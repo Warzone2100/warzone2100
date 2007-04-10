@@ -42,7 +42,6 @@
 #include "intdisplay.h"
 #include "action.h"
 #include "difficulty.h"
-#include "powercrypt.h"
 
 
 #define EXTRACT_POINTS	    1
@@ -109,7 +108,6 @@ void clearPlayerPower(void)
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
 		memset(asPower[player], 0, sizeof(PLAYER_POWER));
-		pwrcSetPlayerCryptPower(player,0);
 	}
 }
 
@@ -141,11 +139,6 @@ BOOL checkPower(UDWORD player, UDWORD quantity, BOOL playAudio)
 		return TRUE;
 	}
 
-	if (!pwrcCheckPlayerCryptPower(player, asPower[player]->currentPower))
-	{
-		return FALSE;
-	}
-
 	if (asPower[player]->currentPower >= quantity)
 	{
 		return TRUE;
@@ -173,16 +166,10 @@ BOOL usePower(UDWORD player, UDWORD quantity)
 		return TRUE;
 	}
 
-	if (!pwrcCheckPlayerCryptPower(player, asPower[player]->currentPower))
-	{
-		return FALSE;
-	}
-
 	//check there is enough first
 	if (asPower[player]->currentPower >= quantity)
 	{
 		asPower[player]->currentPower -= quantity;
-		pwrcSetPlayerCryptPower(player, asPower[player]->currentPower);
 		return TRUE;
 	}
 	else if (player == selectedPlayer)
@@ -201,13 +188,7 @@ BOOL usePower(UDWORD player, UDWORD quantity)
 //return the power when a structure/droid is deliberately destroyed
 void addPower(UDWORD player, UDWORD quantity)
 {
-	if (!pwrcCheckPlayerCryptPower(player, asPower[player]->currentPower))
-	{
-		return;
-	}
-
 	asPower[player]->currentPower += quantity;
-	pwrcSetPlayerCryptPower(player, asPower[player]->currentPower);
 }
 
 /*resets the power calc flag for all players*/
@@ -426,11 +407,6 @@ void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 {
 	UDWORD		power, i, extractedPower;
 
-	if (!pwrcCheckPlayerCryptPower(player, asPower[player]->currentPower))
-	{
-		return;
-	}
-
 	//each power gen can cope with its associated resource extractors
 	extractedPower = 0;
 	//for (i=0; i < (NUM_POWER_MODULES + 1); i++)
@@ -457,8 +433,6 @@ void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 	{
 		asPower[player]->currentPower += power;
 		asPower[player]->extractedPower = 0;
-
-		pwrcSetPlayerCryptPower(player, asPower[player]->currentPower);
 	}
 }
 
@@ -492,14 +466,8 @@ void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 // only used in multiplayer games.
 void setPower(UDWORD player, UDWORD avail)
 {
-	if (!pwrcCheckPlayerCryptPower(player, asPower[player]->currentPower))
-	{
-		return;
-	}
-
 	asPower[player]->currentPower = avail;
 
-	pwrcSetPlayerCryptPower(player, asPower[player]->currentPower);
 }
 
 
@@ -507,15 +475,8 @@ void setPower(UDWORD player, UDWORD avail)
 /*sets the initial value for the power*/
 void setPlayerPower(UDWORD power, UDWORD player)
 {
-	if (!pwrcCheckPlayerCryptPower(player, asPower[player]->currentPower))
-	{
-		return;
-	}
-
 	//asPower[player]->initialPower = power;
 	asPower[player]->currentPower = power;
-
-	pwrcSetPlayerCryptPower(player, asPower[player]->currentPower);
 }
 
 /*Temp function to give all players some power when a new game has been loaded*/

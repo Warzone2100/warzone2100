@@ -67,7 +67,6 @@ SRC=ai.c \
 	optimisepath.c \
 	order.c \
 	player.c \
-	powercrypt.c \
 	radar.c \
 	raycast.c \
 	research.c \

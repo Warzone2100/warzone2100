@@ -24,7 +24,7 @@ noinst_HEADERS = action.h advvis.h ai.h aiexperience.h anim_id.h \
 	message.h messagedef.h miscimd.h mission.h missiondef.h move.h movedef.h \
 	multigifts.h multiint.h multijoin.h multilimit.h multimenu.h multiplay.h multirecv.h \
 	multistat.h objectdef.h objects.h objmem.h oprint.h optimisepath.h order.h \
-	orderdef.h player.h power.h powercrypt.h projectile.h radar.h raycast.h research.h \
+	orderdef.h player.h power.h projectile.h radar.h raycast.h research.h \
 	researchdef.h resource.h scores.h scriptai.h scriptcb.h scriptextern.h scriptfuncs.h \
 	scriptobj.h scripttabs.h scriptvals.h selection.h seqdisp.h stats.h statsdef.h \
 	structure.h structuredef.h target.h text.h texture.h transporter.h visibility.h \
@@ -39,7 +39,7 @@ warzone2100_SOURCES = scriptvals_parser.tab.c scriptvals_lexer.lex.c \
 	intdisplay.c intimage.c intorder.c intelmap.c keybind.c keymap.c levels.c lighting.c \
 	loop.c main.c map.c mapdisplay.c mapgrid.c mechanics.c message.c miscimd.c \
 	move.c multiint.c multimenu.c multiopt.c multisync.c multibot.c multistat.c \
-	objmem.c objects.c optimisepath.c order.c player.c powercrypt.c radar.c \
+	objmem.c objects.c optimisepath.c order.c player.c radar.c \
 	raycast.c research.c scores.c scriptai.c scriptcb.c scriptextern.c scriptfuncs.c \
 	scriptobj.c scripttabs.c scriptvals.c selection.c stats.c text.c texture.c \
 	transporter.c visibility.c warcam.c wrappers.c ani.c arrow.c aud.c \

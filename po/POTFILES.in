@@ -164,7 +164,6 @@ src/atmos.c
 src/message.c
 src/projectile.c
 src/aiexperience.c
-src/powercrypt.c
 src/multilimit.c
 src/oprint.c
 src/seqdisp.c
