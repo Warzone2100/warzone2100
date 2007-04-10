@@ -10,11 +10,10 @@ BUILT_SOURCES = audp_parser.tab.h
 CLEANFILES = audp_parser.tab.h
 
 noinst_LIBRARIES = libgamelib.a
-noinst_HEADERS = ani.h anim.h animobj.h gtime.h hashtabl.h maxpidef.h parser.h \
-	ptrlist.h
+noinst_HEADERS = ani.h anim.h animobj.h gtime.h hashtabl.h maxpidef.h parser.h
 
 libgamelib_a_SOURCES = anim.c animobj.c audp_lexer.lex.c audp_parser.tab.c \
-	gtime.c hashtabl.c ptrlist.c
+	gtime.c hashtabl.c
 
 libgamelib_a_LIBADD = $(top_builddir)/lib/ivis_opengl/libivis_opengl.a \
 	$(top_builddir)/lib/ivis_common/libivis_common.a $(top_builddir)/lib/framework/libframework.a
