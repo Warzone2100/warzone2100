@@ -38,19 +38,6 @@
 
 
 
-void testAngles(void);
-void	processImpact(UDWORD worldX, UDWORD worldY, UBYTE severity,UDWORD tilesAcross);
-//UDWORD	getTileOwner(UDWORD	x, UDWORD y);
-//BASE_OBJECT	*getTileOccupier(UDWORD x, UDWORD y);
-//STRUCTURE	*getTileStructure(UDWORD x, UDWORD y);
-//FEATURE		*getTileFeature(UDWORD x, UDWORD y);
-void	baseObjScreenCoords	( BASE_OBJECT *baseObj, Vector2i *pt				);
-SDWORD	calcDirection		( UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1	);
-UDWORD	adjustDirection		( SDWORD present, SDWORD difference				);
-
-void initBulletTable( void );
-int inQuad(POINT *pt, QUAD *quad);
-
 /* The arc over which bullets fly */
 UBYTE	sineHeightTable[SIZE_SINE_TABLE];
 
