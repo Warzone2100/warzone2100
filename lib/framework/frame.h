@@ -23,9 +23,11 @@
 #ifndef _frame_h
 #define _frame_h
 
+#include "platform.h"
+
+/* This one must be invoked *after* platform.h to get _GNU_SOURCE! */
 #include <string.h>
 
-#include "platform.h"
 #include "macros.h"
 
 #include "types.h"

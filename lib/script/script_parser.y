@@ -24,10 +24,6 @@
  * The yacc grammar for the scipt files.
  */
 
-#include <string.h>
-#include <limits.h>
-#include <stdio.h>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/script/interp.h"
