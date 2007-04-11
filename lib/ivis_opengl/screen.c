@@ -24,18 +24,18 @@
  *
  */
 
+#include "lib/framework/frame.h"
+
 #ifdef WIN32
 /* We need this kludge to avoid a redefinition of INT32 in a jpeglib header */
 # define XMD_H
 #endif
 
-#include <stdio.h>
-#include <string.h>
 #include <SDL/SDL.h>
-#ifdef _MSC_VER
-#include <windows.h>  //needed for gl.h!  --Qamly
-#endif
 #include <SDL/SDL_opengl.h>
+#include <setjmp.h>
+#include <physfs.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -48,10 +48,7 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
-#include <physfs.h>
-#include <setjmp.h>
 
-#include "lib/framework/frame.h"
 #include "lib/framework/frameint.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/pieblitfunc.h"

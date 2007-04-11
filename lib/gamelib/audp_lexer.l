@@ -19,11 +19,10 @@
 */
 %{
 
-#include <stdio.h>
-#include <physfs.h>
-
 /* include framework */
 #include "lib/framework/frame.h"
+
+#include <physfs.h>
 
 #include "lib/gamelib/parser.h"
 

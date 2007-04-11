@@ -45,10 +45,9 @@ void audp_error(char *pMessage,...);
 	/* value tokens */
 %token <fval> FLOAT_T
 %token <ival> INTEGER
-%token <sval> QTEXT			/* Text with double quotes surrounding it */
+%token <sval> QTEXT /* Text with double quotes surrounding it */
 %token <ival> LOOP
 %token <ival> ONESHOT
-%token <sval> TEXT
 
 	/* keywords */
 %token AUDIO

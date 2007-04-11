@@ -22,16 +22,17 @@
  *
  */
 
-#include <SDL/SDL_main.h>
-#include <physfs.h>
-#include <string.h>
-#include <locale.h>
-
 // Get platform defines before checking for them!
 #include "lib/framework/frame.h"
 
+#include <SDL/SDL_main.h>
+#include <physfs.h>
+
 /* For SHGetFolderPath */
 #ifdef WZ_OS_WIN
+// FIXME HACK Workaround DATADIR definition in objbase.h
+// This works since DATADIR is never used on Windows.
+# undef DATADIR
 # include <shlobj.h>
 #endif // WZ_OS_WIN
 

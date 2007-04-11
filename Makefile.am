@@ -1,4 +1,4 @@
-SUBDIRS = po win32 lib src data nsis
+SUBDIRS = win32 lib src po data nsis
 
 dist_doc_DATA = AUTHORS ChangeLog README COPYING COPYING.README
 

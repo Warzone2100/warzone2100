@@ -26,10 +26,8 @@
  */
 /***************************************************************************/
 
-#include <stdio.h>
-#ifdef _MSC_VER
-#include <windows.h>  //needed for gl.h!  --Qamly
-#endif
+#include "lib/framework/frame.h"
+
 #include <SDL/SDL_opengl.h>
 
 #include "lib/ivis_common/ivi.h"

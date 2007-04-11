@@ -26,13 +26,11 @@
  */
 /***************************************************************************/
 
+#include "lib/framework/frame.h"
+
 #include <time.h>
-#ifdef _MSC_VER
-#include <windows.h>  //needed for gl.h!  --Qamly
-#endif
 #include <SDL/SDL_opengl.h>
 
-#include "lib/framework/frame.h"
 #include "lib/ivis_common/pieblitfunc.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piemode.h"

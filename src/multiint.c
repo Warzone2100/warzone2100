@@ -25,15 +25,10 @@
  * Arena and Campaign styles, along with connection and game options.
  */
 
-#include <stdio.h>		// get rid of a couple of warnings.
-#include <string.h>
-#ifdef WIN32
-#include <windows.h>
-#endif
-#include <SDL/SDL_opengl.h>
-#include <physfs.h>
-
 #include "lib/framework/frame.h"
+
+#include <SDL/SDL_opengl.h>
+
 #include "lib/framework/frameresource.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/frameint.h"

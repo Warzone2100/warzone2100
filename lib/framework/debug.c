@@ -24,16 +24,11 @@
  *
  */
 
+#include "frame.h"
+
 #include <string.h>
 #include <stdio.h>
 
-#ifdef WIN32
-#define WIN32_LEAN_AND_MEAN
-#define WIN32_EXTRA_LEAN
-#include <windows.h>
-#endif
-
-#include "frame.h"
 #include "frameint.h"
 
 #define MAX_FILENAME_SIZE 200

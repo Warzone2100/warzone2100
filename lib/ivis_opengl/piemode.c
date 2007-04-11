@@ -26,13 +26,11 @@
  */
 /***************************************************************************/
 
+#include "lib/framework/frame.h"
+
 #include <SDL/SDL.h>
-#ifdef _MSC_VER
-#include <windows.h>  //needed for gl.h!  --Qamly
-#endif
 #include <SDL/SDL_opengl.h>
 
-#include "lib/framework/frame.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/piemode.h"
@@ -93,7 +91,7 @@ BOOL pie_Initialise(void)
 	}
 
 	/* Find texture compression extension */
-	if (check_extension("GL_ARB_texture_compression")) 
+	if (check_extension("GL_ARB_texture_compression"))
 	{
 		debug(LOG_TEXTURE, "Texture compression: Yes");
 		wz_texture_compression = GL_COMPRESSED_RGBA_ARB;

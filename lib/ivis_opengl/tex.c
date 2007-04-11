@@ -17,14 +17,8 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-#ifdef _MSC_VER			//we need windows.h for below inculde.  --Qamly
-#include <windows.h>
-#endif
+#include "lib/framework/frame.h"
+
 #include <SDL/SDL_opengl.h>
 #ifdef __APPLE__
 #include <opengl/glu.h>
@@ -32,7 +26,6 @@
 #include <GL/glu.h>
 #endif
 
-#include "lib/framework/frame.h"
 #include "lib/ivis_common/ivisdef.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/tex.h"
@@ -63,7 +56,7 @@ int pie_AddBMPtoTexPages(iTexture* s, const char* filename, int type, BOOL bReso
 {
 	int	i = 0;
 
-	debug(LOG_TEXTURE, "pie_AddBMPtoTexPages: %s type=%d resource=%s page=%d", filename, 
+	debug(LOG_TEXTURE, "pie_AddBMPtoTexPages: %s type=%d resource=%s page=%d", filename,
 	      type, bResource ? "true" : "false", _TEX_INDEX);
 	assert(s != NULL);
 

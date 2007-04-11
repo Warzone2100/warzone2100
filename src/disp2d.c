@@ -57,15 +57,8 @@ extern void screenBlit(SDWORD destX, SDWORD destY,              // The location 
                                 UDWORD  width, UDWORD height);  // The source rectangle from the surface
 */
 
-#include <windows.h>
-#include <string.h>
-#include <stdio.h>
-
-/* blitTile printfs */
-//#define DEBUG_GROUP1
-/* Surf recreate bitmap */
-//#define DEBUG_GROUP2
 #include "frame.h"
+
 #include "frameint.h"
 #include "map.h"
 #include "disp2d.h"

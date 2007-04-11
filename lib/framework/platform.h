@@ -43,6 +43,7 @@
 #  endif /* WZ_CC_MSVC */
 
 #  define WIN32_LEAN_AND_MEAN
+#  define WIN32_EXTRA_LEAN
 #  include <windows.h>
 
 #  if defined(WZ_CC_MSVC)
@@ -58,8 +59,6 @@
 
 
 #if defined(WZ_OS_UNIX)
-
-#  include <stdio.h>
 
 #  define MAX_PATH 260
 

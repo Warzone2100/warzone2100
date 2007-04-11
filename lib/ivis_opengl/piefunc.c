@@ -26,13 +26,10 @@
  */
 /***************************************************************************/
 
-#include <string.h>
-#ifdef _MSC_VER
-#include <windows.h>  //needed for gl.h!  --Qamly
-#endif
+#include "lib/framework/frame.h"
+
 #include <SDL/SDL_opengl.h>
 
-#include "lib/framework/frame.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/rendmode.h"
@@ -156,10 +153,10 @@ void pie_DrawSkybox(float scale, int u, int v, int w, int h)
 	glPushAttrib(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_ENABLE_BIT | GL_FOG_BIT);
 	// no use in updating the depth buffer
 	glDepthMask(GL_FALSE);
-	
+
 	// fog should not affect the sky
 	glDisable(GL_FOG);
-		
+
 	// So we have realistic colors
 	glColor4ub(0xFF,0xFF,0xFF,0xFF);
 
@@ -169,7 +166,7 @@ void pie_DrawSkybox(float scale, int u, int v, int w, int h)
 
 	// for the nice blend of the sky with the fog
 	glDisable(GL_ALPHA_TEST);
-		
+
 	// Apply scale matrix
 	glScalef(scale,scale / 2.0,scale);
 
@@ -203,7 +200,7 @@ void pie_DrawFogBox(float left, float right, float front, float back, float heig
 
 	fog_colour.argb = pie_GetFogColour();
 	glColor4ub(fog_colour.byte.r,fog_colour.byte.g,fog_colour.byte.b,0xFF);
-	
+
 	pie_SetRendMode(REND_FLAT);
 
 	glPushAttrib(GL_DEPTH_BUFFER_BIT | GL_ENABLE_BIT | GL_FOG_BIT);
