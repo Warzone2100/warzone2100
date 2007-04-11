@@ -31,12 +31,8 @@
  */
 /***************************************************************************/
 
-#include <ctype.h>
-#include <stdio.h>
-#include <string.h>
-
 #include "lib/framework/frame.h"
-//#include "piematrix.h" //for surface normals
+
 #include "ivisdef.h"	// for imd structures
 #include "imd.h"	// for imd structures
 #include "rendmode.h"
@@ -80,7 +76,7 @@ static UDWORD IMDPoints = 0;
 static UDWORD IMDTexAnims = 0;
 static UDWORD IMDConnectors = 0;
 
-static char texfile[64];	//Last loaded texture page filename
+static char texfile[MAX_PATH]; // Last loaded texture page filename
 
 // ppFileData is incremented to the end of the file on exit!
 iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
@@ -140,42 +136,40 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 		}
 		else //version 2 copes with long file names
 		{
-			if (sscanf(pFileData,"%s %d%n", buffer, &ptype,&cnt) != 2) {
+			if (sscanf(pFileData, "%s %d%n", buffer, &ptype, &cnt) != 2) {
 				debug(LOG_ERROR, "iV_ProcessIMD: file corrupt -D (%s)", buffer);
 				return NULL;
 			}
 			pFileData += cnt;
 
-			if (strcmp(buffer,"TEXTURE") == 0) {
+			if (strcmp(buffer, "TEXTURE") == 0) {
 				ch = *pFileData++;
 
-				for( i = 0; (i < 80) &&  ((ch = *pFileData++) != EOF) && (ch != '.'); i++ )	// yummy
+				for( i = 0; (i < MAX_PATH) && ((ch = *pFileData++) != EOF) && (ch != '.'); i++ ) // yummy
 				{
  					texfile[i] = (char)ch;
 				}
+				texfile[i] = '\0';
 
-				if (sscanf(pFileData,"%s%n", texType,&cnt) != 1) {
+				if (sscanf(pFileData, "%s%n", texType, &cnt) != 1) {
 					debug(LOG_ERROR, "iV_ProcessIMD: file corrupt -E (%s)", buffer);
 					return NULL;
 				}
 				pFileData += cnt;
 
-				if (strcmp(texType,"png") != 0) {
+				if (strcmp(texType, "png") != 0) {
 					debug(LOG_ERROR, "iV_ProcessIMD: file corrupt -F (%s)", buffer);
 					return NULL;
 				}
+				strcat(texfile, ".png");
 
-				texfile[i] = 0;
-
-				strcat(texfile,".png");
-
-				if (sscanf(pFileData,"%d %d%n", &pwidth, &pheight,&cnt) != 2) {
+				if (sscanf(pFileData, "%d %d%n", &pwidth, &pheight, &cnt) != 2) {
 					debug(LOG_ERROR, "iV_ProcessIMD: file corrupt -G (%s)", buffer);
 					return NULL;
 				}
 				pFileData += cnt;
 				bTextured = TRUE;
-			} else if (strcmp(buffer,"NOTEXTURE") == 0) {
+			} else if (strcmp(buffer, "NOTEXTURE") == 0) {
 				if (sscanf(pFileData, "%s %d %d%n", texfile, &pwidth, &pheight, &cnt) != 3) {
 					debug(LOG_ERROR, "iV_ProcessIMD: file corrupt -H (%s)", buffer);
 					return NULL;
@@ -191,12 +185,8 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 		// Super scrummy hack to reduce texture page names down to the page id
 		if (bTextured) {
 			if (strncasecmp(texfile, "page-", 5) == 0) {
-				for(i = 5; i < (SDWORD)strlen(texfile); i++) {
-					if (!isdigit(texfile[i])) {
-						break;
-					}
-				}
-				texfile[i] = 0;
+				for(i = 5; i < (SDWORD)strlen(texfile) && isdigit(texfile[i]); i++);
+				texfile[i] = '\0';
 			}
 		}
 #endif
