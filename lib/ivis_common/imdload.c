@@ -145,7 +145,7 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 			if (strcmp(buffer, "TEXTURE") == 0) {
 				ch = *pFileData++;
 
-				for( i = 0; (i < MAX_PATH) && ((ch = *pFileData++) != EOF) && (ch != '.'); i++ ) // yummy
+				for( i = 0; (i < MAX_PATH-5) && ((ch = *pFileData++) != EOF) && (ch != '.'); i++ ) // Run up to the dot or till the buffer is filled. Leave room for the extension.
 				{
  					texfile[i] = (char)ch;
 				}
