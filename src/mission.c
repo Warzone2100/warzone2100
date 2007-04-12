@@ -3898,55 +3898,37 @@ void setNoGoArea(UBYTE x1, UBYTE y1, UBYTE x2, UBYTE y2, UBYTE area)
 	}
 }
 
-void addLandingLights( UDWORD x, UDWORD y)
+static inline void addLandingLight(int x, int y, LAND_LIGHT_SPEC spec, BOOL lit)
 {
+	// The height the landing lights should be above the ground
+	static const unsigned int AboveGround = 16;
 	Vector3i pos;
+
+	if ( x < 0 || y < 0 )
+		return;
 
 	pos.x = x;
 	pos.z = y;
-	pos.y = map_Height(pos.x,pos.z) +16;
-	effectSetLandLightSpec(LL_MIDDLE);
-	addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LAND_LIGHT,FALSE,NULL,TRUE); //middle
-	pos.x=x+128;
-	pos.z=y+128;
-	pos.y = map_Height(pos.x,pos.z) +16;
-	effectSetLandLightSpec(LL_OUTER);
-	addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LAND_LIGHT,FALSE,NULL,FALSE); //outer
-	pos.x=x+128;
-	pos.z=y-128;
-	pos.y = map_Height(pos.x,pos.z) +16;
-	effectSetLandLightSpec(LL_OUTER);
-	addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LAND_LIGHT,FALSE,NULL,FALSE);
-	pos.x=x-128;
-	pos.z=y+128;
-	pos.y = map_Height(pos.x,pos.z) +16;
-	effectSetLandLightSpec(LL_OUTER);
-	addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LAND_LIGHT,FALSE,NULL,FALSE);
-	pos.x=x-128;
-	pos.z=y-128;
-	pos.y = map_Height(pos.x,pos.z) +16;
-	effectSetLandLightSpec(LL_OUTER);
-	addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LAND_LIGHT,FALSE,NULL,FALSE);
-	pos.x=x+64;
-	pos.z=y+64;
-	pos.y = map_Height(pos.x,pos.z) +16;
-	effectSetLandLightSpec(LL_INNER);
-	addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LAND_LIGHT,FALSE,NULL,FALSE); // inner
-	pos.x=x+64;
-	pos.z=y-64;
-	pos.y = map_Height(pos.x,pos.z) +16;
-	effectSetLandLightSpec(LL_INNER);
-	addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LAND_LIGHT,FALSE,NULL,FALSE);
-	pos.x=x-64;
-	pos.z=y+64;
-	pos.y = map_Height(pos.x,pos.z) +16;
-	effectSetLandLightSpec(LL_INNER);
-	addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LAND_LIGHT,FALSE,NULL,FALSE);
-	pos.x=x-64;
-	pos.z=y-64;
-	pos.y = map_Height(pos.x,pos.z) +16;
-	effectSetLandLightSpec(LL_INNER);
-	addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LAND_LIGHT,FALSE,NULL,FALSE);
+	pos.y = map_Height(x, y) + AboveGround;
+
+	effectSetLandLightSpec(spec);
+
+	addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LAND_LIGHT, FALSE, NULL, lit);
+}
+
+static void addLandingLights( UDWORD x, UDWORD y)
+{
+	addLandingLight(x, y, LL_MIDDLE, TRUE);                 // middle
+
+	addLandingLight(x + 128, y + 128, LL_OUTER, FALSE);     // outer
+	addLandingLight(x + 128, y - 128, LL_OUTER, FALSE);
+	addLandingLight(x - 128, y + 128, LL_OUTER, FALSE);
+	addLandingLight(x - 128, y - 128, LL_OUTER, FALSE);
+
+	addLandingLight(x + 64, y + 64, LL_INNER, FALSE);       // inner
+	addLandingLight(x + 64, y - 64, LL_INNER, FALSE);
+	addLandingLight(x - 64, y + 64, LL_INNER, FALSE);
+	addLandingLight(x - 64, y - 64, LL_INNER, FALSE);
 }
 
 /*	checks the x,y passed in are not within the boundary of any Landing Zone
