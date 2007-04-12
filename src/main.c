@@ -424,8 +424,8 @@ int main(int argc, char *argv[])
 #endif
 	/*** Initialize translations ***/
 	setlocale(LC_ALL, "");
-	bindtextdomain(PACKAGE, LOCALEDIR);
-	textdomain(PACKAGE);
+	(void)bindtextdomain(PACKAGE, LOCALEDIR);
+	(void)textdomain(PACKAGE);
 
 	/*** Initialize PhysicsFS ***/
 
