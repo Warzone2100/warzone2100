@@ -63,8 +63,7 @@ struct AUDIO_SAMPLE;
 /* typedefs
  */
 
-typedef BOOL (* SAMPLEVALIDFUNC) ( struct AUDIO_SAMPLE *psSample );
-typedef BOOL (* AUDIO_CALLBACK)  ( struct AUDIO_SAMPLE *psSample );
+typedef BOOL (* AUDIO_CALLBACK)  ( void *psObj );
 
 /***************************************************************************/
 /* structs */

@@ -1565,23 +1565,18 @@ BOOL droidStartFoundation(DROID *psDroid)
 
 
 static BOOL
-droidCheckBuildStillInProgress( AUDIO_SAMPLE *psSample )
+droidCheckBuildStillInProgress( void *psObj )
 {
 	DROID	*psDroid;
 
-	ASSERT( psSample != NULL,
-		"unitCheckBuildStillInProgress: audio sample pointer invalid\n" );
-
-	if ( psSample->psObj == NULL )
+	if ( psObj == NULL )
 	{
 		return FALSE;
 	}
-	else
-	{
-		psDroid = (DROID*)psSample->psObj;
-		ASSERT( psDroid != NULL,
-			"unitCheckBuildStillInProgress: unit pointer invalid\n" );
-	}
+
+	psDroid = (DROID*)psObj;
+	ASSERT(psDroid != NULL,
+	       "unitCheckBuildStillInProgress: unit pointer invalid\n" );
 
 	if ( !psDroid->died && psDroid->action == DACTION_BUILD )
 	{
@@ -1594,25 +1589,20 @@ droidCheckBuildStillInProgress( AUDIO_SAMPLE *psSample )
 }
 
 static BOOL
-droidBuildStartAudioCallback( AUDIO_SAMPLE *psSample )
+droidBuildStartAudioCallback( void *psObj )
 {
 	DROID	*psDroid;
 
-	ASSERT( psSample != NULL,
-		"unitBuildStartAudioCallback: audio sample pointer invalid\n" );
+	psDroid = (DROID*)psObj;
 
-	psDroid = (DROID*)psSample->psObj;
-
-	if ( psDroid != NULL )
+	if (psDroid == NULL)
 	{
-		ASSERT( psDroid != NULL,
-			"unitBuildStartAudioCallback: unit pointer invalid\n" );
+		return TRUE;
+	}
 
-		if ( psDroid->visible[selectedPlayer] )
-		{
-			audio_PlayObjDynamicTrack( psDroid, ID_SOUND_CONSTRUCTION_LOOP,
-										droidCheckBuildStillInProgress );
-		}
+	if ( psDroid->visible[selectedPlayer] )
+	{
+		audio_PlayObjDynamicTrack( psDroid, ID_SOUND_CONSTRUCTION_LOOP, droidCheckBuildStillInProgress );
 	}
 
 	return TRUE;
@@ -6750,14 +6740,11 @@ UWORD repairPowerPoint(DROID *psDroid)
  *  Sets the droid's current track id to NO_SOUND
  *  \return TRUE on success, FALSE on failure
  */
-BOOL droidAudioTrackStopped( AUDIO_SAMPLE *psSample )
+BOOL droidAudioTrackStopped( void *psObj )
 {
 	DROID	*psDroid;
 
-	ASSERT( psSample != NULL,
-		"unitAudioTrackStopped: audio sample pointer invalid\n" );
-
-	psDroid = (DROID*)psSample->psObj;
+	psDroid = (DROID*)psObj;
 	if (psDroid == NULL)
 	{
 		debug( LOG_ERROR, "droidAudioTrackStopped: droid pointer invalid\n" );

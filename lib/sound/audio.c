@@ -554,7 +554,7 @@ BOOL audio_Update( void )
 			if ( psSample->psObj != NULL )
 			{
 				if ( audio_ObjectDead(psSample->psObj)
-				 || (psSample->pCallback != NULL && (psSample->pCallback) (psSample) == FALSE) )
+				 || (psSample->pCallback != NULL && psSample->pCallback(psSample->psObj) == FALSE) )
 				{
 					sound_StopTrack( psSample );
 					psSample->psObj = NULL;
@@ -582,14 +582,14 @@ BOOL audio_Update( void )
 /** Loads audio files and constructs a TRACK from them and returns their respective ID numbers
  *  \param szFileName the filename of the track
  *  \param bLoop whether the track should be looped until explicitly stopped
- *  \param piID[out] the track id number is returned into the variable this pointer points to
+ *  \param iTrack[out] the track id number is returned into the variable this pointer points to
  *  \param iVol the volume this track should be played on (range is 0-100)
  *  \param iAudibleRadius the radius from the source of sound where it can be heard
  *  \return TRUE when succesfull or audio is disabled, FALSE when the file is not found or no more tracks can be loaded (i.e. the limit is reached)
  */
 BOOL audio_SetTrackVals
 	(
-		char	szFileName[],
+		const char	*fileName,
 		BOOL	bLoop,
 		int		*iTrack,
 		int		iVol,
@@ -607,15 +607,15 @@ BOOL audio_SetTrackVals
 	}
 
 	// get track pointer from resource
-	psTrack = (TRACK*)resGetData( "WAV", szFileName );		//at this point we have 4 valid entries, and 8 invalid -Q
+	psTrack = (TRACK*)resGetData( "WAV", fileName );		//at this point we have 4 valid entries, and 8 invalid -Q
 	if ( psTrack == NULL )
 	{
-		debug( LOG_NEVER, "audio_SetTrackVals: track %s resource not found\n", szFileName );
+		debug( LOG_NEVER, "audio_SetTrackVals: track %s resource not found\n", fileName );
 		return FALSE;
 	}
 
 	// get current ID or spare one
-	if ( (*iTrack = audio_GetIDFromStr(szFileName)) == NO_SOUND )
+	if ( (*iTrack = audio_GetIDFromStr(fileName)) == NO_SOUND )
 	{
 		*iTrack = sound_GetAvailableID();
 	}

@@ -3302,22 +3302,13 @@ static BOOL moveDescending( DROID *psDroid, UDWORD iMapHeight )
 }
 
 
-BOOL moveCheckDroidMovingAndVisible( AUDIO_SAMPLE *psSample )
+BOOL moveCheckDroidMovingAndVisible( void *psObj )
 {
-	DROID	*psDroid;
+	DROID	*psDroid = (DROID*)psObj;
 
-	ASSERT( psSample != NULL,
-		"moveCheckUnitMovingAndVisible: audio sample pointer invalid\n" );
-
-	if ( psSample->psObj == NULL )
+	if ( psDroid == NULL )
 	{
 		return FALSE;
-	}
-	else
-	{
-		psDroid = psSample->psObj;
-		ASSERT( psDroid != NULL,
-			"moveCheckUnitMovingAndVisible: unit pointer invalid\n" );
 	}
 
 	/* check for dead, not moving or invisible to player */
@@ -3328,10 +3319,8 @@ BOOL moveCheckDroidMovingAndVisible( AUDIO_SAMPLE *psSample )
 		psDroid->iAudioID = NO_SOUND;
 		return FALSE;
 	}
-	else
-	{
-		return TRUE;
-	}
+
+	return TRUE;
 }
 
 
@@ -3383,28 +3372,16 @@ static void movePlayDroidMoveAudio( DROID *psDroid )
 
 
 
-static BOOL moveDroidStartCallback( AUDIO_SAMPLE *psSample )
+static BOOL moveDroidStartCallback( void *psObj )
 {
-	DROID				*psDroid;
+	DROID *psDroid = (DROID*)psObj;
 
-	ASSERT( psSample != NULL,
-		"moveUnitStartCallback: audio sample pointer invalid\n" );
-
-	if ( psSample->psObj == NULL )
+	if ( psDroid == NULL )
 	{
 		return FALSE;
 	}
-	else
-	{
-		psDroid = psSample->psObj;
-		ASSERT( psDroid != NULL,
-			"moveDroidStartCallback: unit pointer invalid\n" );
-	}
 
-	if ( psDroid != NULL )
-	{
-		movePlayDroidMoveAudio( psDroid );
-	}
+	movePlayDroidMoveAudio( psDroid );
 
 	return TRUE;
 }

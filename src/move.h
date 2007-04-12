@@ -28,7 +28,6 @@
 
 #include "objectdef.h"
 #include "findpath.h"
-#include "lib/sound/audio.h"
 
 /* The base movement speed */
 extern FRACT	baseSpeed;
@@ -82,7 +81,7 @@ extern BOOL moveFormationSpeedLimitingOn( void );
 
 
 /* audio callback used to kill movement sounds */
-extern BOOL moveCheckDroidMovingAndVisible( AUDIO_SAMPLE *psSample );
+extern BOOL moveCheckDroidMovingAndVisible( void *psObj );
 
 // set a vtol to be hovering in the air
 void moveMakeVtolHover( DROID *psDroid );

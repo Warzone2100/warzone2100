@@ -333,7 +333,7 @@ void sound_StopTrack( AUDIO_SAMPLE *psSample )
 	// do stopped callback
 	if ( g_pStopTrackCallback != NULL && psSample->psObj != NULL )
 	{
-		g_pStopTrackCallback( psSample );
+		g_pStopTrackCallback( psSample->psObj );
 	}
 }
 
@@ -366,7 +366,7 @@ void sound_FinishedCallback( AUDIO_SAMPLE *psSample )
 	// call user callback if specified
 	if ( psSample->pCallback != NULL )
 	{
-		( psSample->pCallback ) ( psSample );
+		psSample->pCallback(psSample->psObj);
 	}
 
 	// set remove flag

@@ -6,8 +6,7 @@ SRC=anim.c \
 	audp_parser.tab.c \
 	audp_lexer.lex.c \
 	gtime.c \
-	hashtabl.c \
-	ptrlist.c
+	hashtabl.c
 
 LIB=gamelib
 

@@ -396,7 +396,7 @@ extern UWORD powerReqForDroidRepair(DROID *psDroid);
 extern UWORD repairPowerPoint(DROID *psDroid);
 
 /* audio finished callback */
-extern BOOL droidAudioTrackStopped( AUDIO_SAMPLE *psSample );
+extern BOOL droidAudioTrackStopped( void *psObj );
 
 /*returns TRUE if droid type is one of the Cyborg types*/
 extern BOOL cyborgDroid(DROID *psDroid);

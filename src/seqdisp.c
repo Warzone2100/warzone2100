@@ -389,9 +389,8 @@ void seq_SetVideoPath(void)
 
 
 
-static BOOL SeqEndCallBack( AUDIO_SAMPLE *psSample )
+static BOOL SeqEndCallBack( void *psObj )
 {
-//	psSample;
 	bAudioPlaying = FALSE;
 	debug(LOG_NEVER, "************* briefing ended **************");
 
