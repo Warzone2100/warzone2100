@@ -31,7 +31,7 @@
 /***************************************************************************/
 
 extern BOOL		audio_Init( AUDIO_CALLBACK pStopTrackCallback );
-extern BOOL		audio_Update(void);
+extern void		audio_Update(void);
 extern BOOL		audio_Shutdown(void);
 extern BOOL		audio_Disabled( void );
 
@@ -68,12 +68,6 @@ extern void		audio_QueueTrackGroupPos( SDWORD iTrack, SDWORD iGroup,
 extern void		audio_PlayPreviousQueueTrack( void );
 extern BOOL		audio_GetPreviousQueueTrackPos( SDWORD *iX, SDWORD *iY,
 											SDWORD *iZ );
-extern void		audio_StopTrack( int iTrack );
-
-extern void		audio_SetTrackPan( int iTrack, int iPan );
-extern void		audio_SetTrackVol( int iTrack, int iVol );
-extern void		audio_SetTrackFreq( int iTrack, int iFreq );
-
 extern void		audio_PauseAll( void );
 extern void		audio_ResumeAll( void );
 extern void		audio_StopAll( void );

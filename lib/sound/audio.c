@@ -300,11 +300,6 @@ static AUDIO_SAMPLE *audio_QueueSample( SDWORD iTrack )
 	AUDIO_SAMPLE	*psSample = NULL;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-	//
-	// SDWORD iSameSamples = 0;
-	//
-//	debug(LOG_SOUND, "audio_queuesample called - track=%d", iTrack );
-
 	// return if audio not enabled
 	if ( g_bAudioEnabled == FALSE || g_bAudioPaused == TRUE || g_bStopAll == TRUE )
 	{
@@ -319,20 +314,21 @@ static AUDIO_SAMPLE *audio_QueueSample( SDWORD iTrack )
 		return NULL;
 	}
 
-//	debug(LOG_SOUND, "audio_queuetrack called1" );
 	HEAP_ALLOC( g_psSampleHeap, (void **) &psSample );
-	if ( psSample != NULL )
+	if ( psSample == NULL )
 	{
-		memset( psSample, 0, sizeof(AUDIO_SAMPLE) );		//[check] -Q
-		psSample->iTrack = iTrack;
-		psSample->x = SAMPLE_COORD_INVALID;
-		psSample->y = SAMPLE_COORD_INVALID;
-		psSample->z = SAMPLE_COORD_INVALID;
-		psSample->bRemove = FALSE;
-
-		// add to queue
-		audio_AddSampleToTail( &g_psSampleQueue, psSample );
+		return NULL;
 	}
+
+	memset( psSample, 0, sizeof(AUDIO_SAMPLE) );		//[check] -Q
+	psSample->iTrack = iTrack;
+	psSample->x = SAMPLE_COORD_INVALID;
+	psSample->y = SAMPLE_COORD_INVALID;
+	psSample->z = SAMPLE_COORD_INVALID;
+	psSample->bFinishedPlaying = FALSE;
+
+	// add to queue
+	audio_AddSampleToTail( &g_psSampleQueue, psSample );
 
 	return psSample;
 }
@@ -370,7 +366,7 @@ void audio_QueueTrack( SDWORD iTrack )
 void audio_QueueTrackMinDelay( SDWORD iTrack, UDWORD iMinDelay )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	AUDIO_SAMPLE	*psSample = NULL;
+	AUDIO_SAMPLE	*psSample;
 	UDWORD			iDelay;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -380,15 +376,22 @@ void audio_QueueTrackMinDelay( SDWORD iTrack, UDWORD iMinDelay )
 		return;
 	}
 
+	// Determine if at least iMinDelay time has passed since the last time this track was played
 	iDelay = sound_GetGameTime() - sound_GetTrackTimeLastFinished( iTrack );
-	if ( iDelay > iMinDelay )
+	if ( !(iDelay > iMinDelay) )
 	{
-		psSample = audio_QueueSample( iTrack );
-		if ( psSample != NULL )
-		{
-			sound_SetTrackTimeLastFinished( iTrack, sound_GetGameTime() );
-		}
+		return;
 	}
+
+	// Construct an audio sample from requested track
+	psSample = audio_QueueSample( iTrack );
+	if ( psSample == NULL )
+	{
+		return;
+	}
+	
+	// Set last finished tracktime to current time to prevent parallel playing of this track
+	sound_SetTrackTimeLastFinished( iTrack, sound_GetGameTime() );
 }
 
 //*
@@ -398,7 +401,7 @@ void audio_QueueTrackMinDelay( SDWORD iTrack, UDWORD iMinDelay )
 void audio_QueueTrackMinDelayPos( SDWORD iTrack, UDWORD iMinDelay, SDWORD iX, SDWORD iY, SDWORD iZ )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	AUDIO_SAMPLE	*psSample = NULL;
+	AUDIO_SAMPLE	*psSample;
 	UDWORD			iDelay;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -408,18 +411,26 @@ void audio_QueueTrackMinDelayPos( SDWORD iTrack, UDWORD iMinDelay, SDWORD iX, SD
 		return;
 	}
 
+	// Determine if at least iMinDelay time has passed since the last time this track was played
 	iDelay = sound_GetGameTime() - sound_GetTrackTimeLastFinished( iTrack );
 	if ( iDelay > iMinDelay )
 	{
-		psSample = audio_QueueSample( iTrack );
-		if ( psSample != NULL )
-		{
-			sound_SetTrackTimeLastFinished( iTrack, sound_GetGameTime() );
-			psSample->x = iX;
-			psSample->y = iY;
-			psSample->z = iZ;
-		}
+		return;
 	}
+
+	// Construct an audio sample from requested track
+	psSample = audio_QueueSample( iTrack );
+	if ( psSample == NULL )
+	{
+		return;
+	}
+	
+	psSample->x = iX;
+	psSample->y = iY;
+	psSample->z = iZ;
+
+	// Set last finished tracktime to current time to prevent parallel playing of this track
+	sound_SetTrackTimeLastFinished( iTrack, sound_GetGameTime() );
 }
 
 //*
@@ -429,7 +440,7 @@ void audio_QueueTrackMinDelayPos( SDWORD iTrack, UDWORD iMinDelay, SDWORD iX, SD
 void audio_QueueTrackPos( SDWORD iTrack, SDWORD iX, SDWORD iY, SDWORD iZ )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	AUDIO_SAMPLE	*psSample = NULL;
+	AUDIO_SAMPLE	*psSample;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
@@ -438,13 +449,16 @@ void audio_QueueTrackPos( SDWORD iTrack, SDWORD iX, SDWORD iY, SDWORD iZ )
 		return;
 	}
 
+	// Construct an audio sample from requested track
 	psSample = audio_QueueSample( iTrack );
-	if ( psSample != NULL )
+	if ( psSample == NULL )
 	{
-		psSample->x = iX;
-		psSample->y = iY;
-		psSample->z = iZ;
+		return;
 	}
+
+	psSample->x = iX;
+	psSample->y = iY;
+	psSample->z = iZ;
 }
 
 //*
@@ -454,7 +468,7 @@ void audio_QueueTrackPos( SDWORD iTrack, SDWORD iX, SDWORD iY, SDWORD iZ )
 static void audio_UpdateQueue( void )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	AUDIO_SAMPLE	*psSample = NULL;
+	AUDIO_SAMPLE	*psSample;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
@@ -474,30 +488,32 @@ static void audio_UpdateQueue( void )
 	audio_Set3DVolume( AUDIO_VOL_MAX );
 
 	// check queue for members
-	if ( g_psSampleQueue != NULL )
+	if ( g_psSampleQueue == NULL )
 	{
-		// remove queue head
-		psSample = g_psSampleQueue;
-		audio_RemoveSample( &g_psSampleQueue, psSample );
+		return;
+	}
 
-		// add sample to list if able to play
-		if ( !sound_Play2DTrack(psSample, TRUE) )
-		{
-			debug( LOG_NEVER, "audio_UpdateQueue: couldn't play sample\n" );
-			HEAP_FREE( g_psSampleHeap, psSample );
-			return;
-		}
+	// remove queue head
+	psSample = g_psSampleQueue;
+	audio_RemoveSample( &g_psSampleQueue, psSample );
 
-		audio_AddSampleToHead( &g_psSampleList, psSample );
+	// add sample to list if able to play
+	if ( !sound_Play2DTrack(psSample, TRUE) )
+	{
+		debug( LOG_NEVER, "audio_UpdateQueue: couldn't play sample\n" );
+		HEAP_FREE( g_psSampleHeap, psSample );
+		return;
+	}
 
-		// update last queue sound coords
-		if ( psSample->x != SAMPLE_COORD_INVALID && psSample->y != SAMPLE_COORD_INVALID
-		 && psSample->z != SAMPLE_COORD_INVALID )
-		{
-			g_sPreviousSample.x = psSample->x;
-			g_sPreviousSample.y = psSample->y;
-			g_sPreviousSample.z = psSample->z;
-		}
+	audio_AddSampleToHead( &g_psSampleList, psSample );
+
+	// update last queue sound coords
+	if ( psSample->x != SAMPLE_COORD_INVALID && psSample->y != SAMPLE_COORD_INVALID
+	  && psSample->z != SAMPLE_COORD_INVALID )
+	{
+		g_sPreviousSample.x = psSample->x;
+		g_sPreviousSample.y = psSample->y;
+		g_sPreviousSample.z = psSample->z;
 	}
 }
 
@@ -505,7 +521,7 @@ static void audio_UpdateQueue( void )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL audio_Update( void )
+void audio_Update( void )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	Vector3i		vecPlayer;
@@ -516,7 +532,7 @@ BOOL audio_Update( void )
 	// if audio not enabled return TRUE to carry on game without audio
 	if ( g_bAudioEnabled == FALSE )
 	{
-		return TRUE;
+		return;
 	}
 
 	audio_UpdateQueue();
@@ -540,7 +556,7 @@ BOOL audio_Update( void )
 	while ( psSample != NULL )
 	{
 		// remove finished samples from list
-		if ( psSample->bRemove == TRUE )
+		if ( psSample->bFinishedPlaying == TRUE )
 		{
 			audio_RemoveSample( &g_psSampleList, psSample );
 			psSampleTemp = psSample->psNext;
@@ -575,7 +591,7 @@ BOOL audio_Update( void )
 	}
 
 	sound_Update();
-	return TRUE;
+	return;
 }
 
 
@@ -767,7 +783,7 @@ static BOOL audio_Play3DTrack( SDWORD iX, SDWORD iY, SDWORD iZ, int iTrack, void
 	psSample->x = iX;
 	psSample->y = iY;
 	psSample->z = iZ;
-	psSample->bRemove = FALSE;
+	psSample->bFinishedPlaying = FALSE;
 	psSample->psObj = psObj;
 	psSample->pCallback = pUserCallback;
 
@@ -880,19 +896,22 @@ BOOL audio_PlayStream( const char szFileName[], SDWORD iVol, AUDIO_CALLBACK pUse
 	}
 
 	HEAP_ALLOC( g_psSampleHeap, (void **) &psSample );
-	if ( psSample != NULL )
+	if ( psSample == NULL )
 	{
-		memset( psSample, 0, sizeof(AUDIO_SAMPLE) );
-		psSample->pCallback = pUserCallback;
-		psSample->bRemove = FALSE;
-		audio_Set3DVolume( AUDIO_VOL_MAX );
-		if ( sound_PlayStream(psSample, szFileName, iVol) == TRUE )
-		{
-			return TRUE;
-		}
+		return FALSE;
+	}
+	
+	memset( psSample, 0, sizeof(AUDIO_SAMPLE) );
+	psSample->pCallback = pUserCallback;
+	psSample->bFinishedPlaying = FALSE;
+	audio_Set3DVolume( AUDIO_VOL_MAX );
+
+	if ( !sound_PlayStream(psSample, szFileName, iVol) )
+	{
+		return FALSE;
 	}
 
-	return FALSE;
+	return TRUE;
 }
 
 //*
@@ -915,18 +934,15 @@ void audio_StopObjTrack( void *psObj, int iTrack )
 	psSample = g_psSampleList;
 	while ( psSample != NULL )
 	{
+		// If track has been found stop it and return
 		if ( psSample->psObj == psObj && psSample->iTrack == iTrack )
 		{
-			break;
+			sound_StopTrack(psSample);
+			return;
 		}
 
 		// get next sample from hash table
 		psSample = psSample->psNext;
-	}
-
-	if ( psSample != NULL )
-	{
-		sound_StopTrack( psSample );
 	}
 }
 
@@ -950,76 +966,35 @@ void audio_PlayTrack( int iTrack )
 		return;
 	}
 
+	// Allocate a sample
 	HEAP_ALLOC( g_psSampleHeap, (void **) &psSample );
-	if ( psSample != NULL )
-	{
-		// setup sample
-		memset( psSample, 0, sizeof(AUDIO_SAMPLE) );	  // Set everything to 0  (looks good) -Q
-		psSample->iTrack = iTrack;
-		psSample->bRemove = FALSE;
-
-		// add sample to list if able to play
-		if ( !sound_Play2DTrack(psSample, FALSE) )
-		{
-			debug( LOG_NEVER, "audio_PlayTrack: couldn't play sample\n" );
-			HEAP_FREE( g_psSampleHeap, psSample );
-			return;
-		}
-
-		audio_AddSampleToHead( &g_psSampleList, psSample );
-	}
-}
-
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
-void audio_StopTrack( int iTrack )
-{
-	// return if audio not enabled
-	if ( g_bAudioEnabled == FALSE )
+	if ( psSample == NULL )
 	{
 		return;
 	}
-}
 
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
-void audio_SetTrackPan( int iTrack, int iPan )
-{
-	// return if audio not enabled
-	if ( g_bAudioEnabled == FALSE )
+	// setup/initialize sample
+	psSample->iTrack = iTrack;
+	psSample->bFinishedPlaying = FALSE;
+
+	// Zero callback stuff since we don't need/want it
+	psSample->pCallback = NULL;
+	psSample->psObj = NULL;
+
+	/* iSample, psPrev, and psNext will be initialized by the
+	 * following functions, and x, y and z will be completely
+	 * ignored so we don't need to bother about it
+	 */
+
+	// add sample to list if able to play
+	if ( !sound_Play2DTrack(psSample, FALSE) )
 	{
+		debug( LOG_NEVER, "audio_PlayTrack: couldn't play sample\n" );
+		HEAP_FREE( g_psSampleHeap, psSample );
 		return;
 	}
-}
 
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
-void audio_SetTrackVol( int iTrack, int iVol )
-{
-	// return if audio not enabled
-	if ( g_bAudioEnabled == FALSE )
-	{
-		return;
-	}
-}
-
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
-void audio_SetTrackFreq( int iTrack, int iFreq )
-{
-	// return if audio not enabled
-	if ( g_bAudioEnabled == FALSE )
-	{
-		return;
-	}
+	audio_AddSampleToHead( &g_psSampleList, psSample );
 }
 
 //*

@@ -476,18 +476,18 @@ static void sound_AddActiveSample( AUDIO_SAMPLE *psSample )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-static void sound_SetupChannel( AUDIO_SAMPLE *psSample, SDWORD *piLoops )
+static BOOL sound_SetupChannel( AUDIO_SAMPLE *psSample )
 {
-	if ( sound_TrackLooped(psSample->iTrack) == TRUE )
+	sound_AddActiveSample( psSample );
+
+	if (sound_TrackLooped(psSample->iTrack))
 	{
-		*piLoops = -1;
+		return TRUE;
 	}
 	else
 	{
-		*piLoops = 0;
+		return FALSE;
 	}
-
-	sound_AddActiveSample( psSample );
 }
 
 //*
@@ -497,7 +497,6 @@ static void sound_SetupChannel( AUDIO_SAMPLE *psSample, SDWORD *piLoops )
 BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	SDWORD	iLoops;
 	ALfloat zero[3] = { 0.0, 0.0, 0.0 };
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -512,8 +511,7 @@ BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
 	alSourcefv( psSample->iSample, AL_VELOCITY, zero );
 	alSourcei( psSample->iSample, AL_BUFFER, psTrack->iBufferName );
 	alSourcei( psSample->iSample, AL_SOURCE_RELATIVE, AL_TRUE );
-	sound_SetupChannel( psSample, &iLoops );
-	alSourcei( psSample->iSample, AL_LOOPING, (iLoops) ? AL_TRUE : AL_FALSE );
+	alSourcei( psSample->iSample, AL_LOOPING, (sound_SetupChannel(psSample)) ? AL_TRUE : AL_FALSE );
 	alSourcePlay( psSample->iSample );
 	if ( bQueued )
 	{
@@ -533,7 +531,6 @@ BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
 //
 BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
 {
-	SDWORD	iLoops;
 	ALfloat zero[3] = { 0.0, 0.0, 0.0 };
 
 	if (sfx3d_volume == 0.0) {
@@ -546,8 +543,7 @@ BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
 	sound_SetObjectPosition( psSample->iSample, psSample->x, psSample->y, psSample->z );
 	alSourcefv( psSample->iSample, AL_VELOCITY, zero );
 	alSourcei( psSample->iSample, AL_BUFFER, psTrack->iBufferName );
-	sound_SetupChannel( psSample, &iLoops );
-	alSourcei( psSample->iSample, AL_LOOPING, (iLoops) ? AL_TRUE : AL_FALSE );
+	alSourcei( psSample->iSample, AL_LOOPING, (sound_SetupChannel(psSample)) ? AL_TRUE : AL_FALSE );
 	alSourcePlay( psSample->iSample );
 	return TRUE;
 }

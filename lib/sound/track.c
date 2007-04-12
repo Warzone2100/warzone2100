@@ -369,8 +369,8 @@ void sound_FinishedCallback( AUDIO_SAMPLE *psSample )
 		psSample->pCallback(psSample->psObj);
 	}
 
-	// set remove flag
-	psSample->bRemove = TRUE;
+	// set finished flag
+	psSample->bFinishedPlaying = TRUE;
 }
 
 //*

@@ -73,8 +73,7 @@ typedef struct AUDIO_SAMPLE
 	SDWORD                  iTrack;
 	ALuint                  iSample;        // OpenAL name of the sound source
 	SDWORD                  x, y, z;
-	SDWORD                  iLoops;
-	BOOL                    bRemove;
+	BOOL                    bFinishedPlaying;
 	AUDIO_CALLBACK          pCallback;
 	void                    *psObj;
 	struct AUDIO_SAMPLE     *psPrev;
