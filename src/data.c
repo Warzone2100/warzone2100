@@ -865,7 +865,7 @@ BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 
 	// generate a texture page name in "page-xx" format
 	strncpy(texfile, GetLastResourceFilename(), 254);
-	texfile[254]=0;
+	texfile[254] = '\0';
 	resToLower(texfile);
 
 	debug(LOG_TEXTURE, "bufferTexPageLoad: %s texturepage ...", texfile);
@@ -892,16 +892,11 @@ BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 	}
 
 
-	if (strncmp(texfile, "page-", 5) == 0)
+
+	if (strncmp(texfile, "page-", 5) == 0) // FIXME This is the culprit for WZ discarding everything after the "page-123" part of the texture name!
 	{
-		for(i=5; i<(SDWORD)strlen(texfile); i++)
-		{
-			if (!isdigit(texfile[i]))
-			{
-				break;
-			}
-		}
-		texfile[i] = 0;
+		for(i=5; i<(SDWORD)strlen(texfile) && isdigit(texfile[i]); i++);
+		texfile[i] = '\0';
 	}
 	SetLastResourceFilename(texfile);
 
@@ -914,7 +909,7 @@ BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 		// replace the old texture page with the new one
 		debug(LOG_TEXTURE, "bufferTexPageLoad: replacing old");
 		id = pie_ReloadTexPage(texfile, pBuffer);
-		ASSERT( id >=0,"pie_ReloadTexPage failed" );
+		ASSERT( id >=0, "pie_ReloadTexPage failed" );
 		*ppData = NULL;
 	}
 	else

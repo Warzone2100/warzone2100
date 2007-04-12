@@ -301,7 +301,7 @@ static void initialize_PhysicsFS(void)
  *
  * Priority:
  * Lower loads first. Current:
- * --datadir > User's home dir > SVN data > AutoPackage > BaseDir > DEFAULT_DATADIR
+ * --datadir > User's home dir > SVN data > AutoPackage > BaseDir > DATADIR
  *
  * Only --datadir and home dir are allways examined. Others only if data still not found.
  *
