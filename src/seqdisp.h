@@ -76,7 +76,7 @@ extern BOOL seq_ClearTextForVideo(void);
 //clear the sequence list
 extern void seq_ClearSeqList(void);
 //add a sequence to the list to be played
-extern void seq_AddSeqToList(char *pSeqName, char *pAudioName, const char *pTextName, BOOL bLoop);
+extern void seq_AddSeqToList(const char *pSeqName, const char *pAudioName, const char *pTextName, BOOL bLoop);
 /*checks to see if there are any sequences left in the list to play*/
 extern BOOL seq_AnySeqLeft(void);
 

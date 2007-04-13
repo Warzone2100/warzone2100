@@ -84,8 +84,8 @@ typedef struct {
 } SEQTEXT;
 
 typedef struct {
-	char		*pSeq;						//name of the sequence to play
-	char		*pAudio;					//name of the wav to play
+	const char	*pSeq;						//name of the sequence to play
+	const char	*pAudio;					//name of the wav to play
 	BOOL		bSeqLoop;					//loop this sequence
 	SDWORD		currentText;				//cuurent number of text messages for this seq
 	SEQTEXT		aText[MAX_TEXT_OVERLAYS];	//text data to display for this sequence
@@ -398,7 +398,7 @@ static BOOL SeqEndCallBack( void *psObj )
 }
 
 //full screenvideo functions
-static BOOL seq_StartFullScreenVideo(char* videoName, char* audioName)
+static BOOL seq_StartFullScreenVideo(const char* videoName, const char* audioName)
 {
 	bHoldSeqForAudio = FALSE;
 
@@ -931,7 +931,7 @@ void seq_ClearSeqList(void)
 }
 
 //add a sequence to the list to be played
-void seq_AddSeqToList(char *pSeqName, char *pAudioName, const char *pTextName, BOOL bLoop)
+void seq_AddSeqToList(const char *pSeqName, const char *pAudioName, const char *pTextName, BOOL bLoop)
 {
 	SDWORD strLen;
 	currentSeq++;
