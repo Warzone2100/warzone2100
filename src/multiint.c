@@ -141,8 +141,7 @@ static UDWORD hideTime=0;
 // Function protos
 
 // widget functions
-BOOL		addMultiBut					(W_SCREEN *screen, UDWORD formid,UDWORD id,UDWORD x, UDWORD y, UDWORD width, UDWORD height,UDWORD tipres,UDWORD norm, UDWORD hi,BOOL showmouseover);
-BOOL		addMultiEditBox				(UDWORD formid,UDWORD id,UDWORD x, UDWORD y, UDWORD tip, char tipres[128],UDWORD icon,UDWORD iconid);
+static BOOL addMultiEditBox(UDWORD formid,UDWORD id,UDWORD x, UDWORD y, const char* tip, char tipres[128],UDWORD icon,UDWORD iconid);
 static void addBlueForm					(UDWORD parent,UDWORD id, const char *txt,UDWORD x,UDWORD y,UDWORD w,UDWORD h);
 
 // Drawing Functions
@@ -464,7 +463,7 @@ static BOOL OptionsInet(UDWORD parentID)			//internet options
 	widgAddForm(psConScreen, &sFormInit);
 
 	addMultiBut(psConScreen, CON_SETTINGS,CON_OK,CON_OKX,CON_OKY,MULTIOP_OKW,MULTIOP_OKH,
-				STR_MUL_OK,IMAGE_OK,IMAGE_OK,TRUE);
+				_("Accept Settings"),IMAGE_OK,IMAGE_OK,TRUE);
 
 	//label.
 	memset(&sLabInit, 0, sizeof(W_LABINIT));
@@ -518,7 +517,7 @@ BOOL startConnectionScreen(void)
 	addSideText(FRONTEND_SIDETEXT,  FRONTEND_SIDEX, FRONTEND_SIDEY,_("CONNECTION"));
 
 	addMultiBut(psWScreen,FRONTEND_BOTFORM,CON_CANCEL,10,10,MULTIOP_OKW,MULTIOP_OKH,
-		STR_MUL_CANCEL,IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);	// goback buttpn levels
+		_("Return To Previous Screen"),IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);	// goback buttpn levels
 
 	addConnections(0);
 
@@ -566,7 +565,7 @@ void runConnectionScreen(void )
 
 		addBottomForm();
 		addMultiBut(psWScreen,FRONTEND_BOTFORM,CON_CANCEL,10,10,MULTIOP_OKW,MULTIOP_OKH,
-		STR_MUL_CANCEL,IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);	// goback buttpn levels
+		_("Return To Previous Screen"),IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);	// goback buttpn levels
 
 		addConnections(InitialProto);
 	}
@@ -782,14 +781,14 @@ void startGameFind(void)
 	addSideText(FRONTEND_SIDETEXT,  FRONTEND_SIDEX, FRONTEND_SIDEY,_("GAMES"));
 
 	// cancel
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,CON_CANCEL,10,5,MULTIOP_OKW,MULTIOP_OKH,STR_MUL_CANCEL,
+	addMultiBut(psWScreen,FRONTEND_BOTFORM,CON_CANCEL,10,5,MULTIOP_OKW,MULTIOP_OKH,_("Return To Previous Screen"),
 		IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);
 
 	if(!safeSearch)
 	{
 		//refresh
 		addMultiBut(psWScreen,FRONTEND_BOTFORM,MULTIOP_REFRESH ,480-MULTIOP_OKW-5 ,5,MULTIOP_OKW,MULTIOP_OKH,
-					STR_MUL_REFRESH,IMAGE_REFRESH,IMAGE_REFRESH,FALSE);			// Find Games button
+					_("Refresh Games List"),IMAGE_REFRESH,IMAGE_REFRESH,FALSE);			// Find Games button
 	}
 
 	NETfindGame(TRUE);
@@ -866,8 +865,8 @@ static void addGameOptions(BOOL bRedo)
 
 	addSideText(FRONTEND_SIDETEXT3, MULTIOP_OPTIONSX-3 , MULTIOP_OPTIONSY,_("OPTIONS"));
 
-	addMultiEditBox(MULTIOP_OPTIONS,MULTIOP_GNAME,MCOL0,MROW2,STR_MUL_GAMEIC, game.name ,IMAGE_EDIT_GAME,MULTIOP_GNAME_ICON);
-	addMultiEditBox(MULTIOP_OPTIONS,MULTIOP_MAP  ,MCOL0,MROW3,STR_MUL_MAPIC, game.map ,IMAGE_EDIT_MAP,MULTIOP_MAP_ICON);
+	addMultiEditBox(MULTIOP_OPTIONS,MULTIOP_GNAME,MCOL0,MROW2,_("Select Game Name"), game.name ,IMAGE_EDIT_GAME,MULTIOP_GNAME_ICON);
+	addMultiEditBox(MULTIOP_OPTIONS,MULTIOP_MAP  ,MCOL0,MROW3,_("Select Map"), game.map ,IMAGE_EDIT_MAP,MULTIOP_MAP_ICON);
 
 
 	// buttons.
@@ -875,15 +874,15 @@ static void addGameOptions(BOOL bRedo)
 	// game type
 	addBlueForm(MULTIOP_OPTIONS,MULTIOP_GAMETYPE,_("Game"),MCOL0,MROW5,MULTIOP_BLUEFORMW,27);
 //	addMultiBut(psWScreen,MULTIOP_GAMETYPE,MULTIOP_ARENA,	MCOL1, 2 , MULTIOP_BUTW,MULTIOP_BUTH,
-//				STR_MUL_ARENA,   IMAGE_ARENA,   IMAGE_ARENA_HI,TRUE);		//arena
+//				_("Deathmatch Mode"),   IMAGE_ARENA,   IMAGE_ARENA_HI,TRUE);		//arena
 	addMultiBut(psWScreen,MULTIOP_GAMETYPE,MULTIOP_CAMPAIGN,MCOL1, 2 , MULTIOP_BUTW,MULTIOP_BUTH,
-				STR_MUL_CAMPAIGN,IMAGE_CAMPAIGN,IMAGE_CAMPAIGN_HI,TRUE);	//camp
+				_("Campaign Mode"),IMAGE_CAMPAIGN,IMAGE_CAMPAIGN_HI,TRUE);	//camp
 
 	addMultiBut(psWScreen,MULTIOP_GAMETYPE,MULTIOP_TEAMPLAY,MCOL2, 2 , MULTIOP_BUTW,MULTIOP_BUTH,
-				STR_MUL_TEAMPLAY,IMAGE_TEAM,IMAGE_TEAM_HI,TRUE);			//teamplay
+				_("Team Play"),IMAGE_TEAM,IMAGE_TEAM_HI,TRUE);			//teamplay
 
 	addMultiBut(psWScreen,MULTIOP_GAMETYPE,MULTIOP_SKIRMISH,MCOL3, 2 , MULTIOP_BUTW,MULTIOP_BUTH,
-				STR_MUL_SKIRMISH,IMAGE_SKIRMISH,IMAGE_SKIRMISH_HI,TRUE);	//skirmish
+				_("Skirmish"),IMAGE_SKIRMISH,IMAGE_SKIRMISH_HI,TRUE);	//skirmish
 
 //	widgSetButtonState(psWScreen, MULTIOP_ARENA,	0);
 	widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN,	0);
@@ -914,15 +913,15 @@ static void addGameOptions(BOOL bRedo)
 	}
 
 	//just display the game options.
-	addMultiEditBox(MULTIOP_OPTIONS,MULTIOP_PNAME,MCOL0,MROW1, STR_MUL_PLAYERIC,(char*) sPlayer,IMAGE_EDIT_PLAYER,MULTIOP_PNAME_ICON);
-	addMultiEditBox(MULTIOP_OPTIONS,MULTIOP_FNAME,MCOL0,MROW4, STR_MUL_FORCEIC, sForceName,IMAGE_EDIT_FORCE,MULTIOP_FNAME_ICON);
+	addMultiEditBox(MULTIOP_OPTIONS,MULTIOP_PNAME,MCOL0,MROW1, _("Select Player Name"),(char*) sPlayer,IMAGE_EDIT_PLAYER,MULTIOP_PNAME_ICON);
+	addMultiEditBox(MULTIOP_OPTIONS,MULTIOP_FNAME,MCOL0,MROW4, _("Select Force"), sForceName,IMAGE_EDIT_FORCE,MULTIOP_FNAME_ICON);
 
 
 	// Fog type
 	addBlueForm(MULTIOP_OPTIONS,MULTIOP_FOG,_("Fog"),MCOL0,MROW6,MULTIOP_BLUEFORMW,27);
 
-	addMultiBut(psWScreen,MULTIOP_FOG,MULTIOP_FOG_ON ,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,STR_MUL_FOG_ON, IMAGE_FOG_OFF, IMAGE_FOG_OFF_HI,TRUE);//black stuff
-	addMultiBut(psWScreen,MULTIOP_FOG,MULTIOP_FOG_OFF,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,STR_MUL_FOG_OFF,IMAGE_FOG_ON,IMAGE_FOG_ON_HI,TRUE);
+	addMultiBut(psWScreen,MULTIOP_FOG,MULTIOP_FOG_ON ,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH, _("Fog Of War"), IMAGE_FOG_OFF, IMAGE_FOG_OFF_HI,TRUE);//black stuff
+	addMultiBut(psWScreen,MULTIOP_FOG,MULTIOP_FOG_OFF,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH, _("Distance Fog"),IMAGE_FOG_ON,IMAGE_FOG_ON_HI,TRUE);
 	if(game.fog)
 	{
 		widgSetButtonState(psWScreen, MULTIOP_FOG_ON,WBUT_LOCK);
@@ -946,13 +945,13 @@ static void addGameOptions(BOOL bRedo)
 //		}
 
 		addMultiBut(psWScreen,MULTIOP_ALLIANCES,MULTIOP_ALLIANCE_N,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
-				STR_MUL_ALLIANCEN,IMAGE_NOALLI,IMAGE_NOALLI_HI,TRUE);
+				_("No Alliances"),IMAGE_NOALLI,IMAGE_NOALLI_HI,TRUE);
 		addMultiBut(psWScreen,MULTIOP_ALLIANCES,MULTIOP_ALLIANCE_Y,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
-				STR_MUL_ALLIANCEY,IMAGE_ALLI,IMAGE_ALLI_HI,TRUE);
+				_("Allow Alliances"),IMAGE_ALLI,IMAGE_ALLI_HI,TRUE);
 
 		//add 'Locked Teams' button
 		addMultiBut(psWScreen,MULTIOP_ALLIANCES,MULTIOP_ALLIANCE_TEAMS,MCOL3,2,MULTIOP_BUTW,MULTIOP_BUTH,
-			STR_MUL_ALLIANCE_TEAMS,IMAGE_ALLI_TEAMS,IMAGE_ALLI_TEAMS_HI,TRUE);		//FIXME: fix hover image
+			_("Locked Teams"),IMAGE_ALLI_TEAMS,IMAGE_ALLI_TEAMS_HI,TRUE);		//FIXME: fix hover image
 
 		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,0);				//hilight correct entry
 		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,0);
@@ -987,11 +986,11 @@ static void addGameOptions(BOOL bRedo)
 		// limit options
 		addBlueForm(MULTIOP_OPTIONS,MULTIOP_LIMIT,_("Limits") ,MCOL0,MROW8,MULTIOP_BLUEFORMW,27);
 		addMultiBut(psWScreen,MULTIOP_LIMIT,MULTIOP_NOLIMIT,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
-			STR_MUL_NOLIM,IMAGE_NOLIMIT,IMAGE_NOLIMIT_HI,TRUE);
+			_("No Limits"),IMAGE_NOLIMIT,IMAGE_NOLIMIT_HI,TRUE);
 		addMultiBut(psWScreen,MULTIOP_LIMIT,MULTIOP_FRAGLIMIT,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
-			STR_MUL_FRAGLIM,IMAGE_FRAGLIMIT,IMAGE_FRAGLIMIT_HI,TRUE);
+			_("Kill Limit"),IMAGE_FRAGLIMIT,IMAGE_FRAGLIMIT_HI,TRUE);
 		addMultiBut(psWScreen,MULTIOP_LIMIT,MULTIOP_TIMELIMIT, MCOL3, 2,MULTIOP_BUTW,MULTIOP_BUTH,
-			STR_MUL_TIMELIM,IMAGE_TIMELIMIT,IMAGE_TIMELIMIT_HI,TRUE);
+			_("Time Limit"),IMAGE_TIMELIMIT,IMAGE_TIMELIMIT_HI,TRUE);
 		widgSetButtonState(psWScreen, MULTIOP_NOLIMIT,0);		//hilight correct entry
 		widgSetButtonState(psWScreen, MULTIOP_FRAGLIMIT,0);
 		widgSetButtonState(psWScreen, MULTIOP_TIMELIMIT ,0);
@@ -1022,11 +1021,11 @@ static void addGameOptions(BOOL bRedo)
 		// pow levels
 		addBlueForm(MULTIOP_OPTIONS,MULTIOP_POWER,_("Power"),MCOL0,MROW9,MULTIOP_BLUEFORMW,27);
 		addMultiBut(psWScreen,MULTIOP_POWER,MULTIOP_POWLEV_LOW,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
-			STR_MUL_POWLO,IMAGE_POWLO,IMAGE_POWLO_HI,TRUE);
+			_("Low Power Levels"),IMAGE_POWLO,IMAGE_POWLO_HI,TRUE);
 		addMultiBut(psWScreen,MULTIOP_POWER,MULTIOP_POWLEV_MED,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
-			STR_MUL_POWMED,IMAGE_POWMED,IMAGE_POWMED_HI,TRUE);
+			_("Medium Power Levels"),IMAGE_POWMED,IMAGE_POWMED_HI,TRUE);
 		addMultiBut(psWScreen,MULTIOP_POWER,MULTIOP_POWLEV_HI, MCOL3, 2,MULTIOP_BUTW,MULTIOP_BUTH,
-			STR_MUL_POWHI,IMAGE_POWHI,IMAGE_POWHI_HI,TRUE);
+			_("High Power Levels"),IMAGE_POWHI,IMAGE_POWHI_HI,TRUE);
 		widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW,0);		//hilight correct entry
 		widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED,0);
 		widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI ,0);
@@ -1046,11 +1045,11 @@ static void addGameOptions(BOOL bRedo)
 		//type clean/base/defence
 		addBlueForm(MULTIOP_OPTIONS,MULTIOP_BASETYPE,_("Base"),MCOL0,MROW7,MULTIOP_BLUEFORMW,27);
 		addMultiBut(psWScreen,MULTIOP_BASETYPE,MULTIOP_CLEAN,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
-				STR_MUL_CAMPCLEAN,IMAGE_NOBASE,IMAGE_NOBASE_HI,TRUE);
+				_("Start with No Bases"), IMAGE_NOBASE,IMAGE_NOBASE_HI,TRUE);
 		addMultiBut(psWScreen,MULTIOP_BASETYPE,MULTIOP_BASE,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
-				STR_MUL_CAMPBASE,IMAGE_SBASE,IMAGE_SBASE_HI,TRUE);
+				_("Start with Bases"),IMAGE_SBASE,IMAGE_SBASE_HI,TRUE);
 		addMultiBut(psWScreen,MULTIOP_BASETYPE,MULTIOP_DEFENCE,MCOL3,2,MULTIOP_BUTW,MULTIOP_BUTH,
-				STR_MUL_CAMPDEFENCE,IMAGE_LBASE,IMAGE_LBASE_HI,TRUE);
+				_("Start with Advanced Bases"),IMAGE_LBASE,IMAGE_LBASE_HI,TRUE);
 		widgSetButtonState(psWScreen, MULTIOP_CLEAN,0);						//hilight correct entry
 		widgSetButtonState(psWScreen, MULTIOP_BASE,0);
 		widgSetButtonState(psWScreen, MULTIOP_DEFENCE,0);
@@ -1082,9 +1081,9 @@ static void addGameOptions(BOOL bRedo)
 		}
 
 		addMultiBut(psWScreen,MULTIOP_COMPUTER,MULTIOP_COMPUTER_Y,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
-				STR_MUL_COMP_Y,IMAGE_COMPUTER_Y,IMAGE_COMPUTER_Y_HI,TRUE);
+				_("Computer Opponents"),IMAGE_COMPUTER_Y,IMAGE_COMPUTER_Y_HI,TRUE);
 		addMultiBut(psWScreen,MULTIOP_COMPUTER,MULTIOP_COMPUTER_N,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
-				STR_MUL_COMP_N,IMAGE_COMPUTER_N,IMAGE_COMPUTER_N_HI,TRUE);
+				_("No Computer Opponents"),IMAGE_COMPUTER_N,IMAGE_COMPUTER_N_HI,TRUE);
 		widgSetButtonState(psWScreen, MULTIOP_COMPUTER_Y,0);						//hilight correct entry
 		widgSetButtonState(psWScreen, MULTIOP_COMPUTER_N,0);
 		switch(game.bComputerPlayers)
@@ -1111,14 +1110,14 @@ static void addGameOptions(BOOL bRedo)
 		MULTIOP_CANCELX,MULTIOP_CANCELY,
 		iV_GetImageWidth(FrontImages,IMAGE_RETURN),
 		iV_GetImageHeight(FrontImages,IMAGE_RETURN),
-		STR_MUL_CANCEL,IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);
+		_("Return To Previous Screen"),IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);
 
 
 	// host Games button
 	if(ingame.bHostSetup && !bHosted)
 	{
 		addMultiBut(psWScreen,MULTIOP_OPTIONS,MULTIOP_HOST,MULTIOP_HOSTX,MULTIOP_HOSTY,35,28,
-					STR_MUL_HOST,IMAGE_HOST,IMAGE_HOST,FALSE);
+					_("Start Hosting Game"),IMAGE_HOST,IMAGE_HOST,FALSE);
 	}
 
 	// hosted or hosting.
@@ -1126,7 +1125,7 @@ static void addGameOptions(BOOL bRedo)
 	if(ingame.bHostSetup )//&& (game.type != DMATCH))
 	{
 		addMultiBut(psWScreen,MULTIOP_OPTIONS,MULTIOP_STRUCTLIMITS,MULTIOP_STRUCTLIMITSX,MULTIOP_STRUCTLIMITSY,
-					35,28, STR_MUL_STRLIM,IMAGE_SLIM,IMAGE_SLIM_HI,FALSE);
+					35,28, _("Set Structure Limits"),IMAGE_SLIM,IMAGE_SLIM_HI,FALSE);
 	}
 
 
@@ -1250,7 +1249,7 @@ static void addColourChooser(UDWORD player)
 			4,/*9,*/													  //y
 			iV_GetImageWidth(FrontImages,IMAGE_PLAYER0),		  //w
 			iV_GetImageHeight(FrontImages,IMAGE_PLAYER0),		  //h
-			0, IMAGE_PLAYER0+i, IMAGE_PLAYER0+i,FALSE);
+			"", IMAGE_PLAYER0+i, IMAGE_PLAYER0+i,FALSE);
 
 			if( !safeToUseColour(selectedPlayer,i))
 			{
@@ -1267,7 +1266,7 @@ static void addColourChooser(UDWORD player)
 			23,													  //y
 			iV_GetImageWidth(FrontImages,IMAGE_WEE_GUY)+7,		  //w
 			iV_GetImageHeight(FrontImages,IMAGE_WEE_GUY),		  //h
-			0,IMAGE_WEE_GUY, IMAGE_WEE_GUY,10+i);
+			"",IMAGE_WEE_GUY, IMAGE_WEE_GUY,10+i);
 
 			if(isHumanPlayer(i) && i!=selectedPlayer)
 			{
@@ -1633,7 +1632,7 @@ static void addOkBut(void)
 		MULTIOP_OKX,MULTIOP_OKY,
 		iV_GetImageWidth(FrontImages,IMAGE_BIGOK),
 		iV_GetImageHeight(FrontImages,IMAGE_BIGOK),
-		STR_MUL_OK,IMAGE_BIGOK,IMAGE_BIGOK,FALSE);
+		_("Accept Settings"),IMAGE_BIGOK,IMAGE_BIGOK,FALSE);
 }
 
 static void addChatBox(void)
@@ -2890,7 +2889,7 @@ BOOL startMultiOptions(BOOL bReenter)
 		FRONTEND_BACKDROP,
 		MULTIOP_WHITEBOARD,
 		MULTIOP_CHATBOXX-15,MULTIOP_CHATBOXY+MULTIOP_CHATBOXH-15 ,9,9,
-		0,IMAGE_PENCIL,IMAGE_PENCIL,TRUE);	//whiteboard icon
+		"",IMAGE_PENCIL,IMAGE_PENCIL,TRUE);	//whiteboard icon
 
 	// going back to multiop after setting limits up..
 	if(bReenter && bHosted)
@@ -3341,19 +3340,19 @@ BOOL startForceSelect(void)
  	widgAddBarGraph(psWScreen, &sBarInit);
 
 	addMultiBut(psWScreen,FORCE_STATS,CON_CANCEL,FORCE_OKX,FORCE_OKY,MULTIOP_OKW,MULTIOP_OKH,
-				STR_MUL_CANCEL,IMAGE_RETURN,IMAGE_RETURN_HI,FALSE);			// cancel
+				_("Return To Previous Screen"),IMAGE_RETURN,IMAGE_RETURN_HI,FALSE);			// cancel
 
 	addMultiBut(psWScreen,FORCE_STATS,FORCE_PRESETCLEAR,FORCE_PRESETCLEARX,FORCE_PRESETCLEARY,FORCE_BUTW,FORCE_BUTH,
-		STR_MUL_CLEAR,IMAGE_CLEARFORCE,IMAGE_CLEARFORCE,TRUE);			// clear.
+		_("Clear Current Force"),IMAGE_CLEARFORCE,IMAGE_CLEARFORCE,TRUE);			// clear.
 
 	addMultiBut(psWScreen,FORCE_STATS,FORCE_PRESETDEFAULT,FORCE_PRESETDEFAULTX,FORCE_PRESETDEFAULTY,FORCE_BUTW,FORCE_BUTH,
-		STR_MUL_DEFAULT,IMAGE_DEFAULTFORCE,IMAGE_DEFAULTFORCE,TRUE);	// default.
+		_("Select Default"),IMAGE_DEFAULTFORCE,IMAGE_DEFAULTFORCE,TRUE);	// default.
 
 	addMultiBut(psWScreen,FORCE_STATS,FORCE_LOAD,FORCE_LOADX,FORCE_LOADY,FORCE_BUTW,FORCE_BUTH,
-		STR_MUL_LOAD,IMAGE_LOADFORCE,IMAGE_LOADFORCE,TRUE);				// load
+		_("Load Force"),IMAGE_LOADFORCE,IMAGE_LOADFORCE,TRUE);				// load
 
 	addMultiBut(psWScreen,FORCE_STATS,FORCE_SAVE,FORCE_SAVEX,FORCE_SAVEY,FORCE_BUTW,FORCE_BUTH,
-		STR_MUL_SAVE,IMAGE_SAVEFORCE,IMAGE_SAVEFORCE,TRUE);				// save
+		_("Save Force"),IMAGE_SAVEFORCE,IMAGE_SAVEFORCE,TRUE);				// save
 
 	return TRUE;
 }
@@ -4091,7 +4090,7 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *p
 /////////////////////////////////////////////////////////////////////////////////////////
 // common widgets
 
-BOOL addMultiEditBox(UDWORD formid,UDWORD id,UDWORD x, UDWORD y,UDWORD tip, char tipres[128],UDWORD icon,UDWORD iconid)
+static BOOL addMultiEditBox(UDWORD formid,UDWORD id,UDWORD x, UDWORD y, const char* tip, char tipres[128],UDWORD icon,UDWORD iconid)
 {
 	W_EDBINIT		sEdInit;
 
@@ -4122,8 +4121,7 @@ BOOL addMultiEditBox(UDWORD formid,UDWORD id,UDWORD x, UDWORD y,UDWORD tip, char
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-BOOL addMultiBut(W_SCREEN *screen,UDWORD formid,UDWORD id,UDWORD x, UDWORD y,
-				 UDWORD width, UDWORD height, UDWORD tipres,UDWORD norm,UDWORD hi,BOOL hiIt)
+BOOL addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char* tipres, UDWORD norm, UDWORD hi, BOOL hiIt)
 {
 	W_BUTINIT		sButInit;
 
@@ -4135,34 +4133,13 @@ BOOL addMultiBut(W_SCREEN *screen,UDWORD formid,UDWORD id,UDWORD x, UDWORD y,
 	sButInit.y = (short) y;
 	sButInit.width = (unsigned short) width;
 	sButInit.height= (unsigned short) height;
-	if(tipres)
-	{
-		sButInit.pTip = strresGetString(psStringRes,tipres);
-	}
+	sButInit.pTip = tipres;
 	sButInit.FontID = WFont;
 	sButInit.pDisplay = displayMultiBut;
-/*
-	if (hiIt == 1)
-	{
-		sButInit.pUserData = (void*)PACKDWORD_TRI(0,norm , hi);
-	}
-	else if (hiIt == 0)
-	{
-		sButInit.pUserData = (void*)PACKDWORD_TRI(1,norm , hi);
-	}
-	else
-	{}
-	*/
-		sButInit.pUserData = (void*)PACKDWORD_TRI(hiIt,norm , hi);
+	sButInit.pUserData = (void*)PACKDWORD_TRI(hiIt,norm , hi);
 
-
-	if (!widgAddButton(screen, &sButInit))
-	{
-		return FALSE;
-	}
-	return TRUE;
+	return widgAddButton(screen, &sButInit);
 }
-
 
 void displayForceDroid(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {

@@ -156,7 +156,7 @@ BOOL startLimitScreen(void)
 //					8,5,
 //					iV_GetImageWidth(FrontImages,IMAGE_RETURN),
 //					iV_GetImageHeight(FrontImages,IMAGE_RETURN),
-//					STR_MUL_CANCEL,IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);
+//					_("Return To Previous Screen"),IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);
 
 
 	// ok button
@@ -164,13 +164,13 @@ BOOL startLimitScreen(void)
 //					LIMITS_OKX,LIMITS_OKY,
 //					iV_GetImageWidth(FrontImages,IMAGE_BIGOK),
 //					iV_GetImageHeight(FrontImages,IMAGE_BIGOK),
-//					STR_MUL_OK,IMAGE_BIGOK,IMAGE_BIGOK,TRUE);
+//					_("Accept Settings"),IMAGE_BIGOK,IMAGE_BIGOK,TRUE);
 
 	addMultiBut(psWScreen,IDLIMITS,IDLIMITS_RETURN,
 					LIMITS_OKX-40,LIMITS_OKY,
 					iV_GetImageWidth(FrontImages,IMAGE_RETURN),
 					iV_GetImageHeight(FrontImages,IMAGE_RETURN),
-					STR_MUL_CANCEL,IMAGE_NO,IMAGE_NO,TRUE);
+					_("Return To Previous Screen"),IMAGE_NO,IMAGE_NO,TRUE);
 
 
 	// ok button
@@ -178,7 +178,7 @@ BOOL startLimitScreen(void)
 					LIMITS_OKX,LIMITS_OKY,
 					iV_GetImageWidth(FrontImages,IMAGE_BIGOK),
 					iV_GetImageHeight(FrontImages,IMAGE_BIGOK),
-					STR_MUL_OK,IMAGE_OK,IMAGE_OK,TRUE);
+					_("Accept Settings"),IMAGE_OK,IMAGE_OK,TRUE);
 
 
 

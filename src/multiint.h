@@ -39,9 +39,8 @@ extern	BOOL	startForceSelect		(void);
 
 extern	BOOL	chooseColour			(UDWORD);
 
-extern	BOOL	addMultiBut				(W_SCREEN *screen, UDWORD formid,UDWORD id,UDWORD x, UDWORD y,
-										 UDWORD width, UDWORD height, UDWORD tipres,
-										 UDWORD norm,UDWORD hi,BOOL showmouseover);
+extern BOOL addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char* tipres, UDWORD norm, UDWORD hi, BOOL showmouseover);
+
 extern  char	sForceName[256];
 extern	char	sPlayer[128];
 extern	SDWORD	playerTeamGUI[MAX_PLAYERS];
