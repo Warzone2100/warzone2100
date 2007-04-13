@@ -30,7 +30,6 @@
 #include <SDL/SDL_opengl.h>
 
 #include "lib/framework/frameresource.h"
-#include "lib/framework/strres.h"
 #include "lib/framework/frameint.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/screen.h"
@@ -51,7 +50,6 @@
 #include "gateway.h"
 #include <time.h>
 #include "lib/gamelib/gtime.h"
-#include "text.h"
 #include "configuration.h"
 #include "intdisplay.h"
 #include "design.h"
@@ -2290,6 +2288,24 @@ static void processMultiopWidgets(UDWORD id)
 		addOkBut();
 
 		disableMultiButs();
+
+		// Ensure that Skirmish games have at least one AI player
+		if (game.type == SKIRMISH)
+		{
+			// Search for the first AI player we can find and make sure that it is enabled
+			for (i = 0; i < game.maxPlayers; ++i)
+			{
+				if (!isHumanPlayer(i))
+				{
+					if (game.skDiff[i] == 0)
+					{
+						game.skDiff[i] = 10;
+					}
+
+					break;
+				}
+			}
+		}
 
 		addPlayerBox(!ingame.bHostSetup || bHosted);	//to make sure host can't skip player selection menu (sets game.skdiff to UBYTE_MAX for humans)
 		break;
