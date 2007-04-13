@@ -260,11 +260,11 @@ UDWORD	displayBufferSize;
 static char pCloseText[] = "X";
 
 /* Player button strings */
-static char	*apPlayerText[] =
+static const char	*apPlayerText[] =
 {
 	"0", "1", "2", "3", "4", "5", "6", "7",
 };
-static char	*apPlayerTip[] =
+static const char	*apPlayerTip[] =
 {
 	"Select Player 0",
 	"Select Player 1",
