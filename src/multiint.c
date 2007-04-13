@@ -2251,6 +2251,24 @@ static void processMultiopWidgets(UDWORD id)
 
 		disableMultiButs();
 
+		// Ensure that Skirmish games have at least one AI player
+		if (game.type == SKIRMISH)
+		{
+			// Search for the last AI player we can find and make sure that it is enabled
+			for (i = game.maxPlayers - 1; i != ~0; --i)
+			{
+				if (!isHumanPlayer(i))
+				{
+					if (game.skDiff[i] == 0)
+					{
+						game.skDiff[i] = 10;
+					}
+
+					break;
+				}
+			}
+		}
+
 		break;
 
 	case MULTIOP_CHATEDIT:
