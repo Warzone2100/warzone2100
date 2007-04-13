@@ -46,7 +46,7 @@
 * command in a chat message */
 typedef struct _chat_command_data
 {
-	char		*pCmdDescription;				/* String representing a certain command */
+	const char	*pCmdDescription;				/* String representing a certain command */
 	BOOL		bPlayerAddressed[MAX_PLAYERS];	/* Flag to indicate whether a command was addressed to a certain player */
 	SDWORD		numCmdParams;					/* Number of extracted parameters associated with each command */
 	INTERP_VAL	parameter[MAX_CHAT_CMD_PARAMS];	/* Parameters extracted from text - to be used with scripts */

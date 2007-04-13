@@ -44,7 +44,7 @@ static INTERP_VAL scrParameter;
 extern int chat_lex(void);
 
 // Store extracted command for use in scripts
-static void chat_store_command(char *command);
+static void chat_store_command(const char *command);
 
 /* Return value of the chat parsing - to be used in scripts */
 static BOOL chat_store_parameter(INTERP_VAL *parameter);
@@ -94,7 +94,7 @@ static BOOL chat_store_parameter(INTERP_VAL *cmdParam)
 }
 
 // Store extracted command for use in scripts
-static void chat_store_command(char *command)
+static void chat_store_command(const char *command)
 {
 	SDWORD	numCmdParams, numCommands;
 
