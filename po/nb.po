@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-04-10 19:19+0200\n"
+"POT-Creation-Date: 2007-04-13 02:08+0200\n"
 "PO-Revision-Date: 2007-03-24 17:49+0100\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -113,7 +113,7 @@ msgstr ""
 msgid "Close"
 msgstr "Lukk"
 
-#: src/hci.c:1766 src/mission.c:3505 src/loop.c:599 src/loop.c:611
+#: src/hci.c:1766 src/mission.c:3505 src/loop.c:596 src/loop.c:608
 msgid "GAME SAVED!"
 msgstr ""
 
@@ -141,7 +141,7 @@ msgstr "Forskning"
 msgid "Build"
 msgstr "Bygg"
 
-#: src/hci.c:4017 src/multiint.c:1028
+#: src/hci.c:4017 src/multiint.c:1023
 msgid "Power"
 msgstr ""
 
@@ -207,148 +207,148 @@ msgstr ""
 msgid "Unit Lost!"
 msgstr ""
 
-#: src/droid.c:2480
+#: src/droid.c:2470
 msgid "Structure Restored"
 msgstr ""
 
-#: src/droid.c:4727
+#: src/droid.c:4717
 #, c-format
 msgid "Group %d Selected - %d Unit(s)"
 msgstr ""
 
-#: src/droid.c:4739
+#: src/droid.c:4729
 #, c-format
 msgid "%d Unit(s) Assigned to Group %d"
 msgstr ""
 
-#: src/droid.c:4751
+#: src/droid.c:4741
 #, c-format
 msgid "Centered on Group %d - %d Unit(s)"
 msgstr ""
 
-#: src/droid.c:4755
+#: src/droid.c:4745
 #, c-format
 msgid "Aligning with Group %d - %d Unit(s)"
 msgstr ""
 
-#: src/droid.c:5027
+#: src/droid.c:5017
 msgid "Rookie"
 msgstr ""
 
-#: src/droid.c:5028
+#: src/droid.c:5018
 msgctxt "rank"
 msgid "Green"
 msgstr ""
 
-#: src/droid.c:5029
+#: src/droid.c:5019
 msgid "Trained"
 msgstr ""
 
-#: src/droid.c:5030
+#: src/droid.c:5020
 msgid "Regular"
 msgstr ""
 
-#: src/droid.c:5031
+#: src/droid.c:5021
 msgid "Professional"
 msgstr ""
 
-#: src/droid.c:5032
+#: src/droid.c:5022
 msgid "Veteran"
 msgstr ""
 
-#: src/droid.c:5033
+#: src/droid.c:5023
 msgid "Elite"
 msgstr ""
 
-#: src/droid.c:5034
+#: src/droid.c:5024
 msgid "Special"
 msgstr ""
 
-#: src/droid.c:5035
+#: src/droid.c:5025
 msgid "Hero"
 msgstr ""
 
-#: src/multiint.c:483
+#: src/multiint.c:478
 msgid "IP Address or Machine Name"
 msgstr ""
 
-#: src/multiint.c:523
+#: src/multiint.c:518
 msgid "CONNECTION"
 msgstr ""
 
-#: src/multiint.c:537
+#: src/multiint.c:532
 msgid "Internet"
 msgstr ""
 
-#: src/multiint.c:776
+#: src/multiint.c:771
 msgid "Searching"
 msgstr ""
 
-#: src/multiint.c:787
+#: src/multiint.c:782
 msgid "GAMES"
 msgstr ""
 
-#: src/multiint.c:872
+#: src/multiint.c:867
 msgid "OPTIONS"
 msgstr "ALTERNATIVER"
 
-#: src/multiint.c:881
+#: src/multiint.c:876
 msgid "Game"
 msgstr ""
 
-#: src/multiint.c:927 src/frontend.c:762
+#: src/multiint.c:922 src/frontend.c:762
 msgid "Fog"
 msgstr ""
 
-#: src/multiint.c:950 src/multimenu.c:771
+#: src/multiint.c:945 src/multimenu.c:771
 msgid "Alliances"
 msgstr ""
 
-#: src/multiint.c:1052
+#: src/multiint.c:1047
 msgid "Base"
 msgstr ""
 
-#: src/multiint.c:1082 src/multiint.c:1086
+#: src/multiint.c:1077 src/multiint.c:1081
 msgid "Computer"
 msgstr ""
 
-#: src/multiint.c:1523
+#: src/multiint.c:1518
 msgid "PLAYERS"
 msgstr ""
 
-#: src/multiint.c:1672
+#: src/multiint.c:1667
 msgid "CHAT"
 msgstr ""
 
-#: src/multiint.c:2353
+#: src/multiint.c:2348
 msgid "Host is Starting Game"
 msgstr ""
 
-#: src/multiint.c:2412
+#: src/multiint.c:2407
 msgid "Locked Teams"
 msgstr ""
 
-#: src/multiint.c:2961
+#: src/multiint.c:2956
 msgid "FORCE"
 msgstr ""
 
-#: src/multiint.c:3084
+#: src/multiint.c:3079
 msgid "TEMPLATES"
 msgstr ""
 
-#: src/multiint.c:3248
+#: src/multiint.c:3243
 msgid "Load Force"
 msgstr ""
 
-#: src/multiint.c:3252
+#: src/multiint.c:3247
 msgid "Save Force"
 msgstr ""
 
-#: src/multiint.c:3317
+#: src/multiint.c:3312
 msgid "CONTROL"
 msgstr "KONTROLL"
 
-#: src/multiint.c:3653
+#: src/multiint.c:3648
 msgid "Players"
 msgstr ""
 
