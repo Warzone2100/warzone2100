@@ -2292,8 +2292,8 @@ static void processMultiopWidgets(UDWORD id)
 		// Ensure that Skirmish games have at least one AI player
 		if (game.type == SKIRMISH)
 		{
-			// Search for the first AI player we can find and make sure that it is enabled
-			for (i = 0; i < game.maxPlayers; ++i)
+			// Search for the last AI player we can find and make sure that it is enabled
+			for (i = game.maxPlayers - 1; i != ~0; --i)
 			{
 				if (!isHumanPlayer(i))
 				{
