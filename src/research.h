@@ -64,6 +64,8 @@ RID_MAXRID
 
 
 #define NO_RESEARCH_ICON	0
+//max 'research complete' console message length
+#define MAX_RESEARCH_MSG_SIZE	200
 
 
 /* The store for the research stats */

@@ -1431,6 +1431,8 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay)
 	UDWORD						compInc;
 	MESSAGE						*pMessage;
 	PLAYER_RESEARCH				*pPlayerRes = asPlayerResList[player];
+	//the message gets sent to console
+	char						consoleMsg[MAX_RESEARCH_MSG_SIZE];
 
 	ASSERT( researchIndex < numResearch, "researchResult: invalid research index" );
 
@@ -2011,7 +2013,8 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay)
 		{
 			audio_QueueTrack(ID_SOUND_MAJOR_RESEARCH);
 			//add console text message
-            addConsoleMessage(_("Research Completed"), LEFT_JUSTIFY);
+			sprintf(&consoleMsg, _("Research completed: %s"), *pResearch->pViewData->ppTextMsg);
+            addConsoleMessage(&consoleMsg, LEFT_JUSTIFY);
 		}
 
 		//check there is viewdata for the research topic - just don't add message if not!
@@ -2030,7 +2033,8 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay)
 		{
 			audio_QueueTrack(ID_SOUND_RESEARCH_COMPLETED);
 			//add console text message
-            addConsoleMessage(_("Research Completed"), LEFT_JUSTIFY);
+			sprintf(&consoleMsg, _("Research Completed: %s"), *pResearch->pViewData->ppTextMsg);
+            addConsoleMessage(&consoleMsg, LEFT_JUSTIFY);
 		}
 	}
 
