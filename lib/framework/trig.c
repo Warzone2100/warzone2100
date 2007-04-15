@@ -28,6 +28,7 @@
 #define FRAME_LIB_INCLUDE
 
 #include <assert.h>
+#include <stdlib.h>
 #include "types.h"
 #include "debug.h"
 #include "fractions.h"

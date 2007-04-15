@@ -25,6 +25,7 @@
  */
 
 #include <string.h>
+#include <stdlib.h>
 
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
