@@ -30,7 +30,6 @@
 #include <assert.h>
 #include "types.h"
 #include "debug.h"
-#include "mem.h"
 #include "fractions.h"
 #include "trig.h"
 

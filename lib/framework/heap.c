@@ -33,7 +33,6 @@
 
 #include "types.h"
 #include "debug.h"
-#include "mem.h"
 #include "heap.h"
 #include "treap.h"
 #include "treapint.h"

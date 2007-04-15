@@ -31,7 +31,6 @@
 
 #include "types.h"
 #include "debug.h"
-#include "mem.h"
 #include "heap.h"
 
 /* Turn on and off the treap debugging */

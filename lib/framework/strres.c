@@ -29,11 +29,8 @@
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
 
-// Report unused strings
-//#define DEBUG_GROUP0
 #include "types.h"
 #include "debug.h"
-#include "mem.h"
 #include "heap.h"
 #include "treap.h"
 #include "strres.h"

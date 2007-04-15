@@ -32,7 +32,6 @@
 #include <string.h>
 #include "lib/framework/types.h"
 #include "lib/framework/debug.h"
-#include "lib/framework/mem.h"
 #include "lib/framework/heap.h"
 #include "lib/framework/treap.h"
 #include "lib/framework/strres.h"
