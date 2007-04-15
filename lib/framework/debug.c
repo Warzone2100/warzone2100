@@ -31,16 +31,17 @@
 
 #include "frameint.h"
 
-#define MAX_FILENAME_SIZE 200
 #define MAX_LEN_LOG_LINE 512
-#define MAX_LEN_DEBUG_PART 12
 
 char last_called_script_event[MAX_EVENT_NAME_LEN];
 
 static debug_callback * callbackRegistry = NULL;
 static BOOL enabled_debug_parts[LOG_LAST];
 
-/* This list _must_ match the enum in debug.h! */
+/*
+ * This list _must_ match the enum in debug.h!
+ * Names must be 8 chars long at max!
+ */
 static const char *code_part_names[] = {
 	"all",
 	"main",
@@ -61,35 +62,6 @@ static const char *code_part_names[] = {
 	"last"
 };
 
-/**********************************************************************
- cat_snprintf is like a combination of snprintf and strlcat;
- it does snprintf to the end of an existing string.
-
- Like mystrlcat, n is the total length available for str, including
- existing contents and trailing nul.  If there is no extra room
- available in str, does not change the string.
-
- Also like mystrlcat, returns the final length that str would have
- had without truncation.  I.e., if return is >= n, truncation occurred.
-**********************************************************************/
-static int cat_snprintf(char *str, size_t n, const char *format, ...)
-{
-	size_t len;
-	int ret;
-	va_list ap;
-
-	assert(format != NULL);
-	assert(str != NULL);
-	assert(n > 0);
-
-	len = strlen(str);
-	assert(len < n);
-
-	va_start(ap, format);
-	ret = vsnprintf(str + len, n - len, format, ap);
-	va_end(ap);
-	return (int) (ret + len);
-}
 
 /**
  * Convert code_part names to enum. Case insensitive.
@@ -175,8 +147,6 @@ void debug_callback_file_init( void ** data )
 {
 	const char * filename = (const char *)*data;
 	FILE * logfile = NULL;
-
-	assert( strlen( filename ) < MAX_FILENAME_SIZE );
 
 	logfile = fopen( filename, "a" );
 	if (!logfile) {
@@ -289,7 +259,7 @@ void debug( code_part part, const char *str, ... )
 {
 	va_list ap;
 	static char inputBuffer[2][MAX_LEN_LOG_LINE];
-	static char outputBuffer[MAX_LEN_LOG_LINE+MAX_LEN_DEBUG_PART];
+	static char outputBuffer[MAX_LEN_LOG_LINE];
 	static BOOL useInputBuffer1 = FALSE;
 
 	debug_callback * curCallback = callbackRegistry;
@@ -311,12 +281,12 @@ void debug( code_part part, const char *str, ... )
 		// Received again the same line
 		repeated++;
 		if (repeated == next) {
-			snprintf( outputBuffer, sizeof(outputBuffer), "last message repeated %d times", repeated - prev );
 			if (repeated > 2) {
-				cat_snprintf( outputBuffer, sizeof(outputBuffer), " (total %d repeats)", repeated );
+				snprintf( outputBuffer, sizeof(outputBuffer), "last message repeated %d times (total %d repeats)", repeated - prev, repeated );
+			} else {
+				snprintf( outputBuffer, sizeof(outputBuffer), "last message repeated %d times", repeated - prev );
 			}
-			while (curCallback)
-			{
+			while (curCallback) {
 				curCallback->callback( &curCallback->data, outputBuffer );
 				curCallback = curCallback->next;
 			}
@@ -328,9 +298,10 @@ void debug( code_part part, const char *str, ... )
 		// Received another line, cleanup the old
 		if (repeated > 0 && repeated != prev && repeated != 1) {
 			/* just repeat the previous message when only one repeat occurred */
-			snprintf( outputBuffer, sizeof(outputBuffer), "last message repeated %d times", repeated - prev );
 			if (repeated > 2) {
-				cat_snprintf( outputBuffer, sizeof(outputBuffer), " (total %d repeats)", repeated );
+				snprintf( outputBuffer, sizeof(outputBuffer), "last message repeated %d times (total %d repeats)", repeated - prev, repeated );
+			} else {
+				snprintf( outputBuffer, sizeof(outputBuffer), "last message repeated %d times", repeated - prev );
 			}
 			while (curCallback)
 			{
@@ -347,12 +318,9 @@ void debug( code_part part, const char *str, ... )
 	if (!repeated)
 	{
 		// Assemble the outputBuffer:
-		sprintf( outputBuffer, "%s:", code_part_names[part] );
-		memset( outputBuffer + strlen( code_part_names[part] ) + 1, ' ', MAX_LEN_DEBUG_PART - strlen( code_part_names[part] ) - 1 ); // Fill with whitespaces
-		snprintf( outputBuffer + MAX_LEN_DEBUG_PART, MAX_LEN_LOG_LINE, useInputBuffer1 ? inputBuffer[1] : inputBuffer[0] ); // Append the message
+		snprintf( outputBuffer, MAX_LEN_LOG_LINE, "%-8s: %s", code_part_names[part], useInputBuffer1 ? inputBuffer[1] : inputBuffer[0] );
 
-		while (curCallback)
-		{
+		while (curCallback) {
 			curCallback->callback( &curCallback->data, outputBuffer );
 			curCallback = curCallback->next;
 		}
