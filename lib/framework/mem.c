@@ -263,8 +263,15 @@ void memFree(STRING *pFileName, SDWORD LineNumber, void *pMemToFree)
 
 
 	ASSERT( (pFileName != NULL), "No filename passed to mem_Free" );
-	ASSERT( (pMemToFree != NULL), "Attempt to free NULL pointer, called by:\n"
-								  "File: %s\nLine: %d\n", pFileName, LineNumber );
+	if (pMemToFree != NULL)
+	{
+		// Although it is valid to attempt to free() a NULL-pointer,
+		// it probably is bad style.
+		debug(LOG_MEMORY, "Attempt to free NULL pointer, called by:\n"
+		                  "File: %s\n"
+		                  "Line: %d\n", pFileName, LineNumber );
+		return;
+	}
 
 
 	// see if the pointer was allocated in a block
