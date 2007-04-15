@@ -2013,8 +2013,8 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay)
 		{
 			audio_QueueTrack(ID_SOUND_MAJOR_RESEARCH);
 			//add console text message
-			sprintf(&consoleMsg, _("Research completed: %s"), *pResearch->pViewData->ppTextMsg);
-            addConsoleMessage(&consoleMsg, LEFT_JUSTIFY);
+			sprintf(consoleMsg, _("Research completed: %s"), *pResearch->pViewData->ppTextMsg);
+            addConsoleMessage(consoleMsg, LEFT_JUSTIFY);
 		}
 
 		//check there is viewdata for the research topic - just don't add message if not!
@@ -2033,8 +2033,8 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay)
 		{
 			audio_QueueTrack(ID_SOUND_RESEARCH_COMPLETED);
 			//add console text message
-			sprintf(&consoleMsg, _("Research Completed: %s"), *pResearch->pViewData->ppTextMsg);
-            addConsoleMessage(&consoleMsg, LEFT_JUSTIFY);
+			sprintf(consoleMsg, _("Research Completed: %s"), *pResearch->pViewData->ppTextMsg);
+            addConsoleMessage(consoleMsg, LEFT_JUSTIFY);
 		}
 	}
 
