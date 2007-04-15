@@ -38,8 +38,6 @@ extern BOOL		audio_Disabled( void );
 extern BOOL		audio_LoadTrackFromFile( char szFileName[] );
 extern BOOL		audio_SetTrackVals( const char* fileName, BOOL bLoop, int *iTrack,
 					int iVol, int iAudibleRadius );
-extern BOOL		audio_SetTrackValsHashName( UDWORD hash, BOOL bLoop, int iTrack, int iVol,
-							int iAudibleRadius );
 extern void		audio_ReleaseTrack( TRACK *psTrack );
 
 extern BOOL		audio_PlayStaticTrack( SDWORD iX, SDWORD iY, int iTrack );
@@ -74,7 +72,6 @@ extern void		audio_StopAll( void );
 extern void		audio_CheckAllUnloaded( void );
 
 extern SDWORD	audio_GetTrackID( char szFileName[] );
-extern SDWORD	audio_GetTrackIDFromHash( UDWORD hash );
 extern SDWORD	audio_GetAvailableID( void );
 extern SDWORD	audio_GetMixVol( SDWORD iVol );
 extern SDWORD	audio_GetSampleMixVol( AUDIO_SAMPLE * psSample, SDWORD iVol,

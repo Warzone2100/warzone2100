@@ -649,39 +649,6 @@ BOOL audio_SetTrackVals
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL audio_SetTrackValsHashName
-	(
-		UDWORD	hash,
-		BOOL	bLoop,
-		int		iTrack,
-		int		iVol,
-		int		iAudibleRadius
-	)
-{
-	//~~~~~~~~~~~~~
-	TRACK	*psTrack;
-	//~~~~~~~~~~~~~
-
-	// if audio not enabled return TRUE to carry on game without audio
-	if ( g_bAudioEnabled == FALSE )
-	{
-		return TRUE;
-	}
-
-	// get track pointer from resource
-	psTrack = (TRACK*)resGetDataFromHash( "WAV", hash );
-	if ( psTrack == NULL )
-	{
-		return FALSE;
-	}
-
-	return sound_SetTrackVals( psTrack, bLoop, iTrack, iVol, iAudibleRadius );
-}
-
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
 void audio_ReleaseTrack( TRACK *psTrack )
 {
 	// return if audio not enabled
@@ -941,7 +908,7 @@ void audio_StopObjTrack( void *psObj, int iTrack )
 			return;
 		}
 
-		// get next sample from hash table
+		// get next sample from linked list
 		psSample = psSample->psNext;
 	}
 }
@@ -1099,31 +1066,6 @@ SDWORD audio_GetTrackID( char szFileName[] )
 	}
 
 	psTrack = (TRACK*)resGetData( "WAV", szFileName );
-	if ( psTrack == NULL )
-	{
-		return SAMPLE_NOT_FOUND;
-	}
-
-	return sound_GetTrackID( psTrack );
-}
-
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
-SDWORD audio_GetTrackIDFromHash( UDWORD hash )
-{
-	//~~~~~~~~~~~~~
-	TRACK	*psTrack;
-	//~~~~~~~~~~~~~
-
-	// return if audio not enabled
-	if ( g_bAudioEnabled == FALSE )
-	{
-		return SAMPLE_NOT_FOUND;
-	}
-
-	psTrack = (TRACK*)resGetDataFromHash( "WAV", hash );
 	if ( psTrack == NULL )
 	{
 		return SAMPLE_NOT_FOUND;
