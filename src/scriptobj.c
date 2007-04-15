@@ -859,6 +859,7 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 	UDWORD			id;
 	LEVEL_DATASET	*psLevel;
 	DROID_GROUP		*psGroup;
+	const char              *pName;
 
 	switch (psVal->type)
 	{
@@ -1144,21 +1145,17 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 		break;
 	case ST_SOUND:
 		// find audio id
-		id = *((UDWORD *) pBuffer);
-		endian_udword(&id);
-		index = audio_GetTrackIDFromHash( id );
+		pName = pBuffer;
+		index = audio_GetTrackID( pName );
 		if (index == SAMPLE_NOT_FOUND)
 		{
-			// find empty id
-			index = audio_GetAvailableID();
-			if (index == SAMPLE_NOT_ALLOCATED)
+			// find empty id and set track vals
+			if (audio_SetTrackVals( pName, FALSE, &index, 100, 1800 ))
 			{
-				debug( LOG_ERROR, "Sound ID not available %s not found", pBuffer );
+				debug( LOG_ERROR, "Sound ID not available %s not found", pName );
 				abort();
 				break;
 			}
-			// set track vals
-			audio_SetTrackValsHashName( id, FALSE, index, 100, 1800 );
 		}
 		psVal->v.ival = index;
 		break;
