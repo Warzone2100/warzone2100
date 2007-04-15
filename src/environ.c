@@ -130,14 +130,14 @@ MAPTILE	*psTile;
 // -------------------------------------------------------------------------------
 void	environUpdate( void )
 {
-UDWORD	i,j;
-UDWORD	index;
-FRACT	value,newValue;
-FRACT	increment = 0;
-FRACT	lowest = 0;
-FRACT	highest = 0;
-UDWORD	startX,startY,endX,endY;
-FRACT	fraction;
+	UDWORD	i,j;
+	UDWORD	index;
+	FRACT	value,newValue;
+	FRACT	increment = 0;
+	FRACT	lowest = 0;
+	FRACT	highest = 0;
+	UDWORD	startX,startY,endX,endY;
+	FRACT	fraction;
 
 	//at the moment this function is getting called between levels and so crashes - quick check here for now
 	if (pEnvironData == NULL)
