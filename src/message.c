@@ -576,7 +576,7 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 		//allocate space for text strings
 		if (psViewData->numText)
 		{
-			psViewData->ppTextMsg = (char **) MALLOC(psViewData->numText *
+			psViewData->ppTextMsg = (char **) malloc(psViewData->numText *
 				sizeof(char *));
 		}
 
@@ -609,7 +609,7 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 		switch (psViewData->type)
 		{
 		case VIEW_RES:
-			psViewData->pData = (VIEW_RESEARCH *) MALLOC(sizeof(VIEW_RESEARCH));
+			psViewData->pData = (VIEW_RESEARCH *) malloc(sizeof(VIEW_RESEARCH));
 			if (psViewData->pData == NULL)
 			{
 				debug( LOG_ERROR, "Unable to allocate memory" );
@@ -652,7 +652,7 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 			if (strcmp(audioName, "0"))
 			{
 				//allocate space
-				psViewRes->pAudio = (char *) MALLOC(strlen(audioName) + 1);
+				psViewRes->pAudio = (char *) malloc(strlen(audioName) + 1);
 				if (psViewRes->pAudio == NULL)
 				{
 					debug( LOG_ERROR, "loadViewData - Out of memory" );
@@ -672,7 +672,7 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 		case VIEW_RPLX:
 			// This is now also used for the stream playing on the PSX
 			// NOTE: on the psx the last entry (audioID) is used as the number of frames in the stream
-			psViewData->pData = (VIEW_REPLAY *) MALLOC(sizeof(VIEW_REPLAY));
+			psViewData->pData = (VIEW_REPLAY *) malloc(sizeof(VIEW_REPLAY));
 			if (psViewData->pData == NULL)
 			{
 				debug( LOG_ERROR, "Unable to allocate memory" );
@@ -696,7 +696,7 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 			psViewReplay->numSeq = (UBYTE)count;
 
 			//allocate space for the sequences
-			psViewReplay->pSeqList = (SEQ_DISPLAY*) MALLOC(psViewReplay->numSeq *
+			psViewReplay->pSeqList = (SEQ_DISPLAY*) malloc(psViewReplay->numSeq *
 				sizeof(SEQ_DISPLAY));
 
 			//read in the data for the sequences
@@ -744,7 +744,7 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 				//allocate space for text strings
 				if (psViewReplay->pSeqList[dataInc].numText)
 				{
-					psViewReplay->pSeqList[dataInc].ppTextMsg = (char **) MALLOC(
+					psViewReplay->pSeqList[dataInc].ppTextMsg = (char **) malloc(
 						psViewReplay->pSeqList[dataInc].numText * sizeof(char *));
 				}
 				//read in the data for the text strings
@@ -780,7 +780,7 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 				if (strcmp(audioName, "0"))
 				{
 					//allocate space
-					psViewReplay->pSeqList[dataInc].pAudio = (char *) MALLOC(
+					psViewReplay->pSeqList[dataInc].pAudio = (char *) malloc(
 						strlen(audioName) + 1);
 					if (psViewReplay->pSeqList[dataInc].pAudio == NULL)
 					{
@@ -799,7 +799,7 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 			break;
 
 		case VIEW_PROX:
-			psViewData->pData = (VIEW_PROXIMITY *) MALLOC(sizeof(VIEW_PROXIMITY));
+			psViewData->pData = (VIEW_PROXIMITY *) malloc(sizeof(VIEW_PROXIMITY));
 			if (psViewData->pData == NULL)
 			{
 				debug( LOG_ERROR, "Unable to allocate memory" );
@@ -881,7 +881,7 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 		//increment the list to the start of the next storage block
 		psViewData++;
 	}
-//	FREE(pData);
+//	free(pData);
 
 	//return TRUE;
 	return pData;
@@ -947,11 +947,11 @@ void viewDataShutDown(VIEWDATA *psViewData)
 				//check for any messages using this viewdata
 				checkMessages((MSG_VIEWDATA *)psViewData);
 
-				FREE(psViewData->pName);
+				free(psViewData->pName);
 				//free the space allocated for the text messages
 				if (psViewData->numText)
 				{
-					FREE(psViewData->ppTextMsg);
+					free(psViewData->ppTextMsg);
 				}
 
 				//free the space allocated for multiple sequences
@@ -965,14 +965,14 @@ void viewDataShutDown(VIEWDATA *psViewData)
 							//free the space allocated for the text messages
 							if (psViewReplay->pSeqList[seqInc].numText)
 							{
-								FREE(psViewReplay->pSeqList[seqInc].ppTextMsg);
+								free(psViewReplay->pSeqList[seqInc].ppTextMsg);
 							}
 							if (psViewReplay->pSeqList[seqInc].pAudio)
 							{
-								FREE(psViewReplay->pSeqList[seqInc].pAudio);
+								free(psViewReplay->pSeqList[seqInc].pAudio);
 							}
 						}
-						FREE(psViewReplay->pSeqList);
+						free(psViewReplay->pSeqList);
 					}
 				}
 				else if (psViewData->type == VIEW_RES)
@@ -980,12 +980,12 @@ void viewDataShutDown(VIEWDATA *psViewData)
 					psViewRes = (VIEW_RESEARCH *)psViewData->pData;
 					if (psViewRes->pAudio)
 					{
-						FREE(psViewRes->pAudio);
+						free(psViewRes->pAudio);
 					}
 				}
-				FREE(psViewData->pData);
+				free(psViewData->pData);
 			}
-			FREE(psList->psViewData);
+			free(psList->psViewData);
 			//remove viewData list from the heap
 			if (psList == apsViewData)
 			{

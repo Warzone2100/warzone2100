@@ -72,8 +72,8 @@ void scrvShutDown(void)
 		psCurr = psContextStore;
 		psContextStore = psContextStore->psNext;
 
-		FREE(psCurr->pIDString);
-		FREE(psCurr);
+		free(psCurr->pIDString);
+		free(psCurr);
 	}
 }
 
@@ -87,8 +87,8 @@ void scrvReset(void)
 		psCurr = psContextStore;
 		psContextStore = psContextStore->psNext;
 
-		FREE(psCurr->pIDString);
-		FREE(psCurr);
+		free(psCurr->pIDString);
+		free(psCurr);
 	}
 
 	psContextStore = NULL;
@@ -101,14 +101,14 @@ BOOL scrvAddContext(char *pID, SCRIPT_CONTEXT *psContext, SCRV_TYPE type)
 {
 	SCRV_STORE		*psNew;
 
-	psNew = (SCRV_STORE*)MALLOC(sizeof(SCRV_STORE));
+	psNew = (SCRV_STORE*)malloc(sizeof(SCRV_STORE));
 	if (!psNew)
 	{
 		debug( LOG_ERROR, "scrvAddContext: Out of memory" );
 		abort();
 		return FALSE;
 	}
-	psNew->pIDString = (char*)MALLOC(strlen(pID) + 1);
+	psNew->pIDString = (char*)malloc(strlen(pID) + 1);
 	if (!psNew->pIDString)
 	{
 		debug( LOG_ERROR, "scrvAddContext: Out of memory" );
@@ -371,7 +371,7 @@ BOOL scrvGetString(char *pStringID, char **ppString)
 						psVal->v.sval));
 					return FALSE;
 				}
-				FREE(psVal->v.sval);
+				free(psVal->v.sval);
 				psVal->v.ival = compIndex;
 				break;
 			case ST_PROPULSION:
@@ -387,7 +387,7 @@ BOOL scrvGetString(char *pStringID, char **ppString)
 						psVal->v.sval));
 					return FALSE;
 				}
-				FREE(psVal->v.sval);
+				free(psVal->v.sval);
 				psVal->v.ival = compIndex;
 				break;
 			case ST_ECM:
@@ -403,7 +403,7 @@ BOOL scrvGetString(char *pStringID, char **ppString)
 						psVal->v.sval));
 					return FALSE;
 				}
-				FREE(psVal->v.sval);
+				free(psVal->v.sval);
 				psVal->v.ival = compIndex;
 				break;
 			case ST_SENSOR:
@@ -419,7 +419,7 @@ BOOL scrvGetString(char *pStringID, char **ppString)
 						psVal->v.sval));
 					return FALSE;
 				}
-				FREE(psVal->v.sval);
+				free(psVal->v.sval);
 				psVal->v.ival = compIndex;
 				break;
 			case ST_CONSTRUCT:
@@ -435,7 +435,7 @@ BOOL scrvGetString(char *pStringID, char **ppString)
 						psVal->v.sval));
 					return FALSE;
 				}
-				FREE(psVal->v.sval);
+				free(psVal->v.sval);
 				psVal->v.ival = compIndex;
 				break;
 			case ST_WEAPON:
@@ -451,7 +451,7 @@ BOOL scrvGetString(char *pStringID, char **ppString)
 						psVal->v.sval));
 					return FALSE;
 				}
-				FREE(psVal->v.sval);
+				free(psVal->v.sval);
 				psVal->v.ival = compIndex;
 				break;
 			default:

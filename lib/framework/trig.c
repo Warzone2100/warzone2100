@@ -66,29 +66,29 @@ BOOL trigInitialise(void)
 
 
 	// Allocate the tables
-	aSin=(FRACT*)MALLOC(sizeof(FRACT) * TRIG_DEGREES);
+	aSin=(FRACT*)malloc(sizeof(FRACT) * TRIG_DEGREES);
 	if (!aSin)
 	{
 		return FALSE;
 	}
-	aCos=(FRACT*)MALLOC(sizeof(FRACT) * TRIG_DEGREES);
+	aCos=(FRACT*)malloc(sizeof(FRACT) * TRIG_DEGREES);
 	if (!aCos)
 	{
 		return FALSE;
 	}
-	aInvSin=(FRACT*)MALLOC(sizeof(FRACT) * TRIG_ACCURACY);
+	aInvSin=(FRACT*)malloc(sizeof(FRACT) * TRIG_ACCURACY);
 	if (!aInvSin)
 	{
 		return FALSE;
 	}
 
-	aInvCos=(FRACT*)MALLOC(sizeof(FRACT) * TRIG_ACCURACY);
+	aInvCos=(FRACT*)malloc(sizeof(FRACT) * TRIG_ACCURACY);
 	if (!aInvCos)
 	{
 		return FALSE;
 	}
 
-	aSqrt=(FRACT*)MALLOC(sizeof(FRACT) * SQRT_ACCURACY);
+	aSqrt=(FRACT*)malloc(sizeof(FRACT) * SQRT_ACCURACY);
 	if (!aSqrt)
 	{
 		return FALSE;
@@ -127,11 +127,11 @@ BOOL trigInitialise(void)
 void trigShutDown(void)
 {
 
-	FREE(aSin);
-	FREE(aCos);
-	FREE(aInvSin);
-	FREE(aInvCos);
-	FREE(aSqrt);
+	free(aSin);
+	free(aCos);
+	free(aInvSin);
+	free(aInvCos);
+	free(aSqrt);
 
 }
 

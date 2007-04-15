@@ -504,12 +504,12 @@ KEY_MAPPING *keyAddMapping(KEY_STATUS status,KEY_CODE metaCode, KEY_CODE subCode
 KEY_MAPPING	*newMapping;
 
 	/* Get some memory for our binding */
-	newMapping = (KEY_MAPPING*)MALLOC(sizeof(KEY_MAPPING));
+	newMapping = (KEY_MAPPING*)malloc(sizeof(KEY_MAPPING));
 
 	ASSERT( newMapping != NULL, "Couldn't allocate memory for a key mapping" );
 
 	/* Plus one for the terminator */
-	newMapping->pName = (char*)MALLOC(strlen(name)+1);
+	newMapping->pName = (char*)malloc(strlen(name)+1);
 	ASSERT( newMapping->pName != NULL, "Couldn't allocate the memory for the string in a mapping" );
 
 	/* Copy over the name */
@@ -598,8 +598,8 @@ KEY_MAPPING	*psPrev,*psCurr;
 
 	if(psToRemove == keyMappings && keyMappings->psNext == NULL)
 	{
-		if (keyMappings->pName)	FREE(keyMappings->pName);		// ffs
-		FREE(keyMappings);
+		if (keyMappings->pName)	free(keyMappings->pName);		// ffs
+		free(keyMappings);
 		keyMappings = NULL;
 		numActiveMappings = 0;
 		return(TRUE);
@@ -628,9 +628,9 @@ KEY_MAPPING	*psPrev,*psCurr;
 			keyMappings = psCurr->psNext;
 		}
 		/* Free up the memory, first for the string  */
-		if (psCurr->pName)	FREE(psCurr->pName);		// only free it if it was allocated in the first place (ffs)
+		if (psCurr->pName)	free(psCurr->pName);		// only free it if it was allocated in the first place (ffs)
 		/* and then for the mapping itself */
-		FREE(psCurr);
+		free(psCurr);
 		numActiveMappings--;
 		return(TRUE);
 	}

@@ -185,13 +185,13 @@ void script_debug(const char *pFormat, ...);
 
 /* Macro to allocate a program structure, size is in _bytes_ */
 #define ALLOC_PROG(psProg, codeSize, pAICode, numGlobs, numArys, numTrigs, numEvnts) \
-	(psProg) = (SCRIPT_CODE *)MALLOC(sizeof(SCRIPT_CODE)); \
+	(psProg) = (SCRIPT_CODE *)malloc(sizeof(SCRIPT_CODE)); \
 	if ((psProg) == NULL) \
 	{ \
 		debug(LOG_ERROR, "Out of memory"); \
 		ALLOC_ERROR_ACTION; \
 	} \
-	(psProg)->pCode = (INTERP_VAL *)MALLOC((codeSize) * sizeof(INTERP_VAL)); \
+	(psProg)->pCode = (INTERP_VAL *)malloc((codeSize) * sizeof(INTERP_VAL)); \
 	if ((psProg)->pCode == NULL) \
 	{ \
 		debug(LOG_ERROR, "Out of memory"); \
@@ -199,7 +199,7 @@ void script_debug(const char *pFormat, ...);
 	} \
 	if (numGlobs > 0) \
 	{ \
-		(psProg)->pGlobals = (INTERP_TYPE *)MALLOC(sizeof(INTERP_TYPE) * (numGlobs)); \
+		(psProg)->pGlobals = (INTERP_TYPE *)malloc(sizeof(INTERP_TYPE) * (numGlobs)); \
 		if ((psProg)->pGlobals == NULL) \
 		{ \
 			debug(LOG_ERROR, "Out of memory"); \
@@ -212,7 +212,7 @@ void script_debug(const char *pFormat, ...);
 	} \
 	if (numArys > 0) \
 	{ \
-		(psProg)->psArrayInfo = (ARRAY_DATA *)MALLOC(sizeof(ARRAY_DATA) * (numArys)); \
+		(psProg)->psArrayInfo = (ARRAY_DATA *)malloc(sizeof(ARRAY_DATA) * (numArys)); \
 		if ((psProg)->psArrayInfo == NULL) \
 		{ \
 			debug(LOG_ERROR, "Out of memory"); \
@@ -226,13 +226,13 @@ void script_debug(const char *pFormat, ...);
 	(psProg)->numArrays = (UWORD)(numArys); \
 	if ((numTrigs) > 0) \
 	{ \
-		(psProg)->pTriggerTab = MALLOC(sizeof(UWORD) * ((numTrigs) + 1)); \
+		(psProg)->pTriggerTab = malloc(sizeof(UWORD) * ((numTrigs) + 1)); \
 		if ((psProg)->pTriggerTab == NULL) \
 		{ \
 			debug(LOG_ERROR, "Out of memory"); \
 			ALLOC_ERROR_ACTION; \
 		} \
-		(psProg)->psTriggerData = MALLOC(sizeof(TRIGGER_DATA) * (numTrigs)); \
+		(psProg)->psTriggerData = malloc(sizeof(TRIGGER_DATA) * (numTrigs)); \
 		if ((psProg)->psTriggerData == NULL) \
 		{ \
 			debug(LOG_ERROR, "Out of memory"); \
@@ -244,13 +244,13 @@ void script_debug(const char *pFormat, ...);
 		(psProg)->pTriggerTab = NULL; \
 		(psProg)->psTriggerData = NULL; \
 	} \
-	(psProg)->pEventTab = MALLOC(sizeof(UWORD) * ((numEvnts) + 1)); \
+	(psProg)->pEventTab = malloc(sizeof(UWORD) * ((numEvnts) + 1)); \
 	if ((psProg)->pEventTab == NULL) \
 	{ \
 		debug(LOG_ERROR, "Out of memory"); \
 		ALLOC_ERROR_ACTION; \
 	} \
-	(psProg)->pEventLinks = MALLOC(sizeof(SWORD) * (numEvnts)); \
+	(psProg)->pEventLinks = malloc(sizeof(SWORD) * (numEvnts)); \
 	if ((psProg)->pEventLinks == NULL) \
 	{ \
 		debug(LOG_ERROR, "Out of memory"); \
@@ -263,17 +263,17 @@ void script_debug(const char *pFormat, ...);
 
 /* Macro to allocate a code block, blockSize - number of INTERP_VALs we need*/
 #define ALLOC_BLOCK(psBlock, num) \
-	(psBlock) = (CODE_BLOCK *)MALLOC(sizeof(CODE_BLOCK)); \
+	(psBlock) = (CODE_BLOCK *)malloc(sizeof(CODE_BLOCK)); \
 	if ((psBlock) == NULL) \
 	{ \
 		debug(LOG_ERROR, "Out of memory"); \
 		ALLOC_ERROR_ACTION; \
 	} \
-	(psBlock)->pCode = (INTERP_VAL *)MALLOC((num) * sizeof(INTERP_VAL)); \
+	(psBlock)->pCode = (INTERP_VAL *)malloc((num) * sizeof(INTERP_VAL)); \
 	if ((psBlock)->pCode == NULL) \
 	{ \
 		debug(LOG_ERROR, "Out of memory"); \
-		FREE((psBlock)); \
+		free((psBlock)); \
 		ALLOC_ERROR_ACTION; \
 	} \
 	(psBlock)->size = (num); \
@@ -281,30 +281,30 @@ void script_debug(const char *pFormat, ...);
 
 /* Macro to free a code block */
 #define FREE_BLOCK(psBlock) \
-	FREE((psBlock)->pCode); \
-	FREE((psBlock))
+	free((psBlock)->pCode); \
+	free((psBlock))
 
 /* Macro to allocate a parameter block */
 #define ALLOC_PBLOCK(psBlock, num, paramSize) \
-	(psBlock) = (PARAM_BLOCK *)MALLOC(sizeof(PARAM_BLOCK)); \
+	(psBlock) = (PARAM_BLOCK *)malloc(sizeof(PARAM_BLOCK)); \
 	if ((psBlock) == NULL) \
 	{ \
 		debug(LOG_ERROR, "Out of memory"); \
 		ALLOC_ERROR_ACTION; \
 	} \
-	(psBlock)->pCode = (INTERP_VAL *)MALLOC((num) * sizeof(INTERP_VAL)); \
+	(psBlock)->pCode = (INTERP_VAL *)malloc((num) * sizeof(INTERP_VAL)); \
 	if ((psBlock)->pCode == NULL) \
 	{ \
 		debug(LOG_ERROR, "Out of memory"); \
-		FREE((psBlock)); \
+		free((psBlock)); \
 		ALLOC_ERROR_ACTION; \
 	} \
-	(psBlock)->aParams = (INTERP_TYPE *)MALLOC(sizeof(INTERP_TYPE) * (paramSize)); \
+	(psBlock)->aParams = (INTERP_TYPE *)malloc(sizeof(INTERP_TYPE) * (paramSize)); \
 	if ((psBlock)->aParams == NULL) \
 	{ \
 		debug(LOG_ERROR, "Out of memory"); \
-		FREE((psBlock)->pCode); \
-		FREE((psBlock)); \
+		free((psBlock)->pCode); \
+		free((psBlock)); \
 		ALLOC_ERROR_ACTION; \
 	} \
 	(psBlock)->size = (num); \
@@ -312,19 +312,19 @@ void script_debug(const char *pFormat, ...);
 
 /* Macro to free a parameter block */
 #define FREE_PBLOCK(psBlock) \
-	FREE((psBlock)->pCode); \
-	FREE((psBlock)->aParams); \
-	FREE((psBlock))
+	free((psBlock)->pCode); \
+	free((psBlock)->aParams); \
+	free((psBlock))
 
 /* Macro to allocate a parameter declaration block */
 #define ALLOC_PARAMDECL(psPDecl, num) \
-	(psPDecl) = (PARAM_DECL *)MALLOC(sizeof(PARAM_DECL)); \
+	(psPDecl) = (PARAM_DECL *)malloc(sizeof(PARAM_DECL)); \
 	if ((psPDecl) == NULL) \
 	{ \
 		debug(LOG_ERROR, "Out of memory"); \
 		ALLOC_ERROR_ACTION; \
 	} \
-	(psPDecl)->aParams = (INTERP_TYPE *)MALLOC(sizeof(INTERP_TYPE) * (num)); \
+	(psPDecl)->aParams = (INTERP_TYPE *)malloc(sizeof(INTERP_TYPE) * (num)); \
 	if ((psPDecl)->aParams == NULL) \
 	{ \
 		debug(LOG_ERROR, "Out of memory"); \
@@ -334,24 +334,24 @@ void script_debug(const char *pFormat, ...);
 
 /* Macro to free a parameter declaration block */
 #define FREE_PARAMDECL(psPDecl) \
-	FREE((psPDecl)->aParams); \
-	FREE((psPDecl))
+	free((psPDecl)->aParams); \
+	free((psPDecl))
 
 /* Macro to allocate a conditional block */
 #define ALLOC_CONDBLOCK(psCB, num, numBlocks) \
-	(psCB) = (COND_BLOCK *)MALLOC(sizeof(COND_BLOCK)); \
+	(psCB) = (COND_BLOCK *)malloc(sizeof(COND_BLOCK)); \
 	if ((psCB) == NULL) \
 	{ \
 		debug(LOG_ERROR, "Out of memory"); \
 		ALLOC_ERROR_ACTION; \
 	} \
-	(psCB)->aOffsets = (UDWORD *)MALLOC(sizeof(SDWORD) * (num)); \
+	(psCB)->aOffsets = (UDWORD *)malloc(sizeof(SDWORD) * (num)); \
 	if ((psCB)->aOffsets == NULL) \
 	{ \
 		debug(LOG_ERROR, "Out of memory"); \
 		ALLOC_ERROR_ACTION; \
 	} \
-	(psCB)->pCode = (INTERP_VAL *)MALLOC((numBlocks) * sizeof(INTERP_VAL)); \
+	(psCB)->pCode = (INTERP_VAL *)malloc((numBlocks) * sizeof(INTERP_VAL)); \
 	if ((psCB)->pCode == NULL) \
 	{ \
 		debug(LOG_ERROR, "Out of memory"); \
@@ -362,24 +362,24 @@ void script_debug(const char *pFormat, ...);
 
 /* Macro to free a conditional block */
 #define FREE_CONDBLOCK(psCB) \
-	FREE((psCB)->aOffsets); \
-	FREE((psCB)->pCode); \
-	FREE(psCB)
+	free((psCB)->aOffsets); \
+	free((psCB)->pCode); \
+	free(psCB)
 
 /* Macro to free a code block */
 #define FREE_USERBLOCK(psBlock) \
-	FREE((psBlock)->pCode); \
-	FREE((psBlock))
+	free((psBlock)->pCode); \
+	free((psBlock))
 
 /* Macro to allocate an object variable block */
 #define ALLOC_OBJVARBLOCK(psOV, blockSize, psVar) \
-	(psOV) = (OBJVAR_BLOCK *)MALLOC(sizeof(OBJVAR_BLOCK)); \
+	(psOV) = (OBJVAR_BLOCK *)malloc(sizeof(OBJVAR_BLOCK)); \
 	if ((psOV) == NULL) \
 	{ \
 		scr_error("Out of memory"); \
 		ALLOC_ERROR_ACTION; \
 	} \
-	(psOV)->pCode = (INTERP_VAL *)MALLOC((blockSize) * sizeof(INTERP_VAL)); \
+	(psOV)->pCode = (INTERP_VAL *)malloc((blockSize) * sizeof(INTERP_VAL)); \
 	if ((psOV)->pCode == NULL) \
 	{ \
 		scr_error("Out of memory"); \
@@ -390,18 +390,18 @@ void script_debug(const char *pFormat, ...);
 
 /* Macro to free an object variable block */
 #define FREE_OBJVARBLOCK(psOV) \
-	FREE((psOV)->pCode); \
-	FREE(psOV)
+	free((psOV)->pCode); \
+	free(psOV)
 
 /* Macro to allocate an array variable block */
 #define ALLOC_ARRAYBLOCK(psAV, blockSize, psVar) \
-	(psAV) = (ARRAY_BLOCK *)MALLOC(sizeof(ARRAY_BLOCK)); \
+	(psAV) = (ARRAY_BLOCK *)malloc(sizeof(ARRAY_BLOCK)); \
 	if ((psAV) == NULL) \
 	{ \
 		scr_error("Out of memory"); \
 		ALLOC_ERROR_ACTION; \
 	} \
-	(psAV)->pCode = (INTERP_VAL *)MALLOC((blockSize) * sizeof(INTERP_VAL)); \
+	(psAV)->pCode = (INTERP_VAL *)malloc((blockSize) * sizeof(INTERP_VAL)); \
 	if ((psAV)->pCode == NULL) \
 	{ \
 		scr_error("Out of memory"); \
@@ -413,12 +413,12 @@ void script_debug(const char *pFormat, ...);
 
 /* Macro to free an object variable block */
 #define FREE_ARRAYBLOCK(psAV) \
-	FREE((psAV)->pCode); \
-	FREE(psAV)
+	free((psAV)->pCode); \
+	free(psAV)
 
 /* Allocate a trigger subdecl */
 #define ALLOC_TSUBDECL(psTSub, blockType, blockSize, blockTime) \
-	(psTSub) = MALLOC(sizeof(TRIGGER_DECL)); \
+	(psTSub) = malloc(sizeof(TRIGGER_DECL)); \
 	if ((psTSub) == NULL) \
 	{ \
 		scr_error("Out of memory"); \
@@ -428,7 +428,7 @@ void script_debug(const char *pFormat, ...);
 	(psTSub)->time = (blockTime); \
 	if ((blockSize) > 0) \
 	{ \
-		(psTSub)->pCode = (INTERP_VAL *)MALLOC((blockSize) * sizeof(INTERP_VAL)); \
+		(psTSub)->pCode = (INTERP_VAL *)malloc((blockSize) * sizeof(INTERP_VAL)); \
 		if ((psTSub)->pCode == NULL) \
 		{ \
 			scr_error("Out of memory"); \
@@ -446,13 +446,13 @@ void script_debug(const char *pFormat, ...);
 #define FREE_TSUBDECL(psTSub) \
 	if ((psTSub)->pCode) \
 	{ \
-		FREE((psTSub)->pCode); \
+		free((psTSub)->pCode); \
 	} \
-	FREE(psTSub)
+	free(psTSub)
 
 /* Allocate a variable declaration block */
 #define ALLOC_VARDECL(psDcl) \
-	(psDcl)=MALLOC(sizeof(VAR_DECL)); \
+	(psDcl)=malloc(sizeof(VAR_DECL)); \
 	if ((psDcl) == NULL) \
 	{ \
 		scr_error("Out of memory"); \
@@ -461,11 +461,11 @@ void script_debug(const char *pFormat, ...);
 
 /* Free a variable declaration block */
 #define FREE_VARDECL(psDcl) \
-	FREE(psDcl)
+	free(psDcl)
 
 /* Allocate a variable declaration block */
 #define ALLOC_VARIDENTDECL(psDcl, ident, dim) \
-	(psDcl)=MALLOC(sizeof(VAR_IDENT_DECL)); \
+	(psDcl)=malloc(sizeof(VAR_IDENT_DECL)); \
 	if ((psDcl) == NULL) \
 	{ \
 		scr_error("Out of memory"); \
@@ -473,7 +473,7 @@ void script_debug(const char *pFormat, ...);
 	} \
 	if ((ident) != NULL) \
 	{ \
-		(psDcl)->pIdent=MALLOC(strlen(ident)+1); \
+		(psDcl)->pIdent=malloc(strlen(ident)+1); \
 		if ((psDcl)->pIdent == NULL) \
 		{ \
 			scr_error("Out of memory"); \
@@ -489,7 +489,7 @@ void script_debug(const char *pFormat, ...);
 
 /* Free a variable declaration block */
 #define FREE_VARIDENTDECL(psDcl) \
-	FREE(psDcl)
+	free(psDcl)
 
 /****************************************************************************************
  *
@@ -593,7 +593,7 @@ void script_debug(const char *pFormat, ...);
 #define ALLOC_DEBUG(psBlock, num) \
 	if (genDebugInfo) \
 	{ \
-		(psBlock)->psDebug = (SCRIPT_DEBUG *)MALLOC(sizeof(SCRIPT_DEBUG) * (num)); \
+		(psBlock)->psDebug = (SCRIPT_DEBUG *)malloc(sizeof(SCRIPT_DEBUG) * (num)); \
 		if ((psBlock)->psDebug == NULL) \
 		{ \
 			scr_error("Out of memory"); \
@@ -611,7 +611,7 @@ void script_debug(const char *pFormat, ...);
 /* Macro to free debugging info */
 #define FREE_DEBUG(psBlock) \
 	if (genDebugInfo) \
-		FREE((psBlock)->psDebug)
+		free((psBlock)->psDebug)
 
 
 /* Macro to copy the debugging information from one block to another */
@@ -660,7 +660,7 @@ static SCRIPT_DEBUG	*_psCurr;
 #define DEBUG_LABEL(psBlock, offset, pString) \
 	if (genDebugInfo) \
 	{ \
-		(psBlock)->psDebug[offset].pLabel = MALLOC(strlen(pString)+1); \
+		(psBlock)->psDebug[offset].pLabel = malloc(strlen(pString)+1); \
 		if (!(psBlock)->psDebug[offset].pLabel) \
 		{ \
 			scr_error("Out of memory"); \
@@ -1980,10 +1980,10 @@ script:			header var_list
 
 					//store local vars
 					//allocate array for holding an array of local vars for each event
-					psFinalProg->ppsLocalVars = (INTERP_TYPE **)MALLOC(sizeof(INTERP_TYPE*) * numEvents);
+					psFinalProg->ppsLocalVars = (INTERP_TYPE **)malloc(sizeof(INTERP_TYPE*) * numEvents);
 					psFinalProg->ppsLocalVarVal = NULL;
-					psFinalProg->numLocalVars = (UDWORD *)MALLOC(sizeof(UDWORD) * numEvents);	//how many local vars each event has
-					psFinalProg->numParams = (UDWORD *)MALLOC(sizeof(UDWORD) * numEvents);	//how many arguments each event has
+					psFinalProg->numLocalVars = (UDWORD *)malloc(sizeof(UDWORD) * numEvents);	//how many local vars each event has
+					psFinalProg->numParams = (UDWORD *)malloc(sizeof(UDWORD) * numEvents);	//how many arguments each event has
 
 					i=0;
 					for(psEvent = psEvents; psEvent; psEvent = psEvent->psNext)
@@ -1995,7 +1995,7 @@ script:			header var_list
 
 						if(numEventLocalVars[i] > 0)
 						{
-							pCurEvLocalVars = (INTERP_TYPE*)MALLOC(sizeof(INTERP_TYPE) * numEventLocalVars[i]);
+							pCurEvLocalVars = (INTERP_TYPE*)malloc(sizeof(INTERP_TYPE) * numEventLocalVars[i]);
 
 							j=0;
 							for(psCurr =psLocalVarsB[i]; psCurr != NULL; psCurr = psCurr->psNext)
@@ -2083,7 +2083,7 @@ script:			header var_list
 					{
 						if (numVars > 0)
 						{
-							psFinalProg->psVarDebug = MALLOC(sizeof(VAR_DEBUG) * numVars);
+							psFinalProg->psVarDebug = malloc(sizeof(VAR_DEBUG) * numVars);
 							if (psFinalProg->psVarDebug == NULL)
 							{
 								scr_error("Out of memory");
@@ -2096,7 +2096,7 @@ script:			header var_list
 						}
 						if (numArrays > 0)
 						{
-							psFinalProg->psArrayDebug = MALLOC(sizeof(ARRAY_DEBUG) * numArrays);
+							psFinalProg->psArrayDebug = malloc(sizeof(ARRAY_DEBUG) * numArrays);
 							if (psFinalProg->psArrayDebug == NULL)
 							{
 								scr_error("Out of memory");
@@ -2123,7 +2123,7 @@ script:			header var_list
 						if (genDebugInfo)
 						{
 							psFinalProg->psVarDebug[i].pIdent =
-										MALLOC(strlen(psCurr->pIdent) + 1);
+										malloc(strlen(psCurr->pIdent) + 1);
 							if (psFinalProg->psVarDebug[i].pIdent == NULL)
 							{
 								scr_error("Out of memory");
@@ -2150,7 +2150,7 @@ script:			header var_list
 						if (genDebugInfo)
 						{
 							psFinalProg->psArrayDebug[i].pIdent =
-										MALLOC(strlen(psCurr->pIdent) + 1);
+										malloc(strlen(psCurr->pIdent) + 1);
 							if (psFinalProg->psArrayDebug[i].pIdent == NULL)
 							{
 								scr_error("Out of memory");
@@ -2315,7 +2315,7 @@ variable_ident:		IDENT
 			|
 					IDENT array_sub_decl_list
 					{
-						$2->pIdent = MALLOC(strlen($1)+1);
+						$2->pIdent = malloc(strlen($1)+1);
 						if ($2->pIdent == NULL)
 						{
 							scr_error("Out of memory");
@@ -5750,8 +5750,8 @@ static void scriptResetTables(void)
 	for(psCurr = psGlobalVars; psCurr != NULL; psCurr = psNext)
 	{
 		psNext = psCurr->psNext;
-		FREE(psCurr->pIdent);
-		FREE(psCurr);
+		free(psCurr->pIdent);
+		free(psCurr);
 	}
 	psGlobalVars = NULL;
 
@@ -5764,8 +5764,8 @@ static void scriptResetTables(void)
 		for(psCurr = psLocalVarsB[i]; psCurr != NULL; psCurr = psNext)
 		{
 			psNext = psCurr->psNext;
-			FREE(psCurr->pIdent);
-			FREE(psCurr);
+			free(psCurr->pIdent);
+			free(psCurr);
 		}
 		psLocalVarsB[i] = NULL;
 	}
@@ -5774,8 +5774,8 @@ static void scriptResetTables(void)
 	for(psCurr = psLocalVarsTemp; psCurr != NULL; psCurr = psNext)
 	{
 		psNext = psCurr->psNext;
-		FREE(psCurr->pIdent);
-		FREE(psCurr);
+		free(psCurr->pIdent);
+		free(psCurr);
 	}
 	psLocalVarsTemp = NULL;
 
@@ -5784,8 +5784,8 @@ static void scriptResetTables(void)
 	for(psCurr = psGlobalArrays; psCurr != NULL; psCurr = psNext)
 	{
 		psNext = psCurr->psNext;
-		FREE(psCurr->pIdent);
-		FREE(psCurr);
+		free(psCurr->pIdent);
+		free(psCurr);
 	}
 	psGlobalArrays = NULL;
 
@@ -5795,14 +5795,14 @@ static void scriptResetTables(void)
 		psTNext = psTCurr->psNext;
 		if (psTCurr->psDebug)
 		{
-			FREE(psTCurr->psDebug);
+			free(psTCurr->psDebug);
 		}
 		if (psTCurr->pCode)
 		{
-			FREE(psTCurr->pCode);
+			free(psTCurr->pCode);
 		}
-		FREE(psTCurr->pIdent);
-		FREE(psTCurr);
+		free(psTCurr->pIdent);
+		free(psTCurr);
 	}
 	psTriggers = NULL;
 	numTriggers = 0;
@@ -5813,11 +5813,11 @@ static void scriptResetTables(void)
 		psENext = psECurr->psNext;
 		if (psECurr->psDebug)
 		{
-			FREE(psECurr->psDebug);
+			free(psECurr->psDebug);
 		}
-		FREE(psECurr->pIdent);
-		FREE(psECurr->pCode);
-		FREE(psECurr);
+		free(psECurr->pIdent);
+		free(psECurr->pCode);
+		free(psECurr);
 	}
 	psEvents = NULL;
 	numEvents = 0;
@@ -5827,9 +5827,9 @@ static void scriptResetTables(void)
 	{
 		psFNext = psFCurr->psNext;
 		FREE_DEBUG(psFCurr);
-		FREE(psFCurr->pIdent);
-		FREE(psFCurr->pCode);
-		FREE(psFCurr);
+		free(psFCurr->pIdent);
+		free(psFCurr->pCode);
+		free(psFCurr);
 	}
 	psFunctions = NULL;
 }
@@ -5955,8 +5955,8 @@ void scriptClearLocalVariables(void)
 	for(psCurr = psLocalVars; psCurr != NULL; psCurr = psNext)
 	{
 		psNext = psCurr->psNext;
-		FREE(psCurr->pIdent);
-		FREE(psCurr);
+		free(psCurr->pIdent);
+		free(psCurr);
 	}
 }
 
@@ -5985,14 +5985,14 @@ BOOL scriptAddVariable(VAR_DECL *psStorage, VAR_IDENT_DECL *psVarIdent)
 	SDWORD			i;
 
 	/* Allocate the memory for the symbol structure */
-	psNew = (VAR_SYMBOL *)MALLOC(sizeof(VAR_SYMBOL));
+	psNew = (VAR_SYMBOL *)malloc(sizeof(VAR_SYMBOL));
 	if (psNew == NULL)
 	{
 		scr_error("Out of memory");
 		return FALSE;
 	}
 
-	psNew->pIdent = psVarIdent->pIdent; //(char *)MALLOC(strlen(pIdent) + 1);
+	psNew->pIdent = psVarIdent->pIdent; //(char *)malloc(strlen(pIdent) + 1);
 /*	if (psNew->pIdent == NULL)
 	{
 		scr_error("Out of memory");
@@ -6196,13 +6196,13 @@ BOOL scriptAddTrigger(const char *pIdent, TRIGGER_DECL *psDecl, UDWORD line)
 	TRIGGER_SYMBOL		*psTrigger, *psCurr, *psPrev;
 
 	// Allocate the trigger
-	psTrigger = MALLOC(sizeof(TRIGGER_SYMBOL));
+	psTrigger = malloc(sizeof(TRIGGER_SYMBOL));
 	if (!psTrigger)
 	{
 		scr_error("Out of memory");
 		return FALSE;
 	}
-	psTrigger->pIdent = MALLOC(strlen(pIdent) + 1);
+	psTrigger->pIdent = malloc(strlen(pIdent) + 1);
 	if (!psTrigger->pIdent)
 	{
 		scr_error("Out of memory");
@@ -6211,7 +6211,7 @@ BOOL scriptAddTrigger(const char *pIdent, TRIGGER_DECL *psDecl, UDWORD line)
 	strcpy(psTrigger->pIdent, pIdent);
 	if (psDecl->size > 0)
 	{
-		psTrigger->pCode = (INTERP_VAL *)MALLOC(psDecl->size * sizeof(INTERP_VAL));
+		psTrigger->pCode = (INTERP_VAL *)malloc(psDecl->size * sizeof(INTERP_VAL));
 		if (!psTrigger->pCode)
 		{
 			scr_error("Out of memory");
@@ -6232,7 +6232,7 @@ BOOL scriptAddTrigger(const char *pIdent, TRIGGER_DECL *psDecl, UDWORD line)
 	// Add debug info
 	if (genDebugInfo)
 	{
-		psTrigger->psDebug = MALLOC(sizeof(SCRIPT_DEBUG));
+		psTrigger->psDebug = malloc(sizeof(SCRIPT_DEBUG));
 		psTrigger->psDebug[0].offset = 0;
 		psTrigger->psDebug[0].line = line;
 		psTrigger->debugEntries = 1;
@@ -6318,13 +6318,13 @@ BOOL scriptDeclareEvent(const char *pIdent, EVENT_SYMBOL **ppsEvent, SDWORD numA
 	EVENT_SYMBOL		*psEvent, *psCurr, *psPrev;
 
 	// Allocate the event
-	psEvent = MALLOC(sizeof(EVENT_SYMBOL));
+	psEvent = malloc(sizeof(EVENT_SYMBOL));
 	if (!psEvent)
 	{
 		scr_error("Out of memory");
 		return FALSE;
 	}
-	psEvent->pIdent = MALLOC(strlen(pIdent) + 1);
+	psEvent->pIdent = malloc(strlen(pIdent) + 1);
 	if (!psEvent->pIdent)
 	{
 		scr_error("Out of memory");
@@ -6376,7 +6376,7 @@ BOOL scriptDefineEvent(EVENT_SYMBOL *psEvent, CODE_BLOCK *psCode, SDWORD trigger
 		"Events with parameters can't have a trigger assigned, event: '%s' ", psEvent->pIdent);
 
 	// Store the event code
-	psEvent->pCode = (INTERP_VAL *)MALLOC(psCode->size * sizeof(INTERP_VAL));
+	psEvent->pCode = (INTERP_VAL *)malloc(psCode->size * sizeof(INTERP_VAL));
 	if (!psEvent->pCode)
 	{
 		scr_error("Out of memory");
@@ -6390,7 +6390,7 @@ BOOL scriptDefineEvent(EVENT_SYMBOL *psEvent, CODE_BLOCK *psCode, SDWORD trigger
 	// Add debug info
 	if (genDebugInfo && (psCode->debugEntries > 0))
 	{
-		psEvent->psDebug = MALLOC(sizeof(SCRIPT_DEBUG) * psCode->debugEntries);
+		psEvent->psDebug = malloc(sizeof(SCRIPT_DEBUG) * psCode->debugEntries);
 
 		if (!psEvent->psDebug)
 		{

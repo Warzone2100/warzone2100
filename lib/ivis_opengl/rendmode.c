@@ -83,7 +83,7 @@ void iV_SurfaceDestroy(iSurface *s)
 		psRendSurface = NULL;
 
 	if (s)
-		FREE(s);
+		free(s);
 }
 
 //*************************************************************************

@@ -440,7 +440,7 @@ void droidRelease(DROID *psDroid)
 			}
 		}
 	}
-	//FREE(psDroid->pName);
+	//free(psDroid->pName);
 
 	// leave the current formation if any
 	if (psDroid->sMove.psFormation)
@@ -3139,7 +3139,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		pDroidData = strchr(pDroidData,'\n') + 1;
 		pDroidDesign++;
 	}
-//	FREE(pStartDroidData);
+//	free(pStartDroidData);
 
 
 
@@ -3437,7 +3437,7 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 
 	}
 
-//	FREE(pStartWeaponData);
+//	free(pStartWeaponData);
 	return TRUE;
 }
 

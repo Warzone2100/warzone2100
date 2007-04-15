@@ -82,7 +82,7 @@ BOOL allocPlayerPower(void)
 	//allocate the space for the structure
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		asPower[player] = (PLAYER_POWER *) MALLOC (sizeof(PLAYER_POWER));
+		asPower[player] = (PLAYER_POWER *) malloc(sizeof(PLAYER_POWER));
 		if (asPower[player] == NULL)
 		{
 			debug( LOG_ERROR, "Out of memory" );
@@ -125,7 +125,7 @@ void releasePlayerPower(void)
 	{
 		if (asPower[player])
 		{
-			FREE(asPower[player]);
+			free(asPower[player]);
 		}
 	}
 }

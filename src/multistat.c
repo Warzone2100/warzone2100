@@ -96,7 +96,7 @@ BOOL addToForce(DROID_TEMPLATE  *templ)
 		 psTempl = psTempl->psNext);
 	if(!psTempl)
 	{
-		pT = (DROID_TEMPLATE*)MALLOC(sizeof(DROID_TEMPLATE));
+		pT = (DROID_TEMPLATE*)malloc(sizeof(DROID_TEMPLATE));
 		if ( !pT)
 		{
 			return FALSE;
@@ -117,7 +117,7 @@ BOOL addToForce(DROID_TEMPLATE  *templ)
 	}
 
 	// add droid.
-	pF = (FORCE_MEMBER*)MALLOC(sizeof(FORCE_MEMBER));						// create a slot in the force.
+	pF = (FORCE_MEMBER*)malloc(sizeof(FORCE_MEMBER));						// create a slot in the force.
 	if (!pF)
 	{
 		return FALSE;
@@ -159,7 +159,7 @@ BOOL removeFromForce(UDWORD number)
 	}
 
 	templateid = pF->pTempl->ref;
-	FREE(pF);
+	free(pF);
 
 	// now check if template is still in use.
 	inuse = FALSE;
@@ -193,7 +193,7 @@ BOOL removeFromForce(UDWORD number)
 			{
 				Force.pForceTemplates = psCurr->psNext;	// It's at the root
 			}
-			FREE(psCurr);			// Delete the template.
+			free(psCurr);			// Delete the template.
 		}
 	}
 
@@ -488,7 +488,7 @@ BOOL loadForce(char *name)
 	// old method
 	for(tcount;tcount!=0;tcount--)											// get templates
 	{
-		psTempl = MALLOC(sizeof(DROID_TEMPLATE));
+		psTempl = malloc(sizeof(DROID_TEMPLATE));
 		if (psTempl == NULL)	// !HEAP_ALLOC(psTemplateHeap, &psTempl))
 		{
 			debug( LOG_ERROR, "Couldn't allocate template for %s", fileName );
@@ -643,7 +643,7 @@ BOOL loadMultiStats(char *sPlayerName,PLAYERSTATS *playerStats)
 	//set the name. ASSUME STRING IS LONG ENOUGH!
 	strcpy(sPlayerName,st.name);
 
-	FREE(pFileData);
+	free(pFileData);
 
 	// reset recent scores
 	playerStats->recentKills = 0;

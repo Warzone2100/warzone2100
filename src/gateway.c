@@ -129,7 +129,7 @@ void gwShutDown(void)
 
 	if (aZoneReachable != NULL)
 	{
-		FREE(aZoneReachable);
+		free(aZoneReachable);
 	}
 }
 
@@ -150,7 +150,7 @@ BOOL gwNewGateway(SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
 		return FALSE;
 	}
 
-	psNew = (GATEWAY*)MALLOC(sizeof(GATEWAY));
+	psNew = (GATEWAY*)malloc(sizeof(GATEWAY));
 	if (!psNew)
 	{
 		debug( LOG_ERROR, "gwNewGateway: out of memory" );
@@ -222,7 +222,7 @@ BOOL gwNewLinkGateway(SDWORD x, SDWORD y)
 		return FALSE;
 	}
 
-	psNew = (GATEWAY*)MALLOC(sizeof(GATEWAY));
+	psNew = (GATEWAY*)malloc(sizeof(GATEWAY));
 	if (!psNew)
 	{
 		debug( LOG_ERROR, "gwNewGateway: out of memory" );
@@ -507,9 +507,9 @@ void gwFreeGateway(GATEWAY *psDel)
 	}
 
 	if(psDel->psLinks != NULL) {
-		FREE(psDel->psLinks);
+		free(psDel->psLinks);
 	}
-	FREE(psDel);
+	free(psDel);
 }
 
 
@@ -695,7 +695,7 @@ BOOL gwLinkGateways(void)
 
 
 	// note which zones have a gateway
-	aZoneReachable = (UBYTE*)MALLOC( sizeof(UBYTE) * gwNumZones );
+	aZoneReachable = (UBYTE*)malloc( sizeof(UBYTE) * gwNumZones );
 	if (aZoneReachable == NULL)
 	{
 		debug( LOG_ERROR, "gwLinkGateways: out of memory" );
@@ -785,7 +785,7 @@ BOOL gwLinkGateways(void)
 		}
 		if (zone1Links+zone2Links > 0)
 		{
-			psCurr->psLinks = (GATEWAY_LINK*)MALLOC(sizeof(GATEWAY_LINK) * (zone1Links+zone2Links));
+			psCurr->psLinks = (GATEWAY_LINK*)malloc(sizeof(GATEWAY_LINK) * (zone1Links+zone2Links));
 			if (psCurr->psLinks == NULL)
 			{
 				debug( LOG_ERROR, "gwLinkGateways: out of memory" );
@@ -900,7 +900,7 @@ BOOL gwNewZoneMap(void)
 		gwFreeZoneMap();
 	}
 
-	apRLEZones = (UBYTE**)MALLOC(sizeof(UBYTE *) * gwMapHeight());
+	apRLEZones = (UBYTE**)malloc(sizeof(UBYTE *) * gwMapHeight());
 	if (apRLEZones == NULL)
 	{
 		debug( LOG_ERROR, "gwNewZoneMap: Out of memory" );
@@ -924,10 +924,10 @@ UBYTE * gwNewZoneLine(UDWORD Line,UDWORD Size)
 	ASSERT( apRLEZones != NULL,"gwNewZoneLine : NULL Zone map" );
 
 	if(apRLEZones[Line] != NULL) {
-		FREE(apRLEZones[Line]);
+		free(apRLEZones[Line]);
 	}
 
-	apRLEZones[Line] = (UBYTE*)MALLOC(Size);
+	apRLEZones[Line] = (UBYTE*)malloc(Size);
 	if (apRLEZones[Line] == NULL)
 	{
 		debug( LOG_ERROR, "gwNewZoneLine: Out of memory" );
@@ -974,9 +974,9 @@ void gwFreeZoneMap(void)
 	{
 		for(i=0; i<gwMapHeight(); i++)
 		{
-			FREE(apRLEZones[i]);
+			free(apRLEZones[i]);
 		}
-		FREE(apRLEZones);
+		free(apRLEZones);
 	}
 }
 
@@ -1022,7 +1022,7 @@ BOOL gwNewEquivTable(SDWORD numZones)
 		"gwNewEquivTable: invalid number of zones" );
 
 	gwNumZones = numZones;
-	aNumEquiv = (UBYTE*)MALLOC(sizeof(UBYTE) * numZones);
+	aNumEquiv = (UBYTE*)malloc(sizeof(UBYTE) * numZones);
 	if (aNumEquiv == NULL)
 	{
 		debug( LOG_ERROR, "gwNewEquivTable: out of memory" );
@@ -1034,7 +1034,7 @@ BOOL gwNewEquivTable(SDWORD numZones)
 		aNumEquiv[i] = 0;
 	}
 
-	apEquivZones = (UBYTE**)MALLOC(sizeof(UBYTE *) * numZones);
+	apEquivZones = (UBYTE**)malloc(sizeof(UBYTE *) * numZones);
 	if (apEquivZones == NULL)
 	{
 		debug( LOG_ERROR, "gwNewEquivTable: out of memory" );
@@ -1056,7 +1056,7 @@ void gwFreeEquivTable(void)
 
 	if (aNumEquiv)
 	{
-		FREE(aNumEquiv);
+		free(aNumEquiv);
 	}
 	if (apEquivZones)
 	{
@@ -1064,10 +1064,10 @@ void gwFreeEquivTable(void)
 		{
 			if (apEquivZones[i])
 			{
-				FREE(apEquivZones[i]);
+				free(apEquivZones[i]);
 			}
 		}
-		FREE(apEquivZones);
+		free(apEquivZones);
 	}
 	gwNumZones = 0;
 }
@@ -1085,7 +1085,7 @@ BOOL gwSetZoneEquiv(SDWORD zone, SDWORD numEquiv, UBYTE *pEquiv)
 	ASSERT( numEquiv <= gwNumZones,
 		"gwSetZoneEquiv: invalid number of zone equivalents" );
 
-	apEquivZones[zone] = (UBYTE*)MALLOC(sizeof(UBYTE) * numEquiv);
+	apEquivZones[zone] = (UBYTE*)malloc(sizeof(UBYTE) * numEquiv);
 	if (apEquivZones[zone] == NULL)
 	{
 		debug( LOG_ERROR, "gwSetZoneEquiv: out of memory" );

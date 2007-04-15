@@ -491,7 +491,7 @@ SCORE_SAVEHEADER	*psHeader;		// Pointer to the header part of the file
 	fileSize = ( sizeof(struct _score_save_header) + sizeof(struct mission_data) );
 
 	/* Try and allocate it - freed up in same function */
-	pFileData = (char*)MALLOC(fileSize);
+	pFileData = (char*)malloc(fileSize);
 
 	/* Did we get it? */
 	if(!pFileData)
@@ -542,7 +542,7 @@ SCORE_SAVEHEADER	*psHeader;		// Pointer to the header part of the file
 	/* And free up the memory we used */
 	if (pFileData != NULL)
 	{
-		FREE(pFileData);
+		free(pFileData);
 	}
 	return status;
 }

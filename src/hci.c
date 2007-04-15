@@ -594,7 +594,7 @@ BOOL intInitialise(void)
 	}
 
 	/* Create storage for Structures that can be built */
-	apsStructStatsList = (STRUCTURE_STATS **)MALLOC(sizeof(STRUCTURE_STATS *) *
+	apsStructStatsList = (STRUCTURE_STATS **)malloc(sizeof(STRUCTURE_STATS *) *
 		MAXSTRUCTURES);
 	if (!apsStructStatsList)
 	{
@@ -604,7 +604,7 @@ BOOL intInitialise(void)
 	}
 
 	//create the storage for Research topics - max possible size
-	ppResearchList = (RESEARCH **) MALLOC(sizeof(RESEARCH *) * MAXRESEARCH);
+	ppResearchList = (RESEARCH **) malloc(sizeof(RESEARCH *) * MAXRESEARCH);
 	if (ppResearchList == NULL)
 	{
 		debug( LOG_ERROR, "Unable to allocate memory for research list" );
@@ -614,10 +614,10 @@ BOOL intInitialise(void)
 
 	//create the list for the selected player
 	//needs to be UWORD sized for Patches
-    pList = (UWORD *) MALLOC(sizeof (UWORD) * MAXRESEARCH);
-	pSList = (UWORD *) MALLOC(sizeof (UWORD) * MAXRESEARCH);
-    //pList = (UBYTE *) MALLOC(sizeof (UBYTE) * MAXRESEARCH);
-	//pSList = (UBYTE *) MALLOC(sizeof (UBYTE) * MAXRESEARCH);
+    pList = (UWORD *) malloc(sizeof (UWORD) * MAXRESEARCH);
+	pSList = (UWORD *) malloc(sizeof (UWORD) * MAXRESEARCH);
+    //pList = (UBYTE *) malloc(sizeof (UBYTE) * MAXRESEARCH);
+	//pSList = (UBYTE *) malloc(sizeof (UBYTE) * MAXRESEARCH);
 
 	if (pList == NULL)
 	{
@@ -633,7 +633,7 @@ BOOL intInitialise(void)
 	}
 
 	/* Create storage for Templates that can be built */
-	apsTemplateList = (DROID_TEMPLATE **)MALLOC(sizeof(DROID_TEMPLATE*) *
+	apsTemplateList = (DROID_TEMPLATE **)malloc(sizeof(DROID_TEMPLATE*) *
 		MAXTEMPLATES);
 	if (apsTemplateList == NULL)
 	{
@@ -656,7 +656,7 @@ BOOL intInitialise(void)
 	}
 
 	/* Create storage for the feature list */
-	apsFeatureList = (FEATURE_STATS **)MALLOC(sizeof(FEATURE_STATS *) *
+	apsFeatureList = (FEATURE_STATS **)malloc(sizeof(FEATURE_STATS *) *
 		MAXFEATURES);
 	if (apsFeatureList == NULL)
 	{
@@ -666,7 +666,7 @@ BOOL intInitialise(void)
 	}
 
 	/* Create storage for the component list */
-	apsComponentList = (COMP_BASE_STATS **)MALLOC(sizeof(COMP_BASE_STATS *) *
+	apsComponentList = (COMP_BASE_STATS **)malloc(sizeof(COMP_BASE_STATS *) *
 		MAXCOMPONENT);
 	if (apsComponentList == NULL)
 	{
@@ -676,7 +676,7 @@ BOOL intInitialise(void)
 	}
 
 	/* Create storage for the extra systems list */
-	apsExtraSysList = (COMP_BASE_STATS **)MALLOC(sizeof(COMP_BASE_STATS *) *
+	apsExtraSysList = (COMP_BASE_STATS **)malloc(sizeof(COMP_BASE_STATS *) *
 		MAXEXTRASYS);
 	if (apsExtraSysList == NULL)
 	{
@@ -686,7 +686,7 @@ BOOL intInitialise(void)
 	}
 
 	// allocate the object list
-	apsObjectList = (BASE_OBJECT **)MALLOC(sizeof(BASE_OBJECT *) * MAX_OBJECTS);
+	apsObjectList = (BASE_OBJECT **)malloc(sizeof(BASE_OBJECT *) * MAX_OBJECTS);
 	if (!apsObjectList)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -695,7 +695,7 @@ BOOL intInitialise(void)
 	}
 
 	//allocate the order list - ONLY SIZED FOR FACTORIES AT PRESENT!!
-	apsListToOrder = (BASE_OBJECT **)MALLOC(sizeof(BASE_OBJECT *) * ORDERED_LIST_SIZE);
+	apsListToOrder = (BASE_OBJECT **)malloc(sizeof(BASE_OBJECT *) * ORDERED_LIST_SIZE);
 	if (!apsListToOrder)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -843,16 +843,16 @@ void intShutDown(void)
 	ReleaseSnapBuffer(&InterfaceSnap);
 
 
-	FREE(apsStructStatsList);
-	FREE(ppResearchList);
-	FREE(pList);
-	FREE(pSList);
-	FREE(apsTemplateList);
-	FREE(apsFeatureList);
-	FREE(apsComponentList);
-	FREE(apsExtraSysList);
-	FREE(apsObjectList);
-	FREE(apsListToOrder);
+	free(apsStructStatsList);
+	free(ppResearchList);
+	free(pList);
+	free(pSList);
+	free(apsTemplateList);
+	free(apsFeatureList);
+	free(apsComponentList);
+	free(apsExtraSysList);
+	free(apsObjectList);
+	free(apsListToOrder);
 
 	//release the video buffers
 	seq_ReleaseVideoBuffers();

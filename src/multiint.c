@@ -2868,7 +2868,7 @@ BOOL startMultiOptions(BOOL bReenter)
 		if(ingame.numStructureLimits)
 		{
 			ingame.numStructureLimits = 0;
-			FREE(ingame.pStructureLimits);
+			free(ingame.pStructureLimits);
 		}
 
 		// check the registry for setup entries and set game options.

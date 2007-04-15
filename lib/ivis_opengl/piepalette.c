@@ -63,7 +63,7 @@ int pal_AddNewPalette(iColour *pal)
 	bPaletteInitialised = TRUE;
 	if (psGamePal == NULL)
 	{
-		psGamePal = (iColour*) MALLOC(PALETTE_SIZE * sizeof(iColour));
+		psGamePal = (iColour*) malloc(PALETTE_SIZE * sizeof(iColour));
 		if (psGamePal == NULL)
 		{
 			debug( LOG_ERROR, "pal_AddNewPalette - Out of memory" );
@@ -118,7 +118,7 @@ void pal_ShutDown(void)
 	if (bPaletteInitialised)
 	{
 		bPaletteInitialised = FALSE;
-		FREE(psGamePal);
+		free(psGamePal);
 	}
 }
 

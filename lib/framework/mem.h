@@ -24,9 +24,4 @@
 #ifndef _mem_h
 #define _mem_h
 
-#include <stdlib.h>
-
-#define MALLOC(size)		malloc(size)
-#define FREE(ptr)		do { free(ptr); ptr = NULL; } while(0)
-
 #endif

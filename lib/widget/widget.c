@@ -218,7 +218,7 @@ BOOL widgCreateScreen(W_SCREEN **ppsScreen)
 	W_FORM		*psForm;
 	W_FORMINIT	sInit;
 
-	*ppsScreen = (W_SCREEN *)MALLOC(sizeof(W_SCREEN));
+	*ppsScreen = (W_SCREEN *)malloc(sizeof(W_SCREEN));
 	if (*ppsScreen == NULL)
 	{
 		ASSERT( FALSE, "Out of memory" );
@@ -289,7 +289,7 @@ void widgReleaseScreen(W_SCREEN *psScreen)
 
 	formFree((W_FORM *)psScreen->psForm);
 
-	FREE(psScreen);
+	free(psScreen);
 }
 
 

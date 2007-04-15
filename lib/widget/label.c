@@ -49,7 +49,7 @@ BOOL labelCreate(W_LABEL **ppsWidget, W_LABINIT *psInit)
 
 	/* Allocate the required memory */
 #if W_USE_MALLOC
-	*ppsWidget = (W_LABEL *)MALLOC(sizeof(W_LABEL));
+	*ppsWidget = (W_LABEL *)malloc(sizeof(W_LABEL));
 	if (*ppsWidget == NULL)
 #else
 	if (!HEAP_ALLOC(psLabHeap, (void**) ppsWidget))
@@ -127,7 +127,7 @@ void labelFree(W_LABEL *psWidget)
 		"labelFree: Invalid label pointer" );
 
 #if W_USE_MALLOC
-	FREE(psWidget);
+	free(psWidget);
 #else
 	HEAP_FREE(psLabHeap, psWidget);
 #endif

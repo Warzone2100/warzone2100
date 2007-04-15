@@ -319,8 +319,8 @@ UDWORD	*toClear;
 
 BOOL seq_ReleaseVideoBuffers(void)
 {
-	FREE(pVideoBuffer);
-	FREE(pVideoPalette);
+	free(pVideoBuffer);
+	free(pVideoPalette);
 	return TRUE;
 }
 
@@ -330,13 +330,13 @@ BOOL seq_SetupVideoBuffers(void)
 	UBYTE r,g,b;
 	//assume 320 * 240 * 16bit playback surface
 	mallocSize = (RPL_WIDTH*RPL_HEIGHT*RPL_DEPTH);
-	if ((pVideoBuffer = (char*)MALLOC(mallocSize)) == NULL)
+	if ((pVideoBuffer = (char*)malloc(mallocSize)) == NULL)
 	{
 		return FALSE;
 	}
 
 	mallocSize = 1<<(RPL_BITS_555);//palette only used in 555mode
-	if ((pVideoPalette = (char*)MALLOC(mallocSize)) == NULL)
+	if ((pVideoPalette = (char*)malloc(mallocSize)) == NULL)
 	{
 		return FALSE;
 	}

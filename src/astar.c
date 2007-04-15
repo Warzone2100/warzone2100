@@ -143,7 +143,7 @@ BOOL astarInitialise(void)
 	}
 
 #if OPEN_LIST == 2
-	apsNodes = (FP_NODE**)MALLOC(sizeof(FP_NODE *) * FPATH_TABLESIZE);
+	apsNodes = (FP_NODE**)malloc(sizeof(FP_NODE *) * FPATH_TABLESIZE);
 	if (!apsNodes)
 	{
 		return FALSE;
@@ -151,13 +151,13 @@ BOOL astarInitialise(void)
 	ClearAstarNodes();
 #else
 	// Create the two hash tables
-	apsOpen = MALLOC(sizeof(FP_NODE *) * FPATH_TABLESIZE);
+	apsOpen = malloc(sizeof(FP_NODE *) * FPATH_TABLESIZE);
 	if (!apsOpen)
 	{
 		return FALSE;
 	}
 	memset(apsOpen, 0, sizeof(FP_NODE *) * FPATH_TABLESIZE);
-	apsClosed = MALLOC(sizeof(FP_NODE *) * FPATH_TABLESIZE);
+	apsClosed = malloc(sizeof(FP_NODE *) * FPATH_TABLESIZE);
 	if (!apsClosed)
 	{
 		return FALSE;
@@ -174,10 +174,10 @@ void fpathShutDown(void)
 {
 	HEAP_DESTROY(psFPNodeHeap);
 #if OPEN_LIST == 2
-	FREE(apsNodes);
+	free(apsNodes);
 #else
-	FREE(apsOpen);
-	FREE(apsClosed);
+	free(apsOpen);
+	free(apsClosed);
 #endif
 }
 

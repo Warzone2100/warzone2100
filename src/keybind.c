@@ -2373,7 +2373,7 @@ void kf_ScriptTest( void )
 
 	eventLoadState(pBuffer, size, TRUE);
 
-	FREE(pBuffer);
+	free(pBuffer);
 }
 // --------------------------------------------------------------------------
 void kf_TriggerShockWave( void )

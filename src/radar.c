@@ -153,7 +153,7 @@ BOOL InitRadar(void)
 {
 	UBYTE color;
 
-	radarBuffer = (UBYTE*)MALLOC(RADWIDTH*RADHEIGHT);
+	radarBuffer = (UBYTE*)malloc(RADWIDTH*RADHEIGHT);
 	if(radarBuffer==NULL) return FALSE;
 	memset(radarBuffer,0,RADWIDTH*RADHEIGHT);
 
@@ -204,7 +204,7 @@ BOOL ShutdownRadar(void)
 
 	pie_ShutdownRadar();
 
-	FREE(radarBuffer);
+	free(radarBuffer);
 
 	return TRUE;
 }

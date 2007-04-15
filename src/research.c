@@ -161,7 +161,7 @@ BOOL researchInitVars(void)
     psCBLastResearch = NULL;
 	asResearch = NULL;
     //research is a pre-defined size now
-	asResearch = (RESEARCH *)MALLOC(sizeof(RESEARCH)* MAX_RESEARCH);
+	asResearch = (RESEARCH *)malloc(sizeof(RESEARCH)* MAX_RESEARCH);
 	if (asResearch == NULL)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
@@ -173,7 +173,7 @@ BOOL researchInitVars(void)
     //create the PLAYER_RESEARCH arrays
 	for (i=0; i < MAX_PLAYERS; i++)
 	{
-		asPlayerResList[i] = (PLAYER_RESEARCH*)MALLOC(MAX_RESEARCH *
+		asPlayerResList[i] = (PLAYER_RESEARCH*)malloc(MAX_RESEARCH *
 			sizeof(PLAYER_RESEARCH));
 		if (asPlayerResList[i] == NULL)
 		{
@@ -188,8 +188,8 @@ BOOL researchInitVars(void)
 
     //and deal with all the other arrays for research
     //needs to be UWORD sized for the Patches
-    pResearchPR = (UWORD *) MALLOC(sizeof(UWORD) * MAX_RESEARCH_PR);
-    //pResearchPR = (UBYTE *) MALLOC(sizeof(UBYTE) * MAX_RESEARCH_PR);
+    pResearchPR = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_PR);
+    //pResearchPR = (UBYTE *) malloc(sizeof(UBYTE) * MAX_RESEARCH_PR);
 	if (pResearchPR == NULL)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
@@ -200,7 +200,7 @@ BOOL researchInitVars(void)
     memset(pResearchPR, 0, (MAX_RESEARCH_PR * sizeof(UWORD)));
     //memset(pResearchPR, 0, (MAX_RESEARCH_PR * sizeof(UBYTE)));
 
-    pResearchStructPR = (UWORD *) MALLOC(sizeof(UWORD) * MAX_RESEARCH_STRUCT_PR);
+    pResearchStructPR = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_STRUCT_PR);
 	if (pResearchStructPR == NULL)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
@@ -209,7 +209,7 @@ BOOL researchInitVars(void)
 	}
     memset(pResearchStructPR, 0, (MAX_RESEARCH_STRUCT_PR * sizeof(UWORD)));
 
-    pResearchFunc = (FUNCTION **) MALLOC(sizeof(FUNCTION *) * MAX_RESEARCH_FUNC);
+    pResearchFunc = (FUNCTION **) malloc(sizeof(FUNCTION *) * MAX_RESEARCH_FUNC);
 	if (pResearchFunc == NULL)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
@@ -218,7 +218,7 @@ BOOL researchInitVars(void)
 	}
     memset(pResearchFunc, 0, (MAX_RESEARCH_FUNC * sizeof(FUNCTION *)));
 
-    pResearchStructRed = (UWORD *) MALLOC(sizeof(UWORD) * MAX_RESEARCH_STRUCT_RED);
+    pResearchStructRed = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_STRUCT_RED);
 	if (pResearchStructRed == NULL)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
@@ -227,7 +227,7 @@ BOOL researchInitVars(void)
 	}
     memset(pResearchStructRed, 0, (MAX_RESEARCH_STRUCT_RED * sizeof(UWORD)));
 
-    pResearchArteRed = (COMP_BASE_STATS **) MALLOC(sizeof(COMP_BASE_STATS *) * MAX_RESEARCH_ARTE_RED);
+    pResearchArteRed = (COMP_BASE_STATS **) malloc(sizeof(COMP_BASE_STATS *) * MAX_RESEARCH_ARTE_RED);
 	if (pResearchArteRed == NULL)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
@@ -236,7 +236,7 @@ BOOL researchInitVars(void)
 	}
     memset(pResearchArteRed, 0, (MAX_RESEARCH_ARTE_RED * sizeof(COMP_BASE_STATS *)));
 
-    pResearchStructRes = (UWORD *) MALLOC(sizeof(UWORD) * MAX_RESEARCH_STRUCT_RES);
+    pResearchStructRes = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_STRUCT_RES);
 	if (pResearchStructRes == NULL)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
@@ -245,7 +245,7 @@ BOOL researchInitVars(void)
 	}
     memset(pResearchStructRes, 0, (MAX_RESEARCH_STRUCT_RES * sizeof(UWORD)));
 
-    pResearchArteRes = (COMP_BASE_STATS **) MALLOC(sizeof(COMP_BASE_STATS *) * MAX_RESEARCH_ARTE_RES);
+    pResearchArteRes = (COMP_BASE_STATS **) malloc(sizeof(COMP_BASE_STATS *) * MAX_RESEARCH_ARTE_RES);
 	if (pResearchArteRes == NULL)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
@@ -254,7 +254,7 @@ BOOL researchInitVars(void)
 	}
     memset(pResearchArteRes, 0, (MAX_RESEARCH_ARTE_RES * sizeof(COMP_BASE_STATS *)));
 
-    pResearchArteRep = (COMP_BASE_STATS **) MALLOC(sizeof(COMP_BASE_STATS *) * MAX_RESEARCH_ARTE_RES);
+    pResearchArteRep = (COMP_BASE_STATS **) malloc(sizeof(COMP_BASE_STATS *) * MAX_RESEARCH_ARTE_RES);
 	if (pResearchArteRep == NULL)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
@@ -291,7 +291,7 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 	pStartResearchData = pResearchData;
 
 	researchCount = numCR(pResearchData, bufferSize);
-	/*asResearch = (RESEARCH *)MALLOC(sizeof(RESEARCH)*researchCount);
+	/*asResearch = (RESEARCH *)malloc(sizeof(RESEARCH)*researchCount);
 	if (asResearch == NULL)
 	{
 		DBERROR(("Research Stats - Out of memory"));
@@ -561,7 +561,7 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 		//redundancies - artefacts
 		if (pResearch->numRedArtefacts > 0)
 		{
-			/*pResearch->pRedArtefacts = (COMP_BASE_STATS **) MALLOC(pResearch->
+			/*pResearch->pRedArtefacts = (COMP_BASE_STATS **) malloc(pResearch->
 				numRedArtefacts*sizeof(COMP_BASE_STATS *));
 	    	if (pResearch->pRedArtefacts == NULL)
 		    {
@@ -583,7 +583,7 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 		//results
 		if (pResearch->numArteResults > 0)
 		{
-			/*pResearch->pArtefactResults = (COMP_BASE_STATS **) MALLOC(pResearch->
+			/*pResearch->pArtefactResults = (COMP_BASE_STATS **) malloc(pResearch->
 				numArteResults*sizeof(COMP_BASE_STATS *));
 			if (pResearch->pArtefactResults == NULL)
 			{
@@ -606,7 +606,7 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 		//replacements
 		if (pResearch->numArteResults > 0)
 		{
-			/*pResearch->pReplacedArtefacts = (COMP_BASE_STATS **) MALLOC(pResearch->
+			/*pResearch->pReplacedArtefacts = (COMP_BASE_STATS **) malloc(pResearch->
 				numArteResults*sizeof(COMP_BASE_STATS *));
 			if (pResearch->pReplacedArtefacts == NULL)
 			{
@@ -629,7 +629,7 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 		//allocate storage for the functions
 		if (pResearch->numFunctions > 0)
 		{
-			/*pResearch->pFunctionList = (FUNCTION**)MALLOC(pResearch->
+			/*pResearch->pFunctionList = (FUNCTION**)malloc(pResearch->
 				numFunctions*sizeof(FUNCTION*));
 			if (pResearch->pFunctionList == NULL)
 			{
@@ -652,7 +652,7 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 		//allocate storage for the pre-requisities
 		if (pResearch->numPRRequired > 0)
 		{
-			/*pResearch->pPRList = (UDWORD*)MALLOC(pResearch->
+			/*pResearch->pPRList = (UDWORD*)malloc(pResearch->
 				numPRRequired*sizeof(UDWORD));
 			if (pResearch->pPRList == NULL)
 			{
@@ -678,7 +678,7 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 		//requirements
 		if (pResearch->numStructures > 0)
 		{
-			/*pResearch->pStructList = (UDWORD *) MALLOC(pResearch->
+			/*pResearch->pStructList = (UDWORD *) malloc(pResearch->
 				numStructures*sizeof(UDWORD));
 			if (pResearch->pStructList == NULL)
 			{
@@ -701,7 +701,7 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
         //redundancies
 		if (pResearch->numRedStructs > 0)
 		{
-			/*pResearch->pRedStructs = (UDWORD *) MALLOC(pResearch->
+			/*pResearch->pRedStructs = (UDWORD *) malloc(pResearch->
 				numRedStructs*sizeof(UDWORD));
 			if (pResearch->pRedStructs == NULL)
 			{
@@ -723,7 +723,7 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 		//results
 		if (pResearch->numStructResults > 0)
 		{
-			/*pResearch->pStructureResults = (UDWORD *) MALLOC(pResearch->
+			/*pResearch->pStructureResults = (UDWORD *) malloc(pResearch->
 				numStructResults*sizeof(UDWORD));
 			if (pResearch->pStructureResults == NULL)
 			{
@@ -765,14 +765,14 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 		//increment the list to the start of the next storage block
 		pResearch++;
 	}
-//	FREE(pStartResearchData);
+//	free(pStartResearchData);
 
     //Do this in initResearch now since there is a Max Research
 	//now we know how many research topics there are we can create the
 	//PLAYER_RESEARCH arrays
 	/*for (i=0; i < MAX_PLAYERS; i++)
 	{
-		asPlayerResList[i] = (PLAYER_RESEARCH*)MALLOC(numResearch *
+		asPlayerResList[i] = (PLAYER_RESEARCH*)malloc(numResearch *
 			sizeof(PLAYER_RESEARCH));
 		if (asPlayerResList[i] == NULL)
 		{
@@ -879,7 +879,7 @@ BOOL loadResearchPR(char *pPRData, UDWORD bufferSize)
 		//increment the pointer to the start of the next record
 		pPRData = strchr(pPRData,'\n') + 1;
 	}
-//	FREE(pStartPRData);
+//	free(pStartPRData);
 	return TRUE;
 }
 
@@ -1040,7 +1040,7 @@ BOOL loadResearchArtefacts(char *pArteData, UDWORD bufferSize, UDWORD listNumber
         //increment the pointer to the start of the next record
 		pArteData = strchr(pArteData,'\n') + 1;
 	}
-//	FREE(pStartArteData);
+//	free(pStartArteData);
 	return TRUE;
 }
 
@@ -1189,7 +1189,7 @@ BOOL loadResearchStructures(char *pStructData, UDWORD bufferSize,UDWORD listNumb
 		//increment the pointer to the start of the next record
 		pStructData = strchr(pStructData,'\n') + 1;
 	}
-//	FREE(pStartStructData);
+//	free(pStartStructData);
 	return TRUE;
 }
 
@@ -1290,7 +1290,7 @@ BOOL loadResearchFunctions(char *pFunctionData, UDWORD bufferSize)
 		//increment the pointer to the start of the next record
 		pFunctionData = strchr(pFunctionData,'\n') + 1;
 	}
-//	FREE(pStartFunctionData);
+//	free(pStartFunctionData);
 	return TRUE;
 }
 
@@ -2098,38 +2098,38 @@ BOOL ResearchShutDown(void)
 	for (inc=0; inc < numResearch; inc++)
 	{
 #if !defined (RESOURCE_NAMES) && !defined (STORE_RESOURCE_ID)
-		FREE(pList->pName);
+		free(pList->pName);
 #endif
-		//FREE(pList->pTechnologyName);
-//		FREE(pList->pSubGroupName);
+		//free(pList->pTechnologyName);
+//		free(pList->pSubGroupName);
 		if (pList->numRedArtefacts > 0)
 		{
-			FREE(pList->pRedArtefacts);
+			free(pList->pRedArtefacts);
 		}
 		if (pList->numArteResults > 0)
 		{
-			FREE(pList->pArtefactResults);
-			FREE(pList->pReplacedArtefacts);
+			free(pList->pArtefactResults);
+			free(pList->pReplacedArtefacts);
 		}
 		if (pList->numPRRequired > 0)
 		{
-			FREE(pList->pPRList);
+			free(pList->pPRList);
 		}
 		if (pList->numStructures > 0)
 		{
-			FREE(pList->pStructList);
+			free(pList->pStructList);
 		}
 		if (pList->numRedStructs > 0)
 		{
-			FREE(pList->pRedStructs);
+			free(pList->pRedStructs);
 		}
 		if (pList->numStructResults > 0)
 		{
-			FREE(pList->pStructureResults);
+			free(pList->pStructureResults);
 		}
 		if (pList->numFunctions > 0)
 		{
-			FREE(pList->pFunctionList);
+			free(pList->pFunctionList);
 		}
 		pList++;
 	}
@@ -2177,19 +2177,19 @@ BOOL ResearchRelease(void)
     UBYTE   i;
 
     //free all the pre-defined arrays for research
-    FREE(asResearch);
+    free(asResearch);
 	for (i=0; i < MAX_PLAYERS; i++)
 	{
-        FREE(asPlayerResList[i]);
+        free(asPlayerResList[i]);
     }
-    FREE(pResearchPR);
-    FREE(pResearchStructPR);
-    FREE(pResearchFunc);
-    FREE(pResearchStructRed);
-    FREE(pResearchArteRed);
-    FREE(pResearchStructRes);
-    FREE(pResearchArteRes);
-    FREE(pResearchArteRep);
+    free(pResearchPR);
+    free(pResearchStructPR);
+    free(pResearchFunc);
+    free(pResearchStructRed);
+    free(pResearchArteRed);
+    free(pResearchStructRes);
+    free(pResearchArteRes);
+    free(pResearchArteRep);
 
 	return TRUE;
 }

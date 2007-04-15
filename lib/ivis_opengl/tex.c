@@ -216,7 +216,7 @@ void pie_TexShutDown(void)
 		{
 			if(_TEX_PAGE[i].tex.bmp) {
 				j++;
-				FREE(_TEX_PAGE[i].tex.bmp);
+				free(_TEX_PAGE[i].tex.bmp);
 			}
 		}
 		i++;

@@ -544,7 +544,7 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 
 	if(!edgelist)
 	{
-		edgelist = MALLOC(sizeof(EDGE)*edgelistsize);
+		edgelist = malloc(sizeof(EDGE)*edgelistsize);
 	}
 	pVertices = shape->points;
 	if( flag & pie_STATIC_SHADOW && shape->shadowEdgeList )
@@ -577,9 +577,9 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 					if(edge_count >= edgelistsize-1)
 					{
 						// enlarge
-						EDGE *newstack = MALLOC(sizeof(EDGE)*edgelistsize*2);
+						EDGE *newstack = malloc(sizeof(EDGE)*edgelistsize*2);
 						memcpy(newstack, edgelist, sizeof(EDGE)*edgelistsize);
-						FREE(edgelist);
+						free(edgelist);
 						edgelistsize*=2;
 						edgelist = newstack;
 						debug(LOG_WARNING, "new edge list size: %i", edgelistsize);

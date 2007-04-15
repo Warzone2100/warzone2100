@@ -341,7 +341,7 @@ BOOL image_load_from_jpg(pie_image* image, const char* filename)
 	if (setjmp(jerr.setjmp_buffer)) {
 		jpeg_destroy_decompress(&cinfo);
 		debug(LOG_ERROR, "Error during jpg decompression of \"%s\"!", filename);
-		FREE(buffer);
+		free(buffer);
 		return TRUE;
 	}
 	jpeg_read_header(&cinfo, TRUE);
@@ -371,7 +371,7 @@ BOOL image_load_from_jpg(pie_image* image, const char* filename)
 	jpeg_finish_decompress(&cinfo);
 	jpeg_destroy_decompress(&cinfo);
 
-	FREE(buffer);
+	free(buffer);
 
 	return FALSE;
 }
@@ -469,7 +469,7 @@ void screen_SetBackDropFromFile(char* filename)
 
 			free(imagePNG.bmp);
 		}
-		FREE(buffer);
+		free(buffer);
 		return;
 	}
 	else

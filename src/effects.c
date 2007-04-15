@@ -2905,7 +2905,7 @@ iIMDShape		*psOrig;
 	fileSize = ( sizeof(struct _fx_save_header) + ( fxEntries*sizeof(struct _effect_def) ) );
 
 	/* Try and allocate it - freed up in same function */
-	pFileData = (char*)MALLOC(fileSize);
+	pFileData = (char*)malloc(fileSize);
 
 	/* Did we get it? */
 	if(!pFileData)
@@ -2998,7 +2998,7 @@ iIMDShape		*psOrig;
 	/* And free up the memory we used */
 	if (pFileData != NULL)
 	{
-		FREE(pFileData);
+		free(pFileData);
 	}
 	/* Everything is just fine! */
 	return TRUE;

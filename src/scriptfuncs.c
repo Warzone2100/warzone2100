@@ -9958,7 +9958,7 @@ VIEWDATA *HelpViewData(SDWORD sender, char *textMsg, UDWORD LocX, UDWORD LocY)
 
 
 	//allocate message space
-	psViewData = (VIEWDATA *)MALLOC(sizeof(VIEWDATA));
+	psViewData = (VIEWDATA *)malloc(sizeof(VIEWDATA));
 	if (psViewData == NULL)
 	{
 		debug(LOG_ERROR,"prepairHelpViewData() - Unable to allocate memory for viewdata");
@@ -9977,7 +9977,7 @@ VIEWDATA *HelpViewData(SDWORD sender, char *textMsg, UDWORD LocX, UDWORD LocY)
 	name[2] = 'l';
 	name[3] = 'p';
 	name[4] = '\0';
- 	psViewData->pName = (char *)MALLOC((strlen(name))+1);
+ 	psViewData->pName = (char *)malloc((strlen(name))+1);
 	if (psViewData->pName == NULL)
 	{
 		debug(LOG_ERROR,"prepairHelpViewData() - ViewData Name - Out of memory");
@@ -9987,7 +9987,7 @@ VIEWDATA *HelpViewData(SDWORD sender, char *textMsg, UDWORD LocX, UDWORD LocY)
 	strcpy(psViewData->pName,name);
 
 	//allocate space for text strings
-	psViewData->ppTextMsg = (char **) MALLOC(sizeof(char *));
+	psViewData->ppTextMsg = (char **) malloc(sizeof(char *));
 
 	//store text message pointer
 	psViewData->ppTextMsg[0] = textMsg;
@@ -9996,7 +9996,7 @@ VIEWDATA *HelpViewData(SDWORD sender, char *textMsg, UDWORD LocX, UDWORD LocY)
 	psViewData->type = VIEW_HELP;	//was VIEW_PROX
 
 	//allocate memory for blip location etc
-	psViewData->pData = (VIEW_PROXIMITY *) MALLOC(sizeof(VIEW_PROXIMITY));
+	psViewData->pData = (VIEW_PROXIMITY *) malloc(sizeof(VIEW_PROXIMITY));
 
 	if (psViewData->pData == NULL)
 	{
@@ -10834,7 +10834,7 @@ BOOL scrGetChatCmdDescription(void)
 	}
 
 	/* Allocate memory for the comamnd string */
-	pChatCommand = (char*)MALLOC(MAXSTRLEN);
+	pChatCommand = (char*)malloc(MAXSTRLEN);
 
 	ASSERT(pChatCommand != NULL, "scrGetCommandDescription: out of memory");
 
@@ -10847,11 +10847,11 @@ BOOL scrGetChatCmdDescription(void)
 	if (!stackPushResult(VAL_STRING, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrGetCommandDescription(): failed to push result");
-		FREE(pChatCommand);
+		free(pChatCommand);
 		return FALSE;
 	}
 
-	FREE(pChatCommand);
+	free(pChatCommand);
 
 	return TRUE;
 }

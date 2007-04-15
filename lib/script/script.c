@@ -86,34 +86,34 @@ void scriptFreeCode(SCRIPT_CODE *psCode)
 				{
 					if(psCode->ppsLocalVarVal[i][j].v.sval != NULL)		//doublecheck..
 					{
-						FREE(psCode->ppsLocalVarVal[i][j].v.sval);		//free string
+						free(psCode->ppsLocalVarVal[i][j].v.sval);		//free string
 					}
 				}
 			}
 
-			FREE(psCode->ppsLocalVars[i]);
-			FREE(psCode->ppsLocalVarVal[i]);	//free pointer to event i local vars
+			free(psCode->ppsLocalVars[i]);
+			free(psCode->ppsLocalVarVal[i]);	//free pointer to event i local vars
 		}
 	}
 
-	FREE(psCode->pCode);
+	free(psCode->pCode);
 	if (psCode->pTriggerTab)
 	{
-		FREE(psCode->pTriggerTab);
+		free(psCode->pTriggerTab);
 	}
 	if (psCode->psTriggerData)
 	{
-		FREE(psCode->psTriggerData);
+		free(psCode->psTriggerData);
 	}
-	FREE(psCode->pEventTab);
-	FREE(psCode->pEventLinks);
+	free(psCode->pEventTab);
+	free(psCode->pEventLinks);
 	if (psCode->pGlobals != NULL)
 	{
-		FREE(psCode->pGlobals);
+		free(psCode->pGlobals);
 	}
 	if (psCode->psArrayInfo != NULL)
 	{
-		FREE(psCode->psArrayInfo);
+		free(psCode->psArrayInfo);
 	}
 	if (psCode->psDebug)
 	{
@@ -121,10 +121,10 @@ void scriptFreeCode(SCRIPT_CODE *psCode)
 		{
 			if (psCode->psDebug[i].pLabel)
 			{
-				FREE(psCode->psDebug[i].pLabel);
+				free(psCode->psDebug[i].pLabel);
 			}
 		}
-		FREE(psCode->psDebug);
+		free(psCode->psDebug);
 	}
 	if (psCode->psVarDebug)
 	{
@@ -132,10 +132,10 @@ void scriptFreeCode(SCRIPT_CODE *psCode)
 		{
 			if (psCode->psVarDebug[i].pIdent)
 			{
-				FREE(psCode->psVarDebug[i].pIdent);
+				free(psCode->psVarDebug[i].pIdent);
 			}
 		}
-		FREE(psCode->psVarDebug);
+		free(psCode->psVarDebug);
 	}
 	if (psCode->psArrayDebug)
 	{
@@ -143,29 +143,29 @@ void scriptFreeCode(SCRIPT_CODE *psCode)
 		{
 			if (psCode->psArrayDebug[i].pIdent)
 			{
-				FREE(psCode->psArrayDebug[i].pIdent);
+				free(psCode->psArrayDebug[i].pIdent);
 			}
 		}
-		FREE(psCode->psArrayDebug);
+		free(psCode->psArrayDebug);
 	}
 
 
 
 	if(psCode->numParams != NULL)
-		FREE(psCode->numParams);
+		free(psCode->numParams);
 
 	if(psCode->numLocalVars != NULL)
-		FREE(psCode->numLocalVars);
+		free(psCode->numLocalVars);
 
 	if(psCode->ppsLocalVars != NULL)
-		FREE(psCode->ppsLocalVars);
+		free(psCode->ppsLocalVars);
 
 	if(psCode->ppsLocalVarVal != NULL)
-		FREE(psCode->ppsLocalVarVal);
+		free(psCode->ppsLocalVarVal);
 
 	psCode->numEvents = 0;
 
-	FREE(psCode);
+	free(psCode);
 }
 
 

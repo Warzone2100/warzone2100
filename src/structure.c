@@ -800,11 +800,11 @@ BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
 	NumStructures = numCR(pStructData, bufferSize);
 
 //#ifdef DEMO
-//	asStructureStats = (STRUCTURE_STATS *)MALLOC(sizeof(STRUCTURE_STATS)*
+//	asStructureStats = (STRUCTURE_STATS *)malloc(sizeof(STRUCTURE_STATS)*
 //		(NumStructures + NUM_DEMO_STRUCTS));
 //	//numStructureStats is added to in in demoStructs()
 //#else
-	asStructureStats = (STRUCTURE_STATS *)MALLOC(sizeof(STRUCTURE_STATS)*
+	asStructureStats = (STRUCTURE_STATS *)malloc(sizeof(STRUCTURE_STATS)*
 		NumStructures);
 //#endif
 	numStructureStats = NumStructures;
@@ -872,7 +872,7 @@ BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
 //#endif
 
 		//allocate storage for the name
- 		/*psStructure->pName = (char *)MALLOC((strlen(StructureName))+1);
+ 		/*psStructure->pName = (char *)malloc((strlen(StructureName))+1);
 		if (psStructure->pName == NULL)
 		{
 			DBERROR(("Structure Stats Name - Out of memory"));
@@ -1009,9 +1009,9 @@ BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
 		//if (psStructure->numWeaps > 0)
         /*if (numWeaps > 0)
 		{
-			//psStructure->asWeapList = (WEAPON_STATS **)MALLOC(psStructure->weaponSlots*
+			//psStructure->asWeapList = (WEAPON_STATS **)malloc(psStructure->weaponSlots*
 			//	sizeof(WEAPON_STATS*));
-			psStructure->asWeapList = (WEAPON_STATS **)MALLOC(numWeaps *
+			psStructure->asWeapList = (WEAPON_STATS **)malloc(numWeaps *
                 sizeof(WEAPON_STATS*));
 			if (psStructure->asWeapList == NULL)
 			{
@@ -1023,7 +1023,7 @@ BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
 		psStructure->defaultFunc = -1;
 		if (psStructure->numFuncs > 0)
 		{
-			psStructure->asFuncList = (FUNCTION **)MALLOC(psStructure->numFuncs*
+			psStructure->asFuncList = (FUNCTION **)malloc(psStructure->numFuncs*
 				sizeof(FUNCTION*));
 			if (psStructure->asFuncList == NULL)
 			{
@@ -1038,7 +1038,7 @@ BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
 		psStructure++;
 	}
 
-//	FREE(pData);
+//	free(pData);
 
 	asStructureStats = pStartStats;
 
@@ -1071,7 +1071,7 @@ BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
 	//allocate the structureLimits structure
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		asStructLimits[player] = (STRUCTURE_LIMITS *)MALLOC (sizeof(STRUCTURE_LIMITS) *
+		asStructLimits[player] = (STRUCTURE_LIMITS *)malloc(sizeof(STRUCTURE_LIMITS) *
 			numStructureStats);
 		if (asStructLimits[player] == NULL)
 		{
@@ -1262,7 +1262,7 @@ BOOL loadStructureWeapons(char *pWeaponData, UDWORD bufferSize)
 		//increment the pointer to the start of the next record
 		pWeaponData = strchr(pWeaponData,'\n') + 1;
 	}
-//	FREE(pStartWeaponData);
+//	free(pStartWeaponData);
 	return TRUE;
 }
 
@@ -1346,7 +1346,7 @@ BOOL loadStructureFunctions(char *pFunctionData, UDWORD bufferSize)
 		//increment the pointer to the start of the next record
 		pFunctionData = strchr(pFunctionData,'\n') + 1;
 	}
-//	FREE(pStartFunctionData);
+//	free(pStartFunctionData);
 
 	/**************************************************************************/
 	//Wall Function requires a structure stat so can allocate it now
@@ -1454,27 +1454,27 @@ BOOL structureStatsShutDown(void)
 	{
 //#ifndef RESOURCE_NAMES
 #if !defined (RESOURCE_NAMES) && !defined (STORE_RESOURCE_ID)
-		FREE(pStructure->pName);
+		free(pStructure->pName);
 #endif
 		/*if (pStructure->numWeaps > 0)
 		{
-			FREE(pStructure->asWeapList);
+			free(pStructure->asWeapList);
 		}*/
 		if (pStructure->numFuncs > 0)
 		{
-			FREE(pStructure->asFuncList);
+			free(pStructure->asFuncList);
 		}
 	}
 
 	if(numStructureStats) {
-		FREE(asStructureStats);
+		free(asStructureStats);
 	}
 
 	//free up the structLimits structure
 	for (inc = 0; inc < MAX_PLAYERS ; inc++)
 	{
 		if(asStructLimits[inc]) {
-			FREE(asStructLimits[inc]);
+			free(asStructLimits[inc]);
 		}
 	}
 
@@ -2763,7 +2763,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 				return FALSE;
 			}
 			//allocate the necessary space
-			/*psBuilding->pFunctionality = (FUNCTIONALITY *) MALLOC(sizeof(FACTORY));
+			/*psBuilding->pFunctionality = (FUNCTIONALITY *) malloc(sizeof(FACTORY));
 			if (psBuilding->pFunctionality == NULL)
 			{
 				debug( LOG_ERROR, "Out of memory" );
@@ -2882,7 +2882,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 				return FALSE;
 			}
 			//allocate the necessary space
-			/*psBuilding->pFunctionality = (FUNCTIONALITY *) MALLOC(sizeof(RESEARCH_FACILITY));
+			/*psBuilding->pFunctionality = (FUNCTIONALITY *) malloc(sizeof(RESEARCH_FACILITY));
 			if (psBuilding->pFunctionality == NULL)
 			{
 				debug( LOG_ERROR, "Out of memory" );
@@ -2948,7 +2948,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 				return FALSE;
 			}
 			//allocate the necessary space
-			/*psBuilding->pFunctionality = (FUNCTIONALITY *) MALLOC(sizeof(POWER_GEN));
+			/*psBuilding->pFunctionality = (FUNCTIONALITY *) malloc(sizeof(POWER_GEN));
 			if (psBuilding->pFunctionality == NULL)
 			{
 				DBERROR(("Out of memory"));
@@ -2985,7 +2985,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 				return FALSE;
 			}
 			//allocate the necessary space
-			/*psBuilding->pFunctionality = (FUNCTIONALITY *) MALLOC(sizeof(RES_EXTRACTOR));
+			/*psBuilding->pFunctionality = (FUNCTIONALITY *) malloc(sizeof(RES_EXTRACTOR));
 			if (psBuilding->pFunctionality == NULL)
 			{
 				DBERROR(("Out of memory"));
@@ -3049,7 +3049,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			}
 
 			//allocate the necessary space
-			/*psBuilding->pFunctionality = (FUNCTIONALITY *) MALLOC(sizeof(REPAIR_FACILITY));
+			/*psBuilding->pFunctionality = (FUNCTIONALITY *) malloc(sizeof(REPAIR_FACILITY));
 			if (psBuilding->pFunctionality == NULL)
 			{
 				debug( LOG_ERROR, "Out of memory" );
@@ -3096,7 +3096,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			//getNearestBestValidTile(&x,&y);
 			setAssemblyPoint( psRepairFac->psDeliveryPoint, x << TILE_SHIFT,
 				y << TILE_SHIFT, psBuilding->player, TRUE);
-				
+
 			addFlagPosition(psRepairFac->psDeliveryPoint);
 			setFlagPositionInc(psRepairFac, psBuilding->player, REPAIR_FLAG);
 			break;
@@ -10049,7 +10049,7 @@ BOOL createStructureStat(STRUCTURE_STATS *psBuilding, STRUCTURE_STATS *psNewStru
 	psNewStructure->type = type;
 
 	//allocate storage for the name
-	psNewStructure->pName = (char *) MALLOC(MAX_NAME_SIZE);
+	psNewStructure->pName = (char *) malloc(MAX_NAME_SIZE);
 	if (psNewStructure->pName == NULL)
 	{
 		DBERROR(("Structure Stats Name - Out of memory"));
@@ -10060,7 +10060,7 @@ BOOL createStructureStat(STRUCTURE_STATS *psBuilding, STRUCTURE_STATS *psNewStru
 	//allocate storage for the weapons and functions - if any
 	if (psNewStructure->numWeaps > 0)
 	{
-		psNewStructure->asWeapList = (WEAPON_STATS **)MALLOC(psNewStructure->
+		psNewStructure->asWeapList = (WEAPON_STATS **)malloc(psNewStructure->
 			weaponSlots * sizeof(WEAPON_STATS*));
 		if (psNewStructure->asWeapList == NULL)
 		{
@@ -10076,7 +10076,7 @@ BOOL createStructureStat(STRUCTURE_STATS *psBuilding, STRUCTURE_STATS *psNewStru
 	//allocate storage for the functions - if any
 	if (psNewStructure->numFuncs > 0)
 	{
-		psNewStructure->asFuncList = (FUNCTION **)MALLOC(psNewStructure->
+		psNewStructure->asFuncList = (FUNCTION **)malloc(psNewStructure->
 			numFuncs * sizeof(FUNCTION*));
 		if (psNewStructure->asFuncList == NULL)
 		{

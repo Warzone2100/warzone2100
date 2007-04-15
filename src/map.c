@@ -216,9 +216,9 @@ BOOL mapNew(UDWORD width, UDWORD height)
 		freeAllStructs();
 		freeAllFeatures();
 		proj_FreeAllProjectiles();
-//		FREE(psMapTiles);
+//		free(psMapTiles);
 //		mapFreeTilesAndStrips();
-		FREE(aMapLinePoints);
+		free(aMapLinePoints);
 		psMapTiles = NULL;
 		aMapLinePoints = NULL;
 	}
@@ -252,7 +252,7 @@ BOOL mapNew(UDWORD width, UDWORD height)
 	*/
 
 
-	psMapTiles = (MAPTILE *)MALLOC(sizeof(MAPTILE) * width*height);
+	psMapTiles = (MAPTILE *)malloc(sizeof(MAPTILE) * width*height);
 	if (psMapTiles == NULL)
 	{
 		debug( LOG_ERROR, "mapNew: Out of memory" );
@@ -275,7 +275,7 @@ BOOL mapNew(UDWORD width, UDWORD height)
 
 
 
-	aMapLinePoints = (TILE_COORD *)MALLOC(sizeof(TILE_COORD) * numPoints);
+	aMapLinePoints = (TILE_COORD *)malloc(sizeof(TILE_COORD) * numPoints);
 	if (!aMapLinePoints)
 	{
 		DBERROR(("Out of memory"));
@@ -540,7 +540,7 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 	{
 		debug( LOG_ERROR, "mapLoad: Incorrect file type" );
 		abort();
-		FREE(pFileData);
+		free(pFileData);
 		return FALSE;
 	}
 
@@ -555,7 +555,7 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 	{
 		debug( LOG_ERROR, "MapLoad: unsupported save format version %d", psHeader->version );
 		abort();
-		FREE(pFileData);
+		free(pFileData);
 		return FALSE;
 	}
 	else if (psHeader->version <= VERSION_9)
@@ -570,7 +570,7 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 	{
 		debug( LOG_ERROR, "MapLoad: undefined save format version %d", psHeader->version );
 		abort();
-		FREE(pFileData);
+		free(pFileData);
 		return FALSE;
 	}
 
@@ -622,9 +622,9 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 			freeAllStructs();
 			freeAllFeatures();
 			proj_FreeAllProjectiles();
-//			FREE(psMapTiles);
+//			free(psMapTiles);
 //			mapFreeTilesAndStrips();
-			FREE(aMapLinePoints);
+			free(aMapLinePoints);
 			psMapTiles = NULL;
 			aMapLinePoints = NULL;
 		}
@@ -635,7 +635,7 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 	{
 
 
-		psMapTiles = (MAPTILE *)MALLOC(sizeof(MAPTILE) * width*height);
+		psMapTiles = (MAPTILE *)malloc(sizeof(MAPTILE) * width*height);
 		if (psMapTiles == NULL)
 		{
 			debug( LOG_ERROR, "mapLoad: Out of memory" );
@@ -661,7 +661,7 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 
 
 
-		aMapLinePoints = (TILE_COORD *)MALLOC(sizeof(TILE_COORD) * numPoints);
+		aMapLinePoints = (TILE_COORD *)malloc(sizeof(TILE_COORD) * numPoints);
 		if (!aMapLinePoints)
 		{
 			DBERROR(("Out of memory"));
@@ -733,7 +733,7 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 		*pFileSize += 1+aNumEquiv[i];
 	}
 
-	*ppFileData = (char*)MALLOC(*pFileSize);
+	*ppFileData = (char*)malloc(*pFileSize);
 	if (*ppFileData == NULL)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -872,7 +872,7 @@ BOOL mapSaveMission(char **ppFileData, UDWORD *pFileSize)
 		*pFileSize += 1+aNumEquiv[i];
 	}
 
-	*ppFileData = MALLOC(*pFileSize);
+	*ppFileData = malloc(*pFileSize);
 	if (*ppFileData == NULL)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -962,19 +962,19 @@ BOOL mapSaveMission(char **ppFileData, UDWORD *pFileSize)
 BOOL mapShutdown(void)
 {
 	if(psMapTiles) {
-		FREE(psMapTiles);
+		free(psMapTiles);
 //		mapFreeTilesAndStrips();
 	}
 	psMapTiles = NULL;
 	mapWidth = mapHeight = 0;
 
 /*	if(aMapLinePoints) {
-		FREE(aMapLinePoints);
+		free(aMapLinePoints);
 	}
 	aMapLinePoints = NULL;
 
 	if(aAARootTbl) {
-		FREE(aAARootTbl);
+		free(aAARootTbl);
 	}
 	aAARootTbl = NULL;
 */
@@ -1130,7 +1130,7 @@ void mapRootTblInit(void)
 
 
 	/* Allocate the table */
-	aAARootTbl = MALLOC( tablecells * sizeof(AAFLOAT) );
+	aAARootTbl = malloc( tablecells * sizeof(AAFLOAT) );
 
 	/* Set the table values */
 //	incval = AADIV(AA_ONE,(tablecells - 1));	// This line is incorrect ... the second value is a constant not a fixed point value
@@ -1568,7 +1568,7 @@ BOOL	writeVisibilityData( char *pFileName )
 	fileSize = ( sizeof(struct _vis_save_header) + ( mapEntries*sizeof(UBYTE) ) );
 
 	/* Try and allocate it - freed up in same function */
-	pFileData = (char*)MALLOC(fileSize);
+	pFileData = (char*)malloc(fileSize);
 
 	/* Did we get it? */
 	if(!pFileData)
@@ -1607,7 +1607,7 @@ BOOL	writeVisibilityData( char *pFileName )
 	/* And free up the memory we used */
 	if (pFileData != NULL)
 	{
-		FREE(pFileData);
+		free(pFileData);
 	}
 
 	/* Everything is just fine! */

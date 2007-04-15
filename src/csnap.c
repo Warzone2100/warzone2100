@@ -101,7 +101,7 @@ void snapInitVars(void)
 
 void AllocateSnapBuffer(CURSORSNAP *SnapBuffer,UWORD MaxSnaps)
 {
-	SnapBuffer->SnapCoords = (SNAPCOORD*)MALLOC(sizeof(CURSORSNAP)*MaxSnaps);
+	SnapBuffer->SnapCoords = (SNAPCOORD*)malloc(sizeof(CURSORSNAP)*MaxSnaps);
 	SnapBuffer->MaxSnaps = MaxSnaps;
 	SnapBuffer->NumSnaps = 0;
 	SnapBuffer->CurrentSnap = 0;
@@ -112,7 +112,7 @@ void AllocateSnapBuffer(CURSORSNAP *SnapBuffer,UWORD MaxSnaps)
 
 void ReleaseSnapBuffer(CURSORSNAP *SnapBuffer)
 {
-	FREE(SnapBuffer->SnapCoords);
+	free(SnapBuffer->SnapCoords);
 }
 
 

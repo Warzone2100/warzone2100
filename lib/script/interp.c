@@ -1169,7 +1169,7 @@ static inline void createVarEnvironment(SCRIPT_CONTEXT *psContext, UDWORD eventI
 	if (numEventVars > 0)
 	{
 		// alloc memory
-		varEnvironment[callDepth] = (INTERP_VAL *)MALLOC(sizeof(INTERP_VAL) * numEventVars);
+		varEnvironment[callDepth] = (INTERP_VAL *)malloc(sizeof(INTERP_VAL) * numEventVars);
 
 		// create environment
 		memcpy(varEnvironment[callDepth], psContext->psCode->ppsLocalVarVal[eventIndex], sizeof(INTERP_VAL) * numEventVars);
@@ -1179,7 +1179,7 @@ static inline void createVarEnvironment(SCRIPT_CONTEXT *psContext, UDWORD eventI
 		{
 			if (varEnvironment[callDepth][i].type == VAL_STRING)
 			{
-				varEnvironment[callDepth][i].v.sval = (char*)MALLOC(MAXSTRLEN);
+				varEnvironment[callDepth][i].v.sval = (char*)malloc(MAXSTRLEN);
 				strcpy( varEnvironment[callDepth][i].v.sval, "" );	//initialize
 			}
 		}
@@ -1207,12 +1207,12 @@ static inline void destroyVarEnvironment(SCRIPT_CONTEXT *psContext, UDWORD envIn
 		{
 			if (varEnvironment[envIndex][i].type == VAL_STRING)
 			{
-				FREE( varEnvironment[envIndex][i].v.sval );
+				free( varEnvironment[envIndex][i].v.sval );
 				varEnvironment[envIndex][i].v.sval = NULL;
 			}
 		}
 
-		FREE( varEnvironment[envIndex] );
+		free( varEnvironment[envIndex] );
 	}
 }
 

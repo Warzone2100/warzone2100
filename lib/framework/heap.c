@@ -60,7 +60,7 @@ void heapSetCallPos(const char *pFileName, SDWORD lineNumber)
 	cPos = lineNumber;
 
 #if COPY_FILE_STRING
-	pCFile = (char *)MALLOC(strlen(pFileName) + 1);
+	pCFile = (char *)malloc(strlen(pFileName) + 1);
 	if (!pCFile)
 	{
 		return;
@@ -151,7 +151,7 @@ BOOL heapCreate(OBJ_HEAP **ppsHeap, UDWORD size, UDWORD init, UDWORD ext)
 #endif
 
 	/* Allocate the heap object and its memory */
-	*ppsHeap = (OBJ_HEAP *)MALLOC(sizeof(OBJ_HEAP));
+	*ppsHeap = (OBJ_HEAP *)malloc(sizeof(OBJ_HEAP));
 	if (*ppsHeap == NULL)
 	{
 		debug( LOG_ERROR, "heapCreate: Out of memory" );
@@ -159,7 +159,7 @@ BOOL heapCreate(OBJ_HEAP **ppsHeap, UDWORD size, UDWORD init, UDWORD ext)
 		return FALSE;
 	}
 //	memset(*ppsHeap,0,sizeof(OBJ_HEAP));			//setting everything to 0 first (debug test)-Q
-	(*ppsHeap)->pMemory = (UBYTE *)MALLOC(size * init);
+	(*ppsHeap)->pMemory = (UBYTE *)malloc(size * init);
 
 /*
 	if ((*ppsHeap)->pMemory == NULL)
@@ -265,7 +265,7 @@ BOOL heapAlloc(OBJ_HEAP *psHeap, void **ppObject)
 		{
 			// heap doesn't expand
 #if DEBUG_HEAP && COPY_FILE_STRING
-			FREE(pCFile);
+			free(pCFile);
 #endif
 			return FALSE;
 		}
@@ -274,19 +274,19 @@ BOOL heapAlloc(OBJ_HEAP *psHeap, void **ppObject)
 		debug(LOG_MEMORY, "heapAlloc: Heap %s, line %d extended. Max use: %d\n", psHeap->pFile, psHeap->line, psHeap->maxUsage);
 #endif
 
-		psNew = (HEAP_EXTENSION *)MALLOC(sizeof(HEAP_EXTENSION));
+		psNew = (HEAP_EXTENSION *)malloc(sizeof(HEAP_EXTENSION));
 		if (psNew == NULL)
 		{
 
 			/* Out of memory */
 			return FALSE;
 		}
-		psNew->pMemory = (UBYTE *)MALLOC(psHeap->objSize * psHeap->extAlloc);
+		psNew->pMemory = (UBYTE *)malloc(psHeap->objSize * psHeap->extAlloc);
 		if (psNew->pMemory == NULL)
 		{
 
 			/* Out of memory */
-			FREE(psNew);
+			free(psNew);
 			return FALSE;
 		}
 
@@ -387,7 +387,7 @@ BOOL heapFree(OBJ_HEAP *psHeap, void *pObject)
 #if COPY_FILE_STRING
 	if (psHdr->pFile)
 	{
-		FREE(psHdr->pFile);
+		free(psHdr->pFile);
 	}
 #endif
 
@@ -483,7 +483,7 @@ void heapDestroy(OBJ_HEAP *psHeap)
 #if COPY_FILE_STRING
 		if (psCurrHdr->pFile)
 		{
-			FREE(psCurrHdr->pFile);
+			free(psCurrHdr->pFile);
 		}
 #endif
 	}
@@ -510,7 +510,7 @@ void heapDestroy(OBJ_HEAP *psHeap)
 #if COPY_FILE_STRING
 	if (psHeap->pFile)
 	{
-		FREE(psHeap->pFile);
+		free(psHeap->pFile);
 	}
 #endif
 
@@ -530,11 +530,11 @@ void heapDestroy(OBJ_HEAP *psHeap)
 	for(psExt = psHeap->psExt; psExt != NULL; psExt = psNext)
 	{
 		psNext = psExt->psNext;
-		FREE(psExt->pMemory);
-		FREE(psExt);
+		free(psExt->pMemory);
+		free(psExt);
 	}
-	FREE(psHeap->pMemory);
-	FREE(psHeap);
+	free(psHeap->pMemory);
+	free(psHeap);
 }
 
 

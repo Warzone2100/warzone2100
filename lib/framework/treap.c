@@ -45,7 +45,7 @@ void treapSetCallPos(const char *pFileName, SDWORD lineNumber)
 {
 	cLine = lineNumber;
 
-	pCFile = (char *)MALLOC(strlen(pFileName) + 1);
+	pCFile = (char *)malloc(strlen(pFileName) + 1);
 	if (pCFile)
 	{
 		strcpy(pCFile, pFileName);
@@ -87,7 +87,7 @@ SDWORD treapStringCmp(void *key1, void *key2)
 
 BOOL treapCreate(TREAP **ppsTreap, TREAP_CMP cmp, UDWORD init, UDWORD ext)
 {
-	*ppsTreap = (TREAP*)MALLOC(sizeof(TREAP));
+	*ppsTreap = (TREAP*)malloc(sizeof(TREAP));
 	if (!(*ppsTreap))
 	{
 		debug( LOG_ERROR, "treapCreate: Out of memory" );
@@ -99,7 +99,7 @@ BOOL treapCreate(TREAP **ppsTreap, TREAP_CMP cmp, UDWORD init, UDWORD ext)
 	{
 		debug( LOG_ERROR, "treapCreate: Out of memory" );
 		abort();
-		FREE(*ppsTreap);
+		free(*ppsTreap);
 		return FALSE;
 	}
 
@@ -295,7 +295,7 @@ BOOL treapDel(TREAP *psTreap, void *key)
 
 	// Release the node
 #ifdef DEBUG_TREAP
-	FREE(psDel->pFile);
+	free(psDel->pFile);
 #endif
 	HEAP_FREE(psTreap->psNodes, psDel);
 
@@ -386,12 +386,12 @@ void treapDestroy(TREAP *psTreap)
 		debug( LOG_NEVER, "treapDestroy: %s, line %d : nodes still in the tree\n", psTreap->pFile, psTreap->line );
 		treapReportRec(psTreap->psRoot);
 	}
-	FREE(psTreap->pFile);
+	free(psTreap->pFile);
 #endif
 
 	treapDestroyRec(psTreap->psRoot, psTreap->psNodes);
 	HEAP_DESTROY(psTreap->psNodes);
-	FREE(psTreap);
+	free(psTreap);
 }
 
 /* Recursively display the treap structure */

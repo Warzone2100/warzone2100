@@ -64,7 +64,7 @@ BOOL barGraphCreate(W_BARGRAPH **ppsWidget, W_BARINIT *psInit)
 
 	/* Allocate the required memory */
 #if W_USE_MALLOC
-	*ppsWidget = (W_BARGRAPH *)MALLOC(sizeof(W_BARGRAPH));
+	*ppsWidget = (W_BARGRAPH *)malloc(sizeof(W_BARGRAPH));
 	if (*ppsWidget == NULL)
 #else
 	if (!HEAP_ALLOC(psBarHeap, (void**) ppsWidget))
@@ -158,7 +158,7 @@ void barGraphFree(W_BARGRAPH *psWidget)
 #endif
 
 #if W_USE_MALLOC
-	FREE(psWidget);
+	free(psWidget);
 #else
 	HEAP_FREE(psBarHeap, psWidget);
 #endif

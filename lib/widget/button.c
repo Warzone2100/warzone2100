@@ -55,7 +55,7 @@ BOOL buttonCreate(W_BUTTON **ppsWidget, W_BUTINIT *psInit)
 
 	/* Allocate the required memory */
 #if W_USE_MALLOC
-	*ppsWidget = (W_BUTTON *)MALLOC(sizeof(W_BUTTON));
+	*ppsWidget = (W_BUTTON *)malloc(sizeof(W_BUTTON));
 	if (*ppsWidget == NULL)
 #else
 	if (!HEAP_ALLOC(psButHeap, (void**) ppsWidget))
@@ -72,7 +72,7 @@ BOOL buttonCreate(W_BUTTON **ppsWidget, W_BUTINIT *psInit)
 		{
 			ASSERT( FALSE, "buttonCreate: Out of memory" );
 #if W_USE_MALLOC
-			FREE(*ppsWidget);
+			free(*ppsWidget);
 #else
 			HEAP_FREE(psButHeap, *ppsWidget);
 #endif
@@ -156,7 +156,7 @@ void buttonFree(W_BUTTON *psWidget)
 #endif
 
 #if W_USE_MALLOC
-	FREE(psWidget);
+	free(psWidget);
 #else
 	HEAP_FREE(psButHeap, psWidget);
 #endif

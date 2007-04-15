@@ -186,7 +186,7 @@ void recvOptions(NETMSG *pMsg)
 	if(ingame.numStructureLimits)							// free old limits.
 	{
 			ingame.numStructureLimits = 0;
-			FREE(ingame.pStructureLimits);
+			free(ingame.pStructureLimits);
 	}
 
 	NetGet(pMsg,pos,player2dpid);
@@ -225,7 +225,7 @@ void recvOptions(NETMSG *pMsg)
 	pos += sizeof(ingame.numStructureLimits);
 	if(ingame.numStructureLimits)
 	{
-		ingame.pStructureLimits = (UBYTE*)MALLOC(ingame.numStructureLimits*(sizeof(UDWORD)+sizeof(UBYTE)));	// malloc some room
+		ingame.pStructureLimits = (UBYTE*)malloc(ingame.numStructureLimits*(sizeof(UDWORD)+sizeof(UBYTE)));	// malloc some room
 		memcpy(ingame.pStructureLimits, &(pMsg->body[pos]) ,ingame.numStructureLimits*(sizeof(UDWORD)+sizeof(UBYTE)));
 	}
 
@@ -573,14 +573,14 @@ BOOL multiShutdown(void)
 	{
 		pF = Force.pMembers;
 		Force.pMembers = pF->psNext;
-		FREE(pF);
+		free(pF);
 	}
 
 	debug(LOG_MAIN, "free game data (structure limits)");
 	if(ingame.numStructureLimits)
 	{
 		ingame.numStructureLimits = 0;
-		FREE(ingame.pStructureLimits);
+		free(ingame.pStructureLimits);
 	}
 
 	return TRUE;
@@ -1138,7 +1138,7 @@ BOOL multiGameShutdown(void)
 	if(ingame.numStructureLimits)
 	{
 		ingame.numStructureLimits = 0;
-		FREE(ingame.pStructureLimits);
+		free(ingame.pStructureLimits);
 	}
 
 	ingame.localJoiningInProgress   = FALSE;	// clean up

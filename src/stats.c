@@ -161,7 +161,7 @@ static	char NotUsedString[50];	// Dummy area for scanf
 #define ALLOC_STATS(numEntries, list, listSize, type) \
 	ASSERT( (numEntries) < REF_RANGE, \
 	"allocStats: number of stats entries too large for " #type );\
-	(list) = (type *)MALLOC(sizeof(type) * (numEntries)); \
+	(list) = (type *)malloc(sizeof(type) * (numEntries)); \
 	if ((list) == NULL) \
 	{ \
 		debug( LOG_ERROR, "Out of memory" ); \
@@ -245,13 +245,13 @@ void statsDealloc(COMP_BASE_STATS* pStats, UDWORD listSize, UDWORD structureSize
 
 	for (inc=0; inc < listSize; inc++)
 	{
-		FREE(pStatList->pName);
+		free(pStatList->pName);
 		address += structureSize;
 		pStatList = (COMP_BASE_STATS *) address;
 	}
 #endif
 
-	FREE (pStats);
+	free(pStats);
 }
 
 
@@ -276,11 +276,11 @@ static void deallocBodyStats(void)
 //#ifndef RESOURCE_NAMES
 #if !defined (RESOURCE_NAMES) && !defined (STORE_RESOURCE_ID)
 
-		FREE(psStat->pName);
+		free(psStat->pName);
 #endif
-		FREE(psStat->ppIMDList);
+		free(psStat->ppIMDList);
 	}
-	FREE(asBodyStats);
+	free(asBodyStats);
 }
 
 /*Deallocate all the stats assigned from input data*/
@@ -426,7 +426,7 @@ BOOL loadWeaponStats(char *pWeaponData, UDWORD bufferSize)
 	//pData = pWeaponData;
 
 	psStats = &sStats;
-/*	psStats = (WEAPON_STATS *)MALLOC(sizeof(WEAPON_STATS));
+/*	psStats = (WEAPON_STATS *)malloc(sizeof(WEAPON_STATS));
 	if (psStats == NULL)
 	{
 		DBERROR(("Weapon Stats - Out of memory"));
@@ -848,8 +848,8 @@ BOOL loadWeaponStats(char *pWeaponData, UDWORD bufferSize)
 		//increment the pointer to the start of the next record
 		pWeaponData = strchr(pWeaponData,'\n') + 1;
 	}
-//	FREE(pData);
-//	FREE(psStats);
+//	free(pData);
+//	free(psStats);
 
 	return TRUE;
 }
@@ -871,7 +871,7 @@ BOOL loadWeaponStats(char *pWeaponData, UDWORD bufferSize)
 	}
 	pStartArmourData = pArmourData;
 
-	psStats = (ARMOUR_STATS *)MALLOC(sizeof(ARMOUR_STATS));
+	psStats = (ARMOUR_STATS *)malloc(sizeof(ARMOUR_STATS));
 	if (psStats == NULL)
 	{
 		DBERROR(("Armour Stats - Out of memory"));
@@ -914,7 +914,7 @@ BOOL loadWeaponStats(char *pWeaponData, UDWORD bufferSize)
 			&psStats->strength);
 
 		//allocate storage for the name
-		psStats->pName = (char *)MALLOC((strlen(ArmourName))+1);
+		psStats->pName = (char *)malloc((strlen(ArmourName))+1);
 		if (psStats->pName == NULL)
 		{
 			DBERROR(("Armour Stats Name - Out of memory"));
@@ -931,8 +931,8 @@ BOOL loadWeaponStats(char *pWeaponData, UDWORD bufferSize)
 		//increment the pointer to the start of the next record
 		pArmourData = strchr(pArmourData,'\n') + 1;
 	}
-	FREE(pStartArmourData);
-	FREE(psStats);
+	free(pStartArmourData);
+	free(psStats);
 	return TRUE;
 }
 */
@@ -989,7 +989,7 @@ BOOL loadBodyStats(char *pBodyData, UDWORD bufferSize)
 #endif
 
 		//allocate storage for the name
-		/*psStats->pName = (char *)MALLOC((strlen(BodyName))+1);
+		/*psStats->pName = (char *)malloc((strlen(BodyName))+1);
 		if (psStats->pName == NULL)
 		{
 			DBERROR(("Body Stats Name - Out of memory"));
@@ -1189,7 +1189,7 @@ BOOL loadBrainStats(char *pBrainData, UDWORD bufferSize)
 	}
 	pStartPowerData = pPowerData;
 
-	psStats = (POWER_STATS *)MALLOC(sizeof(POWER_STATS));
+	psStats = (POWER_STATS *)malloc(sizeof(POWER_STATS));
 	if (psStats == NULL)
 	{
 		DBERROR(("Power Stats - Out of memory"));
@@ -1232,7 +1232,7 @@ BOOL loadBrainStats(char *pBrainData, UDWORD bufferSize)
 			&psStats->output);
 
 		//allocate storage for the name
-		psStats->pName = (char *)MALLOC((strlen(PowerName))+1);
+		psStats->pName = (char *)malloc((strlen(PowerName))+1);
 		if (psStats->pName == NULL)
 		{
 			DBERROR(("Power Stats Name - Out of memory"));
@@ -1249,8 +1249,8 @@ BOOL loadBrainStats(char *pBrainData, UDWORD bufferSize)
 		//increment the pointer to the start of the next record
 		pPowerData = strchr(pPowerData,'\n') + 1;
 	}
-	FREE(pStartPowerData);
-	FREE(psStats);
+	free(pStartPowerData);
+	free(psStats);
 	return TRUE;
 }
 */
@@ -1601,7 +1601,7 @@ BOOL loadECMStats(char *pECMData, UDWORD bufferSize)
 	//pData = pECMData;
 
 	psStats = &sStats;
-/*	psStats = (ECM_STATS *)MALLOC(sizeof(ECM_STATS));
+/*	psStats = (ECM_STATS *)malloc(sizeof(ECM_STATS));
 	if (psStats == NULL)
 	{
 		DBERROR(("ECM Stats - Out of memory"));
@@ -1723,8 +1723,8 @@ BOOL loadECMStats(char *pECMData, UDWORD bufferSize)
 		//increment the pointer to the start of the next record
 		pECMData = strchr(pECMData,'\n') + 1;
 	}
-//	FREE(pData);
-//	FREE(psStats);
+//	free(pData);
+//	free(psStats);
 	return TRUE;
 }
 
@@ -1741,7 +1741,7 @@ BOOL loadRepairStats(char *pRepairData, UDWORD bufferSize)
 	//pData = pRepairData;
 
 	psStats = &sStats;
-/*	psStats = (REPAIR_STATS *)MALLOC(sizeof(REPAIR_STATS));
+/*	psStats = (REPAIR_STATS *)malloc(sizeof(REPAIR_STATS));
 	if (psStats == NULL)
 	{
 		DBERROR(("Repair Stats - Out of memory"));
@@ -1870,8 +1870,8 @@ BOOL loadRepairStats(char *pRepairData, UDWORD bufferSize)
 		//increment the pointer to the start of the next record
 		pRepairData = strchr(pRepairData,'\n') + 1;
 	}
-//	FREE(pData);
-//	FREE(psStats);
+//	free(pData);
+//	free(psStats);
 	return TRUE;
 }
 
@@ -1888,7 +1888,7 @@ BOOL loadConstructStats(char *pConstructData, UDWORD bufferSize)
 	//pData = pConstructData;
 
 	psStats = &sStats;
-/*	psStats = (CONSTRUCT_STATS *)MALLOC(sizeof(CONSTRUCT_STATS));
+/*	psStats = (CONSTRUCT_STATS *)malloc(sizeof(CONSTRUCT_STATS));
 	if (psStats == NULL)
 	{
 		DBERROR(("Construct Stats - Out of memory"));
@@ -1992,8 +1992,8 @@ BOOL loadConstructStats(char *pConstructData, UDWORD bufferSize)
 		//increment the pointer to the start of the next record
 		pConstructData = strchr(pConstructData,'\n') + 1;
 	}
-//	FREE(pData);
-//	FREE(psStats);
+//	free(pData);
+//	free(psStats);
 	return TRUE;
 }
 
@@ -2013,7 +2013,7 @@ BOOL loadPropulsionTypes(char *pPropTypeData, UDWORD bufferSize)
 	NumTypes = NUM_PROP_TYPES;
 
 	//allocate storage for the stats
-	asPropulsionTypes = (PROPULSION_TYPES *)MALLOC(sizeof(PROPULSION_TYPES)*NumTypes);
+	asPropulsionTypes = (PROPULSION_TYPES *)malloc(sizeof(PROPULSION_TYPES)*NumTypes);
 	if (asPropulsionTypes == NULL)
 	{
 		debug( LOG_ERROR, "PropulsionTypes - Out of memory" );
@@ -2033,7 +2033,7 @@ BOOL loadPropulsionTypes(char *pPropTypeData, UDWORD bufferSize)
 
 		//allocate storage for the name
 /*
-		asPropulsionTypes->pName = (char *)MALLOC((strlen(PropulsionName))+1);
+		asPropulsionTypes->pName = (char *)malloc((strlen(PropulsionName))+1);
 		if (asPropulsionTypes->pName == NULL)
 		{
 			DBERROR(("Propulsion Type Name - Out of memory"));
@@ -2086,7 +2086,7 @@ BOOL loadPropulsionTypes(char *pPropTypeData, UDWORD bufferSize)
 		//increment the pointer to the start of the next record
 		pPropTypeData = strchr(pPropTypeData,'\n') + 1;
 	}
-//	FREE(pData);
+//	free(pData);
 
 	return TRUE;
 }
@@ -2106,7 +2106,7 @@ BOOL loadTerrainTable(char *pTerrainTableData, UDWORD bufferSize)
 	NumEntries = numCR(pTerrainTableData, bufferSize);
 
 	//allocate storage for the stats
-	asTerrainTable = (TERRAIN_TABLE *)MALLOC(sizeof(TERRAIN_TABLE) *
+	asTerrainTable = (TERRAIN_TABLE *)malloc(sizeof(TERRAIN_TABLE) *
 		//numPropulsionTypes * TERRAIN_TYPES);
 		NUM_PROP_TYPES * TERRAIN_TYPES);
 
@@ -2142,7 +2142,7 @@ BOOL loadTerrainTable(char *pTerrainTableData, UDWORD bufferSize)
 		//increment the pointer to the start of the next record
 		pTerrainTableData = strchr(pTerrainTableData,'\n') + 1;
 	}
-//	FREE(pData);
+//	free(pData);
 
 	//check that none of the entries are 0 otherwise this will stop a droid dead in its tracks
 	//and it will not be able to move again!
@@ -2177,7 +2177,7 @@ BOOL loadSpecialAbility(char *pSAbilityData, UDWORD bufferSize)
 	NumTypes = numCR(pSAbilityData, bufferSize);
 
 	//allocate storage for the stats
-	asSpecialAbility = (SPECIAL_ABILITY *)MALLOC(sizeof(SPECIAL_ABILITY)*NumTypes);
+	asSpecialAbility = (SPECIAL_ABILITY *)malloc(sizeof(SPECIAL_ABILITY)*NumTypes);
 
 	if (asSpecialAbility == NULL)
 	{
@@ -2205,7 +2205,7 @@ BOOL loadSpecialAbility(char *pSAbilityData, UDWORD bufferSize)
 			return FALSE;
 		}
 		//allocate storage for the name
-		asSpecialAbility->pName = (char *)MALLOC((strlen(SAbilityName))+1);
+		asSpecialAbility->pName = (char *)malloc((strlen(SAbilityName))+1);
 		if (asSpecialAbility->pName == NULL)
 		{
 			debug( LOG_ERROR, "Special Ability Name - Out of memory" );
@@ -2218,7 +2218,7 @@ BOOL loadSpecialAbility(char *pSAbilityData, UDWORD bufferSize)
 		pSAbilityData = strchr(pSAbilityData,'\n') + 1;
 		asSpecialAbility++;
 	}
-//	FREE(pData);
+//	free(pData);
 
 	//reset the pointer to the start of the special ability stats
 	asSpecialAbility = pSAbility;
@@ -2249,7 +2249,7 @@ BOOL loadBodyPropulsionIMDs(char *pData, UDWORD bufferSize)
 	for (numStats = 0; numStats < numBodyStats; numStats++)
 	{
 		psBodyStat = &asBodyStats[numStats];
-		psBodyStat->ppIMDList = (iIMDShape **) MALLOC(numPropulsionStats *
+		psBodyStat->ppIMDList = (iIMDShape **) malloc(numPropulsionStats *
 			NUM_PROP_SIDES * sizeof(iIMDShape *));
 		if (psBodyStat->ppIMDList == NULL)
 		{
@@ -2367,7 +2367,7 @@ BOOL loadBodyPropulsionIMDs(char *pData, UDWORD bufferSize)
 		//increment the pointer to the start of the next record
 		pData = strchr(pData,'\n') + 1;
 	}
-//	FREE(pStartData);
+//	free(pStartData);
 	return(TRUE);
 
 }
@@ -2841,16 +2841,16 @@ void deallocPropulsionTypes(void)
 /*
 	for (inc=0; inc < numPropulsionTypes; inc++, pList++)
 	{
-		FREE(pList->pName);
+		free(pList->pName);
 	}
 */
-	FREE (asPropulsionTypes);
+	free(asPropulsionTypes);
 }
 
 //dealloc the storage assigned for the terrain table
 void deallocTerrainTable(void)
 {
-	FREE(asTerrainTable);
+	free(asTerrainTable);
 }
 
 //dealloc the storage assigned for the Special Ability stats
@@ -2861,9 +2861,9 @@ void deallocSpecialAbility(void)
 
 	for (inc=0; inc < numSpecialAbility; inc++, pList++)
 	{
-		FREE(pList->pName);
+		free(pList->pName);
 	}
-	FREE (asSpecialAbility);
+	free(asSpecialAbility);
 }
 
 //store the speed Factor in the terrain table
@@ -3544,7 +3544,7 @@ BOOL allocateName(char **ppStore, char *pName)
 
 #else
 	//need to allocate space for the name
-	*ppStore = (char *)MALLOC((strlen(pName))+1);
+	*ppStore = (char *)malloc((strlen(pName))+1);
 	if (ppStore == NULL)
 	{
 		debug( LOG_ERROR, "Name - Out of memory" );

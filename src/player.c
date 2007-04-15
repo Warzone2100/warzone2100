@@ -133,7 +133,7 @@ PLAYER_AI	*asPlayerAI;
 /* Initialise the player AI system */
 BOOL playerInitialise(void)
 {
-	asPlayerAI = (PLAYER_AI *)MALLOC(sizeof(PLAYER_AI) * MAX_PLAYERS);
+	asPlayerAI = (PLAYER_AI *)malloc(sizeof(PLAYER_AI) * MAX_PLAYERS);
 	if (!asPlayerAI)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -156,7 +156,7 @@ void playerReset(void)
 /* Shutdown the player AI system */
 void playerShutDown(void)
 {
-	FREE(asPlayerAI);
+	free(asPlayerAI);
 }
 
 

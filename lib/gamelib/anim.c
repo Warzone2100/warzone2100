@@ -91,17 +91,17 @@ anim_ReleaseAnim( BASEANIM *psAnim )
 	LIST_REMOVE(g_animGlobals.psAnimList, psAnim, BASEANIM);
 
 	/* free anim scripts */
-	FREE( psAnim->psStates );
+	free( psAnim->psStates );
 
 	/* free anim shape */
 	if ( psAnim->animType == ANIM_3D_FRAMES ||
 		 psAnim->animType == ANIM_3D_TRANS     )
 	{
 		psAnim3D = (ANIM3D *) psAnim;
-		FREE( psAnim3D->apFrame );
+		free( psAnim3D->apFrame );
 	}
 
-	FREE(psAnim);
+	free(psAnim);
 }
 
 /***************************************************************************/
@@ -142,7 +142,7 @@ anim_InitBaseMembers( BASEANIM * psAnim, UWORD uwStates, UWORD uwFrameRate,
 	psAnim->uwAnimTime  = (UWORD) (uwStates*1000 / psAnim->uwFrameRate);
 
 	/* allocate frames */
-	psAnim->psStates = (ANIM_STATE*)MALLOC( uwObj*psAnim->uwStates*sizeof(ANIM_STATE) );
+	psAnim->psStates = (ANIM_STATE*)malloc( uwObj*psAnim->uwStates*sizeof(ANIM_STATE) );
 }
 
 /***************************************************************************/
@@ -156,7 +156,7 @@ anim_Create3D( char szPieFileName[], UWORD uwStates,
 	UWORD		uwFrames, i;
 
 	/* allocate anim */
-	if ( (psAnim3D = (ANIM3D*)MALLOC(sizeof(ANIM3D))) == NULL )
+	if ( (psAnim3D = (ANIM3D*)malloc(sizeof(ANIM3D))) == NULL )
 	{
 		return FALSE;
 	}
@@ -190,7 +190,7 @@ anim_Create3D( char szPieFileName[], UWORD uwStates,
 	}
 
 	/* get pointers to individual frames */
-	psAnim3D->apFrame = (iIMDShape**)MALLOC( uwFrames*sizeof(iIMDShape *) );
+	psAnim3D->apFrame = (iIMDShape**)malloc( uwFrames*sizeof(iIMDShape *) );
 	psFrames = psAnim3D->psFrames;
 	for ( i=0; i<uwFrames; i++ )
 	{

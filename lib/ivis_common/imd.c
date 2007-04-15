@@ -452,32 +452,32 @@ void iV_IMDRelease(iIMDShape *s)
    if (s) {
 
 		if (s->flags & iV_IMD_BINARY) {
-			FREE(s);
+			free(s);
 			return;
 		}
 
 		if (s->points) {
-			FREE(s->points);
+			free(s->points);
 		}
 		if (s->connectors) {
-			FREE(s->connectors);
+			free(s->connectors);
 		}
 		if (s->BSPNode) {
-				FREE(s->BSPNode);	// I used MALLOC() so i'm going to use FREE()
+				free(s->BSPNode);	// I used malloc() so i'm going to use FREE()
 		}
 		if (s->polys) {
 			for (i = 0; i < s->npolys; i++) {
 				if (s->polys[i].pindex) {
-					FREE(s->polys[i].pindex);
+					free(s->polys[i].pindex);
 				}
 				if (s->polys[i].pTexAnim) {
-					FREE(s->polys[i].pTexAnim);
+					free(s->polys[i].pTexAnim);
 				}
 				if (s->polys[i].vrt) {
-					FREE(s->polys[i].vrt);
+					free(s->polys[i].vrt);
 				}
 			}
-			FREE(s->polys);
+			free(s->polys);
 		}
 		if (s->shadowEdgeList)
 		{
@@ -486,7 +486,7 @@ void iV_IMDRelease(iIMDShape *s)
 		}
 		iV_DEBUG0("imd[IMDRelease] = release successful\n");
 		d = s->next;
-		FREE(s);
+		free(s);
 		iV_IMDRelease(d);
 	}
 }

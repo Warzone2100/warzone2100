@@ -204,11 +204,11 @@ void eventShutDown(void)
 
 	if (asCreateFuncs)
 	{
-		FREE(asCreateFuncs);
+		free(asCreateFuncs);
 	}
 	if (asReleaseFuncs)
 	{
-		FREE(asReleaseFuncs);
+		free(asReleaseFuncs);
 	}
 }
 
@@ -332,13 +332,13 @@ BOOL eventInitValueFuncs(SDWORD maxType)
 	ASSERT( asReleaseFuncs == NULL,
 		"eventInitValueFuncs: array already initialised" );
 
-	asCreateFuncs = (VAL_CREATE_FUNC *)MALLOC(sizeof(VAL_CREATE_FUNC) * maxType);
+	asCreateFuncs = (VAL_CREATE_FUNC *)malloc(sizeof(VAL_CREATE_FUNC) * maxType);
 	if (!asCreateFuncs)
 	{
 		debug(LOG_ERROR, "eventInitValueFuncs: Out of memory");
 		return FALSE;
 	}
-	asReleaseFuncs = (VAL_RELEASE_FUNC *)MALLOC(sizeof(VAL_RELEASE_FUNC) * maxType);
+	asReleaseFuncs = (VAL_RELEASE_FUNC *)malloc(sizeof(VAL_RELEASE_FUNC) * maxType);
 	if (!asReleaseFuncs)
 	{
 		debug(LOG_ERROR, "eventInitValueFuncs: Out of memory");
@@ -422,7 +422,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 
 	//prepare local variables (initialize, store type)
 	//-------------------------------
-	psCode->ppsLocalVarVal = (INTERP_VAL **)MALLOC(sizeof(INTERP_VAL*) * psCode->numEvents);	//allocate space for array of local var arrays for each event
+	psCode->ppsLocalVarVal = (INTERP_VAL **)malloc(sizeof(INTERP_VAL*) * psCode->numEvents);	//allocate space for array of local var arrays for each event
 
 	debug(LOG_SCRIPT,"allocated space for %d events", psCode->numEvents);
 
@@ -430,7 +430,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 	{
 		if(psCode->numLocalVars[i] > 0)	//this event has any local vars declared
 		{
-			psCode->ppsLocalVarVal[i] = (INTERP_VAL*)MALLOC(sizeof(INTERP_VAL) * psCode->numLocalVars[i]);	//allocate space for local vars array (for the current event)
+			psCode->ppsLocalVarVal[i] = (INTERP_VAL*)malloc(sizeof(INTERP_VAL) * psCode->numLocalVars[i]);	//allocate space for local vars array (for the current event)
 
 			debug(LOG_SCRIPT,"Event %d has %d local variables", i, psCode->numLocalVars[i]);
 
@@ -444,7 +444,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 				   memset to 0, the only special case is strings */
 				memset (&(psCode->ppsLocalVarVal[i][j]), 0, sizeof(INTERP_VAL));
 				if (type == VAL_STRING) {
-					psCode->ppsLocalVarVal[i][j].v.sval = (char*)MALLOC(MAXSTRLEN);
+					psCode->ppsLocalVarVal[i][j].v.sval = (char*)malloc(MAXSTRLEN);
 					strcpy(psCode->ppsLocalVarVal[i][j].v.sval,"\0");
 				}
 
@@ -503,7 +503,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 			// memset to 0
 			memset(&(psNewChunk->asVals[storeIndex]), 0, sizeof(INTERP_VAL));
 			if (type == VAL_STRING) {
-				psNewChunk->asVals[storeIndex].v.sval = (char*)MALLOC(MAXSTRLEN);
+				psNewChunk->asVals[storeIndex].v.sval = (char*)malloc(MAXSTRLEN);
 				strcpy(psNewChunk->asVals[storeIndex].v.sval,"\0");
 			}
 
@@ -788,7 +788,7 @@ BOOL eventSetContextVar(SCRIPT_CONTEXT *psContext, UDWORD index, INTERP_VAL *dat
 
 		strcpy(psVal->v.sval, data->v.sval);
 
-		FREE(data->v.sval);		//not needed anymore
+		free(data->v.sval);		//not needed anymore
 	}
 	else
 	{

@@ -105,7 +105,7 @@ static BOOL formCreatePlain(W_FORM **ppsWidget, W_FORMINIT *psInit)
 {
 	/* Allocate the required memory */
 #if W_USE_MALLOC
-	*ppsWidget = (W_FORM *)MALLOC(sizeof(W_FORM));
+	*ppsWidget = (W_FORM *)malloc(sizeof(W_FORM));
 	if (*ppsWidget == NULL)
 #else
 	if (!HEAP_ALLOC(psFormHeap, (void**) ppsWidget))
@@ -157,7 +157,7 @@ static void formFreePlain(W_FORM *psWidget)
 
 	widgReleaseWidgetList(psWidget->psWidgets);
 #if W_USE_MALLOC
-	FREE(psWidget);
+	free(psWidget);
 #else
 	HEAP_FREE(psFormHeap, psWidget);
 #endif
@@ -169,7 +169,7 @@ static BOOL formCreateClickable(W_CLICKFORM **ppsWidget, W_FORMINIT *psInit)
 {
 	/* Allocate the required memory */
 #if W_USE_MALLOC
-	*ppsWidget = (W_CLICKFORM *)MALLOC(sizeof(W_CLICKFORM));
+	*ppsWidget = (W_CLICKFORM *)malloc(sizeof(W_CLICKFORM));
 	if (*ppsWidget == NULL)
 #else
 	if (!HEAP_ALLOC(psCFormHeap, (void**) ppsWidget))
@@ -216,7 +216,7 @@ static BOOL formCreateClickable(W_CLICKFORM **ppsWidget, W_FORMINIT *psInit)
 		{
 			ASSERT( FALSE, "formCreateClickable: Out of string memory" );
 #if W_USE_MALLOC
-			FREE(*ppsWidget);
+			free(*ppsWidget);
 #else
 			HEAP_FREE(psCFormHeap, *ppsWidget);
 #endif
@@ -252,7 +252,7 @@ static void formFreeClickable(W_CLICKFORM *psWidget)
 #endif
 
 #if W_USE_MALLOC
-	FREE(psWidget);
+	free(psWidget);
 #else
 	HEAP_FREE(psCFormHeap, psWidget);
 #endif
@@ -296,7 +296,7 @@ static BOOL formCreateTabbed(W_TABFORM **ppsWidget, W_FORMINIT *psInit)
 
 	/* Allocate the required memory */
 #if W_USE_MALLOC
-	*ppsWidget = (W_TABFORM *)MALLOC(sizeof(W_TABFORM));
+	*ppsWidget = (W_TABFORM *)malloc(sizeof(W_TABFORM));
 	if (*ppsWidget == NULL)
 #else
 	if (!HEAP_ALLOC(psTFormHeap, (void**) ppsWidget))
@@ -437,7 +437,7 @@ static void formFreeTabbed(W_TABFORM *psWidget)
 		psCurr = formGetAllWidgets(&sGetAll);
 	}
 #if W_USE_MALLOC
-	FREE(psWidget);
+	free(psWidget);
 #else
 	HEAP_FREE(psTFormHeap, psWidget);
 #endif

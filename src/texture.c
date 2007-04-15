@@ -90,8 +90,8 @@ void	makeTileTexturePages(UDWORD srcWidth, UDWORD srcHeight, UDWORD tileWidth, U
 
 	/* Get enough memory to store one tile */
 	pageNumber = 0;
-	tileStorage = (char*)MALLOC(tileWidth * tileHeight * PAGE_DEPTH);
-	sprite.bmp = (iBitmap*)MALLOC(TEXTURE_PAGE_SIZE);
+	tileStorage = (char*)malloc(tileWidth * tileHeight * PAGE_DEPTH);
+	sprite.bmp = (iBitmap*)malloc(TEXTURE_PAGE_SIZE);
 	sprite.width = PAGE_WIDTH;
 	sprite.height = PAGE_HEIGHT;
 	tilesProcessed = 0;
@@ -127,7 +127,7 @@ void	makeTileTexturePages(UDWORD srcWidth, UDWORD srcHeight, UDWORD tileWidth, U
 				      tilesDown, tilesAcross, tilesProcessed, tilesPerPage);
 				/* If so, download this one and reset to start again */
 				pageId[pageNumber] = pie_AddBMPtoTexPages(&sprite, "terrain", 0, FALSE);
-				sprite.bmp = (iBitmap*)MALLOC(TEXTURE_PAGE_SIZE);
+				sprite.bmp = (iBitmap*)malloc(TEXTURE_PAGE_SIZE);
 				pageNumber++;
 				presentLoc = sprite.bmp;
 			}
@@ -143,7 +143,7 @@ void	makeTileTexturePages(UDWORD srcWidth, UDWORD srcHeight, UDWORD tileWidth, U
 	ASSERT(FALSE, "we should have exited the loop using the goto");
 exit:
 	numTexturePages = pageNumber+1;
-	FREE(tileStorage);
+	free(tileStorage);
 	buildTileIndexes();
 	return;
 }
@@ -165,11 +165,11 @@ void	remakeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, 
 
 	/* Get enough memory to store one tile */
 	pageNumber = 0;
-	tileStorage = (char*)MALLOC(tileWidth * tileHeight * PAGE_DEPTH);
+	tileStorage = (char*)malloc(tileWidth * tileHeight * PAGE_DEPTH);
 	sprite.width = PAGE_WIDTH;
 	sprite.height = PAGE_HEIGHT;
 
-	sprite.bmp = (iBitmap*)MALLOC(TEXTURE_PAGE_SIZE);
+	sprite.bmp = (iBitmap*)malloc(TEXTURE_PAGE_SIZE);
 //	memset(sprite.bmp,0,TEXTURE_PAGE_SIZE);
 	tilesProcessed = 0;
 	tilesAcross = srcWidth/tileWidth;
@@ -220,7 +220,7 @@ void	remakeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, 
 	ASSERT( numTexturePages >= (SDWORD)pageNumber,"New Tertiles too large" );
 
 exit:
-	FREE(tileStorage);
+	free(tileStorage);
 	buildTileIndexes();
 	return;
 }
@@ -271,7 +271,7 @@ void freeTileTextures(void)
 
 	for (i = 0; i < numTexturePages; i++)
 	{
-		FREE(_TEX_PAGE[(firstTexturePage+i)].tex.bmp);
+		free(_TEX_PAGE[(firstTexturePage+i)].tex.bmp);
 	}
 }
 

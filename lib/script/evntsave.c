@@ -322,7 +322,7 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize, BOOL 
 					size += sizeof(UDWORD);
 					break;
 				case VAL_STRING:
-					data.v.sval = (char*)MALLOC(MAXSTRLEN);
+					data.v.sval = (char*)malloc(MAXSTRLEN);
 					strcpy(data.v.sval, "\0");
 
 					stringLen = *((UDWORD *)pPos);	//read string length
@@ -603,7 +603,7 @@ BOOL eventSaveState(SDWORD version, char **ppBuffer, UDWORD *pFileSize)
 
 
 	// Allocate the buffer to save to
-	pBuffer = (char*)MALLOC(totalSize);
+	pBuffer = (char*)malloc(totalSize);
 	if (pBuffer == NULL)
 	{
 		debug( LOG_ERROR, "eventSaveState: out of memory" );

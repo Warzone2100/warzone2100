@@ -223,7 +223,7 @@ static BOOL registry_load( const char *filename )
 			registry_set_key(key, buffer + l);
 		}
 	}
-	FREE(bufstart);
+	free(bufstart);
 	return TRUE;
 }
 

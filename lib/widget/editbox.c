@@ -69,7 +69,7 @@ BOOL editBoxCreate(W_EDITBOX **ppsWidget, W_EDBINIT *psInit)
 
 	/* Allocate the required memory */
 #if W_USE_MALLOC
-	*ppsWidget = (W_EDITBOX *)MALLOC(sizeof(W_EDITBOX));
+	*ppsWidget = (W_EDITBOX *)malloc(sizeof(W_EDITBOX));
 	if (*ppsWidget == NULL)
 #else
 	if (!HEAP_ALLOC(psEdbHeap, (void**) ppsWidget))
@@ -128,7 +128,7 @@ BOOL editBoxCreate(W_EDITBOX **ppsWidget, W_EDBINIT *psInit)
 void editBoxFree(W_EDITBOX *psWidget)
 {
 #if W_USE_MALLOC
-	FREE(psWidget);
+	free(psWidget);
 #else
 	HEAP_FREE(psEdbHeap, psWidget);
 #endif

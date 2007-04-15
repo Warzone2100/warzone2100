@@ -689,7 +689,7 @@ static BOOL loadLevFile(const char* filename, searchPathMode datadir) {
 		debug(LOG_ERROR, "loadLevFile: Parse error in %s\n", filename);
 		return FALSE;
 	}
-	FREE(pBuffer);
+	free(pBuffer);
 
 	return TRUE;
 }
@@ -959,7 +959,7 @@ BOOL systemInitialise(void)
 	{
 		displayBufferSize = 5000000;
 	}
-	DisplayBuffer = (char*)MALLOC(displayBufferSize);
+	DisplayBuffer = (char*)malloc(displayBufferSize);
 	if (DisplayBuffer == NULL)
 	{
 		debug( LOG_ERROR, "Unable to allocate memory for display buffer" );
@@ -1059,7 +1059,7 @@ BOOL systemShutdown(void)
 	}
 
 	debug(LOG_MAIN, "shutting down graphics subsystem");
-	FREE(DisplayBuffer);
+	free(DisplayBuffer);
 	iV_ShutDown();
 	levShutDown();
 	widgShutDown();

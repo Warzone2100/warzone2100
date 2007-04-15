@@ -80,7 +80,7 @@ BOOL sliderCreate(W_SLIDER **ppsWidget, W_SLDINIT *psInit)
 
 	/* Allocate the required memory */
 #if W_USE_MALLOC
-	*ppsWidget = (W_SLIDER *)MALLOC(sizeof(W_SLIDER));
+	*ppsWidget = (W_SLIDER *)malloc(sizeof(W_SLIDER));
 	if (*ppsWidget == NULL)
 #else
 	if (!HEAP_ALLOC(psSldHeap, (void**) ppsWidget))
@@ -156,7 +156,7 @@ void sliderFree(W_SLIDER *psWidget)
 
 
 #if W_USE_MALLOC
-	FREE(psWidget);
+	free(psWidget);
 #else
 	HEAP_FREE(psSldHeap, psWidget);
 #endif

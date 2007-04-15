@@ -277,7 +277,7 @@ static BOOL _imd_load_polys( char **ppFileData, iIMDShape *s )
 	s->numFrames = 0;
 	s->animInterval = 0;
 
-	s->polys = (iIMDPoly *) MALLOC(sizeof(iIMDPoly) * s->npolys);
+	s->polys = (iIMDPoly *) malloc(sizeof(iIMDPoly) * s->npolys);
 
 	if (s->polys) {
 		poly = s->polys;
@@ -300,9 +300,9 @@ static BOOL _imd_load_polys( char **ppFileData, iIMDShape *s )
 
 			IMDVertexcount+= poly->npnts;
 
-			poly->pindex = (VERTEXID *) MALLOC(sizeof(VERTEXID) * poly->npnts);
+			poly->pindex = (VERTEXID *) malloc(sizeof(VERTEXID) * poly->npnts);
 
-			if ((poly->vrt = (iVertex *)	MALLOC(sizeof(iVertex) * poly->npnts)) == NULL) {
+			if ((poly->vrt = (iVertex *)	malloc(sizeof(iVertex) * poly->npnts)) == NULL) {
 				iV_Error(0xff,"(_load_polys) [poly %d] memory alloc fail (vertex struct)",i);
 				return FALSE;
 			}
@@ -347,7 +347,7 @@ static BOOL _imd_load_polys( char **ppFileData, iIMDShape *s )
 			if (poly->flags & iV_IMD_TEXANIM) {
 				IMDTexAnims++;
 
-				if ((poly->pTexAnim = (iTexAnim *)MALLOC(sizeof(iTexAnim))) == NULL) {
+				if ((poly->pTexAnim = (iTexAnim *)malloc(sizeof(iTexAnim))) == NULL) {
 					iV_Error(0xff,"(_load_polys) [poly %d] memory alloc fail (iTexAnim struct)",i);
 					return FALSE;
 				}
@@ -432,7 +432,7 @@ static BOOL _imd_load_bsp( char **ppFileData, iIMDShape *s, UWORD BSPNodeCount )
 	}
 
 	// Build table of nodes - we sort out the links later
-	NodeList = (BSPTREENODE*)MALLOC((sizeof(BSPTREENODE))*BSPNodeCount);	// Allocate the entire node tree
+	NodeList = (BSPTREENODE*)malloc((sizeof(BSPTREENODE))*BSPNodeCount);	// Allocate the entire node tree
 
 	memset(NodeList,0,(sizeof(BSPTREENODE))*BSPNodeCount);	// Zero it out ... we need to make all pointers NULL
 
@@ -654,7 +654,7 @@ static BOOL _imd_load_points( char **ppFileData, iIMDShape *s )
 
 	IMDPoints+=s->npoints;
 
-	s->points = p = (Vector3i *) MALLOC(sizeof(Vector3i) * s->npoints);
+	s->points = p = (Vector3i *) malloc(sizeof(Vector3i) * s->npoints);
 	if (p == NULL) {
 		return FALSE;
 	}
@@ -873,7 +873,7 @@ static BOOL _imd_load_connectors(char **ppFileData, iIMDShape *s)
 
 	IMDConnectors+=s->nconnectors;
 
-	if ((s->connectors = (Vector3i *) MALLOC(sizeof(Vector3i) * s->nconnectors)) == NULL)
+	if ((s->connectors = (Vector3i *) malloc(sizeof(Vector3i) * s->nconnectors)) == NULL)
 	{
 		iV_Error(0xff,"(_load_connectors) MALLOC fail");
 		return FALSE;
@@ -930,7 +930,7 @@ static iIMDShape *_imd_load_level(char **ppFileData, char *FileDataEnd, int nlev
 	if (nlevels == 0)
 		return NULL;
 
-	s = (iIMDShape *) MALLOC(sizeof(iIMDShape));
+	s = (iIMDShape *) malloc(sizeof(iIMDShape));
 
 	if (s) {
 		s->points = NULL;

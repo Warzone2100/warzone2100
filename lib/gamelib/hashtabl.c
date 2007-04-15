@@ -96,9 +96,9 @@ hashTable_Create( HASHTABLE **ppsTable, UDWORD udwTableSize,
 	/* allocate and init table */
 
 
-	(*ppsTable) = (HASHTABLE*)MALLOC( sizeof(HASHTABLE) );
+	(*ppsTable) = (HASHTABLE*)malloc( sizeof(HASHTABLE) );
 	udwSize = udwTableSize * sizeof(HASHNODE *);
-	(*ppsTable)->ppsNode = (HASHNODE**)MALLOC( udwSize );
+	(*ppsTable)->ppsNode = (HASHNODE**)malloc( udwSize );
 	memset( (*ppsTable)->ppsNode, 0, udwSize );
 
 	/* allocate heaps */
@@ -149,8 +149,8 @@ hashTable_Destroy( HASHTABLE *psTable )
 	HEAP_DESTROY( psTable->psElementHeap );
 
 	/* free table */
-	FREE( psTable->ppsNode );
-	FREE( psTable );
+	free( psTable->ppsNode );
+	free( psTable );
 }
 
 /***************************************************************************/

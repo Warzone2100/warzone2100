@@ -335,7 +335,7 @@ void createLimitSet(void)
 	if(ingame.numStructureLimits)									// free the old set if required.
 	{
 		ingame.numStructureLimits = 0;
-		FREE(ingame.pStructureLimits);
+		free(ingame.pStructureLimits);
 	}
 
 	numchanges =0;													// count number of changes
@@ -348,7 +348,7 @@ void createLimitSet(void)
 	}
 
 	//close your eyes now
-	pChanges = (UBYTE*)MALLOC(numchanges*(sizeof(UDWORD)+sizeof(UBYTE)));			// allocate some mem for this.
+	pChanges = (UBYTE*)malloc(numchanges*(sizeof(UDWORD)+sizeof(UBYTE)));			// allocate some mem for this.
 	pEntry = pChanges;
 
 	for(i=0;i<numStructureStats;i++)								// prepare chunk.
@@ -410,7 +410,7 @@ void applyLimitSet(void)
 	// free.
 	if(	ingame.numStructureLimits )
 	{
-		FREE(ingame.pStructureLimits);
+		free(ingame.pStructureLimits);
 		ingame.numStructureLimits = 0;
 	}
 }

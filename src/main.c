@@ -494,7 +494,7 @@ init://jump here from the end if re_initialising
 	}
 
 	//load palette
-	psPaletteBuffer = (iColour*)MALLOC(256 * sizeof(iColour)+1);
+	psPaletteBuffer = (iColour*)malloc(256 * sizeof(iColour)+1);
 	if (psPaletteBuffer == NULL)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -508,7 +508,7 @@ init://jump here from the end if re_initialising
 		return -1;
 	}
 	pal_AddNewPalette(psPaletteBuffer);
-	FREE(psPaletteBuffer);
+	free(psPaletteBuffer);
 
 	pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 	pie_SetFogStatus(FALSE);

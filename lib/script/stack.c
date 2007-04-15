@@ -83,15 +83,15 @@ static BOOL stackNewChunk(UDWORD size)
 	else
 	{
 		/* Allocate a new chunk */
-		psCurrChunk->psNext = (STACK_CHUNK *)MALLOC(sizeof(STACK_CHUNK));
+		psCurrChunk->psNext = (STACK_CHUNK *)malloc(sizeof(STACK_CHUNK));
 		if (!psCurrChunk->psNext)
 		{
 			return FALSE;
 		}
-		psCurrChunk->psNext->aVals = (INTERP_VAL*)MALLOC(sizeof(INTERP_VAL) * size);
+		psCurrChunk->psNext->aVals = (INTERP_VAL*)malloc(sizeof(INTERP_VAL) * size);
 		if (!psCurrChunk->psNext->aVals)
 		{
-			FREE(psCurrChunk->psNext);
+			free(psCurrChunk->psNext);
 			return FALSE;
 		}
 
@@ -122,7 +122,7 @@ BOOL stackPush(INTERP_VAL  *psVal)
 	{
 		/* strings should already have memory allocated */
 		if(psCurrChunk->aVals[currEntry].type != VAL_STRING)		//needs to have memory allocated for string
-			psCurrChunk->aVals[currEntry].v.sval = (char*)MALLOC(MAXSTRLEN);
+			psCurrChunk->aVals[currEntry].v.sval = (char*)malloc(MAXSTRLEN);
 
 		strcpy(psCurrChunk->aVals[currEntry].v.sval, psVal->v.sval);		//copy string to stack
 		psCurrChunk->aVals[currEntry].type = VAL_STRING;
@@ -131,7 +131,7 @@ BOOL stackPush(INTERP_VAL  *psVal)
 	{
 		/* free stack var allocated string memory, if stack var used to be of type VAL_STRING */
 		if(psCurrChunk->aVals[currEntry].type == VAL_STRING)
-			FREE(psCurrChunk->aVals[currEntry].v.sval);			//don't need it anymore
+			free(psCurrChunk->aVals[currEntry].v.sval);			//don't need it anymore
 
 		/* copy type/data as union */
 		memcpy(&(psCurrChunk->aVals[currEntry]), psVal, sizeof(INTERP_VAL));
@@ -444,7 +444,7 @@ BOOL stackPushResult(INTERP_TYPE type, INTERP_VAL *result)
 	{
 		/* strings should already have memory allocated */
 		if(psCurrChunk->aVals[currEntry].type != VAL_STRING)		//needs to have memory allocated for string
-			psCurrChunk->aVals[currEntry].v.sval = (char*)MALLOC(MAXSTRLEN);
+			psCurrChunk->aVals[currEntry].v.sval = (char*)malloc(MAXSTRLEN);
 
 		strcpy(psCurrChunk->aVals[currEntry].v.sval, result->v.sval);		//copy string to stack
 		psCurrChunk->aVals[currEntry].type = VAL_STRING;
@@ -453,7 +453,7 @@ BOOL stackPushResult(INTERP_TYPE type, INTERP_VAL *result)
 	{
 		/* free stack var allocated string memory, if stack var used to be of type VAL_STRING */
 		if(psCurrChunk->aVals[currEntry].type == VAL_STRING)
-			FREE(psCurrChunk->aVals[currEntry].v.sval);			//don't need it anymore
+			free(psCurrChunk->aVals[currEntry].v.sval);			//don't need it anymore
 
 		/* copy type/data as union */
 		memcpy(&(psCurrChunk->aVals[currEntry]), result, sizeof(INTERP_VAL));
@@ -716,19 +716,19 @@ BOOL stackBinaryOp(OPCODE opcode)
 			case VAL_INT:		//first value isn't string, but can be converted to string
 				sprintf(tempstr1,"%d",psV1->v.ival);	//int->string
 				psV1->type = VAL_STRING;			//Mark as string
-				psV1->v.sval =  (char*)MALLOC(MAXSTRLEN);				//allocate space for the string, since the result (string) of concatenation will be saved here
+				psV1->v.sval =  (char*)malloc(MAXSTRLEN);				//allocate space for the string, since the result (string) of concatenation will be saved here
 				break;
 
 			case VAL_BOOL:
 				sprintf(tempstr1,"%d",psV1->v.bval);	//bool->string
 				psV1->type = VAL_STRING;			//Mark as string
-				psV1->v.sval =  (char*)MALLOC(MAXSTRLEN);				//allocate space for the string, since the result (string) of concatenation will be saved here
+				psV1->v.sval =  (char*)malloc(MAXSTRLEN);				//allocate space for the string, since the result (string) of concatenation will be saved here
 				break;
 
 			case VAL_FLOAT:
 				sprintf(tempstr1,"%f",psV1->v.fval);	//float->string
 				psV1->type = VAL_STRING;			//Mark as string
-				psV1->v.sval =  (char*)MALLOC(MAXSTRLEN);				//allocate space for the string, since the result (string) of concatenation will be saved here
+				psV1->v.sval =  (char*)malloc(MAXSTRLEN);				//allocate space for the string, since the result (string) of concatenation will be saved here
 				break;
 
 			case VAL_STRING:
@@ -973,14 +973,14 @@ BOOL castTop(INTERP_TYPE neededType)
 /* Initialise the stack */
 BOOL stackInitialise(void)
 {
-	psStackBase = (STACK_CHUNK *)MALLOC(sizeof(STACK_CHUNK));
+	psStackBase = (STACK_CHUNK *)malloc(sizeof(STACK_CHUNK));
 	if (psStackBase == NULL)
 	{
 		debug( LOG_ERROR, "Out of memory" );
 		abort();
 		return FALSE;
 	}
-	psStackBase->aVals = (INTERP_VAL*)MALLOC(sizeof(INTERP_VAL) * INIT_SIZE);
+	psStackBase->aVals = (INTERP_VAL*)malloc(sizeof(INTERP_VAL) * INIT_SIZE);
 	if (!psStackBase->aVals)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -1028,7 +1028,7 @@ void stackShutDown(void)
 				if(psCurr->aVals[i].v.sval != NULL)					//FIXME: seems to be causing problems sometimes
 				{
 					debug(LOG_WZ, "freeing '%s' ", psCurr->aVals[i].v.sval);
-					FREE(psCurr->aVals[i].v.sval);
+					free(psCurr->aVals[i].v.sval);
 					psCurr->aVals[i].v.sval = NULL;
 				}
 				else
@@ -1038,8 +1038,8 @@ void stackShutDown(void)
 			}
 		}
 
-		FREE(psCurr->aVals);
-		FREE(psCurr);
+		free(psCurr->aVals);
+		free(psCurr);
 	}
 }
 

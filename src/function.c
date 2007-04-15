@@ -117,7 +117,7 @@ BOOL loadFunctionStats(char *pFunctionData, UDWORD bufferSize)
 	totalFunctions = numCR(pFunctionData, bufferSize);
 
 	//allocate storage for the Function pointer array
-	asFunctions = (FUNCTION**) MALLOC(totalFunctions*sizeof(FUNCTION*));
+	asFunctions = (FUNCTION**) malloc(totalFunctions*sizeof(FUNCTION*));
 	if (!asFunctions)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -155,7 +155,7 @@ BOOL loadFunctionStats(char *pFunctionData, UDWORD bufferSize)
 	//create Upgrade arrays
 	//for (player = 0; player < MAX_PLAYERS; player++)
 	//{
-		/*apProductionUpgrades[player] = (FUNCTION_UPGRADE *) MALLOC(numProductionUpgrades *
+		/*apProductionUpgrades[player] = (FUNCTION_UPGRADE *) malloc(numProductionUpgrades *
 			sizeof(FUNCTION_UPGRADE));
 		if (!apProductionUpgrades[player])
 		{
@@ -163,7 +163,7 @@ BOOL loadFunctionStats(char *pFunctionData, UDWORD bufferSize)
 			return FALSE;
 		}
 
-		apResearchUpgrades[player] = (FUNCTION_UPGRADE *) MALLOC(numResearchUpgrades *
+		apResearchUpgrades[player] = (FUNCTION_UPGRADE *) malloc(numResearchUpgrades *
 			sizeof(FUNCTION_UPGRADE));
 		if (!apResearchUpgrades[player])
 		{
@@ -171,7 +171,7 @@ BOOL loadFunctionStats(char *pFunctionData, UDWORD bufferSize)
 			return FALSE;
 		}*/
 
-		/*apBodyUpgrades[player] = (FUNCTION_UPGRADE *) MALLOC(numBodyUpgrades *
+		/*apBodyUpgrades[player] = (FUNCTION_UPGRADE *) malloc(numBodyUpgrades *
 			sizeof(FUNCTION_UPGRADE));
 		if (!apBodyUpgrades[player])
 		{
@@ -179,7 +179,7 @@ BOOL loadFunctionStats(char *pFunctionData, UDWORD bufferSize)
 			return FALSE;
 		}*/
 
-		/*apArmourUpgrades[player] = (FUNCTION_UPGRADE *) MALLOC(numArmourUpgrades *
+		/*apArmourUpgrades[player] = (FUNCTION_UPGRADE *) malloc(numArmourUpgrades *
 			sizeof(FUNCTION_UPGRADE));
 		if (!apArmourUpgrades[player])
 		{
@@ -187,7 +187,7 @@ BOOL loadFunctionStats(char *pFunctionData, UDWORD bufferSize)
 			return FALSE;
 		}*/
 
-		/*apRepairUpgrades[player] = (FUNCTION_UPGRADE *) MALLOC(numRepairUpgrades *
+		/*apRepairUpgrades[player] = (FUNCTION_UPGRADE *) malloc(numRepairUpgrades *
 			sizeof(FUNCTION_UPGRADE));
 		if (!apRepairUpgrades[player])
 		{
@@ -195,14 +195,14 @@ BOOL loadFunctionStats(char *pFunctionData, UDWORD bufferSize)
 			return FALSE;
 		}*/
 
-		/*apResistanceUpgrades[player] = (FUNCTION_UPGRADE *) MALLOC(numResistanceUpgrades *
+		/*apResistanceUpgrades[player] = (FUNCTION_UPGRADE *) malloc(numResistanceUpgrades *
 			sizeof(FUNCTION_UPGRADE));
 		if (!apResistanceUpgrades[player])
 		{
 			DBERROR(("Out of memory"));
 			return FALSE;
 		}*/
-		/*apWeaponUpgrades[player] = (FUNCTION_UPGRADE *) MALLOC(numWeaponUpgrades *
+		/*apWeaponUpgrades[player] = (FUNCTION_UPGRADE *) malloc(numWeaponUpgrades *
 			sizeof(FUNCTION_UPGRADE));
 		if (!apWeaponUpgrades[player])
 		{
@@ -301,7 +301,7 @@ BOOL loadFunctionStats(char *pFunctionData, UDWORD bufferSize)
 // Allocate storage for the name
 BOOL storeName(FUNCTION* pFunction, char* pNameToStore)
 {
-	pFunction->pName = (char *)MALLOC(strlen(pNameToStore)+1);
+	pFunction->pName = (char *)malloc(strlen(pNameToStore)+1);
 	if (pFunction->pName == NULL)
 	{
 		debug( LOG_ERROR, "Function Name - Out of memory" );
@@ -318,7 +318,7 @@ BOOL storeName(FUNCTION* pFunction, char* pNameToStore)
 	char					functionName[50];
 
 	//allocate storage
-	psFunction = (FUNCTION *)MALLOC(sizeof(FUNCTION));
+	psFunction = (FUNCTION *)malloc(sizeof(FUNCTION));
 	if (psFunction == NULL)
 	{
 		DBERROR(("Function - Out of memory"));
@@ -366,7 +366,7 @@ BOOL loadProduction(char *pData)
 	//PROPULSION_TYPES*		pPropulsionType;
 	//allocate storage
 
-	psFunction = (PRODUCTION_FUNCTION *)MALLOC(sizeof(PRODUCTION_FUNCTION));
+	psFunction = (PRODUCTION_FUNCTION *)malloc(sizeof(PRODUCTION_FUNCTION));
 	if (psFunction == NULL)
 	{
 		debug( LOG_ERROR, "Production Function - Out of memory" );
@@ -454,7 +454,7 @@ BOOL loadProductionUpgradeFunction(char *pData)
 	UDWORD outputModifier;
 
 	//allocate storage
-	psFunction = (PRODUCTION_UPGRADE_FUNCTION *)MALLOC(sizeof
+	psFunction = (PRODUCTION_UPGRADE_FUNCTION *)malloc(sizeof
 		(PRODUCTION_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
@@ -520,7 +520,7 @@ BOOL loadResearchFunction(char *pData)
 	char						functionName[MAX_NAME_SIZE];
 
 	//allocate storage
-	psFunction = (RESEARCH_FUNCTION *)MALLOC(sizeof(RESEARCH_FUNCTION));
+	psFunction = (RESEARCH_FUNCTION *)malloc(sizeof(RESEARCH_FUNCTION));
 	if (psFunction == NULL)
 	{
 		debug( LOG_ERROR, "Research Function - Out of memory" );
@@ -554,7 +554,7 @@ BOOL loadReArmFunction(char *pData)
 	char						functionName[MAX_NAME_SIZE];
 
 	//allocate storage
-	psFunction = (REARM_FUNCTION *)MALLOC(sizeof(REARM_FUNCTION));
+	psFunction = (REARM_FUNCTION *)malloc(sizeof(REARM_FUNCTION));
 	if (psFunction == NULL)
 	{
 		debug( LOG_ERROR, "ReArm Function - Out of memory" );
@@ -661,7 +661,7 @@ BOOL loadUpgradeFunction(char *pData, UBYTE type)
 	UPGRADE_FUNCTION			*psFunction;
 
 	//allocate storage
-	psFunction = (UPGRADE_FUNCTION *)MALLOC(sizeof(UPGRADE_FUNCTION));
+	psFunction = (UPGRADE_FUNCTION *)malloc(sizeof(UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
 		debug( LOG_ERROR, "Upgrade Function - Out of memory" );
@@ -706,7 +706,7 @@ BOOL loadDroidBodyUpgradeFunction(char *pData)
 									body, droid, cyborg;
 
 	//allocate storage
-	psFunction = (DROIDBODY_UPGRADE_FUNCTION *)MALLOC(
+	psFunction = (DROIDBODY_UPGRADE_FUNCTION *)malloc(
 		sizeof(DROIDBODY_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
@@ -773,7 +773,7 @@ BOOL loadDroidSensorUpgradeFunction(char *pData)
 	UDWORD							modifier, range;
 
 	//allocate storage
-	psFunction = (DROIDSENSOR_UPGRADE_FUNCTION *)MALLOC(
+	psFunction = (DROIDSENSOR_UPGRADE_FUNCTION *)malloc(
 		sizeof(DROIDSENSOR_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
@@ -822,7 +822,7 @@ BOOL loadWeaponUpgradeFunction(char *pData)
 								radiusDamage, incenDamage, radiusHit;
 
 	//allocate storage
-	psFunction = (WEAPON_UPGRADE_FUNCTION *)MALLOC(sizeof
+	psFunction = (WEAPON_UPGRADE_FUNCTION *)malloc(sizeof
 		(WEAPON_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
@@ -893,7 +893,7 @@ BOOL loadStructureUpgradeFunction(char *pData)
 	UDWORD						armour, body, resistance;
 
 	//allocate storage
-	psFunction = (STRUCTURE_UPGRADE_FUNCTION *)MALLOC(sizeof
+	psFunction = (STRUCTURE_UPGRADE_FUNCTION *)malloc(sizeof
 		(STRUCTURE_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
@@ -944,7 +944,7 @@ BOOL loadWallDefenceUpgradeFunction(char *pData)
 	UDWORD						armour, body;
 
 	//allocate storage
-	psFunction = (WALLDEFENCE_UPGRADE_FUNCTION *)MALLOC(sizeof
+	psFunction = (WALLDEFENCE_UPGRADE_FUNCTION *)malloc(sizeof
 		(WALLDEFENCE_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
@@ -992,7 +992,7 @@ BOOL loadWallDefenceUpgradeFunction(char *pData)
 	char						functionName[MAX_NAME_SIZE];
 
 	//allocate storage
-	psFunction = (BODY_UPGRADE_FUNCTION *)MALLOC(sizeof
+	psFunction = (BODY_UPGRADE_FUNCTION *)malloc(sizeof
 		(BODY_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
@@ -1028,7 +1028,7 @@ BOOL loadWallDefenceUpgradeFunction(char *pData)
 	char						functionName[MAX_NAME_SIZE];
 
 	//allocate storage
-	psFunction = (RADAR_MAP_FUNCTION *)MALLOC(sizeof
+	psFunction = (RADAR_MAP_FUNCTION *)malloc(sizeof
 		(RADAR_MAP_FUNCTION));
 	if (psFunction == NULL)
 	{
@@ -1062,7 +1062,7 @@ BOOL loadPowerGenFunction(char *pData)
 	char						functionName[MAX_NAME_SIZE];
 
 	//allocate storage
-	psFunction = (POWER_GEN_FUNCTION *)MALLOC(sizeof
+	psFunction = (POWER_GEN_FUNCTION *)malloc(sizeof
 		(POWER_GEN_FUNCTION));
 	if (psFunction == NULL)
 	{
@@ -1107,7 +1107,7 @@ BOOL loadResourceFunction(char *pData)
 	char						functionName[MAX_NAME_SIZE];
 
 	//allocate storage
-	psFunction = (RESOURCE_FUNCTION *)MALLOC(sizeof
+	psFunction = (RESOURCE_FUNCTION *)malloc(sizeof
 		(RESOURCE_FUNCTION));
 	if (psFunction == NULL)
 	{
@@ -1142,7 +1142,7 @@ BOOL loadResourceFunction(char *pData)
 	char						functionName[MAX_NAME_SIZE];
 
 	//allocate storage
-	psFunction = (POWER_REG_FUNCTION *)MALLOC(sizeof
+	psFunction = (POWER_REG_FUNCTION *)malloc(sizeof
 		(POWER_REG_FUNCTION));
 	if (psFunction == NULL)
 	{
@@ -1176,7 +1176,7 @@ BOOL loadResourceFunction(char *pData)
 	char						functionName[MAX_NAME_SIZE];
 
 	//allocate storage
-	psFunction = (POWER_RELAY_FUNCTION *)MALLOC(sizeof
+	psFunction = (POWER_RELAY_FUNCTION *)malloc(sizeof
 		(POWER_RELAY_FUNCTION));
 	if (psFunction == NULL)
 	{
@@ -1210,7 +1210,7 @@ BOOL loadRepairDroidFunction(char *pData)
 	char						functionName[MAX_NAME_SIZE];
 
 	//allocate storage
-	psFunction = (REPAIR_DROID_FUNCTION *)MALLOC(sizeof
+	psFunction = (REPAIR_DROID_FUNCTION *)malloc(sizeof
 		(REPAIR_DROID_FUNCTION));
 	if (psFunction == NULL)
 	{
@@ -1255,7 +1255,7 @@ BOOL loadRepairDroidFunction(char *pData)
 	ECM_STATS*						pECMType;
 
 	//allocate storage
-	psFunction = (DEFENSIVE_STRUCTURE_FUNCTION *)MALLOC(
+	psFunction = (DEFENSIVE_STRUCTURE_FUNCTION *)malloc(
 		sizeof(DEFENSIVE_STRUCTURE_FUNCTION));
 	if (psFunction == NULL)
 	{
@@ -1326,7 +1326,7 @@ BOOL loadRepairDroidFunction(char *pData)
 	char				functionName[MAX_NAME_SIZE];
 
 	//allocate storage
-	psFunction = (HQ_FUNCTION *)MALLOC(sizeof(HQ_FUNCTION));
+	psFunction = (HQ_FUNCTION *)malloc(sizeof(HQ_FUNCTION));
 	if (psFunction == NULL)
 	{
 		DBERROR(("HQ Function - Out of memory"));
@@ -1362,7 +1362,7 @@ BOOL loadRepairDroidFunction(char *pData)
 //	ARMOUR_STATS*				pArmourType;
 
 	//allocate storage
-	psFunction = (ARMOUR_UPGRADE_FUNCTION *)MALLOC(sizeof(ARMOUR_UPGRADE_FUNCTION));
+	psFunction = (ARMOUR_UPGRADE_FUNCTION *)malloc(sizeof(ARMOUR_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
 		DBERROR(("Armour Upgrade Function - Out of memory"));
@@ -1421,7 +1421,7 @@ BOOL loadRepairDroidFunction(char *pData)
 	REPAIR_STATS*				pRepairType;
 
 	//allocate storage
-	psFunction = (REPAIR_UPGRADE_FUNCTION *)MALLOC(sizeof(REPAIR_UPGRADE_FUNCTION));
+	psFunction = (REPAIR_UPGRADE_FUNCTION *)malloc(sizeof(REPAIR_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
 		DBERROR(("Repair Upgrade Function - Out of memory"));
@@ -1485,7 +1485,7 @@ BOOL loadRepairDroidFunction(char *pData)
 	char								functionName[MAX_NAME_SIZE];
 
 	//allocate storage
-	psFunction = (RESISTANCE_UPGRADE_FUNCTION *)MALLOC(sizeof
+	psFunction = (RESISTANCE_UPGRADE_FUNCTION *)malloc(sizeof
 		(RESISTANCE_UPGRADE_FUNCTION));
 	if (psFunction == NULL)
 	{
@@ -1527,7 +1527,7 @@ BOOL loadWallFunction(char *pData)
 //	STRUCTURE_STATS			*pStructStat;
 
 	//allocate storage
-	psFunction = (WALL_FUNCTION *)MALLOC(sizeof(WALL_FUNCTION));
+	psFunction = (WALL_FUNCTION *)malloc(sizeof(WALL_FUNCTION));
 	if (psFunction == NULL)
 	{
 		debug( LOG_ERROR, "Wall Function - Out of memory" );
@@ -1555,7 +1555,7 @@ BOOL loadWallFunction(char *pData)
 
 	//store the structure name - cannot set the stat pointer here because structures
 	//haven't been loaded in yet!
-	/*psFunction->pStructName = (char *)MALLOC(strlen(structureName)+1);
+	/*psFunction->pStructName = (char *)malloc(strlen(structureName)+1);
 	if (psFunction->pStructName == NULL)
 	{
 		DBERROR(("Function Name - Out of memory"));
@@ -2230,30 +2230,30 @@ BOOL FunctionShutDown(void)
 	for (inc=0; inc < numFunctions; inc++)
 	{
 		pFunction = *asFunctions;
-		FREE(pFunction->pName);
+		free(pFunction->pName);
 
 //#ifndef RESOURCE_NAMES
 #if !defined (RESOURCE_NAMES) && !defined(STORE_RESOURCE_ID)
 		if (pFunction->type == WALL_TYPE)
 		{
-			FREE(((WALL_FUNCTION *)pFunction)->pStructName);
+			free(((WALL_FUNCTION *)pFunction)->pStructName);
 		}
 #endif
-		FREE (pFunction);
+		free(pFunction);
 		asFunctions++;
 	}
-	FREE (pStartList);
+	free(pStartList);
 
 	//free the Upgrade lists
 	/*for (player=0; player < MAX_PLAYERS; player++)
 	{
-		FREE(apProductionUpgrades[player]);
-		//FREE(apBodyUpgrades[player]);
-		//FREE(apRepairUpgrades[player]);
-		//FREE(apResistanceUpgrades[player]);
-		FREE(apResearchUpgrades[player]);
-		//FREE(apArmourUpgrades[player]);
-		//FREE(apWeaponUpgrades[player]);
+		free(apProductionUpgrades[player]);
+		//free(apBodyUpgrades[player]);
+		//free(apRepairUpgrades[player]);
+		//free(apResistanceUpgrades[player]);
+		free(apResearchUpgrades[player]);
+		//free(apArmourUpgrades[player]);
+		//free(apWeaponUpgrades[player]);
 	}*/
 	return TRUE;
 }

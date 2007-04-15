@@ -75,7 +75,7 @@ BOOL allocComponentList(COMPONENT_TYPE	type, SDWORD number)
 	//allocate the space for the Players' component lists
 	for (inc=0; inc < MAX_PLAYERS; inc++)
 	{
-		apCompLists[inc][type] = (UBYTE *) MALLOC(sizeof(UBYTE) * number);
+		apCompLists[inc][type] = (UBYTE *) malloc(sizeof(UBYTE) * number);
 		if (apCompLists[inc][type] == NULL)
 		{
 			debug( LOG_ERROR, "Out of memory assigning Player Component Lists" );
@@ -101,14 +101,14 @@ void freeComponentLists(void)
 	for (inc=0; inc < MAX_PLAYERS; inc++)
 	{
 		//free the component lists
-		FREE(apCompLists[inc][COMP_BODY]);
-		FREE(apCompLists[inc][COMP_BRAIN]);
-		FREE(apCompLists[inc][COMP_PROPULSION]);
-		FREE(apCompLists[inc][COMP_SENSOR]);
-		FREE(apCompLists[inc][COMP_ECM]);
-		FREE(apCompLists[inc][COMP_REPAIRUNIT]);
-		FREE(apCompLists[inc][COMP_CONSTRUCT]);
-		FREE(apCompLists[inc][COMP_WEAPON]);
+		free(apCompLists[inc][COMP_BODY]);
+		free(apCompLists[inc][COMP_BRAIN]);
+		free(apCompLists[inc][COMP_PROPULSION]);
+		free(apCompLists[inc][COMP_SENSOR]);
+		free(apCompLists[inc][COMP_ECM]);
+		free(apCompLists[inc][COMP_REPAIRUNIT]);
+		free(apCompLists[inc][COMP_CONSTRUCT]);
+		free(apCompLists[inc][COMP_WEAPON]);
 	}
 }
 
@@ -121,7 +121,7 @@ BOOL allocStructLists(void)
 	{
 		if(numStructureStats)
 		{
-			apStructTypeLists[inc] = (UBYTE *) MALLOC(sizeof(UBYTE) *
+			apStructTypeLists[inc] = (UBYTE *) malloc(sizeof(UBYTE) *
 								numStructureStats);
 			if (apStructTypeLists[inc] == NULL)
 			{
@@ -153,7 +153,7 @@ void freeStructureLists(void)
 	{
 		//free the structure lists
 		if(apStructTypeLists[inc]) {
-			FREE(apStructTypeLists[inc]);
+			free(apStructTypeLists[inc]);
 		}
 	}
 }

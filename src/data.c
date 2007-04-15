@@ -741,7 +741,7 @@ static BOOL dataIMDBufferLoad(char *pBuffer, UDWORD size, void **ppData)
 
 BOOL dataIMGPAGELoad(char *pBuffer, UDWORD size, void **ppData)
 {
-	iTexture *psSprite = (iTexture*) MALLOC(sizeof(iTexture));
+	iTexture *psSprite = (iTexture*) malloc(sizeof(iTexture));
 	if (!psSprite)	{
 		return FALSE;
 	}
@@ -893,16 +893,16 @@ static BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 
 		debug(LOG_TEXTURE, "bufferTexPageLoad: adding page %s with texture %s", texpage, texfile);
 
-		NewTexturePage = (TEXTUREPAGE*)MALLOC(sizeof(TEXTUREPAGE));
+		NewTexturePage = (TEXTUREPAGE*)malloc(sizeof(TEXTUREPAGE));
 		if (!NewTexturePage) return FALSE;
 
 		NewTexturePage->Texture=NULL;
 		NewTexturePage->Palette=NULL;
 
-		psPal = (iPalette*)MALLOC(sizeof(iPalette));
+		psPal = (iPalette*)malloc(sizeof(iPalette));
 		if (!psPal) return FALSE;
 
-		psSprite = (iTexture*)MALLOC(sizeof(iTexture));
+		psSprite = (iTexture*)malloc(sizeof(iTexture));
 		if (!psSprite)
 		{
 			return FALSE;
@@ -937,7 +937,7 @@ static void dataISpriteRelease(void *pData)
 			free(psSprite->bmp);
 			psSprite->bmp = NULL;
 		}
-		FREE(psSprite);
+		free(psSprite);
 		psSprite = NULL;
 	}
 }
@@ -956,9 +956,9 @@ static void dataTexPageRelease(void *pData)
 		dataISpriteRelease(Tpage->Texture);
 	}
 	if (Tpage->Palette != NULL)
-		FREE(Tpage->Palette);
+		free(Tpage->Palette);
 
-	FREE(Tpage);
+	free(Tpage);
 }
 
 

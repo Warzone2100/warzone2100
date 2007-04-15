@@ -1525,12 +1525,12 @@ BOOL loadGame(char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGa
 	//	droidTemplateShutDown();
 		if (psMapTiles)
 		{
-//			FREE(psMapTiles);
+//			free(psMapTiles);
 //			mapFreeTilesAndStrips();
 		}
 		if (aMapLinePoints)
 		{
-			FREE(aMapLinePoints);
+			free(aMapLinePoints);
 		}
 		//clear all the messages?
 		releaseAllProxDisp();
@@ -2822,12 +2822,12 @@ error:
 	droidTemplateShutDown();
 	if (psMapTiles)
 	{
-//		FREE(psMapTiles);
+//		free(psMapTiles);
 //		mapFreeTilesAndStrips();
 	}
 	if (aMapLinePoints)
 	{
-		FREE(aMapLinePoints);
+		free(aMapLinePoints);
 	}
 	psMapTiles = NULL;
 	aMapLinePoints = NULL;
@@ -2842,7 +2842,7 @@ error:
 		return FALSE;
 	}
 
-	FREE(pFileData);*/
+	free(pFileData);*/
 
 	/* Start the game clock */
 	gameTimeStart();
@@ -3210,7 +3210,7 @@ BOOL writeMapFile(char *pFileName)
 		status = saveFile(pFileName, pFileData, fileSize);
 	}
 	if (pFileData != NULL) {
-		FREE(pFileData);
+		free(pFileData);
 	}
 	return status;
 }
@@ -4106,7 +4106,7 @@ BOOL writeGameFile(char *pFileName, SDWORD saveType)
 
 	/* Allocate the data buffer */
 	fileSize = GAME_HEADER_SIZE + sizeof(SAVE_GAME);
-	pFileData = (char*)MALLOC(fileSize);
+	pFileData = (char*)malloc(fileSize);
 	if (pFileData == NULL)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -4390,14 +4390,14 @@ BOOL writeGameFile(char *pFileName, SDWORD saveType)
 	/* Write the data to the file */
 	if (pFileData != NULL) {
 		status = saveFile(pFileName, pFileData, fileSize);
-		FREE(pFileData);
+		free(pFileData);
 		return status;
 	}
 
 error:
 	if (pFileData != NULL)
 	{
-		FREE(pFileData);
+		free(pFileData);
 	}
 	return FALSE;
 }
@@ -4700,7 +4700,7 @@ static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 		{
 			ASSERT(FALSE, "This component does not exist : %s", psSaveDroid->asWeaps[i].name );
 			return NULL;
-		}			
+		}
 		psTemplate->asWeaps[i] = weapon;
 	}
 
@@ -4815,7 +4815,7 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 			{
 				ASSERT(FALSE, "This component does not exist : %s", psSaveDroid->asWeaps[i].name );
 				return NULL;
-			}			
+			}
 			psTemplate->asWeaps[i] = weapon;
 		}
 	}
@@ -5069,7 +5069,7 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 			{
 				ASSERT(FALSE, "This component does not exist : %s", psSaveDroid->asWeaps[i].name );
 				return NULL;
-			}			
+			}
 			psTemplate->asWeaps[i] = weapon;
 		}
 	}
@@ -6302,7 +6302,7 @@ BOOL writeDroidFile(char *pFileName, DROID **ppsCurrentDroidLists)
 
 	/* Allocate the data buffer */
 	fileSize = DROID_HEADER_SIZE + totalDroids*sizeof(SAVE_DROID);
-	pFileData = (char*)MALLOC(fileSize);
+	pFileData = (char*)malloc(fileSize);
 	if (pFileData == NULL)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -6361,7 +6361,7 @@ BOOL writeDroidFile(char *pFileName, DROID **ppsCurrentDroidLists)
 	/* Write the data to the file */
 	if (pFileData != NULL) {
 		status = saveFile(pFileName, pFileData, fileSize);
-		FREE(pFileData);
+		free(pFileData);
 		return status;
 	}
 	return FALSE;
@@ -7612,7 +7612,7 @@ BOOL writeStructFile(char *pFileName)
 
 	/* Allocate the data buffer */
 	fileSize = STRUCT_HEADER_SIZE + totalStructs*sizeof(SAVE_STRUCTURE);
-	pFileData = (char*)MALLOC(fileSize);
+	pFileData = (char*)malloc(fileSize);
 	if (pFileData == NULL)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -7857,7 +7857,7 @@ BOOL writeStructFile(char *pFileName)
 	/* Write the data to the file */
 	if (pFileData != NULL) {
 		status = saveFile(pFileName, pFileData, fileSize);
-		FREE(pFileData);
+		free(pFileData);
 		return status;
 	}
 	return FALSE;
@@ -8266,7 +8266,7 @@ BOOL writeFeatureFile(char *pFileName)
 
 	/* Allocate the data buffer */
 	fileSize = FEATURE_HEADER_SIZE + totalFeatures * sizeof(SAVE_FEATURE);
-	pFileData = (char*)MALLOC(fileSize);
+	pFileData = (char*)malloc(fileSize);
 	if (pFileData == NULL)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -8333,7 +8333,7 @@ BOOL writeFeatureFile(char *pFileName)
 	/* Write the data to the file */
 	if (pFileData != NULL) {
 		status = saveFile(pFileName, pFileData, fileSize);
-		FREE(pFileData);
+		free(pFileData);
 		return status;
 	}
 	return FALSE;
@@ -8899,7 +8899,7 @@ BOOL writeTemplateFile(char *pFileName)
 
 	/* Allocate the data buffer */
 	fileSize = TEMPLATE_HEADER_SIZE + totalTemplates*sizeof(SAVE_TEMPLATE);
-	pFileData = (char*)MALLOC(fileSize);
+	pFileData = (char*)malloc(fileSize);
 	if (pFileData == NULL)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -8983,7 +8983,7 @@ BOOL writeTemplateFile(char *pFileName)
 	/* Write the data to the file */
 	if (pFileData != NULL) {
 		status = saveFile(pFileName, pFileData, fileSize);
-		FREE(pFileData);
+		free(pFileData);
 		return status;
 	}
 	return FALSE;
@@ -9073,7 +9073,7 @@ static BOOL writeTerrainTypeMapFile(char *pFileName)
 
 	// Calculate the file size
 	fileSize = TILETYPE_HEADER_SIZE + sizeof(UWORD) * MAX_TILE_TEXTURES;
-	pFileData = (char*)MALLOC(fileSize);
+	pFileData = (char*)malloc(fileSize);
 	if (!pFileData)
 	{
 		debug( LOG_ERROR, "writeTerrainTypeMapFile: Out of memory" );
@@ -9106,7 +9106,7 @@ static BOOL writeTerrainTypeMapFile(char *pFileName)
 	{
 		return FALSE;
 	}
-	FREE(pFileData);
+	free(pFileData);
 
 	return TRUE;
 }
@@ -9301,7 +9301,7 @@ static BOOL writeCompListFile(char *pFileName)
 		numPropulsionStats + numSensorStats + numRepairStats + numBrainStats) * MAX_PLAYERS;
 	fileSize = COMPLIST_HEADER_SIZE + (sizeof(SAVE_COMPLIST) * totalComp);
 	//allocate the buffer space
-	pFileData = (char*)MALLOC(fileSize);
+	pFileData = (char*)malloc(fileSize);
 	if (!pFileData)
 	{
 		debug( LOG_ERROR, "writeCompListFile: Out of memory" );
@@ -9421,7 +9421,7 @@ static BOOL writeCompListFile(char *pFileName)
 	{
 		return FALSE;
 	}
-	FREE(pFileData);
+	free(pFileData);
 
 	return TRUE;
 }
@@ -9613,7 +9613,7 @@ static BOOL writeStructTypeListFile(char *pFileName)
 		numStructureStats * MAX_PLAYERS);
 
 	//allocate the buffer space
-	pFileData = (char*)MALLOC(fileSize);
+	pFileData = (char*)malloc(fileSize);
 	if (!pFileData)
 	{
 		debug( LOG_ERROR, "writeStructTypeListFile: Out of memory" );
@@ -9654,7 +9654,7 @@ static BOOL writeStructTypeListFile(char *pFileName)
 	{
 		return FALSE;
 	}
-	FREE(pFileData);
+	free(pFileData);
 
 	return TRUE;
 }
@@ -9890,7 +9890,7 @@ static BOOL writeResearchFile(char *pFileName)
 		numResearch);
 
 	//allocate the buffer space
-	pFileData = (char*)MALLOC(fileSize);
+	pFileData = (char*)malloc(fileSize);
 	if (!pFileData)
 	{
 		debug( LOG_ERROR, "writeResearchFile: Out of memory" );
@@ -9936,7 +9936,7 @@ static BOOL writeResearchFile(char *pFileName)
 	{
 		return FALSE;
 	}
-	FREE(pFileData);
+	free(pFileData);
 
 	return TRUE;
 }
@@ -10115,7 +10115,7 @@ static BOOL writeMessageFile(char *pFileName)
 
 
 	//allocate the buffer space
-	pFileData = (char*)MALLOC(fileSize);
+	pFileData = (char*)malloc(fileSize);
 	if (!pFileData)
 	{
 		debug( LOG_ERROR, "writeMessageFile: Out of memory" );
@@ -10195,7 +10195,7 @@ static BOOL writeMessageFile(char *pFileName)
 	{
 		return FALSE;
 	}
-	FREE(pFileData);
+	free(pFileData);
 
 	return TRUE;
 }
@@ -10313,7 +10313,7 @@ static BOOL writeProximityFile(char *pFileName)
 
 
 	//allocate the buffer space
-	pFileData = (char*)MALLOC(fileSize);
+	pFileData = (char*)malloc(fileSize);
 	if (!pFileData)
 	{
 		debug( LOG_ERROR, "writeProximityFile: Out of memory" );
@@ -10376,7 +10376,7 @@ static BOOL writeProximityFile(char *pFileName)
 	{
 		return FALSE;
 	}
-	FREE(pFileData);
+	free(pFileData);
 
 	return TRUE;
 }
@@ -10612,7 +10612,7 @@ static BOOL writeFlagFile(char *pFileName)
 
 
 	//allocate the buffer space
-	pFileData = (char*)MALLOC(fileSize);
+	pFileData = (char*)malloc(fileSize);
 	if (!pFileData)
 	{
 		debug( LOG_ERROR, "writeflagFile: Out of memory" );
@@ -10734,7 +10734,7 @@ static BOOL writeFlagFile(char *pFileName)
 	{
 		return FALSE;
 	}
-	FREE(pFileData);
+	free(pFileData);
 
 	return TRUE;
 }
@@ -10838,7 +10838,7 @@ static BOOL writeProductionFile(char *pFileName)
 
 
 	//allocate the buffer space
-	pFileData = (char*)MALLOC(fileSize);
+	pFileData = (char*)malloc(fileSize);
 	if (!pFileData)
 	{
 		debug( LOG_ERROR, "writeProductionFile: Out of memory" );
@@ -10886,7 +10886,7 @@ static BOOL writeProductionFile(char *pFileName)
 	{
 		return FALSE;
 	}
-	FREE(pFileData);
+	free(pFileData);
 
 	return TRUE;
 }
@@ -10953,7 +10953,7 @@ BOOL loadSaveStructLimitsV19(char *pFileData, UDWORD filesize, UDWORD numLimits)
 	STRUCTURE_STATS			*psStats;
 	int SkippedRecords=0;
 
-	psSaveLimits = (SAVE_STRUCTLIMITS_V2 *) MALLOC (sizeof(SAVE_STRUCTLIMITS_V2));
+	psSaveLimits = (SAVE_STRUCTLIMITS_V2 *) malloc(sizeof(SAVE_STRUCTLIMITS_V2));
 	if (!psSaveLimits)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -11011,7 +11011,7 @@ BOOL loadSaveStructLimitsV19(char *pFileData, UDWORD filesize, UDWORD numLimits)
 		debug( LOG_ERROR, "Skipped %d records in structure limits due to bad player number\n", SkippedRecords );
 		abort();
 	}
-	FREE(psSaveLimits);
+	free(psSaveLimits);
 	return TRUE;
 }
 
@@ -11024,7 +11024,7 @@ BOOL loadSaveStructLimitsV(char *pFileData, UDWORD filesize, UDWORD numLimits)
 	STRUCTURE_STATS			*psStats;
 	int SkippedRecords=0;
 
-	psSaveLimits = (SAVE_STRUCTLIMITS*) MALLOC (sizeof(SAVE_STRUCTLIMITS));
+	psSaveLimits = (SAVE_STRUCTLIMITS*) malloc(sizeof(SAVE_STRUCTLIMITS));
 	if (!psSaveLimits)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -11082,7 +11082,7 @@ BOOL loadSaveStructLimitsV(char *pFileData, UDWORD filesize, UDWORD numLimits)
 		debug( LOG_ERROR, "Skipped %d records in structure limits due to bad player number\n", SkippedRecords );
 		abort();
 	}
-	FREE(psSaveLimits);
+	free(psSaveLimits);
 	return TRUE;
 }
 // -----------------------------------------------------------------------------------------
@@ -11102,7 +11102,7 @@ BOOL writeStructLimitsFile(char *pFileName)
 
 	// Allocate the data buffer
 	fileSize = STRUCTLIMITS_HEADER_SIZE + (totalLimits * (sizeof(SAVE_STRUCTLIMITS)));
-	pFileData = (char*)MALLOC(fileSize);
+	pFileData = (char*)malloc(fileSize);
 	if (pFileData == NULL)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -11141,7 +11141,7 @@ BOOL writeStructLimitsFile(char *pFileName)
 	// Write the data to the file
 	if (pFileData != NULL) {
 		status = saveFile(pFileName, pFileData, fileSize);
-		FREE(pFileData);
+		free(pFileData);
 		return status;
 	}
 	return FALSE;
@@ -11245,7 +11245,7 @@ BOOL writeCommandLists(char *pFileName)
 
 	// Allocate the data buffer
 	fileSize = COMMAND_HEADER_SIZE + (totalDroids * (sizeof(SAVE_COMMAND)));
-	pFileData = (char*)MALLOC(fileSize);
+	pFileData = (char*)malloc(fileSize);
 	if (pFileData == NULL)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -11298,7 +11298,7 @@ BOOL writeCommandLists(char *pFileName)
 	// Write the data to the file
 	if (pFileData != NULL) {
 		status = saveFile(pFileName, pFileData, fileSize);
-		FREE(pFileData);
+		free(pFileData);
 		return status;
 	}
 	return FALSE;
@@ -11322,7 +11322,7 @@ static BOOL	writeScriptState(char *pFileName)
 	{
 		return FALSE;
 	}
-	FREE(pBuffer);
+	free(pBuffer);
 	return TRUE;
 }
 

@@ -410,9 +410,9 @@ BOOL missionShutDown(void)
 		releaseAllProxDisp();
 		gwShutDown();
 		//flag positions go with structs
-//		FREE(psMapTiles);
+//		free(psMapTiles);
 //		mapFreeTilesAndStrips();
-		//FREE(aMapLinePoints);
+		//free(aMapLinePoints);
 
 		for (inc = 0; inc < MAX_PLAYERS; inc++)
 		{
@@ -1057,9 +1057,9 @@ void restoreMissionData(void)
 	freeAllFeatures();
 	gwShutDown();
 	mapShutdown();
-//	FREE(psMapTiles);
+//	free(psMapTiles);
 //	mapFreeTilesAndStrips();
-	//FREE(aMapLinePoints);
+	//free(aMapLinePoints);
 	//releaseAllProxDisp();
 	//flag positions go with structs
 

@@ -2263,7 +2263,7 @@ BOOL skAddTemplate(void)
 		return FALSE;
 	}
 	psTempl =(DROID_TEMPLATE *)stempl;
-//	psT = MALLOC(sizeof(SKIRMISHSTORE));
+//	psT = malloc(sizeof(SKIRMISHSTORE));
 	HEAP_ALLOC(psTemplateHeap,&psT);
 	if ( !psT)
 	{

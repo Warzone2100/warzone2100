@@ -78,7 +78,7 @@ BOOL	waterOnMap(void)
 //this function just allocates the memory now for MaxMapWidth, MaxMapHeight
 BOOL    environInit( void )
 {
-	pEnvironData = (ENVIRON_DATA*)MALLOC(sizeof(struct environ_data) * MAP_MAXWIDTH * MAP_MAXHEIGHT);
+	pEnvironData = (ENVIRON_DATA*)malloc(sizeof(struct environ_data) * MAP_MAXWIDTH * MAP_MAXHEIGHT);
 	if(!pEnvironData)
 	{
 		debug( LOG_ERROR, "Can't get memory for the environment data" );
@@ -372,6 +372,6 @@ void	environShutDown( void )
 {
 	if(pEnvironData)
 	{
-		FREE(pEnvironData);
+		free(pEnvironData);
 	}
 }

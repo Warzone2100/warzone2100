@@ -103,7 +103,7 @@ static void rotBox(PASTE_BOX *psBox);
 	char	aType[255], *pCurr;
 
 	// Allocate an array to store the type mapping
-	aDefaultType = MALLOC(sizeof(TERRAIN_TYPE) * maxTexTile);
+	aDefaultType = malloc(sizeof(TERRAIN_TYPE) * maxTexTile);
 	if (!aDefaultType)
 	{
 		DBERROR(("Out of memory"));
@@ -124,7 +124,7 @@ static void rotBox(PASTE_BOX *psBox);
 		if (texNum >= maxTexTile)
 		{
 			DBERROR(("texture number out of range in typemap.txt"));
-			FREE(pFileData);
+			free(pFileData);
 			return FALSE;
 		}
 		if (strcmp(aType, "grass") == 0)
@@ -153,12 +153,12 @@ static void rotBox(PASTE_BOX *psBox);
 		if (pCurr - (char *)pFileData > (SDWORD)fileSize)
 		{
 			DBERROR(("Unexpected EOF in typemap.txt"));
-			FREE(pFileData);
+			free(pFileData);
 			return FALSE;
 		}
 	}
 
-	FREE(pFileData);
+	free(pFileData);
 
 	return TRUE;
 }*/
@@ -188,14 +188,14 @@ void ed2dShutDown(void)
 {
 	if (sPasteBox.psTiles != NULL)
 	{
-		FREE(sPasteBox.psTiles);
+		free(sPasteBox.psTiles);
 	}
 	if (sUndoBox.psTiles != NULL)
 	{
-		FREE(sUndoBox.psTiles);
+		free(sUndoBox.psTiles);
 	}
 
-//	FREE(aDefaultType);
+//	free(aDefaultType);
 
 }
 
@@ -265,7 +265,7 @@ BOOL ed2dProcessInput(void)
 	{
 		if (sPasteBox.psTiles != NULL)
 		{
-			FREE(sPasteBox.psTiles);
+			free(sPasteBox.psTiles);
 		}
 		if (getBox(&sPasteBox, selSX,selSY, selEX-selSX+1,selEY-selSY+1))
 		{
@@ -406,11 +406,11 @@ BOOL ed2dProcessInput(void)
 			/* Free any old undo and paste buffer */
 			if (sPasteBox.psTiles != NULL)
 			{
-				FREE(sPasteBox.psTiles);
+				free(sPasteBox.psTiles);
 			}
 			if (sUndoBox.psTiles != NULL)
 			{
-				FREE(sUndoBox.psTiles);
+				free(sUndoBox.psTiles);
 			}
 
 			/* Get the paste and undo boxes */
@@ -421,7 +421,7 @@ BOOL ed2dProcessInput(void)
 			}
 			if (!getBox(&sUndoBox, selSX,selSY, selEX - selSX + 1, selEY - selSY + 1))
 			{
-				FREE(sPasteBox.psTiles);
+				free(sPasteBox.psTiles);
 				sPasteBox.psTiles = NULL;
 				mState = MS_GAME;
 				break;
@@ -453,7 +453,7 @@ BOOL ed2dProcessInput(void)
 			/* Free the old undo data */
 			if (sUndoBox.psTiles != NULL)
 			{
-				FREE(sUndoBox.psTiles);
+				free(sUndoBox.psTiles);
 			}
 			/* Get the new undo data */
 			if (!getBox(&sUndoBox, selSX, selSY, sPasteBox.width,sPasteBox.height))
@@ -528,7 +528,7 @@ BOOL ed2dProcessInput(void)
 						sGrabBox.width,sGrabBox.height);
 			flipBoxX(&sGrabBox);
 			putBox(&sGrabBox, selSX,selSY);
-			FREE(sGrabBox.psTiles);
+			free(sGrabBox.psTiles);
 		}
 		/* Flip on Y axis */
 		if (keyPressed(KEY_Y) &&
@@ -538,7 +538,7 @@ BOOL ed2dProcessInput(void)
 						sGrabBox.width,sGrabBox.height);
 			flipBoxY(&sGrabBox);
 			putBox(&sGrabBox, selSX,selSY);
-			FREE(sGrabBox.psTiles);
+			free(sGrabBox.psTiles);
 		}
 		/* Rotate */
 		if (keyPressed(KEY_Z) &&
@@ -549,7 +549,7 @@ BOOL ed2dProcessInput(void)
 						sGrabBox.width,sGrabBox.height);
 			rotBox(&sGrabBox);
 			putBox(&sGrabBox, selSX,selSY);
-			FREE(sGrabBox.psTiles);
+			free(sGrabBox.psTiles);
 		}
 	}
 	else if (mState == MS_PASTE)
@@ -786,7 +786,7 @@ static BOOL getBox(PASTE_BOX *psBox, UDWORD x, UDWORD y, UDWORD width, UDWORD he
 	psBox->y = y;
 	psBox->width = width;
 	psBox->height = height;
-	psBox->psTiles = (MAPTILE *)MALLOC(sizeof(MAPTILE)*
+	psBox->psTiles = (MAPTILE *)malloc(sizeof(MAPTILE)*
 							psBox->width * psBox->height);
 	if (psBox->psTiles == NULL)
 	{
@@ -839,7 +839,7 @@ static void flipBoxX(PASTE_BOX *psBox)
 	UDWORD	tex1,tex2;
 
 	/* Allocate a buffer for the flipped version */
-	psNew = (MAPTILE *)MALLOC(sizeof(MAPTILE) * psBox->width * psBox->height);
+	psNew = (MAPTILE *)malloc(sizeof(MAPTILE) * psBox->width * psBox->height);
 	if (psNew == NULL)
 	{
 		debug( LOG_ERROR, "Out of memory, couldn't do flip\n" );
@@ -876,7 +876,7 @@ static void flipBoxX(PASTE_BOX *psBox)
 		}
 	}
 
-	FREE(psBox->psTiles);
+	free(psBox->psTiles);
 	psBox->psTiles = psNew;
 }
 
@@ -889,7 +889,7 @@ static void flipBoxY(PASTE_BOX *psBox)
 	UDWORD	tex1,tex2;
 
 	/* Allocate a buffer for the flipped version */
-	psNew = (MAPTILE *)MALLOC(sizeof(MAPTILE) * psBox->width * psBox->height);
+	psNew = (MAPTILE *)malloc(sizeof(MAPTILE) * psBox->width * psBox->height);
 	if (psNew == NULL)
 	{
 		debug( LOG_ERROR, "Out of memory, couldn't do flip\n" );
@@ -926,7 +926,7 @@ static void flipBoxY(PASTE_BOX *psBox)
 		}
 	}
 
-	FREE(psBox->psTiles);
+	free(psBox->psTiles);
 	psBox->psTiles = psNew;
 }
 
@@ -941,7 +941,7 @@ static void rotBox(PASTE_BOX *psBox)
 	MAPTILE		*psNew, *psSrc, *psDest;
 
 	/* Allocate the new tile buffer */
-	psNew = (MAPTILE *)MALLOC(sizeof(MAPTILE) * psBox->width * psBox->height);
+	psNew = (MAPTILE *)malloc(sizeof(MAPTILE) * psBox->width * psBox->height);
 	if (psNew == NULL)
 	{
 		debug( LOG_ERROR, "Out of memory" );
@@ -965,7 +965,7 @@ static void rotBox(PASTE_BOX *psBox)
 	}
 
 	/* Store the new tiles into the box */
-	FREE(psBox->psTiles);
+	free(psBox->psTiles);
 	psBox->psTiles = psNew;
 	x = psBox->width;
 	psBox->width = psBox->height;
@@ -1007,7 +1007,7 @@ BOOL ed2dLoadMapFile(void)
 	/* Load the data into the map -
 	   don't check the return code as we do the same thing either way */
 	(void)mapLoad(pFileData, fileSize);
-	FREE(pFileData);
+	free(pFileData);
 
 	/* Start the game clock */
 	gameTimeStart();

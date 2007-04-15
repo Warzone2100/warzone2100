@@ -651,7 +651,7 @@ BOOL ProcessDroidOrders(void)
 		addDroid(pD, apsDroidLists);								// add the droid to the world.
 
 		pStore = tempDroidList->psNext;								// goto next droid.
-		FREE(tempDroidList);
+		free(tempDroidList);
 		tempDroidList = pStore;
 
 		if(tempDroidList)

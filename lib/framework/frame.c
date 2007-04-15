@@ -438,7 +438,7 @@ static BOOL loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 
 	if (AllocateMem == TRUE) {
 		// Allocate a buffer to store the data and a terminating zero
-		*ppFileData = (char*)MALLOC(filesize + 1);
+		*ppFileData = (char*)malloc(filesize + 1);
 		if (*ppFileData == NULL) {
 			debug(LOG_ERROR, "loadFile2: Out of memory loading %s", pFileName);
 			assert(FALSE);
@@ -456,14 +456,14 @@ static BOOL loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 	/* Load the file data */
 	length_read = PHYSFS_read(pfile, *ppFileData, 1, filesize);
 	if (length_read != filesize) {
-		FREE( *ppFileData );
+		free( *ppFileData );
 		debug(LOG_ERROR, "loadFile2: Reading %s short: %s",
 		      pFileName, PHYSFS_getLastError());
 		assert(FALSE);
 		return FALSE;
 	}
 	if (!PHYSFS_close(pfile)) {
-		FREE( *ppFileData );
+		free( *ppFileData );
 		debug(LOG_ERROR, "loadFile2: Error closing %s: %s", pFileName,
 		      PHYSFS_getLastError());
 		assert(FALSE);
