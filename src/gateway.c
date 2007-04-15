@@ -993,8 +993,8 @@ SDWORD gwGetZone(SDWORD x, SDWORD y)
 		xPos = 0;
 		do
 		{
-			xPos += *(apRLEZones[y] + rlePos);
-			zone  = *(apRLEZones[y] + rlePos + 1);
+			xPos += apRLEZones[y][rlePos];
+			zone  = apRLEZones[y][rlePos + 1];
 			rlePos += 2;
 		} while (xPos <= x); // xPos is where the next zone starts
 	}

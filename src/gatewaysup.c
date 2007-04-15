@@ -545,8 +545,8 @@ BOOL gwCreateBlankZoneMap(void)
 	// set all the zones to zero
 	for(i=0; i<gwMapHeight(); i++)
 	{
-		*apRLEZones[i] = (UBYTE)gwMapWidth();
-		*(apRLEZones[i] + 1) = 0;
+		apRLEZones[i][0] = (UBYTE)gwMapWidth();
+		apRLEZones[i][1] = 0;
 	}
 
 	return TRUE;
@@ -563,8 +563,8 @@ static void gwDecompressLine(SDWORD line, UBYTE *pBuffer)
 	bufPos = 0;
 	while (bufPos < gwMapWidth())
 	{
-		count = *(apRLEZones[line] + rlePos);
-		zone  = *(apRLEZones[line] + rlePos + 1);
+		count = apRLEZones[line][rlePos];
+		zone  = apRLEZones[line][rlePos + 1];
 		rlePos += 2;
 
 		for(store=0; store < count; store ++)
@@ -596,8 +596,8 @@ static void gwCompressLine(SDWORD line, UBYTE *pBuffer)
 			bufPos += 1;
 		}
 
-		*(apRLEZones[line] + rlePos) = (UBYTE)count;
-		*(apRLEZones[line] + rlePos + 1) = (UBYTE)zone;
+		apRLEZones[line][rlePos] = (UBYTE)count;
+		apRLEZones[line][rlePos + 1] = (UBYTE)zone;
 
 		rlePos += 2;
 	}
