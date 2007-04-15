@@ -977,6 +977,7 @@ void gwFreeZoneMap(void)
 			free(apRLEZones[i]);
 		}
 		free(apRLEZones);
+		apRLEZones = NULL;
 	}
 }
 
