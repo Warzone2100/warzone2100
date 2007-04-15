@@ -2013,7 +2013,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay)
 		{
 			audio_QueueTrack(ID_SOUND_MAJOR_RESEARCH);
 			//add console text message
-			snprintf(consoleMsg, 200, _("Research completed: %s"), *pResearch->pViewData->ppTextMsg);
+			snprintf(consoleMsg, MAX_RESEARCH_MSG_SIZE, _("Research completed: %s"), *pResearch->pViewData->ppTextMsg);
             addConsoleMessage(consoleMsg, LEFT_JUSTIFY);
 		}
 
@@ -2033,7 +2033,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay)
 		{
 			audio_QueueTrack(ID_SOUND_RESEARCH_COMPLETED);
 			//add console text message
-			snprintf(consoleMsg, 200, _("Research Completed: %s"), *pResearch->pViewData->ppTextMsg);
+			snprintf(consoleMsg, MAX_RESEARCH_MSG_SIZE, _("Research Completed: %s"), *pResearch->pViewData->ppTextMsg);
             addConsoleMessage(consoleMsg, LEFT_JUSTIFY);
 		}
 	}

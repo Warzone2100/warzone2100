@@ -28,6 +28,12 @@
 
 #include "objectdef.h"
 
+
+#define NO_RESEARCH_ICON 0
+//max 'research complete' console message length
+#define MAX_RESEARCH_MSG_SIZE 200
+
+
 //used for loading in the research stats into the appropriate list
 enum
 {
@@ -39,17 +45,17 @@ enum
 
 enum
 {
-RID_ROCKET,			
-RID_CANNON,			
-RID_HOVERCRAFT,		
-RID_ECM,				
-RID_PLASCRETE,		
-RID_TRACKS,			
-RID_DROIDTECH,		
-RID_WEAPONTECH,		
-RID_COMPUTERTECH,	
-RID_POWERTECH,		
-RID_SYSTEMTECH,		
+RID_ROCKET,
+RID_CANNON,
+RID_HOVERCRAFT,
+RID_ECM,
+RID_PLASCRETE,
+RID_TRACKS,
+RID_DROIDTECH,
+RID_WEAPONTECH,
+RID_COMPUTERTECH,
+RID_POWERTECH,
+RID_SYSTEMTECH,
 RID_STRUCTURETECH,
 RID_CYBORGTECH,
 RID_DEFENCE,
@@ -59,13 +65,8 @@ RID_GRPUPG,
 RID_GRPREP,
 RID_GRPROF,
 RID_GRPDAM,
-RID_MAXRID	
+RID_MAXRID
 };
-
-
-#define NO_RESEARCH_ICON	0
-//max 'research complete' console message length
-#define MAX_RESEARCH_MSG_SIZE	200
 
 
 /* The store for the research stats */
@@ -88,7 +89,7 @@ extern BOOL loadResearch(char *pResearchData, UDWORD bufferSize);
 //Load the pre-requisites for a research list
 extern BOOL loadResearchPR(char *pPRData, UDWORD bufferSize);
 //Load the artefacts for a research list
-extern BOOL loadResearchArtefacts(char *pArteData, UDWORD bufferSize, 
+extern BOOL loadResearchArtefacts(char *pArteData, UDWORD bufferSize,
 								  UDWORD listNumber);
 //Load the pre-requisites for a research list
 extern BOOL loadResearchFunctions(char *pFunctionData, UDWORD bufferSize);
@@ -96,12 +97,12 @@ extern BOOL loadResearchFunctions(char *pFunctionData, UDWORD bufferSize);
 extern BOOL loadResearchStructures(char *pStructData, UDWORD bufferSize,
 								   UDWORD listNumber);
 
-/*function to check what can be researched for a particular player at any one 
+/*function to check what can be researched for a particular player at any one
   instant. Returns the number to research*/
-//extern UBYTE fillResearchList(UBYTE *plist, UDWORD playerID, UWORD topic, 
+//extern UBYTE fillResearchList(UBYTE *plist, UDWORD playerID, UWORD topic,
 //							   UWORD limit);
 //needs to be UWORD sized for Patches
-extern UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, 
+extern UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic,
                               UWORD limit);
 
 /* process the results of a completed research topic */
@@ -122,11 +123,11 @@ extern void cancelResearch(STRUCTURE *psBuilding);
 /* For a given view data get the research this is related to */
 extern RESEARCH * getResearchForMsg(struct _viewdata *pViewData);
 
-/* Sets the 'possible' flag for a player's research so the topic will appear in 
+/* Sets the 'possible' flag for a player's research so the topic will appear in
 the research list next time the Research Facilty is selected */
 extern BOOL enableResearch(RESEARCH *psResearch, UDWORD player);
 
-/*find the last research topic of importance that the losing player did and 
+/*find the last research topic of importance that the losing player did and
 'give' the results to the reward player*/
 extern void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer);
 
