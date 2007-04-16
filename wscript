@@ -53,10 +53,6 @@ def configure(conf):
 		conf.check_header2('png.h')
 		conf.check_library2('png')
 
-	if not conf.check_pkg2('mad', '0.15', 0):
-		conf.check_header2('mad.h')
-		conf.check_library2('mad')
-
 	if not conf.check_pkg2('ogg', '1.0', 0):
 		conf.check_header2('ogg/ogg.h')
 		conf.check_library2('ogg')
@@ -106,7 +102,7 @@ def configure(conf):
 def build(bld):
 	obj = bld.create_obj('cc', 'program')
 	obj.find_sources_in_dirs('lib/framework lib/gamelib lib/netplay lib/ivis_common lib/ivis_opengl lib/script lib/sequence lib/sound lib/widget src')
-	obj.uselib='PNG JPEG MAD OGG VORBISFILE GLU GL OPENAL PHYSFS SDL_NET SDL SDLMAIN'
+	obj.uselib='PNG JPEG OGG VORBISFILE GLU GL OPENAL PHYSFS SDL_NET SDL SDLMAIN'
 	obj.includes='lib/framework lib/gamelib lib/script src'
 	obj.defines='HAVE_CONFIG_H'
 	obj.target='warzone2100'

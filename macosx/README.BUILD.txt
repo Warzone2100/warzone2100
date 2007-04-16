@@ -10,7 +10,6 @@ Building Warzone 2100 on MacOS X is currently only known to work on
 MacOS X 10.4 "Tiger" with DarwinPorts and the following ports installed:
   automake
   jpeg
-  libmad
   libogg
   libpng
   libsdl

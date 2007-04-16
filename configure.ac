@@ -141,10 +141,6 @@ fi
 AC_ARG_ENABLE(ogg,
 	AS_HELP_STRING([--disable-ogg],[Do not built support for Ogg files]))
 
-#   --disable-mp3 will build without Mp3 support
-AC_ARG_ENABLE(mp3,
-	AS_HELP_STRING([--disable-mp3],[Do not built support for Mp3 files]))
-
 
 # Checks for libraries:
 
@@ -288,26 +284,6 @@ else
 fi
 
 
-if test "x$enable_mp3" != "xno" ; then
-	AC_CHECK_LIB(mad, mad_stream_init,
-		[AC_CHECK_HEADER(mad.h, have_mad=yes, have_mad=no)],
-		[have_mad=no])
-	if test "x$have_mad" = "xno" ; then
-		if test "x$enable_mp3" = "xyes" ; then
-			AC_MSG_ERROR([You need to install libMAD.])
-		else
-			enable_mp3=no
-			AC_DEFINE(WZ_NOMP3, 1, [Disable mp3 support])
-		fi
-	else
-		enable_mp3=yes
-		WZ_LIBS="${WZ_LIBS} -lmad"
-	fi
-else
-	AC_DEFINE(WZ_NOMP3, 1, [Disable mp3 support])
-fi
-
-
 # add some required C flags here
 # -DYY_STATIC is required by flex
 WZ_CFLAGS="${WZ_CFLAGS} -DYY_STATIC -DLOCALEDIR=\\\"${localedir}\\\" -DDATADIR=\\\"${datadir}/${PACKAGE}\\\""
@@ -340,7 +316,6 @@ echo "Warzone 2100 will compile with the following components:"
 echo ""
 echo " OpenGL acceleration:   $enable_opengl"
 echo " OpenAL sound system:   $enable_openal"
-echo " MP3 music support:     $enable_mp3"
 echo " OGG music support:     $enable_ogg"
 echo ""
 

@@ -28,10 +28,6 @@
 #include <AL/al.h>
 #endif
 
-#ifndef WZ_NOMP3
-#include <mad.h>
-#endif
-
 #ifndef WZ_NOOGG
 #include <ogg/ogg.h>
 #include <vorbis/codec.h>
@@ -54,21 +50,7 @@ static BOOL		music_initialized;
 static PHYSFS_file*		music_file = NULL;
 
 enum {	WZ_NONE,
-	WZ_MP3,
 	WZ_OGG }	music_file_format;
-
-#ifndef WZ_NOMP3
-#define MP3_BUFFER_SIZE (8192)
-
-static struct mad_stream mp3_stream;
-static struct mad_frame mp3_frame;
-static struct mad_synth mp3_synth;
-
-static unsigned char	mp3_buffer[MP3_BUFFER_SIZE + MAD_BUFFER_GUARD];
-static unsigned int	mp3_buffer_length;
-static unsigned int	mp3_size;
-static unsigned int	mp3_pos_in_frame;
-#endif
 
 #ifndef WZ_NOOGG
 static OggVorbis_File	ogg_stream;
@@ -155,151 +137,16 @@ BOOL cdAudio_Close( void )
 	return TRUE;
 }
 
-#ifndef WZ_NOMP3
-
-static void mp3_refill(void) {
-	while (mad_frame_decode(&mp3_frame, &mp3_stream)) {
-		int size;
-
-		if (mp3_stream.error == MAD_ERROR_BUFLEN) {
-			int offset;
-
-			if (   music_file == NULL
-			    || PHYSFS_eof(music_file)) {
-				return;
-			}
-
-			if (!mp3_stream.next_frame) {
-				offset = 0;
-				memset(mp3_buffer, 0, MP3_BUFFER_SIZE + MAD_BUFFER_GUARD);
-			} else {
-				offset = mp3_stream.bufend - mp3_stream.next_frame;
-				memcpy(mp3_buffer, mp3_stream.next_frame, offset);
-			}
-
-			size = PHYSFS_read(music_file, mp3_buffer + offset, 1,
-				     MP3_BUFFER_SIZE - offset );
-
-			if (size <= 0) {
-				return;
-			}
-			mp3_stream.error = (enum mad_error)0;
-
-			// Feed the data we just read into the stream decoder
-			mad_stream_buffer(&mp3_stream, mp3_buffer, size + offset);
-		} else if (!MAD_RECOVERABLE(mp3_stream.error)) {
-			return;
-		}
-	}
-
-	// Synthesise the frame into PCM samples and reset the buffer position
-	mad_synth_frame(&mp3_synth, &mp3_frame);
-	mp3_pos_in_frame = 0;
-}
-static inline signed int scale_sample(mad_fixed_t sample)
-{
-  /* round */
-  sample += (1L << (MAD_F_FRACBITS - 16));
-
-  /* clip */
-  if (sample >= MAD_F_ONE)
-    sample = MAD_F_ONE - 1;
-  else if (sample < -MAD_F_ONE)
-    sample = -MAD_F_ONE;
-
-  /* quantize */
-  return sample >> (MAD_F_FRACBITS + 1 - 16);
-}
-
-static int mp3_read_buffer(char *buffer, const int size) {
-	int samples = 0;
-
-	while (samples < size) {
-		const int len = MIN(size, samples + (int)(mp3_synth.pcm.length - mp3_pos_in_frame) * ((music_format == AL_FORMAT_STEREO16) ? 2 : 1));
-		while (samples < len) {
-			signed int sample;
-
-			sample = scale_sample(mp3_synth.pcm.samples[0][mp3_pos_in_frame]);
-			*buffer++ = (sample >> 0) & 0xff;
-			*buffer++ = (sample >> 8) & 0xff;
-			samples += 2;
-			if (music_format == AL_FORMAT_STEREO16) {
-				sample = scale_sample(mp3_synth.pcm.samples[1][mp3_pos_in_frame]);
-				*buffer++ = (sample >> 0) & 0xff;
-				*buffer++ = (sample >> 8) & 0xff;
-				samples += 2;
-			}
-			mp3_pos_in_frame++;
-		}
-		if (mp3_pos_in_frame >= mp3_synth.pcm.length) {
-			mp3_refill();
-			if (mp3_size <= 0) break;
-		}
-	}
-	return samples;
-}
-
-#endif
-
 static BOOL cdAudio_OpenTrack(char* filename) {
 	if (!music_initialized) {
 		return FALSE;
 	}
 
 	if (music_file != NULL) {
-#ifndef WZ_NOMP3
-		if (music_file_format == WZ_MP3) {
-			mad_synth_finish(&mp3_synth);
-			mad_frame_finish(&mp3_frame);
-			mad_stream_finish(&mp3_stream);
-		}
-#endif
 		PHYSFS_close(music_file);
 	}
 
 	music_file_format = WZ_NONE;
-
-#ifndef WZ_NOMP3
-	if (strncasecmp(filename+strlen(filename)-4, ".mp3", 4) == 0)
-	{
-		music_file = PHYSFS_openRead(filename);
-
-		if (music_file == NULL) {
-			debug( LOG_SOUND, "Failed opening %s: %s\n", filename, PHYSFS_getLastError() );
-			return FALSE;
-		}
-
-		mad_stream_init(&mp3_stream);
-		mad_frame_init(&mp3_frame);
-		mad_synth_init(&mp3_synth);
-
-		mp3_buffer_length = PHYSFS_read(music_file, mp3_buffer, 1, MP3_BUFFER_SIZE );
-
-		mad_stream_buffer(&mp3_stream, mp3_buffer, mp3_buffer_length);
-
-		mp3_refill();
-
-		switch(mp3_frame.header.mode) {
-			case MAD_MODE_SINGLE_CHANNEL:
-			case MAD_MODE_DUAL_CHANNEL:
-			case MAD_MODE_JOINT_STEREO:
-			case MAD_MODE_STEREO: {
-				if (MAD_NCHANNELS(&mp3_frame.header) == 1) {
-					music_format = AL_FORMAT_MONO16;
-				} else if (MAD_NCHANNELS(&mp3_frame.header) == 2) {
-					music_format = AL_FORMAT_STEREO16;
-				} else {
-					return FALSE;
-				}
-			}	break;
-			default:
-				return FALSE;
-		}
-
-		music_file_format = WZ_MP3;
-		return TRUE;
-	}
-#endif
 
 #ifndef WZ_NOOGG
 	if (strncasecmp(filename+strlen(filename)-4, ".ogg", 4) == 0)
@@ -367,13 +214,6 @@ static BOOL cdAudio_FillBuffer(ALuint b) {
 	int  result = 0;
 
 	while (size < BUFFER_SIZE) {
-
-#ifndef WZ_NOMP3
-		if (music_file_format == WZ_MP3) {
-			result = mp3_read_buffer(music_data+size, BUFFER_SIZE-size);
-			music_rate = mp3_synth.pcm.samplerate;
-		}
-#endif
 
 #ifndef WZ_NOOGG
 		if (music_file_format == WZ_OGG) {

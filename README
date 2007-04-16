@@ -62,8 +62,8 @@ from a previous version and experience problems, try and remove this
 
 As the original game music is part of the data that was not liberated, we are
 reintroducing music, but in a different way. We use a playlist system that can
-point to any ogg or mp3 file in you filesystem. This is still experimental, and
-we are gradually making this more useable.
+point to any ogg file in you filesystem. This is still experimental, and we are
+gradually making this more useable.
 
 The following playlists are read, in this order, and only the first playlist
 found is used :
@@ -98,6 +98,6 @@ specify it in both of them.
 the playlist is found. If no path is set, all filenames must be given with
 absolute path. All filenames must be lowercase.
 
-ogg and mp3 files are supported (provided all necessary libs are installed).
+ogg files are supported (provided all necessary libs are installed).
 
                                                     The Warzone Resurrection Project
