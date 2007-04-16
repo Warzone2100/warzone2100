@@ -1053,7 +1053,7 @@ void audio_CheckAllUnloaded( void )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-SDWORD audio_GetTrackID( char szFileName[] )
+SDWORD audio_GetTrackID( const char *fileName )
 {
 	//~~~~~~~~~~~~~
 	TRACK	*psTrack;
@@ -1065,7 +1065,7 @@ SDWORD audio_GetTrackID( char szFileName[] )
 		return SAMPLE_NOT_FOUND;
 	}
 
-	psTrack = (TRACK*)resGetData( "WAV", szFileName );
+	psTrack = (TRACK*)resGetData( "WAV", fileName );
 	if ( psTrack == NULL )
 	{
 		return SAMPLE_NOT_FOUND;

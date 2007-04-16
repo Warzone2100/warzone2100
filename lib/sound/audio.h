@@ -71,7 +71,7 @@ extern void		audio_ResumeAll( void );
 extern void		audio_StopAll( void );
 extern void		audio_CheckAllUnloaded( void );
 
-extern SDWORD	audio_GetTrackID( char szFileName[] );
+extern SDWORD	audio_GetTrackID( const char *fileName );
 extern SDWORD	audio_GetAvailableID( void );
 extern SDWORD	audio_GetMixVol( SDWORD iVol );
 extern SDWORD	audio_GetSampleMixVol( AUDIO_SAMPLE * psSample, SDWORD iVol,
