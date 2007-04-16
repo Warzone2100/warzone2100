@@ -200,13 +200,12 @@ extern void	mapWaterProcess( void );
 /* Return a pointer to the tile structure at x,y */
 static inline MAPTILE *mapTile(UDWORD x, UDWORD y)
 {
-
 	ASSERT( x < mapWidth,
 		"mapTile: x coordinate bigger than map width" );
 	ASSERT( y < mapHeight,
 		"mapTile: y coordinate bigger than map height" );
 
-	return psMapTiles + x + (y * mapWidth);
+	return &psMapTiles[x + (y * mapWidth)];
 }
 
 /* Return height of tile at x,y */

@@ -180,7 +180,7 @@ BOOL	godMode;
 
 static UWORD WaterTileID = WATER_TILE;
 static UWORD RiverBedTileID = BED_TILE;
-static FRACT waterRealValue = 0.0f;
+static float waterRealValue = 0.0f;
 #define WAVE_SPEED 4
 static SWORD vOffset = 1;
 #define	MAX_FIRE_STAGE	32
@@ -689,7 +689,7 @@ static void drawTiles(iView *camera, iView *player)
 		if(vOffset >= 64/2)
 		{
 			vOffset = 0;
-			waterRealValue = 0;
+			waterRealValue = 0.0f;
 		}
 	}
 	/* Is the scene spinning? - showcase demo stuff */
@@ -707,8 +707,8 @@ static void drawTiles(iView *camera, iView *player)
 	SetBSPCameraPos(BSPCamera.x, BSPCamera.y, BSPCamera.z);
 
 	/* Find our position in tile coordinates */
-	playerXTile = player->p.x / TILE_UNITS;
-	playerZTile = player->p.z / TILE_UNITS;
+	playerXTile = player->p.x >> TILE_SHIFT;
+	playerZTile = player->p.z >> TILE_SHIFT;
 
 	/* Get the x,z translation components */
 	rx = (player->p.x) & (TILE_UNITS-1);

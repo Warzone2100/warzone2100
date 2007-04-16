@@ -72,22 +72,24 @@ extern void	setProximityDraw(BOOL val);
 extern void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD );
 
 
-extern UDWORD	getSuggestedPitch			( void );
+extern UDWORD getSuggestedPitch( void );
 
 extern BOOL	clipXY ( SDWORD x, SDWORD y);
 
 extern BOOL init3DView(void);
 extern void initViewPosition(void);
 extern iView player,camera;
-extern UDWORD	distance;
-extern UDWORD  terrainOutline;
+extern UDWORD distance;
+extern UDWORD terrainOutline;
 extern UDWORD xOffset,yOffset;
-extern BOOL	selectAttempt;
+extern BOOL selectAttempt;
 extern BOOL draggingTile;
 extern struct iIMDShape *g_imd;
 extern BOOL	droidSelected;
 extern UDWORD terrainMidX,terrainMidY;
-extern Sint32 playerXTile, playerZTile, rx, rz;
+ // FIXME This only used in one location outside of display3d.c, maybe create a wrapper function instead? ->
+extern Sint32 playerXTile, playerZTile, // -> lighting.c
+ rx, rz; // -> atmos.c
 
 extern SDWORD scrollSpeed;
 extern iBitmap	**tilesRAW;

@@ -417,83 +417,6 @@ void normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant)
 	} // end switch
 }
 
-#if 0
-/*	Processes a light into the tileScreenInfo structure - this needs
-	to be optimised and profiled as it's costly to perform
-*/
-void	processLight(LIGHT *psLight)
-{
-SDWORD	i,j;
-UDWORD	tileX,tileY;
-UDWORD	offset;
-UDWORD	distToCorner;
-UDWORD	percent;
-UDWORD	xIndex,yIndex;
-SDWORD	xUpper,yUpper,xLower,yLower;
-SDWORD	gridMinX,gridMinY,gridMaxX,gridMaxY;
-
-	/* Firstly - there's no point processing lights that are off the grid */
-	if(clipXY(psLight->position.x,psLight->position.z) == FALSE)
-	{
-		return;
-	}
-
-	tileX = (psLight->position.x/TILE_UNITS);
-	tileY = (psLight->position.z/TILE_UNITS);
-	offset = psLight->range/TILE_UNITS;
-
-	if(player.p.x>=0)
-	{
-		gridMinX = player.p.x/TILE_UNITS;
-	}
-	else
-	{
-		gridMinX = 0;
-	}
-	if(player.p.z >=0)
-	{
-		gridMinY = player.p.z/TILE_UNITS;
-	}
-	else
-	{
-		gridMinY = 0;
-	}
-	gridMaxX = gridMinX + visibleXTiles;
-	gridMaxY = gridMinY + visibleYTiles;
-
-	xLower = tileX - offset;
-	xUpper = tileX + offset;
-	yLower = tileY - offset;
-	yUpper = tileY + offset;
-
-	for(i=xLower; i<xUpper; i++)
-	{
-		for(j=yLower; j<yUpper; j++)
-		{
-			/*
-				We must make sure that we don't attempt to colour a tile that isn't actually
-				on our grid - say when a light is on the periphery of the grid.
-			*/
-			if(i>gridMinX && i<gridMaxX && j>gridMinY && j<gridMaxY)
-			{
-		 		distToCorner = calcDistToTile(i,j,&psLight->position);
-				/* If we're inside the range of the light */
-				if(distToCorner<psLight->range)
-				{
-					/* Find how close we are to it */
-					percent = 100 - PERCENT(distToCorner,psLight->range);
-
-					xIndex = i - playerXTile;
-					yIndex = j - playerZTile;
-					colourTile(xIndex,yIndex,psLight->colour, (UBYTE)percent);
-				}
-			}
-		}
-	}
-}
-
-#endif
-
 void	processLight(LIGHT *psLight)
 {
 SDWORD	tileX,tileY;
@@ -568,7 +491,7 @@ UDWORD	percent;
 		{
 				distToCorner = calcDistToTile(i,j,&psLight->position);
 				/* If we're inside the range of the light */
-			 	if(distToCorner<(SDWORD)psLight->range)
+			 	if (distToCorner<(SDWORD)psLight->range)
 				{
 					/* Find how close we are to it */
 					percent = 100 - PERCENT(distToCorner,psLight->range);
@@ -576,11 +499,11 @@ UDWORD	percent;
 					yIndex = j - playerZTile;
 					// Might go off the grid for light ranges > one tile
 //					if(i<visibleXTiles && j<visibleYTiles && i>=0 && j>=0)
-					if(xIndex >= 0 && yIndex >= 0 &&
-                        xIndex < (SDWORD)visibleXTiles &&
-                        yIndex < (SDWORD)visibleYTiles)
+					if ( xIndex >= 0 && yIndex >= 0 &&
+					     xIndex < (SDWORD)visibleXTiles &&
+					     yIndex < (SDWORD)visibleYTiles )
 					{
-						colourTile(xIndex,yIndex,psLight->colour, (UBYTE)(2*percent));
+						colourTile(xIndex, yIndex, psLight->colour, (UBYTE)(2*percent));
 					}
 				}
 
