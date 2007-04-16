@@ -678,10 +678,9 @@ void screenDumpToDisk(const char* path) {
 		}
 	}
 
-	if (screendump_num == 0)
-	{
-		debug( LOG_ERROR, "screenDumpToDisk: no more file numbers available, we possibly have just had an integer overflow. That means the user has at least %u screenshots stored\n", (unsigned int)pow(2, CHAR_BIT * sizeof(unsigned int)) - 1);
-		return;
-	}
-	screendump_required = TRUE;
+	ASSERT( screendump_num != 0, "screenDumpToDisk: integer overflow; no more filenumbers available.\n", );
+
+	// If we have an integer overflow, we don't want to go about and overwrite files
+	if (screendump_num != 0)
+		screendump_required = TRUE;
 }
