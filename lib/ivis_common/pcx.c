@@ -51,7 +51,7 @@ static inline void PNGCleanup(png_infop *info_ptr, png_structp *png_ptr)
 		png_destroy_read_struct(png_ptr, NULL, NULL);
 }
 
-BOOL pie_PNGLoadMem(const char *pngimage, iTexture *s)
+BOOL pie_PNGLoadMem(const char *inputBuffer, size_t bufferSize, iTexture *s)
 {
 	unsigned int PNG_BYTES_TO_CHECK=4;
 	png_structp png_ptr = NULL;
@@ -59,11 +59,11 @@ BOOL pie_PNGLoadMem(const char *pngimage, iTexture *s)
 
 	wzpng_io_buf buf;
 
-	assert(pngimage != NULL);
-	buf.buffer = pngimage;
-	buf.length = 10000000;
+	assert(inputBuffer != NULL);
+	buf.buffer = inputBuffer;
+	buf.length = bufferSize;
 
-	if (png_sig_cmp((png_byte*)pngimage, (png_size_t)0, PNG_BYTES_TO_CHECK)) {
+	if (png_sig_cmp((png_byte*)inputBuffer, (png_size_t)0, PNG_BYTES_TO_CHECK)) {
 		debug(LOG_3D, "pie_PNGLoadMem: Did not recognize PNG header in buffer");
 		PNGCleanup(&info_ptr, &png_ptr);
 		return FALSE;

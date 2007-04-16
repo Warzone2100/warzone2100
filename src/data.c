@@ -746,7 +746,7 @@ BOOL dataIMGPAGELoad(char *pBuffer, UDWORD size, void **ppData)
 		return FALSE;
 	}
 
-	if (!pie_PNGLoadMem(pBuffer, psSprite))
+	if (!pie_PNGLoadMem(pBuffer, size, psSprite))
 	{
 		debug( LOG_ERROR, "IMGPAGE load failed" );
 		return FALSE;
@@ -771,7 +771,7 @@ static BOOL dataHWTERTILESLoad(char *pBuffer, UDWORD size, void **ppData)
 	if (bTilesPCXLoaded)
 	{
 		debug( LOG_TEXTURE, "Reloading terrain tiles\n" );
-		if(!pie_PNGLoadMem(pBuffer,&tilesPCX))
+		if(!pie_PNGLoadMem(pBuffer, size, &tilesPCX))
 		{
 			debug( LOG_ERROR, "HWTERTILES reload failed" );
 			return FALSE;
@@ -780,7 +780,7 @@ static BOOL dataHWTERTILESLoad(char *pBuffer, UDWORD size, void **ppData)
 	else
 	{
 		debug( LOG_TEXTURE, "Loading terrain tiles\n" );
-		if(!pie_PNGLoadMem(pBuffer,&tilesPCX))
+		if(!pie_PNGLoadMem(pBuffer, size, &tilesPCX))
 		{
 			debug( LOG_ERROR, "HWTERTILES load failed" );
 			return FALSE;
@@ -881,7 +881,7 @@ static BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 	{
 		// replace the old texture page with the new one
 		debug(LOG_TEXTURE, "bufferTexPageLoad: replacing %s with new texture %s", texpage, texfile);
-		id = pie_ReloadTexPage(texpage, pBuffer);
+		id = pie_ReloadTexPage(texpage, pBuffer, size);
 		ASSERT( id >=0, "pie_ReloadTexPage failed" );
 		*ppData = NULL;
 	}
@@ -908,7 +908,7 @@ static BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 			return FALSE;
 		}
 
-		if (!pie_PNGLoadMem(pBuffer, psSprite))
+		if (!pie_PNGLoadMem(pBuffer, size, psSprite))
 		{
 			return FALSE;
 		}

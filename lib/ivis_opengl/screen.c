@@ -455,9 +455,9 @@ void screen_SetBackDropFromFile(const char* filename)
 	{
 		iTexture imagePNG;
 		char * buffer = NULL;
-		unsigned int dummy = 0;
+		unsigned int bufferSize = 0;
 
-		if (loadFile( filename, &buffer, &dummy ) && pie_PNGLoadMem( buffer, &imagePNG ) )
+		if (loadFile( filename, &buffer, &bufferSize ) && pie_PNGLoadMem( buffer, bufferSize, &imagePNG ) )
 		{
 			if (~backDropTexture == 0)
 				glGenTextures(1, &backDropTexture);
@@ -678,7 +678,7 @@ void screenDumpToDisk(const char* path) {
 		}
 	}
 
-	ASSERT( screendump_num != 0, "screenDumpToDisk: integer overflow; no more filenumbers available.\n", );
+	ASSERT( screendump_num != 0, "screenDumpToDisk: integer overflow; no more filenumbers available.\n" );
 
 	// If we have an integer overflow, we don't want to go about and overwrite files
 	if (screendump_num != 0)

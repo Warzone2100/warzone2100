@@ -155,7 +155,7 @@ void pie_ChangeTexPage(int tex_index, iTexture* s, int type, BOOL bResource)
 	textures in a separate data structure _TEX_PAGE apart from the
 	normal resource system.
 **************************************************************************/
-int iV_GetTexture(char *filename)
+int iV_GetTexture(const char *filename)
 {
 	int i  = 0;
 
@@ -181,7 +181,7 @@ int iV_GetTexture(char *filename)
 	return -1;
 }
 
-int pie_ReloadTexPage(char *filename, char *pBuffer)
+int pie_ReloadTexPage(const char *filename, const char *pBuffer, size_t bufferSize)
 {
 	int i = iV_GetTexture(filename);
 
@@ -195,7 +195,7 @@ int pie_ReloadTexPage(char *filename, char *pBuffer)
 	{
 		free(_TEX_PAGE[i].tex.bmp);
 	}
-	pie_PNGLoadMem(pBuffer, &_TEX_PAGE[i].tex);
+	pie_PNGLoadMem(pBuffer, bufferSize, &_TEX_PAGE[i].tex);
 
 	return i;
 }
