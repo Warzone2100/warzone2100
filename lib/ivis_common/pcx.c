@@ -28,7 +28,7 @@
 
 typedef struct {
 	png_size_t length;
-	char* buffer;
+	const char* buffer;
 } wzpng_io_buf;
 
 static void wzpng_read_data(png_structp ctx, png_bytep area, png_size_t size)
@@ -43,21 +43,30 @@ static void wzpng_read_data(png_structp ctx, png_bytep area, png_size_t size)
 	}
 }
 
-BOOL pie_PNGLoadMem(char *pngimage, iTexture *s)
+static inline void PNGCleanup(png_infop *info_ptr, png_structp *png_ptr)
+{
+	if (*info_ptr != NULL)
+		png_destroy_info_struct(*png_ptr, info_ptr);
+	if (png_ptr)
+		png_destroy_read_struct(png_ptr, NULL, NULL);
+}
+
+BOOL pie_PNGLoadMem(const char *pngimage, iTexture *s)
 {
 	unsigned int PNG_BYTES_TO_CHECK=4;
 	png_structp png_ptr = NULL;
 	png_infop info_ptr = NULL;
 
-	wzpng_io_buf* buf = (wzpng_io_buf*)malloc(sizeof(wzpng_io_buf));
+	wzpng_io_buf buf;
 
 	assert(pngimage != NULL);
-	buf->buffer = pngimage;
-	buf->length = 10000000;
+	buf.buffer = pngimage;
+	buf.length = 10000000;
 
 	if (png_sig_cmp((png_byte*)pngimage, (png_size_t)0, PNG_BYTES_TO_CHECK)) {
 		debug(LOG_3D, "pie_PNGLoadMem: Did not recognize PNG header in buffer");
-		goto error;
+		PNGCleanup(&info_ptr, &png_ptr);
+		return FALSE;
 	}
 
 	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING,
@@ -65,25 +74,28 @@ BOOL pie_PNGLoadMem(char *pngimage, iTexture *s)
 
 	if (png_ptr == NULL) {
 		debug(LOG_3D, "pie_PNGLoadMem: Unable to create png struct");
-		goto error;
+		PNGCleanup(&info_ptr, &png_ptr);
+		return FALSE;
 	}
 
 	info_ptr = png_create_info_struct(png_ptr);
 
 	if (info_ptr == NULL) {
 		debug(LOG_3D, "pie_PNGLoadMem: Unable to create png info struct");
-		goto error;
+		PNGCleanup(&info_ptr, &png_ptr);
+		return FALSE;
 	}
 
 	if (setjmp(png_jmpbuf(png_ptr))) {
 		debug(LOG_3D, "pie_PNGLoadMem: Error decoding PNG data");
-		goto error;
+		PNGCleanup(&info_ptr, &png_ptr);
+		return FALSE;
 	} else {
 		int bit_depth, color_type, interlace_type;
 		png_uint_32 width, height;
 
 		/* Set up the input control */
-		png_set_read_fn(png_ptr, buf, wzpng_read_data);
+		png_set_read_fn(png_ptr, &buf, wzpng_read_data);
 
 		/* Read PNG header info */
 		png_read_info(png_ptr, info_ptr);
@@ -146,16 +158,6 @@ BOOL pie_PNGLoadMem(char *pngimage, iTexture *s)
 		}
 	}
 
-	if (info_ptr) png_destroy_info_struct(png_ptr, &info_ptr);
-	if (png_ptr) png_destroy_read_struct(&png_ptr, NULL, NULL);
-	free(buf);
-
+	PNGCleanup(&info_ptr, &png_ptr);
 	return TRUE;
-
-error:
-	if (info_ptr) png_destroy_info_struct(png_ptr, &info_ptr);
-	if (png_ptr) png_destroy_read_struct(&png_ptr, NULL, NULL);
-	free(buf);
-
-	return FALSE;
 }

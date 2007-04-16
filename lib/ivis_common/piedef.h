@@ -187,7 +187,7 @@ extern void SetBSPCameraPos(SDWORD x,SDWORD y,SDWORD z);
  * \param sprite Sprite to read into
  * \return TRUE on success, FALSE otherwise
  */
-BOOL pie_PNGLoadMem(char *pngimage, iTexture *sprite);
+BOOL pie_PNGLoadMem(const char *pngimage, iTexture *sprite);
 
 void SetBSPObjectRot(SDWORD Yaw, SDWORD Pitch);
 
