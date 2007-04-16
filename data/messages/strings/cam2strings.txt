@@ -67,7 +67,7 @@ CAM2_3_MSG3			"We have detected another convoy proceeding along the river."
 /* Cam2_3 Search and Destroy - briefing */
 CAM2_3_MSG4			"TRANSPORT MISSION: Search for and Destroy Convoy"
 CAM2_3_MSG5			"You are to intercept the convoy and recover its cargo."
-CAM2_3_MSG6			"Enemy VTOL's are likely to be flying close escort."
+CAM2_3_MSG6			"Enemy VTOLs are likely to be flying close escort."
 
 /* Cam2_4 Rescue civilians from containment camp - player ident */
 CAM2_4_MSG			"TRANSPORT MISSION: Rescue civilians from Containment Camp"
@@ -82,17 +82,17 @@ CAM2_4_MSG5			"Then destroy the camp."
 CAM2_C_MSG1			"BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
 CAM2_C_MSG2			"Analysis of flight paths indicate that The Collective's VTOLs originate from here."
 
-/* Cam2_C Destroy Enemy Air Base & Reciver VTOLs - Breifing part1*/
+/* Cam2_C Destroy Enemy Air Base & Recover VTOLs - Briefing part1*/
 CAM2_C_MSG3			"BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
 CAM2_C_MSG4			"The location of the enemy airbase is here; this is your primary objective."
 CAM2_C_MSG5			"Eradicate all Collective forces and recover all artifacts."
 
-/* Cam2_C Destroy Enemy Air Base & Reciver VTOLs - Player Ident part2*/
+/* Cam2_C Destroy Enemy Air Base & Recover VTOLs - Player Ident part2*/
 CAM2_C_MSG6			"SECONDARY MISSION: Destroy or Drive Off Enemy Transport"
 CAM2_C_MSG7			"The Collective are rounding up all civilians in this area."
 CAM2_C_MSG8			"They are then flying them to an unknown location."
 
-/* Cam2_C Destroy Enemy Air Base & Reciver VTOLs - Breifing part2*/
+/* Cam2_C Destroy Enemy Air Base & Recover VTOLs - Briefing part2*/
 CAM2_C_MSG9			"SECONDARY MISSION: Destroy or Drive Off Enemy Transport"
 CAM2_C_MSG10			"Destroy or drive off The Collective's transport."
 CAM2_C_MSG11			"Rescue as many civilians as possible."
