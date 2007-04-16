@@ -593,6 +593,7 @@ msgid "Unable to locate any Commanders!"
 msgstr ""
 
 #: src/research.c:2040
+#, c-format
 msgid "Research completed: %s"
 msgstr "Onderzoek Voltooid: %s"
 
