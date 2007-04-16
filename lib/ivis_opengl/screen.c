@@ -49,6 +49,12 @@ extern "C" {
 }
 #endif
 
+#if !defined(__cplusplus) && !defined(CHAR_BIT)
+// A char is _always_ 1 byte large,
+// assume bytes are 8 bits large
+# define CHAR_BIT 8
+#endif
+
 #include "lib/framework/frameint.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/pieblitfunc.h"
@@ -72,8 +78,7 @@ BOOL    bUpload = FALSE;
 //fog
 SDWORD	fogColour = 0;
 
-static char screendump_filename[255];
-static unsigned int screendump_num = 0;
+static char screendump_filename[MAX_PATH];
 static BOOL screendump_required = FALSE;
 
 static UDWORD	backDropWidth = BACKDROP_WIDTH;
@@ -407,10 +412,10 @@ static GLuint image_create_texture(char* filename) {
 #endif
 //=====================================================================
 
-void screen_SetBackDropFromFile(char* filename)
+void screen_SetBackDropFromFile(const char* filename)
 {
 	// HACK : We should use a resource handler here!
-	char *extension = strrchr(filename, '.');// determine the filetype
+	const char *extension = strrchr(filename, '.');// determine the filetype
 
 	if(!extension)
 	{
@@ -494,7 +499,7 @@ BOOL screen_GetBackDrop(void)
 //******************************************************************
 //slight hack to display maps (or whatever) in background.
 //bitmap MUST be (BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT) for now.
-void screen_Upload(char *newBackDropBmp)
+void screen_Upload(const char *newBackDropBmp)
 {
 	if(newBackDropBmp != NULL)
 	{
@@ -580,36 +585,16 @@ METHODDEF(void) term_destination(j_compress_ptr cinfo) {
 	free(dm->buffer);
 }
 
-void screenDoDumpToDiskIfRequired(void)
+static inline void screen_DumpJPEG(PHYSFS_file* fileHandle, const char* inputBuffer, unsigned int width, unsigned int height, unsigned int bitdepth)
 {
-	static unsigned char* buffer = NULL;
-	static unsigned int buffer_size = 0;
 	struct jpeg_compress_struct cinfo;
 	struct jpeg_error_mgr jerr;
 	my_jpeg_destination_mgr jdest;
 	JSAMPROW row_pointer[1];
-	unsigned int row_stride;
 
-	if (!screendump_required) return;
-
-	row_stride = screen->w * 3;
-
-	if (row_stride * screen->h > buffer_size) {
-		if (buffer != NULL) {
-			free(buffer);
-		}
-		buffer_size = row_stride * screen->h;
-		buffer = (unsigned char*)malloc(buffer_size);
-	}
-	glReadPixels(0, 0, screen->w, screen->h, GL_RGB, GL_UNSIGNED_BYTE, buffer);
-
-	screendump_required = FALSE;
-
-	if ((jdest.file = PHYSFS_openWrite(screendump_filename)) == NULL) {
-		return;
-	}
-
-	debug( LOG_3D, "Saving screenshot %s\n", screendump_filename );
+	unsigned int row_stride = width * bitdepth / 8;
+	
+	jdest.file = fileHandle;
 
 	cinfo.err = jpeg_std_error(&jerr);
 	jpeg_create_compress(&cinfo);
@@ -618,8 +603,8 @@ void screenDoDumpToDiskIfRequired(void)
 	jdest.pub.empty_output_buffer = empty_output_buffer;
 	jdest.pub.term_destination = term_destination;
 
-	cinfo.image_width = screen->w;
-	cinfo.image_height = screen->h;
+	cinfo.image_width = width;
+	cinfo.image_height = height;
 	cinfo.input_components = 3;
 	cinfo.in_color_space = JCS_RGB;
 
@@ -629,33 +614,74 @@ void screenDoDumpToDiskIfRequired(void)
 	jpeg_start_compress(&cinfo, TRUE);
 
 	while (cinfo.next_scanline < cinfo.image_height) {
-		row_pointer[0] = & buffer[(screen->h-cinfo.next_scanline-1) * row_stride];
+		// Yes, we're casting constness away here, but libjpeg apparently 
+		// doesn't know about the existence of the keyword 'const'.
+		row_pointer[0] = (char*)&inputBuffer[(height - cinfo.next_scanline - 1) * row_stride];
 		jpeg_write_scanlines(&cinfo, row_pointer, 1);
 	}
 
 	jpeg_finish_compress(&cinfo);
-	PHYSFS_close(jdest.file);
 	jpeg_destroy_compress(&cinfo);
 }
 
-char* screenDumpToDisk(char* path) {
-	while (1) {
-		sprintf(screendump_filename, "%s%swz2100_shot_%03i.jpg", path, "/", ++screendump_num);
+static const unsigned char* screen_DumpInBuffer(unsigned int width, unsigned int height, unsigned int bitdepth)
+{
+	static unsigned char* buffer = NULL;
+	static unsigned int buffer_size = 0;
+
+	unsigned int row_stride = width * bitdepth / 8;
+
+	if (row_stride * height > buffer_size) {
+		if (buffer != NULL) {
+			free(buffer);
+		}
+		buffer_size = row_stride * height;
+		buffer = (unsigned char*)malloc(buffer_size);
+	}
+	glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, buffer);
+
+	return buffer;
+}
+
+void screenDoDumpToDiskIfRequired(void)
+{
+	const char* fileName = screendump_filename;
+	const char* inputBuffer = NULL;
+	PHYSFS_file* fileHandle;
+
+	if (!screendump_required) return;
+
+	fileHandle = PHYSFS_openWrite(fileName);
+	if (fileHandle == NULL)
+	{
+		return;
+	}
+	debug( LOG_3D, "Saving screenshot %s\n", fileName );
+
+	inputBuffer = screen_DumpInBuffer(screen->w, screen->h, 24);
+
+	screen_DumpJPEG(fileHandle, inputBuffer, screen->w, screen->h, 24);
+
+	screendump_required = FALSE;
+	PHYSFS_close(fileHandle);
+}
+
+void screenDumpToDisk(const char* path) {
+	static unsigned int screendump_num = 0;
+
+	while (++screendump_num != 0) {
+		// We can safely use '/' as path separator here since PHYSFS uses that as its default separator
+		snprintf(screendump_filename, MAX_PATH, "%s/wz2100_shot_%03i.jpg", path, screendump_num);
 		if (!PHYSFS_exists(screendump_filename)) {
+			// Found a usable filename, so we'll stop searching.
 			break;
 		}
 	}
 
+	if (screendump_num == 0)
+	{
+		debug( LOG_ERROR, "screenDumpToDisk: no more file numbers available, we possibly have just had an integer overflow. That means the user has at least %u screenshots stored\n", (unsigned int)pow(2, CHAR_BIT * sizeof(unsigned int)) - 1);
+		return;
+	}
 	screendump_required = TRUE;
-
-	return screendump_filename;
 }
-
-/* Output text to the display screen at location x,y.
- * The remaining arguments are as printf.
- * Used only in now disabled code. Keep for now, though. - Per
- *
-void screenTextOut(UDWORD x, UDWORD y, const char *pFormat, ...)
-{
-}
- */

@@ -45,12 +45,6 @@ void *screenGetSurface(void); /* Return a pointer to the back buffer surface */
 /* Set the colour for text */
 void screenSetTextColour(UBYTE red, UBYTE green, UBYTE blue);
 
-/* Output text to the display screen at location x,y. The remaining arguments are as printf. 
- * Only used in disabled code for now, but do not delete yet. - Per */
-// void screenTextOut(UDWORD x, UDWORD y, const char *pFormat, ...);
-
-/* ------------------------------------------------------------------------------------------- */
-
 /* Image structure */
 
 typedef struct {
@@ -70,14 +64,14 @@ BOOL image_load_from_jpg(pie_image* image, const char* filename);
 
 /* backDrop */
 extern void screen_SetBackDrop(UWORD* newBackDropBmp, UDWORD width, UDWORD height);
-extern void screen_SetBackDropFromFile(char* filename);
+extern void screen_SetBackDropFromFile(const char* filename);
 extern void screen_StopBackDrop(void);
 extern void screen_RestartBackDrop(void);
 extern BOOL screen_GetBackDrop(void);
-extern void screen_Upload(char *newBackDropBmp);
+extern void screen_Upload(const char *newBackDropBmp);
 
 /* screendump */
-char* screenDumpToDisk(char* path);
+void screenDumpToDisk(const char* path);
 
 /* Toggle the display between full screen or windowed */
 extern void	screenToggleMode(void);
