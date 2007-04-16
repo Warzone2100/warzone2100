@@ -20,61 +20,75 @@
 #include <png.h>
 #include <setjmp.h>
 #include <string.h>
+#include <physfs.h>
 
 #include "lib/framework/frame.h"
 #include "ivisdef.h"
 
 #include "ivispatch.h"
 
-typedef struct {
-	png_size_t length;
-	const char* buffer;
-} wzpng_io_buf;
+static const unsigned int PNG_BYTES_TO_CHECK = 4;
 
 static void wzpng_read_data(png_structp ctx, png_bytep area, png_size_t size)
 {
 
-	wzpng_io_buf* buf = (wzpng_io_buf*)png_get_io_ptr(ctx);
+	PHYSFS_file* fileHandle = (PHYSFS_file*)png_get_io_ptr(ctx);
 
-	if (size <= buf->length) {
-		memcpy(area, buf->buffer, size);
-		buf->buffer += size;
-		buf->length -= size;
-	}
+	PHYSFS_read(fileHandle, area, 1, size);
 }
 
-static inline void PNGCleanup(png_infop *info_ptr, png_structp *png_ptr)
+static inline void PNGCleanup(png_infop *info_ptr, png_structp *png_ptr, PHYSFS_file* fileHandle)
 {
 	if (*info_ptr != NULL)
 		png_destroy_info_struct(*png_ptr, info_ptr);
 	if (*png_ptr != NULL)
 		png_destroy_read_struct(png_ptr, NULL, NULL);
+	if (fileHandle != NULL)
+		PHYSFS_close(fileHandle);
 }
 
-BOOL pie_PNGLoadMem(const char *inputBuffer, size_t bufferSize, iTexture *s)
+BOOL pie_PNGLoadFile(const char *fileName, iTexture *s)
 {
-	unsigned int PNG_BYTES_TO_CHECK=4;
 	png_structp png_ptr = NULL;
 	png_infop info_ptr = NULL;
 
-	wzpng_io_buf buf;
+	char PNGheader[PNG_BYTES_TO_CHECK];
+	PHYSFS_sint64 readSize;
 
-	assert(inputBuffer != NULL);
-	buf.buffer = inputBuffer;
-	buf.length = bufferSize;
-
-	if (png_sig_cmp((png_byte*)inputBuffer, (png_size_t)0, PNG_BYTES_TO_CHECK)) {
-		debug(LOG_3D, "pie_PNGLoadMem: Did not recognize PNG header in buffer");
-		PNGCleanup(&info_ptr, &png_ptr);
+	// Open file
+	PHYSFS_file* fileHandle = PHYSFS_openRead(fileName);
+	if (fileHandle == NULL)
+	{
+		debug(LOG_ERROR, "pie_PNGLoadFile: PHYSFS_openRead failed with error: %s\n", PHYSFS_getLastError());
+		PNGCleanup(&info_ptr, &png_ptr, fileHandle);
 		return FALSE;
 	}
 
-	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING,
-					 NULL, NULL, NULL);
+	// Read PNG header from file
+	readSize = PHYSFS_read(fileHandle, PNGheader, 1, PNG_BYTES_TO_CHECK);
+	if (readSize < PNG_BYTES_TO_CHECK)
+	{
+		debug(LOG_ERROR, "pie_PNGLoadFile: PHYSFS_read failed with error: %s\n", PHYSFS_getLastError());
+		PNGCleanup(&info_ptr, &png_ptr, fileHandle);
+		return FALSE;
+	}
+
+	// Verify the PNG header to be correct
+	if (png_sig_cmp(PNGheader, 0, PNG_BYTES_TO_CHECK)) {
+		debug(LOG_3D, "pie_PNGLoadMem: Did not recognize PNG header in buffer");
+		PNGCleanup(&info_ptr, &png_ptr, fileHandle);
+		return FALSE;
+	}
+
+	// Seek back to start of file, libpng needs this
+	PHYSFS_seek(fileHandle, 0);
+
+
+	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 
 	if (png_ptr == NULL) {
 		debug(LOG_3D, "pie_PNGLoadMem: Unable to create png struct");
-		PNGCleanup(&info_ptr, &png_ptr);
+		PNGCleanup(&info_ptr, &png_ptr, fileHandle);
 		return FALSE;
 	}
 
@@ -82,20 +96,22 @@ BOOL pie_PNGLoadMem(const char *inputBuffer, size_t bufferSize, iTexture *s)
 
 	if (info_ptr == NULL) {
 		debug(LOG_3D, "pie_PNGLoadMem: Unable to create png info struct");
-		PNGCleanup(&info_ptr, &png_ptr);
+		PNGCleanup(&info_ptr, &png_ptr, fileHandle);
 		return FALSE;
 	}
 
+	// Set libpng's failure jump position to the if branch,
+	// setjmp evaluates to false so the else branch will be executed at first
 	if (setjmp(png_jmpbuf(png_ptr))) {
 		debug(LOG_3D, "pie_PNGLoadMem: Error decoding PNG data");
-		PNGCleanup(&info_ptr, &png_ptr);
+		PNGCleanup(&info_ptr, &png_ptr, fileHandle);
 		return FALSE;
 	} else {
 		int bit_depth, color_type, interlace_type;
 		png_uint_32 width, height;
 
 		/* Set up the input control */
-		png_set_read_fn(png_ptr, &buf, wzpng_read_data);
+		png_set_read_fn(png_ptr, fileHandle, wzpng_read_data);
 
 		/* Read PNG header info */
 		png_read_info(png_ptr, info_ptr);
@@ -158,6 +174,6 @@ BOOL pie_PNGLoadMem(const char *inputBuffer, size_t bufferSize, iTexture *s)
 		}
 	}
 
-	PNGCleanup(&info_ptr, &png_ptr);
+	PNGCleanup(&info_ptr, &png_ptr, fileHandle);
 	return TRUE;
 }

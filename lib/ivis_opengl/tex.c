@@ -181,21 +181,21 @@ int iV_GetTexture(const char *filename)
 	return -1;
 }
 
-int pie_ReloadTexPage(const char *filename, const char *pBuffer, size_t bufferSize)
+int pie_ReloadTexPage(const char *texpageName, const char *fileName)
 {
-	int i = iV_GetTexture(filename);
+	int i = iV_GetTexture(texpageName);
 
 	if (i == -1)
 	{
 		return -1;
 	}
-	debug(LOG_TEXTURE, "Reloading texture %s from index %d, max is %d", filename, i, _TEX_INDEX);
+	debug(LOG_TEXTURE, "Reloading texture %s from index %d, max is %d", texpageName, i, _TEX_INDEX);
 
 	if (_TEX_PAGE[i].tex.bmp)
 	{
 		free(_TEX_PAGE[i].tex.bmp);
 	}
-	pie_PNGLoadMem(pBuffer, bufferSize, &_TEX_PAGE[i].tex);
+	pie_PNGLoadFile(fileName, &_TEX_PAGE[i].tex);
 
 	return i;
 }

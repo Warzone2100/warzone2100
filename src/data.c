@@ -739,14 +739,14 @@ static BOOL dataIMDBufferLoad(char *pBuffer, UDWORD size, void **ppData)
 }
 
 
-BOOL dataIMGPAGELoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL dataIMGPAGELoad(const char *fileName, void **ppData)
 {
 	iTexture *psSprite = (iTexture*) malloc(sizeof(iTexture));
 	if (!psSprite)	{
 		return FALSE;
 	}
 
-	if (!pie_PNGLoadMem(pBuffer, size, psSprite))
+	if (!pie_PNGLoadFile(fileName, psSprite))
 	{
 		debug( LOG_ERROR, "IMGPAGE load failed" );
 		return FALSE;
@@ -765,13 +765,13 @@ void dataIMGPAGERelease(void *pData)
 }
 
 // Tertiles loader. This version for hardware renderer.
-static BOOL dataHWTERTILESLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL dataHWTERTILESLoad(const char *fileName, void **ppData)
 {
 	// tile loader.
 	if (bTilesPCXLoaded)
 	{
 		debug( LOG_TEXTURE, "Reloading terrain tiles\n" );
-		if(!pie_PNGLoadMem(pBuffer, size, &tilesPCX))
+		if(!pie_PNGLoadFile(fileName, &tilesPCX))
 		{
 			debug( LOG_ERROR, "HWTERTILES reload failed" );
 			return FALSE;
@@ -780,7 +780,7 @@ static BOOL dataHWTERTILESLoad(char *pBuffer, UDWORD size, void **ppData)
 	else
 	{
 		debug( LOG_TEXTURE, "Loading terrain tiles\n" );
-		if(!pie_PNGLoadMem(pBuffer, size, &tilesPCX))
+		if(!pie_PNGLoadFile(fileName, &tilesPCX))
 		{
 			debug( LOG_ERROR, "HWTERTILES load failed" );
 			return FALSE;
@@ -848,7 +848,7 @@ static void dataIMGRelease(void *pData)
 
 
 /* Load a texturepage into memory */
-static BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL fileTexPageLoad(const char *fileName, void **ppData)
 {
 	char		texfile[255];
 	char		texpage[255];
@@ -880,8 +880,8 @@ static BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 	if (resPresent("TEXPAGE", texpage))
 	{
 		// replace the old texture page with the new one
-		debug(LOG_TEXTURE, "bufferTexPageLoad: replacing %s with new texture %s", texpage, texfile);
-		id = pie_ReloadTexPage(texpage, pBuffer, size);
+		debug(LOG_TEXTURE, "fileTexPageLoad: replacing %s with new texture %s", texpage, texfile);
+		id = pie_ReloadTexPage(texpage, fileName);
 		ASSERT( id >=0, "pie_ReloadTexPage failed" );
 		*ppData = NULL;
 	}
@@ -891,7 +891,7 @@ static BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 		iPalette	*psPal;
 		iTexture	*psSprite;
 
-		debug(LOG_TEXTURE, "bufferTexPageLoad: adding page %s with texture %s", texpage, texfile);
+		debug(LOG_TEXTURE, "fileTexPageLoad: adding page %s with texture %s", texpage, texfile);
 
 		NewTexturePage = (TEXTUREPAGE*)malloc(sizeof(TEXTUREPAGE));
 		if (!NewTexturePage) return FALSE;
@@ -908,7 +908,7 @@ static BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 			return FALSE;
 		}
 
-		if (!pie_PNGLoadMem(pBuffer, size, psSprite))
+		if (!pie_PNGLoadFile(fileName, psSprite))
 		{
 			return FALSE;
 		}
@@ -1179,11 +1179,8 @@ static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
 	{"SCRIPT", dataScriptLoad, (RES_FREE)scriptFreeCode},
 	{"SCRIPTVAL", dataScriptLoadVals, NULL},
 	{"STR_RES", dataStrResLoad, dataStrResRelease},
-	{"IMGPAGE", dataIMGPAGELoad, dataIMGPAGERelease},
 	{"TERTILES", NULL, NULL},                                      // This version was used when running with the software renderer.
-	{"HWTERTILES", dataHWTERTILESLoad, dataHWTERTILESRelease},     // freed by 3d shutdow},// Tertiles Files. This version used when running with hardware renderer.
 	{"IMG", dataIMGLoad, dataIMGRelease},
-	{"TEXPAGE", bufferTexPageLoad, dataTexPageRelease},
 	{"IMD", dataIMDBufferLoad, (RES_FREE)iV_IMDRelease},
 };
 
@@ -1200,6 +1197,9 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"AUDIOCFG", dataAudioCfgLoad, NULL},
 	{"ANI", dataAnimLoad, dataAnimRelease},
 	{"ANIMCFG", dataAnimCfgLoad, NULL},
+	{"IMGPAGE", dataIMGPAGELoad, dataIMGPAGERelease},
+	{"HWTERTILES", dataHWTERTILESLoad, dataHWTERTILESRelease},     // freed by 3d shutdow},// Tertiles Files. This version used when running with hardware renderer.
+	{"TEXPAGE", fileTexPageLoad, dataTexPageRelease},
 };
 
 /* Pass all the data loading functions to the framework library */

@@ -181,14 +181,13 @@ extern void SetBSPObjectPos(SDWORD x,SDWORD y,SDWORD z);
 extern void SetBSPCameraPos(SDWORD x,SDWORD y,SDWORD z);
 
 /*!
- * Load a PNG from buffer pngimage into sprite
+ * Load a PNG from file into sprite
  *
- * \param inputBuffer Buffer to load from
- * \param bufferSize size of buffer
+ * \param fileName input file to load from
  * \param sprite Sprite to read into
  * \return TRUE on success, FALSE otherwise
  */
-BOOL pie_PNGLoadMem(const char *inputBuffer, size_t bufferSize, iTexture *sprite);
+BOOL pie_PNGLoadFile(const char *fileName, iTexture *s);
 
 void SetBSPObjectRot(SDWORD Yaw, SDWORD Pitch);
 

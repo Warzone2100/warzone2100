@@ -454,10 +454,8 @@ void screen_SetBackDropFromFile(const char* filename)
 	else if( strcmp(extension,".png") == 0 )
 	{
 		iTexture imagePNG;
-		char * buffer = NULL;
-		unsigned int bufferSize = 0;
 
-		if (loadFile( filename, &buffer, &bufferSize ) && pie_PNGLoadMem( buffer, bufferSize, &imagePNG ) )
+		if (pie_PNGLoadFile( filename, &imagePNG ) )
 		{
 			if (~backDropTexture == 0)
 				glGenTextures(1, &backDropTexture);
@@ -474,7 +472,6 @@ void screen_SetBackDropFromFile(const char* filename)
 
 			free(imagePNG.bmp);
 		}
-		free(buffer);
 		return;
 	}
 	else
