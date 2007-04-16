@@ -221,10 +221,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\ani.c"
-				>
-			</File>
-			<File
 				RelativePath="..\lib\gamelib\anim.c"
 				>
 			</File>
@@ -253,7 +249,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\audio_id.c"
+				RelativePath="..\lib\sound\audio_id.c"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\sound\audio_id.h"
 				>
 			</File>
 			<File
@@ -273,10 +273,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\framework\block.c"
-				>
-			</File>
-			<File
 				RelativePath="..\src\bridge.c"
 				>
 			</File>
@@ -286,10 +282,6 @@
 			</File>
 			<File
 				RelativePath="..\src\bucket3d.c"
-				>
-			</File>
-			<File
-				RelativePath="..\src\buildpos.c"
 				>
 			</File>
 			<File
@@ -609,10 +601,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\framework\mem.c"
-				>
-			</File>
-			<File
 				RelativePath="..\src\message.c"
 				>
 			</File>
@@ -622,10 +610,6 @@
 			</File>
 			<File
 				RelativePath="..\src\mission.c"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\mono.c"
 				>
 			</File>
 			<File
@@ -799,19 +783,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\powercrypt.c"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\gamelib\pqueue.c"
-				>
-			</File>
-			<File
 				RelativePath="..\src\projectile.c"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\gamelib\ptrlist.c"
 				>
 			</File>
 			<File
@@ -1033,15 +1005,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\aidef.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\aiexperience.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\gamelib\ani.h"
 				>
 			</File>
 			<File
@@ -1077,10 +1041,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\audio_id.h"
-				>
-			</File>
-			<File
 				RelativePath=".\audp_parser.tab.h"
 				>
 			</File>
@@ -1097,10 +1057,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\framework\block.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\bridge.h"
 				>
 			</File>
@@ -1114,10 +1070,6 @@
 			</File>
 			<File
 				RelativePath="..\src\bucket3d.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\buildpos.h"
 				>
 			</File>
 			<File
@@ -1301,10 +1253,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\framework\font.h"
-				>
-			</File>
-			<File
 				RelativePath="..\lib\widget\form.h"
 				>
 			</File>
@@ -1357,10 +1305,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\gamedefs.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\gateway.h"
 				>
 			</File>
@@ -1370,10 +1314,6 @@
 			</File>
 			<File
 				RelativePath="..\src\gatewayroute.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\ivis_common\geo.h"
 				>
 			</File>
 			<File
@@ -1517,14 +1457,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\framework\mem.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\memint.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\message.h"
 				>
 			</File>
@@ -1550,10 +1482,6 @@
 			</File>
 			<File
 				RelativePath="..\src\modding.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\mono.h"
 				>
 			</File>
 			<File
@@ -1697,23 +1625,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\powercrypt.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\gamelib\pqueue.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\gamelib\priority.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\projectile.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\gamelib\ptrlist.h"
 				>
 			</File>
 			<File
