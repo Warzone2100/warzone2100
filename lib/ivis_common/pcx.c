@@ -52,7 +52,7 @@ BOOL pie_PNGLoadFile(const char *fileName, iTexture *s)
 	png_structp png_ptr = NULL;
 	png_infop info_ptr = NULL;
 
-	char PNGheader[PNG_BYTES_TO_CHECK];
+	unsigned char PNGheader[PNG_BYTES_TO_CHECK];
 	PHYSFS_sint64 readSize;
 
 	// Open file
