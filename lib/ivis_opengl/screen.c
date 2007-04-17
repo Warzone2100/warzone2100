@@ -33,7 +33,6 @@
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
-#include <setjmp.h>
 #include <physfs.h>
 
 #ifdef __cplusplus
