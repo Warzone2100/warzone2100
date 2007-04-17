@@ -27,7 +27,7 @@
 
 #include "ivispatch.h"
 
-static const unsigned int PNG_BYTES_TO_CHECK = 4;
+static const size_t PNG_BYTES_TO_CHECK = 4;
 
 static void wzpng_read_data(png_structp ctx, png_bytep area, png_size_t size)
 {

@@ -543,7 +543,8 @@ void screenToggleMode(void)
 	(void) SDL_WM_ToggleFullScreen(screen);
 }
 
-#define BUFFER_SIZE 4096
+// JPEG callbacks
+static const size_t JPEG_bufferSize = 4096;
 
 typedef struct {
 	struct jpeg_destination_mgr pub;
@@ -556,20 +557,20 @@ METHODDEF(void) init_destination(j_compress_ptr cinfo)
 	my_jpeg_destination_mgr* dm = (my_jpeg_destination_mgr*)(cinfo->dest);
 
 	/* Allocate the output buffer --- it will be released when done with image */
-	dm->buffer = (JOCTET *)malloc(BUFFER_SIZE*sizeof(JOCTET));
+	dm->buffer = (JOCTET *)malloc(JPEG_bufferSize * sizeof(JOCTET));
 
 	dm->pub.next_output_byte = dm->buffer;
-	dm->pub.free_in_buffer = BUFFER_SIZE;
+	dm->pub.free_in_buffer = JPEG_bufferSize;
 }
 
 METHODDEF(boolean) empty_output_buffer(j_compress_ptr cinfo)
 {
 	my_jpeg_destination_mgr* dm = (my_jpeg_destination_mgr*)cinfo->dest;
 
-	PHYSFS_write(dm->file, dm->buffer, BUFFER_SIZE, 1);
+	PHYSFS_write(dm->file, dm->buffer, JPEG_bufferSize, 1);
 
 	dm->pub.next_output_byte = dm->buffer;
-	dm->pub.free_in_buffer = BUFFER_SIZE;
+	dm->pub.free_in_buffer = JPEG_bufferSize;
 
   return TRUE;
 }
@@ -577,12 +578,14 @@ METHODDEF(boolean) empty_output_buffer(j_compress_ptr cinfo)
 METHODDEF(void) term_destination(j_compress_ptr cinfo) {
 	my_jpeg_destination_mgr* dm = (my_jpeg_destination_mgr*)cinfo->dest;
 
-	PHYSFS_write(dm->file, dm->buffer, BUFFER_SIZE-dm->pub.free_in_buffer, 1);
+	PHYSFS_write(dm->file, dm->buffer, JPEG_bufferSize - dm->pub.free_in_buffer, 1);
 
 	free(dm->buffer);
 }
 
-static inline void screen_DumpJPEG(PHYSFS_file* fileHandle, const char* inputBuffer, unsigned int width, unsigned int height, unsigned int bitdepth)
+// End of JPEG callbacks
+
+static inline void screen_DumpJPEG(PHYSFS_file* fileHandle, const unsigned char* inputBuffer, unsigned int width, unsigned int height, unsigned int bitdepth)
 {
 	struct jpeg_compress_struct cinfo;
 	struct jpeg_error_mgr jerr;
@@ -613,7 +616,7 @@ static inline void screen_DumpJPEG(PHYSFS_file* fileHandle, const char* inputBuf
 	while (cinfo.next_scanline < cinfo.image_height) {
 		// Yes, we're casting constness away here, but libjpeg apparently 
 		// doesn't know about the existence of the keyword 'const'.
-		row_pointer[0] = (char*)&inputBuffer[(height - cinfo.next_scanline - 1) * row_stride];
+		row_pointer[0] = (unsigned char*)&inputBuffer[(height - cinfo.next_scanline - 1) * row_stride];
 		jpeg_write_scanlines(&cinfo, row_pointer, 1);
 	}
 
@@ -643,7 +646,7 @@ static const unsigned char* screen_DumpInBuffer(unsigned int width, unsigned int
 void screenDoDumpToDiskIfRequired(void)
 {
 	const char* fileName = screendump_filename;
-	const char* inputBuffer = NULL;
+	const unsigned char* inputBuffer = NULL;
 	PHYSFS_file* fileHandle;
 
 	if (!screendump_required) return;
@@ -651,6 +654,7 @@ void screenDoDumpToDiskIfRequired(void)
 	fileHandle = PHYSFS_openWrite(fileName);
 	if (fileHandle == NULL)
 	{
+		debug(LOG_ERROR, "screenDoDumpToDiskIfRequired: PHYSFS_openWrite failed (while openening file %s) with error: %s\n", fileName, PHYSFS_getLastError());
 		return;
 	}
 	debug( LOG_3D, "Saving screenshot %s\n", fileName );
