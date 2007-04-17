@@ -253,10 +253,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\sound\audio_id.h"
-				>
-			</File>
-			<File
 				RelativePath=".\audp_lexer.lex.c"
 				>
 			</File>
@@ -1038,6 +1034,10 @@
 			</File>
 			<File
 				RelativePath="..\lib\sound\audio.h"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\sound\audio_id.h"
 				>
 			</File>
 			<File
