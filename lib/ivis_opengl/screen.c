@@ -49,6 +49,8 @@ extern "C" {
 }
 #endif
 
+#include <png.h>
+
 #if !defined(__cplusplus) && !defined(CHAR_BIT)
 // A char is _always_ 1 byte large,
 // assume bytes are 8 bits large
@@ -543,6 +545,10 @@ void screenToggleMode(void)
 	(void) SDL_WM_ToggleFullScreen(screen);
 }
 
+// Screenshot code goes below this
+static const unsigned int channelBitdepth = 8;
+static const unsigned int channelsPerPixel = 3;
+
 // JPEG callbacks
 static const size_t JPEG_bufferSize = 4096;
 
@@ -585,14 +591,14 @@ METHODDEF(void) term_destination(j_compress_ptr cinfo) {
 
 // End of JPEG callbacks
 
-static inline void screen_DumpJPEG(PHYSFS_file* fileHandle, const unsigned char* inputBuffer, unsigned int width, unsigned int height, unsigned int bitdepth)
+static inline void screen_DumpJPEG(PHYSFS_file* fileHandle, const unsigned char* inputBuffer, unsigned int width, unsigned int height, unsigned int channels)
 {
 	struct jpeg_compress_struct cinfo;
 	struct jpeg_error_mgr jerr;
 	my_jpeg_destination_mgr jdest;
 	JSAMPROW row_pointer[1];
 
-	unsigned int row_stride = width * bitdepth / 8;
+	unsigned int row_stride = width * channels;
 	
 	jdest.file = fileHandle;
 
@@ -624,12 +630,126 @@ static inline void screen_DumpJPEG(PHYSFS_file* fileHandle, const unsigned char*
 	jpeg_destroy_compress(&cinfo);
 }
 
-static const unsigned char* screen_DumpInBuffer(unsigned int width, unsigned int height, unsigned int bitdepth)
+// PNG callbacks
+static void wzpng_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
+{
+	PHYSFS_file* fileHandle = (PHYSFS_file*)png_get_io_ptr(png_ptr);
+
+	PHYSFS_write(fileHandle, data, length, 1);
+}
+
+static void wzpng_flush_data(png_structp png_ptr)
+{
+	PHYSFS_file* fileHandle = (PHYSFS_file*)png_get_io_ptr(png_ptr);
+	
+	PHYSFS_flush(fileHandle);
+}
+
+// End of PNG callbacks
+
+static inline void PNGCleanup(png_infop *info_ptr, png_structp *png_ptr)
+{
+	if (*info_ptr != NULL)
+		png_destroy_info_struct(*png_ptr, info_ptr);
+	if (*png_ptr != NULL)
+		png_destroy_read_struct(png_ptr, NULL, NULL);
+}
+
+static inline void screen_DumpPNG(PHYSFS_file* fileHandle, const unsigned char* inputBuffer, unsigned int width, unsigned int height, unsigned int channels)
+{
+	png_infop info_ptr = NULL;
+	png_structp png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+
+	if (png_ptr == NULL)
+	{
+		debug(LOG_ERROR, "screen_DumpPNG: Unable to create png struct\n");
+		return PNGCleanup(&info_ptr, &png_ptr);
+	}
+
+	info_ptr = png_create_info_struct(png_ptr);
+
+	if (info_ptr == NULL)
+	{
+		debug(LOG_ERROR, "screen_DumpPNG: Unable to create png info struct\n");
+		return PNGCleanup(&info_ptr, &png_ptr);
+	}
+
+	// If libpng encounters an error, it will jump into this if-branch
+	if (setjmp(png_jmpbuf(png_ptr)))
+	{
+		debug(LOG_ERROR, "screen_DumpPNG: Error encoding PNG data\n");
+	}
+	else
+	{
+		unsigned int currentRow;
+		unsigned int row_stride = width * channels;
+		const unsigned char** scanlines = malloc(sizeof(const unsigned char*) * height);
+
+		if (scanlines == NULL)
+		{
+			debug(LOG_ERROR, "screen_DumpPNG: Couldn't allocate memory\n");
+			return PNGCleanup(&info_ptr, &png_ptr);
+		}
+
+		png_set_write_fn(png_ptr, fileHandle, wzpng_write_data, wzpng_flush_data);
+
+		// Set the compression level of ZLIB
+		// Right now we stick with the default, since that one is the
+		// fastest which still produces acceptable filesizes.
+		// The highest compression level hardly produces smaller files than default.
+		//
+		// Below are some benchmarks done while taking screenshots at 1280x1024
+		// Z_NO_COMPRESSION:
+		// black (except for GUI): 398 msec
+		// 381, 391, 404, 360 msec
+		// 
+		// Z_BEST_SPEED:
+		// black (except for GUI): 325 msec
+		// 611, 406, 461, 608 msec
+		// 
+		// Z_DEFAULT_COMPRESSION:
+		// black (except for GUI): 374 msec
+		// 1154, 1121, 627, 790 msec
+		// 
+		// Z_BEST_COMPRESSION:
+		// black (except for GUI): 439 msec
+		// 1600, 1078, 1613, 1700 msec
+
+		// Not calling this function is equal to using the default
+		// so to spare some CPU cycles we comment this out.
+		// png_set_compression_level(png_ptr, Z_DEFAULT_COMPRESSION);
+
+		png_set_IHDR(png_ptr, info_ptr, width, height, channelBitdepth,
+			             PNG_COLOR_TYPE_RGB, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+
+		// Create an array of scanlines
+		for (currentRow = 0; currentRow < height; ++currentRow)
+		{
+			// We're filling the scanline from the bottom up here,
+			// otherwise we'd have a vertically mirrored image.
+			scanlines[currentRow] = &inputBuffer[row_stride * (height - currentRow - 1)];
+		}
+
+		png_set_rows(png_ptr, info_ptr, (const png_bytepp)scanlines);
+
+		png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
+	}
+
+	return PNGCleanup(&info_ptr, &png_ptr);
+}
+
+/** Retrieves the currently displayed screen and throws it in a buffer
+ *  \param width the screen's width
+ *  \param height the screen's height
+ *  \param the number of channels per pixel (since we're using RGB, 3 is a sane default)
+ *  \return a pointer to a buffer holding all pixels of the image
+ */
+static const unsigned char* screen_DumpInBuffer(unsigned int width, unsigned int height, unsigned int channels)
 {
 	static unsigned char* buffer = NULL;
 	static unsigned int buffer_size = 0;
 
-	unsigned int row_stride = width * bitdepth / 8;
+	unsigned int row_stride = width * channels;
 
 	if (row_stride * height > buffer_size) {
 		if (buffer != NULL) {
@@ -645,6 +765,7 @@ static const unsigned char* screen_DumpInBuffer(unsigned int width, unsigned int
 
 void screenDoDumpToDiskIfRequired(void)
 {
+	char pngFileName[MAX_PATH];
 	const char* fileName = screendump_filename;
 	const unsigned char* inputBuffer = NULL;
 	PHYSFS_file* fileHandle;
@@ -659,11 +780,33 @@ void screenDoDumpToDiskIfRequired(void)
 	}
 	debug( LOG_3D, "Saving screenshot %s\n", fileName );
 
-	inputBuffer = screen_DumpInBuffer(screen->w, screen->h, 24);
+	// Dump the currently displayed screen in a buffer
+	inputBuffer = screen_DumpInBuffer(screen->w, screen->h, channelsPerPixel);
 
-	screen_DumpJPEG(fileHandle, inputBuffer, screen->w, screen->h, 24);
+	// Write the screen to a JPEG
+	screen_DumpJPEG(fileHandle, inputBuffer, screen->w, screen->h, channelsPerPixel);
 
 	screendump_required = FALSE;
+	PHYSFS_close(fileHandle);
+
+	strncpy(pngFileName, fileName, MAX_PATH);
+	{
+		char *extension = strrchr(pngFileName, '.');
+		strncpy(extension, ".png", MAX_PATH - (extension - pngFileName));
+	}
+	pngFileName[MAX_PATH - 1] = 0;
+
+	fileName = pngFileName;
+
+	fileHandle = PHYSFS_openWrite(fileName);
+	if (fileHandle == NULL)
+	{
+		debug(LOG_ERROR, "screenDoDumpToDiskIfRequired: PHYSFS_openWrite failed (while openening file %s) with error: %s\n", fileName, PHYSFS_getLastError());
+		return;
+	}
+	debug( LOG_3D, "Saving screenshot %s\n", fileName);
+
+	screen_DumpPNG(fileHandle, inputBuffer, screen->w, screen->h, channelsPerPixel);
 	PHYSFS_close(fileHandle);
 }
 
