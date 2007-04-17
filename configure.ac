@@ -151,8 +151,6 @@ AC_CHECK_HEADER(zlib.h, , AC_MSG_ERROR([zlib header not found.]))
 
 
 # Look for image libs
-AC_CHECK_LIB(jpeg, main, , AC_MSG_ERROR([libjpeg not found.]))
-AC_CHECK_HEADER(jpeglib.h, , AC_MSG_ERROR([jpeg header not found.]))
 AC_CHECK_LIB(png, main, , AC_MSG_ERROR([libpng not found.]))
 AC_CHECK_HEADER(png.h, , AC_MSG_ERROR([png header not found.]))
 

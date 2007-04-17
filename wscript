@@ -73,9 +73,6 @@ def configure(conf):
 	conf.check_header2('physfs.h')
 	conf.check_library2('physfs')
 
-	conf.check_header2('jconfig.h')
-	conf.check_library2('jpeg')
-
 	# Common defines
 	conf.add_define('VERSION', VERSION)
 	conf.add_define('DEFAULT_DATADIR', Params.g_options.prefix + 'warzone2100')
@@ -102,7 +99,7 @@ def configure(conf):
 def build(bld):
 	obj = bld.create_obj('cc', 'program')
 	obj.find_sources_in_dirs('lib/framework lib/gamelib lib/netplay lib/ivis_common lib/ivis_opengl lib/script lib/sequence lib/sound lib/widget src')
-	obj.uselib='PNG JPEG OGG VORBISFILE GLU GL OPENAL PHYSFS SDL_NET SDL SDLMAIN'
+	obj.uselib='PNG OGG VORBISFILE GLU GL OPENAL PHYSFS SDL_NET SDL SDLMAIN'
 	obj.includes='lib/framework lib/gamelib lib/script src'
 	obj.defines='HAVE_CONFIG_H'
 	obj.target='warzone2100'

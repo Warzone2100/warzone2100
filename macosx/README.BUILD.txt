@@ -9,7 +9,6 @@ bundle without creating a disk image, run 'makebundle.sh'.
 Building Warzone 2100 on MacOS X is currently only known to work on
 MacOS X 10.4 "Tiger" with DarwinPorts and the following ports installed:
   automake
-  jpeg
   libogg
   libpng
   libsdl

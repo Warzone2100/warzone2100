@@ -26,28 +26,9 @@
 
 #include "lib/framework/frame.h"
 
-#ifdef WIN32
-/* We need this kludge to avoid a redefinition of INT32 in a jpeglib header */
-# define XMD_H
-#endif
-
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
 #include <physfs.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-#include <jpeglib.h>
-// the following two lines compromise an ugly hack because some jpeglib.h
-// actually contain configure-created defines that conflict with ours!
-// man, those jpeglib authors should get a frigging clue...
-#undef HAVE_STDDEF_H
-#undef HAVE_STDLIB_H
-#ifdef __cplusplus
-}
-#endif
-
 #include <png.h>
 
 #if !defined(__cplusplus) && !defined(CHAR_BIT)
@@ -85,8 +66,6 @@ static BOOL screendump_required = FALSE;
 static UDWORD	backDropWidth = BACKDROP_WIDTH;
 static UDWORD	backDropHeight = BACKDROP_HEIGHT;
 static GLuint backDropTexture = ~0;
-
-static void my_error_exit(j_common_ptr cinfo);
 
 /* Initialise the double buffered display */
 BOOL screenInitialise(
@@ -274,145 +253,6 @@ BOOL image_delete(pie_image* image)
 	return FALSE;
 }
 
-typedef struct my_error_mgr {
-  struct jpeg_error_mgr pub;
-  jmp_buf setjmp_buffer;
-}* my_error_ptr;
-
-static void my_error_exit(j_common_ptr cinfo)
-{
-  my_error_ptr myerr = (my_error_ptr) cinfo->err;
-  longjmp(myerr->setjmp_buffer, 1);
-}
-
-METHODDEF(void) init_source( WZ_DECL_UNUSED j_decompress_ptr cinfo ) {}
-
-METHODDEF(boolean) fill_input_buffer(j_decompress_ptr cinfo)
-{
-  static JOCTET dummy[] = { (JOCTET) 0xFF, (JOCTET) JPEG_EOI };
-
-  /* Insert a fake EOI marker */
-  cinfo->src->next_input_byte = dummy;
-  cinfo->src->bytes_in_buffer = 2;
-
-  return TRUE;
-}
-
-METHODDEF(void) skip_input_data( j_decompress_ptr cinfo, long num_bytes )
-{
-	if (num_bytes > 0) {
-		while (num_bytes > (long) cinfo->src->bytes_in_buffer) {
-			num_bytes -= (long) cinfo->src->bytes_in_buffer;
-			(void) fill_input_buffer(cinfo);
-		}
-		cinfo->src->next_input_byte += (size_t) num_bytes;
-		cinfo->src->bytes_in_buffer -= (size_t) num_bytes;
-	}
-}
-
-METHODDEF(void) term_source( WZ_DECL_UNUSED j_decompress_ptr cinfo ) {}
-
-BOOL image_load_from_jpg(pie_image* image, const char* filename)
-{
-	struct jpeg_decompress_struct cinfo;
-	struct my_error_mgr jerr;
-	int row_stride;
-	int image_size;
-	uintptr_t tmp;
-	JSAMPARRAY ptr[1];
-	struct jpeg_source_mgr jsrc;
-	char *buffer;
-	UDWORD fsize;
-
-	if (image == NULL) return TRUE;
-
-	if (!loadFile(filename, &buffer, &fsize)) {
-		debug(LOG_ERROR, "Could not load backdrop file \"%s\"!", filename);
-		return TRUE;
-	}
-
-	jpeg_create_decompress(&cinfo);
-	cinfo.src = &jsrc;
-	jsrc.init_source = init_source;
-	jsrc.fill_input_buffer = fill_input_buffer;
-	jsrc.skip_input_data = skip_input_data;
-	jsrc.resync_to_restart = jpeg_resync_to_restart;
-	jsrc.term_source = term_source;
-	jsrc.bytes_in_buffer = fsize;
-	jsrc.next_input_byte = (JOCTET *)buffer;
-
-	cinfo.err = jpeg_std_error(&jerr.pub);
-	jerr.pub.error_exit = my_error_exit;
-
-	if (setjmp(jerr.setjmp_buffer)) {
-		jpeg_destroy_decompress(&cinfo);
-		debug(LOG_ERROR, "Error during jpg decompression of \"%s\"!", filename);
-		free(buffer);
-		return TRUE;
-	}
-	jpeg_read_header(&cinfo, TRUE);
-
-	cinfo.out_color_space = JCS_RGB;
-	cinfo.quantize_colors = FALSE;
-	cinfo.scale_num   = 1;
-	cinfo.scale_denom = 1;
-	cinfo.dct_method = JDCT_FASTEST;
-	cinfo.do_fancy_upsampling = FALSE;
-
-	jpeg_calc_output_dimensions(&cinfo);
-
-	row_stride = cinfo.output_width * cinfo.output_components;
-	image_size = row_stride * cinfo.output_height;
-
-	image_create(image, cinfo.output_width, cinfo.output_height, cinfo.output_components);
-
-	jpeg_start_decompress(&cinfo);
-
-	tmp = (uintptr_t)image->data;
-	while (cinfo.output_scanline < cinfo.output_height) {
-		ptr[0] = (JSAMPARRAY)tmp;
-		jpeg_read_scanlines(&cinfo, (JSAMPARRAY)ptr, 1);
-		tmp += row_stride;
-	}
-	jpeg_finish_decompress(&cinfo);
-	jpeg_destroy_decompress(&cinfo);
-
-	free(buffer);
-
-	return FALSE;
-}
-
-//=====================================================================
-
-#if 0
-static GLuint image_create_texture(char* filename) {
-	pie_image image;
-	GLuint texture;
-
-	image_init(&image);
-
-	if (!image_load_from_jpg(&image, filename)) {
-		glGenTextures(1, &texture);
-
-		pie_SetTexturePage(-1);
-		glBindTexture(GL_TEXTURE_2D, texture);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-			     image.width, image.height,
-			     0, GL_RGB, GL_UNSIGNED_BYTE, image.data);
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	}
-
-	image_delete(&image);
-
-	return texture;
-}
-#endif
-//=====================================================================
-
 void screen_SetBackDropFromFile(const char* filename)
 {
 	// HACK : We should use a resource handler here!
@@ -428,31 +268,7 @@ void screen_SetBackDropFromFile(const char* filename)
 	// Otherwise WZ will think it is still loaded and not load it again
 	pie_SetTexturePage(-1);
 
-	if( strcmp(extension,".jpg") == 0 || strcmp(extension,".jpeg") == 0 )
-	{
-		pie_image image;
-
-		image_init(&image);
-
-		if (!image_load_from_jpg(&image, filename)) {
-			if (~backDropTexture == 0)
-				glGenTextures(1, &backDropTexture);
-
-			glBindTexture(GL_TEXTURE_2D, backDropTexture);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-					image.width, image.height,
-					0, GL_RGB, GL_UNSIGNED_BYTE, image.data);
-			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-		}
-
-		image_delete(&image);
-		return;
-	}
-	else if( strcmp(extension,".png") == 0 )
+	if( strcmp(extension,".png") == 0 )
 	{
 		iTexture imagePNG;
 
@@ -547,87 +363,6 @@ void screenToggleMode(void)
 // Screenshot code goes below this
 static const unsigned int channelBitdepth = 8;
 static const unsigned int channelsPerPixel = 3;
-
-// JPEG callbacks
-static const size_t JPEG_bufferSize = 4096;
-
-typedef struct {
-	struct jpeg_destination_mgr pub;
-	PHYSFS_file* file;
-	JOCTET * buffer;
-} my_jpeg_destination_mgr;
-
-METHODDEF(void) init_destination(j_compress_ptr cinfo)
-{
-	my_jpeg_destination_mgr* dm = (my_jpeg_destination_mgr*)(cinfo->dest);
-
-	/* Allocate the output buffer --- it will be released when done with image */
-	dm->buffer = (JOCTET *)malloc(JPEG_bufferSize * sizeof(JOCTET));
-
-	dm->pub.next_output_byte = dm->buffer;
-	dm->pub.free_in_buffer = JPEG_bufferSize;
-}
-
-METHODDEF(boolean) empty_output_buffer(j_compress_ptr cinfo)
-{
-	my_jpeg_destination_mgr* dm = (my_jpeg_destination_mgr*)cinfo->dest;
-
-	PHYSFS_write(dm->file, dm->buffer, JPEG_bufferSize, 1);
-
-	dm->pub.next_output_byte = dm->buffer;
-	dm->pub.free_in_buffer = JPEG_bufferSize;
-
-  return TRUE;
-}
-
-METHODDEF(void) term_destination(j_compress_ptr cinfo) {
-	my_jpeg_destination_mgr* dm = (my_jpeg_destination_mgr*)cinfo->dest;
-
-	PHYSFS_write(dm->file, dm->buffer, JPEG_bufferSize - dm->pub.free_in_buffer, 1);
-
-	free(dm->buffer);
-}
-
-// End of JPEG callbacks
-
-static inline void screen_DumpJPEG(PHYSFS_file* fileHandle, const unsigned char* inputBuffer, unsigned int width, unsigned int height, unsigned int channels)
-{
-	struct jpeg_compress_struct cinfo;
-	struct jpeg_error_mgr jerr;
-	my_jpeg_destination_mgr jdest;
-	JSAMPROW row_pointer[1];
-
-	unsigned int row_stride = width * channels;
-	
-	jdest.file = fileHandle;
-
-	cinfo.err = jpeg_std_error(&jerr);
-	jpeg_create_compress(&cinfo);
-	cinfo.dest = &jdest.pub;
-	jdest.pub.init_destination = init_destination;
-	jdest.pub.empty_output_buffer = empty_output_buffer;
-	jdest.pub.term_destination = term_destination;
-
-	cinfo.image_width = width;
-	cinfo.image_height = height;
-	cinfo.input_components = 3;
-	cinfo.in_color_space = JCS_RGB;
-
-	jpeg_set_defaults(&cinfo);
-	jpeg_set_quality(&cinfo, 75, TRUE);
-
-	jpeg_start_compress(&cinfo, TRUE);
-
-	while (cinfo.next_scanline < cinfo.image_height) {
-		// Yes, we're casting constness away here, but libjpeg apparently 
-		// doesn't know about the existence of the keyword 'const'.
-		row_pointer[0] = (unsigned char*)&inputBuffer[(height - cinfo.next_scanline - 1) * row_stride];
-		jpeg_write_scanlines(&cinfo, row_pointer, 1);
-	}
-
-	jpeg_finish_compress(&cinfo);
-	jpeg_destroy_compress(&cinfo);
-}
 
 // PNG callbacks
 static void wzpng_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
@@ -764,7 +499,6 @@ static const unsigned char* screen_DumpInBuffer(unsigned int width, unsigned int
 
 void screenDoDumpToDiskIfRequired(void)
 {
-	char pngFileName[MAX_PATH];
 	const char* fileName = screendump_filename;
 	const unsigned char* inputBuffer = NULL;
 	PHYSFS_file* fileHandle;
@@ -782,30 +516,10 @@ void screenDoDumpToDiskIfRequired(void)
 	// Dump the currently displayed screen in a buffer
 	inputBuffer = screen_DumpInBuffer(screen->w, screen->h, channelsPerPixel);
 
-	// Write the screen to a JPEG
-	screen_DumpJPEG(fileHandle, inputBuffer, screen->w, screen->h, channelsPerPixel);
+	// Write the screen to a PNG
+	screen_DumpPNG(fileHandle, inputBuffer, screen->w, screen->h, channelsPerPixel);
 
 	screendump_required = FALSE;
-	PHYSFS_close(fileHandle);
-
-	strncpy(pngFileName, fileName, MAX_PATH);
-	{
-		char *extension = strrchr(pngFileName, '.');
-		strncpy(extension, ".png", MAX_PATH - (extension - pngFileName));
-	}
-	pngFileName[MAX_PATH - 1] = 0;
-
-	fileName = pngFileName;
-
-	fileHandle = PHYSFS_openWrite(fileName);
-	if (fileHandle == NULL)
-	{
-		debug(LOG_ERROR, "screenDoDumpToDiskIfRequired: PHYSFS_openWrite failed (while openening file %s) with error: %s\n", fileName, PHYSFS_getLastError());
-		return;
-	}
-	debug( LOG_3D, "Saving screenshot %s\n", fileName);
-
-	screen_DumpPNG(fileHandle, inputBuffer, screen->w, screen->h, channelsPerPixel);
 	PHYSFS_close(fileHandle);
 }
 
@@ -814,7 +528,7 @@ void screenDumpToDisk(const char* path) {
 
 	while (++screendump_num != 0) {
 		// We can safely use '/' as path separator here since PHYSFS uses that as its default separator
-		snprintf(screendump_filename, MAX_PATH, "%s/wz2100_shot_%03i.jpg", path, screendump_num);
+		snprintf(screendump_filename, MAX_PATH, "%s/wz2100_shot_%03i.png", path, screendump_num);
 		if (!PHYSFS_exists(screendump_filename)) {
 			// Found a usable filename, so we'll stop searching.
 			break;

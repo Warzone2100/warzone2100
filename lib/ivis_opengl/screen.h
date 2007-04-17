@@ -60,7 +60,6 @@ BOOL image_create(pie_image* image,
 		  unsigned int height,
 		  unsigned int channels);
 BOOL image_delete(pie_image* image);
-BOOL image_load_from_jpg(pie_image* image, const char* filename);
 
 /* backDrop */
 extern void screen_SetBackDrop(UWORD* newBackDropBmp, UDWORD width, UDWORD height);

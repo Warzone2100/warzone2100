@@ -86,8 +86,6 @@
 #include "init.h"
 #include "levels.h"
 
-#include <jpeglib.h>
-
 // ////////////////////////////////////////////////////////////////////////////
 // vars
 extern char	MultiForcesPath[255];
@@ -312,104 +310,6 @@ void loadMapPreview(void)
 	hideTime = gameTime;
 	mapShutdown();
 }
-
-#ifdef REMOVE_WHEN_NOBODY_FINDS_THIS_INTERESTING_ANYMORE
-// leave alone for now please -Q
-// I know this don't belong here, but I am using this for testing.
-static void Show_Map(char *imagedata)
-{
-	GLuint Tex;
-//		SDL_GL_SwapBuffers();
-	pie_image image;
-	image_init(&image);
-//	imagetest=malloc((sizeof(char)*512*512*512));
-	image_load_from_jpg(&image, "texpages/bdrops/test1.jpg");
-	glGenTextures(1, &Tex);
-	pie_SetTexturePage(-1);
-	glBindTexture(GL_TEXTURE_2D, Tex);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-		    512,512,//backDropWidth, backDropHeight,
-			0, GL_RGB, GL_UNSIGNED_BYTE, imagedata);//image.data);
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	image_delete(&image);
-//	free(image);
-	glDisable(GL_DEPTH_TEST);
-	glDepthMask(GL_FALSE);
-	pie_SetTexturePage(-1);
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, Tex);
-	glColor3f(1, 1, 1);
-	glPushMatrix();
-	glLoadIdentity();
-//	glTranslatef(0,0,-13);
-//	glBegin(GL_QUADS);
-//		glVertex3f(-1.0f, 1.0f, 0.0f);				// Top Left
-//		glVertex3f( 1.0f, 1.0f, 0.0f);				// Top Right
-//	glVertex3f( 1.0f,-1.0f, 0.0f);				// Bottom Right
-//		glVertex3f(-1.0f,-1.0f, 0.0f);				// Bottom Left
-//		glEnd();
-glBegin(GL_TRIANGLE_FAN);
-//glVertex3f(10, -12, 0);
-//glVertex3f(10, 12, 0);
-//glVertex3f(-10, 12, 0);
-//glVertex3f(-10, -12, 0);
-//glEnd();
-	glTexCoord2f(0, 0);
-	glVertex2f(0, 0);
-	glTexCoord2f(512, 0);
-	glVertex2f(screenWidth*2, 0);
-	glTexCoord2f(0, 512);
-	glVertex2f(0, screenHeight*2);
-	glTexCoord2f(512, 512);
-	glVertex2f(screenWidth*2, screenHeight*2);
-	glEnd();
-	glPopMatrix();
-	glFlush();
-//	glDeleteTextures(1,Tex);
-	return;
-}
-
-/*		//leave alone -Q
-void displayMapPreview()
-{
-	UDWORD i,j,height;
-	UBYTE col,coltab[16];
-	MAPTILE *psTile,*WTile;
-	FEATURE *psFeat;
-
-//	build col table;
-	for (col=0; col<16; col+=1)
-	{
-		coltab[col] = pal_GetNearestColour( col*16,col*16, col*16);
-	}
-
-	//	for each tile, calc the height and draw a grayscale value 0-16
-	psTile = psMapTiles;
-	for (i=0; i<mapHeight; i+=2)
-	{
-		WTile = psTile;
-		for (j=0; j<mapWidth; j+=2)	//Wtile is tile considering at i,j.
-		{
-
-			height = WTile->height;
-
-			col = coltab[height/16];
-//				pal_GetNearestColour( height, height, height);
-
-			pie_BoxFillIndex(j,i,j+2,i+2,col);
-
-
-			WTile+=2;
-		}
-		psTile += mapWidth*2;
-	}
-}
-*/
-#endif
 
 // ////////////////////////////////////////////////////////////////////////////
 // helper func
@@ -1820,12 +1720,9 @@ static void stopJoining(void)
 			selectedPlayer =0;
 		}
 
-		if (ingame.bHostSetup) {
-#ifdef COVERMOUNT
-				pie_LoadBackDrop(SCREEN_COVERMOUNT);
-#else
+		if (ingame.bHostSetup)
+		{
 				pie_LoadBackDrop(SCREEN_RANDOMBDROP);
-#endif
 		}
 	}
 }
