@@ -1,14 +1,14 @@
 # translation of da.po to Dansk
 # Copyright (C) YEAR Warzone Resurrection Project
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Christian Vest Hansen <karmazilla@gmail.com>, 2007.
 msgid ""
 msgstr ""
 "Project-Id-Version: da\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2007-04-16 15:52+0200\n"
-"PO-Revision-Date: 2007-04-03 22:35+0200\n"
+"PO-Revision-Date: 2007-04-17 23:03+0200\n"
 "Last-Translator: Christian Vest Hansen <karmazilla@gmail.com>\n"
 "Language-Team: Dansk <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -271,7 +271,7 @@ msgstr "General"
 
 #: src/multiint.c:464 src/multiint.c:1633 src/multilimit.c:181
 msgid "Accept Settings"
-msgstr ""
+msgstr "Acceptér Indstillinger"
 
 #: src/multiint.c:475
 msgid "IP Address or Machine Name"
@@ -285,7 +285,7 @@ msgstr "FORBINDELSE"
 #: src/multiint.c:1111 src/multiint.c:3359 src/keyedit.c:381
 #: src/multilimit.c:173
 msgid "Return To Previous Screen"
-msgstr ""
+msgstr "Tilbage"
 
 #: src/multiint.c:529
 msgid "Internet"
@@ -301,7 +301,7 @@ msgstr "SPIL"
 
 #: src/multiint.c:789
 msgid "Refresh Games List"
-msgstr ""
+msgstr "Opdatér spilliste"
 
 #: src/multiint.c:864
 msgid "OPTIONS"
@@ -314,7 +314,7 @@ msgstr "Nulstil spillehastighed"
 
 #: src/multiint.c:867
 msgid "Select Map"
-msgstr ""
+msgstr "Vælg kort"
 
 #: src/multiint.c:873
 msgid "Game"
@@ -332,7 +332,7 @@ msgstr "Hurtgigt spil"
 
 #: src/multiint.c:883
 msgid "Skirmish"
-msgstr ""
+msgstr "Mod computeren"
 
 #: src/multiint.c:914
 #, fuzzy
@@ -354,7 +354,7 @@ msgstr "Krigståge"
 
 #: src/multiint.c:922
 msgid "Distance Fog"
-msgstr ""
+msgstr "Afstandståge"
 
 #: src/multiint.c:942 src/multimenu.c:771
 msgid "Alliances"
@@ -362,11 +362,11 @@ msgstr "Aliancer"
 
 #: src/multiint.c:946
 msgid "No Alliances"
-msgstr ""
+msgstr "Uden alliancer"
 
 #: src/multiint.c:948
 msgid "Allow Alliances"
-msgstr ""
+msgstr "Med alliancer"
 
 #: src/multiint.c:952 src/multiint.c:2422
 msgid "Locked Teams"
@@ -374,15 +374,15 @@ msgstr "Låste hold"
 
 #: src/multiint.c:1022
 msgid "Low Power Levels"
-msgstr ""
+msgstr "Sparsom energi"
 
 #: src/multiint.c:1024
 msgid "Medium Power Levels"
-msgstr ""
+msgstr "Medium energi"
 
 #: src/multiint.c:1026
 msgid "High Power Levels"
-msgstr ""
+msgstr "Meget energi"
 
 #: src/multiint.c:1044
 msgid "Base"
@@ -390,15 +390,15 @@ msgstr "Base"
 
 #: src/multiint.c:1046
 msgid "Start with No Bases"
-msgstr ""
+msgstr "Start uden baser"
 
 #: src/multiint.c:1048
 msgid "Start with Bases"
-msgstr ""
+msgstr "Start med baser"
 
 #: src/multiint.c:1050
 msgid "Start with Advanced Bases"
-msgstr ""
+msgstr "Start med advancerede baser"
 
 #: src/multiint.c:1074 src/multiint.c:1078
 msgid "Computer"
@@ -406,11 +406,11 @@ msgstr "Computer"
 
 #: src/multiint.c:1082
 msgid "Computer Opponents"
-msgstr ""
+msgstr "Computer modstandere"
 
 #: src/multiint.c:1084
 msgid "No Computer Opponents"
-msgstr ""
+msgstr "Ingen computer modstandere"
 
 #: src/multiint.c:1118
 #, fuzzy
@@ -456,11 +456,11 @@ msgstr "KONTROL"
 
 #: src/multiint.c:3362
 msgid "Clear Current Force"
-msgstr ""
+msgstr "Nulstil nuværende styrke"
 
 #: src/multiint.c:3365 src/keyedit.c:386
 msgid "Select Default"
-msgstr ""
+msgstr "Vælg standard"
 
 #: src/multiint.c:3663
 msgid "Players"
@@ -801,7 +801,7 @@ msgstr "TUTORIALS"
 #: src/frontend.c:817 src/frontend.c:953 src/frontend.c:1062
 msgctxt "menu"
 msgid "Return"
-msgstr ""
+msgstr "Tilbage"
 
 #: src/frontend.c:423
 msgid "Load Campaign"
@@ -1366,3 +1366,4 @@ msgstr "Forær enheder"
 #: src/multimenu.c:1132
 msgid "Give Power To Player"
 msgstr "Forær energi"
+
