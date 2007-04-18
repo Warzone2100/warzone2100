@@ -31,12 +31,6 @@
 #include <physfs.h>
 #include <png.h>
 
-#if !defined(__cplusplus) && !defined(CHAR_BIT)
-// A char is _always_ 1 byte large,
-// assume bytes are 8 bits large
-# define CHAR_BIT 8
-#endif
-
 #include "lib/framework/frameint.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/pieblitfunc.h"
