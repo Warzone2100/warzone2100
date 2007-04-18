@@ -569,10 +569,10 @@ void *resGetData(const char *pType, const char *pID)
 
 	if (psRes == NULL)
 	{
-		ASSERT( FALSE, "resGetData: Unknown ID: %s", pID );
+		ASSERT( psRes != NULL, "resGetData: Unknown ID: %s", pID );
 //		resLoadFile(pType,pID);
 //		resGetData(pType,pID);
-//		return NULL;
+		return NULL;
 	}
 
 	psRes->usage += 1;
