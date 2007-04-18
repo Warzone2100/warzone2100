@@ -126,6 +126,14 @@
 #define pgettext_expr(Msgctxt, Msgid) ((const char *) (Msgid))
 #define dpgettext_expr(Domainname, Msgctxt, Msgid) ((const char *) (Msgid))
 
+
+/* Required to be able to compile on systems that don't provide gettext.
+   E.g. MSVC, raw makefiles with MinGW32. */
+#if !defined(PACKAGE) && !defined(LOCALEDIR)
+# define PACKAGE ""
+# define LOCALEDIR ""
+#endif
+
 #endif
 
 /* A pseudo function call that serves as a marker for the automated
