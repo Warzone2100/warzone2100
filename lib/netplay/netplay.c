@@ -28,7 +28,11 @@
 
 #include <time.h>			// for stats
 #include <SDL/SDL_thread.h>
+#ifdef __MACOSX__
+#include <SDL_net/SDL_net.h>
+#else
 #include <SDL/SDL_net.h>
+#endif
 #include <physfs.h>
 #include <string.h>
 

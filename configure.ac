@@ -33,12 +33,8 @@ case $host_os in
 		AC_CHECK_TOOL([WINDRES], [windres], AC_MSG_ERROR([windres not found]))
 		WIN32_LIBS="-lintl -lshfolder -lwinmm -lwsock32 -L\$(srcdir) -ldbghelp"
 		;;
-	darwin*)
-		host_os_darwin=yes
-		;;
 esac
 AM_CONDITIONAL([MINGW32], test "x$host_os_mingw32" = "xyes")
-AM_CONDITIONAL([DARWIN], test "x$host_os_darwin" = "xyes")
 
 
 # Installation directories
@@ -170,15 +166,6 @@ AC_PATH_SDLNET([
 
 
 if test "x$enable_opengl" != "xno" ; then
-	if test "x$host_os_darwin" = "xyes" ; then
-		AC_MSG_CHECKING([for OpenGL framework])
-		wz_ac_check_opengl_save_LIBS=$LIBS
-		LIBS="-framework OpenGL $LIBS"
-		AC_LINK_IFELSE([main() { }],
-			[GL_h=mac ; GLU_h=mac ; GL_lib=yes ; GLU_lib=yes ; GLLIB="-framework OpenGL" ; GLULIB="" ; AC_MSG_RESULT([yes])],
-			[LIBS=$wz_ac_check_opengl_save_LIBS ; AC_MSG_RESULT([no])])
-	fi
-
 	if test "x$GL_lib" != "xyes" ; then
 		AC_CHECK_HEADER(SDL/SDL_opengl.h, GL_h=yes, GL_h=no)
 		AC_CHECK_LIB(GL, main, GLLIB=-lGL GL_lib=yes,
@@ -216,15 +203,6 @@ fi
 
 
 if test "x$enable_openal" != "xno" ; then
-	if test "x$host_os_darwin" = "xyes" ; then
-		AC_MSG_CHECKING([for OpenAL framework])
-		wz_ac_check_openal_save_LIBS=$LIBS
-		LIBS="-framework OpenAL $LIBS"
-		AC_LINK_IFELSE([main() { }],
-			[AL_h=mac ; AL_lib=yes ; ALLIB="-framework OpenAL" ; AC_MSG_RESULT([yes])],
-			[LIBS=$wz_ac_check_openal_save_LIBS ; AC_MSG_RESULT([no])])
-	fi
-
 	if test "x$AL_lib" != "xyes" ; then
 		AC_CHECK_HEADER(AL/al.h, AL_h=yes,
 			[AC_CHECK_HEADER(openal/al.h, AL_h=mac, AL_h=no)])
