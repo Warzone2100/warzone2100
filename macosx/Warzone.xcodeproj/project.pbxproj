@@ -684,14 +684,14 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 02581C5C0BD5A94A00957CBC /* SDLmain */;
+			remoteGlobalIDString = 02581C5C0BD5A94A00957CBC;
 			remoteInfo = SDLmain;
 		};
 		02581D310BD5B5FB00957CBC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 0246A3E00BD3CD81004D1C70 /* SDL */;
+			remoteGlobalIDString = 0246A3E00BD3CD81004D1C70;
 			remoteInfo = SDL;
 		};
 		02DDA8680BD3C21E0049AB60 /* PBXContainerItemProxy */ = {
@@ -1432,7 +1432,7 @@
 		0246A93A0BD3DD3E004D1C70 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		0246AA030BD3DEFA004D1C70 /* SDL_sysloadso.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = SDL_sysloadso.c; path = external/SDL/src/loadso/dlopen/SDL_sysloadso.c; sourceTree = "<group>"; };
 		0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
-		02581C5D0BD5A94A00957CBC /* libSDLmain.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libSDLmain.a; path = build/Debug/libSDLmain.a; sourceTree = "<group>"; };
+		02581C5D0BD5A94A00957CBC /* libSDLmain.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSDLmain.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Vorbis.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		02DDA7EF0BD3C03F0049AB60 /* Vorbis-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "Vorbis-Info.plist"; path = "Resources/Vorbis-Info.plist"; sourceTree = "<group>"; };
 		02DDA7F50BD3C1420049AB60 /* analysis.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = analysis.c; path = external/libvorbis/lib/analysis.c; sourceTree = "<group>"; };
@@ -3161,7 +3161,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "mkdir -p ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources\nrm -rf ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data\ncp -R ../data ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/\ncd ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data\nrm -f Makefile Makefile.am Makefile.in\n";
+			shellScript = "mkdir -p ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources\nrm -rf ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data\ntar -cC .. --exclude .svn --exclude 'Makefile*' data | tar -xC ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources\n";
 		};
 		02581D680BD5BD6B00957CBC /* Create startup script */ = {
 			isa = PBXShellScriptBuildPhase;
