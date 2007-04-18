@@ -28,7 +28,7 @@
 
 #include <time.h>			// for stats
 #include <SDL/SDL_thread.h>
-#ifdef __MACOSX__
+#ifdef WZ_OS_MAC
 #include <SDL_net/SDL_net.h>
 #else
 #include <SDL/SDL_net.h>

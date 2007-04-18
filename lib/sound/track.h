@@ -27,7 +27,7 @@
 
 #include "lib/framework/frame.h"
 
-#ifdef __MACOSX__
+#ifdef WZ_OS_MAC
 #include <OpenAL/al.h>
 #else
 #include <AL/al.h>

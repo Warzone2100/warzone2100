@@ -27,7 +27,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 
-#ifdef __MACOSX__
+#ifdef WZ_OS_MAC
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
 #else
@@ -414,7 +414,7 @@ TRACK* sound_LoadTrackFromFile(const char *fileName)
 	}
 
 	fileHandle.allowSeeking = TRUE;
-       	
+
 	// allocate track, plus the memory required to contain the filename
 	// one malloc call ensures only one free call is required
 	pTrack = (TRACK*)malloc(sizeof(TRACK) + strlen(GetLastResourceFilename()) + 1);
@@ -427,7 +427,7 @@ TRACK* sound_LoadTrackFromFile(const char *fileName)
 
 	// Initialize everyting (except for the filename) to zero
 	memset(pTrack, 0, sizeof(TRACK));
-	
+
 	// Set filename pointer and copy the filename into struct
 	pTrack->pName = (char*)pTrack + sizeof(TRACK);
 	strcpy( pTrack->pName, GetLastResourceFilename() );
