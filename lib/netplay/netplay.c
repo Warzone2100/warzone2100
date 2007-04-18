@@ -26,6 +26,8 @@
 // ////////////////////////////////////////////////////////////////////////
 // includes
 
+#include "lib/framework/frame.h"
+
 #include <time.h>			// for stats
 #include <SDL/SDL_thread.h>
 #ifdef WZ_OS_MAC
@@ -36,7 +38,6 @@
 #include <physfs.h>
 #include <string.h>
 
-#include "lib/framework/frame.h"
 #include "netplay.h"
 #include "netlog.h"
 
