@@ -5,5 +5,5 @@ Also, since that time, the MacOS X port has produced a universal binary
 and has required MacOS X 10.4 "Tiger" to run.
 
 To build the game, just run the following command:
-  xcodebuild -project Warzone -target Warzone -configuration Release
+  xcodebuild -project Warzone.xcodeproj -target Warzone -configuration Release
 
