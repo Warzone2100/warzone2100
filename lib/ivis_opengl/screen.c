@@ -380,7 +380,7 @@ static inline void PNGCleanup(png_infop *info_ptr, png_structp *png_ptr, const u
 	if (*info_ptr != NULL)
 		png_destroy_info_struct(*png_ptr, info_ptr);
 	if (*png_ptr != NULL)
-		png_destroy_read_struct(png_ptr, NULL, NULL);
+		png_destroy_write_struct(png_ptr, NULL, NULL);
 	if (scanlines != NULL)
 		free(scanlines);
 }
