@@ -29,7 +29,7 @@ case $host_os in
 	mingw32)
 		host_os_mingw32=yes
 		AC_CHECK_TOOL([WINDRES], [windres], AC_MSG_ERROR([windres not found]))
-		WIN32_LIBS="-L\$(srcdir) -ldbghelp -lshfolder -lwinmm -lwsock32"
+		WIN32_LIBS="-lshfolder -lwinmm -lwsock32 -L\$(srcdir) -ldbghelp"
 		;;
 	darwin*)
 		host_os_darwin=yes
@@ -125,7 +125,7 @@ AC_ARG_ENABLE(debug,
 AC_MSG_CHECKING([whether to compile in debug mode])
 AC_MSG_RESULT([$enable_debug])
 if test "x$enable_debug" = "xyes" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -DDEBUG -Wall -Wno-unused-label"
+	WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -DDEBUG -Wall -Wno-nonnull -Wno-unused-label"
 else
 	WZ_CFLAGS="${WZ_CFLAGS} -DNDEBUG"
 fi
