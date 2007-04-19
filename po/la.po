@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-04-16 15:52+0200\n"
+"POT-Creation-Date: 2007-04-17 23:12+0200\n"
 "PO-Revision-Date: 2007-04-13 14:34+0200\n"
 "Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
 "Language-Team: Latin\n"
@@ -144,7 +144,7 @@ msgstr "Invenio"
 msgid "Build"
 msgstr "Construo"
 
-#: src/hci.c:4017 src/multiint.c:1020
+#: src/hci.c:4017 src/multiint.c:920
 #, fuzzy
 msgid "Power"
 msgstr "Vigor"
@@ -275,193 +275,193 @@ msgstr ""
 msgid "Hero"
 msgstr "Heros"
 
-#: src/multiint.c:464 src/multiint.c:1633 src/multilimit.c:181
+#: src/multiint.c:364 src/multiint.c:1533 src/multilimit.c:181
 msgid "Accept Settings"
 msgstr ""
 
-#: src/multiint.c:475
+#: src/multiint.c:375
 msgid "IP Address or Machine Name"
 msgstr ""
 
-#: src/multiint.c:515
+#: src/multiint.c:415
 msgid "CONNECTION"
 msgstr ""
 
-#: src/multiint.c:518 src/multiint.c:566 src/multiint.c:782
-#: src/multiint.c:1111 src/multiint.c:3359 src/keyedit.c:381
+#: src/multiint.c:418 src/multiint.c:466 src/multiint.c:682
+#: src/multiint.c:1011 src/multiint.c:3256 src/keyedit.c:381
 #: src/multilimit.c:173
 msgid "Return To Previous Screen"
 msgstr ""
 
-#: src/multiint.c:529
+#: src/multiint.c:429
 msgid "Internet"
 msgstr ""
 
-#: src/multiint.c:768
+#: src/multiint.c:668
 msgid "Searching"
 msgstr ""
 
-#: src/multiint.c:779
+#: src/multiint.c:679
 msgid "GAMES"
 msgstr ""
 
-#: src/multiint.c:789
+#: src/multiint.c:689
 msgid "Refresh Games List"
 msgstr ""
 
-#: src/multiint.c:864
+#: src/multiint.c:764
 msgid "OPTIONS"
 msgstr ""
 
-#: src/multiint.c:866
+#: src/multiint.c:766
 msgid "Select Game Name"
 msgstr ""
 
-#: src/multiint.c:867
+#: src/multiint.c:767
 msgid "Select Map"
 msgstr ""
 
-#: src/multiint.c:873
+#: src/multiint.c:773
 msgid "Game"
 msgstr ""
 
-#: src/multiint.c:877
+#: src/multiint.c:777
 msgid "Campaign Mode"
 msgstr ""
 
-#: src/multiint.c:880
+#: src/multiint.c:780
 msgid "Team Play"
 msgstr ""
 
-#: src/multiint.c:883
+#: src/multiint.c:783
 msgid "Skirmish"
 msgstr ""
 
-#: src/multiint.c:914
+#: src/multiint.c:814
 msgid "Select Player Name"
 msgstr ""
 
-#: src/multiint.c:915
+#: src/multiint.c:815
 msgid "Select Force"
 msgstr ""
 
-#: src/multiint.c:919 src/frontend.c:763
+#: src/multiint.c:819 src/frontend.c:763
 msgid "Fog"
 msgstr ""
 
-#: src/multiint.c:921 src/frontend.c:770 src/frontend.c:867
+#: src/multiint.c:821 src/frontend.c:770 src/frontend.c:867
 msgid "Fog Of War"
 msgstr ""
 
-#: src/multiint.c:922
+#: src/multiint.c:822
 msgid "Distance Fog"
 msgstr ""
 
-#: src/multiint.c:942 src/multimenu.c:771
+#: src/multiint.c:842 src/multimenu.c:771
 msgid "Alliances"
 msgstr ""
 
-#: src/multiint.c:946
+#: src/multiint.c:846
 msgid "No Alliances"
 msgstr ""
 
-#: src/multiint.c:948
+#: src/multiint.c:848
 msgid "Allow Alliances"
 msgstr ""
 
-#: src/multiint.c:952 src/multiint.c:2422
+#: src/multiint.c:852 src/multiint.c:2319
 msgid "Locked Teams"
 msgstr ""
 
-#: src/multiint.c:1022
+#: src/multiint.c:922
 msgid "Low Power Levels"
 msgstr ""
 
-#: src/multiint.c:1024
+#: src/multiint.c:924
 msgid "Medium Power Levels"
 msgstr ""
 
-#: src/multiint.c:1026
+#: src/multiint.c:926
 msgid "High Power Levels"
 msgstr ""
 
-#: src/multiint.c:1044
+#: src/multiint.c:944
 msgid "Base"
 msgstr ""
 
-#: src/multiint.c:1046
+#: src/multiint.c:946
 msgid "Start with No Bases"
 msgstr ""
 
-#: src/multiint.c:1048
+#: src/multiint.c:948
 msgid "Start with Bases"
 msgstr ""
 
-#: src/multiint.c:1050
+#: src/multiint.c:950
 msgid "Start with Advanced Bases"
 msgstr ""
 
-#: src/multiint.c:1074 src/multiint.c:1078
+#: src/multiint.c:974 src/multiint.c:978
 msgid "Computer"
 msgstr ""
 
-#: src/multiint.c:1082
+#: src/multiint.c:982
 msgid "Computer Opponents"
 msgstr ""
 
-#: src/multiint.c:1084
+#: src/multiint.c:984
 msgid "No Computer Opponents"
 msgstr ""
 
-#: src/multiint.c:1118
+#: src/multiint.c:1018
 msgid "Start Hosting Game"
 msgstr ""
 
-#: src/multiint.c:1126
+#: src/multiint.c:1026
 msgid "Set Structure Limits"
 msgstr ""
 
-#: src/multiint.c:1515
+#: src/multiint.c:1415
 msgid "PLAYERS"
 msgstr ""
 
-#: src/multiint.c:1664
+#: src/multiint.c:1564
 msgid "CHAT"
 msgstr ""
 
-#: src/multiint.c:2363
+#: src/multiint.c:2260
 msgid "Host is Starting Game"
 msgstr ""
 
-#: src/multiint.c:2971
+#: src/multiint.c:2868
 msgid "FORCE"
 msgstr ""
 
-#: src/multiint.c:3094
+#: src/multiint.c:2991
 msgid "TEMPLATES"
 msgstr ""
 
-#: src/multiint.c:3258 src/multiint.c:3368
+#: src/multiint.c:3155 src/multiint.c:3265
 msgid "Load Force"
 msgstr ""
 
-#: src/multiint.c:3262 src/multiint.c:3371
+#: src/multiint.c:3159 src/multiint.c:3268
 msgid "Save Force"
 msgstr ""
 
-#: src/multiint.c:3327
+#: src/multiint.c:3224
 msgid "CONTROL"
 msgstr ""
 
-#: src/multiint.c:3362
+#: src/multiint.c:3259
 msgid "Clear Current Force"
 msgstr ""
 
-#: src/multiint.c:3365 src/keyedit.c:386
+#: src/multiint.c:3262 src/keyedit.c:386
 msgid "Select Default"
 msgstr ""
 
-#: src/multiint.c:3663
+#: src/multiint.c:3560
 msgid "Players"
 msgstr ""
 

@@ -54,15 +54,14 @@ int _TEX_INDEX;
 **************************************************************************/
 int pie_AddBMPtoTexPages(iTexture* s, const char* filename, int type, BOOL bResource)
 {
-	int	i = 0;
+	unsigned int i = 0;
 
-	debug(LOG_TEXTURE, "pie_AddBMPtoTexPages: %s type=%d resource=%s page=%d", filename,
-	      type, bResource ? "true" : "false", _TEX_INDEX);
+	debug(LOG_TEXTURE, "pie_AddBMPtoTexPages: %s type=%d resource=%s page=%d", filename, type, bResource ? "true" : "false", _TEX_INDEX);
 	assert(s != NULL);
 
 	/* Have we already loaded this one? (Should generally not happen here.) */
 	while (i < _TEX_INDEX) {
-		if (strcasecmp(filename, _TEX_PAGE[i].name) == 0) {
+		if (strncmp(filename, _TEX_PAGE[i].name, iV_TEXNAME_MAX) == 0) {
 			// this happens with terrain for some reason, which is necessary
 			debug(LOG_TEXTURE, "pie_AddBMPtoTexPages: %s loaded again", filename);
 		}
@@ -80,7 +79,7 @@ int pie_AddBMPtoTexPages(iTexture* s, const char* filename, int type, BOOL bReso
 	}
 
 	/* Stick the name into the tex page structures */
-	strcpy(_TEX_PAGE[i].name, filename);
+	strncpy(_TEX_PAGE[i].name, filename, iV_TEXNAME_MAX);
 
 	/* Store away all the info */
 	/* DID come from a resource */
@@ -121,6 +120,16 @@ int pie_AddBMPtoTexPages(iTexture* s, const char* filename, int type, BOOL bReso
 	return i;
 }
 
+void pie_Pagename(char * filename)
+{
+	if (strncmp(filename, "page-", 5) == 0)
+	{
+		int i;
+		for( i = 5; i < iV_TEXNAME_MAX-1 && isdigit(filename[i]); i++);
+		filename[i] = '\0';
+	}
+}
+
 void pie_ChangeTexPage(int tex_index, iTexture* s, int type, BOOL bResource)
 {
 	assert(s != NULL);
@@ -150,6 +159,21 @@ void pie_ChangeTexPage(int tex_index, iTexture* s, int type, BOOL bResource)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 }
 
+/*!
+ * Print the names of all loaded textures to LOG_ERROR
+ */
+void pie_PrintLoadedTextures(void)
+{
+	unsigned int i = 0;
+
+	debug(LOG_ERROR, "Available texture pages in memory (%d out of %d max):", _TEX_INDEX, iV_TEX_MAX);
+
+	for ( i = 0; i < iV_TEX_MAX; i++ ) {
+		debug(LOG_ERROR, "%02d : %s", i, _TEX_PAGE[i].name);
+	}
+}
+
+
 /**************************************************************************
 	Return the texture number for a given texture resource.  We keep
 	textures in a separate data structure _TEX_PAGE apart from the
@@ -157,38 +181,35 @@ void pie_ChangeTexPage(int tex_index, iTexture* s, int type, BOOL bResource)
 **************************************************************************/
 int iV_GetTexture(const char *filename)
 {
-	int i  = 0;
+	unsigned int i = 0;
 
 	/* Have we already loaded this one then? */
-	while (i < iV_TEX_MAX) {
-		if (strcasecmp(filename, _TEX_PAGE[i].name) == 0) {
+	for ( i = 0; i < iV_TEX_MAX; i++ ) {
+		if (strncmp(filename, _TEX_PAGE[i].name, iV_TEXNAME_MAX) == 0) {
 			return i;
 		}
-		i++;
 	}
 
 	/* This should never happen - by now all textures should have been loaded. */
 	debug(LOG_ERROR, "*** texture %s not loaded! ***", filename);
-	debug(LOG_ERROR, "Available texture pages in memory (%d out of %d max):", _TEX_INDEX, iV_TEX_MAX);
-	for (i = 0; i < iV_TEX_MAX; i++) {
-		debug(LOG_ERROR, "   %02d : %s", i, _TEX_PAGE[i].name);
-	}
-	debug(LOG_ERROR, "This error probably means you did not specify for this texture");
-	debug(LOG_ERROR, "to be preloaded in the appropriate wrf files before referencing");
-	debug(LOG_ERROR, "it in some pie file.  Remember that patches override several");
-	debug(LOG_ERROR, "standard wrf files as well.");
+	debug(LOG_ERROR, "This error probably means you did not specify this texture to be preloaded in the appropriate wrf files before referencing it in some pie file");
+	debug(LOG_ERROR, "Remember that patches override several standard wrf files as well");
+
+	pie_PrintLoadedTextures();
 
 	return -1;
 }
+
 
 int pie_ReloadTexPage(const char *texpageName, const char *fileName)
 {
 	int i = iV_GetTexture(texpageName);
 
-	if (i == -1)
+	if (i < 0)
 	{
 		return -1;
 	}
+
 	debug(LOG_TEXTURE, "Reloading texture %s from index %d, max is %d", texpageName, i, _TEX_INDEX);
 
 	if (_TEX_PAGE[i].tex.bmp)

@@ -7,12 +7,11 @@
 
 
 directory	"texpages"
+file 		HWTERTILES	"tertilesc3hw.png"
 file 		TEXPAGE		"page-6-features-rockies.png"
 file		TEXPAGE		"page-7-barbarians-kevlar.png"
 file		TEXPAGE		"page-8-player buildings-bases-rockies.png"
-file		TEXPAGE		"page-9-player-soft buildings-bases-rockies.png"	//needs changing**DONE**
-file		TEXPAGE		"page-9-player-hard buildings-bases-rockies.png"
-file 		HWTERTILES	"tertilesc3hw.png"
+file		TEXPAGE		"page-9-player buildings-bases-rockies.png"
 
 directory 	"stats/research/cam3"
 file		RESCH		"research.txt"

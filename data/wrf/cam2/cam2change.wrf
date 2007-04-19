@@ -7,12 +7,11 @@
 
 
 directory	"texpages"
-file 		TEXPAGE		"page-6-features-urban area.png"
-file		TEXPAGE		"page-8-player buildings-bases urban.png"
-file		TEXPAGE		"page-9-player-soft buildings-bases-urban.png"	//need altering to urban**DONE**
-file		TEXPAGE		"page-9-player-hard buildings-bases-urban.png"
-file		TEXPAGE 	"page-7-barbarians-urban.png"
 file 		HWTERTILES	"tertilesc2hw.png"
+file 		TEXPAGE		"page-6-features-urban.png"
+file		TEXPAGE 	"page-7-barbarians-urban.png"
+file		TEXPAGE		"page-8-player buildings-bases-urban.png"
+file		TEXPAGE		"page-9-player buildings-bases-urban.png"
 
 directory 	"stats/research/cam2"
 file		RESCH		"research.txt"

@@ -83,7 +83,7 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 {
 	char		*pFileData = *ppFileData;
 	int 		cnt;
-	char		buffer[MAX_FILE_PATH],  texType[MAX_FILE_PATH], ch; //, *str;
+	char		buffer[MAX_FILE_PATH], texType[MAX_FILE_PATH], ch; //, *str;
 	int			i, nlevels, ptype, pwidth, pheight, texpage;
 	iIMDShape	*s, *psShape;
 	BOOL		bTextured = FALSE;
@@ -180,16 +180,9 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 				return NULL;
 			}
 		}
-
-#ifndef PIETOOL		// The BSP tool should not reduce the texture page name down (please)
-		// Super scrummy hack to reduce texture page names down to the page id
 		if (bTextured) {
-			if (strncasecmp(texfile, "page-", 5) == 0) {
-				for(i = 5; i < (SDWORD)strlen(texfile) && isdigit(texfile[i]); i++);
-				texfile[i] = '\0';
-			}
+			pie_Pagename(texfile);
 		}
-#endif
 	}
 
 	if (sscanf(pFileData, "%s %d%n", buffer, &nlevels, &cnt) !=2) {

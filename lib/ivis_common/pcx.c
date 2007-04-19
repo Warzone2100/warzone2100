@@ -59,7 +59,7 @@ BOOL pie_PNGLoadFile(const char *fileName, iTexture *s)
 	PHYSFS_file* fileHandle = PHYSFS_openRead(fileName);
 	if (fileHandle == NULL)
 	{
-		debug(LOG_ERROR, "pie_PNGLoadFile: PHYSFS_openRead failed with error: %s\n", PHYSFS_getLastError());
+		debug(LOG_ERROR, "pie_PNGLoadFile: PHYSFS_openRead(%s) failed with error: %s\n", fileName, PHYSFS_getLastError());
 		PNGCleanup(&info_ptr, &png_ptr, fileHandle);
 		return FALSE;
 	}
@@ -68,14 +68,14 @@ BOOL pie_PNGLoadFile(const char *fileName, iTexture *s)
 	readSize = PHYSFS_read(fileHandle, PNGheader, 1, PNG_BYTES_TO_CHECK);
 	if (readSize < PNG_BYTES_TO_CHECK)
 	{
-		debug(LOG_ERROR, "pie_PNGLoadFile: PHYSFS_read failed with error: %s\n", PHYSFS_getLastError());
+		debug(LOG_ERROR, "pie_PNGLoadFile: PHYSFS_read(%s) failed with error: %s\n", fileName, PHYSFS_getLastError());
 		PNGCleanup(&info_ptr, &png_ptr, fileHandle);
 		return FALSE;
 	}
 
 	// Verify the PNG header to be correct
 	if (png_sig_cmp(PNGheader, 0, PNG_BYTES_TO_CHECK)) {
-		debug(LOG_3D, "pie_PNGLoadMem: Did not recognize PNG header in buffer");
+		debug(LOG_3D, "pie_PNGLoadMem: Did not recognize PNG header in %s", fileName);
 		PNGCleanup(&info_ptr, &png_ptr, fileHandle);
 		return FALSE;
 	}
@@ -103,7 +103,7 @@ BOOL pie_PNGLoadFile(const char *fileName, iTexture *s)
 	// Set libpng's failure jump position to the if branch,
 	// setjmp evaluates to false so the else branch will be executed at first
 	if (setjmp(png_jmpbuf(png_ptr))) {
-		debug(LOG_3D, "pie_PNGLoadMem: Error decoding PNG data");
+		debug(LOG_3D, "pie_PNGLoadMem: Error decoding PNG data in %s", fileName);
 		PNGCleanup(&info_ptr, &png_ptr, fileHandle);
 		return FALSE;
 	} else {

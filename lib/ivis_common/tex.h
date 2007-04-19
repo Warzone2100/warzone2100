@@ -26,7 +26,8 @@
 
 
 
-#define iV_TEX_MAX		64
+#define iV_TEX_MAX 64
+#define iV_TEXNAME_MAX 64
 
 
 
@@ -44,7 +45,7 @@ typedef struct
 {
 	iTexture	tex;
 	Uint8		type;
-	char		name[80];
+	char		name[iV_TEXNAME_MAX];
 	unsigned int textPage3dfx;
 	int		bResource;	// Was page provided by resource handler?
 }
@@ -61,6 +62,12 @@ extern int pie_ReloadTexPage(const char *texpageName, const char *fileName);
 extern int pie_AddBMPtoTexPages(iTexture* s, const char *filename, int type, BOOL bResource);
 void pie_ChangeTexPage(int tex_index, iTexture* s, int type, BOOL bResource);
 extern void pie_TexInit(void);
+
+/*!
+ * Turns filename into a pagename if possible
+ * \param[in,out] filename Filename to pagify
+ */
+extern void pie_Pagename(char * filename);
 
 //*************************************************************************
 

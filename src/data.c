@@ -850,30 +850,15 @@ static void dataIMGRelease(void *pData)
 /* Load a texturepage into memory */
 static BOOL fileTexPageLoad(const char *fileName, void **ppData)
 {
-	char		texfile[255];
-	char		texpage[255];
-	SDWORD		i, id;
+	char texfile[MAX_PATH] = {'\0'}, texpage[MAX_PATH] = {'\0'};
+	SDWORD id;
 
-	// generate a texture page name in "page-xx" format
-	strncpy(texfile, GetLastResourceFilename(), 254);
-	texfile[254] = '\0';
-	resToLower(texfile);
+	strncpy(texfile, GetLastResourceFilename(), MAX_PATH);
+	texfile[MAX_PATH-1] = '\0';
 
-	//hardware
-	if (strstr(texfile, "soft") != NULL) // and this is a software textpage
-	{
-		//so dont load it
-		*ppData = NULL;
-		return TRUE;
-	}
+	strncpy(texpage, texfile, MAX_PATH);
 
-	strncpy(texpage, texfile, 254);
-
-	if (strncmp(texfile, "page-", 5) == 0) // FIXME This is the culprit for WZ discarding everything after the "page-123" part of the texture name!
-	{
-		for(i=5; i<(SDWORD)strlen(texfile) && isdigit(texfile[i]); i++);
-		texpage[i] = '\0';
-	}
+	pie_Pagename(texpage);
 	SetLastResourceFilename(texpage);
 
 	// see if this texture page has already been loaded
