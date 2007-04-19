@@ -118,6 +118,7 @@ fi
 
 
 # -O0 turns off all optimizations; this is necessary for accurate debugging
+# -Wno-unused-label is necessary because flex produces unused labels that we cannot fix
 # Add later for stricter checking: -Wextra -Wmissing-declarations -Wstrict-prototypes
 AC_ARG_ENABLE(debug,
 	AS_HELP_STRING([--enable-debug[=yes/relaxed/no]],[Compile debug version [no]]),
