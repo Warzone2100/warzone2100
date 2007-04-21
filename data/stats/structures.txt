@@ -64,7 +64,7 @@ Emplacement-RotMor,DEFENSE,Level Two-Three,MEDIUM,0,1,1,Concrete,500,1,10,200,10
 GuardTower-ATMiss,DEFENSE,Level Three,MEDIUM,0,1,1,Concrete,450,2,10,250,10,325,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARDR.pie,0,0,1
 GuardTower-BeamLas,DEFENSE,Level Three,MEDIUM,0,1,1,Concrete,400,2,10,250,10,175,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARDR.pie,0,0,1
 GuardTower-Rail1,DEFENSE,Level Three,MEDIUM,0,1,1,Concrete,400,2,10,250,10,275,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARDR.pie,0,0,1
-GuardTower-RotMg,DEFENSE,Level Two-Three,BUNKER,0,1,1,Concrete,400,2,20,500,10,150,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,Blcanpil.pie,0,0,1
+GuardTower-RotMg,DEFENSE,Level Two-Three,MEDIUM,0,1,1,Concrete,400,2,20,500,10,150,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,blguardr.pie,0,0,1
 GuardTower1,DEFENSE,Level All,MEDIUM,0,1,1,Concrete,300,2,10,300,10,100,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARDM.PIE,0,1,1
 GuardTower2,DEFENSE,Level All,MEDIUM,0,1,1,Concrete,400,2,10,300,10,100,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARDM.PIE,0,1,1
 GuardTower3,DEFENSE,Level All,MEDIUM,0,1,1,Concrete,400,2,15,400,10,100,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARDR.pie,0,1,1

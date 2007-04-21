@@ -71,7 +71,7 @@ Emplacement-RotMor,DEFENSE,Level Two-Three,MEDIUM,0,1,1,Concrete,500,1,10,200,10
 GuardTower-ATMiss,DEFENSE,Level Three,MEDIUM,0,1,1,Concrete,450,2,10,250,10,325,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARDR.pie,0,0,1
 GuardTower-BeamLas,DEFENSE,Level Three,MEDIUM,0,1,1,Concrete,400,2,10,250,10,175,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARDR.pie,0,0,1
 GuardTower-Rail1,DEFENSE,Level Three,MEDIUM,0,1,1,Concrete,400,2,10,250,10,275,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARDR.pie,0,0,1
-GuardTower-RotMg,DEFENSE,Level Two-Three,BUNKER,0,1,1,Concrete,400,2,20,500,10,150,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,Blcanpil.pie,0,0,1
+GuardTower-RotMg,DEFENSE,Level Two-Three,MEDIUM,0,1,1,Concrete,400,2,20,500,10,150,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,blguardr.pie,0,0,1
 GuardTower1,DEFENSE,Level All,MEDIUM,0,1,1,Concrete,300,2,10,300,10,100,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARDM.PIE,0,1,1
 GuardTower2,DEFENSE,Level All,MEDIUM,0,1,1,Concrete,400,2,10,300,10,100,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARDM.PIE,0,1,1
 GuardTower3,DEFENSE,Level All,MEDIUM,0,1,1,Concrete,400,2,15,400,10,100,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARDR.pie,0,1,1
@@ -119,7 +119,7 @@ Sys-VTOL-CB-Tower01,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,400,3,15,400,0,1
 Sys-VTOL-RadarTower01,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,400,3,15,400,0,100,10,150,255,0,ZNULLECM,Sys-VTOLRadarTower01,0,BLGUARDR.pie,0,0,0
 TankTrapC,CORNER WALL,Level All,HARD,1,1,1,Concrete,200,1,10,100,10,15,1,0,255,0,ZNULLECM,ZNULLSENSOR,0,MITRAP2.PIE,0,0,0
 Tower-Projector,DEFENSE,Level Two-Three,BUNKER,0,1,1,Concrete,400,1,20,400,10,125,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,Blcanpil.pie,0,0,1
-Tower-RotMg,DEFENSE,Level Two-Three,MEDIUM,0,1,1,Concrete,100,2,15,400,10,125,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARDR.PIE,0,0,1
+Tower-RotMg,DEFENSE,Level Two-Three,BUNKER,0,1,1,Concrete,100,1,15,400,10,125,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,blcanpil.pie,0,0,1
 Tower-VulcanCan,DEFENSE,Level Two-Three,MEDIUM,0,1,1,Concrete,100,2,15,420,10,225,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARDR.PIE,0,0,1
 UplinkCentre,DEFENSE,Level All,MEDIUM,0,2,2,Concrete,500,3,10,500,10,100,30,0,1,1,ZNULLECM,UplinkSensor,0,miupbase.pie,0,1,0
 Wall-RotMg,DEFENSE,Level Two-Three,HARD,0,1,1,Concrete,150,2,15,420,10,150,10,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,BLGUARD1.pie,0,0,1

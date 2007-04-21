@@ -422,7 +422,7 @@ Emplacement-Rocket06-IDF		"Ripple Rocket Battery"
 //Tower-Missile1				"Lancer Guard Tower"
 //Tower-Missile2				"Mini-Pod Rocket Guard Tower"
 Tower-VulcanCan				"Assault Cannon Guard Tower"
-Tower-RotMg				"Assault Gun Guard Tower"
+Tower-RotMg				"Assault Gun Emplacement"
 Wall-RotMg				"Assault Gun Hardpoint"
 Wall-VulcanCan				"Assault Cannon Hardpoint"
 
