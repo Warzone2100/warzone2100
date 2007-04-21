@@ -192,6 +192,36 @@ BOOL loadConfig(void)
 		setWarzoneKeyNumeric("mouseflip", TRUE);
 	}
 
+	if (getWarzoneKeyString("masterserver_name", sBuf))
+	{
+		NETsetMasterserverName(sBuf);
+	}
+	else
+	{
+		NETsetMasterserverName("lobby.wz2100.net");
+		setWarzoneKeyString("masterserver_name", "lobby.wz2100.net");
+	}
+
+	if (getWarzoneKeyNumeric("masterserver_port", &val))
+	{
+		NETsetMasterserverPort(val);
+	}
+	else
+	{
+		NETsetMasterserverPort(9998);
+		setWarzoneKeyNumeric("masterserver_port", 9998);
+	}
+
+	if (getWarzoneKeyNumeric("gameserver_port", &val))
+	{
+		NETsetGameserverPort(val);
+	}
+	else
+	{
+		NETsetGameserverPort(9999);
+		setWarzoneKeyNumeric("gameserver_port", 9999);
+	}
+
 	// //////////////////////////
 	// sequences
 	if(getWarzoneKeyNumeric("sequences", &val))
@@ -311,7 +341,7 @@ BOOL loadConfig(void)
 	// /////////////////////////
 
 	// game name
-	if (getWarzoneKeyString("gameName",(char*)&sBuf))
+	if (getWarzoneKeyString("gameName", sBuf))
 	{
 		strcpy(game.name, sBuf);
 	}
@@ -321,7 +351,7 @@ BOOL loadConfig(void)
 	}
 
 	// player name
-	if (getWarzoneKeyString("playerName",(char*)&sBuf))
+	if (getWarzoneKeyString("playerName", sBuf))
 	{
 		strcpy((char*)sPlayer, sBuf);
 	}
@@ -331,7 +361,7 @@ BOOL loadConfig(void)
 	}
 
 	// map name
-	if(getWarzoneKeyString("mapName",(char*)&sBuf))
+	if(getWarzoneKeyString("mapName", sBuf))
 	{
 		strcpy(game.map, sBuf);
 	}
@@ -430,7 +460,7 @@ BOOL loadConfig(void)
 	}
 
 	// force name
-	if(getWarzoneKeyString("forceName",(char*)&sBuf))
+	if(getWarzoneKeyString("forceName", sBuf))
 	{
 		strcpy(sForceName, sBuf);
 	}
