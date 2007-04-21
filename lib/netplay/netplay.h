@@ -188,6 +188,9 @@ extern WZ_DEPRECATED BOOL NETcheckRegistryEntries	(char *name,char *guid);
 extern WZ_DEPRECATED BOOL NETsetRegistryEntries	(char *name,char *guid,char *file,char *cline,char *path,char *cdir); 
 extern WZ_DEPRECATED BOOL NETconnectToLobby		(LPNETPLAY lpNetPlay);
 //#include "netlobby.h"	// more functions to provide lobby facilities.
+extern void NETsetMasterserverName(const char* hostname);
+extern void NETsetMasterserverPort(unsigned int port);
+extern void NETsetGameserverPort(unsigned int port);
 
 // Some shortcuts to help you along!
 /* FIXME: This is _not_ portable! Bad, Pumpkin, bad! - Per */

@@ -184,6 +184,36 @@ BOOL loadConfig(BOOL bResourceAvailable)
 		setWarzoneKeyNumeric("mouseflip", TRUE);
 	}
 
+	if (getWarzoneKeyString("masterserver_name", sBuf))
+	{
+		NETsetMasterserverName(sBuf);
+	}
+	else
+	{
+		NETsetMasterserverName("lobby.wz2100.net");
+		setWarzoneKeyString("masterserver_name", "lobby.wz2100.net");
+	}
+
+	if (getWarzoneKeyNumeric("masterserver_port", &val))
+	{
+		NETsetMasterserverPort(val);
+	}
+	else
+	{
+		NETsetMasterserverPort(9998);
+		setWarzoneKeyNumeric("masterserver_port", 9998);
+	}
+
+	if (getWarzoneKeyNumeric("gameserver_port", &val))
+	{
+		NETsetGameserverPort(val);
+	}
+	else
+	{
+		NETsetGameserverPort(9999);
+		setWarzoneKeyNumeric("gameserver_port", 9999);
+	}
+
 	// //////////////////////////
 	// sequences
 	if(getWarzoneKeyNumeric("sequences", &val))
