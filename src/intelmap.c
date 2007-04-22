@@ -1426,10 +1426,17 @@ void intDisplayMessageButton(struct _widget *psWidget, UDWORD xOffset,
 	{
 	case MSG_RESEARCH:
 		pResearch = getResearchForMsg((VIEWDATA *)psMsg->pViewData);
+
+		if (pResearch == NULL)
+		{
+			debug( LOG_ERROR, "Couldn't find msg %s in researchs!", ((VIEWDATA *)psMsg->pViewData)->pName );
+			break;
+		}
+
 		//IMDType = IMDTYPE_RESEARCH;
-        	//set the IMDType depending on what stat is associated with the research
-        	if (pResearch->psStat)
-        	{
+		//set the IMDType depending on what stat is associated with the research
+		if (pResearch->psStat)
+		{
 			//we have a Stat associated with this research topic
 			if  (StatIsStructure(pResearch->psStat))
 			{
@@ -1500,7 +1507,6 @@ void intDisplayMessageButton(struct _widget *psWidget, UDWORD xOffset,
 	{
 		if (image > 0)
 		{
-
 			if(MovieButton) {
 				// draw the button with the relevant image, don't add Down to the image ID if it's
 				// a movie button.
