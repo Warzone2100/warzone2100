@@ -25,6 +25,9 @@
 
 /* For SHGetFolderPath */
 #if defined(WIN32)
+// FIXME HACK Workaround DATADIR definition in objbase.h
+// This works since DATADIR is never used on Windows.
+# undef DATADIR
 # include <shlobj.h>
 #endif // WIN32
 

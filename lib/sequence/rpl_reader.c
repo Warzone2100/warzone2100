@@ -17,14 +17,13 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#include <stdlib.h>
-#ifdef WIN32
-#include <windows.h>
-#endif //looks like we need this. --Qamly
-#include "adpcm.h"
 #include "lib/framework/frame.h"
-#include "rpl_reader.h"
+
+#include <stdlib.h>
 #include <physfs.h>
+
+#include "adpcm.h"
+#include "rpl_reader.h"
 
 unsigned int rpl_decode_sound_none(RPL* rpl, short* buffer, unsigned int buffer_size);
 unsigned int rpl_decode_sound_unknown(RPL* rpl, short* buffer, unsigned int buffer_size);
