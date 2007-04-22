@@ -375,26 +375,23 @@ static void wzpng_flush_data(png_structp png_ptr)
 
 // End of PNG callbacks
 
-static inline void PNGCleanup(png_infop *info_ptr, png_structp *png_ptr, const unsigned char** scanlines)
+static inline void PNGCleanup(png_infop *info_ptr, png_structp *png_ptr)
 {
 	if (*info_ptr != NULL)
 		png_destroy_info_struct(*png_ptr, info_ptr);
 	if (*png_ptr != NULL)
 		png_destroy_write_struct(png_ptr, NULL);
-	if (scanlines != NULL)
-		free(scanlines);
 }
 
 static inline void screen_DumpPNG(PHYSFS_file* fileHandle, const unsigned char* inputBuffer, unsigned int width, unsigned int height, unsigned int channels)
 {
-	const unsigned char** scanlines = NULL;
 	png_infop info_ptr = NULL;
 	png_structp png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 
 	if (png_ptr == NULL)
 	{
 		debug(LOG_ERROR, "screen_DumpPNG: Unable to create png struct\n");
-		return PNGCleanup(&info_ptr, &png_ptr, scanlines);
+		return PNGCleanup(&info_ptr, &png_ptr);
 	}
 
 	info_ptr = png_create_info_struct(png_ptr);
@@ -402,7 +399,7 @@ static inline void screen_DumpPNG(PHYSFS_file* fileHandle, const unsigned char* 
 	if (info_ptr == NULL)
 	{
 		debug(LOG_ERROR, "screen_DumpPNG: Unable to create png info struct\n");
-		return PNGCleanup(&info_ptr, &png_ptr, scanlines);
+		return PNGCleanup(&info_ptr, &png_ptr);
 	}
 
 	// If libpng encounters an error, it will jump into this if-branch
@@ -413,14 +410,8 @@ static inline void screen_DumpPNG(PHYSFS_file* fileHandle, const unsigned char* 
 	else
 	{
 		unsigned int currentRow;
+		const unsigned char* scanlines[height];
 		unsigned int row_stride = width * channels;
-
-		scanlines = malloc(sizeof(const unsigned char*) * height);
-		if (scanlines == NULL)
-		{
-			debug(LOG_ERROR, "screen_DumpPNG: Couldn't allocate memory\n");
-			return PNGCleanup(&info_ptr, &png_ptr, scanlines);
-		}
 
 		png_set_write_fn(png_ptr, fileHandle, wzpng_write_data, wzpng_flush_data);
 
@@ -466,7 +457,7 @@ static inline void screen_DumpPNG(PHYSFS_file* fileHandle, const unsigned char* 
 		png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
 	}
 
-	return PNGCleanup(&info_ptr, &png_ptr, scanlines);
+	return PNGCleanup(&info_ptr, &png_ptr);
 }
 
 /** Retrieves the currently displayed screen and throws it in a buffer
