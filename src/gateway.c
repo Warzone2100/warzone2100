@@ -130,6 +130,7 @@ void gwShutDown(void)
 	if (aZoneReachable != NULL)
 	{
 		free(aZoneReachable);
+		aZoneReachable = NULL;
 	}
 }
 
@@ -1058,7 +1059,9 @@ void gwFreeEquivTable(void)
 	if (aNumEquiv)
 	{
 		free(aNumEquiv);
+		aNumEquiv = NULL;
 	}
+
 	if (apEquivZones)
 	{
 		for(i=0; i<gwNumZones; i+=1)
@@ -1069,6 +1072,7 @@ void gwFreeEquivTable(void)
 			}
 		}
 		free(apEquivZones);
+		apEquivZones = NULL;
 	}
 	gwNumZones = 0;
 }
