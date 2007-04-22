@@ -14,9 +14,7 @@ CLEANFILES=$(BASEARCHIVE) $(PATCHARCHIVE)
 # Remove this line when Automake 1.10 becomes standard
 MKDIR_P=$(mkdir_p)
 
-if DATA
-all: $(BASEARCHIVE) $(PATCHARCHIVE)
-endif
+data: $(BASEARCHIVE) $(PATCHARCHIVE)
 
 $(BASEARCHIVE): $(BASELIST)
 	zip -ru0 $@ $(BASELIST) -x *svn*

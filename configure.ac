@@ -61,14 +61,6 @@ fi
 
 # Commandline options:
 
-AC_ARG_ENABLE([data],
-	AS_HELP_STRING([--enable-data],[Build data packages [no]]),
-	[ enable_data=$enableval ], [ enable_data=no ])
-AM_CONDITIONAL(DATA, test "x$enable_data" = "xyes")
-AC_MSG_CHECKING([whether to build data packages])
-AC_MSG_RESULT([$enable_data])
-
-
 AC_ARG_ENABLE([installer],
 	AS_HELP_STRING([--enable-installer],[Build NSIS installer [no]]),
 	[ enable_installer=$enableval ], [ enable_installer=no ])
