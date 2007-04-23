@@ -81,7 +81,6 @@
 typedef struct { Sint32 left, top, right, bottom; } iClip;
 
 typedef struct iSurface {
-	int usr;
 	Uint32 flags;
 	int xcentre;
 	int ycentre;

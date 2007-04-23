@@ -77,7 +77,6 @@ BOOL pie_Initialise(void)
 	pie_InitMaths();
 	pie_TexInit();
 
-	rendSurface.usr = REND_UNDEFINED;
 	rendSurface.flags = REND_SURFACE_UNDEFINED;
 	rendSurface.buffer = NULL;
 	rendSurface.size = 0;
@@ -126,7 +125,6 @@ BOOL pie_Initialise(void)
 void pie_ShutDown(void) {
 	rendSurface.buffer = NULL;
 	rendSurface.flags = REND_SURFACE_UNDEFINED;
-	rendSurface.usr = REND_UNDEFINED;
 	rendSurface.size = 0;
 
 	pie_CleanUp();

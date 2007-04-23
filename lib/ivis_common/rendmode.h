@@ -38,30 +38,11 @@
 #define	iV_DrawTransImageRect		pie_ImageFileIDTile
 
 //*************************************************************************
-
-#define REND_D3D_RGB		0x133			// Direct3D 640x480x16bit RGB renderer (mmx)
-#define REND_D3D_HAL		0x143			// Direct3D 640x480x16bit hardware
-#define REND_D3D_REF		0x153			// Direct3D 640x480x16bit hardware
-#define REND_GLIDE_3DFX		0x200			// 3dfx Glide API
-#define REND_16BIT		0x400			// 16bit software mode for video
-#define iV_MODE_SURFACE		0x10000			// off-screen surface
-#define REND_PSX		0x20000			// PlayStation - added by tjc
-#define REND_UNDEFINED		-1			// undefined mode
-
-//*************************************************************************
 // polygon flags	b0..b7: col, b24..b31: anim index
 
-//#define PIE_FLAT			0x00000100
-#define PIE_TEXTURED			0x00000200
-//#define PIE_WIRE			0x00000400
 #define PIE_COLOURKEYED			0x00000800
-//#define PIE_GOURAUD			0x00001000
-#define PIE_NO_CULL			0x00002000
-//#define PIE_TEXANIM			0x00004000	// PIE_TEX must be set also
-#define PIE_PSXTEX			0x00008000	// - use playstation texture allocation method
-#define PIE_BSPFRESH			0x00010000	// Freshly created by the BSP
-#define PIE_NOHALFPSXTEX		0x00020000
 #define PIE_ALPHA			0x00040000
+#define PIE_NO_CULL			0x00002000
 
 //*************************************************************************
 
