@@ -385,6 +385,7 @@ static inline void PNGCleanup(png_infop *info_ptr, png_structp *png_ptr)
 
 static inline void screen_DumpPNG(PHYSFS_file* fileHandle, const unsigned char* inputBuffer, unsigned int width, unsigned int height, unsigned int channels)
 {
+	const unsigned char** scanlines = NULL;
 	png_infop info_ptr = NULL;
 	png_structp png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 
@@ -410,8 +411,14 @@ static inline void screen_DumpPNG(PHYSFS_file* fileHandle, const unsigned char* 
 	else
 	{
 		unsigned int currentRow;
-		const unsigned char* scanlines[height];
 		unsigned int row_stride = width * channels;
+
+		scanlines = malloc(sizeof(const unsigned char*) * height);
+		if (scanlines == NULL)
+		{
+			debug(LOG_ERROR, "screen_DumpPNG: Couldn't allocate memory\n");
+			return PNGCleanup(&info_ptr, &png_ptr);
+		}
 
 		png_set_write_fn(png_ptr, fileHandle, wzpng_write_data, wzpng_flush_data);
 
@@ -457,6 +464,7 @@ static inline void screen_DumpPNG(PHYSFS_file* fileHandle, const unsigned char* 
 		png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
 	}
 
+	free(scanlines);
 	return PNGCleanup(&info_ptr, &png_ptr);
 }
 
