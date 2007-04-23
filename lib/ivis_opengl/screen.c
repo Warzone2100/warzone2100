@@ -369,7 +369,7 @@ static void wzpng_write_data(png_structp png_ptr, png_bytep data, png_size_t len
 static void wzpng_flush_data(png_structp png_ptr)
 {
 	PHYSFS_file* fileHandle = (PHYSFS_file*)png_get_io_ptr(png_ptr);
-	
+
 	PHYSFS_flush(fileHandle);
 }
 
@@ -424,15 +424,15 @@ static inline void screen_DumpPNG(PHYSFS_file* fileHandle, const unsigned char* 
 		// Z_NO_COMPRESSION:
 		// black (except for GUI): 398 msec
 		// 381, 391, 404, 360 msec
-		// 
+		//
 		// Z_BEST_SPEED:
 		// black (except for GUI): 325 msec
 		// 611, 406, 461, 608 msec
-		// 
+		//
 		// Z_DEFAULT_COMPRESSION:
 		// black (except for GUI): 374 msec
 		// 1154, 1121, 627, 790 msec
-		// 
+		//
 		// Z_BEST_COMPRESSION:
 		// black (except for GUI): 439 msec
 		// 1600, 1078, 1613, 1700 msec
@@ -463,7 +463,7 @@ static inline void screen_DumpPNG(PHYSFS_file* fileHandle, const unsigned char* 
 /** Retrieves the currently displayed screen and throws it in a buffer
  *  \param width the screen's width
  *  \param height the screen's height
- *  \param the number of channels per pixel (since we're using RGB, 3 is a sane default)
+ *  \param channels the number of channels per pixel (since we're using RGB, 3 is a sane default)
  *  \return a pointer to a buffer holding all pixels of the image
  */
 static const unsigned char* screen_DumpInBuffer(unsigned int width, unsigned int height, unsigned int channels)

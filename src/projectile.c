@@ -2423,17 +2423,17 @@ UDWORD	establishTargetHeight( BASE_OBJECT *psTarget )
 					break;
 			}
 
-			utilityHeight = yMax - yMin;
+			utilityHeight = (yMax + yMin)/2;
 			height += utilityHeight;
 
 			return height;
 
 		case OBJ_STRUCTURE:
 			psStructureStats = ((STRUCTURE *)psTarget)->pStructureType;
-			return (psStructureStats->pIMD->ymax - psStructureStats->pIMD->ymin);
+			return (psStructureStats->pIMD->ymax + psStructureStats->pIMD->ymin) /2;
 		case OBJ_FEATURE:
 			// Just use imd ymax+ymin
-			return (psTarget->sDisplay.imd->ymax - psTarget->sDisplay.imd->ymin);
+			return (psTarget->sDisplay.imd->ymax + psTarget->sDisplay.imd->ymin) /2;
 		case OBJ_BULLET:
 			// 16 for bullet
 			return 16;

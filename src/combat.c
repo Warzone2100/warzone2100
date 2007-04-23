@@ -394,10 +394,19 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 			//Watermelon:Target prediction
 			if(psTarget->type == OBJ_DROID)
 			{
-				predictX = (sinf(((float)M_PI / 180) * (((DROID *)psTarget)->sMove.dir)) * ((DROID *)psTarget)->sMove.speed * dist) / psStats->flightSpeed;
+				predictX = (SDWORD)(trigSin(((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * dist /psStats->flightSpeed);
 				predictX += psTarget->x;
-				predictY = (cosf(((float)M_PI / 180) * (((DROID *)psTarget)->sMove.dir)) * ((DROID *)psTarget)->sMove.speed * dist) / psStats->flightSpeed;
+				predictY = (SDWORD)(trigCos(((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * dist /psStats->flightSpeed);
 				predictY += psTarget->y;
+				//to prevent negative number from corrupting UDWORD parameter tarX,tarY in proj_SendProjectile
+				if (predictX < 0)
+				{
+					predictX = 0;
+				}
+				if (predictY < 0)
+				{
+					predictY = 0;
+				}
 			}
 			else
 			{
@@ -445,10 +454,19 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 			//Watermelon:Target prediction
 			if(psTarget->type == OBJ_DROID)
 			{
-				predictX = (sinf(((float)M_PI / 180) * (((DROID *)psTarget)->sMove.dir)) * ((DROID *)psTarget)->sMove.speed * dist) / psStats->flightSpeed;
+				predictX = (SDWORD)(trigSin(((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * dist /psStats->flightSpeed);
 				predictX += psTarget->x;
-				predictY = (cosf(((float)M_PI / 180) * (((DROID *)psTarget)->sMove.dir)) * ((DROID *)psTarget)->sMove.speed * dist) / psStats->flightSpeed;
+				predictY = (SDWORD)(trigCos(((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * dist /psStats->flightSpeed);
 				predictY += psTarget->y;
+				//to prevent negative number from corrupting UDWORD parameter tarX,tarY in proj_SendProjectile
+				if (predictX < 0)
+				{
+					predictX = 0;
+				}
+				if (predictY < 0)
+				{
+					predictY = 0;
+				}
 			}
 			else
 			{
