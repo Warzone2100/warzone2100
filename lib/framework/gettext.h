@@ -37,38 +37,6 @@
      dngettext (DEFAULT_TEXT_DOMAIN, Msgid1, Msgid2, N)
 # endif
 
-/* Pseudo function calls, taking a MSGCTXT and a MSGID instead of just a
-   MSGID.  MSGCTXT and MSGID must be string literals.  MSGCTXT should be
-   short and rarely need to change.
-   The letter 'p' stands for 'particular' or 'special'.  */
-#ifdef DEFAULT_TEXT_DOMAIN
-# define pgettext(Msgctxt, Msgid) \
-   pgettext_aux (DEFAULT_TEXT_DOMAIN, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, LC_MESSAGES)
-#else
-# define pgettext(Msgctxt, Msgid) \
-   pgettext_aux (NULL, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, LC_MESSAGES)
-#endif
-#define dpgettext(Domainname, Msgctxt, Msgid) \
-  pgettext_aux (Domainname, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, LC_MESSAGES)
-#define dcpgettext(Domainname, Msgctxt, Msgid, Category) \
-  pgettext_aux (Domainname, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, Category)
-#ifdef DEFAULT_TEXT_DOMAIN
-# define npgettext(Msgctxt, Msgid, MsgidPlural, N) \
-   npgettext_aux (DEFAULT_TEXT_DOMAIN, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, MsgidPlural, N, LC_MESSAGES)
-#else
-# define npgettext(Msgctxt, Msgid, MsgidPlural, N) \
-   npgettext_aux (NULL, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, MsgidPlural, N, LC_MESSAGES)
-#endif
-#define dnpgettext(Domainname, Msgctxt, Msgid, MsgidPlural, N) \
-  npgettext_aux (Domainname, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, MsgidPlural, N, LC_MESSAGES)
-#define dcnpgettext(Domainname, Msgctxt, Msgid, MsgidPlural, N, Category) \
-  npgettext_aux (Domainname, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, MsgidPlural, N, Category)
-
-#define pgettext_expr(Msgctxt, Msgid) \
-  dcpgettext_expr (NULL, Msgctxt, Msgid, LC_MESSAGES)
-#define dpgettext_expr(Domainname, Msgctxt, Msgid) \
-  dcpgettext_expr (Domainname, Msgctxt, Msgid, LC_MESSAGES)
-
 #else
 
 /* Solaris /usr/include/locale.h includes /usr/include/libintl.h, which
@@ -109,31 +77,6 @@
 # define bindtextdomain(Domainname, Dirname) ((const char *) (Dirname))
 # define bind_textdomain_codeset(Domainname, Codeset) ((const char *) (Codeset))
 
-/* Pseudo function calls, taking a MSGCTXT and a MSGID instead of just a
-   MSGID.  MSGCTXT and MSGID must be string literals.  MSGCTXT should be
-   short and rarely need to change.
-   The letter 'p' stands for 'particular' or 'special'.  */
-#define pgettext(Msgctxt, Msgid) ((const char *) (Msgid))
-#define dpgettext(Domainname, Msgctxt, Msgid) ((const char *) (Msgid))
-#define dcpgettext(Domainname, Msgctxt, Msgid, Category) ((const char *) (Msgid))
-#define npgettext(Msgctxt, Msgid, MsgidPlural, N) \
-   ((N) == 1 ? (const char *) (Msgid) : (const char *) (MsgidPlural))
-#define dnpgettext(Domainname, Msgctxt, Msgid, MsgidPlural, N) \
-   ((N) == 1 ? (const char *) (Msgid) : (const char *) (MsgidPlural))
-#define dcnpgettext(Domainname, Msgctxt, Msgid, MsgidPlural, N, Category) \
-   ((N) == 1 ? (const char *) (Msgid) : (const char *) (MsgidPlural))
-
-#define pgettext_expr(Msgctxt, Msgid) ((const char *) (Msgid))
-#define dpgettext_expr(Domainname, Msgctxt, Msgid) ((const char *) (Msgid))
-
-
-/* Required to be able to compile on systems that don't provide gettext.
-   E.g. MSVC, raw makefiles with MinGW32. */
-#if !defined(PACKAGE) && !defined(LOCALEDIR)
-# define PACKAGE ""
-# define LOCALEDIR ""
-#endif
-
 #endif
 
 /* A pseudo function call that serves as a marker for the automated
@@ -147,6 +90,33 @@
 
 /* The separator between msgctxt and msgid in a .mo file.  */
 #define GETTEXT_CONTEXT_GLUE "\004"
+
+/* Pseudo function calls, taking a MSGCTXT and a MSGID instead of just a
+   MSGID.  MSGCTXT and MSGID must be string literals.  MSGCTXT should be
+   short and rarely need to change.
+   The letter 'p' stands for 'particular' or 'special'.  */
+#ifdef DEFAULT_TEXT_DOMAIN
+# define pgettext(Msgctxt, Msgid) \
+   pgettext_aux (DEFAULT_TEXT_DOMAIN, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, LC_MESSAGES)
+#else
+# define pgettext(Msgctxt, Msgid) \
+   pgettext_aux (NULL, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, LC_MESSAGES)
+#endif
+#define dpgettext(Domainname, Msgctxt, Msgid) \
+  pgettext_aux (Domainname, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, LC_MESSAGES)
+#define dcpgettext(Domainname, Msgctxt, Msgid, Category) \
+  pgettext_aux (Domainname, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, Category)
+#ifdef DEFAULT_TEXT_DOMAIN
+# define npgettext(Msgctxt, Msgid, MsgidPlural, N) \
+   npgettext_aux (DEFAULT_TEXT_DOMAIN, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, MsgidPlural, N, LC_MESSAGES)
+#else
+# define npgettext(Msgctxt, Msgid, MsgidPlural, N) \
+   npgettext_aux (NULL, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, MsgidPlural, N, LC_MESSAGES)
+#endif
+#define dnpgettext(Domainname, Msgctxt, Msgid, MsgidPlural, N) \
+  npgettext_aux (Domainname, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, MsgidPlural, N, LC_MESSAGES)
+#define dcnpgettext(Domainname, Msgctxt, Msgid, MsgidPlural, N, Category) \
+  npgettext_aux (Domainname, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, MsgidPlural, N, Category)
 
 #ifdef __GNUC__
 __inline
@@ -192,12 +162,19 @@ npgettext_aux (const char *domain,
    can be arbitrary expressions.  But for string literals these macros are
    less efficient than those above.  */
 
+#include <string.h>
+
 #define _LIBGETTEXT_HAVE_VARIABLE_SIZE_ARRAYS \
   (__GNUC__ >= 3 || __GNUG__ >= 2 /* || __STDC_VERSION__ >= 199901L */ )
 
 #if !_LIBGETTEXT_HAVE_VARIABLE_SIZE_ARRAYS
 #include <stdlib.h>
 #endif
+
+#define pgettext_expr(Msgctxt, Msgid) \
+  dcpgettext_expr (NULL, Msgctxt, Msgid, LC_MESSAGES)
+#define dpgettext_expr(Domainname, Msgctxt, Msgid) \
+  dcpgettext_expr (Domainname, Msgctxt, Msgid, LC_MESSAGES)
 
 #ifdef __GNUC__
 __inline
