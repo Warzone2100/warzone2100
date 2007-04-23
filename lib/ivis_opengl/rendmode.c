@@ -135,7 +135,6 @@ void (*iV_SetTransImds)(BOOL trans);
 //
 //*************************************************************************
 
-#ifndef PIETOOL
 void iV_RenderAssign(iSurface *s)
 {
 	/* Need to look into this - won't the unwanted called still set render surface? */
@@ -147,4 +146,3 @@ void iV_RenderAssign(iSurface *s)
 	iV_DEBUG5("usr %d\nflags %x\nxcentre, ycentre %d\nbuffer %p\n",
 			s->usr,s->flags,s->xcentre,s->ycentre,s->buffer);
 }
-#endif	// don't want this function at all if we have PIETOOL defined

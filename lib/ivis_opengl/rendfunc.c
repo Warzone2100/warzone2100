@@ -26,8 +26,6 @@
 #include "lib/framework/fractions.h"
 #include "lib/ivis_common/pieclip.h"
 
-#ifndef PIETOOL
-
 /***************************************************************************/
 /*
  *	Local Variables
@@ -463,5 +461,3 @@ iColour* psPalette = pie_GetGamePal();
 	}
 
 }
-
-#endif

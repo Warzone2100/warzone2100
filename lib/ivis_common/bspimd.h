@@ -84,40 +84,6 @@ typedef struct PLANE
 }
 PLANE, *PSPLANE;
 
-
-
-#ifdef PIETOOL
-enum BINTREEORDER	{ PREORDER, INORDER, POSTORDER };
-
-
-typedef struct HDPLANE
-{
-	// These 1st three entries can NOT NOW be cast into a iVectorf *   (iVectorf on PC are doubles)
-	float		a;	// these values form the plane equation ax+by+cz=d
-	float		b;
-	float		c;
-	float		d;
-	Vector3f	vP;	// a point on the plane - in normal non-fract format
-} HDPLANE;
-
-
-typedef int	(*COMPFUNC) ( void *node1, void *node2 );
-typedef int	(*DOFUNC)   ( void *node,  int level   );
-typedef int	(*DELETEFUNC) ( void *node );
-
-typedef struct BINTREE
-{
-	PSBNODE		psBNodeDummyHead;
-	COMPFUNC	Compare;
-	int			DuplicatesOK;
-	int			NodeSize;
-}
-BINTREE, *PSBINTREE;
-
-
-
-#endif
-
 typedef struct BSPTREENODE
 {
 	struct BSPTREENODE *link[2];

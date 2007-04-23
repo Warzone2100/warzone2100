@@ -177,10 +177,7 @@ static BOOL LoadTextureFile(char *FileName, iTexture *pSprite, int *texPageID)
 		i++;
 	}
 
-#ifdef PIETOOL
-	*texPageID=NULL;
-#else
 	*texPageID = pie_AddBMPtoTexPages(pSprite, FileName, 1, TRUE);
-#endif
+
 	return TRUE;
 }

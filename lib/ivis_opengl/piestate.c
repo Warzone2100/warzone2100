@@ -143,7 +143,6 @@ void pie_SetFogStatus(BOOL val)
 /***************************************************************************/
 void pie_SetTexturePage(SDWORD num)
 {
-#ifndef PIETOOL
 	if (num != rendStates.texPage) {
 		rendStates.texPage = num;
 		if (num < 0) {
@@ -153,14 +152,12 @@ void pie_SetTexturePage(SDWORD num)
 			glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[num].textPage3dfx);
 		}
 	}
-#endif
 }
 
 /***************************************************************************/
 
 void pie_SetColourKeyedBlack(BOOL keyingOn)
 {
-#ifndef PIETOOL
 	if (keyingOn != rendStates.keyingOn)
 	{
 		rendStates.keyingOn = keyingOn;
@@ -173,14 +170,11 @@ void pie_SetColourKeyedBlack(BOOL keyingOn)
 			glDisable(GL_ALPHA_TEST);
 		}
 	}
-#endif
 }
 
 /***************************************************************************/
 void pie_SetColourCombine(COLOUR_MODE colCombMode)
 {
-#ifndef PIETOOL	//ffs
-
 	if (colCombMode != rendStates.colourCombine) {
 		rendStates.colourCombine = colCombMode;
 		pieStateCount++;
@@ -195,13 +189,11 @@ void pie_SetColourCombine(COLOUR_MODE colCombMode)
 				break;
 		}
 	}
-#endif
 }
 
 /***************************************************************************/
 void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode)
 {
-#ifndef PIETOOL
 	if (transMode != rendStates.transMode) {
 		rendStates.transMode = transMode;
 		switch (transMode) {
@@ -223,7 +215,6 @@ void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode)
 				break;
 		}
 	}
-#endif
 }
 
 /***************************************************************************/
