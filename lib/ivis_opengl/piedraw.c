@@ -150,7 +150,9 @@ static SDWORD		polyCount = 0;
 static inline void pie_PiePoly(PIEPOLY *poly, BOOL bClip);
 static inline void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, BOOL bClip);
 
+#ifdef BSPIMD
 void DrawTriangleList(BSPPOLYID PolygonNumber);
+#endif
 
 /***************************************************************************/
 /*

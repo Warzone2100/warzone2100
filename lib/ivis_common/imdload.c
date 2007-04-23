@@ -87,9 +87,9 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 	int			i, nlevels, ptype, pwidth, pheight, texpage;
 	iIMDShape	*s, *psShape;
 	BOOL		bTextured = FALSE;
-#ifdef BSPIMD
+//#ifdef BSPIMD
 	UDWORD		level;
-#endif
+//#endif
 
 	IMDcount++;
 
@@ -196,8 +196,8 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 		return NULL;
 	}
 
-#ifdef BSPIMD
-// if we might have BSP then we need to preread the LEVEL directive
+//#ifdef BSPIMD
+	// if we might have BSP then we need to preread the LEVEL directive
 		if (sscanf(pFileData,"%s %d%n",buffer,&level,&cnt) != 2) {
 			iV_Error(0xff,"(_load_level) file corrupt -J");
 			return NULL;
@@ -208,7 +208,7 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 			debug(LOG_ERROR, "iV_ProcessIMD(2): expecting 'LEVELS' directive (%s)", buffer);
 			return NULL;
 		}
-#endif
+//#endif
 
 	s = _imd_load_level(&pFileData,FileDataEnd,nlevels,texpage);
 
@@ -911,14 +911,11 @@ static iIMDShape *_imd_load_level(char **ppFileData, char *FileDataEnd, int nlev
 	int cnt;
 	iIMDShape *s;
 	char buffer[MAX_FILE_PATH];
-//	int level;
+#ifdef NEVER_BSPIMD
+	int level;
+#endif
 	int n;
 	int npolys;
-
-#ifdef BSPIMD
-//		UWORD NumberOfParameters;
-//		UDWORD count;
-#endif
 
 	if (nlevels == 0)
 		return NULL;
@@ -936,7 +933,7 @@ static iIMDShape *_imd_load_level(char **ppFileData, char *FileDataEnd, int nlev
 		s->nShadowEdges = 0;
 
 // if we can be sure that there is no bsp ... the we check for level number at this point
-#ifndef BSPIMD
+#ifdef NEVER_BSPIMD
 		if (sscanf(pFileData,"%s %d%n",buffer,&level,&cnt) != 2) {
 			debug(LOG_ERROR, "_imd_load_level: file corrupt");
 			return NULL;
@@ -944,7 +941,7 @@ static iIMDShape *_imd_load_level(char **ppFileData, char *FileDataEnd, int nlev
 		pFileData += cnt;
 
 		if (strcmp(buffer,"LEVEL") != 0) {
-			debug(LOG_ERROR, "_imd_load_level: excepting 'LEVEL' directive");
+			debug(LOG_ERROR, "_imd_load_level: expecting 'LEVEL' directive");
 			return NULL;
 		}
 #endif
@@ -963,7 +960,7 @@ static iIMDShape *_imd_load_level(char **ppFileData, char *FileDataEnd, int nlev
 		// load points
 
 		if (strcmp(buffer,"POINTS") != 0) {
-			debug(LOG_ERROR, "_imd_load_level: expecting 'POINTS' directive");
+			debug(LOG_ERROR, "_imd_load_level: expecting 'POINTS' directive, got: %s", buffer);
 			return NULL;
 		}
 

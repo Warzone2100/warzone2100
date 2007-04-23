@@ -135,7 +135,9 @@ BOOL	renderBridgeSection(STRUCTURE *psStructure)
 			dv.z = terrainMidY*TILE_UNITS - (structY - player.p.z);
 			dv.y = structZ;
 
+#ifdef BSPIMD
 			SetBSPObjectPos(structX,dv.y,structY);	// world x,y,z coord of structure ... this is needed for the BSP code
+#endif
 
 			/* Push the indentity matrix */
 			pie_MatBegin();

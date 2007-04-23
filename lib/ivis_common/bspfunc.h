@@ -23,11 +23,15 @@
 #include "ivisdef.h"
 #include "bspimd.h"
 
+#ifdef BSPIMD
+
 /***************************************************************************/
 
 void GetRealCameraPos(OBJPOS *Camera, SDWORD Distance, Vector3i *CameraLoc);
 PSBSPTREENODE InitNode(PSBSPTREENODE psBSPNode);
 void GetPlane( iIMDShape *s, UDWORD PolygonID, PSPLANE psPlane );
+
+#endif
 
 #endif
 

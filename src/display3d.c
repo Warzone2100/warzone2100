@@ -315,11 +315,12 @@ static DEF_COLOURS	defaultColours;
 
 /********************  Functions  ********************/
 
-
+#ifdef BSPIMD
 static UDWORD GetCameraDistance(void)
 {
 	return distance;
 }
+#endif
 
 static void displayMultiChat( void )
 {
@@ -622,7 +623,7 @@ static void displayTerrain(void)
 	}
 }
 
-
+#ifdef BSPIMD
 // Parameter is the vector to store the camera position
 static void CalcBSPCameraPos(Vector3i *NewBSPCamera)
 {
@@ -638,6 +639,7 @@ static void CalcBSPCameraPos(Vector3i *NewBSPCamera)
 
 		GetRealCameraPos(&Camera,GetCameraDistance(),NewBSPCamera);
 }
+#endif
 
 /***************************************************************************/
 BOOL	doWeDrawRadarBlips( void )
@@ -666,7 +668,9 @@ static void drawTiles(iView *camera, iView *player)
 {
 	UDWORD i, j;
 	SDWORD zMax;
+#ifdef BSPIMD
 	Vector3i BSPCamera;
+#endif
 	MAPTILE *psTile;
 	UDWORD specular;
 	UDWORD edgeX, edgeY;
@@ -703,8 +707,10 @@ static void drawTiles(iView *camera, iView *player)
 	terrainMidX = visibleXTiles/2;
 	terrainMidY = visibleYTiles/2;
 
+#ifdef BSPIMD
 	CalcBSPCameraPos(&BSPCamera);
 	SetBSPCameraPos(BSPCamera.x, BSPCamera.y, BSPCamera.z);
+#endif
 
 	/* Find our position in tile coordinates */
 	playerXTile = player->p.x >> TILE_SHIFT;
@@ -1997,7 +2003,9 @@ void	renderFeature(FEATURE *psFeature)
 
 		/* features sits at the height of the tile it's centre is on */
 		dv.y = psFeature->z;
+#ifdef BSPIMD
 		SetBSPObjectPos(featX,dv.y,featY);	// world x,y,z coord of structure ... this is needed for the BSP code
+#endif
 
 		/* Push the indentity matrix */
 		iV_MatrixBegin();
@@ -2300,7 +2308,9 @@ void	renderStructure(STRUCTURE *psStructure)
 		} else {
 			dv.y = map_TileHeight(structX >> TILE_SHIFT, structY >> TILE_SHIFT);
 		}
+#ifdef BSPIMD
 		SetBSPObjectPos(structX,dv.y,structY);	// world x,y,z coord of structure ... this is needed for the BSP code
+#endif
 		/* Push the indentity matrix */
 		iV_MatrixBegin();
 
@@ -2712,9 +2722,6 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition)
 	dv.z = terrainMidY*TILE_UNITS - (psPosition->coords.y - player.p.z);
 	dv.y = psPosition->coords.z;
 
-	// world x,y,z coord of deliv point ... this is needed for the BSP code
-	//SetBSPObjectPos(posX,dv.y,posY);
-
 	/* Push the indentity matrix */
 	iV_MatrixBegin();
 
@@ -2851,7 +2858,9 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 		dv.z = terrainMidY*TILE_UNITS - (structY - player.p.z);
 		dv.y = map_Height(structX, structY);
 
+#ifdef BSPIMD
 		SetBSPObjectPos(structX,dv.y,structY);	// world x,y,z coord of structure ... this is needed for the BSP code
+#endif
 
 		/* Push the indentity matrix */
 		iV_MatrixBegin();

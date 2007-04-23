@@ -462,9 +462,11 @@ void iV_IMDRelease(iIMDShape *s)
 		if (s->connectors) {
 			free(s->connectors);
 		}
+#ifdef BSPIMD
 		if (s->BSPNode) {
 				free(s->BSPNode);	// I used malloc() so i'm going to use FREE()
 		}
+#endif
 		if (s->polys) {
 			for (i = 0; i < s->npolys; i++) {
 				if (s->polys[i].pindex) {

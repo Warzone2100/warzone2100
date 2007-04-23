@@ -20,6 +20,8 @@
 #ifndef i_BSPIMD
 #define i_BSPIMD
 
+#ifdef BSPIMD
+
 typedef UDWORD WORLDCOORD;
 typedef SWORD ANGLE;
 
@@ -142,5 +144,8 @@ BSPTREENODE, *PSBSPTREENODE;
 
 
 /***************************************************************************/
+
+#endif
+
 #endif
 

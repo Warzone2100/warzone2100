@@ -41,9 +41,6 @@
  */
 /***************************************************************************/
 #define BSPIMD	// now defined for all versions (optional BSP handled on all formats)
-#ifdef WIN321		//Not really needed I guess, however, see debug.c comments.  -Qamly
-	#define iV_DDX
-#endif
 
 #define iV_SCANTABLE_MAX	1024
 
