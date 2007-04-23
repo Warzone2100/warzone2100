@@ -99,9 +99,12 @@ static inline MESSAGE* createMessage(MESSAGE_TYPE msgType)
 	MESSAGE *newMsg;
 
 	// Allocate memory for the message, and on failure return a NULL pointer
-	newMsg = malloc(sizeof(MESSAGE));
-	if ( !newMsg )
+	newMsg = (MESSAGE*)malloc(sizeof(MESSAGE));
+	if (newMsg == NULL)
+	{
+		debug(LOG_ERROR, "createMessage: out of memory\n");
 		return NULL;
+	}
 
 	newMsg->type = msgType;
 	newMsg->id = (msgID << 3) | selectedPlayer;
@@ -332,33 +335,33 @@ void addProximityDisplay(MESSAGE *psMessage, BOOL proxPos, UDWORD player)
 	PROXIMITY_DISPLAY *psToAdd;
 
 	//create the proximity display
-	psToAdd = malloc(sizeof(PROXIMITY_DISPLAY));
-	if(psToAdd)
+	psToAdd = (PROXIMITY_DISPLAY*)malloc(sizeof(PROXIMITY_DISPLAY));
+	if (psToAdd == NULL)
 	{
-		if (proxPos)
-		{
-			psToAdd->type = POS_PROXOBJ;
-		}
-		else
-		{
-			psToAdd->type = POS_PROXDATA;
-		}
-		psToAdd->psMessage = psMessage;
-		psToAdd->screenX = 0;
-		psToAdd->screenY = 0;
-		psToAdd->screenR = 0;
-		psToAdd->radarX = 0;
-		psToAdd->radarY = 0;
-		psToAdd->player = player;
-		psToAdd->timeLastDrawn = 0;
-		psToAdd->frameNumber = 0;
-		psToAdd->selected = FALSE;
-		psToAdd->strobe = 0;
+		debug(LOG_ERROR, "addProximityDisplay: out of memory\n");
+		return;
+	}
+
+
+	if (proxPos)
+	{
+		psToAdd->type = POS_PROXOBJ;
 	}
 	else
 	{
-		debug(LOG_ERROR, "addProximityDisplay() - malloc failed");
+		psToAdd->type = POS_PROXDATA;
 	}
+	psToAdd->psMessage = psMessage;
+	psToAdd->screenX = 0;
+	psToAdd->screenY = 0;
+	psToAdd->screenR = 0;
+	psToAdd->radarX = 0;
+	psToAdd->radarY = 0;
+	psToAdd->player = player;
+	psToAdd->timeLastDrawn = 0;
+	psToAdd->frameNumber = 0;
+	psToAdd->selected = FALSE;
+	psToAdd->strobe = 0;
 
 	//now add it to the top of the list
 	psToAdd->psNext = apsProxDisp[player];
@@ -488,17 +491,20 @@ BOOL initMessage(void)
 static BOOL addToViewDataList(VIEWDATA *psViewData, UBYTE numData)
 {
 	VIEWDATA_LIST		*psAdd;
-	psAdd = malloc(sizeof(VIEWDATA_LIST));
-	if(psAdd)
+	psAdd = (VIEWDATA_LIST*)malloc(sizeof(VIEWDATA_LIST));
+	if (psAdd == NULL)
 	{
-		psAdd->psViewData = psViewData;
-		psAdd->numViewData = numData;
-		//add to top of list
-		psAdd->psNext = apsViewData;
-		apsViewData = psAdd;
-		return TRUE;
+		debug(LOG_ERROR, "addToViewDataList: out of memory\n");
+		return FALSE;
 	}
-	return FALSE;
+
+	psAdd->psViewData = psViewData;
+	psAdd->numViewData = numData;
+	//add to top of list
+	psAdd->psNext = apsViewData;
+	apsViewData = psAdd;
+
+	return TRUE;
 }
 
 /*load the view data for the messages from the file */

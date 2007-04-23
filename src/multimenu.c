@@ -302,7 +302,7 @@ void displayCamTypeBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD 
 
 	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
 	sprintf(buffer, "T%i", (int)(psWidget->UserData));
-	if ((int)(psWidget->UserData) == current_tech) {
+	if ((unsigned int)(psWidget->UserData) == current_tech) {
 		iV_SetTextColour(PIE_TEXT_WHITE);
 	} else {
 		iV_SetTextColour(PIE_TEXT_LIGHTBLUE);
@@ -318,12 +318,12 @@ void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWO
 	char buffer[8];
 
 	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
-	if ((int)(psWidget->UserData) == current_numplayers) {
+	if ((unsigned int)(psWidget->UserData) == current_numplayers) {
 		iV_SetTextColour(PIE_TEXT_WHITE);
 	} else {
 		iV_SetTextColour(PIE_TEXT_LIGHTBLUE);
 	}
-	if ((int)(psWidget->UserData) == 0) {
+	if ((unsigned int)(psWidget->UserData) == 0) {
 		sprintf(buffer, " *");
 	} else {
 		sprintf(buffer, "%iP", (int)(psWidget->UserData));

@@ -99,7 +99,7 @@ char	name[15];	// hopefully!
 		sprintf(name,miscImds[i].pName);
 		strcat(name,".pie");
 		/* see if the resource loader can find it */
-		miscImds[i].pImd = resGetData("IMD",name);
+		miscImds[i].pImd = (iIMDShape*)resGetData("IMD",name);
 		/* If it didn't get it then... */
 		if(!miscImds[i].pImd)
 		{
@@ -175,7 +175,7 @@ BOOL	initMiscImds( void )
 	{
 		sprintf(pieNum, "%d", i+1);
 		facName[5] = *pieNum;
-		pAssemblyPointIMDs[FACTORY_FLAG][i] = resGetData("IMD", facName);
+		pAssemblyPointIMDs[FACTORY_FLAG][i] = (iIMDShape*)resGetData("IMD", facName);
 		if (!pAssemblyPointIMDs[FACTORY_FLAG][i])
 		{
 			debug( LOG_ERROR, "Can't find assembly point graphic for factory" );
@@ -183,7 +183,7 @@ BOOL	initMiscImds( void )
 			return(FALSE);
 		}
 		cybName[6] = *pieNum;
-		pAssemblyPointIMDs[CYBORG_FLAG][i] = resGetData("IMD", cybName);
+		pAssemblyPointIMDs[CYBORG_FLAG][i] = (iIMDShape*)resGetData("IMD", cybName);
 		if (!pAssemblyPointIMDs[CYBORG_FLAG][i])
 		{
 			debug( LOG_ERROR, "Can't find assembly point graphic for cyborg factory" );
@@ -191,14 +191,14 @@ BOOL	initMiscImds( void )
 			return(FALSE);
 		}
 		vtolName[6] = *pieNum;
-		pAssemblyPointIMDs[VTOL_FLAG][i] = resGetData("IMD", vtolName);
+		pAssemblyPointIMDs[VTOL_FLAG][i] = (iIMDShape*)resGetData("IMD", vtolName);
 		if (!pAssemblyPointIMDs[VTOL_FLAG][i])
 		{
 			debug( LOG_ERROR, "Can't find assembly point graphic for vtol factory" );
 			abort();
 			return(FALSE);
 		}
-		pAssemblyPointIMDs[REPAIR_FLAG][i] = resGetData("IMD", "mirnum1.pie");
+		pAssemblyPointIMDs[REPAIR_FLAG][i] = (iIMDShape*)resGetData("IMD", "mirnum1.pie");
 		if (!pAssemblyPointIMDs[REPAIR_FLAG][i])
 		{
 			debug( LOG_ERROR, "Can't find assembly point graphic for repair facility" );

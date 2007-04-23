@@ -1105,7 +1105,7 @@ init_ObjectDead( void * psObj )
 
 static iIMDShape *anim_GetShapeFunc( char * pStr )
 {
-	return resGetData( "IMD", pStr );
+	return (iIMDShape*)resGetData( "IMD", pStr );
 }
 
 // ////////////////////////////////////////////////////////////////////////////

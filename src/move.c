@@ -3071,7 +3071,7 @@ WZ_DECL_UNUSED static void moveGetStatusStr( UBYTE status, char *szStr )
 static void
 moveCyborgLaunchAnimDone( ANIM_OBJECT *psObj )
 {
-	DROID	*psDroid = psObj->psParent;
+	DROID	*psDroid = (DROID*)psObj->psParent;
 
 	ASSERT( psDroid != NULL,
 			"moveCyborgLaunchAnimDone: invalid cyborg pointer" );
@@ -3086,7 +3086,7 @@ moveCyborgLaunchAnimDone( ANIM_OBJECT *psObj )
 static void
 moveCyborgTouchDownAnimDone( ANIM_OBJECT *psObj )
 {
-	DROID	*psDroid = psObj->psParent;
+	DROID	*psDroid = (DROID*)psObj->psParent;
 
 	ASSERT( psDroid != NULL,
 			"moveCyborgTouchDownAnimDone: invalid cyborg pointer" );

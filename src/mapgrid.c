@@ -98,17 +98,15 @@ BOOL gridInitialise(void)
 void gridClear(void)
 {
 	GRID_ARRAY	*psCurr, *psNext;
-	SDWORD		x,y;
+	unsigned int	x, y;
 
 	debug( LOG_NEVER, "gridClear %d %d\n", gridWidth, gridHeight );
-//	for(x=0; x<GRID_WIDTH; x+=1)
-	for(x=0; x<gridWidth; x+=1)
+	for(x = 0; x < gridWidth; ++x)
 	{
-//		for(y=0; y<GRID_HEIGHT; y+=1)
-		for(y=0; y<gridHeight; y+=1)
+		for(y = 0; y < gridHeight; ++y)
 		{
 //			for(psCurr = apsMapGrid[x][y]; psCurr; psCurr = psNext)
-			for(psCurr = apsMapGrid[GridIndex(x,y)]; psCurr; psCurr = psNext)
+			for(psCurr = apsMapGrid[GridIndex(x,y)]; psCurr != NULL; psCurr = psNext)
 			{
 				psNext = psCurr->psNext;
 				HEAP_FREE(psGridHeap, psCurr);
@@ -189,12 +187,10 @@ static void gridCalcCoverage(BASE_OBJECT *psObj, SDWORD objx, SDWORD objy, COVER
 	// see which ones are covered by the object
 	for (x=minx; x<=maxx; x++)
 	{
-//		if ( (x >= 0) && (x < GRID_WIDTH) )
 		if ( (x >= 0) && (x < gridWidth) )
 		{
 			for(y=miny; y<=maxy; y++)
 			{
-//				if ( (y >= 0) && (y < GRID_HEIGHT) &&
 				if ( (y >= 0) && (y < gridHeight) &&
 					 gridIntersect( x * GRID_UNITS, y * GRID_UNITS,
 									(x+1) * GRID_UNITS, (y+1) * GRID_UNITS,
@@ -246,18 +242,16 @@ void gridRemoveObject(BASE_OBJECT *psObj)
 #if defined(DEBUG)
 	{
 		GRID_ARRAY		*psCurr;
-		SDWORD			i,x,y;
+		unsigned int		i,x,y;
 
-//		for (x=0; x<GRID_WIDTH; x++)
-		for (x=0; x<gridWidth; x++)
+		for (x = 0; x < gridWidth; x++)
 		{
-//			for(y=0; y<GRID_HEIGHT; y++)
-			for(y=0; y<gridHeight; y++)
+			for(y = 0; y < gridHeight; y++)
 			{
 //				for (psCurr = apsMapGrid[x][y]; psCurr; psCurr = psCurr->psNext)
 				for (psCurr = apsMapGrid[GridIndex(x,y)]; psCurr; psCurr = psCurr->psNext)
 				{
-					for (i=0; i<MAX_GRID_ARRAY_CHUNK; i++)
+					for (i = 0; i < MAX_GRID_ARRAY_CHUNK; i++)
 					{
 						if (psCurr->apsObjects[i] == psObj)
 						{
@@ -277,9 +271,6 @@ void gridRemoveObject(BASE_OBJECT *psObj)
 // could affect a location (x,y in world coords)
 void gridStartIterate(SDWORD x, SDWORD y)
 {
-//	ASSERT( (x >= 0) && (x < GRID_WIDTH*GRID_UNITS) &&
-//			 (y >= 0) && (y < GRID_WIDTH*GRID_UNITS),
-//		"gridStartIterate: coords off grid" );
 	ASSERT( (x >= 0) && (x < gridWidth*GRID_UNITS) &&
 			 (y >= 0) && (y < gridHeight*GRID_UNITS),
 		"gridStartIterate: coords off grid" );
@@ -337,14 +328,12 @@ void gridGarbageCollect(void)
 {
 	gridCompactArray(garbageX,garbageY);
 
-	garbageX += 1;
-//	if (garbageX >= GRID_WIDTH)
+	++garbageX;
 	if (garbageX >= gridWidth)
 	{
 		garbageX = 0;
-		garbageY += 1;
+		++garbageY;
 
-//		if (garbageY >= GRID_HEIGHT)
 		if (garbageY >= gridHeight)
 		{
 			garbageX = 0;
@@ -539,17 +528,16 @@ void gridDisplayCoverage(BASE_OBJECT *psObj)
 {
 #ifdef DEBUG
 	{
-		SDWORD		x,y, i;
+		unsigned int	x, y, i;
 		GRID_ARRAY	*psCurr;
 
 		debug( LOG_NEVER, "Grid coverage for object %d (%d,%d) - range %d\n", psObj->id, psObj->x, psObj->y, gridObjRange(psObj) );
-//		for (x=0; x<GRID_WIDTH; x++)
-		for (x=0; x<gridWidth; x++)
+		for (x = 0; x < gridWidth; x++)
 		{
-			for(y=0; y<gridHeight; y++)
+			for(y = 0; y < gridHeight; y++)
 			{
 //				psCurr = apsMapGrid[x][y];
-				psCurr = apsMapGrid[GridIndex(x,y)];
+				psCurr = apsMapGrid[GridIndex(x, y)];
 				i = 0;
 				while (psCurr != NULL)
 				{
@@ -558,7 +546,7 @@ void gridDisplayCoverage(BASE_OBJECT *psObj)
 						debug( LOG_NEVER, "    %d,%d  [ %d,%d -> %d,%d ]\n", x, y, x*GRID_UNITS, y*GRID_UNITS, (x+1)*GRID_UNITS, (y+1)*GRID_UNITS );
 					}
 
-					i += 1;
+					++i;
 					if (i >= MAX_GRID_ARRAY_CHUNK)
 					{
 						psCurr = psCurr->psNext;

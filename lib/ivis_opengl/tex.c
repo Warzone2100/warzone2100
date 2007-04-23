@@ -38,7 +38,7 @@
 //*************************************************************************
 
 iTexPage _TEX_PAGE[iV_TEX_MAX];
-int _TEX_INDEX;
+unsigned int _TEX_INDEX;
 
 //*************************************************************************
 
@@ -228,7 +228,7 @@ int pie_ReloadTexPage(const char *texpageName, const char *fileName)
 */
 void pie_TexShutDown(void)
 {
-	int i = 0, j = 0;
+	unsigned int i = 0, j = 0;
 
 	while (i < _TEX_INDEX) {
 		/*	Only free up the ones that were NOT allocated through resource handler cos they'll already
@@ -243,7 +243,7 @@ void pie_TexShutDown(void)
 		i++;
 	}
 
-	debug(LOG_TEXTURE, "pie_TexShutDown successful - did free %d texture pages\n", j);
+	debug(LOG_TEXTURE, "pie_TexShutDown successful - did free %u texture pages\n", j);
 }
 
 void pie_TexInit(void)

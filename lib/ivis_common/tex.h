@@ -52,7 +52,7 @@ typedef struct
 iTexPage;
 
 //*************************************************************************
-extern int _TEX_INDEX;
+extern unsigned int _TEX_INDEX;
 extern iTexPage	_TEX_PAGE[iV_TEX_MAX];
 
 //*************************************************************************

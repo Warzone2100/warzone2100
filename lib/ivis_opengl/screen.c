@@ -413,7 +413,7 @@ static inline void screen_DumpPNG(PHYSFS_file* fileHandle, const unsigned char* 
 		unsigned int currentRow;
 		unsigned int row_stride = width * channels;
 
-		scanlines = malloc(sizeof(const unsigned char*) * height);
+		scanlines = (const unsigned char**)malloc(sizeof(const unsigned char*) * height);
 		if (scanlines == NULL)
 		{
 			debug(LOG_ERROR, "screen_DumpPNG: Couldn't allocate memory\n");

@@ -2083,7 +2083,7 @@ void intDisplayDPButton(WIDGET *psWidget, UDWORD xOffset,
 	UBYTE		hilight = 0, down = 0;
 	UWORD		imageID;
 
-	psStruct = psButton->pUserData;
+	psStruct = (STRUCTURE*)psButton->pUserData;
 	if (psStruct)
 	{
 		ASSERT( StructIsFactory(psStruct),

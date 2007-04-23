@@ -153,7 +153,7 @@ void iV_FreeImageFile(IMAGEFILE *ImageFile)
 
 static BOOL LoadTextureFile(char *FileName, iTexture *pSprite, int *texPageID)
 {
-	int i=0;
+	unsigned int i=0;
 
 	debug(LOG_TEXTURE, "LoadTextureFile: %s", FileName);
 
