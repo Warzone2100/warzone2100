@@ -27,7 +27,7 @@
 
 #include "ivispatch.h"
 
-static const size_t PNG_BYTES_TO_CHECK = 4;
+#define PNG_BYTES_TO_CHECK 4
 
 static void wzpng_read_data(png_structp ctx, png_bytep area, png_size_t size)
 {
@@ -49,11 +49,11 @@ static inline void PNGCleanup(png_infop *info_ptr, png_structp *png_ptr, PHYSFS_
 
 BOOL pie_PNGLoadFile(const char *fileName, iTexture *s)
 {
-	png_structp png_ptr = NULL;
-	png_infop info_ptr = NULL;
-
 	unsigned char PNGheader[PNG_BYTES_TO_CHECK];
 	PHYSFS_sint64 readSize;
+
+	png_structp png_ptr = NULL;
+	png_infop info_ptr = NULL;
 
 	// Open file
 	PHYSFS_file* fileHandle = PHYSFS_openRead(fileName);
