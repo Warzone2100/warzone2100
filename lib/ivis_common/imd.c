@@ -368,74 +368,6 @@ BOOL iV_IMDSave(char *filename, iIMDShape *s, BOOL PieIMD)
 }
 #endif
 
-
-//*************************************************************************
-//*** print IMD file info
-//*
-//* pre		shape successfully loaded
-//*
-//* params	s = pointer to IMD shape
-//*
-//******
-void iV_IMDDebug(iIMDShape *s)
-{
-	iIMDShape *sp;
-	iIMDPoly *poly;
-	int nlevel, i, j, d;
-
-	iV_DEBUG0("iV_IMDSave = file info *****************************\n");
-
-	iV_DEBUG1("SHAPE\nflags\t%x\n",s->flags);
-	iV_DEBUG1("texpage\t%d\n",s->texpage);
-	iV_DEBUG1("oradius\t%d\n",s->oradius);
-	iV_DEBUG1("sradius\t%d\n",s->sradius);
-	iV_DEBUG1("radius\t%d\n",s->radius);
-	iV_DEBUG2("xmin, xmax\t%d, %d\n",s->xmin,s->xmax);
-	iV_DEBUG2("ymin, ymax\t%d, %d\n",s->ymin,s->ymax);
-	iV_DEBUG2("zmin, zmax\t%d, %d\n",s->zmin,s->zmax);
-	iV_DEBUG3("ocen\t%d %d %d\n",s->ocen.x,s->ocen.y,s->ocen.z);
-	iV_DEBUG1("npoints\t%d\n",s->npoints);
-	iV_DEBUG1("npolys\t%d\n",s->npolys);
-	iV_DEBUG1("points\t%p\n",s->points);
-	iV_DEBUG1("polys\t%p\n",s->polys);
-	iV_DEBUG1("ntexanims\t%d\n",s->ntexanims);
-	iV_DEBUG1("texanims\t%p\n",s->ntexanims);
-	iV_DEBUG1("next\t%p\n",s->next);
-
-	// find number of levels in shape
-
-	for (nlevel=0, sp = s; sp != NULL; sp = sp->next, nlevel++)
-		;
-
-	iV_DEBUG1("nlevels\t%d\n",nlevel);
-
-	for (sp = s, i=0; i<nlevel; sp = sp->next, i++) {
-		iV_DEBUG1("POINTS %d\n",sp->npoints);
-
-		for (j=0; j<sp->npoints; j++)
-			iV_DEBUG3("\t%d %d %d\n",sp->points[j].x,sp->points[j].y,
-					sp->points[j].z);
-
-		iV_DEBUG1("POLYGONS %d\n",sp->npolys);
-
-		// write shape polys
-		for (poly = sp->polys, j=0; j<sp->npolys; j++, poly++) {
-			iV_DEBUG2("\t%8x %d",poly->flags,poly->npnts);
-			for (d=0; d<poly->npnts; d++)
-				iV_DEBUG1(" %d",poly->pindex[d]);
-
-			// if textured write texture uv's
-			if (poly->flags & iV_IMD_TEX) {
-				for (d=0; d<poly->npnts; d++)
-					iV_DEBUG2(" %d %d",poly->vrt[d].u,poly->vrt[d].v);
-			}
-
-			iV_DEBUG0("\n");
-		}
-	}
-}
-
-
 //*************************************************************************
 //*** free IMD shape memory
 //*
@@ -450,12 +382,6 @@ void iV_IMDRelease(iIMDShape *s)
    iIMDShape *d;
 
    if (s) {
-
-		if (s->flags & iV_IMD_BINARY) {
-			free(s);
-			return;
-		}
-
 		if (s->points) {
 			free(s->points);
 		}

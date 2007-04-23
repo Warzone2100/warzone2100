@@ -284,11 +284,6 @@ static BOOL _imd_load_polys( char **ppFileData, iIMDShape *s )
 			pFileData += cnt;
 
 			poly->flags=flags;
-
-			if (flags & PIE_NO_CULL) {
-				s->flags |= iV_IMD_NOCULLSOME;
-			}
-
 			poly->npnts=npnts;
 
 			IMDVertexcount+= poly->npnts;
