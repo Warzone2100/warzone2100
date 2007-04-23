@@ -36,7 +36,6 @@
 #include "lib/ivis_common/piedef.h" //ivis matrix code
 #include "lib/ivis_common/piestate.h" //ivis render code
 #include "lighting.h"
-#include "lib/ivis_common/bspfunc.h"
 #include "loop.h"
 
 #define GetRadius(x) ((x)->sradius)
@@ -143,21 +142,6 @@ void updateLightLevels(void)
 
 void setMatrix(Vector3i *Position, Vector3i *Rotation, Vector3i *CameraPos, BOOL RotXYZ)
 {
-#ifdef BSPIMD
-	Vector3i BSPCameraPos;
-	OBJPOS Camera = {0,0,0,0,0,0};
-
-	Camera.pitch=-45;
-	Camera.yaw=0;
-#endif
-
-#ifdef BSPIMD
-	GetRealCameraPos(&Camera,Position->z,&BSPCameraPos);
-	SetBSPCameraPos(BSPCameraPos.x,500,BSPCameraPos.z);
-	SetBSPObjectPos(0,0,0);			// For imd button the bsp is sourced at 0,0,0
-	SetBSPObjectRot(DEG(-Rotation->y),0);								// Droid rotation
-#endif
-
 	pie_PerspectiveBegin();
    	pie_MatBegin();
 
@@ -316,9 +300,6 @@ void displayStructureButton(STRUCTURE *psStructure, Vector3i *Rotation, Vector3i
         Position->y -= 20;
     }
 
-#ifdef BSPIMD
-	SetBSPObjectPos(0,0,0);
-#endif
 	setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
 	pie_MatScale(scale);
 

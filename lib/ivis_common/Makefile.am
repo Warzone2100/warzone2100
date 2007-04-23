@@ -1,5 +1,5 @@
 noinst_LIBRARIES = libivis_common.a
-noinst_HEADERS = bitimage.h bspfunc.h bspimd.h imd.h ivi.h ivisdef.h \
+noinst_HEADERS = bitimage.h imd.h ivi.h ivisdef.h \
 	ivispatch.h pieblitfunc.h pieclip.h piedef.h piefunc.h piemode.h piepalette.h \
 	piestate.h pietypes.h rendfunc.h rendmode.h tex.h textdraw.h
 

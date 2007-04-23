@@ -150,10 +150,6 @@ static SDWORD		polyCount = 0;
 static inline void pie_PiePoly(PIEPOLY *poly, BOOL bClip);
 static inline void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, BOOL bClip);
 
-#ifdef BSPIMD
-void DrawTriangleList(BSPPOLYID PolygonNumber);
-#endif
-
 /***************************************************************************/
 /*
  *	Source
@@ -193,45 +189,6 @@ void pie_EndLighting(void)
 	shadows = FALSE;
 	lighting = FALSE;
 }
-
-#ifdef BSPIMD
-
-// BSP object position
-static Vector3i BSPObject;
-static Vector3i BSPCamera;
-static SDWORD BSPObject_Yaw=0,BSPObject_Pitch=0;
-
-
-void SetBSPObjectPos(SDWORD x,SDWORD y,SDWORD z)
-{
-	BSPObject.x=x;
-	BSPObject.y=y;
-	BSPObject.z=z;
-	// Reset the yaw & pitch
-
-		// these values must be set every time they are used ...
-	BSPObject_Yaw=0;
-	BSPObject_Pitch=0;
-}
-
-// This MUST be called after SetBSPObjectPos ...
-
-void SetBSPObjectRot(SDWORD Yaw, SDWORD Pitch)
-{
-	BSPObject_Yaw=Yaw;
-	BSPObject_Pitch=Pitch;
-}
-
-
-// This must be called once per frame after the terrainMidX & player.p values have been updated
-void SetBSPCameraPos(SDWORD x,SDWORD y,SDWORD z)
-{
-	BSPCamera.x=x;
-	BSPCamera.y=y;
-	BSPCamera.z=z;
-}
-
-#endif
 
 static inline void Vector3f_Set(Vector3f* v, float x, float y, float z)
 {

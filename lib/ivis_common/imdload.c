@@ -38,8 +38,6 @@
 #include "rendmode.h"
 #include "ivispatch.h"
 #include "tex.h"		// texture page loading
-#include "bspfunc.h"	// for imd functions
-
 
 // Static variables
 static Uint32 	_IMD_FLAGS;
@@ -87,9 +85,7 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 	int			i, nlevels, ptype, pwidth, pheight, texpage;
 	iIMDShape	*s, *psShape;
 	BOOL		bTextured = FALSE;
-//#ifdef BSPIMD
 	UDWORD		level;
-//#endif
 
 	IMDcount++;
 
@@ -196,8 +192,8 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 		return NULL;
 	}
 
-//#ifdef BSPIMD
 	// if we might have BSP then we need to preread the LEVEL directive
+	// FIXME: Remove BSP info from PIE files, since we do not use it anymore
 		if (sscanf(pFileData,"%s %d%n",buffer,&level,&cnt) != 2) {
 			iV_Error(0xff,"(_load_level) file corrupt -J");
 			return NULL;
@@ -208,7 +204,6 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 			debug(LOG_ERROR, "iV_ProcessIMD(2): expecting 'LEVELS' directive (%s)", buffer);
 			return NULL;
 		}
-//#endif
 
 	s = _imd_load_level(&pFileData,FileDataEnd,nlevels,texpage);
 
@@ -384,11 +379,6 @@ static BOOL _imd_load_polys( char **ppFileData, iIMDShape *s )
 					poly->vrt[j].g=255;
 				}
 			}
-
-#ifdef BSPIMD
-			poly->BSP_NextPoly=BSPPOLYID_TERMINATE;	// make it end end of the BSP chain by default
-#endif
-
 		}
 	} else {
 		return FALSE;
@@ -397,158 +387,6 @@ static BOOL _imd_load_polys( char **ppFileData, iIMDShape *s )
 	*ppFileData = pFileData;
 	return TRUE;
 }
-
-
-#ifdef BSPIMD
-
-// The order for the BSP section of the IMD is :-
-// LEFTLINK  FORWARD_POLYGONS_LIST_TEMRINATED_BY_-1  BACKWARD_POLYGONS_LIST_TEMRINATED_BY_-1  RIGHTLINK
-
-#define GETBSPTRIANGLE(polyid) (&(s->polys[(polyid)]))
-
-static BOOL _imd_load_bsp( char **ppFileData, iIMDShape *s, UWORD BSPNodeCount )
-{
-	char *pFileData = *ppFileData;
-	int cnt;
-	UWORD Node;
-	PSBSPTREENODE NodeList;	// An pointer to an array of  nodes
-	iIMDPoly *IMDTri;			// pointer to a polygon ... for handling the link list in the bsp
-	iV_DEBUG1("imd[_load_bsp] = number of nodes =%d\n",BSPNodeCount);
-
-	if (s->npolys >	BSPPOLYID_MAXPOLYID) {
-		iV_Error(0xff,"(_imd_load_bsp) Too many polygons in IMD for BSP to handle");
-	}
-
-	// Build table of nodes - we sort out the links later
-	NodeList = (BSPTREENODE*)malloc((sizeof(BSPTREENODE))*BSPNodeCount);	// Allocate the entire node tree
-
-	memset(NodeList,0,(sizeof(BSPTREENODE))*BSPNodeCount);	// Zero it out ... we need to make all pointers NULL
-
-	for (Node = 0; Node < BSPNodeCount; Node++) {
-		BSPTREENODE *psNode;
-
-		SDWORD NodeID;	// Temp storage area for a node ID
-		SDWORD PolygonID,FirstPolygonID;	// Temp storage area for a polygon ID
-
-		psNode = &(NodeList[Node]);
-
-		FirstPolygonID=-1;	// This indicates the first polygon in the forward facing BSP list
-
-		InitNode(psNode);
-
-		if (sscanf(pFileData,"%d%n",&NodeID,&cnt) != 1)	// Check that we read 1 parameter ok
-		{
-			iV_Error(0xff,"(_load_bsp) - needed a left node!");
-			return FALSE;
-		}
-		pFileData += cnt;
-		psNode->link[LEFT]=(PSBSPTREENODE)NodeID;	// This could be -1 indicating an empty node
-
-		// Get forward facing polygon list - never empty apart from root node
-		while(1) {
-			if (sscanf(pFileData,"%d%n",&PolygonID,&cnt) != 1) 	// Get a valid polygon number
-			{
-				iV_Error(0xff,"(_load_bsp) - needed a polygon number");
-				return FALSE;
-			}
-			pFileData += cnt;
-
-			if (PolygonID==-1)	break;
-
-			if ((PolygonID<0) || (PolygonID >= s->npolys)) {
-				iV_Error(0xff,"(_load_bsp) - bad polygon number");
-				return FALSE;
-			}
-
-			if (FirstPolygonID==-1) FirstPolygonID=PolygonID;
-
-			IMDTri=GETBSPTRIANGLE(PolygonID);
-			if (IMDTri->BSP_NextPoly != BSPPOLYID_TERMINATE) {
-				iV_Error(0xff,"(_load_bsp) - Polygon is mentioned more than once in the BSP");
-			}
-
-			IMDTri->BSP_NextPoly=psNode->TriSameDir;
-			psNode->TriSameDir=PolygonID;
-//			list_Add( psNode->psTriSameDir , &(s->polys[PolygonID]) );
-		}
-
-		// Generate the plane equation - if weve got any polygons
-		if (FirstPolygonID != -1) {
-			GetPlane(s, FirstPolygonID, &(psNode->Plane));
-		} else {
-			memset((char *)&(psNode->Plane),0,sizeof(PLANE));	// Clear the plane equation
-		}
-
-		// Get reverse facing polygon list - frequently empty
-		while(1) {
-			if (sscanf(pFileData,"%d%n",&PolygonID,&cnt) != 1) 	// Get a valid polygon number
-			{
-				iV_Error(0xff,"(_load_bsp) - needed a polygon number");
-				return FALSE;
-			}
-			pFileData += cnt;
-
-			if (PolygonID == -1) {
-				break;
-			}
-			if ((PolygonID < 0) || (PolygonID >= s->npolys)) {
-				iV_Error(0xff,"(_load_bsp) - bad polygon number");
-				return FALSE;
-			}
-
-			// Insert into the list
-			IMDTri=GETBSPTRIANGLE(PolygonID);
-			if (IMDTri->BSP_NextPoly != BSPPOLYID_TERMINATE) {
-				iV_Error(0xff,"(_load_bsp) - Polygon is mentioned more than once in the BSP");
-			}
-
-			IMDTri->BSP_NextPoly=psNode->TriOppoDir;
-			psNode->TriOppoDir=PolygonID;
-
-//			list_Add( psNode->psTriOppoDir , &(s->polys[PolygonID]) );
-		}
-
-		if (sscanf(pFileData,"%d%n",&NodeID,&cnt) != 1)	// Check that we read 1 parameter ok
-		{
-			iV_Error(0xff,"(_load_bsp) - needed a right node!");
-			return FALSE;
-		}
-		pFileData += cnt;
-		psNode->link[RIGHT]=(PSBSPTREENODE)NodeID;	// This could be -1 indicating an empty node
-	}
-
-	// Now fix all the links
-	for (Node = 0; Node < BSPNodeCount; Node++) {
-		BSPTREENODE *psNode;
-		int NodeID;
-
-		psNode = &(NodeList[Node]);
-
-		if ((SDWORD)(psNode->link[LEFT]) == -1) {
-			psNode->link[LEFT]=0;	// if its zero then its an empty link
-		} else {
-			NodeID = (int) psNode->link[LEFT];
-			psNode->link[LEFT] = &NodeList[NodeID];
-		}
-
-		if ((SDWORD)(psNode->link[RIGHT]) == -1) {
-			psNode->link[RIGHT]=0;	// if its zero then its an empty link
-		} else {
-			NodeID = (int) psNode->link[RIGHT];
-			psNode->link[RIGHT] = &NodeList[NodeID];
-		}
-	}
-
-	// Set the shape node list to the root node ... this can be used to
-  // FREE up the BSP memory if we needed to
-	s->BSPNode = &NodeList[0];
-	iV_DEBUG0("BSP Loaded AOK\n");
-
-	*ppFileData = pFileData;
-	return TRUE;
-}
-#endif
-
 
 static BOOL ReadPoints( char **ppFileData, iIMDShape *s )
 {
@@ -994,9 +832,6 @@ static iIMDShape *_imd_load_level(char **ppFileData, char *FileDataEnd, int nlev
 //NOW load optional stuff
 		{
 			BOOL OptionalsCompleted;
-#ifdef BSPIMD
-			s->BSPNode=NULL;	// Zero the bsp node pointer to zero as a default
-#endif
 
 			s->nconnectors = 0;	// Default number of connectors must be 0 ( this was'nt being done PBD. )
 
@@ -1029,12 +864,6 @@ static iIMDShape *_imd_load_level(char **ppFileData, char *FileDataEnd, int nlev
 					iV_DEBUG2("imd[_load_level] = npoints %d, npolys %d\n",s->npoints,s->npolys);
 					s->next = _imd_load_level(&pFileData,FileDataEnd,nlevels-1,texpage);
 				}
-#ifdef BSPIMD
-				else if (strcmp(buffer,"BSP") == 0)
-				{
-					_imd_load_bsp( &pFileData, s, (UWORD)n );
-				}
-#endif
 				else if (strcmp(buffer,"CONNECTORS") == 0)
 				{
 					//load connector stuff

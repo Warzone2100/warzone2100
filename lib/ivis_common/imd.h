@@ -28,18 +28,6 @@
 #define IMD_VER				1
 #define PIE_VER				2
 
-
-
-#ifdef BSPIMD
-
-#define BSPPOLYID_MAXPOLYID (65534)
-#define BSPPOLYID_TERMINATE (BSPPOLYID_MAXPOLYID+1)	// This is used as a terminator
-
-#include "bspimd.h"
-#include "lib/framework/frame.h"
-
-#endif
-
 //*************************************************************************
 
 #define iV_IMD_MAX_POINTS	512 // increased from 256 - Per, May 20th 2006
