@@ -49,7 +49,7 @@ extern "C" {
 }
 #endif
 #include <physfs.h>
-#include <setjmp.h>
+#include <png.h>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/frameint.h"
@@ -495,53 +495,42 @@ void screenToggleMode(void)
 	(void) SDL_WM_ToggleFullScreen(screen);
 }
 
-#define BUFFER_SIZE 4096
+// Screenshot code goes below this
+static const unsigned int channelBitdepth = 8;
 
-typedef struct {
-	struct jpeg_destination_mgr pub;
-	PHYSFS_file* file;
-	JOCTET * buffer;
-} my_jpeg_destination_mgr;
-
-METHODDEF(void) init_destination(j_compress_ptr cinfo)
+static void wzpng_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-	my_jpeg_destination_mgr* dm = (my_jpeg_destination_mgr*)(cinfo->dest);
+	PHYSFS_file* fileHandle = (PHYSFS_file*)png_get_io_ptr(png_ptr);
 
-	/* Allocate the output buffer --- it will be released when done with image */
-	dm->buffer = (JOCTET *)malloc(BUFFER_SIZE*sizeof(JOCTET));
-
-	dm->pub.next_output_byte = dm->buffer;
-	dm->pub.free_in_buffer = BUFFER_SIZE;
+	PHYSFS_write(fileHandle, data, length, 1);
 }
 
-METHODDEF(boolean) empty_output_buffer(j_compress_ptr cinfo)
+static void wzpng_flush_data(png_structp png_ptr)
 {
-	my_jpeg_destination_mgr* dm = (my_jpeg_destination_mgr*)cinfo->dest;
-
-	PHYSFS_write(dm->file, dm->buffer, BUFFER_SIZE, 1);
-
-	dm->pub.next_output_byte = dm->buffer;
-	dm->pub.free_in_buffer = BUFFER_SIZE;
-
-  return TRUE;
+	PHYSFS_file* fileHandle = (PHYSFS_file*)png_get_io_ptr(png_ptr);
+	
+	PHYSFS_flush(fileHandle);
 }
 
-METHODDEF(void) term_destination(j_compress_ptr cinfo) {
-	my_jpeg_destination_mgr* dm = (my_jpeg_destination_mgr*)cinfo->dest;
-
-	PHYSFS_write(dm->file, dm->buffer, BUFFER_SIZE-dm->pub.free_in_buffer, 1);
-
-	free(dm->buffer);
+static inline void PNGCleanup(png_infop *info_ptr, png_structp *png_ptr, PHYSFS_file* fileHandle)
+{
+	if (*info_ptr != NULL)
+		png_destroy_info_struct(*png_ptr, info_ptr);
+	if (*png_ptr != NULL)
+		png_destroy_write_struct(png_ptr, NULL);
+	if (fileHandle != NULL)
+		PHYSFS_close(fileHandle);
 }
 
 void screenDoDumpToDiskIfRequired()
 {
 	static unsigned char* buffer = NULL;
 	static unsigned int buffer_size = 0;
-	struct jpeg_compress_struct cinfo;
-	struct jpeg_error_mgr jerr;
-	my_jpeg_destination_mgr jdest;
-	JSAMPROW row_pointer[1];
+	static const unsigned char** scanlines = NULL;
+	static unsigned int scanlines_size = 0;
+	PHYSFS_file* fileHandle = NULL;
+	png_infop info_ptr = NULL;
+	png_structp png_ptr;
 	int row_stride;
 
 	if (!screendump_required) return;
@@ -554,47 +543,86 @@ void screenDoDumpToDiskIfRequired()
 		}
 		buffer_size = row_stride * screen->h;
 		buffer = malloc(buffer_size);
+		if (buffer == NULL)
+		{
+			debug(LOG_ERROR, "screenDoDumpToDiskIfRequired: Couldn't allocate memory\n");
+			buffer_size = 0;
+			return PNGCleanup(&info_ptr, &png_ptr, fileHandle);
+		}
 	}
 	glReadPixels(0, 0, screen->w, screen->h, GL_RGB, GL_UNSIGNED_BYTE, buffer);
 
 	screendump_required = FALSE;
 
-	if ((jdest.file = PHYSFS_openWrite(screendump_filename)) == NULL) {
-		return;
+	if ((fileHandle = PHYSFS_openWrite(screendump_filename)) == NULL) {
+		debug(LOG_ERROR, "screenDoDumpToDiskIfRequired: PHYSFS_openWrite failed (while openening file %s) with error: %s\n", screendump_filename, PHYSFS_getLastError());
+		return PNGCleanup(&info_ptr, &png_ptr, fileHandle);
 	}
 
 	debug( LOG_3D, "Saving screenshot %s\n", screendump_filename );
 
-	cinfo.err = jpeg_std_error(&jerr);
-	jpeg_create_compress(&cinfo);
-	cinfo.dest = &jdest.pub;
-	jdest.pub.init_destination = init_destination;
-	jdest.pub.empty_output_buffer = empty_output_buffer;
-	jdest.pub.term_destination = term_destination;
-
-	cinfo.image_width = screen->w;
-	cinfo.image_height = screen->h;
-	cinfo.input_components = 3;
-	cinfo.in_color_space = JCS_RGB;
-
-	jpeg_set_defaults(&cinfo);
-	jpeg_set_quality(&cinfo, 75, TRUE);
-
-	jpeg_start_compress(&cinfo, TRUE);
-
-	while (cinfo.next_scanline < cinfo.image_height) {
-		row_pointer[0] = & buffer[(screen->h-cinfo.next_scanline-1) * row_stride];
-		jpeg_write_scanlines(&cinfo, row_pointer, 1);
+	png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+	if (png_ptr == NULL)
+	{
+		debug(LOG_ERROR, "screen_DumpPNG: Unable to create png struct\n");
+		return PNGCleanup(&info_ptr, &png_ptr, fileHandle);
 	}
 
-	jpeg_finish_compress(&cinfo);
-	PHYSFS_close(jdest.file);
-	jpeg_destroy_compress(&cinfo);
+	info_ptr = png_create_info_struct(png_ptr);
+
+	if (info_ptr == NULL)
+	{
+		debug(LOG_ERROR, "screen_DumpPNG: Unable to create png info struct\n");
+		return PNGCleanup(&info_ptr, &png_ptr, fileHandle);
+	}
+
+	// If libpng encounters an error, it will jump into this if-branch
+	if (setjmp(png_jmpbuf(png_ptr)))
+	{
+		debug(LOG_ERROR, "screen_DumpPNG: Error encoding PNG data\n");
+	}
+	else
+	{
+		unsigned int currentRow;
+
+		if (sizeof(const unsigned char*) * screen->h > scanlines_size) {
+			if (scanlines != NULL) {
+				free(scanlines);
+			}
+			scanlines_size = sizeof(const unsigned char*) * screen->h;
+			scanlines = malloc(scanlines_size);
+			if (scanlines == NULL)
+			{
+				debug(LOG_ERROR, "screenDoDumpToDiskIfRequired: Couldn't allocate memory\n");
+				scanlines_size = 0;
+				return PNGCleanup(&info_ptr, &png_ptr, fileHandle);
+			}
+		}
+
+		png_set_write_fn(png_ptr, fileHandle, wzpng_write_data, wzpng_flush_data);
+
+		png_set_IHDR(png_ptr, info_ptr, screen->w, screen->h, channelBitdepth,
+			             PNG_COLOR_TYPE_RGB, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+
+		// Create an array of scanlines
+		for (currentRow = 0; currentRow < screen->h; ++currentRow)
+		{
+			// We're filling the scanline from the bottom up here,
+			// otherwise we'd have a vertically mirrored image.
+			scanlines[currentRow] = &buffer[row_stride * (screen->h - currentRow - 1)];
+		}
+
+		png_set_rows(png_ptr, info_ptr, (const png_bytepp)scanlines);
+
+		png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
+	}
+
+	return PNGCleanup(&info_ptr, &png_ptr, fileHandle);
 }
 
 char* screenDumpToDisk(char* path) {
 	while (1) {
-		sprintf(screendump_filename, "%s%swz2100_shot_%03i.jpg", path, "/", ++screendump_num);
+		sprintf(screendump_filename, "%s%swz2100_shot_%03i.png", path, "/", ++screendump_num);
 		if (!PHYSFS_exists(screendump_filename)) {
 			break;
 		}
