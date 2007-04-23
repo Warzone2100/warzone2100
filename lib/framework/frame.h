@@ -32,6 +32,11 @@
 #include <ctype.h>
 
 #include "gettext.h"
+
+#if !defined(LC_MESSAGES)
+# define LC_MESSAGES 0
+#endif
+
 #define _(String) gettext(String)
 #define N_(String) gettext_noop(String)
 
