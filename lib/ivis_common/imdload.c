@@ -192,18 +192,17 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 		return NULL;
 	}
 
-	// if we might have BSP then we need to preread the LEVEL directive
-	// FIXME: Remove BSP info from PIE files, since we do not use it anymore
-		if (sscanf(pFileData,"%s %d%n",buffer,&level,&cnt) != 2) {
-			iV_Error(0xff,"(_load_level) file corrupt -J");
-			return NULL;
-		}
-		pFileData += cnt;
+	/* Read first LEVEL directive */
+	if (sscanf(pFileData,"%s %d%n",buffer,&level,&cnt) != 2) {
+		iV_Error(0xff,"(_load_level) file corrupt -J");
+		return NULL;
+	}
+	pFileData += cnt;
 
-		if (strcmp(buffer,"LEVEL") != 0) {
-			debug(LOG_ERROR, "iV_ProcessIMD(2): expecting 'LEVELS' directive (%s)", buffer);
-			return NULL;
-		}
+	if (strcmp(buffer,"LEVEL") != 0) {
+		debug(LOG_ERROR, "iV_ProcessIMD(2): expecting 'LEVELS' directive (%s)", buffer);
+		return NULL;
+	}
 
 	s = _imd_load_level(&pFileData,FileDataEnd,nlevels,texpage);
 
@@ -408,14 +407,12 @@ static BOOL ReadPoints( char **ppFileData, iIMDShape *s )
 		}
 		pFileData += cnt;
 
-//		DBPRINTF(("%d) x=%d y=%x z=%d\n",i,newX,newY,newZ));
 		//check for duplicate points
 		match = -1;
 		j = 0;
 
 		// scan through list upto the number of points added (lastPoint) ... not up to the number of points scanned in (i)  (which will include duplicates)
 		while((j < lastPoint) && (match == -1))
-//		while((j < i) && (match == -1))
 		{
 			if (newX == p[j].x) {
 				if (newY == p[j].y) {
@@ -744,9 +741,6 @@ static iIMDShape *_imd_load_level(char **ppFileData, char *FileDataEnd, int nlev
 	int cnt;
 	iIMDShape *s;
 	char buffer[MAX_FILE_PATH];
-#ifdef NEVER_BSPIMD
-	int level;
-#endif
 	int n;
 	int npolys;
 
@@ -764,20 +758,6 @@ static iIMDShape *_imd_load_level(char **ppFileData, char *FileDataEnd, int nlev
 
 		s->shadowEdgeList = NULL;
 		s->nShadowEdges = 0;
-
-// if we can be sure that there is no bsp ... the we check for level number at this point
-#ifdef NEVER_BSPIMD
-		if (sscanf(pFileData,"%s %d%n",buffer,&level,&cnt) != 2) {
-			debug(LOG_ERROR, "_imd_load_level: file corrupt");
-			return NULL;
-		}
-		pFileData += cnt;
-
-		if (strcmp(buffer,"LEVEL") != 0) {
-			debug(LOG_ERROR, "_imd_load_level: expecting 'LEVEL' directive");
-			return NULL;
-		}
-#endif
 
 		s->flags = _IMD_FLAGS;
 		s->texpage = texpage;
@@ -803,13 +783,6 @@ static iIMDShape *_imd_load_level(char **ppFileData, char *FileDataEnd, int nlev
 
 		s->npoints = n;
 
-//	DBPRINTF(("%s %d , %d \n",buffer,n,s->npoints));
-
-		// Some imd/pie's were greater than the max number of points causing all sorts of memory overflows (blfact2)
-		//
-		// There was no check / error handling!
-		//
-
 		_imd_load_points( &pFileData, s );
 
 		if (sscanf(pFileData,"%s %d%n",buffer,&npolys,&cnt) != 2) {
@@ -825,11 +798,10 @@ static iIMDShape *_imd_load_level(char **ppFileData, char *FileDataEnd, int nlev
 			return NULL;
 		}
 
-//			DBPRINTF(("loading polygons - %d\n",s->npolys));
 		_imd_load_polys( &pFileData, s );
 
 
-//NOW load optional stuff
+		// NOW load optional stuff
 		{
 			BOOL OptionalsCompleted;
 
@@ -838,8 +810,6 @@ static iIMDShape *_imd_load_level(char **ppFileData, char *FileDataEnd, int nlev
 			OptionalsCompleted=FALSE;
 
 			while(OptionalsCompleted == FALSE) {
-
-//				DBPRINTF(("current file pos = %p (%x)(%x)(%x)  - endoffile = %p\n",*ppFileData,**ppFileData,*((*ppFileData)+1),*((*ppFileData)+2),FileDataEnd));
 
 				// check for end of file (give or take white space)
 				if (AtEndOfFile(*&pFileData,FileDataEnd)==TRUE)
@@ -872,7 +842,6 @@ static iIMDShape *_imd_load_level(char **ppFileData, char *FileDataEnd, int nlev
 				}
 				else
 				{
-//				DBPRINTF(("1) current file pos = %p (%x)  - endoffile = %p\n",*ppFileData,**ppFileData,FileDataEnd));
 					iV_Error(0xff,"(_load_level) unexpected directive %s %d",buffer,&n);
 					OptionalsCompleted=TRUE;
 					break;
@@ -887,5 +856,3 @@ static iIMDShape *_imd_load_level(char **ppFileData, char *FileDataEnd, int nlev
 	*ppFileData = pFileData;
 	return s;
 }
-
-
