@@ -816,11 +816,17 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 
 					if (bPenetrate)
 					{
+						SDWORD TargetX, TargetY;
+
 						asWeap.nStat = psObj->psWStats - asWeaponStats;
 						//Watermelon:just assume we damaged the chosen target
 						psObj->psDamaged = psNewTarget;
 
-						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, (psObj->startX + extendRad * dx / rad), (psObj->startY + extendRad * dy / rad), psObj->z, NULL, TRUE, bPenetrate, -1 );
+						// Determine position to fire a missile at
+						// (must be at least 0 because we don't use signed integers)
+						TargetX = MAX(psObj->startX + extendRad * dx / rad, 0);
+						TargetY = MAX(psObj->startY + extendRad * dy / rad, 0);
+						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, TargetX, TargetY, psObj->z, NULL, TRUE, bPenetrate, -1 );
 					}
 					else
 					{
@@ -1054,11 +1060,17 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 
 					if (bPenetrate)
 					{
+						SDWORD TargetX, TargetY;
+
 						asWeap.nStat = psObj->psWStats - asWeaponStats;
 						//Watermelon:just assume we damaged the chosen target
 						psObj->psDamaged = psNewTarget;
 
-						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, (psObj->startX + extendRad * dx / iRad), (psObj->startY + extendRad * dy / iRad), psObj->z, NULL, TRUE, bPenetrate, -1 );
+						// Determine position to fire a missile at
+						// (must be at least 0 because we don't use signed integers)
+						TargetX = MAX(psObj->startX + extendRad * dx / iRad, 0);
+						TargetY = MAX(psObj->startY + extendRad * dy / iRad, 0);
+						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, TargetX, TargetY, psObj->z, NULL, TRUE, bPenetrate, -1 );
 					}
 					else
 					{
