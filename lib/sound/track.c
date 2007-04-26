@@ -319,7 +319,6 @@ BOOL sound_Play3DTrack( AUDIO_SAMPLE *psSample )
 void sound_StopTrack( AUDIO_SAMPLE *psSample )
 {
 	ASSERT( psSample != NULL, "sound_StopTrack: sample pointer invalid\n" );
-	ASSERT( psSample->iSample != (ALuint)SAMPLE_NOT_ALLOCATED, "sound_StopTrack: sample %u out of range", psSample->iSample );
 
 	if ( psSample->iSample != (ALuint)SAMPLE_NOT_ALLOCATED )
 	{
@@ -327,7 +326,7 @@ void sound_StopTrack( AUDIO_SAMPLE *psSample )
 	}
 	else
 	{
-		debug( LOG_SOUND, "sound_StopTrack: sample %u out of range\n", psSample->iSample );
+		debug( LOG_SOUND, "sound_StopTrack: sample %u out of range, we probably have run out of available OpenAL sources\n", psSample->iSample );
 	}
 
 	// do stopped callback
@@ -356,7 +355,6 @@ void sound_PauseTrack( AUDIO_SAMPLE *psSample )
 void sound_FinishedCallback( AUDIO_SAMPLE *psSample )
 {
 	ASSERT( psSample != NULL, "sound_FinishedCallback: sample pointer invalid\n" );
-	ASSERT( psSample->iSample != (ALuint)SAMPLE_NOT_ALLOCATED, "sound_FinishedCallback: sample %u out of range", psSample->iSample );
 
 	if ( g_apTrack[psSample->iTrack] != NULL )
 	{

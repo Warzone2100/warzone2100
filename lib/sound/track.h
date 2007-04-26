@@ -54,12 +54,6 @@
 
 
 /***************************************************************************/
-/* forward definitions
- */
-
-struct AUDIO_SAMPLE;
-
-/***************************************************************************/
 /* typedefs
  */
 
@@ -70,7 +64,7 @@ typedef BOOL (* AUDIO_CALLBACK)  ( void *psObj );
 
 typedef struct AUDIO_SAMPLE
 {
-	SDWORD                  iTrack;
+	SDWORD                  iTrack;         // ID number identifying a specific sound; currently (r1182) mapped in audio_id.c
 	ALuint                  iSample;        // OpenAL name of the sound source
 	SDWORD                  x, y, z;
 	BOOL                    bFinishedPlaying;
