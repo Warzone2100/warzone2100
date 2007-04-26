@@ -2839,7 +2839,6 @@
 				02356D730BD3BB3400E9A019 /* Frameworks */,
 				02581C7D0BD5ACEE00957CBC /* Copy frameworks */,
 				02581CC40BD5AD5300957CBC /* Copy game data */,
-				02581D680BD5BD6B00957CBC /* Create startup script */,
 			);
 			buildRules = (
 				0246AA730BD3E47F004D1C70 /* PBXBuildRule */,
@@ -3155,20 +3154,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "mkdir -p ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources\nrm -rf ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data\ntar -cC .. --exclude .svn --exclude 'Makefile*' data | tar -xC ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources\n";
-		};
-		02581D680BD5BD6B00957CBC /* Create startup script */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Create startup script";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "cd ${TARGET_BUILD_DIR}/Warzone.app/Contents/MacOS\ncat <<EOF > warzone.sh\n#!/bin/sh\n\nMYDIR=\\`dirname \"\\$0\"\\`\ncd \"\\$MYDIR\"\nexec ./Warzone --datadir ../Resources/data\nEOF\nchmod 755 warzone.sh\n";
 		};
 		02FD38210BD3FE9A00776FD3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;

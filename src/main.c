@@ -332,6 +332,21 @@ static void scanDataDirs( void )
 		}
 	}
 
+#ifdef WZ_OS_MAC
+	if( !PHYSFS_exists("gamedesc.lev") ) {
+		CFURLRef resourceURL = CFBundleCopyResourcesDirectoryURL(CFBundleGetMainBundle());
+		char resourcePath[PATH_MAX];
+		if( CFURLGetFileSystemRepresentation( resourceURL, true,
+							(UInt8 *) resourcePath,
+							PATH_MAX) ) {
+			chdir( resourcePath );
+			registerSearchPath( "data", 7 );
+			rebuildSearchPath( mod_multiplay, TRUE );
+		} else {
+			debug( LOG_ERROR, "Could not change to resources directory." );
+		}
+	}
+#endif
 
 	/** Debugging and sanity checks **/
 
