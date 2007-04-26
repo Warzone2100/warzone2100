@@ -131,7 +131,6 @@
 		0246A1060BD3CC29004D1C70 /* pcx.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0F40BD3CC29004D1C70 /* pcx.c */; };
 		0246A1070BD3CC29004D1C70 /* pieclip.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0F60BD3CC29004D1C70 /* pieclip.c */; };
 		0246A1080BD3CC29004D1C70 /* piestate.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0FC0BD3CC29004D1C70 /* piestate.c */; };
-		0246A11C0BD3CC43004D1C70 /* bspimd.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A10A0BD3CC43004D1C70 /* bspimd.c */; };
 		0246A11D0BD3CC43004D1C70 /* ivi.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A10B0BD3CC43004D1C70 /* ivi.c */; };
 		0246A11E0BD3CC43004D1C70 /* pieblitfunc.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A10C0BD3CC43004D1C70 /* pieblitfunc.c */; };
 		0246A11F0BD3CC43004D1C70 /* piedraw.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A10D0BD3CC43004D1C70 /* piedraw.c */; };
@@ -891,8 +890,6 @@
 		0246A0E20BD3CC0B004D1C70 /* parser.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = parser.h; path = ../lib/gamelib/parser.h; sourceTree = SOURCE_ROOT; };
 		0246A0EA0BD3CC29004D1C70 /* bitimage.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = bitimage.c; path = ../lib/ivis_common/bitimage.c; sourceTree = SOURCE_ROOT; };
 		0246A0EB0BD3CC29004D1C70 /* bitimage.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = bitimage.h; path = ../lib/ivis_common/bitimage.h; sourceTree = SOURCE_ROOT; };
-		0246A0EC0BD3CC29004D1C70 /* bspfunc.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = bspfunc.h; path = ../lib/ivis_common/bspfunc.h; sourceTree = SOURCE_ROOT; };
-		0246A0ED0BD3CC29004D1C70 /* bspimd.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = bspimd.h; path = ../lib/ivis_common/bspimd.h; sourceTree = SOURCE_ROOT; };
 		0246A0EE0BD3CC29004D1C70 /* imd.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = imd.c; path = ../lib/ivis_common/imd.c; sourceTree = SOURCE_ROOT; };
 		0246A0EF0BD3CC29004D1C70 /* imd.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = imd.h; path = ../lib/ivis_common/imd.h; sourceTree = SOURCE_ROOT; };
 		0246A0F00BD3CC29004D1C70 /* imdload.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = imdload.c; path = ../lib/ivis_common/imdload.c; sourceTree = SOURCE_ROOT; };
@@ -914,7 +911,6 @@
 		0246A1000BD3CC29004D1C70 /* rendmode.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = rendmode.h; path = ../lib/ivis_common/rendmode.h; sourceTree = SOURCE_ROOT; };
 		0246A1010BD3CC29004D1C70 /* tex.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = tex.h; path = ../lib/ivis_common/tex.h; sourceTree = SOURCE_ROOT; };
 		0246A1020BD3CC29004D1C70 /* textdraw.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = textdraw.h; path = ../lib/ivis_common/textdraw.h; sourceTree = SOURCE_ROOT; };
-		0246A10A0BD3CC43004D1C70 /* bspimd.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = bspimd.c; path = ../lib/ivis_opengl/bspimd.c; sourceTree = SOURCE_ROOT; };
 		0246A10B0BD3CC43004D1C70 /* ivi.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = ivi.c; path = ../lib/ivis_opengl/ivi.c; sourceTree = SOURCE_ROOT; };
 		0246A10C0BD3CC43004D1C70 /* pieblitfunc.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = pieblitfunc.c; path = ../lib/ivis_opengl/pieblitfunc.c; sourceTree = SOURCE_ROOT; };
 		0246A10D0BD3CC43004D1C70 /* piedraw.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = piedraw.c; path = ../lib/ivis_opengl/piedraw.c; sourceTree = SOURCE_ROOT; };
@@ -1812,8 +1808,6 @@
 			children = (
 				0246A0EA0BD3CC29004D1C70 /* bitimage.c */,
 				0246A0EB0BD3CC29004D1C70 /* bitimage.h */,
-				0246A0EC0BD3CC29004D1C70 /* bspfunc.h */,
-				0246A0ED0BD3CC29004D1C70 /* bspimd.h */,
 				0246A0EE0BD3CC29004D1C70 /* imd.c */,
 				0246A0EF0BD3CC29004D1C70 /* imd.h */,
 				0246A0F00BD3CC29004D1C70 /* imdload.c */,
@@ -1842,7 +1836,6 @@
 		0246A1090BD3CC2D004D1C70 /* Ivis OpenGL */ = {
 			isa = PBXGroup;
 			children = (
-				0246A10A0BD3CC43004D1C70 /* bspimd.c */,
 				0246A10B0BD3CC43004D1C70 /* ivi.c */,
 				0246A10C0BD3CC43004D1C70 /* pieblitfunc.c */,
 				0246A10D0BD3CC43004D1C70 /* piedraw.c */,
@@ -3175,7 +3168,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd ${TARGET_BUILD_DIR}/Warzone.app/Contents/MacOS\ncat <<EOF > warzone.sh\n#!/bin/sh\n\nMYDIR=\\`dirname \"\\$0\"\\`\ncd \"\\$MYDIR\"\nexec ./warzone --datadir ../Resources/data\nEOF\nchmod 755 warzone.sh\n";
+			shellScript = "cd ${TARGET_BUILD_DIR}/Warzone.app/Contents/MacOS\ncat <<EOF > warzone.sh\n#!/bin/sh\n\nMYDIR=\\`dirname \"\\$0\"\\`\ncd \"\\$MYDIR\"\nexec ./Warzone --datadir ../Resources/data\nEOF\nchmod 755 warzone.sh\n";
 		};
 		02FD38210BD3FE9A00776FD3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3346,7 +3339,6 @@
 				0246A1060BD3CC29004D1C70 /* pcx.c in Sources */,
 				0246A1070BD3CC29004D1C70 /* pieclip.c in Sources */,
 				0246A1080BD3CC29004D1C70 /* piestate.c in Sources */,
-				0246A11C0BD3CC43004D1C70 /* bspimd.c in Sources */,
 				0246A11D0BD3CC43004D1C70 /* ivi.c in Sources */,
 				0246A11E0BD3CC43004D1C70 /* pieblitfunc.c in Sources */,
 				0246A11F0BD3CC43004D1C70 /* piedraw.c in Sources */,
