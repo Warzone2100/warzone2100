@@ -52,7 +52,7 @@ typedef enum _object_type
 	OBJECT_TYPE			type;		/* The type of object */ \
 	UDWORD				id;			/* ID number of the object */ \
 	UWORD				x,y,z;		/* Object's location */ \
-	UWORD				direction;	/* Object's direction +ve rotation about y axis*/ \
+	float				direction;	/* Object's direction +ve rotation about y axis*/ \
 	SWORD				pitch;		/* Object's pitch +ve nose up*/ \
 	SWORD				roll		/* Object's roll +ve left up, right down */
 

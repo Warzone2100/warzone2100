@@ -849,7 +849,7 @@ void missionFlyTransportersIn( SDWORD iPlayer, BOOL bTrackTransporter )
 			    {
 			    	fR += (FRACT_D) (2 * M_PI);
 			    }
-			    psTransporter->direction = (UWORD)( RAD_TO_DEG(fR) );
+			    psTransporter->direction = RAD_TO_DEG(fR);
 
 
 				// Camera track requested and it's the selected player.

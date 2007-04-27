@@ -2700,11 +2700,11 @@ void	effectDroidUpdates( void )
 					if( (SDWORD)psDroid->sMove.speed != 0 )
 					{
 				   		/* Present direction is important */
-						xBehind = ((50*iV_SIN(DEG(psDroid->direction))) >> FP12_SHIFT);
-						yBehind = ((50*iV_COS(DEG(psDroid->direction))) >> FP12_SHIFT);
+						xBehind = ( ( 50 * iV_SIN( DEG( (int)psDroid->direction) ) ) >> FP12_SHIFT );
+						yBehind = ( ( 50 * iV_COS( DEG( (int)psDroid->direction) ) ) >> FP12_SHIFT );
 						pos.x = psDroid->x - xBehind;
 						pos.z = psDroid->y - yBehind;
-						pos.y = map_Height(pos.x,pos.z);
+						pos.y = map_Height(pos.x, pos.z);
 //						addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,FALSE,NULL);
 					}
 				}

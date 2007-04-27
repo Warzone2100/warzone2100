@@ -1133,7 +1133,7 @@ BOOL sendWholeDroid(DROID *pD, UDWORD dest)
 	UDWORD	asWeaps[DROID_MAXWEAPS];
 	int		i;
 	BOOL	bNoTarget;
-	
+
 	// these asserts are done on the receiving side too
 	ASSERT( pD->x < (mapWidth << TILE_SHIFT),
 		"sendWholeDroid: x coordinate bigger than map width" );

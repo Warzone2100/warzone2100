@@ -70,20 +70,12 @@ UBYTE	height;
 //}
 
 /* Angle returned is reflected in line x=0 */
-SDWORD	calcDirection(UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1)
+SDWORD calcDirection(UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1)
 {
-SDWORD	xDif,yDif;
-SDWORD	angleInt;
-double	angle;
-
-	angleInt = 0;
-	xDif = (x1-x0);
-
 	/* Watch out here - should really be y1-y0, but coordinate system is reversed in Y */
-	yDif = (y0-y1);
-	angle = atan2(yDif,xDif);
-	angle = (double) (180 * (angle / M_PI));
-	angleInt = (SDWORD) angle;
+	SDWORD	xDif = (x1-x0), yDif = (y0-y1);
+	double	angle = atan2(yDif, xDif) * 180.0 / M_PI;
+	SDWORD	angleInt = (SDWORD) angle;
 
 	angleInt+=90;
 	if (angleInt<0)
@@ -96,13 +88,6 @@ double	angle;
 }
 
 
-
-
-#ifndef WIN32
-#define max(a,b) (((a)>(b))?(a):(b))
-#define min(a,b) (((a)<(b))?(a):(b))
-#endif
-// -------------------------------------------------------------------------------------------
 /*	A useful function and one that should have been written long ago, assuming of course
 	that is hasn't been!!!! Alex M, 24th Sept, 1998. Returns the nearest unit
 	to a given world coordinate - we can choose whether we require that the unit be
@@ -130,7 +115,7 @@ UDWORD	bestSoFar;
 			    xDif = abs(psDroid->x - x);
 			    yDif = abs(psDroid->y - y);
 			    /* Approximates the distance away - using a sqrt approximation */
-			    dist = max(xDif,yDif) + (min(xDif,yDif))/2;	// approximates, but never more than 11% out...
+			    dist = MAX(xDif,yDif) + MIN(xDif,yDif)/2;	// approximates, but never more than 11% out...
 			    /* Is this the nearest one we got so far? */
 			    if(dist<bestSoFar)
 			    {
@@ -483,7 +468,7 @@ UDWORD	retVal;
 	xDif = abs(x1-x2);
 	yDif = abs(y1-y2);
 
-	retVal = (max(xDif,yDif) + (min(xDif,yDif)/2));
+	retVal = (MAX(xDif,yDif) + (MIN(xDif,yDif)/2));
 	return(retVal);
 }
 //-----------------------------------------------------------------------------------

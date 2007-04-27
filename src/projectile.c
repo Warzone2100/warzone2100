@@ -437,7 +437,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	{
 		fR += (FRACT_D) (2 * M_PI);
 	}
-	psObj->direction = (UWORD)( RAD_TO_DEG(fR) );
+	psObj->direction = RAD_TO_DEG(fR);
 
 
 	/* get target distance */
@@ -1408,7 +1408,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 					{
 						xDiff = psObj->startX - psObj->psDest->x;
 						yDiff = psObj->startY - psObj->psDest->y;
-						impact_angle = abs(psObj->psDest->direction - (180 * atan2f((float)xDiff, (float)yDiff) / M_PI));
+						impact_angle = abs( psObj->psDest->direction - ( 180 * atan2f(xDiff, yDiff) / M_PI ) );
 						if (impact_angle >= 360)
 						{
 							impact_angle -= 360;
@@ -1612,7 +1612,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 								{
 									xDiff = psObj->x - psCurrD->x;
 									yDiff = psObj->y - psCurrD->y;
-									impact_angle = abs(psCurrD->direction - (180 * atan2f((float)xDiff, (float)yDiff) / M_PI));
+									impact_angle = abs( psCurrD->direction - ( 180 * atan2f(xDiff, yDiff) / M_PI ) );
 									if (impact_angle >= 360)
 									{
 										impact_angle -= 360;
@@ -1694,7 +1694,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 								{
 									xDiff = psObj->x - psCurrD->x;
 									yDiff = psObj->y - psCurrD->y;
-									impact_angle = abs(psCurrD->direction - (180 * atan2f((float)xDiff, (float)yDiff) / M_PI));
+									impact_angle = abs( psCurrD->direction - ( 180 * atan2f(xDiff, yDiff) / M_PI ) );
 									if (impact_angle >= 360)
 									{
 										impact_angle -= 360;

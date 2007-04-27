@@ -782,12 +782,12 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	/* Dump down the building wrecks at random angles - still looks shit though */
 	if(psStats->subType == FEAT_BUILD_WRECK)
 	{
-		psFeature->direction = (UWORD)(rand()%360);
+		psFeature->direction = rand() % 360;
 		psFeature->gfxScaling = (UWORD)(80 + (10 - rand()%20)); // put into define
 	}
 	else if(psStats->subType == FEAT_TREE)
 	{
-		psFeature->direction = (UWORD)(rand()%360);
+		psFeature->direction = rand() % 360;
 		psFeature->gfxScaling = (UWORD) (100 + (14-rand()%28));
 	}
 	else

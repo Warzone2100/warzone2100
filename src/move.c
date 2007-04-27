@@ -24,19 +24,6 @@
  *
  */
 
-/* Movement printfs */
-//#define DEBUG_GROUP1
-/* calc turn printfs */
-//#define DEBUG_GROUP2
-/* obstacle avoid printfs */
-//#define DEBUG_GROUP3
-/* Reroute printf's */
-//#define DEBUG_GROUP4
-// boundary printf's
-//#define DEBUG_GROUP5
-// waiting droid printf's
-//#define DEBUG_GROUP6
-
 #include <stdio.h>
 #include <string.h>
 
@@ -96,13 +83,6 @@
 /* system definitions */
 
 #define	DROID_RUN_SOUND			1
-
-
-// get rid of the fast rounding for the movement code
-
-#define MAKEINT(x) ((SDWORD)(x))
-
-
 
 #define	FORMATIONS_DISABLE		0
 
@@ -588,9 +568,9 @@ void moveDroidToDirect(DROID *psDroid, UDWORD x, UDWORD y)
 // Get a droid to turn towards a locaton
 void moveTurnDroid(DROID *psDroid, UDWORD x, UDWORD y)
 {
-	SDWORD	moveDir = (SDWORD)calcDirection(psDroid->x,psDroid->y, x, y);
+	SDWORD moveDir = (SDWORD)calcDirection(psDroid->x, psDroid->y, x, y);
 
-	if ( psDroid->direction != (UDWORD) moveDir )
+	if ( (SDWORD)(psDroid->direction) != moveDir )
 	{
 		psDroid->sMove.targetX = (SDWORD)x;
 		psDroid->sMove.targetY = (SDWORD)y;
@@ -970,10 +950,10 @@ static void moveCalcTurn(FRACT *pCurr, FRACT target, UDWORD rate)
 #endif
 
 	ASSERT( target < MAKEFRACT(360) && target >= MAKEFRACT(0),
-			 "moveCalcTurn: target out of range" );
+			 "moveCalcTurn: target out of range %f", target );
 
 	ASSERT( (*pCurr) < MAKEFRACT(360) && (*pCurr) >= MAKEFRACT(0),
-			 "moveCalcTurn: cur ang out of range" );
+			 "moveCalcTurn: cur ang out of range %f", (*pCurr) );
 
 
 	// calculate the difference in the angles
@@ -985,13 +965,7 @@ static void moveCalcTurn(FRACT *pCurr, FRACT target, UDWORD rate)
 
 //	change = FRACTmul( baseTurn, MAKEFRACT(rate) );
 
-	change = (baseTurn* rate);		// constant rate so we can use a normal mult
-	if(change < FRACTCONST(1,1))
-	{
-		change = FRACTCONST(1,1);	// HACK to solve issue of when framerate so high
-	}								// that integer angle to turn per frame is less than 1
-
-
+	change = (baseTurn* rate); // constant rate so we can use a normal mult
 
 // 	debug( LOG_NEVER, "change : %f\n", change);
 
@@ -1035,20 +1009,20 @@ static void moveCalcTurn(FRACT *pCurr, FRACT target, UDWORD rate)
 		}
 	}
 
-	if (*pCurr < 0)
+	if (*pCurr < 0.0f)
 	{
-		*pCurr += MKF(TRIG_DEGREES);
+		*pCurr += 360.0f;
 	}
-	if (*pCurr >= MKF(TRIG_DEGREES))
+	if (*pCurr >= 360.0f)
 	{
-		*pCurr -= MKF(TRIG_DEGREES);
+		*pCurr -= 360.0f;
 	}
 
 
 #ifdef DEBUG			//Don't forget that if you don't define the variable, then we error out.
 //         debug( LOG_NEVER, "path %d: diff %f\n", path, diff);
 
-	ASSERT( MAKEINT(*pCurr) < 360 && MAKEINT(*pCurr) >= 0,
+	ASSERT( (*pCurr) < 360 && (*pCurr) >= 0,
 			 "moveCalcTurn: angle out of range - path %d\n"
 			 "   NOTE - ANYONE WHO SEES THIS PLEASE REMEMBER: path %d", path, path );
 #endif
@@ -1244,7 +1218,7 @@ static BOOL moveBlocked(DROID *psDroid)
 	}
 
 	// See if the block can be cancelled
-	if (dirDiff((SDWORD)psDroid->direction, psDroid->sMove.bumpDir) > BLOCK_DIR)
+	if (dirDiff(psDroid->direction, psDroid->sMove.bumpDir) > BLOCK_DIR)
 	{
 		// Move on, clear the bump
 		psDroid->sMove.bumpTime = 0;
@@ -2400,14 +2374,14 @@ static BOOL moveDroidStopped( DROID *psDroid, SDWORD speed )
 }
 
 static void moveUpdateDroidDirection( DROID *psDroid, SDWORD *pSpeed, SDWORD direction,
-		SDWORD iSpinAngle, SDWORD iSpinSpeed, SDWORD iTurnSpeed, SDWORD *pDroidDir,
-		FRACT *pfSpeed )
+		SDWORD iSpinAngle, SDWORD iSpinSpeed, SDWORD iTurnSpeed, float *pDroidDir,
+		FRACT *pfSpeed ) // direction is target-direction
 {
-	SDWORD		adiff;
+	float		adiff;
 	FRACT		temp;
 
 	*pfSpeed = MKF(*pSpeed);
-	*pDroidDir = (SDWORD) psDroid->direction;
+	*pDroidDir = psDroid->direction;
 
 	// don't move if in MOVEPAUSE state
 	if (psDroid->sMove.Status == MOVEPAUSE)
@@ -2415,8 +2389,8 @@ static void moveUpdateDroidDirection( DROID *psDroid, SDWORD *pSpeed, SDWORD dir
 		return;
 	}
 
-	temp = MKF(*pDroidDir);
-	adiff = labs(direction - *pDroidDir);
+	temp = *pDroidDir;
+	adiff = fabsf(direction - *pDroidDir);
 	if (adiff > TRIG_DEGREES/2)
 	{
 		adiff = TRIG_DEGREES - adiff;
@@ -2435,18 +2409,18 @@ static void moveUpdateDroidDirection( DROID *psDroid, SDWORD *pSpeed, SDWORD dir
 		moveCalcTurn(&temp, MKF(direction), iTurnSpeed);
 	}
 
-	*pDroidDir = MAKEINT(temp);
+	*pDroidDir = temp;
 }
 
 
 // Calculate current speed perpendicular to droids direction
-static FRACT moveCalcPerpSpeed( DROID *psDroid, SDWORD iDroidDir, SDWORD iSkidDecel )
+static FRACT moveCalcPerpSpeed( DROID *psDroid, float iDroidDir, SDWORD iSkidDecel )
 {
-	SDWORD		adiff;
+	float		adiff;
 	FRACT		perpSpeed;
 
-	adiff = labs(iDroidDir - psDroid->sMove.dir);
-	perpSpeed = Fmul(psDroid->sMove.speed,trigSin(adiff));
+	adiff = fabsf(iDroidDir - psDroid->sMove.moveDir);
+	perpSpeed = psDroid->sMove.speed * trigSin(adiff);
 
 	// decelerate the perpendicular speed
 	perpSpeed -= (iSkidDecel * baseSpeed);
@@ -2460,32 +2434,32 @@ static FRACT moveCalcPerpSpeed( DROID *psDroid, SDWORD iDroidDir, SDWORD iSkidDe
 
 
 static void moveCombineNormalAndPerpSpeeds( DROID *psDroid, FRACT fNormalSpeed,
-										FRACT fPerpSpeed, SDWORD iDroidDir )
+		FRACT fPerpSpeed, float iDroidDir )
 {
-	SDWORD		finalDir, adiff;
+	float		finalDir, adiff;
 	FRACT		finalSpeed;
 
 	/* set current direction */
-	psDroid->direction = (UWORD)iDroidDir;
+	psDroid->direction = iDroidDir;
 
 	/* set normal speed and direction if perpendicular speed is zero */
 	if (fPerpSpeed == MKF(0))
 	{
 		psDroid->sMove.speed = fNormalSpeed;
-		psDroid->sMove.dir   = (SWORD)iDroidDir;
+		psDroid->sMove.moveDir = iDroidDir;
 		return;
 	}
 
 	finalSpeed = fSQRT(Fmul(fNormalSpeed,fNormalSpeed) + Fmul(fPerpSpeed,fPerpSpeed));
 
 	// calculate the angle between the droid facing and movement direction
-	finalDir = MAKEINT(trigInvCos(Fdiv(fNormalSpeed,finalSpeed)));
+	finalDir = trigInvCos(fNormalSpeed / finalSpeed);
 
 	// choose the finalDir on the same side as the old movement direction
-	adiff = labs(iDroidDir - psDroid->sMove.dir);
+	adiff = fabsf(iDroidDir - psDroid->sMove.moveDir);
 	if (adiff < TRIG_DEGREES/2)
 	{
-		if (iDroidDir > psDroid->sMove.dir)
+		if (iDroidDir > psDroid->sMove.moveDir)
 		{
 			finalDir = iDroidDir - finalDir;
 		}
@@ -2496,7 +2470,7 @@ static void moveCombineNormalAndPerpSpeeds( DROID *psDroid, FRACT fNormalSpeed,
 	}
 	else
 	{
-		if (iDroidDir > psDroid->sMove.dir)
+		if (iDroidDir > psDroid->sMove.moveDir)
 		{
 			finalDir = iDroidDir + finalDir;
 			if (finalDir >= TRIG_DEGREES)
@@ -2514,20 +2488,20 @@ static void moveCombineNormalAndPerpSpeeds( DROID *psDroid, FRACT fNormalSpeed,
 		}
 	}
 
-	psDroid->sMove.dir = (SWORD)finalDir;
+	psDroid->sMove.moveDir = finalDir;
 	psDroid->sMove.speed = finalSpeed;
 }
 
 
 // Calculate the current speed in the droids normal direction
-static FRACT moveCalcNormalSpeed( DROID *psDroid, FRACT fSpeed, SDWORD iDroidDir,
-							SDWORD iAccel, SDWORD iDecel )
+static FRACT moveCalcNormalSpeed( DROID *psDroid, FRACT fSpeed, float iDroidDir,
+		SDWORD iAccel, SDWORD iDecel )
 {
-	SDWORD		adiff;
+	float		adiff;
 	FRACT		normalSpeed;
 
-	adiff = labs(iDroidDir - psDroid->sMove.dir);
-	normalSpeed = Fmul(psDroid->sMove.speed,trigCos(adiff));
+	adiff = fabsf(iDroidDir - psDroid->sMove.moveDir);
+	normalSpeed = psDroid->sMove.speed * trigCos(adiff);
 
 	if (normalSpeed < fSpeed)
 	{
@@ -2560,8 +2534,8 @@ static void moveGetDroidPosDiffs( DROID *psDroid, FRACT *pDX, FRACT *pDY )
 	move = Fmul(psDroid->sMove.speed, baseSpeed);
 
 
-	*pDX = Fmul(move,trigSin(psDroid->sMove.dir));
-	*pDY = Fmul(move,trigCos(psDroid->sMove.dir));
+	*pDX = move * trigSin(psDroid->sMove.moveDir);
+	*pDY = move * trigCos(psDroid->sMove.moveDir);
 }
 
 // see if the droid is close to the final way point
@@ -2601,7 +2575,7 @@ static void moveCheckFinalWaypoint( DROID *psDroid, SDWORD *pSpeed )
 static void moveUpdateDroidPos( DROID *psDroid, FRACT dx, FRACT dy )
 {
 	SDWORD	iX = 0, iY = 0;
-	
+
 	ASSERT( psDroid->x < (mapWidth << TILE_SHIFT),
 		"moveUpdateDroidPos: droid is already off the map in the x direction" );
 	ASSERT( psDroid->y < (mapHeight<< TILE_SHIFT),
@@ -2655,7 +2629,7 @@ static void moveUpdateDroidPos( DROID *psDroid, FRACT dx, FRACT dy )
 			psDroid->y = 1;
 		}
 	}
-	
+
 	ASSERT( psDroid->x < (mapWidth << TILE_SHIFT),
 		"moveUpdateDroidPos: droid just moved off the map in the x direction" );
 	ASSERT( psDroid->y < (mapHeight<< TILE_SHIFT),
@@ -2667,7 +2641,8 @@ static void moveUpdateDroidPos( DROID *psDroid, FRACT dx, FRACT dy )
 static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 {
 	FRACT				fPerpSpeed, fNormalSpeed, dx, dy, fSpeed, bx,by;
-	SDWORD				iDroidDir, slideDir;
+	float				iDroidDir;
+	SDWORD				slideDir;
 	PROPULSION_STATS	*psPropStats;
 	SDWORD				spinSpeed, turnSpeed, skidDecel;
 	// constants for the different propulsion types
@@ -2756,7 +2731,7 @@ if(psDroid == driveGetDriven())	debug( LOG_NEVER, "%d\n", speed );
 	{
 		moveUpdateDroidDirection( psDroid, &speed, slideDir, TRACKED_SPIN_ANGLE,
 					psDroid->baseSpeed, psDroid->baseSpeed/3, &iDroidDir, &fSpeed );
-		psDroid->direction = (UWORD)iDroidDir;
+		psDroid->direction = iDroidDir;
 	}
 
 	moveUpdateDroidPos( psDroid, bx, by );
@@ -2770,7 +2745,8 @@ if(psDroid == driveGetDriven())	debug( LOG_NEVER, "%d\n", speed );
 void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 {
 	FRACT			fPerpSpeed, fNormalSpeed, dx, dy, fSpeed;
-	SDWORD			iDroidDir, slideDir;
+	float			iDroidDir;
+	SDWORD			slideDir;
 //	BASE_OBJECT		*psObst;
 	BOOL			bRet;
 
@@ -2938,9 +2914,8 @@ void moveMakeVtolHover( DROID *psDroid )
 static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 {
 	FRACT	fPerpSpeed, fNormalSpeed, dx, dy, fSpeed;
-	SDWORD	iDroidDir, iMapZ, iRoll, slideDir, iSpinSpeed, iTurnSpeed;
-//	SDWORD iDZ, iDroidZ;
-
+	float	iDroidDir;
+	SDWORD	iMapZ, iRoll, slideDir, iSpinSpeed, iTurnSpeed;
 	FRACT	fDZ, fDroidZ, fMapZ;
 
 
@@ -2988,7 +2963,7 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 	moveUpdateDroidPos( psDroid, dx, dy );
 
 	/* update vtol orientation */
-	iRoll = (psDroid->sMove.dir - (SDWORD) psDroid->direction) / 3;
+	iRoll = (psDroid->sMove.moveDir - psDroid->direction) / 3;
 	if ( iRoll < 0 )
 	{
 		iRoll += 360;
@@ -3099,7 +3074,7 @@ moveCyborgTouchDownAnimDone( ANIM_OBJECT *psObj )
 static void moveUpdateJumpCyborgModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 {
 	FRACT	fPerpSpeed, fNormalSpeed, dx, dy, fSpeed;
-	SDWORD	iDroidDir;
+	float	iDroidDir;
 
 	// nothing to do if the droid is stopped
 	if ( moveDroidStopped(  psDroid, speed ) == TRUE )
@@ -3534,7 +3509,8 @@ void moveUpdateDroid(DROID *psDroid)
 	SDWORD				fx, fy;
 	UDWORD				oldx, oldy, iZ;
 	UBYTE				oldStatus = psDroid->sMove.Status;
-	SDWORD				moveSpeed, moveDir;
+	SDWORD				moveSpeed;
+	float				moveDir;
 	PROPULSION_STATS	*psPropStats;
 	Vector3i pos;
 	BOOL				bStarted = FALSE, bStopped;
@@ -3577,7 +3553,7 @@ void moveUpdateDroid(DROID *psDroid)
 	fpathSetCurrentObject( (BASE_OBJECT *) psDroid );
 
 	moveSpeed = 0;
-	moveDir = (SDWORD)psDroid->direction;
+	moveDir = psDroid->direction;
 
 	/* get droid height */
 	iZ = map_Height(psDroid->x, psDroid->y);
@@ -3687,7 +3663,7 @@ void moveUpdateDroid(DROID *psDroid)
 				}
 
 				moveSpeed = moveCalcDroidSpeed(psDroid);
-				moveDir = MAKEINT(tangle);
+				moveDir = tangle;
 			}
 		}
 
@@ -3838,7 +3814,7 @@ void moveUpdateDroid(DROID *psDroid)
 
 		moveSpeed = moveCalcDroidSpeed(psDroid);
 
-		moveDir = MAKEINT(tangle);
+		moveDir = tangle;
 
 
 //if ( psDroid->droidType == DROID_TRANSPORTER )
@@ -3874,7 +3850,7 @@ void moveUpdateDroid(DROID *psDroid)
 		// Turn the droid to it's final facing
 		if (psDroid->sMove.psFormation &&
 			psDroid->sMove.psFormation->refCount > 1 &&
-			psDroid->direction != (UDWORD)psDroid->sMove.psFormation->dir)
+			(SDWORD)psDroid->direction != (SDWORD)psDroid->sMove.psFormation->dir)
 		{
 			moveSpeed = 0;
 			moveDir = psDroid->sMove.psFormation->dir;
@@ -3893,9 +3869,8 @@ void moveUpdateDroid(DROID *psDroid)
 		break;
 	case MOVETURNTOTARGET:
 		moveSpeed = 0;
-		moveDir = (SDWORD)calcDirection(psDroid->x,psDroid->y,
-								psDroid->sMove.targetX, psDroid->sMove.targetY);
-		if (psDroid->direction == (UDWORD)moveDir)
+		moveDir = calcDirection( psDroid->x, psDroid->y, psDroid->sMove.targetX, psDroid->sMove.targetY );
+		if ((int)psDroid->direction == (int)moveDir)
 		{
 			if ( psPropStats->propulsionType == LIFT )
 			{
@@ -3994,30 +3969,26 @@ void moveUpdateDroid(DROID *psDroid)
 
 	if ( psDroid->droidType == DROID_PERSON )
 	{
-		moveUpdatePersonModel(psDroid,moveSpeed,moveDir);
+		moveUpdatePersonModel(psDroid, moveSpeed, moveDir);
 	}
 	//else if ( psDroid->droidType == DROID_CYBORG )
     else if (cyborgDroid(psDroid))
 	{
-		moveUpdateCyborgModel(psDroid,moveSpeed,moveDir,oldStatus);
+		moveUpdateCyborgModel(psDroid, moveSpeed, moveDir, oldStatus);
 	}
 	else if ( psPropStats->propulsionType == LIFT )
 	{
-		moveUpdateVtolModel(psDroid,moveSpeed,moveDir);
+		moveUpdateVtolModel(psDroid, moveSpeed, moveDir);
 	}
 	else
 	{
-		moveUpdateGroundModel(psDroid,moveSpeed,moveDir);
+		moveUpdateGroundModel(psDroid, moveSpeed, moveDir);
 	}
-
 
 	if ((SDWORD)oldx >> TILE_SHIFT != psDroid->x >> TILE_SHIFT ||
 		(SDWORD)oldy >> TILE_SHIFT != psDroid->y >> TILE_SHIFT)
-
 	{
-
 		visTilesUpdate((BASE_OBJECT *)psDroid,FALSE);
-
 		gridMoveObject((BASE_OBJECT *)psDroid, (SDWORD)oldx,(SDWORD)oldy);
 
 		// object moved from one tile to next, check to see if droid is near stuff.(oil)

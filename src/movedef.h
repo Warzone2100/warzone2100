@@ -42,7 +42,7 @@ typedef struct _path_point
 typedef struct _move_control
 {
 	UBYTE	Status;						// Inactive, Navigating or moving point to point status
-	UBYTE	Mask;						// Mask used for the creation of this path	
+	UBYTE	Mask;						// Mask used for the creation of this path
 //	SBYTE	Direction;					// Direction object should be moving (0-7) 0=Up,1=Up-Right
 //	SDWORD	Speed;						// Speed at which object moves along the movement list
 	UBYTE	Position;	   				// Position in asPath
@@ -71,8 +71,8 @@ typedef struct _move_control
 	// NOTE: this is supposed to replace Speed
 	FRACT	speed;						// Speed of motion
 	SWORD	boundX,boundY;				// Vector for the end of path boundary
-	SWORD	dir;						// direction of motion (not the direction the droid is facing)
 
+	float	moveDir;						// direction of motion (not the direction the droid is facing)
 	SWORD	bumpDir;					// direction at last bump
 	UDWORD	bumpTime;					// time of first bump with something
 	UWORD	lastBump;					// time of last bump with a droid - relative to bumpTime

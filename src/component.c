@@ -750,24 +750,24 @@ void displayComponentButtonObject(DROID *psDroid, Vector3i *Rotation, Vector3i *
 // Watermelon:multiple turrets display removed the pointless mountRotation
 void displayComponentObject(BASE_OBJECT *psObj)
 {
-DROID		*psDroid;
-//iIMDShape	*psShape;
-Vector3i		position, rotation;	//,null;
-//iPoint		screenCoords;
-//SDWORD		dummyZ;
-Sint32		xShift,zShift;
-UDWORD		worldAngle;
-SDWORD		difference;
-SDWORD		frame;
-PROPULSION_STATS	*psPropStats;
-UDWORD	tileX,tileY;
-MAPTILE	*psTile;
+	DROID		*psDroid;
+	//iIMDShape	*psShape;
+	Vector3i		position, rotation;	//,null;
+	//iPoint		screenCoords;
+	//SDWORD		dummyZ;
+	Sint32		xShift,zShift;
+	UDWORD		worldAngle;
+	SDWORD		difference;
+	SDWORD		frame;
+	PROPULSION_STATS	*psPropStats;
+	UDWORD	tileX,tileY;
+	MAPTILE	*psTile;
 
 	psDroid = (DROID *)psObj;
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 
-	worldAngle = (UDWORD) ((UDWORD)player.r.y/DEG_1)%360;
-	difference = (worldAngle-psObj->direction);
+	worldAngle = (UDWORD)(player.r.y / DEG_1) % 360;
+	difference = worldAngle - psObj->direction;
 
 	if((difference>0 && difference <180) || difference<-180)
 	{
@@ -1453,9 +1453,9 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 						psShape = getImdFromIndex(MI_FLAME);
 
 						/* Rotate for droid */
-						pie_MatRotY(DEG((SDWORD)psDroid->direction));
-						pie_MatRotX(DEG(-psDroid->pitch));
-						pie_MatRotZ(DEG(-psDroid->roll));
+						pie_MatRotY( DEG( (SDWORD)psDroid->direction ) );
+						pie_MatRotX( DEG( -psDroid->pitch ) );
+						pie_MatRotZ( DEG( -psDroid->roll ) );
 						//Watermelon:rotate Y
 					   	pie_MatRotY(DEG( -( (-(SDWORD)(psDroid->turretRotation[0])) ) ));
 

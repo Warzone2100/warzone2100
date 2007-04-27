@@ -3928,7 +3928,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	psDroid->sMove.Direction3D=0;
 	psDroid->sMove.psFormation = NULL;*/
 
-	psDroid->direction=0;
+	psDroid->direction = 0;
 	psDroid->pitch =  0;
 	psDroid->roll = 0;
 	//psDroid->turretRotRate = 360;
@@ -4120,7 +4120,7 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 
 	psDroid->droidType = droidTemplateType(pTemplate);
 
-	psDroid->direction=0;
+	psDroid->direction = 0;
 	psDroid->pitch =  0;
 	psDroid->roll = 0;
 	//psDroid->turretRotRate = 360;
@@ -4783,7 +4783,7 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 	Vector3i barrel;
  	iIMDShape		*psShape, *psWeapon, *psWeaponMount;
 
-	psShape       = BODY_IMD(psDroid,psDroid->player);
+	psShape = BODY_IMD(psDroid,psDroid->player);
 	//Watermelon:got rid of the macros...
 	//psWeapon      = WEAPON_IMD(psDroid,psDroid->player);
 	//psWeaponMount = WEAPON_MOUNT_IMD(psDroid,psDroid->player);
@@ -4797,9 +4797,9 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 
 			pie_TRANSLATE(psDroid->x,-(SDWORD)psDroid->z,psDroid->y);
 			//matrix = the center of droid
-			pie_MatRotY(DEG((SDWORD) psDroid->direction));
-			pie_MatRotX(DEG(psDroid->pitch));
-			pie_MatRotZ(DEG(-(SDWORD)psDroid->roll));
+			pie_MatRotY( DEG( (SDWORD)psDroid->direction ) );
+			pie_MatRotX( DEG( psDroid->pitch ) );
+			pie_MatRotZ( DEG( -(SDWORD)psDroid->roll ) );
 		//	pie_TRANSLATE(100,0,0);			//	(left,-height,forward)
 			pie_TRANSLATE( psShape->connectors[weapon_slot].x, -psShape->connectors[weapon_slot].z,
 						  -psShape->connectors[weapon_slot].y);//note y and z flipped
@@ -4845,9 +4845,9 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 
 			pie_TRANSLATE(psDroid->x,-(SDWORD)psDroid->z,psDroid->y);
 			//matrix = the center of droid
-			pie_MatRotY(DEG((SDWORD) psDroid->direction));
-			pie_MatRotX(DEG(psDroid->pitch));
-			pie_MatRotZ(DEG(-(SDWORD)psDroid->roll));
+			pie_MatRotY( DEG( (SDWORD)psDroid->direction ) );
+			pie_MatRotX( DEG( psDroid->pitch ) );
+			pie_MatRotZ( DEG( -(SDWORD)psDroid->roll ) );
 	//		pie_TRANSLATE(100,0,0);			//	(left,-height,forward)
 			pie_TRANSLATE( psShape->connectors->x, -psShape->connectors->z,
 						  -psShape->connectors->y);//note y and z flipped
@@ -6346,7 +6346,8 @@ BOOL cbSensorDroid(DROID *psDroid)
 DROID * giftSingleDroid(DROID *psD, UDWORD to)
 {
     DROID_TEMPLATE      sTemplate;
-    UWORD               x, y, numKills, direction, i;
+    UWORD               x, y, numKills, i;
+    float               direction;
     DROID               *psNewDroid, *psCurr;
     STRUCTURE           *psStruct;
     UDWORD              body, armourK[NUM_HIT_SIDES], armourH[NUM_HIT_SIDES];

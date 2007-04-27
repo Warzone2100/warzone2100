@@ -1738,7 +1738,7 @@ static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 				psStruct = apsStructs[x][y];
 				if (psStruct->pStructureType->type == REF_WALL)
 				{
-					if (psStruct->direction == 90)
+					if ( (int)psStruct->direction == 90 )
 					{
 						nayborType = WALL_VERT;
 					}
@@ -7247,9 +7247,9 @@ BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int w
 
 			pie_TRANSLATE(psStructure->x,-(SDWORD)psStructure->z,psStructure->y);
 			//matrix = the center of droid
-			pie_MatRotY(DEG((SDWORD) psStructure->direction));
-			pie_MatRotX(DEG(psStructure->pitch));
-			pie_MatRotZ(DEG(-(SDWORD)psStructure->roll));
+			pie_MatRotY( DEG( (SDWORD)psStructure->direction ) );
+			pie_MatRotX( DEG( psStructure->pitch ) );
+			pie_MatRotZ( DEG( -(SDWORD)psStructure->roll ) );
 	//		pie_TRANSLATE(100,0,0);			//	(left,-height,forward)
 			pie_TRANSLATE( psShape->connectors[weapon_slot].x, -psShape->connectors[weapon_slot].z,
 						  -psShape->connectors[weapon_slot].y);//note y and z flipped
@@ -7276,8 +7276,6 @@ BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int w
 			muzzle->z = -muzzle->z;
 
 			pie_MatEnd();
-
-
 		}
 		else
 		{
@@ -7306,9 +7304,9 @@ BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int w
 
 			pie_TRANSLATE(psStructure->x,-(SDWORD)psStructure->z,psStructure->y);
 			//matrix = the center of droid
-			pie_MatRotY(DEG((SDWORD) psStructure->direction));
-			pie_MatRotX(DEG(psStructure->pitch));
-			pie_MatRotZ(DEG(-(SDWORD)psStructure->roll));
+			pie_MatRotY( DEG( (SDWORD)psStructure->direction ) );
+			pie_MatRotX( DEG( psStructure->pitch ) );
+			pie_MatRotZ( DEG( -(SDWORD)psStructure->roll ) );
 	//		pie_TRANSLATE(100,0,0);			//	(left,-height,forward)
 			pie_TRANSLATE( psShape->connectors->x, -psShape->connectors->z,
 						  -psShape->connectors->y);//note y and z flipped

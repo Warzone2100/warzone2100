@@ -578,7 +578,7 @@ static void offscreenUpdate(DROID *psDroid,
 				psDroid->y		 = (UWORD) fy;
 				gridMoveObject((BASE_OBJECT *)psDroid, (SDWORD)oldx,(SDWORD)oldy);
 
-				psDroid->direction	= (UWORD)(dir %360);		// update rotation
+				psDroid->direction = dir % 360;		// update rotation
 
 				// reroute the droid.
 				turnOffMultiMsg(TRUE);
@@ -595,7 +595,7 @@ static void offscreenUpdate(DROID *psDroid,
 		psDroid->x		 = (UWORD)x;						//update x
 		psDroid->y		 = (UWORD)y;						//update y
 		gridMoveObject((BASE_OBJECT *)psDroid, (SDWORD)oldx,(SDWORD)oldy);
-		psDroid->direction	= (UWORD)(dir %360);				// update rotation
+		psDroid->direction = dir % 360;				// update rotation
 	}
 
 	psDroid->body		= dam;								// update damage
@@ -850,7 +850,6 @@ BOOL recvStructureCheck( NETMSG *m)
 
 	if(pS)
 	{
-
 		if( pS->status != SS_BUILT)							// check its finished
 		{
 			pS->direction = dir;

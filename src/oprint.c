@@ -54,9 +54,7 @@ void printBaseObjInfo(BASE_OBJECT *psObj)
 		break;
 	}
 
-	OPRINTF(ConsoleString,(ConsoleString,"%s id %d at (%d,%d,%d) dpr (%d,%d,%d)\n",
-		pType, psObj->id, psObj->x,psObj->y,psObj->z,
-			   psObj->direction,psObj->pitch,psObj->roll));
+	OPRINTF( ConsoleString, (ConsoleString, "%s id %d at (%d,%d,%d) dpr (%f,%d,%d)\n", pType, psObj->id, psObj->x, psObj->y, psObj->z, psObj->direction, psObj->pitch, psObj->roll) );
 }
 
 // print out information about a general component

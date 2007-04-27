@@ -49,8 +49,9 @@ extern SDWORD	aSinTable[];
 
 //*************************************************************************
 
-#define SIN(X)					aSinTable[(Uint16)(X) >> 4]
-#define COS(X)					aSinTable[((Uint16)(X) >> 4) + 1024]
+// FIXME DUPLICATE CODE! Already present in trig.c!
+#define SIN(X)	aSinTable[(Uint16)(X) >> 4]
+#define COS(X)	aSinTable[((Uint16)(X) >> 4) + 1024]
 
 
 //*************************************************************************

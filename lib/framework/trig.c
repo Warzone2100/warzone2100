@@ -42,81 +42,40 @@
 #define SQRT_ACCURACY	4096
 #define SQRT_ACCBITS	12
 
-/* The trig functions */
-#define SINFUNC		(FRACT)sin
-#define COSFUNC		(FRACT)cos
-#define ASINFUNC	(FRACT)asin
-#define ACOSFUNC	(FRACT)acos
 
-
-
-static FRACT	*aSin;
-static FRACT	*aCos;
-static FRACT	*aInvCos;
-static FRACT	*aSqrt;
-static FRACT	*aInvSin;
+static float aSin[TRIG_DEGREES];
+static float aCos[TRIG_DEGREES];
+static float aInvCos[TRIG_ACCURACY];
+static float aInvSin[TRIG_ACCURACY];
+static float aSqrt[SQRT_ACCURACY];
 
 
 /* Initialise the Trig tables */
 BOOL trigInitialise(void)
 {
-
-	FRACT	val, inc;
-	UDWORD	count;
-
-
-	// Allocate the tables
-	aSin=(FRACT*)malloc(sizeof(FRACT) * TRIG_DEGREES);
-	if (!aSin)
-	{
-		return FALSE;
-	}
-	aCos=(FRACT*)malloc(sizeof(FRACT) * TRIG_DEGREES);
-	if (!aCos)
-	{
-		return FALSE;
-	}
-	aInvSin=(FRACT*)malloc(sizeof(FRACT) * TRIG_ACCURACY);
-	if (!aInvSin)
-	{
-		return FALSE;
-	}
-
-	aInvCos=(FRACT*)malloc(sizeof(FRACT) * TRIG_ACCURACY);
-	if (!aInvCos)
-	{
-		return FALSE;
-	}
-
-	aSqrt=(FRACT*)malloc(sizeof(FRACT) * SQRT_ACCURACY);
-	if (!aSqrt)
-	{
-		return FALSE;
-	}
+	float val = 0.0, inc = 2.0 * M_PI / TRIG_DEGREES;
+	int count;
 
 	// Initialise the tables
-	// inc = 2 * M_PI / TRIG_DEGREES
-	inc = FRACTmul(FRACTCONST(2,1), FRACTCONST(M_PI, TRIG_DEGREES));
-	val = FRACTCONST(0,1);
-	for(count = 0; count < TRIG_DEGREES; count++)
+	for (count = 0; count < TRIG_DEGREES; count++)
 	{
-		aSin[count] = SINFUNC(val);
-		aCos[count] = COSFUNC(val);
+		aSin[count] = sinf(val);
+		aCos[count] = cosf(val);
 		val += inc;
 	}
-	inc = FRACTCONST(2,TRIG_ACCURACY-1);
-	val = FRACTCONST(-1,1);
-	for(count =0; count < TRIG_ACCURACY; count++)
+	inc = 2.0 / (TRIG_ACCURACY-1);
+	val = -1;
+	for (count = 0; count < TRIG_ACCURACY; count++)
 	{
-		aInvSin[count] = FRACTmul( ASINFUNC(val), FRACTCONST(TRIG_DEGREES/2, M_PI) );
-		aInvCos[count] = FRACTmul( ACOSFUNC(val), FRACTCONST(TRIG_DEGREES/2, M_PI) );
+		aInvSin[count] = asinf(val) * (float)TRIG_DEGREES / (2.0 * M_PI);
+		aInvCos[count] = acosf(val) * (float)TRIG_DEGREES / (2.0 * M_PI);
 		val += inc;
 	}
 
-	for(count=0; count < SQRT_ACCURACY; count++)
+	for (count = 0; count < SQRT_ACCURACY; count++)
 	{
-		val = (FRACT)count / (FRACT)(SQRT_ACCURACY / 2);
-		aSqrt[count]= (FRACT)sqrt(val);
+		val = (float)count / (SQRT_ACCURACY / 2);
+		aSqrt[count]= sqrtf(val);
 	}
 
 	return TRUE;
@@ -125,20 +84,11 @@ BOOL trigInitialise(void)
 
 /* Shutdown the trig tables */
 void trigShutDown(void)
-{
-
-	free(aSin);
-	free(aCos);
-	free(aInvSin);
-	free(aInvCos);
-	free(aSqrt);
-
-}
-
+{}
 
 
 /* Access the trig tables */
-FRACT trigSin(SDWORD angle)
+float trigSin(SDWORD angle)
 {
 	if (angle < 0)
 	{
@@ -152,7 +102,8 @@ FRACT trigSin(SDWORD angle)
 	return aSin[angle % TRIG_DEGREES];
 }
 
-FRACT trigCos(SDWORD angle)
+
+float trigCos(SDWORD angle)
 {
 	if (angle < 0)
 	{
@@ -165,43 +116,37 @@ FRACT trigCos(SDWORD angle)
 	}
 	return aCos[angle % TRIG_DEGREES];
 }
-FRACT trigInvSin(FRACT val)
-{
-	SDWORD index;
 
-	index = MAKEINT(FRACTmul(val, MAKEFRACT((TRIG_ACCURACY-1)/2)))
-				+ (TRIG_ACCURACY-1)/2;
+
+float trigInvSin(float val)
+{
+	SDWORD index = (val+1) * (TRIG_ACCURACY-1) / 2;
 
 	return aInvSin[index & TRIG_ACCMASK];
 }
 
-FRACT trigInvCos(FRACT val)
-{
-	SDWORD index;
 
-	index = MAKEINT(FRACTmul(val, MAKEFRACT((TRIG_ACCURACY-1)/2)))
-				+ (TRIG_ACCURACY-1)/2;
+float trigInvCos(float val)
+{
+	SDWORD index = (val+1) * (TRIG_ACCURACY-1) / 2;
 
 	return aInvCos[index & TRIG_ACCMASK];
 }
 
 
-
 /* Fast lookup sqrt */
-FRACT trigIntSqrt(UDWORD val)
+float trigIntSqrt(UDWORD val)
 {
-
 	UDWORD	exp, mask;
-
 
 	if (val == 0)
 	{
-		return FRACTCONST(0,1);
+		return 0.0;
 	}
 
 	// find the exponent of the number
 	mask = 0x80000000;		// set the msb in the mask
-	for(exp=32; exp!=0; exp--)
+	for(exp = 32; exp != 0; exp--)
 	{
 		if (val & mask)
 		{
@@ -230,23 +175,6 @@ FRACT trigIntSqrt(UDWORD val)
 	// now generate the fractional part for the lookup table
 	ASSERT( val < SQRT_ACCURACY,
 		"trigIntSqrt: aargh - table index out of range" );
-	return aSqrt[val] * (FRACT)((UDWORD)1 << ((UDWORD)exp/2));
 
+	return aSqrt[val] * (1 << (exp/2));
 }
-
-
-#define DIVCNT (32)
-
-#define ARCGAP (4096/DIVCNT)			// X2-X1
-
-#define ARCMASK (ARCGAP-1)
-
-/* */
-
-
-
-
-
-
-
-

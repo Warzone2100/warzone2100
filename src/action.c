@@ -527,6 +527,7 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *p
 	targetRotation = calcDirection(psAttacker->x, psAttacker->y, psTarget->x, psTarget->y);
 
 	rotationError = targetRotation - (tRotation + psAttacker->direction);
+
 	//restrict rotationerror to =/- 180 degrees
 	while (rotationError > 180)
 	{
@@ -558,7 +559,7 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *p
 	}
 	else //roughly there so lock on and fire
 	{
-		if ((SDWORD)psAttacker->direction > targetRotation)
+		if ( (SDWORD)psAttacker->direction > targetRotation )
 		{
 			tRotation = (SWORD)(targetRotation + 360 - psAttacker->direction);
 		}
@@ -1171,8 +1172,8 @@ void actionUpdateDroid(DROID *psDroid)
 	ASSERT( psPropStats != NULL,
 			"actionUpdateUnit: invalid propulsion stats pointer" );
 
-	ASSERT( psDroid->turretRotation[i] < 360, "turretRotation out of range" );
-	ASSERT( psDroid->direction < 360, "unit direction out of range" );
+	ASSERT( psDroid->turretRotation[i] < 360, "turretRotation out of range: %d", psDroid->turretRotation[i]);
+	ASSERT( psDroid->direction < 360, "unit direction out of range: %f", psDroid->direction);
 
 	/* check whether turret inverted for actionTargetTurret */
 	//if ( psDroid->droidType != DROID_CYBORG &&

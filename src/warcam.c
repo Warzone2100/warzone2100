@@ -330,7 +330,7 @@ static void setUpRadarTarget(SDWORD x, SDWORD y)
 	{
 		radarTarget.z = map_Height(x,y);
 	}
-	radarTarget.direction = (UWORD)calcDirection(player.p.x, player.p.z, x, y);
+	radarTarget.direction = calcDirection(player.p.x, player.p.z, x, y);
 	radarTarget.pitch = 0;
 	radarTarget.roll = 0;
 	radarTarget.type = OBJ_TARGET;
@@ -813,15 +813,15 @@ SDWORD	angle;
 			}
 			else
 			{
-				multiAngle = getGroupAverageTrackAngle(trackingCamera.target->group,TRUE);
+				multiAngle = getGroupAverageTrackAngle( trackingCamera.target->group, TRUE );
 			}
-			xBehind = ((camDroidYOffset*SIN(DEG(multiAngle))) >> FP12_SHIFT);
-			yBehind = ((camDroidXOffset*COS(DEG(multiAngle))) >> FP12_SHIFT);
+			xBehind = ( ( camDroidYOffset * SIN( DEG(multiAngle) ) ) >> FP12_SHIFT );
+			yBehind = ( ( camDroidXOffset * COS( DEG(multiAngle) ) ) >> FP12_SHIFT );
 		}
 		else
 		{
-		 	xBehind = ((camDroidYOffset*SIN(DEG(trackingCamera.target->direction))) >> FP12_SHIFT);
-			yBehind = ((camDroidXOffset*COS(DEG(trackingCamera.target->direction))) >> FP12_SHIFT);
+		 	xBehind = ( ( camDroidYOffset * SIN( DEG( (int)trackingCamera.target->direction ) ) ) >> FP12_SHIFT );
+			yBehind = ( ( camDroidXOffset * COS( DEG( (int)trackingCamera.target->direction ) ) ) >> FP12_SHIFT );
 		}
 	}
 	else
@@ -1050,39 +1050,38 @@ SDWORD	xPos,yPos,zPos;
 		{
 			if(trackingCamera.target->selected)
 			{
-				yConcern =	DEG(getAverageTrackAngle(FALSE));//DEG(trackingCamera.target->direction);
+				yConcern = DEG( getAverageTrackAngle(FALSE) ); //DEG(trackingCamera.target->direction);
 			}
 			else
 			{
-				yConcern =	DEG(getGroupAverageTrackAngle(trackingCamera.target->group,FALSE));//DEG(trackingCamera.target->direction);
+				yConcern = DEG( getGroupAverageTrackAngle(trackingCamera.target->group, FALSE) ); //DEG(trackingCamera.target->direction);
 			}
 		}
 		else
 		{
-			yConcern =	DEG(trackingCamera.target->direction);
+			yConcern = DEG( (int)trackingCamera.target->direction );
 		}
-		yConcern +=	DEG(180);
+		yConcern += DEG(180);
 
-  		while(trackingCamera.rotation.y<0)
+  		while(trackingCamera.rotation.y < 0)
 		{
-			trackingCamera.rotation.y+=DEG(360);
+			trackingCamera.rotation.y += DEG(360);
 		}
 
 		/* Which way are we facing? */
 		worldAngle =  trackingCamera.rotation.y;
 		separation = (FRACT) ((yConcern - worldAngle));
-		if(separation<DEG(-180))
+		if(separation < DEG(-180))
 		{
-			separation+=DEG(360);
+			separation += DEG(360);
 		}
-		else if(separation>DEG(180))
+		else if(separation > DEG(180))
 		{
-			separation-=DEG(360);
+			separation -= DEG(360);
 		}
 
 		/* Make new acceleration */
-		trackingCamera.rotAccel.y =
-			(rotAccelConstant*separation - rotVelocityConstant*trackingCamera.rotVel.y);
+		trackingCamera.rotAccel.y = rotAccelConstant * separation - rotVelocityConstant * trackingCamera.rotVel.y;
 	}
 
 	if(update & X_UPDATE)

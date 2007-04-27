@@ -4511,7 +4511,7 @@ BOOL loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity)
 
 				if (psDroid) {
 					psDroid->id = pDroidInit->id;
-					psDroid->direction = (UWORD)pDroidInit->direction;
+					psDroid->direction = pDroidInit->direction;
 					addDroid(psDroid, apsDroidLists);
 				}
 				else
@@ -4732,7 +4732,7 @@ static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 	//are these going to ever change from the values set up with?
 //			psDroid->z = psSaveDroid->z;		// use the correct map height value
 
-	psDroid->direction = (UWORD)psSaveDroid->direction;
+	psDroid->direction = psSaveDroid->direction;
 	psDroid->body = psSaveDroid->body;
 	if (psDroid->body > psDroid->originalBody)
 	{
@@ -4869,7 +4869,7 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 	//are these going to ever change from the values set up with?
 //			psDroid->z = psSaveDroid->z;		// use the correct map height value
 
-	psDroid->direction = (UWORD)psSaveDroid->direction;
+	psDroid->direction = psSaveDroid->direction;
     psDroid->body = psSaveDroid->body;
 	if (psDroid->body > psDroid->originalBody)
 	{
@@ -5127,7 +5127,7 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	//are these going to ever change from the values set up with?
 //			psDroid->z = psSaveDroid->z;		// use the correct map height value
 
-	psDroid->direction = (UWORD)psSaveDroid->direction;
+	psDroid->direction = psSaveDroid->direction;
 	psDroid->body = psSaveDroid->body;
 	if (psDroid->body > psDroid->originalBody)
 	{
@@ -6573,7 +6573,7 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 			psStructure->id = psSaveStructure->id;
 			//are these going to ever change from the values set up with?
 //			psStructure->z = (UWORD)psSaveStructure->z;
-			psStructure->direction = (UWORD)psSaveStructure->direction;
+			psStructure->direction = psSaveStructure->direction;
 		}
 
 
@@ -6860,7 +6860,7 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 			psStructure->id = psSaveStructure->id;
 			//are these going to ever change from the values set up with?
 //			psStructure->z = (UWORD)psSaveStructure->z;
-			psStructure->direction = (UWORD)psSaveStructure->direction;
+			psStructure->direction = psSaveStructure->direction;
 		}
 
 		psStructure->inFire = psSaveStructure->inFire;
@@ -7308,7 +7308,7 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 			psStructure->id = psSaveStructure->id;
 			//are these going to ever change from the values set up with?
 //			psStructure->z = (UWORD)psSaveStructure->z;
-			psStructure->direction = (UWORD)psSaveStructure->direction;
+			psStructure->direction = psSaveStructure->direction;
 		}
 
 		psStructure->inFire = psSaveStructure->inFire;
@@ -8119,7 +8119,7 @@ BOOL loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UD
 //DBPRINTF(("Loaded feature - id = %d @ %p\n",psSaveFeature->id,pFeature);
 		//restore values
 		pFeature->id = psSaveFeature->id;
-		pFeature->direction = (UWORD)psSaveFeature->direction;
+		pFeature->direction = psSaveFeature->direction;
 		pFeature->inFire = psSaveFeature->inFire;
 		pFeature->burnDamage = psSaveFeature->burnDamage;
 		if (version >= VERSION_14)
@@ -8229,7 +8229,7 @@ BOOL loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWO
 //DBPRINTF(("Loaded feature - id = %d @ %p\n",psSaveFeature->id,pFeature);
 		//restore values
 		pFeature->id = psSaveFeature->id;
-		pFeature->direction = (UWORD)psSaveFeature->direction;
+		pFeature->direction = psSaveFeature->direction;
 		pFeature->inFire = psSaveFeature->inFire;
 		pFeature->burnDamage = psSaveFeature->burnDamage;
 		for (i=0; i < MAX_PLAYERS; i++)

@@ -1294,7 +1294,7 @@ void	renderProjectile(PROJ_OBJECT *psCurr)
 		iV_TRANSLATE(rx,0,-rz);
 
 		/* Rotate it to the direction it's facing */
-		imdRot2.y = DEG(psCurr->direction);
+		imdRot2.y = DEG( (int)psCurr->direction );
 		iV_MatrixRotateY(-imdRot2.y);
 
 		/* pitch it */
@@ -1376,7 +1376,7 @@ renderAnimComponent( COMPONENT_OBJECT *psObj )
 		iV_TRANSLATE(rx,0,-rz);
 
 		/* parent object rotations */
-		imdRot2.y = DEG(psParentObj->direction);
+		imdRot2.y = DEG( (int)psParentObj->direction );
 		iV_MatrixRotateY(-imdRot2.y);
 		imdRot2.x = DEG(psParentObj->pitch);
 		iV_MatrixRotateX(imdRot2.x);
@@ -1982,7 +1982,7 @@ void	renderFeature(FEATURE *psFeature)
 
 		/* Translate */
 		iV_TRANSLATE(rx,0,-rz);
-		rotation = DEG(psFeature->direction);
+		rotation = DEG( (int)psFeature->direction );
 
 		iV_MatrixRotateY(-rotation);
 
@@ -2287,7 +2287,7 @@ void	renderStructure(STRUCTURE *psStructure)
 		/* OK - here is where we establish which IMD to draw for the building - luckily static objects,
 		* buildings in other words are NOT made up of components - much quicker! */
 
-		rotation = DEG(psStructure->direction);
+		rotation = DEG( (int)psStructure->direction );
 		iV_MatrixRotateY(-rotation);
 			if( !defensive
 			&& gameTime2-psStructure->timeLastHit < ELEC_DAMAGE_DURATION
@@ -2831,7 +2831,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 		/* Translate */
 		iV_TRANSLATE(rx,0,-rz);
 
-		rotation = DEG(psStructure->direction);
+		rotation = DEG( (int)psStructure->direction );
 		iV_MatrixRotateY(-rotation);
 	//	objectShimmy((BASE_OBJECT*)psStructure);
 		if(imd!=NULL)
@@ -2848,21 +2848,21 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 		temp = imd->points;
 
 		// now check if we need to apply the wall hack
-		if(psStructure->direction > 0 && psStructure->pStructureType->type == REF_WALL)
+		if ( psStructure->direction > 0 && psStructure->pStructureType->type == REF_WALL )
 		{
 			// switch them
 			originalDirection = imd;
-			imd = &otherDirections[psStructure->direction/90-1];
-			if(!directionSet[psStructure->direction/90-1])
+			imd = &otherDirections[(int)psStructure->direction / 90 - 1];
+			if(!directionSet[(int)psStructure->direction / 90 - 1])
 			{
 				// not yet initialised, so do that now
 				*imd = *originalDirection;
 				imd->shadowEdgeList = NULL;
-				directionSet[psStructure->direction/90-1] = TRUE;
+				directionSet[(int)psStructure->direction / 90 - 1] = TRUE;
 			}
 		}
 
-		flattenImd(imd,structX,structY,psStructure->direction);
+		flattenImd(imd, structX, structY, psStructure->direction );
 
 		/* Actually render it */
 		if ( (psStructure->status == SS_BEING_BUILT ) ||
@@ -2879,7 +2879,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 		}
 		imd->points = temp;
 
-		if(psStructure->direction > 0 && psStructure->pStructureType->type == REF_WALL)
+		if ( psStructure->direction > 0 && psStructure->pStructureType->type == REF_WALL )
 		{
 			// switch back
 			imd = originalDirection;
@@ -2927,7 +2927,7 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 
 	if(psDroid->droidType == DROID_TRANSPORTER)
 	{
-		iV_MatrixRotateY( DEG(-psDroid->direction));
+		iV_MatrixRotateY( DEG( -psDroid->direction ) );
 	}
 
 	pVecTemp = psShadowIMD->points;
@@ -2939,9 +2939,9 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 	}
 	else
 	{
-		pie_MatRotY(DEG(-psDroid->direction));
-		pie_MatRotX(DEG(psDroid->pitch));
-		pie_MatRotZ(DEG(psDroid->roll));
+		pie_MatRotY( DEG(-psDroid->direction ) );
+		pie_MatRotX( DEG( psDroid->pitch ) );
+		pie_MatRotZ( DEG( psDroid->roll ) );
 	}
 
 	// set up lighting

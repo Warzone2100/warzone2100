@@ -394,9 +394,9 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 			//Watermelon:Target prediction
 			if(psTarget->type == OBJ_DROID)
 			{
-				predictX = (SDWORD)(trigSin(((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * dist /psStats->flightSpeed);
+				predictX = (SDWORD)(trigSin( ((DROID *)psTarget)->sMove.moveDir ) * ((DROID *)psTarget)->sMove.speed * dist / psStats->flightSpeed );
 				predictX += psTarget->x;
-				predictY = (SDWORD)(trigCos(((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * dist /psStats->flightSpeed);
+				predictY = (SDWORD)(trigCos( ((DROID *)psTarget)->sMove.moveDir ) * ((DROID *)psTarget)->sMove.speed * dist / psStats->flightSpeed );
 				predictY += psTarget->y;
 				//to prevent negative number from corrupting UDWORD parameter tarX,tarY in proj_SendProjectile
 				if (predictX < 0)
@@ -454,9 +454,9 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 			//Watermelon:Target prediction
 			if(psTarget->type == OBJ_DROID)
 			{
-				predictX = (SDWORD)(trigSin(((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * dist /psStats->flightSpeed);
+				predictX = (SDWORD)(trigSin( ((DROID *)psTarget)->sMove.moveDir ) * ((DROID *)psTarget)->sMove.speed * dist / psStats->flightSpeed );
 				predictX += psTarget->x;
-				predictY = (SDWORD)(trigCos(((DROID *)psTarget)->sMove.dir) * ((DROID *)psTarget)->sMove.speed * dist /psStats->flightSpeed);
+				predictY = (SDWORD)(trigCos( ((DROID *)psTarget)->sMove.moveDir ) * ((DROID *)psTarget)->sMove.speed * dist / psStats->flightSpeed );
 				predictY += psTarget->y;
 				//to prevent negative number from corrupting UDWORD parameter tarX,tarY in proj_SendProjectile
 				if (predictX < 0)
