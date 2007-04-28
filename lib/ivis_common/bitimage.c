@@ -170,14 +170,14 @@ static BOOL LoadTextureFile(char *FileName, iTexture *pSprite, int *texPageID)
 	/* We have already loaded this one? */
 	while (i < _TEX_INDEX) {
 		if (strcasecmp(FileName, _TEX_PAGE[i].name) == 0) {
-			*texPageID = (_TEX_PAGE[i].textPage3dfx);
+			*texPageID = _TEX_PAGE[i].id;
 			debug(LOG_TEXTURE, "LoadTextureFile: already loaded");
 			return TRUE;
 		}
 		i++;
 	}
 
-	*texPageID = pie_AddBMPtoTexPages(pSprite, FileName, 1, TRUE);
+	*texPageID = pie_AddTexPage(pSprite, FileName, 1, TRUE);
 
 	return TRUE;
 }

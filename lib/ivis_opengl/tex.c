@@ -52,7 +52,7 @@ unsigned int _TEX_INDEX;
 
 	Returns the texture number of the image.
 **************************************************************************/
-int pie_AddBMPtoTexPages(iTexture* s, const char* filename, int type, BOOL bResource)
+int pie_AddTexPage(iTexture* s, const char* filename, int type, BOOL bResource)
 {
 	unsigned int i = 0;
 
@@ -89,8 +89,8 @@ int pie_AddBMPtoTexPages(iTexture* s, const char* filename, int type, BOOL bReso
 	_TEX_PAGE[i].tex.height = s->height;
 	_TEX_PAGE[i].type = type;
 
-	glGenTextures(1, &_TEX_PAGE[i].textPage3dfx);
-	glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[i].textPage3dfx);
+	glGenTextures(1, &_TEX_PAGE[i].id);
+	glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[i].id);
 
 	if ((s->width & (s->width-1)) == 0 && (s->height & (s->height-1)) == 0)
 	{
@@ -103,7 +103,8 @@ int pie_AddBMPtoTexPages(iTexture* s, const char* filename, int type, BOOL bReso
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	if( i == SKY_TEXPAGE )
+
+	if( strncmp( filename, SKY_TEXPAGE, iV_TEXNAME_MAX ) == 0 )
 	{
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	}
@@ -120,7 +121,7 @@ int pie_AddBMPtoTexPages(iTexture* s, const char* filename, int type, BOOL bReso
 	return i;
 }
 
-void pie_Pagename(char * filename)
+void pie_MakeTexPageName(char * filename)
 {
 	if (strncmp(filename, "page-", 5) == 0)
 	{
@@ -142,7 +143,7 @@ void pie_ChangeTexPage(int tex_index, iTexture* s, int type, BOOL bResource)
 	_TEX_PAGE[tex_index].tex.height = s->height;
 	_TEX_PAGE[tex_index].type = type;
 
-	glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[tex_index].textPage3dfx);
+	glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[tex_index].id);
 
 	if ((s->width & (s->width-1)) == 0 && (s->height & (s->height-1)) == 0)
 	{
@@ -231,13 +232,13 @@ void pie_TexShutDown(void)
 	unsigned int i = 0, j = 0;
 
 	while (i < _TEX_INDEX) {
-		/*	Only free up the ones that were NOT allocated through resource handler cos they'll already
-			be free */
+		/*	Only free up the ones that were NOT allocated through resource handler cos they'll already be free */
 		if(_TEX_PAGE[i].bResource == FALSE)
 		{
 			if(_TEX_PAGE[i].tex.bmp) {
 				j++;
 				free(_TEX_PAGE[i].tex.bmp);
+				_TEX_PAGE[i].tex.bmp = NULL;
 			}
 		}
 		i++;

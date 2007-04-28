@@ -113,7 +113,7 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 	// get texture page if specified
 	if (strncmp(buffer, "TEXTURE", 7) == 0)
 	{
-		/* the first parameter for textures is always ignored; which is why we ignore 
+		/* the first parameter for textures is always ignored; which is why we ignore
 		 * nlevels read in above */
 
 		ch = *pFileData++;
@@ -125,27 +125,27 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 		}
 		texfile[i] = '\0';
 
-		if (sscanf(pFileData, "%s%n", texType, &cnt) != 1) 
+		if (sscanf(pFileData, "%s%n", texType, &cnt) != 1)
 		{
 			debug(LOG_ERROR, "iV_ProcessIMD %s texture info corrupt: %s", pFileName, buffer);
 			return NULL;
 		}
 		pFileData += cnt;
 
-		if (strcmp(texType, "png") != 0) 
+		if (strcmp(texType, "png") != 0)
 		{
 			debug(LOG_ERROR, "iV_ProcessIMD %s: only png textures supported", pFileName);
 			return NULL;
 		}
 		strcat(texfile, ".png");
 
-		if (sscanf(pFileData, "%d %d%n", &pwidth, &pheight, &cnt) != 2) 
+		if (sscanf(pFileData, "%d %d%n", &pwidth, &pheight, &cnt) != 2)
 		{
 			debug(LOG_ERROR, "iV_ProcessIMD %s bad texture size: %s", pFileName, buffer);
 			return NULL;
 		}
 		pFileData += cnt;
-		pie_Pagename(texfile);
+		pie_MakeTexPageName(texfile);
 
 		/* Now read in LEVELS directive */
 		if (sscanf(pFileData, "%s %d%n", buffer, &nlevels, &cnt) != 2)
@@ -182,7 +182,7 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 		int texpage = -1;
 
 		texpage = iV_GetTexture(texfile);
-		if (texpage < 0) 
+		if (texpage < 0)
 		{
 			debug(LOG_ERROR, "iV_ProcessIMD %s could not load tex page %s", pFileName, texfile);
 			return NULL;
@@ -290,7 +290,7 @@ static BOOL _imd_load_polys( char **ppFileData, iIMDShape *s )
 				poly->normal.x = poly->normal.y = poly->normal.z = 0;
 			}
 
-			if (poly->flags & iV_IMD_TEXANIM) 
+			if (poly->flags & iV_IMD_TEXANIM)
 			{
 				if ((poly->pTexAnim = (iTexAnim *)malloc(sizeof(iTexAnim))) == NULL) {
 					iV_Error(0xff,"(_load_polys) [poly %d] memory alloc fail (iTexAnim struct)",i);
@@ -327,7 +327,7 @@ static BOOL _imd_load_polys( char **ppFileData, iIMDShape *s )
 				poly->pTexAnim = NULL;
 			}
 			// PC texture coord routine
-			if (poly->vrt && (poly->flags & iV_IMD_TEX)) 
+			if (poly->vrt && (poly->flags & iV_IMD_TEX))
 			{
 				for (j=0; j<poly->npnts; j++) {
 					Sint32 VertexU, VertexV;

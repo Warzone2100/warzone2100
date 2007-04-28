@@ -110,7 +110,7 @@ extern SDWORD	getCentreZ( void );
 extern SDWORD mouseTileX, mouseTileY;
 extern BOOL yBeforeX;
 extern UDWORD numDroidsSelected;
-extern UDWORD intensity1,intensity2,intensity3;
+extern UDWORD intensity1, intensity2, intensity3;
 extern UDWORD lightLevel;
 
 #define INITIAL_DESIRED_PITCH (325)
@@ -126,13 +126,13 @@ extern UDWORD visibleYTiles;
 typedef struct {
 	// PIEVERTEX.
 	SDWORD x, y, z; UWORD tu, tv; PIELIGHT light, specular;
-	SDWORD sx, sy, sz;
 	// Extra data for water.
+	SDWORD sx, sy, sz;
 	SDWORD wx, wy, wz;
 	SDWORD water_height;
 	PIELIGHT wlight;
-	UBYTE	drawInfo;
-	UBYTE	bWater;
+	UBYTE drawInfo;
+	UBYTE bWater;
 } SVMESH;
 
 extern SVMESH tileScreenInfo[LAND_YGRD][LAND_XGRD];

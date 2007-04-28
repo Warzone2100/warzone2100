@@ -47,6 +47,7 @@ static inline void PNGCleanup(png_infop *info_ptr, png_structp *png_ptr, PHYSFS_
 		PHYSFS_close(fileHandle);
 }
 
+
 BOOL pie_PNGLoadFile(const char *fileName, iTexture *s)
 {
 	unsigned char PNGheader[PNG_BYTES_TO_CHECK];

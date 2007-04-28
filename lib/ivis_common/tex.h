@@ -29,6 +29,7 @@
 #define iV_TEX_MAX 64
 #define iV_TEXNAME_MAX 64
 
+#define SKY_TEXPAGE "page-25"
 
 
 //*************************************************************************
@@ -43,11 +44,11 @@
 
 typedef struct
 {
-	iTexture	tex;
-	Uint8		type;
-	char		name[iV_TEXNAME_MAX];
-	unsigned int textPage3dfx;
-	int		bResource;	// Was page provided by resource handler?
+	iTexture tex;
+	Uint8 type;
+	char name[iV_TEXNAME_MAX];
+	unsigned int id;
+	int bResource;	// Was page provided by resource handler?
 }
 iTexPage;
 
@@ -59,15 +60,15 @@ extern iTexPage	_TEX_PAGE[iV_TEX_MAX];
 
 extern int iV_GetTexture(const char *filename);
 extern int pie_ReloadTexPage(const char *texpageName, const char *fileName);
-extern int pie_AddBMPtoTexPages(iTexture* s, const char *filename, int type, BOOL bResource);
-void pie_ChangeTexPage(int tex_index, iTexture* s, int type, BOOL bResource);
+extern int pie_AddTexPage(iTexture* s, const char *filename, int type, BOOL bResource);
+extern void pie_ChangeTexPage(int tex_index, iTexture* s, int type, BOOL bResource);
 extern void pie_TexInit(void);
 
 /*!
  * Turns filename into a pagename if possible
  * \param[in,out] filename Filename to pagify
  */
-extern void pie_Pagename(char * filename);
+extern void pie_MakeTexPageName(char * filename);
 
 //*************************************************************************
 

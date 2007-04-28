@@ -172,13 +172,9 @@ extern void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD colour
 extern void pie_DrawImage(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style);
 extern void pie_DrawImage270( PIEIMAGE *image, PIERECT *dest );
 
-void pie_DrawTriangle( iVertex *pv );
-extern void pie_DrawTexTriangle(PIEVERTEX *aVrts, SDWORD texPage, void* psEffects);
+extern void pie_DrawTexTriangle(PIEVERTEX *aVrts, void* psEffects);
 
 extern void pie_GetResetCounts(SDWORD* pPieCount, SDWORD* pTileCount, SDWORD* pPolyCount, SDWORD* pStateCount);
-
-extern void SetBSPObjectPos(SDWORD x,SDWORD y,SDWORD z);
-extern void SetBSPCameraPos(SDWORD x,SDWORD y,SDWORD z);
 
 /*!
  * Load a PNG from file into sprite
@@ -188,8 +184,6 @@ extern void SetBSPCameraPos(SDWORD x,SDWORD y,SDWORD z);
  * \return TRUE on success, FALSE otherwise
  */
 BOOL pie_PNGLoadFile(const char *fileName, iTexture *s);
-
-void SetBSPObjectRot(SDWORD Yaw, SDWORD Pitch);
 
 void pie_BeginLighting(float x, float y, float z);
 void pie_EndLighting(void);

@@ -80,7 +80,7 @@ void war_SetDefaultStates(void)//Sets all states
 	//set those here and reset in clParse or loadConfig
 	pie_SetFogCap(FOG_CAP_UNDEFINED);
 	war_SetFog(FALSE);
-	war_SetTranslucent(TRUE);	// SHURCOOL: These two should be true (ie. enabled) by default; not false
+	war_SetTranslucent(TRUE);
 
 	war_SetPlayAudioCDs(TRUE);
 

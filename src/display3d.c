@@ -743,9 +743,9 @@ static void drawTiles(iView *camera, iView *player)
 				else if(playerZTile+i > (SDWORD)(mapHeight-1) )
 					edgeY = mapHeight-1;
 
-				tileScreenInfo[i][j].x = (j-terrainMidX) * TILE_UNITS;
+				tileScreenInfo[i][j].x = WORLD_COORD(j-terrainMidX);
 				tileScreenInfo[i][j].y = 0;//map_TileHeight(edgeX,edgeY);
-				tileScreenInfo[i][j].z = (terrainMidY-i) * TILE_UNITS;
+				tileScreenInfo[i][j].z = WORLD_COORD(terrainMidY-i);
 				tileScreenInfo[i][j].sz = pie_RotProj((Vector3i*)&tileScreenInfo[i][j].x, (Vector2i*)&tileScreenInfo[i][j].sx);
 
 				if (pie_GetFogEnabled())
@@ -755,7 +755,7 @@ static void drawTiles(iView *camera, iView *player)
 				}
 				else
 				{
-					tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination( mapTile(edgeX, edgeY)->illumination, rx - tileScreenInfo[i][j].x, rz - (i - terrainMidY) * TILE_UNITS, &specular );
+					tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination( mapTile(edgeX, edgeY)->illumination, rx - tileScreenInfo[i][j].x, rz - WORLD_COORD(i - terrainMidY), &specular );
 				}
 
 				if( playerXTile+j < -1 ||
@@ -776,14 +776,14 @@ static void drawTiles(iView *camera, iView *player)
 
 				psTile = mapTile(playerXTile+j, playerZTile+i);
 				/* Get a pointer to the tile at this location */
-				tileScreenInfo[i][j].x = (j-terrainMidX) * TILE_UNITS;
+				tileScreenInfo[i][j].x = WORLD_COORD(j-terrainMidX);
 
 				if (TERRAIN_TYPE(psTile) == TER_WATER)
 				{
 					tileScreenInfo[i][j].bWater = TRUE;
 				}
 				tileScreenInfo[i][j].y = map_TileHeight(playerXTile+j, playerZTile+i);
-				tileScreenInfo[i][j].z = (terrainMidY-i) * TILE_UNITS;
+				tileScreenInfo[i][j].z = WORLD_COORD(terrainMidY-i);
 
 				/* Is it in the centre and therefore worth averaging height over? */
 				if ( i > MIN_TILE_Y &&
@@ -844,7 +844,7 @@ static void drawTiles(iView *camera, iView *player)
 
 				tileScreenInfo[i][j].sz = pie_RotProj((Vector3i*)&tileScreenInfo[i][j], (Vector2i*)&tileScreenInfo[i][j].sx);
 
-				tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination(TileIllum, rx - tileScreenInfo[i][j].x, rz - (i-terrainMidY) * TILE_UNITS, &specular);
+				tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination(TileIllum, rx - tileScreenInfo[i][j].x, rz - WORLD_COORD(i-terrainMidY), &specular);
 
 				tileScreenInfo[i][j].specular.argb = specular;
 
@@ -859,7 +859,7 @@ static void drawTiles(iView *camera, iView *player)
 					// Transform it into the wx,wy mesh members.
 					tileScreenInfo[i][j].wz = pie_RotProj((Vector3i*)&tileScreenInfo[i][j], (Vector2i*)&tileScreenInfo[i][j].wx);
 					tileScreenInfo[i][j].wlight.argb = lightDoFogAndIllumination(
-						TileIllum, rx - tileScreenInfo[i][j].x, rz - (i-terrainMidY) * TILE_UNITS, &specular);
+						TileIllum, rx - tileScreenInfo[i][j].x, rz - WORLD_COORD(i-terrainMidY), &specular);
 					tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].y;
 					tileScreenInfo[i][j].y = tmp_y;
 				} else {
@@ -4203,7 +4203,7 @@ static void renderSurroundings(void)
 	pie_TRANSLATE(0, -scale / 8, 0);
 
 	// Set the texture page
-	pie_SetTexturePage(SKY_TEXPAGE);
+	pie_SetTexturePage( iV_GetTexture(SKY_TEXPAGE) );
 
 	if(!gamePaused())
 	{
@@ -4320,22 +4320,20 @@ SDWORD	shift;
 			return(imd);
 }
 
-static void	getDefaultColours( void )
+static void getDefaultColours( void )
 {
-defaultColours.red = iV_PaletteNearestColour(255,0,0);
-defaultColours.green = iV_PaletteNearestColour(0,255,0);
-defaultColours.blue = iV_PaletteNearestColour(0,0,255);
-defaultColours.yellow = iV_PaletteNearestColour(255,255,0);
-defaultColours.purple = iV_PaletteNearestColour(255,0,255);
-defaultColours.cyan = iV_PaletteNearestColour(0,255,255);
-defaultColours.black = iV_PaletteNearestColour(0,0,0);
-defaultColours.white = iV_PaletteNearestColour(255,255,255);
+	defaultColours.red = iV_PaletteNearestColour(255, 0, 0);
+	defaultColours.green = iV_PaletteNearestColour(0, 255, 0);
+	defaultColours.blue = iV_PaletteNearestColour(0, 0, 255);
+	defaultColours.yellow = iV_PaletteNearestColour(255, 255, 0);
+	defaultColours.purple = iV_PaletteNearestColour(255, 0, 255);
+	defaultColours.cyan = iV_PaletteNearestColour(0, 255, 255);
+	defaultColours.black = iV_PaletteNearestColour(0, 0, 0);
+	defaultColours.white = iV_PaletteNearestColour(255, 255, 255);
 }
 
-#ifdef JOHN
 //#define SHOW_ZONES
 //#define SHOW_GATEWAYS
-#endif
 
 // -------------------------------------------------------------------------------------
 /* New improved (and much faster) tile drawer */
@@ -4347,7 +4345,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	BOOL bOutlined;
 	UDWORD tileNumber;
 	Vector2i offset;
-	PIEVERTEX aVrts[3];
+	PIEVERTEX vertices[3];
 	UBYTE oldColours[4] = { 0, 0, 0, 0 };
 	UDWORD oldColoursWord[4] = { 0, 0, 0, 0 };
 #if defined(SHOW_ZONES) || defined(SHOW_GATEWAYS)
@@ -4422,20 +4420,15 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		bOutlined = TRUE;
 		//set tilenumber
 //		tileNumber = FOUNDATION_TEXTURE;
-		if( (i<LAND_XGRD-1) && (j<(LAND_YGRD-1)) )		// FIXME
+		if ( i < (LAND_XGRD-1) && j < (LAND_YGRD-1) ) // FIXME
 		{
-			if(outlineColour3D == outlineOK3D)
+			if (outlineColour3D == outlineOK3D)
 			{
 				oldColoursWord[0] = tileScreenInfo[i+0][j+0].light.argb;
 				oldColoursWord[1] = tileScreenInfo[i+0][j+1].light.argb;
 				oldColoursWord[2] = tileScreenInfo[i+1][j+1].light.argb;
 				oldColoursWord[3] = tileScreenInfo[i+1][j+0].light.argb;
-				/*
-				tileScreenInfo[i+0][j+0].light.argb = 0x00f0f0f0;
-				tileScreenInfo[i+0][j+1].light.argb = 0x00f0f0f0;
-				tileScreenInfo[i+1][j+1].light.argb = 0x00f0f0f0;
-				tileScreenInfo[i+1][j+0].light.argb = 0x00f0f0f0;
-				*/
+
 				tileScreenInfo[i+0][j+0].light.byte.b = 255;
 				tileScreenInfo[i+0][j+1].light.byte.b = 255;
 				tileScreenInfo[i+1][j+1].light.byte.b = 255;
@@ -4457,6 +4450,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 				oldColours[1] = tileScreenInfo[i+0][j+1].light.byte.r;
 				oldColours[2] = tileScreenInfo[i+1][j+1].light.byte.r;
 				oldColours[3] = tileScreenInfo[i+1][j+0].light.byte.r;
+
 				tileScreenInfo[i+0][j+0].light.byte.r = 255;
 				tileScreenInfo[i+0][j+1].light.byte.r = 255;
 				tileScreenInfo[i+1][j+1].light.byte.r = 255;
@@ -4464,46 +4458,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 			}
 		}
 	}
-	/*
-	else if(TILE_IN_SENSORRANGE(psTile))
-	{
-		if(tileScreenInfo[i+0][j+0].light.byte.g < 128)
-		{
-			tileScreenInfo[i+0][j+0].light.byte.g *= 2;
-		}
-		else
-		{
-			tileScreenInfo[i+0][j+0].light.byte.g =255;
-		}
 
-		if(tileScreenInfo[i+0][j+1].light.byte.g < 128)
-		{
-			tileScreenInfo[i+0][j+1].light.byte.g *= 2;
-		}
-		else
-		{
-			tileScreenInfo[i+0][j+1].light.byte.g =255;
-		}
-
-		if(tileScreenInfo[i+1][j+1].light.byte.g < 128)
-		{
-			tileScreenInfo[i+1][j+1].light.byte.g *= 2;
-		}
-		else
-		{
-			tileScreenInfo[i+1][j+1].light.byte.g =255;
-		}
-		if(tileScreenInfo[i+1][j+0].light.byte.g < 128)
-		{
-			tileScreenInfo[i+1][j+0].light.byte.g *= 2;
-		}
-		else
-		{
-			tileScreenInfo[i+1][j+0].light.byte.g =255;
-		}
-
-	}
-	*/
 	/* Get the right texture page; it is pre stored and indexed on
 	* the graphics card */
 	pie_SetTexturePage(tileTexInfo[tileNumber & TILE_NUMMASK].texPage);
@@ -4528,95 +4483,76 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	tileScreenInfo[i+1][j+0].tv = (UWORD)(psP4->y + offset.y);
 
 	/* The first triangle */
-	if(TRI_FLIPPED(psTile))
+	memcpy(&vertices[0], &tileScreenInfo[i+0][j+0], sizeof(PIEVERTEX));
+	memcpy(&vertices[1], &tileScreenInfo[i+0][j+1], sizeof(PIEVERTEX));
+	if (onWaterEdge)
 	{
-		memcpy(&aVrts[0], &tileScreenInfo[i + 0][j + 0], sizeof(PIEVERTEX));
-		memcpy(&aVrts[1], &tileScreenInfo[i + 0][j + 1], sizeof(PIEVERTEX));
-		memcpy(&aVrts[2], &tileScreenInfo[i + 1][j + 0], sizeof(PIEVERTEX));
-		if ( onWaterEdge )
-		{
-			aVrts[0].sx = tileScreenInfo[i + 0][j + 0].x;
-			aVrts[0].sy = tileScreenInfo[i + 0][j + 0].water_height;
-			aVrts[0].sz = tileScreenInfo[i + 0][j + 0].z;
-			aVrts[1].sx = tileScreenInfo[i + 0][j + 1].x;
-			aVrts[1].sy = tileScreenInfo[i + 0][j + 1].water_height;
-			aVrts[1].sz = tileScreenInfo[i + 0][j + 1].z;
-			aVrts[2].sx = tileScreenInfo[i + 1][j + 0].x;
-			aVrts[2].sy = tileScreenInfo[i + 1][j + 0].water_height;
-			aVrts[2].sz = tileScreenInfo[i + 1][j + 0].z;
-		}
-		pie_DrawTexTriangle(aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
-	}
-	else
-	{
-		memcpy(&aVrts[0], &tileScreenInfo[i + 0][j + 0], sizeof(PIEVERTEX));
-		memcpy(&aVrts[1], &tileScreenInfo[i + 0][j + 1], sizeof(PIEVERTEX));
-		memcpy(&aVrts[2], &tileScreenInfo[i + 1][j + 1], sizeof(PIEVERTEX));
-		if(onWaterEdge) {
-			aVrts[0].sx = tileScreenInfo[i + 0][j + 0].x;
-			aVrts[0].sy = tileScreenInfo[i + 0][j + 0].water_height;
-			aVrts[0].sz = tileScreenInfo[i + 0][j + 0].z;
-			aVrts[1].sx = tileScreenInfo[i + 0][j + 1].x;
-			aVrts[1].sy = tileScreenInfo[i + 0][j + 1].water_height;
-			aVrts[1].sz = tileScreenInfo[i + 0][j + 1].z;
-			aVrts[2].sx = tileScreenInfo[i + 1][j + 1].x;
-			aVrts[2].sy = tileScreenInfo[i + 1][j + 1].water_height;
-			aVrts[2].sz = tileScreenInfo[i + 1][j + 1].z;
-		}
-		pie_DrawTexTriangle(aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
+		vertices[0].sy = tileScreenInfo[i+0][j+0].water_height;
+		vertices[1].sy = tileScreenInfo[i+0][j+1].water_height;
 	}
 
-	/* The second triangle */
-	if(TRI_FLIPPED(psTile))
+	if (TRI_FLIPPED(psTile))
 	{
-		memcpy(&aVrts[0], &tileScreenInfo[i + 0][j + 1], sizeof(PIEVERTEX));
-		memcpy(&aVrts[1], &tileScreenInfo[i + 1][j + 1], sizeof(PIEVERTEX));
-		memcpy(&aVrts[2], &tileScreenInfo[i + 1][j + 0], sizeof(PIEVERTEX));
-		if ( onWaterEdge )
+		memcpy(&vertices[2], &tileScreenInfo[i+1][j+0], sizeof(PIEVERTEX));
+		if (onWaterEdge)
 		{
-			aVrts[0].sx = tileScreenInfo[i + 0][j + 1].x;
-			aVrts[0].sy = tileScreenInfo[i + 0][j + 1].water_height;
-			aVrts[0].sz = tileScreenInfo[i + 0][j + 1].z;
-			aVrts[1].sx = tileScreenInfo[i + 1][j + 1].x;
-			aVrts[1].sy = tileScreenInfo[i + 1][j + 1].water_height;
-			aVrts[1].sz = tileScreenInfo[i + 1][j + 1].z;
-			aVrts[2].sx = tileScreenInfo[i + 1][j + 0].x;
-			aVrts[2].sy = tileScreenInfo[i + 1][j + 0].water_height;
-			aVrts[2].sz = tileScreenInfo[i + 1][j + 0].z;
+			vertices[2].sy = tileScreenInfo[i+1][j+0].water_height;
 		}
-		pie_DrawTexTriangle(aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
 	}
 	else
 	{
-		memcpy(&aVrts[0], &tileScreenInfo[i + 0][j + 0], sizeof(PIEVERTEX));
-		memcpy(&aVrts[1], &tileScreenInfo[i + 1][j + 1], sizeof(PIEVERTEX));
-		memcpy(&aVrts[2], &tileScreenInfo[i + 1][j + 0], sizeof(PIEVERTEX));
-		if ( onWaterEdge )
+		memcpy(&vertices[2], &tileScreenInfo[i+1][j+1], sizeof(PIEVERTEX));
+		if (onWaterEdge)
 		{
-			aVrts[0].sx = tileScreenInfo[i+0][j+0].x;
-			aVrts[0].sy = tileScreenInfo[i+0][j+0].water_height;
-			aVrts[0].sz = tileScreenInfo[i+0][j+0].z;
-			aVrts[1].sx = tileScreenInfo[i+1][j+1].x;
-			aVrts[1].sy = tileScreenInfo[i+1][j+1].water_height;
-			aVrts[1].sz = tileScreenInfo[i+1][j+1].z;
-			aVrts[2].sx = tileScreenInfo[i+1][j+0].x;
-			aVrts[2].sy = tileScreenInfo[i+1][j+0].water_height;
-			aVrts[2].sz = tileScreenInfo[i+1][j+0].z;
+			vertices[2].sy = tileScreenInfo[i+1][j+1].water_height;
 		}
-		pie_DrawTexTriangle(aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
 	}
+
+
+	pie_DrawTexTriangle(vertices, NULL);
+
+
+	/* The second triangle */
+	if (TRI_FLIPPED(psTile))
+	{
+		memcpy(&vertices[0], &tileScreenInfo[i+0][j+1], sizeof(PIEVERTEX));
+		if (onWaterEdge)
+		{
+			vertices[0].sy = tileScreenInfo[i+0][j+1].water_height;
+		}
+	}
+	else
+	{
+		memcpy(&vertices[0], &tileScreenInfo[i+0][j+0], sizeof(PIEVERTEX));
+		if (onWaterEdge)
+		{
+			vertices[0].sy = tileScreenInfo[i+0][j+0].water_height;
+		}
+	}
+
+	memcpy(&vertices[1], &tileScreenInfo[i+1][j+1], sizeof(PIEVERTEX));
+	memcpy(&vertices[2], &tileScreenInfo[i+1][j+0], sizeof(PIEVERTEX));
+	if ( onWaterEdge )
+	{
+		vertices[1].sy = tileScreenInfo[i+1][j+1].water_height;
+		vertices[2].sy = tileScreenInfo[i+1][j+0].water_height;
+	}
+
+
+	pie_DrawTexTriangle(vertices, NULL);
+
 
 	/* Outline the tile if necessary */
 	if(!onWaterEdge && terrainOutline)
 	{
-		iV_Line(tileScreenInfo[i+0][j+0].sx,tileScreenInfo[i+0][j+0].sy,
-			tileScreenInfo[i+0][j+1].sx,tileScreenInfo[i+0][j+1].sy,255);
-		iV_Line(tileScreenInfo[i+0][j+1].sx,tileScreenInfo[i+0][j+1].sy,
-			tileScreenInfo[i+1][j+1].sx,tileScreenInfo[i+1][j+1].sy,255);
-		iV_Line(tileScreenInfo[i+1][j+1].sx,tileScreenInfo[i+1][j+1].sy,
-			tileScreenInfo[i+1][j+0].sx,tileScreenInfo[i+1][j+0].sy,255);
-		iV_Line(tileScreenInfo[i+1][j+0].sx,tileScreenInfo[i+1][j+0].sy,
-			tileScreenInfo[i+0][j+0].sx,tileScreenInfo[i+0][j+0].sy,255);
+		iV_Line(tileScreenInfo[i+0][j+0].sx, tileScreenInfo[i+0][j+0].sy,
+			tileScreenInfo[i+0][j+1].sx, tileScreenInfo[i+0][j+1].sy, 255);
+		iV_Line(tileScreenInfo[i+0][j+1].sx, tileScreenInfo[i+0][j+1].sy,
+			tileScreenInfo[i+1][j+1].sx, tileScreenInfo[i+1][j+1].sy, 255);
+		iV_Line(tileScreenInfo[i+1][j+1].sx, tileScreenInfo[i+1][j+1].sy,
+			tileScreenInfo[i+1][j+0].sx, tileScreenInfo[i+1][j+0].sy, 255);
+		iV_Line(tileScreenInfo[i+1][j+0].sx, tileScreenInfo[i+1][j+0].sy,
+			tileScreenInfo[i+0][j+0].sx, tileScreenInfo[i+0][j+0].sy, 255);
 	}
 
 	if(!onWaterEdge && bOutlined)
@@ -4648,7 +4584,7 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 	//BOOL	bOutlined;
 	UDWORD	tileNumber;
 	Vector2i offset;
-	PIEVERTEX aVrts[3];
+	PIEVERTEX vertices[3];
 
 	/* Get the correct tile index for the x coordinate */
 	actualX = playerXTile + j;
@@ -4666,15 +4602,15 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 	psTile = mapTile(actualX,actualY);
 
 	// If it's a water tile then draw the water
-	if(TERRAIN_TYPE(psTile) == TER_WATER) {
+	if (TERRAIN_TYPE(psTile) == TER_WATER) {
 		tileNumber = getWaterTileNum();
 		// Draw the main water tile.
 
 		/* 3dfx is pre stored and indexed */
 		pie_SetTexturePage(tileTexInfo[tileNumber & TILE_NUMMASK].texPage);
 
-		offset.x = (tileTexInfo[tileNumber & TILE_NUMMASK].xOffset * 64);
-		offset.y = (tileTexInfo[tileNumber & TILE_NUMMASK].yOffset * 64);
+		offset.x = tileTexInfo[tileNumber & TILE_NUMMASK].xOffset * 64;
+		offset.y = tileTexInfo[tileNumber & TILE_NUMMASK].yOffset * 64;
 
 		tileScreenInfo[i+0][j+0].tu = (UWORD)(offset.x + 1);
 		tileScreenInfo[i+0][j+0].tv = (UWORD)(offset.y);
@@ -4688,40 +4624,34 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 		tileScreenInfo[i+1][j+0].tu = (UWORD)(offset.x + 1);
 		tileScreenInfo[i+1][j+0].tv = (UWORD)(offset.y + 31);
 
-		memcpy(&aVrts[0],&tileScreenInfo[i+0][j+0],sizeof(PIEVERTEX));
-		aVrts[0].sx = tileScreenInfo[i+0][j+0].x;
-		aVrts[0].sy = tileScreenInfo[i+0][j+0].water_height;
-		aVrts[0].sz = tileScreenInfo[i+0][j+0].z;
-		aVrts[0].light = tileScreenInfo[i+0][j+0].wlight;
-		aVrts[0].light.byte.a = WATER_ALPHA_LEVEL;
 
-		memcpy(&aVrts[1],&tileScreenInfo[i+0][j+1],sizeof(PIEVERTEX));
-		aVrts[1].sx = tileScreenInfo[i+0][j+1].x;
-		aVrts[1].sy = tileScreenInfo[i+0][j+1].water_height;
-		aVrts[1].sz = tileScreenInfo[i+0][j+1].z;
-		aVrts[1].light = tileScreenInfo[i+0][j+1].wlight;
-		aVrts[1].light.byte.a = WATER_ALPHA_LEVEL;
+		memcpy(&vertices[0], &tileScreenInfo[i+0][j+0], sizeof(PIEVERTEX));
+		vertices[0].sy = tileScreenInfo[i+0][j+0].water_height;
+		vertices[0].light = tileScreenInfo[i+0][j+0].wlight;
+		vertices[0].light.byte.a = WATER_ALPHA_LEVEL;
 
-		memcpy(&aVrts[2],&tileScreenInfo[i+1][j+1],sizeof(PIEVERTEX));
-		aVrts[2].sx = tileScreenInfo[i+1][j+1].x;
-		aVrts[2].sy = tileScreenInfo[i+1][j+1].water_height;
-		aVrts[2].sz = tileScreenInfo[i+1][j+1].z;
-		aVrts[2].light = tileScreenInfo[i+1][j+1].wlight;
-		aVrts[2].light.byte.a = WATER_ALPHA_LEVEL;
+		memcpy(&vertices[1], &tileScreenInfo[i+0][j+1], sizeof(PIEVERTEX));
+		vertices[1].sy = tileScreenInfo[i+0][j+1].water_height;
+		vertices[1].light = tileScreenInfo[i+0][j+1].wlight;
+		vertices[1].light.byte.a = WATER_ALPHA_LEVEL;
+
+		memcpy(&vertices[2], &tileScreenInfo[i+1][j+1], sizeof(PIEVERTEX));
+		vertices[2].sy = tileScreenInfo[i+1][j+1].water_height;
+		vertices[2].light = tileScreenInfo[i+1][j+1].wlight;
+		vertices[2].light.byte.a = WATER_ALPHA_LEVEL;
 
 		pie_SetDepthOffset(-1.0);
-		pie_DrawTexTriangle(aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, &waterRealValue);//jps 15 apr99
 
-		memcpy(&aVrts[1],&aVrts[2],sizeof(PIEVERTEX));
+		pie_DrawTexTriangle(vertices, &waterRealValue);
 
-		memcpy(&aVrts[2],&tileScreenInfo[i+1][j+0],sizeof(PIEVERTEX));
-		aVrts[2].sx = tileScreenInfo[i+1][j+0].x;
-		aVrts[2].sy = tileScreenInfo[i+1][j+0].water_height;
-		aVrts[2].sz = tileScreenInfo[i+1][j+0].z;
-		aVrts[2].light = tileScreenInfo[i+1][j+0].wlight;
-		aVrts[2].light.byte.a = WATER_ALPHA_LEVEL;
 
-		pie_DrawTexTriangle(aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, &waterRealValue);//jps 15 apr99
+		memcpy(&vertices[1], &vertices[2], sizeof(PIEVERTEX));
+		memcpy(&vertices[2], &tileScreenInfo[i+1][j+0], sizeof(PIEVERTEX));
+		vertices[2].sy = tileScreenInfo[i+1][j+0].water_height;
+		vertices[2].light = tileScreenInfo[i+1][j+0].wlight;
+		vertices[2].light.byte.a = WATER_ALPHA_LEVEL;
+
+		pie_DrawTexTriangle(vertices, &waterRealValue);
 
 		pie_SetDepthOffset(0.0);
 	}
@@ -4733,20 +4663,22 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 // -------------------------------------------------------------------------------------
 UDWORD	getSuggestedPitch( void )
 {
-UDWORD	worldAngle;
-UDWORD	xPos,yPos;
-SDWORD	pitch;
+	UDWORD	worldAngle;
+	UDWORD	xPos,yPos;
+	SDWORD	pitch;
 
 	worldAngle = (UDWORD) ((UDWORD)player.r.y/DEG_1)%360;
 	/* Now, we need to track angle too - to avoid near z clip! */
 
-	xPos = (player.p.x + ((visibleXTiles/2)*TILE_UNITS));
-	yPos = (player.p.z + ((visibleYTiles/2)*TILE_UNITS));
+	xPos = player.p.x + WORLD_COORD(visibleXTiles/2);
+	yPos = player.p.z + WORLD_COORD(visibleYTiles/2);
 // 	getBestPitchToEdgeOfGrid(xPos,yPos,360-worldAngle,&pitch);
-	getPitchToHighestPoint(xPos,yPos,360-worldAngle,0,&pitch);
+	getPitchToHighestPoint(xPos, yPos, 360-worldAngle, 0, &pitch);
 
-	if(pitch<abs(MAX_PLAYER_X_ANGLE)) pitch = abs(MAX_PLAYER_X_ANGLE);
-	if(pitch>abs(MIN_PLAYER_X_ANGLE)) pitch = abs(MIN_PLAYER_X_ANGLE);
+	if (pitch < abs(MAX_PLAYER_X_ANGLE))
+		pitch = abs(MAX_PLAYER_X_ANGLE);
+	if (pitch > abs(MIN_PLAYER_X_ANGLE))
+		pitch = abs(MIN_PLAYER_X_ANGLE);
 
 	return(pitch);
 }

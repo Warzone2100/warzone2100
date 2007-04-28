@@ -139,7 +139,6 @@ typedef struct	RENDER_STATE
 				RENDER_STATE;
 
 #define NO_TEXPAGE -1
-#define SKY_TEXPAGE 30
 
 /***************************************************************************/
 /*

@@ -764,6 +764,7 @@ void dataIMGPAGERelease(void *pData)
 	dataISpriteRelease(psSprite);
 }
 
+
 // Tertiles loader. This version for hardware renderer.
 static BOOL dataHWTERTILESLoad(const char *fileName, void **ppData)
 {
@@ -790,11 +791,11 @@ static BOOL dataHWTERTILESLoad(const char *fileName, void **ppData)
 	getTileRadarColours();
 	if (bTilesPCXLoaded)
 	{
-		remakeTileTexturePages(tilesPCX.width,tilesPCX.height,TILE_WIDTH, TILE_HEIGHT, tilesPCX.bmp);
+		remakeTileTexturePages(tilesPCX.width, tilesPCX.height, TILE_WIDTH, TILE_HEIGHT, tilesPCX.bmp);
 	}
 	else
 	{
-		makeTileTexturePages(tilesPCX.width,tilesPCX.height,TILE_WIDTH, TILE_HEIGHT, tilesPCX.bmp);
+		makeTileTexturePages(tilesPCX.width, tilesPCX.height, TILE_WIDTH, TILE_HEIGHT, tilesPCX.bmp);
 	}
 
 	if (bTilesPCXLoaded)
@@ -858,7 +859,7 @@ static BOOL fileTexPageLoad(const char *fileName, void **ppData)
 
 	strncpy(texpage, texfile, MAX_PATH);
 
-	pie_Pagename(texpage);
+	pie_MakeTexPageName(texpage);
 	SetLastResourceFilename(texpage);
 
 	// see if this texture page has already been loaded
@@ -867,7 +868,7 @@ static BOOL fileTexPageLoad(const char *fileName, void **ppData)
 		// replace the old texture page with the new one
 		debug(LOG_TEXTURE, "fileTexPageLoad: replacing %s with new texture %s", texpage, texfile);
 		id = pie_ReloadTexPage(texpage, fileName);
-		ASSERT( id >=0, "pie_ReloadTexPage failed" );
+		ASSERT( id >= 0, "pie_ReloadTexPage failed" );
 		*ppData = NULL;
 	}
 	else
@@ -901,7 +902,7 @@ static BOOL fileTexPageLoad(const char *fileName, void **ppData)
 		NewTexturePage->Texture=psSprite;
 		NewTexturePage->Palette=psPal;
 
-		pie_AddBMPtoTexPages(psSprite, texpage, 1, TRUE);
+		pie_AddTexPage(psSprite, texpage, 1, TRUE);
 
 		*ppData = NewTexturePage;
 	}

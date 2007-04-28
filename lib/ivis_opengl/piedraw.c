@@ -433,12 +433,12 @@ static int compare_edge (EDGE *A, EDGE *B, Vector3i *pVertices )
 		}
 		return compare_point(&pVertices[A->to], &pVertices[B->from]);
 	}
- 
+
 	if(!compare_point(&pVertices[A->from], &pVertices[B->to]))
 	{
 		return FALSE;
 	}
- 
+
 	if(A->to == B->from)
 	{
 		return TRUE;
@@ -1034,30 +1034,14 @@ int	uFrame, vFrame, j, framesPerLine;
  *
  ***************************************************************************/
 
-//ivis style draw function
-void pie_DrawTriangle( iVertex *pv )
+void pie_DrawTexTriangle(PIEVERTEX *aVrts, void* psEffects)
 {
-	UDWORD	i;
-
-	glBegin(GL_TRIANGLE_FAN);
-	for (i = 0; i < 3; i++) {
-		glColor4ub(pv[i].g*16, pv[i].g*16, pv[i].g*16, 255);
-		glTexCoord2f(pv[i].u, pv[i].v);
-		glVertex3f(pv[i].x, pv[i].y, pv[i].z);
-	}
-	glEnd();
-}
-
-void pie_DrawTexTriangle(PIEVERTEX *aVrts, SDWORD texPage, void* psEffects)
-{
-	GLfloat	offset = 0;
+	GLfloat offset = 0;
 	int i;
 
-	/*	Since this is only used from within source for the terrain draw - we can backface cull the
-		polygons.
+	/*	Since this is only used from within source for the terrain draw - we can backface cull the polygons.
 	*/
 	tileCount++;
-	pie_SetTexturePage(texPage);
 	pie_SetFogStatus(TRUE);
 	if (psEffects != NULL)
 	{
@@ -1076,6 +1060,7 @@ void pie_DrawTexTriangle(PIEVERTEX *aVrts, SDWORD texPage, void* psEffects)
 		glVertex3f( aVrts[i].sx, aVrts[i].sy, aVrts[i].sz );
 	}
 	glEnd();
+
 	if (psEffects != NULL)
 	{
 		/* Solid terrain */

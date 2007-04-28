@@ -72,15 +72,15 @@ static void buildTileIndexes(void);
 	We must then make sure that we source in that texture page and set the
 	texture coordinate for a complete tile to be its position.
 */
-void	makeTileTexturePages(UDWORD srcWidth, UDWORD srcHeight, UDWORD tileWidth, UDWORD tileHeight, char *src)
+void makeTileTexturePages(UDWORD srcWidth, UDWORD srcHeight, UDWORD tileWidth, UDWORD tileHeight, char *src)
 {
-	UDWORD	i,j;
-	UDWORD	pageNumber;
-	UDWORD	tilesAcross,tilesDown;
-	UDWORD	tilesAcrossPage,tilesDownPage,tilesPerPage,tilesPerSource;
-	UDWORD	tilesProcessed;
-	char	*tileStorage;
-	char	*presentLoc;
+	UDWORD i, j;
+	UDWORD pageNumber;
+	UDWORD tilesAcross, tilesDown;
+	UDWORD tilesAcrossPage, tilesDownPage, tilesPerPage, tilesPerSource;
+	UDWORD tilesProcessed;
+	char *tileStorage;
+	char *presentLoc;
 	iTexture sprite;
 
 	/* This is how many pages are already used on hardware */
@@ -95,52 +95,52 @@ void	makeTileTexturePages(UDWORD srcWidth, UDWORD srcHeight, UDWORD tileWidth, U
 	sprite.width = PAGE_WIDTH;
 	sprite.height = PAGE_HEIGHT;
 	tilesProcessed = 0;
-	tilesAcross = srcWidth/tileWidth;
-	tilesDown = srcHeight/tileHeight;
-	tilesPerSource = tilesAcross*tilesDown;
-	tilesAcrossPage = PAGE_WIDTH/tileWidth;
-	tilesDownPage = PAGE_HEIGHT/tileHeight;
-	tilesPerPage = tilesAcrossPage*tilesDownPage;
+	tilesAcross = srcWidth / tileWidth;
+	tilesDown = srcHeight / tileHeight;
+	tilesPerSource = tilesAcross * tilesDown;
+	tilesAcrossPage = PAGE_WIDTH / tileWidth;
+	tilesDownPage = PAGE_HEIGHT / tileHeight;
+	tilesPerPage = tilesAcrossPage * tilesDownPage;
 	presentLoc = sprite.bmp;
 
-	for(i=0; i<tilesDown; i++)
+	for (i=0; i<tilesDown; i++)
 	{
-		for(j=0; j<tilesAcross; j++)
+		for (j=0; j<tilesAcross; j++)
 		{
-			getRectFromPage(tileWidth,tileHeight,src,srcWidth,tileStorage);
-			putRectIntoPage(tileWidth,tileHeight,presentLoc,PAGE_WIDTH,tileStorage);
+			getRectFromPage(tileWidth, tileHeight, src, srcWidth, tileStorage);
+			putRectIntoPage(tileWidth, tileHeight, presentLoc, PAGE_WIDTH, tileStorage);
 			tilesProcessed++;
-			presentLoc+=tileWidth*PAGE_DEPTH;
-			src+=tileWidth*PAGE_DEPTH;
+			presentLoc += tileWidth * PAGE_DEPTH;
+			src += tileWidth * PAGE_DEPTH;
 			/* Have we got all the tiles from the source!? */
-			if((tilesProcessed == tilesPerSource))
+			if (tilesProcessed == tilesPerSource)
 			{
-				pageId[pageNumber] = pie_AddBMPtoTexPages(&sprite, "terrain", 0, FALSE);
+				pageId[pageNumber] = pie_AddTexPage(&sprite, "terrain", 0, FALSE);
 				goto exit;
 			}
 
 			/* Have we run out of texture page? */
-			if(tilesProcessed%tilesPerPage == 0)
+			if (tilesProcessed % tilesPerPage == 0)
 			{
 				debug(LOG_TEXTURE, "makeTileTexturePages: ran out of texture page ...");
-				debug(LOG_TEXTURE, "tilesDown=%d tilesAcross=%d tilesProcessed=%d tilesPerPage=%d",
-				      tilesDown, tilesAcross, tilesProcessed, tilesPerPage);
+				debug(LOG_TEXTURE, "tilesDown=%d tilesAcross=%d tilesProcessed=%d tilesPerPage=%d", tilesDown, tilesAcross, tilesProcessed, tilesPerPage);
 				/* If so, download this one and reset to start again */
-				pageId[pageNumber] = pie_AddBMPtoTexPages(&sprite, "terrain", 0, FALSE);
+				pageId[pageNumber] = pie_AddTexPage(&sprite, "terrain", 0, FALSE);
 				sprite.bmp = (iBitmap*)malloc(TEXTURE_PAGE_SIZE);
 				pageNumber++;
 				presentLoc = sprite.bmp;
 			}
-			else if(tilesProcessed%tilesAcrossPage == 0)
+			else if (tilesProcessed % tilesAcrossPage == 0)
 			{
 				/* Right hand side of texture page */
 				/* So go to one tile down */
-				presentLoc+= ( (tileHeight-1) * PAGE_WIDTH)*PAGE_DEPTH;
+				presentLoc += (tileHeight-1) * PAGE_WIDTH * PAGE_DEPTH;
 			}
 		}
-		src+=( (tileHeight-1) * srcWidth)*PAGE_DEPTH;
+		src += (tileHeight-1) * srcWidth * PAGE_DEPTH;
 	}
 	ASSERT(FALSE, "we should have exited the loop using the goto");
+
 exit:
 	numTexturePages = pageNumber+1;
 	free(tileStorage);
@@ -148,20 +148,19 @@ exit:
 	return;
 }
 
-void	remakeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, UDWORD tileHeight, char *src)
+void remakeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, UDWORD tileHeight, char *src)
 {
-	UDWORD	i,j;
-	UDWORD	pageNumber;
-	UDWORD	tilesAcross,tilesDown;
-	UDWORD	tilesAcrossPage,tilesDownPage,tilesPerPage,tilesPerSource;
-	UDWORD	tilesProcessed;
-	char	*tileStorage;
-	char	*presentLoc;
+	UDWORD i, j;
+	UDWORD pageNumber;
+	UDWORD tilesAcross, tilesDown;
+	UDWORD tilesAcrossPage, tilesDownPage, tilesPerPage, tilesPerSource;
+	UDWORD tilesProcessed;
+	char *tileStorage;
+	char *presentLoc;
 	iTexture sprite;
 	//check enough pages are allocated
 
-	debug(LOG_TEXTURE, "remakeTileTexturePages: src(%d,%d), tile(%d, %d)", srcWidth,
-	      srcHeight, tileWidth, tileHeight);
+	debug(LOG_TEXTURE, "remakeTileTexturePages: src(%d,%d), tile(%d, %d)", srcWidth, srcHeight, tileWidth, tileHeight);
 
 	/* Get enough memory to store one tile */
 	pageNumber = 0;
@@ -170,54 +169,52 @@ void	remakeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, 
 	sprite.height = PAGE_HEIGHT;
 
 	sprite.bmp = (iBitmap*)malloc(TEXTURE_PAGE_SIZE);
-//	memset(sprite.bmp,0,TEXTURE_PAGE_SIZE);
 	tilesProcessed = 0;
-	tilesAcross = srcWidth/tileWidth;
-	tilesDown = srcHeight/tileHeight;
-	tilesPerSource = tilesAcross*tilesDown;
-	tilesAcrossPage = PAGE_WIDTH/tileWidth;
-	tilesDownPage = PAGE_HEIGHT/tileHeight;
-	tilesPerPage = tilesAcrossPage*tilesDownPage;
+	tilesAcross = srcWidth / tileWidth;
+	tilesDown = srcHeight / tileHeight;
+	tilesPerSource = tilesAcross * tilesDown;
+	tilesAcrossPage = PAGE_WIDTH / tileWidth;
+	tilesDownPage = PAGE_HEIGHT / tileHeight;
+	tilesPerPage = tilesAcrossPage * tilesDownPage;
 	presentLoc = sprite.bmp;
 
-	for(i=0; i<tilesDown; i++)
+	for (i=0; i<tilesDown; i++)
 	{
-		for(j=0; j<tilesAcross; j++)
+		for (j=0; j<tilesAcross; j++)
 		{
-			getRectFromPage(tileWidth,tileHeight,src,srcWidth,tileStorage);
-			putRectIntoPage(tileWidth,tileHeight,presentLoc,PAGE_WIDTH,tileStorage);
+			getRectFromPage(tileWidth, tileHeight, src, srcWidth, tileStorage);
+			putRectIntoPage(tileWidth, tileHeight, presentLoc, PAGE_WIDTH, tileStorage);
 			tilesProcessed++;
-			presentLoc+=tileWidth*PAGE_DEPTH;
-			src+=tileWidth*PAGE_DEPTH;
+			presentLoc += tileWidth * PAGE_DEPTH;
+			src += tileWidth * PAGE_DEPTH;
 			/* Have we got all the tiles from the source!? */
-			if((tilesProcessed == tilesPerSource))// || (tileStorage[0] == 0))//hack probably causes too many texture pages to be used
+			if (tilesProcessed == tilesPerSource)
 			{
 				pie_ChangeTexPage(pageId[pageNumber], &sprite, 0, FALSE);
 				goto exit;
 			}
 
 			/* Have we run out of texture page? */
-			if(tilesProcessed%tilesPerPage == 0)
+			if (tilesProcessed % tilesPerPage == 0)
 			{
 				debug(LOG_TEXTURE, "remakeTileTexturePages: ran out of texture page ...");
-				debug(LOG_TEXTURE, "tilesDown=%d tilesAcross=%d tilesProcessed=%d tilesPerPage=%d",
-				      tilesDown, tilesAcross, tilesProcessed, tilesPerPage);
+				debug(LOG_TEXTURE, "tilesDown=%d tilesAcross=%d tilesProcessed=%d tilesPerPage=%d", tilesDown, tilesAcross, tilesProcessed, tilesPerPage);
 				pie_ChangeTexPage(pageId[pageNumber], &sprite, 0, FALSE);
 				pageNumber++;
 				presentLoc = sprite.bmp;
 			}
-			else if(tilesProcessed%tilesAcrossPage == 0)
+			else if (tilesProcessed % tilesAcrossPage == 0)
 			{
 				/* Right hand side of texture page */
 				/* So go to one tile down */
-				presentLoc+= ( (tileHeight-1) * PAGE_WIDTH)*PAGE_DEPTH;
+				presentLoc += (tileHeight-1) * PAGE_WIDTH * PAGE_DEPTH;
 			}
 		}
-		src+=( (tileHeight-1) * srcWidth)*PAGE_DEPTH;
+		src += (tileHeight-1) * srcWidth * PAGE_DEPTH;
 	}
 
 	//check numTexturePages == pageNumber;
-	ASSERT( numTexturePages >= (SDWORD)pageNumber,"New Tertiles too large" );
+	ASSERT( numTexturePages >= (SDWORD)pageNumber, "New Tertiles too large" );
 
 exit:
 	free(tileStorage);
