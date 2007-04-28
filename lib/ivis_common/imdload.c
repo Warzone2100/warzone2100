@@ -71,7 +71,6 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 	char		buffer[MAX_FILE_PATH], texType[MAX_FILE_PATH], ch; //, *str;
 	int		i, nlevels, ptype, pwidth, pheight;
 	iIMDShape	*s, *psShape;
-	BOOL		bTextured = FALSE;
 	UDWORD		level;
 	Sint32		_IMD_VER;
 	Uint32		_IMD_FLAGS;
@@ -90,7 +89,7 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 	}
 
 	//Now supporting version 4 files
-	if ((_IMD_VER < 1) || (_IMD_VER > 4)) {
+	if ((_IMD_VER < 2) || (_IMD_VER > 4)) {
 		debug(LOG_ERROR, "iV_ProcessIMD %s version %d not supported", pFileName, _IMD_VER);
 		return NULL;
 	}
@@ -104,68 +103,47 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 	// get texture page if specified
 	if (_IMD_FLAGS & iV_IMD_XTEX)
 	{
-		if (_IMD_VER == 1) {
-			if (sscanf(pFileData, "%s %d %s %d %d%n", buffer, &ptype, texfile, &pwidth,
-			           &pheight, &cnt) != 5) {
-				debug(LOG_ERROR, "iV_ProcessIMD %s bad texture page info: %s", pFileName, buffer);
-				return NULL;
-			}
-			pFileData += cnt;
-			if (strcmp(buffer,"TEXTURE") != 0) {
-				debug(LOG_ERROR, "iV_ProcessIMD %s expecting 'TEXTURE' directive: %s", pFileName, buffer);
-				return NULL;
-			}
-			bTextured = TRUE;
+		if (sscanf(pFileData, "%s %d%n", buffer, &ptype, &cnt) != 2) {
+			debug(LOG_ERROR, "iV_ProcessIMD %s bad texture page info v2: %s", pFileName, buffer);
+			return NULL;
 		}
-		else //version 2 copes with long file names
+		pFileData += cnt;
+
+		if (strcmp(buffer, "TEXTURE") != 0) 
 		{
-			if (sscanf(pFileData, "%s %d%n", buffer, &ptype, &cnt) != 2) {
-				debug(LOG_ERROR, "iV_ProcessIMD %s bad texture page info v2: %s", pFileName, buffer);
-				return NULL;
-			}
-			pFileData += cnt;
-
-			if (strcmp(buffer, "TEXTURE") == 0) {
-				ch = *pFileData++;
-
-				for( i = 0; (i < MAX_PATH-5) && ((ch = *pFileData++) != EOF) && (ch != '.'); i++ ) // Run up to the dot or till the buffer is filled. Leave room for the extension.
-				{
- 					texfile[i] = (char)ch;
-				}
-				texfile[i] = '\0';
-
-				if (sscanf(pFileData, "%s%n", texType, &cnt) != 1) {
-					debug(LOG_ERROR, "iV_ProcessIMD: file corrupt -E (%s)", buffer);
-					return NULL;
-				}
-				pFileData += cnt;
-
-				if (strcmp(texType, "png") != 0) {
-					debug(LOG_ERROR, "iV_ProcessIMD: file corrupt -F (%s)", buffer);
-					return NULL;
-				}
-				strcat(texfile, ".png");
-
-				if (sscanf(pFileData, "%d %d%n", &pwidth, &pheight, &cnt) != 2) {
-					debug(LOG_ERROR, "iV_ProcessIMD: file corrupt -G (%s)", buffer);
-					return NULL;
-				}
-				pFileData += cnt;
-				bTextured = TRUE;
-			} else if (strcmp(buffer, "NOTEXTURE") == 0) {
-				if (sscanf(pFileData, "%s %d %d%n", texfile, &pwidth, &pheight, &cnt) != 3) {
-					debug(LOG_ERROR, "iV_ProcessIMD: file corrupt -H (%s)", buffer);
-					return NULL;
-				}
-				pFileData += cnt;
-			} else {
-				debug(LOG_ERROR, "iV_ProcessIMD(2): expecting 'TEXTURE' directive (%s)", buffer);
-				return NULL;
-			}
+			debug(LOG_ERROR, "iV_ProcessIMD %s expecting 'TEXTURE' directive: %s", pFileName, buffer);
+			return NULL;
 		}
-		if (bTextured) {
-			pie_Pagename(texfile);
+		ch = *pFileData++;
+
+		// Run up to the dot or till the buffer is filled. Leave room for the extension.
+		for( i = 0; (i < MAX_PATH-5) && ((ch = *pFileData++) != EOF) && (ch != '.'); i++ )
+		{
+ 			texfile[i] = (char)ch;
 		}
+		texfile[i] = '\0';
+
+		if (sscanf(pFileData, "%s%n", texType, &cnt) != 1) 
+		{
+			debug(LOG_ERROR, "iV_ProcessIMD %s texture info corrupt: %s", pFileName, buffer);
+			return NULL;
+		}
+		pFileData += cnt;
+
+		if (strcmp(texType, "png") != 0) 
+		{
+			debug(LOG_ERROR, "iV_ProcessIMD %s: only png textures supported", pFileName);
+			return NULL;
+		}
+		strcat(texfile, ".png");
+
+		if (sscanf(pFileData, "%d %d%n", &pwidth, &pheight, &cnt) != 2) 
+		{
+			debug(LOG_ERROR, "iV_ProcessIMD %s bad texture size: %s", pFileName, buffer);
+			return NULL;
+		}
+		pFileData += cnt;
+		pie_Pagename(texfile);
 	}
 
 	if (sscanf(pFileData, "%s %d%n", buffer, &nlevels, &cnt) !=2) {
@@ -198,12 +176,10 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 	{
 		int texpage = -1;
 
-		if(bTextured) {
-			texpage = iV_GetTexture(texfile);
-			if (texpage < 0) {
-				debug(LOG_ERROR, "iV_ProcessIMD: could not load tex page %s", texfile);
-				return NULL;
-			}
+		texpage = iV_GetTexture(texfile);
+		if (texpage < 0) {
+			debug(LOG_ERROR, "iV_ProcessIMD: could not load tex page %s", texfile);
+			return NULL;
 		}
 		/* assign tex page to levels */
 		psShape = s;
@@ -214,7 +190,7 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 	}
 
 	if (s == NULL) {
-		debug(LOG_ERROR, "iV_ProcessIMD: unsuccessful (%s)", buffer);
+		debug(LOG_ERROR, "iV_ProcessIMD %s unsuccessful", pFileName);
 	}
 	*ppFileData = pFileData;
 	return (s);
