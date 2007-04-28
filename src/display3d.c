@@ -255,9 +255,8 @@ static SDWORD	tileZ = 8000;
 static QUAD	dragQuad;
 //UDWORD	averageHeight;
 
-// The maximum number of points for flattenImd
-#define MAX_FLATTEN_POINTS	 255
-static Vector3i	alteredPoints[MAX_FLATTEN_POINTS];
+/* temporary buffer used for flattening IMDs */
+static Vector3i	alteredPoints[iV_IMD_MAX_POINTS];
 
 //number of tiles visible
 UDWORD	visibleXTiles;
@@ -1996,7 +1995,6 @@ void	renderStructure(STRUCTURE *psStructure)
 	iIMDShape		*pRepImd;
 	REPAIR_FACILITY		*psRepairFac = NULL;
 	BOOL            defensive = FALSE;
-	SDWORD			pointHeight,strHeight,shift;
 
 	if(psStructure->pStructureType->type == REF_WALL ||
 		psStructure->pStructureType->type == REF_WALLCORNER)
@@ -2054,6 +2052,8 @@ void	renderStructure(STRUCTURE *psStructure)
 			imd = psStructure->sDisplay.imd;
 			if ( imd != NULL )
 			{
+				SDWORD	pointHeight, strHeight, shift;
+
 				// Get a copy of the points
 				memcpy( alteredPoints, imd->points, imd->npoints * sizeof(Vector3i) );
 
@@ -4227,9 +4227,7 @@ UDWORD	i;
 UDWORD	pointHeight,centreHeight;
 SDWORD	shift;
 
-	// CHECK WHETHER THE NUMBER OF POINTS IN THE IMD WILL FIT IN THE ARRAY
-
-	ASSERT( imd->npoints < MAX_FLATTEN_POINTS,
+	ASSERT( imd->npoints < iV_IMD_MAX_POINTS,
 		"flattenImd: too many points in the PIE to flatten it" );
 
 	/* Get a copy of the points */
@@ -4917,7 +4915,7 @@ UDWORD	getRubbleTileNum( void )
 }
 // -------------------------------------------------------------------------------------
 
-UDWORD	lastSpinVal;
+static UDWORD	lastSpinVal;
 
 static void testEffect2( UDWORD player )
 {
