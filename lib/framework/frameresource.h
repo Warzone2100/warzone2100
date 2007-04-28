@@ -126,10 +126,4 @@ char *GetLastResourceFilename(void);
 // Set the resource name of the last resource file loaded
 void SetLastResourceFilename(char *pName);
 
-// Returns the filename of the last resource file loaded
-UDWORD GetLastHashName(void);
-// Set the resource name of the last resource file loaded
-void SetLastHashName(UDWORD HashName);
-
 #endif
-

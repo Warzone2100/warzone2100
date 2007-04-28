@@ -132,7 +132,6 @@ typedef struct {
 } iIMDPoly;
 
 typedef struct iIMDShape {
-	Uint32 flags;
 	Sint32 texpage;
 	Sint32 oradius, sradius, radius, visRadius, xmin, xmax, ymin, ymax, zmin, zmax;
 

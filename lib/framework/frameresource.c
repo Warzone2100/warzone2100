@@ -245,21 +245,6 @@ void SetLastResourceFilename(char *pName)
 }
 
 
-static UDWORD LastHashName;
-
-// Returns the filename of the last resource file loaded
-UDWORD GetLastHashName(void)
-{
-	return (LastHashName);
-}
-
-// Set the resource name of the last resource file loaded
-void SetLastHashName(UDWORD HashName)
-{
-	LastHashName = HashName;
-}
-
-
 // Structure for each file currently in use in the resource  ... probably only going to be one ... but we will handle upto MAXLOADEDRESOURCE
 typedef struct
 {
@@ -426,7 +411,6 @@ BOOL resLoadFile(const char *pType, const char *pFile)
 	strcat(aFileName, pFile);
 
 	strcpy(LastResourceFilename,pFile);	// Save the filename in case any routines need it
-	SetLastHashName(HashStringIgnoreCase(LastResourceFilename));
 
 	// load the resource
 	if (psT->buffLoad)

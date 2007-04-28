@@ -32,6 +32,8 @@
 /***************************************************************************/
 
 #include "lib/framework/frame.h"
+#include "lib/framework/frameresource.h"
+#include "lib/ivis_opengl/piematrix.h"
 
 #include "ivisdef.h"	// for imd structures
 #include "imd.h"	// for imd structures
@@ -40,17 +42,10 @@
 #include "tex.h"		// texture page loading
 
 // Static variables
-static Uint32 	_IMD_FLAGS;
-static char		_IMD_NAME[MAX_FILE_PATH];
-static Sint32 	_IMD_VER;
 static VERTEXID 	vertexTable[iV_IMD_MAX_POINTS];
 
-// kludge
-extern void pie_SurfaceNormal(Vector3i *p1, Vector3i *p2, Vector3i *p3, Vector3i *v);
-
 // local prototypes
-static iIMDShape *_imd_load_level(char **FileData, char *FileDataEnd, int nlevels,
-                                  int texpage);
+static iIMDShape *_imd_load_level(char **FileData, char *FileDataEnd, int nlevels);
 
 static BOOL AtEndOfFile(char *CurPos, char *EndOfFile)
 {
@@ -67,65 +62,57 @@ static BOOL AtEndOfFile(char *CurPos, char *EndOfFile)
 	}
 }
 
-static UDWORD IMDcount = 0;
-static UDWORD IMDPolycount = 0;
-static UDWORD IMDVertexcount = 0;
-static UDWORD IMDPoints = 0;
-static UDWORD IMDTexAnims = 0;
-static UDWORD IMDConnectors = 0;
-
-static char texfile[MAX_PATH]; // Last loaded texture page filename
-
 // ppFileData is incremented to the end of the file on exit!
 iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 {
+	char		texfile[MAX_PATH]; // Last loaded texture page filename
 	char		*pFileData = *ppFileData;
 	int 		cnt;
 	char		buffer[MAX_FILE_PATH], texType[MAX_FILE_PATH], ch; //, *str;
-	int			i, nlevels, ptype, pwidth, pheight, texpage;
+	int		i, nlevels, ptype, pwidth, pheight;
 	iIMDShape	*s, *psShape;
 	BOOL		bTextured = FALSE;
 	UDWORD		level;
-
-	IMDcount++;
+	Sint32		_IMD_VER;
+	Uint32		_IMD_FLAGS;
+	char		*pFileName = GetLastResourceFilename();
 
 	if (sscanf(pFileData, "%s %d%n", buffer, &_IMD_VER, &cnt) != 2)  {
-		debug(LOG_ERROR, "iV_ProcessIMD file corrupt -A (%s)", buffer);
+		debug(LOG_ERROR, "iV_ProcessIMD %s bad version: (%s)", pFileName, buffer);
 		assert(FALSE);
 		return NULL;
 	}
 	pFileData += cnt;
 
 	if ((strcmp(IMD_NAME,buffer) != 0) && (strcmp(PIE_NAME, buffer) !=0 )) {
-		debug(LOG_ERROR, "iV_ProcessIMD: not an IMD file (%s %d)", buffer, _IMD_VER);
+		debug(LOG_ERROR, "iV_ProcessIMD %s not an IMD file (%s %d)", pFileName, buffer, _IMD_VER);
 		return NULL;
 	}
 
 	//Now supporting version 4 files
 	if ((_IMD_VER < 1) || (_IMD_VER > 4)) {
-		debug(LOG_ERROR, "iV_ProcessIMD: file version not supported (%s)", buffer);
+		debug(LOG_ERROR, "iV_ProcessIMD %s version %d not supported", pFileName, _IMD_VER);
 		return NULL;
 	}
 
 	if (sscanf(pFileData, "%s %x%n", buffer, &_IMD_FLAGS, &cnt) != 2) {
-		debug(LOG_ERROR, "iV_ProcessIMD: file corrupt -B (%s)", buffer);
+		debug(LOG_ERROR, "iV_ProcessIMD %s bad flags: %s", pFileName, buffer);
 		return NULL;
 	}
 	pFileData += cnt;
 
-	texpage = -1;
-
 	// get texture page if specified
-	if (_IMD_FLAGS & iV_IMD_XTEX){
+	if (_IMD_FLAGS & iV_IMD_XTEX)
+	{
 		if (_IMD_VER == 1) {
 			if (sscanf(pFileData, "%s %d %s %d %d%n", buffer, &ptype, texfile, &pwidth,
 			           &pheight, &cnt) != 5) {
-				debug(LOG_ERROR, "iV_ProcessIMD: file corrupt -C (%s)", buffer);
+				debug(LOG_ERROR, "iV_ProcessIMD %s bad texture page info: %s", pFileName, buffer);
 				return NULL;
 			}
 			pFileData += cnt;
 			if (strcmp(buffer,"TEXTURE") != 0) {
-				debug(LOG_ERROR, "iV_ProcessIMD: expecting 'TEXTURE' directive (%s)", buffer);
+				debug(LOG_ERROR, "iV_ProcessIMD %s expecting 'TEXTURE' directive: %s", pFileName, buffer);
 				return NULL;
 			}
 			bTextured = TRUE;
@@ -133,7 +120,7 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 		else //version 2 copes with long file names
 		{
 			if (sscanf(pFileData, "%s %d%n", buffer, &ptype, &cnt) != 2) {
-				debug(LOG_ERROR, "iV_ProcessIMD: file corrupt -D (%s)", buffer);
+				debug(LOG_ERROR, "iV_ProcessIMD %s bad texture page info v2: %s", pFileName, buffer);
 				return NULL;
 			}
 			pFileData += cnt;
@@ -204,19 +191,19 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 		return NULL;
 	}
 
-	s = _imd_load_level(&pFileData,FileDataEnd,nlevels,texpage);
+	s = _imd_load_level(&pFileData, FileDataEnd, nlevels);
 
 	// load texture page if specified
 	if ( (s != NULL) && (_IMD_FLAGS & iV_IMD_XTEX))
 	{
+		int texpage = -1;
+
 		if(bTextured) {
 			texpage = iV_GetTexture(texfile);
 			if (texpage < 0) {
 				debug(LOG_ERROR, "iV_ProcessIMD: could not load tex page %s", texfile);
 				return NULL;
 			}
-		} else {
-			texpage = -1;
 		}
 		/* assign tex page to levels */
 		psShape = s;
@@ -259,8 +246,6 @@ static BOOL _imd_load_polys( char **ppFileData, iIMDShape *s )
 	//assumes points already set
 	points = s->points;
 
-	IMDPolycount+= s->npolys;
-
 	s->numFrames = 0;
 	s->animInterval = 0;
 
@@ -280,8 +265,6 @@ static BOOL _imd_load_polys( char **ppFileData, iIMDShape *s )
 			poly->flags=flags;
 			poly->npnts=npnts;
 
-			IMDVertexcount+= poly->npnts;
-
 			poly->pindex = (VERTEXID *) malloc(sizeof(VERTEXID) * poly->npnts);
 
 			if ((poly->vrt = (iVertex *)	malloc(sizeof(iVertex) * poly->npnts)) == NULL) {
@@ -294,8 +277,7 @@ static BOOL _imd_load_polys( char **ppFileData, iIMDShape *s )
 					int NewID;
 
 					if (sscanf(pFileData, "%d%n", &NewID,&cnt) != 1) {
-						debug( LOG_NEVER, "failed poly %d. point %d [%s]\n", i, j, _IMD_NAME );
-						iV_Error(0xff,"(_load_polys) [poly %d] error reading poly indices",i);
+						debug(LOG_ERROR, "failed poly %d. point %d", i, j);
 						return FALSE;
 					}
 					pFileData += cnt;
@@ -326,9 +308,8 @@ static BOOL _imd_load_polys( char **ppFileData, iIMDShape *s )
 				poly->normal.x = poly->normal.y = poly->normal.z = 0;
 			}
 
-			if (poly->flags & iV_IMD_TEXANIM) {
-				IMDTexAnims++;
-
+			if (poly->flags & iV_IMD_TEXANIM) 
+			{
 				if ((poly->pTexAnim = (iTexAnim *)malloc(sizeof(iTexAnim))) == NULL) {
 					iV_Error(0xff,"(_load_polys) [poly %d] memory alloc fail (iTexAnim struct)",i);
 					return FALSE;
@@ -474,8 +455,6 @@ static BOOL _imd_load_points( char **ppFileData, iIMDShape *s )
 	         vxmax = { 0, 0, 0 }, vymax = { 0, 0, 0 }, vzmax = { 0, 0, 0 };
 
 	//load the points then pass through a second time to setup bounding datavalues
-
-	IMDPoints+=s->npoints;
 
 	s->points = p = (Vector3i *) malloc(sizeof(Vector3i) * s->npoints);
 	if (p == NULL) {
@@ -694,8 +673,6 @@ static BOOL _imd_load_connectors(char **ppFileData, iIMDShape *s)
 	Vector3i *p;
 	SDWORD newX,newY,newZ;
 
-	IMDConnectors+=s->nconnectors;
-
 	if ((s->connectors = (Vector3i *) malloc(sizeof(Vector3i) * s->nconnectors)) == NULL)
 	{
 		iV_Error(0xff,"(_load_connectors) MALLOC fail");
@@ -729,13 +706,12 @@ static BOOL _imd_load_connectors(char **ppFileData, iIMDShape *s)
 //*
 //* params	fp 		= currently open shape file pointer
 //*			s			= pointer to shape level
-//*			texpage	= texture page number if iV_IMD_TEX
 //*
 //* on exit	s allocated
 //* returns	pointer to iFSDShape structure (or NULL on error)
 //*
 //******
-static iIMDShape *_imd_load_level(char **ppFileData, char *FileDataEnd, int nlevels, int texpage)
+static iIMDShape *_imd_load_level(char **ppFileData, char *FileDataEnd, int nlevels)
 {
 	char *pFileData = *ppFileData;
 	int cnt;
@@ -758,9 +734,7 @@ static iIMDShape *_imd_load_level(char **ppFileData, char *FileDataEnd, int nlev
 
 		s->shadowEdgeList = NULL;
 		s->nShadowEdges = 0;
-
-		s->flags = _IMD_FLAGS;
-		s->texpage = texpage;
+		s->texpage = -1;
 
 		if (sscanf(pFileData,"%s %d%n",buffer,&n,&cnt) != 2) {
 			debug(LOG_ERROR, "_imd_load_level(2): file corrupt");
@@ -832,7 +806,7 @@ static iIMDShape *_imd_load_level(char **ppFileData, char *FileDataEnd, int nlev
 				if (strcmp(buffer,"LEVEL") == 0)
 				{
 					iV_DEBUG2("imd[_load_level] = npoints %d, npolys %d\n",s->npoints,s->npolys);
-					s->next = _imd_load_level(&pFileData,FileDataEnd,nlevels-1,texpage);
+					s->next = _imd_load_level(&pFileData, FileDataEnd, nlevels - 1);
 				}
 				else if (strcmp(buffer,"CONNECTORS") == 0)
 				{
