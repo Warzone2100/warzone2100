@@ -90,8 +90,7 @@ void pie_EnableFog(BOOL val)
 {
 	if (rendStates.fogCap == FOG_CAP_NO)
 	{
-		debug(LOG_FOG, "pie_EnableFog: Trying to fog set fog to %s, but global fog disabled",
-		      val ? "ON" : "OFF");
+		debug(LOG_FOG, "pie_EnableFog: Trying to fog set fog to %s, but global fog disabled", val ? "ON" : "OFF");
 		val = FALSE;
 	}
 	if (rendStates.fogEnabled != val)

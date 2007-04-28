@@ -156,8 +156,8 @@ typedef struct _maptile
 #define MAP_MAXHEIGHT	256
 #define MAP_MAXAREA		(256*256)
 
-#define TILE_MAX_HEIGHT		(255 * ELEVATION_SCALE)
-#define TILE_MIN_HEIGHT		  0
+#define TILE_MAX_HEIGHT (255 * ELEVATION_SCALE)
+#define TILE_MIN_HEIGHT 0
 
 /* The size and contents of the map */
 extern UDWORD	mapWidth, mapHeight;

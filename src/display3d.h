@@ -44,31 +44,30 @@ extern void disp3d_setView(iView *newView);
 extern void disp3d_getView(iView *newView);
 
 extern void draw3DScene (void);
-extern void	renderDroid					( DROID *psDroid );
-extern void	renderStructure				( STRUCTURE *psStructure );
-extern void	renderFeature				( FEATURE *psFeature );
-extern void	renderProximityMsg			( PROXIMITY_DISPLAY	*psProxDisp);
-extern void	drawTerrainTile				( UDWORD i, UDWORD j, BOOL onWaterEdge );	//fast version - optimised
-void drawTerrainWaterTile(UDWORD i, UDWORD j);
-extern void	drawTexturedTile			( UDWORD	i, UDWORD j );
-extern void	renderProjectile			( PROJ_OBJECT *psCurr);
-extern void	renderAnimComponent			( COMPONENT_OBJECT *psObj );
-extern void	renderDeliveryPoint			( FLAG_POSITION *psPosition );
+extern void renderDroid					( DROID *psDroid );
+extern void renderStructure				( STRUCTURE *psStructure );
+extern void renderFeature				( FEATURE *psFeature );
+extern void renderProximityMsg			( PROXIMITY_DISPLAY	*psProxDisp);
+extern void drawTerrainTile				( UDWORD i, UDWORD j, BOOL onWaterEdge );
+extern void drawTerrainWaterTile		( UDWORD i, UDWORD j);
+extern void renderProjectile			( PROJ_OBJECT *psCurr);
+extern void renderAnimComponent			( COMPONENT_OBJECT *psObj );
+extern void renderDeliveryPoint			( FLAG_POSITION *psPosition );
 extern void debugToggleSensorDisplay	( void );
 
 extern void displayFeatures( void );
-extern void	displayStaticObjects( void );
-extern void	displayDynamicObjects( void );
+extern void displayStaticObjects( void );
+extern void displayDynamicObjects( void );
 extern void displayProximityMsgs( void );
 extern void displayDelivPoints(void);
-extern void	calcScreenCoords(DROID *psDroid);
-extern void	toggleReloadBarDisplay( void );
-extern void	toggleEnergyBars( void );
+extern void calcScreenCoords(DROID *psDroid);
+extern void toggleReloadBarDisplay( void );
+extern void toggleEnergyBars( void );
 
-extern BOOL	doWeDrawRadarBlips( void );
-extern BOOL	doWeDrawProximitys( void );
-extern void	setBlipDraw(BOOL val);
-extern void	setProximityDraw(BOOL val);
+extern BOOL doWeDrawRadarBlips( void );
+extern BOOL doWeDrawProximitys( void );
+extern void setBlipDraw(BOOL val);
+extern void setProximityDraw(BOOL val);
 extern void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD );
 
 
@@ -92,35 +91,31 @@ extern Sint32 playerXTile, playerZTile, // -> lighting.c
  rx, rz; // -> atmos.c
 
 extern SDWORD scrollSpeed;
-extern iBitmap	**tilesRAW;
+extern iBitmap **tilesRAW;
 extern UDWORD worldAngle;
-extern iPalette	gamePal;
+extern iPalette gamePal;
 //extern void	assignSensorTarget( DROID *psDroid );
-extern void	assignSensorTarget( BASE_OBJECT *psObj );
-extern void	assignDestTarget( void );
-extern void	setEnergyBarDisplay( BOOL val );
+extern void assignSensorTarget( BASE_OBJECT *psObj );
+extern void assignDestTarget( void );
+extern void setEnergyBarDisplay( BOOL val );
 extern UDWORD getWaterTileNum( void);
-extern void	setUnderwaterTile(UDWORD num);
-extern UDWORD	getRubbleTileNum( void );
-extern void	setRubbleTile(UDWORD num);
+extern void setUnderwaterTile(UDWORD num);
+extern UDWORD getRubbleTileNum( void );
+extern void setRubbleTile(UDWORD num);
 
 extern SDWORD	getCentreX( void );
 extern SDWORD	getCentreZ( void );
 
 
 extern SDWORD mouseTileX, mouseTileY;
-extern BOOL	yBeforeX;
+extern BOOL yBeforeX;
 extern UDWORD numDroidsSelected;
-extern UDWORD	intensity1,intensity2,intensity3;
-extern UDWORD	lightLevel;
-//extern BOOL		bScreenClose;
-//extern UDWORD closingTimeStart;
-//extern UDWORD screenCloseState;
-//extern BOOL	bPlayerHasHQ;
+extern UDWORD intensity1,intensity2,intensity3;
+extern UDWORD lightLevel;
 
-#define	INITIAL_DESIRED_PITCH		(325)
-#define INITIAL_STARTING_PITCH		(-75)
-#define INITIAL_DESIRED_ROTATION	(-45)
+#define INITIAL_DESIRED_PITCH (325)
+#define INITIAL_STARTING_PITCH (-75)
+#define INITIAL_DESIRED_ROTATION (-45)
 
 extern BOOL bRender3DOnly;
 
