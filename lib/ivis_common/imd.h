@@ -40,8 +40,6 @@
 
 #define iV_IMD_TEX			0x00000200
 #define iV_IMD_TEXANIM		0x00004000	// iV_IMD_TEX must be set also
-#define iV_IMD_PSXTEX		0x00008000	// - use playstation texture allocation method
-#define iV_IMD_XTEX			0x00000200
 
 //*************************************************************************
 

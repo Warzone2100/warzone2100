@@ -69,12 +69,13 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 	char		*pFileData = *ppFileData;
 	int 		cnt;
 	char		buffer[MAX_FILE_PATH], texType[MAX_FILE_PATH], ch; //, *str;
-	int		i, nlevels, ptype, pwidth, pheight;
+	int		i, nlevels, pwidth, pheight;
 	iIMDShape	*s, *psShape;
 	UDWORD		level;
 	Sint32		_IMD_VER;
 	Uint32		_IMD_FLAGS;
 	char		*pFileName = GetLastResourceFilename();
+	BOOL		bTextured = FALSE;
 
 	if (sscanf(pFileData, "%s %d%n", buffer, &_IMD_VER, &cnt) != 2)  {
 		debug(LOG_ERROR, "iV_ProcessIMD %s bad version: (%s)", pFileName, buffer);
@@ -94,26 +95,27 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 		return NULL;
 	}
 
+	/* Flags are ignored now. Reading them in just to pass the buffer. */
 	if (sscanf(pFileData, "%s %x%n", buffer, &_IMD_FLAGS, &cnt) != 2) {
 		debug(LOG_ERROR, "iV_ProcessIMD %s bad flags: %s", pFileName, buffer);
 		return NULL;
 	}
 	pFileData += cnt;
 
-	// get texture page if specified
-	if (_IMD_FLAGS & iV_IMD_XTEX)
+	/* This can be either texture or levels */
+	if (sscanf(pFileData, "%s %d%n", buffer, &nlevels, &cnt) != 2)
 	{
-		if (sscanf(pFileData, "%s %d%n", buffer, &ptype, &cnt) != 2) {
-			debug(LOG_ERROR, "iV_ProcessIMD %s bad texture page info v2: %s", pFileName, buffer);
-			return NULL;
-		}
-		pFileData += cnt;
+		debug(LOG_ERROR, "iV_ProcessIMD %s expecting TEXTURE or LEVELS: %s", pFileName, buffer);
+		return NULL;
+	}
+	pFileData += cnt;
 
-		if (strcmp(buffer, "TEXTURE") != 0) 
-		{
-			debug(LOG_ERROR, "iV_ProcessIMD %s expecting 'TEXTURE' directive: %s", pFileName, buffer);
-			return NULL;
-		}
+	// get texture page if specified
+	if (strncmp(buffer, "TEXTURE", 7) == 0)
+	{
+		/* the first parameter for textures is always ignored; which is why we ignore 
+		 * nlevels read in above */
+
 		ch = *pFileData++;
 
 		// Run up to the dot or till the buffer is filled. Leave room for the extension.
@@ -144,13 +146,16 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 		}
 		pFileData += cnt;
 		pie_Pagename(texfile);
-	}
 
-	if (sscanf(pFileData, "%s %d%n", buffer, &nlevels, &cnt) !=2) {
-		debug(LOG_ERROR, "iV_ProcessIMD: file corrupt -I (%s)", buffer);
-		return NULL;
+		/* Now read in LEVELS directive */
+		if (sscanf(pFileData, "%s %d%n", buffer, &nlevels, &cnt) != 2)
+		{
+			debug(LOG_ERROR, "iV_ProcessIMD %s bad levels info: %s", pFileName, buffer);
+			return NULL;
+		}
+		pFileData += cnt;
+		bTextured = TRUE;
 	}
-	pFileData += cnt;
 
 	if (strcmp(buffer,"LEVELS") != 0) {
 		debug(LOG_ERROR, "iV_ProcessIMD: expecting 'LEVELS' directive (%s)", buffer);
@@ -172,13 +177,14 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 	s = _imd_load_level(&pFileData, FileDataEnd, nlevels);
 
 	// load texture page if specified
-	if ( (s != NULL) && (_IMD_FLAGS & iV_IMD_XTEX))
+	if (s != NULL && bTextured)
 	{
 		int texpage = -1;
 
 		texpage = iV_GetTexture(texfile);
-		if (texpage < 0) {
-			debug(LOG_ERROR, "iV_ProcessIMD: could not load tex page %s", texfile);
+		if (texpage < 0) 
+		{
+			debug(LOG_ERROR, "iV_ProcessIMD %s could not load tex page %s", pFileName, texfile);
 			return NULL;
 		}
 		/* assign tex page to levels */
@@ -320,8 +326,9 @@ static BOOL _imd_load_polys( char **ppFileData, iIMDShape *s )
 			} else {
 				poly->pTexAnim = NULL;
 			}
-		// PC texture coord routine
-			if (poly->vrt && (poly->flags & (iV_IMD_TEX|iV_IMD_PSXTEX))) {
+			// PC texture coord routine
+			if (poly->vrt && (poly->flags & iV_IMD_TEX)) 
+			{
 				for (j=0; j<poly->npnts; j++) {
 					Sint32 VertexU, VertexV;
 					if (sscanf(pFileData, "%d %d%n", &VertexU, &VertexV, &cnt) != 2) {

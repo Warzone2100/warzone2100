@@ -75,7 +75,7 @@ BOOL iV_IMDSave(char *filename, iIMDShape *s, BOOL PieIMD)
 
 	if ((fp = fopen(filename,"w")) == NULL) {
 		return FALSE;
-  }
+	}
 
 	if (PieIMD==TRUE) {
 		fprintf(fp,"%s %d\n",PIE_NAME,PIE_VER);
@@ -85,7 +85,8 @@ BOOL iV_IMDSave(char *filename, iIMDShape *s, BOOL PieIMD)
 	fprintf(fp,"TYPE %x\n",s->flags);
 
 	// if textured write tex page file info
-	if (s->flags & iV_IMD_XTEX) {
+	if (s->texpage != -1) 
+	{
 		fprintf(fp,"TEXTURE %d %s %d %d\n",iV_TEXTYPE(s->texpage),
 				iV_TEXNAME(s->texpage),iV_TEXWIDTH(s->texpage),
 				iV_TEXHEIGHT(s->texpage));
@@ -130,7 +131,8 @@ BOOL iV_IMDSave(char *filename, iIMDShape *s, BOOL PieIMD)
 				}
 
 				// if textured write texture uv's
-				if (poly->flags & (iV_IMD_TEX | iV_IMD_PSXTEX)) {
+				if (poly->flags & iV_IMD_TEX) 
+				{
 					for (d=0; d<poly->npnts; d++) {
 						fprintf(fp," %d %d",poly->vrt[d].u,poly->vrt[d].v);
 					}
