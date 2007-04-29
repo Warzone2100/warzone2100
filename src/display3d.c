@@ -4230,17 +4230,17 @@ static void renderSurroundings(void)
 /* Flattens an imd to the landscape and handles 4 different rotations */
 static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDWORD direction)
 {
-UDWORD	i;
-UDWORD	pointHeight,centreHeight;
-SDWORD	shift;
+	UDWORD i, centreHeight;
 
 	ASSERT( imd->npoints < iV_IMD_MAX_POINTS,
 		"flattenImd: too many points in the PIE to flatten it" );
 
 	/* Get a copy of the points */
 	memcpy(alteredPoints,imd->points,imd->npoints*sizeof(Vector3i));
+
 	/* Get the height of the centre point for reference */
 	centreHeight = map_Height(structX,structY);
+
 	/* Now we go through the shape looking for vertices on the edge */
 	/* Flip reference coords if we're on a vertical wall */
 
@@ -4252,81 +4252,64 @@ SDWORD	shift;
 	{
 	case 0:
 		for(i=0; i<(UDWORD)imd->npoints; i++)
+		{
+			if (abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z) >= 63)
 			{
-				if(abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z)>=63)
-				{
-					UDWORD tempX = MIN(structX + alteredPoints[i].x, WORLD_COORD(mapWidth - 1));
-					UDWORD tempY = MAX(structY - alteredPoints[i].z, 0);
-						shift = centreHeight - map_Height(tempX, tempY);
-						alteredPoints[i].y -= (shift-4);
-				}
+				UDWORD tempX = MIN(structX + alteredPoints[i].x, WORLD_COORD(mapWidth - 1));
+				UDWORD tempY = MAX(structY - alteredPoints[i].z, 0);
+				SDWORD shift = centreHeight - map_Height(tempX, tempY);
+
+				alteredPoints[i].y -= (shift - 4);
 			}
+		}
 		break;
 	case 90:
 		for(i=0; i<(UDWORD)imd->npoints; i++)
+		{
+			if (abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z) >= 63)
 			{
-				if(abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z)>=63)
-				{
-					UDWORD tempX = MAX(structX - alteredPoints[i].z, 0);
-					UDWORD tempY = MAX(structY - alteredPoints[i].x, 0);
-					shift = centreHeight - map_Height(tempX, tempY);
-					alteredPoints[i].y -= (shift-4);
-				}
-			}
-		break;
+				UDWORD tempX = MAX(structX - alteredPoints[i].z, 0);
+				UDWORD tempY = MAX(structY - alteredPoints[i].x, 0);
+				SDWORD shift = centreHeight - map_Height(tempX, tempY);
 
+				alteredPoints[i].y -= (shift - 4);
+			}
+		}
+		break;
 	case 180:
 		for(i=0; i<(UDWORD)imd->npoints; i++)
+		{
+			if (abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z) >= 63)
 			{
-				if(abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z)>=63)
-				{
-					UDWORD tempX = MAX(structX - alteredPoints[i].x, 0);
-					UDWORD tempY = MIN(structY + alteredPoints[i].z, WORLD_COORD(mapHeight -1));
-						shift = centreHeight - map_Height(tempX, tempY);
-					alteredPoints[i].y -= (shift-4);
-				}
+				UDWORD tempX = MAX(structX - alteredPoints[i].x, 0);
+				UDWORD tempY = MIN(structY + alteredPoints[i].z, WORLD_COORD(mapHeight - 1));
+				SDWORD shift = centreHeight - map_Height(tempX, tempY);
+
+				alteredPoints[i].y -= (shift - 4);
 			}
+		}
 		break;
 	case 270:
 		for(i=0; i<(UDWORD)imd->npoints; i++)
+		{
+			if(abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z)>=63)
 			{
-				if(abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z)>=63)
-				{
-					UDWORD tempX = MIN(structX + alteredPoints[i].z, WORLD_COORD(mapWidth - 1));
-					UDWORD tempY = MIN(structY + alteredPoints[i].x, WORLD_COORD(mapHeight - 1));
-						shift = centreHeight - map_Height(tempX, tempY);
-					alteredPoints[i].y -= (shift-4);
-				}
-			}
-		break;
+				UDWORD tempX = MIN(structX + alteredPoints[i].z, WORLD_COORD(mapWidth - 1));
+				UDWORD tempY = MIN(structY + alteredPoints[i].x, WORLD_COORD(mapHeight - 1));
+				SDWORD shift = centreHeight - map_Height(tempX, tempY);
 
+				alteredPoints[i].y -= (shift - 4);
+			}
+		}
+		break;
 	default:
-		debug( LOG_ERROR, "Weirdy direction for a structure in renderWall" );
+		debug(LOG_ERROR, "Weird direction (%u) for a structure in flattenImd", direction);
 		abort();
 		break;
 	}
-/*
-			if (psStructure-> direction == 90)
-			{
-				for(i=0; i<imd->npoints; i++)
-				{
-						pointHeight = map_Height(structX-alteredPoints[i].z,structY-alteredPoints[i].x);
-						shift = centreHeight - pointHeight;
-						alteredPoints[i].y -= shift;
-				}
-			}
-			else
-			{
-				for(i=0; i<imd->npoints; i++)
-				{
-						pointHeight = map_Height(structX+alteredPoints[i].x,structY-alteredPoints[i].z);
-						shift = centreHeight - pointHeight;
-						alteredPoints[i].y -= shift;
-				}
-			}
-*/
-			imd->points = alteredPoints;
-			return(imd);
+
+	imd->points = alteredPoints;
+	return imd;
 }
 
 static void getDefaultColours( void )
