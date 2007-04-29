@@ -4,9 +4,9 @@ include $(MAKERULES)/configure.mk
 SRC=bitimage.c \
 	imd.c \
 	imdload.c \
-	pcx.c \
 	pieclip.c \
-	piestate.c
+	piestate.c \
+	png.c
 
 LIB=ivis_common
 

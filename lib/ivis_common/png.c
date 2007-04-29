@@ -17,15 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#include <png.h>
-#include <setjmp.h>
-#include <string.h>
-#include <physfs.h>
 
 #include "lib/framework/frame.h"
-#include "ivisdef.h"
 
-#include "ivispatch.h"
+#include "png.h"
+#include <png.h>
+#include <physfs.h>
 
 #define PNG_BYTES_TO_CHECK 4
 

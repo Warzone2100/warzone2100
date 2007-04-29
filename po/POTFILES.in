@@ -18,10 +18,10 @@ lib/sound/cdaudio.c
 lib/sound/audio_id.c
 lib/ivis_common/imdload.c
 lib/ivis_common/imd.c
-lib/ivis_common/pcx.c
 lib/ivis_common/pieclip.c
 lib/ivis_common/bitimage.c
 lib/ivis_common/piestate.c
+lib/ivis_common/png.c
 lib/gamelib/hashtabl.c
 lib/gamelib/anim.c
 lib/gamelib/gtime.c
