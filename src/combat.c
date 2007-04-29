@@ -398,15 +398,12 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 				predictX += psTarget->x;
 				predictY = (SDWORD)(trigCos( ((DROID *)psTarget)->sMove.moveDir ) * ((DROID *)psTarget)->sMove.speed * dist / psStats->flightSpeed );
 				predictY += psTarget->y;
-				//to prevent negative number from corrupting UDWORD parameter tarX,tarY in proj_SendProjectile
-				if (predictX < 0)
-				{
-					predictX = 0;
-				}
-				if (predictY < 0)
-				{
-					predictY = 0;
-				}
+
+				// Make sure we don't pass any negative or out of bounds numbers to proj_SendProjectile
+				predictX = MAX(predictX, 0);
+				predictX = MIN(predictX, WORLD_COORD(mapWidth - 1));
+				predictY = MAX(predictY, 0);
+				predictY = MIN(predictY, WORLD_COORD(mapHeight - 1));
 			}
 			else
 			{
@@ -458,15 +455,12 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 				predictX += psTarget->x;
 				predictY = (SDWORD)(trigCos( ((DROID *)psTarget)->sMove.moveDir ) * ((DROID *)psTarget)->sMove.speed * dist / psStats->flightSpeed );
 				predictY += psTarget->y;
-				//to prevent negative number from corrupting UDWORD parameter tarX,tarY in proj_SendProjectile
-				if (predictX < 0)
-				{
-					predictX = 0;
-				}
-				if (predictY < 0)
-				{
-					predictY = 0;
-				}
+
+				// Make sure we don't pass any negative or out of bounds numbers to proj_SendProjectile
+				predictX = MAX(predictX, 0);
+				predictX = MIN(predictX, WORLD_COORD(mapWidth - 1));
+				predictY = MAX(predictY, 0);
+				predictY = MIN(predictY, WORLD_COORD(mapHeight - 1));
 			}
 			else
 			{
