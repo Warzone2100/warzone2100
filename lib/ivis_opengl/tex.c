@@ -56,14 +56,14 @@ int pie_AddTexPage(iTexture* s, const char* filename, int type, BOOL bResource)
 {
 	unsigned int i = 0;
 
-	debug(LOG_TEXTURE, "pie_AddBMPtoTexPages: %s type=%d resource=%s page=%d", filename, type, bResource ? "true" : "false", _TEX_INDEX);
+	debug(LOG_TEXTURE, "pie_AddTexPage: %s type=%d resource=%s page=%d", filename, type, bResource ? "true" : "false", _TEX_INDEX);
 	assert(s != NULL);
 
 	/* Have we already loaded this one? (Should generally not happen here.) */
 	while (i < _TEX_INDEX) {
 		if (strncmp(filename, _TEX_PAGE[i].name, iV_TEXNAME_MAX) == 0) {
 			// this happens with terrain for some reason, which is necessary
-			debug(LOG_TEXTURE, "pie_AddBMPtoTexPages: %s loaded again", filename);
+			debug(LOG_TEXTURE, "pie_AddTexPage: %s loaded again", filename);
 		}
 		i++;
 	}
@@ -73,7 +73,7 @@ int pie_AddTexPage(iTexture* s, const char* filename, int type, BOOL bResource)
 
 	/* Have we used up too many? */
 	if (_TEX_INDEX >= iV_TEX_MAX) {
-		debug(LOG_ERROR, "pie_AddBMPtoTexPages: too many texture pages");
+		debug(LOG_ERROR, "pie_AddTexPage: too many texture pages");
 		assert(FALSE);
 		return -1;
 	}
@@ -94,10 +94,9 @@ int pie_AddTexPage(iTexture* s, const char* filename, int type, BOOL bResource)
 
 	if ((s->width & (s->width-1)) == 0 && (s->height & (s->height-1)) == 0)
 	{
-		gluBuild2DMipmaps(GL_TEXTURE_2D, wz_texture_compression, s->width, s->height,
-			     GL_RGBA, GL_UNSIGNED_BYTE, s->bmp);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, wz_texture_compression, s->width, s->height, GL_RGBA, GL_UNSIGNED_BYTE, s->bmp);
 	} else {
-		debug(LOG_ERROR, "pie_AddBMPtoTexPages: non POT texture %s.", filename);
+		debug(LOG_ERROR, "pie_AddTexPage: non POT texture %s", filename);
 	}
 
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);

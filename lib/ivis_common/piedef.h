@@ -177,13 +177,22 @@ extern void pie_DrawTexTriangle(PIEVERTEX *aVrts, void* psEffects);
 extern void pie_GetResetCounts(SDWORD* pPieCount, SDWORD* pTileCount, SDWORD* pPolyCount, SDWORD* pStateCount);
 
 /*!
- * Load a PNG from file into sprite
+ * Load a PNG from file into texture
  *
  * \param fileName input file to load from
  * \param sprite Sprite to read into
  * \return TRUE on success, FALSE otherwise
  */
 BOOL pie_PNGLoadFile(const char *fileName, iTexture *s);
+
+/*!
+ * Save a PNG from texture into file
+ *
+ * \param fileName output file to save to
+ * \param sprite Texture to read from
+ * \return TRUE on success, FALSE otherwise
+ */
+void pie_PNGSaveFile(const char *fileName, iTexture *s);
 
 void pie_BeginLighting(float x, float y, float z);
 void pie_EndLighting(void);

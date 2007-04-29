@@ -44,6 +44,7 @@
 //
 //*************************************************************************
 typedef struct { Sint32 x, y; } Vector2i;
+typedef struct { float x, y; } Vector2f;
 typedef struct { Sint32 x, y, z; } Vector3i;
 typedef struct { float x, y, z; } Vector3f;
 
