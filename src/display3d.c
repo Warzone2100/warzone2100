@@ -4255,8 +4255,9 @@ SDWORD	shift;
 			{
 				if(abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z)>=63)
 				{
-					pointHeight = map_Height(structX+alteredPoints[i].x,structY-alteredPoints[i].z);
-						shift = centreHeight - pointHeight;
+					UDWORD tempX = MIN(structX + alteredPoints[i].x, WORLD_COORD(mapWidth - 1));
+					UDWORD tempY = MAX(structY - alteredPoints[i].z, 0);
+						shift = centreHeight - map_Height(tempX, tempY);
 						alteredPoints[i].y -= (shift-4);
 				}
 			}
@@ -4266,8 +4267,9 @@ SDWORD	shift;
 			{
 				if(abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z)>=63)
 				{
-					pointHeight = map_Height(structX-alteredPoints[i].z,structY-alteredPoints[i].x);
-					shift = centreHeight - pointHeight;
+					UDWORD tempX = MAX(structX - alteredPoints[i].z, 0);
+					UDWORD tempY = MAX(structY - alteredPoints[i].x, 0);
+					shift = centreHeight - map_Height(tempX, tempY);
 					alteredPoints[i].y -= (shift-4);
 				}
 			}
@@ -4278,8 +4280,9 @@ SDWORD	shift;
 			{
 				if(abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z)>=63)
 				{
-					pointHeight = map_Height(structX-alteredPoints[i].x,structY+alteredPoints[i].z);
-						shift = centreHeight - pointHeight;
+					UDWORD tempX = MAX(structX - alteredPoints[i].x, 0);
+					UDWORD tempY = MIN(structY + alteredPoints[i].z, WORLD_COORD(mapHeight -1));
+						shift = centreHeight - map_Height(tempX, tempY);
 					alteredPoints[i].y -= (shift-4);
 				}
 			}
@@ -4289,8 +4292,9 @@ SDWORD	shift;
 			{
 				if(abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z)>=63)
 				{
-					pointHeight = map_Height(structX+alteredPoints[i].z,structY+alteredPoints[i].x);
-						shift = centreHeight - pointHeight;
+					UDWORD tempX = MIN(structX + alteredPoints[i].z, WORLD_COORD(mapWidth - 1));
+					UDWORD tempY = MIN(structY + alteredPoints[i].x, WORLD_COORD(mapHeight - 1));
+						shift = centreHeight - map_Height(tempX, tempY);
 					alteredPoints[i].y -= (shift-4);
 				}
 			}
