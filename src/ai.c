@@ -305,6 +305,12 @@ SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, SDWORD
 	{
 		targetDroid = (DROID *)psTarget;
 
+		if (targetDroid->died)
+		{
+			debug(LOG_NEVER, "Target droid is dead, skipping invalid droid.\n");
+			return noTarget;
+		}
+
 		/* Calculate damage this target suffered */
 		if (targetDroid->originalBody == 0) // FIXME Somewhere we get 0HP droids from
 		{
