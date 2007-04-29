@@ -1321,10 +1321,11 @@ extern SWORD map_Height(UDWORD x, UDWORD y)
 	//SDWORD	lowerHeightOffset,upperHeightOffset;
 	SDWORD dx, dy, ox, oy;
 	BOOL	bWaterTile = FALSE;
-	ASSERT( x < (mapWidth << TILE_SHIFT),
-		"mapHeight: x coordinate bigger than map width" );
-	ASSERT( y < (mapHeight<< TILE_SHIFT),
-		"mapHeight: y coordinate bigger than map height" );
+
+	ASSERT( x < WORLD_COORD(mapWidth),
+		"mapHeight: x(%u) coordinate bigger than map width(%u)", x, WORLD_COORD(mapWidth) );
+	ASSERT( y < WORLD_COORD(mapHeight),
+		"mapHeight: y(%u) coordinate bigger than map height(%u)", y, WORLD_COORD(mapHeight) );
 
 	/* Tile comp */
 	tileX = x >> TILE_SHIFT;
@@ -1664,6 +1665,7 @@ UBYTE				*pVisData;
 	return(TRUE);
 }
 // -----------------------------------------------------------------------------------
+
 
 
 
