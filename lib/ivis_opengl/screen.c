@@ -356,168 +356,39 @@ void screenToggleMode(void)
 }
 
 // Screenshot code goes below this
-static const unsigned int channelBitdepth = 8;
 static const unsigned int channelsPerPixel = 3;
-
-// PNG callbacks
-static void wzpng_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
-{
-	PHYSFS_file* fileHandle = (PHYSFS_file*)png_get_io_ptr(png_ptr);
-
-	PHYSFS_write(fileHandle, data, length, 1);
-}
-
-static void wzpng_flush_data(png_structp png_ptr)
-{
-	PHYSFS_file* fileHandle = (PHYSFS_file*)png_get_io_ptr(png_ptr);
-
-	PHYSFS_flush(fileHandle);
-}
-
-// End of PNG callbacks
-
-static inline void PNGCleanup(png_infop *info_ptr, png_structp *png_ptr)
-{
-	if (*info_ptr != NULL)
-		png_destroy_info_struct(*png_ptr, info_ptr);
-	if (*png_ptr != NULL)
-		png_destroy_write_struct(png_ptr, NULL);
-}
-
-static inline void screen_DumpPNG(PHYSFS_file* fileHandle, const unsigned char* inputBuffer, unsigned int width, unsigned int height, unsigned int channels)
-{
-	const unsigned char** scanlines = NULL;
-	png_infop info_ptr = NULL;
-	png_structp png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-
-	if (png_ptr == NULL)
-	{
-		debug(LOG_ERROR, "screen_DumpPNG: Unable to create png struct\n");
-		return PNGCleanup(&info_ptr, &png_ptr);
-	}
-
-	info_ptr = png_create_info_struct(png_ptr);
-
-	if (info_ptr == NULL)
-	{
-		debug(LOG_ERROR, "screen_DumpPNG: Unable to create png info struct\n");
-		return PNGCleanup(&info_ptr, &png_ptr);
-	}
-
-	// If libpng encounters an error, it will jump into this if-branch
-	if (setjmp(png_jmpbuf(png_ptr)))
-	{
-		debug(LOG_ERROR, "screen_DumpPNG: Error encoding PNG data\n");
-	}
-	else
-	{
-		unsigned int currentRow;
-		unsigned int row_stride = width * channels;
-
-		scanlines = (const unsigned char**)malloc(sizeof(const unsigned char*) * height);
-		if (scanlines == NULL)
-		{
-			debug(LOG_ERROR, "screen_DumpPNG: Couldn't allocate memory\n");
-			return PNGCleanup(&info_ptr, &png_ptr);
-		}
-
-		png_set_write_fn(png_ptr, fileHandle, wzpng_write_data, wzpng_flush_data);
-
-		// Set the compression level of ZLIB
-		// Right now we stick with the default, since that one is the
-		// fastest which still produces acceptable filesizes.
-		// The highest compression level hardly produces smaller files than default.
-		//
-		// Below are some benchmarks done while taking screenshots at 1280x1024
-		// Z_NO_COMPRESSION:
-		// black (except for GUI): 398 msec
-		// 381, 391, 404, 360 msec
-		//
-		// Z_BEST_SPEED:
-		// black (except for GUI): 325 msec
-		// 611, 406, 461, 608 msec
-		//
-		// Z_DEFAULT_COMPRESSION:
-		// black (except for GUI): 374 msec
-		// 1154, 1121, 627, 790 msec
-		//
-		// Z_BEST_COMPRESSION:
-		// black (except for GUI): 439 msec
-		// 1600, 1078, 1613, 1700 msec
-
-		// Not calling this function is equal to using the default
-		// so to spare some CPU cycles we comment this out.
-		// png_set_compression_level(png_ptr, Z_DEFAULT_COMPRESSION);
-
-		png_set_IHDR(png_ptr, info_ptr, width, height, channelBitdepth,
-			             PNG_COLOR_TYPE_RGB, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
-
-		// Create an array of scanlines
-		for (currentRow = 0; currentRow < height; ++currentRow)
-		{
-			// We're filling the scanline from the bottom up here,
-			// otherwise we'd have a vertically mirrored image.
-			scanlines[currentRow] = &inputBuffer[row_stride * (height - currentRow - 1)];
-		}
-
-		png_set_rows(png_ptr, info_ptr, (const png_bytepp)scanlines);
-
-		png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
-	}
-
-	free(scanlines);
-	return PNGCleanup(&info_ptr, &png_ptr);
-}
-
-/** Retrieves the currently displayed screen and throws it in a buffer
- *  \param width the screen's width
- *  \param height the screen's height
- *  \param channels the number of channels per pixel (since we're using RGB, 3 is a sane default)
- *  \return a pointer to a buffer holding all pixels of the image
- */
-static const unsigned char* screen_DumpInBuffer(unsigned int width, unsigned int height, unsigned int channels)
-{
-	static unsigned char* buffer = NULL;
-	static unsigned int buffer_size = 0;
-
-	unsigned int row_stride = width * channels;
-
-	if (row_stride * height > buffer_size) {
-		if (buffer != NULL) {
-			free(buffer);
-		}
-		buffer_size = row_stride * height;
-		buffer = (unsigned char*)malloc(buffer_size);
-	}
-	glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, buffer);
-
-	return buffer;
-}
 
 void screenDoDumpToDiskIfRequired(void)
 {
 	const char* fileName = screendump_filename;
-	const unsigned char* inputBuffer = NULL;
-	PHYSFS_file* fileHandle;
+	static iTexture image = { 0, 0, NULL };
 
 	if (!screendump_required) return;
-
-	fileHandle = PHYSFS_openWrite(fileName);
-	if (fileHandle == NULL)
-	{
-		debug(LOG_ERROR, "screenDoDumpToDiskIfRequired: PHYSFS_openWrite failed (while openening file %s) with error: %s\n", fileName, PHYSFS_getLastError());
-		return;
-	}
 	debug( LOG_3D, "Saving screenshot %s\n", fileName );
-
+	
 	// Dump the currently displayed screen in a buffer
-	inputBuffer = screen_DumpInBuffer(screen->w, screen->h, channelsPerPixel);
+	if (image.width != screen->w || image.height != screen->h)
+	{
+		if (image.bmp != NULL)
+		{
+			free(image.bmp);
+		}
+		image.width = screen->w;
+		image.height = screen->h;
+		image.bmp = (char*)malloc(channelsPerPixel * image.width * image.height);
+		if (image.bmp == NULL)
+		{
+			image.width = 0; image.height = 0;
+			debug(LOG_ERROR, "screenDoDumpToDiskIfRequired: Couldn't allocate memory\n");
+			return;
+		}
+	}
+	glReadPixels(0, 0, image.width, image.height, GL_RGB, GL_UNSIGNED_BYTE, image.bmp);
 
 	// Write the screen to a PNG
-	screen_DumpPNG(fileHandle, inputBuffer, screen->w, screen->h, channelsPerPixel);
+	pie_PNGSaveFile(fileName, &image);
 
 	screendump_required = FALSE;
-	PHYSFS_close(fileHandle);
 }
 
 void screenDumpToDisk(const char* path) {

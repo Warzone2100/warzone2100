@@ -25,7 +25,10 @@
 #include <physfs.h>
 
 #define PNG_BYTES_TO_CHECK 4
+static const unsigned int channelBitdepth = 8;
+static const unsigned int channelsPerPixel = 3;
 
+// PNG callbacks
 static void wzpng_read_data(png_structp ctx, png_bytep area, png_size_t size)
 {
 
@@ -34,7 +37,22 @@ static void wzpng_read_data(png_structp ctx, png_bytep area, png_size_t size)
 	PHYSFS_read(fileHandle, area, 1, size);
 }
 
-static inline void PNGCleanup(png_infop *info_ptr, png_structp *png_ptr, PHYSFS_file* fileHandle)
+static void wzpng_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
+{
+	PHYSFS_file* fileHandle = (PHYSFS_file*)png_get_io_ptr(png_ptr);
+
+	PHYSFS_write(fileHandle, data, length, 1);
+}
+
+static void wzpng_flush_data(png_structp png_ptr)
+{
+	PHYSFS_file* fileHandle = (PHYSFS_file*)png_get_io_ptr(png_ptr);
+
+	PHYSFS_flush(fileHandle);
+}
+// End of PNG callbacks
+
+static inline void PNGReadCleanup(png_infop *info_ptr, png_structp *png_ptr, PHYSFS_file* fileHandle)
 {
 	if (*info_ptr != NULL)
 		png_destroy_info_struct(*png_ptr, info_ptr);
@@ -44,6 +62,15 @@ static inline void PNGCleanup(png_infop *info_ptr, png_structp *png_ptr, PHYSFS_
 		PHYSFS_close(fileHandle);
 }
 
+static inline void PNGWriteCleanup(png_infop *info_ptr, png_structp *png_ptr, PHYSFS_file* fileHandle)
+{
+	if (*info_ptr != NULL)
+		png_destroy_info_struct(*png_ptr, info_ptr);
+	if (*png_ptr != NULL)
+		png_destroy_write_struct(png_ptr, NULL);
+	if (fileHandle != NULL)
+		PHYSFS_close(fileHandle);
+}
 
 BOOL pie_PNGLoadFile(const char *fileName, iTexture *s)
 {
@@ -58,7 +85,7 @@ BOOL pie_PNGLoadFile(const char *fileName, iTexture *s)
 	if (fileHandle == NULL)
 	{
 		debug(LOG_ERROR, "pie_PNGLoadFile: PHYSFS_openRead(%s) failed with error: %s\n", fileName, PHYSFS_getLastError());
-		PNGCleanup(&info_ptr, &png_ptr, fileHandle);
+		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
 		return FALSE;
 	}
 
@@ -67,14 +94,14 @@ BOOL pie_PNGLoadFile(const char *fileName, iTexture *s)
 	if (readSize < PNG_BYTES_TO_CHECK)
 	{
 		debug(LOG_ERROR, "pie_PNGLoadFile: PHYSFS_read(%s) failed with error: %s\n", fileName, PHYSFS_getLastError());
-		PNGCleanup(&info_ptr, &png_ptr, fileHandle);
+		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
 		return FALSE;
 	}
 
 	// Verify the PNG header to be correct
 	if (png_sig_cmp(PNGheader, 0, PNG_BYTES_TO_CHECK)) {
 		debug(LOG_3D, "pie_PNGLoadMem: Did not recognize PNG header in %s", fileName);
-		PNGCleanup(&info_ptr, &png_ptr, fileHandle);
+		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
 		return FALSE;
 	}
 
@@ -86,7 +113,7 @@ BOOL pie_PNGLoadFile(const char *fileName, iTexture *s)
 
 	if (png_ptr == NULL) {
 		debug(LOG_3D, "pie_PNGLoadMem: Unable to create png struct");
-		PNGCleanup(&info_ptr, &png_ptr, fileHandle);
+		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
 		return FALSE;
 	}
 
@@ -94,7 +121,7 @@ BOOL pie_PNGLoadFile(const char *fileName, iTexture *s)
 
 	if (info_ptr == NULL) {
 		debug(LOG_3D, "pie_PNGLoadMem: Unable to create png info struct");
-		PNGCleanup(&info_ptr, &png_ptr, fileHandle);
+		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
 		return FALSE;
 	}
 
@@ -102,7 +129,7 @@ BOOL pie_PNGLoadFile(const char *fileName, iTexture *s)
 	// setjmp evaluates to false so the else branch will be executed at first
 	if (setjmp(png_jmpbuf(png_ptr))) {
 		debug(LOG_3D, "pie_PNGLoadMem: Error decoding PNG data in %s", fileName);
-		PNGCleanup(&info_ptr, &png_ptr, fileHandle);
+		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
 		return FALSE;
 	} else {
 		int bit_depth, color_type, interlace_type;
@@ -172,6 +199,98 @@ BOOL pie_PNGLoadFile(const char *fileName, iTexture *s)
 		}
 	}
 
-	PNGCleanup(&info_ptr, &png_ptr, fileHandle);
+	PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
 	return TRUE;
+}
+
+void pie_PNGSaveFile(const char *fileName, iTexture *image)
+{
+	const char** scanlines = NULL;
+	png_infop info_ptr = NULL;
+	png_structp png_ptr = NULL;
+
+	PHYSFS_file* fileHandle = PHYSFS_openWrite(fileName);
+	if (fileHandle == NULL)
+	{
+		debug(LOG_ERROR, "pie_PNGSaveFile: PHYSFS_openWrite failed (while openening file %s) with error: %s\n", fileName, PHYSFS_getLastError());
+		return;
+	}
+
+	png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+	if (png_ptr == NULL)
+	{
+		debug(LOG_ERROR, "pie_PNGSaveFile: Unable to create png struct\n");
+		return PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
+	}
+
+	info_ptr = png_create_info_struct(png_ptr);
+	if (info_ptr == NULL)
+	{
+		debug(LOG_ERROR, "pie_PNGSaveFile: Unable to create png info struct\n");
+		return PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
+	}
+
+	// If libpng encounters an error, it will jump into this if-branch
+	if (setjmp(png_jmpbuf(png_ptr)))
+	{
+		debug(LOG_ERROR, "pie_PNGSaveFile: Error encoding PNG data\n");
+	}
+	else
+	{
+		unsigned int currentRow;
+		unsigned int row_stride = image->width * channelsPerPixel;
+
+		scanlines = (const char**)malloc(sizeof(const char*) * image->height);
+		if (scanlines == NULL)
+		{
+			debug(LOG_ERROR, "pie_PNGSaveFile: Couldn't allocate memory\n");
+			return PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
+		}
+
+		png_set_write_fn(png_ptr, fileHandle, wzpng_write_data, wzpng_flush_data);
+
+		// Set the compression level of ZLIB
+		// Right now we stick with the default, since that one is the
+		// fastest which still produces acceptable filesizes.
+		// The highest compression level hardly produces smaller files than default.
+		//
+		// Below are some benchmarks done while taking screenshots at 1280x1024
+		// Z_NO_COMPRESSION:
+		// black (except for GUI): 398 msec
+		// 381, 391, 404, 360 msec
+		//
+		// Z_BEST_SPEED:
+		// black (except for GUI): 325 msec
+		// 611, 406, 461, 608 msec
+		//
+		// Z_DEFAULT_COMPRESSION:
+		// black (except for GUI): 374 msec
+		// 1154, 1121, 627, 790 msec
+		//
+		// Z_BEST_COMPRESSION:
+		// black (except for GUI): 439 msec
+		// 1600, 1078, 1613, 1700 msec
+
+		// Not calling this function is equal to using the default
+		// so to spare some CPU cycles we comment this out.
+		// png_set_compression_level(png_ptr, Z_DEFAULT_COMPRESSION);
+
+		png_set_IHDR(png_ptr, info_ptr, image->width, image->height, channelBitdepth,
+			             PNG_COLOR_TYPE_RGB, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+
+		// Create an array of scanlines
+		for (currentRow = 0; currentRow < image->height; ++currentRow)
+		{
+			// We're filling the scanline from the bottom up here,
+			// otherwise we'd have a vertically mirrored image.
+			scanlines[currentRow] = &image->bmp[row_stride * (image->height - currentRow - 1)];
+		}
+
+		png_set_rows(png_ptr, info_ptr, (const png_bytepp)scanlines);
+
+		png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
+	}
+
+	free(scanlines);
+	return PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
 }
