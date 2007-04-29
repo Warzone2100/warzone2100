@@ -1989,9 +1989,7 @@ void	renderStructure(STRUCTURE *psStructure)
 	SDWORD			i;
 	iIMDShape *lImd = NULL, *imd = NULL;
 	Vector3i *temp = NULL;
-	SDWORD			brightVar;
 	BOOL			bHitByElectronic = FALSE;
-	SDWORD			yVar;
 	iIMDShape		*pRepImd;
 	REPAIR_FACILITY		*psRepairFac = NULL;
 	BOOL            defensive = FALSE;
@@ -2052,7 +2050,7 @@ void	renderStructure(STRUCTURE *psStructure)
 			imd = psStructure->sDisplay.imd;
 			if ( imd != NULL )
 			{
-				SDWORD	pointHeight, strHeight, shift;
+				SDWORD strHeight;
 
 				// Get a copy of the points
 				memcpy( alteredPoints, imd->points, imd->npoints * sizeof(Vector3i) );
@@ -2065,6 +2063,8 @@ void	renderStructure(STRUCTURE *psStructure)
 				{
 					if ( alteredPoints[i].y <= 0 )
 					{
+						SDWORD pointHeight, shift;
+
 						pointHeight = map_Height( structX+alteredPoints[i].x, structY-alteredPoints[i].z );
 						shift = strHeight - pointHeight;
 						alteredPoints[i].y -= shift;
@@ -2099,17 +2099,19 @@ void	renderStructure(STRUCTURE *psStructure)
 
 		rotation = DEG( (int)psStructure->direction );
 		iV_MatrixRotateY(-rotation);
-			if( !defensive
-			&& gameTime2-psStructure->timeLastHit < ELEC_DAMAGE_DURATION
-			&& psStructure->lastHitWeapon == WSC_ELECTRONIC )
-			{
-				bHitByElectronic = TRUE;
+		if (!defensive
+		    && gameTime2-psStructure->timeLastHit < ELEC_DAMAGE_DURATION
+		    && psStructure->lastHitWeapon == WSC_ELECTRONIC )
+		{
+			bHitByElectronic = TRUE;
 		}
 
 		buildingBrightness = 200 - (100-PERCENT( psStructure->body , structureBody(psStructure)));
 		/* If it's selected, then it's brighter */
 		if (psStructure->selected)
 		{
+			SDWORD brightVar;
+
 			if(!gamePaused())
 			{
 				brightVar = getStaticTimeValueRange(990,110);
@@ -2151,7 +2153,8 @@ void	renderStructure(STRUCTURE *psStructure)
 				memcpy(alteredPoints,imd->points,imd->npoints*sizeof(Vector3i));
 				for(i=0; i<imd->npoints; i++)
 				{
-					yVar = (10-rand()%20);
+					SDWORD yVar = (10 - rand() % 20);
+
 					alteredPoints[i].x +=yVar - (rand()%2*yVar);
 					alteredPoints[i].z +=yVar - (rand()%2*yVar);
 				}
@@ -2167,13 +2170,13 @@ void	renderStructure(STRUCTURE *psStructure)
 		{
 			if ( defensive )
 			{
-					temp = imd->points;
-					imd->points = alteredPoints;
-				}
-			pie_Draw3DShape(imd, 0, playerFrame,
-			buildingBrightness, specular, pie_HEIGHT_SCALED|pie_SHADOW,
-			(SDWORD)(structHeightScale(psStructure) * pie_RAISE_SCALE));
-			if(bHitByElectronic || defensive) {
+				temp = imd->points;
+				imd->points = alteredPoints;
+			}
+			pie_Draw3DShape(imd, 0, playerFrame, buildingBrightness, specular, pie_HEIGHT_SCALED|pie_SHADOW,
+			                (SDWORD)(structHeightScale(psStructure) * pie_RAISE_SCALE));
+			if (bHitByElectronic || defensive) 
+			{
 				imd->points = temp;
 			}
 		}
@@ -2182,10 +2185,11 @@ void	renderStructure(STRUCTURE *psStructure)
 			if ( defensive )
 			{
 				temp = imd->points;
-					imd->points = alteredPoints;
-				}
+				imd->points = alteredPoints;
+			}
 			pie_Draw3DShape(imd, animFrame, 0, buildingBrightness, specular, pie_STATIC_SHADOW,0);
-			if(bHitByElectronic || defensive) {
+			if (bHitByElectronic || defensive) 
+			{
 				imd->points = temp;
 			}
 
@@ -2553,13 +2557,9 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 	SDWORD			rotation;
 	Vector3i			dv;
 	UDWORD			i;
-	UDWORD			centreHeight;
-	UDWORD			pointHeight;
 	Vector3i			*temp;
-	SDWORD			shift;
 	UDWORD			buildingBrightness, specular;
 	SDWORD			sX,sY;
-	SDWORD			brightVar;
 	// HACK to be able to use static shadows for walls
 	// We just store a separate IMD for each direction
 	static iIMDShape otherDirections[3];
@@ -2579,6 +2579,8 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 
 		if(psStructure->selected)
 		{
+			SDWORD brightVar;
+
 			if(!gamePaused())
 			{
 				brightVar = getStaticTimeValueRange(990,110);
@@ -2611,13 +2613,18 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 		imd = psStructure->pStructureType->pBaseIMD;
 		if(imd!=NULL)
 		{
+			UDWORD centreHeight;
+
 			// Get a copy of the points
 			memcpy(alteredPoints,imd->points,imd->npoints*sizeof(Vector3i));
 			// Get the height of the centre point for reference
 			centreHeight = map_Height(structX,structY);
-		//	 Now we got through the shape looking for vertices on the edge
+			// Now we got through the shape looking for vertices on the edge
 			for(i=0; i<(UDWORD)imd->npoints; i++)
 			{
+				UDWORD pointHeight;
+				SDWORD shift;
+
 				pointHeight = map_Height(structX+alteredPoints[i].x,structY-alteredPoints[i].z);
 				shift = centreHeight - pointHeight;
 				alteredPoints[i].y -= shift;
