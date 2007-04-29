@@ -273,10 +273,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\ivis_opengl\bspimd.c"
-				>
-			</File>
-			<File
 				RelativePath="..\src\bucket3d.c"
 				>
 			</File>
@@ -1058,14 +1054,6 @@
 			</File>
 			<File
 				RelativePath="..\src\bridge.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\ivis_common\bspfunc.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\ivis_common\bspimd.h"
 				>
 			</File>
 			<File
