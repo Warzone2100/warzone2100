@@ -1311,7 +1311,6 @@ void mapCalcAALine(SDWORD X1, SDWORD Y1,
 }
 
 /* Return linear interpolated height of x,y */
-//extern SDWORD map_Height(UDWORD x, UDWORD y)
 extern SWORD map_Height(UDWORD x, UDWORD y)
 {
 	SDWORD	retVal;
@@ -1327,9 +1326,9 @@ extern SWORD map_Height(UDWORD x, UDWORD y)
 	ASSERT( y < WORLD_COORD(mapHeight),
 		"mapHeight: y(%u) coordinate bigger than map height(%u)", y, WORLD_COORD(mapHeight) );
 
-	/* Tile comp */
-	tileX = x >> TILE_SHIFT;
-	tileY = y >> TILE_SHIFT;
+	/* Turn into tile coordinates */
+	tileX = MAP_COORD(x);
+	tileY = MAP_COORD(y);
 
 	/* Inter tile comp */
 	ox = (x & (TILE_UNITS-1));

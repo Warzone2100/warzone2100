@@ -28,7 +28,6 @@
 #include <string.h>
 
 /* loop position printf's */
-//#define DEBUG_GROUP1
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/framework/strres.h"
@@ -100,7 +99,7 @@
 #include "objmem.h"
 #endif
 
-#define MISSION_COMPLETE_DELAY	4000
+static void fireWaitingCallbacks(void);
 
 /*
  * Global variables
@@ -109,10 +108,10 @@ SDWORD loopPieCount;
 SDWORD loopTileCount;
 SDWORD loopPolyCount;
 SDWORD loopStateChanges;
+
 /*
  * local variables
  */
-
 static BOOL paused=FALSE;
 static BOOL video=FALSE;
 static BOOL bQuitVideo=FALSE;
@@ -135,9 +134,7 @@ static	UDWORD	numTransporterDroids[MAX_PLAYERS];
 static	UDWORD	numCommandDroids[MAX_PLAYERS];
 static	UDWORD	numConstructorDroids[MAX_PLAYERS];
 // flag to signal a quick exit from the game
-static BOOL fastExit;
 static SDWORD videoMode;
-
 static SDWORD	g_iGlobalVol;
 
 LOOP_MISSION_STATE		loopMissionState = LMS_NORMAL;
@@ -150,35 +147,16 @@ UDWORD	mcTime;
 BOOL	display3D = TRUE;
 extern BOOL		godMode;
 
-BOOL	gamePaused( void );
-void	setGamePauseStatus( BOOL val );
-void	setGameUpdatePause(BOOL state);
-void	setAudioPause(BOOL state);
-void	setScriptPause(BOOL state);
-void	setScrollPause(BOOL state);
-
-
-// signal a fast exit from the game
-void loopFastExit(void)
-{
-	fastExit = TRUE;
-}
-
-
 /* The main game loop */
 GAMECODE gameLoop(void)
 {
 	DROID		*psCurr, *psNext;
 	STRUCTURE	*psCBuilding, *psNBuilding;
-//	BOOL		bPlayerHasHQ = FALSE;
 	FEATURE		*psCFeat, *psNFeat;
 	UDWORD		i,widgval;
 	BOOL		quitting=FALSE;
 	INT_RETVAL	intRetVal;
 	int	        clearMode;
-//	DumpVRAM();	// use mouse to scroll through vram
-
-//	dumpimdpoints();
 
 #ifdef DEBUG
 	heapIntegrityCheck(psDroidHeap);
@@ -201,8 +179,6 @@ GAMECODE gameLoop(void)
 		clearMode = CLEAR_BLACK;
 	}
 	pie_ScreenFlip(clearMode);//gameloopflip
-
-	fastExit = FALSE;
 
 	HandleClosingWindows();	// Needs to be done outside the pause case.
 
@@ -306,7 +282,6 @@ GAMECODE gameLoop(void)
 			if(bMultiPlayer)
 			{
 				multiPlayerLoop();
-//		RecvMessage();
 			}
 
 			fireWaitingCallbacks();		//Now is the good time to fire waiting callbacks (since interpreter is off now)
@@ -483,15 +458,9 @@ GAMECODE gameLoop(void)
 
 // 			debug( LOG_NEVER, "loop: Smoke/Explosion Update\n");
 
-			/* Ensure smoke drifts up! */
-//			raiseSmoke();
-//			updateGravitons();
-
 			/* update animations */
 			animObj_Update();
 
-			/* Raise and increase frames of explosions */
-//			updateExplosions();
 			/* Update all the temporary world effects */
 //			processEffects();
 
@@ -626,8 +595,7 @@ GAMECODE gameLoop(void)
 	}
 
 	/* Check for quit */
-//	if (keyPressed(KEY_ESC) || intRetVal == INT_QUIT)
-	if ((intRetVal == INT_QUIT) || fastExit)
+	if (intRetVal == INT_QUIT)
 	{
 		if (!video)
 		{
@@ -644,46 +612,24 @@ GAMECODE gameLoop(void)
 	}
 	if  (!video)
 	{
-		//if (!quitting && intRetVal != INT_FULLSCREENPAUSE)
 		if (!quitting)
 		{
 			if (!gameUpdatePaused())
 			{
 				if (display3D)
 				{
-					/*bPlayerHasHQ=FALSE;
-					for (psStructure = apsStructLists[selectedPlayer]; psStructure &&
-						!bPlayerHasHQ; psStructure = psStructure->psNext)
-					{
-						if (psStructure->pStructureType->type == REF_HQ)
-						{
-							bPlayerHasHQ = TRUE;
-						}
-					}
-					*/
-				  //	bPlayerHasHQ = radarCheckForHQ(selectedPlayer);
-
-					if( //(intRetVal != INT_INTELPAUSE) &&
-						(dragBox3D.status != DRAG_DRAGGING) &&
-						(wallDrag.status != DRAG_DRAGGING))
+					if (dragBox3D.status != DRAG_DRAGGING
+					    && wallDrag.status != DRAG_DRAGGING)
 					{
 						ProcessRadarInput();
 					}
 					processInput();
 
 					//no key clicks or in Intelligence Screen
-	//				if (intRetVal == INT_INTELPAUSE)
-					if (intRetVal == INT_NONE && !InGameOpUp)// || intRetVal == INT_INTELPAUSE)
+					if (intRetVal == INT_NONE && !InGameOpUp)
 					{
-// 						debug( LOG_NEVER, "loop: 3D input\n");
-						//quitting = processInput();
-						//don't want to handle the mouse input here when in intelligence screen
-						//if (intRetVal != INT_INTELPAUSE)
-						//{
-							processMouseClickInput();
-						//}
+						processMouseClickInput();
 					}
-// 					debug( LOG_NEVER, "loop: display3D\n");
 					displayWorld();
 				}
 				else
@@ -734,26 +680,7 @@ GAMECODE gameLoop(void)
 
 	//#endif
 		}
-		/*else if (!quitting)
-		{
-			// Display the in game interface
-
-			debug( LOG_NEVER, "loop: Display widgets\n");
-			if(widgetsOn)
-			{
-				pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
-				pie_SetFogStatus(FALSE);
-
-				intDisplayWidgets();
-
-				pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
-				pie_SetFogStatus(TRUE);
-			}
-		}*/
 	}
-
-// 	debug( LOG_NEVER, "loop: key presses\n");
-
 
 	/* Check for toggling video playbackmode */
 	if (bQuitVideo)
@@ -804,11 +731,9 @@ GAMECODE gameLoop(void)
 		clearMode = CLEAR_BLACK;//force to black 3DFX
 	}
 
-	if(!quitting && !fastExit)
+	if (!quitting)
 	{
 
-//JPS 24 feb???		pie_ScreenFlip(clearMode);//gameloopflip
-		{
 			/* Check for toggling display mode */
 			if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) &&
 				keyPressed(KEY_RETURN))
@@ -819,16 +744,7 @@ GAMECODE gameLoop(void)
 		#endif
 				dispModeChange();
 			}
-		}
 	}
-
-/*	if(missionComplete)
-	{
-		if (gameTime>(mcTime+MISSION_COMPLETE_DELAY))
-		{
-			quitting = TRUE;
-		}
-	}*/
 
 	// deal with the mission state
 	switch (loopMissionState)
@@ -866,26 +782,7 @@ GAMECODE gameLoop(void)
 		break;
 	}
 
-	if (fastExit)
-	{
-		pie_SetFogStatus(FALSE);
-		pie_ScreenFlip(CLEAR_BLACK);//gameloopflip
-		pie_ScreenFlip(CLEAR_BLACK);//gameloopflip
-		{
-			/* Check for toggling display mode */
-			if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) &&
-				keyPressed(KEY_RETURN))
-			{
-				screenToggleMode();
-		#ifdef DISP2D
-				disp2DModeChange();
-		#endif
-				dispModeChange();
-			}
-		}
-		return GAMECODE_FASTEXIT;
-	}
-	else if (quitting)
+	if (quitting)
 	{
 		pie_SetFogStatus(FALSE);
 		pie_ScreenFlip(CLEAR_BLACK);//gameloopflip
@@ -910,12 +807,6 @@ GAMECODE gameLoop(void)
 		return GAMECODE_PLAYVIDEO;
 	}
 
-	/*
-	if( (intMode == INT_NORMAL) && (forceWidgetsOn == TRUE) )
-	{
-		forceWidgetsOn = FALSE;
-	}
-	*/
 	return GAMECODE_CONTINUE;
 }
 
@@ -1204,7 +1095,7 @@ void incNumConstructorDroids(UDWORD player)
 }
 
 /* Fire waiting beacon messages which we couldn't run before */
-void fireWaitingCallbacks(void)
+static void fireWaitingCallbacks(void)
 {
 	BOOL bOK = TRUE;
 

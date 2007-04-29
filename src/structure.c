@@ -6542,7 +6542,7 @@ BOOL destroyStruct(STRUCTURE *psDel)
 		/* shake the screen if we're near enough */
 		if(clipXY(pos.x,pos.z))
 		{
-			shakeStart();	//attemptScreenShake();
+			shakeStart();
 		}
 
 //--------------------------------------- And finally, add a boom sound!!!!

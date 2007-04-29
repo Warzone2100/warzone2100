@@ -162,7 +162,7 @@ void pie_ChangeTexPage(int tex_index, iTexture* s, int type, BOOL bResource)
 /*!
  * Print the names of all loaded textures to LOG_ERROR
  */
-void pie_PrintLoadedTextures(void)
+static void pie_PrintLoadedTextures(void)
 {
 	unsigned int i = 0;
 

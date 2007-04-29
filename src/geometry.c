@@ -35,18 +35,12 @@
 #include "hci.h"
 #include "display.h"
 
-
-
+#define AMPLITUDE_HEIGHT        100
+#define SIZE_SINE_TABLE         100
+#define deg (M_PI / SIZE_SINE_TABLE)
 
 /* The arc over which bullets fly */
-UBYTE	sineHeightTable[SIZE_SINE_TABLE];
-
-//BOOL	bScreenShakeActive = FALSE;
-//UDWORD	screenShakeStarted = 0;
-//UDWORD	screenShakeLength = 0;
-
-
-
+static UBYTE sineHeightTable[SIZE_SINE_TABLE];
 
 void initBulletTable( void )
 {
@@ -58,16 +52,6 @@ UBYTE	height;
 	sineHeightTable[i] = height;
 	}
 }
-
-//void	attemptScreenShake(void)
-//{
-//	if(!bScreenShakeActive)
-//	{
-//		bScreenShakeActive = TRUE;
-//		screenShakeStarted = gameTime;
-//		screenShakeLength = 1500;
-//	}
-//}
 
 /* Angle returned is reflected in line x=0 */
 SDWORD calcDirection(UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1)
@@ -171,114 +155,6 @@ SDWORD	sum;
 		return(UDWORD)(sum-360);
 	}
 	return 0;
-}
-
-/* Return a signed difference in direction : a - b
- * result is 180 .. -180
- */
-SDWORD directionDiff(SDWORD a, SDWORD b)
-{
-	SDWORD	diff = a - b;
-
-	if (diff > 180)
-	{
-		return diff - 360;
-	}
-	else if (diff < -180)
-	{
-		return 360 + diff;
-	}
-
-	return diff;
-}
-
-
-
-void WorldPointToScreen( Vector2i *worldPt, Vector2i *screenPt )
-{
-	Vector3i vec, null;
-	//MAPTILE	*psTile;
-	UDWORD	worldX,worldY;
-	SDWORD	xShift,zShift;
-	Sint32	rx,rz;
-
-	/* Get into game context */
-	/* Get the x,z translation components */
-	rx = player.p.x & (TILE_UNITS-1);
- 	rz = player.p.z & (TILE_UNITS-1);
-
-
-	/* Push identity matrix onto stack */
-	iV_MatrixBegin();
-
-	/* Set the camera position */
-	pie_MATTRANS(camera.p.x,camera.p.y,camera.p.z);
-
-	/* Rotate for the player */
-	iV_MatrixRotateZ(player.r.z);
-	iV_MatrixRotateX(player.r.x);
-	iV_MatrixRotateY(player.r.y);
-
-	/* Translate */
-	iV_TRANSLATE(-rx,-player.p.y,rz);
-
-
-
-
-	/* No rotation is necessary*/
-	null.x = 0; null.y = 0; null.z = 0;
-
-	/* Pull out coords now, because we use them twice */
-	worldX = worldPt->x;
-	worldY = worldPt->y;
-
-	/* Get the coordinates of the object into the grid */
-	vec.x = ( worldX - player.p.x) - terrainMidX*TILE_UNITS;
-	vec.z = terrainMidY*TILE_UNITS - (worldY - player.p.z);
-
-	/* Which tile is it on? - In order to establish height (y coordinate in 3 space) */
-//	psTile = mapTile(worldX/TILE_UNITS,worldY/TILE_UNITS);
-//	vec.y = psTile->height;
-	vec.y = map_Height(worldX/TILE_UNITS,worldY/TILE_UNITS);
-
-	/* Set matrix context to local - get an identity matrix */
-	iV_MatrixBegin();
-
-	/* Translate */
-	iV_TRANSLATE(vec.x,vec.y,vec.z);
- 	xShift = player.p.x & (TILE_UNITS-1);
-	zShift = player.p.z & (TILE_UNITS-1);
-
-	/* Translate */
-	iV_TRANSLATE(xShift,0,-zShift);
-
-	/* Project - no rotation being done. So effectively mapping from 3 space to 2 space */
-	pie_RotProj(&null,screenPt);
-
-	/* Pop remaining matrices */
-	pie_MatEnd();
-	pie_MatEnd();
-}
-
-
-
-/*	Calculates the RELATIVE screen coords of a game object from its BASE_OBJECT pointer */
-/*	Alex - Saturday 5th July, 1997  */
-/*	Returns result in POINT pt. They're relative in the sense that even if you pass
-	a pointer to an object that isn't on screen, it'll still return a result - just that
-	the coords may be negative or larger than screen dimensions in either (or both) axis (axes).
-	Remember also, that the Y coordinate axis is reversed for our display in that increasing Y
-	implies a movement DOWN the screen, and NOT up. */
-
-void
-baseObjScreenCoords(BASE_OBJECT *baseObj, Vector2i *pt)
-{
-	Vector2i worldPt;
-
-	worldPt.x = baseObj->x;
-	worldPt.y = baseObj->y;
-
-	WorldPointToScreen( &worldPt, pt );
 }
 
 /* Get the structure pointer for a specified tile coord. NULL if no structure */
@@ -428,37 +304,6 @@ BASE_OBJECT	*getTileOccupier(UDWORD x, UDWORD y)
 	return NULL;
 }
 
-/* Will return the player who presently has a structure on the specified tile */
-UDWORD	getTileOwner(UDWORD	x, UDWORD y)
-{
-STRUCTURE	*psStruct;
-UDWORD		retVal;
-
-	/* Arbitrary error code - player 8 (non existent) owns tile from invalid request */
-	retVal = MAX_PLAYERS;
-
-	/* Check it has a structure - cannot have owner otherwise */
-	if(!TILE_HAS_STRUCTURE(mapTile(x,y)))
-	{
-		debug( LOG_ERROR, "Asking for the owner of a tile with no structure on it!!!" );
-		abort();
-	}
-	else
-	{
-		/* Get a pointer to the structure */
-		psStruct = getTileStructure(x,y);
-
-		/* Did we get one - failsafe really as TILE_HAS_STRUCTURE should get it */
-		if(psStruct!=NULL)
-		{
-			/* Pull out the player number */
-			retVal = psStruct->player;
-		}
-	}
-	/* returns eith the player number or MAX_PLAYERS to signify error */
-	return(retVal);
-}
-
 // Approximates a square root - never more than 11% out...
 UDWORD	dirtySqrt( SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
 {
@@ -471,6 +316,7 @@ UDWORD	retVal;
 	retVal = (MAX(xDif,yDif) + (MIN(xDif,yDif)/2));
 	return(retVal);
 }
+
 //-----------------------------------------------------------------------------------
 BOOL	droidOnScreen( DROID *psDroid, SDWORD tolerance )
 {
@@ -490,69 +336,3 @@ SDWORD	dX,dY;
 		}
 	return(FALSE);
 }
-
-
-void	processImpact(UDWORD worldX, UDWORD worldY, UBYTE severity, UDWORD tilesAcross)
-{
-//MAPTILE	*psTile;
-UDWORD	height;
-SDWORD	newHeight;
-UDWORD	distance;
-float	multiplier;
-UDWORD	damage;
-UDWORD	i,j;
-UDWORD	xDif,yDif;
-SDWORD	tileX,tileY;
-UDWORD	maxDisplacement;
-UDWORD	maxDistance;
-
-	ASSERT( severity<MAX_TILE_DAMAGE,"Damage is too severe" );
-	/* Make sure it's odd */
-	if( !(tilesAcross & 0x01))
-	{
-		tilesAcross-=1;
-	}
-	tileX = ((worldX>>TILE_SHIFT)-(tilesAcross/2-1));
-	tileY = ((worldY>>TILE_SHIFT)-(tilesAcross/2-1));
-	maxDisplacement = ((tilesAcross/2+1) * TILE_UNITS);
-	maxDisplacement = (UDWORD)((float)maxDisplacement * (float)1.42);
-	maxDistance = (UDWORD)sqrt(((float)maxDisplacement * (float)maxDisplacement));
-
-	if(tileX < 0) tileX = 0;
-	if(tileY < 0) tileY = 0;
-
-	for(i=tileX; i<tileX+tilesAcross-1; i++)
-	{
-		for(j=tileY; j<tileY+tilesAcross-1; j++)
-		{
-			/* Only process tiles that are on the map */
-			if(tileX < (SDWORD)mapWidth && tileY<(SDWORD)mapHeight)
-			{
-				xDif = abs(worldX - (i<<TILE_SHIFT));
-				yDif = abs(worldY - (j<<TILE_SHIFT));
-				distance = (UDWORD)sqrt(( (float)(xDif*xDif) + (float)(yDif*yDif) ));
-				multiplier = (1-((float) ( (float)distance / (float) maxDistance)));
-				multiplier = (float) (1.0 - ((float)distance/(float)maxDistance));
-				/* Are we talking less than 15% damage? i.e - at the edge of carater? */
-				if(multiplier<0.15)
-				{
-					/* In which case make the crater edge have jagged edges */
-					multiplier+= (float)((float)(20-rand()%40) * 0.01);
-				}
-
-				height = mapTile(i,j)->height;
-				damage = (UDWORD) ((float)severity*multiplier);
-				newHeight = height-damage;
-				if(newHeight < 0)
-				{
-					newHeight = 0;
-				}
-				setTileHeight(i,j,newHeight);
-			}
-		}
-	}
-}
-
-
-
-
