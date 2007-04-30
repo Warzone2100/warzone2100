@@ -4,6 +4,7 @@ include $(MAKERULES)/configure.mk
 SRC=audio.c \
 	audio_id.c \
 	cdaudio.c \
+	oggvorbis.c \
 	openal_track.c \
 	playlist.c \
 	track.c

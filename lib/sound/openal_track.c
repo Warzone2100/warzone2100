@@ -35,23 +35,14 @@
 #include <AL/alc.h>
 #endif
 
-#ifndef WZ_NOOGG
-#include <vorbis/vorbisfile.h>
-#endif
-
 #include <physfs.h>
 #include <string.h>
 
 #include "tracklib.h"
 #include "audio.h"
+#include "oggvorbis.h"
 
 #define ATTENUATION_FACTOR	0.0003f
-
-#ifdef __BIG_ENDIAN__
-#define OGG_ENDIAN 1
-#else
-#define OGG_ENDIAN 0
-#endif
 
 ALuint current_queue_sample = -1;
 
@@ -68,9 +59,6 @@ static ALfloat		sfx3d_volume = 1.0;
 
 static ALCdevice* device = 0;
 static ALCcontext* context = 0;
-
-static char* data = NULL; // Needed for ReadTrackFromBuffer, must be global, so it can be free'd on shutdown
-static size_t DataBuffer_size = 16 * 1024;
 
 BOOL openal_initialized = FALSE;
 
@@ -162,7 +150,7 @@ void sound_ShutdownLibrary( void )
 		device = 0;
 	}
 
-	free( data );
+	sound_CleanupOggVorbisDecoder();
 
 	while( aSample )
 	{
@@ -261,144 +249,6 @@ BOOL sound_QueueSamplePlaying( void )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-
-typedef struct
-{
-    // Internal identifier towards PhysicsFS
-    PHYSFS_file* fileHandle;
-
-    // Wether to allow seeking or not
-    BOOL         allowSeeking;
-} fileInfo;
-
-static size_t ovPHYSFS_read(void *ptr, size_t size, size_t nmemb, void *datasource)
-{
-    PHYSFS_file* fileHandle = ((fileInfo*)datasource)->fileHandle;
-    return PHYSFS_read(fileHandle, ptr, 1, size*nmemb);
-}
-
-static int ovPHYSFS_seek(void *datasource, ogg_int64_t offset, int whence) {
-    PHYSFS_file* fileHandle = ((fileInfo*)datasource)->fileHandle;
-    BOOL allowSeeking = ((fileInfo*)datasource)->allowSeeking;
-
-    int curPos, fileSize, newPos;
-
-    if (!allowSeeking)
-        return -1;
-
-    switch (whence)
-    {
-        // Seek to absolute position
-        case SEEK_SET:
-            newPos = offset;
-            break;
-
-        // Seek `offset` ahead
-        case SEEK_CUR:
-            curPos = PHYSFS_tell(fileHandle);
-            if (curPos == -1)
-                return -1;
-
-            newPos = curPos + offset;
-            break;
-
-        // Seek backwards from the end of the file
-        case SEEK_END:
-            fileSize = PHYSFS_fileLength(fileHandle);
-            if (fileSize == -1)
-                return -1;
-
-            newPos = fileSize - 1 - offset;
-            break;
-    }
-
-    // PHYSFS_seek return value of non-zero means success
-    if (PHYSFS_seek(fileHandle, newPos) != 0)
-        return newPos;   // success
-    else
-        return -1;  // failure
-}
-
-static int ovPHYSFS_close(void *datasource) {
-    return 0;
-}
-
-static long ovPHYSFS_tell(void *datasource) {
-    PHYSFS_file* fileHandle = ((fileInfo*)datasource)->fileHandle;
-    return PHYSFS_tell(fileHandle);
-}
-
-static ov_callbacks ovPHYSFS_callbacks = {
-    ovPHYSFS_read,
-    ovPHYSFS_seek,
-    ovPHYSFS_close,
-    ovPHYSFS_tell
-};
-
-static inline TRACK* sound_DecodeTrack(TRACK *psTrack, PHYSFS_file* PHYSFS_fileHandle, BOOL allowSeeking)
-{
-	OggVorbis_File	ogg_stream;
-	vorbis_info*	ogg_info;
-
-	ALenum		format;
-	ALsizei		freq;
-
-	ALuint		buffer;
-	ALsizei		size=0;
-	int		result, section;
-	fileInfo	fileHandle = { PHYSFS_fileHandle, allowSeeking };
-
-
-	if (ov_open_callbacks(&fileHandle, &ogg_stream, NULL, 0, ovPHYSFS_callbacks) < 0)
-	{
-		free(psTrack);
-		return NULL;
-	}
-
-	// Aquire some info about the sound data
-	ogg_info = ov_info(&ogg_stream, -1);
-
-	// Determine PCM data format and sample rate in Hz
-	format = (ogg_info->channels == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;
-	freq = ogg_info->rate;
-
-	// Allocate an initial buffer to contain the decoded PCM data
-	if (data == NULL) {
-		data = malloc(DataBuffer_size);
-	}
-
-	// Decode PCM data into the buffer until there is nothing to decode left
-	result = ov_read(&ogg_stream, (char *)data+size, DataBuffer_size-size, OGG_ENDIAN, 2, 1, &section);
-	while( result != 0 ) {
-		size += result;
-
-		// If the PCM buffer has become to small increase it by reallocating double its previous size
-		if (size == DataBuffer_size) {
-			DataBuffer_size *= 2;
-			data = realloc(data, DataBuffer_size);
-		}
-
-		// Decode
-		result = ov_read(&ogg_stream, (char *)data+size, DataBuffer_size-size, OGG_ENDIAN, 2, 1, &section);
-	}
-
-	// Create an OpenAL buffer and fill it with the decoded data
-	alGenBuffers(1, &buffer);
-	alBufferData(buffer, format, data, size, freq);
-
-	// save buffer name in track
-	psTrack->iBufferName = buffer;
-
-	// Close the OggVorbis decoding stream
-	ov_clear(&ogg_stream);
-
-	return psTrack;
-}
-
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
 TRACK* sound_LoadTrackFromFile(const char *fileName)
 {
 	TRACK* pTrack;
@@ -430,7 +280,7 @@ TRACK* sound_LoadTrackFromFile(const char *fileName)
 	strcpy(pTrack->pName, GetLastResourceFilename());
 
 	// Now use sound_ReadTrackFromBuffer to decode the file's contents
-	pTrack = sound_DecodeTrack(pTrack, fileHandle, TRUE);
+	pTrack = sound_DecodeOggVorbisTrack(pTrack, fileHandle, TRUE);
 
 	PHYSFS_close(fileHandle);
 	return pTrack;

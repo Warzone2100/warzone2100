@@ -10,6 +10,7 @@ lib/framework/exceptionhandler.c
 lib/framework/trig.c
 lib/framework/input.c
 lib/framework/strres.c
+lib/sound/oggvorbis.c
 lib/sound/openal_track.c
 lib/sound/playlist.c
 lib/sound/track.c
