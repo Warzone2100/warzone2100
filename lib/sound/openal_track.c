@@ -60,6 +60,9 @@ static ALfloat		sfx3d_volume = 1.0;
 static ALCdevice* device = 0;
 static ALCcontext* context = 0;
 
+static char* DataBuffer = NULL; // Needed for sound_DecodeOggVorbisTrack, must be global, so it can be free'd on shutdown
+static size_t DataBuffer_size = 16 * 1024;
+
 BOOL openal_initialized = FALSE;
 
 BOOL		cdAudio_Update( void );
@@ -150,7 +153,8 @@ void sound_ShutdownLibrary( void )
 		device = 0;
 	}
 
-	sound_CleanupOggVorbisDecoder();
+	free(DataBuffer);
+	DataBuffer = NULL;
 
 	while( aSample )
 	{
@@ -245,6 +249,51 @@ BOOL sound_QueueSamplePlaying( void )
 	}
 }
 
+/** Decodes an opened OggVorbis file into an OpenAL buffer
+ *  \param psTrack pointer to object which will contain the final buffer
+ *  \param PHYSFS_fileHandle file handle given by PhysicsFS to the opened file
+ *  \return on success the psTrack pointer, otherwise it will be free'd and a NULL pointer is returned instead
+ */
+static inline TRACK* sound_DecodeOggVorbisTrack(TRACK *psTrack, PHYSFS_file* PHYSFS_fileHandle)
+{
+	ALenum		format;
+	ALuint		buffer;
+
+	OggVorbisDecoderState* decoder = sound_CreateOggVorbisDecoder(PHYSFS_fileHandle, TRUE);
+	soundDataBuffer* soundBuffer;
+
+	// Allocate an initial buffer to contain the decoded PCM data
+	if (DataBuffer == NULL)
+	{
+		DataBuffer = malloc(DataBuffer_size);
+	}
+
+	soundBuffer = sound_DecodeOggVorbis(decoder, DataBuffer_size, DataBuffer);
+	sound_DestroyOggVorbisDecoder(decoder);
+
+	DataBuffer = (char*)soundBuffer;
+
+	if (soundBuffer == NULL)
+	{
+		free(psTrack);
+		return NULL;
+	}
+
+	DataBuffer_size = soundBuffer->bufferSize;
+
+	// Determine PCM data format
+	format = (soundBuffer->channelCount == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;
+
+	// Create an OpenAL buffer and fill it with the decoded data
+	alGenBuffers(1, &buffer);
+	alBufferData(buffer, format, soundBuffer->data, soundBuffer->size, soundBuffer->frequency);
+
+	// save buffer name in track
+	psTrack->iBufferName = buffer;
+
+	return psTrack;
+}
+
 //*
 // =======================================================================================================================
 // =======================================================================================================================
@@ -280,7 +329,7 @@ TRACK* sound_LoadTrackFromFile(const char *fileName)
 	strcpy(pTrack->pName, GetLastResourceFilename());
 
 	// Now use sound_ReadTrackFromBuffer to decode the file's contents
-	pTrack = sound_DecodeOggVorbisTrack(pTrack, fileHandle, TRUE);
+	pTrack = sound_DecodeOggVorbisTrack(pTrack, fileHandle);
 
 	PHYSFS_close(fileHandle);
 	return pTrack;

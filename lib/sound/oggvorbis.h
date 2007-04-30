@@ -24,8 +24,29 @@
 #include <physfs.h>
 #include "track.h"
 
-TRACK* sound_DecodeOggVorbisTrack(TRACK *psTrack, PHYSFS_file* PHYSFS_fileHandle, BOOL allowSeeking);
+typedef struct
+{
+	// the raw PCM data
+	char* data;
 
-void sound_CleanupOggVorbisDecoder(void);
+	// the size of the data contained in *data (NOTE: this is *NOT* the size of *data itself)
+	size_t size;
+
+	// the size of the buffer *data points to plus sizeof(soundDataBuffer)
+	size_t bufferSize;
+	
+	unsigned int bitsPerSample;
+	unsigned int channelCount;
+	unsigned int frequency;
+} soundDataBuffer;
+
+#ifndef _LIBSOUND_OGGVORBIS_C_
+typedef void OggVorbisDecoderState;
+#endif
+
+OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_fileHandle, BOOL allowSeeking);
+void sound_DestroyOggVorbisDecoder(OggVorbisDecoderState* decoder);
+
+soundDataBuffer* sound_DecodeOggVorbis(OggVorbisDecoderState* decoder, size_t bufferSize, char* targetBuffer);
 
 #endif // _LIBSOUND_OGGVORBIS_H_

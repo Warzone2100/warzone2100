@@ -17,7 +17,8 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#include "oggvorbis.h"
+#include "lib/framework/frame.h"
+#include <physfs.h>
 
 #ifndef WZ_NOOGG
 #include <vorbis/vorbisfile.h>
@@ -29,17 +30,6 @@
 #define OGG_ENDIAN 0
 #endif
 
-#ifdef WZ_OS_MAC
-#include <OpenAL/al.h>
-#include <OpenAL/alc.h>
-#else
-#include <AL/al.h>
-#include <AL/alc.h>
-#endif
-
-static char* soundDataBuffer = NULL; // Needed for sound_DecodeTrack, must be global, so it can be free'd on shutdown
-static size_t DataBuffer_size = 16 * 1024;
-
 typedef struct
 {
     // Internal identifier towards PhysicsFS
@@ -47,17 +37,26 @@ typedef struct
 
     // Wether to allow seeking or not
     BOOL         allowSeeking;
-} wz_oggVorbis_fileInfo;
+
+    // Internal identifier towards libVorbisFile
+    OggVorbis_File oggVorbis_stream;
+
+    // Internal meta data
+    vorbis_info* VorbisInfo;
+} OggVorbisDecoderState;
+
+#define _LIBSOUND_OGGVORBIS_C_
+#include "oggvorbis.h"
 
 static size_t wz_oggVorbis_read(void *ptr, size_t size, size_t nmemb, void *datasource)
 {
-    PHYSFS_file* fileHandle = ((wz_oggVorbis_fileInfo*)datasource)->fileHandle;
+    PHYSFS_file* fileHandle = ((OggVorbisDecoderState*)datasource)->fileHandle;
     return PHYSFS_read(fileHandle, ptr, 1, size*nmemb);
 }
 
 static int wz_oggVorbis_seek(void *datasource, ogg_int64_t offset, int whence) {
-    PHYSFS_file* fileHandle = ((wz_oggVorbis_fileInfo*)datasource)->fileHandle;
-    BOOL allowSeeking = ((wz_oggVorbis_fileInfo*)datasource)->allowSeeking;
+    PHYSFS_file* fileHandle = ((OggVorbisDecoderState*)datasource)->fileHandle;
+    BOOL allowSeeking = ((OggVorbisDecoderState*)datasource)->allowSeeking;
 
     int curPos, fileSize, newPos;
 
@@ -102,7 +101,7 @@ static int wz_oggVorbis_close(void *datasource) {
 }
 
 static long wz_oggVorbis_tell(void *datasource) {
-    PHYSFS_file* fileHandle = ((wz_oggVorbis_fileInfo*)datasource)->fileHandle;
+    PHYSFS_file* fileHandle = ((OggVorbisDecoderState*)datasource)->fileHandle;
     return PHYSFS_tell(fileHandle);
 }
 
@@ -113,62 +112,143 @@ static const ov_callbacks wz_oggVorbis_callbacks = {
     wz_oggVorbis_tell
 };
 
-/** Decodes an opened OggVorbis file into an OpenAL buffer
- *  \param psTrack pointer to object which will contain the final buffer
- *  \param PHYSFS_fileHandle file handle given by PhysicsFS to the opened file
- *  \param allowSeeking whether we should allow seeking or not (seeking is best disabled for streaming files)
- *  \return on success the psTrack pointer, otherwise it will be free'd and a NULL pointer is returned instead
- */
-TRACK* sound_DecodeOggVorbisTrack(TRACK *psTrack, PHYSFS_file* PHYSFS_fileHandle, BOOL allowSeeking)
+OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_fileHandle, BOOL allowSeeking)
 {
-	OggVorbis_File	ogg_stream;
-	vorbis_info*	ogg_info;
+	int error;
 
-	ALenum		format;
-	ALsizei		freq;
-
-	ALuint		buffer;
-	size_t		size = 0;
-	int		result, section;
-
-	wz_oggVorbis_fileInfo fileHandle = { PHYSFS_fileHandle, allowSeeking };
-
-
-	if (ov_open_callbacks(&fileHandle, &ogg_stream, NULL, 0, wz_oggVorbis_callbacks) < 0)
+	OggVorbisDecoderState* decoder = malloc(sizeof(OggVorbisDecoderState));
+	if (decoder == NULL)
 	{
-		free(psTrack);
+		debug(LOG_ERROR, "sound_CreateOggVorbisDecoder: couldn't allocate memory\n");
+		return NULL;
+	}
+
+	decoder->fileHandle = PHYSFS_fileHandle;
+	decoder->allowSeeking = allowSeeking;
+
+	error = ov_open_callbacks(decoder, &decoder->oggVorbis_stream, NULL, 0, wz_oggVorbis_callbacks);
+	if (error < 0)
+	{
+		debug(LOG_ERROR, "sound_CreateOggVorbisDecoder: ov_open_callbacks failed with errorcode %d\n", error);
+		free(decoder);
 		return NULL;
 	}
 
 	// Aquire some info about the sound data
-	ogg_info = ov_info(&ogg_stream, -1);
+	decoder->VorbisInfo = ov_info(&decoder->oggVorbis_stream, -1);
 
-	// Determine PCM data format and sample rate in Hz
-	format = (ogg_info->channels == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;
-	freq = ogg_info->rate;
+	return decoder;
+}
 
-	// Allocate an initial buffer to contain the decoded PCM data
-	if (soundDataBuffer == NULL)
+void sound_DestroyOggVorbisDecoder(OggVorbisDecoderState* decoder)
+{
+	// Close the OggVorbis decoding stream
+	ov_clear(&decoder->oggVorbis_stream);
+
+	free(decoder);
+}
+
+static inline unsigned int getSampleCount(OggVorbisDecoderState* decoder)
+{
+	int numSamples = ov_pcm_total(&decoder->oggVorbis_stream, -1);
+
+	if (numSamples == OV_EINVAL)
+		return 0;
+	
+	return numSamples;
+}
+
+static inline unsigned int getCurrentSample(OggVorbisDecoderState* decoder)
+{
+	int samplePos = ov_pcm_tell(&decoder->oggVorbis_stream);
+
+	if (samplePos == OV_EINVAL)
+		return 0;
+	
+	return samplePos;
+}
+
+soundDataBuffer* sound_DecodeOggVorbis(OggVorbisDecoderState* decoder, size_t bufferSize, char* targetBuffer)
+{
+	size_t		size = 0;
+	int		result;
+
+	soundDataBuffer* buffer;
+
+	if (targetBuffer == NULL)
 	{
-		soundDataBuffer = malloc(DataBuffer_size);
+		if (decoder->allowSeeking)
+		{
+			unsigned int sampleCount = getSampleCount(decoder);
+
+			unsigned int sizeEstimate = sampleCount * decoder->VorbisInfo->channels * 2;
+
+			if (((bufferSize == 0) || (bufferSize > sizeEstimate)) && (sizeEstimate != 0))
+			{
+				bufferSize = (sampleCount - getCurrentSample(decoder)) * decoder->VorbisInfo->channels * 2;
+			}
+		}
+
+		// If we can't seek nor receive any suggested size for our buffer, just quit
+		if (bufferSize == 0)
+		{
+			debug(LOG_ERROR, "sound_DecodeOggVorbis: can't find a proper buffer size\n");
+			return NULL;
+		}
+
+		buffer = malloc(bufferSize + sizeof(soundDataBuffer));
+		if (buffer == NULL)
+		{
+			debug(LOG_ERROR, "sound_DecodeOggVorbis: couldn't allocate memory (%u bytes requested)\n", bufferSize + sizeof(soundDataBuffer));
+			return NULL;
+		}
 	}
+	else
+	{
+		if (bufferSize <= sizeof(soundDataBuffer))
+		{
+			free(targetBuffer);
+			return NULL;
+		}
+
+		buffer = (soundDataBuffer*)targetBuffer;
+		bufferSize -= sizeof(soundDataBuffer);
+	}
+
+	buffer->data = (char*)(buffer + 1);
+	buffer->bufferSize = bufferSize + sizeof(soundDataBuffer);
+	buffer->bitsPerSample = 16;
+	buffer->channelCount = decoder->VorbisInfo->channels;
+	buffer->frequency = decoder->VorbisInfo->rate;
 
 	// Decode PCM data into the buffer until there is nothing to decode left
 	do
 	{
 		// If the PCM buffer has become to small increase it by reallocating double its previous size
-		if (size == DataBuffer_size) {
-			DataBuffer_size *= 2;
-			soundDataBuffer = realloc(soundDataBuffer, DataBuffer_size);
+		if (size == bufferSize && targetBuffer != NULL)
+		{
+			void* newBuffer;
+			bufferSize *= 2;
+			newBuffer = realloc(buffer, bufferSize + sizeof(soundDataBuffer));
+			if (newBuffer == NULL)
+			{
+				debug(LOG_ERROR, "sound_DecodeOggVorbis: realloc failed, bailing out\n");
+				return buffer;
+			}
+
+			buffer = newBuffer;
+			buffer->data = (char*)(buffer + 1);
+			buffer->bufferSize = bufferSize + sizeof(soundDataBuffer);
 		}
 
 		// Decode
-		result = ov_read(&ogg_stream, &soundDataBuffer[size], DataBuffer_size - size, OGG_ENDIAN, 2, 1, &section);
+		int section;
+		result = ov_read(&decoder->oggVorbis_stream, &buffer->data[size], bufferSize - size, OGG_ENDIAN, 2, 1, &section);
 
 		if (result < 0)
 		{
-			debug(LOG_ERROR, "sound_DecodeTrack: error decoding from OggVorbis file; errorcode from ov_read: %d\n", result);
-			free(psTrack);
+			debug(LOG_ERROR, "sound_DecodeOggVorbis: error decoding from OggVorbis file; errorcode from ov_read: %d\n", result);
+			free(buffer);
 			return NULL;
 		}
 		else
@@ -176,25 +256,9 @@ TRACK* sound_DecodeOggVorbisTrack(TRACK *psTrack, PHYSFS_file* PHYSFS_fileHandle
 			size += result;
 		}
 
-	} while( result != 0 || size == DataBuffer_size);
+	} while ((result != 0 && size < bufferSize) || (size == bufferSize && targetBuffer != NULL));
 
-	// Create an OpenAL buffer and fill it with the decoded data
-	alGenBuffers(1, &buffer);
-	alBufferData(buffer, format, soundDataBuffer, size, freq);
+	buffer->size = size;
 
-	// save buffer name in track
-	psTrack->iBufferName = buffer;
-
-	// Close the OggVorbis decoding stream
-	ov_clear(&ogg_stream);
-
-	return psTrack;
-}
-
-/** Clean up all resources used by the decoder functions
- */
-void sound_CleanupOggVorbisDecoder()
-{
-	free(soundDataBuffer);
-	soundDataBuffer = NULL;
+	return buffer;
 }
