@@ -6,7 +6,7 @@ SRC=bitimage.c \
 	imdload.c \
 	pieclip.c \
 	piestate.c \
-	png.c
+	png_util.c
 
 LIB=ivis_common
 

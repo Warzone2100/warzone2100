@@ -30,7 +30,7 @@
 #include <SDL/SDL_opengl.h>
 #include <physfs.h>
 #include <png.h>
-#include "lib/ivis_common/png.h"
+#include "lib/ivis_common/png_util.h"
 
 #include "lib/framework/frameint.h"
 #include "lib/ivis_common/piestate.h"

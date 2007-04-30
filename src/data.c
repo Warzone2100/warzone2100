@@ -62,7 +62,7 @@
 #include "display3d.h"
 #include "display3ddef.h"
 #include "init.h"
-#include "lib/ivis_common/png.h"
+#include "lib/ivis_common/png_util.h"
 
 #include "multiplay.h"
 #include "lib/netplay/netplay.h"

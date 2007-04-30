@@ -21,7 +21,7 @@ lib/ivis_common/imd.c
 lib/ivis_common/pieclip.c
 lib/ivis_common/bitimage.c
 lib/ivis_common/piestate.c
-lib/ivis_common/png.c
+lib/ivis_common/png_util.c
 lib/gamelib/hashtabl.c
 lib/gamelib/anim.c
 lib/gamelib/gtime.c

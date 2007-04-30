@@ -20,7 +20,7 @@
 
 #include "lib/framework/frame.h"
 
-#include "png.h"
+#include "png_util.h"
 #ifdef WZ_OS_MAC
 #include <Png/png.h>
 #else
