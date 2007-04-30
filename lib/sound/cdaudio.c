@@ -43,7 +43,7 @@
 extern BOOL		openal_initialized;
 
 #define NB_BUFFERS  16
-#define BUFFER_SIZE (16384)
+#define BUFFER_SIZE (16 * 1024)
 
 static BOOL		music_initialized;
 
@@ -73,6 +73,22 @@ static ALuint		music_source;
 static ALenum		music_format;
 static unsigned int	music_rate;
 
+
+static inline unsigned int numProcessedBuffers()
+{
+	int count;
+	alGetSourcei(music_source, AL_BUFFERS_PROCESSED, &count);
+
+	return count;
+}
+
+static inline unsigned int numQueuedBuffers()
+{
+	int count;
+	alGetSourcei(music_source, AL_BUFFERS_QUEUED, &count);
+
+	return count;
+}
 
 
 //*
@@ -181,19 +197,18 @@ static BOOL cdAudio_OpenTrack(char* filename) {
 }
 
 static BOOL cdAudio_CloseTrack(void) {
-	if (music_track != 0) {
-		int queued, processed, all;
+	if (music_track != 0)
+	{
+		unsigned int bufferCount;
 
 		alSourceStop(music_source);
-		alGetSourcei(music_source, AL_BUFFERS_QUEUED, &queued);
-		alGetSourcei(music_source, AL_BUFFERS_PROCESSED, &processed);
-		all = queued + processed;
 
-		while (all > 0) {
+		for(bufferCount = numQueuedBuffers() + numProcessedBuffers(); bufferCount != 0; --bufferCount)
+		{
 			ALuint buffer;
 
 			alSourceUnqueueBuffers(music_source, 1, &buffer);
-			all--;
+			alDeleteBuffers(1, &buffer);
 		}
 
 #ifndef WZ_NOOGG
@@ -331,19 +346,17 @@ BOOL cdAudio_Resume( void )
 //
 void cdAudio_Update( void )
 {
-	if (   music_track != 0
-	    && music_volume != 0.0) {
-		int processed = 0;
+	if (music_track != 0 && music_volume != 0.0)
+	{
+		unsigned int update;
 
-		alGetSourcei(music_source, AL_BUFFERS_PROCESSED, &processed);
-
-		while (processed > 0) {
+		for (update = numProcessedBuffers(); update != 0; --update)
+		{
 			ALuint buffer;
 
 			alSourceUnqueueBuffers(music_source, 1, &buffer);
 			cdAudio_FillBuffer(buffer);
 			alSourceQueueBuffers(music_source, 1, &buffer);
-			processed--;
 		}
 
 		{
