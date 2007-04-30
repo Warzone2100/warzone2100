@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: da\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-04-17 23:12+0200\n"
+"POT-Creation-Date: 2007-04-30 19:59+0200\n"
 "PO-Revision-Date: 2007-04-17 23:03+0200\n"
 "Last-Translator: Christian Vest Hansen <karmazilla@gmail.com>\n"
 "Language-Team: Dansk <en@li.org>\n"
@@ -113,7 +113,7 @@ msgstr "Du opdager plantegninger for %s"
 msgid "Close"
 msgstr "Luk"
 
-#: src/hci.c:1766 src/mission.c:3505 src/loop.c:596 src/loop.c:608
+#: src/hci.c:1766 src/mission.c:3505 src/loop.c:565 src/loop.c:577
 msgid "GAME SAVED!"
 msgstr "SPIL GEMT!"
 
@@ -528,41 +528,41 @@ msgstr "Indsalmet energi"
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Kommandobegrænsning nået - indstiller produktion"
 
-#: src/structure.c:7773
+#: src/structure.c:7771
 #, c-format
 msgid "%s - Connected %d of %d"
 msgstr "%s - Forbundet %d af %d"
 
-#: src/structure.c:7908 src/structure.c:7965
+#: src/structure.c:7906 src/structure.c:7963
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronisk beskadiget"
 
-#: src/structure.c:8239
+#: src/structure.c:8237
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronisk gevinst - Rekonniseringsrapport"
 
-#: src/structure.c:8281
+#: src/structure.c:8279
 msgid "Factory Reward - Propulsion"
 msgstr "Fabriksgevinst - Fremdrift"
 
-#: src/structure.c:8306
+#: src/structure.c:8304
 msgid "Factory Reward - Body"
 msgstr "Fabriksgevinst - Skrog"
 
-#: src/structure.c:8331
+#: src/structure.c:8329
 msgid "Factory Reward - Weapon"
 msgstr "Frabriskgevinst - Våben"
 
-#: src/structure.c:8340
+#: src/structure.c:8338
 msgid "Factory Reward - Nothing"
 msgstr "Fabriksgevinst - Ingen"
 
-#: src/structure.c:8369
+#: src/structure.c:8367
 msgid "Repair Facility Award - Repair"
 msgstr "Reperationsgevinst - Reperation"
 
-#: src/structure.c:8376
+#: src/structure.c:8374
 msgid "Repair Facility Award - Nothing"
 msgstr "Reperationsgevinst - Ingen"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-04-17 23:12+0200\n"
+"POT-Creation-Date: 2007-04-30 19:59+0200\n"
 "PO-Revision-Date: 2007-04-16 16:54+0200\n"
 "Last-Translator: Dennis Schridde <devurandom@gna.org>\n"
 "Language-Team: Deutsch\n"
@@ -114,7 +114,7 @@ msgstr "Du hast Entwürfe für %s entdeckt"
 msgid "Close"
 msgstr "Schließen"
 
-#: src/hci.c:1766 src/mission.c:3505 src/loop.c:596 src/loop.c:608
+#: src/hci.c:1766 src/mission.c:3505 src/loop.c:565 src/loop.c:577
 msgid "GAME SAVED!"
 msgstr "Spiel gespeichert"
 
@@ -521,41 +521,41 @@ msgstr "Energie angesammelt"
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Kommandeurkontrolllimit erreicht - Produktion eingestellt"
 
-#: src/structure.c:7773
+#: src/structure.c:7771
 #, c-format
 msgid "%s - Connected %d of %d"
 msgstr "%s - %d von %d verbunden"
 
-#: src/structure.c:7908 src/structure.c:7965
+#: src/structure.c:7906 src/structure.c:7963
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronisch beschädigt"
 
-#: src/structure.c:8239
+#: src/structure.c:8237
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.c:8281
+#: src/structure.c:8279
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.c:8306
+#: src/structure.c:8304
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.c:8331
+#: src/structure.c:8329
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.c:8340
+#: src/structure.c:8338
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.c:8369
+#: src/structure.c:8367
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.c:8376
+#: src/structure.c:8374
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 
