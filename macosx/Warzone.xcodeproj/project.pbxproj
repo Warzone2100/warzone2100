@@ -490,7 +490,6 @@
 		0246AA0B0BD3DF40004D1C70 /* SDL_dlcompat.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A5340BD3D2F0004D1C70 /* SDL_dlcompat.c */; };
 		0246AA170BD3DFEE004D1C70 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */; };
 		0246AA1B0BD3DFFC004D1C70 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */; };
-		024B62260BE585FA00C0C23D /* png.c in Sources */ = {isa = PBXBuildFile; fileRef = 024B62240BE585FA00C0C23D /* png.c */; };
 		02581B6F0BD5A30900957CBC /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */; };
 		02581C600BD5A95C00957CBC /* SDLMain.h in Headers */ = {isa = PBXBuildFile; fileRef = 0246A5A60BD3D482004D1C70 /* SDLMain.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02581C610BD5A95C00957CBC /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 0246A5A70BD3D482004D1C70 /* SDLMain.m */; };
@@ -505,6 +504,8 @@
 		02581C860BD5AD1100957CBC /* SDL_net.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 0246A3ED0BD3CD8A004D1C70 /* SDL_net.framework */; };
 		02581C870BD5AD1100957CBC /* Vorbis.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */; };
 		02581C880BD5AD1100957CBC /* Zlib.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02356D830BD3BB4100E9A019 /* Zlib.framework */; };
+		02C8AEF80BE68A5600E9D8A7 /* png_util.c in Sources */ = {isa = PBXBuildFile; fileRef = 02C8AEF60BE68A5600E9D8A7 /* png_util.c */; };
+		02C8AEFC0BE68A6800E9D8A7 /* oggvorbis.c in Sources */ = {isa = PBXBuildFile; fileRef = 02C8AEFA0BE68A6800E9D8A7 /* oggvorbis.c */; };
 		02DDA81C0BD3C1420049AB60 /* analysis.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA7F50BD3C1420049AB60 /* analysis.c */; };
 		02DDA81D0BD3C1420049AB60 /* backends.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DDA7F60BD3C1420049AB60 /* backends.h */; };
 		02DDA81E0BD3C1420049AB60 /* bitrate.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA7F70BD3C1420049AB60 /* bitrate.c */; };
@@ -1427,9 +1428,11 @@
 		0246A93A0BD3DD3E004D1C70 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		0246AA030BD3DEFA004D1C70 /* SDL_sysloadso.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = SDL_sysloadso.c; path = external/SDL/src/loadso/dlopen/SDL_sysloadso.c; sourceTree = "<group>"; };
 		0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
-		024B62240BE585FA00C0C23D /* png.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = png.c; path = ../lib/ivis_common/png.c; sourceTree = SOURCE_ROOT; };
-		024B62250BE585FA00C0C23D /* png.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = png.h; path = ../lib/ivis_common/png.h; sourceTree = SOURCE_ROOT; };
 		02581C5D0BD5A94A00957CBC /* libSDLmain.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSDLmain.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		02C8AEF60BE68A5600E9D8A7 /* png_util.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = png_util.c; path = ../lib/ivis_common/png_util.c; sourceTree = SOURCE_ROOT; };
+		02C8AEF70BE68A5600E9D8A7 /* png_util.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = png_util.h; path = ../lib/ivis_common/png_util.h; sourceTree = SOURCE_ROOT; };
+		02C8AEFA0BE68A6800E9D8A7 /* oggvorbis.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = oggvorbis.c; path = ../lib/sound/oggvorbis.c; sourceTree = SOURCE_ROOT; };
+		02C8AEFB0BE68A6800E9D8A7 /* oggvorbis.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = oggvorbis.h; path = ../lib/sound/oggvorbis.h; sourceTree = SOURCE_ROOT; };
 		02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Vorbis.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		02DDA7EF0BD3C03F0049AB60 /* Vorbis-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "Vorbis-Info.plist"; path = "Resources/Vorbis-Info.plist"; sourceTree = "<group>"; };
 		02DDA7F50BD3C1420049AB60 /* analysis.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = analysis.c; path = external/libvorbis/lib/analysis.c; sourceTree = "<group>"; };
@@ -1724,8 +1727,10 @@
 		0246A0980BD3CB97004D1C70 /* Warzone sources */ = {
 			isa = PBXGroup;
 			children = (
-				024B62240BE585FA00C0C23D /* png.c */,
-				024B62250BE585FA00C0C23D /* png.h */,
+				02C8AEFA0BE68A6800E9D8A7 /* oggvorbis.c */,
+				02C8AEFB0BE68A6800E9D8A7 /* oggvorbis.h */,
+				02C8AEF60BE68A5600E9D8A7 /* png_util.c */,
+				02C8AEF70BE68A5600E9D8A7 /* png_util.h */,
 				0246A1970BD3CCC3004D1C70 /* Warzone */,
 				0246A1790BD3CCAB004D1C70 /* Widget */,
 				0246A1640BD3CC90004D1C70 /* Sound */,
@@ -3487,7 +3492,8 @@
 				0246A2FB0BD3CCDC004D1C70 /* warcam.c in Sources */,
 				0246A2FC0BD3CCDC004D1C70 /* warzoneconfig.c in Sources */,
 				0246A2FD0BD3CCDC004D1C70 /* wrappers.c in Sources */,
-				024B62260BE585FA00C0C23D /* png.c in Sources */,
+				02C8AEF80BE68A5600E9D8A7 /* png_util.c in Sources */,
+				02C8AEFC0BE68A6800E9D8A7 /* oggvorbis.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
