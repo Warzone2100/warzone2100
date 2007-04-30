@@ -128,7 +128,6 @@
 		0246A1030BD3CC29004D1C70 /* bitimage.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0EA0BD3CC29004D1C70 /* bitimage.c */; };
 		0246A1040BD3CC29004D1C70 /* imd.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0EE0BD3CC29004D1C70 /* imd.c */; };
 		0246A1050BD3CC29004D1C70 /* imdload.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0F00BD3CC29004D1C70 /* imdload.c */; };
-		0246A1060BD3CC29004D1C70 /* pcx.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0F40BD3CC29004D1C70 /* pcx.c */; };
 		0246A1070BD3CC29004D1C70 /* pieclip.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0F60BD3CC29004D1C70 /* pieclip.c */; };
 		0246A1080BD3CC29004D1C70 /* piestate.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0FC0BD3CC29004D1C70 /* piestate.c */; };
 		0246A11D0BD3CC43004D1C70 /* ivi.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A10B0BD3CC43004D1C70 /* ivi.c */; };
@@ -491,6 +490,7 @@
 		0246AA0B0BD3DF40004D1C70 /* SDL_dlcompat.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A5340BD3D2F0004D1C70 /* SDL_dlcompat.c */; };
 		0246AA170BD3DFEE004D1C70 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */; };
 		0246AA1B0BD3DFFC004D1C70 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */; };
+		024B62260BE585FA00C0C23D /* png.c in Sources */ = {isa = PBXBuildFile; fileRef = 024B62240BE585FA00C0C23D /* png.c */; };
 		02581B6F0BD5A30900957CBC /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */; };
 		02581C600BD5A95C00957CBC /* SDLMain.h in Headers */ = {isa = PBXBuildFile; fileRef = 0246A5A60BD3D482004D1C70 /* SDLMain.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02581C610BD5A95C00957CBC /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 0246A5A70BD3D482004D1C70 /* SDLMain.m */; };
@@ -896,7 +896,6 @@
 		0246A0F10BD3CC29004D1C70 /* ivi.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ivi.h; path = ../lib/ivis_common/ivi.h; sourceTree = SOURCE_ROOT; };
 		0246A0F20BD3CC29004D1C70 /* ivisdef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ivisdef.h; path = ../lib/ivis_common/ivisdef.h; sourceTree = SOURCE_ROOT; };
 		0246A0F30BD3CC29004D1C70 /* ivispatch.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ivispatch.h; path = ../lib/ivis_common/ivispatch.h; sourceTree = SOURCE_ROOT; };
-		0246A0F40BD3CC29004D1C70 /* pcx.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = pcx.c; path = ../lib/ivis_common/pcx.c; sourceTree = SOURCE_ROOT; };
 		0246A0F50BD3CC29004D1C70 /* pieblitfunc.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = pieblitfunc.h; path = ../lib/ivis_common/pieblitfunc.h; sourceTree = SOURCE_ROOT; };
 		0246A0F60BD3CC29004D1C70 /* pieclip.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = pieclip.c; path = ../lib/ivis_common/pieclip.c; sourceTree = SOURCE_ROOT; };
 		0246A0F70BD3CC29004D1C70 /* pieclip.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = pieclip.h; path = ../lib/ivis_common/pieclip.h; sourceTree = SOURCE_ROOT; };
@@ -1428,6 +1427,8 @@
 		0246A93A0BD3DD3E004D1C70 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		0246AA030BD3DEFA004D1C70 /* SDL_sysloadso.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = SDL_sysloadso.c; path = external/SDL/src/loadso/dlopen/SDL_sysloadso.c; sourceTree = "<group>"; };
 		0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
+		024B62240BE585FA00C0C23D /* png.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = png.c; path = ../lib/ivis_common/png.c; sourceTree = SOURCE_ROOT; };
+		024B62250BE585FA00C0C23D /* png.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = png.h; path = ../lib/ivis_common/png.h; sourceTree = SOURCE_ROOT; };
 		02581C5D0BD5A94A00957CBC /* libSDLmain.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSDLmain.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Vorbis.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		02DDA7EF0BD3C03F0049AB60 /* Vorbis-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "Vorbis-Info.plist"; path = "Resources/Vorbis-Info.plist"; sourceTree = "<group>"; };
@@ -1723,6 +1724,8 @@
 		0246A0980BD3CB97004D1C70 /* Warzone sources */ = {
 			isa = PBXGroup;
 			children = (
+				024B62240BE585FA00C0C23D /* png.c */,
+				024B62250BE585FA00C0C23D /* png.h */,
 				0246A1970BD3CCC3004D1C70 /* Warzone */,
 				0246A1790BD3CCAB004D1C70 /* Widget */,
 				0246A1640BD3CC90004D1C70 /* Sound */,
@@ -1814,7 +1817,6 @@
 				0246A0F10BD3CC29004D1C70 /* ivi.h */,
 				0246A0F20BD3CC29004D1C70 /* ivisdef.h */,
 				0246A0F30BD3CC29004D1C70 /* ivispatch.h */,
-				0246A0F40BD3CC29004D1C70 /* pcx.c */,
 				0246A0F50BD3CC29004D1C70 /* pieblitfunc.h */,
 				0246A0F60BD3CC29004D1C70 /* pieclip.c */,
 				0246A0F70BD3CC29004D1C70 /* pieclip.h */,
@@ -3321,7 +3323,6 @@
 				0246A1030BD3CC29004D1C70 /* bitimage.c in Sources */,
 				0246A1040BD3CC29004D1C70 /* imd.c in Sources */,
 				0246A1050BD3CC29004D1C70 /* imdload.c in Sources */,
-				0246A1060BD3CC29004D1C70 /* pcx.c in Sources */,
 				0246A1070BD3CC29004D1C70 /* pieclip.c in Sources */,
 				0246A1080BD3CC29004D1C70 /* piestate.c in Sources */,
 				0246A11D0BD3CC43004D1C70 /* ivi.c in Sources */,
@@ -3486,6 +3487,7 @@
 				0246A2FB0BD3CCDC004D1C70 /* warcam.c in Sources */,
 				0246A2FC0BD3CCDC004D1C70 /* warzoneconfig.c in Sources */,
 				0246A2FD0BD3CCDC004D1C70 /* wrappers.c in Sources */,
+				024B62260BE585FA00C0C23D /* png.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
