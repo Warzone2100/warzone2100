@@ -94,7 +94,9 @@ BOOL check_extension(const char* extension_name)
 typedef void (APIENTRY * PFNGLACTIVESTENCILFACEEXTPROC) (GLenum face);
 #endif
 
+#ifndef WZ_OS_MAC
 PFNGLACTIVESTENCILFACEEXTPROC glActiveStencilFaceEXT;
+#endif
 
 /// Check if we can use one-pass stencil in the shadow draw code
 static BOOL stencil_one_pass(void)
@@ -106,6 +108,9 @@ static BOOL stencil_one_pass(void)
 		can_do_stencil_one_pass = 0; // can't use it until we decide otherwise
 
 		// let's check if we have the needed extensions
+#ifdef WZ_OS_MAC
+		can_do_stencil_one_pass = 1;
+#else
 		if( check_extension("GL_EXT_stencil_two_side")
 		 && check_extension("GL_EXT_stencil_wrap"))
 		{
@@ -117,6 +122,7 @@ static BOOL stencil_one_pass(void)
 				can_do_stencil_one_pass = 1;
 			}
 		}
+#endif /* WZ_OS_MAC */
 	}
 
 	return (1 == can_do_stencil_one_pass); // to get the types right

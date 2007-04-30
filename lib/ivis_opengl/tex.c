@@ -90,7 +90,7 @@ int pie_AddTexPage(iTexture* s, const char* filename, int type, BOOL bResource)
 	_TEX_PAGE[i].tex.height = s->height;
 	_TEX_PAGE[i].type = type;
 
-	glGenTextures(1, &_TEX_PAGE[i].id);
+	glGenTextures(1, (GLuint *) &_TEX_PAGE[i].id);
 	glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[i].id);
 
 	if ((s->width & (s->width-1)) == 0 && (s->height & (s->height-1)) == 0)
