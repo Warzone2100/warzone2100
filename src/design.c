@@ -3542,17 +3542,17 @@ static void intSetDesignPower(DROID_TEMPLATE *psTemplate)
 }
 
 // work out current system component
-static UDWORD getSystemType(DROID_TEMPLATE* template)
+static UDWORD getSystemType(DROID_TEMPLATE* droidTemplate)
 {
-	if (template->asParts[COMP_ECM]) {
+	if (droidTemplate->asParts[COMP_ECM]) {
 		return COMP_ECM;
-	} else if (template->asParts[COMP_SENSOR]) {
+	} else if (droidTemplate->asParts[COMP_SENSOR]) {
 		return COMP_SENSOR;
-	} else if (template->asParts[COMP_CONSTRUCT]) {
+	} else if (droidTemplate->asParts[COMP_CONSTRUCT]) {
 		return COMP_CONSTRUCT;
-	} else if (template->asParts[COMP_REPAIRUNIT]) {
+	} else if (droidTemplate->asParts[COMP_REPAIRUNIT]) {
 		return COMP_REPAIRUNIT;
-	} else if (template->asWeaps[0]) {
+	} else if (droidTemplate->asWeaps[0]) {
 		return COMP_WEAPON;
 	} else {
 	    // compare it with the current weapon
