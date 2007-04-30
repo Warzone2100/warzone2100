@@ -285,7 +285,7 @@ void gridStartIterate(SDWORD x, SDWORD y)
 
 // get the next object that could affect a location,
 // should only be called after gridStartIterate
-inline BASE_OBJECT *gridIterate(void)
+BASE_OBJECT *gridIterate(void)
 {
 	BASE_OBJECT		*psRet;
 
