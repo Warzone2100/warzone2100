@@ -36,9 +36,6 @@
 #endif
 
 #ifndef WZ_NOOGG
-#include <ogg/ogg.h>
-#include <vorbis/codec.h>
-#include <vorbis/vorbisenc.h>
 #include <vorbis/vorbisfile.h>
 #endif
 
@@ -72,8 +69,8 @@ static ALfloat		sfx3d_volume = 1.0;
 static ALCdevice* device = 0;
 static ALCcontext* context = 0;
 
-static ALvoid	*data = NULL; // Needed for ReadTrackFromBuffer, must be global, so it can be free'd on shutdown
-static ALsizei DataBuffer_size = 16 * 1024;
+static char* data = NULL; // Needed for ReadTrackFromBuffer, must be global, so it can be free'd on shutdown
+static size_t DataBuffer_size = 16 * 1024;
 
 BOOL openal_initialized = FALSE;
 
@@ -338,7 +335,7 @@ static ov_callbacks ovPHYSFS_callbacks = {
     ovPHYSFS_tell
 };
 
-static inline TRACK* sound_DecodeTrack( TRACK *psTrack, fileInfo* fileHandle )
+static inline TRACK* sound_DecodeTrack(TRACK *psTrack, PHYSFS_file* PHYSFS_fileHandle, BOOL allowSeeking)
 {
 	OggVorbis_File	ogg_stream;
 	vorbis_info*	ogg_info;
@@ -349,9 +346,10 @@ static inline TRACK* sound_DecodeTrack( TRACK *psTrack, fileInfo* fileHandle )
 	ALuint		buffer;
 	ALsizei		size=0;
 	int		result, section;
+	fileInfo	fileHandle = { PHYSFS_fileHandle, allowSeeking };
 
 
-	if (ov_open_callbacks(fileHandle, &ogg_stream, NULL, 0, ovPHYSFS_callbacks) < 0)
+	if (ov_open_callbacks(&fileHandle, &ogg_stream, NULL, 0, ovPHYSFS_callbacks) < 0)
 	{
 		free(psTrack);
 		return NULL;
@@ -404,16 +402,15 @@ static inline TRACK* sound_DecodeTrack( TRACK *psTrack, fileInfo* fileHandle )
 TRACK* sound_LoadTrackFromFile(const char *fileName)
 {
 	TRACK* pTrack;
-	fileInfo fileHandle;
+	PHYSFS_file* fileHandle;
 
 	// Use PhysicsFS to open the file
-	fileHandle.fileHandle = PHYSFS_openRead(fileName);
-	if (fileHandle.fileHandle == NULL)
+	fileHandle = PHYSFS_openRead(fileName);
+	if (fileHandle == NULL)
 	{
+		debug(LOG_ERROR, "sound_LoadTrackFromFile: PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, PHYSFS_getLastError());
 		return NULL;
 	}
-
-	fileHandle.allowSeeking = TRUE;
 
 	// allocate track, plus the memory required to contain the filename
 	// one malloc call ensures only one free call is required
@@ -430,12 +427,12 @@ TRACK* sound_LoadTrackFromFile(const char *fileName)
 
 	// Set filename pointer and copy the filename into struct
 	pTrack->pName = (char*)pTrack + sizeof(TRACK);
-	strcpy( pTrack->pName, GetLastResourceFilename() );
+	strcpy(pTrack->pName, GetLastResourceFilename());
 
 	// Now use sound_ReadTrackFromBuffer to decode the file's contents
-	pTrack = sound_DecodeTrack( pTrack, &fileHandle);
+	pTrack = sound_DecodeTrack(pTrack, fileHandle, TRUE);
 
-	PHYSFS_close(fileHandle.fileHandle);
+	PHYSFS_close(fileHandle);
 	return pTrack;
 }
 
