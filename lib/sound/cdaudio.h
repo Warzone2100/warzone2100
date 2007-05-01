@@ -24,7 +24,7 @@
 
 /***************************************************************************/
 
-BOOL	cdAudio_Open( char* user_musicdir );
+BOOL	cdAudio_Open( const char* user_musicdir );
 BOOL	cdAudio_Close( void );
 BOOL	cdAudio_PlayTrack( SDWORD iTrack );
 BOOL	cdAudio_Stop( void );

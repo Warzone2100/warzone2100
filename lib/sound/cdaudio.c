@@ -28,22 +28,16 @@
 #include <AL/al.h>
 #endif
 
-#ifndef WZ_NOOGG
-#include <ogg/ogg.h>
-#include <vorbis/codec.h>
-#include <vorbis/vorbisenc.h>
-#include <vorbis/vorbisfile.h>
-#endif
-
 #include "audio.h"
 #include "cdaudio.h"
 #include "mixer.h"
 #include "playlist.h"
+#include "oggvorbis.h"
 
 extern BOOL		openal_initialized;
 
 #define NB_BUFFERS  16
-#define BUFFER_SIZE (16 * 1024)
+static const size_t bufferSize = 16 * 1024;
 
 static BOOL		music_initialized;
 
@@ -52,27 +46,13 @@ static PHYSFS_file*		music_file = NULL;
 enum {	WZ_NONE,
 	WZ_OGG }	music_file_format;
 
-#ifndef WZ_NOOGG
-static OggVorbis_File	ogg_stream;
-static vorbis_info*	ogg_info;
-
-static size_t wz_ogg_read( void *ptr, size_t size, size_t nmemb, void *datasource );
-static int wz_ogg_seek( void *datasource, ogg_int64_t offset, int whence );
-static int wz_ogg_close( void *datasource );
-
-static ov_callbacks		wz_ogg_callbacks = { wz_ogg_read, wz_ogg_seek, wz_ogg_close, NULL };
-#endif
-
 static ALfloat		music_volume = 0.5;
-
-static char		music_data[BUFFER_SIZE];
 
 static unsigned int	music_track = 0;
 static ALuint 		music_buffers[NB_BUFFERS];
 static ALuint		music_source;
-static ALenum		music_format;
-static unsigned int	music_rate;
 
+OggVorbisDecoderState* decoder = NULL;
 
 static inline unsigned int numProcessedBuffers()
 {
@@ -90,31 +70,11 @@ static inline unsigned int numQueuedBuffers()
 	return count;
 }
 
-
-//*
-//
-// cdAudio Subclass procedure
-
-size_t wz_ogg_read( void *ptr, size_t size, size_t nmemb, void *datasource )
-{
-	return (PHYSFS_sint64)PHYSFS_read( (PHYSFS_file*)datasource, ptr, (PHYSFS_uint32)size, (PHYSFS_uint32)nmemb );
-}
-int wz_ogg_seek( void *datasource, ogg_int64_t offset, int whence )
-{
-	return -1;
-}
-
-int wz_ogg_close( void *datasource )
-{
-	return PHYSFS_close( (PHYSFS_file*)datasource );
-}
-
-
 //*
 // ======================================================================
 // ======================================================================
 //
-BOOL cdAudio_Open( char* user_musicdir )
+BOOL cdAudio_Open( const char* user_musicdir )
 {
 	if (!openal_initialized) {
 		return FALSE;
@@ -153,7 +113,7 @@ BOOL cdAudio_Close( void )
 	return TRUE;
 }
 
-static BOOL cdAudio_OpenTrack(char* filename) {
+static BOOL cdAudio_OpenTrack(const char* filename) {
 	if (!music_initialized) {
 		return FALSE;
 	}
@@ -174,18 +134,13 @@ static BOOL cdAudio_OpenTrack(char* filename) {
 			return FALSE;
 		}
 
-		if ( ov_open_callbacks( (void*)music_file, &ogg_stream, NULL, 0, wz_ogg_callbacks ) < 0 ) {
+		decoder = sound_CreateOggVorbisDecoder(music_file, FALSE);
+		if (decoder == NULL)
+		{
+			debug(LOG_ERROR, "cdAudio_OpenTrack: Failed to construct a decoder object\n");
 			PHYSFS_close(music_file);
 			music_file = NULL;
 			return FALSE;
-		}
-
-		ogg_info = ov_info(&ogg_stream, -1);
-
-		if (ogg_info->channels == 1) {
-			music_format = AL_FORMAT_MONO16;
-		} else {
-			music_format = AL_FORMAT_STEREO16;
 		}
 
 		music_file_format = WZ_OGG;
@@ -211,9 +166,8 @@ static BOOL cdAudio_CloseTrack(void) {
 			alDeleteBuffers(1, &buffer);
 		}
 
-#ifndef WZ_NOOGG
-		ov_clear( &ogg_stream );
-#endif // WZ_NOOGG
+		sound_DestroyOggVorbisDecoder(decoder);
+		decoder = NULL;
 
 		PHYSFS_close(music_file);
 		music_file = NULL;
@@ -223,49 +177,50 @@ static BOOL cdAudio_CloseTrack(void) {
 	return TRUE;
 }
 
-static BOOL cdAudio_FillBuffer(ALuint b) {
-	int  size = 0;
-	int  section;
-	int  result = 0;
+static BOOL cdAudio_FillBuffer(ALuint buffer)
+{
+	ALenum format;
+	soundDataBuffer* pcm;
 
-	while (size < BUFFER_SIZE) {
-
-#ifndef WZ_NOOGG
-		if (music_file_format == WZ_OGG) {
-			result = ov_read(&ogg_stream, music_data+size,
-					 BUFFER_SIZE-size, 0, 2, 1, &section);
-			music_rate = ogg_info->rate;
-		}
-#endif
-
-		if (result > 0) {
-			size += result;
-		} else {
-			char* filename;
-
-			for (;;) {
-				filename = PlayList_NextSong();
-
-				if (filename == NULL) {
-					music_track = 0;
-					break;
-				}
-				if (cdAudio_OpenTrack(filename)) {
-					debug( LOG_SOUND, "Now playing %s\n", filename );
-					break;
-				} else {
-					return FALSE;	// break out to avoid infinite loops
-				}
-			}
-		}
-	}
-
-	if (size == 0) {
+	if (decoder == NULL)
+	{
 		return FALSE;
 	}
 
-	alBufferData(b, music_format, music_data, size, music_rate);
+	pcm = sound_DecodeOggVorbis(decoder, bufferSize);
+	if (pcm == NULL)
+	{
+		return FALSE;
+	}
 
+	if (pcm->size < bufferSize)
+	{
+		const char* filename = PlayList_NextSong();
+		cdAudio_CloseTrack();
+
+		if (filename == NULL)
+		{
+			music_track = 0;
+		}
+		if (cdAudio_OpenTrack(filename))
+		{
+			debug( LOG_SOUND, "Now playing %s\n", filename );
+		}
+	}
+
+	if (pcm->size == 0)
+	{
+		free(pcm);
+		return FALSE;
+	}
+
+	// Determine PCM data format
+	format = (pcm->channelCount == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;
+
+	// fill the OpenAL buffer with the decoded data
+	alBufferData(buffer, format, pcm->data, pcm->size, pcm->frequency);
+
+	free(pcm);
 	return TRUE;
 }
 
@@ -282,7 +237,7 @@ BOOL cdAudio_PlayTrack( SDWORD iTrack )
 	PlayList_SetTrack(iTrack);
 
 	{
-		char* filename = PlayList_CurrentSong();
+		const char* filename = PlayList_CurrentSong();
 
 		for (;;) {
 			if (filename == NULL) {
@@ -349,6 +304,8 @@ void cdAudio_Update( void )
 	if (music_track != 0 && music_volume != 0.0)
 	{
 		unsigned int update;
+
+		debug(LOG_ERROR, "numProcessedBuffers() = %u\n", numProcessedBuffers());
 
 		for (update = numProcessedBuffers(); update != 0; --update)
 		{
