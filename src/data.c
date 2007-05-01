@@ -747,7 +747,7 @@ static BOOL dataIMGPAGELoad(const char *fileName, void **ppData)
 		return FALSE;
 	}
 
-	if (!pie_PNGLoadFile(fileName, psSprite))
+	if (!iV_loadImage_PNG(fileName, psSprite))
 	{
 		debug( LOG_ERROR, "IMGPAGE load failed" );
 		return FALSE;
@@ -773,7 +773,8 @@ static BOOL dataHWTERTILESLoad(const char *fileName, void **ppData)
 	if (bTilesPCXLoaded)
 	{
 		debug( LOG_TEXTURE, "Reloading terrain tiles\n" );
-		if(!pie_PNGLoadFile(fileName, &tilesPCX))
+		iV_unloadImage(&tilesPCX);
+		if(!iV_loadImage_PNG(fileName, &tilesPCX))
 		{
 			debug( LOG_ERROR, "HWTERTILES reload failed" );
 			return FALSE;
@@ -782,7 +783,7 @@ static BOOL dataHWTERTILESLoad(const char *fileName, void **ppData)
 	else
 	{
 		debug( LOG_TEXTURE, "Loading terrain tiles\n" );
-		if(!pie_PNGLoadFile(fileName, &tilesPCX))
+		if(!iV_loadImage_PNG(fileName, &tilesPCX))
 		{
 			debug( LOG_ERROR, "HWTERTILES load failed" );
 			return FALSE;
@@ -792,11 +793,11 @@ static BOOL dataHWTERTILESLoad(const char *fileName, void **ppData)
 	getTileRadarColours();
 	if (bTilesPCXLoaded)
 	{
-		remakeTileTexturePages(tilesPCX.width, tilesPCX.height, TILE_WIDTH, TILE_HEIGHT, tilesPCX.bmp);
+		remakeTileTexturePages(&tilesPCX, TILE_WIDTH, TILE_HEIGHT);
 	}
 	else
 	{
-		makeTileTexturePages(tilesPCX.width, tilesPCX.height, TILE_WIDTH, TILE_HEIGHT, tilesPCX.bmp);
+		makeTileTexturePages(&tilesPCX, TILE_WIDTH, TILE_HEIGHT);
 	}
 
 	if (bTilesPCXLoaded)
@@ -817,11 +818,7 @@ static void dataHWTERTILESRelease(void *pData)
 	iTexture *psSprite = (iTexture*) pData;
 
 	freeTileTextures();
-	if( psSprite->bmp )
-	{
-		free(psSprite->bmp);
-		psSprite->bmp = NULL;
-	}
+	iV_unloadImage(psSprite);
 	// We are not allowed to free psSprite also, this would give an error on Windows: HEAP[Warzone.exe]: Invalid Address specified to RtlFreeHeap( xxx, xxx )
 	bTilesPCXLoaded = FALSE;
 	pie_TexShutDown();
@@ -850,7 +847,7 @@ static void dataIMGRelease(void *pData)
 
 
 /* Load a texturepage into memory */
-static BOOL fileTexPageLoad(const char *fileName, void **ppData)
+static BOOL dataTexPageLoad(const char *fileName, void **ppData)
 {
 	char texfile[MAX_PATH] = {'\0'}, texpage[MAX_PATH] = {'\0'};
 	SDWORD id;
@@ -895,7 +892,7 @@ static BOOL fileTexPageLoad(const char *fileName, void **ppData)
 			return FALSE;
 		}
 
-		if (!pie_PNGLoadFile(fileName, psSprite))
+		if (!iV_loadImage_PNG(fileName, psSprite))
 		{
 			return FALSE;
 		}
@@ -919,11 +916,7 @@ static void dataISpriteRelease(void *pData)
 
 	if( psSprite )
 	{
-		if( psSprite->bmp )
-		{
-			free(psSprite->bmp);
-			psSprite->bmp = NULL;
-		}
+		iV_unloadImage(psSprite);
 		free(psSprite);
 		psSprite = NULL;
 	}
@@ -1186,7 +1179,7 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"ANIMCFG", dataAnimCfgLoad, NULL},
 	{"IMGPAGE", dataIMGPAGELoad, dataIMGPAGERelease},
 	{"HWTERTILES", dataHWTERTILESLoad, dataHWTERTILESRelease},     // freed by 3d shutdow},// Tertiles Files. This version used when running with hardware renderer.
-	{"TEXPAGE", fileTexPageLoad, dataTexPageRelease},
+	{"TEXPAGE", dataTexPageLoad, dataTexPageRelease},
 };
 
 /* Pass all the data loading functions to the framework library */

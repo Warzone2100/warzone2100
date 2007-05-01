@@ -54,7 +54,8 @@ typedef struct { Sint32 x, y, z, u, v; Uint8 g; } iVertex;
 typedef struct { Uint8 r, g, b; } iColour;
 typedef iColour iPalette[256];
 
-typedef char iBitmap;
-typedef struct { Sint32 width, height; iBitmap *bmp; } iTexture;
+typedef unsigned char iBitmap;
+typedef struct { Uint32 width, height, depth; unsigned char *bmp; } iV_Image;
+typedef iV_Image iTexture;
 
 #endif // _pieTypes_h

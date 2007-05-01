@@ -22,10 +22,10 @@
 
 extern iTexture tilesPCX;
 
-void makeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, UDWORD tileHeight, char *src);
-void remakeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, UDWORD tileHeight, char *src);
-BOOL	getTileRadarColours(void);
-void	freeTileTextures( void );
+extern void makeTileTexturePages(iV_Image * src, UDWORD tileWidth, UDWORD tileHeight);
+extern void remakeTileTexturePages(iV_Image * src, UDWORD tileWidth, UDWORD tileHeight);
+extern BOOL getTileRadarColours(void);
+extern void freeTileTextures( void );
 
 typedef struct _tileTexInfo
 {

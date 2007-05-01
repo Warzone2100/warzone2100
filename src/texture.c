@@ -38,7 +38,7 @@
 #define TEXTURE_PAGE_SIZE	PAGE_WIDTH*PAGE_HEIGHT*PAGE_DEPTH
 
 /* Stores the graphics data for the terrain tiles textures (in src/data.c) */
-iTexture tilesPCX;
+iTexture tilesPCX = { 0, 0, 0, NULL };
 
 /* How many pages have we loaded */
 SDWORD	firstTexturePage;
@@ -50,8 +50,8 @@ TILE_TEX_INFO	tileTexInfo[MAX_TILES];
 
 static UDWORD	getTileXIndex(UDWORD tileNumber);
 static UDWORD	getTileYIndex(UDWORD tileNumber);
-static void getRectFromPage(UDWORD width, UDWORD height, char *src, UDWORD bufWidth, char *dest);
-static void putRectIntoPage(UDWORD width, UDWORD height, char *dest, UDWORD bufWidth, char *src);
+static void getRectFromPage(UDWORD width, UDWORD height, unsigned char *src, UDWORD bufWidth, unsigned char *dest);
+static void putRectIntoPage(UDWORD width, UDWORD height, unsigned char *dest, UDWORD bufWidth, unsigned char *src);
 static void buildTileIndexes(void);
 
 /*
@@ -72,46 +72,34 @@ static void buildTileIndexes(void);
 	We must then make sure that we source in that texture page and set the
 	texture coordinate for a complete tile to be its position.
 */
-void makeTileTexturePages(UDWORD srcWidth, UDWORD srcHeight, UDWORD tileWidth, UDWORD tileHeight, char *src)
+void makeTileTexturePages(iV_Image * src, UDWORD tileWidth, UDWORD tileHeight)
 {
 	UDWORD i, j;
-	UDWORD pageNumber;
-	UDWORD tilesAcross, tilesDown;
-	UDWORD tilesAcrossPage, tilesDownPage, tilesPerPage, tilesPerSource;
-	UDWORD tilesProcessed;
-	char *tileStorage;
-	char *presentLoc;
-	iTexture sprite;
+	UDWORD pageNumber = 0;
+	UDWORD tilesAcross = src->width / tileWidth, tilesDown = src->height / tileHeight;
+	UDWORD tilesAcrossPage = PAGE_WIDTH / tileWidth, tilesDownPage = PAGE_HEIGHT / tileHeight;
+	UDWORD tilesPerPage = tilesAcrossPage * tilesDownPage, tilesPerSource = tilesAcross * tilesDown;
+	UDWORD tilesProcessed = 0;
+	iTexture sprite = { PAGE_WIDTH, PAGE_HEIGHT, PAGE_DEPTH, malloc(TEXTURE_PAGE_SIZE) };
+	/* Get enough memory to store one tile */
+	unsigned char *tileStorage = malloc(tileWidth * tileHeight * PAGE_DEPTH);
+	unsigned char *presentLoc = sprite.bmp;
+	unsigned char *srcBmp = src->bmp;
 
 	/* This is how many pages are already used on hardware */
 	firstTexturePage = pie_GetLastPageDownloaded();
 
-	debug(LOG_TEXTURE, "makeTileTexturePages: src(%d,%d) tile(%d,%d) pages used=%d", srcWidth, srcHeight, tileWidth, tileHeight, firstTexturePage);
-
-	/* Get enough memory to store one tile */
-	pageNumber = 0;
-	tileStorage = (char*)malloc(tileWidth * tileHeight * PAGE_DEPTH);
-	sprite.bmp = (iBitmap*)malloc(TEXTURE_PAGE_SIZE);
-	sprite.width = PAGE_WIDTH;
-	sprite.height = PAGE_HEIGHT;
-	tilesProcessed = 0;
-	tilesAcross = srcWidth / tileWidth;
-	tilesDown = srcHeight / tileHeight;
-	tilesPerSource = tilesAcross * tilesDown;
-	tilesAcrossPage = PAGE_WIDTH / tileWidth;
-	tilesDownPage = PAGE_HEIGHT / tileHeight;
-	tilesPerPage = tilesAcrossPage * tilesDownPage;
-	presentLoc = sprite.bmp;
+	debug(LOG_TEXTURE, "makeTileTexturePages: src(%d,%d) tile(%d,%d) pages used=%d", src->width, src->height, tileWidth, tileHeight, firstTexturePage);
 
 	for (i=0; i<tilesDown; i++)
 	{
 		for (j=0; j<tilesAcross; j++)
 		{
-			getRectFromPage(tileWidth, tileHeight, src, srcWidth, tileStorage);
+			getRectFromPage(tileWidth, tileHeight, srcBmp, src->width, tileStorage);
 			putRectIntoPage(tileWidth, tileHeight, presentLoc, PAGE_WIDTH, tileStorage);
 			tilesProcessed++;
 			presentLoc += tileWidth * PAGE_DEPTH;
-			src += tileWidth * PAGE_DEPTH;
+			srcBmp += tileWidth * PAGE_DEPTH;
 			/* Have we got all the tiles from the source!? */
 			if (tilesProcessed == tilesPerSource)
 			{
@@ -126,9 +114,9 @@ void makeTileTexturePages(UDWORD srcWidth, UDWORD srcHeight, UDWORD tileWidth, U
 				debug(LOG_TEXTURE, "tilesDown=%d tilesAcross=%d tilesProcessed=%d tilesPerPage=%d", tilesDown, tilesAcross, tilesProcessed, tilesPerPage);
 				/* If so, download this one and reset to start again */
 				pageId[pageNumber] = pie_AddTexPage(&sprite, "terrain", 0, FALSE);
-				sprite.bmp = (iBitmap*)malloc(TEXTURE_PAGE_SIZE);
-				pageNumber++;
+				sprite.bmp = malloc(TEXTURE_PAGE_SIZE);
 				presentLoc = sprite.bmp;
+				pageNumber++;
 			}
 			else if (tilesProcessed % tilesAcrossPage == 0)
 			{
@@ -137,7 +125,7 @@ void makeTileTexturePages(UDWORD srcWidth, UDWORD srcHeight, UDWORD tileWidth, U
 				presentLoc += (tileHeight-1) * PAGE_WIDTH * PAGE_DEPTH;
 			}
 		}
-		src += (tileHeight-1) * srcWidth * PAGE_DEPTH;
+		srcBmp += (tileHeight-1) * src->width * PAGE_DEPTH;
 	}
 	ASSERT(FALSE, "we should have exited the loop using the goto");
 
@@ -148,45 +136,31 @@ exit:
 	return;
 }
 
-void remakeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, UDWORD tileHeight, char *src)
+void remakeTileTexturePages(iV_Image * src, UDWORD tileWidth, UDWORD tileHeight)
 {
 	UDWORD i, j;
-	UDWORD pageNumber;
-	UDWORD tilesAcross, tilesDown;
-	UDWORD tilesAcrossPage, tilesDownPage, tilesPerPage, tilesPerSource;
-	UDWORD tilesProcessed;
-	char *tileStorage;
-	char *presentLoc;
-	iTexture sprite;
-	//check enough pages are allocated
-
-	debug(LOG_TEXTURE, "remakeTileTexturePages: src(%d,%d), tile(%d, %d)", srcWidth, srcHeight, tileWidth, tileHeight);
-
+	UDWORD pageNumber = 0;
+	UDWORD tilesAcross = src->width / tileWidth, tilesDown = src->height / tileHeight;
+	UDWORD tilesAcrossPage = PAGE_WIDTH / tileWidth, tilesDownPage = PAGE_HEIGHT / tileHeight;
+	UDWORD tilesPerPage = tilesAcrossPage * tilesDownPage, tilesPerSource = tilesAcross * tilesDown;
+	UDWORD tilesProcessed = 0;
+	iTexture sprite = { PAGE_WIDTH, PAGE_HEIGHT, PAGE_DEPTH, malloc(TEXTURE_PAGE_SIZE) };
 	/* Get enough memory to store one tile */
-	pageNumber = 0;
-	tileStorage = (char*)malloc(tileWidth * tileHeight * PAGE_DEPTH);
-	sprite.width = PAGE_WIDTH;
-	sprite.height = PAGE_HEIGHT;
+	unsigned char *tileStorage = malloc(tileWidth * tileHeight * PAGE_DEPTH);
+	unsigned char *presentLoc = sprite.bmp;
+	unsigned char *srcBmp = src->bmp;
 
-	sprite.bmp = (iBitmap*)malloc(TEXTURE_PAGE_SIZE);
-	tilesProcessed = 0;
-	tilesAcross = srcWidth / tileWidth;
-	tilesDown = srcHeight / tileHeight;
-	tilesPerSource = tilesAcross * tilesDown;
-	tilesAcrossPage = PAGE_WIDTH / tileWidth;
-	tilesDownPage = PAGE_HEIGHT / tileHeight;
-	tilesPerPage = tilesAcrossPage * tilesDownPage;
-	presentLoc = sprite.bmp;
+	debug(LOG_TEXTURE, "remakeTileTexturePages: src(%d,%d), tile(%d, %d)", src->width, src->height, tileWidth, tileHeight);
 
 	for (i=0; i<tilesDown; i++)
 	{
 		for (j=0; j<tilesAcross; j++)
 		{
-			getRectFromPage(tileWidth, tileHeight, src, srcWidth, tileStorage);
+			getRectFromPage(tileWidth, tileHeight, srcBmp, src->width, tileStorage);
 			putRectIntoPage(tileWidth, tileHeight, presentLoc, PAGE_WIDTH, tileStorage);
 			tilesProcessed++;
 			presentLoc += tileWidth * PAGE_DEPTH;
-			src += tileWidth * PAGE_DEPTH;
+			srcBmp += tileWidth * PAGE_DEPTH;
 			/* Have we got all the tiles from the source!? */
 			if (tilesProcessed == tilesPerSource)
 			{
@@ -210,7 +184,7 @@ void remakeTileTexturePages(UDWORD srcWidth,UDWORD srcHeight, UDWORD tileWidth, 
 				presentLoc += (tileHeight-1) * PAGE_WIDTH * PAGE_DEPTH;
 			}
 		}
-		src += (tileHeight-1) * srcWidth * PAGE_DEPTH;
+		srcBmp += (tileHeight-1) * src->width * PAGE_DEPTH;
 	}
 
 	//check numTexturePages == pageNumber;
@@ -227,7 +201,7 @@ BOOL getTileRadarColours(void)
 {
 	UDWORD x, y, i, j, w, h, t;
 	iBitmap *b, *s;
-	char tempBMP[TILE_WIDTH * TILE_HEIGHT];
+	unsigned char tempBMP[TILE_WIDTH * TILE_HEIGHT];
 
 	w = tilesPCX.width / TILE_WIDTH;
 	h = tilesPCX.height / TILE_HEIGHT;
@@ -268,7 +242,7 @@ void freeTileTextures(void)
 
 	for (i = 0; i < numTexturePages; i++)
 	{
-		free(_TEX_PAGE[(firstTexturePage+i)].tex.bmp);
+		iV_unloadImage(&_TEX_PAGE[(firstTexturePage+i)].tex);
 	}
 }
 
@@ -299,7 +273,7 @@ static UDWORD	getTileYIndex(UDWORD tileNumber)
 
 /* Extracts a rectangular buffer from a source buffer, storing result in one contiguous
    chunk	*/
-static void getRectFromPage(UDWORD width, UDWORD height, char *src, UDWORD bufWidth, char *dest)
+static void getRectFromPage(UDWORD width, UDWORD height, unsigned char *src, UDWORD bufWidth, unsigned char *dest)
 {
 	UDWORD	i,j;
 
@@ -314,7 +288,7 @@ static void getRectFromPage(UDWORD width, UDWORD height, char *src, UDWORD bufWi
 }
 
 /* Inserts a rectangle into a dest rectangle */
-static void putRectIntoPage(UDWORD width, UDWORD height, char *dest, UDWORD bufWidth, char *src)
+static void putRectIntoPage(UDWORD width, UDWORD height, unsigned char *dest, UDWORD bufWidth, unsigned char *src)
 {
 UDWORD	i,j;
 

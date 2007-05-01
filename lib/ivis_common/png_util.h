@@ -24,21 +24,21 @@
 #include "pietypes.h"
 
 /*!
- * Load a PNG from file into texture
+ * Load a PNG from file into image
  *
  * \param fileName input file to load from
- * \param sprite Sprite to read into
+ * \param image Sprite to read into
  * \return TRUE on success, FALSE otherwise
  */
-BOOL pie_PNGLoadFile(const char *fileName, iTexture *s);
+BOOL iV_loadImage_PNG(const char *fileName, iV_Image *image);
 
 /*!
- * Save a PNG from texture into file
+ * Save a PNG from image into file
  *
  * \param fileName output file to save to
- * \param sprite Texture to read from
+ * \param image Texture to read from
  * \return TRUE on success, FALSE otherwise
  */
-void pie_PNGSaveFile(const char *fileName, iTexture *s);
+void iV_saveImage_PNG(const char *fileName, const iV_Image *image);
 
 #endif // _LIBIVIS_COMMON_PNG_H_

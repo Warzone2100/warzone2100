@@ -31,6 +31,7 @@
 #include <physfs.h>
 #include <png.h>
 #include "lib/ivis_common/png_util.h"
+#include "lib/ivis_common/tex.h"
 
 #include "lib/framework/frameint.h"
 #include "lib/ivis_common/piestate.h"
@@ -58,8 +59,6 @@ SDWORD	fogColour = 0;
 static char screendump_filename[MAX_PATH];
 static BOOL screendump_required = FALSE;
 
-static UDWORD	backDropWidth = BACKDROP_WIDTH;
-static UDWORD	backDropHeight = BACKDROP_HEIGHT;
 static GLuint backDropTexture = ~0;
 
 /* Initialise the double buffered display */
@@ -172,8 +171,10 @@ BOOL screenInitialise(
 	glPushMatrix();
 	glLoadIdentity();
 	glOrtho(0, width, height, 0, 1, -1);
+
 	glMatrixMode(GL_TEXTURE);
-	glScalef(1/256.0, 1/256.0, 1);
+	glScalef(1/256.0, 1/256.0, 1); // FIXME Scaling texture coords to 256x256!
+
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glCullFace(GL_FRONT);
@@ -198,60 +199,12 @@ void *screenGetSurface(void)
 	return NULL;
 }
 
-void screen_SetBackDrop(UWORD *newBackDropBmp, UDWORD width, UDWORD height)
-{
-	bBackDrop = TRUE;
-	pBackDropData = newBackDropBmp;
-	backDropWidth = width;
-	backDropHeight = height;
-}
-
-BOOL image_init(pie_image* image)
-{
-	if (image == NULL) return TRUE;
-
-	image->width = 0;
-	image->height = 0;
-	image->channels = 0;
-	image->data = NULL;
-
-	return FALSE;
-}
-
-BOOL image_create(pie_image* image,
-		  unsigned int width,
-		  unsigned int height,
-		  unsigned int channels)
-{
-	if (image == NULL) return TRUE;
-
-	image->width = width;
-	image->height = height;
-	image->channels = channels;
-	if (image->data != NULL) {
-		free(image->data);
-	}
-	image->data = (unsigned char*)malloc(width*height*channels);
-
-	return FALSE;
-}
-
-BOOL image_delete(pie_image* image)
-{
-	if (image == NULL) return TRUE;
-
-	if (image->data != NULL) {
-		free(image->data);
-		image->data = NULL;
-	}
-
-	return FALSE;
-}
 
 void screen_SetBackDropFromFile(const char* filename)
 {
 	// HACK : We should use a resource handler here!
 	const char *extension = strrchr(filename, '.');// determine the filetype
+	iV_Image image;
 
 	if(!extension)
 	{
@@ -265,24 +218,22 @@ void screen_SetBackDropFromFile(const char* filename)
 
 	if( strcmp(extension,".png") == 0 )
 	{
-		iTexture imagePNG;
-
-		if (pie_PNGLoadFile( filename, &imagePNG ) )
+		if (iV_loadImage_PNG( filename, &image ) )
 		{
 			if (~backDropTexture == 0)
 				glGenTextures(1, &backDropTexture);
 
 			glBindTexture(GL_TEXTURE_2D, backDropTexture);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-					imagePNG.width, imagePNG.height,
-					0, GL_RGBA, GL_UNSIGNED_BYTE, imagePNG.bmp);
+			glTexImage2D(GL_TEXTURE_2D, 0, iV_getPixelFormat(&image),
+					image.width, image.height,
+					0, iV_getPixelFormat(&image), GL_UNSIGNED_BYTE, image.bmp);
 			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
-			free(imagePNG.bmp);
+			iV_unloadImage(&image);
 		}
 		return;
 	}
@@ -361,11 +312,11 @@ static const unsigned int channelsPerPixel = 3;
 void screenDoDumpToDiskIfRequired(void)
 {
 	const char* fileName = screendump_filename;
-	static iTexture image = { 0, 0, NULL };
+	static iV_Image image = { 0, 0, 0, NULL };
 
 	if (!screendump_required) return;
 	debug( LOG_3D, "Saving screenshot %s\n", fileName );
-	
+
 	// Dump the currently displayed screen in a buffer
 	if (image.width != screen->w || image.height != screen->h)
 	{
@@ -373,9 +324,10 @@ void screenDoDumpToDiskIfRequired(void)
 		{
 			free(image.bmp);
 		}
+
 		image.width = screen->w;
 		image.height = screen->h;
-		image.bmp = (char*)malloc(channelsPerPixel * image.width * image.height);
+		image.bmp = malloc(channelsPerPixel * image.width * image.height);
 		if (image.bmp == NULL)
 		{
 			image.width = 0; image.height = 0;
@@ -386,7 +338,7 @@ void screenDoDumpToDiskIfRequired(void)
 	glReadPixels(0, 0, image.width, image.height, GL_RGB, GL_UNSIGNED_BYTE, image.bmp);
 
 	// Write the screen to a PNG
-	pie_PNGSaveFile(fileName, &image);
+	iV_saveImage_PNG(fileName, &image);
 
 	screendump_required = FALSE;
 }

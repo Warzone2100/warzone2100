@@ -21,6 +21,7 @@
 #define _tex_
 
 #include "ivi.h"
+#include "png_util.h"
 
 //*************************************************************************
 
@@ -49,16 +50,18 @@ typedef struct
 	char name[iV_TEXNAME_MAX];
 	unsigned int id;
 	int bResource;	// Was page provided by resource handler?
-}
-iTexPage;
+} iTexPage;
 
 //*************************************************************************
 extern unsigned int _TEX_INDEX;
-extern iTexPage	_TEX_PAGE[iV_TEX_MAX];
+extern iTexPage _TEX_PAGE[iV_TEX_MAX];
 
 //*************************************************************************
 
 extern int iV_GetTexture(const char *filename);
+extern void iV_unloadImage(iV_Image *image);
+extern unsigned int iV_getPixelFormat(const iV_Image *image);
+
 extern int pie_ReloadTexPage(const char *texpageName, const char *fileName);
 extern int pie_AddTexPage(iTexture* s, const char *filename, int type, BOOL bResource);
 extern void pie_ChangeTexPage(int tex_index, iTexture* s, int type, BOOL bResource);

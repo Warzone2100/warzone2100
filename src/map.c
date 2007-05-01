@@ -265,9 +265,9 @@ BOOL mapNew(UDWORD width, UDWORD height)
 	mapHeight = height;
 
 	for (i=0; i<MAX_TILE_TEXTURES; i++)
-		{
-			terrainTypes[i] = TER_SANDYBRUSH;
-		}
+	{
+		terrainTypes[i] = TER_SANDYBRUSH;
+	}
 
 	/* Allocate a buffer for the LOS routines points */
 

@@ -53,7 +53,7 @@ unsigned int _TEX_INDEX;
 
 	Returns the texture number of the image.
 **************************************************************************/
-int pie_AddTexPage(iTexture* s, const char* filename, int type, BOOL bResource)
+int pie_AddTexPage(iV_Image * s, const char* filename, int type, BOOL bResource)
 {
 	unsigned int i = 0;
 
@@ -88,16 +88,16 @@ int pie_AddTexPage(iTexture* s, const char* filename, int type, BOOL bResource)
 	_TEX_PAGE[i].tex.bmp = s->bmp;
 	_TEX_PAGE[i].tex.width = s->width;
 	_TEX_PAGE[i].tex.height = s->height;
+	_TEX_PAGE[i].tex.depth = s->depth;
 	_TEX_PAGE[i].type = type;
 
 	glGenTextures(1, (GLuint *) &_TEX_PAGE[i].id);
-	// FIXME: This function is used instead of glBindTexture, but we're juggling with difficult
-	//        to trace global state here. Look into pie_SetTexturePage's definition for details.
+	// FIXME: This function is used instead of glBindTexture, but we're juggling with difficult to trace global state here. Look into pie_SetTexturePage's definition for details.
 	pie_SetTexturePage(i);
 
 	if ((s->width & (s->width-1)) == 0 && (s->height & (s->height-1)) == 0)
 	{
-		gluBuild2DMipmaps(GL_TEXTURE_2D, wz_texture_compression, s->width, s->height, GL_RGBA, GL_UNSIGNED_BYTE, s->bmp);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, wz_texture_compression, s->width, s->height, iV_getPixelFormat(s), GL_UNSIGNED_BYTE, s->bmp);
 	} else {
 		debug(LOG_ERROR, "pie_AddTexPage: non POT texture %s", filename);
 	}
@@ -133,7 +133,7 @@ void pie_MakeTexPageName(char * filename)
 	}
 }
 
-void pie_ChangeTexPage(int tex_index, iTexture* s, int type, BOOL bResource)
+void pie_ChangeTexPage(int tex_index, iV_Image * s, int type, BOOL bResource)
 {
 	assert(s != NULL);
 
@@ -143,6 +143,7 @@ void pie_ChangeTexPage(int tex_index, iTexture* s, int type, BOOL bResource)
 	_TEX_PAGE[tex_index].tex.bmp = s->bmp;
 	_TEX_PAGE[tex_index].tex.width = s->width;
 	_TEX_PAGE[tex_index].tex.height = s->height;
+	_TEX_PAGE[tex_index].tex.depth = s->depth;
 	_TEX_PAGE[tex_index].type = type;
 
 	glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[tex_index].id);
@@ -150,7 +151,7 @@ void pie_ChangeTexPage(int tex_index, iTexture* s, int type, BOOL bResource)
 	if ((s->width & (s->width-1)) == 0 && (s->height & (s->height-1)) == 0)
 	{
 		gluBuild2DMipmaps(GL_TEXTURE_2D, wz_texture_compression, s->width, s->height,
-			     GL_RGBA, GL_UNSIGNED_BYTE, s->bmp);
+			     iV_getPixelFormat(s), GL_UNSIGNED_BYTE, s->bmp);
 	} else {
 		debug(LOG_ERROR, "pie_ChangeTexPage: non POT texture %i", tex_index);
 	}
@@ -215,11 +216,8 @@ int pie_ReloadTexPage(const char *texpageName, const char *fileName)
 
 	debug(LOG_TEXTURE, "Reloading texture %s from index %d, max is %d", texpageName, i, _TEX_INDEX);
 
-	if (_TEX_PAGE[i].tex.bmp)
-	{
-		free(_TEX_PAGE[i].tex.bmp);
-	}
-	pie_PNGLoadFile(fileName, &_TEX_PAGE[i].tex);
+	iV_unloadImage(&_TEX_PAGE[i].tex);
+	iV_loadImage_PNG(fileName, &_TEX_PAGE[i].tex);
 
 	return i;
 }
@@ -261,4 +259,33 @@ void pie_TexInit(void)
 		i++;
 	}
 	debug(LOG_TEXTURE, "pie_TexInit successful - initialized %d texture pages\n", i);
+}
+
+
+void iV_unloadImage(iV_Image *image)
+{
+	if (image)
+	{
+		free(image->bmp);
+		image->bmp = NULL;
+	}
+	else
+	{
+		debug(LOG_ERROR, "Tried to free invalid image!");
+	}
+}
+
+
+unsigned int iV_getPixelFormat(const iV_Image *image)
+{
+	switch (image->depth)
+	{
+		case 3:
+			return GL_RGB;
+		case 4:
+			return GL_RGBA;
+		default:
+			debug(LOG_ERROR, "iV_getPixelFormat: Unsupported image depth: %u", image->depth);
+			return GL_INVALID_ENUM;
+	}
 }
