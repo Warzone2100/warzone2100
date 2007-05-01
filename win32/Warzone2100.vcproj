@@ -685,6 +685,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\lib\sound\oggvorbis.c"
+				>
+			</File>
+			<File
 				RelativePath="..\lib\sound\openal_track.c"
 				>
 			</File>
@@ -698,10 +702,6 @@
 			</File>
 			<File
 				RelativePath="..\src\order.c"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\ivis_common\pcx.c"
 				>
 			</File>
 			<File
@@ -768,6 +768,10 @@
 			</File>
 			<File
 				RelativePath="..\lib\sound\playlist.c"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\ivis_common\png_util.c"
 				>
 			</File>
 			<File
@@ -1533,6 +1537,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\lib\sound\oggvorbis.h"
+				>
+			</File>
+			<File
 				RelativePath="..\src\oprint.h"
 				>
 			</File>
@@ -1606,6 +1614,10 @@
 			</File>
 			<File
 				RelativePath="..\lib\sound\playlist.h"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\ivis_common\png_util.h"
 				>
 			</File>
 			<File
