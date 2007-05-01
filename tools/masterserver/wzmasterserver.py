@@ -16,24 +16,9 @@
 # Get the things we need.
 
 import sys
-
-try:
-    import SocketServer
-except:
-    print "Couldn't load module SocketServer! -- Aborting..."
-    sys.exit(1)
-    
-try:
-    import thread
-except:
-    print "Couldn't load module thread! -- Aborting..."
-    sys.exit(1)
-    
-try:
-    import struct
-except:
-    print "Couldn't load module struct! -- Aborting..."
-    sys.exit(1)
+import SocketServer
+import thread
+import struct
 
 #
 ################################################################################
@@ -45,7 +30,6 @@ gsSize    = 112          # Size of GAMESTRUCT in byte.
 ipOffset  = 64+4+4       # 64 byte StringSize + SDWORD + SDWORD
 gameList  = set()        # Holds the list.
 listLock  = thread.allocate_lock()
-
 
 #
 ################################################################################
@@ -69,27 +53,48 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
             # Debug
             if lobbyDev:
                 print "<- addg"
-
-            # Recive the gamestruct.
-            gameData = self.rfile.read(gsSize)
-
+                
             # Fix the server address.
             gameHost = self.client_address[0]
 
             while len(gameHost) < 16:
                 gameHost += '\0'
 
-            # Update the gameData whith the fresh gameHost.
-            gameData = gameData[:ipOffset] + gameHost + gameData[ipOffset+16:]
+            currentGameData = None
+            
+            # and start receiving updates about the game
+            while True:
+                # Receive the gamestruct.
+                try:
+                    newGameData = self.rfile.read(gsSize)
+                except:
+                    newGameData = None
+                
+                # remove the previous data from the list
+                if currentGameData:
+                    listLock.acquire()
+                    try:
+                        if lobbyDev:
+                            print "Removing game from", self.client_address[0]
+                        gameList.remove(currentGameData)
+                    finally:
+                        listLock.release()
+                        
+                if len(newGameData) < gsSize:
+                    # incomplete data
+                    break
+                        
+                # Update the new gameData whith the gameHost
+                currentGameData = newGameData[:ipOffset] + gameHost + newGameData[ipOffset+16:]
 
-            # Put the game in the database.
-            listLock.acquire()
-            gameList.add(gameData)
-            listLock.release()
-
-            # Wait until it is done.
-            self.rfile.read(1)
-            gameList.remove(gameData)
+                # Put the game in the database
+                listLock.acquire()
+                try:
+                    if lobbyDev:
+                        print "  \- Adding game from", self.client_address[0]
+                    gameList.add(currentGameData)
+                finally:
+                    listLock.release()
 
         # Get a game list.
         elif netCommand == 'list':
@@ -128,3 +133,4 @@ if __name__ == '__main__':
     tcpserver = SocketServer.ThreadingTCPServer(('0.0.0.0', lobbyPort), RequestHandler)
     #tcpserver.allow_reuse_address = True
     tcpserver.serve_forever()
+    
