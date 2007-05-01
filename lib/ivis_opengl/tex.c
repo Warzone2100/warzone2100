@@ -91,7 +91,9 @@ int pie_AddTexPage(iTexture* s, const char* filename, int type, BOOL bResource)
 	_TEX_PAGE[i].type = type;
 
 	glGenTextures(1, (GLuint *) &_TEX_PAGE[i].id);
-	glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[i].id);
+	// FIXME: This function is used instead of glBindTexture, but we're juggling with difficult
+	//        to trace global state here. Look into pie_SetTexturePage's definition for details.
+	pie_SetTexturePage(i);
 
 	if ((s->width & (s->width-1)) == 0 && (s->height & (s->height-1)) == 0)
 	{
