@@ -305,8 +305,6 @@ void cdAudio_Update( void )
 	{
 		unsigned int update;
 
-		debug(LOG_ERROR, "numProcessedBuffers() = %u\n", numProcessedBuffers());
-
 		for (update = numProcessedBuffers(); update != 0; --update)
 		{
 			ALuint buffer;
