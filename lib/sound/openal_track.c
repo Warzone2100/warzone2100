@@ -60,9 +60,6 @@ static ALfloat		sfx3d_volume = 1.0;
 static ALCdevice* device = 0;
 static ALCcontext* context = 0;
 
-static char* DataBuffer = NULL; // Needed for sound_DecodeOggVorbisTrack, must be global, so it can be free'd on shutdown
-static size_t DataBuffer_size = 16 * 1024;
-
 BOOL openal_initialized = FALSE;
 
 BOOL		cdAudio_Update( void );
@@ -152,9 +149,6 @@ void sound_ShutdownLibrary( void )
 		alcCloseDevice(device);
 		device = 0;
 	}
-
-	free(DataBuffer);
-	DataBuffer = NULL;
 
 	while( aSample )
 	{
@@ -262,24 +256,14 @@ static inline TRACK* sound_DecodeOggVorbisTrack(TRACK *psTrack, PHYSFS_file* PHY
 	OggVorbisDecoderState* decoder = sound_CreateOggVorbisDecoder(PHYSFS_fileHandle, TRUE);
 	soundDataBuffer* soundBuffer;
 
-	// Allocate an initial buffer to contain the decoded PCM data
-	if (DataBuffer == NULL)
-	{
-		DataBuffer = malloc(DataBuffer_size);
-	}
-
-	soundBuffer = sound_DecodeOggVorbis(decoder, DataBuffer_size, DataBuffer);
+	soundBuffer = sound_DecodeOggVorbis(decoder, 0, NULL);
 	sound_DestroyOggVorbisDecoder(decoder);
-
-	DataBuffer = (char*)soundBuffer;
 
 	if (soundBuffer == NULL)
 	{
 		free(psTrack);
 		return NULL;
 	}
-
-	DataBuffer_size = soundBuffer->bufferSize;
 
 	// Determine PCM data format
 	format = (soundBuffer->channelCount == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;

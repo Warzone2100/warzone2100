@@ -224,23 +224,6 @@ soundDataBuffer* sound_DecodeOggVorbis(OggVorbisDecoderState* decoder, size_t bu
 	// Decode PCM data into the buffer until there is nothing to decode left
 	do
 	{
-		// If the PCM buffer has become to small increase it by reallocating double its previous size
-		if (size == bufferSize && targetBuffer != NULL)
-		{
-			void* newBuffer;
-			bufferSize *= 2;
-			newBuffer = realloc(buffer, bufferSize + sizeof(soundDataBuffer));
-			if (newBuffer == NULL)
-			{
-				debug(LOG_ERROR, "sound_DecodeOggVorbis: realloc failed, bailing out\n");
-				return buffer;
-			}
-
-			buffer = newBuffer;
-			buffer->data = (char*)(buffer + 1);
-			buffer->bufferSize = bufferSize + sizeof(soundDataBuffer);
-		}
-
 		// Decode
 		int section;
 		result = ov_read(&decoder->oggVorbis_stream, &buffer->data[size], bufferSize - size, OGG_ENDIAN, 2, 1, &section);
@@ -256,7 +239,7 @@ soundDataBuffer* sound_DecodeOggVorbis(OggVorbisDecoderState* decoder, size_t bu
 			size += result;
 		}
 
-	} while ((result != 0 && size < bufferSize) || (size == bufferSize && targetBuffer != NULL));
+	} while ((result != 0 && size < bufferSize));
 
 	buffer->size = size;
 
