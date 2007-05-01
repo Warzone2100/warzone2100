@@ -47,6 +47,6 @@ typedef void OggVorbisDecoderState;
 OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_fileHandle, BOOL allowSeeking);
 void sound_DestroyOggVorbisDecoder(OggVorbisDecoderState* decoder);
 
-soundDataBuffer* sound_DecodeOggVorbis(OggVorbisDecoderState* decoder, size_t bufferSize, char* targetBuffer);
+soundDataBuffer* sound_DecodeOggVorbis(OggVorbisDecoderState* decoder, size_t bufferSize);
 
 #endif // _LIBSOUND_OGGVORBIS_H_

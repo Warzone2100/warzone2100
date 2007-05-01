@@ -256,7 +256,7 @@ static inline TRACK* sound_DecodeOggVorbisTrack(TRACK *psTrack, PHYSFS_file* PHY
 	OggVorbisDecoderState* decoder = sound_CreateOggVorbisDecoder(PHYSFS_fileHandle, TRUE);
 	soundDataBuffer* soundBuffer;
 
-	soundBuffer = sound_DecodeOggVorbis(decoder, 0, NULL);
+	soundBuffer = sound_DecodeOggVorbis(decoder, 0);
 	sound_DestroyOggVorbisDecoder(decoder);
 
 	if (soundBuffer == NULL)
@@ -271,6 +271,8 @@ static inline TRACK* sound_DecodeOggVorbisTrack(TRACK *psTrack, PHYSFS_file* PHY
 	// Create an OpenAL buffer and fill it with the decoded data
 	alGenBuffers(1, &buffer);
 	alBufferData(buffer, format, soundBuffer->data, soundBuffer->size, soundBuffer->frequency);
+
+	free(soundBuffer);
 
 	// save buffer name in track
 	psTrack->iBufferName = buffer;

@@ -168,51 +168,37 @@ static inline unsigned int getCurrentSample(OggVorbisDecoderState* decoder)
 	return samplePos;
 }
 
-soundDataBuffer* sound_DecodeOggVorbis(OggVorbisDecoderState* decoder, size_t bufferSize, char* targetBuffer)
+soundDataBuffer* sound_DecodeOggVorbis(OggVorbisDecoderState* decoder, size_t bufferSize)
 {
 	size_t		size = 0;
 	int		result;
 
 	soundDataBuffer* buffer;
 
-	if (targetBuffer == NULL)
+	if (decoder->allowSeeking)
 	{
-		if (decoder->allowSeeking)
+		unsigned int sampleCount = getSampleCount(decoder);
+
+		unsigned int sizeEstimate = sampleCount * decoder->VorbisInfo->channels * 2;
+
+		if (((bufferSize == 0) || (bufferSize > sizeEstimate)) && (sizeEstimate != 0))
 		{
-			unsigned int sampleCount = getSampleCount(decoder);
-
-			unsigned int sizeEstimate = sampleCount * decoder->VorbisInfo->channels * 2;
-
-			if (((bufferSize == 0) || (bufferSize > sizeEstimate)) && (sizeEstimate != 0))
-			{
-				bufferSize = (sampleCount - getCurrentSample(decoder)) * decoder->VorbisInfo->channels * 2;
-			}
-		}
-
-		// If we can't seek nor receive any suggested size for our buffer, just quit
-		if (bufferSize == 0)
-		{
-			debug(LOG_ERROR, "sound_DecodeOggVorbis: can't find a proper buffer size\n");
-			return NULL;
-		}
-
-		buffer = malloc(bufferSize + sizeof(soundDataBuffer));
-		if (buffer == NULL)
-		{
-			debug(LOG_ERROR, "sound_DecodeOggVorbis: couldn't allocate memory (%u bytes requested)\n", bufferSize + sizeof(soundDataBuffer));
-			return NULL;
+			bufferSize = (sampleCount - getCurrentSample(decoder)) * decoder->VorbisInfo->channels * 2;
 		}
 	}
-	else
-	{
-		if (bufferSize <= sizeof(soundDataBuffer))
-		{
-			free(targetBuffer);
-			return NULL;
-		}
 
-		buffer = (soundDataBuffer*)targetBuffer;
-		bufferSize -= sizeof(soundDataBuffer);
+	// If we can't seek nor receive any suggested size for our buffer, just quit
+	if (bufferSize == 0)
+	{
+		debug(LOG_ERROR, "sound_DecodeOggVorbis: can't find a proper buffer size\n");
+		return NULL;
+	}
+
+	buffer = malloc(bufferSize + sizeof(soundDataBuffer));
+	if (buffer == NULL)
+	{
+		debug(LOG_ERROR, "sound_DecodeOggVorbis: couldn't allocate memory (%u bytes requested)\n", bufferSize + sizeof(soundDataBuffer));
+		return NULL;
 	}
 
 	buffer->data = (char*)(buffer + 1);
