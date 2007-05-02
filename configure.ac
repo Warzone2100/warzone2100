@@ -135,14 +135,9 @@ AC_ARG_ENABLE(ogg,
 
 AC_CHECK_LIB(m, pow)
 
-AC_CHECK_LIB(z, gzgets, , AC_MSG_ERROR([zlib not found.]))
-AC_CHECK_HEADER(zlib.h, , AC_MSG_ERROR([zlib header not found.]))
-
-
 # Look for image libs
 AC_CHECK_LIB(png, main, , AC_MSG_ERROR([libpng not found.]))
 AC_CHECK_HEADER(png.h, , AC_MSG_ERROR([png header not found.]))
-
 
 # Look for PhysicsFS
 AC_CHECK_LIB(physfs, PHYSFS_init, , AC_MSG_ERROR([PhysicsFS not found]))
