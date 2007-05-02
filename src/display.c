@@ -578,15 +578,11 @@ void processInput(void)
 	mY = mouseY();
 
 	/* Process all of our key mappings */
-//	keyProcessMappings();	// done later - see below.
-
-//	if(mousePressed(MOUSE_LMB) && getRadarTrackingStatus() && !mOverR)
 	if(mousePressed(MOUSE_LMB) && !mOverR && getRadarTrackingStatus())
 	{
 		camToggleStatus();
 	}
 
-//	if(mousePressed(MOUSE_RMB) && getRadarTrackingStatus() && !mOverR)
 	if(mousePressed(MOUSE_LMB) && !mOverR && getRadarTrackingStatus())
 	{
 		camToggleStatus();
@@ -608,7 +604,7 @@ void processInput(void)
 			}
 			else
 			{
-				for (WheelZoomIterator=0;WheelZoomIterator<10;WheelZoomIterator++)
+				for (WheelZoomIterator = 0; WheelZoomIterator < 10; WheelZoomIterator++)
 					kf_ZoomIn();
 			}
 		}
@@ -630,7 +626,7 @@ void processInput(void)
 			}
 			else
 			{
-				for (WheelZoomIterator=0;WheelZoomIterator<10;WheelZoomIterator++)
+				for (WheelZoomIterator = 0; WheelZoomIterator < 10; WheelZoomIterator++)
 					kf_ZoomOut();
 			}
 		}
@@ -660,80 +656,7 @@ void processInput(void)
 	{
 		setConsolePermanence(FALSE,TRUE);
 	}
-
-/*   	if(keyDown(KEY_F1))
-	{
-		theSun.x+=64;
-		initLighting();
-	}
-
-	if(keyDown(KEY_F2))
-	{
-		theSun.x-=64;
-		initLighting();
-	}
-
-	if(keyDown(KEY_F3))
-	{
-		theSun.y+=64;
-		initLighting();
-	}
-
-	if(keyDown(KEY_F4))
-	{
-		theSun.y-=64;
-		initLighting();
-	}
-
-	if(keyDown(KEY_F5))
-	{
-		theSun.z+=64;
-		initLighting();
-	}
-
-	if(keyDown(KEY_F6))
-	{
-		theSun.z-=64;
-		initLighting();
-	}
-*/
 }
-
-////don't want to do any of these whilst in the Intelligence Screen
-//void processMouseClickInput(void)
-//{
-//	UDWORD	dragX,dragY,i;
-//	SELECTION_TYPE	selection;
-//	MOUSE_TARGET	item;
-//	BOOL OverRadar = mouseOverRadar;
-//
-//	/* Have we tried to click on something - only used to signal to display3d.c */
-//	if (mouseDown(MOUSE_LMB))
-//	{
-//		selectAttempt = TRUE;
-//	}
-//
-//	if(mouseDown(MOUSE_RMB) &&	rotActive)
-//	{
-//  		if(abs(mX-rotX)>8)
-//		{
-//			if(mX<rotX)
-//			{
-//				player.r.y = rotInitial + ( ((rotX-mX)/4) * DEG(1) );
-//			}
-//			else
-//			{
-//				player.r.y = rotInitial - ( ((mX-rotX)/4) * DEG(1) );
-//		   	}
-//		}
-//	}
-//
-//	if(mouseReleased(MOUSE_RMB) && rotActive)
-//	{
-//		rotActive = FALSE;
-//		ignoreRMBC = TRUE;
-//	}
-//}
 
 
 static BOOL OverRadarAndNotDragging(void)
@@ -1622,7 +1545,6 @@ void displayWorld(void)
 	}
 
 	draw3DScene();
-
 }
 
 BOOL	mouseInBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1)

@@ -132,7 +132,7 @@ static void	trackHeight(SDWORD desiredHeight);
 static void	getDefaultColours(void);
 static void	renderSurroundings(void);
 static void	locateMouse(void);
-static void	preprocessTiles(void);
+static void preprocessTiles(void);
 static BOOL	renderWallSection(STRUCTURE *psStructure);
 static void	drawDragBox(void);
 static void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR);
@@ -346,9 +346,7 @@ SDWORD	getCentreZ( void )
 /* Render the 3D world */
 void draw3DScene( void )
 {
-//SDWORD	angle;
-BOOL		bPlayerHasHQ = FALSE;
-
+	BOOL bPlayerHasHQ = FALSE;
 
 	/* Set the droids on-screen display coordinates for selection later */
 	mX = mouseX();
@@ -576,24 +574,17 @@ BOOL		bPlayerHasHQ = FALSE;
 /* Draws the 3D textured terrain */
 static void displayTerrain(void)
 {
-//	SDWORD	x,y;
 	tileZ = 8000;
-
-//	x = ((visibleXTiles/2)*128);
-//	y = ((visibleYTiles/2)*128);
-
-//	x += player.p.x;
-//	y += player.p.z;
 
 	/* SetUpClipping window - to below the backdrop */
 	pie_Set2DClip( xOffset, yOffset, psRendSurface->width-xOffset, psRendSurface->height-yOffset );
-
-	pie_PerspectiveBegin();
 
 	/* We haven't yet located which tile mouse is over */
 	mouseLocated = FALSE;
 
 	numTiles = 0;
+
+	pie_PerspectiveBegin();
 
 	/* Setup tiles */
 	preprocessTiles();
@@ -2175,7 +2166,7 @@ void	renderStructure(STRUCTURE *psStructure)
 			}
 			pie_Draw3DShape(imd, 0, playerFrame, buildingBrightness, specular, pie_HEIGHT_SCALED|pie_SHADOW,
 			                (SDWORD)(structHeightScale(psStructure) * pie_RAISE_SCALE));
-			if (bHitByElectronic || defensive) 
+			if (bHitByElectronic || defensive)
 			{
 				imd->points = temp;
 			}
@@ -2188,7 +2179,7 @@ void	renderStructure(STRUCTURE *psStructure)
 				imd->points = alteredPoints;
 			}
 			pie_Draw3DShape(imd, animFrame, 0, buildingBrightness, specular, pie_STATIC_SHADOW,0);
-			if (bHitByElectronic || defensive) 
+			if (bHitByElectronic || defensive)
 			{
 				imd->points = temp;
 			}
@@ -3850,7 +3841,6 @@ void	calcScreenCoords(DROID *psDroid)
 	else
 	{
 		radius = 22;
-
 	}
 
 	/* Pop matrices and get the screen corrdinates */
@@ -3859,7 +3849,7 @@ void	calcScreenCoords(DROID *psDroid)
 	//Watermelon:added a crash protection hack...
 	if (cZ != 0)
 	{
-		radius = ((radius * pie_GetResScalingFactor()) * 80 / cZ);
+		radius = (radius * pie_GetResScalingFactor()) * 80 / cZ;
 	}
 
 	/* Deselect all the droids if we've released the drag box */
@@ -3874,86 +3864,71 @@ void	calcScreenCoords(DROID *psDroid)
 			if (psDroid->droidType != DROID_TRANSPORTER || bMultiPlayer)
 			{
 				dealWithDroidSelect(psDroid, TRUE);
-/*				psDroid->selected = TRUE;
-				if (bInTutorial)
-				{
-					psCBSelectedDroid = psDroid;
-					eventFireCallbackTrigger(CALL_DROID_SELECTED);
-					psCBSelectedDroid = NULL;
-				}*/
 			}
 		}
 	}
-	cY-=4;
+	cY -= 4;
 	/* Store away the screen coordinates so we can select the droids without doing a trasform */
 	psDroid->sDisplay.screenX = cX;
 	psDroid->sDisplay.screenY = cY;
 	psDroid->sDisplay.screenR = radius;
 }
 
-static void	preprocessTiles(void)
+
+static void preprocessTiles(void)
 {
-UDWORD	i,j;
-UDWORD	left,right,up,down, size;
-DROID   *psDroid;
-//BASE_OBJECT *psObj;
-SDWORD  order;
-//UDWORD	tileCount;
+	UDWORD i, j;
+	UDWORD left,right,up,down, size;
+	DROID *psDroid;
+	SDWORD order;
 
 	/* Set up the highlights if we're putting down a wall */
-	if(wallDrag.status == DRAG_PLACING || wallDrag.status == DRAG_DRAGGING)
+	if (wallDrag.status == DRAG_PLACING || wallDrag.status == DRAG_DRAGGING)
 	{
 		/* Ensure the start point is always shown */
-		SET_TILE_HIGHLIGHT(mapTile(wallDrag.x1,wallDrag.y1));
-		if( (wallDrag.x1 == wallDrag.x2) || (wallDrag.y1 == wallDrag.y2) )
+		SET_TILE_HIGHLIGHT(mapTile(wallDrag.x1, wallDrag.y1));
+		if( wallDrag.x1 == wallDrag.x2 || wallDrag.y1 == wallDrag.y2 )
 		{
 			/* First process the ones inside the wall dragging area */
-			left = min(wallDrag.x1,wallDrag.x2);
-			right = max(wallDrag.x1,wallDrag.x2) + 1;
-			up = min(wallDrag.y1,wallDrag.y2);
-			down = max(wallDrag.y1,wallDrag.y2) + 1;
+			left = min(wallDrag.x1, wallDrag.x2);
+			right = max(wallDrag.x1, wallDrag.x2) + 1;
+			up = min(wallDrag.y1, wallDrag.y2);
+			down = max(wallDrag.y1, wallDrag.y2) + 1;
 
-			for(i=left; i<right; i++)
+			for(i = left; i < right; i++)
 			{
-				for(j=up; j<down; j++)
+				for(j = up; j < down; j++)
 				{
 					SET_TILE_HIGHLIGHT(mapTile(i,j));
 				}
 			}
 		}
 	}
-	else
 	/* Only bother if we're placing a building */
-	if(buildState == BUILD3D_VALID || buildState == BUILD3D_POS)
+	else if (buildState == BUILD3D_VALID || buildState == BUILD3D_POS)
 	{
 	/* Now do the ones inside the building highlight */
 		left = buildSite.xTL;
-		right = buildSite.xBR+1;
+		right = buildSite.xBR + 1;
 		up = buildSite.yTL;
-		down = buildSite.yBR+1;
+		down = buildSite.yBR + 1;
 
-		for(i=left; i<right; i++)
+		for(i = left; i < right; i++)
 		{
-			for(j=up; j<down; j++)
+			for(j = up; j < down; j++)
 			{
 				SET_TILE_HIGHLIGHT(mapTile(i,j));
-//				tileCount++;
-//				averageHeight+=map_TileHeight(i,j);
 			}
 		}
 	}
 
-	//don't display until we're releasing this feature in an update!
+	// HACK don't display until we're releasing this feature in an update!
 #ifndef DISABLE_BUILD_QUEUE
 	if (intBuildSelectMode())
 	{
 		//and there may be multiple building sites that need highlighting - AB 26/04/99
 		if (ctrlShiftDown())
 		{
-			//this just highlights the current interface selected unit
-			//psObj = getCurrentSelected();
-			//if (psObj && psObj->type == OBJ_DROID)
-
 			//this highlights ALL constructor units' build sites
 			for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 			{
@@ -3964,16 +3939,16 @@ SDWORD  order;
 					//draw the current build site if its a line of structures
 					if (psDroid->order == DORDER_LINEBUILD)
 					{
-							left = psDroid->orderX >> TILE_SHIFT;
-							right = (psDroid->orderX2 >> TILE_SHIFT) + 1;
+							left = MAP_COORD(psDroid->orderX);
+							right = MAP_COORD(psDroid->orderX2) + 1;
 							if (left > right)
 							{
 								size = left;
 								left = right;
 								right = size;
 							}
-							up = psDroid->orderY >> TILE_SHIFT;
-							down = (psDroid->orderY2 >> TILE_SHIFT) + 1;
+							up = MAP_COORD(psDroid->orderY);
+							down = MAP_COORD(psDroid->orderY2) + 1;
 							if (up > down)
 							{
 								size = up;
@@ -3981,9 +3956,9 @@ SDWORD  order;
 								down = size;
 							}
 							//hilight the tiles
-							for(i=left; i<right; i++)
+							for(i = left; i < right; i++)
 							{
-								for(j=up; j<down; j++)
+								for(j = up; j < down; j++)
 								{
 									SET_TILE_HIGHLIGHT(mapTile(i,j));
 								}
@@ -3997,16 +3972,16 @@ SDWORD  order;
 							//set up coords for tiles
 							size = ((STRUCTURE_STATS *)psDroid->asOrderList[order].
 								psOrderTarget)->baseWidth;
-							left = ((psDroid->asOrderList[order].x) >> TILE_SHIFT) - size/2;
+							left = MAP_COORD(psDroid->asOrderList[order].x) - size/2;
 							right = left + size;
 							size = ((STRUCTURE_STATS *)psDroid->asOrderList[order].
 								psOrderTarget)->baseBreadth;
-							up = ((psDroid->asOrderList[order].y) >> TILE_SHIFT) - size/2;
+							up = MAP_COORD(psDroid->asOrderList[order].y) - size/2;
 							down = up + size;
 							//hilight the tiles
-							for(i=left; i<right; i++)
+							for(i = left; i < right; i++)
 							{
-								for(j=up; j<down; j++)
+								for(j = up; j < down; j++)
 								{
 									SET_TILE_HIGHLIGHT(mapTile(i,j));
 								}
@@ -4015,16 +3990,16 @@ SDWORD  order;
 						else if (psDroid->asOrderList[order].order == DORDER_LINEBUILD)
 						{
 							//need to highlight the length of the wall
-							left = psDroid->asOrderList[order].x >> TILE_SHIFT;
-							right = psDroid->asOrderList[order].x2 >> TILE_SHIFT;
+							left = MAP_COORD(psDroid->asOrderList[order].x);
+							right = MAP_COORD(psDroid->asOrderList[order].x2);
 							if (left > right)
 							{
 								size = left;
 								left = right;
 								right = size;
 							}
-							up = psDroid->asOrderList[order].y >> TILE_SHIFT;
-							down = psDroid->asOrderList[order].y2 >> TILE_SHIFT;
+							up = MAP_COORD(psDroid->asOrderList[order].y);
+							down = MAP_COORD(psDroid->asOrderList[order].y2);
 							if (up > down)
 							{
 								size = up;
@@ -4032,9 +4007,9 @@ SDWORD  order;
 								down = size;
 							}
 							//hilight the tiles
-							for(i=left; i<=right; i++)
+							for(i = left; i <= right; i++)
 							{
-								for(j=up; j<=down; j++)
+								for(j = up; j <= down; j++)
 								{
 									SET_TILE_HIGHLIGHT(mapTile(i,j));
 								}
@@ -4046,60 +4021,10 @@ SDWORD  order;
 		}
 	}
 #endif
-//	if(tileCount)
-//	{
-
-//		averageHeight = averageHeight/tileCount;
-//	}
 }
 
-//this never gets called!
-/*void	postprocessTiles(void)
-{
-UDWORD	i,j;
-UDWORD	left,right,up,down;
-MAPTILE	*psTile;
 
-	// Clear the highlights if we're putting down a wall
-	if(wallDrag.status == DRAG_PLACING || wallDrag.status == DRAG_DRAGGING)
-	{
-		// Only show valid walls
-		if( (wallDrag.x1 == wallDrag.x2) || (wallDrag.y1 == wallDrag.y2) )
-		{
-			// First process the ones inside the wall dragging area
-			left = min(wallDrag.x1,wallDrag.x2);
-			right = max(wallDrag.x1,wallDrag.x2);
-			up = min(wallDrag.y1,wallDrag.y2);
-			down = max(wallDrag.y1,wallDrag.y2);
-
-			for(i=left; i<right; i++)
-			{
-				for(j=up; j<down; j++)
-				{
-					psTile = mapTile(i,j);
-					CLEAR_TILE_HIGHLIGHT(psTile);
-				}
-			}
-		}
-	}
-	// Now do the ones inside the building highlight
-	left = buildSite.xTL;
-	right = buildSite.xBR;
-	up = buildSite.yTL;
-	down = buildSite.yBR;
-
-	for(i=left; i<right; i++)
-	{
-		for(j=up; j<down; j++)
-		{
-			psTile = mapTile(i,j);
-			CLEAR_TILE_HIGHLIGHT(psTile);
-		}
-	}
-}*/
-
-/* This is slow - speed it up */
-
+/* TODO This is slow - speed it up */
 static void	locateMouse(void)
 {
 	UDWORD	i,j;
@@ -4108,7 +4033,6 @@ static void	locateMouse(void)
 	SDWORD	nearestZ = SDWORD_MAX;
 	SDWORD	tileZ;
 	BOOL	bWaterTile;
-	//UDWORD	bX,bY;
 
 	pt.x = mX;
 	pt.y = mY;

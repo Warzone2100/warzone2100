@@ -85,8 +85,8 @@ char * multiplay_mods[MAX_MODS] = { NULL };
 
 // Warzone 2100 . Pumpkin Studios
 
-UDWORD	gameStatus = GS_TITLE_SCREEN;	// Start game in title mode.
-UDWORD	lastStatus = GS_TITLE_SCREEN;
+// Start game in title mode:
+UDWORD	gameStatus = GS_TITLE_SCREEN, lastStatus = GS_TITLE_SCREEN;
 //flag to indicate when initialisation is complete
 BOOL	videoInitialised = FALSE;
 BOOL	gameInitialised = FALSE;
@@ -101,8 +101,8 @@ char	MultiPlayersPath[MAX_PATH];
 char	KeyMapPath[MAX_PATH];
 char	UserMusicPath[MAX_PATH];
 
-void debug_callback_stderr( void**, const char * );
-void debug_callback_win32debug( void**, const char * );
+extern void debug_callback_stderr( void**, const char * );
+extern void debug_callback_win32debug( void**, const char * );
 
 static BOOL inList( char * list[], const char * item )
 {
@@ -392,10 +392,9 @@ static void make_dir(char *dest, const char *dirname, const char *subdir)
 
 int main(int argc, char *argv[])
 {
-	FRAME_STATUS		frameRet;
 	BOOL			quit = FALSE;
 	BOOL			Restart = FALSE;
-	BOOL			paused = FALSE;//, firstTime = TRUE;
+	BOOL			paused = FALSE;
 	SDWORD			introVideoControl = 3;
 	int			loopStatus = 0;
 	iColour*		psPaletteBuffer;
@@ -500,12 +499,11 @@ init://jump here from the end if re_initialising
 
 	pie_SetFogStatus(FALSE);
 	pie_ScreenFlip(CLEAR_BLACK);
-	pie_ScreenFlip(CLEAR_BLACK);
 
 	if(gameStatus == GS_VIDEO_MODE)
 	{
 		introVideoControl = 0;//play video
-		gameStatus = GS_TITLE_SCREEN;
+		SetGameMode(GS_TITLE_SCREEN);
 	}
 
 	//load palette
@@ -541,14 +539,11 @@ init://jump here from the end if re_initialising
 
 	while (!quit)
 	{
-// Do the game mode specific initialisation.
+		// Do the game mode specific initialisation.
 		switch(gameStatus)
 		{
 			case GS_TITLE_SCREEN:
 				screen_RestartBackDrop();
-
-				//loadLevels(DIR_MULTIPLAYER);
-
 				if (!frontendInitialise("wrf/frontend.wrf"))
 				{
 					goto exit;
@@ -572,15 +567,12 @@ init://jump here from the end if re_initialising
 
 			case GS_SAVEGAMELOAD:
 				screen_RestartBackDrop();
-				gameStatus = GS_NORMAL;
+				SetGameMode(GS_NORMAL);
 				// load up a save game
 				if (!loadGameInit(saveGameName))
 				{
 					goto exit;
 				}
-				/*if (!levLoadData(pLevelName, saveGameName)) {
-					return -1;
-				}*/
 				screen_StopBackDrop();
 				break;
 			case GS_NORMAL:
@@ -617,7 +609,6 @@ init://jump here from the end if re_initialising
 				debug( LOG_ERROR, "Unknown game status on shutdown!" );
 		}
 
-
 		debug(LOG_MAIN, "Entering main loop");
 
 		Restart = FALSE;
@@ -625,58 +616,49 @@ init://jump here from the end if re_initialising
 
 		while (!Restart)
 		{
-			frameRet = frameUpdate();
-
-			switch (frameRet)
+			// Event handling, etc.
+			switch (frameUpdate())
 			{
-			case FRAME_KILLFOCUS:
-				paused = TRUE;
-				gameTimeStop();
-
-				audio_StopAll();
-				break;
-			case FRAME_SETFOCUS:
-				paused = FALSE;
-				gameTimeStart();
-				if (!dispModeChange())
-				{
+				case FRAME_KILLFOCUS:
+					paused = TRUE;
+					gameTimeStop();
+					audio_StopAll();
+					break;
+				case FRAME_SETFOCUS:
+					paused = FALSE;
+					gameTimeStart();
+					if (!dispModeChange())
+					{
+						quit = TRUE;
+						Restart = TRUE;
+					}
+					break;
+				case FRAME_QUIT:
+					debug(LOG_MAIN, "frame quit");
 					quit = TRUE;
 					Restart = TRUE;
-				}
-				break;
-			case FRAME_QUIT:
-				debug(LOG_MAIN, "frame quit");
-				quit = TRUE;
-				Restart = TRUE;
-				break;
-			default:
-				break;
+					break;
+				default:
+					break;
 			}
 
 			lastStatus = gameStatus;
 
 			if ((!paused) && (!quit))
 			{
-				switch(gameStatus)
+				if (loop_GetVideoStatus())
 				{
-				case	GS_TITLE_SCREEN:
-					if (loop_GetVideoStatus())
-					{
-						videoLoop();
-					}
-					else
-					{
+					videoLoop();
+				}
+				else switch(gameStatus)
+				{
+					case GS_TITLE_SCREEN:
 						switch(titleLoop()) {
 							case TITLECODE_QUITGAME:
 								debug(LOG_MAIN, "TITLECODE_QUITGAME");
 								Restart = TRUE;
 								quit = TRUE;
 								break;
-
-	//						case TITLECODE_ATTRACT:
-	//							DBPRINTF(("TITLECODE_ATTRACT\n"));
-	//							break;
-
 							case TITLECODE_SAVEGAMELOAD:
 								debug(LOG_MAIN, "TITLECODE_SAVEGAMELOAD");
 								gameStatus = GS_SAVEGAMELOAD;
@@ -684,7 +666,7 @@ init://jump here from the end if re_initialising
 								break;
 							case TITLECODE_STARTGAME:
 								debug(LOG_MAIN, "TITLECODE_STARTGAME");
-								gameStatus = GS_NORMAL;
+								SetGameMode(GS_NORMAL);
 								Restart = TRUE;
 								break;
 
@@ -705,36 +687,17 @@ init://jump here from the end if re_initialising
 							default:
 								debug(LOG_ERROR, "Unknown code returned by titleLoop");
 						}
-					}
-					break;
+						break;
 
-/*				case GS_SAVEGAMELOAD:
-					if (loopNewLevel)
-					{
-						//the start of a campaign/expand mission
-						DBPRINTF(("GAMECODE_NEWLEVEL\n"));
-						loopNewLevel = FALSE;
-						// gameStatus is unchanged, just loading additional data
-						Restart = TRUE;
-					}
-					break;
-*/
-				case	GS_NORMAL:
-					if (loop_GetVideoStatus())
-					{
-						videoLoop();
-					}
-					else
-					{
+					case GS_NORMAL:
 						loopStatus = gameLoop();
 						switch(loopStatus) {
 							case GAMECODE_QUITGAME:
 								debug(LOG_MAIN, "GAMECODE_QUITGAME");
-								gameStatus = GS_TITLE_SCREEN;
+								SetGameMode(GS_TITLE_SCREEN);
 								Restart = TRUE;
 								if(NetPlay.bLobbyLaunched)
 								{
-//									changeTitleMode(QUIT);
 									quit = TRUE;
 								}
 								break;
@@ -752,16 +715,10 @@ init://jump here from the end if re_initialising
 
 							case GAMECODE_PLAYVIDEO:
 								debug(LOG_MAIN, "GAMECODE_PLAYVIDEO");
-//dont schange mode any more								gameStatus = GS_VIDEO_MODE;
 								Restart = FALSE;
 								break;
 
 							case GAMECODE_NEWLEVEL:
-								debug(LOG_MAIN, "GAMECODE_NEWLEVEL");
-								// gameStatus is unchanged, just loading additional data
-								Restart = TRUE;
-								break;
-
 							case GAMECODE_RESTARTGAME:
 								debug(LOG_MAIN, "GAMECODE_RESTARTGAME");
 								Restart = TRUE;
@@ -773,56 +730,46 @@ init://jump here from the end if re_initialising
 							default:
 								debug(LOG_ERROR, "Unknown code returned by gameLoop");
 						}
-					}
-					break;
+						break;
 
-				case	GS_VIDEO_MODE:
-					debug(LOG_ERROR, "Video_mode no longer valid");
-					if (loop_GetVideoStatus())
-					{
-						videoLoop();
-					}
-					else
-					{
+					case GS_VIDEO_MODE:
+						debug(LOG_ERROR, "Video_mode no longer valid");
 						if (introVideoControl <= 1)
 						{
-								seq_ClearSeqList();
-
-								seq_AddSeqToList("factory.rpl",NULL,NULL, FALSE);
-								seq_StartNextFullScreenVideo();//"sequences/factory.rpl","sequences/factory.wav");
-								introVideoControl = 2;
+							seq_ClearSeqList();
+							seq_AddSeqToList("factory.rpl", NULL, NULL, FALSE);
+							seq_StartNextFullScreenVideo();
+							introVideoControl = 2;
 						}
 						else
 						{
-								debug(LOG_MAIN, "VIDEO_QUIT");
-								if (introVideoControl == 2)//finished playing intro video
+							debug(LOG_MAIN, "VIDEO_QUIT");
+							if (introVideoControl == 2)//finished playing intro video
+							{
+								SetGameMode(GS_TITLE_SCREEN);
+								if (videoInitialised)
 								{
-									gameStatus = GS_TITLE_SCREEN;
-									if (videoInitialised)
-									{
-										Restart = TRUE;
-									}
-									introVideoControl = 3;
+									Restart = TRUE;
 								}
-								else
-								{
-									gameStatus = GS_NORMAL;
-								}
+								introVideoControl = 3;
+							}
+							else
+							{
+								SetGameMode(GS_NORMAL);
+							}
 						}
-					}
+						break;
 
-					break;
-
-				default:
-					debug(LOG_ERROR, "Weirdy game status, I'm afraid!!");
-					break;
+					default:
+						debug(LOG_ERROR, "Weirdy game status, I'm afraid!!");
+						break;
 				}
 
 				gameTimeUpdate();
 			}
-		}	// End of !Restart loop.
+		} // End of !Restart loop.
 
-// Do game mode specific shutdown.
+		// Do game mode specific shutdown.
 		switch(lastStatus) {
 			case GS_TITLE_SCREEN:
 				if (!frontendShutdown())
@@ -832,14 +779,10 @@ init://jump here from the end if re_initialising
 				frontendInitialised = FALSE;
 				break;
 
-/*			case GS_SAVEGAMELOAD:
-				//get the next level to load up
-				gameStatus = GS_NORMAL;
-				break;*/
 			case GS_NORMAL:
 				if (loopStatus != GAMECODE_NEWLEVEL)
 				{
-					initLoadingScreen(TRUE);	// returning to f.e. do a loader.render not active
+					initLoadingScreen(TRUE); // returning to f.e. do a loader.render not active
 					pie_EnableFog(FALSE);//dont let the normal loop code set status on
 					fogStatus = 0;
 					if (loopStatus != GAMECODE_LOADGAME)
@@ -850,7 +793,7 @@ init://jump here from the end if re_initialising
 				gameInitialised = FALSE;
 				break;
 
-			case	GS_VIDEO_MODE:
+			case GS_VIDEO_MODE:
 				debug(LOG_ERROR, "Video_mode no longer valid");
 				if (videoInitialised)
 				{
@@ -862,7 +805,6 @@ init://jump here from the end if re_initialising
 				debug(LOG_ERROR, "Unknown game status on shutdown!");
 				break;
 		}
-
 	} // End of !quit loop.
 
 	debug(LOG_MAIN, "Shuting down application");

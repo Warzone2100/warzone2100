@@ -90,10 +90,9 @@ typedef struct _component
 
 typedef struct _order_list
 {
-	SDWORD				order;
-	//struct _base_object	*psObj;
-    void                *psOrderTarget; //this needs to cope with objects and stats
-	UWORD				x,y,x2,y2;      //line build requires two sets of coords
+	SDWORD order;
+    void *psOrderTarget; //this needs to cope with objects and stats
+	UWORD x, y, x2, y2;      //line build requires two sets of coords
 } ORDER_LIST;
 
 // maximum number of characters in a droid name
@@ -202,8 +201,8 @@ typedef struct _droid
 
 	/* Order data */
 	SDWORD				order;
-	UWORD				orderX,orderY;
-	UWORD				orderX2,orderY2;
+	UWORD				orderX, orderY;
+	UWORD				orderX2, orderY2;
 
 // 	struct _base_object	*psLastAttacker;
 	UDWORD				lastHitWeapon;

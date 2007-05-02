@@ -68,6 +68,16 @@ extern char last_called_script_event[MAX_EVENT_NAME_LEN];
 		__FILE__, __LINE__, __FUNCTION__, (#expr), last_called_script_event ) ); \
 	assert( expr );
 
+
+/*!
+ * Compile time assert
+ * Can not be used in global scope
+ * \param expr Expression to evaluate
+ */
+#define ASSERT_STATIC( expr ) \
+	do { enum { assert_static__ = 1/(expr) }; } while(0)
+
+
 /***
  ***
  ***  New debug logging output interface below. Heavily inspired
