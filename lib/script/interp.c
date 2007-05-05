@@ -36,7 +36,7 @@
 
 // the maximum number of instructions to execute before assuming
 // an infinite loop
-#define INTERP_MAXINSTRUCTIONS		200000
+#define INTERP_MAXINSTRUCTIONS		250000
 #define MAX_FUNC_CALLS 300
 
 static INTERP_VAL	*varEnvironment[MAX_FUNC_CALLS];		//environments for local variables of events/functions
