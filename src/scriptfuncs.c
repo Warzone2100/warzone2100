@@ -5600,7 +5600,7 @@ BOOL scrAddTemplate(void)
 // -----------------------------------------------------------------------------------------
 
 // additional structure check
-static BOOL structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy)
+static BOOL structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD maxBlockingTiles)
 {
 	UDWORD x,y,xTL,yTL,xBR,yBR;
 	UBYTE count =0;
@@ -5649,7 +5649,8 @@ static BOOL structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy)
 			break;
 		}}
 
-	if(count <2)//no more than one blocking side.
+	//make sure this location is not blocked from too many sides
+	if((count <= maxBlockingTiles) || (maxBlockingTiles == -1))
 	{
 		return TRUE;
 	}
@@ -5695,51 +5696,197 @@ BOOL scrPickStructLocation(void)
 	startX = *pX >> TILE_SHIFT;					// change to tile coords.
 	startY = *pY >> TILE_SHIFT;
 
-	for (incX = 1, incY = 1; incX < numIterations; incX++, incY++)
+	x = startX;
+	y = startY;
+
+	// first try the original location
+	if ( validLocation((BASE_STATS*)psStat, startX, startY, player, FALSE) )
 	{
-		if (!found){			//top
-			y = startY - incY;
-			for(x = startX - incX; x < (SDWORD)(startX + incX); x++){
-				if ( validLocation((BASE_STATS*)psStat, x, y, player, FALSE)
-					 && structDoubleCheck((BASE_STATS*)psStat,x,y)
-					){
-					found = TRUE;
-					break;
-				}}}
-
-		if (!found)	{			//right
-			x = startX + incX;
-			for(y = startY - incY; y < (SDWORD)(startY + incY); y++){
-				if(validLocation((BASE_STATS*)psStat, x, y, player, FALSE)
-					 && structDoubleCheck((BASE_STATS*)psStat,x,y)
-					){
-					found = TRUE;
-					break;
-				}}}
-
-		if (!found){			//bot
-			y = startY + incY;
-			for(x = startX + incX; x > (SDWORD)(startX - incX); x--){
-				if(validLocation((BASE_STATS*)psStat, x, y, player, FALSE)
-					 && structDoubleCheck((BASE_STATS*)psStat,x,y)
-					 ){
-					found = TRUE;
-					break;
-				}}}
-
-		if (!found){			//left
-			x = startX - incX;
-			for(y = startY + incY; y > (SDWORD)(startY - incY); y--){
-				if(validLocation((BASE_STATS*)psStat, x, y, player, FALSE)
-					 && structDoubleCheck((BASE_STATS*)psStat,x,y)
-					 ){
-					found = TRUE;
-					break;
-				}}}
-
-		if (found)
+		if(structDoubleCheck((BASE_STATS*)psStat,startX,startY,MAX_BLOCKING_TILES))
 		{
-			break;
+			found = TRUE;
+		}
+	}
+
+	// try some locations nearby
+	if(!found)
+	{
+		for (incX = 1, incY = 1; incX < numIterations; incX++, incY++)
+		{
+			if (!found){			//top
+				y = startY - incY;
+				for(x = startX - incX; x < (SDWORD)(startX + incX); x++){
+					if ( validLocation((BASE_STATS*)psStat, x, y, player, FALSE)
+						 && structDoubleCheck((BASE_STATS*)psStat,x,y,MAX_BLOCKING_TILES)
+						){
+						found = TRUE;
+						break;
+					}}}
+
+			if (!found)	{			//right
+				x = startX + incX;
+				for(y = startY - incY; y < (SDWORD)(startY + incY); y++){
+					if(validLocation((BASE_STATS*)psStat, x, y, player, FALSE)
+						 && structDoubleCheck((BASE_STATS*)psStat,x,y,MAX_BLOCKING_TILES)
+						){
+						found = TRUE;
+						break;
+					}}}
+
+			if (!found){			//bot
+				y = startY + incY;
+				for(x = startX + incX; x > (SDWORD)(startX - incX); x--){
+					if(validLocation((BASE_STATS*)psStat, x, y, player, FALSE)
+						 && structDoubleCheck((BASE_STATS*)psStat,x,y,MAX_BLOCKING_TILES)
+						 ){
+						found = TRUE;
+						break;
+					}}}
+
+			if (!found){			//left
+				x = startX - incX;
+				for(y = startY + incY; y > (SDWORD)(startY - incY); y--){
+					if(validLocation((BASE_STATS*)psStat, x, y, player, FALSE)
+						 && structDoubleCheck((BASE_STATS*)psStat,x,y,MAX_BLOCKING_TILES)
+						 ){
+						found = TRUE;
+						break;
+					}}}
+
+			if (found)
+			{
+				break;
+			}
+		}
+	}
+
+	if(found)	// did It!
+	{
+		// back to world coords.
+		*pX = (x << TILE_SHIFT) + (psStat->baseWidth * (TILE_UNITS/2));
+		*pY = (y << TILE_SHIFT) + (psStat->baseBreadth * (TILE_UNITS/2));
+
+		scrFunctionResult.v.bval = TRUE;
+		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// success!
+		{
+			return FALSE;
+		}
+
+		return TRUE;
+	}
+	else
+	{
+failedstructloc:
+		scrFunctionResult.v.bval = FALSE;
+		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// failed!
+		{
+			return FALSE;
+		}
+	}
+	return TRUE;
+}
+
+// pick a structure location(only used in skirmish game at 27Aug) ajl.
+// Max number of blocking tiles is passed as parameter for this one
+BOOL scrPickStructLocationB(void)
+{
+	SDWORD			*pX,*pY;
+	SDWORD			index;
+	STRUCTURE_STATS	*psStat;
+	UDWORD			numIterations = 30;
+	BOOL			found = FALSE;
+	UDWORD			startX, startY, incX, incY;
+	SDWORD			x=0, y=0;
+	UDWORD			player;
+	SDWORD			maxBlockingTiles;
+
+	if (!stackPopParams(5, ST_STRUCTURESTAT, &index, VAL_REF|VAL_INT, &pX ,
+        VAL_REF|VAL_INT, &pY, VAL_INT, &player, VAL_INT, &maxBlockingTiles))
+	{
+		return FALSE;
+	}
+
+	if (player >= MAX_PLAYERS)
+	{
+		ASSERT( FALSE, "scrPickStructLocationB:player number is too high" );
+		return FALSE;
+	}
+
+    // check for wacky coords.
+	if(		*pX < 0
+		||	*pX > (SDWORD)(mapWidth<<TILE_SHIFT)
+		||	*pY < 0
+		||	*pY > (SDWORD)(mapHeight<<TILE_SHIFT)
+	  )
+	{
+		goto failedstructloc;
+	}
+
+	psStat = &asStructureStats[index];			// get stat.
+	startX = *pX >> TILE_SHIFT;					// change to tile coords.
+	startY = *pY >> TILE_SHIFT;
+
+	x = startX;
+	y = startY;
+
+	// first try the original location
+	if ( validLocation((BASE_STATS*)psStat, startX, startY, player, FALSE) )
+	{
+		if(structDoubleCheck((BASE_STATS*)psStat,startX,startY,maxBlockingTiles))
+		{
+			found = TRUE;
+		}
+	}
+
+	// try some locations nearby
+	if(!found)
+	{
+		for (incX = 1, incY = 1; incX < numIterations; incX++, incY++)
+		{
+			if (!found){			//top
+				y = startY - incY;
+				for(x = startX - incX; x < (SDWORD)(startX + incX); x++){
+					if ( validLocation((BASE_STATS*)psStat, x, y, player, FALSE)
+						 && structDoubleCheck((BASE_STATS*)psStat,x,y,maxBlockingTiles)
+						){
+						found = TRUE;
+						break;
+					}}}
+
+			if (!found)	{			//right
+				x = startX + incX;
+				for(y = startY - incY; y < (SDWORD)(startY + incY); y++){
+					if(validLocation((BASE_STATS*)psStat, x, y, player, FALSE)
+						 && structDoubleCheck((BASE_STATS*)psStat,x,y,maxBlockingTiles)
+						){
+						found = TRUE;
+						break;
+					}}}
+
+			if (!found){			//bot
+				y = startY + incY;
+				for(x = startX + incX; x > (SDWORD)(startX - incX); x--){
+					if(validLocation((BASE_STATS*)psStat, x, y, player, FALSE)
+						 && structDoubleCheck((BASE_STATS*)psStat,x,y,maxBlockingTiles)
+						 ){
+						found = TRUE;
+						break;
+					}}}
+
+			if (!found){			//left
+				x = startX - incX;
+				for(y = startY + incY; y > (SDWORD)(startY - incY); y--){
+					if(validLocation((BASE_STATS*)psStat, x, y, player, FALSE)
+						 && structDoubleCheck((BASE_STATS*)psStat,x,y,maxBlockingTiles)
+						 ){
+						found = TRUE;
+						break;
+					}}}
+
+			if (found)
+			{
+				break;
+			}
 		}
 	}
 

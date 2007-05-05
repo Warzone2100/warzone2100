@@ -624,6 +624,10 @@ FUNC_SYMBOL asFuncTable[] =
 		4, {(INTERP_TYPE)ST_STRUCTURESTAT, VAL_REF | VAL_INT, VAL_REF | VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
+	{ "pickStructLocationB",	scrPickStructLocationB,	VAL_BOOL,
+		5, {(INTERP_TYPE)ST_STRUCTURESTAT, VAL_REF | VAL_INT, VAL_REF | VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
 	// AI functions
 	{ "groupAddDroid",		scrGroupAddDroid,		VAL_VOID,
 		2, { (INTERP_TYPE)ST_GROUP, (INTERP_TYPE)ST_DROID },
@@ -1168,10 +1172,6 @@ FUNC_SYMBOL asFuncTable[] =
 		6, { VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "getClosestEnemy",		scrGetClosestEnemy,		(INTERP_TYPE)ST_BASEOBJECT,
-		6, { VAL_INT, VAL_INT, VAL_INT, VAL_BOOL, VAL_BOOL, VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
 	{ "transporterCapacity",	scrTransporterCapacity,	VAL_INT,
 		1, { (INTERP_TYPE)ST_DROID },
 		0, 0, NULL, 0, 0, NULL, NULL },
@@ -1208,6 +1208,9 @@ FUNC_SYMBOL asFuncTable[] =
 		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
+	{ "getClosestEnemy",		scrGetClosestEnemy,		(INTERP_TYPE)ST_BASEOBJECT,
+		6, { VAL_INT, VAL_INT, VAL_INT, VAL_BOOL, VAL_BOOL, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "skDefenseLocationB",		scrSkDefenseLocationB,		VAL_BOOL,
 	6, {VAL_REF|VAL_INT, VAL_REF|VAL_INT, (INTERP_TYPE)ST_STRUCTURESTAT, (INTERP_TYPE)ST_STRUCTURESTAT, (INTERP_TYPE)ST_DROID, VAL_INT },

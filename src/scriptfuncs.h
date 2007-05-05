@@ -28,6 +28,10 @@
 
 #include "messagedef.h"			//for VIEWDATA
 
+// AI won't build there if there are more than
+// MAX_BLOCKING_TILES on some location
+#define MAX_BLOCKING_TILES		1
+
 // not used in scripts, but used in code.
 extern  BOOL objectInRange(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range);
 
@@ -398,6 +402,7 @@ extern BOOL scrFlushConsoleMessages(void);
 
 // find and manipulate a position to build a structure.
 extern BOOL scrPickStructLocation(void);
+extern BOOL scrPickStructLocationB(void);
 
 // establish the distance between two points in world coordinates - approximate bounded to 11% out
 extern BOOL scrDistanceTwoPts( void );
