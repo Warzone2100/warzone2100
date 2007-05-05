@@ -1879,3 +1879,7 @@ V-Mantis-HPV				"Mantis HPV VTOL"
 A-Rep-Cobra-Trk				"Cobra Repair Trucks"
 A-Rep-Mantis-Trk			"Mantis Repair Trucks"
 
+H-Scorp-Trk-Lancer			"Lancer Hydra Scorpion Tracks"
+H-Scorp-Trk-HC				"Heavy Cannon Hydra Scorpion Tracks"
+H-Scorp-VTOL-Lancer			"Hydra Scorpion Lancer VTOL"
+H-Scorp-VTOL-BB				"Hydra Scorpion BB VTOL"
