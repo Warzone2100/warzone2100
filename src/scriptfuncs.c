@@ -2678,7 +2678,6 @@ BOOL scrSetScrollParams(void)
 	scrollMaxY = maxY;
 
     //when the scroll limits change midgame - need to redo the lighting
-    //initLighting(scrollMinX, scrollMinY, scrollMaxX, scrollMaxY);
     initLighting(prevMinX < scrollMinX ? prevMinX : scrollMinX,
         prevMinY < scrollMinY ? prevMinY : scrollMinY,
         prevMaxX < scrollMaxX ? prevMaxX : scrollMaxX,
@@ -2710,7 +2709,6 @@ BOOL scrSetScrollMinX(void)
     scrollMinX = minX;
 
     //when the scroll limits change midgame - need to redo the lighting
-    //initLighting(scrollMinX, scrollMinY, scrollMaxX, scrollMaxY);
     initLighting(prevMinX < scrollMinX ? prevMinX : scrollMinX,
         scrollMinY, scrollMaxX, scrollMaxY);
 
@@ -2740,7 +2738,6 @@ BOOL scrSetScrollMinY(void)
 	scrollMinY = minY;
 
     //when the scroll limits change midgame - need to redo the lighting
-    //initLighting(scrollMinX, scrollMinY, scrollMaxX, scrollMaxY);
     initLighting(scrollMinX,
         prevMinY < scrollMinY ? prevMinY : scrollMinY,
         scrollMaxX, scrollMaxY);
@@ -2771,7 +2768,6 @@ BOOL scrSetScrollMaxX(void)
 	scrollMaxX = maxX;
 
     //when the scroll limits change midgame - need to redo the lighting
-    //initLighting(scrollMinX, scrollMinY, scrollMaxX, scrollMaxY);
     initLighting(scrollMinX,  scrollMinY,
         prevMaxX < scrollMaxX ? prevMaxX : scrollMaxX,
         scrollMaxY);
@@ -2802,7 +2798,6 @@ BOOL scrSetScrollMaxY(void)
 	scrollMaxY = maxY;
 
     //when the scroll limits change midgame - need to redo the lighting
-    //initLighting(scrollMinX, scrollMinY, scrollMaxX, scrollMaxY);
     initLighting(scrollMinX, scrollMinY, scrollMaxX,
         prevMaxY < scrollMaxY ? prevMaxY : scrollMaxY);
 

@@ -74,8 +74,6 @@
 #define pie_DROID_BRIGHT_LEVEL 192
 
 //Render style flags for all pie draw functions
-#define pie_FLAG_MASK           0xffff
-#define pie_FLAT                0x1
 #define pie_TRANSLUCENT         0x2
 #define pie_ADDITIVE            0x4
 #define pie_NO_BILINEAR         0x8

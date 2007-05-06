@@ -1053,12 +1053,7 @@ BOOL init3DView(void)
 
 	targetInitialise();
 
-	/* Set up the fog tbale for the 3dfx */
-//	pie_SetFogTable(0x00000000,65536,65536);
-	return(TRUE);
-	CONPRINTF(ConsoleString,(ConsoleString, "This build : %s, %s",__TIME__,__DATE__));
-
-	demoProcessTilesIn();
+	return TRUE;
 }
 
 

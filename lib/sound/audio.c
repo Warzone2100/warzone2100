@@ -54,9 +54,7 @@ static AUDIO_SAMPLE *g_psSampleQueue = NULL;
 static BOOL			g_bAudioEnabled = FALSE;
 static BOOL			g_bAudioPaused = FALSE;
 static BOOL			g_bStopAll = FALSE;
-static AUDIO_SAMPLE g_sPreviousSample = {
-	NO_SAMPLE, SAMPLE_COORD_INVALID, SAMPLE_COORD_INVALID, SAMPLE_COORD_INVALID
-};
+static AUDIO_SAMPLE g_sPreviousSample;
 static SDWORD g_i3DVolume = AUDIO_VOL_MAX;
 
 
@@ -76,6 +74,10 @@ BOOL audio_Disabled( void )
 BOOL audio_Init( AUDIO_CALLBACK pStopTrackCallback )
 {
 	// init audio system
+	g_sPreviousSample.iTrack = NO_SAMPLE;
+	g_sPreviousSample.x = SAMPLE_COORD_INVALID;
+	g_sPreviousSample.y = SAMPLE_COORD_INVALID;
+	g_sPreviousSample.z = SAMPLE_COORD_INVALID;
 	g_bAudioEnabled = sound_Init(MAX_SAME_SAMPLES);
 	if (g_bAudioEnabled)
 	{

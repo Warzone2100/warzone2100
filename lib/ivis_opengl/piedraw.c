@@ -506,7 +506,7 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 	iIMDPoly	*pPolys;
 	int edge_count = 0;
 	static EDGE *edgelist = NULL;
-	static unsigned int edgelistsize = 256;
+	static int edgelistsize = 256;
 
 	EDGE *drawlist = NULL;
 
