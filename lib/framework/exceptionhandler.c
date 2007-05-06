@@ -90,11 +90,6 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 
 #elif defined(WZ_OS_UNIX)
 
-// Workaround broken MacOSX POSIX headers
-#define _POSIX_C_SOURCE 199506L
-// Require POSIX XSI extensions
-#define _XOPEN_SOURCE 500
-
 // C99 headers:
 # include <stdint.h>
 # include <signal.h>

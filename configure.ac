@@ -33,6 +33,9 @@ case $host_os in
 		AC_CHECK_TOOL([WINDRES], [windres], AC_MSG_ERROR([windres not found]))
 		WIN32_LIBS="-lintl -lshfolder -lwinmm -lwsock32 -L\$(srcdir) -ldbghelp"
 		;;
+	*)
+		AC_DEFINE([_XOPEN_SOURCE], 600, [Enable POSIX extensions if present])
+		;;
 esac
 AM_CONDITIONAL([MINGW32], test "x$host_os_mingw32" = "xyes")
 
