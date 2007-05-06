@@ -99,10 +99,6 @@
 #  define WZ_OS_UNIX
 #endif /* WZ_OS_WIN */
 
-#if defined(WZ_OS_UNIX) && (_XOPEN_SOURCE - 0 >= 500)
-#  define WZ_OS_POSIX
-#endif /* WZ_OS_UNIX */
-
 
 /*
    The compiler, must be one of: (WZ_CC_x)
