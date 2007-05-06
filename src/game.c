@@ -6087,7 +6087,7 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			//version 24
 			psSaveDroid->resistance = psCurr->resistance;
 			memcpy(&psSaveDroid->sMove, &psCurr->sMove, sizeof(SAVE_MOVE_CONTROL));
-			if (psSaveDroid->sMove.psFormation != NULL)
+			if (psCurr->sMove.psFormation != NULL)
 			{
 				psSaveDroid->formationDir	= psCurr->sMove.psFormation->dir;
 				psSaveDroid->formationX		= psCurr->sMove.psFormation->x;
