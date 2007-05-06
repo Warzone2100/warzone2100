@@ -2236,7 +2236,7 @@ event doResearch(doResearchTr)
 					// do common research
 					if(not boolResult)	//didn't start branch research
 					{
-						if((_numResearching < 0) or (_numResearching < maxIdleRes[curTech]))
+						if((maxIdleRes[curTech] == UNLIMITED) or (_numResearching < maxIdleRes[curTech]))
 						{
 							skDoResearch(structure,me,0);
 							_numResearching++;
