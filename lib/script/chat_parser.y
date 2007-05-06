@@ -194,6 +194,7 @@ static void chat_reset_command(SDWORD cmdIndex)
 %token PIPE
 %token T_WORD
 
+%token R_POSSESSION
 %token _T_QM
 %token _T_EM
 %token _T_FULLSTOP
@@ -233,6 +234,7 @@ static void chat_reset_command(SDWORD cmdIndex)
 %token _T_IM
 %token _T_A
 %token _T_IS
+%token _T_LASSAT
 %token _T_LETS
 %token _T_ME
 %token _T_NO
@@ -266,6 +268,9 @@ static void chat_reset_command(SDWORD cmdIndex)
 /* Typed Keywords */
 %token <ival> R_PLAYER
 %token <ival> R_INTEGER
+
+/* Rules */
+%type <ival> R_PLAYER_POSSESSION
 
 %%
 
@@ -376,6 +381,14 @@ R_COMMAND:						R_ALLY_OFFER					/* ally me */
 									{
 										chat_store_command("player has vtols");
 									}
+								|	R_GETTING_ENEMY_DERRICK		/* gonna get blue's derrick */
+									{
+										chat_store_command("getting player oil");
+									}
+								|	R_LASSAT_PLAYER				/* lassat red */
+									{
+										chat_store_command("lassat player");
+									}
 								;
 
 /* A reference to certain players: "yellow, help me"
@@ -398,6 +411,11 @@ R_PLAYER_LIST:					R_PLAYER
 									}
 								;
 
+R_PLAYER_POSSESSION:			R_PLAYER R_POSSESSION	/* blue's */
+								{
+									$$ = $1;	// just pass player index
+								}
+								;
 
 /* A Article or nothing
  */
@@ -627,6 +645,30 @@ R_PLAYER_HAS_VTOLS:							R_PLAYER R_POSSESSES _T_VTOLS R_EOD	/* blue has VTOLS 
 													/* Store for scripts */
 													scrParameter.type = VAL_INT;
 													scrParameter.v.ival = $1;
+													if(!chat_store_parameter(&scrParameter))
+													{
+														chat_error("chat command: Too many parameters in the message");
+													}
+												}
+											;
+
+R_GETTING_ENEMY_DERRICK:					_T_GONNA R_INITIATE_ATTACK R_PLAYER_POSSESSION _T_DERRICK R_EOD	/* gonna get blue's derrick */
+												{
+													/* Store for scripts */
+													scrParameter.type = VAL_INT;
+													scrParameter.v.ival = $3;
+													if(!chat_store_parameter(&scrParameter))
+													{
+														chat_error("chat command: Too many parameters in the message");
+													}
+												}
+											;
+
+R_LASSAT_PLAYER:							_T_LASSAT R_PLAYER R_EOD	/* gonna get blue's derrick */
+												{
+													/* Store for scripts */
+													scrParameter.type = VAL_INT;
+													scrParameter.v.ival = $2;
 													if(!chat_store_parameter(&scrParameter))
 													{
 														chat_error("chat command: Too many parameters in the message");

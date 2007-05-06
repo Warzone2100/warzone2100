@@ -74,6 +74,7 @@ static SDWORD playerIndex;
 -?[0-9]+					{ chat_lval.ival = atol(chat_text); return R_INTEGER; }
 
 	/* Keywords - Terminals */
+"'s"						{ return R_POSSESSION; }
 "?"+						{ return _T_QM; }
 "!"+						{ return _T_EM; }
 "."+						{ return _T_FULLSTOP; }
@@ -111,6 +112,7 @@ static SDWORD playerIndex;
 "i"							{ return _T_I; }
 "i'm"						{ return _T_IM; }
 "is"						{ return _T_IS; }
+"lassat"					{ return _T_LASSAT; }
 "let's"						{ return _T_LETS; }
 "me"						{ return _T_ME; }
 "no"						{ return _T_NO; }
