@@ -91,7 +91,6 @@ GS_GAMEMODE gameStatus = GS_TITLE_SCREEN, lastStatus = GS_TITLE_SCREEN;
 BOOL	videoInitialised = FALSE;
 BOOL	gameInitialised = FALSE;
 BOOL	frontendInitialised = FALSE;
-BOOL	reInit = FALSE;
 BOOL	bDisableLobby;
 char	SaveGamePath[MAX_PATH];
 char	ScreenDumpPath[MAX_PATH];
@@ -462,9 +461,7 @@ int main(int argc, char *argv[])
 	clIntroVideo = FALSE;
 	war_SetDefaultStates();
 
-init://jump here from the end if re_initialising
-
-	debug(LOG_MAIN, "reinitializing");
+	debug(LOG_MAIN, "initializing");
 
 	bDisableLobby = FALSE;
 
@@ -473,10 +470,8 @@ init://jump here from the end if re_initialising
 	loadRenderMode(); //get the registry entry for clRendMode
 
 	// parse the command line
-	if (!reInit) {
-		if (!ParseCommandLine(argc, argv)) {
-			return -1;
-		}
+	if (!ParseCommandLine(argc, argv)) {
+		return -1;
 	}
 
 	saveConfig();
@@ -489,8 +484,6 @@ init://jump here from the end if re_initialising
 	{
 		return -1;
 	}
-
-	reInit = FALSE;//just so we dont restart again
 
 	if (!frameInitialise( "Warzone 2100", pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), pie_GetVideoBufferDepth(), war_getFullscreen() ))
 	{
@@ -762,8 +755,6 @@ init://jump here from the end if re_initialising
 	systemShutdown();
 	pal_ShutDown();
 	frameShutDown();
-
-	if (reInit) goto init;
 
 	return 0;
 

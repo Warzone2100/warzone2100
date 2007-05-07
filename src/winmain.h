@@ -32,7 +32,6 @@ typedef enum {
 //flag to indicate when initialisation is complete
 extern  BOOL	gameInitialised;
 extern  BOOL	frontendInitialised;
-extern	BOOL	reInit;
 extern	BOOL	bDisableLobby;
 
 extern	UDWORD GetGameMode(void);
