@@ -313,14 +313,6 @@ BOOL ParseCommandLine(int argc, char** argv)
 		{
 			war_setFullscreen(FALSE);
 		}
-		else if ( strcasecmp( tokenType, "--intro" ) == 0 )
-		{
-			SetGameMode(GS_VIDEO_MODE);
-		}
-		else if ( strcasecmp( tokenType, "--title" ) == 0 )
-		{
-			SetGameMode(GS_TITLE_SCREEN);
-		}
 		else if ( strcasecmp( tokenType,"--noTranslucent") == 0 )
 		{
 			war_SetTranslucent(FALSE);

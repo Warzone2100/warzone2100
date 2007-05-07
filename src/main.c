@@ -86,7 +86,7 @@ char * multiplay_mods[MAX_MODS] = { NULL };
 // Warzone 2100 . Pumpkin Studios
 
 // Start game in title mode:
-UDWORD	gameStatus = GS_TITLE_SCREEN, lastStatus = GS_TITLE_SCREEN;
+GS_GAMEMODE gameStatus = GS_TITLE_SCREEN, lastStatus = GS_TITLE_SCREEN;
 //flag to indicate when initialisation is complete
 BOOL	videoInitialised = FALSE;
 BOOL	gameInitialised = FALSE;
@@ -500,12 +500,6 @@ init://jump here from the end if re_initialising
 	pie_SetFogStatus(FALSE);
 	pie_ScreenFlip(CLEAR_BLACK);
 
-	if(gameStatus == GS_VIDEO_MODE)
-	{
-		introVideoControl = 0;//play video
-		SetGameMode(GS_TITLE_SCREEN);
-	}
-
 	//load palette
 	psPaletteBuffer = (iColour*)malloc(256 * sizeof(iColour)+1);
 	if (psPaletteBuffer == NULL)
@@ -595,14 +589,6 @@ init://jump here from the end if re_initialising
 				//set a flag for the trigger/event system to indicate initialisation is complete
 				gameInitialised = TRUE;
 				screen_StopBackDrop();
-				break;
-			case GS_VIDEO_MODE:
-				debug( LOG_ERROR, "Video_mode no longer valid" );
-				abort();
-				if (introVideoControl == 0)
-				{
-					videoInitialised = TRUE;
-				}
 				break;
 
 			default:
@@ -732,34 +718,6 @@ init://jump here from the end if re_initialising
 						}
 						break;
 
-					case GS_VIDEO_MODE:
-						debug(LOG_ERROR, "Video_mode no longer valid");
-						if (introVideoControl <= 1)
-						{
-							seq_ClearSeqList();
-							seq_AddSeqToList("factory.rpl", NULL, NULL, FALSE);
-							seq_StartNextFullScreenVideo();
-							introVideoControl = 2;
-						}
-						else
-						{
-							debug(LOG_MAIN, "VIDEO_QUIT");
-							if (introVideoControl == 2)//finished playing intro video
-							{
-								SetGameMode(GS_TITLE_SCREEN);
-								if (videoInitialised)
-								{
-									Restart = TRUE;
-								}
-								introVideoControl = 3;
-							}
-							else
-							{
-								SetGameMode(GS_NORMAL);
-							}
-						}
-						break;
-
 					default:
 						debug(LOG_ERROR, "Weirdy game status, I'm afraid!!");
 						break;
@@ -791,14 +749,6 @@ init://jump here from the end if re_initialising
 					}
 				}
 				gameInitialised = FALSE;
-				break;
-
-			case GS_VIDEO_MODE:
-				debug(LOG_ERROR, "Video_mode no longer valid");
-				if (videoInitialised)
-				{
-					videoInitialised = FALSE;
-				}
 				break;
 
 			default:
@@ -839,7 +789,6 @@ void SetGameMode(UDWORD status)
 	ASSERT( status == GS_TITLE_SCREEN ||
 			status == GS_MISSION_SCREEN ||
 			status == GS_NORMAL ||
-			status == GS_VIDEO_MODE ||
 			status == GS_SAVEGAMELOAD,
 		"SetGameMode: invalid game mode" );
 

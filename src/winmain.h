@@ -22,11 +22,12 @@
 #ifndef _winmain_h
 #define _winmain_h
 
-#define GS_TITLE_SCREEN		1
-#define GS_MISSION_SCREEN	2
-#define GS_NORMAL			3
-#define GS_VIDEO_MODE		4
-#define	GS_SAVEGAMELOAD		5
+typedef enum {
+	GS_TITLE_SCREEN,
+	GS_MISSION_SCREEN,
+	GS_NORMAL,
+	GS_SAVEGAMELOAD
+} GS_GAMEMODE;
 
 //flag to indicate when initialisation is complete
 extern  BOOL	gameInitialised;
