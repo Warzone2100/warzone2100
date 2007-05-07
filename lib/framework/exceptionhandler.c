@@ -116,7 +116,11 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 typedef void(*SigActionHandler)(int, siginfo_t *, void *);
 
 
+#ifdef WZ_OS_MAC
+static struct sigaction oldAction[32];
+#else
 static struct sigaction oldAction[NSIG];
+#endif
 
 
 static struct utsname sysInfo;
