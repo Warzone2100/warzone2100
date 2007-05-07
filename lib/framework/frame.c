@@ -53,8 +53,6 @@
 
 #include "SDL_framerate.h"
 
-#define IGNORE_FOCUS
-
 /* Linux specific stuff */
 
 static FPSmanager wzFPSmanager;
@@ -183,7 +181,6 @@ static void processEvent(SDL_Event *event)
 {
 	switch(event->type)
 	{
-#ifndef IGNORE_FOCUS
 		case SDL_ACTIVEEVENT:
 			if (event->active.state == SDL_APPINPUTFOCUS || event->active.state == SDL_APPACTIVE)
 			{
@@ -205,11 +202,10 @@ static void processEvent(SDL_Event *event)
 						focusState = FOCUS_KILL;
 					}
 					/* Have to tell the input system that we've lost focus */
-					inputProcessEvent(event);
+					inputLooseFocus();
 				}
 			}
 			break;
-#endif
 		case SDL_KEYUP:
 		case SDL_KEYDOWN:
 		case SDL_MOUSEBUTTONUP:
@@ -294,14 +290,14 @@ BOOL frameInitialise(
 		return FALSE;
 	}
 
-        /* initialise all cursors */
-        initCursors();
+		/* initialise all cursors */
+		initCursors();
 
-        /* Initialise the Direct Draw Buffers */
-        if (!screenInitialise(width, height, bitDepth, fullScreen))
-        {
-                return FALSE;
-        }
+		/* Initialise the Direct Draw Buffers */
+		if (!screenInitialise(width, height, bitDepth, fullScreen))
+		{
+				return FALSE;
+		}
 
 	/* Initialise the input system */
 	inputInitialise();
@@ -328,7 +324,7 @@ BOOL frameInitialise(
 FRAME_STATUS frameUpdate(void)
 {
 	SDL_Event event;
-	FRAME_STATUS	retVal;
+	FRAME_STATUS retVal = FRAME_OK;
 	BOOL wzQuit = FALSE;
 
 	/* Tell the input system about the start of another frame */
@@ -344,25 +340,24 @@ FRAME_STATUS frameUpdate(void)
 	}
 
 	/* Now figure out what to return */
-	retVal = FRAME_OK;
 	if (wzQuit)
 	{
 		retVal = FRAME_QUIT;
 	}
-	else if ((focusState == FOCUS_SET) && (focusLast == FOCUS_OUT))
+	else if (focusState == FOCUS_SET && focusLast == FOCUS_OUT)
 	{
-		debug( LOG_NEVER, "Returning SETFOCUS\n");
+		debug( LOG_NEVER, "frameUpdate: Returning SETFOCUS\n");
 		focusState = FOCUS_IN;
 		retVal = FRAME_SETFOCUS;
 	}
-	else if ((focusState == FOCUS_KILL) && (focusLast == FOCUS_IN))
+	else if (focusState == FOCUS_KILL && focusLast == FOCUS_IN)
 	{
-		debug( LOG_NEVER, "Returning KILLFOCUS\n");
+		debug( LOG_NEVER, "frameUpdate: Returning KILLFOCUS\n");
 		focusState = FOCUS_OUT;
 		retVal = FRAME_KILLFOCUS;
 	}
 
-	if ((focusState == FOCUS_SET) || (focusState == FOCUS_KILL))
+	if (focusState == FOCUS_SET || focusState == FOCUS_KILL)
 	{
 		/* Got a SET or KILL when we were already in or out of
 		   focus respectively */
@@ -375,7 +370,7 @@ FRAME_STATUS frameUpdate(void)
 	}
 
 	/* If things are running normally update the framerate */
-	if ((!wzQuit) && (focusState == FOCUS_IN))
+	if (!wzQuit && focusState == FOCUS_IN)
 	{
 		/* Update the frame rate stuff */
 		MaintainFrameStuff();

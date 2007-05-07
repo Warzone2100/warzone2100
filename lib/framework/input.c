@@ -221,14 +221,11 @@ char inputGetCharKey(void) {
 /* Deal with windows messages to maintain the state of the keyboard and mouse */
 void inputProcessEvent(SDL_Event *event)
 {
-	UDWORD	code,i, vk;
-//	FRACT	divX,divY;
-//	UDWORD	scrX,scrY;
+	UDWORD code, vk;
 
 	switch(event->type)
 	{
 		case SDL_KEYDOWN:
-			//printf("keydown %s (%i)\n", SDL_GetKeyName(code), event->key.keysym.sym);
 			switch (event->key.keysym.sym)
 			{
 				case SDLK_LEFT:
@@ -267,7 +264,6 @@ void inputProcessEvent(SDL_Event *event)
 			}
 
 			{
-
 				unsigned char char_code = event->key.keysym.unicode; // FIXME Discarding last 8 bit of 16bit UNICODE !!!
 
 				debug( LOG_NEVER, "Code: %x\n", vk);
@@ -305,16 +301,6 @@ void inputProcessEvent(SDL_Event *event)
 				/* store the current mouse position */
 				mouseXPos = event->motion.x;
 				mouseYPos = event->motion.y;
-				/*
-				if(mouseXPos>=screenWidth)
-				{
-					mouseXPos = screenWidth-1;
-				}
-				if(mouseYPos >= screenHeight)
-				{
-					mouseYPos = screenHeight-1;
-				}
-				*/
 
 				/* now see if a drag has started */
 				if ((aMouseState[dragKey] == KEY_PRESSED ||
@@ -322,7 +308,6 @@ void inputProcessEvent(SDL_Event *event)
 					(ABSDIF(dragX,mouseXPos) > DRAG_THRESHOLD ||
 					 ABSDIF(dragY,mouseYPos) > DRAG_THRESHOLD))
 				{
-		//		DBPRINTF(("dragging\n"));
 					aMouseState[dragKey] = KEY_DRAG;
 				}
 			}
@@ -353,36 +338,16 @@ void inputProcessEvent(SDL_Event *event)
 			}
 			// TODO: double click
 			break;
-		case SDL_ACTIVEEVENT:
-			/* Lost the window focus, have to take this as a global key up */
-			for(i=0; i<KEY_MAXSCAN; i++)
-			{
-				if ((aKeyState[i] == KEY_PRESSED) ||
-					(aKeyState[i] == KEY_DOWN))
-				{
-					aKeyState[i] = KEY_RELEASED;
-				}
-			}
-			for (i = 0; i < 6; i++)
-			{
-				if ((aMouseState[i] == KEY_PRESSED) ||
-					(aMouseState[i] == KEY_DOWN) ||
-					(aMouseState[i] == KEY_DRAG))
-				{
-					aMouseState[i] = KEY_RELEASED;
-				}
-			}
-			break;
 	}
 }
 
 /* This is called once a frame so that the system can tell
  * whether a key was pressed this turn or held down from the last frame.
  */
+// NOTE This should probably react on events?
 void inputNewFrame(void)
 {
 	UDWORD i;
-
 
 	/* Do the keyboard */
 	for (i=0; i< KEY_MAXSCAN; i++)
@@ -398,7 +363,6 @@ void inputNewFrame(void)
 		}
 	}
 
-
 	/* Do the mouse */
 	for (i = 0; i < 6; i++) {
 		if (aMouseState[i] == KEY_PRESSED)
@@ -408,6 +372,22 @@ void inputNewFrame(void)
 				|| (aMouseState[i] == KEY_PRESSRELEASE))
 			aMouseState[i] = KEY_UP;
 		}
+}
+
+// FIXME This seems to be totally ignored! (Try switching focus while the dragbox is open)
+void inputLooseFocus(void)
+{
+	unsigned int i;
+
+	/* Lost the window focus, have to take this as a global key up */
+	for(i = 0; i < KEY_MAXSCAN; i++)
+	{
+		aKeyState[i] = KEY_RELEASED;
+	}
+	for (i = 0; i < 6; i++)
+	{
+		aMouseState[i] = KEY_RELEASED;
+	}
 }
 
 /* This returns true if the key is currently depressed */

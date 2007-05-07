@@ -125,21 +125,9 @@ void gameTimeUpdate(void)
 
 	currTime = SDL_GetTicks();
 
-	if (currTime < baseTime)
-	{
-#ifdef RATE_LIMIT
-		// Limit the frame time
-#endif
-
-		// ooops the clock has wrapped round -
-		// someone actually managed to keep windows running for 50 days !!!!
-		// ........
-	}
-
 	//don't update the game time if gameTimeStop has been called
 	if (stopCount == 0)
 	{
-
 		// Calculate the new game time
 		newTime = currTime - baseTime;
 
@@ -163,14 +151,12 @@ void gameTimeUpdate(void)
 #else
 			baseTime += frameTime - GTIME_MAXFRAME;
 #endif
-
 			newTime = gameTime + GTIME_MAXFRAME;
 			frameTime = GTIME_MAXFRAME;
 		}
 
 		// Store the game time
 		gameTime = (UDWORD)newTime;
-
 	}
 
 	// now update gameTime2 which does not pause

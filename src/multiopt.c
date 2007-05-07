@@ -471,25 +471,25 @@ BOOL joinArena(UDWORD gameNumber, char *playerName)
 // Lobby launched. fires the correct routine when the game was lobby launched.
 BOOL LobbyLaunched(void)
 {
-	UDWORD			i;
-	PLAYERSTATS		pl={0};
+	UDWORD i;
+	PLAYERSTATS pl={0};
 
 	// set the player info as soon as possible to avoid screwy scores appearing elsewhere.
 	NETplayerInfo();
 	NETfindGame(TRUE);
 
-	for(i = 0; (i< MAX_PLAYERS)&& (NetPlay.players[i].dpid != NetPlay.dpidPlayer);i++);
+	for (i = 0; i < MAX_PLAYERS && NetPlay.players[i].dpid != NetPlay.dpidPlayer; i++);
 
-	if(!loadMultiStats(NetPlay.players[i].name,&pl) )
+	if(!loadMultiStats(NetPlay.players[i].name, &pl) )
 	{
-		return FALSE;									// cheating was detected, so fail.
+		return FALSE; // cheating was detected, so fail.
 	}
 
-	setMultiStats(NetPlay.dpidPlayer,pl,FALSE);
-	setMultiStats(NetPlay.dpidPlayer,pl,TRUE);
+	setMultiStats(NetPlay.dpidPlayer, pl, FALSE);
+	setMultiStats(NetPlay.dpidPlayer, pl, TRUE);
 
 	// setup text boxes on multiplay screen.
-	strcpy((char*) sPlayer,	NetPlay.players[i].name);
+	strcpy((char*) sPlayer, NetPlay.players[i].name);
 	strcpy((char*) game.name, NetPlay.games[0].name);
 
 	return TRUE;
@@ -509,12 +509,12 @@ BOOL lobbyInitialise(void)
 	// RODZ : hashing the file is no more an option.
 	// hash the file to get the key.and catch out the exe patchers.
 //#ifdef DEBUG
-	NETsetKey( 0xdaf456 ,0xb72a5, 0x114d0, 0x2a17);
+	NETsetKey( 0xdaf456, 0xb72a5, 0x114d0, 0x2a17);
 //#else
 //	NETsetKey(NEThashFile("warzone.exe"), 0xb72a5, 0x114d0, 0x2a7);
 //#endif
 
-	if(NetPlay.bLobbyLaunched)									// now check for lobby launching..
+	if(NetPlay.bLobbyLaunched) // now check for lobby launching..
 	{
 		if(!LobbyLaunched())
 		{

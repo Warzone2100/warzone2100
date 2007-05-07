@@ -680,14 +680,15 @@ GAMECODE gameLoop(void)
 /* The video playback loop */
 GAMECODE videoLoop(void)
 {
-	BOOL	bVolKilled = FALSE;
+	BOOL bVolKilled = FALSE;
 
 	// There is something really odd here. - Per
 	static BOOL bActiveBackDrop = FALSE;
 
 #ifdef DEBUG
 	// Surely this should be: bActiveBackDrop = screen_GetBackDrop(); ?? - Per
-	screen_GetBackDrop();//test only remove JPS feb26
+	// That would look odd, I tried it. Eg. intelligence screen is not redrawn correctly. -- DevU
+	screen_GetBackDrop();
 #endif
 
 	if (video)
@@ -726,7 +727,6 @@ GAMECODE videoLoop(void)
 		{
 			displayGameOver(getScriptWinLoseVideo() == PLAY_WIN);
 		}
-//		clearCount = 0;
 		pie_ScreenFlip(CLEAR_BLACK);// videoloopflip extra mar10
 
 		if (bActiveBackDrop)
@@ -734,11 +734,6 @@ GAMECODE videoLoop(void)
 			// We never get here presently - Per
  			screen_RestartBackDrop();
 		}
-		// remove the intelligence screen if necessary
-		/*if (messageIsImmediate())
-		{
-			intResetScreen(TRUE);
-		}*/
 	}
 
 	//if the video finished...
@@ -776,7 +771,6 @@ GAMECODE videoLoop(void)
 			{
 				displayGameOver(getScriptWinLoseVideo() == PLAY_WIN);
 			}
-//		    clearCount = 0;
 			pie_ScreenFlip(CLEAR_BLACK);// videoloopflip extra mar10
 
 			if (bActiveBackDrop)
@@ -784,11 +778,6 @@ GAMECODE videoLoop(void)
 				// We never get here presently - Per
 				screen_RestartBackDrop();
 			}
-			// remove the intelligence screen if necessary
-			/*if (messageIsImmediate())
-			{
-				intResetScreen(TRUE);
-			}*/
 		}
 	}
 
@@ -838,7 +827,7 @@ void loop_ClearVideoPlaybackMode(void)
 	gameTimeStart();
 	pie_SetFogStatus(TRUE);
 	cdAudio_Resume();
-	ASSERT( videoMode == 0,"loop_ClearVideoPlaybackMode: out of sync." );
+	ASSERT( videoMode == 0, "loop_ClearVideoPlaybackMode: out of sync." );
 }
 
 SDWORD loop_GetVideoMode(void)

@@ -391,29 +391,26 @@ static void make_dir(char *dest, const char *dirname, const char *subdir)
 
 int main(int argc, char *argv[])
 {
-	BOOL			quit = FALSE;
-	BOOL			Restart = FALSE;
-	BOOL			paused = FALSE;
-	SDWORD			introVideoControl = 3;
-	int			loopStatus = 0;
-	iColour*		psPaletteBuffer;
-	UDWORD			pSize;
+	BOOL quit = FALSE;
+	BOOL Restart = FALSE;
+	BOOL lostFocus = FALSE;
+	int loopStatus = 0;
+	iColour* psPaletteBuffer = NULL;
+	UDWORD pSize = 0;
 
 	/*** Initialize the debug subsystem ***/
-#ifdef WZ_CC_MSVC
-# ifdef DEBUG
+#if defined(WZ_CC_MSVC) && defined(DEBUG)
 	int tmpDbgFlag;
 	_CrtSetReportMode( _CRT_WARN, _CRTDBG_MODE_DEBUG ); // Output CRT info to debugger
 
 	tmpDbgFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG ); // Grab current flags
-#  ifdef DEBUG_MEMORY
+# if defined(DEBUG_MEMORY)
 	tmpDbgFlag |= _CRTDBG_CHECK_ALWAYS_DF; // Check every (de)allocation
-#  endif // DEBUG_MEMORY
+# endif // DEBUG_MEMORY
 	tmpDbgFlag |= _CRTDBG_ALLOC_MEM_DF; // Check allocations
 	tmpDbgFlag |= _CRTDBG_LEAK_CHECK_DF; // Check for memleaks
 	_CrtSetDbgFlag( tmpDbgFlag );
-# endif //DEBUG
-#endif // WZ_CC_MSVC
+#endif // WZ_CC_MSVC && DEBUG
 
 	setupExceptionHandler(argv[0]);
 
@@ -421,9 +418,9 @@ int main(int argc, char *argv[])
 	atexit( debug_exit );
 
 	debug_register_callback( debug_callback_stderr, NULL, NULL, NULL );
-#if defined WZ_OS_WIN && defined DEBUG
+#if defined(WZ_OS_WIN) && defined(DEBUG)
 //	debug_register_callback( debug_callback_win32debug, NULL, NULL, NULL );
-#endif // WZ_OS_WIN
+#endif // WZ_OS_WIN && DEBUG
 
 	// find early boot info
 	if ( !ParseCommandLineEarly(argc, argv) ) {
@@ -501,7 +498,7 @@ int main(int argc, char *argv[])
 		abort();
 		return -1;
 	}
-	if (!loadFileToBuffer("palette.bin", (char *)psPaletteBuffer, (256 * sizeof(iColour)+1),&pSize))
+	if ( !loadFileToBuffer("palette.bin", (char*)psPaletteBuffer, ( 256 * sizeof(iColour) + 1 ), &pSize) )
 	{
 		debug( LOG_ERROR, "Couldn't load palette data" );
 		abort();
@@ -513,8 +510,6 @@ int main(int argc, char *argv[])
 	pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 	pie_SetFogStatus(FALSE);
 	pie_ScreenFlip(CLEAR_BLACK);
-
-	quit = FALSE;
 
 	if (!systemInitialise())
 	{
@@ -538,18 +533,6 @@ int main(int argc, char *argv[])
 
 				frontendInitialised = TRUE;
 				frontendInitVars();
-				//if intro required set up the video
-				if (introVideoControl <= 1)
-				{
-					seq_ClearSeqList();
-					seq_AddSeqToList("eidos-logo.rpl", NULL, NULL, FALSE);
-					seq_AddSeqToList("pumpkin.rpl", NULL, NULL, FALSE);
-					seq_AddSeqToList("titles.rpl", NULL, NULL, FALSE);
-					seq_AddSeqToList("devastation.rpl", NULL, "devastation.txa", FALSE);
-
-					seq_StartNextFullScreenVideo();
-					introVideoControl = 2;
-				}
 				break;
 
 			case GS_SAVEGAMELOAD:
@@ -591,7 +574,6 @@ int main(int argc, char *argv[])
 		debug(LOG_MAIN, "Entering main loop");
 
 		Restart = FALSE;
-		//firstTime = TRUE;
 
 		while (!Restart)
 		{
@@ -599,12 +581,12 @@ int main(int argc, char *argv[])
 			switch (frameUpdate())
 			{
 				case FRAME_KILLFOCUS:
-					paused = TRUE;
+					lostFocus = TRUE;
 					gameTimeStop();
 					audio_StopAll();
 					break;
 				case FRAME_SETFOCUS:
-					paused = FALSE;
+					lostFocus = FALSE;
 					gameTimeStart();
 					if (!dispModeChange())
 					{
@@ -623,7 +605,7 @@ int main(int argc, char *argv[])
 
 			lastStatus = gameStatus;
 
-			if ((!paused) && (!quit))
+			if (!lostFocus && !quit)
 			{
 				if (loop_GetVideoStatus())
 				{
@@ -657,7 +639,6 @@ int main(int argc, char *argv[])
 								seq_AddSeqToList("titles.rpl", NULL, NULL, FALSE);
 								seq_AddSeqToList("devastation.rpl", NULL, "devastation.txa", FALSE);
 								seq_StartNextFullScreenVideo();
-								introVideoControl = 2;//play the video but dont init the sound system
 								break;
 
 							case TITLECODE_CONTINUE:
@@ -717,11 +698,14 @@ int main(int argc, char *argv[])
 				}
 
 				gameTimeUpdate();
-			}
+			} // !paused && !quit
 		} // End of !Restart loop.
 
+		debug(LOG_MAIN, "Preparing for shutdown/restart");
+
 		// Do game mode specific shutdown.
-		switch(lastStatus) {
+		switch(lastStatus)
+		{
 			case GS_TITLE_SCREEN:
 				if (!frontendShutdown())
 				{
@@ -750,7 +734,7 @@ int main(int argc, char *argv[])
 		}
 	} // End of !quit loop.
 
-	debug(LOG_MAIN, "Shuting down application");
+	debug(LOG_MAIN, "Shutting down Warzone 2100");
 
 	systemShutdown();
 	pal_ShutDown();

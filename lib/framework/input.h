@@ -139,9 +139,11 @@ typedef enum _key_code
 	KEY_IGNORE		=5190
 } KEY_CODE;
 
-/* The largest possible scan code (probably a lot less than this but ...) */
-//      but ...    it's not as if it's got to fit into 2meg of mem or anything is it ...
-#define KEY_MAXSCAN  SDLK_LAST
+// The largest possible scan code
+#define KEY_MAXSCAN SDLK_LAST
+
+/* Tell the input system that we have lost the focus */
+extern void inputLooseFocus(void);
 
 extern void inputProcessEvent(SDL_Event *event);
 
