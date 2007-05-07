@@ -595,7 +595,7 @@
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.h",
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.c",
 			);
-			script = "cd \"${DERIVED_FILES_DIR}\" || exit 1\n/opt/local/bin/bison -y -d -o\"${INPUT_FILE_BASE}\".tab.h \"${INPUT_FILE_PATH}\" || exit 1\n/opt/local/bin/bison -y -d -o\"${INPUT_FILE_BASE}\".tab.c \"${INPUT_FILE_PATH}\" || exit 1";
+			script = "cd \"${DERIVED_FILES_DIR}\" || exit 1\nbison -y -d -o\"${INPUT_FILE_BASE}\".tab.h \"${INPUT_FILE_PATH}\" || exit 1\nbison -y -d -o\"${INPUT_FILE_BASE}\".tab.c \"${INPUT_FILE_PATH}\" || exit 1";
 		};
 		0246AA730BD3E47F004D1C70 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
@@ -3911,7 +3911,10 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"_XOPEN_SOURCE=600L",
+					"$(inherited)",
+				);
 				HEADER_SEARCH_PATHS = (
 					..,
 					"$(inherited)",
@@ -3949,7 +3952,10 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"_XOPEN_SOURCE=600L",
+					"$(inherited)",
+				);
 				HEADER_SEARCH_PATHS = (
 					..,
 					"$(inherited)",
