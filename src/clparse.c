@@ -58,9 +58,6 @@ extern char * global_mods[MAX_MODS];
 extern char * campaign_mods[MAX_MODS];
 extern char * multiplay_mods[MAX_MODS];
 
-//! Whether to play the intro video
-BOOL	clIntroVideo;
-
 //! Let the end user into debug mode....
 BOOL	bAllowDebugMode = FALSE;
 
@@ -202,7 +199,7 @@ BOOL ParseCommandLine(int argc, char** argv)
 		}
 		else if ( strcasecmp(tokenType, "--cheat") == 0 )
 		{
-			fprintf(stdout, "  ** CHEAT MODE UNLOCKED! **\n");
+			fprintf(stdout, "  ** DEBUG MODE UNLOCKED! **\n");
 			bAllowDebugMode = TRUE;
 		}
 		else if ( strcasecmp( tokenType, "--fullscreen" ) == 0 )

@@ -455,7 +455,6 @@ int main(int argc, char *argv[])
 	strcpy(UserMusicPath, "music");
 
 	// initialise all the command line states
-	clIntroVideo = FALSE;
 	war_SetDefaultStates();
 
 	debug(LOG_MAIN, "initializing");

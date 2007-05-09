@@ -47,6 +47,8 @@
 #include "hci.h"
 #include "fpath.h"
 #include "radar.h"
+// HACK bAllowDebugMode shouldn't be in clparse
+#include "clparse.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -102,6 +104,16 @@ BOOL loadConfig(void)
 
 	if (getWarzoneKeyNumeric("playaudiocds", &val)) {
 		war_SetPlayAudioCDs(val);
+	}
+
+	if (getWarzoneKeyNumeric("debugmode", &val))
+	{
+		bAllowDebugMode = val;
+	}
+	else
+	{
+		bAllowDebugMode = FALSE;
+		setWarzoneKeyNumeric("debugmode", FALSE);
 	}
 
 	if (getWarzoneKeyNumeric("framerate", &val))
@@ -567,6 +579,7 @@ BOOL saveConfig(void)
 		setDifficultyLevel(DL_NORMAL);
 	}
 	setWarzoneKeyNumeric("allowSubtitles", war_GetAllowSubtitles());
+	setWarzoneKeyNumeric("debugmode", bAllowDebugMode);
 	setWarzoneKeyNumeric("framerate", (SDWORD)getFramerateLimit());
 	setWarzoneKeyNumeric("gamma", (SDWORD)gammaValue);
 	setWarzoneKeyNumeric("scroll",(SDWORD)scroll_speed_accel);		// scroll

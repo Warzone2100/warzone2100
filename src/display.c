@@ -1480,7 +1480,7 @@ void displayWorld(void)
 	Vector3i pos;
 	shakeUpdate();
 
-	if(mouseDown(MOUSE_RMB) &&	rotActive)
+	if(mouseDown(MOUSE_RMB) && rotActive)
 	{
   		if( (abs(mX-rotX)>8) || xMoved>8)
 		{

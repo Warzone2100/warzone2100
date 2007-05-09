@@ -28,8 +28,6 @@
 
 #define MAX_MODS 100
 
-// whether to play the intro video
-extern BOOL	clIntroVideo;
 // parse the commandline
 extern BOOL ParseCommandLine( int argc, char** argv );
 extern BOOL ParseCommandLineEarly(int argc, char** argv);

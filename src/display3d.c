@@ -381,7 +381,7 @@ void draw3DScene( void )
 
 	pie_Begin3DScene();
 	/* Set 3D world origins */
-	pie_SetGeometricOffset((iV_SCREEN_WIDTH>>1),geoOffset);
+	pie_SetGeometricOffset((iV_SCREEN_WIDTH>>1), geoOffset);
 
 	// draw sky and fogbox
 	renderSurroundings();
