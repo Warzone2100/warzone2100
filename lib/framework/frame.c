@@ -53,12 +53,6 @@
 
 #include "SDL_framerate.h"
 
-// Define IGNORE_FOCUS when you wish to make warzone ignore loss of focus.
-// On Windows this is currently required in order to prevent Warzone from hanging. -- Giel
-#ifdef WZ_OS_WIN
-# define IGNORE_FOCUS
-#endif
-
 /* Linux specific stuff */
 
 static FPSmanager wzFPSmanager;
@@ -188,29 +182,29 @@ static void processEvent(SDL_Event *event)
 	switch(event->type)
 	{
 		case SDL_ACTIVEEVENT:
-			if (event->active.state == SDL_APPINPUTFOCUS || event->active.state == SDL_APPACTIVE)
+			if (event->active.state == SDL_APPINPUTFOCUS ||
+			    event->active.state == SDL_APPACTIVE ||
+			   // Only gain focus from SDL_APPMOUSEFOCUS, don't loose focus
+			   // because of someone (in windowed mode) hovering the mouse over another window -- Giel
+			   (event->active.gain == 1 && event->active.state == SDL_APPMOUSEFOCUS))
 			{
 				if (event->active.gain == 1)
 				{
 					debug( LOG_NEVER, "WM_SETFOCUS\n");
-#ifndef IGNORE_FOCUS
 					if (focusState != FOCUS_IN)
 					{
 						debug( LOG_NEVER, "FOCUS_SET\n");
 						focusState = FOCUS_SET;
 					}
-#endif
 				}
 				else
 				{
 					debug( LOG_NEVER, "WM_KILLFOCUS\n");
-#ifndef IGNORE_FOCUS
 					if (focusState != FOCUS_OUT)
 					{
 						debug( LOG_NEVER, "FOCUS_KILL\n");
 						focusState = FOCUS_KILL;
 					}
-#endif
 					/* Have to tell the input system that we've lost focus */
 					inputLooseFocus();
 				}
