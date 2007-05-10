@@ -281,6 +281,7 @@ function BASEOBJ chooseVtolDefenceTarget(int _x, int _y, int _range, bool bExclu
 function int numGroupSameOrder(GROUP _group, int _orderIndex);
 function void rearrangeAttackVtols();
 function int numStructBusyByType(STRUCTURESTAT _busyStructType);
+function bool aiResponsibleForPlayer(int _player);
 #endregion triggers
 
 /////////////////////////////////////////////////////////////////////
@@ -334,7 +335,10 @@ event initialisedEvent(CALL_GAMEINIT)
 		baseX = droid.x;
 		baseY = droid.y;
 
-		expandBase(droid);
+		if(aiResponsibleForPlayer(me))
+		{
+			expandBase(droid);
+		}
 	}
 	else
 	{
@@ -372,7 +376,10 @@ event initialisedEvent(CALL_GAMEINIT)
 	allianceTime[6] = 0;
 	allianceTime[7] = 0;
 
-	buildTruck();
+	if(aiResponsibleForPlayer(me))
+	{
+		buildTruck();
+	}
 }
 
 // decide what technology branch we will use
@@ -414,11 +421,22 @@ function void setTechBranch(int _tech)
 	}
 }
 
+/* returns TRUE if AI is responsible for the _player */
+function bool aiResponsibleForPlayer(int _player)
+{
+	if(not _DEBUG and ((_player == selectedPlayer) or not myResponsibility(_player)))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
 /////////////////////////////////////////////////////////////////////
 // initial force setup thing. plonk down a force.
 event givehelp(every, 100)
 {
- 	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+ 	if(not aiResponsibleForPlayer(me))
 	{
 		setEventTrigger(givehelp,	inactive);
 	}
@@ -459,7 +477,7 @@ event givehelp(every, 100)
 // keep details about the size and postion of the ai players base
 event basedetails(basedetailsTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(basedetails,	inactive);
 	}
@@ -526,7 +544,7 @@ event basedetails(basedetailsTr)
 // build derricks on oil.
 event buildDerrick(buildDerrickTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(buildDerrick,	inactive);
 	}
@@ -580,7 +598,7 @@ event buildOilDefenseOrRetreat(buildOilDefenseOrRetreatTr)
 {
 	local	int		_numBuilders,_maxBuilders;
 
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(buildOilDefenseOrRetreat,	inactive);
 	}
@@ -701,7 +719,7 @@ event buildOilDefenseOrRetreat(buildOilDefenseOrRetreatTr)
 //mortar etc.. rules. build sensor towers and emplacements.
 event incendry(incendryTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(incendry,	inactive);
 	}
@@ -871,7 +889,7 @@ event incendry(incendryTr)
 // build a power gen for every 4 derricks. VITAL!
 event buildPowerGenerators(buildPowerGeneratorsTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(buildPowerGenerators,	inactive);
 	}
@@ -925,7 +943,7 @@ event buildBase(buildBaseTr)
 {
 	local	int		_numBuilders,_maxBuilders;
 
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(buildBase,	inactive);
 	}
@@ -974,7 +992,7 @@ event buildBase(buildBaseTr)
 //  build other stuff, grow the base slowly...
 event buildExpand( buildExpandTr )
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(buildExpand,inactive);
 	}
@@ -1028,7 +1046,7 @@ function void expandBase(DROID _truck)
 			}
 		}
 	}
-	
+
 	extraStruct = extraStruct + 1;
 }
 
@@ -1037,7 +1055,7 @@ function void expandBase(DROID _truck)
 //	Structure (fac/res/pow) upgrades
 event upgradeStructures(upgradeStructuresTr )
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(upgradeStructures,inactive);
 	}
@@ -1198,7 +1216,7 @@ function bool upgradePowGen(DROID _truck, int _maxBuilders)
 //	Finish Building Part Built Structures
 event finishStructs(finishStructsTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(finishStructs,	inactive);
 	}
@@ -1235,14 +1253,14 @@ event newfortify(fortifyTr)
 {
 	local	int		_numBuilders,_maxBuilders;
 
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(newfortify,	inactive);
 	}
 	else
 	{
 		_maxBuilders = 1;
-		
+
 		if(numGroupSameOrder(buildGroup, DORDER_LINEBUILD) >= _maxBuilders)
 		{
 			exit;
@@ -1296,7 +1314,7 @@ event droidBuilt(droidBuiltTr)
 {
 	local STRUCTURE _repairFacility;
 
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(droidBuilt,	inactive);
 	}
@@ -1413,7 +1431,7 @@ event structBuilt(structBuiltTr)
 	local	FEATURE	_oilResource;
 	local	int		_count,_count2;
 
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(structBuilt,inactive);
 		exit;
@@ -1461,7 +1479,7 @@ event structBuilt(structBuiltTr)
 		if(structure.x == rebuildStructX[_count] and
 		   structure.y == rebuildStructY[_count] and
 		   ( (structure.stat == rebuildStructStat[_count]) or //walls can end up as corner walls
-		   ( (structure.stat == wall or structure.stat == cornerWall) and 
+		   ( (structure.stat == wall or structure.stat == cornerWall) and
 		   (rebuildStructStat[_count] == wall or rebuildStructStat[_count] == cornerWall))
 		   ))
 		{
@@ -1477,14 +1495,14 @@ event structBuilt(structBuiltTr)
 
 				_count2++;
 			}
-			
+
 			//clear last entry
 			rebuildStructX[countRebuildStruct - 1] = 0;
 			rebuildStructY[countRebuildStruct - 1] = 0;
 			rebuildStructStat[countRebuildStruct - 1] = NULLSTRUCTURESTAT;
-			
+
 			countRebuildStruct--;	//we just built one structure
-			
+
 			//_count = countRebuildStruct;	//exit outer loop
 		}
 		_count++;
@@ -1495,7 +1513,7 @@ event structBuilt(structBuiltTr)
 // deal with attacks.
 event droidDestroyed(droidDestroyedTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(droidDestroyed,inactive);
 	}
@@ -1525,7 +1543,7 @@ event droidDestroyed(droidDestroyedTr)
 // build more con droids.
 event conDroids(conDroidsTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(conDroids,inactive);
 	}
@@ -1549,10 +1567,10 @@ function void buildTruck()
 	}
 
 	_maxTruckFactories = 3; 		//max factories to use for truck production
-	
+
 	_haveTrucks = buildGroup.members;
 	_numBuilding = numTemplatesInProduction(constructor,me);
-	
+
 	_totalTrucks = _numBuilding + _haveTrucks;
 
 	initEnumStruct(FALSE,factory,me,me);
@@ -1578,7 +1596,7 @@ function void buildTruck()
 // build repair droids.
 event repairDroids(repairDroidsTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(repairDroids,inactive);
 	}
@@ -1602,7 +1620,7 @@ event repairDroids(repairDroidsTr)
 /////////////////////////////////////////////////////////////////////
 event factoryEvent(factoryEventTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(factoryEvent,	inactive);
 	}
@@ -1690,7 +1708,7 @@ function void factoryBuildDroid(STRUCTURE _factory)
 // put cyborg factories to work
 event cyborgFactoryEvent(cyborgFactoryEventTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(cyborgFactoryEvent,	inactive);
 	}
@@ -1781,7 +1799,7 @@ function void cybFactorBuildCyborg(STRUCTURE _factory)
 // scout an area
 event chooseScoutArea(chooseScoutAreaTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(chooseScoutArea,	inactive);
 	}
@@ -1797,7 +1815,7 @@ event chooseScoutArea(chooseScoutAreaTr)
 
 event expandScoutArea(expandScoutAreaTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(expandScoutArea,	inactive);
 	}
@@ -1844,7 +1862,7 @@ event expandScoutArea(expandScoutAreaTr)
 
 event scoutMain(scoutMainTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(scoutMain,	inactive);
 	}
@@ -1863,7 +1881,7 @@ event scoutMain(scoutMainTr)
 // process new visibility reports
 event newObjectReport(newObjectReportTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(newObjectReport,	inactive);
 	}
@@ -1951,7 +1969,7 @@ function int targetTypeValue(BASEOBJ _target)
 
 event takeover(takeoverTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(takeover,	inactive);
 	}
@@ -1966,7 +1984,7 @@ event takeover(takeoverTr)
 
 event takeoverDefend(takeoverTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(takeoverDefend,	inactive);
 	}
@@ -1984,7 +2002,7 @@ event takeoverDefend(takeoverTr)
 event useLassat(useLassatTr)
 {
 
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(useLassat,	inactive);
 	}
@@ -2014,7 +2032,7 @@ event useLassat(useLassatTr)
 
 event findEnemy(attackStuffTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(findEnemy,	inactive);
 	}
@@ -2048,7 +2066,7 @@ event findEnemy(attackStuffTr)
 // send attack team out to cause trouble near things scout found.
 event attackStuff(attackStuffTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(attackStuff,	inactive);
 	}
@@ -2077,7 +2095,7 @@ event attackStuff(attackStuffTr)
 /////////////////////////////////////////////////////////////////////
 event doAllOutAttack(allOutAttackTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(attackStuff,	inactive);
 	}
@@ -2109,7 +2127,7 @@ event doAllOutAttack(allOutAttackTr)
 // defend attacked objects.
 event defendWatch(defendWatchTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(defendWatch,	inactive);
 	}
@@ -2148,7 +2166,7 @@ event defendWatch(defendWatchTr)
 // defenders  return after they are finished.
 event defendReturn(defendReturnTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(defendReturn,	inactive);
 	}
@@ -2199,7 +2217,7 @@ event doResearch(doResearchTr)
 {
 	local	int		_techIndex,_numResearching;
 
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(doResearch,	inactive);
 	}
@@ -2279,7 +2297,7 @@ function int findResearch(int _searchStart, int _techTree)
 // form alliances
 event formAllianceEvent(formAllianceEventTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(formAllianceEvent,	inactive);
 	}
@@ -2311,7 +2329,7 @@ event formAllianceEvent(formAllianceEventTr)
 // break the alliance too.
 event breakAllianceEvent(breakAllianceEventTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(breakAllianceEvent,	inactive);
 	}
@@ -2360,7 +2378,7 @@ event breakAllianceEvent(breakAllianceEventTr)
 /////////////////////////////////////////////////////////////////////
 event formHumanAlliances(humanAllianceTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(formHumanAlliances,	inactive);
 	}
@@ -2415,7 +2433,7 @@ event formHumanAlliances(humanAllianceTr)
 // bring forces back together to consolidate attacks
 event consolidateEvent(consolidateEventTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(consolidateEvent,	inactive);
 	}
@@ -2429,7 +2447,7 @@ event consolidateEvent(consolidateEventTr)
 				buildX = baseX;
 				buildY = baseY;
 				pickStructLocationB(powGen, ref buildX, ref buildY, me, 0);
-				
+
 				orderGroupLoc(scoutGroup, DORDER_MOVE,buildX,buildY);
 				orderGroupLoc(defendGroup, DORDER_MOVE,buildX,buildY);
 			}
@@ -2447,12 +2465,12 @@ event consolidateEvent(consolidateEventTr)
 			}
 			else
 			{
-			
+
 				// find a place with no structures nearby
 				buildX = baseX;
 				buildY = baseY;
 				pickStructLocationB(powGen, ref buildX, ref buildY, me, 0);
-	
+
 				orderGroupLoc(attackGroup, DORDER_MOVE,buildX,buildY);
 			}
 		}
@@ -2466,7 +2484,7 @@ event consolidateEvent(consolidateEventTr)
 // if running low on power put some power eating stuff on hold for a while.
 event managePower(managePowerTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(managePower,	inactive);
 	}
@@ -2499,7 +2517,7 @@ event managePower(managePowerTr)
 
 event difficultyModifier(difficultyModifierTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(difficultyModifier,	inactive);
 	}
@@ -2518,7 +2536,7 @@ event vtolStructs(inactive)
 	local	int		_maxTrucks,_numTrucks,_maxBuildTrucks,_minBuildTrucks;
 	local	int		_numVtolFacs,_numRearmPads;
 
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(vtolStructs,inactive);
 	}
@@ -2597,7 +2615,7 @@ function void buildRearmPads()
 	if(!isStructureAvailable(vtolPad,me)){
 		return;
 	}
-	
+
 	// build vtol rearm pads.
 	_buildX = baseX;								// pick a location
 	_buildY = baseY;
@@ -2626,7 +2644,7 @@ function void buildRearmPads()
 
 event buildVtols(inactive)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(buildVtols,inactive);
 	}
@@ -2657,7 +2675,7 @@ event buildVtols(inactive)
 function void vtolFactoryBuildVtol(STRUCTURE _factory)
 {
 	local	int		_numTemplates,_bestTemplates;
-	
+
 	if(_factory == NULLOBJECT){
 		return;
 	}
@@ -2693,7 +2711,7 @@ event vtolAttack(inactive)
 	local		bool		_bHaveDefendTarget;
 	local		DROID		_droid;
 
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(vtolAttack,inactive);
 	}
@@ -2724,7 +2742,7 @@ event vtolAttack(inactive)
 				}
 			}
 		}
-		
+
 		//make sure attack vtol groups are not cluttered
 		rearrangeAttackVtols();
 
@@ -2758,12 +2776,12 @@ event vtolAttack(inactive)
 						}
 					}
 				}
-				
+
 				//find target in our base if our base is in trouble
 				if(!_bHaveDefendTarget and defendingOwnBase())
 				{
 					vtolGrAttackObj[_groupIndex] = chooseVtolDefenceTarget(baseX, baseY, MAX_VTOL_DEFEND_RADIUS, FALSE);
-					
+
 					if(vtolGrAttackObj[_groupIndex] != NULLOBJECT)
 					{
 						dbg("assigned new defence target for group " & _groupIndex, me);
@@ -2786,7 +2804,7 @@ event vtolAttack(inactive)
 						}
 					}
 
-					//now try to find an attack target if we have no defence target 
+					//now try to find an attack target if we have no defence target
 					//find best attack target
 					_newTarget = chooseVtolTarget(TRUE);	//search for an exclusive target
 					if(_newTarget == NULLOBJECT)
@@ -2805,7 +2823,7 @@ event vtolAttack(inactive)
 						vtolGrAttackObj[_groupIndex] = _newTarget;
 					}
 				}
-				
+
 				//see if this group has something to attack
 				if(vtolGrAttackObj[_groupIndex] != NULLOBJECT)
 				{
@@ -2837,7 +2855,7 @@ function void rearrangeAttackVtols()
 {
 	local	int		_emptyGr,_fillGr;
 	local	DROID	_droid;
-	
+
 	_emptyGr = 0;
 	while(_emptyGr < numVtolAttackGroups)
 	{
@@ -2870,7 +2888,7 @@ function BASEOBJ chooseVtolDefenceTarget(int _x, int _y, int _range, bool bExclu
 	local	BASEOBJ		_target;
 
 	_target = getClosestEnemy(_x, _y, _range, FALSE, FALSE, me);
-	
+
 	// make sure no one else is targeting it already if we want exclusive targets
 	if(bExclusiveTarget and vtolTargetAssigned(_target))
 	{
@@ -2938,12 +2956,12 @@ function int getVtolTargetWeight(BASEOBJ _target)
 	{
 		return 0;
 	}
-	
+
 	if(_target.type != OBJ_STRUCTURE)
 	{
 		return 0;
 	}
-	
+
 	_structTarget = objToStructure(_target);
 
 	_targetWeight = 0;
@@ -2966,7 +2984,7 @@ function int getVtolTargetWeight(BASEOBJ _target)
 		}
 		_targetType++;
 	}
-	
+
 	// incomplete structures get lower weight
 	if(!structureComplete(_structTarget))
 	{
@@ -3024,7 +3042,7 @@ event vtolDefend(vtolDefendTr)
 {
 	local	int		_numBuilders,_maxBuilders;
 
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(vtolDefend,inactive);
 	}
@@ -3091,7 +3109,7 @@ event vtolDefend(vtolDefendTr)
 /////////////////////////////////////////////////////////////////////
 event vtolEnabler(vtolEnablerTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(vtolEnabler,inactive);
 	}
@@ -3193,7 +3211,7 @@ event beaconEv(beaconTr)
 	local	int			_players;
 	local	string		_processedString;
 
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(beaconEv,	inactive);
 		exit;
@@ -3215,7 +3233,7 @@ event beaconEv(beaconTr)
 /* Deal with a chat message */
 event multiMsgEv(multiMsgTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(multiMsgEv,	inactive);
 		exit;
@@ -3448,7 +3466,7 @@ function bool allyBaseAtLoc(int _ally, int _x, int _y)
 
 event manageAllyHelp(manageAllyHelpTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(manageAllyHelp,	inactive);
 		exit;
@@ -3486,7 +3504,7 @@ event manageAllyHelp(manageAllyHelpTr)
 
 event everySecEv(everySec)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(everySecEv,	inactive);
 		exit;
@@ -3710,7 +3728,7 @@ function bool defendingOwnBase()
 /* Call for help when our base is in danger */
 event watchBaseThreat(watchBaseThreatTr)
 {
- 	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+ 	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(watchBaseThreat, inactive);
 		exit;
@@ -3894,7 +3912,7 @@ event manageDefendLocationEv(inactive)
 
 	dbg("manageDefendLocationEv", me);
 
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(manageDefendLocationEv,	inactive);
 		exit;
@@ -4019,31 +4037,31 @@ event watchMenu(everySec)
 		}else{
 			setDebugMenuEntry("0 " & vtolAttackGr[0].members & " - " & (vtolGrAttackObj[0].x / TILE) & "-" & (vtolGrAttackObj[0].y / TILE), 0);
 		}
-		
+
 		if(vtolGrAttackObj[1] == NULLOBJECT){
 			setDebugMenuEntry("1 - " & vtolAttackGr[1].members, 1);
 		}else{
 			setDebugMenuEntry("1 " & vtolAttackGr[1].members & " - " & (vtolGrAttackObj[1].x / TILE) & "-" & (vtolGrAttackObj[1].y / TILE), 1);
 		}
-		
+
 		if(vtolGrAttackObj[2] == NULLOBJECT){
 			setDebugMenuEntry("2 - " & vtolAttackGr[2].members, 2);
 		}else{
 			setDebugMenuEntry("2 " & vtolAttackGr[2].members & " - " & (vtolGrAttackObj[2].x / TILE) & "-" & (vtolGrAttackObj[2].y / TILE), 2);
 		}
-		
+
 		if(vtolGrAttackObj[3] == NULLOBJECT){
 			setDebugMenuEntry("3 - " & vtolAttackGr[3].members, 3);
 		}else{
 			setDebugMenuEntry("3 " & vtolAttackGr[3].members & " - " & (vtolGrAttackObj[3].x / TILE) & "-" & (vtolGrAttackObj[3].y / TILE), 3);
 		}
-		
+
 		if(vtolGrAttackObj[4] == NULLOBJECT){
 			setDebugMenuEntry("4 - " & vtolAttackGr[4].members, 4);
 		}else{
 			setDebugMenuEntry("4 " & vtolAttackGr[4].members & " - " & (vtolGrAttackObj[4].x / TILE) & "-" & (vtolGrAttackObj[4].y / TILE), 4);
 		}
-		
+
 		if(vtolGrAttackObj[5] == NULLOBJECT){
 			setDebugMenuEntry("5 - " & vtolAttackGr[5].members, 5);
 		}else{
@@ -4122,7 +4140,7 @@ event structureDestroyed(structureDestroyedTr)
 {
 	local	int	_count;
 
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(structureDestroyed,inactive);
 	}
@@ -4154,7 +4172,7 @@ event structureDestroyed(structureDestroyedTr)
 // Rebuild structures that were destroyed
 event rebuildStructureEv(rebuildStructureTr)
 {
-	if(not _DEBUG and ((me == selectedPlayer) or not myResponsibility(me)) )
+	if(not aiResponsibleForPlayer(me) )
 	{
 		setEventTrigger(rebuildStructureEv,inactive);
 	}
@@ -4213,12 +4231,12 @@ function void buildOnExactLocation(DROID _truck, int _x, int _y, STRUCTURESTAT _
 	if(pickStructLocationB(_stat, ref _newX, ref _newY, me, -1))
 	{
 		dbg("trying to rebuild on (" & _newX & "/" & _newY & ")", me);
-		
+
 		if((_x != _newX) or (_y != _newY))
 		{
 			return;
 		}
-		
+
 		orderDroidStatsLoc(_truck, DORDER_BUILD, _stat, _x, _y);
 		//dbg("rebuilding structure after!! (" & _x & "/" & _y & ")", me);
 	}
