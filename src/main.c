@@ -26,6 +26,7 @@
 #include "lib/framework/frame.h"
 
 #include <SDL/SDL_main.h>
+#include <SDL/SDL_timer.h>
 #include <physfs.h>
 
 /* For SHGetFolderPath */
@@ -697,7 +698,12 @@ int main(int argc, char *argv[])
 				}
 
 				gameTimeUpdate();
-			} // !paused && !quit
+			} // !lostFocus && !quit
+			else if (lostFocus && !quit)
+			{
+				// Prevent CPU hogging when we've lost focus
+				SDL_Delay(1);
+			}
 		} // End of !Restart loop.
 
 		debug(LOG_MAIN, "Preparing for shutdown/restart");
