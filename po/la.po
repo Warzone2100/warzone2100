@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-04-30 19:59+0200\n"
+"POT-Creation-Date: 2007-05-12 11:12+0200\n"
 "PO-Revision-Date: 2007-04-13 14:34+0200\n"
 "Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
 "Language-Team: Latin\n"
@@ -49,16 +49,16 @@ msgstr ""
 msgid "Cyan"
 msgstr ""
 
-#: src/display.c:2019
+#: src/display.c:1935
 msgid "Cannot Build. Oil Resource Burning."
 msgstr ""
 
-#: src/display.c:2177
+#: src/display.c:2093
 #, c-format
 msgid "%s - Damage %d%% - Kills %d, %s"
 msgstr ""
 
-#: src/display.c:2422
+#: src/display.c:2338
 msgid "Truck ordered to build Oil Derrick"
 msgstr ""
 
@@ -114,7 +114,7 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: src/hci.c:1766 src/mission.c:3505 src/loop.c:565 src/loop.c:577
+#: src/hci.c:1766 src/mission.c:3505 src/loop.c:488 src/loop.c:500
 msgid "GAME SAVED!"
 msgstr ""
 

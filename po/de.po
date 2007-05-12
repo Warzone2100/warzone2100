@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-04-30 19:59+0200\n"
-"PO-Revision-Date: 2007-04-16 16:54+0200\n"
+"POT-Creation-Date: 2007-05-12 11:12+0200\n"
+"PO-Revision-Date: 2007-05-12 11:23+0200\n"
 "Last-Translator: Dennis Schridde <devurandom@gna.org>\n"
 "Language-Team: Deutsch\n"
 "MIME-Version: 1.0\n"
@@ -49,16 +49,16 @@ msgstr "Pink"
 msgid "Cyan"
 msgstr "Cyan"
 
-#: src/display.c:2019
+#: src/display.c:1935
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Bauen nicht möglich. Ölquelle brennt."
 
-#: src/display.c:2177
+#: src/display.c:2093
 #, c-format
 msgid "%s - Damage %d%% - Kills %d, %s"
 msgstr "%s - Schaden %d%% - Abschüsse %d, %s"
 
-#: src/display.c:2422
+#: src/display.c:2338
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Baufahrzeug wurde beordert einen Ölbohrturm zu bauen"
 
@@ -114,7 +114,7 @@ msgstr "Du hast Entwürfe für %s entdeckt"
 msgid "Close"
 msgstr "Schließen"
 
-#: src/hci.c:1766 src/mission.c:3505 src/loop.c:565 src/loop.c:577
+#: src/hci.c:1766 src/mission.c:3505 src/loop.c:488 src/loop.c:500
 msgid "GAME SAVED!"
 msgstr "Spiel gespeichert"
 
@@ -654,27 +654,27 @@ msgstr "Neues Fahrzeug"
 
 #: src/design.c:576
 msgid "Vehicle Body"
-msgstr ""
+msgstr "Fahrzeugaufbau"
 
 #: src/design.c:598
 msgid "Vehicle Propulsion"
-msgstr ""
+msgstr "Fahrzeug-Antrieb"
 
 #: src/design.c:621 src/design.c:646 src/design.c:672
 msgid "Vehicle Turret"
-msgstr ""
+msgstr "Fahrzeug-Geschützturm"
 
 #: src/design.c:693
 msgid "Delete Design"
-msgstr ""
+msgstr "Design löschen"
 
 #: src/design.c:747 src/design.c:796
 msgid "Kinetic Armour"
-msgstr ""
+msgstr "Kinetische Panzerung"
 
 #: src/design.c:756 src/design.c:808
 msgid "Thermal Armour"
-msgstr ""
+msgstr "Thermische Panzerung"
 
 #: src/design.c:772 src/design.c:829
 msgid "Engine Output"
@@ -689,7 +689,7 @@ msgstr "Gewicht"
 
 #: src/design.c:870 src/design.c:890
 msgid "Total Power Required"
-msgstr ""
+msgstr "Benötigte Gesamtenergie"
 
 #: src/design.c:903 src/design.c:924
 msgid "Total Body Points"
@@ -697,11 +697,11 @@ msgstr ""
 
 #: src/design.c:1109 src/design.c:1141
 msgid "Power Usage"
-msgstr ""
+msgstr "Energieverbrauch"
 
 #: src/design.c:1549
 msgid "Transporter"
-msgstr ""
+msgstr "Transporter"
 
 #: src/design.c:1799
 msgid "Sensor Range"
@@ -950,111 +950,111 @@ msgstr "Ort der letzten Meldung betrachten"
 
 #: src/keymap.c:303
 msgid "Assign Group 1"
-msgstr ""
+msgstr "Gruppe 1 zuteilen"
 
 #: src/keymap.c:304
 msgid "Assign Group 2"
-msgstr ""
+msgstr "Gruppe 2 zuteilen"
 
 #: src/keymap.c:305
 msgid "Assign Group 3"
-msgstr ""
+msgstr "Gruppe 3 zuteilen"
 
 #: src/keymap.c:306
 msgid "Assign Group 4"
-msgstr ""
+msgstr "Gruppe 4 zuteilen"
 
 #: src/keymap.c:307
 msgid "Assign Group 5"
-msgstr ""
+msgstr "Gruppe 5 zuteilen"
 
 #: src/keymap.c:308
 msgid "Assign Group 6"
-msgstr ""
+msgstr "Gruppe 6 zuteilen"
 
 #: src/keymap.c:309
 msgid "Assign Group 7"
-msgstr ""
+msgstr "Gruppe 7 zuteilen"
 
 #: src/keymap.c:310
 msgid "Assign Group 8"
-msgstr ""
+msgstr "Gruppe 8 zuteilen"
 
 #: src/keymap.c:311
 msgid "Assign Group 9"
-msgstr ""
+msgstr "Gruppe 9 zuteilen"
 
 #: src/keymap.c:315
 msgid "Select Group 1"
-msgstr ""
+msgstr "Gruppe 1 auswählen"
 
 #: src/keymap.c:316
 msgid "Select Group 2"
-msgstr ""
+msgstr "Gruppe 2 auswählen"
 
 #: src/keymap.c:317
 msgid "Select Group 3"
-msgstr ""
+msgstr "Gruppe 3 auswählen"
 
 #: src/keymap.c:318
 msgid "Select Group 4"
-msgstr ""
+msgstr "Gruppe 4 auswählen"
 
 #: src/keymap.c:319
 msgid "Select Group 5"
-msgstr ""
+msgstr "Gruppe 5 auswählen"
 
 #: src/keymap.c:320
 msgid "Select Group 6"
-msgstr ""
+msgstr "Gruppe 6 auswählen"
 
 #: src/keymap.c:321
 msgid "Select Group 7"
-msgstr ""
+msgstr "Gruppe 7 auswählen"
 
 #: src/keymap.c:322
 msgid "Select Group 8"
-msgstr ""
+msgstr "Gruppe 8 auswählen"
 
 #: src/keymap.c:323
 msgid "Select Group 9"
-msgstr ""
+msgstr "Gruppe 9 auswählen"
 
 #: src/keymap.c:327
 msgid "Select Commander 1"
-msgstr ""
+msgstr "Kommandeur 1 auswählen"
 
 #: src/keymap.c:328
 msgid "Select Commander 2"
-msgstr ""
+msgstr "Kommandeur 2 auswählen"
 
 #: src/keymap.c:329
 msgid "Select Commander 3"
-msgstr ""
+msgstr "Kommandeur 3 auswählen"
 
 #: src/keymap.c:330
 msgid "Select Commander 4"
-msgstr ""
+msgstr "Kommandeur 4 auswählen"
 
 #: src/keymap.c:331
 msgid "Select Commander 5"
-msgstr ""
+msgstr "Kommandeur 5 auswählen"
 
 #: src/keymap.c:332
 msgid "Select Commander 6"
-msgstr ""
+msgstr "Kommandeur 6 auswählen"
 
 #: src/keymap.c:333
 msgid "Select Commander 7"
-msgstr ""
+msgstr "Kommandeur 7 auswählen"
 
 #: src/keymap.c:334
 msgid "Select Commander 8"
-msgstr ""
+msgstr "Kommandeur 8 auswählen"
 
 #: src/keymap.c:335
 msgid "Select Commander 9"
-msgstr ""
+msgstr "Kommandeur 9 auswählen"
 
 #: src/keymap.c:339
 msgid "Multiplayer Options"
@@ -1082,19 +1082,19 @@ msgstr ""
 
 #: src/keymap.c:347
 msgid "Zoom Radar Out"
-msgstr ""
+msgstr "Radar herauszoomen"
 
 #: src/keymap.c:348
 msgid "Zoom Radar In"
-msgstr ""
+msgstr "Radar hereinzoomen"
 
 #: src/keymap.c:349
 msgid "Zoom In"
-msgstr ""
+msgstr "hereinzoomen"
 
 #: src/keymap.c:350
 msgid "Zoom Out"
-msgstr ""
+msgstr "herauszoomen"
 
 #: src/keymap.c:351
 msgid "Pitch Forward"
@@ -1122,15 +1122,15 @@ msgstr ""
 
 #: src/keymap.c:357
 msgid "Decrease Game Speed"
-msgstr ""
+msgstr "Spielgeschwindigkeit veringern"
 
 #: src/keymap.c:358
 msgid "Increase Game Speed"
-msgstr ""
+msgstr "Spielgeschwindigkeit erhöhen"
 
 #: src/keymap.c:359
 msgid "Reset Game Speed"
-msgstr ""
+msgstr "Spielgeschwindigkeit zurücksetzen"
 
 #: src/keymap.c:360
 msgid "View North"
