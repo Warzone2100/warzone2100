@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: da\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-05-12 11:12+0200\n"
+"POT-Creation-Date: 2007-05-12 17:44+0200\n"
 "PO-Revision-Date: 2007-04-17 23:03+0200\n"
 "Last-Translator: Christian Vest Hansen <karmazilla@gmail.com>\n"
 "Language-Team: Dansk <en@li.org>\n"
@@ -48,16 +48,16 @@ msgstr "Pink"
 msgid "Cyan"
 msgstr "Cyan"
 
-#: src/display.c:1935
+#: src/display.c:1941
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Kan ikke bygge på brændende oilebrøn."
 
-#: src/display.c:2093
+#: src/display.c:2099
 #, c-format
 msgid "%s - Damage %d%% - Kills %d, %s"
 msgstr "%s - Skade %d%% - Drab %d, %s"
 
-#: src/display.c:2338
+#: src/display.c:2344
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Truck beordret til at bygge oliebrøn."
 
@@ -199,7 +199,7 @@ msgstr "Tilbage til hovedmenu"
 msgid "Continue Game"
 msgstr "Fortsæt"
 
-#: src/mission.c:3419 src/mission.c:3555 src/ingameop.c:417 src/frontend.c:517
+#: src/mission.c:3419 src/mission.c:3555 src/ingameop.c:417 src/frontend.c:519
 msgid "Load Saved Game"
 msgstr "Indlæs gemt spil"
 
@@ -344,11 +344,11 @@ msgstr "Flerbruger spil"
 msgid "Select Force"
 msgstr "Gem styrke"
 
-#: src/multiint.c:819 src/frontend.c:763
+#: src/multiint.c:819 src/frontend.c:765
 msgid "Fog"
 msgstr "Tåge"
 
-#: src/multiint.c:821 src/frontend.c:770 src/frontend.c:867
+#: src/multiint.c:821 src/frontend.c:772 src/frontend.c:869
 msgid "Fog Of War"
 msgstr "Krigståge"
 
@@ -639,19 +639,19 @@ msgstr "Fortsæt spil"
 msgid "Quit"
 msgstr "Afbryd"
 
-#: src/ingameop.c:143 src/frontend.c:941
+#: src/ingameop.c:143 src/frontend.c:943
 msgid "Voice Volume"
 msgstr "Stemme volume"
 
-#: src/ingameop.c:148 src/frontend.c:945
+#: src/ingameop.c:148 src/frontend.c:947
 msgid "FX Volume"
 msgstr "Effekt volume"
 
-#: src/ingameop.c:153 src/frontend.c:949
+#: src/ingameop.c:153 src/frontend.c:951
 msgid "Music Volume"
 msgstr "Musik volume"
 
-#: src/ingameop.c:265 src/frontend.c:302
+#: src/ingameop.c:265 src/frontend.c:304
 msgid "Options"
 msgstr "Indstillinger"
 
@@ -771,153 +771,153 @@ msgstr "Kommandotårn"
 msgid "Single Player Campaign"
 msgstr "Solokampange"
 
-#: src/frontend.c:297 src/frontend.c:299
+#: src/frontend.c:297 src/frontend.c:301
 #, fuzzy
 msgid "Multi Player Game"
 msgstr "Flerbruger spil"
 
-#: src/frontend.c:301 src/frontend.c:361
+#: src/frontend.c:303 src/frontend.c:363
 msgid "Tutorial"
 msgstr "Tutorial"
 
-#: src/frontend.c:304
+#: src/frontend.c:306
 msgid "Quit Game"
 msgstr "Afslut spil"
 
-#: src/frontend.c:306
+#: src/frontend.c:308
 msgid "MAIN MENU"
 msgstr "HOVED MENU"
 
-#: src/frontend.c:362
+#: src/frontend.c:364
 msgid "Fast Play"
 msgstr "Hurtgigt spil"
 
-#: src/frontend.c:363
+#: src/frontend.c:365
 msgid "TUTORIALS"
 msgstr "TUTORIALS"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.c:365 src/frontend.c:428 src/frontend.c:568 src/frontend.c:665
-#: src/frontend.c:817 src/frontend.c:953 src/frontend.c:1062
+#: src/frontend.c:367 src/frontend.c:430 src/frontend.c:570 src/frontend.c:667
+#: src/frontend.c:819 src/frontend.c:955 src/frontend.c:1064
 msgctxt "menu"
 msgid "Return"
 msgstr "Tilbage"
 
-#: src/frontend.c:423
+#: src/frontend.c:425
 msgid "Load Campaign"
 msgstr "Indlæs kampange"
 
-#: src/frontend.c:424
+#: src/frontend.c:426
 msgid "New Campaign"
 msgstr "Ny kampange"
 
-#: src/frontend.c:426
+#: src/frontend.c:428
 msgid "SINGLE PLAYER"
 msgstr "SOLO SPILLER"
 
-#: src/frontend.c:560
+#: src/frontend.c:562
 msgid "MULTI PLAYER"
 msgstr "FLER SPILLER"
 
-#: src/frontend.c:562
+#: src/frontend.c:564
 msgid "Host Game"
 msgstr "Udbyd spil"
 
-#: src/frontend.c:563
+#: src/frontend.c:565
 msgid "Join Game"
 msgstr "Forbind til vært"
 
-#: src/frontend.c:565
+#: src/frontend.c:567
 msgid "Force Editor"
 msgstr "Redigér styrke"
 
-#: src/frontend.c:566
+#: src/frontend.c:568
 msgid "One Player Skirmish"
 msgstr "Spil mod computeren"
 
-#: src/frontend.c:660 src/frontend.c:956 src/frontend.c:1065
+#: src/frontend.c:662 src/frontend.c:958 src/frontend.c:1067
 msgid "GAME OPTIONS"
 msgstr "SPIL INDSTILLINGER"
 
-#: src/frontend.c:661
+#: src/frontend.c:663
 msgid "Game Options"
 msgstr "Spil indstillinger"
 
-#: src/frontend.c:662
+#: src/frontend.c:664
 msgid "Graphics Options"
 msgstr "Grafik indstillinger"
 
-#: src/frontend.c:663
+#: src/frontend.c:665
 msgid "Audio Options"
 msgstr "Lyd indstillinger"
 
-#: src/frontend.c:664
+#: src/frontend.c:666
 msgid "Key Mappings"
 msgstr "Tastatur indstillinger"
 
-#: src/frontend.c:739
+#: src/frontend.c:741
 msgid "Reverse Mouse"
 msgstr "Omvendt mus"
 
-#: src/frontend.c:742 src/frontend.c:754 src/frontend.c:807 src/frontend.c:842
-#: src/frontend.c:856 src/frontend.c:892
+#: src/frontend.c:744 src/frontend.c:756 src/frontend.c:809 src/frontend.c:844
+#: src/frontend.c:858 src/frontend.c:894
 msgid "On"
 msgstr "Til"
 
-#: src/frontend.c:746 src/frontend.c:758 src/frontend.c:803 src/frontend.c:812
-#: src/frontend.c:837 src/frontend.c:851 src/frontend.c:887
+#: src/frontend.c:748 src/frontend.c:760 src/frontend.c:805 src/frontend.c:814
+#: src/frontend.c:839 src/frontend.c:853 src/frontend.c:889
 msgid "Off"
 msgstr "Fra"
 
-#: src/frontend.c:751
+#: src/frontend.c:753
 msgid "Screen Shake"
 msgstr "Ryst skærm"
 
-#: src/frontend.c:766 src/frontend.c:874
+#: src/frontend.c:768 src/frontend.c:876
 msgid "Mist"
 msgstr "Afstandståge"
 
-#: src/frontend.c:775
+#: src/frontend.c:777
 msgid "Video Playback"
 msgstr ""
 
-#: src/frontend.c:778 src/frontend.c:911
+#: src/frontend.c:780 src/frontend.c:913
 msgid "Full"
 msgstr "Fuldskærm"
 
-#: src/frontend.c:782 src/frontend.c:901
+#: src/frontend.c:784 src/frontend.c:903
 msgid "Windowed"
 msgstr "Vindue"
 
-#: src/frontend.c:785 src/frontend.c:906
+#: src/frontend.c:787 src/frontend.c:908
 msgid "Minimal"
 msgstr "Minimal"
 
-#: src/frontend.c:792 src/frontend.c:796
+#: src/frontend.c:794 src/frontend.c:798
 msgid "Subtitles"
 msgstr "Undertekster"
 
-#: src/frontend.c:1027
+#: src/frontend.c:1029
 msgid "Difficulty"
 msgstr "Sværhedsgræd"
 
-#: src/frontend.c:1031 src/frontend.c:1116
+#: src/frontend.c:1033 src/frontend.c:1118
 msgid "Easy"
 msgstr "Begynder"
 
-#: src/frontend.c:1034 src/frontend.c:1108
+#: src/frontend.c:1036 src/frontend.c:1110
 msgid "Normal"
 msgstr "Øvet"
 
-#: src/frontend.c:1038 src/frontend.c:1112
+#: src/frontend.c:1040 src/frontend.c:1114
 msgid "Hard"
 msgstr "Svær"
 
-#: src/frontend.c:1043
+#: src/frontend.c:1045
 msgid "Scroll Speed"
 msgstr "Kamera hastighed"
 
-#: src/frontend.c:1059
+#: src/frontend.c:1061
 msgid "Unit Colour"
 msgstr "Holdfarve"
 

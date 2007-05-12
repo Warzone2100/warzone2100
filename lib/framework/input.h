@@ -145,7 +145,9 @@ typedef enum _key_code
 /* Tell the input system that we have lost the focus */
 extern void inputLooseFocus(void);
 
-extern void inputProcessEvent(SDL_Event *event);
+extern void inputHandleKeyEvent(SDL_Event*);
+extern void inputHandleMouseMotionEvent(SDL_Event*);
+extern void inputHandleMouseButtonEvent(SDL_Event*);
 
 /* Converts the key code into an ascii string */
 extern void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize);

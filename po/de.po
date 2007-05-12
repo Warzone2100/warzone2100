@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-05-12 11:12+0200\n"
+"POT-Creation-Date: 2007-05-12 17:44+0200\n"
 "PO-Revision-Date: 2007-05-12 11:23+0200\n"
 "Last-Translator: Dennis Schridde <devurandom@gna.org>\n"
 "Language-Team: Deutsch\n"
@@ -49,16 +49,16 @@ msgstr "Pink"
 msgid "Cyan"
 msgstr "Cyan"
 
-#: src/display.c:1935
+#: src/display.c:1941
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Bauen nicht möglich. Ölquelle brennt."
 
-#: src/display.c:2093
+#: src/display.c:2099
 #, c-format
 msgid "%s - Damage %d%% - Kills %d, %s"
 msgstr "%s - Schaden %d%% - Abschüsse %d, %s"
 
-#: src/display.c:2338
+#: src/display.c:2344
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Baufahrzeug wurde beordert einen Ölbohrturm zu bauen"
 
@@ -200,7 +200,7 @@ msgstr "Zurück zum Hauptmenu"
 msgid "Continue Game"
 msgstr "Spiel fortsetzen"
 
-#: src/mission.c:3419 src/mission.c:3555 src/ingameop.c:417 src/frontend.c:517
+#: src/mission.c:3419 src/mission.c:3555 src/ingameop.c:417 src/frontend.c:519
 msgid "Load Saved Game"
 msgstr "Speicherstand laden"
 
@@ -339,11 +339,11 @@ msgstr "Spielernamen auswählen"
 msgid "Select Force"
 msgstr "Streitmacht auswählen"
 
-#: src/multiint.c:819 src/frontend.c:763
+#: src/multiint.c:819 src/frontend.c:765
 msgid "Fog"
 msgstr "Nebel"
 
-#: src/multiint.c:821 src/frontend.c:770 src/frontend.c:867
+#: src/multiint.c:821 src/frontend.c:772 src/frontend.c:869
 msgid "Fog Of War"
 msgstr "Nebel des Krieges"
 
@@ -632,19 +632,19 @@ msgstr "Spiel fortsetzen"
 msgid "Quit"
 msgstr "Beenden"
 
-#: src/ingameop.c:143 src/frontend.c:941
+#: src/ingameop.c:143 src/frontend.c:943
 msgid "Voice Volume"
 msgstr "Sprachlautstärke"
 
-#: src/ingameop.c:148 src/frontend.c:945
+#: src/ingameop.c:148 src/frontend.c:947
 msgid "FX Volume"
 msgstr "Effektlautstärke"
 
-#: src/ingameop.c:153 src/frontend.c:949
+#: src/ingameop.c:153 src/frontend.c:951
 msgid "Music Volume"
 msgstr "Musiklautstärke"
 
-#: src/ingameop.c:265 src/frontend.c:302
+#: src/ingameop.c:265 src/frontend.c:304
 msgid "Options"
 msgstr "Optionen"
 
@@ -763,152 +763,152 @@ msgstr "Kommando Türme"
 msgid "Single Player Campaign"
 msgstr "Einzelspieler Kampagne"
 
-#: src/frontend.c:297 src/frontend.c:299
+#: src/frontend.c:297 src/frontend.c:301
 msgid "Multi Player Game"
 msgstr "Mehrspieler Spiel"
 
-#: src/frontend.c:301 src/frontend.c:361
+#: src/frontend.c:303 src/frontend.c:363
 msgid "Tutorial"
 msgstr "Tutorial"
 
-#: src/frontend.c:304
+#: src/frontend.c:306
 msgid "Quit Game"
 msgstr "Spiel Beenden"
 
-#: src/frontend.c:306
+#: src/frontend.c:308
 msgid "MAIN MENU"
 msgstr "Hauptmenu"
 
-#: src/frontend.c:362
+#: src/frontend.c:364
 msgid "Fast Play"
 msgstr "Schnelles Spiel"
 
-#: src/frontend.c:363
+#: src/frontend.c:365
 msgid "TUTORIALS"
 msgstr "Tutorials"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.c:365 src/frontend.c:428 src/frontend.c:568 src/frontend.c:665
-#: src/frontend.c:817 src/frontend.c:953 src/frontend.c:1062
+#: src/frontend.c:367 src/frontend.c:430 src/frontend.c:570 src/frontend.c:667
+#: src/frontend.c:819 src/frontend.c:955 src/frontend.c:1064
 msgctxt "menu"
 msgid "Return"
 msgstr "Zurück"
 
-#: src/frontend.c:423
+#: src/frontend.c:425
 msgid "Load Campaign"
 msgstr "Kampagne laden"
 
-#: src/frontend.c:424
+#: src/frontend.c:426
 msgid "New Campaign"
 msgstr "Neue Kampagne"
 
-#: src/frontend.c:426
+#: src/frontend.c:428
 msgid "SINGLE PLAYER"
 msgstr "Einzelspieler"
 
-#: src/frontend.c:560
+#: src/frontend.c:562
 msgid "MULTI PLAYER"
 msgstr "Mehrspieler"
 
-#: src/frontend.c:562
+#: src/frontend.c:564
 msgid "Host Game"
 msgstr "Spiel hosten"
 
-#: src/frontend.c:563
+#: src/frontend.c:565
 msgid "Join Game"
 msgstr "Spiel beitreten"
 
-#: src/frontend.c:565
+#: src/frontend.c:567
 msgid "Force Editor"
 msgstr "Streitmacht Editor"
 
-#: src/frontend.c:566
+#: src/frontend.c:568
 msgid "One Player Skirmish"
 msgstr "Einzelspieler Geplänkel"
 
-#: src/frontend.c:660 src/frontend.c:956 src/frontend.c:1065
+#: src/frontend.c:662 src/frontend.c:958 src/frontend.c:1067
 msgid "GAME OPTIONS"
 msgstr "Spieloptionen"
 
-#: src/frontend.c:661
+#: src/frontend.c:663
 msgid "Game Options"
 msgstr "Spieloptionen"
 
-#: src/frontend.c:662
+#: src/frontend.c:664
 msgid "Graphics Options"
 msgstr "Grafikeinstellungen"
 
-#: src/frontend.c:663
+#: src/frontend.c:665
 msgid "Audio Options"
 msgstr "Audioeinstellungen"
 
-#: src/frontend.c:664
+#: src/frontend.c:666
 msgid "Key Mappings"
 msgstr "Tastenzuordnung"
 
-#: src/frontend.c:739
+#: src/frontend.c:741
 msgid "Reverse Mouse"
 msgstr "Maus umkehren"
 
-#: src/frontend.c:742 src/frontend.c:754 src/frontend.c:807 src/frontend.c:842
-#: src/frontend.c:856 src/frontend.c:892
+#: src/frontend.c:744 src/frontend.c:756 src/frontend.c:809 src/frontend.c:844
+#: src/frontend.c:858 src/frontend.c:894
 msgid "On"
 msgstr "An"
 
-#: src/frontend.c:746 src/frontend.c:758 src/frontend.c:803 src/frontend.c:812
-#: src/frontend.c:837 src/frontend.c:851 src/frontend.c:887
+#: src/frontend.c:748 src/frontend.c:760 src/frontend.c:805 src/frontend.c:814
+#: src/frontend.c:839 src/frontend.c:853 src/frontend.c:889
 msgid "Off"
 msgstr "Aus"
 
-#: src/frontend.c:751
+#: src/frontend.c:753
 msgid "Screen Shake"
 msgstr "Bildschirm-wackeln"
 
-#: src/frontend.c:766 src/frontend.c:874
+#: src/frontend.c:768 src/frontend.c:876
 msgid "Mist"
 msgstr "Dunst"
 
-#: src/frontend.c:775
+#: src/frontend.c:777
 msgid "Video Playback"
 msgstr "Videowiedergabe"
 
-#: src/frontend.c:778 src/frontend.c:911
+#: src/frontend.c:780 src/frontend.c:913
 msgid "Full"
 msgstr "Vollbild"
 
-#: src/frontend.c:782 src/frontend.c:901
+#: src/frontend.c:784 src/frontend.c:903
 msgid "Windowed"
 msgstr "Fenster"
 
-#: src/frontend.c:785 src/frontend.c:906
+#: src/frontend.c:787 src/frontend.c:908
 msgid "Minimal"
 msgstr "Minimiert"
 
-#: src/frontend.c:792 src/frontend.c:796
+#: src/frontend.c:794 src/frontend.c:798
 msgid "Subtitles"
 msgstr "Untertitel"
 
-#: src/frontend.c:1027
+#: src/frontend.c:1029
 msgid "Difficulty"
 msgstr "Schwierigkeit"
 
-#: src/frontend.c:1031 src/frontend.c:1116
+#: src/frontend.c:1033 src/frontend.c:1118
 msgid "Easy"
 msgstr "Einfach"
 
-#: src/frontend.c:1034 src/frontend.c:1108
+#: src/frontend.c:1036 src/frontend.c:1110
 msgid "Normal"
 msgstr "Normal"
 
-#: src/frontend.c:1038 src/frontend.c:1112
+#: src/frontend.c:1040 src/frontend.c:1114
 msgid "Hard"
 msgstr "Schwer"
 
-#: src/frontend.c:1043
+#: src/frontend.c:1045
 msgid "Scroll Speed"
 msgstr "Scrollgeschwindigkeit"
 
-#: src/frontend.c:1059
+#: src/frontend.c:1061
 msgid "Unit Colour"
 msgstr "Einheitenfarbe"
 

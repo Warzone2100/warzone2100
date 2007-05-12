@@ -33,7 +33,6 @@
 #define FRAME_LIB_INCLUDE
 
 /* The input buffer printf's */
-//#define DEBUG_GROUP1
 #include "types.h"
 #include "debug.h"
 #include "input.h"
@@ -217,13 +216,12 @@ char inputGetCharKey(void) {
 }
 
 
-
-/* Deal with windows messages to maintain the state of the keyboard and mouse */
-void inputProcessEvent(SDL_Event *event)
+void inputHandleKeyEvent(SDL_Event * event)
 {
 	UDWORD code, vk;
+	unsigned char char_code = event->key.keysym.unicode; // FIXME Discarding last 8 bit of 16bit UNICODE !!!
 
-	switch(event->type)
+	switch (event->type)
 	{
 		case SDL_KEYDOWN:
 			switch (event->key.keysym.sym)
@@ -263,22 +261,17 @@ void inputProcessEvent(SDL_Event *event)
 					break;
 			}
 
+			debug( LOG_NEVER, "Code: %x\n", vk);
+			if (char_code < 32)
 			{
-				unsigned char char_code = event->key.keysym.unicode; // FIXME Discarding last 8 bit of 16bit UNICODE !!!
-
-				debug( LOG_NEVER, "Code: %x\n", vk);
-
-				if (char_code < 32) {
-					char_code = 0;
-				}
-				inputAddBuffer(vk, char_code, 1);
-
+				char_code = 0;
 			}
+			inputAddBuffer(vk, char_code, 1);
 
 			code = sdlKeyToKeyCode(event->key.keysym.sym);
-			if ((aKeyState[code] == KEY_UP) ||
-				(aKeyState[code] == KEY_RELEASED) ||
-				(aKeyState[code] == KEY_PRESSRELEASE))
+			if ( aKeyState[code] == KEY_UP ||
+				 aKeyState[code] == KEY_RELEASED ||
+				 aKeyState[code] == KEY_PRESSRELEASE )
 			{
 				aKeyState[code] = KEY_PRESSED;
 			}
@@ -294,42 +287,24 @@ void inputProcessEvent(SDL_Event *event)
 				aKeyState[code] = KEY_RELEASED;
 			}
 			break;
-		/* Deal with mouse messages */
-		case SDL_MOUSEMOTION:
-			if(!mouseDown(MOUSE_MMB))
-			{
-				/* store the current mouse position */
-				mouseXPos = event->motion.x;
-				mouseYPos = event->motion.y;
+		default:
+			break;
+	}
+}
 
-				/* now see if a drag has started */
-				if ((aMouseState[dragKey] == KEY_PRESSED ||
-					 aMouseState[dragKey] == KEY_DOWN) &&
-					(ABSDIF(dragX,mouseXPos) > DRAG_THRESHOLD ||
-					 ABSDIF(dragY,mouseYPos) > DRAG_THRESHOLD))
-				{
-					aMouseState[dragKey] = KEY_DRAG;
-				}
-			}
-			break;
-		case SDL_MOUSEBUTTONUP:
-			if (aMouseState[event->button.button] == KEY_PRESSED)
-				{
-				aMouseState[event->button.button] = KEY_PRESSRELEASE;
-				}
-			else if (aMouseState[event->button.button] == KEY_DOWN
-					|| aMouseState[event->button.button] == KEY_DRAG)
-				{
-				aMouseState[event->button.button] = KEY_RELEASED;
-			}
-			break;
+
+void inputHandleMouseButtonEvent(SDL_Event * event)
+{
+	switch (event->type)
+	{
 		case SDL_MOUSEBUTTONDOWN:
-			if (aMouseState[event->button.button] == KEY_UP
-					|| aMouseState[event->button.button] == KEY_RELEASED
-					|| aMouseState[event->button.button] == KEY_PRESSRELEASE)
+			if ( aMouseState[event->button.button] == KEY_UP
+				|| aMouseState[event->button.button] == KEY_RELEASED
+				|| aMouseState[event->button.button] == KEY_PRESSRELEASE )
 			{
 				aMouseState[event->button.button] = KEY_PRESSED;
-				if (event->button.button < 4)
+
+				if (event->button.button < 4) // Not the mousewheel
 				{
 					dragKey = (MOUSE_KEY_CODE)event->button.button;
 					dragX = mouseXPos;
@@ -338,8 +313,49 @@ void inputProcessEvent(SDL_Event *event)
 			}
 			// TODO: double click
 			break;
+		case SDL_MOUSEBUTTONUP:
+			if (aMouseState[event->button.button] == KEY_PRESSED)
+			{
+				aMouseState[event->button.button] = KEY_PRESSRELEASE;
+			}
+			else if ( aMouseState[event->button.button] == KEY_DOWN
+					|| aMouseState[event->button.button] == KEY_DRAG )
+			{
+				aMouseState[event->button.button] = KEY_RELEASED;
+			}
+			break;
+		default:
+			break;
 	}
 }
+
+
+void inputHandleMouseMotionEvent(SDL_Event * event)
+{
+	switch (event->type)
+	{
+		case SDL_MOUSEMOTION:
+			if(!mouseDown(MOUSE_MMB))
+			{
+				/* store the current mouse position */
+				mouseXPos = event->motion.x;
+				mouseYPos = event->motion.y;
+
+				/* now see if a drag has started */
+				if (  ( aMouseState[dragKey] == KEY_PRESSED ||
+						aMouseState[dragKey] == KEY_DOWN )
+				&& ( ABSDIF(dragX, mouseXPos) > DRAG_THRESHOLD ||
+						ABSDIF(dragY, mouseYPos) > DRAG_THRESHOLD ) )
+				{
+					aMouseState[dragKey] = KEY_DRAG;
+				}
+			}
+			break;
+		default:
+			break;
+	}
+}
+
 
 /* This is called once a frame so that the system can tell
  * whether a key was pressed this turn or held down from the last frame.
@@ -350,7 +366,7 @@ void inputNewFrame(void)
 	UDWORD i;
 
 	/* Do the keyboard */
-	for (i=0; i< KEY_MAXSCAN; i++)
+	for (i = 0; i < KEY_MAXSCAN; i++)
 	{
 		if (aKeyState[i] == KEY_PRESSED)
 		{
@@ -367,9 +383,9 @@ void inputNewFrame(void)
 	for (i = 0; i < 6; i++) {
 		if (aMouseState[i] == KEY_PRESSED)
 			aMouseState[i] = KEY_DOWN;
-		else if ((aMouseState[i] == KEY_RELEASED)
-				|| (aMouseState[i] == KEY_DOUBLECLICK)
-				|| (aMouseState[i] == KEY_PRESSRELEASE))
+		else if ( aMouseState[i] == KEY_RELEASED
+				|| aMouseState[i] == KEY_DOUBLECLICK
+				|| aMouseState[i] == KEY_PRESSRELEASE )
 			aMouseState[i] = KEY_UP;
 		}
 }

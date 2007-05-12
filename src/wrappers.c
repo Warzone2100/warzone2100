@@ -93,6 +93,7 @@ STAR	stars[30];	// quick hack for loading stuff
 extern int WFont;
 extern BOOL bLoadSaveUp;
 
+static BOOL		firstcall = FALSE;
 static UDWORD	loadScreenCallNo=0;
 static BOOL		bPlayerHasLost = FALSE;
 static BOOL		bPlayerHasWon = FALSE;
@@ -120,6 +121,7 @@ UDWORD	i;
 //
 BOOL frontendInitVars(void)
 {
+	firstcall = TRUE;
 	initStars();
 
 	return TRUE;
@@ -129,7 +131,6 @@ BOOL frontendInitVars(void)
 // Main Front end game loop.
 TITLECODE titleLoop(void)
 {
-	static BOOL firstcall = TRUE;
 	TITLECODE RetCode = TITLECODE_CONTINUE;
 
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
@@ -374,7 +375,7 @@ void runCreditsScreen( void )
 	if( keyReleased(KEY_ESC)
 	   || keyReleased(KEY_SPACE)
 	   || mouseReleased(MOUSE_LMB)
-	   || gameTime-lastChange > 4000 )
+	   || gameTime - lastChange > 4000 )
 	{
 		lastChange = gameTime;
 		changeTitleMode(QUIT);

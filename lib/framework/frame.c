@@ -172,56 +172,6 @@ Uint32 getFramerateLimit(void)
 }
 
 
-/*
- * processEvent
- *
- * Event processing function
- */
-static void processEvent(SDL_Event *event)
-{
-	switch(event->type)
-	{
-		case SDL_ACTIVEEVENT:
-			// Ignore focus loss through SDL_APPMOUSEFOCUS, since it mostly happens accidentialy
-			// active.state is a bitflag! Mixed events (eg. APPACTIVE|APPMOUSEFOCUS) will thus not be ignored.
-			if ( event->active.state != SDL_APPMOUSEFOCUS )
-			{
-				if ( event->active.gain == 1 )
-				{
-					debug( LOG_NEVER, "WM_SETFOCUS\n");
-					if (focusState != FOCUS_IN)
-					{
-						debug( LOG_NEVER, "FOCUS_SET\n");
-						focusState = FOCUS_SET;
-					}
-				}
-				else
-				{
-					debug( LOG_NEVER, "WM_KILLFOCUS\n");
-					if (focusState != FOCUS_OUT)
-					{
-						debug( LOG_NEVER, "FOCUS_KILL\n");
-						focusState = FOCUS_KILL;
-					}
-					/* Have to tell the input system that we've lost focus */
-					inputLooseFocus();
-				}
-			}
-			break;
-		case SDL_KEYUP:
-		case SDL_KEYDOWN:
-		case SDL_MOUSEBUTTONUP:
-		case SDL_MOUSEBUTTONDOWN:
-		case SDL_MOUSEMOTION:
-			inputProcessEvent(event);
-			break;
-	}
-}
-
-
-
-
-
 static void initCursors(void)
 {
         aCursors[CURSOR_ARROW - CURSOR_OFFSET] = init_system_cursor(cursor_arrow);
@@ -335,10 +285,52 @@ FRAME_STATUS frameUpdate(void)
 	/* Deal with any windows messages */
 	while ( SDL_PollEvent( &event ) != 0)
 	{
-		if (event.type == SDL_QUIT)
-			wzQuit = TRUE;
-		else
-			processEvent(&event);
+		switch (event.type)
+		{
+			case SDL_QUIT:
+				wzQuit = TRUE;
+				break;
+			case SDL_ACTIVEEVENT:
+				// Ignore focus loss through SDL_APPMOUSEFOCUS, since it mostly happens accidentialy
+				// active.state is a bitflag! Mixed events (eg. APPACTIVE|APPMOUSEFOCUS) will thus not be ignored.
+				if ( event.active.state != SDL_APPMOUSEFOCUS )
+				{
+					if ( event.active.gain == 1 )
+					{
+						debug( LOG_NEVER, "WM_SETFOCUS\n");
+						if (focusState != FOCUS_IN)
+						{
+							debug( LOG_NEVER, "FOCUS_SET\n");
+							focusState = FOCUS_SET;
+						}
+					}
+					else
+					{
+						debug( LOG_NEVER, "WM_KILLFOCUS\n");
+						if (focusState != FOCUS_OUT)
+						{
+							debug( LOG_NEVER, "FOCUS_KILL\n");
+							focusState = FOCUS_KILL;
+						}
+						/* Have to tell the input system that we've lost focus */
+						inputLooseFocus();
+					}
+				}
+				break;
+			case SDL_KEYUP:
+			case SDL_KEYDOWN:
+				inputHandleKeyEvent(&event);
+				break;
+			case SDL_MOUSEBUTTONUP:
+			case SDL_MOUSEBUTTONDOWN:
+				inputHandleMouseButtonEvent(&event);
+				break;
+			case SDL_MOUSEMOTION:
+				inputHandleMouseMotionEvent(&event);
+				break;
+			default:
+				break;
+		}
 	}
 
 	/* Now figure out what to return */
@@ -549,18 +541,8 @@ BOOL loadFileToBufferNoError(const char *pFileName, char *pFileBuffer, UDWORD bu
 #define	ONE_EIGHTH		((UDWORD) (BITS_IN_int / 8))
 #define	HIGH_BITS		( ~((UDWORD)(~0) >> ONE_EIGHTH ))
 
-//#define	HIGH_BITS		((UDWORD)(0xf0000000))
-//#define	LOW_BITS		((UDWORD)(0x0fffffff))
-
-
-
 
 ///////////////////////////////////////////////////////////////////
-
-
-
-
-
 
 
 /***************************************************************************/
