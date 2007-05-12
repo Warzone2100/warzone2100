@@ -443,13 +443,7 @@ BOOL dispInitialise(void)
 	return TRUE;
 }
 
-/* Tidy up after a mode change */
-BOOL dispModeChange(void)
-{
-	return TRUE;
-}
-
-BOOL	bRadarDragging = FALSE;
+BOOL bRadarDragging = FALSE;
 
 void ProcessRadarInput(void)
 {

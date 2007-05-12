@@ -30,12 +30,12 @@ typedef enum {
 } GS_GAMEMODE;
 
 //flag to indicate when initialisation is complete
-extern  BOOL	gameInitialised;
-extern  BOOL	frontendInitialised;
-extern	BOOL	bDisableLobby;
+extern BOOL gameInitialised;
+extern BOOL frontendInitialised;
+extern BOOL bDisableLobby;
 
-extern	GS_GAMEMODE GetGameMode(void);
-extern	void SetGameMode(GS_GAMEMODE status);
+extern GS_GAMEMODE GetGameMode(void);
+extern void SetGameMode(GS_GAMEMODE status);
 
 extern char SaveGamePath[];
 

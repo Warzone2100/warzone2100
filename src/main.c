@@ -588,11 +588,6 @@ int main(int argc, char *argv[])
 				case FRAME_SETFOCUS:
 					lostFocus = FALSE;
 					gameTimeStart();
-					if (!dispModeChange())
-					{
-						quit = TRUE;
-						Restart = TRUE;
-					}
 					break;
 				case FRAME_QUIT:
 					debug(LOG_MAIN, "frame quit");
@@ -763,6 +758,7 @@ GS_GAMEMODE GetGameMode(void)
 {
 	return gameStatus;
 }
+
 
 void SetGameMode(GS_GAMEMODE status)
 {
