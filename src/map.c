@@ -1321,10 +1321,10 @@ extern SWORD map_Height(UDWORD x, UDWORD y)
 	SDWORD dx, dy, ox, oy;
 	BOOL	bWaterTile = FALSE;
 
-	ASSERT( x < WORLD_COORD(mapWidth),
-		"mapHeight: x(%u) coordinate bigger than map width(%u)", x, WORLD_COORD(mapWidth) );
-	ASSERT( y < WORLD_COORD(mapHeight),
-		"mapHeight: y(%u) coordinate bigger than map height(%u)", y, WORLD_COORD(mapHeight) );
+	x = x > SDWORD_MAX ? 0 : x;//negative SDWORD passed as UDWORD
+    x = x >= (mapWidth << TILE_SHIFT) ? ((mapWidth-1) << TILE_SHIFT) : x;
+    y = y > SDWORD_MAX ? 0 : y;//negative SDWORD passed as UDWORD
+	y = y >= (mapHeight << TILE_SHIFT) ? ((mapHeight-1) << TILE_SHIFT) : y;
 
 	/* Turn into tile coordinates */
 	tileX = MAP_COORD(x);
