@@ -161,12 +161,11 @@ TITLECODE titleLoop(void)
 		}
 	}
 
-	switch(titleMode)								// run relevant title screen code.
+	switch(titleMode) // run relevant title screen code.
 	{
-
-										// MULTIPLAYER screens
+		// MULTIPLAYER screens
 		case PROTOCOL:
-			runConnectionScreen();					// multiplayer connection screen.
+			runConnectionScreen(); // multiplayer connection screen.
 			break;
 		case MULTIOPTION:
 			runMultiOptions();
@@ -187,7 +186,6 @@ TITLECODE titleLoop(void)
 			runKeyMapEditor();
 			break;
 
-
 		case TITLE:
 			runTitleMenu();
 			break;
@@ -199,7 +197,6 @@ TITLECODE titleLoop(void)
 		case TUTORIAL:
 			runTutorialMenu();
 			break;
-
 
 //		case GRAPHICS:
 //			runGraphicsOptionsMenu();
@@ -279,7 +276,6 @@ TITLECODE titleLoop(void)
 	    && keyPressed(KEY_RETURN)) {
 		screenToggleMode();
 	}
-	SDL_Delay(30);	//To fix ALL menus to be less CPU hogging. -Q 5-14-05
 	return RetCode;
 }
 
