@@ -216,6 +216,9 @@ char inputGetCharKey(void) {
 }
 
 
+/*!
+ * Handle keyboard events
+ */
 void inputHandleKeyEvent(SDL_Event * event)
 {
 	UDWORD code, vk;
@@ -293,6 +296,9 @@ void inputHandleKeyEvent(SDL_Event * event)
 }
 
 
+/*!
+ * Handle mousebutton events
+ */
 void inputHandleMouseButtonEvent(SDL_Event * event)
 {
 	switch (event->type)
@@ -330,6 +336,9 @@ void inputHandleMouseButtonEvent(SDL_Event * event)
 }
 
 
+/*!
+ * Handle mousemotion events
+ */
 void inputHandleMouseMotionEvent(SDL_Event * event)
 {
 	switch (event->type)
@@ -357,10 +366,10 @@ void inputHandleMouseMotionEvent(SDL_Event * event)
 }
 
 
-/* This is called once a frame so that the system can tell
+/*!
+ * This is called once a frame so that the system can tell
  * whether a key was pressed this turn or held down from the last frame.
  */
-// NOTE This should probably react on events?
 void inputNewFrame(void)
 {
 	unsigned int i;
@@ -395,6 +404,9 @@ void inputNewFrame(void)
 	}
 }
 
+/*!
+ * Release all keys (and buttons) when we loose focus
+ */
 // FIXME This seems to be totally ignored! (Try switching focus while the dragbox is open)
 void inputLooseFocus(void)
 {

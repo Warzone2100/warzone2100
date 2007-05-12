@@ -51,11 +51,7 @@
 #include "cursors.h"
 #endif
 
-#include "SDL_framerate.h"
-
 /* Linux specific stuff */
-
-static FPSmanager wzFPSmanager;
 
 static UWORD currentCursorResID = UWORD_MAX;
 SDL_Cursor *aCursors[MAX_CURSORS];
@@ -82,7 +78,7 @@ static Uint32	curTicks = 0; // Number of ticks since execution started
 static Uint32	lastTicks = 0;
 
 /* InitFrameStuff - needs to be called once before frame loop commences */
-static void	InitFrameStuff( void )
+static void InitFrameStuff( void )
 {
 	UDWORD i;
 
@@ -99,7 +95,7 @@ static void	InitFrameStuff( void )
 }
 
 /* MaintainFrameStuff - call this during completion of each frame loop */
-static void	MaintainFrameStuff( void )
+static void MaintainFrameStuff( void )
 {
 	curTicks = SDL_GetTicks();
 	curFrames++;
@@ -149,18 +145,6 @@ void frameSetCursorFromRes(SWORD resID)
 		SDL_SetCursor(aCursors[resID - CURSOR_OFFSET]);
 		currentCursorResID = resID;
         }
-}
-
-
-void setFramerateLimit(Uint32 fpsLimit)
-{
-	SDL_initFramerate( &wzFPSmanager );
-	SDL_setFramerate( &wzFPSmanager, fpsLimit );
-}
-
-Uint32 getFramerateLimit(void)
-{
-	return SDL_getFramerate( &wzFPSmanager );
 }
 
 
@@ -255,37 +239,25 @@ BOOL frameInitialise(
 }
 
 
-/*
- * frameUpdate
- *
- * Call this each cycle to allow the framework to deal with
- * windows messages, and do general house keeping.
- *
- * Returns FRAME_STATUS.
+/*!
+ * Call this each cycle to do general house keeping.
  */
 void frameUpdate(void)
 {
 	/* Tell the input system about the start of another frame */
 	inputNewFrame();
 
-	/* If things are running normally update the framerate */
-	if (focusState == FOCUS_IN)
-	{
-		/* Update the frame rate stuff */
-		MaintainFrameStuff();
-	}
-
-	SDL_framerateDelay(&wzFPSmanager);
+	/* Update the frame rate stuff */
+	MaintainFrameStuff();
 }
 
 
-
+/*!
+ * Cleanup framework
+ */
 void frameShutDown(void)
 {
 	screenShutDown();
-
-	/* Free the default cursor */
-	// DestroyCursor(hCursor);
 
 	/* Free all cursors */
 	freeCursors();
@@ -299,6 +271,7 @@ void frameShutDown(void)
 	// Shutdown the resource stuff
 	resShutDown();
 }
+
 
 /***************************************************************************
   Load the file with name pointed to by pFileName into a memory buffer.

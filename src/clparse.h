@@ -34,6 +34,22 @@ extern BOOL ParseCommandLineEarly(int argc, char** argv);
 
 extern BOOL bAllowDebugMode;
 
+// FIXME The following does not belong here:
+
+/*!
+ * Set the framerate limit
+ *
+ * \param fpsLimit Desired framerate
+ */
+extern void setFramerateLimit(Uint32 fpsLimit);
+
+/*!
+ * Get the framerate limit
+ *
+ * \return Desired framerate
+ */
+extern Uint32 getFramerateLimit(void);
+
 #endif
 
 

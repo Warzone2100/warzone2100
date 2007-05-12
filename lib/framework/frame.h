@@ -97,7 +97,7 @@ extern void frameUpdate(void);
 extern void frameSetCursorFromRes(SWORD resID);
 
 /* Returns the current frame we're on - used to establish whats on screen */
-extern UDWORD	frameGetFrameNumber(void);
+extern UDWORD frameGetFrameNumber(void);
 
 /**
  * Average framerate of the last seconds
@@ -106,20 +106,6 @@ extern UDWORD	frameGetFrameNumber(void);
  */
 extern UDWORD frameGetAverageRate(void);
 
-
-/**
- * Set the framerate limit
- *
- * \param fpsLimit Desired framerate
- */
-extern void setFramerateLimit(Uint32 fpsLimit);
-
-/**
- * Get the framerate limit
- *
- * \return Desired framerate
- */
-extern Uint32 getFramerateLimit(void);
 
 /* Load the file with name pointed to by pFileName into a memory buffer. */
 extern BOOL loadFile(const char *pFileName,		// The filename

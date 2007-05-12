@@ -38,6 +38,8 @@
 
 #include "lib/framework/configfile.h"
 #include "lib/framework/input.h"
+#include "lib/framework/SDL_framerate.h"
+
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/rendmode.h"
@@ -86,8 +88,6 @@ char * multiplay_mods[MAX_MODS] = { NULL };
 
 // Warzone 2100 . Pumpkin Studios
 
-// Start game in title mode:
-GS_GAMEMODE gameStatus = GS_TITLE_SCREEN, lastStatus = GS_TITLE_SCREEN;
 //flag to indicate when initialisation is complete
 BOOL	videoInitialised = FALSE;
 BOOL	gameInitialised = FALSE;
@@ -101,11 +101,30 @@ char	MultiPlayersPath[MAX_PATH];
 char	KeyMapPath[MAX_PATH];
 char	UserMusicPath[MAX_PATH];
 
+static FPSmanager wzFPSmanager;
+
+// Start game in title mode:
+static GS_GAMEMODE gameStatus = GS_TITLE_SCREEN;
+// Status of the gameloop
 static int gameLoopStatus = 0;
 extern FOCUS_STATE focusState;
 
 extern void debug_callback_stderr( void**, const char * );
 extern void debug_callback_win32debug( void**, const char * );
+
+
+void setFramerateLimit(Uint32 fpsLimit)
+{
+	SDL_initFramerate( &wzFPSmanager );
+	SDL_setFramerate( &wzFPSmanager, fpsLimit );
+}
+
+
+Uint32 getFramerateLimit(void)
+{
+	return SDL_getFramerate( &wzFPSmanager );
+}
+
 
 static BOOL inList( char * list[], const char * item )
 {
@@ -393,20 +412,31 @@ static void make_dir(char *dest, const char *dirname, const char *subdir)
 }
 
 
+/*!
+ * Preparations before entering the title (mainmenu) loop
+ * Would start the timer in an event based mainloop
+ */
 static void startTitleLoop(void)
 {
+	SetGameMode(GS_TITLE_SCREEN);
+
 	screen_RestartBackDrop();
 	if (!frontendInitialise("wrf/frontend.wrf"))
 	{
 		debug( LOG_ERROR, "Shutting down after failure" );
 		exit(EXIT_FAILURE);
 	}
-
-	frontendInitialised = TRUE;
 	frontendInitVars();
+
+	// set a flag for the trigger/event system to indicate initialisation is complete
+	frontendInitialised = TRUE;
 }
 
 
+/*!
+ * Shutdown/cleanup after the title (mainmenu) loop
+ * Would stop the timer
+ */
 static void stopTitleLoop(void)
 {
 	if (!frontendShutdown())
@@ -418,8 +448,14 @@ static void stopTitleLoop(void)
 }
 
 
+/*!
+ * Preparations before entering the game loop
+ * Would start the timer in an event based mainloop
+ */
 static void startGameLoop(void)
 {
+	SetGameMode(GS_NORMAL);
+
 	if (!levLoadData(pLevelName, NULL, 0))
 	{
 		debug( LOG_ERROR, "Shutting down after failure" );
@@ -440,12 +476,17 @@ static void startGameLoop(void)
 		exit(EXIT_FAILURE);
 	}
 
-	//set a flag for the trigger/event system to indicate initialisation is complete
-	gameInitialised = TRUE;
 	screen_StopBackDrop();
+
+	// set a flag for the trigger/event system to indicate initialisation is complete
+	gameInitialised = TRUE;
 }
 
 
+/*!
+ * Shutdown/cleanup after the game loop
+ * Would stop the timer
+ */
 static void stopGameLoop(void)
 {
 	if (gameLoopStatus != GAMECODE_NEWLEVEL)
@@ -462,8 +503,14 @@ static void stopGameLoop(void)
 }
 
 
+/*!
+ * Load a savegame and start into the game loop
+ * Game data should be initialised afterwards, so that startGameLoop is not necessary anymore.
+ */
 static void initSaveGameLoad(void)
 {
+	SetGameMode(GS_SAVEGAMELOAD);
+
 	screen_RestartBackDrop();
 	// load up a save game
 	if (!loadGameInit(saveGameName))
@@ -477,6 +524,9 @@ static void initSaveGameLoad(void)
 }
 
 
+/*!
+ * Run the code inside the gameloop
+ */
 static void runGameLoop(void)
 {
 	gameLoopStatus = gameLoop();
@@ -488,19 +538,17 @@ static void runGameLoop(void)
 		case GAMECODE_QUITGAME:
 			debug(LOG_MAIN, "GAMECODE_QUITGAME");
 			stopGameLoop();
-			SetGameMode(GS_TITLE_SCREEN);
-			startTitleLoop();
+			startTitleLoop(); // Restart into titleloop
 			break;
 		case GAMECODE_LOADGAME:
 			debug(LOG_MAIN, "GAMECODE_LOADGAME");
 			stopGameLoop();
-			SetGameMode(GS_SAVEGAMELOAD);
-			startTitleLoop();
+			initSaveGameLoad(); // Restart and load a savegame
 			break;
 		case GAMECODE_NEWLEVEL:
 			debug(LOG_MAIN, "GAMECODE_NEWLEVEL");
 			stopGameLoop();
-			startGameLoop();
+			startGameLoop(); // Restart gameloop
 			break;
 		// Never trown:
 		case GAMECODE_FASTEXIT:
@@ -513,6 +561,9 @@ static void runGameLoop(void)
 }
 
 
+/*!
+ * Run the code inside the titleloop
+ */
 static void runTitleLoop(void)
 {
 	switch (titleLoop())
@@ -532,14 +583,12 @@ static void runTitleLoop(void)
 		case TITLECODE_SAVEGAMELOAD:
 			debug(LOG_MAIN, "TITLECODE_SAVEGAMELOAD");
 			stopTitleLoop();
-			SetGameMode(GS_SAVEGAMELOAD);
-			initSaveGameLoad();
+			initSaveGameLoad(); // Restart into gameloop and load a savegame
 			break;
 		case TITLECODE_STARTGAME:
 			debug(LOG_MAIN, "TITLECODE_STARTGAME");
 			stopTitleLoop();
-			SetGameMode(GS_NORMAL);
-			startGameLoop();
+			startGameLoop(); // Restart into gameloop
 			break;
 		case TITLECODE_SHOWINTRO:
 			debug(LOG_MAIN, "TITLECODE_SHOWINTRO");
@@ -557,6 +606,9 @@ static void runTitleLoop(void)
 }
 
 
+/*!
+ * Activation (focus change) eventhandler
+ */
 static void handleActiveEvent(SDL_Event * event)
 {
 	// Ignore focus loss through SDL_APPMOUSEFOCUS, since it mostly happens accidentialy
@@ -592,6 +644,10 @@ static void handleActiveEvent(SDL_Event * event)
 }
 
 
+/*!
+ * The mainloop.
+ * Fetches events, executes appropriate code
+ */
 static void mainLoop(void)
 {
 	SDL_Event event;
@@ -603,6 +659,7 @@ static void mainLoop(void)
 		{
 			switch (event.type)
 			{
+				// This is uneccessary if we don't have the focus (either we don't get any events or they can't be dealt with anyway)
 				if (focusState == FOCUS_IN)
 				{
 					case SDL_KEYUP:
@@ -629,16 +686,16 @@ static void mainLoop(void)
 
 		if (focusState == FOCUS_IN)
 		{
-			gameTimeUpdate();
+			gameTimeUpdate(); // Update gametime. FIXME There is probably code duplicated with MaintainFrameStuff
 
-			if(loop_GetVideoStatus())
-				videoLoop();
+			if (loop_GetVideoStatus())
+				videoLoop(); // Display the video if neccessary
 			else switch (GetGameMode())
 			{
-				case GS_NORMAL:
+				case GS_NORMAL: // Run the gameloop code
 					runGameLoop();
 					break;
-				case GS_TITLE_SCREEN:
+				case GS_TITLE_SCREEN: // Run the titleloop code
 					runTitleLoop();
 					break;
 				default:
@@ -647,6 +704,8 @@ static void mainLoop(void)
 
 			frameUpdate(); // General housekeeping
 		}
+
+		SDL_framerateDelay(&wzFPSmanager);
 	}
 }
 
@@ -728,8 +787,10 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
+	// Save new (commandline) settings
 	saveConfig();
 
+	// Find out where to find the data
 	scanDataDirs();
 
 	// find out if the lobby stuff has been disabled
@@ -797,6 +858,7 @@ int main(int argc, char *argv[])
 
 	debug(LOG_MAIN, "Entering main loop");
 
+	// Enter the mainloop
 	mainLoop();
 
 	debug(LOG_MAIN, "Shutting down Warzone 2100");
@@ -805,12 +867,18 @@ int main(int argc, char *argv[])
 }
 
 
+/*!
+ * Get the mode the game is currently in
+ */
 GS_GAMEMODE GetGameMode(void)
 {
 	return gameStatus;
 }
 
 
+/*!
+ * Set the current mode
+ */
 void SetGameMode(GS_GAMEMODE status)
 {
 	gameStatus = status;

@@ -63,6 +63,7 @@ extern	UBYTE	sPlayer[128];
 
 extern void registry_clear(void); // from configfile.c
 
+
 // ////////////////////////////////////////////////////////////////////////////
 BOOL loadConfig(void)
 {
