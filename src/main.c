@@ -37,6 +37,7 @@
 #endif // WZ_OS_WIN
 
 #include "lib/framework/configfile.h"
+#include "lib/framework/input.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/rendmode.h"
@@ -99,6 +100,9 @@ char	MultiCustomMapsPath[MAX_PATH];
 char	MultiPlayersPath[MAX_PATH];
 char	KeyMapPath[MAX_PATH];
 char	UserMusicPath[MAX_PATH];
+
+static int gameLoopStatus = 0;
+extern FOCUS_STATE focusState;
 
 extern void debug_callback_stderr( void**, const char * );
 extern void debug_callback_win32debug( void**, const char * );
@@ -384,17 +388,271 @@ static void make_dir(char *dest, const char *dirname, const char *subdir)
 	if ( !PHYSFS_mkdir(dest) ) {
 		debug(LOG_ERROR, "Unable to create directory \"%s\" in write dir \"%s\"!",
 		      dest, PHYSFS_getWriteDir());
-		exit(1);
+		exit(EXIT_FAILURE);
+	}
+}
+
+
+static void startTitleLoop(void)
+{
+	screen_RestartBackDrop();
+	if (!frontendInitialise("wrf/frontend.wrf"))
+	{
+		debug( LOG_ERROR, "Shutting down after failure" );
+		exit(EXIT_FAILURE);
+	}
+
+	frontendInitialised = TRUE;
+	frontendInitVars();
+}
+
+
+static void stopTitleLoop(void)
+{
+	if (!frontendShutdown())
+	{
+		debug( LOG_ERROR, "Shutting down after failure" );
+		exit(EXIT_FAILURE);
+	}
+	frontendInitialised = FALSE;
+}
+
+
+static void startGameLoop(void)
+{
+	if (!levLoadData(pLevelName, NULL, 0))
+	{
+		debug( LOG_ERROR, "Shutting down after failure" );
+		exit(EXIT_FAILURE);
+	}
+	//after data is loaded check the research stats are valid
+	if (!checkResearchStats())
+	{
+		debug( LOG_ERROR, "Invalid Research Stats" );
+		debug( LOG_ERROR, "Shutting down after failure" );
+		exit(EXIT_FAILURE);
+	}
+	//and check the structure stats are valid
+	if (!checkStructureStats())
+	{
+		debug( LOG_ERROR, "Invalid Structure Stats" );
+		debug( LOG_ERROR, "Shutting down after failure" );
+		exit(EXIT_FAILURE);
+	}
+
+	//set a flag for the trigger/event system to indicate initialisation is complete
+	gameInitialised = TRUE;
+	screen_StopBackDrop();
+}
+
+
+static void stopGameLoop(void)
+{
+	if (gameLoopStatus != GAMECODE_NEWLEVEL)
+	{
+		initLoadingScreen(TRUE); // returning to f.e. do a loader.render not active
+		pie_EnableFog(FALSE); // dont let the normal loop code set status on
+		fogStatus = 0;
+		if (gameLoopStatus != GAMECODE_LOADGAME)
+		{
+			levReleaseAll();
+		}
+	}
+	gameInitialised = FALSE;
+}
+
+
+static void initSaveGameLoad(void)
+{
+	screen_RestartBackDrop();
+	// load up a save game
+	if (!loadGameInit(saveGameName))
+	{
+		debug( LOG_ERROR, "Shutting down after failure" );
+		exit(EXIT_FAILURE);
+	}
+	screen_StopBackDrop();
+
+	SetGameMode(GS_NORMAL);
+}
+
+
+static void runGameLoop(void)
+{
+	gameLoopStatus = gameLoop();
+	switch (gameLoopStatus)
+	{
+		case GAMECODE_CONTINUE:
+		case GAMECODE_PLAYVIDEO:
+			break;
+		case GAMECODE_QUITGAME:
+			debug(LOG_MAIN, "GAMECODE_QUITGAME");
+			stopGameLoop();
+			SetGameMode(GS_TITLE_SCREEN);
+			startTitleLoop();
+			break;
+		case GAMECODE_LOADGAME:
+			debug(LOG_MAIN, "GAMECODE_LOADGAME");
+			stopGameLoop();
+			SetGameMode(GS_SAVEGAMELOAD);
+			startTitleLoop();
+			break;
+		case GAMECODE_NEWLEVEL:
+			debug(LOG_MAIN, "GAMECODE_NEWLEVEL");
+			stopGameLoop();
+			startGameLoop();
+			break;
+		// Never trown:
+		case GAMECODE_FASTEXIT:
+		case GAMECODE_RESTARTGAME:
+			break;
+		default:
+			debug(LOG_ERROR, "Unknown code returned by gameLoop");
+			break;
+	}
+}
+
+
+static void runTitleLoop(void)
+{
+	switch (titleLoop())
+	{
+		case TITLECODE_CONTINUE:
+			break;
+		case TITLECODE_QUITGAME:
+			debug(LOG_MAIN, "TITLECODE_QUITGAME");
+			stopTitleLoop();
+			{
+				// Create a quit event to halt game loop.
+				SDL_Event quitEvent;
+				quitEvent.type = SDL_QUIT;
+				SDL_PushEvent(&quitEvent);
+			}
+			break;
+		case TITLECODE_SAVEGAMELOAD:
+			debug(LOG_MAIN, "TITLECODE_SAVEGAMELOAD");
+			stopTitleLoop();
+			SetGameMode(GS_SAVEGAMELOAD);
+			initSaveGameLoad();
+			break;
+		case TITLECODE_STARTGAME:
+			debug(LOG_MAIN, "TITLECODE_STARTGAME");
+			stopTitleLoop();
+			SetGameMode(GS_NORMAL);
+			startGameLoop();
+			break;
+		case TITLECODE_SHOWINTRO:
+			debug(LOG_MAIN, "TITLECODE_SHOWINTRO");
+			seq_ClearSeqList();
+			seq_AddSeqToList("eidos-logo.rpl", NULL, NULL, FALSE);
+			seq_AddSeqToList("pumpkin.rpl", NULL, NULL, FALSE);
+			seq_AddSeqToList("titles.rpl", NULL, NULL, FALSE);
+			seq_AddSeqToList("devastation.rpl", NULL, "devastation.txa", FALSE);
+			seq_StartNextFullScreenVideo();
+			break;
+		default:
+			debug(LOG_ERROR, "Unknown code returned by titleLoop");
+			break;
+	}
+}
+
+
+static void handleActiveEvent(SDL_Event * event)
+{
+	// Ignore focus loss through SDL_APPMOUSEFOCUS, since it mostly happens accidentialy
+	// active.state is a bitflag! Mixed events (eg. APPACTIVE|APPMOUSEFOCUS) will thus not be ignored.
+	if ( event->active.state != SDL_APPMOUSEFOCUS )
+	{
+		if ( event->active.gain == 1 )
+		{
+			debug( LOG_NEVER, "WM_SETFOCUS\n");
+			if (focusState != FOCUS_IN)
+			{
+				focusState = FOCUS_IN;
+
+				gameTimeStart();
+				// Should be: audio_ResumeAll();
+			}
+		}
+		else
+		{
+			debug( LOG_NEVER, "WM_KILLFOCUS\n");
+			if (focusState != FOCUS_OUT)
+			{
+				focusState = FOCUS_OUT;
+
+				gameTimeStop();
+				// Should be: audio_PauseAll();
+				audio_StopAll();
+			}
+			/* Have to tell the input system that we've lost focus */
+			inputLooseFocus();
+		}
+	}
+}
+
+
+static void mainLoop(void)
+{
+	SDL_Event event;
+
+	while (TRUE)
+	{
+		/* Deal with any windows messages */
+		while (SDL_PollEvent(&event))
+		{
+			switch (event.type)
+			{
+				if (focusState == FOCUS_IN)
+				{
+					case SDL_KEYUP:
+					case SDL_KEYDOWN:
+						inputHandleKeyEvent(&event);
+						break;
+					case SDL_MOUSEBUTTONUP:
+					case SDL_MOUSEBUTTONDOWN:
+						inputHandleMouseButtonEvent(&event);
+						break;
+					case SDL_MOUSEMOTION:
+						inputHandleMouseMotionEvent(&event);
+						break;
+				}
+				case SDL_ACTIVEEVENT:
+					handleActiveEvent(&event);
+					break;
+				case SDL_QUIT:
+					return;
+				default:
+					break;
+			}
+		}
+
+		if (focusState == FOCUS_IN)
+		{
+			gameTimeUpdate();
+
+			if(loop_GetVideoStatus())
+				videoLoop();
+			else switch (GetGameMode())
+			{
+				case GS_NORMAL:
+					runGameLoop();
+					break;
+				case GS_TITLE_SCREEN:
+					runTitleLoop();
+					break;
+				default:
+					break;
+			}
+
+			frameUpdate(); // General housekeeping
+		}
 	}
 }
 
 
 int main(int argc, char *argv[])
 {
-	BOOL quit = FALSE;
-	BOOL Restart = FALSE;
-	BOOL lostFocus = FALSE;
-	int loopStatus = 0;
 	iColour* psPaletteBuffer = NULL;
 	UDWORD pSize = 0;
 
@@ -520,227 +778,26 @@ int main(int argc, char *argv[])
 	//set all the pause states to false
 	setAllPauseStates(FALSE);
 
-	while (!quit)
+	// Do the game mode specific initialisation.
+	switch(GetGameMode())
 	{
-		// Do the game mode specific initialisation.
-		switch(gameStatus)
-		{
-			case GS_TITLE_SCREEN:
-				screen_RestartBackDrop();
-				if (!frontendInitialise("wrf/frontend.wrf"))
-				{
-					debug(LOG_ERROR, "Shutting down after failure");
-					exit(EXIT_FAILURE);
-				}
+		case GS_TITLE_SCREEN:
+			startTitleLoop();
+			break;
+		case GS_SAVEGAMELOAD:
+			initSaveGameLoad();
+			break;
+		case GS_NORMAL:
+			startGameLoop();
+			break;
+		default:
+			debug(LOG_ERROR, "Weirdy game status, I'm afraid!!");
+			break;
+	}
 
-				frontendInitialised = TRUE;
-				frontendInitVars();
-				break;
+	debug(LOG_MAIN, "Entering main loop");
 
-			case GS_SAVEGAMELOAD:
-				screen_RestartBackDrop();
-				SetGameMode(GS_NORMAL);
-				// load up a save game
-				if (!loadGameInit(saveGameName))
-				{
-					debug(LOG_ERROR, "Shutting down after failure");
-					exit(EXIT_FAILURE);
-				}
-				screen_StopBackDrop();
-				break;
-			case GS_NORMAL:
-				if (!levLoadData(pLevelName, NULL, 0))
-				{
-					debug(LOG_ERROR, "Shutting down after failure");
-					exit(EXIT_FAILURE);
-				}
-				//after data is loaded check the research stats are valid
-				if (!checkResearchStats())
-				{
-					debug( LOG_ERROR, "Invalid Research Stats" );
-					debug(LOG_ERROR, "Shutting down after failure");
-					exit(EXIT_FAILURE);
-				}
-				//and check the structure stats are valid
-				if (!checkStructureStats())
-				{
-					debug( LOG_ERROR, "Invalid Structure Stats" );
-					debug(LOG_ERROR, "Shutting down after failure");
-					exit(EXIT_FAILURE);
-				}
-
-				//set a flag for the trigger/event system to indicate initialisation is complete
-				gameInitialised = TRUE;
-				screen_StopBackDrop();
-				break;
-
-			default:
-				debug( LOG_ERROR, "Unknown game status on shutdown!" );
-		}
-
-		debug(LOG_MAIN, "Entering main loop");
-
-		Restart = FALSE;
-
-		while (!Restart)
-		{
-			// Event handling, etc.
-			switch (frameUpdate())
-			{
-				case FRAME_KILLFOCUS:
-					lostFocus = TRUE;
-					gameTimeStop();
-					audio_StopAll();
-					break;
-				case FRAME_SETFOCUS:
-					lostFocus = FALSE;
-					gameTimeStart();
-					break;
-				case FRAME_QUIT:
-					debug(LOG_MAIN, "frame quit");
-					quit = TRUE;
-					Restart = TRUE;
-					break;
-				default:
-					break;
-			}
-
-			lastStatus = gameStatus;
-
-			if (!lostFocus && !quit)
-			{
-				if (loop_GetVideoStatus())
-				{
-					videoLoop();
-				}
-				else switch(gameStatus)
-				{
-					case GS_TITLE_SCREEN:
-						switch(titleLoop()) {
-							case TITLECODE_QUITGAME:
-								debug(LOG_MAIN, "TITLECODE_QUITGAME");
-								Restart = TRUE;
-								quit = TRUE;
-								break;
-							case TITLECODE_SAVEGAMELOAD:
-								debug(LOG_MAIN, "TITLECODE_SAVEGAMELOAD");
-								gameStatus = GS_SAVEGAMELOAD;
-								Restart = TRUE;
-								break;
-							case TITLECODE_STARTGAME:
-								debug(LOG_MAIN, "TITLECODE_STARTGAME");
-								SetGameMode(GS_NORMAL);
-								Restart = TRUE;
-								break;
-
-							case TITLECODE_SHOWINTRO:
-								debug(LOG_MAIN, "TITLECODE_SHOWINTRO");
-								seq_ClearSeqList();
-								seq_AddSeqToList("eidos-logo.rpl", NULL, NULL, FALSE);
-								seq_AddSeqToList("pumpkin.rpl", NULL, NULL, FALSE);
-								seq_AddSeqToList("titles.rpl", NULL, NULL, FALSE);
-								seq_AddSeqToList("devastation.rpl", NULL, "devastation.txa", FALSE);
-								seq_StartNextFullScreenVideo();
-								break;
-
-							case TITLECODE_CONTINUE:
-								break;
-
-							default:
-								debug(LOG_ERROR, "Unknown code returned by titleLoop");
-						}
-						break;
-
-					case GS_NORMAL:
-						loopStatus = gameLoop();
-						switch(loopStatus) {
-							case GAMECODE_QUITGAME:
-								debug(LOG_MAIN, "GAMECODE_QUITGAME");
-								SetGameMode(GS_TITLE_SCREEN);
-								Restart = TRUE;
-								if(NetPlay.bLobbyLaunched)
-								{
-									quit = TRUE;
-								}
-								break;
-							case GAMECODE_FASTEXIT:
-								debug(LOG_MAIN, "GAMECODE_FASTEXIT");
-								Restart = TRUE;
-								quit = TRUE;
-								break;
-
-							case GAMECODE_LOADGAME:
-								debug(LOG_MAIN, "GAMECODE_LOADGAME");
-								Restart = TRUE;
-								gameStatus = GS_SAVEGAMELOAD;
-								break;
-
-							case GAMECODE_PLAYVIDEO:
-								debug(LOG_MAIN, "GAMECODE_PLAYVIDEO");
-								Restart = FALSE;
-								break;
-
-							case GAMECODE_NEWLEVEL:
-							case GAMECODE_RESTARTGAME:
-								debug(LOG_MAIN, "GAMECODE_RESTARTGAME");
-								Restart = TRUE;
-								break;
-
-							case GAMECODE_CONTINUE:
-								break;
-
-							default:
-								debug(LOG_ERROR, "Unknown code returned by gameLoop");
-						}
-						break;
-
-					default:
-						debug(LOG_ERROR, "Weirdy game status, I'm afraid!!");
-						break;
-				}
-
-				gameTimeUpdate();
-			} // !lostFocus && !quit
-			else if (lostFocus && !quit)
-			{
-				// Prevent CPU hogging when we've lost focus
-				SDL_Delay(1);
-			}
-		} // End of !Restart loop.
-
-		debug(LOG_MAIN, "Preparing for shutdown/restart");
-
-		// Do game mode specific shutdown.
-		switch(lastStatus)
-		{
-			case GS_TITLE_SCREEN:
-				if (!frontendShutdown())
-				{
-					debug(LOG_ERROR, "Shutting down after failure");
-					exit(EXIT_FAILURE);
-				}
-				frontendInitialised = FALSE;
-				break;
-
-			case GS_NORMAL:
-				if (loopStatus != GAMECODE_NEWLEVEL)
-				{
-					initLoadingScreen(TRUE); // returning to f.e. do a loader.render not active
-					pie_EnableFog(FALSE);//dont let the normal loop code set status on
-					fogStatus = 0;
-					if (loopStatus != GAMECODE_LOADGAME)
-					{
-						levReleaseAll();
-					}
-				}
-				gameInitialised = FALSE;
-				break;
-
-			default:
-				debug(LOG_ERROR, "Unknown game status on shutdown!");
-				break;
-		}
-	} // End of !quit loop.
+	mainLoop();
 
 	debug(LOG_MAIN, "Shutting down Warzone 2100");
 

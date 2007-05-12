@@ -60,15 +60,7 @@ static FPSmanager wzFPSmanager;
 static UWORD currentCursorResID = UWORD_MAX;
 SDL_Cursor *aCursors[MAX_CURSORS];
 
-typedef enum _focus_state
-{
-	FOCUS_OUT,		// Window does not have the focus
-	FOCUS_SET,		// Just received WM_SETFOCUS
-	FOCUS_IN,		// Window has got the focus
-	FOCUS_KILL,		// Just received WM_KILLFOCUS
-} FOCUS_STATE;
-
-FOCUS_STATE		focusState, focusLast;
+FOCUS_STATE focusState = FOCUS_IN;
 
 /************************************************************************************
  *
@@ -225,16 +217,13 @@ BOOL frameInitialise(
 					BOOL fullScreen		// Whether to start full screen or windowed
 					)
 {
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_CDROM) != 0)
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
 	{
 		debug( LOG_ERROR, "Error: Could not initialise SDL (%s).\n", SDL_GetError() );
 		return FALSE;
 	}
 
 	SDL_WM_SetCaption(pWindowName, NULL);
-
-	focusState = FOCUS_IN;
-	focusLast = FOCUS_IN;
 
 	/* Initialise the trig stuff */
 	if (!trigInitialise())
@@ -265,6 +254,7 @@ BOOL frameInitialise(
 	return TRUE;
 }
 
+
 /*
  * frameUpdate
  *
@@ -273,105 +263,19 @@ BOOL frameInitialise(
  *
  * Returns FRAME_STATUS.
  */
-FRAME_STATUS frameUpdate(void)
+void frameUpdate(void)
 {
-	SDL_Event event;
-	FRAME_STATUS retVal = FRAME_OK;
-	BOOL wzQuit = FALSE;
-
 	/* Tell the input system about the start of another frame */
 	inputNewFrame();
 
-	/* Deal with any windows messages */
-	while ( SDL_PollEvent( &event ) != 0)
-	{
-		switch (event.type)
-		{
-			case SDL_QUIT:
-				wzQuit = TRUE;
-				break;
-			case SDL_ACTIVEEVENT:
-				// Ignore focus loss through SDL_APPMOUSEFOCUS, since it mostly happens accidentialy
-				// active.state is a bitflag! Mixed events (eg. APPACTIVE|APPMOUSEFOCUS) will thus not be ignored.
-				if ( event.active.state != SDL_APPMOUSEFOCUS )
-				{
-					if ( event.active.gain == 1 )
-					{
-						debug( LOG_NEVER, "WM_SETFOCUS\n");
-						if (focusState != FOCUS_IN)
-						{
-							debug( LOG_NEVER, "FOCUS_SET\n");
-							focusState = FOCUS_SET;
-						}
-					}
-					else
-					{
-						debug( LOG_NEVER, "WM_KILLFOCUS\n");
-						if (focusState != FOCUS_OUT)
-						{
-							debug( LOG_NEVER, "FOCUS_KILL\n");
-							focusState = FOCUS_KILL;
-						}
-						/* Have to tell the input system that we've lost focus */
-						inputLooseFocus();
-					}
-				}
-				break;
-			case SDL_KEYUP:
-			case SDL_KEYDOWN:
-				inputHandleKeyEvent(&event);
-				break;
-			case SDL_MOUSEBUTTONUP:
-			case SDL_MOUSEBUTTONDOWN:
-				inputHandleMouseButtonEvent(&event);
-				break;
-			case SDL_MOUSEMOTION:
-				inputHandleMouseMotionEvent(&event);
-				break;
-			default:
-				break;
-		}
-	}
-
-	/* Now figure out what to return */
-	if (wzQuit)
-	{
-		retVal = FRAME_QUIT;
-	}
-	else if (focusState == FOCUS_SET && focusLast == FOCUS_OUT)
-	{
-		debug( LOG_NEVER, "frameUpdate: Returning SETFOCUS\n");
-		focusState = FOCUS_IN;
-		retVal = FRAME_SETFOCUS;
-	}
-	else if (focusState == FOCUS_KILL && focusLast == FOCUS_IN)
-	{
-		debug( LOG_NEVER, "frameUpdate: Returning KILLFOCUS\n");
-		focusState = FOCUS_OUT;
-		retVal = FRAME_KILLFOCUS;
-	}
-
-	if (focusState == FOCUS_SET || focusState == FOCUS_KILL)
-	{
-		/* Got a SET or KILL when we were already in or out of
-		   focus respectively */
-		focusState = focusLast;
-	}
-	else if (focusLast != focusState)
-	{
-		debug( LOG_NEVER, "focusLast changing from %d to %d\n", focusLast, focusState);
-		focusLast = focusState;
-	}
-
 	/* If things are running normally update the framerate */
-	if (!wzQuit && focusState == FOCUS_IN)
+	if (focusState == FOCUS_IN)
 	{
 		/* Update the frame rate stuff */
 		MaintainFrameStuff();
-		SDL_framerateDelay( &wzFPSmanager );
 	}
 
-	return retVal;
+	SDL_framerateDelay(&wzFPSmanager);
 }
 
 
@@ -534,15 +438,11 @@ BOOL loadFileToBufferNoError(const char *pFileName, char *pFileBuffer, UDWORD bu
 }
 
 
-
 /* next four used in HashPJW */
 #define	BITS_IN_int		32
 #define	THREE_QUARTERS	((UDWORD) ((BITS_IN_int * 3) / 4))
 #define	ONE_EIGHTH		((UDWORD) (BITS_IN_int / 8))
 #define	HIGH_BITS		( ~((UDWORD)(~0) >> ONE_EIGHTH ))
-
-
-///////////////////////////////////////////////////////////////////
 
 
 /***************************************************************************/
