@@ -1322,9 +1322,9 @@ extern SWORD map_Height(UDWORD x, UDWORD y)
 	BOOL	bWaterTile = FALSE;
 
 	x = x > SDWORD_MAX ? 0 : x;//negative SDWORD passed as UDWORD
-    x = x >= (mapWidth << TILE_SHIFT) ? ((mapWidth-1) << TILE_SHIFT) : x;
-    y = y > SDWORD_MAX ? 0 : y;//negative SDWORD passed as UDWORD
-	y = y >= (mapHeight << TILE_SHIFT) ? ((mapHeight-1) << TILE_SHIFT) : y;
+	x = x >= WORLD_COORD(mapWidth) ? WORLD_COORD(mapWidth - 1) : x;
+	y = y > SDWORD_MAX ? 0 : y;//negative SDWORD passed as UDWORD
+	y = y >= WORLD_COORD(mapHeight) ? WORLD_COORD(mapHeight - 1) : y;
 
 	/* Turn into tile coordinates */
 	tileX = MAP_COORD(x);
