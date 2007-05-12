@@ -25,7 +25,8 @@
 // Get platform defines before checking for them!
 #include "lib/framework/frame.h"
 
-#include <SDL/SDL.h>
+#include <SDL/SDL_main.h>
+#include <SDL/SDL_timer.h>
 #include <physfs.h>
 
 /* For SHGetFolderPath */
@@ -37,7 +38,6 @@
 #endif // WZ_OS_WIN
 
 #include "lib/framework/configfile.h"
-#include "lib/framework/input.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/rendmode.h"
@@ -77,10 +77,6 @@
 # define WZ_WRITEDIR ".warzone2100"
 #endif
 
-
-typedef enum { RUN_GRAPHICS, RUN_GAMELOOP, RUN_TITLELOOP, RUN_VIDEOLOOP } userEvents;
-
-
 char datadir[MAX_PATH] = "\0"; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be \0 on startup for ParseCommandLine to work!
 
 char * global_mods[MAX_MODS] = { NULL };
@@ -91,7 +87,7 @@ char * multiplay_mods[MAX_MODS] = { NULL };
 // Warzone 2100 . Pumpkin Studios
 
 // Start game in title mode:
-GS_GAMEMODE gameStatus = GS_TITLE_SCREEN;
+GS_GAMEMODE gameStatus = GS_TITLE_SCREEN, lastStatus = GS_TITLE_SCREEN;
 //flag to indicate when initialisation is complete
 BOOL	videoInitialised = FALSE;
 BOOL	gameInitialised = FALSE;
@@ -104,14 +100,6 @@ char	MultiCustomMapsPath[MAX_PATH];
 char	MultiPlayersPath[MAX_PATH];
 char	KeyMapPath[MAX_PATH];
 char	UserMusicPath[MAX_PATH];
-
-
-static SDL_TimerID graphicsTimerID, gameLoopTimerID, titleLoopTimerID, videoLoopTimerID;
-static int gameLoopStatus = 0;
-extern FOCUS_STATE focusState;
-
-static void runGameLoop(void);
-static void runTitleLoop(void);
 
 extern void debug_callback_stderr( void**, const char * );
 extern void debug_callback_win32debug( void**, const char * );
@@ -402,372 +390,12 @@ static void make_dir(char *dest, const char *dirname, const char *subdir)
 }
 
 
-static Uint32 graphicsTimer(Uint32 interval, void* param)
-{
-	// Create a user event to call the graphics loop.
-	SDL_Event event;
-
-	event.type = SDL_USEREVENT;
-	event.user.code = RUN_GRAPHICS;
-	event.user.data1 = NULL;
-	event.user.data2 = NULL;
-
-	SDL_PushEvent(&event);
-
-	return interval;
-}
-
-
-static Uint32 gameLoopTimer(Uint32 interval, void* param)
-{
-	// Create a user event to call the game loop.
-	SDL_Event event;
-
-	event.type = SDL_USEREVENT;
-	event.user.code = RUN_GAMELOOP;
-	event.user.data1 = NULL;
-	event.user.data2 = NULL;
-
-	SDL_PushEvent(&event);
-
-	return interval;
-}
-
-
-static Uint32 titleLoopTimer(Uint32 interval, void* param)
-{
-	// Create a user event to call the title loop.
-	SDL_Event event;
-
-	event.type = SDL_USEREVENT;
-	event.user.code = RUN_TITLELOOP;
-	event.user.data1 = NULL;
-	event.user.data2 = NULL;
-
-	SDL_PushEvent(&event);
-
-	return interval;
-}
-
-
-static Uint32 videoLoopTimer(Uint32 interval, void* param)
-{
-	// Create a user event to call the video loop.
-	SDL_Event event;
-
-	event.type = SDL_USEREVENT;
-	event.user.code = RUN_VIDEOLOOP;
-	event.user.data1 = NULL;
-	event.user.data2 = NULL;
-
-	SDL_PushEvent(&event);
-
-	return interval;
-}
-
-
-void startGraphics(void)
-{
-	graphicsTimerID = SDL_AddTimer(1000.0f/getFramerateLimit(), graphicsTimer, NULL); // 20 FPS
-}
-
-
-void stopGraphics(void)
-{
-	SDL_RemoveTimer(graphicsTimerID);
-}
-
-
-void startVideoLoop(void)
-{
-	videoLoopTimerID = SDL_AddTimer(1000.0f/getFramerateLimit(), videoLoopTimer, NULL); // 20 FPS
-}
-
-
-void stopVideoLoop(void)
-{
-	SDL_RemoveTimer(videoLoopTimerID);
-}
-
-
-static void startTitleLoop(void)
-{
-	screen_RestartBackDrop();
-	if (!frontendInitialise("wrf/frontend.wrf"))
-	{
-		debug( LOG_ERROR, "Shutting down after failure" );
-		exit(EXIT_FAILURE);
-	}
-
-	frontendInitialised = TRUE;
-	frontendInitVars();
-
-	titleLoopTimerID = SDL_AddTimer(1000.0f/getFramerateLimit(), titleLoopTimer, NULL);
-}
-
-
-static void stopTitleLoop(void)
-{
-	SDL_RemoveTimer(titleLoopTimerID);
-
-	if (!frontendShutdown())
-	{
-		debug( LOG_ERROR, "Shutting down after failure" );
-		exit(EXIT_FAILURE);
-	}
-	frontendInitialised = FALSE;
-}
-
-
-static void startGameLoop(void)
-{
-	if (!levLoadData(pLevelName, NULL, 0))
-	{
-		debug( LOG_ERROR, "Shutting down after failure" );
-		exit(EXIT_FAILURE);
-	}
-	//after data is loaded check the research stats are valid
-	if (!checkResearchStats())
-	{
-		debug( LOG_ERROR, "Invalid Research Stats" );
-		debug( LOG_ERROR, "Shutting down after failure" );
-		exit(EXIT_FAILURE);
-	}
-	//and check the structure stats are valid
-	if (!checkStructureStats())
-	{
-		debug( LOG_ERROR, "Invalid Structure Stats" );
-		debug( LOG_ERROR, "Shutting down after failure" );
-		exit(EXIT_FAILURE);
-	}
-
-	//set a flag for the trigger/event system to indicate initialisation is complete
-	gameInitialised = TRUE;
-	screen_StopBackDrop();
-
-	gameLoopTimerID = SDL_AddTimer(1000.0f/getFramerateLimit(), gameLoopTimer, NULL);
-}
-
-
-static void stopGameLoop(void)
-{
-	SDL_RemoveTimer(gameLoopTimerID);
-
-	if (gameLoopStatus != GAMECODE_NEWLEVEL)
-	{
-		initLoadingScreen(TRUE); // returning to f.e. do a loader.render not active
-		pie_EnableFog(FALSE); // dont let the normal loop code set status on
-		fogStatus = 0;
-		if (gameLoopStatus != GAMECODE_LOADGAME)
-		{
-			levReleaseAll();
-		}
-	}
-	gameInitialised = FALSE;
-}
-
-
-static void initSaveGameLoad(void)
-{
-	screen_RestartBackDrop();
-	// load up a save game
-	if (!loadGameInit(saveGameName))
-	{
-		debug( LOG_ERROR, "Shutting down after failure" );
-		exit(EXIT_FAILURE);
-	}
-	screen_StopBackDrop();
-
-	SetGameMode(GS_NORMAL);
-	gameLoopTimerID = SDL_AddTimer(1000.0f/getFramerateLimit(), gameLoopTimer, NULL);
-}
-
-
-static void runGameLoop(void)
-{
-	gameLoopStatus = gameLoop();
-	switch (gameLoopStatus)
-	{
-		case GAMECODE_CONTINUE:
-		case GAMECODE_PLAYVIDEO:
-			break;
-		case GAMECODE_QUITGAME:
-			debug(LOG_MAIN, "GAMECODE_QUITGAME");
-			SetGameMode(GS_TITLE_SCREEN);
-			stopGameLoop();
-			startTitleLoop();
-			break;
-		case GAMECODE_LOADGAME:
-			debug(LOG_MAIN, "GAMECODE_LOADGAME");
-			SetGameMode(GS_SAVEGAMELOAD);
-			stopGameLoop();
-			startTitleLoop();
-			break;
-		case GAMECODE_NEWLEVEL:
-			debug(LOG_MAIN, "GAMECODE_NEWLEVEL");
-			stopGameLoop();
-			break;
-		// Never trown:
-		case GAMECODE_FASTEXIT:
-		case GAMECODE_RESTARTGAME:
-			break;
-		default:
-			debug(LOG_ERROR, "Unknown code returned by gameLoop");
-			break;
-	}
-}
-
-
-static void runTitleLoop(void)
-{
-	switch (titleLoop())
-	{
-		case TITLECODE_CONTINUE:
-			break;
-		case TITLECODE_QUITGAME:
-			debug(LOG_MAIN, "TITLECODE_QUITGAME");
-			stopTitleLoop();
-			{
-				// Create a quit event to halt game loop.
-				SDL_Event quitEvent;
-				quitEvent.type = SDL_QUIT;
-				SDL_PushEvent(&quitEvent);
-			}
-			break;
-		case TITLECODE_SAVEGAMELOAD:
-			debug(LOG_MAIN, "TITLECODE_SAVEGAMELOAD");
-			SetGameMode(GS_SAVEGAMELOAD);
-			stopTitleLoop();
-			initSaveGameLoad();
-			break;
-		case TITLECODE_STARTGAME:
-			debug(LOG_MAIN, "TITLECODE_STARTGAME");
-			SetGameMode(GS_NORMAL);
-			stopTitleLoop();
-			startGameLoop();
-			break;
-		case TITLECODE_SHOWINTRO:
-			debug(LOG_MAIN, "TITLECODE_SHOWINTRO");
-			seq_ClearSeqList();
-			seq_AddSeqToList("eidos-logo.rpl", NULL, NULL, FALSE);
-			seq_AddSeqToList("pumpkin.rpl", NULL, NULL, FALSE);
-			seq_AddSeqToList("titles.rpl", NULL, NULL, FALSE);
-			seq_AddSeqToList("devastation.rpl", NULL, "devastation.txa", FALSE);
-			seq_StartNextFullScreenVideo();
-			break;
-		default:
-			debug(LOG_ERROR, "Unknown code returned by titleLoop");
-			break;
-	}
-}
-
-
-static void handleActiveEvent(SDL_Event * event)
-{
-	// Ignore focus loss through SDL_APPMOUSEFOCUS, since it mostly happens accidentialy
-	// active.state is a bitflag! Mixed events (eg. APPACTIVE|APPMOUSEFOCUS) will thus not be ignored.
-	if ( event->active.state != SDL_APPMOUSEFOCUS )
-	{
-		if ( event->active.gain == 1 )
-		{
-			debug( LOG_NEVER, "WM_SETFOCUS\n");
-			if (focusState != FOCUS_IN)
-			{
-				debug( LOG_NEVER, "FOCUS_SET\n");
-				focusState = FOCUS_IN;
-
-				gameTimeStart();
-				// Should be: audio_ResumeAll();
-			}
-		}
-		else
-		{
-			debug( LOG_NEVER, "WM_KILLFOCUS\n");
-			if (focusState != FOCUS_OUT)
-			{
-				debug( LOG_NEVER, "FOCUS_KILL\n");
-				focusState = FOCUS_OUT;
-
-				gameTimeStop();
-				// Should be: audio_PauseAll();
-				audio_StopAll();
-			}
-			/* Have to tell the input system that we've lost focus */
-			inputLooseFocus();
-		}
-	}
-}
-
-
-static void handleUserEvent(SDL_Event * event)
-{
-	// TODO Code which bails if the PC cannot keep up with the desired framerate
-	switch (event->user.code)
-	{
-		case RUN_GRAPHICS:
-			// FIXME To be implemented: runGraphics();
-			break;
-		case RUN_GAMELOOP:
-			runGameLoop();
-			break;
-		case RUN_TITLELOOP:
-			runTitleLoop();
-			break;
-		case RUN_VIDEOLOOP:
-			// FIXME To be implemented: runVideoLoop();
-			break;
-		default:
-			break;
-	}
-}
-
-
-static void mainLoop(void)
-{
-	SDL_Event event;
-
-	/* Deal with any windows messages */
-	while (SDL_WaitEvent(&event))
-	{
-		switch (event.type)
-		{
-			if (focusState == FOCUS_IN)
-			{
-				case SDL_USEREVENT:
-					gameTimeUpdate();
-					// HACK The videoLoop should get an own timer!
-					if(loop_GetVideoStatus())
-						videoLoop();
-					else
-						handleUserEvent(&event);
-					frameUpdate(); // General housekeeping
-					break;
-				case SDL_KEYUP:
-				case SDL_KEYDOWN:
-					inputHandleKeyEvent(&event);
-					break;
-				case SDL_MOUSEBUTTONUP:
-				case SDL_MOUSEBUTTONDOWN:
-					inputHandleMouseButtonEvent(&event);
-					break;
-				case SDL_MOUSEMOTION:
-					inputHandleMouseMotionEvent(&event);
-					break;
-			}
-			case SDL_ACTIVEEVENT:
-				handleActiveEvent(&event);
-				break;
-			case SDL_QUIT:
-				return;
-			default:
-				break;
-		}
-	}
-}
-
-
 int main(int argc, char *argv[])
 {
+	BOOL quit = FALSE;
+	BOOL Restart = FALSE;
+	BOOL lostFocus = FALSE;
+	int loopStatus = 0;
 	iColour* psPaletteBuffer = NULL;
 	UDWORD pSize = 0;
 
@@ -848,7 +476,8 @@ int main(int argc, char *argv[])
 	scanDataDirs();
 
 	// find out if the lobby stuff has been disabled
-	if (!bDisableLobby && !lobbyInitialise()) // ajl. Init net stuff. Lobby can modify startup conditions like commandline.
+	if (!bDisableLobby &&
+		!lobbyInitialise())// ajl. Init net stuff. Lobby can modify startup conditions like commandline.
 	{
 		return -1;
 	}
@@ -857,7 +486,6 @@ int main(int argc, char *argv[])
 	{
 		return -1;
 	}
-	atexit(frameShutDown);
 
 	pie_SetFogStatus(FALSE);
 	pie_ScreenFlip(CLEAR_BLACK);
@@ -878,7 +506,6 @@ int main(int argc, char *argv[])
 	}
 	pal_AddNewPalette(psPaletteBuffer);
 	free(psPaletteBuffer);
-	atexit(pal_ShutDown);
 
 	pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 	pie_SetFogStatus(FALSE);
@@ -888,34 +515,242 @@ int main(int argc, char *argv[])
 	{
 		return -1;
 	}
-	atexit(systemShutdown);
 
 	//set all the pause states to false
 	setAllPauseStates(FALSE);
 
-	switch(GetGameMode())
+	while (!quit)
 	{
-		case GS_TITLE_SCREEN:
-			startTitleLoop();
-			break;
-		case GS_SAVEGAMELOAD:
-			initSaveGameLoad();
-			break;
-		case GS_NORMAL:
-			startGameLoop();
-			break;
-		default:
-			debug(LOG_ERROR, "Weirdy game status, I'm afraid!!");
-			break;
-	}
+		// Do the game mode specific initialisation.
+		switch(gameStatus)
+		{
+			case GS_TITLE_SCREEN:
+				screen_RestartBackDrop();
+				if (!frontendInitialise("wrf/frontend.wrf"))
+				{
+					goto exit;
+				}
 
-	debug(LOG_MAIN, "Entering main loop");
+				frontendInitialised = TRUE;
+				frontendInitVars();
+				break;
 
-	mainLoop();
+			case GS_SAVEGAMELOAD:
+				screen_RestartBackDrop();
+				SetGameMode(GS_NORMAL);
+				// load up a save game
+				if (!loadGameInit(saveGameName))
+				{
+					goto exit;
+				}
+				screen_StopBackDrop();
+				break;
+			case GS_NORMAL:
+				if (!levLoadData(pLevelName, NULL, 0)) {
+					goto exit;
+				}
+				//after data is loaded check the research stats are valid
+				if (!checkResearchStats())
+				{
+					debug( LOG_ERROR, "Invalid Research Stats" );
+					goto exit;
+				}
+				//and check the structure stats are valid
+				if (!checkStructureStats())
+				{
+					debug( LOG_ERROR, "Invalid Structure Stats" );
+					goto exit;
+				}
+
+				//set a flag for the trigger/event system to indicate initialisation is complete
+				gameInitialised = TRUE;
+				screen_StopBackDrop();
+				break;
+
+			default:
+				debug( LOG_ERROR, "Unknown game status on shutdown!" );
+		}
+
+		debug(LOG_MAIN, "Entering main loop");
+
+		Restart = FALSE;
+
+		while (!Restart)
+		{
+			// Event handling, etc.
+			switch (frameUpdate())
+			{
+				case FRAME_KILLFOCUS:
+					lostFocus = TRUE;
+					gameTimeStop();
+					audio_StopAll();
+					break;
+				case FRAME_SETFOCUS:
+					lostFocus = FALSE;
+					gameTimeStart();
+					break;
+				case FRAME_QUIT:
+					debug(LOG_MAIN, "frame quit");
+					quit = TRUE;
+					Restart = TRUE;
+					break;
+				default:
+					break;
+			}
+
+			lastStatus = gameStatus;
+
+			if (!lostFocus && !quit)
+			{
+				if (loop_GetVideoStatus())
+				{
+					videoLoop();
+				}
+				else switch(gameStatus)
+				{
+					case GS_TITLE_SCREEN:
+						switch(titleLoop()) {
+							case TITLECODE_QUITGAME:
+								debug(LOG_MAIN, "TITLECODE_QUITGAME");
+								Restart = TRUE;
+								quit = TRUE;
+								break;
+							case TITLECODE_SAVEGAMELOAD:
+								debug(LOG_MAIN, "TITLECODE_SAVEGAMELOAD");
+								gameStatus = GS_SAVEGAMELOAD;
+								Restart = TRUE;
+								break;
+							case TITLECODE_STARTGAME:
+								debug(LOG_MAIN, "TITLECODE_STARTGAME");
+								SetGameMode(GS_NORMAL);
+								Restart = TRUE;
+								break;
+
+							case TITLECODE_SHOWINTRO:
+								debug(LOG_MAIN, "TITLECODE_SHOWINTRO");
+								seq_ClearSeqList();
+								seq_AddSeqToList("eidos-logo.rpl", NULL, NULL, FALSE);
+								seq_AddSeqToList("pumpkin.rpl", NULL, NULL, FALSE);
+								seq_AddSeqToList("titles.rpl", NULL, NULL, FALSE);
+								seq_AddSeqToList("devastation.rpl", NULL, "devastation.txa", FALSE);
+								seq_StartNextFullScreenVideo();
+								break;
+
+							case TITLECODE_CONTINUE:
+								break;
+
+							default:
+								debug(LOG_ERROR, "Unknown code returned by titleLoop");
+						}
+						break;
+
+					case GS_NORMAL:
+						loopStatus = gameLoop();
+						switch(loopStatus) {
+							case GAMECODE_QUITGAME:
+								debug(LOG_MAIN, "GAMECODE_QUITGAME");
+								SetGameMode(GS_TITLE_SCREEN);
+								Restart = TRUE;
+								if(NetPlay.bLobbyLaunched)
+								{
+									quit = TRUE;
+								}
+								break;
+							case GAMECODE_FASTEXIT:
+								debug(LOG_MAIN, "GAMECODE_FASTEXIT");
+								Restart = TRUE;
+								quit = TRUE;
+								break;
+
+							case GAMECODE_LOADGAME:
+								debug(LOG_MAIN, "GAMECODE_LOADGAME");
+								Restart = TRUE;
+								gameStatus = GS_SAVEGAMELOAD;
+								break;
+
+							case GAMECODE_PLAYVIDEO:
+								debug(LOG_MAIN, "GAMECODE_PLAYVIDEO");
+								Restart = FALSE;
+								break;
+
+							case GAMECODE_NEWLEVEL:
+							case GAMECODE_RESTARTGAME:
+								debug(LOG_MAIN, "GAMECODE_RESTARTGAME");
+								Restart = TRUE;
+								break;
+
+							case GAMECODE_CONTINUE:
+								break;
+
+							default:
+								debug(LOG_ERROR, "Unknown code returned by gameLoop");
+						}
+						break;
+
+					default:
+						debug(LOG_ERROR, "Weirdy game status, I'm afraid!!");
+						break;
+				}
+
+				gameTimeUpdate();
+			} // !lostFocus && !quit
+			else if (lostFocus && !quit)
+			{
+				// Prevent CPU hogging when we've lost focus
+				SDL_Delay(1);
+			}
+		} // End of !Restart loop.
+
+		debug(LOG_MAIN, "Preparing for shutdown/restart");
+
+		// Do game mode specific shutdown.
+		switch(lastStatus)
+		{
+			case GS_TITLE_SCREEN:
+				if (!frontendShutdown())
+				{
+					goto exit;
+				}
+				frontendInitialised = FALSE;
+				break;
+
+			case GS_NORMAL:
+				if (loopStatus != GAMECODE_NEWLEVEL)
+				{
+					initLoadingScreen(TRUE); // returning to f.e. do a loader.render not active
+					pie_EnableFog(FALSE);//dont let the normal loop code set status on
+					fogStatus = 0;
+					if (loopStatus != GAMECODE_LOADGAME)
+					{
+						levReleaseAll();
+					}
+				}
+				gameInitialised = FALSE;
+				break;
+
+			default:
+				debug(LOG_ERROR, "Unknown game status on shutdown!");
+				break;
+		}
+	} // End of !quit loop.
 
 	debug(LOG_MAIN, "Shutting down Warzone 2100");
 
-	return EXIT_SUCCESS;
+	systemShutdown();
+	pal_ShutDown();
+	frameShutDown();
+
+	return 0;
+
+exit:
+
+	debug(LOG_ERROR, "Shutting down after failure");
+
+	systemShutdown();
+	pal_ShutDown();
+	frameShutDown();
+
+	return 1;
 }
 
 

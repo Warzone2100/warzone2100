@@ -444,14 +444,13 @@ GAMECODE gameLoop(void)
 			scroll();
 		}
 	}
-	else // paused
+	else//paused
 	{
 		intRetVal = INT_NONE;
-		if (loop_GetVideoStatus())
+		if (video)
 		{
 			bQuitVideo = !seq_UpdateFullScreenVideo(NULL);
 		}
-
 		if(dragBox3D.status != DRAG_DRAGGING)
 		{
 			scroll();
@@ -517,7 +516,7 @@ GAMECODE gameLoop(void)
 	/* Check for quit */
 	if (intRetVal == INT_QUIT)
 	{
-		if (!loop_GetVideoStatus())
+		if (!video)
 		{
 			//quitting from the game to the front end
 			//so get a new backdrop
@@ -530,7 +529,7 @@ GAMECODE gameLoop(void)
 			bQuitVideo = TRUE;
 		}
 	}
-	if (!loop_GetVideoStatus() && !quitting)
+	if (!video && !quitting)
 	{
 		if (!gameUpdatePaused())
 		{
@@ -581,7 +580,7 @@ GAMECODE gameLoop(void)
 	}
 
 	/* Check for toggling video playbackmode */
-	if (bQuitVideo && loop_GetVideoStatus())
+	if (bQuitVideo && video)
 	{
 		seq_StopFullScreenVideo();
 		bQuitVideo = FALSE;
@@ -606,7 +605,8 @@ GAMECODE gameLoop(void)
 	if (!quitting)
 	{
 			/* Check for toggling display mode */
-			if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && keyPressed(KEY_RETURN))
+			if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) &&
+				keyPressed(KEY_RETURN))
 			{
 				screenToggleMode();
 		#ifdef DISP2D
@@ -666,7 +666,7 @@ GAMECODE gameLoop(void)
 		}
 		return GAMECODE_QUITGAME;
 	}
-	else if (loop_GetVideoStatus())
+	else if (video)
 	{
 		audio_StopAll();
 		return GAMECODE_PLAYVIDEO;
@@ -689,7 +689,7 @@ GAMECODE videoLoop(void)
 	screen_GetBackDrop();
 #endif
 
-	if (loop_GetVideoStatus())
+	if (video)
 	{
 		bQuitVideo = !seq_UpdateFullScreenVideo(NULL);
 	}
@@ -806,7 +806,6 @@ GAMECODE videoLoop(void)
 	return GAMECODE_CONTINUE;
 }
 
-
 void loop_SetVideoPlaybackMode(void)
 {
 	videoMode += 1;
@@ -817,7 +816,6 @@ void loop_SetVideoPlaybackMode(void)
 	pie_SetFogStatus(FALSE);
 	audio_StopAll();
 }
-
 
 void loop_ClearVideoPlaybackMode(void)
 {
@@ -830,7 +828,6 @@ void loop_ClearVideoPlaybackMode(void)
 	ASSERT( videoMode == 0, "loop_ClearVideoPlaybackMode: out of sync." );
 }
 
-
 SDWORD loop_GetVideoMode(void)
 {
 	return videoMode;
@@ -841,12 +838,12 @@ BOOL loop_GetVideoStatus(void)
 	return video;
 }
 
-BOOL gamePaused( void )
+BOOL	gamePaused( void )
 {
-	return paused;
+	return(paused);
 }
 
-void setGamePauseStatus( BOOL val )
+void	setGamePauseStatus( BOOL val )
 {
 	paused = val;
 }

@@ -33,7 +33,7 @@
 
 extern BOOL InitialiseGlobals(void);
 extern BOOL systemInitialise(void);
-extern void systemShutdown(void);
+extern BOOL systemShutdown(void);
 extern BOOL frontendInitialise(const char *ResourceFile);
 extern BOOL frontendShutdown(void);
 extern BOOL stageOneInitialise(void);

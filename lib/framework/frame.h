@@ -74,22 +74,21 @@ extern BOOL frameInitialise(
  */
 extern void frameShutDown(void);
 
-
-typedef enum _focus_state
+/* The current status of the framework */
+typedef enum _frame_status
 {
-	FOCUS_OUT,		// Window does not have the focus
-	FOCUS_SET,		// Just received WM_SETFOCUS
-	FOCUS_IN,		// Window has got the focus
-	FOCUS_KILL,		// Just received WM_KILLFOCUS
-} FOCUS_STATE;
-
+	FRAME_OK,			// Everything normal
+	FRAME_KILLFOCUS,	// The main app window has lost focus (might well want to pause)
+	FRAME_SETFOCUS,		// The main app window has focus back
+	FRAME_QUIT,			// The main app window has been told to quit
+} FRAME_STATUS;
 
 /* Call this each cycle to allow the framework to deal with
  * windows messages, and do general house keeping.
  *
  * Returns FRAME_STATUS.
  */
-extern void frameUpdate(void);
+extern FRAME_STATUS frameUpdate(void);
 
 /* Set the current cursor from a Resource ID
  * This is the same as calling:
