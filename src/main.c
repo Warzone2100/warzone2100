@@ -759,18 +759,12 @@ exit:
 }
 
 
-UDWORD GetGameMode(void)
+GS_GAMEMODE GetGameMode(void)
 {
 	return gameStatus;
 }
 
-void SetGameMode(UDWORD status)
+void SetGameMode(GS_GAMEMODE status)
 {
-	ASSERT( status == GS_TITLE_SCREEN ||
-			status == GS_MISSION_SCREEN ||
-			status == GS_NORMAL ||
-			status == GS_SAVEGAMELOAD,
-		"SetGameMode: invalid game mode" );
-
 	gameStatus = status;
 }
