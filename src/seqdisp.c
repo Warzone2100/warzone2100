@@ -442,9 +442,9 @@ static BOOL seq_StartFullScreenVideo(const char* videoName, const char* audioNam
 	}
 	else if (bCDPath)
 	{
-		ASSERT( (strlen(videoName) + strlen(aCDPath))<MAX_STR_LENGTH,"sequence path+name greater than max string" );
-		strcpy(aVideoName,aCDPath);
-		strcat(aVideoName,videoName);
+		ASSERT( (strlen(videoName) + strlen(aCDPath)) < MAX_STR_LENGTH, "sequence path+name greater than max string" );
+		strcpy(aVideoName, aCDPath);
+		strcat(aVideoName, videoName);
 	}
 	else
 	{
@@ -456,9 +456,9 @@ static BOOL seq_StartFullScreenVideo(const char* videoName, const char* audioNam
 	//set audio path
 	if (audioName != NULL)
 	{
-		ASSERT( strlen(audioName)<244,"sequence path+name greater than max string" );
-		strcpy(aAudioName,"sequenceaudio/");
-		strcat(aAudioName,audioName);
+		ASSERT( strlen(audioName) < MAX_STR_LENGTH, "sequence path+name greater than max string" );
+		strcpy(aAudioName, "sequenceaudio/");
+		strcat(aAudioName, audioName);
 	}
 
 	//start video mode
@@ -472,9 +472,9 @@ static BOOL seq_StartFullScreenVideo(const char* videoName, const char* audioNam
 
 	if (audioName != NULL)
 	{
-		ASSERT( strlen(audioName)<244,"sequence path+name greater than max string" );
-		strcpy(aAudioName,"sequenceaudio/");
-		strcat(aAudioName,audioName);
+		ASSERT( strlen(audioName) < MAX_STR_LENGTH, "sequence path+name greater than max string" );
+		strcpy(aAudioName, "sequenceaudio/");
+		strcat(aAudioName, audioName);
 	}
 
 

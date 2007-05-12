@@ -58,16 +58,16 @@ typedef enum _key_state
 static KEY_STATE aKeyState[KEY_MAXSCAN];
 
 /* The current location of the mouse */
-static SDWORD		mouseXPos, mouseYPos;
+static SDWORD mouseXPos, mouseYPos;
 
 /* How far the mouse has to move to start a drag */
 #define DRAG_THRESHOLD	5
 
 /* Which button is being used for a drag */
-static MOUSE_KEY_CODE	dragKey;
+static MOUSE_KEY_CODE dragKey;
 
 /* The start of a possible drag by the mouse */
-static SDWORD			dragX, dragY;
+static SDWORD dragX, dragY;
 
 /* The current mouse button state */
 static KEY_STATE aMouseState[6];
@@ -363,7 +363,7 @@ void inputHandleMouseMotionEvent(SDL_Event * event)
 // NOTE This should probably react on events?
 void inputNewFrame(void)
 {
-	UDWORD i;
+	unsigned int i;
 
 	/* Do the keyboard */
 	for (i = 0; i < KEY_MAXSCAN; i++)
@@ -372,8 +372,8 @@ void inputNewFrame(void)
 		{
 			aKeyState[i] = KEY_DOWN;
 		}
-		else if ((aKeyState[i] == KEY_RELEASED) ||
-				 (aKeyState[i] == KEY_PRESSRELEASE))
+		else if ( aKeyState[i] == KEY_RELEASED  ||
+				  aKeyState[i] == KEY_PRESSRELEASE )
 		{
 			aKeyState[i] = KEY_UP;
 		}
@@ -483,7 +483,8 @@ void SetMousePos(UDWORD x, UDWORD y)
 {
 	static int mousewarp = -1;
 
-	if (mousewarp == -1) {
+	if (mousewarp == -1)
+	{
 		SDWORD val;
 
 		mousewarp = 1;
@@ -524,7 +525,3 @@ void setMouseUp(MOUSE_KEY_CODE code)
 	event.button.y = mouseY();
 	SDL_PushEvent(&event);
 }
-
-
-
-
