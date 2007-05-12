@@ -181,8 +181,15 @@ extern MAPTILE *psMapTiles;
 /* The mask to get internal tile coords from a full coordinate */
 #define TILE_MASK	0x7f
 
-#define WORLD_COORD(x) ((x)*TILE_UNITS)
-#define MAP_COORD(x) ((x)/TILE_UNITS)
+static inline UDWORD world_coord(UDWORD mapCoord)
+{
+	return mapCoord * TILE_UNITS;
+}
+
+static inline UDWORD map_coord(UDWORD worldCoord)
+{
+	return worldCoord / TILE_UNITS;
+}
 
 /* Shutdown the map module */
 extern BOOL mapShutdown(void);

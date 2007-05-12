@@ -401,9 +401,9 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 				// Make sure we don't pass any negative or out of bounds numbers to proj_SendProjectile
 				predictX = MAX(predictX, 0);
-				predictX = MIN(predictX, WORLD_COORD(mapWidth - 1));
+				predictX = MIN(predictX, world_coord(mapWidth - 1));
 				predictY = MAX(predictY, 0);
-				predictY = MIN(predictY, WORLD_COORD(mapHeight - 1));
+				predictY = MIN(predictY, world_coord(mapHeight - 1));
 			}
 			else
 			{
@@ -458,9 +458,9 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 				// Make sure we don't pass any negative or out of bounds numbers to proj_SendProjectile
 				predictX = MAX(predictX, 0);
-				predictX = MIN(predictX, WORLD_COORD(mapWidth - 1));
+				predictX = MIN(predictX, world_coord(mapWidth - 1));
 				predictY = MAX(predictY, 0);
-				predictY = MIN(predictY, WORLD_COORD(mapHeight - 1));
+				predictY = MIN(predictY, world_coord(mapHeight - 1));
 			}
 			else
 			{

@@ -733,9 +733,9 @@ static void drawTiles(iView *camera, iView *player)
 				else if(playerZTile+i > (SDWORD)(mapHeight-1) )
 					edgeY = mapHeight-1;
 
-				tileScreenInfo[i][j].x = WORLD_COORD(j-terrainMidX);
+				tileScreenInfo[i][j].x = world_coord(j-terrainMidX);
 				tileScreenInfo[i][j].y = 0;//map_TileHeight(edgeX,edgeY);
-				tileScreenInfo[i][j].z = WORLD_COORD(terrainMidY-i);
+				tileScreenInfo[i][j].z = world_coord(terrainMidY-i);
 				tileScreenInfo[i][j].sz = pie_RotProj((Vector3i*)&tileScreenInfo[i][j].x, (Vector2i*)&tileScreenInfo[i][j].sx);
 
 				if (pie_GetFogEnabled())
@@ -745,7 +745,7 @@ static void drawTiles(iView *camera, iView *player)
 				}
 				else
 				{
-					tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination( mapTile(edgeX, edgeY)->illumination, rx - tileScreenInfo[i][j].x, rz - WORLD_COORD(i - terrainMidY), &specular );
+					tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination( mapTile(edgeX, edgeY)->illumination, rx - tileScreenInfo[i][j].x, rz - world_coord(i - terrainMidY), &specular );
 				}
 
 				if( playerXTile+j < -1 ||
@@ -766,14 +766,14 @@ static void drawTiles(iView *camera, iView *player)
 
 				psTile = mapTile(playerXTile+j, playerZTile+i);
 				/* Get a pointer to the tile at this location */
-				tileScreenInfo[i][j].x = WORLD_COORD(j-terrainMidX);
+				tileScreenInfo[i][j].x = world_coord(j-terrainMidX);
 
 				if (TERRAIN_TYPE(psTile) == TER_WATER)
 				{
 					tileScreenInfo[i][j].bWater = TRUE;
 				}
 				tileScreenInfo[i][j].y = map_TileHeight(playerXTile+j, playerZTile+i);
-				tileScreenInfo[i][j].z = WORLD_COORD(terrainMidY-i);
+				tileScreenInfo[i][j].z = world_coord(terrainMidY-i);
 
 				/* Is it in the centre and therefore worth averaging height over? */
 				if ( i > MIN_TILE_Y &&
@@ -834,7 +834,7 @@ static void drawTiles(iView *camera, iView *player)
 
 				tileScreenInfo[i][j].sz = pie_RotProj((Vector3i*)&tileScreenInfo[i][j], (Vector2i*)&tileScreenInfo[i][j].sx);
 
-				tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination(TileIllum, rx - tileScreenInfo[i][j].x, rz - WORLD_COORD(i-terrainMidY), &specular);
+				tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination(TileIllum, rx - tileScreenInfo[i][j].x, rz - world_coord(i-terrainMidY), &specular);
 
 				tileScreenInfo[i][j].specular.argb = specular;
 
@@ -849,7 +849,7 @@ static void drawTiles(iView *camera, iView *player)
 					// Transform it into the wx,wy mesh members.
 					tileScreenInfo[i][j].wz = pie_RotProj((Vector3i*)&tileScreenInfo[i][j], (Vector2i*)&tileScreenInfo[i][j].wx);
 					tileScreenInfo[i][j].wlight.argb = lightDoFogAndIllumination(
-						TileIllum, rx - tileScreenInfo[i][j].x, rz - WORLD_COORD(i-terrainMidY), &specular);
+						TileIllum, rx - tileScreenInfo[i][j].x, rz - world_coord(i-terrainMidY), &specular);
 					tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].y;
 					tileScreenInfo[i][j].y = tmp_y;
 				} else {
@@ -3934,16 +3934,16 @@ static void preprocessTiles(void)
 					//draw the current build site if its a line of structures
 					if (psDroid->order == DORDER_LINEBUILD)
 					{
-							left = MAP_COORD(psDroid->orderX);
-							right = MAP_COORD(psDroid->orderX2) + 1;
+							left = map_coord(psDroid->orderX);
+							right = map_coord(psDroid->orderX2) + 1;
 							if (left > right)
 							{
 								size = left;
 								left = right;
 								right = size;
 							}
-							up = MAP_COORD(psDroid->orderY);
-							down = MAP_COORD(psDroid->orderY2) + 1;
+							up = map_coord(psDroid->orderY);
+							down = map_coord(psDroid->orderY2) + 1;
 							if (up > down)
 							{
 								size = up;
@@ -3967,11 +3967,11 @@ static void preprocessTiles(void)
 							//set up coords for tiles
 							size = ((STRUCTURE_STATS *)psDroid->asOrderList[order].
 								psOrderTarget)->baseWidth;
-							left = MAP_COORD(psDroid->asOrderList[order].x) - size/2;
+							left = map_coord(psDroid->asOrderList[order].x) - size/2;
 							right = left + size;
 							size = ((STRUCTURE_STATS *)psDroid->asOrderList[order].
 								psOrderTarget)->baseBreadth;
-							up = MAP_COORD(psDroid->asOrderList[order].y) - size/2;
+							up = map_coord(psDroid->asOrderList[order].y) - size/2;
 							down = up + size;
 							//hilight the tiles
 							for(i = left; i < right; i++)
@@ -3985,16 +3985,16 @@ static void preprocessTiles(void)
 						else if (psDroid->asOrderList[order].order == DORDER_LINEBUILD)
 						{
 							//need to highlight the length of the wall
-							left = MAP_COORD(psDroid->asOrderList[order].x);
-							right = MAP_COORD(psDroid->asOrderList[order].x2);
+							left = map_coord(psDroid->asOrderList[order].x);
+							right = map_coord(psDroid->asOrderList[order].x2);
 							if (left > right)
 							{
 								size = left;
 								left = right;
 								right = size;
 							}
-							up = MAP_COORD(psDroid->asOrderList[order].y);
-							down = MAP_COORD(psDroid->asOrderList[order].y2);
+							up = map_coord(psDroid->asOrderList[order].y);
+							down = map_coord(psDroid->asOrderList[order].y2);
 							if (up > down)
 							{
 								size = up;
@@ -4174,7 +4174,7 @@ static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDW
 		{
 			if (abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z) >= 63)
 			{
-				UDWORD tempX = MIN(structX + alteredPoints[i].x, WORLD_COORD(mapWidth - 1));
+				UDWORD tempX = MIN(structX + alteredPoints[i].x, world_coord(mapWidth - 1));
 				UDWORD tempY = MAX(structY - alteredPoints[i].z, 0);
 				SDWORD shift = centreHeight - map_Height(tempX, tempY);
 
@@ -4201,7 +4201,7 @@ static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDW
 			if (abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z) >= 63)
 			{
 				UDWORD tempX = MAX(structX - alteredPoints[i].x, 0);
-				UDWORD tempY = MIN(structY + alteredPoints[i].z, WORLD_COORD(mapHeight - 1));
+				UDWORD tempY = MIN(structY + alteredPoints[i].z, world_coord(mapHeight - 1));
 				SDWORD shift = centreHeight - map_Height(tempX, tempY);
 
 				alteredPoints[i].y -= (shift - 4);
@@ -4213,8 +4213,8 @@ static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDW
 		{
 			if(abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z)>=63)
 			{
-				UDWORD tempX = MIN(structX + alteredPoints[i].z, WORLD_COORD(mapWidth - 1));
-				UDWORD tempY = MIN(structY + alteredPoints[i].x, WORLD_COORD(mapHeight - 1));
+				UDWORD tempX = MIN(structX + alteredPoints[i].z, world_coord(mapWidth - 1));
+				UDWORD tempY = MIN(structY + alteredPoints[i].x, world_coord(mapHeight - 1));
 				SDWORD shift = centreHeight - map_Height(tempX, tempY);
 
 				alteredPoints[i].y -= (shift - 4);
@@ -4581,8 +4581,8 @@ UDWORD	getSuggestedPitch( void )
 	worldAngle = (UDWORD) ((UDWORD)player.r.y/DEG_1)%360;
 	/* Now, we need to track angle too - to avoid near z clip! */
 
-	xPos = player.p.x + WORLD_COORD(visibleXTiles/2);
-	yPos = player.p.z + WORLD_COORD(visibleYTiles/2);
+	xPos = player.p.x + world_coord(visibleXTiles/2);
+	yPos = player.p.z + world_coord(visibleYTiles/2);
 // 	getBestPitchToEdgeOfGrid(xPos,yPos,360-worldAngle,&pitch);
 	getPitchToHighestPoint(xPos, yPos, 360-worldAngle, 0, &pitch);
 

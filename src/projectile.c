@@ -826,9 +826,9 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 						// (must be at least 0 because we don't use signed integers
 						//  this shouldn't be larger than the height and width of the map either)
 						TargetX = MAX(psObj->startX + extendRad * dx / rad, 0);
-						TargetX = MIN(TargetX, WORLD_COORD(mapWidth - 1));
+						TargetX = MIN(TargetX, world_coord(mapWidth - 1));
 						TargetY = MAX(psObj->startY + extendRad * dy / rad, 0);
-						TargetY = MIN(TargetY, WORLD_COORD(mapHeight - 1));
+						TargetY = MIN(TargetY, world_coord(mapHeight - 1));
 						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, TargetX, TargetY, psObj->z, NULL, TRUE, bPenetrate, -1 );
 					}
 					else
@@ -1073,9 +1073,9 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 						// (must be at least 0 because we don't use signed integers
 						//  this shouldn't be larger than the height and width of the map either)
 						TargetX = MAX(psObj->startX + extendRad * dx / iRad, 0);
-						TargetX = MIN(TargetX, WORLD_COORD(mapWidth - 1));
+						TargetX = MIN(TargetX, world_coord(mapWidth - 1));
 						TargetY = MAX(psObj->startY + extendRad * dy / iRad, 0);
-						TargetY = MIN(TargetY, WORLD_COORD(mapHeight - 1));						
+						TargetY = MIN(TargetY, world_coord(mapHeight - 1));						
 						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, TargetX, TargetY, psObj->z, NULL, TRUE, bPenetrate, -1 );
 					}
 					else
