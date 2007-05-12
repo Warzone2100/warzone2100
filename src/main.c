@@ -25,8 +25,7 @@
 // Get platform defines before checking for them!
 #include "lib/framework/frame.h"
 
-#include <SDL/SDL_main.h>
-#include <SDL/SDL_timer.h>
+#include <SDL/SDL.h>
 #include <physfs.h>
 
 /* For SHGetFolderPath */
@@ -476,8 +475,7 @@ int main(int argc, char *argv[])
 	scanDataDirs();
 
 	// find out if the lobby stuff has been disabled
-	if (!bDisableLobby &&
-		!lobbyInitialise())// ajl. Init net stuff. Lobby can modify startup conditions like commandline.
+	if (!bDisableLobby && !lobbyInitialise()) // ajl. Init net stuff. Lobby can modify startup conditions like commandline.
 	{
 		return -1;
 	}
@@ -486,6 +484,7 @@ int main(int argc, char *argv[])
 	{
 		return -1;
 	}
+	atexit(frameShutDown);
 
 	pie_SetFogStatus(FALSE);
 	pie_ScreenFlip(CLEAR_BLACK);
@@ -506,6 +505,7 @@ int main(int argc, char *argv[])
 	}
 	pal_AddNewPalette(psPaletteBuffer);
 	free(psPaletteBuffer);
+	atexit(pal_ShutDown);
 
 	pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 	pie_SetFogStatus(FALSE);
@@ -515,6 +515,7 @@ int main(int argc, char *argv[])
 	{
 		return -1;
 	}
+	atexit(systemShutdown);
 
 	//set all the pause states to false
 	setAllPauseStates(FALSE);
@@ -528,7 +529,8 @@ int main(int argc, char *argv[])
 				screen_RestartBackDrop();
 				if (!frontendInitialise("wrf/frontend.wrf"))
 				{
-					goto exit;
+					debug(LOG_ERROR, "Shutting down after failure");
+					exit(EXIT_FAILURE);
 				}
 
 				frontendInitialised = TRUE;
@@ -541,25 +543,30 @@ int main(int argc, char *argv[])
 				// load up a save game
 				if (!loadGameInit(saveGameName))
 				{
-					goto exit;
+					debug(LOG_ERROR, "Shutting down after failure");
+					exit(EXIT_FAILURE);
 				}
 				screen_StopBackDrop();
 				break;
 			case GS_NORMAL:
-				if (!levLoadData(pLevelName, NULL, 0)) {
-					goto exit;
+				if (!levLoadData(pLevelName, NULL, 0))
+				{
+					debug(LOG_ERROR, "Shutting down after failure");
+					exit(EXIT_FAILURE);
 				}
 				//after data is loaded check the research stats are valid
 				if (!checkResearchStats())
 				{
 					debug( LOG_ERROR, "Invalid Research Stats" );
-					goto exit;
+					debug(LOG_ERROR, "Shutting down after failure");
+					exit(EXIT_FAILURE);
 				}
 				//and check the structure stats are valid
 				if (!checkStructureStats())
 				{
 					debug( LOG_ERROR, "Invalid Structure Stats" );
-					goto exit;
+					debug(LOG_ERROR, "Shutting down after failure");
+					exit(EXIT_FAILURE);
 				}
 
 				//set a flag for the trigger/event system to indicate initialisation is complete
@@ -709,7 +716,8 @@ int main(int argc, char *argv[])
 			case GS_TITLE_SCREEN:
 				if (!frontendShutdown())
 				{
-					goto exit;
+					debug(LOG_ERROR, "Shutting down after failure");
+					exit(EXIT_FAILURE);
 				}
 				frontendInitialised = FALSE;
 				break;
@@ -736,21 +744,7 @@ int main(int argc, char *argv[])
 
 	debug(LOG_MAIN, "Shutting down Warzone 2100");
 
-	systemShutdown();
-	pal_ShutDown();
-	frameShutDown();
-
-	return 0;
-
-exit:
-
-	debug(LOG_ERROR, "Shutting down after failure");
-
-	systemShutdown();
-	pal_ShutDown();
-	frameShutDown();
-
-	return 1;
+	return EXIT_SUCCESS;
 }
 
 
