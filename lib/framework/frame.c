@@ -182,31 +182,30 @@ static void processEvent(SDL_Event *event)
 	switch(event->type)
 	{
 		case SDL_ACTIVEEVENT:
-#if defined(WZ_OS_LINUX)
-			// Ignore focus gain through SDL_APPMOUSEFOCUS on Linux, since it mostly happens accidentialy, while on Windows this is the only possibility to gain focus
-			if ( event->active.gain == 1 && event->active.state != SDL_APPMOUSEFOCUS )
-#else
-			if ( event->active.gain == 1 )
-#endif
-			{
-				debug( LOG_NEVER, "WM_SETFOCUS\n");
-				if (focusState != FOCUS_IN)
-				{
-					debug( LOG_NEVER, "FOCUS_SET\n");
-					focusState = FOCUS_SET;
-				}
-			}
 			// Ignore focus loss through SDL_APPMOUSEFOCUS, since it mostly happens accidentialy
-			else if ( event->active.state != SDL_APPMOUSEFOCUS )
+			// active.state is a bitflag! Mixed events (eg. APPACTIVE|APPMOUSEFOCUS) will thus not be ignored.
+			if ( event->active.state != SDL_APPMOUSEFOCUS )
 			{
-				debug( LOG_NEVER, "WM_KILLFOCUS\n");
-				if (focusState != FOCUS_OUT)
+				if ( event->active.gain == 1 )
 				{
-					debug( LOG_NEVER, "FOCUS_KILL\n");
-					focusState = FOCUS_KILL;
+					debug( LOG_NEVER, "WM_SETFOCUS\n");
+					if (focusState != FOCUS_IN)
+					{
+						debug( LOG_NEVER, "FOCUS_SET\n");
+						focusState = FOCUS_SET;
+					}
 				}
-				/* Have to tell the input system that we've lost focus */
-				inputLooseFocus();
+				else
+				{
+					debug( LOG_NEVER, "WM_KILLFOCUS\n");
+					if (focusState != FOCUS_OUT)
+					{
+						debug( LOG_NEVER, "FOCUS_KILL\n");
+						focusState = FOCUS_KILL;
+					}
+					/* Have to tell the input system that we've lost focus */
+					inputLooseFocus();
+				}
 			}
 			break;
 		case SDL_KEYUP:
