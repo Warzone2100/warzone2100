@@ -93,7 +93,6 @@ STAR	stars[30];	// quick hack for loading stuff
 extern int WFont;
 extern BOOL bLoadSaveUp;
 
-static BOOL		firstcall;
 static UDWORD	loadScreenCallNo=0;
 static BOOL		bPlayerHasLost = FALSE;
 static BOOL		bPlayerHasWon = FALSE;
@@ -121,10 +120,7 @@ UDWORD	i;
 //
 BOOL frontendInitVars(void)
 {
-	firstcall = TRUE;
-
 	initStars();
-
 
 	return TRUE;
 }
@@ -133,20 +129,22 @@ BOOL frontendInitVars(void)
 // Main Front end game loop.
 TITLECODE titleLoop(void)
 {
+	static BOOL firstcall = TRUE;
 	TITLECODE RetCode = TITLECODE_CONTINUE;
 
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 	pie_SetFogStatus(FALSE);
 	screen_RestartBackDrop();
 
-	if (firstcall) {
-		startTitleMenu();
-		titleMode = TITLE;
+	if (firstcall)
+	{
 		firstcall = FALSE;
 
-		frameSetCursorFromRes(IDC_DEFAULT);						// reset cursor	(sw)
+		changeTitleMode(TITLE);
 
-		if(NetPlay.bLobbyLaunched)					// lobbies skip title screens & go into the game
+		frameSetCursorFromRes(IDC_DEFAULT); // reset cursor (sw)
+
+		if(NetPlay.bLobbyLaunched) // lobbies skip title screens & go into the game
 		{
 			if (NetPlay.bHost)
 			{
@@ -156,7 +154,6 @@ TITLECODE titleLoop(void)
 			{
 				ingame.bHostSetup = FALSE;
 			}
-
 			changeTitleMode(QUIT);
 		}
 	}
@@ -229,16 +226,13 @@ TITLECODE titleLoop(void)
 			runGameOptions3Menu();
 			break;
 
-
 		case QUIT:
 			RetCode = TITLECODE_QUITGAME;
 			break;
 
 		case STARTGAME:
 		case LOADSAVEGAME:
-
 			initLoadingScreen(TRUE);//render active
-
   			if (titleMode == LOADSAVEGAME)
 			{
 				RetCode = TITLECODE_SAVEGAMELOAD;
@@ -247,12 +241,9 @@ TITLECODE titleLoop(void)
 			{
 				RetCode = TITLECODE_STARTGAME;
 			}
-
 			return RetCode;			// don't flip!
-			break;
 
 		case SHOWINTRO:
-
 			pie_SetFogStatus(FALSE);
 			pie_ScreenFlip(CLEAR_BLACK);//flip to clear screen but not here//reshow intro video.
 	  		pie_ScreenFlip(CLEAR_BLACK);//flip to clear screen but not here
@@ -377,14 +368,13 @@ void startCreditsScreen(void)
 }
 
 /* This function does nothing - since it's already been drawn */
-void	runCreditsScreen( void )
+void runCreditsScreen( void )
 {
 	// Check for key presses now.
-	if(keyReleased(KEY_ESC)
+	if( keyReleased(KEY_ESC)
 	   || keyReleased(KEY_SPACE)
 	   || mouseReleased(MOUSE_LMB)
-	   || (gameTime-lastChange > 4000)
-	   )
+	   || gameTime-lastChange > 4000 )
 	{
 		lastChange = gameTime;
 		changeTitleMode(QUIT);

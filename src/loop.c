@@ -612,7 +612,6 @@ GAMECODE gameLoop(void)
 		#ifdef DISP2D
 				disp2DModeChange();
 		#endif
-				dispModeChange();
 			}
 	}
 
@@ -664,7 +663,6 @@ GAMECODE gameLoop(void)
 #ifdef DISP2D
 			disp2DModeChange();
 #endif
-			dispModeChange();
 		}
 		return GAMECODE_QUITGAME;
 	}

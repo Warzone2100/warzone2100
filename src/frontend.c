@@ -63,7 +63,7 @@
 
 static int StartWithGame = 1; // New game starts in Cam 1.
 
-tMode titleMode;					// the global case
+tMode titleMode; // the global case
 int				FEFont;
 char			pLevelName[MAX_LEVEL_NAME_SIZE+1];	//256];			// vital! the wrf file to use.
 
@@ -182,7 +182,7 @@ void changeTitleMode(tMode mode)
 {
 	tMode oldMode;
 
-	widgDelete(psWScreen,FRONTEND_BACKDROP);		// delete backdrop.
+	widgDelete(psWScreen, FRONTEND_BACKDROP);		// delete backdrop.
 
 	oldMode = titleMode;							// store old mode
 	titleMode = mode;								// set new mode
@@ -291,22 +291,24 @@ BOOL startTitleMenu(void)
 	addTopForm();
 	addBottomForm();
 
-		addTextButton(FRONTEND_SINGLEPLAYER,FRONTEND_POS2X,FRONTEND_POS2Y, _("Single Player Campaign"),FALSE,FALSE);
-		if(!bDisableLobby)
-		{
-			addTextButton(FRONTEND_MULTIPLAYER,	FRONTEND_POS3X,FRONTEND_POS3Y, _("Multi Player Game")   ,FALSE,FALSE);
-		}else{
-			addTextButton(FRONTEND_MULTIPLAYER,	FRONTEND_POS3X,FRONTEND_POS3Y, _("Multi Player Game")   ,FALSE,TRUE);
-		}
-		addTextButton(FRONTEND_TUTORIAL,	FRONTEND_POS4X,FRONTEND_POS4Y, _("Tutorial") ,FALSE,FALSE);
-		addTextButton(FRONTEND_OPTIONS,		FRONTEND_POS5X,FRONTEND_POS5Y, _("Options") ,FALSE,FALSE);
+	addTextButton(FRONTEND_SINGLEPLAYER, FRONTEND_POS2X, FRONTEND_POS2Y, _("Single Player Campaign"), FALSE, FALSE);
+	if(!bDisableLobby)
+	{
+		addTextButton(FRONTEND_MULTIPLAYER, FRONTEND_POS3X,FRONTEND_POS3Y, _("Multi Player Game"), FALSE, FALSE);
+	}
+	else
+	{
+		addTextButton(FRONTEND_MULTIPLAYER, FRONTEND_POS3X, FRONTEND_POS3Y, _("Multi Player Game"),FALSE,TRUE);
+	}
+	addTextButton(FRONTEND_TUTORIAL, FRONTEND_POS4X, FRONTEND_POS4Y, _("Tutorial") ,FALSE,FALSE);
+	addTextButton(FRONTEND_OPTIONS, FRONTEND_POS5X, FRONTEND_POS5Y, _("Options") ,FALSE,FALSE);
 
-	addTextButton(FRONTEND_QUIT,		FRONTEND_POS6X,FRONTEND_POS6Y, _("Quit Game"),FALSE,FALSE);
+	addTextButton(FRONTEND_QUIT, FRONTEND_POS6X, FRONTEND_POS6Y, _("Quit Game"), FALSE, FALSE);
 
-	addSideText	 (FRONTEND_SIDETEXT ,	FRONTEND_SIDEX,FRONTEND_SIDEY,_("MAIN MENU"));
+	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("MAIN MENU"));
 
 	SetMousePos(320, FRONTEND_BOTFORMY + FRONTEND_POS2Y);
-	SnapToID(&InterfaceSnap,4);
+	SnapToID(&InterfaceSnap, 4);
 
 	return TRUE;
 }
@@ -318,11 +320,11 @@ BOOL runTitleMenu(void)
 
 	processFrontendSnap(TRUE);
 
-	id = widgRunScreen(psWScreen);						// Run the current set of widgets
+	id = widgRunScreen(psWScreen); // Run the current set of widgets
 
-		switch(id)
-		{
-			case FRONTEND_QUIT:
+	switch(id)
+	{
+		case FRONTEND_QUIT:
 			changeTitleMode(CREDITS);
 			break;
 		case FRONTEND_MULTIPLAYER:
@@ -339,10 +341,10 @@ BOOL runTitleMenu(void)
 			break;
 		default:
 			break;
-		}
+	}
 
 	StartCursorSnap(&InterfaceSnap);
-	widgDisplayScreen(psWScreen);						// show the widgets currently running
+	widgDisplayScreen(psWScreen); // show the widgets currently running
 
 	return TRUE;
 }

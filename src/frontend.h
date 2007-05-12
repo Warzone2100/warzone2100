@@ -27,28 +27,28 @@
 
 // determines which option screen to use. when in GS_TITLE_SCREEN mode.
 typedef enum _title_mode {
-		TITLE,						// 0 intro mode
-		SINGLE,						// 1 single player menu
-		MULTI,						// 2 multiplayer menu
-		OPTIONS,					// 3 options menu
-		GAME,						// 4
-		TUTORIAL,					// 5  tutorial/fastplay
-		CREDITS,					// 6  credits
-		PROTOCOL,					// 7  MULTIPLAYER, select proto
-		MULTIOPTION,				// 8 MULTIPLAYER, select game options
-		FORCESELECT,				// 9 MULTIPLAYER, Force design screen
-		GAMEFIND,					// 10 MULTIPLAYER, gamefinder.
-		MULTILIMIT,					// 11 MULTIPLAYER, Limit the multistuff.
-		STARTGAME,					// 12 Fire up the game
-		SHOWINTRO,					// 13 reshow the intro
-		QUIT,						// 14 leaving game
-		LOADSAVEGAME,				// 15 loading a save game
-		KEYMAP,						// 16 keymap editor
-		GAME2,						// 17 second options menu.
-		GAME3,						// 18 third options menu.
-//		GRAPHICS,					// 5
-//		VIDEO,
-//	DEMOMODE,					// demo mode. remove for release?
+	TITLE,			// 0 intro mode
+	SINGLE,			// 1 single player menu
+	MULTI,			// 2 multiplayer menu
+	OPTIONS,		// 3 options menu
+	GAME,			// 4
+	TUTORIAL,		// 5  tutorial/fastplay
+	CREDITS,		// 6  credits
+	PROTOCOL,		// 7  MULTIPLAYER, select proto
+	MULTIOPTION,	// 8 MULTIPLAYER, select game options
+	FORCESELECT,	// 9 MULTIPLAYER, Force design screen
+	GAMEFIND,		// 10 MULTIPLAYER, gamefinder.
+	MULTILIMIT,		// 11 MULTIPLAYER, Limit the multistuff.
+	STARTGAME,		// 12 Fire up the game
+	SHOWINTRO,		// 13 reshow the intro
+	QUIT,			// 14 leaving game
+	LOADSAVEGAME,	// 15 loading a save game
+	KEYMAP,			// 16 keymap editor
+	GAME2,			// 17 second options menu.
+	GAME3,			// 18 third options menu.
+//	GRAPHICS,
+//	VIDEO,
+//	DEMOMODE,		// demo mode. remove for release?
 } tMode;
 
 // This dos'nt compile on the PSX.

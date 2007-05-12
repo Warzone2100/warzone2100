@@ -83,8 +83,7 @@ BOOL gwInitialise(void)
 	int i;
 #endif
 
-	ASSERT( psGateways == NULL,
-		"gwInitialise: gatway list has not been reset" );
+	ASSERT( psGateways == NULL, "gwInitialise: gateway list has not been reset" );
 
 	psGateways = NULL;
 
@@ -115,7 +114,7 @@ BOOL gwInitialise(void)
 // Shutdown the gateway system
 void gwShutDown(void)
 {
-	GATEWAY		*psNext;
+	GATEWAY *psNext;
 
 	while (psGateways != NULL)
 	{
@@ -484,9 +483,8 @@ void gwFreeGateway(GATEWAY *psDel)
 
 	LIST_REMOVE(psGateways, psDel, GATEWAY);
 
-	if (psMapTiles)		// this lines fixes the bug where we were closing the gateways after freeing the map
+	if (psMapTiles) // this lines fixes the bug where we were closing the gateways after freeing the map
 	{
-
 		// clear the map flags
 		if (psDel->x1 == psDel->x2)
 		{
@@ -507,7 +505,8 @@ void gwFreeGateway(GATEWAY *psDel)
 
 	}
 
-	if(psDel->psLinks != NULL) {
+	if (psDel->psLinks != NULL)
+	{
 		free(psDel->psLinks);
 	}
 	free(psDel);

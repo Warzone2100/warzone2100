@@ -322,10 +322,10 @@ BOOL missionLimboExpand(void)
 }
 
 
-//mission initialisation game code
+// mission initialisation game code
 void initMission(void)
 {
-	UDWORD		inc;
+	UDWORD inc;
 
 	debug( LOG_NEVER, "***Init Mission ***\n" );
 	//mission.type = MISSION_NONE;

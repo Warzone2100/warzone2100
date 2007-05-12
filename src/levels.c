@@ -197,8 +197,8 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 		case LTK_BETWEEN:
 		case LTK_MKEEP:
 		case LTK_MCLEAR:
-        case LTK_EXPAND_LIMBO:
-        case LTK_MKEEP_LIMBO:
+		case LTK_EXPAND_LIMBO:
+		case LTK_MKEEP_LIMBO:
 			if (state == LP_START || state == LP_WAITDATA)
 			{
 				// start a new level data set
@@ -328,8 +328,8 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 					||psDataSet->type == LDS_CAMCHANGE ||
 					psDataSet->type == LDS_EXPAND ||
 					psDataSet->type == LDS_MCLEAR ||
-                    psDataSet->type == LDS_EXPAND_LIMBO ||
-                    psDataSet->type == LDS_MKEEP_LIMBO
+					psDataSet->type == LDS_EXPAND_LIMBO ||
+					psDataSet->type == LDS_MKEEP_LIMBO
 					)
 				{
 					levError("Missing dataset command");
@@ -589,8 +589,8 @@ BOOL levLoadBaseData(char *pName)
 		psNewLevel->type != LDS_MKEEP
 		&& psNewLevel->type != LDS_EXPAND &&
 		psNewLevel->type != LDS_MCLEAR &&
-        psNewLevel->type != LDS_EXPAND_LIMBO &&
-        psNewLevel->type != LDS_MKEEP_LIMBO
+		psNewLevel->type != LDS_EXPAND_LIMBO &&
+		psNewLevel->type != LDS_MKEEP_LIMBO
 		)
 	{
 		debug( LOG_ERROR, "levLoadBaseData: incorect level type" );
@@ -616,7 +616,7 @@ BOOL levLoadBaseData(char *pName)
 			// load the data
 			debug(LOG_WZ, "levLoadBaseData: Loading %s", psBaseData->apDataFiles[i]);
 			if (!resLoad(psBaseData->apDataFiles[i], i,
-						 DisplayBuffer, displayBufferSize))
+						DisplayBuffer, displayBufferSize))
 			{
 				return FALSE;
 			}
@@ -639,7 +639,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 {
 	LEVEL_DATASET	*psNewLevel, *psBaseData, *psChangeLevel;
 	SDWORD			i;
-    BOOL            bCamChangeSaveGame;
+	BOOL            bCamChangeSaveGame;
 
 	debug(LOG_WZ, "Loading level %s", pName);
 	// reset fog
@@ -658,22 +658,22 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 	/* Keep a copy of the present level name */
 	strcpy(currentLevelName,pName);
 
-    bCamChangeSaveGame = FALSE;
-    if (pSaveName && saveType == GTYPE_SAVE_START)
-    {
-        if (psNewLevel->psChange != NULL)
-        {
-            bCamChangeSaveGame = TRUE;
-        }
-    }
+	bCamChangeSaveGame = FALSE;
+	if (pSaveName && saveType == GTYPE_SAVE_START)
+	{
+		if (psNewLevel->psChange != NULL)
+		{
+			bCamChangeSaveGame = TRUE;
+		}
+	}
 
 	// select the change dataset if there is one
-    psChangeLevel = NULL;
+	psChangeLevel = NULL;
 	if (((psNewLevel->psChange != NULL) && (psCurrLevel != NULL)) || bCamChangeSaveGame)
 	{
-        //store the level name
+		//store the level name
 		debug( LOG_WZ, "levLoadData: Found CAMCHANGE dataset\n" );
-        psChangeLevel = psNewLevel;
+		psChangeLevel = psNewLevel;
 		psNewLevel = psNewLevel->psChange;
 	}
 
@@ -763,7 +763,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 				// load the data
 				debug(LOG_WZ, "levLoadData: Loading %s ...", psBaseData->apDataFiles[i]);
 				if (!resLoad(psBaseData->apDataFiles[i], i,
-							 DisplayBuffer, displayBufferSize))
+							DisplayBuffer, displayBufferSize))
 				{
 					return FALSE;
 				}
@@ -792,7 +792,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 				}
 			}
 
-            //set the mission type before the saveGame data is loaded
+			//set the mission type before the saveGame data is loaded
 			if (saveType == GTYPE_SAVE_MIDMISSION)
 			{
 				debug( LOG_NEVER, "levLoadData: init mission stuff\n" );
@@ -828,9 +828,9 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 		}
 	}
 
-    //we need to load up the save game data here for a camchange
-    if (bCamChangeSaveGame)
-    {
+	//we need to load up the save game data here for a camchange
+	if (bCamChangeSaveGame)
+	{
 		debug( LOG_NEVER, "levLoadData: no .gam file for level: BETWEEN mission\n" );
 		if (pSaveName != NULL)
 		{
@@ -848,31 +848,30 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 				return FALSE;
 			}
 
-    		if (!campaignReset())
-	    	{
-		    	return FALSE;
-		    }
+			if (!campaignReset())
+			{
+				return FALSE;
+			}
 
-            //we now need to go to the next level
-            //psNewLevel = psChangeLevel;
-            //psChangeLevel = NULL;
+			//we now need to go to the next level
+			//psNewLevel = psChangeLevel;
+			//psChangeLevel = NULL;
 
-            //stageTwoShutDown??
-        }
-    }
+			//stageTwoShutDown??
+		}
+	}
 
 
 	// load the new data
 	debug( LOG_NEVER, "levLoadData: loading mission dataset: %s\n", psNewLevel->pName );
-	for(i=0; i<LEVEL_MAXFILES; i++)
+	for(i=0; i < LEVEL_MAXFILES; i++)
 	{
 		if (psNewLevel->game == i)
 		{
 			// do some more initialising if necessary
-			if (psNewLevel->type == LDS_COMPLETE || psNewLevel->type >= MULTI_TYPE_START ||
-				(psBaseData != NULL && !bCamChangeSaveGame))
+			if (psNewLevel->type == LDS_COMPLETE || psNewLevel->type >= MULTI_TYPE_START || (psBaseData != NULL && !bCamChangeSaveGame))
 			{
-				iV_Reset();	//unload font, to avoid crash on 8th load... ajl 15/sep/99
+				iV_Reset(); //unload font, to avoid crash on 8th load... ajl 15/sep/99
 				if (!stageTwoInitialise())
 				{
 					return FALSE;
@@ -882,7 +881,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 			// load a savegame if there is one - but not if already done so
 			if (pSaveName != NULL && !bCamChangeSaveGame)
 			{
-                //set the mission type before the saveGame data is loaded
+				//set the mission type before the saveGame data is loaded
 				if (saveType == GTYPE_SAVE_MIDMISSION)
 				{
 					debug( LOG_NEVER, "levLoadData: init mission stuff\n" );
@@ -998,7 +997,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 
 			// set the view position if necessary
 			if ((pSaveName != NULL)
-			    || ((psNewLevel->type != LDS_BETWEEN)
+				|| ((psNewLevel->type != LDS_BETWEEN)
 				&& (psNewLevel->type != LDS_EXPAND)
 				&& (psNewLevel->type != LDS_EXPAND_LIMBO)
 				))
@@ -1014,7 +1013,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 			// load the data
 			debug(LOG_WZ, "levLoadData: Loading %s", psNewLevel->apDataFiles[i]);
 			if (!resLoad(psNewLevel->apDataFiles[i], i + CURRENT_DATAID,
-						 DisplayBuffer, displayBufferSize))
+						DisplayBuffer, displayBufferSize))
 			{
 				return FALSE;
 			}
@@ -1024,17 +1023,17 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 	dataClearSaveFlag();
 
 	//if (pSaveName != NULL && saveType == GTYPE_SAVE_MIDMISSION)
-    if (pSaveName != NULL)
+	if (pSaveName != NULL)
 	{
 		//load MidMission Extras
 		if (!loadMissionExtras(pSaveName, psNewLevel->type))
 		{
 			return FALSE;
 		}
-    }
+	}
 
-    if (pSaveName != NULL && saveType == GTYPE_SAVE_MIDMISSION)
-    {
+	if (pSaveName != NULL && saveType == GTYPE_SAVE_MIDMISSION)
+	{
 		//load script stuff
 		// load the event system state here for a save game
 		debug( LOG_NEVER, "levLoadData: loading script system state\n" );
@@ -1051,24 +1050,24 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 
 //want to test with release build too
 //#ifdef DEBUG
-    //this enables us to to start cam2/cam3 without going via a save game and get the extra droids
-    //in from the script-controlled Transporters
-    if (!pSaveName && psNewLevel->type == LDS_CAMSTART)
-    {
-        eventFireCallbackTrigger((TRIGGER_TYPE)CALL_NO_REINFORCEMENTS_LEFT);
-    }
+	//this enables us to to start cam2/cam3 without going via a save game and get the extra droids
+	//in from the script-controlled Transporters
+	if (!pSaveName && psNewLevel->type == LDS_CAMSTART)
+	{
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_NO_REINFORCEMENTS_LEFT);
+	}
 //#endif
 
-    //restore the level name for comparisons on next mission load up
-    if (psChangeLevel == NULL)
-    {
-        psCurrLevel = psNewLevel;
-    }
-    else
-    {
-        psCurrLevel = psChangeLevel;
-    }
+	//restore the level name for comparisons on next mission load up
+	if (psChangeLevel == NULL)
+	{
+		psCurrLevel = psNewLevel;
+	}
+	else
+	{
+		psCurrLevel = psChangeLevel;
+	}
 
 
-    return TRUE;
+	return TRUE;
 }
