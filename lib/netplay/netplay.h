@@ -155,9 +155,6 @@ extern BOOL	NETgetGlobalPlayerData(UDWORD dpid, void *pData, SDWORD *pSize);
 extern BOOL	NETsetLocalPlayerData(UDWORD dpid, void *pData, SDWORD size);
 extern BOOL	NETsetGlobalPlayerData(UDWORD dpid, void *pData, SDWORD size);
 
-extern WZ_DECL_DEPRECATED BOOL	NETspectate(void);			// create a spectator
-extern WZ_DECL_DEPRECATED BOOL	NETisSpectator(UDWORD dpid);	// check for spectator status.
-
 #include "netlog.h"
 
 // encryption
