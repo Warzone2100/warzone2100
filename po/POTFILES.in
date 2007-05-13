@@ -32,7 +32,6 @@ lib/netplay/netplay.c
 lib/netplay/netjoin_stub.c
 lib/netplay/netlog.c
 lib/netplay/netcrypt.c
-lib/netplay/netaudio_stub.c
 lib/ivis_opengl/piepalette.c
 lib/ivis_opengl/textdraw.c
 lib/ivis_opengl/ivi.c
