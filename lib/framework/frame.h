@@ -129,6 +129,7 @@ UDWORD HashStringIgnoreCase( const char *String );
 
 
 /* Endianness hacks */
+// TODO Use SDL_SwapXXXX instead
 
 #ifdef __BIG_ENDIAN__
 static inline void endian_uword(UWORD *uword) {
