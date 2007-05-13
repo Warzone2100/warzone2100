@@ -522,15 +522,9 @@ BOOL lobbyInitialise(void)
 
 BOOL multiInitialise(void)
 {
-	// NET AUDIO CAPTURE
-#ifdef WIN32			//Disabled for now.  (returns FALSE always anyway) --Qamly
-//	NETinitPlaybackBuffer(audio_GetDirectSoundObj());			// pass in a dsound pointer to use.
-#endif
-
-	return TRUE;  // use the menus dumbass.
+	// Perform multiplayer initialization here, on success return TRUE
+	return TRUE;
 }
-
-
 
 // ////////////////////////////////////////////////////////////////////////////
 // say goodbye to everyone else
