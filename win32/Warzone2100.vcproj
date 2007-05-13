@@ -402,10 +402,6 @@
 				Name="netplay"
 				>
 				<File
-					RelativePath="..\lib\netplay\netaudio_stub.c"
-					>
-				</File>
-				<File
 					RelativePath="..\lib\netplay\netcrypt.c"
 					>
 				</File>
