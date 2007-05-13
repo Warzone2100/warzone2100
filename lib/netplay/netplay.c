@@ -1158,7 +1158,8 @@ void NETregisterServer(int state) {
 
 static void NETallowJoining(void) {
 	unsigned int i;
-	UDWORD numgames=1;	// always 1 on normal server
+	UDWORD numgames = 1;	// always 1 on normal server
+	endian_udword(&numgames); // Make sure it is little endian, conforming with our protocol
 	char buffer[5];
 
 	if (allow_joining == FALSE) return;
@@ -1336,9 +1337,8 @@ BOOL NEThaltJoining(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////
-// find games on open connection, option to do this asynchronously
-// since it can sometimes take a while.
-BOOL NETfindGame(BOOL async)	// may (not) want to use async here...
+// find games on open connection
+BOOL NETfindGame()
 {
 	static UDWORD gamecount = 0, gamesavailable;
 	IPaddress ip;
@@ -1388,6 +1388,7 @@ BOOL NETfindGame(BOOL async)	// may (not) want to use async here...
 	    && SDLNet_SocketReady(tcp_socket)
 	    && SDLNet_TCP_Recv(tcp_socket, buffer, sizeof(int))) {
 		gamesavailable=(UDWORD)buffer[0];
+		endian_udword(gamesavailable);
 	}
 
 	debug( LOG_NET, "receiving info of %d game(s)\n", gamesavailable );

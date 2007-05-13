@@ -476,7 +476,7 @@ BOOL LobbyLaunched(void)
 
 	// set the player info as soon as possible to avoid screwy scores appearing elsewhere.
 	NETplayerInfo();
-	NETfindGame(TRUE);
+	NETfindGame();
 
 	for (i = 0; i < MAX_PLAYERS && NetPlay.players[i].dpid != NetPlay.dpidPlayer; i++);
 

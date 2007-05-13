@@ -141,7 +141,7 @@ extern SDWORD	NETgetGameFlags(UDWORD flag);			// return one of the four flags(dw
 extern SDWORD	NETgetGameFlagsUnjoined(UDWORD gameid, UDWORD flag);	// return one of the four flags(dword) about the game.
 extern BOOL	NETsetGameFlags(UDWORD flag, SDWORD value);	// set game flag(1-4) to value.
 extern BOOL	NEThaltJoining(void);				// stop new players joining this game
-extern BOOL	NETfindGame(BOOL asynchronously);		// find games being played(uses GAME_GUID);
+extern BOOL	NETfindGame(void);		// find games being played(uses GAME_GUID);
 extern BOOL	NETjoinGame(UDWORD gameNumber, const char* playername);			// join game given with playername
 extern BOOL	NEThostGame(const char* SessionName, const char* PlayerName,// host a game
 			    SDWORD one, SDWORD two, SDWORD three, SDWORD four, UDWORD plyrs);

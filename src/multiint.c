@@ -600,7 +600,7 @@ void runGameFind(void )
 		lastupdate = gameTime;
 		if(safeSearch)
 		{
-			NETfindGame(TRUE);						// find games asynchronously
+			NETfindGame();						// find games synchronously
 		}
 		addGames();									//redraw list
 	}
@@ -616,7 +616,7 @@ void runGameFind(void )
 
 	if(id == MULTIOP_REFRESH)
 	{
-		NETfindGame(TRUE);								// find games asynchronously
+		NETfindGame();								// find games synchronously
 		addGames();										//redraw list.
 	}
 
@@ -689,7 +689,7 @@ void startGameFind(void)
 					_("Refresh Games List"),IMAGE_REFRESH,IMAGE_REFRESH,FALSE);			// Find Games button
 	}
 
-	NETfindGame(TRUE);
+	NETfindGame();
 	addGames();	// now add games.
 }
 
