@@ -1156,7 +1156,7 @@ void NETregisterServer(int state) {
 
 void NETallowJoining() {
 	unsigned int i;
-	UDWORD numgames=1;	// always 1 on normal server
+	const UDWORD numgames = SDL_SwapBE32(1);	// always 1 on normal server
 	char buffer[5];
 
 	if (allow_joining == FALSE) return;
@@ -1384,11 +1384,11 @@ BOOL NETfindGame(BOOL async)	// may (not) want to use async here...
 
 	if (   SDLNet_CheckSockets(socket_set, 1000) > 0
 	    && SDLNet_SocketReady(tcp_socket)
-	    && SDLNet_TCP_Recv(tcp_socket, buffer, sizeof(int))) {
-		gamesavailable=(UDWORD)buffer[0];
+	    && SDLNet_TCP_Recv(tcp_socket, &gamesavailable, sizeof(gamesavailable))) {
+		gamesavailable = SDL_SwapBE32(gamesavailable);
 	}
 
-	debug( LOG_NET, "receiving info of %d game(s)\n", gamesavailable );
+	debug( LOG_NET, "receiving info of %u game(s)\n", gamesavailable );
 
 	do {
 		if (   SDLNet_CheckSockets(socket_set, 1000) > 0
