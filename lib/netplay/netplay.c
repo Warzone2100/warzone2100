@@ -1158,8 +1158,7 @@ void NETregisterServer(int state) {
 
 static void NETallowJoining(void) {
 	unsigned int i;
-	UDWORD numgames = 1;	// always 1 on normal server
-	endian_udword(&numgames); // Make sure it is little endian, conforming with our protocol
+	const UDWORD numgames = SDL_SwapBE32(1);	// always 1 on normal server
 	char buffer[5];
 
 	if (allow_joining == FALSE) return;
@@ -1387,8 +1386,7 @@ BOOL NETfindGame()
 	if (   SDLNet_CheckSockets(socket_set, 1000) > 0
 	    && SDLNet_SocketReady(tcp_socket)
 	    && SDLNet_TCP_Recv(tcp_socket, buffer, sizeof(int))) {
-		gamesavailable=(UDWORD)buffer[0];
-		endian_udword(gamesavailable);
+		gamesavailable=SDL_SwapBE32((UDWORD)buffer[0]);
 	}
 
 	debug( LOG_NET, "receiving info of %d game(s)\n", gamesavailable );

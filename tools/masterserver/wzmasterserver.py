@@ -107,8 +107,8 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
             # Lock the gamelist to prevent new games while output.
             listLock.acquire()
             
-            # Transmit the length of the following list as integer.
-            count = struct.pack('i', len(gameList))
+            # Transmit the length of the following list as unsigned integer (in network byte-order: big-endian).
+            count = struct.pack('!I', len(gameList))
             self.wfile.write(count)
             
             # Transmit the single games.
