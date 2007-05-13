@@ -45,7 +45,6 @@
 
 // ////////////////////////////////////////////////////////////////////////
 // Prototypes
-UDWORD	NEThashFile(char *pFileName);
 UDWORD	NEThashBuffer(char *pData, UDWORD size);
 
 BOOL	NETsetKey			(UDWORD c1,UDWORD c2,UDWORD c3, UDWORD c4);
@@ -54,56 +53,6 @@ void	NETunmanglePacket	(NETMSG *msg);
 
 BOOL	NETmangleData		( UDWORD *input, UDWORD *result, UDWORD dataSize);
 BOOL	NETunmangleData		( UDWORD *input, UDWORD *result, UDWORD dataSize);
-
-// ////////////////////////////////////////////////////////////////////////
-// make a hash value from an exe name.
-UDWORD	NEThashFile(char *pFileName)
-{
-	UDWORD	hashval,c,*val;
-	PHYSFS_file	*pFileHandle;
-	char	fileName[255];
-
-	UBYTE	inBuff[2048];		// must be multiple of 4 bytes.
-
-	strcpy(fileName,pFileName);
-
-	hashval =0;
-
-	debug( LOG_WZ, "NEThashFile: Hashing File\n" );
-
-	// open the file.
-	pFileHandle = PHYSFS_openRead(fileName);									// check file exists
-	if (pFileHandle == NULL)
-	{
-		debug( LOG_WZ, "NEThashFile: Failed\n" );
-		return 0;															// failed
-	}
-
-	// multibyte/buff version
-	while(PHYSFS_read( pFileHandle, &inBuff, sizeof(inBuff), 1 ) == 1)				// get number of droids in force
-	{
-		for(c=0;c<2048 ;c+=4)
-		{	val = (UDWORD*)&inBuff[c];
-			hashval = hashval ^ *val;
-		}
-
-	}
-
-#if 0 // 1 byte version
-	// xor the file with it's self.
-	while((c=getc(pFileHandle))!=EOF)
-	{
-		hashval = hashval ^ c;
-	}
-#endif
-	PHYSFS_close(pFileHandle);
-
-	debug( LOG_WZ, "NEThashFile: Hash Complete :   *****  %u  ***** is todays magic number.\n",hashval );
-//	DBERROR(("%d",hashval));
-
-	return hashval;
-}
-
 
 // ////////////////////////////////////////////////////////////////////////
 // return a hash from a data buffer.

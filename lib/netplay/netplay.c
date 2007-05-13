@@ -481,8 +481,6 @@ BOOL NETinit(BOOL bFirstCall)
 	UDWORD i;
 	debug( LOG_NET, "NETinit" );
 
-//	NEThashFile("warzonedebug.exe");
-
 	if(bFirstCall)
 	{
 		debug( LOG_NEVER, "NETPLAY: Init called, MORNIN'\n" );

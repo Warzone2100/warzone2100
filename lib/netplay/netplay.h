@@ -170,7 +170,6 @@ extern NETMSG*	NETmanglePacket(NETMSG *msg);
 extern void	NETunmanglePacket(NETMSG *msg);
 extern BOOL	NETmangleData(UDWORD *input, UDWORD *result, UDWORD dataSize);
 extern BOOL	NETunmangleData(UDWORD *input, UDWORD *result, UDWORD dataSize);
-extern UDWORD	NEThashFile(char *pFileName);
 extern UBYTE	NEThashVal(UDWORD value);
 extern UDWORD	NEThashBuffer(char *pData, UDWORD size);
 

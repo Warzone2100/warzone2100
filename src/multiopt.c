@@ -508,11 +508,7 @@ BOOL lobbyInitialise(void)
 
 	// RODZ : hashing the file is no more an option.
 	// hash the file to get the key.and catch out the exe patchers.
-//#ifdef DEBUG
 	NETsetKey( 0xdaf456, 0xb72a5, 0x114d0, 0x2a17);
-//#else
-//	NETsetKey(NEThashFile("warzone.exe"), 0xb72a5, 0x114d0, 0x2a7);
-//#endif
 
 	if(NetPlay.bLobbyLaunched) // now check for lobby launching..
 	{
