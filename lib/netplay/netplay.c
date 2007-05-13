@@ -1385,11 +1385,11 @@ BOOL NETfindGame()
 
 	if (   SDLNet_CheckSockets(socket_set, 1000) > 0
 	    && SDLNet_SocketReady(tcp_socket)
-	    && SDLNet_TCP_Recv(tcp_socket, buffer, sizeof(int))) {
-		gamesavailable=SDL_SwapBE32((UDWORD)buffer[0]);
+	    && SDLNet_TCP_Recv(tcp_socket, &gamesavailable, sizeof(gamesavailable))) {
+		gamesavailable = SDL_SwapBE32(gamesavailable);
 	}
 
-	debug( LOG_NET, "receiving info of %d game(s)\n", gamesavailable );
+	debug( LOG_NET, "receiving info of %u game(s)\n", gamesavailable );
 
 	do {
 		if (   SDLNet_CheckSockets(socket_set, 1000) > 0
