@@ -3908,6 +3908,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					DEBUG,
 					"_XOPEN_SOURCE=600L",
 					"$(inherited)",
 				);

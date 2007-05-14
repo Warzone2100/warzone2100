@@ -117,6 +117,10 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 
 	// TODO Don't forget to add new options to ParseCommandLine also!
 
+#if defined(WZ_OS_MAC) && defined(DEBUG)
+	debug_enable_switch( "all" );
+#endif /* WZ_OS_MAC && DEBUG */
+
 	/* loop through command line */
 	for (i = 1; i < argc; ++i) {
 		tokenType = argv[i];

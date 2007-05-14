@@ -57,6 +57,10 @@
 
 #endif /* WZ_OS_WIN */
 
+#if defined(WZ_OS_MAC)
+#  include <sys/syslimits.h>
+#  define MAX_PATH PATH_MAX
+#endif /* WZ_OS_MAC */
 
 #if defined(WZ_OS_UNIX)
 
