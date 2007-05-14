@@ -11,3 +11,9 @@ You will also need a recent version of GNU bison to complete the build
 process.  The version included with Mac OS X 10.4 "Tiger" is not capable
 of properly processing the grammars that Warzone 2100 uses.
 
+There are two build configurations available.  'Release' is compiled
+normally, while 'Debug' sets the DEBUG preprocessor flag and automatically
+sets the game's debugging options to the equivalent of --debug all when
+launched, unless overwritten with a --debug command-line option.  The
+debugging output can be viewed with Console.app.
+
