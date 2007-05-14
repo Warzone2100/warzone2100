@@ -144,7 +144,6 @@
 		0246A1280BD3CC43004D1C70 /* screen.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1180BD3CC43004D1C70 /* screen.c */; };
 		0246A1290BD3CC43004D1C70 /* tex.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A11A0BD3CC43004D1C70 /* tex.c */; };
 		0246A12A0BD3CC43004D1C70 /* textdraw.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A11B0BD3CC43004D1C70 /* textdraw.c */; };
-		0246A1340BD3CC58004D1C70 /* netaudio_stub.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A12C0BD3CC58004D1C70 /* netaudio_stub.c */; };
 		0246A1350BD3CC58004D1C70 /* netcrypt.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A12D0BD3CC58004D1C70 /* netcrypt.c */; };
 		0246A1360BD3CC58004D1C70 /* netjoin_stub.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A12E0BD3CC58004D1C70 /* netjoin_stub.c */; };
 		0246A1370BD3CC58004D1C70 /* netlog.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A12F0BD3CC58004D1C70 /* netlog.c */; };
@@ -928,7 +927,6 @@
 		0246A1190BD3CC43004D1C70 /* screen.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = screen.h; path = ../lib/ivis_opengl/screen.h; sourceTree = SOURCE_ROOT; };
 		0246A11A0BD3CC43004D1C70 /* tex.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = tex.c; path = ../lib/ivis_opengl/tex.c; sourceTree = SOURCE_ROOT; };
 		0246A11B0BD3CC43004D1C70 /* textdraw.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = textdraw.c; path = ../lib/ivis_opengl/textdraw.c; sourceTree = SOURCE_ROOT; };
-		0246A12C0BD3CC58004D1C70 /* netaudio_stub.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = netaudio_stub.c; path = ../lib/netplay/netaudio_stub.c; sourceTree = SOURCE_ROOT; };
 		0246A12D0BD3CC58004D1C70 /* netcrypt.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = netcrypt.c; path = ../lib/netplay/netcrypt.c; sourceTree = SOURCE_ROOT; };
 		0246A12E0BD3CC58004D1C70 /* netjoin_stub.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = netjoin_stub.c; path = ../lib/netplay/netjoin_stub.c; sourceTree = SOURCE_ROOT; };
 		0246A12F0BD3CC58004D1C70 /* netlog.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = netlog.c; path = ../lib/netplay/netlog.c; sourceTree = SOURCE_ROOT; };
@@ -1867,7 +1865,6 @@
 		0246A12B0BD3CC47004D1C70 /* Netplay */ = {
 			isa = PBXGroup;
 			children = (
-				0246A12C0BD3CC58004D1C70 /* netaudio_stub.c */,
 				0246A12D0BD3CC58004D1C70 /* netcrypt.c */,
 				0246A12E0BD3CC58004D1C70 /* netjoin_stub.c */,
 				0246A12F0BD3CC58004D1C70 /* netlog.c */,
@@ -3344,7 +3341,6 @@
 				0246A1280BD3CC43004D1C70 /* screen.c in Sources */,
 				0246A1290BD3CC43004D1C70 /* tex.c in Sources */,
 				0246A12A0BD3CC43004D1C70 /* textdraw.c in Sources */,
-				0246A1340BD3CC58004D1C70 /* netaudio_stub.c in Sources */,
 				0246A1350BD3CC58004D1C70 /* netcrypt.c in Sources */,
 				0246A1360BD3CC58004D1C70 /* netjoin_stub.c in Sources */,
 				0246A1370BD3CC58004D1C70 /* netlog.c in Sources */,
