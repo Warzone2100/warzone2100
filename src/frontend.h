@@ -101,10 +101,6 @@ extern BOOL CancelPressed			(void);
 BOOL		runGameOptions2Menu		(void);
 BOOL		runGameOptions3Menu		(void);
 
-
-BOOL addIGTextButton(UDWORD id, UWORD y, const char *string, UDWORD Style);
-
-
 // ////////////////////////////////////////////////////////////////////////////
 // defines.
 

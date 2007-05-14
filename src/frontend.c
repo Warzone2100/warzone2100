@@ -1556,34 +1556,3 @@ static void displayBigSlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, U
 
 
 }
-
-
-// Placed here to avoid automatic inlining in InGameOp.c by the Playstation compiler.
-//
-BOOL addIGTextButton(UDWORD id, UWORD y, const char *string, UDWORD Style)
-{
-	W_BUTINIT sButInit;
-
-	memset( &sButInit, 0, sizeof(W_BUTINIT) );
-
-	//resume
-	sButInit.formID		= INTINGAMEOP;
-	sButInit.id			= id;
-	sButInit.style		= Style;
-
-
-	sButInit.x			= INTINGAMEOP_1_X;
-	sButInit.y			= y;
-	sButInit.width		= INTINGAMEOP_OP_W;
-	sButInit.height		= INTINGAMEOP_OP_H;
-
-	sButInit.FontID		= WFont;
-	sButInit.pDisplay	= displayTextOption;
-	sButInit.pText		= string;
-	widgAddButton(psWScreen, &sButInit);
-
-	return TRUE;
-}
-
-
-
