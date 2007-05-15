@@ -26,7 +26,7 @@
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include "networking/tcp_server.hpp"
-#include "lobby.hpp"
+#include "lobby/lobby.hpp"
 #include <boost/thread/recursive_mutex.hpp>
 
 const unsigned short lobbyPort = 9998;
