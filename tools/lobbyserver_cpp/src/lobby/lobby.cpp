@@ -22,261 +22,145 @@
 */
 
 #include "lobby.hpp"
-#include <boost/thread/recursive_mutex.hpp>
-#include <boost/array.hpp>
-#include <boost/utility.hpp>
 #include "game.hpp"
-#include <boost/bind.hpp>
-#include <list>
-#include "read_write_mutex.hpp"
 
-#define lobbyDev true
-extern boost::recursive_mutex cout_mutex;
-extern boost::recursive_mutex cerr_mutex;
-
-class GameLobby::impl : boost::noncopyable
+GameLobby::gameLock::gameLock(GameLobby& lobby) :
+    _lobby(lobby),
+    iterValid(false)
 {
-    public:
-        class gameLock : boost::noncopyable
-        {
-            public:
-                inline gameLock(impl* Pimpl) :
-                    pimpl(Pimpl),
-                    iterValid(false)
-                {
-                }
+}
 
-                inline gameLock(impl* Pimpl, const GAMESTRUCT& game) :
-                    pimpl(Pimpl),
-                    iterValid(false)
-                {
-                    *this = game;
-                }
-
-                inline ~gameLock()
-                {
-                    clear();
-                }
-
-                inline gameLock& operator=(const GAMESTRUCT& game)
-                {
-                    // Check to see if the new game isn't the same as the old one
-                    if (*this == game)
-                        return *this;
-
-                    // If we already have a game then remove it first
-                    clear();
-
-                    {
-                        ReadWriteMutex::scoped_lock lock(pimpl->_mutex);
-
-                        // Insert our game into the list
-                        _iter = pimpl->_games.insert(pimpl->_games.begin(), game);
-                        iterValid = true;
-                    }
-
-                    return *this;
-                }
-
-                inline void clear()
-                {
-                    if (iterValid)
-                    {
-                        ReadWriteMutex::scoped_lock lock(pimpl->_mutex);
-
-                        pimpl->_games.erase(_iter);
-
-                        iterValid = false;
-                    }
-                }
-
-                inline bool operator==(const GAMESTRUCT& game)
-                {
-                    if (!iterValid)
-                        return false;
-
-                    ReadWriteMutex::scoped_readonlylock lock(pimpl->_mutex);
-
-                    return *_iter == game;
-                }
-                
-                inline bool operator!=(const GAMESTRUCT& game)
-                {
-                    return !(*this == game);
-                }
-
-            private:
-                impl* pimpl;
-
-                std::list<GAMESTRUCT>::iterator _iter;
-                bool iterValid;
-        };
-
-        inline void printAllGames()
-        {
-            ReadWriteMutex::scoped_readonlylock lock(_mutex);
-
-            for_each(_games.begin(), _games.end(), printGame);
-        }
-
-        inline void listGames(boost::shared_ptr<boost::asio::ip::tcp::socket> socket)
-        {
-            ReadWriteMutex::scoped_readonlylock lock(_mutex);
-
-            const unsigned int gameCount = _games.size();
-
-            boost::asio::write(*socket, boost::asio::buffer(&gameCount, sizeof(gameCount)));
-
-            for_each(_games.begin(), _games.end(), boost::bind(sendGame, socket, _1));
-        }
-
-        static inline void sendGame(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, const GAMESTRUCT& game)
-        {
-            boost::asio::write(*socket, boost::asio::buffer(&game, sizeof(game)));
-        }
-
-    private:
-        ReadWriteMutex _mutex;
-        std::list<GAMESTRUCT> _games;
-};
-
-GameLobby::GameLobby() :
-    pimpl(new impl)
+GameLobby::gameLock::gameLock(GameLobby& lobby, const GAMESTRUCT& game) :
+    _lobby(lobby),
+    iterValid(false)
 {
+    *this = game;
+}
+
+GameLobby::gameLock::~gameLock()
+{
+    clear();
+}
+
+GameLobby::gameLock& GameLobby::gameLock::operator=(const GAMESTRUCT& game)
+{
+    // Check to see if the new game isn't the same as the old one
+    if (*this == game)
+        return *this;
+
+    // If we already have a game then remove it first
+    clear();
+
+    {
+        ReadWriteMutex::scoped_lock lock(_lobby._mutex);
+
+        // Insert our game into the list
+        _iter = _lobby._games.insert(_lobby._games.begin(), game);
+        iterValid = true;
+    }
+
+    return *this;
+}
+
+void GameLobby::gameLock::clear()
+{
+    if (iterValid)
+    {
+        ReadWriteMutex::scoped_lock lock(_lobby._mutex);
+
+        _lobby._games.erase(_iter);
+
+        iterValid = false;
+    }
+}
+
+bool GameLobby::gameLock::operator==(const GAMESTRUCT& game)
+{
+    if (!iterValid)
+        return false;
+
+    ReadWriteMutex::scoped_readonlylock lock(_lobby._mutex);
+
+    return *_iter == game;
+}
+
+bool GameLobby::gameLock::operator!=(const GAMESTRUCT& game)
+{
+    return !(*this == game);
 }
 
 GameLobby::~GameLobby()
 {
-    delete pimpl;
+    // Make sure all pending operations are finished before closing down, by acquiring a write lock first
+    ReadWriteMutex::scoped_lock lock(_mutex);
 }
 
-void GameLobby::addGame(boost::shared_ptr<boost::asio::ip::tcp::socket> socket)
+GameLobby::const_iterator::const_iterator(const GameLobby& lobby, const std::list<GAMESTRUCT>::const_iterator& iter) :
+    _lobby(lobby),
+    lock(_lobby._mutex),
+    _iter(iter)
 {
-    // Debug
-    if (lobbyDev)
-    {
-        boost::recursive_mutex::scoped_lock lock(cout_mutex);
-        std::cout << "<- addg" << std::endl;
-    }
-
-    impl::gameLock lobbiedGame(pimpl);
-
-    for (bool firstRun = true;; firstRun = false)
-    {
-        GAMESTRUCT newGameData;
-        try
-        {
-            boost::asio::read(*socket, boost::asio::buffer(&newGameData, sizeof(GAMESTRUCT)));
-
-	    strncpy(newGameData.desc.host, socket->remote_endpoint().address().to_string().c_str(), sizeof(newGameData.desc.host));
-	    newGameData.desc.host[sizeof(newGameData.desc.host) - 1] = 0;
-
-            lobbiedGame = newGameData;
-        }
-        catch (boost::asio::error& e)
-        {
-            if (e == boost::asio::error::eof)
-            {
-                boost::recursive_mutex::scoped_lock lock(cerr_mutex);
-                std::cerr << "EOF" << std::endl;
-                return;
-            }
-            else if (e == boost::asio::error::connection_aborted)
-            {
-                boost::recursive_mutex::scoped_lock lock(cerr_mutex);
-                std::cerr << "Connection aborted" << std::endl;
-                return;
-            }
-            else
-            {
-                throw;
-            }
-        }
-
-        // Debug
-        if (lobbyDev && !firstRun)
-        {
-            boost::recursive_mutex::scoped_lock lock(cout_mutex);
-            std::cout << "<- addg update" << std::endl;
-        }
-
-        // Debug
-        if (lobbyDev)
-            pimpl->printAllGames();
-    }
 }
 
-void GameLobby::listGames(boost::shared_ptr<boost::asio::ip::tcp::socket> socket)
+GameLobby::const_iterator::const_iterator(const const_iterator& org) :
+    _lobby(org._lobby),
+    lock(_lobby._mutex),
+    _iter(org._iter)
 {
-    // Debug
-    if (lobbyDev)
-    {
-        boost::recursive_mutex::scoped_lock lock(cout_mutex);
-        std::cout << "<- list" << std::endl;
-    }
-
-    static const GAMESTRUCT dummyGame = {"Tha Dummy Game!!!!", {48, 0, "192.168.1.11", 8, 5, 14, 0, 0, 0}};
-
-    impl::gameLock lobbiedGame(pimpl, dummyGame);
-
-    pimpl->listGames(socket);
 }
 
-static inline void printCommandSafe(const boost::array<char, 5>& command)
+bool GameLobby::const_iterator::operator==(const const_iterator& i) const
 {
-    // This is the buffer we will print from, it is one byte longer as the command itself so that we can append a '\0' to it
-    boost::array<char, sizeof(command) + 1> buffer;
+    if (&_lobby != &i._lobby)
+        return false;
 
-    std::copy(command.begin(), command.end(), buffer.begin());
-    // Set last char to '\0'
-    *(buffer.end() - 1) = 0;
-
-    boost::recursive_mutex::scoped_lock lock(cout_mutex);
-
-    std::cout << "Received: \"" << buffer.data();
-
-    // If there is a '\0' contained in the command, output it as the last character
-    if (strlen(buffer.data()) < sizeof(command))
-        std::cout << "\\0";
-
-    std::cout << "\"" << std::endl;
+    return _iter == i._iter;
 }
 
-void GameLobby::handleRequest(boost::shared_ptr<boost::asio::ip::tcp::socket> socket)
+bool GameLobby::const_iterator::operator!=(const const_iterator& i) const
 {
-    try
-    {
-        if (lobbyDev)
-        {
-            boost::recursive_mutex::scoped_lock lock(cout_mutex);
-            std::cout << "Incoming connection from: " << socket->remote_endpoint() << "; on: " << socket->local_endpoint() << std::endl;
-        }
+    return !(*this == i);
+}
 
-        boost::array<char, 5> buffer;
+void GameLobby::const_iterator::operator++()
+{
+    ++_iter;
+}
 
-        boost::asio::read(*socket, boost::asio::buffer(buffer));
+std::size_t GameLobby::const_iterator::operator-(const const_iterator& i) const
+{
+    // This needs to be a comparison between two iterators of the same GameLobby
+    if (&_lobby != &i._lobby)
+        return 0;
 
-        if (std::equal(buffer.begin(), buffer.end(), "addg"))
-        {
-            addGame(socket);
-        }
-        else if (std::equal(buffer.begin(), buffer.end(), "list"))
-        {
-            listGames(socket);
-        }
-        else
-        {
-            printCommandSafe(buffer);
-        }
-    }
-    catch (boost::asio::error& e)
-    {
-        boost::recursive_mutex::scoped_lock lock(cerr_mutex);
-        std::cerr << "handleRequest: Boost::asio exception: " << e << std::endl;
-    }
-    catch (std::exception& e)
-    {
-        boost::recursive_mutex::scoped_lock lock(cerr_mutex);
-        std::cerr << "handleRequest: Exception: " << e.what() << std::endl;
-    }
+    // The current iterator needs to be ==end()
+    // the other (i) ==begin()
+    if (_iter == _lobby._games.end() && i._iter == _lobby._games.begin()
+     || _iter == _lobby._games.begin() && i._iter == _lobby._games.end())
+        return _lobby.size();
+
+    return 0;
+}
+
+GameLobby::const_iterator::const_reference GameLobby::const_iterator::operator*() const
+{
+    return *_iter;
+}
+
+GameLobby::const_iterator GameLobby::begin() const
+{
+    ReadWriteMutex::scoped_readonlylock lock(_mutex);
+    return GameLobby::const_iterator(*this, _games.begin());
+}
+
+GameLobby::const_iterator GameLobby::end() const
+{
+    return const_iterator(*this, _games.end());
+}
+
+std::size_t GameLobby::size() const
+{
+    ReadWriteMutex::scoped_readonlylock lock(_mutex);
+
+    return _games.size();
 }

@@ -24,23 +24,77 @@
 #ifndef _LOBBY_HPP_
 #define _LOBBY_HPP_
 
-#include <boost/asio.hpp>
+#include "read_write_mutex.hpp"
+#include "game.hpp"
+#include <list>
 
 class GameLobby
 {
     public:
-        GameLobby();
         ~GameLobby();
 
-	void handleRequest(boost::shared_ptr<boost::asio::ip::tcp::socket> socket);
+        class gameLock : boost::noncopyable
+        {
+            public:
+                gameLock(GameLobby& lobby);
+                gameLock(GameLobby& lobby, const GAMESTRUCT& game);
+                ~gameLock();
+
+                gameLock& operator=(const GAMESTRUCT& game);
+                void clear();
+
+                bool operator==(const GAMESTRUCT& game);
+                bool operator!=(const GAMESTRUCT& game);
+
+            private:
+                GameLobby& _lobby;
+
+                std::list<GAMESTRUCT>::iterator _iter;
+                bool iterValid;
+        };
+
+        class const_iterator
+        {
+            public:
+                typedef const GAMESTRUCT& const_reference;
+
+            private:
+                // Should only be constructed by GameLobby
+                const_iterator(const GameLobby& lobby, const std::list<GAMESTRUCT>::const_iterator& iter);
+
+            public:
+                const_iterator(const const_iterator& org);
+
+            private:
+                // Private copy assignment operator, to lazy to implement it right now
+                const_iterator& operator=(const const_iterator& org);
+
+            public:
+                bool operator==(const const_iterator& i) const;
+                bool operator!=(const const_iterator& i) const;
+                void operator++();
+
+                std::size_t operator-(const const_iterator& i) const;
+
+                const_reference operator*() const;
+
+            private:
+                const GameLobby& _lobby;
+                ReadWriteMutex::scoped_readonlylock lock;
+
+                std::list<GAMESTRUCT>::const_iterator _iter;
+
+                friend class GameLobby;
+        };
+
+        const_iterator begin() const;
+        const_iterator end() const;
+
+        std::size_t size() const;
 
     private:
-        void addGame(boost::shared_ptr<boost::asio::ip::tcp::socket> socket);
-        void listGames(boost::shared_ptr<boost::asio::ip::tcp::socket> socket);
-        
-    private:
-        class impl;
-        impl* pimpl;
+        ReadWriteMutex _mutex;
+        std::list<GAMESTRUCT> _games;
 };
 
 #endif // _LOBBY_HPP_

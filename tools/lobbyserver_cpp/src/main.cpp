@@ -27,18 +27,19 @@
 #include <boost/bind.hpp>
 #include "networking/tcp_server.hpp"
 #include "lobby/lobby.hpp"
+#include "requesthandler.hpp"
 #include <boost/thread/recursive_mutex.hpp>
 
 const unsigned short lobbyPort = 9998;
 
-static GameLobby lobby;
+static lobbyprotocol::requestHandler LobbyRequestHandler(boost::shared_ptr<GameLobby>(new GameLobby));
 static boost::thread_group threads;
 boost::recursive_mutex cout_mutex;
 boost::recursive_mutex cerr_mutex;
 
 static void handleRequestInThread(boost::shared_ptr<boost::asio::ip::tcp::socket> socket)
 {
-	threads.create_thread(boost::bind(&GameLobby::handleRequest, &lobby, socket));
+	threads.create_thread(boost::bind(&lobbyprotocol::requestHandler::operator(), &LobbyRequestHandler, socket));
 }
 
 int main(int argc, char* argv[])
