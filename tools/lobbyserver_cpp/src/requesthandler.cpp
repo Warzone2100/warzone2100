@@ -112,14 +112,14 @@ class lobbyprotocol::requestHandler::impl
         void listGames(boost::shared_ptr<boost::asio::ip::tcp::socket> socket)
         {
             GameLobby::const_iterator beginIter(_lobby->begin()), endIter(_lobby->end());
-            const unsigned int gameCount = endIter - beginIter;
+            const unsigned int gameCount = htonl(endIter - beginIter);
 
             // Debug
             if (lobbyDev)
             {
                 boost::recursive_mutex::scoped_lock lock(cout_mutex);
-                std::cout << "<- list"
-                          << "  \\- I know " << gameCount << " games." << std::endl;
+                std::cout << "<- list\n"
+                          << "  \\- I know " << ntohl(gameCount) << " games." << std::endl;
             }
 
             // First write out a little endian unsigned 32bit long integer as game count
