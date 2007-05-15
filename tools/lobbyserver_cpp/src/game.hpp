@@ -86,4 +86,6 @@ inline bool operator==(const GAMESTRUCT& left, const GAMESTRUCT& right)
 #endif
 }
 
+extern void printGame(const GAMESTRUCT& game);
+
 #endif // _INCLUDE_GAME_HPP_
