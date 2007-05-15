@@ -24,13 +24,22 @@
 #include <iostream>
 #include <boost/thread/thread.hpp>
 #include <boost/asio.hpp>
-#include <boost/array.hpp>
-#include "game.hpp"
+#include <boost/bind.hpp>
+#include "networking/tcp_server.hpp"
+#include "lobby.hpp"
+#include <boost/thread/recursive_mutex.hpp>
 
 const unsigned short lobbyPort = 9998;
-const bool lobbyDev = true;
 
-int start();
+static GameLobby lobby;
+static boost::thread_group threads;
+boost::recursive_mutex cout_mutex;
+boost::recursive_mutex cerr_mutex;
+
+static void handleRequestInThread(boost::shared_ptr<boost::asio::ip::tcp::socket> socket)
+{
+	threads.create_thread(boost::bind(&GameLobby::handleRequest, &lobby, socket));
+}
 
 int main(int argc, char* argv[])
 {
@@ -38,135 +47,28 @@ int main(int argc, char* argv[])
 
 	//return lobbyServer(lobbyPort);
 
+	unsigned int returnValue = 1;
 	try
 	{
-		return start();
+		boost::shared_ptr<boost::asio::io_service> io_service(new boost::asio::io_service);
+		TCPServer tcp_server(io_service, handleRequestInThread);
+
+		tcp_server.listen(lobbyPort);
+		io_service->run();
+		returnValue = 0;
 	}
 	catch (boost::asio::error& e)
 	{
-		std::cerr << "Boost::asio exception: " << e << std::endl;
+		boost::recursive_mutex::scoped_lock lock(cerr_mutex);
+		std::cerr << "main: Boost::asio exception: " << e << std::endl;
 	}
 	catch (std::exception& e)
 	{
-		std::cerr << "Exception: " << e.what() << std::endl;
+		boost::recursive_mutex::scoped_lock lock(cerr_mutex);
+		std::cerr << "main: Exception: " << e.what() << std::endl;
 	}
 
-	return 1;
-}
+	threads.join_all();
 
-std::string str_repeat(const std::string& src, unsigned int count)
-{
-	std::string tmp;
-	tmp.reserve(src.length() * count);
-	for (unsigned int i = 0; i != count; ++i)
-	{
-		tmp += src;
-	}
-
-	return tmp;
-}
-
-template <class T>
-inline std::string to_string (const T& t)
-{
-    std::stringstream ss;
-    ss << t;
-    return ss.str();
-}
-
-void printGame(boost::shared_ptr<GAMESTRUCT> game)
-{
-	std::string gameName(game->name);
-	std::string gameSize(to_string(game->desc.dwSize));
-	std::string gameFlags(to_string(game->desc.dwFlags));
-	std::string gameHost(game->desc.host);
-	std::string gameMaxPlayers(to_string(game->desc.dwMaxPlayers));
-	std::string gameCurrentPlayers(to_string(game->desc.dwCurrentPlayers));
-	std::string gameUser1(to_string(game->desc.dwUser1));
-	std::string gameUser2(to_string(game->desc.dwUser2));
-	std::string gameUser3(to_string(game->desc.dwUser3));
-	std::string gameUser4(to_string(game->desc.dwUser4));
-
-	unsigned int targetLength = std::max(std::max(std::max(std::max(std::max(std::max(std::max(std::max(std::max(gameName.length() + 2, gameSize.length()), gameFlags.length()), gameHost.length() + 2), gameMaxPlayers.length()), gameCurrentPlayers.length()), gameUser1.length()), gameUser2.length()), gameUser3.length()), gameUser4.length());
-
-	std::cout << "Game info:\n"
-	          << "+------------------" << str_repeat("-", targetLength) << "-+\n"
-	          << "| Name           | \"" << gameName << "\"" << str_repeat(" ", targetLength - gameName.length() - 2) << " |\n"
-	          << "| Size           | " << str_repeat(" ", targetLength - gameSize.length()) << gameSize << " |\n"
-	          << "| Flags          | " << str_repeat(" ", targetLength - gameFlags.length()) << gameFlags << " |\n"
-	          << "| Host           | \"" << gameHost << "\"" << str_repeat(" ", targetLength - gameHost.length() - 2) << " |\n"
-	          << "| MaxPlayers     | " << str_repeat(" ", targetLength - gameMaxPlayers.length()) << gameMaxPlayers << " |\n"
-	          << "| CurrentPlayers | " << str_repeat(" ", targetLength - gameCurrentPlayers.length()) << gameCurrentPlayers << " |\n"
-	          << "| User1          | " << str_repeat(" ", targetLength - gameUser1.length()) << gameUser1 << " |\n"
-	          << "| User2          | " << str_repeat(" ", targetLength - gameUser2.length()) << gameUser2 << " |\n"
-	          << "| User3          | " << str_repeat(" ", targetLength - gameUser3.length()) << gameUser3 << " |\n"
-	          << "| User4          | " << str_repeat(" ", targetLength - gameUser4.length()) << gameUser4 << " |\n"
-	          << "+------------------" << str_repeat("-", targetLength) << "-+" << std::endl;
-}
-
-int start()
-{
-	boost::asio::io_service io_service;
-
-	boost::asio::ip::tcp::acceptor acceptor(io_service, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), lobbyPort));
-
-	for (unsigned int count = 0; count != 10; ++count)
-	{
-		try
-		{
-			boost::asio::ip::tcp::socket socket(io_service);
-			acceptor.accept(socket);
-
-			std::cout << "Incoming connection from: " << socket.remote_endpoint() << "; on: " << socket.local_endpoint() << std::endl;
-
-			std::cout << socket.remote_endpoint().address() << std::endl;
-
-			boost::array<char, 5> buffer;
-
-			for (boost::shared_ptr<GAMESTRUCT> newGameData;;)
-			{
-				size_t reply_length = boost::asio::read(socket, boost::asio::buffer(buffer));
-
-				std::cout << "Received: " << buffer.data() << std::endl;
-
-				boost::array<char, 5> cmdAddGame = {'a','d','d','g', 0};
-				boost::array<char, 5> cmdListGames = {'l','i','s','t', 0};
-				if (buffer == cmdAddGame)
-				{
-					// Debug
-					if (lobbyDev)
-						std::cout << "<- addg" << std::endl;
-
-					newGameData = boost::shared_ptr<GAMESTRUCT>(new GAMESTRUCT);
-
-					reply_length = boost::asio::read(socket, boost::asio::buffer(newGameData.get(), sizeof(GAMESTRUCT)));
-
-					if (lobbyDev)
-						printGame(newGameData);
-				}
-				else if (buffer == cmdListGames)
-				{
-					// Debug
-					if (lobbyDev)
-						std::cout << "<- list" << std::endl;
-
-					static const unsigned int gameCount = 1;
-					static const GAMESTRUCT dummyGame = {"Tha Dummy Game!!!!", {48, 0, "192.168.1.11", 8, 5, 14, 0, 0, 0}};
-
-					boost::asio::write(socket, boost::asio::buffer(&gameCount, sizeof(unsigned int)));
-					boost::asio::write(socket, boost::asio::buffer(&dummyGame, sizeof(GAMESTRUCT)));
-				}
-			}
-		}
-		catch (boost::asio::error& e)
-		{
-			if (!(e == boost::asio::error::eof))
-				throw;
-
-			std::cerr << "EOF" << std::endl;
-			continue;
-		}
-	}
-
-	return 0;
+	return returnValue;
 }
