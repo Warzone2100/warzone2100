@@ -25,11 +25,7 @@
 #include <boost/thread/thread.hpp>
 #include <boost/asio.hpp>
 #include <boost/array.hpp>
-
-extern "C" {
-#include <framework/frame.h>
-#include <netplay/netplay.h>
-}
+#include "game.hpp"
 
 const unsigned short lobbyPort = 9998;
 const bool lobbyDev = true;
@@ -127,30 +123,33 @@ int start()
 
 			boost::array<char, 5> buffer;
 
-			size_t reply_length = boost::asio::read(socket, boost::asio::buffer(buffer));
-
-			std::cout << "Received: " << buffer.data() << std::endl;
-
-			boost::array<char, 5> cmdAddGame = {'a','d','d','g', 0};
-			boost::array<char, 5> cmdListGames = {'l','i','s','t', 0};
-			if (buffer == cmdAddGame)
+			for (boost::shared_ptr<GAMESTRUCT> newGameData;;)
 			{
-				// Debug
-				if (lobbyDev)
-					std::cout << "<- addg" << std::endl;
+				size_t reply_length = boost::asio::read(socket, boost::asio::buffer(buffer));
 
-				boost::shared_ptr<GAMESTRUCT> newGameData(new GAMESTRUCT);
+				std::cout << "Received: " << buffer.data() << std::endl;
 
-				reply_length = boost::asio::read(socket, boost::asio::buffer(newGameData.get(), sizeof(GAMESTRUCT)));
+				boost::array<char, 5> cmdAddGame = {'a','d','d','g', 0};
+				boost::array<char, 5> cmdListGames = {'l','i','s','t', 0};
+				if (buffer == cmdAddGame)
+				{
+					// Debug
+					if (lobbyDev)
+						std::cout << "<- addg" << std::endl;
 
-				if (lobbyDev)
-					printGame(newGameData);
-			}
-			else if (buffer == cmdListGames)
-			{
-				// Debug
-				if (lobbyDev)
-					std::cout << "<- list" << std::endl;
+					newGameData = boost::shared_ptr<GAMESTRUCT>(new GAMESTRUCT);
+
+					reply_length = boost::asio::read(socket, boost::asio::buffer(newGameData.get(), sizeof(GAMESTRUCT)));
+
+					if (lobbyDev)
+						printGame(newGameData);
+				}
+				else if (buffer == cmdListGames)
+				{
+					// Debug
+					if (lobbyDev)
+						std::cout << "<- list" << std::endl;
+				}
 			}
 		}
 		catch (boost::asio::error& e)
@@ -158,8 +157,7 @@ int start()
 			if (!(e == boost::asio::error::eof))
 				throw;
 
-			std::cerr << "Premature EOF" << std::endl;
-			--count;
+			std::cerr << "EOF" << std::endl;
 			continue;
 		}
 	}
