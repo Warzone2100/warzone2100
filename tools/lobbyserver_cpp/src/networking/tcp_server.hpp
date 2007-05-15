@@ -37,7 +37,7 @@ class TCPServer : boost::noncopyable
         TCPServer(boost::shared_ptr<boost::asio::io_service> io_service, const connectionHandler& handler);
         ~TCPServer();
 
-        void listen(unsigned short port);
+        void listen(const boost::asio::ip::tcp::endpoint& endpoint);
 
     private:
         class impl;

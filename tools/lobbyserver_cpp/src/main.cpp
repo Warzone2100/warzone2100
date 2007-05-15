@@ -53,7 +53,16 @@ int main(int argc, char* argv[])
 		boost::shared_ptr<boost::asio::io_service> io_service(new boost::asio::io_service);
 		TCPServer tcp_server(io_service, handleRequestInThread);
 
-		tcp_server.listen(lobbyPort);
+		for (unsigned int i = 1; i < static_cast<unsigned int>(argc); ++i)
+		{
+			boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address::from_string(argv[i]), lobbyPort);
+			{
+				boost::recursive_mutex::scoped_lock lock(cout_mutex);
+				std::cout << "Attempting to listen at: " << endpoint << std::endl;
+			}
+			tcp_server.listen(endpoint);
+		}
+
 		io_service->run();
 		returnValue = 0;
 	}

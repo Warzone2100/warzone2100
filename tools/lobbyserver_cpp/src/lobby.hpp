@@ -21,8 +21,8 @@
     $HeadURL$
 */
 
-#ifndef _REQUESTHANDLER_HPP_
-#define _REQUESTHANDLER_HPP_
+#ifndef _LOBBY_HPP_
+#define _LOBBY_HPP_
 
 #include <boost/asio.hpp>
 
@@ -43,4 +43,4 @@ class GameLobby
         impl* pimpl;
 };
 
-#endif // _REQUESTHANDLER_HPP_
+#endif // _LOBBY_HPP_

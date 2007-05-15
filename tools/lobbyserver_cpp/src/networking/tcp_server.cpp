@@ -84,11 +84,8 @@ TCPServer::~TCPServer()
     delete pimpl;
 }
 
-void TCPServer::listen(unsigned short port)
+void TCPServer::listen(const boost::asio::ip::tcp::endpoint& endpoint)
 {
-    // Listen on the specified port for incoming connections via IPv4
-    pimpl->listen(boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port));
-
-    // Listen on the specified port for incoming connections via IPv6
-    pimpl->listen(boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v6(), port));
+    // Listen on the specified endpoint
+    pimpl->listen(endpoint);
 }

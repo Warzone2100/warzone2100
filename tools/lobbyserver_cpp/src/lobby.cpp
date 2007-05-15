@@ -220,6 +220,9 @@ void GameLobby::addGame(boost::shared_ptr<boost::asio::ip::tcp::socket> socket)
         {
             boost::asio::read(*socket, boost::asio::buffer(&newGameData, sizeof(GAMESTRUCT)));
 
+	    strncpy(newGameData.desc.host, socket->remote_endpoint().address().to_string().c_str(), sizeof(newGameData.desc.host));
+	    newGameData.desc.host[sizeof(newGameData.desc.host) - 1] = 0;
+
             lobbiedGame = newGameData;
         }
         catch (boost::asio::error& e)
