@@ -21,28 +21,36 @@
     $HeadURL$
 */
 
-#include "lobby.hpp"
+#ifndef _INCLUDE_RAII_COUNTER_HPP_
+#define _INCLUDE_RAII_COUNTER_HPP_
 
-GameLobby::~GameLobby()
+#include <boost/utility.hpp>
+
+// An exception safe (not thread safe though) counter
+class RAIICounter : boost::noncopyable
 {
-    // Make sure all pending operations are finished before closing down, by acquiring a write lock first
-    ReadWriteMutex::scoped_lock lock(_mutex);
-}
+    public:
+        RAIICounter();
 
-GameLobby::const_iterator GameLobby::begin() const
-{
-    ReadWriteMutex::scoped_readonlylock lock(_mutex);
-    return GameLobby::const_iterator(*this, _games.begin());
-}
+        inline operator unsigned int() const { return _count; }
 
-GameLobby::const_iterator GameLobby::end() const
-{
-    return const_iterator(*this, _games.end());
-}
+        class scope_counted
+        {
+            public:
+                scope_counted(RAIICounter& counter);
+                scope_counted(const scope_counted& org);
+                ~scope_counted();
 
-std::size_t GameLobby::size() const
-{
-    ReadWriteMutex::scoped_readonlylock lock(_mutex);
+            private:
+                // Private assignment operator since I'm too lazy to write one
+                const scope_counted& operator=(const scope_counted&);
 
-    return _games.size();
-}
+            private:
+                RAIICounter& _counter;
+        };
+
+    private:
+        unsigned int _count;
+};
+
+#endif

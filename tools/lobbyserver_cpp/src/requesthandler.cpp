@@ -33,20 +33,12 @@ extern boost::recursive_mutex cout_mutex;
 extern boost::recursive_mutex cerr_mutex;
 #define lobbyDev true
 
-// define DUMMYGAME if we want to have a dummy game in the list
-#define DUMMYGAME
-#ifdef DUMMYGAME
-static const GAMESTRUCT dummyGameStruct = {"Tha Dummy Game!!!!", {48, 0, "192.168.1.11", 8, 5, 14, 0, 0, 0}};
-#endif
 
 class lobbyprotocol::requestHandler::impl
 {
     public:
         impl(boost::shared_ptr<GameLobby> lobby) :
             _lobby(lobby)
-#ifdef DUMMYGAME
-            ,dummyGame(*_lobby, dummyGameStruct)
-#endif
         {
         }
 
@@ -197,10 +189,6 @@ class lobbyprotocol::requestHandler::impl
 
     private:
         boost::shared_ptr<GameLobby> _lobby;
-
-#ifdef DUMMYGAME
-        GameLobby::gameLock dummyGame;
-#endif
 };
 
 namespace lobbyprotocol

@@ -22,7 +22,7 @@
 MAKERULES=../../../makerules
 include $(MAKERULES)/configure.mk
 
-OBJS=main.o lobby/read_write_mutex.o networking/tcp_server.o lobby/lobby.o lobby/game.o requesthandler.o
+OBJS=main.o lobby/read_write_mutex.o networking/tcp_server.o lobby/lobby.o lobby/game.o lobby/raii_counter.o lobby/lobby_iterator.o lobby/lobby_gamelock.o requesthandler.o
 
 BOOST_DIR=C:/boost_1_33_1
 BOOST_ASIO_DIR=C:/boost_asio_0_3_7

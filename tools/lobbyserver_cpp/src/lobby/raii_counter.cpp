@@ -21,28 +21,26 @@
     $HeadURL$
 */
 
-#include "lobby.hpp"
+#include "raii_counter.hpp"
 
-GameLobby::~GameLobby()
+RAIICounter::RAIICounter() :
+    _count(0)
 {
-    // Make sure all pending operations are finished before closing down, by acquiring a write lock first
-    ReadWriteMutex::scoped_lock lock(_mutex);
 }
 
-GameLobby::const_iterator GameLobby::begin() const
+RAIICounter::scope_counted::scope_counted(RAIICounter& counter) :
+    _counter(counter)
 {
-    ReadWriteMutex::scoped_readonlylock lock(_mutex);
-    return GameLobby::const_iterator(*this, _games.begin());
+    ++(_counter._count);
 }
 
-GameLobby::const_iterator GameLobby::end() const
+RAIICounter::scope_counted::scope_counted(const scope_counted& org) :
+    _counter(org._counter)
 {
-    return const_iterator(*this, _games.end());
+    ++(_counter._count);
 }
 
-std::size_t GameLobby::size() const
+RAIICounter::scope_counted::~scope_counted()
 {
-    ReadWriteMutex::scoped_readonlylock lock(_mutex);
-
-    return _games.size();
+    --(_counter._count);
 }

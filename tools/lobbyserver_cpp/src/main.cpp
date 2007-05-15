@@ -44,10 +44,6 @@ static void handleRequestInThread(boost::shared_ptr<boost::asio::ip::tcp::socket
 
 int main(int argc, char* argv[])
 {
-	//ThreadingTCPServer lobbyServer;
-
-	//return lobbyServer(lobbyPort);
-
 	unsigned int returnValue = 1;
 	try
 	{

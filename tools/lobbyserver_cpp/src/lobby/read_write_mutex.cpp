@@ -23,41 +23,7 @@
 
 #include "read_write_mutex.hpp"
 #include <boost/thread.hpp>
-
-// An exception safe (not thread safe though) counter
-class RAIICounter : boost::noncopyable
-{
-    public:
-        RAIICounter() :
-            _count(0)
-        {
-        }
-
-        inline operator unsigned int() const
-        {
-            return _count;
-        }
-
-        class RAIICounted : boost::noncopyable
-        {
-            public:
-                inline RAIICounted(RAIICounter& counter) :
-                    _counter(counter)
-                {
-                    ++(_counter._count);
-                }
-
-                inline ~RAIICounted()
-                {
-                    --(_counter._count);
-                }
-            private:
-                RAIICounter& _counter;
-        };
-
-    private:
-        unsigned int _count;
-};
+#include "raii_counter.hpp"
 
 class ReadWriteMutex::impl : boost::noncopyable
 {
@@ -103,7 +69,7 @@ class ReadWriteMutex::impl : boost::noncopyable
         boost::mutex::scoped_lock lock(_mutex);
 
         // ensure subsequent readers block
-        RAIICounter::RAIICounted pendWriter(_pendingWriters);
+        RAIICounter::scope_counted pendWriter(_pendingWriters);
         
         // wait until all reader locks are released
         if(_readerCount != 0)
