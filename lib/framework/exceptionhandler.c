@@ -88,7 +88,7 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 	return EXCEPTION_CONTINUE_SEARCH;
 }
 
-#elif defined(WZ_OS_UNIX)
+#elif defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
 
 // C99 headers:
 # include <stdint.h>
@@ -538,7 +538,7 @@ void setupExceptionHandler(const char * programCommand_x)
 {
 #if defined(WZ_OS_WIN)
 	SetUnhandledExceptionFilter(windowsExceptionHandler);
-#elif defined(WZ_OS_UNIX)
+#elif defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
 	// Get full path to 'gdb'
 	FILE * whichStream = popen("which gdb", "r");
 	fread(gdbPath, 1, MAX_PATH, whichStream);

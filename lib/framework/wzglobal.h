@@ -95,8 +95,6 @@
 
 #if defined(WZ_OS_WIN)
 #  undef WZ_OS_UNIX
-#elif defined(WZ_OS_MAC)
-#  undef WZ_OS_UNIX
 #elif !defined(WZ_OS_UNIX)
 #  define WZ_OS_UNIX
 #endif /* WZ_OS_WIN */
