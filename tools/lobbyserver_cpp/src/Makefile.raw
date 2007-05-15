@@ -22,7 +22,7 @@
 MAKERULES=../../../makerules
 include $(MAKERULES)/configure.mk
 
-OBJS=main.o
+OBJS=main.o networking/tcp_server.o
 
 BOOST_DIR=C:/boost_1_33_1
 BOOST_ASIO_DIR=C:/boost_asio_0_3_7
@@ -45,4 +45,4 @@ WzMasterServer$(EXEEXT): $(OBJS)
 	gcc -g $(LIBDIR) -o $@ $^ $(LIBS)
 
 .cpp.o:
-	gcc -g -c $(INCLUDEDIR) -o $@ $<
+	gcc -g -c $(INCLUDEDIR) -Wall -D_WIN32_WINNT=0x0501 -o $@ $<

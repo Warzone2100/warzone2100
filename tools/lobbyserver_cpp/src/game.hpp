@@ -53,4 +53,37 @@ typedef struct
 } GAMESTRUCT;
 #endif
 
+#include <string>
+
+inline bool operator==(const SESSIONDESC& left, const SESSIONDESC& right)
+{
+    if (!(left.dwSize            == right.dwSize
+       && left.dwFlags           == right.dwFlags
+       && left.dwMaxPlayers      == right.dwMaxPlayers
+       && left.dwCurrentPlayers  == right.dwCurrentPlayers
+       && left.dwUser1           == right.dwUser1
+       && left.dwUser2           == right.dwUser2
+       && left.dwUser3           == right.dwUser3
+       && left.dwUser4           == right.dwUser4))
+        return false;
+
+#ifdef USE_STRCMP
+    return std::string(left.host) == std::string(right.host);
+#else
+    return std::equal(left.host, &left.host[sizeof(left.host)], right.host);
+#endif
+}
+
+inline bool operator==(const GAMESTRUCT& left, const GAMESTRUCT& right)
+{
+    if (!(left.desc == right.desc))
+        return false;
+
+#ifdef USE_STRCMP
+    return std::string(left.name) == std::string(right.name);
+#else
+    return std::equal(left.name, &left.name[sizeof(left.name)], right.name);
+#endif
+}
+
 #endif // _INCLUDE_GAME_HPP_

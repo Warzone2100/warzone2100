@@ -149,6 +149,12 @@ int start()
 					// Debug
 					if (lobbyDev)
 						std::cout << "<- list" << std::endl;
+
+					static const unsigned int gameCount = 1;
+					static const GAMESTRUCT dummyGame = {"Tha Dummy Game!!!!", {48, 0, "192.168.1.11", 8, 5, 14, 0, 0, 0}};
+
+					boost::asio::write(socket, boost::asio::buffer(&gameCount, sizeof(unsigned int)));
+					boost::asio::write(socket, boost::asio::buffer(&dummyGame, sizeof(GAMESTRUCT)));
 				}
 			}
 		}
