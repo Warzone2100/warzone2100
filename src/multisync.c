@@ -29,8 +29,6 @@
  * Alex Lee, pumpkin Studios, bath.
  */
 
-#include <string.h>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/framework/strres.h"
@@ -53,22 +51,13 @@
 #include "frontend.h"								// for titlemode
 #include "multistat.h"
 #include "power.h"									// for power checks
+
 // ////////////////////////////////////////////////////////////////////////////
 // function definitions
-BOOL		sendCheck			(void);							// send/recv  check info
-BOOL		recvDroidCheck		(NETMSG *pMsg);
-BOOL		recvStructureCheck	(NETMSG *pMsg);
-BOOL		recvPowerCheck		(NETMSG *pMsg);
-BOOL		recvPing			(NETMSG *pMsg);
-BOOL		sendScoreCheck		(void);							//score
 
 static BOOL sendStructureCheck	(void);							//Structure
-BOOL		sendPowerCheck		(BOOL now);						//power
 static void packageCheck		(UDWORD i, NETMSG *pMsg, DROID *pD);
-
 static BOOL sendDroidCheck		(void);							//droids
-UDWORD		averagePing			(void);
-BOOL		sendPing			(void);							// send/recv Ping information
 
 static void highLevelDroidUpdate(DROID *psDroid,
 								 UDWORD x,

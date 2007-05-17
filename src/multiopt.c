@@ -24,8 +24,6 @@
  *
  * Routines for setting the game options and starting the init process.
  */
-#include <string.h>
-
 #include "lib/framework/frame.h"			// for everything
 #include "map.h"
 #include "game.h"			// for loading maps
@@ -59,31 +57,7 @@
 // External Variables
 
 extern char	MultiForcesPath[255];
-
 extern char	buildTime[8];
-
-// ////////////////////////////////////////////////////////////////////////////
-// Local Functions
-
-void		sendOptions			(UDWORD dest, UDWORD player);
-void		recvOptions			(NETMSG *pMsg);
-//static BOOL dMatchInit			(void);
-static BOOL campInit			(void);
-BOOL		hostCampaign		(char *sGame,		char *sPlayer);
-BOOL		joinCampaign		(UDWORD gameNumber, char *playername);
-//BOOL		hostArena			(char *sGame,		char *sPlayer);
-//BOOL		joinArena			(UDWORD gameNumber, char *playername);
-BOOL		LobbyLaunched		(void);
-void		playerResponding	(void);
-BOOL		multiInitialise		(void);		//only once.
-BOOL		lobbyInitialise		(void);		//only once.
-BOOL		sendLeavingMsg		(void);
-BOOL		multiShutdown		(void);
-BOOL		addTemplate			(UDWORD player, DROID_TEMPLATE *psNew);
-BOOL		addTemplateSet		(UDWORD from,UDWORD to);
-BOOL		copyTemplateSet		(UDWORD from,UDWORD to);
-BOOL		multiGameInit		(void);		// every game
-BOOL		multiGameShutdown	(void);
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////

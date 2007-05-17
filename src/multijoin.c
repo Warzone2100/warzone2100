@@ -76,19 +76,8 @@ extern BOOL		multiRequestUp;
 
 // ////////////////////////////////////////////////////////////////////////////
 // Local Functions
-BOOL sendVersionCheck	(void);
-BOOL recvVersionCheck	(NETMSG *pMsg);
-BOOL intDisplayMultiJoiningStatus (UBYTE joinCount);
-void clearPlayer		(UDWORD player,BOOL quietly,BOOL removeOil);// what to do when a arena player leaves.
-BOOL MultiPlayerLeave	(UDWORD dp);								// remote player has left.
-BOOL MultiPlayerJoin	(UDWORD dp);								// remote player has just joined.
-void setupNewPlayer		(UDWORD dpid, UDWORD player);				// stuff to do when player joins.
-//BOOL multiPlayerRequest	(NETMSG *pMsg);							// remote player has requested info
-//BOOL UpdateClient		(DPID dest, UDWORD playerToSend);		// send information to a remote player
-//BOOL ProcessDroidOrders	(void);									// ince setup, this player issues each droid order.
-//BOOL SendFeatures		(FEATURE *pFeature, DPID player);
-//BOOL recvFeatures		(NETMSG *pMsg);
-void resetMultiVisibility(UDWORD player);
+
+static void resetMultiVisibility(UDWORD player);
 
 // ////////////////////////////////////////////////////////////////////////////
 // Version Check
@@ -239,7 +228,7 @@ void clearPlayer(UDWORD player,BOOL quietly,BOOL removeOil)
 }
 
 // Reset visibilty, so a new player can't see the old stuff!!
-void resetMultiVisibility(UDWORD player)
+static void resetMultiVisibility(UDWORD player)
 {
 	UDWORD		owned;
 	DROID		*pDroid;

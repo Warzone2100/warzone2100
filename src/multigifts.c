@@ -23,8 +23,6 @@
  * Also home to Deathmatch hardcoded RULES.
  */
 
-#include <string.h>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/widget/widget.h"
@@ -65,36 +63,10 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 // prototypes
-BOOL			recvGift						(NETMSG *pMsg);
-BOOL			sendGift						(UDWORD type,UDWORD to);
-void			giftRadar						(UDWORD from, UDWORD to,BOOL send);
-//static void		giftSingleDroid					(DROID *psD,UDWORD from,UDWORD to);
+
 static void		recvGiftDroids					(UDWORD from,UDWORD to,NETMSG *pMsg);
 static void		sendGiftDroids					(UDWORD from,UDWORD to);
 static void		giftResearch					(UDWORD from,UDWORD to,BOOL send);
-void			giftPower						(UDWORD from,UDWORD to,BOOL send);
-
-void			requestAlliance					(UBYTE from ,UBYTE to,BOOL prop,BOOL allowAudio);
-void			breakAlliance					(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio);
-void			formAlliance					(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio,BOOL allowNotification);
-void			sendAlliance					(UBYTE from, UBYTE to, UBYTE state,SDWORD value);
-void			createTeamAlliances				(void);
-BOOL			recvAlliance					(NETMSG *pMsg,BOOL allowAudio);
-void			technologyGiveAway				(STRUCTURE *pS);
-void			addMultiPlayerRandomArtifacts	(UDWORD quantity,SDWORD type);
-void			recvMultiPlayerRandomArtifacts	(NETMSG *pMsg);
-void			giftArtifact					(UDWORD owner,UDWORD x,UDWORD y);
-void			processMultiPlayerArtifacts		(void);
-//DROID_TEMPLATE *pickDistribTempl				(UDWORD player);
-BOOL			addOilDrum						(UDWORD count);
-
-//BOOL			addDMatchDroid					(UDWORD count);
-//BOOL			foundDMatchDroid				(UDWORD player,UDWORD x,UDWORD y);
-//BOOL			deathmatchCheck					(void);
-//static BOOL		dMatchWinner					(UDWORD winplayer,BOOL bcast);
-//BOOL			recvdMatchWinner				(NETMSG *pMsg);
-void			addLoserGifts					(void);
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // gifts..
@@ -213,12 +185,6 @@ void giftRadar(UDWORD from, UDWORD to,BOOL send)
 	}
 }
 
-// ////////////////////////////////////////////////////////////////////////////
-// give a droid - MOVED INTO DROID.C - AB 5/11/98
-
-/*static void giftSingleDroid(DROID *psD,UDWORD from,UDWORD to)
-{
-}*/
 
 static void recvGiftDroids(UDWORD from,UDWORD to,NETMSG *pMsg)
 {
@@ -243,8 +209,6 @@ static void recvGiftDroids(UDWORD from,UDWORD to,NETMSG *pMsg)
 		CONPRINTF(ConsoleString,(ConsoleString,_("%s Gives You Units"),getPlayerName(from) ));
 	}
 }
-
-
 
 
 // give selected droid

@@ -22,8 +22,6 @@
  *
  * interface for setting limits to the game, bots, structlimits etc...
  */
-#include <string.h>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/strres.h"
@@ -82,12 +80,8 @@ extern void			intDisplayPlainForm	(WIDGET *psWidget, UDWORD xOffset,
 #define BUTPERFORM				8
 // ////////////////////////////////////////////////////////////////////////////
 // protos.
-BOOL startLimitScreen	(void);
-void runLimitScreen		(void);
-void applyLimitSet		(void);
-void createLimitSet		(void);
 
-void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -417,7 +411,7 @@ void applyLimitSet(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 
-void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;

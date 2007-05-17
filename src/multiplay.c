@@ -59,6 +59,7 @@
 #include "lib/script/script.h"				//Because of "ScriptTabs.h"
 #include "scripttabs.h"			//because of CALL_AI_MSG
 #include "scriptcb.h"			//for console callback
+#include "scriptfuncs.h"
 
 #include "lib/netplay/netplay.h"								// the netplay library.
 #include "multiplay.h"								// warzone net stuff.
@@ -84,7 +85,6 @@ BOOL						bSendingMap					= FALSE;	// map broadcasting.
 
 char						tempString[12];
 char						beaconReceiveMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];	//beacon msg for each player
-BOOL							recvBeacon(NETMSG *pMsg);
 char								playerName[MAX_PLAYERS][MAX_NAME_SIZE];	//Array to store all player names (humans and AIs)
 
 /////////////////////////////////////
@@ -93,18 +93,14 @@ char								playerName[MAX_PLAYERS][MAX_NAME_SIZE];	//Array to store all player 
 #define MAX_MSG_STACK	50
 #define MAX_STR			255
 
-char msgStr[MAX_MSG_STACK][MAX_STR];
-
-SDWORD msgPlFrom[MAX_MSG_STACK];
-SDWORD msgPlTo[MAX_MSG_STACK];
-
-SDWORD callbackType[MAX_MSG_STACK];
-SDWORD locx[MAX_MSG_STACK];
-SDWORD locy[MAX_MSG_STACK];
-
-DROID		*msgDroid[MAX_MSG_STACK];
-
-SDWORD msgStackPos = -1;				//top element pointer
+static char msgStr[MAX_MSG_STACK][MAX_STR];
+static SDWORD msgPlFrom[MAX_MSG_STACK];
+static SDWORD msgPlTo[MAX_MSG_STACK];
+static SDWORD callbackType[MAX_MSG_STACK];
+static SDWORD locx[MAX_MSG_STACK];
+static SDWORD locy[MAX_MSG_STACK];
+static DROID *msgDroid[MAX_MSG_STACK];
+static SDWORD msgStackPos = -1;				//top element pointer
 
 // ////////////////////////////////////////////////////////////////////////////
 // Remote Prototypes
@@ -114,48 +110,9 @@ extern PLAYER_RESEARCH*		asPlayerResList[MAX_PLAYERS];
 // ////////////////////////////////////////////////////////////////////////////
 // Local Prototypes
 
-BOOL turnOffMultiMsg(BOOL bDoit);
-
-BOOL		multiPlayerLoop(void);
-BOOL		IdToDroid	(UDWORD id, UDWORD player, DROID **psDroid);
-STRUCTURE	*IdToStruct	(UDWORD id,UDWORD player);
-BASE_OBJECT *IdToPointer(UDWORD id,UDWORD player);
-FEATURE		*IdToFeature(UDWORD id,UDWORD player);
-DROID_TEMPLATE *IdToTemplate(UDWORD tempId,UDWORD player);
-DROID_TEMPLATE *NameToTemplate(const char *sName,UDWORD player);
-
-char *getPlayerName		(UDWORD player);
-BOOL	isHumanPlayer		(UDWORD player);				// determine if human
-BOOL	myResponsibility	(UDWORD player);				// this pc has comms responsibility
-BOOL	responsibleFor		(UDWORD player,UDWORD player2);	// has player responsibility for player2
-UDWORD	whosResponsible		(UDWORD player);				// returns player responsible for 'player'
-Vector3i	cameraToHome		(UDWORD player,BOOL scroll);
-BOOL	DirectPlaySystemMessageHandler(void * msg);			// interpret DP messages
-BOOL	recvMessage			(void);							// process an incoming message
-BOOL	SendResearch		(UBYTE player,UDWORD index);	// send/recv Research issues
-BOOL	recvResearch		(NETMSG *pMsg);
-BOOL	sendTextMessage		(const char *pStr,BOOL bcast);		// send/recv a text message
-
-BOOL	sendAIMessage		(char *pStr, SDWORD player, SDWORD to);	//send AI message
-void	displayAIMessage	(char *pStr, SDWORD from, SDWORD to);
-BOOL	recvTextMessageAI	(NETMSG *pMsg);					//AI multiplayer message
-
-BOOL	recvTextMessage		(NETMSG *pMsg);
-BOOL	sendTemplate		(DROID_TEMPLATE *t);			// send/recv Template information
-BOOL	recvTemplate		(NETMSG *pMsg);
-BOOL	SendDestroyTemplate	(DROID_TEMPLATE *t);			// send/recv Template destruction info
-BOOL	recvDestroyTemplate	(NETMSG *pMsg);
-BOOL	SendDestroyFeature	(FEATURE *pF);					// send a destruct feature message.
-BOOL	recvDestroyFeature	(NETMSG *m);					// process a destroy feature msg.
-BOOL	sendDestroyExtra	(BASE_OBJECT *psKilled,BASE_OBJECT *psKiller);
-BOOL	recvDestroyExtra	(NETMSG *pMsg);
-BOOL	recvAudioMsg		(NETMSG *pMsg);
-
-BOOL	recvMapFileRequested	(NETMSG *pMsg);
-UBYTE	sendMap				(void);
-BOOL	recvMapFileData			(NETMSG *pMsg);
-BOOL	addHelpBlip(SDWORD x, SDWORD y, SDWORD forPlayer, SDWORD sender, char * textMsg);
-
+static BOOL recvBeacon(NETMSG *pMsg);
+static BOOL recvDestroyTemplate(NETMSG *pMsg);
+static BOOL recvResearch(NETMSG *pMsg);
 
 // ////////////////////////////////////////////////////////////////////////////
 // temporarily disable multiplayer mode.
@@ -653,16 +610,6 @@ Vector3i cameraToHome(UDWORD player,BOOL scroll)
 	return res;
 }
 
-// ////////////////////////////////////////////////////////////////////////////
-// ////////////////////////////////////////////////////////////////////////////
-// Required by the net library. It's the system message handler..
-BOOL DirectPlaySystemMessageHandler(void * mg)
-{
-
-	return (TRUE);
-}
-
-
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
@@ -897,7 +844,6 @@ BOOL recvMessage(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Research Stuff. Nat games only send the result of research procedures.
-
 BOOL SendResearch(UBYTE player,UDWORD index)
 {
 	NETMSG m;
@@ -936,7 +882,7 @@ BOOL SendResearch(UBYTE player,UDWORD index)
 }
 
 // recv a research topic that is now complete.
-BOOL recvResearch(NETMSG *m)
+static BOOL recvResearch(NETMSG *m)
 {
 	UBYTE			player,i;
 	UDWORD			index;
@@ -982,9 +928,7 @@ BOOL recvResearch(NETMSG *m)
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // New research stuff, so you can see what others are up to!
-
-// inform others, I'm researching this.
-
+// inform others that I'm researching this.
 BOOL sendReseachStatus(STRUCTURE *psBuilding ,UDWORD index, UBYTE player, BOOL bStart)
 {
 	NETMSG m;
@@ -1499,7 +1443,7 @@ BOOL SendDestroyTemplate(DROID_TEMPLATE *t)
 }
 
 // acknowledge another player no longer has a template
-BOOL recvDestroyTemplate(NETMSG * m)
+static BOOL recvDestroyTemplate(NETMSG * m)
 {
 	UDWORD			player,targetref;
 	DROID_TEMPLATE	*psTempl, *psTempPrev;
@@ -1668,15 +1612,12 @@ BOOL recvMapFileRequested(NETMSG *pMsg)
 {
 	char mapStr[256],mapName[256],fixedname[256];
 
-//	pMsg;
-
 	// another player is requesting the map
 	if(!NetPlay.bHost)
 	{
 		return TRUE;
 	}
 
-//#ifndef DISABLEMAPSEND
 	// start sending the map to the other players.
 	if(!bSendingMap)
 	{
@@ -1704,7 +1645,7 @@ BOOL recvMapFileRequested(NETMSG *pMsg)
 		memcpy(mapStr,fixedname,256);
 		NETsendFile(TRUE,mapStr,0);
 	}
-//#endif
+
 	return TRUE;
 }
 
@@ -2013,7 +1954,7 @@ BOOL msgStackFireTop(void)
 	return TRUE;
 }
 
-BOOL recvBeacon(NETMSG *pMsg)
+static BOOL recvBeacon(NETMSG *pMsg)
 {
 	SDWORD	sender, receiver,locX, locY;
 

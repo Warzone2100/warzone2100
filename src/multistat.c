@@ -51,27 +51,7 @@ extern char	MultiPlayersPath[255];
 // ////////////////////////////////////////////////////////////////////////////
 //  Force defs.
 
-BOOL		removeFromForce			(UDWORD number);					// remove a droid from force
-BOOL		addToForce				(DROID_TEMPLATE  *templ);			// add a droid (templ) to force
-void		useTheForce				(BOOL bAddTempl);					// place the force in the game
-BOOL		saveForce				(char *name,FORCE *pfForce);
-BOOL		loadForce				(char *name);
-
 FORCE		Force;														// the selected force.
-
-// ////////////////////////////////////////////////////////////////////////////
-//  Player Stat defs.
-BOOL		saveMultiStats			(char *sFName, char *sPlayerName, PLAYERSTATS *plStats);
-BOOL		loadMultiStats			(char *sPlayerName, PLAYERSTATS *plStats);
-PLAYERSTATS getMultiStats			(UDWORD	player, BOOL bLocal);
-BOOL		setMultiStats			(SDWORD playerDPID, PLAYERSTATS plStats,BOOL bLocal);
-
-void		updateMultiStatsDamage	(UDWORD attacker, UDWORD defender, UDWORD inflicted);
-void		updateMultiStatsGames	(void);
-void		updateMultiStatsWins	(void);
-void		updateMultiStatsLoses	(void);
-void		updateMultiStatsKills	(BASE_OBJECT *psKilled, UDWORD player);
-
 
 // ////////////////////////////////////////////////////////////////////////////
 // FORCE SELECT STUFF
@@ -202,7 +182,7 @@ BOOL removeFromForce(UDWORD number)
 
 /*
 // find a place for the force
-void chooseForceLoc(UDWORD *pX,UDWORD *pY)
+static void chooseForceLoc(UDWORD *pX,UDWORD *pY)
 {
 	FEATURE			*pFeat;
 	UDWORD			x,y,chose,tcount=0;

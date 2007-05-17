@@ -23,8 +23,6 @@
  * Alex Lee , 97/98 Pumpkin Studios, Bath
  * Multiplay stuff relevant to droids only.
  */
-#include <string.h>
-
 #include "lib/framework/frame.h"
 
 #include "droid.h"						// for droid sending and ordering.
@@ -60,34 +58,8 @@ extern DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj);
 // ////////////////////////////////////////////////////////////////////////////
 // Local Prototypes
 
-BOOL		sendVtolRearm(DROID *psDroid,STRUCTURE *psStruct, UBYTE chosen);
-BOOL		recvVtolRearm(NETMSG *pMsg);
-
-BOOL		sendDroidSecondary	(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state);
-BOOL		recvDroidSecondary	(NETMSG *pMsg);
-
-//BOOL		SendSingleDroidWaypoint(DROID *psDroid, UDWORD x,UDWORD y);
-//BOOL		SendDroidWaypoint	(UBYTE player,UDWORD	x, UDWORD y);
-//BOOL		recvDroidWaypoint	(NETMSG *pMsg);
-
-BOOL		SendDroidMove		(DROID  *pDroid, UDWORD x, UDWORD y,BOOL bFormation);
-BOOL		recvDroidMove		(NETMSG *pMsg);
-BOOL		SendDroid			(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UBYTE player, UDWORD id);
-BOOL		recvDroid			(NETMSG *pMsg);
-BOOL		SendDroidInfo		(DROID  *pDroid, DROID_ORDER order, UDWORD x, UDWORD y, BASE_OBJECT *psObj);
-BOOL		recvDroidInfo		(NETMSG *pMsg);
-BOOL		SendGroupOrderSelected	(UBYTE player, UDWORD x, UDWORD y, BASE_OBJECT *psObj);
-BOOL		SendGroupOrderGroup(DROID_GROUP *psGroup, DROID_ORDER order,UDWORD x,UDWORD y,BASE_OBJECT *psObj);
-BOOL		SendCmdGroup		(DROID_GROUP *group, UWORD x, UWORD y, BASE_OBJECT *psObj);
-BOOL		recvGroupOrder		(NETMSG *pMsg);
-static void ProcessDroidOrder	(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, OBJECT_TYPE desttype,UDWORD destid);
-BOOL		SendDestroyDroid	(DROID  *pD);
-BOOL		recvDestroyDroid	(NETMSG *pMsg);
-BOOL		sendWholeDroid		(DROID  *pD, UDWORD dest);
-BOOL		receiveWholeDroid	(NETMSG *pMsg);
-BOOL		sendRequestDroid	(UDWORD droidId);
-BOOL		recvRequestDroid	(NETMSG *pMsg);
-
+static BOOL sendRequestDroid(UDWORD droidId);
+static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, OBJECT_TYPE desttype, UDWORD destid);
 
 // ////////////////////////////////////////////////////////////////////////////
 // Command Droids.
@@ -1388,9 +1360,3 @@ BOOL recvRequestDroid(NETMSG *pMsg)
 
 	return TRUE;
 }
-
-
-
-
-
-

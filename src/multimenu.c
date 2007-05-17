@@ -22,8 +22,6 @@
  *  Handles the In Game MultiPlayer Screen, alliances etc...
  *  Also the selection of disk files..
  */
-#include <string.h>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/widget/widget.h"
@@ -66,7 +64,6 @@
 W_SCREEN  *psRScreen;			// requester stuff.
 
 extern char	MultiCustomMapsPath[255];
-
 extern void	displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
 BOOL	MultiMenuUp			= FALSE;
@@ -1516,122 +1513,3 @@ void intProcessMultiMenu(UDWORD id)
 
 
 }
-
-
-//////////////////////////////////////////////////////////////////////////////
-/*
-void intDisplayMiniMultiMenu(void)
-{
-	SDWORD sc[MAX_PLAYERS];
-	SDWORD scp[MAX_PLAYERS];
-
-	UDWORD j,i,temp;
-
-	UDWORD x = RADTLX;
-	UDWORD y = RADTLY - 60;
-	UDWORD w = RADWIDTH;
-	UDWORD h = 50;
-	UDWORD players = 0;
-	char	sTmp[64];
-
-	if( ingame.localJoiningInProgress)
-	{
-		RenderWindowFrame(&FrameNormal,x, y ,w, h);			// draw a wee blu box.
-
-		// display how far done..
-		sprintf(sTmp,"%d%%", PERCENT(arenaPlayersReceived,MAX_PLAYERS) );
-		iV_DrawText(sTmp, x+(w/2)-10, y+(h/2)+3);
-	}
-	else
-	{
-		for(i=0;i<MAX_PLAYERS;i++)							// clear out...
-		{
-			sc[i] = -1;
-			scp[i] = -1;
-		}
-
-		for(j=0;j<MAX_PLAYERS;j++)							// find biggest score.
-		{
-			if(isHumanPlayer(j) )
-			{
-				players++;
-				sc[j]  = getMultiStats(j,TRUE).recentScore;
-				scp[j] = j;
-			}
-		}
-
-		if(players <3)										// shrink box to fit.
-		{
-			y = RADTLY- (players*13) -18 ;
-			h = players*13 + 8 ;
-		}
-
-		RenderWindowFrame(&FrameNormal,x, y ,w, h);			// draw a wee blu box.
-
-		for(i=0;i<MAX_PLAYERS;++i)							// bubble sort.
-		{
-			for(j=MAX_PLAYERS-1;j>i;--j)
-			{
-				if (sc[j-1] > sc[j])
-				{
-					temp	= sc[j];
-					sc[j]	= sc[j-1];
-					sc[j-1] = temp;
-
-					temp	= scp[j];
-					scp[j]	= scp[j-1];
-					scp[j-1] = temp;						// swap players too.
-				}
-			}
-		}
-
-		for(j=0;(scp[j] != (SDWORD)selectedPlayer) && (j<MAX_PLAYERS);j++);		// rate ourselves.
-
-		iV_DrawText("1",x+5,y+13);							// display stuff
-		strcpy(sTmp,getPlayerName(scp[7]));
-		while(iV_GetTextWidth(sTmp) >= RADWIDTH-20 )
-		{
-			sTmp[strlen(sTmp)-1]='\0';
-		}
-		iV_DrawText(sTmp, x + 16, y + 13);
-
-		if(players >1)
-		{
-			iV_DrawText("2",x+5,y+26);
-			strcpy(sTmp,getPlayerName(scp[6]));
-			while(iV_GetTextWidth(sTmp) >= RADWIDTH-20 )
-			{
-				sTmp[strlen(sTmp)-1]='\0';
-			}
-			iV_DrawText(sTmp, x + 16, y + 26);
-		}
-
-		if(players >2)
-		{
-			if(j!=7 && j!=6)
-			{
-				sprintf(sTmp,"%d",8-j);
-				iV_DrawText(sTmp, x + 5, y + 39);
-
-				strcpy(sTmp,getPlayerName(scp[selectedPlayer]));
-				while(iV_GetTextWidth(sTmp) >= RADWIDTH-20 )
-				{
-					sTmp[strlen(sTmp)-1]='\0';
-				}
-				iV_DrawText(sTmp, x + 16, y + 39);
-			}
-			else
-			{
-				iV_DrawText("3",x+5,y+39);
-				strcpy(sTmp,getPlayerName(scp[5]));
-				while(iV_GetTextWidth(sTmp) >= RADWIDTH-20 )
-				{
-					sTmp[strlen(sTmp)-1]='\0';
-				}
-				iV_DrawText(sTmp, x + 16, y + 39);
-			}
-		}
-	}
-	return;
-}
-*/

@@ -49,8 +49,6 @@ extern BOOL		ClosingMultiMenu;
 
 extern BOOL		DebugMenuUp;
 
-//extern void		intDisplayMiniMultiMenu		(void);
-
 #define MULTIMENU				10600
 #define MULTIMENU_FORM			MULTIMENU
 

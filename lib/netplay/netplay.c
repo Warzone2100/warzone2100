@@ -1158,7 +1158,7 @@ void NETregisterServer(int state) {
 
 static void NETallowJoining(void) {
 	unsigned int i;
-	const UDWORD numgames = SDL_SwapBE32(1);	// always 1 on normal server
+	UDWORD numgames = SDL_SwapBE32(1);	// always 1 on normal server
 	char buffer[5];
 
 	if (allow_joining == FALSE) return;

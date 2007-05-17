@@ -51,20 +51,6 @@
 extern	UDWORD				objID;					// unique ID creation thing..
 
 // ////////////////////////////////////////////////////////////////////////////
-// Local Functions
-//BOOL		levelGround				(UDWORD atx, UDWORD aty, UDWORD atz, UDWORD baseWidth,UDWORD baseBreadth);
-BOOL		sendBuildStarted		(STRUCTURE *psStruct,DROID *psDroid);
-BOOL		recvBuildStarted		(NETMSG *m);
-
-BOOL		SendBuildFinished		(STRUCTURE *psStruct);
-BOOL		recvBuildFinished		(NETMSG *m);
-BOOL		SendDestroyStructure	(STRUCTURE *s);
-BOOL		RecvDestroyStructure	(NETMSG * m);
-
-BOOL		sendLasSat				(UBYTE player,STRUCTURE *psStruct, BASE_OBJECT *psObj);
-BOOL		recvLasSat				(NETMSG *pMsg);
-
-// ////////////////////////////////////////////////////////////////////////////
 // Level ground. A small function for updating the ground below a structure.
 // if and when this gets broken the code was pinched from droidupdatefoundation();
 /*BOOL levelGround(UDWORD atx, UDWORD aty, UDWORD atz, UDWORD baseWidth,UDWORD baseBreadth)
