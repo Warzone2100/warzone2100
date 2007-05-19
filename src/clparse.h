@@ -41,14 +41,14 @@ extern BOOL bAllowDebugMode;
  *
  * \param fpsLimit Desired framerate
  */
-extern void setFramerateLimit(Uint32 fpsLimit);
+extern void setFramerateLimit(int fpsLimit);
 
 /*!
  * Get the framerate limit
  *
  * \return Desired framerate
  */
-extern Uint32 getFramerateLimit(void);
+extern int getFramerateLimit(void);
 
 #endif
 

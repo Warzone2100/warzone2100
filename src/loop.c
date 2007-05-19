@@ -676,7 +676,7 @@ GAMECODE gameLoop(void)
 }
 
 /* The video playback loop */
-GAMECODE videoLoop(void)
+void videoLoop(void)
 {
 	BOOL bVolKilled = FALSE;
 
@@ -802,8 +802,6 @@ GAMECODE videoLoop(void)
 	{
 		mixer_SetWavVolume( g_iGlobalVol );
 	}
-
-	return GAMECODE_CONTINUE;
 }
 
 

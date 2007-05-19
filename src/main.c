@@ -111,14 +111,14 @@ extern void debug_callback_stderr( void**, const char * );
 extern void debug_callback_win32debug( void**, const char * );
 
 
-void setFramerateLimit(Uint32 fpsLimit)
+void setFramerateLimit(int fpsLimit)
 {
 	SDL_initFramerate( &wzFPSmanager );
 	SDL_setFramerate( &wzFPSmanager, fpsLimit );
 }
 
 
-Uint32 getFramerateLimit(void)
+int getFramerateLimit(void)
 {
 	return SDL_getFramerate( &wzFPSmanager );
 }
@@ -655,21 +655,17 @@ static void mainLoop(void)
 		{
 			switch (event.type)
 			{
-				// This is uneccessary if we don't have the focus (either we don't get any events or they can't be dealt with anyway)
-				if (focusState == FOCUS_IN)
-				{
-					case SDL_KEYUP:
-					case SDL_KEYDOWN:
-						inputHandleKeyEvent(&event);
-						break;
-					case SDL_MOUSEBUTTONUP:
-					case SDL_MOUSEBUTTONDOWN:
-						inputHandleMouseButtonEvent(&event);
-						break;
-					case SDL_MOUSEMOTION:
-						inputHandleMouseMotionEvent(&event);
-						break;
-				}
+				case SDL_KEYUP:
+				case SDL_KEYDOWN:
+					inputHandleKeyEvent(&event);
+					break;
+				case SDL_MOUSEBUTTONUP:
+				case SDL_MOUSEBUTTONDOWN:
+					inputHandleMouseButtonEvent(&event);
+					break;
+				case SDL_MOUSEMOTION:
+					inputHandleMouseMotionEvent(&event);
+					break;
 				case SDL_ACTIVEEVENT:
 					handleActiveEvent(&event);
 					break;
@@ -683,7 +679,9 @@ static void mainLoop(void)
 		if (focusState == FOCUS_IN)
 		{
 			if (loop_GetVideoStatus())
+			{
 				videoLoop(); // Display the video if neccessary
+			}
 			else switch (GetGameMode())
 			{
 				case GS_NORMAL: // Run the gameloop code
@@ -805,13 +803,11 @@ int main(int argc, char *argv[])
 	if (psPaletteBuffer == NULL)
 	{
 		debug( LOG_ERROR, "Out of memory" );
-		abort();
 		return -1;
 	}
 	if ( !loadFileToBuffer("palette.bin", (char*)psPaletteBuffer, ( 256 * sizeof(iColour) + 1 ), &pSize) )
 	{
 		debug( LOG_ERROR, "Couldn't load palette data" );
-		abort();
 		return -1;
 	}
 	pal_AddNewPalette(psPaletteBuffer);

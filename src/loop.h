@@ -61,7 +61,7 @@ extern SDWORD loopPolyCount;
 extern SDWORD loopStateChanges;
 
 extern GAMECODE gameLoop(void);
-extern GAMECODE videoLoop(void);
+extern void videoLoop(void);
 extern void loop_SetVideoPlaybackMode(void);
 extern void loop_ClearVideoPlaybackMode(void);
 extern BOOL loop_GetVideoStatus(void);
