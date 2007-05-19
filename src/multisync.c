@@ -72,13 +72,13 @@ static void highLevelDroidUpdate(DROID *psDroid,
 
 static void onscreenUpdate		(DROID *pDroid,UDWORD dam,		// the droid and its damage
 								 UDWORD x, UDWORD y,			// the ideal position
-								 FRACT fx,FRACT fy,				// the ideal fractional position
+								 float fx,float fy,				// the ideal fractional position
 								 UWORD dir,					// direction it should facing
 								 DROID_ORDER order);			// what it should be doing
 
 static void offscreenUpdate		(DROID *pDroid,UDWORD dam,
 								 UDWORD x, UDWORD y,
-								 FRACT fx,FRACT fy,
+								 float fx,float fy,
 								 UWORD dir,
 								 DROID_ORDER order);
 
@@ -317,7 +317,7 @@ static void packageCheck(UDWORD i, NETMSG *pMsg, DROID *pD)
 // receive a check and update the local world state accordingly
 BOOL recvDroidCheck(NETMSG *m)
 {
-	FRACT			fx=0,fy=0;
+	float			fx=0,fy=0;
 	UDWORD			ref,player,x = 0,y = 0,bod,target=0;//,dir;
 	UWORD			dir,numkills;
 	DROID_ORDER		ord;
@@ -493,8 +493,8 @@ static void onscreenUpdate(DROID *psDroid,
 						   UDWORD dam,
 						   UDWORD x,
 						   UDWORD y,
-						   FRACT fx,
-						   FRACT fy,
+						   float fx,
+						   float fy,
 						   UWORD dir,
 						   DROID_ORDER order)
 {
@@ -530,8 +530,8 @@ static void offscreenUpdate(DROID *psDroid,
 							UDWORD dam,
 							UDWORD x,
 							UDWORD y,
-							FRACT fx,
-							FRACT fy,
+							float fx,
+							float fy,
 							UWORD dir,
 							DROID_ORDER order)
 {

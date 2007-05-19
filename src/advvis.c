@@ -86,7 +86,7 @@ SDWORD	lowerX,upperX,lowerY,upperY;
 // ------------------------------------------------------------------------------------
 static void processAVTile(UDWORD x, UDWORD y)
 {
-	FRACT time;
+	float time;
 	MAPTILE *psTile;
 	UDWORD newLevel;
 
@@ -165,7 +165,7 @@ UDWORD	i,j;
 // ------------------------------------------------------------------------------------
 UDWORD	avGetObjLightLevel(BASE_OBJECT *psObj,UDWORD origLevel)
 {
-FRACT	div;
+float	div;
 UDWORD	lowest,newLevel;
 
 

@@ -67,7 +67,7 @@ APS_INACTIVE,
 } AP_STATUS;
 
 ATPART	asAtmosParts[MAX_ATMOS_PARTICLES];
-static	FRACT	fraction;
+static	float	fraction;
 static	UDWORD	freeParticle;
 static	UDWORD	weather;
 

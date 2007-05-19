@@ -96,7 +96,7 @@ extern SDWORD	getPresAngle( void );
 extern UDWORD	getNumDroidsSelected( void );
 extern void	camAllignWithTarget(BASE_OBJECT *psTarget);
 
-extern FRACT accelConstant,velocityConstant, rotAccelConstant, rotVelocityConstant;
+extern float accelConstant,velocityConstant, rotAccelConstant, rotVelocityConstant;
 extern	UDWORD	getTestAngle(void);
 void	updateTestAngle( void );
 #define BEHIND_DROID_DIRECTION(d)	  (360-((d->direction+180)%360))

@@ -25,12 +25,6 @@
  */
 #include <string.h>
 
-// moral check printf's
-//#define DEBUG_GROUP0
-// secondary order factory printf's
-//#define DEBUG_GROUP1
-// order recieved printf's
-//#define DEBUG_GROUP2
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 
@@ -1437,7 +1431,7 @@ static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 WZ_DECL_UNUSED static void orderCheckFireSupportPos(DROID *psSensor, DROID_ORDER_DATA *psOrder)
 {
 	SDWORD		fsx,fsy, fsnum, sensorVX,sensorVY, fsVX,fsVY;
-	FRACT		sensorAngle, fsAngle, adiff;
+	float		sensorAngle, fsAngle, adiff;
 	SDWORD		xdiff,ydiff;
 	SECONDARY_STATE state;
 	DROID		*psCurr;
@@ -1487,16 +1481,16 @@ WZ_DECL_UNUSED static void orderCheckFireSupportPos(DROID *psSensor, DROID_ORDER
 		}
 
 		// now get the angle between the firesupport units and the sensor move
-		sensorAngle = (FRACT)atan2(sensorVY, sensorVX);
-		fsAngle = (FRACT)atan2(fsVY, fsVX);
+		sensorAngle = (float)atan2f(sensorVY, sensorVX);
+		fsAngle = (float)atan2f(fsVY, fsVX);
 		adiff = fsAngle - sensorAngle;
 		if (adiff < 0)
 		{
-			adiff += (FRACT)(M_PI * 2);
+			adiff += (float)(M_PI * 2);
 		}
 		if (adiff > M_PI)
 		{
-			adiff -= (FRACT)(M_PI);
+			adiff -= (float)(M_PI);
 		}
 
 		// if the angle between the firesupport units and the sensor move is bigger

@@ -441,7 +441,7 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *p
 	SDWORD  pitchError;
 	SDWORD	rotationError, dx, dy, dz;
 	BOOL	onTarget = FALSE;
-	FRACT	fR;
+	float	fR;
 	SDWORD	pitchLowerLimit, pitchUpperLimit;
 	DROID	*psDroid = NULL;
 //	Vector3i	muzzle;
@@ -952,7 +952,7 @@ static void actionCalcPullBackPoint(BASE_OBJECT *psObj, BASE_OBJECT *psTarget, S
 	// get the vector from the target to the object
 	xdiff = (SDWORD)psObj->x - (SDWORD)psTarget->x;
 	ydiff = (SDWORD)psObj->y - (SDWORD)psTarget->y;
-	len = (SDWORD)iSQRT(xdiff*xdiff + ydiff*ydiff);
+	len = (SDWORD)sqrtf(xdiff*xdiff + ydiff*ydiff);
 
 	if (len == 0)
 	{

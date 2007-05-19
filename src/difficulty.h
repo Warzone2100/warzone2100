@@ -32,7 +32,7 @@ DL_KILLER
 extern void	setDifficultyLevel( DIFFICULTY_LEVEL lev);
 extern DIFFICULTY_LEVEL	getDifficultyLevel( void );
 extern SDWORD	modifyForDifficultyLevel(SDWORD basicVal,BOOL IsPlayer);
-extern void setModifiers(FRACT Player,FRACT Enemy);
+extern void setModifiers(float Player,float Enemy);
 
 
 #endif

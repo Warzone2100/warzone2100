@@ -651,7 +651,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 	}
 
 	// ffs
-	rad = (SDWORD)iSQRT( dx*dx + dy*dy );
+	rad = (SDWORD)sqrtf( dx*dx + dy*dy );
 	//Watermelon:extended life span
 	extendRad = (SDWORD)(rad * 1.5f);
 
@@ -907,7 +907,7 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 	WEAPON_STATS	*psStats;
 	SDWORD			iTime, iRad, iDist, dx, dy, dz, iX, iY;
 	Vector3i pos;
-	FRACT			fVVert;
+	float			fVVert;
 	BOOL			bOver = FALSE;
 	//Watermelon:psTempObj,psNewTarget,i,xdiff,ydiff,zdiff
 	BASE_OBJECT		*psTempObj;
@@ -933,7 +933,7 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 	dy = (SDWORD)psObj->tarY-(SDWORD)psObj->startY;
 
 	// ffs
-	iRad = (SDWORD)iSQRT( dx*dx + dy*dy );
+	iRad = (SDWORD)sqrtf( dx*dx + dy*dy );
 
 	iDist = iTime * psObj->vXY / GAME_TICKS_PER_SEC;
 

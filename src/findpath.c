@@ -653,7 +653,7 @@ PATH_POINT	*Movement;
 UDWORD		timeSoFar;
 SDWORD		xDif,yDif;
 UDWORD		tarX,tarY;
-FRACT		fraction;
+float		fraction;
 
 #ifdef DEBUG
 //	gameTimeStop();
@@ -782,9 +782,9 @@ FRACT		fraction;
 
 UDWORD	calcJourney(UDWORD	x1, UDWORD y1, UDWORD x2, UDWORD y2, UDWORD speed)
 {
-FRACT	xDif,yDif;
-FRACT	eta;
-FRACT	length;
+float	xDif,yDif;
+float	eta;
+float	length;
 
 	/* Get differences between start and end points */
 	xDif = MAKEFRACT(abs(x1-x2));
@@ -792,7 +792,7 @@ FRACT	length;
 
 	/* Find the length between these two points */
 
-	length = fSQRT(FRACTmul(xDif,xDif) + FRACTmul(yDif,yDif));
+	length = sqrtf(FRACTmul(xDif,xDif) + FRACTmul(yDif,yDif));
 
 
 	/* And how long should that take, given the passed in speed */

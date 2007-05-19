@@ -115,7 +115,7 @@ typedef struct _zonemap_save_header {
 
 
 /* Floating point type for the aaLine */
-// AAFLOAT's are interchangable with the FRACT type used in fractions.h
+// AAFLOAT's are interchangable with the float type used in fractions.h
 //
 // - I couldn't bring myself to rewrite John's execellent fixed/floating point code
 //
@@ -271,7 +271,7 @@ BOOL mapNew(UDWORD width, UDWORD height)
 
 	/* Allocate a buffer for the LOS routines points */
 
-/*	numPoints = iSQRT(mapWidth * mapWidth +  mapHeight * mapHeight) + 1;
+/*	numPoints = sqrtf(mapWidth * mapWidth +  mapHeight * mapHeight) + 1;
 
 
 
@@ -657,7 +657,7 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 
 		/* Allocate a buffer for the LOS routines points */
 
-/*		numPoints = iSQRT(mapWidth * mapWidth +  mapHeight * mapHeight) + 1;
+/*		numPoints = sqrtf(mapWidth * mapWidth +  mapHeight * mapHeight) + 1;
 
 
 
@@ -1139,10 +1139,10 @@ void mapRootTblInit(void)
 	pCell = aAARootTbl;
 	for(nowval = AA_ZERO; nowval < AA_ONE; nowval += incval)
 	{
-		*pCell++ = (AAFLOAT) fSQRT( AADIV(AA_ONE, (AA_ONE + AAMUL(nowval, nowval))) );
+		*pCell++ = (AAFLOAT) sqrtf( AADIV(AA_ONE, (AA_ONE + AAMUL(nowval, nowval))) );
 	}
 
-	aAARootTbl[tablecells - 1] = (AAFLOAT) fSQRT( AA_HALF );
+	aAARootTbl[tablecells - 1] = (AAFLOAT) sqrtf( AA_HALF );
 
 #endif
 }

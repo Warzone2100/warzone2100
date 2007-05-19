@@ -622,13 +622,13 @@ static SDWORD gwRouteLength(GATEWAY *psStart, GATEWAY *psEnd)
 	{
 		xdiff = sx - sRoute.asPos[i].x;
 		ydiff = sy - sRoute.asPos[i].y;
-		dist += (SDWORD)iSQRT(xdiff*xdiff + ydiff*ydiff);
+		dist += (SDWORD)sqrtf(xdiff*xdiff + ydiff*ydiff);
 		sx = sRoute.asPos[i].x;
 		sy = sRoute.asPos[i].y;
 	}
 	xdiff = sx - ex;
 	ydiff = sy - ey;
-	dist += (SDWORD)iSQRT(xdiff*xdiff + ydiff*ydiff);
+	dist += (SDWORD)sqrtf(xdiff*xdiff + ydiff*ydiff);
 
 	fpathBlockingTile = fpathGroundBlockingTile;
 

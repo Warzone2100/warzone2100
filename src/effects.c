@@ -197,7 +197,7 @@ UDWORD EffectGetNumFrames(EFFECT *psEffect);
 UDWORD IMDGetNumFrames(iIMDShape *Shape);
 
 /* The fraction of a second that the last game frame took */
-static	FRACT	fraction;
+static	float	fraction;
 
 static void killEffect(EFFECT *e)
 {
@@ -912,7 +912,7 @@ void	updateExplosion(EFFECT *psEffect)
 	LIGHT light;
 	UDWORD percent;
 	UDWORD range;
-	FRACT scaling;
+	float scaling;
 
 	if(TEST_LIT(psEffect))
 	{
@@ -1105,7 +1105,7 @@ void	updatePolySmoke(EFFECT *psEffect)
 */
 void	updateGraviton(EFFECT *psEffect)
 {
-	FRACT	accel;
+	float	accel;
 	Vector3i dv;
 	UDWORD	groundHeight;
 	MAPTILE	*psTile;
@@ -1189,9 +1189,9 @@ void	updateGraviton(EFFECT *psEffect)
 	}
 
 	/* Spin it round a bit */
-	psEffect->rotation.x += MAKEINT(((FRACT)psEffect->spin.x) * fraction);
-	psEffect->rotation.y += MAKEINT(((FRACT)psEffect->spin.y) * fraction);
-	psEffect->rotation.z += MAKEINT(((FRACT)psEffect->spin.z) * fraction);
+	psEffect->rotation.x += MAKEINT(((float)psEffect->spin.x) * fraction);
+	psEffect->rotation.y += MAKEINT(((float)psEffect->spin.y) * fraction);
+	psEffect->rotation.z += MAKEINT(((float)psEffect->spin.z) * fraction);
 
 	/* Update velocity (and retarding of descent) according to present frame rate */
 	accel = (GRAVITON_GRAVITY*fraction);
@@ -1224,9 +1224,9 @@ void	updateGraviton(EFFECT *psEffect)
 				psEffect->specific++;
 				/* Half it's velocity */
 
-//				psEffect->velocity.x/=(FRACT)(2);
-				psEffect->velocity.y/=(FRACT)(-2); // only y gets flipped
-//				psEffect->velocity.z/=(FRACT)(2);
+//				psEffect->velocity.x/=(float)(2);
+				psEffect->velocity.y/=(float)(-2); // only y gets flipped
+//				psEffect->velocity.z/=(float)(2);
 
 				/* Set it at ground level - may have gone through */
 				psEffect->position.y = MAKEFRACT(groundHeight);
@@ -1263,7 +1263,7 @@ void	updateDestruction(EFFECT *psEffect)
 	LIGHT	light;
 	UDWORD	percent;
 	UDWORD	range;
-	FRACT	div;
+	float	div;
 	UDWORD	height;
 
 	percent = PERCENT(gameTime-psEffect->birthTime,psEffect->lifeSpan);
@@ -1726,7 +1726,7 @@ void	renderDestructionEffect(EFFECT *psEffect)
 {
 	Vector3i dv;
 	SDWORD	rx,rz;
-	FRACT	div;
+	float	div;
 	SDWORD	percent;
 	//SDWORD	centreX,centreZ;
 	UDWORD	brightness,specular;

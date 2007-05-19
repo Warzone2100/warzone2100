@@ -223,7 +223,7 @@ static inline void Vector3f_CP(Vector3f* dest, Vector3f* op1, Vector3f* op2)
 }
 
 static inline void
-pie_Polygon(SDWORD numVerts, PIEVERTEX* pVrts, FRACT texture_offset, BOOL light)
+pie_Polygon(SDWORD numVerts, PIEVERTEX* pVrts, float texture_offset, BOOL light)
 {
 	SDWORD i;
 

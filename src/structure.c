@@ -2163,7 +2163,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y,
 		psBuilding->roll = 0;
 		//psBuilding->damage = structureDamage;
 		psBuilding->selected = FALSE;
-		//psBuilding->heightScale = (FRACT)0;
+		//psBuilding->heightScale = (float)0;
 		psBuilding->status = SS_BEING_BUILT;
 		psBuilding->currentBuildPts = 0;
         psBuilding->currentPowerAccrued = 0;
@@ -9081,10 +9081,10 @@ void checkResExtractorsActive(void)
 }
 
 /*Used for determining how much of the structure to draw as being built or demolished*/
-FRACT structHeightScale(STRUCTURE *psStruct)
+float structHeightScale(STRUCTURE *psStruct)
 {
 
-FRACT	retVal;
+float	retVal;
 	retVal = (MAKEFRACT(psStruct->currentBuildPts)/psStruct->pStructureType->buildPoints);
 	if(retVal<0.05f)
 	{
@@ -9581,7 +9581,7 @@ void	structUpdateRecoil( STRUCTURE *psStruct )
 {
 UDWORD	percent;
 UDWORD	recoil;
-FRACT	fraction;
+float	fraction;
 
 	/* Check it's actually got a weapon */
     if(psStruct->asWeaps[0].nStat == 0)

@@ -60,9 +60,9 @@ typedef struct environ_data
 {
 UBYTE	bProcess;
 UBYTE	type;
-FRACT	val;
+float	val;
 UBYTE	data;
-FRACT	vec;
+float	vec;
 }ENVIRON_DATA;
 
 // -------------------------------------------------------------------------------
@@ -132,12 +132,12 @@ void	environUpdate( void )
 {
 	UDWORD	i,j;
 	UDWORD	index;
-	FRACT	value,newValue;
-	FRACT	increment = 0;
-	FRACT	lowest = 0;
-	FRACT	highest = 0;
+	float	value,newValue;
+	float	increment = 0;
+	float	lowest = 0;
+	float	highest = 0;
 	UDWORD	startX,startY,endX,endY;
-	FRACT	fraction;
+	float	fraction;
 
 	//at the moment this function is getting called between levels and so crashes - quick check here for now
 	if (pEnvironData == NULL)

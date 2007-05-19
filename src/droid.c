@@ -1862,15 +1862,15 @@ BOOL droidUpdateBuild(DROID *psDroid)
 		{
 			for (j = 0; j < psStruct->pStructureType->baseBreadth+1; j++)
 			{
-				FRACT	divisor,illumin, currentIllumin;
+				float	divisor,illumin, currentIllumin;
 
 				divisor = (FOUNDATION_ILLUMIN + prev -
-					(FOUNDATION_ILLUMIN * prev)/(FRACT)100) / (FRACT)100;
+					(FOUNDATION_ILLUMIN * prev)/(float)100) / (float)100;
 				//work out what the initial value was before modifier was applied
 				currentIllumin = mapTile(mapX+i, mapY+j)->illumination;
 				illumin = currentIllumin / divisor;
-				divisor = ( FOUNDATION_ILLUMIN+current-(FOUNDATION_ILLUMIN*current)/(FRACT)100 )
-																			/ (FRACT)100;
+				divisor = ( FOUNDATION_ILLUMIN+current-(FOUNDATION_ILLUMIN*current)/(float)100 )
+																			/ (float)100;
 				illumin = illumin * divisor;
 				mapTile(mapX+i, mapY+j)->illumination = (UBYTE)illumin;
 			}
@@ -2480,7 +2480,7 @@ void	droidUpdateRecoil( DROID *psDroid )
 {
 UDWORD	percent;
 UDWORD	recoil;
-FRACT	fraction;
+float	fraction;
 //Watermelon:added multiple weapon update
 UBYTE	i = 0;
 UBYTE	num_weapons = 0;

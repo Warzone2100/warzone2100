@@ -211,8 +211,8 @@ void	optimisePathForDroid(DROID *psDroid)
 */
 UDWORD	getBisectingDirectionAway(UDWORD angleA,UDWORD angleB)
 {
-FRACT	xVec,yVec;
-FRACT	angle;
+float	xVec,yVec;
+float	angle;
 UDWORD	retVal;
 
 	/* Get the component vectors */
@@ -239,7 +239,7 @@ UDWORD	retVal;
 */
 UDWORD	getStepIndexFromAngle(UDWORD angle)
 {
-FRACT	accA;
+float	accA;
 UDWORD	retVal = 0;
 
 	accA = MAKEFRACT(angle);

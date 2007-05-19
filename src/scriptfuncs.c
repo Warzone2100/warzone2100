@@ -5375,7 +5375,7 @@ STRUCTURE	*psStructure;
 FEATURE		*psFeature;
 BASE_OBJECT	*psObj;
 UDWORD		damagePercent;
-FRACT		divisor;
+float		divisor;
 UDWORD		newVal;
 
 	/* OK - let's get the vars */

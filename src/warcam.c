@@ -98,7 +98,7 @@ SDWORD	presAvAngle = 0;;
 /*	These used to be #defines but they're variable now as it may be necessary
 	to allow the player	to customise tracking speed? Jim?
 */
-FRACT	accelConstant,velocityConstant, rotAccelConstant, rotVelocityConstant;
+float	accelConstant,velocityConstant, rotAccelConstant, rotVelocityConstant;
 
 /* How much info do you want when tracking a droid - this toggles full stat info */
 static	BOOL bFullInfo = FALSE;
@@ -108,14 +108,14 @@ static	BOOL bRadarTrackingRequested = FALSE;
 
 /* World coordinates for a radar track/jump */
 //static  SDWORD	 radarX,radarY;
-static  FRACT	 radarX,radarY;
+static  float	 radarX,radarY;
 
 /*	Where we were up to (pos and rot) last update - allows us to see whether
 	we are sufficently near our target to disable further tracking */
 static	Vector3i	oldPosition, oldRotation;
 
 /* The fraction of a second that the last game frame took */
-static	FRACT	fraction;
+static	float	fraction;
 
 static BOOL OldViewValid;
 
@@ -588,9 +588,9 @@ void	camAllignWithTarget(BASE_OBJECT *psTarget)
 static SDWORD getAverageTrackAngle( BOOL bCheckOnScreen )
 {
 	DROID *psDroid;
-	FRACT xShift, yShift;
-	FRACT xTotal = 0.0, yTotal = 0.0;
-	FRACT averageAngleFloat = 0;
+	float xShift, yShift;
+	float xTotal = 0.0, yTotal = 0.0;
+	float averageAngleFloat = 0;
 	SDWORD droidCount = 0, averageAngle = 0;
 	SDWORD retVal;
 
@@ -630,9 +630,9 @@ static SDWORD getAverageTrackAngle( BOOL bCheckOnScreen )
 static SDWORD getGroupAverageTrackAngle(UDWORD groupNumber, BOOL bCheckOnScreen)
 {
 	DROID *psDroid;
-	FRACT xShift, yShift;
-	FRACT xTotal = 0.0, yTotal = 0.0;
-	FRACT averageAngleFloat = 0;
+	float xShift, yShift;
+	float xTotal = 0.0, yTotal = 0.0;
+	float averageAngleFloat = 0;
 	SDWORD droidCount = 0, averageAngle = 0;
 	SDWORD retVal;
 
@@ -769,7 +769,7 @@ in the case of location and degrees of arc in the case of rotation.
 
 static void updateCameraAcceleration(UBYTE update)
 {
-FRACT	separation;
+float	separation;
 SDWORD	realPos;
 SDWORD	xConcern,yConcern,zConcern;
 SDWORD	xBehind,yBehind;
@@ -869,16 +869,16 @@ SDWORD	angle;
 	{
 		/* Need to update acceleration along x axis */
 		realPos = xConcern - (CAM_X_SHIFT) - xBehind;
-		separation = (FRACT)(realPos - trackingCamera.position.x);
+		separation = (float)(realPos - trackingCamera.position.x);
 		if(!bFlying)
 		{
 		 	trackingCamera.acceleration.x =
-				(accelConstant*separation - velocityConstant*(FRACT)trackingCamera.velocity.x);
+				(accelConstant*separation - velocityConstant*(float)trackingCamera.velocity.x);
 		}
 		else
 		{
 			trackingCamera.acceleration.x =
-				((accelConstant*separation*4) - (velocityConstant*2*(FRACT)trackingCamera.velocity.x));
+				((accelConstant*separation*4) - (velocityConstant*2*(float)trackingCamera.velocity.x));
 
 		}
 	}
@@ -890,7 +890,7 @@ SDWORD	angle;
 
 		/* Need to update acceleration along y axis */
 		realPos = (yConcern);
-		separation = (FRACT)(realPos - trackingCamera.position.y);
+		separation = (float)(realPos - trackingCamera.position.y);
 		if(bFlying) separation = separation/2;
 //		CONPRINTF(ConsoleString,(ConsoleString,"Separation : %f",separation));
 //		CONPRINTF(ConsoleString,(ConsoleString,"Distance : %d",distance));
@@ -910,7 +910,7 @@ SDWORD	angle;
 	{
 		/* Need to update acceleration along z axis */
 		realPos = zConcern - (CAM_Z_SHIFT) - yBehind;
-		separation = (FRACT)(realPos - trackingCamera.position.z);
+		separation = (float)(realPos - trackingCamera.position.z);
 		if(!bFlying)
 		{
 			trackingCamera.acceleration.z =
@@ -930,7 +930,7 @@ SDWORD	angle;
 static void updateCameraVelocity( UBYTE update )
 {
 //UDWORD	frameTime;
-FRACT	fraction;
+float	fraction;
 
 	/*	Get the time fraction of a second - the next two lines are present in 4
 		of the next six functions. All 4 of these functions are called every frame, so
@@ -938,7 +938,7 @@ FRACT	fraction;
 		I've left them in for clarity for now */
 
 //	frameTime = gameTime - trackingCamera.lastUpdate;
-	fraction = (MAKEFRACT(frameTime2) / (FRACT)GAME_TICKS_PER_SEC);
+	fraction = (MAKEFRACT(frameTime2) / (float)GAME_TICKS_PER_SEC);
 
 	if(update & X_UPDATE)
 	{
@@ -962,7 +962,7 @@ static void	updateCameraPosition(UBYTE update)
 {
 //UDWORD	frameTime;
 BOOL	bFlying;
-FRACT	fraction;
+float	fraction;
 DROID	*psDroid;
 PROPULSION_STATS	*psPropStats;
 
@@ -978,7 +978,7 @@ PROPULSION_STATS	*psPropStats;
 	}
 	/* See above */
 //	frameTime = gameTime - trackingCamera.lastUpdate;
-	fraction = (MAKEFRACT(frameTime2) / (FRACT)GAME_TICKS_PER_SEC);
+	fraction = (MAKEFRACT(frameTime2) / (float)GAME_TICKS_PER_SEC);
 
 	if(update & X_UPDATE)
 	{
@@ -997,7 +997,7 @@ PROPULSION_STATS	*psPropStats;
 //		}
 //		else
 //		{
-//			trackingCamera.position.y += MAKEINT(((FRACT)trackingCamera.velocity.y * fraction));
+//			trackingCamera.position.y += MAKEINT(((float)trackingCamera.velocity.y * fraction));
 //		}
 //		}
 	}
@@ -1014,7 +1014,7 @@ PROPULSION_STATS	*psPropStats;
 static void updateCameraRotationAcceleration( UBYTE update )
 {
 SDWORD	worldAngle;
-FRACT	separation;
+float	separation;
 SDWORD	xConcern, yConcern, zConcern;
 BOOL	bTooLow;
 DROID	*psDroid;
@@ -1070,7 +1070,7 @@ SDWORD	xPos,yPos,zPos;
 
 		/* Which way are we facing? */
 		worldAngle =  trackingCamera.rotation.y;
-		separation = (FRACT) ((yConcern - worldAngle));
+		separation = (float) ((yConcern - worldAngle));
 		if(separation < DEG(-180))
 		{
 			separation += DEG(360);
@@ -1117,7 +1117,7 @@ SDWORD	xPos,yPos,zPos;
 				trackingCamera.rotation.x+=DEG(360);
 			}
 		worldAngle =  trackingCamera.rotation.x;
-		separation = (FRACT) ((xConcern - worldAngle));
+		separation = (float) ((xConcern - worldAngle));
 
 		MODFRACT(separation,DEG(360));
 
@@ -1133,7 +1133,7 @@ SDWORD	xPos,yPos,zPos;
 		/* Make new acceleration */
 		trackingCamera.rotAccel.x =
 			/* Make this really slow */
-			((rotAccelConstant)*separation - rotVelocityConstant*(FRACT)trackingCamera.rotVel.x);
+			((rotAccelConstant)*separation - rotVelocityConstant*(float)trackingCamera.rotVel.x);
 	}
 
 	/* This looks a bit arse - looks like a flight sim */
@@ -1152,7 +1152,7 @@ SDWORD	xPos,yPos,zPos;
 				trackingCamera.rotation.z+=DEG(360);
 			}
 		worldAngle =  trackingCamera.rotation.z;
-		separation = (FRACT) ((zConcern - worldAngle));
+		separation = (float) ((zConcern - worldAngle));
 		if(separation<DEG(-180))
 		{
 			separation+=DEG(360);
@@ -1165,7 +1165,7 @@ SDWORD	xPos,yPos,zPos;
 		/* Make new acceleration */
 		trackingCamera.rotAccel.z =
 			/* Make this really slow */
-			((rotAccelConstant/1)*separation - rotVelocityConstant*(FRACT)trackingCamera.rotVel.z);
+			((rotAccelConstant/1)*separation - rotVelocityConstant*(float)trackingCamera.rotVel.z);
 	}
 
 }
@@ -1176,22 +1176,22 @@ SDWORD	xPos,yPos,zPos;
 static void updateCameraRotationVelocity( UBYTE update )
 {
 //UDWORD	frameTime;
-FRACT	fraction;
+float	fraction;
 
 //	frameTime = gameTime - trackingCamera.lastUpdate;
-	fraction = (MAKEFRACT(frameTime2) / (FRACT)GAME_TICKS_PER_SEC);
+	fraction = (MAKEFRACT(frameTime2) / (float)GAME_TICKS_PER_SEC);
 
 	if(update & Y_UPDATE)
 	{
-		trackingCamera.rotVel.y += ((FRACT)trackingCamera.rotAccel.y * fraction);
+		trackingCamera.rotVel.y += ((float)trackingCamera.rotAccel.y * fraction);
 	}
 	if(update & X_UPDATE)
 	{
-		trackingCamera.rotVel.x += ((FRACT)trackingCamera.rotAccel.x * fraction);
+		trackingCamera.rotVel.x += ((float)trackingCamera.rotAccel.x * fraction);
 	}
 	if(update & Z_UPDATE)
 	{
-		trackingCamera.rotVel.z += ((FRACT)trackingCamera.rotAccel.z * fraction);
+		trackingCamera.rotVel.z += ((float)trackingCamera.rotAccel.z * fraction);
 	}
 
 }
@@ -1201,10 +1201,10 @@ FRACT	fraction;
 static void updateCameraRotationPosition( UBYTE update )
 {
 //UDWORD	frameTime;
-FRACT	fraction;
+float	fraction;
 
 //	frameTime = gameTime - trackingCamera.lastUpdate;
-	fraction = (MAKEFRACT(frameTime2) / (FRACT)GAME_TICKS_PER_SEC);
+	fraction = (MAKEFRACT(frameTime2) / (float)GAME_TICKS_PER_SEC);
 
  	if(update & Y_UPDATE)
 	{

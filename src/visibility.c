@@ -73,7 +73,7 @@ static SDWORD			currObj;
 #define VIS_LEVEL_INC		(255*2)
 #define VIS_LEVEL_DEC		50
 // fractional accumulator of how much to change visibility this frame
-static FRACT			visLevelIncAcc, visLevelDecAcc;
+static float			visLevelIncAcc, visLevelDecAcc;
 // integer amount to change visiblility this turn
 static SDWORD			visLevelInc, visLevelDec;
 

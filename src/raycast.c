@@ -61,7 +61,7 @@ typedef struct _ray_point
 /* x and y increments for each ray angle */
 static SDWORD	rayDX[NUM_RAYS], rayDY[NUM_RAYS];
 static SDWORD	rayHDist[NUM_RAYS], rayVDist[NUM_RAYS];
-//static FRACT	rayTan[NUM_RAYS], rayCos[NUM_RAYS], raySin[NUM_RAYS];
+//static float	rayTan[NUM_RAYS], rayCos[NUM_RAYS], raySin[NUM_RAYS];
 static SDWORD	rayFPTan[NUM_RAYS], rayFPInvTan[NUM_RAYS];
 static SDWORD	rayFPInvCos[NUM_RAYS], rayFPInvSin[NUM_RAYS];
 
@@ -70,8 +70,8 @@ static SDWORD	rayFPInvCos[NUM_RAYS], rayFPInvSin[NUM_RAYS];
 BOOL rayInitialise(void)
 {
 	SDWORD	i;
-	FRACT	angle = MAKEFRACT(0);
-	FRACT	val;
+	float	angle = MAKEFRACT(0);
+	float	val;
 
 	for(i=0; i<NUM_RAYS; i++)
 	{
@@ -87,7 +87,7 @@ BOOL rayInitialise(void)
 		}
 
 		if(val == 0) {
-			val = (FRACT)1;	// Horrible hack to avoid divide by zero.
+			val = (float)1;	// Horrible hack to avoid divide by zero.
 		}
 
 		rayDY[i] = (SDWORD)(TILE_UNITS * RAY_ACCMUL / val);
@@ -103,7 +103,7 @@ BOOL rayInitialise(void)
 		// Set up the trig tables for calculating the offset distances
 		val = (float)sin(angle);
 		if(val == 0) {
-			val = (FRACT)1;
+			val = (float)1;
 		}
 		rayFPInvSin[i] = MAKEINT(FRACTdiv(MAKEFRACT(RAY_ACCMUL), val));
 		if (i >= NUM_RAYS/2)
@@ -117,7 +117,7 @@ BOOL rayInitialise(void)
 
 		val = (float)cos(angle);
 		if(val == 0) {
-			val = (FRACT)1;
+			val = (float)1;
 		}
 		rayFPInvCos[i] = MAKEINT(FRACTdiv(MAKEFRACT(RAY_ACCMUL), val));
 		if (i < NUM_RAYS/4 || i > 3*NUM_RAYS/4)
@@ -458,13 +458,13 @@ SDWORD rayPointDist(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2,
 /* Nasty global vars - put into a structure? */
 //-----------------------------------------------------------------------------------
 SDWORD	gHeight;
-FRACT	gPitch;
+float	gPitch;
 UDWORD	gStartTileX;
 UDWORD	gStartTileY;
 
 SDWORD	gHighestHeight,gHOrigHeight;
 SDWORD	gHMinDist;
-FRACT	gHPitch;
+float	gHPitch;
 
 
 //-----------------------------------------------------------------------------------
@@ -502,7 +502,7 @@ static BOOL	getTileHighestCallback(SDWORD x, SDWORD y, SDWORD dist)
 static BOOL	getTileHeightCallback(SDWORD x, SDWORD y, SDWORD dist)
 {
 	SDWORD	height,heightDif;
-	FRACT	newPitch;
+	float	newPitch;
 	BOOL HasTallStructure = FALSE;
 #ifdef TEST_RAY
 	Vector3i pos;

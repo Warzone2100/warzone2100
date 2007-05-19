@@ -30,7 +30,7 @@
 #include "findpath.h"
 
 /* The base movement speed */
-extern FRACT	baseSpeed;
+extern float	baseSpeed;
 
 // The next object that should get the router when a lot of units are
 // in a MOVEROUTE state

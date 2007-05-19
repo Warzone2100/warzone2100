@@ -30,7 +30,7 @@
 //		FRACTmul(fract,fract); to multiply two fract numbers
 //		FRACTdiv(fract,fract); to divide two numbers
 //		SQRT(fract);		to get square root of a fract (returns a fract)
-//      iSQRT(int);			to get a square root of an integer (returns an UDWORD) (no, it does not! - Per)
+//      sqrtf(int);			to get a square root of an integer (returns an UDWORD) (no, it does not! - Per)
 //      FRACTCONST(constA,constB);	; Generates a constant of (constA/constB)
 //                         e.g. to define 0.5 use FRACTCONST(1,2)
 //                              to define 0.114 use FRACTCONT(114,1000)
@@ -38,7 +38,7 @@
 // Also PERCENT(int,int);	// returns a int value 0->100 of the percentage of the first param over the second
 //
 
-// To multiply a FRACT by a integer just use the normal operator 
+// To multiply a float by a integer just use the normal operator
 //   e.g.   FractValue2=FractValue*Interger;
 //
 // same is true of divide
@@ -60,23 +60,18 @@
 #define PERNUM(range,a,b) (((a)*range)/(b))
 
 #ifndef M_PI
-#define M_PI 3.14159265358979323846
+# define M_PI 3.14159265358979323846
 #endif
 
-typedef float FRACT;
 typedef float FRACT_D;  /* But isn't this is supposed to be double? - Per */
 
 #define ROUND(x) ((x)>=0 ? (SDWORD)((x) + 0.5) : (SDWORD)((x) - 0.5))
 
-#define MAKEFRACT(x) ((FRACT)(x))
+#define MAKEFRACT(x) ((float)(x))
 #define FRACTmul(x,y) ((x)*(y))
 #define FRACTdiv(x,y) ((x)/(y))
 #define FRACTmul_1(x,y) ((x)*(y))
 #define FRACTdiv_1(x,y) ((x)/(y))
-#define fSQRT(x) ((FRACT)sqrt(x))
-
-// Jeremy ... the usual leg breaking rule aplies if you remove this again
-#define iSQRT(x) ((FRACT)sqrt(x))
 
 #define FRACTCONST(a,b) (((float)(a)) / ((float)(b)))
 #define MAKEFRACT_D(x) ((FRACT_D)(x))

@@ -703,8 +703,8 @@ void	kf_SystemClose( void )
 /* Zooms out from display */
 void	kf_ZoomOut( void )
 {
-FRACT	fraction;
-FRACT	zoomInterval;
+float	fraction;
+float	zoomInterval;
 
 	fraction = MAKEFRACT(frameTime2)/GAME_TICKS_PER_SEC;
 	zoomInterval = fraction * MAP_ZOOM_RATE;
@@ -750,8 +750,8 @@ void	kf_RadarZoomOut( void )
 /* Zooms in the map */
 void	kf_ZoomIn( void )
 {
-FRACT	fraction;
-FRACT	zoomInterval;
+float	fraction;
+float	zoomInterval;
 
 	fraction = MAKEFRACT(frameTime2)/GAME_TICKS_PER_SEC;
 	zoomInterval = fraction * MAP_ZOOM_RATE;
@@ -813,8 +813,8 @@ void	kf_ExpandScreen( void )
 /* Spins the world round left */
 void	kf_RotateLeft( void )
 {
-FRACT	fraction;
-FRACT	rotAmount;
+float	fraction;
+float	rotAmount;
 
 	fraction = MAKEFRACT(frameTime2)/GAME_TICKS_PER_SEC;
 	rotAmount = fraction * MAP_SPIN_RATE;
@@ -825,8 +825,8 @@ FRACT	rotAmount;
 /* Spins the world right */
 void	kf_RotateRight( void )
 {
-FRACT	fraction;
-FRACT	rotAmount;
+float	fraction;
+float	rotAmount;
 
 	fraction = MAKEFRACT(frameTime2)/GAME_TICKS_PER_SEC;
 	rotAmount = fraction * MAP_SPIN_RATE;
@@ -841,8 +841,8 @@ FRACT	rotAmount;
 /* Pitches camera back */
 void	kf_PitchBack( void )
 {
-FRACT	fraction;
-FRACT	pitchAmount;
+float	fraction;
+float	pitchAmount;
 
 //#ifdef ALEXM
 //SDWORD	pitch;
@@ -882,8 +882,8 @@ FRACT	pitchAmount;
 /* Pitches camera foward */
 void	kf_PitchForward( void )
 {
-FRACT	fraction;
-FRACT	pitchAmount;
+float	fraction;
+float	pitchAmount;
 
 	fraction = MAKEFRACT(frameTime2)/GAME_TICKS_PER_SEC;
 	pitchAmount = fraction * MAP_PITCH_RATE;
@@ -2426,7 +2426,7 @@ void	kf_ToggleShadows( void )
 }
 // --------------------------------------------------------------------------
 
-FRACT available_speed[] = {
+float available_speed[] = {
 	FRACTCONST(1, 8),
 	FRACTCONST(1, 4),
 	FRACTCONST(1, 2),
@@ -2443,7 +2443,7 @@ unsigned int nb_available_speeds = 11;
 
 void kf_SpeedUp( void )
 {
-	FRACT	mod;
+	float	mod;
 
 	if ( (!bMultiPlayer || (NetPlay.bComms==0) )  && !bInTutorial)
 	{
@@ -2470,7 +2470,7 @@ void kf_SpeedUp( void )
 
 void kf_SlowDown( void )
 {
-	FRACT	mod;
+	float	mod;
 
 	if ( (!bMultiPlayer || (NetPlay.bComms==0) )  && !bInTutorial)
 	{

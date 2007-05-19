@@ -182,10 +182,10 @@ static UWORD RiverBedTileID = BED_TILE;
 static float waterRealValue = 0.0f;
 #define WAVE_SPEED 4
 #define	MAX_FIRE_STAGE	32
-static FRACT	separation=(FRACT)0;
+static float	separation=(float)0;
 static SDWORD	acceleration=0;
 static SDWORD	heightSpeed=0;
-static FRACT	aSep;
+static float	aSep;
 static SDWORD	aAccel = 0;
 static SDWORD	aSpeed = 0;
 
@@ -2845,7 +2845,7 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 
 	/* ****************/
 	// display unit resistance instead of reload!
-	FRACT mulH;
+	float mulH;
 	DROID *psDroid;
 
 	if (ctrlShiftDown() && (psObj->type == OBJ_DROID))
@@ -2982,7 +2982,7 @@ UDWORD		i;
 BASE_OBJECT	*psClickedOn;
 BOOL		bMouseOverStructure = FALSE;
 BOOL		bMouseOverOwnStructure = FALSE;
-FRACT		mulH;
+float		mulH;
 
 	psClickedOn = mouseTarget();
 	if(psClickedOn!=NULL && psClickedOn->type == OBJ_STRUCTURE)
@@ -3319,7 +3319,7 @@ static void	drawDroidSelections( void )
 	BOOL			bBeingTracked;
 	UDWORD			i,index;
 	FEATURE			*psFeature;
-	FRACT			mulH;
+	float			mulH;
 
 	psClickedOn = mouseTarget();
 	if(psClickedOn!=NULL && psClickedOn->type == OBJ_DROID)
@@ -4596,25 +4596,25 @@ UDWORD	getSuggestedPitch( void )
 // -------------------------------------------------------------------------------------
 static void	trackHeight( SDWORD desiredHeight )
 {
-FRACT	fraction;
+float	fraction;
 UDWORD	pitch;
 SDWORD	angConcern;
 UDWORD	desPitch;
 
 		/* What fraction of a second did last game loop take */
-		fraction = (MAKEFRACT(frameTime2) / (FRACT)GAME_TICKS_PER_SEC);
+		fraction = (MAKEFRACT(frameTime2) / (float)GAME_TICKS_PER_SEC);
 
 		/* How far are we from desired hieght? */
-		separation = (FRACT)(desiredHeight - player.p.y);
+		separation = (float)(desiredHeight - player.p.y);
 
 		/* Work out accelertion... */
-		acceleration = MAKEINT(((ACCEL_CONSTANT*2)*separation - (VELOCITY_CONSTANT)*(FRACT)heightSpeed));
+		acceleration = MAKEINT(((ACCEL_CONSTANT*2)*separation - (VELOCITY_CONSTANT)*(float)heightSpeed));
 
 		/* ...and now speed */
-		heightSpeed += MAKEINT(((FRACT)acceleration * fraction));
+		heightSpeed += MAKEINT(((float)acceleration * fraction));
 
 		/* Adjust the height accordingly */
-		player.p.y += MAKEINT(((FRACT)heightSpeed * fraction));
+		player.p.y += MAKEINT(((float)heightSpeed * fraction));
 
 		/* Now do auto pitch as well, but only if we're not using mouselook and not tracking */
 		if(!getWarCamStatus() && !getRotActive())
@@ -4647,19 +4647,19 @@ UDWORD	desPitch;
 			else if(pitch>desPitch)
 			{
 				angConcern = DEG(360-pitch);
-				aSep = (FRACT)(angConcern-player.r.x);
-				aAccel = MAKEINT((((ACCEL_CONSTANT))*aSep - (VELOCITY_CONSTANT)*(FRACT)aSpeed));
-				aSpeed += MAKEINT(((FRACT)aAccel * fraction));
-				player.r.x += MAKEINT(((FRACT)aSpeed * fraction));
+				aSep = (float)(angConcern-player.r.x);
+				aAccel = MAKEINT((((ACCEL_CONSTANT))*aSep - (VELOCITY_CONSTANT)*(float)aSpeed));
+				aSpeed += MAKEINT(((float)aAccel * fraction));
+				player.r.x += MAKEINT(((float)aSpeed * fraction));
 			}
 			else
 			{
 				/* Else, move towards player's last selected pitch */
 				angConcern = DEG(360-desPitch);
-				aSep = (FRACT)(angConcern-player.r.x);
-				aAccel = MAKEINT((((ACCEL_CONSTANT))*aSep - (VELOCITY_CONSTANT)*(FRACT)aSpeed));
-				aSpeed += MAKEINT(((FRACT)aAccel * fraction));
-				player.r.x += MAKEINT(((FRACT)aSpeed * fraction));
+				aSep = (float)(angConcern-player.r.x);
+				aAccel = MAKEINT((((ACCEL_CONSTANT))*aSep - (VELOCITY_CONSTANT)*(float)aSpeed));
+				aSpeed += MAKEINT(((float)aAccel * fraction));
+				player.r.x += MAKEINT(((float)aSpeed * fraction));
 			}
 
 //			flushConsoleMessages();

@@ -253,8 +253,8 @@ UDWORD	index;
 BOOL	bMoreBars;
 UDWORD	x,y;
 UDWORD	width,height;
-FRACT	length;
-FRACT	mul;
+float	length;
+float	mul;
 UDWORD	div;
 
 	if(!bDispStarted)
@@ -375,7 +375,7 @@ void	fillUpStats( void )
 {
 	UDWORD	i;
 	UDWORD	maxi,num;
-	FRACT	scaleFactor;
+	float	scaleFactor;
 	UDWORD	length;
 	UDWORD	numUnits;
 	DROID	*psDroid;

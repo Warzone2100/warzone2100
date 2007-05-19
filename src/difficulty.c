@@ -32,11 +32,11 @@
 #include "difficulty.h"
 // ------------------------------------------------------------------------------------
 DIFFICULTY_LEVEL	presDifLevel = DL_NORMAL;
-FRACT				fDifPlayerModifier;
-FRACT				fDifEnemyModifier;
+float				fDifPlayerModifier;
+float				fDifEnemyModifier;
 
 
-void setModifiers(FRACT Player,FRACT Enemy)
+void setModifiers(float Player,float Enemy)
 {
 	fDifPlayerModifier = Player;
 	fDifEnemyModifier = Enemy;

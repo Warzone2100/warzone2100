@@ -66,10 +66,10 @@ typedef struct _move_control
 	SDWORD	srcX,srcY,targetX,targetY;
 
 	/* Stuff for John's movement update */
-	FRACT	fx,fy;						// droid location as a fract
-//	FRACT	dx,dy;						// x and y change for current direction
+	float	fx,fy;						// droid location as a fract
+//	float	dx,dy;						// x and y change for current direction
 	// NOTE: this is supposed to replace Speed
-	FRACT	speed;						// Speed of motion
+	float	speed;						// Speed of motion
 	SWORD	boundX,boundY;				// Vector for the end of path boundary
 
 	float	moveDir;						// direction of motion (not the direction the droid is facing)
@@ -92,7 +92,7 @@ typedef struct _move_control
 
 	// added for vtol movement
 
-	FRACT	fz;
+	float	fz;
 
 
 	/* Only needed for Alex's movement update ? */

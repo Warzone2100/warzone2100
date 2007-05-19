@@ -327,7 +327,7 @@ extern void checkResExtractorsActive(void);
 extern UWORD countAssignableFactories(UBYTE player,UWORD FactoryType);
 
 /*Used for determining how much of the structure to draw as being built or demolished*/
-extern FRACT structHeightScale(STRUCTURE *psStruct);
+extern float structHeightScale(STRUCTURE *psStruct);
 
 /*compares the structure sensor type with the droid weapon type to see if the
 FIRE_SUPPORT order can be assigned*/

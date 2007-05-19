@@ -37,13 +37,13 @@ extern BOOL trigInitialise(void);
 extern void trigShutDown(void);
 
 /* Lookup trig functions */
-extern FRACT trigSin(SDWORD angle);
-extern FRACT trigCos(SDWORD angle);
-extern FRACT trigInvSin(FRACT val);
-extern FRACT trigInvCos(FRACT val);
+extern float trigSin(SDWORD angle);
+extern float trigCos(SDWORD angle);
+extern float trigInvSin(float val);
+extern float trigInvCos(float val);
 
 /* Supposedly fast lookup sqrt - unfortunately it's probably slower than the FPU sqrt :-( */
-extern FRACT trigIntSqrt(UDWORD val);
+extern float trigIntSqrt(UDWORD val);
 
 #endif
 
