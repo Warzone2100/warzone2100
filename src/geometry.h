@@ -43,6 +43,6 @@ extern	int				inQuad			( POINT *pt, QUAD *quad );
 extern DROID			*getNearestDroid ( UDWORD x, UDWORD y, BOOL bSelected );
 extern BOOL	droidOnScreen ( DROID *psDroid, SDWORD tolerance );
 
-extern UDWORD	dirtySqrt	( SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2 );
+extern UDWORD	dirtySqrt	( SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2 );
 
 #endif

@@ -305,16 +305,14 @@ BASE_OBJECT	*getTileOccupier(UDWORD x, UDWORD y)
 }
 
 // Approximates a square root - never more than 11% out...
-UDWORD	dirtySqrt( SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
+UDWORD dirtySqrt( SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
 {
-UDWORD	xDif,yDif;
-UDWORD	retVal;
+	UDWORD xDif, yDif;
 
-	xDif = abs(x1-x2);
-	yDif = abs(y1-y2);
+	xDif = abs(x1 - x2);
+	yDif = abs(y1 - y2);
 
-	retVal = (MAX(xDif,yDif) + (MIN(xDif,yDif)/2));
-	return(retVal);
+	return MAX(xDif, yDif) + MIN(xDif, yDif) / 2;
 }
 
 //-----------------------------------------------------------------------------------

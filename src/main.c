@@ -648,6 +648,8 @@ static void mainLoop(void)
 
 	while (TRUE)
 	{
+		frameUpdate(); // General housekeeping
+
 		/* Deal with any windows messages */
 		while (SDL_PollEvent(&event))
 		{
@@ -695,8 +697,6 @@ static void mainLoop(void)
 			}
 
 			gameTimeUpdate(); // Update gametime. FIXME There is probably code duplicated with MaintainFrameStuff
-
-			frameUpdate(); // General housekeeping
 		}
 
 		SDL_framerateDelay(&wzFPSmanager);
