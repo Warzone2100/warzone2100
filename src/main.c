@@ -89,10 +89,8 @@ char * multiplay_mods[MAX_MODS] = { NULL };
 // Warzone 2100 . Pumpkin Studios
 
 //flag to indicate when initialisation is complete
-BOOL	videoInitialised = FALSE;
 BOOL	gameInitialised = FALSE;
-BOOL	frontendInitialised = FALSE;
-BOOL	bDisableLobby;
+BOOL	bDisableLobby = FALSE;
 char	SaveGamePath[MAX_PATH];
 char	ScreenDumpPath[MAX_PATH];
 char	MultiForcesPath[MAX_PATH];
@@ -427,9 +425,6 @@ static void startTitleLoop(void)
 		exit(EXIT_FAILURE);
 	}
 	frontendInitVars();
-
-	// set a flag for the trigger/event system to indicate initialisation is complete
-	frontendInitialised = TRUE;
 }
 
 
@@ -444,7 +439,6 @@ static void stopTitleLoop(void)
 		debug( LOG_ERROR, "Shutting down after failure" );
 		exit(EXIT_FAILURE);
 	}
-	frontendInitialised = FALSE;
 }
 
 
@@ -686,8 +680,6 @@ static void mainLoop(void)
 
 		if (focusState == FOCUS_IN)
 		{
-			gameTimeUpdate(); // Update gametime. FIXME There is probably code duplicated with MaintainFrameStuff
-
 			if (loop_GetVideoStatus())
 				videoLoop(); // Display the video if neccessary
 			else switch (GetGameMode())
@@ -701,6 +693,8 @@ static void mainLoop(void)
 				default:
 					break;
 			}
+
+			gameTimeUpdate(); // Update gametime. FIXME There is probably code duplicated with MaintainFrameStuff
 
 			frameUpdate(); // General housekeeping
 		}
@@ -775,8 +769,6 @@ int main(int argc, char *argv[])
 	war_SetDefaultStates();
 
 	debug(LOG_MAIN, "initializing");
-
-	bDisableLobby = FALSE;
 
 	loadConfig();
 	atexit( closeConfig );

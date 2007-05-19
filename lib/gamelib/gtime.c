@@ -28,14 +28,9 @@
 
 #include <time.h>
 
-//#define DEBUG_GROUP1
 #include "lib/framework/frame.h"
 #include "gtime.h"
 
-
-#define TIME_FIX
-
-//#define RATE_LIMIT
 
 #define GTIME_MINFRAME	(GAME_TICKS_PER_SEC/80)
 
@@ -53,7 +48,7 @@ UDWORD frameTime2;
 
 
 // the current clock modifier
-static FRACT	modifier;
+static float modifier;
 
 
 // the amount of game time before the last time clock speed was set
@@ -84,9 +79,7 @@ BOOL gameTimeInit(void)
 	timeOffset2 = 0;
 	baseTime2 = baseTime;
 
-
-	modifier = FRACTCONST(1,1);
-
+	modifier = 1.0f;
 
 	stopCount = 0;
 
@@ -115,57 +108,35 @@ UDWORD	div1,div2;
 /* Call this each loop to update the game timer */
 void gameTimeUpdate(void)
 {
-	UDWORD				currTime, fpMod;
-#ifdef TIME_FIX
-	Uint64	newTime;
-	Uint64	extraTime;
-#else
-	unsigned long long	newTime;
-#endif
-
-	currTime = SDL_GetTicks();
+	unsigned int currTime = SDL_GetTicks();
+	unsigned long long newTime;
 
 	//don't update the game time if gameTimeStop has been called
 	if (stopCount == 0)
 	{
 		// Calculate the new game time
-		newTime = currTime - baseTime;
-
-		// convert the modifier to fixed point cos we loose accuracy
-		fpMod = MAKEINT(FRACTmul(modifier, FRACTCONST(1000,1)));
-
-		newTime = newTime * fpMod / 1000;
-
-		newTime += timeOffset;
+		newTime = ( currTime - baseTime ) * modifier + timeOffset;
 
 		// Calculate the time for this frame
-		frameTime = (UDWORD)(newTime - gameTime);
+		frameTime = (newTime - gameTime);
 
 		// Limit the frame time
 		if (frameTime > GTIME_MAXFRAME)
 		{
-#ifdef TIME_FIX
-			extraTime = frameTime - GTIME_MAXFRAME;
-			extraTime = extraTime * 1000 / fpMod;//adjust the addition to base time
-			baseTime += (UDWORD)extraTime;
-#else
-			baseTime += frameTime - GTIME_MAXFRAME;
-#endif
+			baseTime += ( frameTime - GTIME_MAXFRAME ) / modifier; // adjust the addition to base time
 			newTime = gameTime + GTIME_MAXFRAME;
 			frameTime = GTIME_MAXFRAME;
 		}
 
 		// Store the game time
-		gameTime = (UDWORD)newTime;
+		gameTime = newTime;
 	}
 
 	// now update gameTime2 which does not pause
-	newTime = currTime - baseTime2;
-
-	newTime += timeOffset;
+	newTime = currTime - baseTime2 + timeOffset;
 
 	// Calculate the time for this frame
-	frameTime2 = (UDWORD)newTime - gameTime2;
+	frameTime2 = newTime - gameTime2;
 
 	// Limit the frame time
 	if (frameTime2 > GTIME_MAXFRAME)
@@ -176,7 +147,7 @@ void gameTimeUpdate(void)
 	}
 
 	// Store the game time
-	gameTime2 = (UDWORD)newTime;
+	gameTime2 = newTime;
 }
 
 
@@ -189,18 +160,18 @@ void gameTimeResetMod(void)
 	baseTime = SDL_GetTicks();
 	baseTime2 = SDL_GetTicks();
 
-	modifier = FRACTCONST(1,1);
+	modifier = 1.0f;
 }
 
 // set the time modifier
-void gameTimeSetMod(FRACT mod)
+void gameTimeSetMod(float mod)
 {
 	gameTimeResetMod();
 	modifier = mod;
 }
 
 // get the current time modifier
-void gameTimeGetMod(FRACT *pMod)
+void gameTimeGetMod(float *pMod)
 {
 	*pMod = modifier;
 }
@@ -253,8 +224,7 @@ void gameTimeReset(UDWORD time)
 	baseTime2 = SDL_GetTicks();
 
 
-	modifier = FRACTCONST(1,1);
-
+	modifier = 1.0f;
 }
 
 void	getTimeComponents(UDWORD time, UDWORD *hours, UDWORD *minutes, UDWORD *seconds)

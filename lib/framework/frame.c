@@ -150,32 +150,32 @@ void frameSetCursorFromRes(SWORD resID)
 
 static void initCursors(void)
 {
-        aCursors[CURSOR_ARROW - CURSOR_OFFSET] = init_system_cursor(cursor_arrow);
-        aCursors[CURSOR_DEST - CURSOR_OFFSET] = init_system_cursor(cursor_dest);
-        aCursors[CURSOR_SIGHT - CURSOR_OFFSET] = init_system_cursor(cursor_sight);
-        aCursors[CURSOR_TARGET - CURSOR_OFFSET] = init_system_cursor(cursor_target);
-        aCursors[CURSOR_LARROW - CURSOR_OFFSET] = init_system_cursor(cursor_larrow);
-        aCursors[CURSOR_RARROW - CURSOR_OFFSET] = init_system_cursor(cursor_rarrow);
-        aCursors[CURSOR_DARROW - CURSOR_OFFSET] = init_system_cursor(cursor_darrow);
-        aCursors[CURSOR_UARROW - CURSOR_OFFSET] = init_system_cursor(cursor_uarrow);
-        aCursors[CURSOR_DEFAULT - CURSOR_OFFSET] = init_system_cursor(cursor_default);
-        aCursors[CURSOR_EDGEOFMAP - CURSOR_OFFSET] = init_system_cursor(cursor_default);
-        aCursors[CURSOR_ATTACH - CURSOR_OFFSET] = init_system_cursor(cursor_attach);
-        aCursors[CURSOR_ATTACK - CURSOR_OFFSET] = init_system_cursor(cursor_attack);
-        aCursors[CURSOR_BOMB - CURSOR_OFFSET] = init_system_cursor(cursor_bomb);
-        aCursors[CURSOR_BRIDGE - CURSOR_OFFSET] = init_system_cursor(cursor_bridge);
-        aCursors[CURSOR_BUILD - CURSOR_OFFSET] = init_system_cursor(cursor_build);
-        aCursors[CURSOR_EMBARK - CURSOR_OFFSET] = init_system_cursor(cursor_embark);
-        aCursors[CURSOR_FIX - CURSOR_OFFSET] = init_system_cursor(cursor_fix);
-        aCursors[CURSOR_GUARD - CURSOR_OFFSET] = init_system_cursor(cursor_guard);
-        aCursors[CURSOR_JAM - CURSOR_OFFSET] = init_system_cursor(cursor_jam);
-        aCursors[CURSOR_LOCKON - CURSOR_OFFSET] = init_system_cursor(cursor_lockon);
-        aCursors[CURSOR_MENU - CURSOR_OFFSET] = init_system_cursor(cursor_menu);
-        aCursors[CURSOR_MOVE - CURSOR_OFFSET] = init_system_cursor(cursor_move);
-        aCursors[CURSOR_NOTPOSSIBLE - CURSOR_OFFSET] = init_system_cursor(cursor_notpossible);
-        aCursors[CURSOR_PICKUP - CURSOR_OFFSET] = init_system_cursor(cursor_pickup);
-        aCursors[CURSOR_SEEKREPAIR - CURSOR_OFFSET] = init_system_cursor(cursor_seekrepair);
-        aCursors[CURSOR_SELECT - CURSOR_OFFSET] = init_system_cursor(cursor_select);
+	aCursors[CURSOR_ARROW - CURSOR_OFFSET] = init_system_cursor(cursor_arrow);
+	aCursors[CURSOR_DEST - CURSOR_OFFSET] = init_system_cursor(cursor_dest);
+	aCursors[CURSOR_SIGHT - CURSOR_OFFSET] = init_system_cursor(cursor_sight);
+	aCursors[CURSOR_TARGET - CURSOR_OFFSET] = init_system_cursor(cursor_target);
+	aCursors[CURSOR_LARROW - CURSOR_OFFSET] = init_system_cursor(cursor_larrow);
+	aCursors[CURSOR_RARROW - CURSOR_OFFSET] = init_system_cursor(cursor_rarrow);
+	aCursors[CURSOR_DARROW - CURSOR_OFFSET] = init_system_cursor(cursor_darrow);
+	aCursors[CURSOR_UARROW - CURSOR_OFFSET] = init_system_cursor(cursor_uarrow);
+	aCursors[CURSOR_DEFAULT - CURSOR_OFFSET] = init_system_cursor(cursor_default);
+	aCursors[CURSOR_EDGEOFMAP - CURSOR_OFFSET] = init_system_cursor(cursor_default);
+	aCursors[CURSOR_ATTACH - CURSOR_OFFSET] = init_system_cursor(cursor_attach);
+	aCursors[CURSOR_ATTACK - CURSOR_OFFSET] = init_system_cursor(cursor_attack);
+	aCursors[CURSOR_BOMB - CURSOR_OFFSET] = init_system_cursor(cursor_bomb);
+	aCursors[CURSOR_BRIDGE - CURSOR_OFFSET] = init_system_cursor(cursor_bridge);
+	aCursors[CURSOR_BUILD - CURSOR_OFFSET] = init_system_cursor(cursor_build);
+	aCursors[CURSOR_EMBARK - CURSOR_OFFSET] = init_system_cursor(cursor_embark);
+	aCursors[CURSOR_FIX - CURSOR_OFFSET] = init_system_cursor(cursor_fix);
+	aCursors[CURSOR_GUARD - CURSOR_OFFSET] = init_system_cursor(cursor_guard);
+	aCursors[CURSOR_JAM - CURSOR_OFFSET] = init_system_cursor(cursor_jam);
+	aCursors[CURSOR_LOCKON - CURSOR_OFFSET] = init_system_cursor(cursor_lockon);
+	aCursors[CURSOR_MENU - CURSOR_OFFSET] = init_system_cursor(cursor_menu);
+	aCursors[CURSOR_MOVE - CURSOR_OFFSET] = init_system_cursor(cursor_move);
+	aCursors[CURSOR_NOTPOSSIBLE - CURSOR_OFFSET] = init_system_cursor(cursor_notpossible);
+	aCursors[CURSOR_PICKUP - CURSOR_OFFSET] = init_system_cursor(cursor_pickup);
+	aCursors[CURSOR_SEEKREPAIR - CURSOR_OFFSET] = init_system_cursor(cursor_seekrepair);
+	aCursors[CURSOR_SELECT - CURSOR_OFFSET] = init_system_cursor(cursor_select);
 }
 
 
