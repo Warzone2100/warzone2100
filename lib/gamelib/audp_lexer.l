@@ -101,7 +101,7 @@ ANIMOBJECT						{	return ANIMOBJECT;		}
 									}
 
 									/* set final quote in string to blank */
-									audp_lval.sval[audp_leng-2] = (char) NULL;
+									audp_lval.sval[audp_leng-2] = (char) '\0';
 
 									return QTEXT;
 								}
