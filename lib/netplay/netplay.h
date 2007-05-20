@@ -41,15 +41,15 @@
 #define SESSION_JOINDISABLED	1
 
 typedef struct {					//Available game storage... JUST FOR REFERENCE!
-	SDWORD dwSize;
-	SDWORD dwFlags;
+	int32_t dwSize;
+	int32_t dwFlags;
 	char host[16];	// host ip address
-	SDWORD dwMaxPlayers;
-	SDWORD dwCurrentPlayers;
-	SDWORD dwUser1;
-	SDWORD dwUser2;
-	SDWORD dwUser3;
-	SDWORD dwUser4;
+	int32_t dwMaxPlayers;
+	int32_t dwCurrentPlayers;
+	int32_t dwUser1;
+	int32_t dwUser2;
+	int32_t dwUser3;
+	int32_t dwUser4;
 } SESSIONDESC;
 
 // Games Storage Structures
@@ -64,7 +64,7 @@ typedef struct {
 #define NET_ALL_PLAYERS 255
 
 typedef struct {
-	unsigned short	size;
+	uint16_t size;
 	unsigned char	paddedBytes;		// numberofbytes appended for encryption
 	unsigned char	type;
 	unsigned char	destination;
@@ -78,10 +78,14 @@ typedef struct {
 // ////////////////////////////////////////////////////////////////////////
 // Player information. Update using NETplayerinfo
 typedef struct {
-	UDWORD dpid;
+	uint32_t dpid;
 	char name[StringSize];
-	BOOL bHost;				// a bool.
-	BOOL bSpectator;
+
+	// These are actually boolean values so uint8_t would suffice just as well.
+	// The problem is however that these where previously declared as BOOL,
+	// which is typedef'd as int, which on most platforms is equal to uint32_t.
+	uint32_t bHost;
+	uint32_t bSpectator;
 } PLAYER;
 
 // ////////////////////////////////////////////////////////////////////////
@@ -89,21 +93,25 @@ typedef struct {
 typedef struct {
 	GAMESTRUCT	games[MaxGames];		// the collection of games
 	PLAYER		players[MaxNumberOfPlayers];	// the array of players.
-	UDWORD		playercount;			// number of players in game.
+	uint32_t        playercount;			// number of players in game.
 
-	UDWORD		dpidPlayer;			// ID of player created
+	uint32_t        dpidPlayer;			// ID of player created
 
-	BOOL		bComms;				// actually do the comms?
-	BOOL		bHost;				// TRUE if we are hosting the session
-	BOOL		bLobbyLaunched;			// true if app launched by a lobby
-	BOOL		bSpectator;			// true if just spectating
+	// booleans
+	uint32_t        bComms;				// actually do the comms?
+	uint32_t        bHost;				// TRUE if we are hosting the session
+	uint32_t        bLobbyLaunched;			// true if app launched by a lobby
+	uint32_t        bSpectator;			// true if just spectating
 
-	BOOL		bEncryptAllPackets;		// set to true to encrypt all communications.
-	UDWORD		cryptKey[4];			// 4*32 bit encryption key
+	uint32_t        bEncryptAllPackets;		// set to true to encrypt all communications.
 
-	BOOL		bCaptureInUse;			// true if someone is speaking.
-	BOOL		bAllowCaptureRecord;		// true if speech can be recorded.
-	BOOL		bAllowCapturePlay;		// true if speech can be played.
+	// Legitimate uint32_t (i.e. a non-bool)
+	uint32_t        cryptKey[4];			// 4*32 bit encryption key
+
+	// booleans
+	uint32_t        bCaptureInUse;			// true if someone is speaking.
+	uint32_t        bAllowCaptureRecord;		// true if speech can be recorded.
+	uint32_t        bAllowCapturePlay;		// true if speech can be played.
 } NETPLAY, *LPNETPLAY;
 
 // ////////////////////////////////////////////////////////////////////////
