@@ -3384,7 +3384,7 @@ void intDisplayWidgets(void)
 			screen_RestartBackDrop();
 
 			/*Add the radar to the design screen - only if player has HQ*/
-			bPlayerHasHQ = radarCheckForHQ(selectedPlayer);
+			bPlayerHasHQ = getHQExists(selectedPlayer);
 
 
 //			if(bPlayerHasHQ || (bMultiPlayer && (game.type == DMATCH)) )

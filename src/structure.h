@@ -223,10 +223,6 @@ extern void buildingComplete(STRUCTURE *psBuilding);
 extern void checkForResExtractors(STRUCTURE *psPowerGen);
 extern void checkForPowerGen(STRUCTURE *psPowerGen);
 
-/*Looks through the players list of structures to see if a HQ exists - will look
-through the list of structures at Home Base when on an offWorld mission map*/
-extern BOOL radarCheckForHQ(UDWORD player);
-
 // Set the command droid that factory production should go to
 //struct _command_droid;
 extern void assignFactoryCommandDroid(STRUCTURE *psStruct, struct _droid *psCommander);

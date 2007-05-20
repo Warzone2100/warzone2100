@@ -398,7 +398,7 @@ void draw3DScene( void )
 	drawStructureSelections();
 //	drawBuildingLines();
 
-	bPlayerHasHQ = radarCheckForHQ(selectedPlayer);
+	bPlayerHasHQ = getHQExists(selectedPlayer);
 
 //	if(radarOnScreen && (bPlayerHasHQ || (bMultiPlayer && (game.type == DMATCH)) ))
 	if(radarOnScreen && bPlayerHasHQ)
