@@ -1506,35 +1506,15 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 	{
 		pie_Draw3DShape(psShape, 0,colour /*getPlayerColour( psDroid->player)*/, brightness, specular, pieFlag, iPieData);
 	}
-
-
-/*
-	if(leftFirst)
-	{
-		psShape = getRightPropulsionIMD(psDroid);
-		if(psShape!=NULL)
-		{
-			iV_PIEDraw(psShape,psDroid->player);
-		}
-	}
-	else
-	{
-		psShape = getLeftPropulsionIMD(psDroid);
-		if(psShape!=NULL)
-		{
-			iV_PIEDraw(psShape,psDroid->player);
-		}
-	}
-	*/
 }
 
 
 void destroyFXDroid(DROID	*psDroid)
 {
-UDWORD	i;
-iIMDShape	*psImd = NULL;
-SDWORD	widthScatter,breadthScatter,heightScatter;
-Vector3i pos;
+	UDWORD	i;
+	iIMDShape	*psImd = NULL;
+	SDWORD	widthScatter, breadthScatter, heightScatter;
+	Vector3i pos;
 
  	widthScatter = TILE_UNITS/4;
 	breadthScatter = TILE_UNITS/4;
@@ -1556,9 +1536,6 @@ Vector3i pos;
             case DROID_CYBORG_REPAIR:
 			case DROID_WEAPON:
 			case DROID_COMMAND:
-				//Watermelon:another commented-out crash...
-				//Re-added the safety check
-				//if(psDroid->numWeaps)
 				if (psDroid->numWeaps > 0)
 				{
 					if(psDroid->asWeaps[0].nStat > 0)
@@ -1568,12 +1545,10 @@ Vector3i pos;
 				}
 				else
 				{
-//					psImd = debrisImds[rand()%MAX_DEBRIS];
 					psImd = getRandomDebrisImd();
 				}
 				break;
 			default:
-//				psImd = debrisImds[rand()%MAX_DEBRIS];
 				psImd = getRandomDebrisImd();
 				break;
 			}
@@ -1588,19 +1563,16 @@ Vector3i pos;
             case DROID_CYBORG_REPAIR:
 			case DROID_WEAPON:
 			case DROID_COMMAND:
-				//if(psDroid->asWeaps[0].nStat > 0)
 				if(psDroid->numWeaps)
 				{
 					psImd = WEAPON_IMD(psDroid,psDroid->player);
 				}
 				else
 				{
-//					psImd = debrisImds[rand()%MAX_DEBRIS];
 					psImd = getRandomDebrisImd();
 				}
 				break;
 			default:
-//				psImd = debrisImds[rand()%MAX_DEBRIS];
 				psImd = getRandomDebrisImd();
 				break;
 			}
@@ -1608,7 +1580,6 @@ Vector3i pos;
 		case 2:
 		case 3:
 		case 4:
-//			psImd = debrisImds[rand()%MAX_DEBRIS];
 			psImd = getRandomDebrisImd();
 			break;
 		}
@@ -1618,7 +1589,6 @@ Vector3i pos;
 		}
 		else
 		{
-//			addEffect(&pos,EFFECT_GRAVITON,GRAVITON_TYPE_EMITTING_DR,TRUE,debrisImds[rand()%MAX_DEBRIS],0);
 			addEffect(&pos,EFFECT_GRAVITON,GRAVITON_TYPE_EMITTING_DR,TRUE,getRandomDebrisImd(),0);
 		}
 	}
@@ -1638,7 +1608,6 @@ void	compPersonToBits(DROID *psDroid)
 		return;
 	}
 	/* get bits pointers according to whether baba or cyborg*/
-	//if ( psDroid->droidType == DROID_CYBORG )
     if (cyborgDroid(psDroid))
 	{
 		headImd = getImdFromIndex(MI_CYBORG_HEAD);
@@ -1685,6 +1654,7 @@ iIMDShape *getLeftPropulsionIMD(DROID *psDroid)
 	return *imd;
 }
 
+
 iIMDShape *getRightPropulsionIMD(DROID *psDroid)
 {
 	UDWORD			bodyStat, propStat;
@@ -1699,6 +1669,7 @@ iIMDShape *getRightPropulsionIMD(DROID *psDroid)
 	return *imd;
 }
 
+
 SDWORD	rescaleButtonObject(SDWORD radius, SDWORD baseScale,SDWORD baseRadius)
 {
 	SDWORD newScale;
@@ -1711,12 +1682,3 @@ SDWORD	rescaleButtonObject(SDWORD radius, SDWORD baseScale,SDWORD baseRadius)
 	}
 	return newScale;
 }
-
-
-
-
-
-
-
-
-

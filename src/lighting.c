@@ -59,7 +59,6 @@ void	doBuildingLights( void );
 void	processLight(LIGHT *psLight);
 UDWORD	calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos);
 void	colourTile(SDWORD xIndex, SDWORD yIndex, LIGHT_COLOUR colour, UBYTE percent);
-//void	initLighting( void );
 void	calcTileIllum(UDWORD tileX, UDWORD tileY);
 void	normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant);
 UDWORD	numNormals;		// How many normals have we got?
@@ -484,30 +483,26 @@ UDWORD	percent;
         endY = mapHeight-1;
     }
 
-
 	for(i=startX;i<=endX; i++)
 	{
 		for(j=startY; j<=endY; j++)
 		{
-				distToCorner = calcDistToTile(i,j,&psLight->position);
-				/* If we're inside the range of the light */
-			 	if (distToCorner<(SDWORD)psLight->range)
+			distToCorner = calcDistToTile(i,j,&psLight->position);
+			/* If we're inside the range of the light */
+			if (distToCorner<(SDWORD)psLight->range)
+			{
+				/* Find how close we are to it */
+				percent = 100 - PERCENT(distToCorner,psLight->range);
+				xIndex = i - playerXTile;
+				yIndex = j - playerZTile;
+				// Might go off the grid for light ranges > one tile
+				if ( xIndex >= 0 && yIndex >= 0 &&
+					xIndex < (SDWORD)visibleXTiles &&
+					yIndex < (SDWORD)visibleYTiles )
 				{
-					/* Find how close we are to it */
-					percent = 100 - PERCENT(distToCorner,psLight->range);
-					xIndex = i - playerXTile;
-					yIndex = j - playerZTile;
-					// Might go off the grid for light ranges > one tile
-//					if(i<visibleXTiles && j<visibleYTiles && i>=0 && j>=0)
-					if ( xIndex >= 0 && yIndex >= 0 &&
-					     xIndex < (SDWORD)visibleXTiles &&
-					     yIndex < (SDWORD)visibleYTiles )
-					{
-						colourTile(xIndex, yIndex, psLight->colour, (UBYTE)(2*percent));
-					}
+					colourTile(xIndex, yIndex, psLight->colour, (UBYTE)(2*percent));
 				}
-
-
+			}
 		}
 	}
 }
