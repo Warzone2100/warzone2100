@@ -32,7 +32,10 @@ class RAIICounter : boost::noncopyable
     public:
         RAIICounter();
 
-        inline operator unsigned int() const { return _count; }
+        inline operator unsigned int() const
+        {
+            return _count;
+        }
 
         class scope_counted
         {

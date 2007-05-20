@@ -172,7 +172,7 @@ class lobbyprotocol::requestHandler::impl
         static inline std::string commandToString(const boost::array<char, 5>& command)
         {
             // This is the buffer we will copy from, it is one byte longer as the command itself so that we can append a '\0' to it
-            boost::array<char, sizeof(command) + 1> buffer;
+            boost::array < char, sizeof(command) + 1 > buffer;
 
             std::copy(command.begin(), command.end(), buffer.begin());
             // Set last char to '\0' for safety

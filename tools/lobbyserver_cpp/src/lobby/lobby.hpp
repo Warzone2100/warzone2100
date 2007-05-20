@@ -84,7 +84,7 @@ class GameLobby
 
                 std::list<GAMESTRUCT>::const_iterator _iter;
 
-                friend class GameLobby;
+            friend class GameLobby;
         };
 
         const_iterator begin() const;

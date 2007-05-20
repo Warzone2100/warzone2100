@@ -32,7 +32,7 @@
 class TCPServer : boost::noncopyable
 {
     public:
-        typedef boost::function<void (boost::shared_ptr<boost::asio::ip::tcp::socket>)> connectionHandler;
+        typedef boost::function < void(boost::shared_ptr<boost::asio::ip::tcp::socket>) > connectionHandler;
 
         TCPServer(boost::shared_ptr<boost::asio::io_service> io_service, const connectionHandler& handler);
         ~TCPServer();

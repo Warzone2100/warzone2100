@@ -42,7 +42,7 @@ static inline std::string str_repeat(const std::string& src, unsigned int count)
 }
 
 template <class T>
-static inline std::string to_string (const T& t)
+static inline std::string to_string(const T& t)
 {
     std::stringstream ss;
     ss << t;
@@ -64,7 +64,7 @@ void printGame(const GAMESTRUCT& game)
 
     unsigned int targetLength = std::max(std::max(std::max(std::max(std::max(std::max(std::max(std::max(std::max(gameName.length() + 2, gameSize.length()), gameFlags.length()), gameHost.length() + 2), gameMaxPlayers.length()), gameCurrentPlayers.length()), gameUser1.length()), gameUser2.length()), gameUser3.length()), gameUser4.length());
 
-    boost::recursive_mutex::scoped_lock lock(cout_mutex);
+    boost::recursive_mutex::scoped_lock lock (cout_mutex);
 
     std::cout << "Game info:\n"
               << "+------------------" << str_repeat("-", targetLength) << "-+\n"

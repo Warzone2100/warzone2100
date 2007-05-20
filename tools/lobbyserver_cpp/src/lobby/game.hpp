@@ -25,7 +25,8 @@
 #define _INCLUDE_GAME_HPP_
 
 #if USE_GAME_HEADER
-extern "C" {
+extern "C"
+{
 #include <framework/frame.h>
 #include <netplay/netplay.h>
 }

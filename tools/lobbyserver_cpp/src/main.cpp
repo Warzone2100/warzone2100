@@ -39,42 +39,42 @@ boost::recursive_mutex cerr_mutex;
 
 static void handleRequestInThread(boost::shared_ptr<boost::asio::ip::tcp::socket> socket)
 {
-	threads.create_thread(boost::bind(&lobbyprotocol::requestHandler::operator(), &LobbyRequestHandler, socket));
+    threads.create_thread(boost::bind(&lobbyprotocol::requestHandler::operator(), &LobbyRequestHandler, socket));
 }
 
 int main(int argc, char* argv[])
 {
-	unsigned int returnValue = 1;
-	try
-	{
-		boost::shared_ptr<boost::asio::io_service> io_service(new boost::asio::io_service);
-		TCPServer tcp_server(io_service, handleRequestInThread);
+    unsigned int returnValue = 1;
+    try
+    {
+        boost::shared_ptr<boost::asio::io_service> io_service(new boost::asio::io_service);
+        TCPServer tcp_server(io_service, handleRequestInThread);
 
-		for (unsigned int i = 1; i < static_cast<unsigned int>(argc); ++i)
-		{
-			boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address::from_string(argv[i]), lobbyPort);
-			{
-				boost::recursive_mutex::scoped_lock lock(cout_mutex);
-				std::cout << "Attempting to listen at: " << endpoint << std::endl;
-			}
-			tcp_server.listen(endpoint);
-		}
+        for (unsigned int i = 1; i < static_cast<unsigned int>(argc); ++i)
+        {
+            boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address::from_string(argv[i]), lobbyPort);
+            {
+                boost::recursive_mutex::scoped_lock lock(cout_mutex);
+                std::cout << "Attempting to listen at: " << endpoint << std::endl;
+            }
+            tcp_server.listen(endpoint);
+        }
 
-		io_service->run();
-		returnValue = 0;
-	}
-	catch (boost::asio::error& e)
-	{
-		boost::recursive_mutex::scoped_lock lock(cerr_mutex);
-		std::cerr << "main: Boost::asio exception: " << e << std::endl;
-	}
-	catch (std::exception& e)
-	{
-		boost::recursive_mutex::scoped_lock lock(cerr_mutex);
-		std::cerr << "main: Exception: " << e.what() << std::endl;
-	}
+        io_service->run();
+        returnValue = 0;
+    }
+    catch (boost::asio::error& e)
+    {
+        boost::recursive_mutex::scoped_lock lock(cerr_mutex);
+        std::cerr << "main: Boost::asio exception: " << e << std::endl;
+    }
+    catch (std::exception& e)
+    {
+        boost::recursive_mutex::scoped_lock lock(cerr_mutex);
+        std::cerr << "main: Exception: " << e.what() << std::endl;
+    }
 
-	threads.join_all();
+    threads.join_all();
 
-	return returnValue;
+    return returnValue;
 }

@@ -34,69 +34,69 @@ class ReadWriteMutex::impl : boost::noncopyable
         {
         }
 
-    inline void acquireReadLock() const
-    {
-        boost::mutex::scoped_lock lock(_mutex);
-
-        // require a while loop here, since when the writerFinished condition is notified
-        // we should not allow readers to lock if there is a writer waiting
-        // if there is a writer waiting, we continue waiting
-
-        // If there currently is a writer lock, or writers are pending to lock then wait
-        while(_pendingWriters != 0 || _currentWriter)
+        inline void acquireReadLock() const
         {
-            // Block here to prevent busy waiting, we'll be awakened as soon as a writer has finished
-            _writerFinished.wait(lock);
+            boost::mutex::scoped_lock lock(_mutex);
+
+            // require a while loop here, since when the writerFinished condition is notified
+            // we should not allow readers to lock if there is a writer waiting
+            // if there is a writer waiting, we continue waiting
+
+            // If there currently is a writer lock, or writers are pending to lock then wait
+            while (_pendingWriters != 0 || _currentWriter)
+            {
+                // Block here to prevent busy waiting, we'll be awakened as soon as a writer has finished
+                _writerFinished.wait(lock);
+            }
+
+            ++_readerCount;
         }
 
-        ++_readerCount;
-    }
-
-    inline void releaseReadLock() const
-    {
-        boost::mutex::scoped_lock lock(_mutex);
-        --_readerCount;
-
-        if(_readerCount == 0)
+        inline void releaseReadLock() const
         {
-            // notify all pending writers that there currently are no more readers
-            _allReadersFinished.notify_all();
-        }
-    }
+            boost::mutex::scoped_lock lock(_mutex);
+            --_readerCount;
 
-    inline void acquireWriteLock()
-    {
-        boost::mutex::scoped_lock lock(_mutex);
-
-        // ensure subsequent readers block
-        RAIICounter::scope_counted pendWriter(_pendingWriters);
-        
-        // wait until all reader locks are released
-        if(_readerCount != 0)
-        {
-            // * Release our mutex lock
-            // * Block until we're notified there are no more readers holding a lock
-            // * Reacquire our mutex lock (or block until we do so)
-            _allReadersFinished.wait(lock);
+            if (_readerCount == 0)
+            {
+                // notify all pending writers that there currently are no more readers
+                _allReadersFinished.notify_all();
+            }
         }
 
-        // only become a writer when there currently is none
-        while(_currentWriter)
+        inline void acquireWriteLock()
         {
-            // block until the current writer releases its lock
-            _writerFinished.wait(lock);
+            boost::mutex::scoped_lock lock(_mutex);
+
+            // ensure subsequent readers block
+            RAIICounter::scope_counted pendWriter(_pendingWriters);
+
+            // wait until all reader locks are released
+            if (_readerCount != 0)
+            {
+                // * Release our mutex lock
+                // * Block until we're notified there are no more readers holding a lock
+                // * Reacquire our mutex lock (or block until we do so)
+                _allReadersFinished.wait(lock);
+            }
+
+            // only become a writer when there currently is none
+            while (_currentWriter)
+            {
+                // block until the current writer releases its lock
+                _writerFinished.wait(lock);
+            }
+
+            // Yay! We're now the current writer, make sure others know we are
+            _currentWriter = true;
         }
 
-        // Yay! We're now the current writer, make sure others know we are
-        _currentWriter = true;
-    }
-
-    inline void releaseWriteLock()
-    {        
-        boost::mutex::scoped_lock lock(_mutex);
-        _currentWriter = false;
-        _writerFinished.notify_all();
-    }
+        inline void releaseWriteLock()
+        {
+            boost::mutex::scoped_lock lock (_mutex);
+            _currentWriter = false;
+            _writerFinished.notify_all();
+        }
 
     private:
         mutable boost::mutex      _mutex;
