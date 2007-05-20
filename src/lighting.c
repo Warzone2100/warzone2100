@@ -436,11 +436,8 @@ UDWORD	percent;
 	tileX = psLight->position.x/TILE_UNITS;
 	tileY = psLight->position.z/TILE_UNITS;
 
-	rangeSkip = (psLight->range*psLight->range);
-	rangeSkip *=2;
-	rangeSkip = (UDWORD)sqrt(rangeSkip);
-	rangeSkip/=TILE_UNITS;
-	rangeSkip+=1;
+	rangeSkip = sqrtf(psLight->range * psLight->range * 2) / TILE_UNITS + 1;
+
 	/* Rough guess? */
 	startX = tileX - rangeSkip;
 	endX = tileX + rangeSkip;
@@ -530,7 +527,7 @@ UDWORD	calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos)
 	zDif = abs(z1-z2);
 
 	total = (xDif*xDif) + (yDif*yDif) + (zDif*zDif);
-	return((UDWORD)sqrt(total));
+	return (UDWORD)sqrtf(total);
 }
 
 
@@ -679,19 +676,15 @@ float	fraction,adjust;
 
 UDWORD	lightDoFogAndIllumination(UBYTE brightness, SDWORD dx, SDWORD dz, UDWORD* pSpecular)
 {
-SDWORD	umbraRadius;	// Distance to start of light falloff
-SDWORD	penumbraRadius; // radius of area of obscurity
-SDWORD	umbra;
-//SDWORD	edge;
-SDWORD	distance;
-SDWORD	cosA,sinA;
-PIELIGHT lighting, specular, fogColour;
-SDWORD	depth = 0;
-SDWORD	colour;
-SDWORD	fog = 0;
-//SDWORD	mist = 0;
-
-	distance = (SDWORD) (sqrt(dx*dx+dz*dz));
+	SDWORD	umbraRadius;	// Distance to start of light falloff
+	SDWORD	penumbraRadius; // radius of area of obscurity
+	SDWORD	umbra;
+	SDWORD	distance = sqrtf(dx*dx + dz*dz);
+	SDWORD	cosA,sinA;
+	PIELIGHT lighting, specular, fogColour;
+	SDWORD	depth = 0;
+	SDWORD	colour;
+	SDWORD	fog = 0;
 
 	penumbraRadius = (visibleXTiles/2)<<TILE_SHIFT;
 

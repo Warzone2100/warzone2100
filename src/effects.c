@@ -714,7 +714,7 @@ void	updateFirework(EFFECT *psEffect)
 				{
 					drop = dif - psEffect->radius;
 				}
-				radius = (UDWORD)(sqrt((psEffect->radius*psEffect->radius) - (drop*drop)));
+				radius = (UDWORD)sqrtf(psEffect->radius * psEffect->radius - drop * drop);
 				//val = getStaticTimeValueRange(720,360);	// grab an angle - 4 seconds cyclic
   				for(val = 0; val<=180; val+=20)
 				{

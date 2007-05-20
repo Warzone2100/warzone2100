@@ -521,7 +521,7 @@ void sound_SetObjectPosition( SDWORD iSample, SDWORD iX, SDWORD iY, SDWORD iZ )
 	dX = iX - listenerX; // distances on all axis
 	dY = iY - listenerY;
 	dZ = iZ - listenerZ;
-	distance = sqrt(dX * dX + dY * dY + dZ * dZ); // Pythagorean theorem
+	distance = sqrtf(dX * dX + dY * dY + dZ * dZ); // Pythagorean theorem
 
 	// compute gain
 	gain = 1 - distance * ATTENUATION_FACTOR;

@@ -551,7 +551,7 @@ static BOOL _imd_load_points( char **ppFileData, iIMDShape *s )
 		s->radius = MAX(xmax, (MAX(ymax, zmax)));
 
 
-		s->sradius = (SDWORD)((float)sqrt( xmax*xmax + ymax*ymax + zmax*zmax));
+		s->sradius = (SDWORD)sqrtf( xmax*xmax + ymax*ymax + zmax*zmax);
 
 // START: tight bounding sphere
 
