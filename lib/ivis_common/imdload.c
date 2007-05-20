@@ -284,7 +284,7 @@ static BOOL _imd_load_polys( char **ppFileData, iIMDShape *s )
 				p2.y = points[poly->pindex[poly->npnts-1]].y;
 				p2.z = points[poly->pindex[poly->npnts-1]].z;
 
-				pie_SurfaceNormal(&p0,&p1,&p2,&poly->normal);
+				pie_SurfaceNormal3iv(&p0,&p1,&p2,&poly->normal);
 				//iV_DEBUG3("normal %d %d %d\n",poly->normal.x,poly->normal.y,poly->normal.z);
 			} else {
 				poly->normal.x = poly->normal.y = poly->normal.z = 0;
@@ -538,17 +538,17 @@ static BOOL _imd_load_points( char **ppFileData, iIMDShape *s )
 		}
 
 		/* Centered about origin I can do the '-' thing below!! */
-		extremeX = pie_MAX(tempXMax,-tempXMin);
-		extremeZ = pie_MAX(tempZMax,-tempZMin);
+		extremeX = MAX(tempXMax, -tempXMin);
+		extremeZ = MAX(tempZMax, -tempZMin);
 
-		s->visRadius = pie_MAX(extremeX,extremeZ);
+		s->visRadius = MAX(extremeX, extremeZ);
 		// no need to scale an IMD shape (only FSD)
 
-		xmax = pie_MAX(s->xmax,-s->xmin);
-		ymax = pie_MAX(s->ymax,-s->ymin);
-		zmax = pie_MAX(s->zmax,-s->zmin);
+		xmax = MAX(s->xmax, -s->xmin);
+		ymax = MAX(s->ymax, -s->ymin);
+		zmax = MAX(s->zmax, -s->zmin);
 
-		s->radius = pie_MAX(xmax,(pie_MAX(ymax,zmax)));
+		s->radius = MAX(xmax, (MAX(ymax, zmax)));
 
 
 		s->sradius = (SDWORD)((float)sqrt( xmax*xmax + ymax*ymax + zmax*zmax));

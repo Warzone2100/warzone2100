@@ -61,16 +61,6 @@ ANIMGLOBALS	g_animGlobals;
 BOOL
 anim_Init( GETSHAPEFUNC pGetShapeFunc )
 {
-	int		iSizeAnim2D = sizeof(ANIM2D),
-			iSizeAnim3D = sizeof(ANIM3D);
-
-	/* ensure ANIM2D and ANIM3D structs same size */
-	if ( iSizeAnim2D != iSizeAnim3D )
-	{
-		debug( LOG_ERROR, "anim_Init: ANIM2D and ANIM3D structs not same size in anim.h!" );
-		abort();
-	}
-
 	/* init globals */
 	g_animGlobals.psAnimList    = NULL;
 	g_animGlobals.uwCurObj      = 0;
@@ -248,8 +238,7 @@ anim_EndScript( void )
 /***************************************************************************/
 
 BOOL
-anim_AddFrameToAnim( int iFrame, VECTOR3D vecPos, VECTOR3D vecRot,
-						VECTOR3D vecScale )
+anim_AddFrameToAnim( int iFrame, Vector3i vecPos, Vector3i vecRot, Vector3i vecScale )
 {
 	ANIM_STATE	*psState;
 	BASEANIM	*psAnim;
@@ -414,7 +403,7 @@ anim_GetShapeFromID( UWORD uwID )
 UWORD
 anim_GetFrame3D( ANIM3D *psAnim, UWORD uwObj, UDWORD udwGameTime,
 			UDWORD udwStartTime, UDWORD udwStartDelay,
-			VECTOR3D *psVecPos, VECTOR3D *psVecRot, VECTOR3D *psVecScale )
+			Vector3i *psVecPos, Vector3i *psVecRot, Vector3i *psVecScale )
 {
 	SDWORD		dwTime;
 	UWORD		uwState, uwFrame;

@@ -7272,7 +7272,7 @@ BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int w
 				barrel.z = 0;
 			}
 
-			pie_ROTATE_TRANSLATE(barrel.x, barrel.z, barrel.y, muzzle->x, muzzle->z, muzzle->y);
+			pie_RotateTranslate3iv(&barrel, muzzle);
 			muzzle->z = -muzzle->z;
 
 			pie_MatEnd();
@@ -7329,7 +7329,7 @@ BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int w
 				barrel.z = 0;
 			}
 
-			pie_ROTATE_TRANSLATE(barrel.x, barrel.z, barrel.y, muzzle->x, muzzle->z, muzzle->y);
+			pie_RotateTranslate3iv(&barrel, muzzle);
 			muzzle->z = -muzzle->z;
 
 			pie_MatEnd();

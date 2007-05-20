@@ -65,12 +65,6 @@ struct BASEANIM;
 	struct BASEANIM		*psNext;
 
 /* ensure ANIM2D/3D structs same size */
-#define ANIM_2D_ELEMENTS						\
-	ANIM_BASE_ELEMENTS							\
-	iTexture		*psFrames;						\
-	UWORD		uwBmapWidth;	/* width of container bitmap */
-
-/* ensure ANIM2D/3D structs same size */
 #define ANIM_3D_ELEMENTS						\
 	ANIM_BASE_ELEMENTS							\
 	iIMDShape	*psFrames;						\
@@ -78,18 +72,12 @@ struct BASEANIM;
 
 /***************************************************************************/
 
-typedef struct VECTOR3D
-{
-	SDWORD	x, y, z;
-}
-VECTOR3D;
-
 typedef struct ANIM_STATE
 {
 	UWORD				uwFrame;		/* frame to play           */
-	VECTOR3D			vecPos;
-	VECTOR3D			vecAngle;
-	VECTOR3D			vecScale;
+	Vector3i			vecPos;
+	Vector3i			vecAngle;
+	Vector3i			vecScale;
 }
 ANIM_STATE;
 
@@ -98,12 +86,6 @@ typedef struct BASEANIM
 	ANIM_BASE_ELEMENTS
 }
 BASEANIM;
-
-typedef struct ANIM2D
-{
-	ANIM_2D_ELEMENTS
-}
-ANIM2D;
 
 typedef struct ANIM3D
 {
@@ -138,15 +120,14 @@ BOOL		anim_Create3D( char szPieFileName[], UWORD uwFrames,
 							UBYTE ubType, UWORD uwID );
 void		anim_BeginScript( void );
 BOOL		anim_EndScript( void );
-BOOL		anim_AddFrameToAnim( int iFrame, VECTOR3D vecPos,
-									VECTOR3D vecRot, VECTOR3D vecScale );
+BOOL		anim_AddFrameToAnim( int iFrame, Vector3i vecPos, Vector3i vecRot, Vector3i vecScale );
 BASEANIM *	anim_GetAnim( UWORD uwAnimID );
 UWORD		anim_GetAnimID( char *szName );
 iIMDShape *	anim_GetShapeFromID( UWORD uwID );
 UWORD		anim_GetFrame3D( ANIM3D *psAnim, UWORD uwObj, UDWORD udwGameTime,
 								UDWORD udwStartTime, UDWORD udwStartDelay,
-								VECTOR3D *psVecPos, VECTOR3D *psVecRot,
-								VECTOR3D *psVecScale );
+								Vector3i *psVecPos, Vector3i *psVecRot,
+								Vector3i *psVecScale );
 void		anim_SetVals( char szFileName[], UWORD uwAnimID );
 
 /***************************************************************************/

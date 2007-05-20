@@ -45,36 +45,32 @@ typedef struct {SDWORD a, b, c,  d, e, f,  g, h, i,  j, k, l;} SDMATRIX;
 /***************************************************************************/
 
 extern SDMATRIX *psMatrix;
-extern SDWORD	aSinTable[];
+extern SDWORD aSinTable[];
 
 //*************************************************************************
 
 // FIXME DUPLICATE CODE! Already present in trig.c!
-#define SIN(X)	aSinTable[(Uint16)(X) >> 4]
-#define COS(X)	aSinTable[((Uint16)(X) >> 4) + 1024]
+#define SIN(X) aSinTable[(Uint16)(X) >> 4]
+#define COS(X) aSinTable[((Uint16)(X) >> 4) + 1024]
 
 
 //*************************************************************************
 
-#define pie_ROTATE_TRANSLATE(x,y,z,xs,ys,zs)										\
-{																			\
-	xs = (x) * psMatrix->a + (y) * psMatrix->d + (z) * psMatrix->g +	\
-				psMatrix->j;												\
-	ys = (x) * psMatrix->b + (y) * psMatrix->e + (z) * psMatrix->h +	\
-				psMatrix->k;												\
-	zs = (x) * psMatrix->c + (y) * psMatrix->f + (z) * psMatrix->i +	\
-				psMatrix->l;												\
-	xs >>=FP12_SHIFT;												\
-	ys >>=FP12_SHIFT;												\
-	zs >>=FP12_SHIFT;												\
+/*!
+ * Rotate and translate v with the worldmatrix. Store the result in s
+ * \param[in] v Vector to translate
+ * \param[out] s Resulting vector
+ */
+static inline void pie_RotateTranslate3iv(Vector3i * v, Vector3i * s)
+{
+	s->x = ( v->x * psMatrix->a + v->y * psMatrix->d + v->z * psMatrix->g
+			+ psMatrix->j ) / FP12_MULTIPLIER;
+	s->y = ( v->x * psMatrix->b + v->y * psMatrix->e + v->z * psMatrix->h
+			+ psMatrix->k ) / FP12_MULTIPLIER;
+	s->z = ( v->x * psMatrix->c + v->y * psMatrix->f + v->z * psMatrix->i
+			+ psMatrix->l ) / FP12_MULTIPLIER;
 }
 
-//*************************************************************************
-
-
-//*************************************************************************
-
-#define pie_CLOCKWISE(x0,y0,x1,y1,x2,y2) ((((y1)-(y0)) * ((x2)-(x1))) <= (((x1)-(x0)) * ((y2)-(y1))))
 
 //*************************************************************************
 
@@ -86,7 +82,7 @@ extern void pie_MatInit(void);
 
 extern void pie_MatBegin(void);
 extern void pie_MatEnd(void);
-extern void pie_MATTRANS(int x,int y,int z);
+extern void pie_MATTRANS(int x, int y, int z);
 extern void pie_TRANSLATE(int x, int y, int z);
 extern void pie_MatScale( UDWORD percent );
 extern void pie_MatRotX(int x);
@@ -102,9 +98,11 @@ extern void pie_PerspectiveEnd(void);
 
 //*************************************************************************
 
-extern void pie_VectorNormalise(Vector3i *v);
+extern void pie_VectorNormalise3iv(Vector3i *v);
+extern void pie_VectorNormalise3fv(Vector3f *v);
 extern void pie_VectorInverseRotate0(Vector3i *v1, Vector3i *v2);
-extern void pie_SurfaceNormal(Vector3i *p1, Vector3i *p2, Vector3i *p3, Vector3i *v);
+extern void pie_SurfaceNormal3iv(Vector3i *p1, Vector3i *p2, Vector3i *p3, Vector3i *v);
+extern void pie_SurfaceNormal3fv(Vector3f *p1, Vector3f *p2, Vector3f *p3, Vector3f *v);
 extern BOOL pie_Clockwise(iVertex *s);
 extern void pie_SetGeometricOffset(int x, int y);
 

@@ -229,8 +229,8 @@ void	calcTileIllum(UDWORD tileX, UDWORD tileY)
 		finalVector.y += normals[i].y;
 		finalVector.z += normals[i].z;
 	}
-	pie_VectorNormalise(&finalVector);
-	pie_VectorNormalise(&theSun);
+	pie_VectorNormalise3iv(&finalVector);
+	pie_VectorNormalise3iv(&theSun);
 
 //	iV_NumberOut(theSun.x,100,100,255);
 //	iV_NumberOut(theSun.y,100,110,255);
@@ -298,7 +298,7 @@ void normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant)
 				corner3.x = tileX<<TILE_SHIFT;
 				corner3.y = (tileY+1)<<TILE_SHIFT;
 				corner3.z = tileDown->height - dMod;
-				pie_SurfaceNormal(&corner1,&corner2,&corner3,&normals[numNormals++]);
+				pie_SurfaceNormal3iv(&corner1,&corner2,&corner3,&normals[numNormals++]);
 			}
 			else
 			{
@@ -313,7 +313,7 @@ void normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant)
 				corner3.x = tileX<<TILE_SHIFT;
 				corner3.y = (tileY+1)<<TILE_SHIFT;
 				corner3.z = tileDown->height - dMod;
-				pie_SurfaceNormal(&corner1,&corner2,&corner3,&normals[numNormals++]);
+				pie_SurfaceNormal3iv(&corner1,&corner2,&corner3,&normals[numNormals++]);
 			}
 		}
 		else
@@ -330,7 +330,7 @@ void normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant)
 			corner3.x = (tileX+1)<<TILE_SHIFT;
 			corner3.y = (tileY+1)<<TILE_SHIFT;
 			corner3.z = tileDownRight->height - drMod;
-			pie_SurfaceNormal(&corner1,&corner2,&corner3,&normals[numNormals++]);
+			pie_SurfaceNormal3iv(&corner1,&corner2,&corner3,&normals[numNormals++]);
 
 			corner1.x = tileX<<TILE_SHIFT;
 			corner1.y = tileY<<TILE_SHIFT;
@@ -343,7 +343,7 @@ void normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant)
 			corner3.x = tileX<<TILE_SHIFT;
 			corner3.y = (tileY+1)<<TILE_SHIFT;
 			corner3.z = tileDown->height - dMod;
-			pie_SurfaceNormal(&corner1,&corner2,&corner3,&normals[numNormals++]);
+			pie_SurfaceNormal3iv(&corner1,&corner2,&corner3,&normals[numNormals++]);
 		}
 		break;
 	case 1:
@@ -363,7 +363,7 @@ void normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant)
 	   		corner3.x = tileX<<TILE_SHIFT;
 	   		corner3.y = (tileY+1)<<TILE_SHIFT;
 	   		corner3.z = tileDown->height - dMod;
-			pie_SurfaceNormal(&corner1,&corner2,&corner3,&normals[numNormals++]);
+			pie_SurfaceNormal3iv(&corner1,&corner2,&corner3,&normals[numNormals++]);
 
 			corner1.x = (tileX+1)<<TILE_SHIFT;
 	   		corner1.y = tileY<<TILE_SHIFT;
@@ -376,7 +376,7 @@ void normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant)
 	   		corner3.x = tileX<<TILE_SHIFT;
 	   		corner3.y = (tileY+1)<<TILE_SHIFT;
 	   		corner3.z = tileDown->height - dMod;
-	   		pie_SurfaceNormal(&corner1,&corner2,&corner3,&normals[numNormals++]);
+	   		pie_SurfaceNormal3iv(&corner1,&corner2,&corner3,&normals[numNormals++]);
 		}
 		else
 		{
@@ -393,7 +393,7 @@ void normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant)
 				corner3.x = tileX<<TILE_SHIFT;
 				corner3.y = (tileY+1)<<TILE_SHIFT;
 				corner3.z = tileDown->height - dMod;
-				pie_SurfaceNormal(&corner1,&corner2,&corner3,&normals[numNormals++]);
+				pie_SurfaceNormal3iv(&corner1,&corner2,&corner3,&normals[numNormals++]);
 			}
 			else
 			{
@@ -408,7 +408,7 @@ void normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant)
 				corner3.x = (tileX+1)<<TILE_SHIFT;
 				corner3.y = (tileY+1)<<TILE_SHIFT;
 				corner3.z = tileDownRight->height - drMod;
-				pie_SurfaceNormal(&corner1,&corner2,&corner3,&normals[numNormals++]);
+				pie_SurfaceNormal3iv(&corner1,&corner2,&corner3,&normals[numNormals++]);
 			}
 		}
 		break;

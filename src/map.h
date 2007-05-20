@@ -164,22 +164,20 @@ extern UDWORD	mapWidth, mapHeight;
 extern MAPTILE *psMapTiles;
 
 /*
- * Note:
- * TILE_UNITS = (1 << TILE_SHIFT)
- *
  * Usage-Example:
  * tile_coordinate = (world_coordinate / TILE_UNITS) = (world_coordinate >> TILE_SHIFT)
  * world_coordinate = (tile_coordinate * TILE_UNITS) = (tile_coordinate << TILE_SHIFT)
  */
 
-/* The number of units accross a tile */
-#define TILE_UNITS	128
-
 /* The shift on a world coordinate to get the tile coordinate */
-#define TILE_SHIFT	7
+#define TILE_SHIFT 7
 
 /* The mask to get internal tile coords from a full coordinate */
-#define TILE_MASK	0x7f
+#define TILE_MASK 0x7f
+
+/* The number of units accross a tile */
+#define TILE_UNITS (1<<TILE_SHIFT)
+
 
 static inline UDWORD world_coord(UDWORD mapCoord)
 {

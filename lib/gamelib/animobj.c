@@ -269,8 +269,8 @@ animObj_Add( void *pParentObj, int iAnimID,
 /***************************************************************************/
 
 UWORD
-animObj_GetFrame3D( ANIM_OBJECT *psObj, UWORD uwObj, VECTOR3D *psVecPos,
-					VECTOR3D *psVecRot, VECTOR3D *psVecScale )
+animObj_GetFrame3D( ANIM_OBJECT *psObj, UWORD uwObj, Vector3i *psVecPos,
+					Vector3i *psVecRot, Vector3i *psVecScale )
 {
 	ANIM3D		*psAnim;
 

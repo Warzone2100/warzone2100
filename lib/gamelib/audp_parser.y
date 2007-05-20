@@ -26,7 +26,7 @@
 
 static int		g_iCurAnimID = 0;
 static int		g_iDummy;
-static VECTOR3D		vecPos, vecRot, vecScale;
+static Vector3i vecPos, vecRot, vecScale;
 
 int audp_lex();
 void audp_error(char *pMessage,...);

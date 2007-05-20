@@ -1583,7 +1583,7 @@ void displayProximityMsgs( void )
 static void displayAnimation( ANIM_OBJECT * psAnimObj, BOOL bHoldOnFirstFrame )
 {
 	UWORD				i,uwFrame;
-	VECTOR3D			vecPos, vecRot, vecScale;
+	Vector3i			vecPos, vecRot, vecScale;
 	COMPONENT_OBJECT	*psComp;
 
 	for ( i=0; i<psAnimObj->psAnim->uwObj; i++ )

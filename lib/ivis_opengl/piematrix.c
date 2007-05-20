@@ -42,96 +42,141 @@
  */
 /***************************************************************************/
 
-#define MATRIX_MAX	8
-#define	ONE_PERCENT	41	// 4096/100
+#define MATRIX_MAX 8
+#define ONE_PERCENT 4096/100
 
 static SDMATRIX	aMatrixStack[MATRIX_MAX];
 SDMATRIX *psMatrix = &aMatrixStack[0];
 
 BOOL drawing_interface = TRUE;
 
-void pie_VectorNormalise(Vector3i *v)
+
+void pie_VectorNormalise3iv(Vector3i *v)
 {
 	Sint32 size;
 	Vector3i av;
 
-	av.x = pie_ABS(v->x);
-	av.y = pie_ABS(v->y);
-	av.z = pie_ABS(v->z);
-	if (av.x >= av.y) {
+	av.x = ABS(v->x);
+	av.y = ABS(v->y);
+	av.z = ABS(v->z);
+	if (av.x >= av.y)
+	{
 		if (av.x > av.z)
-			size = av.x + (av.z >> 2) + (av.y >> 2);
+			size = av.x + av.z/4 + av.y/4;
 		else
-			size = av.z + (av.x >> 2) + (av.y >> 2);
-	} else {
+			size = av.z + av.x/4 + av.y/4;
+	}
+	else
+	{
 		if (av.y > av.z)
-			size = av.y + (av.z >> 2) + (av.x >> 2);
+			size = av.y + av.z/4 + av.x/4;
 		else
-			size = av.z + (av.y >> 2) + (av.x >> 2);
+			size = av.z + av.y/4 + av.x/4;
 	}
 
-	if (size > 0) {
-		v->x = (v->x << FP12_SHIFT) / size;
-		v->y = (v->y << FP12_SHIFT) / size;
-		v->z = (v->z << FP12_SHIFT) / size;
+	if (size > 0)
+	{
+		v->x = (v->x * FP12_MULTIPLIER) / size;
+		v->y = (v->y * FP12_MULTIPLIER) / size;
+		v->z = (v->z * FP12_MULTIPLIER) / size;
 	}
 }
 
 
-//*************************************************************************
-//*** calculate surface normal
-//*
-//* params	p1,p2,p3	= points for forming 2 vector for cross product
-//*			v			= normal vector returned << FP12_SHIFT
-//*
-//* eg		if a polygon (with n points in clockwise order) normal
-//*			is required, p1 = point 0, p2 = point 1, p3 = point n-1
-//*
-//******
+void pie_VectorNormalise3fv(Vector3f *v)
+{
+	Sint32 size;
+	Vector3f av;
 
-void pie_SurfaceNormal(Vector3i *p1, Vector3i *p2, Vector3i *p3, Vector3i *v)
+	av.x = ABS(v->x);
+	av.y = ABS(v->y);
+	av.z = ABS(v->z);
+	if (av.x >= av.y) {
+		if (av.x > av.z)
+			size = av.x + av.z/4 + av.y/4;
+		else
+			size = av.z + av.x/4 + av.y/4;
+	} else {
+		if (av.y > av.z)
+			size = av.y + av.z/4 + av.x/4;
+		else
+			size = av.z + av.y/4 + av.x/4;
+	}
+
+	if (size > 0) {
+		v->x = (v->x * FP12_MULTIPLIER) / size;
+		v->y = (v->y * FP12_MULTIPLIER) / size;
+		v->z = (v->z * FP12_MULTIPLIER) / size;
+	}
+}
+
+
+/*!
+ * Calculate surface normal
+ * Eg. if a polygon (with n points in clockwise order) normal is required,
+ * p1 = point 0, p2 = point 1, p3 = point n-1
+ * \param[in] p1,p1,p3 points for forming 2 vector for cross product
+ * \param[out] v normal vector returned << FP12_SHIFT
+ */
+void pie_SurfaceNormal3iv(Vector3i *p1, Vector3i *p2, Vector3i *p3, Vector3i *v)
 {
 	Vector3i a, b;
 
 	a.x = p3->x - p1->x;
 	a.y = p3->y - p1->y;
 	a.z = p3->z - p1->z;
-	pie_VectorNormalise(&a);
+	pie_VectorNormalise3iv(&a);
 
  	b.x = p2->x - p1->x;
 	b.y = p2->y - p1->y;
 	b.z = p2->z - p1->z;
-	pie_VectorNormalise(&b);
+	pie_VectorNormalise3iv(&b);
 
-	v->x = ((a.y * b.z) - (a.z * b.y)) >> FP12_SHIFT;
-	v->y = ((a.z * b.x) - (a.x * b.z)) >> FP12_SHIFT;
-	v->z = ((a.x * b.y) - (a.y * b.x)) >> FP12_SHIFT;
-	pie_VectorNormalise(v);
+	v->x = ((a.y * b.z) - (a.z * b.y)) / FP12_MULTIPLIER;
+	v->y = ((a.z * b.x) - (a.x * b.z)) / FP12_MULTIPLIER;
+	v->z = ((a.x * b.y) - (a.y * b.x)) / FP12_MULTIPLIER;
+	pie_VectorNormalise3iv(v);
 }
 
 
+/*!
+ * Calculate surface normal
+ * Eg. if a polygon (with n points in clockwise order) normal is required,
+ * p1 = point 0, p2 = point 1, p3 = point n-1
+ * \param[in] p1,p1,p3 points for forming 2 vector for cross product
+ * \param[out] v normal vector returned << FP12_SHIFT
+ */
+void pie_SurfaceNormal3fv(Vector3f *p1, Vector3f *p2, Vector3f *p3, Vector3f *v)
+{
+	Vector3f a, b;
 
+	a.x = p3->x - p1->x;
+	a.y = p3->y - p1->y;
+	a.z = p3->z - p1->z;
+	pie_VectorNormalise3fv(&a);
 
+ 	b.x = p2->x - p1->x;
+	b.y = p2->y - p1->y;
+	b.z = p2->z - p1->z;
+	pie_VectorNormalise3fv(&b);
 
-
-
+	v->x = ((a.y * b.z) - (a.z * b.y)) / FP12_MULTIPLIER;
+	v->y = ((a.z * b.x) - (a.x * b.z)) / FP12_MULTIPLIER;
+	v->z = ((a.x * b.y) - (a.y * b.x)) / FP12_MULTIPLIER;
+	pie_VectorNormalise3fv(v);
+}
 
 
 #define SC_TABLESIZE	4096
 
 //*************************************************************************
 
-#define X_INTERCEPT(pt1,pt2,yy)														\
-	(pt2->x - (((pt2->y - yy)  * (pt1->x - pt2->x)) / (pt1->y - pt2->y)))
+static SDMATRIX _MATRIX_ID = {FP12_MULTIPLIER, 0, 0, 0, FP12_MULTIPLIER, 0, 0, 0, FP12_MULTIPLIER, 0L, 0L, 0L};
+static SDWORD _MATRIX_INDEX;
 
 //*************************************************************************
 
-static SDMATRIX	_MATRIX_ID = {FP12_MULTIPLIER,0,0, 0,FP12_MULTIPLIER,0, 0,0,FP12_MULTIPLIER, 0L,0L,0L};
-static SDWORD	_MATRIX_INDEX;
-
-//*************************************************************************
-
-SDWORD	aSinTable[SC_TABLESIZE + (SC_TABLESIZE/4)];
+SDWORD aSinTable[SC_TABLESIZE + (SC_TABLESIZE/4)];
 
 //*************************************************************************
 //*** reset transformation matrix stack and make current identity
@@ -215,11 +260,11 @@ void pie_TRANSLATE(int x, int y, int z) {
 //*** matrix scale current transformation matrix
 //*
 //******
-void	pie_MatScale( UDWORD percent )
+void pie_MatScale( UDWORD percent )
 {
-SDWORD	scaleFactor;
+	SDWORD scaleFactor;
 
-	if(percent == 100)
+	if (percent == 100)
 	{
 		return;
 	}

@@ -4781,7 +4781,7 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 //	UDWORD turretType;
 //	UDWORD bodyType;
 	Vector3i barrel;
- 	iIMDShape		*psShape, *psWeapon, *psWeaponMount;
+ 	iIMDShape *psShape, *psWeapon, *psWeaponMount;
 
 	psShape = BODY_IMD(psDroid,psDroid->player);
 	//Watermelon:got rid of the macros...
@@ -4822,7 +4822,7 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 				barrel.z = 0;
 			}
 
-			pie_ROTATE_TRANSLATE(barrel.x, barrel.z, barrel.y, muzzle->x, muzzle->z, muzzle->y);
+			pie_RotateTranslate3iv(&barrel, muzzle);
 			muzzle->z = -muzzle->z;
 
 			pie_MatEnd();
@@ -4871,7 +4871,7 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 				barrel.z = 0;
 			}
 
-			pie_ROTATE_TRANSLATE(barrel.x, barrel.z, barrel.y, muzzle->x, muzzle->z, muzzle->y);
+			pie_RotateTranslate3iv(&barrel, muzzle);
 			muzzle->z = -muzzle->z;
 
 			pie_MatEnd();

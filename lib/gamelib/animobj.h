@@ -52,8 +52,8 @@ typedef BOOL (* ANIMOBJDIEDTESTFUNC) ( void *psParent );
 /* struct member macros */
 
 #define	COMPONENT_ELEMENTS(pointerType)		\
-	VECTOR3D	position;					\
-	VECTOR3D	orientation;				\
+	Vector3i	position;					\
+	Vector3i	orientation;				\
 	void		*psParent;					\
 	iIMDShape	*psShape;
 
@@ -103,8 +103,8 @@ ANIM_OBJECT *	animObj_GetFirst( void );
 ANIM_OBJECT *	animObj_GetNext( void );
 ANIM_OBJECT *	animObj_Find( void *pParentObj, int iAnimID );
 UWORD			animObj_GetFrame3D( ANIM_OBJECT *psObj, UWORD uwObj,
-									VECTOR3D *psPos, VECTOR3D *psVecRot,
-									VECTOR3D *psVecScale );
+									Vector3i *psPos, Vector3i *psVecRot,
+									Vector3i *psVecScale );
 
 /***************************************************************************/
 

@@ -46,8 +46,8 @@
 #define DEG_60	(DEG_360/6)
 #define DEG(X)	(DEG_1 * (X))
 
-#define FP12_SHIFT			12
-#define FP12_MULTIPLIER			(1<<12)
+#define FP12_SHIFT 12
+#define FP12_MULTIPLIER (1<<12)
 #define STRETCHED_Z_SHIFT		10		//stretchs z range for (1000 to 4000) to (8000 to 32000)
 #define	MAX_Z				(32000.0f)	//raised to 32000 from 6000 when stretched
 #define	INV_MAX_Z			(0.00003125f)	//1/32000
@@ -61,7 +61,6 @@
 
 #define TEXTURE_SIZE			(256.0f)
 #define INV_TEX_SIZE			(0.00390625f)
-
 
 
 #define MAX_FILE_PATH		256
@@ -103,9 +102,6 @@
  *	Global Definitions (MACROS)
  */
 /***************************************************************************/
-#define pie_MIN(a,b)	(((a) < (b)) ? (a) : (b))
-#define pie_MAX(a,b)	(((a) > (b)) ? (a) : (b))
-#define pie_ABS(a)		(((a) < 0) ? (-(a)) : (a))
 
 #define pie_ADDLIGHT(l,x)						\
 (((l)->byte.r > (MAX_UB_LIGHT - (x))) ? ((l)->byte.r = MAX_UB_LIGHT) : ((l)->byte.r +=(x)));		\
