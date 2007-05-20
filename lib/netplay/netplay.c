@@ -1337,7 +1337,7 @@ BOOL NEThaltJoining(void)
 
 // ////////////////////////////////////////////////////////////////////////
 // find games on open connection
-BOOL NETfindGame()
+BOOL NETfindGame(void)
 {
 	static UDWORD gamecount = 0, gamesavailable;
 	IPaddress ip;

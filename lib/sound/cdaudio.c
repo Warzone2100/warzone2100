@@ -54,7 +54,7 @@ static ALuint		music_source;
 
 OggVorbisDecoderState* decoder = NULL;
 
-static inline unsigned int numProcessedBuffers()
+static inline unsigned int numProcessedBuffers(void)
 {
 	int count;
 	alGetSourcei(music_source, AL_BUFFERS_PROCESSED, &count);
@@ -62,7 +62,7 @@ static inline unsigned int numProcessedBuffers()
 	return count;
 }
 
-static inline unsigned int numQueuedBuffers()
+static inline unsigned int numQueuedBuffers(void)
 {
 	int count;
 	alGetSourcei(music_source, AL_BUFFERS_QUEUED, &count);
