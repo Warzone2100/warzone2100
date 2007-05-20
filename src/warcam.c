@@ -1358,7 +1358,7 @@ BOOL	bFlying;
 	oldPosition.y = player.p.y;
 	oldPosition.z = player.p.z;
 
-	/* Update the position that's now stored in trackingCamera.position (iVector) */
+	/* Update the position that's now stored in trackingCamera.position */
 	player.p.x = trackingCamera.position.x;
 	player.p.y = trackingCamera.position.y;
 	player.p.z = trackingCamera.position.z;
@@ -1368,7 +1368,7 @@ BOOL	bFlying;
 	oldRotation.y = player.r.y;
 	oldRotation.z = player.r.z;
 
-	/* Update the rotations that're now stored in trackingCamera.rotation (iVector) */
+	/* Update the rotations that're now stored in trackingCamera.rotation */
 	player.r.x = trackingCamera.rotation.x;
 	/*if(!bIsBuilding)*/
 	player.r.y = trackingCamera.rotation.y;

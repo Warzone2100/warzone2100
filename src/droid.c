@@ -1756,7 +1756,7 @@ static void addConstructorEffect(STRUCTURE *psStruct)
 BOOL droidUpdateBuild(DROID *psDroid)
 {
 //	UDWORD		widthRange,breadthRange;
-//	iVector		temp;
+//	Vector3i	temp;
 	UDWORD		pointsToAdd, constructPoints;//, powerPercent, buildPercent;
 	STRUCTURE	*psStruct;
 	//UDWORD		mapX, mapY, i, j;

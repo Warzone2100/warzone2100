@@ -264,8 +264,6 @@ void CreateBlankButton(RENDERED_BUTTON *Buffer,BOOL Down, UDWORD buttonType);
 void RenderImageToButton(IMAGEFILE *ImageFile,UWORD ImageID,RENDERED_BUTTON *Buffer,BOOL Down, UDWORD buttonType);
 void RenderBlankToButton(RENDERED_BUTTON *Buffer,BOOL Down, UDWORD buttonType);
 
-//void RenderCompositeDroid(UDWORD Index,iVector *Rotation,iVector *Position);
-
 
 extern BOOL DroidIsRepairing(DROID *Droid);
 

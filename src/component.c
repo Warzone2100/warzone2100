@@ -1625,15 +1625,6 @@ Vector3i pos;
 }
 
 
-//void addBodyPartEffect(iVector *position,iIMDShape *psShape)
-//{
-//	velocity.x = 1-rand()%3;
-//	velocity.z = 1-rand()%3;
-//	velocity.y = 4+rand()%7;
-//	addEffect(position,EFFECT_GRAVITON,GRAVITON_TYPE_GIBLET,TRUE,psShape,0);
-//}
-
-
 void	compPersonToBits(DROID *psDroid)
 {
 	Vector3i position;	//,rotation,velocity;

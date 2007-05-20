@@ -421,7 +421,7 @@ static BOOL ReadPoints( char **ppFileData, iIMDShape *s )
 //* params	fp 		= currently open shape file pointer
 //*			s			= pointer to shape level
 //*
-//* on exit	s->points allocated (iVector * s->npoints
+//* on exit	s->points allocated
 //* returns	FALSE on error (memory allocation failure/bad file format)
 //*
 //******

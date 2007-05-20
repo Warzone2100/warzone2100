@@ -4508,7 +4508,7 @@ BOOL orderAddWayPoint(DROID *psDroid ,UDWORD dX,UDWORD dY)
 void orderSelectedWaypoint(UDWORD player, UDWORD x, UDWORD y)
 {
 	DROID		*psCurr;//,*psPrev = NULL;
-	iVector		position;
+	Vector3i	position;
 	FORMATION	*psFormation = NULL;
 
 	if(bMultiPlayer)

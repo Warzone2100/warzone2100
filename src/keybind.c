@@ -476,18 +476,6 @@ void	kf_TriFlip( void )
 	psTile = mapTile(mouseTileX,mouseTileY);
 	TOGGLE_TRIFLIP(psTile);
 //	addConsoleMessage("Triangle flip status toggled",DEFAULT_JUSTIFY);
-/*
-	// This seems to be some kind of fire effect test that was added
-	// here of all places for some unknown reason. - Per
-	iVector	pos;
-		pos.x = mouseTileX*TILE_UNITS + TILE_UNITS/2;
-		pos.z = mouseTileY*TILE_UNITS + TILE_UNITS/2;
-		pos.y = map_Height(pos.x,pos.x);
-		effectGiveAuxVar(50);
-		effectGiveAuxVarSec(10000);
-
-		addEffect(&pos,EFFECT_FIRE,FIRE_TYPE_LOCALISED,FALSE,NULL,0);
-*/
 }
 
 // --------------------------------------------------------------------------

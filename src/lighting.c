@@ -512,27 +512,7 @@ UDWORD	percent;
 	}
 }
 
-/*
-UDWORD	calcDistToTile(UDWORD tileX, UDWORD tileY, iVector *pos)
-{
-UDWORD	x1,y1;
-UDWORD	x2,y2;
-UDWORD	xDif,yDif,zDif;
-UDWORD	total;
 
-	x1 = tileX * TILE_UNITS;
-	y1 = tileY * TILE_UNITS;
-
-	x2 = pos->x;
-	y2 = pos->z;
-
-	xDif = abs(x1-x2);
-	zDif = abs(y1-y2);
-
-	total = (xDif*xDif) + (yDif*yDif);
-	return((UDWORD)sqrt(total));
-}
-*/
 UDWORD	calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos)
 {
 	UDWORD	x1,y1,z1;

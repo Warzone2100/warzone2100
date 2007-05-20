@@ -961,10 +961,6 @@ void removeFeature(FEATURE *psDel)
 	MESSAGE		*psMessage;
 	Vector3i pos;
 
-//	iVector		dv;
-//	UWORD		uwFlameCycles, uwFlameAnims, i;
-//	UDWORD		x, y, udwFlameDelay;
-
 	ASSERT( psDel != NULL,
 		"removeFeature: invalid feature pointer\n" );
 
