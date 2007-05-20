@@ -6337,9 +6337,6 @@ BOOL cbSensorDroid(DROID *psDroid)
 	return FALSE;
 }
 
-//testing the new electronic warfare for multiPlayer - AB don't want to release with this in the game!!!!!!
-//#define TEST_EW 1
-
 // ////////////////////////////////////////////////////////////////////////////
 // give a droid from one player to another - used in Electronic Warfare and multiplayer
 //returns the droid created - for single player
@@ -6366,11 +6363,6 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 	{
 		return psD;
 	}
-
-#ifdef TEST_EW
-    bMultiPlayer = TRUE;
-#endif
-
 
     if (bMultiPlayer)
     {
@@ -6459,9 +6451,6 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_UNITTAKEOVER);
 		psScrCBDroidTaken = NULL;
 
-#ifdef TEST_EW
-        bMultiPlayer = FALSE;
-#endif
         return NULL;
     }
 

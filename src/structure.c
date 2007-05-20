@@ -89,9 +89,6 @@
 #include "scores.h"
 #include "gateway.h"
 
-//testing the new electronic warfare for multiPlayer - AB don't want to release with this in the game!!!!!!
-//#define TEST_EW 1
-
 #define MODULE_PIES_ENABLED
 
 // Possible types of wall to build
@@ -3469,9 +3466,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				return;
 			}
 
-#ifdef TEST_EW
-	bMultiPlayer = TRUE;
-#endif
 			//electronic warfare affects the functionality of some structures in multiPlayer
 			if (bMultiPlayer)
 			{
@@ -3482,9 +3476,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				}
 			}
 
-#ifdef TEST_EW
-	bMultiPlayer = FALSE;
-#endif
 			pPlayerRes += (pSubject->ref - REF_RESEARCH_START);
 			//check research has not already been completed by another structure
 			if (IsResearchCompleted(pPlayerRes)==0)
@@ -3562,9 +3553,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				return;
 			}
 
-#ifdef TEST_EW
-	bMultiPlayer = TRUE;
-#endif
 			//electronic warfare affects the functionality of some structures in multiPlayer
 			if (bMultiPlayer)
 			{
@@ -3575,9 +3563,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				}
 			}
 
-#ifdef TEST_EW
-	bMultiPlayer = FALSE;
-#endif
 			if (psFactory->timeStarted == ACTION_START_TIME)
 			{
 				// also need to check if a command droid's group is full
@@ -3710,9 +3695,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 							return;
 						}
 					}
-#ifdef TEST_EW
-	bMultiPlayer = TRUE;
-#endif
+
 					//don't do anything if the resistance is low in multiplayer
 					if (bMultiPlayer)
 					{
@@ -3722,9 +3705,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 							return;
 						}
 					}
-#ifdef TEST_EW
-	bMultiPlayer = FALSE;
-#endif
+
 					//check if enough power to do any
 					powerCost = powerReqForDroidRepair(psDroid);
 					if (powerCost > psDroid->powerAccrued)
@@ -4054,17 +4035,13 @@ void structureUpdate(STRUCTURE *psBuilding)
 		if ((gameTime - psBuilding->lastResistance) > RESISTANCE_INTERVAL)
 		{
 			psBuilding->resistance++;
-#ifdef TEST_EW
-	bMultiPlayer = TRUE;
-#endif
+
 			//in multiplayer, certain structures do not function whilst low resistance
 			if (bMultiPlayer)
 			{
 				resetResistanceLag(psBuilding);
 			}
-#ifdef TEST_EW
-	bMultiPlayer = FALSE;
-#endif
+
 			psBuilding->lastResistance = gameTime;
 			//once the resistance is back up reset the last time increased
 			if (psBuilding->resistance >= (SWORD)iPointsRequired)
@@ -6530,10 +6507,6 @@ BOOL validStructResistance(STRUCTURE *psStruct)
 
 	ASSERT( psStruct != NULL, "invalidStructResistance: invalid structure pointer" );
 
-#ifdef TEST_EW
-	bMultiPlayer = TRUE;
-#endif
-
 	if (psStruct->pStructureType->resistance != 0)
 	{
 		/*certain structures will only provide rewards in multiplayer so
@@ -6564,10 +6537,6 @@ BOOL validStructResistance(STRUCTURE *psStruct)
 			bTarget = TRUE;
 		}
 	}
-
-#ifdef TEST_EW
-	bMultiPlayer = FALSE;
-#endif
 
 	return bTarget;
 }
@@ -7847,10 +7816,6 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, BOOL
 	BOOL                bPowerOn;
 	UWORD               direction;
 
-#ifdef TEST_EW
-	bMultiPlayer = TRUE;
-#endif
-
 	//this is not the case for EW in multiPlayer mode
 	if (!bMultiPlayer)
 	{
@@ -7950,10 +7915,6 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, BOOL
 				setStructTileDraw(psStructure);
 			}
 		}
-
-#ifdef TEST_EW
-		bMultiPlayer = FALSE;
-#endif
 
 		//ASSERT( FALSE,
 		//    "giftSingleStructure: EW attack in multiplayer" );
