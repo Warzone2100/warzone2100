@@ -71,11 +71,14 @@ extern char last_called_script_event[MAX_EVENT_NAME_LEN];
 
 /*!
  * Compile time assert
- * Can not be used in global scope
  * \param expr Expression to evaluate
  */
-#define ASSERT_STATIC( expr ) \
-	do { enum { assert_static__ = 1/(expr) }; } while(0)
+#define STATIC_ASSERT( expr ) \
+	extern char MKID(sa, __LINE__, _static_assert)[!!(expr) * 2 - 1]
+
+// Helper macro for STATIC_ASSERT
+#define MKID(a, b, c) MKID_(a, b, c)
+#define MKID_(a, b, c) a ## b ## c
 
 
 /***
