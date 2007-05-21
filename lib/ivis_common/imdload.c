@@ -261,7 +261,7 @@ static BOOL _imd_load_polys( char **ppFileData, iIMDShape *s )
 			iV_Error(0xff, "(_load_polys) [poly %d] memory alloc fail (poly indices)", i);
 			return FALSE;
 		}
-		poly->vrt = (iVertex*)malloc(sizeof(iVertex) * poly->npnts);
+		poly->vrt = (fVertex*)malloc(sizeof(fVertex) * poly->npnts);
 		if (poly->vrt == NULL)
 		{
 			iV_Error(0xff, "(_load_polys) [poly %d] memory alloc fail (vertex struct)", i);
@@ -284,7 +284,7 @@ static BOOL _imd_load_polys( char **ppFileData, iIMDShape *s )
 		// calc poly normal
 		if (poly->npnts > 2)
 		{
-			Vector3i p0, p1, p2;
+			Vector3f p0, p1, p2;
 
 			//assumes points already set
 			p0.x = s->points[poly->pindex[0]].x;
@@ -299,11 +299,11 @@ static BOOL _imd_load_polys( char **ppFileData, iIMDShape *s )
 			p2.y = s->points[poly->pindex[poly->npnts-1]].y;
 			p2.z = s->points[poly->pindex[poly->npnts-1]].z;
 
-			pie_SurfaceNormal3iv(&p0, &p1, &p2, &poly->normal);
+			pie_SurfaceNormal3fv(&p0, &p1, &p2, &poly->normal);
 		}
 		else
 		{
-			poly->normal = (Vector3i){0.0f, 0.0f, 0.0f};
+			poly->normal = (Vector3f){0.0f, 0.0f, 0.0f};
 		}
 
 		if (poly->flags & iV_IMD_TEXANIM)
@@ -346,8 +346,8 @@ static BOOL _imd_load_polys( char **ppFileData, iIMDShape *s )
 		{
 			for (j = 0; j < poly->npnts; j++)
 			{
-				Sint32 VertexU, VertexV;
-				if (sscanf(pFileData, "%d %d%n", &VertexU, &VertexV, &cnt) != 2)
+				float VertexU, VertexV;
+				if (sscanf(pFileData, "%f %f%n", &VertexU, &VertexV, &cnt) != 2)
 				{
 					iV_Error(0xff, "(_load_polys) [poly %d] error reading tex outline", i);
 					return FALSE;
@@ -371,11 +371,11 @@ static BOOL ReadPoints( char **ppFileData, iIMDShape *s )
 {
 	char *pFileData = *ppFileData;
 	int cnt, i, j, lastPoint = 0, match = -1;
-	Vector3i new = {0, 0, 0};
+	Vector3f new = {0.0f, 0.0f, 0.0f};
 
 	for (i = 0; i < s->npoints; i++)
 	{
-		if (sscanf(pFileData, "%d %d %d%n", &new.x, &new.y, &new.z, &cnt) != 3)
+		if (sscanf(pFileData, "%f %f %f%n", &new.x, &new.y, &new.z, &cnt) != 3)
 		{
 			iV_Error(0xff, "(_load_points) file corrupt -K");
 			return FALSE;
@@ -388,7 +388,7 @@ static BOOL ReadPoints( char **ppFileData, iIMDShape *s )
 		// scan through list upto the number of points added (lastPoint) ... not up to the number of points scanned in (i)  (which will include duplicates)
 		for (j = 0; j < lastPoint; j++)
 		{
-			if (Vector3i_compare(&new, &s->points[j]))
+			if (Vector3f_compare(&new, &s->points[j]))
 			{
 				match = j;
 				break;
@@ -428,7 +428,7 @@ static BOOL ReadPoints( char **ppFileData, iIMDShape *s )
 static BOOL _imd_load_points( char **ppFileData, iIMDShape *s )
 {
 	int i;
-	Vector3i *p = NULL;
+	Vector3f *p = NULL;
 	Sint32 tempXMax, tempXMin, tempZMax, tempZMin, extremeX, extremeZ;
 	Sint32 xmax, ymax, zmax;
 	double dx, dy, dz, rad_sq, rad, old_to_p_sq, old_to_p, old_to_new;
@@ -438,7 +438,7 @@ static BOOL _imd_load_points( char **ppFileData, iIMDShape *s )
 	         vxmax = { 0, 0, 0 }, vymax = { 0, 0, 0 }, vzmax = { 0, 0, 0 };
 
 	//load the points then pass through a second time to setup bounding datavalues
-	s->points = (Vector3i*)malloc(sizeof(Vector3i) * s->npoints);
+	s->points = (Vector3f*)malloc(sizeof(Vector3f) * s->npoints);
 	if (s->points == NULL)
 	{
 		return FALSE;
@@ -634,9 +634,7 @@ static BOOL _imd_load_points( char **ppFileData, iIMDShape *s )
 		}
 	}
 
-	s->ocen.x = cen.x;
-	s->ocen.y = cen.y;
-	s->ocen.z = cen.z;
+	s->ocen = cen;
 	s->oradius = rad;
 	iV_DEBUG2("radius, sradius, %d, %d\n", s->radius, s->sradius);
 	iV_DEBUG4("SPHERE: cen,rad = %d %d %d,  %d\n", s->ocen.x, s->ocen.y, s->ocen.z, s->oradius);
@@ -661,9 +659,9 @@ static BOOL _imd_load_connectors(char **ppFileData, iIMDShape *s)
 {
 	char *pFileData = *ppFileData;
 	int cnt, i;
-	Vector3i *p = NULL, new = {0, 0, 0};
+	Vector3f *p = NULL, new = {0.0f, 0.0f, 0.0f};
 
-	s->connectors = (Vector3i*)malloc(sizeof(Vector3i) * s->nconnectors);
+	s->connectors = (Vector3f*)malloc(sizeof(Vector3f) * s->nconnectors);
 	if (s->connectors == NULL)
 	{
 		iV_Error(0xff, "(_load_connectors) MALLOC fail");
@@ -672,7 +670,7 @@ static BOOL _imd_load_connectors(char **ppFileData, iIMDShape *s)
 
 	for (i = 0, p = s->connectors; i < s->nconnectors; i++, p++)
 	{
-		if (sscanf(pFileData, "%d %d %d%n", &new.x, &new.y, &new.z, &cnt) != 3)
+		if (sscanf(pFileData, "%f %f %f%n", &new.x, &new.y, &new.z, &cnt) != 3)
 		{
 			iV_Error(0xff, "(_load_connectors) file corrupt -M");
 			return FALSE;

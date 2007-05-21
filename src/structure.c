@@ -4072,7 +4072,7 @@ void structureUpdate(STRUCTURE *psBuilding)
 			if(bMultiPlayer && ONEINTEN)
 			{
 				Vector3i position;
-				Vector3i *point;
+				Vector3f *point;
 				SDWORD	realY;
 				UDWORD	pointIndex;
 

@@ -141,7 +141,7 @@ static BOOL stencil_one_pass(void)
 /***************************************************************************/
 
 static Vector3f		scrPoints[pie_MAX_POINTS];
-static PIEVERTEX	pieVrts[pie_MAX_POLY_VERTS];
+static PIEVERTEXF	pieVrts[pie_MAX_POLY_VERTS];
 static SDWORD		pieCount = 0;
 static SDWORD		tileCount = 0;
 static SDWORD		polyCount = 0;
@@ -223,7 +223,7 @@ static inline void Vector3f_CP(Vector3f* dest, Vector3f* op1, Vector3f* op2)
 }
 
 static inline void
-pie_Polygon(SDWORD numVerts, PIEVERTEX* pVrts, float texture_offset, BOOL light)
+pie_Polygon(SDWORD numVerts, PIEVERTEXF* pVrts, float texture_offset, BOOL light)
 {
 	SDWORD i;
 
@@ -316,10 +316,9 @@ static unsigned int nb_tshapes = 0;
 
 static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT specular, int pieFlag, int pieFlagData)
 {
-	Sint32 tempY;
+	float tempY;
 	int i, n;
-	Vector3i *pVertices;
-	Vector3f *pPixels;
+	Vector3f *pVertices, *pPixels;
 	iIMDPoly *pPolys;
 	PIEPOLY piePoly;
 	VERTEXID *index;
@@ -443,7 +442,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 
 
 /// returns true if the edges are adjacent
-static int compare_edge (EDGE *A, EDGE *B, const Vector3i *pVertices )
+static int compare_edge (EDGE *A, EDGE *B, const Vector3f *pVertices )
 {
 	if(A->from == B->to)
 	{
@@ -451,10 +450,10 @@ static int compare_edge (EDGE *A, EDGE *B, const Vector3i *pVertices )
 		{
 			return TRUE;
 		}
-		return Vector3i_compare(&pVertices[A->to], &pVertices[B->from]);
+		return Vector3f_compare(&pVertices[A->to], &pVertices[B->from]);
 	}
 
-	if(!Vector3i_compare(&pVertices[A->from], &pVertices[B->to]))
+	if(!Vector3f_compare(&pVertices[A->from], &pVertices[B->to]))
 	{
 		return FALSE;
 	}
@@ -463,12 +462,12 @@ static int compare_edge (EDGE *A, EDGE *B, const Vector3i *pVertices )
 	{
 		return TRUE;
 	}
-	return Vector3i_compare(&pVertices[A->to], &pVertices[B->from]);
+	return Vector3f_compare(&pVertices[A->to], &pVertices[B->from]);
 }
 
 /// Add an edge to an edgelist
 /// Makes sure only silhouette edges are present
-static void addToEdgeList(int a, int b, EDGE *edgelist, int *edge_count, Vector3i *pVertices)
+static void addToEdgeList(int a, int b, EDGE *edgelist, int *edge_count, Vector3f *pVertices)
 {
 	EDGE newEdge = {a, b};
 	int i;
@@ -514,7 +513,7 @@ static inline float scale_y(float y, int flag, int flag_data)
 static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* light)
 {
 	int i, j, n;
-	Vector3i *pVertices;
+	Vector3f *pVertices;
 	iIMDPoly *pPolys;
 	int edge_count = 0;
 	static EDGE *edgelist = NULL;
@@ -1016,7 +1015,7 @@ static inline void pie_PiePoly(PIEPOLY *poly, BOOL light)
 
 static inline void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, BOOL light)
 {
-int	uFrame, vFrame, j, framesPerLine;
+	int uFrame, vFrame, j, framesPerLine;
 
 	if ((poly->flags & iV_IMD_TEXANIM) && (frame != 0)) {
 		if (poly->pTexAnim != NULL) {

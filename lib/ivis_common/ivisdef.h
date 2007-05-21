@@ -102,9 +102,9 @@ typedef struct {
 	Uint32 flags;
 	Sint32 zcentre;
 	int npnts;
-	Vector3i normal;
+	Vector3f normal;
 	VERTEXID *pindex;
-	iVertex *vrt;
+	fVertex *vrt;
 	iTexAnim *pTexAnim;
 } iIMDPoly;
 
@@ -112,16 +112,16 @@ typedef struct iIMDShape {
 	Sint32 texpage;
 	Sint32 oradius, sradius, radius, visRadius, xmin, xmax, ymin, ymax, zmin, zmax;
 
-	Vector3i ocen;
+	Vector3f ocen;
 	UWORD numFrames;
 	UWORD animInterval;
 	int npoints;
 	int npolys; // After BSP this number is not updated - it stays the number of pre-bsp polys
 	int nconnectors; // After BSP this number is not updated - it stays the number of pre-bsp polys
 
-	Vector3i *points;
+	Vector3f *points;
 	iIMDPoly *polys; // After BSP this is not changed - it stays the original chunk of polys - not all are now used,and others not in this array are, see BSPNode for a tree of all the post BSP polys
-	Vector3i *connectors; // After BSP this is not changed - it stays the original chunk of polys - not all are now used,and others not in this array are, see BSPNode for a tree of all the post BSP polys
+	Vector3f *connectors; // After BSP this is not changed - it stays the original chunk of polys - not all are now used,and others not in this array are, see BSPNode for a tree of all the post BSP polys
 
 	int ntexanims;
 	iTexAnim **texanims;

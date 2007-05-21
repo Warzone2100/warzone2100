@@ -255,7 +255,7 @@ static SDWORD tileZ = 8000;
 static QUAD dragQuad;
 
 /* temporary buffer used for flattening IMDs */
-static Vector3i alteredPoints[iV_IMD_MAX_POINTS];
+static Vector3f alteredPoints[iV_IMD_MAX_POINTS];
 
 //number of tiles visible
 UDWORD	visibleXTiles;
@@ -1724,7 +1724,7 @@ void	renderFeature(FEATURE *psFeature)
 	SDWORD		rotation;
 	UDWORD		brightness, specular;
 	Vector3i dv;
-	Vector3i *vecTemp;
+	Vector3f *vecTemp;
 	BOOL bForceDraw = ( !getRevealStatus() && psFeature->psStats->visibleAtStart);
 	int shadowFlags = 0;
 
@@ -1741,7 +1741,6 @@ void	renderFeature(FEATURE *psFeature)
 		}
 		dv.x = (featX - player.p.x) - terrainMidX*TILE_UNITS;
 		dv.z = terrainMidY*TILE_UNITS - (featY - player.p.z);
-
 
 		/* features sits at the height of the tile it's centre is on */
 		dv.y = psFeature->z;
@@ -1956,7 +1955,7 @@ void	renderStructure(STRUCTURE *psStructure)
 	Vector3i dv;
 	SDWORD			i;
 	iIMDShape *lImd = NULL, *imd = NULL;
-	Vector3i *temp = NULL;
+	Vector3f *temp = NULL;
 	BOOL			bHitByElectronic = FALSE;
 	iIMDShape		*pRepImd;
 	REPAIR_FACILITY		*psRepairFac = NULL;
@@ -2021,7 +2020,7 @@ void	renderStructure(STRUCTURE *psStructure)
 				SDWORD strHeight;
 
 				// Get a copy of the points
-				memcpy( alteredPoints, imd->points, imd->npoints * sizeof(Vector3i) );
+				memcpy( alteredPoints, imd->points, imd->npoints * sizeof(Vector3f) );
 
 				// Get the height of the centre point for reference
 				strHeight = psStructure->z;//map_Height(structX,structY) + 64;
@@ -2461,7 +2460,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition)
 {
 	Vector3i dv;
 	SDWORD			x, y, r;
-	Vector3i *temp = NULL;
+	Vector3f *temp = NULL;
 	SDWORD			buildingBrightness, specular;
 	//store the frame number for when deciding what has been clicked on
 	psPosition->frameNumber = currentGameFrame;
@@ -2521,7 +2520,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 	SDWORD			rotation;
 	Vector3i			dv;
 	UDWORD			i;
-	Vector3i			*temp;
+	Vector3f			*temp;
 	UDWORD			buildingBrightness, specular;
 	// HACK to be able to use static shadows for walls
 	// We just store a separate IMD for each direction
@@ -2609,7 +2608,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 		rz = player.p.z & (TILE_UNITS-1);
 
 		/* Translate */
-		iV_TRANSLATE(rx,0,-rz);
+		iV_TRANSLATE(rx, 0, -rz);
 
 		rotation = DEG( (int)psStructure->direction );
 		iV_MatrixRotateY(-rotation);
@@ -2685,7 +2684,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 {
 	Vector3i			dv;
-	Vector3i			*pVecTemp;
+	Vector3f			*pVecTemp;
 	SDWORD			shadowScale;
 	UDWORD brightness, specular;
 
@@ -5313,7 +5312,7 @@ static	void	addConstructionLine(DROID	*psDroid, STRUCTURE *psStructure)
 {
 	PIEVERTEX	pts[3];
 	Vector3i each;
-	Vector3i *point;
+	Vector3f *point;
 	UDWORD	pointIndex;
 	SDWORD	realY;
 	Vector3i null, vec;

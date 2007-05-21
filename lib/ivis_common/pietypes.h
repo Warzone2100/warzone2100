@@ -50,6 +50,7 @@ typedef struct { float x, y, z; } Vector3f;
 
 typedef struct { Vector3i p, r; } iView;
 typedef struct { Sint32 x, y, z, u, v; Uint8 g; } iVertex;
+typedef struct { float x, y, z, u, v; Uint8 g; } fVertex;
 
 typedef struct { Uint8 r, g, b; } iColour;
 typedef iColour iPalette[256];
