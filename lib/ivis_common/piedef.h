@@ -63,7 +63,6 @@
 #define INV_TEX_SIZE			(0.00390625f)
 
 
-#define MAX_FILE_PATH		256
 #define pie_MAX_POLY_SIZE	16
 
 //Effects

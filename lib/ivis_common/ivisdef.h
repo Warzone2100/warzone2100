@@ -48,29 +48,6 @@
 #define iV_IMD_ANIM_FRAMES	8
 
 
-/***************************************************************************/
-/*
- *	Global Macros
- */
-/***************************************************************************/
-
-/***************************************************************************/
-/*
- *	Global Type Definitions
- */
-/***************************************************************************/
-//*************************************************************************
-//
-// Basic types (now defined in pieTypes.h)
-//
-//*************************************************************************
-
-//*************************************************************************
-//
-// Simple derived types (now defined in pieTypes.h)
-//
-//*************************************************************************
-
 //*************************************************************************
 //
 // screen surface structure
@@ -128,7 +105,7 @@ typedef struct {
 	Vector3i normal;
 	VERTEXID *pindex;
 	iVertex *vrt;
-	iTexAnim *pTexAnim;		// warning.... this is not used on the playstation version !
+	iTexAnim *pTexAnim;
 } iIMDPoly;
 
 typedef struct iIMDShape {
@@ -139,17 +116,17 @@ typedef struct iIMDShape {
 	UWORD	numFrames;
 	UWORD	animInterval;
 	int npoints;
-	int npolys;					// After BSP this number is not updated - it stays the number of pre-bsp polys
-	int nconnectors;			// After BSP this number is not updated - it stays the number of pre-bsp polys
+	int npolys; // After BSP this number is not updated - it stays the number of pre-bsp polys
+	int nconnectors; // After BSP this number is not updated - it stays the number of pre-bsp polys
 
-   Vector3i *points;
-   iIMDPoly *polys;		// After BSP this is not changed - it stays the original chunk of polys - not all are now used,and others not in this array are, see BSPNode for a tree of all the post BSP polys
-   Vector3i *connectors;		// After BSP this is not changed - it stays the original chunk of polys - not all are now used,and others not in this array are, see BSPNode for a tree of all the post BSP polys
+	Vector3i *points;
+	iIMDPoly *polys; // After BSP this is not changed - it stays the original chunk of polys - not all are now used,and others not in this array are, see BSPNode for a tree of all the post BSP polys
+	Vector3i *connectors; // After BSP this is not changed - it stays the original chunk of polys - not all are now used,and others not in this array are, see BSPNode for a tree of all the post BSP polys
 
 	int ntexanims;
 	iTexAnim **texanims;
 
-	struct iIMDShape *next;		// next pie in multilevel pies (NULL for non multilevel !)
+	struct iIMDShape *next; // next pie in multilevel pies (NULL for non multilevel !)
 
 	void *shadowEdgeList;
 	unsigned int nShadowEdges;

@@ -422,11 +422,6 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	}
 }
 
-/// returns true if both vectors are equal
-static inline BOOL compare_point (Vector3i *A, Vector3i *B)
-{
-	return A->x == B->x && A->y == B->y && A->z == B->z;
-}
 
 /// returns true if the edges are adjacent
 static int compare_edge (EDGE *A, EDGE *B, Vector3i *pVertices )
@@ -437,10 +432,10 @@ static int compare_edge (EDGE *A, EDGE *B, Vector3i *pVertices )
 		{
 			return TRUE;
 		}
-		return compare_point(&pVertices[A->to], &pVertices[B->from]);
+		return Vector3i_compare(&pVertices[A->to], &pVertices[B->from]);
 	}
 
-	if(!compare_point(&pVertices[A->from], &pVertices[B->to]))
+	if(!Vector3i_compare(&pVertices[A->from], &pVertices[B->to]))
 	{
 		return FALSE;
 	}
@@ -449,7 +444,7 @@ static int compare_edge (EDGE *A, EDGE *B, Vector3i *pVertices )
 	{
 		return TRUE;
 	}
-	return compare_point(&pVertices[A->to], &pVertices[B->from]);
+	return Vector3i_compare(&pVertices[A->to], &pVertices[B->from]);
 }
 
 /// Add an edge to an edgelist

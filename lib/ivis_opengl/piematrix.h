@@ -72,6 +72,15 @@ static inline void pie_RotateTranslate3iv(Vector3i * v, Vector3i * s)
 }
 
 
+/*!
+ * returns true if both vectors are equal
+ */
+static inline BOOL Vector3i_compare(const Vector3i *a, const Vector3i *b)
+{
+	return a->x == b->x && a->y == b->y && a->z == b->z;
+}
+
+
 //*************************************************************************
 
 
