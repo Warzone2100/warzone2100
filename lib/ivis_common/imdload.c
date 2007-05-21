@@ -228,14 +228,9 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 static BOOL _imd_load_polys( char **ppFileData, iIMDShape *s )
 {
 	char *pFileData = *ppFileData;
-	int cnt;
-	int i, j;
-	Vector3i p0, p1, p2, *points;
+	int i, j, cnt;
 	iIMDPoly *poly;
 	int nFrames, pbRate, tWidth, tHeight;
-
-	//assumes points already set
-	points = s->points;
 
 	s->numFrames = 0;
 	s->animInterval = 0;
@@ -289,17 +284,20 @@ static BOOL _imd_load_polys( char **ppFileData, iIMDShape *s )
 		// calc poly normal
 		if (poly->npnts > 2)
 		{
-			p0.x = points[poly->pindex[0]].x;
-			p0.y = points[poly->pindex[0]].y;
-			p0.z = points[poly->pindex[0]].z;
+			Vector3i p0, p1, p2;
 
-			p1.x = points[poly->pindex[1]].x;
-			p1.y = points[poly->pindex[1]].y;
-			p1.z = points[poly->pindex[1]].z;
+			//assumes points already set
+			p0.x = s->points[poly->pindex[0]].x;
+			p0.y = s->points[poly->pindex[0]].y;
+			p0.z = s->points[poly->pindex[0]].z;
 
-			p2.x = points[poly->pindex[poly->npnts-1]].x;
-			p2.y = points[poly->pindex[poly->npnts-1]].y;
-			p2.z = points[poly->pindex[poly->npnts-1]].z;
+			p1.x = s->points[poly->pindex[1]].x;
+			p1.y = s->points[poly->pindex[1]].y;
+			p1.z = s->points[poly->pindex[1]].z;
+
+			p2.x = s->points[poly->pindex[poly->npnts-1]].x;
+			p2.y = s->points[poly->pindex[poly->npnts-1]].y;
+			p2.z = s->points[poly->pindex[poly->npnts-1]].z;
 
 			pie_SurfaceNormal3iv(&p0, &p1, &p2, &poly->normal);
 		}
