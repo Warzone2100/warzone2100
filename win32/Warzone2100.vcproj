@@ -1641,6 +1641,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\lib\ivis_common\pievector.h"
+				>
+			</File>
+			<File
 				RelativePath="..\lib\framework\platform.h"
 				>
 			</File>
