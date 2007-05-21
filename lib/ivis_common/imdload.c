@@ -303,7 +303,7 @@ static BOOL _imd_load_polys( char **ppFileData, iIMDShape *s )
 		}
 		else
 		{
-			poly->normal = (Vector3f){0.0f, 0.0f, 0.0f};
+			Vector3f_Set(&poly->normal, 0.0f, 0.0f, 0.0f);
 		}
 
 		if (poly->flags & iV_IMD_TEXANIM)

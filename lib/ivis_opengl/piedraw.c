@@ -196,31 +196,6 @@ void pie_EndLighting(void)
 	lighting = FALSE;
 }
 
-static inline void Vector3f_Set(Vector3f* v, float x, float y, float z)
-{
-	v->x = x;
-	v->y = y;
-	v->z = z;
-}
-
-static inline void Vector3f_Sub(Vector3f* dest, Vector3f* op1, Vector3f* op2)
-{
-	dest->x = op1->x - op2->x;
-	dest->y = op1->y - op2->y;
-	dest->z = op1->z - op2->z;
-}
-
-static inline float Vector3f_SP(Vector3f* op1, Vector3f* op2)
-{
-	return op1->x * op2->x + op1->y * op2->y + op1->z * op2->z;
-}
-
-static inline void Vector3f_CP(Vector3f* dest, Vector3f* op1, Vector3f* op2)
-{
-	dest->x = op1->y * op2->z - op1->z * op2->y;
-	dest->y = op1->z * op2->x - op1->x * op2->z;
-	dest->z = op1->x * op2->y - op1->y * op2->x;
-}
 
 static inline void
 pie_Polygon(SDWORD numVerts, PIEVERTEXF* pVrts, float texture_offset, BOOL light)
