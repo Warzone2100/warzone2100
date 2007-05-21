@@ -227,14 +227,22 @@ pie_Polygon(SDWORD numVerts, PIEVERTEX* pVrts, float texture_offset, BOOL light)
 {
 	SDWORD i;
 
-	if (numVerts < 1) {
+	if (numVerts < 1)
+	{
 		return;
-	} else if (numVerts == 1) {
+	}
+	else if (numVerts == 1)
+	{
 		glBegin(GL_POINTS);
-	} else if (numVerts == 2) {
+	}
+	else if (numVerts == 2)
+	{
 		glBegin(GL_LINE_STRIP);
-	} else {
-		if (light) {
+	}
+	else
+	{
+		if (light)
+		{
 			float ambient[4] = { 1, 1, 1, 1 };
 			float diffuse[4] = { 1, 1, 1, 1 };
 			float specular[4] = { 1, 1, 1, 1 };
@@ -249,26 +257,25 @@ pie_Polygon(SDWORD numVerts, PIEVERTEX* pVrts, float texture_offset, BOOL light)
 			glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
 		}
 		glBegin(GL_TRIANGLE_FAN);
-		if (light) {
-			Vector3f p1, p2, p3, v1, v2, n;
-			float l;
+		if (light)
+		{
+			Vector3f p1 = { pVrts[0].sx, pVrts[0].sy, pVrts[0].sz },
+					p2 = { pVrts[1].sx, pVrts[1].sy, pVrts[1].sz },
+	 				p3 = { pVrts[2].sx, pVrts[2].sy, pVrts[2].sz },
+	  				v1, v2, n;
+			float l = 1.0f;
 
-			Vector3f_Set(&p1, pVrts[0].sx, pVrts[0].sy, pVrts[0].sz);
-			Vector3f_Set(&p2, pVrts[1].sx, pVrts[1].sy, pVrts[1].sz);
-			Vector3f_Set(&p3, pVrts[2].sx, pVrts[2].sy, pVrts[2].sz);
 			Vector3f_Sub(&v1, &p3, &p1);
 			Vector3f_Sub(&v2, &p2, &p1);
 			Vector3f_CP(&n, &v1, &v2);
-			l = 1.0;
 
 			glNormal3f(n.x*l, n.y*l, n.z*l);
-			//printf("%f %f %f\n", n.x*l, n.y*l, n.z*l);
 		}
 	}
-	for (i = 0; i < numVerts; i++) {
+	for (i = 0; i < numVerts; i++)
+	{
 		glColor4ub(pVrts[i].light.byte.r, pVrts[i].light.byte.g, pVrts[i].light.byte.b, pVrts[i].light.byte.a);
 		glTexCoord2f(pVrts[i].tu, pVrts[i].tv+texture_offset);
-		//d3dVrts[i].specular = pVrts[i].specular.argb;
 		glVertex3f(pVrts[i].sx, pVrts[i].sy, pVrts[i].sz);
 	}
 	glEnd();
@@ -408,24 +415,28 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 		}
 		for (n=0; n<pPolys->npnts; n++, index++)
 		{
-			pieVrts[n].sx = MAKEINT(scrPoints[*index].x);
-			pieVrts[n].sy = MAKEINT(scrPoints[*index].y);
-			pieVrts[n].sz = MAKEINT(scrPoints[*index].z);
+			// FIXME We reduce our nice float IMDs to integer accuracy!!!
+			// Fixing this needs changes to the type of pieVrts and piePoly
+			pieVrts[n].sx = scrPoints[*index].x;
+			pieVrts[n].sy = scrPoints[*index].y;
+			pieVrts[n].sz = scrPoints[*index].z;
 			pieVrts[n].tu = pPolys->vrt[n].u;
 			pieVrts[n].tv = pPolys->vrt[n].v;
 			pieVrts[n].light.argb = colour.argb;
 			pieVrts[n].specular.argb = specular.argb;
 		}
 		piePoly.nVrts = pPolys->npnts;
-		piePoly.pVrts = &pieVrts[0];
+		piePoly.pVrts = pieVrts;
 
 		piePoly.pTexAnim = pPolys->pTexAnim;
 
-		if (piePoly.flags > 0) {
-			pie_PiePolyFrame(&piePoly,frame,light);	   // draw the polygon ... this is an inline function
+		if (piePoly.flags > 0)
+		{
+			pie_PiePolyFrame(&piePoly, frame, light); // draw the polygon ...
 		}
 	}
-	if (pieFlag & pie_BUTTON) {
+	if (pieFlag & pie_BUTTON)
+	{
 		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 	}
 }
@@ -976,22 +987,28 @@ void pie_DrawRect( SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour )
  *
  ***************************************************************************/
 
-static void pie_PiePoly(PIEPOLY *poly, BOOL light)
+static inline void pie_PiePoly(PIEPOLY *poly, BOOL light)
 {
 	polyCount++;
 
-	if (poly->nVrts >= 3) {
-		if (poly->flags & PIE_COLOURKEYED) {
+	if (poly->nVrts >= 3)
+	{
+		if (poly->flags & PIE_COLOURKEYED)
+		{
 			pie_SetColourKeyedBlack(TRUE);
-		} else {
+		}
+		else
+		{
 			pie_SetColourKeyedBlack(FALSE);
 		}
 		pie_SetColourKeyedBlack(TRUE);
-		if (poly->flags & PIE_NO_CULL) {
+		if (poly->flags & PIE_NO_CULL)
+		{
 			glDisable(GL_CULL_FACE);
 		}
 		pie_Polygon(poly->nVrts, poly->pVrts, 0.0, light);
-		if (poly->flags & PIE_NO_CULL) {
+		if (poly->flags & PIE_NO_CULL)
+		{
 			glEnable(GL_CULL_FACE);
 		}
 	}
