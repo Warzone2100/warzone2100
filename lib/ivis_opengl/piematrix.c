@@ -397,44 +397,35 @@ void pie_MatRotX(int x)
 //*
 //******
 
-Sint32 pie_RotateProject(SDWORD x, SDWORD y, SDWORD z, SDWORD* xs, SDWORD* ys)
+Sint32 pie_RotateProject(Vector3i *v3d, Vector2i *v2d)
 {
 	Sint32 zfx, zfy;
 	Sint32 zz, _x, _y, _z;
 
 
-	_x = x * psMatrix->a+y * psMatrix->d+z * psMatrix->g + psMatrix->j;
-	_y = x * psMatrix->b+y * psMatrix->e+z * psMatrix->h + psMatrix->k;
-	_z = x * psMatrix->c+y * psMatrix->f+z * psMatrix->i + psMatrix->l;
+	_x = v3d->x * psMatrix->a + v3d->y * psMatrix->d + v3d->z * psMatrix->g + psMatrix->j;
+	_y = v3d->x * psMatrix->b + v3d->y * psMatrix->e + v3d->z * psMatrix->h + psMatrix->k;
+	_z = v3d->x * psMatrix->c + v3d->y * psMatrix->f + v3d->z * psMatrix->i + psMatrix->l;
 
 	zz = _z >> STRETCHED_Z_SHIFT;
 
 	zfx = _z >> psRendSurface->xpshift;
 	zfy = _z >> psRendSurface->ypshift;
 
-	if ((zfx<=0) || (zfy<=0))
+	if (zfx <= 0 || zfy <= 0 || zz < MIN_STRETCHED_Z)
 	{
-		*xs = LONG_WAY; //just along way off screen
-		*ys = LONG_WAY;
-	}
-	else if (zz < MIN_STRETCHED_Z)
-	{
-		*xs = LONG_WAY; //just along way off screen
-		*ys = LONG_WAY;
+		v2d->x = LONG_WAY; //just along way off screen
+		v2d->y = LONG_WAY;
 	}
 	else
 	{
-		*xs = psRendSurface->xcentre + (_x / zfx);
-		*ys = psRendSurface->ycentre - (_y / zfy);
+		v2d->x = psRendSurface->xcentre + (_x / zfx);
+		v2d->y = psRendSurface->ycentre - (_y / zfy);
 	}
 
 	return zz;
 }
 
-Sint32 pie_RotProj(Vector3i *v3d, Vector2i *v2d)
-{
-	return pie_RotateProject(v3d->x, v3d->y, v3d->z, &(v2d->x), &(v2d->y));
-}
 
 //*************************************************************************
 

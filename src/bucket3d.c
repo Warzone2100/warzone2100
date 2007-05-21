@@ -374,7 +374,7 @@ SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
  			position.y = (SDWORD)position.y;
 
 			/* 16 below is HACK!!! */
-			z = pie_RotProj(&position,&pixel) - 16;
+			z = pie_RotateProject(&position,&pixel) - 16;
 #ifdef BUCKET_CLIP
 			if (z > 0)
 			{
@@ -419,7 +419,7 @@ SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 
 				position.y = psSimpObj->z;
 
-				z = pie_RotProj(&position,&pixel);
+				z = pie_RotateProject(&position,&pixel);
 	#ifdef BUCKET_CLIP
 				if (z > 0)
 				{
@@ -468,7 +468,7 @@ SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 #endif
 			}
 
-			z = pie_RotProj(&position,&pixel);
+			z = pie_RotateProject(&position,&pixel);
 #ifdef BUCKET_CLIP
 			if (z > 0)
 			{
@@ -496,7 +496,7 @@ SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 
 			position.y = psSimpObj->z+2;
 
-			z = pie_RotProj(&position,&pixel);
+			z = pie_RotateProject(&position,&pixel);
 #ifdef BUCKET_CLIP
 			if (z > 0)
 			{
@@ -539,7 +539,7 @@ SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			iV_MatrixRotateZ( -psCompObj->orientation.y );
 			iV_MatrixRotateX( -psCompObj->orientation.x );
 
-			z = pie_RotProj(&position,&pixel);
+			z = pie_RotateProject(&position,&pixel);
 #ifdef BUCKET_CLIP
 			/*	Don't do this for animations
 			if (z > 0)
@@ -577,7 +577,7 @@ SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 
 			psBStats = asBodyStats + psDroid->asBits[COMP_BODY].nStat;
 			droidSize = psBStats->pIMD->radius;
-			z = pie_RotProj(&position,&pixel) - (droidSize*2);
+			z = pie_RotateProject(&position,&pixel) - (droidSize*2);
 #ifdef BUCKET_CLIP
 			if (z > 0)
 			{
@@ -621,7 +621,7 @@ SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
  				position.y = ((BASE_OBJECT *)((PROXIMITY_DISPLAY *)pObject)->
 					psMessage->pViewData)->z;
 			}
-			z = pie_RotProj(&position,&pixel);
+			z = pie_RotateProject(&position,&pixel);
 #ifdef BUCKET_CLIP
 			if (z > 0)
 			{
@@ -658,7 +658,7 @@ SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
  			position.y = (SDWORD)((EFFECT*)pObject)->position.y;
 
 			/* 16 below is HACK!!! */
-			z = pie_RotProj(&position,&pixel) - 16;
+			z = pie_RotateProject(&position,&pixel) - 16;
 #ifdef BUCKET_CLIP
 			if (z > 0)
 			{
@@ -691,7 +691,7 @@ SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 				coords.y - player.p.z);
  			position.y = ((FLAG_POSITION*)pObject)->coords.z;
 
-			z = pie_RotProj(&position,&pixel);
+			z = pie_RotateProject(&position,&pixel);
 #ifdef BUCKET_CLIP
 			if (z > 0)
 			{

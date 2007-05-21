@@ -876,7 +876,7 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 	DROID				*psDroid;
 	//Watermelon:I need another temp pointer to Shape
 	iIMDShape			*psShape, *psJet, *psShapeTemp = NULL;
-	Vector3i				null;
+	Vector3i				zero = {0, 0, 0};
 	Vector2i				screenCoords;
 	SDWORD				dummyZ, iConnector;
 	PROPULSION_STATS	*psPropStats;
@@ -924,32 +924,9 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 		specular = 0;
 	}
 
-//	/* No auxilliary rotation */
-	null.x = null.y = null.z = 0;
-
 	/* We've got a z value here _and_ screen coords of origin */
-	dummyZ = pie_RotProj(&null,&screenCoords);
+	dummyZ = pie_RotateProject(&zero, &screenCoords);
 
-	/* Draw the propulsion and body imds here */
-	/* Establish the propulsion - this is more complex if two parts */
-/*
-	if(leftFirst)
-	{
-		psShape = getLeftPropulsionIMD(psDroid);
-		if(psShape!=NULL)
-		{
-			iV_PIEDraw(psShape,psDroid->player);
-		}
-	}
-	else
-	{
-		psShape = getRightPropulsionIMD(psDroid);
-		if(psShape!=NULL)
-		{
-			iV_PIEDraw(psShape,psDroid->player);
-		}
-	}
-*/
 	if (droidScale != 100) {
 		pie_MatScale(droidScale);
 	}
@@ -1140,7 +1117,7 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 						{
 							pie_MatBegin();
 							//Watermelon:reset Z?
-							dummyZ = pie_RotProj(&null,&screenCoords);
+							dummyZ = pie_RotateProject(&zero, &screenCoords);
 
 							//Watermelon:to skip number of VTOL_CONNECTOR_START ground unit connectors
 							if ( iConnector < VTOL_CONNECTOR_START )
@@ -1276,7 +1253,7 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 				//Watermelon:sensor uses connectors[0]
 				pie_MatBegin();
 				//Watermelon:reset Z?
-				dummyZ = pie_RotProj(&null,&screenCoords);
+				dummyZ = pie_RotateProject(&zero, &screenCoords);
 				/* vtol weapons inverted */
 				if ( iConnector >= VTOL_CONNECTOR_START )
 				{
@@ -1321,7 +1298,7 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 				//Watermelon:cyborg uses connectors[0]
 				pie_MatBegin();
 				//Watermelon:reset Z?
-				dummyZ = pie_RotProj(&null,&screenCoords);
+				dummyZ = pie_RotateProject(&zero, &screenCoords);
 				/* vtol weapons inverted */
 				if ( iConnector >= VTOL_CONNECTOR_START )
 				{
@@ -1368,7 +1345,7 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 				//Watermelon:ecm uses connectors[0]
 				pie_MatBegin();
 				//Watermelon:reset Z?
-				dummyZ = pie_RotProj(&null,&screenCoords);
+				dummyZ = pie_RotateProject(&zero, &screenCoords);
 				/* vtol weapons inverted */
 				if ( iConnector >= VTOL_CONNECTOR_START )
 				{
@@ -1407,7 +1384,7 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 				//Watermelon:cyborg uses connectors[0]
 				pie_MatBegin();
 				//Watermelon:reset Z?
-				dummyZ = pie_RotProj(&null,&screenCoords);
+				dummyZ = pie_RotateProject(&zero, &screenCoords);
 				/* vtol weapons inverted */
 				if ( iConnector >= VTOL_CONNECTOR_START )
 				{

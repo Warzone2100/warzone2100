@@ -736,7 +736,7 @@ static void drawTiles(iView *camera, iView *player)
 				tileScreenInfo[i][j].x = world_coord(j-terrainMidX);
 				tileScreenInfo[i][j].y = 0;//map_TileHeight(edgeX,edgeY);
 				tileScreenInfo[i][j].z = world_coord(terrainMidY-i);
-				tileScreenInfo[i][j].sz = pie_RotProj((Vector3i*)&tileScreenInfo[i][j].x, (Vector2i*)&tileScreenInfo[i][j].sx);
+				tileScreenInfo[i][j].sz = pie_RotateProject((Vector3i*)&tileScreenInfo[i][j].x, (Vector2i*)&tileScreenInfo[i][j].sx);
 
 				if (pie_GetFogEnabled())
 				{
@@ -832,7 +832,7 @@ static void drawTiles(iView *camera, iView *player)
 					TileIllum = (UBYTE)(TileIllum * 0.75f);
 				}
 
-				tileScreenInfo[i][j].sz = pie_RotProj((Vector3i*)&tileScreenInfo[i][j], (Vector2i*)&tileScreenInfo[i][j].sx);
+				tileScreenInfo[i][j].sz = pie_RotateProject((Vector3i*)&tileScreenInfo[i][j], (Vector2i*)&tileScreenInfo[i][j].sx);
 
 				tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination(TileIllum, rx - tileScreenInfo[i][j].x, rz - world_coord(i-terrainMidY), &specular);
 
@@ -847,7 +847,7 @@ static void drawTiles(iView *camera, iView *player)
 					}
 
 					// Transform it into the wx,wy mesh members.
-					tileScreenInfo[i][j].wz = pie_RotProj((Vector3i*)&tileScreenInfo[i][j], (Vector2i*)&tileScreenInfo[i][j].wx);
+					tileScreenInfo[i][j].wz = pie_RotateProject((Vector3i*)&tileScreenInfo[i][j], (Vector2i*)&tileScreenInfo[i][j].wx);
 					tileScreenInfo[i][j].wlight.argb = lightDoFogAndIllumination(
 						TileIllum, rx - tileScreenInfo[i][j].x, rz - world_coord(i-terrainMidY), &specular);
 					tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].y;
@@ -1154,21 +1154,18 @@ BOOL clipXY(SDWORD x, SDWORD y)
 the Intelligence screen.  VERY similar to above function*/
 static void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR)
 {
-	SDWORD	centX,centY,centZ;
-	SDWORD	cX,cY;
-	UDWORD	radius;
-
 	/* Get it's absolute dimensions */
-	centX = centY = centZ = 0;
+	Vector3i center3d = {0, 0, 0};
+	Vector2i center2d = {0, 0};
 	/* How big a box do we want - will ultimately be calculated using xmax, ymax, zmax etc */
-	radius = 22;
+	UDWORD	radius = 22;
 
 	/* Pop matrices and get the screen coordinates for last point*/
-	pie_RotateProject( centX, centY, centZ, &cX, &cY );
+	pie_RotateProject( &center3d, &center2d );
 
 	/*store the coords*/
-	*pX = cX;
-	*pY = cY;
+	*pX = center2d.x;
+	*pY = center2d.y;
 	*pR = radius;
 }
 
@@ -1321,7 +1318,6 @@ renderAnimComponent( COMPONENT_OBJECT *psObj )
 	DROID		*psDroid;
 	STRUCTURE	*psStructure;
 	UDWORD		brightness, specular;
-//	SDWORD		centreX, centreZ;
 
 	ASSERT( psParentObj != NULL,
 		"renderAnimComponent: invalid parent object pointer" );
@@ -1338,9 +1334,6 @@ renderAnimComponent( COMPONENT_OBJECT *psObj )
 	posX = psParentObj->x + psObj->position.x;
 	posY = psParentObj->y + psObj->position.y;
 	posZ = psParentObj->z + psObj->position.z;
-
-//	centreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
-//	centreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
 
 	/* render */
 	if( clipXY( posX, posY ) )
@@ -1404,15 +1397,15 @@ renderAnimComponent( COMPONENT_OBJECT *psObj )
 		//brightness and fog calculation
 		if (psParentObj->type == OBJ_STRUCTURE)
 		{
-			SDWORD sX,sY;
+			Vector3i zero = {0, 0, 0};
+			Vector2i s = {0, 0};
 
 			psStructure = (STRUCTURE*)psParentObj;
 			brightness = 200 - (100-PERCENT( psStructure->body ,
-			//		psStructure->baseBodyPoints ));
 					structureBody(psStructure)));
-			pie_RotateProject( 0, 0, 0, &sX, &sY );
-			psStructure->sDisplay.screenX = sX;
-			psStructure->sDisplay.screenY = sY;
+			pie_RotateProject( &zero, &s );
+			psStructure->sDisplay.screenX = s.x;
+			psStructure->sDisplay.screenY = s.y;
 			targetAdd((BASE_OBJECT*)psStructure);
 		}
 		else
@@ -1730,25 +1723,14 @@ void	renderFeature(FEATURE *psFeature)
 {
 	UDWORD		featX,featY;
 	SDWORD		rotation;
-	//SDWORD		centreX,centreZ;
 	UDWORD		brightness, specular;
 	Vector3i dv;
 	Vector3i *vecTemp;
-	BOOL		bForceDraw;
+	BOOL		bForceDraw = ( !getRevealStatus() && psFeature->psStats->visibleAtStart);
 	int shadowFlags = 0;
-
-
-//	if(psFeature->psStats->subType == FEAT_BUILD_WRECK)
-//	{
-//		return;//don't draw 'em
-//	}
-
-	bForceDraw = ( !getRevealStatus() && psFeature->psStats->visibleAtStart);
 
 	if (psFeature->visible[selectedPlayer] || godMode || demoGetStatus() || bForceDraw)
 	{
-		SDWORD sX,sY;
-
 		psFeature->sDisplay.frameNumber = currentGameFrame;
 		/* Get it's x and y coordinates so we don't have to deref. struct later */
 		featX = psFeature->x;
@@ -1822,10 +1804,16 @@ void	renderFeature(FEATURE *psFeature)
 			pie_Draw3DShape(psFeature->sDisplay.imd, 0, 0, brightness, specular, shadowFlags,0);
 		}
 
-		pie_RotateProject( 0, 0, 0, &sX, &sY );
-		psFeature->sDisplay.screenX = sX;
-		psFeature->sDisplay.screenY = sY;
-		targetAdd((BASE_OBJECT*)psFeature);
+		{
+			Vector3i zero = {0, 0, 0};
+			Vector2i s = {0, 0};
+
+			pie_RotateProject( &zero, &s );
+			psFeature->sDisplay.screenX = s.x;
+			psFeature->sDisplay.screenY = s.y;
+
+			targetAdd((BASE_OBJECT*)psFeature);
+		}
 
 		iV_MatrixEnd();
 	}
@@ -1960,7 +1948,6 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 void	renderStructure(STRUCTURE *psStructure)
 {
 	SDWORD			structX,structY;
-	SDWORD			sX,sY;
 	iIMDShape		*baseImd,*strImd;//*mountImd,*weaponImd,*flashImd;
 	iIMDShape		*mountImd[STRUCT_MAXWEAPS];
 	iIMDShape		*weaponImd[STRUCT_MAXWEAPS];
@@ -2458,12 +2445,19 @@ void	renderStructure(STRUCTURE *psStructure)
 				}
 			}
 		}
-		pie_RotateProject( 0, 0, 0, &sX, &sY );
-		psStructure->sDisplay.screenX = sX;
-		psStructure->sDisplay.screenY = sY;
-		iV_MatrixEnd();
 
-		targetAdd((BASE_OBJECT*)psStructure);
+		{
+			Vector3i zero = {0, 0, 0};
+			Vector2i s = {0, 0};
+
+			pie_RotateProject( &zero, &s );
+			psStructure->sDisplay.screenX = s.x;
+			psStructure->sDisplay.screenY = s.y;
+
+			targetAdd((BASE_OBJECT*)psStructure);
+		}
+
+		iV_MatrixEnd();
 	}
 }
 
@@ -2537,7 +2531,6 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition)
 static BOOL	renderWallSection(STRUCTURE *psStructure)
 {
 	SDWORD			structX,structY;
-//	SDWORD			centreX,centreZ;
 	UDWORD			brightness;
 	iIMDShape		*imd;
 	SDWORD			rotation;
@@ -2545,7 +2538,6 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 	UDWORD			i;
 	Vector3i			*temp;
 	UDWORD			buildingBrightness, specular;
-	SDWORD			sX,sY;
 	// HACK to be able to use static shadows for walls
 	// We just store a separate IMD for each direction
 	static iIMDShape otherDirections[3];
@@ -2688,9 +2680,15 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 			imd = originalDirection;
 		}
 
-		pie_RotateProject( 0, 0, 0, &sX, &sY );
-		psStructure->sDisplay.screenX = sX;
-		psStructure->sDisplay.screenY = sY;
+		{
+			Vector3i zero = {0, 0, 0};
+			Vector2i s = {0, 0};
+
+			pie_RotateProject( &zero, &s );
+			psStructure->sDisplay.screenX = s.x;
+			psStructure->sDisplay.screenY = s.y;
+		}
+
 		iV_MatrixEnd();
 
 		return(TRUE);
@@ -3768,10 +3766,9 @@ SDWORD	xShift,yShift, index;
 /* ---------------------------------------------------------------------------- */
 void	draw3dLine(Vector3i *src, Vector3i *dest, UBYTE col)
 {
-	Vector3i null, vec;
+	Vector3i zero = {0, 0, 0}, vec;
 	Vector2i srcS, destS;
 
-	null.x = null.y = null.z = 0;
 	vec.x = (src->x - player.p.x) - terrainMidX*TILE_UNITS;
 	vec.z = terrainMidY*TILE_UNITS - (src->z - player.p.z);
 	vec.y = src->y;
@@ -3787,7 +3784,7 @@ void	draw3dLine(Vector3i *src, Vector3i *dest, UBYTE col)
 	pie_TRANSLATE(rx,0,-rz);
 
 	/* Project - no rotation being done */
-	pie_RotProj(&null,&srcS);
+	pie_RotateProject(&zero, &srcS);
 	pie_MatEnd();
 
 	vec.x = (dest->x - player.p.x) - terrainMidX*TILE_UNITS;
@@ -3797,15 +3794,15 @@ void	draw3dLine(Vector3i *src, Vector3i *dest, UBYTE col)
 	iV_MatrixBegin();
 
 	/* Translate */
-	pie_TRANSLATE(vec.x,vec.y,vec.z);
+	pie_TRANSLATE(vec.x, vec.y, vec.z);
 	rx = player.p.x & (TILE_UNITS-1);
 	rz = player.p.z & (TILE_UNITS-1);
 
 	/* Translate */
-	pie_TRANSLATE(rx,0,-rz);
+	pie_TRANSLATE(rx, 0, -rz);
 
 	/* Project - no rotation being done */
-	pie_RotProj(&null,&destS);
+	pie_RotateProject(&zero, &destS);
 	pie_MatEnd();
 
 	iV_Line(srcS.x,srcS.y,destS.x,destS.y,col);
@@ -3815,18 +3812,12 @@ void	draw3dLine(Vector3i *src, Vector3i *dest, UBYTE col)
 	speeded up and the accuracy increased to allow variable size bouding boxes */
 void	calcScreenCoords(DROID *psDroid)
 {
-	//BOOL	setMouse = FALSE;
-	SDWORD	centX,centY,centZ;
-	SDWORD	cX, cY, cZ;
-	iIMDShape	*imd;
+	/* Get it's absolute dimensions */
+	Vector3i center = {0, 0, 0};
+	Vector2i center2 = {0, 0};
+	SDWORD cZ;
 	UDWORD	radius;
 	POINT	pt;
-
-	/* which IMD are we using? */
-	imd = psDroid->sDisplay.imd;
-
-	/* Get it's absolute dimensions */
-	centX = centY = centZ = 0;
 
 	/* How big a box do we want - will ultimately be calculated using xmax, ymax, zmax etc */
 	if(psDroid->droidType == DROID_TRANSPORTER)
@@ -3839,7 +3830,7 @@ void	calcScreenCoords(DROID *psDroid)
 	}
 
 	/* Pop matrices and get the screen corrdinates */
-	cZ = pie_RotateProject( centX, centY, centZ, &cX, &cY );
+	cZ = pie_RotateProject( &center, &center2 );
 
 	//Watermelon:added a crash protection hack...
 	if (cZ != 0)
@@ -3850,8 +3841,8 @@ void	calcScreenCoords(DROID *psDroid)
 	/* Deselect all the droids if we've released the drag box */
 	if(dragBox3D.status == DRAG_RELEASED)
 	{
-		pt.x = cX;
-		pt.y = cY;
+		pt.x = center2.x;
+		pt.y = center2.y;
 		if(inQuad(&pt,&dragQuad) && psDroid->player == selectedPlayer)
 		{
 			//don't allow Transporter Droids to be selected here
@@ -3862,10 +3853,10 @@ void	calcScreenCoords(DROID *psDroid)
 			}
 		}
 	}
-	cY -= 4;
+	center2.y -= 4;
 	/* Store away the screen coordinates so we can select the droids without doing a trasform */
-	psDroid->sDisplay.screenX = cX;
-	psDroid->sDisplay.screenY = cY;
+	psDroid->sDisplay.screenX = center2.x;
+	psDroid->sDisplay.screenY = center2.y;
 	psDroid->sDisplay.screenR = radius;
 }
 
