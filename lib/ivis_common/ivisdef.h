@@ -113,8 +113,8 @@ typedef struct iIMDShape {
 	Sint32 oradius, sradius, radius, visRadius, xmin, xmax, ymin, ymax, zmin, zmax;
 
 	Vector3i ocen;
-	UWORD	numFrames;
-	UWORD	animInterval;
+	UWORD numFrames;
+	UWORD animInterval;
 	int npoints;
 	int npolys; // After BSP this number is not updated - it stays the number of pre-bsp polys
 	int nconnectors; // After BSP this number is not updated - it stays the number of pre-bsp polys

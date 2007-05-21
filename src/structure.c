@@ -18,7 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /*!
- * \file Structure.c
+ * \file structure.c
  *
  * Store Structure stats.
  * WARNING!!!!!!
@@ -3954,8 +3954,8 @@ static BOOL canSmoke(STRUCTURE *psStruct)
 /* The main update routine for all Structures */
 void structureUpdate(STRUCTURE *psBuilding)
 {
-	UDWORD			widthScatter,breadthScatter;
-	UDWORD			percentDamage, emissionInterval, iPointsToAdd, iPointsRequired;
+	UDWORD widthScatter,breadthScatter;
+	UDWORD percentDamage, emissionInterval, iPointsToAdd, iPointsRequired;
 	Vector3i dv;
 
 	ASSERT( psBuilding != NULL,
@@ -3974,8 +3974,6 @@ void structureUpdate(STRUCTURE *psBuilding)
 			psBuilding->selected = FALSE;
 		}
 	}
-
-	//--
 
 	/* Only add smoke if they're visible and they can 'burn' */
 	if(psBuilding->visible[selectedPlayer] && canSmoke(psBuilding))
@@ -4073,7 +4071,8 @@ void structureUpdate(STRUCTURE *psBuilding)
 			//add the blue flashing effect for multiPlayer
 			if(bMultiPlayer && ONEINTEN)
 			{
-				Vector3i position, *point;
+				Vector3i position;
+				Vector3i *point;
 				SDWORD	realY;
 				UDWORD	pointIndex;
 
@@ -4085,8 +4084,8 @@ void structureUpdate(STRUCTURE *psBuilding)
 				position.z = psBuilding->y - point->z;
 
 				effectSetSize(30);
-				addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,
-					getImdFromIndex(MI_PLASMA),0);
+				addEffect(&position, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, TRUE,
+					getImdFromIndex(MI_PLASMA), 0);
 			}
 
 			if (iPointsToAdd)

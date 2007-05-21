@@ -81,6 +81,15 @@ static inline BOOL Vector3i_compare(const Vector3i *a, const Vector3i *b)
 }
 
 
+/*!
+ * returns true if both vectors are equal
+ */
+static inline BOOL Vector3f_compare(const Vector3f *a, const Vector3f *b)
+{
+	return a->x == b->x && a->y == b->y && a->z == b->z;
+}
+
+
 //*************************************************************************
 
 

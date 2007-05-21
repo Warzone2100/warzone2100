@@ -307,50 +307,59 @@ static transluscent_shape_t* tshapes = NULL;
 static unsigned int tshapes_size = 0;
 static unsigned int nb_tshapes = 0;
 
-static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT specular,
-		      int pieFlag, int pieFlagData)
+static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT specular, int pieFlag, int pieFlagData)
 {
-	Sint32		tempY;
+	Sint32 tempY;
 	int i, n;
-	Vector3i		*pVertices;
-	Vector3f	*pPixels;
-	iIMDPoly	*pPolys;
-	PIEPOLY		piePoly;
-	VERTEXID	*index;
-	BOOL		light = lighting;
+	Vector3i *pVertices;
+	Vector3f *pPixels;
+	iIMDPoly *pPolys;
+	PIEPOLY piePoly;
+	VERTEXID *index;
+	BOOL light = lighting;
 
 	/* Set tranlucency */
-	if (pieFlag & pie_ADDITIVE) { //Assume also translucent
+	if (pieFlag & pie_ADDITIVE)
+	{ //Assume also translucent
 		pie_SetFogStatus(FALSE);
 		pie_SetRendMode(REND_ADDITIVE_TEX);
 		colour.byte.a = (UBYTE)pieFlagData;
 		pie_SetBilinear(TRUE);
 		light = FALSE;
-	} else if (pieFlag & pie_TRANSLUCENT) {
+	}
+	else if (pieFlag & pie_TRANSLUCENT)
+	{
 		pie_SetFogStatus(FALSE);
 		pie_SetRendMode(REND_ALPHA_TEX);
 		colour.byte.a = (UBYTE)pieFlagData;
 		pie_SetBilinear(FALSE);//never bilinear with constant alpha, gives black edges
 		light = FALSE;
-	} else {
+	}
+	else
+	{
 		if (pieFlag & pie_BUTTON)
 		{
 			pie_SetFogStatus(FALSE);
 			pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
-		} else {
+		}
+		else
+		{
 			pie_SetFogStatus(TRUE);
 		}
 		pie_SetRendMode(REND_GOURAUD_TEX);
 		//if hardware fog then alpha is set else unused in decal mode
-		//colour.byte.a = MAX_UB_LIGHT;
-		if (pieFlag & pie_NO_BILINEAR) {
+		if (pieFlag & pie_NO_BILINEAR)
+		{
 			pie_SetBilinear(FALSE);
-		} else {
+		}
+		else
+		{
 			pie_SetBilinear(TRUE);
 		}
 	}
 
-	if (pieFlag & pie_RAISE) {
+	if (pieFlag & pie_RAISE)
+	{
 		pieFlagData = (shape->ymax * (pie_RAISE_SCALE - pieFlagData))/pie_RAISE_SCALE;
 	}
 
@@ -358,25 +367,24 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 
 	//now draw the shape
 	//rotate and project points from shape->points to scrPoints
-	pVertices = shape->points;
-	pPixels = &scrPoints[0];
-
-	//--
-	for (i=0; i<shape->npoints; i++, pVertices++, pPixels++) {
+	for (i = 0, pVertices = shape->points, pPixels = scrPoints;
+			i < shape->npoints;
+			i++, pVertices++, pPixels++)
+	{
 		tempY = pVertices->y;
 		if (pieFlag & pie_RAISE)
 		{
 			tempY = pVertices->y - pieFlagData;
-			if (tempY < 0) tempY = 0;
+			if (tempY < 0)
+				tempY = 0;
 
 		}
 		else if (pieFlag & pie_HEIGHT_SCALED)
 		{
-			if(pVertices->y>0)
+			if(pVertices->y > 0)
 			{
-				tempY = (pVertices->y * pieFlagData)/pie_RAISE_SCALE;
+				tempY = (pVertices->y * pieFlagData) / pie_RAISE_SCALE;
 			}
-			//if (tempY < 0) tempY = 0;
 		}
 		pPixels->x = pVertices->x;
 		pPixels->y = tempY;
@@ -424,7 +432,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 
 
 /// returns true if the edges are adjacent
-static int compare_edge (EDGE *A, EDGE *B, Vector3i *pVertices )
+static int compare_edge (EDGE *A, EDGE *B, const Vector3i *pVertices )
 {
 	if(A->from == B->to)
 	{
@@ -451,13 +459,11 @@ static int compare_edge (EDGE *A, EDGE *B, Vector3i *pVertices )
 /// Makes sure only silhouette edges are present
 static void addToEdgeList(int a, int b, EDGE *edgelist, int *edge_count, Vector3i *pVertices)
 {
-	EDGE newEdge;
+	EDGE newEdge = {a, b};
 	int i;
 	BOOL foundMatching = FALSE;
 
-	newEdge.from = a;
-	newEdge.to = b;
-	for(i=0;i<*edge_count;i++)
+	for(i = 0; i < *edge_count; i++)
 	{
 		if(edgelist[i].from < 0)
 		{
@@ -496,9 +502,9 @@ static inline float scale_y(float y, int flag, int flag_data)
 /// Draw the shadow for a shape
 static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* light)
 {
-	int i,j, n;
-	Vector3i		*pVertices;
-	iIMDPoly	*pPolys;
+	int i, j, n;
+	Vector3i *pVertices;
+	iIMDPoly *pPolys;
 	int edge_count = 0;
 	static EDGE *edgelist = NULL;
 	static int edgelistsize = 256;
@@ -517,11 +523,11 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 	}
 	else
 	{
-		pPolys = shape->polys;
-		for (i = 0; i < shape->npolys; ++i, ++pPolys) {
+
+		for (i = 0, pPolys = shape->polys; i < shape->npolys; ++i, ++pPolys) {
 			Vector3f p[3], v[2], normal;
 			VERTEXID current, first;
-			for(j=0;j<3;j++)
+			for(j = 0; j < 3; j++)
 			{
 				current = pPolys->pindex[j];
 				Vector3f_Set(&p[j], pVertices[current].x, scale_y(pVertices[current].y, flag, flag_data), pVertices[current].z);
@@ -549,7 +555,7 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 					}
 				}
 				// back to the first
-				addToEdgeList(pPolys->pindex[ pPolys->npnts-1 ], first, edgelist, &edge_count, pVertices);
+				addToEdgeList(pPolys->pindex[pPolys->npnts-1], first, edgelist, &edge_count, pVertices);
 			}
 		}
 		//debug(LOG_WARNING, "we have %i edges", edge_count);
@@ -558,10 +564,9 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 		if(flag & pie_STATIC_SHADOW)
 		{
 			// first compact the current edgelist
-			j = 0;
-			for(i=0;i<edge_count;i++)
+			for(i = 0, j = 0; i < edge_count; i++)
 			{
-				if(edgelist[i].from<0)
+				if(edgelist[i].from < 0)
 				{
 					continue;
 				}
@@ -570,9 +575,9 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 			}
 			edge_count = j;
 			// then store it in the imd
-			shape->shadowEdgeList = malloc(sizeof(EDGE)*edge_count);
-			memcpy(shape->shadowEdgeList, edgelist, sizeof(EDGE)*edge_count);
 			shape->nShadowEdges = edge_count;
+			shape->shadowEdgeList = malloc(sizeof(EDGE) * shape->nShadowEdges);
+			memcpy(shape->shadowEdgeList, edgelist, sizeof(EDGE) * shape->nShadowEdges);
 		}
 	}
 
@@ -580,13 +585,11 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 	glBegin(GL_QUADS);
 	for(i=0;i<edge_count;i++)
 	{
-		int a,b;
-		a = drawlist[i].from;
+		int a = drawlist[i].from, b = drawlist[i].to;
 		if(a < 0)
 		{
 			continue;
 		}
-		b = drawlist[i].to;
 
 		glVertex3f(pVertices[b].x, scale_y(pVertices[b].y, flag, flag_data), pVertices[b].z);
 		glVertex3f(pVertices[b].x+light->x, scale_y(pVertices[b].y, flag, flag_data)+light->y, pVertices[b].z+light->z);
@@ -599,13 +602,16 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 	glDisable(GL_DEPTH_TEST);
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 
-	glColor4ub(0xFF,0,0,0xFF);
+	glColor4ub(0xFF, 0, 0, 0xFF);
 	glBegin(GL_LINES);
-	for(i=0;i<edge_count;i++)
+	for(i = 0; i < edge_count; i++)
 	{
-		int a = drawlist[i].from;
-		if(a<0) continue;
-		int b = drawlist[i].to;
+		int a = drawlist[i].from, b = drawlist[i].to;
+		if(a < 0)
+		{
+			continue;
+		}
+
 		glVertex3f(pVertices[b].x, scale_y(pVertices[b].y, flag, flag_data), pVertices[b].z);
 		glVertex3f(pVertices[a].x, scale_y(pVertices[a].y, flag, flag_data), pVertices[a].z);
 	}

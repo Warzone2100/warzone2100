@@ -248,15 +248,14 @@ static BOOL	mouseLocated = TRUE;
 
 /* The box used for multiple selection - present screen coordinates */
 /* The game palette */
-iPalette	gamePal;
-UDWORD	currentGameFrame;
-static UDWORD	numTiles = 0;
-static SDWORD	tileZ = 8000;
-static QUAD	dragQuad;
-//UDWORD	averageHeight;
+iPalette gamePal;
+UDWORD currentGameFrame;
+static UDWORD numTiles = 0;
+static SDWORD tileZ = 8000;
+static QUAD dragQuad;
 
 /* temporary buffer used for flattening IMDs */
-static Vector3i	alteredPoints[iV_IMD_MAX_POINTS];
+static Vector3i alteredPoints[iV_IMD_MAX_POINTS];
 
 //number of tiles visible
 UDWORD	visibleXTiles;
@@ -1726,7 +1725,7 @@ void	renderFeature(FEATURE *psFeature)
 	UDWORD		brightness, specular;
 	Vector3i dv;
 	Vector3i *vecTemp;
-	BOOL		bForceDraw = ( !getRevealStatus() && psFeature->psStats->visibleAtStart);
+	BOOL bForceDraw = ( !getRevealStatus() && psFeature->psStats->visibleAtStart);
 	int shadowFlags = 0;
 
 	if (psFeature->visible[selectedPlayer] || godMode || demoGetStatus() || bForceDraw)
@@ -1763,12 +1762,8 @@ void	renderFeature(FEATURE *psFeature)
 
 		iV_MatrixRotateY(-rotation);
 
-
-//		centreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
-//		centreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
 		brightness = 200; //? HUH?
 
-//		if(psFeature->sDisplay.imd->ymax>300)
 		if(psFeature->psStats->subType == FEAT_SKYSCRAPER)
 		{
 			objectShimmy((BASE_OBJECT*)psFeature);
@@ -1783,7 +1778,7 @@ void	renderFeature(FEATURE *psFeature)
 			brightness = avGetObjLightLevel((BASE_OBJECT*)psFeature,brightness);
 		}
 
-		brightness = lightDoFogAndIllumination(brightness,getCentreX()-featX,getCentreZ()-featY, &specular);
+		brightness = lightDoFogAndIllumination(brightness, getCentreX() - featX, getCentreZ() - featY, &specular);
 		if(psFeature->psStats->subType == FEAT_BUILDING ||
 		psFeature->psStats->subType == FEAT_SKYSCRAPER ||
 		psFeature->psStats->subType == FEAT_OIL_DRUM)
@@ -1794,7 +1789,7 @@ void	renderFeature(FEATURE *psFeature)
 		if(psFeature->psStats->subType == FEAT_OIL_RESOURCE)
 		{
 			vecTemp = psFeature->sDisplay.imd->points;
-			flattenImd(psFeature->sDisplay.imd,psFeature->x,psFeature->y,0);
+			flattenImd(psFeature->sDisplay.imd, psFeature->x, psFeature->y, 0);
 			/* currentGameFrame/2 set anim running - GJ hack */
 			pie_Draw3DShape(psFeature->sDisplay.imd, currentGameFrame/2, 0, brightness, specular, 0, 0);
 			psFeature->sDisplay.imd->points = vecTemp;
@@ -2065,7 +2060,7 @@ void	renderStructure(STRUCTURE *psStructure)
 		rz = player.p.z & (TILE_UNITS-1);
 
 		/* Translate */
-		iV_TRANSLATE(rx,0,-rz);
+		iV_TRANSLATE(rx, 0, -rz);
 
 		/* OK - here is where we establish which IMD to draw for the building - luckily static objects,
 		* buildings in other words are NOT made up of components - much quicker! */
@@ -2107,7 +2102,7 @@ void	renderStructure(STRUCTURE *psStructure)
 			/* Draw the building's base first */
 			baseImd = psStructure->pStructureType->pBaseIMD;
 
-			if(baseImd!=NULL)
+			if(baseImd != NULL)
 			{
 				pie_Draw3DShape(baseImd, 0, 0, buildingBrightness, specular, 0,0);
 			}
@@ -2120,16 +2115,16 @@ void	renderStructure(STRUCTURE *psStructure)
 
 			imd = psStructure->sDisplay.imd;
 
-			if(imd!=NULL && bHitByElectronic)
+			if(imd != NULL && bHitByElectronic)
 			{
 				// Get a copy of the points
-				memcpy(alteredPoints,imd->points,imd->npoints*sizeof(Vector3i));
+				memcpy(alteredPoints, imd->points, imd->npoints * sizeof(Vector3i));
 				for(i=0; i<imd->npoints; i++)
 				{
 					SDWORD yVar = (10 - rand() % 20);
 
-					alteredPoints[i].x +=yVar - (rand()%2*yVar);
-					alteredPoints[i].z +=yVar - (rand()%2*yVar);
+					alteredPoints[i].x += yVar - (rand()%2*yVar);
+					alteredPoints[i].z += yVar - (rand()%2*yVar);
 				}
 				temp = imd->points;
 				imd->points = alteredPoints;
@@ -2467,7 +2462,6 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition)
 	Vector3i dv;
 	SDWORD			x, y, r;
 	Vector3i *temp = NULL;
-//	SDWORD			centreX, centreZ;
 	SDWORD			buildingBrightness, specular;
 	//store the frame number for when deciding what has been clicked on
 	psPosition->frameNumber = currentGameFrame;
@@ -2489,7 +2483,6 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition)
 	iV_TRANSLATE(rx,0,-rz);
 
 	//quick check for invalid data
-	//ASSERT( psPosition->factoryType < NUM_FACTORY_TYPES &&
 	ASSERT( psPosition->factoryType < NUM_FLAG_TYPES && psPosition->factoryInc < MAX_FACTORY, "Invalid assembly point" );
 
 	if(!psPosition->selected)
@@ -2499,20 +2492,12 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition)
 			psPosition->coords.x, psPosition->coords.y,0);
 	}
 
-	pie_MatScale(50);				//they are all big now so make this one smaller too
+	pie_MatScale(50); // they are all big now so make this one smaller too
 
-//	centreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
-//	centreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
+	buildingBrightness = lightDoFogAndIllumination(pie_MAX_BRIGHT_LEVEL,
+		getCentreX() - psPosition->coords.x, getCentreZ() - psPosition->coords.y, (UDWORD*)&specular);
 
-	buildingBrightness = pie_MAX_BRIGHT_LEVEL;
-
-	buildingBrightness = lightDoFogAndIllumination((UBYTE)buildingBrightness,
-		getCentreX()-psPosition->coords.x,getCentreZ()-psPosition->coords.y, (UDWORD*)&specular);
-
-//	pie_Draw3DShape(pAssemblyPointIMDs[psPosition->factoryInc], 0, 0,
-	//	buildingBrightness, 0, pie_TRANSLUCENT | pie_NO_BILINEAR, EFFECT_DELIVERY_POINT_TRANSPARENCY);
-	pie_Draw3DShape(pAssemblyPointIMDs[psPosition->factoryType][psPosition->factoryInc],
-		0, 0, buildingBrightness, specular, pie_NO_BILINEAR, 0);
+	pie_Draw3DShape(pAssemblyPointIMDs[psPosition->factoryType][psPosition->factoryInc], 0, 0, buildingBrightness, specular, pie_NO_BILINEAR, 0);
 
 	if(!psPosition->selected)
 	{
@@ -2589,7 +2574,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 		fit tightly to the ground and to neighbours.
 		*/
 		imd = psStructure->pStructureType->pBaseIMD;
-		if(imd!=NULL)
+		if(imd != NULL)
 		{
 			UDWORD centreHeight;
 
@@ -2628,8 +2613,8 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 
 		rotation = DEG( (int)psStructure->direction );
 		iV_MatrixRotateY(-rotation);
-	//	objectShimmy((BASE_OBJECT*)psStructure);
-		if(imd!=NULL)
+
+		if(imd != NULL)
 		{
 			// Make the imd pointer to the vertex list point to ours
 			temp = imd->points;
@@ -2703,8 +2688,6 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 	Vector3i			*pVecTemp;
 	SDWORD			shadowScale;
 	UDWORD brightness, specular;
-//	SDWORD centreX, centreZ;
-
 
 	dv.x = (psDroid->x - player.p.x) - terrainMidX*TILE_UNITS;
 	if(psDroid->droidType == DROID_TRANSPORTER)
@@ -4142,11 +4125,10 @@ static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDW
 {
 	UDWORD i, centreHeight;
 
-	ASSERT( imd->npoints < iV_IMD_MAX_POINTS,
-		"flattenImd: too many points in the PIE to flatten it" );
+	ASSERT( imd->npoints < iV_IMD_MAX_POINTS, "flattenImd: too many points in the PIE to flatten it" );
 
 	/* Get a copy of the points */
-	memcpy(alteredPoints,imd->points,imd->npoints*sizeof(Vector3i));
+	memcpy(alteredPoints, imd->points, imd->npoints * sizeof(Vector3i));
 
 	/* Get the height of the centre point for reference */
 	centreHeight = map_Height(structX,structY);
@@ -4161,7 +4143,7 @@ static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDW
 	switch(direction)
 	{
 	case 0:
-		for(i=0; i<(UDWORD)imd->npoints; i++)
+		for(i = 0; i < (UDWORD)imd->npoints; i++)
 		{
 			if (abs(alteredPoints[i].x) >= 63 || abs(alteredPoints[i].z) >= 63)
 			{
