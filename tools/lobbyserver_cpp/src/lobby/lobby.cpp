@@ -26,23 +26,5 @@
 GameLobby::~GameLobby()
 {
     // Make sure all pending operations are finished before closing down, by acquiring a write lock first
-    ReadWriteMutex::scoped_lock lock (_mutex);
-}
-
-GameLobby::const_iterator GameLobby::begin() const
-{
-    ReadWriteMutex::scoped_readonlylock lock (_mutex);
-    return GameLobby::const_iterator(*this, _games.begin());
-}
-
-GameLobby::const_iterator GameLobby::end() const
-{
-    return const_iterator(*this, _games.end());
-}
-
-std::size_t GameLobby::size() const
-{
-    ReadWriteMutex::scoped_readonlylock lock (_mutex);
-
-    return _games.size();
+    ReadWriteMutex::scoped_lock lock(_mutex);
 }

@@ -25,6 +25,7 @@
 #include <iostream>
 #include <boost/thread/recursive_mutex.hpp>
 #include "lobby/lobby.hpp"
+#include "lobby/lobby_iterator.hpp"
 #include "lobby/game.hpp"
 #include <algorithm>
 #include <boost/bind.hpp>
@@ -100,7 +101,12 @@ class lobbyprotocol::requestHandler::impl
 
                 // Debug, dump the current list of games on screen
                 if (lobbyDev)
-                    std::for_each(_lobby->begin(), _lobby->end(), printGame);
+                {
+                    // Open up the game lobby for (read-only) iteration
+                    GameLobby::iterator_interface iterInterface(*_lobby);
+
+                    std::for_each(iterInterface.begin(), iterInterface.end(), printGame);
+                }
             }
         }
 
@@ -111,8 +117,10 @@ class lobbyprotocol::requestHandler::impl
 
         void listGames(boost::shared_ptr<boost::asio::ip::tcp::socket> socket)
         {
-            GameLobby::const_iterator beginIter(_lobby->begin()), endIter(_lobby->end());
-            const unsigned int gameCount = htonl(endIter - beginIter);
+            // Open up the game lobby for (read-only) iteration
+            GameLobby::iterator_interface iterInterface(*_lobby);
+
+            const unsigned int gameCount = iterInterface.size();
 
             // Debug
             if (lobbyDev)
@@ -125,7 +133,7 @@ class lobbyprotocol::requestHandler::impl
             // First write out a little endian unsigned 32bit long integer as game count
             boost::asio::write(*socket, boost::asio::buffer(&gameCount, sizeof(gameCount)));
             // Now send all members of the game list to the client
-            std::for_each(beginIter, endIter, boost::bind(sendGame, socket, _1));
+            std::for_each(iterInterface.begin(), iterInterface.end(), boost::bind(sendGame, socket, _1));
         }
 
         void handleRequest(boost::shared_ptr<boost::asio::ip::tcp::socket> socket)

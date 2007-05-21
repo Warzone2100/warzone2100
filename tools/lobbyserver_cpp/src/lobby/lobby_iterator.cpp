@@ -21,56 +21,54 @@
     $HeadURL$
 */
 
-#include "lobby.hpp"
+#include "lobby_iterator.hpp"
 
-GameLobby::const_iterator::const_iterator(const GameLobby& lobby, const std::list<GAMESTRUCT>::const_iterator& iter) :
+GameLobby::iterator_interface::iterator_interface(const GameLobby& lobby) :
     _lobby(lobby),
-    lock(_lobby._mutex),
+    lock(_lobby._mutex)
+{
+}
+
+GameLobby::iterator_interface::const_iterator GameLobby::iterator_interface::begin() const
+{
+    return const_iterator(*this, _lobby._games.begin());
+}
+
+GameLobby::iterator_interface::const_iterator GameLobby::iterator_interface::end() const
+{
+    return const_iterator(*this, _lobby._games.end());
+}
+
+std::size_t GameLobby::iterator_interface::size() const
+{
+    return _lobby._games.size();
+}
+
+GameLobby::iterator_interface::const_iterator::const_iterator(const iterator_interface& interface, const std::list<GAMESTRUCT>::const_iterator& iter) :
+    _interface(interface),
     _iter(iter)
 {
 }
 
-GameLobby::const_iterator::const_iterator(const const_iterator& org) :
-    _lobby(org._lobby),
-    lock(_lobby._mutex),
-    _iter(org._iter)
+bool GameLobby::iterator_interface::const_iterator::operator==(const const_iterator& i) const
 {
-}
-
-bool GameLobby::const_iterator::operator==(const const_iterator& i) const
-{
-    if (&_lobby != &i._lobby)
+    if (&_interface._lobby != &i._interface._lobby)
         return false;
 
     return _iter == i._iter;
 }
 
-bool GameLobby::const_iterator::operator!=(const const_iterator& i) const
+bool GameLobby::iterator_interface::const_iterator::operator!=(const const_iterator& i) const
 {
     return !(*this == i);
 }
 
-void GameLobby::const_iterator::operator++()
+void GameLobby::iterator_interface::const_iterator::operator++()
 {
     ++_iter;
 }
 
-std::size_t GameLobby::const_iterator::operator-(const const_iterator& i) const
-{
-    // This needs to be a comparison between two iterators of the same GameLobby
-    if (&_lobby != &i._lobby)
-        return 0;
-
-    // The current iterator needs to be ==end()
-    // the other (i) ==begin()
-    if (_iter == _lobby._games.end() && i._iter == _lobby._games.begin()
-     || _iter == _lobby._games.begin() && i._iter == _lobby._games.end())
-        return _lobby.size();
-
-    return 0;
-}
-
-GameLobby::const_iterator::const_reference GameLobby::const_iterator::operator*() const
+GameLobby::iterator_interface::const_reference GameLobby::iterator_interface::const_iterator::operator*() const
 {
     return *_iter;
 }

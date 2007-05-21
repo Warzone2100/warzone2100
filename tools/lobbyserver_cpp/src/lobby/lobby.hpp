@@ -53,44 +53,7 @@ class GameLobby
                 bool iterValid;
         };
 
-        class const_iterator
-        {
-            public:
-                typedef const GAMESTRUCT& const_reference;
-
-            private:
-                // Should only be constructed by GameLobby
-                const_iterator(const GameLobby& lobby, const std::list<GAMESTRUCT>::const_iterator& iter);
-
-            public:
-                const_iterator(const const_iterator& org);
-
-            private:
-                // Private copy assignment operator, to lazy to implement it right now
-                const_iterator& operator=(const const_iterator& org);
-
-            public:
-                bool operator==(const const_iterator& i) const;
-                bool operator!=(const const_iterator& i) const;
-                void operator++();
-
-                std::size_t operator-(const const_iterator& i) const;
-
-                const_reference operator*() const;
-
-            private:
-                const GameLobby& _lobby;
-                ReadWriteMutex::scoped_readonlylock lock;
-
-                std::list<GAMESTRUCT>::const_iterator _iter;
-
-            friend class GameLobby;
-        };
-
-        const_iterator begin() const;
-        const_iterator end() const;
-
-        std::size_t size() const;
+        class iterator_interface;
 
     private:
         ReadWriteMutex _mutex;
