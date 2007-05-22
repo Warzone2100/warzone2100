@@ -1337,9 +1337,8 @@ extern SWORD map_Height(UDWORD x, UDWORD y)
 	tileY = map_coord(y);
 
 	/* Inter tile comp */
-	ox = (x & (TILE_UNITS-1));
-	oy = (y & (TILE_UNITS-1));
-
+	ox = map_round(x);
+	oy = map_round(y);
 
 	if(TERRAIN_TYPE(mapTile(tileX,tileY)) == TER_WATER)
 	{

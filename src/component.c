@@ -782,8 +782,8 @@ void displayComponentObject(BASE_OBJECT *psObj)
 	pie_MatBegin();
 
 	/* Get internal tile units coordinates */
-	xShift = player.p.x & (TILE_UNITS-1);
-	zShift = player.p.z & (TILE_UNITS-1);
+	xShift = map_round(player.p.x);
+	zShift = map_round(player.p.z);
 
 	/* Mask out to tile_units resolution */
 	pie_TRANSLATE(xShift,0,-zShift);

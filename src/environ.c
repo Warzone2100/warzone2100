@@ -275,8 +275,8 @@ extern UDWORD map_MistValue(UDWORD x, UDWORD y)
 	tileY = y >> TILE_SHIFT;
 
 	/* Inter tile comp */
-	ox = (x & (TILE_UNITS-1));
-	oy = (y & (TILE_UNITS-1));
+	ox = map_round(x);
+	oy = map_round(y);
 
 	/* If this happens, then get quick height */
 	if(!x && !y)

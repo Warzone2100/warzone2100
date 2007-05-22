@@ -349,8 +349,8 @@ void	renderParticle( ATPART *psPart )
 	dv.z = terrainMidY * TILE_UNITS - ((UDWORD)z - player.p.z);
 	iV_MatrixBegin();							/* Push the indentity matrix */
 	iV_TRANSLATE(dv.x,dv.y,dv.z);
-	rx = player.p.x & (TILE_UNITS-1);			/* Get the x,z translation components */
-	rz = player.p.z & (TILE_UNITS-1);
+	rx = map_round(player.p.x);			/* Get the x,z translation components */
+	rz = map_round(player.p.z);
 	iV_TRANSLATE(rx,0,-rz);						/* Translate */
 	/* Make it face camera */
 	iV_MatrixRotateY(-player.r.y);

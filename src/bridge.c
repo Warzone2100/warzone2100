@@ -142,8 +142,8 @@ BOOL	renderBridgeSection(STRUCTURE *psStructure)
 			pie_TRANSLATE(dv.x,dv.y,dv.z);
 
 			/* Get the x,z translation components */
-			rx = player.p.x & (TILE_UNITS-1);
-			rz = player.p.z & (TILE_UNITS-1);
+			rx = map_round(player.p.x);
+			rz = map_round(player.p.z);
 
 			/* Translate */
 			pie_TRANSLATE(rx,0,-rz);

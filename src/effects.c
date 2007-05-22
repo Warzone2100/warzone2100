@@ -1636,8 +1636,8 @@ void	renderWaypointEffect(EFFECT *psEffect)
 	dv.z = terrainMidY * TILE_UNITS - ((UDWORD)MAKEINT(psEffect->position.z) - player.p.z);
 	iV_MatrixBegin();							/* Push the indentity matrix */
 	iV_TRANSLATE(dv.x,dv.y,dv.z);
-	rx = player.p.x & (TILE_UNITS-1);			/* Get the x,z translation components */
-	rz = player.p.z & (TILE_UNITS-1);
+	rx = map_round(player.p.x);			/* Get the x,z translation components */
+	rz = map_round(player.p.z);
 	iV_TRANSLATE(rx,0,-rz);						/* Translate */
 
 	// set up lighting
@@ -1670,8 +1670,8 @@ void	renderFirework(EFFECT *psEffect)
 	dv.z = terrainMidY * TILE_UNITS - ((UDWORD)MAKEINT(psEffect->position.z) - player.p.z);
 	iV_MatrixBegin();							/* Push the indentity matrix */
 	iV_TRANSLATE(dv.x,dv.y,dv.z);
-	rx = player.p.x & (TILE_UNITS-1);			/* Get the x,z translation components */
-	rz = player.p.z & (TILE_UNITS-1);
+	rx = map_round(player.p.x);			/* Get the x,z translation components */
+	rz = map_round(player.p.z);
 	iV_TRANSLATE(rx,0,-rz);						/* Translate */
 
 
@@ -1702,8 +1702,8 @@ void	renderBloodEffect(EFFECT *psEffect)
 	dv.z = terrainMidY * TILE_UNITS - ((UDWORD)MAKEINT(psEffect->position.z) - player.p.z);
 	iV_MatrixBegin();							/* Push the indentity matrix */
 	iV_TRANSLATE(dv.x,dv.y,dv.z);
-	rx = player.p.x & (TILE_UNITS-1);			/* Get the x,z translation components */
-	rz = player.p.z & (TILE_UNITS-1);
+	rx = map_round(player.p.x);			/* Get the x,z translation components */
+	rz = map_round(player.p.z);
 	iV_TRANSLATE(rx,0,-rz);						/* Translate */
 	iV_MatrixRotateY(-player.r.y);
 	iV_MatrixRotateX(-player.r.x);
@@ -1741,8 +1741,8 @@ void	renderDestructionEffect(EFFECT *psEffect)
 	dv.z = terrainMidY * TILE_UNITS - ((UDWORD)MAKEINT(psEffect->position.z) - player.p.z);
 	iV_MatrixBegin();							/* Push the indentity matrix */
 	iV_TRANSLATE(dv.x,dv.y,dv.z);
-	rx = player.p.x & (TILE_UNITS-1);			/* Get the x,z translation components */
-	rz = player.p.z & (TILE_UNITS-1);
+	rx = map_round(player.p.x);			/* Get the x,z translation components */
+	rz = map_round(player.p.z);
 	iV_TRANSLATE(rx,0,-rz);						/* Translate */
 
 
@@ -1822,8 +1822,8 @@ void	renderExplosionEffect(EFFECT *psEffect)
 	dv.z = terrainMidY * TILE_UNITS - ((UDWORD)MAKEINT(psEffect->position.z) - player.p.z);
 	iV_MatrixBegin();							/* Push the indentity matrix */
 	iV_TRANSLATE(dv.x,dv.y,dv.z);
-	rx = player.p.x & (TILE_UNITS-1);			/* Get the x,z translation components */
-	rz = player.p.z & (TILE_UNITS-1);
+	rx = map_round(player.p.x);			/* Get the x,z translation components */
+	rz = map_round(player.p.z);
 	iV_TRANSLATE(rx,0,-rz);						/* Translate */
 
 	/* Bit in comments - doesn't quite work yet? */
@@ -1896,8 +1896,8 @@ void	renderGravitonEffect(EFFECT *psEffect)
 	iV_TRANSLATE(vec.x,vec.y,vec.z);
 
 	/* Offset from camera */
-	rx = player.p.x & (TILE_UNITS-1);
-	rz = player.p.z & (TILE_UNITS-1);
+	rx = map_round(player.p.x);
+	rz = map_round(player.p.z);
 
 	/* Move to camera reference */
 	iV_TRANSLATE(rx,0,-rz);
@@ -1955,8 +1955,8 @@ void	renderConstructionEffect(EFFECT *psEffect)
 	iV_TRANSLATE(vec.x,vec.y,vec.z);
 
 	/* Offset from camera */
-	rx = player.p.x & (TILE_UNITS-1);
-	rz = player.p.z & (TILE_UNITS-1);
+	rx = map_round(player.p.x);
+	rz = map_round(player.p.z);
 
 	/* Move to camera reference */
 	iV_TRANSLATE(rx,0,-rz);
@@ -2027,8 +2027,8 @@ void	renderSmokeEffect(EFFECT *psEffect)
 	iV_TRANSLATE(vec.x,vec.y,vec.z);
 
 	/* Offset from camera */
-	rx = player.p.x & (TILE_UNITS-1);
-	rz = player.p.z & (TILE_UNITS-1);
+	rx = map_round(player.p.x);
+	rz = map_round(player.p.z);
 
 	/* Move to camera reference */
 	iV_TRANSLATE(rx,0,-rz);
