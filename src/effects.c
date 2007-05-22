@@ -168,6 +168,7 @@ static void	renderWaypointEffect	( EFFECT *psEffect );
 static void	renderBloodEffect		( EFFECT *psEffect );
 static void	renderDestructionEffect	( EFFECT *psEffect );
 static void renderFirework			( EFFECT *psEffect );
+static void positionEffect(EFFECT *psEffect);
 /* There is no render destruction effect! */
 
 // ----------------------------------------------------------------------------------------
@@ -198,6 +199,30 @@ UDWORD IMDGetNumFrames(iIMDShape *Shape);
 
 /* The fraction of a second that the last game frame took */
 static	float	fraction;
+
+static void positionEffect(EFFECT *psEffect)
+{
+	Vector3i dv;
+	SDWORD rx, rz;
+
+	/* Establish world position */
+	dv.x = ((UDWORD)MAKEINT(psEffect->position.x) - player.p.x) - terrainMidX * TILE_UNITS;
+	dv.y = (UDWORD)MAKEINT(psEffect->position.y);
+	dv.z = terrainMidY * TILE_UNITS - ((UDWORD)MAKEINT(psEffect->position.z) - player.p.z);
+
+	/* Push the indentity matrix */
+	iV_MatrixBegin();
+
+	/* Move to position */
+	iV_TRANSLATE(dv.x, dv.y, dv.z);
+
+	/* Get the x,z translation components */
+	rx = map_round(player.p.x);
+	rz = map_round(player.p.z);
+
+	/* Move to camera reference */
+	iV_TRANSLATE(rx, 0, -rz);
+}
 
 static void killEffect(EFFECT *e)
 {
@@ -1626,27 +1651,14 @@ void	renderEffect(EFFECT *psEffect)
 /* drawing func for wapypoints . AJL. */
 void	renderWaypointEffect(EFFECT *psEffect)
 {
-	Vector3i dv;
-	SDWORD		rx,rz;
 	UDWORD brightness, specular;
-	//SDWORD centreX, centreZ;
 
-	dv.x = ((UDWORD)MAKEINT(psEffect->position.x) - player.p.x) - terrainMidX * TILE_UNITS;
-	dv.y = (UDWORD)MAKEINT(psEffect->position.y);
-	dv.z = terrainMidY * TILE_UNITS - ((UDWORD)MAKEINT(psEffect->position.z) - player.p.z);
-	iV_MatrixBegin();							/* Push the indentity matrix */
-	iV_TRANSLATE(dv.x,dv.y,dv.z);
-	rx = map_round(player.p.x);			/* Get the x,z translation components */
-	rz = map_round(player.p.z);
-	iV_TRANSLATE(rx,0,-rz);						/* Translate */
+	positionEffect(psEffect);
 
 	// set up lighting
-//	centreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
-//	centreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
 	brightness = lightDoFogAndIllumination(pie_MAX_BRIGHT_LEVEL,getCentreX() - MAKEINT(psEffect->position.x),getCentreZ() - MAKEINT(psEffect->position.z), &specular);
 
 	pie_Draw3DShape(psEffect->imd, 0, 0, brightness, specular, 0, 0);
-//	pie_Draw3DShape(psEffect->imd, 0, 0, pie_MAX_BRIGHT_LEVEL, 0, pie_NO_BILINEAR, 0);
 	iV_MatrixEnd();
 
 }
@@ -1654,10 +1666,7 @@ void	renderWaypointEffect(EFFECT *psEffect)
 // ----------------------------------------------------------------------------------------
 void	renderFirework(EFFECT *psEffect)
 {
-	Vector3i dv;
-	SDWORD		rx,rz;
 	UDWORD brightness, specular;
-	//SDWORD centreX, centreZ;
 
 	/* these don't get rendered */
 	if(psEffect->type == FIREWORK_TYPE_LAUNCHER)
@@ -1665,22 +1674,11 @@ void	renderFirework(EFFECT *psEffect)
 		return;
 	}
 
-	dv.x = ((UDWORD)MAKEINT(psEffect->position.x) - player.p.x) - terrainMidX * TILE_UNITS;
-	dv.y = (UDWORD)MAKEINT(psEffect->position.y);
-	dv.z = terrainMidY * TILE_UNITS - ((UDWORD)MAKEINT(psEffect->position.z) - player.p.z);
-	iV_MatrixBegin();							/* Push the indentity matrix */
-	iV_TRANSLATE(dv.x,dv.y,dv.z);
-	rx = map_round(player.p.x);			/* Get the x,z translation components */
-	rz = map_round(player.p.z);
-	iV_TRANSLATE(rx,0,-rz);						/* Translate */
-
+	positionEffect(psEffect);
 
 	iV_MatrixRotateY(-player.r.y);
 	iV_MatrixRotateX(-player.r.x);
 
-
-  //	centreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
-  //	centreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
 	brightness = lightDoFogAndIllumination(pie_MAX_BRIGHT_LEVEL,getCentreX() - MAKEINT(psEffect->position.x),getCentreZ() - MAKEINT(psEffect->position.z), &specular);
 
 	pie_MatScale(psEffect->size);
@@ -1692,31 +1690,19 @@ void	renderFirework(EFFECT *psEffect)
 /* drawing func for blood. */
 void	renderBloodEffect(EFFECT *psEffect)
 {
-	Vector3i dv;
-	SDWORD		rx,rz;
 	UDWORD brightness, specular;
-	//SDWORD centreX, centreZ;
 
-	dv.x = ((UDWORD)MAKEINT(psEffect->position.x) - player.p.x) - terrainMidX * TILE_UNITS;
-	dv.y = (UDWORD)MAKEINT(psEffect->position.y);
-	dv.z = terrainMidY * TILE_UNITS - ((UDWORD)MAKEINT(psEffect->position.z) - player.p.z);
-	iV_MatrixBegin();							/* Push the indentity matrix */
-	iV_TRANSLATE(dv.x,dv.y,dv.z);
-	rx = map_round(player.p.x);			/* Get the x,z translation components */
-	rz = map_round(player.p.z);
-	iV_TRANSLATE(rx,0,-rz);						/* Translate */
+	positionEffect(psEffect);
+
 	iV_MatrixRotateY(-player.r.y);
 	iV_MatrixRotateX(-player.r.x);
 	pie_MatScale(psEffect->size);
 
 	// set up lighting
-  //	centreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
-  //	centreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
 	brightness = lightDoFogAndIllumination(pie_MAX_BRIGHT_LEVEL,getCentreX() - MAKEINT(psEffect->position.x),getCentreZ() - MAKEINT(psEffect->position.z), &specular);
 
 	pie_Draw3DShape(getImdFromIndex(MI_BLOOD), psEffect->frameNumber, 0, brightness, specular, pie_TRANSLUCENT, EFFECT_BLOOD_TRANSPARENCY);
 	iV_MatrixEnd();
-
 }
 
 
@@ -1724,11 +1710,8 @@ void	renderBloodEffect(EFFECT *psEffect)
 // ----------------------------------------------------------------------------------------
 void	renderDestructionEffect(EFFECT *psEffect)
 {
-	Vector3i dv;
-	SDWORD	rx,rz;
 	float	div;
 	SDWORD	percent;
-	//SDWORD	centreX,centreZ;
 	UDWORD	brightness,specular;
 
 	if(psEffect->type!=DESTRUCTION_TYPE_SKYSCRAPER)
@@ -1736,15 +1719,7 @@ void	renderDestructionEffect(EFFECT *psEffect)
 		return;
 	}
 
-   	dv.x = ((UDWORD)MAKEINT(psEffect->position.x) - player.p.x) - terrainMidX * TILE_UNITS;
-	dv.y = (UDWORD)MAKEINT(psEffect->position.y);
-	dv.z = terrainMidY * TILE_UNITS - ((UDWORD)MAKEINT(psEffect->position.z) - player.p.z);
-	iV_MatrixBegin();							/* Push the indentity matrix */
-	iV_TRANSLATE(dv.x,dv.y,dv.z);
-	rx = map_round(player.p.x);			/* Get the x,z translation components */
-	rz = map_round(player.p.z);
-	iV_TRANSLATE(rx,0,-rz);						/* Translate */
-
+	positionEffect(psEffect);
 
 	div = MAKEFRACT(gameTime - psEffect->birthTime)/psEffect->lifeSpan;
 	if(div>1.0)	div = 1.0;	//temporary!
@@ -1754,8 +1729,6 @@ void	renderDestructionEffect(EFFECT *psEffect)
 	}
 
 	//get fog value
-   //	centreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
-  //	centreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
 	brightness = lightDoFogAndIllumination(pie_MAX_BRIGHT_LEVEL,
 		getCentreX() - MAKEINT(psEffect->position.x),getCentreZ() - MAKEINT(psEffect->position.z), &specular);
 
@@ -1767,9 +1740,7 @@ void	renderDestructionEffect(EFFECT *psEffect)
 	}
  	pie_Draw3DShape(psEffect->imd, 0, 0, brightness, 0,pie_RAISE, percent);
 
-
 	iV_MatrixEnd();
-
 }
 
 // ----------------------------------------------------------------------------------------
@@ -1799,15 +1770,13 @@ UDWORD	timeSlice;
 		if(type == LL_MIDDLE) return(FALSE); else return(TRUE);	// reject all expect middle
 	}
 }
+
 // ----------------------------------------------------------------------------------------
 /* Renders the standard explosion effect */
 void	renderExplosionEffect(EFFECT *psEffect)
 {
-	Vector3i dv;
-	SDWORD		rx,rz;
 	SDWORD	percent;
 	UDWORD brightness, specular;
-//	SDWORD centreX, centreZ;
 
 	if(psEffect->type == EXPLOSION_TYPE_LAND_LIGHT)
 	{
@@ -1817,14 +1786,7 @@ void	renderExplosionEffect(EFFECT *psEffect)
 		}
 	}
 
-	dv.x = ((UDWORD)MAKEINT(psEffect->position.x) - player.p.x) - terrainMidX * TILE_UNITS;
-	dv.y = (UDWORD)MAKEINT(psEffect->position.y);
-	dv.z = terrainMidY * TILE_UNITS - ((UDWORD)MAKEINT(psEffect->position.z) - player.p.z);
-	iV_MatrixBegin();							/* Push the indentity matrix */
-	iV_TRANSLATE(dv.x,dv.y,dv.z);
-	rx = map_round(player.p.x);			/* Get the x,z translation components */
-	rz = map_round(player.p.z);
-	iV_TRANSLATE(rx,0,-rz);						/* Translate */
+	positionEffect(psEffect);
 
 	/* Bit in comments - doesn't quite work yet? */
 	if(TEST_FACING(psEffect))
@@ -1852,8 +1814,6 @@ void	renderExplosionEffect(EFFECT *psEffect)
 		pie_MatScale(psEffect->size);
 	}
 	//get fog value
-//	centreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
-//	centreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
 	brightness = lightDoFogAndIllumination(pie_MAX_BRIGHT_LEVEL,getCentreX() - MAKEINT(psEffect->position.x),getCentreZ() - MAKEINT(psEffect->position.z), &specular);
 
 	if(psEffect->type == EXPLOSION_TYPE_PLASMA)
@@ -1876,31 +1836,9 @@ void	renderExplosionEffect(EFFECT *psEffect)
 // ----------------------------------------------------------------------------------------
 void	renderGravitonEffect(EFFECT *psEffect)
 {
-	Vector3i	vec;
-	SDWORD	rx,rz;
 	UDWORD  brightness, specular;
-	//SDWORD	centreX,centreZ;
 
-	//	centreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
-	//	centreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
-
-	/* Establish world position */
-	vec.x = ((UDWORD)MAKEINT(psEffect->position.x) - player.p.x) - terrainMidX * TILE_UNITS;
-	vec.y = (UDWORD)MAKEINT(psEffect->position.y);
-	vec.z = terrainMidY * TILE_UNITS - ((UDWORD)MAKEINT(psEffect->position.z) - player.p.z);
-
-	/* Push matrix */
-	iV_MatrixBegin();
-
-	/* Move to position */
-	iV_TRANSLATE(vec.x,vec.y,vec.z);
-
-	/* Offset from camera */
-	rx = map_round(player.p.x);
-	rz = map_round(player.p.z);
-
-	/* Move to camera reference */
-	iV_TRANSLATE(rx,0,-rz);
+	positionEffect(psEffect);
 
 	iV_MatrixRotateX(psEffect->rotation.x);
 	iV_MatrixRotateY(psEffect->rotation.y);
@@ -1923,7 +1861,6 @@ void	renderGravitonEffect(EFFECT *psEffect)
 
 	/* Pop the matrix */
 	iV_MatrixEnd();
-
 }
 
 // ----------------------------------------------------------------------------------------
@@ -1932,34 +1869,16 @@ renderConstructionEffect:-
 Renders the standard construction effect */
 void	renderConstructionEffect(EFFECT *psEffect)
 {
-	Vector3i vec, null;
-	SDWORD	rx,rz;
+	Vector3i null;
 	SDWORD	percent;
 	UDWORD	translucency;
 	UDWORD	size;
 	UDWORD brightness, specular;
-	//SDWORD centreX, centreZ;
 
 	/* No rotation about arbitrary axis */
 	null.x = null.y = null.z = 0;
 
-	/* Establish world position */
-	vec.x = ((UDWORD)MAKEINT(psEffect->position.x) - player.p.x) - terrainMidX * TILE_UNITS;
-	vec.y = (UDWORD)MAKEINT(psEffect->position.y);
-	vec.z = terrainMidY * TILE_UNITS - ((UDWORD)MAKEINT(psEffect->position.z) - player.p.z);
-
-	/* Push matrix */
-	iV_MatrixBegin();
-
-	/* Move to position */
-	iV_TRANSLATE(vec.x,vec.y,vec.z);
-
-	/* Offset from camera */
-	rx = map_round(player.p.x);
-	rz = map_round(player.p.z);
-
-	/* Move to camera reference */
-	iV_TRANSLATE(rx,0,-rz);
+	positionEffect(psEffect);
 
 	/* Bit in comments doesn't quite work yet? */
 	if(TEST_FACING(psEffect))
@@ -1988,17 +1907,12 @@ void	renderConstructionEffect(EFFECT *psEffect)
 	pie_MatScale(size);
 
 	// set up lighting
-//	centreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
-//	centreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
 	brightness = lightDoFogAndIllumination(pie_MAX_BRIGHT_LEVEL,getCentreX() - MAKEINT(psEffect->position.x),getCentreZ() - MAKEINT(psEffect->position.z), &specular);
 
 	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, specular, pie_TRANSLUCENT, (UBYTE)(translucency));
-//	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, pie_MAX_BRIGHT_LEVEL, 0, pie_TRANSLUCENT, (UBYTE)(40+percent));
-//	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, pie_MAX_BRIGHT_LEVEL, 0, pie_TRANSLUCENT, (UBYTE)(130-percent));
 
 	/* Pop the matrix */
 	iV_MatrixEnd();
-
 }
 
 // ----------------------------------------------------------------------------------------
@@ -2010,28 +1924,9 @@ void	renderSmokeEffect(EFFECT *psEffect)
 {
 	UDWORD	percent;
 	UDWORD	transparency = 0;
-	Vector3i vec;
-	SDWORD	rx,rz;
 	UDWORD brightness, specular;
-	//SDWORD centreX, centreZ;
 
-	/* Establish world position */
-	vec.x = ((UDWORD)MAKEINT(psEffect->position.x) - player.p.x) - terrainMidX * TILE_UNITS;
-	vec.y = (UDWORD)MAKEINT(psEffect->position.y);
-	vec.z = terrainMidY * TILE_UNITS - ((UDWORD)MAKEINT(psEffect->position.z) - player.p.z);
-
-	/* Push matrix */
-	iV_MatrixBegin();
-
-	/* Move to position */
-	iV_TRANSLATE(vec.x,vec.y,vec.z);
-
-	/* Offset from camera */
-	rx = map_round(player.p.x);
-	rz = map_round(player.p.z);
-
-	/* Move to camera reference */
-	iV_TRANSLATE(rx,0,-rz);
+	positionEffect(psEffect);
 
 	/* Bit in comments doesn't quite work yet? */
 	if(TEST_FACING(psEffect))
@@ -2068,8 +1963,6 @@ void	renderSmokeEffect(EFFECT *psEffect)
 	}
 
    	// set up lighting
-//	centreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
-//	centreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
 	brightness = lightDoFogAndIllumination(pie_MAX_BRIGHT_LEVEL,getCentreX() - MAKEINT(psEffect->position.x),getCentreZ() - MAKEINT(psEffect->position.z), &specular);
 
 	transparency = (transparency * 3) / 2;  //JPS smoke strength increased for d3d 12 may 99
@@ -2101,8 +1994,8 @@ void	renderSmokeEffect(EFFECT *psEffect)
 // ----------------------------------------------------------------------------------------
 void	effectSetUpFirework(EFFECT *psEffect)
 {
+	UDWORD	camExtra;
 
-UDWORD	camExtra;
 	if(psEffect->type == FIREWORK_TYPE_LAUNCHER)
 	{
 	 	psEffect->velocity.x = 200 - rand()%400;
@@ -2150,10 +2043,10 @@ UDWORD	camExtra;
 	psEffect->frameDelay = (EXPLOSION_FRAME_DELAY*2);
 
 }
+
 // ----------------------------------------------------------------------------------------
 void	effectSetupSmoke(EFFECT *psEffect)
 {
-
 	/* everything except steam drifts about */
 	if(psEffect->type==SMOKE_TYPE_STEAM)
 	{
@@ -2243,6 +2136,7 @@ void effectSetUpSatLaser(EFFECT *psEffect)
 	psEffect->baseScale = 1;
 	return;
 }
+
 // ----------------------------------------------------------------------------------------
 void	effectSetupGraviton(EFFECT *psEffect)
 {
@@ -2536,6 +2430,7 @@ void    effectSetupDestruction(EFFECT *psEffect)
 		psEffect->frameDelay = DESTRUCTION_FRAME_DELAY/2;
 	}
 }
+
 #define FX_PER_EDGE 6
 #define	SMOKE_SHIFT	(16 - (rand()%32))
 // ----------------------------------------------------------------------------------------
@@ -2552,14 +2447,12 @@ void	initPerimeterSmoke(iIMDShape *pImd, UDWORD x, UDWORD y, UDWORD z)
 	base.y = y;
 	base.z = z;
 
-
 	varStart = pImd->xmin -16;
 	varEnd = pImd->xmax + 16;
 	varStride = 24;//(varEnd-varStart)/FX_PER_EDGE;
 
 	inStart = pImd->zmin - 16;
 	inEnd = pImd->zmax + 16;
-
 
 	for(i=varStart; i<varEnd; i+=varStride)
 	{
@@ -2627,12 +2520,12 @@ void	initPerimeterSmoke(iIMDShape *pImd, UDWORD x, UDWORD y, UDWORD z)
 		}
 	}
 }
+
 // ----------------------------------------------------------------------------------------
 UDWORD	getNumEffects( void )
 {
 	return(numEffects);
 }
-
 
 
 // ----------------------------------------------------------------------------------------

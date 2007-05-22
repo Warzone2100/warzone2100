@@ -250,7 +250,4 @@ extern BOOL	writeFXData( char *pFileName );
 extern	void	effectSetSize(UDWORD size);
 extern void	effectSetLandLightSpec(LAND_LIGHT_SPEC spec);
 
-
-
-
 #endif
