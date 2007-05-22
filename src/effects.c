@@ -56,7 +56,6 @@
 #include "lib/ivis_common/piemode.h"
 #include "mission.h"
 
-
 /*Remove this one!!! :-( */
 #include "miscimd.h"
 #include "effects.h"
@@ -68,15 +67,7 @@
 #include "loop.h"
 
 #include "multiplay.h"
-
-
 #include "game.h"
-//#define COUNTOFFSCREEN
-
-
-#define DOLIGHTS
-
-
 
 extern UWORD OffScreenEffects;
 
@@ -116,9 +107,7 @@ static EFFECT_STATUS effectStatus[MAX_EFFECTS];
 static	UDWORD	lastUpdateDroids[EFFECT_DROID_DIVISION];
 static	UDWORD	lastUpdateStructures[EFFECT_STRUCTURE_DIVISION];
 
-/* Current next slot to use - cyclic */
-static	UDWORD freeEffect;
-
+static	UDWORD	freeEffect; /* Current next slot to use - cyclic */
 static	UDWORD	numEffects;
 static	UDWORD	activeEffects;
 static	UDWORD	missCount;
@@ -128,35 +117,23 @@ static	UDWORD	auxVarSec; // dirty filthy hack - don't look for what this does...
 static	UDWORD	aeCalls;
 static	UDWORD	specifiedSize;
 static  UDWORD	ellSpec;
+
 // ----------------------------------------------------------------------------------------
 /* PROTOTYPES */
-/* externals */
 
-/* Don't even ask what this fellow does... */
-void	effectResetUpdates		( void );
-void	effectGiveAuxVar		( UDWORD var);
-void	effectGiveAuxVarSec		( UDWORD var);
-UDWORD	getFreeEffect			( void );
-
-void	initEffectsSystem		( void );
-void	processEffects			( void );
-void	addEffect				( Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, BOOL specified, iIMDShape *imd, BOOL lit );
-void	addMultiEffect(Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP group, EFFECT_TYPE type, BOOL specified, iIMDShape *imd, UDWORD number, BOOL lit, UDWORD size);
-UDWORD	getNumEffects			( void );
-void	renderEffect			( EFFECT *psEffect );	// MASTER Fn
 // ----------------------------------------------------------------------------------------
 // ---- Update functions - every group type of effect has one of these */
-void	updateEffect			( EFFECT *psEffect );		//MASTER Fn
-void	updateWaypoint			( EFFECT *psEffect );
-void	updateExplosion			( EFFECT *psEffect );
-void	updatePolySmoke			( EFFECT *psEffect );
-void	updateGraviton			( EFFECT *psEffect );
-void	updateConstruction		( EFFECT *psEffect );
-void	updateBlood				( EFFECT *psEffect );
-void	updateDestruction		( EFFECT *psEffect );
-void	updateFire				( EFFECT *psEffect );
-void	updateSatLaser			( EFFECT *psEffect );
-void	updateFirework			( EFFECT *psEffect );
+static void updateWaypoint(EFFECT *psEffect);
+static void updateExplosion(EFFECT *psEffect);
+static void updatePolySmoke(EFFECT *psEffect);
+static void updateGraviton(EFFECT *psEffect);
+static void updateConstruction(EFFECT *psEffect);
+static void updateBlood	(EFFECT *psEffect);
+static void updateDestruction(EFFECT *psEffect);
+static void updateFire(EFFECT *psEffect);
+static void updateSatLaser(EFFECT *psEffect);
+static void updateFirework(EFFECT *psEffect);
+static void updateEffect(EFFECT *psEffect);	// MASTER function
 
 // ----------------------------------------------------------------------------------------
 // ---- The render functions - every group type of effect has a distinct one
@@ -177,7 +154,6 @@ static void	effectSetupSmoke		( EFFECT *psEffect );
 static void	effectSetupGraviton		( EFFECT *psEffect );
 static void	effectSetupExplosion	( EFFECT *psEffect );
 static void	effectSetupConstruction ( EFFECT *psEffect );
-//static void	effectSetupDust			( EFFECT *psEffect );
 static void	effectSetupWayPoint		( EFFECT *psEffect );
 static void	effectSetupBlood		( EFFECT *psEffect );
 static void effectSetupDestruction  ( EFFECT *psEffect );
@@ -187,15 +163,8 @@ static void effectSetUpFirework		( EFFECT *psEffect );
 #ifdef DEBUG
 static BOOL	validatePie( EFFECT_GROUP group, iIMDShape *pie );
 #endif
-// ----------------------------------------------------------------------------------------
-//void	initPerimeterSmoke			( EFFECT *psEffect );
-void	initPerimeterSmoke			( iIMDShape *pImd, UDWORD x, UDWORD y, UDWORD z);
-// ----------------------------------------------------------------------------------------
-void	effectStructureUpdates	( void );
-void	effectDroidUpdates		( void );
-
-UDWORD EffectGetNumFrames(EFFECT *psEffect);
-UDWORD IMDGetNumFrames(iIMDShape *Shape);
+static void effectStructureUpdates(void);
+static void effectDroidUpdates(void);
 
 /* The fraction of a second that the last game frame took */
 static	float	fraction;
@@ -256,6 +225,7 @@ static BOOL	essentialEffect(EFFECT_GROUP group, EFFECT_TYPE type)
 		break;
 	}
 }
+
 static BOOL utterlyReject( EFFECT_GROUP group )
 {
 	switch(group)
@@ -269,6 +239,7 @@ static BOOL utterlyReject( EFFECT_GROUP group )
 		break;
 	}
 }
+
 // ----------------------------------------------------------------------------------------
 /*	Simply sets the free pointer to the start - actually this isn't necessary
 	as it will work just fine anyway. This WOULD be necessary were we to change
@@ -513,7 +484,6 @@ void	addEffect(Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type,BOOL specifie
 			effectSetupExplosion(&asEffectsList[freeEffect]);
 			break;
 		case EFFECT_CONSTRUCTION:
-//			effectSetupDust(&asEffectsList[freeEffect]);
 			effectSetupConstruction(&asEffectsList[freeEffect]);
 			break;
 		case EFFECT_WAYPOINT:
@@ -592,6 +562,7 @@ static BOOL validatePie( EFFECT_GROUP group, iIMDShape *pie )
 }
 // ----------------------------------------------------------------------------------------
 #endif
+
 /* Calls all the update functions for each different currently active effect */
 void	processEffects(void)
 {
@@ -635,7 +606,7 @@ void	processEffects(void)
 
 // ----------------------------------------------------------------------------------------
 /* The general update function for all effects - calls a specific one for each */
-void	updateEffect(EFFECT *psEffect)
+static void updateEffect(EFFECT *psEffect)
 {
 	/* What type of effect are we dealing with? */
 	switch(psEffect->group)
@@ -692,7 +663,7 @@ void	updateEffect(EFFECT *psEffect)
 // ALL THE UPDATE FUNCTIONS
 // ----------------------------------------------------------------------------------------
 /* Update the waypoint effects.*/
-void	updateWaypoint(EFFECT *psEffect)
+static void updateWaypoint(EFFECT *psEffect)
 {
 	if(!(keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) ||
 	     keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT)))
@@ -703,7 +674,7 @@ void	updateWaypoint(EFFECT *psEffect)
 
 
 // ----------------------------------------------------------------------------------------
-void	updateFirework(EFFECT *psEffect)
+static void updateFirework(EFFECT *psEffect)
 {
 	UDWORD	height;
 	UDWORD	xDif,yDif,radius,val;
@@ -727,8 +698,6 @@ void	updateFirework(EFFECT *psEffect)
 			addEffect(&dv,EFFECT_EXPLOSION,EXPLOSION_TYPE_MEDIUM,FALSE,NULL,0);
 			audio_PlayStaticTrack( MAKEINT(psEffect->position.x), MAKEINT(psEffect->position.z), ID_SOUND_EXPLOSION );
 
-//			stepHeight = psEffect->radius/15;
-//			stepAngle = psEffect->radius/15;
 			for(dif =0; dif < (psEffect->radius*2); dif+=20)
 			{
 				if(dif<psEffect->radius)
@@ -827,11 +796,10 @@ void	updateFirework(EFFECT *psEffect)
 
 	}
 
-
-
 }
+
 // ----------------------------------------------------------------------------------------
-void	updateSatLaser(EFFECT *psEffect)
+static void updateSatLaser(EFFECT *psEffect)
 {
 	Vector3i dv;
 	UDWORD	val;
@@ -852,10 +820,8 @@ void	updateSatLaser(EFFECT *psEffect)
 	if(psEffect->baseScale)
 	{
 		psEffect->baseScale = 0;
-
 		pie = getImdFromIndex(MI_FLAME);
 
-//printf("%d %d : %d %d : %p\n",xPos,yPos,startHeight,endHeight,pie);
 		/* Add some big explosions....! */
 
 		for(i=0; i<16; i++)
@@ -876,15 +842,11 @@ void	updateSatLaser(EFFECT *psEffect)
 
 
 		/* Now, add the column of light */
-
 		for(i=startHeight; i<endHeight; i+=56)
-
 		{
-
 			radius = 80;
 			/* Add 36 around in a circle..! */
 			for(val = 0; val<=180; val+=30)
-
 			{
    				xDif = radius * (SIN(DEG(val)));
    				yDif = radius * (COS(DEG(val)));
@@ -914,7 +876,6 @@ void	updateSatLaser(EFFECT *psEffect)
 		}
 	}
 
-//printf("%d %d\n",gameTime,psEffect->birthTime);
 	if(gameTime-psEffect->birthTime < 1000)
 	{
   		light.position.x = xPos;
@@ -930,9 +891,10 @@ void	updateSatLaser(EFFECT *psEffect)
 		killEffect(psEffect);
 	}
 }
+
 // ----------------------------------------------------------------------------------------
 /* The update function for the explosions */
-void	updateExplosion(EFFECT *psEffect)
+static void updateExplosion(EFFECT *psEffect)
 {
 	LIGHT light;
 	UDWORD percent;
@@ -962,17 +924,14 @@ void	updateExplosion(EFFECT *psEffect)
 		}
 
 		range = percent;
-//#ifdef DOLIGHTS
 		light.position.x = MAKEINT(psEffect->position.x);
 		light.position.y = MAKEINT(psEffect->position.y);
 		light.position.z = MAKEINT(psEffect->position.z);
 		light.range = (3*range)/2;
 		light.colour = LIGHT_RED;
 		processLight(&light);
-//#endif
 	}
 
-#ifdef DOLIGHTS
 /*
 	if(psEffect->type == EXPLOSION_TYPE_LAND_LIGHT)
 	{
@@ -985,21 +944,20 @@ void	updateExplosion(EFFECT *psEffect)
 		processLight(&light);
 	}
 */
-#endif
 
 	if(psEffect->type == EXPLOSION_TYPE_SHOCKWAVE)
 	{
 		psEffect->size += MAKEINT((fraction*SHOCKWAVE_SPEED));
 		scaling = MAKEFRACT(psEffect->size)/MAX_SHOCKWAVE_SIZE;
 		psEffect->frameNumber = MAKEINT(scaling*EffectGetNumFrames(psEffect));
-#ifdef DOLIGHTS
+
 		light.position.x = MAKEINT(psEffect->position.x);
 		light.position.y = MAKEINT(psEffect->position.y);
 		light.position.z = MAKEINT(psEffect->position.z);
 		light.range = psEffect->size+200;
 		light.colour = LIGHT_YELLOW;
 		processLight(&light);
-#endif
+
 		if(psEffect->size>MAX_SHOCKWAVE_SIZE || light.range>600)
 		{
  			/* Kill it off */
@@ -1042,9 +1000,10 @@ void	updateExplosion(EFFECT *psEffect)
 
 	}
 }
+
 // ----------------------------------------------------------------------------------------
 /* The update function for blood */
-void	updateBlood(EFFECT *psEffect)
+static void updateBlood(EFFECT *psEffect)
 {
 	/* Time to update the frame number on the blood */
 	if(gameTime - psEffect->lastFrame > psEffect->frameDelay)
@@ -1069,7 +1028,7 @@ void	updateBlood(EFFECT *psEffect)
 // ----------------------------------------------------------------------------------------
 /* Processes all the drifting smoke
 	Handles the smoke puffing out the factory as well */
-void	updatePolySmoke(EFFECT *psEffect)
+static void updatePolySmoke(EFFECT *psEffect)
 {
 
 	/* Time to update the frame number on the smoke sprite */
@@ -1128,7 +1087,7 @@ void	updatePolySmoke(EFFECT *psEffect)
 	Gravitons just fly up for a bit and then drop down and are
 	killed off when they hit the ground
 */
-void	updateGraviton(EFFECT *psEffect)
+static void updateGraviton(EFFECT *psEffect)
 {
 	float	accel;
 	Vector3i dv;
@@ -1136,7 +1095,6 @@ void	updateGraviton(EFFECT *psEffect)
 	MAPTILE	*psTile;
 	LIGHT	light;
 
-#ifdef DOLIGHTS
 	if(psEffect->type!=GRAVITON_TYPE_GIBLET)
 	{
 		light.position.x = MAKEINT(psEffect->position.x);
@@ -1146,7 +1104,6 @@ void	updateGraviton(EFFECT *psEffect)
 		light.colour = LIGHT_YELLOW;
 		processLight(&light);
 	}
-#endif
 
 	if(gamePaused())
 	{
@@ -1249,9 +1206,7 @@ void	updateGraviton(EFFECT *psEffect)
 				psEffect->specific++;
 				/* Half it's velocity */
 
-//				psEffect->velocity.x/=(float)(2);
 				psEffect->velocity.y/=(float)(-2); // only y gets flipped
-//				psEffect->velocity.z/=(float)(2);
 
 				/* Set it at ground level - may have gone through */
 				psEffect->position.y = MAKEFRACT(groundHeight);
@@ -1279,7 +1234,7 @@ void	updateGraviton(EFFECT *psEffect)
 /* updateDestruction
 This isn't really an on-screen effect itself - it just spawns other ones....
   */
-void	updateDestruction(EFFECT *psEffect)
+static void updateDestruction(EFFECT *psEffect)
 {
 	Vector3i pos;
 	UDWORD	effectType;
@@ -1297,7 +1252,7 @@ void	updateDestruction(EFFECT *psEffect)
 		percent = 100;
 	}
 	range = 50 - abs(50-percent);
-#ifdef DOLIGHTS
+
 	light.position.x = MAKEINT(psEffect->position.x);
 	light.position.y = MAKEINT(psEffect->position.y);
 	light.position.z = MAKEINT(psEffect->position.z);
@@ -1319,7 +1274,6 @@ void	updateDestruction(EFFECT *psEffect)
 		light.colour = LIGHT_RED;
 	}
 	processLight(&light);
-#endif
 
 	if(gameTime > (psEffect->birthTime + psEffect->lifeSpan))
 	{
@@ -1428,7 +1382,6 @@ void	updateDestruction(EFFECT *psEffect)
 		case 10:
 			if(psEffect->type == DESTRUCTION_TYPE_STRUCTURE)
 			{
-//				addEffect(&pos,EFFECT_GRAVITON,GRAVITON_TYPE_EMITTING_ST,TRUE,debrisImds[rand()%MAX_DEBRIS],0);
 				addEffect(&pos,EFFECT_GRAVITON,GRAVITON_TYPE_EMITTING_ST,TRUE,getRandomDebrisImd(),0);
 			}
 			else
@@ -1456,12 +1409,13 @@ void	updateDestruction(EFFECT *psEffect)
 		}
 	}
 }
+
 // ----------------------------------------------------------------------------------------
 /*
 updateConstruction:-
 Moves the construction graphic about - dust cloud or whatever....
 */
-void	updateConstruction(EFFECT *psEffect)
+static void updateConstruction(EFFECT *psEffect)
 {
 
 	/* Time to update the frame number on the construction sprite */
@@ -1512,7 +1466,7 @@ void	updateConstruction(EFFECT *psEffect)
 
 // ----------------------------------------------------------------------------------------
 /* Update fire sequences */
-void	updateFire(EFFECT *psEffect)
+static void updateFire(EFFECT *psEffect)
 {
 	Vector3i pos;
 	LIGHT	light;
@@ -1523,14 +1477,13 @@ void	updateFire(EFFECT *psEffect)
 	{
 		percent = 100;
 	}
-#ifdef DOLIGHTS
+
 	light.position.x = MAKEINT(psEffect->position.x);
 	light.position.y = MAKEINT(psEffect->position.y);
 	light.position.z = MAKEINT(psEffect->position.z);
 	light.range = (percent*psEffect->radius*3)/100;
 	light.colour = LIGHT_RED;
 	processLight(&light);
-#endif
 
 	/* Time to update the frame number on the construction sprite */
 	if(gameTime - psEffect->lastFrame > psEffect->frameDelay)
@@ -1549,10 +1502,6 @@ void	updateFire(EFFECT *psEffect)
 			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,FALSE,NULL,0);
 		}
 
-
-//		pos.x = (MAKEINT(psEffect->position.x) + ((rand()%psEffect->radius) - (rand()%(2*psEffect->radius))));
-//		pos.z = (MAKEINT(psEffect->position.z) + ((rand()%psEffect->radius) - (rand()%(2*psEffect->radius))));
-//		pos.y = map_Height(pos.x,pos.z);
 		if(psEffect->type == FIRE_TYPE_SMOKY || psEffect->type == FIRE_TYPE_SMOKY_BLUE)
 		{
 			pos.x = (MAKEINT(psEffect->position.x) + ((rand()%psEffect->radius/2) - (rand()%(2*psEffect->radius/2))));
@@ -1621,7 +1570,6 @@ void	renderEffect(EFFECT *psEffect)
 	case EFFECT_BLOOD:
 		renderBloodEffect(psEffect);
 		break;
-
 
 	case EFFECT_STRUCTURE:
 		break;
@@ -1704,8 +1652,6 @@ void	renderBloodEffect(EFFECT *psEffect)
 	pie_Draw3DShape(getImdFromIndex(MI_BLOOD), psEffect->frameNumber, 0, brightness, specular, pie_TRANSLUCENT, EFFECT_BLOOD_TRANSPARENCY);
 	iV_MatrixEnd();
 }
-
-
 
 // ----------------------------------------------------------------------------------------
 void	renderDestructionEffect(EFFECT *psEffect)
@@ -1935,8 +1881,6 @@ void	renderSmokeEffect(EFFECT *psEffect)
 /*		TEST_FLIPPED_Y(psEffect) ? iV_MatrixRotateY(-player.r.y+iV_DEG(180)) : */iV_MatrixRotateY(-player.r.y);
 /*		TEST_FLIPPED_X(psEffect) ? iV_MatrixRotateX(-player.r.x+iV_DEG(180)) : */iV_MatrixRotateX(-player.r.x);
 	}
-
-
 
 	/* Small smoke - used for the droids */
 //		if(psEffect->type == SMOKE_TYPE_DRIFTING_SMALL || psEffect->type == SMOKE_TYPE_TRAIL)
@@ -2341,34 +2285,6 @@ void	effectSetupConstruction(EFFECT *psEffect)
 }
 
 // ----------------------------------------------------------------------------------------
-#if (0)
-void	effectSetupDust(EFFECT *psEffect)
-{
-	psEffect->velocity.x = MAKEFRACT(0);//(1-rand()%3);
-	psEffect->velocity.z = MAKEFRACT(0);//(1-rand()%3);
-	psEffect->velocity.y = MAKEFRACT((0-rand()%3));
-	psEffect->frameDelay = (UWORD)CONSTRUCTION_FRAME_DELAY;
-	psEffect->imd = getImdFromIndex(MI_BLOOD);
-	psEffect->lifeSpan = CONSTRUCTION_LIFESPAN;
-
-	/* These effects always face you */
-	SET_FACING(psEffect);
-
-	/* It's a cyclic anim - dies on age */
-	SET_CYCLIC(psEffect);
-
-	/* Randomly flip the construction graphics in x and y for variation */
-	if(ONEINTWO)
-	{
-		SET_FLIPPED_X(psEffect);
-	}
-	if(ONEINTWO)
-	{
-		SET_FLIPPED_Y(psEffect);
-	}
-}
-#endif
-
 void	effectSetupFire(EFFECT *psEffect)
 {
 	psEffect->frameDelay = 300;	   // needs to be investigated...
@@ -2562,7 +2478,7 @@ void	effectGiveAuxVarSec( UDWORD var)
 
 // ----------------------------------------------------------------------------------------
 /* Runs all the spot effect stuff for the droids - adding of dust and the like... */
-void	effectDroidUpdates( void )
+static void effectDroidUpdates(void)
 {
 	UDWORD	i;
 	DROID	*psDroid;
@@ -2608,7 +2524,7 @@ void	effectDroidUpdates( void )
 
 // ----------------------------------------------------------------------------------------
 /* Runs all the structure effect stuff - steam puffing out etc */
-void	effectStructureUpdates( void )
+static void effectStructureUpdates(void)
 {
 	UDWORD		i;
 	UDWORD		partition;
