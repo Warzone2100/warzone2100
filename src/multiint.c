@@ -2769,11 +2769,6 @@ BOOL startMultiOptions(BOOL bReenter)
 			free(ingame.pStructureLimits);
 		}
 
-		// check the registry for setup entries and set game options.
-//#ifndef NOREGCHECK
-//		NETcheckRegistryEntries("Warzone2100",S_WARZONEGUID);		// check for registry entries.. warn if not ok...
-//#endif
-
 		if(NetPlay.bLobbyLaunched)
 		{
 			game.bytesPerSec	= INETBYTESPERSEC;					// maximum bitrate achieved before dropping checks.

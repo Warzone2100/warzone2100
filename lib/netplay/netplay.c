@@ -992,20 +992,6 @@ BOOL NETsetupTCPIP(void ** addr, char * machine)
 	return TRUE;
 }
 
-// select a current protocol. Call with a connection returned by findprotocol.
-BOOL NETselectProtocol(void * lpConnection)
-{
-	return TRUE;
-}
-
-// ////////////////////////////////////////////////////////////////////////
-// call with true to enumerate available protocols.
-BOOL NETfindProtocol(BOOL Lob)
-{
-	return TRUE;
-}
-
-
 // ////////////////////////////////////////////////////////////////////////
 // File Transfer programs.
 // uses guaranteed messages to send files between clients.
@@ -1027,7 +1013,7 @@ UBYTE NETsendFile(BOOL newFile, const char *fileName, UDWORD player)
 		if (pFileHandle == NULL)
 		{
 			debug( LOG_WZ, "NETsendFile: Failed\n" );
-			return 0;															// failed
+			return 0; // failed
 		}
 		// get the file's size.
 		fileSize = 0;

@@ -123,8 +123,6 @@ extern LPNETPLAY			lpNetPlay;
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.
 extern BOOL   NETinit(BOOL bFirstCall);				//init(guid can be NULL)
-extern BOOL   NETfindProtocol(BOOL Lob);			//put connections in Protocols[] (Lobbies optional)
-extern BOOL   NETselectProtocol(void * lpConnection);		//choose one.
 extern BOOL   NETsend(NETMSG *msg, UDWORD player, BOOL guarantee);// send to player, possibly guaranteed
 extern BOOL   NETbcast(NETMSG *msg,BOOL guarantee);		// broadcast to everyone, possibly guaranteed
 extern BOOL   NETrecv(NETMSG *msg);				// recv a message if possible
@@ -173,9 +171,6 @@ extern BOOL	NETunmangleData(UDWORD *input, UDWORD *result, UDWORD dataSize);
 extern UBYTE	NEThashVal(UDWORD value);
 extern UDWORD	NEThashBuffer(char *pData, UDWORD size);
 
-extern WZ_DECL_DEPRECATED BOOL NETcheckRegistryEntries	(char *name,char *guid);
-extern WZ_DECL_DEPRECATED BOOL NETsetRegistryEntries	(char *name,char *guid,char *file,char *cline,char *path,char *cdir);
-extern WZ_DECL_DEPRECATED BOOL NETconnectToLobby		(LPNETPLAY lpNetPlay);
 extern void NETsetMasterserverName(const char* hostname);
 extern void NETsetMasterserverPort(unsigned int port);
 extern void NETsetGameserverPort(unsigned int port);
