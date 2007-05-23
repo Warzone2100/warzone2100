@@ -71,6 +71,24 @@ typedef struct
 
 #endif /* !WZ_OS_WIN */
 
+// If we are C99 compatible, the "bool" macro will be defined in <stdbool.h> (as _Bool)
+#if __STDC_VERSION__ >= 199901L
+# include <stdbool.h>
+#else
+// Pretend we are C99 compatible (well, for the bool type then)
+# ifndef bool
+#  define bool BOOL
+# endif
+# ifndef true
+#  define true (1)
+# endif
+# ifndef false
+#  define false (0)
+# endif
+# ifndef __bool_true_false_are_defined
+#  define __bool_true_false_are_defined (1)
+# endif
+#endif
 
 /* Numeric size defines */
 #define UBYTE_MAX	0xff
