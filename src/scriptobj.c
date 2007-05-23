@@ -39,6 +39,7 @@
 #include "message.h"
 #include "researchdef.h"
 #include "lib/sound/audio.h"
+#include "lib/sound/audio_id.h"
 
 #include "multiplay.h"
 
