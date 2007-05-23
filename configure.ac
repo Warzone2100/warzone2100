@@ -125,7 +125,7 @@ if test "x$enable_debug" = "xyes" ; then
 elif test "x$enable_debug" = "xrelaxed" ; then
 	WZ_CFLAGS="${WZ_CFLAGS} -g -DDEBUG -Wall -Wextra"
 else
-	WZ_CFLAGS="${WZ_CFLAGS} -DNDEBUG"
+	WZ_CFLAGS="${WZ_CFLAGS} -g -DNDEBUG"
 fi
 
 
