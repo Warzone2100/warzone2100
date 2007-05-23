@@ -4,8 +4,7 @@ include $(MAKERULES)/configure.mk
 SRC=netcrypt.c \
 	netjoin_stub.c \
 	netlog.c \
-	netplay.c \
-	netusers_stub.c
+	netplay.c
 
 LIB=netplay
 

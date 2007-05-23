@@ -505,7 +505,7 @@ BOOL NETinit(BOOL bFirstCall)
 		}
 		//GAME_GUID = g;
 
-		NETuseNetwork(TRUE);
+		NetPlay.bComms = TRUE;
 		NETstartLogging();
 	}
 

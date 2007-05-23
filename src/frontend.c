@@ -628,7 +628,8 @@ BOOL runMultiPlayerMenu(void)
 	case FRONTEND_SKIRMISH:
 		ingame.bHostSetup = TRUE;
 
-		NETuseNetwork(FALSE);						// pretend its a multiplayer.
+		// only pretend its a multiplayer.
+		NetPlay.bComms = FALSE; // use network = false
 
 //		strcpy(sPlayer,"LastUsed");					// initialize name string.
 //		loadMultiStats(sPlayer,&nullStats);

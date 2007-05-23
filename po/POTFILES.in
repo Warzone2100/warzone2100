@@ -27,7 +27,6 @@ lib/gamelib/hashtabl.c
 lib/gamelib/anim.c
 lib/gamelib/gtime.c
 lib/gamelib/animobj.c
-lib/netplay/netusers_stub.c
 lib/netplay/netplay.c
 lib/netplay/netjoin_stub.c
 lib/netplay/netlog.c

@@ -417,10 +417,6 @@
 					RelativePath="..\lib\netplay\netplay.c"
 					>
 				</File>
-				<File
-					RelativePath="..\lib\netplay\netusers_stub.c"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="script"

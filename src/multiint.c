@@ -410,7 +410,8 @@ BOOL startConnectionScreen(void)
 	InitialProto	= 0;
 	safeSearch		= FALSE;
 
-	NETuseNetwork(TRUE);								// don't pretend!!
+	// don't pretend!! (Giel: don't pretend what?)
+	NetPlay.bComms = TRUE; // use network = TRUE
 
 	addSideText(FRONTEND_SIDETEXT,  FRONTEND_SIDEX, FRONTEND_SIDEY,_("CONNECTION"));
 

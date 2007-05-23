@@ -155,7 +155,6 @@ extern BOOL	NEThostGame(const char* SessionName, const char* PlayerName,// host 
 			    SDWORD one, SDWORD two, SDWORD three, SDWORD four, UDWORD plyrs);
 
 //from netusers.c
-extern BOOL	NETuseNetwork(BOOL val);	// TURN on/off networking.
 extern UDWORD	NETplayerInfo(void);		// count players in this game.
 extern BOOL	NETchangePlayerName(UDWORD dpid, char *newName);// change a players name.
 extern BOOL	NETgetLocalPlayerData(UDWORD dpid, void *pData, SDWORD *pSize);
