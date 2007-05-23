@@ -333,41 +333,6 @@ static SDWORD clustFindUnused(void)
 	return 0;
 }
 
-
-// display the current clusters
-/*void clustDisplay(void)
-{
-	SDWORD	player, cluster;
-	DROID	*psCurr;
-	BOOL	shownCluster;
-
-	DBPRINTF(("Current clusters:\n"));
-	for (player=0; player<MAX_PLAYERS; player++)
-	{
-		DBPRINTF(("Player %d:\n", player));
-		for (cluster=0; cluster < UBYTE_MAX; cluster++)
-		{
-			shownCluster = FALSE;
-			for (psCurr=apsDroidLists[player]; psCurr; psCurr=psCurr->psNext)
-			{
-				if (psCurr->cluster == cluster)
-				{
-					if (!shownCluster)
-					{
-						DBPRINTF(("   Cluster %d:  ", cluster));
-						shownCluster = TRUE;
-					}
-					DBPRINTF(("%d  ", psCurr->id));
-				}
-			}
-			if (shownCluster)
-			{
-				DBPRINTF(("\n"));
-			}
-		}
-	}
-}*/
-
 // display the current clusters
 void clustDisplay(void)
 {
@@ -753,6 +718,3 @@ void clustResetVisibility(SDWORD player)
 		aClusterVisibility[i] &= ~(1 << player);
 	}
 }
-
-
-

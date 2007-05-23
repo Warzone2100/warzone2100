@@ -76,7 +76,6 @@
 #include "mapdisplay.h"
 #include "message.h"
 #include "component.h"
-#include "bridge.h"
 #include "warcam.h"
 #include "lib/script/script.h"
 #include "scripttabs.h"

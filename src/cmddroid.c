@@ -40,7 +40,7 @@ extern UDWORD selectedPlayer;
 DROID	*apsCmdDesignator[MAX_PLAYERS];
 
 // whether experience should be boosted due to a multi game
-BOOL bMultiExpBoost = FALSE;
+static BOOL bMultiExpBoost = FALSE;
 
 
 // Initialise the command droids

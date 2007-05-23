@@ -39,7 +39,7 @@
 static PHYSFS_file* aiSaveFile[8];
 
 SDWORD baseLocation[MAX_PLAYERS][MAX_PLAYERS][2];		//each player's visible enemy base x,y coords for each player (hence 3d)
-SDWORD oilLocation[MAX_PLAYERS][MAX_OIL_LOCATIONS][2];	//remembered oil locations
+static SDWORD oilLocation[MAX_PLAYERS][MAX_OIL_LOCATIONS][2];	//remembered oil locations
 
 SDWORD baseDefendLocation[MAX_PLAYERS][MAX_BASE_DEFEND_LOCATIONS][2];
 SDWORD baseDefendLocPrior[MAX_PLAYERS][MAX_BASE_DEFEND_LOCATIONS];		//Priority
@@ -137,15 +137,6 @@ BOOL SavePlayerAIExperience(SDWORD nPlayer, BOOL bNotify)
 
 			//addConsoleMessage("Failed to save experience.",RIGHT_JUSTIFY);
 			console("Failed to save experience for player %d.", nPlayer);
-/*
-			res = MessageBox(frameGetWinHandle(), "WriteAISaveData failed, delete this experience file?", "Confirmation",
-							 MB_ICONQUESTION | MB_YESNO);
-			if (res == IDYES)
-			{
-				//ToDo: delete
-				//winQuit = TRUE;
-			}
-*/
 			return FALSE;
 		}
 		//else

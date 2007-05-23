@@ -73,10 +73,10 @@
  *
  *********************************************************/
 
-BOOL	bTilesPCXLoaded = FALSE;
+static BOOL bTilesPCXLoaded = FALSE;
 
 // whether a save game is currently being loaded
-BOOL	saveFlag = FALSE;
+static BOOL saveFlag = FALSE;
 extern char	aCurrResDir[255];		// Arse
 
 UDWORD	cheatHash[CHEAT_MAXCHEAT];

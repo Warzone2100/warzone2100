@@ -99,21 +99,6 @@
 /***************************************************************************************/
 /*                  Max values for the design bar graphs                               */
 
-//these are calculated now when the game gets loaded up
-//#define DBAR_MAXWEIGHT				3500			// maximum weight for a component
-//#define DBAR_SENSORMAXRANGE			(30*TILE_UNITS)	// maximum sensor range
-//#define DBAR_SENSORMAXPOWER			1000			// maximum sensor power
-//#define DBAR_ECMMAXPOWER			1000			// maximum ecm power
-//#define DBAR_REPAIRMAXPOINTS		1000			// maximum repair points
-//#define DBAR_WEAPMAXRANGE			(30*TILE_UNITS)	// maximum weapon range
-//#define DBAR_WEAPMAXDAMAGE			30				// maximum weapon damage
-//#define DBAR_BODYMAXARMOUR			25				// maximum armour on the body
-//#define DBAR_BODYMAXPOINTS			1000			// maximum body points of the body
-//#define DBAR_BODYMAXPOWER			20000			// maximum power output of the body
-//#define DBAR_PROPMAXSPEED			1000//2000			// maximum propulsion speed factor
-//#define DBAR_CONSTMAXPOINTS			20				// maximum build points for a constructor
-//#define DBAR_MAXPOWER				300				// maximum power required to build a template
-
 #define DBAR_TEMPLATEMAXPOINTS      8400            //maximum body points for a template
 #define DBAR_TEMPLATEMAXPOWER       1000            //maximum power points for a template
 
@@ -392,16 +377,9 @@ static BOOL intCheckValidWeaponForProp(void);
 static BOOL checkTemplateIsVtol(DROID_TEMPLATE *psTemplate);
 
 /* save the current Template if valid. Return TRUE if stored */
-BOOL saveTemplate(void);
+static BOOL saveTemplate(void);
 
-void desCreateDefaultTemplate( void );
-
-//extern iIMDShape *CurrentStatsTemplate;
-//extern iIMDShape *CurrentStatsShape;
-//extern SWORD CurrentStatsIndex;
-
-UDWORD ViewRotation = 0;
-iIMDShape *ViewShape = NULL;
+static void desCreateDefaultTemplate( void );
 
 /* The current name of the design */
 static char			aCurrName[WIDG_MAXSTR];
@@ -425,15 +403,10 @@ DROID_TEMPLATE			sCurrDesign;
 /* Flag to indictate whether a 'spare' template button is required */
 static BOOL				newTemplate = FALSE;
 
-void intDisplayTemplateForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void intDisplayStatusForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void intDisplayComponentForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void intDisplayComponentButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-
-extern void RenderCompositeDroid(UDWORD Index, Vector3i *Rotation, Vector3i *Position, Vector3i *TurretRotation, DROID *psDroid, BOOL RotXYZ);
+static void intDisplayComponentButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
 extern BOOL bRender3DOnly;
 
@@ -485,7 +458,7 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	sFormInit.y = (SWORD)DES_CENTERFORMY;	//0;
 	sFormInit.width = DES_CENTERFORMWIDTH;	//DISP_WIDTH-1;
 	sFormInit.height = DES_CENTERFORMHEIGHT;	//DES_BASEHEIGHT;
-	sFormInit.pDisplay = intDisplayPlainForm;		//intDisplayStatusForm;
+	sFormInit.pDisplay = intDisplayPlainForm;
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
 		return FALSE;
@@ -1036,7 +1009,7 @@ static BOOL _intAddTemplateForm(DROID_TEMPLATE *psSelected)
 	sFormInit.majorOffset = DES_TAB_LEFTOFFSET;
 	sFormInit.tabVertOffset = (DES_TAB_HEIGHT/2);			//(DES_TAB_HEIGHT/2)+2;
 	sFormInit.tabMajorThickness = DES_TAB_HEIGHT;
-	sFormInit.pFormDisplay = intDisplayObjectForm;		//intDisplayTemplateForm;
+	sFormInit.pFormDisplay = intDisplayObjectForm;
 	sFormInit.pUserData = (void*)&StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
 	for (i=0; i< sFormInit.numMajor; i++)
@@ -3982,7 +3955,7 @@ static BOOL intValidTemplate(DROID_TEMPLATE *psTempl)
 	return TRUE;
 }
 
-void desCreateDefaultTemplate( void )
+static void desCreateDefaultTemplate( void )
 {
 	/* set current design to default */
 	memcpy( &sCurrDesign, &sDefaultDesignTemplate, sizeof(DROID_TEMPLATE) );
@@ -5129,62 +5102,7 @@ void intRunDesign(void)
 	}
 }
 
-
-
-/*void intDisplayTemplateForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
-{
-	W_TABFORM *Form = (W_TABFORM*)psWidget;
-	UDWORD x0,y0,x1,y1;
-	pColours;
-
-	x0 = xOffset+Form->x;
-	y0 = yOffset+Form->y;
-	x1 = x0 + Form->width;
-	y1 = y0 + Form->height;
-
-	AdjustTabFormSize(Form,&x0,&y0,&x1,&y1);
-
-	RenderWindowFrame(&FrameDesignLeft,x0,y0,x1-x0,y1-y0);
-}*/
-
-
-/*void intDisplayStatusForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
-{
-	W_TABFORM *Form = (W_TABFORM*)psWidget;
-	UDWORD x0,y0,x1,y1;
-	pColours;
-
-	x0 = xOffset+Form->x;
-	y0 = yOffset+Form->y;
-	x1 = x0 + Form->width;
-	y1 = y0 + Form->height;
-
-	AdjustTabFormSize(Form,&x0,&y0,&x1,&y1);
-
-	RenderWindowFrame(&FrameDesignCenter,x0,y0,x1-x0,y1-y0);
-}*/
-
-
-/*void intDisplayComponentForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
-{
-	W_TABFORM *Form = (W_TABFORM*)psWidget;
-	UDWORD x0,y0,x1,y1;
-	pColours;
-
-	x0 = xOffset+Form->x;
-	y0 = yOffset+Form->y;
-	x1 = x0 + Form->width;
-	y1 = y0 + Form->height;
-
-	AdjustTabFormSize(Form,&x0,&y0,&x1,&y1);
-
-	RenderWindowFrame(&FrameDesignRight,x0,y0,x1-x0,y1-y0);
-}*/
-
-
-extern void BoxBlueWash(UWORD x, UWORD y, UWORD w, UWORD h, BOOL Animate);
-
-void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	W_CLICKFORM		*Form = (W_CLICKFORM*)psWidget;
 	UWORD			x0, y0;
@@ -5241,7 +5159,7 @@ void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD
 }
 
 /* Displays the 3D view of the droid in a window on the design form */
-void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 	W_FORM			*Form = (W_FORM*)psWidget;
 	UDWORD			x0,y0,x1,y1;
@@ -5264,7 +5182,6 @@ void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD
 								(DES_CENTERFORMY+DES_3DVIEWY) + (DES_3DVIEWHEIGHT/4) + 32);
 
 		Rotation.x = -30;
-//		Rotation.y = ViewRotation;
 		Rotation.y = iRY;
 		Rotation.z = 0;
 
@@ -5285,8 +5202,6 @@ void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD
 		//display large droid view in the design screen
 		displayComponentButtonTemplate((DROID_TEMPLATE*)&sCurrDesign,&Rotation,&Position,TRUE, falseScale);
 	}
-
-//	ViewRotation+=2;
 }
 
 
@@ -5296,7 +5211,7 @@ void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 }
 
 
-void intDisplayComponentButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+static void intDisplayComponentButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 //	iIMDShape *OldCurShape = CurrentStatsShape;
 //	SWORD OldCurIndex = CurrentStatsIndex;
@@ -5327,9 +5242,8 @@ void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWO
 }
 
 
-// NOTE!! if(when) this function is changed, please mail alexlee.
 /* save the current Template if valid. Return TRUE if stored */
-BOOL saveTemplate(void)
+static BOOL saveTemplate(void)
 {
 	DROID_TEMPLATE	*psTempl = NULL, *psPlayerTempl, *psPrevTempl;
 	BOOL			stored = FALSE, bTemplateFound = FALSE;

@@ -29,8 +29,6 @@
 #include "hci.h"
 #include "map.h"
 
-/* This uses oodles of memory and so can only be done on the PC */
-
 // ------------------------------------------------------------------------------------
 #define FADE_IN_TIME	(GAME_TICKS_PER_SEC/10)
 #define	START_DIVIDE	(8)
@@ -38,7 +36,6 @@
 static UDWORD avConsidered;
 static UDWORD avCalculated;
 static UDWORD avIgnored;
-
 static BOOL bRevealActive = FALSE;
 
 
@@ -168,7 +165,6 @@ UDWORD	avGetObjLightLevel(BASE_OBJECT *psObj,UDWORD origLevel)
 float	div;
 UDWORD	lowest,newLevel;
 
-
 	div = MAKEFRACT(psObj->visible[selectedPlayer])/255;
 	lowest = origLevel/START_DIVIDE;
 	newLevel = (UDWORD)(div*origLevel);
@@ -199,13 +195,12 @@ void	setRevealStatus( BOOL val )
 	debug(LOG_FOG, "avSetRevealStatus: Setting reveal to %s", val ? "ON" : "OFF");
 	bRevealActive = val;
 }
+
 // ------------------------------------------------------------------------------------
 void	preProcessVisibility( void )
 {
 UDWORD		i,j;
 MAPTILE		*psTile;
-//STRUCTURE	*psStruct;
-//FEATURE		*psFeature;
 
 	for(i=0; i<mapWidth;i++)
 	{
@@ -216,27 +211,6 @@ MAPTILE		*psTile;
 		  	{
 				psTile->bMaxed = TRUE;
 				psTile->level = psTile->illumination;
-                //can't have this cos when load up a save game where a structure has been built by the
-                //enemy in an area that has been seen before it flags the structure as visible!
-				/*if(TILE_HAS_STRUCTURE(psTile))
-				{
-				 	psStruct = getTileStructure(i,j);
-                    if (psStruct)
-                    {
-					    psStruct->visible[selectedPlayer] = UBYTE_MAX;
-                    }
-                    else
-                    {
-                        ASSERT( FALSE, "preProcessVisibility: should be a structure at %d, %d", i, j );
-                    }
-				}*/
-				/*
-				if(TILE_HAS_FEATURE(psTile))
-				{
-					psFeature = getTileFeature(i,j);
-					psFeature->visible[selectedPlayer] = UBYTE_MAX;
-				}
-				*/
 		  	}
 			else
 			{

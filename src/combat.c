@@ -24,12 +24,6 @@
  *
  */
 
-/* Turn on the damage printf's from combExplodeBullet */
-//#define DEBUG_GROUP1
-/* Turn on LOS printf's */
-//#define DEBUG_GROUP2
-/* Turn on Missed printf's */
-//#define DEBUG_GROUP3
 #include "lib/framework/frame.h"
 
 #include "objects.h"
@@ -50,12 +44,6 @@
 #include "order.h"
 #include "ai.h"
 #include "action.h"
-
-#define	EXPLOSION_AUDIO	0
-
-/* Number of tiles that missed bullets scatter from target */
-//#define DIRECT_SCATTERDIST 3
-//#define INDIRECT_SCATTERDIST 2
 
 /* minimum miss distance */
 #define MIN_MISSDIST	(TILE_UNITS/6)

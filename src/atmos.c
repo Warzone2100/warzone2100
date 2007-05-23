@@ -25,7 +25,6 @@
 */
 #include "lib/framework/frame.h"
 #include "lib/ivis_common/piedef.h"
-// FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_common/piestate.h"
 #include "display3d.h"
@@ -66,24 +65,17 @@ APS_ACTIVE,
 APS_INACTIVE,
 } AP_STATUS;
 
-ATPART	asAtmosParts[MAX_ATMOS_PARTICLES];
+static ATPART	asAtmosParts[MAX_ATMOS_PARTICLES];
 static	float	fraction;
 static	UDWORD	freeParticle;
 static	UDWORD	weather;
 
 // -----------------------------------------------------------------------------
+static void processParticle(ATPART *psPart);
+static void atmosAddParticle(Vector3i *pos, AP_TYPE type);
+static void testParticleWrap(ATPART *psPart);
 // -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
-void	atmosInitSystem			( void );
-void	atmosUpdateSystem		( void );
-void	atmosDrawParticles		( void );
-void	processParticle			( ATPART *psPart );
-void	atmosAddParticle		( Vector3i *pos, AP_TYPE type );
-void	renderParticle			( ATPART *psPart );
-void	testParticleWrap		( ATPART *psPart );
-void	atmosSetWeatherType		( WT_CLASS type );
-WT_CLASS	atmosGetWeatherType	( void );
-// -----------------------------------------------------------------------------
+
 /* Setup all the particles */
 void	atmosInitSystem( void )
 {

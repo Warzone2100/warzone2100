@@ -24,14 +24,7 @@
  *
  */
 
-// A* printf's
-//#define DEBUG_GROUP0
-// open list printf's
-//#define DEBUG_GROUP1
-// summary info printf's
-//#define DEBUG_GROUP2
 #include <assert.h>
-#include <string.h>
 
 #include "lib/framework/frame.h"
 
@@ -127,6 +120,7 @@ void astarResetCounters(void)
 	astarOuter = 0;
 	astarRemove = 0;
 }
+
 static void ClearAstarNodes(void)
 {
 	assert(apsNodes);
@@ -185,16 +179,6 @@ void fpathShutDown(void)
 #define RAND_MULTI	25173
 #define RAND_INC	13849
 #define RAND_MOD	0xffff
-/*SDWORD fpathHashFunc(SDWORD x, SDWORD y)
-{
-	UDWORD	index;
-
-	index = ((UDWORD)x * RAND_MULTI + RAND_INC) & RAND_MOD;
-	index = index ^ ((UDWORD)y * RAND_MULTI + RAND_INC) & RAND_MOD;
-	index = index % FPATH_TABLESIZE;
-
-	return index;
-}*/
 
 /* next four used in HashPJW */
 #define	BITS_IN_int		32
@@ -270,13 +254,6 @@ static FP_NODE *fpathHashPresent(FP_NODE *apsTable[], SDWORD x, SDWORD y)
 
 	return psFound;
 }
-
-/*	FP_NODE		*psPrev, *psFound;
-
-	index = fpathHashFunc(x,y);
-
-	return psFound;
-}*/
 
 #if OPEN_LIST == 0 || OPEN_LIST == 1
 // Remove a node from the hash table
@@ -790,40 +767,6 @@ static FP_NODE *fpathNewNode(SDWORD x, SDWORD y, SDWORD dist, FP_NODE *psRoute)
 }
 
 
-// Compare a location with those in the hash table and return a new one
-// if necessary
-/*FP_NODE *fpathHashCompare(SDWORD x, SDWORD y, SDWORD dist)
-{
-	FP_NODE	*psNew, *psPrev, *psFound;
-	SDWORD	index;
-
-	index = fpathHashFunc(x,y);
-	if (apsClosed[index] &&
-		apsClosed[index]->x == x && apsClosed[index]->y == y)
-	{
-		psFound = apsClosed[index];
-		apsClosed[index] = apsClosed[index]->psNext;
-	}
-	else
-	{
-		psPrev = NULL;
-		for(psFound = apsClosed[index]; psFound; psFound = psFound->psNext)
-		{
-			if (psFound->x == x && psFound->y == y)
-			{
-				break;
-			}
-			psPrev = psFound;
-		}
-		if (psFound)
-		{
-			psPrev->psNext = psFound->psNext;
-		}
-	}
-
-	return psNew;
-}*/
-
 // Variables for the callback
 static SDWORD	finalX,finalY, vectorX,vectorY;
 static BOOL		obstruction;
@@ -1117,9 +1060,6 @@ static 	FP_NODE		*psNearest, *psRoute;
 	astarOuter=0;
 	astarRemove=0;*/
 
-//	DBPRINTF(("Astar start\n");
-
-
 	tileSX = sx >> TILE_SHIFT; tileSY = sy >> TILE_SHIFT;
 	tileFX = fx >> TILE_SHIFT; tileFY = fy >> TILE_SHIFT;
 
@@ -1249,10 +1189,6 @@ static 	FP_NODE		*psNearest, *psRoute;
 // 		debug( LOG_NEVER, "HashAdd - closed : %3d,%3d (%d,%d) = %d\n", psCurr->x, psCurr->y, psCurr->dist, psCurr->est, psCurr->dist+psCurr->est );
 	}
 
-
-//	DBPRINTF(("Astar fin astarOuter=%d astarInner=%d\n",astarOuter,astarInner);
-
-
 	retval = ASR_OK;
 
 	// return the nearest route if no actual route was found
@@ -1315,8 +1251,3 @@ exit_error:
 
 
 #endif
-
-
-
-
-

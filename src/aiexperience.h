@@ -26,7 +26,6 @@
 #define SAME_LOC_RANGE 8				//if within this range, consider it the same loc
 
 extern SDWORD baseLocation[MAX_PLAYERS][MAX_PLAYERS][2];
-extern SDWORD oilLocation[MAX_PLAYERS][MAX_OIL_LOCATIONS][2];
 extern SDWORD baseDefendLocation[MAX_PLAYERS][MAX_BASE_DEFEND_LOCATIONS][2];
 extern SDWORD oilDefendLocation[MAX_PLAYERS][MAX_OIL_DEFEND_LOCATIONS][2];
 

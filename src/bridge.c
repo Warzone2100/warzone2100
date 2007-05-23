@@ -40,6 +40,9 @@ Alex McLean, Pumpkin Studios EIDOS Interactive, 1998.
 Handles rendering and placement of bridging sections for
 traversing water and ravines?! My guess is this won't make it into
 the final game, but we'll see...
+
+He was right. It did not make the final game. The code below
+is unused. Can it be reused? - Per, 2007
 */
 
 

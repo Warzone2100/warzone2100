@@ -134,19 +134,13 @@ extern BOOL intAddDesign( BOOL bShowCentreScreen );
 /* Add the droid template buttons to a form */
 BOOL intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight, UDWORD butWidth,
                            UDWORD butHeight, UDWORD gap, DROID_TEMPLATE *psSelected);
+void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
 extern void intRemoveDesign(void);
 extern void intProcessDesign(UDWORD id);
 extern void intRunDesign(void);
 
-extern void intDisplayComponentForm(struct _widget *psWidget, UDWORD xOffset, 
-									UDWORD yOffset, UDWORD *pColours);
-
 extern void intDisplayDesignForm(struct _widget *psWidget, UDWORD xOffset,
-									UDWORD yOffset, UDWORD *pColours);
-
-
-extern void intDisplayViewForm(struct _widget *psWidget, UDWORD xOffset,
 									UDWORD yOffset, UDWORD *pColours);
 
 extern void SetDesignWidgetName(char *Name);

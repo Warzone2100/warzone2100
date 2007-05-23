@@ -88,9 +88,6 @@ typedef struct _droid_action_data
 	(psDroid->sMove.Status == MOVEINACTIVE || psDroid->sMove.Status == MOVEHOVER || \
 	 psDroid->sMove.Status == MOVESHUFFLE)
 
-// choose a landing position for a VTOL when it goes to rearm
-BOOL actionVTOLLandingPos(DROID *psDroid, UDWORD *px, UDWORD *py);
-
 /* Check if a target is at correct range to attack */
 BOOL actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 {
@@ -2813,7 +2810,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 			psDroid->actionStarted = 0;
 			psDroid->actionPoints = 0;
 			//psDroid->actionHeight = 0;
-            psDroid->powerAccrued = 0;
+			psDroid->powerAccrued = 0;
 			if (psDroid->numWeaps > 0)
 			{
 				for (i = 0;i < psDroid->numWeaps;i++)
@@ -2852,33 +2849,24 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		if (electronicDroid(psDroid))
 		{
 			//check for low or zero resistance - just zero resistance!
-			if (psAction->psObj[0]->type == OBJ_STRUCTURE && (
-//				(((STRUCTURE *)psAction->psObj)->pStructureType->resistance == 0)))
-                /* || (((STRUCTURE *)psAction->psObj)->resistance <
-				(SDWORD)structureResistance(((STRUCTURE *)psAction->psObj)->
-				pStructureType, psAction->psObj->player))))*/
-				//psObj)->resistance < (SDWORD)((STRUCTURE *)psAction->
-				//psObj)->pStructureType->resistance)))
-                !validStructResistance((STRUCTURE *)psAction->psObj[0])))
+			if (psAction->psObj[0]->type == OBJ_STRUCTURE
+			    && !validStructResistance((STRUCTURE *)psAction->psObj[0]))
 			{
 				//structure is low resistance already so don't attack
 				psDroid->action = DACTION_NONE;
 				break;
 			}
-            //in multiPlayer cannot electronically attack a tranporter
-            if (bMultiPlayer && psAction->psObj[0]->type == OBJ_DROID &&
-                ((DROID *)psAction->psObj[0])->droidType == DROID_TRANSPORTER)
-            {
-                psDroid->action = DACTION_NONE;
+
+			//in multiPlayer cannot electronically attack a tranporter
+			if (bMultiPlayer
+			    && psAction->psObj[0]->type == OBJ_DROID
+			    && ((DROID *)psAction->psObj[0])->droidType == DROID_TRANSPORTER)
+			{
+				psDroid->action = DACTION_NONE;
 				break;
-            }
+			}
 		}
 
-
-
-
-//		psDroid->actionX = psAction->psObj->x;
-//		psDroid->actionY = psAction->psObj->y;
 		// note the droid's current pos so that scout & patrol orders know how far the
 		// droid has gone during an attack
 		// slightly strange place to store this I know, but I didn't want to add any more to the droid
@@ -3291,8 +3279,6 @@ BOOL actionVTOLLandingPos(DROID *psDroid, UDWORD *px, UDWORD *py)
 //		"actionVTOLLandingPos: no rearm pad set for the VTOL" );
 
 	/* Initial box dimensions and set iteration count to zero */
-//	startX = endX = (SDWORD)psDroid->psActionTarget->x >> TILE_SHIFT;
-//	startY = endY = (SDWORD)psDroid->psActionTarget->y >> TILE_SHIFT;
 	startX = endX = (SDWORD)*px >> TILE_SHIFT;
 	startY = endY = (SDWORD)*py >> TILE_SHIFT;
 	passes = 0;
@@ -3312,10 +3298,10 @@ BOOL actionVTOLLandingPos(DROID *psDroid, UDWORD *px, UDWORD *py)
 		}
 		if (psCurr != psDroid)
 		{
-            if (tileOnMap(tx, ty))
-            {
-		    	mapTile(tx,ty)->tileInfoBits |= BITS_FPATHBLOCK;
-            }
+			if (tileOnMap(tx, ty))
+			{
+				mapTile(tx,ty)->tileInfoBits |= BITS_FPATHBLOCK;
+			}
 		}
 	}
 
@@ -3372,17 +3358,3 @@ exit:
 	return result;
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

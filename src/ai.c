@@ -39,7 +39,7 @@
 #include "visibility.h"
 
 /* Calculates attack priority for a certain target */
-SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, SDWORD weapon_slot);
+static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, SDWORD weapon_slot);
 
 // alliances
 UBYTE	alliances[MAX_PLAYERS][MAX_PLAYERS];
@@ -102,12 +102,11 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 	WEAPON_EFFECT		weaponEffect;
 	DROID				*friendlyDroid;
 
-
-    //don't bother looking if empty vtol droid
-    if (vtolEmpty(psDroid))
-    {
-        return failure;
-    }
+	//don't bother looking if empty vtol droid
+	if (vtolEmpty(psDroid))
+	{
+		return failure;
+	}
 
 	/* Return if have no weapons */
 	// Watermelon:added a protection against no weapon droid 'numWeaps'
@@ -188,41 +187,34 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 			}
 			else if (targetInQuestion->type == OBJ_DROID)
 			{
-                //in multiPlayer - don't attack Transporters with EW
-                if (bMultiPlayer)
-                {
-                    //if not electronic then valid target
-                    if (!electronic || (electronic && ((DROID *)targetInQuestion)->
-                        droidType != DROID_TRANSPORTER))
-                    {
-                        //only a valid target if NOT a transporter
-                        psTarget = targetInQuestion;
-                    }
-                }
-                else
+				// in multiPlayer - don't attack Transporters with EW
+				if (bMultiPlayer)
+				{
+					// if not electronic then valid target
+					if (!electronic 
+					    || (electronic 
+					        && ((DROID *)targetInQuestion)->droidType != DROID_TRANSPORTER))
+					{
+						//only a valid target if NOT a transporter
+						psTarget = targetInQuestion;
+					}
+				}
+				else
 				{
 					psTarget = targetInQuestion;
-                }
+				}
 			}
 			else if (targetInQuestion->type == OBJ_STRUCTURE)
 			{
 				if (electronic)
 				{
-					/*don't want to target structures with resistance of zero if
-                    using electronic warfare*/
-//					if (((STRUCTURE *)targetInQuestion)->pStructureType->resistance != 0)// &&
-						//((STRUCTURE *)targetInQuestion)->resistance >= (SDWORD)(((STRUCTURE *)
-						//targetInQuestion)->pStructureType->resistance))
-						//((STRUCTURE *)targetInQuestion)->resistance >= (SDWORD)
-						//structureResistance(((STRUCTURE *)targetInQuestion)->pStructureType,
-						//targetInQuestion->player))
-                    if (validStructResistance((STRUCTURE *)targetInQuestion))
+					/* don't want to target structures with resistance of zero if using electronic warfare */
+					if (validStructResistance((STRUCTURE *)targetInQuestion))
 					{
 						psTarget = targetInQuestion;
 					}
 				}
-				//else if (((STRUCTURE *)targetInQuestion)->numWeaps > 0)
-                else if (((STRUCTURE *)targetInQuestion)->asWeaps[weapon_slot].nStat > 0)
+				else if (((STRUCTURE *)targetInQuestion)->asWeaps[weapon_slot].nStat > 0)
 				{
 					// structure with weapons - go for this
 					psTarget = targetInQuestion;
@@ -275,7 +267,7 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 }
 
 /* Calculates attack priority for a certain target */
-SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, SDWORD weapon_slot)
+static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, SDWORD weapon_slot)
 {
 	SDWORD			targetTypeBonus=0, damageRatio=0, attackWeight=0, noTarget=-1;
 	DROID			*targetDroid;
@@ -414,7 +406,7 @@ static BOOL aiStructHasRange(STRUCTURE *psStruct, BASE_OBJECT *psTarget, int wea
 	WEAPON_STATS		*psWStats;
 	SDWORD				xdiff,ydiff, longRange;
 
-    if (psStruct->numWeaps == 0 || psStruct->asWeaps[0].nStat == 0)
+	if (psStruct->numWeaps == 0 || psStruct->asWeaps[0].nStat == 0)
 	{
 		// Can't attack without a weapon
 		return FALSE;
@@ -746,11 +738,9 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj,
 BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 {
 	UDWORD	radSquared;
-//	UDWORD	player;
 	BASE_OBJECT		*psCurr,*psTemp = NULL;
 	BASE_OBJECT		*psTarget = NULL;
 	SDWORD	xdiff,ydiff, distSq, tarDist;
-//    BOOL    bSuperSensor = FALSE;
 
 	/* Get the sensor range */
 	switch (psObj->type)
@@ -774,12 +764,6 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 		}
 		radSquared = ((STRUCTURE *)psObj)->sensorRange *
 					 ((STRUCTURE *)psObj)->sensorRange;
-        //AB 3/9/99 - the SUPER_SENSOR now uses the stat defined range - same as all other sensors
-        //if we've got a SUPER sensor attached, then the whole of the map can be seen
-        /*if (((STRUCTURE *)psObj)->pStructureType->pSensor->type == SUPER_SENSOR)
-        {
-            bSuperSensor = TRUE;
-        }*/
 		break;
 	default:
 		radSquared = 0;
@@ -803,61 +787,11 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 	}
 	else
 	{
-        //AB 3/9/99 - the SUPER_SENSOR now uses the stat defined range - same as all other sensors
-        //new for the SUPER sensor which can see EVERYWHERE!
-        /*if (bSuperSensor)
-        {
-            DROID       *psDroid;
-            STRUCTURE   *psStruct;
-            UBYTE       player;
-
-            tarDist = SDWORD_MAX;
-            psTarget = NULL;
-            // just go through the list of droids/structures for the oppositions
-            // and get the nearest target. This might be REAL slow...
-            for (player = 0; player < MAX_PLAYERS; player++)
-            {
-                //ignore the Sensor Structure's objects
-                if ((player == psObj->player) || (aiCheckAlliances(player,psObj->player)))
-                {
-                    continue;
-                }
-                for (psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
-                {
-                    //everything is visible!
-					xdiff = psDroid->x - psObj->x;
-					ydiff = psDroid->y - psObj->y;
-					distSq = xdiff*xdiff + ydiff*ydiff;
-                    //store if nearer
-                    if (distSq < tarDist)
-                    {
-    					psTarget = (BASE_OBJECT *)psDroid;
-	    				tarDist = distSq;
-                    }
-                }
-                for (psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
-                {
-                    //everything is visible!
-					xdiff = psStruct->x - psObj->x;
-					ydiff = psStruct->y - psObj->y;
-					distSq = xdiff*xdiff + ydiff*ydiff;
-                    //store if nearer
-                    if (distSq < tarDist)
-                    {
-    					psTarget = (BASE_OBJECT *)psStruct;
-	    				tarDist = distSq;
-                    }
-                }
-            }
-        }
-        else*/
-        {
-		    tarDist = SDWORD_MAX;
-		    //psTarget->objects[0] = NULL;
-		    gridStartIterate((SDWORD)psObj->x, (SDWORD)psObj->y);
-		    psCurr = gridIterate();
-		    while (psCurr != NULL)
-		    {
+		tarDist = SDWORD_MAX;
+		gridStartIterate((SDWORD)psObj->x, (SDWORD)psObj->y);
+		psCurr = gridIterate();
+		while (psCurr != NULL)
+		{
 			    //don't target features
 			    if (psCurr->type != OBJ_FEATURE)
 			    {
@@ -879,8 +813,7 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 				    }
 			    }
 			    psCurr = gridIterate();
-		    }
-        }
+		}
 
 		if (psTemp)
 		{
@@ -900,7 +833,6 @@ void aiUpdateDroid(DROID *psDroid)
 	DROID_OACTION_INFO	oaInfo;
 	SECONDARY_STATE		state;
 	BOOL		lookForTarget,updateTarget;
-//	BOOL		bTemp;
 	UBYTE		i,targetResult = 1;
 
 	ASSERT( psDroid != NULL,
@@ -979,11 +911,6 @@ void aiUpdateDroid(DROID *psDroid)
 	{
 		lookForTarget = FALSE;
 	}
-    //do not look for a target if droid is an empty vtol
-/*    if (vtolEmpty(psDroid))
-    {
-        lookForTarget = FALSE;
-    }*/
 
 	// do not look for a target if droid is currently under direct control.
 	if(driveModeActive() && (psDroid == driveGetDriven())) {
@@ -1041,8 +968,6 @@ void aiUpdateDroid(DROID *psDroid)
 	if (lookForTarget && !updateTarget)
 	{
 		//console("Choosing first-time target");
-//			my_error("",0,"","Droid(%s) attacking : %d\n",
-//					psDroid->pName, psTarget->id );
 		turnOffMultiMsg(TRUE);
 		if (psDroid->droidType == DROID_SENSOR)
 		{
@@ -1091,11 +1016,9 @@ can fire on the propulsion type of the target*/
 BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot)
 {
 	BOOL	bTargetInAir, bValidTarget = FALSE;
-    UBYTE	surfaceToAir;
+	UBYTE	surfaceToAir;
 
-    //bValidTarget = FALSE;
-
-    //need to check propulsion type of target
+	//need to check propulsion type of target
 	switch (psTarget->type)
 	{
 	case OBJ_DROID:
@@ -1123,7 +1046,7 @@ BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot)
         break;
     }
 
-    //need what can shoot at
+	//need what can shoot at
 	switch (psObject->type)
 	{
 	case OBJ_DROID:
@@ -1154,13 +1077,13 @@ BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot)
 		*/
 		break;
 	case OBJ_STRUCTURE:
-        // Can't attack without a weapon
+		// Can't attack without a weapon
 		//Watermelon:re-enabled if (((DROID *)psObject)->numWeaps != 0) to prevent crash
 		if ( ((STRUCTURE *)psObject)->numWeaps != 0 &&
 			((STRUCTURE *)psObject)->asWeaps[weapon_slot].nStat != 0 )
 		{
-            surfaceToAir = asWeaponStats[((STRUCTURE *)psObject)->asWeaps[weapon_slot].nStat].surfaceToAir;
-        }
+			surfaceToAir = asWeaponStats[((STRUCTURE *)psObject)->asWeaps[weapon_slot].nStat].surfaceToAir;
+		}
 		else
 		{
 			surfaceToAir = 0;
@@ -1201,9 +1124,6 @@ BOOL updateAttackTarget(BASE_OBJECT * psAttacker, SDWORD weapon_slot)
 
 	if(aiChooseTarget(psAttacker, &psBetterTarget, weapon_slot, TRUE))	//update target
 	{
-		//if(psAttacker->player == selectedPlayer)
-		//	console("GOT A NEW TARGET");
-
 		if(psAttacker->type == OBJ_DROID)
 		{
 			psDroid = (DROID *)psAttacker;
@@ -1228,7 +1148,6 @@ BOOL updateAttackTarget(BASE_OBJECT * psAttacker, SDWORD weapon_slot)
 
 		return TRUE;
 	}
-
 
 	return FALSE;
 }
