@@ -4,7 +4,8 @@
    * New: Screenshots are now saved as PNGs for better quality
    * Fix: AutoPackage (Linux Installer) should be easier to install now and also work on non Athlon CPUs. It doesn't support playback of MP3s anymore, though.
    * Fix: Crashes caused by not-loaded file when sound is disabled
-   * Fix: The usual crash fixes
+   * Fix: Crashes after the mission briefing
+   * Fix: It was possible to disable the computer in singleplayer games
 
 2007-03-31: Version 2.0.6
  * General:
