@@ -371,11 +371,11 @@ static BOOL ReadPoints( char **ppFileData, iIMDShape *s )
 {
 	char *pFileData = *ppFileData;
 	int cnt, i, j, lastPoint = 0, match = -1;
-	Vector3f new = {0.0f, 0.0f, 0.0f};
+	Vector3f newVector = {0.0f, 0.0f, 0.0f};
 
 	for (i = 0; i < s->npoints; i++)
 	{
-		if (sscanf(pFileData, "%f %f %f%n", &new.x, &new.y, &new.z, &cnt) != 3)
+		if (sscanf(pFileData, "%f %f %f%n", &newVector.x, &newVector.y, &newVector.z, &cnt) != 3)
 		{
 			iV_Error(0xff, "(_load_points) file corrupt -K");
 			return FALSE;
@@ -388,7 +388,7 @@ static BOOL ReadPoints( char **ppFileData, iIMDShape *s )
 		// scan through list upto the number of points added (lastPoint) ... not up to the number of points scanned in (i)  (which will include duplicates)
 		for (j = 0; j < lastPoint; j++)
 		{
-			if (Vector3f_compare(&new, &s->points[j]))
+			if (Vector3f_compare(&newVector, &s->points[j]))
 			{
 				match = j;
 				break;
@@ -399,9 +399,9 @@ static BOOL ReadPoints( char **ppFileData, iIMDShape *s )
 		if (match == -1)
 		{
 			// new point
-			s->points[lastPoint].x = new.x;
-			s->points[lastPoint].y = new.y;
-			s->points[lastPoint].z = new.z;
+			s->points[lastPoint].x = newVector.x;
+			s->points[lastPoint].y = newVector.y;
+			s->points[lastPoint].z = newVector.z;
 			vertexTable[i] = lastPoint;
 			lastPoint++;
 		}
@@ -659,7 +659,7 @@ static BOOL _imd_load_connectors(char **ppFileData, iIMDShape *s)
 {
 	char *pFileData = *ppFileData;
 	int cnt, i;
-	Vector3f *p = NULL, new = {0.0f, 0.0f, 0.0f};
+	Vector3f *p = NULL, newVector = {0.0f, 0.0f, 0.0f};
 
 	s->connectors = (Vector3f*)malloc(sizeof(Vector3f) * s->nconnectors);
 	if (s->connectors == NULL)
@@ -670,13 +670,13 @@ static BOOL _imd_load_connectors(char **ppFileData, iIMDShape *s)
 
 	for (i = 0, p = s->connectors; i < s->nconnectors; i++, p++)
 	{
-		if (sscanf(pFileData, "%f %f %f%n", &new.x, &new.y, &new.z, &cnt) != 3)
+		if (sscanf(pFileData, "%f %f %f%n", &newVector.x, &newVector.y, &newVector.z, &cnt) != 3)
 		{
 			iV_Error(0xff, "(_load_connectors) file corrupt -M");
 			return FALSE;
 		}
 		pFileData += cnt;
-		*p = new;
+		*p = newVector;
 	}
 
 	*ppFileData = pFileData;

@@ -34,7 +34,7 @@ typedef struct
 
 	// the size of the buffer *data points to plus sizeof(soundDataBuffer)
 	size_t bufferSize;
-	
+
 	unsigned int bitsPerSample;
 	unsigned int channelCount;
 	unsigned int frequency;
@@ -44,9 +44,16 @@ typedef struct
 typedef void OggVorbisDecoderState;
 #endif
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_fileHandle, BOOL allowSeeking);
 void sound_DestroyOggVorbisDecoder(OggVorbisDecoderState* decoder);
 
 soundDataBuffer* sound_DecodeOggVorbis(OggVorbisDecoderState* decoder, size_t bufferSize);
+#ifdef __cplusplus
+}
+#endif
 
 #endif // _LIBSOUND_OGGVORBIS_H_
