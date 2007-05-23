@@ -148,7 +148,6 @@
 		0246A1360BD3CC58004D1C70 /* netjoin_stub.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A12E0BD3CC58004D1C70 /* netjoin_stub.c */; };
 		0246A1370BD3CC58004D1C70 /* netlog.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A12F0BD3CC58004D1C70 /* netlog.c */; };
 		0246A1380BD3CC58004D1C70 /* netplay.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1310BD3CC58004D1C70 /* netplay.c */; };
-		0246A1390BD3CC58004D1C70 /* netusers_stub.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1330BD3CC58004D1C70 /* netusers_stub.c */; };
 		0246A14D0BD3CC71004D1C70 /* chat_lexer.l in Sources */ = {isa = PBXBuildFile; fileRef = 0246A13B0BD3CC71004D1C70 /* chat_lexer.l */; };
 		0246A14E0BD3CC71004D1C70 /* chat_parser.y in Sources */ = {isa = PBXBuildFile; fileRef = 0246A13C0BD3CC71004D1C70 /* chat_parser.y */; };
 		0246A14F0BD3CC71004D1C70 /* codeprint.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A13E0BD3CC71004D1C70 /* codeprint.c */; };
@@ -933,7 +932,6 @@
 		0246A1300BD3CC58004D1C70 /* netlog.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = netlog.h; path = ../lib/netplay/netlog.h; sourceTree = SOURCE_ROOT; };
 		0246A1310BD3CC58004D1C70 /* netplay.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = netplay.c; path = ../lib/netplay/netplay.c; sourceTree = SOURCE_ROOT; };
 		0246A1320BD3CC58004D1C70 /* netplay.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = netplay.h; path = ../lib/netplay/netplay.h; sourceTree = SOURCE_ROOT; };
-		0246A1330BD3CC58004D1C70 /* netusers_stub.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = netusers_stub.c; path = ../lib/netplay/netusers_stub.c; sourceTree = SOURCE_ROOT; };
 		0246A13B0BD3CC71004D1C70 /* chat_lexer.l */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.lex; name = chat_lexer.l; path = ../lib/script/chat_lexer.l; sourceTree = SOURCE_ROOT; };
 		0246A13C0BD3CC71004D1C70 /* chat_parser.y */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.yacc; name = chat_parser.y; path = ../lib/script/chat_parser.y; sourceTree = SOURCE_ROOT; };
 		0246A13D0BD3CC71004D1C70 /* chat_processing.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = chat_processing.h; path = ../lib/script/chat_processing.h; sourceTree = SOURCE_ROOT; };
@@ -1871,7 +1869,6 @@
 				0246A1300BD3CC58004D1C70 /* netlog.h */,
 				0246A1310BD3CC58004D1C70 /* netplay.c */,
 				0246A1320BD3CC58004D1C70 /* netplay.h */,
-				0246A1330BD3CC58004D1C70 /* netusers_stub.c */,
 			);
 			name = Netplay;
 			sourceTree = "<group>";
@@ -3345,7 +3342,6 @@
 				0246A1360BD3CC58004D1C70 /* netjoin_stub.c in Sources */,
 				0246A1370BD3CC58004D1C70 /* netlog.c in Sources */,
 				0246A1380BD3CC58004D1C70 /* netplay.c in Sources */,
-				0246A1390BD3CC58004D1C70 /* netusers_stub.c in Sources */,
 				0246A14E0BD3CC71004D1C70 /* chat_parser.y in Sources */,
 				0246A14D0BD3CC71004D1C70 /* chat_lexer.l in Sources */,
 				0246A14F0BD3CC71004D1C70 /* codeprint.c in Sources */,
@@ -4367,7 +4363,7 @@
 				022B2F260BD55816002E64E3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		02356D670BD3BB2600E9A019 /* Build configuration list for PBXProject "Warzone" */ = {
 			isa = XCConfigurationList;
@@ -4376,7 +4372,7 @@
 				02356D690BD3BB2600E9A019 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		02356D790BD3BB3600E9A019 /* Build configuration list for PBXNativeTarget "Warzone" */ = {
 			isa = XCConfigurationList;
@@ -4385,7 +4381,7 @@
 				02356D7B0BD3BB3600E9A019 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		02356D850BD3BB4200E9A019 /* Build configuration list for PBXNativeTarget "Zlib" */ = {
 			isa = XCConfigurationList;
@@ -4394,7 +4390,7 @@
 				02356D870BD3BB4200E9A019 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		02356DC40BD3BBFC00E9A019 /* Build configuration list for PBXNativeTarget "Png" */ = {
 			isa = XCConfigurationList;
@@ -4403,7 +4399,7 @@
 				02356DC60BD3BBFC00E9A019 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		02356E0B0BD3BCFF00E9A019 /* Build configuration list for PBXNativeTarget "Ogg" */ = {
 			isa = XCConfigurationList;
@@ -4412,7 +4408,7 @@
 				02356E0D0BD3BCFF00E9A019 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		0246A3E30BD3CD81004D1C70 /* Build configuration list for PBXNativeTarget "SDL" */ = {
 			isa = XCConfigurationList;
@@ -4421,7 +4417,7 @@
 				0246A3E50BD3CD81004D1C70 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		0246A3EF0BD3CD8B004D1C70 /* Build configuration list for PBXNativeTarget "SDL_net" */ = {
 			isa = XCConfigurationList;
@@ -4430,7 +4426,7 @@
 				0246A3F10BD3CD8B004D1C70 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		02581C6B0BD5A9A200957CBC /* Build configuration list for PBXNativeTarget "SDLmain" */ = {
 			isa = XCConfigurationList;
@@ -4439,7 +4435,7 @@
 				02581C6D0BD5A9A200957CBC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		02DDA7F00BD3C03F0049AB60 /* Build configuration list for PBXNativeTarget "Vorbis" */ = {
 			isa = XCConfigurationList;
@@ -4448,7 +4444,7 @@
 				02DDA7F20BD3C03F0049AB60 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		02DDA8B30BD3C2F20049AB60 /* Build configuration list for PBXNativeTarget "PhysFS" */ = {
 			isa = XCConfigurationList;
@@ -4457,7 +4453,7 @@
 				02DDA8B50BD3C2F20049AB60 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};
