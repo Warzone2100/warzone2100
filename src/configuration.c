@@ -536,6 +536,10 @@ BOOL loadRenderMode()
 
 	if( getWarzoneKeyNumeric("fullscreen", &val) ) {
 		war_setFullscreen(val);
+	} else {
+		// If no setting is found go to fullscreen by default
+		setWarzoneKeyNumeric("fullscreen", TRUE);
+		war_setFullscreen(TRUE);
 	}
 
 	// now load the desired res..
