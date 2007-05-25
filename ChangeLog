@@ -6,6 +6,8 @@
    * Fix: Crashes caused by not-loaded file when sound is disabled
    * Fix: Crashes after the mission briefing
    * Fix: It was possible to disable the computer in singleplayer games
+ * Settings:
+   * Change: Warzone will now run in fullscreen by default (current configurations won't be affected)
 
 2007-03-31: Version 2.0.6
  * General:
