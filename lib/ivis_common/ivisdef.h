@@ -151,14 +151,13 @@ typedef struct {
 
 
 typedef struct {
-//	UDWORD HashValue
 	UWORD TPageID;
 	UWORD PalID;
 	UWORD Tu,Tv;
-	UWORD Width;
-	UWORD Height;
-	SWORD XOffset;
-	SWORD YOffset;
+	unsigned short Width;
+	unsigned short Height;
+	short XOffset;
+	short YOffset;
 } IMAGEDEF;
 
 
