@@ -30,7 +30,9 @@
 #define OGG_ENDIAN 0
 #endif
 
-typedef struct
+#include "oggvorbis.h"
+
+struct OggVorbisDecoderState
 {
     // Internal identifier towards PhysicsFS
     PHYSFS_file* fileHandle;
@@ -43,20 +45,17 @@ typedef struct
 
     // Internal meta data
     vorbis_info* VorbisInfo;
-} OggVorbisDecoderState;
-
-#define _LIBSOUND_OGGVORBIS_C_
-#include "oggvorbis.h"
+};
 
 static size_t wz_oggVorbis_read(void *ptr, size_t size, size_t nmemb, void *datasource)
 {
-    PHYSFS_file* fileHandle = ((OggVorbisDecoderState*)datasource)->fileHandle;
+    PHYSFS_file* fileHandle = ((struct OggVorbisDecoderState*)datasource)->fileHandle;
     return PHYSFS_read(fileHandle, ptr, 1, size*nmemb);
 }
 
 static int wz_oggVorbis_seek(void *datasource, ogg_int64_t offset, int whence) {
-    PHYSFS_file* fileHandle = ((OggVorbisDecoderState*)datasource)->fileHandle;
-    BOOL allowSeeking = ((OggVorbisDecoderState*)datasource)->allowSeeking;
+    PHYSFS_file* fileHandle = ((struct OggVorbisDecoderState*)datasource)->fileHandle;
+    BOOL allowSeeking = ((struct OggVorbisDecoderState*)datasource)->allowSeeking;
 
     int curPos, fileSize, newPos;
 
@@ -101,7 +100,7 @@ static int wz_oggVorbis_close(void *datasource) {
 }
 
 static long wz_oggVorbis_tell(void *datasource) {
-    PHYSFS_file* fileHandle = ((OggVorbisDecoderState*)datasource)->fileHandle;
+    PHYSFS_file* fileHandle = ((struct OggVorbisDecoderState*)datasource)->fileHandle;
     return PHYSFS_tell(fileHandle);
 }
 
@@ -112,11 +111,11 @@ static const ov_callbacks wz_oggVorbis_callbacks = {
     wz_oggVorbis_tell
 };
 
-OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_fileHandle, BOOL allowSeeking)
+struct OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_fileHandle, BOOL allowSeeking)
 {
 	int error;
 
-	OggVorbisDecoderState* decoder = malloc(sizeof(OggVorbisDecoderState));
+	struct OggVorbisDecoderState* decoder = malloc(sizeof(struct OggVorbisDecoderState));
 	if (decoder == NULL)
 	{
 		debug(LOG_ERROR, "sound_CreateOggVorbisDecoder: couldn't allocate memory\n");
@@ -140,7 +139,7 @@ OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_fileHand
 	return decoder;
 }
 
-void sound_DestroyOggVorbisDecoder(OggVorbisDecoderState* decoder)
+void sound_DestroyOggVorbisDecoder(struct OggVorbisDecoderState* decoder)
 {
 	// Close the OggVorbis decoding stream
 	ov_clear(&decoder->oggVorbis_stream);
@@ -148,27 +147,27 @@ void sound_DestroyOggVorbisDecoder(OggVorbisDecoderState* decoder)
 	free(decoder);
 }
 
-static inline unsigned int getSampleCount(OggVorbisDecoderState* decoder)
+static inline unsigned int getSampleCount(struct OggVorbisDecoderState* decoder)
 {
 	int numSamples = ov_pcm_total(&decoder->oggVorbis_stream, -1);
 
 	if (numSamples == OV_EINVAL)
 		return 0;
-	
+
 	return numSamples;
 }
 
-static inline unsigned int getCurrentSample(OggVorbisDecoderState* decoder)
+static inline unsigned int getCurrentSample(struct OggVorbisDecoderState* decoder)
 {
 	int samplePos = ov_pcm_tell(&decoder->oggVorbis_stream);
 
 	if (samplePos == OV_EINVAL)
 		return 0;
-	
+
 	return samplePos;
 }
 
-soundDataBuffer* sound_DecodeOggVorbis(OggVorbisDecoderState* decoder, size_t bufferSize)
+soundDataBuffer* sound_DecodeOggVorbis(struct OggVorbisDecoderState* decoder, size_t bufferSize)
 {
 	size_t		size = 0;
 	int		result;

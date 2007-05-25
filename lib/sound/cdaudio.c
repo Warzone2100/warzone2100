@@ -52,7 +52,7 @@ static unsigned int	music_track = 0;
 static ALuint 		music_buffers[NB_BUFFERS];
 static ALuint		music_source;
 
-OggVorbisDecoderState* decoder = NULL;
+struct OggVorbisDecoderState* decoder = NULL;
 
 static inline unsigned int numProcessedBuffers(void)
 {

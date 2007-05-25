@@ -253,7 +253,7 @@ static inline TRACK* sound_DecodeOggVorbisTrack(TRACK *psTrack, PHYSFS_file* PHY
 	ALenum		format;
 	ALuint		buffer;
 
-	OggVorbisDecoderState* decoder = sound_CreateOggVorbisDecoder(PHYSFS_fileHandle, TRUE);
+	struct OggVorbisDecoderState* decoder = sound_CreateOggVorbisDecoder(PHYSFS_fileHandle, TRUE);
 	soundDataBuffer* soundBuffer;
 
 	soundBuffer = sound_DecodeOggVorbis(decoder, 0);

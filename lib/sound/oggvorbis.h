@@ -40,20 +40,12 @@ typedef struct
 	unsigned int frequency;
 } soundDataBuffer;
 
-#ifndef _LIBSOUND_OGGVORBIS_C_
-typedef void OggVorbisDecoderState;
-#endif
+// Forward declaration so we can take pointers to this type
+struct OggVorbisDecoderState;
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_fileHandle, BOOL allowSeeking);
-void sound_DestroyOggVorbisDecoder(OggVorbisDecoderState* decoder);
+struct OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_fileHandle, BOOL allowSeeking);
+void sound_DestroyOggVorbisDecoder(struct OggVorbisDecoderState* decoder);
 
-soundDataBuffer* sound_DecodeOggVorbis(OggVorbisDecoderState* decoder, size_t bufferSize);
-#ifdef __cplusplus
-}
-#endif
+soundDataBuffer* sound_DecodeOggVorbis(struct OggVorbisDecoderState* decoder, size_t bufferSize);
 
 #endif // _LIBSOUND_OGGVORBIS_H_
