@@ -510,7 +510,7 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 	{
 
 		for (i = 0, pPolys = shape->polys; i < shape->npolys; ++i, ++pPolys) {
-			Vector3f p[3], v[2], normal;
+			Vector3f p[3], v[2], normal = {0.0f, 0.0f, 0.0f};
 			VERTEXID current, first;
 			for(j = 0; j < 3; j++)
 			{

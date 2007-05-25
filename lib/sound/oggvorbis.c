@@ -57,7 +57,7 @@ static int wz_oggVorbis_seek(void *datasource, ogg_int64_t offset, int whence) {
     PHYSFS_file* fileHandle = ((struct OggVorbisDecoderState*)datasource)->fileHandle;
     BOOL allowSeeking = ((struct OggVorbisDecoderState*)datasource)->allowSeeking;
 
-    int curPos, fileSize, newPos;
+    int curPos = 0, fileSize = 0, newPos = 0;
 
     if (!allowSeeking)
         return -1;

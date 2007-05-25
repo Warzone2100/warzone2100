@@ -60,43 +60,7 @@ static BOOL LoadTextureFile(const char *FileName, iTexture *pSprite, int *texPag
 }
 
 
-UWORD iV_GetImageWidth(IMAGEFILE *ImageFile, UWORD ID)
-{
-	assert(ID < ImageFile->Header.NumImages);
-	return ImageFile->ImageDefs[ID].Width;
-}
-
-UWORD iV_GetImageHeight(IMAGEFILE *ImageFile, UWORD ID)
-{
-	assert(ID < ImageFile->Header.NumImages);
-	return ImageFile->ImageDefs[ID].Height;
-}
-
-SWORD iV_GetImageXOffset(IMAGEFILE *ImageFile, UWORD ID)
-{
-	assert(ID < ImageFile->Header.NumImages);
-	return ImageFile->ImageDefs[ID].XOffset;
-}
-
-SWORD iV_GetImageYOffset(IMAGEFILE *ImageFile, UWORD ID)
-{
-	assert(ID < ImageFile->Header.NumImages);
-	return ImageFile->ImageDefs[ID].YOffset;
-}
-
-UWORD iV_GetImageCenterX(IMAGEFILE *ImageFile, UWORD ID)
-{
-	assert(ID < ImageFile->Header.NumImages);
-	return ImageFile->ImageDefs[ID].XOffset + ImageFile->ImageDefs[ID].Width/2;
-}
-
-UWORD iV_GetImageCenterY(IMAGEFILE *ImageFile, UWORD ID)
-{
-	assert(ID < ImageFile->Header.NumImages);
-	return ImageFile->ImageDefs[ID].YOffset + ImageFile->ImageDefs[ID].Height/2;
-}
-
-IMAGEFILE *iV_LoadImageFile(const char *FileData, WZ_DECL_UNUSED UDWORD FileSize)
+IMAGEFILE *iV_LoadImageFile(const char *FileData, WZ_DECL_UNUSED const UDWORD FileSize)
 {
 	const char *Ptr;
 	IMAGEHEADER *Header;
@@ -170,11 +134,6 @@ IMAGEFILE *iV_LoadImageFile(const char *FileData, WZ_DECL_UNUSED UDWORD FileSize
 
 void iV_FreeImageFile(IMAGEFILE *ImageFile)
 {
-
-//	for(i=0; i<ImageFile->Header.NumTPages; i++) {
-//		free(ImageFile->TexturePages[i].bmp);
-//	}
-
 	free(ImageFile->TexturePages);
 	free(ImageFile->ImageDefs);
 	free(ImageFile);
