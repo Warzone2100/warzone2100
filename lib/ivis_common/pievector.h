@@ -10,7 +10,7 @@ typedef struct { float x, y, z; } Vector3f;
  * \param[out] v Vector to set
  * \param[in] x,y,z Values to set to
  */
-static inline void Vector3f_Set(Vector3f* v, float x, float y, float z)
+WZ_DECL_CONST static inline void Vector3f_Set(Vector3f* v, const float x, const float y, const float z)
 {
 	v->x = x;
 	v->y = y;
@@ -24,7 +24,7 @@ static inline void Vector3f_Set(Vector3f* v, float x, float y, float z)
  * \param[out] v Vector to set
  * \param[in] x,y,z Values to set to
  */
-static inline void Vector3i_Set(Vector3i *v, int x, int y, int z)
+WZ_DECL_CONST static inline void Vector3i_Set(Vector3i *v, const int x, const int y, const int z)
 {
 	v->x = x;
 	v->y = y;
@@ -37,7 +37,7 @@ static inline void Vector3i_Set(Vector3i *v, int x, int y, int z)
  * \param[out] dest Result
  * \param[in] op1,op2 Operands
  */
-static inline void Vector3f_Sub(Vector3f* dest, Vector3f* op1, Vector3f* op2)
+WZ_DECL_CONST static inline void Vector3f_Sub(Vector3f* dest, const Vector3f* op1, const Vector3f* op2)
 {
 	dest->x = op1->x - op2->x;
 	dest->y = op1->y - op2->y;
@@ -50,7 +50,7 @@ static inline void Vector3f_Sub(Vector3f* dest, Vector3f* op1, Vector3f* op2)
  * \param[in] op1,op2 Operands
  * \return Scalarproduct of the 2 vectors
  */
-static inline float Vector3f_SP(Vector3f* op1, Vector3f* op2)
+WZ_DECL_CONST static inline float Vector3f_SP(const Vector3f* op1, const Vector3f* op2)
 {
 	return op1->x * op2->x + op1->y * op2->y + op1->z * op2->z;
 }
@@ -61,7 +61,7 @@ static inline float Vector3f_SP(Vector3f* op1, Vector3f* op2)
  * \param[out] dest Result
  * \param[in] op1,op2 Operands
  */
-static inline void Vector3f_CP(Vector3f* dest, Vector3f* op1, Vector3f* op2)
+WZ_DECL_CONST static inline void Vector3f_CP(Vector3f* dest, const Vector3f* op1, const Vector3f* op2)
 {
 	dest->x = op1->y * op2->z - op1->z * op2->y;
 	dest->y = op1->z * op2->x - op1->x * op2->z;

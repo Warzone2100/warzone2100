@@ -28,7 +28,37 @@
 #include "lib/framework/frameresource.h"
 
 
-static BOOL LoadTextureFile(char *FileName, iTexture *TPage, int *TPageID);
+static BOOL LoadTextureFile(const char *FileName, iTexture *pSprite, int *texPageID)
+{
+	unsigned int i = 0;
+
+	debug(LOG_TEXTURE, "LoadTextureFile: %s", FileName);
+
+	if (!resPresent("IMGPAGE", FileName)) {
+		debug(LOG_ERROR, "Texture file \"%s\" not preloaded.", FileName);
+		assert(FALSE);
+		return FALSE;
+	} else {
+		*pSprite = *(iTexture*)resGetData("IMGPAGE", FileName);
+		debug(LOG_TEXTURE, "Load texture from resource cache: %s (%d, %d)",
+		      FileName, pSprite->width, pSprite->height);
+	}
+
+	/* We have already loaded this one? */
+	while (i < _TEX_INDEX) {
+		if (strcasecmp(FileName, _TEX_PAGE[i].name) == 0) {
+			*texPageID = _TEX_PAGE[i].id;
+			debug(LOG_TEXTURE, "LoadTextureFile: already loaded");
+			return TRUE;
+		}
+		i++;
+	}
+
+	*texPageID = pie_AddTexPage(pSprite, FileName, 1, TRUE);
+
+	return TRUE;
+}
+
 
 UWORD iV_GetImageWidth(IMAGEFILE *ImageFile, UWORD ID)
 {
@@ -66,13 +96,13 @@ UWORD iV_GetImageCenterY(IMAGEFILE *ImageFile, UWORD ID)
 	return ImageFile->ImageDefs[ID].YOffset + ImageFile->ImageDefs[ID].Height/2;
 }
 
-IMAGEFILE *iV_LoadImageFile(char *FileData, WZ_DECL_UNUSED UDWORD FileSize)
+IMAGEFILE *iV_LoadImageFile(const char *FileData, WZ_DECL_UNUSED UDWORD FileSize)
 {
-	char *Ptr;
+	const char *Ptr;
 	IMAGEHEADER *Header;
 	IMAGEFILE *ImageFile;
 	IMAGEDEF *ImageDef;
-	int i;
+	unsigned int i = 0;
 
 	Ptr = FileData;
 
@@ -148,36 +178,4 @@ void iV_FreeImageFile(IMAGEFILE *ImageFile)
 	free(ImageFile->TexturePages);
 	free(ImageFile->ImageDefs);
 	free(ImageFile);
-}
-
-
-static BOOL LoadTextureFile(char *FileName, iTexture *pSprite, int *texPageID)
-{
-	unsigned int i=0;
-
-	debug(LOG_TEXTURE, "LoadTextureFile: %s", FileName);
-
-	if (!resPresent("IMGPAGE",FileName)) {
-		debug(LOG_ERROR, "Texture file \"%s\" not preloaded.", FileName);
-		assert(FALSE);
-		return FALSE;
-	} else {
-		*pSprite = *(iTexture*)resGetData("IMGPAGE", FileName);
-		debug(LOG_TEXTURE, "Load texture from resource cache: %s (%d, %d)",
-		      FileName, pSprite->width, pSprite->height);
-	}
-
-	/* We have already loaded this one? */
-	while (i < _TEX_INDEX) {
-		if (strcasecmp(FileName, _TEX_PAGE[i].name) == 0) {
-			*texPageID = _TEX_PAGE[i].id;
-			debug(LOG_TEXTURE, "LoadTextureFile: already loaded");
-			return TRUE;
-		}
-		i++;
-	}
-
-	*texPageID = pie_AddTexPage(pSprite, FileName, 1, TRUE);
-
-	return TRUE;
 }

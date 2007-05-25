@@ -555,7 +555,6 @@ BOOL loadWeaponStats(char *pWeaponData, UDWORD bufferSize)
 
 		if(GetGameMode() == GS_NORMAL)
 		{
-
 			psStats->pMuzzleGraphic = (iIMDShape *) resGetData("IMD", muzzleGfx);
 			if (psStats->pMuzzleGraphic == NULL)
 			{

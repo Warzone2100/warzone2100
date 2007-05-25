@@ -168,10 +168,41 @@
 #  define WZ_DECL_DEPRECATED
 #endif
 
+
+/*!
+ * \def WZ_DECL_UNUSED
+ * This function is not used, but shall not generate an unused warning either.
+ */
 #if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && (__GNUC__ - 0 > 3 || (__GNUC__ - 0 == 3 && __GNUC_MINOR__ - 0 >= 2))
-#  define WZ_DECL_UNUSED __attribute__((unused))
+#  define WZ_DECL_UNUSED __attribute__((__unused__))
 #else
 #  define WZ_DECL_UNUSED
+#endif
+
+
+/*!
+ * \def WZ_DECL_PURE
+ * This function works read only on its arguments or global variables.
+ * The result of a call will not change between two consecutive calls.
+ * Helps optimization.
+ */
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 2))
+#  define WZ_DECL_PURE __attribute__((__pure__))
+#else
+#  define WZ_DECL_PURE
+#endif
+
+
+/*!
+ * \def WZ_DECL_CONST
+ * This function works read only on its arguments and nothing else.
+ * The result of a call will not change between two consecutive calls.
+ * Helps optimization.
+ */
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 2))
+#  define WZ_DECL_CONST __attribute__((__const__))
+#else
+#  define WZ_DECL_CONST
 #endif
 
 #endif /* WZGLOBAL_H */
