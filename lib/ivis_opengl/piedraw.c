@@ -752,8 +752,7 @@ static void pie_ShadowDrawLoop(void)
 
 	for (i = 0; i < nb_scshapes; i++)
 	{
-		glLoadIdentity();
-		glMultMatrixf( scshapes[i].matrix );
+		glLoadMatrixf(scshapes[i].matrix);
 		pie_DrawShadow(scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, &scshapes[i].light);
 	}
 }
@@ -843,8 +842,7 @@ static void pie_DrawRemainingTransShapes(void)
 	glPushMatrix();
 	for (i = 0; i < nb_tshapes; ++i)
 	{
-		glLoadIdentity();
-		glMultMatrixf(tshapes[i].matrix);
+		glLoadMatrixf(tshapes[i].matrix);
 		pie_Draw3DShape2(tshapes[i].shape, tshapes[i].frame, tshapes[i].colour,
 				 tshapes[i].specular, tshapes[i].flag, tshapes[i].flag_data);
 	}
