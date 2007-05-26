@@ -312,8 +312,6 @@ extern BOOL bucketRenderCurrentList(void)
 
 	//reset the tag array
 	resourceCounter = 0;
-//	iV_NumberOut(worldMax,100,100,255);
- //	iV_NumberOut(worldMin,100,200,255);
 	zMax = SDWORD_MIN;
 	zMin = SDWORD_MAX;
 	worldMax = SDWORD_MIN;

@@ -696,7 +696,6 @@ static void drawTiles(iView *camera, iView *player)
 	pie_TRANSLATE(-rx, -player->p.y, rz);
 	angle += 0.01f;
 
-	// RODZ uncomment the following line to see an OpenGL lighting demo
 	if (getDrawShadows()) {
 		const Vector3f light = {225.0f, -600.0f, 450.0f};
 		// this also detemines the length of the shadows
@@ -1820,7 +1819,6 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 	VIEW_PROXIMITY	*pViewProximity = NULL;
 	SDWORD			x, y, r;
 	iIMDShape		*proxImd = NULL;
-//	SDWORD		centreX,centreZ;
 	UDWORD		brightness, specular;
 
 	//store the frame number for when deciding what has been clicked on
@@ -1858,8 +1856,6 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 	{
 		ASSERT( FALSE,"Buggered proximity message type" );
 	}
-//	centreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
-//	centreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
 	brightness = lightDoFogAndIllumination(pie_MAX_BRIGHT_LEVEL,getCentreX()-msgX,getCentreZ()-msgY, &specular);
 
 	dv.x = (msgX - player.p.x) - terrainMidX*TILE_UNITS;
@@ -1914,7 +1910,6 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 		}
 	}
 
-//	iV_MatrixRotateY(DEG(gameTime/10));
 	iV_MatrixRotateY(-player.r.y);
 	iV_MatrixRotateX(-player.r.x);
 
@@ -2726,10 +2721,6 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 		pie_MatRotX( DEG( psDroid->pitch ) );
 		pie_MatRotZ( DEG( psDroid->roll ) );
 	}
-
-	// set up lighting
-//	centreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
-//	centreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
 
 	brightness = (UDWORD)lightDoFogAndIllumination(pie_MAX_BRIGHT_LEVEL,getCentreX()-psDroid->x,getCentreZ()-psDroid->y, &specular);
 

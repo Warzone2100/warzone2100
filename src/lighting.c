@@ -54,18 +54,13 @@ Vector3i	theSun;
 UDWORD	fogStatus = 0;
 /*	Module function Prototypes */
 
-UDWORD	lightDoFogAndIllumination(UBYTE brightness, SDWORD dx, SDWORD dz, UDWORD* pSpecular);
-void	doBuildingLights( void );
-void	processLight(LIGHT *psLight);
-UDWORD	calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos);
-void	colourTile(SDWORD xIndex, SDWORD yIndex, LIGHT_COLOUR colour, UBYTE percent);
-void	calcTileIllum(UDWORD tileX, UDWORD tileY);
-void	normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant);
+static void colourTile(SDWORD xIndex, SDWORD yIndex, LIGHT_COLOUR colour, UBYTE percent);
+static void normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant);
+static UDWORD calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos);
+
 UDWORD	numNormals;		// How many normals have we got?
 Vector3i normals[8];		// Maximum 8 possible normals
 extern void	draw3dLine(Vector3i *src, Vector3i *dest, UBYTE col);
-
-
 
 
 /*****************************************************************************/
@@ -73,68 +68,6 @@ extern void	draw3dLine(Vector3i *src, Vector3i *dest, UBYTE col);
  * SOURCE
  */
 /*****************************************************************************/
-
-/*Rewrote the function so it takes parameters and also doesn't loop thru'
-the map 4 times!*/
-/*void initLighting( void )
-{
-UDWORD	i,j;
-MAPTILE	*psTile;
-
-	for(i=0; i<mapWidth; i++)
-	{
-		for(j=0; j<mapHeight; j++)
-		{
-			mapTile(i,j)->illumination = 16;
-		}
-	}
-
-	//for(i=2; i<mapHeight-2; i++)
-	//{
-	//	for(j=2; j<mapWidth-2; j++)
-	//	{
-	//		calcTileIllum(j,i);
-	//	}
-	//}
-
-	for(i=1; i<mapHeight-1; i++)
-	{
-		for(j=1; j<mapWidth-1; j++)
-		{
-			calcTileIllum(j,i);
-		}
-	}
-
-	for(i=0; i<mapWidth; i++)
-	{
-		for(j=0; j<mapHeight; j++)
-		{
-			if(i==0 || j==0 || i>=mapWidth-1 || j>=mapHeight-1)
-			{
-//				mapTile(i,j)->height = 0;
-				psTile = mapTile(i,j);
-				if(TERRAIN_TYPE(psTile) == TER_WATER)
-				{
-					psTile->texture = 0;
-				}
-			}
-		}
-	}
-
-	// Cheers to paul for this idea - works on PC too
-	//	Basically darkens down the tiles that are outside the scroll
-	//	limits - thereby emphasising the cannot-go-there-ness of them
-	for(i=0; i<mapWidth; i++)
-	{
-		for(j=0; j<mapHeight; j++)
-		{
-			if(i<(scrollMinX+4) || i>(scrollMaxX-4) || j<(scrollMinY+4) || j>(scrollMaxY-4))
-			{
-				mapTile(i,j)->illumination/=3;
-			}
-		}
-	}
-}*/
 
 //should do the same as above except cuts down on the loop count!
 //By passing in params - it means that if the scroll limits are changed mid-mission
@@ -231,24 +164,17 @@ void	calcTileIllum(UDWORD tileX, UDWORD tileY)
 	pie_VectorNormalise3iv(&finalVector);
 	pie_VectorNormalise3iv(&theSun);
 
-//	iV_NumberOut(theSun.x,100,100,255);
-//	iV_NumberOut(theSun.y,100,110,255);
-//	iV_NumberOut(theSun.z,100,120,255);
-
-//	iV_NumberOut(numNormals,100,140,255);
-
 	dotProduct =	(finalVector.x * theSun.x +
 					finalVector.y * theSun.y +
 					finalVector.z * theSun.z)>>FP12_SHIFT;
 
-   /* iV_NumberOut(dotProduct,100,150,255);*/
 	val = ((abs(dotProduct)) / 16);
 	if (val == 0) val = 1;
 	if(val > 254) val = 254;
 	mapTile(tileX, tileY)->illumination = val;
 }
 
-void normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant)
+static void normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant)
 {
 	Vector3i corner1, corner2, corner3;
 	MAPTILE	*psTile, *tileRight, *tileDownRight, *tileDown;
@@ -505,7 +431,7 @@ UDWORD	percent;
 }
 
 
-UDWORD	calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos)
+static UDWORD calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos)
 {
 	UDWORD	x1,y1,z1;
 	UDWORD	x2,y2,z2;
@@ -531,7 +457,7 @@ UDWORD	calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos)
 }
 
 
-void	colourTile(SDWORD xIndex, SDWORD yIndex, LIGHT_COLOUR colour, UBYTE percent)
+static void colourTile(SDWORD xIndex, SDWORD yIndex, LIGHT_COLOUR colour, UBYTE percent)
 {
 
 	ASSERT( xIndex<LAND_XGRD,"X Colour Value out of range (above) for lighting" );
@@ -905,7 +831,7 @@ UDWORD	i;
 	DBCONPRINTF(ConsoleString,(ConsoleString,"Sun X Vector : %d",theSun.x));
 	DBCONPRINTF(ConsoleString,(ConsoleString,"Sun Y Vector : %d",theSun.y));
 	DBCONPRINTF(ConsoleString,(ConsoleString,"Sun Z Vector : %d",theSun.z));
-   }
+}
 
 void showSunOnTile(UDWORD x, UDWORD y)
 {
