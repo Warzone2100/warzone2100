@@ -164,7 +164,7 @@ extern void pie_DrawTexTriangle(PIEVERTEX *aVrts, void* psEffects);
 
 extern void pie_GetResetCounts(SDWORD* pPieCount, SDWORD* pTileCount, SDWORD* pPolyCount, SDWORD* pStateCount);
 
-void pie_BeginLighting(float x, float y, float z);
+void pie_BeginLighting(const Vector3f * light);
 void pie_EndLighting(void);
 void pie_RemainingPasses(void);
 

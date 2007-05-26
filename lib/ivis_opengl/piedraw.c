@@ -165,18 +165,13 @@ static inline void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, BOOL bClip);
 static BOOL lighting = FALSE;
 static BOOL shadows = FALSE;
 
-void pie_BeginLighting(float x, float y, float z)
+void pie_BeginLighting(const Vector3f * light)
 {
-	float pos[4];
-	float zero[4] = {0.0f, 0.0f, 0.0f, 0.0f};
-	float ambient[4] = {0.2f, 0.2f, 0.2f, 0.0f};
-	float diffuse[4] = {0.5f, 0.5f, 0.5f, 0.0f};
-	float specular[4] = {1.0f, 1.0f, 1.0f, 0.0f};
-
-	pos[0] = x;
-	pos[1] = y;
-	pos[2] = z;
-	pos[3] = 0;
+	const float pos[4] = {light->x, light->y, light->z, 0.0f};
+	const float zero[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+	const float ambient[4] = {0.2f, 0.2f, 0.2f, 0.0f};
+	const float diffuse[4] = {0.5f, 0.5f, 0.5f, 0.0f};
+	const float specular[4] = {1.0f, 1.0f, 1.0f, 0.0f};
 
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, zero);
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_FALSE);
@@ -186,7 +181,7 @@ void pie_BeginLighting(float x, float y, float z)
 	glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
 	glEnable(GL_LIGHT0);
 
-	//lighting = TRUE;
+// 	lighting = TRUE; // Globaly disable lighting!
 	shadows = TRUE;
 }
 
@@ -218,9 +213,9 @@ pie_Polygon(SDWORD numVerts, PIEVERTEXF* pVrts, float texture_offset, BOOL light
 	{
 		if (light)
 		{
-			float ambient[4] = { 1, 1, 1, 1 };
-			float diffuse[4] = { 1, 1, 1, 1 };
-			float specular[4] = { 1, 1, 1, 1 };
+			float ambient[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+			float diffuse[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+			float specular[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 			float shininess = 10;
 
 			glEnable(GL_LIGHTING);
@@ -270,6 +265,7 @@ typedef struct {
 	iIMDShape*	shape;
 	int		flag;
 	int		flag_data;
+	Vector3f	light;
 } shadowcasting_shape_t;
 
 typedef struct {
@@ -389,8 +385,6 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 		}
 		for (n=0; n<pPolys->npnts; n++, index++)
 		{
-			// FIXME We reduce our nice float IMDs to integer accuracy!!!
-			// Fixing this needs changes to the type of pieVrts and piePoly
 			pieVrts[n].sx = scrPoints[*index].x;
 			pieVrts[n].sy = scrPoints[*index].y;
 			pieVrts[n].sz = scrPoints[*index].z;
@@ -469,6 +463,7 @@ static void addToEdgeList(int a, int b, EDGE *edgelist, int *edge_count, Vector3
 	}
 }
 
+
 /// scale the height according to the flags
 static inline float scale_y(float y, int flag, int flag_data)
 {
@@ -483,6 +478,7 @@ static inline float scale_y(float y, int flag, int flag_data)
 	}
 	return tempY;
 }
+
 
 /// Draw the shadow for a shape
 static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* light)
@@ -606,6 +602,23 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 #endif
 }
 
+static void inverse_matrix(const float * src, float * dst)
+{
+	const float det = src[0]*src[5]*src[10] + src[4]*src[9]*src[2] + src[8]*src[1]*src[6] - src[2]*src[5]*src[8] - src[6]*src[9]*src[0] - src[10]*src[1]*src[4];
+	const float invdet = 1.0f/det;
+
+	dst[0] = invdet * (src[5]*src[10] - src[9]*src[6]);
+	dst[1] = invdet * (src[9]*src[2] - src[1]*src[10]);
+	dst[2] = invdet * (src[1]*src[6] - src[5]*src[2]);
+	dst[3] = invdet * (src[8]*src[6] - src[4]*src[10]);
+	dst[4] = invdet * (src[0]*src[10] - src[8]*src[2]);
+	dst[5] = invdet * (src[4]*src[2] - src[0]*src[6]);
+	dst[6] = invdet * (src[4]*src[9] - src[8]*src[5]);
+	dst[7] = invdet * (src[8]*src[1] - src[0]*src[9]);
+	dst[8] = invdet * (src[0]*src[5] - src[4]*src[1]);
+}
+
+
 void pie_CleanUp( void )
 {
 	free( tshapes );
@@ -629,12 +642,15 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 	// Fix for transparent buildings and features!! */
 
 // WARZONE light as byte passed in colour so expand
-	if (col <= MAX_UB_LIGHT) {
+	if (col <= MAX_UB_LIGHT)
+	{
 		colour.byte.a = 255;//no fog
 		colour.byte.r = (UBYTE)col;
 		colour.byte.g = (UBYTE)col;
 		colour.byte.b = (UBYTE)col;
-	} else {
+	}
+	else
+	{
 		colour.argb = col;
 	}
 	specular.argb = spec;
@@ -644,16 +660,24 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 		frame = team;
 	}
 
-	if (drawing_interface || !shadows) {
+	if (drawing_interface || !shadows)
+	{
 		pie_Draw3DShape2(shape, frame, colour, specular, pieFlag, pieFlagData);
-	} else {
-		if (pieFlag & (pie_ADDITIVE | pie_TRANSLUCENT)) {
-			if (tshapes_size <= nb_tshapes) {
-				if (tshapes_size == 0) {
+	}
+	else
+	{
+		if (pieFlag & (pie_ADDITIVE | pie_TRANSLUCENT))
+		{
+			if (tshapes_size <= nb_tshapes)
+			{
+				if (tshapes_size == 0)
+				{
 					tshapes_size = 64;
 					tshapes = (transluscent_shape_t*)malloc(tshapes_size*sizeof(transluscent_shape_t));
 					memset( tshapes, 0, tshapes_size*sizeof(transluscent_shape_t) );
-				} else {
+				}
+				else
+				{
 					unsigned int old_size = tshapes_size;
 					tshapes_size <<= 1;
 					tshapes = (transluscent_shape_t*)realloc(tshapes, tshapes_size*sizeof(transluscent_shape_t));
@@ -668,31 +692,51 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 			tshapes[nb_tshapes].flag = pieFlag;
 			tshapes[nb_tshapes].flag_data = pieFlagData;
 			nb_tshapes++;
-		} else {
+		}
+		else
+		{
 			if(pieFlag & pie_SHADOW || pieFlag & pie_STATIC_SHADOW)
 			{
 				// draw a shadow
-				if (scshapes_size <= nb_scshapes) {
-					if (scshapes_size == 0) {
+				if (scshapes_size <= nb_scshapes)
+				{
+					if (scshapes_size == 0)
+					{
 						scshapes_size = 64;
 						scshapes = (shadowcasting_shape_t*)malloc(scshapes_size*sizeof(shadowcasting_shape_t));
 						memset( scshapes, 0, scshapes_size*sizeof(shadowcasting_shape_t) );
-					} else {
+					}
+					else
+					{
 						unsigned int old_size = scshapes_size;
 						scshapes_size <<= 1;
 						scshapes = (shadowcasting_shape_t*)realloc(scshapes, scshapes_size*sizeof(shadowcasting_shape_t));
 						memset( &scshapes[old_size], 0, (scshapes_size-old_size)*sizeof(shadowcasting_shape_t) );
 					}
 				}
+
 				glGetFloatv(GL_MODELVIEW_MATRIX, scshapes[nb_scshapes].matrix);
-				distance = scshapes[nb_scshapes].matrix[12]*scshapes[nb_scshapes].matrix[12];
-				distance += scshapes[nb_scshapes].matrix[13]*scshapes[nb_scshapes].matrix[13];
-				distance += scshapes[nb_scshapes].matrix[14]*scshapes[nb_scshapes].matrix[14];
+				distance = scshapes[nb_scshapes].matrix[12] * scshapes[nb_scshapes].matrix[12];
+				distance += scshapes[nb_scshapes].matrix[13] * scshapes[nb_scshapes].matrix[13];
+				distance += scshapes[nb_scshapes].matrix[14] * scshapes[nb_scshapes].matrix[14];
+
 				// if object is too far in the fog don't generate a shadow.
-				if (distance < 6000*6000) {
+				if (distance < 6000*6000)
+				{
+					float invmat[9], pos_light0[4];
+
+					inverse_matrix( scshapes[nb_scshapes].matrix, invmat );
+
+					// Calculate the light position relative to the object
+					glGetLightfv(GL_LIGHT0, GL_POSITION, pos_light0);
+					scshapes[nb_scshapes].light.x = invmat[0] * pos_light0[0] + invmat[3] * pos_light0[1] + invmat[6] * pos_light0[2];
+					scshapes[nb_scshapes].light.y = invmat[1] * pos_light0[0] + invmat[4] * pos_light0[1] + invmat[7] * pos_light0[2];
+					scshapes[nb_scshapes].light.z = invmat[2] * pos_light0[0] + invmat[5] * pos_light0[1] + invmat[8] * pos_light0[2];
+
 					scshapes[nb_scshapes].shape = shape;
 					scshapes[nb_scshapes].flag = pieFlag;
 					scshapes[nb_scshapes].flag_data = pieFlagData;
+
 					nb_scshapes++;
 				}
 			}
@@ -701,49 +745,24 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 	}
 }
 
-static void inverse_matrix(float* src, float * dst)
-{
-	float det = src[0]*src[5]*src[10]+src[4]*src[9]*src[2]+src[8]*src[1]*src[6] -src[2]*src[5]*src[8]-src[6]*src[9]*src[0]-src[10]*src[1]*src[4];
-	float invdet = 1.0f/det;
 
-	dst[0] = invdet*(src[5]*src[10]-src[9]*src[6]);
-	dst[1] = invdet*(src[9]*src[2]-src[1]*src[10]);
-	dst[2] = invdet*(src[1]*src[6]-src[5]*src[2]);
-	dst[3] = invdet*(src[8]*src[6]-src[4]*src[10]);
-	dst[4] = invdet*(src[0]*src[10]-src[8]*src[2]);
-	dst[5] = invdet*(src[4]*src[2]-src[0]*src[6]);
-	dst[6] = invdet*(src[4]*src[9]-src[8]*src[5]);
-	dst[7] = invdet*(src[8]*src[1]-src[0]*src[9]);
-	dst[8] = invdet*(src[0]*src[5]-src[4]*src[1]);
-}
-
-static void pie_ShadowDrawLoop(float pos_lgt0[4])
+static void pie_ShadowDrawLoop(void)
 {
-	float invmat[9];
-	Vector3f light;
-	unsigned int i;
+	unsigned int i = 0;
 
 	for (i = 0; i < nb_scshapes; i++)
 	{
 		glLoadIdentity();
 		glMultMatrixf( scshapes[i].matrix );
-		inverse_matrix( scshapes[i].matrix, invmat );
-		light.x = invmat[0] * pos_lgt0[0] + invmat[3] * pos_lgt0[1] + invmat[6] * pos_lgt0[2];
-		light.y = invmat[1] * pos_lgt0[0] + invmat[4] * pos_lgt0[1] + invmat[7] * pos_lgt0[2];
-		light.z = invmat[2] * pos_lgt0[0] + invmat[5] * pos_lgt0[1] + invmat[8] * pos_lgt0[2];
-		pie_DrawShadow(scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, &light);
+		pie_DrawShadow(scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, &scshapes[i].light);
 	}
 }
 
+
 static void pie_DrawShadows(void)
 {
-	static BOOL dlist_defined = FALSE;
-	static GLuint dlist;
-	float pos_lgt0[4];
-	float width = pie_GetVideoBufferWidth();
-	float height = pie_GetVideoBufferHeight();
-
-	glGetLightfv(GL_LIGHT0, GL_POSITION, pos_lgt0);
+	const float width = pie_GetVideoBufferWidth();
+	const float height = pie_GetVideoBufferHeight();
 
 	pie_SetTexturePage(-1);
 
@@ -766,14 +785,10 @@ static void pie_DrawShadows(void)
 		glStencilOp(GL_KEEP, GL_KEEP, GL_INCR_WRAP_EXT);
 		glStencilFunc(GL_ALWAYS, 0, ~0);
 
-		pie_ShadowDrawLoop(pos_lgt0);
+		pie_ShadowDrawLoop();
 		glDisable(GL_STENCIL_TEST_TWO_SIDE_EXT);
 
 	} else {
-		if (!dlist_defined) {
-			dlist = glGenLists(1);
-			dlist_defined = TRUE;
-		}
 		// Setup stencil for back faces.
 		glStencilMask(~0);
 		glStencilFunc(GL_ALWAYS, 0, ~0);
@@ -781,14 +796,14 @@ static void pie_DrawShadows(void)
 		glCullFace(GL_BACK);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
 
-		pie_ShadowDrawLoop(pos_lgt0);
+		pie_ShadowDrawLoop();
 
 		// Setup stencil for front faces.
 		glCullFace(GL_FRONT);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_DECR);
 
 		// Draw shadows again
-		pie_ShadowDrawLoop(pos_lgt0);
+		pie_ShadowDrawLoop();
 	}
 
 	glEnable(GL_CULL_FACE);
@@ -823,17 +838,17 @@ static void pie_DrawShadows(void)
 
 static void pie_DrawRemainingTransShapes(void)
 {
-	unsigned int i;
+	unsigned int i = 0;
 
+	glPushMatrix();
 	for (i = 0; i < nb_tshapes; ++i)
 	{
-		glPushMatrix();
 		glLoadIdentity();
 		glMultMatrixf(tshapes[i].matrix);
 		pie_Draw3DShape2(tshapes[i].shape, tshapes[i].frame, tshapes[i].colour,
 				 tshapes[i].specular, tshapes[i].flag, tshapes[i].flag_data);
-		glPopMatrix();
 	}
+	glPopMatrix();
 
 	nb_tshapes = 0;
 }
@@ -980,7 +995,7 @@ static inline void pie_PiePoly(PIEPOLY *poly, BOOL light)
 		{
 			glDisable(GL_CULL_FACE);
 		}
-		pie_Polygon(poly->nVrts, poly->pVrts, 0.0, light);
+		pie_Polygon(poly->nVrts, poly->pVrts, 0.0f, light);
 		if (poly->flags & PIE_NO_CULL)
 		{
 			glEnable(GL_CULL_FACE);
@@ -1035,7 +1050,7 @@ static inline void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, BOOL light)
 void pie_DrawTexTriangle(PIEVERTEX *aVrts, void* psEffects)
 {
 	GLfloat offset = 0;
-	int i;
+	unsigned int i = 0;
 
 	/*	Since this is only used from within source for the terrain draw - we can backface cull the polygons.
 	*/

@@ -642,7 +642,7 @@ static void drawTiles(iView *camera, iView *player)
 	int numTilesAveraged = 0;
 	BOOL bEdgeTile;
 	SDWORD tmp_y;
-	static float angle = 0.0;
+	static float angle = 0.0f;
 
 	// Animate the water texture, just cycles the V coordinate through half the tiles height.
 	if(!gamePaused())
@@ -698,8 +698,9 @@ static void drawTiles(iView *camera, iView *player)
 
 	// RODZ uncomment the following line to see an OpenGL lighting demo
 	if (getDrawShadows()) {
+		const Vector3f light = {225.0f, -600.0f, 450.0f};
 		// this also detemines the length of the shadows
-		pie_BeginLighting(225, -600, 450);
+		pie_BeginLighting(&light);
 	}
 
 	/* ---------------------------------------------------------------- */
