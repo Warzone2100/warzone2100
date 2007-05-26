@@ -430,10 +430,10 @@ Sint32 pie_RotateProject(Vector3i *v3d, Vector2i *v2d)
 //*************************************************************************
 
 void pie_PerspectiveBegin(void) {
-	float width = pie_GetVideoBufferWidth();
-	float height = pie_GetVideoBufferHeight();
-	float xangle = width/6;
-	float yangle = height/6;
+	const float width = pie_GetVideoBufferWidth();
+	const float height = pie_GetVideoBufferHeight();
+	const float xangle = width/6;
+	const float yangle = height/6;
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();

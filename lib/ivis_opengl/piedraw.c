@@ -818,10 +818,10 @@ static void pie_DrawShadows(void)
 	glLoadIdentity();
 	glDisable(GL_DEPTH_TEST);
 	glBegin(GL_TRIANGLE_STRIP);
-	glVertex2f(0, 0);
-	glVertex2f(width, 0);
-	glVertex2f(0, height);
-	glVertex2f(width, height);
+		glVertex2f(0, 0);
+		glVertex2f(width, 0);
+		glVertex2f(0, height);
+		glVertex2f(width, height);
 	glEnd();
 	pie_PerspectiveBegin();
 

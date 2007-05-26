@@ -53,8 +53,8 @@ int	pie_ClipTextured(int npoints, PIEVERTEX *points, PIEVERTEX *clip);
 BOOL	pie_SetVideoBufferDepth(UDWORD depth);
 BOOL	pie_SetVideoBufferWidth(UDWORD width);
 BOOL	pie_SetVideoBufferHeight(UDWORD height);
-UDWORD	pie_GetVideoBufferDepth( void );
-UDWORD	pie_GetVideoBufferWidth( void );
-UDWORD	pie_GetVideoBufferHeight( void );
+UDWORD	pie_GetVideoBufferDepth( void ) WZ_DECL_PURE;
+UDWORD	pie_GetVideoBufferWidth( void ) WZ_DECL_PURE;
+UDWORD	pie_GetVideoBufferHeight( void ) WZ_DECL_PURE;
 
 #endif // _pieclip_h
