@@ -42,8 +42,6 @@
 #include "pietexture.h"
 #include "lib/ivis_common/pieclip.h"
 
-#define MIST
-
 /// Stores the from and to verticles from an edge
 typedef struct edge_
 {
@@ -169,7 +167,7 @@ void pie_BeginLighting(const Vector3f * light)
 {
 	const float pos[4] = {light->x, light->y, light->z, 0.0f};
 	const float zero[4] = {0.0f, 0.0f, 0.0f, 0.0f};
-	const float ambient[4] = {0.2f, 0.2f, 0.2f, 0.0f};
+	const float ambient[4] = {0.4f, 0.4f, 0.4f, 0.0f};
 	const float diffuse[4] = {0.5f, 0.5f, 0.5f, 0.0f};
 	const float specular[4] = {1.0f, 1.0f, 1.0f, 0.0f};
 
@@ -193,7 +191,7 @@ void pie_EndLighting(void)
 
 
 static inline void
-pie_Polygon(SDWORD numVerts, PIEVERTEXF* pVrts, float texture_offset, BOOL light)
+pie_Polygon(SDWORD numVerts, PIEVERTEXF* pVrts, BOOL light)
 {
 	SDWORD i;
 
@@ -244,7 +242,7 @@ pie_Polygon(SDWORD numVerts, PIEVERTEXF* pVrts, float texture_offset, BOOL light
 	for (i = 0; i < numVerts; i++)
 	{
 		glColor4ub(pVrts[i].light.byte.r, pVrts[i].light.byte.g, pVrts[i].light.byte.b, pVrts[i].light.byte.a);
-		glTexCoord2f(pVrts[i].tu, pVrts[i].tv+texture_offset);
+		glTexCoord2f(pVrts[i].tu, pVrts[i].tv);
 		glVertex3f(pVrts[i].sx, pVrts[i].sy, pVrts[i].sz);
 	}
 	glEnd();
@@ -980,7 +978,7 @@ static inline void pie_PiePoly(PIEPOLY *poly, BOOL light)
 		{
 			glDisable(GL_CULL_FACE);
 		}
-		pie_Polygon(poly->nVrts, poly->pVrts, 0.0f, light);
+		pie_Polygon(poly->nVrts, poly->pVrts, light);
 		if (poly->flags & PIE_NO_CULL)
 		{
 			glEnable(GL_CULL_FACE);
