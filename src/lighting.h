@@ -27,7 +27,7 @@
 #define FOG_ENABLED		8
 
 extern UDWORD	fogStatus;
-extern Vector3i	theSun;
+extern Vector3f	theSun;
 
 typedef enum _lightcols
 {
@@ -58,10 +58,4 @@ extern void	calcDroidIllumination(DROID *psDroid);
 //darkens down the tiles that are outside the scroll limits
 extern void setScrollLimitLighting(void);
 
-
-#ifdef ALEXM
-extern void	findSunVector( void );
-extern void	showSunOnTile(UDWORD x, UDWORD y);
-#endif
-
-
+extern void	findSunVector(void);

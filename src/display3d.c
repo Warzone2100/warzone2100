@@ -377,6 +377,9 @@ void draw3DScene( void )
 		dragQuad.coords[3].y = dragBox3D.y2;
 	}
 
+	/* Calculate the position of the sun */
+//	findSunVector();
+
 	pie_Begin3DScene();
 	/* Set 3D world origins */
 	pie_SetGeometricOffset((iV_SCREEN_WIDTH>>1), geoOffset);
@@ -696,10 +699,10 @@ static void drawTiles(iView *camera, iView *player)
 	pie_TRANSLATE(-rx, -player->p.y, rz);
 	angle += 0.01f;
 
-	if (getDrawShadows()) {
-		const Vector3f light = {225.0f, -600.0f, 450.0f};
+	if (getDrawShadows()) 
+	{
 		// this also detemines the length of the shadows
-		pie_BeginLighting(&light);
+		pie_BeginLighting(&theSun);
 	}
 
 	/* ---------------------------------------------------------------- */
@@ -884,7 +887,7 @@ static void drawTiles(iView *camera, iView *player)
 		avUpdateTiles();
 	}
 
-//	doBuildingLights();
+	//doBuildingLights();
 	/* ---------------------------------------------------------------- */
 	/* Draw all the tiles or add them to bucket sort                     */
 	/* ---------------------------------------------------------------- */
@@ -989,14 +992,13 @@ BOOL init3DView(void)
 	visibleXTiles = VISIBLE_XTILES;
 	visibleYTiles = VISIBLE_YTILES;
 
-
 	/* There are no drag boxes */
 	dragBox3D.status = DRAG_INACTIVE;
 
 	/* Arbitrary choice - from direct read! */
-	theSun.x = 0;
-	theSun.y = -3441;
-	theSun.z = 2619;
+	theSun.x = 225.0f;
+	theSun.y = -600.0f;
+	theSun.z = 450.0f;
 
 	/* Make sure and change these to comply with map.c */
 	imdRot.x = -35;
@@ -1026,9 +1028,6 @@ BOOL init3DView(void)
 
 	/* Set up the sine table for the bullets */
 	initBulletTable();
-
-	/* Set up light values */
-//	initLighting();
 
 	/* Build our shade table for gouraud shading - 256*16 values with best match from 256 colour table */
 	iV_PaletteShadeTableCreate();

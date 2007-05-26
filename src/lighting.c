@@ -50,7 +50,7 @@
 #define FOG_END_SCALE 0.6
 
 /*	The vector that holds the sun's lighting direction - planar */
-Vector3i	theSun;
+Vector3f	theSun;
 UDWORD	fogStatus = 0;
 /*	Module function Prototypes */
 
@@ -162,11 +162,11 @@ void	calcTileIllum(UDWORD tileX, UDWORD tileY)
 		finalVector.z += normals[i].z;
 	}
 	pie_VectorNormalise3iv(&finalVector);
-	pie_VectorNormalise3iv(&theSun);
+	pie_VectorNormalise3fv(&theSun);
 
 	dotProduct =	(finalVector.x * theSun.x +
-					finalVector.y * theSun.y +
-					finalVector.z * theSun.z)>>FP12_SHIFT;
+			 finalVector.y * theSun.y +
+			 finalVector.z * theSun.z) / FP12_MULTIPLIER;
 
 	val = ((abs(dotProduct)) / 16);
 	if (val == 0) val = 1;
@@ -788,13 +788,11 @@ UDWORD	lightDoFogAndIllumination(UBYTE brightness, SDWORD dx, SDWORD dz, UDWORD*
 	return lighting.argb;
 }
 
-
-/*
 void	doBuildingLights( void )
 {
-STRUCTURE	*psStructure;
-UDWORD	i;
-LIGHT	light;
+	STRUCTURE	*psStructure;
+	UDWORD	i;
+	LIGHT	light;
 
 	for(i=0; i<MAX_PLAYERS; i++)
 	{
@@ -810,12 +808,11 @@ LIGHT	light;
 		}
 	}
 }
-*/
-#ifdef ALEXM
+
+/* Experimental moving shadows code */
 void	findSunVector( void )
 {
-SDWORD	val,val2,val3;
-UDWORD	i;
+	SDWORD	val,val2,val3;
 
 	val = getStaticTimeValueRange(16384,8192);
 	val = 4096 - val;
@@ -827,27 +824,4 @@ UDWORD	i;
 	theSun.x = val;
 	theSun.y = val2;
 	theSun.z = val3;
-	flushConsoleMessages();
-	DBCONPRINTF(ConsoleString,(ConsoleString,"Sun X Vector : %d",theSun.x));
-	DBCONPRINTF(ConsoleString,(ConsoleString,"Sun Y Vector : %d",theSun.y));
-	DBCONPRINTF(ConsoleString,(ConsoleString,"Sun Z Vector : %d",theSun.z));
 }
-
-void showSunOnTile(UDWORD x, UDWORD y)
-{
-	Vector3i a, b;
-
-	a.x = (x<<TILE_SHIFT)+(TILE_UNITS/2);
-	a.z = (y<<TILE_SHIFT)+(TILE_UNITS/2);
-	a.y = map_Height(a.x,a.z);
-
-	b.x = a.x + theSun.x/64;
-	b.y = a.y + theSun.y/64;
-	b.z = a.z + theSun.z/64;
-
-	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
-	pie_SetFogStatus(FALSE);
-	draw3dLine(&a,&b,mapTile(x,y)->illumination);
-	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
-}
-#endif

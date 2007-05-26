@@ -1633,9 +1633,7 @@ BOOL stageThreeInitialise(void)
 	}
 
 	effectResetUpdates();
-	//initLighting();
-    initLighting(0, 0, mapWidth, mapHeight);
-
+	initLighting(0, 0, mapWidth, mapHeight);
 
 	if(bMultiPlayer)
 	{

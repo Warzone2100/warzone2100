@@ -420,7 +420,6 @@ if(bMultiPlayer)
 /* Recalculates the lighting values for a tile */
 void	kf_RecalcLighting( void )
 {
-		//initLighting();
         initLighting(0, 0, mapWidth, mapHeight);
 		addConsoleMessage("Lighting values for all tiles recalculated",DEFAULT_JUSTIFY);
 }
