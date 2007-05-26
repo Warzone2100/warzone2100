@@ -503,7 +503,7 @@ static void stopGameLoop(void)
  */
 static void initSaveGameLoad(void)
 {
-	SetGameMode(GS_SAVEGAMELOAD);
+	SetGameMode(GS_NORMAL);
 
 	screen_RestartBackDrop();
 	// load up a save game
@@ -513,8 +513,6 @@ static void initSaveGameLoad(void)
 		exit(EXIT_FAILURE);
 	}
 	screen_StopBackDrop();
-
-	SetGameMode(GS_NORMAL);
 }
 
 
