@@ -233,13 +233,12 @@ pie_Polygon(SDWORD numVerts, PIEVERTEXF* pVrts, float texture_offset, BOOL light
 					p2 = { pVrts[1].sx, pVrts[1].sy, pVrts[1].sz },
 	 				p3 = { pVrts[2].sx, pVrts[2].sy, pVrts[2].sz },
 	  				v1, v2, n;
-			float l = 1.0f;
 
 			Vector3f_Sub(&v1, &p3, &p1);
 			Vector3f_Sub(&v2, &p2, &p1);
 			Vector3f_CP(&n, &v1, &v2);
 
-			glNormal3f(n.x*l, n.y*l, n.z*l);
+			glNormal3f(n.x, n.y, n.z);
 		}
 	}
 	for (i = 0; i < numVerts; i++)
@@ -869,10 +868,6 @@ void pie_RemainingPasses(void)
  * replaces all ivis blit functions
  *
  ***************************************************************************/
-//d3d loses edge pixels in triangle draw
-//this is a temporary correction that may become an option
-
-# define EDGE_CORRECTION 0
 
 void pie_DrawImage(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style)
 {
@@ -889,20 +884,12 @@ void pie_DrawImage(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style)
 	//set up 4 pie verts
 	glTexCoord2f(image->tu, image->tv);
 	glVertex2f(dest->x, dest->y);
-	//pieVrts[0].sz  = (SDWORD)INTERFACE_DEPTH;
-	//pieVrts[0].specular.argb = style->specular.argb;
-	glTexCoord2f(image->tu + image->tw + EDGE_CORRECTION, image->tv);
-	glVertex2f(dest->x + dest->w + EDGE_CORRECTION, dest->y);
-	//pieVrts[1].sz  = (SDWORD)INTERFACE_DEPTH;
-	//pieVrts[1].specular.argb = style->specular.argb;
-	glTexCoord2f(image->tu, image->tv + image->th + EDGE_CORRECTION);
-	glVertex2f(dest->x, dest->y + dest->h + EDGE_CORRECTION);
-	//pieVrts[3].sz  = (SDWORD)INTERFACE_DEPTH;
-	//pieVrts[3].specular.argb = style->specular.argb;
-	glTexCoord2f(image->tu + image->tw + EDGE_CORRECTION, image->tv + image->th + EDGE_CORRECTION);
-	glVertex2f(dest->x + dest->w + EDGE_CORRECTION, dest->y + dest->h + EDGE_CORRECTION);
-	//pieVrts[2].sz  = (SDWORD)INTERFACE_DEPTH;
-	//pieVrts[2].specular.argb = style->specular.argb;
+	glTexCoord2f(image->tu + image->tw, image->tv);
+	glVertex2f(dest->x + dest->w, dest->y);
+	glTexCoord2f(image->tu, image->tv + image->th);
+	glVertex2f(dest->x, dest->y + dest->h);
+	glTexCoord2f(image->tu + image->tw, image->tv + image->th);
+	glVertex2f(dest->x + dest->w, dest->y + dest->h);
 	glEnd();
 }
 
@@ -928,14 +915,14 @@ void pie_DrawImage270( PIEIMAGE *image, PIERECT *dest )
 
 	glBegin(GL_TRIANGLE_FAN);
 	glColor4ub(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a);
-	glTexCoord2f(image->tu+image->tw+EDGE_CORRECTION, image->tv);
+	glTexCoord2f(image->tu+image->tw, image->tv);
 	glVertex2f(dest->x, dest->y);
-	glTexCoord2f(image->tu+image->tw+EDGE_CORRECTION, image->tv+image->th+EDGE_CORRECTION);
-	glVertex2f(dest->x+dest->h+EDGE_CORRECTION, dest->y);
-	glTexCoord2f(image->tu, image->tv+image->th+EDGE_CORRECTION);
-	glVertex2f(dest->x+dest->h+EDGE_CORRECTION, dest->y+dest->w+EDGE_CORRECTION);
+	glTexCoord2f(image->tu+image->tw, image->tv+image->th);
+	glVertex2f(dest->x+dest->h, dest->y);
+	glTexCoord2f(image->tu, image->tv+image->th);
+	glVertex2f(dest->x+dest->h, dest->y+dest->w);
 	glTexCoord2f(image->tu, image->tv);
-	glVertex2f(dest->x, dest->y+dest->w+EDGE_CORRECTION);
+	glVertex2f(dest->x, dest->y+dest->w);
 	glEnd();
 }
 
