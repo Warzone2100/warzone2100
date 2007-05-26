@@ -182,9 +182,7 @@
 
 /*!
  * \def WZ_DECL_PURE
- * This function works read only on its arguments or global variables.
- * The result of a call will not change between two consecutive calls.
- * Helps optimization.
+ * "Many functions have no effects except the return value and their return value depends only on the parameters and/or global variables. Such a function can be subject to common subexpression elimination and loop optimization just as an arithmetic operator would be."
  */
 #if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 2))
 #  define WZ_DECL_PURE __attribute__((__pure__))
@@ -195,9 +193,7 @@
 
 /*!
  * \def WZ_DECL_CONST
- * This function works read only on its arguments and nothing else.
- * The result of a call will not change between two consecutive calls.
- * Helps optimization.
+ * "Many functions do not examine any values except their arguments, and have no effects except the return value. Basically this is just slightly more strict class than the pure attribute below, since function is not allowed to read global memory."
  */
 #if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 2))
 #  define WZ_DECL_CONST __attribute__((__const__))

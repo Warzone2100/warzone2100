@@ -33,7 +33,7 @@ extern BOOL gameInitialised;
 extern BOOL frontendInitialised;
 extern BOOL bDisableLobby;
 
-extern WZ_DECL_PURE GS_GAMEMODE GetGameMode(void);
+extern GS_GAMEMODE GetGameMode(void) WZ_DECL_PURE;
 extern void SetGameMode(GS_GAMEMODE status);
 
 extern char SaveGamePath[];
