@@ -3176,7 +3176,7 @@ event reassignPlayers(reassignTr)
 	setEventTrigger(watchBaseThreat, watchBaseThreatTr);
 	setEventTrigger(manageAllyHelp, manageAllyHelpTr);
 	setEventTrigger(everySecEv, everySec);
-	setEventTrigger(manageDefendLocationEv, manageDefendLocationTr);
+	//setEventTrigger(manageDefendLocationEv, manageDefendLocationTr);
 	setEventTrigger(structBuilt, structBuiltTr);
 	setEventTrigger(structureDestroyed, structureDestroyedTr);
 	setEventTrigger(rebuildStructureEv, rebuildStructureTr);
@@ -3850,6 +3850,9 @@ function void doRequestHelp(int _helpX, int _helpY)
 function void defendLocation(int _defendX, int _defendY, int _tDefendTimeout, int _defendRadius, bool _bMove)
 {
 	dbg("starting defending for " & _tDefendTimeout - (gameTime / 10) & " secs, with defend radius " & _defendRadius, me);
+
+	ASSERT(_defendRadius >= TILE,
+		"defendLocation: defendRadius too low:" & _defendRadius, me);
 
 	defendX = _defendX;
 	defendY = _defendY;
