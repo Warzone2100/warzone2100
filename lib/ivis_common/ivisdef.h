@@ -140,33 +140,34 @@ typedef struct iIMDShape {
 //*************************************************************************
 
 typedef struct {
-	UBYTE Type[4];
-	UWORD Version;
-	UWORD NumImages;
-	UWORD BitDepth;
-	UWORD NumTPages;
-	UBYTE TPageFiles[16][16];
-	UBYTE PalFile[16];
+	char Type[4];
+	uint16_t Version;
+	uint16_t NumImages;
+	uint16_t BitDepth;
+	uint16_t NumTPages;
+	char TPageFiles[16][16];
+	char PalFile[16];
 } IMAGEHEADER;
 
 
 typedef struct {
-	UWORD TPageID;
-	UWORD PalID;
-	UWORD Tu,Tv;
-	unsigned short Width;
-	unsigned short Height;
-	short XOffset;
-	short YOffset;
+	uint16_t TPageID;
+	uint16_t PalID;
+	uint16_t Tu;
+	uint16_t Tv;
+	uint16_t Width;
+	uint16_t Height;
+	int16_t XOffset;
+	int16_t YOffset;
 } IMAGEDEF;
 
 
 typedef struct {
 	IMAGEHEADER Header;
 	iTexture *TexturePages;
-	UWORD NumCluts;
-	UWORD TPageIDs[16];
-	UWORD ClutIDs[48];
+	unsigned short NumCluts;
+	unsigned short TPageIDs[16];
+	unsigned short ClutIDs[48];
 	IMAGEDEF *ImageDefs;
 } IMAGEFILE;
 

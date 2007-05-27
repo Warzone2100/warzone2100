@@ -825,16 +825,13 @@ static void dataHWTERTILESRelease(void *pData)
 }
 
 
-static BOOL dataIMGLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL dataIMGLoad(const char *fileName, void **ppData)
 {
-	IMAGEFILE *ImageFile;
-
-	ImageFile = iV_LoadImageFile(pBuffer,size);
-	if(ImageFile == NULL) {
+	*ppData = iV_LoadImageFile(fileName);
+	if(*ppData == NULL)
+	{
 		return FALSE;
 	}
-
-	*ppData = ImageFile;
 
 	return TRUE;
 }
@@ -1160,7 +1157,6 @@ static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
 	{"SCRIPTVAL", dataScriptLoadVals, NULL},
 	{"STR_RES", dataStrResLoad, dataStrResRelease},
 	{"TERTILES", NULL, NULL},                                      // This version was used when running with the software renderer.
-	{"IMG", dataIMGLoad, dataIMGRelease},
 	{"IMD", dataIMDBufferLoad, (RES_FREE)iV_IMDRelease},
 };
 
@@ -1179,6 +1175,7 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"ANIMCFG", dataAnimCfgLoad, NULL},
 	{"IMGPAGE", dataIMGPAGELoad, dataIMGPAGERelease},
 	{"HWTERTILES", dataHWTERTILESLoad, dataHWTERTILESRelease},     // freed by 3d shutdow},// Tertiles Files. This version used when running with hardware renderer.
+	{"IMG", dataIMGLoad, dataIMGRelease},
 	{"TEXPAGE", dataTexPageLoad, dataTexPageRelease},
 };
 

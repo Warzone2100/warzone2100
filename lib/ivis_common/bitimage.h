@@ -63,7 +63,7 @@ WZ_DECL_PURE static inline unsigned short iV_GetImageCenterY(const IMAGEFILE *Im
 }
 
 
-IMAGEFILE *iV_LoadImageFile(const char *FileData, const UDWORD FileSize);
+IMAGEFILE *iV_LoadImageFile(const char *fileName);
 void iV_FreeImageFile(IMAGEFILE *ImageFile);
 
 #endif

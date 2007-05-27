@@ -26,6 +26,7 @@
 #include "ivispatch.h"
 #include "bitimage.h"
 #include "lib/framework/frameresource.h"
+#include <physfs.h>
 
 
 static BOOL LoadTextureFile(const char *FileName, iTexture *pSprite, int *texPageID)
@@ -59,82 +60,89 @@ static BOOL LoadTextureFile(const char *FileName, iTexture *pSprite, int *texPag
 	return TRUE;
 }
 
-
-IMAGEFILE *iV_LoadImageFile(const char *FileData, WZ_DECL_UNUSED const UDWORD FileSize)
+static inline IMAGEFILE* iV_AllocImageFile(size_t NumTPages, size_t NumImages)
 {
-	const char *Ptr;
-	IMAGEHEADER *Header;
+	const size_t totalSize = sizeof(IMAGEFILE) + sizeof(iTexture) * NumTPages + sizeof(IMAGEDEF) * NumImages;
+
+	IMAGEFILE* ImageFile = malloc(totalSize);
+	if (ImageFile == NULL)
+	{
+		debug(LOG_ERROR, "iV_AllocImageFile: Out of memory");
+		return NULL;
+	}
+
+	// Set member pointers to their respective areas in the allocated memory area
+	ImageFile->TexturePages = (iTexture*)(ImageFile + 1);
+	ImageFile->ImageDefs = (IMAGEDEF*)(ImageFile->TexturePages + NumTPages);
+
+	return ImageFile;
+}
+
+IMAGEFILE *iV_LoadImageFile(const char *fileName)
+{
 	IMAGEFILE *ImageFile;
-	IMAGEDEF *ImageDef;
-	unsigned int i = 0;
+	IMAGEDEF* ImageDef;
+	unsigned int i;
 
-	Ptr = FileData;
+	IMAGEHEADER Header;
+	PHYSFS_file* fileHandle;
 
-	Header = (IMAGEHEADER*)Ptr;
-	Ptr += sizeof(IMAGEHEADER);
-
-	endian_uword(&Header->Version);
-	endian_uword(&Header->NumImages);
-	endian_uword(&Header->BitDepth);
-	endian_uword(&Header->NumTPages);
-
-	ImageFile = (IMAGEFILE*)malloc(sizeof(IMAGEFILE));
-	if(ImageFile == NULL) {
-		debug( LOG_ERROR, "Out of memory" );
+	fileHandle = PHYSFS_openRead(fileName);
+	if (!fileHandle)
+	{
+		debug(LOG_ERROR, "iV_LoadImageFromFile: PHYSFS_openRead failed (opening %s) with error: %s", fileName, PHYSFS_getLastError());
 		return NULL;
 	}
 
+	// Read header from file
+	PHYSFS_read      (fileHandle, &Header.Type, sizeof(Header.Type), 1);
+	PHYSFS_readULE16 (fileHandle, &Header.Version);
+	PHYSFS_readULE16 (fileHandle, &Header.NumImages);
+	PHYSFS_readULE16 (fileHandle, &Header.BitDepth);
+	PHYSFS_readULE16 (fileHandle, &Header.NumTPages);
+	PHYSFS_read      (fileHandle, &Header.TPageFiles, sizeof(Header.TPageFiles), 1);
+	PHYSFS_read      (fileHandle, &Header.PalFile, sizeof(Header.PalFile), 1);
 
-	ImageFile->TexturePages = (iTexture*)malloc(sizeof(iTexture)*Header->NumTPages);
-	if(ImageFile->TexturePages == NULL) {
-		debug( LOG_ERROR, "Out of memory" );
+	ImageFile = iV_AllocImageFile(Header.NumTPages, Header.NumImages);
+	if(ImageFile == NULL)
+	{
 		return NULL;
 	}
 
-	ImageFile->ImageDefs = (IMAGEDEF*)malloc(sizeof(IMAGEDEF)*Header->NumImages);
-	if(ImageFile->ImageDefs == NULL) {
-		debug( LOG_ERROR, "Out of memory" );
-		return NULL;
-	}
-
-	ImageFile->Header = *Header;
+	ImageFile->Header = Header;
 
 	// Load the texture pages.
-	for (i = 0; i < Header->NumTPages; i++) {
+	for (i = 0; i < Header.NumTPages; i++) {
 		int tmp=0;	/* Workaround for MacOS gcc 4.0.0 bug. */
-		LoadTextureFile((char*)Header->TPageFiles[i],
+		LoadTextureFile((char*)Header.TPageFiles[i],
 				&ImageFile->TexturePages[i],
 				&tmp);
 		ImageFile->TPageIDs[i] = tmp;
 	}
 
-	ImageDef = (IMAGEDEF*)Ptr;
+	for(ImageDef = &ImageFile->ImageDefs[0]; ImageDef != &ImageFile->ImageDefs[Header.NumImages]; ++ImageDef)
+	{
+		// Read image definition from file
+		PHYSFS_readULE16(fileHandle, &ImageDef->TPageID);
+		PHYSFS_readULE16(fileHandle, &ImageDef->PalID);
+		PHYSFS_readULE16(fileHandle, &ImageDef->Tu);
+		PHYSFS_readULE16(fileHandle, &ImageDef->Tv);
+		PHYSFS_readULE16(fileHandle, &ImageDef->Width);
+		PHYSFS_readULE16(fileHandle, &ImageDef->Height);
+		PHYSFS_readSLE16(fileHandle, &ImageDef->XOffset);
+		PHYSFS_readSLE16(fileHandle, &ImageDef->YOffset);
 
-	for(i=0; i<Header->NumImages; i++) {
-		endian_uword(&ImageDef->TPageID);
-		endian_uword(&ImageDef->PalID);
-		endian_uword(&ImageDef->Tu);
-		endian_uword(&ImageDef->Tv);
-		endian_uword(&ImageDef->Width);
-		endian_uword(&ImageDef->Height);
-		endian_sword(&ImageDef->XOffset);
-		endian_sword(&ImageDef->YOffset);
-
-		ImageFile->ImageDefs[i] = *ImageDef;
 		if( (ImageDef->Width <= 0) || (ImageDef->Height <= 0) ) {
-			debug( LOG_ERROR, "Illegal image size" );
+			debug( LOG_ERROR, "iV_LoadImageFromFile: Illegal image size" );
+			free(ImageFile);
 			return NULL;
 		}
-		ImageDef++;
 	}
 
 	return ImageFile;
 }
 
-
 void iV_FreeImageFile(IMAGEFILE *ImageFile)
 {
-	free(ImageFile->TexturePages);
-	free(ImageFile->ImageDefs);
 	free(ImageFile);
 }
