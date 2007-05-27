@@ -144,7 +144,7 @@ typedef struct {
 	uint16_t NumImages;
 	uint16_t BitDepth;
 	uint16_t NumTPages;
-	char TPageFiles[16][16];
+	uint8_t TPageFiles[16][16];
 } IMAGEHEADER;
 
 
