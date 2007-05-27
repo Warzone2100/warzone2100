@@ -686,18 +686,23 @@ void widgSetTabs(W_SCREEN *psScreen, UDWORD id, UWORD major, UWORD minor)
 	W_TABFORM	*psForm;
 
 	psForm = (W_TABFORM *)widgGetFromID(psScreen, id);
+	ASSERT(psForm != NULL, "widgSetTabs: Invalid tab form pointer" );
+	ASSERT((psForm->style & WFORM_TABBED), "widgSetTabs: couldn't find tabbed form from id");
 	if (psForm == NULL || !(psForm->style & WFORM_TABBED))
 	{
-		ASSERT( FALSE,"widgSetTabs: couldn't find tabbed form from id" );
+		return; /* make us work fine in no assert compiles */
+	}
+
+	if (major >= psForm->numMajor)
+	{
+		ASSERT(FALSE, "widgSetTabs id=%u: invalid major id %u >= max %u", id,
+		       major, psForm->numMajor);
 		return;
 	}
-	ASSERT( psForm != NULL,
-		"widgSetTabs: Invalid tab form pointer" );
-
-	if (major >= psForm->numMajor ||
-		minor >= psForm->asMajor[major].numMinor)
+	if (minor >= psForm->asMajor[major].numMinor)
 	{
-		ASSERT( FALSE, "widgSetTabs: invalid major or minor id" );
+		ASSERT(FALSE, "widgSetTabs id=%u: invalid minor id %u >= max %u", id,
+		       minor, psForm->asMajor[major].numMinor);
 		return;
 	}
 
