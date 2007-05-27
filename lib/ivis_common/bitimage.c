@@ -95,7 +95,6 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 	PHYSFS_readULE16 (fileHandle, &Header.BitDepth);
 	PHYSFS_readULE16 (fileHandle, &Header.NumTPages);
 	PHYSFS_read      (fileHandle, &Header.TPageFiles, sizeof(Header.TPageFiles), 1);
-	PHYSFS_read      (fileHandle, &Header.PalFile, sizeof(Header.PalFile), 1);
 
 	ImageFile = iV_AllocImageFile(Header.NumTPages, Header.NumImages);
 	if(ImageFile == NULL)
