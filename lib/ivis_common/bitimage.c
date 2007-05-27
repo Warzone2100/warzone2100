@@ -114,7 +114,6 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 	{
 		// Read image definition from file
 		PHYSFS_readULE16(fileHandle, &ImageDef->TPageID);
-		PHYSFS_readULE16(fileHandle, &ImageDef->PalID);
 		PHYSFS_readULE16(fileHandle, &ImageDef->Tu);
 		PHYSFS_readULE16(fileHandle, &ImageDef->Tv);
 		PHYSFS_readULE16(fileHandle, &ImageDef->Width);

@@ -151,7 +151,6 @@ typedef struct {
 
 typedef struct {
 	uint16_t TPageID;
-	uint16_t PalID;
 	uint16_t Tu;
 	uint16_t Tv;
 	uint16_t Width;
