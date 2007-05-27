@@ -949,11 +949,11 @@ static void moveCalcTurn(float *pCurr, float target, UDWORD rate)
 #define SET_PATH(x)
 #endif
 
-	ASSERT( target < MAKEFRACT(360) && target >= MAKEFRACT(0),
+	ASSERT( target < 360.0 && target >= 0.0,
 			 "moveCalcTurn: target out of range %f", target );
 
-	ASSERT( (*pCurr) < MAKEFRACT(360) && (*pCurr) >= MAKEFRACT(0),
-			 "moveCalcTurn: cur ang out of range %f", (*pCurr) );
+	ASSERT( *pCurr < 360.0 && *pCurr >= 0.0,
+			 "moveCalcTurn: cur ang out of range %f", *pCurr );
 
 
 	// calculate the difference in the angles
@@ -963,15 +963,10 @@ static void moveCalcTurn(float *pCurr, float target, UDWORD rate)
 
 
 
-//	change = FRACTmul( baseTurn, MAKEFRACT(rate) );
-
-	change = (baseTurn* rate); // constant rate so we can use a normal mult
-
-// 	debug( LOG_NEVER, "change : %f\n", change);
-
+	change = (baseTurn * rate); // constant rate so we can use a normal multiplication
 
 	if ((diff >= 0 && diff < change) ||
-		(diff < 0 && diff > -change))
+	    (diff < 0 && diff > -change))
 	{
 		// got to the target direction
 		*pCurr = target;
@@ -980,7 +975,7 @@ static void moveCalcTurn(float *pCurr, float target, UDWORD rate)
 	else if (diff > 0)
 	{
 		// Target dir is greater than current
-		if (diff < MKF(TRIG_DEGREES/2))
+		if (diff < TRIG_DEGREES / 2)
 		{
 			// Simple case - just increase towards target
 			*pCurr += change;
@@ -995,7 +990,7 @@ static void moveCalcTurn(float *pCurr, float target, UDWORD rate)
 	}
 	else
 	{
-		if (diff > MKF(-(TRIG_DEGREES/2)))
+		if (diff > -(TRIG_DEGREES/2))
 		{
 			// Simple case - just decrease towards target
 			*pCurr -= change;
@@ -1013,14 +1008,13 @@ static void moveCalcTurn(float *pCurr, float target, UDWORD rate)
 	{
 		*pCurr += 360.0f;
 	}
-	if (*pCurr >= 360.0f)
+	else if (*pCurr >= 360.0f)
 	{
 		*pCurr -= 360.0f;
 	}
 
 
 #ifdef DEBUG			//Don't forget that if you don't define the variable, then we error out.
-//         debug( LOG_NEVER, "path %d: diff %f\n", path, diff);
 
 	ASSERT( (*pCurr) < 360 && (*pCurr) >= 0,
 			 "moveCalcTurn: angle out of range - path %d\n"
@@ -1035,16 +1029,11 @@ static BOOL moveNextTarget(DROID *psDroid)
 	UDWORD	srcX,srcY, tarX, tarY;
 
 	// See if there is anything left in the move list
-//	if (psDroid->sMove.MovementList[psDroid->sMove.Position].XCoordinate == -1)
 	if (psDroid->sMove.Position == psDroid->sMove.numPoints)
 	{
 		return FALSE;
 	}
 
-/*	tarX = (psDroid->sMove.MovementList[psDroid->sMove.Position].XCoordinate
-				<< TILE_SHIFT) + TILE_UNITS/2;
-	tarY = (psDroid->sMove.MovementList[psDroid->sMove.Position].YCoordinate
-				<< TILE_SHIFT) + TILE_UNITS/2;*/
 	tarX = (psDroid->sMove.asPath[psDroid->sMove.Position].x << TILE_SHIFT) + TILE_UNITS/2;
 	tarY = (psDroid->sMove.asPath[psDroid->sMove.Position].y << TILE_SHIFT) + TILE_UNITS/2;
 	if (psDroid->sMove.Position == 0)
@@ -1083,10 +1072,6 @@ static void movePeekNextTarget(DROID *psDroid, SDWORD *pX, SDWORD *pY)
 	}
 	else
 	{
-/*		*pX = (psDroid->sMove.MovementList[psDroid->sMove.Position].XCoordinate
-					<< TILE_SHIFT) + TILE_UNITS/2;
-		*pY = (psDroid->sMove.MovementList[psDroid->sMove.Position].YCoordinate
-					<< TILE_SHIFT) + TILE_UNITS/2;*/
 		*pX = (psDroid->sMove.asPath[psDroid->sMove.Position].x << TILE_SHIFT) + TILE_UNITS/2;
 		*pY = (psDroid->sMove.asPath[psDroid->sMove.Position].y << TILE_SHIFT) + TILE_UNITS/2;
 	}
@@ -1258,8 +1243,6 @@ static BOOL moveBlocked(DROID *psDroid)
 
 			  (psDroid->player == selectedPlayer)) &&
 			(psDroid->sMove.Position != psDroid->sMove.numPoints) &&
-//			!fpathTileLOS((SDWORD)psDroid->x >> TILE_SHIFT, (SDWORD)psDroid->y >> TILE_SHIFT,
-//						  psDroid->sMove.targetX >> TILE_SHIFT, psDroid->sMove.targetY >> TILE_SHIFT))
 			!fpathTileLOS((SDWORD)psDroid->x >> TILE_SHIFT, (SDWORD)psDroid->y >> TILE_SHIFT,
 						  psDroid->sMove.DestinationX >> TILE_SHIFT, psDroid->sMove.DestinationY >> TILE_SHIFT))
 		{
