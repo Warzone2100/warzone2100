@@ -3675,13 +3675,12 @@ UDWORD	calcTemplatePower(DROID_TEMPLATE *psTemplate)
 	UDWORD power, i;
 
 	//get the component power
-	power = (asBodyStats + psTemplate->asParts[COMP_BODY])->buildPower +
-	(asBrainStats + psTemplate->asParts[COMP_BRAIN])->buildPower +
-	//(asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->buildPower +
-	(asSensorStats + psTemplate->asParts[COMP_SENSOR])->buildPower +
-	(asECMStats + psTemplate->asParts[COMP_ECM])->buildPower +
-	(asRepairStats + psTemplate->asParts[COMP_REPAIRUNIT])->buildPower +
-	(asConstructStats + psTemplate->asParts[COMP_CONSTRUCT])->buildPower;
+	power = (asBodyStats + psTemplate->asParts[COMP_BODY])->buildPower;
+	power += (asBrainStats + psTemplate->asParts[COMP_BRAIN])->buildPower;
+	power += (asSensorStats + psTemplate->asParts[COMP_SENSOR])->buildPower;
+	power += (asECMStats + psTemplate->asParts[COMP_ECM])->buildPower;
+	power += (asRepairStats + psTemplate->asParts[COMP_REPAIRUNIT])->buildPower;
+	power += (asConstructStats + psTemplate->asParts[COMP_CONSTRUCT])->buildPower;
 
 	/* propulsion power points are a percentage of the bodys' power points */
 	power += (((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->buildPower *
