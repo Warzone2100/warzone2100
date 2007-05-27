@@ -89,7 +89,6 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 	}
 
 	// Read header from file
-	PHYSFS_read      (fileHandle, &Header.Type, sizeof(Header.Type), 1);
 	PHYSFS_readULE16 (fileHandle, &Header.Version);
 	PHYSFS_readULE16 (fileHandle, &Header.NumImages);
 	PHYSFS_readULE16 (fileHandle, &Header.BitDepth);
@@ -127,6 +126,8 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 			return NULL;
 		}
 	}
+
+	PHYSFS_close(fileHandle);
 
 	return ImageFile;
 }

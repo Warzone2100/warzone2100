@@ -140,7 +140,6 @@ typedef struct iIMDShape {
 //*************************************************************************
 
 typedef struct {
-	char Type[4];
 	uint16_t Version;
 	uint16_t NumImages;
 	uint16_t BitDepth;
