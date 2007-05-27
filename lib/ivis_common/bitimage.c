@@ -29,35 +29,29 @@
 #include <physfs.h>
 
 
-static BOOL LoadTextureFile(const char *FileName, iTexture *pSprite, int *texPageID)
+static unsigned short LoadTextureFile(const char *FileName, iTexture *pSprite)
 {
-	unsigned int i = 0;
+	unsigned int i;
 
 	debug(LOG_TEXTURE, "LoadTextureFile: %s", FileName);
 
-	if (!resPresent("IMGPAGE", FileName)) {
-		debug(LOG_ERROR, "Texture file \"%s\" not preloaded.", FileName);
-		assert(FALSE);
-		return FALSE;
-	} else {
-		*pSprite = *(iTexture*)resGetData("IMGPAGE", FileName);
-		debug(LOG_TEXTURE, "Load texture from resource cache: %s (%d, %d)",
-		      FileName, pSprite->width, pSprite->height);
-	}
+	ASSERT(resPresent("IMGPAGE", FileName), "Texture file \"%s\" not preloaded.", FileName);
 
-	/* We have already loaded this one? */
-	while (i < _TEX_INDEX) {
-		if (strcasecmp(FileName, _TEX_PAGE[i].name) == 0) {
-			*texPageID = _TEX_PAGE[i].id;
+	*pSprite = *(iTexture*)resGetData("IMGPAGE", FileName);
+	debug(LOG_TEXTURE, "Load texture from resource cache: %s (%d, %d)",
+	      FileName, pSprite->width, pSprite->height);
+
+	/* Have we already loaded this one? */
+	for (i = 0; i < _TEX_INDEX; ++i)
+	{
+		if (strcasecmp(FileName, _TEX_PAGE[i].name) == 0)
+		{
 			debug(LOG_TEXTURE, "LoadTextureFile: already loaded");
-			return TRUE;
+			return _TEX_PAGE[i].id;
 		}
-		i++;
 	}
 
-	*texPageID = pie_AddTexPage(pSprite, FileName, 1, TRUE);
-
-	return TRUE;
+	return pie_AddTexPage(pSprite, FileName, 1, TRUE);
 }
 
 static inline IMAGEFILE* iV_AllocImageFile(size_t NumTPages, size_t NumImages)
@@ -112,12 +106,9 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 	ImageFile->Header = Header;
 
 	// Load the texture pages.
-	for (i = 0; i < Header.NumTPages; i++) {
-		int tmp=0;	/* Workaround for MacOS gcc 4.0.0 bug. */
-		LoadTextureFile((char*)Header.TPageFiles[i],
-				&ImageFile->TexturePages[i],
-				&tmp);
-		ImageFile->TPageIDs[i] = tmp;
+	for (i = 0; i < Header.NumTPages; i++)
+	{
+		ImageFile->TPageIDs[i] = LoadTextureFile(Header.TPageFiles[i], &ImageFile->TexturePages[i]);
 	}
 
 	for(ImageDef = &ImageFile->ImageDefs[0]; ImageDef != &ImageFile->ImageDefs[Header.NumImages]; ++ImageDef)
