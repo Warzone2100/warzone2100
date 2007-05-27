@@ -607,30 +607,33 @@ static void handleActiveEvent(SDL_Event * event)
 	// active.state is a bitflag! Mixed events (eg. APPACTIVE|APPMOUSEFOCUS) will thus not be ignored.
 	if ( event->active.state != SDL_APPMOUSEFOCUS )
 	{
-		if ( event->active.gain == 1 )
+		if(!bMultiPlayer)		//can't pause in multiplayer
 		{
-			debug( LOG_NEVER, "WM_SETFOCUS\n");
-			if (focusState != FOCUS_IN)
+			if ( event->active.gain == 1 )
 			{
-				focusState = FOCUS_IN;
+				debug( LOG_NEVER, "WM_SETFOCUS\n");
+				if (focusState != FOCUS_IN)
+				{
+					focusState = FOCUS_IN;
 
-				gameTimeStart();
-				// Should be: audio_ResumeAll();
+					gameTimeStart();
+					// Should be: audio_ResumeAll();
+				}
 			}
-		}
-		else
-		{
-			debug( LOG_NEVER, "WM_KILLFOCUS\n");
-			if (focusState != FOCUS_OUT)
+			else
 			{
-				focusState = FOCUS_OUT;
+				debug( LOG_NEVER, "WM_KILLFOCUS\n");
+				if (focusState != FOCUS_OUT)
+				{
+					focusState = FOCUS_OUT;
 
-				gameTimeStop();
-				// Should be: audio_PauseAll();
-				audio_StopAll();
+					gameTimeStop();
+					// Should be: audio_PauseAll();
+					audio_StopAll();
+				}
+				/* Have to tell the input system that we've lost focus */
+				inputLooseFocus();
 			}
-			/* Have to tell the input system that we've lost focus */
-			inputLooseFocus();
 		}
 	}
 }
