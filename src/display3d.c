@@ -905,7 +905,7 @@ static void drawTiles(iView *camera, iView *player)
 				zMax = MAX(zMax, tileScreenInfo[i][j+1].sz);
 				tileIJ[i][j].depth = zMax;
 
-				ASSERT( i =< mapHeight && j =< mapWidth, "Tile coordinates out of range" );
+				ASSERT( i <= mapHeight && j <= mapWidth, "Tile coordinates out of range" );
 
 				if(zMax < 0)
 				{
