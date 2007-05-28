@@ -2014,12 +2014,7 @@ void actionUpdateDroid(DROID *psDroid)
 
 			// Got to destination - start building
 			psStructStats = (STRUCTURE_STATS*)psDroid->psTarStats[0];
-			if (psDroid->order == DORDER_BUILD &&
-				(psDroid->psTarget[0] == NULL))
-//				&&  (
-//				psStructStats->type != REF_WALL ||
-//				psStructStats->type != REF_WALLCORNER))
-				//psDroid->order == DORDER_LINEBUILD)
+			if (psDroid->order == DORDER_BUILD && psDroid->psTarget[0] == NULL)
 			{
 				// Starting a new structure
 				// calculate the top left of the structure
@@ -2072,15 +2067,11 @@ void actionUpdateDroid(DROID *psDroid)
 					debug( LOG_NEVER, "DACTION_MOVETOBUILD: !validLocation\n");
 					psDroid->action = DACTION_NONE;
 				}
-				else if (droidStartFoundation(psDroid))
-				{
-					debug( LOG_NEVER, "DACTION_MOVETOBUILD: start foundation\n");
-					psDroid->action = DACTION_BUILD_FOUNDATION;
-				}
 				else
 				{
-					debug( LOG_NEVER, "DACTION_MOVETOBUILD: giving up (2)\n");
-					psDroid->action = DACTION_NONE;
+					psDroid->action = DACTION_BUILD_FOUNDATION;
+					psDroid->actionStarted = gameTime;
+					psDroid->actionPoints = 0;
 				}
 			}
 			else if(  (psDroid->order == DORDER_LINEBUILD||psDroid->order==DORDER_BUILD)
@@ -2360,26 +2351,6 @@ void actionUpdateDroid(DROID *psDroid)
 		break;
 	case DACTION_BUILD_FOUNDATION:
 		//building a structure's foundation - flattening the ground for now
-		if (droidUpdateFoundation(psDroid))
-		{
-			//the droid moves around the site in UpdateFoundation now
-
-			//randomly move the droid around the construction site
-			/*if ((rand() % 50) < 1)
-			{
-				debug( LOG_NEVER, "DACTION_BUILD_FOUNDATION: start wander\n");
-				psStructStats = (STRUCTURE_STATS *)psDroid->psTarStats;
-				if (getDroidDestination(psStructStats, psDroid->orderX, psDroid->orderY,
-					&droidX, &droidY))
-				{
-					psDroid->action = DACTION_FOUNDATION_WANDER;
-					psDroid->actionX = droidX;
-					psDroid->actionY = droidY;
-					moveDroidTo(psDroid, droidX,droidY);
-				}
-			}*/
-		}
-		else
 		{
 			psTile = mapTile(psDroid->orderX>>TILE_SHIFT, psDroid->orderY>>TILE_SHIFT);
 			psStructStats = (STRUCTURE_STATS*)psDroid->psTarStats[0];

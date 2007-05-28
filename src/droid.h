@@ -148,9 +148,6 @@ extern void droidUpdate(DROID *psDroid);
 /* Set up a droid to build a structure - returns true if successful */
 extern BOOL droidStartBuild(DROID *psDroid);
 
-/* Set up a droid to build a foundation - returns true if successful */
-extern BOOL droidStartFoundation(DROID *psDroid);
-
 /* Sets a droid to start demolishing - returns true if successful */
 extern BOOL	droidStartDemolishing( DROID *psDroid );
 
@@ -177,10 +174,6 @@ extern void droidSelfRepair(DROID *psDroid);
 /* Update a construction droid while it is building
    returns TRUE while building continues */
 extern BOOL droidUpdateBuild(DROID *psDroid);
-
-/* Update a construction droid while it is building a
-   foundation. Returns TRUE whilst foundation continues */
-extern BOOL droidUpdateFoundation(DROID *psDroid);
 
 /*Start a EW weapon droid working on a low resistance structure*/
 extern BOOL droidStartRestore( DROID *psDroid );

@@ -1731,7 +1731,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 				//NEVER EVER EVER WANT MORE THAN 5 FACTORIES
 				if (asStructLimits[selectedPlayer][max].currentQuantity > MAX_FACTORY)
 				{
-					ASSERT( FALSE, "buildStructure: trying to build too many factories" );
+					ASSERT(FALSE, "buildStructure: trying to build too many factories (%d max)", MAX_FACTORY);
 					return NULL;
 				}
 			}
@@ -1740,7 +1740,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 				//can only cope with MAX_OBJECTS research facilities
 				if (asStructLimits[selectedPlayer][max].currentQuantity > MAX_OBJECTS)
 				{
-					ASSERT( FALSE, "buildStructure: trying to build too many research facilities" );
+					ASSERT(FALSE, "buildStructure: trying to build too many research facilities (%d max)", MAX_OBJECTS);
 					return NULL;
 				}
 			}
@@ -1748,6 +1748,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			if (pStructureType->psWeapStat[0] && pStructureType->psWeapStat[0]->
 				weaponSubClass == WSC_LAS_SAT && getLasSatExists(selectedPlayer))
 			{
+				ASSERT(FALSE, "buildStructure: trying to build too many Las Sat (1 max)");
 				return NULL;
 			}
 			//HARD_CODE don't ever want more than one Sat Uplink structure
@@ -1755,7 +1756,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			{
 				if (asStructLimits[selectedPlayer][max].currentQuantity > 0)
 				{
-					ASSERT( FALSE, "buildStructure: trying to build too many Sat Uplinks" );
+					ASSERT(FALSE, "buildStructure: trying to build too many Sat Uplinks (1 max)");
 					return NULL;
 				}
 			}
@@ -1769,13 +1770,13 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		if(((x >> TILE_SHIFT) < TOO_NEAR_EDGE) || ((x >> TILE_SHIFT) > (
 			mapWidth - TOO_NEAR_EDGE)))
 		{
-			ASSERT( FALSE, "buildStructure: x coord too near edge" );
+			ASSERT(FALSE, "buildStructure: x coord (%u) too near edge (req. distance is %u)", x, TOO_NEAR_EDGE);
 			return NULL;
 		}
 		if(((y >> TILE_SHIFT) < TOO_NEAR_EDGE) || ((y >> TILE_SHIFT) > (
 			mapHeight - TOO_NEAR_EDGE)))
 		{
-			ASSERT( FALSE, "buildStructure: y coord too near edge" );
+			ASSERT(FALSE, "buildStructure: y coord (%u) too near edge (req. distance is %u)", y, TOO_NEAR_EDGE);
 			return NULL;
 		}
 
@@ -1802,7 +1803,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			}
 		}
 
-		//try and create the Structure
+		// allocate memory for and initialize a structure object
 		if (!createStruct(player, &psBuilding))
 		{
 			return NULL;
@@ -1845,15 +1846,17 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 				// end of dodgy stuff
 				else
 				{
-					ASSERT( !(TILE_HAS_STRUCTURE(mapTile(mapX+width,mapY+breadth))),
-						"buildStructure - structure - %d already found at %d, %d",
-						psBuilding->id, mapX+width,mapY+breadth );
+					ASSERT(!(TILE_HAS_STRUCTURE(psTile)),
+					       "buildStructure: building %s at (%d, %d) but found %s already at (%d, %d)",
+					       pStructureType->pName, mapX, mapY, 
+					       getTileStructure(mapX + width, mapY + breadth)->pStructureType->pName,
+					       mapX + width, mapY + breadth);
 				}
 
 				SET_TILE_STRUCTURE(psTile);
 				// if it's a tall structure then flag it in the map.
-				if(psBuilding->sDisplay.imd->ymax > TALLOBJECT_YMAX) {
-
+				if(psBuilding->sDisplay.imd->ymax > TALLOBJECT_YMAX) 
+				{
 					SET_TILE_TALLSTRUCTURE(psTile);
 				}
 				if ((pStructureType->type == REF_WALL) ||
