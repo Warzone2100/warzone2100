@@ -921,8 +921,7 @@ static UDWORD scrStructTargetMask(STRUCTURE *psStruct)
 		//else if (psStats->numWeaps > 0)
         else if (psStats->psWeapStat != NULL)
 		{
-			//psWStats = psStats->asWeapList[0];
-            psWStats = psStats->psWeapStat[0];
+			psWStats = psStats->psWeapStat[0];
 			if (!proj_Direct(psWStats))
 			{
 				mask = SCR_ST_DEF_IDF;

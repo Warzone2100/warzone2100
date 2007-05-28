@@ -372,6 +372,8 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 			case REF_REPAIR_FACILITY:
 				targetTypeBonus = WEIGHT_MILITARY_STRUCT;
 				break;
+			default:
+				break;
 		}
 
 		/* Now calculate the overall weight */

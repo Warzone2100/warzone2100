@@ -790,13 +790,9 @@ BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
 			&psStructure->buildPoints, &psStructure->height,
 			&psStructure->armourValue, &psStructure->bodyPoints,
 			&psStructure->repairSystem, &psStructure->powerToBuild,
-			//&psStructure->minimumPower, &psStructure->resistance,
 			&dummyVal, &psStructure->resistance,
-			//&psStructure->quantityLimit, &psStructure->sizeModifier,
 			&dummyVal, &psStructure->sizeModifier,
-			//&ecmType, &sensorType, &psStructure->weaponSlots, &GfxFile,
 			ecmType, sensorType, &weapSlots, GfxFile,
-			//&baseIMD, &psStructure->numFuncs, &psStructure->numWeaps);
 			baseIMD, &psStructure->numFuncs, &numWeaps);
 
 #if MAX_PLAYERS != 4 && MAX_PLAYERS != 8
@@ -3425,8 +3421,10 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 					psReArmPad->currentPtsAdded = 0;
 				}
 			}
+			break;
 		}
-		break;
+		default:
+			break;
 	}
 
 	/* check subject stats (for research or manufacture) */
@@ -4464,6 +4462,11 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 
 		switch(psBuilding->type)
 		{
+			case NUM_DIFF_BUILDINGS:
+			case REF_DEMOLISH:
+			case REF_BRIDGE:
+				ASSERT(FALSE, "validLocation: Bad structure type %u", psBuilding->type);
+				break;
 			case REF_HQ:
 			case REF_FACTORY:
 			case REF_LAB:
@@ -4713,10 +4716,6 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 						valid = TRUE;
 					}
 				}
-				break;
-
-			default:
-				valid = TRUE;
 				break;
 		}
 		//if setting up a build queue need to check against future sites as well - AB 4/5/99
@@ -5465,6 +5464,8 @@ BOOL  structureIdle(STRUCTURE *psBuilding)
 				pSubject = ((FACTORY*)psBuilding->pFunctionality)->psSubject;
 				break;
 			}
+			default:
+				break;
 		}
 
 		if (pSubject != NULL)
@@ -7926,7 +7927,8 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, BOOL
 		case REF_VTOL_FACTORY:
 			capacity = ((FACTORY *)psStructure->pFunctionality)->capacity;
 			break;
-		//no default case cos don't care!
+		default:
+			break;
 		}
 	}
 	//get rid of the structure
@@ -7959,6 +7961,8 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, BOOL
 						attackPlayer, FALSE);
 					capacity--;
 				}
+				break;
+			default:
 				break;
 			}
 		}
@@ -8111,7 +8115,8 @@ UDWORD  structPowerToBuild(STRUCTURE *psStruct)
 		case REF_VTOL_FACTORY:
 			capacity = ((FACTORY *)psStruct->pFunctionality)->capacity;
 			break;
-		//no default case cos don't care!
+		default:
+			break;
 		}
 		if (capacity)
 		{
@@ -8171,11 +8176,8 @@ void resetResistanceLag(STRUCTURE *psBuilding)
 					}
 				}
 			}
-			/*
-			case REF_REPAIR_FACILITY: - this is catered for in the aiUpdateStructure function
-			case REF_REARM_PAD: - this structure is taken over completely
-			*/
-			//default: //do nothing
+			default: //do nothing
+				break;
 		}
 	}
 }

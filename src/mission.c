@@ -2078,6 +2078,8 @@ void aiUpdateMissionStructure(STRUCTURE *psStructure)
             }
 		    break;
 		}
+		default:
+			break;
 	}
 
 	if (pSubject != NULL)

@@ -7183,6 +7183,8 @@ void intCheckReticuleButtons(void)
 				case REF_HQ:
 					ReticuleEnabled[RETBUT_DESIGN].Enabled = TRUE;
 					break;
+				default:
+					break;
 			}
 		}
 	}

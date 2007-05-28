@@ -916,8 +916,6 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UD
 
 		Buffer->State = Form->state;
 
-//		Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
-
 		Object = NULL;
 		Image = -1;
 		psObj = (BASE_OBJECT*)Buffer->Data;	// Get the object associated with this widget.
@@ -932,14 +930,12 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UD
 		}
 
 		if(psObj) {
-//			screenTextOut(64,48,"psObj: %p",psObj);
 			switch (psObj->type) {
 				case OBJ_DROID:						// If it's a droid...
 					Droid = (DROID*)psObj;
 
 					if(DroidIsBuilding(Droid)) {
 						Structure = DroidGetBuildStructure(Droid);
-//						DBPRINTF(("%p : %p",Droid,Structure));
 						if(Structure) {
 							Object = Structure;	//(void*)StructureGetIMD(Structure);
 							IMDType = IMDTYPE_STRUCTURE;
@@ -952,17 +948,14 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UD
 						Player = selectedPlayer;
 						IMDType = IMDTYPE_STRUCTURESTAT;
 						RENDERBUTTON_INITIALISED(Buffer);
-					} else if (orderState(Droid, DORDER_DEMOLISH))
-                    {
+					} else if (orderState(Droid, DORDER_DEMOLISH)) {
 						Stats = (BASE_STATS *)structGetDemolishStat();
 						ASSERT( Stats!=NULL,"intDisplayStatusButton : NULL Stats pointer." );
 						Object = (void*)Stats;
 						Player = selectedPlayer;
 						IMDType = IMDTYPE_STRUCTURESTAT;
 						RENDERBUTTON_INITIALISED(Buffer);
-                    }
-                    else if (Droid->droidType == DROID_COMMAND)
-					{
+					} else if (Droid->droidType == DROID_COMMAND) {
 						Structure = droidGetCommandFactory(Droid);
 						if (Structure) {
 							Object = Structure;
@@ -974,11 +967,13 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UD
 
 				case OBJ_STRUCTURE:					// If it's a structure...
 					Structure = (STRUCTURE*)psObj;
-					switch(Structure->pStructureType->type) {
+					switch(Structure->pStructureType->type) 
+					{
 						case REF_FACTORY:
 						case REF_CYBORG_FACTORY:
 						case REF_VTOL_FACTORY:
-							if(StructureIsManufacturing(Structure)) {
+							if (StructureIsManufacturing(Structure)) 
+							{
 								IMDType = IMDTYPE_DROIDTEMPLATE;
 								Object = (void*)FactoryGetTemplate(StructureGetFactory(Structure));
 								RENDERBUTTON_INITIALISED(Buffer);
@@ -991,69 +986,62 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UD
 							break;
 
 						case REF_RESEARCH:
-							if(StructureIsResearching(Structure)) {
+							if (StructureIsResearching(Structure)) 
+							{
 								Stats = (BASE_STATS*)Buffer->Data2;
-								if(Stats) {
-									/*StatGetResearchImage(Stats,&Image,(iIMDShape**)&Object,FALSE);
-									//if Object != NULL the there must be a IMD so set the object to
-									//equal the Research stat
-									if (Object != NULL)
-									{
-										Object = (void*)Stats;
-									}
-    								IMDType = IMDTYPE_RESEARCH;*/
-	    							if (((RESEARCH_FACILITY *)Structure->
-                                        pFunctionality)->timeStartHold)
+								if (!Stats)
+								{
+									break;
+								}
+	    							if (((RESEARCH_FACILITY *)Structure->pFunctionality)->timeStartHold)
 		    						{
 			    						bOnHold = TRUE;
 				    				}
-                                    StatGetResearchImage(Stats,&Image,(iIMDShape**)&Object,
-                                        &psResGraphic, FALSE);
-                                    if (psResGraphic)
-                                    {
-                                        //we have a Stat associated with this research topic
-                                        if  (StatIsStructure(psResGraphic))
-                                        {
-                                            //overwrite the Object pointer
-                                            Object = (void*)psResGraphic;
-				                            Player = selectedPlayer;
-                                            //this defines how the button is drawn
-				                            IMDType = IMDTYPE_STRUCTURESTAT;
-                                        }
-                                        else
-                                        {
-            				                compID = StatIsComponent(psResGraphic);
-				                            if (compID != COMP_UNKNOWN)
-				                            {
-                                                //this defines how the button is drawn
-					                            IMDType = IMDTYPE_COMPONENT;
-                                                //overwrite the Object pointer
-					                            Object = (void*)psResGraphic;
-				                            }
-                                            else
-                                            {
-                                                ASSERT( FALSE,
-                                                    "intDisplayStatsButton:Invalid Stat for research button" );
-                                                Object = NULL;
-                                                IMDType = IMDTYPE_RESEARCH;
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        //no Stat for this research topic so just use the graphic provided
-                                        //if Object != NULL the there must be a IMD so set the object to
-                                        //equal the Research stat
-                                        if (Object != NULL)
-                                        {
-                                            Object = (void*)Stats;
-        									IMDType = IMDTYPE_RESEARCH;
-                                        }
-                                    }
-									RENDERBUTTON_INITIALISED(Buffer);
+								StatGetResearchImage(Stats,&Image,(iIMDShape**)&Object, &psResGraphic, FALSE);
+								if (psResGraphic)
+								{
+									// we have a Stat associated with this research topic
+									if (StatIsStructure(psResGraphic))
+									{
+										// overwrite the Object pointer
+										Object = (void*)psResGraphic;
+										Player = selectedPlayer;
+										// this defines how the button is drawn
+										IMDType = IMDTYPE_STRUCTURESTAT;
+									}
+									else
+									{
+										compID = StatIsComponent(psResGraphic);
+										if (compID != COMP_UNKNOWN)
+										{
+											// this defines how the button is drawn
+											IMDType = IMDTYPE_COMPONENT;
+											// overwrite the Object pointer
+											Object = (void*)psResGraphic;
+										}
+										else
+										{
+											ASSERT(FALSE, "intDisplayStatsButton:Invalid Stat for research button");
+											Object = NULL;
+											IMDType = IMDTYPE_RESEARCH;
+										}
+									}
 								}
-//								Image = ResearchGetImage((RESEARCH_FACILITY*)Structure);
+								else
+								{
+									// no Stat for this research topic so just use the graphic provided
+									// if Object != NULL the there must be a IMD so set the object to
+									// equal the Research stat
+									if (Object != NULL)
+									{
+										Object = (void*)Stats;
+										IMDType = IMDTYPE_RESEARCH;
+									}
+								}
+								RENDERBUTTON_INITIALISED(Buffer);
 							}
+							break;
+						default:
 							break;
 					}
 					break;
@@ -1081,10 +1069,6 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UD
 		} else {
 			RenderBlankToButton(Buffer,Down,TOPBUTTON);
 		}
-
-
-
-//						RENDERBUTTON_INITIALISED(Buffer);
 	}
 
 	CloseButtonRender();

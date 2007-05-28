@@ -37,7 +37,7 @@
 #define	REF_ANY	255	// Used to indicate any kind of building when calling intGotoNextStructureType()
 
 /* Defines for indexing an appropriate IMD object given a buildings purpose. */
-enum
+typedef enum _structure_type
 {
 REF_HQ,
 REF_FACTORY,
@@ -53,7 +53,7 @@ REF_RESEARCH,
 REF_RESEARCH_MODULE,
 REF_REPAIR_FACILITY,
 REF_COMMAND_CONTROL,		//control centre for command droids
-REF_BRIDGE,
+REF_BRIDGE,			//NOT USED, but removing it would change savegames
 REF_DEMOLISH,			//the demolish structure type - should only be one stat with this type
 REF_CYBORG_FACTORY,
 REF_VTOL_FACTORY,
@@ -61,29 +61,8 @@ REF_LAB,
 REF_REARM_PAD,
 REF_MISSILE_SILO,
 REF_SAT_UPLINK,         //added for updates - AB 8/6/99
-
-//REF_WALLH,     //the following are needed for the demo
-//REF_WALLV,
-//REF_CORNER1,
-//REF_CORNER2,
-//REF_CORNER3,
-//REF_CORNER4,
-//REF_GATE1,
-//REF_GATE2,
-//REF_GATE3,
-//REF_GATE4,
-//REF_TOWER1,
-//REF_TOWER2,
-//REF_TOWER3,
-//REF_TOWER4,
-//REF_VANH,
-//REF_VANV,
-//REF_JEEP,
-//REF_TANKERH,
-//REF_TANKERV,
-
 NUM_DIFF_BUILDINGS,		//need to keep a count of how many types for IMD loading
-};
+} STRUCTURE_TYPE;
 
 typedef enum _position_type
 {
@@ -151,7 +130,7 @@ typedef UWORD STRUCTSTRENGTH_MODIFIER;
 typedef struct _structure_stats
 {
 	STATS_BASE;						/* basic stats */
-	UDWORD		type;				/* the type of structure */
+	STRUCTURE_TYPE	type;				/* the type of structure */
 	TECH_LEVEL	techLevel;			/* technology level of the structure */
 	STRUCT_STRENGTH	strength;		/* strength against the weapon effects */
 	UDWORD		terrainType;		/*The type of terrain the structure has to be
@@ -171,15 +150,9 @@ typedef struct _structure_stats
 									  points until fully restored . The points are
 									  then added to the Armour Points*/
 	UDWORD		powerToBuild;		/*How much power the structure requires to build*/
-    //NOT USED ANYMORE - AB 24/01/99
-	/*UDWORD		minimumPower;		The minimum power requirement to start building
-								      the structure*/
 	UDWORD		resistance;			/*The number used to determine whether a
 									  structure can resist an enemy takeover -
 									  0 = cannot be attacked electrically*/
-    //NOT USED ANYMORE - AB 24/01/99
-	/*UDWORD		quantityLimit;		The maximum number that a player can have -
-									  0 = no limit 1 = only 1 allowed etc*/
 	UDWORD		sizeModifier;		/*The larger the target, the easier to hit*/
 	struct 	iIMDShape	*pIMD;		/*The IMD to draw for this structure */
 	struct 	iIMDShape	*pBaseIMD;	/*The base IMD to draw for this structure */
@@ -187,17 +160,11 @@ typedef struct _structure_stats
 									  if any*/
 	struct _sensor_stats *pSensor;	/*Which Sensor is standard for the structure -
 									  if any*/
-    //NOT USED ANYMORE - AB 24/01/99
-	//Watermelon:pfft
 	UDWORD		weaponSlots;		/*Number of weapons that can be attached to the
 									  building*/
 	UDWORD		numWeaps;			/*Number of weapons for default */
-	//SDWORD		defaultWeap;		/The default weapon/
 
-	//struct _weapon_stats **asWeapList;		/*List of pointers to default weapons*/
-
-	//Watermelon:can only have STRUCT_MAXWEAPS now...
-    struct _weapon_stats    *psWeapStat[STRUCT_MAXWEAPS];    //can only have one weapon now
+	struct _weapon_stats    *psWeapStat[STRUCT_MAXWEAPS];
 
 	UDWORD		numFuncs;			/*Number of functions for default*/
 	SDWORD		defaultFunc;		/*The default function*/

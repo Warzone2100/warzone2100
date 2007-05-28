@@ -236,78 +236,6 @@ BOOL actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 }
 
 
-
-/* Find a new location by a structure when building */
-/*static BOOL actionNewBuildPos(DROID *psDroid, UDWORD *pX, UDWORD *pY)
-{
-	//STRUCTURE_STATS		*psStructStats;
-	BASE_STATS				*psStats;
-
-	// get the structure stats
-	switch (psDroid->action)
-	{
-	case DACTION_MOVETOBUILD:
-	case DACTION_FOUNDATION_WANDER:
-		if ( psDroid->order == DORDER_BUILD || psDroid->order == DORDER_LINEBUILD )
-		{
-			//psStructStats = (STRUCTURE_STATS *)psDroid->psTarStats;
-			psStats = psDroid->psTarStats;
-		}
-		else
-		{
-			ASSERT( psDroid->order == DORDER_HELPBUILD,
-				"actionNewBuildPos: invalid order" );
-			//psStructStats = ((STRUCTURE *)psDroid->psTarget)->pStructureType;
-			psStats = (BASE_STATS *)((STRUCTURE *)psDroid->psTarget)->pStructureType;
-		}
-		break;
-	case DACTION_BUILD:
-	case DACTION_BUILDWANDER:
-	case DACTION_MOVETODEMOLISH:
-	//case DACTION_MOVETOREPAIR:
-	case DACTION_MOVETORESTORE:
-		//psStructStats = ((STRUCTURE *)psDroid->psTarget)->pStructureType;
-		psStats = (BASE_STATS *)((STRUCTURE *)psDroid->psTarget)->pStructureType;
-		break;
-	case DACTION_MOVETOREPAIR:
-	case DACTION_MOVETOREARM:
-		psStats = (BASE_STATS *)((STRUCTURE *)psDroid->psActionTarget)->pStructureType;
-		break;
-	case DACTION_MOVETOCLEAR:
-		psStats = (BASE_STATS *)((FEATURE *)psDroid->psTarget)->psStats;
-		break;
-	default:
-		ASSERT( FALSE,
-			"actionNewBuildPos: invalid action" );
-		return FALSE;
-		break;
-	}
-	//ASSERT( psStructStats != NULL,
-	//	"actionNewBuildPos: invalid structure stats pointer" );
-
-	// find a new destination
-	//if (getDroidDestination(psStructStats, psDroid->orderX, psDroid->orderY,pX,pY))
-	if (psDroid->action == DACTION_MOVETOREARM || psDroid->action == DACTION_MOVETOREPAIR)
-	{
-		//use action target
-		if (getDroidDestination(psStats, psDroid->actionX, psDroid->actionY, pX, pY))
-		{
-			return TRUE;
-		}
-	}
-	else
-	{
-		//use order target
-		if (getDroidDestination(psStats, psDroid->orderX, psDroid->orderY, pX, pY))
-		{
-			return TRUE;
-		}
-	}
-
-	return FALSE;
-}*/
-
-
 // Realign turret
 void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot)
 {
@@ -1991,25 +1919,6 @@ void actionUpdateDroid(DROID *psDroid)
 						(SDWORD)psDroid->orderX,(SDWORD)psDroid->orderY, psDroid->psTarStats[0]))
 		{
 			moveStopDroid(psDroid);
-/*			xdiff = (SDWORD)psDroid->x - (SDWORD)psDroid->actionX;
-			ydiff = (SDWORD)psDroid->y - (SDWORD)psDroid->actionY;
-			if ( xdiff*xdiff + ydiff*ydiff >= TILE_UNITS*TILE_UNITS )
-			{
-				debug( LOG_NEVER, "DACTION_MOVETOBUILD: new location\n");
-				// Couldn't reach destination - try and find a new one
-				if (actionNewBuildPos(psDroid, &droidX,&droidY))
-				{
-					psDroid->actionX = droidX;
-					psDroid->actionY = droidY;
-					moveDroidTo(psDroid, droidX,droidY);
-				}
-				else
-				{
-					debug( LOG_NEVER, "DACTION_MOVETOBUILD: giving up\n");
-					psDroid->action = DACTION_NONE;
-				}
-			}
-			else*/
 			bDoHelpBuild = FALSE;
 
 			// Got to destination - start building
@@ -2020,8 +1929,6 @@ void actionUpdateDroid(DROID *psDroid)
 				// calculate the top left of the structure
 				tlx = (SDWORD)psDroid->orderX - (SDWORD)(psStructStats->baseWidth * TILE_UNITS)/2;
 				tly = (SDWORD)psDroid->orderY - (SDWORD)(psStructStats->baseBreadth * TILE_UNITS)/2;
-//				tlx = tlx >> TILE_UNITS;
-//				tly = tly >> TILE_UNITS;
 
 				//need to check if something has already started building here?
 				//unless its a module!
@@ -2061,7 +1968,6 @@ void actionUpdateDroid(DROID *psDroid)
 					}
 				}
 				else if (!validLocation((BASE_STATS*)psDroid->psTarStats[0],
-//					psDroid->orderX >> TILE_SHIFT, psDroid->orderY >> TILE_SHIFT))
 					tlx >> TILE_SHIFT, tly >> TILE_SHIFT, psDroid->player, FALSE))
 				{
 					debug( LOG_NEVER, "DACTION_MOVETOBUILD: !validLocation\n");

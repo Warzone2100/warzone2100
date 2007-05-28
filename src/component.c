@@ -490,9 +490,6 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats,UDWORD Player, Vector3i *
 				//can only have the one
 				if (Stats->psWeapStat[i] != NULL)
 				{
-					/*nWeaponStat = Stats->defaultWeap;
-					weaponImd =  Stats->asWeapList[nWeaponStat]->pIMD;
-					mountImd =  Stats->asWeapList[nWeaponStat]->pMountGraphic;*/
 					weaponImd[i] = Stats->psWeapStat[i]->pIMD;
 					mountImd[i] = Stats->psWeapStat[i]->pMountGraphic;
 				}
@@ -522,9 +519,6 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats,UDWORD Player, Vector3i *
 		{
 			if (Stats->psWeapStat[0] != NULL)
 			{
-				/*nWeaponStat = Stats->defaultWeap;
-				weaponImd =  Stats->asWeapList[nWeaponStat]->pIMD;
-				mountImd =  Stats->asWeapList[nWeaponStat]->pMountGraphic;*/
 				weaponImd[0] = Stats->psWeapStat[0]->pIMD;
 				mountImd[0] = Stats->psWeapStat[0]->pMountGraphic;
 			}
