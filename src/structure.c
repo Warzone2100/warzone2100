@@ -5595,7 +5595,8 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 			case REF_VTOL_FACTORY:
 			case REF_BLASTDOOR:
 			case REF_REARM_PAD:
-            case REF_MISSILE_SILO:
+			case REF_MISSILE_SILO:
+			case REF_SAT_UPLINK:
 				/*need to check each tile the structure will sit on is not water*/
 				for (i = site.xTL; i <= site.xBR AND valid; i++)
 				{
