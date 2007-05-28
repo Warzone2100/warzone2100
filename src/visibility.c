@@ -312,8 +312,7 @@ static BOOL rayLOSCallback(SDWORD x, SDWORD y, SDWORD dist)
 		if (blockingWall && !((tileX == finalX) && (tileY == finalY)))
 		{
 			psTile = mapTile(x >> TILE_SHIFT, y >> TILE_SHIFT);
-			if ((psTile->tileInfoBits & BITS_WALL) &&
-				!TILE_HAS_SMALLSTRUCTURE(psTile))
+			if (TILE_HAS_WALL(psTile) && !TILE_HAS_SMALLSTRUCTURE(psTile))
 			{
 				lastH = 2*UBYTE_MAX * ELEVATION_SCALE;
 	//			currG = UBYTE_MAX * ELEVATION_SCALE * GRAD_MUL / lastD;

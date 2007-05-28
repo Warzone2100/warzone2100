@@ -80,30 +80,26 @@ typedef enum _terrain_type
 
 #define TILE_IS_NOTBLOCKING(x)	(x->texture & TILE_NOTBLOCKING)
 
-#define TILE_IMPOSSIBLE(x)		((TILE_HAS_STRUCTURE(x)) && (TILE_HAS_FEATURE(x)))
-#define BITS_OCCUPIED			(BITS_STRUCTURE | BITS_FEATURE | BITS_WALL)
-#define TILE_OCCUPIED(x)		(x->tileInfoBits & BITS_OCCUPIED)
-#define TILE_HAS_STRUCTURE(x)	(x->tileInfoBits & BITS_STRUCTURE)
-#define TILE_HAS_FEATURE(x)		(x->tileInfoBits & BITS_FEATURE)
+#define TILE_OCCUPIED(x)		(x->psObject)
+#define TILE_HAS_STRUCTURE(x)		(x->psObject && x->psObject->type == OBJ_STRUCTURE)
+#define TILE_HAS_FEATURE(x)		(x->psObject && x->psObject->type == OBJ_FEATURE)
+#define TILE_HAS_WALL(x)		(TILE_HAS_STRUCTURE(x) \
+					&& (((STRUCTURE*)x->psObject)->pStructureType->type == REF_WALL \
+					    || ((STRUCTURE*)x->psObject)->pStructureType->type == REF_WALLCORNER))
 #define TILE_DRAW(x)			(!((x)->tileInfoBits & BITS_NODRAWTILE))
 #define TILE_HIGHLIGHT(x)		(x->texture & TILE_HILIGHT)
 #define TILE_HAS_TALLSTRUCTURE(x)	(x->tileInfoBits & BITS_TALLSTRUCTURE)
-#define TILE_HAS_SMALLSTRUCTURE(x)	(x->tileInfoBits & BITS_SMALLSTRUCTURE)
+#define TILE_HAS_SMALLSTRUCTURE(x)	(TILE_HAS_STRUCTURE(x) && ((STRUCTURE*)x->psObject)->pStructureType->height == 1)
 
 #define SET_TILE_NOTBLOCKING(x)	(x->texture |= TILE_NOTBLOCKING)
 #define CLEAR_TILE_NOTBLOCKING(x)	(x->texture &= ~TILE_NOTBLOCKING)
 
-#define SET_TILE_STRUCTURE(x)	(x->tileInfoBits = (UBYTE)(((x->tileInfoBits & (~BITS_OCCUPIED))) | BITS_STRUCTURE))
-#define SET_TILE_FEATURE(x)		(x->tileInfoBits = (UBYTE)(((x->tileInfoBits & (~BITS_OCCUPIED))) | BITS_FEATURE))
-#define SET_TILE_EMPTY(x)		(x->tileInfoBits = (UBYTE) (x->tileInfoBits & (~BITS_OCCUPIED)) )
 #define SET_TILE_NODRAW(x)		(x->tileInfoBits = (UBYTE)((x)->tileInfoBits | BITS_NODRAWTILE))
 #define CLEAR_TILE_NODRAW(x)	(x->tileInfoBits = (UBYTE)((x)->tileInfoBits & (~BITS_NODRAWTILE)))
 #define SET_TILE_HIGHLIGHT(x)	(x->texture = (UWORD)((x)->texture | TILE_HILIGHT))
 #define CLEAR_TILE_HIGHLIGHT(x)	(x->texture = (UWORD)((x)->texture & (~TILE_HILIGHT)))
 #define SET_TILE_TALLSTRUCTURE(x)	(x->tileInfoBits = (UBYTE)((x)->tileInfoBits | BITS_TALLSTRUCTURE))
 #define CLEAR_TILE_TALLSTRUCTURE(x)	(x->tileInfoBits = (UBYTE)((x)->tileInfoBits & (~BITS_TALLSTRUCTURE)))
-#define SET_TILE_SMALLSTRUCTURE(x)	(x->tileInfoBits = (UBYTE)((x)->tileInfoBits | BITS_SMALLSTRUCTURE))
-#define CLEAR_TILE_SMALLSTRUCTURE(x)	(x->tileInfoBits = (UBYTE)((x)->tileInfoBits & (~BITS_SMALLSTRUCTURE)))
 
 // Multiplier for the tile height
 #define	ELEVATION_SCALE	2
@@ -137,14 +133,8 @@ typedef struct _maptile
 	UBYTE			bMaxed;
 	UBYTE			level;
 	UBYTE			inRange;		// sensor range display.
+	BASE_OBJECT		*psObject;		// Any object sitting on the location (e.g. building)
 
-									// This is also used to store the tile flip flags
-//  What's been removed - 46 bytes per tile so far
-//	BASE_OBJECT		*psObject;		// Any object sitting on the location (e.g. building)
-//	UBYTE			onFire;			// Is tile on fire?
-//	UBYTE			rippleIndex;	// Current value in ripple table?
-//	BOOL			tileVisible[MAX_PLAYERS]; // Which players can see the tile?
-//	BOOL			triangleFlip;	// Is the triangle flipped?
 //	TYPE_OF_TERRAIN	type;			// The terrain type for the tile
 } MAPTILE;
 

@@ -1095,7 +1095,7 @@ BOOL actionRouteBlockingPos(DROID *psDroid, SDWORD tx, SDWORD ty)
 			if (tileOnMap(i,j))
 			{
 				psTile = mapTile(i,j);
-				if (psTile->tileInfoBits & BITS_WALL)
+				if (TILE_HAS_WALL(psTile))
 				{
 					psWall = getTileStructure((UDWORD)i,(UDWORD)j);
 					//Watermelon:fixes AI try to destroy ally's wall bug

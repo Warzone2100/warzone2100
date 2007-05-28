@@ -22,6 +22,9 @@
 #ifndef _geometry_h
 #define _geometry_h
 
+#include "map.h"
+#include "hci.h"
+
 typedef struct _t_tri
 {
 POINT	coords[3];
@@ -32,10 +35,6 @@ typedef struct _t_quad
 POINT	coords[4];
 } QUAD;
 
-extern BASE_OBJECT	*getTileOccupier(UDWORD x, UDWORD y);
-extern STRUCTURE	*getTileStructure(UDWORD x, UDWORD y);
-extern FEATURE		*getTileFeature(UDWORD x, UDWORD y);
-
 extern	UDWORD			adjustDirection	( SDWORD present, SDWORD difference );
 extern	SDWORD			calcDirection	( UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1 );
 extern	void			initBulletTable	( void );
@@ -44,5 +43,27 @@ extern DROID			*getNearestDroid ( UDWORD x, UDWORD y, BOOL bSelected );
 extern BOOL	droidOnScreen ( DROID *psDroid, SDWORD tolerance );
 
 extern UDWORD	dirtySqrt	( SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2 );
+
+static inline STRUCTURE *getTileStructure(UDWORD x, UDWORD y)
+{
+	return (STRUCTURE *)mapTile(x,y)->psObject;
+}
+
+static inline FEATURE *getTileFeature(UDWORD x, UDWORD y)
+{
+	return (FEATURE *)mapTile(x,y)->psObject;
+}
+
+static inline BASE_OBJECT *getTileOccupier(UDWORD x, UDWORD y)
+{
+	MAPTILE *psTile = mapTile(x,y);
+
+	if (TEST_TILE_VISIBLE(selectedPlayer, psTile))
+	{
+		return mapTile(x,y)->psObject;
+	} else {
+		return NULL;
+	}
+}
 
 #endif

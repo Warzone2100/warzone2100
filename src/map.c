@@ -329,13 +329,10 @@ static BOOL mapLoadV2(char *pFileData, UDWORD fileSize)
 
 //		psMapTiles[i].type = psTileData->type;
 		psMapTiles[i].height = psTileData->height;
-//		psMapTiles[i].onFire = 0;
 		// Changed line - alex
-//		psMapTiles[i].rippleIndex = (UBYTE) (i%RIP_SIZE);
 		//end of change - alex
 		for (j=0; j<MAX_PLAYERS; j++)
 		{
-//			psMapTiles[i].tileVisible[j]=FALSE;
 			psMapTiles[i].tileVisBits =(UBYTE)(( (psMapTiles[i].tileVisBits) &~ (UBYTE)(1<<j) ));
 		}
 		psTileData = (MAP_SAVETILEV2 *)(((UBYTE *)psTileData) + SAVE_TILE_SIZE);
@@ -383,13 +380,10 @@ static BOOL mapLoadV3(char *pFileData, UDWORD fileSize)
 
 //		psMapTiles[i].type = psTileData->type;
 		psMapTiles[i].height = psTileData->height;
-//		psMapTiles[i].onFire = 0;
 		// Changed line - alex
-//		psMapTiles[i].rippleIndex = (UBYTE) (i%RIP_SIZE);
 		//end of change - alex
 		for (j=0; j<MAX_PLAYERS; j++)
 		{
-//			psMapTiles[i].tileVisible[j]=FALSE;
 			psMapTiles[i].tileVisBits =(UBYTE)(( (psMapTiles[i].tileVisBits) &~ (UBYTE)(1<<j) ));
 		}
 		psTileData = (MAP_SAVETILEV2 *)(((UBYTE *)psTileData) + SAVE_TILE_SIZE);

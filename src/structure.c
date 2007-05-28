@@ -167,9 +167,6 @@ static	STRUCTURE_STATS	*g_psStatDestroyStruct = NULL;
 // the structure that was last hit
 STRUCTURE	*psLastStructHit;
 
-//flag for oil derrick anim
-//static	UBYTE	powerGenExists[MAX_PLAYERS];
-
 //flag for drawing radar
 static		UBYTE	hqExists[MAX_PLAYERS];
 //flag for drawing all sat uplink sees
@@ -1701,15 +1698,12 @@ void buildFlatten(STRUCTURE_STATS *pStructureType, UDWORD atx, UDWORD aty,UDWORD
 /*Builds an instance of a Structure - the x/y passed in are in world coords. */
 STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, UDWORD player, BOOL FromSave)
 {
-	STRUCTURE*	psBuilding;
-	FEATURE		*psFeature, *psFNext;
 	UDWORD		mapX, mapY, mapH;
 	UDWORD		width, breadth, weapon, capacity, bodyDiff = 0;
 	SDWORD		wallType = 0, preScrollMinX = 0, preScrollMinY = 0, preScrollMaxX = 0, preScrollMaxY = 0;
-	MAPTILE		*psTile;
-	BOOL		bUpgraded;
 	UDWORD		min,max;
 	int			i;
+	STRUCTURE	*psBuilding = NULL;
 
 	if (IsStatExpansionModule(pStructureType)==FALSE)
 	{
@@ -1792,8 +1786,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			}
 		}
 
-		if (pStructureType->type == REF_DEFENSE &&
-			mapTile(x >> TILE_SHIFT, y >> TILE_SHIFT)->tileInfoBits & BITS_WALL)
+		if (pStructureType->type == REF_DEFENSE && TILE_HAS_WALL(mapTile(x >> TILE_SHIFT, y >> TILE_SHIFT)))
 		{
 			// building a gun tower over a wall, replace it
 			psBuilding = getTileStructure(x >> TILE_SHIFT, y >> TILE_SHIFT);
@@ -1825,12 +1818,28 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		//set up the imd to use for the display
 		psBuilding->sDisplay.imd = pStructureType->pIMD;
 
+		//if resource extractor - need to remove oil feature and prox Msg
+		if (pStructureType->type == REF_RESOURCE_EXTRACTOR)
+		{
+			FEATURE *psFeature = getTileFeature(map_coord(x), map_coord(y));
+
+			if (psFeature->psStats->subType == FEAT_OIL_RESOURCE)
+			{
+				// remove it from the map
+				turnOffMultiMsg(TRUE); // dont send this one!
+				removeFeature(psFeature);
+				turnOffMultiMsg(FALSE);
+			} else {
+				ASSERT(FALSE, "buildStructure: Tried to build derrick but feature is not oil at (%u, %u)!", x, y);
+			}
+		}
+
 		mapH = buildFoundation(pStructureType, x, y);
 		for (width = 0; width < pStructureType->baseWidth; width++)
 		{
 			for (breadth = 0; breadth < pStructureType->baseBreadth; breadth++)
 			{
-				psTile = mapTile(mapX+width,mapY+breadth);
+				MAPTILE *psTile = mapTile(mapX+width,mapY+breadth);
 
 				// don't really think this should be done here, but dont know otherwise.alexl
 				if(pStructureType->type == REF_WALLCORNER || pStructureType->type == REF_WALL)
@@ -1853,20 +1862,12 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 					       mapX + width, mapY + breadth);
 				}
 
-				SET_TILE_STRUCTURE(psTile);
+				psTile->psObject = (BASE_OBJECT*)psBuilding;
+
 				// if it's a tall structure then flag it in the map.
 				if(psBuilding->sDisplay.imd->ymax > TALLOBJECT_YMAX) 
 				{
 					SET_TILE_TALLSTRUCTURE(psTile);
-				}
-				if ((pStructureType->type == REF_WALL) ||
-					(pStructureType->type == REF_WALLCORNER))
-				{
-					psTile->tileInfoBits |= BITS_WALL;
-				}
-				if (pStructureType->height == 1)
-				{
-					SET_TILE_SMALLSTRUCTURE(psTile);
 				}
 			}
 		}
@@ -2063,46 +2064,18 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		gridAddObject((BASE_OBJECT *)psBuilding);
 
 		clustNewStruct(psBuilding);
-
-		//if resource extractor - need to remove oil feature and prox Msg
-		if (pStructureType->type == REF_RESOURCE_EXTRACTOR)
-		{
-			//find the resource at this point
-			for (psFeature = apsFeatureLists[0]; psFeature != NULL; psFeature = psFNext)
-			{
-				psFNext = psFeature->psNext;
-				if (psFeature->psStats->subType == FEAT_OIL_RESOURCE)
-				{
-					if ((psFeature->x == psBuilding->x) && (psFeature->y == psBuilding->y))
-					{
-						//remove it from the map
-						turnOffMultiMsg(TRUE); // dont send this one!
-						removeFeature(psFeature);
-						turnOffMultiMsg(FALSE);
-
-						//set the map to hold the resource extractor again
-						SET_TILE_STRUCTURE(mapTile(psFeature->x >> TILE_SHIFT,
-							psFeature->y >> TILE_SHIFT));
-						// if it's a tall structure then flag it in the map.
-						if(psBuilding->sDisplay.imd->ymax > TALLOBJECT_YMAX) {
-
-							SET_TILE_TALLSTRUCTURE(mapTile(psFeature->x >> TILE_SHIFT,
-								psFeature->y >> TILE_SHIFT));
-						}
-					}
-				}
-			}
-		}
 	}
 	else //its an upgrade
 	{
-		bUpgraded = FALSE;
+		BOOL bUpgraded = FALSE;
+
+		psBuilding = getTileStructure(map_coord(x), map_coord(y));
+
 		//don't create the Structure use existing one
-		psBuilding = getTileStructure(x>>TILE_SHIFT, y>>TILE_SHIFT);
+
 		if (psBuilding == NULL)
 		{
-			debug( LOG_ERROR, "No owning structure for this module - %s", getStructName(pStructureType) );
-			abort();
+			ASSERT(FALSE, "No owning structure for this module - %s", getStructName(pStructureType));
 			return FALSE;
 		}
 		if (pStructureType->type == REF_FACTORY_MODULE)
@@ -2287,6 +2260,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 
 	/* why is this necessary - it makes tiles under the structure visible */
 	setUnderTilesVis((BASE_OBJECT*)psBuilding,player);
+
 	return psBuilding;
 }
 
@@ -4306,7 +4280,6 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 	UDWORD				min, max;
 	HIGHLIGHT			site;
 	FLAG_POSITION		*psCurrFlag;
-	MAPTILE				*psTile;
 
 	psBuilding = (STRUCTURE_STATS *)psStats;
 
@@ -4487,6 +4460,8 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 	if (psStats->ref >= REF_STRUCTURE_START &&
 		psStats->ref < (REF_STRUCTURE_START + REF_RANGE))
 	{
+		MAPTILE	*psTile;
+
 		switch(psBuilding->type)
 		{
 			case REF_HQ:
@@ -4666,9 +4641,9 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 							psTile = mapTile(i,j);
 							if (TILE_OCCUPIED(psTile))
 							{
-								if ((psBuilding->type == REF_DEFENSE ||
-									psBuilding->type == REF_WALL) &&
-									(psTile->tileInfoBits & BITS_WALL))
+								if (TILE_HAS_WALL(psTile)
+								    && (psBuilding->type == REF_DEFENSE ||
+-                                                                       psBuilding->type == REF_WALL))
 								{
 									psStruct = getTileStructure(i,j);
 									if (psStruct != NULL &&
@@ -5074,11 +5049,10 @@ void removeStructFromMap(STRUCTURE *psStruct)
 		for (j = 0; j < psStruct->pStructureType->baseBreadth; j++)
 		{
 			psTile = mapTile(mapX+i, mapY+j);
-			SET_TILE_EMPTY(psTile);
+			psTile->psObject = NULL;
 			CLEAR_TILE_NODRAW(psTile);
 			CLEAR_TILE_TALLSTRUCTURE(psTile);
 			CLEAR_TILE_NOTBLOCKING(psTile);
-			CLEAR_TILE_SMALLSTRUCTURE(psTile);
 		}
 	}
 }

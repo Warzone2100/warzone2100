@@ -207,7 +207,6 @@ static void normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant)
 	case 0:
 	case 2:
 		/* Is it flipped? In this case one triangle  */
-//		if(psTile->triangleFlip)
 		if(TRI_FLIPPED(psTile))
 		{
 			if(quadrant==0)
@@ -274,7 +273,6 @@ static void normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant)
 	case 1:
 	case 3:
 		/* Is it flipped? In this case two triangles  */
-//		if(psTile->triangleFlip)
 		if(TRI_FLIPPED(psTile))
 		{
 	   	 	corner1.x = tileX<<TILE_SHIFT;

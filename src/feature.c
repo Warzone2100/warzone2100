@@ -725,7 +725,6 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	FEATURE		*psFeature;
 	UDWORD		mapX, mapY;
 	UDWORD		width,breadth, foundationMin,foundationMax, height;
-	MAPTILE		*psTile;
 	UDWORD		startX,startY,max,min;
 	SDWORD		i;
 	UBYTE		vis;
@@ -843,14 +842,12 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	if(psFeature->psStats->subType==FEAT_BUILD_WRECK)
 	{
 
-//		psFeature->sDisplay.imd = wreckageImds[rand()%MAX_WRECKAGE];
 		psFeature->sDisplay.imd = getRandomWreckageImd();
 
 	}
 	else
 	{
 		psFeature->sDisplay.imd = psStats->psImd;
-//DBPRINTF(("%d %d\n",psStats->psImd->ymin,psStats->psImd->ymax);
   	}
 
 
@@ -860,8 +857,9 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	{
 		for (breadth = 0; breadth <= psStats->baseBreadth; breadth++)
 		{
-			//check not outside of map - for load save game
+			MAPTILE *psTile = mapTile(mapX + width, mapY + breadth);
 
+			//check not outside of map - for load save game
 			ASSERT( (mapX+width) < mapWidth,
 				"x coord bigger than map width - %s, id = %d",
 				getName(psFeature->psStats->pName), psFeature->id );
@@ -869,14 +867,14 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 				"y coord bigger than map height - %s, id = %d",
 				getName(psFeature->psStats->pName), psFeature->id );
 
-			psTile = mapTile(mapX+width, mapY+breadth);
 			if (width != psStats->baseWidth && breadth != psStats->baseBreadth)
 			{
-				ASSERT( !(TILE_HAS_FEATURE(mapTile(mapX+width,mapY+breadth))),
+				ASSERT( !(TILE_HAS_FEATURE(psTile)),
 					"buildFeature - feature- %d already found at %d, %d",
 					psFeature->id, mapX+width,mapY+breadth );
 
-				SET_TILE_FEATURE(psTile);
+				psTile->psObject = (BASE_OBJECT*)psFeature;
+
 				// if it's a tall feature then flag it in the map.
 				if(psFeature->sDisplay.imd->ymax > TALLOBJECT_YMAX) {
 					SET_TILE_TALLSTRUCTURE(psTile);
@@ -911,7 +909,6 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 //	else
 //	{
 //		psFeature->sDisplay.imd = psStats->psImd;
-//DBPRINTF(("%d %d\n",psStats->psImd->ymin,psStats->psImd->ymax);
 // 	}
 
 	// add the feature to the grid
@@ -957,7 +954,6 @@ void featureUpdate(FEATURE *psFeat)
 void removeFeature(FEATURE *psDel)
 {
 	UDWORD		mapX, mapY, width,breadth, player;
-	MAPTILE		*psTile;
 	MESSAGE		*psMessage;
 	Vector3i pos;
 
@@ -986,9 +982,10 @@ void removeFeature(FEATURE *psDel)
 	{
 		for (breadth = 0; breadth < psDel->psStats->baseBreadth; breadth++)
 		{
-			psTile = mapTile(mapX+width, mapY+breadth);
-			/* Don't need to worry about clearing structure bits - they should not be there! */
-			SET_TILE_EMPTY(psTile);
+			MAPTILE *psTile = mapTile(mapX + width, mapY + breadth);
+
+			psTile->psObject = NULL;
+
 			CLEAR_TILE_NODRAW(psTile);
 			CLEAR_TILE_TALLSTRUCTURE(psTile);
 			CLEAR_TILE_NOTBLOCKING(psTile);
@@ -1056,14 +1053,11 @@ void destroyFeature(FEATURE *psDel)
 	Vector3i pos;
 	UDWORD			width,breadth;
 	UDWORD			mapX,mapY;
-	MAPTILE			*psTile;
 	UDWORD			texture;
-
 
 	ASSERT( psDel != NULL,
 		"destroyFeature: invalid feature pointer\n" );
 
-//---------------------------------------------------------------------------------------
  	/* Only add if visible and damageable*/
 	if(psDel->visible[selectedPlayer] && psDel->psStats->damageable)
 	{
@@ -1107,20 +1101,20 @@ void destroyFeature(FEATURE *psDel)
 			mapX = (psDel->x - psDel->psStats->baseWidth * TILE_UNITS / 2) >> TILE_SHIFT;
 			mapY = (psDel->y - psDel->psStats->baseBreadth * TILE_UNITS / 2) >> TILE_SHIFT;
 //			if(psDel->sDisplay.imd->ymax>300)
-		if(psDel->psStats->subType == FEAT_SKYSCRAPER)
+			if (psDel->psStats->subType == FEAT_SKYSCRAPER)
 			{
 				for (width = 0; width < psDel->psStats->baseWidth; width++)
 				{
 					for (breadth = 0; breadth < psDel->psStats->baseBreadth; breadth++)
 					{
-						psTile = mapTile(mapX+width,mapY+breadth);
+						MAPTILE *psTile = mapTile(mapX+width,mapY+breadth);
 						// stops water texture chnaging for underwateer festures
 					 	if(TERRAIN_TYPE(psTile) != TER_WATER)
 						{
 							if(TERRAIN_TYPE(psTile) != TER_CLIFFFACE)
 							{
 						   		/* Clear feature bits */
-								SET_TILE_EMPTY(mapTile(mapX+width,mapY+breadth));
+								psTile->psObject = NULL;
 								texture = (psTile->texture & (~TILE_NUMMASK));
 								texture |= DRIVE_OVER_RUBBLE_TILE;//getRubbleTileNum();
 								psTile->texture = (UWORD)texture;
@@ -1128,7 +1122,7 @@ void destroyFeature(FEATURE *psDel)
 							else
 							{
 							   /* This remains a blocking tile */
-								SET_TILE_EMPTY(mapTile(mapX+width,mapY+breadth));
+								psTile->psObject = NULL;
 								texture = (psTile->texture & (~TILE_NUMMASK));
 								texture |= NO_DRIVE_OVER_RUBBLE_TILE;//getRubbleTileNum();
 								psTile->texture = (UWORD)texture;
