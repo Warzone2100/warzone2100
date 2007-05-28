@@ -205,6 +205,8 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 #define LEV_MED					400
 #define LEV_HI					700
 
+#define DIFF_SLIDER_STOPS		20			//max number of stops for the multiplayer difficulty slider
+
 // ////////////////////////////////////////////////////////////////////////////
 // macros For handling net messages, just copy things in & out of the msg buffer
 /*

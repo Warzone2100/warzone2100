@@ -1485,7 +1485,8 @@ UDWORD addPlayerBox(BOOL players)
 				sFormInit.pDisplay = displayPlayer;//intDisplayButtonHilight;
 				sFormInit.pUserData = (void*) i;
 				widgAddForm(psWScreen, &sFormInit);
-				addFESlider(MULTIOP_SKSLIDE+i,sFormInit.id, 43,9,	  20,game.skDiff[i], 0);
+				addFESlider(MULTIOP_SKSLIDE+i,sFormInit.id, 43,9,
+					DIFF_SLIDER_STOPS, DIFF_SLIDER_STOPS / 2, 0);		//set to 50%
 			}
 		}
 	}
@@ -2197,7 +2198,7 @@ static void processMultiopWidgets(UDWORD id)
 				{
 					if (game.skDiff[i] == 0)
 					{
-						game.skDiff[i] = 10;
+						game.skDiff[i] = (DIFF_SLIDER_STOPS / 2);
 					}
 
 					break;
@@ -2722,7 +2723,7 @@ BOOL startMultiOptions(BOOL bReenter)
 		{
 //			game.skirmishPlayers[i] = 1; // clear out skirmish setting
 //			game.skDiff[i] = (rand()%19)+1;	//1-20
-			game.skDiff[i] = 10;
+			game.skDiff[i] = (DIFF_SLIDER_STOPS / 2);
 		}
 
 /*		//set defaults for game.

@@ -274,7 +274,7 @@ BOOL MultiPlayerLeave( UDWORD dp)
 
 		turnOffMultiMsg(TRUE);
 		clearPlayer(i,FALSE,FALSE);
-		game.skDiff[dp-1] = 10;
+		game.skDiff[dp-1] = (DIFF_SLIDER_STOPS / 2);
 
 		turnOffMultiMsg(FALSE);
 

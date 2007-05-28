@@ -1758,7 +1758,7 @@ BOOL scrSkDifficultyModifier(void)
 	}
 
 	// power modifier
-	amount = game.skDiff[player]*40;		//(0-20)*25
+	amount = game.skDiff[player]*40;		//(0-DIFF_SLIDER_STOPS)*25
 	
 	if(amount > 0)
 	{
