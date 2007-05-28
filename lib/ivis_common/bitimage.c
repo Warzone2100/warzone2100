@@ -106,7 +106,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 	// Load the texture pages.
 	for (i = 0; i < Header.NumTPages; i++)
 	{
-		ImageFile->TPageIDs[i] = LoadTextureFile(Header.TPageFiles[i], &ImageFile->TexturePages[i]);
+		ImageFile->TPageIDs[i] = LoadTextureFile((char *)Header.TPageFiles[i], &ImageFile->TexturePages[i]);
 	}
 
 	for(ImageDef = &ImageFile->ImageDefs[0]; ImageDef != &ImageFile->ImageDefs[Header.NumImages]; ++ImageDef)
