@@ -37,6 +37,8 @@
 #include "lib/framework/strres.h"
 #include "lib/framework/strresly.h"
 
+#include <physfs.h>
+
 /* Get the Yacc definitions */
 #include "strres_parser.tab.h"
 
@@ -52,16 +54,21 @@ static UDWORD currText=0;
 // Note if in a comment
 static BOOL inComment;
 
-/* Pointer to the input buffer */
-static char *pInputBuffer = NULL;
-static char *pEndBuffer = NULL;
+/* Handle to the input file */
+static PHYSFS_file* pReadFile = NULL;
 
 #define YY_INPUT(buf,result,max_size) \
-			if (pInputBuffer != pEndBuffer) { \
-				buf[0] = *(pInputBuffer++); result = 1; \
-			} else { \
+		if (PHYSFS_eof(pReadFile)) \
+		{ \
+			buf[0] = EOF; result = YY_NULL; \
+		} \
+		else { \
+			result = PHYSFS_read(pReadFile, buf, 1, max_size); \
+			if (result == -1) \
+			{ \
 				buf[0] = EOF; result = YY_NULL; \
-			}
+			} \
+		}
 %}
 
 %option nounput
@@ -113,14 +120,12 @@ static char *pEndBuffer = NULL;
 
 %%
 
-/* Set the current input buffer for the lexer */
-void strresSetInputBuffer(char *pBuffer, UDWORD size)
+/* Set the current input file for the lexer */
+void strresSetInputFile(PHYSFS_file* fileHandle)
 {
-	pInputBuffer = pBuffer;
-	pEndBuffer = pBuffer + size;
+	pReadFile = fileHandle;
 
 	/* Reset the lexer incase it's been used before */
-//	YY_FLUSH_BUFFER;
 	yy_flush_buffer( YY_CURRENT_BUFFER );
 }
 

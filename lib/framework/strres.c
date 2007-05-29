@@ -385,14 +385,23 @@ char *strresGetString(STR_RES *psRes, UDWORD id)
 
 
 /* Load a string resource file */
-BOOL strresLoad(STR_RES *psRes, char *pData, UDWORD size)
+BOOL strresLoad(STR_RES* psRes, const char* fileName)
 {
 	psCurrRes = psRes;
-	strresSetInputBuffer(pData, size);
-	if (strres_parse() != 0)
+	PHYSFS_file* fileHandle = PHYSFS_openRead(fileName);
+	if (!fileHandle)
 	{
+		debug(LOG_ERROR, "strresLoadFile: PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, PHYSFS_getLastError());		
 		return FALSE;
 	}
+
+	strresSetInputFile(fileHandle);
+	if (strres_parse() != 0)
+	{
+		PHYSFS_close(fileHandle);
+		return FALSE;
+	}
+	PHYSFS_close(fileHandle);
 
 	return TRUE;
 }

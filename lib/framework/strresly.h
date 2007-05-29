@@ -23,6 +23,8 @@
 #ifndef _strresly_h
 #define _strresly_h
 
+#include <physfs.h>
+
 /* Maximum number of characters in a directory entry */
 #define FILE_MAXCHAR		255
 
@@ -33,7 +35,7 @@
 extern STR_RES	*psCurrRes;
 
 /* Set the current input buffer for the lexer - used by strresLoad */
-extern void strresSetInputBuffer(char *pBuffer, UDWORD size);
+extern void strresSetInputFile(PHYSFS_file* fileHandle);
 
 /* Give access to the line number and current text for error messages */
 extern void strresGetErrorData(int *pLine, char **ppText);

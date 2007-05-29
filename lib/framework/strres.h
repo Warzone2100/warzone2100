@@ -80,7 +80,7 @@ extern BOOL strresGetIDString(STR_RES *psRes, char *pIDStr, char **ppStoredID);
 extern char *strresGetString(STR_RES *psRes, UDWORD id);
 
 /* Load a string resource file */
-extern BOOL strresLoad(STR_RES *psRes, char *pData, UDWORD size);
+extern BOOL strresLoad(STR_RES* psRes, const char* fileName);
 
 /* Return the the length of a char */
 extern UDWORD stringLen(const char *pStr);

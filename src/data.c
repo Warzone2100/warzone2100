@@ -1025,7 +1025,7 @@ static void dataAnimRelease( void *pData )
 }
 
 /* Load a string resource file */
-static BOOL dataStrResLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL dataStrResLoad(const char* fileName, void** ppData)
 {
 	// recreate the string resource if it was freed by a WRF release
 	if (psStringRes == NULL)
@@ -1036,7 +1036,7 @@ static BOOL dataStrResLoad(char *pBuffer, UDWORD size, void **ppData)
 		}
 	}
 
-	if (!strresLoad(psStringRes, pBuffer, size))
+	if (!strresLoad(psStringRes, fileName))
 	{
 		return FALSE;
 	}
@@ -1155,7 +1155,6 @@ static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
 	{"SMSG", bufferSMSGLoad, dataSMSGRelease},
 	{"SCRIPT", dataScriptLoad, (RES_FREE)scriptFreeCode},
 	{"SCRIPTVAL", dataScriptLoadVals, NULL},
-	{"STR_RES", dataStrResLoad, dataStrResRelease},
 	{"IMD", dataIMDBufferLoad, (RES_FREE)iV_IMDRelease},
 };
 
@@ -1176,6 +1175,7 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"TERTILES", dataTERTILESLoad, dataTERTILESRelease},     // freed by 3d shutdow},// Tertiles Files. This version used when running with hardware renderer.
 	{"IMG", dataIMGLoad, dataIMGRelease},
 	{"TEXPAGE", dataTexPageLoad, dataTexPageRelease},
+	{"STR_RES", dataStrResLoad, dataStrResRelease},
 };
 
 /* Pass all the data loading functions to the framework library */
