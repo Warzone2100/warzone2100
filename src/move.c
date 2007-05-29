@@ -961,7 +961,7 @@ static void moveCalcTurn(float *pCurr, float target, UDWORD rate)
 	{
 		*pCurr += 360.0f;
 	}
-	else if (*pCurr >= 360.0f)
+	if (*pCurr >= 360.0f)
 	{
 		*pCurr -= 360.0f;
 	}
