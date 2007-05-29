@@ -712,7 +712,7 @@ static void drawTiles(iView *camera, iView *player)
 		of the tiles in the grid
 	*/
 	averageCentreTerrainHeight = 0;
-	for (i=0; i < (SDWORD)visibleYTiles+1; i++)
+	for (i=0; i < visibleYTiles+1; i++)
 	{
 		/* Go through the x's */
 		for (j=0; j < (SDWORD)visibleXTiles+1; j++)
@@ -891,7 +891,7 @@ static void drawTiles(iView *camera, iView *player)
 	/* ---------------------------------------------------------------- */
 	/* Draw all the tiles or add them to bucket sort                     */
 	/* ---------------------------------------------------------------- */
-	for (i= 0; i < (SDWORD)visibleYTiles; i++)
+	for (i= 0; i < visibleYTiles; i++)
 	{
 		for (j= 0; j < (SDWORD)visibleXTiles; j++)
 		{
