@@ -1526,7 +1526,6 @@ BOOL loadGame(char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGa
 		if (psMapTiles)
 		{
 //			free(psMapTiles);
-//			mapFreeTilesAndStrips();
 		}
 		if (aMapLinePoints)
 		{
@@ -2823,7 +2822,6 @@ error:
 	if (psMapTiles)
 	{
 //		free(psMapTiles);
-//		mapFreeTilesAndStrips();
 	}
 	if (aMapLinePoints)
 	{
