@@ -113,7 +113,6 @@ extern void debug_callback_win32debug( void**, const char * );
 
 void setFramerateLimit(int fpsLimit)
 {
-	SDL_initFramerate( &wzFPSmanager );
 	SDL_setFramerate( &wzFPSmanager, fpsLimit );
 }
 
@@ -728,28 +727,30 @@ int main(int argc, char *argv[])
 	debug_init();
 	atexit( debug_exit );
 
+#ifdef DEBUG
+	debug( LOG_WZ, "Warzone 2100 - Version %s - Built %s - DEBUG", VERSION, __DATE__ );
+#else
+	debug( LOG_WZ, "Warzone 2100 - Version %s - Built %s", VERSION, __DATE__ );
+#endif
+
 	debug_register_callback( debug_callback_stderr, NULL, NULL, NULL );
-#if defined(WZ_OS_WIN) && defined(DEBUG)
-//	debug_register_callback( debug_callback_win32debug, NULL, NULL, NULL );
-#endif // WZ_OS_WIN && DEBUG
+#if defined(WZ_OS_WIN) && defined(DEBUG_INSANE)
+	debug_register_callback( debug_callback_win32debug, NULL, NULL, NULL );
+#endif // WZ_OS_WIN && DEBUG_INSANE
 
 	// find early boot info
 	if ( !ParseCommandLineEarly(argc, argv) ) {
 		return -1;
 	}
 
-#ifdef DEBUG
-	debug( LOG_WZ, "Warzone 2100 - Version %s - Built %s - DEBUG", VERSION, __DATE__ );
-#else
-	debug( LOG_WZ, "Warzone 2100 - Version %s - Built %s", VERSION, __DATE__ );
-#endif
 	/*** Initialize translations ***/
 	setlocale(LC_ALL, "");
 	(void)bindtextdomain(PACKAGE, LOCALEDIR);
 	(void)textdomain(PACKAGE);
 
-	/*** Initialize PhysicsFS ***/
+	SDL_initFramerate( &wzFPSmanager );
 
+	/*** Initialize PhysicsFS ***/
 	PHYSFS_init(argv[0]);
 	initialize_PhysicsFS();
 
