@@ -179,7 +179,7 @@ void pie_BeginLighting(const Vector3f * light)
 	glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
 	glEnable(GL_LIGHT0);
 
- 	lighting = TRUE;
+	lighting = TRUE;
 	shadows = TRUE;
 }
 
