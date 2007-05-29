@@ -20,6 +20,7 @@
 #ifndef _keymap_h
 #define _keymap_h
 
+#include "lib/framework/input.h"
 
 #define NO_META_KEY				9999
 #define KEYFUNC_TOGGLE_RADAR	20

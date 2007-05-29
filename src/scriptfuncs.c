@@ -92,6 +92,7 @@
 #include "display3d.h"			//for showRangeAtPos()
 #include "multimenu.h"
 #include "lib/script/chat_processing.h"
+#include "keymap.h"
 
 static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 

@@ -69,12 +69,8 @@ typedef enum _terrain_type
 #define TILE_NUMMASK	0x01ff
 #define TILE_BITMASK	0xfe00
 
-#define BITS_STRUCTURE	0x1
-#define BITS_FEATURE	0x2
 #define BITS_NODRAWTILE	0x4
-#define BITS_SMALLSTRUCTURE	0x8			// show small structures - tank traps / bunkers
 #define BITS_FPATHBLOCK	0x10		// bit set temporarily by find path to mark a blocking tile
-#define BITS_WALL		0x20
 #define BITS_GATEWAY	0x40		// bit set to show a gateway on the tile
 #define BITS_TALLSTRUCTURE 0x80		// bit set to show a tall structure which camera needs to avoid.
 
