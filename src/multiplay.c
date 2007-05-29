@@ -1993,7 +1993,7 @@ char *getPlayerColourName(SDWORD player)
 
 	if (player < end)
 	{
-		strcpy(tempString, _(playerColors[player]));
+		strcpy(tempString, _(playerColors[ getPlayerColour(player) ]));
 	}
 	else
 	{
