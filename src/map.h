@@ -236,6 +236,13 @@ static inline BOOL tileOnMap(SDWORD x, SDWORD y)
 	return (x >= 0) && (x < (SDWORD)mapWidth) && (y >= 0) && (y < (SDWORD)mapHeight);
 }
 
+/* Return true if a tile is not too near the map edge and not outside of the map */
+static inline BOOL tileInsideBuildRange(SDWORD x, SDWORD y)
+{
+	return (x >= TOO_NEAR_EDGE) && (x < ((SDWORD)mapWidth - TOO_NEAR_EDGE)) &&
+		(y >= TOO_NEAR_EDGE) && (y < ((SDWORD)mapHeight - TOO_NEAR_EDGE));
+}
+
 /* Return whether a world coordinate is on the map */
 static inline BOOL worldOnMap(SDWORD x, SDWORD y)
 {

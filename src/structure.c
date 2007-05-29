@@ -4279,6 +4279,12 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 	HIGHLIGHT			site;
 	FLAG_POSITION		*psCurrFlag;
 
+	//make sure we are not too near map edge and not going to go over it
+	if( !tileInsideBuildRange((SDWORD)x, (SDWORD)y) )
+	{
+		return FALSE;
+	}
+
 	psBuilding = (STRUCTURE_STATS *)psStats;
 
 	// initialise the buildsite structure
