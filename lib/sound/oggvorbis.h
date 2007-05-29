@@ -26,9 +26,6 @@
 
 typedef struct
 {
-	// the raw PCM data
-	char* data;
-
 	// the size of the data contained in *data (NOTE: this is *NOT* the size of *data itself)
 	size_t size;
 
@@ -38,6 +35,13 @@ typedef struct
 	unsigned int bitsPerSample;
 	unsigned int channelCount;
 	unsigned int frequency;
+
+	// the raw PCM data
+#if __STDC_VERSION__ >= 199901L
+	char data[];
+#else
+	char* data;
+#endif
 } soundDataBuffer;
 
 // Forward declaration so we can take pointers to this type
