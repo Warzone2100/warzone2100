@@ -216,7 +216,7 @@ soundDataBuffer* sound_DecodeOggVorbis(struct OggVorbisDecoderState* decoder, si
 #if !(__STDC_VERSION__ >= 199901L)
 	buffer->data = (char*)(buffer + 1);
 #endif
-	buffer->bufferSize = bufferSize + sizeof(soundDataBuffer);
+	buffer->bufferSize = bufferSize;
 	buffer->bitsPerSample = 16;
 	buffer->channelCount = decoder->VorbisInfo->channels;
 	buffer->frequency = decoder->VorbisInfo->rate;
