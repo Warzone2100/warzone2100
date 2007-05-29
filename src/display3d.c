@@ -156,7 +156,6 @@ static void	showSensorRange2(BASE_OBJECT *psObj);
 static void	drawRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius);
 static void	addConstructionLine(DROID *psDroid, STRUCTURE *psStructure);
 static void	doConstructionLines(void);
-WZ_DECL_UNUSED static void	showDroidSelection(DROID *psDroid);
 WZ_DECL_UNUSED static void	drawDeliveryPointSelection(void);
 static void	drawDroidCmndNo(DROID *psDroid);
 static void	drawDroidRank(DROID *psDroid);
@@ -3210,45 +3209,6 @@ BASE_OBJECT		*psObj;
 		}
 	}
 	return(retVal);
-}
-
-static void drawDroidPowerBar(DROID *psDroid)
-{
-	return;
-}
-
-static void drawDroidRanking(DROID *psDroid)
-{
-	return;
-}
-
-static void drawDroidReloadBar(DROID *psDroid)
-{
-	return;
-}
-
-static BOOL doHighlight( DROID *psDroid )
-{
-	return(TRUE);
-}
-
-static void	showDroidSelection( DROID *psDroid )
-{
-	/* First, let's see if we need to - Get out if it's not selected and no appropriate to highlight */
-	if(!psDroid->selected && !doHighlight(psDroid))
-	{
-		/* No need - so get out now */
-		return;
-	}
-
-	/* Right, we're going to process this one, so first do power bars */
-	drawDroidPowerBar(psDroid);
-
-	/* Now, display it's rank */
-	drawDroidRanking(psDroid);
-
-	/* And the reload bars... */
-	drawDroidReloadBar(psDroid);
 }
 
 static void	drawDeliveryPointSelection(void)

@@ -117,22 +117,22 @@ UDWORD	bestSoFar;
 
 /* Returns non-zero if a point is in a 4 sided polygon */
 /* See header file for definition of QUAD */
-int inQuad(POINT *pt, QUAD *quad)
+int inQuad(const POINT *pt, const QUAD *quad)
 {
 int i, j, c = 0;
 
 	for (i = 0, j = 3; i < 4; j = i++)
 	{
 		if ((((quad->coords[i].y<=pt->y) && (pt->y<quad->coords[j].y)) ||
-             ((quad->coords[j].y<=pt->y) && (pt->y<quad->coords[i].y))) &&
-			(pt->x < (quad->coords[j].x - quad->coords[i].x) *
-			(pt->y - quad->coords[i].y) / (quad->coords[j].y -
-			quad->coords[i].y) + quad->coords[i].x))
+		    ((quad->coords[j].y<=pt->y) && (pt->y<quad->coords[i].y))) &&
+		    (pt->x < (quad->coords[j].x - quad->coords[i].x) *
+		    (pt->y - quad->coords[i].y) / (quad->coords[j].y -
+		    quad->coords[i].y) + quad->coords[i].x))
 
-          c = !c;
-    }
+		c = !c;
+	}
 
-    return c;
+	return c;
 }
 
 UDWORD	adjustDirection(SDWORD present, SDWORD difference)
