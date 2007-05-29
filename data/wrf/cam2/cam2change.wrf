@@ -7,7 +7,7 @@
 
 
 directory	"texpages"
-file 		HWTERTILES	"tertilesc2hw.png"
+file 		TERTILES	"tertilesc2hw.png"
 file 		TEXPAGE		"page-6-features-urban.png"
 file		TEXPAGE 	"page-7-barbarians-urban.png"
 file		TEXPAGE		"page-8-player buildings-bases-urban.png"

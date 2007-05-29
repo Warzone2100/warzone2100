@@ -767,7 +767,7 @@ void dataIMGPAGERelease(void *pData)
 
 
 // Tertiles loader. This version for hardware renderer.
-static BOOL dataHWTERTILESLoad(const char *fileName, void **ppData)
+static BOOL dataTERTILESLoad(const char *fileName, void **ppData)
 {
 	// tile loader.
 	if (bTilesPCXLoaded)
@@ -776,7 +776,7 @@ static BOOL dataHWTERTILESLoad(const char *fileName, void **ppData)
 		iV_unloadImage(&tilesPCX);
 		if(!iV_loadImage_PNG(fileName, &tilesPCX))
 		{
-			debug( LOG_ERROR, "HWTERTILES reload failed" );
+			debug( LOG_ERROR, "TERTILES reload failed" );
 			return FALSE;
 		}
 	}
@@ -785,7 +785,7 @@ static BOOL dataHWTERTILESLoad(const char *fileName, void **ppData)
 		debug( LOG_TEXTURE, "Loading terrain tiles\n" );
 		if(!iV_loadImage_PNG(fileName, &tilesPCX))
 		{
-			debug( LOG_ERROR, "HWTERTILES load failed" );
+			debug( LOG_ERROR, "TERTILES load failed" );
 			return FALSE;
 		}
 	}
@@ -813,7 +813,7 @@ static BOOL dataHWTERTILESLoad(const char *fileName, void **ppData)
 	return TRUE;
 }
 
-static void dataHWTERTILESRelease(void *pData)
+static void dataTERTILESRelease(void *pData)
 {
 	iTexture *psSprite = (iTexture*) pData;
 
@@ -1156,7 +1156,6 @@ static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
 	{"SCRIPT", dataScriptLoad, (RES_FREE)scriptFreeCode},
 	{"SCRIPTVAL", dataScriptLoadVals, NULL},
 	{"STR_RES", dataStrResLoad, dataStrResRelease},
-	{"TERTILES", NULL, NULL},                                      // This version was used when running with the software renderer.
 	{"IMD", dataIMDBufferLoad, (RES_FREE)iV_IMDRelease},
 };
 
@@ -1174,7 +1173,7 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"ANI", dataAnimLoad, dataAnimRelease},
 	{"ANIMCFG", dataAnimCfgLoad, NULL},
 	{"IMGPAGE", dataIMGPAGELoad, dataIMGPAGERelease},
-	{"HWTERTILES", dataHWTERTILESLoad, dataHWTERTILESRelease},     // freed by 3d shutdow},// Tertiles Files. This version used when running with hardware renderer.
+	{"TERTILES", dataTERTILESLoad, dataTERTILESRelease},     // freed by 3d shutdow},// Tertiles Files. This version used when running with hardware renderer.
 	{"IMG", dataIMGLoad, dataIMGRelease},
 	{"TEXPAGE", dataTexPageLoad, dataTexPageRelease},
 };
