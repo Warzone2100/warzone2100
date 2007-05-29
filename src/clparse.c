@@ -185,7 +185,7 @@ BOOL ParseCommandLine(int argc, char** argv)
 
 		if ( stricmp(tokenType, "--cheat") == 0 )
 		{
-			fprintf(stdout, "  ** CHEAT MODE ACTIVATED! **\n");
+			fprintf(stdout, "  ** DEBUG MODE UNLOCKED! **\n");
 			bAllowDebugMode = TRUE;
 		}
 		else if ( stricmp( tokenType, "--fullscreen" ) == 0 )

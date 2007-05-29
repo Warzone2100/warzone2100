@@ -262,6 +262,9 @@ static __inline void endian_fract(FRACT *fract) {
 #endif
 }
 
-void setupExceptionHandler(const char * programCommand);
+extern void setupExceptionHandler(const char * programCommand);
+
+extern void setFramerateLimit(int fpsLimit);
+extern int getFramerateLimit(void);
 
 #endif

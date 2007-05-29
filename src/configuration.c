@@ -44,6 +44,8 @@
 #include "lib/sound/mixer.h"
 #include "hci.h"
 #include "fpath.h"
+// HACK bAllowDebugMode shouldn't be in clparse
+#include "clparse.h"
 
 #include "radar.h" //because of bDrawRadarTerrain
 
@@ -104,6 +106,26 @@ BOOL loadConfig(BOOL bResourceAvailable)
 
 	if (getWarzoneKeyNumeric("playaudiocds", &val)) {
 		war_SetPlayAudioCDs(val);
+	}
+
+	if (getWarzoneKeyNumeric("debugmode", &val))
+	{
+		bAllowDebugMode = val;
+	}
+	else
+	{
+		bAllowDebugMode = FALSE;
+		setWarzoneKeyNumeric("debugmode", FALSE);
+	}
+
+	if (getWarzoneKeyNumeric("framerate", &val))
+	{
+		setFramerateLimit(val);
+	}
+	else
+	{
+		setFramerateLimit(60);
+		setWarzoneKeyNumeric("framerate", 60);
 	}
 
 	// //////////////////////////
@@ -579,8 +601,10 @@ BOOL saveConfig()
 		setDifficultyLevel(DL_NORMAL);
 	}
 	setWarzoneKeyNumeric("allowSubtitles", war_GetAllowSubtitles());
-	setWarzoneKeyNumeric("gamma", (SDWORD)(gammaValue));
-	setWarzoneKeyNumeric("scroll",(DWORD)scroll_speed_accel);		// scroll
+	setWarzoneKeyNumeric("debugmode", bAllowDebugMode);
+	setWarzoneKeyNumeric("framerate", getFramerateLimit());
+	setWarzoneKeyNumeric("gamma", gammaValue);
+	setWarzoneKeyNumeric("scroll", scroll_speed_accel);		// scroll
 	setWarzoneKeyNumeric("difficulty", getDifficultyLevel());		// level
 	setWarzoneKeyNumeric("barmode",(DWORD)barMode);			//energybars
 	setWarzoneKeyNumeric("visfog",(DWORD)(!war_GetFog()));			// fogtype

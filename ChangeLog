@@ -2,10 +2,13 @@
  * General:
    * New: Masterserver name and IP, as well as the gameserver port is now configurable
    * New: Screenshots are now saved as PNGs for better quality
+   * New: Configurable framerate limit
+   * New: Possibility to always allow debugmode
    * Fix: AutoPackage (Linux Installer) should be easier to install now and also work on non Athlon CPUs. It doesn't support playback of MP3s anymore, though.
+   * Fix: It was possible to disable the computer in singleplayer games
    * Fix: Crashes caused by not-loaded file when sound is disabled
    * Fix: Crashes after the mission briefing
-   * Fix: It was possible to disable the computer in singleplayer games
+   * Fix: Crash related to the satelite uplink
  * Settings:
    * Change: Warzone will now run in fullscreen by default (current configurations won't be affected)
 

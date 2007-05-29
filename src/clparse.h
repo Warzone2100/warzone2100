@@ -28,6 +28,10 @@
 
 // whether to play the intro video
 extern BOOL	clIntroVideo;
+
+// Let the end user into debug mode....
+extern BOOL	bAllowDebugMode;
+
 // parse the commandline
 extern BOOL ParseCommandLine( int argc, char** argv );
 BOOL ParseCommandLineEarly(int argc, char** argv);

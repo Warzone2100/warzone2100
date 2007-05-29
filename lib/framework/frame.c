@@ -58,6 +58,18 @@
 static FPSmanager wzFPSmanager;
 
 
+void setFramerateLimit(int fpsLimit)
+{
+	SDL_setFramerate( &wzFPSmanager, fpsLimit );
+}
+
+
+int getFramerateLimit(void)
+{
+	return SDL_getFramerate( &wzFPSmanager );
+}
+
+
 char *unix_path(const char *path)
 {
 	static char returnval[512];
@@ -383,7 +395,6 @@ BOOL frameInitialise(HANDLE hInst,			// The windows application instance
 	InitFrameStuff();
 
 	SDL_initFramerate( &wzFPSmanager );
-	SDL_setFramerate( &wzFPSmanager, 60 );
 
 	// Initialise the resource stuff
 	if (!resInitialise())
