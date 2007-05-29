@@ -21,49 +21,50 @@
 #define __INCLUDED_BITIMAGE__
 
 
-WZ_DECL_PURE static inline unsigned short iV_GetImageWidth(const IMAGEFILE *ImageFile, const unsigned short ID)
+static inline WZ_DECL_PURE unsigned short iV_GetImageWidth(const IMAGEFILE *ImageFile, const unsigned short ID)
 {
 	assert(ID < ImageFile->Header.NumImages);
 	return ImageFile->ImageDefs[ID].Width;
 }
 
 
-WZ_DECL_PURE static inline unsigned short iV_GetImageHeight(const IMAGEFILE *ImageFile, const unsigned short ID)
+static inline WZ_DECL_PURE unsigned short iV_GetImageHeight(const IMAGEFILE *ImageFile, const unsigned short ID)
 {
 	assert(ID < ImageFile->Header.NumImages);
 	return ImageFile->ImageDefs[ID].Height;
 }
 
 
-WZ_DECL_PURE static inline short iV_GetImageXOffset(const IMAGEFILE *ImageFile, const unsigned short ID)
+static inline WZ_DECL_PURE short iV_GetImageXOffset(const IMAGEFILE *ImageFile, const unsigned short ID)
 {
 	assert(ID < ImageFile->Header.NumImages);
 	return ImageFile->ImageDefs[ID].XOffset;
 }
 
 
-WZ_DECL_PURE static inline short iV_GetImageYOffset(const IMAGEFILE *ImageFile, const unsigned short ID)
+static inline WZ_DECL_PURE short iV_GetImageYOffset(const IMAGEFILE *ImageFile, const unsigned short ID)
 {
 	assert(ID < ImageFile->Header.NumImages);
 	return ImageFile->ImageDefs[ID].YOffset;
 }
 
 
-WZ_DECL_PURE static inline unsigned short iV_GetImageCenterX(const IMAGEFILE *ImageFile, const unsigned short ID)
+static inline WZ_DECL_PURE unsigned short iV_GetImageCenterX(const IMAGEFILE *ImageFile, const unsigned short ID)
 {
 	assert(ID < ImageFile->Header.NumImages);
 	return ImageFile->ImageDefs[ID].XOffset + ImageFile->ImageDefs[ID].Width/2;
 }
 
 
-WZ_DECL_PURE static inline unsigned short iV_GetImageCenterY(const IMAGEFILE *ImageFile, const unsigned short ID)
+static inline WZ_DECL_PURE unsigned short iV_GetImageCenterY(const IMAGEFILE *ImageFile, const unsigned short ID)
 {
 	assert(ID < ImageFile->Header.NumImages);
 	return ImageFile->ImageDefs[ID].YOffset + ImageFile->ImageDefs[ID].Height/2;
 }
 
 
-IMAGEFILE *iV_LoadImageFile(const char *fileName);
-void iV_FreeImageFile(IMAGEFILE *ImageFile);
+extern IMAGEFILE *iV_LoadImageFile(const char *FileData);
+extern void iV_FreeImageFile(IMAGEFILE *ImageFile);
+
 
 #endif

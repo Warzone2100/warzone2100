@@ -48,13 +48,13 @@
  *	Global ProtoTypes
  */
 /***************************************************************************/
-void pie_Set2DClip(int x0, int y0, int x1, int y1);
-int	pie_ClipTextured(int npoints, PIEVERTEX *points, PIEVERTEX *clip);
-BOOL	pie_SetVideoBufferDepth(UDWORD depth);
-BOOL	pie_SetVideoBufferWidth(UDWORD width);
-BOOL	pie_SetVideoBufferHeight(UDWORD height);
-UDWORD	pie_GetVideoBufferDepth( void ) WZ_DECL_PURE;
-UDWORD	pie_GetVideoBufferWidth( void ) WZ_DECL_PURE;
-UDWORD	pie_GetVideoBufferHeight( void ) WZ_DECL_PURE;
+extern void pie_Set2DClip(int x0, int y0, int x1, int y1);
+extern int pie_ClipTextured(int npoints, PIEVERTEX *points, PIEVERTEX *clip);
+extern BOOL pie_SetVideoBufferDepth(UDWORD depth);
+extern BOOL pie_SetVideoBufferWidth(UDWORD width);
+extern BOOL pie_SetVideoBufferHeight(UDWORD height);
+extern UDWORD pie_GetVideoBufferDepth( void ) WZ_DECL_PURE;
+extern UDWORD pie_GetVideoBufferWidth( void ) WZ_DECL_PURE;
+extern UDWORD pie_GetVideoBufferHeight( void ) WZ_DECL_PURE;
 
 #endif // _pieclip_h

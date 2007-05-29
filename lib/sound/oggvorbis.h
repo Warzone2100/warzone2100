@@ -37,7 +37,7 @@ typedef struct
 	unsigned int frequency;
 
 	// the raw PCM data
-#if __STDC_VERSION__ >= 199901L
+#if defined(_ISOC99_SOURCE)
 	char data[];
 #else
 	char* data;

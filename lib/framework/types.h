@@ -72,7 +72,7 @@ typedef struct
 #endif /* !WZ_OS_WIN */
 
 // If we are C99 compatible, the "bool" macro will be defined in <stdbool.h> (as _Bool)
-#if __STDC_VERSION__ >= 199901L
+#if defined(_ISOC99_SOURCE)
 # include <stdbool.h>
 #else
 // Pretend we are C99 compatible (well, for the bool type then)

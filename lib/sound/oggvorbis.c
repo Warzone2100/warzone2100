@@ -213,7 +213,7 @@ soundDataBuffer* sound_DecodeOggVorbis(struct OggVorbisDecoderState* decoder, si
 		return NULL;
 	}
 
-#if !(__STDC_VERSION__ >= 199901L)
+#if !defined(_ISOC99_SOURCE)
 	buffer->data = (char*)(buffer + 1);
 #endif
 	buffer->bufferSize = bufferSize;

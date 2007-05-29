@@ -167,9 +167,9 @@ void pie_BeginLighting(const Vector3f * light)
 {
 	const float pos[4] = {light->x, light->y, light->z, 0.0f};
 	const float zero[4] = {0.0f, 0.0f, 0.0f, 0.0f};
-	const float ambient[4] = {0.4f, 0.4f, 0.4f, 0.0f};
-	const float diffuse[4] = {0.5f, 0.5f, 0.5f, 0.0f};
-	const float specular[4] = {1.0f, 1.0f, 1.0f, 0.0f};
+	const float ambient[4] = {0.3f, 0.3f, 0.3f, 1.0f};
+	const float diffuse[4] = {0.8f, 0.8f, 0.8f, 1.0f};
+	const float specular[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, zero);
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_FALSE);
@@ -179,7 +179,7 @@ void pie_BeginLighting(const Vector3f * light)
 	glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
 	glEnable(GL_LIGHT0);
 
-// 	lighting = TRUE; // Globaly disable lighting!
+ 	lighting = TRUE;
 	shadows = TRUE;
 }
 

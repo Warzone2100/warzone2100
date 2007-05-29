@@ -605,7 +605,7 @@ static void handleActiveEvent(SDL_Event * event)
 {
 	// Ignore focus loss through SDL_APPMOUSEFOCUS, since it mostly happens accidentialy
 	// active.state is a bitflag! Mixed events (eg. APPACTIVE|APPMOUSEFOCUS) will thus not be ignored.
-	if (!bMultiPlayer && event->active.state != SDL_APPMOUSEFOCUS )
+	if ( event->active.state != SDL_APPMOUSEFOCUS )
 	{
 		if ( event->active.gain == 1 )
 		{
@@ -665,7 +665,11 @@ static void mainLoop(void)
 					inputHandleMouseMotionEvent(&event);
 					break;
 				case SDL_ACTIVEEVENT:
-					handleActiveEvent(&event);
+					 // Ignore this event during multiplayer games since it breaks the game when one player suddenly pauses!
+					if (!bMultiPlayer)
+					{
+						handleActiveEvent(&event);
+					}
 					break;
 				case SDL_QUIT:
 					return;
