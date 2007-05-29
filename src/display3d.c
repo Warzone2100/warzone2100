@@ -294,8 +294,7 @@ UDWORD	cameraHeight = 400;
 //UDWORD	averageHeight;
 
 // The maximum number of points for flattenImd
-#define MAX_FLATTEN_POINTS	 255
-static iVector	alteredPoints[MAX_FLATTEN_POINTS];
+static iVector	alteredPoints[iV_IMD_MAX_POINTS];
 
 //number of tiles visible
 UDWORD	visibleXTiles;
@@ -437,7 +436,7 @@ BOOL		bPlayerHasHQ = FALSE;
 	renderSky();
 	// draw terrain
    	displayTerrain();
-   	
+
 	pie_BeginInterface();
 	updateLightLevels();
 	drawDroidSelections();
@@ -1051,7 +1050,7 @@ BOOL	init3DView(void)
 	// the world centre - used for decaying lighting etc
 	gridCentreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
 	gridCentreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
-	
+
 	edgeTile.texture = 0;
 
 	bEnergyBars = TRUE;
