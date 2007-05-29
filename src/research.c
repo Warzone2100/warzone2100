@@ -2055,8 +2055,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay)
     }
 #endif
 
-//just a debug check...
-#ifdef DEBUG
+#ifdef DEBUG_SOME_OTHER_TIME
     /*this just checks that there are not more than 32 weapons now available for
     the design screen - it'll give us grief in the design screen (which we may HAVE TO fix)!*/
     //only check if selectedPlayer has done the research
