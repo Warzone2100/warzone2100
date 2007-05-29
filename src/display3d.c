@@ -4662,7 +4662,7 @@ SDWORD	shift;
 
 	// CHECK WHETHER THE NUMBER OF POINTS IN THE IMD WILL FIT IN THE ARRAY
 
-	ASSERT( imd->npoints < MAX_FLATTEN_POINTS,
+	ASSERT( imd->npoints < iV_IMD_MAX_POINTS,
 		"flattenImd: too many points in the PIE to flatten it" );
 
 	/* Get a copy of the points */
