@@ -150,7 +150,7 @@ private BASEOBJ			baseobj,baseobj2;
 private int				count,count2,result,result2,tempx,tempy;
 private bool			boolResult,boolResult2;
 
-private bool			powerSave,_DEBUG;
+private bool			powerSave,_DEBUG,bRunning;
 private	int				allianceTime[8];
 private int				sender,x,y,beaconX[8],beaconY[8],tBeacon[8],
 						tLastHelpRequest,lastHelpPlayer,tHelp,tHelpTimeout,helpX,helpY;
@@ -209,6 +209,7 @@ trigger difficultyModifierTr		(every,600);
 trigger humanAllianceTr				(CALL_ALLIANCEOFFER,ref count, ref count2);
 trigger multiMsgTr					(CALL_AI_MSG, me, ref sender, ref message);
 trigger	beaconTr					(CALL_BEACON, me, ref sender, ref x, ref y, ref message);
+trigger consoleTr					(CALL_CONSOLE, ref sender, ref message);
 trigger watchBaseThreatTr			(every, 120);
 trigger manageAllyHelpTr			(every, 80);
 trigger everySec					(every, 10);
@@ -282,6 +283,8 @@ function int numGroupSameOrder(GROUP _group, int _orderIndex);
 function void rearrangeAttackVtols();
 function int numStructBusyByType(STRUCTURESTAT _busyStructType);
 function bool aiResponsibleForPlayer(int _player);
+function void reassignAI();
+function void shutDownAI();
 #endregion triggers
 
 /////////////////////////////////////////////////////////////////////
@@ -375,10 +378,17 @@ event initialisedEvent(CALL_GAMEINIT)
 	allianceTime[5] = 0;
 	allianceTime[6] = 0;
 	allianceTime[7] = 0;
+	
+	bRunning = false;
 
 	if(aiResponsibleForPlayer(me))
 	{
+		bRunning = true;
 		buildTruck();
+	}
+	else
+	{
+		shutDownAI();
 	}
 }
 
@@ -436,106 +446,94 @@ function bool aiResponsibleForPlayer(int _player)
 // initial force setup thing. plonk down a force.
 event givehelp(every, 100)
 {
- 	if(not aiResponsibleForPlayer(me))
+
+	if(multiPlayerBaseType == CAMP_WALLS)
 	{
-		setEventTrigger(givehelp,	inactive);
-	}
-	else
-	{
-		if(multiPlayerBaseType == CAMP_WALLS)
+		// free power
+		addPower(1500, me);
+
+		// free droids.
+		/* structure = getStructure(factory, me);
+		if(structure != NULLOBJECT)
 		{
-			// free power
-			addPower(1500, me);
-
-			// free droids.
-			/* structure = getStructure(factory, me);
-			if(structure != NULLOBJECT)
+			count = 0;
+			while(count<10)
 			{
-				count = 0;
-				while(count<10)
+				tempx = baseX;
+				tempy = baseY;
+
+
+				boolResult = pickStructLocation(defStructs[0], ref tempx, ref tempy,me);
+				if(boolResult == TRUE)
 				{
-					tempx = baseX;
-					tempy = baseY;
-
-
-					boolResult = pickStructLocation(defStructs[0], ref tempx, ref tempy,me);
-					if(boolResult == TRUE)
-					{
-						droid = addDroid(tmpl[curTech][ random(6) ]  , tempx, tempy, me);
-					}
-
-					count = count + 1;
+					droid = addDroid(tmpl[curTech][ random(6) ]  , tempx, tempy, me);
 				}
-			} */
-		}
-		setEventTrigger(givehelp,	inactive);
 
+				count = count + 1;
+			}
+		} */
 	}
+	setEventTrigger(givehelp,	inactive);
+
 }
 
 /////////////////////////////////////////////////////////////////////
 // keep details about the size and postion of the ai players base
 event basedetails(basedetailsTr)
 {
-	if(not aiResponsibleForPlayer(me) )
-	{
-		setEventTrigger(basedetails,	inactive);
-	}
-	else
-	{
-		// clear old extremities.
-		maxy = 0;
-		maxx = 0;
-		miny = (mapHeight*128);
-		minx = (mapWidth*128);
 
-		baseRange = 4 * TILE;
+	// clear old extremities.
+	maxy = 0;
+	maxx = 0;
+	miny = (mapHeight*128);
+	minx = (mapWidth*128);
 
-		// now find the extremities of our vital structures.
-		count = 0;
-		while(count < numBaseStruct)
+	baseRange = 4 * TILE;
+
+	// now find the extremities of our vital structures.
+	count = 0;
+	while(count < numBaseStruct)
+	{
+		initEnumStruct(FALSE,baseStruct[count],me,me);
+		structure= enumStruct();
+		while(structure != NULLOBJECT)
 		{
-			initEnumStruct(FALSE,baseStruct[count],me,me);
-			structure= enumStruct();
-			while(structure != NULLOBJECT)
+			if(structure.x < minx)
 			{
-				if(structure.x < minx)
-				{
-					minx = structure.x;
-				}
-				if(structure.x > maxx)
-				{
-					maxx = structure.x;
-				}
-				if(structure.y < miny)
-				{
-					miny = structure.y;
-				}
-				if(structure.y > maxy)
-				{
-					maxy = structure.y;
-				}
-
-				result = distBetweenTwoPoints(baseX, baseY, structure.x, structure.y);
-
-				if(result > baseRange){
-					baseRange = result;
-				}
-
-				structure= enumStruct();
+				minx = structure.x;
+			}
+			if(structure.x > maxx)
+			{
+				maxx = structure.x;
+			}
+			if(structure.y < miny)
+			{
+				miny = structure.y;
+			}
+			if(structure.y > maxy)
+			{
+				maxy = structure.y;
 			}
 
-			count = count + 1;
+			result = distBetweenTwoPoints(baseX, baseY, structure.x, structure.y);
+
+			if(result > baseRange){
+				baseRange = result;
+			}
+
+			structure= enumStruct();
 		}
 
-		result = 3 * 128;
-		minx = minx - result;
-		maxx = maxx + result;
-		miny = miny - result;
-		maxy = maxy + result;
-
-		baseRange = baseRange + (4 * 128);
+		count = count + 1;
 	}
+
+	result = 3 * 128;
+	minx = minx - result;
+	maxx = maxx + result;
+	miny = miny - result;
+	maxy = maxy + result;
+
+	baseRange = baseRange + (4 * 128);
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -544,51 +542,45 @@ event basedetails(basedetailsTr)
 // build derricks on oil.
 event buildDerrick(buildDerrickTr)
 {
-	if(not aiResponsibleForPlayer(me) )
-	{
-		setEventTrigger(buildDerrick,	inactive);
-	}
-	else
-	{
-		feature = getFeature(me);					// find unoccupied oil resource.
-		if(feature != NULLOBJECT)
-		{
-			buildX = feature.x;
-			buildY = feature.y;
 
-			// if no more than 2 units already trying to build
+	feature = getFeature(me);					// find unoccupied oil resource.
+	if(feature != NULLOBJECT)
+	{
+		buildX = feature.x;
+		buildY = feature.y;
+
+		// if no more than 2 units already trying to build
+		initIterateGroup(buildGroup);				// find all units in build group.
+		droid = iterateGroup(buildGroup);
+		count = 0;
+		while(droid != NULLOBJECT)
+		{
+			if((droid.orderx == buildX) and (droid.ordery == buildY))
+			{
+				count = count + 1;
+			}
+			droid = iterateGroup(buildGroup);
+		}
+
+		if(count < 3)
+		{
 			initIterateGroup(buildGroup);				// find all units in build group.
 			droid = iterateGroup(buildGroup);
-			count = 0;
-			while(droid != NULLOBJECT)
+			boolResult = FALSE;							// only send 1 droid to each derrick
+			while( (boolResult == FALSE) and (droid != NULLOBJECT) )
 			{
-				if((droid.orderx == buildX) and (droid.ordery == buildY))
+				if( (droid.order == DORDER_NONE) or (droid.order == DORDER_RTB))
 				{
-					count = count + 1;
+					orderDroidStatsLoc(droid, DORDER_BUILD,derrick, buildX,buildY);	//build a derick
+					boolResult = TRUE;
 				}
 				droid = iterateGroup(buildGroup);
 			}
-
-			if(count < 3)
-			{
-				initIterateGroup(buildGroup);				// find all units in build group.
-				droid = iterateGroup(buildGroup);
-				boolResult = FALSE;							// only send 1 droid to each derrick
-				while( (boolResult == FALSE) and (droid != NULLOBJECT) )
-				{
-					if( (droid.order == DORDER_NONE) or (droid.order == DORDER_RTB))
-					{
-						orderDroidStatsLoc(droid, DORDER_BUILD,derrick, buildX,buildY);	//build a derick
-						boolResult = TRUE;
-					}
-					droid = iterateGroup(buildGroup);
-				}
-			}
 		}
-		else											// feature is null
-		{
-			initGetFeature(oilRes,me,me);		// start again next time.
-		}
+	}
+	else											// feature is null
+	{
+		initGetFeature(oilRes,me,me);		// start again next time.
 	}
 }
 
@@ -598,103 +590,86 @@ event buildOilDefenseOrRetreat(buildOilDefenseOrRetreatTr)
 {
 	local	int		_numBuilders,_maxBuilders;
 
-	if(not aiResponsibleForPlayer(me) )
-	{
-		setEventTrigger(buildOilDefenseOrRetreat,	inactive);
-	}
-	else
-	{
-		_maxBuilders = 1;
 
-		// check idle.
-		initIterateGroup(buildGroup);					// find idle droids in build group.
-		droid = iterateGroup(buildGroup);
-		while(droid != NULLOBJECT)
+	_maxBuilders = 1;
+
+	// check idle.
+	initIterateGroup(buildGroup);					// find idle droids in build group.
+	droid = iterateGroup(buildGroup);
+	while(droid != NULLOBJECT)
+	{
+		if(droid.order == DORDER_NONE)
 		{
-			if(droid.order == DORDER_NONE)
-			{
-				// if in range of a derrick
-				structure = structureBuiltInRange(derrick, droid.x, droid.y, (5*128), me);
+			// if in range of a derrick
+			structure = structureBuiltInRange(derrick, droid.x, droid.y, (5*128), me);
 
-				// if inside base limits then presume ok..
-				if( structure != NULLOBJECT)
+			// if inside base limits then presume ok..
+			if( structure != NULLOBJECT)
+			{
+				if((structure.x > minx) and (structure.y > miny) and (structure.x < maxx) and (structure.y <maxy))
 				{
-					if((structure.x > minx) and (structure.y > miny) and (structure.x < maxx) and (structure.y <maxy))
+					structure = NULLOBJECT;
+				}
+			}
+
+			if(structure != NULLOBJECT)
+			{
+				buildX = structure.x;
+				buildY = structure.y;
+
+				count = 0;							// if derrick has no defense near it.
+				result = 0;
+				while(count < numDefStructs)
+				{
+					structure = structureBuiltInRange(defStructs[count], buildX, buildX,(3*128), me);
+					if(structure != NULLOBJECT)
 					{
-						structure = NULLOBJECT;
+						result = result + 1;							// found a defense.
 					}
+					count = count + 1;
 				}
 
-				if(structure != NULLOBJECT)
+				// not many defenses nearby
+				if(result < 2)
 				{
-					buildX = structure.x;
-					buildY = structure.y;
-
-					count = 0;							// if derrick has no defense near it.
-					result = 0;
-					while(count < numDefStructs)
+					count = numDefStructs - 1;							//pick a struct to build..
+					count2 = 0;
+					while( (count2 < 5) and (count >= 0) )
 					{
-						structure = structureBuiltInRange(defStructs[count], buildX, buildX,(3*128), me);
-						if(structure != NULLOBJECT)
+						if( isStructureAvailable(defStructs[count],me))
 						{
-							result = result + 1;							// found a defense.
-						}
-						count = count + 1;
-					}
 
-					// not many defenses nearby
-					if(result < 2)
-					{
-						count = numDefStructs - 1;							//pick a struct to build..
-						count2 = 0;
-						while( (count2 < 5) and (count >= 0) )
-						{
-							if( isStructureAvailable(defStructs[count],me))
+							// don't build multiple sensors together.
+							if(count == 5)
 							{
-
-								// don't build multiple sensors together.
-								if(count == 5)
+								structure = structureBuiltInRange(defStructs[count], buildX, buildY,(6*128), me);
+								if(structure != NULLOBJECT)
 								{
-									structure = structureBuiltInRange(defStructs[count], buildX, buildY,(6*128), me);
-									if(structure != NULLOBJECT)
-									{
-										count = 8;
-									}
+									count = 8;
 								}
-
-								structChoice[count2] = defStructs[count];
-								count2 = count2 + 1;
-
 							}
-							count = count - 1;
+
+							structChoice[count2] = defStructs[count];
+							count2 = count2 + 1;
+
 						}
-						count =0;
-						if(count2 > 0)
-						{
-							count = random(count2);						 //count = choice!
-
-							// pick a location
-							boolResult = pickStructLocation(structChoice[count], ref buildX, ref buildY,me);
-
-							_numBuilders = numBuildSameBuilding(NULLSTRUCTURESTAT, buildX, buildY);
-
-							if((boolResult == TRUE) and (_numBuilders < _maxBuilders))
-							{
-								// build it.
-								orderDroidStatsLoc(droid, DORDER_BUILD,structChoice[count], buildX,buildY);
-								_numBuilders++;
-							}
-						}
+						count = count - 1;
 					}
-					else
+					count =0;
+					if(count2 > 0)
 					{
-						structure = structureBuiltInRange(playerHQ, droid.x, droid.y, (5*128), me);
-						if(structure == NULLOBJECT)
+						count = random(count2);						 //count = choice!
+
+						// pick a location
+						boolResult = pickStructLocation(structChoice[count], ref buildX, ref buildY,me);
+
+						_numBuilders = numBuildSameBuilding(NULLSTRUCTURESTAT, buildX, buildY);
+
+						if((boolResult == TRUE) and (_numBuilders < _maxBuilders))
 						{
-							if(!insideBase(droid.x, droid.y))
-							{
-								orderDroid(droid,DORDER_RTB);				// return to base;
-							}
+							// build it.
+							orderDroidStatsLoc(droid, DORDER_BUILD,structChoice[count], buildX,buildY);
+							_numBuilders++;
 						}
 					}
 				}
@@ -705,13 +680,24 @@ event buildOilDefenseOrRetreat(buildOilDefenseOrRetreatTr)
 					{
 						if(!insideBase(droid.x, droid.y))
 						{
-							orderDroid(droid,DORDER_RTB);					// return to base;
+							orderDroid(droid,DORDER_RTB);				// return to base;
 						}
 					}
 				}
 			}
-			droid = iterateGroup(buildGroup);
+			else
+			{
+				structure = structureBuiltInRange(playerHQ, droid.x, droid.y, (5*128), me);
+				if(structure == NULLOBJECT)
+				{
+					if(!insideBase(droid.x, droid.y))
+					{
+						orderDroid(droid,DORDER_RTB);					// return to base;
+					}
+				}
+			}
 		}
+		droid = iterateGroup(buildGroup);
 	}
 }
 
@@ -719,164 +705,157 @@ event buildOilDefenseOrRetreat(buildOilDefenseOrRetreatTr)
 //mortar etc.. rules. build sensor towers and emplacements.
 event incendry(incendryTr)
 {
-	if(not aiResponsibleForPlayer(me) )
-	{
-		setEventTrigger(incendry,	inactive);
-	}
-	else
-	{
-		initEnumStruct(FALSE,sensorTower,me,me);
 
-		count = 0;
+	initEnumStruct(FALSE,sensorTower,me,me);
+
+	count = 0;
+	structure = enumStruct();
+	while(structure != NULLOBJECT)
+	{
+		count = count + 1;
 		structure = enumStruct();
+	}
+
+	if(count < (gameTime/4200) )		// every 7 mins
+	{
+		// if not found build a sensor tower.
+		// find a place to build.
+		buildX = 0;
+		buildY = 0;
+		initEnumStruct(FALSE,derrick,me,me);
+		structure= enumStruct();
 		while(structure != NULLOBJECT)
 		{
-			count = count + 1;
-			structure = enumStruct();
-		}
-
-		if(count < (gameTime/4200) )		// every 7 mins
-		{
-			// if not found build a sensor tower.
-			// find a place to build.
-			buildX = 0;
-			buildY = 0;
-			initEnumStruct(FALSE,derrick,me,me);
-			structure= enumStruct();
-			while(structure != NULLOBJECT)
+			count = 0;
+			result = 0;
+			while(count < numDefStructs)
 			{
-				count = 0;
-				result = 0;
-				while(count < numDefStructs)
-				{
-					structure2 = structureBuiltInRange(defStructs[count], structure.x, structure.y,(4*128), me);
-					if(structure2 != NULLOBJECT)
-					{
-						result = result + 1;
-					}
-					count = count + 1;
-				}
-
-				// check for sensor nearby,
-				structure2 = structureBuiltInRange(sensorTower, structure.x, structure.y,(5*128), me);
+				structure2 = structureBuiltInRange(defStructs[count], structure.x, structure.y,(4*128), me);
 				if(structure2 != NULLOBJECT)
 				{
-					result = 4;
+					result = result + 1;
 				}
-
-				if(result < 3)
-				{
-					buildX = structure.x;
-					buildY = structure.y;
-					structure = NULLOBJECT;
-				}
-				else
-				{
-					structure = enumStruct();
-				}
+				count = count + 1;
 			}
 
-			if(buildX != 0)
+			// check for sensor nearby,
+			structure2 = structureBuiltInRange(sensorTower, structure.x, structure.y,(5*128), me);
+			if(structure2 != NULLOBJECT)
 			{
-				boolResult = pickStructLocation(sensorTower, ref buildX, ref buildY,me);	// pick spot.
-				if(boolResult == TRUE)
-				{
-					// find unit
-					initIterateGroup(buildGroup);
-					droid = iterateGroup(buildGroup);
-					while(droid != NULLOBJECT)
-					{
-						if(droid.order == DORDER_NONE or droid.order == DORDER_RTB)
-						{
-							orderDroidStatsLoc(droid, DORDER_BUILD,sensorTower, buildX,buildY);
-							droid = NULLOBJECT;
-						}
-						else
-						{
-							droid = iterateGroup(buildGroup);
-						}
-					}
-				}
+				result = 4;
 			}
-		}
-		else
-		{
-			// find a sensor tower with least incencdry structs around it..
-			buildX = 0;
-			buildY = 0;
 
-			initEnumStruct(FALSE,sensorTower,me,me);
-			structure= enumStruct();
-			count = 999;
-			while(structure != NULLOBJECT)
+			if(result < 3)
 			{
-				// count incendrys near this tower.
-				result = 0;
-				count2 = 0;
-				while(count2 < numIncendrys)
-				{
-					structure2 = structureBuiltInRange(incendrys[count2], structure.x, structure.y,(4*128), me);
-					if(structure2 != NULLOBJECT)
-					{
-						result = result + 1;
-					}
-					count2 = count2 + 1;
-				}
-
-				if((result < 6) and (result < count))		// lowest found yet. only sites with <6 too.
-				{
-					buildX = structure.x;
-					buildY = structure.y;
-					count  = result;
-				}
+				buildX = structure.x;
+				buildY = structure.y;
+				structure = NULLOBJECT;
+			}
+			else
+			{
 				structure = enumStruct();
 			}
+		}
 
-			if(buildX != 0)
+		if(buildX != 0)
+		{
+			boolResult = pickStructLocation(sensorTower, ref buildX, ref buildY,me);	// pick spot.
+			if(boolResult == TRUE)
 			{
-
-				// choose a device
-				count = numIncendrys - 1;
-				result = 99;
-				while(count >= 0 )
+				// find unit
+				initIterateGroup(buildGroup);
+				droid = iterateGroup(buildGroup);
+				while(droid != NULLOBJECT)
 				{
-					if(isStructureAvailable(incendrys[count],me))
+					if(droid.order == DORDER_NONE or droid.order == DORDER_RTB)
 					{
-						result = count;
-						count = -1;
+						orderDroidStatsLoc(droid, DORDER_BUILD,sensorTower, buildX,buildY);
+						droid = NULLOBJECT;
 					}
 					else
 					{
-						count = count - 1;
-					}
-				}
-
-
-				// find a unit and build an incendry device.
-				if(result != 99)
-				{
-					boolResult = pickStructLocation(incendrys[result], ref buildX, ref buildY,me);	// pick spot.
-					if(boolResult == TRUE)
-					{
-						initIterateGroup(buildGroup);
 						droid = iterateGroup(buildGroup);
-
-						boolResult = (numBuildSameBuilding(incendrys[result], buildX, buildY) > 0);	//anyone building there already?
-
-						while(droid != NULLOBJECT and (not boolResult))
-						{
-							if(droid.order == DORDER_NONE or droid.order == DORDER_RTB)
-							{
-								orderDroidStatsLoc(droid, DORDER_BUILD,incendrys[result], buildX,buildY);
-								boolResult = TRUE;	//only 1 truck
-							}
-							droid = iterateGroup(buildGroup);
-						}
 					}
 				}
 			}
 		}
+	}
+	else
+	{
+		// find a sensor tower with least incencdry structs around it..
+		buildX = 0;
+		buildY = 0;
 
+		initEnumStruct(FALSE,sensorTower,me,me);
+		structure= enumStruct();
+		count = 999;
+		while(structure != NULLOBJECT)
+		{
+			// count incendrys near this tower.
+			result = 0;
+			count2 = 0;
+			while(count2 < numIncendrys)
+			{
+				structure2 = structureBuiltInRange(incendrys[count2], structure.x, structure.y,(4*128), me);
+				if(structure2 != NULLOBJECT)
+				{
+					result = result + 1;
+				}
+				count2 = count2 + 1;
+			}
+
+			if((result < 6) and (result < count))		// lowest found yet. only sites with <6 too.
+			{
+				buildX = structure.x;
+				buildY = structure.y;
+				count  = result;
+			}
+			structure = enumStruct();
+		}
+
+		if(buildX != 0)
+		{
+
+			// choose a device
+			count = numIncendrys - 1;
+			result = 99;
+			while(count >= 0 )
+			{
+				if(isStructureAvailable(incendrys[count],me))
+				{
+					result = count;
+					count = -1;
+				}
+				else
+				{
+					count = count - 1;
+				}
+			}
+
+
+			// find a unit and build an incendry device.
+			if(result != 99)
+			{
+				boolResult = pickStructLocation(incendrys[result], ref buildX, ref buildY,me);	// pick spot.
+				if(boolResult == TRUE)
+				{
+					initIterateGroup(buildGroup);
+					droid = iterateGroup(buildGroup);
+
+					boolResult = (numBuildSameBuilding(incendrys[result], buildX, buildY) > 0);	//anyone building there already?
+
+					while(droid != NULLOBJECT and (not boolResult))
+					{
+						if(droid.order == DORDER_NONE or droid.order == DORDER_RTB)
+						{
+							orderDroidStatsLoc(droid, DORDER_BUILD,incendrys[result], buildX,buildY);
+							boolResult = TRUE;	//only 1 truck
+						}
+						droid = iterateGroup(buildGroup);
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -889,49 +868,43 @@ event incendry(incendryTr)
 // build a power gen for every 4 derricks. VITAL!
 event buildPowerGenerators(buildPowerGeneratorsTr)
 {
-	if(not aiResponsibleForPlayer(me) )
+
+	initEnumStruct(FALSE,derrick,me,me);					// count = numderricks
+	structure= enumStruct();
+	count	 = 0;
+	while(structure != NULLOBJECT)
 	{
-		setEventTrigger(buildPowerGenerators,	inactive);
+		count = count + 1;
+		structure= enumStruct();
 	}
-	else
+
+	initEnumStruct(FALSE,powGen,me,me);					// count2 = numpowgens
+	structure= enumStruct();
+	count2	 = 0;
+	while(structure != NULLOBJECT)
 	{
-		initEnumStruct(FALSE,derrick,me,me);					// count = numderricks
+		count2 = count2 + 1;
 		structure= enumStruct();
-		count	 = 0;
-		while(structure != NULLOBJECT)
-		{
-			count = count + 1;
-			structure= enumStruct();
-		}
+	}
 
-		initEnumStruct(FALSE,powGen,me,me);					// count2 = numpowgens
-		structure= enumStruct();
-		count2	 = 0;
-		while(structure != NULLOBJECT)
+	if( (count2 * 4) < count )								// if we need powergen
+	{
+		buildX = baseX;										// try build powergen.
+		buildY = baseY;
+		boolResult = pickStructLocation(powGen, ref buildX, ref buildY,me);
+		if(boolResult == TRUE)
 		{
-			count2 = count2 + 1;
-			structure= enumStruct();
-		}
-
-		if( (count2 * 4) < count )								// if we need powergen
-		{
-			buildX = baseX;										// try build powergen.
-			buildY = baseY;
-			boolResult = pickStructLocation(powGen, ref buildX, ref buildY,me);
-			if(boolResult == TRUE)
+			initIterateGroup(buildGroup);
+			droid = iterateGroup(buildGroup);
+			while(droid != NULLOBJECT)
 			{
-				initIterateGroup(buildGroup);
-				droid = iterateGroup(buildGroup);
-				while(droid != NULLOBJECT)
+				if(droid.order == DORDER_NONE or droid.order == DORDER_RTB)
 				{
-					if(droid.order == DORDER_NONE or droid.order == DORDER_RTB)
-					{
-						orderDroidStatsLoc(droid, DORDER_BUILD,powGen, buildX,buildY);
-					}
-					droid = iterateGroup(buildGroup);
+					orderDroidStatsLoc(droid, DORDER_BUILD,powGen, buildX,buildY);
 				}
-
+				droid = iterateGroup(buildGroup);
 			}
+
 		}
 	}
 }
@@ -943,47 +916,41 @@ event buildBase(buildBaseTr)
 {
 	local	int		_numBuilders,_maxBuilders;
 
-	if(not aiResponsibleForPlayer(me) )
-	{
-		setEventTrigger(buildBase,	inactive);
-	}
-	else
-	{
-		if( idleGroup(buildGroup) >= (buildGroup.members/2) )
-		{
-			count = 0;
-			while(count < numStructs)
-			{
-				// check that struct.
-				structure = getStructure(structs[count],me);
-				if(structure == NULLOBJECT)				// if missing build it.
-				{
-					if(isStructureAvailable(structs[count],me))
-					{
-						buildX = baseX;						// pick a location
-						buildY = baseY;
-						boolResult = pickStructLocationB(structs[count], ref buildX, ref buildY,me,0);
-						if(boolResult == TRUE)
-						{
-							_maxBuilders = 2;
-							_numBuilders = numBuildSameBuilding(structs[count], buildX, buildY);
 
-							initIterateGroup(buildGroup);				// find idle droids in build group.
-							droid = iterateGroup(buildGroup);
-							while((droid != NULLOBJECT) and (_numBuilders < _maxBuilders))
+	if( idleGroup(buildGroup) >= (buildGroup.members/2) )
+	{
+		count = 0;
+		while(count < numStructs)
+		{
+			// check that struct.
+			structure = getStructure(structs[count],me);
+			if(structure == NULLOBJECT)				// if missing build it.
+			{
+				if(isStructureAvailable(structs[count],me))
+				{
+					buildX = baseX;						// pick a location
+					buildY = baseY;
+					boolResult = pickStructLocationB(structs[count], ref buildX, ref buildY,me,0);
+					if(boolResult == TRUE)
+					{
+						_maxBuilders = 2;
+						_numBuilders = numBuildSameBuilding(structs[count], buildX, buildY);
+
+						initIterateGroup(buildGroup);				// find idle droids in build group.
+						droid = iterateGroup(buildGroup);
+						while((droid != NULLOBJECT) and (_numBuilders < _maxBuilders))
+						{
+							if((droid.order == DORDER_NONE) or (droid.order == DORDER_RTB))
 							{
-								if((droid.order == DORDER_NONE) or (droid.order == DORDER_RTB))
-								{
-									orderDroidStatsLoc(droid, DORDER_BUILD,structs[count], buildX,buildY);	// build it
-									_numBuilders++;
-								}
-								droid = iterateGroup(buildGroup);
+								orderDroidStatsLoc(droid, DORDER_BUILD,structs[count], buildX,buildY);	// build it
+								_numBuilders++;
 							}
+							droid = iterateGroup(buildGroup);
 						}
 					}
 				}
-				count = count + 1;
 			}
+			count = count + 1;
 		}
 	}
 }
@@ -992,14 +959,7 @@ event buildBase(buildBaseTr)
 //  build other stuff, grow the base slowly...
 event buildExpand( buildExpandTr )
 {
-	if(not aiResponsibleForPlayer(me) )
-	{
-		setEventTrigger(buildExpand,inactive);
-	}
-	else
-	{
-		expandBase(NULLOBJECT);
-	}
+	expandBase(NULLOBJECT);
 }
 
 function void expandBase(DROID _truck)
@@ -1055,63 +1015,57 @@ function void expandBase(DROID _truck)
 //	Structure (fac/res/pow) upgrades
 event upgradeStructures(upgradeStructuresTr )
 {
-	if(not aiResponsibleForPlayer(me) )
+
+	initIterateGroup(buildGroup);				// find idle droids in build group.
+	droid = iterateGroup(buildGroup);
+	while(droid != NULLOBJECT)
 	{
-		setEventTrigger(upgradeStructures,inactive);
-	}
-	else
-	{
-		initIterateGroup(buildGroup);				// find idle droids in build group.
-		droid = iterateGroup(buildGroup);
-		while(droid != NULLOBJECT)
+		if((droid.order != DORDER_BUILD) and (droid.order != DORDER_LINEBUILD))
 		{
-			if((droid.order != DORDER_BUILD) and (droid.order != DORDER_LINEBUILD))
+			boolResult = FALSE;
+
+			if(curTech == branchDefault)
 			{
-				boolResult = FALSE;
+				//powergen
+				boolResult = upgradePowGen(droid, 2);
 
-				if(curTech == branchDefault)
-				{
-					//powergen
-					boolResult = upgradePowGen(droid, 2);
-
-					//factory
-					if(droid.order != DORDER_BUILD){
-						boolResult = upgradeFactory(droid, 3);
-					}
-
-					//research
-					if(droid.order != DORDER_BUILD){
-						boolResult = upgradeResearch(droid, 1);
-					}
-
-					//vtol Factory
-					if(droid.order != DORDER_BUILD){
-						boolResult = upgradeVtolFactory(droid, 1);
-					}
+				//factory
+				if(droid.order != DORDER_BUILD){
+					boolResult = upgradeFactory(droid, 3);
 				}
-				else if(curTech == branchVTOL)
-				{
-					//powergen
-					boolResult = upgradePowGen(droid, 2);
 
-					//vtol Factory
-					if(droid.order != DORDER_BUILD){
-						boolResult = upgradeVtolFactory(droid, 3);
-					}
+				//research
+				if(droid.order != DORDER_BUILD){
+					boolResult = upgradeResearch(droid, 1);
+				}
 
-					//factory
-					if(droid.order != DORDER_BUILD){
-						boolResult = upgradeFactory(droid, 2);
-					}
-
-					//research
-					if(droid.order != DORDER_BUILD){
-						boolResult = upgradeResearch(droid, 1);
-					}
+				//vtol Factory
+				if(droid.order != DORDER_BUILD){
+					boolResult = upgradeVtolFactory(droid, 1);
 				}
 			}
-			droid = iterateGroup(buildGroup);
+			else if(curTech == branchVTOL)
+			{
+				//powergen
+				boolResult = upgradePowGen(droid, 2);
+
+				//vtol Factory
+				if(droid.order != DORDER_BUILD){
+					boolResult = upgradeVtolFactory(droid, 3);
+				}
+
+				//factory
+				if(droid.order != DORDER_BUILD){
+					boolResult = upgradeFactory(droid, 2);
+				}
+
+				//research
+				if(droid.order != DORDER_BUILD){
+					boolResult = upgradeResearch(droid, 1);
+				}
+			}
 		}
+		droid = iterateGroup(buildGroup);
 	}
 }
 
@@ -1216,31 +1170,24 @@ function bool upgradePowGen(DROID _truck, int _maxBuilders)
 //	Finish Building Part Built Structures
 event finishStructs(finishStructsTr)
 {
-	if(not aiResponsibleForPlayer(me) )
+	initEnumStruct(TRUE,factory,me,me);
+	structure= enumStruct();
+	while(structure != NULLOBJECT)
 	{
-		setEventTrigger(finishStructs,	inactive);
-	}
-	else
-	{
-		initEnumStruct(TRUE,factory,me,me);
-		structure= enumStruct();
-		while(structure != NULLOBJECT)
+		if(not structureComplete(structure))
 		{
-			if(not structureComplete(structure))
+			initIterateGroup(buildGroup);				// find idle droids in build group.
+			droid = iterateGroup(buildGroup);
+			while(droid != NULLOBJECT)
 			{
-				initIterateGroup(buildGroup);				// find idle droids in build group.
-				droid = iterateGroup(buildGroup);
-				while(droid != NULLOBJECT)
+				if((droid.order != DORDER_BUILD) and (droid.order != DORDER_LINEBUILD))
 				{
-					if((droid.order != DORDER_BUILD) and (droid.order != DORDER_LINEBUILD))
-					{
-						orderDroidObj(droid,DORDER_HELPBUILD,structure);
-					}
-					droid = iterateGroup(buildGroup);
+					orderDroidObj(droid,DORDER_HELPBUILD,structure);
 				}
+				droid = iterateGroup(buildGroup);
 			}
-			structure= enumStruct();
 		}
+		structure= enumStruct();
 	}
 }
 
@@ -1253,55 +1200,48 @@ event newfortify(fortifyTr)
 {
 	local	int		_numBuilders,_maxBuilders;
 
-	if(not aiResponsibleForPlayer(me) )
+	_maxBuilders = 1;
+
+	if(numGroupSameOrder(buildGroup, DORDER_LINEBUILD) >= _maxBuilders)
 	{
-		setEventTrigger(newfortify,	inactive);
+		exit;
 	}
-	else
+
+	boolResult = FALSE;
+	initIterateGroup(buildGroup);				// find idle an idle veh.in build group.
+	droid = iterateGroup(buildGroup);
+	while((boolResult == FALSE) and (droid != NULLOBJECT))
 	{
-		_maxBuilders = 1;
-
-		if(numGroupSameOrder(buildGroup, DORDER_LINEBUILD) >= _maxBuilders)
+		if((droid.order != DORDER_BUILD) and (droid.order != DORDER_LINEBUILD))
 		{
-			exit;
-		}
+			boolResult = TRUE;					// dont do this again!
 
-		boolResult = FALSE;
-		initIterateGroup(buildGroup);				// find idle an idle veh.in build group.
-		droid = iterateGroup(buildGroup);
-		while((boolResult == FALSE) and (droid != NULLOBJECT))
-		{
-			if((droid.order != DORDER_BUILD) and (droid.order != DORDER_LINEBUILD))
+			tempx = baseX;
+			tempy = baseY;
+
+			// choose a suitable turret.
+			count = numWallWeaps - 1;
+			count2 = 0;
+			while( (count2 < 3) and (count >= 0) )
 			{
-				boolResult = TRUE;					// dont do this again!
-
-				tempx = baseX;
-				tempy = baseY;
-
-				// choose a suitable turret.
-				count = numWallWeaps - 1;
-				count2 = 0;
-				while( (count2 < 3) and (count >= 0) )
+				if( isStructureAvailable(wallWeaps[count],me))
 				{
-					if( isStructureAvailable(wallWeaps[count],me))
-					{
-						structChoice[count2] = wallWeaps[count];
-						count2 = count2 + 1;
-					}
-					count = count - 1;
+					structChoice[count2] = wallWeaps[count];
+					count2 = count2 + 1;
 				}
-				count =0;
-				if((count2 > 0) and (_numBuilders < _maxBuilders))
-				{
-					count = random(count2);
-					skDefenseLocation(ref tempx,ref tempy,wall,structChoice[count],droid,me);
-					_numBuilders++;
-				}
-
+				count = count - 1;
 			}
-			droid = iterateGroup(buildGroup);
+			count =0;
+			if((count2 > 0) and (_numBuilders < _maxBuilders))
+			{
+				count = random(count2);
+				skDefenseLocation(ref tempx,ref tempy,wall,structChoice[count],droid,me);
+				_numBuilders++;
+			}
 
 		}
+		droid = iterateGroup(buildGroup);
+
 	}
 }
 
@@ -1314,113 +1254,107 @@ event droidBuilt(droidBuiltTr)
 {
 	local STRUCTURE _repairFacility;
 
-	if(not aiResponsibleForPlayer(me) )
+
+	if(isVtol(droid))
 	{
-		setEventTrigger(droidBuilt,	inactive);
-	}
-	else
-	{
-		if(isVtol(droid))
+		if(vtolDefendGr.members < numDefendVtols)
 		{
-			if(vtolDefendGr.members < numDefendVtols)
-			{
-				groupAddDroid(vtolDefendGr, droid);
-			}
-			else
-			{
-				count = 0;
-				while(count < numVtolAttackGroups)
-				{
-					if(vtolAttackGr[count].members < numAttackVtols)
-					{
-						dbg("added new vtol to group " & count, me);
-						groupAddDroid(vtolAttackGr[count], droid);
-						count = numVtolAttackGroups;
-					}
-					count++;
-				}
-			}
+			groupAddDroid(vtolDefendGr, droid);
 		}
 		else
 		{
-			if(droid.droidType == DROID_REPAIR)
+			count = 0;
+			while(count < numVtolAttackGroups)
 			{
-				numRepairUnits = numRepairUnits + 1;
+				if(vtolAttackGr[count].members < numAttackVtols)
+				{
+					dbg("added new vtol to group " & count, me);
+					groupAddDroid(vtolAttackGr[count], droid);
+					count = numVtolAttackGroups;
+				}
+				count++;
 			}
-			if(droid.droidType == DROID_CONSTRUCT)				// if not constructor droid
+		}
+	}
+	else
+	{
+		if(droid.droidType == DROID_REPAIR)
+		{
+			numRepairUnits = numRepairUnits + 1;
+		}
+		if(droid.droidType == DROID_CONSTRUCT)				// if not constructor droid
+		{
+			groupAddDroid(buildGroup, droid);
+		}
+		else
+		{
+			if(droid.droidType == DROID_CYBORG)
 			{
-				groupAddDroid(buildGroup, droid);
+				groupAddDroid(defendGroup, droid);
 			}
 			else
 			{
-				if(droid.droidType == DROID_CYBORG)
+				if(scoutGroup.members < numScouts[curTech])
+				{
+					groupAddDroid(scoutGroup, droid);
+				}
+				else if(attackGroup.members < numAttackers[curTech])
+				{
+					groupAddDroid(attackGroup, droid);
+				}
+				else if( defendGroup.members < numDefenders[curTech])
 				{
 					groupAddDroid(defendGroup, droid);
 				}
-				else
+
+				else		// just make them scouts.
 				{
-					if(scoutGroup.members < numScouts[curTech])
+
+					if(scoutGroup.members < maxScouts[curTech])
 					{
 						groupAddDroid(scoutGroup, droid);
 					}
-					else if(attackGroup.members < numAttackers[curTech])
+					else if(attackGroup.members < maxAttackers[curTech])
 					{
 						groupAddDroid(attackGroup, droid);
 					}
-					else if( defendGroup.members < numDefenders[curTech])
+					else if( defendGroup.members < maxDefenders[curTech])
 					{
 						groupAddDroid(defendGroup, droid);
 					}
-
-					else		// just make them scouts.
+					else	//make them attack
 					{
-
-						if(scoutGroup.members < maxScouts[curTech])
-						{
-							groupAddDroid(scoutGroup, droid);
-						}
-						else if(attackGroup.members < maxAttackers[curTech])
-						{
-							groupAddDroid(attackGroup, droid);
-						}
-						else if( defendGroup.members < maxDefenders[curTech])
-						{
-							groupAddDroid(defendGroup, droid);
-						}
-						else	//make them attack
-						{
-							groupAddDroid(attackGroup, droid);
-						}
+						groupAddDroid(attackGroup, droid);
 					}
 				}
 			}
-
-			_repairFacility = getStructure(repairFacility,me);
-			if(_repairFacility == NULLOBJECT)
-			{
-				setDroidSecondary(droid,DSO_REPAIR_LEVEL, DSS_REPLEV_NEVER);
-			}
-			else
-			{
-				setDroidSecondary(droid,DSO_REPAIR_LEVEL, DSS_REPLEV_LOW);
-			}
 		}
 
-		/* Start building next droid */
-		if(structure != NULLOBJECT)
+		_repairFacility = getStructure(repairFacility,me);
+		if(_repairFacility == NULLOBJECT)
 		{
-			if(structure.stattype == REF_FACTORY)
-			{
-				factoryBuildDroid(structure);
-			}
-			else if(structure.stattype == REF_CYBORG_FACTORY)
-			{
-				cybFactorBuildCyborg(structure);
-			}
-			else if(structure.stattype == REF_VTOL_FACTORY)
-			{
-				vtolFactoryBuildVtol(structure);
-			}
+			setDroidSecondary(droid,DSO_REPAIR_LEVEL, DSS_REPLEV_NEVER);
+		}
+		else
+		{
+			setDroidSecondary(droid,DSO_REPAIR_LEVEL, DSS_REPLEV_LOW);
+		}
+	}
+
+	/* Start building next droid */
+	if(structure != NULLOBJECT)
+	{
+		if(structure.stattype == REF_FACTORY)
+		{
+			factoryBuildDroid(structure);
+		}
+		else if(structure.stattype == REF_CYBORG_FACTORY)
+		{
+			cybFactorBuildCyborg(structure);
+		}
+		else if(structure.stattype == REF_VTOL_FACTORY)
+		{
+			vtolFactoryBuildVtol(structure);
 		}
 	}
 }
@@ -1430,12 +1364,6 @@ event structBuilt(structBuiltTr)
 {
 	local	FEATURE	_oilResource;
 	local	int		_count,_count2;
-
-	if(not aiResponsibleForPlayer(me) )
-	{
-		setEventTrigger(structBuilt,inactive);
-		exit;
-	}
 
 	if(structure == NULLOBJECT || droid == NULLOBJECT){
 		exit;
@@ -1513,28 +1441,22 @@ event structBuilt(structBuiltTr)
 // deal with attacks.
 event droidDestroyed(droidDestroyedTr)
 {
-	if(not aiResponsibleForPlayer(me) )
+
+	if(droid.droidType == DROID_REPAIR)
 	{
-		setEventTrigger(droidDestroyed,inactive);
+		numRepairUnits = numRepairUnits - 1;
 	}
-	else
+
+	if(droid.droidType == DROID_CONSTRUCT)					// if constructor droid
 	{
-		if(droid.droidType == DROID_REPAIR)
+		initEnumStruct(FALSE,factory,me,me);
+		structure= enumStruct();							// find factory.
+
+		if( (structure != NULLOBJECT) and (getDroidCount(me) < MAX_DROIDS) )
 		{
-			numRepairUnits = numRepairUnits - 1;
+			buildDroid(constructor, structure, me, 1);	// build constructor
 		}
 
-		if(droid.droidType == DROID_CONSTRUCT)					// if constructor droid
-		{
-			initEnumStruct(FALSE,factory,me,me);
-			structure= enumStruct();							// find factory.
-
-			if( (structure != NULLOBJECT) and (getDroidCount(me) < MAX_DROIDS) )
-			{
-				buildDroid(constructor, structure, me, 1);	// build constructor
-			}
-
-		}
 	}
 }
 
@@ -1543,16 +1465,9 @@ event droidDestroyed(droidDestroyedTr)
 // build more con droids.
 event conDroids(conDroidsTr)
 {
-	if(not aiResponsibleForPlayer(me) )
-	{
-		setEventTrigger(conDroids,inactive);
-	}
-	else
-	{
 
-		buildTruck();
+	buildTruck();
 
-	}
 }
 
 function void buildTruck()
@@ -1596,50 +1511,38 @@ function void buildTruck()
 // build repair droids.
 event repairDroids(repairDroidsTr)
 {
-	if(not aiResponsibleForPlayer(me) )
-	{
-		setEventTrigger(repairDroids,inactive);
-	}
-	else
-	{
-		// if we're running low on repair droids, build some..
-		if(numRepairUnits <3)
-		{
-			initEnumStruct(FALSE,factory,me,me);
-			structure= enumStruct();							// find factory.
-			if( (structure != NULLOBJECT) and (getDroidCount(me) < MAX_DROIDS) )
-			{
-				buildDroid(repairUnit, structure, me, 1);	// build repairunit.
-			}
-		}
 
+	// if we're running low on repair droids, build some..
+	if(numRepairUnits <3)
+	{
+		initEnumStruct(FALSE,factory,me,me);
+		structure= enumStruct();							// find factory.
+		if( (structure != NULLOBJECT) and (getDroidCount(me) < MAX_DROIDS) )
+		{
+			buildDroid(repairUnit, structure, me, 1);	// build repairunit.
+		}
 	}
+
 }
 
 
 /////////////////////////////////////////////////////////////////////
 event factoryEvent(factoryEventTr)
 {
-	if(not aiResponsibleForPlayer(me) )
-	{
-		setEventTrigger(factoryEvent,	inactive);
-	}
-	else
-	{
-		// for each factory....
-		initEnumStruct(FALSE,factory,me,me);
-		structure = enumStruct();								// find factory.
-		if(getDroidCount(me) < MAX_DROIDS)
-		{
-			while(structure != NULLOBJECT)
-			{
-				if( structureIdle(structure) )
-				{
-					factoryBuildDroid(structure);
-				}
 
-				structure = enumStruct();
+	// for each factory....
+	initEnumStruct(FALSE,factory,me,me);
+	structure = enumStruct();								// find factory.
+	if(getDroidCount(me) < MAX_DROIDS)
+	{
+		while(structure != NULLOBJECT)
+		{
+			if( structureIdle(structure) )
+			{
+				factoryBuildDroid(structure);
 			}
+
+			structure = enumStruct();
 		}
 	}
 }
@@ -1708,30 +1611,22 @@ function void factoryBuildDroid(STRUCTURE _factory)
 // put cyborg factories to work
 event cyborgFactoryEvent(cyborgFactoryEventTr)
 {
-	if(not aiResponsibleForPlayer(me) )
+
+	if(not ((defendGroup.members < maxCyborgs[curTech]) or (maxCyborgs[curTech] == UNLIMITED)))
 	{
-		setEventTrigger(cyborgFactoryEvent,	inactive);
+		exit;		//we need no cyborgs
 	}
-	else
+
+	initEnumStruct(FALSE,cybFactory,me,me);
+	structure= enumStruct();								// find factory.
+
+	while(structure != NULLOBJECT)
 	{
-
-		if(not ((defendGroup.members < maxCyborgs[curTech]) or (maxCyborgs[curTech] == UNLIMITED)))
+		if( structureIdle(structure) == TRUE)
 		{
-			exit;		//we need no cyborgs
+			cybFactorBuildCyborg(structure);
 		}
-
-		initEnumStruct(FALSE,cybFactory,me,me);
-		structure= enumStruct();								// find factory.
-
-		while(structure != NULLOBJECT)
-		{
-			if( structureIdle(structure) == TRUE)
-			{
-				cybFactorBuildCyborg(structure);
-			}
-			structure= enumStruct();							// find factory.
-		}
-
+		structure= enumStruct();							// find factory.
 	}
 }
 
@@ -1799,15 +1694,8 @@ function void cybFactorBuildCyborg(STRUCTURE _factory)
 // scout an area
 event chooseScoutArea(chooseScoutAreaTr)
 {
-	if(not aiResponsibleForPlayer(me) )
-	{
-		setEventTrigger(chooseScoutArea,	inactive);
-	}
-	else
-	{
-		scoutX = scoutTLX + random(scoutW);
-		scoutY = scoutTLY + random(scoutH);
-	}
+	scoutX = scoutTLX + random(scoutW);
+	scoutY = scoutTLY + random(scoutH);
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -1815,45 +1703,39 @@ event chooseScoutArea(chooseScoutAreaTr)
 
 event expandScoutArea(expandScoutAreaTr)
 {
-	if(not aiResponsibleForPlayer(me) )
+
+	//expand the scouting area slightly
+	scoutTLX	= scoutTLX - ((mapWidth*128)/ tileExpand);
+	scoutTLY	= scoutTLY - ((mapHeight*128)/ tileExpand);
+	scoutW		= scoutW + (2*((mapWidth*128)/ tileExpand));
+	scoutH		= scoutH + (2*((mapHeight*128)/ tileExpand));
+
+	// check & restrain.
+	if(scoutTLX <1)
 	{
-		setEventTrigger(expandScoutArea,	inactive);
+		scoutTLX = 1;
 	}
-	else
+	if(scoutTLY <1)
 	{
-		//expand the scouting area slightly
-		scoutTLX	= scoutTLX - ((mapWidth*128)/ tileExpand);
-		scoutTLY	= scoutTLY - ((mapHeight*128)/ tileExpand);
-		scoutW		= scoutW + (2*((mapWidth*128)/ tileExpand));
-		scoutH		= scoutH + (2*((mapHeight*128)/ tileExpand));
+		scoutTLY = 1;
+	}
 
-		// check & restrain.
-		if(scoutTLX <1)
-		{
-			scoutTLX = 1;
-		}
-		if(scoutTLY <1)
-		{
-			scoutTLY = 1;
-		}
+	if(scoutTLX >(mapWidth*128))
+	{
+		scoutTLX = (mapWidth*128) - 128;
+	}
+	if(scoutTLY >(mapHeight*128))
+	{
+		scoutTLY = (128*mapHeight) - 128;
+	}
 
-		if(scoutTLX >(mapWidth*128))
-		{
-			scoutTLX = (mapWidth*128) - 128;
-		}
-		if(scoutTLY >(mapHeight*128))
-		{
-			scoutTLY = (128*mapHeight) - 128;
-		}
-
-		if( (scoutTLX + scoutW) > (128 * mapWidth) )
-		{
-			scoutW = ( (128 * mapWidth) - scoutTLX) - 128;
-		}
-		if( (scoutTLY + scoutH) > (128 *mapHeight) )
-		{
-			scoutH = ( (128*mapHeight) - scoutTLY) - 128;
-		}
+	if( (scoutTLX + scoutW) > (128 * mapWidth) )
+	{
+		scoutW = ( (128 * mapWidth) - scoutTLX) - 128;
+	}
+	if( (scoutTLY + scoutH) > (128 *mapHeight) )
+	{
+		scoutH = ( (128*mapHeight) - scoutTLY) - 128;
 	}
 }
 
@@ -1862,18 +1744,11 @@ event expandScoutArea(expandScoutAreaTr)
 
 event scoutMain(scoutMainTr)
 {
-	if(not aiResponsibleForPlayer(me) )
+	// find any new scouts
+	// if scouts aren't busy, send them to a new spot.
+	if( idleGroup(scoutGroup) >= (scoutGroup.members /2) )
 	{
-		setEventTrigger(scoutMain,	inactive);
-	}
-	else
-	{
-		// find any new scouts
-		// if scouts aren't busy, send them to a new spot.
-		if( idleGroup(scoutGroup) >= (scoutGroup.members /2) )
-		{
-			orderGroupLoc(scoutGroup, DORDER_MOVE,scoutX,scoutY);
-		}
+		orderGroupLoc(scoutGroup, DORDER_MOVE,scoutX,scoutY);
 	}
 }
 
@@ -1881,29 +1756,23 @@ event scoutMain(scoutMainTr)
 // process new visibility reports
 event newObjectReport(newObjectReportTr)
 {
-	if(not aiResponsibleForPlayer(me) )
-	{
-		setEventTrigger(newObjectReport,	inactive);
-	}
-	else
-	{
-		if( baseobj2 != NULLOBJECT )
-		{
-			if((baseobj2.type == OBJ_DROID) and !friendlyPlayer(baseobj.player))
-			{
-				if(targetTypeValue(baseobj) > targetTypeValue(attackObj))
-				{
-					attackObj = baseobj;// got a new unseen  target from a scout.
 
-					if(	attackObj.type == OBJ_STRUCTURE)
+	if( baseobj2 != NULLOBJECT )
+	{
+		if((baseobj2.type == OBJ_DROID) and !friendlyPlayer(baseobj.player))
+		{
+			if(targetTypeValue(baseobj) > targetTypeValue(attackObj))
+			{
+				attackObj = baseobj;// got a new unseen  target from a scout.
+
+				if(	attackObj.type == OBJ_STRUCTURE)
+				{
+					if(not allianceExistsBetween(attackObj.player,me))	// an enemy
 					{
-						if(not allianceExistsBetween(attackObj.player,me))	// an enemy
+						structure = objToStructure(attackObj);
+						if(structure.stat == factory)
 						{
-							structure = objToStructure(attackObj);
-							if(structure.stat == factory)
-							{
-								allOutAttack = attackObj;
-							}
+							allOutAttack = attackObj;
 						}
 					}
 				}
@@ -1969,32 +1838,18 @@ function int targetTypeValue(BASEOBJ _target)
 
 event takeover(takeoverTr)
 {
-	if(not aiResponsibleForPlayer(me) )
+	if( droid.player == me )
 	{
-		setEventTrigger(takeover,	inactive);
-	}
-	else
-	{
-		if( droid.player == me )
-		{
-			groupAddDroid( attackGroup, droid );
-		}
+		groupAddDroid( attackGroup, droid );
 	}
 }
 
 event takeoverDefend(takeoverTr)
 {
-	if(not aiResponsibleForPlayer(me) )
+	if( droid.player != me )
 	{
+		completeResearch(nexusDefence,me);
 		setEventTrigger(takeoverDefend,	inactive);
-	}
-	else
-	{
-		if( droid.player != me )
-		{
-			completeResearch(nexusDefence,me);
-			setEventTrigger(takeoverDefend,	inactive);
-		}
 	}
 }
 
@@ -2002,26 +1857,19 @@ event takeoverDefend(takeoverTr)
 event useLassat(useLassatTr)
 {
 
-	if(not aiResponsibleForPlayer(me) )
+	// find my lassat
+	// fire it at my attack objective.
+	if(allOutAttack != NULLOBJECT)
 	{
-		setEventTrigger(useLassat,	inactive);
-	}
-	else
-	{
-		// find my lassat
-		// fire it at my attack objective.
-		if(allOutAttack != NULLOBJECT)
+		initEnumStruct(FALSE,lassat,me,me);
+		structure= enumStruct();
+		while(structure != NULLOBJECT)
 		{
-			initEnumStruct(FALSE,lassat,me,me);
-			structure= enumStruct();
-			while(structure != NULLOBJECT)
+			if(structureComplete(structure) == TRUE)
 			{
-				if(structureComplete(structure) == TRUE)
-				{
-					skFireLassat(me,allOutAttack);
-				}
-				structure= enumStruct();
+				skFireLassat(me,allOutAttack);
 			}
+			structure= enumStruct();
 		}
 	}
 }
@@ -2032,60 +1880,45 @@ event useLassat(useLassatTr)
 
 event findEnemy(attackStuffTr)
 {
-	if(not aiResponsibleForPlayer(me) )
+	if(attackObj == NULLOBJECT)
 	{
-		setEventTrigger(findEnemy,	inactive);
-	}
-	else
-	{
-		if(attackObj == NULLOBJECT)
+		count = random(8);
+		count2 = 100;
+		while( friendlyPlayer(count) && (count2 > 0) )
 		{
 			count = random(8);
-			count2 = 100;
-			while( friendlyPlayer(count) && (count2 > 0) )
-			{
-				count = random(8);
-				count2--;
-			}
+			count2--;
+		}
 
-			if(!friendlyPlayer(count))
+		if(!friendlyPlayer(count))
+		{
+			baseobj = skLocateEnemy(count);
+			if(baseobj != NULLOBJECT)
 			{
-				baseobj = skLocateEnemy(count);
-				if(baseobj != NULLOBJECT)
-				{
-					attackObj =	baseobj;
-					allOutAttack = attackObj;
-				}
+				attackObj =	baseobj;
+				allOutAttack = attackObj;
 			}
 		}
 	}
-
 }
 
 /////////////////////////////////////////////////////////////////////
 // send attack team out to cause trouble near things scout found.
 event attackStuff(attackStuffTr)
 {
-	if(not aiResponsibleForPlayer(me) )
+	if( idleGroup(attackGroup) >= (attackGroup.members /2))
 	{
-		setEventTrigger(attackStuff,	inactive);
-	}
-	else
-	{
-		if( idleGroup(attackGroup) >= (attackGroup.members /2))
+		if( (attackObj != NULLOBJECT) and (not helpingAlly()) )
 		{
-			if( (attackObj != NULLOBJECT) and (not helpingAlly()) )
+			if (not allianceExistsBetween(me, attackObj.player))
 			{
-				if (not allianceExistsBetween(me, attackObj.player))
+				if(attackGroup.members > (6+random(6)) )
 				{
-					if(attackGroup.members > (6+random(6)) )
-					{
-						orderGroupLoc(attackGroup, DORDER_SCOUT,attackObj.x,attackObj.y);
-					}
-					if( idleGroup(scoutGroup) >= (scoutGroup.members /2) )
-					{
-						orderGroupLoc(scoutGroup, DORDER_MOVE,scoutX,scoutY);
-					}
+					orderGroupLoc(attackGroup, DORDER_SCOUT,attackObj.x,attackObj.y);
+				}
+				if( idleGroup(scoutGroup) >= (scoutGroup.members /2) )
+				{
+					orderGroupLoc(scoutGroup, DORDER_MOVE,scoutX,scoutY);
 				}
 			}
 		}
@@ -2095,27 +1928,20 @@ event attackStuff(attackStuffTr)
 /////////////////////////////////////////////////////////////////////
 event doAllOutAttack(allOutAttackTr)
 {
-	if(not aiResponsibleForPlayer(me) )
+	if( (allOutAttack != NULLOBJECT) and (not helpingAlly()) )
 	{
-		setEventTrigger(attackStuff,	inactive);
-	}
-	else
-	{
-		if( (allOutAttack != NULLOBJECT) and (not helpingAlly()) )
+		if( !friendlyPlayer(allOutAttack.player) )
 		{
-			if( !friendlyPlayer(allOutAttack.player) )
+			if( getDroidCount(me) > 40)	// plenty of units.
 			{
-				if( getDroidCount(me) > 40)	// plenty of units.
-				{
-					orderGroupObj(attackGroup, DORDER_ATTACK,allOutAttack);
-					//orderGroupLoc(defendGroup, DORDER_SCOUT,allOutAttack.x,allOutAttack.y);
-					orderGroupLoc(scoutGroup,  DORDER_SCOUT,allOutAttack.x,allOutAttack.y);
-				}
+				orderGroupObj(attackGroup, DORDER_ATTACK,allOutAttack);
+				//orderGroupLoc(defendGroup, DORDER_SCOUT,allOutAttack.x,allOutAttack.y);
+				orderGroupLoc(scoutGroup,  DORDER_SCOUT,allOutAttack.x,allOutAttack.y);
 			}
-			else
-			{
-				allOutAttack = NULLOBJECT;
-			}
+		}
+		else
+		{
+			allOutAttack = NULLOBJECT;
 		}
 	}
 }
@@ -2127,36 +1953,29 @@ event doAllOutAttack(allOutAttackTr)
 // defend attacked objects.
 event defendWatch(defendWatchTr)
 {
-	if(not aiResponsibleForPlayer(me) )
+	if(baseobj != NULLOBJECT)
 	{
-		setEventTrigger(defendWatch,	inactive);
-	}
-	else
-	{
-		if(baseobj != NULLOBJECT)
+		if(!friendlyPlayer(baseobj.player))
 		{
-			if(!friendlyPlayer(baseobj.player))
+			if(not isHumanPlayer(baseobj.player) )	// new in wdg1 dont allout attack a pc player	//TODO:is this check needed?
 			{
-				if(not isHumanPlayer(baseobj.player) )	// new in wdg1 dont allout attack a pc player	//TODO:is this check needed?
+				if(distBetweenTwoPoints(baseobj.x, baseobj.y, baseX, baseY) <= MAX_DEFENDERS_RADIUS)	//don't go too far away from the base
 				{
-					if(distBetweenTwoPoints(baseobj.x, baseobj.y, baseX, baseY) <= MAX_DEFENDERS_RADIUS)	//don't go too far away from the base
+					defendObj = baseobj;
+					defendbusy = TRUE;
+					// if not too busy, attack.
+					if( idleGroup(defendGroup) >= (defendGroup.members / 2) )
 					{
-						defendObj = baseobj;
-						defendbusy = TRUE;
-						// if not too busy, attack.
-						if( idleGroup(defendGroup) >= (defendGroup.members / 2) )
-						{
-							orderGroupLoc(defendGroup, DORDER_MOVE,defendObj.x,defendObj.y);	//cyborg mechanics can't attack (won't move)
-							//orderGroupObj(defendGroup, DORDER_ATTACK, defendObj);
-						}
-
-						if( idleGroup(scoutGroup) >= (scoutGroup.members / 2) )
-						{
-							orderGroupLoc(scoutGroup, DORDER_MOVE,scoutX,scoutY);
-						}
+						orderGroupLoc(defendGroup, DORDER_MOVE,defendObj.x,defendObj.y);	//cyborg mechanics can't attack (won't move)
+						//orderGroupObj(defendGroup, DORDER_ATTACK, defendObj);
 					}
 
+					if( idleGroup(scoutGroup) >= (scoutGroup.members / 2) )
+					{
+						orderGroupLoc(scoutGroup, DORDER_MOVE,scoutX,scoutY);
+					}
 				}
+
 			}
 		}
 	}
@@ -2166,22 +1985,15 @@ event defendWatch(defendWatchTr)
 // defenders  return after they are finished.
 event defendReturn(defendReturnTr)
 {
-	if(not aiResponsibleForPlayer(me) )
+	if( defendbusy and (idleGroup(defendGroup) == (defendGroup.members - defendGroup.members / 12)))
 	{
-		setEventTrigger(defendReturn,	inactive);
-	}
-	else
-	{
-		if( defendbusy and (idleGroup(defendGroup) == (defendGroup.members - defendGroup.members / 12)))
-		{
-			// find a place with no structures nearby
-			buildX = baseX;
-			buildY = baseY;
-			pickStructLocationB(powGen, ref buildX, ref buildY, me, 0);
+		// find a place with no structures nearby
+		buildX = baseX;
+		buildY = baseY;
+		pickStructLocationB(powGen, ref buildX, ref buildY, me, 0);
 
-			orderGroupLoc(defendGroup, DORDER_MOVE,buildX,buildY);
-			defendbusy = FALSE;
-		}
+		orderGroupLoc(defendGroup, DORDER_MOVE,buildX,buildY);
+		defendbusy = FALSE;
 	}
 }
 
@@ -2217,55 +2029,47 @@ event doResearch(doResearchTr)
 {
 	local	int		_techIndex,_numResearching;
 
-	if(not aiResponsibleForPlayer(me) )
-	{
-		setEventTrigger(doResearch,	inactive);
-	}
-	else
-	{
-		_techIndex = 0;	//research start
-		_numResearching = numStructBusyByType(resLab);
+	_techIndex = 0;	//research start
+	_numResearching = numStructBusyByType(resLab);
 
-		// for every research lab do this..
-		initEnumStruct(FALSE,resLab,me,me);
-		structure= enumStruct();
-		count = 0;
-		while(structure != NULLOBJECT)
+	// for every research lab do this..
+	initEnumStruct(FALSE,resLab,me,me);
+	structure= enumStruct();
+	count = 0;
+	while(structure != NULLOBJECT)
+	{
+		boolResult = FALSE;		//haven't started research for the current resFac
+
+		if(structureIdle(structure))
 		{
-			boolResult = FALSE;		//haven't started research for the current resFac
-
-			if(structureIdle(structure))
+			if(structureComplete(structure))
 			{
-				if(structureComplete(structure))
+				// first research all technologies necessary for the current research branch
+				while(not boolResult and _techIndex != NONE)	//not started researching and still branch tech left to try
 				{
-					// first research all technologies necessary for the current research branch
-					while(not boolResult and _techIndex != NONE)	//not started researching and still branch tech left to try
+					_techIndex = findResearch(_techIndex, curTech);
+					if(_techIndex > NONE)
 					{
-						_techIndex = findResearch(_techIndex, curTech);
-						if(_techIndex > NONE)
-						{
-							boolResult = pursueResearch(structure,me,tech[curTech][_techIndex]);
+						boolResult = pursueResearch(structure,me,tech[curTech][_techIndex]);
 
-							_techIndex++;	//try nect research next time if needed
-							_numResearching++;
-						}
+						_techIndex++;	//try nect research next time if needed
+						_numResearching++;
 					}
+				}
 
-					// do common research
-					if(not boolResult)	//didn't start branch research
+				// do common research
+				if(not boolResult)	//didn't start branch research
+				{
+					if((maxIdleRes[curTech] == UNLIMITED) or (_numResearching < maxIdleRes[curTech]))
 					{
-						if((maxIdleRes[curTech] == UNLIMITED) or (_numResearching < maxIdleRes[curTech]))
-						{
-							skDoResearch(structure,me,0);
-							_numResearching++;
-						}
+						skDoResearch(structure,me,0);
+						_numResearching++;
 					}
 				}
 			}
-
-			structure = enumStruct();
 		}
 
+		structure = enumStruct();
 	}
 }
 
@@ -2297,31 +2101,25 @@ function int findResearch(int _searchStart, int _techTree)
 // form alliances
 event formAllianceEvent(formAllianceEventTr)
 {
-	if(not aiResponsibleForPlayer(me) )
+
+	count = 0;
+	while(count < MAX_PLAYERS)
 	{
-		setEventTrigger(formAllianceEvent,	inactive);
-	}
-	else
-	{
-		count = 0;
-		while(count < MAX_PLAYERS)
+		if( count != me )												// if not the only other player and rand2
 		{
-			if( count != me )												// if not the only other player and rand2
+			if((getDroidCount(me) > 1) and (getDroidCount(count) > 1) )	// not dead
 			{
-				if((getDroidCount(me) > 1) and (getDroidCount(count) > 1) )	// not dead
+				if(random(28) == 1)											// bit random
 				{
-					if(random(28) == 1)											// bit random
+					if(not isHumanPlayer(count))							// not human
 					{
-						if(not isHumanPlayer(count))							// not human
-						{
-							createAlliance(me,count);
-							allianceTime[count] = gameTime;
-						}
+						createAlliance(me,count);
+						allianceTime[count] = gameTime;
 					}
 				}
 			}
-			count = count + 1;
 		}
+		count = count + 1;
 	}
 }
 
@@ -2329,99 +2127,85 @@ event formAllianceEvent(formAllianceEventTr)
 // break the alliance too.
 event breakAllianceEvent(breakAllianceEventTr)
 {
-	if(not aiResponsibleForPlayer(me) )
+	count = 0;
+	while(count<multiPlayerMaxPlayers)
 	{
-		setEventTrigger(breakAllianceEvent,	inactive);
-	}
-	else
-	{
-		count = 0;
-		while(count<multiPlayerMaxPlayers)
+		if( count != me)
 		{
-			if( count != me)
+			if((getDroidCount(me) > 1) and (getDroidCount(count) > 1) )	// not dead
 			{
-				if((getDroidCount(me) > 1) and (getDroidCount(count) > 1) )	// not dead
+				if(allianceExistsBetween(me,count) )
 				{
-					if(allianceExistsBetween(me,count) )
+					// check if we're in alliance with any other players.
+					if( (random(30) == 1) and ( (gameTime - allianceTime[count]) > 6000) )	// rand and more than 10 minutes.
 					{
-						// check if we're in alliance with any other players.
-						if( (random(30) == 1) and ( (gameTime - allianceTime[count]) > 6000) )	// rand and more than 10 minutes.
-						{
-							allianceTime[count] = gameTime;
-							breakAlliance(me,count);
-						}
-
-						// rules for breaking alliances with humans.
-						// built within my base
-						if(numStructsInArea(count,minx,miny,maxx,maxy) > 1)
-						{
-							allianceTime[count] = gameTime;
-							breakAlliance(me,count);
-						}
-
-						// you've got lots of units in my area.
-						if(numDroidsInArea(count,minx,miny,maxx,maxy) > 3)
-						{
-							allianceTime[count] = gameTime;
-							breakAlliance(me,count);
-						}
-
-						// you've wiped out one of my allies ??.
+						allianceTime[count] = gameTime;
+						breakAlliance(me,count);
 					}
+
+					// rules for breaking alliances with humans.
+					// built within my base
+					if(numStructsInArea(count,minx,miny,maxx,maxy) > 1)
+					{
+						allianceTime[count] = gameTime;
+						breakAlliance(me,count);
+					}
+
+					// you've got lots of units in my area.
+					if(numDroidsInArea(count,minx,miny,maxx,maxy) > 3)
+					{
+						allianceTime[count] = gameTime;
+						breakAlliance(me,count);
+					}
+
+					// you've wiped out one of my allies ??.
 				}
 			}
-			count = count + 1;
 		}
+		count = count + 1;
 	}
 }
 
 /////////////////////////////////////////////////////////////////////
 event formHumanAlliances(humanAllianceTr)
 {
-	if(not aiResponsibleForPlayer(me) )
+	if(count2 == me) // offered to me.
 	{
-		setEventTrigger(formHumanAlliances,	inactive);
-	}
-	else
-	{
-		if(count2 == me) // offered to me.
+		result = 0;
+		result2 = 0;
+		while(result < multiPlayerMaxPlayers)
 		{
-			result = 0;
-			result2 = 0;
-			while(result < multiPlayerMaxPlayers)
+			if(allianceExistsBetween(count,result))
 			{
-				if(allianceExistsBetween(count,result))
-				{
-					result2 = result2 + 1;
-				}
-				result = result + 1;
+				result2 = result2 + 1;
 			}
-			if( result2 < ((multiPlayerMaxPlayers / 2) - 1) )	// not too many already
+			result = result + 1;
+		}
+		if( result2 < ((multiPlayerMaxPlayers / 2) - 1) )	// not too many already
+		{
+			//not too soon.
+			if((allianceTime[count] == 0) or (gameTime - allianceTime[count] > 1200))
 			{
-				//not too soon.
-				if((allianceTime[count] == 0) or (gameTime - allianceTime[count] > 1200))
+				result = 0;								// check forming wont end the game
+				result2 = 0;
+				while(result < multiPlayerMaxPlayers)
 				{
-					result = 0;								// check forming wont end the game
-					result2 = 0;
-					while(result < multiPlayerMaxPlayers)
+					while(result2 < multiPlayerMaxPlayers)
 					{
-						while(result2 < multiPlayerMaxPlayers)
+						if((not allianceExistsBetween(result,result2)) and (getDroidCount(result) > 0) and (getDroidCount(result2) > 0) and (result != result2) )
 						{
-							if((not allianceExistsBetween(result,result2)) and (getDroidCount(result) > 0) and (getDroidCount(result2) > 0) and (result != result2) )
+							if( ((result == count and result2 == count2) or (result2 == count2 and result == count)) )	// ignore the outcome of this alliance
 							{
-								if( ((result == count and result2 == count2) or (result2 == count2 and result == count)) )	// ignore the outcome of this alliance
-								{
-									createAlliance(me,count);
-									allianceTime[count] = gameTime;
-								}
+								createAlliance(me,count);
+								allianceTime[count] = gameTime;
 							}
-							result2 = result2 + 1;
 						}
-						result = result + 1;
+						result2 = result2 + 1;
 					}
+					result = result + 1;
 				}
-
 			}
+
 		}
 	}
 }
@@ -2433,46 +2217,39 @@ event formHumanAlliances(humanAllianceTr)
 // bring forces back together to consolidate attacks
 event consolidateEvent(consolidateEventTr)
 {
-	if(not aiResponsibleForPlayer(me) )
+	if(not helpingAlly())
 	{
-		setEventTrigger(consolidateEvent,	inactive);
-	}
-	else
-	{
-		if(not helpingAlly())
+		if(random(3) == 1)				// order all droids home to rejoin forces.!
 		{
-			if(random(3) == 1)				// order all droids home to rejoin forces.!
-			{
-				// find a place with no structures nearby
-				buildX = baseX;
-				buildY = baseY;
-				pickStructLocationB(powGen, ref buildX, ref buildY, me, 0);
+			// find a place with no structures nearby
+			buildX = baseX;
+			buildY = baseY;
+			pickStructLocationB(powGen, ref buildX, ref buildY, me, 0);
 
-				orderGroupLoc(scoutGroup, DORDER_MOVE,buildX,buildY);
-				orderGroupLoc(defendGroup, DORDER_MOVE,buildX,buildY);
-			}
+			orderGroupLoc(scoutGroup, DORDER_MOVE,buildX,buildY);
+			orderGroupLoc(defendGroup, DORDER_MOVE,buildX,buildY);
+		}
 
-			if(attackObj != NULLOBJECT)	// consolidate any ongoing attack.
+		if(attackObj != NULLOBJECT)	// consolidate any ongoing attack.
+		{
+			if(!friendlyPlayer(attackObj.player))
 			{
-				if(!friendlyPlayer(attackObj.player))
-				{
-					orderGroupObj(attackGroup, DORDER_ATTACK,attackObj);
-				}
-				else
-				{
-					attackObj = NULLOBJECT;
-				}
+				orderGroupObj(attackGroup, DORDER_ATTACK,attackObj);
 			}
 			else
 			{
-
-				// find a place with no structures nearby
-				buildX = baseX;
-				buildY = baseY;
-				pickStructLocationB(powGen, ref buildX, ref buildY, me, 0);
-
-				orderGroupLoc(attackGroup, DORDER_MOVE,buildX,buildY);
+				attackObj = NULLOBJECT;
 			}
+		}
+		else
+		{
+
+			// find a place with no structures nearby
+			buildX = baseX;
+			buildY = baseY;
+			pickStructLocationB(powGen, ref buildX, ref buildY, me, 0);
+
+			orderGroupLoc(attackGroup, DORDER_MOVE,buildX,buildY);
 		}
 	}
 }
@@ -2484,32 +2261,25 @@ event consolidateEvent(consolidateEventTr)
 // if running low on power put some power eating stuff on hold for a while.
 event managePower(managePowerTr)
 {
-	if(not aiResponsibleForPlayer(me) )
+	if( playerPower(me) < LOW_POWER )	// turn off some events.
 	{
-		setEventTrigger(managePower,	inactive);
+		powerSave = TRUE;
+
+//			setEventTrigger(fortify,			inactive);	// stop building defenses.
+		setEventTrigger(upgradeStructures,	inactive);	// stop building oil defenses.
+	//	setEventTrigger(buildExpand,		inactive);	// stop building extra buildings.
+	//	setEventTrigger(conDroids,			inactive);	// stop building more construct droids.
 	}
 	else
 	{
-		if( playerPower(me) < LOW_POWER )	// turn off some events.
+		if(powerSave == TRUE)		// turn events back on.
 		{
-			powerSave = TRUE;
-
-//			setEventTrigger(fortify,			inactive);	// stop building defenses.
-			setEventTrigger(upgradeStructures,	inactive);	// stop building oil defenses.
-		//	setEventTrigger(buildExpand,		inactive);	// stop building extra buildings.
-		//	setEventTrigger(conDroids,			inactive);	// stop building more construct droids.
-		}
-		else
-		{
-			if(powerSave == TRUE)		// turn events back on.
-			{
-				powerSave = FALSE;
+			powerSave = FALSE;
 
 //				setEventTrigger(fortify,			fortifyTr);			 //  building defenses.
-				setEventTrigger(upgradeStructures,	upgradeStructuresTr);//  building oil defenses.
-		//		setEventTrigger(buildExpand,		buildExpandTr);		 //  building extra buildings.
-		//		setEventTrigger(conDroids,			conDroidsTr);	  	 //  building more construct droids.
-			}
+			setEventTrigger(upgradeStructures,	upgradeStructuresTr);//  building oil defenses.
+	//		setEventTrigger(buildExpand,		buildExpandTr);		 //  building extra buildings.
+	//		setEventTrigger(conDroids,			conDroidsTr);	  	 //  building more construct droids.
 		}
 	}
 }
@@ -2517,14 +2287,7 @@ event managePower(managePowerTr)
 
 event difficultyModifier(difficultyModifierTr)
 {
-	if(not aiResponsibleForPlayer(me) )
-	{
-		setEventTrigger(difficultyModifier,	inactive);
-	}
-	else
-	{
-		skDifficultyModifier(me);
-	}
+	skDifficultyModifier(me);
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -2536,53 +2299,46 @@ event vtolStructs(inactive)
 	local	int		_maxTrucks,_numTrucks,_maxBuildTrucks,_minBuildTrucks;
 	local	int		_numVtolFacs,_numRearmPads;
 
-	if(not aiResponsibleForPlayer(me) )
-	{
-		setEventTrigger(vtolStructs,inactive);
+	// got any idle trucks?
+	if(idleGroup(buildGroup) < 1){
+		exit;
 	}
-	else
+
+	// see how many vtol factories we already have
+	_numVtolFacs = getNumStructures(vtolFactory,me);
+	_numRearmPads = getNumStructures(vtolPad,me);
+
+	//see if we have enough rearm pads
+	if( _numRearmPads * 4 / 3 <= totalVtols() )
 	{
-		// got any idle trucks?
-		if(idleGroup(buildGroup) < 1){
-			exit;
-		}
+		dbg("NEED REARM PADS", me);
+		buildRearmPads();
+	}
 
-		// see how many vtol factories we already have
-		_numVtolFacs = getNumStructures(vtolFactory,me);
-		_numRearmPads = getNumStructures(vtolPad,me);
+	// calculate how many trucks we want to use for construction
+	_minBuildTrucks = 1;
+	_maxBuildTrucks = 3;
+	_maxTrucks = min(_maxBuildTrucks, max(_minBuildTrucks, idleGroup(buildGroup) / 2));
 
-		//see if we have enough rearm pads
-		if( _numRearmPads * 4 / 3 <= totalVtols() )
+	if(_numVtolFacs < maxVtolFacs[curTech])			// if not enough
+	{
+		// build factory
+		buildX = baseX;								// pick a location
+		buildY = baseY;
+		boolResult = pickStructLocation(vtolFactory, ref buildX, ref buildY,me);
+		if(boolResult == TRUE)
 		{
-			dbg("NEED REARM PADS", me);
-			buildRearmPads();
-		}
-
-		// calculate how many trucks we want to use for construction
-		_minBuildTrucks = 1;
-		_maxBuildTrucks = 3;
-		_maxTrucks = min(_maxBuildTrucks, max(_minBuildTrucks, idleGroup(buildGroup) / 2));
-
-		if(_numVtolFacs < maxVtolFacs[curTech])			// if not enough
-		{
-			// build factory
-			buildX = baseX;								// pick a location
-			buildY = baseY;
-			boolResult = pickStructLocation(vtolFactory, ref buildX, ref buildY,me);
-			if(boolResult == TRUE)
+			initIterateGroup(buildGroup);			// find idle droids in build group.
+			droid = iterateGroup(buildGroup);
+			_numTrucks = 0;							// only send _maxTrucks to do the job
+			while( (_numTrucks < _maxTrucks) and (droid != NULLOBJECT))
 			{
-				initIterateGroup(buildGroup);			// find idle droids in build group.
-				droid = iterateGroup(buildGroup);
-				_numTrucks = 0;							// only send _maxTrucks to do the job
-				while( (_numTrucks < _maxTrucks) and (droid != NULLOBJECT))
+				if( (droid.order == DORDER_NONE) or (droid.order == DORDER_RTB))
 				{
-					if( (droid.order == DORDER_NONE) or (droid.order == DORDER_RTB))
-					{
-						orderDroidStatsLoc(droid, DORDER_BUILD,vtolFactory, buildX,buildY);
-						_numTrucks++;
-					}
-					droid = iterateGroup(buildGroup);
+					orderDroidStatsLoc(droid, DORDER_BUILD,vtolFactory, buildX,buildY);
+					_numTrucks++;
 				}
+				droid = iterateGroup(buildGroup);
 			}
 		}
 	}
@@ -2644,30 +2400,24 @@ function void buildRearmPads()
 
 event buildVtols(inactive)
 {
-	if(not aiResponsibleForPlayer(me) )
-	{
-		setEventTrigger(buildVtols,inactive);
+
+	// got enough vtols?
+	if((vtolDefendGr.members >= maxVTOLs[curTech]) or (getDroidCount(me) >= MAX_DROIDS)){
+		dbg("CAN'T BUILD VTOLS - TOO MANY UNITS", me);
+		exit;
 	}
-	else
+
+	// build vtols
+	initEnumStruct(FALSE,vtolFactory,me,me);
+	structure = enumStruct();
+	while(structure != NULLOBJECT)
 	{
-		// got enough vtols?
-		if((vtolDefendGr.members >= maxVTOLs[curTech]) or (getDroidCount(me) >= MAX_DROIDS)){
-			dbg("CAN'T BUILD VTOLS - TOO MANY UNITS", me);
-			exit;
-		}
-
-		// build vtols
-		initEnumStruct(FALSE,vtolFactory,me,me);
-		structure = enumStruct();
-		while(structure != NULLOBJECT)
+		if(structureIdle(structure))	// if factory idle
 		{
-			if(structureIdle(structure))	// if factory idle
-			{
-				vtolFactoryBuildVtol(structure);
-			}
-
-			structure = enumStruct();
+			vtolFactoryBuildVtol(structure);
 		}
+
+		structure = enumStruct();
 	}
 }
 
@@ -2711,142 +2461,135 @@ event vtolAttack(inactive)
 	local		bool		_bHaveDefendTarget;
 	local		DROID		_droid;
 
-	if(not aiResponsibleForPlayer(me) )
+	// if vtol group is not busy..
+	if(  (idleGroup(vtolDefendGr) >= (vtolDefendGr.members / 2)) and (vtolDefendGr.members >= 2) )
 	{
-		setEventTrigger(vtolAttack,inactive);
-	}
-	else
-	{
-		// if vtol group is not busy..
-		if(  (idleGroup(vtolDefendGr) >= (vtolDefendGr.members / 2)) and (vtolDefendGr.members >= 2) )
+		if(attackObj != NULLOBJECT)
 		{
-			if(attackObj != NULLOBJECT)
+			if(!friendlyPlayer(attackObj.player))
 			{
-				if(!friendlyPlayer(attackObj.player))
-				{
-					orderGroupObj(vtolDefendGr, DORDER_ATTACK, attackObj);	// get the attack target.
-				}
-				else
-				{
-					attackObj = NULLOBJECT;
-				}
+				orderGroupObj(vtolDefendGr, DORDER_ATTACK, attackObj);	// get the attack target.
 			}
 			else
 			{
-				if(defendObj != NULLOBJECT)
+				attackObj = NULLOBJECT;
+			}
+		}
+		else
+		{
+			if(defendObj != NULLOBJECT)
+			{
+				if(not isHumanPlayer(defendObj.player) )	// new in wdg1 	//TODO:is this check needed?
 				{
-					if(not isHumanPlayer(defendObj.player) )	// new in wdg1 	//TODO:is this check needed?
-					{
-						orderGroupObj(vtolDefendGr, DORDER_ATTACK,defendObj);		// get the defend target
-					}
+					orderGroupObj(vtolDefendGr, DORDER_ATTACK,defendObj);		// get the defend target
 				}
 			}
 		}
+	}
 
-		//make sure attack vtol groups are not cluttered
-		rearrangeAttackVtols();
+	//make sure attack vtol groups are not cluttered
+	rearrangeAttackVtols();
 
-		//attack vtols
-		_groupIndex = 0;
-		while(_groupIndex < numVtolAttackGroups)
+	//attack vtols
+	_groupIndex = 0;
+	while(_groupIndex < numVtolAttackGroups)
+	{
+		if(vtolAttackGr[_groupIndex].members > 0)
 		{
-			if(vtolAttackGr[_groupIndex].members > 0)
+			// if our base is in trouble see if we have a target in the base
+			// don't choose new target if already have one
+			_bHaveDefendTarget = FALSE;
+			if((vtolGrAttackObj[_groupIndex] != NULLOBJECT))
 			{
-				// if our base is in trouble see if we have a target in the base
-				// don't choose new target if already have one
-				_bHaveDefendTarget = FALSE;
-				if((vtolGrAttackObj[_groupIndex] != NULLOBJECT))
+				if(defendingOwnBase() and
+					(distBetweenTwoPoints(baseX, baseY, vtolGrAttackObj[_groupIndex].x, vtolGrAttackObj[_groupIndex].y) <= MAX_VTOL_DEFEND_RADIUS))
 				{
-					if(defendingOwnBase() and
-						(distBetweenTwoPoints(baseX, baseY, vtolGrAttackObj[_groupIndex].x, vtolGrAttackObj[_groupIndex].y) <= MAX_VTOL_DEFEND_RADIUS))
+					_bHaveDefendTarget = TRUE;
+				}
+				else	//reset target if it's not worth it
+				{
+					//we don't want to attack enemy heavy tanks outside of our base
+					if(vtolGrAttackObj[_groupIndex].type == OBJ_DROID)
 					{
-						_bHaveDefendTarget = TRUE;
-					}
-					else	//reset target if it's not worth it
-					{
-						//we don't want to attack enemy heavy tanks outside of our base
-						if(vtolGrAttackObj[_groupIndex].type == OBJ_DROID)
+						_droid = objToDroid(vtolGrAttackObj[_groupIndex]);
+						if(_droid.droidType != DROID_CONSTRUCT)
 						{
-							_droid = objToDroid(vtolGrAttackObj[_groupIndex]);
-							if(_droid.droidType != DROID_CONSTRUCT)
-							{
-								vtolGrAttackObj[_groupIndex] = NULLOBJECT;	//reset target
-								_bHaveDefendTarget = FALSE;
-							}
+							vtolGrAttackObj[_groupIndex] = NULLOBJECT;	//reset target
+							_bHaveDefendTarget = FALSE;
 						}
 					}
 				}
+			}
 
-				//find target in our base if our base is in trouble
-				if(!_bHaveDefendTarget and defendingOwnBase())
-				{
-					vtolGrAttackObj[_groupIndex] = chooseVtolDefenceTarget(baseX, baseY, MAX_VTOL_DEFEND_RADIUS, FALSE);
+			//find target in our base if our base is in trouble
+			if(!_bHaveDefendTarget and defendingOwnBase())
+			{
+				vtolGrAttackObj[_groupIndex] = chooseVtolDefenceTarget(baseX, baseY, MAX_VTOL_DEFEND_RADIUS, FALSE);
 
-					if(vtolGrAttackObj[_groupIndex] != NULLOBJECT)
-					{
-						dbg("assigned new defence target for group " & _groupIndex, me);
-						_bHaveDefendTarget = TRUE;
-					}
-				}
-
-				//attack rules
-				if(!_bHaveDefendTarget and (idleGroup(vtolAttackGr[_groupIndex]) >= (vtolAttackGr[_groupIndex].members / 2)) and
-				(vtolAttackGr[_groupIndex].members >= (numAttackVtols * 2 / 3)))
-				{
-					_newTarget = NULLOBJECT;
-
-					//reset attack targets once in a while
-					if(vtolGrAttackObj[_groupIndex] != NULLOBJECT)
-					{
-						if(random(10) > 7)
-						{
-							vtolGrAttackObj[_groupIndex] = NULLOBJECT;
-						}
-					}
-
-					//now try to find an attack target if we have no defence target
-					//find best attack target
-					_newTarget = chooseVtolTarget(TRUE);	//search for an exclusive target
-					if(_newTarget == NULLOBJECT)
-					{
-						_newTarget = chooseVtolTarget(FALSE);	//search for any target
-					}
-
-					_newTargetWeight = getVtolTargetWeight(_newTarget);
-					_oldTargetWeight = getVtolTargetWeight(vtolGrAttackObj[_groupIndex]);
-
-					// new one or a much better one
-					if((_newTargetWeight >= (_oldTargetWeight + 20)) or
-						(vtolGrAttackObj[_groupIndex] == NULLOBJECT ))
-					{
-						dbg("choosing new attack object for " & _groupIndex, me);
-						vtolGrAttackObj[_groupIndex] = _newTarget;
-					}
-				}
-
-				//see if this group has something to attack
 				if(vtolGrAttackObj[_groupIndex] != NULLOBJECT)
 				{
-					if(!friendlyPlayer(vtolGrAttackObj[_groupIndex].player))
-					{
-						dbg("VTOL Group " & _groupIndex & " attacking", me);
+					dbg("assigned new defence target for group " & _groupIndex, me);
+					_bHaveDefendTarget = TRUE;
+				}
+			}
 
-						if(_DEBUG and (_groupIndex == 0))
-						{
-							dropBeacon(getPlayerName(me), me, me, vtolGrAttackObj[_groupIndex].x, vtolGrAttackObj[_groupIndex].y, 0);
-						}
+			//attack rules
+			if(!_bHaveDefendTarget and (idleGroup(vtolAttackGr[_groupIndex]) >= (vtolAttackGr[_groupIndex].members / 2)) and
+			(vtolAttackGr[_groupIndex].members >= (numAttackVtols * 2 / 3)))
+			{
+				_newTarget = NULLOBJECT;
 
-						orderGroupObj(vtolAttackGr[_groupIndex], DORDER_ATTACK, vtolGrAttackObj[_groupIndex]);
-					}
-					else
+				//reset attack targets once in a while
+				if(vtolGrAttackObj[_groupIndex] != NULLOBJECT)
+				{
+					if(random(10) > 7)
 					{
 						vtolGrAttackObj[_groupIndex] = NULLOBJECT;
 					}
 				}
+
+				//now try to find an attack target if we have no defence target
+				//find best attack target
+				_newTarget = chooseVtolTarget(TRUE);	//search for an exclusive target
+				if(_newTarget == NULLOBJECT)
+				{
+					_newTarget = chooseVtolTarget(FALSE);	//search for any target
+				}
+
+				_newTargetWeight = getVtolTargetWeight(_newTarget);
+				_oldTargetWeight = getVtolTargetWeight(vtolGrAttackObj[_groupIndex]);
+
+				// new one or a much better one
+				if((_newTargetWeight >= (_oldTargetWeight + 20)) or
+					(vtolGrAttackObj[_groupIndex] == NULLOBJECT ))
+				{
+					dbg("choosing new attack object for " & _groupIndex, me);
+					vtolGrAttackObj[_groupIndex] = _newTarget;
+				}
 			}
 
-			_groupIndex++;
+			//see if this group has something to attack
+			if(vtolGrAttackObj[_groupIndex] != NULLOBJECT)
+			{
+				if(!friendlyPlayer(vtolGrAttackObj[_groupIndex].player))
+				{
+					dbg("VTOL Group " & _groupIndex & " attacking", me);
+
+					if(_DEBUG and (_groupIndex == 0))
+					{
+						dropBeacon(getPlayerName(me), me, me, vtolGrAttackObj[_groupIndex].x, vtolGrAttackObj[_groupIndex].y, 0);
+					}
+
+					orderGroupObj(vtolAttackGr[_groupIndex], DORDER_ATTACK, vtolGrAttackObj[_groupIndex]);
+				}
+				else
+				{
+					vtolGrAttackObj[_groupIndex] = NULLOBJECT;
+				}
+			}
 		}
+
+		_groupIndex++;
 	}
 }
 
@@ -3042,64 +2785,58 @@ event vtolDefend(vtolDefendTr)
 {
 	local	int		_numBuilders,_maxBuilders;
 
-	if(not aiResponsibleForPlayer(me) )
-	{
-		setEventTrigger(vtolDefend,inactive);
-	}
-	else
-	{
+
 //		boolResult2 = FALSE;					// if attacked by a vtol.
-		if(baseobj != NULLOBJECT)
+	if(baseobj != NULLOBJECT)
+	{
+		if(baseobj.type == OBJ_DROID)
 		{
-			if(baseobj.type == OBJ_DROID)
+			if(isVtol(objToDroid(baseobj)))
 			{
-				if(isVtol(objToDroid(baseobj)))
-				{
-					// activate other vtol functions..
-					setEventTrigger(vtolStructs,vtolStructsTr);
-					setEventTrigger(buildVtols,	buildVtolsTr);
-					setEventTrigger(vtolAttack,	vtolAttackTr);
+				// activate other vtol functions..
+				setEventTrigger(vtolStructs,vtolStructsTr);
+				setEventTrigger(buildVtols,	buildVtolsTr);
+				setEventTrigger(vtolAttack,	vtolAttackTr);
 
-					_numBuilders = 0;
-					_maxBuilders = 2;
+				_numBuilders = 0;
+				_maxBuilders = 2;
 
-					// build defenses.
-					initIterateGroup(buildGroup);		// find idle droids in build group.
-					droid = iterateGroup(buildGroup);
+				// build defenses.
+				initIterateGroup(buildGroup);		// find idle droids in build group.
+				droid = iterateGroup(buildGroup);
 //					while( (boolResult2 != TRUE) and (droid != NULLOBJECT))
-					while( droid != NULLOBJECT)
+				while( droid != NULLOBJECT)
+				{
+					if( (structure != NULLOBJECT) and (droid.order != DORDER_BUILD) )
 					{
-						if( (structure != NULLOBJECT) and (droid.order != DORDER_BUILD) )
+						buildX = structure.x;
+						buildY = structure.y;
+						//	if ! vtol defense already built...
+
+						//find best defense we can build.
+						count = 0;
+						count2 = -1;
+						while( count < 5)
 						{
-							buildX = structure.x;
-							buildY = structure.y;
-							//	if ! vtol defense already built...
-
-							//find best defense we can build.
-							count = 0;
-							count2 = -1;
-							while( count < 5)
+							if(isStructureAvailable(vtolDefStruct[count],me))
 							{
-								if(isStructureAvailable(vtolDefStruct[count],me))
-								{
-									count2 = count;
-								}
-								count = count + 1;
+								count2 = count;
 							}
-							if(count2 != (-1) )
-							{
-								boolResult = pickStructLocation(vtolDefStruct[count2], ref buildX, ref buildY,me);
-								if((boolResult == TRUE) and (_numBuilders < _maxBuilders))	// build a vtol defense near the attacked struct...
-								{
-									orderDroidStatsLoc(droid, DORDER_BUILD,vtolDefStruct[count2],buildX,buildY);
-									_numBuilders++;
-//									boolResult2 = TRUE;
-								}
-							}
-
+							count = count + 1;
 						}
-						droid = iterateGroup(buildGroup);
+						if(count2 != (-1) )
+						{
+							boolResult = pickStructLocation(vtolDefStruct[count2], ref buildX, ref buildY,me);
+							if((boolResult == TRUE) and (_numBuilders < _maxBuilders))	// build a vtol defense near the attacked struct...
+							{
+								orderDroidStatsLoc(droid, DORDER_BUILD,vtolDefStruct[count2],buildX,buildY);
+								_numBuilders++;
+//									boolResult2 = TRUE;
+							}
+						}
+
 					}
+					droid = iterateGroup(buildGroup);
 				}
 			}
 		}
@@ -3109,28 +2846,83 @@ event vtolDefend(vtolDefendTr)
 /////////////////////////////////////////////////////////////////////
 event vtolEnabler(vtolEnablerTr)
 {
-	if(not aiResponsibleForPlayer(me) )
+	if( skVtolEnableCheck(me) )					// check to see if we have vtol technologies.
 	{
-		setEventTrigger(vtolEnabler,inactive);
-	}
-	else
-	{
-		if( skVtolEnableCheck(me) )					// check to see if we have vtol technologies.
-		{
-			setEventTrigger(vtolEnabler,inactive);		// turn off this event.
-			setEventTrigger(vtolStructs,vtolStructsTr);	// activate other vtol functions..
-			setEventTrigger(buildVtols,	buildVtolsTr);
-			setEventTrigger(vtolAttack,	vtolAttackTr);
-			dbg("----I CAN USE VTOLS----", me);
-		}
+		setEventTrigger(vtolEnabler,inactive);		// turn off this event.
+		setEventTrigger(vtolStructs,vtolStructsTr);	// activate other vtol functions..
+		setEventTrigger(buildVtols,	buildVtolsTr);
+		setEventTrigger(vtolAttack,	vtolAttackTr);
+		dbg("----I CAN USE VTOLS----", me);
 	}
 }
 
 /////////////////////////////////////////////////////////////////////
 // HouseKeeping
 
+function void shutDownAI()
+{
+	bRunning = false;
+
+	setEventTrigger(givehelp,	inactive);
+	setEventTrigger(basedetails,	inactive);
+	setEventTrigger(buildDerrick,	inactive);
+	setEventTrigger(buildOilDefenseOrRetreat,	inactive);
+	setEventTrigger(incendry,	inactive);
+	setEventTrigger(buildPowerGenerators,	inactive);
+	setEventTrigger(buildBase,	inactive);
+	setEventTrigger(buildExpand,inactive);
+	setEventTrigger(upgradeStructures,inactive);
+	setEventTrigger(finishStructs,	inactive);
+	setEventTrigger(newfortify,	inactive);
+	setEventTrigger(droidBuilt,	inactive);
+	setEventTrigger(structBuilt,inactive);
+	setEventTrigger(droidDestroyed,inactive);
+	setEventTrigger(conDroids,inactive);
+	setEventTrigger(repairDroids,inactive);
+	setEventTrigger(factoryEvent,	inactive);
+	setEventTrigger(cyborgFactoryEvent,	inactive);
+	setEventTrigger(chooseScoutArea,	inactive);
+	setEventTrigger(expandScoutArea,	inactive);
+	setEventTrigger(scoutMain,	inactive);
+	setEventTrigger(newObjectReport,	inactive);
+	setEventTrigger(takeover,	inactive);
+	setEventTrigger(takeoverDefend,	inactive);
+	setEventTrigger(useLassat,	inactive);
+	setEventTrigger(findEnemy,	inactive);
+	setEventTrigger(attackStuff,	inactive);
+	setEventTrigger(defendWatch,	inactive);
+	setEventTrigger(defendReturn,	inactive);
+	setEventTrigger(doResearch,	inactive);
+	setEventTrigger(formAllianceEvent,	inactive);
+	setEventTrigger(breakAllianceEvent,	inactive);
+	setEventTrigger(formHumanAlliances,	inactive);
+	setEventTrigger(consolidateEvent,	inactive);
+	setEventTrigger(managePower,	inactive);
+	setEventTrigger(difficultyModifier,	inactive);
+	setEventTrigger(vtolStructs,inactive);
+	setEventTrigger(buildVtols,inactive);
+	setEventTrigger(vtolAttack,inactive);
+	setEventTrigger(vtolDefend,inactive);
+	setEventTrigger(vtolEnabler,inactive);
+	setEventTrigger(beaconEv,	inactive);
+	setEventTrigger(multiMsgEv,	inactive);
+	setEventTrigger(manageAllyHelp,	inactive);
+	setEventTrigger(everySecEv,	inactive);
+	setEventTrigger(watchBaseThreat, inactive);
+	setEventTrigger(manageDefendLocationEv,	inactive);
+	setEventTrigger(structureDestroyed,inactive);
+	setEventTrigger(rebuildStructureEv,inactive);
+}
+
 event reassignPlayers(reassignTr)
 {
+	reassignAI();
+}
+
+function void reassignAI()
+{
+	bRunning = true;
+
 	setEventTrigger(basedetails,basedetailsTr);
 	setEventTrigger(buildDerrick,buildDerrickTr);
 	setEventTrigger(buildOilDefenseOrRetreat,buildOilDefenseOrRetreatTr);
@@ -3211,12 +3003,6 @@ event beaconEv(beaconTr)
 	local	int			_players;
 	local	string		_processedString;
 
-	if(not aiResponsibleForPlayer(me) )
-	{
-		setEventTrigger(beaconEv,	inactive);
-		exit;
-	}
-
 	if(_DEBUG)
 		debug(me & ") beaconEv: from " & sender);
 
@@ -3233,12 +3019,6 @@ event beaconEv(beaconTr)
 /* Deal with a chat message */
 event multiMsgEv(multiMsgTr)
 {
-	if(not aiResponsibleForPlayer(me) )
-	{
-		setEventTrigger(multiMsgEv,	inactive);
-		exit;
-	}
-
 	if(_DEBUG)
 		debug(me & ") multiMsgEv: from " & sender);
 
@@ -3466,12 +3246,6 @@ function bool allyBaseAtLoc(int _ally, int _x, int _y)
 
 event manageAllyHelp(manageAllyHelpTr)
 {
-	if(not aiResponsibleForPlayer(me) )
-	{
-		setEventTrigger(manageAllyHelp,	inactive);
-		exit;
-	}
-
 	if(helpingAlly())
 	{
 		if(canStopHelpingAlly())
@@ -3504,12 +3278,6 @@ event manageAllyHelp(manageAllyHelpTr)
 
 event everySecEv(everySec)
 {
-	if(not aiResponsibleForPlayer(me) )
-	{
-		setEventTrigger(everySecEv,	inactive);
-		exit;
-	}
-
 	/* Check if we were helping long enough */
 	if(helpingAlly())
 	{
@@ -3728,12 +3496,6 @@ function bool defendingOwnBase()
 /* Call for help when our base is in danger */
 event watchBaseThreat(watchBaseThreatTr)
 {
- 	if(not aiResponsibleForPlayer(me) )
-	{
-		setEventTrigger(watchBaseThreat, inactive);
-		exit;
-	}
-
 	/* See if we can stop defending */
 	if(defendingOwnBase())
 	{
@@ -3914,12 +3676,6 @@ event manageDefendLocationEv(inactive)
 	local DROID _droid;
 
 	dbg("manageDefendLocationEv", me);
-
-	if(not aiResponsibleForPlayer(me) )
-	{
-		setEventTrigger(manageDefendLocationEv,	inactive);
-		exit;
-	}
 
 	ASSERT(defendRadius >= TILE,
 		"manageDefendLocationEv: defendRadius too low:" & defendRadius, me);
@@ -4143,46 +3899,33 @@ event structureDestroyed(structureDestroyedTr)
 {
 	local	int	_count;
 
-	if(not aiResponsibleForPlayer(me) )
+
+	// add certain structures to the rebuild list
+	_count = 0;
+	while(_count < numRebuildStat[curTech])
 	{
-		setEventTrigger(structureDestroyed,inactive);
-	}
-	else
-	{
-		// add certain structures to the rebuild list
-		_count = 0;
-		while(_count < numRebuildStat[curTech])
+		if(structure.stat == rebuildStat[curTech][_count])
 		{
-			if(structure.stat == rebuildStat[curTech][_count])
+			if(countRebuildStruct < MAX_REBUILD_STRUCT)
 			{
-				if(countRebuildStruct < MAX_REBUILD_STRUCT)
-				{
-					rebuildStructX[countRebuildStruct] = structure.x;
-					rebuildStructY[countRebuildStruct] = structure.y;
-					rebuildStructStat[countRebuildStruct] = structure.stat;
-					countRebuildStruct++;
+				rebuildStructX[countRebuildStruct] = structure.x;
+				rebuildStructY[countRebuildStruct] = structure.y;
+				rebuildStructStat[countRebuildStruct] = structure.stat;
+				countRebuildStruct++;
 
-					dbg("remembered structure (" & countRebuildStruct & ") - " & structure.x & "/" & structure.y, me);
+				dbg("remembered structure (" & countRebuildStruct & ") - " & structure.x & "/" & structure.y, me);
 
-					exit;
-				}
+				exit;
 			}
-			_count++;
 		}
+		_count++;
 	}
 }
 
 // Rebuild structures that were destroyed
 event rebuildStructureEv(rebuildStructureTr)
 {
-	if(not aiResponsibleForPlayer(me) )
-	{
-		setEventTrigger(rebuildStructureEv,inactive);
-	}
-	else
-	{
-		rebuildStructures();
-	}
+	rebuildStructures();
 }
 
 function void rebuildStructures()
@@ -4273,3 +4016,33 @@ function DROID closestIdleTruck(int _x, int _y)
 	return _closestTruck;
 }
 
+event consoleEv(consoleTr)
+{
+	//turn on 'autogame'
+	if(message == "autogame on" && (sender == me))
+	{
+		if(debugModeEnabled())
+		{
+			if(myResponsibility(me))
+			{
+				if(not bRunning)		//make sure current machine is responsible for this AI and it's not already active
+				{
+					console(getPlayerName(me) & " activated");
+
+					reassignAI();
+				}
+			}
+		}
+	}
+
+	//turn off 'autogames'
+	if(message == "autogame off" && debugModeEnabled()  && (sender == me))
+	{
+		if(bRunning)		//make sure this AI is active
+		{
+			console(getPlayerName(me) & " deactivated");
+			
+			shutDownAI();
+		}
+	}
+}
