@@ -122,6 +122,17 @@
 #endif /* WZ_CC_x */
 
 
+/*
+   The supported C standard, must be one of: (WZ_Cxx)
+
+     99       - ISO/IEC 9899:1999 / C99
+
+*/
+#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
+# define WZ_C99
+#endif /* WZ_Cxx */
+
+
 /**
  * \def WZ_DECL_DEPRECATED
  *

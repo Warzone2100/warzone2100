@@ -37,11 +37,11 @@ typedef struct
 	unsigned int frequency;
 
 	// the raw PCM data
-#if defined(_ISOC99_SOURCE)
+#if defined(WZ_C99)
 	char data[];
 #else
 	char* data;
-#endif
+#endif /* WZ_C99 */
 } soundDataBuffer;
 
 // Forward declaration so we can take pointers to this type
