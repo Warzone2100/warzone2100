@@ -600,13 +600,13 @@ static void runTitleLoop(void)
 /*!
  * Activation (focus change) eventhandler
  */
-static void handleActiveEvent(SDL_Event * event)
+static void handleActiveEvent(SDL_ActiveEvent * activeEvent)
 {
 	// Ignore focus loss through SDL_APPMOUSEFOCUS, since it mostly happens accidentialy
 	// active.state is a bitflag! Mixed events (eg. APPACTIVE|APPMOUSEFOCUS) will thus not be ignored.
-	if ( event->active.state != SDL_APPMOUSEFOCUS )
+	if ( activeEvent->state != SDL_APPMOUSEFOCUS )
 	{
-		if ( event->active.gain == 1 )
+		if ( activeEvent->gain == 1 )
 		{
 			debug( LOG_NEVER, "WM_SETFOCUS\n");
 			if (focusState != FOCUS_IN)
@@ -654,20 +654,20 @@ static void mainLoop(void)
 			{
 				case SDL_KEYUP:
 				case SDL_KEYDOWN:
-					inputHandleKeyEvent(&event);
+					inputHandleKeyEvent(&event.key);
 					break;
 				case SDL_MOUSEBUTTONUP:
 				case SDL_MOUSEBUTTONDOWN:
-					inputHandleMouseButtonEvent(&event);
+					inputHandleMouseButtonEvent(&event.button);
 					break;
 				case SDL_MOUSEMOTION:
-					inputHandleMouseMotionEvent(&event);
+					inputHandleMouseMotionEvent(&event.motion);
 					break;
 				case SDL_ACTIVEEVENT:
 					 // Ignore this event during multiplayer games since it breaks the game when one player suddenly pauses!
 					if (!bMultiPlayer)
 					{
-						handleActiveEvent(&event);
+						handleActiveEvent(&event.active);
 					}
 					break;
 				case SDL_QUIT:

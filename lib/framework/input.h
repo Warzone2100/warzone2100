@@ -145,9 +145,9 @@ typedef enum _key_code
 /* Tell the input system that we have lost the focus */
 extern void inputLooseFocus(void);
 
-extern void inputHandleKeyEvent(SDL_Event*);
-extern void inputHandleMouseMotionEvent(SDL_Event*);
-extern void inputHandleMouseButtonEvent(SDL_Event*);
+extern void inputHandleKeyEvent(SDL_KeyboardEvent*);
+extern void inputHandleMouseMotionEvent(SDL_MouseMotionEvent*);
+extern void inputHandleMouseButtonEvent(SDL_MouseButtonEvent*);
 
 /* Converts the key code into an ascii string */
 extern void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize);
@@ -178,8 +178,8 @@ typedef enum _mouse_key_code
 } MOUSE_KEY_CODE;
 
 /* These two functions return the current position of the mouse */
-extern SDWORD mouseX(void);
-extern SDWORD mouseY(void);
+extern Uint16 mouseX(void) WZ_DECL_PURE;
+extern Uint16 mouseY(void) WZ_DECL_PURE;
 
 /* This returns true if the mouse key is currently depressed */
 extern BOOL mouseDown(MOUSE_KEY_CODE code);
@@ -197,7 +197,7 @@ extern BOOL mouseReleased(MOUSE_KEY_CODE code);
 extern BOOL mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py);
 
 /* Warps the mouse to the given position */
-extern void SetMousePos(UDWORD x, UDWORD y);
+extern void SetMousePos(Uint16 x, Uint16 y);
 
 /* Sets the state of the mouse key to down */
 extern void setMouseDown(MOUSE_KEY_CODE code);

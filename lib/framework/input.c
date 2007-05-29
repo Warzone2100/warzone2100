@@ -58,7 +58,7 @@ typedef enum _key_state
 static KEY_STATE aKeyState[KEY_MAXSCAN];
 
 /* The current location of the mouse */
-static SDWORD mouseXPos, mouseYPos;
+static Uint16 mouseXPos, mouseYPos;
 
 /* How far the mouse has to move to start a drag */
 #define DRAG_THRESHOLD	5
@@ -111,7 +111,7 @@ void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize)
 /* Initialise the input module */
 void inputInitialise(void)
 {
-	UDWORD	i;
+	unsigned int i;
 
 	for (i = 0; i < KEY_MAXSCAN; i++)
 	{
@@ -219,15 +219,15 @@ char inputGetCharKey(void) {
 /*!
  * Handle keyboard events
  */
-void inputHandleKeyEvent(SDL_Event * event)
+void inputHandleKeyEvent(SDL_KeyboardEvent * keyEvent)
 {
 	UDWORD code, vk;
-	unsigned char char_code = event->key.keysym.unicode; // FIXME Discarding last 8 bit of 16bit UNICODE !!!
+	unsigned char char_code = keyEvent->keysym.unicode; // FIXME Discarding last 8 bit of 16bit UNICODE !!!
 
-	switch (event->type)
+	switch (keyEvent->type)
 	{
 		case SDL_KEYDOWN:
-			switch (event->key.keysym.sym)
+			switch (keyEvent->keysym.sym)
 			{
 				case SDLK_LEFT:
 					vk = INPBUF_LEFT;
@@ -260,7 +260,7 @@ void inputHandleKeyEvent(SDL_Event * event)
 					vk = INPBUF_PGDN;
 					break;
 				default:
-					vk = event->key.keysym.sym;
+					vk = keyEvent->keysym.sym;
 					break;
 			}
 
@@ -271,7 +271,7 @@ void inputHandleKeyEvent(SDL_Event * event)
 			}
 			inputAddBuffer(vk, char_code, 1);
 
-			code = sdlKeyToKeyCode(event->key.keysym.sym);
+			code = sdlKeyToKeyCode(keyEvent->keysym.sym);
 			if ( aKeyState[code] == KEY_UP ||
 				 aKeyState[code] == KEY_RELEASED ||
 				 aKeyState[code] == KEY_PRESSRELEASE )
@@ -280,7 +280,7 @@ void inputHandleKeyEvent(SDL_Event * event)
 			}
 			break;
 		case SDL_KEYUP:
-			code = sdlKeyToKeyCode(event->key.keysym.sym);
+			code = sdlKeyToKeyCode(keyEvent->keysym.sym);
 			if (aKeyState[code] == KEY_PRESSED)
 			{
 				aKeyState[code] = KEY_PRESSRELEASE;
@@ -299,20 +299,20 @@ void inputHandleKeyEvent(SDL_Event * event)
 /*!
  * Handle mousebutton events
  */
-void inputHandleMouseButtonEvent(SDL_Event * event)
+void inputHandleMouseButtonEvent(SDL_MouseButtonEvent * buttonEvent)
 {
-	switch (event->type)
+	switch (buttonEvent->type)
 	{
 		case SDL_MOUSEBUTTONDOWN:
-			if ( aMouseState[event->button.button] == KEY_UP
-				|| aMouseState[event->button.button] == KEY_RELEASED
-				|| aMouseState[event->button.button] == KEY_PRESSRELEASE )
+			if ( aMouseState[buttonEvent->button] == KEY_UP
+				|| aMouseState[buttonEvent->button] == KEY_RELEASED
+				|| aMouseState[buttonEvent->button] == KEY_PRESSRELEASE )
 			{
-				aMouseState[event->button.button] = KEY_PRESSED;
+				aMouseState[buttonEvent->button] = KEY_PRESSED;
 
-				if (event->button.button < 4) // Not the mousewheel
+				if (buttonEvent->button < 4) // Not the mousewheel
 				{
-					dragKey = (MOUSE_KEY_CODE)event->button.button;
+					dragKey = (MOUSE_KEY_CODE)buttonEvent->button;
 					dragX = mouseXPos;
 					dragY = mouseYPos;
 				}
@@ -320,14 +320,14 @@ void inputHandleMouseButtonEvent(SDL_Event * event)
 			// TODO: double click
 			break;
 		case SDL_MOUSEBUTTONUP:
-			if (aMouseState[event->button.button] == KEY_PRESSED)
+			if (aMouseState[buttonEvent->button] == KEY_PRESSED)
 			{
-				aMouseState[event->button.button] = KEY_PRESSRELEASE;
+				aMouseState[buttonEvent->button] = KEY_PRESSRELEASE;
 			}
-			else if ( aMouseState[event->button.button] == KEY_DOWN
-					|| aMouseState[event->button.button] == KEY_DRAG )
+			else if ( aMouseState[buttonEvent->button] == KEY_DOWN
+					|| aMouseState[buttonEvent->button] == KEY_DRAG )
 			{
-				aMouseState[event->button.button] = KEY_RELEASED;
+				aMouseState[buttonEvent->button] = KEY_RELEASED;
 			}
 			break;
 		default:
@@ -339,16 +339,16 @@ void inputHandleMouseButtonEvent(SDL_Event * event)
 /*!
  * Handle mousemotion events
  */
-void inputHandleMouseMotionEvent(SDL_Event * event)
+void inputHandleMouseMotionEvent(SDL_MouseMotionEvent * motionEvent)
 {
-	switch (event->type)
+	switch (motionEvent->type)
 	{
 		case SDL_MOUSEMOTION:
 			if(!mouseDown(MOUSE_MMB))
 			{
 				/* store the current mouse position */
-				mouseXPos = event->motion.x;
-				mouseYPos = event->motion.y;
+				mouseXPos = motionEvent->x;
+				mouseYPos = motionEvent->y;
 
 				/* now see if a drag has started */
 				if (  ( aMouseState[dragKey] == KEY_PRESSED ||
@@ -445,13 +445,13 @@ BOOL keyReleased(KEY_CODE code)
 }
 
 /* Return the X coordinate of the mouse */
-SDWORD mouseX(void)
+Uint16 mouseX(void)
 {
 	return mouseXPos;
 }
 
 /* Return the Y coordinate of the mouse */
-SDWORD mouseY(void)
+Uint16 mouseY(void)
 {
 	return mouseYPos;
 }
@@ -496,7 +496,7 @@ BOOL mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py)
 	return FALSE;
 }
 
-void SetMousePos(UDWORD x, UDWORD y)
+void SetMousePos(Uint16 x, Uint16 y)
 {
 	static int mousewarp = -1;
 
@@ -505,10 +505,9 @@ void SetMousePos(UDWORD x, UDWORD y)
 		SDWORD val;
 
 		mousewarp = 1;
-		if (getWarzoneKeyNumeric("nomousewarp", &val)) {
-			if (val) {
-				mousewarp = 0;
-			}
+		if (getWarzoneKeyNumeric("nomousewarp", &val))
+		{
+			mousewarp = !val;
 		}
 	}
 	if (mousewarp)
