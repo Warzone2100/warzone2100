@@ -284,8 +284,6 @@ extern BOOL SendCmdGroup		(DROID_GROUP *psGroup, UWORD x, UWORD y, BASE_OBJECT *
 extern BOOL SendGroupOrderGroup(DROID_GROUP *psGroup, DROID_ORDER order,UDWORD x,UDWORD y,BASE_OBJECT *psObj);
 
 
-//extern BOOL SendDroidWaypoint	(UBYTE player, UDWORD	x, UDWORD y);
-//extern BOOL SendSingleDroidWaypoint(DROID *psDroid, UDWORD x,UDWORD y);
 extern BOOL sendDroidSecondary	(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state);
 extern BOOL sendDroidSecondaryAll(DROID *psDroid);
 extern BOOL sendDroidEmbark     (DROID *psDroid);

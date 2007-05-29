@@ -611,33 +611,6 @@ static SDWORD moveDirDiff(SDWORD start, SDWORD end)
 	return retval;
 }
 
-// initialise a droid for a shuffle move
-/*void moveShuffleInit(DROID *psDroid, SDWORD mx, SDWORD my)
-{
-	// set up the move state
-	psDroid->sMove.Status = MOVESHUFFLE;
-	psDroid->sMove.shuffleX = (SWORD)mx;
-	psDroid->sMove.shuffleY = (SWORD)my;
-	psDroid->sMove.srcX = (SDWORD)psDroid->x;
-	psDroid->sMove.srcY = (SDWORD)psDroid->y;
-	psDroid->sMove.targetX = (SDWORD)psDroid->x + mx;
-	psDroid->sMove.targetY = (SDWORD)psDroid->y + my;
-	psDroid->sMove.DestinationX = psDroid->sMove.targetX;
-	psDroid->sMove.DestinationY = psDroid->sMove.targetY;
-	psDroid->sMove.numPoints = 0;
-	psDroid->sMove.Position = 0;
-	psDroid->sMove.fx = MAKEFRACT(psDroid->x);
-	psDroid->sMove.fy = MAKEFRACT(psDroid->y);
-	psDroid->sMove.bumpTime = 0;
-	moveCalcBoundary(psDroid);
-
-	if (psDroid->sMove.psFormation != NULL)
-	{
-		formationLeave(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid);
-		psDroid->sMove.psFormation = NULL;
-	}
-}*/
-
 // Tell a droid to move out the way for a shuffle
 static void moveShuffleDroid(DROID *psDroid, UDWORD shuffleStart, SDWORD sx, SDWORD sy)
 {
@@ -893,26 +866,6 @@ void updateDroidOrientation(DROID *psDroid)
 */
 	return;
 }
-
-
-
-
-/* Calculate the normalised vector between a droid and a point */
-/*void moveCalcVector(DROID *psDroid, UDWORD x, UDWORD y, float *pVX, float *pVY)
-{
-	SDWORD	dx,dy, mag;
-	float	root;
-
-	// Calc the basic vector
-	dx = (SDWORD)x - (SDWORD)psDroid->x;
-	dy = (SDWORD)y - (SDWORD)psDroid->y;
-
-	// normalise
-	mag = dx*dx + dy*dy;
-	root = sqrtf(MAKEFRACT(mag));
-	*pVX = FRACTdiv(dx, root);
-	*pVY = FRACTdiv(dy, root);
-}*/
 
 
 /* Turn a vector into an angle - returns a float (!) */
@@ -3673,7 +3626,6 @@ void moveUpdateDroid(DROID *psDroid)
 
 		// Calculate the direction vector
 //		psDroid->direction = calcDirection(psDroid->x,psDroid->y, tarX,tarY);
-//		moveCalcVector(psDroid, tarX,tarY, &psDroid->sMove.dx,&psDroid->sMove.dy)
 		psDroid->sMove.fx = MAKEFRACT(psDroid->x);
 		psDroid->sMove.fy = MAKEFRACT(psDroid->y);
 

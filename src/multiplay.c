@@ -679,9 +679,6 @@ BOOL recvMessage(void)
 				recvDestroyStructure(&msg);
 				break;
 
-//			case NET_WAYPOINT:					// add waypoint to droids.
-//				recvDroidWaypoint(&msg);
-//				break;
 			case NET_SECONDARY:					// set a droids secondary order level.
 				recvDroidSecondary(&msg);
 				break;

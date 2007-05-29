@@ -2464,13 +2464,6 @@ DROID_OACTION_INFO oaInfo = {{NULL}};
 			addEffect(&Pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_MEDIUM,FALSE,NULL,0);
 #endif
 
-			/* We've just clicked on an area of terrain. A 'send to' operation */
-			/* We need to establish the world coordinates */
-/*			if(keyDown(KEY_LALT) || keyDown(KEY_RALT))		// shift clicked a destination, add a waypoint.
-			{
-				orderSelectedWaypoint(selectedPlayer,mouseTileX*TILE_UNITS+TILE_UNITS/2,mouseTileY*TILE_UNITS+TILE_UNITS/2);
-			}*/
-
 			// now changed to use the multiple order stuff
 			if(ctrlShiftDown())		// shift clicked a destination, add an order
 			{

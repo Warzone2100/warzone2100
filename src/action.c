@@ -692,13 +692,11 @@ static void actionAddVtolAttackRun( DROID *psDroid )
 	/* add waypoint left perpendicular to target*/
 	iX = psTarget->x + iVx;
 	iY = psTarget->y + iVy;
-//	orderAddWayPoint( psDroid, iX, iY );
 #endif
 
 	/* add waypoint behind target attack length away*/
 	iX = psTarget->x + (iVNx * VTOL_ATTACK_LENGTH / iA);
 	iY = psTarget->y + (iVNy * VTOL_ATTACK_LENGTH / iA);
-//	orderAddWayPoint( psDroid, iX, iY );
 
 	if ( iX<=0 || iY<=0 ||
 		 iX>(SDWORD)(GetWidthOfMap()<<TILE_SHIFT) ||
