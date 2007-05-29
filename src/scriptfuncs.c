@@ -11151,3 +11151,19 @@ BOOL scrPrintCallStack(void)
 
 	return TRUE;
 }
+
+/*
+ * Returns true if game debug mode is on
+ */
+BOOL scrDebugModeEnabled(void)
+{
+
+	scrFunctionResult.v.bval = getDebugMappingStatus();
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
+	{
+		debug(LOG_ERROR, "scrDebugModeEnabled(): failed to push result");
+		return FALSE;
+	}
+
+	return TRUE;
+}
