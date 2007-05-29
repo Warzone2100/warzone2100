@@ -519,8 +519,6 @@ function void shutDown()
 {
 	bRunning = FALSE;	//remember this AI is inactive
 
-	console(getPlayerName(me) & " deactivated");
-
 	notifyPlayerDead(me);
 
 	setEventTrigger(selftest, inactive);	//Start
@@ -9959,33 +9957,21 @@ event consoleEv(consoleTr)
 				if(not bRunning)		//make sure current machine is responsible for this AI and it's not already active
 				{
 					console(getPlayerName(me) & " activated");
+					
 					mainInitialize();
 				}
-				else
-				{
-					console(getPlayerName(me) & " is already running");
-				}
-			}
-			else
-			{
-				console(selectedPlayer & " is not responsible for " & me);
 			}
 		}
-		else
-		{
-			console("debug mode failed");
-		}
 	}
-	else
-	{
-		console("string failed");
-	}
+
 
 	//turn off 'autogames'
 	if(cstr == "autogame off" && debugModeEnabled()  && (msgPlayer2 == me))
 	{
 		if(bRunning)		//make sure this AI is active
 		{
+			console(getPlayerName(me) & " deactivated");
+			
 			shutDown();
 		}
 	}
