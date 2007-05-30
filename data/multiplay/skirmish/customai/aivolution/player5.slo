@@ -6,10 +6,12 @@
 
 public	int				player,numLego,numTemplates,numBaseStructs,numDef,numRes[2],
 						numGatewayDef,numAA,numRepairTmpl,maxDamageLevels,damageLevel[4],
-						numBranches,techTanks,techAir,numVtolTemplates;
+						numBranches,techTanks,techAir,numVtolTemplates,numVitalStructs,
+						numMinimalStruct[10],maxVitalBuilders[10];
 public	TEMPLATE		truck,tmpl[2][40],tmplOK[8],tmplBB,tmplRep[5],vtoltmpl[2][5];
 public	STRUCTURESTAT	fac,derrick,powGen,vtolfac,resFac,powMod,facMod,resMod,legoSt[4],
-						baseStructs[10],def[6],gatewayDef[6],wall,AA[5],HQ,uplink,lasSat;
+						baseStructs[10],def[6],gatewayDef[6],wall,AA[5],HQ,uplink,lasSat,
+						minimalStruct[10];
 public	STRUCTURESTAT	ArgStrStat0;	//is private
 public	FEATURESTAT		oilRes,ArgFeatStat0;
 
@@ -20,7 +22,7 @@ public	WEAPON			weaponBB;
 //-----------------------
 // private vars
 
-private	float		testFloat;
+private	float	testFloat;
 private	int		count,count2,count3,count4,result,result2,result3,result4,ArgInt0,ArgInt1,ArgInt2,
 				ArgInt3,retInt,retInt2,_retInt,scoutX,scoutY,range,x,y;
 private	int		temp,temp2,temp3,temp4,temp5,temp6,enemyScoutStep,enemyScoutX,enemyScoutY,
@@ -191,18 +193,18 @@ function void	startEnemyScout();
 function void	getNextScoutCoord(int _lastX, int _lastY);
 function void	closerTruck();
 
-function void	buildInBase(STRUCTURESTAT _statToBuild);
-function void	buildOnMap(STRUCTURESTAT _statToBuild, int _buildX, int _buildY);
+function bool	buildInBase(STRUCTURESTAT _statToBuild, int _maxTrucks);
+function void	buildOnMap(STRUCTURESTAT _statToBuild, int _buildX, int _buildY, int _maxTrucks);
 function DROID	closestIdleTruck(int _x, int _y);
-function bool	buildUsingClosestTruck(STRUCTURESTAT _statToBuild, int _buildX, int _buildY);
-function void	findClosestOilToBuildOn(int _lookx, int _looky, int _maxRange);
+function bool	buildUsingClosestTruck(STRUCTURESTAT _statToBuild, int _buildX, int _buildY, int _maxTrucks);
+function FEATURE	findClosestOilToBuildOn(int _lookx, int _looky, int _maxRange);
 function STRUCTURE	findBestEnemyDerrick(int _targetPlayer, int _numAttackers);
 function int	posWeight(int _owner, int _x, int _y, int _range);
 function int	oilWeight(int _owner, int _x, int _y);
 
 //Functions
 
-function int	numStatBusy(STRUCTURESTAT _structureToCheck);	//On the way or already a certain building type
+function int	numStatBusy(STRUCTURESTAT _structureToCheck, bool _bExcludeAlreadyBuilding);	//On the way or already a certain building type
 function int	numStatMoveBusy(STRUCTURESTAT _structStatToCheck);	//On the way
 function int	numTrucksBuilding();		//Number of trucks currently building something
 function int	numBusyByType(STRUCTURESTAT _busyStructType);			//Num of certain structures busy
@@ -411,6 +413,8 @@ function void	vsetState(int _newState);
 function void	toggleDebugMenu();
 function void	shutDown();
 function void	oneTimeInitialize();
+function bool	haveMinimalStructures();
+function void	checkMinimalStructures();
 
 /*%? Help1	=	"Always turn on 'multiplayer mode' is you are going to use Aivolution
  in multiplayer mode (more than 1 human player), otherwise you might get asyncs. \nBy turning on this option
@@ -466,7 +470,7 @@ event powerup(CALL_GAMEINIT)
 	{
 		bResult = FALSE;
 	}
-	
+
 	//do common one-time initialization only if this player is loaded
 	if(bResult){
 		oneTimeInitialize();
@@ -577,24 +581,24 @@ function void oneTimeInitialize()
 	{
 		setPlayerName(me, myName);
 	}
-	
+
 	fixGroups();
-	
+
 	unassignedDroids(defendGr, buildGr);		//assign all dorids to an approriate group
-	
+
 	storeBase();		//remember base location
-	
+
 	if(bLearn)
 	{
 		loadPlayerAIExperience(me, TRUE);
 	}
-	
+
 	bigMap = FALSE;
 	if((mapWidth * mapHeight) > 14400)
 	{
 		bigMap = TRUE;
 	}
-	
+
 	/* Initialize ghost structures data */
 	maxGhosts = 120;
 	count = 0;
@@ -606,7 +610,7 @@ function void oneTimeInitialize()
 		ghostDead[count] = TRUE;
 		count  = count +1 ;
 	}
-	
+
 
 
 	maxBaseEnemies = 22;
@@ -672,7 +676,7 @@ function void oneTimeInitialize()
 	bNotifiedReadyAttack = FALSE;
 
 	maxTransporters = 9;
-	
+
 
 
 	count = 0;
@@ -828,8 +832,8 @@ function void oneTimeInitialize()
 	phSync			= 12;	//Synchronizing with allies
 	phSendDrop		= 13;
 	phTransportDone		= 14;	//signal for drop phase that transport phase is done successfully
-	
-	
+
+
 	stNone			= 0;
 	stAttacking		= 1;
 	stDefending		= 2;
@@ -839,7 +843,7 @@ function void oneTimeInitialize()
 	stCollecting		= 6;
 	stDrop			= 7;
 	stTransporting		= 8;
-	
+
 	threatRange = (10 * 128);
 
 	maxBuildOilTrucks = 5;	//How many trucks are allowed to be building derricks at a time
@@ -854,9 +858,9 @@ function void oneTimeInitialize()
 	initialDefensesFinished = FALSE;	//if finished building anti-rush defenses
 
 	bFirstTimeDefenders = TRUE;
-	
+
 	tech = none;
-	
+
 	lsNone = 0;
 	lsRecharging = 1;
 	lsReady = 2;			//recharged
@@ -873,7 +877,7 @@ function void oneTimeInitialize()
 	tLasSatCountdown = off;	//used for misc stuff
 	tLasSatReplyMax = 6;
 	tLasSatWaitAlliesMax = 45;	//wait max x secs for allies' lasSat to fully recharge
-	
+
 	//initialize enemy and ally information
 	count = 0;
 	while(count < 8)	//multiPlayerMaxPlayers)
@@ -947,7 +951,7 @@ function void oneTimeInitialize()
 
 		count = count + 1;
 	}
-	
+
 	base[me][0] = baseX;
 	base[me][1] = baseY;
 
@@ -971,13 +975,13 @@ function void oneTimeInitialize()
 						ArgDesc="30"	*/
 
 	defendCorridor = (5 * 128);	//range which defenders can stay in (baseRange)
-	
+
 	minAttackers = 10;
 	maxAttackers = 300;	//(unitLimit - maxTrucks - numDefenders) * 3 / 4;
 	numAttackers = 12 + random(15) + minAttackers; //random(8) + minAttackers;
 
 	minSendUnits = 18 + random(8);
-	
+
 	//drop stuff
 	maxDroppers = 40;
 	if(random(2) == 0)
@@ -988,16 +992,16 @@ function void oneTimeInitialize()
 	minDroppers = 10;					//1 transporter
 
 	maxAllyDroppers = 3 + random(2);		//no more than x players
-	
+
 	//Bunker Buster
 	minBB = 1;
 	maxBB = 8;
 	numBB = maxBB;
 
 	haveBB = FALSE;
-	
+
 	attackedCount = 0;		// how many times was attacked
-	
+
 	//adapt for big maps
 	if(bigMap)
 	{
@@ -1106,8 +1110,8 @@ function void storeBase()
 	local	DROID		_truck;
 	local	bool		_bHaveBaseStructs;
 	local	int			_index,_baseX,_baseY,_numBaseStructs;
-	
-	
+
+
 	_bHaveBaseStructs = FALSE;
 
 	//Go through all structures
@@ -1123,13 +1127,13 @@ function void storeBase()
 		{
 			_baseX = _baseX + _structure.x / TILE;
 			_baseY = _baseY + _structure.y / TILE;
-			
+
 			_numBaseStructs++;
 			_structure = enumStruct();
 		}
 		_index++;
 	}
-	
+
 	if(_numBaseStructs > 0)
 	{
 		baseX = (_baseX / _numBaseStructs) * TILE;
@@ -1146,7 +1150,7 @@ function void storeBase()
 		}else{
 			baseX = (TILE * mapWidth) / 2;
 			baseY = (TILE * mapHeight) / 2;
-			
+
 			console("Couldn't find base location for " & getPlayerName(me));
 		}
 	}
@@ -1287,9 +1291,12 @@ function void doEconomy()
 
 		//dbg(" " & me & ")  checkPowerGen");
 
+	//Make sure we have all vital base structures (factory, power getm etc)
+	checkMinimalStructures();
+
 	checkPowerGen();
 
-		//dbg(" " & me & ")  repair");
+	//dbg(" " & me & ")  repair");
 
 	if((buildGr.members >= minTrucks) or (state == stDefending))		//don't send if low on trucks
 	{
@@ -1297,7 +1304,8 @@ function void doEconomy()
 		finishStructures();
 	}
 
-		//dbg(" " & me & ")  upgradeFacPow");
+	//dbg(" " & me & ")  upgradeFacPow");
+
 	//if(not alert)
 	//{
 		upgradeFacPow();
@@ -1574,7 +1582,7 @@ function void finishStructures()
 			//Build it
 			if(structure2 != NULLOBJECT)
 			{
-				bDummy = buildUsingClosestTruck(structure2.stat, structure2.x, structure2.y);
+				bDummy = buildUsingClosestTruck(structure2.stat, structure2.x, structure2.y, 1);
 			}
 
 
@@ -3231,7 +3239,7 @@ event buildNormalOilDefenses(inactive)
 						/* build the normal way */
 						dbg("building oil defense the normal way at " & (structure.x / 128) & " - " & (structure.y / 128), me);
 
-						buildOnMap(def[best], structure.x, structure.y);
+						buildOnMap(def[best], structure.x, structure.y, 1);
 					}
 				}
 			}
@@ -3262,7 +3270,7 @@ event defendOil(inactive)
 	best = none;
 	while(count < numDef)
 	{
-		result2 = numStatBusy(def[count]);	//How many trucks are busy with defenses
+		result2 = numStatBusy(def[count], TRUE);	//How many trucks are busy with defenses
 		result = result + result2;
 
 		count = count + 1;
@@ -3465,7 +3473,7 @@ event defendOil(inactive)
 		droid = droid3;
 	}
 
-	buildOnMap(def[best], x, y);
+	buildOnMap(def[best], x, y, 1);
 }
 
 
@@ -3787,10 +3795,14 @@ function bool isBaseStruct(STRUCTURE _checkStruct)
 //---------------------------------------------------------
 function void checkOil(bool _bInBaseOnly)
 {
+	local	FEATURE		_oil;
+
 	//dbg(" " & me & ")  Executing checkOil()");
 
 	//How many trucks already working on derricks
-	result = numStatBusy(derrick);	//How many trucks are busy with derricks
+	result = numStatBusy(derrick, TRUE);	//How many trucks are busy with derricks
+
+	_oil = NULLOBJECT;
 
 	//dbg(" " & me & ")  right now building " & result & " oil resoirces");
 
@@ -3798,18 +3810,18 @@ function void checkOil(bool _bInBaseOnly)
 	{
 		if(_bInBaseOnly)
 		{
-			findClosestOilToBuildOn(baseX, baseY, baseRange);	//Look near the base
+			_oil = findClosestOilToBuildOn(baseX, baseY, baseRange);	//Look near the base
 		}
 		else
 		{
-			findClosestOilToBuildOn(baseX, baseY, -1);			//Normal way
+			_oil = findClosestOilToBuildOn(baseX, baseY, -1);			//Normal way
 		}
 
-		if(retFeature != NULLOBJECT)
+		if(_oil != NULLOBJECT)
 		{
 			//dbg(" " & me & ")  found unoccupied oil resource");
 
-			bDummy = buildUsingClosestTruck(derrick, retFeature.x, retFeature.y);	//Can skip "buildOnMap" for oil
+			bDummy = buildUsingClosestTruck(derrick, _oil.x, _oil.y, 1);	//Can skip "buildOnMap" for oil
 		}
 	}
 
@@ -3819,23 +3831,25 @@ function void checkOil(bool _bInBaseOnly)
 //-----------------------------------------------------
 //Build ArgStrStat0 (passes STRUCTURESTAT) somewhere
 //-----------------------------------------------------
-function void buildOnMap(STRUCTURESTAT _statToBuild, int _buildX, int _buildY)
+function void buildOnMap(STRUCTURESTAT _statToBuild, int _buildX, int _buildY, int _maxTrucks)
 {
 	bTempResult = pickStructLocation(_statToBuild, ref _buildX, ref _buildY, me);
 	if(bTempResult)
 	{
-		bDummy = buildUsingClosestTruck(_statToBuild, _buildX, _buildY);		//can re-use all arguments
+		bDummy = buildUsingClosestTruck(_statToBuild, _buildX, _buildY, _maxTrucks);		//can re-use all arguments
 	}
 }
 
-function void findClosestOilToBuildOn(int _lookx, int _looky, int _maxRange)
+function FEATURE findClosestOilToBuildOn(int _lookx, int _looky, int _maxRange)
 {
+	local	FEATURE		_oil;
+
 	//dbg(" " & me & ")  Executing findClosestOilToBuildOn()");
 
 	temp3 = _lookx;	//will be re-assigned
 	temp4 = _looky;
 
-	retFeature = NULLOBJECT;	//Not found right now
+	_oil = NULLOBJECT;	//Not found right now
 	temp = 99999;
 
 	initGetFeature(oilRes,me,me);
@@ -3861,7 +3875,7 @@ function void findClosestOilToBuildOn(int _lookx, int _looky, int _maxRange)
 						if(temp2 < temp)
 						{
 							temp = temp2;
-							retFeature = tempFeature;	//Remember and return it
+							_oil = tempFeature;	//Remember it
 						}
 					}
 				}
@@ -3869,6 +3883,8 @@ function void findClosestOilToBuildOn(int _lookx, int _looky, int _maxRange)
 		//}
 		tempFeature = getFeature(me);
 	}
+
+	return _oil;
 
 	//dbg(" " & me & ")  End findClosestOilToBuildOn()");
 }
@@ -3913,27 +3929,33 @@ function void buildTrucks()
 
 function void checkPowerGen()
 {
+	local	bool	_bStartedBuilding;
 	//dbg(" " & me & ")  Executing checkPowerGen()");
+
+	_bStartedBuilding = FALSE;
 
 	if(not structureLimitReached(powGen, me))
 	{
 		result = getNumStructures(derrick, me);
-		result = result + numStatBusy(derrick);	//"Think ahead"
+		result = result + numStatBusy(derrick, FALSE);	//"Think ahead"
 
 		result2 = getNumStructures(powGen,me);
 
 		if((result2 * 4) < result)	//not enough pow gens
 		{
-			result3 = numStatMoveBusy(powGen);	//How many builds trucks are on the way to build
-
-			count = (((result+3)/4) - result2) - result3;	//How many power gens are *really* missing (missing - pending)
+			count = (((result+3)/4) - result2);		//How many power gens are missing
 
 			//dbg(" " & me & ")  num gens to build: " & count);
 
 			while(count > 0)
 			{
-				buildInBase(powGen);	//Build power gen in the base  (can re-use argument ArgStrStat0)
-				count = count - 1;
+				_bStartedBuilding = buildInBase(powGen, 1);	//Build power gen in the base  (can re-use argument ArgStrStat0)
+
+				if(_bStartedBuilding){
+					count--;
+				}else{
+					count = -1;		//break loop
+				}
 			}
 		}
 	}
@@ -3956,7 +3978,7 @@ function void upgradeFacPow()
 
 			if(not buildingSiteBlocked(NULLOBJECT, 128, structure.x, structure.y))	//No one upgrading
 			{
-				buildOnMap(powMod, structure.x, structure.y);
+				buildOnMap(powMod, structure.x, structure.y, 1);
 			}
 		}
 		structure = enumStruct();
@@ -3973,11 +3995,11 @@ function void upgradeFacPow()
 
 			if(not buildingSiteBlocked(NULLOBJECT, 128, structure.x, structure.y))
 			{
-				result = numStatBusy(facMod);	//How many trucks are busy with facMod
+				result = numStatBusy(facMod, TRUE);	//How many trucks are busy with facMod
 
 				if(result <= 1)		//Max 2 at a time
 				{
-					buildOnMap(facMod, structure.x, structure.y);
+					buildOnMap(facMod, structure.x, structure.y, 2);
 				}
 			}
 		}
@@ -4000,11 +4022,11 @@ function void upgradeVtolFac()
 
 			if(not buildingSiteBlocked(NULLOBJECT, 128, structure.x, structure.y))
 			{
-				result = numStatBusy(facMod);	//How many trucks are busy with resMod
+				result = numStatBusy(facMod, TRUE);	//How many trucks are busy with resMod
 
 				if(result <= 1)		//Max 2 at a time
 				{
-					buildOnMap(facMod, structure.x, structure.y);
+					buildOnMap(facMod, structure.x, structure.y, 1);
 				}
 			}
 		}
@@ -4029,11 +4051,11 @@ function void upgradeResFac()
 
 			if(not buildingSiteBlocked(NULLOBJECT, 128, structure.x, structure.y))
 			{
-				result = numStatBusy(resMod);	//How many trucks are busy with resMod
+				result = numStatBusy(resMod, TRUE);	//How many trucks are busy with resMod
 
 				if(result <= 1)		//Max 2 at a time
 				{
-					buildOnMap(resMod, structure.x, structure.y);
+					buildOnMap(resMod, structure.x, structure.y, 1);
 				}
 			}
 		}
@@ -4236,24 +4258,31 @@ function int numBusyByType(STRUCTURESTAT _busyStructType)
 //For how many structures of given type there's a pending
 //build (truck is on the way to build or already building)
 //--------------------------------------------------------
-function int numStatBusy(STRUCTURESTAT _structureToCheck)
+function int numStatBusy(STRUCTURESTAT _structureToCheck, bool _bExcludeAlreadyBuilding)
 {
-	_temp = 0;
+	local	int		_numStatBusy;
+	local	DROID	_bTruck;
+
+	_numStatBusy = 0;
+
 	initIterateGroup(buildGr);
-	tempDroid = iterateGroup(buildGr);
-	while(tempDroid != NULLOBJECT)
+	_bTruck = iterateGroup(buildGr);
+	while(_bTruck != NULLOBJECT)
 	{
-		if(tempDroid.order == DORDER_BUILD)
+		if(_bTruck.order == DORDER_BUILD)
 		{
-			if(tempDroid.stat == _structureToCheck)	//going to build it
+			if(not (_bExcludeAlreadyBuilding and _bTruck.action == DACTION_BUILD))
 			{
-				_temp = _temp + 1;
+				if(_bTruck.stat == _structureToCheck)	//going to build it
+				{
+					_numStatBusy++;
+				}
 			}
 		}
-		tempDroid = iterateGroup(buildGr);
+		_bTruck = iterateGroup(buildGr);
 	}
 
-	return(_temp);
+	return _numStatBusy;
 }
 
 //--------------------------------------------------------
@@ -4302,42 +4331,59 @@ function int numStatMoveBusy(STRUCTURESTAT _structStatToCheck)
 }
 
 //-----------------------------------------------------
-function void buildInBase(STRUCTURESTAT _statToBuild)
+function bool buildInBase(STRUCTURESTAT _statToBuild, int _maxTrucks)
 {
+	local	bool		_bStartedBuilding;
+
+	_bStartedBuilding = FALSE;
+
 	//dbg(" " & me & ")  Executing buildInBase()");
 
 	temp = 6 * 128;
 	temp2 = baseX + (random(temp) - (temp/2));	//Randomize a bit
 	temp3 = baseY + (random(temp) - (temp/2));
 
-	bTempResult = pickStructLocation(_statToBuild, ref temp2, ref temp3, me);
-	if(bTempResult)
+	if(pickStructLocation(_statToBuild, ref temp2, ref temp3, me))
 	{
-		bDummy = buildUsingClosestTruck(_statToBuild, temp2, temp3);		//can re-use ArgStrStat0
+		_bStartedBuilding = buildUsingClosestTruck(_statToBuild, temp2, temp3, _maxTrucks);		//can re-use ArgStrStat0
 	}
 
 	//dbg(" " & me & ")  End buildInBase()");
+
+	return _bStartedBuilding;
 }
 
 //-----------------------------------------------------
 //Build a structure with the closest truck
 //-----------------------------------------------------
-function bool buildUsingClosestTruck(STRUCTURESTAT _statToBuild, int _buildX, int _buildY)		//Building coords and STRUCTURESTAT are passed
+function bool buildUsingClosestTruck(STRUCTURESTAT _statToBuild, int _buildX, int _buildY, int _maxTrucks)		//Building coords and STRUCTURESTAT are passed
 {
+	local	int		_numTrucks;
+	local	bool	_bHaveMoreTrucks;
+	local	DROID	_truck;
+
 	//dbg(" " & me & ")  Executing buildUsingClosestTruck()");
 
-	tempDroid = closestIdleTruck(_buildX, _buildY);
-
-	if(tempDroid != NULLOBJECT)
+	_numTrucks = 0;
+	_bHaveMoreTrucks = TRUE;
+	while((_numTrucks < _maxTrucks) and _bHaveMoreTrucks)
 	{
-		orderDroidStatsLoc(tempDroid, DORDER_BUILD, _statToBuild, _buildX, _buildY);
-		//dbg(" " & me & ")  End buildUsingClosestTruck()");
-		return(TRUE);
+		_bHaveMoreTrucks = FALSE;
+
+		_truck = closestIdleTruck(_buildX, _buildY);
+		if(_truck != NULLOBJECT)
+		{
+			_bHaveMoreTrucks = TRUE;
+			orderDroidStatsLoc(_truck, DORDER_BUILD, _statToBuild, _buildX, _buildY);
+
+			//dbg(" " & me & ")  End buildUsingClosestTruck()");
+			_numTrucks++;
+		}
 	}
 
 	//dbg(" " & me & ")  End buildUsingClosestTruck()");
 
-	return(FALSE);
+	return (_numTrucks > 0);
 }
 
 //-----------------------------------------------------
@@ -4379,11 +4425,11 @@ function void buildBaseStructs()
 	if(getStructure(HQ, me) == NULLOBJECT)	//not built and no one's on the way to build
 	{
 		//Check if someone's already on the way to build HQ
-		result3 = numStatBusy(HQ);
+		result3 = numStatBusy(HQ, TRUE);
 
 		if(result3 == 0)		//no one's on the way to build
 		{
-			buildInBase(HQ);
+			bDummy = buildInBase(HQ, 1);
 		}
 	}
 
@@ -4397,11 +4443,11 @@ function void buildBaseStructs()
 				if(getNumStructures(vtolfac, me) < min(1, getStructureLimit(vtolfac, me)))	//don't try to build more than allowed
 				{
 					//Check if someone's already on the way to build VTOL fac
-					result3 = numStatBusy(vtolfac);
+					result3 = numStatBusy(vtolfac, TRUE);
 
 					if(result3 == 0)		//no one's on the way to build
 					{
-						buildInBase(vtolfac);
+						bDummy = buildInBase(vtolfac, 2);
 						exit;
 					}
 				}
@@ -4429,7 +4475,7 @@ function void buildBaseStructs()
 
 				if(not buildingSiteBlocked(NULLOBJECT, 128, _buildX, _buildY))
 				{
-					bResult = buildUsingClosestTruck(fac, _buildX, _buildY);		//Building coords and STRUCTURESTAT are passed
+					bResult = buildUsingClosestTruck(fac, _buildX, _buildY, 2);		//Building coords and STRUCTURESTAT are passed
 
 					if(bResult)
 					{
@@ -4467,7 +4513,7 @@ function void buildBaseStructs()
 
 				if(not buildingSiteBlocked(NULLOBJECT, 128, _buildX, _buildY))
 				{
-					bDummy = buildUsingClosestTruck(resFac, _buildX, _buildY);		//Building coords and STRUCTURESTAT are passed
+					bDummy = buildUsingClosestTruck(resFac, _buildX, _buildY, 1);		//Building coords and STRUCTURESTAT are passed
 				}
 			}
 		}
@@ -4495,7 +4541,7 @@ function void buildBaseStructs()
 
 		if(not buildingSiteBlocked(NULLOBJECT, 128, _buildX, _buildY))
 		{
-			bDummy = buildUsingClosestTruck(uplink, _buildX, _buildY);		//Building coords and STRUCTURESTAT are passed
+			bDummy = buildUsingClosestTruck(uplink, _buildX, _buildY, 1);		//Building coords and STRUCTURESTAT are passed
 		}
 	}
 
@@ -5351,7 +5397,7 @@ function int numBuildingDefenses()
 	{
 		if(isStructureAvailable(def[temp],me))
 		{
-			temp3 = numStatBusy(def[temp]);	//How many going to build it
+			temp3 = numStatBusy(def[temp], TRUE);	//How many going to build it
 			temp2 = temp2 + temp3;
 		}
 
@@ -5654,7 +5700,7 @@ function void buildDefenses()
 		//don't allow to build outside of the range
 		if(distBetweenTwoPoints(buildX, buildY, x, y) < range)		//coords corrected with pickStructLocation() not too far away from orig
 		{
-			_buildStarted = buildUsingClosestTruck(def[best], buildX, buildY);
+			_buildStarted = buildUsingClosestTruck(def[best], buildX, buildY, 1);
 
 			if(_buildStarted)
 			{
@@ -5781,7 +5827,7 @@ event objectAttacked(inactive)
 				dbg("building AA defense, since don't see attacker's base", me);
 
 				/* build AA */
-				buildOnMap(AA[best], buildX, buildY);
+				buildOnMap(AA[best], buildX, buildY, 2);
 			}
 		}
 	}
@@ -9944,7 +9990,7 @@ function void buildAA()
 						}
 
 						/* it worked, build AA */
-						buildOnMap(AA[best], buildX, buildY);
+						buildOnMap(AA[best], buildX, buildY, 2);
 					}
 				}
 		}
@@ -11072,3 +11118,68 @@ function void toggleDebugMenu()
 	debugMenu(debugMenuUp);
 }
 
+/* Returns true if AI has all vital structures */
+function bool haveMinimalStructures()
+{
+	local	int			_index;
+	local	STRUCTURE	_structure;
+
+	_index = 0;
+	while(_index < numVitalStructs)
+	{
+		if( (getNumStructures(minimalStruct[_index], me) + numStatBusy(minimalStruct[_index], FALSE))
+				< numMinimalStruct[_index] )
+		{
+			return FALSE;
+		}
+		_index++;
+	}
+
+	return TRUE;
+}
+
+function void checkMinimalStructures()
+{
+	local	int			_index,_maxTrucks;
+	local	bool		_bStartedBuild;
+	local	STRUCTURE	_structure;
+	local	FEATURE		_oil;
+
+	if(haveMinimalStructures()){
+		return;
+	}
+
+	_index = 0;
+	while(_index < numVitalStructs)
+	{
+		if( (getNumStructures(minimalStruct[_index], me) + numStatBusy(minimalStruct[_index], FALSE))
+				< numMinimalStruct[_index] )
+		{
+			//see how many trucks are allowed to build thi structure
+			_maxTrucks = maxVitalBuilders[_index];
+			if(_maxTrucks == -1){
+				_maxTrucks = buildGr.members;		//use all trucks
+			}
+
+			//if it's a derrick
+			if(minimalStruct[_index] == derrick)
+			{
+				_oil = findClosestOilToBuildOn(baseX, baseY, -1);
+
+				if(_oil != NULLOBJECT){
+					dbg("Building minimal base - oil", me);
+					bDummy = buildUsingClosestTruck(derrick, _oil.x, _oil.y, _maxTrucks);	//Can skip "buildOnMap" for oil
+				}
+			}
+			else
+			{
+				_bStartedBuild = buildInBase(minimalStruct[_index], _maxTrucks);
+
+				if(_bStartedBuild){
+					dbg("Building minimal base " & _index, me);
+				}
+			}
+		}
+		_index++;
+	}
+}
