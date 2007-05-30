@@ -836,28 +836,30 @@ static void drawTiles(iView *camera, iView *player)
 				{
 					// If it's the main water tile then bring it back up because it was pushed down for the river bed calc.
 					SDWORD tmp_y = tileScreenInfo[i][j].y;
+
 					if (PushedDown)
 					{
 						tileScreenInfo[i][j].y += (shiftVal + 2*altVal);
 					}
 
 					// Transform it into the wx,wy mesh members.
-					tileScreenInfo[i][j].wz = pie_RotateProject((Vector3i*)&tileScreenInfo[i][j].x, (Vector2i*)&tileScreenInfo[i][j].wx);
+					tileScreenInfo[i][j].water.z = pie_RotateProject((Vector3i*)&tileScreenInfo[i][j].x, (Vector2i*)&tileScreenInfo[i][j].water);
 					tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].y;
-					tileScreenInfo[i][j].wlight.argb = lightDoFogAndIllumination(TileIllum, rx - tileScreenInfo[i][j].x, rz - world_coord(i-terrainMidY), NULL); // Calc the light for modified y coord and ignore the specular component
+
+					// Calc the light for modified y coord and ignore the specular component
+					tileScreenInfo[i][j].wlight.argb = lightDoFogAndIllumination(TileIllum, rx - tileScreenInfo[i][j].x, rz - world_coord(i-terrainMidY), NULL);
+
 					tileScreenInfo[i][j].y = tmp_y;
 				}
 				else
 				{
-					// If it wasnt a water tile then need to ensure wx,wy are valid because
+					// If it wasnt a water tile then need to ensure water.xyz are valid because
 					// a water tile might be sharing verticies with it.
-					tileScreenInfo[i][j].wx = tileScreenInfo[i][j].sx;
-					tileScreenInfo[i][j].wy = tileScreenInfo[i][j].sy;
-					tileScreenInfo[i][j].wz = tileScreenInfo[i][j].sz;
+					tileScreenInfo[i][j].water = tileScreenInfo[i][j].screen;
 					tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].y;
 				}
 			}
-			tileScreenInfo[i][j].sz = pie_RotateProject((Vector3i*)&tileScreenInfo[i][j].x, (Vector2i*)&tileScreenInfo[i][j].sx);
+			tileScreenInfo[i][j].screen.z = pie_RotateProject((Vector3i*)&tileScreenInfo[i][j].x, (Vector2i*)&tileScreenInfo[i][j].screen);
 		}
 	}
 
@@ -895,9 +897,9 @@ static void drawTiles(iView *camera, iView *player)
 			if (tileScreenInfo[i][j].drawInfo == TRUE)
 			{
 				//get distance of furthest corner
-				zMax = MAX(tileScreenInfo[i][j].sz, tileScreenInfo[i+1][j].sz);
-				zMax = MAX(zMax, tileScreenInfo[i+1][j+1].sz);
-				zMax = MAX(zMax, tileScreenInfo[i][j+1].sz);
+				zMax = MAX(tileScreenInfo[i][j].screen.z, tileScreenInfo[i+1][j].screen.z);
+				zMax = MAX(zMax, tileScreenInfo[i+1][j+1].screen.z);
+				zMax = MAX(zMax, tileScreenInfo[i][j+1].screen.z);
 
 				if(zMax < 0)
 				{
@@ -3941,6 +3943,9 @@ static void preprocessTiles(void)
 }
 
 
+/*!
+ * Find the tile the mouse is currently over
+ */
 /* TODO This is slow - speed it up */
 static void locateMouse(void)
 {
@@ -3956,20 +3961,20 @@ static void locateMouse(void)
 		{
 			bWaterTile = tileScreenInfo[i][j].bWater;
 
-			tileZ = (bWaterTile ? tileScreenInfo[i][j].wz : tileScreenInfo[i][j].sz);
+			tileZ = (bWaterTile ? tileScreenInfo[i][j].water.z : tileScreenInfo[i][j].screen.z);
 			if(tileZ <= nearestZ)
 			{
-				quad.coords[0].x = (bWaterTile ? tileScreenInfo[i][j].wx : tileScreenInfo[i][j].sx);
-				quad.coords[0].y = (bWaterTile ? tileScreenInfo[i][j].wy : tileScreenInfo[i][j].sy);
+				quad.coords[0].x = (bWaterTile ? tileScreenInfo[i+0][j+0].water.x : tileScreenInfo[i+0][j+0].screen.x);
+				quad.coords[0].y = (bWaterTile ? tileScreenInfo[i+0][j+0].water.y : tileScreenInfo[i+0][j+0].screen.y);
 
-				quad.coords[1].x = (bWaterTile ? tileScreenInfo[i][j+1].wx : tileScreenInfo[i][j+1].sx);
-				quad.coords[1].y = (bWaterTile ? tileScreenInfo[i][j+1].wy : tileScreenInfo[i][j+1].sy);
+				quad.coords[1].x = (bWaterTile ? tileScreenInfo[i+0][j+1].water.x : tileScreenInfo[i+0][j+1].screen.x);
+				quad.coords[1].y = (bWaterTile ? tileScreenInfo[i+0][j+1].water.y : tileScreenInfo[i+0][j+1].screen.y);
 
-				quad.coords[2].x = (bWaterTile ? tileScreenInfo[i+1][j+1].wx : tileScreenInfo[i+1][j+1].sx);
-				quad.coords[2].y = (bWaterTile ? tileScreenInfo[i+1][j+1].wy :tileScreenInfo[i+1][j+1].sy);
+				quad.coords[2].x = (bWaterTile ? tileScreenInfo[i+1][j+1].water.x : tileScreenInfo[i+1][j+1].screen.x);
+				quad.coords[2].y = (bWaterTile ? tileScreenInfo[i+1][j+1].water.y : tileScreenInfo[i+1][j+1].screen.y);
 
-				quad.coords[3].x = (bWaterTile ? tileScreenInfo[i+1][j].wx: tileScreenInfo[i+1][j].sx);
-				quad.coords[3].y = (bWaterTile ? tileScreenInfo[i+1][j].wy: tileScreenInfo[i+1][j].sy);
+				quad.coords[3].x = (bWaterTile ? tileScreenInfo[i+1][j+0].water.x : tileScreenInfo[i+1][j+0].screen.x);
+				quad.coords[3].y = (bWaterTile ? tileScreenInfo[i+1][j+0].water.y : tileScreenInfo[i+1][j+0].screen.y);
 
 				/* We've got a match for our mouse coords */
 				if (inQuad(&pt, &quad))
@@ -4368,14 +4373,14 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	/* Outline the tile if necessary */
 	if(!onWaterEdge && terrainOutline)
 	{
-		iV_Line(tileScreenInfo[i+0][j+0].sx, tileScreenInfo[i+0][j+0].sy,
-			tileScreenInfo[i+0][j+1].sx, tileScreenInfo[i+0][j+1].sy, 255);
-		iV_Line(tileScreenInfo[i+0][j+1].sx, tileScreenInfo[i+0][j+1].sy,
-			tileScreenInfo[i+1][j+1].sx, tileScreenInfo[i+1][j+1].sy, 255);
-		iV_Line(tileScreenInfo[i+1][j+1].sx, tileScreenInfo[i+1][j+1].sy,
-			tileScreenInfo[i+1][j+0].sx, tileScreenInfo[i+1][j+0].sy, 255);
-		iV_Line(tileScreenInfo[i+1][j+0].sx, tileScreenInfo[i+1][j+0].sy,
-			tileScreenInfo[i+0][j+0].sx, tileScreenInfo[i+0][j+0].sy, 255);
+		iV_Line(tileScreenInfo[i+0][j+0].screen.x, tileScreenInfo[i+0][j+0].screen.y,
+			tileScreenInfo[i+0][j+1].screen.x, tileScreenInfo[i+0][j+1].screen.y, 255);
+		iV_Line(tileScreenInfo[i+0][j+1].screen.x, tileScreenInfo[i+0][j+1].screen.y,
+			tileScreenInfo[i+1][j+1].screen.x, tileScreenInfo[i+1][j+1].screen.y, 255);
+		iV_Line(tileScreenInfo[i+1][j+1].screen.x, tileScreenInfo[i+1][j+1].screen.y,
+			tileScreenInfo[i+1][j+0].screen.x, tileScreenInfo[i+1][j+0].screen.y, 255);
+		iV_Line(tileScreenInfo[i+1][j+0].screen.x, tileScreenInfo[i+1][j+0].screen.y,
+			tileScreenInfo[i+0][j+0].screen.x, tileScreenInfo[i+0][j+0].screen.y, 255);
 	}
 
 	if(!onWaterEdge && bOutlined)
