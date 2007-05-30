@@ -74,7 +74,7 @@ extern char last_called_script_event[MAX_EVENT_NAME_LEN];
  * \param expr Expression to evaluate
  */
 #define STATIC_ASSERT( expr ) \
-	extern char MKID(sa, __LINE__, _static_assert)[!!(expr) * 2 - 1]
+	extern WZ_DECL_UNUSED char MKID(sa, __LINE__, _static_assert)[!!(expr) * 2 - 1]
 
 // Helper macro for STATIC_ASSERT
 #define MKID(a, b, c) MKID_(a, b, c)
