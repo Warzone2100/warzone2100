@@ -3950,20 +3950,21 @@ static void preprocessTiles(void)
 static void locateMouse(void)
 {
 	const POINT pt = {mouseXPos, mouseYPos};
-	UDWORD	i, j;
-	QUAD	quad;
-	SDWORD	tileZ, nearestZ = SDWORD_MAX;
-	BOOL	bWaterTile;
+	unsigned int i;
+	int nearestZ = INT_MAX;
 
-	for(i = 0; i < visibleXTiles; i++)
+	for(i = 0; i < visibleXTiles; ++i)
 	{
-		for(j = 0; j < visibleYTiles; j++)
+		unsigned int j;
+		for(j = 0; j < visibleYTiles; ++j)
 		{
-			bWaterTile = tileScreenInfo[i][j].bWater;
+			bool bWaterTile = tileScreenInfo[i][j].bWater;
+			int tileZ = (bWaterTile ? tileScreenInfo[i][j].water.z : tileScreenInfo[i][j].screen.z);
 
-			tileZ = (bWaterTile ? tileScreenInfo[i][j].water.z : tileScreenInfo[i][j].screen.z);
 			if(tileZ <= nearestZ)
 			{
+				QUAD quad;
+
 				quad.coords[0].x = (bWaterTile ? tileScreenInfo[i+0][j+0].water.x : tileScreenInfo[i+0][j+0].screen.x);
 				quad.coords[0].y = (bWaterTile ? tileScreenInfo[i+0][j+0].water.y : tileScreenInfo[i+0][j+0].screen.y);
 
