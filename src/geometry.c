@@ -119,17 +119,20 @@ UDWORD	bestSoFar;
 /* See header file for definition of QUAD */
 int inQuad(const POINT *pt, const QUAD *quad)
 {
-int i, j, c = 0;
+	int i, j, c = 0;
 
 	for (i = 0, j = 3; i < 4; j = i++)
 	{
-		if ((((quad->coords[i].y<=pt->y) && (pt->y<quad->coords[j].y)) ||
-		    ((quad->coords[j].y<=pt->y) && (pt->y<quad->coords[i].y))) &&
-		    (pt->x < (quad->coords[j].x - quad->coords[i].x) *
-		    (pt->y - quad->coords[i].y) / (quad->coords[j].y -
-		    quad->coords[i].y) + quad->coords[i].x))
-
-		c = !c;
+		if (((quad->coords[i].y <= pt->y && pt->y < quad->coords[j].y) ||
+			(quad->coords[j].y <= pt->y && pt->y < quad->coords[i].y)) &&
+			(pt->x <
+				(quad->coords[j].x - quad->coords[i].x)
+				* (pt->y - quad->coords[i].y)
+				/ (quad->coords[j].y - quad->coords[i].y)
+				+ quad->coords[i].x))
+		{
+			c = !c;
+		}
 	}
 
 	return c;
@@ -160,10 +163,7 @@ SDWORD	sum;
 // Approximates a square root - never more than 11% out...
 UDWORD dirtySqrt( SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
 {
-	UDWORD xDif, yDif;
-
-	xDif = abs(x1 - x2);
-	yDif = abs(y1 - y2);
+	const UDWORD xDif = abs(x1 - x2), yDif = abs(y1 - y2);
 
 	return MAX(xDif, yDif) + MIN(xDif, yDif) / 2;
 }

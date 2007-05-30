@@ -251,5 +251,5 @@ void pie_InitMaths(void)
 
 UBYTE pie_ByteScale(UBYTE a, UBYTE b)
 {
-	return (((UDWORD)a)*((UDWORD)b))>>8;
+	return ((UDWORD)a * (UDWORD)b) >> 8;
 }

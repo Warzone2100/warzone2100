@@ -25,24 +25,19 @@
 #include "map.h"
 #include "hci.h"
 
-typedef struct _t_tri
-{
-POINT	coords[3];
-} TRI;
-
 typedef struct _t_quad
 {
-POINT	coords[4];
+POINT coords[4];
 } QUAD;
 
-extern	UDWORD			adjustDirection	( SDWORD present, SDWORD difference );
-extern	SDWORD			calcDirection	( UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1 );
-extern	void			initBulletTable	( void );
-extern	int				inQuad			(const POINT *pt, const QUAD *quad );
-extern DROID			*getNearestDroid ( UDWORD x, UDWORD y, BOOL bSelected );
-extern BOOL	droidOnScreen ( DROID *psDroid, SDWORD tolerance );
+extern UDWORD adjustDirection( SDWORD present, SDWORD difference );
+extern SDWORD calcDirection( UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1 );
+extern void initBulletTable( void );
+extern int inQuad( const POINT *pt, const QUAD *quad );
+extern DROID *getNearestDroid( UDWORD x, UDWORD y, BOOL bSelected );
+extern BOOL droidOnScreen( DROID *psDroid, SDWORD tolerance );
 
-extern UDWORD	dirtySqrt	( SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2 );
+extern UDWORD dirtySqrt( SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2 ) WZ_DECL_CONST;
 
 static inline STRUCTURE *getTileStructure(UDWORD x, UDWORD y)
 {

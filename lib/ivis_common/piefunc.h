@@ -33,7 +33,7 @@
 #include "lib/ivis_common/piedef.h"
 
 extern void pie_InitMaths(void);
-extern UBYTE pie_ByteScale(UBYTE a, UBYTE b);
+extern UBYTE pie_ByteScale(UBYTE a, UBYTE b) WZ_DECL_CONST;
 extern void	pie_TransColouredTriangle( PIEVERTEX *vrt, UDWORD rgb );
 extern void pie_DrawSkybox(float scale, int u, int v, int w, int h);
 extern void pie_DrawFogBox(float left, float right, float front, float back, float height, float wider);

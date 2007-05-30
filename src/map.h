@@ -192,7 +192,7 @@ extern BOOL mapSave(char **ppFileData, UDWORD *pFileSize);
 
 
 /* Return a pointer to the tile structure at x,y */
-static inline MAPTILE *mapTile(UDWORD x, UDWORD y)
+static inline WZ_DECL_PURE MAPTILE *mapTile(UDWORD x, UDWORD y)
 {
 	ASSERT( x < mapWidth,
 		"mapTile: x coordinate bigger than map width" );
@@ -203,12 +203,13 @@ static inline MAPTILE *mapTile(UDWORD x, UDWORD y)
 }
 
 /* Return height of tile at x,y */
-static inline SWORD map_TileHeight(UDWORD x, UDWORD y)
+static inline WZ_DECL_PURE SWORD map_TileHeight(UDWORD x, UDWORD y)
 {
-	if((x>=mapWidth) || (y>=mapHeight)) {
+	if ( x >= mapWidth || y >= mapHeight )
+	{
 		return 0;
 	}
-	return (SWORD)((psMapTiles[x + (y * mapWidth)].height) * ELEVATION_SCALE);
+	return (SWORD)(psMapTiles[x + (y * mapWidth)].height * ELEVATION_SCALE);
 }
 
 /*sets the tile height */

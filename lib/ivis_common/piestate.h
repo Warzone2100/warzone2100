@@ -169,7 +169,7 @@ extern BOOL pie_GetFogEnabled(void);
 extern void pie_SetFogStatus(BOOL val);
 extern BOOL pie_GetFogStatus(void);
 extern void pie_SetFogColour(UDWORD colour);
-extern UDWORD pie_GetFogColour(void);
+extern UDWORD pie_GetFogColour(void) WZ_DECL_PURE;
 extern void pie_UpdateFogDistance(float begin, float end);
 //render states
 extern void pie_SetTexturePage(SDWORD num);

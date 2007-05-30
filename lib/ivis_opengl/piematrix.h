@@ -106,7 +106,7 @@ extern void pie_MatScale( UDWORD percent );
 extern void pie_MatRotX(int x);
 extern void pie_MatRotY(int y);
 extern void pie_MatRotZ(int z);
-extern Sint32 pie_RotateProject(Vector3i *v3d, Vector2i *v2d);
+extern Sint32 pie_RotateProject(const Vector3i *src, Vector2i *dest);
 
 //*************************************************************************
 

@@ -385,23 +385,17 @@ void pie_MatRotX(int x)
 }
 
 
-//*************************************************************************
-//*** 3D vector perspective projection
-//*
-//* params	v1 = 3D vector to project
-//* 			v2 = pointer to 2D resultant vector
-//*
-//* on exit	v2 = projected vector
-//*
-//* returns	rotated and translated z component of v1
-//*
-//******
-
-Sint32 pie_RotateProject(Vector3i *v3d, Vector2i *v2d)
+/*!
+ * 3D vector perspective projection
+ * Projects 3D vector into 2D screen space
+ * \param v3d 3D vector to project
+ * \param v2d resulting 2D vector
+ * \return projected z component of v2d
+ */
+Sint32 pie_RotateProject(const Vector3i *v3d, Vector2i *v2d)
 {
 	Sint32 zfx, zfy;
 	Sint32 zz, _x, _y, _z;
-
 
 	_x = v3d->x * psMatrix->a + v3d->y * psMatrix->d + v3d->z * psMatrix->g + psMatrix->j;
 	_y = v3d->x * psMatrix->b + v3d->y * psMatrix->e + v3d->z * psMatrix->h + psMatrix->k;
