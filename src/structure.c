@@ -1735,8 +1735,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 				}
 			}
 			//HARD_CODE don't ever want more than one Las Sat structure
-			if (pStructureType->psWeapStat[0] && pStructureType->psWeapStat[0]->
-				weaponSubClass == WSC_LAS_SAT && getLasSatExists(selectedPlayer))
+			if (isLasSat(pStructureType) && getLasSatExists(selectedPlayer))
 			{
 				ASSERT(FALSE, "buildStructure: trying to build too many Las Sat (1 max)");
 				return NULL;
@@ -1779,16 +1778,6 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 				{
 					pStructureType = ((WALL_FUNCTION *)pStructureType->asFuncList[0])->pCornerStat;
 				}
-			}
-		}
-
-		if (pStructureType->type == REF_DEFENSE && TILE_HAS_WALL(mapTile(x >> TILE_SHIFT, y >> TILE_SHIFT)))
-		{
-			// building a gun tower over a wall, replace it
-			psBuilding = getTileStructure(x >> TILE_SHIFT, y >> TILE_SHIFT);
-			if (psBuilding != NULL)
-			{
-				removeStruct(psBuilding, TRUE);
 			}
 		}
 
@@ -1837,6 +1826,13 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			{
 				MAPTILE *psTile = mapTile(mapX+width,mapY+breadth);
 
+				/* Remove any walls underneath the building. You can build defense buildings on top
+				 * of walls, you see. This is not the place to test whether we own it! */
+				if (pStructureType->type == REF_DEFENSE && TILE_HAS_WALL(psTile))
+				{
+					removeStruct((STRUCTURE *)psTile->psObject, TRUE);
+				}
+
 				// don't really think this should be done here, but dont know otherwise.alexl
 				if(pStructureType->type == REF_WALLCORNER || pStructureType->type == REF_WALL)
 				{
@@ -1867,7 +1863,6 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 				}
 			}
 		}
-
 
 		/* DEFENSIVE structures are pulled to the terrain */
 		if(pStructureType->type != REF_DEFENSE)
@@ -4237,8 +4232,7 @@ UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer, UDWORD
 					}
 				}
 				//HARD_CODE don't ever want more than one Las Sat structure
-				if (psBuilding->psWeapStat[0] && psBuilding->psWeapStat[0]->
-					weaponSubClass == WSC_LAS_SAT && getLasSatExists(selectedPlayer))
+				if (isLasSat(psBuilding) && getLasSatExists(selectedPlayer))
 				{
 					continue;
 				}
@@ -4308,10 +4302,10 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 			site.yBR += 1;
 		}
 		//if we're dragging the wall/defense we need to check along the current dragged size
-		if (wallDrag.status != DRAG_INACTIVE)
+		if (wallDrag.status != DRAG_INACTIVE
+		    && (psBuilding->type == REF_WALL || psBuilding->type == REF_DEFENSE)
+		    && !isLasSat(psBuilding))
 		{
-			if (psBuilding->type == REF_WALL || psBuilding->type == REF_DEFENSE)
-			{
 				UWORD    dx,dy;
 
 				wallDrag.x2 = mouseTileX;
@@ -4362,7 +4356,6 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 						site.yTL = dy;
 					}
 				}
-			}
 		}
 	}
 	else
@@ -4577,7 +4570,6 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 					//on PC - defence structures can be built next to anything now- AB 22/09/98
 					//and the Missile_Silo (special case) - AB 01/03/99
 					if (!(psBuilding->type == REF_DEFENSE ||
-
 						psBuilding->type == REF_WALL ||
 						psBuilding->type == REF_WALLCORNER ||
 						psBuilding->type == REF_MISSILE_SILO))

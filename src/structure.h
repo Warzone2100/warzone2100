@@ -201,6 +201,13 @@ extern BOOL placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY);
 /*returns teh status of the flag*/
 //extern BOOL getPowerGenExists(UDWORD player);
 
+/* is this a lassat structure? */
+static inline bool isLasSat(STRUCTURE_STATS *pStructureType)
+{
+	return (pStructureType->psWeapStat[0]
+	        && pStructureType->psWeapStat[0]->weaponSubClass == WSC_LAS_SAT);
+}
+
 /*sets the flag to indicate a HQ Exists - so draw Radar*/
 extern void setHQExists(BOOL state, UDWORD player);
 /*returns the status of the flag*/
