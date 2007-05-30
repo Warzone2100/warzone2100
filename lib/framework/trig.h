@@ -37,13 +37,14 @@ extern BOOL trigInitialise(void);
 extern void trigShutDown(void);
 
 /* Lookup trig functions */
-extern float trigSin(SDWORD angle);
-extern float trigCos(SDWORD angle);
-extern float trigInvSin(float val);
-extern float trigInvCos(float val);
+// These can be assumed const, since they only rely on memory setup on startup
+extern float trigSin(int angle) WZ_DECL_CONST;
+extern float trigCos(int angle) WZ_DECL_CONST;
+extern float trigInvSin(float val) WZ_DECL_CONST;
+extern float trigInvCos(float val) WZ_DECL_CONST;
 
 /* Supposedly fast lookup sqrt - unfortunately it's probably slower than the FPU sqrt :-( */
-extern float trigIntSqrt(UDWORD val);
+extern float trigIntSqrt(unsigned int val);
 
 #endif
 

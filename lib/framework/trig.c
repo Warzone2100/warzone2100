@@ -54,28 +54,29 @@ static float aSqrt[SQRT_ACCURACY];
 BOOL trigInitialise(void)
 {
 	float val = 0.0, inc = 2.0 * M_PI / TRIG_DEGREES;
-	int count;
+	int i;
 
 	// Initialise the tables
-	for (count = 0; count < TRIG_DEGREES; count++)
+	for (i = 0; i < TRIG_DEGREES; i++)
 	{
-		aSin[count] = sinf(val);
-		aCos[count] = cosf(val);
-		val += inc;
-	}
-	inc = 2.0 / (TRIG_ACCURACY-1);
-	val = -1;
-	for (count = 0; count < TRIG_ACCURACY; count++)
-	{
-		aInvSin[count] = asinf(val) * (float)TRIG_DEGREES / (2.0 * M_PI);
-		aInvCos[count] = acosf(val) * (float)TRIG_DEGREES / (2.0 * M_PI);
+		aSin[i] = sinf(val);
+		aCos[i] = cosf(val);
 		val += inc;
 	}
 
-	for (count = 0; count < SQRT_ACCURACY; count++)
+	inc = 2.0 / (TRIG_ACCURACY-1);
+	val = -1;
+	for (i = 0; i < TRIG_ACCURACY; i++)
 	{
-		val = (float)count / (SQRT_ACCURACY / 2);
-		aSqrt[count]= sqrtf(val);
+		aInvSin[i] = asinf(val) * (float)TRIG_DEGREES / (2.0 * M_PI);
+		aInvCos[i] = acosf(val) * (float)TRIG_DEGREES / (2.0 * M_PI);
+		val += inc;
+	}
+
+	for (i = 0; i < SQRT_ACCURACY; i++)
+	{
+		val = (float)i / (SQRT_ACCURACY / 2);
+		aSqrt[i]= sqrtf(val);
 	}
 
 	return TRUE;
@@ -88,7 +89,7 @@ void trigShutDown(void)
 
 
 /* Access the trig tables */
-float trigSin(SDWORD angle)
+float trigSin(int angle)
 {
 	if (angle < 0)
 	{
@@ -103,7 +104,7 @@ float trigSin(SDWORD angle)
 }
 
 
-float trigCos(SDWORD angle)
+float trigCos(int angle)
 {
 	if (angle < 0)
 	{
@@ -135,17 +136,17 @@ float trigInvCos(float val)
 
 
 /* Fast lookup sqrt */
-float trigIntSqrt(UDWORD val)
+float trigIntSqrt(unsigned int val)
 {
-	UDWORD	exp, mask;
+	UDWORD exp, mask;
 
 	if (val == 0)
 	{
-		return 0.0;
+		return 0.0f;
 	}
 
 	// find the exponent of the number
-	mask = 0x80000000;		// set the msb in the mask
+	mask = 0x80000000; // set the msb in the mask
 	for(exp = 32; exp != 0; exp--)
 	{
 		if (val & mask)
@@ -173,8 +174,7 @@ float trigIntSqrt(UDWORD val)
 	}
 
 	// now generate the fractional part for the lookup table
-	ASSERT( val < SQRT_ACCURACY,
-		"trigIntSqrt: aargh - table index out of range" );
+	ASSERT( val < SQRT_ACCURACY, "trigIntSqrt: table index out of range" );
 
 	return aSqrt[val] * (1 << (exp/2));
 }
