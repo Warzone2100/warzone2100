@@ -506,7 +506,7 @@ event checkLost(inactive)
 
 	//if((getDroidCount(me) == 0) and (getStructure(fac, me) == NULLOBJECT))
 	if((getDroidCount(me) == 0) and
-	not (multiPlayerGameType == SKIRMISH and multiPlayerAlliancesType == ALLIANCES_TEAMS))
+		not (multiPlayerGameType == SKIRMISH and multiPlayerAlliancesType == ALLIANCES_TEAMS))
 	{
 		shutDown();
 	}
@@ -579,6 +579,8 @@ function void oneTimeInitialize()
 	}
 	
 	fixGroups();
+	
+	unassignedDroids(defendGr, buildGr);		//assign all dorids to an approriate group
 	
 	storeBase();		//remember base location
 	
@@ -1100,28 +1102,53 @@ function void showVersion()
 
 function void storeBase()
 {
-	local	STRUCTURE _structure;
+	local	STRUCTURE	_structure;
+	local	DROID		_truck;
+	local	bool		_bHaveBaseStructs;
+	local	int			_index,_baseX,_baseY,_numBaseStructs;
 	
-	//find HQ
-	_structure = getStructure(HQ, me);
 	
-	if(_structure != NULLOBJECT)
+	_bHaveBaseStructs = FALSE;
+
+	//Go through all structures
+	_index = 0;
+	_numBaseStructs = 0;
+	_baseX = 0;
+	_baseY = 0;
+	while(_index < numBaseStructs)
 	{
-		baseX = _structure.x;
-		baseY = _structure.y;
+		initEnumStruct(FALSE,baseStructs[_index],me,me);
+		_structure = enumStruct();
+		while(_structure != NULLOBJECT)
+		{
+			_baseX = _baseX + _structure.x / TILE;
+			_baseY = _baseY + _structure.y / TILE;
+			
+			_numBaseStructs++;
+			_structure = enumStruct();
+		}
+		_index++;
+	}
+	
+	if(_numBaseStructs > 0)
+	{
+		baseX = (_baseX / _numBaseStructs) * TILE;
+		baseY = (_baseY / _numBaseStructs) * TILE;
 	}
 	else
 	{
 		initIterateGroup(buildGr);		// find idle droids in build group.
-		droid = iterateGroup(buildGr);
+		_truck = iterateGroup(buildGr);
 
-		if(droid != NULLOBJECT){
-			baseX = droid.x;
-			baseY = droid.y;
+		if(_truck != NULLOBJECT){
+			baseX = _truck.x;
+			baseY = _truck.y;
+		}else{
+			baseX = (TILE * mapWidth) / 2;
+			baseY = (TILE * mapHeight) / 2;
+			
+			console("Couldn't find base location for " & getPlayerName(me));
 		}
-		else{
-			baseX = (128*mapWidth)/2;
-			baseY = (128*mapHeight)/2;}
 	}
 }
 
@@ -9950,20 +9977,15 @@ event consoleEv(consoleTr)
 	//turn on 'autogame'
 	if(cstr == "autogame on" && (msgPlayer2 == me))
 	{
-		if(debugModeEnabled())
+		if(debugModeEnabled() && myResponsibility(me))
 		{
-			if(myResponsibility(me))
+			if(not bRunning)		//make sure current machine is responsible for this AI and it's not already active
 			{
-				if(not bRunning)		//make sure current machine is responsible for this AI and it's not already active
-				{
-					console(getPlayerName(me) & " activated");
-					
-					mainInitialize();
-				}
+				console(getPlayerName(me) & " activated");
+				mainInitialize();
 			}
 		}
 	}
-
 
 	//turn off 'autogames'
 	if(cstr == "autogame off" && debugModeEnabled()  && (msgPlayer2 == me))
@@ -9971,7 +9993,7 @@ event consoleEv(consoleTr)
 		if(bRunning)		//make sure this AI is active
 		{
 			console(getPlayerName(me) & " deactivated");
-			
+
 			shutDown();
 		}
 	}
