@@ -595,7 +595,6 @@ float	fraction,adjust;
 	psDroid->illumination = (UBYTE)retVal;
 }
 
-//#define EDGE_FOG
 
 
 UDWORD	lightDoFogAndIllumination(UBYTE brightness, SDWORD dx, SDWORD dz, UDWORD* pSpecular)
@@ -758,9 +757,12 @@ UDWORD	lightDoFogAndIllumination(UBYTE brightness, SDWORD dx, SDWORD dz, UDWORD*
 		brightness = (UBYTE)pie_ByteScale((UBYTE)brightness, (UBYTE)umbra);
 	}
 
-	if (fog == 0) {
-		// (d3d with no fog?)
-		*pSpecular = 0;
+	if (fog == 0)
+	{
+		if (pSpecular != NULL)
+		{
+			*pSpecular = 0;
+		}
 		lighting.byte.a = UBYTE_MAX;
 		lighting.byte.r = brightness;
 		lighting.byte.g = brightness;
@@ -768,12 +770,15 @@ UDWORD	lightDoFogAndIllumination(UBYTE brightness, SDWORD dx, SDWORD dz, UDWORD*
 	}
 	else
 	{
-		fogColour.argb = pie_GetFogColour();
-		specular.byte.a = (UBYTE)fog;
-		specular.byte.r = pie_ByteScale((UBYTE)fog, fogColour.byte.r);
-		specular.byte.g = pie_ByteScale((UBYTE)fog, fogColour.byte.g);
-		specular.byte.b = pie_ByteScale((UBYTE)fog, fogColour.byte.b);
-		*pSpecular = specular.argb;
+		if (pSpecular != NULL)
+		{
+			fogColour.argb = pie_GetFogColour();
+			specular.byte.a = (UBYTE)fog;
+			specular.byte.r = pie_ByteScale((UBYTE)fog, fogColour.byte.r);
+			specular.byte.g = pie_ByteScale((UBYTE)fog, fogColour.byte.g);
+			specular.byte.b = pie_ByteScale((UBYTE)fog, fogColour.byte.b);
+			*pSpecular = specular.argb;
+		}
 
 		//calculate new brightness
 		colour = 256 - fog;
@@ -783,6 +788,7 @@ UDWORD	lightDoFogAndIllumination(UBYTE brightness, SDWORD dx, SDWORD dz, UDWORD*
 		lighting.byte.g = brightness;
 		lighting.byte.b = brightness;
 	}
+
 	return lighting.argb;
 }
 

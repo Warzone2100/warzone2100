@@ -37,7 +37,7 @@
 /* Initialise the display system */
 extern BOOL dispInitialise(void);
 
-extern SDWORD mX, mY;
+extern Uint16 mouseXPos, mouseYPos;
 
 extern void shakeStart(void);
 

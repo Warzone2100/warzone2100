@@ -126,13 +126,13 @@ extern UDWORD visibleYTiles;
 typedef struct {
 	// PIEVERTEX.
 	SDWORD x, y, z; UWORD tu, tv; PIELIGHT light, specular;
-	// Extra data for water.
-	SDWORD sx, sy, sz;
-	SDWORD wx, wy, wz;
-	SDWORD water_height;
-	PIELIGHT wlight;
-	UBYTE drawInfo;
-	UBYTE bWater;
+	SDWORD sx, sy, sz; //! Screenspace tile coordinates
+	// Extra data for water:
+	SDWORD wx, wy, wz; //! Screenspace water coordinates
+	SDWORD water_height; //! Worldspace water height
+	PIELIGHT wlight; //! Special water lighting
+	UBYTE drawInfo; //! Draw this tile?
+	UBYTE bWater; //! Is it a watertile?
 } SVMESH;
 
 extern SVMESH tileScreenInfo[LAND_YGRD][LAND_XGRD];

@@ -214,23 +214,17 @@ UDWORD		terrainOutline = FALSE;
 SVMESH tileScreenInfo[LAND_YGRD][LAND_XGRD];
 
 /* Stores the tilepointers for rendered tiles */
-static TILE_BUCKET	tileIJ[LAND_YGRD][LAND_XGRD];
+static TILE_BUCKET tileIJ[LAND_YGRD][LAND_XGRD];
 
 /* Points for flipping the texture around if the tile is flipped or rotated */
 static POINT  sP1, sP2, sP3, sP4;
 static POINT  *psP1, *psP2, *psP3, *psP4, *psPTemp;
 
-/* Pointer to which tile the mouse is currently over */
-MAPTILE	*tile3dOver = NULL;
-
 /* Records the present X and Y values for the current mouse tile (in tiles */
-SDWORD	mouseTileX,mouseTileY;
-
-/* World coordinates that the mouse is over */
-static UDWORD	tile3dX,tile3dY;
+SDWORD mouseTileX, mouseTileY;
 
 /* Offsets for the screen being shrunk/expanded - how far in, how far down */
-UDWORD	xOffset=CLIP_BORDER,yOffset=CLIP_BORDER;
+UDWORD xOffset = CLIP_BORDER, yOffset = CLIP_BORDER;
 
 /* Do we want the radar to be rendered */
 BOOL	radarOnScreen=FALSE;
@@ -344,10 +338,6 @@ SDWORD	getCentreZ( void )
 void draw3DScene( void )
 {
 	BOOL bPlayerHasHQ = FALSE;
-
-	/* Set the droids on-screen display coordinates for selection later */
-	mX = mouseX();
-	mY = mouseY();
 
 	// the world centre - used for decaying lighting etc
 	gridCentreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
@@ -632,18 +622,14 @@ static void drawTiles(iView *camera, iView *player)
 	UDWORD i, j;
 	SDWORD zMax;
 	MAPTILE *psTile;
-	UDWORD specular;
 	UDWORD edgeX, edgeY;
-	BOOL IsWaterTile = FALSE;
+	BOOL bWaterTile = FALSE;
 	BOOL PushedDown = FALSE;
 	UBYTE TileIllum;
-	UWORD TextNum;
 	UDWORD shiftVal = 0;
 	UDWORD altVal = 0;
-	UDWORD realX, realY;
 	int numTilesAveraged = 0;
 	BOOL bEdgeTile;
-	SDWORD tmp_y;
 	static float angle = 0.0f;
 
 	// Animate the water texture, just cycles the V coordinate through half the tiles height.
@@ -669,6 +655,9 @@ static void drawTiles(iView *camera, iView *player)
 	/* Find our position in tile coordinates */
 	playerXTile = player->p.x >> TILE_SHIFT;
 	playerZTile = player->p.z >> TILE_SHIFT;
+
+	// Check here, since it would crash our loops otherwise
+	ASSERT( visibleYTiles <= mapHeight && visibleXTiles <= mapWidth, "Tile coordinates out of range" );
 
 	/* Get the x,z translation components */
 	rx = (player->p.x) & (TILE_UNITS-1);
@@ -698,7 +687,7 @@ static void drawTiles(iView *camera, iView *player)
 	pie_TRANSLATE(-rx, -player->p.y, rz);
 	angle += 0.01f;
 
-	if (getDrawShadows()) 
+	if (getDrawShadows())
 	{
 		// this also detemines the length of the shadows
 		pie_BeginLighting(&theSun);
@@ -711,32 +700,34 @@ static void drawTiles(iView *camera, iView *player)
 		of the tiles in the grid
 	*/
 	averageCentreTerrainHeight = 0;
-	for (i=0; i < visibleYTiles+1; i++)
+	for (i = 0; i < visibleYTiles+1; i++)
 	{
 		/* Go through the x's */
-		for (j=0; j < (SDWORD)visibleXTiles+1; j++)
+		for (j = 0; j < (SDWORD)visibleXTiles+1; j++)
 		{
-			tileScreenInfo[i][j].bWater = FALSE;
+			tileScreenInfo[i][j].x = world_coord(j - terrainMidX);
+			tileScreenInfo[i][j].z = world_coord(terrainMidY - i);
+
 			if( playerXTile+j < 0 ||
 				playerZTile+i < 0 ||
 				playerXTile+j > (SDWORD)(mapWidth-1) ||
 				playerZTile+i > (SDWORD)(mapHeight-1) )
 			{
+				// Tiles on the border of the map are never water tiles.
+				tileScreenInfo[i][j].bWater = FALSE;
+
 				edgeX = playerXTile+j;
 				edgeY = playerZTile+i;
-				if(playerXTile+j < 0 )
+				if (playerXTile+j < 0 )
 					edgeX = 0;
-				else if(playerXTile+j > (SDWORD)(mapWidth-1) )
+				else if (playerXTile+j > (SDWORD)(mapWidth-1) )
 					edgeX = mapWidth-1;
-				if(playerZTile+i < 0 )
+				if (playerZTile+i < 0 )
 					edgeY = 0;
-				else if(playerZTile+i > (SDWORD)(mapHeight-1) )
+				else if (playerZTile+i > (SDWORD)(mapHeight-1) )
 					edgeY = mapHeight-1;
 
-				tileScreenInfo[i][j].x = world_coord(j-terrainMidX);
-				tileScreenInfo[i][j].y = 0;//map_TileHeight(edgeX,edgeY);
-				tileScreenInfo[i][j].z = world_coord(terrainMidY-i);
-				tileScreenInfo[i][j].sz = pie_RotateProject((Vector3i*)&tileScreenInfo[i][j].x, (Vector2i*)&tileScreenInfo[i][j].sx);
+				tileScreenInfo[i][j].y = 0; // map_TileHeight(edgeX, edgeY);
 
 				if (pie_GetFogEnabled())
 				{
@@ -745,7 +736,8 @@ static void drawTiles(iView *camera, iView *player)
 				}
 				else
 				{
-					tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination( mapTile(edgeX, edgeY)->illumination, rx - tileScreenInfo[i][j].x, rz - world_coord(i - terrainMidY), &specular );
+					TileIllum = mapTile(edgeX, edgeY)->illumination;
+					tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination( TileIllum, rx - tileScreenInfo[i][j].x, rz - world_coord(i-terrainMidY), &tileScreenInfo[i][j].specular.argb );
 				}
 
 				if( playerXTile+j < -1 ||
@@ -764,16 +756,20 @@ static void drawTiles(iView *camera, iView *player)
 			{
 				tileScreenInfo[i][j].drawInfo = TRUE;
 
-				psTile = mapTile(playerXTile+j, playerZTile+i);
 				/* Get a pointer to the tile at this location */
-				tileScreenInfo[i][j].x = world_coord(j-terrainMidX);
-
+				psTile = mapTile(playerXTile + j, playerZTile + i);
 				if (TERRAIN_TYPE(psTile) == TER_WATER)
 				{
 					tileScreenInfo[i][j].bWater = TRUE;
+					bWaterTile = TRUE;
 				}
-				tileScreenInfo[i][j].y = map_TileHeight(playerXTile+j, playerZTile+i);
-				tileScreenInfo[i][j].z = world_coord(terrainMidY-i);
+				else
+				{
+					tileScreenInfo[i][j].bWater = FALSE;
+					bWaterTile = FALSE;
+				}
+
+				tileScreenInfo[i][j].y = map_TileHeight(playerXTile + j, playerZTile + i);
 
 				/* Is it in the centre and therefore worth averaging height over? */
 				if ( i > MIN_TILE_Y &&
@@ -784,16 +780,6 @@ static void drawTiles(iView *camera, iView *player)
 					averageCentreTerrainHeight += tileScreenInfo[i][j].y;
 					numTilesAveraged++;
 				}
-				realX = playerXTile+j;
-				realY = playerZTile+i;
-				bEdgeTile = FALSE;
-				if ( realX <= 1 ||
-					 realY <= 1 ||
-					 realX >= mapWidth-2 ||
-					 realY >= mapHeight-2 )
-				{
-					bEdgeTile = TRUE;
-				}
 
 				if(getRevealStatus())
 				{
@@ -803,57 +789,67 @@ static void drawTiles(iView *camera, iView *player)
 					}
 					else
 					{
-						TileIllum = (psTile->level == UBYTE_MAX ? 1 : psTile->level);//avGetTileLevel(realX,realY);
+						TileIllum = (psTile->level == UBYTE_MAX ? 1 : psTile->level); // avGetTileLevel(realX,realY);
 					}
+				}
+				else if(bDisplaySensorRange)
+				{
+					TileIllum = psTile->inRange;
 				}
 				else
 				{
 					TileIllum = psTile->illumination;
 				}
 
+				tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination(TileIllum, rx - tileScreenInfo[i][j].x, rz - world_coord(i-terrainMidY), &tileScreenInfo[i][j].specular.argb);
 
-				if(bDisplaySensorRange)
+				if ( playerXTile+j <= 1 ||
+					 playerZTile+i <= 1 ||
+					 playerXTile+j >= mapWidth-2 ||
+					 playerZTile+i >= mapHeight-2 )
 				{
-					TileIllum = psTile->inRange;
+					bEdgeTile = TRUE;
+				}
+				else
+				{
+					bEdgeTile = FALSE;
 				}
 
-				TextNum = (UWORD)(psTile->texture & TILE_NUMMASK);
-				IsWaterTile = (TERRAIN_TYPE(psTile) == TER_WATER);
-				// If it's the main water tile then..
-				PushedDown = FALSE;
-				if( TextNum == WaterTileID && !bEdgeTile )
+				// If it's the main water tile (has water texture) then..
+				if( (psTile->texture & TILE_NUMMASK) == WaterTileID && !bEdgeTile )
 				{
 					// Push the terrain down for the river bed.
 					PushedDown = TRUE;
 					shiftVal = WATER_DEPTH + environGetData(playerXTile+j, playerZTile+i) * 1.5f;
-					altVal = 0;//environGetValue(playerXTile+j,playerZTile+i);
+					altVal = 0; // environGetValue(playerXTile+j, playerZTile+i);
 					tileScreenInfo[i][j].y -= shiftVal + altVal;
 					// And darken it.
 					TileIllum = (UBYTE)(TileIllum * 0.75f);
 				}
-
-				tileScreenInfo[i][j].sz = pie_RotateProject((Vector3i*)&tileScreenInfo[i][j], (Vector2i*)&tileScreenInfo[i][j].sx);
-
-				tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination(TileIllum, rx - tileScreenInfo[i][j].x, rz - world_coord(i-terrainMidY), &specular);
-
-				tileScreenInfo[i][j].specular.argb = specular;
+				else
+				{
+					PushedDown = FALSE;
+				}
 
 				// If it's any water tile..
-				if(IsWaterTile) {
+				if (bWaterTile)
+				{
 					// If it's the main water tile then bring it back up because it was pushed down for the river bed calc.
-					tmp_y = tileScreenInfo[i][j].y;
-					if (PushedDown) { //TextNum == WaterTileID) {
+					SDWORD tmp_y = tileScreenInfo[i][j].y;
+					if (PushedDown)
+					{
 						tileScreenInfo[i][j].y += (shiftVal + 2*altVal);
 					}
 
 					// Transform it into the wx,wy mesh members.
-					tileScreenInfo[i][j].wz = pie_RotateProject((Vector3i*)&tileScreenInfo[i][j], (Vector2i*)&tileScreenInfo[i][j].wx);
-					tileScreenInfo[i][j].wlight.argb = lightDoFogAndIllumination(
-						TileIllum, rx - tileScreenInfo[i][j].x, rz - world_coord(i-terrainMidY), &specular);
+					tileScreenInfo[i][j].wz = pie_RotateProject((Vector3i*)&tileScreenInfo[i][j].x, (Vector2i*)&tileScreenInfo[i][j].wx);
 					tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].y;
+					tileScreenInfo[i][j].wlight.argb = lightDoFogAndIllumination(TileIllum, rx - tileScreenInfo[i][j].x, rz - world_coord(i-terrainMidY), NULL); // Calc the light for modified y coord and ignore the specular component
 					tileScreenInfo[i][j].y = tmp_y;
-				} else {
-					// If it was'nt a water tile then need to ensure wx,wy are valid because
+				}
+				else
+				{
+					// If it wasnt a water tile then need to ensure wx,wy are valid because
 					// a water tile might be sharing verticies with it.
 					tileScreenInfo[i][j].wx = tileScreenInfo[i][j].sx;
 					tileScreenInfo[i][j].wy = tileScreenInfo[i][j].sy;
@@ -861,6 +857,7 @@ static void drawTiles(iView *camera, iView *player)
 					tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].y;
 				}
 			}
+			tileScreenInfo[i][j].sz = pie_RotateProject((Vector3i*)&tileScreenInfo[i][j].x, (Vector2i*)&tileScreenInfo[i][j].sx);
 		}
 	}
 
@@ -873,6 +870,7 @@ static void drawTiles(iView *camera, iView *player)
 	{
 		averageCentreTerrainHeight = ELEVATION_SCALE * TILE_UNITS;
 	}
+
 	/* This is done here as effects can light the terrain - pause mode problems though */
 	processEffects();
 	atmosUpdateSystem();
@@ -890,32 +888,34 @@ static void drawTiles(iView *camera, iView *player)
 	/* ---------------------------------------------------------------- */
 	/* Draw all the tiles or add them to bucket sort                     */
 	/* ---------------------------------------------------------------- */
-	for (i= 0; i < visibleYTiles; i++)
+	for (i = 0; i < visibleYTiles; i++)
 	{
-		for (j= 0; j < (SDWORD)visibleXTiles; j++)
+		for (j = 0; j < visibleXTiles; j++)
 		{
-			if(tileScreenInfo[i][j].drawInfo == TRUE)
+			if (tileScreenInfo[i][j].drawInfo == TRUE)
 			{
-				tileIJ[i][j].i = i;
-				tileIJ[i][j].j = j;
 				//get distance of furthest corner
 				zMax = MAX(tileScreenInfo[i][j].sz, tileScreenInfo[i+1][j].sz);
 				zMax = MAX(zMax, tileScreenInfo[i+1][j+1].sz);
 				zMax = MAX(zMax, tileScreenInfo[i][j+1].sz);
-				tileIJ[i][j].depth = zMax;
-
-				ASSERT( i <= mapHeight && j <= mapWidth, "Tile coordinates out of range" );
 
 				if(zMax < 0)
 				{
 					// clipped
 					continue;
 				}
+
 				drawTerrainTile(i, j, FALSE);
+
 				if(tileScreenInfo[i][j].bWater)
 				{
+					tileIJ[i][j].i = i;
+					tileIJ[i][j].j = j;
+					tileIJ[i][j].depth = zMax;
+
 					// add the (possibly) transparent water to the bucket sort
 					bucketAddTypeToList(RENDER_WATERTILE, &tileIJ[i][j]);
+
 					// check if we need to draw a water edge
 					if((mapTile(playerXTile+j, playerZTile+i)->texture & TILE_NUMMASK) != WaterTileID) {
 						// the edge is in front of the water (which is drawn at z-index -1)
@@ -2774,10 +2774,10 @@ static void	drawDragBox( void )
 		}
 
 		// SHURCOOL: Determine the 4 corners of the selection box, and use them for consistent selection box rendering
-		minX = min(dragBox3D.x1, mX);
-		maxX = max(dragBox3D.x1, mX);
-		minY = min(dragBox3D.y1, mY);
-		maxY = max(dragBox3D.y1, mY);
+		minX = min(dragBox3D.x1, mouseXPos);
+		maxX = max(dragBox3D.x1, mouseXPos);
+		minY = min(dragBox3D.y1, mouseYPos);
+		maxY = max(dragBox3D.y1, mouseYPos);
 
 		// SHURCOOL: Reduce the box in size to produce a (consistent) pulsing inward effect
 		minX += dragBox3D.boxColourIndex/2;
@@ -3774,7 +3774,7 @@ void	calcScreenCoords(DROID *psDroid)
 	{
 		pt.x = center2.x;
 		pt.y = center2.y;
-		if(inQuad(&pt,&dragQuad) && psDroid->player == selectedPlayer)
+		if(inQuad(&pt, &dragQuad) && psDroid->player == selectedPlayer)
 		{
 			//don't allow Transporter Droids to be selected here
 			//unless we're in multiPlayer mode!!!!
@@ -3928,7 +3928,7 @@ static void preprocessTiles(void)
 							{
 								for(j = up; j <= down; j++)
 								{
-									SET_TILE_HIGHLIGHT(mapTile(i,j));
+									SET_TILE_HIGHLIGHT(mapTile(i, j));
 								}
 							}
 						}
@@ -3942,25 +3942,22 @@ static void preprocessTiles(void)
 
 
 /* TODO This is slow - speed it up */
-static void	locateMouse(void)
+static void locateMouse(void)
 {
-	UDWORD	i,j;
-	POINT	pt;
+	const POINT pt = {mouseXPos, mouseYPos};
+	UDWORD	i, j;
 	QUAD	quad;
-	SDWORD	nearestZ = SDWORD_MAX;
-	SDWORD	tileZ;
+	SDWORD	tileZ, nearestZ = SDWORD_MAX;
 	BOOL	bWaterTile;
 
-	pt.x = mX;
-	pt.y = mY;
-	for(i=0; i<visibleXTiles; i++)
+	for(i = 0; i < visibleXTiles; i++)
 	{
-		for(j=0; j<visibleYTiles; j++)
+		for(j = 0; j < visibleYTiles; j++)
 		{
 			bWaterTile = tileScreenInfo[i][j].bWater;
 
 			tileZ = (bWaterTile ? tileScreenInfo[i][j].wz : tileScreenInfo[i][j].sz);
-			if(tileZ<=nearestZ)
+			if(tileZ <= nearestZ)
 			{
 				quad.coords[0].x = (bWaterTile ? tileScreenInfo[i][j].wx : tileScreenInfo[i][j].sx);
 				quad.coords[0].y = (bWaterTile ? tileScreenInfo[i][j].wy : tileScreenInfo[i][j].sy);
@@ -3975,32 +3972,27 @@ static void	locateMouse(void)
 				quad.coords[3].y = (bWaterTile ? tileScreenInfo[i+1][j].wy: tileScreenInfo[i+1][j].sy);
 
 				/* We've got a match for our mouse coords */
-				if(inQuad(&pt,&quad))
+				if (inQuad(&pt, &quad))
 				{
-					mouseTileX = playerXTile+j;
-					mouseTileY = playerZTile+i;
-					if(mouseTileX<0) mouseTileX = 0;
-					if(mouseTileX > mapWidth-1) mouseTileX = mapWidth-1;
-					if(mouseTileY<0) mouseTileY = 0;
-					if(mouseTileY > mapHeight-1) mouseTileY = mapHeight-1;
+					mouseTileX = playerXTile + j;
+					mouseTileY = playerZTile + i;
+					if (mouseTileX < 0)
+						mouseTileX = 0;
+					else if (mouseTileX > mapWidth-1)
+						mouseTileX = mapWidth - 1;
+					if (mouseTileY < 0)
+						mouseTileY = 0;
+					else if (mouseTileY > mapHeight-1)
+						mouseTileY = mapHeight - 1;
 
-					tile3dX = playerXTile+j;
-					tile3dY = playerZTile+i;
-					if( (tile3dX > 0) &&
-						(tile3dY > 0) &&
-						(tile3dX <= mapWidth-1) &&
-						(tile3dY <= mapHeight-1) )
-
-					tile3dOver = mapTile(tile3dX,tile3dY);
 					/* Store away z value */
 					nearestZ = tileZ;
 				}
 			}
 		}
 	}
-
-
 }
+
 
 // Render the sky and surroundings
 static void renderSurroundings(void)
@@ -4031,7 +4023,7 @@ static void renderSurroundings(void)
 	// Fogbox //
 	rx = (player.p.x) & (TILE_UNITS-1);
 	rz = (player.p.z) & (TILE_UNITS-1);
-	pie_TRANSLATE(-rx,-player.p.y,rz);
+	pie_TRANSLATE(-rx, -player.p.y, rz);
 
 	left  = TILE_UNITS * min(visibleXTiles/2, playerXTile+visibleXTiles/2+1);
 	right = TILE_UNITS * min(visibleXTiles/2, mapWidth-playerXTile-visibleXTiles/2);
@@ -4251,7 +4243,6 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		CLEAR_TILE_HIGHLIGHT(psTile);
 		bOutlined = TRUE;
 		//set tilenumber
-//		tileNumber = FOUNDATION_TEXTURE;
 		if ( i < (LAND_XGRD-1) && j < (LAND_YGRD-1) ) // FIXME
 		{
 			if (outlineColour3D == outlineOK3D)
