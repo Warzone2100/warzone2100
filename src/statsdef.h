@@ -86,8 +86,8 @@ typedef enum _tech_level
 	UDWORD			buildPower;			/* Power required to build the component */ \
 	UDWORD			buildPoints;		/* Time required to build the component */ \
 	UDWORD			weight;				/* Component's weight */ \
-	UDWORD			hitPoints;			/* Component's hit points */ \
-	UDWORD			systemPoints;		/* Space the component takes in the droid */ \
+	UDWORD			hitPoints;			/* Component's hit points - SEEMS TO BE UNUSED */ \
+	UDWORD			systemPoints;		/* Space the component takes in the droid - SEEMS TO BE UNUSED */ \
 	UDWORD			body;				/* Component's body points */ \
 	BOOL			design;				/* flag to indicate whether this component can*/ \
 										/* be used in the design screen*/ \
