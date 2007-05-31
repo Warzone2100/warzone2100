@@ -2109,25 +2109,32 @@ INT_RETVAL intRunWidgets(void)
 				if (psPositionStats->ref >= REF_STRUCTURE_START &&
 					psPositionStats->ref < REF_STRUCTURE_START + REF_RANGE)
 				{
-					intCalcStructCenter((STRUCTURE_STATS *)psPositionStats, structX,structY,
-												&structX,&structY);
-					psStructure = buildStructure((STRUCTURE_STATS *)psPositionStats,
-									structX, structY, selectedPlayer,FALSE);
+					STRUCTURE_STATS *psBuilding = (STRUCTURE_STATS *)psPositionStats;
+
+					intCalcStructCenter(psBuilding, structX, structY, &structX, &structY);
+					if (psBuilding->type == REF_DEMOLISH)
+					{
+						MAPTILE *psTile = mapTile(map_coord(structX), map_coord(structY));
+						FEATURE *psFeature = (FEATURE *)psTile->psObject;
+						psStructure = (STRUCTURE *)psTile->psObject; /* reuse var */
+
+						if (psStructure && psTile->psObject->type == OBJ_STRUCTURE)
+						{
+							removeStruct(psStructure, TRUE);
+						} 
+						else if (psFeature && psTile->psObject->type == OBJ_FEATURE) 
+						{
+							removeFeature(psFeature);
+						}
+						psStructure = NULL;
+					} else {
+						psStructure = buildStructure(psBuilding, structX, structY, 
+						                             selectedPlayer, FALSE);
+					}
 					if (psStructure)
 					{
 						psStructure->status = SS_BUILT;
 						buildingComplete(psStructure);
-						/*if (psStructure->pStructureType->type == REF_POWER_GEN)
-						{
-							//initPlayerPower();
-							capacityUpdate(psStructure);
-						}
-						else if (psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR ||
-							psStructure->pStructureType->type == REF_HQ)
-						{
-							//initPlayerPower();
-							extractedPowerUpdate(psStructure);
-						}*/
 					}
 				}
 				else if (psPositionStats->ref >= REF_FEATURE_START &&
@@ -6176,15 +6183,6 @@ static BOOL setConstructionStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 			if(driveModeActive()) {
 				driveSelectionChanged();
 			}
-            /* Re-written to allow demolish order to be added to the queuing system
-
-            //make sure its not on the way to build something
-   		    orderDroid(psDroid,DORDER_STOP);
-            //clear out target (but not if queuing)
-            psDroid->psTarget = NULL;
-    		psDroid->psTarStats = (BASE_STATS *) structGetDemolishStat();
-
-            */
 			return TRUE;
 		}
 

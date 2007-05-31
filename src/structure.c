@@ -1701,6 +1701,9 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 	int			i;
 	STRUCTURE	*psBuilding = NULL;
 
+	assert(pStructureType);
+	ASSERT(pStructureType->type != REF_DEMOLISH, "You cannot build demolition!");
+
 	if (IsStatExpansionModule(pStructureType)==FALSE)
 	{
 		//some prelim tests...
@@ -4461,8 +4464,9 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 
 		switch(psBuilding->type)
 		{
-			case NUM_DIFF_BUILDINGS:
 			case REF_DEMOLISH:
+				break;
+			case NUM_DIFF_BUILDINGS:
 			case REF_BRIDGE:
 				ASSERT(FALSE, "validLocation: Bad structure type %u", psBuilding->type);
 				break;
