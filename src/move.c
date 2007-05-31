@@ -894,27 +894,17 @@ static float vectorToAngle(float vx, float vy)
 /* Calculate the change in direction given a target angle and turn rate */
 static void moveCalcTurn(float *pCurr, float target, UDWORD rate)
 {
-	float	diff, change;
-#ifdef DEBUG							//Ugh.  If your gonna ONLY use this variable in "DEBUG", then
-	SDWORD	path=0;				//make sure you wrap the function that uses it also!
-#define SET_PATH(x) path=x
-#else
-#define SET_PATH(x)
-#endif
+	float diff, change, retval = *pCurr;
 
 	ASSERT( target < 360.0 && target >= 0.0,
 			 "moveCalcTurn: target out of range %f", target );
-
-	ASSERT( *pCurr < 360.0 && *pCurr >= 0.0,
-			 "moveCalcTurn: cur ang out of range %f", *pCurr );
-
+	ASSERT( retval < 360.0 && retval >= 0.0,
+			 "moveCalcTurn: cur ang out of range %f", retval );
 
 	// calculate the difference in the angles
-	diff = target - *pCurr;
+	diff = target - retval;
 
 	// calculate the change in direction
-
-
 
 	change = (baseTurn * rate); // constant rate so we can use a normal multiplication
 
@@ -922,8 +912,7 @@ static void moveCalcTurn(float *pCurr, float target, UDWORD rate)
 	    (diff < 0 && diff > -change))
 	{
 		// got to the target direction
-		*pCurr = target;
-		SET_PATH(0);
+		retval = target;
 	}
 	else if (diff > 0)
 	{
@@ -931,14 +920,12 @@ static void moveCalcTurn(float *pCurr, float target, UDWORD rate)
 		if (diff < TRIG_DEGREES / 2)
 		{
 			// Simple case - just increase towards target
-			*pCurr += change;
-			SET_PATH(1);
+			retval += change;
 		}
 		else
 		{
 			// decrease to target, but could go over 0 boundary */
-			*pCurr -= change;
-			SET_PATH(2);
+			retval -= change;
 		}
 	}
 	else
@@ -946,33 +933,25 @@ static void moveCalcTurn(float *pCurr, float target, UDWORD rate)
 		if (diff > -(TRIG_DEGREES/2))
 		{
 			// Simple case - just decrease towards target
-			*pCurr -= change;
-			SET_PATH(3);
+			retval -= change;
 		}
 		else
 		{
 			// increase to target, but could go over 0 boundary
-			*pCurr += change;
-			SET_PATH(4);
+			retval += change;
 		}
 	}
 
-	if (*pCurr < 0.0f)
+	while (retval < 0.0f)
 	{
-		*pCurr += 360.0f;
+		retval += 360.0f;
 	}
-	if (*pCurr >= 360.0f)
-	{
-		*pCurr -= 360.0f;
-	}
+	retval = fmodf(retval, 360);
 
+	ASSERT(retval < 360 && retval >= 0, "moveCalcTurn: bad angle %f from (%f, %f, %u)\n", 
+	       retval, *pCurr, target, rate);
 
-#ifdef DEBUG			//Don't forget that if you don't define the variable, then we error out.
-
-	ASSERT( (*pCurr) < 360 && (*pCurr) >= 0,
-			 "moveCalcTurn: angle out of range - path %d\n"
-			 "   NOTE - ANYONE WHO SEES THIS PLEASE REMEMBER: path %d", path, path );
-#endif
+	*pCurr = retval;
 }
 
 
