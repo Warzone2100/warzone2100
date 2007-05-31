@@ -777,7 +777,6 @@ static void actionUpdateTransporter( DROID *psDroid )
 	UBYTE	i;
 	//this is a bit field
 	UBYTE	num_weapons = 0;
-	DROID_OACTION_INFO	*psTargets = {NULL};
 
 	//check if transporter has arrived
 	if (updateTransporter(psDroid))
@@ -794,7 +793,6 @@ static void actionUpdateTransporter( DROID *psDroid )
         psDroid->psActionTarget[0] = NULL;
     }
 
-	//if (psDroid->numWeaps == 0)
 	/* Watermelon:if I am a multi-turret droid */
 	if (psDroid->numWeaps > 1)
 	{
@@ -822,8 +820,7 @@ static void actionUpdateTransporter( DROID *psDroid )
 		}
 	}
 
-    /* check for weapon */
-	//if ( psDroid->numWeaps > 0 )
+	/* check for weapon */
 	for(i = 0;i < psDroid->numWeaps;i++)
 	{
 		if ( (num_weapons & (1 << (i+1))) )
@@ -833,19 +830,11 @@ static void actionUpdateTransporter( DROID *psDroid )
 				(void)aiBestNearestTarget(psDroid, &psDroid->psActionTarget[i], i);
 			}
 
-
 			if ( psDroid->psActionTarget[i] != NULL )
 			{
-				psDroid->psActionTarget[i] = psTargets->objects[i];
 				if ( visibleObject((BASE_OBJECT*)psDroid, psDroid->psActionTarget[i]) )
 				{
-					/*if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
-							&(psDroid->turretRotation), &(psDroid->turretPitch),
-							psDroid->turretRotRate, (SWORD)(psDroid->turretRotRate/2),
-							//asWeaponStats[psDroid->asWeaps->nStat].direct))
-							proj_Direct(&asWeaponStats[psDroid->asWeaps->nStat]),
-							TRUE))*/
-					if (actionTargetTurret((BASE_OBJECT*)psDroid, psTargets->objects[i],
+					if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[i],
 							&(psDroid->turretRotation[i]), &(psDroid->turretPitch[i]),
 							&asWeaponStats[psDroid->asWeaps[i].nStat],
 							TRUE,i))
@@ -1629,7 +1618,7 @@ void actionUpdateDroid(DROID *psDroid)
 
 	case DACTION_VTOLATTACK:
 		//Watermelon:uses vtResult
-		if (psDroid->psActionTarget != NULL &&
+		if (psDroid->psActionTarget[0] != NULL &&
 			validTarget((BASE_OBJECT *)psDroid, psDroid->psActionTarget[0], 0))
 		{
 			//check if vtol that its armed
