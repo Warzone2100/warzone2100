@@ -31,8 +31,6 @@
 #include "radar.h"
 
 #define MAX_TERRAIN_PAGES	20
-#define PAGE_WIDTH		512
-#define PAGE_HEIGHT		512
 // 4 byte depth == 32 bpp
 #define PAGE_DEPTH		4
 #define TEXTURE_PAGE_SIZE	PAGE_WIDTH*PAGE_HEIGHT*PAGE_DEPTH
@@ -252,9 +250,9 @@ static UDWORD	getTileXIndex(UDWORD tileNumber)
 	UDWORD	tileInPage;
 	UDWORD	xIndex;
 
-	texPage = tileNumber/16;
-	tileInPage = tileNumber - (texPage*16);
-	xIndex = tileInPage%4;
+	texPage = tileNumber / TILES_IN_PAGE;
+	tileInPage = tileNumber - (texPage * TILES_IN_PAGE);
+	xIndex = tileInPage % TILES_IN_PAGE_COLUMN;
 	return(xIndex);
 }
 
@@ -264,12 +262,11 @@ static UDWORD	getTileYIndex(UDWORD tileNumber)
 	UDWORD	tileInPage;
 	UDWORD	yIndex;
 
-	texPage = tileNumber/16;
-	tileInPage = tileNumber - (texPage*16);
-	yIndex = tileInPage/4;
+	texPage = tileNumber / TILES_IN_PAGE;
+	tileInPage = tileNumber - (texPage * TILES_IN_PAGE);
+	yIndex = tileInPage / TILES_IN_PAGE_ROW;
 	return(yIndex);
 }
-
 
 /* Extracts a rectangular buffer from a source buffer, storing result in one contiguous
    chunk	*/
@@ -310,6 +307,6 @@ static void buildTileIndexes(void)
 	{
 		tileTexInfo[i].xOffset = getTileXIndex(i);
 		tileTexInfo[i].yOffset = getTileYIndex(i);
-		tileTexInfo[i].texPage = pageId[(i/16)];//(i/16) + firstTexturePage;
+		tileTexInfo[i].texPage = pageId[(i / TILES_IN_PAGE)];
 	}
 }

@@ -218,7 +218,7 @@ static TILE_BUCKET tileIJ[LAND_YGRD][LAND_XGRD];
 
 /* Points for flipping the texture around if the tile is flipped or rotated */
 static POINT  sP1, sP2, sP3, sP4;
-static POINT  *psP1, *psP2, *psP3, *psP4, *psPTemp;
+static POINT  *psP1, *psP2, *psP3, *psP4;
 
 /* Records the present X and Y values for the current mouse tile (in tiles */
 SDWORD mouseTileX, mouseTileY;
@@ -1070,23 +1070,27 @@ void disp3d_getView(iView *newView)
 when flips and rotations are being done */
 static void	flipsAndRots(int texture)
 {
+	/* Used to calculate texture coordinates, which are 0-255 in value */
+	const UDWORD xMult = (256 / TILES_IN_PAGE_COLUMN);
+	const UDWORD yMult = (256 / TILES_IN_PAGE_ROW);
 
-/* Store the source rect as four points */
+	POINT *psPTemp;
+
+	/* Store the source rect as four points */
 	sP1.x = 1;
 	sP1.y = 1;
-	sP2.x = 63;
+	sP2.x = (xMult - 1);
 	sP2.y = 1;
-	sP3.x = 63;
-	sP3.y = 63;
+	sP3.x = (xMult - 1);
+	sP3.y = (yMult - 1);
 	sP4.x = 1;
-	sP4.y = 63;
+	sP4.y = (yMult - 1);
 
 	/* Store pointers to the points */
 	psP1 = &sP1;
 	psP2 = &sP2;
 	psP3 = &sP3;
 	psP4 = &sP4;
-
 
 	if (texture & TILE_XFLIP)
 	{
@@ -4163,7 +4167,7 @@ static void getDefaultColours( void )
 }
 
 //#define SHOW_ZONES
-//#define SHOW_GATEWAYS
+#define SHOW_GATEWAYS
 
 // -------------------------------------------------------------------------------------
 /* New improved (and much faster) tile drawer */
@@ -4292,9 +4296,9 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	* the graphics card */
 	pie_SetTexturePage(tileTexInfo[tileNumber & TILE_NUMMASK].texPage);
 
-	/* set up the texture size info */
-	offset.x = (tileTexInfo[tileNumber & TILE_NUMMASK].xOffset * 64);
-	offset.y = (tileTexInfo[tileNumber & TILE_NUMMASK].yOffset * 64);
+	/* set up the texture size info (0-255 used for texture coordinates) */
+	offset.x = (tileTexInfo[tileNumber & TILE_NUMMASK].xOffset * (256 / TILES_IN_PAGE_COLUMN));
+	offset.y = (tileTexInfo[tileNumber & TILE_NUMMASK].yOffset * (256 / TILES_IN_PAGE_ROW));
 
 	/* Check for rotations and flips - this sets up the coordinates for texturing */
 	flipsAndRots(tileNumber & ~TILE_NUMMASK);
@@ -4431,27 +4435,32 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 	psTile = mapTile(actualX,actualY);
 
 	// If it's a water tile then draw the water
-	if (TERRAIN_TYPE(psTile) == TER_WATER) {
+	if (TERRAIN_TYPE(psTile) == TER_WATER) 
+	{
+		/* Used to calculate texture coordinates, which are 0-255 in value */
+		const UDWORD xMult = (256 / TILES_IN_PAGE_COLUMN);
+		const UDWORD yMult = (256 / TILES_IN_PAGE_ROW);
+
 		tileNumber = getWaterTileNum();
 		// Draw the main water tile.
 
 		/* 3dfx is pre stored and indexed */
 		pie_SetTexturePage(tileTexInfo[tileNumber & TILE_NUMMASK].texPage);
 
-		offset.x = tileTexInfo[tileNumber & TILE_NUMMASK].xOffset * 64;
-		offset.y = tileTexInfo[tileNumber & TILE_NUMMASK].yOffset * 64;
+		offset.x = tileTexInfo[tileNumber & TILE_NUMMASK].xOffset * xMult;
+		offset.y = tileTexInfo[tileNumber & TILE_NUMMASK].yOffset * yMult;
 
 		tileScreenInfo[i+0][j+0].tu = (UWORD)(offset.x + 1);
 		tileScreenInfo[i+0][j+0].tv = (UWORD)(offset.y);
 
-		tileScreenInfo[i+0][j+1].tu = (UWORD)(offset.x + 63);
+		tileScreenInfo[i+0][j+1].tu = (UWORD)(offset.x + (xMult - 1));
 		tileScreenInfo[i+0][j+1].tv = (UWORD)(offset.y);
 
-		tileScreenInfo[i+1][j+1].tu = (UWORD)(offset.x + 63);
-		tileScreenInfo[i+1][j+1].tv = (UWORD)(offset.y + 31);
+		tileScreenInfo[i+1][j+1].tu = (UWORD)(offset.x + (xMult - 1));
+		tileScreenInfo[i+1][j+1].tv = (UWORD)(offset.y + ((yMult / 2) - 1));
 
 		tileScreenInfo[i+1][j+0].tu = (UWORD)(offset.x + 1);
-		tileScreenInfo[i+1][j+0].tv = (UWORD)(offset.y + 31);
+		tileScreenInfo[i+1][j+0].tv = (UWORD)(offset.y + ((yMult / 2) - 1));
 
 
 		memcpy(&vertices[0], &tileScreenInfo[i+0][j+0], sizeof(PIEVERTEX));
