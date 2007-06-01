@@ -3951,7 +3951,7 @@ static void locateMouse(void)
 {
 	const POINT pt = {mouseXPos, mouseYPos};
 	unsigned int i;
-	int nearestZ = INT_MAX;
+	int nearestZ = INT32_MAX;
 
 	for(i = 0; i < visibleXTiles; ++i)
 	{

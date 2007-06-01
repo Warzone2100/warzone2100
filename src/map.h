@@ -67,7 +67,6 @@ typedef enum _terrain_type
 #define TILE_NOTBLOCKING	0x0200	// units can drive on this even if there is a structure or feature on it
 
 #define TILE_NUMMASK	0x01ff
-#define TILE_BITMASK	0xfe00
 
 #define BITS_NODRAWTILE	0x4
 #define BITS_FPATHBLOCK	0x10		// bit set temporarily by find path to mark a blocking tile
