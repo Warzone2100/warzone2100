@@ -4167,7 +4167,7 @@ static void getDefaultColours( void )
 }
 
 //#define SHOW_ZONES
-#define SHOW_GATEWAYS
+//#define SHOW_GATEWAYS
 
 // -------------------------------------------------------------------------------------
 /* New improved (and much faster) tile drawer */
