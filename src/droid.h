@@ -212,9 +212,6 @@ extern DROID_TYPE droidTemplateType(DROID_TEMPLATE *psTemplate);
 //fills the list with Templates that can be manufactured in the Factory - based on size
 extern UDWORD fillTemplateList(DROID_TEMPLATE **pList, STRUCTURE *psFactory, UDWORD limit);
 
-// Get an IMD index from a droid template.
-extern UDWORD GetIMDFromTemplate(DROID_TEMPLATE *Template,UDWORD Player);
-
 extern void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber);
 
 extern BOOL activateGroup(UDWORD playerNumber, UDWORD groupNumber);
@@ -244,9 +241,6 @@ extern char *droidGetName(DROID *psDroid);
 
 // Set a droid's name.
 extern void droidSetName(DROID *psDroid, const char *pName);
-
-// Delete the name from a droid structure.
-extern void droidDeleteName(DROID *psDroid);
 
 // Set a templates name.
 extern void templateSetName(DROID_TEMPLATE *psTemplate,char *pName);
@@ -341,9 +335,6 @@ extern void updateVtolAttackRun(DROID *psDroid, int weapon_slot);
 extern UWORD   getNumAttackRuns(DROID *psDroid, int weapon_slot);
 //assign rearmPad to the VTOL
 extern void assignVTOLPad(DROID *psNewDroid, STRUCTURE *psReArmPad);
-//don't use this function any more - the droid checks each frame for this to have died
-//look through all droids to see if any are associated with the ReArming Pad
-//extern void releaseVTOLPad(STRUCTURE *psReArmPad);
 // true if a vtol is waiting to be rearmed by a particular rearm pad
 extern BOOL vtolReadyToRearm(DROID *psDroid, STRUCTURE *psStruct);
 // true if a vtol droid currently returning to be rearmed
@@ -394,7 +385,21 @@ extern BOOL droidAudioTrackStopped( void *psObj );
 /*returns TRUE if droid type is one of the Cyborg types*/
 extern BOOL cyborgDroid(DROID *psDroid);
 
+/* assert if droid is bad */
+#ifdef DEBUG
+#define CHECK_DROID(droid) \
+do { \
+	int i; \
+	assert(droid->type == OBJ_DROID); assert(droid->direction <= 360.0f && droid->direction >= 0.0f); \
+	assert(droid != NULL); assert(droid->numWeaps < DROID_MAXWEAPS); \
+	assert(droid->listSize < ORDER_LIST_MAX); \
+	for (i = 0; i < DROID_MAXWEAPS; i++) assert(droid->turretRotation[i] <= 360); \
+	for (i = 0; i < DROID_MAXWEAPS; i++) assert(droid->asWeaps[i].lastFired <= gameTime); \
+	for (i = 0; i < DROID_MAXWEAPS; i++) \
+		if (droid->psActionTarget[i]) assert(droid->psActionTarget[i]->direction >= 0.0f); \
+} while (FALSE);
+#else
+#define CHECK_DROID(x)
 #endif
 
-
-
+#endif

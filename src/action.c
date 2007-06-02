@@ -95,7 +95,7 @@ BOOL actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 	SECONDARY_STATE state;
 	WEAPON_STATS	*psStats;
 
-	//if (psDroid->numWeaps == 0)
+	CHECK_DROID(psDroid);
 	if (psDroid->asWeaps[0].nStat == 0)
 	{
 		return FALSE;
@@ -169,7 +169,8 @@ BOOL actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 	SDWORD			dx, dy, dz, radSq, rangeSq, longRange;
 	WEAPON_STATS	*psStats;
 
-	//if (psDroid->numWeaps == 0)
+	CHECK_DROID(psDroid);
+
 	if (psDroid->asWeaps[0].nStat == 0)
 	{
 		return FALSE;
@@ -208,7 +209,8 @@ BOOL actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 	SDWORD			dx, dy, dz, radSq, rangeSq, minRange;
 	WEAPON_STATS	*psStats;
 
-	//if (psDroid->numWeaps == 0)
+	CHECK_DROID(psDroid);
+
 	/* Watermelon:if I am a multi-turret droid */
 	if (psDroid->asWeaps[0].nStat == 0)
 	{
@@ -602,6 +604,8 @@ BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 {
 	WEAPON_STATS	*psStats;
 
+	CHECK_DROID(psDroid);
+
 	if (psDroid->numWeaps == 0)
 	{
 		if ( visibleObject((BASE_OBJECT*)psDroid, psTarget) )
@@ -660,6 +664,8 @@ static void actionAddVtolAttackRun( DROID *psDroid )
 	SDWORD		iVx, iVy;
 #endif
 
+	CHECK_DROID(psDroid);
+
 	if ( psDroid->psActionTarget[0] != NULL )
 	{
 		psTarget = psDroid->psActionTarget[0];
@@ -717,6 +723,8 @@ static void actionUpdateVtolAttack( DROID *psDroid )
 {
 	WEAPON_STATS	*psWeapStats[DROID_MAXWEAPS];
 	UBYTE i;
+
+	CHECK_DROID(psDroid);
 
 	/* don't do attack runs whilst returning to base */
 	if ( psDroid->order == DORDER_RTB )
@@ -777,6 +785,8 @@ static void actionUpdateTransporter( DROID *psDroid )
 	UBYTE	i;
 	//this is a bit field
 	UBYTE	num_weapons = 0;
+
+	CHECK_DROID(psDroid);
 
 	//check if transporter has arrived
 	if (updateTransporter(psDroid))
@@ -852,6 +862,7 @@ static void actionUpdateTransporter( DROID *psDroid )
 			}
 		}
 	}
+	CHECK_DROID(psDroid);
 }
 
 
@@ -887,6 +898,8 @@ static void actionCalcPullBackPoint(BASE_OBJECT *psObj, BASE_OBJECT *psTarget, S
 BOOL actionReachedBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psStats)
 {
 	SDWORD		width, breadth, tx,ty, dx,dy;
+
+	CHECK_DROID(psDroid);
 
 	// do all calculations in half tile units so that
 	// the droid moves to within half a tile of the target
@@ -937,6 +950,8 @@ BOOL actionReachedBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psSta
 BOOL actionDroidOnBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psStats)
 {
 	SDWORD	width, breadth, tx,ty, dx,dy;
+
+	CHECK_DROID(psDroid);
 
 	dx = (SDWORD)(psDroid->x >> (TILE_SHIFT));
 	dy = (SDWORD)(psDroid->y >> (TILE_SHIFT));
@@ -993,6 +1008,8 @@ BOOL actionRouteBlockingPos(DROID *psDroid, SDWORD tx, SDWORD ty)
 	SDWORD		i,j;
 	MAPTILE		*psTile;
 	STRUCTURE	*psWall;
+
+	CHECK_DROID(psDroid);
 
 	if (vtolDroid(psDroid) ||
 		((psDroid->order != DORDER_MOVE) &&
@@ -1071,7 +1088,6 @@ void actionUpdateDroid(DROID *psDroid)
 	SDWORD				moveAction;
 	BOOL				bDoHelpBuild;
 	MAPTILE				*psTile;
-
 	UBYTE	 i = 0;
 	//this is a bit field
 	UBYTE	 num_weapons = 0;
@@ -1079,6 +1095,8 @@ void actionUpdateDroid(DROID *psDroid)
 	BASE_OBJECT			*psTargets[DROID_MAXWEAPS];
 	UBYTE	j,iVisible = 1;
 	BOOL	bHasTarget;
+
+	CHECK_DROID(psDroid);
 
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 	ASSERT( psPropStats != NULL,
@@ -2641,6 +2659,7 @@ void actionUpdateDroid(DROID *psDroid)
 			}
 		}
 	}
+	CHECK_DROID(psDroid);
 }
 
 /* Overall action function that is called by the specific action functions */
@@ -2654,10 +2673,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 	//Watermelon:added MinRangeResult;
 	UBYTE	i;
 
-	ASSERT( psDroid != NULL,
-		"actionUnitBase: Invalid Unit pointer" );
-	ASSERT( psDroid->type == OBJ_DROID,
-		"actionUnitBase: Unit pointer does not reference a unit" );
+	CHECK_DROID(psDroid);
 
 	switch (psAction->action)
 	{
@@ -2981,6 +2997,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		ASSERT( FALSE, "actionUnitBase: unknown action" );
 		break;
 	}
+	CHECK_DROID(psDroid);
 }
 
 
@@ -3053,7 +3070,7 @@ void moveToRearm(DROID *psDroid)
 	STRUCTURE	*psStruct;
 	UBYTE		chosen=0;
 
-	// IF YOU CHANGE THE ORDER/ACTION RESULTS TELL ALEXL!!!! && recvvtolrearm
+	CHECK_DROID(psDroid);
 
 	if (!vtolDroid(psDroid))
 	{
@@ -3139,8 +3156,7 @@ BOOL actionVTOLLandingPos(DROID *psDroid, UDWORD *px, UDWORD *py)
 	DROID	*psCurr;
 	BOOL	result;
 
-//	ASSERT( (psDroid->psActionTarget != NULL),
-//		"actionVTOLLandingPos: no rearm pad set for the VTOL" );
+	CHECK_DROID(psDroid);
 
 	/* Initial box dimensions and set iteration count to zero */
 	startX = endX = (SDWORD)*px >> TILE_SHIFT;

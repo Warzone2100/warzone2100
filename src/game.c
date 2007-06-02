@@ -5912,7 +5912,6 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 				}
 			}
 			psSaveDroid->body = psCurr->body;
-//			psSaveDroid->activeWeapon = psCurr->activeWeapon;
 			//psSaveDroid->numWeaps = psCurr->numWeaps;
 			/*for (i=0; i < psCurr->numWeaps; i++)
 			{

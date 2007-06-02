@@ -100,17 +100,13 @@ typedef struct _order_list
 
 typedef struct _droid_template
 {
-	// FOR DROID TEMPLATES
 	// On the PC the pName entry in STATS_BASE is redundant and can be assumed to be NULL,
-	// on the PSX the NameHash entry is used. If it is database generated template, the hashed version of the short name of the template is stored. If it is a user generated template NULL is stored.
 	STATS_BASE;						/* basic stats */
 
-
 	// on the PC this contains the full editable ascii name of the template
-	// on the PSX this is not used, the full name is NON-EDITABLE and is generated from the template components e.g. Viper Mk I
 	char			aName[DROID_MAXNAME];
 
-	UBYTE 			NameVersion;			// Version number used in name (e.g. Viper Mk "I" would be stored as 1 - Viper Mk "X" as 10)  - copied to droid structure
+	UBYTE 			NameVersion;			// Version number used in name (e.g. Viper Mk "I" would be stored as 1 - Viper Mk "X" as 10)
 
 	/* The droid components.  This array is indexed by COMPONENT_TYPE
 	 * so the ECM would be accessed using asParts[COMP_ECM].
@@ -140,12 +136,8 @@ typedef struct _droid
 	/* The common structure elements for all objects */
 	BASE_ELEMENTS(struct _droid);
 
-
 	//Ascii name of the droid - This is generated from the droid template and can not be changed by the game player after creation.
 	char		aName[DROID_MAXNAME];
-
-//	UBYTE 		NameVersion;			// Version number used for generating on-the-fly names (e.g. Viper Mk "I" would be stored as 1 - Viper Mk "X" as 10)  - copied from droid template
-
 
 	DROID_TYPE	droidType;			// The type of droid
 
@@ -174,26 +166,22 @@ typedef struct _droid
 	UDWORD		body;				// the current body points
 	//Watermleon:armour of all sides
 	UDWORD		armour[NUM_HIT_SIDES][NUM_WEAPON_CLASS];
-	//UDWORD		power;
 //tjc	UDWORD		imdNum;
 	UWORD		numKills;
-	//UWORD		turretRotRate; THIS IS A CONSTANT
 	UWORD		turretRotation[DROID_MAXWEAPS];		// Watermelon:turretRotation info for multiple turrents :)
 	UWORD		turretPitch[DROID_MAXWEAPS];	//* Watermelon:turrentPitch info for multiple turrents :)
 	UBYTE 		NameVersion;			// Version number used for generating on-the-fly names (e.g. Viper Mk "I" would be stored as 1 - Viper Mk "X" as 10)  - copied from droid template
 	UBYTE		currRayAng;
-//	UDWORD		numKills;
 
-    SWORD       resistance;             //used in Electronic Warfare
+	SWORD       resistance;             //used in Electronic Warfare
 
-//	SDWORD		activeWeapon;		// The currently selected weapon
 	UDWORD		numWeaps;		// Watermelon:Re-enabled this,I need this one in droid.c
 	WEAPON		asWeaps[DROID_MAXWEAPS];
 
 	// The group the droid belongs to
 	struct		_droid_group	*psGroup;
 	struct		_droid			*psGrpNext;
-    struct      _structure      *psBaseStruct;      //a structure that this droid might be associated with
+	struct      _structure      *psBaseStruct;  //a structure that this droid might be associated with
                                                     //for vtols its the rearming pad
 	// queued orders
 	SDWORD			listSize;
@@ -204,7 +192,6 @@ typedef struct _droid
 	UWORD				orderX, orderY;
 	UWORD				orderX2, orderY2;
 
-// 	struct _base_object	*psLastAttacker;
 	UDWORD				lastHitWeapon;
 	UDWORD				timeLastHit;
 	BOOL				bTargetted;
@@ -227,8 +214,7 @@ typedef struct _droid
 	UDWORD				actionPoints;		// number of points done by action since start
 	//UWORD				actionHeight;		// height to level the ground to for foundation,
 											// possibly use it for other data as well? Yup! - powerAccrued!
-    UWORD               powerAccrued;       // renamed the above variable since this is what its used for now!
-	//UBYTE				tileNumber;			// tile number for foundation NOT USED ANYMORE
+	UWORD               powerAccrued;       // renamed the above variable since this is what its used for now!
 
 	UBYTE				illumination;
 	UBYTE				updateFlags;
@@ -236,6 +222,7 @@ typedef struct _droid
 	/* Movement control data */
 	MOVE_CONTROL		sMove;
 //	void				*lastTile;
+
 	/* anim data */
 	ANIM_OBJECT			*psCurAnim;
 	SDWORD				iAudioID;

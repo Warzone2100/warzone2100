@@ -3082,23 +3082,6 @@ DROID_TEMPLATE *FactoryGetTemplate(FACTORY *Factory)
 	return (DROID_TEMPLATE*)Factory->psSubject;
 }
 
-//iIMDShape *TemplateGetIMD(DROID_TEMPLATE *Template,UDWORD Player)
-//{
-////	return droidIMDs[GetIMDFromTemplate(Template,Player)];
-//	return NULL;
-//}
-//
-///*UDWORD TemplateGetIMDIndex(DROID_TEMPLATE *Template,UDWORD Player)
-//{
-//	return GetIMDFromTemplate(Template,Player);
-//}*/
-//
-//SDWORD ResearchGetImage(RESEARCH_FACILITY *Research)
-//{
-//	return 0;	//IMAGE_RESITEM;
-//}
-
-
 BOOL StatIsStructure(BASE_STATS *Stat)
 {
 	return (Stat->ref >= REF_STRUCTURE_START && Stat->ref <

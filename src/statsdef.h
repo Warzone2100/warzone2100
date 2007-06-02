@@ -443,10 +443,6 @@ typedef enum _travel_medium
 
 typedef struct _propulsion_types
 {
-	//Name isn't used anymore - AB 16/06/98
-/*
-	char	*pName;				// Text name of the component
-*/
 	UWORD				powerRatioMult;		// Multiplier for the calculated power ratio of
 											// the droid
 	UDWORD				travel;				// Which medium the propulsion travels in
