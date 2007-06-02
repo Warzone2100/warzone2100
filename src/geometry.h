@@ -27,13 +27,13 @@
 
 typedef struct _t_quad
 {
-POINT coords[4];
+	Vector2i coords[4];
 } QUAD;
 
 extern UDWORD adjustDirection( SDWORD present, SDWORD difference );
 extern SDWORD calcDirection( UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1 );
 extern void initBulletTable( void );
-extern int inQuad( const POINT *pt, const QUAD *quad );
+extern int inQuad( const Vector2i *pt, const QUAD *quad );
 extern DROID *getNearestDroid( UDWORD x, UDWORD y, BOOL bSelected );
 extern BOOL droidOnScreen( DROID *psDroid, SDWORD tolerance );
 

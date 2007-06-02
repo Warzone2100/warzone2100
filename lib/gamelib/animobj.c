@@ -260,26 +260,6 @@ animObj_Add( void *pParentObj, int iAnimID,
 	return psObj;
 }
 
-/***************************************************************************/
-/*
- * animObj_GetFrame3D
- *
- * returns NULL if animation not started yet
- */
-/***************************************************************************/
-
-UWORD
-animObj_GetFrame3D( ANIM_OBJECT *psObj, UWORD uwObj, Vector3i *psVecPos,
-					Vector3i *psVecRot, Vector3i *psVecScale )
-{
-	ANIM3D		*psAnim;
-
-	/* get local anim pointer */
-	psAnim = (ANIM3D *) psObj->psAnim;
-
-	return anim_GetFrame3D( psAnim, uwObj, gameTime, psObj->udwStartTime,
-					psObj->udwStartDelay, psVecPos, psVecRot, psVecScale );
-}
 
 /***************************************************************************/
 

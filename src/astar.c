@@ -100,7 +100,7 @@ static POINT aDirOffset[NUM_DIR] =
 #define NUM_DIR		8
 // Convert a direction into an offset
 // dir 0 => x = 0, y = -1
-static POINT aDirOffset[NUM_DIR] =
+static Vector2i aDirOffset[NUM_DIR] =
 {
 	{ 0, 1},
 	{-1, 1},

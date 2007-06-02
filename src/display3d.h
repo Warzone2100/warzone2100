@@ -51,7 +51,7 @@ extern void renderProximityMsg			( PROXIMITY_DISPLAY	*psProxDisp);
 extern void drawTerrainTile				( UDWORD i, UDWORD j, BOOL onWaterEdge );
 extern void drawTerrainWaterTile		( UDWORD i, UDWORD j);
 extern void renderProjectile			( PROJ_OBJECT *psCurr);
-extern void renderAnimComponent			( COMPONENT_OBJECT *psObj );
+extern void renderAnimComponent			( const COMPONENT_OBJECT *psObj );
 extern void renderDeliveryPoint			( FLAG_POSITION *psPosition );
 extern void debugToggleSensorDisplay	( void );
 

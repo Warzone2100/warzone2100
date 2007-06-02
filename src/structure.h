@@ -270,11 +270,11 @@ stat type*/
 extern BOOL checkSpecificStructExists(UDWORD structInc, UDWORD player);
 
 /*Access functions for the upgradeable stats of a structure*/
-extern UDWORD	structureBody(STRUCTURE * psStruct);
+extern UDWORD	structureBody(const STRUCTURE *psStruct);
 extern UDWORD	structureArmour(STRUCTURE_STATS *psStats, UBYTE player);
 extern UDWORD	structureResistance(STRUCTURE_STATS *psStats, UBYTE player);
 /*this returns the Base Body points of a structure - regardless of upgrade*/
-extern UDWORD	structureBaseBody(STRUCTURE *psStructure);
+extern UDWORD	structureBaseBody(const STRUCTURE *psStructure);
 
 extern void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer);
 

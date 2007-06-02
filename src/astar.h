@@ -29,8 +29,8 @@
 #define ASTAR_MAXROUTE		50
 typedef struct _astar_route
 {
-	POINT	asPos[ASTAR_MAXROUTE];
-	SDWORD	finalX,finalY,numPoints;
+	Vector2i asPos[ASTAR_MAXROUTE];
+	SDWORD finalX, finalY, numPoints;
 } ASTAR_ROUTE;
 
 // Sizes for the node heap

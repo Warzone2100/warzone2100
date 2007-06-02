@@ -217,8 +217,8 @@ SVMESH tileScreenInfo[LAND_YGRD][LAND_XGRD];
 static TILE_BUCKET tileIJ[LAND_YGRD][LAND_XGRD];
 
 /* Points for flipping the texture around if the tile is flipped or rotated */
-static POINT  sP1, sP2, sP3, sP4;
-static POINT  *psP1, *psP2, *psP3, *psP4;
+static Vector2i sP1, sP2, sP3, sP4;
+static Vector2i *psP1, *psP2, *psP3, *psP4;
 
 /* Records the present X and Y values for the current mouse tile (in tiles */
 SDWORD mouseTileX, mouseTileY;
@@ -1068,13 +1068,12 @@ void disp3d_getView(iView *newView)
 
 /* John's routine - deals with flipping around the vertex ordering for source textures
 when flips and rotations are being done */
-static void	flipsAndRots(int texture)
+static void flipsAndRots(int texture)
 {
 	/* Used to calculate texture coordinates, which are 0-255 in value */
 	const UDWORD xMult = (256 / TILES_IN_PAGE_COLUMN);
 	const UDWORD yMult = (256 / TILES_IN_PAGE_ROW);
-
-	POINT *psPTemp;
+	Vector2i *psPTemp;
 
 	/* Store the source rect as four points */
 	sP1.x = 1;
@@ -1311,52 +1310,47 @@ void	renderProjectile(PROJ_OBJECT *psCurr)
 }
 
 void
-renderAnimComponent( COMPONENT_OBJECT *psObj )
+renderAnimComponent( const COMPONENT_OBJECT *psObj )
 {
-	Vector3i		dv;
-	SDWORD		posX, posY, posZ, iPlayer;
-	BASE_OBJECT	*psParentObj = (BASE_OBJECT *) psObj->psParent;
-	DROID		*psDroid;
-	STRUCTURE	*psStructure;
-	UDWORD		brightness, specular;
+	BASE_OBJECT *psParentObj = (BASE_OBJECT*)psObj->psParent;
+	const SDWORD posX = psParentObj->x + psObj->position.x,
+		posY = psParentObj->y + psObj->position.y;
 
-	ASSERT( psParentObj != NULL,
-		"renderAnimComponent: invalid parent object pointer" );
+	ASSERT( psParentObj != NULL, "renderAnimComponent: invalid parent object pointer" );
 
 	/* only draw visible bits */
-	if( (psParentObj->type == OBJ_DROID) && !godMode && !demoGetStatus())
+	if( (psParentObj->type == OBJ_DROID) && !godMode && !demoGetStatus() &&
+		((DROID*)psParentObj)->visible[selectedPlayer] != UBYTE_MAX )
 	{
-		if( ((DROID*)psParentObj)->visible[selectedPlayer] != UBYTE_MAX)
-		{
-			return;
-		}
+		return;
 	}
-
-	posX = psParentObj->x + psObj->position.x;
-	posY = psParentObj->y + psObj->position.y;
-	posZ = psParentObj->z + psObj->position.z;
 
 	/* render */
 	if( clipXY( posX, posY ) )
 	{
+		/* get parent object translation */
+		const Vector3i dv = {
+			(psParentObj->x - player.p.x) - terrainMidX * TILE_UNITS,
+			psParentObj->z,
+			terrainMidY * TILE_UNITS - (psParentObj->y - player.p.z)
+		};
+		SDWORD iPlayer;
+		UDWORD brightness, specular;
+
 		psParentObj->sDisplay.frameNumber = currentGameFrame;
+
 		/* Push the indentity matrix */
 		iV_MatrixBegin();
 
-		/* get parent object translation */
-		dv.x = (psParentObj->x - player.p.x) - terrainMidX*TILE_UNITS;
-		dv.z = terrainMidY*TILE_UNITS - (psParentObj->y - player.p.z);
-		dv.y = psParentObj->z;
-
 		/* parent object translation */
-		iV_TRANSLATE(dv.x,dv.y,dv.z);
+		iV_TRANSLATE(dv.x, dv.y, dv.z);
 
 		/* Get the x,z translation components */
 		rx = player.p.x & (TILE_UNITS-1);
 		rz = player.p.z & (TILE_UNITS-1);
 
 		/* Translate */
-		iV_TRANSLATE(rx,0,-rz);
+		iV_TRANSLATE(rx, 0, -rz);
 
 		/* parent object rotations */
 		imdRot2.y = DEG( (int)psParentObj->direction );
@@ -1375,10 +1369,10 @@ renderAnimComponent( COMPONENT_OBJECT *psObj )
 		/* Set frame numbers - look into this later?? FIXME!!!!!!!! */
 		if( psParentObj->type == OBJ_DROID )
 		{
-			psDroid = (DROID *) psParentObj;
+			DROID *psDroid = (DROID*)psParentObj;
 			if ( psDroid->droidType == DROID_PERSON )
 			{
-				iPlayer = psParentObj->player-6;
+				iPlayer = psParentObj->player - 6;
 				pie_MatScale(75);
 			}
 			else
@@ -1398,15 +1392,16 @@ renderAnimComponent( COMPONENT_OBJECT *psObj )
 		//brightness and fog calculation
 		if (psParentObj->type == OBJ_STRUCTURE)
 		{
-			Vector3i zero = {0, 0, 0};
+			const Vector3i zero = {0, 0, 0};
 			Vector2i s = {0, 0};
+			STRUCTURE *psStructure = (STRUCTURE*)psParentObj;
 
-			psStructure = (STRUCTURE*)psParentObj;
-			brightness = 200 - (100-PERCENT( psStructure->body ,
-					structureBody(psStructure)));
+			brightness = 200 - (100 - PERCENT(psStructure->body, structureBody(psStructure)));
+
 			pie_RotateProject( &zero, &s );
 			psStructure->sDisplay.screenX = s.x;
 			psStructure->sDisplay.screenY = s.y;
+
 			targetAdd((BASE_OBJECT*)psStructure);
 		}
 		else
@@ -1418,7 +1413,8 @@ renderAnimComponent( COMPONENT_OBJECT *psObj )
 		{
 			brightness = avGetObjLightLevel((BASE_OBJECT*)psParentObj,brightness);
 		}
-		brightness = (UDWORD)lightDoFogAndIllumination((UBYTE)brightness,getCentreX()-posX,getCentreZ()-posY, &specular);
+
+		brightness = (UDWORD)lightDoFogAndIllumination((UBYTE)brightness, getCentreX()-posX, getCentreZ()-posY, &specular);
 
 		pie_Draw3DShape(psObj->psShape, 0, iPlayer, brightness, specular, pie_NO_BILINEAR|pie_STATIC_SHADOW, 0);
 
@@ -1576,11 +1572,11 @@ void displayProximityMsgs( void )
 
 static void displayAnimation( ANIM_OBJECT * psAnimObj, BOOL bHoldOnFirstFrame )
 {
-	UWORD				i,uwFrame;
-	Vector3i			vecPos, vecRot, vecScale;
-	COMPONENT_OBJECT	*psComp;
+	UWORD i, uwFrame;
+	Vector3i vecPos, vecRot, vecScale;
+	COMPONENT_OBJECT *psComp;
 
-	for ( i=0; i<psAnimObj->psAnim->uwObj; i++ )
+	for ( i = 0; i < psAnimObj->psAnim->uwObj; i++ )
 	{
 		if ( bHoldOnFirstFrame == TRUE )
 		{
@@ -1591,8 +1587,7 @@ static void displayAnimation( ANIM_OBJECT * psAnimObj, BOOL bHoldOnFirstFrame )
 		}
 		else
 		{
-			uwFrame = animObj_GetFrame3D( psAnimObj, i,
-										&vecPos, &vecRot, &vecScale );
+			uwFrame = anim_GetFrame3D( psAnimObj->psAnim, i, gameTime, psAnimObj->udwStartTime, psAnimObj->udwStartDelay, &vecPos, &vecRot, &vecScale );
 		}
 
 		if ( uwFrame != ANIM_DELAYED )
@@ -3747,14 +3742,13 @@ void	draw3dLine(Vector3i *src, Vector3i *dest, UBYTE col)
 
 /*	Get the onscreen corrdinates of a droid - so we can draw a bounding box - this need to be severely
 	speeded up and the accuracy increased to allow variable size bouding boxes */
-void	calcScreenCoords(DROID *psDroid)
+void calcScreenCoords(DROID *psDroid)
 {
 	/* Get it's absolute dimensions */
-	Vector3i center = {0, 0, 0};
-	Vector2i center2 = {0, 0};
+	const Vector3i zero = {0, 0, 0};
+	Vector2i center = {0, 0};
 	SDWORD cZ;
-	UDWORD	radius;
-	POINT	pt;
+	UDWORD radius;
 
 	/* How big a box do we want - will ultimately be calculated using xmax, ymax, zmax etc */
 	if(psDroid->droidType == DROID_TRANSPORTER)
@@ -3767,7 +3761,7 @@ void	calcScreenCoords(DROID *psDroid)
 	}
 
 	/* Pop matrices and get the screen corrdinates */
-	cZ = pie_RotateProject( &center, &center2 );
+	cZ = pie_RotateProject( &zero, &center );
 
 	//Watermelon:added a crash protection hack...
 	if (cZ != 0)
@@ -3778,9 +3772,7 @@ void	calcScreenCoords(DROID *psDroid)
 	/* Deselect all the droids if we've released the drag box */
 	if(dragBox3D.status == DRAG_RELEASED)
 	{
-		pt.x = center2.x;
-		pt.y = center2.y;
-		if(inQuad(&pt, &dragQuad) && psDroid->player == selectedPlayer)
+		if(inQuad(&center, &dragQuad) && psDroid->player == selectedPlayer)
 		{
 			//don't allow Transporter Droids to be selected here
 			//unless we're in multiPlayer mode!!!!
@@ -3790,10 +3782,11 @@ void	calcScreenCoords(DROID *psDroid)
 			}
 		}
 	}
-	center2.y -= 4;
+	center.y -= 4;
+
 	/* Store away the screen coordinates so we can select the droids without doing a trasform */
-	psDroid->sDisplay.screenX = center2.x;
-	psDroid->sDisplay.screenY = center2.y;
+	psDroid->sDisplay.screenX = center.x;
+	psDroid->sDisplay.screenY = center.y;
 	psDroid->sDisplay.screenR = radius;
 }
 
@@ -3953,7 +3946,7 @@ static void preprocessTiles(void)
 /* TODO This is slow - speed it up */
 static void locateMouse(void)
 {
-	const POINT pt = {mouseXPos, mouseYPos};
+	const Vector2i pt = {mouseXPos, mouseYPos};
 	unsigned int i;
 	int nearestZ = INT32_MAX;
 
@@ -4435,7 +4428,7 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 	psTile = mapTile(actualX,actualY);
 
 	// If it's a water tile then draw the water
-	if (TERRAIN_TYPE(psTile) == TER_WATER) 
+	if (TERRAIN_TYPE(psTile) == TER_WATER)
 	{
 		/* Used to calculate texture coordinates, which are 0-255 in value */
 		const UDWORD xMult = (256 / TILES_IN_PAGE_COLUMN);

@@ -117,7 +117,7 @@ UDWORD	bestSoFar;
 
 /* Returns non-zero if a point is in a 4 sided polygon */
 /* See header file for definition of QUAD */
-int inQuad(const POINT *pt, const QUAD *quad)
+int inQuad(const Vector2i *pt, const QUAD *quad)
 {
 	int i, j, c = 0;
 

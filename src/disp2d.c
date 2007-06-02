@@ -886,14 +886,14 @@ removed cos types are different - am
 /* Display a texture tile in 2D */
 void blitTile(RECT *psDestRect, RECT *psSrcRect, UDWORD texture)
 {
-	LPDIRECTDRAWSURFACE4		psBack;
-	DDSURFACEDESC2			sDDSDDest, sDDSDSrc;
-	HRESULT					ddrval;
-	POINT					sP1,sP2,sP3,sP4;
-	POINT					*psP1,*psP2,*psP3,*psP4,*psPTemp;
-	UBYTE					*p8Src, *p8Dest;
-	UWORD					*p16Src, *p16Dest;
-	SDWORD					x,y, xDir,yDir, srcInc,destInc;
+	LPDIRECTDRAWSURFACE4 psBack;
+	DDSURFACEDESC2 sDDSDDest, sDDSDSrc;
+	HRESULT ddrval;
+	Vector2i sP1, sP2, sP3, sP4;
+	Vector2i *psP1, *psP2, *psP3, *psP4 ,*psPTemp;
+	UBYTE *p8Src, *p8Dest;
+	UWORD *p16Src, *p16Dest;
+	SDWORD x, y, xDir, yDir, srcInc, destInc;
 
 	psBack = screenGetSurface();
 //	surfCreate(&psBack, 640,480, DDSCAPS_SYSTEMMEMORY, NULL);

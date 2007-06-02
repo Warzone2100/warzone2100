@@ -224,7 +224,7 @@ void screen_SetBackDropFromFile(const char* filename)
 				glGenTextures(1, &backDropTexture);
 
 			glBindTexture(GL_TEXTURE_2D, backDropTexture);
-			glTexImage2D(GL_TEXTURE_2D, 0, iV_getPixelFormat(&image),
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
 					image.width, image.height,
 					0, iV_getPixelFormat(&image), GL_UNSIGNED_BYTE, image.bmp);
 			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);

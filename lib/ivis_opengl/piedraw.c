@@ -284,8 +284,7 @@ static unsigned int nb_tshapes = 0;
 
 static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT specular, int pieFlag, int pieFlagData)
 {
-	float tempY;
-	int i, n;
+	unsigned int n;
 	Vector3f *pVertices, *pPixels;
 	iIMDPoly *pPolys;
 	PIEPOLY piePoly;
@@ -341,11 +340,11 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 
 	//now draw the shape
 	//rotate and project points from shape->points to scrPoints
-	for (i = 0, pVertices = shape->points, pPixels = scrPoints;
-			i < shape->npoints;
-			i++, pVertices++, pPixels++)
+	for (pVertices = shape->points, pPixels = scrPoints;
+			pVertices < shape->points + shape->npoints;
+			pVertices++, pPixels++)
 	{
-		tempY = pVertices->y;
+		float tempY = pVertices->y;
 		if (pieFlag & pie_RAISE)
 		{
 			tempY = pVertices->y - pieFlagData;
@@ -353,22 +352,21 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 				tempY = 0;
 
 		}
-		else if (pieFlag & pie_HEIGHT_SCALED)
+		else if ( (pieFlag & pie_HEIGHT_SCALED) && pVertices->y > 0 )
 		{
-			if(pVertices->y > 0)
-			{
-				tempY = (pVertices->y * pieFlagData) / pie_RAISE_SCALE;
-			}
+			tempY = (pVertices->y * pieFlagData) / pie_RAISE_SCALE;
 		}
 		pPixels->x = pVertices->x;
 		pPixels->y = tempY;
 		pPixels->z = pVertices->z;
 	}
 
-	pPolys = shape->polys;
-	for (i=0; i<shape->npolys; i++, pPolys++) {
-		index = pPolys->pindex;
+	for (pPolys = shape->polys;
+			pPolys < shape->polys + shape->npolys;
+			pPolys++)
+	{
 		piePoly.flags = pPolys->flags;
+
 		if (pieFlag & pie_TRANSLUCENT)
 		{
 			/* There are no PIE files with PIE_ALPHA set, this is the only user, and
@@ -380,7 +378,10 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 		{
 			piePoly.flags &= (0xffffffff-PIE_COLOURKEYED);//dont treat additive images as colour keyed
 		}
-		for (n=0; n<pPolys->npnts; n++, index++)
+
+		for (n = 0, index = pPolys->pindex;
+				n < pPolys->npnts;
+				n++, index++)
 		{
 			pieVrts[n].sx = scrPoints[*index].x;
 			pieVrts[n].sy = scrPoints[*index].y;
@@ -400,6 +401,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 			pie_PiePolyFrame(&piePoly, frame, light); // draw the polygon ...
 		}
 	}
+
 	if (pieFlag & pie_BUTTON)
 	{
 		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
@@ -625,18 +627,16 @@ void pie_CleanUp( void )
 void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD spec, int pieFlag, int pieFlagData)
 {
 	PIELIGHT colour, specular;
-	float distance;
 
 	pieCount++;
 
-	// Fix for transparent buildings and features!! */
+	// Fix for transparent buildings and features!!
 	if( (pieFlag & pie_TRANSLUCENT) && (pieFlagData>220) )
 	{
 		// force to bilinear and non-transparent
 		pieFlag = pieFlag & ~pie_TRANSLUCENT;
 		pieFlagData = 0;
 	}
-	// Fix for transparent buildings and features!! */
 
 // WARZONE light as byte passed in colour so expand
 	if (col <= MAX_UB_LIGHT)
@@ -675,7 +675,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 				}
 				else
 				{
-					unsigned int old_size = tshapes_size;
+					const unsigned int old_size = tshapes_size;
 					tshapes_size <<= 1;
 					tshapes = (transluscent_shape_t*)realloc(tshapes, tshapes_size*sizeof(transluscent_shape_t));
 					memset( &tshapes[old_size], 0, (tshapes_size-old_size)*sizeof(transluscent_shape_t) );
@@ -694,6 +694,8 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 		{
 			if(pieFlag & pie_SHADOW || pieFlag & pie_STATIC_SHADOW)
 			{
+				float distance;
+
 				// draw a shadow
 				if (scshapes_size <= nb_scshapes)
 				{
@@ -705,7 +707,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 					}
 					else
 					{
-						unsigned int old_size = scshapes_size;
+						const unsigned int old_size = scshapes_size;
 						scshapes_size <<= 1;
 						scshapes = (shadowcasting_shape_t*)realloc(scshapes, scshapes_size*sizeof(shadowcasting_shape_t));
 						memset( &scshapes[old_size], 0, (scshapes_size-old_size)*sizeof(shadowcasting_shape_t) );
@@ -988,28 +990,35 @@ static inline void pie_PiePoly(PIEPOLY *poly, BOOL light)
 
 static inline void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, BOOL light)
 {
-	int uFrame, vFrame, j, framesPerLine;
-
-	if ((poly->flags & iV_IMD_TEXANIM) && (frame != 0)) {
-		if (poly->pTexAnim != NULL) {
-			if (poly->pTexAnim->nFrames >=0) {
+	if ((poly->flags & iV_IMD_TEXANIM) && (frame != 0))
+	{
+		if (poly->pTexAnim != NULL)
+		{
+			if (poly->pTexAnim->nFrames >=0)
+			{
 				frame %= poly->pTexAnim->nFrames;
-			} else {
+			}
+			else
+			{
 				frame %= (-poly->pTexAnim->nFrames);
 			}
-			if (frame > 0) {
+
+			if (frame > 0)
+			{
 // HACK - fix this!!!!
-				framesPerLine = 256 / poly->pTexAnim->textureWidth;
+				const int framesPerLine = 256 / poly->pTexAnim->textureWidth;
 //should be		framesPerLine = iV_TEXTEX(texPage)->width / poly->pTexAnim->textureWidth;
-				vFrame = 0;
+				int uFrame = 0, vFrame = 0, j = 0;
+
 				while (frame >= framesPerLine)
 				{
 					frame -= framesPerLine;
 					vFrame += poly->pTexAnim->textureHeight;
 				}
+
 				uFrame = frame * poly->pTexAnim->textureWidth;
 
-				for (j=0; j<poly->nVrts; j++)
+				for (j = 0; j < poly->nVrts; j++)
 				{
 					poly->pVrts[j].tu += uFrame;
 					poly->pVrts[j].tv += vFrame;

@@ -1852,7 +1852,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 				{
 					ASSERT(!(TILE_HAS_STRUCTURE(psTile)),
 					       "buildStructure: building %s at (%d, %d) but found %s already at (%d, %d)",
-					       pStructureType->pName, mapX, mapY, 
+					       pStructureType->pName, mapX, mapY,
 					       getTileStructure(mapX + width, mapY + breadth)->pStructureType->pName,
 					       mapX + width, mapY + breadth);
 				}
@@ -1860,7 +1860,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 				psTile->psObject = (BASE_OBJECT*)psBuilding;
 
 				// if it's a tall structure then flag it in the map.
-				if(psBuilding->sDisplay.imd->ymax > TALLOBJECT_YMAX) 
+				if(psBuilding->sDisplay.imd->ymax > TALLOBJECT_YMAX)
 				{
 					SET_TILE_TALLSTRUCTURE(psTile);
 				}
@@ -6523,110 +6523,76 @@ BOOL validStructResistance(STRUCTURE *psStruct)
 
 
 /*Access functions for the upgradeable stats of a structure*/
-UDWORD	structureBody(STRUCTURE *psStructure)
+UDWORD structureBody(const STRUCTURE *psStructure)
 {
-	STRUCTURE_STATS		*psStats;
-	UBYTE				player;//, i;
-
-	psStats = psStructure->pStructureType;
-	player = psStructure->player;
+	const STRUCTURE_STATS *psStats = psStructure->pStructureType;
+	const UBYTE player = psStructure->player;
 
 	switch(psStats->type)
 	{
-		//wall/defence structures
-	case REF_DEFENSE:
-	case REF_WALL:
-	case REF_WALLCORNER:
-	case REF_BLASTDOOR:
-		return (psStats->bodyPoints + (psStats->bodyPoints *
-			asWallDefenceUpgrade[player].body)/100);
-		break;
-	default:
-		//all other structures
-		return (structureBaseBody(psStructure) + (structureBaseBody(psStructure) *
-			asStructureUpgrade[player].body)/100);
-		break;
+		// wall/defence structures:
+		case REF_DEFENSE:
+		case REF_WALL:
+		case REF_WALLCORNER:
+		case REF_BLASTDOOR:
+			return psStats->bodyPoints + (psStats->bodyPoints * asWallDefenceUpgrade[player].body)/100;
+		// all other structures:
+		default:
+			return structureBaseBody(psStructure) + (structureBaseBody(psStructure) * asStructureUpgrade[player].body)/100;
 	}
 }
 
 
 /*this returns the Base Body points of a structure - regardless of upgrade*/
-UDWORD	structureBaseBody(STRUCTURE *psStructure)
+UDWORD structureBaseBody(const STRUCTURE *psStructure)
 {
-	STRUCTURE_STATS		*psStats;
-	UBYTE				player, capacity;
-	UDWORD				body;
+	const STRUCTURE_STATS *psStats = psStructure->pStructureType;
 
-	ASSERT( psStructure != NULL,
-		"structureBaseBody: invalid structure pointer" );
-
-	psStats = psStructure->pStructureType;
-	player = psStructure->player;
+	ASSERT( psStructure != NULL, "structureBaseBody: invalid structure pointer" );
 
 	switch(psStats->type)
 	{
-		//modules may be attached
-	case REF_FACTORY:
-	case REF_VTOL_FACTORY:
-		ASSERT( psStructure->pFunctionality != NULL,
-			"structureBaseBody: invalid structure functionality pointer" );
-		if (((FACTORY *)psStructure->pFunctionality)->capacity > 0)
-		{
-			body = 0;
-			capacity = ((FACTORY *)psStructure->pFunctionality)->capacity;
-			while (capacity)
+		// modules may be attached:
+		case REF_FACTORY:
+		case REF_VTOL_FACTORY:
+			ASSERT( psStructure->pFunctionality != NULL, "structureBaseBody: invalid structure functionality pointer" );
+			if (((FACTORY *)psStructure->pFunctionality)->capacity > 0)
 			{
-				body += asStructureStats[factoryModuleStat].bodyPoints;
-				capacity--;
+				//add on the default for the factory
+				return psStats->bodyPoints + asStructureStats[factoryModuleStat].bodyPoints * ((FACTORY*)psStructure->pFunctionality)->capacity;
 			}
-			//add on the default for the factory
-			body += psStats->bodyPoints;
-			return body;
-		}
-		else
-		{
-			//no modules
+			else
+			{
+				//no modules
+				return psStats->bodyPoints;
+			}
+		case REF_RESEARCH:
+			ASSERT( psStructure->pFunctionality != NULL, "structureBaseBody: invalid structure functionality pointer" );
+			if (((RESEARCH_FACILITY *)psStructure->pFunctionality)->capacity > 0)
+			{
+				//add on the default for the factory
+				return psStats->bodyPoints + asStructureStats[researchModuleStat].bodyPoints;
+			}
+			else
+			{
+				//no modules
+				return psStats->bodyPoints;
+			}
+		case REF_POWER_GEN:
+			ASSERT( psStructure->pFunctionality != NULL, "structureBaseBody: invalid structure functionality pointer" );
+			if (((POWER_GEN *)psStructure->pFunctionality)->capacity > 0)
+			{
+				//add on the default for the factory
+				return psStats->bodyPoints + asStructureStats[powerModuleStat].bodyPoints;
+			}
+			else
+			{
+				//no modules
+				return psStats->bodyPoints;
+			}
+		// all other structures:
+		default:
 			return psStats->bodyPoints;
-		}
-		break;
-	case REF_RESEARCH:
-		ASSERT( psStructure->pFunctionality != NULL,
-			"structureBaseBody: invalid structure functionality pointer" );
-		if (((RESEARCH_FACILITY *)psStructure->pFunctionality)->capacity > 0)
-		{
-			body = 0;
-			body = asStructureStats[researchModuleStat].bodyPoints;
-			//add on the default for the factory
-			body += psStats->bodyPoints;
-			return body;
-		}
-		else
-		{
-			//no modules
-			return psStats->bodyPoints;
-		}
-		break;
-	case REF_POWER_GEN:
-		ASSERT( psStructure->pFunctionality != NULL,
-			"structureBaseBody: invalid structure functionality pointer" );
-		if (((POWER_GEN *)psStructure->pFunctionality)->capacity > 0)
-		{
-			body = 0;
-			body = asStructureStats[powerModuleStat].bodyPoints;
-			//add on the default for the factory
-			body += psStats->bodyPoints;
-			return body;
-		}
-		else
-		{
-			//no modules
-			return psStats->bodyPoints;
-		}
-
-		//all other structures
-	default:
-		return psStats->bodyPoints;
-		break;
 	}
 }
 

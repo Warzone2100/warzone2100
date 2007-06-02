@@ -437,7 +437,7 @@ static UBYTE			ProductionRun = 1;
 static BASE_OBJECT		*apsPreviousObj[IOBJ_MAX];
 
 /* The jump position for each object on the base bar */
-static POINT			asJumpPos[IOBJ_MAX];
+static Vector2i asJumpPos[IOBJ_MAX];
 
 // whether to reopen the build menu
 //static BOOL				bReopenBuildMenu = FALSE;
@@ -2121,14 +2121,14 @@ INT_RETVAL intRunWidgets(void)
 						if (psStructure && psTile->psObject->type == OBJ_STRUCTURE)
 						{
 							removeStruct(psStructure, TRUE);
-						} 
-						else if (psFeature && psTile->psObject->type == OBJ_FEATURE) 
+						}
+						else if (psFeature && psTile->psObject->type == OBJ_FEATURE)
 						{
 							removeFeature(psFeature);
 						}
 						psStructure = NULL;
 					} else {
-						psStructure = buildStructure(psBuilding, structX, structY, 
+						psStructure = buildStructure(psBuilding, structX, structY,
 						                             selectedPlayer, FALSE);
 					}
 					if (psStructure)

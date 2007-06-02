@@ -63,12 +63,6 @@ typedef int32_t  SDWORD;
 
 typedef int BOOL;
 
-typedef struct
-{
-  int  x;
-  int  y;
-} POINT;
-
 #endif /* !WZ_OS_WIN */
 
 // If we are C99 compatible, the "bool" macro will be defined in <stdbool.h> (as _Bool)

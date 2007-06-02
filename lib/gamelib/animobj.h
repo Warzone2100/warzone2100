@@ -102,9 +102,6 @@ BOOL			animObj_Remove( ANIM_OBJECT **ppsObj, int iAnimID );
 ANIM_OBJECT *	animObj_GetFirst( void );
 ANIM_OBJECT *	animObj_GetNext( void );
 ANIM_OBJECT *	animObj_Find( void *pParentObj, int iAnimID );
-UWORD			animObj_GetFrame3D( ANIM_OBJECT *psObj, UWORD uwObj,
-									Vector3i *psPos, Vector3i *psVecRot,
-									Vector3i *psVecScale );
 
 /***************************************************************************/
 
