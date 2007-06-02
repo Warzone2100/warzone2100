@@ -1009,6 +1009,7 @@ static void movePeekNextTarget(DROID *psDroid, SDWORD *pX, SDWORD *pY)
 	}
 }
 
+// Watermelon:fix these magic number...the collision radius should be based on pie imd radius not some static int's...
 static	int mvPersRad = 20, mvCybRad = 30, mvSmRad = 40, mvMedRad = 50, mvLgRad = 60;
 
 // Get the radius of a base object for collision
@@ -1169,11 +1170,7 @@ static BOOL moveBlocked(DROID *psDroid)
 		psDroid->sMove.lastBump = 0;
 
 		// if the unit cannot see the next way point - reroute it's got stuck
-		if ( (
-
-			  bMultiPlayer ||
-
-			  (psDroid->player == selectedPlayer)) &&
+		if ( ( bMultiPlayer || (psDroid->player == selectedPlayer) ) &&
 			(psDroid->sMove.Position != psDroid->sMove.numPoints) &&
 			!fpathTileLOS((SDWORD)psDroid->x >> TILE_SHIFT, (SDWORD)psDroid->y >> TILE_SHIFT,
 						  psDroid->sMove.DestinationX >> TILE_SHIFT, psDroid->sMove.DestinationY >> TILE_SHIFT))
@@ -2141,8 +2138,6 @@ static BOOL moveReachedWayPoint(DROID *psDroid)
 		{
 			iRange = TILE_UNITS/4;
 		}
-
-
 
 		if (droidX*droidX + droidY*droidY < iRange*iRange)
 		{
@@ -3937,15 +3932,11 @@ void moveUpdateDroid(DROID *psDroid)
 //	ASSERT( psDroid->x != 0 && psDroid->y != 0,
 //		"moveUpdateUnit (end): unit at (0,0)" );
 
-
-
 	/* If it's sitting in water then it's got to go with the flow! */
 	if(TERRAIN_TYPE(mapTile(psDroid->x/TILE_UNITS,psDroid->y/TILE_UNITS)) == TER_WATER)
 	{
 		updateDroidOrientation(psDroid);
 	}
-
-
 
 	if( (psDroid->inFire && psDroid->type != DROID_PERSON) && psDroid->visible[selectedPlayer])
 	{

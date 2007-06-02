@@ -421,6 +421,8 @@ static BOOL fpathEndPointCallback(SDWORD x, SDWORD y, SDWORD dist)
 	return TRUE;
 }
 
+/* To plan a path from psObj's current position to 2D position Vector(targetX,targetY)
+without taking obstructions in to consideration */
 void fpathSetDirectRoute( BASE_OBJECT *psObj, SDWORD targetX, SDWORD targetY )
 {
 	MOVE_CONTROL *psMoveCntl;

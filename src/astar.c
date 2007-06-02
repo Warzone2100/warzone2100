@@ -1073,6 +1073,7 @@ static 	FP_NODE		*psNearest, *psRoute;
 		{
 			goto exit_error;
 		}
+		// estimate the estimated distance/moves
 		psCurr->est = (SWORD)fpathEstimate(psCurr->x, psCurr->y, tileFX, tileFY);
 		psOpen = NULL;
 		fpathOpenAdd(psCurr);
@@ -1107,8 +1108,18 @@ static 	FP_NODE		*psNearest, *psRoute;
 
 		astarOuter += 1;
 
+		// loop through possible moves in 8 directions to find a valid move
 		for(dir=0; dir<NUM_DIR; dir+=1)
 		{
+			/* make non-orthogonal-adjacent moves' dist a bit longer/cost a bit more
+			   5  6  7
+			     \|/
+			   4 -I- 0
+			     /|\  
+			   3  2  1
+			   odd:orthogonal-adjacent tiles even:non-orthogonal-adjacent tiles
+			   odd ones get extra 4 units(1.414 times) of distance/costs
+			*/
 			if (dir % 2 == 0)
 			{
 				currDist = psCurr->dist + 10;
