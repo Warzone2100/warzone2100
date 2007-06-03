@@ -42,17 +42,101 @@
 
 
 //holder for all functions
-FUNCTION	**asFunctions;
-UDWORD		numFunctions;
-
-/*Returns the Function type based on the string - used for reading in data */
-static UDWORD functionType(const char* pType);
-static BOOL storeName(FUNCTION* pFunction, const char* pNameToStore);
-static BOOL loadUpgradeFunction(const char *pData, UBYTE type);
+FUNCTION **asFunctions;
+UDWORD numFunctions;
 
 
 typedef BOOL (*LoadFunction)(const char *pData);
 static LoadFunction pLoadFunction[NUMFUNCTIONS];
+
+
+/*Returns the Function type based on the string - used for reading in data */
+static UDWORD functionType(const char* pType)
+{
+	if (!strcmp(pType, "Production"))
+	{
+		return PRODUCTION_TYPE;
+	}
+	if (!strcmp(pType, "Production Upgrade"))
+	{
+		return PRODUCTION_UPGRADE_TYPE;
+	}
+	if (!strcmp(pType, "Research"))
+	{
+		return RESEARCH_TYPE;
+	}
+	if (!strcmp(pType, "Research Upgrade"))
+	{
+		return RESEARCH_UPGRADE_TYPE;
+	}
+	if (!strcmp(pType, "Power Generator"))
+	{
+		return POWER_GEN_TYPE;
+	}
+	if (!strcmp(pType, "Resource"))
+	{
+		return RESOURCE_TYPE;
+	}
+	if (!strcmp(pType, "Repair Droid"))
+	{
+		return REPAIR_DROID_TYPE;
+	}
+	if (!strcmp(pType, "Weapon Upgrade"))
+	{
+		return WEAPON_UPGRADE_TYPE;
+	}
+	if (!strcmp(pType, "Wall Function"))
+	{
+		return WALL_TYPE;
+	}
+	if (!strcmp(pType, "Structure Upgrade"))
+	{
+		return STRUCTURE_UPGRADE_TYPE;
+	}
+	if (!strcmp(pType, "WallDefence Upgrade"))
+	{
+		return WALLDEFENCE_UPGRADE_TYPE;
+	}
+	if (!strcmp(pType, "Power Upgrade"))
+	{
+		return POWER_UPGRADE_TYPE;
+	}
+	if (!strcmp(pType, "Repair Upgrade"))
+	{
+		return REPAIR_UPGRADE_TYPE;
+	}
+	if (!strcmp(pType, "VehicleRepair Upgrade"))
+	{
+		return DROIDREPAIR_UPGRADE_TYPE;
+	}
+	if (!strcmp(pType, "VehicleECM Upgrade"))
+	{
+		return DROIDECM_UPGRADE_TYPE;
+	}
+	if (!strcmp(pType, "VehicleConst Upgrade"))
+	{
+		return DROIDCONST_UPGRADE_TYPE;
+	}
+	if (!strcmp(pType, "VehicleBody Upgrade"))
+	{
+		return DROIDBODY_UPGRADE_TYPE;
+	}
+	if (!strcmp(pType, "VehicleSensor Upgrade"))
+	{
+		return DROIDSENSOR_UPGRADE_TYPE;
+	}
+	if (!strcmp(pType, "ReArm"))
+	{
+		return REARM_TYPE;
+	}
+	if (!strcmp(pType, "ReArm Upgrade"))
+	{
+		return REARM_UPGRADE_TYPE;
+	}
+
+	ASSERT( FALSE, "Unknown Function Type: %s", pType );
+	return 0;
+}
 
 
 BOOL loadFunctionStats(const char *pFunctionData, UDWORD bufferSize)
@@ -114,7 +198,7 @@ static BOOL storeName(FUNCTION* pFunction, const char* pNameToStore)
 }
 
 
-BOOL loadProduction(const char *pData)
+static BOOL loadProduction(const char *pData)
 {
 	PRODUCTION_FUNCTION*	psFunction;
 	//UBYTE					propType;
@@ -204,7 +288,7 @@ BOOL loadProduction(const char *pData)
 	return TRUE;
 }
 
-BOOL loadProductionUpgradeFunction(const char *pData)
+static BOOL loadProductionUpgradeFunction(const char *pData)
 {
 	PRODUCTION_UPGRADE_FUNCTION*	psFunction;
 	char							functionName[MAX_NAME_SIZE];
@@ -272,7 +356,7 @@ BOOL loadProductionUpgradeFunction(const char *pData)
 	return TRUE;
 }
 
-BOOL loadResearchFunction(const char *pData)
+static BOOL loadResearchFunction(const char *pData)
 {
 	RESEARCH_FUNCTION*			psFunction;
 	char						functionName[MAX_NAME_SIZE];
@@ -306,7 +390,7 @@ BOOL loadResearchFunction(const char *pData)
 	return TRUE;
 }
 
-BOOL loadReArmFunction(const char *pData)
+static BOOL loadReArmFunction(const char *pData)
 {
 	REARM_FUNCTION*				psFunction;
 	char						functionName[MAX_NAME_SIZE];
@@ -341,78 +425,8 @@ BOOL loadReArmFunction(const char *pData)
 }
 
 
-BOOL loadResearchUpgradeFunction(const char *pData)
-{
-	if (!loadUpgradeFunction(pData, RESEARCH_UPGRADE_TYPE))
-	{
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
-BOOL loadPowerUpgradeFunction(const char *pData)
-{
-	if (!loadUpgradeFunction(pData, POWER_UPGRADE_TYPE))
-	{
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
-BOOL loadRepairUpgradeFunction(const char *pData)
-{
-	if (!loadUpgradeFunction(pData, REPAIR_UPGRADE_TYPE))
-	{
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
-BOOL loadDroidRepairUpgradeFunction(const char *pData)
-{
-	if (!loadUpgradeFunction(pData, DROIDREPAIR_UPGRADE_TYPE))
-	{
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
-BOOL loadDroidECMUpgradeFunction(const char *pData)
-{
-	if (!loadUpgradeFunction(pData, DROIDECM_UPGRADE_TYPE))
-	{
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
-BOOL loadDroidConstUpgradeFunction(const char *pData)
-{
-	if (!loadUpgradeFunction(pData, DROIDCONST_UPGRADE_TYPE))
-	{
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
-BOOL loadReArmUpgradeFunction(const char *pData)
-{
-	if (!loadUpgradeFunction(pData, REARM_UPGRADE_TYPE))
-	{
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
 //generic load function for upgrade type
-BOOL loadUpgradeFunction(const char *pData, UBYTE type)
+static BOOL loadUpgradeFunction(const char *pData, UBYTE type)
 {
 	char						functionName[MAX_NAME_SIZE];
 	UDWORD						modifier;
@@ -456,7 +470,45 @@ BOOL loadUpgradeFunction(const char *pData, UBYTE type)
 	return TRUE;
 }
 
-BOOL loadDroidBodyUpgradeFunction(const char *pData)
+
+
+static BOOL loadResearchUpgradeFunction(const char *pData)
+{
+	return loadUpgradeFunction(pData, RESEARCH_UPGRADE_TYPE);
+}
+
+static BOOL loadPowerUpgradeFunction(const char *pData)
+{
+	return loadUpgradeFunction(pData, POWER_UPGRADE_TYPE);
+}
+
+static BOOL loadRepairUpgradeFunction(const char *pData)
+{
+	return loadUpgradeFunction(pData, REPAIR_UPGRADE_TYPE);
+}
+
+static BOOL loadDroidRepairUpgradeFunction(const char *pData)
+{
+	return loadUpgradeFunction(pData, DROIDREPAIR_UPGRADE_TYPE);
+}
+
+static BOOL loadDroidECMUpgradeFunction(const char *pData)
+{
+	return loadUpgradeFunction(pData, DROIDECM_UPGRADE_TYPE);
+}
+
+static BOOL loadDroidConstUpgradeFunction(const char *pData)
+{
+	return loadUpgradeFunction(pData, DROIDCONST_UPGRADE_TYPE);
+}
+
+static BOOL loadReArmUpgradeFunction(const char *pData)
+{
+	return loadUpgradeFunction(pData, REARM_UPGRADE_TYPE);
+}
+
+
+static BOOL loadDroidBodyUpgradeFunction(const char *pData)
 {
 	DROIDBODY_UPGRADE_FUNCTION		*psFunction;
 	char							functionName[MAX_NAME_SIZE];
@@ -524,7 +576,7 @@ BOOL loadDroidBodyUpgradeFunction(const char *pData)
 	return TRUE;
 }
 
-BOOL loadDroidSensorUpgradeFunction(const char *pData)
+static BOOL loadDroidSensorUpgradeFunction(const char *pData)
 {
 	DROIDSENSOR_UPGRADE_FUNCTION	*psFunction;
 	char							functionName[MAX_NAME_SIZE];
@@ -571,7 +623,7 @@ BOOL loadDroidSensorUpgradeFunction(const char *pData)
     return TRUE;
 }
 
-BOOL loadWeaponUpgradeFunction(const char *pData)
+static BOOL loadWeaponUpgradeFunction(const char *pData)
 {
 	WEAPON_UPGRADE_FUNCTION*	psFunction;
 	char						functionName[MAX_NAME_SIZE],
@@ -644,7 +696,7 @@ BOOL loadWeaponUpgradeFunction(const char *pData)
     return TRUE;
 }
 
-BOOL loadStructureUpgradeFunction(const char *pData)
+static BOOL loadStructureUpgradeFunction(const char *pData)
 {
 	STRUCTURE_UPGRADE_FUNCTION  *psFunction;
 	char						functionName[MAX_NAME_SIZE];
@@ -695,7 +747,7 @@ BOOL loadStructureUpgradeFunction(const char *pData)
 	return TRUE;
 }
 
-BOOL loadWallDefenceUpgradeFunction(const char *pData)
+static BOOL loadWallDefenceUpgradeFunction(const char *pData)
 {
 	WALLDEFENCE_UPGRADE_FUNCTION  *psFunction;
 	char						functionName[MAX_NAME_SIZE];
@@ -745,7 +797,7 @@ BOOL loadWallDefenceUpgradeFunction(const char *pData)
 }
 
 
-BOOL loadPowerGenFunction(const char *pData)
+static BOOL loadPowerGenFunction(const char *pData)
 {
 	POWER_GEN_FUNCTION*			psFunction;
 	char						functionName[MAX_NAME_SIZE];
@@ -790,7 +842,7 @@ BOOL loadPowerGenFunction(const char *pData)
 	return TRUE;
 }
 
-BOOL loadResourceFunction(const char *pData)
+static BOOL loadResourceFunction(const char *pData)
 {
 	RESOURCE_FUNCTION			*psFunction;
 	char						functionName[MAX_NAME_SIZE];
@@ -826,7 +878,7 @@ BOOL loadResourceFunction(const char *pData)
 }
 
 
-BOOL loadRepairDroidFunction(const char *pData)
+static BOOL loadRepairDroidFunction(const char *pData)
 {
 	REPAIR_DROID_FUNCTION*		psFunction;
 	char						functionName[MAX_NAME_SIZE];
@@ -864,7 +916,7 @@ BOOL loadRepairDroidFunction(const char *pData)
 
 
 /*loads the corner stat to use for a particular wall stat */
-BOOL loadWallFunction(const char *pData)
+static BOOL loadWallFunction(const char *pData)
 {
 	WALL_FUNCTION			*psFunction;
 //	UDWORD					i;
@@ -1298,46 +1350,6 @@ void droidBodyUpgrade(FUNCTION *pFunction, DROID *psDroid)
     }
 }
 
-/*void armourUpgrade(FUNCTION *pFunction, STRUCTURE *psBuilding)
-{
-	psBuilding->armour = psBuilding->pStructureType->armourValue + (psBuilding->
-		pStructureType->armourValue *((	ARMOUR_UPGRADE_FUNCTION *)pFunction)->
-		armourPoints) / 100;
-}*/
-
-/*void repairUpgrade(FUNCTION *pFunction, STRUCTURE *psBuilding)
-{
-	psBuilding->repair = psBuilding->pStructureType->repairSystem + (psBuilding->
-		pStructureType->repairSystem *((REPAIR_UPGRADE_FUNCTION *)pFunction)->
-		repairPoints) / 100;
-}*/
-
-/*void bodyUpgrade(FUNCTION *pFunction, STRUCTURE *psBuilding)
-{
-	UDWORD	increment;
-
-	increment = (psBuilding->pStructureType->bodyPoints *((
-		BODY_UPGRADE_FUNCTION *)pFunction)->bodyPoints) / 100;
-
-	psBuilding->body += increment;
-	//upgrade the base body points
-	psBuilding->baseBodyPoints += increment;
-}*/
-
-/*void resistanceUpgrade(FUNCTION *pFunction, STRUCTURE *psBuilding)
-{
-	psBuilding->resistance = psBuilding->pStructureType->resistance + (psBuilding->
-		pStructureType->resistance *((RESISTANCE_UPGRADE_FUNCTION *)pFunction)->
-		resistancePoints) / 100;
-
-	//I'm not convinced this function is ever going to get used but if it does then
-	we will have to keep a copy of the baseResistancePoints per Structure like we do
-	with the body points, but I don't want to increase the size of STRUCTURE if we
-	don't need to! AB 01/07/98
-	ASSERT( TRUE,
-		"resistanceUpgrade - for this function to work, there has to be a code change" );
-}*/
-
 //upgrade the weapon stats for the correct subclass
 void weaponUpgrade(FUNCTION *pFunction, UBYTE player)
 {
@@ -1585,94 +1597,6 @@ BOOL FunctionShutDown(void)
 	return TRUE;
 }
 
-/*Returns the Function type based on the string - used for reading in data */
-static UDWORD functionType(const char* pType)
-{
-	if (!strcmp(pType, "Production"))
-	{
-		return PRODUCTION_TYPE;
-	}
-	if (!strcmp(pType, "Production Upgrade"))
-	{
-		return PRODUCTION_UPGRADE_TYPE;
-	}
-	if (!strcmp(pType, "Research"))
-	{
-		return RESEARCH_TYPE;
-	}
-	if (!strcmp(pType, "Research Upgrade"))
-	{
-		return RESEARCH_UPGRADE_TYPE;
-	}
-	if (!strcmp(pType, "Power Generator"))
-	{
-		return POWER_GEN_TYPE;
-	}
-	if (!strcmp(pType, "Resource"))
-	{
-		return RESOURCE_TYPE;
-	}
-	if (!strcmp(pType, "Repair Droid"))
-	{
-		return REPAIR_DROID_TYPE;
-	}
-	if (!strcmp(pType, "Weapon Upgrade"))
-	{
-		return WEAPON_UPGRADE_TYPE;
-	}
-	if (!strcmp(pType, "Wall Function"))
-	{
-		return WALL_TYPE;
-	}
-	if (!strcmp(pType, "Structure Upgrade"))
-	{
-		return STRUCTURE_UPGRADE_TYPE;
-	}
-	if (!strcmp(pType, "WallDefence Upgrade"))
-	{
-		return WALLDEFENCE_UPGRADE_TYPE;
-	}
-	if (!strcmp(pType, "Power Upgrade"))
-	{
-		return POWER_UPGRADE_TYPE;
-	}
-	if (!strcmp(pType, "Repair Upgrade"))
-	{
-		return REPAIR_UPGRADE_TYPE;
-	}
-	if (!strcmp(pType, "VehicleRepair Upgrade"))
-	{
-		return DROIDREPAIR_UPGRADE_TYPE;
-	}
-	if (!strcmp(pType, "VehicleECM Upgrade"))
-	{
-		return DROIDECM_UPGRADE_TYPE;
-	}
-	if (!strcmp(pType, "VehicleConst Upgrade"))
-	{
-		return DROIDCONST_UPGRADE_TYPE;
-	}
-	if (!strcmp(pType, "VehicleBody Upgrade"))
-	{
-		return DROIDBODY_UPGRADE_TYPE;
-	}
-	if (!strcmp(pType, "VehicleSensor Upgrade"))
-	{
-		return DROIDSENSOR_UPGRADE_TYPE;
-	}
-	if (!strcmp(pType, "ReArm"))
-	{
-		return REARM_TYPE;
-	}
-	if (!strcmp(pType, "ReArm Upgrade"))
-	{
-		return REARM_UPGRADE_TYPE;
-	}
-
-	ASSERT( FALSE, "Unknown Function Type: %s", pType );
-	return 0;
-}
-
 
 //array of functions pointers for each load function
 static LoadFunction pLoadFunction[NUMFUNCTIONS] =
@@ -1697,17 +1621,5 @@ static LoadFunction pLoadFunction[NUMFUNCTIONS] =
 	loadDroidConstUpgradeFunction,
 	loadReArmFunction,
 	loadReArmUpgradeFunction,
-	//loadDefensiveStructFunction,
-	//loadRadarMapFunction,
-	//loadPowerRegFunction,
-	//loadPowerRelayFunction,
-	//loadArmourUpgradeFunction,
-	//loadRepairUpgradeFunction,
-	//loadResistanceUpgradeFunction,
-//	loadFunction,
-//	loadFunction,
-//	loadFunction,
-	//loadBodyUpgradeFunction,
-	//loadHQFunction,
 };
 
