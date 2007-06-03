@@ -95,7 +95,7 @@ BOOL actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 	SECONDARY_STATE state;
 	WEAPON_STATS	*psStats;
 
-	CHECK_DROID(psDroid);
+	check_droid(psDroid);
 	if (psDroid->asWeaps[0].nStat == 0)
 	{
 		return FALSE;
@@ -169,7 +169,7 @@ BOOL actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 	SDWORD			dx, dy, dz, radSq, rangeSq, longRange;
 	WEAPON_STATS	*psStats;
 
-	CHECK_DROID(psDroid);
+	check_droid(psDroid);
 
 	if (psDroid->asWeaps[0].nStat == 0)
 	{
@@ -209,7 +209,7 @@ BOOL actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 	SDWORD			dx, dy, dz, radSq, rangeSq, minRange;
 	WEAPON_STATS	*psStats;
 
-	CHECK_DROID(psDroid);
+	check_droid(psDroid);
 
 	/* Watermelon:if I am a multi-turret droid */
 	if (psDroid->asWeaps[0].nStat == 0)
@@ -604,7 +604,7 @@ BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 {
 	WEAPON_STATS	*psStats;
 
-	CHECK_DROID(psDroid);
+	check_droid(psDroid);
 
 	if (psDroid->numWeaps == 0)
 	{
@@ -664,7 +664,7 @@ static void actionAddVtolAttackRun( DROID *psDroid )
 	SDWORD		iVx, iVy;
 #endif
 
-	CHECK_DROID(psDroid);
+	check_droid(psDroid);
 
 	if ( psDroid->psActionTarget[0] != NULL )
 	{
@@ -724,7 +724,7 @@ static void actionUpdateVtolAttack( DROID *psDroid )
 	WEAPON_STATS	*psWeapStats[DROID_MAXWEAPS];
 	UBYTE i;
 
-	CHECK_DROID(psDroid);
+	check_droid(psDroid);
 
 	/* don't do attack runs whilst returning to base */
 	if ( psDroid->order == DORDER_RTB )
@@ -786,7 +786,7 @@ static void actionUpdateTransporter( DROID *psDroid )
 	//this is a bit field
 	UBYTE	num_weapons = 0;
 
-	CHECK_DROID(psDroid);
+	check_droid(psDroid);
 
 	//check if transporter has arrived
 	if (updateTransporter(psDroid))
@@ -862,7 +862,7 @@ static void actionUpdateTransporter( DROID *psDroid )
 			}
 		}
 	}
-	CHECK_DROID(psDroid);
+	check_droid(psDroid);
 }
 
 
@@ -899,7 +899,7 @@ BOOL actionReachedBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psSta
 {
 	SDWORD		width, breadth, tx,ty, dx,dy;
 
-	CHECK_DROID(psDroid);
+	check_droid(psDroid);
 
 	// do all calculations in half tile units so that
 	// the droid moves to within half a tile of the target
@@ -951,7 +951,7 @@ BOOL actionDroidOnBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psSta
 {
 	SDWORD	width, breadth, tx,ty, dx,dy;
 
-	CHECK_DROID(psDroid);
+	check_droid(psDroid);
 
 	dx = (SDWORD)(psDroid->x >> (TILE_SHIFT));
 	dy = (SDWORD)(psDroid->y >> (TILE_SHIFT));
@@ -1009,7 +1009,7 @@ BOOL actionRouteBlockingPos(DROID *psDroid, SDWORD tx, SDWORD ty)
 	MAPTILE		*psTile;
 	STRUCTURE	*psWall;
 
-	CHECK_DROID(psDroid);
+	check_droid(psDroid);
 
 	if (vtolDroid(psDroid) ||
 		((psDroid->order != DORDER_MOVE) &&
@@ -1096,7 +1096,7 @@ void actionUpdateDroid(DROID *psDroid)
 	UBYTE	j,iVisible = 1;
 	BOOL	bHasTarget;
 
-	CHECK_DROID(psDroid);
+	check_droid(psDroid);
 
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 	ASSERT( psPropStats != NULL,
@@ -2659,7 +2659,7 @@ void actionUpdateDroid(DROID *psDroid)
 			}
 		}
 	}
-	CHECK_DROID(psDroid);
+	check_droid(psDroid);
 }
 
 /* Overall action function that is called by the specific action functions */
@@ -2673,7 +2673,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 	//Watermelon:added MinRangeResult;
 	UBYTE	i;
 
-	CHECK_DROID(psDroid);
+	check_droid(psDroid);
 
 	switch (psAction->action)
 	{
@@ -2997,7 +2997,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		ASSERT( FALSE, "actionUnitBase: unknown action" );
 		break;
 	}
-	CHECK_DROID(psDroid);
+	check_droid(psDroid);
 }
 
 
@@ -3070,7 +3070,7 @@ void moveToRearm(DROID *psDroid)
 	STRUCTURE	*psStruct;
 	UBYTE		chosen=0;
 
-	CHECK_DROID(psDroid);
+	check_droid(psDroid);
 
 	if (!vtolDroid(psDroid))
 	{
@@ -3156,7 +3156,7 @@ BOOL actionVTOLLandingPos(DROID *psDroid, UDWORD *px, UDWORD *py)
 	DROID	*psCurr;
 	BOOL	result;
 
-	CHECK_DROID(psDroid);
+	check_droid(psDroid);
 
 	/* Initial box dimensions and set iteration count to zero */
 	startX = endX = (SDWORD)*px >> TILE_SHIFT;

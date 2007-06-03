@@ -27,6 +27,7 @@
 #define _droid_h
 
 #include "objectdef.h"
+#include "lib/gamelib/gtime.h"
 
 #define OFF_SCREEN 9999		// world->screen check - alex
 
@@ -386,20 +387,30 @@ extern BOOL droidAudioTrackStopped( void *psObj );
 extern BOOL cyborgDroid(DROID *psDroid);
 
 /* assert if droid is bad */
+static inline void check_droid(DROID* droid)
+{
 #ifdef DEBUG
-#define CHECK_DROID(droid) \
-do { \
-	int i; \
-	assert(droid->type == OBJ_DROID); assert(droid->direction <= 360.0f && droid->direction >= 0.0f); \
-	assert(droid != NULL); assert(droid->numWeaps < DROID_MAXWEAPS); \
-	assert(droid->listSize < ORDER_LIST_MAX); \
-	for (i = 0; i < DROID_MAXWEAPS; i++) assert(droid->turretRotation[i] <= 360); \
-	for (i = 0; i < DROID_MAXWEAPS; i++) assert(droid->asWeaps[i].lastFired <= gameTime); \
-	for (i = 0; i < DROID_MAXWEAPS; i++) \
-		if (droid->psActionTarget[i]) assert(droid->psActionTarget[i]->direction >= 0.0f); \
-} while (FALSE);
-#else
-#define CHECK_DROID(x)
+	unsigned int i;
+
+	assert(droid != NULL);
+
+	// Make sure to know we actually have a droid in our hands
+	assert(droid->type == OBJ_DROID);
+
+	assert(droid->direction <= 360.0f && droid->direction >= 0.0f);
+	assert(droid->numWeaps < DROID_MAXWEAPS);
+	assert(droid->listSize < ORDER_LIST_MAX);
+
+	for (i = 0; i < DROID_MAXWEAPS; ++i)
+		assert(droid->turretRotation[i] <= 360);
+
+	for (i = 0; i < DROID_MAXWEAPS; ++i)
+		assert(droid->asWeaps[i].lastFired <= gameTime);
+
+	for (i = 0; i < DROID_MAXWEAPS; ++i)
+		if (droid->psActionTarget[i])
+			assert(droid->psActionTarget[i]->direction >= 0.0f);
 #endif
+}
 
 #endif
