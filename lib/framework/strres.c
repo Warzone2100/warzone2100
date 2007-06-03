@@ -242,12 +242,11 @@ BOOL strresGetIDNum(STR_RES *psRes, const char *pIDStr, UDWORD *pIDNum)
 
 
 /* Return the ID stored ID string that matches the string passed in */
-BOOL strresGetIDString(STR_RES *psRes, char *pIDStr, char **ppStoredID)
+BOOL strresGetIDString(STR_RES *psRes, const char *pIDStr, char **ppStoredID)
 {
-	STR_ID	*psID;
+	STR_ID *psID;
 
-	ASSERT( psRes != NULL,
-		"strresGetIDString: Invalid string res pointer" );
+	ASSERT( psRes != NULL, "strresGetIDString: Invalid string res pointer" );
 
 	psID = (STR_ID*)TREAP_FIND(psRes->psIDTreap, (void*)pIDStr);
 	if (!psID)
@@ -257,7 +256,6 @@ BOOL strresGetIDString(STR_RES *psRes, char *pIDStr, char **ppStoredID)
 	}
 
 	*ppStoredID = psID->pIDStr;
-
 	return TRUE;
 }
 
@@ -390,7 +388,7 @@ BOOL strresLoad(STR_RES* psRes, const char* fileName)
 	PHYSFS_file* fileHandle = PHYSFS_openRead(fileName);
 	if (!fileHandle)
 	{
-		debug(LOG_ERROR, "strresLoadFile: PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, PHYSFS_getLastError());		
+		debug(LOG_ERROR, "strresLoadFile: PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, PHYSFS_getLastError());
 		return FALSE;
 	}
 
@@ -433,25 +431,23 @@ void stringCpy(char *pDest, const char *pSrc)
 
 
 /* Get the ID number for a string*/
-UDWORD strresGetIDfromString(STR_RES *psRes, char *pString)
+UDWORD strresGetIDfromString(STR_RES *psRes, const char *pString)
 {
-	STR_BLOCK	*psBlock, *psNext = NULL;
-	UDWORD		i;
+	STR_BLOCK *psBlock, *psNext = NULL;
+	unsigned int i;
 
 	ASSERT( psRes != NULL,
 		"strresGetID: Invalid string res pointer" );
 
 	// Search through all the blocks to find the string
-	for(psBlock = psRes->psStrings; psBlock; psBlock=psNext)
+	for(psBlock = psRes->psStrings; psBlock != NULL; psBlock=psNext)
 	{
-		for(i=psBlock->idStart; i<=psBlock->idEnd; i++)
+		for(i = psBlock->idStart; i <= psBlock->idEnd; i++)
 		{
-			if (psBlock->apStrings[i - psBlock->idStart])
+			if ( psBlock->apStrings[i - psBlock->idStart] &&
+				!strcmp(psBlock->apStrings[i - psBlock->idStart], pString) )
 			{
-				if (!strcmp(psBlock->apStrings[i - psBlock->idStart], pString))
-				{
-					return i;
-				}
+				return i;
 			}
 		}
 		psNext = psBlock->psNext;

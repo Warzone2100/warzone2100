@@ -159,22 +159,16 @@ static void featureType(FEATURE_STATS* psFeature, char *pType)
 }
 
 /* Load the feature stats */
-BOOL loadFeatureStats(char *pFeatureData, UDWORD bufferSize)
+BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 {
-	char				*pData;
 	FEATURE_STATS		*psFeature;
-	UDWORD				i;
+	unsigned int		i;
 	char				featureName[MAX_NAME_SIZE], GfxFile[MAX_NAME_SIZE],
 						type[MAX_NAME_SIZE];
-						//compName[MAX_NAME_SIZE], compType[MAX_NAME_SIZE];
-
-	//keep the start so we release it at the end
-	pData = pFeatureData;
 
 	numFeatureStats = numCR(pFeatureData, bufferSize);
 
-	asFeatureStats = (FEATURE_STATS *)malloc(sizeof(FEATURE_STATS)*
-		numFeatureStats);
+	asFeatureStats = (FEATURE_STATS*)malloc(sizeof(FEATURE_STATS) * numFeatureStats);
 
 	if (asFeatureStats == NULL)
 	{
@@ -184,32 +178,26 @@ BOOL loadFeatureStats(char *pFeatureData, UDWORD bufferSize)
 	}
 
 	psFeature = asFeatureStats;
-	for (i=0; i < numFeatureStats; i++)
+	for (i = 0; i < numFeatureStats; i++)
 	{
-		UDWORD Width,Breadth;
+		UDWORD Width, Breadth;
 
 		memset(psFeature, 0, sizeof(FEATURE_STATS));
+
 		featureName[0] = '\0';
 		GfxFile[0] = '\0';
 		type[0] = '\0';
-		//read the data into the storage - the data is delimeted using comma's
 
-/*		sscanf(pFeatureData,"%[^','],%d,%d,%d,%d,%d,%[^','],%[^','],%[^','],%[^','],%d,%d,%d",
-			&featureName, &psFeature->baseWidth, &psFeature->baseBreadth,
-			&psFeature->damageable, &psFeature->armour, &psFeature->body,
-			&GfxFile, &type, &compType, &compName,
-			&psFeature->tileDraw, &psFeature->allowLOS, &psFeature->visibleAtStart);*/
+		//read the data into the storage - the data is delimeted using comma's
 		sscanf(pFeatureData,"%[^','],%d,%d,%d,%d,%d,%[^','],%[^','],%d,%d,%d",
 			featureName, &Width, &Breadth,
 			&psFeature->damageable, &psFeature->armour, &psFeature->body,
 			GfxFile, type, &psFeature->tileDraw, &psFeature->allowLOS,
 			&psFeature->visibleAtStart);
 
-
 		// These are now only 16 bits wide - so we need to copy them
-		psFeature->baseWidth=(UWORD)Width;
-		psFeature->baseBreadth=(UWORD)Breadth;
-
+		psFeature->baseWidth = (UWORD)Width;
+		psFeature->baseBreadth = (UWORD)Breadth;
 
 		if (!allocateName(&psFeature->pName, featureName))
 		{
@@ -221,11 +209,7 @@ BOOL loadFeatureStats(char *pFeatureData, UDWORD bufferSize)
 
 		//need to know which is the wrecked droid and wrecked structure for later use
 		//the last stat of each type is used
-		/*if (psFeature->subType == FEAT_DROID)
-		{
-			droidFeature = i;
-		}
-		else */if (psFeature->subType == FEAT_BUILD_WRECK)
+		if (psFeature->subType == FEAT_BUILD_WRECK)
 		{
 			structFeature = i;
 		}
@@ -244,13 +228,6 @@ BOOL loadFeatureStats(char *pFeatureData, UDWORD bufferSize)
 			return FALSE;
 		}
 
-		//sort out the component - if any
-		/*if (strcmp(compType, "0"))
-		{
-			psFeature->compType = componentType(compType);
-			psFeature->compIndex = getCompFromName(psFeature->compType, compName);
-		}*/
-
 		psFeature->ref = REF_FEATURE_START + i;
 
 		//increment the pointer to the start of the next record
@@ -259,362 +236,7 @@ BOOL loadFeatureStats(char *pFeatureData, UDWORD bufferSize)
 		psFeature++;
 	}
 
-//	free(pData);
-
 	return TRUE;
-
-	/* Allocate the stats Array */
-/*	numFeatureStats = 19;
-	asFeatureStats = (FEATURE_STATS *)malloc(sizeof(FEATURE_STATS) * numFeatureStats);
-	if (!asFeatureStats)
-	{
-		DBERROR(("Out of memory"));
-		return FALSE;
-	}
-	memset(asFeatureStats, 0, sizeof(FEATURE_STATS) * numFeatureStats);
-
-	// Create some simple stats
-	ref = REF_FEATURE_START;
-	psStats = asFeatureStats;
-	psStats->pName = "Mesa Feature";
-	psStats->ref = ref ++;
-	psStats->subType = FEAT_MESA;
-	psStats->baseWidth = 6;
-	psStats->baseBreadth = 4;
-	psStats->tileDraw = FALSE;
-	psStats->allowLOS = FALSE;
-	psStats->psImd = resGetData("IMD", "mimesa1.imd");
-
-	psStats++;
-	psStats->pName = "Mesa Feature 2";
-	psStats->ref = ref ++;
-	psStats->subType = FEAT_MESA2;
-	psStats->baseWidth = 5;
-	psStats->baseBreadth = 4;
-	psStats->tileDraw = FALSE;
-	psStats->allowLOS = FALSE;
-	psStats->psImd = resGetData("IMD", "mimesa2.imd");
-
-	psStats++;
-	psStats->pName = "Cliff";
-	psStats->ref = ref ++;
-	psStats->subType = FEAT_CLIFF;
-	psStats->baseWidth = 7;
-	psStats->baseBreadth = 7;
-	psStats->tileDraw = FALSE;
-	psStats->allowLOS = FALSE;
-	psStats->psImd = resGetData("IMD", "micliff.imd");
-
-	psStats++;
-	psStats->pName = "Stack";
-	psStats->ref = ref ++;
-	psStats->subType = FEAT_STACK;
-	psStats->baseWidth = 2;
-	psStats->baseBreadth = 2;
-	psStats->tileDraw = FALSE;
-	psStats->allowLOS = FALSE;
-	psStats->psImd = resGetData("IMD", "mistack.imd");
-
-	psStats++;
-	psStats->pName = "Wrecked Building";
-	psStats->ref = ref ++;
-	psStats->subType = FEAT_BUILD_WRECK1;
-	psStats->baseWidth = 1;
-	psStats->baseBreadth = 1;
-	psStats->tileDraw = FALSE;
-	psStats->allowLOS = TRUE;
-	psStats->psImd = resGetData("IMD", "miwreck.imd");
-
-	psStats++;
-	psStats->pName = "Wrecked Hovercraft";
-	psStats->ref = ref ++;
-	psStats->subType = FEAT_HOVER;
-	psStats->baseWidth = 1;
-	psStats->baseBreadth = 1;
-	psStats->tileDraw = FALSE;
-	psStats->allowLOS = TRUE;
-	psStats->psImd = resGetData("IMD", "miarthov.imd");
-
-	// Find the hover component for it
-	psStats->compType = COMP_PROPULSION;
-	for(comp=0; comp<numPropulsionStats; comp++)
-	{
-		if (strcmp(asPropulsionStats[comp].pName, "Hover Propulsion") == 0)
-		{
-			psStats->compIndex = comp;
-		}
-	}
-
-	psStats++;
-	psStats->pName = "Wrecked Tank";
-	psStats->ref = ref ++;
-	psStats->subType = FEAT_TANK;
-	psStats->baseWidth = 1;
-	psStats->baseBreadth = 1;
-	psStats->tileDraw = FALSE;
-	psStats->allowLOS = TRUE;
-	psStats->psImd = resGetData("IMD", "miartecm.imd");
-
-	// Find the ecm component for it
-	psStats->compType = COMP_ECM;
-	for(comp=0; comp<numECMStats; comp++)
-	{
-		if (strcmp(asECMStats[comp].pName, "Heavy ECM #1") == 0)
-		{
-			psStats->compIndex = comp;
-		}
-	}
-
-	psStats++;
-	psStats->pName = "Generic Artefact";
-	psStats->ref = ref ++;
-	psStats->subType = FEAT_GEN_ARTE;
-	psStats->baseWidth = 1;
-	psStats->baseBreadth = 1;
-	psStats->tileDraw = FALSE;
-	psStats->allowLOS = FALSE;
-	psStats->psImd = resGetData("IMD", "miartgen.imd");
-
-	psStats++;
-	psStats->pName = "Oil Resource";
-	psStats->ref = ref ++;
-	psStats->subType = FEAT_OIL_RESOURCE;
-	psStats->baseWidth = 1;
-	psStats->baseBreadth = 1;
-	psStats->tileDraw = TRUE;
-	psStats->allowLOS = TRUE;
-	psStats->psImd = resGetData("IMD", "mislick.imd");
-
-	psStats++;
-	psStats->pName = "Boulder 1";
-	psStats->ref = ref ++;
-	psStats->subType = FEAT_BOULDER1;
-	psStats->baseWidth = 1;
-	psStats->baseBreadth = 1;
-	psStats->tileDraw = FALSE;
-	psStats->allowLOS = FALSE;
-	psStats->psImd = resGetData("IMD", "mibould1.imd");
-
-	psStats++;
-	psStats->pName = "Boulder 2";
-	psStats->ref = ref ++;
-	psStats->subType = FEAT_BOULDER2;
-	psStats->baseWidth = 1;
-	psStats->baseBreadth = 1;
-	psStats->tileDraw = FALSE;
-	psStats->allowLOS = FALSE;
-	psStats->psImd = resGetData("IMD", "mibould2.imd");
-
-	psStats++;
-	psStats->pName = "Boulder 3";
-	psStats->ref = ref ++;
-	psStats->subType = FEAT_BOULDER3;
-	psStats->baseWidth = 1;
-	psStats->baseBreadth = 1;
-	psStats->tileDraw = FALSE;
-	psStats->allowLOS = FALSE;
-	psStats->psImd = resGetData("IMD", "mibould3.imd");
-
-	psStats++;
-	psStats->pName = "Futuristic Car";
-	psStats->ref = ref ++;
-	psStats->subType = FEAT_FUTCAR;
-	psStats->baseWidth = 1;
-	psStats->baseBreadth = 1;
-	psStats->tileDraw = FALSE;
-	psStats->allowLOS = FALSE;
-	psStats->psImd = resGetData("IMD", "mifutcar.imd");
-
-	psStats++;
-	psStats->pName = "Fururistic Van";
-	psStats->ref = ref ++;
-	psStats->subType = FEAT_FUTVAN;
-	psStats->baseWidth = 1;
-	psStats->baseBreadth = 1;
-	psStats->tileDraw = FALSE;
-	psStats->allowLOS = FALSE;
-	psStats->psImd = resGetData("IMD", "mifutvan.imd");
-
-	psStats++;
-	psStats->pName = "Wrecked Droid Hub";
-	psStats->ref = ref ++;
-	psStats->subType = FEAT_DROID;
-	psStats->baseWidth = 1;
-	psStats->baseBreadth = 1;
-	psStats->tileDraw = TRUE;
-	psStats->allowLOS = TRUE;
-	psStats->psImd = resGetData("IMD", "drwreck.imd");
-	//Value is stored for easy access to this feature in destroyDroid()
-	droidFeature = psStats - asFeatureStats;
-
-	psStats++;
-	//Value is stored for easy access to this feature in destroyStruct
-	structFeature = psStats - asFeatureStats;
-	psStats->pName = "Wrecked Building1";
-	psStats->ref = ref++;
-	psStats->subType = FEAT_BUILD_WRECK1;
-	psStats->baseWidth = 1;
-	psStats->baseBreadth = 1;
-	psStats->tileDraw = FALSE;
-	psStats->allowLOS = TRUE;
-	psStats->psImd = resGetData("IMD", "miwrek1.imd");
-
-	psStats++;
-	psStats->pName = "Wrecked Building2";
-	psStats->ref = ref++;
-	psStats->subType = FEAT_BUILD_WRECK2;
-	psStats->baseWidth = 1;
-	psStats->baseBreadth = 1;
-	psStats->tileDraw = FALSE;
-	psStats->allowLOS = TRUE;
-	psStats->psImd = resGetData("IMD", "miwrek2.imd");
-
-	psStats++;
-	psStats->pName = "Wrecked Building3";
-	psStats->ref = ref++;
-	psStats->subType = FEAT_BUILD_WRECK3;
-	psStats->baseWidth = 1;
-	psStats->baseBreadth = 1;
-	psStats->tileDraw = FALSE;
-	psStats->allowLOS = TRUE;
-	psStats->psImd = resGetData("IMD", "miwrek3.imd");
-
-	psStats++;
-	psStats->pName = "Wrecked Building4";
-	psStats->ref = ref++;
-	psStats->subType = FEAT_BUILD_WRECK4;
-	psStats->baseWidth = 1;
-	psStats->baseBreadth = 1;
-	psStats->tileDraw = FALSE;
-	psStats->allowLOS = TRUE;
-	psStats->psImd = resGetData("IMD", "miwrek4.imd");
-
-	// These are test features for the LOS code
-	psStats++;
-	psStats->pName = "Cube 1,1";
-	psStats->ref = ref++;
-	psStats->subType = FEAT_LOS_OBJ;
-	psStats->baseWidth = 1;
-	psStats->baseBreadth = 1;
-	psStats->tileDraw = TRUE;
-	psStats->allowLOS = FALSE;
-	psStats->psImd = resGetData("IMD", "cube_1_1.imd");
-
-	psStats++;
-	psStats->pName = "Cube 1,3";
-	psStats->ref = ref++;
-	psStats->subType = FEAT_LOS_OBJ;
-	psStats->baseWidth = 1;
-	psStats->baseBreadth = 1;
-	psStats->tileDraw = TRUE;
-	psStats->allowLOS = FALSE;
-	psStats->psImd = resGetData("IMD", "cube_1_3.imd");
-
-	psStats++;
-	psStats->pName = "Cube 2,1";
-	psStats->ref = ref++;
-	psStats->subType = FEAT_LOS_OBJ;
-	psStats->baseWidth = 2;
-	psStats->baseBreadth = 2;
-	psStats->tileDraw = TRUE;
-	psStats->allowLOS = FALSE;
-	psStats->psImd = resGetData("IMD", "cube_2_1.imd");
-
-	psStats++;
-	psStats->pName = "Cube 2,3";
-	psStats->ref = ref++;
-	psStats->subType = FEAT_LOS_OBJ;
-	psStats->baseWidth = 2;
-	psStats->baseBreadth = 2;
-	psStats->tileDraw = TRUE;
-	psStats->allowLOS = FALSE;
-	psStats->psImd = resGetData("IMD", "cube_2_3.imd");
-
-	psStats++;
-	psStats->pName = "Cube 3,1";
-	psStats->ref = ref++;
-	psStats->subType = FEAT_LOS_OBJ;
-	psStats->baseWidth = 3;
-	psStats->baseBreadth = 3;
-	psStats->tileDraw = TRUE;
-	psStats->allowLOS = FALSE;
-	psStats->psImd = resGetData("IMD", "cube_3_1.imd");
-
-	psStats++;
-	psStats->pName = "Cube 3,3";
-	psStats->ref = ref++;
-	psStats->subType = FEAT_LOS_OBJ;
-	psStats->baseWidth = 3;
-	psStats->baseBreadth = 3;
-	psStats->tileDraw = TRUE;
-	psStats->allowLOS = FALSE;
-	psStats->psImd = resGetData("IMD", "cube_3_3.imd");
-
-	psStats++;
-	psStats->pName = "Cyl 1,1";
-	psStats->ref = ref++;
-	psStats->subType = FEAT_LOS_OBJ;
-	psStats->baseWidth = 1;
-	psStats->baseBreadth = 1;
-	psStats->tileDraw = TRUE;
-	psStats->allowLOS = FALSE;
-	psStats->psImd = resGetData("IMD", "cyl_1_1.imd");
-
-	psStats++;
-	psStats->pName = "Cyl 1,3";
-	psStats->ref = ref++;
-	psStats->subType = FEAT_LOS_OBJ;
-	psStats->baseWidth = 1;
-	psStats->baseBreadth = 1;
-	psStats->tileDraw = TRUE;
-	psStats->allowLOS = FALSE;
-	psStats->psImd = resGetData("IMD", "cyl_1_3.imd");
-
-	psStats++;
-	psStats->pName = "Cyl 2,1";
-	psStats->ref = ref++;
-	psStats->subType = FEAT_LOS_OBJ;
-	psStats->baseWidth = 2;
-	psStats->baseBreadth = 2;
-	psStats->tileDraw = TRUE;
-	psStats->allowLOS = FALSE;
-	psStats->psImd = resGetData("IMD", "cyl_2_1.imd");
-
-	psStats++;
-	psStats->pName = "Cyl 2,3";
-	psStats->ref = ref++;
-	psStats->subType = FEAT_LOS_OBJ;
-	psStats->baseWidth = 2;
-	psStats->baseBreadth = 2;
-	psStats->tileDraw = TRUE;
-	psStats->allowLOS = FALSE;
-	psStats->psImd = resGetData("IMD", "cyl_2_3.imd");
-
-	psStats++;
-	psStats->pName = "Cyl 3,1";
-	psStats->ref = ref++;
-	psStats->subType = FEAT_LOS_OBJ;
-	psStats->baseWidth = 3;
-	psStats->baseBreadth = 3;
-	psStats->tileDraw = TRUE;
-	psStats->allowLOS = FALSE;
-	psStats->psImd = resGetData("IMD", "cyl_3_1.imd");
-
-	psStats++;
-	psStats->pName = "Cyl 3,3";
-	psStats->ref = ref++;
-	psStats->subType = FEAT_LOS_OBJ;
-	psStats->baseWidth = 3;
-	psStats->baseBreadth = 3;
-	psStats->tileDraw = TRUE;
-	psStats->allowLOS = FALSE;
-	psStats->psImd = resGetData("IMD", "cyl_3_3.imd");
-
-	psStats++;
-	ASSERT( psStats - asFeatureStats == (SDWORD)numFeatureStats,
-		"loadFeatureStats: incorrect number of features" );
-
-	return TRUE;*/
 }
 
 /* Release the feature stats memory */
@@ -1159,18 +781,17 @@ void destroyFeature(FEATURE *psDel)
 	removeFeature(psDel);
 }
 
-SDWORD getFeatureStatFromName( char *pName )
+
+SDWORD getFeatureStatFromName( const char *pName )
 {
-	UDWORD			inc;
-	FEATURE_STATS	*psStat;
+	unsigned int inc;
+	FEATURE_STATS *psStat;
 
 #ifdef RESOURCE_NAMES
-
 	if (!getResourceName(pName))
 	{
 		return -1;
 	}
-
 #endif
 
 	for (inc = 0; inc < numFeatureStats; inc++)
@@ -1183,6 +804,7 @@ SDWORD getFeatureStatFromName( char *pName )
 	}
 	return -1;
 }
+
 
 /*looks around the given droid to see if there is any building
 wreckage to clear*/

@@ -135,9 +135,8 @@ static COMP_BASE_STATS * getComponentDetails(char *pName, char *pCompName);
 static void replaceComponent(COMP_BASE_STATS *pNewComponent, COMP_BASE_STATS *pOldComponent,
 					  UBYTE player);
 static BOOL checkResearchName(RESEARCH *psRes, UDWORD numStats);
-//static void enableSelfRepair(UBYTE player);
 
-static char *getResearchName(RESEARCH *pResearch)
+static const char *getResearchName(RESEARCH *pResearch)
 {
 	return(getName(pResearch->pName));
 }
@@ -274,53 +273,39 @@ BOOL researchInitVars(void)
 
 
 /*Load the research stats from the file exported from Access*/
-BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
+BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 {
-	char		        *pStartResearchData;
-	RESEARCH	        *pResearch;
-    COMP_BASE_STATS     *psComp;
-	SDWORD				structID;
-	UDWORD		        researchCount = 0,i,keyTopic, techCode, resPoints;
-	char		        ResearchName[MAX_NAME_SIZE];
-	char		        msgName[MAX_STR_SIZE], iconID[MAX_NAME_SIZE];
-	char		        imdName[MAX_NAME_SIZE],	imdName2[MAX_NAME_SIZE];
-	char		        structName[MAX_NAME_SIZE], compName[MAX_NAME_SIZE],
-                        compType[MAX_STR_SIZE];
-
-	//reserve the start of the data
-	pStartResearchData = pResearchData;
-
-	researchCount = numCR(pResearchData, bufferSize);
-	/*asResearch = (RESEARCH *)malloc(sizeof(RESEARCH)*researchCount);
-	if (asResearch == NULL)
-	{
-		DBERROR(("Research Stats - Out of memory"));
-		return FALSE;
-	}*/
+	const unsigned int researchCount = numCR(pResearchData, bufferSize);
+	RESEARCH *pResearch;
+	COMP_BASE_STATS *psComp;
+	SDWORD structID;
+	UDWORD i, keyTopic, techCode, resPoints;
+	char ResearchName[MAX_NAME_SIZE];
+	char msgName[MAX_STR_SIZE], iconID[MAX_NAME_SIZE];
+	char imdName[MAX_NAME_SIZE], imdName2[MAX_NAME_SIZE];
+	char structName[MAX_NAME_SIZE], compName[MAX_NAME_SIZE],
+		compType[MAX_STR_SIZE];
 
 	numResearch = researchCount;
-	//ASSERT( (numResearch) < REF_RANGE, "Too many ResearchStats!!" );
-    ASSERT( (numResearch) <= MAX_RESEARCH,
-        "Too many ResearchStats!! - max allowed %d", MAX_RESEARCH );
 
-    //init all the counts
-    numResearchPR = numResearchFunc = numResearchArteRed = numResearchArteRes =
-        numResearchArteRep = 0;
-    numResearchStructPR = numResearchStructRed = numResearchStructRes = 0;
+    ASSERT( (numResearch) <= MAX_RESEARCH, "Too many ResearchStats!! - max allowed %d", MAX_RESEARCH );
+
+	//init all the counts
+	numResearchPR = numResearchFunc = numResearchArteRed = numResearchArteRes = numResearchArteRep = 0;
+	numResearchStructPR = numResearchStructRed = numResearchStructRes = 0;
 
 	//get the start of the research storage
 	pResearch = asResearch;
 
-	for (i=0; i < researchCount; i++)
+	for (i = 0; i < researchCount; i++)
 	{
 		memset(pResearch, 0, sizeof(RESEARCH));
 
 		//read the data into the storage - the data is delimeted using comma's
 		ResearchName[0] = '\0';
 		sscanf(pResearchData,"%[^','],", ResearchName);
+
 		//allocate storage for the name
-
-
 		if (!allocateName(&pResearch->pName, ResearchName))
 		{
 			return FALSE;
@@ -349,49 +334,6 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 		ResearchName[0] = '\0';
 		sscanf(pResearchData,"%[^','],", ResearchName);
 
-        //subGroup value now holds which category the research comes under for yet another icon!
-		// store subgroup. may differ from tech level at some point?
-		/*if(strcmp(ResearchName,"Sub Group One") == 0)
-		{
-			pResearch->subGroup	= 1;
-		}
-		else if(strcmp(ResearchName,"Sub Group Two") == 0)
-		{
-			pResearch->subGroup	= 2;
-		}
-		else if(strcmp(ResearchName,"Sub Group Three") == 0)
-		{
-			pResearch->subGroup	= 3;
-		}
-		// now support for future 'add on packs' (hey I can be hopeful).
-		else if(strcmp(ResearchName,"Sub Group Four") == 0)
-		{
-			pResearch->subGroup	= 4;
-		}
-		else if(strcmp(ResearchName,"Sub Group Five") == 0)
-		{
-			pResearch->subGroup	= 5;
-		}
-		else if(strcmp(ResearchName,"Sub Group Six") == 0)
-		{
-			pResearch->subGroup	= 6;
-		}
-		else if(strcmp(ResearchName,"Sub Group Seven") == 0)
-		{
-			pResearch->subGroup	= 7;
-		}
-		else if(strcmp(ResearchName,"Sub Group Eight") == 0)
-		{
-			pResearch->subGroup	= 8;
-		}
-		else if(strcmp(ResearchName,"Sub Group Nine") == 0)
-		{
-			pResearch->subGroup	= 9;
-		}
-		else
-		{
-			DBERROR(("Unknown Research Subgroup."));
-		}*/
 		if (strcmp(ResearchName, "0"))
 		{
 			pResearch->subGroup = setIconID(ResearchName, pResearch->pName);
@@ -429,15 +371,14 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 				&numRedStructs, &numStructResults,
 				&numRedArtefacts, &numArteResults);
 
-			pResearch->numPRRequired=(UBYTE)numPRRequired;
-			pResearch->numFunctions=(UBYTE)numFunctions;
-			pResearch->numStructures=(UBYTE)numStructures;
-			pResearch->numRedStructs=(UBYTE)numRedStructs;
+			pResearch->numPRRequired = (UBYTE)numPRRequired;
+			pResearch->numFunctions = (UBYTE)numFunctions;
+			pResearch->numStructures = (UBYTE)numStructures;
+			pResearch->numRedStructs = (UBYTE)numRedStructs;
 
-			pResearch->numStructResults=(UBYTE)numStructResults;
-			pResearch->numRedArtefacts=(UBYTE)numRedArtefacts;
-			pResearch->numArteResults=(UBYTE)numArteResults;
-
+			pResearch->numStructResults = (UBYTE)numStructResults;
+			pResearch->numRedArtefacts = (UBYTE)numRedArtefacts;
+			pResearch->numArteResults = (UBYTE)numArteResults;
 		}
 
 		//set keytopic flag
@@ -481,38 +422,38 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 		//get the IMDs used in the interface
 		if (strcmp(structName, "0"))
 		{
-            //find the structure stat
-            structID = getStructStatFromName(structName);
-            if (structID >= 0)
-            {
-                pResearch->psStat = (BASE_STATS *)(asStructureStats + structID);
-            }
-            else
-            {
+			//find the structure stat
+			structID = getStructStatFromName(structName);
+			if (structID >= 0)
+			{
+				pResearch->psStat = (BASE_STATS *)(asStructureStats + structID);
+			}
+			else
+			{
 				debug( LOG_ERROR, "Cannot find the structure Stat for Research %s", getResearchName(pResearch) );
 				abort();
-                return FALSE;
-            }
-        }
-        else if (strcmp(compName, "0"))
+				return FALSE;
+			}
+		}
+		else if (strcmp(compName, "0"))
 		{
-            //find the component stat
-            psComp = getComponentDetails(compType, compName);
-	        if (psComp != NULL)
-	        {
-		        pResearch->psStat = (BASE_STATS *)psComp;
-	        }
-            else
-            {
+			//find the component stat
+			psComp = getComponentDetails(compType, compName);
+			if (psComp != NULL)
+			{
+				pResearch->psStat = (BASE_STATS *)psComp;
+			}
+			else
+			{
 				debug( LOG_ERROR, "Cannot find the component Stat for Research %s", getResearchName(pResearch) );
 				abort();
-                return FALSE;
-            }
-        }
-        else
-        {
-            pResearch->psStat = NULL;
-        }
+				return FALSE;
+			}
+		}
+		else
+		{
+			pResearch->psStat = NULL;
+		}
 		if (strcmp(imdName, "0"))
 		{
 			pResearch->pIMD = (iIMDShape *) resGetData("IMD", imdName);
@@ -563,195 +504,149 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 		{
 			/*pResearch->pRedArtefacts = (COMP_BASE_STATS **) malloc(pResearch->
 				numRedArtefacts*sizeof(COMP_BASE_STATS *));
-	    	if (pResearch->pRedArtefacts == NULL)
-		    {
-			   	DBERROR(("Out of memory assigning research artefacts - redundancies"));
-			    return FALSE;
+			if (pResearch->pRedArtefacts == NULL)
+			{
+				DBERROR(("Out of memory assigning research artefacts - redundancies"));
+				return FALSE;
 			}*/
-            if (numResearchArteRed >= MAX_RESEARCH_ARTE_RED)
-            {
+			if (numResearchArteRed >= MAX_RESEARCH_ARTE_RED)
+			{
 				debug( LOG_ERROR, "Out of memory assigning research artefacts - redundancies" );
 				abort();
-                return FALSE;
-            }
-            //don't MALLOC - get them from the pre-defined arrays
-            pResearch->pRedArtefacts = pResearchArteRed + numResearchArteRed;
-            //pResearchArteRed += pResearch->numRedArtefacts;
-            //keep track on how many are being allocated
-            numResearchArteRed = (UBYTE)(numResearchArteRed + pResearch->numRedArtefacts);
+				return FALSE;
+			}
+			//don't MALLOC - get them from the pre-defined arrays
+			pResearch->pRedArtefacts = pResearchArteRed + numResearchArteRed;
+			//pResearchArteRed += pResearch->numRedArtefacts;
+			//keep track on how many are being allocated
+			numResearchArteRed = (UBYTE)(numResearchArteRed + pResearch->numRedArtefacts);
 		}
 		//results
 		if (pResearch->numArteResults > 0)
 		{
-			/*pResearch->pArtefactResults = (COMP_BASE_STATS **) malloc(pResearch->
-				numArteResults*sizeof(COMP_BASE_STATS *));
-			if (pResearch->pArtefactResults == NULL)
+			if (numResearchArteRed >= MAX_RESEARCH_ARTE_RES)
 			{
-				DBERROR(("Out of memory assigning research artefacts - results"));
-				return FALSE;
-			}*/
-            if (numResearchArteRed >= MAX_RESEARCH_ARTE_RES)
-            {
 				debug( LOG_ERROR, "Out of memory assigning research artefacts - results" );
 				abort();
-                return FALSE;
-            }
-            //don't MALLOC - get them from the pre-defined arrays
-            pResearch->pArtefactResults = pResearchArteRes + numResearchArteRes;
-            //pResearchArteRes += pResearch->numArteResults;
-            //keep track on how many are being allocated
-            numResearchArteRes = (UBYTE)(numResearchArteRes + pResearch->numArteResults);
+				return FALSE;
+			}
+
+			//don't MALLOC - get them from the pre-defined arrays
+			pResearch->pArtefactResults = pResearchArteRes + numResearchArteRes;
+
+			//keep track on how many are being allocated
+			numResearchArteRes = (UBYTE)(numResearchArteRes + pResearch->numArteResults);
 		}
 
 		//replacements
 		if (pResearch->numArteResults > 0)
 		{
-			/*pResearch->pReplacedArtefacts = (COMP_BASE_STATS **) malloc(pResearch->
-				numArteResults*sizeof(COMP_BASE_STATS *));
-			if (pResearch->pReplacedArtefacts == NULL)
+			if (numResearchArteRep >= MAX_RESEARCH_ARTE_RES)
 			{
-				DBERROR(("Out of memory assigning research artefacts - replacements"));
-				return FALSE;
-			}*/
-            if (numResearchArteRep >= MAX_RESEARCH_ARTE_RES)
-            {
 				debug( LOG_ERROR, "Out of memory assigning research artefacts - replacements" );
 				abort();
-                return FALSE;
-            }
-            //don't MALLOC - get them from the pre-defined arrays
-            pResearch->pReplacedArtefacts = pResearchArteRep + numResearchArteRep;
-            //pResearchArteRep += pResearch->numArteResults;
-            //keep track on how many are being allocated
-            numResearchArteRep = (UBYTE)(numResearchArteRep + pResearch->numArteResults);
+				return FALSE;
+			}
+
+			//don't MALLOC - get them from the pre-defined arrays
+			pResearch->pReplacedArtefacts = pResearchArteRep + numResearchArteRep;
+
+			//keep track on how many are being allocated
+			numResearchArteRep = (UBYTE)(numResearchArteRep + pResearch->numArteResults);
 		}
 
 		//allocate storage for the functions
 		if (pResearch->numFunctions > 0)
 		{
-			/*pResearch->pFunctionList = (FUNCTION**)malloc(pResearch->
-				numFunctions*sizeof(FUNCTION*));
-			if (pResearch->pFunctionList == NULL)
+			if (numResearchFunc >= MAX_RESEARCH_FUNC)
 			{
-				DBERROR(("Out of memory assigning research functions"));
-				return FALSE;
-			}*/
-            if (numResearchFunc >= MAX_RESEARCH_FUNC)
-            {
 				debug( LOG_ERROR, "Out of memory assigning research functions" );
 				abort();
-                return FALSE;
-            }
-            //don't MALLOC - get them from the pre-defined arrays
-            pResearch->pFunctionList = pResearchFunc + numResearchFunc;
-            //pResearchFunc += pResearch->numFunctions;
-            //keep track on how many are being allocated
-            numResearchFunc = (numResearchFunc + pResearch->numFunctions);
+				return FALSE;
+			}
+
+			//don't MALLOC - get them from the pre-defined arrays
+			pResearch->pFunctionList = pResearchFunc + numResearchFunc;
+
+			//keep track on how many are being allocated
+			numResearchFunc = (numResearchFunc + pResearch->numFunctions);
 		}
 
 		//allocate storage for the pre-requisities
 		if (pResearch->numPRRequired > 0)
 		{
-			/*pResearch->pPRList = (UDWORD*)malloc(pResearch->
-				numPRRequired*sizeof(UDWORD));
-			if (pResearch->pPRList == NULL)
+			if (numResearchPR >= MAX_RESEARCH_PR)
 			{
-				DBERROR(("Out of memory assigning research pre-requisities"));
-				return FALSE;
-			}*/
-            if (numResearchPR >= MAX_RESEARCH_PR)
-            {
 				debug( LOG_ERROR, "Out of memory assigning research pre-requisities" );
 				abort();
-                return FALSE;
-            }
-            //don't MALLOC - get them from the pre-defined arrays
-            pResearch->pPRList = pResearchPR + numResearchPR;
-            //pResearchPR += pResearch->numPRRequired;
-            //keep track on how many are being allocated
+				return FALSE;
+			}
 
-            numResearchPR = (UWORD)(numResearchPR + pResearch->numPRRequired);
+			//don't MALLOC - get them from the pre-defined arrays
+			pResearch->pPRList = pResearchPR + numResearchPR;
 
+			//keep track on how many are being allocated
+			numResearchPR = (UWORD)(numResearchPR + pResearch->numPRRequired);
 		}
 
 		//allocate storage for the structures
 		//requirements
 		if (pResearch->numStructures > 0)
 		{
-			/*pResearch->pStructList = (UDWORD *) malloc(pResearch->
-				numStructures*sizeof(UDWORD));
-			if (pResearch->pStructList == NULL)
+			if (numResearchStructPR >= MAX_RESEARCH_STRUCT_PR)
 			{
-				DBERROR(("Out of memory assigning research structures - requirements"));
-				return FALSE;
-			}*/
-            if (numResearchStructPR >= MAX_RESEARCH_STRUCT_PR)
-            {
 				debug( LOG_ERROR, "Out of memory assigning research structures - requirements" );
 				abort();
-                return FALSE;
-            }
-            //don't MALLOC - get them from the pre-defined arrays
-            pResearch->pStructList = pResearchStructPR + numResearchStructPR;
-            //pResearchStructPR += pResearch->numStructures;
-            //keep track on how many are being allocated
-            numResearchStructPR = (UBYTE)(numResearchStructPR + pResearch->numStructures);
+				return FALSE;
+			}
+
+			//don't MALLOC - get them from the pre-defined arrays
+			pResearch->pStructList = pResearchStructPR + numResearchStructPR;
+
+			//keep track on how many are being allocated
+			numResearchStructPR = (UBYTE)(numResearchStructPR + pResearch->numStructures);
 		}
 
         //redundancies
 		if (pResearch->numRedStructs > 0)
 		{
-			/*pResearch->pRedStructs = (UDWORD *) malloc(pResearch->
-				numRedStructs*sizeof(UDWORD));
-			if (pResearch->pRedStructs == NULL)
+			if (numResearchStructRed >= MAX_RESEARCH_STRUCT_RED)
 			{
-				DBERROR(("Out of memory assigning research structures - redundancies"));
-				return FALSE;
-			}*/
-            if (numResearchStructRed >= MAX_RESEARCH_STRUCT_RED)
-            {
 				debug( LOG_ERROR, "Out of memory assigning research structures - redundancies" );
 				abort();
-                return FALSE;
-            }
-            //don't MALLOC - get them from the pre-defined arrays
-            pResearch->pRedStructs = pResearchStructRed + numResearchStructRed;
-            //pResearchStructRed += pResearch->numRedStructs;
-            //keep track on how many are being allocated
-            numResearchStructRed = (UBYTE)(numResearchStructRed + pResearch->numRedStructs);
+				return FALSE;
+			}
+			//don't MALLOC - get them from the pre-defined arrays
+			pResearch->pRedStructs = pResearchStructRed + numResearchStructRed;
+
+			//keep track on how many are being allocated
+			numResearchStructRed = (UBYTE)(numResearchStructRed + pResearch->numRedStructs);
 		}
 		//results
 		if (pResearch->numStructResults > 0)
 		{
-			/*pResearch->pStructureResults = (UDWORD *) malloc(pResearch->
-				numStructResults*sizeof(UDWORD));
-			if (pResearch->pStructureResults == NULL)
+			if (numResearchStructRes >= MAX_RESEARCH_STRUCT_RES)
 			{
-				DBERROR(("Out of memory assigning research structures - results"));
-				return FALSE;
-			}*/
-            if (numResearchStructRes >= MAX_RESEARCH_STRUCT_RES)
-            {
 				debug( LOG_ERROR, "Out of memory assigning research structures - results" );
 				abort();
-                return FALSE;
-            }
-            //don't MALLOC - get them from the pre-defined arrays
-            pResearch->pStructureResults = pResearchStructRes + numResearchStructRes;
-            //pResearchStructRes += pResearch->numStructResults;
-            //keep track on how many are being allocated
-            numResearchStructRes = (UBYTE)(numResearchStructRes + pResearch->numStructResults);
+				return FALSE;
+			}
+
+			//don't MALLOC - get them from the pre-defined arrays
+			pResearch->pStructureResults = pResearchStructRes + numResearchStructRes;
+
+			//keep track on how many are being allocated
+			numResearchStructRes = (UBYTE)(numResearchStructRes + pResearch->numStructResults);
 		}
 
-        //set the researchPoints
-        if (resPoints > UWORD_MAX)
-        {
-			debug( LOG_ERROR, "Research Points too high for research topic - %s ",
-                getResearchName(pResearch) );
+		//set the researchPoints
+		if (resPoints > UWORD_MAX)
+		{
+			debug( LOG_ERROR, "Research Points too high for research topic - %s ", getResearchName(pResearch) );
 			abort();
 			return FALSE;
-        }
-        pResearch->researchPoints = (UWORD)resPoints;
+		}
+		pResearch->researchPoints = (UWORD)resPoints;
 
 		//set the research power
 		pResearch->researchPower = pResearch->researchPoints / RESEARCH_FACTOR;
@@ -765,48 +660,29 @@ BOOL loadResearch(char *pResearchData, UDWORD bufferSize)
 		//increment the list to the start of the next storage block
 		pResearch++;
 	}
-//	free(pStartResearchData);
-
-    //Do this in initResearch now since there is a Max Research
-	//now we know how many research topics there are we can create the
-	//PLAYER_RESEARCH arrays
-	/*for (i=0; i < MAX_PLAYERS; i++)
-	{
-		asPlayerResList[i] = (PLAYER_RESEARCH*)malloc(numResearch *
-			sizeof(PLAYER_RESEARCH));
-		if (asPlayerResList[i] == NULL)
-		{
-			DBERROR(("Out of memory assigning Player_Research"));
-			return FALSE;
-		}
-		memset(asPlayerResList[i], 0, (numResearch * sizeof(PLAYER_RESEARCH)));
-	}*/
 
 	return TRUE;
 }
 
 
 //Load the pre-requisites for a research list
-BOOL loadResearchPR(char *pPRData, UDWORD bufferSize)
+BOOL loadResearchPR(const char *pPRData, UDWORD bufferSize)
 {
-	char				*pStartPRData;
-	UDWORD				NumToAlloc = 0, i;
+	const unsigned int NumToAlloc = numCR(pPRData, bufferSize);
+	unsigned int i = 0;
 	char				ResearchName[MAX_NAME_SIZE], PRName[MAX_NAME_SIZE];
 	UWORD				incR, incPR;
 	RESEARCH			*pResearch = asResearch, *pPRResearch = asResearch;
 	BOOL				recFound;
 
-	pStartPRData = pPRData;
-
-	NumToAlloc = numCR(pPRData, bufferSize);
-
     //check not going to go over max
     ASSERT( NumToAlloc <= MAX_RESEARCH_PR, "loadResearchPR: too many!" );
     numResearchPR = 0;
 
-	for (i=0; i < NumToAlloc; i++)
+	for (i = 0; i < NumToAlloc; i++)
 	{
 		recFound = FALSE;
+
 		//read the data into the storage - the data is delimited using commas
 		ResearchName[0] = '\0';
 		PRName[0] = '\0';
@@ -824,7 +700,6 @@ BOOL loadResearchPR(char *pPRData, UDWORD bufferSize)
 		//loop through each Research to compare the name
 		for (incR=0; incR < numResearch; incR++)
 		{
-
 			if (!(strcmp(ResearchName, pResearch[incR].pName)))
 			{
 				//Research found
@@ -870,60 +745,55 @@ BOOL loadResearchPR(char *pPRData, UDWORD bufferSize)
 			abort();
 			return FALSE;
 		}
-        //quick check that haven't reached maxPR
-        if (numResearchPR >= MAX_RESEARCH_PR)
-        {
-            //don't load any more since will write over memory!
-            break;
-        }
+		//quick check that haven't reached maxPR
+		if (numResearchPR >= MAX_RESEARCH_PR)
+		{
+			//don't load any more since will write over memory!
+			break;
+		}
 		//increment the pointer to the start of the next record
 		pPRData = strchr(pPRData,'\n') + 1;
 	}
-//	free(pStartPRData);
+
 	return TRUE;
 }
 
 //Load the artefacts for a research list
-BOOL loadResearchArtefacts(char *pArteData, UDWORD bufferSize, UDWORD listNumber)
+BOOL loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD listNumber)
 {
-	char				*pStartArteData;
-	UDWORD				NumToAlloc = 0, i;
+	const unsigned int NumToAlloc = numCR(pArteData, bufferSize);
+	unsigned int i = 0;
 	char				ResearchName[MAX_NAME_SIZE], ArteName[MAX_NAME_SIZE],
 						TypeName[MAX_NAME_SIZE];
-	UDWORD				incR;
 	RESEARCH			*pResearch = asResearch;
 	COMP_BASE_STATS		*pArtefact;
 	UDWORD				newType;
 	UBYTE				maxArtefacts;
 
 	//initialise the storage flags
-	for (incR = 0; incR < numResearch; incR++)
+	for (i = 0; i < numResearch; i++)
 	{
-		pResearch[incR].storeCount = 0;
+		pResearch[i].storeCount = 0;
 	}
 	pResearch = asResearch;
-
-	pStartArteData = pArteData;
-
-	NumToAlloc = numCR(pArteData, bufferSize);
 
     //check not going to go over max
 	switch (listNumber)
 	{
-	case RED_LIST:
-        ASSERT( NumToAlloc <= MAX_RESEARCH_ARTE_RED,
-            "loadResearchArtefacts: too many Redundant Components" );
-        numResearchArteRed = 0;
-        break;
-	case RES_LIST:
-        ASSERT( NumToAlloc <= MAX_RESEARCH_ARTE_RES,
-            "loadResearchArtefacts: too many Component Results" );
-        numResearchArteRes = 0;
-        numResearchArteRep = 0;
-        break;
-    }
+		case RED_LIST:
+			ASSERT( NumToAlloc <= MAX_RESEARCH_ARTE_RED,
+				"loadResearchArtefacts: too many Redundant Components" );
+			numResearchArteRed = 0;
+			break;
+		case RES_LIST:
+			ASSERT( NumToAlloc <= MAX_RESEARCH_ARTE_RES,
+				"loadResearchArtefacts: too many Component Results" );
+			numResearchArteRes = 0;
+			numResearchArteRep = 0;
+			break;
+	}
 
-	for (i=0; i < NumToAlloc; i++)
+	for (i = 0; i < NumToAlloc; i++)
 	{
 		//read the data into the storage - the data is delimited using commas
 		ResearchName[0] = '\0';
@@ -960,65 +830,65 @@ BOOL loadResearchArtefacts(char *pArteData, UDWORD bufferSize, UDWORD listNumber
 		//ArtefactResearch found - alloc the artefact to the current Research topic
 		switch (listNumber)
 		{
-		case RED_LIST:
-			*(pResearch->pRedArtefacts + pResearch->storeCount) = pArtefact;
-            //keep tab on how many we have loaded in
-            numResearchArteRed++;
-			maxArtefacts = pResearch->numRedArtefacts;
-			break;
-		case RES_LIST:
-			*(pResearch->pArtefactResults + pResearch->storeCount) = pArtefact ;
-            //keep tab on how many we have loaded in
-            numResearchArteRes++;
-			maxArtefacts = pResearch->numArteResults;
-			break;
-		default:
-			debug( LOG_ERROR, "Unknown research list" );
-			abort();
-			return FALSE;
+			case RED_LIST:
+				*(pResearch->pRedArtefacts + pResearch->storeCount) = pArtefact;
+				//keep tab on how many we have loaded in
+				numResearchArteRed++;
+				maxArtefacts = pResearch->numRedArtefacts;
+				break;
+			case RES_LIST:
+				*(pResearch->pArtefactResults + pResearch->storeCount) = pArtefact ;
+				//keep tab on how many we have loaded in
+				numResearchArteRes++;
+				maxArtefacts = pResearch->numArteResults;
+				break;
+			default:
+				debug( LOG_ERROR, "Unknown research list" );
+				abort();
+				return FALSE;
 		}
 		//deal with extra data
 		switch (listNumber)
 		{
-		case RED_LIST:
-			//ignore the last character
-			sscanf(pArteData,",%*d");
-			break;
-		case RES_LIST:
-			ArteName[0] = '\0';
-			TypeName[0] = '\0';
-			sscanf(pArteData, "%[^','],%[^','],%*d", ArteName, TypeName);
-			if (!strcmp(ArteName, "0"))
-			{
-				*(pResearch->pReplacedArtefacts + pResearch->storeCount) =  NULL;
-			}
-			else
-			{
-				if (!getResourceName(ArteName))
+			case RED_LIST:
+				//ignore the last character
+				sscanf(pArteData,",%*d");
+				break;
+			case RES_LIST:
+				ArteName[0] = '\0';
+				TypeName[0] = '\0';
+				sscanf(pArteData, "%[^','],%[^','],%*d", ArteName, TypeName);
+				if (!strcmp(ArteName, "0"))
 				{
-					return FALSE;
+					*(pResearch->pReplacedArtefacts + pResearch->storeCount) =  NULL;
 				}
-				pArtefact = getComponentDetails(TypeName, ArteName);
-				if (pArtefact == NULL)
+				else
 				{
-					return FALSE;
+					if (!getResourceName(ArteName))
+					{
+						return FALSE;
+					}
+					pArtefact = getComponentDetails(TypeName, ArteName);
+					if (pArtefact == NULL)
+					{
+						return FALSE;
+					}
+					//check the old and new types are the same
+					if (statType(pArtefact->ref) != newType)
+					{
+						debug( LOG_ERROR, "You are trying to replace one type of component with a different type for research %s in ResultComponents.txt", ResearchName );
+						abort();
+						return FALSE;
+					}
+					//ArtefactResearch found - alloc the artefact to the current Research topic
+					*(pResearch->pReplacedArtefacts + pResearch->storeCount) = pArtefact;
+					numResearchArteRep++;
 				}
-				//check the old and new types are the same
-				if (statType(pArtefact->ref) != newType)
-				{
-					debug( LOG_ERROR, "You are trying to replace one type of component with a different type for research %s in ResultComponents.txt", ResearchName );
-					abort();
-					return FALSE;
-				}
-				//ArtefactResearch found - alloc the artefact to the current Research topic
-				*(pResearch->pReplacedArtefacts + pResearch->storeCount) = pArtefact;
-                numResearchArteRep++;
-			}
-			break;
-		default:
-			debug( LOG_ERROR, "Unknown research list" );
-			abort();
-			return FALSE;
+				break;
+			default:
+				debug( LOG_ERROR, "Unknown research list" );
+				abort();
+				return FALSE;
 		}
 
 		//check not allocating more than allowed
@@ -1030,25 +900,25 @@ BOOL loadResearchArtefacts(char *pArteData, UDWORD bufferSize, UDWORD listNumber
 		}
 		pResearch->storeCount++;
 
-        //quick check that haven't reached maxArtes
-        if (numResearchArteRed >= MAX_RESEARCH_ARTE_RED || numResearchArteRes >=
-            MAX_RESEARCH_ARTE_RES || numResearchArteRep > MAX_RESEARCH_ARTE_RES)
-        {
-            //don't load any more since will write over memory!
-            break;
-        }
-        //increment the pointer to the start of the next record
+		//quick check that haven't reached maxArtes
+		if (numResearchArteRed >= MAX_RESEARCH_ARTE_RED || numResearchArteRes >=
+			MAX_RESEARCH_ARTE_RES || numResearchArteRep > MAX_RESEARCH_ARTE_RES)
+		{
+			//don't load any more since will write over memory!
+			break;
+		}
+		//increment the pointer to the start of the next record
 		pArteData = strchr(pArteData,'\n') + 1;
 	}
-//	free(pStartArteData);
+
 	return TRUE;
 }
 
 //Load the Structures for a research list
-BOOL loadResearchStructures(char *pStructData, UDWORD bufferSize,UDWORD listNumber)
+BOOL loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD listNumber)
 {
-	char				*pStartStructData;
-	UDWORD				NumToAlloc = 0, i;
+	const unsigned int NumToAlloc = numCR(pStructData, bufferSize);
+	unsigned int i = 0;
 	char				ResearchName[MAX_NAME_SIZE], StructureName[MAX_NAME_SIZE];
 	UWORD				incR, incS;
 	RESEARCH			*pResearch = asResearch;
@@ -1057,35 +927,32 @@ BOOL loadResearchStructures(char *pStructData, UDWORD bufferSize,UDWORD listNumb
 	UDWORD				numToFind;
 
 	//initialise the storage flags
-	for (incR = 0; incR < numResearch; incR++)
+	for (i = 0; i < numResearch; i++)
 	{
-		pResearch[incR].storeCount = 0;
+		pResearch[i].storeCount = 0;
 	}
 	pResearch = asResearch;
 
-	pStartStructData = pStructData;
-
-	NumToAlloc = numCR(pStructData, bufferSize);
 	switch (listNumber)
 	{
-	case REQ_LIST:
-        //check not going to go over max
-        ASSERT( NumToAlloc <= MAX_RESEARCH_STRUCT_PR, "loadResearchStructures: too many Struct PRs" );
-        numResearchStructPR = 0;
-		break;
-	case RED_LIST:
-        //check not going to go over max
-        ASSERT( NumToAlloc <= MAX_RESEARCH_STRUCT_RED, "loadResearchStructures: too many redundant structure" );
-        numResearchStructRed = 0;
-    	break;
-	case RES_LIST:
-        //check not going to go over max
-        ASSERT( NumToAlloc <= MAX_RESEARCH_STRUCT_RES, "loadResearchStructures: too many structure results" );
-        numResearchStructRes = 0;
-        break;
-    }
+		case REQ_LIST:
+			//check not going to go over max
+			ASSERT( NumToAlloc <= MAX_RESEARCH_STRUCT_PR, "loadResearchStructures: too many Struct PRs" );
+			numResearchStructPR = 0;
+			break;
+		case RED_LIST:
+			//check not going to go over max
+			ASSERT( NumToAlloc <= MAX_RESEARCH_STRUCT_RED, "loadResearchStructures: too many redundant structure" );
+			numResearchStructRed = 0;
+			break;
+		case RES_LIST:
+			//check not going to go over max
+			ASSERT( NumToAlloc <= MAX_RESEARCH_STRUCT_RES, "loadResearchStructures: too many structure results" );
+			numResearchStructRes = 0;
+			break;
+	}
 
-	for (i=0; i < NumToAlloc; i++)
+	for (i = 0; i < NumToAlloc; i++)
 	{
 		recFound = FALSE;
 		numToFind = 0;
@@ -1105,12 +972,12 @@ BOOL loadResearchStructures(char *pStructData, UDWORD bufferSize,UDWORD listNumb
 		}
 
 		//loop through each Research to compare the name
-		for (incR=0; incR < numResearch; incR++)
+		for (incR = 0; incR < numResearch; incR++)
 		{
 			if (!(strcmp(ResearchName, pResearch[incR].pName)))
 			{
 				//Research found
-				for (incS=0; incS < numStructureStats; incS++)
+				for (incS = 0; incS < numStructureStats; incS++)
 				{
 					if (!(strcmp(StructureName, pStructure[incS].pName)))
 					{
@@ -1120,22 +987,22 @@ BOOL loadResearchStructures(char *pStructData, UDWORD bufferSize,UDWORD listNumb
 							case REQ_LIST:
 								pResearch[incR].pStructList[pResearch[incR].
 									storeCount] = incS;
-                                //keep tab on how many we have loaded in
-                                numResearchStructPR++;
-                                numToFind = pResearch[incR].numStructures;
+								//keep tab on how many we have loaded in
+								numResearchStructPR++;
+								numToFind = pResearch[incR].numStructures;
 								break;
 							case RED_LIST:
 								pResearch[incR].pRedStructs[pResearch[incR].
 									storeCount] = incS;
-                                //keep tab on how many we have loaded in
-                                numResearchStructRed++;
+								//keep tab on how many we have loaded in
+								numResearchStructRed++;
 								numToFind = pResearch[incR].numRedStructs;
 								break;
 							case RES_LIST:
 								pResearch[incR].pStructureResults[pResearch[incR].
 									storeCount] = incS;
-                                //keep tab on how many we have loaded in
-                                numResearchStructRes++;
+								//keep tab on how many we have loaded in
+								numResearchStructRes++;
 								numToFind = pResearch[incR].numStructResults;
 								break;
 							default:
@@ -1178,26 +1045,26 @@ BOOL loadResearchStructures(char *pStructData, UDWORD bufferSize,UDWORD listNumb
 			return FALSE;
 		}
 
-        //quick check that haven't reached max structs
-        if (numResearchStructPR >= MAX_RESEARCH_STRUCT_PR ||
-            numResearchStructRes >= MAX_RESEARCH_STRUCT_RES ||
-            numResearchStructRed >= MAX_RESEARCH_STRUCT_RED)
-        {
-            //don't load any more since will write over memory!
-            break;
-        }
+		//quick check that haven't reached max structs
+		if (numResearchStructPR >= MAX_RESEARCH_STRUCT_PR ||
+			numResearchStructRes >= MAX_RESEARCH_STRUCT_RES ||
+			numResearchStructRed >= MAX_RESEARCH_STRUCT_RED)
+		{
+			//don't load any more since will write over memory!
+			break;
+		}
 		//increment the pointer to the start of the next record
 		pStructData = strchr(pStructData,'\n') + 1;
 	}
-//	free(pStartStructData);
+
 	return TRUE;
 }
 
 //Load the pre-requisites for a research list
-BOOL loadResearchFunctions(char *pFunctionData, UDWORD bufferSize)
+BOOL loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize)
 {
-	char				*pStartFunctionData;
-	UDWORD				NumToAlloc = 0, i;
+	const unsigned int NumToAlloc = numCR(pFunctionData, bufferSize);
+	unsigned int i = 0;
 	char				ResearchName[MAX_NAME_SIZE], FunctionName[MAX_NAME_SIZE];
 	UDWORD				incR, incF;
 	RESEARCH			*pResearch = asResearch;
@@ -1211,12 +1078,9 @@ BOOL loadResearchFunctions(char *pFunctionData, UDWORD bufferSize)
 	}
 	pResearch = asResearch;
 
-	pStartFunctionData = pFunctionData;
-
-	NumToAlloc = numCR(pFunctionData, bufferSize);
-    //check not going to go over max
-    ASSERT( NumToAlloc <= MAX_RESEARCH_FUNC, "loadResearchFunctions: too many" );
-    numResearchFunc = 0;
+	//check not going to go over max
+	ASSERT( NumToAlloc <= MAX_RESEARCH_FUNC, "loadResearchFunctions: too many" );
+	numResearchFunc = 0;
 
 	for (i=0; i < NumToAlloc; i++)
 	{
@@ -1244,8 +1108,8 @@ BOOL loadResearchFunctions(char *pFunctionData, UDWORD bufferSize)
 						//Function found alloc this to the current Research
 						pResearch[incR].pFunctionList[pResearch[incR].
 							storeCount] = pFunction[incF];
-                        //keep tab on how many we have loaded in
-                        numResearchFunc++;
+						//keep tab on how many we have loaded in
+						numResearchFunc++;
 
 						recFound = TRUE;
 						//check not allocating more than allowed
@@ -1280,17 +1144,17 @@ BOOL loadResearchFunctions(char *pFunctionData, UDWORD bufferSize)
 			abort();
 			return FALSE;
 		}
-        //quick check that haven't reached maxPR
+		//quick check that haven't reached maxPR
 
-        if (numResearchFunc >= MAX_RESEARCH_FUNC)
-        {
-            //don't load any more since will write over memory!
-            break;
-        }
+		if (numResearchFunc >= MAX_RESEARCH_FUNC)
+		{
+			//don't load any more since will write over memory!
+			break;
+		}
 		//increment the pointer to the start of the next record
 		pFunctionData = strchr(pFunctionData,'\n') + 1;
 	}
-//	free(pStartFunctionData);
+
 	return TRUE;
 }
 
@@ -2684,21 +2548,18 @@ COMP_BASE_STATS * getComponentDetails(char *pName, char *pCompName)
 }
 
 //return a pointer to a research topic based on the name
-RESEARCH * getResearch(char *pName, BOOL resName)
+RESEARCH * getResearch(const char *pName, BOOL resName)
 {
-	UDWORD inc;
+	unsigned int inc = 0;
 
 	//need to get the in game name if a resource name has been passed in
-	if (resName)
+	if (resName && !getResourceName(pName))
 	{
-		if (!getResourceName(pName))
-		{
-			debug(LOG_ERROR, "getResearch: resource not found");
-			return NULL;
-		}
+		debug(LOG_ERROR, "getResearch: resource not found");
+		return NULL;
 	}
 
-	for (inc=0; inc < numResearch; inc++)
+	for (inc = 0; inc < numResearch; inc++)
 	{
 		if (!strcasecmp(asResearch[inc].pName, pName))
 		{
@@ -2711,6 +2572,7 @@ RESEARCH * getResearch(char *pName, BOOL resName)
 	}
 	debug(LOG_ERROR, "Unknown research - %s", pName);
 	assert(FALSE);
+
 	return NULL;
 }
 
@@ -2884,32 +2746,21 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		researchResult(rewardID, rewardPlayer, TRUE);
 		if (rewardPlayer == selectedPlayer)
 		{
-			//addConsoleMessage(_("Research Award"), DEFAULT_JUSTIFY);
-            //name the actual reward
-            //addConsoleMessage(asResearch[rewardID].pName, DEFAULT_JUSTIFY);
-           	CONPRINTF(ConsoleString,(ConsoleString,"%s :- %s",
-        	    _("Research Award"),
-                getName(asResearch[rewardID].pName)));
+			//name the actual reward
+			CONPRINTF(ConsoleString,(ConsoleString,"%s :- %s",
+				_("Research Award"),
+				getName(asResearch[rewardID].pName)));
 		}
 	}
-	/* Not worth mentioning if nothing useful to gain?
-    if (rewardPlayer == selectedPlayer)
-	{
-		addConsoleMessage(_("Research Award"), DEFAULT_JUSTIFY);
-	}*/
 }
-
-
-
-#define	getResearchName(res) (res.pName)
 
 
 /*checks that the research has loaded up as expected - must be done after
 all research parts have been loaded*/
 BOOL checkResearchStats(void)
 {
-	UDWORD	resInc, inc;
-	for (resInc=0; resInc < numResearch; resInc++)
+	UDWORD resInc, inc;
+	for (resInc = 0; resInc < numResearch; resInc++)
 	{
 		if (asResearch[resInc].numPRRequired == 0)
 		{
@@ -2917,19 +2768,19 @@ BOOL checkResearchStats(void)
 			{
 				ASSERT( FALSE,
 					"checkResearchStats: PreReq for topic %s should be NULL",
-					getResearchName(asResearch[resInc]) );
+					asResearch[resInc].pName );
 				return FALSE;
 			}
 		}
 		else
 		{
-			for (inc=0; inc < asResearch[resInc].numPRRequired; inc++)
+			for (inc = 0; inc < asResearch[resInc].numPRRequired; inc++)
 			{
 				if (asResearch[resInc].pPRList[inc] > numResearch)
 				{
 					ASSERT( FALSE,
 						"checkResearchStats: Invalid PreReq for topic %s",
-					getResearchName(asResearch[resInc]) );
+						asResearch[resInc].pName );
 					return FALSE;
 				}
 
@@ -2941,19 +2792,19 @@ BOOL checkResearchStats(void)
 			{
 				ASSERT( FALSE,
 					"checkResearchStats: StructureList for topic %s should be NULL",
-					getResearchName(asResearch[resInc]) );
+					asResearch[resInc].pName );
 				return FALSE;
 			}
 		}
 		else
 		{
-			for (inc=0; inc < asResearch[resInc].numStructures; inc++)
+			for (inc = 0; inc < asResearch[resInc].numStructures; inc++)
 			{
 				if (asResearch[resInc].pStructList[inc] > numStructureStats)
 				{
 					ASSERT( FALSE,
 						"checkResearchStats: Invalid Structure for topic %s",
-					getResearchName(asResearch[resInc]) );
+						asResearch[resInc].pName );
 					return FALSE;
 				}
 			}
@@ -2964,19 +2815,19 @@ BOOL checkResearchStats(void)
 			{
 				ASSERT( FALSE,
 					"checkResearchStats: FunctionList for topic %s should be NULL",
-					getResearchName(asResearch[resInc]) );
+					asResearch[resInc].pName );
 				return FALSE;
 			}
 		}
 		else
 		{
-			for (inc=0; inc < asResearch[resInc].numFunctions; inc++)
+			for (inc = 0; inc < asResearch[resInc].numFunctions; inc++)
 			{
 				if (asResearch[resInc].pFunctionList[inc]->ref -
 					REF_FUNCTION_START > numFunctions)
 				{
 					ASSERT( FALSE, "checkResearchStats: Invalid function for %s",
-					getResearchName(asResearch[resInc]) );
+					asResearch[resInc].pName );
 				}
 			}
 		}
@@ -2986,19 +2837,19 @@ BOOL checkResearchStats(void)
 			{
 				ASSERT( FALSE,
 					"checkResearchStats: Redundant StructList for topic %s should be NULL",
-					getResearchName(asResearch[resInc]) );
+					asResearch[resInc].pName );
 				return FALSE;
 			}
 		}
 		else
 		{
-			for (inc=0; inc < asResearch[resInc].numRedStructs; inc++)
+			for (inc = 0; inc < asResearch[resInc].numRedStructs; inc++)
 			{
 				if (asResearch[resInc].pRedStructs[inc] > numStructureStats)
 				{
 					ASSERT( FALSE,
 						"checkResearchStats: Invalid Redundant Structure for topic %s",
-						getResearchName(asResearch[resInc]) );
+						asResearch[resInc].pName );
 					return FALSE;
 				}
 			}
@@ -3009,19 +2860,19 @@ BOOL checkResearchStats(void)
 			{
 				ASSERT( FALSE,
 					"checkResearchStats: Result StructList for topic %s should be NULL",
-					getResearchName(asResearch[resInc]) );
+					asResearch[resInc].pName );
 				return FALSE;
 			}
 		}
 		else
 		{
-			for (inc=0; inc < asResearch[resInc].numStructResults; inc++)
+			for (inc = 0; inc < asResearch[resInc].numStructResults; inc++)
 			{
 				if (asResearch[resInc].pStructureResults[inc] > numStructureStats)
 				{
 					ASSERT( FALSE,
 						"checkResearchStats: Invalid Result Structure for topic %s",
-					getResearchName(asResearch[resInc]) );
+						asResearch[resInc].pName );
 					return FALSE;
 				}
 			}
@@ -3032,17 +2883,17 @@ BOOL checkResearchStats(void)
 			{
 				ASSERT( FALSE,
 					"checkResearchStats: CompResultList for topic %s should be NULL",
-					getResearchName(asResearch[resInc]) );
+					asResearch[resInc].pName );
 				return FALSE;
 			}
 		}
 		else
 		{
-			for (inc=0; inc < asResearch[resInc].numArteResults; inc++)
+			for (inc = 0; inc < asResearch[resInc].numArteResults; inc++)
 			{
 				ASSERT( asResearch[resInc].pArtefactResults[inc] != NULL,
 					"checkResearchStats: Invalid Comp Result for topic %s",
-					getResearchName(asResearch[resInc]) );
+					asResearch[resInc].pName );
 			}
 		}
 		if (asResearch[resInc].numRedArtefacts == 0)
@@ -3051,20 +2902,21 @@ BOOL checkResearchStats(void)
 			{
 				ASSERT( FALSE,
 					"checkResearchStats: RedundantCompList for topic %s should be NULL",
-					getResearchName(asResearch[resInc]) );
+					asResearch[resInc].pName );
 				return FALSE;
 			}
 		}
 		else
 		{
-			for (inc=0; inc < asResearch[resInc].numRedArtefacts; inc++)
+			for (inc = 0; inc < asResearch[resInc].numRedArtefacts; inc++)
 			{
 				ASSERT( asResearch[resInc].pRedArtefacts[inc] != NULL,
 					"checkResearchStats: Invalid Redundant Comp for topic %s",
-					getResearchName(asResearch[resInc]) );
+					asResearch[resInc].pName );
 			}
 		}
 	}
+
 	return TRUE;
 }
 

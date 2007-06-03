@@ -90,7 +90,7 @@ extern int scr_lineno;
  * Source
  *
  *********************************************************/
-static void calcCheatHash(char *pBuffer, UDWORD size, UDWORD cheat)
+static void calcCheatHash(const char *pBuffer, UDWORD size, UDWORD cheat)
 {
 	if(!bMultiPlayer)
 	{
@@ -98,7 +98,7 @@ static void calcCheatHash(char *pBuffer, UDWORD size, UDWORD cheat)
 	}
 
 	// create the hash for that data block.
-	cheatHash[cheat] =cheatHash[cheat] ^ NEThashBuffer(pBuffer,size);
+	cheatHash[cheat] = cheatHash[cheat] ^ NEThashBuffer(pBuffer, size);
 	return;
 }
 
@@ -125,7 +125,7 @@ void dataClearSaveFlag(void)
 
 
 /* Load the body stats */
-static BOOL bufferSBODYLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferSBODYLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SBODY);
 	if (!loadBodyStats(pBuffer, size))
@@ -151,7 +151,7 @@ static void dataReleaseStats(void *pData)
 
 
 /* Load the weapon stats */
-static BOOL bufferSWEAPONLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferSWEAPONLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size, CHEAT_SWEAPON);
 	if (!loadWeaponStats(pBuffer, size))
@@ -170,7 +170,7 @@ static BOOL bufferSWEAPONLoad(char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the constructor stats */
-static BOOL bufferSCONSTRLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferSCONSTRLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SCONSTR);
 	if (!loadConstructStats(pBuffer, size))
@@ -189,7 +189,7 @@ static BOOL bufferSCONSTRLoad(char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the ECM stats */
-static BOOL bufferSECMLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferSECMLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SECM);
 
@@ -209,7 +209,7 @@ static BOOL bufferSECMLoad(char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Propulsion stats */
-static BOOL bufferSPROPLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferSPROPLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SPROP);
 
@@ -229,7 +229,7 @@ static BOOL bufferSPROPLoad(char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Sensor stats */
-static BOOL bufferSSENSORLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferSSENSORLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SSENSOR);
 
@@ -249,7 +249,7 @@ static BOOL bufferSSENSORLoad(char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Repair stats */
-static BOOL bufferSREPAIRLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferSREPAIRLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SREPAIR);
 
@@ -269,7 +269,7 @@ static BOOL bufferSREPAIRLoad(char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Brain stats */
-static BOOL bufferSBRAINLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferSBRAINLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SBRAIN);
 
@@ -289,7 +289,7 @@ static BOOL bufferSBRAINLoad(char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the PropulsionType stats */
-static BOOL bufferSPROPTYPESLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferSPROPTYPESLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SPROPTY);
 
@@ -305,7 +305,7 @@ static BOOL bufferSPROPTYPESLoad(char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the propulsion type sound stats */
-static BOOL bufferSPROPSNDLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferSPROPSNDLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadPropulsionSounds(pBuffer, size))
 	{
@@ -318,7 +318,7 @@ static BOOL bufferSPROPSNDLoad(char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the SSPECABIL stats */
-static BOOL bufferSSPECABILLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferSSPECABILLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadSpecialAbility(pBuffer, size))
 	{
@@ -332,7 +332,7 @@ static BOOL bufferSSPECABILLoad(char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the STERRTABLE stats */
-static BOOL bufferSTERRTABLELoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferSTERRTABLELoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_STERRT);
 
@@ -348,7 +348,7 @@ static BOOL bufferSTERRTABLELoad(char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the body/propulsion IMDs stats */
-static BOOL bufferSBPIMDLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferSBPIMDLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadBodyPropulsionIMDs(pBuffer, size))
 	{
@@ -362,7 +362,7 @@ static BOOL bufferSBPIMDLoad(char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the weapon sound stats */
-static BOOL bufferSWEAPSNDLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferSWEAPSNDLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	if (!loadWeaponSounds(pBuffer, size))
 	{
@@ -376,7 +376,7 @@ static BOOL bufferSWEAPSNDLoad(char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Weapon Effect modifier stats */
-static BOOL bufferSWEAPMODLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferSWEAPMODLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SWEAPMOD);
 
@@ -393,7 +393,7 @@ static BOOL bufferSWEAPMODLoad(char *pBuffer, UDWORD size, void **ppData)
 
 
 /* Load the Template stats */
-static BOOL bufferSTEMPLLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferSTEMPLLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_STEMP);
 
@@ -416,7 +416,7 @@ static void dataSTEMPLRelease(void *pData)
 }
 
 /* Load the Template weapons stats */
-static BOOL bufferSTEMPWEAPLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferSTEMPWEAPLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_STEMPWEAP);
 
@@ -432,7 +432,7 @@ static BOOL bufferSTEMPWEAPLoad(char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Structure stats */
-static BOOL bufferSSTRUCTLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferSSTRUCTLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SSTRUCT);
 
@@ -459,7 +459,7 @@ static void dataSSTRUCTRelease(void *pData)
 }
 
 /* Load the Structure Weapons stats */
-static BOOL bufferSSTRWEAPLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferSSTRWEAPLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SSTRWEAP);
 
@@ -475,7 +475,7 @@ static BOOL bufferSSTRWEAPLoad(char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Structure Functions stats */
-static BOOL bufferSSTRFUNCLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferSSTRFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_STRFUNC);
 
@@ -491,7 +491,7 @@ static BOOL bufferSSTRFUNCLoad(char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Structure strength modifier stats */
-static BOOL bufferSSTRMODLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferSSTRMODLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SSTRMOD);
 
@@ -506,16 +506,14 @@ static BOOL bufferSSTRMODLoad(char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Feature stats */
-static BOOL bufferSFEATLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferSFEATLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-
 	calcCheatHash(pBuffer,size,CHEAT_SFEAT);
 
 	if (!loadFeatureStats(pBuffer, size))
 	{
 		return FALSE;
 	}
-
 
 	// set a dummy value so the release function gets called
 	*ppData = (void *)1;
@@ -529,7 +527,7 @@ static void dataSFEATRelease(void *pData)
 }
 
 /* Load the Functions stats */
-static BOOL bufferSFUNCLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferSFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_SFUNC);
 
@@ -560,7 +558,7 @@ static void dataRESCHRelease(void *pData)
 }
 
 /* Load the Research stats */
-static BOOL bufferRESCHLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferRESCHLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_RESCH);
 
@@ -586,7 +584,7 @@ static BOOL bufferRESCHLoad(char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the research pre-requisites */
-static BOOL bufferRPREREQLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferRPREREQLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_RPREREQ);
 
@@ -601,7 +599,7 @@ static BOOL bufferRPREREQLoad(char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the research components made redundant */
-static BOOL bufferRCOMPREDLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferRCOMPREDLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_RCOMPRED);
 
@@ -617,7 +615,7 @@ static BOOL bufferRCOMPREDLoad(char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the research component results */
-static BOOL bufferRCOMPRESLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferRCOMPRESLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 
 	calcCheatHash(pBuffer,size,CHEAT_RCOMPRES);
@@ -634,7 +632,7 @@ static BOOL bufferRCOMPRESLoad(char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the research structures required */
-static BOOL bufferRSTRREQLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferRSTRREQLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 
 	calcCheatHash(pBuffer,size,CHEAT_RSTRREQ);
@@ -651,7 +649,7 @@ static BOOL bufferRSTRREQLoad(char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the research structures made redundant */
-static BOOL bufferRSTRREDLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferRSTRREDLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_RSTRRED);
 
@@ -666,7 +664,7 @@ static BOOL bufferRSTRREDLoad(char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the research structure results */
-static BOOL bufferRSTRRESLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferRSTRRESLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	calcCheatHash(pBuffer,size,CHEAT_RSTRRES);
 
@@ -682,7 +680,7 @@ static BOOL bufferRSTRRESLoad(char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the research functions */
-static BOOL bufferRFUNCLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferRFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 
 	calcCheatHash(pBuffer,size,CHEAT_RFUNC);
@@ -699,7 +697,7 @@ static BOOL bufferRFUNCLoad(char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the message viewdata */
-static BOOL bufferSMSGLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL bufferSMSGLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	VIEWDATA	*pViewData;
 
@@ -723,10 +721,10 @@ static void dataSMSGRelease(void *pData)
 }
 
 /* Load an imd */
-static BOOL dataIMDBufferLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL dataIMDBufferLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	iIMDShape	*psIMD;
-	char *pBufferPosition = pBuffer;
+	const char *pBufferPosition = pBuffer;
 
 	psIMD = iV_ProcessIMD( &pBufferPosition, pBufferPosition + size );
 	if (psIMD == NULL) {
@@ -1057,7 +1055,7 @@ static void dataStrResRelease(void *pData)
 
 /* Load a script file */
 // All scripts, binary or otherwise are now passed through this routine
-static BOOL dataScriptLoad(char *pBuffer, UDWORD size, void **ppData)
+static BOOL dataScriptLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 	SCRIPT_CODE		*psProg=NULL;
 	BOOL			printHack = FALSE;
@@ -1084,7 +1082,7 @@ static BOOL dataScriptLoad(char *pBuffer, UDWORD size, void **ppData)
 }
 
 // Load a script variable values file
-static BOOL dataScriptLoadVals(char *pBuffer, UDWORD size, void **ppData)
+static BOOL dataScriptLoadVals(const char *pBuffer, UDWORD size, void **ppData)
 {
 	*ppData = NULL;
 

@@ -40,7 +40,7 @@ extern UDWORD			structFeature;
 extern UDWORD			oilResFeature;
 
 /* Load the feature stats */
-extern BOOL loadFeatureStats(char *pFeatureData, UDWORD bufferSize);
+extern BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize);
 
 /* Release the feature stats memory */
 extern void featureStatsShutDown(void);
@@ -64,9 +64,9 @@ extern void removeFeature(FEATURE *psDel);
 extern void destroyFeature(FEATURE *psDel);
 
 /* get a feature stat id from its name */
-extern SDWORD getFeatureStatFromName( char *pName );
+extern SDWORD getFeatureStatFromName(const char *pName);
 
-/*looks around the given droid to see if there is any building 
+/*looks around the given droid to see if there is any building
 wreckage to clear*/
 extern FEATURE	* checkForWreckage(DROID *psDroid);
 

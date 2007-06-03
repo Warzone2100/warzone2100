@@ -258,9 +258,9 @@ BOOL scrvGetBaseObj(UDWORD id, BASE_OBJECT **ppsObj)
 }
 
 // Find a string from it's (string)id
-BOOL scrvGetString(char *pStringID, char **ppString)
+BOOL scrvGetString(const char *pStringID, char **ppString)
 {
-	UDWORD			id;
+	UDWORD id;
 
 	//get the ID for the string
 	if (!strresGetIDNum(psStringRes, pStringID, &id))
@@ -269,6 +269,7 @@ BOOL scrvGetString(char *pStringID, char **ppString)
 		abort();
 		return FALSE;
 	}
+
 	//get the string from the id
 	*ppString = strresGetString(psStringRes, id);
 

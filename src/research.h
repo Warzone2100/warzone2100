@@ -85,17 +85,15 @@ extern UDWORD	aDefaultECM[MAX_PLAYERS];
 extern UDWORD	aDefaultRepair[MAX_PLAYERS];
 
 //extern BOOL loadResearch(void);
-extern BOOL loadResearch(char *pResearchData, UDWORD bufferSize);
+extern BOOL loadResearch(const char *pResearchData, UDWORD bufferSize);
 //Load the pre-requisites for a research list
-extern BOOL loadResearchPR(char *pPRData, UDWORD bufferSize);
+extern BOOL loadResearchPR(const char *pPRData, UDWORD bufferSize);
 //Load the artefacts for a research list
-extern BOOL loadResearchArtefacts(char *pArteData, UDWORD bufferSize,
-								  UDWORD listNumber);
+extern BOOL loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD listNumber);
 //Load the pre-requisites for a research list
-extern BOOL loadResearchFunctions(char *pFunctionData, UDWORD bufferSize);
+extern BOOL loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize);
 //Load the Structures for a research list
-extern BOOL loadResearchStructures(char *pStructData, UDWORD bufferSize,
-								   UDWORD listNumber);
+extern BOOL loadResearchStructures(const char *pStructData, UDWORD bufferSize, UDWORD listNumber);
 
 /*function to check what can be researched for a particular player at any one
   instant. Returns the number to research*/
@@ -114,7 +112,7 @@ extern BOOL ResearchShutDown(void);
 extern BOOL ResearchRelease(void);
 
 /* For a given view data get the research this is related to */
-extern RESEARCH * getResearch(char *pName, BOOL resName);
+extern RESEARCH * getResearch(const char *pName, BOOL resName);
 
 /* sets the status of the topic to cancelled and stores the current research
    points accquired */

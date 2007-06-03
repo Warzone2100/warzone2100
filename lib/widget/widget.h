@@ -148,8 +148,8 @@ typedef struct _w_init
 #define TAB_MINOR 0	// Tab types passed into tab display callbacks.
 #define TAB_MAJOR 1
 
-typedef void (*TAB_DISPLAY)(WIDGET *psWidget,UDWORD TabType,UDWORD Position,UDWORD Number,BOOL Selected,BOOL Hilight,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height);
-typedef void (*FONT_DISPLAY)(UDWORD x,UDWORD y,char *String);
+typedef void (*TAB_DISPLAY)(WIDGET *psWidget, UDWORD TabType, UDWORD Position, UDWORD Number, BOOL Selected, BOOL Hilight, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height);
+typedef void (*FONT_DISPLAY)(UDWORD x, UDWORD y, char *String);
 
 /* Form initialisation structure */
 typedef struct _w_forminit
@@ -250,7 +250,7 @@ typedef struct _w_sldinit
 	UWORD		numStops;		// Number of stops on the slider
 	UWORD		barSize;		// Size of the bar
 	UWORD		pos;			// Initial position of the slider bar
-	char		*pTip;			// Tip string
+	const char	*pTip;			// Tip string
 } W_SLDINIT;
 
 /***********************************************************************************/
@@ -324,7 +324,7 @@ extern void widgReveal(W_SCREEN *psScreen, UDWORD id);
  * This will always return a valid string pointer.
  * NOTE: The string must be copied out of the buffer
  */
-extern char *widgGetString(W_SCREEN *psScreen, UDWORD id);
+extern const char *widgGetString(W_SCREEN *psScreen, UDWORD id);
 
 /* Set the text in a widget */
 extern void widgSetString(W_SCREEN *psScreen, UDWORD id, const char *pText);
@@ -357,13 +357,13 @@ extern UDWORD widgGetMouseOver(W_SCREEN *psScreen);
 extern void *widgGetUserData(W_SCREEN *psScreen, UDWORD id);
 
 /* Set the user data for a widget */
-extern void widgSetUserData(W_SCREEN *psScreen, UDWORD id,void *UserData);
+extern void widgSetUserData(W_SCREEN *psScreen, UDWORD id, void *UserData);
 
 /* Return the user data for a widget */
-UDWORD widgGetUserData2(W_SCREEN *psScreen, UDWORD id);
+extern UDWORD widgGetUserData2(W_SCREEN *psScreen, UDWORD id);
 
 /* Set the user data for a widget */
-void widgSetUserData2(W_SCREEN *psScreen, UDWORD id,UDWORD UserData);
+extern void widgSetUserData2(W_SCREEN *psScreen, UDWORD id,UDWORD UserData);
 
 /* Return the user data for the returned widget */
 extern void *widgGetLastUserData(W_SCREEN *psScreen);
@@ -372,7 +372,7 @@ extern void *widgGetLastUserData(W_SCREEN *psScreen);
 extern WIDGET *widgGetFromID(W_SCREEN *psScreen, UDWORD id);
 
 /* Set tip string for a widget */
-extern void widgSetTip( W_SCREEN *psScreen, UDWORD id, char *pTip );
+extern void widgSetTip( W_SCREEN *psScreen, UDWORD id, const char *pTip );
 
 /* Colour numbers */
 enum _w_colour
@@ -456,10 +456,10 @@ extern SWORD WidgGetHilightAudioID(void);
 // Get current audio ID for clicked.
 extern SWORD WidgGetClickedAudioID(void);
 
-void sliderEnableDrag(BOOL Enable);
+extern void sliderEnableDrag(BOOL Enable);
 
-void	setWidgetsStatus( BOOL var );
-BOOL	getWidgetsStatus( void );
+extern void setWidgetsStatus( BOOL var );
+extern BOOL getWidgetsStatus( void );
 
 #endif
 

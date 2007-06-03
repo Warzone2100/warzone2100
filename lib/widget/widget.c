@@ -1054,53 +1054,52 @@ void *widgGetLastUserData(W_SCREEN *psScreen)
 }
 
 /* Set tip string for a widget */
-void widgSetTip( W_SCREEN *psScreen, UDWORD id, char *pTip )
+void widgSetTip( W_SCREEN *psScreen, UDWORD id, const char *pTip )
 {
-	WIDGET	*psWidget;
+	WIDGET *psWidget = widgGetFromID(psScreen, id);
 
-	psWidget = widgGetFromID(psScreen, id);
 	if ( psWidget )
 	{
 		switch (psWidget->type)
 		{
 			case WIDG_FORM:
-			if (psWidget->style & WFORM_CLICKABLE)
-			{
-				((W_CLICKFORM *) psWidget)->pTip = pTip;
-			}
-			else if (psWidget->style & WFORM_TABBED)
-			{
-				ASSERT( FALSE, "widgSetTip: tabbed forms do not have a tip" );
-			}
-			else
-			{
-				ASSERT( FALSE, "widgSetTip: plain forms do not have a tip" );
-			}
-			break;
+				if (psWidget->style & WFORM_CLICKABLE)
+				{
+					((W_CLICKFORM *) psWidget)->pTip = pTip;
+				}
+				else if (psWidget->style & WFORM_TABBED)
+				{
+					ASSERT( FALSE, "widgSetTip: tabbed forms do not have a tip" );
+				}
+				else
+				{
+					ASSERT( FALSE, "widgSetTip: plain forms do not have a tip" );
+				}
+				break;
 
 			case WIDG_LABEL:
-			((W_LABEL *) psWidget)->pTip = pTip;
-			break;
+				((W_LABEL *) psWidget)->pTip = pTip;
+				break;
 
 			case WIDG_BUTTON:
-			((W_BUTTON *) psWidget)->pTip = pTip;
-			break;
+				((W_BUTTON *) psWidget)->pTip = pTip;
+				break;
 
 			case WIDG_BARGRAPH:
-			((W_BARGRAPH *) psWidget)->pTip = pTip;
-			break;
+				((W_BARGRAPH *) psWidget)->pTip = pTip;
+				break;
 
 			case WIDG_SLIDER:
-			((W_SLIDER *) psWidget)->pTip = pTip;
-			break;
+				((W_SLIDER *) psWidget)->pTip = pTip;
+				break;
 
 			case WIDG_EDITBOX:
-			ASSERT( FALSE, "widgSetTip: edit boxes do not have a tip" );
-			break;
+				ASSERT( FALSE, "widgSetTip: edit boxes do not have a tip" );
+				break;
 
 			default:
-			ASSERT( FALSE,"widgSetTip: Unknown widget type" );
-			break;
+				ASSERT( FALSE,"widgSetTip: Unknown widget type" );
+				break;
 		}
 	}
 }
@@ -1234,57 +1233,55 @@ void widgSetButtonState(W_SCREEN *psScreen, UDWORD id, UDWORD state)
 /* Return a pointer to a buffer containing the current string of a widget.
  * NOTE: The string must be copied out of the buffer
  */
-char *widgGetString(W_SCREEN *psScreen, UDWORD id)
+const char *widgGetString(W_SCREEN *psScreen, UDWORD id)
 {
-	WIDGET	*psWidget;
+	const WIDGET *psWidget = widgGetFromID(psScreen, id);
 
-	ASSERT( psScreen != NULL,
-		"widgGetString: Invalid screen pointer" );
+	ASSERT( psScreen != NULL, "widgGetString: Invalid screen pointer" );
 
 	/* Get the widget */
-	psWidget = widgGetFromID(psScreen, id);
 	if (psWidget != NULL)
 	{
 		switch (psWidget->type)
 		{
-		case WIDG_FORM:
-			ASSERT( FALSE, "widgGetString: Forms do not have a string" );
-			aStringRetBuffer[0]=0;
-			break;
-		case WIDG_LABEL:
-			strcpy(aStringRetBuffer, ((W_LABEL *)psWidget)->aText);
-			break;
-		case WIDG_BUTTON:
-			if (((W_BUTTON *)psWidget)->pText)
-			{
-				strcpy(aStringRetBuffer, ((W_BUTTON *)psWidget)->pText);
-			}
-			else
-			{
+			case WIDG_FORM:
+				ASSERT( FALSE, "widgGetString: Forms do not have a string" );
+				aStringRetBuffer[0] = '\0';
+				break;
+			case WIDG_LABEL:
+				strcpy(aStringRetBuffer, ((W_LABEL *)psWidget)->aText);
+				break;
+			case WIDG_BUTTON:
+				if (((W_BUTTON *)psWidget)->pText)
+				{
+					strcpy(aStringRetBuffer, ((W_BUTTON *)psWidget)->pText);
+				}
+				else
+				{
+					aStringRetBuffer[0]=0;
+				}
+				break;
+			case WIDG_EDITBOX:
+				strcpy(aStringRetBuffer, ((W_EDITBOX *)psWidget)->aText);
+				break;
+			case WIDG_BARGRAPH:
+				ASSERT( FALSE, "widgGetString: Bar Graphs do not have a string" );
 				aStringRetBuffer[0]=0;
-			}
-			break;
-		case WIDG_EDITBOX:
-			strcpy(aStringRetBuffer, ((W_EDITBOX *)psWidget)->aText);
-			break;
-		case WIDG_BARGRAPH:
-			ASSERT( FALSE, "widgGetString: Bar Graphs do not have a string" );
-			aStringRetBuffer[0]=0;
-			break;
-		case WIDG_SLIDER:
-			ASSERT( FALSE, "widgGetString: Sliders do not have a string" );
-			aStringRetBuffer[0]=0;
-			break;
-		default:
-			ASSERT( FALSE,"widgGetString: Unknown widget type" );
-			aStringRetBuffer[0]=0;
-			break;
+				break;
+			case WIDG_SLIDER:
+				ASSERT( FALSE, "widgGetString: Sliders do not have a string" );
+				aStringRetBuffer[0]=0;
+				break;
+			default:
+				ASSERT( FALSE,"widgGetString: Unknown widget type" );
+				aStringRetBuffer[0]=0;
+				break;
 		}
 	}
 	else
 	{
 		ASSERT( FALSE, "widgGetString: couldn't get widget from id" );
-		aStringRetBuffer[0]=0;
+		aStringRetBuffer[0] = '\0';
 	}
 
 	return aStringRetBuffer;

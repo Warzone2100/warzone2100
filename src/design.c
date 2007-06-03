@@ -1512,8 +1512,8 @@ intChooseSystemStats( DROID_TEMPLATE *psTemplate )
 
 static const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 {
-	COMP_BASE_STATS		*psStats;
-	char				*pStr;
+	COMP_BASE_STATS *psStats = NULL;
+
 	/*
 		First we check for the special cases of the Transporter & Cyborgs
 	*/
@@ -1521,13 +1521,12 @@ static const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	{
 		return _("Transporter");
 	}
+
 	/*
 		Now get the normal default droid name based on its components
-
 	*/
-	aCurrName[0]=0;		// Reset string to null
+	aCurrName[0] = '\0'; // Reset string to null
 	psStats = intChooseSystemStats( psTemplate );
-
 	if ( psTemplate->asWeaps[0]					!= 0 ||
 		 psTemplate->asParts[COMP_CONSTRUCT]	!= 0 ||
 		 psTemplate->asParts[COMP_SENSOR]		!= 0 ||
@@ -1535,11 +1534,9 @@ static const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 		 psTemplate->asParts[COMP_REPAIRUNIT]   != 0 ||
 		 psTemplate->asParts[COMP_BRAIN]		!= 0    )
 	{
-		pStr = getStatName( psStats );
+		const char * pStr = getStatName( psStats );
 		strcpy( aCurrName, pStr );
 		strcat( aCurrName, " " );
-//		DBPRINTF(("%s",aCurrName));
-//	DBPRINTF(("a) templ=%p stat=%p name=%s\n",psTemplate,psStats,pStr);
 	}
 
 	if ( psTemplate->numWeaps > 1 )
@@ -1550,7 +1547,7 @@ static const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	psStats = (COMP_BASE_STATS *) (asBodyStats + psTemplate->asParts[COMP_BODY]);
 	if ( psTemplate->asParts[COMP_BODY] != 0 )
 	{
-		pStr = getStatName( psStats );
+		const char * pStr = getStatName( psStats );
 
 		if ( strlen( aCurrName ) + strlen( pStr ) > WIDG_MAXSTR )
 		{
@@ -1560,13 +1557,12 @@ static const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 
 		strcat( aCurrName, pStr );
 		strcat( aCurrName, " " );
-//		DBPRINTF(("b) templ=%p stat=%p name=%s\n",psTemplate,psStats,pStr);
 	}
 
 	psStats = (COMP_BASE_STATS *) (asPropulsionStats + psTemplate->asParts[COMP_PROPULSION]);
 	if ( psTemplate->asParts[COMP_PROPULSION] != 0 )
 	{
-		pStr = getStatName( psStats );
+		const char * pStr = getStatName( psStats );
 
 		if ( strlen( aCurrName ) + strlen( pStr ) > WIDG_MAXSTR )
 		{
@@ -1575,10 +1571,7 @@ static const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 		}
 
 		strcat( aCurrName, pStr );
-//		DBPRINTF(("c) templ=%p stat=%p name=%s\n",psTemplate,psStats,pStr);
 	}
-
-//	DBPRINTF(("TEMPLATE NAME [%s]\n",aCurrName);
 
 	return aCurrName;
 }
@@ -3054,12 +3047,9 @@ static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 /* Set the bar graphs for the system clickable */
 static void intSetSystemStats(COMP_BASE_STATS *psStats)
 {
-	W_FORM	*psForm;
+	W_FORM *psForm;
 
-	ASSERT( psStats != NULL,
-//			 (((UBYTE *)psStats >= (UBYTE *)asCommandDroids) &&
-//			  ((UBYTE *)psStats < (UBYTE *)asCommandDroids + sizeof(asCommandDroids))),
-		"intSetSystemStats: Invalid stats pointer" );
+	ASSERT( psStats != NULL, "intSetSystemStats: Invalid stats pointer" );
 
 	/* set form tip to stats string */
 	widgSetTip( psWScreen, IDDES_SYSTEMFORM, getStatName(psStats) );

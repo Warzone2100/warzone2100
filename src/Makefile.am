@@ -1,4 +1,4 @@
-%.tab.h %.tab.c: %.y
+%.tab.c: %.y
 	$(YACC) $(YFLAGS) $(AM_YFLAGS) -o$@ $<
 
 %.lex.c: %.l

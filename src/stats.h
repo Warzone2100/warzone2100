@@ -153,55 +153,55 @@ extern UWORD weaponROF(WEAPON_STATS *psStat);
 extern UDWORD numCR(const char *pFileBuffer, UDWORD fileSize);
 
 /*Load the weapon stats from the file exported from Access*/
-extern BOOL loadWeaponStats(char *pWeaponData, UDWORD bufferSize);
+extern BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize);
 
 /*Load the armour stats from the file exported from Access*/
 //extern BOOL loadArmourStats(void);
 
 /*Load the body stats from the file exported from Access*/
-extern BOOL loadBodyStats(char *pBodyData, UDWORD bufferSize);
+extern BOOL loadBodyStats(const char *pBodyData, UDWORD bufferSize);
 
 /*Load the brain stats from the file exported from Access*/
-extern BOOL loadBrainStats(char *pBrainData, UDWORD bufferSize);
+extern BOOL loadBrainStats(const char *pBrainData, UDWORD bufferSize);
 
 /*Load the power stats from the file exported from Access*/
 //extern BOOL loadPowerStats(void);
 
 /*Load the propulsion stats from the file exported from Access*/
-extern BOOL loadPropulsionStats(char *pPropulsionData, UDWORD bufferSize);
+extern BOOL loadPropulsionStats(const char *pPropulsionData, UDWORD bufferSize);
 
 /*Load the sensor stats from the file exported from Access*/
-extern BOOL loadSensorStats(char *pSensorData, UDWORD bufferSize);
+extern BOOL loadSensorStats(const char *pSensorData, UDWORD bufferSize);
 
 /*Load the ecm stats from the file exported from Access*/
-extern BOOL loadECMStats(char *pECMData, UDWORD bufferSize);
+extern BOOL loadECMStats(const char *pECMData, UDWORD bufferSize);
 
 /*Load the repair stats from the file exported from Access*/
-extern BOOL loadRepairStats(char *pRepairData, UDWORD bufferSize);
+extern BOOL loadRepairStats(const char *pRepairData, UDWORD bufferSize);
 
 /*Load the construct stats from the file exported from Access*/
-extern BOOL loadConstructStats(char *pConstructData, UDWORD bufferSize);
+extern BOOL loadConstructStats(const char *pConstructData, UDWORD bufferSize);
 
 /*Load the Propulsion Types from the file exported from Access*/
-extern BOOL loadPropulsionTypes(char *pPropTypeData, UDWORD bufferSize);
+extern BOOL loadPropulsionTypes(const char *pPropTypeData, UDWORD bufferSize);
 
 /*Load the propulsion sounds from the file exported from Access*/
-extern BOOL loadPropulsionSounds(char *pSoundData, UDWORD bufferSize);
+extern BOOL loadPropulsionSounds(const char *pSoundData, UDWORD bufferSize);
 
 /*Load the Terrain Table from the file exported from Access*/
-extern BOOL loadTerrainTable(char *pTerrainTableData, UDWORD bufferSize);
+extern BOOL loadTerrainTable(const char *pTerrainTableData, UDWORD bufferSize);
 
 /*Load the Special Ability stats from the file exported from Access*/
-extern BOOL loadSpecialAbility(char *pSAbilityData, UDWORD bufferSize);
+extern BOOL loadSpecialAbility(const char *pSAbilityData, UDWORD bufferSize);
 
 /* load the IMDs to use for each body-propulsion combination */
-extern BOOL loadBodyPropulsionIMDs(char *pData, UDWORD bufferSize);
+extern BOOL loadBodyPropulsionIMDs(const char *pData, UDWORD bufferSize);
 
 /*Load the weapon sounds from the file exported from Access*/
-extern BOOL loadWeaponSounds(char *pSoundData, UDWORD bufferSize);
+extern BOOL loadWeaponSounds(const char *pSoundData, UDWORD bufferSize);
 
 /*Load the Weapon Effect Modifiers from the file exported from Access*/
-extern BOOL loadWeaponModifiers(char *pWeapModData, UDWORD bufferSize);
+extern BOOL loadWeaponModifiers(const char *pWeapModData, UDWORD bufferSize);
 /*******************************************************************************
 *		Set stats functions
 *******************************************************************************/
@@ -260,7 +260,7 @@ extern CONSTRUCT_STATS *statsGetConstruct(UDWORD ref);
 extern BOOL statsShutDown(void);
 
 /*Deallocate the stats passed in as parameter */
-extern void statsDealloc(COMP_BASE_STATS* pStats, UDWORD listSize, 
+extern void statsDealloc(COMP_BASE_STATS* pStats, UDWORD listSize,
 						 UDWORD structureSize);
 
 extern void deallocPropulsionTypes(void);
@@ -275,32 +275,32 @@ extern UDWORD statType(UDWORD ref);
 //return the REF_START value of this type of stat
 extern UDWORD statRefStart(UDWORD stat);
 /*Returns the component type based on the string - used for reading in data */
-extern UDWORD componentType(char* pType);
+extern UDWORD componentType(const char* pType);
 //get the component Inc for a stat based on the name
-extern SDWORD	getCompFromName(UDWORD compType, char *pName);
+extern SDWORD getCompFromName(UDWORD compType, const char *pName);
 //get the component Inc for a stat based on the Resource name held in Names.txt
-extern SDWORD	getCompFromResName(UDWORD compType, char *pName);
+extern SDWORD getCompFromResName(UDWORD compType, const char *pName);
 /*sets the tech level for the stat passed in */
 extern BOOL setTechLevel(BASE_STATS *psStats, char *pLevel);
 /*returns the weapon sub class based on the string name passed in */
-extern WEAPON_SUBCLASS	getWeaponSubClass(char *pSubClass);
+extern WEAPON_SUBCLASS getWeaponSubClass(const char *pSubClass);
 /*either gets the name associated with the resource (if one) or allocates space and copies pName*/
-extern BOOL allocateName(char **ppStore, char *pName);
+extern BOOL allocateName(char **ppStore, const char *pName);
 //converts the name read in from Access into the name which is used in the Stat lists (or ignores it)
-extern BOOL getResourceName(char *pName);
+extern BOOL getResourceName(const char *pName);
 /*return the name to display for the interface - valid for OBJECTS and STATS*/
-extern char* getName(char *pNameID);
-/*sets the store to the body size based on the name passed in - returns FALSE 
+extern const char* getName(const char *pNameID);
+/*sets the store to the body size based on the name passed in - returns FALSE
 if doesn't compare with any*/
-extern BOOL getBodySize(char *pSize, UBYTE *pStore);
+extern BOOL getBodySize(const char *pSize, UBYTE *pStore);
 
 // Pass in a stat and get its name
-extern char* getStatName(void * pStat);
+extern const char* getStatName(void * pStat);
 
 /*returns the propulsion type based on the string name passed in */
-extern PROPULSION_TYPE	getPropulsionType(char *pType);
+extern PROPULSION_TYPE getPropulsionType(const char *pType);
 /*returns the weapon effect based on the string name passed in */
-extern WEAPON_EFFECT	getWeaponEffect(char *pWeaponEffect);
+extern WEAPON_EFFECT getWeaponEffect(const char *pWeaponEffect);
 
 extern UWORD weaponROF(WEAPON_STATS *psStat);
 /*Access functions for the upgradeable stats of a weapon*/
@@ -322,13 +322,13 @@ extern UDWORD	repairPoints(REPAIR_STATS *psStats, UBYTE player);
 extern UDWORD	constructorPoints(CONSTRUCT_STATS *psStats, UBYTE player);
 /*Access functions for the upgradeable stats of a body*/
 extern UDWORD	bodyPower(BODY_STATS *psStats, UBYTE player, UBYTE bodyType);
-extern UDWORD	bodyArmour(BODY_STATS *psStats, UBYTE player, UBYTE bodyType, 
+extern UDWORD	bodyArmour(BODY_STATS *psStats, UBYTE player, UBYTE bodyType,
 				   WEAPON_CLASS weaponClass, int side);
 
 /*dummy function for John*/
 extern void brainAvailable(BRAIN_STATS *psStat);
 
-void adjustMaxDesignStats(void);
+extern void adjustMaxDesignStats(void);
 
 //Access functions for the max values to be used in the Design Screen
 extern UDWORD getMaxComponentWeight(void);

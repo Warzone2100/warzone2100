@@ -45,76 +45,22 @@
 FUNCTION	**asFunctions;
 UDWORD		numFunctions;
 
-//lists the current Upgrade level that can be applied to a structure through research
-//FUNCTION_UPGRADE		*apProductionUpgrades[MAX_PLAYERS];
-//UDWORD					numProductionUpgrades;
-//FUNCTION_UPGRADE		*apResearchUpgrades[MAX_PLAYERS];
-//UDWORD					numResearchUpgrades;
-//FUNCTION_UPGRADE		*apArmourUpgrades[MAX_PLAYERS];
-//UDWORD					numArmourUpgrades;
-//FUNCTION_UPGRADE		*apBodyUpgrades[MAX_PLAYERS];
-//UDWORD					numBodyUpgrades;
-//FUNCTION_UPGRADE		*apRepairUpgrades[MAX_PLAYERS];
-//UDWORD					numRepairUpgrades;
-//FUNCTION_UPGRADE		*apResistanceUpgrades[MAX_PLAYERS];
-//UDWORD					numResistanceUpgrades;
-//FUNCTION_UPGRADE		*apWeaponUpgrades[MAX_PLAYERS];
-//UDWORD					numWeaponUpgrades;
-
 /*Returns the Function type based on the string - used for reading in data */
-static UDWORD functionType(char* pType);
-static BOOL storeName(FUNCTION* pFunction, char* pNameToStore);
-static BOOL loadUpgradeFunction(char *pData, UBYTE type);
+static UDWORD functionType(const char* pType);
+static BOOL storeName(FUNCTION* pFunction, const char* pNameToStore);
+static BOOL loadUpgradeFunction(const char *pData, UBYTE type);
 
 
-//array of functions pointers for each load function
-BOOL (*pLoadFunction[NUMFUNCTIONS])(char *pData) =
+typedef BOOL (*LoadFunction)(const char *pData);
+static LoadFunction pLoadFunction[NUMFUNCTIONS];
+
+
+BOOL loadFunctionStats(const char *pFunctionData, UDWORD bufferSize)
 {
-	loadProduction,
-	loadProductionUpgradeFunction,
-	loadResearchFunction,
-	loadResearchUpgradeFunction,
-	loadPowerGenFunction,
-	loadResourceFunction,
-	loadRepairDroidFunction,
-	loadWeaponUpgradeFunction,
-	loadWallFunction,
-	loadStructureUpgradeFunction,
-	loadWallDefenceUpgradeFunction,
-	loadPowerUpgradeFunction,
-	loadRepairUpgradeFunction,
-	loadDroidRepairUpgradeFunction,
-	loadDroidECMUpgradeFunction,
-	loadDroidBodyUpgradeFunction,
-	loadDroidSensorUpgradeFunction,
-	loadDroidConstUpgradeFunction,
-	loadReArmFunction,
-	loadReArmUpgradeFunction,
-	//loadDefensiveStructFunction,
-	//loadRadarMapFunction,
-	//loadPowerRegFunction,
-	//loadPowerRelayFunction,
-	//loadArmourUpgradeFunction,
-	//loadRepairUpgradeFunction,
-	//loadResistanceUpgradeFunction,
-//	loadFunction,
-//	loadFunction,
-//	loadFunction,
-	//loadBodyUpgradeFunction,
-	//loadHQFunction,
-};
-
-BOOL loadFunctionStats(char *pFunctionData, UDWORD bufferSize)
-{
-	char		*pStartFunctionData;
-	UDWORD		totalFunctions = 0, i, type;//, player;
+	const unsigned int totalFunctions = numCR(pFunctionData, bufferSize);
+	UDWORD		i, type;
 	char		FunctionType[MAX_NAME_SIZE];
 	FUNCTION	**pStartList;
-
-	//keep the start so we release it at the end
-	pStartFunctionData = pFunctionData;
-
-	totalFunctions = numCR(pFunctionData, bufferSize);
 
 	//allocate storage for the Function pointer array
 	asFunctions = (FUNCTION**) malloc(totalFunctions*sizeof(FUNCTION*));
@@ -150,156 +96,11 @@ BOOL loadFunctionStats(char *pFunctionData, UDWORD bufferSize)
 	//set the function list pointer to the start
 	asFunctions = pStartList;
 
-//	FREE (pStartFunctionData);
-
-	//create Upgrade arrays
-	//for (player = 0; player < MAX_PLAYERS; player++)
-	//{
-		/*apProductionUpgrades[player] = (FUNCTION_UPGRADE *) malloc(numProductionUpgrades *
-			sizeof(FUNCTION_UPGRADE));
-		if (!apProductionUpgrades[player])
-		{
-			DBERROR(("Out of memory"));
-			return FALSE;
-		}
-
-		apResearchUpgrades[player] = (FUNCTION_UPGRADE *) malloc(numResearchUpgrades *
-			sizeof(FUNCTION_UPGRADE));
-		if (!apResearchUpgrades[player])
-		{
-			DBERROR(("Out of memory"));
-			return FALSE;
-		}*/
-
-		/*apBodyUpgrades[player] = (FUNCTION_UPGRADE *) malloc(numBodyUpgrades *
-			sizeof(FUNCTION_UPGRADE));
-		if (!apBodyUpgrades[player])
-		{
-			DBERROR(("Out of memory"));
-			return FALSE;
-		}*/
-
-		/*apArmourUpgrades[player] = (FUNCTION_UPGRADE *) malloc(numArmourUpgrades *
-			sizeof(FUNCTION_UPGRADE));
-		if (!apArmourUpgrades[player])
-		{
-			DBERROR(("Out of memory"));
-			return FALSE;
-		}*/
-
-		/*apRepairUpgrades[player] = (FUNCTION_UPGRADE *) malloc(numRepairUpgrades *
-			sizeof(FUNCTION_UPGRADE));
-		if (!apRepairUpgrades[player])
-		{
-			DBERROR(("Out of memory"));
-			return FALSE;
-		}*/
-
-		/*apResistanceUpgrades[player] = (FUNCTION_UPGRADE *) malloc(numResistanceUpgrades *
-			sizeof(FUNCTION_UPGRADE));
-		if (!apResistanceUpgrades[player])
-		{
-			DBERROR(("Out of memory"));
-			return FALSE;
-		}*/
-		/*apWeaponUpgrades[player] = (FUNCTION_UPGRADE *) malloc(numWeaponUpgrades *
-			sizeof(FUNCTION_UPGRADE));
-		if (!apWeaponUpgrades[player])
-		{
-			DBERROR(("Out of memory"));
-			return FALSE;
-		}*/
-	//}
-
-	//pStartList = asFunctions;
-	//numProductionUpgrades =	numResearchUpgrades = 0;//numArmourUpgrades =
-		//numRepairUpgrades = numResistanceUpgrades = numBodyUpgrades =
-		//numWeaponUpgrades = 0;
-	//now fill the Upgrade arrays
-	//for (i = 0; i < numFunctions; i++)
-	//{
-	//	switch ((*pStartList)->type)
-	//	{
-			/*case (PRODUCTION_UPGRADE_TYPE):
-			{
-				for (player = 0; player < MAX_PLAYERS; player++)
-				{
-					apProductionUpgrades[player][numProductionUpgrades].functionInc = i;
-					apProductionUpgrades[player][numProductionUpgrades].available = FALSE;
-				}
-				numProductionUpgrades++;
-				break;
-			}*/
-			/*case (RESEARCH_UPGRADE_TYPE):
-			{
-				for (player = 0; player < MAX_PLAYERS; player++)
-				{
-					apResearchUpgrades[player][numResearchUpgrades].functionInc = i;
-					apResearchUpgrades[player][numResearchUpgrades].available = FALSE;
-				}
-				numResearchUpgrades++;
-				break;
-			}*/
-			/*case (ARMOUR_UPGRADE_TYPE):
-			{
-				for (player = 0; player < MAX_PLAYERS; player++)
-				{
-					apArmourUpgrades[player][numArmourUpgrades].functionInc = i;
-					apArmourUpgrades[player][numArmourUpgrades].available = FALSE;
-				}
-				numArmourUpgrades++;
-				break;
-			}*/
-			/*case (BODY_UPGRADE_TYPE):
-			{
-				for (player = 0; player < MAX_PLAYERS; player++)
-				{
-					apBodyUpgrades[player][numBodyUpgrades].functionInc = i;
-					apBodyUpgrades[player][numBodyUpgrades].available = FALSE;
-				}
-				numBodyUpgrades++;
-				break;
-			}*/
-			/*case (REPAIR_UPGRADE_TYPE):
-			{
-				for (player = 0; player < MAX_PLAYERS; player++)
-				{
-					apRepairUpgrades[player][numRepairUpgrades].functionInc = i;
-					apRepairUpgrades[player][numRepairUpgrades].available = FALSE;
-				}
-				numRepairUpgrades++;
-				break;
-			}*/
-			/*case (RESISTANCE_UPGRADE_TYPE):
-			{
-				for (player = 0; player < MAX_PLAYERS; player++)
-				{
-					apResistanceUpgrades[player][numResistanceUpgrades].functionInc = i;
-					apResistanceUpgrades[player][numResistanceUpgrades].available = FALSE;
-				}
-				numResistanceUpgrades++;
-				break;
-			}*/
-			/*case (WEAPON_UPGRADE_TYPE):
-			{
-				for (player = 0; player < MAX_PLAYERS; player++)
-				{
-					apWeaponUpgrades[player][numWeaponUpgrades].functionInc = i;
-					apWeaponUpgrades[player][numWeaponUpgrades].available = FALSE;
-				}
-				numWeaponUpgrades++;
-				break;
-			}*/
-			//default:
-				//do nothing
-	//	}//end of switch
-	//	pStartList++;
-	//}
 	return TRUE;
 }
 
 // Allocate storage for the name
-BOOL storeName(FUNCTION* pFunction, char* pNameToStore)
+static BOOL storeName(FUNCTION* pFunction, const char* pNameToStore)
 {
 	pFunction->pName = (char *)malloc(strlen(pNameToStore)+1);
 	if (pFunction->pName == NULL)
@@ -308,55 +109,12 @@ BOOL storeName(FUNCTION* pFunction, char* pNameToStore)
 		abort();
 		return FALSE;
 	}
-	strcpy(pFunction->pName,pNameToStore);
+	strcpy(pFunction->pName, pNameToStore);
 	return TRUE;
 }
 
-/*BOOL loadFunction(char *pData, UDWORD functionType)
-{
-	FUNCTION*				psFunction;
-	char					functionName[50];
 
-	//allocate storage
-	psFunction = (FUNCTION *)malloc(sizeof(FUNCTION));
-	if (psFunction == NULL)
-	{
-		DBERROR(("Function - Out of memory"));
-		return FALSE;
-	}
-
-	//store the pointer in the Function Array
-	*asFunctions = (FUNCTION*)psFunction;
-	numFunctions++;
-	asFunctions++;
-
-	//set the type of function
-	switch (functionType)
-	{
-	case DROID_DESIGN_TYPE:
-		psFunction->type = DROID_DESIGN_TYPE;
-		break;
-	case MAP_MARKER_TYPE:
-		psFunction->type = MAP_MARKER_TYPE;
-		break;
-	case SKY_DOME_MAP_TYPE:
-		psFunction->type = SKY_DOME_MAP_TYPE;
-		break;
-	default:
-		DBERROR(("Unknown Function Type"));
-		return FALSE;
-	}
-
-	//read the data in
-	sscanf(pData, "%[^',']", &functionName);
-
-	//allocate storage for the name
-	storeName(psFunction, functionName);
-
-	return TRUE;
-}*/
-
-BOOL loadProduction(char *pData)
+BOOL loadProduction(const char *pData)
 {
 	PRODUCTION_FUNCTION*	psFunction;
 	//UBYTE					propType;
@@ -446,7 +204,7 @@ BOOL loadProduction(char *pData)
 	return TRUE;
 }
 
-BOOL loadProductionUpgradeFunction(char *pData)
+BOOL loadProductionUpgradeFunction(const char *pData)
 {
 	PRODUCTION_UPGRADE_FUNCTION*	psFunction;
 	char							functionName[MAX_NAME_SIZE];
@@ -514,7 +272,7 @@ BOOL loadProductionUpgradeFunction(char *pData)
 	return TRUE;
 }
 
-BOOL loadResearchFunction(char *pData)
+BOOL loadResearchFunction(const char *pData)
 {
 	RESEARCH_FUNCTION*			psFunction;
 	char						functionName[MAX_NAME_SIZE];
@@ -548,7 +306,7 @@ BOOL loadResearchFunction(char *pData)
 	return TRUE;
 }
 
-BOOL loadReArmFunction(char *pData)
+BOOL loadReArmFunction(const char *pData)
 {
 	REARM_FUNCTION*				psFunction;
 	char						functionName[MAX_NAME_SIZE];
@@ -583,7 +341,7 @@ BOOL loadReArmFunction(char *pData)
 }
 
 
-BOOL loadResearchUpgradeFunction(char *pData)
+BOOL loadResearchUpgradeFunction(const char *pData)
 {
 	if (!loadUpgradeFunction(pData, RESEARCH_UPGRADE_TYPE))
 	{
@@ -593,7 +351,7 @@ BOOL loadResearchUpgradeFunction(char *pData)
 	return TRUE;
 }
 
-BOOL loadPowerUpgradeFunction(char *pData)
+BOOL loadPowerUpgradeFunction(const char *pData)
 {
 	if (!loadUpgradeFunction(pData, POWER_UPGRADE_TYPE))
 	{
@@ -603,7 +361,7 @@ BOOL loadPowerUpgradeFunction(char *pData)
 	return TRUE;
 }
 
-BOOL loadRepairUpgradeFunction(char *pData)
+BOOL loadRepairUpgradeFunction(const char *pData)
 {
 	if (!loadUpgradeFunction(pData, REPAIR_UPGRADE_TYPE))
 	{
@@ -613,7 +371,7 @@ BOOL loadRepairUpgradeFunction(char *pData)
 	return TRUE;
 }
 
-BOOL loadDroidRepairUpgradeFunction(char *pData)
+BOOL loadDroidRepairUpgradeFunction(const char *pData)
 {
 	if (!loadUpgradeFunction(pData, DROIDREPAIR_UPGRADE_TYPE))
 	{
@@ -623,7 +381,7 @@ BOOL loadDroidRepairUpgradeFunction(char *pData)
 	return TRUE;
 }
 
-BOOL loadDroidECMUpgradeFunction(char *pData)
+BOOL loadDroidECMUpgradeFunction(const char *pData)
 {
 	if (!loadUpgradeFunction(pData, DROIDECM_UPGRADE_TYPE))
 	{
@@ -633,7 +391,7 @@ BOOL loadDroidECMUpgradeFunction(char *pData)
 	return TRUE;
 }
 
-BOOL loadDroidConstUpgradeFunction(char *pData)
+BOOL loadDroidConstUpgradeFunction(const char *pData)
 {
 	if (!loadUpgradeFunction(pData, DROIDCONST_UPGRADE_TYPE))
 	{
@@ -643,7 +401,7 @@ BOOL loadDroidConstUpgradeFunction(char *pData)
 	return TRUE;
 }
 
-BOOL loadReArmUpgradeFunction(char *pData)
+BOOL loadReArmUpgradeFunction(const char *pData)
 {
 	if (!loadUpgradeFunction(pData, REARM_UPGRADE_TYPE))
 	{
@@ -654,7 +412,7 @@ BOOL loadReArmUpgradeFunction(char *pData)
 }
 
 //generic load function for upgrade type
-BOOL loadUpgradeFunction(char *pData, UBYTE type)
+BOOL loadUpgradeFunction(const char *pData, UBYTE type)
 {
 	char						functionName[MAX_NAME_SIZE];
 	UDWORD						modifier;
@@ -698,7 +456,7 @@ BOOL loadUpgradeFunction(char *pData, UBYTE type)
 	return TRUE;
 }
 
-BOOL loadDroidBodyUpgradeFunction(char *pData)
+BOOL loadDroidBodyUpgradeFunction(const char *pData)
 {
 	DROIDBODY_UPGRADE_FUNCTION		*psFunction;
 	char							functionName[MAX_NAME_SIZE];
@@ -766,7 +524,7 @@ BOOL loadDroidBodyUpgradeFunction(char *pData)
 	return TRUE;
 }
 
-BOOL loadDroidSensorUpgradeFunction(char *pData)
+BOOL loadDroidSensorUpgradeFunction(const char *pData)
 {
 	DROIDSENSOR_UPGRADE_FUNCTION	*psFunction;
 	char							functionName[MAX_NAME_SIZE];
@@ -813,7 +571,7 @@ BOOL loadDroidSensorUpgradeFunction(char *pData)
     return TRUE;
 }
 
-BOOL loadWeaponUpgradeFunction(char *pData)
+BOOL loadWeaponUpgradeFunction(const char *pData)
 {
 	WEAPON_UPGRADE_FUNCTION*	psFunction;
 	char						functionName[MAX_NAME_SIZE],
@@ -886,7 +644,7 @@ BOOL loadWeaponUpgradeFunction(char *pData)
     return TRUE;
 }
 
-BOOL loadStructureUpgradeFunction(char *pData)
+BOOL loadStructureUpgradeFunction(const char *pData)
 {
 	STRUCTURE_UPGRADE_FUNCTION  *psFunction;
 	char						functionName[MAX_NAME_SIZE];
@@ -937,7 +695,7 @@ BOOL loadStructureUpgradeFunction(char *pData)
 	return TRUE;
 }
 
-BOOL loadWallDefenceUpgradeFunction(char *pData)
+BOOL loadWallDefenceUpgradeFunction(const char *pData)
 {
 	WALLDEFENCE_UPGRADE_FUNCTION  *psFunction;
 	char						functionName[MAX_NAME_SIZE];
@@ -986,77 +744,8 @@ BOOL loadWallDefenceUpgradeFunction(char *pData)
 	return TRUE;
 }
 
-/*BOOL loadBodyUpgradeFunction(char *pData)
-{
-	BODY_UPGRADE_FUNCTION*		psFunction;
-	char						functionName[MAX_NAME_SIZE];
 
-	//allocate storage
-	psFunction = (BODY_UPGRADE_FUNCTION *)malloc(sizeof
-		(BODY_UPGRADE_FUNCTION));
-	if (psFunction == NULL)
-	{
-		DBERROR(("Body Upgrade Function - Out of memory"));
-		return FALSE;
-	}
-
-	//store the pointer in the Function Array
-	*asFunctions = (FUNCTION *)psFunction;
-	psFunction->ref = REF_FUNCTION_START + numFunctions;
-	numFunctions++;
-	asFunctions++;
-
-	//set the type of function
-	psFunction->type = BODY_UPGRADE_TYPE;
-
-	//read the data in
-	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d", &functionName, &psFunction->bodyPoints);
-
-	//allocate storage for the name
-	storeName((FUNCTION *)psFunction, functionName);
-
-	//increment the number of upgrades
-	numBodyUpgrades++;
-
-	return TRUE;
-}*/
-
-/*BOOL loadRadarMapFunction(char *pData)
-{
-	RADAR_MAP_FUNCTION*			psFunction;
-	char						functionName[MAX_NAME_SIZE];
-
-	//allocate storage
-	psFunction = (RADAR_MAP_FUNCTION *)malloc(sizeof
-		(RADAR_MAP_FUNCTION));
-	if (psFunction == NULL)
-	{
-		DBERROR(("Radar Map Function - Out of memory"));
-		return FALSE;
-	}
-
-	//store the pointer in the Function Array
-	*asFunctions = (FUNCTION *)psFunction;
-	psFunction->ref = REF_FUNCTION_START + numFunctions;
-	numFunctions++;
-	asFunctions++;
-
-	//set the type of function
-	psFunction->type = RADAR_MAP_TYPE;
-
-	//read the data in
-	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d,%d", &functionName,
-		&psFunction->radarDecayRate, &psFunction->radarRadius);
-
-	//allocate storage for the name
-	storeName((FUNCTION *)psFunction, functionName);
-
-	return TRUE;
-}*/
-
-BOOL loadPowerGenFunction(char *pData)
+BOOL loadPowerGenFunction(const char *pData)
 {
 	POWER_GEN_FUNCTION*			psFunction;
 	char						functionName[MAX_NAME_SIZE];
@@ -1101,7 +790,7 @@ BOOL loadPowerGenFunction(char *pData)
 	return TRUE;
 }
 
-BOOL loadResourceFunction(char *pData)
+BOOL loadResourceFunction(const char *pData)
 {
 	RESOURCE_FUNCTION			*psFunction;
 	char						functionName[MAX_NAME_SIZE];
@@ -1136,75 +825,8 @@ BOOL loadResourceFunction(char *pData)
 	return TRUE;
 }
 
-/*BOOL loadPowerRegFunction(char *pData)
-{
-	POWER_REG_FUNCTION*			psFunction;
-	char						functionName[MAX_NAME_SIZE];
 
-	//allocate storage
-	psFunction = (POWER_REG_FUNCTION *)malloc(sizeof
-		(POWER_REG_FUNCTION));
-	if (psFunction == NULL)
-	{
-		DBERROR(("Power Reg Function - Out of memory"));
-		return FALSE;
-	}
-
-	//store the pointer in the Function Array
-	*asFunctions = (FUNCTION *)psFunction;
-	psFunction->ref = REF_FUNCTION_START + numFunctions;
-	numFunctions++;
-	asFunctions++;
-
-	//set the type of function
- 	psFunction->type = POWER_REG_TYPE;
-
-	//read the data in
-	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d", &functionName, &psFunction->maxPower);
-
-
-	//allocate storage for the name
-	storeName((FUNCTION *)psFunction, functionName);
-
-	return TRUE;
-}*/
-
-/*BOOL loadPowerRelayFunction(char *pData)
-{
-	POWER_RELAY_FUNCTION*			psFunction;
-	char						functionName[MAX_NAME_SIZE];
-
-	//allocate storage
-	psFunction = (POWER_RELAY_FUNCTION *)malloc(sizeof
-		(POWER_RELAY_FUNCTION));
-	if (psFunction == NULL)
-	{
-		DBERROR(("Power Relay Function - Out of memory"));
-		return FALSE;
-	}
-
-	//store the pointer in the Function Array
-	*asFunctions = (FUNCTION *)psFunction;
-	psFunction->ref = REF_FUNCTION_START + numFunctions;
-	numFunctions++;
-	asFunctions++;
-
-	//set the type of function
-	psFunction->type = POWER_RELAY_TYPE;
-
-	//read the data in
-	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d,%d", &functionName,
-		&psFunction->powerRelayType, &psFunction->powerRelayRange);
-
-	//allocate storage for the name
-	storeName((FUNCTION *)psFunction, functionName);
-
-	return TRUE;
-}*/
-
-BOOL loadRepairDroidFunction(char *pData)
+BOOL loadRepairDroidFunction(const char *pData)
 {
 	REPAIR_DROID_FUNCTION*		psFunction;
 	char						functionName[MAX_NAME_SIZE];
@@ -1240,285 +862,9 @@ BOOL loadRepairDroidFunction(char *pData)
 	return TRUE;
 }
 
-/*BOOL loadDefensiveStructFunction(char *pData)
-{
-	//pData;
-	//DBERROR(("Defensive Structure Function is not longer used - \
-	//	do not allocate it to a Structure!"));
-	//return FALSE;
-	DEFENSIVE_STRUCTURE_FUNCTION*	psFunction;
-	UDWORD							i;
-	char							functionName[MAX_NAME_SIZE];
-	char							sensorType[MAX_NAME_SIZE];
-	char							ecmType[MAX_NAME_SIZE];
-	SENSOR_STATS*					pSensorType;
-	ECM_STATS*						pECMType;
-
-	//allocate storage
-	psFunction = (DEFENSIVE_STRUCTURE_FUNCTION *)malloc(
-		sizeof(DEFENSIVE_STRUCTURE_FUNCTION));
-	if (psFunction == NULL)
-	{
-		DBERROR(("Defensive Structure Function - Out of memory"));
-		return FALSE;
-	}
-
-	//store the pointer in the Function Array
-	*asFunctions = (FUNCTION *)psFunction;
-	psFunction->ref = REF_FUNCTION_START + numFunctions;
-	numFunctions++;
-	asFunctions++;
-
-	//set the type of function
-	psFunction->type = DEFENSIVE_STRUCTURE_TYPE;
-
-	//read the data in
-	sscanf(pData, "%[^','],%[^','],%[^','],%d", &functionName, &ecmType,
-		&sensorType, &psFunction->weaponCapacity);
-
-	//allocate storage for the name
-	storeName((FUNCTION *)psFunction, functionName);
-
-	//get the sensor stats pointer
-	if (!strcmp(sensorType,"0"))
-	{
-		psFunction->pSensor = NULL;
-	}
-	else
-	{
-		pSensorType = asSensorStats;
-		for (i=0; i < numSensorStats; i++)
-		{
-			//compare the names
-			if (!strcmp(sensorType, pSensorType->pName))
-			{
-				psFunction->pSensor = pSensorType;
-				break;
-			}
-			pSensorType++;
-		}
-	}
-	//get the ecm stats pointer
-	if (!strcmp(ecmType,"0"))
-	{
-		psFunction->pECM = NULL;
-	}
-	else
-	{
-		pECMType = asECMStats;
-		for (i=0; i < numECMStats; i++)
-		{
-			//compare the names
-			if (!strcmp(ecmType, pECMType->pName))
-			{
-				psFunction->pECM = pECMType;
-				break;
-			}
-			pECMType++;
-		}
-	}
-	return TRUE;
-}*/
-
-/*BOOL loadHQFunction(SBYTE *pData)
-{
-	HQ_FUNCTION*		psFunction;
-	char				functionName[MAX_NAME_SIZE];
-
-	//allocate storage
-	psFunction = (HQ_FUNCTION *)malloc(sizeof(HQ_FUNCTION));
-	if (psFunction == NULL)
-	{
-		DBERROR(("HQ Function - Out of memory"));
-		return FALSE;
-	}
-
-	//store the pointer in the Function Array
-	*asFunctions = (FUNCTION *)psFunction;
-	psFunction->ref = REF_FUNCTION_START + numFunctions;
-	numFunctions++;
-	asFunctions++;
-
-	//set the type of function
-	psFunction->type = HQ_TYPE;
-
-	//read the data in
-	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d", &functionName,
-		&psFunction->power);
-
-	//allocate storage for the name
-	storeName((FUNCTION *)psFunction, functionName);
-
-	return TRUE;
-}*/
-
-/*BOOL loadArmourUpgradeFunction(SBYTE *pData)
-{
-	ARMOUR_UPGRADE_FUNCTION*	psFunction;
-//	UDWORD						i;
-	char						functionName[MAX_NAME_SIZE];
-	//char						armourType[50];
-//	ARMOUR_STATS*				pArmourType;
-
-	//allocate storage
-	psFunction = (ARMOUR_UPGRADE_FUNCTION *)malloc(sizeof(ARMOUR_UPGRADE_FUNCTION));
-	if (psFunction == NULL)
-	{
-		DBERROR(("Armour Upgrade Function - Out of memory"));
-		return FALSE;
-	}
-
-	//store the pointer in the Function Array
-	*asFunctions = (FUNCTION *)psFunction;
-	psFunction->ref = REF_FUNCTION_START + numFunctions;
-	numFunctions++;
-	asFunctions++;
-
-	//set the type of function
-	psFunction->type = ARMOUR_UPGRADE_TYPE;
-
-	//read the data in
-	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d,%d,%d", &functionName,
-		&psFunction->buildPoints, &psFunction->powerRequired, &psFunction->armourPoints);
-
-	//allocate storage for the name
-	storeName((FUNCTION *)psFunction, functionName);
-
-	//get the armour stats pointer
-	//pArmourType = asArmourStats;
-	//psFunction->pArmour = NULL;
-	//for (i=0; i < numArmourStats; i++)
-	//{
-		//compare the names
-	//	if (!strcmp(armourType, pArmourType->pName))
-	//	{
-	//		psFunction->pArmour = pArmourType;
-	//		break;
-	//	}
-	//	pArmourType++;
-	//}
-	//if not found the armour stat then problem
-	//if (!psFunction->pArmour)
-	//{
-	//	DBERROR(("Armour Type invalid"));
-	//	return FALSE;
-	//}
-
-	//increment the number of upgrades
-	numArmourUpgrades++;
-
-	return TRUE;
-}*/
-
-/*BOOL loadRepairUpgradeFunction(SBYTE *pData)
-{
-	REPAIR_UPGRADE_FUNCTION*	psFunction;
-	UDWORD						i;
-	char						functionName[MAX_NAME_SIZE];
-	char						repairType[MAX_NAME_SIZE];
-	REPAIR_STATS*				pRepairType;
-
-	//allocate storage
-	psFunction = (REPAIR_UPGRADE_FUNCTION *)malloc(sizeof(REPAIR_UPGRADE_FUNCTION));
-	if (psFunction == NULL)
-	{
-		DBERROR(("Repair Upgrade Function - Out of memory"));
-		return FALSE;
-	}
-
-	//store the pointer in the Function Array
-	*asFunctions = (FUNCTION *)psFunction;
-	psFunction->ref = REF_FUNCTION_START + numFunctions;
-	numFunctions++;
-	asFunctions++;
-
-	//set the type of function
-	psFunction->type = REPAIR_UPGRADE_TYPE;
-
-	//read the data in
-	functionName[0] = '\0';
-	repairType[0] = '\0';
-	sscanf(pData, "%[^','],%[^','],%d,%d,%d", &functionName,
-		&repairType, &psFunction->repairPoints, &psFunction->buildPoints,
-		&psFunction->powerRequired);
-
-	//allocate storage for the name
-	storeName((FUNCTION *)psFunction, functionName);
-
-	if (!getResourceName(repairType))
-	{
-		return FALSE;
-	}
-
-
-	//get the repair stats pointer
-	pRepairType = asRepairStats;
-	psFunction->pRepair = NULL;
-
-	for (i=0; i < numRepairStats; i++)
-	{
-		//compare the names
-		if (!strcmp(repairType, pRepairType->pName))
-		{
-			psFunction->pRepair = pRepairType;
-			break;
-		}
-		pRepairType++;
-	}
-	//if not found the repair stats then problem
-	if (!psFunction->pRepair)
-	{
-		DBERROR(("Repair Stats Invalid for function - %s", functionName));
-		return FALSE;
-	}
-	//increment the number of upgrades
-	numRepairUpgrades++;
-
-	return TRUE;
-}*/
-
-/*BOOL loadResistanceUpgradeFunction(SBYTE *pData)
-{
-	RESISTANCE_UPGRADE_FUNCTION*		psFunction;
-	char								functionName[MAX_NAME_SIZE];
-
-	//allocate storage
-	psFunction = (RESISTANCE_UPGRADE_FUNCTION *)malloc(sizeof
-		(RESISTANCE_UPGRADE_FUNCTION));
-	if (psFunction == NULL)
-	{
-		DBERROR(("Resistance Upgrade Function - Out of memory"));
-		return FALSE;
-	}
-
-	//store the pointer in the Function Array
-	*asFunctions = (FUNCTION *)psFunction;
-	psFunction->ref = REF_FUNCTION_START + numFunctions;
-	numFunctions++;
-	asFunctions++;
-
-	//set the type of function
-	psFunction->type = RESISTANCE_UPGRADE_TYPE;
-
-	//read the data in
-	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d,%d,%d,%d", &functionName,
-		&psFunction->resistanceUpgrade, &psFunction->buildPoints,
-		&psFunction->powerRequired, &psFunction->resistancePoints);
-
-	//allocate storage for the name
-	storeName((FUNCTION *)psFunction, functionName);
-
-	//increment the number of upgrades
-	numResistanceUpgrades++;
-
-	return TRUE;
-}*/
 
 /*loads the corner stat to use for a particular wall stat */
-BOOL loadWallFunction(char *pData)
+BOOL loadWallFunction(const char *pData)
 {
 	WALL_FUNCTION			*psFunction;
 //	UDWORD					i;
@@ -1555,13 +901,6 @@ BOOL loadWallFunction(char *pData)
 
 	//store the structure name - cannot set the stat pointer here because structures
 	//haven't been loaded in yet!
-	/*psFunction->pStructName = (char *)malloc(strlen(structureName)+1);
-	if (psFunction->pStructName == NULL)
-	{
-		DBERROR(("Function Name - Out of memory"));
-		return FALSE;
-	}
-	strcpy(psFunction->pStructName,structureName);*/
 	if (!allocateName(&psFunction->pStructName, structureName))
 	{
 		debug( LOG_ERROR, "Structure Stats Invalid for function - %s", functionName );
@@ -2232,7 +1571,6 @@ BOOL FunctionShutDown(void)
 		pFunction = *asFunctions;
 		free(pFunction->pName);
 
-//#ifndef RESOURCE_NAMES
 #if !defined (RESOURCE_NAMES) && !defined(STORE_RESOURCE_ID)
 		if (pFunction->type == WALL_TYPE)
 		{
@@ -2244,153 +1582,132 @@ BOOL FunctionShutDown(void)
 	}
 	free(pStartList);
 
-	//free the Upgrade lists
-	/*for (player=0; player < MAX_PLAYERS; player++)
-	{
-		free(apProductionUpgrades[player]);
-		//free(apBodyUpgrades[player]);
-		//free(apRepairUpgrades[player]);
-		//free(apResistanceUpgrades[player]);
-		free(apResearchUpgrades[player]);
-		//free(apArmourUpgrades[player]);
-		//free(apWeaponUpgrades[player]);
-	}*/
 	return TRUE;
 }
 
 /*Returns the Function type based on the string - used for reading in data */
-UDWORD functionType(char* pType)
+static UDWORD functionType(const char* pType)
 {
-	if (!strcmp(pType,"Production"))
+	if (!strcmp(pType, "Production"))
 	{
 		return PRODUCTION_TYPE;
 	}
-	if (!strcmp(pType,"Production Upgrade"))
+	if (!strcmp(pType, "Production Upgrade"))
 	{
 		return PRODUCTION_UPGRADE_TYPE;
 	}
-	if (!strcmp(pType,"Research"))
+	if (!strcmp(pType, "Research"))
 	{
 		return RESEARCH_TYPE;
 	}
-	if (!strcmp(pType,"Research Upgrade"))
+	if (!strcmp(pType, "Research Upgrade"))
 	{
 		return RESEARCH_UPGRADE_TYPE;
 	}
-	if (!strcmp(pType,"Power Generator"))
+	if (!strcmp(pType, "Power Generator"))
 	{
 		return POWER_GEN_TYPE;
 	}
-	if (!strcmp(pType,"Resource"))
+	if (!strcmp(pType, "Resource"))
 	{
 		return RESOURCE_TYPE;
 	}
-	if (!strcmp(pType,"Repair Droid"))
+	if (!strcmp(pType, "Repair Droid"))
 	{
 		return REPAIR_DROID_TYPE;
 	}
-	if (!strcmp(pType,"Weapon Upgrade"))
+	if (!strcmp(pType, "Weapon Upgrade"))
 	{
 		return WEAPON_UPGRADE_TYPE;
 	}
-	if (!strcmp(pType,"Wall Function"))
+	if (!strcmp(pType, "Wall Function"))
 	{
 		return WALL_TYPE;
 	}
-	if (!strcmp(pType,"Structure Upgrade"))
+	if (!strcmp(pType, "Structure Upgrade"))
 	{
 		return STRUCTURE_UPGRADE_TYPE;
 	}
-	if (!strcmp(pType,"WallDefence Upgrade"))
+	if (!strcmp(pType, "WallDefence Upgrade"))
 	{
 		return WALLDEFENCE_UPGRADE_TYPE;
 	}
-	if (!strcmp(pType,"Power Upgrade"))
+	if (!strcmp(pType, "Power Upgrade"))
 	{
 		return POWER_UPGRADE_TYPE;
 	}
-	if (!strcmp(pType,"Repair Upgrade"))
+	if (!strcmp(pType, "Repair Upgrade"))
 	{
 		return REPAIR_UPGRADE_TYPE;
 	}
-	if (!strcmp(pType,"VehicleRepair Upgrade"))
+	if (!strcmp(pType, "VehicleRepair Upgrade"))
 	{
 		return DROIDREPAIR_UPGRADE_TYPE;
 	}
-	if (!strcmp(pType,"VehicleECM Upgrade"))
+	if (!strcmp(pType, "VehicleECM Upgrade"))
 	{
 		return DROIDECM_UPGRADE_TYPE;
 	}
-	if (!strcmp(pType,"VehicleConst Upgrade"))
+	if (!strcmp(pType, "VehicleConst Upgrade"))
 	{
 		return DROIDCONST_UPGRADE_TYPE;
 	}
-	if (!strcmp(pType,"VehicleBody Upgrade"))
+	if (!strcmp(pType, "VehicleBody Upgrade"))
 	{
 		return DROIDBODY_UPGRADE_TYPE;
 	}
-	if (!strcmp(pType,"VehicleSensor Upgrade"))
+	if (!strcmp(pType, "VehicleSensor Upgrade"))
 	{
 		return DROIDSENSOR_UPGRADE_TYPE;
 	}
-	if (!strcmp(pType,"ReArm"))
+	if (!strcmp(pType, "ReArm"))
 	{
 		return REARM_TYPE;
 	}
-	if (!strcmp(pType,"ReArm Upgrade"))
+	if (!strcmp(pType, "ReArm Upgrade"))
 	{
 		return REARM_UPGRADE_TYPE;
 	}
 
-	/*if (!strcmp(pType,"Radar Map"))
-	{
-		return RADAR_MAP_TYPE;
-	}*/
-	/*if (!strcmp(pType,"Power Regulator"))
-	{
-		return POWER_REG_TYPE;
-	}*/
-	/*if (!strcmp(pType,"Power Relay"))
-	{
-		return POWER_RELAY_TYPE;
-	}*/
-	/*if (!strcmp(pType,"Defensive Structure"))
-	{
-		return DEFENSIVE_STRUCTURE_TYPE;
-	}*/
-	/*if (!strcmp(pType,"Armour Upgrade"))
-	{
-		return ARMOUR_UPGRADE_TYPE;
-	}*/
-	/*if (!strcmp(pType,"Repair Upgrade"))
-	{
-		return REPAIR_UPGRADE_TYPE;
-	}*/
-	/*if (!strcmp(pType,"Resistance Upgrade"))
-	{
-		return RESISTANCE_UPGRADE_TYPE;
-	}*/
-/*	if (!strcmp(pType,"Droid Design"))
-	{
-		return DROID_DESIGN_TYPE;
-	}
-	if (!strcmp(pType,"Map Marker"))
-	{
-		return MAP_MARKER_TYPE;
-	}
-	if (!strcmp(pType,"Sky Dome Map"))
-	{
-		return SKY_DOME_MAP_TYPE;
-	}*/
-	/*if (!strcmp(pType,"Body Upgrade"))
-	{
-		return BODY_UPGRADE_TYPE;
-	}*/
-	/*if (!strcmp(pType,"HQ"))
-	{
-		return HQ_TYPE;
-	}*/
-
-	ASSERT( FALSE, "Unknown Function Type" );
+	ASSERT( FALSE, "Unknown Function Type: %s", pType );
 	return 0;
 }
+
+
+//array of functions pointers for each load function
+static LoadFunction pLoadFunction[NUMFUNCTIONS] =
+{
+	loadProduction,
+	loadProductionUpgradeFunction,
+	loadResearchFunction,
+	loadResearchUpgradeFunction,
+	loadPowerGenFunction,
+	loadResourceFunction,
+	loadRepairDroidFunction,
+	loadWeaponUpgradeFunction,
+	loadWallFunction,
+	loadStructureUpgradeFunction,
+	loadWallDefenceUpgradeFunction,
+	loadPowerUpgradeFunction,
+	loadRepairUpgradeFunction,
+	loadDroidRepairUpgradeFunction,
+	loadDroidECMUpgradeFunction,
+	loadDroidBodyUpgradeFunction,
+	loadDroidSensorUpgradeFunction,
+	loadDroidConstUpgradeFunction,
+	loadReArmFunction,
+	loadReArmUpgradeFunction,
+	//loadDefensiveStructFunction,
+	//loadRadarMapFunction,
+	//loadPowerRegFunction,
+	//loadPowerRelayFunction,
+	//loadArmourUpgradeFunction,
+	//loadRepairUpgradeFunction,
+	//loadResistanceUpgradeFunction,
+//	loadFunction,
+//	loadFunction,
+//	loadFunction,
+	//loadBodyUpgradeFunction,
+	//loadHQFunction,
+};
+

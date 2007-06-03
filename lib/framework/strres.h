@@ -74,7 +74,7 @@ extern BOOL strresLoadFixedID(STR_RES *psRes, STR_ID *psID, UDWORD numID);
 extern BOOL strresGetIDNum(STR_RES *psRes, const char *pIDStr, UDWORD *pIDNum);
 
 /* Return the stored ID string that matches the string passed in */
-extern BOOL strresGetIDString(STR_RES *psRes, char *pIDStr, char **ppStoredID);
+extern BOOL strresGetIDString(STR_RES *psRes, const char *pIDStr, char **ppStoredID);
 
 /* Get the string from an ID number */
 extern char *strresGetString(STR_RES *psRes, UDWORD id);
@@ -89,7 +89,7 @@ extern UDWORD stringLen(const char *pStr);
 extern void stringCpy(char *pDest, const char *pSrc);
 
 /* Get the ID number for a string*/
-extern UDWORD strresGetIDfromString(STR_RES *psRes, char *pString);
+extern UDWORD strresGetIDfromString(STR_RES *psRes, const char *pString);
 
 #endif
 

@@ -256,9 +256,9 @@ void statsDealloc(COMP_BASE_STATS* pStats, UDWORD listSize, UDWORD structureSize
 
 
 
-static BOOL allocateStatName(BASE_STATS* pStat, char *Name)
+static BOOL allocateStatName(BASE_STATS* pStat, const char *Name)
 {
-		return (allocateName(&pStat->pName, Name));
+	return (allocateName(&pStat->pName, Name));
 }
 
 
@@ -388,9 +388,9 @@ BOOL statsAllocConstruct(UDWORD	numStats)
 	ALLOC_STATS(numStats, asConstructStats, numConstructStats, CONSTRUCT_STATS);
 }
 
-char *getStatName(void * Stat)
+const char *getStatName(void * Stat)
 {
-	BASE_STATS *psStats=(BASE_STATS * )Stat;
+	const BASE_STATS * psStats= (BASE_STATS*)Stat;
 
 	return(getName(psStats->pName));
 }
@@ -402,11 +402,11 @@ char *getStatName(void * Stat)
 *		Load stats functions
 *******************************************************************************/
 /*Load the weapon stats from the file exported from Access*/
-BOOL loadWeaponStats(char *pWeaponData, UDWORD bufferSize)
+BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 {
-	//SBYTE			*pData;
-	WEAPON_STATS	sStats, *psStats, *psStartStats;
-	UDWORD			NumWeapons = 0, i, rotate, maxElevation, surfaceToAir;
+	const unsigned int NumWeapons = numCR(pWeaponData, bufferSize);
+	WEAPON_STATS	sStats, *psStats = &sStats, *psStartStats = &sStats;
+	UDWORD			i, rotate, maxElevation, surfaceToAir;
 	SDWORD			minElevation;
 	char			WeaponName[MAX_NAME_SIZE], GfxFile[MAX_NAME_SIZE];
 	char			mountGfx[MAX_NAME_SIZE], flightGfx[MAX_NAME_SIZE],
@@ -422,20 +422,6 @@ BOOL loadWeaponStats(char *pWeaponData, UDWORD bufferSize)
 	char			*StatsName;
 	UDWORD			penetrate;
 
-	//keep the start so we release it at the end
-	//pData = pWeaponData;
-
-	psStats = &sStats;
-/*	psStats = (WEAPON_STATS *)malloc(sizeof(WEAPON_STATS));
-	if (psStats == NULL)
-	{
-		DBERROR(("Weapon Stats - Out of memory"));
-		return FALSE;
-	}*/
-	//reserve the start of the data
-	psStartStats = psStats;
-
-	NumWeapons = numCR(pWeaponData, bufferSize);
 	if (!statsAllocWeapons(NumWeapons))
 	{
 		return FALSE;
@@ -937,27 +923,21 @@ BOOL loadWeaponStats(char *pWeaponData, UDWORD bufferSize)
 */
 
 /*Load the Body stats from the file exported from Access*/
-BOOL loadBodyStats(char *pBodyData, UDWORD bufferSize)
+BOOL loadBodyStats(const char *pBodyData, UDWORD bufferSize)
 {
-	BODY_STATS		sStats, *psStats, *psStartStats;
-	UDWORD			NumBody = 0,i,designable;
-	char			BodyName[MAX_NAME_SIZE], size[MAX_NAME_SIZE],
-					GfxFile[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE],
-                    flameIMD[MAX_NAME_SIZE];
-
-	psStats = &sStats;
-
-	//reserve the start of the data
-	psStartStats = psStats;
-
-	NumBody = numCR(pBodyData, bufferSize);
+	BODY_STATS sStats, *psStats = &sStats, *psStartStats = &sStats;
+	const unsigned int NumBody = numCR(pBodyData, bufferSize);
+	unsigned int i, designable;
+	char BodyName[MAX_NAME_SIZE], size[MAX_NAME_SIZE],
+		GfxFile[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE],
+		flameIMD[MAX_NAME_SIZE];
 
 	if (!statsAllocBody(NumBody))
 	{
 		return FALSE;
 	}
 
-	for (i=0; i < NumBody; i++)
+	for (i = 0; i < NumBody; i++)
 	{
 		memset(psStats, 0, sizeof(BODY_STATS));
 
@@ -966,6 +946,7 @@ BOOL loadBodyStats(char *pBodyData, UDWORD bufferSize)
 		size[0] = '\0';
 		GfxFile[0] = '\0';
 		flameIMD[0] = '\0';
+
 		//Watermelon:added 10 %d to store FRONT,REAR,LEFT,RIGHT,TOP,BOTTOM armour values
 		//read the data into the storage - the data is delimeted using comma's
 		sscanf(pBodyData,"%[^','],%[^','],%[^','],%d,%d,%d,%d,%[^','],\
@@ -983,18 +964,11 @@ BOOL loadBodyStats(char *pBodyData, UDWORD bufferSize)
 			(int*)&psStats->armourValue[HIT_SIDE_BOTTOM][WC_HEAT], (char*)&flameIMD, &designable);//, &psStats->armourValue[WC_EXPLOSIVE],
 			//&psStats->armourValue[WC_MISC]);
 
-#if (MAX_PLAYERS!=4 && MAX_PLAYERS!=8)
-#error Invalid number of players
+#if (MAX_PLAYERS != 4 && MAX_PLAYERS != 8)
+# error Invalid number of players
 #endif
 
 		//allocate storage for the name
-		/*psStats->pName = (char *)malloc((strlen(BodyName))+1);
-		if (psStats->pName == NULL)
-		{
-			DBERROR(("Body Stats Name - Out of memory"));
-			return FALSE;
-		}
-		strcpy(psStats->pName,BodyName);*/
 		if (!allocateStatName((BASE_STATS *)psStats, BodyName))
 		{
 			return FALSE;
@@ -1016,14 +990,7 @@ BOOL loadBodyStats(char *pBodyData, UDWORD bufferSize)
 		}
 
 		//set design flag
-		if (designable)
-		{
-			psStats->design = TRUE;
-		}
-		else
-		{
-			psStats->design = FALSE;
-		}
+		psStats->design = (designable != 0);
 
 		//get the IMD for the component
 		if (strcmp(GfxFile, "0"))
@@ -1075,30 +1042,25 @@ BOOL loadBodyStats(char *pBodyData, UDWORD bufferSize)
 		//increment the pointer to the start of the next record
 		pBodyData = strchr(pBodyData,'\n') + 1;
 	}
+
 	return TRUE;
 }
 
 /*Load the Brain stats from the file exported from Access*/
-BOOL loadBrainStats(char *pBrainData, UDWORD bufferSize)
+BOOL loadBrainStats(const char *pBrainData, UDWORD bufferSize)
 {
-	BRAIN_STATS	sStats, *psStats, *psStartStats;
-	UDWORD		NumBrain = 0,i, incW;
+	BRAIN_STATS sStats, *psStats = &sStats, *psStartStats = &sStats;
+	const unsigned int NumBrain = numCR(pBrainData, bufferSize);
+	unsigned int i = 0, weapon = 0;
 	char		BrainName[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE],
 				weaponName[MAX_NAME_SIZE];
-
-	psStats = &sStats;
-
-	//reserve the start of the data
-	psStartStats = psStats;
-
-	NumBrain = numCR(pBrainData, bufferSize);
 
 	if (!statsAllocBrain(NumBrain))
 	{
 		return FALSE;
 	}
 
-	for (i=0; i < NumBrain; i++)
+	for (i = 0; i < NumBrain; i++)
 	{
 		memset(psStats, 0, sizeof(BRAIN_STATS));
 
@@ -1136,9 +1098,10 @@ BOOL loadBrainStats(char *pBrainData, UDWORD bufferSize)
 			{
 				return FALSE;
 			}
-			incW = getCompFromName(COMP_WEAPON, weaponName);
+			weapon = getCompFromName(COMP_WEAPON, weaponName);
+
 			//if weapon not found - error
-			if (incW == -1)
+			if (weapon == -1)
 			{
 				debug( LOG_ERROR, "Unable to find Weapon %s for brain %s", weaponName, BrainName );
 				abort();
@@ -1147,7 +1110,7 @@ BOOL loadBrainStats(char *pBrainData, UDWORD bufferSize)
 			else
 			{
 				//Weapon found, alloc this to the brain
-				psStats->psWeaponStat = asWeaponStats + incW;
+				psStats->psWeaponStat = asWeaponStats + weapon;
 			}
 		}
 
@@ -1166,122 +1129,40 @@ BOOL loadBrainStats(char *pBrainData, UDWORD bufferSize)
 
 		psStats = psStartStats;
 		//increment the pointer to the start of the next record
-		pBrainData = strchr(pBrainData,'\n') + 1;
+		pBrainData = strchr(pBrainData, '\n') + 1;
 	}
 	return TRUE;
 }
 
-/*Load the Power stats from the file exported from Access*/
-/*BOOL loadPowerStats(void)
-{
-	char *pPowerData, *pStartPowerData;
-	UDWORD fileSize;
-	POWER_STATS	*psStats, *psStartStats;
-	UDWORD	NumPower = 0,i;
-	char  PowerName[50];
-	BOOL EndOfFile;
-
-
-	if (!loadFile("PowerPlant.txt", &pPowerData, &fileSize))
-	{
-		return FALSE;
-	}
-	pStartPowerData = pPowerData;
-
-	psStats = (POWER_STATS *)malloc(sizeof(POWER_STATS));
-	if (psStats == NULL)
-	{
-		DBERROR(("Power Stats - Out of memory"));
-		return FALSE;
-	}
-	//reserve the start of the data
-	psStartStats = psStats;
-
-	EndOfFile = FALSE;
-	//determine the number of records to add by counting the number of '\n'
-	while (!EndOfFile)
-	{
-		pPowerData = strchr(pPowerData,'\n');
-		if (pPowerData == NULL)
-		{
-			EndOfFile = TRUE;
-		}
-		else
-		{
-			pPowerData++;
-			NumPower++;
-		}
-	}
-	//return to the start of the data
-	pPowerData = pStartPowerData;
-
-	if (!statsAllocPower(NumPower))
-	{
-		return FALSE;
-	}
-
-	for (i=0; i < NumPower; i++)
-	{
-		memset(psStats, 0, sizeof(POWER_STATS));
-
-		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pPowerData,"%[^','],%d,%d,%d,%d,%d,%d",
-			&PowerName, &psStats->buildPower,&psStats->buildPoints,
-			&psStats->weight, &psStats->hitPoints, &psStats->systemPoints,
-			&psStats->output);
-
-		//allocate storage for the name
-		psStats->pName = (char *)malloc((strlen(PowerName))+1);
-		if (psStats->pName == NULL)
-		{
-			DBERROR(("Power Stats Name - Out of memory"));
-			return FALSE;
-		}
-		strcpy(psStats->pName,PowerName);
-
-		psStats->ref = REF_POWER_START + i;
-
-		//save the stats
-		statsSetPower(psStats, i);
-
-		psStats = psStartStats;
-		//increment the pointer to the start of the next record
-		pPowerData = strchr(pPowerData,'\n') + 1;
-	}
-	free(pStartPowerData);
-	free(psStats);
-	return TRUE;
-}
-*/
 
 /*returns the propulsion type based on the string name passed in */
-PROPULSION_TYPE	getPropulsionType(char *pType)
+PROPULSION_TYPE getPropulsionType(const char *pType)
 {
-	if (!strcmp(pType,"Wheeled"))
+	if (!strcmp(pType, "Wheeled"))
 	{
 		return WHEELED;
 	}
-	if (!strcmp(pType,"Tracked"))
+	if (!strcmp(pType, "Tracked"))
 	{
 		return TRACKED;
 	}
-	if (!strcmp(pType,"Legged"))
+	if (!strcmp(pType, "Legged"))
 	{
 		return LEGGED;
 	}
-	if (!strcmp(pType,"Hover"))
+	if (!strcmp(pType, "Hover"))
 	{
 		return HOVER;
 	}
-	if (!strcmp(pType,"Ski"))
+	if (!strcmp(pType, "Ski"))
 	{
 		return SKI;
 	}
-	if (!strcmp(pType,"Lift"))
+	if (!strcmp(pType, "Lift"))
 	{
 		return LIFT;
 	}
-	if (!strcmp(pType,"Propellor"))
+	if (!strcmp(pType, "Propellor"))
 	{
 		return PROPELLOR;
 	}
@@ -1298,25 +1179,20 @@ PROPULSION_TYPE	getPropulsionType(char *pType)
 }
 
 /*Load the Propulsion stats from the file exported from Access*/
-BOOL loadPropulsionStats(char *pPropulsionData, UDWORD bufferSize)
+BOOL loadPropulsionStats(const char *pPropulsionData, UDWORD bufferSize)
 {
-	PROPULSION_STATS	sStats, *psStats, *psStartStats;
-	UDWORD				NumPropulsion = 0,i,designable;
+	const unsigned int NumPropulsion = numCR(pPropulsionData, bufferSize);
+	PROPULSION_STATS	sStats, *psStats = &sStats, *psStartStats = &sStats;
+	unsigned int i = 0, designable;
 	char				PropulsionName[MAX_NAME_SIZE], imdName[MAX_NAME_SIZE],
 						techLevel[MAX_NAME_SIZE], type[MAX_NAME_SIZE];
 
-	psStats = &sStats;
-
-	//reserve the start of the data
-	psStartStats = psStats;
-
-	NumPropulsion = numCR(pPropulsionData, bufferSize);
 	if (!statsAllocPropulsion(NumPropulsion))
 	{
 		return FALSE;
 	}
 
-	for (i=0; i < NumPropulsion; i++)
+	for (i = 0; i < NumPropulsion; i++)
 	{
 		memset(psStats, 0, sizeof(PROPULSION_STATS));
 
@@ -1349,14 +1225,7 @@ BOOL loadPropulsionStats(char *pPropulsionData, UDWORD bufferSize)
 		}
 
 		//set design flag
-		if (designable)
-		{
-			psStats->design = TRUE;
-		}
-		else
-		{
-			psStats->design = FALSE;
-		}
+		psStats->design = (designable != 0);
 
 		//deal with imd - stored so that got something to see in Design Screen!
 		if (strcmp(imdName, "0"))
@@ -1409,15 +1278,14 @@ BOOL loadPropulsionStats(char *pPropulsionData, UDWORD bufferSize)
 			//check stat is designable
 			if (asBodyStats[i].design)
 			{
+				unsigned int j = 0;
 				//check against each propulsion stat
-				for (NumPropulsion = 0; NumPropulsion < numPropulsionStats;
-				     NumPropulsion++)
+				for (j = 0; j < numPropulsionStats; j++)
 				{
 					//check stat is designable
-					if (asPropulsionStats[NumPropulsion].design)
+					if (asPropulsionStats[j].design)
 					{
-						setMaxComponentWeight(asPropulsionStats[NumPropulsion].weight
-						                      * asBodyStats[i].weight / 100);
+						setMaxComponentWeight(asPropulsionStats[j].weight * asBodyStats[i].weight / 100);
 					}
 				}
 			}
@@ -1428,29 +1296,21 @@ BOOL loadPropulsionStats(char *pPropulsionData, UDWORD bufferSize)
 }
 
 /*Load the Sensor stats from the file exported from Access*/
-BOOL loadSensorStats(char *pSensorData, UDWORD bufferSize)
+BOOL loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 {
-	SENSOR_STATS	sStats, *psStats, *psStartStats;
-	UDWORD			NumSensor = 0,i,designable;
+	const unsigned int NumSensor = numCR(pSensorData, bufferSize);
+	SENSOR_STATS sStats, *psStats = &sStats, *psStartStats = &sStats;
+	unsigned int i = 0, designable;
 	char			SensorName[MAX_NAME_SIZE], location[MAX_NAME_SIZE],
 					GfxFile[MAX_NAME_SIZE],type[MAX_NAME_SIZE];
 	char			mountGfx[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE];
 
-	//keep the start so we release it at the end
-	//pData = pSensorData;
-
-	psStats = &sStats;
-
-	//reserve the start of the data
-	psStartStats = psStats;
-
-	NumSensor = numCR(pSensorData, bufferSize);
 	if (!statsAllocSensor(NumSensor))
 	{
 		return FALSE;
 	}
 
-	for (i=0; i < NumSensor; i++)
+	for (i = 0; i < NumSensor; i++)
 	{
 		memset(psStats, 0, sizeof(SENSOR_STATS));
 
@@ -1527,14 +1387,7 @@ BOOL loadSensorStats(char *pSensorData, UDWORD bufferSize)
 		psStats->time *= WEAPON_TIME;
 
 		//set design flag
-		if (designable)
-		{
-			psStats->design = TRUE;
-		}
-		else
-		{
-			psStats->design = FALSE;
-		}
+		psStats->design = (designable != 0);
 
 		//get the IMD for the component
 		if (strcmp(mountGfx, "0"))
@@ -1586,30 +1439,14 @@ BOOL loadSensorStats(char *pSensorData, UDWORD bufferSize)
 }
 
 /*Load the ECM stats from the file exported from Access*/
-BOOL loadECMStats(char *pECMData, UDWORD bufferSize)
+BOOL loadECMStats(const char *pECMData, UDWORD bufferSize)
 {
-	//SBYTE		*pData;
-	ECM_STATS	sStats, *psStats, *psStartStats;
-	UDWORD		NumECM = 0,i,designable;
+	const unsigned int NumECM = numCR(pECMData, bufferSize);
+	ECM_STATS	sStats, *psStats = &sStats, *psStartStats = &sStats;
+	unsigned int i = 0, designable;
 	char		ECMName[MAX_NAME_SIZE], location[MAX_NAME_SIZE],
 				GfxFile[MAX_NAME_SIZE];
 	char		mountGfx[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE];
-
-
-	//keep the start so we release it at the end
-	//pData = pECMData;
-
-	psStats = &sStats;
-/*	psStats = (ECM_STATS *)malloc(sizeof(ECM_STATS));
-	if (psStats == NULL)
-	{
-		DBERROR(("ECM Stats - Out of memory"));
-		return FALSE;
-	}*/
-	//reserve the start of the data
-	psStartStats = psStats;
-
-	NumECM = numCR(pECMData, bufferSize);
 
 	if (!statsAllocECM(NumECM))
 	{
@@ -1667,14 +1504,7 @@ BOOL loadECMStats(char *pECMData, UDWORD bufferSize)
 		}
 
 		//set design flag
-		if (designable)
-		{
-			psStats->design = TRUE;
-		}
-		else
-		{
-			psStats->design = FALSE;
-		}
+		psStats->design = (designable != 0);
 
 		//get the IMD for the component
 		if (strcmp(GfxFile, "0"))
@@ -1728,28 +1558,14 @@ BOOL loadECMStats(char *pECMData, UDWORD bufferSize)
 }
 
 /*Load the Repair stats from the file exported from Access*/
-BOOL loadRepairStats(char *pRepairData, UDWORD bufferSize)
+BOOL loadRepairStats(const char *pRepairData, UDWORD bufferSize)
 {
-	//SBYTE			*pData;
-	REPAIR_STATS	sStats, *psStats, *psStartStats;
-	UDWORD			NumRepair = 0,i,designable;
+	const unsigned int NumRepair = numCR(pRepairData, bufferSize);
+	REPAIR_STATS sStats, *psStats = &sStats, *psStartStats = &sStats;
+	unsigned int i = 0, designable;
 	char			RepairName[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE],
 					GfxFile[MAX_NAME_SIZE],	mountGfx[MAX_NAME_SIZE],
 					location[MAX_NAME_SIZE];
-	//keep the start so we can release it at the end
-	//pData = pRepairData;
-
-	psStats = &sStats;
-/*	psStats = (REPAIR_STATS *)malloc(sizeof(REPAIR_STATS));
-	if (psStats == NULL)
-	{
-		DBERROR(("Repair Stats - Out of memory"));
-		return FALSE;
-	}*/
-	//reserve the start of the data
-	psStartStats = psStats;
-
-	NumRepair = numCR(pRepairData, bufferSize);
 
 	if (!statsAllocRepair(NumRepair))
 	{
@@ -1803,25 +1619,18 @@ BOOL loadRepairStats(char *pRepairData, UDWORD bufferSize)
 		//multiply time stats
 		psStats->time *= WEAPON_TIME;
 
-        //check its not 0 since we will be dividing by it at a later stage
-        if (psStats->time == 0)
-        {
+		//check its not 0 since we will be dividing by it at a later stage
+		if (psStats->time == 0)
+		{
 
-            ASSERT( FALSE, "loadRepairStats: the delay time cannot be zero for %s",
-                psStats->pName );
+			ASSERT( FALSE, "loadRepairStats: the delay time cannot be zero for %s",
+				psStats->pName );
 
-            psStats->time = 1;
-        }
+			psStats->time = 1;
+		}
 
 		//set design flag
-		if (designable)
-		{
-			psStats->design = TRUE;
-		}
-		else
-		{
-			psStats->design = FALSE;
-		}
+		psStats->design = (designable != 0);
 
 		//get the IMD for the component
 		if (strcmp(GfxFile, "0"))
@@ -1875,28 +1684,14 @@ BOOL loadRepairStats(char *pRepairData, UDWORD bufferSize)
 }
 
 /*Load the Construct stats from the file exported from Access*/
-BOOL loadConstructStats(char *pConstructData, UDWORD bufferSize)
+BOOL loadConstructStats(const char *pConstructData, UDWORD bufferSize)
 {
-	//SBYTE			*pData;
-	CONSTRUCT_STATS	sStats, *psStats, *psStartStats;
-	UDWORD			NumConstruct = 0,i,designable;
+	const unsigned int NumConstruct = numCR(pConstructData, bufferSize);
+	CONSTRUCT_STATS sStats, *psStats = &sStats, *psStartStats = &sStats;
+	unsigned int i = 0, designable;
 	char			ConstructName[MAX_NAME_SIZE], GfxFile[MAX_NAME_SIZE];
 	char			mountGfx[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE];
 
-	//keep the start so we release it at the end
-	//pData = pConstructData;
-
-	psStats = &sStats;
-/*	psStats = (CONSTRUCT_STATS *)malloc(sizeof(CONSTRUCT_STATS));
-	if (psStats == NULL)
-	{
-		DBERROR(("Construct Stats - Out of memory"));
-		return FALSE;
-	}*/
-	//reserve the start of the data
-	psStartStats = psStats;
-
-	NumConstruct = numCR(pConstructData, bufferSize);
 	if (!statsAllocConstruct(NumConstruct))
 	{
 		return FALSE;
@@ -1998,18 +1793,12 @@ BOOL loadConstructStats(char *pConstructData, UDWORD bufferSize)
 
 
 /*Load the Propulsion Types from the file exported from Access*/
-BOOL loadPropulsionTypes(char *pPropTypeData, UDWORD bufferSize)
+BOOL loadPropulsionTypes(const char *pPropTypeData, UDWORD bufferSize)
 {
-	//SBYTE				*pData;
-	PROPULSION_TYPES	*pPropType;
-	UDWORD				NumTypes = 0, i, multiplier, type;
-	char				PropulsionName[MAX_NAME_SIZE], flightName[MAX_NAME_SIZE];
-
-	//keep the start so we can release it at the end
-	//pData = pPropTypeData;
-
-	//NumTypes = numCR(pPropTypeData, bufferSize);
-	NumTypes = NUM_PROP_TYPES;
+	const unsigned int NumTypes = NUM_PROP_TYPES;
+	PROPULSION_TYPES *pPropType;
+	unsigned int i, multiplier, type;
+	char PropulsionName[MAX_NAME_SIZE], flightName[MAX_NAME_SIZE];
 
 	//allocate storage for the stats
 	asPropulsionTypes = (PROPULSION_TYPES *)malloc(sizeof(PROPULSION_TYPES)*NumTypes);
@@ -2020,8 +1809,6 @@ BOOL loadPropulsionTypes(char *pPropTypeData, UDWORD bufferSize)
 		return FALSE;
 	}
 
-//	numPropulsionTypes = NumTypes;
-
 	memset(asPropulsionTypes, 0, (sizeof(PROPULSION_TYPES)*NumTypes));
 
 	for (i=0; i < NumTypes; i++)
@@ -2030,16 +1817,6 @@ BOOL loadPropulsionTypes(char *pPropTypeData, UDWORD bufferSize)
 		sscanf(pPropTypeData,"%[^','],%[^','],%d",
 			(char*)&PropulsionName, (char*)&flightName, &multiplier);
 
-		//allocate storage for the name
-/*
-		asPropulsionTypes->pName = (char *)malloc((strlen(PropulsionName))+1);
-		if (asPropulsionTypes->pName == NULL)
-		{
-			DBERROR(("Propulsion Type Name - Out of memory"));
-			return FALSE;
-		}
-		strcpy(asPropulsionTypes->pName,PropulsionName);
-*/
 		//set the pointer for this record based on the name
 		type = getPropulsionType(PropulsionName);
 		if (type == INVALID_PROP_TYPE)
@@ -2085,29 +1862,21 @@ BOOL loadPropulsionTypes(char *pPropTypeData, UDWORD bufferSize)
 		//increment the pointer to the start of the next record
 		pPropTypeData = strchr(pPropTypeData,'\n') + 1;
 	}
-//	free(pData);
 
 	return TRUE;
 }
 
 
 /*Load the Terrain Table from the file exported from Access*/
-BOOL loadTerrainTable(char *pTerrainTableData, UDWORD bufferSize)
+BOOL loadTerrainTable(const char *pTerrainTableData, UDWORD bufferSize)
 {
-	//SBYTE			*pData;
-	TERRAIN_TABLE	*pTerrainTable;
-	UDWORD			NumEntries = 0,i,j;
+	const unsigned int NumEntries = numCR(pTerrainTableData, bufferSize);
+	TERRAIN_TABLE *pTerrainTable;
+	unsigned int i = 0, j = 0;
 	UDWORD			terrainType, propulsionType, speedFactor;
 
-
-	//pData = pTerrainTableData;
-
-	NumEntries = numCR(pTerrainTableData, bufferSize);
-
 	//allocate storage for the stats
-	asTerrainTable = (TERRAIN_TABLE *)malloc(sizeof(TERRAIN_TABLE) *
-		//numPropulsionTypes * TERRAIN_TYPES);
-		NUM_PROP_TYPES * TERRAIN_TYPES);
+	asTerrainTable = (TERRAIN_TABLE *)malloc(sizeof(TERRAIN_TABLE) * NUM_PROP_TYPES * TERRAIN_TYPES);
 
 	if (asTerrainTable == NULL)
 	{
@@ -2117,8 +1886,6 @@ BOOL loadTerrainTable(char *pTerrainTableData, UDWORD bufferSize)
 	}
 
 	//initialise the storage to 100
-	//memset(asTerrainTable, 0, (sizeof(TERRAIN_TABLE) * numPropulsionTypes
-		//* TERRAIN_TYPES));
 	for (i=0; i < TERRAIN_TYPES; i++)
 	{
 		for (j=0; j < NUM_PROP_TYPES; j++)
@@ -2127,9 +1894,6 @@ BOOL loadTerrainTable(char *pTerrainTableData, UDWORD bufferSize)
 			pTerrainTable->speedFactor = 100;
 		}
 	}
-
-	//copy the start location
-	//pTerrainTable = asTerrainTable;
 
 	for (i=0; i < NumEntries; i++)
 	{
@@ -2141,7 +1905,6 @@ BOOL loadTerrainTable(char *pTerrainTableData, UDWORD bufferSize)
 		//increment the pointer to the start of the next record
 		pTerrainTableData = strchr(pTerrainTableData,'\n') + 1;
 	}
-//	free(pData);
 
 	//check that none of the entries are 0 otherwise this will stop a droid dead in its tracks
 	//and it will not be able to move again!
@@ -2163,17 +1926,12 @@ BOOL loadTerrainTable(char *pTerrainTableData, UDWORD bufferSize)
 }
 
 /*Load the Special Ability stats from the file exported from Access*/
-BOOL loadSpecialAbility(char *pSAbilityData, UDWORD bufferSize)
+BOOL loadSpecialAbility(const char *pSAbilityData, UDWORD bufferSize)
 {
-	//SBYTE			*pData;
+	const unsigned int NumTypes = numCR(pSAbilityData, bufferSize);
 	SPECIAL_ABILITY *pSAbility;
-	UDWORD			NumTypes = 0, i, accessID;
-	char			SAbilityName[MAX_NAME_SIZE];
-
-	//keep the start so we can release it at the end
-	//pData = pSAbilityData;
-
-	NumTypes = numCR(pSAbilityData, bufferSize);
+	unsigned int i, accessID;
+	char SAbilityName[MAX_NAME_SIZE];
 
 	//allocate storage for the stats
 	asSpecialAbility = (SPECIAL_ABILITY *)malloc(sizeof(SPECIAL_ABILITY)*NumTypes);
@@ -2225,12 +1983,12 @@ BOOL loadSpecialAbility(char *pSAbilityData, UDWORD bufferSize)
 }
 
 /* load the IMDs to use for each body-propulsion combination */
-BOOL loadBodyPropulsionIMDs(char *pData, UDWORD bufferSize)
+BOOL loadBodyPropulsionIMDs(const char *pData, UDWORD bufferSize)
 {
-//	SBYTE				*pStartData;
-	BODY_STATS			*psBodyStat;
-	PROPULSION_STATS	*psPropulsionStat;
-	UDWORD				NumTypes = 0, i, numStats;
+	const unsigned int NumTypes = numCR(pData, bufferSize);
+	BODY_STATS *psBodyStat = asBodyStats;
+	PROPULSION_STATS *psPropulsionStat = asPropulsionStats;
+	unsigned int i, numStats;
 	char				bodyName[MAX_NAME_SIZE], propulsionName[MAX_NAME_SIZE],
 						leftIMD[MAX_NAME_SIZE], rightIMD[MAX_NAME_SIZE];
 	iIMDShape			**startIMDs;
@@ -2241,15 +1999,11 @@ BOOL loadBodyPropulsionIMDs(char *pData, UDWORD bufferSize)
 	ASSERT( asBodyStats != NULL, "Body Stats have not been set up" );
 	ASSERT( asPropulsionStats != NULL, "Propulsion Stats have not been set up" );
 
-	psBodyStat = asBodyStats;
-	psPropulsionStat = asPropulsionStats;
-
 	//allocate space
 	for (numStats = 0; numStats < numBodyStats; numStats++)
 	{
 		psBodyStat = &asBodyStats[numStats];
-		psBodyStat->ppIMDList = (iIMDShape **) malloc(numPropulsionStats *
-			NUM_PROP_SIDES * sizeof(iIMDShape *));
+		psBodyStat->ppIMDList = (iIMDShape **) malloc(numPropulsionStats * NUM_PROP_SIDES * sizeof(iIMDShape *));
 		if (psBodyStat->ppIMDList == NULL)
 		{
 			debug( LOG_ERROR, "Out of memory" );
@@ -2260,12 +2014,7 @@ BOOL loadBodyPropulsionIMDs(char *pData, UDWORD bufferSize)
 			NUM_PROP_SIDES * sizeof(iIMDShape *)));
 	}
 
-	//keep the start so we can release it at the end
-	//pStartData = pData;
 
-
-
-	NumTypes = numCR(pData, bufferSize);
 
 	for (i=0; i < NumTypes; i++)
 	{
@@ -2403,22 +2152,19 @@ statsGetAudioIDFromString( char *szStatName, char *szWavName, SDWORD *piWavID )
 
 
 /*Load the weapon sounds from the file exported from Access*/
-BOOL loadWeaponSounds(char *pSoundData, UDWORD bufferSize)
+BOOL loadWeaponSounds(const char *pSoundData, UDWORD bufferSize)
 {
-	//SBYTE			*pData;
-	SDWORD			NumRecords = 0, i, weaponSoundID, explosionSoundID, inc, iDum;
+	const unsigned int NumRecords = numCR(pSoundData, bufferSize);
+	SDWORD i, weaponSoundID, explosionSoundID, inc, iDum;
 	char			WeaponName[MAX_NAME_SIZE];
 	char			szWeaponWav[MAX_NAME_SIZE],	szExplosionWav[MAX_NAME_SIZE];
 	BOOL 	Ok = TRUE;
-
-	NumRecords = numCR(pSoundData, bufferSize);
 
 	ASSERT( asWeaponStats != NULL, "loadWeaponSounds: Weapon stats not loaded" );
 
 	for (i=0; i < NumRecords; i++)
 	{
 		WeaponName[0]     = '\0';
-
 		szWeaponWav[0]    = '\0';
 		szExplosionWav[0] = '\0';
 		//read the data into the storage - the data is delimeted using comma's
@@ -2466,14 +2212,14 @@ BOOL loadWeaponSounds(char *pSoundData, UDWORD bufferSize)
 }
 
 /*Load the Weapon Effect Modifiers from the file exported from Access*/
-BOOL loadWeaponModifiers(char *pWeapModData, UDWORD bufferSize)
+BOOL loadWeaponModifiers(const char *pWeapModData, UDWORD bufferSize)
 {
+	const unsigned int NumRecords = numCR(pWeapModData, bufferSize);
 	PROPULSION_TYPE		propInc;
 	WEAPON_EFFECT		effectInc;
-	UDWORD				NumRecords = 0, i, j, modifier;
+	UDWORD				i, j, modifier;
 	char				weaponEffectName[MAX_NAME_SIZE], propulsionName[MAX_NAME_SIZE];
 
-	//memset(asWeaponModifier, 0, (sizeof(WEAPON_MODIFIER)*WE_NUMEFFECTS*NUM_PROP_TYPES));
 	//initialise to 100%
 	for (i=0; i < WE_NUMEFFECTS; i++)
 	{
@@ -2482,8 +2228,6 @@ BOOL loadWeaponModifiers(char *pWeapModData, UDWORD bufferSize)
 			asWeaponModifier[i][j] = 100;
 		}
 	}
-
-	NumRecords = numCR(pWeapModData, bufferSize);
 
 	for (i=0; i < NumRecords; i++)
 	{
@@ -2525,9 +2269,10 @@ BOOL loadWeaponModifiers(char *pWeapModData, UDWORD bufferSize)
 }
 
 /*Load the propulsion type sounds from the file exported from Access*/
-BOOL loadPropulsionSounds(char *pPropSoundData, UDWORD bufferSize)
+BOOL loadPropulsionSounds(const char *pPropSoundData, UDWORD bufferSize)
 {
-	SDWORD				NumRecords = 0, i, startID, idleID, moveOffID, moveID,
+	const unsigned int NumRecords = numCR(pPropSoundData, bufferSize);
+	SDWORD				i, startID, idleID, moveOffID, moveID,
 						hissID, shutDownID, iDum;
 	char				propulsionName[MAX_NAME_SIZE], szStart[MAX_NAME_SIZE],
 						szIdle[MAX_NAME_SIZE], szMoveOff[MAX_NAME_SIZE],
@@ -2536,7 +2281,6 @@ BOOL loadPropulsionSounds(char *pPropSoundData, UDWORD bufferSize)
 	UDWORD				type;
 	PROPULSION_TYPES	*pPropType;
 
-	NumRecords = numCR(pPropSoundData, bufferSize);
 
 	ASSERT( asPropulsionTypes != NULL,
 		"loadPropulsionSounds: Propulsion type stats not loaded" );
@@ -3053,44 +2797,43 @@ UDWORD statRefStart(UDWORD stat)
 }
 
 /*Returns the component type based on the string - used for reading in data */
-UDWORD componentType(char* pType)
+unsigned int componentType(const char* pType)
 {
-
-	if (!strcmp(pType,"BODY"))
+	if (!strcmp(pType, "BODY"))
 	{
 		return COMP_BODY;
 	}
-	if (!strcmp(pType,"PROPULSION"))
+	if (!strcmp(pType, "PROPULSION"))
 	{
 		return COMP_PROPULSION;
 	}
-	if (!strcmp(pType,"BRAIN"))
+	if (!strcmp(pType, "BRAIN"))
 	{
 		return COMP_BRAIN;
 	}
-	if (!strcmp(pType,"REPAIR"))
+	if (!strcmp(pType, "REPAIR"))
 	{
 		return COMP_REPAIRUNIT;
 	}
-	if (!strcmp(pType,"ECM"))
+	if (!strcmp(pType, "ECM"))
 	{
 		return COMP_ECM;
 	}
-	if (!strcmp(pType,"SENSOR"))
+	if (!strcmp(pType, "SENSOR"))
 	{
 		return COMP_SENSOR;
 	}
-	if (!strcmp(pType,"WEAPON"))
+	if (!strcmp(pType, "WEAPON"))
 	{
 		return COMP_WEAPON;
 	}
-	if (!strcmp(pType,"CONSTRUCT"))
+	if (!strcmp(pType, "CONSTRUCT"))
 	{
 		return COMP_CONSTRUCT;
 	}
-	ASSERT( FALSE, "Unknown Component Type" );
 
-	return 0;	// Should never get here.
+	ASSERT( FALSE, "Unknown Component Type" );
+	return 0; // Should never get here.
 }
 
 //function to compare a value with yes/no - if neither warns player!
@@ -3117,7 +2860,7 @@ BOOL compareYes(char *strToCompare, char *strOwner)
 //get the component Inc for a stat based on the Resource name and type
 //returns -1 if record not found
 //used in Scripts
-SDWORD	getCompFromResName(UDWORD compType, char *pName)
+SDWORD	getCompFromResName(UDWORD compType, const char *pName)
 {
 #ifdef RESOURCE_NAMES
 	if (!getResourceName(pName))
@@ -3184,40 +2927,33 @@ static void getStatsDetails(UDWORD compType, BASE_STATS **ppsStats, UDWORD *pnum
 
 //get the component Inc for a stat based on the name and type
 //returns -1 if record not found
-SDWORD	getCompFromName(UDWORD compType, char *pName)
+SDWORD getCompFromName(UDWORD compType, const char *pName)
 {
 	BASE_STATS	*psStats = NULL;
 	UDWORD		numStats = 0, count, statSize = 0;
-//	DBPRINTF(("getcompfromname type=%d name=[%s]\n",compType,pName));
-
 
 	getStatsDetails(compType, &psStats,&numStats,&statSize);
 
 	//find the stat with the same name
-
 	for(count = 0; count < numStats; count++)
 	{
-	//DBPRINTF(("%x ",psStats->NameHash);
 		if (!strcmp(pName, psStats->pName))
 		{
-//			DBPRINTF(("found at %d\n",count));
 			return count;
 		}
-    // psStats += statSize; doesn't work, structure alignment?
 		psStats = (BASE_STATS*)((char*)psStats + statSize);
 	}
-//	DBPRINTF(("not found\n"));
+
 	//return -1 if record not found or an invalid component type is passed in
 	return -1;
 }
 
 
 //converts the name read in from Access into the name which is used in the Stat lists
-BOOL getResourceName(char *pName)
+BOOL getResourceName(const char *pName)
 {
 #ifdef RESOURCE_NAMES
-
-	UDWORD		id;
+	UDWORD id;
 
 	//see if the name has a resource associated with it by trying to get the ID for the string
 	if (!strresGetIDNum(psStringRes, pName, &id))
@@ -3228,18 +2964,18 @@ BOOL getResourceName(char *pName)
 	}
 	//get the string from the id
 	strcpy(pName, strresGetString(psStringRes, id));
-
 #endif
+
 	return TRUE;
 }
 
 /*return the name to display for the interface - valid for OBJECTS and STATS*/
-char* getName(char *pNameID)
+const char* getName(const char *pNameID)
 {
 #ifdef STORE_RESOURCE_ID
-	UDWORD			id;
-	char			*pName;
-	static char	Unknown[]="Name Unknown";
+	UDWORD id;
+	char *pName;
+	static char Unknown[] = "Name Unknown";
 
 	/*see if the name has a resource associated with it by trying to get
 	the ID for the string*/
@@ -3333,91 +3069,85 @@ BOOL setTechLevel(BASE_STATS *psStats, char *pLevel)
 
 /*sets the store to the body size based on the name passed in - returns FALSE
 if doesn't compare with any*/
-BOOL getBodySize(char *pSize, UBYTE *pStore)
+BOOL getBodySize(const char *pSize, UBYTE *pStore)
 {
-	if (!strcmp(pSize,"LIGHT"))
+	if (!strcmp(pSize, "LIGHT"))
 	{
 		*pStore = SIZE_LIGHT;
+		return TRUE;
 	}
 	else if (!strcmp(pSize, "MEDIUM"))
 	{
 		*pStore = SIZE_MEDIUM;
+		return TRUE;
 	}
 	else if (!strcmp(pSize, "HEAVY"))
 	{
 		*pStore = SIZE_HEAVY;
+		return TRUE;
 	}
 	else if (!strcmp(pSize, "SUPER HEAVY"))
 	{
 		*pStore = SIZE_SUPER_HEAVY;
+		return TRUE;
 	}
-	else
-	{
-		return FALSE;
-	}
-	return TRUE;
+
+	ASSERT( FALSE, "Invalid size - %s", pSize );
+	return FALSE;
 }
 
 /*returns the weapon sub class based on the string name passed in */
-WEAPON_SUBCLASS	getWeaponSubClass(char *pSubClass)
+WEAPON_SUBCLASS getWeaponSubClass(const char *pSubClass)
 {
-	if (!strcmp(pSubClass,"CANNON"))
+	if (!strcmp(pSubClass, "CANNON"))
 	{
 		return WSC_CANNON;
 	}
-	/*if (!strcmp(pSubClass,"ARTILLARY"))
-	{
-		return WSC_ARTILLARY;
-	}*/
-	if (!strcmp(pSubClass,"MORTARS"))
+	if (!strcmp(pSubClass, "MORTARS"))
 	{
 		return WSC_MORTARS;
 	}
-	if (!strcmp(pSubClass,"MISSILE"))
+	if (!strcmp(pSubClass, "MISSILE"))
 	{
 		return WSC_MISSILE;
 	}
-	if (!strcmp(pSubClass,"ROCKET"))
+	if (!strcmp(pSubClass, "ROCKET"))
 	{
 		return WSC_ROCKET;
 	}
-	if (!strcmp(pSubClass,"ENERGY"))
+	if (!strcmp(pSubClass, "ENERGY"))
 	{
 		return WSC_ENERGY;
 	}
-	if (!strcmp(pSubClass,"GAUSS"))
+	if (!strcmp(pSubClass, "GAUSS"))
 	{
 		return WSC_GAUSS;
 	}
-	if (!strcmp(pSubClass,"FLAME"))
+	if (!strcmp(pSubClass, "FLAME"))
 	{
 		return WSC_FLAME;
 	}
-	/*if (!strcmp(pSubClass,"CLOSECOMBAT"))
-	{
-		return WSC_CLOSECOMBAT;
-	}*/
-	if (!strcmp(pSubClass,"HOWITZERS"))
+	if (!strcmp(pSubClass, "HOWITZERS"))
 	{
 		return WSC_HOWITZERS;
 	}
-	if (!strcmp(pSubClass,"MACHINE GUN"))
+	if (!strcmp(pSubClass, "MACHINE GUN"))
 	{
 		return WSC_MGUN;
 	}
-	if (!strcmp(pSubClass,"ELECTRONIC"))
+	if (!strcmp(pSubClass, "ELECTRONIC"))
 	{
 		return WSC_ELECTRONIC;
 	}
-	if (!strcmp(pSubClass,"A-A GUN"))
+	if (!strcmp(pSubClass, "A-A GUN"))
 	{
 		return WSC_AAGUN;
 	}
-	if (!strcmp(pSubClass,"SLOW MISSILE"))
+	if (!strcmp(pSubClass, "SLOW MISSILE"))
 	{
 		return WSC_SLOWMISSILE;
 	}
-	if (!strcmp(pSubClass,"SLOW ROCKET"))
+	if (!strcmp(pSubClass, "SLOW ROCKET"))
 	{
 		return WSC_SLOWROCKET;
 	}
@@ -3477,47 +3207,47 @@ MOVEMENT_MODEL	getMovementModel(char *pMovement)
 
 
 /*returns the weapon effect based on the string name passed in */
-WEAPON_EFFECT	getWeaponEffect(char *pWeaponEffect)
+WEAPON_EFFECT getWeaponEffect(const char *pWeaponEffect)
 {
 	if (!strcmp(pWeaponEffect, "ANTI PERSONNEL"))
 	{
 		return WE_ANTI_PERSONNEL;
 	}
-	else if (!strcmp(pWeaponEffect,"ANTI TANK"))
+	else if (!strcmp(pWeaponEffect, "ANTI TANK"))
 	{
 		return WE_ANTI_TANK;
 	}
-	else if (!strcmp(pWeaponEffect,"BUNKER BUSTER"))
+	else if (!strcmp(pWeaponEffect, "BUNKER BUSTER"))
 	{
 		return WE_BUNKER_BUSTER;
 	}
-	else if (!strcmp(pWeaponEffect,"ARTILLERY ROUND"))
+	else if (!strcmp(pWeaponEffect, "ARTILLERY ROUND"))
 	{
 		return WE_ARTILLERY_ROUND;
 	}
-	else if (!strcmp(pWeaponEffect,"FLAMER"))
+	else if (!strcmp(pWeaponEffect, "FLAMER"))
 	{
 		return WE_FLAMER;
 	}
-	else if (!strcmp(pWeaponEffect,"ANTI AIRCRAFT"))
+	else if (!strcmp(pWeaponEffect, "ANTI AIRCRAFT"))
 	{
 		return WE_ANTI_AIRCRAFT;
 	}
-	else
-	{
-		return INVALID_WEAPON_EFFECT;
-	}
+
+	ASSERT(FALSE, "Invalid weapon effect: %s", pWeaponEffect);
+	return INVALID_WEAPON_EFFECT;
 }
+
 
 /*
 looks up the name to get the resource associated with it - or allocates space
 and stores the name. Eventually ALL names will be 'resourced' for translation
 */
-BOOL allocateName(char **ppStore, char *pName)
+BOOL allocateName(char **ppStore, const char *pName)
 {
 #ifdef RESOURCE_NAMES
 
-	UDWORD		id;
+	UDWORD id;
 
 	//see if the name has a resource associated with it by trying to get the ID for the string
 	if (!strresGetIDNum(psStringRes, pName, &id))
@@ -3540,10 +3270,9 @@ BOOL allocateName(char **ppStore, char *pName)
 		return FALSE;
 	}
 	return TRUE;
-
 #else
 	//need to allocate space for the name
-	*ppStore = (char *)malloc((strlen(pName))+1);
+	*ppStore = (char*)malloc((strlen(pName))+1);
 	if (ppStore == NULL)
 	{
 		debug( LOG_ERROR, "Name - Out of memory" );
@@ -3551,8 +3280,8 @@ BOOL allocateName(char **ppStore, char *pName)
 		return FALSE;
 	}
 	strcpy(*ppStore,pName);
-	return TRUE;
 
+	return TRUE;
 #endif
 }
 

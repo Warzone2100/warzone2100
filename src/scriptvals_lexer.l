@@ -47,8 +47,8 @@ static UDWORD currText=0;
 static BOOL inComment = FALSE;
 
 /* Pointer to the input buffer */
-static char *pInputBuffer = NULL;
-static char *pEndBuffer = NULL;
+static const char *pInputBuffer = NULL;
+static const char *pEndBuffer = NULL;
 
 #define YY_INPUT(buf,result,max_size) \
       if (pInputBuffer != pEndBuffer) { \
@@ -151,7 +151,7 @@ FALSE						{ scrv_lval.bval = FALSE;	 return BOOLEAN_T; }
 %%
 
 /* Set the current input buffer for the lexer */
-void scrvSetInputBuffer(char *pBuffer, UDWORD size)
+void scrvSetInputBuffer(const char *pBuffer, UDWORD size)
 {
 	pInputBuffer = pBuffer;
 	pEndBuffer = pBuffer + size;

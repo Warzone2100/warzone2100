@@ -466,13 +466,13 @@ static void structureType(STRUCTURE_STATS *pStructure, char *pType)
 }
 
 
-static char *getStructName(STRUCTURE_STATS	 *psStruct)
+static const char *getStructName(STRUCTURE_STATS *psStruct)
 {
 	return getName(psStruct->pName);
 }
 
 /*returns the structure strength based on the string name passed in */
-static UBYTE getStructStrength(char *pStrength)
+static UBYTE getStructStrength(const char *pStrength)
 {
 	if (!strcmp(pStrength, "SOFT"))
 	{
@@ -490,10 +490,8 @@ static UBYTE getStructStrength(char *pStrength)
 	{
 		return STRENGTH_BUNKER;
 	}
-	else
-	{
-		return INVALID_STRENGTH;
-	}
+
+	return INVALID_STRENGTH;
 }
 
 
@@ -712,15 +710,15 @@ void initModulePIEsNoMods(char *GfxFile,UDWORD i,STRUCTURE_STATS *psStructure)
 #endif
 
 /* load the Structure stats from the Access database */
-BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
+BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 {
-	char				*pData;
-	UDWORD				NumStructures = 0, i, inc, player, numWeaps, weapSlots;
+	const unsigned int NumStructures = numCR(pStructData, bufferSize);
+	UDWORD i, inc, player, numWeaps, weapSlots;
 	char				StructureName[MAX_NAME_SIZE], foundation[MAX_NAME_SIZE],
 						type[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE],
 						strength[MAX_NAME_SIZE];
 	char				GfxFile[MAX_NAME_SIZE], baseIMD[MAX_NAME_SIZE];
-	char				ecmType[MAX_NAME_SIZE],sensorType[MAX_NAME_SIZE];
+	char				ecmType[MAX_NAME_SIZE], sensorType[MAX_NAME_SIZE];
 	STRUCTURE_STATS		*psStructure, *pStartStats;
 	ECM_STATS*			pECMType;
 	SENSOR_STATS*		pSensorType;
@@ -747,12 +745,6 @@ BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
 		powerModuleIMDs[module] = NULL;
 	}
 
-
-	//keep the start so we release it at the end
-	pData = pStructData;
-
-	NumStructures = numCR(pStructData, bufferSize);
-
 	asStructureStats = (STRUCTURE_STATS*)malloc(sizeof(STRUCTURE_STATS)* NumStructures);
 	numStructureStats = NumStructures;
 
@@ -769,9 +761,10 @@ BOOL loadStructureStats(char *pStructData, UDWORD bufferSize)
 	//get the start of the structure_stats storage
 	psStructure = asStructureStats;
 
-	for (i=0; i < NumStructures; i++)
+	for (i = 0; i < NumStructures; i++)
 	{
 		memset(psStructure, 0, sizeof(STRUCTURE_STATS));
+
 		//read the data into the storage - the data is delimeted using comma's
 		GfxFile[0] = '\0';
 		StructureName[0] = '\0';
@@ -1039,10 +1032,10 @@ void setCurrentStructQuantity(BOOL displayError)
 }
 
 //Load the weapons assigned to Structure in the Access database
-BOOL loadStructureWeapons(char *pWeaponData, UDWORD bufferSize)
+BOOL loadStructureWeapons(const char *pWeaponData, UDWORD bufferSize)
 {
-	char				*pStartWeaponData;
-	UDWORD				NumToAlloc = 0, i,incS, incW;
+	const unsigned int NumToAlloc = numCR(pWeaponData, bufferSize);
+	UDWORD				i, incS, incW;
 	char				StructureName[MAX_NAME_SIZE];//, WeaponName[MAX_NAME_SIZE];
 	//Watermelon:weaponName array
 	char				WeaponName[STRUCT_MAXWEAPS][MAX_NAME_SIZE];
@@ -1050,10 +1043,6 @@ BOOL loadStructureWeapons(char *pWeaponData, UDWORD bufferSize)
 	WEAPON_STATS		*pWeapon = asWeaponStats;
 	BOOL				weaponFound, structureFound;
 	UBYTE				j;
-
-	pStartWeaponData = pWeaponData;
-
-	NumToAlloc = numCR(pWeaponData, bufferSize);
 
 	for (i=0; i < NumToAlloc; i++)
 	{
@@ -1120,18 +1109,16 @@ BOOL loadStructureWeapons(char *pWeaponData, UDWORD bufferSize)
 }
 
 //Load the programs assigned to Droids in the Access database
-BOOL loadStructureFunctions(char *pFunctionData, UDWORD bufferSize)
+BOOL loadStructureFunctions(const char *pFunctionData, UDWORD bufferSize)
 {
-	char				*pStartFunctionData;
-	UDWORD				NumToAlloc = 0,i,incS, incF;
+	const unsigned int NumToAlloc = numCR(pFunctionData, bufferSize);
+	UDWORD				i, incS, incF;
 	char				StructureName[MAX_NAME_SIZE], FunctionName[MAX_NAME_SIZE];
 	STRUCTURE_STATS		*pStructure = asStructureStats;
 	FUNCTION			*pFunction, **pStartFunctions = asFunctions;
 	BOOL				functionFound, structureFound;
 
-	pStartFunctionData = pFunctionData;
 
-	NumToAlloc = numCR(pFunctionData, bufferSize);
 
 	for (i=0; i < NumToAlloc; i++)
 	{
@@ -1233,11 +1220,12 @@ BOOL loadStructureFunctions(char *pFunctionData, UDWORD bufferSize)
 }
 
 /*Load the Structure Strength Modifiers from the file exported from Access*/
-BOOL loadStructureStrengthModifiers(char *pStrengthModData, UDWORD bufferSize)
+BOOL loadStructureStrengthModifiers(const char *pStrengthModData, UDWORD bufferSize)
 {
+	const unsigned int NumRecords = numCR(pStrengthModData, bufferSize);
 	STRUCT_STRENGTH		strengthInc;
 	WEAPON_EFFECT		effectInc;
-	UDWORD				NumRecords = 0, i, j, modifier;
+	UDWORD				i, j, modifier;
 	char				weaponEffectName[MAX_NAME_SIZE], strengthName[MAX_NAME_SIZE];
 
 	//initialise to 100%
@@ -1248,8 +1236,6 @@ BOOL loadStructureStrengthModifiers(char *pStrengthModData, UDWORD bufferSize)
 			asStructStrengthModifier[i][j] = 100;
 		}
 	}
-
-	NumRecords = numCR(pStrengthModData, bufferSize);
 
 	for (i=0; i < NumRecords; i++)
 	{

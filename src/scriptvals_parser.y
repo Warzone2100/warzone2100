@@ -757,7 +757,7 @@ var_value:		BOOLEAN_T
 %%
 
 // Lookup a type
-BOOL scrvLookUpType(char *pIdent, INTERP_TYPE *pType)
+BOOL scrvLookUpType(const char *pIdent, INTERP_TYPE *pType)
 {
 	TYPE_SYMBOL		*psCurr;
 
@@ -775,7 +775,7 @@ BOOL scrvLookUpType(char *pIdent, INTERP_TYPE *pType)
 
 
 // Lookup a variable identifier
-BOOL scrvLookUpVar(char *pIdent, UDWORD *pIndex)
+BOOL scrvLookUpVar(const char *pIdent, UDWORD *pIndex)
 {
 	UDWORD	i;
 
@@ -799,7 +799,7 @@ BOOL scrvLookUpVar(char *pIdent, UDWORD *pIndex)
 
 
 // Lookup an array identifier
-BOOL scrvLookUpArray(char *pIdent, UDWORD *pIndex)
+BOOL scrvLookUpArray(const char *pIdent, UDWORD *pIndex)
 {
 	UDWORD	i;
 
@@ -823,7 +823,7 @@ BOOL scrvLookUpArray(char *pIdent, UDWORD *pIndex)
 
 
 // Load a script value file
-BOOL scrvLoad(char *pData, UDWORD size)
+BOOL scrvLoad(const char *pData, UDWORD size)
 {
 	scrvSetInputBuffer(pData, size);
 

@@ -52,8 +52,8 @@ static UDWORD currText=0;
 static BOOL inComment = FALSE;
 
 /* Pointer to the input buffer */
-static char *pInputBuffer = NULL;
-static char *pEndBuffer = NULL;
+static const char *pInputBuffer = NULL;
+static const char *pEndBuffer = NULL;
 
 #define YY_INPUT(buf,result,max_size) \
 			if (pInputBuffer != pEndBuffer) { \

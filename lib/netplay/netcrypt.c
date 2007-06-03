@@ -45,8 +45,6 @@
 
 // ////////////////////////////////////////////////////////////////////////
 // Prototypes
-UDWORD	NEThashBuffer(char *pData, UDWORD size);
-
 BOOL	NETsetKey			(UDWORD c1,UDWORD c2,UDWORD c3, UDWORD c4);
 NETMSG*	NETmanglePacket		(NETMSG *msg);
 void	NETunmanglePacket	(NETMSG *msg);
@@ -57,19 +55,16 @@ BOOL	NETunmangleData		( UDWORD *input, UDWORD *result, UDWORD dataSize);
 // ////////////////////////////////////////////////////////////////////////
 // return a hash from a data buffer.
 
-UDWORD	NEThashBuffer(char *pData, UDWORD size)
+UDWORD NEThashBuffer(const char *pData, UDWORD size)
 {
-	UDWORD hashval,*val;
-	UDWORD pt;
+	const uint32_t *xData = (uint32_t*)pData; // remember that we read 4 bytes at once
+	UDWORD hashval = 0, i = 0;
 
-	hashval =0;
-	pt =0;
+	size /= sizeof(uint32_t);
 
-	while(pt <= size-4) // remember that we read 4 bytes at once
+	for(i = 0; i <= size; i++)
 	{
-		val = (UDWORD*)(pData+pt);
-		hashval = hashval ^ *val;
-		pt += 4;
+		hashval = hashval ^ xData[i];
 	}
 
 	return hashval;

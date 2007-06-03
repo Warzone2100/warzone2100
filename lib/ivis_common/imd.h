@@ -43,7 +43,7 @@
 
 //*************************************************************************
 
-extern iIMDShape *iV_ProcessIMD(char **ppFileData, char *FileDataEnd );
+extern iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd );
 
 extern BOOL iV_IMDSave(char *filename, iIMDShape *s, BOOL PieIMD);
 extern void iV_IMDRelease(iIMDShape *s);

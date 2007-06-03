@@ -508,7 +508,7 @@ static BOOL addToViewDataList(VIEWDATA *psViewData, UBYTE numData)
 }
 
 /*load the view data for the messages from the file */
-VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
+VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 {
 	UDWORD				i, id, dataInc, seqInc, numFrames, numData, count, count2;
 	VIEWDATA			*psViewData, *pData;
@@ -894,14 +894,12 @@ VIEWDATA *loadViewData(char *pViewMsgData, UDWORD bufferSize)
 }
 
 /*get the view data identified by the name */
-VIEWDATA * getViewData(char *pName)
+VIEWDATA * getViewData(const char *pName)
 {
-	//VIEWDATA		*psViewData;// = asViewData;
-	VIEWDATA_LIST	*psList;
-	//UDWORD			i;
-	UBYTE			i;
+	VIEWDATA_LIST *psList = NULL;
+	unsigned int i = 0;
 
-	ASSERT( strlen(pName)< MAX_STR_SIZE,"getViewData: verbose message name" );
+	ASSERT( strlen(pName) < MAX_STR_SIZE, "getViewData: verbose message name" );
 
 	for (psList = apsViewData; psList != NULL; psList = psList->psNext)
 	{

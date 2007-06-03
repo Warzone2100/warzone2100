@@ -168,8 +168,8 @@ extern NETMSG*	NETmanglePacket(NETMSG *msg);
 extern void	NETunmanglePacket(NETMSG *msg);
 extern BOOL	NETmangleData(UDWORD *input, UDWORD *result, UDWORD dataSize);
 extern BOOL	NETunmangleData(UDWORD *input, UDWORD *result, UDWORD dataSize);
-extern UBYTE	NEThashVal(UDWORD value);
-extern UDWORD	NEThashBuffer(char *pData, UDWORD size);
+extern UBYTE NEThashVal(UDWORD value);
+extern UDWORD NEThashBuffer(const char *pData, UDWORD size);
 
 extern void NETsetMasterserverName(const char* hostname);
 extern void NETsetMasterserverPort(unsigned int port);

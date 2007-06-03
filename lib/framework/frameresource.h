@@ -31,7 +31,7 @@
 #define RESID_MAXCHAR		40
 
 /* Function pointer for a function that loads from a memory buffer */
-typedef BOOL (*RES_BUFFERLOAD)(char *pBuffer, UDWORD size, void **pData);
+typedef BOOL (*RES_BUFFERLOAD)(const char *pBuffer, UDWORD size, void **pData);
 /* Function pointer for a function that loads from a filename */
 typedef BOOL (*RES_FILELOAD)(const char *pFile, void **pData);
 

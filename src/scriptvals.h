@@ -53,7 +53,7 @@ typedef struct _array_indexes
 } ARRAY_INDEXES;
 
 /* Set the current input buffer for the lexer */
-extern void scrvSetInputBuffer(char *pBuffer, UDWORD size);
+extern void scrvSetInputBuffer(const char *pBuffer, UDWORD size);
 
 extern void scrvGetErrorData(int *pLine, char **ppText);
 
@@ -66,13 +66,13 @@ extern void scrv_error(const char *pMessage,...);
 extern int scrv_parse(void);
 
 // Lookup a type
-extern BOOL scrvLookUpType(char *pIdent, INTERP_TYPE *pType);
+extern BOOL scrvLookUpType(const char *pIdent, INTERP_TYPE *pType);
 
 // Lookup a variable identifier
-extern BOOL scrvLookUpVar(char *pIdent, UDWORD *pIndex);
+extern BOOL scrvLookUpVar(const char *pIdent, UDWORD *pIndex);
 
 // Lookup an array identifier
-extern BOOL scrvLookUpArray(char *pIdent, UDWORD *pIndex);
+extern BOOL scrvLookUpArray(const char *pIdent, UDWORD *pIndex);
 
 // Whether the script is run immediately or stored for later use
 typedef enum _scrv_type
@@ -112,7 +112,7 @@ extern void scrvShutDown(void);
 extern void scrvReset(void);
 
 // Load a script value file
-extern BOOL scrvLoad(char *pData, UDWORD size);
+extern BOOL scrvLoad(const char *pData, UDWORD size);
 
 // Link any object types to the actual pointer values
 //extern BOOL scrvLinkValues(void);
@@ -121,6 +121,6 @@ extern BOOL scrvLoad(char *pData, UDWORD size);
 extern BOOL scrvGetBaseObj(UDWORD id, BASE_OBJECT **ppsObj);
 
 // Find a string from it's (string)id
-extern BOOL scrvGetString(char *pStringID, char **ppString);
+extern BOOL scrvGetString(const char *pStringID, char **ppString);
 #endif
 

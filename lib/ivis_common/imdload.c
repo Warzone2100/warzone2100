@@ -45,9 +45,9 @@
 static VERTEXID vertexTable[iV_IMD_MAX_POINTS];
 
 // local prototypes
-static iIMDShape *_imd_load_level(char **FileData, char *FileDataEnd, int nlevels);
+static iIMDShape *_imd_load_level(const char **FileData, const char *FileDataEnd, int nlevels);
 
-static BOOL AtEndOfFile(char *CurPos, char *EndOfFile)
+static BOOL AtEndOfFile(const char *CurPos, const char *EndOfFile)
 {
 	while ( *CurPos == 0x00 || *CurPos == 0x09 || *CurPos == 0x0a || *CurPos == 0x0d || *CurPos == 0x20 )
 	{
@@ -66,19 +66,17 @@ static BOOL AtEndOfFile(char *CurPos, char *EndOfFile)
 }
 
 // ppFileData is incremented to the end of the file on exit!
-iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
+iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 {
-	char		texfile[MAX_PATH]; // Last loaded texture page filename
-	char		*pFileData = *ppFileData;
-	int 		cnt;
-	char		buffer[MAX_PATH], texType[MAX_PATH], ch; //, *str;
-	int		i, nlevels, pwidth, pheight;
-	iIMDShape	*s, *psShape;
-	UDWORD		level;
-	Sint32		imd_version;
-	Uint32		imd_flags; // FIXME UNUSED
-	char		*pFileName = GetLastResourceFilename();
-	BOOL		bTextured = FALSE;
+	const char *pFileName = GetLastResourceFilename(); // Last loaded texture page filename
+	const char *pFileData = *ppFileData;
+	char buffer[MAX_PATH], texfile[MAX_PATH];
+	int cnt, nlevels;
+	iIMDShape *shape, *psShape;
+	UDWORD level;
+	Sint32 imd_version;
+	Uint32 imd_flags; // FIXME UNUSED
+	BOOL bTextured = FALSE;
 
 	if (sscanf(pFileData, "%s %d%n", buffer, &imd_version, &cnt) != 2)
 	{
@@ -120,6 +118,9 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 	// get texture page if specified
 	if (strncmp(buffer, "TEXTURE", 7) == 0)
 	{
+		int i, pwidth, pheight;
+		char ch, texType[MAX_PATH];
+
 		/* the first parameter for textures is always ignored; which is why we ignore
 		 * nlevels read in above */
 		ch = *pFileData++;
@@ -144,6 +145,7 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 			return NULL;
 		}
 		strcat(texfile, ".png");
+		pie_MakeTexPageName(texfile);
 
 		if (sscanf(pFileData, "%d %d%n", &pwidth, &pheight, &cnt) != 2)
 		{
@@ -151,7 +153,6 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 			return NULL;
 		}
 		pFileData += cnt;
-		pie_MakeTexPageName(texfile);
 
 		/* Now read in LEVELS directive */
 		if (sscanf(pFileData, "%s %d%n", buffer, &nlevels, &cnt) != 2)
@@ -184,8 +185,8 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 		return NULL;
 	}
 
-	s = _imd_load_level(&pFileData, FileDataEnd, nlevels);
-	if (s == NULL)
+	shape = _imd_load_level(&pFileData, FileDataEnd, nlevels);
+	if (shape == NULL)
 	{
 		debug(LOG_ERROR, "iV_ProcessIMD %s unsuccessful", pFileName);
 		return NULL;
@@ -203,14 +204,14 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
 			return NULL;
 		}
 		/* assign tex page to levels */
-		for (psShape = s; psShape != NULL; psShape = psShape->next)
+		for (psShape = shape; psShape != NULL; psShape = psShape->next)
 		{
 			psShape->texpage = texpage;
 		}
 	}
 
 	*ppFileData = pFileData;
-	return s;
+	return shape;
 }
 
 
@@ -225,9 +226,9 @@ iIMDShape *iV_ProcessIMD( char **ppFileData, char *FileDataEnd )
  * \post s->polys allocated (iFSDPoly * s->npolys)
  * \post s->pindex allocated for each poly
  */
-static BOOL _imd_load_polys( char **ppFileData, iIMDShape *s )
+static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 {
-	char *pFileData = *ppFileData;
+	const char *pFileData = *ppFileData;
 	int i, j, cnt;
 	iIMDPoly *poly;
 	int nFrames, pbRate, tWidth, tHeight;
@@ -367,9 +368,9 @@ static BOOL _imd_load_polys( char **ppFileData, iIMDShape *s )
 }
 
 
-static BOOL ReadPoints( char **ppFileData, iIMDShape *s )
+static BOOL ReadPoints( const char **ppFileData, iIMDShape *s )
 {
-	char *pFileData = *ppFileData;
+	const char *pFileData = *ppFileData;
 	int cnt, i, j, lastPoint = 0, match = -1;
 	Vector3f newVector = {0.0f, 0.0f, 0.0f};
 
@@ -425,9 +426,8 @@ static BOOL ReadPoints( char **ppFileData, iIMDShape *s )
 }
 
 
-static BOOL _imd_load_points( char **ppFileData, iIMDShape *s )
+static BOOL _imd_load_points( const char **ppFileData, iIMDShape *s )
 {
-	int i;
 	Vector3f *p = NULL;
 	Sint32 tempXMax, tempXMin, tempZMax, tempZMin, extremeX, extremeZ;
 	Sint32 xmax, ymax, zmax;
@@ -457,7 +457,7 @@ static BOOL _imd_load_points( char **ppFileData, iIMDShape *s )
 	vxmin.x = vymin.y = vzmin.z = FP12_MULTIPLIER;
 
 	// set up bounding data for minimum number of vertices
-	for (i = 0, p = s->points; i < s->npoints; i++, p++)
+	for (p = s->points; p < s->points + s->npoints; p++)
 	{
 		if (p->x > s->xmax)
 			s->xmax = p->x;
@@ -609,7 +609,7 @@ static BOOL _imd_load_points( char **ppFileData, iIMDShape *s )
 	rad = sqrt(rad_sq);
 
 	// second pass (find tight sphere)
-	for (i = 0, p = s->points; i < s->npoints; i++, p++)
+	for (p = s->points; p < s->points + s->npoints; p++)
 	{
 		dx = p->x - cen.x;
 		dy = p->y - cen.y;
@@ -655,10 +655,10 @@ static BOOL _imd_load_points( char **ppFileData, iIMDShape *s )
  * \pre s->nconnectors set
  * \post s->connectors allocated
  */
-static BOOL _imd_load_connectors(char **ppFileData, iIMDShape *s)
+static BOOL _imd_load_connectors(const char **ppFileData, iIMDShape *s)
 {
-	char *pFileData = *ppFileData;
-	int cnt, i;
+	const char *pFileData = *ppFileData;
+	int cnt;
 	Vector3f *p = NULL, newVector = {0.0f, 0.0f, 0.0f};
 
 	s->connectors = (Vector3f*)malloc(sizeof(Vector3f) * s->nconnectors);
@@ -668,7 +668,7 @@ static BOOL _imd_load_connectors(char **ppFileData, iIMDShape *s)
 		return FALSE;
 	}
 
-	for (i = 0, p = s->connectors; i < s->nconnectors; i++, p++)
+	for (p = s->connectors; p < s->connectors + s->nconnectors; p++)
 	{
 		if (sscanf(pFileData, "%f %f %f%n", &newVector.x, &newVector.y, &newVector.z, &cnt) != 3)
 		{
@@ -694,12 +694,12 @@ static BOOL _imd_load_connectors(char **ppFileData, iIMDShape *s)
  * \pre ppFileData loaded
  * \post s allocated
  */
-static iIMDShape *_imd_load_level(char **ppFileData, char *FileDataEnd, int nlevels)
+static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataEnd, int nlevels)
 {
-	char *pFileData = *ppFileData;
+	const char *pFileData = *ppFileData;
+	char buffer[MAX_PATH] = {'\0'};
 	int cnt = 0, n = 0;
 	iIMDShape *s = NULL;
-	char buffer[MAX_PATH] = {'\0'};
 
 	if (nlevels == 0)
 		return NULL;
