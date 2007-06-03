@@ -387,7 +387,6 @@ extern BOOL droidAudioTrackStopped( void *psObj );
 extern BOOL cyborgDroid(DROID *psDroid);
 
 /* assert if droid is bad */
-#ifdef DEBUG
 #define CHECK_DROID(droid) \
 do { \
 	unsigned int i; \
@@ -411,8 +410,5 @@ do { \
 		if (droid->psActionTarget[i]) \
 			assert(droid->psActionTarget[i]->direction >= 0.0f); \
 } while (0);
-#else
-#define CHECK_DROID(x)
-#endif
 
 #endif

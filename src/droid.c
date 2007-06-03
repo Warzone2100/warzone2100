@@ -395,9 +395,9 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 		psDroid->lastHitWeapon = weaponSubClass;
 	}
 
-	return FALSE;
-
 	CHECK_DROID(psDroid);
+
+	return FALSE;
 }
 
 /* droidRelease: release all resources associated with a droid -
