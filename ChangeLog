@@ -39,6 +39,11 @@
    * Heavy Repair:
      * heavy repair component cost increased from 50 to 70
      * heavy repair component build time increased from 250 to 300
+   * Laser Satellite weapon:
+     * blast radius: increased from 2 tiles to 4.5 tiles
+     * blast radius damage: increased from 1000 to 2800
+     * reload time: increased from 5 mins to 8 mins
+     * chance to hit in the blast radius: reduced from 99% to 90%
    
 2007-03-31: Version 2.0.6
  * General:
