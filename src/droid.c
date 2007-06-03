@@ -148,31 +148,31 @@ BOOL droidInit(void)
 #define UNIT_LOST_DELAY	(5*GAME_TICKS_PER_SEC)
 BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass, int angle)
 {
-	UDWORD		penDamage, armourDamage;
+	UDWORD		armourDamage;
 	BOOL		penetrated = FALSE;
 	UDWORD		armour=0;
 	SECONDARY_STATE		state;
-	SDWORD		level, cmdLevel;
 	DROID_HIT_SIDE	impact_side;
 
 	check_droid(psDroid);
 
-    //EMP cannons do not do body damage
-    if (weaponSubClass == WSC_EMP)
-    {
-        //store the time
-    	psDroid->timeLastHit = gameTime;
-	    psDroid->lastHitWeapon = weaponSubClass;
-        //quit early
-        return FALSE;
-    }
+	//EMP cannons do not do body damage
+	if (weaponSubClass == WSC_EMP)
+	{
+		//store the time
+		psDroid->timeLastHit = gameTime;
+		psDroid->lastHitWeapon = weaponSubClass;
 
-    //only overwrite if the last weapon to hit was not an EMP - need the time value for this
-    if (psDroid->lastHitWeapon != WSC_EMP)
-    {
-    	psDroid->timeLastHit = gameTime;
-	    psDroid->lastHitWeapon = weaponSubClass;
-    }
+		//quit early
+		return FALSE;
+	}
+
+	//only overwrite if the last weapon to hit was not an EMP - need the time value for this
+	if (psDroid->lastHitWeapon != WSC_EMP)
+	{
+		psDroid->timeLastHit = gameTime;
+		psDroid->lastHitWeapon = weaponSubClass;
+	}
 
 //	if(selectedPlayer==0)
 	if(psDroid->player != selectedPlayer)
@@ -262,34 +262,32 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 	{
 		/* Damage has penetrated - reduce armour and body points */
 		//penDamage = damage - psDroid->armour;
-		penDamage = damage - armour;
+		unsigned int penDamage = damage - armour;
 
-		level = getDroidLevel(psDroid);
-		cmdLevel = cmdGetCommanderLevel(psDroid);
-		if (level > cmdLevel)
+		// Retrieve highest, applicable, experience level
+		unsigned int level = getDroidLevel(psDroid);
 		{
-			//penDamage = (penDamage * (100 - 5 * level)) / 100;
-			penDamage = (penDamage * (100 - 6 * level)) / 100;
+			unsigned int cmdLevel = cmdGetCommanderLevel(psDroid);
+			level = MAX(level, cmdLevel);
 		}
-		else
-		{
-			//penDamage = (penDamage * (100 - 5 * cmdLevel)) / 100;
-			penDamage = (penDamage * (100 - 6 * cmdLevel)) / 100;
-		}
+
+		// Reduce damage taken by 6% for each experience level
+		penDamage = (penDamage * (100 - 6 * level)) / 100;
 
 		debug( LOG_ATTACK, "        penetrated: %d\n", penDamage);
 		if (penDamage >= psDroid->body)
 		{
-            //we don't want this in multiPlayer
-            if (!bMultiPlayer)
-            {
-                //hack to prevent Transporter's being blown up
-                if (psDroid->droidType == DROID_TRANSPORTER)
-                {
-                    psDroid->body = 1;
-                    return FALSE;
-                }
-            }
+			//we don't want this in multiPlayer
+			if (!bMultiPlayer)
+			{
+				//hack to prevent Transporter's being blown up
+				if (psDroid->droidType == DROID_TRANSPORTER)
+				{
+					psDroid->body = 1;
+					return FALSE;
+				}
+			}
+
 			/* Droid destroyed */
 			debug( LOG_ATTACK, "        DESTROYED\n");
 			if(psDroid->player == selectedPlayer)
@@ -338,17 +336,17 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 		}
 		if (psDroid->body == 1)
 		{
-            //we don't want this in multiPlayer
-            if (!bMultiPlayer)
-            {
-                //hack to prevent Transporter's being blown up
-                if (psDroid->droidType == DROID_TRANSPORTER)
-                {
-                    return FALSE;
-                }
-            }
+			//we don't want this in multiPlayer
+			if (!bMultiPlayer)
+			{
+				//hack to prevent Transporter's being blown up
+				if (psDroid->droidType == DROID_TRANSPORTER)
+				{
+					return FALSE;
+				}
+			}
 
-            if(psDroid->player == selectedPlayer)
+			if(psDroid->player == selectedPlayer)
 			{
 				CONPRINTF(ConsoleString,(ConsoleString,_("Unit Lost!")));
 				scoreUpdateVar(WD_UNITS_LOST);
@@ -386,16 +384,16 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 	/* now check for auto return on droid's secondary orders */
 	secondaryCheckDamageLevel(psDroid);
 
-    /* now check for scripted run-away based on health */
-    orderHealthCheck(psDroid);
+	/* now check for scripted run-away based on health */
+	orderHealthCheck(psDroid);
 
 
-    //only overwrite if the last weapon to hit was not an EMP - need the time value for this
-    if (psDroid->lastHitWeapon != WSC_EMP)
-    {
-    	psDroid->timeLastHit = gameTime;
-	    psDroid->lastHitWeapon = weaponSubClass;
-    }
+	//only overwrite if the last weapon to hit was not an EMP - need the time value for this
+	if (psDroid->lastHitWeapon != WSC_EMP)
+	{
+		psDroid->timeLastHit = gameTime;
+		psDroid->lastHitWeapon = weaponSubClass;
+	}
 
 	return FALSE;
 

@@ -36,7 +36,6 @@
 #define ConnectionSize		255			// max size of a connection description.
 #define MaxProtocols		12			// max number of returnable protocols.
 #define MaxGames		12			// max number of concurrently playable games to allow.
-//#define USE_DIRECTPLAY_PROTOCOL			// use DX6 protocol.
 
 #define SESSION_JOINDISABLED	1
 

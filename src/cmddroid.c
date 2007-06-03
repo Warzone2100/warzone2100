@@ -171,7 +171,7 @@ void cmdDroidMultiExpBoost(BOOL bDoit)
 
 
 // get the experience level of a command droid
-SDWORD cmdDroidGetLevel(DROID *psCommander)
+unsigned int cmdDroidGetLevel(DROID *psCommander)
 {
 	SDWORD	numKills = psCommander->numKills;
 
@@ -180,6 +180,7 @@ SDWORD cmdDroidGetLevel(DROID *psCommander)
 	{
 		numKills *= 2;
 	}
+
 	if (numKills > 2047)
 	{
 		return 8;
@@ -217,7 +218,7 @@ SDWORD cmdDroidGetLevel(DROID *psCommander)
 }
 
 // get the maximum group size for a command droid
-SDWORD cmdDroidMaxGroup(DROID *psCommander)
+unsigned int cmdDroidMaxGroup(DROID *psCommander)
 {
 	return cmdDroidGetLevel(psCommander) * 2 + 6;
 }
@@ -239,22 +240,26 @@ void cmdDroidUpdateKills(DROID *psKiller)
 }
 
 // get the level of a droids commander, if any
-SDWORD cmdGetCommanderLevel(DROID *psDroid)
+unsigned int cmdGetCommanderLevel(DROID *psDroid)
 {
 	DROID	*psCommander;
 
 	ASSERT( psDroid != NULL,
 		"cmdGetCommanderLevel: invalid droid pointer" );
 
-	if ( (psDroid->psGroup != NULL) &&
-		 (psDroid->psGroup->type == GT_COMMAND) )
+	// If this droid is not the member of a Commander's group
+	// Return an experience level of 0
+	if ((psDroid->psGroup == NULL) ||
+	    (psDroid->psGroup->type != GT_COMMAND))
 	{
-		psCommander = psDroid->psGroup->psCommander;
-
-		return cmdDroidGetLevel(psCommander);
+		return 0;
 	}
 
-	return 0;
+	// Retrieve this group's commander
+	psCommander = psDroid->psGroup->psCommander;
+
+	// Return the experience level of this commander
+	return cmdDroidGetLevel(psCommander);
 }
 
 // Selects all droids for a given commander
