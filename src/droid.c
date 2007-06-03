@@ -154,7 +154,7 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 	SECONDARY_STATE		state;
 	DROID_HIT_SIDE	impact_side;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	//EMP cannons do not do body damage
 	if (weaponSubClass == WSC_EMP)
@@ -397,7 +397,7 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 
 	return FALSE;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 }
 
 /* droidRelease: release all resources associated with a droid -
@@ -407,7 +407,7 @@ void droidRelease(DROID *psDroid)
 {
 	DROID	*psCurr, *psNext;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	if (psDroid->droidType == DROID_TRANSPORTER)
 	{
@@ -452,7 +452,7 @@ void recycleDroid(DROID *psDroid)
 	SDWORD		i, cost, storeIndex;
 	Vector3i position;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	// store the droids kills
 	numKills = psDroid->numKills;
@@ -494,7 +494,7 @@ void recycleDroid(DROID *psDroid)
 
 	addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_DISCOVERY,FALSE,NULL,FALSE);
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 }
 
 
@@ -505,7 +505,7 @@ void	removeDroidBase(DROID *psDel)
 	DROID_GROUP	*psGroup;
 	STRUCTURE	*psStruct;
 
-	check_droid(psDel);
+	CHECK_DROID(psDel);
 
 	if(!driveDroidKilled(psDel)) {	// Tell the driver system it's gone.
 
@@ -654,7 +654,7 @@ static void removeDroidFX(DROID *psDel)
 {
 	Vector3i pos;
 
-	check_droid(psDel);
+	CHECK_DROID(psDel);
 
 	// only display anything if the droid is visible
 	if (!psDel->visible[selectedPlayer])
@@ -758,7 +758,7 @@ TAKE CARE with removeDroid() - usually want droidRemove since it deal with clust
 //returns FALSE if the droid wasn't removed - because it died!
 BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 {
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	if(!driveDroidKilled(psDroid)) {	// Tell the driver system it's gone.
 
@@ -859,7 +859,7 @@ void droidBurn( DROID * psDroid )
 {
 	BOOL	bRet;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	if ( psDroid->droidType != DROID_PERSON )
 	{
@@ -995,7 +995,7 @@ void droidGetNaybors(DROID *psDroid)
 	UDWORD		dx,dy, distSqr;
 	BASE_OBJECT	*psObj;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 // Ensure only called max of once per droid per game cycle.
 	if(CurrentNaybors == psDroid && nayborTime == gameTime) {
@@ -1060,7 +1060,7 @@ void droidUpdate(DROID *psDroid)
 	BASE_OBJECT	*psBeingTargetted = NULL;
 	SDWORD	damageToDo;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	// Find all the objects close to the droid
 //	droidGetNaybors(psTmpDroid);	// Now done when needed.
@@ -1242,7 +1242,7 @@ void droidUpdate(DROID *psDroid)
 	    }
     }
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 }
 
 /* See if a droid is next to a structure */
@@ -1250,7 +1250,7 @@ static BOOL droidNextToStruct(DROID *psDroid, BASE_OBJECT *psStruct)
 {
 	SDWORD	minX, maxX, maxY, x,y;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	minX = (SDWORD)(psDroid->x >> TILE_SHIFT)-1;
 	y = (SDWORD)(psDroid->y >> TILE_SHIFT)-1;
@@ -1300,7 +1300,7 @@ droidCheckBuildStillInProgress( void *psObj )
 	}
 
 	psDroid = (DROID*)psObj;
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	if ( !psDroid->died && psDroid->action == DACTION_BUILD )
 	{
@@ -1339,7 +1339,7 @@ BOOL droidStartBuild(DROID *psDroid)
 	STRUCTURE			*psStruct;
 	STRUCTURE_STATS		*psStructStat;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	/* See if we are starting a new structure */
 	if ((psDroid->psTarget[0] == NULL) &&
@@ -1408,7 +1408,7 @@ BOOL droidStartBuild(DROID *psDroid)
 										droidBuildStartAudioCallback );
 	}
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	return TRUE;
 }
@@ -1456,7 +1456,7 @@ BOOL droidUpdateBuild(DROID *psDroid)
 	//UDWORD		mapX, mapY, i, j;
 	//UBYTE		prevScale, currScale, current = 0, prev = 0;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	ASSERT( psDroid->action == DACTION_BUILD,
 		"unitUpdateBuild: unit is not building" );
@@ -1671,7 +1671,7 @@ BOOL droidStartDemolishing( DROID *psDroid )
 {
 	STRUCTURE	*psStruct;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	ASSERT( psDroid->order == DORDER_DEMOLISH,
 		"unitStartDemolishing: unit is not demolishing" );
@@ -1696,7 +1696,7 @@ BOOL droidStartDemolishing( DROID *psDroid )
 		releasePowerGen(psStruct);
 	}
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	return TRUE;
 }
@@ -1706,7 +1706,7 @@ BOOL droidUpdateDemolishing( DROID *psDroid )
 	STRUCTURE	*psStruct;
 	UDWORD		pointsToAdd, constructPoints;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	ASSERT( psDroid->action == DACTION_DEMOLISH,
 		"unitUpdateDemolishing: unit is not demolishing" );
@@ -1820,7 +1820,7 @@ BOOL droidUpdateDemolishing( DROID *psDroid )
 		addConstructorEffect(psStruct);
 	}
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	return TRUE;
 }
@@ -1830,7 +1830,7 @@ BOOL droidStartClearing( DROID *psDroid )
 {
 	FEATURE			*psFeature;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	ASSERT( psDroid->order == DORDER_CLEARWRECK,
 		"unitStartClearing: unit is not clearing wreckage" );
@@ -1843,7 +1843,7 @@ BOOL droidStartClearing( DROID *psDroid )
 	psDroid->actionStarted = gameTime;
 	psDroid->actionPoints  = 0;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	return TRUE;
 }
@@ -1855,7 +1855,7 @@ BOOL droidUpdateClearing( DROID *psDroid )
 	FEATURE		*psFeature;
 	UDWORD		pointsToAdd, constructPoints;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	ASSERT( psDroid->action == DACTION_CLEARWRECK,
 		"unitUpdateClearing: unit is not clearing wreckage" );
@@ -1888,12 +1888,12 @@ BOOL droidUpdateClearing( DROID *psDroid )
 		/* reset target stats */
 		psDroid->psTarStats[0] = NULL;
 
-		check_droid(psDroid);
+		CHECK_DROID(psDroid);
 
 		return FALSE;
 	}
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	return TRUE;
 }
@@ -1902,7 +1902,7 @@ BOOL droidStartRepair( DROID *psDroid )
 {
 	STRUCTURE	*psStruct;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	psStruct = (STRUCTURE *)psDroid->psActionTarget[0];
 	ASSERT( psStruct->type == OBJ_STRUCTURE,
@@ -1911,7 +1911,7 @@ BOOL droidStartRepair( DROID *psDroid )
 	psDroid->actionStarted = gameTime;
 	psDroid->actionPoints  = 0;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	return TRUE;
 }
@@ -1922,7 +1922,7 @@ BOOL droidStartDroidRepair( DROID *psDroid )
 {
 	DROID	*psDroidToRepair;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	psDroidToRepair = (DROID *)psDroid->psActionTarget[0];
 	ASSERT( psDroidToRepair->type == OBJ_DROID,
@@ -1931,7 +1931,7 @@ BOOL droidStartDroidRepair( DROID *psDroid )
 	psDroid->actionStarted = gameTime;
 	psDroid->actionPoints  = 0;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	return TRUE;
 }
@@ -1939,7 +1939,7 @@ BOOL droidStartDroidRepair( DROID *psDroid )
 /*checks a droids current body points to see if need to self repair*/
 void droidSelfRepair(DROID *psDroid)
 {
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
     if (!vtolDroid(psDroid))
     {
@@ -1956,7 +1956,7 @@ void droidSelfRepair(DROID *psDroid)
 	    }
     }
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 }
 
 
@@ -1965,7 +1965,7 @@ BOOL droidStartRestore( DROID *psDroid )
 {
 	STRUCTURE	*psStruct;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	ASSERT( psDroid->order == DORDER_RESTORE,
 		"unitStartRestore: unit is not restoring" );
@@ -1976,7 +1976,7 @@ BOOL droidStartRestore( DROID *psDroid )
 	psDroid->actionStarted = gameTime;
 	psDroid->actionPoints  = 0;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	return TRUE;
 }
@@ -1988,7 +1988,7 @@ BOOL droidUpdateRestore( DROID *psDroid )
 	UDWORD			pointsToAdd, restorePoints;
 	WEAPON_STATS	*psStats;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	ASSERT( psDroid->action == DACTION_RESTORE,
 		"unitUpdateRestore: unit is not restoring" );
@@ -2018,7 +2018,7 @@ BOOL droidUpdateRestore( DROID *psDroid )
 	//store the amount just added
 	psDroid->actionPoints = pointsToAdd;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	/* check if structure is restored */
 	//if ( psStruct->resistance < (SDWORD)(psStruct->pStructureType->resistance))
@@ -2047,7 +2047,7 @@ float	fraction;
 UBYTE	i = 0;
 UBYTE	num_weapons = 0;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	if (psDroid->numWeaps > 1)
 	{
@@ -2111,7 +2111,7 @@ UBYTE	num_weapons = 0;
 			psDroid->asWeaps[i].recoilValue = recoil;
 		}
 	}
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 }
 
 
@@ -2120,7 +2120,7 @@ BOOL droidUpdateRepair( DROID *psDroid )
 	STRUCTURE	*psStruct;
 	UDWORD		iPointsToAdd, iRepairPoints;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	ASSERT( psDroid->action == DACTION_REPAIR,
 		"unitUpdateRepair: unit does not have repair order" );
@@ -2161,7 +2161,7 @@ BOOL droidUpdateDroidRepair(DROID *psRepairDroid)
 	UDWORD		iPointsToAdd, iRepairPoints, powerCost;
 	Vector3i iVecEffect;
 
-	check_droid(psRepairDroid);
+	CHECK_DROID(psRepairDroid);
 
 	ASSERT( psRepairDroid->action == DACTION_DROIDREPAIR,
 		"unitUpdateUnitRepair: unit does not have unit repair order" );
@@ -2289,7 +2289,7 @@ BOOL droidUpdateDroidRepair(DROID *psRepairDroid)
 		droidAddWeldSound( iVecEffect );
 	}
 
-	check_droid(psRepairDroid);
+	CHECK_DROID(psRepairDroid);
 
 	/* if not finished repair return TRUE else complete repair and return FALSE */
 	if (psDroidToRepair->body < psDroidToRepair->originalBody)
@@ -3999,7 +3999,7 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 	Vector3i barrel;
  	iIMDShape *psShape, *psWeapon, *psWeaponMount;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	psShape = BODY_IMD(psDroid,psDroid->player);
 	//Watermelon:got rid of the macros...
@@ -4102,7 +4102,7 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 		}
 	}
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
   return TRUE;
 }
 
@@ -5073,7 +5073,7 @@ BOOL electronicDroid(DROID *psDroid)
 {
 	DROID	*psCurr;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	//Watermelon:use slot 0 for now
 	//if (psDroid->numWeaps && asWeaponStats[psDroid->asWeaps[0].nStat].
@@ -5103,7 +5103,7 @@ BOOL droidUnderRepair(DROID *psDroid)
 {
 	DROID		*psCurr;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	//droid must be damaged
 	if (droidIsDamaged(psDroid))
@@ -5154,7 +5154,7 @@ BOOL vtolEmpty(DROID *psDroid)
 	UBYTE	emptyWeaps = 0;
 	BOOL	bEmpty = TRUE;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	if (!vtolDroid(psDroid))
 	{
@@ -5196,7 +5196,7 @@ BOOL vtolReadyToRearm(DROID *psDroid, STRUCTURE *psStruct)
 {
 	STRUCTURE	*psRearmPad;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	if (!vtolDroid(psDroid) ||
 		psDroid->action != DACTION_WAITFORREARM)
@@ -5236,7 +5236,7 @@ BOOL vtolReadyToRearm(DROID *psDroid, STRUCTURE *psStruct)
 // true if a vtol droid currently returning to be rearmed
 BOOL vtolRearming(DROID *psDroid)
 {
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	if (!vtolDroid(psDroid))
 	{
@@ -5261,7 +5261,7 @@ BOOL vtolRearming(DROID *psDroid)
 // true if a droid is currently attacking
 BOOL droidAttacking(DROID *psDroid)
 {
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
     //what about cyborgs?
 	//if (psDroid->droidType != DROID_WEAPON)
@@ -5290,7 +5290,7 @@ BOOL allVtolsRearmed(DROID *psDroid)
 	DROID	*psCurr;
 	BOOL	stillRearming;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	// ignore all non vtols
 	if (!vtolDroid(psDroid))
@@ -5346,7 +5346,7 @@ BOOL  vtolHappy(DROID *psDroid)
 	UBYTE	rearmedWeaps = 0;
 	BOOL	bHappy = TRUE;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	ASSERT( vtolDroid(psDroid), "vtolHappy: not a VTOL droid" );
 	ASSERT( psDroid->droidType == DROID_WEAPON, "vtolHappy: not a weapon droid" );
@@ -5412,7 +5412,7 @@ void mendVtol(DROID *psDroid)
 	UBYTE	i;
 	ASSERT( vtolEmpty(psDroid), "mendVtol: droid is not an empty weapon VTOL!" );
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
 	/* set rearm value to no runs made */
 	for (i = 0;i < psDroid->numWeaps;i++)
@@ -5426,7 +5426,7 @@ void mendVtol(DROID *psDroid)
 	/* set droid points to max */
 	psDroid->body = psDroid->originalBody;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 }
 
 //assign rearmPad to the VTOL
@@ -5559,7 +5559,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
     UDWORD              body, armourK[NUM_HIT_SIDES], armourH[NUM_HIT_SIDES];
 	DROID_HIT_SIDE		impact_side;
 
-	check_droid(psD);
+	CHECK_DROID(psD);
 
     //leave any group it belongs to  - this gets called in droidRemove()
 	/*if(psD->psGroup)
@@ -5730,7 +5730,7 @@ SWORD   droidResistance(DROID *psDroid)
 {
     SWORD   resistance;
 
-	check_droid(psDroid);
+	CHECK_DROID(psDroid);
 
     resistance = (SWORD)(psDroid->numKills * DROID_RESISTANCE_FACTOR);
 
