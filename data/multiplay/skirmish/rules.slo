@@ -70,7 +70,7 @@ event initialisedEvent(CALL_GAMEINIT)
 		enableStructure(research	,playnum);
 		
 		setStructureLimits(factory,	5, playnum);	// set structure limits
-		setStructureLimits(powerGen,5, playnum);
+		setStructureLimits(powerGen,6, playnum);
 		setStructureLimits(research,5, playnum);
 		setStructureLimits(command,	1, playnum);
 		setStructureLimits(commandrelay,1, playnum);
