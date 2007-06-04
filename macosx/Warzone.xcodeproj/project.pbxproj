@@ -3861,6 +3861,10 @@
 					__MACOSX__,
 					"$(inherited)",
 				);
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"--std=gnu99",
+				);
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Debug;
@@ -3878,6 +3882,10 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					__MACOSX__,
 					"$(inherited)",
+				);
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"--std=gnu99",
 				);
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
