@@ -62,12 +62,6 @@ BOOL buttonCreate(W_BUTTON **ppsWidget, W_BUTINIT *psInit)
 	{
 		(*ppsWidget)->pText = strdup(psInit->pText);
 		ASSERT((*ppsWidget)->pText != NULL, "buttonCreate: Out of memory");
-
-		if ((*ppsWidget)->pText == NULL)
-		{
-			free(*ppsWidget);
-			return FALSE;
-		}
 	}
 	else
 	{
