@@ -32,7 +32,6 @@
 
 #include "types.h"
 #include "debug.h"
-#include "heap.h"
 #include "treap.h"
 #include "strres.h"
 #include "strresly.h"

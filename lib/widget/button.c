@@ -46,7 +46,7 @@ BOOL buttonCreate(W_BUTTON **ppsWidget, W_BUTINIT *psInit)
 	if (psInit->style & ~(WBUT_PLAIN | WIDG_HIDDEN | WFORM_NOCLICKMOVE |
 						  WBUT_NOPRIMARY | WBUT_SECONDARY | WBUT_TXTCENTRE ))
 	{
-		ASSERT( FALSE, "Unknown button style" );
+		ASSERT(!"unknown button style", "buttonCreate: unknown button style");
 		return FALSE;
 	}
 
@@ -54,7 +54,7 @@ BOOL buttonCreate(W_BUTTON **ppsWidget, W_BUTINIT *psInit)
 	*ppsWidget = (W_BUTTON *)malloc(sizeof(W_BUTTON));
 	if (*ppsWidget == NULL)
 	{
-		ASSERT( FALSE, "buttonCreate: Out of memory" );
+		debug(LOG_ERROR, "buttonCreate: Out of memory" );
 		return FALSE;
 	}
 	/* Allocate memory for the text and copy it if necessary */

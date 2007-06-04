@@ -43,9 +43,6 @@
 
 UDWORD	gridWidth, gridHeight;
 
-// The heap for the grid arrays
-OBJ_HEAP	*psGridHeap;
-
 // The map grid
 GRID_ARRAY	*apsMapGrid[GRID_MAXAREA];
 #define GridIndex(a,b) (((b)*gridWidth) + (a))
@@ -77,11 +74,6 @@ SDWORD	gridObjRange(BASE_OBJECT *psObj);
 // initialise the grid system
 BOOL gridInitialise(void)
 {
-	if (!HEAP_CREATE(&psGridHeap, sizeof(GRID_ARRAY), GRID_HEAPINIT, GRID_HEAPEXT))
-	{
-		return FALSE;
-	}
-
 //	memset(apsMapGrid, 0, sizeof(GRID_ARRAY *) * GRID_WIDTH * GRID_HEIGHT);
 	memset(apsMapGrid, 0, sizeof(GRID_ARRAY *) * GRID_MAXAREA);
 
@@ -109,7 +101,7 @@ void gridClear(void)
 			for(psCurr = apsMapGrid[GridIndex(x,y)]; psCurr != NULL; psCurr = psNext)
 			{
 				psNext = psCurr->psNext;
-				HEAP_FREE(psGridHeap, psCurr);
+				free(psCurr);
 			}
 //			apsMapGrid[x][y] = NULL;
 			apsMapGrid[GridIndex(x,y)] = NULL;
@@ -158,8 +150,6 @@ void gridShutDown(void)
 {
 	//gridReset();
 	gridClear();
-
-	HEAP_DESTROY(psGridHeap);
 }
 
 
@@ -416,9 +406,10 @@ void gridAddArrayObject(SDWORD x, SDWORD y, BASE_OBJECT *psObj)
 	}
 
 	// allocate a new array chunk
-	if (!HEAP_ALLOC(psGridHeap, (void**) &psNew))
+	psNew = malloc(sizeof(GRID_ARRAY));
+	if (psNew == NULL)
 	{
-		debug( LOG_NEVER, "help - %d\n", psObj->id );
+		debug(LOG_ERROR, "gridAddArrayObject: Out of memory");
 		return;
 	}
 
@@ -517,7 +508,7 @@ void gridCompactArray(SDWORD x, SDWORD y)
 	while (psDone)
 	{
 		psNext = psDone->psNext;
-		HEAP_FREE(psGridHeap, psDone);
+		free(psDone);
 		psDone = psNext;
 	}
 }

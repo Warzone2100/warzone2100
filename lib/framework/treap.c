@@ -32,7 +32,6 @@
 
 #include "types.h"
 #include "debug.h"
-#include "heap.h"
 #include "treap.h"
 #include "treapint.h"
 
@@ -92,14 +91,6 @@ BOOL treapCreate(TREAP **ppsTreap, TREAP_CMP cmp, UDWORD init, UDWORD ext)
 	{
 		debug( LOG_ERROR, "treapCreate: Out of memory" );
 		abort();
-		return FALSE;
-	}
-
-	if (!HEAP_CREATE(&((*ppsTreap)->psNodes), sizeof(TREAP_NODE), init, ext))
-	{
-		debug( LOG_ERROR, "treapCreate: Out of memory" );
-		abort();
-		free(*ppsTreap);
 		return FALSE;
 	}
 
@@ -189,10 +180,11 @@ void treapAddNode(TREAP_NODE **ppsRoot, TREAP_NODE *psNew, TREAP_CMP cmp)
  */
 BOOL treapAdd(TREAP *psTreap, void *key, void *pObj)
 {
-	TREAP_NODE	*psNew;
+	TREAP_NODE* psNew = malloc(sizeof(TREAP_NODE));
 
-	if (!HEAP_ALLOC(psTreap->psNodes, (void**)&psNew))
+	if (psNew == NULL)
 	{
+		debug(LOG_ERROR, "treapAdd: Out of memory");
 		return FALSE;
 	}
 	psNew->priority = (UDWORD)rand();
@@ -297,7 +289,7 @@ BOOL treapDel(TREAP *psTreap, void *key)
 #ifdef DEBUG_TREAP
 	free(psDel->pFile);
 #endif
-	HEAP_FREE(psTreap->psNodes, psDel);
+	free(psDel);
 
 	return TRUE;
 }
@@ -344,7 +336,7 @@ static void treapReportRec(TREAP_NODE *psRoot)
 {
 	if (psRoot)
 	{
-		debug( LOG_NEVER, (("   %s, line %d\n", psRoot->pFile, psRoot->line );
+		debug( LOG_NEVER, (("   %s, line %d\n", psRoot->pFile, psRoot->line )));
 		treapReportRec(psRoot->psLeft);
 		treapReportRec(psRoot->psRight);
 	}
@@ -353,7 +345,7 @@ static void treapReportRec(TREAP_NODE *psRoot)
 
 
 /* Recursively free a treap */
-static void treapDestroyRec(TREAP_NODE *psRoot, OBJ_HEAP *psHeap)
+static void treapDestroyRec(TREAP_NODE *psRoot)
 {
 	if (psRoot == NULL)
 	{
@@ -361,18 +353,18 @@ static void treapDestroyRec(TREAP_NODE *psRoot, OBJ_HEAP *psHeap)
 	}
 
 	// free the sub branches
-	treapDestroyRec(psRoot->psLeft, psHeap);
-	treapDestroyRec(psRoot->psRight, psHeap);
+	treapDestroyRec(psRoot->psLeft);
+	treapDestroyRec(psRoot->psRight);
 
 	// free the root
-	HEAP_FREE(psHeap, psRoot);
+	free(psRoot);
 }
 
 
 /* Release all the nodes in the treap */
 void treapReset(TREAP *psTreap)
 {
-	treapDestroyRec(psTreap->psRoot, psTreap->psNodes);
+	treapDestroyRec(psTreap->psRoot);
 	psTreap->psRoot = NULL;
 }
 
@@ -389,8 +381,7 @@ void treapDestroy(TREAP *psTreap)
 	free(psTreap->pFile);
 #endif
 
-	treapDestroyRec(psTreap->psRoot, psTreap->psNodes);
-	HEAP_DESTROY(psTreap->psNodes);
+	treapDestroyRec(psTreap->psRoot);
 	free(psTreap);
 }
 

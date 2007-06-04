@@ -31,7 +31,6 @@
 
 #include "types.h"
 #include "debug.h"
-#include "heap.h"
 
 /* Turn on and off the treap debugging */
 #ifdef DEBUG
@@ -78,7 +77,6 @@ typedef struct _treap_node
 typedef struct _treap
 {
 	TREAP_CMP		cmp;		// comparison function
-	OBJ_HEAP		*psNodes;	// node heap
 	TREAP_NODE		*psRoot;	// root of the tree
 
 #ifdef DEBUG_TREAP
