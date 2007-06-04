@@ -25,9 +25,6 @@
 #ifndef _button_h
 #define _button_h
 
-/* The widget heap */
-extern OBJ_HEAP	*psButHeap;
-
 /* Button states */
 #define WBUTS_NORMAL	0x0000
 #define WBUTS_DOWN		0x0001		// Button is down

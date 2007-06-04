@@ -26,11 +26,6 @@
 #ifndef _form_h
 #define _form_h
 
-/* The widget heaps */
-extern OBJ_HEAP	*psFormHeap;
-extern OBJ_HEAP	*psCFormHeap;
-extern OBJ_HEAP	*psTFormHeap;
-
 /* The basic form data */
 #define FORM_BASE \
 	WIDGET_BASE;				/* The common widget data */ \

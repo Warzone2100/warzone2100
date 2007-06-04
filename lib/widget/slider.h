@@ -25,9 +25,6 @@
 #ifndef _slider_h
 #define _slider_h
 
-/* The widget heaps */
-extern OBJ_HEAP	*psSldHeap;
-
 /* Slider state */
 #define SLD_DRAG		0x0001		// Slider is being dragged
 #define SLD_HILITE		0x0002		// Slider is hilited

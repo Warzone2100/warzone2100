@@ -25,9 +25,6 @@
 #ifndef _bar_h
 #define _bar_h
 
-/* The widget heap */
-extern OBJ_HEAP	*psBarHeap;
-
 typedef struct _w_bargraph
 {
 	/* The common widget data */

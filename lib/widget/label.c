@@ -33,9 +33,6 @@
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_common/rendmode.h"
 
-/* The widget heaps */
-OBJ_HEAP	*psLabHeap;
-
 /* Create a button widget data structure */
 BOOL labelCreate(W_LABEL **ppsWidget, W_LABINIT *psInit)
 {
@@ -48,12 +45,8 @@ BOOL labelCreate(W_LABEL **ppsWidget, W_LABINIT *psInit)
 	}
 
 	/* Allocate the required memory */
-#if W_USE_MALLOC
 	*ppsWidget = (W_LABEL *)malloc(sizeof(W_LABEL));
 	if (*ppsWidget == NULL)
-#else
-	if (!HEAP_ALLOC(psLabHeap, (void**) ppsWidget))
-#endif
 	{
 		ASSERT( FALSE, "Out of memory" );
 		return FALSE;
@@ -126,11 +119,7 @@ void labelFree(W_LABEL *psWidget)
 	ASSERT( psWidget != NULL,
 		"labelFree: Invalid label pointer" );
 
-#if W_USE_MALLOC
 	free(psWidget);
-#else
-	HEAP_FREE(psLabHeap, psWidget);
-#endif
 }
 
 

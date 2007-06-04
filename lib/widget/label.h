@@ -25,9 +25,6 @@
 #ifndef _label_h
 #define _label_h
 
-/* The widget heaps */
-extern OBJ_HEAP	*psLabHeap;
-
 // label states.
 #define WLABEL_HILITE	0x0004		// label is hilited
 

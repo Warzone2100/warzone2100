@@ -91,43 +91,7 @@ BOOL widgInitialise(W_HEAPINIT *psInit)
 
 	tipInitialise();
 
-#if W_USE_MALLOC
 	psInit = psInit;
-#else
-	// Create the widget heaps
-	if (!HEAP_CREATE(&psBarHeap, sizeof(W_BARGRAPH), psInit->barInit, psInit->barExt))
-	{
-		return FALSE;
-	}
-	if (!HEAP_CREATE(&psButHeap, sizeof(W_BUTTON), psInit->butInit, psInit->butExt))
-	{
-		return FALSE;
-	}
-	if (!HEAP_CREATE(&psEdbHeap, sizeof(W_EDITBOX), psInit->edbInit, psInit->edbExt))
-	{
-		return FALSE;
-	}
-	if (!HEAP_CREATE(&psFormHeap, sizeof(W_FORM), psInit->formInit, psInit->formExt))
-	{
-		return FALSE;
-	}
-	if (!HEAP_CREATE(&psCFormHeap, sizeof(W_CLICKFORM), psInit->cFormInit, psInit->cFormExt))
-	{
-		return FALSE;
-	}
-	if (!HEAP_CREATE(&psTFormHeap, sizeof(W_TABFORM), psInit->tFormInit, psInit->tFormExt))
-	{
-		return FALSE;
-	}
-	if (!HEAP_CREATE(&psLabHeap, sizeof(W_LABEL), psInit->labInit, psInit->labExt))
-	{
-		return FALSE;
-	}
-	if (!HEAP_CREATE(&psSldHeap, sizeof(W_SLIDER), psInit->sldInit, psInit->sldExt))
-	{
-		return FALSE;
-	}
-#endif
 
 	return TRUE;
 }
@@ -146,17 +110,6 @@ void widgShutDown(void)
 {
 #if W_USE_STRHEAP
 	HEAP_DESTROY(psStrHeap);
-#endif
-
-#if !W_USE_MALLOC
-	HEAP_DESTROY(psBarHeap);
-	HEAP_DESTROY(psButHeap);
-	HEAP_DESTROY(psEdbHeap);
-	HEAP_DESTROY(psFormHeap);
-	HEAP_DESTROY(psCFormHeap);
-	HEAP_DESTROY(psTFormHeap);
-	HEAP_DESTROY(psLabHeap);
-	HEAP_DESTROY(psSldHeap);
 #endif
 }
 

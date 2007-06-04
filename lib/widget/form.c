@@ -33,11 +33,6 @@
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piepalette.h"
 
-/* The widget heaps */
-OBJ_HEAP	*psFormHeap;
-OBJ_HEAP	*psCFormHeap;
-OBJ_HEAP	*psTFormHeap;
-
 /* Control whether single tabs are displayed */
 #define NO_DISPLAY_SINGLE_TABS 1
 
@@ -104,12 +99,8 @@ static void formSetDefaultColours(W_FORM *psForm)
 static BOOL formCreatePlain(W_FORM **ppsWidget, W_FORMINIT *psInit)
 {
 	/* Allocate the required memory */
-#if W_USE_MALLOC
 	*ppsWidget = (W_FORM *)malloc(sizeof(W_FORM));
 	if (*ppsWidget == NULL)
-#else
-	if (!HEAP_ALLOC(psFormHeap, (void**) ppsWidget))
-#endif
 	{
 		ASSERT( FALSE, "formCreatePlain: Out of memory" );
 		return FALSE;
@@ -156,11 +147,7 @@ static void formFreePlain(W_FORM *psWidget)
 		"formFreePlain: Invalid form pointer" );
 
 	widgReleaseWidgetList(psWidget->psWidgets);
-#if W_USE_MALLOC
 	free(psWidget);
-#else
-	HEAP_FREE(psFormHeap, psWidget);
-#endif
 }
 
 
@@ -168,12 +155,8 @@ static void formFreePlain(W_FORM *psWidget)
 static BOOL formCreateClickable(W_CLICKFORM **ppsWidget, W_FORMINIT *psInit)
 {
 	/* Allocate the required memory */
-#if W_USE_MALLOC
 	*ppsWidget = (W_CLICKFORM *)malloc(sizeof(W_CLICKFORM));
 	if (*ppsWidget == NULL)
-#else
-	if (!HEAP_ALLOC(psCFormHeap, (void**) ppsWidget))
-#endif
 	{
 		ASSERT( FALSE, "formCreateClickable: Out of memory" );
 		return FALSE;
@@ -215,11 +198,7 @@ static BOOL formCreateClickable(W_CLICKFORM **ppsWidget, W_FORMINIT *psInit)
 		if (!widgAllocCopyString(&(*ppsWidget)->pTip, psInit->pTip))
 		{
 			ASSERT( FALSE, "formCreateClickable: Out of string memory" );
-#if W_USE_MALLOC
 			free(*ppsWidget);
-#else
-			HEAP_FREE(psCFormHeap, *ppsWidget);
-#endif
 			return FALSE;
 		}
 #endif
@@ -251,11 +230,7 @@ static void formFreeClickable(W_CLICKFORM *psWidget)
 	}
 #endif
 
-#if W_USE_MALLOC
 	free(psWidget);
-#else
-	HEAP_FREE(psCFormHeap, psWidget);
-#endif
 }
 
 
@@ -295,12 +270,8 @@ static BOOL formCreateTabbed(W_TABFORM **ppsWidget, W_FORMINIT *psInit)
 	}
 
 	/* Allocate the required memory */
-#if W_USE_MALLOC
 	*ppsWidget = (W_TABFORM *)malloc(sizeof(W_TABFORM));
 	if (*ppsWidget == NULL)
-#else
-	if (!HEAP_ALLOC(psTFormHeap, (void**) ppsWidget))
-#endif
 	{
 		ASSERT( FALSE, "formCreateTabbed: Out of memory" );
 		return FALSE;
@@ -436,11 +407,7 @@ static void formFreeTabbed(W_TABFORM *psWidget)
 		widgReleaseWidgetList(psCurr);
 		psCurr = formGetAllWidgets(&sGetAll);
 	}
-#if W_USE_MALLOC
 	free(psWidget);
-#else
-	HEAP_FREE(psTFormHeap, psWidget);
-#endif
 }
 
 

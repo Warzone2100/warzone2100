@@ -25,9 +25,6 @@
 #ifndef _editbox_h
 #define _editbox_h
 
-/* The widget heap */
-extern OBJ_HEAP	*psEdbHeap;
-
 /* Edit Box states */
 #define WEDBS_FIXED		0x0001		// No editing is going on
 #define WEDBS_INSERT	0x0002		// Insertion editing

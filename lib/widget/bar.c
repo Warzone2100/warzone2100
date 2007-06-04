@@ -33,9 +33,6 @@
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piepalette.h"
 
-/* The widget heap */
-OBJ_HEAP	*psBarHeap;
-
 /* Create a barGraph widget data structure */
 BOOL barGraphCreate(W_BARGRAPH **ppsWidget, W_BARINIT *psInit)
 {
@@ -63,12 +60,8 @@ BOOL barGraphCreate(W_BARGRAPH **ppsWidget, W_BARINIT *psInit)
 	}
 
 	/* Allocate the required memory */
-#if W_USE_MALLOC
 	*ppsWidget = (W_BARGRAPH *)malloc(sizeof(W_BARGRAPH));
 	if (*ppsWidget == NULL)
-#else
-	if (!HEAP_ALLOC(psBarHeap, (void**) ppsWidget))
-#endif
 	{
 		ASSERT( FALSE, "barGraphCreate: Out of memory" );
 		return FALSE;
@@ -157,11 +150,7 @@ void barGraphFree(W_BARGRAPH *psWidget)
 	}
 #endif
 
-#if W_USE_MALLOC
 	free(psWidget);
-#else
-	HEAP_FREE(psBarHeap, psWidget);
-#endif
 }
 
 /* Initialise a barGraph widget before running it */

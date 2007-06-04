@@ -27,9 +27,6 @@
 
 #include "lib/framework/input.h"
 
-/* Control whether to use malloc for widgets */
-#define W_USE_MALLOC	FALSE
-
 /* Control whether the internal widget string heap should be used */
 #define W_USE_STRHEAP	FALSE
 

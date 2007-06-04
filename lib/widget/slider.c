@@ -30,8 +30,6 @@
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_common/rendmode.h"
 
-/* The widget heaps */
-OBJ_HEAP	*psSldHeap;
 BOOL DragEnabled = TRUE;
 
 void sliderEnableDrag(BOOL Enable)
@@ -79,12 +77,8 @@ BOOL sliderCreate(W_SLIDER **ppsWidget, W_SLDINIT *psInit)
 	}
 
 	/* Allocate the required memory */
-#if W_USE_MALLOC
 	*ppsWidget = (W_SLIDER *)malloc(sizeof(W_SLIDER));
 	if (*ppsWidget == NULL)
-#else
-	if (!HEAP_ALLOC(psSldHeap, (void**) ppsWidget))
-#endif
 	{
 		ASSERT( FALSE, "sliderCreate: Out of memory" );
 		return FALSE;
@@ -155,11 +149,7 @@ void sliderFree(W_SLIDER *psWidget)
 #endif
 
 
-#if W_USE_MALLOC
 	free(psWidget);
-#else
-	HEAP_FREE(psSldHeap, psWidget);
-#endif
 }
 
 
