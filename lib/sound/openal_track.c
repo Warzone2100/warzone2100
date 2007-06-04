@@ -202,11 +202,17 @@ void sound_Update( void )
 //	}//  <=== whats up with this You trying to make those local only ??
 
 	cdAudio_Update();
+
+	// Reset the current error state
+	alcGetError(device);
+
 	alcProcessContext(context);
+
 	err = alcGetError(device);
-	if(err != ALC_NO_ERROR) {
+	if (err != ALC_NO_ERROR)
+	{
 		debug(LOG_ERROR, "Error while processing audio context: %s",
-				alGetString(err));
+		      alGetString(err));
 	}
 }
 
