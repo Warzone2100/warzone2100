@@ -60,8 +60,7 @@ BOOL buttonCreate(W_BUTTON **ppsWidget, W_BUTINIT *psInit)
 	/* Allocate memory for the text and copy it if necessary */
 	if (psInit->pText)
 	{
-		(*ppsWidget)->pText = strdup(psInit->pText);
-		ASSERT((*ppsWidget)->pText != NULL, "buttonCreate: Out of memory");
+		(*ppsWidget)->pText = psInit->pText;
 	}
 	else
 	{
@@ -70,8 +69,7 @@ BOOL buttonCreate(W_BUTTON **ppsWidget, W_BUTINIT *psInit)
 	/* Allocate the memory for the tip and copy it if necessary */
 	if (psInit->pTip)
 	{
-		(*ppsWidget)->pTip = strdup(psInit->pTip);
-		ASSERT((*ppsWidget)->pTip != NULL, "buttonCreate: Out of memory");
+		(*ppsWidget)->pTip = psInit->pTip;
 	}
 	else
 	{
@@ -117,8 +115,6 @@ void buttonFree(W_BUTTON *psWidget)
 	ASSERT( psWidget != NULL,
 		"buttonFree: invalid button pointer" );
 
-	free(psWidget->pText);
-	free(psWidget->pTip);
 	free(psWidget);
 }
 

@@ -960,7 +960,7 @@ void widgSetTipText(WIDGET* psWidget, const char* pTip)
 		case WIDG_FORM:
 			if (psWidget->style & WFORM_CLICKABLE)
 			{
-				((W_CLICKFORM *) psWidget)->pTip = strdup(pTip);
+				((W_CLICKFORM *) psWidget)->pTip = pTip;
 			}
 			else if (psWidget->style & WFORM_TABBED)
 			{
@@ -973,19 +973,19 @@ void widgSetTipText(WIDGET* psWidget, const char* pTip)
 			break;
 
 		case WIDG_LABEL:
-			((W_LABEL *) psWidget)->pTip = strdup(pTip);
+			((W_LABEL *) psWidget)->pTip = pTip;
 			break;
 
 		case WIDG_BUTTON:
-			((W_BUTTON *) psWidget)->pTip = strdup(pTip);
+			((W_BUTTON *) psWidget)->pTip = pTip;
 			break;
 
 		case WIDG_BARGRAPH:
-			((W_BARGRAPH *) psWidget)->pTip = strdup(pTip);
+			((W_BARGRAPH *) psWidget)->pTip = pTip;
 			break;
 
 		case WIDG_SLIDER:
-			((W_SLIDER *) psWidget)->pTip = strdup(pTip);
+			((W_SLIDER *) psWidget)->pTip = pTip;
 			break;
 
 		case WIDG_EDITBOX:
@@ -1212,9 +1212,7 @@ void widgSetString(W_SCREEN *psScreen, UDWORD id, const char *pText)
 			break;
 
 		case WIDG_BUTTON:
-			free(((W_BUTTON *)psWidget)->pText);
-
-			((W_BUTTON *)psWidget)->pText = strdup(pText);
+			((W_BUTTON *)psWidget)->pText = pText;
 			break;
 
 		case WIDG_EDITBOX:

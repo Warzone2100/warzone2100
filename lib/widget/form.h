@@ -113,7 +113,7 @@ typedef struct _w_clickform
 	FORM_BASE;
 
 	UDWORD		state;					// Button state of the form
-	char	*pTip;					// Tip for the form
+	const char	*pTip;					// Tip for the form
 	SWORD HilightAudioID;				// Audio ID for form clicked sound
 	SWORD ClickedAudioID;				// Audio ID for form hilighted sound
 	WIDGET_AUDIOCALLBACK AudioCallback;	// Pointer to audio callback function

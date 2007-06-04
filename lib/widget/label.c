@@ -52,15 +52,7 @@ BOOL labelCreate(W_LABEL **ppsWidget, W_LABINIT *psInit)
 		return FALSE;
 	}
 	/* Allocate the memory for the tip and copy it if necessary */
-	if (psInit->pTip)
-	{
-		(*ppsWidget)->pTip = strdup(psInit->pTip);
-		ASSERT((*ppsWidget)->pTip != NULL, "buttonCreate: Out of memory" );
-	}
-	else
-	{
-		(*ppsWidget)->pTip = NULL;
-	}
+	(*ppsWidget)->pTip = psInit->pTip;
 
 	/* Initialise the structure */
 	(*ppsWidget)->type = WIDG_LABEL;
@@ -107,7 +99,6 @@ void labelFree(W_LABEL *psWidget)
 	ASSERT( psWidget != NULL,
 		"labelFree: Invalid label pointer" );
 
-	free(psWidget->pTip);
 	free(psWidget);
 }
 
