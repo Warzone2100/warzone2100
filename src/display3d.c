@@ -3956,7 +3956,7 @@ static void locateMouse(void)
 		unsigned int j;
 		for(j = 0; j < visibleYTiles; ++j)
 		{
-			bool bWaterTile = tileScreenInfo[i][j].bWater;
+			BOOL bWaterTile = tileScreenInfo[i][j].bWater;
 			int tileZ = (bWaterTile ? tileScreenInfo[i][j].water.z : tileScreenInfo[i][j].screen.z);
 
 			if(tileZ <= nearestZ)

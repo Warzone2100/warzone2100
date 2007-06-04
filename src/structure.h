@@ -202,7 +202,7 @@ extern BOOL placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY);
 //extern BOOL getPowerGenExists(UDWORD player);
 
 /* is this a lassat structure? */
-static inline bool isLasSat(STRUCTURE_STATS *pStructureType)
+static inline BOOL isLasSat(STRUCTURE_STATS *pStructureType)
 {
 	return (pStructureType->psWeapStat[0]
 	        && pStructureType->psWeapStat[0]->weaponSubClass == WSC_LAS_SAT);
