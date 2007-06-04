@@ -373,6 +373,7 @@ extern WIDGET *widgGetFromID(W_SCREEN *psScreen, UDWORD id);
 
 /* Set tip string for a widget */
 extern void widgSetTip( W_SCREEN *psScreen, UDWORD id, const char *pTip );
+extern void widgSetTipText(WIDGET* psWidget, const char* pTip);
 
 /* Colour numbers */
 enum _w_colour

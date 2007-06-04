@@ -243,45 +243,46 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 			Droid = (DROID*)psObj;
 
 
-			if(DroidIsBuilding(Droid)) {		// Is it building.
-				ASSERT( Droid->asBits[COMP_CONSTRUCT].nStat,"intUpdateProgressBar: invalid droid type" );
-				Structure = DroidGetBuildStructure(Droid);				// Get the structure it's building.
-//				ASSERT( Structure != NULL,"intUpdateProgressBar : NULL Structure pointer." );
-				if(Structure)
-                {
-				    //check if have all the power to build yet
-                    BuildPower = structPowerToBuild(Structure);
-				    //if (Structure->currentPowerAccrued < (SWORD)Structure->pStructureType->powerToBuild)
-                    if (Structure->currentPowerAccrued < (SWORD)BuildPower)
-				    {
-					    //if not started building show how much power accrued
-					    //Range = Structure->pStructureType->powerToBuild;
-                        Range = BuildPower;
-					    BuildPoints = Structure->currentPowerAccrued;
-					    //set the colour of the bar to green
-					    BarGraph->majorCol = COL_LIGHTGREEN;
-					    //and change the tool tip
-					    BarGraph->pTip = _("Power Accrued");
-				    }
-				    else
-				    {
-                        //show progress of build
-    					Range =  Structure->pStructureType->buildPoints;	// And how long it takes to build.
-                        BuildPoints = Structure->currentBuildPts;			// How near to completion.
-					    //set the colour of the bar to yellow
-					    BarGraph->majorCol = COL_YELLOW;
-					    //and change the tool tip
-					    BarGraph->pTip = _("Progress Bar");
-				    }
+			if(DroidIsBuilding(Droid))  // Is it a building.
+			{
+				ASSERT(Droid->asBits[COMP_CONSTRUCT].nStat, "intUpdateProgressBar: invalid droid type" );
+
+				Structure = DroidGetBuildStructure(Droid);  // Get the structure's building.
+
+				if (Structure)
+				{
+					//check if have all the power to build yet
+					BuildPower = structPowerToBuild(Structure);
+					if (Structure->currentPowerAccrued < (SWORD)BuildPower)
+					{
+						//if not started building show how much power accrued
+						//Range = Structure->pStructureType->powerToBuild;
+						Range = BuildPower;
+						BuildPoints = Structure->currentPowerAccrued;
+						//set the colour of the bar to green
+						BarGraph->majorCol = COL_LIGHTGREEN;
+						//and change the tool tip
+						widgSetTipText((WIDGET*)BarGraph, _("Power Accrued"));
+					}
+					else
+					{
+						//show progress of build
+						Range =  Structure->pStructureType->buildPoints;	// And how long it takes to build.
+						BuildPoints = Structure->currentBuildPts;			// How near to completion.
+						//set the colour of the bar to yellow
+						BarGraph->majorCol = COL_YELLOW;
+						//and change the tool tip
+						widgSetTipText((WIDGET*)BarGraph, _("Progress Bar"));
+					}
 					if (BuildPoints > Range)
 					{
 						BuildPoints = Range;
 					}
-    				BarGraph->majorSize = (UWORD)PERNUM(WBAR_SCALE,BuildPoints,Range);
+					BarGraph->majorSize = (UWORD)PERNUM(WBAR_SCALE,BuildPoints,Range);
 					BarGraph->style &= ~WIDG_HIDDEN;
 				}
-                else
-                {
+				else
+				{
 					BarGraph->majorSize = 0;
 					BarGraph->style |= WIDG_HIDDEN;
 				}
@@ -306,15 +307,15 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 					//set the colour of the bar to green
 					BarGraph->majorCol = COL_LIGHTGREEN;
 					//and change the tool tip
-					BarGraph->pTip = _("Power Accrued");
+					widgSetTipText((WIDGET*)BarGraph, _("Power Accrued"));
 				}
 				else
 				{
-    				Range = Manufacture->timeToBuild;
+					Range = Manufacture->timeToBuild;
 					//set the colour of the bar to yellow
 					BarGraph->majorCol = COL_YELLOW;
 					//and change the tool tip
-					BarGraph->pTip = _("Progress Bar");
+					widgSetTipText((WIDGET*)BarGraph, _("Progress Bar"));
 					//if on hold need to take it into account
 					if (Manufacture->timeStartHold)
 					{
@@ -334,14 +335,16 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 				}
 				BarGraph->majorSize = (UWORD)PERNUM(WBAR_SCALE,BuildPoints,Range);
 				BarGraph->style &= ~WIDG_HIDDEN;
-			} else if(StructureIsResearching(Structure)) {		// Is it researching.
+			}
+			else if(StructureIsResearching(Structure))  // Is it researching.
+			{
 				Research = StructureGetResearch(Structure);
-				pPlayerRes = asPlayerResList[selectedPlayer] + ((RESEARCH *)Research->
-					psSubject - asResearch);
-                //this is no good if you change which lab is researching the topic and one lab is faster
+				pPlayerRes = asPlayerResList[selectedPlayer] +
+				             ((RESEARCH *)Research->psSubject - asResearch);
+				//this is no good if you change which lab is researching the topic and one lab is faster
 				//Range = Research->timeToResearch;
-                Range = ((RESEARCH *)((RESEARCH_FACILITY*)Structure->
-                    pFunctionality)->psSubject)->researchPoints;
+				Range = ((RESEARCH *)((RESEARCH_FACILITY*)Structure->
+				pFunctionality)->psSubject)->researchPoints;
 				//check started to research
 				if (Research->timeStarted == ACTION_START_TIME)
 				{
@@ -352,37 +355,31 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 					//set the colour of the bar to green
 					BarGraph->majorCol = COL_LIGHTGREEN;
 					//and change the tool tip
-					BarGraph->pTip = _("Power Accrued");
+					widgSetTipText((WIDGET*)BarGraph, _("Power Accrued"));
 				}
 				else
 				{
 					//set the colour of the bar to yellow
 					BarGraph->majorCol = COL_YELLOW;
 					//and change the tool tip
-					BarGraph->pTip = _("Progress Bar");
+					widgSetTipText((WIDGET*)BarGraph, _("Progress Bar"));
 					//if on hold need to take it into account
 					if (Research->timeStartHold)
 					{
 
 						BuildPoints = ((RESEARCH_FACILITY*)Structure->pFunctionality)->
-                            researchPoints * (gameTime - (Research->timeStarted + (
-                            gameTime - Research->timeStartHold))) / GAME_TICKS_PER_SEC;
-
+						researchPoints * (gameTime - (Research->timeStarted + (
+						gameTime - Research->timeStartHold))) / GAME_TICKS_PER_SEC;
 
 						BuildPoints+= pPlayerRes->currentPoints;
-
-
 					}
 					else
 					{
 
-				    	BuildPoints = ((RESEARCH_FACILITY*)Structure->pFunctionality)->
-                            researchPoints * (gameTime - Research->timeStarted) /
-                            GAME_TICKS_PER_SEC;
+						BuildPoints = ((RESEARCH_FACILITY*)Structure->pFunctionality)->
+						researchPoints * (gameTime - Research->timeStarted) / GAME_TICKS_PER_SEC;
 
-				    	BuildPoints+= pPlayerRes->currentPoints;
-
-
+						BuildPoints+= pPlayerRes->currentPoints;
 					}
 				}
 				if (BuildPoints > Range)

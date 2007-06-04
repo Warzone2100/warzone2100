@@ -945,49 +945,56 @@ void widgSetTip( W_SCREEN *psScreen, UDWORD id, const char *pTip )
 {
 	WIDGET *psWidget = widgGetFromID(psScreen, id);
 
-	if ( psWidget )
+	if (!psWidget)
+		return;
+
+	widgSetTipText(psWidget, pTip);
+}
+
+void widgSetTipText(WIDGET* psWidget, const char* pTip)
+{
+	ASSERT(psWidget != NULL, "invalid widget pointer");
+
+	switch (psWidget->type)
 	{
-		switch (psWidget->type)
-		{
-			case WIDG_FORM:
-				if (psWidget->style & WFORM_CLICKABLE)
-				{
-					((W_CLICKFORM *) psWidget)->pTip = strdup(pTip);
-				}
-				else if (psWidget->style & WFORM_TABBED)
-				{
-					ASSERT(!"tabbed forms don't have a tip", "widgSetTip: tabbed forms do not have a tip");
-				}
-				else
-				{
-					ASSERT(!"plain forms don't have a tip", "widgSetTip: plain forms do not have a tip");
-				}
-				break;
+		case WIDG_FORM:
+			if (psWidget->style & WFORM_CLICKABLE)
+			{
+				((W_CLICKFORM *) psWidget)->pTip = strdup(pTip);
+			}
+			else if (psWidget->style & WFORM_TABBED)
+			{
+				ASSERT(!"tabbed forms don't have a tip", "widgSetTip: tabbed forms do not have a tip");
+			}
+			else
+			{
+				ASSERT(!"plain forms don't have a tip", "widgSetTip: plain forms do not have a tip");
+			}
+			break;
 
-			case WIDG_LABEL:
-				((W_LABEL *) psWidget)->pTip = strdup(pTip);
-				break;
+		case WIDG_LABEL:
+			((W_LABEL *) psWidget)->pTip = strdup(pTip);
+			break;
 
-			case WIDG_BUTTON:
-				((W_BUTTON *) psWidget)->pTip = strdup(pTip);
-				break;
+		case WIDG_BUTTON:
+			((W_BUTTON *) psWidget)->pTip = strdup(pTip);
+			break;
 
-			case WIDG_BARGRAPH:
-				((W_BARGRAPH *) psWidget)->pTip = strdup(pTip);
-				break;
+		case WIDG_BARGRAPH:
+			((W_BARGRAPH *) psWidget)->pTip = strdup(pTip);
+			break;
 
-			case WIDG_SLIDER:
-				((W_SLIDER *) psWidget)->pTip = strdup(pTip);
-				break;
+		case WIDG_SLIDER:
+			((W_SLIDER *) psWidget)->pTip = strdup(pTip);
+			break;
 
-			case WIDG_EDITBOX:
-				ASSERT(!"wrong widget type", "widgSetTip: edit boxes do not have a tip");
-				break;
+		case WIDG_EDITBOX:
+			ASSERT(!"wrong widget type", "widgSetTip: edit boxes do not have a tip");
+			break;
 
-			default:
-				ASSERT(!"unknown widget type", "widgSetTip: Unknown widget type");
-				break;
-		}
+		default:
+			ASSERT(!"unknown widget type", "widgSetTip: Unknown widget type");
+			break;
 	}
 }
 
