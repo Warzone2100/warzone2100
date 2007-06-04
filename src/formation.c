@@ -65,9 +65,6 @@ static SDWORD	fmLtRad = 80, fmMedRad = 100, fmHvyRad = 110;
 
 #define FORMATION_SPEED_INIT	100000L
 
-// The heap of formations
-OBJ_HEAP	*psFHeap;
-
 // The list of allocated formations
 FORMATION	*psFormationList;
 
@@ -76,11 +73,6 @@ SDWORD formationObjRadius(BASE_OBJECT *psObj);
 // Initialise the formation system
 BOOL formationInitialise(void)
 {
-	if (!HEAP_CREATE(&psFHeap, sizeof(FORMATION), F_HEAPINIT, F_HEAPEXT))
-	{
-		return FALSE;
-	}
-
 	psFormationList = NULL;
 
 	return TRUE;
@@ -95,11 +87,9 @@ void formationShutDown(void)
 	{
 		debug( LOG_NEVER, "formation with %d units still attached\n", psFormationList->refCount );
 		psNext = psFormationList->psNext;
-		HEAP_FREE(psFHeap, psFormationList);
+		free(psFormationList);
 		psFormationList = psNext;
 	}
-
-	HEAP_DESTROY(psFHeap);
 }
 
 #ifdef TEST_BED
@@ -131,12 +121,13 @@ SDWORD	sum;
 BOOL formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
 					SDWORD x, SDWORD y, SDWORD dir)
 {
-	FORMATION	*psNew;
 	SDWORD		i;
+	FORMATION	*psNew = malloc(sizeof(FORMATION));
 
 	// get a heap structure
-	if (!HEAP_ALLOC(psFHeap, (void**) &psNew))
+	if (psNew == NULL)
 	{
+		debug(LOG_ERROR, "formationNew: Out of memory");
 		return FALSE;
 	}
 
@@ -352,7 +343,7 @@ void formationLeave(FORMATION *psFormation, BASE_OBJECT *psObj)
 			}
 			psPrev->psNext = psFormation->psNext;
 		}
-		HEAP_FREE(psFHeap, psFormation);
+		free(psFormation);
 	}
 }
 

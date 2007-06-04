@@ -101,20 +101,6 @@ hashTable_Create( HASHTABLE **ppsTable, UDWORD udwTableSize,
 	(*ppsTable)->ppsNode = (HASHNODE**)malloc( udwSize );
 	memset( (*ppsTable)->ppsNode, 0, udwSize );
 
-	/* allocate heaps */
-	if ( !HEAP_CREATE( &(*ppsTable)->psNodeHeap, sizeof(HASHNODE),
-						udwInitElements, udwExtElements) )
-	{
-		return FALSE;
-	}
-
-	if ( !HEAP_CREATE( &(*ppsTable)->psElementHeap, udwElementSize,
-						udwInitElements, udwExtElements) )
-	{
-//		my_error("",0,"","htc FAIL!\n");
-		return FALSE;
-	}
-
 	/* init members */
 	(*ppsTable)->udwTableSize   = udwTableSize;
 	(*ppsTable)->udwElements    = udwInitElements;
@@ -143,10 +129,6 @@ hashTable_Destroy( HASHTABLE *psTable )
 			"hashTable_Destroy: table pointer invalid\n" );
 
 	hashTable_Clear( psTable );
-
-	/* destroy heaps */
-	HEAP_DESTROY( psTable->psNodeHeap );
-	HEAP_DESTROY( psTable->psElementHeap );
 
 	/* free table */
 	free( psTable->ppsNode );
@@ -188,13 +170,13 @@ hashTable_Clear( HASHTABLE *psTable )
 			}
 
 			/* free element */
-			HEAP_FREE( psTable->psElementHeap, psNode->psElement );
+			free(psNode->psElement);
 
 			/* return node to heap */
 			ASSERT( psNode != NULL,
 				"hashTable_Destroy: node pointer invalid\n" );
 			psNodeTmp = psNode->psNext;
-			HEAP_FREE( psTable->psNodeHeap, psNode );
+			free(psNode);
 			psNode = psNodeTmp;
 		}
 
@@ -238,15 +220,16 @@ void *
 hashTable_GetElement( HASHTABLE *psTable )
 {
 	void	*psElement;
-	BOOL result;
 
 	ASSERT( psTable != NULL,
 			"hashTable_GetElement: table pointer invalid\n" );
 
-	result=HEAP_ALLOC( psTable->psElementHeap, &psElement );
-
-	// if the alloc fails then return NULL
-	if (result==FALSE) return NULL;
+	psElement = malloc(psTable->udwElementSize);
+	if (psElement == NULL)  // if the alloc fails then return NULL
+	{
+		debug(LOG_ERROR, "hashTable_GetElement: Out of memory");
+		return NULL;
+	}
 
 
 	return psElement;
@@ -282,7 +265,7 @@ hashTable_InsertElement( HASHTABLE *psTable, void *psElement,
 	udwHashIndex = hashTable_GetHashKey( psTable, iKey1, iKey2 );
 
 	/* get node from heap */
-	HEAP_ALLOC( psTable->psNodeHeap, (void**) &psNode );
+	psNode = malloc(sizeof(HASHNODE));
 
 	/* set node elements */
 	psNode->iKey1     = iKey1;
@@ -427,12 +410,12 @@ hashTable_RemoveElement( HASHTABLE *psTable, void *psElement,
 		/* return element to heap */
 		ASSERT( psNode->psElement != NULL,
 				"hashTable_RemoveElement: element pointer invalid\n" );
-		HEAP_FREE( psTable->psElementHeap, psNode->psElement );
+		free(psNode->psElement);
 
 		/* return node to heap */
 		ASSERT( psNode != NULL,
 				"hashTable_RemoveElement: node pointer invalid\n" );
-		HEAP_FREE( psTable->psNodeHeap, psNode );
+		free(psNode);
 
 		return TRUE;
 	}

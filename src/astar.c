@@ -82,10 +82,6 @@ FP_NODE		**apsClosed;
 FP_NODE		**apsOpen;
 #endif
 
-// object heap to store nodes
-OBJ_HEAP	*psFPNodeHeap;
-
-
 /*#define NUM_DIR		4
 // Convert a direction into an offset
 // dir 0 => x = 0, y = -1
@@ -130,12 +126,6 @@ static void ClearAstarNodes(void)
 // Initialise the findpath routine
 BOOL astarInitialise(void)
 {
-	// Create the node heap
-	if (!HEAP_CREATE(&psFPNodeHeap, sizeof(FP_NODE), FPATH_NODEINIT, FPATH_NODEEXT))
-	{
-		return FALSE;
-	}
-
 #if OPEN_LIST == 2
 	apsNodes = (FP_NODE**)malloc(sizeof(FP_NODE *) * FPATH_TABLESIZE);
 	if (!apsNodes)
@@ -166,7 +156,6 @@ BOOL astarInitialise(void)
 // Shutdown the findpath routine
 void fpathShutDown(void)
 {
-	HEAP_DESTROY(psFPNodeHeap);
 #if OPEN_LIST == 2
 	free(apsNodes);
 #else
@@ -342,26 +331,24 @@ static void fpathHashReset(void)
 		while (apsNodes[i])
 		{
 			psNext = apsNodes[i]->psNext;
-			HEAP_FREE(psFPNodeHeap, apsNodes[i]);
+			free(apsNodes[i]);
 			apsNodes[i] = psNext;
 		}
 #else
 		while (apsOpen[i])
 		{
 			psNext = apsOpen[i]->psNext;
-			HEAP_FREE(psFPNodeHeap, apsOpen[i]);
+			free(apsOpen[i]);
 			apsOpen[i] = psNext;
 		}
 		while (apsClosed[i])
 		{
 			psNext = apsClosed[i]->psNext;
-			HEAP_FREE(psFPNodeHeap, apsClosed[i]);
+			free(apsClosed[i]);
 			apsClosed[i] = psNext;
 		}
 #endif
 	}
-
-	HEAP_RESET(psFPNodeHeap);
 }
 
 
@@ -750,10 +737,11 @@ static SDWORD fpathEstimate(SDWORD x, SDWORD y, SDWORD fx, SDWORD fy)
 // Generate a new node
 static FP_NODE *fpathNewNode(SDWORD x, SDWORD y, SDWORD dist, FP_NODE *psRoute)
 {
-	FP_NODE	*psNode;
+	FP_NODE	*psNode = malloc(sizeof(FP_NODE));
 
-	if (!HEAP_ALLOC(psFPNodeHeap, (void**) &psNode))
+	if (psNode == NULL)
 	{
+		debug(LOG_ERROR, "fpathNewNode: Out of memory");
 		return NULL;
 	}
 

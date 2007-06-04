@@ -46,7 +46,6 @@ ARROW;
 
 /***************************************************************************/
 
-OBJ_HEAP	*g_psArrowHeap;
 ARROW		*g_psArrowList = NULL;
 
 /***************************************************************************/
@@ -54,12 +53,6 @@ ARROW		*g_psArrowList = NULL;
 BOOL
 arrowInit( void )
 {
-	if (!HEAP_CREATE(&g_psArrowHeap, sizeof(ARROW),
-			ARROW_HEAP_INIT, ARROW_HEAP_EXT))
-	{
-		return FALSE;
-	}
-
 	return TRUE;
 }
 
@@ -68,7 +61,6 @@ arrowInit( void )
 void
 arrowShutDown( void )
 {
-	HEAP_DESTROY(g_psArrowHeap);
 }
 
 /***************************************************************************/
@@ -77,10 +69,10 @@ BOOL
 arrowAdd( SDWORD iBaseX, SDWORD iBaseY, SDWORD iBaseZ,
 			SDWORD iHeadX, SDWORD iHeadY, SDWORD iHeadZ, UBYTE iColour )
 {
-	ARROW	*psArrow;
-
-	if ( !HEAP_ALLOC( g_psArrowHeap, (void**) &psArrow) )
+	ARROW	*psArrow = malloc(sizeof(ARROW));
+	if (psArrow == NULL)
 	{
+		debug(LOG_ERROR, "arrowAdd: Out of memory");
 		return FALSE;
 	}
 
@@ -118,7 +110,7 @@ arrowDrawAll( void )
 	{
 		draw3dLine( &psArrow->vecHead, &psArrow->vecBase, psArrow->iColour );
 		psArrowTemp = psArrow->psNext;
-		HEAP_FREE( g_psArrowHeap, psArrow );
+		free(psArrow);
 		psArrow = psArrowTemp;
 	}
 
