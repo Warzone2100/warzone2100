@@ -29,6 +29,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 /* Includes direct access to render library */
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piestate.h"
@@ -3948,7 +3949,7 @@ static void locateMouse(void)
 {
 	const Vector2i pt = {mouseXPos, mouseYPos};
 	unsigned int i;
-	int nearestZ = INT32_MAX;
+	int nearestZ = INT_MAX;
 
 	for(i = 0; i < visibleXTiles; ++i)
 	{
