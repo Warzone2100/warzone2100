@@ -101,11 +101,14 @@ BOOL editBoxCreate(W_EDITBOX **ppsWidget, W_EDBINIT *psInit)
 
 	if (psInit->pText)
 	{
-		widgCopyString((*ppsWidget)->aText, psInit->pText);
+		strncpy((*ppsWidget)->aText, psInit->pText, sizeof((*ppsWidget)->aText));
+
+		// Terminate the string with a NUL character
+		(*ppsWidget)->aText[sizeof((*ppsWidget)->aText) - 1] = '\0';
 	}
 	else
 	{
-		(*ppsWidget)->aText[0] = 0;
+		(*ppsWidget)->aText[0] = '\0';
 	}
 
 	editBoxInitialise(*ppsWidget);
@@ -574,12 +577,15 @@ void editBoxSetString(W_EDITBOX *psWidget, const char *pText)
 	ASSERT( psWidget != NULL,
 		"editBoxSetString: Invalid edit box pointer" );
 
-	widgCopyString(psWidget->aText, pText);
+	strncpy(psWidget->aText, pText, sizeof(psWidget->aText));
+	// Terminate the string with a NUL character
+	psWidget->aText[sizeof(psWidget->aText) - 1] = '\0';
+
 	psWidget->state = WEDBS_FIXED;
 	psWidget->printStart = 0;
 	iV_SetFont(psWidget->FontID);
 	fitStringStart(psWidget->aText, psWidget->width,
-		&psWidget->printChars, &psWidget->printWidth);
+	               &psWidget->printChars, &psWidget->printWidth);
 }
 
 

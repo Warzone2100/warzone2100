@@ -72,23 +72,12 @@ static void widgReleased(WIDGET *psWidget, UDWORD key, W_CONTEXT *psContext);
 static void widgRun(WIDGET *psWidget, W_CONTEXT *psContext);
 static void widgDisplayForm(W_FORM *psForm, UDWORD xOffset, UDWORD yOffset);
 
-/* The heap for widget strings */
-static OBJ_HEAP		*psStrHeap;
-
 /* Buffer to return strings in */
 static char aStringRetBuffer[WIDG_MAXSTR];
 
 /* Initialise the widget module */
 BOOL widgInitialise(W_HEAPINIT *psInit)
 {
-#if W_USE_STRHEAP
-	// Create the string heap
-	if (!HEAP_CREATE(&psStrHeap, WIDG_MAXSTR, WIDG_STRINIT, WIDG_STREXT))
-	{
-		return FALSE;
-	}
-#endif
-
 	tipInitialise();
 
 	psInit = psInit;
@@ -108,61 +97,6 @@ void widgReset(void)
 /* Shut down the widget module */
 void widgShutDown(void)
 {
-#if W_USE_STRHEAP
-	HEAP_DESTROY(psStrHeap);
-#endif
-}
-
-
-/* Get a string from the string heap */
-BOOL widgAllocString(char **ppStr)
-{
-	if (!HEAP_ALLOC(psStrHeap, (void**) ppStr))
-	{
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
-/* Copy one string to another
- * The string to copy will be truncated if it is longer than WIDG_MAXSTR.
- */
-void widgCopyString(char *pDest, const char *pSrc)
-{
-	/* See if we need to clip the string, then copy */
-	if (strlen(pSrc) >= WIDG_MAXSTR)
-	{
-		memcpy(pDest, pSrc, WIDG_MAXSTR - 1);
-		*(pDest + WIDG_MAXSTR-1) = 0;
-	}
-	else
-	{
-		strcpy(pDest, pSrc);
-	}
-}
-
-/* Get a string from the heap and copy in some data.
- * The string to copy will be truncated if it is too long.
- */
-BOOL widgAllocCopyString(char **ppDest, char *pSrc)
-{
-	if (!HEAP_ALLOC(psStrHeap, (void**) ppDest))
-	{
-		*ppDest = NULL;
-		return FALSE;
-	}
-
-	widgCopyString(*ppDest, pSrc);
-
-	return TRUE;
-}
-
-
-/* Return a string to the string heap */
-void widgFreeString(char *pStr)
-{
-	HEAP_FREE(psStrHeap, pStr);
 }
 
 /* Create an empty widget screen */
@@ -1047,11 +981,11 @@ void widgSetTip( W_SCREEN *psScreen, UDWORD id, const char *pTip )
 				break;
 
 			case WIDG_EDITBOX:
-				ASSERT( FALSE, "widgSetTip: edit boxes do not have a tip" );
+				ASSERT(!"wrong widget type", "widgSetTip: edit boxes do not have a tip" );
 				break;
 
 			default:
-				ASSERT( FALSE,"widgSetTip: Unknown widget type" );
+				ASSERT(!"unknown widget type", "widgSetTip: Unknown widget type" );
 				break;
 		}
 	}
@@ -1251,30 +1185,29 @@ void widgSetString(W_SCREEN *psScreen, UDWORD id, const char *pText)
 
 	/* Get the widget */
 	psWidget = widgGetFromID(psScreen, id);
-	if (psWidget != NULL)
+	if (psWidget == NULL)
 	{
-		switch (psWidget->type)
-		{
+		debug(LOG_ERROR, "widgSetString: couldn't get widget from id");
+		return;
+	}
+
+	switch (psWidget->type)
+	{
 		case WIDG_FORM:
 			ASSERT( FALSE, "widgSetString: forms do not have a string" );
 			break;
+
 		case WIDG_LABEL:
-			widgCopyString(((W_LABEL *)psWidget)->aText, pText);
+			strncpy(((W_LABEL *)psWidget)->aText, pText, sizeof(((W_LABEL *)psWidget)->aText));
+
+			// Terminate the string with a NUL character
+			((W_LABEL *)psWidget)->aText[sizeof(((W_LABEL *)psWidget)->aText) - 1] = '\0';
 			break;
+
 		case WIDG_BUTTON:
-#if W_USE_STRHEAP
-			if (((W_BUTTON *)psWidget)->pText)
-			{
-				widgCopyString(((W_BUTTON *)psWidget)->pText, pText);
-			}
-			else
-			{
-				widgAllocCopyString(&((W_BUTTON *)psWidget)->pText, pText);
-			}
-#else
 			((W_BUTTON *)psWidget)->pText = pText;
-#endif
 			break;
+
 		case WIDG_EDITBOX:
 			if (psScreen->psFocus == psWidget)
 			{
@@ -1282,20 +1215,18 @@ void widgSetString(W_SCREEN *psScreen, UDWORD id, const char *pText)
 			}
 			editBoxSetString((W_EDITBOX *)psWidget, pText);
 			break;
+
 		case WIDG_BARGRAPH:
-			ASSERT( FALSE, "widgGetString: Bar graphs do not have a string" );
+			ASSERT( !"wrong widget type", "widgGetString: Bar graphs do not have a string" );
 			break;
+
 		case WIDG_SLIDER:
-			ASSERT( FALSE, "widgGetString: Sliders do not have a string" );
+			ASSERT( !"wrong widget type", "widgGetString: Sliders do not have a string" );
 			break;
+
 		default:
-			ASSERT( FALSE,"widgSetString: Unknown widget type" );
+			ASSERT( !"unknown widget type", "widgSetString: Unknown widget type");
 			break;
-		}
-	}
-	else
-	{
-		ASSERT( FALSE, "widgSetString: couldn't get widget from id" );
 	}
 }
 

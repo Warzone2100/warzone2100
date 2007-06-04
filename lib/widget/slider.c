@@ -84,23 +84,7 @@ BOOL sliderCreate(W_SLIDER **ppsWidget, W_SLDINIT *psInit)
 		return FALSE;
 	}
 	/* Allocate the memory for the tip and copy it if necessary */
-	if (psInit->pTip)
-	{
-#if W_USE_STRHEAP
-		if (!widgAllocCopyString(&(*ppsWidget)->pTip, psInit->pTip))
-		{
-			/* Out of memory - just carry on without the tip */
-			ASSERT( FALSE, "sliderCreate: Out of memory" );
-			(*ppsWidget)->pTip = NULL;
-		}
-#else
-		(*ppsWidget)->pTip = psInit->pTip;
-#endif
-	}
-	else
-	{
-		(*ppsWidget)->pTip = NULL;
-	}
+	(*ppsWidget)->pTip = psInit->pTip;
 
 	/* Initialise the structure */
 	(*ppsWidget)->type = WIDG_SLIDER;
@@ -140,14 +124,6 @@ void sliderFree(W_SLIDER *psWidget)
 {
 	ASSERT( psWidget != NULL,
 		"sliderFree: Invalid widget pointer" );
-
-#if W_USE_STRHEAP
-	if (psWidget->pTip)
-	{
-		widgFreeString(psWidget->pTip);
-	}
-#endif
-
 
 	free(psWidget);
 }

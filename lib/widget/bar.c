@@ -69,16 +69,7 @@ BOOL barGraphCreate(W_BARGRAPH **ppsWidget, W_BARINIT *psInit)
 	/* Allocate the memory for the tip and copy it if necessary */
 	if (psInit->pTip)
 	{
-#if W_USE_STRHEAP
-		if (!widgAllocCopyString(&(*ppsWidget)->pTip, psInit->pTip))
-		{
-			/* Out of memory - just carry on without the tip */
-			ASSERT( FALSE, "barGraphCreate: Out of memory" );
-			(*ppsWidget)->pTip = NULL;
-		}
-#else
 		(*ppsWidget)->pTip = psInit->pTip;
-#endif
 	}
 	else
 	{
@@ -142,13 +133,6 @@ void barGraphFree(W_BARGRAPH *psWidget)
 {
 	ASSERT( psWidget != NULL,
 		"barGraphFree: Invalid widget pointer" );
-
-#if W_USE_STRHEAP
-	if (psWidget->pTip)
-	{
-		widgFreeString(psWidget->pTip);
-	}
-#endif
 
 	free(psWidget);
 }

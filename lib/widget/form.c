@@ -36,7 +36,7 @@
 /* Control whether single tabs are displayed */
 #define NO_DISPLAY_SINGLE_TABS 1
 
-static void formFreeTips(W_TABFORM *psForm);
+static inline void formFreeTips(W_TABFORM *psForm);
 
 /* Store the position of a tab */
 typedef struct _tab_pos
@@ -192,22 +192,7 @@ static BOOL formCreateClickable(W_CLICKFORM **ppsWidget, W_FORMINIT *psInit)
 	}
 	(*ppsWidget)->psWidgets = NULL;
 	(*ppsWidget)->psLastHiLite = NULL;
-	if (psInit->pTip)
-	{
-#if W_USE_STRHEAP
-		if (!widgAllocCopyString(&(*ppsWidget)->pTip, psInit->pTip))
-		{
-			ASSERT( FALSE, "formCreateClickable: Out of string memory" );
-			free(*ppsWidget);
-			return FALSE;
-		}
-#endif
-		(*ppsWidget)->pTip = psInit->pTip;
-	}
-	else
-	{
-		(*ppsWidget)->pTip = NULL;
-	}
+	(*ppsWidget)->pTip = psInit->pTip;
 	formSetDefaultColours((W_FORM *)*ppsWidget);
 
 	formInitialise((W_FORM *)*ppsWidget);
@@ -223,12 +208,6 @@ static void formFreeClickable(W_CLICKFORM *psWidget)
 		"formFreePlain: Invalid form pointer" );
 
 	widgReleaseWidgetList(psWidget->psWidgets);
-#if W_USE_STRHEAP
-	if (psWidget->pTip)
-	{
-		widgFreeString(psWidget->pTip);
-	}
-#endif
 
 	free(psWidget);
 }
@@ -283,26 +262,12 @@ static BOOL formCreateTabbed(W_TABFORM **ppsWidget, W_FORMINIT *psInit)
 	for(major=0; major<psInit->numMajor; major++)
 	{
 		/* Check for a tip for the major tab */
-		if (psInit->apMajorTips[major])
-		{
-#if W_USE_STRHEAP
-			(void)widgAllocCopyString(&psMajor->pTip, psInit->apMajorTips[major]);
-#else
-			psMajor->pTip = psInit->apMajorTips[major];
-#endif
-		}
+		psMajor->pTip = psInit->apMajorTips[major];
+
 		/* Check for tips for the minor tab */
 		for(minor=0; minor<psInit->aNumMinors[major]; minor++)
 		{
-			if (psInit->apMinorTips[major][minor])
-			{
-#if W_USE_STRHEAP
-				(void)widgAllocCopyString(&(psMajor->asMinor[minor].pTip),
-										  psInit->apMinorTips[major][minor]);
-#else
-				psMajor->asMinor[minor].pTip = psInit->apMinorTips[major][minor];
-#endif
-			}
+			psMajor->asMinor[minor].pTip = psInit->apMinorTips[major][minor];
 		}
 		psMajor++;
 	}
@@ -362,31 +327,9 @@ static BOOL formCreateTabbed(W_TABFORM **ppsWidget, W_FORMINIT *psInit)
 }
 
 /* Free the tips strings for a tabbed form */
-static void formFreeTips(W_TABFORM *psForm)
+static inline void formFreeTips(W_TABFORM *psForm)
 {
-#if W_USE_STRHEAP
-	UDWORD		minor,major;
-	W_MAJORTAB	*psMajor;
-
-	psMajor = psForm->asMajor;
-	for(major = 0; major < psForm->numMajor; major++)
-	{
-		if (psMajor->pTip)
-		{
-			widgFreeString(psMajor->pTip);
-		}
-		for(minor = 0; minor < psMajor->numMinor; minor++)
-		{
-			if (psMajor->asMinor[minor].pTip)
-			{
-				widgFreeString(psMajor->asMinor[minor].pTip);
-			}
-		}
-		psMajor++;
-	}
-#else
 	psForm = psForm;
-#endif
 }
 
 /* Free a tabbed form widget */

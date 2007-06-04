@@ -27,30 +27,11 @@
 
 #include "lib/framework/input.h"
 
-/* Control whether the internal widget string heap should be used */
-#define W_USE_STRHEAP	FALSE
-
 /* Set the id number for widgRunScreen to return */
 extern void widgSetReturn(WIDGET *psWidget);
 
 /* Find a widget in a screen from its ID number */
 extern WIDGET *widgGetFromID(W_SCREEN *psScreen, UDWORD id);
-
-/* Get a string from the string heap */
-extern BOOL widgAllocString(char **ppStr);
-
-/* Get a string from the heap and copy in some data.
- * The string to copy will be truncated if it is too long.
- */
-extern BOOL widgAllocCopyString(char **ppDest, char *pSrc);
-
-/* Copy one string to another
- * The string to copy will be truncated if it is longer than WIDG_MAXSTR.
- */
-extern void widgCopyString(char *pDest, const char *pSrc);
-
-/* Return a string to the string heap */
-extern void widgFreeString(char *pStr);
 
 /* Release a list of widgets */
 extern void widgReleaseWidgetList(WIDGET *psWidgets);
