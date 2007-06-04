@@ -272,7 +272,7 @@ BOOL stackPopType(INTERP_VAL  *psVal)
 		if (!interpCheckEquiv(psVal->type,psTop->type))
 		{
 			debug(LOG_ERROR, "stackPopType: type mismatch: %d/%d", psVal->type, psTop->type);
-			ASSERT( FALSE, "stackPopType: type mismatch: %d/%d", psVal->type, psTop->type);
+			ASSERT( !"type mismatch", "stackPopType: type mismatch: %d/%d", psVal->type, psTop->type);
 			return FALSE;
 		}
 

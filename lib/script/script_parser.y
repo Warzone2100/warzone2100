@@ -4990,7 +4990,10 @@ stringexp:
 					$$ = psCurrBlock;
 
 					/* Manage string stack */
-					widgCopyString(STRSTACK[CURSTACKSTR],yyvsp[0].sval);
+					strncpy(STRSTACK[CURSTACKSTR], yyvsp[0].sval, sizeof(STRSTACK[CURSTACKSTR]));
+					// Terminate the string with a NUL character
+					STRSTACK[CURSTACKSTR][sizeof(STRSTACK[CURSTACKSTR]) - 1] = '\0';
+
 					CURSTACKSTR = CURSTACKSTR + 1;		/* Increment 'pointer' to the top of the string stack */
 
 					if(CURSTACKSTR >= MAXSTACKLEN)
