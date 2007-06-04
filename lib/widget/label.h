@@ -36,7 +36,7 @@ typedef struct _w_label
 	UDWORD		state;					// The current button state
 	char		aText[WIDG_MAXSTR];		// Text on the label
 	int FontID;
-	const char	*pTip;					// The tool tip for the button
+	char	*pTip;					// The tool tip for the button
 } W_LABEL;
 
 /* Create a button widget data structure */

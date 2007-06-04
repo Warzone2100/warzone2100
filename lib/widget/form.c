@@ -192,7 +192,21 @@ static BOOL formCreateClickable(W_CLICKFORM **ppsWidget, W_FORMINIT *psInit)
 	}
 	(*ppsWidget)->psWidgets = NULL;
 	(*ppsWidget)->psLastHiLite = NULL;
-	(*ppsWidget)->pTip = psInit->pTip;
+	if (psInit->pTip)
+	{
+		(*ppsWidget)->pTip = strdup(psInit->pTip);
+		ASSERT((*ppsWidget)->pTip != NULL, "formCreateClickable: Out of string memory");
+
+		if ((*ppsWidget)->pTip == NULL)
+		{
+			free(*ppsWidget);
+			return FALSE;
+		}
+	}
+	else
+	{
+		(*ppsWidget)->pTip = NULL;
+	}
 	formSetDefaultColours((W_FORM *)*ppsWidget);
 
 	formInitialise((W_FORM *)*ppsWidget);
@@ -209,6 +223,7 @@ static void formFreeClickable(W_CLICKFORM *psWidget)
 
 	widgReleaseWidgetList(psWidget->psWidgets);
 
+	free(psWidget->pTip);
 	free(psWidget);
 }
 
@@ -262,12 +277,25 @@ static BOOL formCreateTabbed(W_TABFORM **ppsWidget, W_FORMINIT *psInit)
 	for(major=0; major<psInit->numMajor; major++)
 	{
 		/* Check for a tip for the major tab */
-		psMajor->pTip = psInit->apMajorTips[major];
-
+		if (psInit->apMajorTips[major])
+		{
+			psMajor->pTip = strdup(psInit->apMajorTips[major]);
+		}
+		else
+		{
+			psMajor->pTip = NULL;
+		}
 		/* Check for tips for the minor tab */
 		for(minor=0; minor<psInit->aNumMinors[major]; minor++)
 		{
-			psMajor->asMinor[minor].pTip = psInit->apMinorTips[major][minor];
+			if (psInit->apMinorTips[major][minor])
+			{
+				psMajor->asMinor[minor].pTip = strdup(psInit->apMinorTips[major][minor]);
+			}
+			else
+			{
+				psMajor->asMinor[minor].pTip = NULL;
+			}
 		}
 		psMajor++;
 	}
@@ -327,9 +355,20 @@ static BOOL formCreateTabbed(W_TABFORM **ppsWidget, W_FORMINIT *psInit)
 }
 
 /* Free the tips strings for a tabbed form */
-static inline void formFreeTips(W_TABFORM *psForm)
+static void formFreeTips(W_TABFORM *psForm)
 {
-	psForm = psForm;
+	W_MAJORTAB* psMajor;
+
+	for(psMajor = &psForm->asMajor[0]; psMajor != &psForm->asMajor[psForm->numMajor]; ++psMajor)
+	{
+		W_MINORTAB* psMinor;
+		for(psMinor = &psMajor->asMinor[0]; psMinor != &psMajor->asMinor[psMajor->numMinor]; ++psMinor)
+		{
+			free(psMinor->pTip);
+		}
+
+		free(psMajor->pTip);
+	}
 }
 
 /* Free a tabbed form widget */

@@ -39,7 +39,7 @@ typedef struct _w_slider
 	UWORD		barSize;			// Thickness of slider bar
 	UWORD		pos;				// Current stop position of the slider
 	UWORD		state;				// Slider state
-	const char	*pTip;				// Tool tip
+	char	*pTip;				// Tool tip
 } W_SLIDER;
 
 /* Create a slider widget data structure */

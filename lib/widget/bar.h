@@ -37,7 +37,7 @@ typedef struct _w_bargraph
 	UWORD		iValue;				// Current value
 	UBYTE		majorCol;			// Colour for the major bar
 	UBYTE		minorCol;			// Colour for the minor bar
-	const char	*pTip;				// The tool tip for the graph
+	char	*pTip;				// The tool tip for the graph
 } W_BARGRAPH;
 
 /* Create a barGraph widget data structure */

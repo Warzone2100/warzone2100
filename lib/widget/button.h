@@ -41,8 +41,8 @@ typedef struct _w_button
 	WIDGET_BASE;
 
 	UDWORD		state;				// The current button state
-	const char *pText;				// The text for the button
-	const char *pTip;				// The tool tip for the button
+	char *pText;				// The text for the button
+	char *pTip;				// The tool tip for the button
 	SWORD HilightAudioID;				// Audio ID for form clicked sound
 	SWORD ClickedAudioID;				// Audio ID for form hilighted sound
 	WIDGET_AUDIOCALLBACK AudioCallback;	// Pointer to audio callback function
