@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2007-05-28 14:43+0200\n"
-"PO-Revision-Date: 2007-04-13 14:27+0200\n"
+"PO-Revision-Date: 2007-06-05 14:46+0200\n"
 "Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -119,7 +119,7 @@ msgstr "SPEL OPGESLAGEN!"
 
 #: src/hci.c:3809 src/keymap.c:292
 msgid "Commanders"
-msgstr ""
+msgstr "Commandanten"
 
 #: src/hci.c:3825 src/keymap.c:291
 msgid "Intelligence Display"
@@ -336,7 +336,7 @@ msgstr ""
 
 #: src/multiint.c:784
 msgid "Skirmish"
-msgstr ""
+msgstr "Schermutseling"
 
 #: src/multiint.c:815
 msgid "Select Player Name"
@@ -489,7 +489,7 @@ msgstr ""
 
 #: src/keybind.c:2297
 msgid "Unable to locate HQ!"
-msgstr ""
+msgstr "Kan het Hoofdkwartier niet vinden"
 
 #: src/keybind.c:2313
 msgid "Formation speed limiting OFF"
@@ -1176,7 +1176,7 @@ msgstr ""
 
 #: src/keymap.c:368
 msgid "View next Commander"
-msgstr ""
+msgstr "Ga naar volgende Commandant"
 
 #: src/keymap.c:369
 msgid "Toggle Overlays"
@@ -1208,15 +1208,15 @@ msgstr ""
 
 #: src/keymap.c:378
 msgid "Return to HQ"
-msgstr ""
+msgstr "Keer terug naar Hoofdkwartier"
 
 #: src/keymap.c:379
 msgid "Optimum Range"
-msgstr ""
+msgstr "Optimaal bereik"
 
 #: src/keymap.c:380
 msgid "Short Range"
-msgstr ""
+msgstr "Kort bereik"
 
 #: src/keymap.c:381
 msgid "Pursue"
@@ -1240,7 +1240,7 @@ msgstr "Stuur Tekst Bericht"
 
 #: src/keymap.c:386
 msgid "Long Range"
-msgstr ""
+msgstr "Groot bereik"
 
 #: src/keymap.c:399
 msgid "Retreat at Medium Damage"
