@@ -48,7 +48,6 @@
 //*
 //
 // global variables
-static OBJ_HEAP		*g_psSampleHeap = NULL;
 static AUDIO_SAMPLE *g_psSampleList = NULL;
 static AUDIO_SAMPLE *g_psSampleQueue = NULL;
 static BOOL			g_bAudioEnabled = FALSE;
@@ -81,14 +80,6 @@ BOOL audio_Init( AUDIO_CALLBACK pStopTrackCallback )
 	g_bAudioEnabled = sound_Init(MAX_SAME_SAMPLES);
 	if (g_bAudioEnabled)
 	{
-		// allocate sample heap
-		if ( !HEAP_CREATE(&g_psSampleHeap, AUDIO_SAMPLE_HEAP_INIT, AUDIO_SAMPLE_HEAP_EXT, sizeof(AUDIO_SAMPLE)) )
-		{
-			debug( LOG_ERROR, "audio_Init: couldn't create sample queue\n" );
-			abort();
-			return FALSE;
-		}
-
 		sound_SetStoppedCallback( pStopTrackCallback );
 	}
 	return g_bAudioEnabled;
@@ -119,7 +110,7 @@ BOOL audio_Shutdown( void )
 	while ( psSample != NULL )
 	{
 		psSampleTemp = psSample->psNext;
-		HEAP_FREE( g_psSampleHeap, psSample );
+		free(psSample);
 		psSample = psSampleTemp;
 	}
 
@@ -128,13 +119,11 @@ BOOL audio_Shutdown( void )
 	while ( psSample != NULL )
 	{
 		psSampleTemp = psSample->psNext;
-		HEAP_FREE( g_psSampleHeap, psSample );
+		free(psSample);
 		psSample = psSampleTemp;
 	}
 
 	// free sample heap
-	HEAP_DESTROY( g_psSampleHeap );
-	g_psSampleHeap = NULL;
 	g_psSampleList = NULL;
 	g_psSampleQueue = NULL;
 
@@ -316,9 +305,10 @@ static AUDIO_SAMPLE *audio_QueueSample( SDWORD iTrack )
 		return NULL;
 	}
 
-	HEAP_ALLOC( g_psSampleHeap, (void **) &psSample );
+	psSample = malloc(sizeof(AUDIO_SAMPLE));
 	if ( psSample == NULL )
 	{
+		debug(LOG_ERROR, "audio_QueueSample: Out of memory");
 		return NULL;
 	}
 
@@ -503,7 +493,7 @@ static void audio_UpdateQueue( void )
 	if ( !sound_Play2DTrack(psSample, TRUE) )
 	{
 		debug( LOG_NEVER, "audio_UpdateQueue: couldn't play sample\n" );
-		HEAP_FREE( g_psSampleHeap, psSample );
+		free(psSample);
 		return;
 	}
 
@@ -562,7 +552,7 @@ void audio_Update( void )
 		{
 			audio_RemoveSample( &g_psSampleList, psSample );
 			psSampleTemp = psSample->psNext;
-			HEAP_FREE( g_psSampleHeap, psSample );
+			free(psSample);
 			psSample = psSampleTemp;
 		}
 
@@ -740,9 +730,10 @@ static BOOL audio_Play3DTrack( SDWORD iX, SDWORD iY, SDWORD iZ, int iTrack, void
 		return FALSE;
 	}
 
-	HEAP_ALLOC( g_psSampleHeap, (void **) &psSample );
+	psSample = malloc(sizeof(AUDIO_SAMPLE));
 	if ( psSample == NULL )
 	{
+		debug(LOG_ERROR, "audio_Play3DTrack: Out of memory");
 		return FALSE;
 	}
 
@@ -760,7 +751,7 @@ static BOOL audio_Play3DTrack( SDWORD iX, SDWORD iY, SDWORD iZ, int iTrack, void
 	if ( !sound_Play3DTrack(psSample) )
 	{
 		debug( LOG_NEVER, "audio_Play3DTrack: couldn't play sample\n" );
-		HEAP_FREE( g_psSampleHeap, psSample );
+		free(psSample);
 		return FALSE;
 	}
 
@@ -864,9 +855,10 @@ BOOL audio_PlayStream( const char szFileName[], SDWORD iVol, AUDIO_CALLBACK pUse
 		return FALSE;
 	}
 
-	HEAP_ALLOC( g_psSampleHeap, (void **) &psSample );
+	psSample = malloc(sizeof(AUDIO_SAMPLE));
 	if ( psSample == NULL )
 	{
+		debug(LOG_ERROR, "audio_PlayStream: Out of memory");
 		return FALSE;
 	}
 	
@@ -936,9 +928,10 @@ void audio_PlayTrack( int iTrack )
 	}
 
 	// Allocate a sample
-	HEAP_ALLOC( g_psSampleHeap, (void **) &psSample );
+	psSample = malloc(sizeof(AUDIO_SAMPLE));
 	if ( psSample == NULL )
 	{
+		debug(LOG_ERROR, "audio_PlayTrack: Out of memory");
 		return;
 	}
 
@@ -959,7 +952,7 @@ void audio_PlayTrack( int iTrack )
 	if ( !sound_Play2DTrack(psSample, FALSE) )
 	{
 		debug( LOG_NEVER, "audio_PlayTrack: couldn't play sample\n" );
-		HEAP_FREE( g_psSampleHeap, psSample );
+		free(psSample);
 		return;
 	}
 
@@ -1033,7 +1026,7 @@ void audio_StopAll( void )
 	while ( psSample != NULL )
 	{
 		psSampleTemp = psSample->psNext;
-		HEAP_FREE( g_psSampleHeap, psSample );
+		free(psSample);
 		psSample = psSampleTemp;
 	}
 

@@ -6,7 +6,6 @@ SRC=configfile.c \
 	exceptionhandler.c \
 	frame.c \
 	frameresource.c \
-	heap.c \
 	input.c \
 	resource_parser.tab.c \
 	resource_lexer.lex.c \

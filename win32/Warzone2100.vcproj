@@ -223,9 +223,6 @@
 					RelativePath="..\lib\framework\frameresource.c"
 					>
 				</File>
-				<File
-					RelativePath="..\lib\framework\heap.c"
-					>
 				</File>
 				<File
 					RelativePath="..\lib\framework\input.c"
@@ -1360,9 +1357,6 @@
 				RelativePath="..\src\hci.h"
 				>
 			</File>
-			<File
-				RelativePath="..\lib\framework\heap.h"
-				>
 			</File>
 			<File
 				RelativePath="..\lib\ivis_common\imd.h"

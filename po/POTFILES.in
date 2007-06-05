@@ -4,7 +4,6 @@ lib/framework/configfile.c
 lib/framework/SDL_framerate.c
 lib/framework/frameresource.c
 lib/framework/frame.c
-lib/framework/heap.c
 lib/framework/treap.c
 lib/framework/exceptionhandler.c
 lib/framework/trig.c
