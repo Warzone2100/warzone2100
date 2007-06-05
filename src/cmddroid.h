@@ -56,9 +56,6 @@ extern void cmdDroidClearDesignator(UDWORD player);
 // get the index of the command droid
 extern SDWORD cmdDroidGetIndex(DROID *psCommander);
 
-// get the experience level of a command droid
-extern unsigned int cmdDroidGetLevel(DROID *psCommander);
-
 // get the maximum group size for a command droid
 extern unsigned int cmdDroidMaxGroup(DROID *psCommander);
 

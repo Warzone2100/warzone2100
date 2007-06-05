@@ -4227,57 +4227,55 @@ BOOL selectDroidByID(UDWORD id, UDWORD player)
 	return FALSE;
 }
 
-typedef struct
+struct rankMap
 {
-	UDWORD      kills;  // required minimum amount of kills to reach this rank
-	const char* name;   // name of this rank
-} RANK_MAP;
+	unsigned int kills;          // required minimum amount of kills to reach this rank
+	unsigned int commanderKills; // required minimum amount of kills for a commander (or sensor) to reach this rank
+	const char*  name;           // name of this rank
+};
 
-static const RANK_MAP arrRank[] =
+static const struct rankMap arrRank[] =
 {
-	{0,   N_("Rookie")},
-	{4,   NP_("rank", "Green")},
-	{8,   N_("Trained")},
-	{16,  N_("Regular")},
-	{32,  N_("Professional")},
-	{64,  N_("Veteran")},
-	{128, N_("Elite")},
-	{256, N_("Special")},
-	{512, N_("Hero")}
+	{0,   0,    N_("Rookie")},
+	{4,   16,   NP_("rank", "Green")},
+	{8,   32,   N_("Trained")},
+	{16,  64,   N_("Regular")},
+	{32,  128,  N_("Professional")},
+	{64,  256,  N_("Veteran")},
+	{128, 512,  N_("Elite")},
+	{256, 1024, N_("Special")},
+	{512, 2048, N_("Hero")}
 };
 
 UDWORD	getDroidLevel(DROID *psDroid)
 {
-	UDWORD i;
-	static const UDWORD end = sizeof(arrRank) / sizeof(RANK_MAP);
-
-	if (psDroid->droidType == DROID_COMMAND ||
-		psDroid->droidType == DROID_SENSOR)
-	{
-		return cmdDroidGetLevel(psDroid);
-	}
+	static const unsigned int lastRank = sizeof(arrRank) / sizeof(struct rankMap);
+	bool isCommander = (psDroid->droidType == DROID_COMMAND ||
+	                    psDroid->droidType == DROID_SENSOR) ? true : false;
+	unsigned int i;
 
 	// Search through the array of ranks until one is found
 	// which requires more kills than the droid has.
 	// Then fall back to the previous rank.
-	for (i = 1; i != end; ++i)
+	for (i = 1; i != lastRank; ++i)
 	{
-		if (psDroid->numKills < arrRank[i].kills)
+		unsigned int requiredKills = isCommander ? arrRank[i].commanderKills : arrRank[i].kills;
+		if (psDroid->numKills < requiredKills)
 		{
 			return i - 1;
 		}
 	}
 
 	// If the criteria of the last rank are met, then select the last one
-	return end - 1;
+	return lastRank - 1;
 }
 
 
 
 const char *getDroidNameForRank(UDWORD rank)
 {
-	ASSERT( rank < (sizeof(arrRank) / sizeof(RANK_MAP)),
-	        "getDroidNameForRank: given rank number (%d) out of bounds, we only have %d ranks\n", rank, (sizeof(arrRank) / sizeof(RANK_MAP)) );
+	ASSERT( rank < (sizeof(arrRank) / sizeof(struct rankMap)),
+	        "getDroidNameForRank: given rank number (%d) out of bounds, we only have %d ranks\n", rank, (sizeof(arrRank) / sizeof(struct rankMap)) );
 
 	return PE_("rank", arrRank[rank].name);
 }

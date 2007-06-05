@@ -169,58 +169,10 @@ void cmdDroidMultiExpBoost(BOOL bDoit)
 	bMultiExpBoost = bDoit;
 }
 
-
-// get the experience level of a command droid
-unsigned int cmdDroidGetLevel(DROID *psCommander)
-{
-	SDWORD	numKills = psCommander->numKills;
-
-	// commanders do not need as much experience in multiplayer
-	if (bMultiExpBoost)
-	{
-		numKills *= 2;
-	}
-
-	if (numKills > 2047)
-	{
-		return 8;
-	}
-	else if (numKills > 1023)
-	{
-		return 7;
-	}
-	else if (numKills > 511)
-	{
-		return 6;
-	}
-	else if (numKills > 255)
-	{
-		return 5;
-	}
-	else if (numKills > 127)
-	{
-		return 4;
-	}
-	else if (numKills > 63)
-	{
-		return 3;
-	}
-	else if (numKills > 31)
-	{
-		return 2;
-	}
-	else if (numKills > 15)
-	{
-		return 1;
-	}
-
-	return 0;
-}
-
 // get the maximum group size for a command droid
 unsigned int cmdDroidMaxGroup(DROID *psCommander)
 {
-	return cmdDroidGetLevel(psCommander) * 2 + 6;
+	return getDroidLevel(psCommander) * 2 + 6;
 }
 
 // update the kills of a command droid if psKiller is in a command group
@@ -259,7 +211,7 @@ unsigned int cmdGetCommanderLevel(DROID *psDroid)
 	psCommander = psDroid->psGroup->psCommander;
 
 	// Return the experience level of this commander
-	return cmdDroidGetLevel(psCommander);
+	return getDroidLevel(psCommander);
 }
 
 // Selects all droids for a given commander

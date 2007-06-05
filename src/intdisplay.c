@@ -629,7 +629,7 @@ void intUpdateCommandExp(WIDGET *psWidget, W_CONTEXT *psContext)
 		ASSERT( psDroid->droidType == DROID_COMMAND,
 			"intUpdateCommandSize: droid is not a command droid" );
 
-		numStars = cmdDroidGetLevel(psDroid);
+		numStars = getDroidLevel(psDroid);
 		numStars = (numStars >= 1) ? (numStars - 1) : 0;
 		for(i=0; i<numStars; i++)
 		{
