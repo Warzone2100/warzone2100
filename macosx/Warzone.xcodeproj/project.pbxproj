@@ -109,7 +109,6 @@
 		0246A0C30BD3CBD5004D1C70 /* exceptionhandler.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0A10BD3CBD5004D1C70 /* exceptionhandler.c */; };
 		0246A0C40BD3CBD5004D1C70 /* frame.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0A30BD3CBD5004D1C70 /* frame.c */; };
 		0246A0C50BD3CBD5004D1C70 /* frameresource.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0A60BD3CBD5004D1C70 /* frameresource.c */; };
-		0246A0C60BD3CBD5004D1C70 /* heap.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0A90BD3CBD5004D1C70 /* heap.c */; };
 		0246A0C70BD3CBD5004D1C70 /* input.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0AB0BD3CBD5004D1C70 /* input.c */; };
 		0246A0C80BD3CBD5004D1C70 /* resource_lexer.l in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0B10BD3CBD5004D1C70 /* resource_lexer.l */; };
 		0246A0C90BD3CBD5004D1C70 /* resource_parser.y in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0B20BD3CBD5004D1C70 /* resource_parser.y */; };
@@ -851,8 +850,6 @@
 		0246A0A60BD3CBD5004D1C70 /* frameresource.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = frameresource.c; path = ../lib/framework/frameresource.c; sourceTree = SOURCE_ROOT; };
 		0246A0A70BD3CBD5004D1C70 /* frameresource.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = frameresource.h; path = ../lib/framework/frameresource.h; sourceTree = SOURCE_ROOT; };
 		0246A0A80BD3CBD5004D1C70 /* gettext.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = gettext.h; path = ../lib/framework/gettext.h; sourceTree = SOURCE_ROOT; };
-		0246A0A90BD3CBD5004D1C70 /* heap.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = heap.c; path = ../lib/framework/heap.c; sourceTree = SOURCE_ROOT; };
-		0246A0AA0BD3CBD5004D1C70 /* heap.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = heap.h; path = ../lib/framework/heap.h; sourceTree = SOURCE_ROOT; };
 		0246A0AB0BD3CBD5004D1C70 /* input.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = input.c; path = ../lib/framework/input.c; sourceTree = SOURCE_ROOT; };
 		0246A0AC0BD3CBD5004D1C70 /* input.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = input.h; path = ../lib/framework/input.h; sourceTree = SOURCE_ROOT; };
 		0246A0AD0BD3CBD5004D1C70 /* listmacs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = listmacs.h; path = ../lib/framework/listmacs.h; sourceTree = SOURCE_ROOT; };
@@ -1760,8 +1757,6 @@
 				0246A0A60BD3CBD5004D1C70 /* frameresource.c */,
 				0246A0A70BD3CBD5004D1C70 /* frameresource.h */,
 				0246A0A80BD3CBD5004D1C70 /* gettext.h */,
-				0246A0A90BD3CBD5004D1C70 /* heap.c */,
-				0246A0AA0BD3CBD5004D1C70 /* heap.h */,
 				0246A0AB0BD3CBD5004D1C70 /* input.c */,
 				0246A0AC0BD3CBD5004D1C70 /* input.h */,
 				0246A0AD0BD3CBD5004D1C70 /* listmacs.h */,
@@ -3303,7 +3298,6 @@
 				0246A0C30BD3CBD5004D1C70 /* exceptionhandler.c in Sources */,
 				0246A0C40BD3CBD5004D1C70 /* frame.c in Sources */,
 				0246A0C50BD3CBD5004D1C70 /* frameresource.c in Sources */,
-				0246A0C60BD3CBD5004D1C70 /* heap.c in Sources */,
 				0246A0C70BD3CBD5004D1C70 /* input.c in Sources */,
 				0246A0C90BD3CBD5004D1C70 /* resource_parser.y in Sources */,
 				0246A0C80BD3CBD5004D1C70 /* resource_lexer.l in Sources */,
