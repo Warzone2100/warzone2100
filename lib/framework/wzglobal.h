@@ -212,4 +212,13 @@
 #  define WZ_DECL_CONST
 #endif
 
+/*
+ * \note
+ * The compiler must support 8bit long bytes
+ */
+#include <limits.h>
+#if !(CHAR_BIT == 8)
+# error "Warzone currently depends on having 8bit long bytes, therefore this system is not supported."
+#endif
+
 #endif /* WZGLOBAL_H */

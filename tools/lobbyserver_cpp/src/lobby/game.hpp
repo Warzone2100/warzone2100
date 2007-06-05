@@ -32,19 +32,20 @@ extern "C"
 }
 
 #else
+#include <stdint.h>
 #define StringSize 64
 
 typedef struct
 {
-    signed int dwSize;
-    signed int dwFlags;
-    char       host[16];
-    signed int dwMaxPlayers;
-    signed int dwCurrentPlayers;
-    signed int dwUser1;
-    signed int dwUser2;
-    signed int dwUser3;
-    signed int dwUser4;
+    int32_t dwSize;
+    int32_t dwFlags;
+    char    host[16];
+    int32_t dwMaxPlayers;
+    int32_t dwCurrentPlayers;
+    int32_t dwUser1;
+    int32_t dwUser2;
+    int32_t dwUser3;
+    int32_t dwUser4;
 } SESSIONDESC;
 
 typedef struct
