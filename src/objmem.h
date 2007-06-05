@@ -34,9 +34,6 @@
 /* The memory heaps for the different object types */
 extern OBJ_HEAP		*psDroidHeap, *psStructHeap, *psFeatureHeap;
 
-// the memory heap for templates
-extern OBJ_HEAP		*psTemplateHeap;
-
 /* The lists of objects allocated */
 extern DROID			*apsDroidLists[MAX_PLAYERS];
 extern STRUCTURE		*apsStructLists[MAX_PLAYERS];

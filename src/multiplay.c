@@ -1394,8 +1394,11 @@ BOOL recvTemplate(NETMSG * m)
 		addTemplate(player,&t);
 		apsDroidTemplates[player]->ref = REF_TEMPLATE_START;	// templates are the odd one out!
 
-/*		if (!HEAP_ALLOC(psTemplateHeap, &psTempl))
+#if 0
+		psTempl = malloc(sizeof(DROID_TEMPLATE));
+		if (psTempl == NULL)
 		{
+			debug(LOG_ERROR, "recvTemplate: Out of memory");
 			return FALSE;
 		}
 		memcpy(psTempl, &t, sizeof(DROID_TEMPLATE));
@@ -1415,7 +1418,7 @@ BOOL recvTemplate(NETMSG * m)
 			apsDroidTemplates[player]=psTempl;
 			psTempl->psNext = NULL;
 		}
-*/
+#endif
 	}
 	return TRUE;
 }
@@ -1467,7 +1470,7 @@ static BOOL recvDestroyTemplate(NETMSG * m)
 		{
 			apsDroidTemplates[player] = psTempl->psNext;// It's at the root ?
 		}
-		HEAP_FREE(psTemplateHeap, psTempl);									// Delete the template.
+		free(psTempl);									// Delete the template.
 	}
 	return (TRUE);
 }

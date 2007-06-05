@@ -290,7 +290,8 @@ void useTheForce(BOOL bAddTempl)//Luke
 
 /*		if(!psTempl)												// already exists.
 		{
-			if (HEAP_ALLOC(psTemplateHeap, &psTempl))
+			psTempl = malloc(sizeof(DROID_TEMPLATE));
+			if (psTempl != NULL)
 			{
 				memcpy(psTempl, Force.pMembers->pTempl, sizeof(DROID_TEMPLATE));
 				psTempl->ref = REF_TEMPLATE_START;					// templates are the odd one out!
@@ -469,7 +470,7 @@ BOOL loadForce(char *name)
 	for(tcount;tcount!=0;tcount--)											// get templates
 	{
 		psTempl = malloc(sizeof(DROID_TEMPLATE));
-		if (psTempl == NULL)	// !HEAP_ALLOC(psTemplateHeap, &psTempl))
+		if (psTempl == NULL)
 		{
 			debug( LOG_ERROR, "Couldn't allocate template for %s", fileName );
 			abort();

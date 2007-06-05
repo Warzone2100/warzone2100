@@ -2263,7 +2263,7 @@ BOOL skAddTemplate(void)
 	}
 	psTempl =(DROID_TEMPLATE *)stempl;
 //	psT = malloc(sizeof(SKIRMISHSTORE));
-	HEAP_ALLOC(psTemplateHeap,&psT);
+	psT = malloc(sizeof(DROID_TEMPLATE));
 	if ( !psT)
 	{
 		goto fail;
@@ -2322,7 +2322,7 @@ BOOL skClearSkirmishTemplates(void)
 	{
 		while(skirmishStore[i])
 		{
-			HEAP_FREE(psTemplateHeap,skirmishStore[i]);
+			free(skirmishStore[i]);
 		}
 	}
 

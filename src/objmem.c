@@ -65,8 +65,6 @@ OBJ_HEAP		*psDroidHeap, *psStructHeap, *psFeatureHeap;
 OBJ_HEAP		*psStructFuncHeap;
 /* The memory heap for the Flag Postions */
 OBJ_HEAP		*psFlagPosHeap;
-// the memory heap for templates
-OBJ_HEAP		*psTemplateHeap;
 
 
 //SDWORD	factoryDeliveryPointCheck[MAX_PLAYERS][NUM_FACTORY_TYPES][MAX_FACTORY];
@@ -210,11 +208,6 @@ BOOL objmemInitialise(void)
 		return FALSE;
 	}
 
-	if (!HEAP_CREATE(&psTemplateHeap, sizeof(DROID_TEMPLATE), TEMPLATE_INIT, TEMPLATE_EXT))
-	{
-		return FALSE;
-	}
-
 	// reset the object ID number
 	objID = OBJ_ID_INIT;
 
@@ -231,7 +224,6 @@ void objmemShutdown(void)
 	HEAP_DESTROY(psStructFuncHeap);
 	HEAP_DESTROY(psFeatureHeap);
 	HEAP_DESTROY(psFlagPosHeap);
-	HEAP_DESTROY(psTemplateHeap);
 }
 
 /* General housekeeping for the object system */

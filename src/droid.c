@@ -2331,9 +2331,10 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 
 	for (i=0; i < NumDroids; i++)
 	{
-		if (!HEAP_ALLOC(psTemplateHeap, (void**) &pDroidDesign))
+		pDroidDesign = malloc(sizeof(DROID_TEMPLATE));
+		if (pDroidDesign == NULL)
 		{
-			debug(LOG_ERROR, "Out of memory - Droid Templates");
+			debug(LOG_ERROR, "loadDroidTemplates: Out of memory");
 			return FALSE;
 		}
 		memset(pDroidDesign, 0, sizeof(DROID_TEMPLATE));
@@ -2695,7 +2696,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		if ( pDroidDesign->droidType == DROID_DEFAULT )
 		{
 			memcpy( &sDefaultDesignTemplate, pDroidDesign, sizeof(DROID_TEMPLATE) );
-			HEAP_FREE(psTemplateHeap, pDroidDesign);
+			free(pDroidDesign);
 		}
 		else
 		{
@@ -3021,7 +3022,7 @@ BOOL droidTemplateShutDown(void)
 			pTemplate = pNext)
 		{
 			pNext = pTemplate->psNext;
-			HEAP_FREE(psTemplateHeap, pTemplate);
+			free(pTemplate);
 		}
 		apsDroidTemplates[player] = NULL;
 	}
