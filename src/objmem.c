@@ -61,10 +61,6 @@
 
 /* The memory heaps for the different object types */
 OBJ_HEAP		*psDroidHeap, *psStructHeap, *psFeatureHeap;
-/*Heap for structure functionality*/
-OBJ_HEAP		*psStructFuncHeap;
-/* The memory heap for the Flag Postions */
-OBJ_HEAP		*psFlagPosHeap;
 
 
 //SDWORD	factoryDeliveryPointCheck[MAX_PLAYERS][NUM_FACTORY_TYPES][MAX_FACTORY];
@@ -192,18 +188,7 @@ BOOL objmemInitialise(void)
 		return FALSE;
 	}
 
-	if (!HEAP_CREATE(&psStructFuncHeap, sizeof(FUNCTIONALITY), STRUCTFUNC_INIT,
-		STRUCTFUNC_EXT))
-	{
-		return FALSE;
-	}
-
 	if (!HEAP_CREATE(&psFeatureHeap, sizeof(FEATURE), FEATURE_INIT, FEATURE_EXT))
-	{
-		return FALSE;
-	}
-
-	if (!HEAP_CREATE(&psFlagPosHeap, sizeof(FLAG_POSITION), FLAGPOS_INIT, FLAGPOS_EXT))
 	{
 		return FALSE;
 	}
@@ -221,9 +206,7 @@ void objmemShutdown(void)
 {
 	HEAP_DESTROY(psDroidHeap);
 	HEAP_DESTROY(psStructHeap);
-	HEAP_DESTROY(psStructFuncHeap);
 	HEAP_DESTROY(psFeatureHeap);
-	HEAP_DESTROY(psFlagPosHeap);
 }
 
 /* General housekeeping for the object system */
@@ -666,8 +649,10 @@ BOOL createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player)
 {
 	ASSERT( player<MAX_PLAYERS, "createFlagPosition: invalid player number" );
 
-	if (!HEAP_ALLOC(psFlagPosHeap, (void**) ppsNew))
+	*ppsNew = malloc(sizeof(FLAG_POSITION));
+	if (*ppsNew == NULL)
 	{
+		debug(LOG_ERROR, "createFlagPosition: Out of memory");
 		return FALSE;
 	}
 	(*ppsNew)->type = POS_DELIVERY;
@@ -702,7 +687,7 @@ void removeFlagPosition(FLAG_POSITION *psDel)
 	if (apsFlagPosLists[psDel->player] == psDel)
 	{
 		apsFlagPosLists[psDel->player] = apsFlagPosLists[psDel->player]->psNext;
-		HEAP_FREE(psFlagPosHeap, psDel);
+		free(psDel);
 	}
 	else
 	{
@@ -716,7 +701,7 @@ void removeFlagPosition(FLAG_POSITION *psDel)
 		if (psCurr != NULL)
 		{
 			psPrev->psNext = psCurr->psNext;
-			HEAP_FREE(psFlagPosHeap, psCurr);
+			free(psCurr);
 		}
 	}
 }
@@ -733,7 +718,7 @@ void freeAllFlagPositions(void)
 		while (apsFlagPosLists[player])
 		{
 			psNext = apsFlagPosLists[player]->psNext;
-			HEAP_FREE(psFlagPosHeap, apsFlagPosLists[player]);
+			free(apsFlagPosLists[player]);
 			apsFlagPosLists[player] = psNext;
 		}
 	}
@@ -786,8 +771,10 @@ void checkFactoryFlags(void)
 /* Create a new Structure Functionality*/
 BOOL createStructFunc(FUNCTIONALITY **ppsNew)
 {
-	if (!HEAP_ALLOC(psStructFuncHeap, (void**)ppsNew))
+	*ppsNew = malloc(sizeof(FUNCTIONALITY));
+	if (*ppsNew == NULL)
 	{
+		debug(LOG_ERROR, "createStructFunc: Out of memory");
 		return FALSE;
 	}
 	return TRUE;
@@ -796,7 +783,7 @@ BOOL createStructFunc(FUNCTIONALITY **ppsNew)
 /*remove a structure Functionality from the heap*/
 void removeStructFunc(FUNCTIONALITY *psDel)
 {
-	HEAP_FREE(psStructFuncHeap, psDel);
+	free(psDel);
 }
 
 /**************************  OBJECT ACCESS FUNCTIONALITY ********************************/
