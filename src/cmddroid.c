@@ -205,7 +205,7 @@ unsigned int cmdDroidGetLevel(DROID *psCommander)
 	{
 		return 3;
 	}
-	else if (numKills > 32)
+	else if (numKills > 31)
 	{
 		return 2;
 	}
