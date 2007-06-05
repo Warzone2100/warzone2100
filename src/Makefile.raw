@@ -115,15 +115,15 @@ SRC=ai.c \
 	target.c \
 	warzoneconfig.c
 
-LIBS=../lib/libframework.a \
-	../lib/libgamelib.a \
+LIBS=../lib/libgamelib.a \
 	../lib/libivis_common.a \
 	../lib/libivis_opengl.a \
 	../lib/libnetplay.a \
 	../lib/libscript.a \
 	../lib/libsequence.a \
 	../lib/libsound.a \
-	../lib/libwidget.a
+	../lib/libwidget.a \
+	../lib/libframework.a
 
 ifeq ($(strip $(PLATFORM)),windows)
 LIBS += ../win32/warzone2100.o

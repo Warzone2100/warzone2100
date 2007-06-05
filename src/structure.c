@@ -2013,7 +2013,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		if(!setFunctionality(psBuilding, pStructureType->type))
 		{
 			removeStructFromMap(psBuilding);
-			HEAP_FREE(psStructHeap, psBuilding);
+			free(psBuilding);
 			//better reset these if you couldn't build the structure!
 			if (FromSave && player == selectedPlayer && missionLimboExpand())
 			{

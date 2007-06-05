@@ -419,7 +419,7 @@ void droidRelease(DROID *psDroid)
 			{
 				psNext = psCurr->psGrpNext;
 				droidRelease(psCurr);
-				HEAP_FREE(psDroidHeap, psCurr);
+				free(psCurr);
 			}
 		}
 	}
@@ -3347,7 +3347,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 		{
 			debug( LOG_NEVER, "unit build: unable to create group\n" );
 			ASSERT( FALSE,"Can't create unit because can't create group" );
-			HEAP_FREE(psDroidHeap, psDroid);
+			free(psDroid);
 			return NULL;
 		}
 		grpJoin(psGrp, psDroid);

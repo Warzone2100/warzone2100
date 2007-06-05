@@ -2553,7 +2553,7 @@ void missionResetDroids(void)
 					    DBPRINTF(("missionResetDroids: tile occupied\n");
 	    `				removeDroid(psDroid, apsDroidLists);
 					    droidRelease(psDroid);
-					    HEAP_FREE(psDroidHeap, psDroid);
+					    free(psDroid);
 				    }*/
 /*				    mapX = psDroid->x >> TILE_SHIFT;
 				    mapY = psDroid->y >> TILE_SHIFT;
@@ -4092,7 +4092,7 @@ void missionDestroyObjects(void)
 				removeDroidBase(psDroid);
 //				droidRemove(psDroid, apsDroidLists);
 //				droidRelease(psDroid);
-//				HEAP_FREE(psDroidHeap, psDroid);
+//				free(psDroid);
 				psDroid = psNext;
 			}
 
@@ -4107,7 +4107,7 @@ void missionDestroyObjects(void)
 				removeDroidBase(psDroid);
 //				droidRemove(psDroid, apsDroidLists);
 //				droidRelease(psDroid);
-//				HEAP_FREE(psDroidHeap, psDroid);
+//				free(psDroid);
 				psDroid = psNext;
 			}
             mission.apsDroidLists[Player] = NULL;

@@ -42,24 +42,27 @@ BOOL mechShutdown(void)
 {
 	BASE_OBJECT *psObj, *psNext;
 
-	for(psObj = psDestroyedObj; psObj; psObj = psNext)
+	for(psObj = psDestroyedObj; psObj != NULL; psObj = psNext)
 	{
 		psNext = psObj->psNext;
-		if (psObj->type == OBJ_DROID)
+		switch (psObj->type)
 		{
-			droidRelease((DROID *)psObj);
-			heapFree(psDroidHeap, (DROID *)psObj);
+			case OBJ_DROID:
+				droidRelease((DROID *)psObj);
+				break;
+
+			case OBJ_STRUCTURE:
+				structureRelease((STRUCTURE *)psObj);
+				break;
+
+			case OBJ_FEATURE:
+				featureRelease((FEATURE *)psObj);
+				break;
+
+			default:
+				ASSERT(!"unknown object type", "mechShutdown: unknown object type in destroyed object list");
 		}
-		if (psObj->type == OBJ_STRUCTURE)
-		{
-			structureRelease((STRUCTURE *)psObj);
-			heapFree(psStructHeap, (STRUCTURE *)psObj);
-		}
-		if (psObj->type == OBJ_FEATURE)
-		{
-			featureRelease((FEATURE *)psObj);
-			heapFree(psFeatureHeap, (FEATURE *)psObj);
-		}
+		free(psObj);
 	}
 	psDestroyedObj = NULL;
 

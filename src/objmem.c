@@ -57,12 +57,6 @@
 #define TEMPLATE_EXT	10
 
 
-
-
-/* The memory heaps for the different object types */
-OBJ_HEAP		*psDroidHeap, *psStructHeap, *psFeatureHeap;
-
-
 //SDWORD	factoryDeliveryPointCheck[MAX_PLAYERS][NUM_FACTORY_TYPES][MAX_FACTORY];
 SDWORD	factoryDeliveryPointCheck[MAX_PLAYERS][NUM_FLAG_TYPES][MAX_FACTORY];
 // the initial value for the object ID
@@ -178,21 +172,6 @@ void objListIntegCheck(void);
 /* Initialise the object heaps */
 BOOL objmemInitialise(void)
 {
-	if (!HEAP_CREATE(&psDroidHeap, sizeof(DROID), DROID_INIT, DROID_EXT))
-	{
-		return FALSE;
-	}
-
-	if (!HEAP_CREATE(&psStructHeap, sizeof(STRUCTURE), STRUCTURE_INIT, STRUCTURE_EXT))
-	{
-		return FALSE;
-	}
-
-	if (!HEAP_CREATE(&psFeatureHeap, sizeof(FEATURE), FEATURE_INIT, FEATURE_EXT))
-	{
-		return FALSE;
-	}
-
 	// reset the object ID number
 	objID = OBJ_ID_INIT;
 
@@ -204,9 +183,6 @@ BOOL objmemInitialise(void)
 /* Release the object heaps */
 void objmemShutdown(void)
 {
-	HEAP_DESTROY(psDroidHeap);
-	HEAP_DESTROY(psStructHeap);
-	HEAP_DESTROY(psFeatureHeap);
 }
 
 /* General housekeeping for the object system */
@@ -232,23 +208,25 @@ void objmemUpdate(void)
 
 		switch (psDestroyedObj->type)
 		{
-		case OBJ_DROID:
-			debug( LOG_MEMORY, "objmemUpdate: freeing droid\n");
-			droidRelease((DROID *)psDestroyedObj);
-			HEAP_FREE(psDroidHeap, psDestroyedObj);
-			break;
-		case OBJ_STRUCTURE:
-			debug( LOG_MEMORY, "objmemUpdate: freeing structure\n");
-			structureRelease((STRUCTURE *)psDestroyedObj);
-			HEAP_FREE(psStructHeap, psDestroyedObj);
-			break;
-		case OBJ_FEATURE:
-			featureRelease((FEATURE *)psDestroyedObj);
-			HEAP_FREE(psFeatureHeap, psDestroyedObj);
-			break;
-		default:
-			ASSERT( FALSE, "objmemUpdate: unknown object type in destroyed list" );
+			case OBJ_DROID:
+				debug( LOG_MEMORY, "objmemUpdate: freeing droid\n");
+				droidRelease((DROID *)psDestroyedObj);
+				break;
+
+			case OBJ_STRUCTURE:
+				debug( LOG_MEMORY, "objmemUpdate: freeing structure\n");
+				structureRelease((STRUCTURE *)psDestroyedObj);
+				break;
+
+			case OBJ_FEATURE:
+				featureRelease((FEATURE *)psDestroyedObj);
+				break;
+
+			default:
+				ASSERT(!"unknown object type", "objmemUpdate: unknown object type in destroyed list");
 		}
+		free(psDestroyedObj);
+
 		psDestroyedObj = psNext;
 	}
 
@@ -263,21 +241,20 @@ void objmemUpdate(void)
 
 			switch (psCurr->type)
 			{
-			case OBJ_DROID:
-				droidRelease((DROID *)psCurr);
-				HEAP_FREE(psDroidHeap, psCurr);
-				break;
-			case OBJ_STRUCTURE:
-				structureRelease((STRUCTURE *)psCurr);
-				HEAP_FREE(psStructHeap, psCurr);
-				break;
-			case OBJ_FEATURE:
-				featureRelease((FEATURE *)psDestroyedObj);
-				HEAP_FREE(psFeatureHeap, psCurr);
-				break;
-			default:
-				ASSERT( FALSE, "objmemUpdate: unknown object type in destroyed list" );
+				case OBJ_DROID:
+					droidRelease((DROID *)psCurr);
+					break;
+				case OBJ_STRUCTURE:
+					structureRelease((STRUCTURE *)psCurr);
+					break;
+				case OBJ_FEATURE:
+					featureRelease((FEATURE *)psDestroyedObj);
+					break;
+				default:
+					ASSERT(!"unknown object type", "objmemUpdate: unknown object type in destroyed list");
 			}
+			free(psCurr);
+
 			/*set the linked list up - you will never be deleting the top
 			of the list, so don't have to check*/
 			psPrev->psNext = psNext;
@@ -317,15 +294,37 @@ void objmemUpdate(void)
 
 /* Creating a new object
  */
-static inline BASE_OBJECT* createObject(UDWORD player, OBJ_HEAP *heap, OBJECT_TYPE objType)
+static inline BASE_OBJECT* createObject(UDWORD player, OBJECT_TYPE objType)
 {
 	BASE_OBJECT* newObject;
 
 	ASSERT(player < MAX_PLAYERS,
 	       "createObject: invalid player number");
 
-	if (!HEAP_ALLOC(heap, ((void**) &newObject)))
+	switch (objType)
+	{
+		case OBJ_FEATURE:
+			newObject = malloc(sizeof(FEATURE));
+			break;
+
+		case OBJ_STRUCTURE:
+			newObject = malloc(sizeof(STRUCTURE));
+			break;
+
+		case OBJ_DROID:
+			newObject = malloc(sizeof(DROID));
+			break;
+
+		default:
+			ASSERT(!"unknown object type", "createObject: unknown object type");
+			return NULL;
+	}
+
+	if (newObject == NULL)
+	{
+		debug(LOG_ERROR, "createObject: Out of memory");
 		return NULL;
+	}
 
 	newObject->type = objType;
 	newObject->id = (objID << 3) | player;
@@ -448,7 +447,7 @@ static inline BASE_OBJECT* findObjectInList(BASE_OBJECT list[], UDWORD idNum)
 // Necessary for a nice looking cast in calls to releaseAllObjectsInList
 typedef void (*OBJECT_DESTRUCTOR)(BASE_OBJECT*);
 
-static inline void releaseAllObjectsInList(BASE_OBJECT *list[], OBJ_HEAP *heap, OBJECT_DESTRUCTOR objectDestructor)
+static inline void releaseAllObjectsInList(BASE_OBJECT *list[], OBJECT_DESTRUCTOR objectDestructor)
 {
 	UDWORD i;
 	BASE_OBJECT *psCurr, *psNext;
@@ -466,7 +465,7 @@ static inline void releaseAllObjectsInList(BASE_OBJECT *list[], OBJ_HEAP *heap, 
 			objectDestructor(psCurr);
 
 			// Release object's memory
-			HEAP_FREE(heap, psCurr);
+			free(psCurr);
 		}
 		list[i] = NULL;
 	}
@@ -482,7 +481,7 @@ static inline void releaseAllObjectsInList(BASE_OBJECT *list[], OBJ_HEAP *heap, 
 /* Create a new droid */
 BOOL createDroid(UDWORD player, DROID **ppsNew)
 {
-	*ppsNew = (DROID*)createObject(player, psDroidHeap, OBJ_DROID);
+	*ppsNew = (DROID*)createObject(player, OBJ_DROID);
 
 	if (*ppsNew == NULL)
 		return FALSE;
@@ -528,7 +527,7 @@ void killDroid(DROID *psDel)
 /* Remove all droids */
 void freeAllDroids(void)
 {
-	releaseAllObjectsInList((BASE_OBJECT**)apsDroidLists, psDroidHeap, (OBJECT_DESTRUCTOR)droidRelease);
+	releaseAllObjectsInList((BASE_OBJECT**)apsDroidLists, (OBJECT_DESTRUCTOR)droidRelease);
 }
 
 /*Remove a single Droid from a list*/
@@ -552,13 +551,13 @@ void removeDroid(DROID *psDroidToRemove, DROID *pList[MAX_PLAYERS])
 /*Removes all droids that may be stored in the mission lists*/
 void freeAllMissionDroids(void)
 {
-	releaseAllObjectsInList((BASE_OBJECT**)mission.apsDroidLists, psDroidHeap, (OBJECT_DESTRUCTOR)droidRelease);
+	releaseAllObjectsInList((BASE_OBJECT**)mission.apsDroidLists, (OBJECT_DESTRUCTOR)droidRelease);
 }
 
 /*Removes all droids that may be stored in the limbo lists*/
 void freeAllLimboDroids(void)
 {
-	releaseAllObjectsInList((BASE_OBJECT**)apsLimboDroids, psDroidHeap, (OBJECT_DESTRUCTOR)droidRelease);
+	releaseAllObjectsInList((BASE_OBJECT**)apsLimboDroids, (OBJECT_DESTRUCTOR)droidRelease);
 }
 
 /**************************  STRUCTURE  *******************************/
@@ -566,7 +565,7 @@ void freeAllLimboDroids(void)
 /* Create a new structure */
 BOOL createStruct(UDWORD player, STRUCTURE **ppsNew)
 {
-	*ppsNew = (STRUCTURE*)createObject(player, psStructHeap, OBJ_STRUCTURE);
+	*ppsNew = (STRUCTURE*)createObject(player, OBJ_STRUCTURE);
 
 	if (*ppsNew == NULL)
 		return FALSE;
@@ -593,7 +592,7 @@ void killStruct(STRUCTURE *psDel)
 /* Remove heapall structures */
 void freeAllStructs(void)
 {
-	releaseAllObjectsInList((BASE_OBJECT**)apsStructLists, psStructHeap, (OBJECT_DESTRUCTOR)structureRelease);
+	releaseAllObjectsInList((BASE_OBJECT**)apsStructLists, (OBJECT_DESTRUCTOR)structureRelease);
 }
 
 /*Remove a single Structure from a list*/
@@ -611,7 +610,7 @@ void removeStructureFromList(STRUCTURE *psStructToRemove, STRUCTURE *pList[MAX_P
 /* Create a new Feature */
 BOOL createFeature(FEATURE **ppsNew)
 {
-	*ppsNew = (FEATURE*)createObject(0, psFeatureHeap, OBJ_FEATURE);
+	*ppsNew = (FEATURE*)createObject(0, OBJ_FEATURE);
 
 	if (*ppsNew == NULL)
 		return FALSE;
@@ -639,7 +638,7 @@ void killFeature(FEATURE *psDel)
 /* Remove all features */
 void freeAllFeatures(void)
 {
-	releaseAllObjectsInList((BASE_OBJECT**)apsFeatureLists, psFeatureHeap, (OBJECT_DESTRUCTOR)featureRelease);
+	releaseAllObjectsInList((BASE_OBJECT**)apsFeatureLists, (OBJECT_DESTRUCTOR)featureRelease);
 }
 
 /**************************  FLAG_POSITION ********************************/

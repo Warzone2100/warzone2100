@@ -36,18 +36,9 @@
 #define GRP_HEAP_INIT	45
 #define GRP_HEAP_EXT	15
 
-// heap for the droid group structure
-OBJ_HEAP	*psGrpHeap;
-
-
 // initialise the group system
 BOOL grpInitialise(void)
 {
-	if (!HEAP_CREATE(&psGrpHeap, sizeof(DROID_GROUP), GRP_HEAP_INIT, GRP_HEAP_EXT))
-	{
-		return FALSE;
-	}
-
 	return TRUE;
 }
 
@@ -55,15 +46,16 @@ BOOL grpInitialise(void)
 // shutdown the group system
 void grpShutDown(void)
 {
-	HEAP_DESTROY(psGrpHeap);
 }
 
 
 // create a new group
 BOOL grpCreate(DROID_GROUP	**ppsGroup)
 {
-	if (!HEAP_ALLOC(psGrpHeap, (void**) ppsGroup))
+	*ppsGroup = malloc(sizeof(DROID_GROUP));
+	if (*ppsGroup == NULL)
 	{
+		debug(LOG_ERROR, "grpCreate: Out of memory");
 		return FALSE;
 	}
 
@@ -248,7 +240,7 @@ void grpLeave(DROID_GROUP *psGroup, DROID *psDroid)
 	// free the group structure if necessary
 	if (psGroup->refCount <= 0)
 	{
-		HEAP_FREE(psGrpHeap, psGroup);
+		free(psGroup);
 	}
 }
 

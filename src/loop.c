@@ -158,10 +158,6 @@ GAMECODE gameLoop(void)
 	INT_RETVAL	intRetVal;
 	int	        clearMode;
 
-#ifdef DEBUG
-	heapIntegrityCheck(psDroidHeap);
-#endif
-
 	clearMode = CLEAR_FOG;
 	if (!war_GetFog())
 	{
