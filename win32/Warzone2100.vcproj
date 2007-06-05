@@ -223,7 +223,6 @@
 					RelativePath="..\lib\framework\frameresource.c"
 					>
 				</File>
-				</File>
 				<File
 					RelativePath="..\lib\framework\input.c"
 					>
@@ -1356,7 +1355,6 @@
 			<File
 				RelativePath="..\src\hci.h"
 				>
-			</File>
 			</File>
 			<File
 				RelativePath="..\lib\ivis_common\imd.h"
