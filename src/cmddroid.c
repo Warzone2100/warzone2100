@@ -169,6 +169,11 @@ void cmdDroidMultiExpBoost(BOOL bDoit)
 	bMultiExpBoost = bDoit;
 }
 
+BOOL cmdGetDroidMultiExpBoost()
+{
+	return bMultiExpBoost;
+}
+
 // get the maximum group size for a command droid
 unsigned int cmdDroidMaxGroup(DROID *psCommander)
 {

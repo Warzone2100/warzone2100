@@ -77,6 +77,8 @@ extern void	cmdSelectSubDroids(DROID *psDroid);
 // note that commander experience should be increased
 extern void cmdDroidMultiExpBoost(BOOL bDoit);
 
+// check whether commander experience should be increased
+extern BOOL cmdGetDroidMultiExpBoost(void);
 
 #endif
 
