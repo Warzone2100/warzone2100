@@ -34,10 +34,12 @@
 #include "rpl_reader.h"
 #include "sequence.h"
 
-#ifdef WZ_OS_MAC
-#include <OpenAL/al.h>
-#else
-#include <AL/al.h>
+#ifndef WZ_NOSOUND
+# ifdef WZ_OS_MAC
+#  include <OpenAL/al.h>
+# else
+#  include <AL/al.h>
+# endif
 #endif
 
 #define DUMMY_VIDEO
@@ -55,14 +57,17 @@ BOOL seq_sound = FALSE;
  */
 /***************************************************************************/
 
+#ifndef WZ_NOSOUND
 ALuint 		seq_buffer;
 ALuint		seq_source;
+#endif
 
 static void seq_start_sound(RPL* s) {
 	unsigned int buffer_size = rpl_decode_sound(s, sound_buffer, SOUND_BUFFER_SIZE);
 
 	if (buffer_size != 0) {
 		seq_sound = TRUE;
+#ifndef WZ_NOSOUND
 		alGenBuffers(1, &seq_buffer);
 		alBufferData(seq_buffer, AL_FORMAT_MONO16, sound_buffer, buffer_size*sizeof(short), 22050);
 
@@ -76,6 +81,7 @@ static void seq_start_sound(RPL* s) {
 
 		alSourceQueueBuffers(seq_source, 1, &seq_buffer);
 		alSourcePlay(seq_source);
+#endif
 	}
 }
 
@@ -183,11 +189,13 @@ BOOL	seq_ShutDown(void)
 {
 	debug( LOG_VIDEO, "seq_ShutDown\n" );
 	if (current_sequence != NULL) {
+#ifndef WZ_NOSOUND
 		if (seq_sound == TRUE) {
 			alSourceStop(seq_source);
 			alDeleteSources(1, &seq_source);
 			alDeleteBuffers(1, &seq_buffer);
 		}
+#endif
 		rpl_close(current_sequence);
 		current_sequence = NULL;
 	}

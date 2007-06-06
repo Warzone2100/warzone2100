@@ -572,7 +572,9 @@ void audio_Update( void )
 					// update sample position
 					{
 						audio_GetObjectPos( psSample->psObj, &psSample->x, &psSample->y, &psSample->z );
+#ifndef WZ_NOSOUND
 						sound_SetObjectPosition( psSample->iSample, psSample->x, psSample->y, psSample->z );
+#endif
 					}
 				}
 			}

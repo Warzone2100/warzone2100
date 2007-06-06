@@ -27,10 +27,12 @@
 
 #include "lib/framework/frame.h"
 
-#ifdef WZ_OS_MAC
-#include <OpenAL/al.h>
-#else
-#include <AL/al.h>
+#ifndef WZ_NOSOUND
+# ifdef WZ_OS_MAC
+#  include <OpenAL/al.h>
+# else
+#  include <AL/al.h>
+# endif
 #endif
 
 #ifndef MAX_STR
@@ -65,7 +67,9 @@ typedef BOOL (* AUDIO_CALLBACK)  ( void *psObj );
 typedef struct AUDIO_SAMPLE
 {
 	SDWORD                  iTrack;         // ID number identifying a specific sound; currently (r1182) mapped in audio_id.c
+#ifndef WZ_NOSOUND
 	ALuint                  iSample;        // OpenAL name of the sound source
+#endif
 	SDWORD                  x, y, z;
 	BOOL                    bFinishedPlaying;
 	AUDIO_CALLBACK          pCallback;
@@ -82,7 +86,9 @@ typedef struct TRACK
 	SDWORD          iTime;                  // duration in milliseconds
 	UDWORD          iTimeLastFinished;      // time last finished in ms
 	UDWORD          iNumPlaying;
+#ifndef WZ_NOSOUND
 	ALuint          iBufferName;            // OpenAL name of the buffer
+#endif
 	char            *pName;                 // resource name of the track
 } TRACK;
 

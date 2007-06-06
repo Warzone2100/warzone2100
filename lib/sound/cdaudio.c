@@ -22,10 +22,12 @@
 
 #include "lib/framework/frame.h"
 
-#ifdef WZ_OS_MAC
-#include <OpenAL/al.h>
-#else
-#include <AL/al.h>
+#ifndef WZ_NOSOUND
+# ifdef WZ_OS_MAC
+#  include <OpenAL/al.h>
+# else
+#  include <AL/al.h>
+# endif
 #endif
 
 #include "audio.h"
@@ -46,28 +48,41 @@ static PHYSFS_file*		music_file = NULL;
 enum {	WZ_NONE,
 	WZ_OGG }	music_file_format;
 
-static ALfloat		music_volume = 0.5;
-
 static unsigned int	music_track = 0;
+
+#ifndef WZ_NOSOUND
+static ALfloat		music_volume = 0.5;
+#endif
+
+#ifndef WZ_NOSOUND
 static ALuint 		music_buffers[NB_BUFFERS];
 static ALuint		music_source;
+#endif
 
 struct OggVorbisDecoderState* decoder = NULL;
 
 static inline unsigned int numProcessedBuffers(void)
 {
+#ifndef WZ_NOSOUND
 	int count;
 	alGetSourcei(music_source, AL_BUFFERS_PROCESSED, &count);
 
 	return count;
+#else
+	return 0;
+#endif
 }
 
 static inline unsigned int numQueuedBuffers(void)
 {
+#ifndef WZ_NOSOUND
 	int count;
 	alGetSourcei(music_source, AL_BUFFERS_QUEUED, &count);
 
 	return count;
+#else
+	return 0;
+#endif
 }
 
 //*
@@ -80,6 +95,7 @@ BOOL cdAudio_Open( const char* user_musicdir )
 		return FALSE;
 	}
 
+#ifndef WZ_NOSOUND
 	alGenBuffers(NB_BUFFERS, music_buffers);
 	alGenSources(1, &music_source);
 	alSourcef (music_source, AL_GAIN, music_volume);
@@ -87,6 +103,7 @@ BOOL cdAudio_Open( const char* user_musicdir )
 	alSource3f(music_source, AL_VELOCITY, 0.0, 0.0, 0.0);
 	alSourcef (music_source, AL_ROLLOFF_FACTOR, 0.0);
 	alSourcei (music_source, AL_SOURCE_RELATIVE, AL_TRUE);
+#endif
 
 	PlayList_Init();
 
@@ -107,8 +124,10 @@ BOOL cdAudio_Open( const char* user_musicdir )
 //
 BOOL cdAudio_Close( void )
 {
+#ifndef WZ_NOSOUND
 	alDeleteBuffers(NB_BUFFERS, music_buffers);
 	alDeleteSources(1, &music_source);
+#endif
 	PlayList_Quit();
 	return TRUE;
 }
@@ -124,7 +143,7 @@ static BOOL cdAudio_OpenTrack(const char* filename) {
 
 	music_file_format = WZ_NONE;
 
-#ifndef WZ_NOOGG
+#ifndef WZ_NOSOUND
 	if (strncasecmp(filename+strlen(filename)-4, ".ogg", 4) == 0)
 	{
 		music_file = PHYSFS_openRead(filename);
@@ -154,6 +173,7 @@ static BOOL cdAudio_OpenTrack(const char* filename) {
 static BOOL cdAudio_CloseTrack(void) {
 	if (music_track != 0)
 	{
+#ifndef WZ_NOSOUND
 		unsigned int bufferCount;
 
 		alSourceStop(music_source);
@@ -165,6 +185,7 @@ static BOOL cdAudio_CloseTrack(void) {
 			alSourceUnqueueBuffers(music_source, 1, &buffer);
 			alDeleteBuffers(1, &buffer);
 		}
+#endif
 
 		sound_DestroyOggVorbisDecoder(decoder);
 		decoder = NULL;
@@ -177,6 +198,7 @@ static BOOL cdAudio_CloseTrack(void) {
 	return TRUE;
 }
 
+#ifndef WZ_NOSOUND
 static BOOL cdAudio_FillBuffer(ALuint buffer)
 {
 	ALenum format;
@@ -223,6 +245,7 @@ static BOOL cdAudio_FillBuffer(ALuint buffer)
 	free(pcm);
 	return TRUE;
 }
+#endif
 
 //*
 // ======================================================================
@@ -230,7 +253,9 @@ static BOOL cdAudio_FillBuffer(ALuint buffer)
 //
 BOOL cdAudio_PlayTrack( SDWORD iTrack )
 {
+#ifndef WZ_NOSOUND
 	unsigned int i;
+#endif
 
 	cdAudio_CloseTrack();
 
@@ -255,6 +280,7 @@ BOOL cdAudio_PlayTrack( SDWORD iTrack )
 		}
 	}
 
+#ifndef WZ_NOSOUND
 	for (i = 0; i < NB_BUFFERS; ++i) {
 		if (!cdAudio_FillBuffer(music_buffers[i])) {
 			return FALSE;
@@ -263,6 +289,7 @@ BOOL cdAudio_PlayTrack( SDWORD iTrack )
 
 	alSourceQueueBuffers(music_source, NB_BUFFERS, music_buffers);
 	alSourcePlay(music_source);
+#endif
 
 	return TRUE;
 }
@@ -301,6 +328,7 @@ BOOL cdAudio_Resume( void )
 //
 void cdAudio_Update( void )
 {
+#ifndef WZ_NOSOUND
 	if (music_track != 0 && music_volume != 0.0)
 	{
 		unsigned int update;
@@ -323,6 +351,7 @@ void cdAudio_Update( void )
 			}
 		}
 	}
+#endif
 }
 
 //*
@@ -331,7 +360,11 @@ void cdAudio_Update( void )
 //
 SDWORD mixer_GetCDVolume( void )
 {
+#ifndef WZ_NOSOUND
 	return (SDWORD)(100*music_volume);
+#else
+	return 0;
+#endif
 }
 
 //*
@@ -340,6 +373,7 @@ SDWORD mixer_GetCDVolume( void )
 //
 void mixer_SetCDVolume( SDWORD iVol )
 {
+#ifndef WZ_NOSOUND
 	music_volume = 0.01*iVol;
 
 	if (music_volume < 0.0) {
@@ -348,4 +382,5 @@ void mixer_SetCDVolume( SDWORD iVol )
 		music_volume = 1.0;
 	}
 	alSourcef (music_source, AL_GAIN, music_volume);
+#endif
 }

@@ -27,12 +27,14 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 
-#ifdef WZ_OS_MAC
-#include <OpenAL/al.h>
-#include <OpenAL/alc.h>
-#else
-#include <AL/al.h>
-#include <AL/alc.h>
+#ifndef WZ_NOSOUND
+# ifdef WZ_OS_MAC
+#  include <OpenAL/al.h>
+#  include <OpenAL/alc.h>
+# else
+#  include <AL/al.h>
+#  include <AL/alc.h>
+# endif
 #endif
 
 #include <physfs.h>
@@ -44,7 +46,9 @@
 
 #define ATTENUATION_FACTOR	0.0003f
 
+#ifndef WZ_NOSOUND
 ALuint current_queue_sample = -1;
+#endif
 
 typedef struct	SAMPLE_LIST
 {
@@ -54,16 +58,19 @@ typedef struct	SAMPLE_LIST
 
 static SAMPLE_LIST *active_samples = NULL;
 
+#ifndef WZ_NOSOUND
 static ALfloat		sfx_volume = 1.0;
 static ALfloat		sfx3d_volume = 1.0;
 
 static ALCdevice* device = 0;
 static ALCcontext* context = 0;
+#endif
 
 BOOL openal_initialized = FALSE;
 
 BOOL		cdAudio_Update( void );
 
+#ifndef WZ_NOSOUND
 static void PrintOpenALVersion(void)
 {
 	debug(LOG_ERROR, "OpenAL Vendor: %s\n"
@@ -73,6 +80,7 @@ static void PrintOpenALVersion(void)
 		   alGetString(AL_VENDOR), alGetString(AL_VERSION),
 		   alGetString(AL_RENDERER), alGetString(AL_EXTENSIONS));
 }
+#endif
 
 //*
 // =======================================================================================================================
@@ -80,6 +88,7 @@ static void PrintOpenALVersion(void)
 //
 BOOL sound_InitLibrary( void )
 {
+#ifndef WZ_NOSOUND
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	int err=0;
 	ALfloat listenerVel[3] = { 0.0, 0.0, 0.0 };
@@ -104,9 +113,11 @@ BOOL sound_InitLibrary( void )
 				alcGetString(device, err));
 		return FALSE;
 	}
+#endif
 
 	openal_initialized = TRUE;
 
+#ifndef WZ_NOSOUND
 	// Clear Error Codes
 	alGetError();
 	alcGetError(device);
@@ -121,6 +132,7 @@ BOOL sound_InitLibrary( void )
 	alListenerfv( AL_VELOCITY, listenerVel );
 	alListenerfv( AL_ORIENTATION, listenerOri );
 	alDistanceModel( AL_NONE );
+#endif
 	return TRUE;
 }
 
@@ -133,6 +145,7 @@ void sound_ShutdownLibrary( void )
 	SAMPLE_LIST * aSample = active_samples, * tmpSample = NULL;
 
 	debug(LOG_SOUND, "sound_ShutdownLibrary: starting shutdown");
+#ifndef WZ_NOSOUND
 	if(context != 0) {
 #ifdef WIN32
 		/* Ifdef'ed out the two lines below on Linux since this caused some versions
@@ -149,6 +162,7 @@ void sound_ShutdownLibrary( void )
 		alcCloseDevice(device);
 		device = 0;
 	}
+#endif
 
 	while( aSample )
 	{
@@ -164,7 +178,9 @@ void sound_ShutdownLibrary( void )
 //
 void sound_Update( void )
 {
+#ifndef WZ_NOSOUND
 	int err=0;
+#endif
 //	{			//  <=== whats up with this ??
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		SAMPLE_LIST **tmp = &active_samples;
@@ -174,6 +190,7 @@ void sound_Update( void )
 		for ( tmp = &active_samples, i = *tmp; i != NULL; i = *tmp )
 		{
 			//~~~~~~~~~~
+#ifndef WZ_NOSOUND
 			ALenum	state = AL_STOPPED;
 			//~~~~~~~~~~
 
@@ -189,20 +206,26 @@ void sound_Update( void )
 				break;
 
 			default:
+#endif
 				sound_FinishedCallback( i->curr );
+#ifndef WZ_NOSOUND
 				if (i->curr->iSample != (ALuint)AL_INVALID) {
 					alDeleteSources( 1, &(i->curr->iSample) );
 					i->curr->iSample = AL_INVALID;
 				}
+#endif
 				*tmp = i->next;
 				free( i );
+#ifndef WZ_NOSOUND
 				break;
 			}
+#endif
 		}
 //	}//  <=== whats up with this You trying to make those local only ??
 
 	cdAudio_Update();
 
+#ifndef WZ_NOSOUND
 	// Reset the current error state
 	alcGetError(device);
 
@@ -214,6 +237,7 @@ void sound_Update( void )
 		debug(LOG_ERROR, "Error while processing audio context: %s",
 		      alGetString(err));
 	}
+#endif
 }
 
 //*
@@ -222,6 +246,7 @@ void sound_Update( void )
 //
 BOOL sound_QueueSamplePlaying( void )
 {
+#ifndef WZ_NOSOUND
 	if ( current_queue_sample == (ALuint)AL_INVALID )
 	{
 		return FALSE;
@@ -247,6 +272,9 @@ BOOL sound_QueueSamplePlaying( void )
 			return FALSE;
 		}
 	}
+#else
+	return FALSE;
+#endif
 }
 
 /** Decodes an opened OggVorbis file into an OpenAL buffer
@@ -256,6 +284,7 @@ BOOL sound_QueueSamplePlaying( void )
  */
 static inline TRACK* sound_DecodeOggVorbisTrack(TRACK *psTrack, PHYSFS_file* PHYSFS_fileHandle)
 {
+#ifndef WZ_NOSOUND
 	ALenum		format;
 	ALuint		buffer;
 
@@ -282,6 +311,7 @@ static inline TRACK* sound_DecodeOggVorbisTrack(TRACK *psTrack, PHYSFS_file* PHY
 
 	// save buffer name in track
 	psTrack->iBufferName = buffer;
+#endif
 
 	return psTrack;
 }
@@ -333,7 +363,9 @@ TRACK* sound_LoadTrackFromFile(const char *fileName)
 //
 void sound_FreeTrack( TRACK *psTrack )
 {
+#ifndef WZ_NOSOUND
 	alDeleteBuffers( 1, &psTrack->iBufferName );
+#endif
 }
 
 //*
@@ -345,6 +377,7 @@ int sound_GetMaxVolume( void )
 	return 32767;		// Why this value? -Q
 }
 
+#ifndef WZ_NOSOUND
 //*
 // =======================================================================================================================
 // =======================================================================================================================
@@ -377,6 +410,7 @@ static BOOL sound_SetupChannel( AUDIO_SAMPLE *psSample )
 		return FALSE;
 	}
 }
+#endif
 
 //*
 // =======================================================================================================================
@@ -384,6 +418,7 @@ static BOOL sound_SetupChannel( AUDIO_SAMPLE *psSample )
 //
 BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
 {
+#ifndef WZ_NOSOUND
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	ALfloat zero[3] = { 0.0, 0.0, 0.0 };
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -409,6 +444,7 @@ BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
 	{
 		current_queue_sample = -1;
 	}
+#endif
 
 	return TRUE;
 }
@@ -419,6 +455,7 @@ BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
 //
 BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
 {
+#ifndef WZ_NOSOUND
 	ALfloat zero[3] = { 0.0, 0.0, 0.0 };
 
 	if (sfx3d_volume == 0.0) {
@@ -433,6 +470,7 @@ BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
 	alSourcei( psSample->iSample, AL_BUFFER, psTrack->iBufferName );
 	alSourcei( psSample->iSample, AL_LOOPING, (sound_SetupChannel(psSample)) ? AL_TRUE : AL_FALSE );
 	alSourcePlay( psSample->iSample );
+#endif
 	return TRUE;
 }
 
@@ -451,7 +489,9 @@ BOOL sound_PlayStream( AUDIO_SAMPLE *psSample, const char szFileName[], SDWORD i
 //
 void sound_StopSample( UDWORD iSample )
 {
+#ifndef WZ_NOSOUND
 	alSourceStop( iSample );
+#endif
 }
 
 //*
@@ -476,7 +516,9 @@ void sound_SetSampleVolAll( int iVol )
 //
 void sound_SetPlayerPos( SDWORD iX, SDWORD iY, SDWORD iZ )
 {
+#ifndef WZ_NOSOUND
 	alListener3f( AL_POSITION, iX, iY, iZ );
+#endif
 }
 
 //
@@ -490,6 +532,7 @@ void sound_SetPlayerPos( SDWORD iX, SDWORD iY, SDWORD iZ )
  */
 void sound_SetPlayerOrientation( SDWORD iX, SDWORD iY, SDWORD iZ )
 {
+#ifndef WZ_NOSOUND
 	//~~~~~~~~~~~
 	float	ori[6];
 	//~~~~~~~~~~~
@@ -506,6 +549,7 @@ void sound_SetPlayerOrientation( SDWORD iX, SDWORD iY, SDWORD iZ )
 	ori[4] = 0;
 	ori[5] = 1;
 	alListenerfv( AL_ORIENTATION, ori );
+#endif
 }
 
 //*
@@ -514,6 +558,7 @@ void sound_SetPlayerOrientation( SDWORD iX, SDWORD iY, SDWORD iZ )
 //
 void sound_SetObjectPosition( SDWORD iSample, SDWORD iX, SDWORD iY, SDWORD iZ )
 {
+#ifndef WZ_NOSOUND
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// coordinates
 	float	listenerX, listenerY, listenerZ, dX, dY, dZ;
@@ -541,6 +586,7 @@ void sound_SetObjectPosition( SDWORD iSample, SDWORD iX, SDWORD iY, SDWORD iZ )
 
 	// the alSource3i variant would be better, if it wouldn't provide linker errors however
 	alSource3f( iSample, AL_POSITION, iX, iY, iZ );
+#endif
 }
 
 //*
@@ -549,7 +595,9 @@ void sound_SetObjectPosition( SDWORD iSample, SDWORD iX, SDWORD iY, SDWORD iZ )
 //
 void sound_PauseSample( AUDIO_SAMPLE *psSample )
 {
+#ifndef WZ_NOSOUND
 	alSourcePause( psSample->iSample );
+#endif
 }
 
 //*
@@ -558,7 +606,9 @@ void sound_PauseSample( AUDIO_SAMPLE *psSample )
 //
 void sound_ResumeSample( AUDIO_SAMPLE *psSample )
 {
+#ifndef WZ_NOSOUND
 	alSourcePlay( psSample->iSample );
+#endif
 }
 
 //*
@@ -591,6 +641,7 @@ void sound_StopAll( void )
 //
 BOOL sound_SampleIsFinished( AUDIO_SAMPLE *psSample )
 {
+#ifndef WZ_NOSOUND
 	//~~~~~~~~~~
 	ALenum	state;
 	//~~~~~~~~~~
@@ -609,6 +660,9 @@ BOOL sound_SampleIsFinished( AUDIO_SAMPLE *psSample )
 		}
 		return TRUE;
 	}
+#else
+	return TRUE;
+#endif
 }
 
 //*
@@ -618,11 +672,16 @@ BOOL sound_SampleIsFinished( AUDIO_SAMPLE *psSample )
 
 SDWORD mixer_GetWavVolume( void )
 {
+#ifndef WZ_NOSOUND
 	return (SDWORD)(100*sfx_volume);
+#else
+	return 0;
+#endif
 }
 
 void mixer_SetWavVolume( SDWORD iVol )
 {
+#ifndef WZ_NOSOUND
 	sfx_volume = iVol * 0.01;
 
 	if (sfx_volume < 0.0) {
@@ -630,15 +689,21 @@ void mixer_SetWavVolume( SDWORD iVol )
 	} else if (sfx_volume > 1.0) {
 		sfx_volume = 1.0;
 	}
+#endif
 }
 
 SDWORD mixer_Get3dWavVolume( void )
 {
+#ifndef WZ_NOSOUND
 	return (SDWORD)(100*sfx3d_volume);
+#else
+	return 0;
+#endif
 }
 
 void mixer_Set3dWavVolume( SDWORD iVol )
 {
+#ifndef WZ_NOSOUND
 	sfx3d_volume = iVol * 0.01;
 
 	if (sfx3d_volume < 0.0) {
@@ -646,4 +711,5 @@ void mixer_Set3dWavVolume( SDWORD iVol )
 	} else if (sfx3d_volume > 1.0) {
 		sfx3d_volume = 1.0;
 	}
+#endif
 }

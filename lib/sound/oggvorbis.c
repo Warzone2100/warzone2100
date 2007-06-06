@@ -20,7 +20,7 @@
 #include "lib/framework/frame.h"
 #include <physfs.h>
 
-#ifndef WZ_NOOGG
+#ifndef WZ_NOSOUND
 #include <vorbis/vorbisfile.h>
 #endif
 
@@ -40,13 +40,16 @@ struct OggVorbisDecoderState
 	// Wether to allow seeking or not
 	BOOL         allowSeeking;
 
+#ifndef WZ_NOSOUND
 	// Internal identifier towards libVorbisFile
 	OggVorbis_File oggVorbis_stream;
 
 	// Internal meta data
 	vorbis_info* VorbisInfo;
+#endif
 };
 
+#ifndef WZ_NOSOUND
 static size_t wz_oggVorbis_read(void *ptr, size_t size, size_t nmemb, void *datasource)
 {
 	PHYSFS_file* fileHandle = ((struct OggVorbisDecoderState*)datasource)->fileHandle;
@@ -123,10 +126,13 @@ static const ov_callbacks wz_oggVorbis_callbacks =
 	wz_oggVorbis_close,
 	wz_oggVorbis_tell
 };
+#endif
 
 struct OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_fileHandle, BOOL allowSeeking)
 {
+#ifndef WZ_NOSOUND
 	int error;
+#endif
 
 	struct OggVorbisDecoderState* decoder = malloc(sizeof(struct OggVorbisDecoderState));
 	if (decoder == NULL)
@@ -138,6 +144,7 @@ struct OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_f
 	decoder->fileHandle = PHYSFS_fileHandle;
 	decoder->allowSeeking = allowSeeking;
 
+#ifndef WZ_NOSOUND
 	error = ov_open_callbacks(decoder, &decoder->oggVorbis_stream, NULL, 0, wz_oggVorbis_callbacks);
 	if (error < 0)
 	{
@@ -148,45 +155,59 @@ struct OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_f
 
 	// Aquire some info about the sound data
 	decoder->VorbisInfo = ov_info(&decoder->oggVorbis_stream, -1);
+#endif
 
 	return decoder;
 }
 
 void sound_DestroyOggVorbisDecoder(struct OggVorbisDecoderState* decoder)
 {
+#ifndef WZ_NOSOUND
 	// Close the OggVorbis decoding stream
 	ov_clear(&decoder->oggVorbis_stream);
+#endif
 
 	free(decoder);
 }
 
 static inline unsigned int getSampleCount(struct OggVorbisDecoderState* decoder)
 {
+#ifndef WZ_NOSOUND
 	int numSamples = ov_pcm_total(&decoder->oggVorbis_stream, -1);
 
 	if (numSamples == OV_EINVAL)
 		return 0;
 
 	return numSamples;
+#else
+	return 0;
+#endif
 }
 
 static inline unsigned int getCurrentSample(struct OggVorbisDecoderState* decoder)
 {
+#ifndef WZ_NOSOUND
 	int samplePos = ov_pcm_tell(&decoder->oggVorbis_stream);
 
 	if (samplePos == OV_EINVAL)
 		return 0;
 
 	return samplePos;
+#else
+	return 0;
+#endif
 }
 
 soundDataBuffer* sound_DecodeOggVorbis(struct OggVorbisDecoderState* decoder, size_t bufferSize)
 {
 	size_t		size = 0;
+#ifndef WZ_NOSOUND
 	int		result;
+#endif
 
 	soundDataBuffer* buffer;
 
+#ifndef WZ_NOSOUND
 	if (decoder->allowSeeking)
 	{
 		unsigned int sampleCount = getSampleCount(decoder);
@@ -205,6 +226,9 @@ soundDataBuffer* sound_DecodeOggVorbis(struct OggVorbisDecoderState* decoder, si
 		debug(LOG_ERROR, "sound_DecodeOggVorbis: can't find a proper buffer size\n");
 		return NULL;
 	}
+#else
+	bufferSize = 0;
+#endif
 
 	buffer = malloc(bufferSize + sizeof(soundDataBuffer));
 	if (buffer == NULL)
@@ -218,6 +242,8 @@ soundDataBuffer* sound_DecodeOggVorbis(struct OggVorbisDecoderState* decoder, si
 #endif /* WZ_C99 */
 	buffer->bufferSize = bufferSize;
 	buffer->bitsPerSample = 16;
+
+#ifndef WZ_NOSOUND
 	buffer->channelCount = decoder->VorbisInfo->channels;
 	buffer->frequency = decoder->VorbisInfo->rate;
 
@@ -239,8 +265,8 @@ soundDataBuffer* sound_DecodeOggVorbis(struct OggVorbisDecoderState* decoder, si
 			size += result;
 		}
 
-	}
-	while ((result != 0 && size < bufferSize));
+	} while ((result != 0 && size < bufferSize));
+#endif
 
 	buffer->size = size;
 

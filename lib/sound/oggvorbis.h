@@ -22,7 +22,6 @@
 
 #include "lib/framework/frame.h"
 #include <physfs.h>
-#include "track.h"
 
 typedef struct
 {
