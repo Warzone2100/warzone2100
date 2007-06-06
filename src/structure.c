@@ -1796,6 +1796,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		if (pStructureType->type == REF_RESOURCE_EXTRACTOR)
 		{
 			FEATURE *psFeature = getTileFeature(map_coord(x), map_coord(y));
+			ASSERT(psFeature != NULL, "buildStructure: getTileFeature returned a NULL pointer");
 
 			if (psFeature->psStats->subType == FEAT_OIL_RESOURCE)
 			{
