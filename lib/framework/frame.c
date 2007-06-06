@@ -430,42 +430,60 @@ BOOL loadFileToBufferNoError(const char *pFileName, char *pFileBuffer, UDWORD bu
 /***************************************************************************/
 UDWORD HashString( const char *c )
 {
-	UDWORD	iHashValue, i;
+	UDWORD	iHashValue;
 
-	assert(c!=NULL);
-	assert(*c!=0x0);
+	assert(c != NULL);
+	assert(*c != 0x0);
 
-	for ( iHashValue=0; *c; ++c )
+	for (iHashValue = 0; *c; ++c)
 	{
+		unsigned int i;
 		iHashValue = ( iHashValue << ONE_EIGHTH ) + *c;
 
-		if ( (i = iHashValue & HIGH_BITS) != 0 )
+		i = iHashValue & HIGH_BITS;
+		if ( i != 0 )
 		{
 			iHashValue = ( iHashValue ^ ( i >> THREE_QUARTERS ) ) &
 							~HIGH_BITS;
 		}
 	}
-//	printf("%%%%%%%% String:%s Hash:%0x\n",String,iHashValue);
+	debug(LOG_NEVER, "HashString: string: %s, hash: %0x\n", c, iHashValue);
 	return iHashValue;
+}
+
+/* Converts lower case ASCII characters into upper case characters
+ * \param c the character to convert
+ * \return an upper case ASCII character
+ */
+static inline char upcaseASCII(char c)
+{
+	// If this is _not_ a lower case character simply return
+	if (c < 'a' || c > 'z')
+		return c;
+	// Otherwise substract 32 to make the lower case character an upper case one
+	else
+		return c - 32;
 }
 
 UDWORD HashStringIgnoreCase( const char *c )
 {
-	UDWORD	iHashValue, i;
+	UDWORD	iHashValue;
 
-	assert(c!=NULL);
-	assert(*c!=0x0);
+	assert(c != NULL);
+	assert(*c != 0x0);
 
-	for ( iHashValue=0; *c; ++c )
+	for (iHashValue=0; *c; ++c)
 	{
-		iHashValue = ( iHashValue << ONE_EIGHTH ) + ((*c)&(0xdf));
+		unsigned int i;
+		iHashValue = ( iHashValue << ONE_EIGHTH ) + upcaseASCII(*c);
 
-		if ( (i = iHashValue & HIGH_BITS) != 0 )
+		i = iHashValue & HIGH_BITS;
+		if ( i != 0 )
 		{
 			iHashValue = ( iHashValue ^ ( i >> THREE_QUARTERS ) ) &
 							~HIGH_BITS;
 		}
 	}
-//	printf("%%%%%%%% (Ignorcase) String:%s Hash:%0x\n",String,iHashValue);
+	debug(LOG_NEVER, "HashStringIgnoreCase: string: %s, hash: %0x\n", c, iHashValue);
 	return iHashValue;
 }
