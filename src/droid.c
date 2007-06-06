@@ -174,7 +174,6 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 		psDroid->lastHitWeapon = weaponSubClass;
 	}
 
-//	if(selectedPlayer==0)
 	if(psDroid->player != selectedPlayer)
 	{
 		// Player inflicting damage on enemy.
@@ -257,11 +256,9 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 
 	clustObjectAttacked((BASE_OBJECT *)psDroid);
 
-//	if (damage > psDroid->armour[WC_KINETIC])
 	if (penetrated)
 	{
 		/* Damage has penetrated - reduce armour and body points */
-		//penDamage = damage - psDroid->armour;
 		unsigned int penDamage = damage - armour;
 
 		// Retrieve highest, applicable, experience level
@@ -296,7 +293,6 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 				scoreUpdateVar(WD_UNITS_LOST);
 				audio_QueueTrackMinDelayPos(ID_SOUND_UNIT_DESTROYED,UNIT_LOST_DELAY,
 											psDroid->x, psDroid->y, psDroid->z );
-	//				"INTEL REPORT : Unit Lost!"));
 			}
 			else
 			{
@@ -317,11 +313,6 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 		{
 			psDroid->body -= penDamage;
 		}
-
-		/* Do damage to armour */
-//		armourDamage = (damage / PEN_ARMOUR_DAMAGE_FACTOR) + 1;
-
-//		debug( LOG_ATTACK, "penetrated: %d, armour: %d\n", penDamage, armourDamage);
 	}
 	else
 	{
@@ -368,18 +359,7 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 			psDroid->body -= 1;
 		}
 
-//		debug( LOG_ATTACK, "armour: %d\n", armourDamage);
 	}
-
-	/* Actually reduce the droids armour */
-/*	if (armourDamage >= psDroid->armour)
-	{
-		psDroid->armour = 0;
-	}
-	else
-	{
-		psDroid->armour -= armourDamage;
-	}*/
 
 	/* now check for auto return on droid's secondary orders */
 	secondaryCheckDamageLevel(psDroid);
