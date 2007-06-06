@@ -3309,7 +3309,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	DROID_HIT_SIDE	impact_side;
 
 	// Don't use this assertion in single player, since droids can finish building while on an away mission
-	ASSERT(!bMultiplayer || worldOnMap(x,y), "the build locations are not on the map");
+	ASSERT(!bMultiPlayer || worldOnMap(x,y), "the build locations are not on the map");
 
 	//allocate memory
 	if (!createDroid(player, &psDroid))
