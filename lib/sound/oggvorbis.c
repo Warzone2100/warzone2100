@@ -233,7 +233,7 @@ soundDataBuffer* sound_DecodeOggVorbis(struct OggVorbisDecoderState* decoder, si
 	buffer = malloc(bufferSize + sizeof(soundDataBuffer));
 	if (buffer == NULL)
 	{
-		debug(LOG_ERROR, "sound_DecodeOggVorbis: couldn't allocate memory (%u bytes requested)\n", bufferSize + sizeof(soundDataBuffer));
+		debug(LOG_ERROR, "sound_DecodeOggVorbis: couldn't allocate memory (%zu bytes requested)\n", bufferSize + sizeof(soundDataBuffer));
 		return NULL;
 	}
 
