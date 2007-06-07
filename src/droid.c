@@ -141,49 +141,53 @@ BOOL droidInit(void)
 }
 
 
-/* Do damage to a droid.
- * Returns TRUE if the droid is destroyed
- */
-
 #define UNIT_LOST_DELAY	(5*GAME_TICKS_PER_SEC)
+/* Deals damage to a droid
+ * \param psDroid droid to deal damage to
+ * \param damage amount of damage to deal
+ * \param weaponClass the class of the weapon that deals the damage
+ * \param weaponSubClass the subclass of the weapon that deals the damage
+ * \param angle angle of impact (from the damage dealing projectile in relation to this droid)
+ * \return TRUE when the dealt damage destroys the droid, FALSE when the droid survives
+ *
+ * NOTE: This function will damage but _never_ destroy transports when in single player (campaign) mode
+ */
 BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass, int angle)
 {
-	UDWORD		armourDamage;
-	BOOL		penetrated = FALSE;
-	UDWORD		armour=0;
+	// Do at least one point of damage
+	unsigned int actualDamage = 1, armour;
 	SECONDARY_STATE		state;
-	DROID_HIT_SIDE	impact_side;
+	DROID_HIT_SIDE	impactSide;
 
 	CHECK_DROID(psDroid);
-
-	//EMP cannons do not do body damage
-	if (weaponSubClass == WSC_EMP)
+	
+	// If the previous hit was by an EMP cannon and this one is not:
+	// don't reset the weapon class and hit time
+	// (Giel: I guess we need this to determine when the EMP-"shock" is over)
+	if (psDroid->lastHitWeapon != WSC_EMP || weaponSubClass == WSC_EMP)
 	{
-		//store the time
 		psDroid->timeLastHit = gameTime;
 		psDroid->lastHitWeapon = weaponSubClass;
+	}
 
-		//quit early
+	// EMP cannons do no damage, if we are one return now
+	if (weaponSubClass == WSC_EMP)
+	{
 		return FALSE;
 	}
 
-	//only overwrite if the last weapon to hit was not an EMP - need the time value for this
-	if (psDroid->lastHitWeapon != WSC_EMP)
-	{
-		psDroid->timeLastHit = gameTime;
-		psDroid->lastHitWeapon = weaponSubClass;
-	}
-
-	if(psDroid->player != selectedPlayer)
+	if (psDroid->player != selectedPlayer)
 	{
 		// Player inflicting damage on enemy.
 		damage = (UDWORD) modifyForDifficultyLevel( (SDWORD) damage,TRUE);
-	} else {
+	}
+	else
+	{
 		// Enemy inflicting damage on player.
 		damage = (UDWORD) modifyForDifficultyLevel( (SDWORD) damage,FALSE);
 	}
 
-	// vtols on the ground take triple damage
+	// VTOLs on the ground take triple damage
 	if (vtolDroid(psDroid) &&
 		psDroid->sMove.Status == MOVEINACTIVE)
 	{
@@ -191,75 +195,43 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 	}
 
 	// reset the attack level
-	if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state))
+	if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state)
+	    && state == DSS_ALEV_ATTACKED)
 	{
-		if (state == DSS_ALEV_ATTACKED)
-		{
-			secondarySetState(psDroid, DSO_ATTACK_LEVEL, DSS_ALEV_ALWAYS);
-		}
+		secondarySetState(psDroid, DSO_ATTACK_LEVEL, DSS_ALEV_ALWAYS);
 	}
 
 	//Watermelon:use 361 for TOP and 362 for BOTTOM
-	//TOP
+	// Top
 	if (angle == HIT_ANGLE_TOP)
-	{
-		impact_side = HIT_SIDE_TOP;			//4
-	}
-	//BOTTOM
+		impactSide = HIT_SIDE_TOP;
+	// Bottom
 	else if (angle == HIT_ANGLE_BOTTOM)
-	{
-		impact_side = HIT_SIDE_BOTTOM;		//5
-	}
-	//RIGHT
+		impactSide = HIT_SIDE_BOTTOM;
+	// Right
 	else if (angle > 45 && angle < 135)
-	{
-		impact_side = HIT_SIDE_RIGHT;		//3
-	}
-	//REAR
+		impactSide = HIT_SIDE_RIGHT;
+	// Rear
 	else if (angle >= 135 && angle <= 225)
-	{
-		impact_side = HIT_SIDE_REAR;		//1
-	}
-	//LEFT
+		impactSide = HIT_SIDE_REAR;
+	// Left
 	else if (angle > 225 && angle < 315)
-	{
-		impact_side = HIT_SIDE_LEFT;		//2
-	}
-	//FRONT - default
+		impactSide = HIT_SIDE_LEFT;
+	// Front - default
 	else //if (angle <= 45 || angle >= 315)
-	{
-		impact_side = HIT_SIDE_FRONT;		//0
-	}
+		impactSide = HIT_SIDE_FRONT;
+
+	armour = psDroid->armour[impactSide][weaponClass];
 
 	debug( LOG_ATTACK, "unitDamage(%d): body %d armour %d damage: %d\n",
-		psDroid->id, psDroid->body, psDroid->armour[impact_side][WC_KINETIC], damage);
-
-	switch (weaponClass)
-	{
-		case WC_KINETIC:
-		//case WC_EXPLOSIVE:
-			if (damage > psDroid->armour[impact_side][WC_KINETIC])
-			{
-				penetrated = TRUE;
-			}
-			armour = psDroid->armour[impact_side][WC_KINETIC];
-			break;
-		case WC_HEAT:
-		//case WC_MISC:
-			if (damage > psDroid->armour[impact_side][WC_HEAT])
-			{
-				penetrated = TRUE;
-			}
-			armour = psDroid->armour[impact_side][WC_HEAT];
-			break;
-	}
+		psDroid->id, psDroid->body, armour, damage);
 
 	clustObjectAttacked((BASE_OBJECT *)psDroid);
 
-	if (penetrated)
+	// If the shell penetrated the armour work out how much damage it actually did
+	if (damage > armour)
 	{
-		/* Damage has penetrated - reduce armour and body points */
-		unsigned int penDamage = damage - armour;
+		actualDamage = damage - armour;
 
 		// Retrieve highest, applicable, experience level
 		unsigned int level = getDroidLevel(psDroid);
@@ -269,111 +241,60 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 		}
 
 		// Reduce damage taken by 6% for each experience level
-		penDamage = (penDamage * (100 - 6 * level)) / 100;
+		actualDamage = (actualDamage * (100 - 6 * level)) / 100;
 
-		debug( LOG_ATTACK, "        penetrated: %d\n", penDamage);
-		if (penDamage >= psDroid->body)
+		debug( LOG_ATTACK, "        penetrated: %d\n", actualDamage);
+	}
+
+	// If the shell did sufficient damage to destroy the droid, deal with it and return
+	if (actualDamage >= psDroid->body)
+	{
+		// HACK: Prevent transporters from being destroyed in single player
+		if (!bMultiPlayer && psDroid->droidType == DROID_TRANSPORTER)
 		{
-			//we don't want this in multiPlayer
-			if (!bMultiPlayer)
-			{
-				//hack to prevent Transporter's being blown up
-				if (psDroid->droidType == DROID_TRANSPORTER)
-				{
-					psDroid->body = 1;
-					return FALSE;
-				}
-			}
+			psDroid->body = 1;
+			return FALSE;
+		}
 
-			/* Droid destroyed */
-			debug( LOG_ATTACK, "        DESTROYED\n");
-			if(psDroid->player == selectedPlayer)
-			{
-				CONPRINTF(ConsoleString,(ConsoleString, _("Unit Lost!")));
-				scoreUpdateVar(WD_UNITS_LOST);
-				audio_QueueTrackMinDelayPos(ID_SOUND_UNIT_DESTROYED,UNIT_LOST_DELAY,
-											psDroid->x, psDroid->y, psDroid->z );
-			}
-			else
-			{
-				scoreUpdateVar(WD_UNITS_KILLED);
-			}
-			if(psDroid->droidType == DROID_PERSON && weaponClass == WC_HEAT)
-			{
-				droidBurn(psDroid);
-			}
-			else
-			{
-	  			destroyDroid(psDroid);
+		// Droid destroyed
+		debug( LOG_ATTACK, "        DESTROYED\n");
 
-			}
-			return TRUE;
+		// Deal with score increase/decrease and messages to the player
+		if( psDroid->player == selectedPlayer)
+		{
+			CONPRINTF(ConsoleString,(ConsoleString, _("Unit Lost!")));
+			scoreUpdateVar(WD_UNITS_LOST);
+			audio_QueueTrackMinDelayPos(ID_SOUND_UNIT_DESTROYED,UNIT_LOST_DELAY,
+										psDroid->x, psDroid->y, psDroid->z );
 		}
 		else
 		{
-			psDroid->body -= penDamage;
+			scoreUpdateVar(WD_UNITS_KILLED);
 		}
-	}
-	else
-	{
-		/* Damage didn't penetrate - only reduce armour */
-		armourDamage = (damage / ARMOUR_DAMAGE_FACTOR) + 1;
 
-		/* Do one point of damage to body */
-		debug( LOG_ATTACK, "        not penetrated - 1 point damage\n");
-		if(psDroid->droidType == DROID_PERSON && weaponClass == WC_HEAT)
+		// If this is droid is a person and was destroyed by flames,
+		// show it nicely by burning him/her to death.
+		if (psDroid->droidType == DROID_PERSON && weaponClass == WC_HEAT)
 		{
 			droidBurn(psDroid);
 		}
-		if (psDroid->body == 1)
-		{
-			//we don't want this in multiPlayer
-			if (!bMultiPlayer)
-			{
-				//hack to prevent Transporter's being blown up
-				if (psDroid->droidType == DROID_TRANSPORTER)
-				{
-					return FALSE;
-				}
-			}
-
-			if(psDroid->player == selectedPlayer)
-			{
-				CONPRINTF(ConsoleString,(ConsoleString,_("Unit Lost!")));
-				scoreUpdateVar(WD_UNITS_LOST);
-				audio_QueueTrackMinDelayPos( ID_SOUND_UNIT_DESTROYED,UNIT_LOST_DELAY,
-											psDroid->x, psDroid->y, psDroid->z );
-			}
-			else
-			{
-				scoreUpdateVar(WD_UNITS_KILLED);
-			}
-
-  			destroyDroid(psDroid);
-
-			debug( LOG_ATTACK, "        DESTROYED\n");
-			return TRUE;
-		}
+		// Otherwise use the default destruction animation
 		else
 		{
-			psDroid->body -= 1;
+			destroyDroid(psDroid);
 		}
 
+		return TRUE;
 	}
 
-	/* now check for auto return on droid's secondary orders */
+	// Substract the dealt damage from the droid's remaining body points
+	psDroid->body -= actualDamage;
+
+	// Now check for auto return on droid's secondary orders (i.e. return on medium/heavy damage)
 	secondaryCheckDamageLevel(psDroid);
 
-	/* now check for scripted run-away based on health */
+	// Now check for scripted run-away based on health left
 	orderHealthCheck(psDroid);
-
-
-	//only overwrite if the last weapon to hit was not an EMP - need the time value for this
-	if (psDroid->lastHitWeapon != WSC_EMP)
-	{
-		psDroid->timeLastHit = gameTime;
-		psDroid->lastHitWeapon = weaponSubClass;
-	}
 
 	CHECK_DROID(psDroid);
 

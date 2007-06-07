@@ -258,13 +258,16 @@ void featureStatsShutDown(void)
 	}
 }
 
-/* Deal with damage to a feature */
+/* Deals with damage to a feature
+ * \param psFeature feature to deal damage to
+ * \param damage amount of damage to deal
+ * \param weaponSubClass the subclass of the weapon that deals the damage
+ * \return TRUE when the dealt damage destroys the feature, FALSE when the feature survives
+ */
 BOOL featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponSubClass)
 {
-	UDWORD		penDamage;
-
-	/* this is ignored for features */
-	//(void)weaponClass;
+	// Do at least one point of damage
+	unsigned int actualDamage = 1;
 
 	ASSERT( psFeature != NULL,
 		"featureDamage: Invalid feature pointer" );
@@ -272,52 +275,33 @@ BOOL featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponSubClass)
 	debug( LOG_ATTACK, "featureDamage(%d): body %d armour %d damage: %d\n",
 		psFeature->id, psFeature->body, psFeature->psStats->armour, damage);
 
-    //EMP cannons do not work on Features
-    if (weaponSubClass == WSC_EMP)
-    {
-        return FALSE;
-    }
+	// EMP cannons do not work on Features
+	if (weaponSubClass == WSC_EMP)
+	{
+		return FALSE;
+	}
 
 	if (damage > psFeature->psStats->armour)
 	{
-		/* Damage has penetrated - reduce body points */
-		penDamage = damage - psFeature->psStats->armour;
-		debug( LOG_ATTACK, "        penetrated: %d\n", penDamage);
-		if (penDamage >= psFeature->body)
-		{
-			/* feature destroyed */
-			debug( LOG_ATTACK, "        DESTROYED\n");
-			destroyFeature(psFeature);
-			return TRUE;
-		}
-		else
-		{
-			psFeature->body -= penDamage;
-		}
-	}
-	else
-	{
-		/* Do one point of damage to body */
-		debug( LOG_ATTACK, "        not penetrated - 1 point damage\n");
-		if (psFeature->body == 1)
-		{
-			destroyFeature(psFeature);
-			debug( LOG_ATTACK, "        DESTROYED\n");
-			return TRUE;
-		}
-		else
-		{
-			psFeature->body -= 1;
-		}
+		// Damage has penetrated - reduce body points
+		actualDamage = damage - psFeature->psStats->armour;
+		debug( LOG_ATTACK, "        penetrated: %d\n", actualDamage);
 	}
 
-//	if(psFeature->sDisplay.imd->ymax > 300)
-//	{
-		psFeature->timeLastHit = gameTime;
-//	}
+	// If the shell did sufficient damage to destroy the feature
+	if (actualDamage >= psFeature->body)
+	{
+		destroyFeature(psFeature);
+		return TRUE;
+	}
+
+	// Substract the dealt damage from the feature's remaining body points
+	psFeature->body -= actualDamage;
+
+	// Set last hit-time to <now>
+	psFeature->timeLastHit = gameTime;
 
 	return FALSE;
-
 }
 
 

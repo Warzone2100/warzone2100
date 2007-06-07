@@ -1309,13 +1309,18 @@ BOOL structureStatsShutDown(void)
 }
 
 
-/* Do damage to a Structure.
-* Returns TRUE if the Structure is destroyed
-*/
+/* Deals damage to a Structure.
+ * \param psStructure structure to deal damage to
+ * \param damage amount of damage to deal
+ * \param weaponClass the class of the weapon that deals the damage
+ * \param weaponSubClass the subclass of the weapon that deals the damage
+ * \return TRUE when the dealt damage destroys the structure, FALSE when the structure survives
+ */
 BOOL structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 					UDWORD weaponSubClass)
 {
-	UDWORD		penDamage, armourDamage;
+	// Do at least one point of damage
+	unsigned int actualDamage = 1;
 
 	ASSERT( psStructure != NULL,
 		"structureDamage: Invalid Structure pointer" );
@@ -1323,7 +1328,7 @@ BOOL structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 	debug( LOG_ATTACK, "structureDamage(%d): body %d armour %d damage: %d\n",
 		psStructure->id, psStructure->body, psStructure->armour, damage);
 
-	//EMP cannons do not work on Structures
+	// EMP cannons do not work on Structures
 	if (weaponSubClass == WSC_EMP)
 	{
 		return FALSE;
@@ -1333,63 +1338,39 @@ BOOL structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 	{
 		// Player inflicting damage on enemy.
 		damage = (UDWORD) modifyForDifficultyLevel( (SDWORD) damage,TRUE);
-	} else {
+	}
+	else
+	{
 		// Enemy inflicting damage on player.
 		damage = (UDWORD) modifyForDifficultyLevel( (SDWORD) damage,FALSE);
 	}
 
-	//store the time it was hit
+	// Store the time it was hit and by what kind of weapon it was hit with
 	psStructure->timeLastHit = gameTime;
+	psStructure->lastHitWeapon = weaponSubClass;
 
-	// tell the cluster system it has been attacked
+	// Tell the cluster system it has been attacked
 	clustObjectAttacked((BASE_OBJECT *)psStructure);
 
 	if (damage > psStructure->armour)
 	{
-		/* Damage has penetrated - reduce armour and body points */
-		penDamage = damage - psStructure->armour;
-		debug( LOG_ATTACK, "        penetrated: %d\n", penDamage);
-		if (penDamage >= psStructure->body)
-		{
-			/* structure destroyed */
-			debug( LOG_ATTACK, "        DESTROYED\n");
-			return destroyStruct(psStructure);
-		}
-		else
-		{
-			psStructure->body = (UWORD)(psStructure->body  - (UWORD)penDamage);
-		}
-
-		/* Do damage to armour */
-		armourDamage = (damage / PEN_ARMOUR_DAMAGE_FACTOR) + 1;
+		// Damage has penetrated the armour
+		actualDamage = damage - psStructure->armour;
+		debug( LOG_ATTACK, "        penetrated: %d\n", actualDamage);
 	}
-	else
+
+	// If the shell did sufficient damage to destroy the structure 
+	if (actualDamage >= psStructure->body)
 	{
-		/* Damage didn't penetrate - only reduce armour */
-		armourDamage = (damage / ARMOUR_DAMAGE_FACTOR) + 1;
-
-		/* Do one point of damage to body */
-		debug( LOG_ATTACK, "        not penetrated - 1 point damage\n");
-		if (psStructure->body == 1)
-		{
-			debug( LOG_ATTACK, "        DESTROYED\n");
-			return destroyStruct(psStructure);
-		}
-		else
-		{
-			psStructure->body -= 1;
-		}
+		debug( LOG_ATTACK, "        DESTROYED\n");
+		destroyStruct(psStructure);
+		return TRUE;
 	}
 
-	/* Actually reduce the Structure's armour */
+	// Substract the dealt damage from the structure's remaining body points
+	psStructure->body -= actualDamage;
+
 	debug( LOG_ATTACK, "        body left: %d armour left: %d\n", psStructure->body, psStructure->armour);
-
-	//only overwrite if the last weapon to hit was not an EMP - need the time value for this
-	if (psStructure->lastHitWeapon != WSC_EMP)
-	{
-		psStructure->timeLastHit = gameTime;
-		psStructure->lastHitWeapon = weaponSubClass;
-	}
 
 	return FALSE;
 }
