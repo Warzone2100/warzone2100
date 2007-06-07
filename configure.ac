@@ -262,6 +262,7 @@ LIBS="${LIBS} ${WZ_LIBS} ${WIN32_LIBS}"
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_FILES([Makefile
 		po/Makefile.in
+		icons/Makefile
 		data/Makefile
 		nsis/Makefile
 		win32/Makefile

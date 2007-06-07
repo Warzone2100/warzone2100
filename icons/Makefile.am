@@ -1,0 +1,14 @@
+# Remove this line when Automake 1.10 becomes standard
+MKDIR_P=$(mkdir_p)
+
+ACLOCAL_AMFLAGS = -I m4
+
+install-data-local:
+	$(MKDIR_P) $(DESTDIR)$(icondir)
+	$(MKDIR_P) $(DESTDIR)$(applicationdir)
+	$(INSTALL_DATA) $(srcdir)/warzone2100.png $(DESTDIR)$(icondir)/warzone2100.png
+	$(INSTALL_DATA) $(srcdir)/warzone2100.desktop $(DESTDIR)$(applicationdir)/warzone2100.desktop
+
+uninstall-local:
+	$(RM) $(DESTDIR)$(icondir)/warzone2100.png
+	$(RM) $(DESTDIR)$(applicationdir)/warzone2100.desktop

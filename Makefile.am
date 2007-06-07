@@ -1,4 +1,4 @@
-SUBDIRS = win32 lib src po data nsis
+SUBDIRS = win32 lib src data po icons nsis
 
 dist_doc_DATA = AUTHORS ChangeLog README COPYING COPYING.README
 
@@ -6,16 +6,6 @@ dist_doc_DATA = AUTHORS ChangeLog README COPYING COPYING.README
 MKDIR_P=$(mkdir_p)
 
 ACLOCAL_AMFLAGS = -I m4
-
-install-data-local:
-	$(MKDIR_P) $(DESTDIR)$(icondir)
-	$(MKDIR_P) $(DESTDIR)$(applicationdir)
-	$(INSTALL_DATA) $(srcdir)/debian/warzone2100.png $(DESTDIR)$(icondir)/warzone2100.png
-	$(INSTALL_DATA) $(srcdir)/debian/warzone2100.desktop $(DESTDIR)$(applicationdir)/warzone2100.desktop
-
-uninstall-local:
-	$(RM) $(DESTDIR)$(icondir)/warzone2100.png
-	$(RM) $(DESTDIR)$(applicationdir)/warzone2100.desktop
 
 EXTRA_DIST= \
 	config.rpath \
