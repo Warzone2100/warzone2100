@@ -2050,7 +2050,7 @@ BOOL proj_Direct(WEAPON_STATS *psStats)
 		return FALSE;
 		break;
 	default:
-		ASSERT( FALSE,"proj_Direct: unknown movement model" );
+		ASSERT(!"unknown movement model", "proj_Direct: unknown movement model");
 		break;
 	}
 
@@ -2215,7 +2215,7 @@ BOOL objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD w
 			return featureDamage((FEATURE *)psObj, damage, weaponSubClass);
 			break;
 		default:
-			ASSERT( FALSE, "objectDamage - unknown object type" );
+			ASSERT(!"unknown object type", "objectDamage - unknown object type");
 	}
 	return FALSE;
 }
