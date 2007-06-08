@@ -1,3 +1,9 @@
+warzone2100 (2.0.6-0svn2) unstable; urgency=low
+
+  * Move icons and desktop from /debian/ into /icons/.
+
+ -- Dennis Schridde <devurandom@gna.org>  Fri,  8 Jun 2007 00:51:55 +0200
+
 warzone2100 (2.0.6-0svn1) unstable; urgency=low
 
   * Commented out dh_installdocs in order to prevent warzone2100 and 
