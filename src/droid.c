@@ -231,10 +231,12 @@ BOOL droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weapo
 	// If the shell penetrated the armour work out how much damage it actually did
 	if (damage > armour)
 	{
+		unsigned int level;
+
 		actualDamage = damage - armour;
 
 		// Retrieve highest, applicable, experience level
-		unsigned int level = getDroidLevel(psDroid);
+		level = getDroidLevel(psDroid);
 		{
 			unsigned int cmdLevel = cmdGetCommanderLevel(psDroid);
 			level = MAX(level, cmdLevel);
