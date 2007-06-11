@@ -62,7 +62,7 @@ UDWORD NEThashBuffer(const char *pData, UDWORD size)
 
 	size /= sizeof(uint32_t);
 
-	for(i = 0; i <= size; i++)
+	for(i = 0; i < size; i++)
 	{
 		hashval = hashval ^ xData[i];
 	}
