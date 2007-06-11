@@ -1777,9 +1777,9 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		if (pStructureType->type == REF_RESOURCE_EXTRACTOR)
 		{
 			FEATURE *psFeature = getTileFeature(map_coord(x), map_coord(y));
-			ASSERT(psFeature != NULL, "buildStructure: getTileFeature returned a NULL pointer");
+			ASSERT(psFeature != NULL, "buildStructure: Trying to build oil derrick but not on oil!");
 
-			if (psFeature->psStats->subType == FEAT_OIL_RESOURCE)
+			if (psFeature && psFeature->psStats->subType == FEAT_OIL_RESOURCE)
 			{
 				// remove it from the map
 				turnOffMultiMsg(TRUE); // dont send this one!
@@ -1787,6 +1787,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 				turnOffMultiMsg(FALSE);
 			} else {
 				ASSERT(FALSE, "buildStructure: Tried to build derrick but feature is not oil at (%u, %u)!", x, y);
+				return NULL;
 			}
 		}
 
