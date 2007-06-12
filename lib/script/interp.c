@@ -1213,6 +1213,7 @@ static inline void destroyVarEnvironment(SCRIPT_CONTEXT *psContext, UDWORD envIn
 		}
 
 		free( varEnvironment[envIndex] );
+		varEnvironment[envIndex] = NULL;
 	}
 }
 

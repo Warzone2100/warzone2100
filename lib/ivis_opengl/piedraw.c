@@ -622,6 +622,8 @@ void pie_CleanUp( void )
 {
 	free( tshapes );
 	free( scshapes );
+	tshapes = NULL;
+	scshapes = NULL;
 }
 
 void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD spec, int pieFlag, int pieFlagData)

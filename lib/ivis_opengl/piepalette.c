@@ -119,6 +119,7 @@ void pal_ShutDown(void)
 	{
 		bPaletteInitialised = FALSE;
 		free(psGamePal);
+		psGamePal = NULL;
 	}
 }
 

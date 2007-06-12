@@ -92,6 +92,7 @@ static BOOL stackNewChunk(UDWORD size)
 		if (!psCurrChunk->psNext->aVals)
 		{
 			free(psCurrChunk->psNext);
+			psCurrChunk->psNext = NULL;
 			return FALSE;
 		}
 
@@ -131,7 +132,10 @@ BOOL stackPush(INTERP_VAL  *psVal)
 	{
 		/* free stack var allocated string memory, if stack var used to be of type VAL_STRING */
 		if(psCurrChunk->aVals[currEntry].type == VAL_STRING)
+		{
 			free(psCurrChunk->aVals[currEntry].v.sval);			//don't need it anymore
+			psCurrChunk->aVals[currEntry].v.sval = NULL;
+		}
 
 		/* copy type/data as union */
 		memcpy(&(psCurrChunk->aVals[currEntry]), psVal, sizeof(INTERP_VAL));
@@ -453,7 +457,10 @@ BOOL stackPushResult(INTERP_TYPE type, INTERP_VAL *result)
 	{
 		/* free stack var allocated string memory, if stack var used to be of type VAL_STRING */
 		if(psCurrChunk->aVals[currEntry].type == VAL_STRING)
+		{
 			free(psCurrChunk->aVals[currEntry].v.sval);			//don't need it anymore
+			psCurrChunk->aVals[currEntry].v.sval = NULL;
+		}
 
 		/* copy type/data as union */
 		memcpy(&(psCurrChunk->aVals[currEntry]), result, sizeof(INTERP_VAL));

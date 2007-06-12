@@ -175,10 +175,12 @@ void eventShutDown(void)
 	if (asCreateFuncs)
 	{
 		free(asCreateFuncs);
+		asCreateFuncs = NULL;
 	}
 	if (asReleaseFuncs)
 	{
 		free(asReleaseFuncs);
+		asReleaseFuncs = NULL;
 	}
 }
 
@@ -761,6 +763,7 @@ BOOL eventSetContextVar(SCRIPT_CONTEXT *psContext, UDWORD index, INTERP_VAL *dat
 		strcpy(psVal->v.sval, data->v.sval);
 
 		free(data->v.sval);		//not needed anymore
+		data->v.sval = NULL;
 	}
 	else
 	{
