@@ -1773,11 +1773,12 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		//set up the imd to use for the display
 		psBuilding->sDisplay.imd = pStructureType->pIMD;
 
-		//if resource extractor - need to remove oil feature and prox Msg
+		/* if resource extractor - need to remove oil feature first, but do not do any
+		 * consistency checking here - save games do not have any feature to remove
+		 * to remove when placing oil derricks! */
 		if (pStructureType->type == REF_RESOURCE_EXTRACTOR)
 		{
 			FEATURE *psFeature = getTileFeature(map_coord(x), map_coord(y));
-			ASSERT(psFeature != NULL, "buildStructure: Trying to build oil derrick but not on oil!");
 
 			if (psFeature && psFeature->psStats->subType == FEAT_OIL_RESOURCE)
 			{
@@ -1785,9 +1786,6 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 				turnOffMultiMsg(TRUE); // dont send this one!
 				removeFeature(psFeature);
 				turnOffMultiMsg(FALSE);
-			} else {
-				ASSERT(FALSE, "buildStructure: Tried to build derrick but feature is not oil at (%u, %u)!", x, y);
-				return NULL;
 			}
 		}
 
