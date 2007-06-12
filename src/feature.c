@@ -255,6 +255,7 @@ void featureStatsShutDown(void)
 	if(numFeatureStats)
 	{
 		free(asFeatureStats);
+		asFeatureStats = NULL;
 	}
 }
 

@@ -815,6 +815,7 @@ int main(int argc, char *argv[])
 	}
 	pal_AddNewPalette(psPaletteBuffer);
 	free(psPaletteBuffer);
+	psPaletteBuffer = NULL;
 	atexit(pal_ShutDown);
 
 	pie_LoadBackDrop(SCREEN_RANDOMBDROP);

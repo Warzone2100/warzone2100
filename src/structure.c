@@ -1290,11 +1290,13 @@ BOOL structureStatsShutDown(void)
 		if (pStructure->numFuncs > 0)
 		{
 			free(pStructure->asFuncList);
+			pStructure->asFuncList = NULL;
 		}
 	}
 
 	if(numStructureStats) {
 		free(asStructureStats);
+		asStructureStats = NULL;
 	}
 
 	//free up the structLimits structure
@@ -1302,6 +1304,7 @@ BOOL structureStatsShutDown(void)
 	{
 		if(asStructLimits[inc]) {
 			free(asStructLimits[inc]);
+			asStructLimits[inc] = NULL;
 		}
 	}
 

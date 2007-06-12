@@ -158,9 +158,12 @@ void fpathShutDown(void)
 {
 #if OPEN_LIST == 2
 	free(apsNodes);
+	apsNodes = NULL;
 #else
 	free(apsOpen);
 	free(apsClosed);
+	apsOpen = NULL;
+	apsClosed = NULL;
 #endif
 }
 

@@ -115,6 +115,7 @@ void releasePlayerPower(void)
 		if (asPower[player])
 		{
 			free(asPower[player]);
+			asPower[player] = NULL;
 		}
 	}
 }

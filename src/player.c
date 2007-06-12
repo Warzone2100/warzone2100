@@ -157,6 +157,7 @@ void playerReset(void)
 void playerShutDown(void)
 {
 	free(asPlayerAI);
+	asPlayerAI = NULL;
 }
 
 

@@ -373,5 +373,6 @@ void	environShutDown( void )
 	if(pEnvironData)
 	{
 		free(pEnvironData);
+		pEnvironData = NULL;
 	}
 }

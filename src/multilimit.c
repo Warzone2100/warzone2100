@@ -330,6 +330,7 @@ void createLimitSet(void)
 	{
 		ingame.numStructureLimits = 0;
 		free(ingame.pStructureLimits);
+		ingame.pStructureLimits = NULL;
 	}
 
 	numchanges =0;													// count number of changes
@@ -406,6 +407,7 @@ void applyLimitSet(void)
 	{
 		free(ingame.pStructureLimits);
 		ingame.numStructureLimits = 0;
+		ingame.pStructureLimits = NULL;
 	}
 }
 

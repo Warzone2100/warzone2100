@@ -793,14 +793,11 @@ void intShutDown(void)
 //	widgEndScreen(psWScreen);
 	widgReleaseScreen(psWScreen);
 
-
 #ifdef DISP2D
 	ed2dShutDown();
 #endif
 
-
 	ReleaseSnapBuffer(&InterfaceSnap);
-
 
 	free(apsStructStatsList);
 	free(ppResearchList);
@@ -813,9 +810,19 @@ void intShutDown(void)
 	free(apsObjectList);
 	free(apsListToOrder);
 
+	apsStructStatsList = NULL;
+	ppResearchList = NULL;
+	pList = NULL;
+	pSList = NULL;
+	apsTemplateList = NULL;
+	apsFeatureList = NULL;
+	apsComponentList = NULL;
+	apsExtraSysList = NULL;
+	apsObjectList = NULL;
+	apsListToOrder = NULL;
+
 	//release the video buffers
 	seq_ReleaseVideoBuffers();
-
 
 	intDeleteGraphics();
 

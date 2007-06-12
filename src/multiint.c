@@ -2768,6 +2768,7 @@ BOOL startMultiOptions(BOOL bReenter)
 		{
 			ingame.numStructureLimits = 0;
 			free(ingame.pStructureLimits);
+			ingame.pStructureLimits = NULL;
 		}
 
 		if(NetPlay.bLobbyLaunched)

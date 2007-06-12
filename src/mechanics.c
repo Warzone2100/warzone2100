@@ -157,6 +157,7 @@ void freeStructureLists(void)
 		//free the structure lists
 		if(apStructTypeLists[inc]) {
 			free(apStructTypeLists[inc]);
+			apStructTypeLists[inc] = NULL;
 		}
 	}
 }

@@ -1530,6 +1530,7 @@ BOOL loadGame(char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGa
 		if (aMapLinePoints)
 		{
 			free(aMapLinePoints);
+			aMapLinePoints = NULL;
 		}
 		//clear all the messages?
 		releaseAllProxDisp();
@@ -2826,6 +2827,7 @@ error:
 	if (aMapLinePoints)
 	{
 		free(aMapLinePoints);
+		aMapLinePoints = NULL;
 	}
 	psMapTiles = NULL;
 	aMapLinePoints = NULL;

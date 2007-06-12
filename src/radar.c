@@ -205,6 +205,7 @@ BOOL ShutdownRadar(void)
 	pie_ShutdownRadar();
 
 	free(radarBuffer);
+	radarBuffer = NULL;
 
 	return TRUE;
 }

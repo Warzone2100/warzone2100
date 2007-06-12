@@ -2323,6 +2323,7 @@ BOOL skClearSkirmishTemplates(void)
 		while(skirmishStore[i])
 		{
 			free(skirmishStore[i]);
+			skirmishStore[i] = NULL;
 		}
 	}
 
