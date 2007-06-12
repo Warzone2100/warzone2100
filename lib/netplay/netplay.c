@@ -65,8 +65,8 @@ unsigned int masterserver_port = 0, gameserver_port = 0;
 static BOOL allow_joining = FALSE;
 
 static void NETallowJoining(void);
-BOOL MultiPlayerJoin(UDWORD dpid);
-BOOL MultiPlayerLeave(UDWORD dpid);
+extern BOOL MultiPlayerJoin(UDWORD dpid);  /* from src/multijoin.c ! */
+extern BOOL MultiPlayerLeave(UDWORD dpid); /* from src/multijoin.c ! */
 
 // ////////////////////////////////////////////////////////////////////////
 // Variables
@@ -865,7 +865,6 @@ BOOL NETrecv(NETMSG * pMsg)
 	do {
 receive_message:
 		received = FALSE;
-		//printf("Receiving something\n");
 
 		if (is_server) {
 			if (connected_bsocket[current] == NULL) return FALSE;

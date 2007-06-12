@@ -236,7 +236,6 @@ void statsInitVars(void)
 /*Deallocate all the stats assigned from input data*/
 void statsDealloc(COMP_BASE_STATS* pStats, UDWORD listSize, UDWORD structureSize)
 {
-//#ifndef RESOURCE_NAMES
 #if !defined (RESOURCE_NAMES) && !defined(STORE_RESOURCE_ID)
 
 	UDWORD				inc;
@@ -273,7 +272,6 @@ static void deallocBodyStats(void)
 	{
 		psStat = &asBodyStats[inc];
 
-//#ifndef RESOURCE_NAMES
 #if !defined (RESOURCE_NAMES) && !defined (STORE_RESOURCE_ID)
 
 		free(psStat->pName);
@@ -3311,18 +3309,6 @@ UDWORD	weaponDamage(WEAPON_STATS *psStats, UBYTE player)
 		psStats->weaponSubClass].damage)/100);
 }
 
-/*	Use this one if everything starts blowing up with suspect area damage
-UDWORD	weaponRadDamage(WEAPON_STATS *psStats, UBYTE player)
-{
-	//---
-UDWORD	val;
-	//---
-	val =  (psStats->radiusDamage + (psStats->radiusDamage * asWeaponUpgrade[player][
-		psStats->weaponSubClass].radiusDamage)/100);
-	ASSERT( val<512,"Big range!!!!" );
-	return(val);
-}
-*/
 UDWORD	weaponRadDamage(WEAPON_STATS *psStats, UBYTE player)
 {
 	return  (psStats->radiusDamage + (psStats->radiusDamage * asWeaponUpgrade[player][
