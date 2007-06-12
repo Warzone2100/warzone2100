@@ -279,6 +279,7 @@ static void deallocBodyStats(void)
 		free(psStat->ppIMDList);
 	}
 	free(asBodyStats);
+	asBodyStats = NULL;
 }
 
 /*Deallocate all the stats assigned from input data*/
@@ -2586,12 +2587,14 @@ void deallocPropulsionTypes(void)
 	}
 */
 	free(asPropulsionTypes);
+	asPropulsionTypes = NULL;
 }
 
 //dealloc the storage assigned for the terrain table
 void deallocTerrainTable(void)
 {
 	free(asTerrainTable);
+	asTerrainTable = NULL;
 }
 
 //dealloc the storage assigned for the Special Ability stats
@@ -2605,6 +2608,7 @@ void deallocSpecialAbility(void)
 		free(pList->pName);
 	}
 	free(asSpecialAbility);
+	asSpecialAbility = NULL;
 }
 
 //store the speed Factor in the terrain table

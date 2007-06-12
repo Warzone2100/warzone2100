@@ -161,6 +161,7 @@ void recvOptions(NETMSG *pMsg)
 	{
 			ingame.numStructureLimits = 0;
 			free(ingame.pStructureLimits);
+			ingame.pStructureLimits = NULL;
 	}
 
 	NetGet(pMsg,pos,player2dpid);
@@ -545,6 +546,7 @@ BOOL multiShutdown(void)
 	{
 		ingame.numStructureLimits = 0;
 		free(ingame.pStructureLimits);
+		ingame.pStructureLimits = NULL;
 	}
 
 	return TRUE;
@@ -1104,6 +1106,7 @@ BOOL multiGameShutdown(void)
 	{
 		ingame.numStructureLimits = 0;
 		free(ingame.pStructureLimits);
+		ingame.pStructureLimits = NULL;
 	}
 
 	ingame.localJoiningInProgress   = FALSE;	// clean up

@@ -1052,6 +1052,7 @@ void systemShutdown(void)
 
 	debug(LOG_MAIN, "shutting down graphics subsystem");
 	free(DisplayBuffer);
+	DisplayBuffer = NULL;
 	iV_ShutDown();
 	levShutDown();
 	widgShutDown();

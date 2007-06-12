@@ -952,10 +952,13 @@ void viewDataShutDown(VIEWDATA *psViewData)
 				checkMessages((MSG_VIEWDATA *)psViewData);
 
 				free(psViewData->pName);
+				psViewData->pName = NULL;
+
 				//free the space allocated for the text messages
 				if (psViewData->numText)
 				{
 					free(psViewData->ppTextMsg);
+					psViewData->ppTextMsg = NULL;
 				}
 
 				//free the space allocated for multiple sequences
@@ -970,13 +973,16 @@ void viewDataShutDown(VIEWDATA *psViewData)
 							if (psViewReplay->pSeqList[seqInc].numText)
 							{
 								free(psViewReplay->pSeqList[seqInc].ppTextMsg);
+								psViewReplay->pSeqList[seqInc].ppTextMsg = NULL;
 							}
 							if (psViewReplay->pSeqList[seqInc].pAudio)
 							{
 								free(psViewReplay->pSeqList[seqInc].pAudio);
+								psViewReplay->pSeqList[seqInc].pAudio = NULL;
 							}
 						}
 						free(psViewReplay->pSeqList);
+						psViewReplay->pSeqList = NULL;
 					}
 				}
 				else if (psViewData->type == VIEW_RES)
@@ -985,11 +991,15 @@ void viewDataShutDown(VIEWDATA *psViewData)
 					if (psViewRes->pAudio)
 					{
 						free(psViewRes->pAudio);
+						psViewRes->pAudio = NULL;
 					}
 				}
 				free(psViewData->pData);
+				psViewData->pData = NULL;
 			}
 			free(psList->psViewData);
+			psList->psViewData = NULL;
+
 			//remove viewData list from the heap
 			if (psList == apsViewData)
 			{
