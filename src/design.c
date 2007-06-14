@@ -2603,22 +2603,22 @@ static BOOL intAddSystemButtons(SDWORD mode)
 	// lock down the correct button
 	switch (mode)
 	{
-	case IDES_TURRET:
-	case IDES_TURRET_A:
-	case IDES_TURRET_B:
-		widgSetButtonState(psWScreen, IDDES_WEAPONS, WBUT_LOCK);
-		break;
-	case IDES_BRAIN:
-/*
-		widgSetButtonState(psWScreen, IDDES_COMMAND, WBUT_LOCK);
-		break;
-*/
-	case IDES_SYSTEM:
-		widgSetButtonState(psWScreen, IDDES_SYSTEMS, WBUT_LOCK);
-		break;
-	default:
-		ASSERT( FALSE, "intAddSystemButtons: unexpected mode" );
-		break;
+		case IDES_TURRET:
+		case IDES_TURRET_A:
+		case IDES_TURRET_B:
+			widgSetButtonState(psWScreen, IDDES_WEAPONS, WBUT_LOCK);
+			break;
+		case IDES_BRAIN:
+#if 0
+			widgSetButtonState(psWScreen, IDDES_COMMAND, WBUT_LOCK);
+			break;
+#endif
+		case IDES_SYSTEM:
+			widgSetButtonState(psWScreen, IDDES_SYSTEMS, WBUT_LOCK);
+			break;
+		default:
+			ASSERT(!"invalid/unexpected mode", "intAddSystemButtons: unexpected mode");
+			break;
 	}
 
 	return TRUE;

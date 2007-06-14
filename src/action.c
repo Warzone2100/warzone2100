@@ -141,7 +141,7 @@ BOOL actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 			rangeSq = longRange * longRange;
 			break;
 		default:
-			ASSERT( FALSE, "actionInAttackRange: unknown attack range order" );
+			ASSERT(!"unknown attackrange order", "actionInAttackRange: unknown attack range order");
 			longRange = proj_GetLongRange(psStats, dz);
 			rangeSq = longRange * longRange;
 			break;
@@ -273,7 +273,7 @@ void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot)
 		tRot = (UWORD)(((tRot + 360) - nearest) % 360);
 		break;
 	default:
-		ASSERT( FALSE, "actionAlignTurret: invalid object type" );
+		ASSERT(!"invalid object type", "actionAlignTurret: invalid object type");
 		return;
 		break;
 	}
@@ -345,7 +345,7 @@ void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot)
 		((STRUCTURE *)psObj)->turretPitch[weapon_slot] = tPitch;
 		break;
 	default:
-		ASSERT( FALSE, "actionAlignTurret: invalid object type" );
+		ASSERT(!"invalid object type", "actionAlignTurret: invalid object type");
 		return;
 		break;
 	}
@@ -2624,7 +2624,7 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 		break;
 	default:
-		ASSERT( FALSE, "actionUpdateUnit: unknown action" );
+		ASSERT(!"unknown action", "actionUpdateUnit: unknown action");
 		break;
 	}
 
@@ -2994,7 +2994,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		break;
 
 	default:
-		ASSERT( FALSE, "actionUnitBase: unknown action" );
+		ASSERT(!"unknown action", "actionUnitBase: unknown action");
 		break;
 	}
 	CHECK_DROID(psDroid);

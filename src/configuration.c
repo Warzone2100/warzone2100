@@ -516,8 +516,9 @@ BOOL loadConfig(void)
 	{
 		radarDrawMode = val;
 
-		if(radarDrawMode >= NUM_RADAR_MODES){
-			ASSERT(FALSE, "loadConfig: wrong mini-map mode: %d", radarDrawMode);
+		if(radarDrawMode >= NUM_RADAR_MODES)
+		{
+			ASSERT(!"wrong mini-map mode", "loadConfig: wrong mini-map mode: %d", radarDrawMode);
 			radarDrawMode = RADAR_MODE_DEFAULT;
 		}
 	} else {

@@ -100,7 +100,7 @@ static void objmemDestroy(BASE_OBJECT *psObj)
 			break;
 
 		default:
-			ASSERT(FALSE, "objmemUpdate: unknown object type in destroyed list at %p", psObj);
+			ASSERT(!"unknown object type", "objmemDestroy: unknown object type in destroyed list at 0x%p", psObj);
 	}
 	free(psObj);
 }

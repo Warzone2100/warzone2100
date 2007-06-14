@@ -617,7 +617,7 @@ static void fpathOpenAdd(FP_NODE *psNode)
 		psNode->psOpen = psCurr;
 		psPrev->psOpen = psNode;
 		debug( LOG_MOVEMENT, ("OpenAdd: after %d,%d dist %d\n",
-			psPrev->x,psPrev->y, psPrev->dist);
+			psPrev->x,psPrev->y, psPrev->dist));
 	}
 }
 
@@ -691,7 +691,7 @@ static void fpathOpenRemove(FP_NODE *psNode)
 
 	if (psOpen == NULL)
 	{
-		ASSERT( FALSE, "fpathOpenRemove: NULL list" );
+		ASSERT(!"empty/NULL list", "fpathOpenRemove: NULL list");
 		return;
 	}
 	else if (psNode == psOpen)
@@ -714,7 +714,7 @@ static void fpathOpenRemove(FP_NODE *psNode)
 		}
 		else
 		{
-			ASSERT( FALSE, "fpathOpenRemove: failed to find node" );
+			ASSERT(!"unable to find node", "fpathOpenRemove: failed to find node");
 			return;
 		}
 	}
@@ -970,7 +970,7 @@ BOOL fpathAStarRoute(ASTAR_ROUTE *psRoutePoints,
 			}
 			else
 			{
-				ASSERT( FALSE,"fpathAStarRoute: the open and closed lists are f***ed" );
+				ASSERT(!"the open and closed lists are fried/wrong", "fpathAStarRoute: the open and closed lists are f***ed");
 			}
 		}
 
@@ -1177,7 +1177,7 @@ static 	FP_NODE		*psNearest, *psRoute;
 			}
 			else
 			{
-				ASSERT( FALSE,"fpathAStarRoute: the open and closed lists are f***ed" );
+				ASSERT(!"the open and closed lists are fried/wrong", "fpathAStarRoute: the open and closed lists are f***ed");
 			}
 		}
 

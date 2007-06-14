@@ -1448,7 +1448,7 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 				// no extra mounts for people
 				break;
 			default:
-				ASSERT( FALSE, "Whoa! Weirdy type of droid found in drawComponentObject!!!" );
+				ASSERT(!"invalid droid type", "Whoa! Weirdy type of droid found in drawComponentObject!!!");
 				break;
 			}
 		}

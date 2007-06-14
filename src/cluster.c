@@ -475,28 +475,17 @@ void clustUpdateObject(BASE_OBJECT * psObj)
 	aClusterInfo[newCluster] = (UBYTE)(psObj->player & CLUSTER_PLAYER_MASK);
 	switch (psObj->type)
 	{
-	case OBJ_DROID:
-		aClusterInfo[newCluster] |= CLUSTER_DROID;
-		break;
-	case OBJ_STRUCTURE:
-		aClusterInfo[newCluster] |= CLUSTER_STRUCTURE;
-		break;
-	default:
-		ASSERT( FALSE,"clustUpdateObject: invalid object type" );
-		break;
-	}
-
-	switch (psObj->type)
-	{
-	case OBJ_DROID:
-		clustAddDroid((DROID *)psObj, newCluster);
-		break;
-	case OBJ_STRUCTURE:
-		clustAddStruct((STRUCTURE *)psObj, newCluster);
-		break;
-	default:
-		ASSERT( FALSE, "clustUpdateObject: invalid object type" );
-		break;
+		case OBJ_DROID:
+			aClusterInfo[newCluster] |= CLUSTER_DROID;
+			clustAddDroid((DROID *)psObj, newCluster);
+			break;
+		case OBJ_STRUCTURE:
+			aClusterInfo[newCluster] |= CLUSTER_STRUCTURE;
+			clustAddStruct((STRUCTURE *)psObj, newCluster);
+			break;
+		default:
+			ASSERT(!"invalid object type", "clustUpdateObject: invalid object type");
+			break;
 	}
 }
 
@@ -595,16 +584,16 @@ void clustGetCenter(BASE_OBJECT *psObj, SDWORD *px, SDWORD *py)
 
 	switch (psObj->type)
 	{
-	case OBJ_DROID:
-		psList = (BASE_OBJECT *)apsDroidLists[psObj->player];
-		break;
-	case OBJ_STRUCTURE:
-		psList = (BASE_OBJECT *)apsStructLists[psObj->player];
-		break;
-	default:
-		ASSERT( FALSE,"clustGetCenter: invalid object type" );
-		psList = NULL;
-		break;
+		case OBJ_DROID:
+			psList = (BASE_OBJECT *)apsDroidLists[psObj->player];
+			break;
+		case OBJ_STRUCTURE:
+			psList = (BASE_OBJECT *)apsStructLists[psObj->player];
+			break;
+		default:
+			ASSERT(!"invalid object type", "clustGetCenter: invalid object type");
+			psList = NULL;
+			break;
 	}
 
 	averagex = 0;
@@ -655,18 +644,18 @@ void clustObjectSeen(BASE_OBJECT *psObj, BASE_OBJECT *psViewer)
 
 			switch (psObj->type)
 			{
-			case OBJ_DROID:
-				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_SEEN);
-				break;
-			case OBJ_STRUCTURE:
-				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_STRUCT_SEEN);
-				break;
-			case OBJ_FEATURE:
-				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_FEATURE_SEEN);
-				break;
-			default:
-				ASSERT( FALSE, "clustObjectSeen: invalid object type" );
-				break;
+				case OBJ_DROID:
+					eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_SEEN);
+					break;
+				case OBJ_STRUCTURE:
+					eventFireCallbackTrigger((TRIGGER_TYPE)CALL_STRUCT_SEEN);
+					break;
+				case OBJ_FEATURE:
+					eventFireCallbackTrigger((TRIGGER_TYPE)CALL_FEATURE_SEEN);
+					break;
+				default:
+					ASSERT(!"invalid object type", "clustObjectSeen: invalid object type");
+					break;
 			}
 
 			psScrCBObjSeen = NULL;
@@ -688,19 +677,19 @@ void clustObjectAttacked(BASE_OBJECT *psObj)
 
 		switch (psObj->type)
 		{
-		case OBJ_DROID:
-			psLastDroidHit = (DROID *)psObj;
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_ATTACKED);
-			psLastDroidHit = NULL;
-			break;
-		case OBJ_STRUCTURE:
-			psLastStructHit = (STRUCTURE *)psObj;
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_STRUCT_ATTACKED);
-			psLastStructHit = NULL;
-			break;
-		default:
-			ASSERT( FALSE, "clustObjectAttacked: invalid object type" );
-			break;
+			case OBJ_DROID:
+				psLastDroidHit = (DROID *)psObj;
+				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_ATTACKED);
+				psLastDroidHit = NULL;
+				break;
+			case OBJ_STRUCTURE:
+				psLastStructHit = (STRUCTURE *)psObj;
+				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_STRUCT_ATTACKED);
+				psLastStructHit = NULL;
+				break;
+			default:
+				ASSERT(!"invalid object type", "clustObjectAttacked: invalid object type");
+				break;
 		}
 
 		aClusterAttacked[psObj->cluster] = gameTime;

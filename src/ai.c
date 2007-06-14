@@ -281,14 +281,17 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 	targetTypeBonus = 0;			//Sensors/ecm droids, non-military structures get lower priority
 
 	/* Get attacker weapon effect */
-	if(psAttacker->type == OBJ_DROID){
+	if(psAttacker->type == OBJ_DROID)
+	{
 		weaponEffect = ((WEAPON_STATS *)(asWeaponStats + ((DROID *)psAttacker)->asWeaps[weapon_slot].nStat))->weaponEffect;
-	}else if(psAttacker->type == OBJ_STRUCTURE){
+	}
+	else if(psAttacker->type == OBJ_STRUCTURE)
+	{
 		weaponEffect = ((WEAPON_STATS *)(asWeaponStats + ((STRUCTURE *)psAttacker)->asWeaps[weapon_slot].nStat))->weaponEffect;
 	}
 	else	/* feature */
 	{
-		ASSERT(FALSE, "targetAttackWeight: Invalid attacker object type");
+		ASSERT(!"invalid attacker object type", "targetAttackWeight: Invalid attacker object type");
 		return noTarget;
 	}
 

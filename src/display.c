@@ -1916,7 +1916,6 @@ DROID			*psDroid,*psCurr,*psNearestUnit;
 //BOOL			bWeapDroidSelected;
 STRUCTURE		*psStructure,*psSLoop;
 FEATURE			*psFeature;
-OBJECT_POSITION	*psLocation;
 UDWORD			i;
 SELECTION_TYPE	selection;
 DROID_OACTION_INFO oaInfo = {{NULL}};
@@ -2386,40 +2385,45 @@ DROID_OACTION_INFO oaInfo = {{NULL}};
 	else
 	if( !driveModeActive() || driveTacticalActive()) {
 		/*Check for a Delivery Point or a Proximity Message*/
-		psLocation = NULL;
-		psLocation = checkMouseLoc();
+		OBJECT_POSITION* psLocation = checkMouseLoc();
+
 		if (psLocation && !driveModeActive() && !selNumSelected(selectedPlayer))
 		{
 			switch (psLocation->type)
 			{
-			case POS_DELIVERY:
-				if(psLocation->player == selectedPlayer)
-				{
-					StartDeliveryPosition( psLocation );
-					/* We've clicked on one of our own DP */
-//					addConsoleMessage("Clicked on your delivery point",DEFAULT_JUSTIFY);
+				case POS_DELIVERY:
+					if(psLocation->player == selectedPlayer)
+					{
+						StartDeliveryPosition( psLocation );
+#if 0
+						/* We've clicked on one of our own DP */
+						addConsoleMessage("Clicked on your delivery point",DEFAULT_JUSTIFY);
 
 
-//					/* clear the selection */
-//					clearSelection();
-//
-//					//set this object position to be highlighted
-//					psLocation->selected = TRUE;
-				}
-				else
-				{
-					/* We've clicked on somebody else's DP - remove this sometime?*/
-//					addConsoleMessage("Clicked on another player's delivery point",DEFAULT_JUSTIFY);
-				}
+						/* clear the selection */
+						clearSelection();
+
+						//set this object position to be highlighted
+						psLocation->selected = TRUE;
+					}
+					else
+					{
+						/* We've clicked on somebody else's DP - remove this sometime?*/
+						addConsoleMessage("Clicked on another player's delivery point",DEFAULT_JUSTIFY);
+#endif
+					}
 				break;
-			/*case POS_PROX:
-				if(psLocation->player == selectedPlayer)
-				{
-					displayProximityMessage((PROXIMITY_DISPLAY *)psLocation);
-				}
-				break;*/
-			default:
-				ASSERT( FALSE, "Unknown type from checkMouseLoc" );
+
+#if 0
+				case POS_PROX:
+					if(psLocation->player == selectedPlayer)
+					{
+						displayProximityMessage((PROXIMITY_DISPLAY *)psLocation);
+					}
+					break;
+#endif
+				default:
+					ASSERT(!"unknown object position type", "Unknown type from checkMouseLoc" );
 			}
 		}
 		else
@@ -2619,7 +2623,6 @@ void dealWithRMB( void )
 	DROID				*psDroid;
 	STRUCTURE			*psStructure;
 	STRUCTURE			*psSLoop;
-	OBJECT_POSITION		*psLocation;
 
 //printf("dealWithRMB %d\n",mouseOverRadar);
 
@@ -2756,33 +2759,35 @@ void dealWithRMB( void )
 	else
 	{
 		/*Check for a Delivery Point*/
-		psLocation = NULL;
-		psLocation = checkMouseLoc();
+		OBJECT_POSITION* psLocation = checkMouseLoc();
+
 		if (psLocation)
 		{
 			switch (psLocation->type)
 			{
-			case POS_DELIVERY:
-				if(psLocation->player == selectedPlayer)
-				{
-					//centre the view on the owning Factory
-					psStructure = findDeliveryFactory((FLAG_POSITION *)psLocation);
-					if (psStructure)
+				case POS_DELIVERY:
+					if(psLocation->player == selectedPlayer)
 					{
-						setViewPos(psStructure->x >> TILE_SHIFT,
-							psStructure->y >> TILE_SHIFT,TRUE);
+						//centre the view on the owning Factory
+						psStructure = findDeliveryFactory((FLAG_POSITION *)psLocation);
+						if (psStructure)
+						{
+							setViewPos(psStructure->x >> TILE_SHIFT,
+								psStructure->y >> TILE_SHIFT,TRUE);
+						}
 					}
-				}
-				break;
-			default:
-				ASSERT( FALSE, "Unknown type from checkMouseLoc" );
+					break;
+
+				default:
+					ASSERT(!"unknown object position type", "Unknown type from checkMouseLoc");
 			}
 		}
 		else
 		{
 			/* We've just clicked on an area of terrain. A 'send to' operation
 			for Transporter in multiPlay mode*/
-			/*if (bMultiPlayer)
+#if 0
+			if (bMultiPlayer)
 			{
 				//there may be more than one Transporter selected
 				for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL;
@@ -2804,7 +2809,8 @@ void dealWithRMB( void )
 					}
 				}
 			}
-			else*/
+			else
+#endif
 			{
 				clearSelection();
 				intObjectSelected(NULL);
@@ -3249,7 +3255,7 @@ SELECTION_TYPE	selectionClass;
 			break;
 
 		default:
-			ASSERT( FALSE,"Weirdy droid type on what you've clicked on!!!" );
+			ASSERT(!"unknown droid type", "Weirdy droid type on what you've clicked on!!!");
 			break;
 
 		}

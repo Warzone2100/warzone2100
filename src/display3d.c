@@ -1840,7 +1840,7 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 	}
 	else
 	{
-		ASSERT( FALSE,"Buggered proximity message type" );
+		ASSERT(!"unknown proximity display message type", "Buggered proximity message type");
 	}
 	brightness = lightDoFogAndIllumination(pie_MAX_BRIGHT_LEVEL,getCentreX()-msgX,getCentreZ()-msgY, &specular);
 
@@ -1873,7 +1873,7 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 			proxImd = getImdFromIndex(MI_BLIP_ARTEFACT);
 			break;
 		default:
-			ASSERT( FALSE,"Buggered proximity message type" );
+			ASSERT(!"unknown proximity display message type", "Buggered proximity message type");
 			break;
 		}
 	}
@@ -2897,7 +2897,7 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 			scrR = scale * 20;
 			break;
 		default:
-			ASSERT( FALSE, "drawWeaponReloadBars: invalid object type" );
+			ASSERT(!"invalid object type", "drawWeaponReloadBars: invalid object type");
 			damLevel = 100;
 			break;
 		}
@@ -3266,7 +3266,7 @@ static void	drawDroidSelections( void )
 	case BAR_NONE:
 		return;
 	default:
-		ASSERT( FALSE,"Invalid energy bar display value" );
+		ASSERT(!"invalid energy bar display value", "Invalid energy bar display value");
 		break;
 	}
 
@@ -5081,11 +5081,11 @@ UDWORD  getDroidRankGraphic(DROID *psDroid)
 			gfxId = IMAGE_LEV_7;
 			break;
 		default:
-			ASSERT( FALSE, "Weird droid level in drawDroidRank" );
+			ASSERT(!"out of range droid rank", "Weird droid level in drawDroidRank");
 		break;
 	}
 //#else
-	/*
+#if 0
 	switch(getDroidLevel(psDroid))
 	{
 		case 0:
@@ -5116,14 +5116,15 @@ UDWORD  getDroidRankGraphic(DROID *psDroid)
 			gfxId = IMAGE_GN_8;
 			break;
 		default:
-			ASSERT( FALSE, "Weird droid level in drawDroidRank" );
+			ASSERT(!"out of range droid rank", "Weird droid level in drawDroidRank");
 		break;
 	}
-	*/
+#endif
 //#endif
 
 
-/*	John's routing debug code
+#if 0
+	// John's routing debug code
 	switch (psDroid->sMove.Status)
 	{
 		case MOVEINACTIVE:
@@ -5155,7 +5156,8 @@ UDWORD  getDroidRankGraphic(DROID *psDroid)
 			break;
 		default:
 		break;
-	}*/
+	}
+#endif
 
 	return gfxId;
 }
