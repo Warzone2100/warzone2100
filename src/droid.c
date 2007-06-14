@@ -3215,10 +3215,11 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	ASSERT(!bMultiPlayer || worldOnMap(x,y), "the build locations are not on the map");
 
 	//allocate memory
-	if (!createDroid(player, &psDroid))
+	psDroid = createDroid(player);
+	if (psDroid == NULL)
 	{
-		debug( LOG_NEVER, "unit build: unable to create\n" );
-		ASSERT( FALSE,"Cannot get the memory for the unit" );
+		debug(LOG_NEVER, "unit build: unable to create\n");
+		ASSERT(!"out of memory", "Cannot get the memory for the unit");
 		return NULL;
 	}
 
@@ -3249,8 +3250,8 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	{
 		if (!grpCreate(&psGrp))
 		{
-			debug( LOG_NEVER, "unit build: unable to create group\n" );
-			ASSERT( FALSE,"Can't create unit because can't create group" );
+			debug(LOG_NEVER, "unit build: unable to create group\n");
+			ASSERT(!"unable to create group", "Can't create unit because can't create group");
 			free(psDroid);
 			return NULL;
 		}
@@ -5629,7 +5630,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
         }
         else
         {
-            ASSERT( FALSE, "giftSingleUnit: unable to build a unit" );
+            ASSERT(!"failed building a droid", "giftSingleUnit: unable to build a unit" );
         }
         return psNewDroid;
     }

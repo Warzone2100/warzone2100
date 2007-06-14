@@ -365,14 +365,9 @@ static inline void releaseAllObjectsInList(BASE_OBJECT *list[], OBJECT_DESTRUCTO
 /***************************  DROID  *********************************/
 
 /* Create a new droid */
-BOOL createDroid(UDWORD player, DROID **ppsNew)
+DROID* createDroid(UDWORD player)
 {
-	*ppsNew = (DROID*)createObject(player, OBJ_DROID);
-
-	if (*ppsNew == NULL)
-		return FALSE;
-
-	return TRUE;
+	return (DROID*)createObject(player, OBJ_DROID);
 }
 
 /* add the droid to the Droid Lists */
@@ -449,14 +444,9 @@ void freeAllLimboDroids(void)
 /**************************  STRUCTURE  *******************************/
 
 /* Create a new structure */
-BOOL createStruct(UDWORD player, STRUCTURE **ppsNew)
+STRUCTURE* createStruct(UDWORD player)
 {
-	*ppsNew = (STRUCTURE*)createObject(player, OBJ_STRUCTURE);
-
-	if (*ppsNew == NULL)
-		return FALSE;
-
-	return TRUE;
+	return (STRUCTURE*)createObject(player, OBJ_STRUCTURE);
 }
 
 /* add the structure to the Structure Lists */
@@ -494,14 +484,9 @@ void removeStructureFromList(STRUCTURE *psStructToRemove, STRUCTURE *pList[MAX_P
 /**************************  FEATURE  *********************************/
 
 /* Create a new Feature */
-BOOL createFeature(FEATURE **ppsNew)
+FEATURE* createFeature()
 {
-	*ppsNew = (FEATURE*)createObject(0, OBJ_FEATURE);
-
-	if (*ppsNew == NULL)
-		return FALSE;
-
-	return TRUE;
+	return (FEATURE*)createObject(0, OBJ_FEATURE);
 }
 
 /* add the feature to the Feature Lists */
@@ -653,18 +638,6 @@ void checkFactoryFlags(void)
 
 /**************************  STRUC FUNCTIONALITY ********************************/
 
-/* Create a new Structure Functionality*/
-BOOL createStructFunc(FUNCTIONALITY **ppsNew)
-{
-	*ppsNew = malloc(sizeof(FUNCTIONALITY));
-	if (*ppsNew == NULL)
-	{
-		debug(LOG_ERROR, "createStructFunc: Out of memory");
-		return FALSE;
-	}
-	return TRUE;
-}
-
 /*remove a structure Functionality from the heap*/
 void removeStructFunc(FUNCTIONALITY *psDel)
 {
@@ -677,63 +650,64 @@ void removeStructFunc(FUNCTIONALITY *psDel)
 //this function is similar to BOOL scrvGetBaseObj(UDWORD id, BASE_OBJECT **ppsObj)
 BASE_OBJECT *getBaseObjFromId(UDWORD id)
 {
-	UDWORD			i;
+	unsigned int i;
 	UDWORD			player;
 	BASE_OBJECT		*psObj;
 	DROID			*psTrans;
 
-	for(i=0; i<7; i++)
+	for(i = 0; i < 7; ++i)
 	{
-		for(player=0; player<MAX_PLAYERS; player++)
+		for(player = 0; player < MAX_PLAYERS; ++player)
 		{
 			switch (i)
 			{
-			case 0:
-				psObj=(BASE_OBJECT *)apsDroidLists[player];
-				break;
-			case 1:
-				psObj=(BASE_OBJECT *)apsStructLists[player];
-				break;
-			case 2:
-				if (player == 0)
-				{
-					psObj=(BASE_OBJECT *)apsFeatureLists[0];
-				}
-				else
-				{
+				case 0:
+					psObj=(BASE_OBJECT *)apsDroidLists[player];
+					break;
+				case 1:
+					psObj=(BASE_OBJECT *)apsStructLists[player];
+					break;
+				case 2:
+					if (player == 0)
+					{
+						psObj=(BASE_OBJECT *)apsFeatureLists[0];
+					}
+					else
+					{
+						psObj = NULL;
+					}
+					break;
+				case 3:
+					psObj=(BASE_OBJECT *)mission.apsDroidLists[player];
+					break;
+				case 4:
+					psObj=(BASE_OBJECT *)mission.apsStructLists[player];
+					break;
+				case 5:
+					if (player == 0)
+					{
+						psObj=(BASE_OBJECT *)mission.apsFeatureLists[0];
+					}
+					else
+					{
+						psObj = NULL;
+					}
+					break;
+				case 6:
+					if (player == 0)
+					{
+						psObj=(BASE_OBJECT *)apsLimboDroids[0];
+					}
+					else
+					{
+						psObj = NULL;
+					}
+					break;
+				default:
 					psObj = NULL;
-				}
-				break;
-			case 3:
-				psObj=(BASE_OBJECT *)mission.apsDroidLists[player];
-				break;
-			case 4:
-				psObj=(BASE_OBJECT *)mission.apsStructLists[player];
-				break;
-			case 5:
-				if (player == 0)
-				{
-					psObj=(BASE_OBJECT *)mission.apsFeatureLists[0];
-				}
-				else
-				{
-					psObj = NULL;
-				}
-				break;
-			case 6:
-				if (player == 0)
-				{
-					psObj=(BASE_OBJECT *)apsLimboDroids[0];
-				}
-				else
-				{
-					psObj = NULL;
-				}
-				break;
-			default:
-				psObj = NULL;
-				break;
+					break;
 			}
+
 			while (psObj)
 			{
 				if (psObj->id == id)
@@ -755,14 +729,14 @@ BASE_OBJECT *getBaseObjFromId(UDWORD id)
 			}
 		}
 	}
-	ASSERT( FALSE,"getBaseObjFromId() failed for id %d", id );
+	ASSERT(!"couldn't find a BASE_OBJ with ID", "getBaseObjFromId() failed for id %d", id);
 
 	return NULL;
 }
 
 UDWORD getRepairIdFromFlag(FLAG_POSITION *psFlag)
 {
-	UDWORD			i;
+	unsigned int i;
 	UDWORD			player;
 	STRUCTURE		*psObj;
 	REPAIR_FACILITY	*psRepair;
@@ -771,20 +745,21 @@ UDWORD getRepairIdFromFlag(FLAG_POSITION *psFlag)
 	player = psFlag->player;
 
 	//probably dont need to check mission list
-	for(i=0; i<2; i++)
+	for(i = 0; i < 2; ++i)
 	{
 		switch (i)
 		{
-		case 0:
-			psObj=(STRUCTURE *)apsStructLists[player];
-			break;
-		case 1:
-			psObj=(STRUCTURE *)mission.apsStructLists[player];
-			break;
-		default:
-			psObj = NULL;
-			break;
+			case 0:
+				psObj=(STRUCTURE *)apsStructLists[player];
+				break;
+			case 1:
+				psObj=(STRUCTURE *)mission.apsStructLists[player];
+				break;
+			default:
+				psObj = NULL;
+				break;
 		}
+
 		while (psObj)
 		{
 			if (psObj->pFunctionality)
@@ -802,7 +777,7 @@ UDWORD getRepairIdFromFlag(FLAG_POSITION *psFlag)
 			psObj = psObj->psNext;
 		}
 	}
-	ASSERT( FALSE,"getRepairIdFromFlag() failed" );
+	ASSERT(!"unable to find repair id for FLAG_POSITION", "getRepairIdFromFlag() failed");
 
 	return UDWORD_MAX;
 }
@@ -811,63 +786,64 @@ UDWORD getRepairIdFromFlag(FLAG_POSITION *psFlag)
 // check a base object exists for an ID
 BOOL checkValidId(UDWORD id)
 {
-	UDWORD			i;
+	unsigned int i;
 	UDWORD			player;
 	BASE_OBJECT		*psObj;
 	DROID			*psTrans;
 
-	for(i=0; i<7; i++)
+	for(i = 0; i < 7; ++i)
 	{
-		for(player=0; player<MAX_PLAYERS; player++)
+		for(player = 0; player < MAX_PLAYERS; ++player)
 		{
 			switch (i)
 			{
-			case 0:
-				psObj=(BASE_OBJECT *)apsDroidLists[player];
-				break;
-			case 1:
-				psObj=(BASE_OBJECT *)apsStructLists[player];
-				break;
-			case 2:
-				if (player == 0)
-				{
-					psObj=(BASE_OBJECT *)apsFeatureLists[0];
-				}
-				else
-				{
+				case 0:
+					psObj=(BASE_OBJECT *)apsDroidLists[player];
+					break;
+				case 1:
+					psObj=(BASE_OBJECT *)apsStructLists[player];
+					break;
+				case 2:
+					if (player == 0)
+					{
+						psObj=(BASE_OBJECT *)apsFeatureLists[0];
+					}
+					else
+					{
+						psObj = NULL;
+					}
+					break;
+				case 3:
+					psObj=(BASE_OBJECT *)mission.apsDroidLists[player];
+					break;
+				case 4:
+					psObj=(BASE_OBJECT *)mission.apsStructLists[player];
+					break;
+				case 5:
+					if (player == 0)
+					{
+						psObj=(BASE_OBJECT *)mission.apsFeatureLists[0];
+					}
+					else
+					{
+						psObj = NULL;
+					}
+					break;
+				case 6:
+					if (player == 0)
+					{
+						psObj=(BASE_OBJECT *)apsLimboDroids[0];
+					}
+					else
+					{
+						psObj = NULL;
+					}
+					break;
+				default:
 					psObj = NULL;
-				}
-				break;
-			case 3:
-				psObj=(BASE_OBJECT *)mission.apsDroidLists[player];
-				break;
-			case 4:
-				psObj=(BASE_OBJECT *)mission.apsStructLists[player];
-				break;
-			case 5:
-				if (player == 0)
-				{
-					psObj=(BASE_OBJECT *)mission.apsFeatureLists[0];
-				}
-				else
-				{
-					psObj = NULL;
-				}
-				break;
-			case 6:
-				if (player == 0)
-				{
-					psObj=(BASE_OBJECT *)apsLimboDroids[0];
-				}
-				else
-				{
-					psObj = NULL;
-				}
-				break;
-			default:
-				psObj = NULL;
-				break;
+					break;
 			}
+
 			while (psObj)
 			{
 				if (psObj->id == id)
@@ -889,7 +865,7 @@ BOOL checkValidId(UDWORD id)
 			}
 		}
 	}
-	ASSERT( FALSE,"checkValidId() failed for id %d", id );
+	ASSERT(!"invalid ID for BASE_OBJ", "checkValidId() failed for id %d", id);
 
 	return FALSE;
 }

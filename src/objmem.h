@@ -50,7 +50,7 @@ extern void objmemShutdown(void);
 extern void objmemUpdate(void);
 
 /* Create a new droid */
-extern BOOL createDroid(UDWORD player, DROID **ppsNew);
+extern DROID* createDroid(UDWORD player);
 
 /* add the droid to the Droid Lists */
 extern void addDroid(DROID *psDroidToAdd, DROID *pList[MAX_PLAYERS]);
@@ -71,7 +71,7 @@ extern void freeAllMissionDroids(void);
 extern void freeAllLimboDroids(void);
 
 /* Create a new structure */
-extern BOOL createStruct(UDWORD player, STRUCTURE **ppsNew);
+extern STRUCTURE* createStruct(UDWORD player);
 
 /* add the structure to the Structure Lists */
  extern void addStructure(STRUCTURE *psStructToAdd);
@@ -87,7 +87,7 @@ extern void removeStructureFromList(STRUCTURE *psStructToRemove,
                                     STRUCTURE *pList[MAX_PLAYERS]);
 
 /* Create a new Feature */
-extern BOOL createFeature(FEATURE **ppsNew);
+extern FEATURE* createFeature(void);
 
 /* add the feature to the Feature Lists */
  extern void addFeature(FEATURE *psFeatureToAdd);
@@ -107,11 +107,6 @@ extern void removeFlagPosition(FLAG_POSITION *psDel);
 // free all flag positions
 extern void freeAllFlagPositions(void);
 extern void freeAllAssemblyPoints(void);
-
-/* Create a new Structure Functionality*/
-extern BOOL createStructFunc(FUNCTIONALITY **ppsNew);
-/*remove a structure Functionality from the heap*/
-extern void removeStructFunc(FUNCTIONALITY *psDel);
 
 // Find a base object from it's id
 extern BASE_OBJECT *getBaseObjFromId(UDWORD id);

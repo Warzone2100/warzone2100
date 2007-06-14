@@ -155,7 +155,7 @@ static void featureType(FEATURE_STATS* psFeature, char *pType)
 		psFeature->subType = FEAT_SKYSCRAPER;
 		return;
 	}
-	ASSERT( FALSE, "Unknown Feature Type" );
+	ASSERT(!"unknown feature type", "Unknown Feature Type");
 }
 
 /* Load the feature stats */
@@ -329,7 +329,6 @@ void setFeatTileDraw(FEATURE *psFeat)
 /* Create a feature on the map */
 FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 {
-	FEATURE		*psFeature;
 	UDWORD		mapX, mapY;
 	UDWORD		width,breadth, foundationMin,foundationMax, height;
 	UDWORD		startX,startY,max,min;
@@ -337,7 +336,8 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	UBYTE		vis;
 
 	//try and create the Feature
-	if (!createFeature(&psFeature))
+	FEATURE* psFeature = createFeature();
+	if (psFeature == NULL)
 	{
 		return NULL;
 	}

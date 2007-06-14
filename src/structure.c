@@ -462,7 +462,7 @@ static void structureType(STRUCTURE_STATS *pStructure, char *pType)
 		pStructure->type = REF_SAT_UPLINK;
 		return;
 	}
-	ASSERT( FALSE, "Unknown Structure Type" );
+	ASSERT(!"unknown structure type", "structureType: Unknown Structure Type");
 }
 
 
@@ -1680,7 +1680,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		max = pStructureType - asStructureStats;
 		if (max > numStructureStats)
 		{
-			ASSERT( FALSE, "buildStructure: Invalid structure type" );
+			ASSERT(!"invalid structure type", "buildStructure: Invalid structure type");
 			return NULL;
 		}
 
@@ -1694,7 +1694,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 				//NEVER EVER EVER WANT MORE THAN 5 FACTORIES
 				if (asStructLimits[selectedPlayer][max].currentQuantity > MAX_FACTORY)
 				{
-					ASSERT(FALSE, "buildStructure: trying to build too many factories (%d max)", MAX_FACTORY);
+					ASSERT(!"attempting to construct too many factories", "buildStructure: trying to build too many factories (%d max)", MAX_FACTORY);
 					return NULL;
 				}
 			}
@@ -1703,14 +1703,14 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 				//can only cope with MAX_OBJECTS research facilities
 				if (asStructLimits[selectedPlayer][max].currentQuantity > MAX_OBJECTS)
 				{
-					ASSERT(FALSE, "buildStructure: trying to build too many research facilities (%d max)", MAX_OBJECTS);
+					ASSERT(!"attempting to construct too many research facilities", "buildStructure: trying to build too many research facilities (%d max)", MAX_OBJECTS);
 					return NULL;
 				}
 			}
 			//HARD_CODE don't ever want more than one Las Sat structure
 			if (isLasSat(pStructureType) && getLasSatExists(selectedPlayer))
 			{
-				ASSERT(FALSE, "buildStructure: trying to build too many Las Sat (1 max)");
+				ASSERT(!"attempting to build more than 1 Las Sat center", "buildStructure: trying to build too many Las Sat (1 max)");
 				return NULL;
 			}
 			//HARD_CODE don't ever want more than one Sat Uplink structure
@@ -1718,7 +1718,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			{
 				if (asStructLimits[selectedPlayer][max].currentQuantity > 0)
 				{
-					ASSERT(FALSE, "buildStructure: trying to build too many Sat Uplinks (1 max)");
+					ASSERT(!"attempting to build more than 1 Sat Uplink", "buildStructure: trying to build too many Sat Uplinks (1 max)");
 					return NULL;
 				}
 			}
@@ -1732,13 +1732,13 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		if(((x >> TILE_SHIFT) < TOO_NEAR_EDGE) || ((x >> TILE_SHIFT) > (
 			mapWidth - TOO_NEAR_EDGE)))
 		{
-			ASSERT(FALSE, "buildStructure: x coord (%u) too near edge (req. distance is %u)", x, TOO_NEAR_EDGE);
+			ASSERT(!"attempting to build too closely to map-edge", "buildStructure: x coord (%u) too near edge (req. distance is %u)", x, TOO_NEAR_EDGE);
 			return NULL;
 		}
 		if(((y >> TILE_SHIFT) < TOO_NEAR_EDGE) || ((y >> TILE_SHIFT) > (
 			mapHeight - TOO_NEAR_EDGE)))
 		{
-			ASSERT(FALSE, "buildStructure: y coord (%u) too near edge (req. distance is %u)", y, TOO_NEAR_EDGE);
+			ASSERT(!"attempting to build too closely to map-edge", "buildStructure: y coord (%u) too near edge (req. distance is %u)", y, TOO_NEAR_EDGE);
 			return NULL;
 		}
 
@@ -1755,7 +1755,8 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		}
 
 		// allocate memory for and initialize a structure object
-		if (!createStruct(player, &psBuilding))
+		psBuilding = createStruct(player);
+		if (psBuilding == NULL)
 		{
 			return NULL;
 		}
@@ -2039,7 +2040,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 
 		if (psBuilding == NULL)
 		{
-			ASSERT(FALSE, "No owning structure for this module - %s", getStructName(pStructureType));
+			ASSERT(!"module has no owning structure", "No owning structure for this module - %s", getStructName(pStructureType));
 			return FALSE;
 		}
 		if (pStructureType->type == REF_FACTORY_MODULE)
@@ -2256,9 +2257,10 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			}
 
 			//allocate the necessary space
-			if (!createStructFunc(&psBuilding->pFunctionality))
+			psBuilding->pFunctionality = malloc(sizeof(FUNCTIONALITY));
+			if (psBuilding->pFunctionality == NULL)
 			{
-				debug( LOG_ERROR, "Out of memory" );
+				debug(LOG_ERROR, "setFunctionality: Out of memory");
 				abort();
 				return FALSE;
 			}
@@ -2292,17 +2294,17 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			addFlagPosition(psFactory->psAssemblyPoint);
 			switch(functionType)
 			{
-			case REF_FACTORY:
-				setFlagPositionInc(psFactory, psBuilding->player, FACTORY_FLAG);
-				break;
-			case REF_CYBORG_FACTORY:
-				setFlagPositionInc(psFactory, psBuilding->player, CYBORG_FLAG);
-				break;
-			case REF_VTOL_FACTORY:
-				setFlagPositionInc(psFactory, psBuilding->player, VTOL_FLAG);
-				break;
-			default:
-				ASSERT( FALSE, "setFunctionality: Invalid factory type" );
+				case REF_FACTORY:
+					setFlagPositionInc(psFactory, psBuilding->player, FACTORY_FLAG);
+					break;
+				case REF_CYBORG_FACTORY:
+					setFlagPositionInc(psFactory, psBuilding->player, CYBORG_FLAG);
+					break;
+				case REF_VTOL_FACTORY:
+					setFlagPositionInc(psFactory, psBuilding->player, VTOL_FLAG);
+					break;
+				default:
+					ASSERT(!"invalid factory type", "setFunctionality: Invalid factory type");
 			}
 
 			psFactory->psFormation = NULL;
@@ -2319,9 +2321,10 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 				return FALSE;
 			}
 			//try and create the Structure
-			if (!createStructFunc(&psBuilding->pFunctionality))
+			psBuilding->pFunctionality = malloc(sizeof(FUNCTIONALITY));
+			if (psBuilding->pFunctionality == NULL)
 			{
-				debug( LOG_ERROR, "Out of memory" );
+				debug(LOG_ERROR, "setFunctionality: Out of memory");
 				abort();
 				return FALSE;
 			}
@@ -2346,9 +2349,10 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			}
 
 			//try and create the Structure
-			if (!createStructFunc(&psBuilding->pFunctionality))
+			psBuilding->pFunctionality = malloc(sizeof(FUNCTIONALITY));
+			if (psBuilding->pFunctionality == NULL)
 			{
-				debug( LOG_ERROR, "Out of memory" );
+				debug(LOG_ERROR, "setFunctionality: Out of memory");
 				abort();
 				return FALSE;
 			}
@@ -2377,9 +2381,10 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			}
 
 			//try and create the Structure
-			if (!createStructFunc(&psBuilding->pFunctionality))
+			psBuilding->pFunctionality = malloc(sizeof(FUNCTIONALITY));
+			if (psBuilding->pFunctionality == NULL)
 			{
-				debug( LOG_ERROR, "Out of memory" );
+				debug(LOG_ERROR, "setFunctionality: Out of memory");
 				abort();
 				return FALSE;
 			}
@@ -2432,9 +2437,10 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			}
 
 			//try and create the Structure
-			if (!createStructFunc(&psBuilding->pFunctionality))
+			psBuilding->pFunctionality = malloc(sizeof(FUNCTIONALITY));
+			if (psBuilding->pFunctionality == NULL)
 			{
-				debug( LOG_ERROR, "Out of memory" );
+				debug(LOG_ERROR, "setFunctionality: Out of memory");
 				abort();
 				return FALSE;
 			}
@@ -2485,9 +2491,10 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 				return FALSE;
 			}
 			//try and create the Structure
-			if (!createStructFunc(&psBuilding->pFunctionality))
+			psBuilding->pFunctionality = malloc(sizeof(FUNCTIONALITY));
+			if (psBuilding->pFunctionality == NULL)
 			{
-				debug( LOG_ERROR, "Out of memory" );
+				debug(LOG_ERROR, "setFunctionality: Out of memory");
 				abort();
 				return FALSE;
 			}
@@ -2519,19 +2526,19 @@ void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 
 	switch(psStruct->pStructureType->type)
 	{
-	case REF_FACTORY:
-		typeFlag = FACTORY_FLAG;
-		break;
-	case REF_VTOL_FACTORY:
-		typeFlag = VTOL_FLAG;
-		break;
-	case REF_CYBORG_FACTORY:
-		typeFlag = CYBORG_FLAG;
-		break;
-	default:
-		ASSERT( FALSE,"assignfactorycommandUnit: unknown factory type" );
-		typeFlag = FACTORY_FLAG;
-		break;
+		case REF_FACTORY:
+			typeFlag = FACTORY_FLAG;
+			break;
+		case REF_VTOL_FACTORY:
+			typeFlag = VTOL_FLAG;
+			break;
+		case REF_CYBORG_FACTORY:
+			typeFlag = CYBORG_FLAG;
+			break;
+		default:
+			ASSERT(!"unknown factory type", "assignfactorycommandUnit: unknown factory type");
+			typeFlag = FACTORY_FLAG;
+			break;
 	}
 
 	// removing a commander from a factory
@@ -4083,7 +4090,7 @@ void structureRelease(STRUCTURE *psBuilding)
 		}
 
 		//free up the space used by the functionality array
-		removeStructFunc(psBuilding->pFunctionality);
+		free(psBuilding->pFunctionality);
 	}
 
 	// remove the object from the grid
@@ -4438,7 +4445,7 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 				break;
 			case NUM_DIFF_BUILDINGS:
 			case REF_BRIDGE:
-				ASSERT(FALSE, "validLocation: Bad structure type %u", psBuilding->type);
+				ASSERT(!"invalid structure type", "validLocation: Bad structure type %u", psBuilding->type);
 				break;
 			case REF_HQ:
 			case REF_FACTORY:
@@ -5551,7 +5558,7 @@ void findAssemblyPointPosition(UDWORD *pX, UDWORD *pY, UDWORD player)
 		return;
 	}
 	/* If we got this far, then we failed - passed in values will be unchanged */
-	ASSERT( FALSE, "findAssemblyPointPosition: unable to find a valid location!" );
+	ASSERT(!"unable to find a valid location", "findAssemblyPointPosition: unable to find a valid location!");
 }
 
 
@@ -5610,23 +5617,23 @@ void setFlagPositionInc(void *pFunctionality, UDWORD player, UBYTE factoryType)
 #ifdef DEBUG
 		switch (factoryType)
 		{
-		case FACTORY_FLAG:
-			pType = "Factory";
-			break;
-		case CYBORG_FLAG:
-			pType = "Cyborg Factory";
-			break;
-		case VTOL_FLAG:
-			pType = "VTOL Factory";
-			break;
-		case REPAIR_FLAG:
-			pType = "Repair Facility";
-			break;
-		default:
-			pType = "";
-			break;
+			case FACTORY_FLAG:
+				pType = "Factory";
+				break;
+			case CYBORG_FLAG:
+				pType = "Cyborg Factory";
+				break;
+			case VTOL_FLAG:
+				pType = "VTOL Factory";
+				break;
+			case REPAIR_FLAG:
+				pType = "Repair Facility";
+				break;
+			default:
+				pType = "";
+				break;
 		}
-		ASSERT( FALSE, "Building more than %d %s for player %d", MAX_FACTORY, pType, player );
+		ASSERT(!"building more factories than allowed", "Building more than %d %s for player %d", MAX_FACTORY, pType, player);
 #endif
 		inc = 1;
 	}
@@ -5877,7 +5884,7 @@ void checkForResExtractors(STRUCTURE *psBuilding)
 
 	if (psBuilding->pStructureType->type != REF_POWER_GEN)
 	{
-		ASSERT( FALSE, "checkForResExtractors: invalid structure type" );
+		ASSERT(!"invalid structure type", "checkForResExtractors: invalid structure type");
 		return;
 	}
 	psPowerGen = (POWER_GEN *)psBuilding->pFunctionality;
@@ -5956,7 +5963,7 @@ void checkForPowerGen(STRUCTURE *psBuilding)
 
 	if (psBuilding->pStructureType->type != REF_RESOURCE_EXTRACTOR)
 	{
-		ASSERT( FALSE, "checkForPowerGen: invalid structure type" );
+		ASSERT(!"invalid structure type", "checkForPowerGen: invalid structure type");
 		return;
 	}
 	psRE = (RES_EXTRACTOR *)psBuilding->pFunctionality;
@@ -6011,7 +6018,7 @@ void informPowerGen(STRUCTURE *psStruct)
 
 	if (psStruct->pStructureType->type != REF_RESOURCE_EXTRACTOR)
 	{
-		ASSERT( FALSE, "informPowerGen: invalid structure type" );
+		ASSERT(!"invalid structure type", "informPowerGen: invalid structure type");
 		return;
 	}
 
@@ -6042,7 +6049,7 @@ void releaseResExtractor(STRUCTURE *psRelease)
 
 	if (psRelease->pStructureType->type != REF_RESOURCE_EXTRACTOR)
 	{
-		ASSERT( FALSE, "releaseResExtractor:Invalid structure type" );
+		ASSERT(!"invalid structure type", "releaseResExtractor:Invalid structure type");
 		return;
 	}
 
@@ -6081,7 +6088,7 @@ void releasePowerGen(STRUCTURE *psRelease)
 
 	if (psRelease->pStructureType->type != REF_POWER_GEN)
 	{
-		ASSERT( FALSE, "releasePowerGen:Invalid structure type" );
+		ASSERT(!"invalid structure type", "releasePowerGen: Invalid structure type");
 		return;
 	}
 
@@ -6367,14 +6374,14 @@ BOOL electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 		psDroid = (DROID *)psTarget;
 		bCompleted = FALSE;
 
-		ASSERT( psDroid != NULL, "electronicDamage: Invalid Droid pointer" );
+		ASSERT(psDroid != NULL, "electronicDamage: Invalid Droid pointer");
 
 		//in multiPlayer cannot attack a Transporter with EW
 		if (bMultiPlayer)
 		{
 			if (psDroid->droidType == DROID_TRANSPORTER)
 			{
-				ASSERT( FALSE, "electronicDamage: Cannot attack a Transporter in multiPlayer" );
+				ASSERT(!"can't attack a Transporter while in multiplayer", "electronicDamage: Cannot attack a Transporter in multiPlayer");
 				return TRUE;
 			}
 		}
@@ -7355,7 +7362,7 @@ void checkDeliveryPoints(UDWORD version)
 							// add an assembly point
 							if (!createFlagPosition(&psRepair->psDeliveryPoint, psStruct->player))
 							{
-								ASSERT( FALSE,"checkDeliveryPoints: unable to create new delivery point for repair facility" );
+								ASSERT(!"can't create new deilivery point for repair facility", "checkDeliveryPoints: unable to create new delivery point for repair facility");
 								return;
 							}
 							addFlagPosition(psRepair->psDeliveryPoint);
