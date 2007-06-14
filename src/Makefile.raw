@@ -18,11 +18,9 @@ SRC=ai.c \
 	data.c \
 	design.c \
 	difficulty.c \
-	disp2d.c \
 	display.c \
 	droid.c \
 	e3demo.c \
-	edit2d.c \
 	edit3d.c \
 	effects.c \
 	environ.c \

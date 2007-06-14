@@ -606,10 +606,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\disp2d.c"
-					>
-				</File>
-				<File
 					RelativePath="..\src\display.c"
 					>
 				</File>
@@ -627,10 +623,6 @@
 				</File>
 				<File
 					RelativePath="..\src\e3demo.c"
-					>
-				</File>
-				<File
-					RelativePath="..\src\edit2d.c"
 					>
 				</File>
 				<File
@@ -1197,10 +1189,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\disp2d.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\display.h"
 				>
 			</File>
@@ -1230,10 +1218,6 @@
 			</File>
 			<File
 				RelativePath="..\src\e3demo.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\edit2d.h"
 				>
 			</File>
 			<File

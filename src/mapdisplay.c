@@ -49,7 +49,6 @@
 #include "map.h"
 #include "mapdisplay.h"
 #include "component.h"
-#include "disp2d.h"
 #include "display3d.h"
 #include "hci.h"
 #include "intelmap.h"

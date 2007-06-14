@@ -1297,13 +1297,6 @@ BOOL stageOneInitialise(void)
 		return FALSE;
 	}
 
-#ifdef DISP2D
-	if (!disp2DInitialise())
-	{
-		return FALSE;
-	}
-#endif
-
 	if ( !anim_Init( anim_GetShapeFunc ) )
 	{
 		return FALSE;
@@ -1442,20 +1435,7 @@ BOOL stageOneShutDown(void)
 		return FALSE;
 	}
 
-
-#ifdef DISP2D
-	if (!disp2DShutdown())
-	{
-		return FALSE;
-	}
-#endif
-
-
-
-
 	pie_TexShutDown();
-
-
 
 	viewDataHeapShutDown();
 

@@ -53,7 +53,6 @@
 #include "move.h"
 #include "visibility.h"
 #include "findpath.h"
-#include "disp2d.h"
 #include "geometry.h"
 #include "lib/gamelib/gtime.h"
 #include "resource.h"
@@ -409,13 +408,6 @@ void draw3DScene( void )
 
 	if(!bRender3DOnly)
 	{
-
-		if(gameStats)
-		{
-#ifdef DISP2D
-			showGameStats();
-#endif
-		}
 
 	/* Ensure that any text messages are displayed at bottom of screen */
 		pie_SetFogStatus(FALSE);

@@ -24,11 +24,8 @@
 #include "lib/widget/widget.h"
 #include "objects.h"
 #include "loop.h"
-#include "edit2d.h"
 #include "map.h"
 #include "lib/ivis_common/bitimage.h"//bitmap routines
-
-
 
 #include "display3d.h"
 #include "hci.h"

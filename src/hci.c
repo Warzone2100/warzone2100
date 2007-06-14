@@ -663,15 +663,6 @@ BOOL intInitialise(void)
 	}
 
 
-
-	/* Initialise the edit module */
-#ifdef DISP2D
-	if (!ed2dInitialise())
-	{
-		return FALSE;
-	}
-#endif
-
 	LOADBARCALLBACK();	//	loadingScreenCallback();
 
 	intInitialiseGraphics();
@@ -792,10 +783,6 @@ void intShutDown(void)
 {
 //	widgEndScreen(psWScreen);
 	widgReleaseScreen(psWScreen);
-
-#ifdef DISP2D
-	ed2dShutDown();
-#endif
 
 	ReleaseSnapBuffer(&InterfaceSnap);
 
@@ -1412,9 +1399,6 @@ static void intProcessOptions(UDWORD id)
 		{
 #ifdef EDIT_OPTIONS
 		case IDOPT_MAPLOAD:
-#ifdef DISP2D
-			if (ed2dLoadMapFile())
-#endif
 			{
 				/* Managed to load so quit the option screen */
 				intRemoveOptions();
@@ -1422,9 +1406,6 @@ static void intProcessOptions(UDWORD id)
 			}
 			break;
 		case IDOPT_MAPSAVE:
-#ifdef DISP2D
-			if (ed2dSaveMapFile())
-#endif
 			{
 				/* Managed to save so quit the option screen */
 				intRemoveOptions();
@@ -1983,9 +1964,6 @@ INT_RETVAL intRunWidgets(void)
 			/* Including the edit mode here is pretty nasty - but it will get
 			 * ripped out for the final version.
 			 */
- #ifdef DISP2D
-			quitting = ed2dProcessInput();
- #endif
 		}
 		else
 		if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_BUILDSEL)
@@ -3230,9 +3208,6 @@ static void intStartStructPosition(BASE_STATS *psStats,DROID *psDroid)
 {
 	init3DBuilding(psStats,NULL,NULL);
 
-#ifdef DISP2D
-	disp2DStartStructPosition(psStats);
-#endif
 	/*if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_BUILDSEL) {
 		widgGetTabs(psWScreen, IDOBJ_TABFORM, &objMajor, &objMinor);
 		// Hide the object form while we select a position.
@@ -3267,9 +3242,6 @@ static void intStopStructPosition(void)
 	}
 
 	kill3DBuilding();
-#ifdef DISP2D
-	disp2DStopStructPosition();
-#endif
 }
 
 
@@ -3283,9 +3255,6 @@ static BOOL intGetStructPosition(UDWORD *pX, UDWORD *pY)
 		retVal = found3DBuilding(pX,pY);
 		if (retVal)
 		{
-#ifdef DISP2D
-			disp2DStopStructPosition();
-#endif
 //			if (intMode == INT_OBJECT && objMode == IOBJ_BUILDSEL) {
 			/*if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_BUILDSEL)
 			{
@@ -3293,22 +3262,6 @@ static BOOL intGetStructPosition(UDWORD *pX, UDWORD *pY)
 				widgReveal(psWScreen,IDOBJ_FORM);
 			}*/
 		}
-	}
-	else
-	{
-#ifdef DISP2D
-		retVal = disp2DGetStructPosition(pX, pY);
-		if (retVal)
-		{
-			kill3DBuilding();
-//			if (intMode == INT_OBJECT && objMode == IOBJ_BUILDSEL) {
-			/*if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_BUILDSEL)
-			{
-				widgReveal(psWScreen,IDOBJ_TABFORM);	// Reveal the object form.
-				widgReveal(psWScreen,IDOBJ_FORM);
-			}*/
-		}
-#endif
 	}
 
 	return retVal;
@@ -3325,15 +3278,6 @@ void intDisplayWidgets(void)
 	/* Including the edit mode here is pretty nasty - but it will get
 	 * ripped out for the final version.
 	 */
-
-	if (intMode == INT_EDIT)
-	{
-#ifdef DISP2D
-		ed2dDisplay();
-#endif
-	}
-
-
 
 	// God only knows...
 	if(ReticuleUp && !bInTutorial) {

@@ -41,7 +41,6 @@
 #include "objects.h"
 #include "display.h"
 #include "map.h"
-#include "disp2d.h"
 #include "hci.h"
 #include "lib/sound/audio.h"
 #include "ingameop.h"
@@ -546,17 +545,6 @@ GAMECODE gameLoop(void)
 				}
 				displayWorld();
 			}
-#ifdef DISP2D
-			else
-			{
-				//no key clicks or in Intelligence Screen
-				if (intRetVal == INT_NONE)
-				{
-					quitting = process2DInput();
-				}
-				display2DWorld();
-			}
-#endif
 		}
 		/* Display the in game interface */
 		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
@@ -605,9 +593,6 @@ GAMECODE gameLoop(void)
 			if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && keyPressed(KEY_RETURN))
 			{
 				screenToggleMode();
-		#ifdef DISP2D
-				disp2DModeChange();
-		#endif
 			}
 	}
 
@@ -656,9 +641,6 @@ GAMECODE gameLoop(void)
 		if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && keyPressed(KEY_RETURN))
 		{
 			screenToggleMode();
-#ifdef DISP2D
-			disp2DModeChange();
-#endif
 		}
 		return GAMECODE_QUITGAME;
 	}

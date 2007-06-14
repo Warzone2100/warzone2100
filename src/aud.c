@@ -30,7 +30,6 @@
 #include "lib/framework/frame.h"
 #include "base.h"
 #include "map.h"
-#include "disp2d.h"
 #include "display3d.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/gamelib/gtime.h"

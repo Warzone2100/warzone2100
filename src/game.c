@@ -32,7 +32,6 @@
 #include "lib/script/script.h"
 #include "lib/gamelib/gtime.h"
 #include "map.h"
-#include "edit2d.h"
 #include "droid.h"
 #include "action.h"
 #include "game.h"

@@ -32,7 +32,6 @@
 
 #include "display.h"
 #include "map.h"
-#include "disp2d.h"
 #include "loop.h"
 #include "atmos.h"	// temporary only for here
 #include "csnap.h"

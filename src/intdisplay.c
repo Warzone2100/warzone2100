@@ -31,7 +31,6 @@
 
 #include "objects.h"
 #include "loop.h"
-#include "edit2d.h"
 #include "map.h"
 #include "radar.h"
 /* Includes direct access to render library */
@@ -48,7 +47,6 @@
 
 #include "display3d.h"
 #include "edit3d.h"
-#include "disp2d.h"
 #include "structure.h"
 #include "research.h"
 #include "function.h"
