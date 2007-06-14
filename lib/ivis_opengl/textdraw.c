@@ -17,34 +17,18 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#include <stdio.h>
+
 #include <stdlib.h>
 #include <string.h>
 #include "lib/ivis_common/ivisdef.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/rendmode.h"
-#include "lib/ivis_common/rendfunc.h"
 #include "lib/ivis_common/pieclip.h"
 #include "lib/ivis_common/pieblitfunc.h"
 #include "lib/ivis_common/piepalette.h"
 #include "lib/ivis_common/ivispatch.h"
 #include "lib/ivis_common/textdraw.h"
 #include "lib/ivis_common/bitimage.h"
-
-/***************************************************************************/
-/*
- *	Global Variables
- */
-/***************************************************************************/
-/***************************************************************************/
-/*
- *	Globally Imported Variables (well dodgy)
- */
-/***************************************************************************/
-extern UBYTE		aTransTable[256];//from rendfunc
-extern UBYTE		aTransTable2[256];//from rendfunc
-extern UBYTE		aTransTable3[256];//from rendfunc
-extern UBYTE		aTransTable4[256];//from rendfunc
 
 /***************************************************************************/
 /*
@@ -580,58 +564,6 @@ void pie_DrawText(const char *string, UDWORD x, UDWORD y)
 	}
 }
 
-//draw Blue tinted bitmap
-void pie_RenderBlueTintedBitmap(iBitmap *bmp, int x, int y, int w, int h, int ow)
-{
-	int i, j, lineSkip;
-	Uint8 *bp;
-	Uint8 present;
-
-
-	bp = (Uint8 *) psRendSurface->buffer + x + psRendSurface->scantable[y];
-
-	lineSkip = psRendSurface->width - w;
-	for (i=0; i<h; i++)
-	{
-		for (j=0; j<w; j++)
-		{
-			present = *bmp++;
-			if(present)
-			{
-				*bp = aTransTable3[present];			// Write in the new version (blue tinted)
-			}
-			bp++;
-		}
-		bmp += (ow - w);
-		bp += lineSkip;
-	}
-}
-
-void pie_RenderDeepBlueTintedBitmap(iBitmap *bmp, int x, int y, int w, int h, int ow)
-{
-	int i, j, lineSkip;
-	Uint8 *bp;
-	Uint8 present;
-
-
-	bp = (Uint8 *) psRendSurface->buffer + x + psRendSurface->scantable[y];
-
-	lineSkip = psRendSurface->width - w;
-	for (i=0; i<h; i++)
-	{
-		for (j=0; j<w; j++)
-		{
-			present = *bmp++;
-			if(present)
-			{
-				*bp = aTransTable4[present];			// Write in the new version (blue tinted)
-			}
-			bp++;
-		}
-		bmp += (ow - w);
-		bp += lineSkip;
-	}
-}
 
 void pie_DrawText270(const char *String, int XPos, int YPos)
 {

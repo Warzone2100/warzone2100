@@ -881,17 +881,21 @@ void pie_DrawImage(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style)
 	style->colour.argb = pie_GetColour();
 	style->specular.argb = 0x00000000;
 
-	glBegin(GL_TRIANGLE_STRIP);
 	glColor4ub(style->colour.byte.r, style->colour.byte.g, style->colour.byte.b, style->colour.byte.a);
-	//set up 4 pie verts
-	glTexCoord2f(image->tu, image->tv);
-	glVertex2f(dest->x, dest->y);
-	glTexCoord2f(image->tu + image->tw, image->tv);
-	glVertex2f(dest->x + dest->w, dest->y);
-	glTexCoord2f(image->tu, image->tv + image->th);
-	glVertex2f(dest->x, dest->y + dest->h);
-	glTexCoord2f(image->tu + image->tw, image->tv + image->th);
-	glVertex2f(dest->x + dest->w, dest->y + dest->h);
+
+	glBegin(GL_TRIANGLE_STRIP);
+		//set up 4 pie verts
+		glTexCoord2f(image->tu, image->tv);
+		glVertex2f(dest->x, dest->y);
+
+		glTexCoord2f(image->tu + image->tw, image->tv);
+		glVertex2f(dest->x + dest->w, dest->y);
+
+		glTexCoord2f(image->tu, image->tv + image->th);
+		glVertex2f(dest->x, dest->y + dest->h);
+
+		glTexCoord2f(image->tu + image->tw, image->tv + image->th);
+		glVertex2f(dest->x + dest->w, dest->y + dest->h);
 	glEnd();
 }
 
@@ -915,16 +919,20 @@ void pie_DrawImage270( PIEIMAGE *image, PIERECT *dest )
 
 	colour.argb = pie_GetColour();
 
-	glBegin(GL_TRIANGLE_FAN);
 	glColor4ub(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a);
-	glTexCoord2f(image->tu+image->tw, image->tv);
-	glVertex2f(dest->x, dest->y);
-	glTexCoord2f(image->tu+image->tw, image->tv+image->th);
-	glVertex2f(dest->x+dest->h, dest->y);
-	glTexCoord2f(image->tu, image->tv+image->th);
-	glVertex2f(dest->x+dest->h, dest->y+dest->w);
-	glTexCoord2f(image->tu, image->tv);
-	glVertex2f(dest->x, dest->y+dest->w);
+
+	glBegin(GL_TRIANGLE_FAN);
+		glTexCoord2f(image->tu + image->tw, image->tv);
+		glVertex2f(dest->x, dest->y);
+
+		glTexCoord2f(image->tu + image->tw, image->tv + image->th);
+		glVertex2f(dest->x + dest->h, dest->y);
+
+		glTexCoord2f(image->tu, image->tv + image->th);
+		glVertex2f(dest->x + dest->h, dest->y + dest->w);
+
+		glTexCoord2f(image->tu, image->tv);
+		glVertex2f(dest->x, dest->y + dest->w);
 	glEnd();
 }
 
@@ -1060,12 +1068,12 @@ void pie_DrawTexTriangle(PIEVERTEX *aVrts, void* psEffects)
 	pie_SetBilinear(TRUE);
 
 	glBegin(GL_TRIANGLE_FAN);
-	for ( i = 0; i < 3; i++ )
-	{
-		glColor4ub( aVrts[i].light.byte.r, aVrts[i].light.byte.g, aVrts[i].light.byte.b, aVrts[i].light.byte.a );
-		glTexCoord2f( aVrts[i].tu, aVrts[i].tv + offset );
-		glVertex3f( aVrts[i].sx, aVrts[i].sy, aVrts[i].sz );
-	}
+		for ( i = 0; i < 3; i++ )
+		{
+			glColor4ub( aVrts[i].light.byte.r, aVrts[i].light.byte.g, aVrts[i].light.byte.b, aVrts[i].light.byte.a );
+			glTexCoord2f( aVrts[i].tu, aVrts[i].tv + offset );
+			glVertex3f( aVrts[i].sx, aVrts[i].sy, aVrts[i].sz );
+		}
 	glEnd();
 
 	if (psEffects != NULL)

@@ -421,20 +421,6 @@ BOOL LoadLevelGraphics(UBYTE LevelNumber)
 /* Initialise the display system */
 BOOL dispInitialise(void)
 {
-/*	UBYTE	*pFileData, *pImageData;
-	UDWORD	fileSize, width,height;
-	UDWORD i;*/
-
-
-	/*	Build the transparency table that's
-		used for the rgb filter rectangle plotter in ivis */
-	iV_SetTransFilter(TRANS_BLUE,0);		// set the table.
-	iV_SetTransFilter(TRANS_BRITE,1);		// set the other table.
-	iV_SetTransFilter(TINT_BLUE,2);		// set the other other table.
-	iV_SetTransFilter(TINT_DEEPBLUE,3);		// set the other other table.
-
-//	screenSetTextColour(0xff,0xff,0xff);
-
 	noDrag3D = FALSE;
 	RadarZoomLevel = 0;
 

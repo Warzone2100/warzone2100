@@ -31,7 +31,6 @@
 #include "scripttabs.h"
 #include "scriptextern.h"
 
-#include "lib/ivis_common/rendfunc.h"
 #include "display.h"
 
 #include "multiplay.h"
@@ -111,8 +110,7 @@ BOOL scrGenExternGet(UDWORD index)
 		break;
 	case EXTID_CURSOR:
 		type = VAL_INT;
-		scrFunctionResult.v.ival = iV_GetMouseFrame();	// from  rendfunc.c
-//		DBPRINTF(("CURSOR = %d val\n",val));
+		scrFunctionResult.v.ival = 0; // FIXME Set to 0 since function returned undef value
 		break;
 	case EXTID_INTMODE:
 		type=VAL_INT;
@@ -220,6 +218,3 @@ BOOL scrGenExternSet(UDWORD index)
 
 	return TRUE;
 }
-
-
-

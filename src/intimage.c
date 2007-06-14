@@ -239,7 +239,7 @@ TABDEF	SmallTab = {
 //
 BOOL imageInitBitmaps(void)
 {
-  	IntImages = (IMAGEFILE*)resGetData("IMG","intfac.img");
+	IntImages = (IMAGEFILE*)resGetData("IMG", "intfac.img");
 
 	return TRUE;
 }

@@ -524,43 +524,36 @@ void *resGetData(const char *pType, const char *pID)
 {
 	RES_TYPE	*psT;
 	RES_DATA	*psRes;
-	UDWORD HashedType;
 	// Find the correct type
-
-	HashedType=HashString(pType);	// la da la
-//printf("[resGetData] entering with %s / %s  = %0x\n",pID,pType,HashedType);
+	UDWORD HashedType = HashString(pType);
+	UDWORD HashedID = HashStringIgnoreCase(pID);
 
 	for(psT = psResTypes; psT != NULL; psT = psT->psNext )
 	{
-		if (psT->HashedType==HashedType)
+		if (psT->HashedType == HashedType)
 		{
 			break;
 		}
 	}
+
 	if (psT == NULL)
 	{
 		ASSERT( FALSE, "resGetData: Unknown type: %s", pType );
 		return NULL;
 	}
 
+	for(psRes = psT->psRes; psRes != NULL; psRes = psRes->psNext)
 	{
-		UDWORD HashedID=HashStringIgnoreCase(pID);
-		for(psRes = psT->psRes; psRes; psRes = psRes->psNext)
+		if (psRes->HashedID == HashedID)
 		{
-			if (psRes->HashedID==HashedID)
-			{
-				/* We found it */
-//				printf("[resGetData] looking for %s = %0x  ******found!\n",pID,HashedID);
-				break;
-			}
+			/* We found it */
+			break;
 		}
 	}
 
 	if (psRes == NULL)
 	{
 		ASSERT( psRes != NULL, "resGetData: Unknown ID: %s", pID );
-//		resLoadFile(pType,pID);
-//		resGetData(pType,pID);
 		return NULL;
 	}
 

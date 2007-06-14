@@ -78,8 +78,6 @@ extern UDWORD pie_DrawFormattedText(char *String, UDWORD x, UDWORD y, UDWORD Wid
 
 extern void pie_DrawText(const char *string, UDWORD x, UDWORD y);
 extern void pie_DrawText270(const char *String, int XPos, int YPos);
-extern void pie_RenderBlueTintedBitmap(iBitmap *bmp, int x, int y, int w, int h, int ow);
-extern void pie_RenderDeepBlueTintedBitmap(iBitmap *bmp, int x, int y, int w, int h, int ow);
 
 typedef void (*RENDERTEXT_CALLBACK)(const char *String, UDWORD X, UDWORD Y);
 // routines used for textdraw
