@@ -65,7 +65,6 @@ lib/sequence/adpcm.c
 lib/sequence/sequence_stub.c
 src/ai.c
 src/miscimd.c
-src/edit2d.c
 src/gateway.c
 src/edit3d.c
 src/radar.c
@@ -93,7 +92,6 @@ src/multibot.c
 src/feature.c
 src/multiint.c
 src/display3d.c
-src/disp2d.c
 src/multiopt.c
 src/multistruct.c
 src/geometry.c
