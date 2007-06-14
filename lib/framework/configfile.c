@@ -34,8 +34,8 @@ typedef struct	regkey_t
 	char			*value;
 	struct regkey_t *next;
 } regkey_t;
-regkey_t	*registry[REGISTRY_HASH_SIZE] = { NULL };
-char		RegFilePath[MAX_PATH];
+static regkey_t* registry[REGISTRY_HASH_SIZE] = { NULL };
+static char      RegFilePath[MAX_PATH];
 
 //
 // =======================================================================================================================
@@ -54,15 +54,15 @@ void registry_clear( void )
 		regkey_t	*tmp;
 		//~~~~~~~~~~~~~
 
-		for ( j = registry[i]; j != NULL; j = tmp )
+		for (j = registry[i]; j != NULL; j = tmp)
 		{
 			tmp = j->next;
-			free( j->key );
-			free( j->value );
-			free( j );
+			free(j->key);
+			free(j->value);
+			free(j);
 		}
 
-		registry[i] = 0;
+		registry[i] = NULL;
 	}
 }
 
@@ -256,6 +256,14 @@ static BOOL registry_save( const char *filename )
 		return FALSE; // only in NDEBUG case
 	}
 	return TRUE;
+}
+
+void setRegistryFilePath(const char* fileName)
+{
+	strncpy(RegFilePath, fileName, sizeof(RegFilePath) - 1);
+
+	// Guarantee to terminate string with a NUL char
+	RegFilePath[sizeof(RegFilePath) - 1] = '\0';
 }
 
 ///

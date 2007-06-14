@@ -289,11 +289,15 @@ static BOOL loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 	PHYSFS_sint64 length_read;
 
 	pfile = PHYSFS_openRead(pFileName);
-	if (!pfile) {
-		if (hard_fail) {
+	if (!pfile)
+	{
+		if (hard_fail)
+		{
 			debug(LOG_ERROR, "loadFile2: file %s could not be opened: %s", pFileName, PHYSFS_getLastError());
-			assert(FALSE);
-		} else {
+			assert(!"unable to open file");
+		}
+		else
+		{
 			debug(LOG_WARNING, "loadFile2: optional file %s could not be opened: %s", pFileName, PHYSFS_getLastError());
 		}
 		return FALSE;
@@ -302,16 +306,21 @@ static BOOL loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 
 	//debug(LOG_WZ, "loadFile2: %s opened, size %i", pFileName, filesize);
 
-	if (AllocateMem == TRUE) {
+	if (AllocateMem)
+	{
 		// Allocate a buffer to store the data and a terminating zero
 		*ppFileData = (char*)malloc(filesize + 1);
-		if (*ppFileData == NULL) {
+		if (*ppFileData == NULL)
+		{
 			debug(LOG_ERROR, "loadFile2: Out of memory loading %s", pFileName);
 			assert(FALSE);
 			return FALSE;
 		}
-	} else {
-		if (filesize > *pFileSize) {
+	}
+	else
+	{
+		if (filesize > *pFileSize)
+		{
 			debug(LOG_ERROR, "loadFile2: No room for file %s", pFileName);
 			assert(FALSE);
 			return FALSE;
@@ -321,15 +330,28 @@ static BOOL loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 
 	/* Load the file data */
 	length_read = PHYSFS_read(pfile, *ppFileData, 1, filesize);
-	if (length_read != filesize) {
-		free( *ppFileData );
+	if (length_read != filesize)
+	{
+		if (AllocateMem)
+		{
+			free(*ppFileData);
+			*ppFileData = NULL;
+		}
+
 		debug(LOG_ERROR, "loadFile2: Reading %s short: %s",
 		      pFileName, PHYSFS_getLastError());
 		assert(FALSE);
 		return FALSE;
 	}
-	if (!PHYSFS_close(pfile)) {
-		free( *ppFileData );
+
+	if (!PHYSFS_close(pfile))
+	{
+		if (AllocateMem)
+		{
+			free(*ppFileData);
+			*ppFileData = NULL;
+		}
+
 		debug(LOG_ERROR, "loadFile2: Error closing %s: %s", pFileName,
 		      PHYSFS_getLastError());
 		assert(FALSE);

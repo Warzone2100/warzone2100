@@ -21,6 +21,9 @@
  * \brief load and save favourites to the registry.
  */
 
+#ifndef _INCLUDE_LIB_FRAMEWORK_CONFIGFILE_H_
+#define _INCLUDE_LIB_FRAMEWORK_CONFIGFILE_H_
+
 extern void registry_clear(void);
 extern BOOL openWarzoneKey(void);
 extern BOOL closeWarzoneKey(void);
@@ -28,5 +31,6 @@ extern BOOL getWarzoneKeyNumeric(const char *pName, SDWORD *val);
 extern BOOL setWarzoneKeyNumeric(const char *pName, SDWORD val);
 extern BOOL getWarzoneKeyString(const char *pName, char *pString);
 extern BOOL setWarzoneKeyString(const char *pName, const char *pString);
+extern void setRegistryFilePath(const char* fileName);
 
-extern char RegFilePath[MAX_PATH];
+#endif // _INCLUDE_LIB_FRAMEWORK_CONFIGFILE_H_
