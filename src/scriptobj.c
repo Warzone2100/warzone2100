@@ -1172,8 +1172,8 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 	case ST_DROIDID:
 	default:
 		// just set the contents directly
-		psVal->v.ival = *((UDWORD *)pBuffer);
-		endian_udword(&psVal->v.ival);
+		psVal->v.ival = *((SDWORD *)pBuffer);
+		endian_sdword(&psVal->v.ival);
 		break;
 	}
 
