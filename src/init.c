@@ -1069,9 +1069,7 @@ init_ObjectDead( void * psObj )
 	DROID		*psDroid;
 	STRUCTURE	*psStructure;
 
-	/* check is valid pointer */
-	ASSERT( psBaseObj != NULL,
-			"init_ObjectDead: game object pointer invalid\n" );
+	CHECK_OBJECT(psBaseObj);
 
 	if ( psBaseObj->died == TRUE )
 	{

@@ -107,6 +107,18 @@ SIMPLE_OBJECT;
 
 /***************************************************************************/
 
+/* assert if object is bad */
+#define CHECK_OBJECT(object) \
+do { \
+        assert(object != NULL); \
+        assert(object->type == OBJ_DROID || object->type == OBJ_STRUCTURE \
+	       || object->type == OBJ_FEATURE || object->type == OBJ_BULLET \
+	       || object->type == OBJ_TARGET); \
+	assert(object->type == OBJ_FEATURE || object->type == OBJ_TARGET \
+	       || object->player < MAX_PLAYERS); \
+        assert(object->direction <= 360.0f && object->direction >= 0.0f); \
+} while (0)
+
 #endif
 
 /***************************************************************************/

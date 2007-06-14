@@ -126,6 +126,20 @@ extern void	objectShimmy	( BASE_OBJECT *psObj );
 // Watermelon:naybor related functions
 extern void projGetNaybors(PROJ_OBJECT *psObj);
 
+/* assert if projectile is bad */
+#define CHECK_PROJECTILE(object) \
+do { \
+        assert(object != NULL); \
+        assert(object->type == OBJ_BULLET); \
+        assert(object->player < MAX_PLAYERS); \
+	assert(object->state == PROJ_INFLIGHT || object->state == PROJ_IMPACT \
+	       || object->state == PROJ_POSTIMPACT); \
+        assert(object->direction <= 360.0f && object->direction >= 0.0f); \
+	if (object->psDest) CHECK_OBJECT(object->psDest); \
+	if (object->psSource) CHECK_OBJECT(object->psSource); \
+	if (object->psDamaged) CHECK_OBJECT(object->psDamaged); \
+} while (0)
+
 
 #endif	/* _PROJECTILE_H_ */
 

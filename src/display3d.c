@@ -1184,13 +1184,8 @@ static void display3DProjectiles( void )
 		{
 		case PROJ_INFLIGHT:
 			// if source or destination is visible
-//			if(   ((psObj->psSource != NULL) && psObj->psSource->visible[selectedPlayer])
-//			   || ((psObj->psDest != NULL)   && psObj->psDest->visible[selectedPlayer]  )  )
 			if(gfxVisible(psObj))
-
-//			if(GFX_VISIBLE(psObj))
 			{
-
 				/* don't display first frame of trajectory (projectile on firing object) */
 				if ( gameTime != psObj->born )
 				{

@@ -151,6 +151,8 @@ BOOL gfxVisible(PROJ_OBJECT *psObj)
 {
 	BOOL bVisible = FALSE;
 
+	CHECK_PROJECTILE(psObj);
+
 	// already know it is visible
 	if (psObj->bVisible)
 	{
@@ -256,8 +258,10 @@ proj_GetNext( void )
 // update the kills after a target is destroyed
 static void proj_UpdateKills(PROJ_OBJECT *psObj)
 {
-	DROID	        *psDroid ;//, *psSensor;
-    BASE_OBJECT     *psSensor;//, *psTarget;
+	DROID	        *psDroid;
+	BASE_OBJECT     *psSensor;
+
+	CHECK_PROJECTILE(psObj);
 
 	if ((psObj->psSource == NULL) ||
 		((psObj->psDest != NULL) && (psObj->psDest->type == OBJ_FEATURE)))
@@ -587,6 +591,8 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 		counterBatteryFire(psAttacker, psTarget);
 	}
 
+	CHECK_PROJECTILE(psObj);
+
 	return TRUE;
 }
 
@@ -619,8 +625,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 	BOOL			bPenetrate;
 	WEAPON			asWeap;
 
-	ASSERT( psObj != NULL,
-		"proj_InFlightDirectFunc: invalid projectile pointer" );
+	CHECK_PROJECTILE(psObj);
 
 	psStats = psObj->psWStats;
 	ASSERT( psStats != NULL,
@@ -757,6 +762,9 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 			!aiCheckAlliances(asProjNaybors[i].psObj->player,psObj->player) )
 		{
 			psTempObj = asProjNaybors[i].psObj;
+
+			CHECK_OBJECT(psTempObj);
+
 			if ( psTempObj == psObj->psDamaged )
 			{
 				continue;
@@ -919,8 +927,7 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 	BOOL			bPenetrate;
 	WEAPON			asWeap;
 
-	ASSERT( psObj != NULL,
-		"proj_InFlightIndirectFunc: invalid projectile pointer" );
+	CHECK_PROJECTILE(psObj);
 
 	psStats = psObj->psWStats;
 	bPenetrate = psStats->penetrate;
@@ -1021,6 +1028,9 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 			!aiCheckAlliances(asProjNaybors[i].psObj->player,psObj->player))
 		{
 			psTempObj = asProjNaybors[i].psObj;
+
+			CHECK_OBJECT(psTempObj);
+
 			//Watermelon;dont collide with any other projectiles
 			if ( psTempObj->type == OBJ_BULLET )
 			{
@@ -1177,9 +1187,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 	SDWORD			tarZ0,tarZ1,zDiff;
 	int				impact_angle;
 
-
-	ASSERT( psObj != NULL,
-		"proj_ImpactFunc: invalid projectile pointer" );
+	CHECK_PROJECTILE(psObj);
 
 	psStats = psObj->psWStats;
 	ASSERT( psStats != NULL,
@@ -1246,11 +1254,6 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 	}
 	/* Nothings been killed */
 	bKilled = FALSE;
-	if ( psObj->psDest != NULL )
-	{
-		ASSERT( psObj->psDest != NULL,
-			"proj_ImpactFunc: Invalid destination object pointer" );
-	}
 
 	if ( psObj->psDest == NULL )
 	{
@@ -1306,13 +1309,15 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 	}
 	else
 	{
+		CHECK_OBJECT( psObj->psDest );
+
 		if (psObj->psDest->type == OBJ_FEATURE &&
 			((FEATURE *)psObj->psDest)->psStats->damageable == 0)
 		{
 			debug( LOG_NEVER, "proj_ImpactFunc: trying to damage non-damageable target,projectile removed\n");
 			if ( hashTable_RemoveElement( g_pProjObjTable, psObj, (int) psObj, UNUSED_KEY ) == FALSE )
 			{
-				debug( LOG_NEVER, "proj_ImpactFunc: couldn't remove projectile from table\n" );
+				debug( LOG_ERROR, "proj_ImpactFunc: couldn't remove projectile from table\n" );
 			}
 			return;
 		}
@@ -1846,8 +1851,7 @@ proj_PostImpactFunc( PROJ_OBJECT *psObj )
 	SDWORD			i, age;
 	FIRE_BOX		flame;
 
-	ASSERT( psObj != NULL,
-		"proj_PostImpactFunc: invalid projectile pointer" );
+	CHECK_PROJECTILE(psObj);
 
 	psStats = psObj->psWStats;
 	ASSERT( psStats != NULL,
@@ -1895,8 +1899,7 @@ proj_PostImpactFunc( PROJ_OBJECT *psObj )
 static void
 proj_Update( PROJ_OBJECT *psObj )
 {
-	ASSERT( psObj != NULL,
-		"proj_Update: Invalid bullet pointer" );
+	CHECK_PROJECTILE(psObj);
 
 	/* See if any of the stored objects have died
 	 * since the projectile was created
@@ -1959,6 +1962,8 @@ proj_checkBurnDamage( BASE_OBJECT *apsList, PROJ_OBJECT *psProj,
 	SDWORD			damageToDo;
 	BOOL			bKilled;
 //	BOOL			bMultiTemp;
+
+	CHECK_PROJECTILE(psProj);
 
 	// note the attacker if any
 	g_pProjLastAttacker = psProj->psSource;
@@ -2079,6 +2084,7 @@ STRUCTURE	*psStructure;
 FEATURE		*psFeat;
 //Watermelon:droid pointer
 
+	CHECK_OBJECT(psTarget);
 	radius = 0;
 
 	switch(psTarget->type)
@@ -2334,6 +2340,8 @@ void projGetNaybors(PROJ_OBJECT *psObj)
 	//Watermelon:renamed to psTempObj from psObj
 	BASE_OBJECT	*psTempObj;
 
+	CHECK_PROJECTILE(psObj);
+
 // Ensure only called max of once per droid per game cycle.
 	if(CurrentProjNaybors == (BASE_OBJECT *)psObj && projnayborTime == gameTime) {
 		return;
@@ -2376,6 +2384,7 @@ UDWORD	establishTargetHeight( BASE_OBJECT *psTarget )
 	{
 		return 0;
 	}
+	CHECK_OBJECT(psTarget);
 
 	switch(psTarget->type)
 	{
