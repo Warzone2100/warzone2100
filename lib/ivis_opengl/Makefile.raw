@@ -4,12 +4,12 @@ include $(MAKERULES)/configure.mk
 SRC=	ivi.c \
 	pieblitfunc.c \
 	piedraw.c \
+	piefunc.c \
 	piematrix.c \
 	piemode.c \
 	piepalette.c \
 	piestate.c \
 	pietexture.c \
-	rendfunc.c \
 	rendmode.c \
 	screen.c \
 	tex.c \
