@@ -374,10 +374,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\lib\ivis_opengl\rendfunc.c"
-					>
-				</File>
-				<File
 					RelativePath="..\lib\ivis_opengl\rendmode.c"
 					>
 				</File>
@@ -1646,10 +1642,6 @@
 			</File>
 			<File
 				RelativePath="..\src\raycast.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\ivis_common\rendfunc.h"
 				>
 			</File>
 			<File
