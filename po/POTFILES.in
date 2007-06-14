@@ -34,7 +34,6 @@ lib/ivis_opengl/piepalette.c
 lib/ivis_opengl/textdraw.c
 lib/ivis_opengl/ivi.c
 lib/ivis_opengl/tex.c
-lib/ivis_opengl/rendfunc.c
 lib/ivis_opengl/rendmode.c
 lib/ivis_opengl/screen.c
 lib/ivis_opengl/piematrix.c
