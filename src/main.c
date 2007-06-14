@@ -762,7 +762,7 @@ int main(int argc, char *argv[])
 	make_dir(MultiCustomMapsPath, "multiplay", "custommaps");
 
 	/* Put these files in the writedir root */
-	strcpy(RegFilePath, "config");
+	setRegistryFilePath("config");
 	strcpy(KeyMapPath, "keymap.map");
 	strcpy(UserMusicPath, "music");
 
