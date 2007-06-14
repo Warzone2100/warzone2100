@@ -25,7 +25,6 @@
  */
 #include <string.h>
 
-//#define DEBUG_GROUP1
 #include "lib/framework/frame.h"
 #include "objects.h"
 #include "deliverance.h"
@@ -39,29 +38,10 @@
 #include "scriptcb.h"
 #include "mission.h"
 
-/* Allocation sizes for the droid, structure and feature heaps */
+static SDWORD	factoryDeliveryPointCheck[MAX_PLAYERS][NUM_FLAG_TYPES][MAX_FACTORY];
 
-
-#define DROID_INIT		400
-#define STRUCTURE_INIT	200
-
-#define DROID_EXT		15
-#define STRUCTURE_EXT	15
-#define STRUCTFUNC_INIT	50
-#define STRUCTFUNC_EXT	5
-#define FEATURE_INIT	145		// Surely this can be reduced.
-#define FEATURE_EXT		15
-#define FLAGPOS_INIT	20
-#define FLAGPOS_EXT		5
-#define TEMPLATE_INIT	120		// was 40 but this there is 116 templates in template.txt alone ... Arse ... 84 bytes each as well ... arse ...
-#define TEMPLATE_EXT	10
-
-
-//SDWORD	factoryDeliveryPointCheck[MAX_PLAYERS][NUM_FACTORY_TYPES][MAX_FACTORY];
-SDWORD	factoryDeliveryPointCheck[MAX_PLAYERS][NUM_FLAG_TYPES][MAX_FACTORY];
 // the initial value for the object ID
 #define OBJ_ID_INIT		20000
-
 
 /* The id number for the next object allocated
  * Each object will have a unique id number irrespective of type
@@ -74,108 +54,21 @@ DROID			*apsDroidLists[MAX_PLAYERS];
 STRUCTURE		*apsStructLists[MAX_PLAYERS];
 FEATURE			*apsFeatureLists[MAX_PLAYERS];		// Only player zero is valid for
 													// features
-/* The list of structure functionality's required*/
-FUNCTIONALITY	*apsStructFuncLists[MAX_PLAYERS];
 /*The list of Flag Positions allocated */
 FLAG_POSITION	*apsFlagPosLists[MAX_PLAYERS];
 
 /* The list of destroyed objects */
 BASE_OBJECT		*psDestroyedObj=NULL;
 
+/* Forward function declarations */
+static void objListIntegCheck(void);
 
-#if defined(DEBUG)
-// store a record of units that recently died
-typedef struct _morgue
-{
-	BASE_OBJECT		*pMem;
-	SDWORD			type;
-	UDWORD			id;
-	UDWORD			player;
-	char			aName[50];
-	UDWORD			died;
-} MORGUE;
-
-#define MAX_MORGUE		150
-MORGUE	asMorgue[MAX_MORGUE];
-
-SDWORD		morgueEnd;
-
-void initMorgue(void)
-{
-	memset(asMorgue, 0, sizeof(asMorgue));
-	morgueEnd = 0;
-}
-
-void embalm(BASE_OBJECT *psDead)
-{
-	MORGUE	*psSlot;
-	char	*pName;
-
-	psSlot = asMorgue + morgueEnd;
-
-	memset(psSlot, 0, sizeof(MORGUE));
-
-	psSlot->pMem = psDead;
-	psSlot->type = psDead->type;
-	psSlot->id = psDead->id;
-	psSlot->player = psDead->player;
-	psSlot->died = psDead->died;
-
-	pName = NULL;
-	switch (psDead->type)
-	{
-	case OBJ_BULLET:
-	case OBJ_TARGET:
-		/* Was originally not handled */
-		debug(LOG_ERROR, "src/objmem.c:embalm(): Unhandled dead object type");
-		break;
-	case OBJ_DROID:
-		pName = ((DROID *)psDead)->aName;
-		break;
-	case OBJ_STRUCTURE:
-		pName = ((STRUCTURE *)psDead)->pStructureType->pName;
-		break;
-	case OBJ_FEATURE:
-		pName = ((FEATURE *)psDead)->psStats->pName;
-		break;
-	}
-
-	if (pName != NULL)
-	{
-		strncpy(psSlot->aName, pName, 50);
-		psSlot->aName[50] = 0;
-	}
-	else
-	{
-		psSlot->aName[0] = 0;
-	}
-
-	morgueEnd += 1;
-	if (morgueEnd >= MAX_MORGUE)
-	{
-		morgueEnd = 0;
-	}
-}
-
-
-#define INIT_MORGUE()	initMorgue()
-#define EMBALM(x)		embalm(x)
-
-
-#else
-#define INIT_MORGUE()
-#define EMBALM(x)
-#endif
-
-void objListIntegCheck(void);
 
 /* Initialise the object heaps */
 BOOL objmemInitialise(void)
 {
 	// reset the object ID number
 	objID = OBJ_ID_INIT;
-
-	INIT_MORGUE();
 
 	return TRUE;
 }
@@ -185,10 +78,42 @@ void objmemShutdown(void)
 {
 }
 
+/* Remove an object from the destroyed list, finally freeing its memory
+ * Hopefully by this time, no pointers still refer to it! */
+static void objmemDestroy(BASE_OBJECT *psObj)
+{
+	switch (psObj->type)
+	{
+		case OBJ_DROID:
+			debug(LOG_MEMORY, "objmemUpdate: freeing droid at %p", psObj);
+			droidRelease((DROID *)psObj);
+			break;
+
+		case OBJ_STRUCTURE:
+			debug(LOG_MEMORY, "objmemUpdate: freeing structure at %p", psObj);
+			structureRelease((STRUCTURE *)psObj);
+			break;
+
+		case OBJ_FEATURE:
+			debug(LOG_MEMORY, "objmemUpdate: freeing feature at %p", psObj);
+			featureRelease((FEATURE *)psObj);
+			break;
+
+		default:
+			ASSERT(FALSE, "objmemUpdate: unknown object type in destroyed list at %p", psObj);
+	}
+	free(psObj);
+}
+
 /* General housekeeping for the object system */
 void objmemUpdate(void)
 {
 	BASE_OBJECT		*psCurr, *psNext, *psPrev;
+
+#ifdef DEBUG
+	// do a general validity check first
+	objListIntegCheck();
+#endif
 
 	// tell the script system about any destroyed objects
 	if (psDestroyedObj != NULL)
@@ -203,30 +128,7 @@ void objmemUpdate(void)
 	while (psDestroyedObj != NULL && psDestroyedObj->died != gameTime)
 	{
 		psNext = psDestroyedObj->psNext;
-
-		EMBALM(psDestroyedObj);
-
-		switch (psDestroyedObj->type)
-		{
-			case OBJ_DROID:
-				debug( LOG_MEMORY, "objmemUpdate: freeing droid\n");
-				droidRelease((DROID *)psDestroyedObj);
-				break;
-
-			case OBJ_STRUCTURE:
-				debug( LOG_MEMORY, "objmemUpdate: freeing structure\n");
-				structureRelease((STRUCTURE *)psDestroyedObj);
-				break;
-
-			case OBJ_FEATURE:
-				featureRelease((FEATURE *)psDestroyedObj);
-				break;
-
-			default:
-				ASSERT(!"unknown object type", "objmemUpdate: unknown object type in destroyed list");
-		}
-		free(psDestroyedObj);
-
+		objmemDestroy(psDestroyedObj);
 		psDestroyedObj = psNext;
 	}
 
@@ -237,23 +139,7 @@ void objmemUpdate(void)
 		psNext = psCurr->psNext;
 		if (psCurr->died != gameTime)
 		{
-			EMBALM(psCurr);
-
-			switch (psCurr->type)
-			{
-				case OBJ_DROID:
-					droidRelease((DROID *)psCurr);
-					break;
-				case OBJ_STRUCTURE:
-					structureRelease((STRUCTURE *)psCurr);
-					break;
-				case OBJ_FEATURE:
-					featureRelease((FEATURE *)psDestroyedObj);
-					break;
-				default:
-					ASSERT(!"unknown object type", "objmemUpdate: unknown object type in destroyed list");
-			}
-			free(psCurr);
+			objmemDestroy(psCurr);
 
 			/*set the linked list up - you will never be deleting the top
 			of the list, so don't have to check*/
@@ -1010,7 +896,7 @@ BOOL checkValidId(UDWORD id)
 
 
 // integrity check the lists
-void objListIntegCheck(void)
+static void objListIntegCheck(void)
 {
 	SDWORD			player;
 	BASE_OBJECT		*psCurr;
