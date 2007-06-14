@@ -119,10 +119,6 @@ extern RENDERED_BUTTON StatBuffers[NUM_STATBUFFERS];
 extern RENDERED_BUTTON System0Buffers[NUM_SYSTEM0BUFFERS];
 //extern RENDERED_BUTTON System1Buffers[NUM_OBJECTBUFFERS];
 //extern RENDERED_BUTTON System2Buffers[NUM_OBJECTBUFFERS];
-extern BUTTON_SURFACE TopicSurfaces[NUM_TOPICSURFACES];
-extern BUTTON_SURFACE ObjectSurfaces[NUM_OBJECTSURFACES];
-extern BUTTON_SURFACE StatSurfaces[NUM_STATSURFACES];
-extern BUTTON_SURFACE System0Surfaces[NUM_SYSTEM0SURFACES];
 
 
 extern UDWORD ManuPower;		// Power required to manufacture the current item.

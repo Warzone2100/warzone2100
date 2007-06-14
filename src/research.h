@@ -109,7 +109,7 @@ extern void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay);
 //this just inits all the research arrays
 extern BOOL ResearchShutDown(void);
 //this free the memory used for the research
-extern BOOL ResearchRelease(void);
+extern void ResearchRelease(void);
 
 /* For a given view data get the research this is related to */
 extern RESEARCH * getResearch(const char *pName, BOOL resName);

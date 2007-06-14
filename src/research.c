@@ -99,27 +99,27 @@ RESEARCH                *psCBLastResearch;
 
 //need corresponding arrays for the above
 //needs to be a UWORD* for the Patches
-UWORD               *pResearchPR;
+static UWORD*            pResearchPR;
 //UBYTE               *pResearchPR;
-UWORD               *pResearchStructPR;
-FUNCTION            **pResearchFunc;
-UWORD               *pResearchStructRed;
-COMP_BASE_STATS	    **pResearchArteRed;
-UWORD               *pResearchStructRes;
-COMP_BASE_STATS	    **pResearchArteRes;
-COMP_BASE_STATS	    **pResearchArteRep;
+static UWORD*            pResearchStructPR;
+static FUNCTION**        pResearchFunc;
+static UWORD*            pResearchStructRed;
+static COMP_BASE_STATS** pResearchArteRed;
+static UWORD*            pResearchStructRes;
+static COMP_BASE_STATS** pResearchArteRes;
+static COMP_BASE_STATS** pResearchArteRep;
 
 
-UWORD               numResearchPR;
+static UWORD numResearchPR;
 
 
-UWORD               numResearchStructPR;
-UWORD               numResearchFunc;
-UWORD               numResearchStructRed;
-UBYTE               numResearchArteRed;
-UWORD               numResearchStructRes;
-UBYTE               numResearchArteRes;
-UBYTE               numResearchArteRep;
+static UWORD numResearchStructPR;
+static UWORD numResearchFunc;
+static UWORD numResearchStructRed;
+static UBYTE numResearchArteRed;
+static UWORD numResearchStructRes;
+static UBYTE numResearchArteRes;
+static UBYTE numResearchArteRep;
 
 //List of pointers to arrays of PLAYER_RESEARCH[numResearch] for each player
 PLAYER_RESEARCH*		asPlayerResList[MAX_PLAYERS];
@@ -2005,8 +2005,10 @@ BOOL ResearchShutDown(void)
 		pList++;
 	}
 
-	if(numResearch) {
-		FREE (asResearch);
+	if(numResearch)
+	{
+		free(asResearch);
+		asResearch = NULL;
 	}
 
 	//free up the lists for each player
@@ -2043,26 +2045,43 @@ BOOL ResearchShutDown(void)
 }
 
 /*This function is called when a game finishes*/
-BOOL ResearchRelease(void)
+void ResearchRelease(void)
 {
-    UBYTE   i;
+	unsigned int i;
 
-    //free all the pre-defined arrays for research
-    free(asResearch);
+	//free all the pre-defined arrays for research
+	free(asResearch);
+	asResearch = NULL;
+
 	for (i=0; i < MAX_PLAYERS; i++)
 	{
-        free(asPlayerResList[i]);
-    }
-    free(pResearchPR);
-    free(pResearchStructPR);
-    free(pResearchFunc);
-    free(pResearchStructRed);
-    free(pResearchArteRed);
-    free(pResearchStructRes);
-    free(pResearchArteRes);
-    free(pResearchArteRep);
+        	free(asPlayerResList[i]);
+		asPlayerResList[i] = NULL;
+	}
 
-	return TRUE;
+	free(pResearchPR);
+	pResearchPR = NULL;
+
+	free(pResearchStructPR);
+	pResearchStructPR = NULL;
+
+	free(pResearchFunc);
+	pResearchFunc = NULL;
+
+	free(pResearchStructRed);
+	pResearchStructRed = NULL;
+
+	free(pResearchArteRed);
+	pResearchArteRed = NULL;
+
+	free(pResearchStructRes);
+	pResearchStructRes = NULL;
+
+	free(pResearchArteRes);
+	pResearchArteRes = NULL;
+
+	free(pResearchArteRep);
+	pResearchArteRep = NULL;
 }
 
 /*puts research facility on hold*/

@@ -1416,7 +1416,7 @@ BOOL stageOneShutDown(void)
 	formationShutDown();
 	releasePlayerPower();
 
-    ResearchRelease();
+	ResearchRelease();
 
 	//free up the gateway stuff?
 	gwShutDown();

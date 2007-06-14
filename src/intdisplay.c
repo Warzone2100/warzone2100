@@ -172,10 +172,14 @@ UDWORD ManuPower = 0;	// Power required to manufacture the current item.
 
 
 // Display surfaces for rendered buttons.
-BUTTON_SURFACE TopicSurfaces[NUM_TOPICSURFACES];
-BUTTON_SURFACE ObjectSurfaces[NUM_OBJECTSURFACES];
-BUTTON_SURFACE StatSurfaces[NUM_STATSURFACES];
-BUTTON_SURFACE System0Surfaces[NUM_SYSTEM0SURFACES];
+// FIXME: These variables are never, ever referenced directly;
+//        they're always used through the below .*Buffers,
+//        so rather than declaring them here we should remove
+//        these and make them part of the below
+static BUTTON_SURFACE TopicSurfaces[NUM_TOPICSURFACES];
+static BUTTON_SURFACE ObjectSurfaces[NUM_OBJECTSURFACES];
+static BUTTON_SURFACE StatSurfaces[NUM_STATSURFACES];
+static BUTTON_SURFACE System0Surfaces[NUM_SYSTEM0SURFACES];
 
 
 // Working buffers for rendered buttons.
@@ -2462,24 +2466,35 @@ SDWORD GetSystem0Buffer(void)
 //
 void DeleteButtonData(void)
 {
-	UDWORD i;
-	for(i=0; i<NUM_OBJECTSURFACES; i++) {
+	unsigned int i;
+
+	// Setting all these pointers may, or may not be necessary, but it surely is safe
+	// Look above (near the declaration of .*Surfaces) for a detailed description of why this .*Surfaces stuff is bad
+	for(i = 0; i < NUM_OBJECTSURFACES; ++i)
+	{
 		free(ObjectSurfaces[i].Buffer);
+		ObjectSurfaces[i].Buffer = NULL;
 		iV_SurfaceDestroy(ObjectSurfaces[i].Surface);
 	}
 
-	for(i=0; i<NUM_TOPICSURFACES; i++) {
+	for(i = 0; i < NUM_TOPICSURFACES; ++i)
+	{
 		free(TopicSurfaces[i].Buffer);
+		TopicSurfaces[i].Buffer = NULL;
 		iV_SurfaceDestroy(TopicSurfaces[i].Surface);
 	}
 
-	for(i=0; i<NUM_STATSURFACES; i++) {
+	for(i = 0; i < NUM_STATSURFACES; ++i)
+	{
 		free(StatSurfaces[i].Buffer);
+		StatSurfaces[i].Buffer = NULL;
 		iV_SurfaceDestroy(StatSurfaces[i].Surface);
 	}
 
-    for(i=0; i<NUM_SYSTEM0SURFACES; i++) {
+	for(i = 0; i < NUM_SYSTEM0SURFACES; ++i)
+	{
 		free(System0Surfaces[i].Buffer);
+		System0Surfaces[i].Buffer = NULL;
 		iV_SurfaceDestroy(System0Surfaces[i].Surface);
 	}
 }

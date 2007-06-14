@@ -77,7 +77,8 @@ typedef struct _paste_box
 	UDWORD		x,y, width,height;
 	MAPTILE		*psTiles;
 } PASTE_BOX;
-PASTE_BOX	sPasteBox, sUndoBox;		// Store the undo box as a paste box.
+
+static PASTE_BOX	sPasteBox, sUndoBox;		// Store the undo box as a paste box.
 
 /* Get a past box from the map */
 static BOOL getBox(PASTE_BOX *psBox, UDWORD x, UDWORD y, UDWORD width, UDWORD height);
@@ -186,17 +187,16 @@ BOOL ed2dInitialise(void)
 /* ShutDown the 2D editing module */
 void ed2dShutDown(void)
 {
-	if (sPasteBox.psTiles != NULL)
-	{
-		free(sPasteBox.psTiles);
-	}
-	if (sUndoBox.psTiles != NULL)
-	{
-		free(sUndoBox.psTiles);
-	}
+	free(sPasteBox.psTiles);
+	sPasteBox.psTiles = NULL;
 
-//	free(aDefaultType);
+	free(sUndoBox.psTiles);
+	sUndoBox.psTiles = NULL;
 
+#if 0
+	free(aDefaultType);
+	aDefaultType = NULL;
+#endif
 }
 
 
@@ -205,7 +205,6 @@ BOOL ed2dProcessInput(void)
 {
 	UDWORD		worldX,worldY;
 	UDWORD		tileX,tileY, mx,my;
-	PASTE_BOX	sGrabBox;
 	BOOL		quitting = FALSE;
 
 	if (keyDown(KEY_RCTRL))
@@ -263,10 +262,8 @@ BOOL ed2dProcessInput(void)
 		(keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL)) &&
 		keyPressed(KEY_C))
 	{
-		if (sPasteBox.psTiles != NULL)
-		{
-			free(sPasteBox.psTiles);
-		}
+		free(sPasteBox.psTiles);
+
 		if (getBox(&sPasteBox, selSX,selSY, selEX-selSX+1,selEY-selSY+1))
 		{
 			debug( LOG_NEVER, "MS_GAME\n");
@@ -404,14 +401,11 @@ BOOL ed2dProcessInput(void)
 			dragSX != tileX && dragSY != tileY)
 		{
 			/* Free any old undo and paste buffer */
-			if (sPasteBox.psTiles != NULL)
-			{
-				free(sPasteBox.psTiles);
-			}
-			if (sUndoBox.psTiles != NULL)
-			{
-				free(sUndoBox.psTiles);
-			}
+			free(sPasteBox.psTiles);
+			free(sUndoBox.psTiles);
+
+			// Make this NULL since the code that operates on this (the second getBox call below) might never be reached
+			sUndoBox.psTiles = NULL;
 
 			/* Get the paste and undo boxes */
 			if (!getBox(&sPasteBox, selSX,selSY, selEX - selSX + 1, selEY - selSY + 1))
@@ -423,6 +417,7 @@ BOOL ed2dProcessInput(void)
 			{
 				free(sPasteBox.psTiles);
 				sPasteBox.psTiles = NULL;
+
 				mState = MS_GAME;
 				break;
 			}
@@ -451,10 +446,8 @@ BOOL ed2dProcessInput(void)
 			 tileY < selSY || tileY > selEY))
 		{
 			/* Free the old undo data */
-			if (sUndoBox.psTiles != NULL)
-			{
-				free(sUndoBox.psTiles);
-			}
+			free(sUndoBox.psTiles);
+
 			/* Get the new undo data */
 			if (!getBox(&sUndoBox, selSX, selSY, sPasteBox.width,sPasteBox.height))
 			{
@@ -520,6 +513,8 @@ BOOL ed2dProcessInput(void)
 	/* Do rotates, flips and copies on the current grab/paste box */
 	if (mState == MS_GRABBED)
 	{
+		PASTE_BOX	sGrabBox;
+
 		/* Flip on X axis */
 		if (keyPressed(KEY_X) &&
 			getBox(&sGrabBox, selSX,selSY, selEX-selSX+1,selEY-selSY+1))
