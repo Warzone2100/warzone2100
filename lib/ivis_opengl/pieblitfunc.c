@@ -490,7 +490,7 @@ void pie_LoadBackDrop(SCREENTYPE screenType)
 		if ( rand()%2 == 0 )
 			sprintf(backd,"texpages/bdrops/0%i-bdrop.png", rand()%7); // Range: 0-6
 		else
-			sprintf(backd,"texpages/bdrops/wzlogo_%i.png", rand()%2 + 3); // Range: 3-4
+			sprintf(backd,"texpages/bdrops/wzlogo_%i.png", rand()%3 + 3); // Range: 3-5
 		break;
 	case SCREEN_MISSIONEND:
 		sprintf(backd,"texpages/bdrops/missionend.png");
