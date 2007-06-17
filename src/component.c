@@ -253,16 +253,17 @@ UDWORD getStructureStatSize(STRUCTURE_STATS *Stats)
 
 UDWORD getStructureHeight(STRUCTURE *psStructure)
 {
-    return (getStructureStatHeight(psStructure->pStructureType));
+	return (getStructureStatHeight(psStructure->pStructureType));
 }
 
 UDWORD getStructureStatHeight(STRUCTURE_STATS *psStat)
 {
-    if (psStat->pIMD)
-    {
-        return (psStat->pIMD->ymax - psStat->pIMD->ymin);
-    }
-    return 0;
+	if (psStat->pIMD)
+	{
+		return (psStat->pIMD->ymax - psStat->pIMD->ymin);
+	}
+
+	return 0;
 }
 
 
@@ -291,14 +292,14 @@ void displayStructureButton(STRUCTURE *psStructure, Vector3i *Rotation, Vector3i
 	Vector3i TmpCamPos = {0,0,0};
 	int		i;
 
-    /*HACK HACK HACK!
-    if its a 'tall thin (ie tower)' structure with something on the top - offset the
-    position to show the object on top*/
-    if (psStructure->pStructureType->pIMD->nconnectors && scale == SMALL_STRUCT_SCALE &&
-        getStructureHeight(psStructure) > TOWER_HEIGHT)
-    {
-        Position->y -= 20;
-    }
+	/*HACK HACK HACK!
+	if its a 'tall thin (ie tower)' structure with something on the top - offset the
+	position to show the object on top*/
+	if (psStructure->pStructureType->pIMD->nconnectors && scale == SMALL_STRUCT_SCALE &&
+	    getStructureHeight(psStructure) > TOWER_HEIGHT)
+	{
+		Position->y -= 20;
+	}
 
 	setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
 	pie_MatScale(scale);
@@ -443,16 +444,16 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats,UDWORD Player, Vector3i *
 	//UDWORD			nWeaponStat;
 	UBYTE	i;
 
-    /*HACK HACK HACK!
-    if its a 'tall thin (ie tower)' structure stat with something on the top - offset the
-    position to show the object on top*/
-    if (Stats->pIMD->nconnectors && scale == SMALL_STRUCT_SCALE &&
-        getStructureStatHeight(Stats) > TOWER_HEIGHT)
-    {
-        Position->y -= 20;
-    }
+	/*HACK HACK HACK!
+	if its a 'tall thin (ie tower)' structure stat with something on the top - offset the
+	position to show the object on top*/
+	if (Stats->pIMD->nconnectors && scale == SMALL_STRUCT_SCALE &&
+	    getStructureStatHeight(Stats) > TOWER_HEIGHT)
+	{
+		Position->y -= 20;
+	}
 
-    setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
+	setMatrix(Position,Rotation,&TmpCamPos,RotXYZ);
 	pie_MatScale(scale);
 
 	/* Draw the building's base first */
@@ -818,18 +819,18 @@ void displayComponentObject(BASE_OBJECT *psObj)
 		objectShimmy( (BASE_OBJECT*) psDroid );
 	}
 
-    if (psDroid->lastHitWeapon == WSC_EMP &&
-        (gameTime - psDroid->timeLastHit < EMP_DISABLE_TIME))
-    {
-        Vector3i position;
+	if (psDroid->lastHitWeapon == WSC_EMP &&
+	    (gameTime - psDroid->timeLastHit < EMP_DISABLE_TIME))
+	{
+		Vector3i position;
 
-        //add an effect on the droid
+		//add an effect on the droid
 		position.x = psDroid->x + DROID_EMP_SPREAD;
 		position.y = psDroid->z + rand()%8;;
 		position.z = psDroid->y + DROID_EMP_SPREAD;
-        effectGiveAuxVar(90+rand()%20);
+		effectGiveAuxVar(90+rand()%20);
 		addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_PLASMA,FALSE,NULL,0);
-    }
+	}
 
 	if (godMode || (psDroid->visible[selectedPlayer] == UBYTE_MAX) || demoGetStatus())
 	{
@@ -877,7 +878,6 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 	SDWORD				frame;
 	SDWORD				pieFlag, iPieData;
 	UDWORD				brightness, specular;
-//	SDWORD				centreX,centreZ;
 	UDWORD				colour;
 	UDWORD				bDarkSide = FALSE;
 	//Watermelon:i
@@ -972,7 +972,7 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 			}
 		}
 		//else if( psDroid->droidType == DROID_CYBORG)
-        else if (cyborgDroid(psDroid))
+	else if (cyborgDroid(psDroid))
 		{
 			/* draw body if cyborg not animating */
 			if ( psDroid->psCurAnim == NULL || psDroid->psCurAnim->bVisible == FALSE )
@@ -993,8 +993,8 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 
 	/* render vtol jet if flying - horrible hack - GJ */
 	if (((psPropStats->propulsionType == LIFT) &&
-		//(psDroid->droidType != DROID_CYBORG)) && (!bButton))
-        (!cyborgDroid(psDroid))) && (!bButton))
+	    //(psDroid->droidType != DROID_CYBORG)) && (!bButton))
+	    (!cyborgDroid(psDroid))) && (!bButton))
 	{
 		/* show flame if above ground */
 		if ( psDroid->sMove.Status != MOVEINACTIVE )
@@ -1002,7 +1002,7 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 			/* draw flame if found  */
 
 			/* GJ TODO: add flame-finding code here */
-            psJet = asBodyStats[psDroid->asBits[COMP_BODY].nStat].pFlameIMD;
+			psJet = asBodyStats[psDroid->asBits[COMP_BODY].nStat].pFlameIMD;
 
 			if ( psJet != NULL )
 			{
@@ -1019,12 +1019,12 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 	}
 
 	/* set default components transparent */
-	if ( psDroid->asWeaps[0].nStat              == 0 &&
-		 psDroid->asBits[COMP_SENSOR].nStat     == 0 &&
-		 psDroid->asBits[COMP_ECM].nStat        == 0 &&
-		 psDroid->asBits[COMP_BRAIN].nStat      == 0 &&
-		 psDroid->asBits[COMP_REPAIRUNIT].nStat == 0 &&
-		 psDroid->asBits[COMP_CONSTRUCT].nStat  == 0    )
+	if (psDroid->asWeaps[0].nStat              == 0 &&
+	    psDroid->asBits[COMP_SENSOR].nStat     == 0 &&
+	    psDroid->asBits[COMP_ECM].nStat        == 0 &&
+	    psDroid->asBits[COMP_BRAIN].nStat      == 0 &&
+	    psDroid->asBits[COMP_REPAIRUNIT].nStat == 0 &&
+	    psDroid->asBits[COMP_CONSTRUCT].nStat  == 0)
 	{
 		pieFlag  |= pie_TRANSLUCENT;
 		iPieData  = DEFAULT_COMPONENT_TRANSLUCENCY;
@@ -1285,7 +1285,7 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 				break;
 
 			case DROID_CONSTRUCT:
-            case DROID_CYBORG_CONSTRUCT:
+			case DROID_CYBORG_CONSTRUCT:
 				/*	Get the mounting graphic - we've already moved to the right position
 				Allegedly - all droids will have a mount graphic so this shouldn't
 				fall on it's arse......*/
@@ -1313,18 +1313,18 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 					pie_Draw3DShape(psShape, 0,colour/*getPlayerColour( psDroid->player)*/, brightness, specular, pieFlag, iPieData);
 				}
 
-                /* translate for construct mount point if cyborg */
-                if (cyborgDroid(psDroid) && psShape && psShape->nconnectors)
+				/* translate for construct mount point if cyborg */
+				if (cyborgDroid(psDroid) && psShape && psShape->nconnectors)
 				{
 					pie_TRANSLATE( psShape->connectors[0].x,
 								   psShape->connectors[0].z,
 								   psShape->connectors[0].y  );
 				}
 
-                /* Get the construct graphic assuming it's there */
+				/* Get the construct graphic assuming it's there */
 				psShape = CONSTRUCT_IMD(psDroid,psDroid->player);
 
-                /* Draw it */
+				/* Draw it */
 				if(psShape)
 				{
 					pie_Draw3DShape(psShape, 0,colour/*getPlayerColour( psDroid->player)*/, brightness, specular, pieFlag, iPieData);
@@ -1371,7 +1371,7 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 				pie_MatEnd();
 				break;
 			case DROID_REPAIR:
-            case DROID_CYBORG_REPAIR:
+			case DROID_CYBORG_REPAIR:
 				/*	Get the mounting graphic - we've already moved to the right position
 				Allegedly - all droids will have a mount graphic so this shouldn't
 				fall on it's arse......*/
@@ -1399,16 +1399,16 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 					pie_Draw3DShape(psShape, 0,colour /*getPlayerColour( psDroid->player)*/, brightness, specular, pieFlag, iPieData);
 				}
 
-                /* translate for construct mount point if cyborg */
-                if (cyborgDroid(psDroid) && psShape && psShape->nconnectors)
+				/* translate for construct mount point if cyborg */
+				if (cyborgDroid(psDroid) && psShape && psShape->nconnectors)
 				{
 					pie_TRANSLATE( psShape->connectors[0].x,
 								   psShape->connectors[0].z,
 								   psShape->connectors[0].y  );
 				}
 
-                /* Get the Repair graphic assuming it's there.... */
-                psShape = REPAIR_IMD(psDroid,psDroid->player);
+				/* Get the Repair graphic assuming it's there.... */
+				psShape = REPAIR_IMD(psDroid,psDroid->player);
 
 				/* Draw it */
 				if(psShape)
@@ -1503,8 +1503,8 @@ void destroyFXDroid(DROID	*psDroid)
 			case DROID_DEFAULT:
 			case DROID_CYBORG:
 			case DROID_CYBORG_SUPER:
-            case DROID_CYBORG_CONSTRUCT:
-            case DROID_CYBORG_REPAIR:
+			case DROID_CYBORG_CONSTRUCT:
+			case DROID_CYBORG_REPAIR:
 			case DROID_WEAPON:
 			case DROID_COMMAND:
 				if (psDroid->numWeaps > 0)
@@ -1530,8 +1530,8 @@ void destroyFXDroid(DROID	*psDroid)
 			case DROID_DEFAULT:
 			case DROID_CYBORG:
 			case DROID_CYBORG_SUPER:
-            case DROID_CYBORG_CONSTRUCT:
-            case DROID_CYBORG_REPAIR:
+			case DROID_CYBORG_CONSTRUCT:
+			case DROID_CYBORG_REPAIR:
 			case DROID_WEAPON:
 			case DROID_COMMAND:
 				if(psDroid->numWeaps)
@@ -1579,7 +1579,7 @@ void	compPersonToBits(DROID *psDroid)
 		return;
 	}
 	/* get bits pointers according to whether baba or cyborg*/
-    if (cyborgDroid(psDroid))
+	if (cyborgDroid(psDroid))
 	{
 		headImd = getImdFromIndex(MI_CYBORG_HEAD);
 		legsImd = getImdFromIndex(MI_CYBORG_LEGS);
