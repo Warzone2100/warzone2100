@@ -23,12 +23,14 @@
  *
  * Load IMD (.pie) files
  *
- * updated to load version 4 files
+ * - Changes at version 4:
+ *   - pcx name as string
+ *   - pcx filepath
+ *   - cut down vertex list
  *
- * changes at version 4:
- * - pcx name as string
- * - pcx filepath
- * - cut down vertex list
+ * - Changes at version 5_pre:
+ *   - float coordinate support
+ *   - ...
  */
 
 #include "lib/framework/frame.h"
@@ -686,7 +688,7 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 	}
 
 	//Now supporting version 4 files
-	if (imd_version < 2 || imd_version > 4)
+	if (imd_version < 2 || imd_version > 5)
 	{
 		debug(LOG_ERROR, "iV_ProcessIMD %s version %d not supported", pFileName, imd_version);
 		return NULL;
