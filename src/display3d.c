@@ -218,7 +218,6 @@ static TILE_BUCKET tileIJ[LAND_YGRD][LAND_XGRD];
 
 /* Points for flipping the texture around if the tile is flipped or rotated */
 static Vector2i sP1, sP2, sP3, sP4;
-static Vector2i *psP1, *psP2, *psP3, *psP4;
 
 /* Records the present X and Y values for the current mouse tile (in tiles */
 SDWORD mouseTileX, mouseTileY;
@@ -1066,7 +1065,7 @@ static void flipsAndRots(int texture)
 	/* Used to calculate texture coordinates, which are 0-255 in value */
 	const UDWORD xMult = (256 / TILES_IN_PAGE_COLUMN);
 	const UDWORD yMult = (256 / TILES_IN_PAGE_ROW);
-	Vector2i *psPTemp;
+	Vector2i sPTemp;
 
 	/* Store the source rect as four points */
 	sP1.x = 1;
@@ -1078,55 +1077,50 @@ static void flipsAndRots(int texture)
 	sP4.x = 1;
 	sP4.y = (yMult - 1);
 
-	/* Store pointers to the points */
-	psP1 = &sP1;
-	psP2 = &sP2;
-	psP3 = &sP3;
-	psP4 = &sP4;
-
 	if (texture & TILE_XFLIP)
 	{
-		psPTemp = psP1;
-		psP1 = psP2;
-		psP2 = psPTemp;
-		psPTemp = psP3;
-		psP3 = psP4;
-		psP4 = psPTemp;
+		sPTemp = sP1;
+		sP1 = sP2;
+		sP2 = sPTemp;
+
+		sPTemp = sP3;
+		sP3 = sP4;
+		sP4 = sPTemp;
 	}
 	if (texture & TILE_YFLIP)
 	{
-		psPTemp = psP1;
-		psP1 = psP4;
-		psP4 = psPTemp;
-		psPTemp = psP2;
-		psP2 = psP3;
-		psP3 = psPTemp;
+		sPTemp = sP1;
+		sP1 = sP4;
+		sP4 = sPTemp;
+		sPTemp = sP2;
+		sP2 = sP3;
+		sP3 = sPTemp;
 	}
 
 	switch ((texture & TILE_ROTMASK) >> TILE_ROTSHIFT)
 	{
-	case 1:
-		psPTemp = psP1;
-		psP1 = psP4;
-		psP4 = psP3;
-		psP3 = psP2;
-		psP2 = psPTemp;
-		break;
-	case 2:
-		psPTemp = psP1;
-		psP1 = psP3;
-		psP3 = psPTemp;
-		psPTemp = psP4;
-		psP4 = psP2;
-		psP2 = psPTemp;
-		break;
-	case 3:
-		psPTemp = psP1;
-		psP1 = psP2;
-		psP2 = psP3;
-		psP3 = psP4;
-		psP4 = psPTemp;
-		break;
+		case 1:
+			sPTemp = sP1;
+			sP1 = sP4;
+			sP4 = sP3;
+			sP3 = sP2;
+			sP2 = sPTemp;
+			break;
+		case 2:
+			sPTemp = sP1;
+			sP1 = sP3;
+			sP3 = sPTemp;
+			sPTemp = sP4;
+			sP4 = sP2;
+			sP2 = sPTemp;
+			break;
+		case 3:
+			sPTemp = sP1;
+			sP1 = sP2;
+			sP2 = sP3;
+			sP3 = sP4;
+			sP4 = sPTemp;
+			break;
 	}
 }
 
@@ -4284,17 +4278,17 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	/* Check for rotations and flips - this sets up the coordinates for texturing */
 	flipsAndRots(tileNumber & ~TILE_NUMMASK);
 
-	tileScreenInfo[i+0][j+0].tu = (UWORD)(psP1->x + offset.x);
-	tileScreenInfo[i+0][j+0].tv = (UWORD)(psP1->y + offset.y);
+	tileScreenInfo[i+0][j+0].tu = (UWORD)(sP1.x + offset.x);
+	tileScreenInfo[i+0][j+0].tv = (UWORD)(sP1.y + offset.y);
 
-	tileScreenInfo[i+0][j+1].tu = (UWORD)(psP2->x + offset.x);
-	tileScreenInfo[i+0][j+1].tv = (UWORD)(psP2->y + offset.y);
+	tileScreenInfo[i+0][j+1].tu = (UWORD)(sP2.x + offset.x);
+	tileScreenInfo[i+0][j+1].tv = (UWORD)(sP2.y + offset.y);
 
-	tileScreenInfo[i+1][j+1].tu = (UWORD)(psP3->x + offset.x);
-	tileScreenInfo[i+1][j+1].tv = (UWORD)(psP3->y + offset.y);
+	tileScreenInfo[i+1][j+1].tu = (UWORD)(sP3.x + offset.x);
+	tileScreenInfo[i+1][j+1].tv = (UWORD)(sP3.y + offset.y);
 
-	tileScreenInfo[i+1][j+0].tu = (UWORD)(psP4->x + offset.x);
-	tileScreenInfo[i+1][j+0].tv = (UWORD)(psP4->y + offset.y);
+	tileScreenInfo[i+1][j+0].tu = (UWORD)(sP4.x + offset.x);
+	tileScreenInfo[i+1][j+0].tv = (UWORD)(sP4.y + offset.y);
 
 	/* The first triangle */
 	memcpy(&vertices[0], &tileScreenInfo[i+0][j+0], sizeof(PIEVERTEX));
