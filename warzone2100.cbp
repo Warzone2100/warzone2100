@@ -211,14 +211,14 @@
 		</Unit>
 		<Unit filename="lib/framework/resource_lexer.l">
 			<Option compilerVar="CC" />
-			<Option compiler="gcc" use="1" buildCommand="flex -o$file.c $file\n$compiler $options $include -I. -c $file.c -o $object" />
+			<Option compiler="gcc" use="1" buildCommand="flex -o$file.c $file\n$compiler $options $includes -c $file.c -o $object" />
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
 		<Unit filename="lib/framework/resource_parser.y">
 			<Option compilerVar="CC" />
 			<Option weight="10" />
-			<Option compiler="gcc" use="1" buildCommand="bison -y -d -olib/framework/resource_parser.tab.c $file\n$compiler $options $include -I. -c lib/framework/resource_parser.tab.c -o $object" />
+			<Option compiler="gcc" use="1" buildCommand="bison -y -d -olib/framework/resource_parser.tab.c $file\n$compiler $options $includes -c lib/framework/resource_parser.tab.c -o $object" />
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
@@ -236,14 +236,14 @@
 		</Unit>
 		<Unit filename="lib/framework/strres_lexer.l">
 			<Option compilerVar="CC" />
-			<Option compiler="gcc" use="1" buildCommand="flex -o$file.c $file\n$compiler $options $include -I. -c $file.c -o $object" />
+			<Option compiler="gcc" use="1" buildCommand="flex -o$file.c $file\n$compiler $options $includes -c $file.c -o $object" />
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
 		<Unit filename="lib/framework/strres_parser.y">
 			<Option compilerVar="CC" />
 			<Option weight="10" />
-			<Option compiler="gcc" use="1" buildCommand="bison -y -d -olib/framework/strres_parser.tab.c $file\n$compiler $options $include -I. -c lib/framework/strres_parser.tab.c -o $object" />
+			<Option compiler="gcc" use="1" buildCommand="bison -y -d -olib/framework/strres_parser.tab.c $file\n$compiler $options $includes -c lib/framework/strres_parser.tab.c -o $object" />
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
@@ -325,14 +325,14 @@
 		</Unit>
 		<Unit filename="lib/gamelib/audp_lexer.l">
 			<Option compilerVar="CC" />
-			<Option compiler="gcc" use="1" buildCommand="flex -o$file.c $file\n$compiler $options $include -I. -c $file.c -o $object" />
+			<Option compiler="gcc" use="1" buildCommand="flex -o$file.c $file\n$compiler $options $includes -c $file.c -o $object" />
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
 		<Unit filename="lib/gamelib/audp_parser.y">
 			<Option compilerVar="CC" />
 			<Option weight="10" />
-			<Option compiler="gcc" use="1" buildCommand="bison -y -d -olib/gamelib/audp_parser.tab.c $file\n$compiler $options $include -I. -c lib/gamelib/audp_parser.tab.c -o $object" />
+			<Option compiler="gcc" use="1" buildCommand="bison -y -d -olib/gamelib/audp_parser.tab.c $file\n$compiler $options $includes -c lib/gamelib/audp_parser.tab.c -o $object" />
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
@@ -652,14 +652,14 @@
 		</Unit>
 		<Unit filename="lib/script/chat_lexer.l">
 			<Option compilerVar="CC" />
-			<Option compiler="gcc" use="1" buildCommand="flex -o$file.c $file\n$compiler $options $include -I. -c $file.c -o $object" />
+			<Option compiler="gcc" use="1" buildCommand="flex -o$file.c $file\n$compiler $options $includes -c $file.c -o $object" />
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
 		<Unit filename="lib/script/chat_parser.y">
 			<Option compilerVar="CC" />
 			<Option weight="10" />
-			<Option compiler="gcc" use="1" buildCommand="bison -y -d -olib/script/chat_parser.tab.c $file\n$compiler $options $include -I. -c lib/script/chat_parser.tab.c -o $object" />
+			<Option compiler="gcc" use="1" buildCommand="bison -y -d -olib/script/chat_parser.tab.c $file\n$compiler $options $includes -c lib/script/chat_parser.tab.c -o $object" />
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
@@ -739,14 +739,14 @@
 		</Unit>
 		<Unit filename="lib/script/script_lexer.l">
 			<Option compilerVar="CC" />
-			<Option compiler="gcc" use="1" buildCommand="flex -o$file.c $file\n$compiler $options $include -I. -c $file.c -o $object" />
+			<Option compiler="gcc" use="1" buildCommand="flex -o$file.c $file\n$compiler $options $includes -c $file.c -o $object" />
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
 		<Unit filename="lib/script/script_parser.y">
 			<Option compilerVar="CC" />
 			<Option weight="10" />
-			<Option compiler="gcc" use="1" buildCommand="bison -y -d -olib/script/script_parser.tab.c $file\n$compiler $options $include -I. -c lib/script/script_parser.tab.c -o $object" />
+			<Option compiler="gcc" use="1" buildCommand="bison -y -d -olib/script/script_parser.tab.c $file\n$compiler $options $includes -c lib/script/script_parser.tab.c -o $object" />
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
@@ -1752,7 +1752,7 @@
 		</Unit>
 		<Unit filename="src/level_lexer.l">
 			<Option compilerVar="CC" />
-			<Option compiler="gcc" use="1" buildCommand="flex -o$file.c $file\n$compiler $options $include -I. -c $file.c -o $object" />
+			<Option compiler="gcc" use="1" buildCommand="flex -o$file.c $file\n$compiler $options $includes -c $file.c -o $object" />
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
@@ -2309,14 +2309,14 @@
 		</Unit>
 		<Unit filename="src/scriptvals_lexer.l">
 			<Option compilerVar="CC" />
-			<Option compiler="gcc" use="1" buildCommand="flex -o$file.c $file\n$compiler $options $include -I. -c $file.c -o $object" />
+			<Option compiler="gcc" use="1" buildCommand="flex -o$file.c $file\n$compiler $options $includes -c $file.c -o $object" />
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
 		<Unit filename="src/scriptvals_parser.y">
 			<Option compilerVar="CC" />
 			<Option weight="10" />
-			<Option compiler="gcc" use="1" buildCommand="bison -y -d -osrc/scriptvals_parser.tab.c $file\n$compiler $options $include -I. -c src/scriptvals_parser.tab.c -o $object" />
+			<Option compiler="gcc" use="1" buildCommand="bison -y -d -osrc/scriptvals_parser.tab.c $file\n$compiler $options $includes -c src/scriptvals_parser.tab.c -o $object" />
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
