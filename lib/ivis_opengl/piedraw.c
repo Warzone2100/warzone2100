@@ -35,12 +35,12 @@
 #include "lib/ivis_common/imd.h"
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piefunc.h"
-#include "piematrix.h"
 #include "lib/ivis_common/tex.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piestate.h"
-#include "pietexture.h"
 #include "lib/ivis_common/pieclip.h"
+#include "piematrix.h"
+#include "pietexture.h"
 
 /// Stores the from and to verticles from an edge
 typedef struct edge_
@@ -1015,9 +1015,9 @@ static inline void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, BOOL light)
 
 			if (frame > 0)
 			{
-// HACK - fix this!!!!
+				// HACK - fix this!!!!
+				// should be: framesPerLine = iV_TEXTEX(texPage)->width / poly->pTexAnim->textureWidth;
 				const int framesPerLine = 256 / poly->pTexAnim->textureWidth;
-//should be		framesPerLine = iV_TEXTEX(texPage)->width / poly->pTexAnim->textureWidth;
 				int uFrame = 0, vFrame = 0, j = 0;
 
 				while (frame >= framesPerLine)
