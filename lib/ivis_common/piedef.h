@@ -48,19 +48,15 @@
 
 #define FP12_SHIFT 12
 #define FP12_MULTIPLIER (1<<12)
-#define STRETCHED_Z_SHIFT		10		//stretchs z range for (1000 to 4000) to (8000 to 32000)
-#define	MAX_Z				(32000.0f)	//raised to 32000 from 6000 when stretched
-#define	INV_MAX_Z			(0.00003125f)	//1/32000
+#define STRETCHED_Z_SHIFT		10 // stretchs z range for (1000 to 4000) to (8000 to 32000)
+#define MAX_Z				(32000.0f) // raised to 32000 from 6000 when stretched
 #define MIN_STRETCHED_Z			256
-#define	LONG_WAY			(1<<15)
-#define	LONG_TEST			(1<<14)
-#define INTERFACE_DEPTH			(MAX_Z - 1.0f)
-#define INTERFACE_DEPTH_3DFX		(65535)
-#define INV_INTERFACE_DEPTH_3DFX	(1.0f/65535.0f)
-#define BUTTON_DEPTH			(2000)		 //will be stretched to 16000
+#define LONG_WAY			(1<<15)
+#define LONG_TEST			(1<<14)
+#define INTERFACE_DEPTH		(MAX_Z - 1.0f)
+#define BUTTON_DEPTH		2000 // will be stretched to 16000
 
-#define TEXTURE_SIZE			(256.0f)
-#define INV_TEX_SIZE			(0.00390625f)
+#define OLD_TEXTURE_SIZE_FIX 256.0f
 
 
 #define pie_MAX_POLY_SIZE	16

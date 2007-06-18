@@ -369,7 +369,7 @@ void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 	}
 }
 
-void pie_ImageFileIDStretch(IMAGEFILE *ImageFile,UWORD ID,int x,int y,int Width,int Height)
+void pie_ImageFileIDStretch(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, int Height)
 {
 	IMAGEDEF *Image;
 	PIEIMAGE pieImage;

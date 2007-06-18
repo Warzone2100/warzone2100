@@ -20,12 +20,9 @@
 #ifndef _tex_
 #define _tex_
 
-#include "ivi.h"
 #include "png_util.h"
 
 //*************************************************************************
-
-
 
 #define iV_TEX_MAX 64
 #define iV_TEXNAME_MAX 64

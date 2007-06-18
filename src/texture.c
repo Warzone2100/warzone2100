@@ -273,7 +273,7 @@ static void putRectIntoPage(UDWORD width, UDWORD height, unsigned char *dest, UD
 {
 	unsigned int i, j;
 
-	for(i = 0; i<height; i++)
+	for(i = 0; i < height; i++)
 	{
 		for(j = 0; j < width * PAGE_DEPTH; j++)
 		{

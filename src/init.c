@@ -35,6 +35,7 @@
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/tex.h"
+#include "lib/ivis_common/ivi.h"
 #include "lib/netplay/netplay.h"
 #include "lib/script/script.h"
 #include "lib/sound/cdaudio.h"
@@ -1265,7 +1266,7 @@ BOOL stageOneInitialise(void)
 		return FALSE;
 	}
 
-	iV_Reset();			// Reset the IV library
+	iV_Reset(); // Reset the IV library
 
 	if (!stringsInitialise())	/* Initialise the string system */
 	{

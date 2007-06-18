@@ -35,7 +35,6 @@
 #define iV_TransBoxFill			pie_TransBoxFill
 #define iV_DrawImage			pie_ImageFileID
 #define iV_DrawImageRect		pie_ImageFileIDTile
-#define iV_DrawImage		pie_ImageFileID
 
 //*************************************************************************
 // polygon flags	b0..b7: col, b24..b31: anim index

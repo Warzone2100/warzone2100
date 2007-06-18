@@ -1911,17 +1911,16 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 
 		FeedbackOrderGiven();
 		driveDisableTactical();
-		
+
 		return;
 	}
-	
+
 	if (ctrlShiftDown())
 	{
 		// select/deselect etc. the droid
 		dealWithDroidSelect(psDroid, FALSE);
 	}
-	else
-	if (psDroid->droidType == DROID_TRANSPORTER)
+	else if (psDroid->droidType == DROID_TRANSPORTER)
 	{
 		if (selection == SC_INVALID)
 		{
@@ -1950,7 +1949,7 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 	{
 		// try to attack your own unit
 		DROID* psCurr;
-		
+
 		for(psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
 		{
 			if ((psCurr != psDroid) && // can't attack yourself
@@ -2043,7 +2042,7 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 		if(psDroid->droidType == DROID_SENSOR)
 		{
 			DROID* psCurr;
-			
+
 			//bWeapDroidSelected = FALSE;
 			bSensorAssigned = FALSE;
 			for(psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
@@ -2162,7 +2161,7 @@ static inline void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE s
 			selection == SC_INVALID)
 	{
 		STRUCTURE* psCurr;
-		
+
 		/* Clear old building selection(s) - should only be one */
 		for(psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
 		{
@@ -2174,7 +2173,7 @@ static inline void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE s
 	if (keyDown(KEY_LALT) || keyDown(KEY_RALT))
 	{
 		DROID* psCurr;
-		
+
 		// try to attack your own structure
 		for(psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
 		{
@@ -2252,7 +2251,7 @@ static inline void dealWithLMBFeature(FEATURE* psFeature)
 			(apStructTypeLists[selectedPlayer][i] == AVAILABLE) )	// dont go any further if no derrick stat found.
 		{
 			DROID* psCurr;
-			
+
 			// for each droid
 			for(psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
 			{
@@ -2266,7 +2265,7 @@ static inline void dealWithLMBFeature(FEATURE* psFeature)
 						AddDerrickBurningMessage();
 						break;
 					}
-					
+
 					if (ctrlShiftDown())
 					{
 						orderDroidStatsLocAdd(psCurr, DORDER_BUILD,
@@ -2357,7 +2356,7 @@ static inline void dealWithLMBObject(BASE_OBJECT* psClickedOn)
 		case OBJ_DROID:
 			dealWithLMBDroid((DROID*)psClickedOn, selection);
 			break;
-			
+
 		case OBJ_STRUCTURE:
 			dealWithLMBStructure((STRUCTURE*)psClickedOn, selection);
 			break;
@@ -2417,7 +2416,7 @@ void	dealWithLMB( void )
 		Pos.y = 100;
 #if 0
 		addEffect(&Pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,resGetData("IMD","fxlswave.pie"));
-		DBPRINTF(("Added test effect %p : %d,%d,%d\n",resGetData("IMD","fxlswave.pie"),Pos.x,Pos.y,Pos.z);
+		debug(LOG_NEVER, "Added test effect %p : %d,%d,%d\n",resGetData("IMD","fxlswave.pie"),Pos.x,Pos.y,Pos.z);
 		addEffect(&Pos,EFFECT_GRAVITON,GRAVITON_TYPE_EMITTING_DR,TRUE,debrisImds[rand()%MAX_DEBRIS]);
 #endif
 		addEffect(&Pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_MEDIUM,FALSE,NULL,0);
@@ -2451,7 +2450,7 @@ void	dealWithLMB( void )
 
 			//addConsoleMessage("Droid ordered to new location",DEFAULT_JUSTIFY);
 		}
-		
+
 		driveDisableTactical();
 
 		return;

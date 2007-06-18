@@ -35,6 +35,7 @@
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/piemode.h"
 #include "piematrix.h"
+#include "lib/ivis_common/ivi.h"
 #include "lib/ivis_common/piefunc.h"
 #include "lib/ivis_common/tex.h"
 #include "lib/ivis_common/rendmode.h"

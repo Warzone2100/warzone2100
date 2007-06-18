@@ -30,7 +30,6 @@
 
 #include <SDL/SDL_opengl.h>
 
-#include "lib/ivis_common/ivi.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/pieclip.h"
 #include "piematrix.h"
@@ -523,5 +522,5 @@ void pie_MatInit(void)
 	pie_MatReset();
 
 
-	iV_DEBUG0("geo[_geo_setup] = setup successful\n");
+	debug(LOG_3D, "geo[_geo_setup] = setup successful\n");
 }

@@ -948,7 +948,7 @@ static void moveCalcTurn(float *pCurr, float target, UDWORD rate)
 	}
 	retval = fmodf(retval, 360);
 
-	ASSERT(retval < 360 && retval >= 0, "moveCalcTurn: bad angle %f from (%f, %f, %u)\n", 
+	ASSERT(retval < 360 && retval >= 0, "moveCalcTurn: bad angle %f from (%f, %f, %u)\n",
 	       retval, *pCurr, target, rate);
 
 	*pCurr = retval;
@@ -2905,7 +2905,7 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 	moveAdjustVtolHeight( psDroid, iMapZ );
 }
 
-#ifndef FINALBUILD
+#ifdef DEBUG
 
 WZ_DECL_UNUSED static void moveGetStatusStr( UBYTE status, char *szStr )
 {

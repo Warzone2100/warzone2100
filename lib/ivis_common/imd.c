@@ -85,7 +85,7 @@ BOOL iV_IMDSave(char *filename, iIMDShape *s, BOOL PieIMD)
 	fprintf(fp,"TYPE %x\n",s->flags);
 
 	// if textured write tex page file info
-	if (s->texpage != -1) 
+	if (s->texpage != -1)
 	{
 		fprintf(fp,"TEXTURE %d %s %d %d\n",iV_TEXTYPE(s->texpage),
 				iV_TEXNAME(s->texpage),iV_TEXWIDTH(s->texpage),
@@ -131,7 +131,7 @@ BOOL iV_IMDSave(char *filename, iIMDShape *s, BOOL PieIMD)
 				}
 
 				// if textured write texture uv's
-				if (poly->flags & iV_IMD_TEX) 
+				if (poly->flags & iV_IMD_TEX)
 				{
 					for (d=0; d<poly->npnts; d++) {
 						fprintf(fp," %d %d",poly->vrt[d].u,poly->vrt[d].v);
@@ -189,7 +189,7 @@ void iV_IMDRelease(iIMDShape *s)
 			free(s->shadowEdgeList);
 			s->shadowEdgeList = NULL;
 		}
-		iV_DEBUG0("imd[IMDRelease] = release successful\n");
+		debug(LOG_3D, "imd[IMDRelease] = release successful\n");
 		d = s->next;
 		free(s);
 		iV_IMDRelease(d);

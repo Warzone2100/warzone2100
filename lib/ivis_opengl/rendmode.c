@@ -20,7 +20,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "lib/ivis_common/ivi.h"
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/pieclip.h"
 #include "lib/ivis_common/textdraw.h"
@@ -68,7 +67,7 @@ iSurface *iV_SurfaceCreate(Uint32 flags, int width, int height, int xp, int yp, 
 	s->clip.top = 0;
 	s->clip.bottom = height-1;
 
-	iV_DEBUG2("vid[SurfaceCreate] = created surface width %d, height %d\n",width,height);
+	debug(LOG_3D, "vid[SurfaceCreate] = created surface width %d, height %d\n",width,height);
 
 	return s;
 }
@@ -97,7 +96,7 @@ void iV_RenderAssign(iSurface *s)
 	/* Need to look into this - won't the unwanted called still set render surface? */
 	psRendSurface = s;
 
-	iV_DEBUG0("vid[RenderAssign] = assigned renderer :\n");
-	iV_DEBUG5("usr %d\nflags %x\nxcentre, ycentre %d\nbuffer %p\n",
-			s->usr,s->flags,s->xcentre,s->ycentre,s->buffer);
+	debug(LOG_3D, "vid[RenderAssign] = assigned renderer :\n");
+	debug(LOG_3D, "flags %x\nxcentre %d, ycentre %d\nbuffer %p\n",
+			s->flags, s->xcentre, s->ycentre, s->buffer);
 }

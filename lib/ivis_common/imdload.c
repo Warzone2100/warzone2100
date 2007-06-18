@@ -101,7 +101,7 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 
 		if (sscanf(pFileData, "%x %d%n", &flags, &npnts, &cnt) != 2)
 		{
-			iV_Error(0xff, "(_load_polys) [poly %d] error loading flags and npoints", i);
+			debug(LOG_ERROR, "(_load_polys) [poly %d] error loading flags and npoints", i);
 		}
 		pFileData += cnt;
 
@@ -111,13 +111,13 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 		poly->pindex = (VERTEXID*)malloc(sizeof(VERTEXID) * poly->npnts);
 		if (poly->pindex == NULL)
 		{
-			iV_Error(0xff, "(_load_polys) [poly %d] memory alloc fail (poly indices)", i);
+			debug(LOG_ERROR, "(_load_polys) [poly %d] memory alloc fail (poly indices)", i);
 			return FALSE;
 		}
 		poly->vrt = (fVertex*)malloc(sizeof(fVertex) * poly->npnts);
 		if (poly->vrt == NULL)
 		{
-			iV_Error(0xff, "(_load_polys) [poly %d] memory alloc fail (vertex struct)", i);
+			debug(LOG_ERROR, "(_load_polys) [poly %d] memory alloc fail (vertex struct)", i);
 			return FALSE;
 		}
 
@@ -164,14 +164,14 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 			poly->pTexAnim = (iTexAnim*)malloc(sizeof(iTexAnim));
 			if (poly->pTexAnim == NULL)
 			{
-				iV_Error(0xff, "(_load_polys) [poly %d] memory alloc fail (iTexAnim struct)", i);
+				debug(LOG_ERROR, "(_load_polys) [poly %d] memory alloc fail (iTexAnim struct)", i);
 				return FALSE;
 			}
 
 			// even the psx needs to skip the data
 			if (sscanf(pFileData, "%d %d %d %d%n", &nFrames, &pbRate, &tWidth, &tHeight, &cnt) != 4)
 			{
-				iV_Error(0xff, "(_load_polys) [poly %d] error reading texanim data", i);
+				debug(LOG_ERROR, "(_load_polys) [poly %d] error reading texanim data", i);
 				return FALSE;
 			}
 			pFileData += cnt;
@@ -202,14 +202,14 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 				float VertexU, VertexV;
 				if (sscanf(pFileData, "%f %f%n", &VertexU, &VertexV, &cnt) != 2)
 				{
-					iV_Error(0xff, "(_load_polys) [poly %d] error reading tex outline", i);
+					debug(LOG_ERROR, "(_load_polys) [poly %d] error reading tex outline", i);
 					return FALSE;
 				}
 				pFileData += cnt;
 
 				poly->vrt[j].u = VertexU;
 				poly->vrt[j].v = VertexV;
-				poly->vrt[j].g = 255;
+				poly->vrt[j].g = UINT8_MAX;
 			}
 		}
 	}
@@ -230,7 +230,7 @@ static BOOL ReadPoints( const char **ppFileData, iIMDShape *s )
 	{
 		if (sscanf(pFileData, "%f %f %f%n", &newVector.x, &newVector.y, &newVector.z, &cnt) != 3)
 		{
-			iV_Error(0xff, "(_load_points) file corrupt -K");
+			debug(LOG_ERROR, "(_load_points) file corrupt -K");
 			return FALSE;
 		}
 		pFileData += cnt;
@@ -482,14 +482,14 @@ static BOOL _imd_load_points( const char **ppFileData, iIMDShape *s )
 			cen.x = (rad*cen.x + old_to_new*p->x) / old_to_p;
 			cen.y = (rad*cen.y + old_to_new*p->y) / old_to_p;
 			cen.z = (rad*cen.z + old_to_new*p->z) / old_to_p;
-			iV_DEBUG4("NEW SPHERE: cen,rad = %d %d %d, %d\n", cen.x, cen.y, cen.z, rad);
+			debug(LOG_3D, "NEW SPHERE: cen,rad = %f %f %f, %f\n", cen.x, cen.y, cen.z, rad);
 		}
 	}
 
 	s->ocen = cen;
 	s->oradius = rad;
-	iV_DEBUG2("radius, sradius, %d, %d\n", s->radius, s->sradius);
-	iV_DEBUG4("SPHERE: cen,rad = %d %d %d,  %d\n", s->ocen.x, s->ocen.y, s->ocen.z, s->oradius);
+	debug(LOG_3D, "radius, sradius, %d, %d\n", s->radius, s->sradius);
+	debug(LOG_3D, "SPHERE: cen,rad = %f %f %f, %d\n", s->ocen.x, s->ocen.y, s->ocen.z, s->oradius);
 
 // END: tight bounding sphere
 
@@ -516,7 +516,7 @@ static BOOL _imd_load_connectors(const char **ppFileData, iIMDShape *s)
 	s->connectors = (Vector3f*)malloc(sizeof(Vector3f) * s->nconnectors);
 	if (s->connectors == NULL)
 	{
-		iV_Error(0xff, "(_load_connectors) MALLOC fail");
+		debug(LOG_ERROR, "(_load_connectors) MALLOC fail");
 		return FALSE;
 	}
 
@@ -524,7 +524,7 @@ static BOOL _imd_load_connectors(const char **ppFileData, iIMDShape *s)
 	{
 		if (sscanf(pFileData, "%f %f %f%n", &newVector.x, &newVector.y, &newVector.z, &cnt) != 3)
 		{
-			iV_Error(0xff, "(_load_connectors) file corrupt -M");
+			debug(LOG_ERROR, "(_load_connectors) file corrupt -M");
 			return FALSE;
 		}
 		pFileData += cnt;
@@ -632,7 +632,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 		// might be "BSP" or "LEVEL"
 		if (strcmp(buffer, "LEVEL") == 0)
 		{
-			iV_DEBUG2("imd[_load_level] = npoints %d, npolys %d\n", s->npoints, s->npolys);
+			debug(LOG_3D, "imd[_load_level] = npoints %d, npolys %d\n", s->npoints, s->npolys);
 			s->next = _imd_load_level(&pFileData, FileDataEnd, nlevels - 1);
 		}
 		else if (strcmp(buffer, "CONNECTORS") == 0)
@@ -643,7 +643,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 		}
 		else
 		{
-			iV_Error(0xff, "(_load_level) unexpected directive %s %d", buffer, &n);
+			debug(LOG_ERROR, "(_load_level) unexpected directive %s %d", buffer, n);
 			break;
 		}
 	}
@@ -769,7 +769,7 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 	/* Read first LEVEL directive */
 	if (sscanf(pFileData, "%s %d%n", buffer, &level, &cnt) != 2)
 	{
-		iV_Error(0xff, "(_load_level) file corrupt -J");
+		debug(LOG_ERROR, "(_load_level) file corrupt -J");
 		return NULL;
 	}
 	pFileData += cnt;

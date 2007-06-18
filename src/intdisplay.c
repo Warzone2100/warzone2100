@@ -961,12 +961,12 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UD
 
 				case OBJ_STRUCTURE:					// If it's a structure...
 					Structure = (STRUCTURE*)psObj;
-					switch(Structure->pStructureType->type) 
+					switch(Structure->pStructureType->type)
 					{
 						case REF_FACTORY:
 						case REF_CYBORG_FACTORY:
 						case REF_VTOL_FACTORY:
-							if (StructureIsManufacturing(Structure)) 
+							if (StructureIsManufacturing(Structure))
 							{
 								IMDType = IMDTYPE_DROIDTEMPLATE;
 								Object = (void*)FactoryGetTemplate(StructureGetFactory(Structure));
@@ -980,7 +980,7 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UD
 							break;
 
 						case REF_RESEARCH:
-							if (StructureIsResearching(Structure)) 
+							if (StructureIsResearching(Structure))
 							{
 								Stats = (BASE_STATS*)Buffer->Data2;
 								if (!Stats)
@@ -3432,7 +3432,6 @@ void intDisplayDesignPowerBar(WIDGET *psWidget, UDWORD xOffset,
 
 	//draw current value section
 	iV_DrawImageRect(IntImages,IMAGE_DES_STATSCURR, iX, y0,
-						//BarGraph->majorSize, iV_GetImageHeight(IntImages,IMAGE_DES_STATSCURR));
                         width, iV_GetImageHeight(IntImages,IMAGE_DES_STATSCURR));
 
 	/* draw text value */
