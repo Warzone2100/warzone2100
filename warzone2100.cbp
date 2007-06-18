@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_project_file>
-	<FileVersion major="1" minor="5" />
+	<FileVersion major="1" minor="6" />
 	<Project>
 		<Option title="Warzone 2100" />
 		<Option pch_mode="2" />
-		<Option default_target="" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/warzone2100" prefix_auto="1" extension_auto="1" />
@@ -57,2441 +55,817 @@
 		</Linker>
 		<Unit filename="lib/framework/SDL_framerate.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/framework/SDL_framerate.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/framework/config-macosx.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/framework/SDL_framerate.h" />
+		<Unit filename="lib/framework/config-macosx.h" />
 		<Unit filename="lib/framework/configfile.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/framework/configfile.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/framework/cursors.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/framework/cursors16.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/framework/dbghelp.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/framework/configfile.h" />
+		<Unit filename="lib/framework/cursors.h" />
+		<Unit filename="lib/framework/cursors16.h" />
+		<Unit filename="lib/framework/dbghelp.h" />
 		<Unit filename="lib/framework/debug.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/framework/debug.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/framework/debug.h" />
 		<Unit filename="lib/framework/exceptionhandler.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/framework/fractions.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/framework/fractions.h" />
 		<Unit filename="lib/framework/frame.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/framework/frame.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/framework/frameint.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/framework/frame.h" />
+		<Unit filename="lib/framework/frameint.h" />
 		<Unit filename="lib/framework/frameresource.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/framework/frameresource.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/framework/gettext.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/framework/frameresource.h" />
+		<Unit filename="lib/framework/gettext.h" />
 		<Unit filename="lib/framework/input.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/framework/input.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/framework/listmacs.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/framework/macros.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/framework/platform.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/framework/resly.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/framework/input.h" />
+		<Unit filename="lib/framework/listmacs.h" />
+		<Unit filename="lib/framework/macros.h" />
+		<Unit filename="lib/framework/platform.h" />
+		<Unit filename="lib/framework/resly.h" />
 		<Unit filename="lib/framework/resource_lexer.l">
 			<Option compilerVar="CC" />
+			<Option compile="1" />
+			<Option link="1" />
 			<Option compiler="gcc" use="1" buildCommand="flex -o$file.c $file\n$compiler $options $includes -c $file.c -o $object" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="lib/framework/resource_parser.y">
 			<Option compilerVar="CC" />
+			<Option compile="1" />
+			<Option link="1" />
 			<Option weight="10" />
 			<Option compiler="gcc" use="1" buildCommand="bison -y -d -olib/framework/resource_parser.tab.c $file\n$compiler $options $includes -c lib/framework/resource_parser.tab.c -o $object" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="lib/framework/strres.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/framework/strres.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/framework/strres.h" />
 		<Unit filename="lib/framework/strres_lexer.l">
 			<Option compilerVar="CC" />
+			<Option compile="1" />
+			<Option link="1" />
 			<Option compiler="gcc" use="1" buildCommand="flex -o$file.c $file\n$compiler $options $includes -c $file.c -o $object" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="lib/framework/strres_parser.y">
 			<Option compilerVar="CC" />
+			<Option compile="1" />
+			<Option link="1" />
 			<Option weight="10" />
 			<Option compiler="gcc" use="1" buildCommand="bison -y -d -olib/framework/strres_parser.tab.c $file\n$compiler $options $includes -c lib/framework/strres_parser.tab.c -o $object" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/framework/strresly.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/framework/strresly.h" />
 		<Unit filename="lib/framework/treap.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/framework/treap.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/framework/treapint.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/framework/treap.h" />
+		<Unit filename="lib/framework/treapint.h" />
 		<Unit filename="lib/framework/trig.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/framework/trig.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/framework/types.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/framework/wzglobal.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/framework/trig.h" />
+		<Unit filename="lib/framework/types.h" />
+		<Unit filename="lib/framework/wzglobal.h" />
 		<Unit filename="lib/gamelib/anim.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/gamelib/anim.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/gamelib/anim.h" />
 		<Unit filename="lib/gamelib/animobj.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/gamelib/animobj.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/gamelib/animobj.h" />
 		<Unit filename="lib/gamelib/audp_lexer.l">
 			<Option compilerVar="CC" />
+			<Option compile="1" />
+			<Option link="1" />
 			<Option compiler="gcc" use="1" buildCommand="flex -o$file.c $file\n$compiler $options $includes -c $file.c -o $object" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="lib/gamelib/audp_parser.y">
 			<Option compilerVar="CC" />
+			<Option compile="1" />
+			<Option link="1" />
 			<Option weight="10" />
 			<Option compiler="gcc" use="1" buildCommand="bison -y -d -olib/gamelib/audp_parser.tab.c $file\n$compiler $options $includes -c lib/gamelib/audp_parser.tab.c -o $object" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="lib/gamelib/gtime.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/gamelib/gtime.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/gamelib/gtime.h" />
 		<Unit filename="lib/gamelib/hashtabl.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/gamelib/hashtabl.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/gamelib/maxpidef.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/gamelib/parser.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/gamelib/hashtabl.h" />
+		<Unit filename="lib/gamelib/maxpidef.h" />
+		<Unit filename="lib/gamelib/parser.h" />
 		<Unit filename="lib/ivis_common/bitimage.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/ivis_common/bitimage.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/ivis_common/bitimage.h" />
 		<Unit filename="lib/ivis_common/imd.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/ivis_common/imd.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/ivis_common/imd.h" />
 		<Unit filename="lib/ivis_common/imdload.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/ivis_common/ivi.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/ivis_common/ivisdef.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/ivis_common/ivispatch.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/ivis_common/pieblitfunc.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/ivis_common/ivi.h" />
+		<Unit filename="lib/ivis_common/ivisdef.h" />
+		<Unit filename="lib/ivis_common/ivispatch.h" />
+		<Unit filename="lib/ivis_common/pieblitfunc.h" />
 		<Unit filename="lib/ivis_common/pieclip.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/ivis_common/pieclip.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/ivis_common/piedef.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/ivis_common/piefunc.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/ivis_common/piemode.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/ivis_common/piepalette.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/ivis_common/pieclip.h" />
+		<Unit filename="lib/ivis_common/piedef.h" />
+		<Unit filename="lib/ivis_common/piefunc.h" />
+		<Unit filename="lib/ivis_common/piemode.h" />
+		<Unit filename="lib/ivis_common/piepalette.h" />
 		<Unit filename="lib/ivis_common/piestate.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/ivis_common/piestate.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/ivis_common/pietypes.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/ivis_common/pievector.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/ivis_common/piestate.h" />
+		<Unit filename="lib/ivis_common/pietypes.h" />
+		<Unit filename="lib/ivis_common/pievector.h" />
 		<Unit filename="lib/ivis_common/png_util.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/ivis_common/png_util.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/ivis_common/rendmode.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/ivis_common/tex.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/ivis_common/textdraw.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/ivis_common/png_util.h" />
+		<Unit filename="lib/ivis_common/rendmode.h" />
+		<Unit filename="lib/ivis_common/tex.h" />
+		<Unit filename="lib/ivis_common/textdraw.h" />
 		<Unit filename="lib/ivis_opengl/ivi.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="lib/ivis_opengl/pieblitfunc.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="lib/ivis_opengl/piedraw.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="lib/ivis_opengl/piefunc.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="lib/ivis_opengl/piematrix.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/ivis_opengl/piematrix.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/ivis_opengl/piematrix.h" />
 		<Unit filename="lib/ivis_opengl/piemode.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="lib/ivis_opengl/piepalette.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="lib/ivis_opengl/piestate.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="lib/ivis_opengl/pietexture.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/ivis_opengl/pietexture.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/ivis_opengl/pietexture.h" />
 		<Unit filename="lib/ivis_opengl/rendmode.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="lib/ivis_opengl/screen.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/ivis_opengl/screen.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/ivis_opengl/screen.h" />
 		<Unit filename="lib/ivis_opengl/tex.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="lib/ivis_opengl/textdraw.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="lib/netplay/netcrypt.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="lib/netplay/netjoin_stub.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="lib/netplay/netlog.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/netplay/netlog.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/netplay/netlog.h" />
 		<Unit filename="lib/netplay/netplay.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/netplay/netplay.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/netplay/netplay.h" />
 		<Unit filename="lib/script/chat_lexer.l">
 			<Option compilerVar="CC" />
+			<Option compile="1" />
+			<Option link="1" />
 			<Option compiler="gcc" use="1" buildCommand="flex -o$file.c $file\n$compiler $options $includes -c $file.c -o $object" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="lib/script/chat_parser.y">
 			<Option compilerVar="CC" />
+			<Option compile="1" />
+			<Option link="1" />
 			<Option weight="10" />
 			<Option compiler="gcc" use="1" buildCommand="bison -y -d -olib/script/chat_parser.tab.c $file\n$compiler $options $includes -c lib/script/chat_parser.tab.c -o $object" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/script/chat_processing.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/script/chat_processing.h" />
 		<Unit filename="lib/script/codeprint.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/script/codeprint.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/script/codeprint.h" />
 		<Unit filename="lib/script/event.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/script/event.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/script/event.h" />
 		<Unit filename="lib/script/evntsave.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/script/evntsave.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/script/evntsave.h" />
 		<Unit filename="lib/script/interp.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/script/interp.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/script/parse.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/script/interp.h" />
+		<Unit filename="lib/script/parse.h" />
 		<Unit filename="lib/script/script.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/script/script.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/script/script.h" />
 		<Unit filename="lib/script/script_lexer.l">
 			<Option compilerVar="CC" />
+			<Option compile="1" />
+			<Option link="1" />
 			<Option compiler="gcc" use="1" buildCommand="flex -o$file.c $file\n$compiler $options $includes -c $file.c -o $object" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="lib/script/script_parser.y">
 			<Option compilerVar="CC" />
+			<Option compile="1" />
+			<Option link="1" />
 			<Option weight="10" />
 			<Option compiler="gcc" use="1" buildCommand="bison -y -d -olib/script/script_parser.tab.c $file\n$compiler $options $includes -c lib/script/script_parser.tab.c -o $object" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="lib/script/stack.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/script/stack.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/script/stack.h" />
 		<Unit filename="lib/sequence/adpcm.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/sequence/adpcm.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/sequence/adpcm.h" />
 		<Unit filename="lib/sequence/dec130.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="lib/sequence/rpl_reader.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/sequence/rpl_reader.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/sequence/sequence.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/sequence/rpl_reader.h" />
+		<Unit filename="lib/sequence/sequence.h" />
 		<Unit filename="lib/sequence/sequence_stub.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/sound/aud.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/sound/aud.h" />
 		<Unit filename="lib/sound/audio.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/sound/audio.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/sound/audio.h" />
 		<Unit filename="lib/sound/audio_id.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/sound/audio_id.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/sound/audio_id.h" />
 		<Unit filename="lib/sound/cdaudio.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/sound/cdaudio.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/sound/mixer.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/sound/cdaudio.h" />
+		<Unit filename="lib/sound/mixer.h" />
 		<Unit filename="lib/sound/oggvorbis.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/sound/oggvorbis.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/sound/oggvorbis.h" />
 		<Unit filename="lib/sound/openal_track.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="lib/sound/playlist.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/sound/playlist.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/sound/playlist.h" />
 		<Unit filename="lib/sound/track.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/sound/track.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/sound/tracklib.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/sound/track.h" />
+		<Unit filename="lib/sound/tracklib.h" />
 		<Unit filename="lib/widget/bar.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/widget/bar.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/widget/bar.h" />
 		<Unit filename="lib/widget/button.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/widget/button.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/widget/button.h" />
 		<Unit filename="lib/widget/editbox.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/widget/editbox.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/widget/editbox.h" />
 		<Unit filename="lib/widget/form.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/widget/form.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/widget/form.h" />
 		<Unit filename="lib/widget/label.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/widget/label.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/widget/label.h" />
 		<Unit filename="lib/widget/scrap.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/widget/scrap.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/widget/scrap.h" />
 		<Unit filename="lib/widget/slider.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/widget/slider.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/widget/slider.h" />
 		<Unit filename="lib/widget/tip.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/widget/tip.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/widget/widgbase.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/widget/tip.h" />
+		<Unit filename="lib/widget/widgbase.h" />
 		<Unit filename="lib/widget/widget.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="lib/widget/widget.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="lib/widget/widgint.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="lib/widget/widget.h" />
+		<Unit filename="lib/widget/widgint.h" />
 		<Unit filename="src/action.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/action.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/action.h" />
 		<Unit filename="src/advvis.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/advvis.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/advvis.h" />
 		<Unit filename="src/ai.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/ai.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/ai.h" />
 		<Unit filename="src/aiexperience.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/aiexperience.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/anim_id.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/aiexperience.h" />
+		<Unit filename="src/anim_id.h" />
 		<Unit filename="src/arrow.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/arrow.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/arrow.h" />
 		<Unit filename="src/astar.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/astar.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/astar.h" />
 		<Unit filename="src/atmos.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/atmos.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/atmos.h" />
 		<Unit filename="src/aud.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/base.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/base.h" />
 		<Unit filename="src/bridge.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/bridge.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/bridge.h" />
 		<Unit filename="src/bucket3d.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/bucket3d.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/bullet.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/bulletdef.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/bucket3d.h" />
+		<Unit filename="src/bullet.h" />
+		<Unit filename="src/bulletdef.h" />
 		<Unit filename="src/cdspan.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/cdspan.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/cdspan.h" />
 		<Unit filename="src/cheat.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/cheat.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/cheat.h" />
 		<Unit filename="src/clparse.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/clparse.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/clparse.h" />
 		<Unit filename="src/cluster.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/cluster.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/cluster.h" />
 		<Unit filename="src/cmddroid.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/cmddroid.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/cmddroiddef.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/cmddroid.h" />
+		<Unit filename="src/cmddroiddef.h" />
 		<Unit filename="src/combat.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/combat.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/combat.h" />
 		<Unit filename="src/component.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/component.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/component.h" />
 		<Unit filename="src/configuration.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/configuration.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/configuration.h" />
 		<Unit filename="src/console.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/console.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/console.h" />
 		<Unit filename="src/csnap.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/csnap.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/csnap.h" />
 		<Unit filename="src/data.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/data.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/deliverance.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/data.h" />
+		<Unit filename="src/deliverance.h" />
 		<Unit filename="src/design.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/design.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/design.h" />
 		<Unit filename="src/difficulty.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/difficulty.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/difficulty.h" />
 		<Unit filename="src/display.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/display.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/display.h" />
 		<Unit filename="src/display3d.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/display3d.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/display3ddef.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/displaydef.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/display3d.h" />
+		<Unit filename="src/display3ddef.h" />
+		<Unit filename="src/displaydef.h" />
 		<Unit filename="src/drive.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/drive.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/drive.h" />
 		<Unit filename="src/droid.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/droid.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/droiddef.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/droid.h" />
+		<Unit filename="src/droiddef.h" />
 		<Unit filename="src/e3demo.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/e3demo.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/e3demo.h" />
 		<Unit filename="src/edit3d.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/edit3d.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/edit3d.h" />
 		<Unit filename="src/effects.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/effects.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/effects.h" />
 		<Unit filename="src/environ.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/environ.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/environ.h" />
 		<Unit filename="src/feature.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/feature.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/featuredef.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/feature.h" />
+		<Unit filename="src/featuredef.h" />
 		<Unit filename="src/findpath.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/findpath.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/findpath.h" />
 		<Unit filename="src/formation.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/formation.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/formationdef.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/formation.h" />
+		<Unit filename="src/formationdef.h" />
 		<Unit filename="src/fpath.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/fpath.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/frend.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/fpath.h" />
+		<Unit filename="src/frend.h" />
 		<Unit filename="src/frontend.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/frontend.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/frontend.h" />
 		<Unit filename="src/function.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/function.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/functiondef.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/function.h" />
+		<Unit filename="src/functiondef.h" />
 		<Unit filename="src/game.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/game.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/game.h" />
 		<Unit filename="src/gateway.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/gateway.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/gatewaydef.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/gateway.h" />
+		<Unit filename="src/gatewaydef.h" />
 		<Unit filename="src/gatewayroute.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/gatewayroute.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/gatewayroute.h" />
 		<Unit filename="src/gatewaysup.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="src/geometry.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/geometry.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/geometry.h" />
 		<Unit filename="src/group.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/group.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/group.h" />
 		<Unit filename="src/hci.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/hci.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/hci.h" />
 		<Unit filename="src/ingameop.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/ingameop.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/ingameop.h" />
 		<Unit filename="src/init.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/init.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/init.h" />
 		<Unit filename="src/intdisplay.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/intdisplay.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/intdisplay.h" />
 		<Unit filename="src/intelmap.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/intelmap.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/intfac.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/intelmap.h" />
+		<Unit filename="src/intfac.h" />
 		<Unit filename="src/intimage.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/intimage.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/intimage.h" />
 		<Unit filename="src/intorder.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/intorder.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/intorder.h" />
 		<Unit filename="src/keybind.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/keybind.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/keybind.h" />
 		<Unit filename="src/keyedit.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/keyedit.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/keyedit.h" />
 		<Unit filename="src/keymap.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/keymap.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/keymap.h" />
 		<Unit filename="src/level_lexer.l">
 			<Option compilerVar="CC" />
+			<Option compile="1" />
+			<Option link="1" />
 			<Option compiler="gcc" use="1" buildCommand="flex -o$file.c $file\n$compiler $options $includes -c $file.c -o $object" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/levelint.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/levelint.h" />
 		<Unit filename="src/levels.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/levels.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/levels.h" />
 		<Unit filename="src/lighting.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/lighting.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/lighting.h" />
 		<Unit filename="src/loadsave.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/loadsave.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/loadsave.h" />
 		<Unit filename="src/loop.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/loop.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/loop.h" />
 		<Unit filename="src/main.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="src/map.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/map.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/map.h" />
 		<Unit filename="src/mapdisplay.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/mapdisplay.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/mapdisplay.h" />
 		<Unit filename="src/mapgrid.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/mapgrid.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/mapgrid.h" />
 		<Unit filename="src/mechanics.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/mechanics.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/mechanics.h" />
 		<Unit filename="src/message.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/message.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/messagedef.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/message.h" />
+		<Unit filename="src/messagedef.h" />
 		<Unit filename="src/miscimd.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/miscimd.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/miscimd.h" />
 		<Unit filename="src/mission.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/mission.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/missiondef.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/modding.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/mission.h" />
+		<Unit filename="src/missiondef.h" />
+		<Unit filename="src/modding.h" />
 		<Unit filename="src/move.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/move.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/movedef.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/move.h" />
+		<Unit filename="src/movedef.h" />
 		<Unit filename="src/multibot.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="src/multigifts.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/multigifts.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/multigifts.h" />
 		<Unit filename="src/multiint.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/multiint.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/multiint.h" />
 		<Unit filename="src/multijoin.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/multijoin.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/multijoin.h" />
 		<Unit filename="src/multilimit.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/multilimit.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/multilimit.h" />
 		<Unit filename="src/multimenu.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/multimenu.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/multimenu.h" />
 		<Unit filename="src/multiopt.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="src/multiplay.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/multiplay.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/multirecv.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/multiplay.h" />
+		<Unit filename="src/multirecv.h" />
 		<Unit filename="src/multistat.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/multistat.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/multistat.h" />
 		<Unit filename="src/multistruct.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="src/multisync.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/objectdef.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/objectdef.h" />
 		<Unit filename="src/objects.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/objects.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/objects.h" />
 		<Unit filename="src/objmem.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/objmem.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/objmem.h" />
 		<Unit filename="src/oprint.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/oprint.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/oprint.h" />
 		<Unit filename="src/optimisepath.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/optimisepath.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/optimisepath.h" />
 		<Unit filename="src/order.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/order.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/orderdef.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/order.h" />
+		<Unit filename="src/orderdef.h" />
 		<Unit filename="src/player.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/player.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/player.h" />
 		<Unit filename="src/power.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/power.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/power.h" />
 		<Unit filename="src/projectile.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/projectile.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/projectile.h" />
 		<Unit filename="src/radar.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/radar.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/radar.h" />
 		<Unit filename="src/raycast.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/raycast.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/raycast.h" />
 		<Unit filename="src/research.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/research.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/researchdef.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/resource.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/research.h" />
+		<Unit filename="src/researchdef.h" />
+		<Unit filename="src/resource.h" />
 		<Unit filename="src/scores.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/scores.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/scores.h" />
 		<Unit filename="src/scriptai.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/scriptai.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/scriptai.h" />
 		<Unit filename="src/scriptcb.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/scriptcb.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/scriptcb.h" />
 		<Unit filename="src/scriptextern.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/scriptextern.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/scriptextern.h" />
 		<Unit filename="src/scriptfuncs.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/scriptfuncs.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/scriptfuncs.h" />
 		<Unit filename="src/scriptobj.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/scriptobj.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/scriptobj.h" />
 		<Unit filename="src/scripttabs.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/scripttabs.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/scripttabs.h" />
 		<Unit filename="src/scriptvals.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/scriptvals.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/scriptvals.h" />
 		<Unit filename="src/scriptvals_lexer.l">
 			<Option compilerVar="CC" />
+			<Option compile="1" />
+			<Option link="1" />
 			<Option compiler="gcc" use="1" buildCommand="flex -o$file.c $file\n$compiler $options $includes -c $file.c -o $object" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="src/scriptvals_parser.y">
 			<Option compilerVar="CC" />
+			<Option compile="1" />
+			<Option link="1" />
 			<Option weight="10" />
 			<Option compiler="gcc" use="1" buildCommand="bison -y -d -osrc/scriptvals_parser.tab.c $file\n$compiler $options $includes -c src/scriptvals_parser.tab.c -o $object" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
 		<Unit filename="src/selection.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/selection.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/selection.h" />
 		<Unit filename="src/seqdisp.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/seqdisp.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/seqdisp.h" />
 		<Unit filename="src/stats.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/stats.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/statsdef.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/stats.h" />
+		<Unit filename="src/statsdef.h" />
 		<Unit filename="src/structure.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/structure.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/structuredef.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/structure.h" />
+		<Unit filename="src/structuredef.h" />
 		<Unit filename="src/target.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/target.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/target.h" />
 		<Unit filename="src/text.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/text.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/text.h" />
 		<Unit filename="src/texture.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/texture.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/texture.h" />
 		<Unit filename="src/transporter.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/transporter.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/transporter.h" />
 		<Unit filename="src/visibility.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/visibility.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/visibility.h" />
 		<Unit filename="src/warcam.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/warcam.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/warcam.h" />
 		<Unit filename="src/warzoneconfig.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/warzoneconfig.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/weapons.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src/winmain.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/warzoneconfig.h" />
+		<Unit filename="src/weapons.h" />
+		<Unit filename="src/winmain.h" />
 		<Unit filename="src/wrappers.c">
 			<Option compilerVar="CC" />
-			<Option target="Debug" />
-			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/wrappers.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Extensions />
+		<Unit filename="src/wrappers.h" />
+		<Extensions>
+			<code_completion />
+		</Extensions>
 	</Project>
 </CodeBlocks_project_file>
