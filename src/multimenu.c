@@ -281,7 +281,7 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWO
 	// if map, then draw no. of players.
 	for(count=0;count<(UDWORD)psWidget->pUserData;count++)
 	{
-		iV_DrawTransImage(FrontImages,IMAGE_WEE_GUY,(x+(6*count)+6),y+16);
+		iV_DrawImage(FrontImages,IMAGE_WEE_GUY,(x+(6*count)+6),y+16);
 	}
 
 	AddCursorSnap(&InterfaceSnap, (SWORD)(x+5),(SWORD)(y+5),psWidget->formID,psWidget->id,NULL);

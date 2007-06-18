@@ -3423,7 +3423,7 @@ void displayWhiteBoard(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD 
 	}
 
 	// overlay close widget.
-	iV_DrawTransImage(FrontImages,IMAGE_NOPENCIL,MULTIOP_CHATBOXX-15+D_W,MULTIOP_CHATBOXY+D_H+MULTIOP_CHATBOXH-15);
+	iV_DrawImage(FrontImages,IMAGE_NOPENCIL,MULTIOP_CHATBOXX-15+D_W,MULTIOP_CHATBOXY+D_H+MULTIOP_CHATBOXH-15);
 }
 
 // add whiteboard
@@ -3503,34 +3503,34 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD 
 	//draw type overlay.
 //	if(NETgetGameFlagsUnjoined(i,1) == DMATCH)
 //	{
-//		iV_DrawTransImage(FrontImages,IMAGE_ARENA_OVER,x+59,y+3);
+//		iV_DrawImage(FrontImages,IMAGE_ARENA_OVER,x+59,y+3);
 //	}
 //	else
 	if( NETgetGameFlagsUnjoined(i,1) == CAMPAIGN)
 	{
-		iV_DrawTransImage(FrontImages,IMAGE_CAMPAIGN_OVER,x+59,y+3);
+		iV_DrawImage(FrontImages,IMAGE_CAMPAIGN_OVER,x+59,y+3);
 	}
 	else if( NETgetGameFlagsUnjoined(i,1) == TEAMPLAY)
 	{
-		iV_DrawTransImage(FrontImages,IMAGE_TEAM_OVER,x+62,y+3);
+		iV_DrawImage(FrontImages,IMAGE_TEAM_OVER,x+62,y+3);
 	}
 	else
 	{
-		iV_DrawTransImage(FrontImages,IMAGE_SKIRMISH_OVER,x+62,y+3);	// SKIRMISH
+		iV_DrawImage(FrontImages,IMAGE_SKIRMISH_OVER,x+62,y+3);	// SKIRMISH
 	}
 
 	// ping rating
 	png = NETgetGameFlagsUnjoined(i,2);
 	if(png >= PING_LO && png < PING_MED)
 	{
-		iV_DrawTransImage(FrontImages,IMAGE_LAMP_GREEN,x+70,y+26);
+		iV_DrawImage(FrontImages,IMAGE_LAMP_GREEN,x+70,y+26);
 	}
 	else if(png >= PING_MED && png < PING_HI)
 	{
-		iV_DrawTransImage(FrontImages,IMAGE_LAMP_AMBER,x+70,y+26);
+		iV_DrawImage(FrontImages,IMAGE_LAMP_AMBER,x+70,y+26);
 	}else
 	{
-		iV_DrawTransImage(FrontImages,IMAGE_LAMP_RED,x+70,y+26);
+		iV_DrawImage(FrontImages,IMAGE_LAMP_RED,x+70,y+26);
 	}
 
 	//draw game name
@@ -3551,7 +3551,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD 
 
 	{
 		// need some sort of closed thing here!
-		iV_DrawTransImage(FrontImages,IMAGE_NOJOIN,x+18,y+11);
+		iV_DrawImage(FrontImages,IMAGE_NOJOIN,x+18,y+11);
 	}
 	else
 	{
@@ -3609,7 +3609,7 @@ void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD
 	//bluboxes.
 	drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
 
-	iV_DrawTransImage(FrontImages,IMAGE_TEAM0 + playerTeamGUI[i],x+3,y+6);
+	iV_DrawImage(FrontImages,IMAGE_TEAM0 + playerTeamGUI[i],x+3,y+6);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -3653,44 +3653,44 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 		// ping rating
 		if(ingame.PingTimes[j] >= PING_LO && ingame.PingTimes[j] < PING_MED)
 		{
-			iV_DrawTransImage(FrontImages,IMAGE_LAMP_GREEN,x,y);
+			iV_DrawImage(FrontImages,IMAGE_LAMP_GREEN,x,y);
 		}else
 		if(ingame.PingTimes[j] >= PING_MED && ingame.PingTimes[j] < PING_HI)
 		{
-			iV_DrawTransImage(FrontImages,IMAGE_LAMP_AMBER,x,y);
+			iV_DrawImage(FrontImages,IMAGE_LAMP_AMBER,x,y);
 		}else
 		{
-			iV_DrawTransImage(FrontImages,IMAGE_LAMP_RED,x,y);
+			iV_DrawImage(FrontImages,IMAGE_LAMP_RED,x,y);
 		}
 
 
 		// player number
-//		iV_DrawTransImage(FrontImages,IMAGE_WEE_GUY,x,y+23);
+//		iV_DrawImage(FrontImages,IMAGE_WEE_GUY,x,y+23);
 		switch(j)
 		{
 		case 0:
-			iV_DrawTransImage(IntImages,IMAGE_GN_0,x+4,y+29);
+			iV_DrawImage(IntImages,IMAGE_GN_0,x+4,y+29);
 			break;
 		case 1:
-			iV_DrawTransImage(IntImages,IMAGE_GN_1,x+5,y+29);
+			iV_DrawImage(IntImages,IMAGE_GN_1,x+5,y+29);
 			break;
 		case 2:
-			iV_DrawTransImage(IntImages,IMAGE_GN_2,x+4,y+29);
+			iV_DrawImage(IntImages,IMAGE_GN_2,x+4,y+29);
 			break;
 		case 3:
-			iV_DrawTransImage(IntImages,IMAGE_GN_3,x+4,y+29);
+			iV_DrawImage(IntImages,IMAGE_GN_3,x+4,y+29);
 			break;
 		case 4:
-			iV_DrawTransImage(IntImages,IMAGE_GN_4,x+4,y+29);
+			iV_DrawImage(IntImages,IMAGE_GN_4,x+4,y+29);
 			break;
 		case 5:
-			iV_DrawTransImage(IntImages,IMAGE_GN_5,x+4,y+29);
+			iV_DrawImage(IntImages,IMAGE_GN_5,x+4,y+29);
 			break;
 		case 6:
-			iV_DrawTransImage(IntImages,IMAGE_GN_6,x+4,y+29);
+			iV_DrawImage(IntImages,IMAGE_GN_6,x+4,y+29);
 			break;
 		case 7:
-			iV_DrawTransImage(IntImages,IMAGE_GN_7,x+4,y+29);
+			iV_DrawImage(IntImages,IMAGE_GN_7,x+4,y+29);
 			break;
 		default:
 			break;
@@ -3701,25 +3701,25 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 		switch (eval)
 		{
 		case 1:
-			iV_DrawTransImage(IntImages,IMAGE_GN_1,x+5,y+3);
+			iV_DrawImage(IntImages,IMAGE_GN_1,x+5,y+3);
 			break;
 		case 2:
-			iV_DrawTransImage(IntImages,IMAGE_GN_2,x+4,y+3);
+			iV_DrawImage(IntImages,IMAGE_GN_2,x+4,y+3);
 			break;
 		case 3:
-			iV_DrawTransImage(IntImages,IMAGE_GN_3,x+4,y+3);
+			iV_DrawImage(IntImages,IMAGE_GN_3,x+4,y+3);
 			break;
 		case 4:
-			iV_DrawTransImage(IntImages,IMAGE_GN_4,x+4,y+3);
+			iV_DrawImage(IntImages,IMAGE_GN_4,x+4,y+3);
 			break;
 		case 5:
-			iV_DrawTransImage(IntImages,IMAGE_GN_5,x+4,y+3);
+			iV_DrawImage(IntImages,IMAGE_GN_5,x+4,y+3);
 			break;
 		case 6:
-			iV_DrawTransImage(IntImages,IMAGE_GN_6,x+4,y+3);
+			iV_DrawImage(IntImages,IMAGE_GN_6,x+4,y+3);
 			break;
 		case 7:
-			iV_DrawTransImage(IntImages,IMAGE_GN_7,x+4,y+3);
+			iV_DrawImage(IntImages,IMAGE_GN_7,x+4,y+3);
 			break;
 		default:
 			break;
@@ -3727,7 +3727,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 
 		if(getMultiStats(j,FALSE).played < 5)
 		{
-			iV_DrawTransImage(FrontImages,IMAGE_MEDAL_DUMMY,x+37,y+13);
+			iV_DrawImage(FrontImages,IMAGE_MEDAL_DUMMY,x+37,y+13);
 		}
 		else
 		{
@@ -3737,15 +3737,15 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 			eval = stat.totalKills;
 			if(eval >600)
 			{
-				iV_DrawTransImage(FrontImages,IMAGE_MULTIRANK1,x+37,y+3);
+				iV_DrawImage(FrontImages,IMAGE_MULTIRANK1,x+37,y+3);
 			}
 			else if(eval >300)
 			{
-				iV_DrawTransImage(FrontImages,IMAGE_MULTIRANK2,x+37,y+3);
+				iV_DrawImage(FrontImages,IMAGE_MULTIRANK2,x+37,y+3);
 			}
 			else if(eval >150)
 			{
-				iV_DrawTransImage(FrontImages,IMAGE_MULTIRANK3,x+37,y+3);
+				iV_DrawImage(FrontImages,IMAGE_MULTIRANK3,x+37,y+3);
 			}
 
 
@@ -3753,15 +3753,15 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 			eval = stat.played;
 			if(eval >200)
 			{
-				iV_DrawTransImage(FrontImages,IMAGE_MULTIRANK1,x+37,y+13);
+				iV_DrawImage(FrontImages,IMAGE_MULTIRANK1,x+37,y+13);
 			}
 			else if(eval >100)
 			{
-				iV_DrawTransImage(FrontImages,IMAGE_MULTIRANK2,x+37,y+13);
+				iV_DrawImage(FrontImages,IMAGE_MULTIRANK2,x+37,y+13);
 			}
 			else if(eval >50)
 			{
-				iV_DrawTransImage(FrontImages,IMAGE_MULTIRANK3,x+37,y+13);
+				iV_DrawImage(FrontImages,IMAGE_MULTIRANK3,x+37,y+13);
 			}
 
 
@@ -3769,15 +3769,15 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 			eval = stat.wins;
 			if(eval >80)
 			{
-				iV_DrawTransImage(FrontImages,IMAGE_MULTIRANK1,x+37,y+23);
+				iV_DrawImage(FrontImages,IMAGE_MULTIRANK1,x+37,y+23);
 			}
 			else if(eval >40)
 			{
-				iV_DrawTransImage(FrontImages,IMAGE_MULTIRANK2,x+37,y+23);
+				iV_DrawImage(FrontImages,IMAGE_MULTIRANK2,x+37,y+23);
 			}
 			else if(eval >10)
 			{
-				iV_DrawTransImage(FrontImages,IMAGE_MULTIRANK3,x+37,y+23);
+				iV_DrawImage(FrontImages,IMAGE_MULTIRANK3,x+37,y+23);
 			}
 
 			// medals.
@@ -3787,16 +3787,16 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 				{
 					if(stat.wins>(8*stat.loses))							// gold requirement
 					{
-						iV_DrawTransImage(FrontImages,IMAGE_MEDAL_GOLD,x+49,y+11);
+						iV_DrawImage(FrontImages,IMAGE_MEDAL_GOLD,x+49,y+11);
 					}
 					else
 					{
-						iV_DrawTransImage(FrontImages,IMAGE_MEDAL_SILVER,x+49,y+11);
+						iV_DrawImage(FrontImages,IMAGE_MEDAL_SILVER,x+49,y+11);
 					}
 				}
 				else
 				{
-					iV_DrawTransImage(FrontImages,IMAGE_MEDAL_BRONZE,x+49,y+11);
+					iV_DrawImage(FrontImages,IMAGE_MEDAL_BRONZE,x+49,y+11);
 				}
 			}
 		}
@@ -3804,28 +3804,28 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 		switch(getPlayerColour(j))		//flag icon
 		{
 		case 0:
-			iV_DrawTransImage(FrontImages,IMAGE_PLAYER0,x+7,y+9);
+			iV_DrawImage(FrontImages,IMAGE_PLAYER0,x+7,y+9);
 			break;
 		case 1:
-			iV_DrawTransImage(FrontImages,IMAGE_PLAYER1,x+7,y+9);
+			iV_DrawImage(FrontImages,IMAGE_PLAYER1,x+7,y+9);
 			break;
 		case 2:
-			iV_DrawTransImage(FrontImages,IMAGE_PLAYER2,x+7,y+9);
+			iV_DrawImage(FrontImages,IMAGE_PLAYER2,x+7,y+9);
 			break;
 		case 3:
-			iV_DrawTransImage(FrontImages,IMAGE_PLAYER3,x+7,y+9);
+			iV_DrawImage(FrontImages,IMAGE_PLAYER3,x+7,y+9);
 			break;
 		case 4:
-			iV_DrawTransImage(FrontImages,IMAGE_PLAYER4,x+7,y+9);
+			iV_DrawImage(FrontImages,IMAGE_PLAYER4,x+7,y+9);
 			break;
 		case 5:
-			iV_DrawTransImage(FrontImages,IMAGE_PLAYER5,x+7,y+9);
+			iV_DrawImage(FrontImages,IMAGE_PLAYER5,x+7,y+9);
 			break;
 		case 6:
-			iV_DrawTransImage(FrontImages,IMAGE_PLAYER6,x+7,y+9);
+			iV_DrawImage(FrontImages,IMAGE_PLAYER6,x+7,y+9);
 			break;
 		case 7:
-			iV_DrawTransImage(FrontImages,IMAGE_PLAYER7,x+7,y+9);
+			iV_DrawImage(FrontImages,IMAGE_PLAYER7,x+7,y+9);
 			break;
 		default:
 			break;
@@ -3842,7 +3842,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 
 		//if(game.type == SKIRMISH && game.skDiff[i])
 		//{
-		//	iV_DrawTransImage(FrontImages,IMAGE_PLAYER_PC,x+2,y+9);
+		//	iV_DrawImage(FrontImages,IMAGE_PLAYER_PC,x+2,y+9);
 		//}
 	}
 	AddCursorSnap(&InterfaceSnap,
@@ -3877,7 +3877,7 @@ void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWOR
 	drawBlueBox(x,y,psWidget->width,psWidget->height);
 	drawBlueBox(x+psWidget->width,y,psWidget->height,psWidget->height);	// box on end.
 
-	iV_DrawTransImage(FrontImages,im,x+psWidget->width+2,y+4);			//icon descriptor.
+	iV_DrawImage(FrontImages,im,x+psWidget->width+2,y+4);			//icon descriptor.
 
 	if( ((W_EDITBOX*)psWidget)->state & WEDBS_DISABLE)					// disabled
 	{
@@ -3956,12 +3956,12 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *p
 
 
 	// now display
-	iV_DrawTransImage(FrontImages,im,x,y);
+	iV_DrawImage(FrontImages,im,x,y);
 
 	// hilight with a number...just for player selector
 	if(usehl >=10)
 	{
-		iV_DrawTransImage(IntImages,IMAGE_ASCII48-10+usehl,x+11,y+8);
+		iV_DrawImage(IntImages,IMAGE_ASCII48-10+usehl,x+11,y+8);
 	}
 
 	// hilights etc..
@@ -3969,18 +3969,18 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *p
 	{
 		if(Down)
 		{
-			iV_DrawTransImage(FrontImages,im2,x,y);
+			iV_DrawImage(FrontImages,im2,x,y);
 		}
 
 		if(hiToUse)
 		{
-			iV_DrawTransImage(FrontImages,hiToUse,x,y);
+			iV_DrawImage(FrontImages,hiToUse,x,y);
 		}
 
 	}
 	else if(Down)
 	{
-		iV_DrawTransImage(FrontImages,im2,x,y);
+		iV_DrawImage(FrontImages,im2,x,y);
 	}
 
 

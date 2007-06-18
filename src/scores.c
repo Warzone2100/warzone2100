@@ -333,7 +333,7 @@ UDWORD	div;
 			/* If we're beyond STAT_ROOKIE, then we're on rankings */
 			if(index>=STAT_GREEN && index <= STAT_ACE)
 			{
-				iV_DrawTransImage(IntImages,(UWORD)(IMAGE_LEV_0 + (index - STAT_GREEN)),x-8,y+2);
+				iV_DrawImage(IntImages,(UWORD)(IMAGE_LEV_0 + (index - STAT_GREEN)),x-8,y+2);
 			}
 
 

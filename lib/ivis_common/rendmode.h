@@ -29,14 +29,13 @@
 //*************************************************************************
 //patch
 
-#define	iV_Line				pie_Line
-#define	iV_Box				pie_Box
-#define	iV_BoxFill			pie_BoxFillIndex
-#define	iV_TransBoxFill			pie_TransBoxFill
-#define	iV_DrawImage			pie_ImageFileID
-#define	iV_DrawImageRect		pie_ImageFileIDTile
-#define	iV_DrawTransImage		pie_ImageFileID
-#define	iV_DrawTransImageRect		pie_ImageFileIDTile
+#define iV_Line				pie_Line
+#define iV_Box				pie_Box
+#define iV_BoxFill			pie_BoxFillIndex
+#define iV_TransBoxFill			pie_TransBoxFill
+#define iV_DrawImage			pie_ImageFileID
+#define iV_DrawImageRect		pie_ImageFileIDTile
+#define iV_DrawImage		pie_ImageFileID
 
 //*************************************************************************
 // polygon flags	b0..b7: col, b24..b31: anim index

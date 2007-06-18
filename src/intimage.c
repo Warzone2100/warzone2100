@@ -387,100 +387,48 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 	if(Frame->TopLeft >= 0) {
 		WTopLeft = (SWORD)iV_GetImageWidth(IntImages,Frame->TopLeft);
 		HTopLeft = (SWORD)iV_GetImageHeight(IntImages,Frame->TopLeft);
-		iV_DrawTransImage(IntImages,Frame->TopLeft,x,y);
+		iV_DrawImage(IntImages,Frame->TopLeft,x,y);
 	}
 
 	if(Frame->TopRight >= 0) {
 		WTopRight = (SWORD)iV_GetImageWidth(IntImages,Frame->TopRight);
 		HTopRight = (SWORD)iV_GetImageHeight(IntImages,Frame->TopRight);
-		iV_DrawTransImage(IntImages,Frame->TopRight,x+Width-WTopRight, y);
+		iV_DrawImage(IntImages,Frame->TopRight,x+Width-WTopRight, y);
 	}
 
 	if(Frame->BottomRight >= 0) {
 		WBottomRight = (SWORD)iV_GetImageWidth(IntImages,Frame->BottomRight);
 		HBottomRight = (SWORD)iV_GetImageHeight(IntImages,Frame->BottomRight);
-		iV_DrawTransImage(IntImages,Frame->BottomRight,x+Width-WBottomRight,y+Height-HBottomRight);
+		iV_DrawImage(IntImages,Frame->BottomRight,x+Width-WBottomRight,y+Height-HBottomRight);
 	}
 
 	if(Frame->BottomLeft >= 0) {
 		WBottomLeft = (SWORD)iV_GetImageWidth(IntImages,Frame->BottomLeft);
 		HBottomLeft = (SWORD)iV_GetImageHeight(IntImages,Frame->BottomLeft);
-		iV_DrawTransImage(IntImages,Frame->BottomLeft,x,y+Height-HBottomLeft);
+		iV_DrawImage(IntImages,Frame->BottomLeft,x,y+Height-HBottomLeft);
 	}
 
 	if(Frame->TopEdge >= 0) {
-		if(Frame->TopType == FR_SOLID) {
-			iV_DrawImageRect(IntImages,Frame->TopEdge,
-								x+iV_GetImageWidth(IntImages,Frame->TopLeft),
-								y,
-								0,0,
-								Width-WTopLeft-WTopRight,
-								iV_GetImageHeight(IntImages,Frame->TopEdge));
-		} else {
-			iV_DrawTransImageRect(IntImages,Frame->TopEdge,
-								x+iV_GetImageWidth(IntImages,Frame->TopLeft),
-								y,
-								0,0,
-								Width-WTopLeft-WTopRight,
-								iV_GetImageHeight(IntImages,Frame->TopEdge));
-		}
+		iV_DrawImageRect( IntImages, Frame->TopEdge,
+							x + iV_GetImageWidth(IntImages, Frame->TopLeft), y,
+							Width - WTopLeft - WTopRight, iV_GetImageHeight(IntImages, Frame->TopEdge) );
 	}
 
 	if(Frame->BottomEdge >= 0) {
-		if(Frame->BottomType == FR_SOLID) {
-			iV_DrawImageRect(IntImages,Frame->BottomEdge,
-								x+WBottomLeft,
-								y+Height-iV_GetImageHeight(IntImages,Frame->BottomEdge),
-								0,0,
-								Width-WBottomLeft-WBottomRight,
-								iV_GetImageHeight(IntImages,Frame->BottomEdge));
-		} else {
-			iV_DrawTransImageRect(IntImages,Frame->BottomEdge,
-								x+WBottomLeft,
-								y+Height-iV_GetImageHeight(IntImages,Frame->BottomEdge),
-								0,0,
-								Width-WBottomLeft-WBottomRight,
-								iV_GetImageHeight(IntImages,Frame->BottomEdge));
-		}
+		iV_DrawImageRect( IntImages, Frame->BottomEdge,
+							x + WBottomLeft, y + Height - iV_GetImageHeight(IntImages, Frame->BottomEdge),
+							Width - WBottomLeft - WBottomRight, iV_GetImageHeight(IntImages, Frame->BottomEdge) );
 	}
 
 	if(Frame->LeftEdge >= 0) {
-		if(Frame->LeftType == FR_SOLID) {
-			iV_DrawImageRect(IntImages,Frame->LeftEdge,
-								x,
-								y+HTopLeft,
-								0,0,
-								iV_GetImageWidth(IntImages,Frame->LeftEdge),
-								Height-HTopLeft-HBottomLeft);
-		} else {
-			iV_DrawTransImageRect(IntImages,Frame->LeftEdge,
-								x,
-								y+HTopLeft,
-								0,0,
-								iV_GetImageWidth(IntImages,Frame->LeftEdge),
-								Height-HTopLeft-HBottomLeft);
-		}
+		iV_DrawImageRect( IntImages, Frame->LeftEdge,
+							x, y + HTopLeft,
+							iV_GetImageWidth(IntImages, Frame->LeftEdge), Height - HTopLeft - HBottomLeft );
 	}
 
 	if(Frame->RightEdge >= 0) {
-		if(Frame->RightType == FR_SOLID) {
-			iV_DrawImageRect(IntImages,Frame->RightEdge,
-								x+Width-iV_GetImageWidth(IntImages,Frame->RightEdge),
-								y+HTopRight,
-								0,0,
-								iV_GetImageWidth(IntImages,Frame->RightEdge),
-								Height-HTopRight-HBottomRight);
-		} else {
-			iV_DrawTransImageRect(IntImages,Frame->RightEdge,
-								x+Width-iV_GetImageWidth(IntImages,Frame->RightEdge),
-								y+HTopRight,
-								0,0,
-								iV_GetImageWidth(IntImages,Frame->RightEdge),
-								Height-HTopRight-HBottomRight);
-		}
+		iV_DrawImageRect( IntImages, Frame->RightEdge,
+							x + Width - iV_GetImageWidth(IntImages, Frame->RightEdge), y + HTopRight,
+							iV_GetImageWidth(IntImages, Frame->RightEdge), Height - HTopRight - HBottomRight );
 	}
 }
-
-
-
-

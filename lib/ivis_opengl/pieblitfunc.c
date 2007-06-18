@@ -220,13 +220,8 @@ void pie_UniTransBoxFill(SDWORD x0,SDWORD y0, SDWORD x1, SDWORD y1, UDWORD rgb, 
 void pie_DrawImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 {
 	IMAGEDEF *Image;
-//	iBitmap *bmp;
-//	UDWORD modulus;
 	PIEIMAGE pieImage;
 	PIERECT dest;
-//	SDWORD width;
-//	SDWORD height;
-//	SDWORD delta;
 
 	assert(ID < ImageFile->Header.NumImages);
 	Image = &ImageFile->ImageDefs[ID];
@@ -236,8 +231,8 @@ void pie_DrawImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 	pieImage.tv = Image->Tv;
 	pieImage.tw = Image->Width;
 	pieImage.th = Image->Height;
-	dest.x = x+Image->XOffset;
-	dest.y = y+Image->YOffset;
+	dest.x = x + Image->XOffset;
+	dest.y = y + Image->YOffset;
 	dest.w = Image->Width;
 	dest.h = Image->Height;
 	pie_DrawImage(&pieImage, &dest, &rendStyle);
@@ -261,14 +256,8 @@ static BOOL pie_GetAdditiveSprites( void ) {
 void pie_ImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 {
 	IMAGEDEF *Image;
-//	iBitmap *bmp;
-//	UDWORD modulus;
 	PIEIMAGE pieImage;
 	PIERECT dest;
-//	SDWORD width;
-//	SDWORD height;
-//	SDWORD delta;
-//	SDWORD div,wave;
 
 	assert(ID < ImageFile->Header.NumImages);
 	Image = &ImageFile->ImageDefs[ID];
@@ -290,8 +279,8 @@ void pie_ImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 	pieImage.tv = Image->Tv;
 	pieImage.tw = Image->Width;
 	pieImage.th = Image->Height;
-	dest.x = x+Image->XOffset;
-	dest.y = y+Image->YOffset;
+	dest.x = x + Image->XOffset;
+	dest.y = y + Image->YOffset;
 	dest.w = Image->Width;
 	dest.h = Image->Height;
 	pie_DrawImage(&pieImage, &dest, &rendStyle);
@@ -300,16 +289,14 @@ void pie_ImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 
 /***************************************************************************/
 
-void pie_ImageFileIDTile(IMAGEFILE *ImageFile,UWORD ID,int x,int y,int x0,int y0,int Width,int Height)
+void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, int Height)
 {
 	IMAGEDEF *Image;
 	SDWORD hRep, hRemainder, vRep, vRemainder;
 	PIEIMAGE pieImage;
 	PIERECT dest;
-	assert(ID < ImageFile->Header.NumImages);
 
-	assert(x0 == 0);
-	assert(y0 == 0);
+	assert(ID < ImageFile->Header.NumImages);
 
 	Image = &ImageFile->ImageDefs[ID];
 
@@ -324,58 +311,60 @@ void pie_ImageFileIDTile(IMAGEFILE *ImageFile,UWORD ID,int x,int y,int x0,int y0
 	pieImage.tw = Image->Width;
 	pieImage.th = Image->Height;
 
-	dest.x = x+Image->XOffset;
-	dest.y = y+Image->YOffset;
+	dest.x = x + Image->XOffset;
+	dest.y = y + Image->YOffset;
 	dest.w = Image->Width;
 	dest.h = Image->Height;
 
-	vRep = Height/Image->Height;
-	vRemainder = Height - (vRep * Image->Height);
+	vRemainder = Height % Image->Height;
+	hRemainder = Width % Image->Width;
 
-	while(vRep > 0) {
-		hRep = Width/Image->Width;
-		hRemainder = Width - (hRep * Image->Width);
+	for (vRep = 0; vRep < Height/Image->Height; vRep++)
+	{
 		pieImage.tw = Image->Width;
-		dest.x = x+Image->XOffset;
+		dest.x = x + Image->XOffset;
 		dest.w = Image->Width;
-		while(hRep > 0) {
+
+		for (hRep = 0; hRep < Width/Image->Width; hRep++)
+		{
 			pie_DrawImage(&pieImage, &dest, &rendStyle);
-			hRep --;
 			dest.x += Image->Width;
 		}
+
 		//draw remainder
-		if (hRemainder > 0) {
+		if (hRemainder > 0)
+		{
 			pieImage.tw = hRemainder;
 			dest.w = hRemainder;
 			pie_DrawImage(&pieImage, &dest, &rendStyle);
 		}
-		vRep --;
+
 		dest.y += Image->Height;
 	}
+
 	//draw remainder
-	if (vRemainder > 0) {
-		hRep = Width/Image->Width;
-		hRemainder = Width - (hRep * Image->Width);
+	if (vRemainder > 0)
+	{
+		//as above
+		pieImage.tw = Image->Width;
+		dest.x = x + Image->XOffset;
+		dest.w = Image->Width;
+
 		pieImage.th = vRemainder;
 		dest.h = vRemainder;
-		//as above
+
+		for (hRep = 0; hRep < Width/Image->Width; hRep++)
 		{
-			pieImage.tw = Image->Width;
-			dest.x = x+Image->XOffset;
-			dest.w = Image->Width;
-			while(hRep > 0)
-			{
-				pie_DrawImage(&pieImage, &dest, &rendStyle);
-				hRep --;
-				dest.x += Image->Width;
-			}
-			//draw remainder
-			if (hRemainder > 0)
-			{
-				pieImage.tw = hRemainder;
-				dest.w = hRemainder;
-				pie_DrawImage(&pieImage, &dest, &rendStyle);
-			}
+			pie_DrawImage(&pieImage, &dest, &rendStyle);
+			dest.x += Image->Width;
+		}
+
+		//draw remainder
+		if (hRemainder > 0)
+		{
+			pieImage.tw = hRemainder;
+			dest.w = hRemainder;
+			pie_DrawImage(&pieImage, &dest, &rendStyle);
 		}
 	}
 }
@@ -400,8 +389,8 @@ void pie_ImageFileIDStretch(IMAGEFILE *ImageFile,UWORD ID,int x,int y,int Width,
 	pieImage.tw = Image->Width;
 	pieImage.th = Image->Height;
 
-	dest.x = x+Image->XOffset;
-	dest.y = y+Image->YOffset;
+	dest.x = x + Image->XOffset;
+	dest.y = y + Image->YOffset;
 	dest.w = Width;
 	dest.h = Height;
 	pie_DrawImage(&pieImage, &dest, &rendStyle);

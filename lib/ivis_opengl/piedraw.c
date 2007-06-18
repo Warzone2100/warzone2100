@@ -633,7 +633,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 	pieCount++;
 
 	// Fix for transparent buildings and features!!
-	if( (pieFlag & pie_TRANSLUCENT) && (pieFlagData>220) )
+	if( (pieFlag & pie_TRANSLUCENT) && (pieFlagData > 220) )
 	{
 		// force to bilinear and non-transparent
 		pieFlag = pieFlag & ~pie_TRANSLUCENT;
@@ -1051,11 +1051,10 @@ static inline void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, BOOL light)
 
 void pie_DrawTexTriangle(PIEVERTEX *aVrts, void* psEffects)
 {
-	GLfloat offset = 0;
+	GLfloat offset = 0.0f;
 	unsigned int i = 0;
 
-	/*	Since this is only used from within source for the terrain draw - we can backface cull the polygons.
-	*/
+	/* Since this is only used from within source for the terrain draw - we can backface cull the polygons. */
 	tileCount++;
 	pie_SetFogStatus(TRUE);
 	if (psEffects != NULL)

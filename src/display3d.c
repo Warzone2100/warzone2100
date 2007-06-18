@@ -179,7 +179,7 @@ static UWORD WaterTileID = WATER_TILE;
 static UWORD RiverBedTileID = BED_TILE;
 static float waterRealValue = 0.0f;
 #define WAVE_SPEED 4
-#define	MAX_FIRE_STAGE	32
+#define MAX_FIRE_STAGE	32
 static float	separation=(float)0;
 static SDWORD	acceleration=0;
 static SDWORD	heightSpeed=0;
@@ -381,15 +381,11 @@ void draw3DScene( void )
 	pie_BeginInterface();
 	updateLightLevels();
 	drawDroidSelections();
-	/* Show the selected delivery point */
-//	drawDeliveryPointSelection(0);
 
 	drawStructureSelections();
-//	drawBuildingLines();
 
 	bPlayerHasHQ = getHQExists(selectedPlayer);
 
-//	if(radarOnScreen && (bPlayerHasHQ || (bMultiPlayer && (game.type == DMATCH)) ))
 	if(radarOnScreen && bPlayerHasHQ)
 	{
 		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
@@ -407,66 +403,29 @@ void draw3DScene( void )
 
 	if(!bRender3DOnly)
 	{
-
-	/* Ensure that any text messages are displayed at bottom of screen */
+		/* Ensure that any text messages are displayed at bottom of screen */
 		pie_SetFogStatus(FALSE);
 		displayConsoleMessages();
-//		if(getWarCamStatus())
-//		{
-//			dispWarCamLogo();
-//		}
 	}
-//	scoreDataToScreen();
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_OFF);
 	pie_SetFogStatus(FALSE);
 	iV_SetTextColour(-1);
 
-//	if(widgetsOn)
-//	{
-//		iV_DrawText("Warzone 2100 - Pumpkin Studios - QA(4) ",190,470);
-//	}
-
-//----------------------------------------------------------
-//----------------------------------------------------------
-//----------------------------------------------------------
 	/* Dont remove this folks!!!! */
 	if(!bAllowOtherKeyPresses)
 	{
 		displayMultiChat();
-
 	}
 	else
 	{
 		// FIXME: This wasn't shown before. Do we want to keep it? Or change it?
 		if(gamePaused())
 		{
-			iV_DrawText( "Developed by Pumpkin Studios", RET_X + 3, 467 + E_H );
-			iV_DrawText( "Published by EIDOS Interactive", pie_GetVideoBufferWidth() - 196, 467 + E_H );
+			iV_DrawText( _("Developed by Pumpkin Studios"), RET_X + 3, 467 + E_H );
+			iV_DrawText( _("Published by EIDOS Interactive"), pie_GetVideoBufferWidth() - 196, 467 + E_H );
 		}
 	}
 
-
-
-	/*
-	if(mousePressed(MOUSE_LMB))
-	{
-		{
-			if(apsDroidLists[0])
-			{
-				Vector3i	pos;
-				UDWORD	i;
-				pos.x = apsDroidLists[0]->x;
-				pos.z = apsDroidLists[0]->y;
-				pos.y = map_Height(pos.x,pos.z);
-				addEffect(&pos,EFFECT_SAT_LASER,SAT_LASER_STANDARD,FALSE,NULL,0);
-			}
-
-		}
-	}
-	*/
-//----------------------------------------------------------
-//----------------------------------------------------------
-//----------------------------------------------------------
 	if(getDebugMappingStatus() && !demoGetStatus() && !gamePaused())
 	{
 		iV_DrawText( "DEBUG ", RET_X + 134, 440 + E_H );
@@ -491,9 +450,8 @@ void draw3DScene( void )
 	/* If we don't have an active camera track, then track terrain height! */
 	if(!getWarCamStatus())
 	{
-	/*	player.p.y = averageCentreTerrainHeight; */
-	/* Move the autonomous camera if necessary */
-		trackHeight(2*averageCentreTerrainHeight);
+		/* Move the autonomous camera if necessary */
+		trackHeight(2 * averageCentreTerrainHeight);
 	}
 	else
 	{
@@ -509,42 +467,24 @@ void draw3DScene( void )
 		permitNewConsoleMessages(FALSE);
 	}
 
-//	sprintf(buildInfo,"WallDrag from %d,%d to %d,%d", wallDrag.x1,wallDrag.y1,wallDrag.x2,wallDrag.y2);
-//	iV_DrawText(buildInfo,100,180);
-	/*
-	sprintf(buildInfo,"Gridvar calls : %d", gridVarCalls);
-	iV_DrawText(buildInfo,100,180);
-
-	sprintf(buildInfo,"Instructions saved : %d", gridVarCalls*24);
-	iV_DrawText(buildInfo,100,200);
-		gridVarCalls = 0;
-	*/
-
 #ifdef ALEXM
-		sprintf(buildInfo,"Skipped effects : %d", getNumSkippedEffects());
-	iV_DrawText(buildInfo,100,200);
-	sprintf(buildInfo,"Miss Count : %d", getMissCount());
-	iV_DrawText(buildInfo,100,220);
-	sprintf(buildInfo,"Even effects : %d", getNumEvenEffects());
-	iV_DrawText(buildInfo,100,240);
+	sprintf(buildInfo, "Skipped effects : %d", getNumSkippedEffects());
+	iV_DrawText(buildInfo, 100, 200);
+	sprintf(buildInfo, "Miss Count : %d", getMissCount());
+	iV_DrawText(buildInfo, 100, 220);
+	sprintf(buildInfo, "Even effects : %d", getNumEvenEffects());
+	iV_DrawText(buildInfo, 100, 240);
 #endif
-
-//	sprintf(buildInfo,"Average Grid Height : %d", averageCentreTerrainHeight);
-//	iV_DrawText(buildInfo,100,240);
-//	sprintf(buildInfo,"Height : %d", player.p.y);
-//	iV_DrawText(buildInfo,100,260);
-
-
 
 	processDemoCam();
 	processSensorTarget();
 	processDestinationTarget();
 
-	testEffect();				//this does squat, but leave it for now I guess -Q
+	testEffect(); //this does squat, but leave it for now I guess -Q
 
 	if(bSensorDisplay)
 	{
-		showDroidSensorRanges();		//shows sensor data for units/droids/whatever...-Q 5-10-05
+		showDroidSensorRanges(); //shows sensor data for units/droids/whatever...-Q 5-10-05
 	}
 
 	//visualize radius if needed
@@ -3053,7 +2993,7 @@ float		mulH;
 							psStruct->targetted = 0;
 							scrX = psStruct->sDisplay.screenX;
 							scrY = psStruct->sDisplay.screenY - (psStruct->sDisplay.imd->ymax/4);
-							iV_DrawTransImage(IntImages,getTargettingGfx(),scrX,scrY);
+							iV_DrawImage(IntImages,getTargettingGfx(),scrX,scrY);
 
 							/*
 							scrR = (gameTime%1000)/50;
@@ -3491,7 +3431,7 @@ static void	drawDroidSelections( void )
 					scrX = psDroid->sDisplay.screenX;
 					scrY = psDroid->sDisplay.screenY - 8;
 					index = IMAGE_BLUE1+getTimeValueRange(1020,5);
-					iV_DrawTransImage(IntImages,index,scrX,scrY);
+					iV_DrawImage(IntImages,index,scrX,scrY);
 				}
 			}
 		}
@@ -3506,7 +3446,7 @@ static void	drawDroidSelections( void )
 				psFeature->bTargetted = FALSE;
 				scrX = psFeature->sDisplay.screenX;
 				scrY = psFeature->sDisplay.screenY - (psFeature->sDisplay.imd->ymax/4);
-				iV_DrawTransImage(IntImages,getTargettingGfx(),scrX,scrY);
+				iV_DrawImage(IntImages,getTargettingGfx(),scrX,scrY);
 			}
 		}
 	}
@@ -3601,10 +3541,10 @@ SDWORD	xShift,yShift;
 		yShift = GN_Y_OFFSET;
 		xShift = ((xShift*pie_GetResScalingFactor())/100);
 		yShift = ((yShift*pie_GetResScalingFactor())/100);
-		iV_DrawTransImage(IntImages,id,psDroid->sDisplay.screenX-xShift,psDroid->sDisplay.screenY+yShift);
+		iV_DrawImage(IntImages,id,psDroid->sDisplay.screenX-xShift,psDroid->sDisplay.screenY+yShift);
 		if(id2!=UDWORD_MAX)
 		{
-			iV_DrawTransImage(IntImages,id2,psDroid->sDisplay.screenX-xShift,psDroid->sDisplay.screenY+yShift-8);
+			iV_DrawImage(IntImages,id2,psDroid->sDisplay.screenX-xShift,psDroid->sDisplay.screenY+yShift-8);
 		}
 	}
 }
@@ -3670,8 +3610,8 @@ SDWORD	xShift,yShift, index;
 		yShift = GN_Y_OFFSET;
 		xShift = ((xShift*pie_GetResScalingFactor())/100);
 		yShift = ((yShift*pie_GetResScalingFactor())/100);
-		iV_DrawTransImage(IntImages,id2,psDroid->sDisplay.screenX-xShift-6,psDroid->sDisplay.screenY+yShift);
-		iV_DrawTransImage(IntImages,id,psDroid->sDisplay.screenX-xShift,psDroid->sDisplay.screenY+yShift);
+		iV_DrawImage(IntImages,id2,psDroid->sDisplay.screenX-xShift-6,psDroid->sDisplay.screenY+yShift);
+		iV_DrawImage(IntImages,id,psDroid->sDisplay.screenX-xShift,psDroid->sDisplay.screenY+yShift);
 	}
 }
 /* ---------------------------------------------------------------------------- */
@@ -4149,28 +4089,22 @@ static void getDefaultColours( void )
 // -------------------------------------------------------------------------------------
 void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 {
-	SDWORD actualX,actualY;
-	MAPTILE *psTile;
-	BOOL bOutlined;
-	UDWORD tileNumber;
+	/* Get the correct tile index for the x/y coordinates */
+	SDWORD actualX = playerXTile + j, actualY = playerZTile + i;
+	MAPTILE *psTile = NULL;
+	BOOL bOutlined = FALSE;
+	UDWORD tileNumber = 0;
 	Vector2i offset;
 	PIEVERTEX vertices[3];
 	UBYTE oldColours[4] = { 0, 0, 0, 0 };
 	UDWORD oldColoursWord[4] = { 0, 0, 0, 0 };
 #if defined(SHOW_ZONES) || defined(SHOW_GATEWAYS)
-	SDWORD zone;
+	SDWORD zone = 0;
 #endif
-	/* Get the correct tile index for the x coordinate */
-	actualX = playerXTile + j;
-	/* Get the correct tile index for the y coordinate */
-	actualY = playerZTile + i;
 
-#ifdef SHOW_ZONES
-	zone = 0;
-#endif
 	/* Let's just get out now if we're not supposed to draw it */
-	if( (actualX<0) ||
-		(actualY<0) ||
+	if( (actualX < 0) ||
+		(actualY < 0) ||
 		(actualX > mapWidth-1) ||
 		(actualY > mapHeight-1) )
 	{
@@ -4179,18 +4113,17 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	}
 	else
 	{
-		psTile = mapTile(actualX,actualY);
-#ifdef SHOW_ZONES
-		if (!fpathBlockingTile(actualX,actualY) ||
+		psTile = mapTile(actualX, actualY);
+#if defined(SHOW_ZONES)
+		if (!fpathBlockingTile(actualX, actualY) ||
 			TERRAIN_TYPE(psTile) == TER_WATER)
 		{
-			zone = gwGetZone(actualX,actualY);
+			zone = gwGetZone(actualX, actualY);
 		}
-#endif
-#ifdef SHOW_GATEWAYS
+#elif defined(SHOW_GATEWAYS)
 		if (psTile->tileInfoBits & BITS_GATEWAY)
 		{
-			zone  = gwGetZone(actualX,actualY);
+			zone = gwGetZone(actualX, actualY);
 		}
 #endif
 	}
@@ -4200,11 +4133,15 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		/* This tile isn't being drawn */
 		return;
 	}
-	/* what tile texture number is it? */
-	tileNumber = psTile->texture;
 
-	// If it's a water tile then force it to be the river bed texture.
-	if(!onWaterEdge && TERRAIN_TYPE(psTile) == TER_WATER) {
+	if (TERRAIN_TYPE(psTile) != TER_WATER)
+	{
+		// what tile texture number is it?
+		tileNumber = psTile->texture;
+	}
+	else if(!onWaterEdge)
+	{
+		// If it's a water tile then force it to be the river bed texture.
 		tileNumber = RiverBedTileID;
 	}
 
@@ -4628,7 +4565,7 @@ static void	processSensorTarget( void )
 				{
 					index = IMAGE_BLUE1;
 				}
-				iV_DrawTransImage(IntImages,index,x,y);
+				iV_DrawImage(IntImages,index,x,y);
 
 				offset = (SWORD)(12+ ((TARGET_TO_SENSOR_TIME)-(gameTime2-
 					lastTargetAssignation))/2);
@@ -5171,7 +5108,7 @@ UDWORD	gfxId;
 	if(gfxId!=UDWORD_MAX)
 	{
 		/* Render the rank graphic at the correct location */ // remove hardcoded numbers?!
-		iV_DrawTransImage(IntImages,(UWORD)gfxId,psDroid->sDisplay.screenX+20,psDroid->sDisplay.screenY+8);
+		iV_DrawImage(IntImages,(UWORD)gfxId,psDroid->sDisplay.screenX+20,psDroid->sDisplay.screenY+8);
 	}
 }
 
@@ -5184,7 +5121,7 @@ static void	drawDroidSensorLock(DROID *psDroid)
 	if (orderState(psDroid, DORDER_FIRESUPPORT))
 	{
 		/* Render the sensor graphic at the correct location - which is what?!*/
-		iV_DrawTransImage(IntImages,IMAGE_GN_STAR,psDroid->sDisplay.screenX+20,
+		iV_DrawImage(IntImages,IMAGE_GN_STAR,psDroid->sDisplay.screenX+20,
 			psDroid->sDisplay.screenY-20);
 	}
 }

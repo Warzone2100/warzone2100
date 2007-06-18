@@ -1490,7 +1490,7 @@ void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset,
 	if (Hilight)
 	{
 
-		iV_DrawTransImage(IntImages,IMAGE_BUT_HILITE,xOffset+psButton->x,
+		iV_DrawImage(IntImages,IMAGE_BUT_HILITE,xOffset+psButton->x,
 			yOffset+psButton->y);
 	}
 }
@@ -1548,7 +1548,7 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 		image = (SWORD)getResearchForMsg((VIEWDATA *)psMessage->pViewData)->iconID;
 		if (image > 0)
 		{
-			iV_DrawTransImage(IntImages,image,x0,y0);
+			iV_DrawImage(IntImages,image,x0,y0);
 		}
 	}
 }
@@ -2062,7 +2062,7 @@ void setCurrentMsg(void)
 	}
 
 	//draw the 'button'
-	iV_DrawTransImage(IntImages,imageID, psButton->x, psButton->y);
+	iV_DrawImage(IntImages,imageID, psButton->x, psButton->y);
 }*/
 /*check the x and y are within the messages 3D view if on screen */
 /*BOOL checkMessageOverlap(MESSAGE *psMessage, SWORD x, SWORD y)

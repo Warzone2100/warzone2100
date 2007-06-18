@@ -168,7 +168,7 @@ void pie_DrawSkybox(float scale, int u, int v, int w, int h)
 	glDisable(GL_ALPHA_TEST);
 
 	// Apply scale matrix
-	glScalef(scale,scale / 2.0,scale);
+	glScalef(scale, scale/2.0f, scale);
 
 	glBegin(GL_QUAD_STRIP);
 		// Front
