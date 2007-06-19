@@ -115,7 +115,7 @@ typedef enum _terrain_type
 
 extern UBYTE terrainTypes[MAX_TILE_TEXTURES];
 
-#define TERRAIN_TYPE(x) terrainTypes[x->texture & TILE_NUMMASK]
+#define TERRAIN_TYPE(x) terrainTypes[(x)->texture & TILE_NUMMASK]
 
 /* Information stored with each tile */
 typedef struct _maptile

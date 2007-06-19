@@ -18,10 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 //*************************************************************************
-//***	ivi.h iVi engine definitions. [Sam Kerbeck]
-//*	24-04-96.30-07-96 PC
-//*	18-11-96.04-12-96	WIN'95
-//*
+//***	ivi.h iVi engine definitions. [Sam Kerbeck] ***//
 
 #ifndef _ivi_
 #define _ivi_

@@ -112,8 +112,11 @@
 #include "cmddroid.h"
 
 
+// Extremely magic!
 #define WATER_TILE 17			// ID of water tile.
-#define BED_TILE 5				// ID of river bed tile.
+#define RIVERBED_TILE 5				// ID of river bed tile.
+
+
 #define WATER_ALPHA_LEVEL 255 //was 164	// Amount to alpha blend water.
 #define WATER_ZOFFSET 32		// Sorting offset for main water tile.
 #define WATER_EDGE_ZOFFSET 64	// Sorting offset for water edge tiles.
@@ -171,15 +174,14 @@ static BOOL	bDrawBlips=TRUE;
 static BOOL	bDrawProximitys=TRUE;
 BOOL	godMode;
 
-static UWORD WaterTileID = WATER_TILE;
-static UWORD RiverBedTileID = BED_TILE;
+static UWORD RiverBedTileID = RIVERBED_TILE;
 static float waterRealValue = 0.0f;
 #define WAVE_SPEED 4
 #define MAX_FIRE_STAGE 32
-static float	separation=(float)0;
-static SDWORD	acceleration=0;
-static SDWORD	heightSpeed=0;
-static float	aSep;
+static float	separation = 0.0f;
+static SDWORD	acceleration = 0;
+static SDWORD	heightSpeed = 0;
+static float	aSep = 0.0f;
 static SDWORD	aAccel = 0;
 static SDWORD	aSpeed = 0;
 
@@ -744,7 +746,7 @@ static void drawTiles(iView *camera, iView *player)
 				}
 
 				// If it's the main water tile (has water texture) then..
-				if ( (psTile->texture & TILE_NUMMASK) == WaterTileID && !bEdgeTile )
+				if ( (psTile->texture & TILE_NUMMASK) == WATER_TILE && !bEdgeTile )
 				{
 					// Push the terrain down for the river bed.
 					PushedDown = TRUE;
@@ -847,7 +849,8 @@ static void drawTiles(iView *camera, iView *player)
 					bucketAddTypeToList(RENDER_WATERTILE, &tileIJ[i][j]);
 
 					// check if we need to draw a water edge
-					if((mapTile(playerXTile+j, playerZTile+i)->texture & TILE_NUMMASK) != WaterTileID) {
+					if ( (mapTile(playerXTile+j, playerZTile+i)->texture & TILE_NUMMASK) != WATER_TILE )
+					{
 						// the edge is in front of the water (which is drawn at z-index -1)
 						pie_SetDepthOffset(-2.0);
 						drawTerrainTile(i, j, TRUE);
@@ -4767,10 +4770,8 @@ static void testEffect2( UDWORD player )
 						addEffect(&pos,EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER,FALSE,NULL,0);
 					}
 				}
-
 			}
 		}
-
 	}
 }
 
