@@ -79,9 +79,6 @@ static	BASE_OBJECT	radarTarget;
 /* Do we trun to face when doing a radar jump? */
 static	BOOL	bRadarAllign;
 
-/* How far we track relative to the droids location - direction matters */
-SDWORD	camDroidXOffset;
-SDWORD	camDroidYOffset;
 SDWORD	presAvAngle = 0;;
 /* Camera logo spins at 120 degrees a second */
 #define	LOGO_ROT_SPEED DEG(120)
@@ -90,15 +87,12 @@ SDWORD	presAvAngle = 0;;
 	it to be pretty far _down_ the screen, so we can see more
 */
 
+/* Offset from droid's world coords */
+/* How far we track relative to the droids location - direction matters */
 #define	CAM_DEFAULT_X_OFFSET	-400
 #define CAM_DEFAULT_Y_OFFSET	-400
 #define	MINCAMROTX	-20
 
-
-/*	These used to be #defines but they're variable now as it may be necessary
-	to allow the player	to customise tracking speed? Jim?
-*/
-float	accelConstant,velocityConstant, rotAccelConstant, rotVelocityConstant;
 
 /* How much info do you want when tracking a droid - this toggles full stat info */
 static	BOOL bFullInfo = FALSE;
@@ -126,18 +120,9 @@ void	initWarCam( void )
 	/* We're not intitially following anything */
 	trackingCamera.status = CAM_INACTIVE;
 
-	/* Set up the default tracking variables */
-	accelConstant = ACCEL_CONSTANT;
-	velocityConstant = VELOCITY_CONSTANT;
-	rotAccelConstant = ROT_ACCEL_CONSTANT;
-	rotVelocityConstant = ROT_VELOCITY_CONSTANT;
-
 	/* Logo setup */
 	warCamLogoRotation = 0;
 
-  /* Offset from droid's world coords */
-	camDroidXOffset = CAM_DEFAULT_X_OFFSET;
-	camDroidYOffset = CAM_DEFAULT_Y_OFFSET;
 	OldViewValid = FALSE;
 }
 
@@ -815,13 +800,13 @@ SDWORD	angle;
 			{
 				multiAngle = getGroupAverageTrackAngle( trackingCamera.target->group, TRUE );
 			}
-			xBehind = ( ( camDroidYOffset * SIN( DEG(multiAngle) ) ) >> FP12_SHIFT );
-			yBehind = ( ( camDroidXOffset * COS( DEG(multiAngle) ) ) >> FP12_SHIFT );
+			xBehind = ( ( CAM_DEFAULT_Y_OFFSET * SIN( DEG(multiAngle) ) ) >> FP12_SHIFT );
+			yBehind = ( ( CAM_DEFAULT_X_OFFSET * COS( DEG(multiAngle) ) ) >> FP12_SHIFT );
 		}
 		else
 		{
-		 	xBehind = ( ( camDroidYOffset * SIN( DEG( (int)trackingCamera.target->direction ) ) ) >> FP12_SHIFT );
-			yBehind = ( ( camDroidXOffset * COS( DEG( (int)trackingCamera.target->direction ) ) ) >> FP12_SHIFT );
+		 	xBehind = ( ( CAM_DEFAULT_Y_OFFSET * SIN( DEG( (int)trackingCamera.target->direction ) ) ) >> FP12_SHIFT );
+			yBehind = ( ( CAM_DEFAULT_X_OFFSET * COS( DEG( (int)trackingCamera.target->direction ) ) ) >> FP12_SHIFT );
 		}
 	}
 	else
@@ -873,12 +858,12 @@ SDWORD	angle;
 		if(!bFlying)
 		{
 		 	trackingCamera.acceleration.x =
-				(accelConstant*separation - velocityConstant*(float)trackingCamera.velocity.x);
+				(ACCEL_CONSTANT*separation - VELOCITY_CONSTANT*(float)trackingCamera.velocity.x);
 		}
 		else
 		{
 			trackingCamera.acceleration.x =
-				((accelConstant*separation*4) - (velocityConstant*2*(float)trackingCamera.velocity.x));
+				((ACCEL_CONSTANT*separation*4) - (VELOCITY_CONSTANT*2*(float)trackingCamera.velocity.x));
 
 		}
 	}
@@ -897,12 +882,12 @@ SDWORD	angle;
 		if(!bFlying)
 		{
 		 	trackingCamera.acceleration.y =
-				((accelConstant)*separation - (velocityConstant)*trackingCamera.velocity.y);
+				((ACCEL_CONSTANT)*separation - (VELOCITY_CONSTANT)*trackingCamera.velocity.y);
 		}
 		else
 		{
 			trackingCamera.acceleration.y =
-				(((accelConstant)*separation*4) - ((velocityConstant)*2*trackingCamera.velocity.y));
+				(((ACCEL_CONSTANT)*separation*4) - ((VELOCITY_CONSTANT)*2*trackingCamera.velocity.y));
 		}
 	}
 
@@ -914,12 +899,12 @@ SDWORD	angle;
 		if(!bFlying)
 		{
 			trackingCamera.acceleration.z =
-				(accelConstant*separation - velocityConstant*trackingCamera.velocity.z);
+				(ACCEL_CONSTANT*separation - VELOCITY_CONSTANT*trackingCamera.velocity.z);
 		}
 		else
 		{
 			trackingCamera.acceleration.z =
-				((accelConstant*separation*4) - (velocityConstant*2*trackingCamera.velocity.z));
+				((ACCEL_CONSTANT*separation*4) - (VELOCITY_CONSTANT*2*trackingCamera.velocity.z));
 
 		}
 	}
@@ -1081,7 +1066,7 @@ SDWORD	xPos,yPos,zPos;
 		}
 
 		/* Make new acceleration */
-		trackingCamera.rotAccel.y = rotAccelConstant * separation - rotVelocityConstant * trackingCamera.rotVel.y;
+		trackingCamera.rotAccel.y = ROT_ACCEL_CONSTANT * separation - ROT_VELOCITY_CONSTANT * trackingCamera.rotVel.y;
 	}
 
 	if(update & X_UPDATE)
@@ -1133,7 +1118,7 @@ SDWORD	xPos,yPos,zPos;
 		/* Make new acceleration */
 		trackingCamera.rotAccel.x =
 			/* Make this really slow */
-			((rotAccelConstant)*separation - rotVelocityConstant*(float)trackingCamera.rotVel.x);
+			((ROT_ACCEL_CONSTANT)*separation - ROT_VELOCITY_CONSTANT*(float)trackingCamera.rotVel.x);
 	}
 
 	/* This looks a bit arse - looks like a flight sim */
@@ -1165,7 +1150,7 @@ SDWORD	xPos,yPos,zPos;
 		/* Make new acceleration */
 		trackingCamera.rotAccel.z =
 			/* Make this really slow */
-			((rotAccelConstant/1)*separation - rotVelocityConstant*(float)trackingCamera.rotVel.z);
+			((ROT_ACCEL_CONSTANT/1)*separation - ROT_VELOCITY_CONSTANT*(float)trackingCamera.rotVel.z);
 	}
 
 }

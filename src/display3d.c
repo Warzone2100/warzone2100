@@ -126,7 +126,7 @@
 
 static UDWORD	getTargettingGfx(void);
 static void	drawDroidGroupNumber(DROID *psDroid);
-static void	trackHeight(SDWORD desiredHeight);
+static void	trackHeight(float desiredHeight);
 static void	getDefaultColours(void);
 static void	renderSurroundings(void);
 static void	locateMouse(void);
@@ -178,12 +178,6 @@ static UWORD RiverBedTileID = RIVERBED_TILE;
 static float waterRealValue = 0.0f;
 #define WAVE_SPEED 4.0f
 #define MAX_FIRE_STAGE 32
-static float	separation = 0.0f;
-static SDWORD	acceleration = 0;
-static SDWORD	heightSpeed = 0;
-static float	aSep = 0.0f;
-static SDWORD	aAccel = 0;
-static SDWORD	aSpeed = 0;
 
 UDWORD	barMode = BAR_FULL; // configured in configuration.c
 
@@ -4406,81 +4400,53 @@ UDWORD	getSuggestedPitch( void )
 
 	return(pitch);
 }
+
+
 // -------------------------------------------------------------------------------------
-static void	trackHeight( SDWORD desiredHeight )
+static void trackHeight( float desiredHeight )
 {
-float	fraction;
-UDWORD	pitch;
-SDWORD	angConcern;
-UDWORD	desPitch;
+	static float heightSpeed = 0.0f;
+	/* What fraction of a second did last game loop take */
+	float fraction = frameTime2 / (float)GAME_TICKS_PER_SEC;
+	/* How far are we from desired hieght? */
+	float separation = desiredHeight - player.p.y;
+	/* Work out accelertion... */
+	float acceleration = ACCEL_CONSTANT * separation - VELOCITY_CONSTANT * heightSpeed;
 
-		/* What fraction of a second did last game loop take */
-		fraction = (MAKEFRACT(frameTime2) / (float)GAME_TICKS_PER_SEC);
+	/* ...and now speed */
+	heightSpeed += acceleration * fraction;
 
-		/* How far are we from desired hieght? */
-		separation = (float)(desiredHeight - player.p.y);
+	/* Adjust the height accordingly */
+	player.p.y += heightSpeed * fraction;
 
-		/* Work out accelertion... */
-		acceleration = MAKEINT(((ACCEL_CONSTANT*2)*separation - (VELOCITY_CONSTANT)*(float)heightSpeed));
+	/* Now do auto pitch as well, but only if we're not using mouselook and not tracking */
+	if(!getWarCamStatus() && !getRotActive())
+	{
+		/* Get the suggested pitch */
+		UDWORD pitch = getSuggestedPitch();
 
-		/* ...and now speed */
-		heightSpeed += MAKEINT(((float)acceleration * fraction));
+		/* What's the desired pitch from the player */
+		UDWORD desPitch = 360 - getDesiredPitch();
 
-		/* Adjust the height accordingly */
-		player.p.y += MAKEINT(((float)heightSpeed * fraction));
+		/* Make sure this isn't negative or too much */
+		player.r.x %= DEG(360);
 
-		/* Now do auto pitch as well, but only if we're not using mouselook and not tracking */
-		if(!getWarCamStatus() && !getRotActive())
+		/* Only do something if we're not within 2 degrees of optimum */
+		if ( abs(pitch - desPitch) > 2 )
 		{
-			/* Get the suggested pitch */
-			pitch = getSuggestedPitch();
-
-			/* Make sure this isn't negative */
-			while(player.r.x<0)
-			{
-				player.r.x+=DEG(360);
-			}
-
-			/* Or too much */
-			while(player.r.x > DEG(360))
-			{
-				player.r.x -= DEG(360);
-			}
-
-			/* What's the desired pitch from the player */
-			desPitch = (360-getDesiredPitch());
-
-			/* Do nothing if we're within 2 degrees of optimum */
-			if(abs(pitch-desPitch) < 2) // near enough
-			{
-					/*NOP*/
-			}
-
+			static float aSpeed = 0.0f;
 			/* Force adjust if too low - stops near z clip */
-			else if(pitch>desPitch)
-			{
-				angConcern = DEG(360-pitch);
-				aSep = (float)(angConcern-player.r.x);
-				aAccel = MAKEINT((((ACCEL_CONSTANT))*aSep - (VELOCITY_CONSTANT)*(float)aSpeed));
-				aSpeed += MAKEINT(((float)aAccel * fraction));
-				player.r.x += MAKEINT(((float)aSpeed * fraction));
-			}
-			else
-			{
-				/* Else, move towards player's last selected pitch */
-				angConcern = DEG(360-desPitch);
-				aSep = (float)(angConcern-player.r.x);
-				aAccel = MAKEINT((((ACCEL_CONSTANT))*aSep - (VELOCITY_CONSTANT)*(float)aSpeed));
-				aSpeed += MAKEINT(((float)aAccel * fraction));
-				player.r.x += MAKEINT(((float)aSpeed * fraction));
-			}
+			/* Else, move towards player's last selected pitch */
+			const SDWORD aSep = DEG(360 - MAX(pitch, desPitch)) - player.r.x;
+			const float aAccel = ROT_ACCEL_CONSTANT * aSep - ROT_VELOCITY_CONSTANT * aSpeed;
 
-//			flushConsoleMessages();
-//			CONPRINTF(ConsoleString,(ConsoleString,"Player.r.x : %d",player.r.x/182));
-//			CONPRINTF(ConsoleString,(ConsoleString,"Pitch : %d",pitch));
+			aSpeed += aAccel * fraction;
+			player.r.x += aSpeed * fraction;
 		}
-
+	}
 }
+
+
 // -------------------------------------------------------------------------------------
 void	toggleEnergyBars( void )
 {
