@@ -4132,12 +4132,12 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		return;
 	}
 
-	if (TERRAIN_TYPE(psTile) != TER_WATER)
+	if ( TERRAIN_TYPE(psTile) != TER_WATER || onWaterEdge )
 	{
 		// what tile texture number is it?
 		tileNumber = psTile->texture;
 	}
-	else if (!onWaterEdge)
+	else
 	{
 		// If it's a water tile then force it to be the river bed texture.
 		tileNumber = RiverBedTileID;
