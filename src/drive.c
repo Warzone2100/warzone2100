@@ -781,14 +781,10 @@ BOOL driveInterfaceEnabled(void)
 //
 void driveProcessAquireButton(void)
 {
-
 	if(mouseReleased(MOUSE_RMB) || keyPressed(KEY_S)) {
 		BASE_OBJECT	*psObj;
-//		psObj = targetAquireNext(TARGET_TYPE_ANY);
-//		psObj = targetAquireNearestObj(targetGetCrosshair(),TARGET_TYPE_ANY);
-		psObj = targetAquireNearestObjView((BASE_OBJECT*)psDrivenDroid,TARGET_TYPE_ANY);
+		psObj = targetAquireNearestObjView((BASE_OBJECT*)psDrivenDroid);
 	}
-
 }
 
 
