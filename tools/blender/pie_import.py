@@ -7,9 +7,9 @@ Group: 'Import'
 Tooltip: 'Load a Warzone model file'
 """
 
-__author__ = "Rodolphe Suescun, Gerard Krol"
+__author__ = "Rodolphe Suescun, Gerard Krol, Kevin Gillette"
 __url__ = ["blender"]
-__version__ = "0.2"
+__version__ = "0.2.1"
 
 __bpydoc__ = """\
 This script imports PIE files to Blender.
@@ -43,7 +43,6 @@ Run this script from "File->Import" menu and then load the desired PIE file.
 # ***** END GPL LICENCE BLOCK *****
 # --------------------------------------------------------------------------
 
-import glob
 from Blender import *
 import os
 
@@ -83,13 +82,28 @@ def load_pie(file):
 			loaded = 1
 			
 			# the big image finding trick
-			basename = l[2].split(' ')[0].split('.')[0].lower()
+			basename, ext = os.path.splitext(' '.join(l[2:-2]).lower())
+			namelen = len(basename) + len(ext)
+
 			print 'basename:', basename
+			print 'ext:', ext
 			options = []
-			options.extend(glob.glob(os.path.join(DIR,basename) + '*.*'))
-			options.extend(glob.glob(os.path.join(DIR,'..','texpages', basename) + '*.*'))
-			options.extend(glob.glob(os.path.join(DIR,'..','..','texpages', basename) + '*.*'))
-			print 'options', options
+			for d in (('..', 'texpages'), ('..', '..', 'texpages')):
+				file_found = False
+				d = os.path.join(DIR, *d)
+				if not os.path.exists(d): continue
+				for fn in os.listdir(d):
+					if fn.startswith(basename):
+						canonical = os.path.abspath(os.path.join(d, fn))
+						if fn.endswith(ext) and len(fn) == namelen:
+							options.insert(0, canonical)
+							file_found = True
+							break
+						else:
+							options.append(canonical)
+				if file_found: break
+
+			print 'options:', options
 			image = Image.Load(options[0])
 
 			texture = Texture.New()
