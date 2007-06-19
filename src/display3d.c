@@ -744,7 +744,7 @@ static void drawTiles(iView *camera, iView *player)
 				}
 
 				// If it's the main water tile (has water texture) then..
-				if ( bWaterTile && !bEdgeTile )
+				if ( (psTile->texture & TILE_NUMMASK) == WaterTileID && !bEdgeTile )
 				{
 					// Push the terrain down for the river bed.
 					PushedDown = TRUE;
