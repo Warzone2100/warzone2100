@@ -70,8 +70,6 @@ typedef float FRACT_D;  /* But isn't this is supposed to be double? - Per */
 #define MAKEFRACT(x) ((float)(x))
 #define FRACTmul(x,y) ((x)*(y))
 #define FRACTdiv(x,y) ((x)/(y))
-#define FRACTmul_1(x,y) ((x)*(y))
-#define FRACTdiv_1(x,y) ((x)/(y))
 
 #define FRACTCONST(a,b) (((float)(a)) / ((float)(b)))
 #define MAKEFRACT_D(x) ((FRACT_D)(x))

@@ -175,7 +175,7 @@ static inline UDWORD map_coord(UDWORD worldCoord)
 }
 
 /* maps a position down to the corner of a tile */
-#define map_round(coord) coord & (TILE_UNITS - 1)
+#define map_round(coord) (coord & (TILE_UNITS - 1))
 
 /* Shutdown the map module */
 extern BOOL mapShutdown(void);

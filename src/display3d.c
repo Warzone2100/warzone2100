@@ -185,7 +185,7 @@ UDWORD	barMode = BAR_FULL; // configured in configuration.c
 BOOL	spinScene = FALSE;
 
 /* Initial 3D world origins */
-UDWORD	mapX=45,mapY=80;
+UDWORD	mapX=45, mapY=80;
 
 /* Have we made a selection by clicking the mouse - used for dragging etc */
 BOOL	selectAttempt = FALSE;
@@ -551,7 +551,6 @@ static void drawTiles(iView *camera, iView *player)
 	BOOL PushedDown = FALSE;
 	UBYTE TileIllum;
 	UDWORD shiftVal = 0;
-	UDWORD altVal = 0;
 	int numTilesAveraged = 0;
 	BOOL bEdgeTile;
 	static float angle = 0.0f;
@@ -745,8 +744,7 @@ static void drawTiles(iView *camera, iView *player)
 					// Push the terrain down for the river bed.
 					PushedDown = TRUE;
 					shiftVal = WATER_DEPTH + environGetData(playerXTile+j, playerZTile+i) * 1.5f;
-					altVal = 0; // environGetValue(playerXTile+j, playerZTile+i);
-					tileScreenInfo[i][j].y -= shiftVal + altVal;
+					tileScreenInfo[i][j].y -= shiftVal;
 					// And darken it.
 					TileIllum = (UBYTE)(TileIllum * 0.75f);
 				}
@@ -763,7 +761,7 @@ static void drawTiles(iView *camera, iView *player)
 
 					if (PushedDown)
 					{
-						tileScreenInfo[i][j].y += (shiftVal + 2*altVal);
+						tileScreenInfo[i][j].y += shiftVal;
 					}
 
 					// Transform it into the wx,wy mesh members.
