@@ -149,23 +149,14 @@ extern void showRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius);
 #define	BASE_MUZZLE_FLASH_DURATION	(GAME_TICKS_PER_SEC/10)
 #define	EFFECT_MUZZLE_ADDITIVE		128
 
-#define CLOSING_TIME	800
-#define LINE_TIME		600
-#define DOT_TIME		200
-#define SC_INACTIVE		1
-#define SC_CLOSING_DOWN	2
-#define SC_CLOSING_IN	3
-#define SC_WAITING		4
-#define SC_DOT_KILL		5
-
 #define BAR_FULL	0
 #define BAR_BASIC	1
 #define BAR_DOT		2
 #define BAR_NONE	3
 
-extern UDWORD	barMode;
-extern UDWORD	geoOffset;
+extern UDWORD barMode;
+extern UDWORD geoOffset;
 
-extern void     draw3dLine(Vector3i *src, Vector3i *dest, UBYTE col);
+extern void draw3dLine(Vector3i *src, Vector3i *dest, UBYTE col);
 
 #endif
