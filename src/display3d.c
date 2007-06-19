@@ -179,7 +179,7 @@ static UWORD WaterTileID = WATER_TILE;
 static UWORD RiverBedTileID = BED_TILE;
 static float waterRealValue = 0.0f;
 #define WAVE_SPEED 4
-#define MAX_FIRE_STAGE	32
+#define MAX_FIRE_STAGE 32
 static float	separation=(float)0;
 static SDWORD	acceleration=0;
 static SDWORD	heightSpeed=0;
@@ -748,7 +748,7 @@ static void drawTiles(iView *camera, iView *player)
 				}
 
 				// If it's the main water tile (has water texture) then..
-				if( (psTile->texture & TILE_NUMMASK) == WaterTileID && !bEdgeTile )
+				if ( bWaterTile && !bEdgeTile )
 				{
 					// Push the terrain down for the river bed.
 					PushedDown = TRUE;
@@ -3922,11 +3922,11 @@ static void locateMouse(void)
 // Render the sky and surroundings
 static void renderSurroundings(void)
 {
-	static float wind = 0;
-	const float height = 10*TILE_UNITS;
-	const float wider  = 2*(visibleXTiles*TILE_UNITS);
+	static float wind = 0.0f;
+	const float skybox_scale = 10000.0f;
+	const float height = 10.0f * TILE_UNITS;
+	const float wider  = 2.0f * (visibleXTiles * TILE_UNITS);
 	int left, right, front, back;
-	const float scale = 10000.0f;
 
 	// set up matrices and textures
 	pie_PerspectiveBegin();
@@ -3965,20 +3965,20 @@ static void renderSurroundings(void)
 	pie_MatRotY(DEG(1) * wind);
 
 	// move it somewhat below ground level for the blending effect
-	pie_TRANSLATE(0, -scale / 8, 0);
+	pie_TRANSLATE(0, -skybox_scale/8, 0);
 
 	// Set the texture page
 	pie_SetTexturePage( iV_GetTexture(SKY_TEXPAGE) );
 
 	if(!gamePaused())
 	{
-		wind += 0.5*frameTime2/GAME_TICKS_PER_SEC;
-		if(wind >= 360)
+		wind += 0.5f * frameTime2/GAME_TICKS_PER_SEC;
+		if(wind >= 360.0f)
 		{
-			wind = 0;
+			wind = 0.0f;
 		}
 	}
-	pie_DrawSkybox(scale, 0, 128, 256, 128);
+	pie_DrawSkybox(skybox_scale, 0, 128, 256, 128);
 
 	// Load Saved State
 	pie_MatEnd();
@@ -4094,7 +4094,6 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	MAPTILE *psTile = NULL;
 	BOOL bOutlined = FALSE;
 	UDWORD tileNumber = 0;
-	Vector2i offset;
 	PIEVERTEX vertices[3];
 	UBYTE oldColours[4] = { 0, 0, 0, 0 };
 	UDWORD oldColoursWord[4] = { 0, 0, 0, 0 };
@@ -4128,7 +4127,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 #endif
 	}
 
-	if(!TILE_DRAW(psTile))
+	if (!TILE_DRAW(psTile))
 	{
 		/* This tile isn't being drawn */
 		return;
@@ -4139,7 +4138,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		// what tile texture number is it?
 		tileNumber = psTile->texture;
 	}
-	else if(!onWaterEdge)
+	else if (!onWaterEdge)
 	{
 		// If it's a water tile then force it to be the river bed texture.
 		tileNumber = RiverBedTileID;
@@ -4158,7 +4157,6 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 #endif
 
 	/* Is the tile highlighted? Perhaps because there's a building foundation on it */
-	bOutlined = FALSE;
 	if(!onWaterEdge && TILE_HIGHLIGHT(psTile))
 	{
 		/* Clear it for next time round */
@@ -4208,24 +4206,20 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	* the graphics card */
 	pie_SetTexturePage(tileTexInfo[tileNumber & TILE_NUMMASK].texPage);
 
-	/* set up the texture size info (0-255 used for texture coordinates) */
-	offset.x = (tileTexInfo[tileNumber & TILE_NUMMASK].xOffset * (256 / TILES_IN_PAGE_COLUMN));
-	offset.y = (tileTexInfo[tileNumber & TILE_NUMMASK].yOffset * (256 / TILES_IN_PAGE_ROW));
-
 	/* Check for rotations and flips - this sets up the coordinates for texturing */
 	flipsAndRots(tileNumber & ~TILE_NUMMASK);
 
-	tileScreenInfo[i+0][j+0].tu = (UWORD)(sP1.x + offset.x);
-	tileScreenInfo[i+0][j+0].tv = (UWORD)(sP1.y + offset.y);
+	tileScreenInfo[i+0][j+0].tu = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + sP1.x;
+	tileScreenInfo[i+0][j+0].tv = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + sP1.y;
 
-	tileScreenInfo[i+0][j+1].tu = (UWORD)(sP2.x + offset.x);
-	tileScreenInfo[i+0][j+1].tv = (UWORD)(sP2.y + offset.y);
+	tileScreenInfo[i+0][j+1].tu = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + sP2.x;
+	tileScreenInfo[i+0][j+1].tv = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + sP2.y;
 
-	tileScreenInfo[i+1][j+1].tu = (UWORD)(sP3.x + offset.x);
-	tileScreenInfo[i+1][j+1].tv = (UWORD)(sP3.y + offset.y);
+	tileScreenInfo[i+1][j+1].tu = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + sP3.x;
+	tileScreenInfo[i+1][j+1].tv = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + sP3.y;
 
-	tileScreenInfo[i+1][j+0].tu = (UWORD)(sP4.x + offset.x);
-	tileScreenInfo[i+1][j+0].tv = (UWORD)(sP4.y + offset.y);
+	tileScreenInfo[i+1][j+0].tu = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + sP4.x;
+	tileScreenInfo[i+1][j+0].tv = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + sP4.y;
 
 	/* The first triangle */
 	memcpy(&vertices[0], &tileScreenInfo[i+0][j+0], sizeof(PIEVERTEX));
@@ -4324,55 +4318,39 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 //
 void drawTerrainWaterTile(UDWORD i, UDWORD j)
 {
-	UDWORD	actualX,actualY;
-	MAPTILE	*psTile;
-	//BOOL	bOutlined;
-	UDWORD	tileNumber;
-	Vector2i offset;
-	PIEVERTEX vertices[3];
-
-	/* Get the correct tile index for the x coordinate */
-	actualX = playerXTile + j;
-	/* Get the correct tile index for the y coordinate */
-	actualY = playerZTile + i;
+	/* Get the correct tile index for the x/y coordinates */
+	const unsigned int actualX = playerXTile + j, actualY = playerZTile + i;
 
 	/* Let's just get out now if we're not supposed to draw it */
 	if ( actualX > mapWidth - 1 || actualY > mapHeight - 1 )
 	{
 		return;
-//		psTile = &edgeTile;
-//		CLEAR_TILE_HIGHLIGHT(psTile);
 	}
 
-	psTile = mapTile(actualX,actualY);
-
 	// If it's a water tile then draw the water
-	if (TERRAIN_TYPE(psTile) == TER_WATER)
+	if (TERRAIN_TYPE( mapTile(actualX, actualY) ) == TER_WATER)
 	{
 		/* Used to calculate texture coordinates, which are 0-255 in value */
-		const UDWORD xMult = (256 / TILES_IN_PAGE_COLUMN);
-		const UDWORD yMult = (256 / TILES_IN_PAGE_ROW);
+		const unsigned int
+				xMult = 256 / TILES_IN_PAGE_COLUMN,
+				yMult = 256 / (2 * TILES_IN_PAGE_ROW);
+		const unsigned int tileNumber = getWaterTileNum();
+		PIEVERTEX vertices[3];
 
-		tileNumber = getWaterTileNum();
 		// Draw the main water tile.
-
-		/* 3dfx is pre stored and indexed */
 		pie_SetTexturePage(tileTexInfo[tileNumber & TILE_NUMMASK].texPage);
 
-		offset.x = tileTexInfo[tileNumber & TILE_NUMMASK].xOffset * xMult;
-		offset.y = tileTexInfo[tileNumber & TILE_NUMMASK].yOffset * yMult;
+		tileScreenInfo[i+0][j+0].tu = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + 1;
+		tileScreenInfo[i+0][j+0].tv = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset;
 
-		tileScreenInfo[i+0][j+0].tu = (UWORD)(offset.x + 1);
-		tileScreenInfo[i+0][j+0].tv = (UWORD)(offset.y);
+		tileScreenInfo[i+0][j+1].tu = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + (xMult - 1);
+		tileScreenInfo[i+0][j+1].tv = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset;
 
-		tileScreenInfo[i+0][j+1].tu = (UWORD)(offset.x + (xMult - 1));
-		tileScreenInfo[i+0][j+1].tv = (UWORD)(offset.y);
+		tileScreenInfo[i+1][j+1].tu = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + (xMult - 1);
+		tileScreenInfo[i+1][j+1].tv = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + (yMult - 1);
 
-		tileScreenInfo[i+1][j+1].tu = (UWORD)(offset.x + (xMult - 1));
-		tileScreenInfo[i+1][j+1].tv = (UWORD)(offset.y + ((yMult / 2) - 1));
-
-		tileScreenInfo[i+1][j+0].tu = (UWORD)(offset.x + 1);
-		tileScreenInfo[i+1][j+0].tv = (UWORD)(offset.y + ((yMult / 2) - 1));
+		tileScreenInfo[i+1][j+0].tu = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + 1;
+		tileScreenInfo[i+1][j+0].tv = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + (yMult - 1);
 
 
 		memcpy(&vertices[0], &tileScreenInfo[i+0][j+0], sizeof(PIEVERTEX));
@@ -4408,9 +4386,6 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 }
 
 
-
-
-// -------------------------------------------------------------------------------------
 UDWORD	getSuggestedPitch( void )
 {
 	UDWORD	worldAngle;

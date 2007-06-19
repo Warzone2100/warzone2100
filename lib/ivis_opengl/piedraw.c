@@ -1024,7 +1024,7 @@ void pie_DrawRect( SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour )
  *
  ***************************************************************************/
 
-void pie_DrawTexTriangle(PIEVERTEX *aVrts, void* psEffects)
+void pie_DrawTexTriangle(const PIEVERTEX *aVrts, const void* psEffects)
 {
 	GLfloat offset = 0.0f;
 	unsigned int i = 0;

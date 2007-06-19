@@ -9043,7 +9043,7 @@ BOOL loadTerrainTypeMap(char *pFileData, UDWORD filesize)
 	// Load the terrain type mapping
 	pType = (UWORD *)(pFileData + TILETYPE_HEADER_SIZE);
 	endian_uword(pType);
-	for(i=0; i<psHeader->quantity; i++)
+	for(i = 0; i < psHeader->quantity; i++)
 	{
 		if (i >= MAX_TILE_TEXTURES)
 		{
@@ -9060,7 +9060,7 @@ BOOL loadTerrainTypeMap(char *pFileData, UDWORD filesize)
 		}
 
 		terrainTypes[i] = (UBYTE)*pType;
-		pType += 1;
+		pType++;
 		endian_uword(pType);
 	}
 

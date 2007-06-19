@@ -661,12 +661,12 @@ static void pie_TextRender270(IMAGEFILE *ImageFile, UWORD ImageID, int x, int y)
 	pieImage.tv = Image->Tv;
 	pieImage.tw = Image->Width;
 	pieImage.th = Image->Height;
-	dest.x = x+Image->YOffset;
-	dest.y = y+Image->XOffset - Image->Width;
+	dest.x = x + Image->YOffset;
+	dest.y = y + Image->XOffset - Image->Width;
 	dest.w = Image->Width;
 	dest.h = Image->Height;
+
 	pie_SetColourKeyedBlack(TRUE);
 	pie_DrawImage270( &pieImage, &dest );
 	pie_SetColourKeyedBlack(FALSE);
 }
-

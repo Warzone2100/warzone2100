@@ -242,12 +242,12 @@ void freeTileTextures(void)
 	}
 }
 
-static inline WZ_DECL_CONST unsigned int getTileXIndex(unsigned int tileNumber)
+static inline WZ_DECL_CONST unsigned int getTileUIndex(unsigned int tileNumber)
 {
 	return (tileNumber % TILES_IN_PAGE) % TILES_IN_PAGE_COLUMN;
 }
 
-static inline WZ_DECL_CONST unsigned int getTileYIndex(unsigned int tileNumber)
+static inline WZ_DECL_CONST unsigned int getTileVIndex(unsigned int tileNumber)
 {
 	return (tileNumber % TILES_IN_PAGE) / TILES_IN_PAGE_ROW;
 }
@@ -289,8 +289,8 @@ static void buildTileIndexes(void)
 
 	for(i = 0; i < MAX_TILES; i++)
 	{
-		tileTexInfo[i].xOffset = getTileXIndex(i);
-		tileTexInfo[i].yOffset = getTileYIndex(i);
+		tileTexInfo[i].uOffset = getTileUIndex(i) * (256 / TILES_IN_PAGE_COLUMN);
+		tileTexInfo[i].vOffset = getTileVIndex(i) * (256 / TILES_IN_PAGE_ROW);
 		tileTexInfo[i].texPage = pageId[i / TILES_IN_PAGE];
 	}
 }

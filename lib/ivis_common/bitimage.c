@@ -121,7 +121,8 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		PHYSFS_readSLE16(fileHandle, &ImageDef->XOffset);
 		PHYSFS_readSLE16(fileHandle, &ImageDef->YOffset);
 
-		if( (ImageDef->Width <= 0) || (ImageDef->Height <= 0) ) {
+		if( (ImageDef->Width <= 0) || (ImageDef->Height <= 0) )
+		{
 			debug( LOG_ERROR, "iV_LoadImageFromFile: Illegal image size" );
 			free(ImageFile);
 			PHYSFS_close(fileHandle);

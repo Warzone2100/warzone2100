@@ -83,7 +83,6 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 	const char *pFileData = *ppFileData;
 	int i, j, cnt;
 	iIMDPoly *poly;
-	int nFrames, pbRate, tWidth, tHeight;
 
 	s->numFrames = 0;
 	s->animInterval = 0;
@@ -161,6 +160,8 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 
 		if (poly->flags & iV_IMD_TEXANIM)
 		{
+			unsigned int nFrames, pbRate, tWidth, tHeight;
+
 			poly->pTexAnim = (iTexAnim*)malloc(sizeof(iTexAnim));
 			if (poly->pTexAnim == NULL)
 			{

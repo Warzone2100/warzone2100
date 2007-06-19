@@ -985,28 +985,25 @@ void gwFreeZoneMap(void)
 // Look up the zone for a coordinate
 SDWORD gwGetZone(SDWORD x, SDWORD y)
 {
-	SDWORD		xPos, zone, rlePos;
+	ASSERT( x >= 0 && x < gwMapWidth() && y >= 0 && y < gwMapHeight(), "gwGetZone: invalid coordinates" );
 
-	zone = 0;
-	if ((x >= 0) && (x < gwMapWidth()) && (y >= 0) && (y < gwMapHeight()))
+	if ( x >= 0 && x < gwMapWidth() && y >= 0 && y < gwMapHeight() )
 	{
-		rlePos = 0;
-		xPos = 0;
+		SDWORD xPos = 0, zone = 0, rlePos = 0;
+
 		do
 		{
 			xPos += apRLEZones[y][rlePos];
 			zone  = apRLEZones[y][rlePos + 1];
 			rlePos += 2;
 		} while (xPos <= x); // xPos is where the next zone starts
+
+		return zone;
 	}
 	else
 	{
-		ASSERT( FALSE,
-			"gwGetZone: invalid coordinates" );
+		return 0;
 	}
-
-
-	return zone;
 }
 
 

@@ -129,9 +129,6 @@ typedef struct {SWORD x, y, w, h;} PIERECT; //screen rectangle
 typedef struct {SDWORD texPage; SWORD tu, tv, tw, th;} PIEIMAGE; //an area of texture
 typedef struct {UDWORD pieFlag; PIELIGHT colour, specular; UBYTE light, trans, scale, height;} PIESTYLE; //render style for pie draw functions
 
-typedef struct {long n; char msge[240];} iError;
-typedef Sint32 fixed;
-
 // This is the new resource loaded structure (TEXPAGE)
 typedef struct
 {
@@ -156,7 +153,7 @@ extern void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD colour
 extern void pie_DrawImage(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style);
 extern void pie_DrawImage270( PIEIMAGE *image, PIERECT *dest );
 
-extern void pie_DrawTexTriangle(PIEVERTEX *aVrts, void* psEffects);
+extern void pie_DrawTexTriangle(const PIEVERTEX *aVrts, const void* psEffects);
 
 extern void pie_GetResetCounts(SDWORD* pPieCount, SDWORD* pTileCount, SDWORD* pPolyCount, SDWORD* pStateCount);
 
