@@ -81,20 +81,19 @@ BOOL check_extension(const char* extension_name)
 	return FALSE;
 }
 
+
 // EXT_stencil_two_side
 #ifndef GL_EXT_stencil_two_side
-#define GL_STENCIL_TEST_TWO_SIDE_EXT      0x8910
-#define GL_ACTIVE_STENCIL_FACE_EXT        0x8911
-#endif
-
-#ifndef GL_EXT_stencil_two_side
-#define GL_EXT_stencil_two_side 1
+# define GL_EXT_stencil_two_side 1
+# define GL_STENCIL_TEST_TWO_SIDE_EXT      0x8910
+# define GL_ACTIVE_STENCIL_FACE_EXT        0x8911
 typedef void (APIENTRY * PFNGLACTIVESTENCILFACEEXTPROC) (GLenum face);
 #endif
 
 #ifndef WZ_OS_MAC
 PFNGLACTIVESTENCILFACEEXTPROC glActiveStencilFaceEXT;
 #endif
+
 
 /// Check if we can use one-pass stencil in the shadow draw code
 static BOOL stencil_one_pass(void)
@@ -126,11 +125,6 @@ static BOOL stencil_one_pass(void)
 	return (1 == can_do_stencil_one_pass); // to get the types right
 }
 
-/***************************************************************************/
-/*
- *	Local Definitions
- */
-/***************************************************************************/
 
 /***************************************************************************/
 /*
@@ -138,30 +132,20 @@ static BOOL stencil_one_pass(void)
  */
 /***************************************************************************/
 
-static Vector3f		scrPoints[pie_MAX_POINTS];
-static PIEVERTEXF	pieVrts[pie_MAX_POLY_VERTS];
-static SDWORD		pieCount = 0;
-static SDWORD		tileCount = 0;
-static SDWORD		polyCount = 0;
+static Vector3f scrPoints[pie_MAX_POINTS];
+static PIEVERTEXF pieVrts[pie_MAX_POLY_VERTS];
+static SDWORD pieCount = 0;
+static SDWORD tileCount = 0;
+static SDWORD polyCount = 0;
+static BOOL lighting = FALSE;
+static BOOL shadows = FALSE;
 
-/***************************************************************************/
-/*
- *	Local ProtoTypes
- */
-/***************************************************************************/
-
-//pievertex draw poly (low level) //all modes from PIEVERTEX data
-static inline void pie_PiePoly(PIEPOLY *poly, BOOL bClip);
-static inline void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, BOOL bClip);
 
 /***************************************************************************/
 /*
  *	Source
  */
 /***************************************************************************/
-
-static BOOL lighting = FALSE;
-static BOOL shadows = FALSE;
 
 void pie_BeginLighting(const Vector3f * light)
 {
@@ -190,10 +174,9 @@ void pie_EndLighting(void)
 }
 
 
-static inline void
-pie_Polygon(SDWORD numVerts, PIEVERTEXF* pVrts, BOOL light)
+static inline void pie_Polygon(const SDWORD numVerts, const PIEVERTEXF* pVrts, const BOOL light)
 {
-	SDWORD i;
+	unsigned int i = 0;
 
 	if (numVerts < 1)
 	{
@@ -224,13 +207,16 @@ pie_Polygon(SDWORD numVerts, PIEVERTEXF* pVrts, BOOL light)
 			glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
 			glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
 		}
+
 		glBegin(GL_TRIANGLE_FAN);
+
 		if (light)
 		{
-			Vector3f p1 = { pVrts[0].sx, pVrts[0].sy, pVrts[0].sz },
+			const Vector3f
+					p1 = { pVrts[0].sx, pVrts[0].sy, pVrts[0].sz },
 					p2 = { pVrts[1].sx, pVrts[1].sy, pVrts[1].sz },
-	 				p3 = { pVrts[2].sx, pVrts[2].sy, pVrts[2].sz },
-	  				v1, v2, n;
+					p3 = { pVrts[2].sx, pVrts[2].sy, pVrts[2].sz };
+			Vector3f v1, v2, n;
 
 			Vector3f_Sub(&v1, &p3, &p1);
 			Vector3f_Sub(&v2, &p2, &p1);
@@ -239,15 +225,85 @@ pie_Polygon(SDWORD numVerts, PIEVERTEXF* pVrts, BOOL light)
 			glNormal3f(n.x, n.y, n.z);
 		}
 	}
+
 	for (i = 0; i < numVerts; i++)
 	{
 		glColor4ub(pVrts[i].light.byte.r, pVrts[i].light.byte.g, pVrts[i].light.byte.b, pVrts[i].light.byte.a);
 		glTexCoord2f(pVrts[i].tu, pVrts[i].tv);
 		glVertex3f(pVrts[i].sx, pVrts[i].sy, pVrts[i].sz);
 	}
+
 	glEnd();
+
 	glDisable(GL_LIGHTING);
 }
+
+
+/***************************************************************************
+ * pie_PiePoly
+ *
+ * universal poly draw function for hardware
+ *
+ * Assumes render mode set up externally
+ *
+ ***************************************************************************/
+static inline void pie_PiePoly(const PIEPOLY *poly, const BOOL light)
+{
+	polyCount++;
+
+	if (poly->nVrts >= 3)
+	{
+		if (poly->flags & PIE_COLOURKEYED)
+		{
+			pie_SetColourKeyedBlack(TRUE);
+		}
+		else
+		{
+			pie_SetColourKeyedBlack(FALSE);
+		}
+		pie_SetColourKeyedBlack(TRUE);
+		if (poly->flags & PIE_NO_CULL)
+		{
+			glDisable(GL_CULL_FACE);
+		}
+		pie_Polygon(poly->nVrts, poly->pVrts, light);
+		if (poly->flags & PIE_NO_CULL)
+		{
+			glEnable(GL_CULL_FACE);
+		}
+	}
+}
+
+
+static inline void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, const BOOL light)
+{
+	if ( (poly->flags & iV_IMD_TEXANIM) && poly->pTexAnim != NULL && frame != 0 )
+	{
+		frame %= abs(poly->pTexAnim->nFrames);
+
+		if (frame > 0)
+		{
+			// HACK - fix this!!!!
+			// should be: framesPerLine = iV_TEXTEX(texPage)->width / poly->pTexAnim->textureWidth;
+			const unsigned int framesPerLine = 256 / poly->pTexAnim->textureWidth;
+			const unsigned int
+					uFrame = (frame % framesPerLine) * poly->pTexAnim->textureWidth,
+					vFrame = (frame / framesPerLine) * poly->pTexAnim->textureHeight;
+			unsigned int j = 0;
+
+			for (j = 0; j < poly->nVrts; j++)
+			{
+				poly->pVrts[j].tu += uFrame;
+				poly->pVrts[j].tv += vFrame;
+			}
+		}
+	}
+#ifndef NO_RENDER
+	//draw with new texture data
+	pie_PiePoly(poly, light);
+#endif
+}
+
 
 /***************************************************************************
  * pie_Draw3dShape
@@ -955,93 +1011,12 @@ void pie_DrawRect( SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour )
 
 	glColor4ub(c.byte.r, c.byte.g, c.byte.b, c.byte.a);
 	glBegin(GL_TRIANGLE_STRIP);
-	glVertex2i(x0, y0);
-	glVertex2i(x1, y0);
-	glVertex2i(x0, y1);
-	glVertex2i(x1, y1);
+		glVertex2i(x0, y0);
+		glVertex2i(x1, y0);
+		glVertex2i(x0, y1);
+		glVertex2i(x1, y1);
 	glEnd();
 }
-
-/***************************************************************************
- * pie_PiePoly
- *
- * universal poly draw function for hardware
- *
- * Assumes render mode set up externally
- *
- ***************************************************************************/
-
-static inline void pie_PiePoly(PIEPOLY *poly, BOOL light)
-{
-	polyCount++;
-
-	if (poly->nVrts >= 3)
-	{
-		if (poly->flags & PIE_COLOURKEYED)
-		{
-			pie_SetColourKeyedBlack(TRUE);
-		}
-		else
-		{
-			pie_SetColourKeyedBlack(FALSE);
-		}
-		pie_SetColourKeyedBlack(TRUE);
-		if (poly->flags & PIE_NO_CULL)
-		{
-			glDisable(GL_CULL_FACE);
-		}
-		pie_Polygon(poly->nVrts, poly->pVrts, light);
-		if (poly->flags & PIE_NO_CULL)
-		{
-			glEnable(GL_CULL_FACE);
-		}
-	}
-}
-
-static inline void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, BOOL light)
-{
-	if ((poly->flags & iV_IMD_TEXANIM) && (frame != 0))
-	{
-		if (poly->pTexAnim != NULL)
-		{
-			if (poly->pTexAnim->nFrames >=0)
-			{
-				frame %= poly->pTexAnim->nFrames;
-			}
-			else
-			{
-				frame %= (-poly->pTexAnim->nFrames);
-			}
-
-			if (frame > 0)
-			{
-				// HACK - fix this!!!!
-				// should be: framesPerLine = iV_TEXTEX(texPage)->width / poly->pTexAnim->textureWidth;
-				const int framesPerLine = 256 / poly->pTexAnim->textureWidth;
-				int uFrame = 0, vFrame = 0, j = 0;
-
-				while (frame >= framesPerLine)
-				{
-					frame -= framesPerLine;
-					vFrame += poly->pTexAnim->textureHeight;
-				}
-
-				uFrame = frame * poly->pTexAnim->textureWidth;
-
-				for (j = 0; j < poly->nVrts; j++)
-				{
-					poly->pVrts[j].tu += uFrame;
-					poly->pVrts[j].tv += vFrame;
-				}
-			}
-		}
-	}
-#ifndef NO_RENDER
-	//draw with new texture data
-	pie_PiePoly(poly, light);
-#endif
-}
-
 
 /***************************************************************************
  *
