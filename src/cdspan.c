@@ -30,23 +30,23 @@
 #include "lib/sound/track.h"
 #include "cdspan.h"
 
-static char		g_szCurDriveName[MAX_STR] = "";
-
 void
-cdspan_PlayInGameAudio( char szFileName[], SDWORD iVol )
+cdspan_PlayInGameAudio(const char* fileName, SDWORD iVol)
 {
-	char szStream[MAX_STR];//	szDrive[MAX_STR] = "",
-	BOOL	bPlaying = FALSE;
+	BOOL	bPlaying;
 
 	audio_StopAll();
 
-	sprintf( szStream, "%s%s", g_szCurDriveName, szFileName );
-	bPlaying = audio_PlayStream( szStream, iVol, NULL );
+	bPlaying = audio_PlayStream(fileName, iVol, NULL);
 
 	/* try playing from hard disk */
-	if ( bPlaying == FALSE )
+	if (bPlaying == FALSE)
 	{
-		sprintf( szStream, "audio/%s", szFileName );
-		bPlaying = audio_PlayStream( szStream, iVol, NULL );
+        char streamFileName[MAX_STR];
+		snprintf(streamFileName, sizeof(streamFileName), "audio/%s", fileName);
+		// Mark end of string
+		streamFileName[sizeof(streamFileName) - 1] = '\0';
+
+		audio_PlayStream(streamFileName, iVol, NULL);
 	}
 }
