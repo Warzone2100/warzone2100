@@ -138,7 +138,6 @@
 		0246A1230BD3CC43004D1C70 /* piepalette.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1120BD3CC43004D1C70 /* piepalette.c */; };
 		0246A1240BD3CC43004D1C70 /* piestate.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1130BD3CC43004D1C70 /* piestate.c */; };
 		0246A1250BD3CC43004D1C70 /* pietexture.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1140BD3CC43004D1C70 /* pietexture.c */; };
-		0246A1260BD3CC43004D1C70 /* rendfunc.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1160BD3CC43004D1C70 /* rendfunc.c */; };
 		0246A1270BD3CC43004D1C70 /* rendmode.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1170BD3CC43004D1C70 /* rendmode.c */; };
 		0246A1280BD3CC43004D1C70 /* screen.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1180BD3CC43004D1C70 /* screen.c */; };
 		0246A1290BD3CC43004D1C70 /* tex.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A11A0BD3CC43004D1C70 /* tex.c */; };
@@ -900,7 +899,6 @@
 		0246A0FC0BD3CC29004D1C70 /* piestate.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = piestate.c; path = ../lib/ivis_common/piestate.c; sourceTree = SOURCE_ROOT; };
 		0246A0FD0BD3CC29004D1C70 /* piestate.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = piestate.h; path = ../lib/ivis_common/piestate.h; sourceTree = SOURCE_ROOT; };
 		0246A0FE0BD3CC29004D1C70 /* pietypes.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = pietypes.h; path = ../lib/ivis_common/pietypes.h; sourceTree = SOURCE_ROOT; };
-		0246A0FF0BD3CC29004D1C70 /* rendfunc.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = rendfunc.h; path = ../lib/ivis_common/rendfunc.h; sourceTree = SOURCE_ROOT; };
 		0246A1000BD3CC29004D1C70 /* rendmode.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = rendmode.h; path = ../lib/ivis_common/rendmode.h; sourceTree = SOURCE_ROOT; };
 		0246A1010BD3CC29004D1C70 /* tex.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = tex.h; path = ../lib/ivis_common/tex.h; sourceTree = SOURCE_ROOT; };
 		0246A1020BD3CC29004D1C70 /* textdraw.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = textdraw.h; path = ../lib/ivis_common/textdraw.h; sourceTree = SOURCE_ROOT; };
@@ -915,7 +913,6 @@
 		0246A1130BD3CC43004D1C70 /* piestate.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = piestate.c; path = ../lib/ivis_opengl/piestate.c; sourceTree = SOURCE_ROOT; };
 		0246A1140BD3CC43004D1C70 /* pietexture.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = pietexture.c; path = ../lib/ivis_opengl/pietexture.c; sourceTree = SOURCE_ROOT; };
 		0246A1150BD3CC43004D1C70 /* pietexture.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = pietexture.h; path = ../lib/ivis_opengl/pietexture.h; sourceTree = SOURCE_ROOT; };
-		0246A1160BD3CC43004D1C70 /* rendfunc.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = rendfunc.c; path = ../lib/ivis_opengl/rendfunc.c; sourceTree = SOURCE_ROOT; };
 		0246A1170BD3CC43004D1C70 /* rendmode.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = rendmode.c; path = ../lib/ivis_opengl/rendmode.c; sourceTree = SOURCE_ROOT; };
 		0246A1180BD3CC43004D1C70 /* screen.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = screen.c; path = ../lib/ivis_opengl/screen.c; sourceTree = SOURCE_ROOT; };
 		0246A1190BD3CC43004D1C70 /* screen.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = screen.h; path = ../lib/ivis_opengl/screen.h; sourceTree = SOURCE_ROOT; };
@@ -1051,8 +1048,6 @@
 		0246A1D70BD3CCDB004D1C70 /* droiddef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = droiddef.h; path = ../src/droiddef.h; sourceTree = SOURCE_ROOT; };
 		0246A1D80BD3CCDB004D1C70 /* e3demo.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = e3demo.c; path = ../src/e3demo.c; sourceTree = SOURCE_ROOT; };
 		0246A1D90BD3CCDB004D1C70 /* e3demo.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = e3demo.h; path = ../src/e3demo.h; sourceTree = SOURCE_ROOT; };
-		0246A1DA0BD3CCDB004D1C70 /* edit2d.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = edit2d.c; path = ../src/edit2d.c; sourceTree = SOURCE_ROOT; };
-		0246A1DB0BD3CCDB004D1C70 /* edit2d.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = edit2d.h; path = ../src/edit2d.h; sourceTree = SOURCE_ROOT; };
 		0246A1DC0BD3CCDB004D1C70 /* edit3d.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = edit3d.c; path = ../src/edit3d.c; sourceTree = SOURCE_ROOT; };
 		0246A1DD0BD3CCDB004D1C70 /* edit3d.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = edit3d.h; path = ../src/edit3d.h; sourceTree = SOURCE_ROOT; };
 		0246A1DE0BD3CCDB004D1C70 /* effects.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = effects.c; path = ../src/effects.c; sourceTree = SOURCE_ROOT; };
@@ -1819,7 +1814,6 @@
 				0246A0FC0BD3CC29004D1C70 /* piestate.c */,
 				0246A0FD0BD3CC29004D1C70 /* piestate.h */,
 				0246A0FE0BD3CC29004D1C70 /* pietypes.h */,
-				0246A0FF0BD3CC29004D1C70 /* rendfunc.h */,
 				0246A1000BD3CC29004D1C70 /* rendmode.h */,
 				0246A1010BD3CC29004D1C70 /* tex.h */,
 				0246A1020BD3CC29004D1C70 /* textdraw.h */,
@@ -1841,7 +1835,6 @@
 				0246A1130BD3CC43004D1C70 /* piestate.c */,
 				0246A1140BD3CC43004D1C70 /* pietexture.c */,
 				0246A1150BD3CC43004D1C70 /* pietexture.h */,
-				0246A1160BD3CC43004D1C70 /* rendfunc.c */,
 				0246A1170BD3CC43004D1C70 /* rendmode.c */,
 				0246A1180BD3CC43004D1C70 /* screen.c */,
 				0246A1190BD3CC43004D1C70 /* screen.h */,
@@ -2019,8 +2012,6 @@
 				0246A1D70BD3CCDB004D1C70 /* droiddef.h */,
 				0246A1D80BD3CCDB004D1C70 /* e3demo.c */,
 				0246A1D90BD3CCDB004D1C70 /* e3demo.h */,
-				0246A1DA0BD3CCDB004D1C70 /* edit2d.c */,
-				0246A1DB0BD3CCDB004D1C70 /* edit2d.h */,
 				0246A1DC0BD3CCDB004D1C70 /* edit3d.c */,
 				0246A1DD0BD3CCDB004D1C70 /* edit3d.h */,
 				0246A1DE0BD3CCDB004D1C70 /* effects.c */,
@@ -3321,7 +3312,6 @@
 				0246A1230BD3CC43004D1C70 /* piepalette.c in Sources */,
 				0246A1240BD3CC43004D1C70 /* piestate.c in Sources */,
 				0246A1250BD3CC43004D1C70 /* pietexture.c in Sources */,
-				0246A1260BD3CC43004D1C70 /* rendfunc.c in Sources */,
 				0246A1270BD3CC43004D1C70 /* rendmode.c in Sources */,
 				0246A1280BD3CC43004D1C70 /* screen.c in Sources */,
 				0246A1290BD3CC43004D1C70 /* tex.c in Sources */,
