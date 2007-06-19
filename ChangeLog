@@ -6,6 +6,7 @@
    * Fix: Crashes caused by not-loaded file when sound is disabled
    * Fix: Crashes after the mission briefing
    * Fix: Crash related to the satelite uplink
+   * Fix: A potential buffer overflow when using longer file names than expected to set the background music
  * Settings:
    * New: Masterserver name and IP, as well as the gameserver port is now configurable
    * New: Configurable framerate limit
