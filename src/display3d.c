@@ -111,10 +111,6 @@
 
 #include "cmddroid.h"
 
-#ifndef WIN32
-#define max(a,b) (((a)>(b))?(a):(b))
-#define min(a,b) (((a)<(b))?(a):(b))
-#endif
 
 #define WATER_TILE 17			// ID of water tile.
 #define BED_TILE 5				// ID of river bed tile.
@@ -2697,10 +2693,10 @@ static void	drawDragBox( void )
 		}
 
 		// SHURCOOL: Determine the 4 corners of the selection box, and use them for consistent selection box rendering
-		minX = min(dragBox3D.x1, mouseXPos);
-		maxX = max(dragBox3D.x1, mouseXPos);
-		minY = min(dragBox3D.y1, mouseYPos);
-		maxY = max(dragBox3D.y1, mouseYPos);
+		minX = MIN(dragBox3D.x1, mouseXPos);
+		maxX = MAX(dragBox3D.x1, mouseXPos);
+		minY = MIN(dragBox3D.y1, mouseYPos);
+		maxY = MAX(dragBox3D.y1, mouseYPos);
 
 		// SHURCOOL: Reduce the box in size to produce a (consistent) pulsing inward effect
 		minX += dragBox3D.boxColourIndex/2;
@@ -2826,7 +2822,7 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 		case OBJ_STRUCTURE:
 			psStruct = (STRUCTURE *)psObj;
 			damLevel = PERCENT(psStruct->body, structureBody(psStruct));
-			scale = max(psStruct->pStructureType->baseWidth,psStruct->pStructureType->baseBreadth);
+			scale = MAX(psStruct->pStructureType->baseWidth, psStruct->pStructureType->baseBreadth);
 			scrY += scale * 10 - 1;
 			scrR = scale * 20;
 			break;
@@ -2899,7 +2895,7 @@ float		mulH;
 										&& psStruct->sDisplay.frameNumber == currentGameFrame))
 			{
 			//----
-				scale = max(psStruct->pStructureType->baseWidth,psStruct->pStructureType->baseBreadth);
+				scale = MAX(psStruct->pStructureType->baseWidth, psStruct->pStructureType->baseBreadth);
 				width = scale*20;
 				scrX = psStruct->sDisplay.screenX;
 				scrY = psStruct->sDisplay.screenY + (scale*10);
@@ -2947,7 +2943,7 @@ float		mulH;
 			{
 				if(psStruct->status == SS_BEING_BUILT && psStruct->sDisplay.frameNumber == currentGameFrame)
 				{
-					scale = max(psStruct->pStructureType->baseWidth,psStruct->pStructureType->baseBreadth);
+					scale = MAX(psStruct->pStructureType->baseWidth, psStruct->pStructureType->baseBreadth);
 					width = scale*20;
 					scrX = psStruct->sDisplay.screenX;
 					scrY = psStruct->sDisplay.screenY + (scale*10);
@@ -3019,7 +3015,7 @@ float		mulH;
 			if(psStruct->status==SS_BUILT)
 			{
 			//----
-				scale = max(psStruct->pStructureType->baseWidth,psStruct->pStructureType->baseBreadth);
+				scale = MAX(psStruct->pStructureType->baseWidth, psStruct->pStructureType->baseBreadth);
 				width = scale*20;
 				scrX = psStruct->sDisplay.screenX;
 				scrY = psStruct->sDisplay.screenY + (scale*10);
@@ -3054,7 +3050,7 @@ float		mulH;
 			}
 			else if(psStruct->status == SS_BEING_BUILT)
 			{
-				scale = max(psStruct->pStructureType->baseWidth,psStruct->pStructureType->baseBreadth);
+				scale = MAX(psStruct->pStructureType->baseWidth, psStruct->pStructureType->baseBreadth);
 				width = scale*20;
 				scrX = psStruct->sDisplay.screenX;
 				scrY = psStruct->sDisplay.screenY + (scale*10);
@@ -3728,10 +3724,10 @@ static void preprocessTiles(void)
 		if( wallDrag.x1 == wallDrag.x2 || wallDrag.y1 == wallDrag.y2 )
 		{
 			/* First process the ones inside the wall dragging area */
-			left = min(wallDrag.x1, wallDrag.x2);
-			right = max(wallDrag.x1, wallDrag.x2) + 1;
-			up = min(wallDrag.y1, wallDrag.y2);
-			down = max(wallDrag.y1, wallDrag.y2) + 1;
+			left = MIN(wallDrag.x1, wallDrag.x2);
+			right = MAX(wallDrag.x1, wallDrag.x2) + 1;
+			up = MIN(wallDrag.y1, wallDrag.y2);
+			down = MAX(wallDrag.y1, wallDrag.y2) + 1;
 
 			for(i = left; i < right; i++)
 			{
@@ -3950,10 +3946,10 @@ static void renderSurroundings(void)
 	rz = (player.p.z) & (TILE_UNITS-1);
 	pie_TRANSLATE(-rx, -player.p.y, rz);
 
-	left  = TILE_UNITS * min(visibleXTiles/2, playerXTile+visibleXTiles/2+1);
-	right = TILE_UNITS * min(visibleXTiles/2, mapWidth-playerXTile-visibleXTiles/2);
-	front = TILE_UNITS * min(visibleYTiles/2, playerZTile+visibleYTiles/2+1);
-	back  = TILE_UNITS * min(visibleYTiles/2, mapHeight-playerZTile-visibleYTiles/2);
+	left  = TILE_UNITS * MIN(visibleXTiles/2, playerXTile+visibleXTiles/2+1);
+	right = TILE_UNITS * MIN(visibleXTiles/2, mapWidth-playerXTile-visibleXTiles/2);
+	front = TILE_UNITS * MIN(visibleYTiles/2, playerZTile+visibleYTiles/2+1);
+	back  = TILE_UNITS * MIN(visibleYTiles/2, mapHeight-playerZTile-visibleYTiles/2);
 
 	pie_DrawFogBox(left, right, front, back, height, wider);
 

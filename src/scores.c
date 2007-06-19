@@ -60,10 +60,6 @@
 #define MAX_BAR_LENGTH	100
 #define LC_UPPER	100
 
-#ifndef WIN32
-#define max(a,b) (((a)>(b))?(a):(b))
-#endif
-
 #define LC_X	32
 #define RC_X	320+32
 #define	RANK_BAR_WIDTH	100
@@ -410,7 +406,7 @@ void	fillUpStats( void )
 
 	/* Now do the other stuff... */
 	/* Units killed and lost... */
-	maxi = max(missionData.unitsLost,missionData.unitsKilled);
+	maxi = MAX(missionData.unitsLost, missionData.unitsKilled);
 	if (maxi == 0)
 	{
 		scaleFactor = 0;
@@ -426,7 +422,7 @@ void	fillUpStats( void )
 	infoBars[STAT_UNIT_KILLED].percent = PERCENT(length,STAT_BAR_WIDTH);
 
 	/* Now do the structure losses */
-	maxi = max(missionData.strLost,missionData.strKilled);
+	maxi = MAX(missionData.strLost, missionData.strKilled);
 	if (maxi == 0)
 	{
 		scaleFactor = 0;
@@ -449,8 +445,8 @@ void	fillUpStats( void )
 		psDroid; psDroid = psDroid->psNext,numUnits++);
 
 
-	maxi = max(missionData.unitsBuilt,missionData.strBuilt);
-	maxi = max(maxi,numUnits);
+	maxi = MAX(missionData.unitsBuilt, missionData.strBuilt);
+	maxi = MAX(maxi, numUnits);
 
 	if (maxi == 0)
 	{

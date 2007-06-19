@@ -1085,7 +1085,7 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 						TargetX = MAX(psObj->startX + extendRad * dx / iRad, 0);
 						TargetX = MIN(TargetX, world_coord(mapWidth - 1));
 						TargetY = MAX(psObj->startY + extendRad * dy / iRad, 0);
-						TargetY = MIN(TargetY, world_coord(mapHeight - 1));						
+						TargetY = MIN(TargetY, world_coord(mapHeight - 1));
 						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, TargetX, TargetY, psObj->z, NULL, TRUE, bPenetrate, -1 );
 					}
 					else
@@ -2071,9 +2071,6 @@ SDWORD proj_GetLongRange(WEAPON_STATS *psStats, SDWORD dz)
 	return (SDWORD)psStats->longRange;
 }
 
-#ifndef WIN32
-#define max(a,b) ((a)>(b)) ? (a) :(b)
-#endif
 
 /***************************************************************************/
 //Watemelon:added case for OBJ_BULLET
@@ -2114,12 +2111,12 @@ FEATURE		*psFeat;
 			break;
 		case OBJ_STRUCTURE:
 			psStructure = (STRUCTURE*)psTarget;
-			radius = ((max(psStructure->pStructureType->baseBreadth,psStructure->pStructureType->baseWidth)) * TILE_UNITS)/2;
+			radius = (MAX(psStructure->pStructureType->baseBreadth, psStructure->pStructureType->baseWidth) * TILE_UNITS) / 2;
 			break;
 		case OBJ_FEATURE:
 //			radius = TILE_UNITS/4;	// how will we arrive at this?
 			psFeat = (FEATURE *)psTarget;
-			radius = ((max(psFeat->psStats->baseBreadth,psFeat->psStats->baseWidth)) * TILE_UNITS)/2;
+			radius = (MAX(psFeat->psStats->baseBreadth,psFeat->psStats->baseWidth) * TILE_UNITS) / 2;
 			break;
 		case OBJ_BULLET:
 			//Watermelon 1/2 radius of a droid?
