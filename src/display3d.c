@@ -176,7 +176,7 @@ BOOL	godMode;
 
 static UWORD RiverBedTileID = RIVERBED_TILE;
 static float waterRealValue = 0.0f;
-#define WAVE_SPEED 4
+#define WAVE_SPEED 4.0f
 #define MAX_FIRE_STAGE 32
 static float	separation = 0.0f;
 static SDWORD	acceleration = 0;
@@ -565,7 +565,7 @@ static void drawTiles(iView *camera, iView *player)
 	// Animate the water texture, just cycles the V coordinate through half the tiles height.
 	if(!gamePaused())
 	{
-		waterRealValue += WAVE_SPEED * frameTime2 / GAME_TICKS_PER_SEC;
+		waterRealValue += (WAVE_SPEED * frameTime2) / GAME_TICKS_PER_SEC;
 		if(waterRealValue >= 64/2)
 		{
 			waterRealValue = 0.0f;
