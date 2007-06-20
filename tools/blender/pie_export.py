@@ -1,5 +1,4 @@
 #!BPY
-from __future__ import division
  
 """
 Name: 'Warzone model (.pie)...'
