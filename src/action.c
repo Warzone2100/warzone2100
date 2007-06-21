@@ -354,12 +354,6 @@ void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot)
 #define HEAVY_WEAPON_WEIGHT     50000
 
 /* returns true if on target */
-
-//BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UDWORD *pRotation,
-//		UDWORD *pPitch, SDWORD rotRate, SDWORD pitchRate, BOOL bDirectFire, BOOL bInvert)
-//BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *pRotation,
-//		UWORD *pPitch, SWORD rotRate, SWORD pitchRate, BOOL bDirectFire, BOOL bInvert)
-//Watermelon:added weapon_slot
 BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *pRotation,
 		UWORD *pPitch, WEAPON_STATS *psWeapStats, BOOL bInvert, int weapon_slot)
 {
@@ -1485,12 +1479,6 @@ void actionUpdateDroid(DROID *psDroid)
 
 							if (validTarget((BASE_OBJECT *)psDroid, psActionTarget, j))
 							{
-								/*if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
-													&(psDroid->turretRotation), &(psDroid->turretPitch),
-													psDroid->turretRotRate, (SWORD)(psDroid->turretRotRate/2),
-													//asWeaponStats[psDroid->asWeaps->nStat].direct))
-													proj_Direct(&asWeaponStats[psDroid->asWeaps->nStat]),
-													bInvert))*/
 								if (actionTargetTurret((BASE_OBJECT*)psDroid, psActionTarget,
 														&(psDroid->turretRotation[j]), &(psDroid->turretPitch[j]),
 														&asWeaponStats[psDroid->asWeaps[j].nStat],
@@ -1777,12 +1765,6 @@ void actionUpdateDroid(DROID *psDroid)
 						psWeapStats = asWeaponStats + psDroid->asWeaps[i].nStat;
 						if (psWeapStats->rotate)
 						{
-							/*actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget,
-													&(psDroid->turretRotation), &(psDroid->turretPitch),
-													psDroid->turretRotRate, (SWORD)(psDroid->turretRotRate/2),
-													//asWeaponStats[psDroid->asWeaps->nStat].direct);
-													proj_Direct(&asWeaponStats[psDroid->asWeaps->nStat]),
-													bInvert);*/
 							actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[0],
 													&(psDroid->turretRotation[i]), &(psDroid->turretPitch[i]),
 													&asWeaponStats[psDroid->asWeaps[i].nStat],
@@ -2298,11 +2280,6 @@ void actionUpdateDroid(DROID *psDroid)
 			{
 				debug( LOG_NEVER, "DACTION_BUILD_FOUNDATION: start build\n");
 				psDroid->action = DACTION_BUILD;
-
-
-				//add one to current quantity for this player - done in droidStartBuild()
-				//asStructLimits[psDroid->player][(STRUCTURE_STATS *)psDroid->
-					//psTarStats - asStructureStats].currentQuantity++;
 			}
 			else
 			{
@@ -2490,26 +2467,12 @@ void actionUpdateDroid(DROID *psDroid)
 		if (DROID_STOPPED(psDroid))
 		{
 			// Couldn't reach destination - try and find a new one
-			/*droidX = psDroid->psTarget->x >> TILE_SHIFT;
-			droidY = psDroid->psTarget->y >> TILE_SHIFT;
-			if (!pickATile(&droidX, &droidY, LOOK_NEXT_TO_DROID))
-			{
-				//couldn't get next to the droid, so stop trying
-				psDroid->action = DACTION_NONE;
-			}
-			psDroid->actionX = droidX << TILE_SHIFT;
-			psDroid->actionY = droidY << TILE_SHIFT;*/
 			psDroid->actionX = psDroid->psActionTarget[0]->x;
 			psDroid->actionY = psDroid->psActionTarget[0]->y;
 			moveDroidTo(psDroid, psDroid->actionX, psDroid->actionY);
 		}
 		break;
 	case DACTION_DROIDREPAIR:
-		/*actionTargetTurret((BASE_OBJECT*)psDroid,
-					psDroid->psActionTarget, &(psDroid->turretRotation),
-					&(psDroid->turretPitch), psDroid->turretRotRate,
-					(SWORD)(psDroid->turretRotRate/2), FALSE, FALSE);*/
-
 		//if not doing self-repair
 		//Watermelon:use 0 for repair droid
 		if (psDroid->psActionTarget[0] != (BASE_OBJECT *)psDroid)

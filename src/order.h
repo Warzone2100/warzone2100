@@ -248,10 +248,7 @@ extern BOOL getFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_
 //lasSat structure can select a target
 extern void orderStructureObj(UDWORD player, BASE_OBJECT *psObj);
 
+// clear all targets (but not action targets)
+void clearDroidTargets(DROID *psDroid);
+
 #endif
-
-
-
-
-
-

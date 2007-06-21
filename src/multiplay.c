@@ -720,48 +720,7 @@ BOOL recvMessage(void)
 				break;
 			}
 		}
-/*
-		// messages only during setup.
-		if(ingame.localJoiningInProgress)
-		{
-			switch(msg.type)
-			{
-			case NET_PLAYERCOMPLETE:			// don't care about this!
-				arenaPlayersReceived++;
 
-				if (arenaPlayersReceived == MAX_PLAYERS)
-				{
-					ProcessDroidOrders();						// set droid orders....
-					bMultiPlayer = TRUE;						// reinit mulitplay messaging
-
-					useTheForce(FALSE);							// use the force.
-					playerResponding();							// say hi.
-					addDMatchDroid(1);							// each player adds a newdroid point.
-				}
-				else
-				{
-					// request the next player
-					NetAdd(msg,0,NetPlay.dpidPlayer);				//our id
-					NetAdd(msg,4,arenaPlayersReceived);				//player we require.
-					msg.size = 8;
-					msg.type = NET_REQUESTPLAYER;
-					NETbcast(msg,TRUE);
-				}
-				break;
-
-			case NET_FEATURES:								// feature set
-				recvFeatures(&msg);							// **biggest message of them all!**
-				break;
-
-//			case NET_STRUCT:								// structure set.
-//				receiveWholeStructure(&msg);
-//				break;
-
-			default:
-				break;
-			}
-		}
-*/
 		// messages usable all the time
 		switch(msg.type)
 		{

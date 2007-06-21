@@ -47,33 +47,6 @@
 #include "lib/sound/audio_id.h"
 
 // ////////////////////////////////////////////////////////////////////////////
-// External Variables
-extern	UDWORD				objID;					// unique ID creation thing..
-
-// ////////////////////////////////////////////////////////////////////////////
-// Level ground. A small function for updating the ground below a structure.
-// if and when this gets broken the code was pinched from droidupdatefoundation();
-/*BOOL levelGround(UDWORD atx, UDWORD aty, UDWORD atz, UDWORD baseWidth,UDWORD baseBreadth)
-{
-	UDWORD				x = atx >> TILE_SHIFT;
-	UDWORD				y = aty >> TILE_SHIFT;
-	UBYTE				width, breadth;
-
-	for (breadth=0; breadth < (UBYTE)(baseBreadth + 1); breadth++)
-	{
-		for (width=0; width < (UBYTE)(baseWidth + 1); width++)
-		{
-			while((x+width-1)<0)width++;
-			while((y+breadth-1)<0)breadth++;
-
-			setTileHeight(x + width-1, y + breadth-1, atz);
-		}
-	}
-	return TRUE;
-}
-*/
-
-// ////////////////////////////////////////////////////////////////////////////
 // structures
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -113,7 +86,6 @@ BOOL sendBuildStarted(STRUCTURE *psStruct,DROID *psDroid)
 // put down a base plate and start droid building it!
 BOOL recvBuildStarted(NETMSG *pMsg)
 {
-	//UDWORD			targetId,order,droidId,structId,x,z,y,structStat,player;
 	UDWORD			targetId,order,droidId,structId,structStat;
 	UWORD			x,z,y,player;
 	STRUCTURE_STATS *psStats;
@@ -167,7 +139,6 @@ BOOL recvBuildStarted(NETMSG *pMsg)
 			}
 
 		}
-
 
 		if (psDroid->psTarget[0])									//sync id's
 		{

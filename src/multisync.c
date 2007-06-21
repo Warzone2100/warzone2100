@@ -64,8 +64,6 @@ static void highLevelDroidUpdate(DROID *psDroid,
 								 UDWORD y,
 								 UDWORD state,
 								 UDWORD order,
-								 //UDWORD orderX,
-								 //UDWORD orderY,
 								 BASE_OBJECT *psTarget,
 								 UDWORD	numKills);
 
@@ -465,12 +463,12 @@ static void highLevelDroidUpdate(DROID *psDroid,UDWORD x, UDWORD y,
 		orderDroidObj(psDroid, DORDER_ATTACK, &oaInfo);
 		turnOffMultiMsg(FALSE);
 	}
+
 	// secondary orders.
 	if(psDroid->secondaryOrder != state)
 	{
 		psDroid->secondaryOrder = state;
 	}
-
 
 	// see how well the sync worked, optionally update.
 	// offscreen updates will make this ok each time.
@@ -826,9 +824,6 @@ BOOL recvStructureCheck( NETMSG *m)
 			NETlogEntry("scheck: didn't find structure at all, building it",0,0);
 
 //			buildFlatten(psStats, x,y,z);
-//			levelGround(x,y,z,
-//				((STRUCTURE_STATS *)psStats)->baseWidth,
-//				((STRUCTURE_STATS *)psStats)->baseBreadth);
 
 			powerCalc(FALSE);	// turn off power
 			pS = buildStructure((STRUCTURE_STATS *)psStats, x , y ,player,TRUE);

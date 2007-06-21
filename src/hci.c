@@ -6088,12 +6088,9 @@ static BASE_STATS *getConstructionStats(BASE_OBJECT *psObj)
 		return Stats;
 	} else if( orderStateObj(psDroid, DORDER_BUILD,(BASE_OBJECT**)&Structure) &&
 				 psDroid->order == DORDER_BUILD ) { // Is building
-//		DBPRINTF(("BUILDING %p : %d %p %p\n",psDroid,psDroid->order,psDroid->psTarStats,psDroid->psTarget));
 		return psDroid->psTarStats[0];
 	} else if( orderStateObj(psDroid, DORDER_HELPBUILD,(BASE_OBJECT**)&Structure) &&
 		 (psDroid->order == DORDER_HELPBUILD || psDroid->order == DORDER_LINEBUILD)) { //Is helping
-//		DBPRINTF(("HELPING  %p : %d %p %p\n",psDroid,psDroid->order,psDroid->psTarStats,psDroid->psTarget));
-//		return (BASE_STATS*)((STRUCTURE*)psDroid->psTarget)->pStructureType;
 		return (BASE_STATS*)Structure->pStructureType;
     } else if (orderState(psDroid, DORDER_DEMOLISH)) {
         return 	(BASE_STATS *)structGetDemolishStat();
@@ -6150,21 +6147,6 @@ static BOOL setConstructionStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		/* Now start looking for a location for the structure */
 		if (psSStats)
 		{
-//			if ( psSStats == structGetDemolishStat() )
-//			{
-//				objMode = IOBJ_DEMOLISHSEL;
-//				psDroid->psTarStats = (BASE_STATS *) structGetDemolishStat();
-
-//				//set the droids current program
-//				/*for (i=0; i < psDroid->numProgs; i++)
-//				{
-//					if (psDroid->asProgs[i].psStats->order == ORDER_DEMOLISH)
-//					{
-//						psDroid->activeProg = i;
-//					}
-//				}*/
-//			}
-//			else
 			{
 				objMode = IOBJ_BUILDSEL;
 

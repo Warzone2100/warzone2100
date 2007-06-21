@@ -182,7 +182,6 @@ static void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer);
 static void repairFacilityReward(UBYTE losingPlayer, UBYTE rewardPlayer);
 static void findAssemblyPointPosition(UDWORD *pX, UDWORD *pY, UDWORD player);
 static void removeStructFromMap(STRUCTURE *psStruct);
-//static void	getNearestBestValidTile(UDWORD *x, UDWORD *y);
 static void	structUpdateRecoil( STRUCTURE *psStruct );
 static void resetResistanceLag(STRUCTURE *psBuilding);
 static void revealAll(UBYTE player);
@@ -202,6 +201,8 @@ BOOL	ptInStructure(STRUCTURE *psStruct, UDWORD x, UDWORD y)
 	UDWORD tlX, tlY, brX, brY;
 	UDWORD width, height;
 
+	CHECK_STRUCTURE(psStruct);
+
 	width = (psStruct->pStructureType->baseWidth * TILE_UNITS);
 	height = (psStruct->pStructureType->baseBreadth * TILE_UNITS);
 
@@ -215,7 +216,6 @@ BOOL	ptInStructure(STRUCTURE *psStruct, UDWORD x, UDWORD y)
 	if (x > tlX && x < brX && y > tlY && y < brY)
 		return(TRUE);
 	return(FALSE);
-
 }
 
 /*
@@ -1325,8 +1325,7 @@ BOOL structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 	// Do at least one point of damage
 	unsigned int actualDamage = 1;
 
-	ASSERT( psStructure != NULL,
-		"structureDamage: Invalid Structure pointer" );
+	CHECK_STRUCTURE(psStructure);
 
 	debug( LOG_ATTACK, "structureDamage(%d): body %d armour %d damage: %d\n",
 		psStructure->id, psStructure->body, psStructure->armour, damage);
@@ -1383,6 +1382,8 @@ BOOL structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, UBYTE quantity)
 {
 	FACTORY		*psFact;
+
+	CHECK_STRUCTURE(psStruct);
 
 	ASSERT( psStruct != NULL && psStruct->type == OBJ_STRUCTURE &&
 			(psStruct->pStructureType->type == REF_FACTORY ||
@@ -1619,6 +1620,8 @@ void setStructTileDraw(STRUCTURE *psStruct)
 	STRUCTURE_STATS		*pStructureType = psStruct->pStructureType;
 	UDWORD	width, breadth, mapX,mapY;
 
+	CHECK_STRUCTURE(psStruct);
+
 	mapX = (psStruct->x >> TILE_SHIFT) - (pStructureType->baseWidth/2);
 	mapY = (psStruct->y >> TILE_SHIFT) - (pStructureType->baseBreadth/2);
 	for (width = 0; width < pStructureType->baseWidth; width++)
@@ -1632,7 +1635,6 @@ void setStructTileDraw(STRUCTURE *psStruct)
 		}
 	}
 }
-
 
 
 void buildFlatten(STRUCTURE_STATS *pStructureType, UDWORD atx, UDWORD aty,UDWORD h )
@@ -1856,7 +1858,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		{
 			psBuilding->turretRotation[i] = 0;
 			psBuilding->turretPitch[i] = 0;
-			psBuilding->psTarget[i] = 0;
+			psBuilding->psTarget[i] = NULL;
 		}
 		psBuilding->targetted = 0;
 
@@ -2241,6 +2243,8 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 	REARM_PAD				*psReArmPad;
 	UDWORD					x, y;
 
+	CHECK_STRUCTURE(psBuilding);
+
 	psBuilding->pFunctionality = NULL;
 	switch(functionType)
 	{
@@ -2520,6 +2524,7 @@ void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 	FLAG_POSITION	*psFlag, *psNext, *psPrev;
 	SDWORD			factoryInc,typeFlag;
 
+	CHECK_STRUCTURE(psStruct);
 	ASSERT( StructIsFactory(psStruct),"assignFactoryCommandUnit: structure not a factory" );
 
 	psFact = (FACTORY *)psStruct->pFunctionality;
@@ -2683,6 +2688,8 @@ BOOL placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY)
 	SWORD			sx,sy, xmin,xmax, ymin,ymax, x,y, xmid;
 	BOOL			placed;
 
+	CHECK_STRUCTURE(psStructure);
+
 	/* Get the tile coords for the top left of the structure */
 	sx = (SWORD)(psStructure->x - psStructure->pStructureType->baseWidth * TILE_UNITS/2);
 	sx = (SWORD)(sx >> TILE_SHIFT);
@@ -2795,6 +2802,8 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 	Vector3i iVecEffect;
 	UBYTE			factoryType;
 	BOOL			assignCommander;
+
+	CHECK_STRUCTURE(psStructure);
 
 	placed = placeDroid(psStructure, &x, &y);
 
@@ -3014,6 +3023,8 @@ static BOOL maxDroidsByTypeReached(STRUCTURE *psStructure)
 {
 	FACTORY		*psFact = (FACTORY *)psStructure->pFunctionality;
 
+	CHECK_STRUCTURE(psStructure);
+
 	if ( (droidTemplateType((DROID_TEMPLATE *)psFact->psSubject) == DROID_COMMAND) &&
 		(getNumCommandDroids(psStructure->player) >= 10) )
 	{
@@ -3035,6 +3046,8 @@ static BOOL maxDroidsByTypeReached(STRUCTURE *psStructure)
 //
 BOOL CheckHaltOnMaxUnitsReached(STRUCTURE *psStructure)
 {
+	CHECK_STRUCTURE(psStructure);
+
 	// if the players that owns the factory has reached his (or hers) droid limit
 	// then put production on hold & return - we need a message to be displayed here !!!!!!!
 	if (IsPlayerDroidLimitReached(psStructure->player) ||
@@ -3071,15 +3084,13 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 	Vector3i iVecEffect;
 	BOOL				bFinishAction,bDroidPlaced;
 	WEAPON_STATS		*psWStats;
-	BASE_OBJECT			*psTarget;
 	SDWORD				xdiff,ydiff, mindist, currdist;
 #ifdef INCLUDE_FACTORYLISTS
 	DROID_TEMPLATE		*psNextTemplate;
 #endif
 	UDWORD				i;
 
-	ASSERT( psStructure != NULL,
-		"aiUpdateStructure: invalid Structure pointer" );
+	CHECK_STRUCTURE(psStructure);
 
 	if (psStructure->numWeaps > 0)
 	{
@@ -3307,6 +3318,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				mindist = SDWORD_MAX;
 				for(psDroid = apsDroidLists[psStructure->player]; psDroid; psDroid = psDroid->psNext)
 				{
+					BASE_OBJECT *psTarget;
+
 					if (orderStateObj(psDroid, DORDER_RTR, &psTarget) &&
 						(psTarget == (BASE_OBJECT *)psStructure) &&
 						psDroid->action == DACTION_WAITFORREPAIR)
@@ -3908,8 +3921,7 @@ void structureUpdate(STRUCTURE *psBuilding)
 	UDWORD percentDamage, emissionInterval, iPointsToAdd, iPointsRequired;
 	Vector3i dv;
 
-	ASSERT( psBuilding != NULL,
-		"structureUpdate: Invalid Structure pointer" );
+	CHECK_STRUCTURE(psBuilding);
 
 	//update the manufacture/research of the building once complete
 	if (psBuilding->status == SS_BUILT)
@@ -4050,6 +4062,7 @@ void structureUpdate(STRUCTURE *psBuilding)
 			}
 		}
 	}
+	CHECK_STRUCTURE(psBuilding);
 }
 
 
@@ -5014,7 +5027,7 @@ BOOL checkLength(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDWORD *p
 
 
 //remove a structure from the map
-void removeStructFromMap(STRUCTURE *psStruct)
+static void removeStructFromMap(STRUCTURE *psStruct)
 {
 	UDWORD		i,j;
 	UDWORD		mapX, mapY;
@@ -5168,7 +5181,7 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 	return resourceFound;
 }
 
-/* Remove a structure and free it's memory */
+/* Remove a structure */
 BOOL destroyStruct(STRUCTURE *psDel)
 {
 	UDWORD			mapX, mapY, width,breadth;
@@ -5177,10 +5190,9 @@ BOOL destroyStruct(STRUCTURE *psDel)
 	Vector3i pos;
 	BOOL			resourceFound = FALSE;
 	MAPTILE			*psTile;
-	BOOL			bMinor;
+	BOOL			bMinor = FALSE;
 
-	bMinor = FALSE;
-	ASSERT( psDel != NULL, "destroyStruct: invalid structure pointer\n" );
+	CHECK_STRUCTURE(psDel);
 
 	if (bMultiPlayer)
 	{
@@ -5425,6 +5437,8 @@ SDWORD getStructStatFromName(char *pName)
 BOOL  structureIdle(STRUCTURE *psBuilding)
 {
 	BASE_STATS		*pSubject = NULL;
+
+	CHECK_STRUCTURE(psBuilding);
 
 	if (psBuilding->pFunctionality != NULL)
 	{
@@ -5760,6 +5774,8 @@ BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int w
 {
 	Vector3i barrel;
 	iIMDShape		*psShape = psStructure->pStructureType->pIMD, *psWeaponImd = NULL;
+
+	CHECK_STRUCTURE(psStructure);
 
 	if (weapon_slot >= 0)
 	{
@@ -7015,6 +7031,7 @@ DROID_TEMPLATE * factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTem
 	UDWORD		inc, factoryType, factoryInc;
 	FACTORY		*psFactory;
 
+	CHECK_STRUCTURE(psStructure);
 	ASSERT( psStructure->player == productionPlayer,
 		"factoryProdUpdate: called for incorrect player" );
 
@@ -7084,6 +7101,7 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, BOOL 
 	FACTORY		*psFactory;
 	BOOL		bAssigned = FALSE, bCheckForCancel = FALSE;
 
+	CHECK_STRUCTURE(psStructure);
 	ASSERT( psStructure->player == productionPlayer,
 		"factoryProdAdjust: called for incorrect player" );
 
@@ -7738,6 +7756,8 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, BOOL
 	SWORD               buildPoints = 0, i;
 	BOOL                bPowerOn;
 	UWORD               direction;
+
+	CHECK_STRUCTURE(psStructure);
 
 	//this is not the case for EW in multiPlayer mode
 	if (!bMultiPlayer)

@@ -111,12 +111,11 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	//Watermelon:dist
 	SDWORD			dist;
 
+	CHECK_OBJECT(psAttacker);
+	CHECK_OBJECT(psTarget);
+
 	ASSERT( psWeap != NULL,
 		"combFire: Invalid weapon pointer" );
-	ASSERT( psAttacker != NULL,
-		"combFire: Invalid attacker pointer" );
-	ASSERT( psTarget != NULL,
-		"combFire: Invalid target pointer" );
 
 	/* Watermelon:dont shoot if the weapon_slot of a vtol is empty */
 	if (psAttacker->type == OBJ_DROID &&
@@ -544,6 +543,7 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 		return;
 	}
 
+	CHECK_OBJECT(psTarget);
 
 	gridStartIterate((SDWORD)psTarget->x, (SDWORD)psTarget->y);
 	for (psViewer = gridIterate(); psViewer != NULL; psViewer = gridIterate())

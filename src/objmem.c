@@ -902,4 +902,8 @@ static void objListIntegCheck(void)
 		ASSERT( psCurr->type == OBJ_FEATURE,
 				"objListIntegCheck: misplaced object in the feature list" );
 	}
+	for (psCurr = (BASE_OBJECT*)psDestroyedObj; psCurr; psCurr = psCurr->psNext)
+	{
+		ASSERT( psCurr->died > 0, "objListIntegCheck: Object in destroyed list but not dead!" );
+	}
 }

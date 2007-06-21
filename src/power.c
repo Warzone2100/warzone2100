@@ -504,9 +504,6 @@ BOOL accruePower(BASE_OBJECT *psObject)
             //check trying to build something (and that hasn't been blown up)
             if (DroidIsBuilding(psDroid) && psDroid->psTarget[0] && !psDroid->psTarget[0]->died)
             {
-			    //powerDiff = ((STRUCTURE *)psDroid->psTarget)->pStructureType->
-                //    powerToBuild - ((STRUCTURE *)psDroid->psTarget)->
-                //    currentPowerAccrued;
                 powerDiff = structPowerToBuild((STRUCTURE *)psDroid->psTarget[0]) -
                     ((STRUCTURE *)psDroid->psTarget[0])->currentPowerAccrued;
 			    //if equal then don't need power

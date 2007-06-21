@@ -1023,7 +1023,6 @@ BOOL sendWholeDroid(DROID *pD, UDWORD dest)
 	ASSERT( pD->y < (mapHeight<< TILE_SHIFT),
 		"sendWholeDroid: y coordinate bigger than map height" );
 
-	//Watermelon:pfft
 	if (pD->numWeaps == 0)
 	{
 		if (pD->asWeaps[0].nStat > 0)									// build some bits for the template.

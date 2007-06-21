@@ -274,7 +274,6 @@ BOOL scrBaseObjGet(UDWORD index)
 		}
 		else if (psObj->type == OBJ_DROID)
 		{
-			//psStructStats = (STRUCTURE_STATS*)psDroid->psTarStats;
 			type = (INTERP_TYPE)ST_STRUCTURESTAT;
 			scrFunctionResult.v.ival = (SDWORD)((STRUCTURE_STATS *)(((DROID *)psObj)->psTarStats[0]) - asStructureStats);
 		}
@@ -295,7 +294,6 @@ BOOL scrBaseObjGet(UDWORD index)
 		}
 		else if (psObj->type == OBJ_DROID)
 		{
-			//psStructStats = (STRUCTURE_STATS*)psDroid->psTarStats;
 			type = (INTERP_TYPE)ST_BASEOBJECT;
 			scrFunctionResult.v.oval = (((DROID *)psObj)->psTarget[0]);
 		}

@@ -3252,9 +3252,6 @@ SELECTION_TYPE	selectionClass;
 
 		case DROID_CONSTRUCT:
 		case DROID_CYBORG_CONSTRUCT:
-			/* Re-written to allow demolish order to be added to the queuing system
-			if ((psDominant->psTarget == NULL && psDominant->psTarStats ==
-				(BASE_STATS *) structGetDemolishStat())*/
 			if (intDemolishSelectMode())
 			{
 				selectionClass = SC_DROID_DEMOLISH;			// demolish mode.

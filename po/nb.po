@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-06-15 00:10+0200\n"
+"POT-Creation-Date: 2007-06-21 19:16+0200\n"
 "PO-Revision-Date: 2007-03-24 17:49+0100\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -52,12 +52,12 @@ msgstr ""
 msgid "Cannot Build. Oil Resource Burning."
 msgstr ""
 
-#: src/display.c:2050
+#: src/display.c:2033
 #, c-format
 msgid "%s - Damage %d%% - Kills %d, %s"
 msgstr ""
 
-#: src/display.c:2295
+#: src/display.c:2281
 msgid "Truck ordered to build Oil Derrick"
 msgstr ""
 
@@ -459,6 +459,14 @@ msgstr ""
 msgid "Players"
 msgstr ""
 
+#: src/display3d.c:416
+msgid "Developed by Pumpkin Studios"
+msgstr ""
+
+#: src/display3d.c:417
+msgid "Published by EIDOS Interactive"
+msgstr ""
+
 #: src/keybind.c:1226
 msgid "View Aligned to North"
 msgstr ""
@@ -475,41 +483,41 @@ msgstr ""
 msgid "Unable to locate any resource extractors!"
 msgstr ""
 
-#: src/keybind.c:2285
+#: src/keybind.c:2287
 msgid "Centered on player HQ, direction NORTH"
 msgstr ""
 
-#: src/keybind.c:2297
+#: src/keybind.c:2299
 msgid "Unable to locate HQ!"
 msgstr ""
 
-#: src/keybind.c:2313
+#: src/keybind.c:2315
 msgid "Formation speed limiting OFF"
 msgstr ""
 
-#: src/keybind.c:2317
+#: src/keybind.c:2319
 msgid "Formation speed limiting ON"
 msgstr ""
 
-#: src/keybind.c:2447 src/keybind.c:2474 src/keybind.c:2489
+#: src/keybind.c:2449 src/keybind.c:2476 src/keybind.c:2491
 msgid "Game Speed Reset"
 msgstr ""
 
-#: src/keybind.c:2449
+#: src/keybind.c:2451
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr ""
 
-#: src/keybind.c:2476
+#: src/keybind.c:2478
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr ""
 
-#: src/keybind.c:2502
+#: src/keybind.c:2504
 msgid "Build menu will reopen"
 msgstr ""
 
-#: src/keybind.c:2506
+#: src/keybind.c:2508
 msgid "Build menu will not reopen"
 msgstr ""
 
@@ -597,29 +605,29 @@ msgstr "Forskning ferdig"
 msgid "Research Award"
 msgstr ""
 
-#: src/scores.c:272
+#: src/scores.c:268
 msgid "Unit Losses"
 msgstr ""
 
-#: src/scores.c:273
+#: src/scores.c:269
 msgid "Structure Losses"
 msgstr ""
 
-#: src/scores.c:274
+#: src/scores.c:270
 msgid "Force Information"
 msgstr ""
 
-#: src/scores.c:359
+#: src/scores.c:355
 #, c-format
 msgid "ARTIFACTS RECOVERED: %d"
 msgstr ""
 
-#: src/scores.c:364
+#: src/scores.c:360
 #, c-format
 msgid "Mission Time - %s"
 msgstr ""
 
-#: src/scores.c:369
+#: src/scores.c:365
 #, c-format
 msgid "Total Game Time - %s"
 msgstr ""

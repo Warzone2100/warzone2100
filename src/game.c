@@ -5263,7 +5263,7 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 
 
 // -----------------------------------------------------------------------------------------
-BOOL loadDroidSetPointers(void)
+static BOOL loadDroidSetPointers(void)
 {
 	UDWORD		player,list;
 	UDWORD		id;
@@ -5352,53 +5352,10 @@ BOOL loadDroidSetPointers(void)
 				}
 				psDroid = psDroid->psNext;
 			}
-			/*
-			for(psDroid = ppsDroidLists[list][i]; psDroid; psDroid = psDroid->psNext)
-			{
-				id = (UDWORD)(psDroid->psTarget);
-				psDroid->psTarget = (id==UDWORD_MAX ? NULL : getBaseObjFromId(id));
-				id = (UDWORD)(psDroid->psActionTarget);
-				psDroid->psActionTarget = ( id==UDWORD_MAX ? NULL : getBaseObjFromId(id));
-				ASSERT( ((UDWORD)psDroid->psTarget)!=UDWORD_MAX,"Found invalid target" );
-				ASSERT( ((UDWORD)psDroid->psActionTarget)!=UDWORD_MAX,"Found invalid action target" );
-				DBPRINTF(("psDroid->psTarget = %d\n",psDroid->psTarget));
-			}
-			*/
 		}
 	}
 
- /*
-	for(player=0; player<MAX_PLAYERS; player++)
-	{
-		psDroid=(DROID *)apsDroidLists[player];
-		while (psDroid)
-		{
-			//rebuild the object pointer from the ID
-			id = (UDWORD)(psDroid->psTarget);
-			if (id != UDWORD_MAX)
-			{
-				psDroid->psTarget			= getBaseObjFromId(id);
-			}
-			else
-			{
-				psDroid->psTarget			= NULL;//psSaveDroid->targetID
-			}
-			//rebuild the object pointer from the ID
-			id = (UDWORD)(psDroid->psActionTarget);
-			if (id != UDWORD_MAX)
-			{
-				psDroid->psActionTarget			= getBaseObjFromId(id);
-			}
-			else
-			{
-				psDroid->psActionTarget			= NULL;//psSaveDroid->targetID
-			}
-			psDroid = psDroid->psNext;
-		}
-	}
-*/
 	return TRUE;
-
 }
 
 // -----------------------------------------------------------------------------------------

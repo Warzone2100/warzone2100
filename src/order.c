@@ -3354,9 +3354,6 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj)
 		if ( psDroid->droidType == DROID_CONSTRUCT ||
             psDroid->droidType == DROID_CYBORG_CONSTRUCT)
 		{
-			//check for demolish first
-			//if ((psDroid->psTarget == NULL &&
-            //    psDroid->psTarStats == (BASE_STATS *) structGetDemolishStat())
             //Re-written to allow demolish order to be added to the queuing system
             if (intDemolishSelectMode())
 			{

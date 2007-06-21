@@ -313,9 +313,6 @@ typedef struct _structure
 	//the sensor stats need to be stored since the actual sensor stat can change with research
 	UWORD		sensorRange;
 	UWORD		sensorPower;
-	/*UDWORD		turretRotation;				// weapon, ECM and sensor direction and pitch
-	UDWORD		turretRotRate;				// weapon, ECM and sensor direction and pitch
-	UDWORD		turretPitch;				// weapon, ECM and sensor direction and pitch*/
 	UWORD		turretRotation[STRUCT_MAXWEAPS];				// weapon, ECM and sensor direction and pitch
 	//UWORD		turretRotRate;				// weapon, ECM and sensor direction and pitch - THIS IS A CONSTANT
 	UWORD		turretPitch[STRUCT_MAXWEAPS];				// weapon, ECM and sensor direction and pitch

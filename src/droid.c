@@ -3263,7 +3263,6 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	psDroid->orderY = 0;
 	psDroid->orderX2 = 0;
 	psDroid->orderY2 = 0;
-	psDroid->psTarStats[0] = NULL;
 	psDroid->secondaryOrder = DSS_ARANGE_DEFAULT | DSS_REPLEV_NEVER | DSS_ALEV_ALWAYS | DSS_HALT_GUARD;
 	psDroid->action = DACTION_NONE;
 	psDroid->actionX = 0;
@@ -3271,6 +3270,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 
 	for(i = 0;i < DROID_MAXWEAPS;i++)
 	{
+		psDroid->psTarStats[i] = NULL;
 		psDroid->psActionTarget[i] = NULL;
 		psDroid->psTarget[i] = NULL;
 		psDroid->asWeaps[i].lastFired = 0;

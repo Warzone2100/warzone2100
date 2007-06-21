@@ -196,9 +196,8 @@ typedef struct _droid
 	UDWORD				timeLastHit;
 	BOOL				bTargetted;
 
-	//Watermelon:pfft DROID_MAXWEAPS targets
-	struct _base_object	*psTarget[DROID_MAXWEAPS];
-	struct _base_stats	*psTarStats[DROID_MAXWEAPS];
+	BASE_OBJECT			*psTarget[DROID_MAXWEAPS];	// Who to shoot at etc
+	BASE_STATS			*psTarStats[DROID_MAXWEAPS];	// What to build etc; only first value ever used
 
 	// secondary order data
 	UDWORD				secondaryOrder;
@@ -208,8 +207,7 @@ typedef struct _droid
 	/* Action data */
 	SDWORD				action;
 	UDWORD				actionX,actionY;
-	//Watermelon:pfft DROID_MAXWEAPS targets
-	struct _base_object	*psActionTarget[DROID_MAXWEAPS];	// Action target object
+	BASE_OBJECT			*psActionTarget[DROID_MAXWEAPS];	// Action target object
 	UDWORD				actionStarted;		// Game time action started
 	UDWORD				actionPoints;		// number of points done by action since start
 	//UWORD				actionHeight;		// height to level the ground to for foundation,

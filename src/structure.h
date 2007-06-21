@@ -396,6 +396,23 @@ extern BOOL	ptInStructure(STRUCTURE *psStruct, UDWORD x, UDWORD y);
 selected - returns TRUE if valid*/
 extern BOOL lasSatStructSelected(STRUCTURE *psStruct);
 
+#define CHECK_STRUCTURE(object) \
+do { \
+	unsigned int i; \
+\
+	assert(object != NULL); \
+	assert(object->type == OBJ_STRUCTURE); \
+	assert(object->player < MAX_PLAYERS); \
+	assert(object->pStructureType->type < NUM_DIFF_BUILDINGS); \
+	assert(object->numWeaps < STRUCT_MAXWEAPS); \
+	for (i = 0; i < STRUCT_MAXWEAPS; ++i) \
+	{ \
+		assert(object->turretRotation[i] <= 360); \
+		if (object->psTarget[i]) \
+		{ \
+			CHECK_OBJECT(object->psTarget[i]); \
+		} \
+	} \
+} while (0)
+
 #endif
-
-
