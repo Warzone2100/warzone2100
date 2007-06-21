@@ -138,9 +138,6 @@ static void	proj_InFlightDirectFunc( PROJ_OBJECT *psObj );
 static void	proj_InFlightIndirectFunc( PROJ_OBJECT *psObj );
 static void	proj_ImpactFunc( PROJ_OBJECT *psObj );
 static void	proj_PostImpactFunc( PROJ_OBJECT *psObj );
-
-//static void	proj_MachineGunInFlightFunc( PROJ_OBJECT *psObj );
-
 static void	proj_checkBurnDamage( BASE_OBJECT *apsList, PROJ_OBJECT *psProj,
 									FIRE_BOX *pFireBox );
 
@@ -239,6 +236,20 @@ proj_Shutdown( void )
 
 /***************************************************************************/
 
+static void proj_Destroy(PROJ_OBJECT *psObj)
+{
+	CHECK_PROJECTILE(psObj);
+
+	/* WARNING WARNING: The use of (int) cast pointer here is not safe for
+	 * most 64-bit architectures! FIXME!! - Per */
+	if (hashTable_RemoveElement(g_pProjObjTable, psObj, (int) psObj, UNUSED_KEY) == FALSE)
+	{
+		debug(LOG_ERROR, "proj_Destroy: couldn't remove projectile from hash table");
+	}
+}
+
+/***************************************************************************/
+
 PROJ_OBJECT *
 proj_GetFirst( void )
 {
@@ -269,24 +280,17 @@ static void proj_UpdateKills(PROJ_OBJECT *psObj)
 		return;
 	}
 
-
 	if(bMultiPlayer)
 	{
 		sendDestroyExtra(psObj->psDest,psObj->psSource);
 		updateMultiStatsKills(psObj->psDest,psObj->psSource->player);
 	}
 
-
 	if(psObj->psSource->type == OBJ_DROID)			/* update droid kills */
 	{
 		psDroid = (DROID*)psObj->psSource;
 		psDroid->numKills++;
 		cmdDroidUpdateKills(psDroid);
-        //can't assume the sensor object is a droid - it might be a structure
-		/*if (orderStateObj(psDroid, DORDER_FIRESUPPORT, (BASE_OBJECT **)&psSensor))
-		{
-			psSensor->numKills ++;
-		}*/
 		if (orderStateObj(psDroid, DORDER_FIRESUPPORT, &psSensor))
 		{
             if (psSensor->type == OBJ_DROID)
@@ -917,7 +921,6 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 	Vector3i pos;
 	float			fVVert;
 	BOOL			bOver = FALSE;
-	//Watermelon:psTempObj,psNewTarget,i,xdiff,ydiff,zdiff
 	BASE_OBJECT		*psTempObj;
 	BASE_OBJECT		*psNewTarget;
 	UDWORD			i;
@@ -1314,11 +1317,8 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 		if (psObj->psDest->type == OBJ_FEATURE &&
 			((FEATURE *)psObj->psDest)->psStats->damageable == 0)
 		{
-			debug( LOG_NEVER, "proj_ImpactFunc: trying to damage non-damageable target,projectile removed\n");
-			if ( hashTable_RemoveElement( g_pProjObjTable, psObj, (int) psObj, UNUSED_KEY ) == FALSE )
-			{
-				debug( LOG_ERROR, "proj_ImpactFunc: couldn't remove projectile from table\n" );
-			}
+			debug(LOG_NEVER, "proj_ImpactFunc: trying to damage non-damageable target,projectile removed");
+			proj_Destroy(psObj);
 			return;
 		}
 		position.x = psObj->x;
@@ -1363,14 +1363,11 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 		/* Do damage to the target */
 		if (proj_Direct(psStats))
 		{
-			/*Check for Electronic Warfare damage where we know the subclass
-            of the weapon*/
-			if (psStats->weaponSubClass == WSC_ELECTRONIC)// && psObj->psDest->
-				//type == OBJ_STRUCTURE)
+			/* Check for Electronic Warfare damage where we know the subclass of the weapon */
+			if (psStats->weaponSubClass == WSC_ELECTRONIC)
 			{
 				if (psObj->psSource)
 				{
-					//if (electronicDamage((STRUCTURE *)psObj->psDest, calcDamage(
                     if (electronicDamage(psObj->psDest, calcDamage(weaponDamage(
                         psStats,psObj->player), psStats->weaponEffect,
                         psObj->psDest), psObj->player))
@@ -1531,10 +1528,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 		}
 
 		/* This was just a simple bullet - release it and return */
-		if ( hashTable_RemoveElement( g_pProjObjTable, psObj, (int) psObj, UNUSED_KEY ) == FALSE )
-		{
-			debug( LOG_NEVER, "proj_ImpactFunc: couldn't remove projectile from table\n" );
-		}
+		proj_Destroy(psObj);
 		return;
 	}
 
@@ -1546,7 +1540,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 		/* Note when it exploded for the explosion effect */
 		psObj->born = gameTime;
 
-	/* Work out the bounding box for the blast radius */
+		/* Work out the bounding box for the blast radius */
 		tarX0 = (SDWORD)psObj->x - (SDWORD)psStats->radius;
 		tarY0 = (SDWORD)psObj->y - (SDWORD)psStats->radius;
 		tarX1 = (SDWORD)psObj->x + (SDWORD)psStats->radius;
@@ -1862,11 +1856,7 @@ proj_PostImpactFunc( PROJ_OBJECT *psObj )
 	/* Time to finish postimpact effect? */
 	if (age > (SDWORD)psStats->radiusLife && age > (SDWORD)psStats->incenTime)
 	{
-		if ( hashTable_RemoveElement( g_pProjObjTable, psObj,
-									(int) psObj, UNUSED_KEY ) == FALSE )
-		{
-			debug( LOG_NEVER, "proj_PostImpactFunc: couldn't remove projectile from table\n" );
-		}
+		proj_Destroy(psObj);
 		return;
 	}
 
@@ -2328,11 +2318,7 @@ static void addProjNaybor(BASE_OBJECT *psObj, UDWORD distSqr)
 /* Find all the objects close to the projectile */
 void projGetNaybors(PROJ_OBJECT *psObj)
 {
-//	DROID		*psCurrD;
-//	STRUCTURE	*psCurrS;
-//	FEATURE		*psCurrF;
 	SDWORD		xdiff, ydiff;
-//	UDWORD		player;
 	UDWORD		dx,dy, distSqr;
 	//Watermelon:renamed to psTempObj from psObj
 	BASE_OBJECT	*psTempObj;
@@ -2345,8 +2331,6 @@ void projGetNaybors(PROJ_OBJECT *psObj)
 	}
 	CurrentProjNaybors = (BASE_OBJECT *)psObj;
 	projnayborTime = gameTime;
-
-
 
 	// reset the naybor array
 	numProjNaybors = 0;

@@ -41,9 +41,6 @@
 #include "multiplay.h"
 #include "advvis.h"
 
-
-
-
 // accuracy for the height gradient
 #define GRAD_MUL	10000
 
@@ -336,12 +333,7 @@ static BOOL rayLOSCallback(SDWORD x, SDWORD y, SDWORD dist)
 	return TRUE;
 }
 
-//#define VTRAYSTEP	(NUM_RAYS/80)
 #define VTRAYSTEP	(NUM_RAYS/120)
-
-//SDWORD currRayAng;
-//BOOL currRayPending = FALSE;
-
 #define	DUPF_SCANTERRAIN 0x01
 
 BOOL visTilesPending(BASE_OBJECT *psObj)
@@ -410,11 +402,9 @@ void visTilesUpdate(BASE_OBJECT *psObj,BOOL SpreadLoad)
 		rayCast(psObj->x,psObj->y,(currRayAng+(NUM_RAYS/2)+(NUM_RAYS/4))%360, range, rayTerrainCallback);
 
 		psDroid->currRayAng += VTRAYSTEP;
-//DBPRINTF(("%p %d\n",psDroid,psDroid->currRayAng);
 		if(psDroid->currRayAng >= (NUM_RAYS/4)) {
 			psDroid->currRayAng = 0;
 			psDroid->updateFlags &= ~DUPF_SCANTERRAIN;
-//DBPRINTF(("%p done\n",psDroid);
 		}
 	} else {
 		// Do the whole circle.
@@ -442,7 +432,6 @@ void visTilesUpdate(BASE_OBJECT *psObj,BOOL SpreadLoad)
  * psTarget can be any type of BASE_OBJECT (e.g. a tree).
  * struckBlock controls whether structures block LOS
  */
-//BOOL visibleObjectBlock(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget, BOOL structBlock)
 BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 {
 	SDWORD		x,y, ray;
@@ -574,22 +563,6 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 		return FALSE;
 	}
 
-//	if (rangeSquared > BASE_VISIBILITY*BASE_VISIBILITY)
-//	{
-		/* Not automatically seen so have to check against ecm */
-//		sensorPower = visCalcPower(psViewer->x,psViewer->y, psTarget->x,psTarget->y,
-//									sensorPower, sensorRange);
-//		lastSensorPower = senPower;
-		// ecm power was already calculated in processVisiblity
-/*		if (sensorPower < ecmPower)
-		{
-			return FALSE;
-		}*/
-//	}
-//	else
-//	{
-//		lastSensorPower = MAX_SENSOR_POWER;	// NOTE this was "lastSensorPower == 0" which I assume was wrong (PD)
-//	}
 	if (rangeSquared == 0)
 	{
 		// Should never be on top of each other, but ...
@@ -597,7 +570,6 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 	}
 
 	// initialise the callback variables
-//	startH = mapTile(x>>TILE_SHIFT,y>>TILE_SHIFT)->height * ELEVATION_SCALE;
 	startH = psViewer->z;
 	startH += visObjHeight(psViewer);
 	currG = -UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE;
@@ -608,50 +580,14 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 	finalX = psTarget->x >> TILE_SHIFT;
 	finalY = psTarget->y >> TILE_SHIFT;
 
-/*	if (structBlock)
-	{
-		// Get the objects that might intersect the rays for this quadrant
-		if (ray < NUM_RAYS/2)
-		{
-			x1 = x - xDiff;
-			x2 = x;
-		}
-		else
-		{
-			x1 = x;
-			x2 = x + xDiff;
-		}
-		if (ray < NUM_RAYS/4 || ray > 3*NUM_RAYS/4)
-		{
-			y1 = y;
-			y2 = y + yDiff;
-		}
-		else
-		{
-			y1 = y - yDiff;
-			y2 = y;
-		}
-		visGetTestObjects(x1,y1, x2,y2, psViewer, psTarget);
-
-		// Get the objects that actually intersect the ray
-		visGetRayObjects(x,y, (SDWORD)psTarget->x,(SDWORD)psTarget->y);
-	}
-	else*/
-	{
-		// don't check for any objects intersecting the ray
-		numRayObjects = 0;
-	}
+	// don't check for any objects intersecting the ray
+	numRayObjects = 0;
 
 	// Cast a ray from the viewer to the target
 	rayCast(x,y, ray, range, rayLOSCallback);
 
 	// See if the target can be seen
 	top = ((SDWORD)psTarget->z + visObjHeight(psTarget) - startH);
-//	tarG = (top*top) * GRAD_MUL / rangeSquared;
-//	if (top < 0)
-//	{
-//		tarG = - tarG;
-//	}
 	tarG = top * GRAD_MUL / lastD;
 
 	return tarG >= currG;
@@ -708,59 +644,16 @@ found:
 	return psWall != NULL;;
 }
 
-
-/* Check whether psViewer can see psTarget.
- * psViewer should be an object that has some form of sensor,
- * currently droids and structures.
- * psTarget can be any type of BASE_OBJECT (e.g. a tree).
- */
-/*BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
-{
-	BOOL	structBlock;
-
-	switch (psTarget->type)
-	{
-	case OBJ_DROID:
-		structBlock = FALSE;
-//		structBlock = TRUE;
-		break;
-	default:
-		structBlock = FALSE;
-		break;
-	}
-
-	return visibleObjectBlock(psViewer,psTarget, structBlock);
-}*/
-
-/*BOOL	blockingTile(UDWORD x, UDWORD y)
-{
-	TILE	*psTile;
-
-	// get a pointer to the tile
-	psTile = mapTile(x,y);
-
-	// Is it anything other than grass or sand?
-	if (psTile->type != TER_GRASS && psTile->type!=TER_SAND)
-		return(TRUE);
-	else
-		return(FALSE);
-}*/
-
 /* Find out what can see this object */
 void processVisibility(BASE_OBJECT *psObj)
 {
-//	DROID		*psCount;
 	DROID		*psDroid;
 	STRUCTURE	*psBuilding;
 	UDWORD		i, maxPower, ecmPoints;
-//	UDWORD		currPower;
 	ECM_STATS	*psECMStats;
 	BOOL		prevVis[MAX_PLAYERS], currVis[MAX_PLAYERS];
-//	SDWORD		maxSensor[MAX_PLAYERS];
 	SDWORD		visLevel;
-//	SDWORD		powerRatio;
 	BASE_OBJECT	*psViewer;
-//	BOOL		changed;
 	MESSAGE		*psMessage;
 	UDWORD		player, ally;
 
@@ -1143,53 +1036,6 @@ void visGetRayObjects(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
 		aObjDist[furthest] = SDWORD_MAX;
 	}
 }
-
-
-// calculate the power at a given distance from a sensor/ecm
-/*UDWORD visCalcPower(UDWORD x1,UDWORD y1, UDWORD x2,UDWORD y2, UDWORD power, UDWORD range)
-{
-	SDWORD	xdiff,ydiff;
-	SDWORD	distSq,rangeSq, powerBoost;
-	UDWORD	finalPower;
-//	SDWORD	dist, absx,absy;
-
-	xdiff = (SDWORD)x1 - (SDWORD)x2;
-	ydiff = (SDWORD)y1 - (SDWORD)y2;
-	distSq = xdiff*xdiff + ydiff*ydiff;
-	rangeSq = (SDWORD)(range*range);
-//	absx = abs(xdiff);
-//	absy = abs(ydiff);
-//	dist = absx > absy ? absx + absy/2 : absx/2 + absy;
-
-//	if (dist >= range)
-//	{
-//		finalPower = 0;
-//	}
-//	else
-//	{
-//		finalPower = power - power * dist / range;
-//	}
-
-	if (distSq > rangeSq)
-	{
-		finalPower = 0;
-	}
-	else
-	{
-		// increase the power -> will be bigger than power for some of range
-//		powerBoost = 3 * power / 2;
-		powerBoost = power;
-		finalPower = (UDWORD)(powerBoost - powerBoost * distSq / rangeSq);
-		// bring the power lower than max power
-		if (finalPower > power)
-		{
-			finalPower = power;
-		}
-	}
-
-	return finalPower;
-}*/
-
 
 ////////////////////////////////////////////////////////////////////
 // alexl's sensor range.

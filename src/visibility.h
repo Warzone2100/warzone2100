@@ -55,9 +55,6 @@ extern BOOL visGetBlockingWall(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget, STR
 
 extern void	processVisibility(BASE_OBJECT *psCurr);
 
-// calculate the power at a given distance from a sensor/ecm
-extern UDWORD visCalcPower(UDWORD x1,UDWORD y1, UDWORD x2,UDWORD y2, UDWORD power, UDWORD range);
-
 // update the visibility reduction
 extern void visUpdateLevel(void);
 
