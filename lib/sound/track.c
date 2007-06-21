@@ -56,9 +56,9 @@ BOOL sound_Init( SDWORD iMaxSameSamples )
 
 	g_iMaxSameSamples = iMaxSameSamples;
 	g_iCurTracks = 0;
-	if ( sound_InitLibrary() == FALSE )
+	if (!sound_InitLibrary())
 	{
-		debug( LOG_NEVER, "Cannot init sound library\n" );
+		debug(LOG_ERROR, "Cannot init sound library");
 		return FALSE;
 	}
 
@@ -145,16 +145,20 @@ BOOL sound_SetTrackVals
 //
 void sound_ReleaseTrack( TRACK *psTrack )
 {
-	SDWORD	iTrack;
+	TRACK** currTrack;
 
+	// This is here to save CPU wasted by the loop below;
+	// Calling this function with psTrack = NULL is perfectly legal,
+	// with or without this check
 	if (!psTrack)
 		return;
 
-	for ( iTrack = 0; iTrack < g_iCurTracks; iTrack++ )
+	// Run through the list of tracks and set the pointer to the track which is to be released to NULL
+	for (currTrack = &g_apTrack[0]; currTrack != &g_apTrack[g_iCurTracks]; ++currTrack)
 	{
-		if ( g_apTrack[iTrack] == psTrack )
+		if (*currTrack == psTrack)
 		{
-			g_apTrack[iTrack] = NULL;
+			*currTrack = NULL;
 		}
 	}
 
@@ -168,11 +172,11 @@ void sound_ReleaseTrack( TRACK *psTrack )
 //
 void sound_CheckAllUnloaded( void )
 {
-	SDWORD	iTrack;
+	TRACK** currTrack;
 
-	for ( iTrack = 0; iTrack < MAX_TRACKS; iTrack++ )
+	for (currTrack = &g_apTrack[0]; currTrack != &g_apTrack[MAX_TRACKS]; ++currTrack)
 	{
-		ASSERT( g_apTrack[iTrack] == NULL, "sound_CheckAllUnloaded: check audio.cfg for duplicate IDs\n" );
+		ASSERT(*currTrack == NULL, "sound_CheckAllUnloaded: a track is not unloaded yet (%s); check audio.cfg for duplicate IDs", (*currTrack)->pName);
 	}
 }
 

@@ -381,7 +381,7 @@ void audio_QueueTrackMinDelay( SDWORD iTrack, UDWORD iMinDelay )
 	{
 		return;
 	}
-	
+
 	// Set last finished tracktime to current time to prevent parallel playing of this track
 	sound_SetTrackTimeLastFinished( iTrack, sound_GetGameTime() );
 }
@@ -416,7 +416,7 @@ void audio_QueueTrackMinDelayPos( SDWORD iTrack, UDWORD iMinDelay, SDWORD iX, SD
 	{
 		return;
 	}
-	
+
 	psSample->x = iX;
 	psSample->y = iY;
 	psSample->z = iZ;
@@ -863,7 +863,7 @@ BOOL audio_PlayStream( const char szFileName[], SDWORD iVol, AUDIO_CALLBACK pUse
 		debug(LOG_ERROR, "audio_PlayStream: Out of memory");
 		return FALSE;
 	}
-	
+
 	memset( psSample, 0, sizeof(AUDIO_SAMPLE) );
 	psSample->pCallback = pUserCallback;
 	psSample->bFinishedPlaying = FALSE;
@@ -1035,15 +1035,6 @@ void audio_StopAll( void )
 	g_psSampleQueue = NULL;
 	g_bStopAll = FALSE;
 	debug( LOG_NEVER, "audio_StopAll done\n" );
-}
-
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
-void audio_CheckAllUnloaded( void )
-{
-	sound_CheckAllUnloaded();
 }
 
 //*
