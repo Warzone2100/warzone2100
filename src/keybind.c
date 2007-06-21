@@ -1621,12 +1621,14 @@ void	kf_MoveToLastMessagePos( void )
 {
 	SDWORD	iX, iY, iZ;
 
-	if ( audio_GetPreviousQueueTrackPos( &iX, &iY, &iZ ) )
+	if (!audio_GetPreviousQueueTrackPos( &iX, &iY, &iZ ))
 	{
+		return;
+	}
+
 // Should use requestRadarTrack but the camera gets jammed so use setViewpos - GJ
 //		requestRadarTrack( iX, iY );
-		setViewPos( iX>>TILE_SHIFT, iY>>TILE_SHIFT, TRUE );
-	}
+	setViewPos( map_coord(iX), map_coord(iY), TRUE );
 }
 // --------------------------------------------------------------------------
 /* Makes it snow if it's not snowing and stops it if it is */

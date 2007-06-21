@@ -134,24 +134,12 @@ BOOL audio_Shutdown( void )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-void audio_PlayPreviousQueueTrack( void )
-{
-	if ( g_sPreviousSample.iTrack != NO_SAMPLE )
-	{
-		audio_PlayTrack( g_sPreviousSample.iTrack );
-	}
-}
-
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
 BOOL audio_GetPreviousQueueTrackPos( SDWORD *iX, SDWORD *iY, SDWORD *iZ )
 {
-	if ( g_sPreviousSample.x == SAMPLE_COORD_INVALID || g_sPreviousSample.y == SAMPLE_COORD_INVALID
-	 || g_sPreviousSample.z == SAMPLE_COORD_INVALID )
+	if (g_sPreviousSample.x == SAMPLE_COORD_INVALID
+	 || g_sPreviousSample.y == SAMPLE_COORD_INVALID
+	 || g_sPreviousSample.z == SAMPLE_COORD_INVALID)
 	{
-		*iX = *iY = *iZ;
 		return FALSE;
 	}
 
@@ -640,21 +628,6 @@ BOOL audio_SetTrackVals
 }
 
 //*
-// =======================================================================================================================
-// =======================================================================================================================
-//
-void audio_ReleaseTrack( TRACK *psTrack )
-{
-	// return if audio not enabled
-	if ( g_bAudioEnabled == FALSE )
-	{
-		return;
-	}
-
-	sound_ReleaseTrack( psTrack );
-}
-
-//*
 //
 //
 // * audio_CheckSame3DTracksPlaying Reject samples if too many already playing in
@@ -1066,21 +1039,6 @@ SDWORD audio_GetTrackID( const char *fileName )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-SDWORD audio_GetAvailableID( void )
-{
-	// return if audio not enabled
-	if ( g_bAudioEnabled == FALSE )
-	{
-		return 0;
-	}
-
-	return sound_GetAvailableID();
-}
-
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
 SDWORD audio_Get3DVolume( void )
 {
 	return g_i3DVolume;
@@ -1111,33 +1069,3 @@ SDWORD audio_GetMixVol( SDWORD iVol )
 
 	return iMixVol;
 }
-
-//*
-//
-//
-// * audio_GetSampleMixVol iVol, audio_Get3DVolume and sound_GetTrackVolume all need
-// * to be scaled by AUDIO_VOL_RANGE
-//
-
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
-SDWORD audio_GetSampleMixVol( AUDIO_SAMPLE *psSample, SDWORD iVol, BOOL bScale3D )
-{
-	//~~~~~~~~~~~~
-	SDWORD	iMixVol;
-	//~~~~~~~~~~~~
-
-	iMixVol = iVol * sound_GetMaxVolume() / AUDIO_VOL_RANGE;
-	iMixVol = iMixVol * sound_GetTrackVolume( psSample->iTrack ) / AUDIO_VOL_RANGE;
-	if ( bScale3D )
-	{
-		iMixVol = iMixVol * audio_Get3DVolume() / AUDIO_VOL_RANGE;
-	}
-
-	return iMixVol;
-}
-
-//*
-//
