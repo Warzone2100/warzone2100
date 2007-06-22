@@ -16,7 +16,7 @@ PackageDesktop: share/applications/warzone2100.desktop
 AutopackageTarget: 1.2
 
 [BuildPrepare]
-prepareBuild --enable-data --disable-mp3
+prepareBuild --disable-mp3
 
 [BuildUnprepare]
 unprepareBuild
