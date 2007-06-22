@@ -275,6 +275,8 @@ Section "Uninstall"
 
   Delete "$INSTDIR\warzone2100.exe"
 
+  Delete "$INSTDIR\oalinst.exe"
+
   Delete "$INSTDIR\dbghelp.dll.license.txt"
   Delete "$INSTDIR\dbghelp.dll"
 
