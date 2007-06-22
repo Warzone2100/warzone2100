@@ -116,10 +116,6 @@ Section $(TEXT_SecBase) SecBase
   ; Main executable
   File "..\src\warzone2100.exe"
 
-  ; Required runtime libs
-  File "${LIBDIR}\OpenAL32.dll"
-  File "${LIBDIR}\wrap_oal.dll"
-
   ; Windows dbghelp library
   File "${LIBDIR}\dbghelp.dll.license.txt"
   File "${LIBDIR}\dbghelp.dll"
@@ -163,6 +159,21 @@ Section $(TEXT_SecBase) SecBase
 
 SectionEnd
 
+; Installs OpenAL runtime libraries, using Creative's installer
+; Found here: http://developer.creative.com/articles/article.asp?cat=1&sbcat=31&top=38&aid=46
+Section $(TEXT_SecOpenAL) SecOpenAL
+
+  SetOutPath "$TEMP"
+
+  File "${LIBDIR}\oalinst.exe"
+
+  ExecWait "$TEMP\oalinst.exe"
+
+  Delete "$TEMP\oalinst.exe"
+
+  SetOutPath "$INSTDIR"
+
+SectionEnd
 
 SectionGroup /e $(TEXT_SecMods) secMods
 
@@ -204,6 +215,9 @@ FunctionEnd
   LangString TEXT_SecBase ${LANG_ENGLISH} "Standard installation"
   LangString DESC_SecBase ${LANG_ENGLISH} "Standard installation."
 
+  LangString TEXT_SecOpenAL ${LANG_ENGLISH} "OpenAL libraries"
+  LangString DESC_SecOpenAL ${LANG_ENGLISH} "Required runtime libraries for OpenAL, an opensource/free Audio Library."
+
   LangString TEXT_SecMods ${LANG_ENGLISH} "Mods"
   LangString DESC_SecMods ${LANG_ENGLISH} "Various mods."
 
@@ -214,6 +228,9 @@ FunctionEnd
 
   LangString TEXT_SecBase ${LANG_GERMAN} "Standardinstallation"
   LangString DESC_SecBase ${LANG_GERMAN} "Standardinstallation."
+
+  LangString TEXT_SecOpenAL ${LANG_GERMAN} "OpenAL Bibliotheken"
+  LangString DESC_SecOpenAL ${LANG_GERMAN} "Benötigte Bibliotheken für OpenAL, eine opensource/free Audio Bibliothek."
 
   LangString TEXT_SecMods ${LANG_GERMAN} "Mods"
   LangString DESC_SecMods ${LANG_GERMAN} "Verschiedene Mods."
@@ -232,6 +249,8 @@ FunctionEnd
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
     !insertmacro MUI_DESCRIPTION_TEXT ${SecBase} $(DESC_SecBase)
 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenAL} $(DESC_SecOpenAL)
+
     !insertmacro MUI_DESCRIPTION_TEXT ${SecMods} $(DESC_SecMods)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecGrimMod} $(DESC_SecGrimMod)
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
@@ -246,9 +265,6 @@ Section "Uninstall"
   ;ADD YOUR OWN FILES HERE...
 
   Delete "$INSTDIR\warzone2100.exe"
-
-  Delete "$INSTDIR\OpenAL32.dll"
-  Delete "$INSTDIR\wrap_oal.dll"
 
   Delete "$INSTDIR\dbghelp.dll.license.txt"
   Delete "$INSTDIR\dbghelp.dll"
