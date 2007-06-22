@@ -79,7 +79,7 @@ VIAddVersionKey "ProductVersion"	"${VERSION}"
   !define MUI_FINISHPAGE_RUN_TEXT $(TEXT_RunWarzone)
   !define MUI_FINISHPAGE_RUN_FUNCTION "LaunchLink"
   !define MUI_FINISHPAGE_SHOWREADME_NOTCHECKED
-  !define MUI_FINISHPAGE_SHOWREADME $INSTDIR\Readme.txt
+  !define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\Readme.txt"
 
 ;--------------------------------
 ;Pages
@@ -137,8 +137,8 @@ Section $(TEXT_SecBase) SecBase
   File "..\src\warzone2100.exe"
 
   ; Windows dbghelp library
-  File "${LIBDIR}\dbghelp.dll.license.txt"
-  File "${LIBDIR}\dbghelp.dll"
+  File "${EXTDIR}\dbghelp.dll.license.txt"
+  File "${EXTDIR}\dbghelp.dll"
 
   ; Data files
   File "..\data\mp.wz"
@@ -179,21 +179,16 @@ Section $(TEXT_SecBase) SecBase
 
 SectionEnd
 
+
 ; Installs OpenAL runtime libraries, using Creative's installer
-; Found here: http://developer.creative.com/articles/article.asp?cat=1&sbcat=31&top=38&aid=46
 Section $(TEXT_SecOpenAL) SecOpenAL
 
-  SetOutPath "$TEMP"
+  File "${EXTDIR}\oalinst.exe"
 
-  File "${LIBDIR}\oalinst.exe"
-
-  ExecWait "$TEMP\oalinst.exe"
-
-  Delete "$TEMP\oalinst.exe"
-
-  SetOutPath "$INSTDIR"
+  ExecWait "$INSTDIR\oalinst.exe"
 
 SectionEnd
+
 
 SectionGroup /e $(TEXT_SecMods) secMods
 
@@ -236,7 +231,7 @@ FunctionEnd
   LangString DESC_SecBase ${LANG_ENGLISH} "Standard installation."
 
   LangString TEXT_SecOpenAL ${LANG_ENGLISH} "OpenAL libraries"
-  LangString DESC_SecOpenAL ${LANG_ENGLISH} "Required runtime libraries for OpenAL, an opensource/free Audio Library."
+  LangString DESC_SecOpenAL ${LANG_ENGLISH} "Runtime libraries for OpenAL, a free Audio interface. Implementation by Creative Labs."
 
   LangString TEXT_SecMods ${LANG_ENGLISH} "Mods"
   LangString DESC_SecMods ${LANG_ENGLISH} "Various mods."
@@ -264,7 +259,7 @@ FunctionEnd
   LangString DESC_SecBase ${LANG_GERMAN} "Standardinstallation."
 
   LangString TEXT_SecOpenAL ${LANG_GERMAN} "OpenAL Bibliotheken"
-  LangString DESC_SecOpenAL ${LANG_GERMAN} "Benötigte Bibliotheken für OpenAL, eine opensource/freie Audio Bibliothek."
+  LangString DESC_SecOpenAL ${LANG_GERMAN} "Bibliotheken für OpenAL, ein freies Audio Interface. Implementation von Creative Labs."
 
   LangString TEXT_SecMods ${LANG_GERMAN} "Mods"
   LangString DESC_SecMods ${LANG_GERMAN} "Verschiedene Mods."
@@ -301,6 +296,8 @@ Section "Uninstall"
 
   Delete "$INSTDIR\warzone2100.exe"
 
+  Delete "$INSTDIR\oalinst.exe"
+
   Delete "$INSTDIR\dbghelp.dll.license.txt"
   Delete "$INSTDIR\dbghelp.dll"
 
@@ -320,13 +317,12 @@ Section "Uninstall"
   RMDir "$INSTDIR\mods"
   RMDir "$INSTDIR"
 
-  !insertmacro MUI_STARTMENU_GETFOLDER Application $MUI_TEMP
-
-  Delete "$SMPROGRAMS\$MUI_TEMP\Uninstall.lnk"
-  Delete "$SMPROGRAMS\$MUI_TEMP\Warzone 2100.lnk"
-  Delete "$SMPROGRAMS\$MUI_TEMP\Warzone 2100 - Grim's GFX.lnk"
+  Delete "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk"
+  Delete "$SMPROGRAMS\$STARTMENU_FOLDER\Warzone 2100.lnk"
+  Delete "$SMPROGRAMS\$STARTMENU_FOLDER\Warzone 2100 - Grim's GFX.lnk"
 
   ;Delete empty start menu parent diretories
+  !insertmacro MUI_STARTMENU_GETFOLDER Application $MUI_TEMP
   StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP"
 
   startMenuDeleteLoop:
