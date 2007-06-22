@@ -65,7 +65,7 @@ VIAddVersionKey "ProductVersion"	"${VERSION}"
   !define MUI_FINISHPAGE_RUN_TEXT $(TEXT_RunWarzone)
   !define MUI_FINISHPAGE_RUN_FUNCTION "LaunchLink"
   !define MUI_FINISHPAGE_SHOWREADME_NOTCHECKED
-  !define MUI_FINISHPAGE_SHOWREADME $INSTDIR\Readme.txt
+  !define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\Readme.txt"
 
 ;--------------------------------
 ;Pages
@@ -121,15 +121,9 @@ Section $(TEXT_SecBase) SecBase
 ;  File "..\src\warzone2100.exe"
   !insertmacro VPatchFile "warzone2100.exe.vpatch" "$INSTDIR\warzone2100.exe" "$INSTDIR\warzone2100.exe.tmp"
 
-  ; Required runtime libs
-;  File "${LIBDIR}\OpenAL32.dll"
-;  File "${LIBDIR}\wrap_oal.dll"
-;  !insertmacro VPatchFile "openal32.dll.vpatch" "$INSTDIR\OpenAL32.dll" "$INSTDIR\OpenAL32.dll.tmp"
-;  !insertmacro VPatchFile "wrap_oal.dll.vpatch" "$INSTDIR\wrap_oal.dll" "$INSTDIR\wrap_oal.dll.tmp"
-
   ; Windows dbghelp library
-  File "${LIBDIR}\dbghelp.dll.license.txt"
-  File "${LIBDIR}\dbghelp.dll"
+  File "${EXTDIR}\dbghelp.dll.license.txt"
+  File "${EXTDIR}\dbghelp.dll"
 ;  !insertmacro VPatchFile "dbghelp.dll.license.txt.vpatch" "$INSTDIR\dbghelp.dll.license.txt" "$INSTDIR\dbghelp.dll.license.txt.tmp"
 ;  !insertmacro VPatchFile "dbghelp.dll.vpatch" "$INSTDIR\dbghelp.dll" "$INSTDIR\dbghelp.dll.tmp"
 
@@ -179,6 +173,16 @@ Section $(TEXT_SecBase) SecBase
 SectionEnd
 
 
+; Installs OpenAL runtime libraries, using Creative's installer
+Section $(TEXT_SecOpenAL) SecOpenAL
+
+  File "${EXTDIR}\oalinst.exe"
+
+  ExecWait "$INSTDIR\oalinst.exe"
+
+SectionEnd
+
+
 SectionGroup /e $(TEXT_SecMods) secMods
 
 Section $(TEXT_SecGrimMod) SecGrimMod
@@ -186,7 +190,7 @@ Section $(TEXT_SecGrimMod) SecGrimMod
   SetOutPath "$INSTDIR\mods\global"
 
 ;  File "..\data\grim.wz"
-  !insertmacro VPatchFile "grim.wz.vpatch" "$INSTDIR\grim.wz" "$INSTDIR\grim.wz.tmp"
+;  !insertmacro VPatchFile "grim.wz.vpatch" "$INSTDIR\grim.wz" "$INSTDIR\grim.wz.tmp"
 
   SetOutPath "$INSTDIR"
 
@@ -220,6 +224,9 @@ FunctionEnd
   LangString TEXT_SecBase ${LANG_ENGLISH} "Standard installation"
   LangString DESC_SecBase ${LANG_ENGLISH} "Standard installation."
 
+  LangString TEXT_SecOpenAL ${LANG_ENGLISH} "OpenAL libraries"
+  LangString DESC_SecOpenAL ${LANG_ENGLISH} "Runtime libraries for OpenAL, a free Audio interface. Implementation by Creative Labs."
+
   LangString TEXT_SecMods ${LANG_ENGLISH} "Mods"
   LangString DESC_SecMods ${LANG_ENGLISH} "Various mods."
 
@@ -230,6 +237,9 @@ FunctionEnd
 
   LangString TEXT_SecBase ${LANG_GERMAN} "Standardinstallation"
   LangString DESC_SecBase ${LANG_GERMAN} "Standardinstallation."
+
+  LangString TEXT_SecOpenAL ${LANG_GERMAN} "OpenAL Bibliotheken"
+  LangString DESC_SecOpenAL ${LANG_GERMAN} "Bibliotheken für OpenAL, ein freies Audio Interface. Implementation von Creative Labs."
 
   LangString TEXT_SecMods ${LANG_GERMAN} "Mods"
   LangString DESC_SecMods ${LANG_GERMAN} "Verschiedene Mods."
@@ -248,6 +258,8 @@ FunctionEnd
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
     !insertmacro MUI_DESCRIPTION_TEXT ${SecBase} $(DESC_SecBase)
 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenAL} $(DESC_SecOpenAL)
+
     !insertmacro MUI_DESCRIPTION_TEXT ${SecMods} $(DESC_SecMods)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecGrimMod} $(DESC_SecGrimMod)
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
@@ -262,9 +274,6 @@ Section "Uninstall"
   ;ADD YOUR OWN FILES HERE...
 
   Delete "$INSTDIR\warzone2100.exe"
-
-  Delete "$INSTDIR\OpenAL32.dll"
-  Delete "$INSTDIR\wrap_oal.dll"
 
   Delete "$INSTDIR\dbghelp.dll.license.txt"
   Delete "$INSTDIR\dbghelp.dll"
@@ -285,13 +294,12 @@ Section "Uninstall"
   RMDir "$INSTDIR\mods"
   RMDir "$INSTDIR"
 
-  !insertmacro MUI_STARTMENU_GETFOLDER Application $MUI_TEMP
-
-  Delete "$SMPROGRAMS\$MUI_TEMP\Uninstall.lnk"
-  Delete "$SMPROGRAMS\$MUI_TEMP\Warzone 2100.lnk"
-  Delete "$SMPROGRAMS\$MUI_TEMP\Warzone 2100 - Grim's GFX.lnk"
+  Delete "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk"
+  Delete "$SMPROGRAMS\$STARTMENU_FOLDER\Warzone 2100.lnk"
+  Delete "$SMPROGRAMS\$STARTMENU_FOLDER\Warzone 2100 - Grim's GFX.lnk"
 
   ;Delete empty start menu parent diretories
+  !insertmacro MUI_STARTMENU_GETFOLDER Application $MUI_TEMP
   StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP"
 
   startMenuDeleteLoop:

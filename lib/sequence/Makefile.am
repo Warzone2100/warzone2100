@@ -1,5 +1,3 @@
-AM_CPPFLAGS = -I$(top_srcdir)
-
 noinst_LIBRARIES = libsequence.a
 noinst_HEADERS = adpcm.h rpl_reader.h sequence.h streamer.h
 

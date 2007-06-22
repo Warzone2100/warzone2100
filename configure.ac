@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.56)
-AC_INIT([Warzone 2100],[2.0.6],[http://wz2100.net/],[warzone2100])
+AC_INIT([Warzone 2100],[2.0.7],[http://wz2100.net/],[warzone2100])
 AM_INIT_AUTOMAKE([1.8])
 
 AC_CONFIG_MACRO_DIR([m4])
@@ -80,8 +80,8 @@ AC_ARG_WITH(makensis,
 	AS_HELP_STRING([--with-makensis],[Path to makensis]))
 
 
-AC_ARG_WITH(installer_libdir,
-	AS_HELP_STRING([--with-installer-libdir],[Path to libraries for NSIS script]))
+AC_ARG_WITH(installer_extdir,
+	AS_HELP_STRING([--with-installer-extdir],[Path to external data for NSIS script]))
 
 
 AC_ARG_WITH(installer_version,
@@ -106,12 +106,12 @@ if test "x$enable_installer" = "xyes" ; then
 		AC_MSG_RESULT([$with_installer_version])
 		AC_SUBST(INSTALLER_VERSION, $with_installer_version)
 	fi
-	if test "x$with_installer_libdir" = "x" ; then
-		AC_MSG_ERROR([installer libdir not found])
+	if test "x$with_installer_extdir" = "x" ; then
+		AC_MSG_ERROR([installer external dir not found])
 	else
-		AC_MSG_CHECKING([for installer libdir])
-		AC_MSG_RESULT([$with_installer_libdir])
-		AC_SUBST(INSTALLER_LIBDIR, $with_installer_libdir)
+		AC_MSG_CHECKING([for installer extdir])
+		AC_MSG_RESULT([$with_installer_extdir])
+		AC_SUBST(INSTALLER_EXTDIR, $with_installer_extdir)
 	fi
 fi
 
@@ -147,13 +147,11 @@ AC_CHECK_LIB(m, pow)
 AC_CHECK_LIB(z, gzgets, , AC_MSG_ERROR([zlib not found.]))
 AC_CHECK_HEADER(zlib.h, , AC_MSG_ERROR([zlib header not found.]))
 
-
 # Look for image libs
 AC_CHECK_LIB(jpeg, main, , AC_MSG_ERROR([libjpeg not found.]))
 AC_CHECK_HEADER(jpeglib.h, , AC_MSG_ERROR([jpeg header not found.]))
 AC_CHECK_LIB(png, main, , AC_MSG_ERROR([libpng not found.]))
 AC_CHECK_HEADER(png.h, , AC_MSG_ERROR([png header not found.]))
-
 
 # Look for PhysicsFS
 AC_CHECK_LIB(physfs, PHYSFS_init, , AC_MSG_ERROR([PhysicsFS not found]))
@@ -314,6 +312,7 @@ LIBS="${LIBS} ${WZ_LIBS} ${WIN32_LIBS}"
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_FILES([Makefile
 		data/Makefile
+		icons/Makefile
 		nsis/Makefile
 		win32/Makefile
 		lib/Makefile

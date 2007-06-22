@@ -10,15 +10,8 @@ all: $(SETUPFILE)
 endif
 endif
 
-# This is necessary to make sure "/Dvar=val" is used on Windows systems and -Dvar="val" on GNU/Linux buildsystems.
-# Which is a direct result from inconsistencies in commandline parsing between the Windows and GNU/Linux versions.
-ifeq ($(strip $(PLATFORM)),windows)
 $(SETUPFILE): warzone2100.nsi ../src/warzone2100.exe ../data/warzone.wz ../data/mp.wz ../data/grim.wz
-	$(MAKENSIS) "/DVERSION=$(VERSION)" "/DVERSIONNUM=$(INSTALLER_VERSION)" "/DLIBDIR=$(DEVDIR)\lib" $<
-else
-$(SETUPFILE): warzone2100.nsi ../src/warzone2100.exe ../data/warzone.wz ../data/mp.wz ../data/grim.wz
-	$(MAKENSIS) -DVERSION="$(VERSION)" -DVERSIONNUM="$(INSTALLER_VERSION)" -DLIBDIR="$(DEVDIR)\lib" $<
-endif
+	$(MAKENSIS) -DVERSION="$(VERSION)" -DVERSIONNUM="$(INSTALLER_VERSION)" -DEXTDIR="$(DEVDIR)\bin" $<
 
 clean:
 	$(RM) $(SETUPFILE)

@@ -1,5 +1,3 @@
-AM_CPPFLAGS = -I$(top_srcdir)
-
 noinst_LIBRARIES = libsound.a
 noinst_HEADERS = aud.h audio.h cdaudio.h mixer.h track.h tracklib.h
 

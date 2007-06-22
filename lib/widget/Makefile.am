@@ -1,5 +1,3 @@
-AM_CPPFLAGS = -I$(top_srcdir)
-
 noinst_LIBRARIES = libwidget.a
 noinst_HEADERS = bar.h button.h editbox.h form.h label.h scrap.h slider.h tip.h \
 	widgbase.h widget.h widgint.h

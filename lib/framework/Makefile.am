@@ -6,7 +6,6 @@
 
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
-AM_CPPFLAGS = -I$(top_srcdir)
 BUILT_SOURCES = resource_parser.tab.h strres_parser.tab.h
 CLEANFILES = resource_parser.tab.h strres_parser.tab.h
 

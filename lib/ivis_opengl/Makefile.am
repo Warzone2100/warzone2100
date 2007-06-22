@@ -1,5 +1,3 @@
-AM_CPPFLAGS = -I$(top_srcdir)
-
 noinst_LIBRARIES = libivis_opengl.a
 noinst_HEADERS = ivis02.h piematrix.h pietexture.h screen.h
 
