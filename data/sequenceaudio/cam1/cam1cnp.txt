@@ -2,4 +2,4 @@
 //x	y		start	end	Text	
 
 20	432		150	325	"Your attacks upon us will not go unpunished."
-0	0		150	325	"Tū Paradigmatorem Novum contrā venis"
+0	0		150	325	"You are in contravention of the New Paradigm."
