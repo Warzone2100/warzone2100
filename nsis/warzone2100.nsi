@@ -101,12 +101,14 @@ VIAddVersionKey "ProductVersion"	"${VERSION}"
 ;Languages
 
   !insertmacro MUI_LANGUAGE "English" # first language is the default language
+  !insertmacro MUI_LANGUAGE "Dutch"
   !insertmacro MUI_LANGUAGE "German"
 
 ;--------------------------------
 ;License Language String
 
   LicenseLangString MUILicense ${LANG_ENGLISH} "..\COPYING"
+  LicenseLangString MUILicense ${LANG_DUTCH} "..\COPYING"
   LicenseLangString MUILicense ${LANG_GERMAN} "..\COPYING"
 
 ;--------------------------------
@@ -244,6 +246,20 @@ FunctionEnd
 
 
 
+  LangString TEXT_SecBase ${LANG_DUTCH} "Standaard installatie"
+  LangString DESC_SecBase ${LANG_DUTCH} "Standaard installatie."
+
+  LangString TEXT_SecOpenAL ${LANG_DUTCH} "OpenAL bibliotheken"
+  LangString DESC_SecOpenAL ${LANG_DUTCH} "Vereiste bibliotheken voor OpenAL, een opensource/vrije Audio Bibliotheek."
+
+  LangString TEXT_SecMods ${LANG_DUTCH} "Mods"
+  LangString DESC_SecMods ${LANG_DUTCH} "Verschillende mods."
+
+  LangString TEXT_SecGrimMod ${LANG_DUTCH} "Grim's grafische-update"
+  LangString DESC_SecGrimMod ${LANG_DUTCH} "Grim's grafische-update. Bevat meer gedetaïleerde textures voor campaign 1 en extra texture- en model-updates. Copyright (C) 2005-2007 Grim Moroe, gebruik is alleen toegestaan voor Warzone 2100."
+
+
+
   LangString TEXT_SecBase ${LANG_GERMAN} "Standardinstallation"
   LangString DESC_SecBase ${LANG_GERMAN} "Standardinstallation."
 
@@ -259,6 +275,7 @@ FunctionEnd
 
 
   LangString TEXT_RunWarzone ${LANG_ENGLISH} "Run Warzone 2100"
+  LangString TEXT_RunWarzone ${LANG_DUTCH} "Start Warzone 2100"
   LangString TEXT_RunWarzone ${LANG_GERMAN} "Starte Warzone 2100"
 
 
