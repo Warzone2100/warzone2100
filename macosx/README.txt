@@ -15,5 +15,8 @@ that begins with 'fullscreen=' and change its value between '0' and '1'.
 
 This program is distributed as a self-contained application bundle.
 It should run without requiring any additional software on MacOS X
-10.3 "Panther" and 10.4 "Tiger" on the PowerPC platform.
+10.4 "Tiger" on either PowerPC or Intel systems.
+
+Please contact the Warzone Resurrection at http://wz2100.net/ if
+you have any problems with this software.
 
