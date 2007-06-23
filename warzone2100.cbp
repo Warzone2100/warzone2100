@@ -34,33 +34,24 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option='-DVERSION=\&quot;TRUNK\&quot;' />
-			<Add option='-DLOCALEDIR=\&quot;\&quot;' />
-			<Add option='-DPACKAGE=\&quot;warzone2100\&quot;' />
-			<Add option="-DWIN32" />
-			<Add option="-DYY_STATIC" />
+			<Add option='-DVERSION=\\&quot;TRUNK\\&quot;' />
+			<Add option='-DLOCALEDIR=\\&quot;\\&quot;' />
+			<Add option='-DPACKAGE=\\&quot;warzone2100\\&quot;' />
 			<Add directory="." />
-			<Add directory="C:\devpkg\include" />
 		</Compiler>
 		<Linker>
-			<Add library="mingw32" />
-			<Add library="SDLmain" />
 			<Add library="physfs" />
 			<Add library="png" />
-			<Add library="z" />
+			<Add library="m" />
 			<Add library="SDL" />
-			<Add library="gdi32" />
+			<Add library="pthread" />
 			<Add library="SDL_net" />
-			<Add library="opengl32" />
-			<Add library="glu32" />
-			<Add library="openal32" />
+			<Add library="GL" />
+			<Add library="GLU" />
+			<Add library="openal" />
 			<Add library="vorbisfile" />
 			<Add library="vorbis" />
 			<Add library="ogg" />
-			<Add library="dbghelp" />
-			<Add library="winmm" />
-			<Add library="wsock32" />
-			<Add directory="C:\devpkg\lib" />
 		</Linker>
 		<Unit filename="lib/framework/SDL_framerate.c">
 			<Option compilerVar="CC" />
