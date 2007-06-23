@@ -1301,16 +1301,32 @@ BOOL recvTextMessageAI(NETMSG *pMsg)
 BOOL sendTemplate(DROID_TEMPLATE *pTempl)
 {
 	NETMSG m;
-	/* FIXME: This is dodgy, as we rely on the last entry in the struct being a pointer,
-	 * and the only pointer. */
-	UDWORD tsize = sizeof(DROID_TEMPLATE) - sizeof(pTempl);
+	UDWORD count = 0, i;
 
 	ASSERT(pTempl != NULL, "sendTemplate: Old Pumpkin bug");
 	if (!pTempl) return TRUE; /* hack */
 
-	m.body[0] = (UBYTE)selectedPlayer;						//player to attach template to
-	memcpy(&(m.body[1]),pTempl, tsize);			//the template itself
-	m.size = (UWORD)(tsize + 1);
+	// I hate adding more of this hideous code, but it is necessary for now - Per
+	NetAddUint8(m, count, selectedPlayer);			count += 1;
+	NetAddUint32(m, count, pTempl->ref);			count += 4;
+	NetAdd(m, count, pTempl->aName);			count += DROID_MAXNAME;
+	NetAddUint8(m, count, pTempl->NameVersion);		count += 1;
+	for (i = 0; i < DROID_MAXCOMP; i++)
+	{
+		// signed, but sent as a bunch of bits...
+		NetAddUint32(m, count, pTempl->asParts[i]);	count += 4;
+	}
+	NetAddUint32(m, count, pTempl->buildPoints);		count += 4;
+	NetAddUint32(m, count, pTempl->powerPoints);		count += 4;
+	NetAddUint32(m, count, pTempl->storeCount);		count += 4;
+	NetAddUint32(m, count, pTempl->numWeaps);		count += 4;
+	for (i = 0; i < DROID_MAXWEAPS; i++)
+	{
+		NetAddUint32(m, count, pTempl->asWeaps[i]);	count += 4;
+	}
+	NetAddUint32(m, count, pTempl->droidType);		count += 4;
+	NetAddUint32(m, count, pTempl->multiPlayerID);		count += 4;
+	
 	m.type = NET_TEMPLATE;
 	return(  NETbcast(&m,FALSE)	);
 }
@@ -1320,16 +1336,31 @@ BOOL recvTemplate(NETMSG * m)
 {
 	UBYTE			player;
 	DROID_TEMPLATE	*psTempl;
-	DROID_TEMPLATE	t;
-	UDWORD tsize = sizeof(DROID_TEMPLATE) - sizeof(psTempl); // see comment above in send function
+	DROID_TEMPLATE	t, *pT = &t;
+	UDWORD count, i;
 
-	player = (UBYTE)(m->body[0]);
-
+	NetGetUint8(m, count, player);				count += 1;
 	ASSERT( player < MAX_PLAYERS, "recvtemplate: invalid player size: %d", player );
-	ASSERT(m->size == tsize + 1, "recvtemplate: invalid size template packet: got %d, should be %d", 
-	       (int)m->size, (int)tsize + 1);
 
-	memcpy(&t, &(m->body[1]), tsize);
+	NetGetUint32(m, count, pT->ref);			count += 4;
+	NetGet(m, count, pT->aName);				count += DROID_MAXNAME;
+	NetGetUint8(m, count, pT->NameVersion);			count += 1;
+	for (i = 0; i < DROID_MAXCOMP; i++)
+	{
+		// signed, but sent as a bunch of bits...
+		NetGetUint32(m, count, pT->asParts[i]);		count += 4;
+	}
+	NetGetUint32(m, count, pT->buildPoints);		count += 4;
+	NetGetUint32(m, count, pT->powerPoints);		count += 4;
+	NetGetUint32(m, count, pT->storeCount);			count += 4;
+	NetGetUint32(m, count, pT->numWeaps);			count += 4;
+	for (i = 0; i < DROID_MAXWEAPS; i++)
+	{
+		NetGetUint32(m, count, pT->asWeaps[i]);		count += 4;
+	}
+	NetGetUint32(m, count, pT->droidType);			count += 4;
+	NetGetUint32(m, count, pT->multiPlayerID);		count += 4;
+
 	t.psNext = NULL;
 
 	psTempl = IdToTemplate(t.multiPlayerID,player);
