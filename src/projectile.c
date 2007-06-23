@@ -377,18 +377,26 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	psObj->born			= gameTime;
 	psObj->player		= (UBYTE)player;
 	psObj->bVisible		= FALSE;
-	psObj->airTarget	= (UBYTE)( ( psTarget != NULL &&
-				psTarget->type == OBJ_DROID &&
-				vtolDroid((DROID*)psTarget) ) ||
-			( psTarget == NULL &&
-				(SDWORD)tarZ > map_Height(tarX,tarY) ) );
+	psObj->airTarget	= FALSE;
+	psObj->psSource		= NULL;
+	psObj->psDamaged	= NULL;
+
+	/* If target is a VTOL or higher than ground, it is an air target. */
+	if ((psTarget != NULL && psTarget->type == OBJ_DROID && vtolDroid((DROID*)psTarget)) 
+	    || (psTarget == NULL && (SDWORD)tarZ > map_Height(tarX,tarY)))
+	{
+		psObj->airTarget = TRUE;
+	}
 
 	//Watermelon:use the source of the source of psObj :) (psAttacker is a projectile)
-	if (bPenetrate)
+	if (bPenetrate && psAttacker)
 	{
-		psObj->psSource = ((PROJ_OBJECT *)psAttacker)->psSource;
-		psObj->psDamaged = ((PROJ_OBJECT *)psAttacker)->psDest;
-		((PROJ_OBJECT *)psAttacker)->state = PROJ_IMPACT;
+		PROJ_OBJECT *psProj = (PROJ_OBJECT *)psAttacker;
+
+		ASSERT(psProj->type == OBJ_BULLET, "Penetrating but not projectile?");
+		psObj->psSource = psProj->psSource;
+		psObj->psDamaged = psProj->psDest;
+		psProj->state = PROJ_IMPACT;
 	}
 	else
 	{
