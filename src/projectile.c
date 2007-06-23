@@ -141,7 +141,7 @@ static void	proj_PostImpactFunc( PROJ_OBJECT *psObj );
 static void	proj_checkBurnDamage( BASE_OBJECT *apsList, PROJ_OBJECT *psProj,
 									FIRE_BOX *pFireBox );
 
-static BOOL objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass,int angle);
+static SDWORD objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass,int angle);
 
 /***************************************************************************/
 BOOL gfxVisible(PROJ_OBJECT *psObj)
@@ -266,8 +266,8 @@ proj_GetNext( void )
 
 /***************************************************************************/
 
-// update the kills after a target is destroyed
-static void proj_UpdateKills(PROJ_OBJECT *psObj)
+// update the kills after a target is damaged/destroyed
+static void proj_UpdateKills(PROJ_OBJECT *psObj, SDWORD percentDamage)
 {
 	DROID	        *psDroid;
 	BASE_OBJECT     *psSensor;
@@ -280,22 +280,26 @@ static void proj_UpdateKills(PROJ_OBJECT *psObj)
 		return;
 	}
 
-	if(bMultiPlayer)
+	// If percentDamage is negative then the target was killed
+	if(bMultiPlayer && percentDamage < 0)
 	{
 		sendDestroyExtra(psObj->psDest,psObj->psSource);
 		updateMultiStatsKills(psObj->psDest,psObj->psSource->player);
 	}
 
+	// Since we are no longer interested if it was killed or not, abs it
+	percentDamage = abs(percentDamage);
+
 	if(psObj->psSource->type == OBJ_DROID)			/* update droid kills */
 	{
 		psDroid = (DROID*)psObj->psSource;
-		psDroid->numKills++;
-		cmdDroidUpdateKills(psDroid);
+		psDroid->numKills += percentDamage;
+		cmdDroidUpdateKills(psDroid, percentDamage);
 		if (orderStateObj(psDroid, DORDER_FIRESUPPORT, &psSensor))
 		{
             if (psSensor->type == OBJ_DROID)
             {
-			    ((DROID *)psSensor)->numKills++;
+			    ((DROID *)psSensor)->numKills += percentDamage;
             }
 		}
 	}
@@ -308,7 +312,7 @@ static void proj_UpdateKills(PROJ_OBJECT *psObj)
 			if ((psDroid->action == DACTION_ATTACK) &&
 				(psDroid->psActionTarget[0] == psObj->psDest))
 			{
-				psDroid->numKills ++;
+				psDroid->numKills += percentDamage;
 			}
 		}
 	}
@@ -1191,7 +1195,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 	UDWORD			dice;
 	SDWORD			tarX0,tarY0, tarX1,tarY1;
 	SDWORD			radSquared, xDiff,yDiff;
-	BOOL			bKilled;//,bMultiTemp;
+	SDWORD			percentDamage;
 	Vector3i position,scatter;
 	UDWORD			damage;	//optimisation - were all being calculated twice on PC
 	//Watermelon: tarZ0,tarZ1,zDiff for AA AOE weapons;
@@ -1263,8 +1267,6 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 			}
 		}
 	}
-	/* Nothings been killed */
-	bKilled = FALSE;
 
 	if ( psObj->psDest == NULL )
 	{
@@ -1435,13 +1437,11 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 				{
 					impact_angle = 0;
 				}
-	  			bKilled = objectDamage(psObj->psDest,damage , psStats->weaponClass,psStats->weaponSubClass, impact_angle);
+	  			percentDamage = objectDamage(psObj->psDest,damage , psStats->weaponClass,psStats->weaponSubClass, impact_angle);
 
-				if(bKilled)
-				{
-					proj_UpdateKills(psObj);
-				}
-				else
+				proj_UpdateKills(psObj, percentDamage);
+				
+				if (percentDamage >= 0)	// So long as the target wasn't killed
 				{
 					psObj->psDamaged = psObj->psDest;
 				}
@@ -1488,13 +1488,11 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 				{
 					impact_angle = HIT_SIDE_FRONT;
 				}
-				bKilled = objectDamage(psObj->psDest, damage, psStats->weaponClass,psStats->weaponSubClass, impact_angle);
+				percentDamage = objectDamage(psObj->psDest, damage, psStats->weaponClass,psStats->weaponSubClass, impact_angle);
 
-				if(bKilled)
-				{
-					proj_UpdateKills(psObj);
-				}
-				else
+				proj_UpdateKills(psObj, percentDamage);
+				
+				if (percentDamage >= 0)
 				{
 					psObj->psDamaged = psObj->psDest;
 				}
@@ -1631,14 +1629,11 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 										impact_angle -= 360;
 									}
 								}
-								bKilled = droidDamage(psCurrD, damage, psStats->weaponClass,psStats->weaponSubClass, impact_angle);
+								percentDamage = droidDamage(psCurrD, damage, psStats->weaponClass,psStats->weaponSubClass, impact_angle);
 
 								turnOffMultiMsg(FALSE);	// multiplay msgs back on.
 
-								if(bKilled)
-								{
-									proj_UpdateKills(psObj);
-								}
+								proj_UpdateKills(psObj, percentDamage);
 							}
 						}
 					}
@@ -1713,14 +1708,11 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 										impact_angle -= 360;
 									}
 								}
-								bKilled = droidDamage(psCurrD, damage, psStats->weaponClass,psStats->weaponSubClass, impact_angle);
+								percentDamage = droidDamage(psCurrD, damage, psStats->weaponClass,psStats->weaponSubClass, impact_angle);
 
 								turnOffMultiMsg(FALSE);	// multiplay msgs back on.
 
-								if(bKilled)
-								{
-									proj_UpdateKills(psObj);
-								}
+								proj_UpdateKills(psObj, percentDamage);
 							}
 						}
 					}
@@ -1757,13 +1749,10 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 									}
 								}
 
-								bKilled = structureDamage(psCurrS, damage,
+								percentDamage = structureDamage(psCurrS, damage,
 									psStats->weaponClass, psStats->weaponSubClass);
 
-								if(bKilled)
-								{
-									proj_UpdateKills(psObj);
-								}
+								proj_UpdateKills(psObj, percentDamage);
 							}
 						}
 					}
@@ -1780,13 +1769,10 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 							}
 						}
 
-				  		bKilled = structureDamage(psCurrS, damage,
+				  		percentDamage = structureDamage(psCurrS, damage,
 							psStats->weaponClass, psStats->weaponSubClass);
 
-				   		if(bKilled)
-						{
-				   			proj_UpdateKills(psObj);
-						}
+				   		proj_UpdateKills(psObj, percentDamage);
 					}
 				}
 			}
@@ -1820,13 +1806,11 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 						debug(LOG_NEVER, "Damage to object %d, player %d\n",
 								psCurrF->id, psCurrF->player);
 
-						bKilled = featureDamage(psCurrF, calcDamage(weaponRadDamage(
+						percentDamage = featureDamage(psCurrF, calcDamage(weaponRadDamage(
 							psStats, psObj->player), psStats->weaponEffect,
 							(BASE_OBJECT *)psCurrF), psStats->weaponSubClass);
-						if(bKilled)
-						{
-							proj_UpdateKills(psObj);
-						}
+						
+						proj_UpdateKills(psObj, percentDamage);
 					}
 				}
 			}
@@ -1958,6 +1942,7 @@ proj_checkBurnDamage( BASE_OBJECT *apsList, PROJ_OBJECT *psProj,
 	WEAPON_STATS	*psStats;
 	UDWORD			damageSoFar;
 	SDWORD			damageToDo;
+	SDWORD			percentDamage;
 	BOOL			bKilled;
 //	BOOL			bMultiTemp;
 
@@ -2017,14 +2002,11 @@ proj_checkBurnDamage( BASE_OBJECT *apsList, PROJ_OBJECT *psProj,
 								damageToDo, psCurr->id, psCurr->player);
 
 						//Watermelon:just assume the burn damage is from FRONT
-	  					bKilled = objectDamage(psCurr, damageToDo, psStats->weaponClass,psStats->weaponSubClass, 0);
+	  					percentDamage = objectDamage(psCurr, damageToDo, psStats->weaponClass,psStats->weaponSubClass, 0);
 
 						psCurr->burnDamage += damageToDo;
 
-						if(bKilled)
-						{
-							proj_UpdateKills(psProj);
-						}
+						proj_UpdateKills(psProj, percentDamage);
 					}
 					/* The damage could be negative if the object
 					   is being burn't by another fire
@@ -2201,8 +2183,21 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
 	return damage;
 }
 
-
-BOOL objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, int angle)
+/*
+ * A quick explanation about hown this function works:
+ *  - It returns an integer between 0 and 100 (see note for exceptions);
+ *  - this represents the amount of damage inflicted on the droid by the weapon
+ *    in relation to its original health.
+ *  - e.g. If 100 points of (*actual*) damage were done to a unit who started
+ *    off (when first produced) with 400 points then 25 would be returned.
+ *  - If the actual damage done to a unit is greater than its remaining points
+ *    then the actual damage is clipped: so if we did 200 actual points of
+ *    damage to a cyborg with 150 points left the actual damage would be taken
+ *    as 150.
+ *  - Should sufficient damage be done to destroy/kill a unit then the value is
+ *    multiplied by -1, resulting in a negative number. 
+ */
+SDWORD objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, int angle)
 {
 	switch (psObj->type)
 	{
@@ -2218,7 +2213,8 @@ BOOL objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD w
 		default:
 			ASSERT(!"unknown object type", "objectDamage - unknown object type");
 	}
-	return FALSE;
+
+	return 0;
 }
 
 

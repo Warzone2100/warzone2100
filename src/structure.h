@@ -108,7 +108,7 @@ extern BOOL loadStructureStrengthModifiers(const char *pStrengthModData, UDWORD 
 
 extern BOOL	structureStatsShutDown(void);
 
-extern BOOL structureDamage(STRUCTURE *psStructure, UDWORD damage,
+extern SDWORD structureDamage(STRUCTURE *psStructure, UDWORD damage,
                             UDWORD weaponClass, UDWORD weaponSubClass);
 
 /* Set the type of droid for a factory to build */

@@ -1319,11 +1319,13 @@ BOOL structureStatsShutDown(void)
  * \param weaponSubClass the subclass of the weapon that deals the damage
  * \return TRUE when the dealt damage destroys the structure, FALSE when the structure survives
  */
-BOOL structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
+SDWORD structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 					UDWORD weaponSubClass)
 {
 	// Do at least one point of damage
 	unsigned int actualDamage = 1;
+	float		body = (float) psStructure->body;
+	float		originalBody = (float) psStructure->pStructureType->bodyPoints;
 
 	CHECK_STRUCTURE(psStructure);
 
@@ -1333,7 +1335,7 @@ BOOL structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 	// EMP cannons do not work on Structures
 	if (weaponSubClass == WSC_EMP)
 	{
-		return FALSE;
+		return 0;
 	}
 
 	if(psStructure->player != selectedPlayer)
@@ -1366,7 +1368,7 @@ BOOL structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 	{
 		debug( LOG_ATTACK, "        DESTROYED\n");
 		destroyStruct(psStructure);
-		return TRUE;
+		return (SDWORD) (body / originalBody * -100);
 	}
 
 	// Substract the dealt damage from the structure's remaining body points
@@ -1374,7 +1376,7 @@ BOOL structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 
 	debug( LOG_ATTACK, "        body left: %d armour left: %d\n", psStructure->body, psStructure->armour);
 
-	return FALSE;
+	return (SDWORD) ((float) actualDamage / originalBody * 100);
 }
 
 

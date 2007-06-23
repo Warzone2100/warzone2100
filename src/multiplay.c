@@ -1547,11 +1547,16 @@ BOOL recvDestroyExtra(NETMSG *pMsg)
 		if(psSrc && (psSrc->type == OBJ_DROID) )		// process extra bits.
 		{
 			psKiller = 	(DROID*)psSrc;
+#if 0
+			// FIXME: this code *and* the code that sends this message needs to be modified
+			//        in such a way that they update psKiller->numKills with the percentage
+			//        of damage dealt rather than just a kill count.
 			if(psKiller)
 			{
 				psKiller->numKills++;
 			}
 			cmdDroidUpdateKills(psKiller);
+#endif
 			return TRUE;
 		}
 	}

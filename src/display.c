@@ -2021,7 +2021,7 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 			CONPRINTF(ConsoleString, (ConsoleString,
 			        _("%s - Damage %d%% - Serial ID %d - Kills %d order %d action %d, %s"),
 			droidGetName(psDroid), 100 - PERCENT(psDroid->body,
-			psDroid->originalBody),psDroid->id,psDroid->numKills,
+			psDroid->originalBody),psDroid->id, psDroid->numKills / 100,
 			psDroid->order, psDroid->action, getDroidLevelName(psDroid)));
 			FeedbackClickedOn();
 		}
@@ -2032,7 +2032,7 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 				CONPRINTF(ConsoleString, (ConsoleString,
 					_("%s - Damage %d%% - Kills %d, %s"),
 				droidGetName(psDroid), 100 - PERCENT(psDroid->body,
-				psDroid->originalBody),psDroid->numKills,
+				psDroid->originalBody), psDroid->numKills / 100,
 				getDroidLevelName(psDroid)));
 				FeedbackClickedOn();
 			}

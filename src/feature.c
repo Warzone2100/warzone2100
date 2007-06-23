@@ -265,10 +265,12 @@ void featureStatsShutDown(void)
  * \param weaponSubClass the subclass of the weapon that deals the damage
  * \return TRUE when the dealt damage destroys the feature, FALSE when the feature survives
  */
-BOOL featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponSubClass)
+SDWORD featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponSubClass)
 {
 	// Do at least one point of damage
 	unsigned int actualDamage = 1;
+	float		body = (float) psFeature->body;
+	float		originalBody = (float) psFeature->psStats->body;
 
 	ASSERT( psFeature != NULL,
 		"featureDamage: Invalid feature pointer" );
@@ -279,7 +281,7 @@ BOOL featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponSubClass)
 	// EMP cannons do not work on Features
 	if (weaponSubClass == WSC_EMP)
 	{
-		return FALSE;
+		return 0;
 	}
 
 	if (damage > psFeature->psStats->armour)
@@ -293,7 +295,7 @@ BOOL featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponSubClass)
 	if (actualDamage >= psFeature->body)
 	{
 		destroyFeature(psFeature);
-		return TRUE;
+		return (SDWORD) (body / originalBody * -100);
 	}
 
 	// Substract the dealt damage from the feature's remaining body points
@@ -302,7 +304,7 @@ BOOL featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponSubClass)
 	// Set last hit-time to <now>
 	psFeature->timeLastHit = gameTime;
 
-	return FALSE;
+	return (SDWORD) ((float) actualDamage / originalBody * 100);
 }
 
 
