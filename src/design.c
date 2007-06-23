@@ -5340,6 +5340,7 @@ static BOOL saveTemplate(void)
 
 	if (stored)
 	{
+		ASSERT(psTempl != NULL, "Template is NULL in saveTemplate()!");
 		psTempl->multiPlayerID = (objID<<3)|selectedPlayer;
 		objID++;
 		if (bMultiPlayer)

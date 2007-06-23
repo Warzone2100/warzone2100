@@ -1301,20 +1301,16 @@ BOOL recvTextMessageAI(NETMSG *pMsg)
 BOOL sendTemplate(DROID_TEMPLATE *pTempl)
 {
 	NETMSG m;
+	/* FIXME: This is dodgy, as we rely on the last entry in the struct being a pointer,
+	 * and the only pointer. */
+	UDWORD tsize = sizeof(DROID_TEMPLATE) - sizeof(pTempl);
 
-	if(pTempl == NULL)
-	{
-#ifdef DEBUG
-		// FIXME sendTemplate: TELL ALEXL NOW!!!THIS IS THE BUG THAT ISNT FIXED!!!
-		debug( LOG_ERROR, "sendTemplate: TELL ALEXL NOW!!!THIS IS THE BUG THAT ISNT FIXED!!!" );
-		abort();
-#endif
-		return TRUE;
-	}
+	ASSERT(pTempl != NULL, "sendTemplate: Old Pumpkin bug");
+	if (!pTempl) return TRUE; /* hack */
 
 	m.body[0] = (UBYTE)selectedPlayer;						//player to attach template to
-	memcpy(&(m.body[1]),pTempl,	sizeof(DROID_TEMPLATE));			//the template itself
-	m.size = (UWORD)(sizeof(DROID_TEMPLATE)+1);
+	memcpy(&(m.body[1]),pTempl, tsize);			//the template itself
+	m.size = (UWORD)(tsize + 1);
 	m.type = NET_TEMPLATE;
 	return(  NETbcast(&m,FALSE)	);
 }
@@ -1325,22 +1321,16 @@ BOOL recvTemplate(NETMSG * m)
 	UBYTE			player;
 	DROID_TEMPLATE	*psTempl;
 	DROID_TEMPLATE	t;
+	UDWORD tsize = sizeof(DROID_TEMPLATE) - sizeof(psTempl); // see comment above in send function
 
 	player = (UBYTE)(m->body[0]);
 
 	ASSERT( player < MAX_PLAYERS, "recvtemplate: invalid player size: %d", player );
+	ASSERT(m->size == tsize + 1, "recvtemplate: invalid size template packet: got %d, should be %d", 
+	       (int)m->size, (int)tsize + 1);
 
-	if(m->size < sizeof(DROID_TEMPLATE))
-	{
-#ifdef DEBUG
-		// FIXME recvTemplate: invalid template recvd. THIS IS THE BUG THAT ISNT FIXED!!!
-		debug( LOG_ERROR, "recvTemplate: invalid template recvd. THIS IS THE BUG THAT ISNT FIXED!!!" );
-		abort();
-#endif
-		return TRUE;
-	}
-
-	memcpy(&t,&(m->body[1]),sizeof(DROID_TEMPLATE));
+	memcpy(&t, &(m->body[1]), tsize);
+	t.psNext = NULL;
 
 	psTempl = IdToTemplate(t.multiPlayerID,player);
 	if(psTempl)												// already exists.
@@ -1352,32 +1342,6 @@ BOOL recvTemplate(NETMSG * m)
 	{
 		addTemplate(player,&t);
 		apsDroidTemplates[player]->ref = REF_TEMPLATE_START;	// templates are the odd one out!
-
-#if 0
-		psTempl = malloc(sizeof(DROID_TEMPLATE));
-		if (psTempl == NULL)
-		{
-			debug(LOG_ERROR, "recvTemplate: Out of memory");
-			return FALSE;
-		}
-		memcpy(psTempl, &t, sizeof(DROID_TEMPLATE));
-		psTempl->ref = REF_TEMPLATE_START;					// templates are the odd one out!
-		if (apsDroidTemplates[player])						// Add it to the list
-		{
-			for(psCurr = apsDroidTemplates[player];
-				psCurr->psNext != NULL;
-				psCurr = psCurr->psNext
-				);
-
-			psCurr->psNext = psTempl;
-			psTempl->psNext = NULL;
-		}
-		else
-		{
-			apsDroidTemplates[player]=psTempl;
-			psTempl->psNext = NULL;
-		}
-#endif
 	}
 	return TRUE;
 }
