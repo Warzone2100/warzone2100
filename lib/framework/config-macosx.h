@@ -264,13 +264,13 @@
 #define PACKAGE_NAME "Warzone 2100"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "Warzone 2100 2.0.x"
+#define PACKAGE_STRING "Warzone 2100 2.0.7"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "warzone2100"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "2.0.x"
+#define PACKAGE_VERSION "2.0.7"
 
 /* Define if <inttypes.h> exists and defines unusable PRI* macros. */
 /* #undef PRI_MACROS_BROKEN */
@@ -318,7 +318,7 @@
 /* #undef USE_WIN32_THREADS */
 
 /* Version number of package */
-#define VERSION "2.0.x"
+#define VERSION "2.0.7"
 
 /* Disable mp3 support */
 /* #undef WZ_NOMP3 */
