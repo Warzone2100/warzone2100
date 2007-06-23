@@ -158,7 +158,6 @@ SDWORD droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD wea
 	unsigned int actualDamage = 1, armour;
 	float        originalBody = psDroid->originalBody;
 	float        body = psDroid->body;
-	BOOL         penetrated = FALSE;
 	SECONDARY_STATE		state;
 	DROID_HIT_SIDE	impactSide;
 

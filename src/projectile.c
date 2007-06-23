@@ -1943,8 +1943,6 @@ proj_checkBurnDamage( BASE_OBJECT *apsList, PROJ_OBJECT *psProj,
 	UDWORD			damageSoFar;
 	SDWORD			damageToDo;
 	SDWORD			percentDamage;
-	BOOL			bKilled;
-//	BOOL			bMultiTemp;
 
 	CHECK_PROJECTILE(psProj);
 
