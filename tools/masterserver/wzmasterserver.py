@@ -151,6 +151,6 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 if __name__ == '__main__':
     print "Starting Warzone 2100 lobby server on port ", lobbyPort
 
+    SocketServer.ThreadingTCPServer.allow_reuse_address = True
     tcpserver = SocketServer.ThreadingTCPServer(('0.0.0.0', lobbyPort), RequestHandler)
-    tcpserver.allow_reuse_address = True
     tcpserver.serve_forever()
