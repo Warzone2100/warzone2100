@@ -27,7 +27,7 @@ import socket
 
 gamePort  = 9999         # Gameserver port.
 lobbyPort = 9998         # Lobby port.
-lobbyDev  = True         # Enable debugging.
+lobbyDbg  = True         # Enable debugging.
 gsSize    = 112          # Size of GAMESTRUCT in byte.
 ipOffset  = 64+4+4       # 64 byte StringSize + SDWORD + SDWORD
 gameList  = set()        # Holds the list.
@@ -53,7 +53,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
         if netCommand == 'addg':
 
             # Debug
-            if lobbyDev:
+            if lobbyDbg:
                 print "<- addg"
 
             # Fix the server address.
@@ -62,12 +62,19 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
             # Check we can connect to the host
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             try:
+                if lobbyDbg:
+                    print "  \- Checking gameserver's vitality..."
+                s.settimeout(10.0)
                 s.connect((gameHost, gamePort))
             except:
+                if lobbyDbg:
+                    print "  \- Gameserver did not respond!"
                 s.close()
                 return
 
             # The host is valid, close the socket and continue
+            if lobbyDbg:
+                print "  \- Adding gameserver."
             s.close()
 
             while len(gameHost) < 16:
@@ -88,7 +95,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
                 if currentGameData:
                     listLock.acquire()
                     try:
-                        if lobbyDev:
+                        if lobbyDbg:
                             print "Removing game from", self.client_address[0]
                         gameList.remove(currentGameData)
                     finally:
@@ -104,7 +111,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
                 # Put the game in the database
                 listLock.acquire()
                 try:
-                    if lobbyDev:
+                    if lobbyDbg:
                         print "  \- Adding game from", self.client_address[0]
                     gameList.add(currentGameData)
                 finally:
@@ -114,7 +121,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
         elif netCommand == 'list':
 
             # Debug
-            if lobbyDev:
+            if lobbyDbg:
                 print "<- list"
                 print "  \- I know ", len(gameList), " games."
 
@@ -145,5 +152,5 @@ if __name__ == '__main__':
     print "Starting Warzone 2100 lobby server on port ", lobbyPort
 
     tcpserver = SocketServer.ThreadingTCPServer(('0.0.0.0', lobbyPort), RequestHandler)
-    #tcpserver.allow_reuse_address = True
+    tcpserver.allow_reuse_address = True
     tcpserver.serve_forever()
