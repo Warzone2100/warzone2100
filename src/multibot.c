@@ -490,7 +490,6 @@ BOOL SendDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UBYTE player,UDWOR
 {
 	NETMSG m;
 
-//	if( ingame.localJoiningInProgress &&  (game.type != DMATCH) )
 	if( ingame.localJoiningInProgress )
 	{
 		return TRUE;								// dont send other droids during campaign setup.
@@ -1184,6 +1183,8 @@ BOOL receiveWholeDroid(NETMSG *m)
 
 	if(ingame.localJoiningInProgress)
 	{
+		ASSERT(!"unused", "Tell Per he was wrong and that this code is actually in use!");
+
 		NetGet(m,sizecount,pD->order);				sizecount+=sizeof(pD->order);		// processed laater
 		NetGet(m,sizecount,pD->orderX);				sizecount+=sizeof(pD->orderX);		//later!
 		NetGet(m,sizecount,pD->orderY);				sizecount+=sizeof(pD->orderY);		//later!
@@ -1198,6 +1199,7 @@ BOOL receiveWholeDroid(NETMSG *m)
 		NetGet(m,sizecount,pD->psTarStats[0]);			sizecount+=sizeof(pD->psTarStats[0]);	//later!
 
 		//store the droid for later.
+		//except there is no 'later', this is NEVER USED except here! What happens to the poor droid? - Per
 		tempDroid = (DROIDSTORE*)malloc(sizeof(DROIDSTORE));
 		tempDroid->psDroid  = pD;
 		tempDroid->psNext	= tempDroidList;
