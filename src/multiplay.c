@@ -1326,7 +1326,7 @@ BOOL sendTemplate(DROID_TEMPLATE *pTempl)
 	}
 	NetAddUint32(m, count, pTempl->droidType);		count += 4;
 	NetAddUint32(m, count, pTempl->multiPlayerID);		count += 4;
-	
+
 	m.type = NET_TEMPLATE;
 	m.size = count;
 	return(  NETbcast(&m,FALSE)	);
@@ -1338,7 +1338,8 @@ BOOL recvTemplate(NETMSG * m)
 	UBYTE			player;
 	DROID_TEMPLATE	*psTempl;
 	DROID_TEMPLATE	t, *pT = &t;
-	UDWORD count, i;
+	unsigned int i;
+	unsigned int count = 0;
 
 	NetGetUint8(m, count, player);				count += 1;
 	ASSERT( player < MAX_PLAYERS, "recvtemplate: invalid player size: %d", player );
