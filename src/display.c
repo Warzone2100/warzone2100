@@ -2019,7 +2019,7 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 		if(godMode)
 		{
 			CONPRINTF(ConsoleString, (ConsoleString,
-			"%s - Damage %d%% - Serial ID %d - Kills %d order %d action %d, %s",
+			        _("%s - Damage %d%% - Serial ID %d - Kills %d order %d action %d, %s"),
 			droidGetName(psDroid), 100 - PERCENT(psDroid->body,
 			psDroid->originalBody),psDroid->id,psDroid->numKills,
 			psDroid->order, psDroid->action, getDroidLevelName(psDroid)));
@@ -2031,7 +2031,6 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 			{
 				CONPRINTF(ConsoleString, (ConsoleString,
 					_("%s - Damage %d%% - Kills %d, %s"),
-				/*	"%s - Damage %d%% - Kills %d, %s",*/
 				droidGetName(psDroid), 100 - PERCENT(psDroid->body,
 				psDroid->originalBody),psDroid->numKills,
 				getDroidLevelName(psDroid)));
