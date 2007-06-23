@@ -1328,6 +1328,7 @@ BOOL sendTemplate(DROID_TEMPLATE *pTempl)
 	NetAddUint32(m, count, pTempl->multiPlayerID);		count += 4;
 	
 	m.type = NET_TEMPLATE;
+	m.size = count;
 	return(  NETbcast(&m,FALSE)	);
 }
 
