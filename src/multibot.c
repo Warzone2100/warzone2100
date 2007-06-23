@@ -1111,11 +1111,7 @@ BOOL receiveWholeDroid(NETMSG *m)
 	UDWORD			sizecount=0;
 	DROID_TEMPLATE	dt;
 	DROID			*pD,*existingdroid;
-//	BOOL			temp= FALSE;
-
 	DROIDSTORE		*tempDroid;
-
-	//UDWORD x,y,z,id;
 	UWORD x,y,z;
 	UDWORD id;
 	UBYTE player;
@@ -1123,7 +1119,6 @@ BOOL receiveWholeDroid(NETMSG *m)
 
 	// get the stuff
 	NetGet(m,sizecount,dt.asParts);				sizecount+=sizeof(dt.asParts);		// build a template
-//	NetGet(m,sizecount,dt.powerPoints);			sizecount+=sizeof(dt.powerPoints);
 	NetGet(m,sizecount,dt.asWeaps);				sizecount+=sizeof(dt.asWeaps);
 	NetGet(m,sizecount,dt.numWeaps);			sizecount+=sizeof(dt.numWeaps);		// numWeaps
 	NetGet(m,sizecount,x);						sizecount+=sizeof(x);				// edit it.
@@ -1159,6 +1154,8 @@ BOOL receiveWholeDroid(NETMSG *m)
 	{
 		return FALSE;
 	}
+
+	assert(sizeof(id) == sizeof(pD->id));
 
 	// now the instance specific stuff.
 	pD->id = id;
@@ -1207,14 +1204,10 @@ BOOL receiveWholeDroid(NETMSG *m)
 	}
 	else							//don't bother setting the orders. they'll update sooner or later anywho.
 	{
-		pD->order     = 0;
-		pD->orderX    = 0;
-		pD->orderY    = 0;
-
-		//Watermelon:recieve packet changes to cope with psTarget[] array change
 		for (i = 0;i < dt.numWeaps;i++)
 		{
-			NetGet(m,sizecount,pD->psTarget[i]);			sizecount+=sizeof(pD->psTarget[i]);	//later!
+			NetGet(m, sizecount, id);			sizecount += sizeof(id);
+			pD->psTarget[i] = IdToPointer(id, ANYPLAYER);
 		}
 		pD->psTarStats[0] = 0;
 
