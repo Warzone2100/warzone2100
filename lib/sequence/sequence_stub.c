@@ -34,8 +34,8 @@
 #include "rpl_reader.h"
 #include "sequence.h"
 
-#ifdef WZ_OPENAL_MAC_H
-#include <openal/al.h>
+#ifdef __MACOSX__
+#include <OpenAL/al.h>
 #else
 #include <AL/al.h>
 #endif

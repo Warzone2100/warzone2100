@@ -29,7 +29,7 @@
 #include "config.h"
 #endif
 
-#ifdef WZ_OPENAL_MAC_H
+#ifdef __MACOSX__
 #include <openal/al.h>
 #else
 #include <AL/al.h>

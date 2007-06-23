@@ -30,6 +30,10 @@
 # include "config.h"
 #endif
 
+#ifdef __MACOSX__
+# include "config-macosx.h"
+#endif
+
 #ifdef _MSC_VER
 # ifdef _DEBUG
 #  define _CRTDBG_MAP_ALLOC
