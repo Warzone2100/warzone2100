@@ -1307,25 +1307,25 @@ BOOL sendTemplate(DROID_TEMPLATE *pTempl)
 	if (!pTempl) return TRUE; /* hack */
 
 	// I hate adding more of this hideous code, but it is necessary for now - Per
-	NetAddUint8(m, count, selectedPlayer);			count += 1;
-	NetAddUint32(m, count, pTempl->ref);			count += 4;
+	NetAddUint8(m, count, selectedPlayer);			count += sizeof(Uint8);
+	NetAddUint32(m, count, pTempl->ref);			count += sizeof(Uint32);
 	NetAdd(m, count, pTempl->aName);			count += DROID_MAXNAME;
-	NetAddUint8(m, count, pTempl->NameVersion);		count += 1;
+	NetAddUint8(m, count, pTempl->NameVersion);		count += sizeof(Uint8);
 	for (i = 0; i < DROID_MAXCOMP; i++)
 	{
 		// signed, but sent as a bunch of bits...
-		NetAddUint32(m, count, pTempl->asParts[i]);	count += 4;
+		NetAddUint32(m, count, pTempl->asParts[i]);	count += sizeof(Uint32);
 	}
-	NetAddUint32(m, count, pTempl->buildPoints);		count += 4;
-	NetAddUint32(m, count, pTempl->powerPoints);		count += 4;
-	NetAddUint32(m, count, pTempl->storeCount);		count += 4;
-	NetAddUint32(m, count, pTempl->numWeaps);		count += 4;
+	NetAddUint32(m, count, pTempl->buildPoints);		count += sizeof(Uint32);
+	NetAddUint32(m, count, pTempl->powerPoints);		count += sizeof(Uint32);
+	NetAddUint32(m, count, pTempl->storeCount);		count += sizeof(Uint32);
+	NetAddUint32(m, count, pTempl->numWeaps);		count += sizeof(Uint32);
 	for (i = 0; i < DROID_MAXWEAPS; i++)
 	{
-		NetAddUint32(m, count, pTempl->asWeaps[i]);	count += 4;
+		NetAddUint32(m, count, pTempl->asWeaps[i]);	count += sizeof(Uint32);
 	}
-	NetAddUint32(m, count, pTempl->droidType);		count += 4;
-	NetAddUint32(m, count, pTempl->multiPlayerID);		count += 4;
+	NetAddUint32(m, count, pTempl->droidType);		count += sizeof(Uint32);
+	NetAddUint32(m, count, pTempl->multiPlayerID);		count += sizeof(Uint32);
 
 	m.type = NET_TEMPLATE;
 	m.size = count;
@@ -1341,27 +1341,27 @@ BOOL recvTemplate(NETMSG * m)
 	unsigned int i;
 	unsigned int count = 0;
 
-	NetGetUint8(m, count, player);				count += 1;
+	NetGetUint8(m, count, player);				count += sizeof(Uint8);
 	ASSERT( player < MAX_PLAYERS, "recvtemplate: invalid player size: %d", player );
 
-	NetGetUint32(m, count, pT->ref);			count += 4;
+	NetGetUint32(m, count, pT->ref);			count += sizeof(Uint32);
 	NetGet(m, count, pT->aName);				count += DROID_MAXNAME;
-	NetGetUint8(m, count, pT->NameVersion);			count += 1;
+	NetGetUint8(m, count, pT->NameVersion);			count += sizeof(Uint8);
 	for (i = 0; i < DROID_MAXCOMP; i++)
 	{
 		// signed, but sent as a bunch of bits...
-		NetGetUint32(m, count, pT->asParts[i]);		count += 4;
+		NetGetUint32(m, count, pT->asParts[i]);		count += sizeof(Uint32);
 	}
-	NetGetUint32(m, count, pT->buildPoints);		count += 4;
-	NetGetUint32(m, count, pT->powerPoints);		count += 4;
-	NetGetUint32(m, count, pT->storeCount);			count += 4;
-	NetGetUint32(m, count, pT->numWeaps);			count += 4;
+	NetGetUint32(m, count, pT->buildPoints);		count += sizeof(Uint32);
+	NetGetUint32(m, count, pT->powerPoints);		count += sizeof(Uint32);
+	NetGetUint32(m, count, pT->storeCount);			count += sizeof(Uint32);
+	NetGetUint32(m, count, pT->numWeaps);			count += sizeof(Uint32);
 	for (i = 0; i < DROID_MAXWEAPS; i++)
 	{
-		NetGetUint32(m, count, pT->asWeaps[i]);		count += 4;
+		NetGetUint32(m, count, pT->asWeaps[i]);		count += sizeof(Uint32);
 	}
-	NetGetUint32(m, count, pT->droidType);			count += 4;
-	NetGetUint32(m, count, pT->multiPlayerID);		count += 4;
+	NetGetUint32(m, count, pT->droidType);			count += sizeof(Uint32);
+	NetGetUint32(m, count, pT->multiPlayerID);		count += sizeof(Uint32);
 
 	t.psNext = NULL;
 
