@@ -19,11 +19,13 @@ import sys
 import SocketServer
 import thread
 import struct
+import socket
 
 #
 ################################################################################
 # Settings.
 
+gamePort  = 9999         # Gameserver port.
 lobbyPort = 9998         # Lobby port.
 lobbyDev  = True         # Enable debugging.
 gsSize    = 112          # Size of GAMESTRUCT in byte.
@@ -34,12 +36,12 @@ listLock  = thread.allocate_lock()
 #
 ################################################################################
 # Socket Handler.
- 
+
 class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHandler):
     def handle(self):
     	# Read the incoming command.
         netCommand = self.rfile.read(4)
-        
+
         # Skip the trailing NULL.
         self.rfile.read(1)
 
@@ -53,15 +55,26 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
             # Debug
             if lobbyDev:
                 print "<- addg"
-                
+
             # Fix the server address.
             gameHost = self.client_address[0]
+
+            # Check we can connect to the host
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            try:
+                s.connect((gameHost, gamePort))
+            except:
+                s.close()
+                return
+
+            # The host is valid, close the socket and continue
+            s.close()
 
             while len(gameHost) < 16:
                 gameHost += '\0'
 
             currentGameData = None
-            
+
             # and start receiving updates about the game
             while True:
                 # Receive the gamestruct.
@@ -69,7 +82,8 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
                     newGameData = self.rfile.read(gsSize)
                 except:
                     newGameData = None
-                
+                    continue
+
                 # remove the previous data from the list
                 if currentGameData:
                     listLock.acquire()
@@ -79,11 +93,11 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
                         gameList.remove(currentGameData)
                     finally:
                         listLock.release()
-                        
+
                 if len(newGameData) < gsSize:
                     # incomplete data
                     break
-                        
+
                 # Update the new gameData whith the gameHost
                 currentGameData = newGameData[:ipOffset] + gameHost + newGameData[ipOffset+16:]
 
@@ -98,7 +112,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 
         # Get a game list.
         elif netCommand == 'list':
-        
+
             # Debug
             if lobbyDev:
                 print "<- list"
@@ -106,21 +120,21 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 
             # Lock the gamelist to prevent new games while output.
             listLock.acquire()
-            
+
             # Transmit the length of the following list as unsigned integer (in network byte-order: big-endian).
             count = struct.pack('!I', len(gameList))
             self.wfile.write(count)
-            
+
             # Transmit the single games.
             for game in gameList:
                 self.wfile.write(game)
-                
+
             # Remove the lock.
             listLock.release()
 
         # If something unknown apperas.
         else:
-            print "Recieved a unknown command: ", netCommand 
+            print "Recieved a unknown command: ", netCommand
 
 
 #
@@ -129,8 +143,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 
 if __name__ == '__main__':
     print "Starting Warzone 2100 lobby server on port ", lobbyPort
-    
+
     tcpserver = SocketServer.ThreadingTCPServer(('0.0.0.0', lobbyPort), RequestHandler)
     #tcpserver.allow_reuse_address = True
     tcpserver.serve_forever()
-    
