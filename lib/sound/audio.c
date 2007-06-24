@@ -518,14 +518,7 @@ void audio_Update( void )
 	audio_UpdateQueue();
 
 	// get player position
-	if ( audio_Display3D() == TRUE )
-	{
-		audio_Get3DPlayerPos( &vecPlayer.x, &vecPlayer.y, &vecPlayer.z );
-	}
-	else
-	{
-		audio_Get2DPlayerPos( &vecPlayer.x, &vecPlayer.y, &vecPlayer.z );
-	}
+	audio_Get3DPlayerPos(&vecPlayer.x, &vecPlayer.y, &vecPlayer.z);
 
 	sound_SetPlayerPos( vecPlayer.x, vecPlayer.y, vecPlayer.z );
 	audio_Get3DPlayerRotAboutVerticalAxis( &iA );

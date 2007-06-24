@@ -143,7 +143,6 @@ SDWORD	nextMissionType = LDS_NONE;//MISSION_NONE;
 
  /* Force 3D display */
 UDWORD	mcTime;
-BOOL	display3D = TRUE;
 extern BOOL		godMode;
 
 /* The main game loop */
@@ -529,22 +528,19 @@ GAMECODE gameLoop(void)
 	{
 		if (!gameUpdatePaused())
 		{
-			if (display3D)
+			if (dragBox3D.status != DRAG_DRAGGING
+			 && wallDrag.status != DRAG_DRAGGING)
 			{
-				if (dragBox3D.status != DRAG_DRAGGING
-					&& wallDrag.status != DRAG_DRAGGING)
-				{
-					ProcessRadarInput();
-				}
-				processInput();
-
-				//no key clicks or in Intelligence Screen
-				if (intRetVal == INT_NONE && !InGameOpUp)
-				{
-					processMouseClickInput();
-				}
-				displayWorld();
+				ProcessRadarInput();
 			}
+			processInput();
+
+			//no key clicks or in Intelligence Screen
+			if (intRetVal == INT_NONE && !InGameOpUp)
+			{
+				processMouseClickInput();
+			}
+			displayWorld();
 		}
 		/* Display the in game interface */
 		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);

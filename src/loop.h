@@ -53,8 +53,6 @@ extern LOOP_MISSION_STATE		loopMissionState;
 // this is set by scrStartMission to say what type of new level is to be started
 extern SDWORD	nextMissionType;
 
-extern BOOL   display3D;
-
 extern SDWORD loopPieCount;
 extern SDWORD loopTileCount;
 extern SDWORD loopPolyCount;

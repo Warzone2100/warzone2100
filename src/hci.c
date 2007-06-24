@@ -1429,12 +1429,6 @@ static void intProcessOptions(UDWORD id)
 			intGetMapSize();
 			break;
 		case IDOPT_EDIT:
-			if (!display3D)
-			{
-				intRemoveOptions();
-				intAddEdit();
-				intMode = INT_EDIT;
-			}
 			break;
 #endif
 			/* The add object buttons */
@@ -1969,7 +1963,7 @@ INT_RETVAL intRunWidgets(void)
 		if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_BUILDSEL)
 		{
 			// See if a position for the structure has been found
-			if (display3D && found3DBuildLocTwo(&structX, &structY, &structX2, &structY2))
+			if (found3DBuildLocTwo(&structX, &structY, &structX2, &structY2))
 			{
 				// check if it's a straight line.
 				if((structX == structX2) || (structY == structY2))
@@ -3250,18 +3244,17 @@ static BOOL intGetStructPosition(UDWORD *pX, UDWORD *pY)
 {
 	BOOL	retVal = FALSE;
 
-	if (display3D)
+	retVal = found3DBuilding(pX,pY);
+	if (retVal)
 	{
-		retVal = found3DBuilding(pX,pY);
-		if (retVal)
+#if 0
+//		if (intMode == INT_OBJECT && objMode == IOBJ_BUILDSEL) {
+		if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_BUILDSEL)
 		{
-//			if (intMode == INT_OBJECT && objMode == IOBJ_BUILDSEL) {
-			/*if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_BUILDSEL)
-			{
-				widgReveal(psWScreen,IDOBJ_TABFORM);	// Reveal the object form.
-				widgReveal(psWScreen,IDOBJ_FORM);
-			}*/
+			widgReveal(psWScreen,IDOBJ_TABFORM);	// Reveal the object form.
+			widgReveal(psWScreen,IDOBJ_FORM);
 		}
+#endif
 	}
 
 	return retVal;

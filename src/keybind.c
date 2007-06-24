@@ -143,13 +143,6 @@ void	kf_NoFaults( void )
 }
 // --------------------------------------------------------------------------
 
-void	kf_ToggleDimension( void )
-{
-		display3D = FALSE;
-		intSetMapPos(player.p.x + ((visibleXTiles/2) << TILE_SHIFT),
-					 player.p.z + ((visibleYTiles/2) << TILE_SHIFT));
-}
-
 // --------------------------------------------------------------------------
 //===================================================
 void kf_ToggleSensorDisplay( void )
