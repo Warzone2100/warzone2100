@@ -4117,7 +4117,6 @@ BOOL intAddOptions(void)
 	{
 		return FALSE;
 	}
-#endif
 
 	/* Add the edit button */
 	sButInit.formID = IDOPT_FORM;
@@ -4128,7 +4127,6 @@ BOOL intAddOptions(void)
 	sButInit.height = OPT_BUTHEIGHT;
 	sButInit.pText = "Edit";
 	sButInit.pTip = "Start Edit Mode";
-#ifdef EDIT_OPTIONS
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return FALSE;
