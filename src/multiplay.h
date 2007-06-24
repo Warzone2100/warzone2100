@@ -22,6 +22,9 @@
  *
  *Alex Lee 1997/98, Pumpkin Studios, Bath.
  */
+
+#ifndef _multiplay_h
+#define _multiplay_h
 #include "group.h"
 
 // Different Message Structures allowed to be sent between players.
@@ -339,3 +342,4 @@ extern BOOL msgStackGetDroid(DROID **ppsDroid);
 extern BOOL	sendBeaconToPlayerNet(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char *pStr);
 extern BOOL msgStackFireTop(void);
 
+#endif
