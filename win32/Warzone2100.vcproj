@@ -394,10 +394,6 @@
 				Name="netplay"
 				>
 				<File
-					RelativePath="..\lib\netplay\netcrypt.c"
-					>
-				</File>
-				<File
 					RelativePath="..\lib\netplay\netjoin_stub.c"
 					>
 				</File>

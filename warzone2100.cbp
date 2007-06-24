@@ -242,9 +242,6 @@
 		<Unit filename="lib/ivis_opengl/textdraw.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="lib/netplay/netcrypt.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="lib/netplay/netjoin_stub.c">
 			<Option compilerVar="CC" />
 		</Unit>
