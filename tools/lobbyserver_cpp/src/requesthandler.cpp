@@ -29,6 +29,7 @@
 #include "lobby/game.hpp"
 #include <algorithm>
 #include <boost/bind.hpp>
+#include "networking/nattester.hpp"
 
 extern boost::recursive_mutex cout_mutex;
 extern boost::recursive_mutex cerr_mutex;
@@ -68,6 +69,20 @@ class lobbyprotocol::requestHandler::impl
                     // Update the game struct's host (usually not set by client, so we'll have to do this)
                     strncpy(newGameData.desc.host, socket->remote_endpoint().address().to_string().c_str(), sizeof(newGameData.desc.host));
                     newGameData.desc.host[sizeof(newGameData.desc.host) - 1] = 0;
+
+                    // If this is the first run we first want to check whether we can open a connection
+                    // back to the client, to make sure any NATs enroute are properly configured.
+                    if (firstRun)
+                    {
+                        boost::asio::ip::tcp::endpoint gameHostAddress(socket->remote_endpoint().address(), 9999);
+                        NATTester NATTest(gameHostAddress);
+
+                        if (!NATTest.reachable(10))
+                        {
+                            std::cerr << "Couldn't reach game host (" << gameHostAddress << "), probably behind a NAT" << std::endl;
+                            return;
+                        }
+                    }
 
                     // Attach this game to our GameLobby lock, this'll automatically add the game to the lobby list
                     lobbiedGame = newGameData;
