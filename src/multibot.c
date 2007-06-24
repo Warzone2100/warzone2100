@@ -1155,7 +1155,7 @@ BOOL receiveWholeDroid(NETMSG *m)
 		return FALSE;
 	}
 
-	assert(sizeof(id) == sizeof(pD->id));
+	STATIC_ASSERT(sizeof(id) == sizeof(pD->id));
 
 	// now the instance specific stuff.
 	pD->id = id;

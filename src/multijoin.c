@@ -89,8 +89,7 @@ BOOL sendVersionCheck(void)
 	msg.size = 0;
 
 	NetAdd(msg,0,selectedPlayer);
-	NetAdd(msg,1,cheatHash);
-	msg.size = sizeof(cheatHash)+1;
+	msg.size = 1;
 	msg.type = NET_VERSION;
 
 	return NETbcast(&msg,TRUE);
@@ -98,36 +97,6 @@ BOOL sendVersionCheck(void)
 
 BOOL recvVersionCheck(NETMSG *pMsg)
 {
-	UDWORD	extCheat[CHEAT_MAXCHEAT];
-	UBYTE	pl;
-	char	sTmp[128];
-	NetGet(pMsg,1,extCheat);
-
-	if( memcmp(extCheat,cheatHash, CHEAT_MAXCHEAT*4) != 0)
-	{
-		goto FAILURE;
-	}
-	return TRUE;
-
-FAILURE:
-
-	// what should we do now ?
-	NetGet(pMsg,0,pl);
-
-//	DBERROR(("%s has different data to you CHEATING?"));
-
-	sprintf(sTmp,"%s has different data. CHEATING or wrong version",getPlayerName(pl));
-	addConsoleMessage(sTmp,DEFAULT_JUSTIFY);
-	sendTextMessage(sTmp,TRUE);
-/*
-	// We need to disable this for now. It is in any case trivial to circumvent, and
-	// may give a false sense of security. - Per
-	if(NetPlay.bHost)
-	{
-		kickPlayer( player2dpid[pl] );
-	}
-*/
-//	setPlayerHasLost(TRUE);
 	return TRUE;
 }
 

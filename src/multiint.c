@@ -2238,8 +2238,6 @@ static void processMultiopWidgets(UDWORD id)
 			// end of skirmish col choose
 			////////
 
-			resetCheatHash();
-
 			NEThaltJoining();							// stop new players entering.
 			SendFireUp();								//bcast a fireup message
 		}
@@ -2469,8 +2467,6 @@ void frontendMultiMessages(void)
 		case NET_FIREUP:					// campaign game started.. can fire the whole shebang up...
 			if(ingame.localOptionsReceived)
 			{
-				resetCheatHash();
-
 				decideWRF();
 
 				if(game.type != SKIRMISH)	// force stuff.

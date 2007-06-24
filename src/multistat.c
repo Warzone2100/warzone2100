@@ -594,8 +594,7 @@ BOOL loadMultiStats(char *sPlayerName,PLAYERSTATS *playerStats)
 	UDWORD				size;
 	char				*pFileData;
 	PLAYERSTATS			blankstats = {0};
-	SAVEDPLAYERSTATS	st,*codedst;
-	UDWORD				tmp[4];
+	SAVEDPLAYERSTATS		st;
 
 	strcpy(fileName,MultiPlayersPath);
 	strcat(fileName,sPlayerName);
@@ -603,20 +602,13 @@ BOOL loadMultiStats(char *sPlayerName,PLAYERSTATS *playerStats)
 
 	debug(LOG_WZ, "loadMultiStats: %s", fileName);
 	// check player already exists
-	// FIXME: integrate with physfs stuff, and add basic sanity
 	if ( !PHYSFS_exists( fileName ) )
 	{
 		saveMultiStats(sPlayerName,sPlayerName,&blankstats);		// didnt exist so create.
 	}
 
 	loadFile(fileName,&pFileData,&size);
-	codedst = ((SAVEDPLAYERSTATS*)pFileData);
-
-	//decode packet;
-	memcpy(&tmp,&NetPlay.cryptKey,sizeof(tmp));
-	NETsetKey(11974,224351,2023901,21080);
-	NETunmangleData((UDWORD*)codedst,(UDWORD*)&st,sizeof(SAVEDPLAYERSTATS));
-	NETsetKey(tmp[0],tmp[1],tmp[2],tmp[3]);
+	memcpy(&st, (SAVEDPLAYERSTATS*)pFileData, sizeof(SAVEDPLAYERSTATS));
 
 	//set stats.
 	memcpy(playerStats,&(st.stats), sizeof(PLAYERSTATS));	// get
@@ -648,20 +640,13 @@ BOOL loadMultiStats(char *sPlayerName,PLAYERSTATS *playerStats)
 BOOL saveMultiStats(char *sFileName, char *sPlayerName,PLAYERSTATS *playerStats)
 {
 	char				fileName[255]="";
-	SAVEDPLAYERSTATS	codedst,st;
-	UDWORD				tmp[4];
+	SAVEDPLAYERSTATS		st;
 
 	// prepare file.
 	memcpy(&st.stats,playerStats,sizeof(PLAYERSTATS));
 	memset(st.name,0,255);
 	memset(st.padding,1,4);
 	strcpy(st.name, sPlayerName);
-
-	//encode packet;
-	memcpy(&tmp,&NetPlay.cryptKey,sizeof(tmp));
-	NETsetKey(11974,224351,2023901,21080);
-	NETmangleData((UDWORD*)&st,(UDWORD*)&codedst,sizeof(SAVEDPLAYERSTATS));
-	NETsetKey(tmp[0],tmp[1],tmp[2],tmp[3]);
 
 	strcpy(fileName,MultiPlayersPath);
 	strcat(fileName,sFileName);
@@ -670,7 +655,7 @@ BOOL saveMultiStats(char *sFileName, char *sPlayerName,PLAYERSTATS *playerStats)
 	// we write some uninitialised bytes here (the last of the struct)
 	// this is caused by struct sizes getting rounded up to a nice value
 	// FIXME: ugly cast
-	saveFile(fileName, (char *)&codedst, sizeof(SAVEDPLAYERSTATS));
+	saveFile(fileName, (char *)&st, sizeof(SAVEDPLAYERSTATS));
 
 	return TRUE;
 }

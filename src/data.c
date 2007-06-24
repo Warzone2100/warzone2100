@@ -79,37 +79,9 @@ static BOOL bTilesPCXLoaded = FALSE;
 static BOOL saveFlag = FALSE;
 extern char	aCurrResDir[255];		// Arse
 
-UDWORD	cheatHash[CHEAT_MAXCHEAT];
-
 static void dataISpriteRelease(void *pData);
 
 extern int scr_lineno;
-
-/**********************************************************
- *
- * Source
- *
- *********************************************************/
-static void calcCheatHash(const char *pBuffer, UDWORD size, UDWORD cheat)
-{
-	if(!bMultiPlayer)
-	{
-		return;
-	}
-
-	// create the hash for that data block.
-	cheatHash[cheat] = cheatHash[cheat] ^ NEThashBuffer(pBuffer, size);
-	return;
-}
-
-void resetCheatHash(void)
-{
-	UDWORD i;
-	for(i=0;i<CHEAT_MAXCHEAT;i++)
-	{
-		cheatHash[i] =0;
-	}
-}
 
 /**********************************************************/
 
@@ -127,7 +99,6 @@ void dataClearSaveFlag(void)
 /* Load the body stats */
 static BOOL bufferSBODYLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	calcCheatHash(pBuffer,size,CHEAT_SBODY);
 	if (!loadBodyStats(pBuffer, size))
 	{
 		return FALSE;
@@ -153,7 +124,6 @@ static void dataReleaseStats(void *pData)
 /* Load the weapon stats */
 static BOOL bufferSWEAPONLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	calcCheatHash(pBuffer,size, CHEAT_SWEAPON);
 	if (!loadWeaponStats(pBuffer, size))
 	{
 		return FALSE;
@@ -172,7 +142,6 @@ static BOOL bufferSWEAPONLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the constructor stats */
 static BOOL bufferSCONSTRLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	calcCheatHash(pBuffer,size,CHEAT_SCONSTR);
 	if (!loadConstructStats(pBuffer, size))
 	{
 		return FALSE;
@@ -191,8 +160,6 @@ static BOOL bufferSCONSTRLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the ECM stats */
 static BOOL bufferSECMLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	calcCheatHash(pBuffer,size,CHEAT_SECM);
-
 	if (!loadECMStats(pBuffer, size))
 	{
 		return FALSE;
@@ -211,8 +178,6 @@ static BOOL bufferSECMLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the Propulsion stats */
 static BOOL bufferSPROPLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	calcCheatHash(pBuffer,size,CHEAT_SPROP);
-
 	if (!loadPropulsionStats(pBuffer, size))
 	{
 		return FALSE;
@@ -231,8 +196,6 @@ static BOOL bufferSPROPLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the Sensor stats */
 static BOOL bufferSSENSORLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	calcCheatHash(pBuffer,size,CHEAT_SSENSOR);
-
 	if (!loadSensorStats(pBuffer, size))
 	{
 		return FALSE;
@@ -251,8 +214,6 @@ static BOOL bufferSSENSORLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the Repair stats */
 static BOOL bufferSREPAIRLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	calcCheatHash(pBuffer,size,CHEAT_SREPAIR);
-
 	if (!loadRepairStats(pBuffer, size))
 	{
 		return FALSE;
@@ -271,8 +232,6 @@ static BOOL bufferSREPAIRLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the Brain stats */
 static BOOL bufferSBRAINLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	calcCheatHash(pBuffer,size,CHEAT_SBRAIN);
-
 	if (!loadBrainStats(pBuffer, size))
 	{
 		return FALSE;
@@ -291,8 +250,6 @@ static BOOL bufferSBRAINLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the PropulsionType stats */
 static BOOL bufferSPROPTYPESLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	calcCheatHash(pBuffer,size,CHEAT_SPROPTY);
-
 	if (!loadPropulsionTypes(pBuffer, size))
 	{
 		return FALSE;
@@ -334,8 +291,6 @@ static BOOL bufferSSPECABILLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the STERRTABLE stats */
 static BOOL bufferSTERRTABLELoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	calcCheatHash(pBuffer,size,CHEAT_STERRT);
-
 	if (!loadTerrainTable(pBuffer, size))
 	{
 		return FALSE;
@@ -378,8 +333,6 @@ static BOOL bufferSWEAPSNDLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the Weapon Effect modifier stats */
 static BOOL bufferSWEAPMODLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	calcCheatHash(pBuffer,size,CHEAT_SWEAPMOD);
-
 	if (!loadWeaponModifiers(pBuffer, size))
 	{
 		return FALSE;
@@ -395,8 +348,6 @@ static BOOL bufferSWEAPMODLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the Template stats */
 static BOOL bufferSTEMPLLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	calcCheatHash(pBuffer,size,CHEAT_STEMP);
-
 	if (!loadDroidTemplates(pBuffer, size))
 	{
 		return FALSE;
@@ -418,8 +369,6 @@ static void dataSTEMPLRelease(void *pData)
 /* Load the Template weapons stats */
 static BOOL bufferSTEMPWEAPLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	calcCheatHash(pBuffer,size,CHEAT_STEMPWEAP);
-
 	if (!loadDroidWeapons(pBuffer, size))
 	{
 		return FALSE;
@@ -434,8 +383,6 @@ static BOOL bufferSTEMPWEAPLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the Structure stats */
 static BOOL bufferSSTRUCTLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	calcCheatHash(pBuffer,size,CHEAT_SSTRUCT);
-
 	if (!loadStructureStats(pBuffer, size))
 	{
 		return FALSE;
@@ -461,8 +408,6 @@ static void dataSSTRUCTRelease(void *pData)
 /* Load the Structure Weapons stats */
 static BOOL bufferSSTRWEAPLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	calcCheatHash(pBuffer,size,CHEAT_SSTRWEAP);
-
 	if (!loadStructureWeapons(pBuffer, size))
 	{
 		return FALSE;
@@ -477,8 +422,6 @@ static BOOL bufferSSTRWEAPLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the Structure Functions stats */
 static BOOL bufferSSTRFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	calcCheatHash(pBuffer,size,CHEAT_STRFUNC);
-
 	if (!loadStructureFunctions(pBuffer, size))
 	{
 		return FALSE;
@@ -493,8 +436,6 @@ static BOOL bufferSSTRFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the Structure strength modifier stats */
 static BOOL bufferSSTRMODLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	calcCheatHash(pBuffer,size,CHEAT_SSTRMOD);
-
 	if (!loadStructureStrengthModifiers(pBuffer, size))
 	{
 		return FALSE;
@@ -508,8 +449,6 @@ static BOOL bufferSSTRMODLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the Feature stats */
 static BOOL bufferSFEATLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	calcCheatHash(pBuffer,size,CHEAT_SFEAT);
-
 	if (!loadFeatureStats(pBuffer, size))
 	{
 		return FALSE;
@@ -529,8 +468,6 @@ static void dataSFEATRelease(void *pData)
 /* Load the Functions stats */
 static BOOL bufferSFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	calcCheatHash(pBuffer,size,CHEAT_SFUNC);
-
 	if (!loadFunctionStats(pBuffer, size))
 	{
 		return FALSE;
@@ -560,8 +497,6 @@ static void dataRESCHRelease(void *pData)
 /* Load the Research stats */
 static BOOL bufferRESCHLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	calcCheatHash(pBuffer,size,CHEAT_RESCH);
-
     //check to see if already loaded
     if (numResearch > 0)
     {
@@ -586,8 +521,6 @@ static BOOL bufferRESCHLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the research pre-requisites */
 static BOOL bufferRPREREQLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	calcCheatHash(pBuffer,size,CHEAT_RPREREQ);
-
 	if (!loadResearchPR(pBuffer, size))
 	{
 		return FALSE;
@@ -601,8 +534,6 @@ static BOOL bufferRPREREQLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the research components made redundant */
 static BOOL bufferRCOMPREDLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	calcCheatHash(pBuffer,size,CHEAT_RCOMPRED);
-
 	if (!loadResearchArtefacts(pBuffer, size, RED_LIST))
 	{
 		return FALSE;
@@ -617,8 +548,6 @@ static BOOL bufferRCOMPREDLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the research component results */
 static BOOL bufferRCOMPRESLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-
-	calcCheatHash(pBuffer,size,CHEAT_RCOMPRES);
 
 	if (!loadResearchArtefacts(pBuffer, size, RES_LIST))
 	{
@@ -635,8 +564,6 @@ static BOOL bufferRCOMPRESLoad(const char *pBuffer, UDWORD size, void **ppData)
 static BOOL bufferRSTRREQLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
 
-	calcCheatHash(pBuffer,size,CHEAT_RSTRREQ);
-
 	if (!loadResearchStructures(pBuffer, size, REQ_LIST))
 	{
 		return FALSE;
@@ -651,8 +578,6 @@ static BOOL bufferRSTRREQLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the research structures made redundant */
 static BOOL bufferRSTRREDLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	calcCheatHash(pBuffer,size,CHEAT_RSTRRED);
-
 	if (!loadResearchStructures(pBuffer, size, RED_LIST))
 	{
 		return FALSE;
@@ -666,8 +591,6 @@ static BOOL bufferRSTRREDLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the research structure results */
 static BOOL bufferRSTRRESLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	calcCheatHash(pBuffer,size,CHEAT_RSTRRES);
-
 	if (!loadResearchStructures(pBuffer, size, RES_LIST))
 	{
 		return FALSE;
@@ -682,8 +605,6 @@ static BOOL bufferRSTRRESLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the research functions */
 static BOOL bufferRFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-
-	calcCheatHash(pBuffer,size,CHEAT_RFUNC);
 
 	if (!loadResearchFunctions(pBuffer, size))
 	{
@@ -1060,8 +981,6 @@ static BOOL dataScriptLoad(const char *pBuffer, UDWORD size, void **ppData)
 	SCRIPT_CODE		*psProg=NULL;
 	BOOL			printHack = FALSE;
 
-	calcCheatHash(pBuffer,size,CHEAT_SCRIPT);
-
 	debug(LOG_WZ, "COMPILING SCRIPT ...%s",GetLastResourceFilename());
 	scr_lineno = 1;
 
@@ -1085,8 +1004,6 @@ static BOOL dataScriptLoad(const char *pBuffer, UDWORD size, void **ppData)
 static BOOL dataScriptLoadVals(const char *pBuffer, UDWORD size, void **ppData)
 {
 	*ppData = NULL;
-
-	calcCheatHash(pBuffer,size,CHEAT_SCRIPTVAL);
 
 	// don't load anything if a saved game is being loaded
 	if (saveFlag)
@@ -1179,9 +1096,6 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 /* Pass all the data loading functions to the framework library */
 BOOL dataInitLoadFuncs(void)
 {
-	// init the cheat system;
-	resetCheatHash();
-
 	// Using iterator style: begin iterator (ResourceTypes),
 	// end iterator (EndType), and current iterator (CurrentType)
 	{  // iterate through buffer load functions

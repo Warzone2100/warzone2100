@@ -1014,17 +1014,11 @@ BOOL sendTextMessage(const char *pStr,BOOL all)
 	BOOL	sendto[MAX_PLAYERS];
 	UDWORD	i;
 	char	display[MAX_CONSOLE_STRING_LENGTH];
-	BOOL	bEncrypting;
-
-
 
 	if(!ingame.localOptionsReceived)
 	{
 		return TRUE;
 	}
-
-	bEncrypting = NetPlay.bEncryptAllPackets;
-	NetPlay.bEncryptAllPackets = FALSE;
 
 	for(i=0;i<MAX_PLAYERS;i++)
 	{
@@ -1081,8 +1075,6 @@ BOOL sendTextMessage(const char *pStr,BOOL all)
 		}
 	}
 
-	NetPlay.bEncryptAllPackets = bEncrypting;
-
 	for(i = 0; NetPlay.players[i].dpid != NetPlay.dpidPlayer; i++);	//findplayer
 	strcpy(display,NetPlay.players[i].name);						// name
 	strcat(display," : ");											// seperator
@@ -1097,7 +1089,6 @@ BOOL sendAIMessage(char *pStr, SDWORD player, SDWORD to)
 {
 	NETMSG	m;
 	SDWORD	sendPlayer;
-	BOOL	bEncrypting;
 
 	//check if this is one of the local players, don't need net send then
 	if(to == selectedPlayer || myResponsibility(to))	//(the only) human on this machine or AI on this machine
@@ -1120,9 +1111,6 @@ BOOL sendAIMessage(char *pStr, SDWORD player, SDWORD to)
 		{
 			return TRUE;
 		}
-
-		bEncrypting = NetPlay.bEncryptAllPackets;
-		NetPlay.bEncryptAllPackets = FALSE;
 
 		NetAdd(m,0,player);			//save the actual sender
 
@@ -1150,8 +1138,6 @@ BOOL sendAIMessage(char *pStr, SDWORD player, SDWORD to)
 		}
 
 		NETsend(&m,player2dpid[sendPlayer],FALSE);		//send to the player who is hosting 'to' player (might be himself if human and not AI)
-
-		NetPlay.bEncryptAllPackets = bEncrypting;
 	}
 
 	return TRUE;
@@ -1161,12 +1147,8 @@ BOOL sendBeaconToPlayerNet(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD se
 {
 	NETMSG	m;
 	SDWORD	sendPlayer;
-	BOOL	bEncrypting;
 
 	//debug(LOG_WZ, "sendBeaconToPlayerNet: '%s'",pStr);
-
-	bEncrypting = NetPlay.bEncryptAllPackets;
-	NetPlay.bEncryptAllPackets = FALSE;
 
 	NetAdd(m,0,sender);			//save the actual sender
 
@@ -1192,8 +1174,6 @@ BOOL sendBeaconToPlayerNet(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD se
 	}
 
 	NETsend(&m,player2dpid[sendPlayer],FALSE);		//send to the player who is hosting 'to' player (might be himself if human and not AI)
-
-	NetPlay.bEncryptAllPackets = bEncrypting;
 
 	return TRUE;
 }

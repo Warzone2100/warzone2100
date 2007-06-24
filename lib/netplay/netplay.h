@@ -63,12 +63,13 @@ typedef struct {
 #define NET_ALL_PLAYERS 255
 
 typedef struct {
-	uint16_t size;
-	unsigned char	paddedBytes;		// numberofbytes appended for encryption
-	unsigned char	type;
-	unsigned char	destination;
+	uint16_t	size;			// used size of body
+	uint8_t		paddedBytes;		// numberofbytes appended for encryption
+	uint8_t		type;			// type of packet
+	uint8_t		destination;		// player to send to, or NET_ALL_PLAYERS
+	uint16_t	counter;		// where in body we are currently
 	char 		body[MaxMsgSize];
-} NETMSG, *LPNETMSG;
+} NETMSG;
 
 #define		ENCRYPTFLAG		100	// added to type to determine packet is encrypted.
 #define		AUDIOMSG		255	// an audio packet (special message);
@@ -117,7 +118,6 @@ typedef struct {
 // variables
 
 extern NETPLAY				NetPlay;
-extern LPNETPLAY			lpNetPlay;
 
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.
@@ -161,15 +161,6 @@ extern BOOL	NETsetGlobalPlayerData(UDWORD dpid, void *pData, SDWORD size);
 
 #include "netlog.h"
 
-// encryption
-extern BOOL	NETsetKey(UDWORD c1,UDWORD c2,UDWORD c3, UDWORD c4);
-extern NETMSG*	NETmanglePacket(NETMSG *msg);
-extern void	NETunmanglePacket(NETMSG *msg);
-extern BOOL	NETmangleData(UDWORD *input, UDWORD *result, UDWORD dataSize);
-extern BOOL	NETunmangleData(UDWORD *input, UDWORD *result, UDWORD dataSize);
-extern UBYTE NEThashVal(UDWORD value);
-extern UDWORD NEThashBuffer(const char *pData, UDWORD size);
-
 extern void NETsetMasterserverName(const char* hostname);
 extern void NETsetMasterserverPort(unsigned int port);
 extern void NETsetGameserverPort(unsigned int port);
@@ -193,7 +184,6 @@ extern void NETsetGameserverPort(unsigned int port);
 
 #define NetAddSt(m,pos,stri) \
 	strcpy(&(m.body[pos]),stri)
-
 
 
 #define NetGet(m,pos,thing) \

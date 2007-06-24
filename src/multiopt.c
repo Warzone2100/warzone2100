@@ -67,7 +67,6 @@ extern char	buildTime[8];
 void sendOptions(UDWORD dest, UDWORD play)
 {
 	NETMSG m;
-	UBYTE checkval;
 
 	NetAdd(m,0,game);
 	m.size = sizeof(game);
@@ -77,10 +76,6 @@ void sendOptions(UDWORD dest, UDWORD play)
 
 	NetAdd(m,m.size,ingame.JoiningInProgress);
 	m.size += sizeof(ingame.JoiningInProgress);
-
-	checkval = NEThashVal(NetPlay.cryptKey[0]);	// exe's hash val. DONT SEND THE VAL ITSELF!
-	NetAdd(m,m.size,checkval);
-	m.size += sizeof(checkval);
 
 	NetAdd(m,m.size,dest);
 	m.size += sizeof(dest);
@@ -144,8 +139,6 @@ void recvOptions(NETMSG *pMsg)
 {
 	UDWORD	pos=0,play,id;
 	UDWORD	newPl;
-	UBYTE	checkval;
-
 
 	NetGet(pMsg,0,game);									// get details.
 	pos += sizeof(game);
@@ -170,17 +163,6 @@ void recvOptions(NETMSG *pMsg)
 	NetGet(pMsg,pos,ingame.JoiningInProgress);
 	pos += sizeof(ingame.JoiningInProgress);
 
-	NetGet(pMsg,pos,checkval);
-	pos += sizeof(checkval);
-/*
-	// This was set to a fixed value in earlier versions of post-Pumpkin code.
-	// Commenting out to avoid confusion. Should probably be removed. - Per
-	if(checkval != NEThashVal(NetPlay.cryptKey[0]))
-	{
-
-		DBERROR(("Host Binary is different from this one. Cheating?"));
-	}
-*/
 	NetGet(pMsg,pos,newPl);
 	pos += sizeof(newPl);
 
@@ -479,11 +461,6 @@ BOOL lobbyInitialise(void)
 	{
 		return FALSE;
 	}
-	// setup the encryption key
-
-	// RODZ : hashing the file is no more an option.
-	// hash the file to get the key.and catch out the exe patchers.
-	NETsetKey( 0xdaf456, 0xb72a5, 0x114d0, 0x2a17);
 
 	if(NetPlay.bLobbyLaunched) // now check for lobby launching..
 	{
@@ -1033,12 +1010,10 @@ static BOOL campInit(void)
 void playerResponding(void)
 {
 	NETMSG	msg;
-	UDWORD	i;
 
 	ingame.startTime = gameTime;
 	ingame.localJoiningInProgress = FALSE;				// no longer joining.
 	ingame.JoiningInProgress[selectedPlayer] = FALSE;
-//	arenaPlayersReceived	= 0;						// clear rcvd list.
 
 	cameraToHome(selectedPlayer,FALSE);						// home the camera to the player.
 
@@ -1046,12 +1021,6 @@ void playerResponding(void)
 	msg.size = sizeof(UDWORD);
 	msg.type = NET_PLAYERRESPONDING;
 	NETbcast(&msg,TRUE);
-
-	// set the key from the lowest available dpid.
-	for(i=0; !player2dpid[i] && i<MAX_PLAYERS;i++);
-	NETsetKey(0,0,0,player2dpid[i]);
-
-	NetPlay.bEncryptAllPackets = TRUE;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1086,7 +1055,6 @@ BOOL multiGameInit(void)
 	return TRUE;
 }
 
-
 ////////////////////////////////
 // at the end of every game.
 BOOL multiGameShutdown(void)
@@ -1118,6 +1086,5 @@ BOOL multiGameShutdown(void)
 	selectedPlayer					= 0;		//back to use player 0 (single player friendly)
 	bForceEditorLoaded				= FALSE;
 
-	NetPlay.bEncryptAllPackets		= FALSE;	// pull security.
 	return TRUE;
 }

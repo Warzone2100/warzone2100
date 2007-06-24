@@ -490,13 +490,9 @@ BOOL NETinit(BOOL bFirstCall)
 		NetPlay.bHost			= 0;
 		NetPlay.bComms			= TRUE;
 
-		NetPlay.bEncryptAllPackets	= FALSE;
-		NETsetKey(0x2fe8f810, 0xb72a5, 0x114d0, 0x2a7);	// j-random key to get us started
-
 		NetPlay.bAllowCaptureRecord	= FALSE;
 		NetPlay.bAllowCapturePlay	= FALSE;
 		NetPlay.bCaptureInUse		= FALSE;
-
 
 		for(i=0;i<MaxNumberOfPlayers;i++)
 		{
@@ -692,14 +688,6 @@ BOOL NETsend(NETMSG *msg, UDWORD player, BOOL guarantee)
 	//printf("Sending message %i to %i\n", msg->type, msg->destination);
 	msg->destination = player;
 
-	if (   NetPlay.bEncryptAllPackets
-	    && (msg->type!=AUDIOMSG)
-	    && (msg->type!=FILEMSG)) {
-		NETmanglePacket(msg);
-	}
-
-//printf("NETsend %i\n", msg->type);
-
 	size = msg->size + sizeof(msg->size) + sizeof(msg->type) + sizeof(msg->paddedBytes) + sizeof(msg->destination);
 
 	if (is_server) {
@@ -737,15 +725,7 @@ BOOL NETbcast(NETMSG *msg, BOOL guarantee)
 
 	msg->destination = NET_ALL_PLAYERS;
 
-	if (   NetPlay.bEncryptAllPackets
-	    && (msg->type!=AUDIOMSG)
-	    && (msg->type!=FILEMSG)) {
-		NETmanglePacket(msg);
-	}
-
 	size = msg->size + sizeof(msg->size) + sizeof(msg->type) + sizeof(msg->paddedBytes) + sizeof(msg->destination);
-
-//printf("NETbcast %i\n", msg->type);
 
 	if (is_server) {
 		unsigned int i;
@@ -951,14 +931,6 @@ receive_message:
 
 				goto receive_message;
 			}
-
-			if (   (pMsg->type>=ENCRYPTFLAG)
-			    && (pMsg->type!=AUDIOMSG)
-			    && (pMsg->type!=FILEMSG)) {
-				NETunmanglePacket(pMsg);
-			}
-
-			//printf("Received message : type = %i, size = %i, size = %i.\n", pMsg->type, pMsg->size, size);
 
 			nStats.bytesRecvd   += size;
 			nStats.packetsRecvd += 1;
