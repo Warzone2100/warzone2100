@@ -169,6 +169,7 @@ UDWORD	displayBufferSize;
 #define IDOPT_MAPLOAD		1002		// The load map button
 #define IDOPT_MAPSAVE		1003		// The save map button
 #define IDOPT_MAPLABEL		1004		// The map label
+#define IDOPT_EDIT			1005		// The edit mode toggle
 #define IDOPT_CLOSE			1006		// The close button
 #define IDOPT_LABEL			1007		// The Option screen label
 #define IDOPT_PLAYERFORM	1008		// The player button form
@@ -1009,6 +1010,181 @@ static void intRemoveOptions(void)
 //	widgStartScreen(psWScreen);
 }
 
+
+#ifdef EDIT_OPTIONS
+/* Add the edit widgets to the widget screen */
+static BOOL intAddEdit(void)
+{
+	W_FORMINIT sFormInit;
+	W_LABINIT sLabInit;
+	W_BUTINIT sButInit;
+
+//	widgEndScreen(psWScreen);
+
+	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	memset(&sLabInit, 0, sizeof(W_LABINIT));
+	memset(&sButInit, 0, sizeof(W_BUTINIT));
+
+	/* Add the edit form */
+	sFormInit.formID = 0;
+	sFormInit.id = IDED_FORM;
+	sFormInit.style = WFORM_PLAIN;
+	sFormInit.x = ED_X;
+	sFormInit.y = ED_Y;
+	sFormInit.width = ED_WIDTH;
+	sFormInit.height = ED_HEIGHT;
+	if (!widgAddForm(psWScreen, &sFormInit))
+	{
+		return FALSE;
+	}
+
+	/* Add the Option screen label */
+	sLabInit.formID = IDED_FORM;
+	sLabInit.id = IDED_LABEL;
+	sLabInit.style = WLAB_PLAIN;
+	sLabInit.x = ED_GAP;
+	sLabInit.y = ED_GAP;
+	sLabInit.width = ED_WIDTH;
+	sLabInit.height = ED_BUTHEIGHT;
+	sLabInit.pText = "Edit";
+	sLabInit.FontID = WFont;
+	if (!widgAddLabel(psWScreen, &sLabInit))
+	{
+		return FALSE;
+	}
+
+	/* Add the close box */
+	sButInit.formID = IDED_FORM;
+	sButInit.id = IDED_CLOSE;
+	sButInit.style = WBUT_PLAIN;
+	sButInit.x = ED_WIDTH - ED_GAP - CLOSE_SIZE;
+	sButInit.y = ED_GAP;
+	sButInit.width = CLOSE_SIZE;
+	sButInit.height = CLOSE_SIZE;
+	sButInit.FontID = WFont;
+	sButInit.pText = pCloseText;
+	sButInit.pTip = _("Close");
+	if (!widgAddButton(psWScreen, &sButInit))
+	{
+		return FALSE;
+	}
+	return TRUE;
+}
+
+
+/* Remove the edit widgets from the widget screen */
+static void intRemoveEdit(void)
+{
+//	widgEndScreen(psWScreen);
+	widgDelete(psWScreen, IDED_FORM);
+//	widgStartScreen(psWScreen);
+}
+
+
+/* Get  and validate the new map size from the options screen */
+static void intGetMapSize(void)
+{
+	SDWORD editWidth, editHeight;
+	STRING aText[WIDG_MAXSTR];
+	UDWORD i, tmp, bitCount;
+	BOOL widthChanged = FALSE, heightChanged = FALSE;
+	STRING *pStr = widgGetString(psWScreen, IDOPT_MAPWIDTH);
+
+	if (isdigit(*pStr))
+	{
+		// There is a number in the string
+		sscanf(pStr, "%d", &editWidth);
+	}
+	else
+	{
+		// No number in the string, restore the old value
+		editWidth = newMapWidth;
+		widthChanged = TRUE;
+	}
+
+	// Get the new height
+	pStr = widgGetString(psWScreen, IDOPT_MAPHEIGHT);
+	if (isdigit(*pStr))
+	{
+		// There is a number in the string
+		sscanf(pStr, "%d", &editHeight);
+	}
+	else
+	{
+		// No number in the string, restore the old value
+		editHeight = newMapHeight;
+		heightChanged = TRUE;
+	}
+
+	// now validate the sizes
+	if (editWidth <= 0 || editWidth > MAP_MAXWIDTH)
+	{
+		editWidth = newMapWidth;
+		widthChanged = TRUE;
+	}
+	else
+	{
+		// Check it is a power of 2
+		bitCount = 0;
+		tmp = editWidth;
+		for (i = 0; i < 32; i++)
+		{
+			if (tmp & 1)
+			{
+				bitCount ++;
+			}
+			tmp = tmp >> 1;
+		}
+		if (bitCount != 1)
+		{
+			editWidth = newMapWidth;
+			widthChanged = TRUE;
+		}
+	}
+	if (editHeight <= 0 || editHeight > MAP_MAXHEIGHT)
+	{
+		editHeight = newMapHeight;
+		heightChanged = TRUE;
+	}
+	else
+	{
+		// Check it is a power of 2
+		bitCount = 0;
+		tmp = editHeight;
+		for (i = 0; i < 32; i++)
+		{
+			if (tmp & 1)
+			{
+				bitCount ++;
+			}
+			tmp = tmp >> 1;
+		}
+		if (bitCount != 1)
+		{
+			editHeight = newMapHeight;
+			heightChanged = TRUE;
+		}
+	}
+
+	// Store the new size
+	newMapWidth = editWidth;
+	newMapHeight = editHeight;
+
+	// Syncronise the edit boxes if necessary
+	if (widthChanged)
+	{
+		sprintf(aText, "%d", newMapWidth);
+		widgSetString(psWScreen, IDOPT_MAPWIDTH, aText);
+	}
+	if (heightChanged)
+	{
+		sprintf(aText, "%d", newMapHeight);
+		widgSetString(psWScreen, IDOPT_MAPHEIGHT, aText);
+	}
+}
+#endif
+
+
 /* Reset the widget screen to just the reticule */
 void intResetScreen(BOOL NoAnim)
 {
@@ -1048,6 +1224,12 @@ void intResetScreen(BOOL NoAnim)
 			intRemoveStats();
 		}
 		break;
+
+#ifdef EDIT_OPTIONS
+	case INT_EDIT:
+		intRemoveEdit();
+		break;
+#endif
 
 	case INT_OBJECT:
 		intStopStructPosition();
@@ -1215,6 +1397,40 @@ static void intProcessOptions(UDWORD id)
 	{
 		switch (id)
 		{
+#ifdef EDIT_OPTIONS
+		case IDOPT_MAPLOAD:
+			{
+				/* Managed to load so quit the option screen */
+				intRemoveOptions();
+				intMode = INT_NORMAL;
+			}
+			break;
+		case IDOPT_MAPSAVE:
+			{
+				/* Managed to save so quit the option screen */
+				intRemoveOptions();
+				intMode = INT_NORMAL;
+			}
+			break;
+
+		case IDOPT_MAPNEW:
+			intGetMapSize();
+			if (mapNew(newMapWidth, newMapHeight))
+			{
+				/* Managed to create a new map so quit the option screen */
+				intRemoveOptions();
+				intMode = INT_NORMAL;
+			}
+			break;
+		case IDOPT_MAPWIDTH:
+			intGetMapSize();
+			break;
+		case IDOPT_MAPHEIGHT:
+			intGetMapSize();
+			break;
+		case IDOPT_EDIT:
+			break;
+#endif
 			/* The add object buttons */
 		case IDOPT_DROID:
 			intRemoveOptions();
@@ -1338,6 +1554,27 @@ static void intProcessEditStats(UDWORD id)
 		objMode = IOBJ_NONE;
 	}
 }
+
+
+#ifdef EDIT_OPTIONS
+/* Process return codes from the edit screen */
+static void intProcessEdit(UDWORD id)
+{
+	switch (id)
+	{
+	case IDED_CLOSE:
+		intRemoveEdit();
+		intMode = INT_NORMAL;
+		break;
+	case IDED_FORM:
+	case IDED_LABEL:
+		break;
+	default:
+		ASSERT( FALSE, "intProcessEdit: Unknown return code" );
+		break;
+	}
+}
+#endif
 
 
 /* Run the widgets for the in game interface */
@@ -1666,6 +1903,11 @@ INT_RETVAL intRunWidgets(void)
 		case INT_EDITSTAT:
 			intProcessEditStats(retID);
 			break;
+#ifdef EDIT_OPTIONS
+		case INT_EDIT:
+			intProcessEdit(retID);
+			break;
+#endif
 		case INT_STAT:
 		case INT_CMDORDER:
 			/* In stat mode ids get passed to processObject
@@ -3713,6 +3955,9 @@ BOOL intAddOptions(void)
 	W_BUTINIT	sButInit;
 	W_LABINIT	sLabInit;
 	UDWORD		player;
+#ifdef EDIT_OPTIONS
+	char		aText[WIDG_MAXSTR];
+#endif
 
 //	widgEndScreen(psWScreen);
 
@@ -3769,6 +4014,126 @@ BOOL intAddOptions(void)
 	{
 		return FALSE;
 	}
+
+#ifdef EDIT_OPTIONS
+	/* Add the map form */
+	sFormInit.formID = IDOPT_FORM;
+	sFormInit.id = IDOPT_MAPFORM;
+	sFormInit.style = WFORM_PLAIN;
+	sFormInit.x = OPT_GAP;
+	sFormInit.y = OPT_MAPY;
+	sFormInit.width = OPT_WIDTH - OPT_GAP*2;
+	sFormInit.height = OPT_BUTHEIGHT*2 + OPT_GAP*3;
+	if (!widgAddForm(psWScreen, &sFormInit))
+	{
+		return FALSE;
+	}
+
+	/* Add the map label */
+	sLabInit.formID = IDOPT_MAPFORM;
+	sLabInit.id = IDOPT_MAPLABEL;
+	sLabInit.style = WLAB_PLAIN;
+	sLabInit.x = OPT_GAP;
+	sLabInit.y = OPT_GAP;
+	sLabInit.pText = "Map:";
+	sLabInit.FontID = WFont;
+	if (!widgAddLabel(psWScreen, &sLabInit))
+	{
+		return FALSE;
+	}
+
+	/* Add the load save and new buttons */
+	sButInit.formID = IDOPT_MAPFORM;
+	sButInit.id = IDOPT_MAPLOAD;
+	sButInit.x = OPT_GAP*2 + OPT_BUTWIDTH;
+	sButInit.y = OPT_GAP;
+	sButInit.width = OPT_BUTWIDTH;
+	sButInit.height = OPT_BUTHEIGHT;
+	sButInit.pText = "Load";
+	sButInit.pTip = "Load Map File";
+	if (!widgAddButton(psWScreen, &sButInit))
+	{
+		return FALSE;
+	}
+	sButInit.id = IDOPT_MAPSAVE;
+	sButInit.x += OPT_GAP + OPT_BUTWIDTH;
+	sButInit.pText = "Save";
+	sButInit.pTip = "Save Map File";
+	if (!widgAddButton(psWScreen, &sButInit))
+	{
+		return FALSE;
+	}
+	sButInit.id = IDOPT_MAPNEW;
+	sButInit.x = OPT_GAP;
+	sButInit.y = OPT_GAP*2 + OPT_BUTHEIGHT;
+	sButInit.pText = "New";
+	sButInit.pTip = "New Blank Map";
+	if (!widgAddButton(psWScreen, &sButInit))
+	{
+		return FALSE;
+	}
+
+	/* Add the load and save game buttons */
+	sButInit.formID = IDOPT_FORM;
+	sButInit.id = IDOPT_LOADGAME;
+	sButInit.x = OPT_GAP;
+	sButInit.y = OPT_LOADY;
+	sButInit.pText = "Load";
+	sButInit.pTip = _("Load Game");
+	if (!widgAddButton(psWScreen, &sButInit))
+	{
+		return FALSE;
+	}
+	sButInit.id = IDOPT_SAVEGAME;
+	sButInit.x += OPT_GAP + OPT_BUTWIDTH;
+	sButInit.pText = "Save";
+	sButInit.pTip = _("Save Game");
+	if (!widgAddButton(psWScreen, &sButInit))
+	{
+		return FALSE;
+	}
+
+	/* Add the map size edit boxes */
+	newMapWidth = mapWidth;
+	newMapHeight = mapHeight;
+	sEdInit.formID = IDOPT_MAPFORM;
+	sEdInit.id = IDOPT_MAPWIDTH;
+	sEdInit.style = WEDB_PLAIN;
+	sEdInit.x = OPT_GAP*2 + OPT_BUTWIDTH;
+	sEdInit.y = OPT_GAP*2 + OPT_BUTHEIGHT;
+	sEdInit.width = OPT_BUTWIDTH;
+	sEdInit.height = OPT_BUTHEIGHT;
+	sEdInit.pText = aText;
+	sprintf(aText, "%d", mapWidth);
+	sEdInit.FontID = WFont;
+	if (!widgAddEditBox(psWScreen, &sEdInit))
+	{
+		return FALSE;
+	}
+	sEdInit.id = IDOPT_MAPHEIGHT;
+	sEdInit.x += OPT_GAP + OPT_BUTWIDTH;
+	sprintf(aText, "%d", mapHeight);
+	if (!widgAddEditBox(psWScreen, &sEdInit))
+	{
+		return FALSE;
+	}
+#endif
+
+	/* Add the edit button */
+	sButInit.formID = IDOPT_FORM;
+	sButInit.id = IDOPT_EDIT;
+	sButInit.x = OPT_GAP;
+	sButInit.y = OPT_EDITY;
+	sButInit.width = OPT_BUTWIDTH;
+	sButInit.height = OPT_BUTHEIGHT;
+	sButInit.pText = "Edit";
+	sButInit.pTip = "Start Edit Mode";
+#ifdef EDIT_OPTIONS
+	if (!widgAddButton(psWScreen, &sButInit))
+	{
+		return FALSE;
+	}
+#endif
 
 	/* Add the add object buttons */
 	sButInit.id = IDOPT_DROID;
