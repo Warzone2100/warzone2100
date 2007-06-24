@@ -52,7 +52,6 @@ static AUDIO_SAMPLE *g_psSampleList = NULL;
 static AUDIO_SAMPLE *g_psSampleQueue = NULL;
 static BOOL			g_bAudioEnabled = FALSE;
 static BOOL			g_bAudioPaused = FALSE;
-static BOOL			g_bStopAll = FALSE;
 static AUDIO_SAMPLE g_sPreviousSample;
 static SDWORD g_i3DVolume = AUDIO_VOL_MAX;
 
@@ -280,7 +279,7 @@ static AUDIO_SAMPLE *audio_QueueSample( SDWORD iTrack )
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
-	if ( g_bAudioEnabled == FALSE || g_bAudioPaused == TRUE || g_bStopAll == TRUE )
+	if ( g_bAudioEnabled == FALSE || g_bAudioPaused == TRUE)
 	{
 		return NULL;
 	}
@@ -324,7 +323,7 @@ void audio_QueueTrack( SDWORD iTrack )
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
-	if ( g_bAudioEnabled == FALSE || g_bAudioPaused == TRUE || g_bStopAll == TRUE )
+	if ( g_bAudioEnabled == FALSE || g_bAudioPaused == TRUE)
 	{
 		return;
 	}
@@ -688,7 +687,7 @@ static BOOL audio_Play3DTrack( SDWORD iX, SDWORD iY, SDWORD iZ, int iTrack, void
 	//~~~~~~~~~~~~~~~~~~~~~~
 
 	// if audio not enabled return TRUE to carry on game without audio
-	if ( g_bAudioEnabled == FALSE || g_bAudioPaused == TRUE || g_bStopAll == TRUE )
+	if ( g_bAudioEnabled == FALSE || g_bAudioPaused == TRUE)
 	{
 		return FALSE;
 	}
@@ -854,7 +853,7 @@ void audio_StopObjTrack( void *psObj, int iTrack )
 	//~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
-	if ( g_bAudioEnabled == FALSE || g_bStopAll == TRUE )
+	if ( g_bAudioEnabled == FALSE)
 	{
 		return;
 	}
@@ -890,7 +889,7 @@ void audio_PlayTrack( int iTrack )
 	//~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
-	if ( g_bAudioEnabled == FALSE || g_bAudioPaused == TRUE || g_bStopAll == TRUE )
+	if ( g_bAudioEnabled == FALSE || g_bAudioPaused == TRUE)
 	{
 		return;
 	}
@@ -975,9 +974,6 @@ void audio_StopAll( void )
 		return;
 	}
 
-	debug( LOG_NEVER, "audio_StopAll called\n" );
-	g_bStopAll = TRUE;
-
 	//
 	// * empty list - audio_Update will free samples because callbacks have to come in
 	// * first
@@ -999,8 +995,6 @@ void audio_StopAll( void )
 	}
 
 	g_psSampleQueue = NULL;
-	g_bStopAll = FALSE;
-	debug( LOG_NEVER, "audio_StopAll done\n" );
 }
 
 //*

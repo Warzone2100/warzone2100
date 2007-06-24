@@ -42,7 +42,6 @@ void	audio_GetStaticPos( SDWORD iWorldX, SDWORD iWorldY,
 								SDWORD *piX, SDWORD *piY, SDWORD *piZ );
 BOOL	audio_ObjectDead( void * psObj );
 void	audio_Get3DPlayerPos( SDWORD *piX, SDWORD *piY, SDWORD *piZ );
-void	audio_Get2DPlayerRotAboutVerticalAxis( SDWORD *piA );
 void	audio_Get3DPlayerRotAboutVerticalAxis( SDWORD *piA );
 
 /***************************************************************************/

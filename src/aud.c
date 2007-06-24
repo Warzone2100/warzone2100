@@ -119,18 +119,6 @@ audio_Get3DPlayerPos( SDWORD *piX, SDWORD *piY, SDWORD *piZ )
 
 /***************************************************************************/
 /*
- * get player direction vector - always 0 in 2D
- */
-/***************************************************************************/
-
-void
-audio_Get2DPlayerRotAboutVerticalAxis( SDWORD *piA )
-{
-	*piA = (SWORD) 0;
-}
-
-/***************************************************************************/
-/*
  * get player direction vector - angle about vertical (y) ivis axis
  */
 /***************************************************************************/
