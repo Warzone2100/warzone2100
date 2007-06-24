@@ -89,7 +89,6 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
                     newGameData = self.rfile.read(gsSize)
                 except:
                     newGameData = None
-                    continue
 
                 # remove the previous data from the list
                 if currentGameData:
@@ -101,7 +100,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
                     finally:
                         listLock.release()
 
-                if len(newGameData) < gsSize:
+                if newGameData and len(newGameData) < gsSize:
                     # incomplete data
                     break
 
