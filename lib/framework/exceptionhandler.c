@@ -523,8 +523,18 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 	}
 	else
 	{
-		write(dumpFile, "GDB not available, no extended backtrace dumped\n",
-			  strlen("GDB not available, no extended backtrace dumped\n"));
+		write(dumpFile, "No extended backtrace dumped:\n",
+			strlen("No extended backtrace dumped:\n"));
+		if (!programIsAvailable)
+		{
+			write(dumpFile, "- Program path not available\n",
+				strlen("- Program path not available\n"));
+		}
+		if (!gdbIsAvailable)
+		{
+			write(dumpFile, "- GDB not available\n",
+				strlen("- GDB not available\n"));
+		}
 	}
 
 
@@ -562,7 +572,7 @@ void setupExceptionHandler(const char * programCommand)
 	// Were we able to find ourselves?
 	if (strlen(programPath) > 0)
 	{
-		programIsAvailable = FALSE;
+		programIsAvailable = TRUE;
 		*(strrchr(programPath, '\n')) = '\0'; // `which' adds a \n which confuses exec()
 		debug(LOG_WZ, "Found us at %s", programPath);
 	}
