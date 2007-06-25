@@ -53,8 +53,6 @@ static AUDIO_SAMPLE *g_psSampleQueue = NULL;
 static BOOL			g_bAudioEnabled = FALSE;
 static BOOL			g_bAudioPaused = FALSE;
 static AUDIO_SAMPLE g_sPreviousSample;
-static SDWORD g_i3DVolume = AUDIO_VOL_MAX;
-
 
 //*
 // =======================================================================================================================
@@ -456,15 +454,10 @@ static void audio_UpdateQueue( void )
 		return;
 	}
 
-	if ( sound_QueueSamplePlaying() == TRUE )
+	if (sound_QueueSamplePlaying() == TRUE)
 	{
-		// lower volume whilst playing queue audio
-		audio_Set3DVolume( LOWERED_VOL );
 		return;
 	}
-
-	// set full global volume
-	audio_Set3DVolume( AUDIO_VOL_MAX );
 
 	// check queue for members
 	if ( g_psSampleQueue == NULL )
@@ -832,7 +825,6 @@ BOOL audio_PlayStream( const char szFileName[], SDWORD iVol, AUDIO_CALLBACK pUse
 	memset( psSample, 0, sizeof(AUDIO_SAMPLE) );
 	psSample->pCallback = pUserCallback;
 	psSample->bFinishedPlaying = FALSE;
-	audio_Set3DVolume( AUDIO_VOL_MAX );
 
 	if ( !sound_PlayStream(psSample, szFileName, iVol) )
 	{
@@ -1020,39 +1012,4 @@ SDWORD audio_GetTrackID( const char *fileName )
 	}
 
 	return sound_GetTrackID( psTrack );
-}
-
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
-SDWORD audio_Get3DVolume( void )
-{
-	return g_i3DVolume;
-}
-
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
-void audio_Set3DVolume( SDWORD iVol )
-{
-	g_i3DVolume = iVol;
-}
-
-//*
-//
-// audio_GetMixVol iVol and audio_Get3DVolume need to be scaled by AUDIO_VOL_RANGE
-
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
-SDWORD audio_GetMixVol( SDWORD iVol )
-{
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	SDWORD	iMixVol = ( iVol * sound_GetMaxVolume() * audio_Get3DVolume() ) / ( AUDIO_VOL_RANGE * AUDIO_VOL_RANGE );
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-	return iMixVol;
 }

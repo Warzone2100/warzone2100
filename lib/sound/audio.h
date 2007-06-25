@@ -69,10 +69,6 @@ extern void		audio_ResumeAll( void );
 extern void		audio_StopAll( void );
 
 extern SDWORD	audio_GetTrackID( const char *fileName );
-extern SDWORD	audio_GetMixVol( SDWORD iVol );
-
-extern SDWORD	audio_Get3DVolume( void );
-extern void		audio_Set3DVolume( SDWORD iVol );
 
 /***************************************************************************/
 
