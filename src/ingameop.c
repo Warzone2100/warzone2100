@@ -166,17 +166,17 @@ static BOOL _addSlideOptions(void)
 	// fx vol
 	addIGTextButton(INTINGAMEOP_FXVOL, INTINGAMEOP_1_Y, _("Voice Volume"), WBUT_PLAIN);
 	addFESlider(INTINGAMEOP_FXVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOP_1_Y-5,
-				AUDIO_VOL_MAX, mixer_GetWavVolume(), INTINGAMEOP_FXVOL);
+				AUDIO_VOL_MAX, (int)(sound_GetUIVolume() * 100.0), INTINGAMEOP_FXVOL);
 
 	// fx vol
 	addIGTextButton(INTINGAMEOP_3DFXVOL, INTINGAMEOP_2_Y, _("FX Volume"), WBUT_PLAIN);
 	addFESlider(INTINGAMEOP_3DFXVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOP_2_Y-5,
-				AUDIO_VOL_MAX, mixer_Get3dWavVolume(), INTINGAMEOP_3DFXVOL);
+				AUDIO_VOL_MAX, (int)(sound_GetEffectsVolume() * 100.0), INTINGAMEOP_3DFXVOL);
 
 	// cd vol
 	addIGTextButton(INTINGAMEOP_CDVOL, INTINGAMEOP_3_Y, _("Music Volume"), WBUT_PLAIN);
 	addFESlider(INTINGAMEOP_CDVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOP_3_Y-5,
-				AUDIO_VOL_MAX, mixer_GetCDVolume(), INTINGAMEOP_CDVOL);
+				AUDIO_VOL_MAX, (int)(sound_GetMusicVolume() * 100), INTINGAMEOP_CDVOL);
 
 	SetCurrentSnapID(&InterfaceSnap, INTINGAMEOP_RESUME);
 
@@ -456,13 +456,13 @@ void intProcessInGameOptions(UDWORD id)
 
 
 	case INTINGAMEOP_FXVOL_S:
-		mixer_SetWavVolume(widgGetSliderPos(psWScreen, INTINGAMEOP_FXVOL_S));
+		sound_SetUIVolume((float)widgGetSliderPos(psWScreen, INTINGAMEOP_FXVOL_S) / 100.0);
 		break;
 	case INTINGAMEOP_3DFXVOL_S:
-		mixer_Set3dWavVolume(widgGetSliderPos(psWScreen, INTINGAMEOP_3DFXVOL_S));
+		sound_SetEffectsVolume((float)widgGetSliderPos(psWScreen, INTINGAMEOP_3DFXVOL_S) / 100.0);
 		break;
 	case INTINGAMEOP_CDVOL_S:
-		mixer_SetCDVolume(widgGetSliderPos(psWScreen, INTINGAMEOP_CDVOL_S));
+		sound_SetMusicVolume((float)widgGetSliderPos(psWScreen, INTINGAMEOP_CDVOL_S) / 100.0);
 		break;
 
 //	case INTINGAMEOP_GAMMA_S:

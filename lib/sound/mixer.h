@@ -29,12 +29,12 @@
 
 /***************************************************************************/
 
-SDWORD	mixer_GetCDVolume( void );
-void	mixer_SetCDVolume( SDWORD iVol );
-SDWORD	mixer_GetWavVolume( void );
-void	mixer_SetWavVolume( SDWORD iVol );
-SDWORD	mixer_Get3dWavVolume( void );
-void	mixer_Set3dWavVolume( SDWORD iVol );
+float sound_GetMusicVolume(void);
+void  sound_SetMusicVolume(float volume);
+float sound_GetUIVolume(void );
+void  sound_SetUIVolume(float volume);
+float sound_GetEffectsVolume(void);
+void  sound_SetEffectsVolume(float volume);
 
 /***************************************************************************/
 

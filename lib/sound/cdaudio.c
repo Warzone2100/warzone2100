@@ -358,10 +358,10 @@ void cdAudio_Update( void )
 // ======================================================================
 // ======================================================================
 //
-SDWORD mixer_GetCDVolume( void )
+float sound_GetMusicVolume()
 {
 #ifndef WZ_NOSOUND
-	return (SDWORD)(100*music_volume);
+	return music_volume;
 #else
 	return 0;
 #endif
@@ -371,16 +371,22 @@ SDWORD mixer_GetCDVolume( void )
 // ======================================================================
 // ======================================================================
 //
-void mixer_SetCDVolume( SDWORD iVol )
+void sound_SetMusicVolume(float volume)
 {
 #ifndef WZ_NOSOUND
-	music_volume = 0.01*iVol;
+	music_volume = volume;
 
-	if (music_volume < 0.0) {
+    // Keep volume in the range of 0.0 - 1.0
+	if (music_volume < 0.0)
+	{
 		music_volume = 0.0;
-	} else if (music_volume > 1.0) {
+	}
+	else if (music_volume > 1.0)
+	{
 		music_volume = 1.0;
 	}
-	alSourcef (music_source, AL_GAIN, music_volume);
+
+	// Set the volume on the OpenAL source playing our music stream
+	alSourcef(music_source, AL_GAIN, music_volume);
 #endif
 }

@@ -86,21 +86,21 @@ BOOL loadConfig(void)
 	// voice vol
 	if(getWarzoneKeyNumeric("voicevol", &val))
 	{
-		mixer_SetWavVolume((SDWORD)val);//was val
+		sound_SetUIVolume((float)val / 100.0);//was val
 	}
 
 	// //////////////////////////
 	// fx vol
 	if(getWarzoneKeyNumeric("fxvol", &val))
 	{
-		mixer_Set3dWavVolume((SDWORD)val);//was val
+		sound_SetEffectsVolume((float)val / 100.0);//was val
 	}
 
 	// //////////////////////////
 	// cdvol
 	if(getWarzoneKeyNumeric("cdvol", &val))
 	{
-		mixer_SetCDVolume((SDWORD)val);
+		sound_SetMusicVolume((float)val / 100.0);
 	}
 
 	if (getWarzoneKeyNumeric("playaudiocds", &val)) {
@@ -569,9 +569,9 @@ BOOL saveConfig(void)
 
 	// //////////////////////////
 	// voicevol, fxvol and cdvol
-	setWarzoneKeyNumeric("voicevol", mixer_GetWavVolume());
-	setWarzoneKeyNumeric("fxvol", mixer_Get3dWavVolume());
-	setWarzoneKeyNumeric("cdvol", mixer_GetCDVolume());
+	setWarzoneKeyNumeric("voicevol", (int)(sound_GetUIVolume() * 100.0));
+	setWarzoneKeyNumeric("fxvol", (int)(sound_GetEffectsVolume() * 100.0));
+	setWarzoneKeyNumeric("cdvol", (int)(sound_GetMusicVolume() * 100.0));
 	setWarzoneKeyNumeric("playaudiocds", war_GetPlayAudioCDs());
 
 	setWarzoneKeyNumeric("width", pie_GetVideoBufferWidth());

@@ -942,15 +942,15 @@ BOOL startGameOptions3Menu(void)
 
 	// 2d audio
 	addTextButton(FRONTEND_FX, FRONTEND_POS2X-25,FRONTEND_POS2Y, _("Voice Volume"),TRUE,FALSE);
-	addFESlider(FRONTEND_FX_SL, FRONTEND_BOTFORM, FRONTEND_POS2M, FRONTEND_POS2Y+5, AUDIO_VOL_MAX, mixer_GetWavVolume(), FRONTEND_FX );
+	addFESlider(FRONTEND_FX_SL, FRONTEND_BOTFORM, FRONTEND_POS2M, FRONTEND_POS2Y+5, AUDIO_VOL_MAX, (int)(sound_GetUIVolume() * 100.0), FRONTEND_FX );
 
 	// 3d audio
 	addTextButton(FRONTEND_3D_FX, FRONTEND_POS3X-25,FRONTEND_POS3Y, _("FX Volume"),TRUE,FALSE);
-	addFESlider(FRONTEND_3D_FX_SL,FRONTEND_BOTFORM, FRONTEND_POS3M, FRONTEND_POS3Y+5,AUDIO_VOL_MAX,mixer_Get3dWavVolume(),FRONTEND_3D_FX );
+	addFESlider(FRONTEND_3D_FX_SL, FRONTEND_BOTFORM, FRONTEND_POS3M, FRONTEND_POS3Y+5, AUDIO_VOL_MAX, (int)(sound_GetEffectsVolume() * 100.0), FRONTEND_3D_FX );
 
 	// cd audio
 	addTextButton(FRONTEND_MUSIC, FRONTEND_POS4X-25,FRONTEND_POS4Y, _("Music Volume"),TRUE,FALSE);
-	addFESlider(FRONTEND_MUSIC_SL,FRONTEND_BOTFORM, FRONTEND_POS4M, FRONTEND_POS4Y+5,AUDIO_VOL_MAX,mixer_GetCDVolume(),FRONTEND_MUSIC );
+	addFESlider(FRONTEND_MUSIC_SL, FRONTEND_BOTFORM, FRONTEND_POS4M, FRONTEND_POS4Y+5, AUDIO_VOL_MAX, (int)(sound_GetMusicVolume() * 100.0), FRONTEND_MUSIC );
 
 	// quit.
 	addMultiBut(psWScreen,FRONTEND_BOTFORM,FRONTEND_QUIT,10,10,30,29, P_("menu", "Return"),IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);
@@ -979,15 +979,15 @@ BOOL runGameOptions3Menu(void)
 		break;
 
 	case FRONTEND_FX_SL:
-		mixer_SetWavVolume(widgGetSliderPos(psWScreen,FRONTEND_FX_SL));
+		sound_SetUIVolume((float)widgGetSliderPos(psWScreen,FRONTEND_FX_SL) / 100.0);
 		break;
 
 	case FRONTEND_3D_FX_SL:
-		mixer_Set3dWavVolume(widgGetSliderPos(psWScreen,FRONTEND_3D_FX_SL));
+		sound_SetEffectsVolume((float)widgGetSliderPos(psWScreen,FRONTEND_3D_FX_SL) / 100.0);
 		break;
 
 	case FRONTEND_MUSIC_SL:
-		mixer_SetCDVolume(widgGetSliderPos(psWScreen,FRONTEND_MUSIC_SL));
+		sound_SetMusicVolume((float)widgGetSliderPos(psWScreen, FRONTEND_MUSIC_SL) / 100.0);
 		break;
 
 

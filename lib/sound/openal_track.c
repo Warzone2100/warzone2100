@@ -670,45 +670,53 @@ BOOL sound_SampleIsFinished( AUDIO_SAMPLE *psSample )
 // =======================================================================================================================
 //
 
-SDWORD mixer_GetWavVolume( void )
+float sound_GetUIVolume()
 {
 #ifndef WZ_NOSOUND
-	return (SDWORD)(100*sfx_volume);
+	return sfx_volume;
 #else
 	return 0;
 #endif
 }
 
-void mixer_SetWavVolume( SDWORD iVol )
+void sound_SetUIVolume(float volume)
 {
 #ifndef WZ_NOSOUND
-	sfx_volume = iVol * 0.01;
+	sfx_volume = volume;
 
-	if (sfx_volume < 0.0) {
+    // Keep volume in the range of 0.0 - 1.0
+	if (sfx_volume < 0.0)
+	{
 		sfx_volume = 0.0;
-	} else if (sfx_volume > 1.0) {
+	}
+	else if (sfx_volume > 1.0)
+	{
 		sfx_volume = 1.0;
 	}
 #endif
 }
 
-SDWORD mixer_Get3dWavVolume( void )
+float sound_GetEffectsVolume()
 {
 #ifndef WZ_NOSOUND
-	return (SDWORD)(100*sfx3d_volume);
+	return sfx3d_volume;
 #else
 	return 0;
 #endif
 }
 
-void mixer_Set3dWavVolume( SDWORD iVol )
+void sound_SetEffectsVolume(float volume)
 {
 #ifndef WZ_NOSOUND
-	sfx3d_volume = iVol * 0.01;
+	sfx3d_volume = volume;
 
-	if (sfx3d_volume < 0.0) {
+    // Keep volume in the range of 0.0 - 1.0
+	if (sfx3d_volume < 0.0)
+	{
 		sfx3d_volume = 0.0;
-	} else if (sfx3d_volume > 1.0) {
+	}
+	else if (sfx3d_volume > 1.0)
+	{
 		sfx3d_volume = 1.0;
 	}
 #endif

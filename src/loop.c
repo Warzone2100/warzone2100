@@ -134,7 +134,6 @@ static	UDWORD	numCommandDroids[MAX_PLAYERS];
 static	UDWORD	numConstructorDroids[MAX_PLAYERS];
 // flag to signal a quick exit from the game
 static SDWORD videoMode;
-static SDWORD	g_iGlobalVol;
 
 LOOP_MISSION_STATE		loopMissionState = LMS_NORMAL;
 
@@ -652,7 +651,8 @@ GAMECODE gameLoop(void)
 /* The video playback loop */
 void videoLoop(void)
 {
-	BOOL bVolKilled = FALSE;
+	bool bVolKilled = false;
+	float originalVolume;
 
 	// There is something really odd here. - Per
 	static BOOL bActiveBackDrop = FALSE;
@@ -671,9 +671,9 @@ void videoLoop(void)
 	if ( (keyPressed(KEY_ESC) || bQuitVideo) && !seq_AnySeqLeft() )
 	{
 		/* zero volume before video quit - restore later */
-		g_iGlobalVol = mixer_GetWavVolume();
-		mixer_SetWavVolume( 0 );
-		bVolKilled = TRUE;
+		originalVolume = sound_GetUIVolume();
+		sound_SetUIVolume(0.0);
+		bVolKilled = true;
 	}
 
 	//toggling display mode disabled in video mode
@@ -772,9 +772,9 @@ void videoLoop(void)
 	pie_ScreenFlip(CLEAR_BLACK);// videoloopflip
 
 	/* restore volume after video quit */
-	if ( bVolKilled == TRUE )
+	if (bVolKilled)
 	{
-		mixer_SetWavVolume( g_iGlobalVol );
+		sound_SetUIVolume(originalVolume);
 	}
 }
 
