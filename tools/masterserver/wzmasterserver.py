@@ -100,7 +100,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
                     finally:
                         listLock.release()
 
-                if newGameData or len(newGameData) < gsSize:
+                if not newGameData:
                     # incomplete data
                     break
 
