@@ -557,7 +557,7 @@ void setupExceptionHandler(const char * programCommand)
 	}
 	else
 	{
-		debug(LOG_WARNING, "Could not retrieve full path to %s, will not create extended backtrace\n", programCommand);
+		debug(LOG_WZ, "Could not retrieve full path to %s, will not create extended backtrace\n", programCommand);
 	}
 
 	// Get full path to 'gdb'
