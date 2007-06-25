@@ -96,6 +96,7 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 // POSIX headers:
 # include <unistd.h>
 # include <fcntl.h>
+# include <time.h>
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <sys/wait.h>
@@ -109,6 +110,7 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 
 
 # define MAX_PID_STRING 16
+# define MAX_DATE_STRING 256
 
 
 typedef void(*SigActionHandler)(int, siginfo_t *, void *);
@@ -124,6 +126,7 @@ static struct sigaction oldAction[NSIG];
 static struct utsname sysInfo;
 static BOOL gdbIsAvailable = FALSE, programIsAvailable = FALSE, sysInfoValid = FALSE;
 static char
+	executionDate[MAX_DATE_STRING] = {'\0'},
 	programPID[MAX_PID_STRING] = {'\0'},
 	programPath[MAX_PATH] = {'\0'},
 	gdbPath[MAX_PATH] = {'\0'};
@@ -409,6 +412,10 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, void * sigcon
 
 	write(dumpFile, "Compiled on: ", strlen("Compiled on: "));
 	write(dumpFile, __DATE__, strlen(__DATE__));
+	write(dumpFile, "\n", 1);
+
+	write(dumpFile, "Executed on: ", strlen("Executed on: "));
+	write(dumpFile, executionDate, strlen(executionDate));
 	write(dumpFile, "\n\n", 2);
 
 
@@ -514,8 +521,18 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, void * sigcon
 	}
 	else
 	{
-		write(dumpFile, "GDB not available, no extended backtrace dumped\n",
-			  strlen("GDB not available, no extended backtrace dumped\n"));
+		write(dumpFile, "No extended backtrace dumped:\n",
+			strlen("No extended backtrace dumped:\n"));
+		if (!programIsAvailable)
+		{
+			write(dumpFile, "- Program path not available\n",
+				strlen("- Program path not available\n"));
+		}
+		if (!gdbIsAvailable)
+		{
+			write(dumpFile, "- GDB not available\n",
+				strlen("- GDB not available\n"));
+		}
 	}
 
 
@@ -540,6 +557,7 @@ void setupExceptionHandler(const char * programCommand)
 #if defined(__WIN32__)
 	SetUnhandledExceptionFilter(windowsExceptionHandler);
 #elif (_XOPEN_SOURCE - 0 >= 500) && !defined(__MACOSX__)
+	// Prepare 'which' command for popen
 	char whichProgramCommand[MAX_PATH] = {'\0'};
 	snprintf( whichProgramCommand, MAX_PATH, "which %s", programCommand );
 
@@ -551,7 +569,7 @@ void setupExceptionHandler(const char * programCommand)
 	// Were we able to find ourselves?
 	if (strlen(programPath) > 0)
 	{
-		programIsAvailable = FALSE;
+		programIsAvailable = TRUE;
 		*(strrchr(programPath, '\n')) = '\0'; // `which' adds a \n which confuses exec()
 		debug(LOG_WZ, "Found us at %s", programPath);
 	}
@@ -578,6 +596,9 @@ void setupExceptionHandler(const char * programCommand)
 	}
 
 	sysInfoValid = (uname(&sysInfo) == 0);
+
+	time_t currentTime = time(NULL);
+	strncpy( executionDate, ctime(&currentTime), MAX_DATE_STRING );
 
 	snprintf( programPID, MAX_PID_STRING, "%i", getpid() );
 
