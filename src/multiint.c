@@ -3771,11 +3771,11 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 			}
 
 			// medals.
-			if((stat.loses>2)&&(stat.wins>2)&&(stat.wins>(2*stat.loses)) )// bronze requirement.
+			if((stat.losses > 2) && (stat.wins > 2) && (stat.wins > (2 * stat.losses)))// bronze requirement.
 			{
-				if(stat.wins>(4*stat.loses))								// silver requirement.
+				if( stat.wins > (4 * stat.losses))								// silver requirement.
 				{
-					if(stat.wins>(8*stat.loses))							// gold requirement
+					if(stat.wins > (8 * stat.losses))							// gold requirement
 					{
 						iV_DrawImage(FrontImages,IMAGE_MEDAL_GOLD,x+49,y+11);
 					}

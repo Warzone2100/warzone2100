@@ -27,26 +27,28 @@
  * Also Definitions for saved Arena Forces to enable teams to be saved to disk
  */
 
-typedef struct{
-	SDWORD		played;						/// propogated stats.
-	SDWORD		wins;
-	SDWORD		loses;
-	SDWORD		totalKills;
-	SDWORD		totalScore;
+typedef struct
+{
+	uint32_t played;						/// propogated stats.
+	uint32_t wins;
+	uint32_t losses;
+	uint32_t totalKills;
+	uint32_t totalScore;
 
-	SDWORD		recentKills;				// score/kills in last game.
-	SDWORD		recentScore;
+	uint32_t recentKills;				// score/kills in last game.
+	uint32_t recentScore;
 
-	SDWORD		killsToAdd;					// things to add next time score is updated.
-	SDWORD		scoreToAdd;
+	uint32_t killsToAdd;					// things to add next time score is updated.
+	uint32_t scoreToAdd;
 
-} PLAYERSTATS, *LPPLAYERSTATS;
+} PLAYERSTATS;
 
-typedef struct{								// complete info.
-	char		name[255];
-	PLAYERSTATS	stats;
-	UBYTE		padding[4];					// used to fill encryption array & confuse enduser.
-}SAVEDPLAYERSTATS, *LPSAVEDPLAYERSTATS;
+// This is the definition of the multiplay/players/*.sta files
+typedef struct								// complete info.
+{
+	char        name[255];
+	PLAYERSTATS stats;
+} SAVEDPLAYERSTATS;
 
 
 typedef struct _forcemember {
@@ -69,8 +71,8 @@ extern BOOL	saveForce				(char *name,FORCE *pfForce);
 extern BOOL	loadForce				(char *name);
 
 // stat defs
-extern BOOL			saveMultiStats			(char *sFName, char *sPlayerName,PLAYERSTATS *playerStats);	// to disk
-extern BOOL			loadMultiStats			(const char *sPlayerName, PLAYERSTATS *playerStats);					// form disk
+extern BOOL			saveMultiStats			(const char *sFName, const char *sPlayerName, const PLAYERSTATS *playerStats);	// to disk
+extern BOOL			loadMultiStats			(char *sPlayerName, PLAYERSTATS *playerStats);					// form disk
 extern PLAYERSTATS	getMultiStats			(UDWORD player,BOOL bLocal);									// get from net
 extern BOOL			setMultiStats			(SDWORD playerDPID, PLAYERSTATS plStats,BOOL bLocal);			// send to net.
 extern void			updateMultiStatsDamage	(UDWORD attacker, UDWORD defender, UDWORD inflicted);
@@ -78,4 +80,3 @@ extern void			updateMultiStatsGames	(void);
 extern void			updateMultiStatsWins	(void);
 extern void			updateMultiStatsLoses	(void);
 extern void			updateMultiStatsKills	(BASE_OBJECT *psKilled,UDWORD player);
-
