@@ -145,7 +145,7 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 
 					/* See if friendly droid has a target */
 					tempTarget = friendlyDroid->psActionTarget[0];
-					if(tempTarget != NULL)
+					if(tempTarget && !tempTarget->died)
 					{
 						//make sure a weapon droid is targeting it
 						if(friendlyDroid->numWeaps > 0)
@@ -191,8 +191,8 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 				if (bMultiPlayer)
 				{
 					// if not electronic then valid target
-					if (!electronic 
-					    || (electronic 
+					if (!electronic
+					    || (electronic
 					        && ((DROID *)targetInQuestion)->droidType != DROID_TRANSPORTER))
 					{
 						//only a valid target if NOT a transporter

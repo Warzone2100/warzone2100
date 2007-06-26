@@ -386,7 +386,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	psObj->psDamaged	= NULL;
 
 	/* If target is a VTOL or higher than ground, it is an air target. */
-	if ((psTarget != NULL && psTarget->type == OBJ_DROID && vtolDroid((DROID*)psTarget)) 
+	if ((psTarget != NULL && psTarget->type == OBJ_DROID && vtolDroid((DROID*)psTarget))
 	    || (psTarget == NULL && (SDWORD)tarZ > map_Height(tarX,tarY)))
 	{
 		psObj->airTarget = TRUE;
@@ -399,7 +399,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 
 		ASSERT(psProj->type == OBJ_BULLET, "Penetrating but not projectile?");
 		psObj->psSource = psProj->psSource;
-		psObj->psDamaged = psProj->psDest;
+		psObj->psDamaged = (psProj->psDest && !psProj->psDest->died) ? psProj->psDest : NULL;
 		psProj->state = PROJ_IMPACT;
 	}
 	else
@@ -1440,7 +1440,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 	  			percentDamage = objectDamage(psObj->psDest,damage , psStats->weaponClass,psStats->weaponSubClass, impact_angle);
 
 				proj_UpdateKills(psObj, percentDamage);
-				
+
 				if (percentDamage >= 0)	// So long as the target wasn't killed
 				{
 					psObj->psDamaged = psObj->psDest;
@@ -1491,7 +1491,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 				percentDamage = objectDamage(psObj->psDest, damage, psStats->weaponClass,psStats->weaponSubClass, impact_angle);
 
 				proj_UpdateKills(psObj, percentDamage);
-				
+
 				if (percentDamage >= 0)
 				{
 					psObj->psDamaged = psObj->psDest;
@@ -1809,7 +1809,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 						percentDamage = featureDamage(psCurrF, calcDamage(weaponRadDamage(
 							psStats, psObj->player), psStats->weaponEffect,
 							(BASE_OBJECT *)psCurrF), psStats->weaponSubClass);
-						
+
 						proj_UpdateKills(psObj, percentDamage);
 					}
 				}
@@ -1893,6 +1893,10 @@ proj_Update( PROJ_OBJECT *psObj )
 	if (psObj->psDest && psObj->psDest->died)
 	{
 		psObj->psDest = NULL;
+	}
+	if (psObj->psDamaged && psObj->psDamaged->died)
+	{
+		psObj->psDamaged = NULL;
 	}
 
 	//Watermelon:get naybors
@@ -2193,7 +2197,7 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
  *    damage to a cyborg with 150 points left the actual damage would be taken
  *    as 150.
  *  - Should sufficient damage be done to destroy/kill a unit then the value is
- *    multiplied by -1, resulting in a negative number. 
+ *    multiplied by -1, resulting in a negative number.
  */
 SDWORD objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, int angle)
 {
