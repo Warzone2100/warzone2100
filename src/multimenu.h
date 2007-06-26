@@ -27,7 +27,7 @@
 #define __INCLUDED_MULTIMENU__
 
 // requester
-extern void		addMultiRequest(char *ToFind, UDWORD id,UBYTE mapCam, UBYTE numPlayers);
+extern void		addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD id,UBYTE mapCam, UBYTE numPlayers);
 extern BOOL		multiRequestUp;
 extern W_SCREEN *psRScreen;			// requester stuff.
 extern BOOL		runMultiRequester(UDWORD id,UDWORD *contextmode, char *chosen,UDWORD *chosenValue);
