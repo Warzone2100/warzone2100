@@ -364,13 +364,16 @@ BOOL loadConfig(void)
 	}
 
 	// player name
-	if (getWarzoneKeyString("playerName", sBuf))
+	// must _not_ be an empty string
+	if (getWarzoneKeyString("playerName", sBuf)
+	 && *sBuf != '\0')
 	{
 		strcpy((char*)sPlayer, sBuf);
 	}
 	else
 	{
-		setWarzoneKeyString("playerName","Player");
+		setWarzoneKeyString("playerName", _("Player"));
+		strcpy((char*)sPlayer, _("Player"));
 	}
 
 	// map name

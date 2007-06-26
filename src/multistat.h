@@ -70,7 +70,7 @@ extern BOOL	loadForce				(char *name);
 
 // stat defs
 extern BOOL			saveMultiStats			(char *sFName, char *sPlayerName,PLAYERSTATS *playerStats);	// to disk
-extern BOOL			loadMultiStats			(char *sPlayerName,PLAYERSTATS *playerStats);					// form disk
+extern BOOL			loadMultiStats			(const char *sPlayerName, PLAYERSTATS *playerStats);					// form disk
 extern PLAYERSTATS	getMultiStats			(UDWORD player,BOOL bLocal);									// get from net
 extern BOOL			setMultiStats			(SDWORD playerDPID, PLAYERSTATS plStats,BOOL bLocal);			// send to net.
 extern void			updateMultiStatsDamage	(UDWORD attacker, UDWORD defender, UDWORD inflicted);

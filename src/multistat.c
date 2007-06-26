@@ -588,17 +588,19 @@ BOOL setMultiStats(SDWORD dp, PLAYERSTATS plStats, BOOL bLocal)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Load Player Stats
-BOOL loadMultiStats(char *sPlayerName,PLAYERSTATS *playerStats)
+BOOL loadMultiStats(const char *sPlayerName, PLAYERSTATS *playerStats)
 {
-	char				fileName[255]="";
+	char				fileName[255];
 	UDWORD				size;
 	char				*pFileData;
 	PLAYERSTATS			blankstats = {0};
 	SAVEDPLAYERSTATS		st;
 
-	strcpy(fileName,MultiPlayersPath);
-	strcat(fileName,sPlayerName);
-	strcat(fileName,".sta");
+	// Prevent an empty player name (where the first byte is a 0x0 terminating char already)
+	if (!*sPlayerName)
+		sPlayerName = _("Player");
+
+	snprintf(fileName, sizeof(fileName), "%s%s.sta", MultiPlayersPath, sPlayerName);
 
 	debug(LOG_WZ, "loadMultiStats: %s", fileName);
 	// check player already exists
