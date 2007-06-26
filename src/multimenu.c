@@ -358,6 +358,8 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 	char**             fileList;
 	char**             currFile;
 	const unsigned int extensionLength = strlen(fileExtension);
+	const unsigned int buttonsX = (mode == MULTIOP_MAP) ? 22 : 17;
+
 	unsigned int       numButtons, count, butPerForm, i;
 
 	static char		tips[NBTIPS][MAX_STR_SIZE];
@@ -471,7 +473,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 	sButInit.formID		= M_REQUEST_TAB;
 	sButInit.id		= M_REQUEST_BUT;
 	sButInit.style		= WBUT_PLAIN;
-	sButInit.x		= 22;
+	sButInit.x		= buttonsX;
 	sButInit.y		= 4;
 	sButInit.width		= R_BUT_W;
 	sButInit.height		= R_BUT_H;
@@ -531,7 +533,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 		sButInit.x = (SWORD)(sButInit.x + (R_BUT_W+ 4));
 		if (sButInit.x + R_BUT_W+ 2 > M_REQUEST_W)
 		{
-			sButInit.x = 17;
+			sButInit.x = buttonsX;
 			sButInit.y = (SWORD)(sButInit.y +R_BUT_H + 4);
 		}
 		if (sButInit.y +R_BUT_H + 4 > M_REQUEST_H)
@@ -565,7 +567,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 				sButInit.x = (SWORD)(sButInit.x + (R_BUT_W+ 4));
 				if (sButInit.x + R_BUT_W+ 2 > M_REQUEST_W)
 				{
-					sButInit.x = 22;
+					sButInit.x = buttonsX;
 					sButInit.y = (SWORD)(sButInit.y +R_BUT_H + 4);
 				}
 				if (sButInit.y +R_BUT_H + 4 > M_REQUEST_H)
@@ -592,7 +594,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 		sButInit.height		= 17;
 		sButInit.UserData	= 1;
 		sButInit.FontID		= WFont;
-		sButInit.pTip		= "Tech:1";
+		sButInit.pTip		= _("Technology level 1");
 		sButInit.pDisplay	= displayCamTypeBut;
 
 		widgAddButton(psRScreen, &sButInit);
@@ -600,38 +602,38 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 		sButInit.id		= M_REQUEST_C2;
 		sButInit.y		+= 22;
 		sButInit.UserData	= 2;
-		sButInit.pTip		= "Tech:2";
+		sButInit.pTip		= _("Technology level 2");
 		widgAddButton(psRScreen, &sButInit);
 
 		sButInit.id		= M_REQUEST_C3;
 		sButInit.y		+= 22;
 		sButInit.UserData	= 3;
-		sButInit.pTip		= "Tech:3";
+		sButInit.pTip		= _("Technology level 3");
 		widgAddButton(psRScreen, &sButInit);
 
 		sButInit.id		= M_REQUEST_AP;
 		sButInit.y		= 17;
 		sButInit.UserData	= 0;
-		sButInit.pTip		= "Any number of players";
+		sButInit.pTip		= _("Any number of players");
 		sButInit.pDisplay	= displayNumPlayersBut;
 		widgAddButton(psRScreen, &sButInit);
 
 		sButInit.id		= M_REQUEST_2P;
 		sButInit.y		+= 22;
 		sButInit.UserData	= 2;
-		sButInit.pTip		= "2 players";
+		sButInit.pTip		= _("2 players");
 		widgAddButton(psRScreen, &sButInit);
 
 		sButInit.id		= M_REQUEST_4P;
 		sButInit.y		+= 22;
 		sButInit.UserData	= 4;
-		sButInit.pTip		= "4 players";
+		sButInit.pTip		= _("4 players");
 		widgAddButton(psRScreen, &sButInit);
 
 		sButInit.id		= M_REQUEST_8P;
 		sButInit.y		+= 22;
 		sButInit.UserData	= 8;
-		sButInit.pTip		= "8 players";
+		sButInit.pTip		= _("8 players");
 		widgAddButton(psRScreen, &sButInit);
 	}
 
