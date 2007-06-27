@@ -433,7 +433,7 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	// Just display the 3d, no interface
 		displayWorld();
 	// Upload the current display back buffer into system memory.
-		pie_UploadDisplayBuffer(DisplayBuffer);
+		pie_UploadDisplayBuffer();
 
 		radarOnScreen = radOnScreen;
 		bRender3DOnly = FALSE;

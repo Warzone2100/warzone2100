@@ -77,7 +77,7 @@ extern BOOL pie_ShutdownRadar(void);
 extern void pie_DownLoadRadar( unsigned char *buffer );
 extern void pie_RenderRadar( int x, int y );
 
-extern void pie_UploadDisplayBuffer(char *DisplayBuffer);
+extern void pie_UploadDisplayBuffer(void);
 
 extern	void	pie_SetAdditiveSprites(BOOL	val);
 extern	void	pie_SetAdditiveSpriteLevel(UDWORD	val);

@@ -181,7 +181,7 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 
 				displayWorld();									// Just display the 3d, no interface
 
-				pie_UploadDisplayBuffer(DisplayBuffer);			// Upload the current display back buffer into system memory.
+				pie_UploadDisplayBuffer();			// Upload the current display back buffer into system memory.
 
 				radarOnScreen = radOnScreen;
 				bRender3DOnly = FALSE;
