@@ -1384,13 +1384,6 @@ static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 	ASSERT( psGroup != NULL,
 		"cmdUnitOrderGroupBase: invalid unit group" );
 
-
-	if (bMultiPlayer && SendCmdGroup(psGroup, psData->x,	psData->y,	psData->psObj[0]) )
-	{	// turn off multiplay messages,since we've send a group one instead.
-		turnOffMultiMsg(TRUE);
-	}
-
-
 	if (psData->order == DORDER_RECOVER)
 	{
 		// picking up an artifact - only need to send one unit

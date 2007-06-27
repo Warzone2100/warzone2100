@@ -48,8 +48,6 @@
 #define ANYPLAYER	99
 #define UNKNOWN		99
 
-DROIDSTORE *tempDroidList = NULL;
-
 // ////////////////////////////////////////////////////////////////////////////
 // External Stuff.
 extern DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y);
@@ -150,6 +148,8 @@ BOOL sendVtolRearm(DROID *psDroid,STRUCTURE *psStruct, UBYTE chosen)
 
 	msg.size = (12 + i);
 	msg.type = NET_VTOLREARM;
+
+	// FIXME: Err... How about actually sending the packet here? - Per
 	return TRUE;
 }
 
@@ -585,55 +585,6 @@ BOOL recvDroid(NETMSG * m)
 // ////////////////////////////////////////////////////////////////////////////
 // Droid Group/selection orders.
 // minimises comms by sending orders for whole groups, rather than each droid
-
-BOOL SendCmdGroup(DROID_GROUP *psGroup, UWORD x, UWORD y, BASE_OBJECT *psObj)
-{
-	//NETMSG	m;
-	//DROID	*pDroid;
-	//UWORD	droidcount=0;
-
-    return FALSE;	//doesnt fukin work. return FALSE and use other msgs to cope with this (about 2 packet overhead)
-/*
-	if (psObj == NULL)							//it's a position order
-	{
-		NetAdd(m,0,x);
-		NetAdd(m,4,y);
-		m.body[8] = 0;							// subtype flag
-	}
-	else										// it's a object order
-	{
-		NetAdd(m,0, psObj->id);
-		NetAdd(m,4, psObj->type);
-		m.body[8]=1;							// subtype flag
-	}
-	m.body[10]=1;		//  a cmd order.
-	m.size=12;
-
-	for (pDroid = psGroup->psList; pDroid; pDroid=pDroid->psGrpNext)
-	{
-
-		if (!orderState(pDroid, DORDER_RTR))	// CHANGE THIS BIT WHEN REQD!!!
-		{
-			NetAdd(m,m.size,pDroid->id);
-			m.size += sizeof(UDWORD);
-			droidcount ++;
-		}
-	}
-
-	if( droidcount > 0	) 							// return TRUE if it's worth using.
-	{
-		NetAdd(m,9,droidcount);						// note how many in this message.
-		m.type = NET_GROUPORDER;					// send it
-		NETbcast(&m,FALSE);
-		return TRUE;
-	}
-	else
-	{
-		return FALSE;								// didn't bother using it, so return false, to allow individiual orders.
-	}
-*/
-}
-
 
 BOOL SendGroupOrderSelected(UBYTE player, UDWORD x, UDWORD y, BASE_OBJECT *psObj)
 {
@@ -1111,7 +1062,6 @@ BOOL receiveWholeDroid(NETMSG *m)
 	UDWORD			sizecount=0;
 	DROID_TEMPLATE	dt;
 	DROID			*pD,*existingdroid;
-	DROIDSTORE		*tempDroid;
 	UWORD x,y,z;
 	UDWORD id;
 	UBYTE player;
@@ -1178,41 +1128,14 @@ BOOL receiveWholeDroid(NETMSG *m)
 
 	NetGet(m,sizecount,pD->secondaryOrder);		sizecount+=sizeof(pD->secondaryOrder);
 
-	if(ingame.localJoiningInProgress)
+	for (i = 0;i < dt.numWeaps;i++)
 	{
-		ASSERT(!"unused", "Tell Per he was wrong and that this code is actually in use!");
-
-		NetGet(m,sizecount,pD->order);				sizecount+=sizeof(pD->order);		// processed laater
-		NetGet(m,sizecount,pD->orderX);				sizecount+=sizeof(pD->orderX);		//later!
-		NetGet(m,sizecount,pD->orderY);				sizecount+=sizeof(pD->orderY);		//later!
-		NetGet(m,sizecount,pD->orderX2);			sizecount+=sizeof(pD->orderX2);
-		NetGet(m,sizecount,pD->orderY2);			sizecount+=sizeof(pD->orderY2);
-
-		//Watermelon:recieve packet changes to cope with psTarget[] array change
-		for (i = 0;i < dt.numWeaps;i++)
-		{
-			NetGet(m,sizecount,pD->psTarget[i]);			sizecount+=sizeof(pD->psTarget[i]);	//later!
-		}
-		NetGet(m,sizecount,pD->psTarStats[0]);			sizecount+=sizeof(pD->psTarStats[0]);	//later!
-
-		//store the droid for later.
-		//except there is no 'later', this is NEVER USED except here! What happens to the poor droid? - Per
-		tempDroid = (DROIDSTORE*)malloc(sizeof(DROIDSTORE));
-		tempDroid->psDroid  = pD;
-		tempDroid->psNext	= tempDroidList;
-		tempDroidList		= tempDroid;
+		NetGet(m, sizecount, id);			sizecount += sizeof(id);
+		pD->psTarget[i] = IdToPointer(id, ANYPLAYER);
 	}
-	else							//don't bother setting the orders. they'll update sooner or later anywho.
-	{
-		for (i = 0;i < dt.numWeaps;i++)
-		{
-			NetGet(m, sizecount, id);			sizecount += sizeof(id);
-			pD->psTarget[i] = IdToPointer(id, ANYPLAYER);
-		}
-		pD->psTarStats[0] = 0;
+	pD->psTarStats[0] = NULL;
 
-		addDroid(pD, apsDroidLists);
-	}
+	addDroid(pD, apsDroidLists);
 
 	return TRUE;
 }
