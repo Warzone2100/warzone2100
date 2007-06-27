@@ -1260,7 +1260,6 @@ static BOOL IsScenario;
  *	Local ProtoTypes
  */
 /***************************************************************************/
-BOOL gameLoad(char *pFileData, UDWORD filesize);
 static BOOL gameLoadV7(char *pFileData, UDWORD filesize);
 static BOOL gameLoadV(char *pFileData, UDWORD filesize, UDWORD version);
 static BOOL writeGameFile(char *pFileName, SDWORD saveType);
@@ -1296,7 +1295,6 @@ static BOOL loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatu
 static BOOL loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWORD version);
 static BOOL writeFeatureFile(char *pFileName);
 
-BOOL loadTerrainTypeMap(char *pFileData, UDWORD filesize);		// now used in gamepsx.c aswell
 static BOOL writeTerrainTypeMapFile(char *pFileName);
 
 static BOOL loadSaveCompList(char *pFileData, UDWORD filesize);
@@ -1365,7 +1363,7 @@ static char *getSaveStructNameV(SAVE_STRUCTURE *psSaveStructure)
 so can be called in levLoadData when starting a game from a load save game*/
 
 // -----------------------------------------------------------------------------------------
-BOOL loadGameInit(char *pGameToLoad )
+BOOL loadGameInit(const char *pGameToLoad )
 {
 	char			*pFileData = NULL;
 	UDWORD			fileSize;
@@ -1374,20 +1372,20 @@ BOOL loadGameInit(char *pGameToLoad )
 	pFileData = DisplayBuffer;
 	if (!loadFileToBuffer(pGameToLoad, pFileData, displayBufferSize, &fileSize))
 	{
-		debug( LOG_NEVER, "loadgame: Fail2\n" );
+		debug(LOG_ERROR, "loadGameInit: Fail1\n" );
 		goto error;
 	}
 
 	if (!gameLoad(pFileData, fileSize))
 	{
 		// FIXME Probably should never arrive here?
-		debug( LOG_NEVER, "loadgame: Fail4\n" );
+		debug(LOG_ERROR, "loadGameInit: Fail2\n" );
 		goto error;
 	}
+
 	return TRUE;
 
 error:
-		debug( LOG_NEVER, "loadgame: ERROR\n" );
 
 	/* Start the game clock */
 	gameTimeStart();
@@ -1407,7 +1405,7 @@ error:
 //
 // if it is a level loaded up from CD then UserSaveGame will by false
 // UserSaveGame ... Extra stuff to load after scripts
-BOOL loadMissionExtras(char *pGameToLoad, SWORD levelType)
+BOOL loadMissionExtras(const char *pGameToLoad, SWORD levelType)
 {
 	char			aFileName[256];
 
@@ -1486,7 +1484,7 @@ BOOL loadMissionExtras(char *pGameToLoad, SWORD levelType)
 
 // -----------------------------------------------------------------------------------------
 // UserSaveGame ... this is true when you are loading a players save game
-BOOL loadGame(char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGame)
+BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGame)
 {
 	char			aFileName[256];
 	//OPENFILENAME		sOFN;
@@ -8960,7 +8958,7 @@ BOOL writeTemplateFile(char *pFileName)
 // -----------------------------------------------------------------------------------------
 
 // load up a terrain tile type map file
-BOOL loadTerrainTypeMap(char *pFileData, UDWORD filesize)
+BOOL loadTerrainTypeMap(const char *pFileData, UDWORD filesize)
 {
 	TILETYPE_SAVEHEADER	*psHeader;
 	UDWORD				i;

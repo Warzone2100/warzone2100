@@ -18,16 +18,16 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /*
- * game.h	  
+ * game.h
  *
  * load and save game routines.
- * Very likely to ALL change! All the headers are separately defined at the 
- * moment - they probably don't need to be - if no difference make into one. 
- * Also the struct defintions throughout the game could be re-ordered to contain 
+ * Very likely to ALL change! All the headers are separately defined at the
+ * moment - they probably don't need to be - if no difference make into one.
+ * Also the struct defintions throughout the game could be re-ordered to contain
  * the variables required for saving so that don't need to create a load more here!
  */
 #ifndef _game_h
-#define _game_h							  
+#define _game_h
 
 /***************************************************************************/
 /*
@@ -125,18 +125,18 @@ typedef struct _score_save_header
  */
 /***************************************************************************/
 
-extern BOOL loadGame(char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGame);	// UserSaveGame is TRUE when the save game is not a new level (User Save Game)
+extern BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGame);	// UserSaveGame is TRUE when the save game is not a new level (User Save Game)
 /*This just loads up the .gam file to determine which level data to set up - split up
 so can be called in levLoadData when starting a game from a load save game*/
-extern BOOL loadGameInit(char *pGameToLoad);
+extern BOOL loadGameInit(const char *pGameToLoad);
 
-extern BOOL loadMissionExtras(char *pGameToLoad, SWORD levelType);
+extern BOOL loadMissionExtras(const char *pGameToLoad, SWORD levelType);
 
 // load the script state given a .gam name
 extern BOOL loadScriptState(char *pFileName);
 
 /// Load the terrain types
-extern BOOL loadTerrainTypeMap(char *pFileData, UDWORD filesize);
+extern BOOL loadTerrainTypeMap(const char *pFileData, UDWORD filesize);
 
 //direct access for forceloader
 extern BOOL gameLoad(char *pFileData, UDWORD filesize);
@@ -160,4 +160,3 @@ UDWORD RemapPlayerNumber(UDWORD OldNumber);
 BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWORD offY);
 
 #endif
-
