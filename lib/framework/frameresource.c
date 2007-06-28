@@ -411,8 +411,9 @@ BOOL resLoadFromDisk(STRING *pFileName, UBYTE **ppBuffer, UDWORD *pSize)
 			pos--;
 		}
 //===================================
-
-
+// Note, now it is .wz first, then HD.  Easy to swap things
+// around if needed for a override. 
+//===================================
 	sprintf(Bname,"%s",pFileName);
 //	printf("[resLoadFromDisk] loading ...%s\n",Bname);
 	foundZip = Zip_Find_MP(Bname);  //full is the file name I think...
