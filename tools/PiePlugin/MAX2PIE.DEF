@@ -1,8 +1,0 @@
-LIBRARY Pumpkin
-EXPORTS
-	LibDescription		@21
-	LibNumberClasses	@22
-	LibClassDesc		@23
-	LibVersion			@24
-SECTIONS
-	.data READ WRITE
