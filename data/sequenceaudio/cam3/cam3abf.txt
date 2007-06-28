@@ -1,0 +1,20 @@
+20	432	0	200	"The Reed Corporation was founded by Dr Allan Reed. In 2080, Dr Reed landed a contract with the US Military to develop the synaptic link technology."
+
+20	432	225	350	"After patenting the synaptic link five years later, Dr Reed continued his researches into cybernetics."
+
+20	432	375	600	"His goal this time was to allow transfer of human consciousness into data streams that could meld with computer technologies. While in Cyberspace the operator's bodies were kept in immersion tanks."
+
+20	432	625	850	"Backed again by the military, Dr Reed began work on the NEXUS Intruder Program. After three years with little progress, the military abandoned the Nexus Project and cut Dr Reed's funding."
+
+20	432	875	1000	"Reports from the time claim that Dr Reed was furious and vowed to have his revenge on all who got in his way."
+
+20	432	1025	1225	"It appears that Dr Reed may have succeeded in his goals and completed the Nexus Intruder Program."
+0	0	1025	1225	"The similarity between NEXUS and Dr Reed is striking."
+
+20	432	1290	1485	"Such an interesting history lesson. Now allow me to bring you up to date."
+0	0	1290	1485	"The NEXUS Intruder Program was created in order to control fools like you."
+
+20	432	1490	1760	"It's very simple for me to infiltrate your systems and take them over. It's so simple, in fact, that you wouldn't even know I'm there. That is until I activate parts of myself etched into your core systems."
+
+20	432	1770	1850	"Let's start by activating NEXUS in your core systems and see what happens!"
+

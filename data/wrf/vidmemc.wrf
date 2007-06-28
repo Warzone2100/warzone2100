@@ -1,0 +1,28 @@
+/***********************************************************/
+/*  You may have to modify this file for it to be correct! */ 
+/*******************       WRF\vidmemC.wrf      *******************/
+
+
+directory	"Images"
+file		IMGPAGE	"Intfac0.png"
+file		IMGPAGE	"intfac1.png"
+file		IMGPAGE	"intfac2.png"
+file		IMGPAGE	"intfac3.png"
+file		IMGPAGE	"intfac4.png"
+file		IMG	"intfac.img"
+directory	"texpages"
+file		TEXPAGE	"page-7-barbarians-kevlar.png"
+file		TEXPAGE	"Page-14-Droid Hubs.png"
+file		TEXPAGE	"Page-16-Droid Drives.png"
+file		TEXPAGE	"Page-17-Droid Weapons.png"
+file		TERTILES	"tertilesC1.png"
+file		HWTERTILES	"tertilesc1hw.png"
+file		TEXPAGE	"page-11-player buildings.png"
+file		TEXPAGE	"Page-12-Player Buildings.png"
+file		TEXPAGE	"Page-13-Player Buildings.png"
+file		TEXPAGE	"page-15-droid hubs.png"
+file		TEXPAGE	"page-10-laboratories.png"
+file		TEXPAGE	"page-22-fx`s.png"
+file		TEXPAGE	"Page-24-FX`s.png"
+file		TEXPAGE	"Page-8-Player Buildings-Bases.png"
+file		TEXPAGE	"Page-6-Features-Arizona.png"

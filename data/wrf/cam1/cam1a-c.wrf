@@ -1,0 +1,24 @@
+/*
+ * Cam1A-C.wrf
+ *
+ */
+
+/* Directory for Proximity messages and mission briefs */
+directory	"messages"
+
+file		SMSG		"brief1a-c.txt"
+file		SMSG		"prox1a-c.txt"
+
+/* Directory for uncompiled script files */
+directory       "script\text"
+
+file		SCRIPT		"cam1A-C.slo"
+file		SCRIPT		"cam1daynight.slo"
+
+/* Directory for compiled script files*/
+directory       "script\binary"
+
+/* Directory for script value files*/
+directory       "script\data"
+file            SCRIPTVAL       "cam1A-C.vlo"
+file            SCRIPTVAL       "cam1night.vlo"

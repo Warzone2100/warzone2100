@@ -1,0 +1,68 @@
+/*
+ * Cam3-1.wrf
+ *
+ */
+
+
+/* Aditional audio for the level */
+directory	"audio\Countdown"
+file		WAV		"60Min.ogg"
+file		WAV		"50Min.ogg"
+file		WAV		"40Min.ogg"
+file		WAV		"30Min.ogg"
+file		WAV		"20Min.ogg"
+file		WAV		"10Min.ogg"
+file		WAV		"MEFLP.ogg"
+file		WAV		"5Min.ogg"
+file		WAV		"4Min.ogg"
+file		WAV		"3Min.ogg"
+file		WAV		"2Min.ogg"
+file		WAV		"1Min.ogg"
+file		WAV		"FLSeq.ogg"
+file		WAV		"10to1.ogg"
+file		WAV		"MLaunch.ogg"
+
+file		WAV		"LAbort.ogg"
+
+file		WAV		"WActivat.ogg"
+file		WAV		"Det60Min.ogg"
+file		WAV		"Det50Min.ogg"
+file		WAV		"Det40Min.ogg"
+file		WAV		"Det30Min.ogg"
+file		WAV		"Det20Min.ogg"
+file		WAV		"Det10Min.ogg"
+file		WAV		"Det5Min.ogg"
+file		WAV		"Det4Min.ogg"
+file		WAV		"Det3Min.ogg"
+file		WAV		"Det2Min.ogg"
+file		WAV		"Det1Min.ogg"
+file		WAV		"FDetSeq.ogg"
+
+/* Directory for Proximity messages and mission briefs */
+directory	"messages"
+
+file		SMSG		"brief3-1A.txt"
+file		SMSG		"brief3-1b.txt"
+file		SMSG		"prox3-1.txt"
+
+/* Directory for uncompiled script files */
+directory       "script\text"
+
+file		SCRIPT		"setdisk.slo"
+file		SCRIPT		"genexp.slo"
+file		SCRIPT		"cam3-1x.slo"
+file		SCRIPT		"VTOLS.slo"
+file		SCRIPT		"cam3daynight.slo"
+file		SCRIPT		"countdown.slo"
+
+/* Directory for compiled script files*/
+directory       "script\binary"
+
+/* Directory for script value files*/
+directory       "script\data"
+file            SCRIPTVAL       "cam3-1.vlo"
+file            SCRIPTVAL       "cam3-1x.vlo"
+file            SCRIPTVAL       "VTOLS3-1.vlo"
+file            SCRIPTVAL       "count3-1.vlo"
+file            SCRIPTVAL       "disk2.vlo"
+file            SCRIPTVAL       "cam3mkday.vlo"

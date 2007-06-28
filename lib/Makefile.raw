@@ -1,0 +1,32 @@
+SUBDIRS=framework \
+	gamelib \
+	ivis_common \
+	netplay \
+	script \
+	sequence \
+	sound \
+	widget
+
+ifeq ($(GFX), software)
+SUBDIRS+=ivis02
+else
+SUBDIRS+=ivis_opengl
+endif
+
+SUBDIRS_CLEAN=	framework \
+		gamelib \
+		netplay \
+		script \
+		sequence \
+		sound \
+		widget \
+		ivis_common \
+		ivis02 \
+		ivis_opengl
+
+all dep:
+	@for i in $(SUBDIRS); do (cd $$i; $(MAKE) -f Makefile.raw $@); done
+
+clean:
+	@for i in $(SUBDIRS_CLEAN); do (cd $$i; $(MAKE) -f Makefile.raw $@); done
+

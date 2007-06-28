@@ -1,0 +1,11 @@
+//pos		frame	
+//x	y		start	end	Text	
+
+20	432		210	380	"NEXUS, the synaptic technology you required has been recovered and sent for collection."
+
+
+
+
+
+
+

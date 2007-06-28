@@ -1,0 +1,41 @@
+0.2.1 - 20050716
+* .net bug fixes.
+* Music sample rate fix.
+* New: Shuffle mode for playlists.
+* Fixed tile-related crash.
+* Removed useless culling code.
+* Moved MatScale function into the ivis lib.
+* Configure fix: OpenAL is required, not optional.
+* More code cleanup.
+* gcc4 fixes (thanks to Matze Braun).
+* Fixed problem with power plant effect.
+* Now use rand() for shuffle mode in playlist on all platforms.
+* Fixed sound-related crash on exit.
+* Fixed crash when saving without any available sound device.
+* Fixed a division by zero.
+* Made the banner ad only display on pause, since having it on all the time is
+really annoying.
+* --enable-debug removed from configuration options for the time being.
+* Changed playlist syntax. Replaced '[track1]' and '[track2]' with less cryptic
+'[game]' and '[menu]' tags.
+* Removed some no-more-needed verbosity during playlist parsing.
+* Reverted to wdg data file format, which re-enabled technology levels 2 and
+3, plus more maps.
+* More sample musics from Neos in order to demo the new shuffle mode.
+* Cleaned-up (kinda...) JPEG backdrops used for backgrounds in OpenGL.
+
+0.2 - 20050625
+* Code cleanups and minor bug corrections.
+* Correction of a bug that prevented network games between Windows and Linux
+machines. Windows-only or Linux-only network games were unaffected.
+* Music support added. See README.
+* Merge of source and data tarballs.
+* Video sequences removed (they can't be used anyway).
+* "Thump-thump" of the oil-pumps toned down a bit.
+* COPYING (oops !), README, CHANGELOG and AUTHORS added to base directory.
+
+0.1 - Initial release
+* Based on the code liberated on December 6th, 2004.
+* Proprietary technologies replaced by SDL, OpenGL and OpenAL.
+* Network implemented using SDL-net.
+* Zoom enhancements (increased range and control using the mouse wheel).

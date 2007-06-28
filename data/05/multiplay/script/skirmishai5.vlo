@@ -1,0 +1,235 @@
+/////////////////////////////////////////////////////////////////////
+// ai for skirmish game
+// Generic vlo for each computer player
+/////////////////////////////////////////////////////////////////////
+
+script "skirmishAI.slo"
+run
+{
+	player			INT					5
+
+	numScouts		INT					3			// min number of droids in group to aim for.
+	numDefenders	INT					3
+	numAttackers	INT					6	
+	numCyborgs		INT					8			// build cyborgs until scouts contains x droids
+
+	tileExpand		INT					12			// approx minutes to expand over the map.
+
+	/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// structures
+ 
+ 	// generic names, often used.
+	oilRes			FEATURESTAT			"OilResource"
+	resLab			STRUCTURESTAT		"A0ResearchFacility"
+	powGen			STRUCTURESTAT		"A0PowerGenerator"
+	factory			STRUCTURESTAT		"A0LightFactory"
+	derrick			STRUCTURESTAT		"A0ResourceExtractor"
+	cybFactory		STRUCTURESTAT		"A0CyborgFactory"
+	playerHQ		STRUCTURESTAT		"A0CommandCentre"
+	vtolPad			STRUCTURESTAT		"A0VtolPad"
+	vtolFactory		STRUCTURESTAT		"A0VTolFactory1"
+	repairFacility	STRUCTURESTAT		"A0RepairCentre3"
+
+	//anti a.
+	vtolDefStruct[0] STRUCTURESTAT		"AASite-QuadMg1"	//1
+	vtolDefStruct[1] STRUCTURESTAT		"AASite-QuadBof" 	//2
+	vtolDefStruct[2] STRUCTURESTAT		"AASite-QuadRotMg" 	
+	vtolDefStruct[3] STRUCTURESTAT		"P0-AASite-SAM1" 	//3
+	vtolDefStruct[4] STRUCTURESTAT		"P0-AASite-SAM2" 	
+
+	// upgrade structures
+	powModule		STRUCTURESTAT		"A0PowMod1"
+	facModule		STRUCTURESTAT		"A0FacMod1"
+	resModule		STRUCTURESTAT		"A0ResearchModule1"
+
+ 	// Essential structs.
+	numStructs		INT					5
+	structs[0]		STRUCTURESTAT		"A0PowerGenerator"
+	structs[1]		STRUCTURESTAT		"A0LightFactory"	
+	structs[2]		STRUCTURESTAT		"A0CommandCentre"
+	structs[3]		STRUCTURESTAT		"A0ResearchFacility"
+	structs[4]		STRUCTURESTAT		"A0CyborgFactory"
+	
+	// defensive structs.
+	numDefStructs	INT					26
+	defStructs[0]	STRUCTURESTAT		"PillBox1"
+	defStructs[1]	STRUCTURESTAT		"WallTower06"  
+	defStructs[2]	STRUCTURESTAT		"Emplacement-MortarPit01"
+	defStructs[3]	STRUCTURESTAT		"PillBox1"
+	defStructs[4]	STRUCTURESTAT		"PillBox5"
+	defStructs[5]	STRUCTURESTAT		"Sys-SensoTower02"
+	defStructs[6]	STRUCTURESTAT		"WallTower03"
+	defStructs[7]	STRUCTURESTAT		"WallTower02"
+	defStructs[8]	STRUCTURESTAT		"Emplacement-MRL-pit"
+
+	defStructs[9]	STRUCTURESTAT		"Wall-RotMg"				// Campaign 2 Defensive Structures
+	defStructs[10]	STRUCTURESTAT		"Wall-VulcanCan"
+	defStructs[11]	STRUCTURESTAT		"WallTower-HPVcannon"
+	defStructs[12]	STRUCTURESTAT		"Emplacement-Howitzer105"
+	defStructs[13]	STRUCTURESTAT		"Emplacement-HvyATrocket"
+	defStructs[14]	STRUCTURESTAT		"Emplacement-MortarPit02"
+	defStructs[15]	STRUCTURESTAT		"Pillbox-RotMG"
+	defStructs[16]	STRUCTURESTAT		"Emplacement-PulseLaser"	// Campaign 3 Defensive Structures
+	defStructs[17]	STRUCTURESTAT		"Emplacement-Rail2"
+	defStructs[18]	STRUCTURESTAT		"Wall-VulcanCan"
+	defStructs[19]	STRUCTURESTAT		"Emplacement-RotMor"
+	defStructs[20]	STRUCTURESTAT		"WallTower-HvATrocket"
+	defStructs[21]	STRUCTURESTAT		"WallTower-Atmiss"
+	defStructs[22]	STRUCTURESTAT		"WallTower-PulseLas"
+	defStructs[23]	STRUCTURESTAT		"WallTower-Rail2"
+	defStructs[24]	STRUCTURESTAT		"WallTower-Rail3"
+	defStructs[25]	STRUCTURESTAT		"Pillbox-RotMG"
+
+
+
+
+	// extra structs
+	numExtraStructs	INT					6
+	extraStructs[0]	STRUCTURESTAT		"A0LightFactory"
+	extraStructs[1]	STRUCTURESTAT		"A0RepairCentre3"
+	extraStructs[2]	STRUCTURESTAT		"PillBox5"
+	extraStructs[3]	STRUCTURESTAT		"A0LightFactory"
+	extraStructs[4]	STRUCTURESTAT		"A0ResearchFacility"
+	extraStructs[5]	STRUCTURESTAT		"Sys-SensoTower02"
+
+	/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	// SKIRMISH TEMPLATES
+	
+	// COMBAT TEMPLATES
+
+	numTemplates	INT		71
+
+	tmpl[0]		TEMPLATE	"ViperMG01Wheels"
+	tmpl[1]		TEMPLATE	"ViperMG02Wheels"
+	tmpl[2]		TEMPLATE	"ViperMRLWheels"
+	tmpl[3]		TEMPLATE	"ViperMG02Halftrack"
+	tmpl[4]		TEMPLATE	"ViperHMGHalftrack"
+	tmpl[5]		TEMPLATE	"ViperHMGTracks"
+	tmpl[6]		TEMPLATE	"ViperLtA-Twheels"
+	tmpl[7]		TEMPLATE	"ViperMedCnTrks"
+	tmpl[8]		TEMPLATE	"ViperBBWheels"
+	tmpl[9]		TEMPLATE	"ViperPODWheels"
+	tmpl[10]	TEMPLATE	"P6-M-QMG1-HT"
+	tmpl[11]	TEMPLATE	"CobraMRLHalftrack"
+	tmpl[12]	TEMPLATE	"CobraLtA-Thalftrack"
+	tmpl[13]	TEMPLATE	"CobraFlameTracks"
+	tmpl[14]	TEMPLATE	"CobraHvyMortarHalftrack"
+	tmpl[15]	TEMPLATE	"Sk-CobraBBHover"
+	tmpl[16]	TEMPLATE	"CobraFlameTracks"
+	tmpl[17]	TEMPLATE	"SK-Cobra-Hover-Lancer"
+	tmpl[18]	TEMPLATE	"CobraMedCnTrks"
+	tmpl[19]	TEMPLATE	"SK-Cobra-Hover-HMG"
+	tmpl[20]	TEMPLATE	"CobraHvyCnTrks"
+	tmpl[21]	TEMPLATE	"SK-Cobra-Hover-BB"
+	tmpl[22]	TEMPLATE	"PythonLtCnTrks"
+	tmpl[23]	TEMPLATE	"SK-Python-Hover-Mcannon"
+	tmpl[24]	TEMPLATE	"PythonMedCnTrks"
+	tmpl[25]	TEMPLATE	"SK-Python-Hover-Hcannon"
+	tmpl[26]	TEMPLATE	"SK-Python-Hover-Lancer"
+	//Campaign 2
+	tmpl[27]	TEMPLATE	"SK-Python-Hover-Hcannon"
+	tmpl[28]	TEMPLATE	"SK-Cobra-Track-HVC"
+	tmpl[29]	TEMPLATE	"SK-Cobra-Track-TK"
+	tmpl[30]	TEMPLATE	"SK-Python-Track-Hcannon"
+	tmpl[31]	TEMPLATE	"Sk-PythonHvCanTrack"
+	tmpl[32]	TEMPLATE	"SK-Leopard-Track-Lancer"
+	tmpl[33]	TEMPLATE	"SK-Leopard-HTrk-ASGun"
+	tmpl[34]	TEMPLATE	"SK-Panther-Track-HVC"
+	tmpl[35]	TEMPLATE	"SK-Panther-Hover-HVC"
+	tmpl[36]	TEMPLATE	"SK-Panther-Track-TK"
+	tmpl[37]	TEMPLATE	"SK-Panther-Hover-TK"
+	tmpl[38]	TEMPLATE	"SK-Panther-Htrk-ASGun"
+	tmpl[39]	TEMPLATE	"SK-Panther-Htrk-BB"
+	tmpl[40]	TEMPLATE	"SK-Tiger-Track-Hcannon"
+	tmpl[41]	TEMPLATE	"SK-Tiger-Hover-Hcannon"
+	tmpl[42]	TEMPLATE	"SK-Tiger-Track-HVC"
+	tmpl[43]	TEMPLATE	"SK-Tiger-Hover-HVC"
+	tmpl[44]	TEMPLATE	"SK-Tiger-Track-TK"
+	tmpl[45]	TEMPLATE	"SK-Tiger-Hover-TK"
+	tmpl[46]	TEMPLATE	"SK-Tiger-Track-ASCannon"
+	tmpl[47]	TEMPLATE	"SK-Tiger-Hover-ASCannon"
+	//Campaign 3 
+	tmpl[48]	TEMPLATE	"SK-Leopard-Htrk-Needle"
+	tmpl[49]	TEMPLATE	"SK-Leopard-Hover-Needle"
+	tmpl[50]	TEMPLATE	"SK-Panther-Track-RailGun"
+	tmpl[51]	TEMPLATE	"SK-Panther-Track-TK"
+	tmpl[52]	TEMPLATE	"SK-Panther-Hover-TK"
+	tmpl[53]	TEMPLATE	"SK-Tiger-Track-Scourge"
+	tmpl[54]	TEMPLATE	"SK-Tiger-Hover-Scourge"
+	tmpl[55]	TEMPLATE	"SK-Tiger-Track-Gauss"
+	tmpl[56]	TEMPLATE	"SK-Tiger-Hover-Gauss"
+	tmpl[57]	TEMPLATE	"SK-Retal-Track-Needle"
+	tmpl[58]	TEMPLATE	"SK-Retre-Track-PulseLsr"
+	tmpl[59]	TEMPLATE	"SK-Retre-Track-FlashLight"
+	tmpl[60]	TEMPLATE	"SK-Retre-Htrk-Pepper"
+	tmpl[61]	TEMPLATE	"SK-Retre-Track-RailGun"
+	tmpl[62]	TEMPLATE	"SK-Veng-Track-Scourge"
+	tmpl[63]	TEMPLATE	"SK-Retre-Hover-RailGun"
+	tmpl[64]	TEMPLATE	"SK-Retre-Track-Scourge"
+	tmpl[65]	TEMPLATE	"SK-Retre-Hover-Scourge"
+	tmpl[66]	TEMPLATE	"SK-Veng-Track-Gauss"
+	tmpl[67]	TEMPLATE	"SK-Veng-Hover-Gauss"
+	tmpl[68]	TEMPLATE	"SK-Veng-Track-PulseLsr"
+	tmpl[69]	TEMPLATE	"SK-Veng-Hover-PulseLsr"
+	tmpl[70]	TEMPLATE	"SK-Veng-Hover-Scourge"
+
+	/////////////////////////////////////////////////////////////////////
+	// SENSORS / REPAIR TEMPLATES
+
+	constructor	TEMPLATE	"ConstructorDroid"
+	repairUnit	TEMPLATE	"ViperRepairHalftrack"
+
+	numSenseTemplates		INT		10
+
+	//Campaign 1
+	sense[0]	TEMPLATE	"ViperRepairWheels"
+	sense[1]	TEMPLATE	"ViperRepairHalftrack"
+	sense[2]	TEMPLATE	"CobraSensorHalftrack"
+	//Campaign 2 
+	sense[3]	TEMPLATE	"SK-Bug-Hover-Sensor"
+	sense[4]	TEMPLATE	"SK-Bug-Hover-Repair"
+	sense[5]	TEMPLATE	"SK-Leopard-Hover-Sensor"
+	sense[6]	TEMPLATE	"SK-Leopard-Hover-Repair"
+	sense[7]	TEMPLATE	"SK-Panther-Track-Repair"
+	//Campaign 3
+	sense[8]	TEMPLATE	"SK-Retal-Hover-Sensor"
+	sense[9]	TEMPLATE	"SK-Retal-Hover-Repair"
+
+	/////////////////////////////////////////////////////////////////////
+	// cyborg templates
+	cybTempl[0]		TEMPLATE	"CyborgChain01Ground"
+	cybTempl[1]		TEMPLATE	"CyborgFlamer01Grd"
+	cybTempl[2]		TEMPLATE	"CyborgCannon01Grd"
+	cybTempl[3]		TEMPLATE	"CyborgRkt01Ground"
+
+	/////////////////////////////////////////////////////////////////////
+	// VTOL TEMPLATES
+
+	
+	numVtolTemplates		INT		17
+
+	//Campaign 1
+	vtols[0]	TEMPLATE	"P6-L-Bomb1-V"
+	vtols[1]	TEMPLATE	"P6-L-LTAT-V"
+	//Campaign 2 
+	vtols[2]	TEMPLATE	"SK-Bug-VTOL-CLBomb"
+	vtols[3]	TEMPLATE	"SK-Bug-VTOL-BB"
+	vtols[4]	TEMPLATE	"SK-Scorpion-VTOL-BB"
+	vtols[5]	TEMPLATE	"SK-Scorpion-VTOL-Hbomb"
+	vtols[6]	TEMPLATE	"SK-Mantis-VTOL-BB"
+	vtols[7]	TEMPLATE	"SK-Leopard-VTOL-BB"
+	vtols[8]	TEMPLATE	"SK-Leopard-VTOL-PhosBomb"
+	vtols[9]	TEMPLATE	"SK-Panther-VTOL-Thermite"
+	vtols[10]	TEMPLATE	"SK-Panther-VTOL-BB"
+	vtols[11]	TEMPLATE	"SK-Panther-VTOL-Phosbomb"
+	vtols[12]	TEMPLATE	"SK-Panther-VTOL-TK"
+	//Campaign 3 
+	vtols[13]	TEMPLATE	"SK-Retal-VTOL-Phosbomb"
+	vtols[14]	TEMPLATE	"SK-Retre-VTOL-Thermite"
+	vtols[15]	TEMPLATE	"SK-Retre-VTOL-PulseLsr"
+	vtols[16]	TEMPLATE	"SK-Retre-VTOL-Scourge"
+
+	/////////////////////////////////////////////////////////////////////
+}

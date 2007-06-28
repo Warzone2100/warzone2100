@@ -1,0 +1,14 @@
+//
+// Deathmath Script Loader  
+//
+
+directory	"messages"
+file		SMSG		"multiplay.txt"
+
+directory       "multiplay\script"
+file		SCRIPT		"multiplay.slo"
+
+directory       "multiplay\script"
+file        	SCRIPTVAL   	 "multiplay.vlo"
+
+

@@ -1,0 +1,149 @@
+// Scavenger MultiPlayer Factory (one) Script
+
+/* aims.
+
+x build upto x droids of y types
+x add each new droid to the buildgroup
++ if buildgroup has x droids, send off to wander/attack enemy stuff
+x when sending a group, remove the droids from it
+x Groups attack things that come into range
+x when a friendly structure is attacked send group to attack back
++ wandering likes oil resources, especially those with derricks
+ */
+
+
+// scavenger values
+public		int			enemy1;
+public		int			maxDroids;
+
+private		int			targetX,targetY;
+
+public		STRUCTURESTAT	factory;
+private		STRUCTURE	fac1;
+
+private		int			Fact1State;
+private		bool		Fact1Destroyed;
+
+private		int			count;
+
+// Build Templates 
+public		TEMPLATE	trike;
+public		TEMPLATE	buggy;
+public		TEMPLATE	bloke;
+public		TEMPLATE	jeep;
+
+// groups
+private		GROUP		defendGroup,attackGroup,wanderGroup;
+private		DROID		newDroid,droid;
+
+// attacking 
+private		STRUCTURE	structure;
+private		BASEOBJ		attacker;
+private		INT			lastAttack;
+
+// Startup
+event startup(init)
+{
+	lastAttack = 0;
+
+	groupAddArea(attackGroup, enemy1, 0, 0, (mapWidth*128), (mapHeight*128));  
+
+	targetX = (mapWidth/2)*128;		// init target.
+	targetY = (mapHeight/2)*128;
+
+//	if(fac1 != NULLOBJECT)
+//		setAssemblyPoint (fac1, fac1Ass1X, fac1Ass1Y);			//set assembly points (can't do later in case the factories are dead!!!
+
+}
+
+
+
+// deal with a droid being built by enemy1
+event droidbuilt(CALL_NEWDROID, enemy1, ref newDroid,ref structure)
+{
+	if(myResponsibility(enemy1))
+	{
+		// add droid to either the attack or defend group.
+		count = random(5);
+		if( count == 0)						
+		{
+			groupAddDroid(defendGroup, newDroid);
+		}
+		
+		else if(count == 1)
+		{
+			groupAddDroid(wanderGroup, newDroid);
+		}
+		else
+		{	// 2 or 3 or 4
+			groupAddDroid(attackGroup, newDroid);
+		}
+
+		// move the wanderGroup to the muster point.
+		if (wanderGroup.members >= 4)
+		{
+	
+			// need to pick a target x and y.
+			// either an oil resource, an opposing struct or somewhere nearby.? HOW?
+
+			orderGroupLoc(wanderGroup, DORDER_MOVE, targetX, targetY);
+
+			initIterateGroup(wanderGroup);
+			count = wanderGroup.members;
+			while(count != 0)
+			{
+				droid = iterateGroup(wanderGroup);
+				droidLeaveGroup(droid);
+				count = count - 1;
+			}
+		}
+
+
+	}
+}
+
+
+//build list
+event Fact1Evnt(myResponsibility(enemy1) , 300)
+{
+	fac1 = getStructure(factory, enemy1);
+	if 	(fac1 == NULLOBJECT)
+	{
+ 		setEventTrigger(Fact1Evnt, inactive);
+	}
+	else if (structureIdle(fac1)
+			 and (numDroidsInArea(enemy1, 0,0, (mapWidth*128),(mapHeight*128)) < maxDroids ) )
+	{
+		if (Fact1State == 0)
+		{
+			buildDroid (trike, fac1, enemy1, 1);
+			Fact1State = 1;
+		}
+		else if (Fact1State == 1)
+		{
+			buildDroid (buggy, fac1, enemy1, 1);
+			Fact1State = 2;
+		}
+		else if (Fact1State == 2)
+		{
+			buildDroid (jeep, fac1, enemy1, 1);
+			Fact1State = 3;
+		}
+		else
+		{
+			buildDroid (bloke, fac1, enemy1, 3);
+			Fact1State = 0;
+		}
+	}
+}
+
+// watch for structures being attacked. Send the cavalry as required.
+event structureAttacked(CALL_STRUCT_ATTACKED, enemy1,ref structure , ref attacker )
+{
+	if((gameTime - lastAttack) > 300)
+	{
+		lastAttack = gameTime;
+		orderGroupLoc(attackGroup, DORDER_MOVE, structure.x, structure.y);
+	}
+}
+

@@ -1,0 +1,12 @@
+//pos		frame	
+//x	y		start	end	Text	
+
+20	432		200	275	"Warning!"
+0	0		200	275	"You are entering a restricted area."
+
+20	432		300	550	"Return to your designated zone or be destroyed."
+0	0		300	550	"Repeat. Return to your designated zone or be destroyed."
+0	0		300	550	"Message Ends."
+
+
+ 

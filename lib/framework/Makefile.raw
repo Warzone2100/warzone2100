@@ -1,0 +1,47 @@
+SRC_FILES=	block.c \
+		configfile.c \
+		debug.c \
+		frame_stub.c \
+		frameresource.c \
+		heap.c \
+		input_stub.c \
+		mem.c \
+		mono.c \
+		resource_y.c \
+		resource_l.c \
+		strres.c \
+		strres_y.c \
+		strres_l.c \
+		treap.c \
+		trig.c 
+
+#GENERATED_SRC=	resource_l.c \
+#		resource_y.c \
+#		resource_y.h \
+#		strres_l.c \
+#		strres_y.c \
+#		strres_y.h
+
+LIB=framework
+
+MAKERULES=../../makerules
+include $(MAKERULES)/lib.mk
+
+resource_l.c: resource_lexer.l
+	flex $(<)
+	mv lex.res_.c $@
+
+resource_y.c resource_y.h: resource_parser.y
+	bison -d -pres_ resource_parser.y
+	mv resource_parser.tab.c resource_y.c
+	mv resource_parser.tab.h resource_parser.h
+
+strres_l.c: strres_lexer.l
+	flex $(<)
+	mv lex.strres_.c $@
+
+strres_y.c strres_y.h: strres_parser.y
+	bison -d -pstrres_ strres_parser.y
+	mv strres_parser.tab.c strres_y.c
+	mv strres_parser.tab.h strres_parser.h
+

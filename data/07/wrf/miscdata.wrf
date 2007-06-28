@@ -1,0 +1,32 @@
+/***********************************************************/
+/*  You may have to modify this file for it to be correct! */ 
+/*******************       MISCDATA      *******************/
+
+
+directory	"multiplay\maps"
+file		MISCDATA	"4c-Basingstoke.gam"
+file		MISCDATA	"4c-LittleEgypt.gam"
+file		MISCDATA	"8c-SandCastles.gam"
+directory	"multiplay\maps\4c-Basingstoke"
+file		MISCDATA	"DInit.bjo"
+file		MISCDATA	"Feat.bjo"
+file		MISCDATA	"Game.map"
+file		MISCDATA	"Struct.bjo"
+file		MISCDATA	"TagList.tag"
+file		MISCDATA	"TTypes.ttp"
+directory	"multiplay\maps\4c-LittleEgypt"
+file		MISCDATA	"DInit.bjo"
+file		MISCDATA	"Feat.bjo"
+file		MISCDATA	"Game.map"
+file		MISCDATA	"Struct.bjo"
+file		MISCDATA	"TagList.tag"
+file		MISCDATA	"TTypes.ttp"
+directory	"multiplay\maps\8c-SandCastles"
+file		MISCDATA	"DInit.bjo"
+file		MISCDATA	"Feat.bjo"
+file		MISCDATA	"Game.map"
+file		MISCDATA	"Struct.bjo"
+file		MISCDATA	"TagList.tag"
+file		MISCDATA	"TTypes.ttp"
+directory	""
+file		MISCDATA	"addon.lev"

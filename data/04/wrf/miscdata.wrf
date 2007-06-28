@@ -1,0 +1,24 @@
+/***********************************************************/
+/*  You may have to modify this file for it to be correct! */ 
+/*******************       MISCDATA      *******************/
+
+
+directory	""
+file		MISCDATA	"addon.lev"
+directory	"multiplay\maps"
+file		MISCDATA	"8c-ThePit.gam"
+file		MISCDATA	"4c-GreatRift.gam"
+directory	"multiplay\maps\8c-ThePit"
+file		MISCDATA	"DInit.bjo"
+file		MISCDATA	"Feat.bjo"
+file		MISCDATA	"Game.map"
+file		MISCDATA	"Struct.bjo"
+file		MISCDATA	"TagList.tag"
+file		MISCDATA	"TTypes.ttp"
+directory	"multiplay\maps\4c-GreatRift"
+file		MISCDATA	"DInit.bjo"
+file		MISCDATA	"Feat.bjo"
+file		MISCDATA	"Game.map"
+file		MISCDATA	"Struct.bjo"
+file		MISCDATA	"TagList.tag"
+file		MISCDATA	"TTypes.ttp"

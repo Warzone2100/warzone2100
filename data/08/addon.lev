@@ -1,0 +1,134 @@
+
+// New Maps Only
+
+// BeggarsKanyon - 8 player desert
+
+// Multiplay
+
+// Tech 1
+
+level 		BeggarsKanyon-T1
+players		8
+type		12
+dataset		MULTI_CAM_1
+game		"multiplay\maps\8c-BeggarsKanyon.gam"
+data		"wrf\multi\campaign.wrf"
+data		"wrf\multi\fog1.wrf"
+
+// Tech 2
+
+level 		BeggarsKanyon-T2
+players		8
+type		15
+dataset		MULTI_T2_C1
+game		"multiplay\maps\8c-BeggarsKanyon.gam"
+data		"wrf\multi\t2-campaign.wrf"
+data		"wrf\multi\fog1.wrf"
+
+// Tech 3
+
+level 		BeggarsKanyon-T3
+players		8
+type		16
+dataset		MULTI_T3_C1
+game		"multiplay\maps\8c-BeggarsKanyon.gam"
+data		"wrf\multi\t3-campaign.wrf"
+data		"wrf\multi\fog1.wrf"
+
+// Skirmish
+
+// Tech 1
+
+level 		Sk-BeggarsKanyon-T1
+players		8
+type		14
+dataset		MULTI_CAM_1
+game		"multiplay\maps\8c-BeggarsKanyon.gam"
+data		"wrf\multi\skirmish8.wrf"
+data		"wrf\multi\fog1.wrf"
+
+// Tech 2
+
+level 		Sk-BeggarsKanyon-T2
+players		8
+type		18
+dataset		MULTI_T2_C1
+game		"multiplay\maps\8c-BeggarsKanyon.gam"
+data		"wrf\multi\t2-skirmish8.wrf"
+data		"wrf\multi\fog1.wrf"
+
+// Tech 3
+
+level 		Sk-BeggarsKanyon-T3
+players		8
+type		19
+dataset		MULTI_T3_C1
+game		"multiplay\maps\8c-BeggarsKanyon.gam"
+data		"wrf\multi\t3-skirmish8.wrf"
+data		"wrf\multi\fog1.wrf"
+
+// Gridlock
+
+// Multiplay
+
+// Tech 1
+
+level 		Gridlock-T1
+players		8
+type		12
+dataset		MULTI_CAM_2
+game		"multiplay\maps\8c-Gridlock.gam"
+data		"wrf\multi\campaign.wrf"
+data		"wrf\multi\fog2.wrf"
+
+// Tech 2
+
+level 		Gridlock-T2
+players		8
+type		15
+dataset		MULTI_T2_C2
+game		"multiplay\maps\8c-Gridlock.gam"
+data		"wrf\multi\campaign.wrf"
+data		"wrf\multi\fog2.wrf"
+
+// Tech 3
+
+level 		Gridlock-T3
+players		8
+type		16
+dataset		MULTI_T3_C2
+game		"multiplay\maps\8c-Gridlock.gam"
+data		"wrf\multi\campaign.wrf"
+data		"wrf\multi\fog2.wrf"
+
+// Skirmish
+
+// Tech 1
+
+level 		Sk-Gridlock-T1
+players		8
+type		14
+dataset		MULTI_CAM_2
+game		"multiplay\maps\8c-Gridlock.gam"
+data		"wrf\multi\skirmish8.wrf"
+data		"wrf\multi\fog2.wrf"
+
+// Tech 2
+
+level 		Sk-Gridlock-T2
+players		8
+type		18
+dataset		MULTI_T2_C2
+game		"multiplay\maps\8c-Gridlock.gam"
+data		"wrf\multi\t2-skirmish8.wrf"
+data		"wrf\multi\fog2.wrf"
+
+// Tech 3
+
+level 		Sk-Gridlock-T3
+players		8
+type		19
+dataset		MULTI_T3_C2
+game		"multiplay\maps\8c-Gridlock.gam"
+data		"wrf\multi\t3-skirmish8.wrf"
+data		"wrf\multi\fog2.wrf"

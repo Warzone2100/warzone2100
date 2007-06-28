@@ -1,0 +1,49 @@
+// New Maps Only
+
+level 		Concrete-T1
+players		8
+type		12
+dataset		MULTI_CAM_2
+game		"multiplay\maps\8c-ConcretePlayGround.gam"
+data		"wrf\multi\campaign.wrf"
+data		"wrf\multi\fog2.wrf"
+
+level 		Concrete-T2
+players		8
+type		15
+dataset		MULTI_T2_C2
+game		"multiplay\maps\8c-ConcretePlayGround.gam"
+data		"wrf\multi\campaign.wrf"
+data		"wrf\multi\fog2.wrf"
+
+level 		FishNets-T1
+players		4
+type		12
+dataset		MULTI_CAM_3
+game		"multiplay\maps\4c-Fishnet.gam"
+data		"wrf\multi\campaign.wrf"
+data		"wrf\multi\fog3.wrf"
+
+level 		FishNets-T2
+players		4
+type		15
+dataset		MULTI_T2_C3
+game		"multiplay\maps\4c-Fishnet.gam"
+data		"wrf\multi\campaign.wrf"
+data		"wrf\multi\fog3.wrf"
+
+level 		Sk-Concrete
+players		8
+type		14
+dataset		MULTI_CAM_2
+game		"multiplay\maps\8c-ConcretePlayGround.gam"
+data		"wrf\multi\skirmish8.wrf"
+data		"wrf\multi\fog2.wrf"
+
+level 		Sk-FishNets
+players		4
+type		14
+dataset		MULTI_CAM_3
+game		"multiplay\maps\4c-Fishnet.gam"
+data		"wrf\multi\skirmish4.wrf"
+data		"wrf\multi\fog3.wrf"

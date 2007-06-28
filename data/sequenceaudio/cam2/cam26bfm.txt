@@ -1,0 +1,6 @@
+20	432	40	175	"Commander we are detecting transmissions from this site that are reaching high orbit."
+
+20	432	325	410	"Nexus has now reconnected itself with the NASDA satellites."
+
+20	432	420	565	"This poses a major threat to the Project and to our survival." 
+

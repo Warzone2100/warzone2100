@@ -1,0 +1,4 @@
+20	432	20	85	"Coordinate Download Completed."
+
+
+20	432	90	200	"Commander, forces from Team Alpha escaped the nuclear attack on Alpha Base."

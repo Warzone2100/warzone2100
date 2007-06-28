@@ -1,0 +1,12 @@
+PIE 2
+TYPE 200
+TEXTURE 0 page-9-player buildings-bases.png 256 256
+LEVELS 1
+LEVEL 1
+POINTS 4
+	-43 45 0
+	-43 -44 0
+	42 -44 0
+	42 45 0
+POLYGONS 1
+	6a00 4 3 2 1 0 8 1 32 32 1 194 1 224 31 224 31 194

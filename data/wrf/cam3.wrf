@@ -1,0 +1,13 @@
+/***********************************************************/
+/*  You may have to modify this file for it to be correct! */ 
+/*******************       WRF\Cam3.wrf      *******************/
+
+
+directory	"messages\strings"
+file		STR_RES	"Strings.txt"
+file		STR_RES	"genstrings.txt"
+file		STR_RES	"cam3strings.txt"
+file		STR_RES	"ResStrings.txt"
+file		STR_RES	"scrstrings.txt"
+directory	"messages"
+file		SMSG	"Cam3Messages.txt"

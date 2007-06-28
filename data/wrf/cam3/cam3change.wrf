@@ -1,0 +1,28 @@
+/*
+ * cam3change.wrf
+ *
+ * The data that changes between campaign 2 and 3
+ *
+ */
+
+
+directory	"texpages"
+file 		TEXPAGE		"page-6-features-rockies.png"
+file		TEXPAGE		"page-7-Barbarians-Kevlar.png"
+file		TEXPAGE		"page-8-player buildings-bases-Rockies.png"
+file		TEXPAGE		"page-9-player-soft buildings-bases-rockies.png"	//needs changing**DONE**
+file		TEXPAGE		"page-9-player-hard buildings-bases-rockies.png"
+file 		TERTILES	"tertilesC3.png"
+file 		HWTERTILES	"tertilesc3hw.png"
+
+directory 	"stats\research\cam3"
+file		RESCH		"Research.txt"
+file		RPREREQ		"PRResearch.txt"
+
+file		RCOMPRED	"RedComponents.txt"
+file		RCOMPRES	"ResultComponent.txt"
+file		RSTRREQ		"ResearchStruct.txt"
+file		RSTRRED		"RedStructure.txt"
+file		RSTRRES		"ResultStructure.txt"
+file		RFUNC		"ResearchFunctions.txt"
+

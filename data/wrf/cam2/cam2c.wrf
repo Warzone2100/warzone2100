@@ -1,0 +1,28 @@
+/*
+ * Cam2C.wrf
+ *
+ */
+
+/* Directory for Proximity messages and mission briefs */
+directory	"messages"
+
+file		SMSG		"brief2-C.txt"
+file		SMSG		"prox2C.txt"
+
+/* Directory for uncompiled script files */
+directory       "script\text"
+
+file		SCRIPT		"genexp.slo"
+file		SCRIPT		"cam2cx.slo"
+file		SCRIPT		"VTOLS2.slo"
+file		SCRIPT		"cam2daynight.slo"
+
+/* Directory for compiled script files*/
+directory       "script\binary"
+
+/* Directory for script value files*/
+directory       "script\data"
+file            SCRIPTVAL       "cam2C.vlo"
+file		SCRIPTVAL	"cam2cx.vlo"
+file            SCRIPTVAL       "VTOLS2C.vlo"
+file            SCRIPTVAL       "cam2day.vlo"

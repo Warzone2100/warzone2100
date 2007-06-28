@@ -1,0 +1,11 @@
+20	432	25	250	"Warriors of The Collective, we are ready to destroy the intruders who pollute our lands."
+
+20	432	275	625	"Those of the Project are not of the machine. They have been denied its blessing. We who have embraced the power of the machine have a destiny to sweep away such weak creatures."
+
+
+20	432	650	775	"They shall fall before the might of The Collective."
+
+20	432	800	925	"Attack and destroy all who resist the machine."
+0	0	800	925	"Attack!"
+
+

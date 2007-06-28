@@ -1,0 +1,4 @@
+Wheeled,Con-Move Off.ogg,-1,-1,Con-Move.ogg,-1,Con-Shut down.ogg,2
+Tracked,-1,-1,-1,Tread.ogg,-1,-1,3
+Hover,HovStart.ogg,-1,-1,HovMove.ogg,-1,HovStop.ogg,4
+Lift,VtolOff.ogg,-1,-1,VtolMove.ogg,-1,VtolLand.ogg,5

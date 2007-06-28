@@ -1,0 +1,5 @@
+script "setdisk.slo"
+run
+{
+	campaign	int		3
+}

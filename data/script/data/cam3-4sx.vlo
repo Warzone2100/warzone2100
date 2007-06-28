@@ -1,0 +1,9 @@
+// cam3-4sX.vlo
+//give player starting power
+
+script "cam3-4sX.slo"
+run
+{
+player		int		0
+startPower	int		50000	//starting power for player
+}

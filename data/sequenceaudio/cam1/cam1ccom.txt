@@ -1,0 +1,15 @@
+//pos		frame	
+//x	y		start	end	Text	
+
+20	432		0	100	"Commander, we have recovered a command turret from the New Paradigm."
+
+20	432		125	375	"This turret allows commanders to coordinate attacks between assigned units and to act as a delivery point for factories. Researching and using this technology has the highest priority."
+
+20	432		425	475	"Commander, we are receiving this transmission."
+
+
+
+
+
+
+
