@@ -7,8 +7,8 @@ Group: 'Export'
 Tooltip: 'Save a Warzone model file'
 """
 
-__author__ = "Gerard Krol"
-__version__ = "0.1"
+__author__ = "Gerard Krol, Kevin Gillette"
+__version__ = "0.2"
 __bpydoc__ = """\
 This script exports Warzone 2100 PIE files.
 """
@@ -16,6 +16,7 @@ This script exports Warzone 2100 PIE files.
 #
 # --------------------------------------------------------------------------
 # PIE Export v0.1 by Gerard Krol (gerard_)
+#            v0.2 by Kevin Gillette (kage)
 # --------------------------------------------------------------------------
 # ***** BEGIN GPL LICENSE BLOCK *****
 #
@@ -46,7 +47,7 @@ def fs_callback(filepath):
 		mesh = ob[0].getData(mesh=1)
 		
 		out = file(filepath, 'w')
-		out.write( 'PIE 2\n' )
+		out.write( "PIE %i\n" % pie_version )
 		out.write( 'TYPE 200\n' )
 		#print mesh.faces[0].image.getFilename()
 		texturename = os.path.basename(mesh.faces[0].image.getFilename())
@@ -56,8 +57,13 @@ def fs_callback(filepath):
 		out.write( 'LEVEL 1\n')
 		out.write('POINTS ' + str(len(mesh.verts)) + '\n')
 
+		if precision > 0:
+			format_str = "\t" + (" %%.%if" % precision * 3)[1:] + "\n"
+		else:
+			format_str = '\t%i %i %i\n'
+
 		for vert in mesh.verts:
-				out.write( '\t%i %i %i\n' % (vert.co.x*128, vert.co.z*128, -vert.co.y*128) )
+			out.write( format_str % (vert.co.x*128, vert.co.z*128, -vert.co.y*128) )
 		
 		out.write('POLYGONS ' + str(len(mesh.faces)) + '\n')
 		uvLayers = mesh.getUVLayerNames()
@@ -116,4 +122,29 @@ def fs_callback(filepath):
 				out.write('\t%i %i %i\n' % xyz)
 		out.close()
 fname = Blender.sys.makename(ext=".pie")
-Blender.Window.FileSelector(fs_callback, "Export Warzone Model", fname)
+
+precision, pie_version = Blender.Draw.Create(0), 2
+
+def opts_draw():
+	global precision, pie_version
+	if precision.val > 0: pie_version = 5
+	else: pie_version = 2
+	Blender.Draw.Label("Version: PIE %i" % pie_version, 10, 80, 130, 30)
+	precision = Blender.Draw.Number("precision", 2, 10, 50, 130, 30, precision.val, 0, 5)
+	Blender.Draw.Button("Export", 0, 10, 10, 60, 30)
+	Blender.Draw.Button("Cancel", 1, 80, 10, 60, 30)
+
+def opts_evt(val):
+	if 0 == val:
+		global precision
+		precision = precision.val
+		Blender.Draw.Exit()
+		print "starting export at floating-point precision of", precision
+		Blender.Window.FileSelector(fs_callback, "Export Warzone Model", fname)
+	elif 1 == val:
+		Blender.Draw.Exit()
+		print "export aborted"
+	else:
+		Blender.Draw.Redraw()
+
+Blender.Draw.Register(opts_draw, None, opts_evt)
