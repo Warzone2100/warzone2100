@@ -2432,7 +2432,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 	// We just store a separate IMD for each direction
 	static iIMDShape otherDirections[3];
 	static BOOL directionSet[3] = {FALSE, FALSE, FALSE};
-	iIMDShape *originalDirection;
+	iIMDShape *originalDirection = NULL;
 
 
 	if(psStructure->visible[selectedPlayer] || godMode || demoGetStatus())
@@ -3984,7 +3984,7 @@ static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDW
 	ASSERT( imd->npoints < iV_IMD_MAX_POINTS, "flattenImd: too many points in the PIE to flatten it" );
 
 	/* Get a copy of the points */
-	memcpy(alteredPoints, imd->points, imd->npoints * sizeof(Vector3i));
+	memcpy(alteredPoints, imd->points, imd->npoints * sizeof(Vector3f));
 
 	/* Get the height of the centre point for reference */
 	centreHeight = map_Height(structX,structY);
