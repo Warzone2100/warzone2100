@@ -1,3 +1,9 @@
+warzone2100 (2.0.8-0) unstable; urgency=low
+
+  * Bump upstream version number
+
+ -- Dennis Schridde <devurandom@gna.org>  Sun, 01 Jul 2007 00:00:00 +0100
+
 warzone2100 (2.0.7-0svn1) unstable; urgency=low
 
   * Bump upstream version number
