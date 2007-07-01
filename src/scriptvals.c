@@ -239,21 +239,6 @@ BOOL scrvGetContext(char *pID, SCRIPT_CONTEXT **ppsContext)
 }
 
 
-// Find a base object from it's id
-BOOL scrvGetBaseObj(UDWORD id, BASE_OBJECT **ppsObj)
-{
-	BASE_OBJECT		*psObj;
-
-	psObj = getBaseObjFromId(id);
-	*ppsObj = psObj;
-
-	if (psObj == NULL)
-	{
-		return FALSE;
-	}
-	return TRUE;
-}
-
 // Find a string from it's (string)id
 BOOL scrvGetString(const char *pStringID, char **ppString)
 {

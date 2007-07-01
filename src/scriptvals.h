@@ -117,9 +117,6 @@ extern BOOL scrvLoad(const char *pData, UDWORD size);
 // Link any object types to the actual pointer values
 //extern BOOL scrvLinkValues(void);
 
-// Find a base object from it's id
-extern BOOL scrvGetBaseObj(UDWORD id, BASE_OBJECT **ppsObj);
-
 // Find a string from it's (string)id
 extern BOOL scrvGetString(const char *pStringID, char **ppString);
 #endif

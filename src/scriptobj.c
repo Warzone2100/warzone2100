@@ -890,7 +890,8 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 		}
 		else
 		{
-			if (!scrvGetBaseObj(id, (BASE_OBJECT **)&(psVal->v.oval)))
+			psVal->v.oval = (void*)getBaseObjFromId(id);
+			if (!psVal->v.oval)
 			{
 				debug( LOG_ERROR, "scrValDefLoad: couldn't find object id %d", id );
 				abort();
@@ -1128,7 +1129,8 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 		{
 			endian_udword((UDWORD*)pPos);
 			id = *((UDWORD *) pPos);
-			if (!scrvGetBaseObj(id, (BASE_OBJECT **)&psCDroid))
+			psCDroid = (DROID *)getBaseObjFromId(id);
+			if (!psCDroid)
 			{
 				debug( LOG_ERROR, "scrValDefLoad: couldn't find object id %d", id );
 				abort();

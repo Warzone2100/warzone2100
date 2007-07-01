@@ -248,7 +248,8 @@ var_init:		var_entry TYPE var_value
 							scrv_error("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						if (!scrvGetBaseObj((UDWORD)$3.index, &psObj))
+						psObj = getBaseObjFromId((UDWORD)$3.index);
+						if (!psObj)
 						{
 							scrv_error("Droid id %d not found", (UDWORD)$3.index);
 							YYABORT;
@@ -277,7 +278,8 @@ var_init:		var_entry TYPE var_value
 							scrv_error("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						if (!scrvGetBaseObj((UDWORD)$3.index, &psObj))
+						psObj = getBaseObjFromId((UDWORD)$3.index);
+						if (!psObj)
 						{
 							scrv_error("Structure id %d not found", (UDWORD)$3.index);
 							YYABORT;
@@ -305,7 +307,8 @@ var_init:		var_entry TYPE var_value
 							scrv_error("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						if (!scrvGetBaseObj((UDWORD)$3.index, &psObj))
+						psObj = getBaseObjFromId((UDWORD)$3.index);
+						if (!psObj)
 						{
 							scrv_error("Feature id %d not found", (UDWORD)$3.index);
 							YYABORT;
@@ -542,7 +545,8 @@ var_init:		var_entry TYPE var_value
 							scrv_error("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						if (!scrvGetBaseObj((UDWORD)$3.index, &psObj))
+						psObj = getBaseObjFromId((UDWORD)$3.index);
+						if (!psObj)
 						{
 							scrv_error("Structure id %d not found", (UDWORD)$3.index);
 							YYABORT;
@@ -568,7 +572,8 @@ var_init:		var_entry TYPE var_value
 							scrv_error("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						if (!scrvGetBaseObj((UDWORD)$3.index, &psObj))
+						psObj = getBaseObjFromId((UDWORD)$3.index);
+						if (!psObj)
 						{
 							scrv_error("Droid id %d not found", (UDWORD)$3.index);
 							YYABORT;
