@@ -37,6 +37,7 @@
 #include "scripttabs.h"
 #include "scriptcb.h"
 #include "mission.h"
+#include "structuredef.h"
 
 static SDWORD	factoryDeliveryPointCheck[MAX_PLAYERS][NUM_FLAG_TYPES][MAX_FACTORY];
 
@@ -462,6 +463,18 @@ void killStruct(STRUCTURE *psDel)
 		"killStruct: pointer is not a droid" );
 	ASSERT( psDel->player < MAX_PLAYERS,
 		"killStruct: invalid player for stucture" );
+
+	if (StructIsFactory(psDel))
+	{
+		FACTORY *psFactory = (FACTORY *)psDel->pFunctionality;
+
+		if (psFactory->psAssemblyPoint != NULL)
+		{
+			removeFlagPosition(psFactory->psAssemblyPoint);
+			psFactory->psAssemblyPoint = NULL;
+		}
+	}
+
 	destroyObject((BASE_OBJECT**)apsStructLists, (BASE_OBJECT*)psDel);
 }
 

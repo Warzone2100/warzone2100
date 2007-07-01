@@ -396,6 +396,12 @@ extern BOOL	ptInStructure(STRUCTURE *psStruct, UDWORD x, UDWORD y);
 selected - returns TRUE if valid*/
 extern BOOL lasSatStructSelected(STRUCTURE *psStruct);
 
+static inline void setStructureTarget(STRUCTURE *psBuilding, BASE_OBJECT *psNewTarget, UWORD idx)
+{
+	assert(idx < STRUCT_MAXWEAPS);
+	psBuilding->psTarget[idx] = psNewTarget;
+}
+
 #define CHECK_STRUCTURE(object) \
 do { \
 	unsigned int i; \

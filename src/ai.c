@@ -650,7 +650,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj,
 			while (psCurr != NULL)
 			{
 				//don't target features
-				if (psCurr->type != OBJ_FEATURE)
+				if (psCurr->type != OBJ_FEATURE && !psCurr->died)
 				{
 					if (psObj->player != psCurr->player &&
 						!aiCheckAlliances(psCurr->player,psObj->player))
@@ -798,7 +798,7 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 		while (psCurr != NULL)
 		{
 			    //don't target features
-			    if (psCurr->type != OBJ_FEATURE)
+			    if (psCurr->type != OBJ_FEATURE && !psCurr->died)
 			    {
 				    if (psObj->player != psCurr->player &&
 					    !aiCheckAlliances(psCurr->player,psObj->player) &&

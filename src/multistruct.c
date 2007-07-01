@@ -121,11 +121,11 @@ BOOL recvBuildStarted(NETMSG *pMsg)
 			psDroid->psTarStats[0] = (BASE_STATS *) psStats;
 			if(targetId)
 			{
-				psDroid->psTarget[0] = IdToPointer(targetId,ANYPLAYER);
+				setDroidTarget(psDroid, IdToPointer(targetId, ANYPLAYER), 0);
 			}
 			else
 			{
-				psDroid->psTarget[0] = 0;
+				setDroidTarget(psDroid, NULL, 0);
 			}
 
 			if (IsStatExpansionModule(psStats))

@@ -546,7 +546,7 @@ BOOL accruePower(BASE_OBJECT *psObject)
             //check the droid hasn't died in the meantime
             if (psTarget && psTarget->died)
             {
-                psDroid->psTarget[0] = NULL;
+		setDroidTarget(psDroid, NULL, 0);
                 psTarget = NULL;
             }
             if (psTarget)

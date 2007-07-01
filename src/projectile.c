@@ -240,6 +240,11 @@ static void proj_Destroy(PROJ_OBJECT *psObj)
 {
 	CHECK_PROJECTILE(psObj);
 
+	/* Decrement any reference counts the projectile may have increased */
+	setProjectileDamaged(psObj, NULL);
+	setProjectileSource(psObj, NULL);
+	setProjectileDestination(psObj, NULL);
+
 	/* WARNING WARNING: The use of (int) cast pointer here is not safe for
 	 * most 64-bit architectures! FIXME!! - Per */
 	if (hashTable_RemoveElement(g_pProjObjTable, psObj, (int) psObj, UNUSED_KEY) == FALSE)
@@ -377,13 +382,14 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	psObj->tarX			= tarX;
 	psObj->tarY			= tarY;
 	psObj->targetRadius = (psTarget ? establishTargetRadius(psTarget) : 0); // needed to backtrack FX
-	psObj->psDest		= psTarget;
 	psObj->born			= gameTime;
 	psObj->player		= (UBYTE)player;
 	psObj->bVisible		= FALSE;
 	psObj->airTarget	= FALSE;
+	psObj->psDamaged	= NULL; // must initialize these to NULL first!
 	psObj->psSource		= NULL;
-	psObj->psDamaged	= NULL;
+	psObj->psDest		= NULL;
+	setProjectileDestination(psObj, psTarget);
 
 	/* If target is a VTOL or higher than ground, it is an air target. */
 	if ((psTarget != NULL && psTarget->type == OBJ_DROID && vtolDroid((DROID*)psTarget))
@@ -395,17 +401,25 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	//Watermelon:use the source of the source of psObj :) (psAttacker is a projectile)
 	if (bPenetrate && psAttacker)
 	{
-		PROJ_OBJECT *psProj = (PROJ_OBJECT *)psAttacker;
+		// psAttacker is a projectile if bPenetrate
+		PROJ_OBJECT *psProj = (PROJ_OBJECT*)psAttacker;
 
 		ASSERT(psProj->type == OBJ_BULLET, "Penetrating but not projectile?");
-		psObj->psSource = psProj->psSource;
-		psObj->psDamaged = (psProj->psDest && !psProj->psDest->died) ? psProj->psDest : NULL;
+
+		if (psProj->psSource && !psProj->psSource->died)
+		{
+			setProjectileSource(psObj, psProj->psSource);
+		}
+
+		if (psProj->psDest && !psProj->psDest->died)
+		{
+			setProjectileDamaged(psObj, psProj->psDest);
+		}
 		psProj->state = PROJ_IMPACT;
 	}
 	else
 	{
-		psObj->psSource = psAttacker;
-		psObj->psDamaged = NULL;
+		setProjectileSource(psObj, psAttacker);
 	}
 
 	if (psTarget)
@@ -627,7 +641,6 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 	//Watermelon:int i
 	UDWORD			i;
 	//Watermelon:2 temp BASE_OBJECT pointer
-	BASE_OBJECT		*psTempObj;
 	BASE_OBJECT		*psNewTarget;
 	//Watermelon:Missile or not
 	BOOL			bMissile = FALSE;
@@ -770,35 +783,41 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 
 	for (i = 0;i < numProjNaybors;i++)
 	{
-		if ( asProjNaybors[i].psObj->player != psObj->player &&
-			( asProjNaybors[i].psObj->type == OBJ_DROID ||
-			asProjNaybors[i].psObj->type == OBJ_STRUCTURE ||
-			asProjNaybors[i].psObj->type == OBJ_BULLET ||
-			asProjNaybors[i].psObj->type == OBJ_FEATURE ) &&
-			!aiCheckAlliances(asProjNaybors[i].psObj->player,psObj->player) )
+		BASE_OBJECT *psTempObj = asProjNaybors[i].psObj;
+
+		CHECK_OBJECT(psTempObj);
+
+		// Dont set the target as destination twice messes up memory
+		if ( psTempObj == psObj->psDest )
 		{
-			psTempObj = asProjNaybors[i].psObj;
+			continue;
+		}
 
-			CHECK_OBJECT(psTempObj);
+		if ( psTempObj == psObj->psDamaged )
+		{
+			continue;
+		}
 
-			if ( psTempObj == psObj->psDamaged )
-			{
-				continue;
-			}
+		//Watermelon;so a projectile wont collide with another projectile unless it's a counter-missile weapon
+		if ( psTempObj->type == OBJ_BULLET && !( bMissile || ((PROJ_OBJECT *)psTempObj)->psWStats->weaponSubClass == WSC_COUNTER ) )
+		{
+			continue;
+		}
 
-			//Watermelon;so a projectile wont collide with another projectile unless it's a counter-missile weapon
-			if ( psTempObj->type == OBJ_BULLET && !( bMissile || ((PROJ_OBJECT *)psTempObj)->psWStats->weaponSubClass == WSC_COUNTER ) )
-			{
-				continue;
-			}
+		//Watermelon:ignore oil resource and pickup
+		if ( psTempObj->type == OBJ_FEATURE &&
+			((FEATURE *)psTempObj)->psStats->damageable == 0 )
+		{
+			continue;
+		}
 
-			//Watermelon:ignore oil resource and pickup
-			if ( psTempObj->type == OBJ_FEATURE &&
-				((FEATURE *)psTempObj)->psStats->damageable == 0 )
-			{
-				continue;
-			}
-
+		if ( psTempObj->player != psObj->player &&
+			( psTempObj->type == OBJ_DROID ||
+			psTempObj->type == OBJ_STRUCTURE ||
+			psTempObj->type == OBJ_BULLET ||
+			psTempObj->type == OBJ_FEATURE ) &&
+			!aiCheckAlliances(psTempObj->player,psObj->player) )
+		{
 			if ( psTempObj->type == OBJ_STRUCTURE || psTempObj->type == OBJ_FEATURE )
 			{
 				//Watermelon:AA weapon shouldnt hit buildings
@@ -815,7 +834,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 					(xdiff*xdiff + ydiff*ydiff) < ( (SDWORD)establishTargetRadius(psTempObj) * (SDWORD)establishTargetRadius(psTempObj) ) )
 				{
 					psNewTarget = psTempObj;
-					psObj->psDest = psNewTarget;
+					setProjectileDestination(psObj, psNewTarget);
 					psObj->state = PROJ_IMPACT;
 					return;
 				}
@@ -836,7 +855,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 					(xdiff*xdiff + ydiff*ydiff) < (SDWORD)( wpRadius * establishTargetRadius(psTempObj) * establishTargetRadius(psTempObj) ) )
 				{
 					psNewTarget = psTempObj;
-					psObj->psDest = psNewTarget;
+					setProjectileDestination(psObj, psNewTarget);
 
 					if (bPenetrate)
 					{
@@ -844,7 +863,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 
 						asWeap.nStat = psObj->psWStats - asWeaponStats;
 						//Watermelon:just assume we damaged the chosen target
-						psObj->psDamaged = psNewTarget;
+						setProjectileDamaged(psObj, psNewTarget);
 
 						// Determine position to fire a missile at
 						// (must be at least 0 because we don't use signed integers
@@ -897,7 +916,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 			else
 			{
 				//Watermelon:missed.you can now 'dodge' projectile by micro,so cyborgs should be more useful now
-				psObj->psDest = NULL;
+				setProjectileDestination(psObj, NULL);
 			}
 		}
 	}
@@ -908,7 +927,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 	{
 		psObj->state = PROJ_IMPACT;
 		/* miss registered if NULL target */
-		psObj->psDest = NULL;
+		setProjectileDestination(psObj, NULL);
 		return;
 	}
 #endif
@@ -933,7 +952,6 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 	Vector3i pos;
 	float			fVVert;
 	BOOL			bOver = FALSE;
-	BASE_OBJECT		*psTempObj;
 	BASE_OBJECT		*psNewTarget;
 	UDWORD			i;
 	SDWORD			xdiff,ydiff,extendRad;
@@ -1035,30 +1053,36 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 	//Watermelon:test test
 	for (i = 0;i < numProjNaybors;i++)
 	{
-		if (asProjNaybors[i].psObj->player != psObj->player &&
-			(asProjNaybors[i].psObj->type == OBJ_DROID ||
-			asProjNaybors[i].psObj->type == OBJ_STRUCTURE ||
-			asProjNaybors[i].psObj->type == OBJ_BULLET ||
-			asProjNaybors[i].psObj->type == OBJ_FEATURE) &&
-			!aiCheckAlliances(asProjNaybors[i].psObj->player,psObj->player))
+		BASE_OBJECT *psTempObj = asProjNaybors[i].psObj;
+
+		CHECK_OBJECT(psTempObj);
+
+		// Dont set the target as destination twice messes up memory
+		if ( psTempObj == psObj->psDest )
 		{
-			psTempObj = asProjNaybors[i].psObj;
+			continue;
+		}
 
-			CHECK_OBJECT(psTempObj);
+		//Watermelon;dont collide with any other projectiles
+		if ( psTempObj->type == OBJ_BULLET )
+		{
+			continue;
+		}
 
-			//Watermelon;dont collide with any other projectiles
-			if ( psTempObj->type == OBJ_BULLET )
-			{
-				continue;
-			}
+		//Watermelon:ignore oil resource and pickup
+		if ( psTempObj->type == OBJ_FEATURE &&
+			((FEATURE *)psTempObj)->psStats->damageable == 0 )
+		{
+			continue;
+		}
 
-			//Watermelon:ignore oil resource and pickup
-			if ( psTempObj->type == OBJ_FEATURE &&
-				((FEATURE *)psTempObj)->psStats->damageable == 0 )
-			{
-				continue;
-			}
-
+		if (psTempObj->player != psObj->player &&
+			(psTempObj->type == OBJ_DROID ||
+			psTempObj->type == OBJ_STRUCTURE ||
+			psTempObj->type == OBJ_BULLET ||
+			psTempObj->type == OBJ_FEATURE) &&
+			!aiCheckAlliances(psTempObj->player,psObj->player))
+		{
 			if ( psTempObj->type == OBJ_STRUCTURE || psTempObj->type == OBJ_FEATURE )
 			{
 				xdiff = (SDWORD)psObj->x - (SDWORD)psTempObj->x;
@@ -1069,7 +1093,7 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 					(xdiff*xdiff + ydiff*ydiff) < ( (SDWORD)establishTargetRadius(psTempObj) * (SDWORD)establishTargetRadius(psTempObj) ) )
 				{
 					psNewTarget = psTempObj;
-					psObj->psDest = psNewTarget;
+					setProjectileDestination(psObj, psNewTarget);
 		  			psObj->state = PROJ_IMPACT;
 					return;
 				}
@@ -1084,7 +1108,7 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 					(UDWORD)(xdiff*xdiff + ydiff*ydiff) < ( wpRadius * (SDWORD)establishTargetRadius(psTempObj) * (SDWORD)establishTargetRadius(psTempObj) ) )
 				{
 					psNewTarget = psTempObj;
-					psObj->psDest = psNewTarget;
+					setProjectileDestination(psObj, psNewTarget);
 
 					if (bPenetrate)
 					{
@@ -1092,7 +1116,7 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 
 						asWeap.nStat = psObj->psWStats - asWeaponStats;
 						//Watermelon:just assume we damaged the chosen target
-						psObj->psDamaged = psNewTarget;
+						setProjectileDamaged(psObj, psNewTarget);
 
 						// Determine position to fire a missile at
 						// (must be at least 0 because we don't use signed integers
@@ -1145,7 +1169,7 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 			}
 			else
 			{
-				psObj->psDest = NULL;
+				setProjectileDestination(psObj, NULL);
 			}
 		}
 		bOver = TRUE;
@@ -1157,7 +1181,7 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 	{
 		psObj->state = PROJ_IMPACT;
 		/* miss registered if NULL target */
-		psObj->psDest = NULL;
+		setProjectileDestination(psObj, NULL);
 		bOver = TRUE;
 	}
 #endif
@@ -1443,7 +1467,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 
 				if (percentDamage >= 0)	// So long as the target wasn't killed
 				{
-					psObj->psDamaged = psObj->psDest;
+					setProjectileDamaged(psObj, psObj->psDest);
 				}
 			}
 		}
@@ -1494,7 +1518,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 
 				if (percentDamage >= 0)
 				{
-					psObj->psDamaged = psObj->psDest;
+					setProjectileDamaged(psObj, psObj->psDest);
 				}
 			}
 		}
@@ -1888,15 +1912,15 @@ proj_Update( PROJ_OBJECT *psObj )
 	 */
 	if (psObj->psSource && psObj->psSource->died)
 	{
-		psObj->psSource = NULL;
+		setProjectileSource(psObj, NULL);
 	}
 	if (psObj->psDest && psObj->psDest->died)
 	{
-		psObj->psDest = NULL;
+		setProjectileDestination(psObj, NULL);
 	}
 	if (psObj->psDamaged && psObj->psDamaged->died)
 	{
-		psObj->psDamaged = NULL;
+		setProjectileDamaged(psObj, NULL);
 	}
 
 	//Watermelon:get naybors
@@ -2351,7 +2375,7 @@ void projGetNaybors(PROJ_OBJECT *psObj)
 	gridStartIterate((SDWORD)dx, (SDWORD)dy);
 	for (psTempObj = gridIterate(); psTempObj != NULL; psTempObj = gridIterate())
 	{
-		if (psTempObj != (BASE_OBJECT *)psObj)
+		if (psTempObj != (BASE_OBJECT *)psObj && !psTempObj->died)
 		{
 			IN_PROJ_NAYBOR_RANGE(psTempObj);
 

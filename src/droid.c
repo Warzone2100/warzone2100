@@ -702,7 +702,7 @@ BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 	}
 
     //reset the baseStruct
-    psDroid->psBaseStruct = NULL;
+	setDroidBase(psDroid, NULL);
 
 	// remove the droid from the cluster systerm
 	clustRemoveObject((BASE_OBJECT *)psDroid);
@@ -947,7 +947,7 @@ void droidGetNaybors(DROID *psDroid)
 	gridStartIterate((SDWORD)dx, (SDWORD)dy);
 	for (psObj = gridIterate(); psObj != NULL; psObj = gridIterate())
 	{
-		if (psObj != (BASE_OBJECT *)psDroid)
+		if (psObj != (BASE_OBJECT *)psDroid && !psObj->died)
 		{
 			IN_NAYBOR_RANGE(psObj);
 
@@ -1303,10 +1303,9 @@ BOOL droidStartBuild(DROID *psDroid)
 	{
 		psDroid->actionStarted = gameTime;
 		psDroid->actionPoints = 0;
-		psDroid->psTarget[0] = (BASE_OBJECT *)psStruct;
-		psDroid->psActionTarget[0] = (BASE_OBJECT *)psStruct;
+		setDroidTarget(psDroid, (BASE_OBJECT *)psStruct, 0);
+		setDroidActionTarget(psDroid, (BASE_OBJECT *)psStruct, 0);
 	}
-
 
 	if ( psStruct->visible[selectedPlayer] )
 	{
@@ -1854,8 +1853,7 @@ void droidSelfRepair(DROID *psDroid)
 		    if (psDroid->asBits[COMP_REPAIRUNIT].nStat != 0)
 		    {
 			    psDroid->action = DACTION_DROIDREPAIR;
-//			    psDroid->psTarget = (BASE_OBJECT *)psDroid;
-                psDroid->psActionTarget[0] = (BASE_OBJECT *)psDroid;
+				setDroidActionTarget(psDroid, (BASE_OBJECT *)psDroid, 0);
 			    psDroid->actionStarted = gameTime;
 			    psDroid->actionPoints  = 0;
 		    }
@@ -3274,8 +3272,8 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	for(i = 0;i < DROID_MAXWEAPS;i++)
 	{
 		psDroid->psTarStats[i] = NULL;
-		psDroid->psActionTarget[i] = NULL;
 		psDroid->psTarget[i] = NULL;
+		psDroid->psActionTarget[i] = NULL;
 		psDroid->asWeaps[i].lastFired = 0;
 		psDroid->asWeaps[i].nStat = 0;
 		psDroid->asWeaps[i].ammo = 0;
@@ -4867,7 +4865,7 @@ void setUpBuildModule(DROID *psDroid)
 		{
 			//set up the help build scenario
 			psDroid->order = DORDER_HELPBUILD;
-			psDroid->psTarget[0] = (BASE_OBJECT *)psStruct;
+			setDroidTarget(psDroid, (BASE_OBJECT *)psStruct, 0);
 			if (droidStartBuild(psDroid))
 			{
 				psDroid->action = DACTION_BUILD;
@@ -5354,7 +5352,7 @@ void assignVTOLPad(DROID *psNewDroid, STRUCTURE *psReArmPad)
 			psReArmPad->pStructureType->type == REF_REARM_PAD,
         "assignVTOLPad: not a ReArm Pad" );
 
-    psNewDroid->psBaseStruct = psReArmPad;
+	setDroidBase(psNewDroid, psReArmPad);
 }
 
 /*compares the droid sensor type with the droid weapon type to see if the
@@ -5553,6 +5551,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
             {
                 if (psCurr->asOrderList[i].psOrderTarget == (BASE_OBJECT *)psD)
                 {
+					removeDroidOrderTarget(psCurr, i);
             		// move the rest of the list down
 		            memmove(&psCurr->asOrderList[i], &psCurr->asOrderList[i] + 1,
                         (psCurr->listSize - i) * sizeof(ORDER_LIST));

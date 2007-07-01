@@ -126,6 +126,21 @@ extern void	objectShimmy	( BASE_OBJECT *psObj );
 // Watermelon:naybor related functions
 extern void projGetNaybors(PROJ_OBJECT *psObj);
 
+static inline void setProjectileDestination(PROJ_OBJECT *psProj, BASE_OBJECT *psObj)
+{
+	psProj->psDest = psObj;
+}
+
+static inline void setProjectileSource(PROJ_OBJECT *psProj, BASE_OBJECT *psObj)
+{
+	psProj->psSource = psObj;
+}
+
+static inline void setProjectileDamaged(PROJ_OBJECT *psProj, BASE_OBJECT *psObj)
+{
+	psProj->psDamaged = psObj;
+}
+
 /* assert if projectile is bad */
 #define CHECK_PROJECTILE(object) \
 do { \

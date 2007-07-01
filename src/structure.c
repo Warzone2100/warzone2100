@@ -3100,7 +3100,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 		{
 			if (psStructure->psTarget[i] && psStructure->psTarget[i]->died)
 			{
-				psStructure->psTarget[i] = NULL;
+				setStructureTarget(psStructure, NULL, i);
 			}
 		}
 	}
@@ -3108,7 +3108,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 	{
 		if (psStructure->psTarget[0] && psStructure->psTarget[0]->died)
 		{
-			psStructure->psTarget[0] = NULL;
+			setStructureTarget(psStructure, NULL, 0);
 		}
 	}
 
@@ -3146,7 +3146,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 					{
 						debug( LOG_ATTACK, "Struct(%d) attacking : %d\n",
 								psStructure->id, psChosenObjs[i]->id );
-						psStructure->psTarget[i] = psChosenObjs[i];
+						setStructureTarget(psStructure, psChosenObjs[i], i);
 					}
 					else
 					{
@@ -3156,18 +3156,18 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 							{
 								debug( LOG_ATTACK, "Struct(%d) attacking : %d\n",
 										psStructure->id, psChosenObjs[0]->id );
-								psStructure->psTarget[i] = psChosenObjs[0];
+								setStructureTarget(psStructure, psChosenObjs[0], i);
 								psChosenObjs[i] = psChosenObjs[0];
 							}
 							else
 							{
-								psStructure->psTarget[i] = NULL;
+								setStructureTarget(psStructure, NULL, i);
 								psChosenObjs[i] = NULL;
 							}
 						}
 						else
 						{
-							psStructure->psTarget[i] = NULL;
+							setStructureTarget(psStructure, NULL, i);
 							psChosenObjs[i] = NULL;
 						}
 					}
@@ -3221,11 +3221,11 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				{
 					debug( LOG_ATTACK, "Struct(%d) attacking : %d\n",
 						psStructure->id, psChosenObj->id );
-					psStructure->psTarget[0] = psChosenObj;
+					setStructureTarget(psStructure, psChosenObj, 0);
 				}
 				else
 				{
-					psStructure->psTarget[0] = NULL;
+					setStructureTarget(psStructure, NULL, 0);
 				}
 			}
 			psChosenObj = psStructure->psTarget[0];
@@ -4096,12 +4096,6 @@ void structureRelease(STRUCTURE *psBuilding)
 		{
 			// free up repair fac stuff
 			psAssemblyPoint = ((REPAIR_FACILITY *)psBuilding->pFunctionality)->psDeliveryPoint;
-		}
-
-		// remove any assembly points
-		if (psAssemblyPoint != NULL)
-		{
-			removeFlagPosition(psAssemblyPoint);
 		}
 
 		//free up the space used by the functionality array
@@ -7819,6 +7813,7 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, BOOL
 				{
 					if (psCurr->asOrderList[i].psOrderTarget == (BASE_OBJECT *)psStructure)
 					{
+						removeDroidOrderTarget(psCurr, i);
 						// move the rest of the list down
 						memmove(&psCurr->asOrderList[i], &psCurr->asOrderList[i] + 1,
 							(psCurr->listSize - i) * sizeof(ORDER_LIST));
@@ -7830,16 +7825,16 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, BOOL
 					}
 				}
 			}
+
 			//check through the 'attackPlayer' players list of structures to see if any are targetting it
 			for (psStruct = apsStructLists[attackPlayer]; psStruct != NULL; psStruct =
 				psStruct->psNext)
 			{
 				if (psStruct->psTarget[0] == (BASE_OBJECT *)psStructure)
 				{
-					psStruct->psTarget[0] = NULL;
+					setStructureTarget(psStruct, NULL, 0);
 				}
 			}
-
 
 			//add back into cluster system
 			clustNewStruct(psStructure);

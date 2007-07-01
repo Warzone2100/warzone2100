@@ -386,6 +386,38 @@ extern BOOL droidAudioTrackStopped( void *psObj );
 /*returns TRUE if droid type is one of the Cyborg types*/
 extern BOOL cyborgDroid(DROID *psDroid);
 
+/** helper functions for future refcount patch **/
+
+static inline void setDroidTarget(DROID *psDroid, BASE_OBJECT *psNewTarget, UWORD idx)
+{
+	psDroid->psTarget[idx] = psNewTarget;
+}
+
+static inline void setDroidActionTarget(DROID *psDroid, BASE_OBJECT *psNewTarget, UWORD idx)
+{
+	psDroid->psActionTarget[idx] = psNewTarget;
+}
+
+static inline void setDroidBase(DROID *psDroid, STRUCTURE *psNewBase)
+{
+	psDroid->psBaseStruct = psNewBase;
+}
+
+static inline void setSaveDroidTarget(DROID *psSaveDroid, BASE_OBJECT *psNewTarget, UWORD idx)
+{
+	psSaveDroid->psTarget[idx] = psNewTarget;
+}
+
+static inline void setSaveDroidActionTarget(DROID *psSaveDroid, BASE_OBJECT *psNewTarget, UWORD idx)
+{
+	psSaveDroid->psActionTarget[idx] = psNewTarget;
+}
+
+static inline void setSaveDroidBase(DROID *psSaveDroid, STRUCTURE *psNewBase)
+{
+	psSaveDroid->psBaseStruct = psNewBase;
+}
+
 /* assert if droid is bad */
 #define CHECK_DROID(droid) \
 do { \

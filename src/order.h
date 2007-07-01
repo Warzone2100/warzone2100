@@ -251,4 +251,16 @@ extern void orderStructureObj(UDWORD player, BASE_OBJECT *psObj);
 // clear all targets (but not action targets)
 void clearDroidTargets(DROID *psDroid);
 
+static inline void setDroidOrderTarget(DROID *psDroid, void *psNewObject, SDWORD idx)
+{
+	assert(idx >= 0 && idx < ORDER_LIST_MAX);
+	psDroid->asOrderList[idx].psOrderTarget = psNewObject;
+}
+
+static inline void removeDroidOrderTarget(DROID *psDroid, SDWORD idx)
+{
+	assert(idx >= 0 && idx < ORDER_LIST_MAX);
+	psDroid->asOrderList[idx].psOrderTarget = NULL;
+}
+
 #endif

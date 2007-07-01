@@ -188,7 +188,7 @@ BOOL recvVtolRearm(NETMSG *pMsg)
 		}
 		else
 		{
-			psDroid->psBaseStruct = psStruct;
+			setDroidBase(psDroid, psStruct);
 		}
 	}
 
@@ -317,9 +317,8 @@ BOOL sendDroidEmbark(DROID *psDroid)
 
 BOOL recvDroidEmbark(NETMSG *pMsg)
 {
-    DROID			*psDroid;
+	DROID			*psDroid;
 	UDWORD			id,player;
-	int				i;
 
 	NetGet(pMsg,0,id);
 	player = pMsg->body[4];
@@ -329,20 +328,18 @@ BOOL recvDroidEmbark(NETMSG *pMsg)
 		return FALSE;
 	}
 
-    if(psDroid)
-    {
-        //take it out of the world without destroying it
-        droidRemove(psDroid, apsDroidLists);
-        //init the order for when disembark
-        psDroid->order = DORDER_NONE;
-		for(i = 0;i < psDroid->numWeaps;i++)
-		{
-    		psDroid->psTarget[i] = NULL;
-		}
-        psDroid->psTarStats[0] = NULL;
-    }
+	if(psDroid)
+	{
+		// take it out of the world without destroying it
+		droidRemove(psDroid, apsDroidLists);
 
-    return TRUE;
+		//init the order for when disembark
+		psDroid->order = DORDER_NONE;
+		clearDroidTargets(psDroid);
+		psDroid->psTarStats[0] = NULL;
+	}
+
+	return TRUE;
 }
 
 BOOL sendDroidDisEmbark(DROID *psDroid)
