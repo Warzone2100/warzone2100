@@ -24,10 +24,6 @@
  *
  */
 
-// various script tracing printf's
-//#define DEBUG_GROUP0
-// script order printf's
-//#define DEBUG_GROUP1
 #include "lib/framework/frame.h"
 #include "objects.h"
 #include "group.h"
@@ -264,8 +260,8 @@ BOOL scrIdleGroup(void)
 }
 
 // variables for the group iterator
-DROID_GROUP		*psScrIterateGroup;
-DROID			*psScrIterateGroupDroid;
+static DROID_GROUP		*psScrIterateGroup;
+static DROID			*psScrIterateGroupDroid;
 
 // initialise iterating a groups members
 BOOL scrInitIterateGroup(void)
@@ -285,7 +281,6 @@ BOOL scrInitIterateGroup(void)
 
 	return TRUE;
 }
-
 
 
 // iterate through a groups members
@@ -1114,7 +1109,6 @@ static void scrDroidTargetPriority(DROID **ppsTarget, DROID *psCurr)
 {
 	// priority to things with weapons
 	if ( ((*ppsTarget) == NULL) ||
-		 //((*ppsTarget)->numWeaps == 0) )
          ((*ppsTarget)->asWeaps[0].nStat == 0) )
 	{
 		*ppsTarget = psCurr;
@@ -1645,31 +1639,6 @@ BOOL scrSkDoResearch(void)
 	}
 
 	return TRUE;
-/*
-	// do it.
-	if(i != numResearch)
-	{
-		researchResult(i,(UBYTE)player,FALSE);
-
-		sprintf(sTemp,"player:%d did topic: %s",player, asResearch[i].pName );
-		NETlogEntry(sTemp,0,0);
-
-		SendResearch((UBYTE)player,i );
-	}
-
-	// set delay for next topic.
-
-
-	timeToResearch = (asResearch+i)->researchPoints / ((RESEARCH_FACILITY*)psResearch->pFunctionality)->researchPoints;;
-
-	scrFunctionResult.v.ival = timeToResearch;
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))		// return time to do it..
-	{
-		return FALSE;
-	}
-*/
-
-//	UDWORD				count;
 }
 
 // ********************************************************************************************
@@ -1741,7 +1710,7 @@ BOOL scrSkDifficultyModifier(void)
 	SDWORD              amount,player;
 	RESEARCH_FACILITY	*psResFacility;
 	STRUCTURE           *psStr;
-    PLAYER_RESEARCH		*pPlayerRes;
+	PLAYER_RESEARCH		*pPlayerRes;
 
 	if (!stackPopParams(1,VAL_INT, &player ))
 	{
@@ -1771,8 +1740,7 @@ BOOL scrSkDifficultyModifier(void)
 	//research modifier.??
 	for(psStr=apsStructLists[player];psStr;psStr=psStr->psNext)
 	{
-
-//		subtract 0 - 60% off the time to research.
+		// subtract 0 - 60% off the time to research.
 		if(psStr->pStructureType->type == REF_RESEARCH)
 		{
 			psResFacility =	(RESEARCH_FACILITY*)psStr->pFunctionality;
@@ -1814,8 +1782,7 @@ static BOOL defenseLocation(BOOL variantB)
 	UDWORD		x1,x2,x3,x4,y1,y2,y3,y4;
 	BOOL		noWater;
 	UDWORD      minCount;
-    UDWORD      offset;
-
+	UDWORD      offset;
 
 	if (!stackPopParams(6,
 						VAL_REF|VAL_INT, &pX,
@@ -2174,161 +2141,5 @@ BOOL scrIterateGroupB(void)
 	return TRUE;
 }
 
-// ********************************************************************************************
-// Give a Droid a build order
-/*BOOL scrSkOrderDroidLineBuild(void)
-{
-	DROID			*psDroid;
-	SDWORD			x1,y1,x2,y2, statIndex;
-	BASE_STATS		*psStats;
-
-	if (!stackPopParams(6, ST_DROID, &psDroid, ST_STRUCTURESTAT, &statIndex,
-						   VAL_INT, &x1, VAL_INT, &y1,VAL_INT, &x2, VAL_INT, &y2))
-	{
-		return FALSE;
-	}
-
-	psStats = (BASE_STATS *)(asStructureStats + statIndex);
-
-	ASSERT( psDroid != NULL,
-		"scrOrderDroidLineBuild: Invalid Unit pointer" );
-	ASSERT( psStats != NULL,
-		"scrOrderDroidLineBuild: Invalid object pointer" );
-	if (psDroid == NULL)
-	{
-		return FALSE;
-	}
-
-	if ((x1 < 0) || (x1 > (SDWORD)mapWidth*TILE_UNITS) ||
-		(y1 < 0) || (y1 > (SDWORD)mapHeight*TILE_UNITS)||
-		(x2 < 0) || (x2 > (SDWORD)mapWidth*TILE_UNITS) ||
-		(y2 < 0) || (y2 > (SDWORD)mapHeight*TILE_UNITS) )
-	{
-		ASSERT( FALSE,
-			"scrOrderDroidLineBuild: Invalid location" );
-		return FALSE;
-	}
-
-
-	if(IsPlayerStructureLimitReached(psDroid->player) == FALSE)
-	{
-		orderDroidStatsTwoLoc(psDroid, DORDER_LINEBUILD, psStats, (UDWORD)x1,(UDWORD)y1,(UDWORD)x2,(UDWORD)y2);
-	}
-
-	return TRUE;
-}
-*/
-// ********************************************************************************************
-
-// skirmish template storage facility
-
-// storage definition
-/*
-typedef struct _skirmishstore {
-	SDWORD					index;
-	DROID_TEMPLATE			*psTempl;
-	struct _skirmishstore	*psNext;
-}SKIRMISHSTORE;
-
-#define numSkPiles	8
-SKIRMISHSTORE	*skirmishStore[numSkPiles];
-
-// init templates
-BOOL skInitSkirmishTemplates(void)
-{
-	UBYTE i;
-	for(i=0;i<numSkPiles;i++)
-	{
-		skirmishStore[i] = NULL;
-	}
-	scrFunctionResult.v.bval = TRUE;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// success!
-	{
-		return FALSE;
-	}
-	return TRUE;
-}
-
-// add template
-BOOL skAddTemplate(void)
-{
-	SKIRMISHSTORE *psT;
-
-	SDWORD			stempl,index,pile;
-	DROID_TEMPLATE	*psTempl;
-
-	if (!stackPopParams(3,VAL_INT, &pile,VAL_INT, &index, ST_TEMPLATE, &stempl))
-	{
-		return FALSE;
-	}
-	psTempl =(DROID_TEMPLATE *)stempl;
-//	psT = malloc(sizeof(SKIRMISHSTORE));
-	psT = malloc(sizeof(DROID_TEMPLATE));
-	if ( !psT)
-	{
-		goto fail;
-	}
-	psT->index			= index;
-	psT->psTempl		= psTempl;
-	psT->psNext			= skirmishStore[pile];
-	skirmishStore[pile] = psT;
-
-	scrFunctionResult.v.bval = TRUE;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// yes
-	{
-		return FALSE;
-	}
-	return TRUE;
-fail:
-scrFunctionResult.v.bval = FALSE;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// no
-	{
-		return FALSE;
-	}
-	return TRUE;
-}
-
-
-// get template
-BOOL skGetTemplate(void)
-{
-	SDWORD	index,pile;
-	SKIRMISHSTORE *psT;
-
-	if (!stackPopParams(2,VAL_INT, &pile,VAL_INT, &index))
-	{
-		return FALSE;
-	}
-
-	for( psT = skirmishStore[pile]; psT && (psT->index != index); psT=psT->psNext);
-	if(!psT)
-	{
-		DBERROR(("failed to find required skTemplate"));
-		return FALSE;
-	}
-
-	if (!stackPushResult(ST_TEMPLATE, (UDWORD)(psT->psTempl) ))
-	{
-		return FALSE;
-	}
-	return TRUE;
-}
-
-// clear templates
-BOOL skClearSkirmishTemplates(void)
-{
-	UBYTE i;
-	for(i=0;i<numSkPiles;i++)
-	{
-		while(skirmishStore[i])
-		{
-			free(skirmishStore[i]);
-			skirmishStore[i] = NULL;
-		}
-	}
-
-	return TRUE;
-}
-*/
 // ********************************************************************************************
 // ********************************************************************************************

@@ -53,7 +53,6 @@ static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to sta
 // Get values from a base object
 BOOL scrBaseObjGet(UDWORD index)
 {
-//	INTERP_VAL		sVal;
 	INTERP_TYPE		type = 0;
 	BASE_OBJECT		*psObj;
 	DROID			*psDroid;
@@ -317,15 +316,6 @@ BOOL scrBaseObjGet(UDWORD index)
 		debug(LOG_ERROR, "scrBaseObjGet: stackPushResult() failed");
 		return FALSE;
 	}
-
-	return TRUE;
-}
-
-
-// Set values from a base object
-BOOL scrBaseObjSet(UDWORD index)
-{
-	index = index;
 
 	return TRUE;
 }
