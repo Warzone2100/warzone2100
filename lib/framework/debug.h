@@ -63,8 +63,8 @@ extern char last_called_script_event[MAX_EVENT_NAME_LEN];
  * Arguments:	ASSERT( condition, "Format string with variables: %d, %d", var1, var2 );
  */
 #define ASSERT( expr, ... ) \
-	( (expr) ? (void)0 : (void)debug( LOG_ERROR, __VA_ARGS__ ) ); \
-	( (expr) ? (void)0 : (void)debug( LOG_ERROR, "Assert in Warzone: %s:%d : %s (%s), last script event: '%s'", \
+	( (expr) ? (void)0 : (void)_debug( LOG_ERROR, __VA_ARGS__ ) ); \
+	( (expr) ? (void)0 : (void)_debug( LOG_ERROR, "Assert in Warzone: %s:%d : %s (%s), last script event: '%s'", \
 		__FILE__, __LINE__, __FUNCTION__, (#expr), last_called_script_event ) ); \
 	assert( expr );
 
@@ -118,6 +118,8 @@ typedef enum {
   LOG_FOG,
   LOG_LAST /* _must_ be last! */
 } code_part;
+
+extern BOOL enabled_debug[LOG_LAST];
 
 typedef void (*debug_callback_fn)(void**, const char*);
 typedef void (*debug_callback_init)(void**);
@@ -174,7 +176,8 @@ BOOL debug_enable_switch(const char *str);
  * \param	part	Code part to associate with this message
  * \param	str		printf style formatstring
  */
-void debug( code_part part, const char *str, ...)
+#define debug(part, ...) do { if (enabled_debug[part]) _debug(part, __VA_ARGS__); } while(0)
+void _debug( code_part part, const char *str, ...)
 		wz__attribute((format (printf, 2, 3)) );
 
 #endif

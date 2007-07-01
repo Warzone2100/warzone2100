@@ -36,7 +36,7 @@
 char last_called_script_event[MAX_EVENT_NAME_LEN];
 
 static debug_callback * callbackRegistry = NULL;
-static BOOL enabled_debug_parts[LOG_LAST];
+BOOL enabled_debug[LOG_LAST]; // global
 
 /*
  * This list _must_ match the enum in debug.h!
@@ -188,10 +188,10 @@ void debug_init(void)
 		        "list in debug.c!\n" );
 		exit(1);
 	}
-	memset( enabled_debug_parts, FALSE, sizeof(enabled_debug_parts) );
-	enabled_debug_parts[LOG_ERROR] = TRUE;
+	memset( enabled_debug, FALSE, sizeof(enabled_debug) );
+	enabled_debug[LOG_ERROR] = TRUE;
 #ifdef DEBUG
-	enabled_debug_parts[LOG_WARNING] = TRUE;
+	enabled_debug[LOG_WARNING] = TRUE;
 #endif
 }
 
@@ -246,16 +246,16 @@ BOOL debug_enable_switch(const char *str)
 	int part = code_part_from_str(str);
 
 	if (part != LOG_LAST) {
-		enabled_debug_parts[part] = !enabled_debug_parts[part];
+		enabled_debug[part] = !enabled_debug[part];
 	}
 	if (part == LOG_ALL) {
-		memset(enabled_debug_parts, TRUE, sizeof(enabled_debug_parts));
+		memset(enabled_debug, TRUE, sizeof(enabled_debug));
 	}
 	return (part != LOG_LAST);
 }
 
 
-void debug( code_part part, const char *str, ... )
+void _debug( code_part part, const char *str, ... )
 {
 	va_list ap;
 	static char inputBuffer[2][MAX_LEN_LOG_LINE];
@@ -267,11 +267,6 @@ void debug( code_part part, const char *str, ... )
 	static unsigned int repeated = 0; /* times current message repeated */
 	static unsigned int next = 2;     /* next total to print update */
 	static unsigned int prev = 0;     /* total on last update */
-
-	/* Not enabled debugging for this part? Punt! */
-	if (!enabled_debug_parts[part]) {
-		return;
-	}
 
 	va_start(ap, str);
 	vsnprintf( useInputBuffer1 ? inputBuffer[1] : inputBuffer[0], MAX_LEN_LOG_LINE, str, ap );
