@@ -118,12 +118,12 @@ BOOL startLimitScreen(void)
 	{
 		initLoadingScreen( TRUE );//changed by jeremy mar8
 
-		if (!resLoad("wrf/piestats.wrf", 501, DisplayBuffer, displayBufferSize))
+		if (!resLoad("wrf/piestats.wrf", 501, fileLoadBuffer, FILE_LOAD_BUFFER_SIZE))
 		{
 			return FALSE;
 		}
 
-		if (!resLoad("wrf/forcedit2.wrf", 502, DisplayBuffer, displayBufferSize))
+		if (!resLoad("wrf/forcedit2.wrf", 502, fileLoadBuffer, FILE_LOAD_BUFFER_SIZE))
 		{
 			return FALSE;
 		}

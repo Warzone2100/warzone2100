@@ -51,6 +51,7 @@
 #include "scripttabs.h"
 #include "design.h"
 #include "wrappers.h"
+#include "init.h" // For fileLoadBuffer
 
 /***************************************************************************/
 /*
@@ -882,12 +883,12 @@ static BOOL seq_AddTextFromFile(const char *pTextName, BOOL bJustify)
 	}
 	FindClose(fileHandle);
 */
-	if (loadFileToBufferNoError(aTextName, DisplayBuffer, displayBufferSize, &fileSize) == FALSE)  //Did I mention this is lame? -Q
+	if (loadFileToBufferNoError(aTextName, fileLoadBuffer, FILE_LOAD_BUFFER_SIZE, &fileSize) == FALSE)  //Did I mention this is lame? -Q
 	{
 		return FALSE;
 	}
 
-	pTextBuffer = DisplayBuffer;
+	pTextBuffer = fileLoadBuffer;
 	pCurrentLine = strtok(pTextBuffer,seps);
 	while(pCurrentLine != NULL)
 	{

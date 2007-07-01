@@ -142,9 +142,6 @@ BOOL Refreshing = FALSE;
 
 CURSORSNAP InterfaceSnap;
 
-char	*DisplayBuffer;
-UDWORD	displayBufferSize;
-
 
 /***************************************************************************************/
 /*                  Widget ID numbers                                                  */

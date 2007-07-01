@@ -553,7 +553,7 @@ static BOOL levLoadSingleWRF(char *pName)
 
 	// load the data
 	debug(LOG_WZ, "levLoadSingleWRF: Loading %s ...", pName);
-	if (!resLoad(pName, 0, DisplayBuffer, displayBufferSize))
+	if (!resLoad(pName, 0, fileLoadBuffer, FILE_LOAD_BUFFER_SIZE))
 	{
 		return FALSE;
 	}
@@ -616,7 +616,7 @@ BOOL levLoadBaseData(char *pName)
 			// load the data
 			debug(LOG_WZ, "levLoadBaseData: Loading %s", psBaseData->apDataFiles[i]);
 			if (!resLoad(psBaseData->apDataFiles[i], i,
-						DisplayBuffer, displayBufferSize))
+						fileLoadBuffer, FILE_LOAD_BUFFER_SIZE))
 			{
 				return FALSE;
 			}
@@ -763,7 +763,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 				// load the data
 				debug(LOG_WZ, "levLoadData: Loading %s ...", psBaseData->apDataFiles[i]);
 				if (!resLoad(psBaseData->apDataFiles[i], i,
-							DisplayBuffer, displayBufferSize))
+							fileLoadBuffer, FILE_LOAD_BUFFER_SIZE))
 				{
 					return FALSE;
 				}
@@ -1013,7 +1013,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 			// load the data
 			debug(LOG_WZ, "levLoadData: Loading %s", psNewLevel->apDataFiles[i]);
 			if (!resLoad(psNewLevel->apDataFiles[i], i + CURRENT_DATAID,
-						DisplayBuffer, displayBufferSize))
+						fileLoadBuffer, FILE_LOAD_BUFFER_SIZE))
 			{
 				return FALSE;
 			}

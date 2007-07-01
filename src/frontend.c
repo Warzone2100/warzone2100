@@ -597,21 +597,21 @@ BOOL runMultiPlayerMenu(void)
 		{
 			initLoadingScreen( TRUE );
 /*			if (!resLoad("wrf/forcedit.wrf", 500,
-						 DisplayBuffer, displayBufferSize))
+						 fileLoadBuffer, FILE_LOAD_BUFFER_SIZE))
 				//need the object heaps to have been set up before loading
 			{
 				return FALSE;
 			}
 */
 			if (!resLoad("wrf/piestats.wrf", 501,
-						 DisplayBuffer, displayBufferSize))
+						 fileLoadBuffer, FILE_LOAD_BUFFER_SIZE))
 				//need the object heaps to have been set up before loading
 			{
 				return FALSE;
 			}
 
 			if (!resLoad("wrf/forcedit2.wrf", 502,
-						 DisplayBuffer, displayBufferSize))
+						 fileLoadBuffer, FILE_LOAD_BUFFER_SIZE))
 				//need the object heaps to have been set up before loading
 			{
 				return FALSE;

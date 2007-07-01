@@ -321,7 +321,7 @@ static BOOL loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 	{
 		if (filesize > *pFileSize)
 		{
-			debug(LOG_ERROR, "loadFile2: No room for file %s", pFileName);
+			debug(LOG_ERROR, "loadFile2: No room for file %s, buffer is too small! Got: %d Need: %ld", pFileName, *pFileSize, (long)filesize);
 			assert(FALSE);
 			return FALSE;
 		}

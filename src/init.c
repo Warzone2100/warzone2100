@@ -108,6 +108,9 @@ extern char * global_mods[];
 extern char * campaign_mods[];
 extern char * multiplay_mods[];
 
+// FIXME Totally inappropriate place for this.
+char fileLoadBuffer[FILE_LOAD_BUFFER_SIZE];
+
 // Ascii to font image id lookup table for frontend font.
 //
 
@@ -955,19 +958,6 @@ BOOL systemInitialise(void)
 
 	pie_SetGammaValue((float)gammaValue / 20.0f);
 
-	displayBufferSize = pie_GetVideoBufferWidth()*pie_GetVideoBufferHeight()*2;
-	if (displayBufferSize < 5000000)
-	{
-		displayBufferSize = 5000000;
-	}
-	DisplayBuffer = (char*)malloc(displayBufferSize);
-	if (DisplayBuffer == NULL)
-	{
-		debug( LOG_ERROR, "Unable to allocate memory for display buffer" );
-		abort();
-		return FALSE;
-	}
-
 	if ( war_getSoundEnabled() )
 	{
 		if( !audio_Init(droidAudioTrackStopped) )
@@ -1052,8 +1042,6 @@ void systemShutdown(void)
 	}
 
 	debug(LOG_MAIN, "shutting down graphics subsystem");
-	free(DisplayBuffer);
-	DisplayBuffer = NULL;
 	iV_ShutDown();
 	levShutDown();
 	widgShutDown();
@@ -1146,7 +1134,7 @@ BOOL frontendInitialise(const char *ResourceFile)
 	}
 
 	debug(LOG_MAIN, "frontEndInitialise: loading resource file .....");
-	if (!resLoad(ResourceFile, 0, DisplayBuffer, displayBufferSize))
+	if (!resLoad(ResourceFile, 0, fileLoadBuffer, FILE_LOAD_BUFFER_SIZE))
 	{
 		//need the object heaps to have been set up before loading in the save game
 		return FALSE;

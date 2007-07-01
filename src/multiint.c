@@ -225,8 +225,8 @@ void loadMapPreview(void)
 	strcpy(aFileName,psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName)-4] = '\0';
 	strcat(aFileName, "/ttypes.ttp");
-	pFileData = DisplayBuffer;
-	if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
+	pFileData = fileLoadBuffer;
+	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 	{
 		debug(LOG_NEVER, "loadMapPreview: Failed to load terrain types file");
 		return;
@@ -244,8 +244,8 @@ void loadMapPreview(void)
 	ptr = strrchr(aFileName, '/');
 	ASSERT(ptr, "this string was supposed to contain a /");
 	strcpy(ptr, "/game.map");
-	pFileData = DisplayBuffer;
-	if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
+	pFileData = fileLoadBuffer;
+	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 	{
 		debug(LOG_NEVER, "loadMapPreview: Failed to load map file");
 		return;

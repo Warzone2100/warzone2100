@@ -319,10 +319,6 @@ extern iIMDShape	*pNewDesignIMD;
 
 extern CURSORSNAP InterfaceSnap;
 
-extern char	*DisplayBuffer;
-extern UDWORD	displayBufferSize;
-
-
 extern BOOL ClosingMessageView;
 extern BOOL ClosingIntelMap;
 extern BOOL	ClosingTrans;

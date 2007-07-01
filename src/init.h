@@ -29,7 +29,9 @@
 #include "lib/ivis_common/ivisdef.h"
 
 // the size of the file loading buffer
-#define FILE_LOAD_BUFF_SIZE		(1024*1024)
+// FIXME Totally inappropriate place for this.
+#define FILE_LOAD_BUFFER_SIZE (1024*1024)
+extern char fileLoadBuffer[];
 
 extern BOOL InitialiseGlobals(void);
 extern BOOL systemInitialise(void);

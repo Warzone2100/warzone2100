@@ -1369,8 +1369,8 @@ BOOL loadGameInit(const char *pGameToLoad )
 	UDWORD			fileSize;
 
 	/* Load in the chosen file data */
-	pFileData = DisplayBuffer;
-	if (!loadFileToBuffer(pGameToLoad, pFileData, displayBufferSize, &fileSize))
+	pFileData = fileLoadBuffer;
+	if (!loadFileToBuffer(pGameToLoad, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 	{
 		debug(LOG_ERROR, "loadGameInit: Fail1\n" );
 		goto error;
@@ -1431,8 +1431,8 @@ BOOL loadMissionExtras(const char *pGameToLoad, SWORD levelType)
 			aFileName[fileExten] = '\0';
 			strcat(aFileName, "proxstate.bjo");
 			// Load in the chosen file data
-			pFileData = DisplayBuffer;
-			if (loadFileToBufferNoError(aFileName, pFileData, displayBufferSize, &fileSize))
+			pFileData = fileLoadBuffer;
+			if (loadFileToBufferNoError(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 			{
 				//load the proximity status data
 				if (pFileData)
@@ -1460,8 +1460,8 @@ BOOL loadMissionExtras(const char *pGameToLoad, SWORD levelType)
 			aFileName[fileExten] = '\0';
 			strcat(aFileName, "messtate.bjo");
 			// Load in the chosen file data
-			pFileData = DisplayBuffer;
-			if (loadFileToBufferNoError(aFileName, pFileData, displayBufferSize, &fileSize))
+			pFileData = fileLoadBuffer;
+			if (loadFileToBufferNoError(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 			{
 				//load the message status data
 				if (pFileData)
@@ -1812,8 +1812,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 	powerCalculated = FALSE;
 	/* Load in the chosen file data */
 /*
-	pFileData = DisplayBuffer;
-	if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
+	pFileData = fileLoadBuffer;
+	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 	{
 		DBPRINTF(("loadgame: Fail2\n"));
 		goto error;
@@ -1841,8 +1841,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "ttypes.ttp");
 		/* Load in the chosen file data */
-		pFileData = DisplayBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
+		pFileData = fileLoadBuffer;
+		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
 			debug( LOG_NEVER, "loadgame: Fail23\n" );
 			goto error;
@@ -1905,8 +1905,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "templ.bjo");
 		/* Load in the chosen file data */
-		pFileData = DisplayBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
+		pFileData = fileLoadBuffer;
+		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
 			debug( LOG_NEVER, "loadgame: Fail20\n" );
 			goto error;
@@ -1940,8 +1940,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "mission.map");
 		/* Load in the chosen file data */
-		pFileData = DisplayBuffer;
-		if (loadFileToBufferNoError(aFileName, pFileData, displayBufferSize, &fileSize))
+		pFileData = fileLoadBuffer;
+		if (loadFileToBufferNoError(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
 			if (!mapLoad(pFileData, fileSize))
 			{
@@ -1954,8 +1954,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "misvis.bjo");
 		/* Load in the chosen file data */
-		pFileData = DisplayBuffer;
-		if (loadFileToBufferNoError(aFileName, pFileData, displayBufferSize, &fileSize))
+		pFileData = fileLoadBuffer;
+		if (loadFileToBufferNoError(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
 			//load the visibility data
 			if (pFileData)
@@ -1979,8 +1979,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "mfeat.bjo");
 		/* Load in the chosen file data */
-		pFileData = DisplayBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
+		pFileData = fileLoadBuffer;
+		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
 			debug( LOG_NEVER, "loadgame: Fail14\n" );
 			goto error;
@@ -1997,8 +1997,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "mstruct.bjo");
 		/* Load in the chosen file data */
-		pFileData = DisplayBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
+		pFileData = fileLoadBuffer;
+		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
 			debug( LOG_NEVER, "loadgame: Fail17\n" );
 			goto error;
@@ -2035,8 +2035,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			strcat(aFileName, "munit.bjo");
 		}
 		/* Load in the chosen file data */
-		pFileData = DisplayBuffer;
-		if (loadFileToBufferNoError(aFileName, pFileData, displayBufferSize, &fileSize))
+		pFileData = fileLoadBuffer;
+		if (loadFileToBufferNoError(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
 			//load the data into mission.apsDroidLists
 			//ppsCurrentDroidLists = mission.apsDroidLists;
@@ -2072,8 +2072,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "mflagstate.bjo");
 		// Load in the chosen file data
-		pFileData = DisplayBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
+		pFileData = fileLoadBuffer;
+		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
 			debug( LOG_NEVER, "loadMissionExtras: Fail 3\n" );
 			return FALSE;
@@ -2113,8 +2113,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "game.map");
 		/* Load in the chosen file data */
-		pFileData = DisplayBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
+		pFileData = fileLoadBuffer;
+		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
 			debug( LOG_NEVER, "loadgame: Fail5\n" );
 			goto error;
@@ -2131,8 +2131,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 /*		aFileName[fileExten] = '\0';
 		strcat(aFileName, "gates.txt");
 		// Load in the chosen file data
-		pFileData = DisplayBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
+		pFileData = fileLoadBuffer;
+		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
 			DBPRINTF(("loadgame: Failed to load gates.txt\n"));
 			goto error;
@@ -2175,8 +2175,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "resstate.bjo");
 		// Load in the chosen file data
-		pFileData = DisplayBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
+		pFileData = fileLoadBuffer;
+		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
 			debug( LOG_NEVER, "loadgame: Fail32\n" );
 			goto error;
@@ -2200,8 +2200,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "dinit.bjo");
 		/* Load in the chosen file data */
-		pFileData = DisplayBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
+		pFileData = fileLoadBuffer;
+		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
 			debug( LOG_NEVER, "loadgame: Fail8\n" );
 			goto error;
@@ -2228,8 +2228,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			strcat(aFileName, "unit.bjo");
 		}
 		/* Load in the chosen file data */
-		pFileData = DisplayBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
+		pFileData = fileLoadBuffer;
+		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
 			debug( LOG_NEVER, "loadgame: Fail11\n" );
 			goto error;
@@ -2279,8 +2279,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 					strcat(aFileName, "munit.bjo");
 				}
 				/* Load in the chosen file data */
-				pFileData = DisplayBuffer;
-				if (loadFileToBufferNoError(aFileName, pFileData, displayBufferSize, &fileSize)) {
+				pFileData = fileLoadBuffer;
+				if (loadFileToBufferNoError(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize)) {
 					//load the data into mission.apsDroidLists
 					//ppsCurrentDroidLists = mission.apsDroidLists;
 					if (!loadSaveDroid(pFileData, fileSize, mission.apsDroidLists))
@@ -2303,8 +2303,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "limbo.bjo");
 		/* Load in the chosen file data */
-		pFileData = DisplayBuffer;
-		if (loadFileToBufferNoError(aFileName, pFileData, displayBufferSize, &fileSize))
+		pFileData = fileLoadBuffer;
+		if (loadFileToBufferNoError(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
 			//load the data into apsDroidLists
 			//ppsCurrentDroidLists = apsLimboDroids;
@@ -2322,8 +2322,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 	aFileName[fileExten] = '\0';
 	strcat(aFileName, "feat.bjo");
 	/* Load in the chosen file data */
-	pFileData = DisplayBuffer;
-	if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
+	pFileData = fileLoadBuffer;
+	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 	{
 		debug( LOG_NEVER, "loadgame: Fail14\n" );
 		goto error;
@@ -2344,8 +2344,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 	aFileName[fileExten] = '\0';
 	strcat(aFileName, "struct.bjo");
 	/* Load in the chosen file data */
-	pFileData = DisplayBuffer;
-	if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
+	pFileData = fileLoadBuffer;
+	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 	{
 		debug( LOG_NEVER, "loadgame: Fail17\n" );
 		goto error;
@@ -2377,8 +2377,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "compl.bjo");
 		/* Load in the chosen file data */
-		pFileData = DisplayBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
+		pFileData = fileLoadBuffer;
+		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
 			debug( LOG_NEVER, "loadgame: Fail26\n" );
 			goto error;
@@ -2399,8 +2399,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "strtype.bjo");
 		/* Load in the chosen file data */
-		pFileData = DisplayBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
+		pFileData = fileLoadBuffer;
+		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
 			debug( LOG_NEVER, "loadgame: Fail29\n" );
 			goto error;
@@ -2431,8 +2431,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			aFileName[fileExten] = '\0';
 			strcat(aFileName, "visstate.bjo");
 			// Load in the chosen file data
-			pFileData = DisplayBuffer;
-			if (loadFileToBufferNoError(aFileName, pFileData, displayBufferSize, &fileSize))
+			pFileData = fileLoadBuffer;
+			if (loadFileToBufferNoError(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 			{
 				//load the visibility data
 				if (pFileData)
@@ -2462,8 +2462,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			aFileName[fileExten] = '\0';
 			strcat(aFileName, "prodstate.bjo");
 			// Load in the chosen file data
-    		pFileData = DisplayBuffer;
-			if (loadFileToBufferNoError(aFileName, pFileData, displayBufferSize, &fileSize))
+    		pFileData = fileLoadBuffer;
+			if (loadFileToBufferNoError(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 			{
 				//load the visibility data
 				if (pFileData)
@@ -2491,8 +2491,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			aFileName[fileExten] = '\0';
 			strcat(aFileName, "fxstate.bjo");
 			// Load in the chosen file data
-			pFileData = DisplayBuffer;
-			if (loadFileToBufferNoError(aFileName, pFileData, displayBufferSize, &fileSize))
+			pFileData = fileLoadBuffer;
+			if (loadFileToBufferNoError(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 			{
 				//load the fx data
 				if (pFileData)
@@ -2521,8 +2521,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			aFileName[fileExten] = '\0';
 			strcat(aFileName, "score.bjo");
 			// Load in the chosen file data
-			pFileData = DisplayBuffer;
-			if (loadFileToBufferNoError(aFileName, pFileData, displayBufferSize, &fileSize))
+			pFileData = fileLoadBuffer;
+			if (loadFileToBufferNoError(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 			{
 				//load the fx data
 				if (pFileData)
@@ -2553,8 +2553,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			aFileName[fileExten] = '\0';
 			strcat(aFileName, "flagstate.bjo");
 			// Load in the chosen file data
-			pFileData = DisplayBuffer;
-			if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
+			pFileData = fileLoadBuffer;
+			if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 			{
 				debug( LOG_NEVER, "loadMissionExtras: Fail 3\n");
 				return FALSE;
@@ -2585,8 +2585,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			aFileName[fileExten] = '\0';
 			strcat(aFileName, "command.bjo");
 			// Load in the chosen file data
-			pFileData = DisplayBuffer;
-			if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
+			pFileData = fileLoadBuffer;
+			if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 			{
 				debug( LOG_NEVER, "loadMissionExtras: Fail 5\n" );
 				return FALSE;
@@ -2613,8 +2613,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "limits.bjo");
 		/* Load in the chosen file data */
-		pFileData = DisplayBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
+		pFileData = fileLoadBuffer;
+		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
 			debug( LOG_NEVER, "loadgame: Fail17\n" );
 			goto error;
@@ -3515,8 +3515,8 @@ UDWORD getCampaign(char *pGameToLoad, BOOL *bSkipCDCheck)
 	debug(LOG_WZ, "getCampaign: %s", pGameToLoad);
 
 	/* Load in the chosen file data */
-	pFileData = DisplayBuffer;
-	if (!loadFileToBuffer(pGameToLoad, pFileData, displayBufferSize, &fileSize))
+	pFileData = fileLoadBuffer;
+	if (!loadFileToBuffer(pGameToLoad, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 	{
 		debug( LOG_NEVER, "loadgame: Fail2\n" );
 		return 0;
@@ -11300,8 +11300,8 @@ BOOL loadScriptState(char *pFileName)
 	pFileName[strlen(pFileName)-4] = (char)0;
 	strcat(pFileName, ".es");
 
-	pFileData = DisplayBuffer;
-	if (!loadFileToBuffer(pFileName, pFileData, displayBufferSize, &fileSize))
+	pFileData = fileLoadBuffer;
+	if (!loadFileToBuffer(pFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 	{
 		debug( LOG_ERROR, "loadScriptState: couldn't load %s", pFileName );
 		abort();
@@ -11461,8 +11461,8 @@ BOOL plotStructurePreview(iTexture *backDropSprite, UBYTE scale, UDWORD offX, UD
 	aFileName[strlen(aFileName)-4] = '\0';
 	strcat(aFileName, "/struct.bjo");
 
-	pFileData = DisplayBuffer;
-	if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
+	pFileData = fileLoadBuffer;
+	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 	{
 		debug( LOG_NEVER, "plotStructurePreview: Fail1\n" );
 	}
@@ -11596,8 +11596,8 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 	aFileName[strlen(aFileName)-4] = '\0';
 	strcat(aFileName, "/struct.bjo");
 
-	pFileData = DisplayBuffer;
-	if (!loadFileToBuffer(aFileName, pFileData, displayBufferSize, &fileSize))
+	pFileData = fileLoadBuffer;
+	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 	{
 		debug( LOG_NEVER, "plotStructurePreview16: Fail1\n" );
 	}
