@@ -44,7 +44,22 @@
      * blast radius damage: increased from 1000 to 2800
      * reload time: increased from 5 mins to 8 mins
      * chance to hit in the blast radius: reduced from 99% to 90%
-   
+
+2007-06-22: Version 2.0.7
+ * General:
+   * New: Screenshots are now saved as PNGs for better quality
+   * Fix: AutoPackage (Linux Installer) should be easier to install now and also work on non Athlon CPUs. It doesn't support playback of MP3s anymore, though.
+   * Fix: It was possible to disable the computer in singleplayer games
+   * Fix: Crashes caused by not-loaded file when sound is disabled
+   * Fix: Crashes after the mission briefing
+   * Fix: Crash related to the satelite uplink
+   * Fix: A potential buffer overflow when using longer file names than expected to set the background music
+ * Settings:
+   * New: Masterserver name and IP, as well as the gameserver port is now configurable
+   * New: Configurable framerate limit
+   * New: Possibility to always allow debugmode
+   * Change: Warzone will now run in fullscreen by default (current configurations won't be affected)
+
 2007-03-31: Version 2.0.6
  * General:
    * New: New exceptionhandler allows better bugreports by saving memory dumps (On Windows and Linux)
