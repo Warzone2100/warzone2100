@@ -4909,8 +4909,6 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 		FIXME_CAST_ASSIGN(UDWORD, psDroid->psActionTarget[0], psSaveDroid->actionTargetID);
 		psDroid->actionStarted		= psSaveDroid->actionStarted;
 		psDroid->actionPoints		= psSaveDroid->actionPoints;
-        //actionHeight has been renamed to powerAccrued - AB 7/1/99
-        //psDroid->actionHeight		= psSaveDroid->actionHeight;
 		psDroid->powerAccrued		= psSaveDroid->actionHeight;
 		//added for V14
 
@@ -5172,8 +5170,6 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	FIXME_CAST_ASSIGN(UDWORD, psDroid->psActionTarget[0], psSaveDroid->actionTargetID);
 	psDroid->actionStarted		= psSaveDroid->actionStarted;
 	psDroid->actionPoints		= psSaveDroid->actionPoints;
-    //actionHeight has been renamed to powerAccrued - AB 7/1/99
-    //psDroid->actionHeight		= psSaveDroid->actionHeight;
 	psDroid->powerAccrued		= psSaveDroid->actionHeight;
 	//added for V14
 
@@ -5856,7 +5852,7 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			still exist*/
 			strcpy(psSaveDroid->name, psCurr->aName);
 
-			//for (i=0; i < DROID_MAXCOMP; i++) not interested in first comp - COMP_UNKNOWN
+			// not interested in first comp - COMP_UNKNOWN
 			for (i=1; i < DROID_MAXCOMP; i++)
 			{
 
@@ -5868,21 +5864,8 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 				}
 			}
 			psSaveDroid->body = psCurr->body;
-			//psSaveDroid->numWeaps = psCurr->numWeaps;
-			/*for (i=0; i < psCurr->numWeaps; i++)
-			{
-				if (!getNameFromComp(COMP_WEAPON, psSaveDroid->asWeaps[i].name, psCurr->asWeaps[i].nStat))
-				{
-					//ignore this record
-					//continue;
-					break;
-				}
-				psSaveDroid->asWeaps[i].hitPoints = psCurr->asWeaps[i].hitPoints;
-				psSaveDroid->asWeaps[i].ammo = psCurr->asWeaps[i].ammo;
-				psSaveDroid->asWeaps[i].lastFired = psCurr->asWeaps[i].lastFired;
-			}*/
 			//Watermelon:loop thru all weapons
-            psSaveDroid->numWeaps = psCurr->numWeaps;
+			psSaveDroid->numWeaps = psCurr->numWeaps;
 			for(i = 0;i < psCurr->numWeaps;i++)
 			{
 				if (psCurr->asWeaps[i].nStat > 0)
@@ -5923,7 +5906,6 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			psSaveDroid->timeLastHit	= psCurr->timeLastHit;
 			if (psCurr->psTarget[0] != NULL)
 			{
-				ASSERT( psCurr->psTarget[0]->id != 0xdddddddd,"SaveUnit found freed target" );
 				if (psCurr->psTarget[0]->died <= 1)
 				{
 					psSaveDroid->targetID		= psCurr->psTarget[0]->id;
@@ -5947,7 +5929,6 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			psSaveDroid->actionY		= psCurr->actionY;
 			if (psCurr->psActionTarget[0] != NULL)
 			{
-				ASSERT( psCurr->psActionTarget[0]->id != 0xdddddddd,"SaveUnit found freed action target" );
 				if (psCurr->psActionTarget[0]->died <= 1)
 				{
 					psSaveDroid->actionTargetID		= psCurr->psActionTarget[0]->id;
@@ -5968,9 +5949,7 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			}
 			psSaveDroid->actionStarted	= psCurr->actionStarted;
 			psSaveDroid->actionPoints	= psCurr->actionPoints;
-            //actionHeight has been renamed to powerAccrued - AB 7/1/99
-			//psSaveDroid->actionHeight	= psCurr->actionHeight;
-            psSaveDroid->actionHeight	= psCurr->powerAccrued;
+			psSaveDroid->actionHeight	= psCurr->powerAccrued;
 
 			//version 14
 			if (psCurr->psTarStats[0] != NULL)
@@ -6103,7 +6082,6 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			psSaveDroid->id = psCurr->id;
 			psSaveDroid->x = psCurr->x;
 			psSaveDroid->y = psCurr->y;
-			ASSERT(worldOnMap(psSaveDroid->x,psSaveDroid->y), "the saved droid if off the map");
 			psSaveDroid->z = psCurr->z;
 			psSaveDroid->direction = psCurr->direction;
 			psSaveDroid->player = psCurr->player;

@@ -1886,7 +1886,6 @@ void actionUpdateDroid(DROID *psDroid)
 	case DACTION_SULK:
 		// unable to route to target ... don't do anything aggressive until time is up
 		// we need to do something defensive at this point ???
-		//if (gameTime>psDroid->actionHeight)				// actionHeight is used here for the ending time for this action
 
 		//hmmm, hope this doesn't cause any problems!
 		if (gameTime > psDroid->actionStarted)
@@ -2664,7 +2663,6 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 			psDroid->actionY = 0;
 			psDroid->actionStarted = 0;
 			psDroid->actionPoints = 0;
-			//psDroid->actionHeight = 0;
 			psDroid->powerAccrued = 0;
 			if (psDroid->numWeaps > 0)
 			{
@@ -2893,11 +2891,8 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 	case DACTION_SULK:
 // 		debug( LOG_NEVER, "Go with sulk ... %p\n", psDroid );
 		psDroid->action = DACTION_SULK;
-        //hmmm, hope this doesn't cause any problems!
-		//psDroid->actionStarted = gameTime;			// what is action started used for ? Certainly not used here!
-		//psDroid->actionHeight = (UWORD)(gameTime+MIN_SULK_TIME+(rand()%(
-		//	MAX_SULK_TIME-MIN_SULK_TIME)));	// actionHeight is used here for the ending time for this action
-        psDroid->actionStarted = gameTime+MIN_SULK_TIME+(rand()%(
+		// hmmm, hope this doesn't cause any problems!
+		psDroid->actionStarted = gameTime+MIN_SULK_TIME+(rand()%(
 			MAX_SULK_TIME-MIN_SULK_TIME));
 		break;
 	case DACTION_DESTRUCT:
