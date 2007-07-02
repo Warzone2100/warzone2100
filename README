@@ -34,7 +34,7 @@ common command line options :
 		as it needs to be a resolution supported by your X server.
 
 Note that you do need to type the dash in front of the option, like this :
-		./warzone --fullscreen --viewport 1280x960
+		./warzone --fullscreen --resolution 1280x960
 (this is my prefered mode).
 
 The fullscreen/window modes and the resolution are stored, so they only need to
@@ -43,7 +43,7 @@ be specified once, or when you want to change them. So,
 will start in fullscreen and in 1280x960 because this is what I specified just
 before (remember ?).
 
-For more commandline options see: http://wz2100.net/wiki/user:command_line_options
+For more commandline options see: http://wz2100.net/wiki/command_line_options
 
 If you are on Linux and using X11, you can dynamically switch between windowed
 mode and fullscreen using ALT+ENTER at any time.
