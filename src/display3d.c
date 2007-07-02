@@ -241,8 +241,10 @@ static QUAD dragQuad;
 static Vector3f alteredPoints[iV_IMD_MAX_POINTS];
 
 //number of tiles visible
-UDWORD	visibleXTiles;
-UDWORD	visibleYTiles;
+// FIXME This should become dynamic! (A function of resolution, angle and zoom maybe.)
+const UDWORD	visibleXTiles = VISIBLE_XTILES;
+const UDWORD	visibleYTiles = VISIBLE_YTILES;
+
 UDWORD	terrainMidX;
 UDWORD	terrainMidY;
 UDWORD	terrainMaxX;
@@ -579,13 +581,9 @@ static void drawTiles(iView *camera, iView *player)
 	playerXTile = player->p.x >> TILE_SHIFT;
 	playerZTile = player->p.z >> TILE_SHIFT;
 
-	// Check here, since it would crash our loops otherwise
-	ASSERT( visibleYTiles <= mapHeight && visibleXTiles <= mapWidth, "Tile coordinates out of range" );
-
 	/* Get the x,z translation components */
 	rx = (player->p.x) & (TILE_UNITS-1);
 	rz = (player->p.z) & (TILE_UNITS-1);
-
 
 	/* ---------------------------------------------------------------- */
 	/* Set up the geometry                                              */
@@ -812,9 +810,9 @@ static void drawTiles(iView *camera, iView *player)
 	/* ---------------------------------------------------------------- */
 	/* Draw all the tiles or add them to bucket sort                     */
 	/* ---------------------------------------------------------------- */
-	for (i = 0; i < visibleYTiles; i++)
+	for (i = 0; i < MIN(visibleYTiles, mapHeight); i++)
 	{
-		for (j = 0; j < visibleXTiles; j++)
+		for (j = 0; j < MIN(visibleXTiles, mapWidth); j++)
 		{
 			if (tileScreenInfo[i][j].drawInfo == TRUE)
 			{
@@ -909,11 +907,6 @@ BOOL init3DView(void)
 
 	/* Base Level */
 	geoOffset = 192;
-
-	//set up how many tiles to draw
-	// FIXME This should become dynamic! (A function of resolution, angle and zoom maybe.)
-	visibleXTiles = VISIBLE_XTILES;
-	visibleYTiles = VISIBLE_YTILES;
 
 	/* There are no drag boxes */
 	dragBox3D.status = DRAG_INACTIVE;

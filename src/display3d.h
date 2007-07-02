@@ -119,8 +119,8 @@ extern UDWORD lightLevel;
 
 extern BOOL bRender3DOnly;
 
-extern UDWORD visibleXTiles;
-extern UDWORD visibleYTiles;
+extern const UDWORD visibleXTiles;
+extern const UDWORD visibleYTiles;
 
 // Expanded PIEVERTEX.
 typedef struct {
