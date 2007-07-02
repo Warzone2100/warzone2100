@@ -3110,7 +3110,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 			psDroid->x = INVALID_XY;
 			psDroid->y = INVALID_XY;
             //this is mainly for VTOLs
-			setDroidBase(psDroid, NULL);
+			setSaveDroidBase(psDroid, NULL);
             psDroid->cluster = 0;
 			orderDroid(psDroid, DORDER_STOP);
         }
@@ -5441,10 +5441,10 @@ BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
    			//add the droid to the list
 			for(i = 0;i < psDroid->numWeaps;i++)
 			{
-				setDroidTarget(psDroid, NULL, i);
-				setDroidActionTarget(psDroid, NULL, i);
+				setSaveDroidTarget(psDroid, NULL, i);
+				setSaveDroidActionTarget(psDroid, NULL, i);
 			}
-			setDroidBase(psDroid, NULL);
+			setSaveDroidBase(psDroid, NULL);
 			ASSERT( psCurrentTransGroup != NULL,"loadSaveUnitV9; Transporter unit without group " );
 			grpJoin(psCurrentTransGroup, psDroid);
 		}
@@ -5597,16 +5597,16 @@ BOOL loadSaveDroidV19(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 			{
 				for(i = 0;i < psDroid->numWeaps;i++)
 				{
-					setDroidTarget(psDroid, NULL, i);
-					setDroidActionTarget(psDroid, NULL, i);
+					setSaveDroidTarget(psDroid, NULL, i);
+					setSaveDroidActionTarget(psDroid, NULL, i);
 				}
 			}
 			else
 			{
-				setDroidTarget(psDroid, NULL, 0);
-				setDroidActionTarget(psDroid, NULL, 0);
+				setSaveDroidTarget(psDroid, NULL, 0);
+				setSaveDroidActionTarget(psDroid, NULL, 0);
 			}
-			setDroidBase(psDroid, NULL);
+			setSaveDroidBase(psDroid, NULL);
 			//add the droid to the list
 			ASSERT( psCurrentTransGroup != NULL,"loadSaveUnitV9; Transporter unit without group " );
 			grpJoin(psCurrentTransGroup, psDroid);
@@ -5798,10 +5798,10 @@ BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
 			psDroid->action = DACTION_NONE;
 			for(i = 0;i < psDroid->numWeaps;i++)
 			{
-				setDroidTarget(psDroid, NULL, i);
-				setDroidActionTarget(psDroid, NULL, i);
+				setSaveDroidTarget(psDroid, NULL, i);
+				setSaveDroidActionTarget(psDroid, NULL, i);
 			}
-			setDroidBase(psDroid, NULL);
+			setSaveDroidBase(psDroid, NULL);
 			//add the droid to the list
 			psDroid->psGroup = NULL;
 			psDroid->psGrpNext = NULL;
