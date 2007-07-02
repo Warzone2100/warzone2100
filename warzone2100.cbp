@@ -34,6 +34,7 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add option="-Werror-implicit-function-declaration" />
 			<Add option='-DVERSION=\\&quot;TRUNK\\&quot;' />
 			<Add option='-DLOCALEDIR=\\&quot;\\&quot;' />
 			<Add option='-DPACKAGE=\\&quot;warzone2100\\&quot;' />
