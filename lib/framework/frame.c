@@ -469,7 +469,6 @@ UDWORD HashString( const char *c )
 							~HIGH_BITS;
 		}
 	}
-	debug(LOG_NEVER, "HashString: string: %s, hash: %0x\n", c, iHashValue);
 	return iHashValue;
 }
 
@@ -506,6 +505,5 @@ UDWORD HashStringIgnoreCase( const char *c )
 							~HIGH_BITS;
 		}
 	}
-	debug(LOG_NEVER, "HashStringIgnoreCase: string: %s, hash: %0x\n", c, iHashValue);
 	return iHashValue;
 }
