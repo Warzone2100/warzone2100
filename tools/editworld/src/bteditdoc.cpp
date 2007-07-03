@@ -42,6 +42,8 @@
 #include "gateinterface.h"
 #include "pasteprefs.h"
 
+#include <string>
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -2034,7 +2036,6 @@ void StrExtractFileName(char *Dest,char *Source)
 	char	Dir[256];
 	char	FName[256];
 	char	Ext[256];
-	char	BackupName[512];
 
 	_splitpath(Source,Drive,Dir,FName,Ext);
 	sprintf(Dest,"%s%s",FName,Ext);
@@ -2778,7 +2779,7 @@ void CBTEditDoc::DrawRadarMap2D(CDIBDraw *DIBDraw,DWORD XPos,DWORD YPos)
 		}
 
 		if(m_EditTool == ET_GATEWAY) {
-			ListNode<GateWay> *TmpNode,*NextNode;
+			ListNode<GateWay> *TmpNode;
 			GateWay *Data;
 
 			HDC	dc=(HDC)DIBDraw->GetDIBDC();
@@ -3414,7 +3415,6 @@ BOOL CBTEditDoc::ReadClipboard(char *FileName)
 		}
 	}
 
-	C3DObjectInstance *Instance;
 	for(int i=0; i<m_ObjectBufferSize; i++) {
 		ListNode<C3DObjectInstance> *TmpNode;
 		C3DObjectInstance *Data;
@@ -5936,29 +5936,33 @@ void CBTEditDoc::OnUpdateFileExportclipboard(CCmdUI* pCmdUI)
 	pCmdUI->Enable(m_TileBuffer != NULL);
 }
 
+std::string EditorDataFileName(const std::string& fileName)
+{
+	char	Drive[256];
+	char	Dir[256];
+	char	FName[256];
+	char	Ext[256];
+	char	AltName[512];
+
+	// Try the data directory.
+	_splitpath(fileName.c_str(), Drive, Dir, FName, Ext);
+	sprintf(AltName, "%s\\data\\%s%s", g_HomeDirectory, FName, Ext);
+
+	return std::string(AltName);
+}
 
 // Open a file, if the file is'nt in the current directory then tries the editors
 // data directory.
 //
-FILE *OpenEditorFile(char *FileName)
+FILE *OpenEditorFile(const char* fileName)
 {
 	FILE *Stream;
 
 	// Try the current directory.
-	Stream = fopen(FileName,"rb");
+	Stream = fopen(fileName,"rb");
 
-	if(Stream == NULL) {
-		char	Drive[256];
-		char	Dir[256];
-		char	FName[256];
-		char	Ext[256];
-		char	AltName[512];
-
-		// Try the data directory.
-		_splitpath(FileName,Drive,Dir,FName,Ext);
-		sprintf(AltName,"%s\\data\\%s%s",g_HomeDirectory,FName,Ext);
-		Stream = fopen(AltName,"rb");
-	}
+	if(Stream == NULL)
+		Stream = fopen(EditorDataFileName(fileName).c_str(), "rb");
 
 	return Stream;
 }

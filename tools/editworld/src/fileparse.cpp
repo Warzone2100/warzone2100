@@ -19,7 +19,7 @@
 */
 
 #include	<windows.h>
-#include	<stdio.h>
+#include	<fstream>
 #include	<stdlib.h>
 #include	<conio.h>
 #include	<string.h>
@@ -29,89 +29,40 @@
 #include	"debugprint.h"
 
 
-CFileParser::CFileParser(void)
+CFileParser::CFileParser() :
+	m_File(NULL)
 {
-	m_File = NULL;
 	strcpy(m_Brk,"= \n\r\t");
 }
 
-
-BOOL CFileParser::Create(char *FileName,short Flags)
+CFileParser::CFileParser(std::istream& file, short flags) :
+	m_File(NULL)
 {
-	fpos_t Size;
+	m_Flags = flags;
 
-	m_Flags = Flags;
-	m_File = NULL;
+	// Seek to the end to determine the file/stream's size
+	file.seekg(0, std::ios::end);
+	std::ifstream::pos_type fileSize = file.tellg();
+	file.seekg(0);
 
-	if(FileName==NULL) return FALSE;
-	FILE *Stream = fopen(FileName,"rb");
-	if(Stream==NULL) return FALSE;
+	delete m_File;
 
-	fseek( Stream, 0, SEEK_END);
-	fgetpos( Stream, &Size);
-	fseek( Stream, 0, SEEK_SET);
-
-	m_File = new char[(int)Size+1];
-	if(m_File) {
-		fread(m_File,(unsigned int)Size,1,Stream);
-		m_File[Size]=0;
+	m_File = new char[fileSize + static_cast<std::ifstream::pos_type>(1)];
+	if(m_File)
+	{
+		file.readsome(static_cast<std::istream::char_type*>(m_File), fileSize);
+		m_File[fileSize]=0;
 	}
 
 	m_Pos = m_File;
 
-	fclose(Stream);
-
-	m_BufferSize = (long)Size+1;
-	m_WasAllocated = TRUE;
-	strcpy(m_Brk,"= \n\r\t");
-
-	return TRUE;
-}
-
-
-CFileParser::CFileParser(FILE *Stream,short Flags)
-{
-	fpos_t Size;
-
-	m_Flags = Flags;
-	m_File = NULL;
-
-	fseek( Stream, 0, SEEK_END);
-	fgetpos( Stream, &Size);
-	fseek( Stream, 0, SEEK_SET);
-
-	m_File = new char[(int)Size+1];
-	if(m_File) {
-		fread(m_File,(unsigned int)Size,1,Stream);
-		m_File[Size]=0;
-	}
-
-	m_Pos = m_File;
-
-	m_BufferSize = (long)Size+1;
-	m_WasAllocated = TRUE;
+	m_BufferSize = static_cast<long>(fileSize) + 1;
 	strcpy(m_Brk,"= \n\r\t");
 }
-
-
-CFileParser::CFileParser(char *Buffer,long BufferSize,short Flags)
-{
-	m_Flags = Flags;
-	m_File = Buffer;
-	m_Pos = m_File;
-	m_BufferSize = BufferSize+1;
-	m_WasAllocated = FALSE;
-	strcpy(m_Brk,"= \n\r\t");
-}
-
 
 CFileParser::~CFileParser(void)
 {
-	if(m_WasAllocated) {
-		if(m_File) {
-			delete m_File;
-		}
-	}
+	delete m_File;
 }
 
 

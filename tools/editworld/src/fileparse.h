@@ -32,56 +32,58 @@
 #define MAXBREAKCHARACTERS	16	// Maximum number of break characters.
 #define MAXTOKENSIZE		512
 
-struct TokenID {
+#include <istream>
+
+struct TokenID
+{
 	char *Token;
 	int ID;
 };
 
-class CFileParser {
+class CFileParser
+{
+	public:
+		CFileParser();
+		CFileParser(std::istream& file, short flags);
 
-public:
-	CFileParser(void);
-	BOOL Create(char *FileName,short Flags);
-	CFileParser(FILE *Stream,short Flags);
-	CFileParser(char *Buffer,long BufferSize,short Flags);
-	~CFileParser(void);
-	void SetFlags(short Flags) { m_Flags = Flags; }
-	short GetFlags(void) { return m_Flags; }
-	void SetBreakCharacters(char *brk);
+		~CFileParser();
 
-	int CountTokens(void);
-	void Rewind(void);
-	void Parse(char *Word,short Size);
-	void UnParse(void);
-	BOOL ParseInt(char *Ident,int *Int);
-	BOOL ParseFloat(char *Ident,float *Float);
-	BOOL ParseDouble(char *Ident,double *Double);
-	BOOL ParseString(char *Ident,char *Word,short Size);
-	BOOL FindToken(char *Token);
-	BOOL FindTokenList(char *Token, ...);
-	char *GetBase(void) { return m_File; }
-	char *GetPos(void) { return m_Pos; }
-	void SetPos(char *Pos) { m_Pos = Pos; }
+		void SetFlags(short Flags) { m_Flags = Flags; }
+		short GetFlags(void) { return m_Flags; }
+		void SetBreakCharacters(char *brk);
 
-	TokenID *FindTokenID(char *Token,TokenID *IDLookup);
-	int TokenToInt(char *Word);
-	float TokenToFloat(char *Word);
-	double TokenToDouble(char *Word);
+		int CountTokens(void);
+		void Rewind(void);
+		void Parse(char *Word,short Size);
+		void UnParse(void);
+		BOOL ParseInt(char *Ident,int *Int);
+		BOOL ParseFloat(char *Ident,float *Float);
+		BOOL ParseDouble(char *Ident,double *Double);
+		BOOL ParseString(char *Ident,char *Word,short Size);
+		BOOL FindToken(char *Token);
+		BOOL FindTokenList(char *Token, ...);
+		char *GetBase(void) { return m_File; }
+		char *GetPos(void) { return m_Pos; }
+		void SetPos(char *Pos) { m_Pos = Pos; }
 
-protected:
-	char *StringNextToken(char *s,char *tok,short toklen,char *brk);
-	char StringFixCase(char chr);
-	BOOL StringBreakChar(char chr,char *brk);
-	char *StringSkipBlanks(char *p);
-	char *StringSkipLine(char *p);
+		TokenID *FindTokenID(char *Token,TokenID *IDLookup);
+		int TokenToInt(char *Word);
+		float TokenToFloat(char *Word);
+		double TokenToDouble(char *Word);
 
-	char m_Brk[MAXBREAKCHARACTERS];
-	short m_Flags;
-	char *m_File;
-	char *m_Pos;
-	char *m_LastPos;
-	long m_BufferSize;
-	BOOL m_WasAllocated;
+	private:
+		char *StringNextToken(char *s,char *tok,short toklen,char *brk);
+		char StringFixCase(char chr);
+		BOOL StringBreakChar(char chr,char *brk);
+		char *StringSkipBlanks(char *p);
+		char *StringSkipLine(char *p);
+
+		char m_Brk[MAXBREAKCHARACTERS];
+		short m_Flags;
+		char *m_File;
+		char *m_Pos;
+		char *m_LastPos;
+		long m_BufferSize;
 };
 
-#endif
+#endif // __INCLUDED_FILEPARSER__

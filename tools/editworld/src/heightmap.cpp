@@ -37,6 +37,8 @@
 #include "undoredo.h"
 #include "gateinterface.h"
 
+#include <fstream>
+#include <string>
 
 //#define MIPMAP_TILES
 
@@ -148,6 +150,7 @@ extern CUndoRedo *g_UndoRedo;
 extern char g_HomeDirectory[1024];
 extern char g_WorkDirectory[1024];
 extern FILE *OpenEditorFile(char *FileName);
+extern std::string EditorDataFileName(const std::string& fileName);
 
 char *IMDTypeNames[]={
 	"Feature",
@@ -403,7 +406,6 @@ DWORD CHeightMap::GetNumTextures(void)
 CGrdLandIO* CHeightMap::Read(FILE *Stream)
 {
 	CGrdLandIO *Project;
-	DWORD i;
 
 	Project = new CGrdLandIO();
 
@@ -1138,7 +1140,6 @@ void CHeightMap::SetTextureSize(DWORD TextureWidth,DWORD TextureHeight)
 	m_TextureWidth = TextureWidth;
 	m_TextureHeight = TextureHeight;
 
-	SLONG	x,z;
 	CTile *Tile = m_MapTiles;
 
 	InitialiseTextMaps();
@@ -1888,7 +1889,7 @@ UDWORD CHeightMap::GetTileFlipType(SDWORD MapX, SDWORD MapY)
 
 void CHeightMap::AddNormal(SDWORD MapX, SDWORD MapY,UDWORD AddedNormals,D3DVECTOR *SummedVector)
 {
-	D3DVECTOR Vec1,Vec2,Norm;
+	D3DVECTOR Norm;
 
 	D3DVECTOR Coords[4];
 
@@ -2876,7 +2877,6 @@ void CHeightMap::Draw3DVerticies(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosi
 				D3DVERTEX TVertices[4];
 				D3DHVERTEX HVertex[4];
 				BOOL AllClipped;
-				DWORD j;
 
 				HeightToV0(Tile->Height[0],&Tile->Position,(D3DVECTOR*)&Vertices[0]);
 
@@ -3207,7 +3207,7 @@ int	CHeightMap::SelectFace(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition,
 	D3DVECTOR Average;
 	BOOL	AllClipped;
 	BOOL	SomeClipped;
-	DWORD i,j;
+	DWORD j;
 
 	DWORD	TMap = 1;
 	int	Selected = -1;
@@ -3352,7 +3352,6 @@ float CHeightMap::GetInterpolatedHeight(float xPos,float yPos)
 	UDWORD	retVal;
 	UDWORD tileX, tileY, tileYOffset;
 	SDWORD h0, hx, hy, hxy;
-	SDWORD	lowerHeightOffset,upperHeightOffset;
 	SDWORD dx, dy, ox, oy;
 	UDWORD x = (UDWORD)(xPos+(m_MapWidth*m_TileWidth/2));
 	UDWORD y = (UDWORD)(yPos+(m_MapHeight*m_TileHeight/2));
@@ -3471,24 +3470,19 @@ _inline float SafeDivide(float a, float b)
 
 BOOL CHeightMap::ReadFeatureStats(char *ScriptFile,char *IMDDir,char *TextDir)
 {
-	FILE *Stream;
 	BOOL Flanged = TRUE;
    	BOOL TileSnap = TRUE;
    	int ColourIndex = -1;
    	NORMALTYPE ShadeMode = NT_DEFAULTNORMALS;
-	char type[MAX_NAME_SIZE], compName[MAX_NAME_SIZE], compType[MAX_NAME_SIZE];
 	BOOL Ok = TRUE;
 
-	Stream = fopen(ScriptFile,"rb");
-	if(Stream == NULL) {
+	std::ifstream file(ScriptFile, std::ios_base::binary);
+	if(!file.is_open())
 		return FALSE;
-	}
 
-	CFileParser Parser(Stream,FP_SKIPCOMMENTS);
+	CFileParser Parser(file, FP_SKIPCOMMENTS);
 	Parser.SetBreakCharacters("=,\n\r\t");
 	int NumFeatures = Parser.CountTokens()/FEATURE_STATS_SIZE;
-
-	char String[256];
 
 	m_NumFeatures = NumFeatures;
 
@@ -3528,15 +3522,12 @@ BOOL CHeightMap::ReadFeatureStats(char *ScriptFile,char *IMDDir,char *TextDir)
 		}
 	}
 
-	fclose(Stream);
-
 	return Ok;
 }
 
 		
 BOOL CHeightMap::ReadStructureStats(char *ScriptFile,char *IMDDir,char *TextDir)
 {
-	FILE *Stream;
 	BOOL Flanged = TRUE;
    	BOOL TileSnap = TRUE;
    	int ColourIndex = -1;
@@ -3546,16 +3537,13 @@ BOOL CHeightMap::ReadStructureStats(char *ScriptFile,char *IMDDir,char *TextDir)
 	char techLevel[MAX_NAME_SIZE];
 	char strength[MAX_NAME_SIZE];
 
-	Stream = fopen(ScriptFile,"rb");
-	if(Stream == NULL) {
+	std::ifstream file(ScriptFile, std::ios_base::binary);
+	if(!file.is_open())
 		return FALSE;
-	}
 
-	CFileParser Parser(Stream,FP_SKIPCOMMENTS);
+	CFileParser Parser(file, FP_SKIPCOMMENTS);
 	Parser.SetBreakCharacters("=,\n\r\t");
 	int NumStructs = Parser.CountTokens()/STRUCTURE_STATS_SIZE;
-
-	char String[256];
 
 	m_NumStructures = NumStructs;
 
@@ -3673,8 +3661,6 @@ BOOL CHeightMap::ReadStructureStats(char *ScriptFile,char *IMDDir,char *TextDir)
 		}
 	}
 
-	fclose(Stream);
-
 	return Ok;
 }
 
@@ -3725,26 +3711,25 @@ TECH_LEVEL CHeightMap::SetTechLevel(char *pLevel)
 
 BOOL CHeightMap::ReadTemplateStats(char *ScriptFile,char *IMDDir,char *TextDir)
 {
-	FILE *Stream;
 	char String[256];
 	BOOL Ok = TRUE;
 
-	Stream = fopen(ScriptFile,"rb");
-	if(Stream == NULL) {
+	std::ifstream file(ScriptFile, std::ios_base::binary);
+	if(!file.is_open())
 		return FALSE;
-	}
 
-	CFileParser Parser(Stream,FP_SKIPCOMMENTS);
+	CFileParser Parser(file, FP_SKIPCOMMENTS);
 	Parser.SetBreakCharacters("=,\n\r\t");
 	int NumTemplates = Parser.CountTokens()/DROID_TEMPLATE_STATS_SIZE;
 
 	m_NumTemplates = NumTemplates;
-	if(m_Templates) delete m_Templates;
+
+	delete m_Templates;
 	m_Templates = new DroidTemplate[NumTemplates];
 
-	if(m_Templates == NULL) {
+	if(m_Templates == NULL)
+	{
 		MessageBox(NULL,"Error","Unable to allocate template list.",MB_OK);
-		fclose(Stream);
 		return FALSE;
 	}
 
@@ -3773,8 +3758,6 @@ BOOL CHeightMap::ReadTemplateStats(char *ScriptFile,char *IMDDir,char *TextDir)
 		}
 	}
 
-	fclose(Stream);
-
 	return Ok;
 }
 
@@ -3782,17 +3765,16 @@ BOOL CHeightMap::ReadTemplateStats(char *ScriptFile,char *IMDDir,char *TextDir)
 
 BOOL CHeightMap::ReadIMDObjects(char *ScriptFile)
 {
-	FILE *Stream;
+	std::ifstream file(ScriptFile, std::ios_base::binary);
+	if(!file.is_open())
+	{
+		file.open(EditorDataFileName(ScriptFile).c_str(), std::ios_base::binary);
+	}
 
-	Stream = OpenEditorFile(ScriptFile);
-//	Stream = fopen(ScriptFile,"rb");
-	if(Stream == NULL) {
+	if(!file.is_open())
 		return FALSE;
-	}
 
-	if(m_FeatureSet) {
-		delete m_FeatureSet;
-	}
+	delete m_FeatureSet;
 
 	char	Drive[16];
 	char	Dir[256];
@@ -3807,7 +3789,7 @@ BOOL CHeightMap::ReadIMDObjects(char *ScriptFile)
 	m_FeatureSet = new char[strlen(FeatureSet)+1];
 	strcpy(m_FeatureSet,FeatureSet);
 
-	CFileParser Parser(Stream,FP_SKIPCOMMENTS | FP_QUOTES | FP_LOWERCASE);
+	CFileParser Parser(file, FP_SKIPCOMMENTS | FP_QUOTES | FP_LOWERCASE);
 
 	if(!ReadMisc(&Parser,"miscbegin","miscend")) {
 		return FALSE;
@@ -3825,24 +3807,20 @@ BOOL CHeightMap::ReadIMDObjects(char *ScriptFile)
 		return FALSE;
 	}
 
-	fclose(Stream);
-
 	return TRUE;
 }
 
 
 BOOL CHeightMap::ReadObjectNames(char *FileName)
 {
-	FILE *Stream;
 	char String[256];
 	char Name[256];
 
-	Stream = fopen(FileName,"rb");
-	if(Stream == NULL) {
+	std::ifstream file(FileName, std::ios_base::binary);
+	if(!file.is_open())
 		return FALSE;
-	}
 
-	CFileParser Parser(Stream,FP_SKIPCOMMENTS | FP_QUOTES);
+	CFileParser Parser(file, FP_SKIPCOMMENTS | FP_QUOTES);
 
 	m_NumNames = 0;
 
@@ -3864,8 +3842,6 @@ BOOL CHeightMap::ReadObjectNames(char *FileName)
 //		DebugPrint("%s : %s\n",String,Name);
 	}
 
-	fclose(Stream);
-
 	return TRUE;
 }
 
@@ -3885,12 +3861,8 @@ int CHeightMap::MatchObjName(char *IDString)
 BOOL CHeightMap::ReadMisc(CFileParser *Parser,char *Begin,char *End)
 {
 	char String[256];
-	char Name[256];
-	char Type[256];
 	char TextureName[256];
 	DWORD NumObjects = 0;
-	BOOL Flanged;
-	BOOL TileSnap;
 	int ColourIndex = -1;
 
 	Parser->Parse(String,sizeof(String));
@@ -3975,13 +3947,10 @@ BOOL CHeightMap::ReadFeatures(CFileParser *Parser,char *Begin,char *End)
 {
 	char String[256];
 	char Name[256];
-	char Type[256];
 	char StatsDir[256];
 	char IMDDir[256];
 	char TextDir[256];
 	DWORD NumObjects = 0;
-	BOOL Flanged;
-	BOOL TileSnap;
 	int ColourIndex = -1;
 
 	Parser->Parse(String,sizeof(String));
@@ -4029,13 +3998,10 @@ BOOL CHeightMap::ReadStructures(CFileParser *Parser,char *Begin,char *End)
 {
 	char String[256];
 	char Name[256];
-	char Type[256];
 	char StatsDir[256];
 	char IMDDir[256];
 	char TextDir[256];
 	DWORD NumObjects = 0;
-	BOOL Flanged;
-	BOOL TileSnap;
 	int ColourIndex = -1;
 
 	Parser->Parse(String,sizeof(String));
@@ -4083,13 +4049,10 @@ BOOL CHeightMap::ReadTemplates(CFileParser *Parser,char *Begin,char *End)
 {
 	char String[256];
 	char Name[256];
-	char Type[256];
 	char StatsDir[256];
 	char IMDDir[256];
 	char TextDir[256];
 	DWORD NumObjects = 0;
-	BOOL Flanged;
-	BOOL TileSnap;
 	int ColourIndex = -1;
 
 	Parser->Parse(String,sizeof(String));
@@ -4305,7 +4268,7 @@ BOOL CHeightMap::ReadIMD(char *FileName,char *Description,char *TextDir,int Type
 // Textured?
 	if(Flags & iV_IMD_TEX) {
 		char texfile[80];
-		int nlevels, ptype, pwidth, pheight, texpage;
+		int ptype, pwidth, pheight;
 
 // Read in the texture name and parameters.
 		fscanf(Stream,"%s %d",	Buffer,&ptype);
@@ -5299,7 +5262,6 @@ void CHeightMap::DrawIMDSphere(DWORD ObjectID,D3DVECTOR &Rotation,D3DVECTOR &Pos
 	if(ObjectID >= m_Num3DObjects) return;
 	C3DObject *Object = &m_3DObjects[ObjectID];
 	D3DVECTOR ObjPos = Position;
-	D3DVECTOR Center = Object->Smallest;
 
 // Initialise world matrix with camera rotation.
 	m_DirectMaths->SetWorldMatrix(&CameraRotation);
@@ -5678,7 +5640,6 @@ SDWORD CHeightMap::ObjectHit3DSphere(DWORD ObjectID,D3DVECTOR &Rotation,D3DVECTO
 
 	C3DObject *Object = &m_3DObjects[ObjectID];
 	D3DVECTOR ObjPos = Position;
-	D3DVECTOR Center = Object->Smallest;
 
 //	Center.x += Object->Largest.x;	Center.y += Object->Largest.y;	Center.z += Object->Largest.z;
 //	Center.x /= 2.0F;	Center.y /= 2.0F;	Center.z /= 2.0F;
@@ -5892,7 +5853,6 @@ void CHeightMap::DeSelect3DObject(DWORD Index)
 void CHeightMap::SelectAll3DObjects(void)
 {
 	ListNode<C3DObjectInstance> *TmpNode;
-	C3DObjectInstance *Data;
 
 	TmpNode = m_Objects;
 	while(TmpNode!=NULL) {
@@ -5907,7 +5867,6 @@ void CHeightMap::SelectAll3DObjects(void)
 void CHeightMap::DeSelectAll3DObjects(void)
 {
 	ListNode<C3DObjectInstance> *TmpNode;
-	C3DObjectInstance *Data;
 
 	TmpNode = m_Objects;
 	while(TmpNode!=NULL) {
@@ -5922,7 +5881,6 @@ void CHeightMap::DeSelectAll3DObjects(void)
 void CHeightMap::DeleteSelected3DObjects(void)
 {
 	ListNode<C3DObjectInstance> *TmpNode,*NextNode;
-	C3DObjectInstance *Data;
 
 	TmpNode = m_Objects;
 	while(TmpNode!=NULL) {
@@ -6627,7 +6585,6 @@ void CHeightMap::Set3DObjectPosition(DWORD Index,D3DVECTOR &Position)
 {
 	C3DObjectInstance *Data = GetObjectPointer(Index);
 	C3DObject *Object = &m_3DObjects[Data->ObjectID];
-	_feature_stats *Stats;
 
 	switch(Object->TypeID) {
 //		case	IMD_FEATURE:
@@ -6791,7 +6748,6 @@ BOOL CHeightMap::CheckUniqueScriptNames(void)
 {
 	ListNode<C3DObjectInstance> *TmpNode;
 	C3DObjectInstance *Data;
-	C3DObject *Object;
 
 	int NumIDs = 0;
 	char *ScriptNames = new char[m_TotalInstances*MAX_SCRIPTNAME];
@@ -6831,7 +6787,6 @@ BOOL CHeightMap::CheckUniqueIDs(void)
 {
 	ListNode<C3DObjectInstance> *TmpNode;
 	C3DObjectInstance *Data;
-	C3DObject *Object;
 
 	int NumIDs = 0;
 	int *IDs = new int[m_TotalInstances];
@@ -6867,7 +6822,6 @@ void CHeightMap::SetUniqueIDs(void)
 {
 	ListNode<C3DObjectInstance> *TmpNode;
 	C3DObjectInstance *Data;
-	C3DObject *Object;
 
 	int ID = 0;
 
@@ -6955,7 +6909,6 @@ BOOL CHeightMap::ReadObjectList(FILE *Stream)
 	D3DVECTOR Position;
 	D3DVECTOR Rotation;
 	char FeatureSet[32];
-	char FullPath[1024];
 	char ScriptName[256];
 
 	ScriptName[0] = 0;
@@ -7311,7 +7264,6 @@ BOOL CHeightMap::WriteDeliveranceTagList(FILE *Stream)
 
 	ListNode<C3DObjectInstance> *TmpNode;
 	C3DObjectInstance *Data;
-	C3DObject *Object;
 
 	TmpNode = m_Objects;
 	while(TmpNode!=NULL) {
@@ -7419,7 +7371,7 @@ BOOL CHeightMap::WriteDeliveranceMap(FILE *Stream)
 		if( fwrite(&Tile,SAVE_TILE_SIZE,1,Stream) != 1) return FALSE;
 	}
 
-	ListNode<GateWay> *TmpNode,*NextNode;
+	ListNode<GateWay> *TmpNode;
 	GateWay *Data;
 	GATEWAY_SAVEHEADER GateHeader;
 	GATEWAY_SAVE Gate;
@@ -7806,11 +7758,7 @@ BOOL CHeightMap::WriteDeliveranceDroidInit(FILE *Stream,UDWORD GameType,int Excl
 
 BOOL CHeightMap::WriteDeliveranceDroids(FILE *Stream)
 {
-	ListNode<C3DObjectInstance> *TmpNode;
-	C3DObjectInstance *Data;
-
 	DROID_SAVEHEADER	Header;
-	SAVE_DROID			Droid;
 
 	Header.aFileType[0] = 'd';
 	Header.aFileType[1] = 'r';
@@ -7827,11 +7775,7 @@ BOOL CHeightMap::WriteDeliveranceDroids(FILE *Stream)
 
 BOOL CHeightMap::WriteDeliveranceTemplates(FILE *Stream)
 {
-	ListNode<C3DObjectInstance> *TmpNode;
-	C3DObjectInstance *Data;
-
 	TEMPLATE_SAVEHEADER	Header;
-	SAVE_TEMPLATE		Template;
 
 	Header.aFileType[0] = 't';
 	Header.aFileType[1] = 'e';
@@ -8022,7 +7966,7 @@ void CHeightMap::DeleteAllScrollLimits(void)
 
 DWORD CHeightMap::FindScrollLimit(DWORD UniqueID)
 {
-	ListNode<CScrollLimits> *TmpNode,*NextNode;
+	ListNode<CScrollLimits> *TmpNode;
 	CScrollLimits *Data;
 	DWORD Index = 0;
 
@@ -8042,7 +7986,7 @@ DWORD CHeightMap::FindScrollLimit(DWORD UniqueID)
 
 DWORD CHeightMap::FindScrollLimit(char *ScriptName)
 {
-	ListNode<CScrollLimits> *TmpNode,*NextNode;
+	ListNode<CScrollLimits> *TmpNode;
 	CScrollLimits *Data;
 	DWORD Index = 0;
 
@@ -8062,8 +8006,7 @@ DWORD CHeightMap::FindScrollLimit(char *ScriptName)
 
 void CHeightMap::DeleteScrollLimit(DWORD Index)
 {
-	ListNode<CScrollLimits> *TmpNode,*NextNode;
-	CScrollLimits *Data;
+	ListNode<CScrollLimits> *TmpNode;
 
 	if(m_ScrollLimits) {
 		TmpNode = m_ScrollLimits->GetNthNode(Index);
@@ -8084,7 +8027,7 @@ void CHeightMap::DrawScrollLimits(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPos
 	m_DirectMaths->SetObjectMatrix(&ZeroVector,&ZeroVector,&CameraPosition);
 	m_DirectMaths->SetTransformation();
 
-	ListNode<CScrollLimits> *TmpNode,*NextNode;
+	ListNode<CScrollLimits> *TmpNode;
 	CScrollLimits *Data;
 
 	TmpNode = m_ScrollLimits;
@@ -8176,7 +8119,7 @@ BOOL CHeightMap::WriteScrollLimits(FILE *Stream,int StartX,int StartY,int Width,
 	fprintf(Stream,"    NumLimits %d\n",m_NumScrollLimits);
 	fprintf(Stream,"    Limits {\n");
 
-	ListNode<CScrollLimits> *TmpNode,*NextNode;
+	ListNode<CScrollLimits> *TmpNode;
 	CScrollLimits *Data;
 
 	TmpNode = m_ScrollLimits;
@@ -8340,7 +8283,7 @@ int CHeightMap::AddGateway(int x0,int y0,int x1,int y1)
 //
 void CHeightMap::DeleteGateway(int Index)
 {
-	ListNode<GateWay> *TmpNode,*NextNode;
+	ListNode<GateWay> *TmpNode;
 
 	if(m_Gateways) {
 		TmpNode = m_Gateways->GetNthNode(Index);
@@ -8386,7 +8329,6 @@ void CHeightMap::DeSelectGateways(void)
 //
 void CHeightMap::SelectGateway(int Index)
 {
-	ListNode<GateWay> *TmpNode;
 	GateWay *Data;
 
 	DeSelectGateways();
@@ -8400,7 +8342,6 @@ void CHeightMap::SelectGateway(int Index)
 
 BOOL CHeightMap::GetGateway(int Index,int *x0,int *y0,int *x1,int *y1)
 {
-	ListNode<GateWay> *TmpNode;
 	GateWay *Data;
 
 	if(Index < m_NumGateways) {
@@ -8443,7 +8384,6 @@ int CHeightMap::FindGateway(int x,int y)
 
 void CHeightMap::SetGateway(int Index,int x0,int y0,int x1,int y1)
 {
-	ListNode<GateWay> *TmpNode;
 	GateWay *Data;
 
 	if(Index < m_NumGateways) {
@@ -8519,9 +8459,7 @@ BOOL CHeightMap::TileIsBlocking(int x,int y,int Water)
 //
 BOOL CHeightMap::CheckGatewayBlockingTiles(int Index)
 {
-	ListNode<GateWay> *TmpNode;
 	GateWay *Data;
-	int Type;
 	BOOL Water;
 
 	if(Index < m_NumGateways) {
@@ -8644,7 +8582,7 @@ BOOL CHeightMap::CheckGatewayBlockingTiles(int Index)
 //
 BOOL CHeightMap::CheckGatewayOverlap(int CurIndex,int x0,int y0,int x1,int y1)
 {
-	ListNode<GateWay> *TmpNode,*NextNode;
+	ListNode<GateWay> *TmpNode;
 	GateWay *Data;
 
 	int dx = x1-x0;
@@ -8733,7 +8671,7 @@ BOOL CHeightMap::CheckGatewayOverlap(int CurIndex,int x0,int y0,int x1,int y1)
 //
 BOOL CHeightMap::WriteGateways(FILE *Stream,int StartX,int StartY,int Width,int Height)
 {
-	ListNode<GateWay> *TmpNode,*NextNode;
+	ListNode<GateWay> *TmpNode;
 	GateWay *Data;
 
 	fprintf(Stream,"Gateways {\n");
@@ -8793,7 +8731,7 @@ BOOL CHeightMap::ReadGateways(FILE *Stream)
 //
 BOOL CHeightMap::WriteDeliveranceGateways(FILE *Stream)
 {
-	ListNode<GateWay> *TmpNode,*NextNode;
+	ListNode<GateWay> *TmpNode;
 	GateWay *Data;
 
 	fprintf(Stream,"%d\r\n",m_NumGateways);
@@ -8822,7 +8760,7 @@ void CHeightMap::DisplayGateways3D(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPo
 //
 void CHeightMap::DisplayGateways2D(CDIBDraw *DIBDraw,int ScrollX, int ScrollY,RECT *Clip)
 {
-	ListNode<GateWay> *TmpNode,*NextNode;
+	ListNode<GateWay> *TmpNode;
 	GateWay *Data;
 
 	ScrollX /= (int)m_TextureWidth;
@@ -8931,7 +8869,6 @@ void CHeightMap::XFlipObjects(int x0,int y0,int x1,int y1)
 {
 	ListNode<C3DObjectInstance> *TmpNode;
 	C3DObjectInstance *Data;
-	C3DObject *Object;
 	float CenX,CenZ;
 
 	x1 ++;
@@ -8988,7 +8925,6 @@ void CHeightMap::YFlipObjects(int x0,int y0,int x1,int y1)
 {
 	ListNode<C3DObjectInstance> *TmpNode;
 	C3DObjectInstance *Data;
-	C3DObject *Object;
 	float CenX,CenZ;
 
 	x1 ++;
