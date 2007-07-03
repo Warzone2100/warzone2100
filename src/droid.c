@@ -313,8 +313,6 @@ void droidRelease(DROID *psDroid)
 {
 	DROID	*psCurr, *psNext;
 
-	CHECK_DROID(psDroid);
-
 	if (psDroid->droidType == DROID_TRANSPORTER)
 	{
 		if (psDroid->psGroup)
