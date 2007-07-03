@@ -290,10 +290,6 @@ BOOL CEdgeBrush::Paint(DWORD XCoord,DWORD YCoord,BOOL SetHeight)
 			DstType = g_Flags[DstTid];
 
 			int Height;
-			int Height0;
-			int Height1;
-			int Height2;
-			int Height3;
 
 			switch(m_HeightMode) {
 				case EB_HM_SEALEVEL:

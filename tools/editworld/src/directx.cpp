@@ -3758,9 +3758,6 @@ BOOL CALLBACK BuildDeviceListCallback(GUID* lpGUID, LPSTR szName, LPSTR szDevice
 	DList->DisplayModes[DevIndex].NumModes = 0;
 	DXCALL(Device->EnumDisplayModes(0,NULL,(LPVOID*)&DList->DisplayModes[DevIndex],EnumModesCallback));
 
-    SURFACEDESC ddsd;
-	DWORD WindowsBPP;
-
 //    memset(&ddsd, 0, sizeof(SURFACEDESC));
 //    ddsd.dwSize = sizeof(SURFACEDESC);
 //    DXCALL(Device->GetDisplayMode(&ddsd));

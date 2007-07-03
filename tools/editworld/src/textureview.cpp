@@ -311,9 +311,6 @@ void CTextureView::OnLButtonDown(UINT nFlags, CPoint point)
 	int SelX = point.x + m_ScrollX;
 	int SelY = point.y + m_ScrollY;
 	CTextureSelector *Selector = pDoc->GetTextureSelector();
-	BOOL FlipX;
-	BOOL FlipY;
-	DWORD Rotate;
 	int Selected;
 
 	switch(pDoc->GetTVMode()) {

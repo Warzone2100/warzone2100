@@ -637,8 +637,6 @@ void DDImage::DDBlitImageDIBRot90(CDIBDraw *DIBDraw,SLONG x,SLONG y)
 	setRectWH(&src,m_SourceX,m_SourceY,m_Width,m_Height);
 	setRectWH(&dst,x,y,m_Width,m_Height);
 
-	RECT pcSrc = src;		// Pre-clipped source rectangle.
-
 	if( (ClipFlags = ClipRect(DIBDraw,x,y,src,dst)) & CLIP_GONE) {
 		return;
 	}
