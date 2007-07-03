@@ -338,10 +338,6 @@ SOURCE=.\gatewaydef.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\gatewaymapdefs.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\geometry.h
 # End Source File
 # Begin Source File
