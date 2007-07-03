@@ -5262,7 +5262,7 @@ static BOOL loadDroidSetPointers(void)
 	UDWORD		player,list;
 	UDWORD		id;
 	DROID		*psDroid, *psCommander;
-	DROID		**ppsDroidLists[3];
+	DROID		**ppsDroidLists[3], *psNext;
 
 	ppsDroidLists[0] = apsDroidLists;
 	ppsDroidLists[1] = mission.apsDroidLists;
@@ -5278,7 +5278,6 @@ static BOOL loadDroidSetPointers(void)
 			{
 				//Target rebuild the object pointer from the ID
 				id = (UDWORD)(psDroid->psTarget[0]);
-				ASSERT( id != 0xdddddddd,"LoadUnit found freed target" );
 				if (id != UDWORD_MAX)
 				{
 					setSaveDroidTarget(psDroid, getBaseObjFromId(id), 0);
@@ -5294,7 +5293,6 @@ static BOOL loadDroidSetPointers(void)
 				}
 				//ActionTarget rebuild the object pointer from the ID
 				id = (UDWORD)(psDroid->psActionTarget[0]);
-				ASSERT( id != 0xdddddddd,"LoadUnit found freed action target" );
 				if (id != UDWORD_MAX)
 				{
 					setSaveDroidActionTarget(psDroid, getBaseObjFromId(id), 0);
@@ -5310,7 +5308,6 @@ static BOOL loadDroidSetPointers(void)
 				}
 				//BaseStruct rebuild the object pointer from the ID
 				id = (UDWORD)(psDroid->psBaseStruct);
-				ASSERT( id != 0xdddddddd,"LoadUnit found freed baseStruct" );
 				if (id != UDWORD_MAX)
 				{
 					setSaveDroidBase(psDroid, (STRUCTURE*)getBaseObjFromId(id));
@@ -5332,7 +5329,6 @@ static BOOL loadDroidSetPointers(void)
 						id = (UDWORD)(psDroid->psGroup);
 						psDroid->psGroup = NULL;
 						psDroid->psGrpNext = NULL;
-						ASSERT( id != 0xdddddddd,"LoadUnit found freed commander" );
 						if (id != UDWORD_MAX)
 						{
 							psCommander	= (DROID*)getBaseObjFromId(id);
@@ -5348,6 +5344,36 @@ static BOOL loadDroidSetPointers(void)
 			}
 		}
 	}
+
+	/* HACK: Make sure all cargo units are properly initialized! I am not sure why we need
+	 * to do this, but the code in this file is too horrible to debug. - Per */
+	for(list = 0; list<3; list++)
+	{
+		for(player = 0; player<MAX_PLAYERS; player++)
+		{
+			for (psNext = (DROID *)ppsDroidLists[list][player]; psNext; psNext = psNext->psNext)
+			{
+				if (psNext->droidType == DROID_TRANSPORTER)
+				{
+					DROID *psCargo, *psTemp;
+
+					for (psCargo = psNext->psGroup->psList; psCargo; psCargo = psTemp)
+					{
+						UDWORD i;
+
+						psTemp = psCargo->psGrpNext;
+						for (i = 0; i < DROID_MAXWEAPS; i++)
+						{
+							setSaveDroidTarget(psCargo, NULL, i);
+							setSaveDroidActionTarget(psCargo, NULL, i);
+						}
+						setSaveDroidBase(psCargo, NULL);
+					}
+				}
+			}
+		}
+	}
+
 
 	return TRUE;
 }
@@ -5435,7 +5461,7 @@ BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 		else if (psSaveDroid->saveType == DROID_ON_TRANSPORT)
 		{
    			//add the droid to the list
-			for(i = 0;i < psDroid->numWeaps;i++)
+			for (i = 0; i < DROID_MAXWEAPS; i++)
 			{
 				setSaveDroidTarget(psDroid, NULL, i);
 				setSaveDroidActionTarget(psDroid, NULL, i);
@@ -5589,18 +5615,10 @@ BOOL loadSaveDroidV19(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
   			//add the droid to the list
 			psDroid->order = DORDER_NONE;
 			psDroid->action = DACTION_NONE;
-			if (psDroid->numWeaps > 0)
+			for (i = 0; i < DROID_MAXWEAPS; i++)
 			{
-				for(i = 0;i < psDroid->numWeaps;i++)
-				{
-					setSaveDroidTarget(psDroid, NULL, i);
-					setSaveDroidActionTarget(psDroid, NULL, i);
-				}
-			}
-			else
-			{
-				setSaveDroidTarget(psDroid, NULL, 0);
-				setSaveDroidActionTarget(psDroid, NULL, 0);
+				setSaveDroidTarget(psDroid, NULL, i);
+				setSaveDroidActionTarget(psDroid, NULL, i);
 			}
 			setSaveDroidBase(psDroid, NULL);
 			//add the droid to the list
@@ -5792,7 +5810,7 @@ BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
   			//add the droid to the list
 			psDroid->order = DORDER_NONE;
 			psDroid->action = DACTION_NONE;
-			for(i = 0;i < psDroid->numWeaps;i++)
+			for (i = 0; i < DROID_MAXWEAPS; i++)
 			{
 				setSaveDroidTarget(psDroid, NULL, i);
 				setSaveDroidActionTarget(psDroid, NULL, i);
