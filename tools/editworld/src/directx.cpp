@@ -228,8 +228,8 @@ BOOL CDirectDraw::Create(void *hWnd,char *szDevice,char *sz3DDevice,Profile *Use
 		return FALSE;
 	}
 
-    if(m_WindowsBPP != 16) {
-		MessageBox(NULL, "This program requires the windows\ndisplay depth to be set to 16 bits.\nPlease alter the display properties",
+    if(m_WindowsBPP < 16) {
+		MessageBox(NULL, "This program requires the windows\ndisplay depth to be set to at least 16 bits.\nPlease alter the display properties",
 					"Invalid Display Mode", MB_OK);
 		return FALSE;
 	}
