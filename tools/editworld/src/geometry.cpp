@@ -28,10 +28,9 @@
 #include <io.h>
 #include <math.h>
 
-#include "d3dwrap.h"
-//#include "debugprint.h"
-//#include "geometry.h"
-//#include "directx.h"
+#include "debugprint.h"
+#include "geometry.h"
+#include "directx.h"
 
 
 float Distance2D(float x,float y)

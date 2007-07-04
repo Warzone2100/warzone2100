@@ -79,13 +79,6 @@ typedef DDSURFACEDESC		SURFACEDESC;
 typedef DDSCAPS				SURFACECAPS;
 #endif
 
-#ifdef DLLEXPORT
-#define EXPORT __declspec (dllexport)
-#else
-#define EXPORT
-#endif
-
-
 // Colour models.
 //
 typedef enum {
@@ -298,102 +291,98 @@ struct TextureList {
 
 
 class CTexture {
-protected:
-	IDDSURFACE	*m_MemorySurface;  // system memory surface
-	IDDSURFACE	*m_DeviceSurface;  // video memory texture
-	IDDPALETTE	*m_Palette;
+	protected:
+		IDDSURFACE	*m_MemorySurface;  // system memory surface
+		IDDSURFACE	*m_DeviceSurface;  // video memory texture
+		IDDPALETTE	*m_Palette;
 #ifdef DX6
-    ID3DTEXTURE	*m_Texture;
+		ID3DTEXTURE	*m_Texture;
 #else
-	D3DTEXTUREHANDLE	m_Handle;
+		D3DTEXTUREHANDLE	m_Handle;
 #endif
-	int m_Width,m_Height;
+		int m_Width,m_Height;
 
-public:
-EXPORT 	CTexture(void);
-EXPORT 	~CTexture(void);
-//EXPORT 	BOOL Create(IDDRAW *DirectDraw,ID3D *Direct3D,ID3DDEVICE *Device,
-//				void *Bits,DWORD Width,DWORD Height,
-//				PALETTEENTRY *PaletteEntries,
-//				TFORMAT TexFormat,
-//				UBYTE Alpha=255,void *AlphaMap=NULL,
-//				DWORD Scale=1);
-EXPORT	BOOL Create(IDDRAW *DirectDraw,ID3D *Direct3D,ID3DDEVICE *Device3D,
-						MatDesc *Desc);
-//EXPORT	BOOL CreateMipMap(IDDRAW *DirectDraw,ID3D *Direct3D,ID3DDEVICE *Device3D,
-//						DWORD Count,void **Bits,DWORD Width,DWORD Height,
-//						PALETTEENTRY *PaletteEntries,
-//						TFORMAT TexFormat,
-//						UBYTE Alpha,void *AlphaMap,
-//						DWORD Scale);
-EXPORT	BOOL CreateMipMap(IDDRAW *DirectDraw,ID3D *Direct3D,ID3DDEVICE *Device3D,
-						MatDesc *Desc);
+	public:
+ 		CTexture(void);
+ 		~CTexture(void);
+	// 	BOOL Create(IDDRAW *DirectDraw,ID3D *Direct3D,ID3DDEVICE *Device,
+	//				void *Bits,DWORD Width,DWORD Height,
+	//				PALETTEENTRY *PaletteEntries,
+	//				TFORMAT TexFormat,
+	//				UBYTE Alpha=255,void *AlphaMap=NULL,
+	//				DWORD Scale=1);
+		BOOL Create(IDDRAW *DirectDraw,ID3D *Direct3D,ID3DDEVICE *Device3D,
+							MatDesc *Desc);
+	//	BOOL CreateMipMap(IDDRAW *DirectDraw,ID3D *Direct3D,ID3DDEVICE *Device3D,
+	//						DWORD Count,void **Bits,DWORD Width,DWORD Height,
+	//						PALETTEENTRY *PaletteEntries,
+	//						TFORMAT TexFormat,
+	//						UBYTE Alpha,void *AlphaMap,
+	//						DWORD Scale);
+		BOOL CreateMipMap(IDDRAW *DirectDraw,ID3D *Direct3D,ID3DDEVICE *Device3D,
+							MatDesc *Desc);
 #ifdef DX6
-EXPORT 	ID3DTEXTURE *GetTexture(void) { return m_Texture; }
+ 		ID3DTEXTURE *GetTexture(void) { return m_Texture; }
 #else
-EXPORT 	D3DTEXTUREHANDLE GetHandle(void) { return m_Handle; }
+ 		D3DTEXTUREHANDLE GetHandle(void) { return m_Handle; }
 #endif
-EXPORT 	HRESULT Restore(void);
-EXPORT 	BOOL SetColourKey(SWORD ColourKeyIndex);
-EXPORT	int GetWidth(void) { return m_Width; }
-EXPORT	int GetHeight(void) { return m_Height; }
-
-protected:
+ 		HRESULT Restore(void);
+ 		BOOL SetColourKey(SWORD ColourKeyIndex);
+		int GetWidth(void) { return m_Width; }
+		int GetHeight(void) { return m_Height; }
 };
 
 
 class CSurface {
-protected:
-	IDDSURFACE *m_Surface;
-	SURFACEDESC m_ddsd;
-	PALETTEENTRY *m_PaletteEntries;
-	ULONG *m_RGBLookup;
-	UWORD *m_RedLookup;
-	UWORD *m_GreenLookup;
-	UWORD *m_BlueLookup;
-	DWORD m_BitCount;
-	DWORD m_RBitMask,m_GBitMask,m_BBitMask;
-	UWORD m_RedShift,m_GreenShift,m_BlueShift;
-	UWORD m_RedBits,m_GreenBits,m_BlueBits;
-	HDC m_hdc;
-	BOOL m_IsLocked;
-public:
-EXPORT	CSurface(IDDSURFACE *Surface,PALETTEENTRY *PaletteEntries);
-EXPORT	~CSurface();
-//EXPORT	void PutPixel(SLONG XCoord,SLONG YCoord,UWORD Index);
-EXPORT	UWORD GetValue(UBYTE Red,UBYTE Green,UBYTE Blue);
-EXPORT	void PutPixel(SLONG XCoord,SLONG YCoord,UWORD Value);
-EXPORT	void PutPixel(SLONG XCoord,SLONG YCoord,UBYTE Red,UBYTE Green,UBYTE Blue);
-EXPORT	void Line(SLONG X0,SLONG Y0,SLONG X1,SLONG Y1,UWORD Index);
-EXPORT	void Line(SLONG X0,SLONG Y0,SLONG X1,SLONG Y1,UBYTE Red,UBYTE Green,UBYTE Blue);
-EXPORT	void Clear(UWORD Index);
-EXPORT	void Clear(UBYTE Red,UBYTE Green,UBYTE Blue);
-EXPORT	void *Lock(void);
-EXPORT	void Unlock(void);
-EXPORT	HDC GetDC(void);
-EXPORT	void ReleaseDC(void);
+	protected:
+		IDDSURFACE *m_Surface;
+		SURFACEDESC m_ddsd;
+		PALETTEENTRY *m_PaletteEntries;
+		ULONG *m_RGBLookup;
+		UWORD *m_RedLookup;
+		UWORD *m_GreenLookup;
+		UWORD *m_BlueLookup;
+		DWORD m_BitCount;
+		DWORD m_RBitMask,m_GBitMask,m_BBitMask;
+		UWORD m_RedShift,m_GreenShift,m_BlueShift;
+		UWORD m_RedBits,m_GreenBits,m_BlueBits;
+		HDC m_hdc;
+		BOOL m_IsLocked;
+	public:
+		CSurface(IDDSURFACE *Surface,PALETTEENTRY *PaletteEntries);
+		~CSurface();
+	//	void PutPixel(SLONG XCoord,SLONG YCoord,UWORD Index);
+		UWORD GetValue(UBYTE Red,UBYTE Green,UBYTE Blue);
+		void PutPixel(SLONG XCoord,SLONG YCoord,UWORD Value);
+		void PutPixel(SLONG XCoord,SLONG YCoord,UBYTE Red,UBYTE Green,UBYTE Blue);
+		void Line(SLONG X0,SLONG Y0,SLONG X1,SLONG Y1,UWORD Index);
+		void Line(SLONG X0,SLONG Y0,SLONG X1,SLONG Y1,UBYTE Red,UBYTE Green,UBYTE Blue);
+		void Clear(UWORD Index);
+		void Clear(UBYTE Red,UBYTE Green,UBYTE Blue);
+		void *Lock(void);
+		void Unlock(void);
+		HDC GetDC(void);
+		void ReleaseDC(void);
 };
 
 
 class CMaterial {
-protected:
-	D3DMATERIALHANDLE	m_Handle;
-	ID3DMATERIAL *m_Material;
+	protected:
+		D3DMATERIALHANDLE	m_Handle;
+		ID3DMATERIAL *m_Material;
 
-public:
-EXPORT	CMaterial(void);
-EXPORT	~CMaterial(void);
-EXPORT	BOOL Create(ID3D *Direct3D,ID3DDEVICE *Device,
-				  D3DCOLORVALUE *Ambient=NULL,
-				  D3DCOLORVALUE *Diffuse=NULL,
-				  D3DCOLORVALUE *Specular=NULL,D3DVALUE Power=1.0F,
-				  D3DCOLORVALUE *Emissive=NULL,
-				  D3DTEXTUREHANDLE TexHandle = 0);
-EXPORT	D3DMATERIALHANDLE GetHandle(void) { return m_Handle; }
-EXPORT	BOOL GetMaterialColour(D3DCOLORVALUE *Ambient,D3DCOLORVALUE *Diffuse,D3DCOLORVALUE *Specular);
-EXPORT	BOOL SetMaterialColour(D3DCOLORVALUE *Ambient,D3DCOLORVALUE *Diffuse,D3DCOLORVALUE *Specular);
-
-protected:
+	public:
+		CMaterial(void);
+		~CMaterial(void);
+		BOOL Create(ID3D *Direct3D,ID3DDEVICE *Device,
+					  D3DCOLORVALUE *Ambient=NULL,
+					  D3DCOLORVALUE *Diffuse=NULL,
+					  D3DCOLORVALUE *Specular=NULL,D3DVALUE Power=1.0F,
+					  D3DCOLORVALUE *Emissive=NULL,
+					  D3DTEXTUREHANDLE TexHandle = 0);
+		D3DMATERIALHANDLE GetHandle(void) { return m_Handle; }
+		BOOL GetMaterialColour(D3DCOLORVALUE *Ambient,D3DCOLORVALUE *Diffuse,D3DCOLORVALUE *Specular);
+		BOOL SetMaterialColour(D3DCOLORVALUE *Ambient,D3DCOLORVALUE *Diffuse,D3DCOLORVALUE *Specular);
 };
 
 
@@ -405,214 +394,214 @@ protected:
 // creation.
 //
 class CDirectDraw {
-protected:
-	HWND					m_hWnd;
-	DWORD					m_WindowsBPP;
-	DWORD				    m_WindowsXRes;
-	DWORD				    m_WindowsYRes;
-	UWORD					m_NumDevices;
-	DeviceList				m_DeviceList;
-	char                    m_DeviceName[MAX_DD_NAMESIZE];
-	D3DDeviceList			m_3DDeviceList;
-	int						m_3DDeviceIndex;
-	IDDRAW					*m_Device;
-	IDDSURFACE				*m_FrontBuffer;
-	IDDSURFACE				*m_BackBuffer;
-	IDDSURFACE				*m_ZBuffer;
-	IDDCLIPPER				*m_Clipper;
-	IDDPALETTE				*m_Palette;
-	ID3D					*m_Direct3D;
-	ID3DDEVICE		        *m_3DDevice;
-	ID3DVIEPORT				*m_Viewport;
-	RECT					m_rcWindow;
-	DWORD					m_ZBufferDepth;
+	protected:
+		HWND					m_hWnd;
+		DWORD					m_WindowsBPP;
+		DWORD				    m_WindowsXRes;
+		DWORD				    m_WindowsYRes;
+		UWORD					m_NumDevices;
+		DeviceList				m_DeviceList;
+		char                    m_DeviceName[MAX_DD_NAMESIZE];
+		D3DDeviceList			m_3DDeviceList;
+		int						m_3DDeviceIndex;
+		IDDRAW					*m_Device;
+		IDDSURFACE				*m_FrontBuffer;
+		IDDSURFACE				*m_BackBuffer;
+		IDDSURFACE				*m_ZBuffer;
+		IDDCLIPPER				*m_Clipper;
+		IDDPALETTE				*m_Palette;
+		ID3D					*m_Direct3D;
+		ID3DDEVICE		        *m_3DDevice;
+		ID3DVIEPORT				*m_Viewport;
+		RECT					m_rcWindow;
+		DWORD					m_ZBufferDepth;
 #ifdef DX6
-	DDPIXELFORMAT			m_ddpfZBuffer;
-	DDCAPS					m_HalCaps;
-	DDCAPS					m_HelCaps;
+		DDPIXELFORMAT			m_ddpfZBuffer;
+		DDCAPS					m_HalCaps;
+		DDCAPS					m_HelCaps;
 #endif
-	SIZE					m_ScreenSize;
-	Profile					m_Profile;
-	D3DDEVICEDESC			m_HALDevDesc;
-	D3DDEVICEDESC			m_HELDevDesc;
-	D3DDEVICEDESC			m_DevDesc;
-	PixFormatExt			m_PixFormat;
-	PixFormatExt			m_WindowsPixelFormat;
-	D3DState				m_CurrentState;
-	CMaterial				*m_BackMaterial;
-	SWORD					m_InScene;
-	D3DMATERIALHANDLE		m_LastMatHandle;
+		SIZE					m_ScreenSize;
+		Profile					m_Profile;
+		D3DDEVICEDESC			m_HALDevDesc;
+		D3DDEVICEDESC			m_HELDevDesc;
+		D3DDEVICEDESC			m_DevDesc;
+		PixFormatExt			m_PixFormat;
+		PixFormatExt			m_WindowsPixelFormat;
+		D3DState				m_CurrentState;
+		CMaterial				*m_BackMaterial;
+		SWORD					m_InScene;
+		D3DMATERIALHANDLE		m_LastMatHandle;
 #ifdef DX6
-	ID3DTEXTURE				*m_LastTexInterface;
+		ID3DTEXTURE				*m_LastTexInterface;
 #else
-	D3DTEXTUREHANDLE		m_LastTexHandle;
+		D3DTEXTUREHANDLE		m_LastTexHandle;
 #endif
-	CSurface				*m_BackBufferSurface;
-	CSurface				*m_FrontBufferSurface;
-	BOOL					m_ClipState;
+		CSurface				*m_BackBufferSurface;
+		CSurface				*m_FrontBufferSurface;
+		BOOL					m_ClipState;
 
-public:
-	  // Core methods.
-EXPORT	CDirectDraw(void);
-EXPORT	~CDirectDraw(void);
-EXPORT	BOOL Create(void *hWnd,char *szDevice,char *sz3DDevice,Profile *UserProfile = NULL);
-EXPORT	BOOL SetDefaultRenderState(void);
-EXPORT	BOOL SetRenderState(D3DState *State);
-EXPORT	BOOL SetMode(void);
-EXPORT	BOOL SetDisplayPalette(void);
-EXPORT	BOOL ClearBackBuffer(void);
-EXPORT	BOOL SwitchBuffers(void);
-EXPORT	BOOL RestoreBuffers(void);
+	public:
+		  // Core methods.
+		CDirectDraw(void);
+		~CDirectDraw(void);
+		BOOL Create(void *hWnd,char *szDevice,char *sz3DDevice,Profile *UserProfile = NULL);
+		BOOL SetDefaultRenderState(void);
+		BOOL SetRenderState(D3DState *State);
+		BOOL SetMode(void);
+		BOOL SetDisplayPalette(void);
+		BOOL ClearBackBuffer(void);
+		BOOL SwitchBuffers(void);
+		BOOL RestoreBuffers(void);
 
-EXPORT	BOOL SetBackgroundMaterial(D3DMATERIALHANDLE Handle);
+		BOOL SetBackgroundMaterial(D3DMATERIALHANDLE Handle);
 
-EXPORT	BOOL SetFog(BOOL Enable,UBYTE Red,UBYTE Green,UBYTE Blue,ULONG Start,ULONG Stop);
-EXPORT	BOOL SetFilter(BOOL Filter);
-EXPORT	BOOL SetAmbient(UBYTE Red,UBYTE Green,UBYTE Blue);
-	
-EXPORT	void *GetBackBufferDC(void);
-EXPORT	BOOL ReleaseBackBufferDC(void *hdc);
+		BOOL SetFog(BOOL Enable,UBYTE Red,UBYTE Green,UBYTE Blue,ULONG Start,ULONG Stop);
+		BOOL SetFilter(BOOL Filter);
+		BOOL SetAmbient(UBYTE Red,UBYTE Green,UBYTE Blue);
+		
+		void *GetBackBufferDC(void);
+		BOOL ReleaseBackBufferDC(void *hdc);
 
-EXPORT	BOOL BeginScene(void);
-EXPORT	BOOL EndScene(void);
+		BOOL BeginScene(void);
+		BOOL EndScene(void);
 
-EXPORT	BOOL RestoreSurfaces(void);
+		BOOL RestoreSurfaces(void);
 
-EXPORT	BOOL SetClipper(void *hWnd);
-EXPORT	void OnResize(void *hWnd);
+		BOOL SetClipper(void *hWnd);
+		void OnResize(void *hWnd);
 
-EXPORT	HRESULT SetRenderState(_D3DRENDERSTATETYPE StateReg,UWORD State) {	return m_3DDevice->SetRenderState(StateReg,State);	}
-EXPORT	HRESULT SetLightState(_D3DLIGHTSTATETYPE StateReg,UWORD State) { return m_3DDevice->SetLightState(StateReg,State);	}
+		HRESULT SetRenderState(_D3DRENDERSTATETYPE StateReg,UWORD State) {	return m_3DDevice->SetRenderState(StateReg,State);	}
+		HRESULT SetLightState(_D3DLIGHTSTATETYPE StateReg,UWORD State) { return m_3DDevice->SetLightState(StateReg,State);	}
 
 //#ifdef DX6
-//EXPORT	void EnableColourKey(BOOL Enable) { m_3DDevice->SetRenderState(D3DRENDERSTATE_BLENDENABLE, Enable); }
+//		void EnableColourKey(BOOL Enable) { m_3DDevice->SetRenderState(D3DRENDERSTATE_BLENDENABLE, Enable); }
 //#else
-EXPORT	void EnableBlend(BOOL Enable)  { m_3DDevice->SetRenderState(D3DRENDERSTATE_BLENDENABLE, Enable); }
-EXPORT	void EnableColourKey(BOOL Enable) { m_3DDevice->SetRenderState(D3DRENDERSTATE_COLORKEYENABLE ,Enable); }
+		void EnableBlend(BOOL Enable)  { m_3DDevice->SetRenderState(D3DRENDERSTATE_BLENDENABLE, Enable); }
+		void EnableColourKey(BOOL Enable) { m_3DDevice->SetRenderState(D3DRENDERSTATE_COLORKEYENABLE ,Enable); }
 //#endif
-EXPORT	void EnableClip(BOOL Enable) { m_ClipState = Enable ? 0 : D3DDP_DONOTCLIP; }
+		void EnableClip(BOOL Enable) { m_ClipState = Enable ? 0 : D3DDP_DONOTCLIP; }
 
 #ifdef DX6
-EXPORT	BOOL DrawPoint(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
-			  			D3DVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawLine(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
-			   			D3DVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawPolyLine(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
-		   				D3DVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawTriangle(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
-		   				D3DVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawTriangleFan(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
-		   				D3DVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawTriangleStrip(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
-		   				D3DVERTEX *Vertex,DWORD Count);
+		BOOL DrawPoint(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
+			  				D3DVERTEX *Vertex,DWORD Count);
+		BOOL DrawLine(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
+			   				D3DVERTEX *Vertex,DWORD Count);
+		BOOL DrawPolyLine(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
+		   					D3DVERTEX *Vertex,DWORD Count);
+		BOOL DrawTriangle(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
+		   					D3DVERTEX *Vertex,DWORD Count);
+		BOOL DrawTriangleFan(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
+		   					D3DVERTEX *Vertex,DWORD Count);
+		BOOL DrawTriangleStrip(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
+		   					D3DVERTEX *Vertex,DWORD Count);
 
-EXPORT	BOOL DrawPoint(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
-			  			D3DLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawLine(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
-			   			D3DLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawPolyLine(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
-		   				D3DLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawTriangle(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
-		   				D3DLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawTriangleFan(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
-		   				D3DLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawTriangleStrip(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
-		   				D3DLVERTEX *Vertex,DWORD Count);
+		BOOL DrawPoint(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
+			  				D3DLVERTEX *Vertex,DWORD Count);
+		BOOL DrawLine(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
+			   				D3DLVERTEX *Vertex,DWORD Count);
+		BOOL DrawPolyLine(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
+		   					D3DLVERTEX *Vertex,DWORD Count);
+		BOOL DrawTriangle(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
+		   					D3DLVERTEX *Vertex,DWORD Count);
+		BOOL DrawTriangleFan(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
+		   					D3DLVERTEX *Vertex,DWORD Count);
+		BOOL DrawTriangleStrip(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
+		   					D3DLVERTEX *Vertex,DWORD Count);
 
-EXPORT	BOOL DrawPoint(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
-			  			D3DTLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawLine(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
-			   			D3DTLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawPolyLine(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
-		   				D3DTLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawTriangle(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
-		   				D3DTLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawTriangleFan(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
-		   				D3DTLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawTriangleStrip(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
-		   				D3DTLVERTEX *Vertex,DWORD Count);
+		BOOL DrawPoint(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
+			  				D3DTLVERTEX *Vertex,DWORD Count);
+		BOOL DrawLine(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
+			   				D3DTLVERTEX *Vertex,DWORD Count);
+		BOOL DrawPolyLine(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
+		   					D3DTLVERTEX *Vertex,DWORD Count);
+		BOOL DrawTriangle(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
+		   					D3DTLVERTEX *Vertex,DWORD Count);
+		BOOL DrawTriangleFan(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
+		   					D3DTLVERTEX *Vertex,DWORD Count);
+		BOOL DrawTriangleStrip(D3DMATERIALHANDLE MatHandle,ID3DTEXTURE *TexInterface,
+		   					D3DTLVERTEX *Vertex,DWORD Count);
 #else
-EXPORT	BOOL DrawPoint(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
-			  			D3DVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawLine(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
-			   			D3DVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawPolyLine(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
-		   				D3DVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawTriangle(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
-		   				D3DVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawTriangleFan(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
-		   				D3DVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawTriangleStrip(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
-		   				D3DVERTEX *Vertex,DWORD Count);
+		BOOL DrawPoint(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
+			  				D3DVERTEX *Vertex,DWORD Count);
+		BOOL DrawLine(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
+			   				D3DVERTEX *Vertex,DWORD Count);
+		BOOL DrawPolyLine(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
+		   					D3DVERTEX *Vertex,DWORD Count);
+		BOOL DrawTriangle(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
+		   					D3DVERTEX *Vertex,DWORD Count);
+		BOOL DrawTriangleFan(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
+		   					D3DVERTEX *Vertex,DWORD Count);
+		BOOL DrawTriangleStrip(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
+		   					D3DVERTEX *Vertex,DWORD Count);
 
-EXPORT	BOOL DrawPoint(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
-			  			D3DLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawLine(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
-			   			D3DLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawPolyLine(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
-		   				D3DLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawTriangle(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
-		   				D3DLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawTriangleFan(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
-		   				D3DLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawTriangleStrip(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
-		   				D3DLVERTEX *Vertex,DWORD Count);
+		BOOL DrawPoint(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
+			  				D3DLVERTEX *Vertex,DWORD Count);
+		BOOL DrawLine(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
+			   				D3DLVERTEX *Vertex,DWORD Count);
+		BOOL DrawPolyLine(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
+		   					D3DLVERTEX *Vertex,DWORD Count);
+		BOOL DrawTriangle(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
+		   					D3DLVERTEX *Vertex,DWORD Count);
+		BOOL DrawTriangleFan(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
+		   					D3DLVERTEX *Vertex,DWORD Count);
+		BOOL DrawTriangleStrip(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
+		   					D3DLVERTEX *Vertex,DWORD Count);
 
-EXPORT	BOOL DrawPoint(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
-			  			D3DTLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawLine(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
-			   			D3DTLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawPolyLine(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
-		   				D3DTLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawTriangle(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
-		   				D3DTLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawTriangleFan(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
-		   				D3DTLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawTriangleStrip(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
-		   				D3DTLVERTEX *Vertex,DWORD Count);
+		BOOL DrawPoint(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
+			  				D3DTLVERTEX *Vertex,DWORD Count);
+		BOOL DrawLine(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
+			   				D3DTLVERTEX *Vertex,DWORD Count);
+		BOOL DrawPolyLine(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
+		   					D3DTLVERTEX *Vertex,DWORD Count);
+		BOOL DrawTriangle(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
+		   					D3DTLVERTEX *Vertex,DWORD Count);
+		BOOL DrawTriangleFan(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
+		   					D3DTLVERTEX *Vertex,DWORD Count);
+		BOOL DrawTriangleStrip(D3DMATERIALHANDLE MatHandle,D3DTEXTUREHANDLE TexHandle,
+		   					D3DTLVERTEX *Vertex,DWORD Count);
 #endif
-EXPORT	IDDSURFACE *CreateImageSurface(DWORD Width,DWORD Height,SURFACEMEMTYPE MemType=SURFACE_VIDEOMEMORY);
-EXPORT	IDDSURFACE *CreateImageSurfaceFromBitmap(void *Bits,DWORD Width,DWORD Height,
-												PALETTEENTRY *PaletteEntries,SURFACEMEMTYPE MemType=SURFACE_VIDEOMEMORY);
+		IDDSURFACE *CreateImageSurface(DWORD Width,DWORD Height,SURFACEMEMTYPE MemType=SURFACE_VIDEOMEMORY);
+		IDDSURFACE *CreateImageSurfaceFromBitmap(void *Bits,DWORD Width,DWORD Height,
+													PALETTEENTRY *PaletteEntries,SURFACEMEMTYPE MemType=SURFACE_VIDEOMEMORY);
 
-// Member access.
-EXPORT	HWND GetHWnd(void) { return m_hWnd; }
-EXPORT	UWORD GetNumDevices(void) { return m_NumDevices; }
-EXPORT	DeviceList *GetDeviceList(void) { return &m_DeviceList; }
-EXPORT	char *GetDeviceName(void) { return m_DeviceName; }
-EXPORT	IDDRAW *GetDevice(void) { return m_Device; }
-EXPORT	IDDSURFACE *GetFrontBuffer(void) { return m_FrontBuffer; }
-EXPORT	IDDSURFACE *GetBackBuffer(void) { return m_BackBuffer; }
-EXPORT	IDDPALETTE *GetDisplayPalette(void) { return m_Palette; }
-EXPORT	CSurface *GetBackBufferSurface(void) { return m_BackBufferSurface; }
-EXPORT	CSurface *GetFrontBufferSurface(void) { return m_FrontBufferSurface; }
-EXPORT	SIZE &GetScreenSize(void) { return m_ScreenSize; }
-EXPORT	BOOL GetDisplayPaletteEntries(PALETTEENTRY *PaletteEntries);
-EXPORT	BOOL SetDisplayPaletteEntries(PALETTEENTRY *PaletteEntries);
-EXPORT	DWORD GetBPP(void) { return m_Profile.BPP; }
-EXPORT	Profile &GetProfile(void) { return m_Profile; }
+	// Member access.
+		HWND GetHWnd(void) { return m_hWnd; }
+		UWORD GetNumDevices(void) { return m_NumDevices; }
+		DeviceList *GetDeviceList(void) { return &m_DeviceList; }
+		char *GetDeviceName(void) { return m_DeviceName; }
+		IDDRAW *GetDevice(void) { return m_Device; }
+		IDDSURFACE *GetFrontBuffer(void) { return m_FrontBuffer; }
+		IDDSURFACE *GetBackBuffer(void) { return m_BackBuffer; }
+		IDDPALETTE *GetDisplayPalette(void) { return m_Palette; }
+		CSurface *GetBackBufferSurface(void) { return m_BackBufferSurface; }
+		CSurface *GetFrontBufferSurface(void) { return m_FrontBufferSurface; }
+		SIZE &GetScreenSize(void) { return m_ScreenSize; }
+		BOOL GetDisplayPaletteEntries(PALETTEENTRY *PaletteEntries);
+		BOOL SetDisplayPaletteEntries(PALETTEENTRY *PaletteEntries);
+		DWORD GetBPP(void) { return m_Profile.BPP; }
+		Profile &GetProfile(void) { return m_Profile; }
 
-EXPORT	ID3D *GetDirect3D(void) { return m_Direct3D; }
-EXPORT	ID3DDEVICE *Get3DDevice(void) { return m_3DDevice; }
-EXPORT	ID3DVIEPORT *GetViewport(void) { return m_Viewport; }
+		ID3D *GetDirect3D(void) { return m_Direct3D; }
+		ID3DDEVICE *Get3DDevice(void) { return m_3DDevice; }
+		ID3DVIEPORT *GetViewport(void) { return m_Viewport; }
 
-EXPORT	void GetRes(DWORD *XRes,DWORD *YRes) { *XRes = m_ScreenSize.cx; *YRes = m_ScreenSize.cy; }
-EXPORT	void GetDisplayPixelFormat(PixFormatExt &PixFormat) { PixFormat = m_PixFormat; }
+		void GetRes(DWORD *XRes,DWORD *YRes) { *XRes = m_ScreenSize.cx; *YRes = m_ScreenSize.cy; }
+		void GetDisplayPixelFormat(PixFormatExt &PixFormat) { PixFormat = m_PixFormat; }
 
-protected:
-	BOOL GetWindowsMode(void);
-	BOOL GetDisplayFormat(void);
-	BOOL RestoreWindowsMode(void);
-	BOOL Create3D(char *sz3DDevice);
-	int MatchDevice(char *sz3DDevice);
-	BOOL CleanUp(BOOL FreeAll = FALSE);
-	BOOL CreateBuffers(void);
-	BOOL CreateZBuffer(void);
-	BOOL CreatePalette(void);
-	BOOL CreateBackground(void);
-	void Dump3DDeviceDesc(D3DDevice *Device);
-	void DumpPrimCaps(D3DPRIMCAPS *Caps);
-	BOOL Build3DDeviceList(void);
+	protected:
+		BOOL GetWindowsMode(void);
+		BOOL GetDisplayFormat(void);
+		BOOL RestoreWindowsMode(void);
+		BOOL Create3D(char *sz3DDevice);
+		int MatchDevice(char *sz3DDevice);
+		BOOL CleanUp(BOOL FreeAll = FALSE);
+		BOOL CreateBuffers(void);
+		BOOL CreateZBuffer(void);
+		BOOL CreatePalette(void);
+		BOOL CreateBackground(void);
+		void Dump3DDeviceDesc(D3DDevice *Device);
+		void DumpPrimCaps(D3DPRIMCAPS *Caps);
+		BOOL Build3DDeviceList(void);
 };
 
 
@@ -631,99 +620,97 @@ struct MaterialData {
 
 
 class CMatManager {
-protected:
-	CDirectDraw *m_DirectDraw;
-	DWORD m_NumMats;
-	MaterialData m_Materials[MAX_MATERIALS];
+	protected:
+		CDirectDraw *m_DirectDraw;
+		DWORD m_NumMats;
+		MaterialData m_Materials[MAX_MATERIALS];
 
-public:
-EXPORT	CMatManager(CDirectDraw *DirectDraw);
-EXPORT	~CMatManager(void);
-EXPORT	BOOL FindMaterial(char *Name,DWORD *MatID);
-EXPORT	DWORD CreateMaterial(MatDesc *Desc);
-EXPORT	int	GetMaterialWidth(DWORD MatID) {	return m_Materials[MatID].Texture->GetWidth(); }
-EXPORT	int	GetMaterialHeight(DWORD MatID) { return m_Materials[MatID].Texture->GetWidth(); }
+	public:
+		CMatManager(CDirectDraw *DirectDraw);
+		~CMatManager(void);
+		BOOL FindMaterial(char *Name,DWORD *MatID);
+		DWORD CreateMaterial(MatDesc *Desc);
+		int	GetMaterialWidth(DWORD MatID) {	return m_Materials[MatID].Texture->GetWidth(); }
+		int	GetMaterialHeight(DWORD MatID) { return m_Materials[MatID].Texture->GetWidth(); }
 
-//EXPORT	DWORD CreateMaterial(DWORD Type,char* Name,void *Bits,
-//											DWORD Count,void **MipMapBits,
-//											DWORD Width,DWORD Height,
-//											PALETTEENTRY *PaletteEntries,
-//											UBYTE Alpha,void *AlphaMap,
-//											TFORMAT TexFormat,
-//											D3DCOLORVALUE *Ambient,
-//											D3DCOLORVALUE *Diffuse,
-//											D3DCOLORVALUE *Specular,
-//											DWORD Scale=1);
-EXPORT	int GetMaterialID(char* Name);
+	//	DWORD CreateMaterial(DWORD Type,char* Name,void *Bits,
+	//											DWORD Count,void **MipMapBits,
+	//											DWORD Width,DWORD Height,
+	//											PALETTEENTRY *PaletteEntries,
+	//											UBYTE Alpha,void *AlphaMap,
+	//											TFORMAT TexFormat,
+	//											D3DCOLORVALUE *Ambient,
+	//											D3DCOLORVALUE *Diffuse,
+	//											D3DCOLORVALUE *Specular,
+	//											DWORD Scale=1);
+		int GetMaterialID(char* Name);
 
-EXPORT	D3DMATERIALHANDLE GetMaterialHandle(DWORD MaterialID);
+		D3DMATERIALHANDLE GetMaterialHandle(DWORD MaterialID);
 #ifdef DX6
-EXPORT	ID3DTEXTURE *GetTextureInterface(DWORD MaterialID);
+		ID3DTEXTURE *GetTextureInterface(DWORD MaterialID);
 #else
-EXPORT	D3DTEXTUREHANDLE GetTextureHandle(DWORD MaterialID);
+		D3DTEXTUREHANDLE GetTextureHandle(DWORD MaterialID);
 #endif
 
-EXPORT	BOOL DeleteMaterial(DWORD MaterialID);
-EXPORT	BOOL SetColourKey(DWORD MaterialID,SWORD ColourKeyIndex);
-EXPORT	BOOL SetMaterialColour(DWORD MaterialID,
-							D3DCOLORVALUE *Ambient,
-							D3DCOLORVALUE *Diffuse,
-							D3DCOLORVALUE *Specular);
-EXPORT	BOOL GetMaterialColour(DWORD MaterialID,
-							D3DCOLORVALUE *Ambient,
-							D3DCOLORVALUE *Diffuse,
-							D3DCOLORVALUE *Specular);
-EXPORT	BOOL ReleaseMaterials(void);
+		BOOL DeleteMaterial(DWORD MaterialID);
+		BOOL SetColourKey(DWORD MaterialID,SWORD ColourKeyIndex);
+		BOOL SetMaterialColour(DWORD MaterialID,
+								D3DCOLORVALUE *Ambient,
+								D3DCOLORVALUE *Diffuse,
+								D3DCOLORVALUE *Specular);
+		BOOL GetMaterialColour(DWORD MaterialID,
+								D3DCOLORVALUE *Ambient,
+								D3DCOLORVALUE *Diffuse,
+								D3DCOLORVALUE *Specular);
+		BOOL ReleaseMaterials(void);
 
-EXPORT	BOOL RestoreMaterials(void);
+		BOOL RestoreMaterials(void);
 
-EXPORT	BOOL BeginScene(void);
-EXPORT	BOOL EndScene(void);
+		BOOL BeginScene(void);
+		BOOL EndScene(void);
 
-EXPORT	BOOL DrawPoint(int MaterialID,
-	  			D3DVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawLine(int MaterialID,
-	   			D3DVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawPolyLine(int MaterialID,
-				D3DVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawTriangle(int MaterialID,
-				D3DVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawTriangleFan(int MaterialID,
-				D3DVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawTriangleStrip(int MaterialID,
-				D3DVERTEX *Vertex,DWORD Count);
+		BOOL DrawPoint(int MaterialID,
+	  				D3DVERTEX *Vertex,DWORD Count);
+		BOOL DrawLine(int MaterialID,
+	   				D3DVERTEX *Vertex,DWORD Count);
+		BOOL DrawPolyLine(int MaterialID,
+					D3DVERTEX *Vertex,DWORD Count);
+		BOOL DrawTriangle(int MaterialID,
+					D3DVERTEX *Vertex,DWORD Count);
+		BOOL DrawTriangleFan(int MaterialID,
+					D3DVERTEX *Vertex,DWORD Count);
+		BOOL DrawTriangleStrip(int MaterialID,
+					D3DVERTEX *Vertex,DWORD Count);
 
-EXPORT	BOOL DrawPoint(int MaterialID,
-	  			D3DLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawLine(int MaterialID,
-	   			D3DLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawPolyLine(int MaterialID,
-				D3DLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawTriangle(int MaterialID,
-				D3DLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawTriangleFan(int MaterialID,
-				D3DLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawTriangleStrip(int MaterialID,
-				D3DLVERTEX *Vertex,DWORD Count);
+		BOOL DrawPoint(int MaterialID,
+	  				D3DLVERTEX *Vertex,DWORD Count);
+		BOOL DrawLine(int MaterialID,
+	   				D3DLVERTEX *Vertex,DWORD Count);
+		BOOL DrawPolyLine(int MaterialID,
+					D3DLVERTEX *Vertex,DWORD Count);
+		BOOL DrawTriangle(int MaterialID,
+					D3DLVERTEX *Vertex,DWORD Count);
+		BOOL DrawTriangleFan(int MaterialID,
+					D3DLVERTEX *Vertex,DWORD Count);
+		BOOL DrawTriangleStrip(int MaterialID,
+					D3DLVERTEX *Vertex,DWORD Count);
 
-EXPORT	BOOL DrawPoint(int MaterialID,
-	  			D3DTLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawLine(int MaterialID,
-	   			D3DTLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawPolyLine(int MaterialID,
-				D3DTLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawTriangle(int MaterialID,
-				D3DTLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawTriangleFan(int MaterialID,
-				D3DTLVERTEX *Vertex,DWORD Count);
-EXPORT	BOOL DrawTriangleStrip(int MaterialID,
-				D3DTLVERTEX *Vertex,DWORD Count);
-
-protected:
+		BOOL DrawPoint(int MaterialID,
+	  				D3DTLVERTEX *Vertex,DWORD Count);
+		BOOL DrawLine(int MaterialID,
+	   				D3DTLVERTEX *Vertex,DWORD Count);
+		BOOL DrawPolyLine(int MaterialID,
+					D3DTLVERTEX *Vertex,DWORD Count);
+		BOOL DrawTriangle(int MaterialID,
+					D3DTLVERTEX *Vertex,DWORD Count);
+		BOOL DrawTriangleFan(int MaterialID,
+					D3DTLVERTEX *Vertex,DWORD Count);
+		BOOL DrawTriangleStrip(int MaterialID,
+					D3DTLVERTEX *Vertex,DWORD Count);
 };
 
 
-EXPORT	void DisplayError(HRESULT Code,LPCTSTR File,DWORD Line,...);
+	void DisplayError(HRESULT Code,LPCTSTR File,DWORD Line,...);
 
 extern BOOL g_WindowsIs555;
 

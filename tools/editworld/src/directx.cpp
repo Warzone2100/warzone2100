@@ -27,7 +27,9 @@
 #include <stdlib.h>
 #include <io.h>
 
-#include "d3dwrap.h"
+#include "directx.h"
+#include "geometry.h"
+#include "debugprint.h"
 
 //#define FOGGY
 #define FILTER
