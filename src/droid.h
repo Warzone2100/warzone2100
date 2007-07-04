@@ -429,7 +429,7 @@ do { \
 	assert(droid->type == OBJ_DROID); \
 \
 	assert(droid->direction <= 360.0f && droid->direction >= 0.0f); \
-	assert(droid->numWeaps < DROID_MAXWEAPS); \
+	assert(droid->numWeaps <= DROID_MAXWEAPS); \
 	assert(droid->listSize < ORDER_LIST_MAX); \
 	assert(droid->player < MAX_PLAYERS); \
 \
