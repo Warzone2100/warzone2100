@@ -40,12 +40,12 @@ struct TokenID
 	int ID;
 };
 
-class CFileParser
+class fileParser
 {
 	public:
-		CFileParser(std::istream& file, short flags);
+		fileParser(std::istream& file, short flags);
 
-		~CFileParser();
+		~fileParser();
 
 		void SetFlags(short Flags) { m_Flags = Flags; }
 		short GetFlags(void) { return m_Flags; }

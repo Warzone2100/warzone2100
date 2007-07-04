@@ -808,13 +808,17 @@ public:
 	BOOL ReadStructureStats(char *ScriptFile,char *IMDDir,char *TextDir);
 	TECH_LEVEL CHeightMap::SetTechLevel(char *pLevel);
 	BOOL ReadTemplateStats(char *ScriptFile,char *IMDDir,char *TextDir);
-	BOOL ReadObjects(CFileParser *Parser,char *Begin,char *End,int TypeID);
 	BOOL ReadObjectNames(char *FileName);
 	int MatchObjName(char *IDString);
-	BOOL ReadMisc(CFileParser *Parser,char *Begin,char *End);
-	BOOL ReadFeatures(CFileParser *Parser,char *Begin,char *End);
-	BOOL ReadStructures(CFileParser *Parser,char *Begin,char *End);
-	BOOL ReadTemplates(CFileParser *Parser,char *Begin,char *End);
+
+private:
+	BOOL ReadObjects(fileParser& Parser,char *Begin,char *End,int TypeID);
+	BOOL ReadMisc(fileParser& Parser,char *Begin,char *End);
+	BOOL ReadFeatures(fileParser& Parser,char *Begin,char *End);
+	BOOL ReadStructures(fileParser& Parser,char *Begin,char *End);
+	BOOL ReadTemplates(fileParser& Parser,char *Begin,char *End);
+
+public:
 	BOOL ReadIMDObjects(char *ScriptFile);
 //	BOOL ReadObjects(char *ScripFile);
 	DWORD GetNumIMD(void) { return m_Num3DObjects; }

@@ -3480,7 +3480,7 @@ BOOL CHeightMap::ReadFeatureStats(char *ScriptFile,char *IMDDir,char *TextDir)
 	if(!file.is_open())
 		return FALSE;
 
-	CFileParser Parser(file, FP_SKIPCOMMENTS);
+	fileParser Parser(file, FP_SKIPCOMMENTS);
 	Parser.SetBreakCharacters("=,\n\r\t");
 	int NumFeatures = Parser.CountTokens()/FEATURE_STATS_SIZE;
 
@@ -3541,7 +3541,7 @@ BOOL CHeightMap::ReadStructureStats(char *ScriptFile,char *IMDDir,char *TextDir)
 	if(!file.is_open())
 		return FALSE;
 
-	CFileParser Parser(file, FP_SKIPCOMMENTS);
+	fileParser Parser(file, FP_SKIPCOMMENTS);
 	Parser.SetBreakCharacters("=,\n\r\t");
 	int NumStructs = Parser.CountTokens()/STRUCTURE_STATS_SIZE;
 
@@ -3718,7 +3718,7 @@ BOOL CHeightMap::ReadTemplateStats(char *ScriptFile,char *IMDDir,char *TextDir)
 	if(!file.is_open())
 		return FALSE;
 
-	CFileParser Parser(file, FP_SKIPCOMMENTS);
+	fileParser Parser(file, FP_SKIPCOMMENTS);
 	Parser.SetBreakCharacters("=,\n\r\t");
 	int NumTemplates = Parser.CountTokens()/DROID_TEMPLATE_STATS_SIZE;
 
@@ -3789,21 +3789,21 @@ BOOL CHeightMap::ReadIMDObjects(char *ScriptFile)
 	m_FeatureSet = new char[strlen(FeatureSet)+1];
 	strcpy(m_FeatureSet,FeatureSet);
 
-	CFileParser Parser(file, FP_SKIPCOMMENTS | FP_QUOTES | FP_LOWERCASE);
+	fileParser Parser(file, FP_SKIPCOMMENTS | FP_QUOTES | FP_LOWERCASE);
 
-	if(!ReadMisc(&Parser,"miscbegin","miscend")) {
+	if(!ReadMisc(Parser,"miscbegin","miscend")) {
 		return FALSE;
 	}
-	if(!ReadFeatures(&Parser,"featuresbegin","featuresend")) {
+	if(!ReadFeatures(Parser,"featuresbegin","featuresend")) {
 		return FALSE;
 	}
-	if(!ReadStructures(&Parser,"structuresbegin","structuresend")) {
+	if(!ReadStructures(Parser,"structuresbegin","structuresend")) {
 		return FALSE;
 	}
-	if(!ReadTemplates(&Parser,"droidsbegin","droidsend")) {
+	if(!ReadTemplates(Parser,"droidsbegin","droidsend")) {
 		return FALSE;
 	}
-	if(!ReadObjects(&Parser,"objectsbegin","objectsend",IMD_OBJECT)) {
+	if(!ReadObjects(Parser,"objectsbegin","objectsend",IMD_OBJECT)) {
 		return FALSE;
 	}
 
@@ -3820,7 +3820,7 @@ BOOL CHeightMap::ReadObjectNames(char *FileName)
 	if(!file.is_open())
 		return FALSE;
 
-	CFileParser Parser(file, FP_SKIPCOMMENTS | FP_QUOTES);
+	fileParser Parser(file, FP_SKIPCOMMENTS | FP_QUOTES);
 
 	m_NumNames = 0;
 
@@ -3858,21 +3858,21 @@ int CHeightMap::MatchObjName(char *IDString)
 }
 
 
-BOOL CHeightMap::ReadMisc(CFileParser *Parser,char *Begin,char *End)
+BOOL CHeightMap::ReadMisc(fileParser& Parser,char *Begin,char *End)
 {
 	char String[256];
 	char TextureName[256];
 	DWORD NumObjects = 0;
 	int ColourIndex = -1;
 
-	Parser->Parse(String,sizeof(String));
+	Parser.Parse(String,sizeof(String));
 	if(strcmp(String,Begin) != 0) {
 		MessageBox(NULL,"Section directive not found!","Error parsing data set!",MB_OK);
 		DebugPrint("%s Not found!\n",Begin);
 		return FALSE;
 	}
 
-	if(!Parser->ParseString("tiletextures",TextureName,sizeof(TextureName))) {
+	if(!Parser.ParseString("tiletextures",TextureName,sizeof(TextureName))) {
 		DebugPrint("TILETEXTURES directive not found!\n");
 		MessageBox(NULL,"TILETEXTURES directive not found!","Error parsing data set!",MB_OK);
 		return FALSE;
@@ -3880,7 +3880,7 @@ BOOL CHeightMap::ReadMisc(CFileParser *Parser,char *Begin,char *End)
 
 	strcpy(m_TileTextureName,TextureName);
 
-	if(!Parser->ParseString("objectnames",String,sizeof(String))) {
+	if(!Parser.ParseString("objectnames",String,sizeof(String))) {
 		DebugPrint("OBJECTNAMES directive not found!\n");
 		MessageBox(NULL,"OBJECTNAMES directive not found!","Error parsing data set!",MB_OK);
 		return FALSE;
@@ -3889,7 +3889,7 @@ BOOL CHeightMap::ReadMisc(CFileParser *Parser,char *Begin,char *End)
 	strcpy(m_ObjectNames,String);
 	ReadObjectNames(m_ObjectNames);
 
-	Parser->Parse(String,sizeof(String));
+	Parser.Parse(String,sizeof(String));
 	if(strcmp(String,"brushbegin") != 0) {
 		MessageBox(NULL,"BRUSHBEGIN directive not found!","Error parsing data set!",MB_OK);
 		DebugPrint("BRUSHBEGIN Not found!\n");
@@ -3897,23 +3897,23 @@ BOOL CHeightMap::ReadMisc(CFileParser *Parser,char *Begin,char *End)
 	}
 
 	for(int i=0; i<16; i++) {
-		Parser->ParseInt(NULL,&m_BrushHeightMode[i]);
-		Parser->ParseInt(NULL,&m_BrushHeight[i]);
-		Parser->ParseInt(NULL,&m_BrushRandomRange[i]);
+		Parser.ParseInt(NULL,&m_BrushHeightMode[i]);
+		Parser.ParseInt(NULL,&m_BrushHeight[i]);
+		Parser.ParseInt(NULL,&m_BrushRandomRange[i]);
 		for(int j=0; j<16; j++) {
-			Parser->ParseInt(NULL,&m_BrushTiles[i][j]);
-			Parser->ParseInt(NULL,&m_BrushFlags[i][j]);
+			Parser.ParseInt(NULL,&m_BrushTiles[i][j]);
+			Parser.ParseInt(NULL,&m_BrushFlags[i][j]);
 		}
 	}
 
-	Parser->Parse(String,sizeof(String));
+	Parser.Parse(String,sizeof(String));
 	if(strcmp(String,"brushend") != 0) {
 		MessageBox(NULL,"BRUSHEND directive not found!","Error parsing data set!",MB_OK);
 		DebugPrint("BRUSHEND Not found!\n");
 		return FALSE;
 	}
 
-	Parser->Parse(String,sizeof(String));
+	Parser.Parse(String,sizeof(String));
 	if(strcmp(String,"typebegin") != 0) {
 		MessageBox(NULL,"TYPEBEGIN directive not found!","Error parsing data set!",MB_OK);
 		DebugPrint("TYPEBEGIN Not found!\n");
@@ -3921,17 +3921,17 @@ BOOL CHeightMap::ReadMisc(CFileParser *Parser,char *Begin,char *End)
 	}
 
 	for(i=0; i<128; i++) {
-		Parser->ParseInt(NULL,&m_TileTypes[i]);
+		Parser.ParseInt(NULL,&m_TileTypes[i]);
 	}
 
-	Parser->Parse(String,sizeof(String));
+	Parser.Parse(String,sizeof(String));
 	if(strcmp(String,"typeend") != 0) {
 		MessageBox(NULL,"TYPEEND directive not found!","Error parsing data set!",MB_OK);
 		DebugPrint("TYPEEND Not found!\n");
 		return FALSE;
 	}
 
-	Parser->Parse(String,sizeof(String));
+	Parser.Parse(String,sizeof(String));
 	if(strcmp(String,End) != 0) {
 		MessageBox(NULL,"Section directive not found!","Error parsing data set!",MB_OK);
 		DebugPrint("%s Not found!\n",End);
@@ -3943,7 +3943,7 @@ BOOL CHeightMap::ReadMisc(CFileParser *Parser,char *Begin,char *End)
 
 
 
-BOOL CHeightMap::ReadFeatures(CFileParser *Parser,char *Begin,char *End)
+BOOL CHeightMap::ReadFeatures(fileParser& Parser,char *Begin,char *End)
 {
 	char String[256];
 	char Name[256];
@@ -3953,33 +3953,33 @@ BOOL CHeightMap::ReadFeatures(CFileParser *Parser,char *Begin,char *End)
 	DWORD NumObjects = 0;
 	int ColourIndex = -1;
 
-	Parser->Parse(String,sizeof(String));
+	Parser.Parse(String,sizeof(String));
 	if(strcmp(String,Begin) != 0) {
 		MessageBox(NULL,"Section directive not found!","Error parsing data set!",MB_OK);
 		DebugPrint("%s Not found!\n",Begin);
 		return FALSE;
 	}
 
-	if(!Parser->ParseString("statsdir",StatsDir,sizeof(StatsDir))) {
+	if(!Parser.ParseString("statsdir",StatsDir,sizeof(StatsDir))) {
 		DebugPrint("STATSDIR directive not found!\n");
 		MessageBox(NULL,"STATSDIR directive not found!","Error parsing data set!",MB_OK);
 		return FALSE;
 	}
 
-	if(!Parser->ParseString("imddir",IMDDir,sizeof(IMDDir))) {
+	if(!Parser.ParseString("imddir",IMDDir,sizeof(IMDDir))) {
 		DebugPrint("IMDDIR directive not found!\n");
 		MessageBox(NULL,"IMDDIR directive not found!","Error parsing data set!",MB_OK);
 		return FALSE;
 	}
 
-	if(!Parser->ParseString("textdir",TextDir,sizeof(TextDir))) {
+	if(!Parser.ParseString("textdir",TextDir,sizeof(TextDir))) {
 		DebugPrint("TEXTDIR directive not found!\n");
 		MessageBox(NULL,"TEXTDIR directive not found!","Error parsing data set!",MB_OK);
 		return FALSE;
 	}
 
 	while(1) {
-		Parser->Parse(String,sizeof(String));
+		Parser.Parse(String,sizeof(String));
 		if(strcmp(String,End) == 0) break;
 
 		sprintf(Name,"%s\\%s%s",g_WorkDirectory,StatsDir,String);
@@ -3994,7 +3994,7 @@ BOOL CHeightMap::ReadFeatures(CFileParser *Parser,char *Begin,char *End)
 }
 
 
-BOOL CHeightMap::ReadStructures(CFileParser *Parser,char *Begin,char *End)
+BOOL CHeightMap::ReadStructures(fileParser& Parser,char *Begin,char *End)
 {
 	char String[256];
 	char Name[256];
@@ -4004,33 +4004,33 @@ BOOL CHeightMap::ReadStructures(CFileParser *Parser,char *Begin,char *End)
 	DWORD NumObjects = 0;
 	int ColourIndex = -1;
 
-	Parser->Parse(String,sizeof(String));
+	Parser.Parse(String,sizeof(String));
 	if(strcmp(String,Begin) != 0) {
 		MessageBox(NULL,"Section directive not found!","Error parsing data set!",MB_OK);
 		DebugPrint("%s Not found!\n",Begin);
 		return FALSE;
 	}
 
-	if(!Parser->ParseString("statsdir",StatsDir,sizeof(StatsDir))) {
+	if(!Parser.ParseString("statsdir",StatsDir,sizeof(StatsDir))) {
 		DebugPrint("STATSDIR directive not found!\n");
 		MessageBox(NULL,"STATSDIR directive not found!","Error parsing data set!",MB_OK);
 		return FALSE;
 	}
 
-	if(!Parser->ParseString("imddir",IMDDir,sizeof(IMDDir))) {
+	if(!Parser.ParseString("imddir",IMDDir,sizeof(IMDDir))) {
 		DebugPrint("IMDDIR directive not found!\n");
 		MessageBox(NULL,"IMDDIR directive not found!","Error parsing data set!",MB_OK);
 		return FALSE;
 	}
 
-	if(!Parser->ParseString("textdir",TextDir,sizeof(TextDir))) {
+	if(!Parser.ParseString("textdir",TextDir,sizeof(TextDir))) {
 		DebugPrint("TEXTDIR directive not found!\n");
 		MessageBox(NULL,"TEXTDIR directive not found!","Error parsing data set!",MB_OK);
 		return FALSE;
 	}
 
 	while(1) {
-		Parser->Parse(String,sizeof(String));
+		Parser.Parse(String,sizeof(String));
 		if(strcmp(String,End) == 0) break;
 
 		sprintf(Name,"%s\\%s%s",g_WorkDirectory,StatsDir,String);
@@ -4045,7 +4045,7 @@ BOOL CHeightMap::ReadStructures(CFileParser *Parser,char *Begin,char *End)
 }
 
 
-BOOL CHeightMap::ReadTemplates(CFileParser *Parser,char *Begin,char *End)
+BOOL CHeightMap::ReadTemplates(fileParser& Parser,char *Begin,char *End)
 {
 	char String[256];
 	char Name[256];
@@ -4055,33 +4055,33 @@ BOOL CHeightMap::ReadTemplates(CFileParser *Parser,char *Begin,char *End)
 	DWORD NumObjects = 0;
 	int ColourIndex = -1;
 
-	Parser->Parse(String,sizeof(String));
+	Parser.Parse(String,sizeof(String));
 	if(strcmp(String,Begin) != 0) {
 		MessageBox(NULL,"Section directive not found!","Error parsing data set!",MB_OK);
 		DebugPrint("%s Not found!\n",Begin);
 		return FALSE;
 	}
 
-	if(!Parser->ParseString("statsdir",StatsDir,sizeof(StatsDir))) {
+	if(!Parser.ParseString("statsdir",StatsDir,sizeof(StatsDir))) {
 		DebugPrint("STATSDIR directive not found!\n");
 		MessageBox(NULL,"STATSDIR directive not found!","Error parsing data set!",MB_OK);
 		return FALSE;
 	}
 
-	if(!Parser->ParseString("imddir",IMDDir,sizeof(IMDDir))) {
+	if(!Parser.ParseString("imddir",IMDDir,sizeof(IMDDir))) {
 		DebugPrint("IMDDIR directive not found!\n");
 		MessageBox(NULL,"IMDDIR directive not found!","Error parsing data set!",MB_OK);
 		return FALSE;
 	}
 
-	if(!Parser->ParseString("textdir",TextDir,sizeof(TextDir))) {
+	if(!Parser.ParseString("textdir",TextDir,sizeof(TextDir))) {
 		DebugPrint("TEXTDIR directive not found!\n");
 		MessageBox(NULL,"TEXTDIR directive not found!","Error parsing data set!",MB_OK);
 		return FALSE;
 	}
 
 	while(1) {
-		Parser->Parse(String,sizeof(String));
+		Parser.Parse(String,sizeof(String));
 		if(strcmp(String,End) == 0) break;
 
 		sprintf(Name,"%s\\%s%s",g_WorkDirectory,StatsDir,String);
@@ -4097,7 +4097,7 @@ BOOL CHeightMap::ReadTemplates(CFileParser *Parser,char *Begin,char *End)
 
 
 
-BOOL CHeightMap::ReadObjects(CFileParser *Parser,char *Begin,char *End,int TypeID)
+BOOL CHeightMap::ReadObjects(fileParser& Parser,char *Begin,char *End,int TypeID)
 {
 	char String[256];
 	char Name[256];
@@ -4111,41 +4111,41 @@ BOOL CHeightMap::ReadObjects(CFileParser *Parser,char *Begin,char *End,int TypeI
 	BOOL TileSnap;
 	int ColourIndex = -1;
 
-	Parser->Parse(String,sizeof(String));
+	Parser.Parse(String,sizeof(String));
 	if(strcmp(String,Begin) != 0) {
 		DebugPrint("%s Not found!\n",Begin);
 		MessageBox(NULL,"Section directive not found!","Error parsing data set!",MB_OK);
 		return FALSE;
 	}
 
-	if(!Parser->ParseString("statsdir",StatsDir,sizeof(StatsDir))) {
+	if(!Parser.ParseString("statsdir",StatsDir,sizeof(StatsDir))) {
 		DebugPrint("STATSDIR directive not found!\n");
 		MessageBox(NULL,"STATSDIR directive not found!","Error parsing data set!",MB_OK);
 		return FALSE;
 	}
 
-	if(!Parser->ParseString("imddir",IMDDir,sizeof(IMDDir))) {
+	if(!Parser.ParseString("imddir",IMDDir,sizeof(IMDDir))) {
 		DebugPrint("IMDDIR directive not found!\n");
 		MessageBox(NULL,"IMDDIR directive not found!","Error parsing data set!",MB_OK);
 		return FALSE;
 	}
 
-	if(!Parser->ParseString("textdir",TextDir,sizeof(TextDir))) {
+	if(!Parser.ParseString("textdir",TextDir,sizeof(TextDir))) {
 		DebugPrint("TEXTDIR directive not found!\n");
 		MessageBox(NULL,"TEXTDIR directive not found!","Error parsing data set!",MB_OK);
 		return FALSE;
 	}
 
 	while(1) {
-		Parser->Parse(String,sizeof(String));
+		Parser.Parse(String,sizeof(String));
 		if(strcmp(String,End) == 0) break;
 
-		short Flags = Parser->GetFlags();
-		Parser->SetFlags(Flags & ~(FP_LOWERCASE | FP_UPPERCASE));
-		Parser->Parse(Description,sizeof(Description));
-		Parser->SetFlags(Flags);
+		short Flags = Parser.GetFlags();
+		Parser.SetFlags(Flags & ~(FP_LOWERCASE | FP_UPPERCASE));
+		Parser.Parse(Description,sizeof(Description));
+		Parser.SetFlags(Flags);
 		
-		Parser->Parse(Type,sizeof(Type));
+		Parser.Parse(Type,sizeof(Type));
 		if(strcmp(Type,"flanged") == 0) {
 			Flanged = TRUE;
 		} else if(strcmp(Type,"overlayed") == 0) {
@@ -4155,7 +4155,7 @@ BOOL CHeightMap::ReadObjects(CFileParser *Parser,char *Begin,char *End,int TypeI
 			return FALSE;
 		}
 
-		Parser->Parse(Type,sizeof(Type));
+		Parser.Parse(Type,sizeof(Type));
 		if(strcmp(Type,"tilesnap") == 0) {
 			TileSnap = TRUE;
 		} else if(strcmp(Type,"nosnap") == 0) {
@@ -4165,7 +4165,7 @@ BOOL CHeightMap::ReadObjects(CFileParser *Parser,char *Begin,char *End,int TypeI
 			return FALSE;
 		}
 
-		Parser->Parse(Type,sizeof(Type));
+		Parser.Parse(Type,sizeof(Type));
 		if(strncmp(Type,"key",3) == 0) {
 			if(sscanf(&Type[3],"%d",&ColourIndex) != 1) {
 				MessageBox(NULL,"Invalid key index.\nShould be number between 0-255","Error parsing data set!",MB_OK);
@@ -4180,7 +4180,7 @@ BOOL CHeightMap::ReadObjects(CFileParser *Parser,char *Begin,char *End,int TypeI
 
 		NORMALTYPE ShadeMode;
 
-		Parser->Parse(Type,sizeof(Type));
+		Parser.Parse(Type,sizeof(Type));
 		if(strcmp(Type,"smoothshade") == 0) {
 			ShadeMode = NT_SMOOTHNORMALS;
 		} else if(strcmp(Type,"flatshade") == 0) {

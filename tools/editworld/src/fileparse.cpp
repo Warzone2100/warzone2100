@@ -29,7 +29,7 @@
 #include	"debugprint.h"
 
 
-CFileParser::CFileParser(std::istream& file, short flags) :
+fileParser::fileParser(std::istream& file, short flags) :
 	m_Flags(flags),
 	m_File(NULL)
 {
@@ -52,19 +52,19 @@ CFileParser::CFileParser(std::istream& file, short flags) :
 	strcpy(m_Brk,"= \n\r\t");
 }
 
-CFileParser::~CFileParser()
+fileParser::~fileParser()
 {
 	delete m_File;
 }
 
 
-void CFileParser::Rewind(void)
+void fileParser::Rewind(void)
 {
 	m_Pos = m_File;
 }
 
 
-BOOL CFileParser::ParseString(char *Ident,char *Word,short Size)
+BOOL fileParser::ParseString(char *Ident,char *Word,short Size)
 {
 	char Tmp[256];
 	if(Ident) {
@@ -79,7 +79,7 @@ BOOL CFileParser::ParseString(char *Ident,char *Word,short Size)
 }
 
 
-BOOL CFileParser::ParseInt(char *Ident,int *Int)
+BOOL fileParser::ParseInt(char *Ident,int *Int)
 {
 	char Tmp[256];
 	if(Ident) {
@@ -95,7 +95,7 @@ BOOL CFileParser::ParseInt(char *Ident,int *Int)
 }
 
 
-BOOL CFileParser::ParseFloat(char *Ident,float *Float)
+BOOL fileParser::ParseFloat(char *Ident,float *Float)
 {
 	char Tmp[256];
 	if(Ident) {
@@ -111,7 +111,7 @@ BOOL CFileParser::ParseFloat(char *Ident,float *Float)
 }
 
 
-BOOL CFileParser::ParseDouble(char *Ident,double *Double)
+BOOL fileParser::ParseDouble(char *Ident,double *Double)
 {
 	char Tmp[256];
 	if(Ident) {
@@ -127,13 +127,13 @@ BOOL CFileParser::ParseDouble(char *Ident,double *Double)
 }
 
 
-void CFileParser::SetBreakCharacters(char *brk)
+void fileParser::SetBreakCharacters(char *brk)
 {
 	strcpy(m_Brk,brk);
 }
 
 
-int CFileParser::CountTokens(void)
+int fileParser::CountTokens(void)
 {
 	char String[MAXTOKENSIZE];
 
@@ -152,7 +152,7 @@ int CFileParser::CountTokens(void)
 }
 
 
-void CFileParser::Parse(char *Word,short Size)
+void fileParser::Parse(char *Word,short Size)
 {
 	m_LastPos = m_Pos;
 
@@ -189,13 +189,13 @@ void CFileParser::Parse(char *Word,short Size)
 }
 
 
-void CFileParser::UnParse(void)
+void fileParser::UnParse(void)
 {
 	m_Pos = m_LastPos;
 }
 
 
-TokenID *CFileParser::FindTokenID(char *Token,TokenID *IDLookup)
+TokenID* fileParser::FindTokenID(char *Token,TokenID *IDLookup)
 {
 	TokenID *TokID = IDLookup;
 
@@ -211,7 +211,7 @@ TokenID *CFileParser::FindTokenID(char *Token,TokenID *IDLookup)
 }
 
 
-BOOL CFileParser::FindToken(char *Token)
+BOOL fileParser::FindToken(char *Token)
 {
 	char Tmp[256];
 	do {
@@ -226,7 +226,7 @@ BOOL CFileParser::FindToken(char *Token)
 }
 
 
-BOOL CFileParser::FindTokenList(char *Token, ...)
+BOOL fileParser::FindTokenList(char *Token, ...)
 {
 	BOOL FoundFirst;
 	char *Tok;
@@ -263,25 +263,25 @@ BOOL CFileParser::FindTokenList(char *Token, ...)
 }
 
 
-int CFileParser::TokenToInt(char *Word)
+int fileParser::TokenToInt(char *Word)
 {
 	return atoi(Word);
 }
 
 
-float CFileParser::TokenToFloat(char *Word)
+float fileParser::TokenToFloat(char *Word)
 {
 	return (float)atof(Word);
 }
 
 
-double CFileParser::TokenToDouble(char *Word)
+double fileParser::TokenToDouble(char *Word)
 {
 	return atof(Word);
 }
 
 
-char *CFileParser::StringNextToken(char *s,char *tok,short toklen,char *brk)
+char* fileParser::StringNextToken(char *s,char *tok,short toklen,char *brk)
 {
 	short	i = 0;
 
@@ -323,7 +323,7 @@ char *CFileParser::StringNextToken(char *s,char *tok,short toklen,char *brk)
 }
 
 
-char CFileParser::StringFixCase(char chr)
+char fileParser::StringFixCase(char chr)
 {
 	if(m_Flags & FP_UPPERCASE) {
 		if( (chr >= 'a') && (chr <='z') ) {
@@ -341,7 +341,7 @@ char CFileParser::StringFixCase(char chr)
 }
 
 
-BOOL CFileParser::StringBreakChar(char chr,char *brk)
+BOOL fileParser::StringBreakChar(char chr,char *brk)
 {
 	short	i;
 
@@ -353,7 +353,7 @@ BOOL CFileParser::StringBreakChar(char chr,char *brk)
 }
 
 
-char *CFileParser::StringSkipBlanks(char *p)
+char* fileParser::StringSkipBlanks(char *p)
 {
 	while( (*p == ' ') || (*p == 9) || (*p == 10) || (*p == 13) ) {
 		if(*p == 0) return(p);
@@ -365,7 +365,7 @@ char *CFileParser::StringSkipBlanks(char *p)
 }
 
 
-char *CFileParser::StringSkipLine(char *p)
+char* fileParser::StringSkipLine(char *p)
 {
 	while( (*p != 10) && (*p != 13) && (*p != 0) ) {
 		p++;
