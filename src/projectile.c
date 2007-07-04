@@ -148,8 +148,6 @@ BOOL gfxVisible(PROJ_OBJECT *psObj)
 {
 	BOOL bVisible = FALSE;
 
-	CHECK_PROJECTILE(psObj);
-
 	// already know it is visible
 	if (psObj->bVisible)
 	{
@@ -169,28 +167,34 @@ BOOL gfxVisible(PROJ_OBJECT *psObj)
 	}
 
 	// you can see the source
-	if( (psObj->psSource!=NULL) && (psObj->psSource->visible[selectedPlayer]) )
+	if( (psObj->psSource!=NULL) &&
+		(!psObj->psSource->died) &&
+		(psObj->psSource->visible[selectedPlayer]) )
 	{
 		bVisible = TRUE;
 	}
 
 	// you can see the destination
-	if( (psObj->psDest!=NULL) && (psObj->psDest->visible[selectedPlayer]) )
+	if( (psObj->psDest!=NULL) &&
+		(!psObj->psDest->died) &&
+		(psObj->psDest->visible[selectedPlayer]) )
 	{
 		bVisible = TRUE;
 	}
 
 	// someone elses structure firing at something you can't see
 	if ( psObj->psSource != NULL &&
+		!psObj->psSource->died &&
 		psObj->psSource->type == OBJ_STRUCTURE &&
 		psObj->psSource->player!=selectedPlayer &&
-		( psObj->psDest == NULL || !psObj->psDest->visible[selectedPlayer] ) )
+		( psObj->psDest == NULL || psObj->psDest->died || !psObj->psDest->visible[selectedPlayer] ) )
 	{
 		bVisible = FALSE;
 	}
 
 	// something you cannot see firing at a structure that isn't yours
 	if ( psObj->psDest != NULL &&
+		!psObj->psDest->died &&
 		psObj->psDest->type == OBJ_STRUCTURE &&
 		psObj->psDest->player != selectedPlayer &&
 		( psObj->psSource == NULL || !psObj->psSource->visible[selectedPlayer] ) )
