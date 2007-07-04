@@ -29,38 +29,30 @@
 #include	"debugprint.h"
 
 
-CFileParser::CFileParser() :
-	m_File(NULL)
-{
-	strcpy(m_Brk,"= \n\r\t");
-}
-
 CFileParser::CFileParser(std::istream& file, short flags) :
+	m_Flags(flags),
 	m_File(NULL)
 {
-	m_Flags = flags;
-
 	// Seek to the end to determine the file/stream's size
 	file.seekg(0, std::ios::end);
-	std::ifstream::pos_type fileSize = file.tellg();
+	size_t fileSize = file.tellg();
 	file.seekg(0);
 
-	delete m_File;
+	// Should throw std::bad_alloc on failure to allocate memory
+	m_File = new char[fileSize + 1];
 
-	m_File = new char[fileSize + static_cast<std::ifstream::pos_type>(1)];
-	if(m_File)
-	{
-		file.readsome(static_cast<std::istream::char_type*>(m_File), fileSize);
-		m_File[fileSize]=0;
-	}
+	file.read(m_File, fileSize);
+
+	// Nul terminate string
+	m_File[fileSize] = 0;
 
 	m_Pos = m_File;
 
-	m_BufferSize = static_cast<long>(fileSize) + 1;
+	m_BufferSize = fileSize + 1;
 	strcpy(m_Brk,"= \n\r\t");
 }
 
-CFileParser::~CFileParser(void)
+CFileParser::~CFileParser()
 {
 	delete m_File;
 }

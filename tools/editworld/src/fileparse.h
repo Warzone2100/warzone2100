@@ -43,7 +43,6 @@ struct TokenID
 class CFileParser
 {
 	public:
-		CFileParser();
 		CFileParser(std::istream& file, short flags);
 
 		~CFileParser();

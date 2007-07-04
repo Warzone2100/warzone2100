@@ -149,7 +149,7 @@ extern CUndoRedo *g_UndoRedo;
 
 extern char g_HomeDirectory[1024];
 extern char g_WorkDirectory[1024];
-extern FILE *OpenEditorFile(char *FileName);
+extern FILE *OpenEditorFile(const char *FileName);
 extern std::string EditorDataFileName(const std::string& fileName);
 
 char *IMDTypeNames[]={
