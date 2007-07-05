@@ -443,10 +443,21 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 					heightVariance = rand()%8;
 				}
 				break;
+
 			case OBJ_STRUCTURE:
 				heightVariance = rand()%8;
 				break;
+
+			case OBJ_BULLET:
+				ASSERT(!"invalid object type: bullet", "proj_SendProjectile: invalid object type: OBJ_BULLET");
+				break;
+
+			case OBJ_TARGET:
+				ASSERT(!"invalid object type: target", "proj_SendProjectile: invalid object type: OBJ_TARGET");
+				break;
+
 			default:
+				ASSERT(!"unknown object type", "proj_SendProjectile: unknown object type");
 				break;
 		}
 		tarHeight = psTarget->z + heightVariance;
@@ -2234,14 +2245,25 @@ SDWORD objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD
 		case OBJ_DROID:
 			return droidDamage((DROID *)psObj, damage, weaponClass,weaponSubClass, angle);
 			break;
+
 		case OBJ_STRUCTURE:
 			return structureDamage((STRUCTURE *)psObj, damage, weaponClass, weaponSubClass);
 			break;
+
 		case OBJ_FEATURE:
 			return featureDamage((FEATURE *)psObj, damage, weaponSubClass);
 			break;
+
+		case OBJ_BULLET:
+			ASSERT(!"invalid object type: bullet", "objectDamage: invalid object type: OBJ_BULLET");
+			break;
+
+		case OBJ_TARGET:
+			ASSERT(!"invalid object type: target", "objectDamage: invalid object type: OBJ_TARGET");
+			break;
+
 		default:
-			ASSERT(!"unknown object type", "objectDamage - unknown object type");
+			ASSERT(!"unknown object type", "objectDamage: unknown object type");
 	}
 
 	return 0;
@@ -2264,29 +2286,42 @@ STRUCTURE	*psStructure;
 
 	switch(psObj->type)
 	{
-	case OBJ_DROID:
-		psDroid = (DROID*)psObj;
-		if( (gameTime - psDroid->timeLastHit) < HIT_THRESHOLD &&
-            psDroid->lastHitWeapon == WSC_ELECTRONIC)
-			return(TRUE);
-	case OBJ_FEATURE:
-		psFeature = (FEATURE*)psObj;
-		if( (gameTime - psFeature->timeLastHit) < HIT_THRESHOLD )
-			return(TRUE);
-		break;
-	case OBJ_STRUCTURE:
-		psStructure = (STRUCTURE*)psObj;
-		if( (gameTime - psStructure->timeLastHit) < HIT_THRESHOLD &&
-            psStructure->lastHitWeapon == WSC_ELECTRONIC)
-			return(TRUE);
-		break;
-	default:
-		debug( LOG_ERROR, "Weird object type in justBeenHitByEW" );
-		abort();
-		break;
+		case OBJ_DROID:
+			psDroid = (DROID*)psObj;
+			if ((gameTime - psDroid->timeLastHit) < HIT_THRESHOLD
+			 && psDroid->lastHitWeapon == WSC_ELECTRONIC)
+				return(TRUE);
+			break;
+
+		case OBJ_FEATURE:
+			psFeature = (FEATURE*)psObj;
+			if ((gameTime - psFeature->timeLastHit) < HIT_THRESHOLD)
+				return(TRUE);
+			break;
+
+		case OBJ_STRUCTURE:
+			psStructure = (STRUCTURE*)psObj;
+			if ((gameTime - psStructure->timeLastHit) < HIT_THRESHOLD
+			 && psStructure->lastHitWeapon == WSC_ELECTRONIC)
+				return TRUE;
+			break;
+
+		case OBJ_BULLET:
+			ASSERT(!"invalid object type: bullet", "justBeenHitByEW: invalid object type: OBJ_BULLET");
+			abort();
+			break;
+
+		case OBJ_TARGET:
+			ASSERT(!"invalid object type: target", "justBeenHitByEW: invalid object type: OBJ_TARGET");
+			abort();
+			break;
+
+		default:
+			ASSERT(!"unknown object type", "justBeenHitByEW: unknown object type");
+			abort();
 	}
 
-	return(FALSE);
+	return FALSE;
 }
 
 void	objectShimmy(BASE_OBJECT *psObj)
