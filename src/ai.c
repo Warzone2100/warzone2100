@@ -167,7 +167,11 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 				}
 				else if(friendlyObj->type == OBJ_STRUCTURE)
 				{
-					targetInQuestion = ((STRUCTURE *)friendlyObj)->psTarget[0];
+					tempTarget = ((STRUCTURE*)friendlyObj)->psTarget[0];
+					if (tempTarget && !tempTarget->died)
+					{
+						targetInQuestion = tempTarget;
+					}
 				}
 			}
 		}
