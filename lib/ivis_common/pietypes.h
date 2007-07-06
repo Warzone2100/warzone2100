@@ -46,7 +46,7 @@ typedef struct { Uint8 r, g, b; } iColour;
 typedef iColour iPalette[256];
 
 typedef unsigned char iBitmap;
-typedef struct { Uint32 width, height, depth; unsigned char *bmp; } iV_Image;
+typedef struct { unsigned int width, height, depth; unsigned char *bmp; } iV_Image;
 typedef iV_Image iTexture;
 
 #endif // _pieTypes_h

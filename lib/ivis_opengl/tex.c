@@ -75,7 +75,7 @@ int pie_AddTexPage(iV_Image * s, const char* filename, int type, BOOL bResource)
 	/* Have we used up too many? */
 	if (_TEX_INDEX >= iV_TEX_MAX) {
 		debug(LOG_ERROR, "pie_AddTexPage: too many texture pages");
-		assert(FALSE);
+		assert(!"too many texture pages");
 		return -1;
 	}
 
