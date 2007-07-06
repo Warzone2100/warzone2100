@@ -1240,12 +1240,21 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 	//Watermelon: tarZ0,tarZ1,zDiff for AA AOE weapons;
 	SDWORD			tarZ0,tarZ1,zDiff;
 	int				impactAngle;
+	// EvilGuru: Data about the effect to be shown
+	EFFECT_TYPE facing;
+	iIMDShape *imd;
 
 	CHECK_PROJECTILE(psObj);
 
 	psStats = psObj->psWStats;
 	ASSERT( psStats != NULL,
 		"proj_ImpactFunc: Invalid weapon stats pointer" );
+
+	// Get if we are facing or not
+	facing = (psStats->facePlayer) ? EXPLOSION_TYPE_SPECIFIED : EXPLOSION_TYPE_NOT_FACING;
+
+	// note the attacker if any
+	g_pProjLastAttacker = psObj->psSource;
 
 	/* play impact audio */
 	if (gfxVisible(psObj))
@@ -1271,26 +1280,18 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 				audio_PlayStaticTrack(psObj->psDest->x, psObj->psDest->y, psStats->iAudioImpactID);
 			}
 		}
-	}
-	// note the attacker if any
-	g_pProjLastAttacker = psObj->psSource;
 
-	if(gfxVisible(psObj))
-	{
-		/* Set stuff burning if it's a flame droid... */
-//		if(psStats->weaponSubClass == WSC_FLAME)
-//		{
-			/* Shouldn't need to do this check but the stats aren't all at a value yet... */ // FIXME
-			if (psStats->incenRadius && psStats->incenTime)
-			{
-				position.x = psObj->tarX;
-				position.z = psObj->tarY;
-				position.y = map_Height(position.x, position.z);
-				effectGiveAuxVar(psStats->incenRadius);
-				effectGiveAuxVarSec(psStats->incenTime);
-				addEffect(&position, EFFECT_FIRE, FIRE_TYPE_LOCALISED, FALSE, NULL, 0);
-			}
-//		}
+		/* Shouldn't need to do this check but the stats aren't all at a value yet... */ // FIXME
+		if (psStats->incenRadius && psStats->incenTime)
+		{
+			position.x = psObj->tarX;
+			position.z = psObj->tarY;
+			position.y = map_Height(position.x, position.z);
+			effectGiveAuxVar(psStats->incenRadius);
+			effectGiveAuxVarSec(psStats->incenTime);
+			addEffect(&position, EFFECT_FIRE, FIRE_TYPE_LOCALISED, FALSE, NULL, 0);
+		}
+
 		// may want to add both a fire effect and the las sat effect
 		if (psStats->weaponSubClass == WSC_LAS_SAT)
 		{
@@ -1298,65 +1299,49 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 			position.z = psObj->tarY;
 			position.y = map_Height(position.x, position.z);
 			addEffect(&position, EFFECT_SAT_LASER, SAT_LASER_STANDARD, FALSE, NULL, 0);
-			if(clipXY(psObj->tarX, psObj->tarY))
+			if (clipXY(psObj->tarX, psObj->tarY))
 			{
 				shakeStart();
 			}
 		}
 	}
 
+	// Set the effects position and radius
+	position.x = psObj->x;
+	position.z = psObj->y;
+	position.y = psObj->z;//map_Height(psObj->x, psObj->y) + 24;
+	scatter.x = psStats->radius;
+	scatter.y = 0;
+	scatter.z = psStats->radius;
+
+	// If the projectile missed its target (or the target died)
 	if (psObj->psDest == NULL)
 	{
-		/* The bullet missed or the target was destroyed in flight */
-		/* So show the MISS effect */
-	 	position.x = psObj->x;
-		position.z = psObj->y;
-		position.y = psObj->z;//map_Height(psObj->x, psObj->y) + 24;//jps
-		scatter.x = psStats->radius; scatter.y = 0;	scatter.z = psStats->radius;
-
 		if (gfxVisible(psObj))
 		{
-			// you got to have at least 1 in the numExplosions field or you'll see nowt..:-)
-			if (psObj->airTarget)
+			// The graphic to show depends on if we hit water or not
+			if (TERRAIN_TYPE(mapTile(map_coord(psObj->x), map_coord(psObj->y))) == TER_WATER)
 			{
-				if ((psStats->surfaceToAir & SHOOT_IN_AIR) && !(psStats->surfaceToAir & SHOOT_ON_GROUND))
-				{
-					if (psStats->facePlayer)
-					{
-						addMultiEffect(&position, &scatter, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, TRUE, psStats->pTargetMissGraphic, psStats->numExplosions, psStats->lightWorld, psStats->effectSize);
-					}
-					else
-					{
-						addMultiEffect(&position, &scatter, EFFECT_EXPLOSION, EXPLOSION_TYPE_NOT_FACING, TRUE, psStats->pTargetMissGraphic,psStats->numExplosions, psStats->lightWorld, psStats->effectSize);
-					}
-					/* Add some smoke to flak */
-					addMultiEffect(&position, &scatter, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING, FALSE, NULL, 3, 0, 0);
-				}
+				imd = psStats->pWaterHitGraphic;
 			}
-			else if(TERRAIN_TYPE(mapTile(psObj->x / TILE_UNITS, psObj->y / TILE_UNITS)) == TER_WATER)
-			{
-				if (psStats->facePlayer)
-				{
-					addMultiEffect(&position, &scatter, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, TRUE, psStats->pWaterHitGraphic, psStats->numExplosions, psStats->lightWorld, psStats->effectSize);
-				}
-				else
-				{
-					addMultiEffect(&position, &scatter, EFFECT_EXPLOSION, EXPLOSION_TYPE_NOT_FACING, TRUE, psStats->pWaterHitGraphic, psStats->numExplosions, psStats->lightWorld, psStats->effectSize);
-				}
-			}
+			// We did not hit water, the regular miss graphic will do the trick
 			else
 			{
-				if (psStats->facePlayer)
-				{
-					addMultiEffect(&position, &scatter, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, TRUE, psStats->pTargetMissGraphic, psStats->numExplosions, psStats->lightWorld, psStats->effectSize);
-				}
-				else
-				{
-					addMultiEffect(&position, &scatter, EFFECT_EXPLOSION, EXPLOSION_TYPE_NOT_FACING, TRUE, psStats->pTargetMissGraphic, psStats->numExplosions, psStats->lightWorld, psStats->effectSize);
-				}
+				imd = psStats->pTargetMissGraphic;
+			}
+
+			addMultiEffect(&position, &scatter, EFFECT_EXPLOSION, facing, TRUE, imd, psStats->numExplosions, psStats->lightWorld, psStats->effectSize);
+
+			// If the target was a VTOL hit in the air add smoke
+			if (psObj->airTarget
+			 && (psStats->surfaceToAir & SHOOT_IN_AIR)
+			 && !(psStats->surfaceToAir & SHOOT_ON_GROUND))
+			{
+				addMultiEffect(&position, &scatter, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING, FALSE, NULL, 3, 0, 0);
 			}
 		}
 	}
+	// The projectile hit its intended target
 	else
 	{
 		CHECK_OBJECT(psObj->psDest);
@@ -1368,89 +1353,79 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 			proj_Destroy(psObj);
 			return;
 		}
-		position.x = psObj->x;
-		position.z = psObj->y;
-		position.y = psObj->z;//map_Height(psObj->x, psObj->y) + 24;
-		scatter.x = psStats->radius;
-		scatter.y = 0;
-		scatter.z = psStats->radius;
 
-		if(gfxVisible(psObj))
+		if (gfxVisible(psObj))
 		{
-			/* Watermelon:gives AA gun explosive field and smoke effect even if it hits the target */
-			if (psObj->airTarget)
+			// If we hit a VTOL with an AA gun use the miss graphic and add some smoke
+			if (psObj->airTarget
+			 && (psStats->surfaceToAir & SHOOT_IN_AIR)
+			 && !(psStats->surfaceToAir & SHOOT_ON_GROUND)
+			 && psStats->weaponSubClass == WSC_AAGUN)
 			{
-				if ((psStats->surfaceToAir & SHOOT_IN_AIR)
-				 && !(psStats->surfaceToAir & SHOOT_ON_GROUND)
-				 && psStats->weaponSubClass == WSC_AAGUN)
-				{
-					if(psStats->facePlayer)
-					{
-						addMultiEffect(&position, &scatter, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, TRUE, psStats->pTargetMissGraphic, psStats->numExplosions, psStats->lightWorld, psStats->effectSize);
-					}
-					else
-					{
-						addMultiEffect(&position, &scatter, EFFECT_EXPLOSION, EXPLOSION_TYPE_NOT_FACING, TRUE, psStats->pTargetMissGraphic, psStats->numExplosions, psStats->lightWorld, psStats->effectSize);
-					}
-					/* Add some smoke to flak */
-					addMultiEffect(&position, &scatter, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING, FALSE, NULL, 3, 0, 0);
-				}
+				imd = psStats->pTargetMissGraphic;
+				addMultiEffect(&position, &scatter, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING, FALSE, NULL, 3, 0, 0);
 			}
+			// Otherwise we just hit it plain and simple
 			else
 			{
-				if(psStats->facePlayer)
-				{
-					addMultiEffect(&position, &scatter, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, TRUE, psStats->pTargetHitGraphic, psStats->numExplosions, psStats->lightWorld, psStats->effectSize);
-				}
-				else
-				{
-					addMultiEffect(&position, &scatter, EFFECT_EXPLOSION, EXPLOSION_TYPE_NOT_FACING, TRUE, psStats->pTargetHitGraphic, psStats->numExplosions, psStats->lightWorld, psStats->effectSize);
-				}
+				imd = psStats->pTargetHitGraphic;
 			}
+
+			addMultiEffect(&position, &scatter, EFFECT_EXPLOSION, facing, TRUE, imd, psStats->numExplosions, psStats->lightWorld, psStats->effectSize);
 		}
 
-		/* Do damage to the target */
+		// If the weapon is direct (e.g. cannon, lancer &c)
 		if (proj_Direct(psStats))
 		{
-			/* Check for Electronic Warfare damage where we know the subclass of the weapon */
-			if (psStats->weaponSubClass == WSC_ELECTRONIC)
+			// Check for electronic warfare damage where we know the subclass and source
+			if (psStats->weaponSubClass == WSC_ELECTRONIC && psObj->psSource)
 			{
-				if (psObj->psSource)
+				// If we did enough `damage' to capture the target
+				if (electronicDamage(psObj->psDest,
+				                     calcDamage(weaponDamage(psStats, psObj->player), psStats->weaponEffect, psObj->psDest),
+				                     psObj->player))
 				{
-					if (electronicDamage(psObj->psDest,
-					                     calcDamage(weaponDamage(psStats, psObj->player), psStats->weaponEffect, psObj->psDest),
-					                     psObj->player))
+					switch (psObj->psSource->type)
 					{
-						if (psObj->psSource->type == OBJ_DROID)
-						{
-							//the structure has lost all resistance so quit
-							((DROID *)psObj->psSource)->order = DORDER_NONE;
-							actionDroid((DROID*)psObj->psSource, DACTION_NONE);
-						}
-						else if (psObj->psSource->type == OBJ_STRUCTURE)
-						{
-							//the droid has lost all resistance - init the structures target
-							((STRUCTURE*)psObj->psSource)->psTarget[0] = NULL;
-						}
+						case OBJ_DROID:
+							((DROID*) psObj->psSource)->order = DORDER_NONE;
+							actionDroid((DROID *) (psObj->psSource), DACTION_NONE);
+							break;
+
+						case OBJ_STRUCTURE:
+							((STRUCTURE*) psObj->psSource)->psTarget[0] = NULL;
+							break;
+
+						// This is only here to prevent the compile from producing
+						// warnings for unhandled enumeration values
+						default:
+							break;
 					}
 				}
 			}
+			// Otherwise YADFW (Yet Another Direct Fire Weapon)
 			else
 			{
-				/* Just assume a direct fire weapon hits the target */
+				// Calculate the damage the weapon does to its target
 				damage = calcDamage(weaponDamage(psStats, psObj->player), psStats->weaponEffect, psObj->psDest);
-				if(bMultiPlayer)
+
+				// If we are in a multi-player game and the attacker is our responsibility
+				if (bMultiPlayer && psObj->psSource && myResponsibility(psObj->psSource->player))
 				{
-					if(psObj->psSource && myResponsibility(psObj->psSource->player)  )
-					{
-						updateMultiStatsDamage(psObj->psSource->player,psObj->psDest->player,damage);
-					}
+					updateMultiStatsDamage(psObj->psSource->player, psObj->psDest->player, damage);
 				}
 
 				debug(LOG_NEVER, "Damage to object %d, player %d\n",
 						psObj->psDest->id, psObj->psDest->player);
-				/*the damage depends on the weapon effect and the target propulsion type or structure strength*/
 
+				/*
+				 * Since droids can have different armour levels on different
+				 * sides we need to work out the angle of the projectile. How
+				 * this relates to the hit side I have no idea!
+				 * FIXME: At the end of the day we only need the side, not the
+				 *        angle and so it would be better if it worked it out
+				 *        here.
+				 */
 				if (psObj->psDest->type == OBJ_DROID)
 				{
 					if (psObj->altChange > 300)
@@ -1476,6 +1451,8 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 				{
 					impactAngle = 0;
 				}
+
+				// Damage the object
 				percentDamage = objectDamage(psObj->psDest,damage , psStats->weaponClass,psStats->weaponSubClass, impactAngle);
 
 				proj_UpdateKills(psObj, percentDamage);
@@ -1503,21 +1480,17 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 				((SDWORD)psObj->psDest->y <= (SDWORD)psObj->y + TILE_UNITS)))
 			{
 
-				damage = calcDamage(weaponDamage(
-							psStats, psObj->player),
-							psStats->weaponEffect, psObj->psDest);
-				if(bMultiPlayer)
+				damage = calcDamage(weaponDamage(psStats, psObj->player), psStats->weaponEffect, psObj->psDest);
+
+				// If we are in a multi-player game and the attacker is our responsibility
+				if (bMultiPlayer && psObj->psSource && myResponsibility(psObj->psSource->player))
 				{
-					if(psObj->psSource && myResponsibility(psObj->psSource->player))
-					{
-						//updateMultiStatsDamage(psObj->psSource->player,psObj->psDest->player,psStats->damage);
-						updateMultiStatsDamage(psObj->psSource->player,
-							//psObj->psDest->player,	calcDamage(psStats->damage,
-							psObj->psDest->player, damage	);
-					}
+					updateMultiStatsDamage(psObj->psSource->player, psObj->psDest->player, damage);
 				}
+
 				debug(LOG_NEVER, "Damage to object %d, player %d\n",
 						psObj->psDest->id, psObj->psDest->player);
+
 				//Watermelon:just assume it as from TOP for indirect artillery
 				if (psObj->psDest->type == OBJ_DROID)
 				{
@@ -1527,6 +1500,8 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 				{
 					impactAngle = HIT_SIDE_FRONT;
 				}
+
+				// Damage the object
 				percentDamage = objectDamage(psObj->psDest, damage, psStats->weaponClass,psStats->weaponSubClass, impactAngle);
 
 				proj_UpdateKills(psObj, percentDamage);
@@ -1539,40 +1514,9 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 		}
 	}
 
+	// If the projectile does no splash damage and does not set fire to things
 	if ((psStats->radius == 0) && (psStats->incenTime == 0) )
 	{
-		position.x = psObj->x;
-		position.z = psObj->y;
-		position.y = psObj->z;
-		scatter.x = psStats->radius; scatter.y = 0;	scatter.z = psStats->radius;
-
-		if(gfxVisible(psObj))
-		{
-			if(TERRAIN_TYPE(mapTile(psObj->x/TILE_UNITS,psObj->y/TILE_UNITS)) == TER_WATER)
-			{
-				if(psStats->facePlayer)
-				{
-					addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,psStats->pWaterHitGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
-				}
-				else
-				{
-					addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_NOT_FACING,TRUE,psStats->pWaterHitGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
-				}
-			}
-			else
-			{
-				if(psStats->facePlayer)
-				{
-					addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,psStats->pTargetHitGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
-				}
-				else
-				{
-					addMultiEffect(&position,&scatter,EFFECT_EXPLOSION,EXPLOSION_TYPE_NOT_FACING,TRUE,psStats->pTargetHitGraphic,psStats->numExplosions,psStats->lightWorld,psStats->effectSize);
-				}
-			}
-		}
-
-		/* This was just a simple bullet - release it and return */
 		proj_Destroy(psObj);
 		return;
 	}
@@ -1594,13 +1538,13 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 		tarZ0 = (SDWORD)psObj->z - (SDWORD)psStats->radius;
 		tarZ1 = (SDWORD)psObj->z + (SDWORD)psStats->radius;
 
-		/* Store the radius squared */
+		/* Store the radius cubed */
 		radCubed = psStats->radius * psStats->radius * psStats->radius;
 
 		/* Watermelon:air suppression */
 		if (psObj->airTarget)
 		{
-			for (i=0; i<MAX_PLAYERS; i++)
+			for (i = 0; i < MAX_PLAYERS; i++)
 			{
 				for (psCurrD = apsDroidLists[i]; psCurrD; psCurrD = psNextD)
 				{
@@ -1635,15 +1579,13 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 								debug(LOG_NEVER, "Damage to object %d, player %d\n",
 										psCurrD->id, psCurrD->player);
 
-								damage = calcDamage(
-											weaponRadDamage(psStats, psObj->player),
-											psStats->weaponEffect, (BASE_OBJECT *)psCurrD);
-								if(bMultiPlayer)
+								damage = calcDamage(weaponRadDamage(psStats, psObj->player), psStats->weaponEffect, (BASE_OBJECT *) psCurrD);
+
+								if (bMultiPlayer)
 								{
-									if(psObj->psSource && myResponsibility(psObj->psSource->player))
+									if (psObj->psSource && myResponsibility(psObj->psSource->player))
 									{
-										updateMultiStatsDamage(psObj->psSource->player,
-											psCurrD->player, damage);
+										updateMultiStatsDamage(psObj->psSource->player, psCurrD->player, damage);
 									}
 									turnOffMultiMsg(TRUE);
 								}
@@ -1668,7 +1610,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 										impactAngle -= 360;
 									}
 								}
-								percentDamage = droidDamage(psCurrD, damage, psStats->weaponClass,psStats->weaponSubClass, impactAngle);
+								percentDamage = droidDamage(psCurrD, damage, psStats->weaponClass, psStats->weaponSubClass, impactAngle);
 
 								turnOffMultiMsg(FALSE);	// multiplay msgs back on.
 
@@ -1682,7 +1624,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 		else
 		{
 			/* Do damage to everything in range */
-			for (i=0; i<MAX_PLAYERS; i++)
+			for (i = 0; i < MAX_PLAYERS; i++)
 			{
 				for (psCurrD = apsDroidLists[i]; psCurrD; psCurrD = psNextD)
 				{
@@ -1717,12 +1659,11 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 								damage = calcDamage(
 											weaponRadDamage(psStats, psObj->player),
 											psStats->weaponEffect, (BASE_OBJECT *)psCurrD);
-								if(bMultiPlayer)
+								if (bMultiPlayer)
 								{
-									if(psObj->psSource && myResponsibility(psObj->psSource->player))
+									if (psObj->psSource && myResponsibility(psObj->psSource->player))
 									{
-										updateMultiStatsDamage(psObj->psSource->player,
-											psCurrD->player, damage);
+										updateMultiStatsDamage(psObj->psSource->player, psCurrD->player, damage);
 									}
 									turnOffMultiMsg(TRUE);
 								}
@@ -1780,9 +1721,9 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 								                    psStats->weaponEffect,
 								                    (BASE_OBJECT *)psCurrS);
 
-								if(bMultiPlayer)
+								if (bMultiPlayer)
 								{
-									if(psObj->psSource && myResponsibility(psObj->psSource->player))
+									if (psObj->psSource && myResponsibility(psObj->psSource->player))
 									{
 										updateMultiStatsDamage(psObj->psSource->player,	psCurrS->player,damage);
 									}
