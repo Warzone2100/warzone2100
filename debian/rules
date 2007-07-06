@@ -29,6 +29,9 @@ endif
 	pngtopnm $< | pnmscale -xysize 32 32 | ppmtoxpm -alphamask $@.alpha > $@
 	$(RM) $@.alpha
 
+configure:
+	sh autogen.sh
+
 config.status: configure
 	dh_testdir
 
@@ -37,7 +40,7 @@ config.status: configure
 
 build: build-stamp
 
-build-stamp:  config.status debian/warzone2100.xpm
+build-stamp:  config.status icons/warzone2100.xpm
 	dh_testdir
 
 	$(MAKE)
@@ -57,7 +60,7 @@ ifneq "$(wildcard /usr/share/misc/config.guess)" ""
 	cp -f /usr/share/misc/config.guess config.guess
 endif
 
-	$(RM) debian/warzone2100.xpm
+	$(RM) icons/warzone2100.xpm
 
 	dh_clean 
 
