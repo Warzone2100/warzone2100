@@ -17,12 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef __ADPCM_H__
-#define __ADPCM_H__
 
-#include "lib/framework/frame.h"
+#ifndef __INCLUDE_LIB_SEQUENCE_DEC130_H__
+#define __INCLUDE_LIB_SEQUENCE_DEC130_H__
 
-void adpcm_init(void);
-void adpcm_decode(unsigned char* input, unsigned int input_size, int16_t** output);
+#include "rpl_reader.h"
 
-#endif
+unsigned int dec130_decode(RPL* rpl, char* in, unsigned int in_size, char* out);
+
+#endif // __INCLUDE_LIB_SEQUENCE_DEC130_H__

@@ -17,11 +17,13 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
+
 #include "adpcm.h"
 
-char index_adjust[8] = { -1, -1, -1, -1, 2, 4, 6, 8 };
+static const signed char index_adjust[8] = { -1, -1, -1, -1, 2, 4, 6, 8 };
 
-short step_size[89] = {
+static const short step_size[89] =
+{
 	7, 8, 9, 10, 11, 12, 13, 14, 16, 17,
 	19, 21, 23, 25, 28, 31, 34, 37, 41, 45,
 	50, 55, 60, 66, 73, 80, 88, 97, 107, 118,
@@ -38,7 +40,8 @@ int step_idx = 0;
 
 /* This code is "borrowed" from the ALSA library 
    http://www.alsa-project.org */
-static short adpcm_decode_sample(char code) {
+static int16_t adpcm_decode_sample(char code)
+{
 	short pred_diff;	/* Predicted difference to next sample */
 	short step;		/* holds previous step_size value */
 	char sign;
@@ -58,40 +61,52 @@ static short adpcm_decode_sample(char code) {
 
 	/* Compute difference and new predicted value */
 	pred_diff = step >> 3;
-	for (i = 0x4; i; i >>= 1, step >>= 1) {
-		if (code & i) {
+	for (i = 0x4; i; i >>= 1, step >>= 1)
+	{
+		if (code & i)
+		{
 			pred_diff += step;
 		}
 	}
 	pred_val += (sign) ? -pred_diff : pred_diff;
 
 	/* Clamp output value */
-	if (pred_val > 32767) {
-		pred_val = 32767;
-	} else if (pred_val < -32768) {
-		pred_val = -32768;
+	if (pred_val > INT16_MAX)
+	{
+		pred_val = INT16_MAX;
+	}
+	else if (pred_val < INT16_MIN)
+	{
+		pred_val = INT16_MIN;
 	}
 
 	/* Find new step_size index value */
 	step_idx += index_adjust[(int) code];
 
-	if (step_idx < 0) {
+	if (step_idx < 0)
+	{
 		step_idx = 0;
-	} else if (step_idx > 88) {
+	}
+	else if (step_idx > 88)
+	{
 		step_idx = 88;
 	}
+
 	return pred_val;
 }
 
-void adpcm_init(void) {
+void adpcm_init(void)
+{
 	pred_val = 0;
 	step_idx = 0;
 }
 
-void adpcm_decode(unsigned char* input, unsigned int input_size, short** output) {
+void adpcm_decode(unsigned char* input, unsigned int input_size, int16_t** output)
+{
 	unsigned int i;
 
-	for (i = 0; i < input_size; ++i) {
+	for (i = 0; i < input_size; ++i)
+	{
 		unsigned char two_samples = input[i];
 		*((*output)++) = adpcm_decode_sample(two_samples >> 4);
 		*((*output)++) = adpcm_decode_sample(two_samples & 15);

@@ -48,7 +48,7 @@ RPL* current_sequence = NULL;
 unsigned int current_frame = 0;
 
 #define SOUND_BUFFER_SIZE 1024*1024
-short sound_buffer[SOUND_BUFFER_SIZE];
+int16_t sound_buffer[SOUND_BUFFER_SIZE];
 BOOL seq_sound = FALSE;
 
 /***************************************************************************/
