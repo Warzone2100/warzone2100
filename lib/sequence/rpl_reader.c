@@ -150,8 +150,8 @@ RPL* rpl_open(const char* filename)
 	//printf("fps : %f\n\n", rpl->fps);
 	rpl->current_video_frame = 0;
 
-	tmp = readint(f, buf, len);
-	switch (tmp)
+	rpl->soundCodecID = readint(f, buf, len);
+	switch (rpl->soundCodecID)
 	{
 		case 0:
 			rpl->sound_decoder = rpl_decode_sound_none;
@@ -163,6 +163,7 @@ RPL* rpl_open(const char* filename)
 
 		case 101:
 			rpl->sound_decoder = rpl_decode_sound_adpcm;
+			rpl->sound_decoder_data = adpcm_init();
 			break;
 
 		default:
@@ -308,7 +309,6 @@ static unsigned int rpl_decode_sound_adpcm(RPL* rpl, int16_t* buffer, unsigned i
 	static unsigned char* tmp_buffer = NULL;
 	unsigned int tmp_buffer_size = 0;
 	unsigned int size = 0;
-	int16_t* tmp = buffer;
 
 	while (1)
 	{
@@ -329,7 +329,7 @@ static unsigned int rpl_decode_sound_adpcm(RPL* rpl, int16_t* buffer, unsigned i
 
 		PHYSFS_seek(rpl->f, rpl->chunks[cf].offset+rpl->chunks[cf].video_size);
 		PHYSFS_read(rpl->f, tmp_buffer, audio_frame_size, 1);
-		adpcm_decode(tmp_buffer, audio_frame_size, &tmp);
+		adpcm_decode(rpl->sound_decoder_data, tmp_buffer, audio_frame_size, buffer);
 		size += audio_frame_size << 1;
 		rpl->current_sound_frame++;
 	}
@@ -374,13 +374,19 @@ int rpl_decode_next_image(RPL* rpl, char* buffer)
 	return rpl->current_video_frame++;
 }
 
-void
-rpl_close(RPL* rpl)
+void rpl_close(RPL* rpl)
 {
-	if (rpl != NULL)
+	if (rpl == NULL)
+		return;
+
+	switch (rpl->soundCodecID)
 	{
-		PHYSFS_close(rpl->f);
-		free(rpl->chunks);
-		free(rpl);
+		case 101:
+			adpcm_finish(rpl->sound_decoder_data);
+			break;
 	}
+
+	PHYSFS_close(rpl->f);
+	free(rpl->chunks);
+	free(rpl);
 }

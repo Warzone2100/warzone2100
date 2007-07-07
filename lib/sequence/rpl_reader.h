@@ -45,12 +45,14 @@ typedef struct RPL
 	unsigned int		current_video_frame;
 
 	// Audio attributes
+	unsigned int soundCodecID;
 	int			samples;
 	int			channels;
 	int			bps;
 	int			fpc;
 	unsigned int		(*sound_decoder)(struct RPL*, int16_t*, unsigned int);
 	unsigned int		current_sound_frame;
+	void*       sound_decoder_data;
 
 	// Chunk-related info
 	unsigned int		nb_chunks;

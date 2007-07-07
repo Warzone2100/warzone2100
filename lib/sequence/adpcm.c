@@ -35,12 +35,15 @@ static const short step_size[89] =
 	15289, 16818, 18500, 20350, 22385, 24623, 27086, 29794, 32767
 };
 
-int pred_val = 0;
-int step_idx = 0;
+struct adpcm_state
+{
+	int pred_val;
+	int step_idx;
+};
 
-/* This code is "borrowed" from the ALSA library 
+/* This code is "borrowed" from the ALSA library
    http://www.alsa-project.org */
-static int16_t adpcm_decode_sample(char code)
+static int16_t adpcm_decode_sample(struct adpcm_state *state, char code)
 {
 	short pred_diff;	/* Predicted difference to next sample */
 	short step;		/* holds previous step_size value */
@@ -57,7 +60,7 @@ static int16_t adpcm_decode_sample(char code)
 	 * but see comment in adpcm_coder.
 	 */
 
-	step = step_size[step_idx];
+	step = step_size[state->step_idx];
 
 	/* Compute difference and new predicted value */
 	pred_diff = step >> 3;
@@ -68,47 +71,65 @@ static int16_t adpcm_decode_sample(char code)
 			pred_diff += step;
 		}
 	}
-	pred_val += (sign) ? -pred_diff : pred_diff;
+	state->pred_val += (sign) ? -pred_diff : pred_diff;
 
 	/* Clamp output value */
-	if (pred_val > INT16_MAX)
+	if (state->pred_val > INT16_MAX)
 	{
-		pred_val = INT16_MAX;
+		state->pred_val = INT16_MAX;
 	}
-	else if (pred_val < INT16_MIN)
+	else if (state->pred_val < INT16_MIN)
 	{
-		pred_val = INT16_MIN;
+		state->pred_val = INT16_MIN;
 	}
 
 	/* Find new step_size index value */
-	step_idx += index_adjust[(int) code];
+	state->step_idx += index_adjust[(int) code];
 
-	if (step_idx < 0)
+	if (state->step_idx < 0)
 	{
-		step_idx = 0;
+		state->step_idx = 0;
 	}
-	else if (step_idx > 88)
+	else if (state->step_idx > 88)
 	{
-		step_idx = 88;
+		state->step_idx = 88;
 	}
 
-	return pred_val;
+	return state->pred_val;
 }
 
-void adpcm_init(void)
+struct adpcm_state* adpcm_init()
 {
-	pred_val = 0;
-	step_idx = 0;
+	struct adpcm_state* state = malloc(sizeof(struct adpcm_state));
+	if (state == NULL)
+	{
+		debug(LOG_ERROR, "adpcm_init: couldn't allocate memory");
+		return NULL;
+	}
+
+	state->pred_val = 0;
+	state->step_idx = 0;
+
+	return state;
 }
 
-void adpcm_decode(unsigned char* input, unsigned int input_size, int16_t** output)
+void adpcm_finish(struct adpcm_state* state)
+{
+	free(state);
+}
+
+void adpcm_decode(struct adpcm_state *state, unsigned char* input, unsigned int input_size, int16_t* output)
 {
 	unsigned int i;
 
 	for (i = 0; i < input_size; ++i)
 	{
 		unsigned char two_samples = input[i];
-		*((*output)++) = adpcm_decode_sample(two_samples >> 4);
-		*((*output)++) = adpcm_decode_sample(two_samples & 15);
+
+		// Decode the 4 most significant bits
+		*(output++) = adpcm_decode_sample(state, two_samples >> 4);
+
+		// Decode the 4 least significant bits
+		*(output++) = adpcm_decode_sample(state, two_samples & 15);
 	}
 }
