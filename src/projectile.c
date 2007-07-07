@@ -1422,7 +1422,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 			if (psObj->psDest->type == OBJ_DROID)
 			{
 				// For indirect weapons (e.g. artillery) just assume the side as HIT_SIDE_TOP
-				impactSide = proj_Direct(psStats) ? getHitSide(psObj, psObj->psDest) : HIT_SIDE_TOP;
+				impactSide = proj_Direct(psStats) ? getHitSide(psObj, (DROID*)psObj->psDest) : HIT_SIDE_TOP;
 			}
 
 			// Damage the object
