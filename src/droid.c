@@ -152,17 +152,16 @@ BOOL droidInit(void)
  *
  * NOTE: This function will damage but _never_ destroy transports when in single player (campaign) mode
  */
-SDWORD droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass, int angle)
+SDWORD droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass, DROID_HIT_SIDE impactSide)
 {
 	// Do at least one point of damage
 	unsigned int actualDamage = 1, armour;
 	float        originalBody = psDroid->originalBody;
 	float        body = psDroid->body;
 	SECONDARY_STATE		state;
-	DROID_HIT_SIDE	impactSide;
 
 	CHECK_DROID(psDroid);
-	
+
 	// If the previous hit was by an EMP cannon and this one is not:
 	// don't reset the weapon class and hit time
 	// (Giel: I guess we need this to determine when the EMP-"shock" is over)
@@ -202,26 +201,6 @@ SDWORD droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD wea
 	{
 		secondarySetState(psDroid, DSO_ATTACK_LEVEL, DSS_ALEV_ALWAYS);
 	}
-
-	//Watermelon:use 361 for TOP and 362 for BOTTOM
-	// Top
-	if (angle == HIT_ANGLE_TOP)
-		impactSide = HIT_SIDE_TOP;
-	// Bottom
-	else if (angle == HIT_ANGLE_BOTTOM)
-		impactSide = HIT_SIDE_BOTTOM;
-	// Right
-	else if (angle > 45 && angle < 135)
-		impactSide = HIT_SIDE_RIGHT;
-	// Rear
-	else if (angle >= 135 && angle <= 225)
-		impactSide = HIT_SIDE_REAR;
-	// Left
-	else if (angle > 225 && angle < 315)
-		impactSide = HIT_SIDE_LEFT;
-	// Front - default
-	else //if (angle <= 45 || angle >= 315)
-		impactSide = HIT_SIDE_FRONT;
 
 	armour = psDroid->armour[impactSide][weaponClass];
 
@@ -1117,7 +1096,7 @@ void droidUpdate(DROID *psDroid)
 					//psDroid->damage(psDroid, damageToDo, WC_HEAT);
 
 					//Watermelon:just assume the burn damage is from FRONT
-					(void)droidDamage(psDroid, damageToDo, WC_HEAT,WSC_FLAME, 0);
+					droidDamage(psDroid, damageToDo, WC_HEAT,WSC_FLAME, 0);
 
 				}
 			}

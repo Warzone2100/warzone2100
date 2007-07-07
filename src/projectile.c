@@ -141,7 +141,8 @@ static void	proj_PostImpactFunc( PROJ_OBJECT *psObj );
 static void	proj_checkBurnDamage( BASE_OBJECT *apsList, PROJ_OBJECT *psProj,
 									FIRE_BOX *pFireBox );
 
-static SDWORD objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass,int angle);
+static SDWORD objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, DROID_HIT_SIDE impactSide);
+static DROID_HIT_SIDE getHitSide (PROJ_OBJECT *psObj, DROID *psTarget);
 
 /***************************************************************************/
 BOOL gfxVisible(PROJ_OBJECT *psObj)
@@ -1239,10 +1240,10 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 	UDWORD			damage;	//optimisation - were all being calculated twice on PC
 	//Watermelon: tarZ0,tarZ1,zDiff for AA AOE weapons;
 	SDWORD			tarZ0,tarZ1,zDiff;
-	int				impactAngle;
 	// EvilGuru: Data about the effect to be shown
-	EFFECT_TYPE facing;
-	iIMDShape *imd;
+	EFFECT_TYPE     facing;
+	iIMDShape       *imd;
+	DROID_HIT_SIDE  impactSide = HIT_SIDE_FRONT;
 
 	CHECK_PROJECTILE(psObj);
 
@@ -1374,142 +1375,64 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 			addMultiEffect(&position, &scatter, EFFECT_EXPLOSION, facing, TRUE, imd, psStats->numExplosions, psStats->lightWorld, psStats->effectSize);
 		}
 
-		// If the weapon is direct (e.g. cannon, lancer &c)
-		if (proj_Direct(psStats))
+		// Check for electronic warfare damage where we know the subclass and source
+		if (proj_Direct(psStats)
+		 && psStats->weaponSubClass == WSC_ELECTRONIC
+		 && psObj->psSource)
 		{
-			// Check for electronic warfare damage where we know the subclass and source
-			if (psStats->weaponSubClass == WSC_ELECTRONIC && psObj->psSource)
+			// If we did enough `damage' to capture the target
+			if (electronicDamage(psObj->psDest,
+			                     calcDamage(weaponDamage(psStats, psObj->player), psStats->weaponEffect, psObj->psDest),
+			                     psObj->player))
 			{
-				// If we did enough `damage' to capture the target
-				if (electronicDamage(psObj->psDest,
-				                     calcDamage(weaponDamage(psStats, psObj->player), psStats->weaponEffect, psObj->psDest),
-				                     psObj->player))
+				switch (psObj->psSource->type)
 				{
-					switch (psObj->psSource->type)
-					{
-						case OBJ_DROID:
-							((DROID*) psObj->psSource)->order = DORDER_NONE;
-							actionDroid((DROID *) (psObj->psSource), DACTION_NONE);
-							break;
+					case OBJ_DROID:
+						((DROID *) psObj->psSource)->order = DORDER_NONE;
+						actionDroid((DROID *) (psObj->psSource), DACTION_NONE);
+						break;
 
-						case OBJ_STRUCTURE:
-							((STRUCTURE*) psObj->psSource)->psTarget[0] = NULL;
-							break;
+					case OBJ_STRUCTURE:
+						((STRUCTURE *) psObj->psSource)->psTarget[0] = NULL;
+						break;
 
-						// This is only here to prevent the compile from producing
-						// warnings for unhandled enumeration values
-						default:
-							break;
-					}
-				}
-			}
-			// Otherwise YADFW (Yet Another Direct Fire Weapon)
-			else
-			{
-				// Calculate the damage the weapon does to its target
-				damage = calcDamage(weaponDamage(psStats, psObj->player), psStats->weaponEffect, psObj->psDest);
-
-				// If we are in a multi-player game and the attacker is our responsibility
-				if (bMultiPlayer && psObj->psSource && myResponsibility(psObj->psSource->player))
-				{
-					updateMultiStatsDamage(psObj->psSource->player, psObj->psDest->player, damage);
-				}
-
-				debug(LOG_NEVER, "Damage to object %d, player %d\n",
-						psObj->psDest->id, psObj->psDest->player);
-
-				/*
-				 * Since droids can have different armour levels on different
-				 * sides we need to work out the angle of the projectile. How
-				 * this relates to the hit side I have no idea!
-				 * FIXME: At the end of the day we only need the side, not the
-				 *        angle and so it would be better if it worked it out
-				 *        here.
-				 */
-				if (psObj->psDest->type == OBJ_DROID)
-				{
-					if (psObj->altChange > 300)
-					{
-						impactAngle = HIT_ANGLE_TOP;
-					}
-					else if (psObj->z < (psObj->psDest->z - 50))
-					{
-						impactAngle = HIT_ANGLE_BOTTOM;
-					}
-					else
-					{
-						xDiff = psObj->startX - psObj->psDest->x;
-						yDiff = psObj->startY - psObj->psDest->y;
-						impactAngle = abs( psObj->psDest->direction - ( 180 * atan2f(xDiff, yDiff) / M_PI ) );
-						if (impactAngle >= 360)
-						{
-							impactAngle -= 360;
-						}
-					}
-				}
-				else
-				{
-					impactAngle = 0;
-				}
-
-				// Damage the object
-				percentDamage = objectDamage(psObj->psDest,damage , psStats->weaponClass,psStats->weaponSubClass, impactAngle);
-
-				proj_UpdateKills(psObj, percentDamage);
-
-				if (percentDamage >= 0)	// So long as the target wasn't killed
-				{
-					setProjectileDamaged(psObj, psObj->psDest);
+					// This is only here to prevent the compiler from producing
+					// warnings for unhandled enumeration values
+					default:
+						break;
 				}
 			}
 		}
+		// Else it is just a regular weapon (direct or indirect)
 		else
 		{
-			/* See if the target is still close to the impact point */
-			/* Should do a better test than this but as we don't have */
-			/* a world size for objects we'll just see if it is within */
-			/* a tile of the bullet */
-			/***********************************************************/
-			/*  MIGHT WANT TO CHANGE THIS                              */
-			/***********************************************************/
-			if ( (psObj->psDest->type == OBJ_STRUCTURE) ||
-				 (psObj->psDest->type == OBJ_FEATURE) ||
-				(((SDWORD)psObj->psDest->x >= (SDWORD)psObj->x - TILE_UNITS) &&
-				((SDWORD)psObj->psDest->x <= (SDWORD)psObj->x + TILE_UNITS) &&
-				((SDWORD)psObj->psDest->y >= (SDWORD)psObj->y - TILE_UNITS) &&
-				((SDWORD)psObj->psDest->y <= (SDWORD)psObj->y + TILE_UNITS)))
+			// Calculate the damage the weapon does to its target
+			damage = calcDamage(weaponDamage(psStats, psObj->player), psStats->weaponEffect, psObj->psDest);
+
+			// If we are in a multi-player game and the attacker is our responsibility
+			if (bMultiPlayer && psObj->psSource && myResponsibility(psObj->psSource->player))
 			{
+				updateMultiStatsDamage(psObj->psSource->player, psObj->psDest->player, damage);
+			}
 
-				damage = calcDamage(weaponDamage(psStats, psObj->player), psStats->weaponEffect, psObj->psDest);
+			debug(LOG_NEVER, "Damage to object %d, player %d\n",
+			      psObj->psDest->id, psObj->psDest->player);
 
-				// If we are in a multi-player game and the attacker is our responsibility
-				if (bMultiPlayer && psObj->psSource && myResponsibility(psObj->psSource->player))
-				{
-					updateMultiStatsDamage(psObj->psSource->player, psObj->psDest->player, damage);
-				}
+			// If the target is a droid work out the side of it we hit
+			if (psObj->psDest->type == OBJ_DROID)
+			{
+				// For indirect weapons (e.g. artillery) just assume the side as HIT_SIDE_TOP
+				impactSide = proj_Direct(psStats) ? getHitSide(psObj, psObj->psDest) : HIT_SIDE_TOP;
+			}
 
-				debug(LOG_NEVER, "Damage to object %d, player %d\n",
-						psObj->psDest->id, psObj->psDest->player);
+			// Damage the object
+			percentDamage = objectDamage(psObj->psDest,damage , psStats->weaponClass,psStats->weaponSubClass, impactSide);
 
-				//Watermelon:just assume it as from TOP for indirect artillery
-				if (psObj->psDest->type == OBJ_DROID)
-				{
-					impactAngle = HIT_ANGLE_TOP;
-				}
-				else
-				{
-					impactAngle = HIT_SIDE_FRONT;
-				}
+			proj_UpdateKills(psObj, percentDamage);
 
-				// Damage the object
-				percentDamage = objectDamage(psObj->psDest, damage, psStats->weaponClass,psStats->weaponSubClass, impactAngle);
-
-				proj_UpdateKills(psObj, percentDamage);
-
-				if (percentDamage >= 0)
-				{
-					setProjectileDamaged(psObj, psObj->psDest);
-				}
+			if (percentDamage >= 0)	// So long as the target wasn't killed
+			{
+				setProjectileDamaged(psObj, psObj->psDest);
 			}
 		}
 	}
@@ -1592,25 +1515,9 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 
 								//Watermelon:uses a slightly different check for angle,
 								// since fragment of a project is from the explosion spot not from the projectile start position
-								if (psObj->altChange > 300)
-								{
-									impactAngle = HIT_ANGLE_TOP;
-								}
-								else if (psObj->z < (psCurrD->z - 50))
-								{
-									impactAngle = HIT_ANGLE_BOTTOM;
-								}
-								else
-								{
-									xDiff = psObj->x - psCurrD->x;
-									yDiff = psObj->y - psCurrD->y;
-									impactAngle = abs( psCurrD->direction - ( 180 * atan2f(xDiff, yDiff) / M_PI ) );
-									if (impactAngle >= 360)
-									{
-										impactAngle -= 360;
-									}
-								}
-								percentDamage = droidDamage(psCurrD, damage, psStats->weaponClass, psStats->weaponSubClass, impactAngle);
+								impactSide = getHitSide(psObj, psCurrD);
+
+								percentDamage = droidDamage(psCurrD, damage, psStats->weaponClass, psStats->weaponSubClass, impactSide);
 
 								turnOffMultiMsg(FALSE);	// multiplay msgs back on.
 
@@ -1670,25 +1577,9 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 
 								//Watermelon:uses a slightly different check for angle,
 								// since fragment of a project is from the explosion spot not from the projectile start position
-								if (psObj->altChange > 300)
-								{
-									impactAngle = HIT_ANGLE_TOP;
-								}
-								else if (psObj->z < (psCurrD->z - 50))
-								{
-									impactAngle = HIT_ANGLE_BOTTOM;
-								}
-								else
-								{
-									xDiff = psObj->x - psCurrD->x;
-									yDiff = psObj->y - psCurrD->y;
-									impactAngle = abs( psCurrD->direction - ( 180 * atan2f(xDiff, yDiff) / M_PI ) );
-									if (impactAngle >= 360)
-									{
-										impactAngle -= 360;
-									}
-								}
-								percentDamage = droidDamage(psCurrD, damage, psStats->weaponClass,psStats->weaponSubClass, impactAngle);
+								impactSide = getHitSide(psObj, psCurrD);
+
+								percentDamage = droidDamage(psCurrD, damage, psStats->weaponClass,psStats->weaponSubClass, impactSide);
 
 								turnOffMultiMsg(FALSE);	// multiplay msgs back on.
 
@@ -2185,12 +2076,12 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
  *  - Should sufficient damage be done to destroy/kill a unit then the value is
  *    multiplied by -1, resulting in a negative number.
  */
-SDWORD objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, int angle)
+SDWORD objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, DROID_HIT_SIDE impactSide)
 {
 	switch (psObj->type)
 	{
 		case OBJ_DROID:
-			return droidDamage((DROID *)psObj, damage, weaponClass,weaponSubClass, angle);
+			return droidDamage((DROID *)psObj, damage, weaponClass,weaponSubClass, impactSide);
 			break;
 
 		case OBJ_STRUCTURE:
@@ -2216,7 +2107,59 @@ SDWORD objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD
 	return 0;
 }
 
+/**
+ * This function will calculate which side of the droid psTarget the projectile
+ * psObj hit. Although it is possible to extract the target from psObj it is
+ * only the `direct' target of the projectile. Since impact sides also apply for
+ * any splash damage a projectile might do the exact target is needed.
+ */
+static DROID_HIT_SIDE getHitSide (PROJ_OBJECT *psObj, DROID *psTarget)
+{
+	int deltaX, deltaY;
+	int impactAngle;
 
+	// If we hit the top of the droid
+	if (psObj->altChange > 300)
+	{
+		return HIT_SIDE_TOP;
+	}
+	// If the height difference between us and the target is > 50
+	else if (psObj->z < (psTarget->z - 50))
+	{
+		return HIT_SIDE_BOTTOM;
+	}
+	// We hit an actual `side'
+	else
+	{
+		deltaX = psObj->startX - psTarget->x;
+		deltaY = psObj->startY - psTarget->y;
+
+		/*
+		 * Work out the impact angle. It is easiest to understand if you
+		 * model the target droid as a circle, divided up into 360 pieces.
+		 */
+		impactAngle = abs(psTarget->direction - (180 * atan2f(deltaX, deltaY) / M_PI));
+
+		if (impactAngle >= 360)
+		{
+			impactAngle -= 360;
+		}
+
+		// Use the impact angle to work out the side hit
+		// Right
+		if (impactAngle > 45 && impactAngle < 135)
+			return HIT_SIDE_RIGHT;
+		// Rear
+		else if (impactAngle >= 135 && impactAngle <= 225)
+			return HIT_SIDE_REAR;
+		// Left
+		else if (impactAngle > 225 && impactAngle < 315)
+			return HIT_SIDE_LEFT;
+		// Front - default
+		else //if (impactAngle <= 45 || impactAngle >= 315)
+			return HIT_SIDE_FRONT;
+	}
+}
 
 #define HIT_THRESHOLD	(GAME_TICKS_PER_SEC/6)	// got to be over 5 frames per sec.
 /* Returns true if an object has just been hit by an electronic warfare weapon*/

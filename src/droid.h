@@ -138,9 +138,7 @@ BOOL templateIsIDF(DROID_TEMPLATE *psTemplate);
 BOOL idfDroid(DROID *psDroid);
 
 /* Do damage to a droid */
-
-//Watermelon:added int angle,no need to use float since the difference between them is superficial.
-extern SDWORD droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, int angle);
+extern SDWORD droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, DROID_HIT_SIDE impactSide);
 
 
 /* The main update routine for all droids */
