@@ -1363,7 +1363,7 @@ SDWORD structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass
 		debug( LOG_ATTACK, "        penetrated: %d\n", actualDamage);
 	}
 
-	// If the shell did sufficient damage to destroy the structure 
+	// If the shell did sufficient damage to destroy the structure
 	if (actualDamage >= psStructure->body)
 	{
 		debug( LOG_ATTACK, "        DESTROYED\n");
@@ -2236,69 +2236,67 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 
 BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 {
-	//SDWORD					upgrade;
-	FACTORY					*psFactory;
-	RESEARCH_FACILITY		*psResFac;
-	POWER_GEN				*psPowerGen;
-	REPAIR_FACILITY			*psRepairFac;
-	REPAIR_DROID_FUNCTION	*pFuncRepair;
-	REARM_PAD				*psReArmPad;
-	UDWORD					x, y;
-
 	CHECK_STRUCTURE(psBuilding);
 
-	psBuilding->pFunctionality = NULL;
-	switch(functionType)
+	switch (functionType)
 	{
 		case REF_FACTORY:
 		case REF_CYBORG_FACTORY:
 		case REF_VTOL_FACTORY:
-		{
-			//this structure must have a function assigned to the stat
-			if (psBuilding->pStructureType->numFuncs == 0)
-			{
-				debug( LOG_ERROR, "There must be a function assigned to this building - %s", getName( psBuilding->pStructureType->pName ) );
-				abort();
-				return FALSE;
-			}
+		case REF_RESEARCH:
+		case REF_POWER_GEN:
+		case REF_RESOURCE_EXTRACTOR:
+		case REF_REPAIR_FACILITY:
+		case REF_REARM_PAD:
+			// Allocate space for the buildings functionality
+			psBuilding->pFunctionality = calloc(1, sizeof(FUNCTIONALITY));
 
-			//allocate the necessary space
-			psBuilding->pFunctionality = malloc(sizeof(FUNCTIONALITY));
 			if (psBuilding->pFunctionality == NULL)
 			{
 				debug(LOG_ERROR, "setFunctionality: Out of memory");
 				abort();
 				return FALSE;
 			}
+			break;
 
-			//initialise the memory
-			memset(psBuilding->pFunctionality, 0, sizeof(FUNCTIONALITY));
+		default:
+			psBuilding->pFunctionality = NULL;
+			break;
+	}
 
-			psFactory = (FACTORY *)psBuilding->pFunctionality;
-			psFactory->capacity = (UBYTE)((PRODUCTION_FUNCTION*)psBuilding->
-				pStructureType->asFuncList[0])->capacity;
-			psFactory->productionOutput = (UBYTE)((PRODUCTION_FUNCTION*)psBuilding->
-				pStructureType->asFuncList[0])->productionOutput;
+	switch (functionType)
+	{
+		case REF_FACTORY:
+		case REF_CYBORG_FACTORY:
+		case REF_VTOL_FACTORY:
+		{
+			FACTORY* psFactory = &psBuilding->pFunctionality->factory;
+			unsigned int x, y;
+
+			psFactory->capacity = (UBYTE) ((PRODUCTION_FUNCTION*)psBuilding->pStructureType->asFuncList[0])->capacity;
+			psFactory->productionOutput = (UBYTE) ((PRODUCTION_FUNCTION*)psBuilding->pStructureType->asFuncList[0])->productionOutput;
 			psFactory->psSubject = NULL;
-			//default the secondary order - AB 22/04/99
-			psFactory->secondaryOrder = DSS_ARANGE_DEFAULT | DSS_REPLEV_NEVER |
-				DSS_ALEV_ALWAYS | DSS_HALT_GUARD;
 
-			//add the assembly point to the factory
+			// Default the secondary order - AB 22/04/99
+			psFactory->secondaryOrder = DSS_ARANGE_DEFAULT | DSS_REPLEV_NEVER
+                                      | DSS_ALEV_ALWAYS | DSS_HALT_GUARD;
+
+			// Create the assembly point for the factory
 			if (!createFlagPosition(&psFactory->psAssemblyPoint, psBuilding->player))
 			{
 				return FALSE;
 			}
 
-			//initialise the assembly point position
-			x = (psBuilding->x+256) >> TILE_SHIFT;
-			y = (psBuilding->y+256) >> TILE_SHIFT;
-			// Belt and braces - shouldn't be able to build too near edge
-			setAssemblyPoint( psFactory->psAssemblyPoint, x << TILE_SHIFT,
-				y << TILE_SHIFT, psBuilding->player, TRUE);
-			// add it to the list
+			// initialise the assembly point position
+			x = map_coord(psBuilding->x + 256);
+			y = map_coord(psBuilding->y + 256);
+
+			// Set the assembly point
+			setAssemblyPoint(psFactory->psAssemblyPoint, world_coord(x), world_coord(y), psBuilding->player, TRUE);
+
+			// Add the flag to the list
 			addFlagPosition(psFactory->psAssemblyPoint);
-			switch(functionType)
+			switch (functionType)
 			{
 				case REF_FACTORY:
 					setFlagPositionInc(psFactory, psBuilding->player, FACTORY_FLAG);
@@ -2314,207 +2312,103 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			}
 
 			psFactory->psFormation = NULL;
+
+			// Take advantage of upgrades
 			structureProductionUpgrade(psBuilding);
 			break;
 		}
 		case REF_RESEARCH:
 		{
-			//this structure must have a function assigned to the stat
-			if (psBuilding->pStructureType->numFuncs == 0)
-			{
-				debug( LOG_ERROR, "There must be a function assigned to this building - %s", getName( psBuilding->pStructureType->pName ) );
-				abort();
-				return FALSE;
-			}
-			//try and create the Structure
-			psBuilding->pFunctionality = malloc(sizeof(FUNCTIONALITY));
-			if (psBuilding->pFunctionality == NULL)
-			{
-				debug(LOG_ERROR, "setFunctionality: Out of memory");
-				abort();
-				return FALSE;
-			}
-			//initialise the memory
-			memset(psBuilding->pFunctionality, 0, sizeof(FUNCTIONALITY));
+			RESEARCH_FACILITY* psResFac = &psBuilding->pFunctionality->researchFacility;
 
-			psResFac = (RESEARCH_FACILITY *)psBuilding->pFunctionality;
-			psResFac->researchPoints = ((RESEARCH_FUNCTION*)psBuilding->
-				pStructureType->asFuncList[0])->researchPoints;
-			//check for upgrades - work backwards since want the most recent
+			psResFac->researchPoints = ((RESEARCH_FUNCTION *) psBuilding->pStructureType->asFuncList[0])->researchPoints;
+
+			// Take advantage of upgrades
 			structureResearchUpgrade(psBuilding);
 			break;
 		}
 		case REF_POWER_GEN:
 		{
-			//this structure must have a function assigned to the stat
-			if (psBuilding->pStructureType->numFuncs == 0)
-			{
-				debug( LOG_ERROR, "There must be a function assigned to this building - %s", getName( psBuilding->pStructureType->pName ) );
-				abort();
-				return FALSE;
-			}
+			POWER_GEN* psPowerGen = &psBuilding->pFunctionality->powerGenerator;
 
-			//try and create the Structure
-			psBuilding->pFunctionality = malloc(sizeof(FUNCTIONALITY));
-			if (psBuilding->pFunctionality == NULL)
-			{
-				debug(LOG_ERROR, "setFunctionality: Out of memory");
-				abort();
-				return FALSE;
-			}
-
-			//initialise the memory
-			memset(psBuilding->pFunctionality, 0, sizeof(FUNCTIONALITY));
-
-			psPowerGen = (POWER_GEN *)psBuilding->pFunctionality;
-			psPowerGen->power = ((POWER_GEN_FUNCTION*)psBuilding->
-				pStructureType->asFuncList[0])->powerOutput;
-			psPowerGen->multiplier = ((POWER_GEN_FUNCTION*)psBuilding->
-				pStructureType->asFuncList[0])->powerMultiplier;
+			psPowerGen->power = ((POWER_GEN_FUNCTION *) psBuilding->pStructureType->asFuncList[0])->powerOutput;
+			psPowerGen->multiplier = ((POWER_GEN_FUNCTION *) psBuilding->pStructureType->asFuncList[0])->powerMultiplier;
 			psPowerGen->capacity = 0;
-			//check for upgrades
+
+			// Take advantage of upgrades
 			structurePowerUpgrade(psBuilding);
 			break;
 		}
 		case REF_RESOURCE_EXTRACTOR:
 		{
-			//this structure must have a function assigned to the stat
-			if (psBuilding->pStructureType->numFuncs == 0)
-			{
-				debug( LOG_ERROR, "There must be a function assigned to this building - %s", getName( psBuilding->pStructureType->pName ) );
-				abort();
-				return FALSE;
-			}
+			RES_EXTRACTOR* psResExtracter = &psBuilding->pFunctionality->resourceExtractor;
 
-			//try and create the Structure
-			psBuilding->pFunctionality = malloc(sizeof(FUNCTIONALITY));
-			if (psBuilding->pFunctionality == NULL)
-			{
-				debug(LOG_ERROR, "setFunctionality: Out of memory");
-				abort();
-				return FALSE;
-			}
-			//initialise the memory
-			memset(psBuilding->pFunctionality, 0, sizeof(FUNCTIONALITY));
+			psResExtracter->power = ((RESOURCE_FUNCTION*)psBuilding->pStructureType->asFuncList[0])->maxPower;
 
-			((RES_EXTRACTOR*)psBuilding->pFunctionality)->power = ((
-				//POWER_REG_FUNCTION*)psBuilding->pStructureType->asFuncList[0])->
-				RESOURCE_FUNCTION*)psBuilding->pStructureType->asFuncList[0])->
-				maxPower;
-
-			//set the structure to inactive
-			((RES_EXTRACTOR*)psBuilding->pFunctionality)->active = FALSE;
-			((RES_EXTRACTOR*)psBuilding->pFunctionality)->psPowerGen = NULL;
+			// Make the structure inactive
+			psResExtracter->active = FALSE;
+			psResExtracter->psPowerGen = NULL;
 			break;
 		}
-		//this just checks that a function has been assigned
 		case REF_HQ:
 		{
+			// If an HQ has just been built make sure the radar is displayed!
 			radarOnScreen = TRUE;
-			//this structure must have a function assigned to the stat
-			if (psBuilding->pStructureType->numFuncs == 0)
-			{
-				debug( LOG_ERROR, "There must be a function assigned to this building - %s", getName( psBuilding->pStructureType->pName ) );
-				abort();
-				return FALSE;
-			}
-			//this function is called once the structure has been built
-			break;
-		}
-		case REF_WALL:
-		{
-			//this structure must have a function assigned to the stat - this is just a check!
-			if (psBuilding->pStructureType->numFuncs == 0)
-			{
-				debug( LOG_ERROR, "There must be a function assigned to this building - %s", getName( psBuilding->pStructureType->pName ) );
-				abort();
-				return FALSE;
-			}
 			break;
 		}
 		case REF_REPAIR_FACILITY:
 		{
-			//this structure must have a function assigned to the stat
-			if (psBuilding->pStructureType->numFuncs == 0)
-			{
-				debug( LOG_ERROR, "There must be a function assigned to this building - %s", getName( psBuilding->pStructureType->pName ) );
-				abort();
-				return FALSE;
-			}
+			REPAIR_FACILITY* psRepairFac = &psBuilding->pFunctionality->repairFacility;
+			REPAIR_DROID_FUNCTION* pFuncRepair = (REPAIR_DROID_FUNCTION*)psBuilding->pStructureType->asFuncList[0];
+			unsigned int x, y;
 
-			//try and create the Structure
-			psBuilding->pFunctionality = malloc(sizeof(FUNCTIONALITY));
-			if (psBuilding->pFunctionality == NULL)
-			{
-				debug(LOG_ERROR, "setFunctionality: Out of memory");
-				abort();
-				return FALSE;
-			}
-			//initialise the memory
-			memset(psBuilding->pFunctionality, 0, sizeof(FUNCTIONALITY));
-
-			psRepairFac = (REPAIR_FACILITY *) psBuilding->pFunctionality;
-			pFuncRepair = (REPAIR_DROID_FUNCTION *) psBuilding->pStructureType->asFuncList[0];
 			psRepairFac->power = pFuncRepair->repairPoints;
 			psRepairFac->psObj = NULL;
 
-			if ( !grpCreate(&((REPAIR_FACILITY *) psBuilding->pFunctionality)->psGroup) )
+			if (!grpCreate(&((REPAIR_FACILITY*)psBuilding->pFunctionality)->psGroup))
 			{
 				debug( LOG_NEVER, "setFunctionality: couldn't create repair facility group" );
 			}
 			else
 			{
-				/* add null droid */
-				grpJoin( psRepairFac->psGroup, NULL );
+				// Add NULL droid to the group
+				grpJoin(psRepairFac->psGroup, NULL);
 			}
-			//check for upgrades
+
+			// Take advantage of upgrades
 			structureRepairUpgrade(psBuilding);
 
-			// add an assembly point
+			// Create an assembly point for repaired droids
 			if (!createFlagPosition(&psRepairFac->psDeliveryPoint, psBuilding->player))
 			{
 				return FALSE;
 			}
 
-			//initialise the assembly point position
-			x = (psBuilding->x+256) >> TILE_SHIFT;
-			y = (psBuilding->y+256) >> TILE_SHIFT;
-			// Belt and braces - shouldn't be able to build too near edge
-			setAssemblyPoint( psRepairFac->psDeliveryPoint, x << TILE_SHIFT,
-				y << TILE_SHIFT, psBuilding->player, TRUE);
+			// Initialise the assembly point
+			x = map_coord(psBuilding->x+256);
+			y = map_coord(psBuilding->y+256);
 
+			// Set the assembly point
+			setAssemblyPoint(psRepairFac->psDeliveryPoint, world_coord(x),
+			                 world_coord(y), psBuilding->player, TRUE);
+
+			// Add the flag (triangular marker on the ground) at the delivery point
 			addFlagPosition(psRepairFac->psDeliveryPoint);
 			setFlagPositionInc(psRepairFac, psBuilding->player, REPAIR_FLAG);
 			break;
 		}
 		case REF_REARM_PAD:
 		{
-			//this structure must have a function assigned to the stat
-			if (psBuilding->pStructureType->numFuncs == 0)
-			{
-				debug( LOG_ERROR, "There must be a function assigned to this building - %s", getName( psBuilding->pStructureType->pName ) );
-				abort();
-				return FALSE;
-			}
-			//try and create the Structure
-			psBuilding->pFunctionality = malloc(sizeof(FUNCTIONALITY));
-			if (psBuilding->pFunctionality == NULL)
-			{
-				debug(LOG_ERROR, "setFunctionality: Out of memory");
-				abort();
-				return FALSE;
-			}
-			//initialise the memory
-			memset(psBuilding->pFunctionality, 0, sizeof(FUNCTIONALITY));
+			REARM_PAD* psReArmPad = &psBuilding->pFunctionality->rearmPad;
 
-			psReArmPad = (REARM_PAD *)psBuilding->pFunctionality;
-			psReArmPad->reArmPoints = ((REARM_PAD *)psBuilding->
-				pStructureType->asFuncList[0])->reArmPoints;
-			//check for upgrades
+			psReArmPad->reArmPoints = ((REARM_PAD *)psBuilding->pStructureType->asFuncList[0])->reArmPoints;
+
+			// Take advantage of upgrades
 			structureReArmUpgrade(psBuilding);
 			break;
 		}
-	}//end of switch
+	}
+
 	return TRUE;
 }
 
