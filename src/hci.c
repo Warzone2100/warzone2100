@@ -437,7 +437,6 @@ static BASE_OBJECT		*apsPreviousObj[IOBJ_MAX];
 static Vector2i asJumpPos[IOBJ_MAX];
 
 // whether to reopen the build menu
-//static BOOL				bReopenBuildMenu = FALSE;
 // chnaged back to pre Mark Donald setting at Jim's request - AlexM
 static BOOL				bReopenBuildMenu = FALSE;
 
