@@ -1146,12 +1146,12 @@ void structureProductionUpgrade(STRUCTURE *psBuilding)
 		type = VTOL_FLAG;
 		break;
 	default:
-		ASSERT( FALSE, "structureProductionUpgrade: Invalid factory type" );
+		ASSERT(!"invalid or not a factory type", "structureProductionUpgrade: Invalid factory type");
 		return;
 	}
 
 	//upgrade the Output
-	pFact = (FACTORY*)psBuilding->pFunctionality;
+	pFact = &psBuilding->pFunctionality->factory;
 	ASSERT( pFact != NULL,
 		"structureProductionUpgrade: invalid Factory pointer" );
 
@@ -1176,15 +1176,13 @@ void structureProductionUpgrade(STRUCTURE *psBuilding)
 
 void structureResearchUpgrade(STRUCTURE *psBuilding)
 {
-	RESEARCH_FACILITY			*pRes;
+	RESEARCH_FACILITY			*pRes = &psBuilding->pFunctionality->researchFacility;
 	RESEARCH_FUNCTION			*pResFunc;
     UDWORD                       baseOutput;
     STRUCTURE_STATS             *psStat;
 
 	//upgrade the research points
-	pRes = (RESEARCH_FACILITY*)psBuilding->pFunctionality;
-	ASSERT( pRes != NULL,
-		"structureResearchUpgrade: invalid Research pointer" );
+	ASSERT(pRes != NULL, "structureResearchUpgrade: invalid Research pointer");
 
 	pResFunc = (RESEARCH_FUNCTION *)psBuilding->pStructureType->asFuncList[0];
 	ASSERT( pResFunc != NULL,
@@ -1206,13 +1204,11 @@ void structureResearchUpgrade(STRUCTURE *psBuilding)
 
 void structureReArmUpgrade(STRUCTURE *psBuilding)
 {
-	REARM_PAD					*pPad;
+	REARM_PAD					*pPad = &psBuilding->pFunctionality->rearmPad;
 	REARM_FUNCTION				*pPadFunc;
 
 	//upgrade the reArm points
-	pPad = (REARM_PAD*)psBuilding->pFunctionality;
-	ASSERT( pPad != NULL,
-		"structureReArmUpgrade: invalid ReArm pointer" );
+	ASSERT(pPad != NULL, "structureReArmUpgrade: invalid ReArm pointer");
 
 	pPadFunc = (REARM_FUNCTION *)psBuilding->pStructureType->asFuncList[0];
 	ASSERT( pPadFunc != NULL,
@@ -1224,15 +1220,13 @@ void structureReArmUpgrade(STRUCTURE *psBuilding)
 
 void structurePowerUpgrade(STRUCTURE *psBuilding)
 {
-	POWER_GEN					*pPowerGen;
+	POWER_GEN					*pPowerGen = &psBuilding->pFunctionality->powerGenerator;
 	POWER_GEN_FUNCTION			*pPGFunc;
     UDWORD                       baseOutput;
     STRUCTURE_STATS             *psStat;
 
 	//upgrade the research points
-	pPowerGen = (POWER_GEN*)psBuilding->pFunctionality;
-	ASSERT( pPowerGen != NULL,
-		"structurePowerUpgrade: invalid Power Gen pointer" );
+	ASSERT(pPowerGen != NULL, "structurePowerUpgrade: invalid Power Gen pointer");
 
 	pPGFunc = (POWER_GEN_FUNCTION *)psBuilding->pStructureType->asFuncList[0];
 	ASSERT( pPGFunc != NULL,
@@ -1254,13 +1248,11 @@ void structurePowerUpgrade(STRUCTURE *psBuilding)
 
 void structureRepairUpgrade(STRUCTURE *psBuilding)
 {
-	REPAIR_FACILITY			*pRepair;
+	REPAIR_FACILITY			*pRepair = &psBuilding->pFunctionality->repairFacility;
 	REPAIR_DROID_FUNCTION	*pRepairFunc;
 
 	//upgrade the research points
-	pRepair = (REPAIR_FACILITY*)psBuilding->pFunctionality;
-	ASSERT( pRepair != NULL,
-		"structureRepairUpgrade: invalid Repair pointer" );
+	ASSERT(pRepair != NULL, "structureRepairUpgrade: invalid Repair pointer");
 
 	pRepairFunc = (REPAIR_DROID_FUNCTION *)psBuilding->pStructureType->asFuncList[0];
 	ASSERT( pRepairFunc != NULL,

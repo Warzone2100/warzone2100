@@ -175,7 +175,7 @@ static		UBYTE	satUplinkExists[MAX_PLAYERS];
 static		UBYTE	lasSatExists[MAX_PLAYERS];
 
 static BOOL setFunctionality(STRUCTURE* psBuilding, UDWORD functionType);
-static void setFlagPositionInc(void *pFunctionality, UDWORD player, UBYTE factoryType);
+static void setFlagPositionInc(FUNCTIONALITY* pFunctionality, UDWORD player, UBYTE factoryType);
 static void informPowerGen(STRUCTURE *psStruct);
 static BOOL electronicReward(STRUCTURE *psStructure, UBYTE attackPlayer);
 static void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer);
@@ -314,43 +314,32 @@ void initFactoryNumFlag(void)
 //called at start of missions
 void resetFactoryNumFlag(void)
 {
-	UDWORD			i;
-	STRUCTURE		*psStruct;
-	UBYTE			mask;
-	FACTORY			*psFactory;
+	STRUCTURE*   psStruct;
+	uint8_t      mask;
+	unsigned int i;
 
 	for(i = 0; i < MAX_PLAYERS; i++)
 	{
 		//look throu the list of structures to see which have been used
 		for (psStruct = apsStructLists[i]; psStruct != NULL; psStruct = psStruct->psNext)
 		{
+			if (psStruct->pStructureType->type == REF_FACTORY
+			 || psStruct->pStructureType->type == REF_CYBORG_FACTORY
+			 || psStruct->pStructureType->type == REF_VTOL_FACTORY)
+			{
+				FACTORY* psFactory = &psStruct->pFunctionality->factory;
+				if (psFactory->psAssemblyPoint)
+				{
+					mask = (1 << psFactory->psAssemblyPoint->factoryInc);
+				}
+			}
+
 			if (psStruct->pStructureType->type == REF_FACTORY)
-			{
-				psFactory = ((FACTORY*)psStruct->pFunctionality);
-				if (psFactory->psAssemblyPoint)
-				{
-					mask = (UBYTE)(1 << psFactory->psAssemblyPoint->factoryInc);
 					factoryNumFlag[i][FACTORY_FLAG] |= mask;
-				}
-			}
-			if (psStruct->pStructureType->type == REF_CYBORG_FACTORY)
-			{
-				psFactory = ((FACTORY*)psStruct->pFunctionality);
-				if (psFactory->psAssemblyPoint)
-				{
-					mask = (UBYTE)(1 << psFactory->psAssemblyPoint->factoryInc);
+			else if (psStruct->pStructureType->type == REF_CYBORG_FACTORY)
 					factoryNumFlag[i][CYBORG_FLAG] |= mask;
-				}
-			}
-			if (psStruct->pStructureType->type == REF_VTOL_FACTORY)
-			{
-				psFactory = ((FACTORY*)psStruct->pFunctionality);
-				if (psFactory->psAssemblyPoint)
-				{
-					mask = (UBYTE)(1 << psFactory->psAssemblyPoint->factoryInc);
+			else if (psStruct->pStructureType->type == REF_VTOL_FACTORY)
 					factoryNumFlag[i][VTOL_FLAG] |= mask;
-				}
-			}
 		}
 	}
 }
@@ -1395,7 +1384,7 @@ BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, UBYTE qu
 	/* psTempl might be NULL if the build is being cancelled in the middle */
 
 	//assign it to the Factory
-	psFact = (FACTORY*)psStruct->pFunctionality;
+	psFact = &psStruct->pFunctionality->factory;
 	psFact->psSubject = (BASE_STATS *)psTempl;
 
 	//set up the start time and build time
@@ -2055,25 +2044,23 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 				return NULL;
 			}
 			//increment the capacity and output for the owning structure
-			if (((FACTORY*)psBuilding->pFunctionality)->capacity < SIZE_SUPER_HEAVY)
+			if (psBuilding->pFunctionality->factory.capacity < SIZE_SUPER_HEAVY)
 			{
 				//store the % difference in body points before upgrading
 				bodyDiff = PERCENT(psBuilding->body, structureBody(psBuilding));
 
-				((FACTORY*)psBuilding->pFunctionality)->capacity++;
+				++psBuilding->pFunctionality->factory.capacity;
 				bUpgraded = TRUE;
 				//put any production on hold
 				holdProduction(psBuilding);
 
 				//quick check not trying to add too much
-				ASSERT( ((FACTORY*)psBuilding->pFunctionality)->productionOutput +
-					((PRODUCTION_FUNCTION*)pStructureType->asFuncList[0])->
-					productionOutput < UBYTE_MAX,
-					"building factory module - productionOutput too big" );
+				ASSERT(psBuilding->pFunctionality->factory.productionOutput +
+					((PRODUCTION_FUNCTION*)pStructureType->asFuncList[0])->productionOutput < UBYTE_MAX,
+					"building factory module - productionOutput too big");
 
-				((FACTORY*)psBuilding->pFunctionality)->productionOutput += ((
-					PRODUCTION_FUNCTION*)pStructureType->asFuncList[0])->
-					productionOutput;
+				psBuilding->pFunctionality->factory.productionOutput += ((
+					PRODUCTION_FUNCTION*)pStructureType->asFuncList[0])->productionOutput;
 				//need to change which IMD is used for player 0
 				//Need to do a check its not Barbarian really!
 
@@ -2081,7 +2068,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 					|| (bMultiPlayer && (game.type == SKIRMISH) && (psBuilding->player < game.maxPlayers))
 					|| !bMultiPlayer)
 				{
-					capacity = ((FACTORY*)psBuilding->pFunctionality)->capacity;
+					capacity = psBuilding->pFunctionality->factory.capacity;
 					if (capacity < NUM_FACTORY_MODULES)
 					{
 						if (psBuilding->pStructureType->type == REF_FACTORY)
@@ -2119,20 +2106,20 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 				return NULL;
 			}
 			//increment the capacity and research points for the owning structure
-			if (((RESEARCH_FACILITY*)psBuilding->pFunctionality)->capacity < NUM_RESEARCH_MODULES)
+			if (psBuilding->pFunctionality->researchFacility.capacity < NUM_RESEARCH_MODULES)
 			{
 				//store the % difference in body points before upgrading
 				bodyDiff = PERCENT(psBuilding->body, structureBody(psBuilding));
 
 				//add all the research modules in one go AB 24/06/98
 				//((RESEARCH_FACILITY*)psBuilding->pFunctionality)->capacity++;
-				((RESEARCH_FACILITY*)psBuilding->pFunctionality)->capacity = NUM_RESEARCH_MODULES;
-				((RESEARCH_FACILITY*)psBuilding->pFunctionality)->researchPoints += ((
+				psBuilding->pFunctionality->researchFacility.capacity = NUM_RESEARCH_MODULES;
+				psBuilding->pFunctionality->researchFacility.researchPoints += ((
 					RESEARCH_FUNCTION*)pStructureType->asFuncList[0])->
 					researchPoints;
 				bUpgraded = TRUE;
 				//cancel any research - put on hold now
-				if (((RESEARCH_FACILITY *)psBuilding->pFunctionality)->psSubject)
+				if (psBuilding->pFunctionality->researchFacility.psSubject)
 				{
 					//cancel the topic
 					holdResearch(psBuilding);
@@ -2144,7 +2131,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 					|| (bMultiPlayer && (game.type == SKIRMISH) && (psBuilding->player < game.maxPlayers))
 					|| !bMultiPlayer)
 				{
-					capacity = ((RESEARCH_FACILITY*)psBuilding->pFunctionality)->capacity;
+					capacity = psBuilding->pFunctionality->researchFacility.capacity;
 					if (capacity < NUM_RESEARCH_MODULES)
 					{
 						psBuilding->sDisplay.imd = researchModuleIMDs[capacity-1];
@@ -2164,18 +2151,18 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 				return NULL;
 			}
 			//increment the capacity and research points for the owning structure
-			if (((POWER_GEN*)psBuilding->pFunctionality)->capacity < NUM_POWER_MODULES)
+			if (psBuilding->pFunctionality->powerGenerator.capacity < NUM_POWER_MODULES)
 			{
 				//store the % difference in body points before upgrading
 				bodyDiff = PERCENT(psBuilding->body, structureBody(psBuilding));
 
 				//increment the power output, multiplier and capacity
 				//add all the research modules in one go AB 24/06/98
-				((POWER_GEN*)psBuilding->pFunctionality)->capacity = NUM_POWER_MODULES;
-				((POWER_GEN*)psBuilding->pFunctionality)->power += ((
+				psBuilding->pFunctionality->powerGenerator.capacity = NUM_POWER_MODULES;
+				psBuilding->pFunctionality->powerGenerator.power += ((
 					POWER_GEN_FUNCTION*)pStructureType->asFuncList[0])->
 					powerOutput;
-				((POWER_GEN*)psBuilding->pFunctionality)->multiplier += ((
+				psBuilding->pFunctionality->powerGenerator.multiplier += ((
 					POWER_GEN_FUNCTION*)pStructureType->asFuncList[0])->
 					powerMultiplier;
 				bUpgraded = TRUE;
@@ -2187,7 +2174,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 					|| (bMultiPlayer && (game.type == SKIRMISH) && (psBuilding->player < game.maxPlayers))
 					|| !bMultiPlayer)
 				{
-					capacity = ((POWER_GEN*)psBuilding->pFunctionality)->capacity;
+					capacity = psBuilding->pFunctionality->powerGenerator.capacity;
 					if (capacity < NUM_POWER_MODULES)
 					{
 						psBuilding->sDisplay.imd = powerModuleIMDs[capacity-1];
@@ -2299,13 +2286,13 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 			switch (functionType)
 			{
 				case REF_FACTORY:
-					setFlagPositionInc(psFactory, psBuilding->player, FACTORY_FLAG);
+					setFlagPositionInc(psBuilding->pFunctionality, psBuilding->player, FACTORY_FLAG);
 					break;
 				case REF_CYBORG_FACTORY:
-					setFlagPositionInc(psFactory, psBuilding->player, CYBORG_FLAG);
+					setFlagPositionInc(psBuilding->pFunctionality, psBuilding->player, CYBORG_FLAG);
 					break;
 				case REF_VTOL_FACTORY:
-					setFlagPositionInc(psFactory, psBuilding->player, VTOL_FLAG);
+					setFlagPositionInc(psBuilding->pFunctionality, psBuilding->player, VTOL_FLAG);
 					break;
 				default:
 					ASSERT(!"invalid factory type", "setFunctionality: Invalid factory type");
@@ -2394,7 +2381,7 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 
 			// Add the flag (triangular marker on the ground) at the delivery point
 			addFlagPosition(psRepairFac->psDeliveryPoint);
-			setFlagPositionInc(psRepairFac, psBuilding->player, REPAIR_FLAG);
+			setFlagPositionInc(psBuilding->pFunctionality, psBuilding->player, REPAIR_FLAG);
 			break;
 		}
 		case REF_REARM_PAD:
@@ -2423,7 +2410,7 @@ void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 	CHECK_STRUCTURE(psStruct);
 	ASSERT( StructIsFactory(psStruct),"assignFactoryCommandUnit: structure not a factory" );
 
-	psFact = (FACTORY *)psStruct->pFunctionality;
+	psFact = &psStruct->pFunctionality->factory;
 
 	switch(psStruct->pStructureType->type)
 	{
@@ -2527,7 +2514,7 @@ void clearCommandDroidFactory(DROID *psDroid)
 			(psCurr->pStructureType->type == REF_CYBORG_FACTORY) ||
 			(psCurr->pStructureType->type == REF_VTOL_FACTORY) )
 		{
-			if (((FACTORY*)psCurr->pFunctionality)->psCommander == psDroid)
+			if (psCurr->pFunctionality->factory.psCommander == psDroid)
 			{
 				assignFactoryCommandDroid(psCurr, NULL);
 			}
@@ -2539,7 +2526,7 @@ void clearCommandDroidFactory(DROID *psDroid)
 			(psCurr->pStructureType->type == REF_CYBORG_FACTORY) ||
 			(psCurr->pStructureType->type == REF_VTOL_FACTORY) )
 		{
-			if (((FACTORY*)psCurr->pFunctionality)->psCommander == psDroid)
+			if (psCurr->pFunctionality->factory.psCommander == psDroid)
 			{
 				assignFactoryCommandDroid(psCurr, NULL);
 			}
@@ -2715,7 +2702,7 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 		}
 
 		//set the droids order to that of the factory - AB 22/04/99
-		psNewDroid->secondaryOrder = ((FACTORY *)psStructure->pFunctionality)->secondaryOrder;
+		psNewDroid->secondaryOrder = psStructure->pFunctionality->factory.secondaryOrder;
 
 		if(bMultiPlayer)
 		{
@@ -2763,7 +2750,7 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 			break;
 		}
 
-		psFact = (FACTORY *)psStructure->pFunctionality;
+		psFact = &psStructure->pFunctionality->factory;
 		apx = psFact->psAssemblyPoint->coords.x;
 		apy = psFact->psAssemblyPoint->coords.y;
 
@@ -2917,7 +2904,7 @@ BOOL IsPlayerDroidLimitReached(UDWORD PlayerNumber)
 
 static BOOL maxDroidsByTypeReached(STRUCTURE *psStructure)
 {
-	FACTORY		*psFact = (FACTORY *)psStructure->pFunctionality;
+	FACTORY		*psFact = &psStructure->pFunctionality->factory;
 
 	CHECK_STRUCTURE(psStructure);
 
@@ -3169,7 +3156,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 	{
 		case REF_RESEARCH:
 		{
-			pSubject = ((RESEARCH_FACILITY*)psStructure->pFunctionality)->psSubject;
+			pSubject = psStructure->pFunctionality->researchFacility.psSubject;
 			structureMode = REF_RESEARCH;
 			break;
 		}
@@ -3177,11 +3164,11 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 		case REF_CYBORG_FACTORY:
 		case REF_VTOL_FACTORY:
 		{
-			pSubject = ((FACTORY*)psStructure->pFunctionality)->psSubject;
+			pSubject = psStructure->pFunctionality->factory.psSubject;
 			structureMode = REF_FACTORY;
 			//check here to see if the factory's commander has died
-			if (((FACTORY*)psStructure->pFunctionality)->psCommander &&
-				((FACTORY*)psStructure->pFunctionality)->psCommander->died)
+			if (psStructure->pFunctionality->factory.psCommander &&
+				psStructure->pFunctionality->factory.psCommander->died)
 			{
 				//remove the commander from the factory
 				assignFactoryCommandDroid(psStructure, NULL);
@@ -3190,7 +3177,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 		}
 		case REF_REPAIR_FACILITY:
 		{
-			psRepairFac = (REPAIR_FACILITY *) psStructure->pFunctionality;
+			psRepairFac = &psStructure->pFunctionality->repairFacility;
 			psChosenObj = psRepairFac->psObj;
 			structureMode = REF_REPAIR_FACILITY;
 			psDroid = (DROID *)psChosenObj;
@@ -3255,7 +3242,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 		{
 			DROID_OACTION_INFO oaInfo = {{(BASE_OBJECT *)psStructure}};
 
-			psReArmPad = (REARM_PAD *) psStructure->pFunctionality;
+			psReArmPad = &psStructure->pFunctionality->rearmPad;
 			psChosenObj = psReArmPad->psObj;
 			structureMode = REF_REARM_PAD;
 			psDroid = NULL;
@@ -3317,7 +3304,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 		//if subject is research...
 		if (structureMode == REF_RESEARCH)
 		{
-			psResFacility = (RESEARCH_FACILITY*)psStructure->pFunctionality;
+			psResFacility = &psStructure->pFunctionality->researchFacility;
 
 			//if on hold don't do anything
 			if (psResFacility->timeStartHold)
@@ -3403,7 +3390,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 		//check for manufacture
 		else if (structureMode == REF_FACTORY)
 		{
-			psFactory = (FACTORY *)psStructure->pFunctionality;
+			psFactory = &psStructure->pFunctionality->factory;
 			Quantity = psFactory->quantity;
 
 			//if on hold don't do anything
@@ -3534,7 +3521,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 			psDroid = (DROID *) psChosenObj;
 			ASSERT( psDroid != NULL,
 					"aiUpdateStructure: invalid droid pointer" );
-			psRepairFac = (REPAIR_FACILITY*)psStructure->pFunctionality;
+			psRepairFac = &psStructure->pFunctionality->repairFacility;
 
 			if ( psDroid->action == DACTION_WAITDURINGREPAIR &&
 				actionTargetTurret((BASE_OBJECT*)psStructure, psChosenObj,
@@ -3685,7 +3672,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 		//check for rearming
 		else if (structureMode == REF_REARM_PAD)
 		{
-			psReArmPad = (REARM_PAD *)psStructure->pFunctionality;
+			psReArmPad = &psStructure->pFunctionality->rearmPad;
 
 			psDroid = (DROID *)psChosenObj;
 			ASSERT( psDroid != NULL,
@@ -4941,7 +4928,7 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 		HOW MUCH IS THERE && NOT RES EXTRACTORS */
 		if (psDel->pStructureType->type == REF_RESOURCE_EXTRACTOR)
 		{
-			if (((RES_EXTRACTOR *)psDel->pFunctionality)->power)
+			if (psDel->pFunctionality->resourceExtractor.power)
 			{
 				//clear the tile nodraw attribute so that will get set up when building the feature
 				CLEAR_TILE_NODRAW(mapTile(psDel->x >> TILE_SHIFT,psDel->y >> TILE_SHIFT));
@@ -4966,7 +4953,7 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 	//check for a research topic currently under way
 	if (psDel->pStructureType->type == REF_RESEARCH)
 	{
-		if (((RESEARCH_FACILITY *)psDel->pFunctionality)->psSubject)
+		if (psDel->pFunctionality->researchFacility.psSubject)
 		{
 			//cancel the topic
 			cancelResearch(psDel);
@@ -4984,7 +4971,7 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 	//if it is a factory - need to reset the factoryNumFlag
 	if (StructIsFactory(psDel))
 	{
-		psFactory = ((FACTORY*)psDel->pFunctionality) ;
+		psFactory = &psDel->pFunctionality->factory;
 
 		//need to initialise the production run as well
 		cancelProduction(psDel);
@@ -4993,7 +4980,7 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 	}
 	else if (psDel->pStructureType->type == REF_REPAIR_FACILITY)
 	{
-		psAssemblyPoint = ((REPAIR_FACILITY*)psDel->pFunctionality)->psDeliveryPoint;
+		psAssemblyPoint = psDel->pFunctionality->repairFacility.psDeliveryPoint;
 	}
 
 	if (psAssemblyPoint != NULL)
@@ -5133,7 +5120,7 @@ BOOL destroyStruct(STRUCTURE *psDel)
 			// give some power back to the player.
 			addPower(psDel->player, structPowerToBuild(psDel));
 			//if it had a module attached, need to add the power for the base struct as well
-			if (((POWER_GEN *)psDel->pFunctionality)->capacity)
+			if (psDel->pFunctionality->powerGenerator.capacity)
 			{
 				addPower(psDel->player, psDel->pStructureType->powerToBuild);
 			}
@@ -5304,32 +5291,33 @@ BOOL  structureIdle(STRUCTURE *psBuilding)
 
 	CHECK_STRUCTURE(psBuilding);
 
-	if (psBuilding->pFunctionality != NULL)
-	{
-		//determine the Subject
-		switch (psBuilding->pStructureType->type)
-		{
-			case REF_RESEARCH:
-			{
-				pSubject = ((RESEARCH_FACILITY*)psBuilding->pFunctionality)->psSubject;
-				break;
-			}
-			case REF_FACTORY:
-			case REF_CYBORG_FACTORY:
-			case REF_VTOL_FACTORY:
-			{
-				pSubject = ((FACTORY*)psBuilding->pFunctionality)->psSubject;
-				break;
-			}
-			default:
-				break;
-		}
+	if (psBuilding->pFunctionality == NULL)
+		return TRUE;
 
-		if (pSubject != NULL)
+	//determine the Subject
+	switch (psBuilding->pStructureType->type)
+	{
+		case REF_RESEARCH:
 		{
-			return FALSE;
+			pSubject = psBuilding->pFunctionality->researchFacility.psSubject;
+			break;
 		}
+		case REF_FACTORY:
+		case REF_CYBORG_FACTORY:
+		case REF_VTOL_FACTORY:
+		{
+			pSubject = psBuilding->pFunctionality->factory.psSubject;
+			break;
+		}
+		default:
+			break;
 	}
+
+	if (pSubject != NULL)
+	{
+		return FALSE;
+	}
+
 	return TRUE;
 }
 
@@ -5468,7 +5456,7 @@ void setAssemblyPoint(FLAG_POSITION *psAssemblyPoint, UDWORD x, UDWORD y,
 
 
 /*sets the factory Inc for the Assembly Point*/
-void setFlagPositionInc(void *pFunctionality, UDWORD player, UBYTE factoryType)
+void setFlagPositionInc(FUNCTIONALITY* pFunctionality, UDWORD player, UBYTE factoryType)
 {
 	UBYTE			inc;
 	UBYTE			mask = 1;
@@ -5518,13 +5506,13 @@ void setFlagPositionInc(void *pFunctionality, UDWORD player, UBYTE factoryType)
 
 	if (factoryType == REPAIR_FLAG)
 	{
-		psRepair = (REPAIR_FACILITY *)pFunctionality;
+		psRepair = &pFunctionality->repairFacility;
 		psRepair->psDeliveryPoint->factoryInc = 0;
 		psRepair->psDeliveryPoint->factoryType = factoryType;
 	}
 	else
 	{
-		psFactory = (FACTORY *)pFunctionality;
+		psFactory = &pFunctionality->factory;
 		psFactory->psAssemblyPoint->factoryInc = inc;
 		psFactory->psAssemblyPoint->factoryType = factoryType;
 		factoryNumFlag[player][factoryType] |= mask;
@@ -5767,7 +5755,7 @@ void checkForResExtractors(STRUCTURE *psBuilding)
 		ASSERT(!"invalid structure type", "checkForResExtractors: invalid structure type");
 		return;
 	}
-	psPowerGen = (POWER_GEN *)psBuilding->pFunctionality;
+	psPowerGen = &psBuilding->pFunctionality->powerGenerator;
 	//count the number of allocated slots
 	slot = 0;//-1;
 	for (i=0; i < NUM_POWER_MODULES; i++)
@@ -5776,8 +5764,7 @@ void checkForResExtractors(STRUCTURE *psBuilding)
 		{
 			slot++;
 			//make sure the derrrick is active if any oil left
-			psResExtractor = (RES_EXTRACTOR *)psPowerGen->apResExtractors[i]->
-				pFunctionality;
+			psResExtractor = &psPowerGen->apResExtractors[i]->pFunctionality->resourceExtractor;
 			if (psResExtractor->power)
 			{
 				psResExtractor->active = TRUE;
@@ -5795,12 +5782,12 @@ void checkForResExtractors(STRUCTURE *psBuilding)
 		{
 			if (psCurr->pStructureType->type == REF_RESOURCE_EXTRACTOR)
 			{
-				psResExtractor = (RES_EXTRACTOR *)psCurr->pFunctionality;
+				psResExtractor = &psCurr->pFunctionality->resourceExtractor;
 
 				//check not connected and power left and built!
-				if (!((RES_EXTRACTOR *)psCurr->pFunctionality)->active  &&
-					psCurr->status == SS_BUILT && ((RES_EXTRACTOR *)psCurr->
-					pFunctionality)->power)
+				if (!psResExtractor->active
+				 && psCurr->status == SS_BUILT
+				 && psResExtractor->power)
 				{
 					//assign the extractor to the power generator - use first vacant slot
 					for (i = 0; i < NUM_POWER_MODULES; i++)
@@ -5846,7 +5833,7 @@ void checkForPowerGen(STRUCTURE *psBuilding)
 		ASSERT(!"invalid structure type", "checkForPowerGen: invalid structure type");
 		return;
 	}
-	psRE = (RES_EXTRACTOR *)psBuilding->pFunctionality;
+	psRE = &psBuilding->pFunctionality->resourceExtractor;
 	if (psRE->active)
 	{
 		return;
@@ -5858,7 +5845,7 @@ void checkForPowerGen(STRUCTURE *psBuilding)
 	{
 		if (psCurr->pStructureType->type == REF_POWER_GEN && psCurr->status == SS_BUILT)
 		{
-			psPG = ((POWER_GEN *)psCurr->pFunctionality);
+			psPG = &psCurr->pFunctionality->powerGenerator;
 			//check capacity against number of filled slots
 			slot = 0;//-1;
 			for (i=0; i < NUM_POWER_MODULES; i++)
@@ -5903,8 +5890,7 @@ void informPowerGen(STRUCTURE *psStruct)
 	}
 
 	//get the owning power generator
-	psPowerGen = (POWER_GEN *)((RES_EXTRACTOR *)psStruct->pFunctionality)->
-		psPowerGen->pFunctionality;
+	psPowerGen = &psStruct->pFunctionality->resourceExtractor.psPowerGen->pFunctionality->powerGenerator;
 	if (psPowerGen)
 	{
 		for (i=0; i < NUM_POWER_MODULES; i++)
@@ -5934,22 +5920,23 @@ void releaseResExtractor(STRUCTURE *psRelease)
 	}
 
 	//tell associated Power Gen
-	if (((RES_EXTRACTOR *)psRelease->pFunctionality)->psPowerGen)
+	if (psRelease->pFunctionality->resourceExtractor.psPowerGen)
 	{
 		informPowerGen(psRelease);
 	}
 
-	((RES_EXTRACTOR *)psRelease->pFunctionality)->psPowerGen = NULL;
+	psRelease->pFunctionality->resourceExtractor.psPowerGen = NULL;
 
 	//there may be spare resource extractors
 	for (psCurr = apsStructLists[psRelease->player]; psCurr != NULL; psCurr =
 		psCurr->psNext)
 	{
 		//check not connected and power left and built!
-		if (psCurr->pStructureType->type == REF_RESOURCE_EXTRACTOR &&
-			psCurr != psRelease && !((RES_EXTRACTOR *)psCurr->pFunctionality)->
-			active && ((RES_EXTRACTOR *)psCurr->pFunctionality)->power &&
-			psCurr->status == SS_BUILT)
+		if (psCurr->pStructureType->type == REF_RESOURCE_EXTRACTOR
+		 && psCurr != psRelease
+		 && !psCurr->pFunctionality->resourceExtractor.active
+		 && psCurr->pFunctionality->resourceExtractor.power
+		 && psCurr->status == SS_BUILT)
 		{
 			checkForPowerGen(psCurr);
 		}
@@ -5972,16 +5959,14 @@ void releasePowerGen(STRUCTURE *psRelease)
 		return;
 	}
 
-	psPowerGen = (POWER_GEN *)psRelease->pFunctionality;
+	psPowerGen = &psRelease->pFunctionality->powerGenerator;
 	//go through list of res extractors, setting them to inactive
 	for (i=0; i < NUM_POWER_MODULES; i++)
 	{
 		if (psPowerGen->apResExtractors[i])
 		{
-			((RES_EXTRACTOR *)psPowerGen->apResExtractors[i]->
-				pFunctionality)->active = FALSE;
-			((RES_EXTRACTOR *)psPowerGen->apResExtractors[i]->
-				pFunctionality)->psPowerGen = NULL;
+			psPowerGen->apResExtractors[i]->pFunctionality->resourceExtractor.active = FALSE;
+			psPowerGen->apResExtractors[i]->pFunctionality->resourceExtractor.psPowerGen = NULL;
 			psPowerGen->apResExtractors[i] = NULL;
 		}
 	}
@@ -6093,7 +6078,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 #endif
 		break;
 	case REF_POWER_GEN:
-		psPowerGen = (POWER_GEN *)psStructure->pFunctionality;
+		psPowerGen = &psStructure->pFunctionality->powerGenerator;
 		numConnected = 0;
 		for (i = 0; i < NUM_POWER_MODULES; i++)
 		{
@@ -6412,11 +6397,11 @@ UDWORD structureBaseBody(const STRUCTURE *psStructure)
 		// modules may be attached:
 		case REF_FACTORY:
 		case REF_VTOL_FACTORY:
-			ASSERT( psStructure->pFunctionality != NULL, "structureBaseBody: invalid structure functionality pointer" );
-			if (((FACTORY *)psStructure->pFunctionality)->capacity > 0)
+			ASSERT(psStructure->pFunctionality != NULL, "structureBaseBody: invalid structure functionality pointer");
+			if (psStructure->pFunctionality->factory.capacity > 0)
 			{
 				//add on the default for the factory
-				return psStats->bodyPoints + asStructureStats[factoryModuleStat].bodyPoints * ((FACTORY*)psStructure->pFunctionality)->capacity;
+				return psStats->bodyPoints + asStructureStats[factoryModuleStat].bodyPoints * psStructure->pFunctionality->factory.capacity;
 			}
 			else
 			{
@@ -6424,8 +6409,8 @@ UDWORD structureBaseBody(const STRUCTURE *psStructure)
 				return psStats->bodyPoints;
 			}
 		case REF_RESEARCH:
-			ASSERT( psStructure->pFunctionality != NULL, "structureBaseBody: invalid structure functionality pointer" );
-			if (((RESEARCH_FACILITY *)psStructure->pFunctionality)->capacity > 0)
+			ASSERT(psStructure->pFunctionality != NULL, "structureBaseBody: invalid structure functionality pointer");
+			if (psStructure->pFunctionality->researchFacility.capacity > 0)
 			{
 				//add on the default for the factory
 				return psStats->bodyPoints + asStructureStats[researchModuleStat].bodyPoints;
@@ -6436,8 +6421,8 @@ UDWORD structureBaseBody(const STRUCTURE *psStructure)
 				return psStats->bodyPoints;
 			}
 		case REF_POWER_GEN:
-			ASSERT( psStructure->pFunctionality != NULL, "structureBaseBody: invalid structure functionality pointer" );
-			if (((POWER_GEN *)psStructure->pFunctionality)->capacity > 0)
+			ASSERT(psStructure->pFunctionality != NULL, "structureBaseBody: invalid structure functionality pointer");
+			if (psStructure->pFunctionality->powerGenerator.capacity > 0)
 			{
 				//add on the default for the factory
 				return psStats->bodyPoints + asStructureStats[powerModuleStat].bodyPoints;
@@ -6764,11 +6749,9 @@ FLAG_POSITION *FindFactoryDelivery(STRUCTURE *Struct)
 		for (psCurrFlag = apsFlagPosLists[selectedPlayer]; psCurrFlag;
 			psCurrFlag = psCurrFlag->psNext)
 		{
-			if(FlagIsFactory(psCurrFlag) &&
-				((FACTORY *)Struct->pFunctionality)->psAssemblyPoint->
-				factoryInc == psCurrFlag->factoryInc &&
-				((FACTORY *)Struct->pFunctionality)->psAssemblyPoint->
-				factoryType == psCurrFlag->factoryType)
+			if(FlagIsFactory(psCurrFlag)
+			 && Struct->pFunctionality->factory.psAssemblyPoint->factoryInc == psCurrFlag->factoryInc
+			 && Struct->pFunctionality->factory.psAssemblyPoint->factoryType == psCurrFlag->factoryType)
 			{
 				return psCurrFlag;
 			}
@@ -6791,7 +6774,7 @@ STRUCTURE	*findDeliveryFactory(FLAG_POSITION *psDelPoint)
 	{
 		if(StructIsFactory(psCurr))
 		{
-			psFactory = (FACTORY *)psCurr->pFunctionality;
+			psFactory = &psCurr->pFunctionality->factory;
 			if (psFactory->psAssemblyPoint->factoryInc == psDelPoint->factoryInc &&
 				psFactory->psAssemblyPoint->factoryType == psDelPoint->factoryType)
 			{
@@ -6800,7 +6783,7 @@ STRUCTURE	*findDeliveryFactory(FLAG_POSITION *psDelPoint)
 		}
 		else if (psCurr->pStructureType->type == REF_REPAIR_FACILITY)
 		{
-			psRepair = (REPAIR_FACILITY *)psCurr->pFunctionality;
+			psRepair = &psCurr->pFunctionality->repairFacility;
 			if (psRepair->psDeliveryPoint == psDelPoint)
 			{
 				return psCurr;
@@ -6820,7 +6803,7 @@ void cancelProduction(STRUCTURE *psBuilding)
 	ASSERT( StructIsFactory(psBuilding),
 		"cancelProduction: structure not a factory" );
 
-	psFactory = (FACTORY *)psBuilding->pFunctionality;
+	psFactory = &psBuilding->pFunctionality->factory;
 
 	//check its the correct factory
 	if (psBuilding->player == productionPlayer && psFactory->psSubject)
@@ -6851,7 +6834,7 @@ void holdProduction(STRUCTURE *psBuilding)
 
 	ASSERT( StructIsFactory(psBuilding), "holdProduction: structure not a factory" );
 
-	psFactory = (FACTORY *)psBuilding->pFunctionality;
+	psFactory = &psBuilding->pFunctionality->factory;
 
 	if (psFactory->psSubject)
 	{
@@ -6874,7 +6857,7 @@ void releaseProduction(STRUCTURE *psBuilding)
 	ASSERT( StructIsFactory(psBuilding),
 		"releaseProduction: structure not a factory" );
 
-	psFactory = (FACTORY *)psBuilding->pFunctionality;
+	psFactory = &psBuilding->pFunctionality->factory;
 
 	if (psFactory->psSubject && psFactory->timeStartHold)
 	{
@@ -6899,7 +6882,7 @@ DROID_TEMPLATE * factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTem
 	ASSERT( psStructure->player == productionPlayer,
 		"factoryProdUpdate: called for incorrect player" );
 
-	psFactory = (FACTORY *)psStructure->pFunctionality;
+	psFactory = &psStructure->pFunctionality->factory;
 	factoryType = psFactory->psAssemblyPoint->factoryType;
 	factoryInc = psFactory->psAssemblyPoint->factoryInc;
 
@@ -6969,7 +6952,7 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, BOOL 
 	ASSERT( psStructure->player == productionPlayer,
 		"factoryProdAdjust: called for incorrect player" );
 
-	psFactory = (FACTORY *)psStructure->pFunctionality;
+	psFactory = &psStructure->pFunctionality->factory;
 	factoryType = psFactory->psAssemblyPoint->factoryType;
 	factoryInc = psFactory->psAssemblyPoint->factoryInc;
 
@@ -7073,7 +7056,7 @@ UDWORD	getProductionQuantity(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate)
 
 	if (psStructure->player == productionPlayer)
 	{
-		psFactory = (FACTORY *)psStructure->pFunctionality;
+		psFactory = &psStructure->pFunctionality->factory;
 		factoryType = psFactory->psAssemblyPoint->factoryType;
 		factoryInc = psFactory->psAssemblyPoint->factoryInc;
 
@@ -7101,7 +7084,7 @@ UDWORD	getProductionBuilt(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate)
 
 	if (psStructure->player == productionPlayer)
 	{
-		psFactory = (FACTORY *)psStructure->pFunctionality;
+		psFactory = &psStructure->pFunctionality->factory;
 		factoryType = psFactory->psAssemblyPoint->factoryType;
 		factoryInc = psFactory->psAssemblyPoint->factoryInc;
 
@@ -7217,7 +7200,7 @@ void checkDeliveryPoints(UDWORD version)
 				if(StructIsFactory(psStruct))
 				{
 					//check the DP
-					psFactory = (FACTORY *)psStruct->pFunctionality;
+					psFactory = &psStruct->pFunctionality->factory;
 					if (psFactory->psAssemblyPoint == NULL)//need to add one
 					{
 						ASSERT( psFactory->psAssemblyPoint != NULL,
@@ -7231,7 +7214,7 @@ void checkDeliveryPoints(UDWORD version)
 				}
 				else if (psStruct->pStructureType->type == REF_REPAIR_FACILITY)
 				{
-					psRepair = (REPAIR_FACILITY *)psStruct->pFunctionality;
+					psRepair = &psStruct->pFunctionality->repairFacility;
 
 					if (psRepair->psDeliveryPoint == NULL)//need to add one
 					{
@@ -7248,7 +7231,7 @@ void checkDeliveryPoints(UDWORD version)
 								return;
 							}
 							addFlagPosition(psRepair->psDeliveryPoint);
-							setFlagPositionInc(psRepair, psStruct->player, REPAIR_FLAG);
+							setFlagPositionInc(psStruct->pFunctionality, psStruct->player, REPAIR_FLAG);
 							//initialise the assembly point position
 							x = (psStruct->x+256) >> TILE_SHIFT;
 							y = (psStruct->y+256) >> TILE_SHIFT;
@@ -7279,7 +7262,7 @@ void factoryLoopAdjust(STRUCTURE *psStruct, BOOL add)
 	ASSERT( psStruct->player == selectedPlayer,
 		"factoryLoopAdjust: should only be called for selectedPlayer" );
 
-	psFactory = (FACTORY *)psStruct->pFunctionality;
+	psFactory = &psStruct->pFunctionality->factory;
 
 	if (add)
 	{
@@ -7328,10 +7311,9 @@ void checkResExtractorsActive(void)
 		{
 			if (psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)
 			{
-				if (((RES_EXTRACTOR *)psStruct->pFunctionality)->active)
+				if (psStruct->pFunctionality->resourceExtractor.active)
 				{
-					((RES_EXTRACTOR *)psStruct->pFunctionality)->
-						timeLastUpdated = gameTime;
+					psStruct->pFunctionality->resourceExtractor.timeLastUpdated = gameTime;
 				}
 			}
 		}
@@ -7472,9 +7454,9 @@ BOOL structVTOLCBSensor(STRUCTURE *psStruct)
 // check whether a rearm pad is clear
 BOOL clearRearmPad(STRUCTURE *psStruct)
 {
-	if ((psStruct->pStructureType->type == REF_REARM_PAD) &&
-		( ((REARM_PAD *)psStruct->pFunctionality)->psObj == NULL ||
-		vtolHappy((DROID *)((REARM_PAD *)psStruct->pFunctionality)->psObj) ))
+	if (psStruct->pStructureType->type == REF_REARM_PAD
+	 && (psStruct->pFunctionality->rearmPad.psObj == NULL
+	 || vtolHappy((DROID*)psStruct->pFunctionality->rearmPad.psObj)))
 	{
 		return TRUE;
 	}
@@ -7748,14 +7730,14 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, BOOL
 		switch(psType->type)
 		{
 		case REF_POWER_GEN:
-			capacity = (UBYTE)((POWER_GEN *)psStructure->pFunctionality)->capacity;
+			capacity = (UBYTE)psStructure->pFunctionality->powerGenerator.capacity;
 			break;
 		case REF_RESEARCH:
-			capacity = (UBYTE)((RESEARCH_FACILITY *)psStructure->pFunctionality)->capacity;
+			capacity = (UBYTE)psStructure->pFunctionality->researchFacility.capacity;
 			break;
 		case REF_FACTORY:
 		case REF_VTOL_FACTORY:
-			capacity = ((FACTORY *)psStructure->pFunctionality)->capacity;
+			capacity = psStructure->pFunctionality->factory.capacity;
 			break;
 		default:
 			break;
@@ -7936,14 +7918,14 @@ UDWORD  structPowerToBuild(STRUCTURE *psStruct)
 		switch(psStruct->pStructureType->type)
 		{
 		case REF_POWER_GEN:
-			capacity = (UBYTE)((POWER_GEN *)psStruct->pFunctionality)->capacity;
+			capacity = (UBYTE)psStruct->pFunctionality->powerGenerator.capacity;
 			break;
 		case REF_RESEARCH:
-			capacity = (UBYTE)((RESEARCH_FACILITY *)psStruct->pFunctionality)->capacity;
+			capacity = (UBYTE)psStruct->pFunctionality->researchFacility.capacity;
 			break;
 		case REF_FACTORY:
 		case REF_VTOL_FACTORY:
-			capacity = ((FACTORY *)psStruct->pFunctionality)->capacity;
+			capacity = psStruct->pFunctionality->factory.capacity;
 			break;
 		default:
 			break;
@@ -7977,8 +7959,7 @@ void resetResistanceLag(STRUCTURE *psBuilding)
 		{
 			case REF_RESEARCH:
 			{
-				RESEARCH_FACILITY *psResFacility = (RESEARCH_FACILITY*)
-					psBuilding->pFunctionality;
+				RESEARCH_FACILITY *psResFacility = &psBuilding->pFunctionality->researchFacility;
 
 				//if working on a topic
 				if (psResFacility->psSubject)
@@ -7994,7 +7975,7 @@ void resetResistanceLag(STRUCTURE *psBuilding)
 			case REF_VTOL_FACTORY:
 			case REF_CYBORG_FACTORY:
 			{
-				FACTORY    *psFactory = (FACTORY *)psBuilding->pFunctionality;
+				FACTORY    *psFactory = &psBuilding->pFunctionality->factory;
 
 				//if working on a unit
 				if (psFactory->psSubject)

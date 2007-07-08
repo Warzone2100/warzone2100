@@ -2748,19 +2748,17 @@ void dealWithRMB( void )
 					//if a factory go to deliv point rather than setting up the interface
 					if (StructIsFactory(psStructure))
 					{
-						setViewPos(((FACTORY *)psStructure->pFunctionality)->
-							psAssemblyPoint->coords.x >> TILE_SHIFT,
-							((FACTORY *)psStructure->pFunctionality)->psAssemblyPoint->
-							coords.y >> TILE_SHIFT,TRUE);
+						setViewPos(map_coord(psStructure->pFunctionality->factory.psAssemblyPoint->coords.x),
+						           map_coord(psStructure->pFunctionality->factory.psAssemblyPoint->coords.y),
+						           TRUE);
 						//pop up the order interface for the factory - AB 21/04/99 Patch v1.2->
 						intAddFactoryOrder(psStructure);
 					}
 					else if (psStructure->pStructureType->type == REF_REPAIR_FACILITY)
 					{
-						setViewPos(((REPAIR_FACILITY *)psStructure->pFunctionality)->
-							psDeliveryPoint->coords.x >> TILE_SHIFT,
-							((REPAIR_FACILITY *)psStructure->pFunctionality)->psDeliveryPoint->
-							coords.y >> TILE_SHIFT,TRUE);
+						setViewPos(map_coord(psStructure->pFunctionality->repairFacility.psDeliveryPoint->coords.x),
+						           map_coord(psStructure->pFunctionality->repairFacility.psDeliveryPoint->coords.y),
+						           TRUE);
 					}
 					else
 					{
@@ -3082,19 +3080,17 @@ STRUCTURE	*psStructure;
 				{
 					retVal = MT_OWNSTRDAM;
 				}
-				// if factory/powgen/research and not upgraded. make build icon available..
-				else if( ( psStructure->pStructureType->type  == REF_FACTORY
-						&& ((FACTORY *)psStructure->pFunctionality)->capacity < NUM_FACTORY_MODULES )
+				// If this building is a factory/power generator/research facility
+				// which isn't upgraded. Make the build icon available.
+				else if(((psStructure->pStructureType->type == REF_FACTORY
+				       || psStructure->pStructureType->type == REF_VTOL_FACTORY)
+				      && psStructure->pFunctionality->factory.capacity < NUM_FACTORY_MODULES)
 
-					||	 ( psStructure->pStructureType->type  == REF_VTOL_FACTORY
-						&& ((FACTORY *)psStructure->pFunctionality)->capacity < NUM_FACTORY_MODULES)
+				     || (psStructure->pStructureType->type  == REF_POWER_GEN
+				      && psStructure->pFunctionality->powerGenerator.capacity < NUM_POWER_MODULES)
 
-					||	 ( psStructure->pStructureType->type  == REF_POWER_GEN
-						&& ((POWER_GEN *)psStructure->pFunctionality)->capacity < NUM_POWER_MODULES)
-
-					||	 ( psStructure->pStructureType->type  == REF_RESEARCH
-						&& ((RESEARCH_FACILITY *)psStructure->pFunctionality)->capacity < NUM_RESEARCH_MODULES)
-					)
+				     || (psStructure->pStructureType->type  == REF_RESEARCH
+				      && psStructure->pFunctionality->researchFacility.capacity < NUM_RESEARCH_MODULES))
 				{
 						retVal = MT_OWNSTRINCOMP;
 				}

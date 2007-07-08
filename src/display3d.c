@@ -1379,8 +1379,7 @@ void displayStaticObjects( void )
 						//check that a power gen exists before animationg res extrac
 						//else if (getPowerGenExists(psStructure->player))
 						/*check the building is active*/
-						else if (((RES_EXTRACTOR *)psStructure->
-							pFunctionality)->active)
+						else if (psStructure->pFunctionality->resourceExtractor.active)
 						{
 							displayAnimation( psAnimObj, FALSE );
 							if(selectedPlayer == psStructure->player)
@@ -1857,7 +1856,6 @@ void	renderStructure(STRUCTURE *psStructure)
 	Vector3f *temp = NULL;
 	BOOL			bHitByElectronic = FALSE;
 	iIMDShape		*pRepImd;
-	REPAIR_FACILITY		*psRepairFac = NULL;
 	BOOL            defensive = FALSE;
 
 	if(psStructure->pStructureType->type == REF_WALL ||
@@ -2146,7 +2144,7 @@ void	renderStructure(STRUCTURE *psStructure)
 							pie_Draw3DShape(weaponImd[i], playerFrame, 0, buildingBrightness, specular, pie_SHADOW,0);
 							if(psStructure->pStructureType->type == REF_REPAIR_FACILITY)
 							{
-								psRepairFac = (REPAIR_FACILITY*)psStructure->pFunctionality;
+								REPAIR_FACILITY* psRepairFac = &psStructure->pFunctionality->repairFacility;
 								//draw repair flash if the Repair Facility has a target which it has started work on
 								if(weaponImd[i]->nconnectors && psRepairFac->psObj!=NULL
 									&& psRepairFac->psObj->type == OBJ_DROID &&
@@ -2221,7 +2219,7 @@ void	renderStructure(STRUCTURE *psStructure)
 						pie_Draw3DShape(weaponImd[0], playerFrame, 0, buildingBrightness, specular, pie_SHADOW,0);
 						if(psStructure->pStructureType->type == REF_REPAIR_FACILITY)
 						{
-							psRepairFac = (REPAIR_FACILITY*)psStructure->pFunctionality;
+							REPAIR_FACILITY* psRepairFac = &psStructure->pFunctionality->repairFacility;
 							//draw repair flash if the Repair Facility has a target which it has started work on
 							if(weaponImd[0]->nconnectors && psRepairFac->psObj!=NULL
 								&& psRepairFac->psObj->type == OBJ_DROID &&
@@ -4609,11 +4607,9 @@ static void testEffect2( UDWORD player )
 	SDWORD	xDif,yDif;
 	Vector3i	pos;
 	UDWORD	numConnected;
-	POWER_GEN	*psPowerGen;
 	DROID	*psDroid;
 	UDWORD	gameDiv;
 	UDWORD	i;
-	REARM_PAD	*psReArmPad;
 	BASE_OBJECT			*psChosenObj = NULL;
 	UWORD	bFXSize;
 
@@ -4624,7 +4620,7 @@ static void testEffect2( UDWORD player )
 		{
 			if(psStructure->pStructureType->type == REF_POWER_GEN && psStructure->visible[selectedPlayer])
 			{
-				psPowerGen = (POWER_GEN *)psStructure->pFunctionality;
+				POWER_GEN* psPowerGen = &psStructure->pFunctionality->powerGenerator;
 				numConnected = 0;
 				for (i = 0; i < NUM_POWER_MODULES; i++)
 				{
@@ -4688,7 +4684,7 @@ static void testEffect2( UDWORD player )
 			else if(psStructure->pStructureType->type == REF_REARM_PAD
 				&& psStructure->visible[selectedPlayer] )
 			{
-				psReArmPad = (REARM_PAD *) psStructure->pFunctionality;
+				REARM_PAD* psReArmPad = &psStructure->pFunctionality->rearmPad;
 				psChosenObj = psReArmPad->psObj;
 				if(psChosenObj!=NULL)
 				{

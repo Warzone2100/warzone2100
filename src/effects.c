@@ -2582,7 +2582,7 @@ static void effectStructureUpdates(void)
 						}
 						else if(psStructure->pStructureType->type == REF_POWER_GEN)
 						{
-							psPowerGen = (POWER_GEN*)psStructure->pFunctionality;
+							psPowerGen = &psStructure->pFunctionality->powerGenerator;
 							eventPos.x = psStructure->x;
 							eventPos.z = psStructure->y;
 							if (psStructure->sDisplay.imd->nconnectors > 0)
@@ -2604,8 +2604,8 @@ static void effectStructureUpdates(void)
 							active = FALSE;
 							for (i=0; i < NUM_POWER_MODULES; i++)
 							{
-								if (psPowerGen->apResExtractors[i] && ((RES_EXTRACTOR *)
-									psPowerGen->apResExtractors[i]->pFunctionality)->active)
+								if (psPowerGen->apResExtractors[i]
+								 && psPowerGen->apResExtractors[i]->pFunctionality->resourceExtractor.active)
 								{
 									active = TRUE;
 									break;
