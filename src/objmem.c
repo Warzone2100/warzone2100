@@ -38,6 +38,7 @@
 #include "scriptcb.h"
 #include "mission.h"
 #include "structuredef.h"
+#include "formation.h"
 
 static SDWORD	factoryDeliveryPointCheck[MAX_PLAYERS][NUM_FLAG_TYPES][MAX_FACTORY];
 
@@ -457,25 +458,52 @@ void addStructure(STRUCTURE *psStructToAdd)
 }
 
 /* Destroy a structure */
-void killStruct(STRUCTURE *psDel)
+void killStruct(STRUCTURE *psBuilding)
 {
-	ASSERT( psDel->type == OBJ_STRUCTURE,
+	ASSERT( psBuilding->type == OBJ_STRUCTURE,
 		"killStruct: pointer is not a droid" );
-	ASSERT( psDel->player < MAX_PLAYERS,
+	ASSERT( psBuilding->player < MAX_PLAYERS,
 		"killStruct: invalid player for stucture" );
 
-	if (StructIsFactory(psDel))
+	if (psBuilding->pFunctionality != NULL)
 	{
-		FACTORY *psFactory = (FACTORY *)psDel->pFunctionality;
-
-		if (psFactory->psAssemblyPoint != NULL)
+		if (StructIsFactory(psBuilding))
 		{
-			removeFlagPosition(psFactory->psAssemblyPoint);
-			psFactory->psAssemblyPoint = NULL;
+			FACTORY *psFactory = (FACTORY *)psBuilding->pFunctionality;
+
+			// free up factory stuff
+			if (psFactory->psFormation)
+			{
+				formationReset(psFactory->psFormation);
+			}
+
+			// remove any assembly points
+			if (psFactory->psAssemblyPoint != NULL)
+			{
+				removeFlagPosition(psFactory->psAssemblyPoint);
+				psFactory->psAssemblyPoint = NULL;
+			}
+
+			// remove any commander from the factory
+			if (psFactory->psCommander != NULL)
+			{
+				assignFactoryCommandDroid(psBuilding, NULL);
+			}
+		}
+		else if (psBuilding->pStructureType->type == REF_REPAIR_FACILITY)
+		{
+			REPAIR_FACILITY *psRepair = (REPAIR_FACILITY *)psBuilding->pFunctionality;
+
+			if (psRepair->psDeliveryPoint)
+			{
+				// free up repair fac stuff
+				removeFlagPosition(psRepair->psDeliveryPoint);
+				psRepair->psDeliveryPoint = NULL;
+			}
 		}
 	}
 
-	destroyObject((BASE_OBJECT**)apsStructLists, (BASE_OBJECT*)psDel);
+	destroyObject((BASE_OBJECT**)apsStructLists, (BASE_OBJECT*)psBuilding);
 }
 
 /* Remove heapall structures */
@@ -660,7 +688,6 @@ void removeStructFunc(FUNCTIONALITY *psDel)
 /**************************  OBJECT ACCESS FUNCTIONALITY ********************************/
 
 // Find a base object from it's id
-//this function is similar to BOOL scrvGetBaseObj(UDWORD id, BASE_OBJECT **ppsObj)
 BASE_OBJECT *getBaseObjFromId(UDWORD id)
 {
 	unsigned int i;

@@ -4071,36 +4071,10 @@ void structureUpdate(STRUCTURE *psBuilding)
 /* Release all resources associated with a structure */
 void structureRelease(STRUCTURE *psBuilding)
 {
-	FLAG_POSITION	*psAssemblyPoint;
 
-	if (psBuilding->pFunctionality != NULL)
-	{
-		psAssemblyPoint = NULL;
-		if (StructIsFactory(psBuilding))
-		{
-			// free up factory stuff
-			if (((FACTORY *)psBuilding->pFunctionality)->psFormation)
-			{
-				formationReset(((FACTORY *)psBuilding->pFunctionality)->psFormation);
-			}
-
-			psAssemblyPoint = ((FACTORY *)psBuilding->pFunctionality)->psAssemblyPoint;
-
-			// remove any commander from the factory
-			if (((FACTORY *)psBuilding->pFunctionality)->psCommander != NULL)
-			{
-				assignFactoryCommandDroid(psBuilding, NULL);
-			}
-		}
-		else if (psBuilding->pStructureType->type == REF_REPAIR_FACILITY)
-		{
-			// free up repair fac stuff
-			psAssemblyPoint = ((REPAIR_FACILITY *)psBuilding->pFunctionality)->psDeliveryPoint;
-		}
-
-		//free up the space used by the functionality array
-		free(psBuilding->pFunctionality);
-	}
+	// free up the space used by the functionality array
+	free(psBuilding->pFunctionality);
+	psBuilding->pFunctionality = NULL;
 
 	// remove the object from the grid
 	gridRemoveObject((BASE_OBJECT *)psBuilding);
