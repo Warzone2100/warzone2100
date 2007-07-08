@@ -225,12 +225,6 @@ typedef struct _factory
 
 } FACTORY;
 
-//this is sizeof(FACTORY) the largest at present 11-2-99 - increased AB 22-04-99
-//depends on pointer sizes - LB 22-11-06
-#define MAX_FUNCTIONALITY_SIZE sizeof(struct _factory)
-
-typedef UBYTE FUNCTIONALITY[MAX_FUNCTIONALITY_SIZE];
-
 typedef struct _res_extractor
 {
 	UDWORD				power;				/*The max amount of power that can be extracted*/
@@ -276,6 +270,15 @@ typedef struct _rearm_pad
                                                that is being worked on */
 } REARM_PAD;
 
+typedef union
+{
+	RESEARCH_FACILITY researchFacility;
+	FACTORY           factory;
+	RES_EXTRACTOR     resourceExtractor;
+	POWER_GEN         powerGenerator;
+	REPAIR_FACILITY   repairFacility;
+	REARM_PAD         rearmPad;
+} FUNCTIONALITY;
 
 //this structure is used whenever an instance of a building is required in game
 typedef struct _structure
