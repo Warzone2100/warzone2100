@@ -1,5 +1,5 @@
 noinst_LIBRARIES = libsequence.a
-noinst_HEADERS = adpcm.h rpl_reader.h sequence.h
+noinst_HEADERS = adpcm.h dec130.h rpl_reader.h sequence.h
 
 libsequence_a_SOURCES = adpcm.c dec130.c rpl_reader.c sequence_stub.c
 
