@@ -1901,6 +1901,13 @@ proj_checkBurnDamage( BASE_OBJECT *apsList, PROJ_OBJECT *psProj,
 // return whether a weapon is direct or indirect
 BOOL proj_Direct(WEAPON_STATS *psStats)
 {
+	ASSERT(psStats != NULL, "proj_Direct: called with NULL weapon!");
+	if (!psStats)
+	{
+		return TRUE; // arbitrary value in no-debug case
+	}
+	ASSERT(psStats->movementModel < NUM_MOVEMENT_MODEL, "proj_Direct: invalid weapon stat");
+
 	switch (psStats->movementModel)
 	{
 	case MM_DIRECT:
@@ -1913,12 +1920,12 @@ BOOL proj_Direct(WEAPON_STATS *psStats)
 	case MM_HOMINGINDIRECT:
 		return FALSE;
 		break;
-	default:
-		ASSERT(!"unknown movement model", "proj_Direct: unknown movement model");
-		break;
+	case NUM_MOVEMENT_MODEL:
+	case INVALID_MOVEMENT:
+		break; // error checking in assert above; this is for no-debug case
 	}
 
-	return TRUE;
+	return TRUE; // just to satisfy compiler
 }
 
 /***************************************************************************/

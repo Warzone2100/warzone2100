@@ -909,12 +909,12 @@ static UDWORD scrStructTargetMask(STRUCTURE *psStruct)
 		break;
 	case REF_DEFENSE:
 		//if (psStats->numWeaps == 0 && psStats->pSensor != NULL)
-        if (psStats->psWeapStat == NULL && psStats->pSensor != NULL)
+		if (psStats->psWeapStat[0] == NULL && psStats->pSensor != NULL)
 		{
 			mask = SCR_ST_SENSOR;
 		}
 		//else if (psStats->numWeaps > 0)
-        else if (psStats->psWeapStat != NULL)
+		else if (psStats->psWeapStat[0] != NULL)
 		{
 			psWStats = psStats->psWeapStat[0];
 			if (!proj_Direct(psWStats))
