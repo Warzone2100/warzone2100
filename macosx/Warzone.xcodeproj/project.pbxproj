@@ -576,6 +576,7 @@
 		02DDA8D10BD3C3600049AB60 /* unix.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8CF0BD3C3600049AB60 /* unix.c */; };
 		02DDA8D40BD3C3820049AB60 /* Zlib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02356D830BD3BB4100E9A019 /* Zlib.framework */; };
 		02DDA8E10BD3C3CC0049AB60 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA8E00BD3C3CC0049AB60 /* IOKit.framework */; };
+		02F1E2810C42007C007CE4B6 /* dec130.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02F1E2800C42007C007CE4B6 /* dec130.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -718,6 +719,7 @@
 				02581C860BD5AD1100957CBC /* SDL_net.framework in Copy frameworks */,
 				02581C870BD5AD1100957CBC /* Vorbis.framework in Copy frameworks */,
 				02581C880BD5AD1100957CBC /* Zlib.framework in Copy frameworks */,
+				02F1E2810C42007C007CE4B6 /* dec130.h in Copy frameworks */,
 			);
 			name = "Copy frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1494,6 +1496,7 @@
 		02DDA8CE0BD3C3600049AB60 /* posix.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = posix.c; path = external/physfs/platform/posix.c; sourceTree = "<group>"; };
 		02DDA8CF0BD3C3600049AB60 /* unix.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = unix.c; path = external/physfs/platform/unix.c; sourceTree = "<group>"; };
 		02DDA8E00BD3C3CC0049AB60 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
+		02F1E2800C42007C007CE4B6 /* dec130.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = dec130.h; path = ../lib/sequence/dec130.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1709,10 +1712,6 @@
 		0246A0980BD3CB97004D1C70 /* Warzone sources */ = {
 			isa = PBXGroup;
 			children = (
-				02C8AEFA0BE68A6800E9D8A7 /* oggvorbis.c */,
-				02C8AEFB0BE68A6800E9D8A7 /* oggvorbis.h */,
-				02C8AEF60BE68A5600E9D8A7 /* png_util.c */,
-				02C8AEF70BE68A5600E9D8A7 /* png_util.h */,
 				0246A1970BD3CCC3004D1C70 /* Warzone */,
 				0246A1790BD3CCAB004D1C70 /* Widget */,
 				0246A1640BD3CC90004D1C70 /* Sound */,
@@ -1794,6 +1793,8 @@
 		0246A0E90BD3CC10004D1C70 /* Ivis Common */ = {
 			isa = PBXGroup;
 			children = (
+				02C8AEF60BE68A5600E9D8A7 /* png_util.c */,
+				02C8AEF70BE68A5600E9D8A7 /* png_util.h */,
 				0246A0EA0BD3CC29004D1C70 /* bitimage.c */,
 				0246A0EB0BD3CC29004D1C70 /* bitimage.h */,
 				0246A0EE0BD3CC29004D1C70 /* imd.c */,
@@ -1882,6 +1883,7 @@
 		0246A1570BD3CC78004D1C70 /* Sequence */ = {
 			isa = PBXGroup;
 			children = (
+				02F1E2800C42007C007CE4B6 /* dec130.h */,
 				0246A1580BD3CC8A004D1C70 /* adpcm.c */,
 				0246A1590BD3CC8A004D1C70 /* adpcm.h */,
 				0246A15A0BD3CC8A004D1C70 /* dec130.c */,
@@ -1897,6 +1899,8 @@
 		0246A1640BD3CC90004D1C70 /* Sound */ = {
 			isa = PBXGroup;
 			children = (
+				02C8AEFA0BE68A6800E9D8A7 /* oggvorbis.c */,
+				02C8AEFB0BE68A6800E9D8A7 /* oggvorbis.h */,
 				0246A1650BD3CCA6004D1C70 /* aud.h */,
 				0246A1660BD3CCA6004D1C70 /* audio_id.c */,
 				0246A1670BD3CCA6004D1C70 /* audio_id.h */,
