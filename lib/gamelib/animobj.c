@@ -55,8 +55,8 @@
 /***************************************************************************/
 /* global variables */
 
-static	HASHTABLE				*g_pAnimObjTable;
-static	ANIMOBJDIEDTESTFUNC		g_pDiedFunc;
+static	HASHTABLE *g_pAnimObjTable = NULL;
+static	ANIMOBJDIEDTESTFUNC g_pDiedFunc = NULL;
 
 /***************************************************************************/
 /* local functions */
@@ -81,8 +81,7 @@ animObj_Init( ANIMOBJDIEDTESTFUNC pDiedFunc )
 
 	/* set local hash table functions */
 	hashTable_SetHashFunction( g_pAnimObjTable, animObj_HashFunction );
-	hashTable_SetFreeElementFunction( g_pAnimObjTable,
-										animObj_HashFreeElementFunc );
+	hashTable_SetFreeElementFunction(g_pAnimObjTable, animObj_HashFreeElementFunc);
 
 	/* set global died test function */
 	g_pDiedFunc = pDiedFunc;
@@ -97,6 +96,8 @@ animObj_Shutdown( void )
 {
 	/* destroy hash table */
 	hashTable_Destroy( g_pAnimObjTable );
+	g_pAnimObjTable = NULL;
+	g_pDiedFunc = NULL;
 
 	return TRUE;
 }
@@ -208,15 +209,12 @@ animObj_Add( void *pParentObj, int iAnimID,
 	ASSERT( psAnim != NULL,
 			"anim_AddAnimObject: anim id %i not found\n", iAnimID );
 
-
 	/* get object from table */
 	psObj = (ANIM_OBJECT*)hashTable_GetElement( g_pAnimObjTable );
 
-
 	if (psObj==NULL)
 	{
-		debug( LOG_ERROR, "animObj_Add: No room in hash table\n" );
-		abort();
+		debug(LOG_ERROR, "animObj_Add: No room in hash table");
 		return(NULL);
 	}
 
@@ -254,8 +252,7 @@ animObj_Add( void *pParentObj, int iAnimID,
 	}
 
 	/* insert object in table by parent */
-	hashTable_InsertElement( g_pAnimObjTable, psObj,
-								(int) pParentObj, iAnimID );
+	hashTable_InsertElement(g_pAnimObjTable, psObj, (int) pParentObj, iAnimID);
 
 	return psObj;
 }
