@@ -266,8 +266,11 @@ void iV_unloadImage(iV_Image *image)
 {
 	if (image)
 	{
-		free(image->bmp);
-		image->bmp = NULL;
+		if (image->bmp)
+		{
+			free(image->bmp);
+			image->bmp = NULL;
+		}
 	}
 	else
 	{
