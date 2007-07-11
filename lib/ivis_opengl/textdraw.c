@@ -171,10 +171,10 @@ int iV_GetTextWidth(const char *String)
 	IVIS_FONT *Font = &iVFonts[ActiveFontID];
 
 	while (*String!=0) {
-		Index = *String;
+		Index = (unsigned char)*String;
 
 		if(Index != ASCII_COLOURMODE) {
-			if(Index != ASCII_SPACE) { // FIXME Culprit for images in UTF-8 strings?
+			if(Index != ASCII_SPACE) {
 				ImageID = (UWORD)Font->AsciiTable[Index];
 				MaxX += iV_GetImageWidth(Font->FontFile, ImageID) + 1;
 			} else {
@@ -195,7 +195,7 @@ int iV_GetCharWidth(const char Char)
 	int Width = 0;
 	IVIS_FONT *Font = &iVFonts[ActiveFontID];
 
-	Index = Char;
+	Index = (unsigned char)Char;
 
 	if(Index != ASCII_COLOURMODE) {
 		if(Index != ASCII_SPACE) {
@@ -531,7 +531,7 @@ void pie_DrawText(const char *string, UDWORD x, UDWORD y)
 	pie_BeginTextRender(Font->FontColourIndex);
 
 	while (*string!=0) {
-		Index = *string;
+		Index = (unsigned char)*string;
 
 		// Toggle colour mode?
 		if(Index == ASCII_COLOURMODE) {
@@ -545,7 +545,7 @@ void pie_DrawText(const char *string, UDWORD x, UDWORD y)
 			}
 		} else if(Index == ASCII_SPACE) {
 			x += Font->FontSpaceSize;
-		} else { // FIXME Culprit for images in UTF-8 strings?
+		} else {
 			ImageID = (UWORD)Font->AsciiTable[Index];
 			pie_TextRender(Font->FontFile, ImageID, x, y);
 			x += iV_GetImageWidth(Font->FontFile, ImageID) + 1;
@@ -577,7 +577,7 @@ void pie_DrawText270(const char *String, int XPos, int YPos)
 
 	while (*String!=0)
 	{
-		Index = *String;
+		Index = (unsigned char)*String;
 
 		if (Index != ASCII_SPACE) {
 			ImageID = (UWORD)Font->AsciiTable[Index];
