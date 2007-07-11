@@ -48,11 +48,16 @@ warzone2100_SOURCES = scriptvals_parser.tab.c scriptvals_lexer.lex.c \
 	multiplay.c multistruct.c oprint.c power.c projectile.c seqdisp.c structure.c \
 	target.c warzoneconfig.c
 
-warzone2100_LDADD = $(top_builddir)/lib/widget/libwidget.a \
-	$(top_builddir)/lib/sound/libsound.a $(top_builddir)/lib/sequence/libsequence.a \
-	$(top_builddir)/lib/script/libscript.a $(top_builddir)/lib/netplay/libnetplay.a \
-	$(top_builddir)/lib/ivis_opengl/libivis_opengl.a $(top_builddir)/lib/ivis_common/libivis_common.a \
-	$(top_builddir)/lib/gamelib/libgamelib.a $(top_builddir)/lib/framework/libframework.a
+warzone2100_LDADD = \
+	$(top_builddir)/lib/widget/libwidget.a \
+	$(top_builddir)/lib/sequence/libsequence.a \
+	$(top_builddir)/lib/sound/libsound.a \
+	$(top_builddir)/lib/script/libscript.a \
+	$(top_builddir)/lib/netplay/libnetplay.a \
+	$(top_builddir)/lib/ivis_opengl/libivis_opengl.a \
+	$(top_builddir)/lib/ivis_common/libivis_common.a \
+	$(top_builddir)/lib/gamelib/libgamelib.a \
+	$(top_builddir)/lib/framework/libframework.a
 
 if MINGW32
 warzone2100_LDADD += $(top_builddir)/win32/warzone2100.o
