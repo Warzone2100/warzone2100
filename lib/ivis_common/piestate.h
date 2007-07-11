@@ -146,7 +146,7 @@ typedef struct	RENDER_STATE
  */
 /***************************************************************************/
 
-extern SDWORD	pieStateCount;
+extern unsigned int pieStateCount;
 
 /***************************************************************************/
 /*

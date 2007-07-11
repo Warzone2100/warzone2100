@@ -75,7 +75,6 @@ BOOL pie_Initialise(void)
 {
 	int i;
 
-	pie_InitMaths();
 	pie_TexInit();
 
 	rendSurface.flags = REND_SURFACE_UNDEFINED;

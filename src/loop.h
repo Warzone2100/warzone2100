@@ -53,10 +53,10 @@ extern LOOP_MISSION_STATE		loopMissionState;
 // this is set by scrStartMission to say what type of new level is to be started
 extern SDWORD	nextMissionType;
 
-extern SDWORD loopPieCount;
-extern SDWORD loopTileCount;
-extern SDWORD loopPolyCount;
-extern SDWORD loopStateChanges;
+extern unsigned int loopPieCount;
+extern unsigned int loopTileCount;
+extern unsigned int loopPolyCount;
+extern unsigned int loopStateChanges;
 
 extern GAMECODE gameLoop(void);
 extern void videoLoop(void);

@@ -51,9 +51,8 @@
  *	Local Variables
  */
 /***************************************************************************/
-static PIEVERTEX	pieVrts[pie_MAX_POLY_VERTS];
-static PIEVERTEX	clippedVrts[pie_MAX_POLY_VERTS];
-static UBYTE		aByteScale[256][256];
+static PIEVERTEX	pieVrts[pie_MAX_VERTICES_PER_POLYGON];
+static PIEVERTEX	clippedVrts[pie_MAX_VERTICES_PER_POLYGON];
 
 /***************************************************************************/
 /*
@@ -230,24 +229,6 @@ void pie_DrawFogBox(float left, float right, float front, float back, float heig
 }
 
 /* ---------------------------------------------------------------------------------- */
-
-void pie_InitMaths(void)
-{
-	UBYTE c;
-	UDWORD a,b,bigC;
-
-	for(a=0; a<=UBYTE_MAX; a++)
-	{
-		for(b=0; b<=UBYTE_MAX; b++)
-		{
-			bigC = a * b;
-			bigC /= UBYTE_MAX;
-			ASSERT( bigC <= UBYTE_MAX,"light_InitMaths; rounding error" );
-			c = (UBYTE)bigC;
-			aByteScale[a][b] = c;
-		}
-	}
-}
 
 UBYTE pie_ByteScale(UBYTE a, UBYTE b)
 {

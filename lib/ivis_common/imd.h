@@ -30,16 +30,16 @@
 
 //*************************************************************************
 
-#define iV_IMD_MAX_POINTS	512 // increased from 256 - Per, May 20th 2006
-#define iV_IMD_MAX_POLYS	512 // increased from 256 - Per, May 20th 2006
+#define iV_IMD_MAX_POINTS pie_MAX_VERTICES
+#define iV_IMD_MAX_POLYS pie_MAX_POLYGONS
 
 //*************************************************************************
 
 // polygon flags	b0..b7: col, b24..b31: anim index
 
 
-#define iV_IMD_TEX			0x00000200
-#define iV_IMD_TEXANIM		0x00004000	// iV_IMD_TEX must be set also
+#define iV_IMD_TEX 0x00000200
+#define iV_IMD_TEXANIM 0x00004000 // iV_IMD_TEX must be set also
 
 //*************************************************************************
 

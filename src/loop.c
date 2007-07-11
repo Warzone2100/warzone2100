@@ -103,10 +103,10 @@ static void fireWaitingCallbacks(void);
 /*
  * Global variables
  */
-SDWORD loopPieCount;
-SDWORD loopTileCount;
-SDWORD loopPolyCount;
-SDWORD loopStateChanges;
+unsigned int loopPieCount;
+unsigned int loopTileCount;
+unsigned int loopPolyCount;
+unsigned int loopStateChanges;
 
 /*
  * local variables

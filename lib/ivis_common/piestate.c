@@ -19,8 +19,8 @@
 */
 #include "piestate.h"
 
-SDWORD		pieStateCount = 0; // FIXME Is this really used somewhere? Or is it just a dummy?
-RENDER_STATE	rendStates;
+unsigned int pieStateCount = 0; // Used in pie_GetResetCounts
+RENDER_STATE rendStates;
 
 void pie_SetColourCombine(COLOUR_MODE colCombMode);
 void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode);

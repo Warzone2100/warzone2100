@@ -79,9 +79,9 @@
 
 #define pie_RAISE_SCALE			256
 
-#define pie_MAX_POINTS			512
-#define pie_MAX_POLYS			512
-#define pie_MAX_POLY_VERTS		10
+#define pie_MAX_VERTICES		768
+#define pie_MAX_POLYGONS		512
+#define pie_MAX_VERTICES_PER_POLYGON	6
 
 #define pie_FILLRED			16
 #define pie_FILLGREEN			16
@@ -155,7 +155,7 @@ extern void pie_DrawImage270( PIEIMAGE *image, PIERECT *dest );
 
 extern void pie_DrawTexTriangle(const PIEVERTEX *aVrts, const void* psEffects);
 
-extern void pie_GetResetCounts(SDWORD* pPieCount, SDWORD* pTileCount, SDWORD* pPolyCount, SDWORD* pStateCount);
+extern void pie_GetResetCounts(unsigned int* pPieCount, unsigned int* pTileCount, unsigned int* pPolyCount, unsigned int* pStateCount);
 
 void pie_BeginLighting(const Vector3f * light);
 void pie_EndLighting(void);

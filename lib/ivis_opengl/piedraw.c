@@ -132,11 +132,10 @@ static BOOL stencil_one_pass(void)
  */
 /***************************************************************************/
 
-static Vector3f scrPoints[pie_MAX_POINTS];
-static PIEVERTEXF pieVrts[pie_MAX_POLY_VERTS];
-static SDWORD pieCount = 0;
-static SDWORD tileCount = 0;
-static SDWORD polyCount = 0;
+static PIEVERTEXF pieVrts[pie_MAX_VERTICES_PER_POLYGON];
+static unsigned int pieCount = 0;
+static unsigned int tileCount = 0;
+static unsigned int polyCount = 0;
 static BOOL lighting = FALSE;
 static BOOL shadows = FALSE;
 
@@ -341,7 +340,7 @@ static unsigned int nb_tshapes = 0;
 static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT specular, int pieFlag, int pieFlagData)
 {
 	unsigned int n;
-	Vector3f *pVertices, *pPixels;
+	Vector3f *pVertices, *pPixels, scrPoints[pie_MAX_VERTICES];
 	iIMDPoly *pPolys;
 	PIEPOLY piePoly;
 	VERTEXID *index;
@@ -1058,7 +1057,7 @@ void pie_DrawTexTriangle(const PIEVERTEX *aVrts, const void* psEffects)
 	}
 }
 
-void pie_GetResetCounts(SDWORD* pPieCount, SDWORD* pTileCount, SDWORD* pPolyCount, SDWORD* pStateCount)
+void pie_GetResetCounts(unsigned int* pPieCount, unsigned int* pTileCount, unsigned int* pPolyCount, unsigned int* pStateCount)
 {
 	*pPieCount  = pieCount;
 	*pTileCount = tileCount;
