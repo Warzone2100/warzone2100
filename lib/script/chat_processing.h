@@ -26,7 +26,7 @@
 #define _chat_processing_h
 
 #include "lib/framework/frame.h"
-#include "src/base.h"
+#include "src/basedef.h"
 #include "src/droiddef.h"
 #include "src/structuredef.h"
 #include "lib/script/script.h"

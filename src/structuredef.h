@@ -28,7 +28,7 @@
 
 #include "lib/gamelib/animobj.h"
 #include "statsdef.h"
-#include "weapons.h"
+#include "weapondef.h"
 
 #define NUM_FACTORY_MODULES	2
 #define NUM_RESEARCH_MODULES 4

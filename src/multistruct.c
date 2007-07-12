@@ -30,7 +30,7 @@
 #include "lib/framework/frame.h"
 #include "droid.h"
 #include "droiddef.h"
-#include "base.h"
+#include "basedef.h"
 #include "power.h"
 #include "geometry.h"								// for gettilestructure
 #include "anim_id.h"

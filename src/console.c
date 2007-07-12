@@ -22,7 +22,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/gamelib/gtime.h"
-#include "base.h"
+#include "basedef.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/rendmode.h"

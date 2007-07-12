@@ -30,7 +30,7 @@
 #include "lib/framework/strres.h"
 #include "lib/script/script.h"
 #include "objects.h"
-#include "base.h"
+#include "basedef.h"
 #include "scripttabs.h"
 #include "scriptvals.h"
 #include "lib/gamelib/gtime.h"

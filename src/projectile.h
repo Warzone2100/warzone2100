@@ -31,7 +31,7 @@
 /***************************************************************************/
 
 #include "lib/framework/types.h"
-#include "base.h"
+#include "basedef.h"
 #include "statsdef.h"
 #include "movedef.h"
 #include "lib/gamelib/anim.h"

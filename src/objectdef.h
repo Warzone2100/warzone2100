@@ -34,12 +34,12 @@
 #include "movedef.h"
 #include "statsdef.h"
 #include "researchdef.h"
-#include "weapons.h"
+#include "weapondef.h"
 
-#include "base.h"
+#include "basedef.h"
 #include "droiddef.h"
 #include "structuredef.h"
-#include "bulletdef.h"
+#include "projectiledef.h"
 #include "featuredef.h"
 
 #endif

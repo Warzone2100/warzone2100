@@ -28,7 +28,7 @@
 /***************************************************************************/
 
 #include "lib/framework/frame.h"
-#include "base.h"
+#include "basedef.h"
 #include "map.h"
 #include "display3d.h"
 #include "lib/ivis_common/piedef.h"

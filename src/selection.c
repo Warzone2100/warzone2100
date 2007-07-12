@@ -29,7 +29,7 @@
 #include "lib/framework/strres.h"
 
 #include "objects.h"
-#include "base.h"
+#include "basedef.h"
 #include "droiddef.h"
 #include "statsdef.h"
 #include "text.h"

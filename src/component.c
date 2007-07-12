@@ -26,7 +26,7 @@
 #include <string.h>
 
 #include "lib/framework/frame.h"
-#include "base.h"
+#include "basedef.h"
 #include "droid.h"
 #include "action.h"
 #include "order.h"

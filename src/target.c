@@ -29,7 +29,7 @@
 #include "lib/gamelib/animobj.h"
 
 #include "statsdef.h"
-#include "base.h"
+#include "basedef.h"
 #include "featuredef.h"
 #include "weapons.h"
 #include "structuredef.h"

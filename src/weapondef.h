@@ -18,13 +18,13 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /*
- * Weapons.h
+ * weapondef.h
  *
  * Definitions for the weapons
  *
  */
-#ifndef _weapons_h
-#define _weapons_h
+#ifndef _weapondef_h
+#define _weapondef_h
 
 typedef struct _weapon
 {

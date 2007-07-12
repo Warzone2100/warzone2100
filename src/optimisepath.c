@@ -28,10 +28,9 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/trig.h"
 
-#include "base.h"
+#include "basedef.h"
 #include "move.h"
 #include "map.h"
-#include "weapons.h"
 #include "statsdef.h"
 #include "droiddef.h"
 #include "lib/ivis_common/pietypes.h"

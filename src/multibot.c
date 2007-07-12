@@ -27,7 +27,7 @@
 
 #include "droid.h"						// for droid sending and ordering.
 #include "droiddef.h"
-#include "base.h"						// for sending WHOLE droids.
+#include "basedef.h"						// for sending WHOLE droids.
 #include "stats.h"
 #include "move.h"						// for ordering droids
 #include "objmem.h"

@@ -38,7 +38,7 @@
 #include "lib/ivis_common/rendmode.h"
 #include "objects.h"
 #include "droiddef.h"
-#include "base.h"
+#include "basedef.h"
 #include "statsdef.h"
 #include "hci.h"
 #include "text.h"

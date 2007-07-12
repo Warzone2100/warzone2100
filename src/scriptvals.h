@@ -25,7 +25,7 @@
 #ifndef _scriptvals_h
 #define _scriptvals_h
 
-#include "base.h"
+#include "basedef.h"
 
 // The possible types of initialisation values
 typedef enum _init_type

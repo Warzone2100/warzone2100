@@ -28,11 +28,11 @@
 #include "lib/gamelib/animobj.h"
 #include "lib/sound/audio.h"
 
-#include "base.h"
+#include "basedef.h"
 #include "deliverance.h"
 #include "movedef.h"
 #include "statsdef.h"
-#include "weapons.h"
+#include "weapondef.h"
 
 /* The number of components in the asParts / asBits arrays */
 #define DROID_MAXCOMP		(COMP_NUMCOMPONENTS - 1)//(COMP_NUMCOMPONENTS - 2)

@@ -29,7 +29,7 @@
 #ifndef _display_h
 #define _display_h
 
-#include "base.h"
+#include "basedef.h"
 #include "structure.h"
 
 

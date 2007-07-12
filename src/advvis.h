@@ -21,7 +21,7 @@
 #define _advvis_h
 
 #include "lib/framework/types.h"
-#include "base.h"
+#include "basedef.h"
 
 extern void	avInformOfChange(SDWORD x, SDWORD y);
 extern void	avUpdateTiles( void );

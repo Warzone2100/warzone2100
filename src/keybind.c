@@ -22,7 +22,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "objects.h"
-#include "base.h"
+#include "basedef.h"
 #include "map.h"
 #include "warcam.h"
 #include "warzoneconfig.h"
