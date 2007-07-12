@@ -949,7 +949,6 @@
 		0246A15C0BD3CC8A004D1C70 /* rpl_reader.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = rpl_reader.h; path = ../lib/sequence/rpl_reader.h; sourceTree = SOURCE_ROOT; };
 		0246A15D0BD3CC8A004D1C70 /* sequence_stub.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = sequence_stub.c; path = ../lib/sequence/sequence_stub.c; sourceTree = SOURCE_ROOT; };
 		0246A15E0BD3CC8A004D1C70 /* sequence.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = sequence.h; path = ../lib/sequence/sequence.h; sourceTree = SOURCE_ROOT; };
-		0246A15F0BD3CC8A004D1C70 /* streamer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = streamer.h; path = ../lib/sequence/streamer.h; sourceTree = SOURCE_ROOT; };
 		0246A1650BD3CCA6004D1C70 /* aud.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = aud.h; path = ../lib/sound/aud.h; sourceTree = SOURCE_ROOT; };
 		0246A1660BD3CCA6004D1C70 /* audio_id.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = audio_id.c; path = ../lib/sound/audio_id.c; sourceTree = SOURCE_ROOT; };
 		0246A1670BD3CCA6004D1C70 /* audio_id.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = audio_id.h; path = ../lib/sound/audio_id.h; sourceTree = SOURCE_ROOT; };
@@ -1000,12 +999,12 @@
 		0246A1A50BD3CCDB004D1C70 /* atmos.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = atmos.c; path = ../src/atmos.c; sourceTree = SOURCE_ROOT; };
 		0246A1A60BD3CCDB004D1C70 /* atmos.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = atmos.h; path = ../src/atmos.h; sourceTree = SOURCE_ROOT; };
 		0246A1A70BD3CCDB004D1C70 /* aud.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = aud.c; path = ../src/aud.c; sourceTree = SOURCE_ROOT; };
-		0246A1A80BD3CCDB004D1C70 /* base.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = base.h; path = ../src/base.h; sourceTree = SOURCE_ROOT; };
+		0246A1A80BD3CCDB004D1C70 /* basedef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = basedef.h; path = ../src/basedef.h; sourceTree = SOURCE_ROOT; };
 		0246A1A90BD3CCDB004D1C70 /* bridge.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = bridge.c; path = ../src/bridge.c; sourceTree = SOURCE_ROOT; };
 		0246A1AA0BD3CCDB004D1C70 /* bridge.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = bridge.h; path = ../src/bridge.h; sourceTree = SOURCE_ROOT; };
 		0246A1AB0BD3CCDB004D1C70 /* bucket3d.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = bucket3d.c; path = ../src/bucket3d.c; sourceTree = SOURCE_ROOT; };
 		0246A1AC0BD3CCDB004D1C70 /* bucket3d.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = bucket3d.h; path = ../src/bucket3d.h; sourceTree = SOURCE_ROOT; };
-		0246A1AE0BD3CCDB004D1C70 /* bulletdef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = bulletdef.h; path = ../src/bulletdef.h; sourceTree = SOURCE_ROOT; };
+		0246A1AE0BD3CCDB004D1C70 /* projectiledef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = projectiledef.h; path = ../src/projectiledef.h; sourceTree = SOURCE_ROOT; };
 		0246A1AF0BD3CCDB004D1C70 /* cdspan.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = cdspan.c; path = ../src/cdspan.c; sourceTree = SOURCE_ROOT; };
 		0246A1B00BD3CCDB004D1C70 /* cdspan.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = cdspan.h; path = ../src/cdspan.h; sourceTree = SOURCE_ROOT; };
 		0246A1B10BD3CCDB004D1C70 /* cheat.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = cheat.c; path = ../src/cheat.c; sourceTree = SOURCE_ROOT; };
@@ -1220,7 +1219,7 @@
 		0246A2860BD3CCDC004D1C70 /* warcam.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = warcam.h; path = ../src/warcam.h; sourceTree = SOURCE_ROOT; };
 		0246A2870BD3CCDC004D1C70 /* warzoneconfig.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = warzoneconfig.c; path = ../src/warzoneconfig.c; sourceTree = SOURCE_ROOT; };
 		0246A2880BD3CCDC004D1C70 /* warzoneconfig.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = warzoneconfig.h; path = ../src/warzoneconfig.h; sourceTree = SOURCE_ROOT; };
-		0246A2890BD3CCDC004D1C70 /* weapons.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = weapons.h; path = ../src/weapons.h; sourceTree = SOURCE_ROOT; };
+		0246A2890BD3CCDC004D1C70 /* weapondef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = weapondef.h; path = ../src/weapondef.h; sourceTree = SOURCE_ROOT; };
 		0246A28A0BD3CCDC004D1C70 /* winmain.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = winmain.h; path = ../src/winmain.h; sourceTree = SOURCE_ROOT; };
 		0246A28B0BD3CCDC004D1C70 /* wrappers.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = wrappers.c; path = ../src/wrappers.c; sourceTree = SOURCE_ROOT; };
 		0246A28C0BD3CCDC004D1C70 /* wrappers.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = wrappers.h; path = ../src/wrappers.h; sourceTree = SOURCE_ROOT; };
@@ -1890,7 +1889,6 @@
 				0246A15C0BD3CC8A004D1C70 /* rpl_reader.h */,
 				0246A15D0BD3CC8A004D1C70 /* sequence_stub.c */,
 				0246A15E0BD3CC8A004D1C70 /* sequence.h */,
-				0246A15F0BD3CC8A004D1C70 /* streamer.h */,
 			);
 			name = Sequence;
 			sourceTree = "<group>";
@@ -1964,12 +1962,12 @@
 				0246A1A50BD3CCDB004D1C70 /* atmos.c */,
 				0246A1A60BD3CCDB004D1C70 /* atmos.h */,
 				0246A1A70BD3CCDB004D1C70 /* aud.c */,
-				0246A1A80BD3CCDB004D1C70 /* base.h */,
+				0246A1A80BD3CCDB004D1C70 /* basedef.h */,
 				0246A1A90BD3CCDB004D1C70 /* bridge.c */,
 				0246A1AA0BD3CCDB004D1C70 /* bridge.h */,
 				0246A1AB0BD3CCDB004D1C70 /* bucket3d.c */,
 				0246A1AC0BD3CCDB004D1C70 /* bucket3d.h */,
-				0246A1AE0BD3CCDB004D1C70 /* bulletdef.h */,
+				0246A1AE0BD3CCDB004D1C70 /* projectiledef.h */,
 				0246A1AF0BD3CCDB004D1C70 /* cdspan.c */,
 				0246A1B00BD3CCDB004D1C70 /* cdspan.h */,
 				0246A1B10BD3CCDB004D1C70 /* cheat.c */,
@@ -2184,7 +2182,7 @@
 				0246A2860BD3CCDC004D1C70 /* warcam.h */,
 				0246A2870BD3CCDC004D1C70 /* warzoneconfig.c */,
 				0246A2880BD3CCDC004D1C70 /* warzoneconfig.h */,
-				0246A2890BD3CCDC004D1C70 /* weapons.h */,
+				0246A2890BD3CCDC004D1C70 /* weapondef.h */,
 				0246A28A0BD3CCDC004D1C70 /* winmain.h */,
 				0246A28B0BD3CCDC004D1C70 /* wrappers.c */,
 				0246A28C0BD3CCDC004D1C70 /* wrappers.h */,
