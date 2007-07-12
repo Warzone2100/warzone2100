@@ -339,7 +339,8 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj,
 			// has a target - (slow firing weapons will not be ready to fire otherwise).
 			bCommanderBlock = TRUE;
 			if (psCommander->action == DACTION_ATTACK &&
-				psCommander->psActionTarget != NULL)
+				psCommander->psActionTarget != NULL &&
+				!psCommander->psActionTarget->died)
 			{
 				// the commander has a target to fire on
 				if (aiStructHasRange((STRUCTURE *)psObj, psCommander->psActionTarget))
@@ -373,7 +374,8 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj,
 
 				if (!bCBTower &&
 					structStandardSensor(psCStruct) &&
-					psCStruct->psTarget != NULL)
+					psCStruct->psTarget != NULL &&
+					!psCStruct->psTarget->died)
 				{
                     /*check its a valid target*/
                     if (validTarget(psObj, psCStruct->psTarget) &&
