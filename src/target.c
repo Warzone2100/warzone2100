@@ -31,7 +31,7 @@
 #include "statsdef.h"
 #include "basedef.h"
 #include "featuredef.h"
-#include "weapons.h"
+#include "weapondef.h"
 #include "structuredef.h"
 #include "display.h"
 #include "visibility.h"
