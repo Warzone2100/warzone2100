@@ -25,9 +25,6 @@
 
 #include <physfs.h>
 
-/* Maximum number of characters in a directory entry */
-#define FILE_MAXCHAR		255
-
 /* Maximum number of TEXT items in any one Yacc rule */
 #define TEXT_BUFFERS	10
 

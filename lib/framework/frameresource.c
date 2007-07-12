@@ -35,8 +35,8 @@
 static RES_TYPE *psResTypes=NULL;
 
 /* The initial resource directory and the current resource directory */
-char	aResDir[FILE_MAXCHAR];
-char	aCurrResDir[FILE_MAXCHAR];
+char aResDir[MAX_PATH];
+char aCurrResDir[MAX_PATH];
 
 // the current resource block ID
 static SDWORD	resBlockID;
@@ -96,7 +96,7 @@ void resShutDown(void)
 // set the base resource directory
 void resSetBaseDir(char *pResDir)
 {
-	strncpy(aResDir, pResDir, FILE_MAXCHAR - 1);
+	strncpy(aResDir, pResDir, MAX_PATH - 1);
 }
 
 /* Parse the res file */
@@ -232,7 +232,7 @@ void resToLower(char *pStr)
 }
 
 
-static char LastResourceFilename[FILE_MAXCHAR];
+static char LastResourceFilename[MAX_PATH];
 
 // Returns the filename of the last resource file loaded
 char *GetLastResourceFilename(void)
@@ -243,8 +243,8 @@ char *GetLastResourceFilename(void)
 // Set the resource name of the last resource file loaded
 void SetLastResourceFilename(char *pName)
 {
-	strncpy(LastResourceFilename, pName, FILE_MAXCHAR-1);
-	LastResourceFilename[FILE_MAXCHAR-1] = 0;
+	strncpy(LastResourceFilename, pName, MAX_PATH-1);
+	LastResourceFilename[MAX_PATH-1] = '\0';
 }
 
 
@@ -378,7 +378,7 @@ BOOL resLoadFile(const char *pType, const char *pFile)
 	RES_TYPE	*psT;
 	void		*pData;
 	RES_DATA	*psRes;
-	char		aFileName[FILE_MAXCHAR];
+	char		aFileName[MAX_PATH];
 	UDWORD          HashedName, HashedType = HashString(pType);
 
 	// Find the resource-type
@@ -408,7 +408,7 @@ BOOL resLoadFile(const char *pType, const char *pFile)
 	}
 
 	// Create the file name
-	if (strlen(aCurrResDir) + strlen(pFile) + 1 >= FILE_MAXCHAR) {
+	if (strlen(aCurrResDir) + strlen(pFile) + 1 >= MAX_PATH) {
 		debug(LOG_ERROR, "resLoadFile: Filename too long!! %s%s", aCurrResDir, pFile);
 		return FALSE;
 	}
