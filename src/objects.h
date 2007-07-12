@@ -30,7 +30,6 @@
 #include "droid.h"
 #include "structure.h"
 #include "feature.h"
-#include "bullet.h"
 #include "objmem.h"
 
 #include "ai.h"

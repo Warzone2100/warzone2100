@@ -126,6 +126,17 @@ extern void	objectShimmy	( BASE_OBJECT *psObj );
 // Watermelon:naybor related functions
 extern void projGetNaybors(PROJ_OBJECT *psObj);
 
+//used for passing data to the checkBurnDamage function
+typedef struct _fire_box
+{
+	SWORD	x1, y1;
+	SWORD	x2, y2;
+	SWORD	rad;
+} FIRE_BOX;
+
+/*Apply the damage to an object due to fire range*/
+extern void checkBurnDamage(BASE_OBJECT* apsList, PROJ_OBJECT* psBullet, FIRE_BOX* pFireBox);
+
 static inline void setProjectileDestination(PROJ_OBJECT *psProj, BASE_OBJECT *psObj)
 {
 	psProj->psDest = psObj;

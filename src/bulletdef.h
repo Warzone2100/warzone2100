@@ -45,12 +45,6 @@ struct PROJ_OBJECT;
 
 typedef void (* PROJECTILE_FUNC) ( struct PROJ_OBJECT *psObj );
 
-typedef struct PROJECTILE
-{
-	struct PROJECTILE	*psNext;
-}
-PROJECTILE;
-
 typedef struct PROJ_OBJECT
 {
 	/* Use only simple object elements */
