@@ -137,6 +137,8 @@ AC_ARG_ENABLE(ogg,
 # Checks for libraries:
 
 AC_CHECK_LIB(m, pow)
+# PhysFS needs this, since on sometimes it is not properly linked:
+AC_CHECK_LIB(z, deflate)
 
 # Look for image libs
 AC_CHECK_LIB(png, main, , AC_MSG_ERROR([libpng not found.]))

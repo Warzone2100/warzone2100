@@ -24,7 +24,7 @@ CPPFLAGS="$SDL_CFLAGS $SDLNETINC"
 LIBS="$SDL_LIBS $SDLNETLIB -lSDL_net"
 AC_TRY_COMPILE([
 	 #include "SDL.h"
-	 #include "SDL/SDL_net.h"
+	 #include "SDL_net.h"
 	 int main(int argc, char **argv)
 	 {
 		 SDLNet_Init();
