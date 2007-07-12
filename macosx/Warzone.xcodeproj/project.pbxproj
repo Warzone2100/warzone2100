@@ -1005,7 +1005,6 @@
 		0246A1AA0BD3CCDB004D1C70 /* bridge.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = bridge.h; path = ../src/bridge.h; sourceTree = SOURCE_ROOT; };
 		0246A1AB0BD3CCDB004D1C70 /* bucket3d.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = bucket3d.c; path = ../src/bucket3d.c; sourceTree = SOURCE_ROOT; };
 		0246A1AC0BD3CCDB004D1C70 /* bucket3d.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = bucket3d.h; path = ../src/bucket3d.h; sourceTree = SOURCE_ROOT; };
-		0246A1AD0BD3CCDB004D1C70 /* bullet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = bullet.h; path = ../src/bullet.h; sourceTree = SOURCE_ROOT; };
 		0246A1AE0BD3CCDB004D1C70 /* bulletdef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = bulletdef.h; path = ../src/bulletdef.h; sourceTree = SOURCE_ROOT; };
 		0246A1AF0BD3CCDB004D1C70 /* cdspan.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = cdspan.c; path = ../src/cdspan.c; sourceTree = SOURCE_ROOT; };
 		0246A1B00BD3CCDB004D1C70 /* cdspan.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = cdspan.h; path = ../src/cdspan.h; sourceTree = SOURCE_ROOT; };
@@ -1970,7 +1969,6 @@
 				0246A1AA0BD3CCDB004D1C70 /* bridge.h */,
 				0246A1AB0BD3CCDB004D1C70 /* bucket3d.c */,
 				0246A1AC0BD3CCDB004D1C70 /* bucket3d.h */,
-				0246A1AD0BD3CCDB004D1C70 /* bullet.h */,
 				0246A1AE0BD3CCDB004D1C70 /* bulletdef.h */,
 				0246A1AF0BD3CCDB004D1C70 /* cdspan.c */,
 				0246A1B00BD3CCDB004D1C70 /* cdspan.h */,
