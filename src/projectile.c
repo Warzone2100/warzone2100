@@ -39,7 +39,6 @@
 #include "map.h"
 #include "lib/sound/audio_id.h"
 #include "lib/sound/audio.h"
-#include "lib/gamelib/hashtabl.h"
 #include "anim_id.h"
 #include "projectile.h"
 #include "visibility.h"
@@ -64,16 +63,6 @@
 // Watermelon:I need this one for map grid iteration
 #include "mapgrid.h"
 
-/***************************************************************************/
-/* max number of slots in hash table - prime numbers are best because hash
- * function used here is modulous of object pointer with table size -
- * prime number nearest 100 is 97.
- * Table of nearest primes in Binstock+Rex, "Practical Algorithms" p 91.
- */
-
-#define	PROJ_HASH_TABLE_SIZE	97
-#define PROJ_INIT				200
-#define PROJ_EXT				10
 #define	PROJ_MAX_PITCH			30
 #define	ACC_GRAVITY				1000
 #define	DIRECT_PROJ_SPEED		500
@@ -121,9 +110,13 @@ UDWORD				numProjNaybors=0;
 static BASE_OBJECT	*CurrentProjNaybors = NULL;
 static UDWORD	projnayborTime = 0;
 
-/***************************************************************************/
+/* The list of projectiles in play */
+static PROJECTILE *psProjectileList = NULL;
 
-static	HASHTABLE	*g_pProjObjTable;
+/* The next projectile to give out in the proj_First / proj_Next methods */
+static PROJECTILE *psProjectileNext = NULL;
+
+/***************************************************************************/
 
 // the last unit that did damage - used by script functions
 BASE_OBJECT		*g_pProjLastAttacker;
@@ -140,6 +133,7 @@ static void	proj_ImpactFunc( PROJECTILE *psObj );
 static void	proj_PostImpactFunc( PROJECTILE *psObj );
 static void	proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj,
 									FIRE_BOX *pFireBox );
+static void	proj_Free(PROJECTILE *psObj);
 
 static SDWORD objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, DROID_HIT_SIDE impactSide);
 static DROID_HIT_SIDE getHitSide (PROJECTILE *psObj, DROID *psTarget);
@@ -210,21 +204,30 @@ BOOL gfxVisible(PROJECTILE *psObj)
 BOOL
 proj_InitSystem( void )
 {
-	/* allocate object hashtable */
-	hashTable_Create( &g_pProjObjTable, PROJ_HASH_TABLE_SIZE,
-						PROJ_INIT, PROJ_EXT, sizeof(PROJECTILE) );
+	psProjectileList = NULL;
+	psProjectileNext = NULL;
+
 	return TRUE;
 }
 
 /***************************************************************************/
 
+// Clean out all projectiles from the system, and properly decrement
+// all reference counts.
 void
 proj_FreeAllProjectiles( void )
 {
-	if (g_pProjObjTable)
+	PROJECTILE *psCurr = psProjectileList, *psPrev = NULL;
+
+	while (psCurr)
 	{
-		hashTable_Clear( g_pProjObjTable );
+		psPrev = psCurr;
+		psCurr = psCurr->psNext;
+		proj_Free(psPrev);
 	}
+
+	psProjectileList = NULL;
+	psProjectileNext = NULL;
 }
 
 /***************************************************************************/
@@ -232,46 +235,76 @@ proj_FreeAllProjectiles( void )
 BOOL
 proj_Shutdown( void )
 {
-	/* destroy hash table */
-	hashTable_Destroy( g_pProjObjTable );
-	g_pProjObjTable = NULL;
+	proj_FreeAllProjectiles();
 
 	return TRUE;
 }
 
 /***************************************************************************/
 
-static void proj_Destroy(PROJECTILE *psObj)
+// Free the memory held by a projectile, and decrement its reference counts,
+// if any. Do not call directly on a projectile in a list, because then the
+// list will be broken!
+static void proj_Free(PROJECTILE *psObj)
 {
-	CHECK_PROJECTILE(psObj);
-
 	/* Decrement any reference counts the projectile may have increased */
 	setProjectileDamaged(psObj, NULL);
 	setProjectileSource(psObj, NULL);
 	setProjectileDestination(psObj, NULL);
 
-	/* WARNING WARNING: The use of (int) cast pointer here is not safe for
-	 * most 64-bit architectures! FIXME!! - Per */
-	if (hashTable_RemoveElement(g_pProjObjTable, psObj, (int) psObj, UNUSED_KEY) == FALSE)
+	free(psObj);
+}
+
+// Take a projectile out of the global list and shoot it...
+static void proj_Destroy(PROJECTILE *psObj)
+{
+	PROJECTILE *psCurr = psProjectileList, *psPrev = NULL;
+
+	CHECK_PROJECTILE(psObj);
+
+	// is it the first node?
+	if (psCurr == psObj)
 	{
-		debug(LOG_ERROR, "proj_Destroy: couldn't remove projectile from hash table");
+		psProjectileList = psCurr->psNext;
+		proj_Free(psCurr);
+		return;
 	}
+
+	// is in list
+	while (psCurr)
+	{
+		psPrev = psCurr;
+		psCurr = psCurr->psNext;
+		if (psCurr == psObj)
+		{
+			psPrev->psNext = psCurr->psNext;
+			proj_Free(psCurr);
+			return;
+		}
+	}
+
+	// oops
+	ASSERT(!"projectile not found", "projectile not in global list");
 }
 
 /***************************************************************************/
 
+// Reset the first/next methods, and give out the first projectile in the list.
 PROJECTILE *
 proj_GetFirst( void )
 {
-	return (PROJECTILE*)hashTable_GetFirst( g_pProjObjTable );
+	psProjectileNext = psProjectileList;
+	return psProjectileList;
 }
 
 /***************************************************************************/
 
+// Get the next projectile
 PROJECTILE *
 proj_GetNext( void )
 {
-	return (PROJECTILE*)hashTable_GetNext( g_pProjObjTable );
+	psProjectileNext = psProjectileNext->psNext;
+	return psProjectileNext;
 }
 
 /***************************************************************************/
@@ -334,7 +367,7 @@ BOOL
 proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 					 UDWORD tarX, UDWORD tarY, UDWORD tarZ, BASE_OBJECT *psTarget, BOOL bVisible, BOOL bPenetrate, int weapon_slot )
 {
-	PROJECTILE		*psObj;
+	PROJECTILE		*psObj = malloc(sizeof(PROJECTILE));
 	SDWORD			tarHeight, srcHeight, iMinSq;
 	SDWORD			altChange, dx, dy, dz, iVelSq, iVel;
 	FRACT_D			fR, fA, fS, fT, fC;
@@ -345,9 +378,6 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 
 	ASSERT( psWeapStats != NULL,
 			"proj_SendProjectile: invalid weapon stats" );
-
-	/* get unused projectile object from hashtable*/
-	psObj = (PROJECTILE*)hashTable_GetElement( g_pProjObjTable );
 
 	/* get muzzle offset */
 	if (psAttacker == NULL)
@@ -597,8 +627,9 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 		psObj->pInFlightFunc = proj_InFlightIndirectFunc;
 	}
 
-	/* put object in hashtable */
-	hashTable_InsertElement( g_pProjObjTable, psObj, (int) psObj, UNUSED_KEY );
+	/* put the projectile object first in the global list */
+	psObj->psNext = psProjectileList;
+	psProjectileList = psObj;
 
 	/* play firing audio */
 	// only play if either object is visible, i know it's a bit of a hack, but it avoids the problem
@@ -1797,18 +1828,15 @@ proj_Update( PROJECTILE *psObj )
 
 /***************************************************************************/
 
+// iterate through all projectiles and update their status
 void
 proj_UpdateAll( void )
 {
 	PROJECTILE	*psObj;
 
-	psObj = (PROJECTILE *) hashTable_GetFirst( g_pProjObjTable );
-
-	while ( psObj != NULL )
+	for (psObj = psProjectileList; psObj != NULL; psObj = psObj->psNext)
 	{
 		proj_Update( psObj );
-
-		psObj = (PROJECTILE *) hashTable_GetNext( g_pProjObjTable );
 	}
 }
 

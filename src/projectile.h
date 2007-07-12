@@ -42,7 +42,6 @@
 extern	BASE_OBJECT		*g_pProjLastAttacker;
 extern UDWORD	selectedPlayer;
 
-
 // whether an object is in a fire
 #define IN_FIRE		0x01
 // whether an object has just left the fire, but is still burning
@@ -80,40 +79,6 @@ typedef struct _proj_naybor_info
 	//UDWORD			dist;			// The distance to the object
 } PROJ_NAYBOR_INFO;
 
-/*
-// The fattest macro around - change this little bastard at your peril
-#define GFX_VISIBLE(psObj)	(							\
-	(													\
-		(psObj->player == selectedPlayer)				\
-	)													\
-	OR													\
-	(													\
-		(psObj->psSource != NULL)						\
-		AND												\
-		(												\
-			(psObj->psSource->type == OBJ_STRUCTURE && psObj->psSource->player == selectedPlayer) OR\
-			(psObj->psSource->type == OBJ_STRUCTURE && psObj->psSource->visible[selectedPlayer]) OR\
-			(psObj->psSource->type == OBJ_DROID     && psObj->psSource->visible[selectedPlayer]) OR\
-			(psObj->psSource->type == OBJ_DROID     && psObj->psSource->player == selectedPlayer) \
-		)												\
-	)													\
-	OR													\
-	(													\
-		(psObj->psDest != NULL)							\
-		AND												\
-		(												\
-			(psObj->psDest->type == OBJ_STRUCTURE && psObj->psDest->player == selectedPlayer) OR\
-			(psObj->psDest->type == OBJ_STRUCTURE && psObj->psSource->visible[selectedPlayer]) OR\
-			(psObj->psDest->type == OBJ_DROID     && psObj->psDest->visible[selectedPlayer]) OR\
-			(psObj->psDest->type == OBJ_DROID     && psObj->psSource->player == selectedPlayer) \
-		)												\
-	)													\
-	OR													\
-	(													\
-		godMode											\
-	)													\
-)
-*/
 extern UDWORD calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect,
 						 BASE_OBJECT *psTarget);
 extern BOOL gfxVisible(PROJECTILE *psObj);
