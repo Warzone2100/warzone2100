@@ -1084,7 +1084,7 @@ static void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR)
 /* Renders the bullets and their effects in 3D */
 static void display3DProjectiles( void )
 {
-	PROJ_OBJECT		*psObj;
+	PROJECTILE		*psObj;
 
 	psObj = proj_GetFirst();
 
@@ -1136,7 +1136,7 @@ static void display3DProjectiles( void )
 }	/* end of function display3DProjectiles */
 
 
-void	renderProjectile(PROJ_OBJECT *psCurr)
+void	renderProjectile(PROJECTILE *psCurr)
 {
 	WEAPON_STATS	*psStats;
 	Vector3i			dv;

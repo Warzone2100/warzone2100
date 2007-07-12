@@ -287,7 +287,7 @@ extern BOOL bucketRenderCurrentList(void)
 
 				case RENDER_PROJECTILE:
 				case RENDER_PROJECTILE_TRANSPARENT:
-					renderProjectile((PROJ_OBJECT*)thisTag->pObject);
+					renderProjectile((PROJECTILE*)thisTag->pObject);
 				break;
 				case RENDER_ANIMATION:
 					renderAnimComponent((COMPONENT_OBJECT*)thisTag->pObject);
@@ -370,11 +370,11 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			break;
 		case RENDER_PROJECTILE://not depth sorted
 		case RENDER_PROJECTILE_TRANSPARENT:
-//			((PROJ_OBJECT*)pObject)->psWStats;
+//			((PROJECTILE*)pObject)->psWStats;
 			/* these guys should never be added to the list anyway */
-			if(((PROJ_OBJECT*)pObject)->psWStats->weaponSubClass == WSC_FLAME ||
-                ((PROJ_OBJECT*)pObject)->psWStats->weaponSubClass == WSC_COMMAND ||
-                ((PROJ_OBJECT*)pObject)->psWStats->weaponSubClass == WSC_EMP)
+			if(((PROJECTILE*)pObject)->psWStats->weaponSubClass == WSC_FLAME ||
+                ((PROJECTILE*)pObject)->psWStats->weaponSubClass == WSC_COMMAND ||
+                ((PROJECTILE*)pObject)->psWStats->weaponSubClass == WSC_EMP)
 			{
 				/* We don't do projectiles from these guys, cos there's an effect instead */
 				z = -1;
@@ -383,7 +383,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			{
 
 				//the weapon stats holds the reference to which graphic to use
-				pImd = ((PROJ_OBJECT*)pObject)->psWStats->pInFlightGraphic;
+				pImd = ((PROJECTILE*)pObject)->psWStats->pInFlightGraphic;
 
 	   			px = player.p.x & (TILE_UNITS-1);
 	   			pz = player.p.z & (TILE_UNITS-1);
@@ -756,7 +756,7 @@ static SDWORD bucketCalculateState(RENDER_TYPE objectType, void* pObject)
 			break;
 
 		case RENDER_PROJECTILE:
-			pie = ((PROJ_OBJECT*)pObject)->psWStats->pInFlightGraphic;
+			pie = ((PROJECTILE*)pObject)->psWStats->pInFlightGraphic;
 			z = NUM_BUCKETS - pie->texpage;
 		break;
 		case RENDER_ANIMATION:

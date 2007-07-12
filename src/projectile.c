@@ -134,18 +134,18 @@ extern BOOL	godMode;
 
 static UDWORD	establishTargetRadius( BASE_OBJECT *psTarget );
 static UDWORD	establishTargetHeight( BASE_OBJECT *psTarget );
-static void	proj_InFlightDirectFunc( PROJ_OBJECT *psObj );
-static void	proj_InFlightIndirectFunc( PROJ_OBJECT *psObj );
-static void	proj_ImpactFunc( PROJ_OBJECT *psObj );
-static void	proj_PostImpactFunc( PROJ_OBJECT *psObj );
-static void	proj_checkBurnDamage( BASE_OBJECT *apsList, PROJ_OBJECT *psProj,
+static void	proj_InFlightDirectFunc( PROJECTILE *psObj );
+static void	proj_InFlightIndirectFunc( PROJECTILE *psObj );
+static void	proj_ImpactFunc( PROJECTILE *psObj );
+static void	proj_PostImpactFunc( PROJECTILE *psObj );
+static void	proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj,
 									FIRE_BOX *pFireBox );
 
 static SDWORD objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, DROID_HIT_SIDE impactSide);
-static DROID_HIT_SIDE getHitSide (PROJ_OBJECT *psObj, DROID *psTarget);
+static DROID_HIT_SIDE getHitSide (PROJECTILE *psObj, DROID *psTarget);
 
 /***************************************************************************/
-BOOL gfxVisible(PROJ_OBJECT *psObj)
+BOOL gfxVisible(PROJECTILE *psObj)
 {
 	BOOL bVisible = FALSE;
 
@@ -212,7 +212,7 @@ proj_InitSystem( void )
 {
 	/* allocate object hashtable */
 	hashTable_Create( &g_pProjObjTable, PROJ_HASH_TABLE_SIZE,
-						PROJ_INIT, PROJ_EXT, sizeof(PROJ_OBJECT) );
+						PROJ_INIT, PROJ_EXT, sizeof(PROJECTILE) );
 	return TRUE;
 }
 
@@ -241,7 +241,7 @@ proj_Shutdown( void )
 
 /***************************************************************************/
 
-static void proj_Destroy(PROJ_OBJECT *psObj)
+static void proj_Destroy(PROJECTILE *psObj)
 {
 	CHECK_PROJECTILE(psObj);
 
@@ -260,24 +260,24 @@ static void proj_Destroy(PROJ_OBJECT *psObj)
 
 /***************************************************************************/
 
-PROJ_OBJECT *
+PROJECTILE *
 proj_GetFirst( void )
 {
-	return (PROJ_OBJECT*)hashTable_GetFirst( g_pProjObjTable );
+	return (PROJECTILE*)hashTable_GetFirst( g_pProjObjTable );
 }
 
 /***************************************************************************/
 
-PROJ_OBJECT *
+PROJECTILE *
 proj_GetNext( void )
 {
-	return (PROJ_OBJECT*)hashTable_GetNext( g_pProjObjTable );
+	return (PROJECTILE*)hashTable_GetNext( g_pProjObjTable );
 }
 
 /***************************************************************************/
 
 // update the kills after a target is damaged/destroyed
-static void proj_UpdateKills(PROJ_OBJECT *psObj, SDWORD percentDamage)
+static void proj_UpdateKills(PROJECTILE *psObj, SDWORD percentDamage)
 {
 	DROID	        *psDroid;
 	BASE_OBJECT     *psSensor;
@@ -334,7 +334,7 @@ BOOL
 proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 					 UDWORD tarX, UDWORD tarY, UDWORD tarZ, BASE_OBJECT *psTarget, BOOL bVisible, BOOL bPenetrate, int weapon_slot )
 {
-	PROJ_OBJECT		*psObj;
+	PROJECTILE		*psObj;
 	SDWORD			tarHeight, srcHeight, iMinSq;
 	SDWORD			altChange, dx, dy, dz, iVelSq, iVel;
 	FRACT_D			fR, fA, fS, fT, fC;
@@ -347,7 +347,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 			"proj_SendProjectile: invalid weapon stats" );
 
 	/* get unused projectile object from hashtable*/
-	psObj = (PROJ_OBJECT*)hashTable_GetElement( g_pProjObjTable );
+	psObj = (PROJECTILE*)hashTable_GetElement( g_pProjObjTable );
 
 	/* get muzzle offset */
 	if (psAttacker == NULL)
@@ -376,7 +376,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	}
 
 	/* Initialise the structure */
-	psObj->type		    = OBJ_BULLET;
+	psObj->type		    = OBJ_PROJECTILE;
 	psObj->state		= PROJ_INFLIGHT;
 	psObj->psWStats		= asWeaponStats + psWeap->nStat;
 	psObj->x			= (UWORD)muzzle.x;
@@ -407,9 +407,9 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	if (bPenetrate && psAttacker)
 	{
 		// psAttacker is a projectile if bPenetrate
-		PROJ_OBJECT *psProj = (PROJ_OBJECT*)psAttacker;
+		PROJECTILE *psProj = (PROJECTILE*)psAttacker;
 
-		ASSERT(psProj->type == OBJ_BULLET, "Penetrating but not projectile?");
+		ASSERT(psProj->type == OBJ_PROJECTILE, "Penetrating but not projectile?");
 
 		if (psProj->psSource && !psProj->psSource->died)
 		{
@@ -449,8 +449,8 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 				heightVariance = rand()%8;
 				break;
 
-			case OBJ_BULLET:
-				ASSERT(!"invalid object type: bullet", "proj_SendProjectile: invalid object type: OBJ_BULLET");
+			case OBJ_PROJECTILE:
+				ASSERT(!"invalid object type: bullet", "proj_SendProjectile: invalid object type: OBJ_PROJECTILE");
 				break;
 
 			case OBJ_TARGET:
@@ -645,7 +645,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 /***************************************************************************/
 
 void
-proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
+proj_InFlightDirectFunc( PROJECTILE *psObj )
 {
 	WEAPON_STATS	*psStats;
 	SDWORD			timeSoFar;
@@ -815,7 +815,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 		}
 
 		//Watermelon;so a projectile wont collide with another projectile unless it's a counter-missile weapon
-		if ( psTempObj->type == OBJ_BULLET && !( bMissile || ((PROJ_OBJECT *)psTempObj)->psWStats->weaponSubClass == WSC_COUNTER ) )
+		if ( psTempObj->type == OBJ_PROJECTILE && !( bMissile || ((PROJECTILE *)psTempObj)->psWStats->weaponSubClass == WSC_COUNTER ) )
 		{
 			continue;
 		}
@@ -830,7 +830,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 		if ( psTempObj->player != psObj->player &&
 			( psTempObj->type == OBJ_DROID ||
 			psTempObj->type == OBJ_STRUCTURE ||
-			psTempObj->type == OBJ_BULLET ||
+			psTempObj->type == OBJ_PROJECTILE ||
 			psTempObj->type == OBJ_FEATURE ) &&
 			!aiCheckAlliances(psTempObj->player,psObj->player) )
 		{
@@ -961,7 +961,7 @@ proj_InFlightDirectFunc( PROJ_OBJECT *psObj )
 /***************************************************************************/
 
 void
-proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
+proj_InFlightIndirectFunc( PROJECTILE *psObj )
 {
 	WEAPON_STATS	*psStats;
 	SDWORD			iTime, iRad, iDist, dx, dy, dz, iX, iY;
@@ -1080,7 +1080,7 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 		}
 
 		//Watermelon;dont collide with any other projectiles
-		if ( psTempObj->type == OBJ_BULLET )
+		if ( psTempObj->type == OBJ_PROJECTILE )
 		{
 			continue;
 		}
@@ -1095,7 +1095,7 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 		if (psTempObj->player != psObj->player &&
 			(psTempObj->type == OBJ_DROID ||
 			psTempObj->type == OBJ_STRUCTURE ||
-			psTempObj->type == OBJ_BULLET ||
+			psTempObj->type == OBJ_PROJECTILE ||
 			psTempObj->type == OBJ_FEATURE) &&
 			!aiCheckAlliances(psTempObj->player,psObj->player))
 		{
@@ -1225,7 +1225,7 @@ proj_InFlightIndirectFunc( PROJ_OBJECT *psObj )
 /***************************************************************************/
 
 void
-proj_ImpactFunc( PROJ_OBJECT *psObj )
+proj_ImpactFunc( PROJECTILE *psObj )
 {
 	WEAPON_STATS	*psStats;
 	SDWORD			i, iAudioImpactID;
@@ -1708,7 +1708,7 @@ proj_ImpactFunc( PROJ_OBJECT *psObj )
 /***************************************************************************/
 
 void
-proj_PostImpactFunc( PROJ_OBJECT *psObj )
+proj_PostImpactFunc( PROJECTILE *psObj )
 {
 	WEAPON_STATS	*psStats;
 	SDWORD			i, age;
@@ -1756,7 +1756,7 @@ proj_PostImpactFunc( PROJ_OBJECT *psObj )
 /***************************************************************************/
 
 static void
-proj_Update( PROJ_OBJECT *psObj )
+proj_Update( PROJECTILE *psObj )
 {
 	CHECK_PROJECTILE(psObj);
 
@@ -1777,7 +1777,7 @@ proj_Update( PROJ_OBJECT *psObj )
 	}
 
 	//Watermelon:get naybors
-	projGetNaybors((PROJ_OBJECT *)psObj);
+	projGetNaybors((PROJECTILE *)psObj);
 
 	switch (psObj->state)
 	{
@@ -1800,22 +1800,22 @@ proj_Update( PROJ_OBJECT *psObj )
 void
 proj_UpdateAll( void )
 {
-	PROJ_OBJECT	*psObj;
+	PROJECTILE	*psObj;
 
-	psObj = (PROJ_OBJECT *) hashTable_GetFirst( g_pProjObjTable );
+	psObj = (PROJECTILE *) hashTable_GetFirst( g_pProjObjTable );
 
 	while ( psObj != NULL )
 	{
 		proj_Update( psObj );
 
-		psObj = (PROJ_OBJECT *) hashTable_GetNext( g_pProjObjTable );
+		psObj = (PROJECTILE *) hashTable_GetNext( g_pProjObjTable );
 	}
 }
 
 /***************************************************************************/
 
 void
-proj_checkBurnDamage( BASE_OBJECT *apsList, PROJ_OBJECT *psProj,
+proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj,
 						FIRE_BOX *pFireBox )
 {
 	BASE_OBJECT		*psCurr, *psNext;
@@ -1939,7 +1939,7 @@ SDWORD proj_GetLongRange(WEAPON_STATS *psStats, SDWORD dz)
 
 
 /***************************************************************************/
-//Watemelon:added case for OBJ_BULLET
+//Watemelon:added case for OBJ_PROJECTILE
 UDWORD	establishTargetRadius( BASE_OBJECT *psTarget )
 {
 UDWORD		radius;
@@ -1984,7 +1984,7 @@ FEATURE		*psFeat;
 			psFeat = (FEATURE *)psTarget;
 			radius = (MAX(psFeat->psStats->baseBreadth,psFeat->psStats->baseWidth) * TILE_UNITS) / 2;
 			break;
-		case OBJ_BULLET:
+		case OBJ_PROJECTILE:
 			//Watermelon 1/2 radius of a droid?
 			radius = TILE_UNITS/8;
 		default:
@@ -2099,8 +2099,8 @@ SDWORD objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD
 			return featureDamage((FEATURE *)psObj, damage, weaponSubClass);
 			break;
 
-		case OBJ_BULLET:
-			ASSERT(!"invalid object type: bullet", "objectDamage: invalid object type: OBJ_BULLET");
+		case OBJ_PROJECTILE:
+			ASSERT(!"invalid object type: bullet", "objectDamage: invalid object type: OBJ_PROJECTILE");
 			break;
 
 		case OBJ_TARGET:
@@ -2120,7 +2120,7 @@ SDWORD objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD
  * only the `direct' target of the projectile. Since impact sides also apply for
  * any splash damage a projectile might do the exact target is needed.
  */
-static DROID_HIT_SIDE getHitSide (PROJ_OBJECT *psObj, DROID *psTarget)
+static DROID_HIT_SIDE getHitSide (PROJECTILE *psObj, DROID *psTarget)
 {
 	int deltaX, deltaY;
 	int impactAngle;
@@ -2203,8 +2203,8 @@ STRUCTURE	*psStructure;
 				return TRUE;
 			break;
 
-		case OBJ_BULLET:
-			ASSERT(!"invalid object type: bullet", "justBeenHitByEW: invalid object type: OBJ_BULLET");
+		case OBJ_PROJECTILE:
+			ASSERT(!"invalid object type: bullet", "justBeenHitByEW: invalid object type: OBJ_PROJECTILE");
 			abort();
 			break;
 
@@ -2282,7 +2282,7 @@ static void addProjNaybor(BASE_OBJECT *psObj, UDWORD distSqr)
 
 //Watermelon: projGetNaybors ripped from droid.c
 /* Find all the objects close to the projectile */
-void projGetNaybors(PROJ_OBJECT *psObj)
+void projGetNaybors(PROJECTILE *psObj)
 {
 	SDWORD		xdiff, ydiff;
 	UDWORD		dx,dy, distSqr;
@@ -2408,7 +2408,7 @@ UDWORD	establishTargetHeight( BASE_OBJECT *psTarget )
 		case OBJ_FEATURE:
 			// Just use imd ymax+ymin
 			return (psTarget->sDisplay.imd->ymax + psTarget->sDisplay.imd->ymin) /2;
-		case OBJ_BULLET:
+		case OBJ_PROJECTILE:
 			// 16 for bullet
 			return 16;
 		default:

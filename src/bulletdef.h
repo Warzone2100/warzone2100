@@ -41,14 +41,14 @@ PROJ_STATE;
 
 /***************************************************************************/
 
-struct PROJ_OBJECT;
+struct PROJECTILE;
 
-typedef void (* PROJECTILE_FUNC) ( struct PROJ_OBJECT *psObj );
+typedef void (* PROJECTILE_FUNC) ( struct PROJECTILE *psObj );
 
-typedef struct PROJ_OBJECT
+typedef struct PROJECTILE
 {
 	/* Use only simple object elements */
-	SIMPLE_ELEMENTS( struct PROJ_OBJECT );
+	SIMPLE_ELEMENTS( struct PROJECTILE );
 
 	UBYTE			state;			/* current projectile state */
 	UBYTE			airTarget;		/* whether the projectile was fired at an airborn target */
@@ -73,7 +73,7 @@ typedef struct PROJ_OBJECT
 	
 	PROJECTILE_FUNC	pInFlightFunc;
 }
-PROJ_OBJECT;
+PROJECTILE;
 
 /***************************************************************************/
 

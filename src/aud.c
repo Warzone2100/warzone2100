@@ -55,7 +55,7 @@ audio_ObjectDead( void * psObj )
 {
 	SIMPLE_OBJECT	*psSimpleObj = (SIMPLE_OBJECT *) psObj;
 	BASE_OBJECT		*psBaseObj;
-	PROJ_OBJECT		*psProj;
+	PROJECTILE		*psProj;
 
 	/* check is valid simple object pointer */
 	if ( psSimpleObj == NULL )
@@ -65,9 +65,9 @@ audio_ObjectDead( void * psObj )
 	}
 
 	/* check projectiles */
-	if ( psSimpleObj->type == OBJ_BULLET )
+	if ( psSimpleObj->type == OBJ_PROJECTILE )
 	{
-		psProj = (PROJ_OBJECT *) psSimpleObj;
+		psProj = (PROJECTILE *) psSimpleObj;
 		if ( psProj == NULL )
 		{
 			debug( LOG_NEVER, "audio_ObjectDead: projectile object pointer invalid\n" );

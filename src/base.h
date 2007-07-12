@@ -42,7 +42,7 @@ typedef enum _object_type
 	OBJ_DROID,		// Droids
 	OBJ_STRUCTURE,	// All Buildings
 	OBJ_FEATURE,	// Things like roads, trees, bridges, fires
-	OBJ_BULLET,		// Comes out of guns, stupid :-)
+	OBJ_PROJECTILE,		// Comes out of guns, stupid :-)
 	OBJ_TARGET,		// for the camera tracking
 } OBJECT_TYPE;
 
@@ -112,7 +112,7 @@ SIMPLE_OBJECT;
 do { \
         assert(object != NULL); \
         assert(object->type == OBJ_DROID || object->type == OBJ_STRUCTURE \
-	       || object->type == OBJ_FEATURE || object->type == OBJ_BULLET \
+	       || object->type == OBJ_FEATURE || object->type == OBJ_PROJECTILE \
 	       || object->type == OBJ_TARGET); \
 	assert(object->type == OBJ_FEATURE || object->type == OBJ_TARGET \
 	       || object->player < MAX_PLAYERS); \
