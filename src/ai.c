@@ -459,9 +459,8 @@ static BOOL aiObjIsWall(BASE_OBJECT *psObj)
 BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot, BOOL bUpdateTarget)
 {
 	UDWORD	radSquared;
-	BASE_OBJECT		*psCurr, *psTarget;
+	BASE_OBJECT		*psTarget;
 	SDWORD			xdiff,ydiff, distSq, tarDist, minDist;//, longRange;
-	WEAPON_STATS	*psWStats;
 	BOOL			bCBTower;
 	STRUCTURE		*psCStruct;
 	DROID			*psCommander;
@@ -474,15 +473,12 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 	switch (psObj->type)
 	{
 	case OBJ_DROID:
-
-		//if (psDroid->numWeaps == 0)
 		if (((DROID *)psObj)->asWeaps[weapon_slot].nStat == 0)
 		{
 			return FALSE;
 		}
 
-		//if (((DROID *)psObj)->numWeaps == 0)
-        if (((DROID *)psObj)->asWeaps[0].nStat == 0 &&
+		if (((DROID *)psObj)->asWeaps[0].nStat == 0 &&
 			((DROID *)psObj)->droidType != DROID_SENSOR)
 		{
 			// Can't attack without a weapon
@@ -492,8 +488,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 					 ((DROID *)psObj)->sensorRange;
 		break;
 	case OBJ_STRUCTURE:
-		//if (((STRUCTURE *)psObj)->numWeaps == 0)
-        if (((STRUCTURE *)psObj)->numWeaps == 0 || ((STRUCTURE *)psObj)->asWeaps[0].nStat == 0)
+		if (((STRUCTURE *)psObj)->numWeaps == 0 || ((STRUCTURE *)psObj)->asWeaps[0].nStat == 0)
 		{
 			// Can't attack without a weapon
 			return FALSE;
@@ -532,29 +527,31 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 			(newTargetWeight > (curTargetWeight + OLD_TARGET_THRESHOLD))	//updating and new target is better
 			))
 		{
-            /*check its a valid target*/
-            if (validTarget(psObj, psTarget, weapon_slot))
-            {
+			/*check its a valid target*/
+			if (validTarget(psObj, psTarget, weapon_slot))
+			{
     			/* See if in sensor range */
 			    xdiff = psTarget->x - psObj->x;
 			    ydiff = psTarget->y - psObj->y;
 			    if ((xdiff*xdiff + ydiff*ydiff < (SDWORD)radSquared) ||			//target is within our sensor range
 					(secondaryGetState((DROID *)psObj, DSO_HALTTYPE, &state) &&	//in case we got this target from a friendly unit see if can pursue it
 					(state != DSS_HALT_HOLD)))									//make sure it's guard or pursue
-			    {
+				{
+					ASSERT(!psTarget->died, "aiChooseTarget: Droid found a dead target!");
 				    *ppsTarget = psTarget;
 				    return TRUE;
-			    }
-		    }
-        }
+				}
+			}
+		}
 	}
 	else if (psObj->type == OBJ_STRUCTURE)
 	{
-		//ASSERT( ((STRUCTURE *)psObj)->numWeaps > 0,
-        ASSERT( ((STRUCTURE *)psObj)->asWeaps[weapon_slot].nStat > 0,
-			"aiChooseTarget: no weapons on structure" );
-		psWStats = ((STRUCTURE *)psObj)->asWeaps[weapon_slot].nStat + asWeaponStats;
+		WEAPON_STATS	*psWStats;
 
+		ASSERT( ((STRUCTURE *)psObj)->asWeaps[weapon_slot].nStat > 0,
+			"aiChooseTarget: no weapons on structure" );
+
+		psWStats = ((STRUCTURE *)psObj)->asWeaps[weapon_slot].nStat + asWeaponStats;
 
 		// see if there is a target from the command droids
 		psTarget = NULL;
@@ -567,8 +564,9 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 			// set bCommanderBlock so that the structure does not fire until the commander
 			// has a target - (slow firing weapons will not be ready to fire otherwise).
 			bCommanderBlock = TRUE;
-			if (psCommander->action == DACTION_ATTACK &&
-				psCommander->psActionTarget[0] != NULL)
+			if (psCommander->action == DACTION_ATTACK 
+			    && psCommander->psActionTarget[0] != NULL
+			    && !psCommander->psActionTarget[0]->died)
 			{
 				// the commander has a target to fire on
 				if (aiStructHasRange((STRUCTURE *)psObj, psCommander->psActionTarget[0], weapon_slot))
@@ -600,15 +598,16 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 					continue;
 				}
 
-				if (!bCBTower &&
-					structStandardSensor(psCStruct) &&
-					psCStruct->psTarget[0] != NULL)
+				if (!bCBTower
+				    && structStandardSensor(psCStruct)
+				    && psCStruct->psTarget[0] != NULL
+				    && !psCStruct->psTarget[0]->died)
 				{
-                    /*check its a valid target*/
+					/*check its a valid target*/
 					//Watermelon:Greater than 1 for now
-                    if ( validTarget(psObj, psCStruct->psTarget[0], 0) &&
+					if ( validTarget(psObj, psCStruct->psTarget[0], 0) &&
 						aiStructHasRange((STRUCTURE *)psObj, psCStruct->psTarget[0], weapon_slot))
-                    {
+					{
 					    xdiff = (SDWORD)psCStruct->psTarget[0]->x - (SDWORD)psObj->x;
 					    ydiff = (SDWORD)psCStruct->psTarget[0]->y - (SDWORD)psObj->y;
 					    distSq = xdiff*xdiff + ydiff*ydiff;
@@ -618,18 +617,19 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 						    tarDist = distSq;
 						    psTarget = psCStruct->psTarget[0];
 					    }
-                    }
+					}
 				}
-				else if (structCBSensor(psCStruct) &&
-						 psCStruct->psTarget[0] != NULL)
+				else if (structCBSensor(psCStruct)
+				         && psCStruct->psTarget[0] != NULL
+				         && !psCStruct->psTarget[0]->died)
 				{
-                    /*check its a valid target*/
-                    if ( validTarget(psObj, psCStruct->psTarget[0], 0) &&
+					/*check its a valid target*/
+					if ( validTarget(psObj, psCStruct->psTarget[0], 0) &&
 						aiStructHasRange((STRUCTURE *)psObj, psCStruct->psTarget[0], weapon_slot))
-                    {
-    					xdiff = (SDWORD)psCStruct->psTarget[0]->x - (SDWORD)psObj->x;
-	    				ydiff = (SDWORD)psCStruct->psTarget[0]->y - (SDWORD)psObj->y;
-		    			distSq = xdiff*xdiff + ydiff*ydiff;
+					{
+						xdiff = (SDWORD)psCStruct->psTarget[0]->x - (SDWORD)psObj->x;
+						ydiff = (SDWORD)psCStruct->psTarget[0]->y - (SDWORD)psObj->y;
+						distSq = xdiff*xdiff + ydiff*ydiff;
 					    if ((!bCBTower || (distSq < tarDist)) &&
 						    (distSq > minDist))
 					    {
@@ -637,7 +637,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 						    psTarget = psCStruct->psTarget[0];
 						    bCBTower = TRUE;
 					    }
-                    }
+					}
 				}
 			}
 		}
@@ -645,6 +645,8 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 		if ((psTarget == NULL) &&
 			!bCommanderBlock)
 		{
+			BASE_OBJECT *psCurr;
+
 			gridStartIterate((SDWORD)psObj->x, (SDWORD)psObj->y);
 			psCurr = gridIterate();
 			while (psCurr != NULL)
@@ -655,11 +657,11 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 					if (psObj->player != psCurr->player &&
 						!aiCheckAlliances(psCurr->player,psObj->player))
 					{
-                        /*check its a valid target*/
+						/*check its a valid target*/
 						//Watermelon:Greater than 1 for now
-                        if ( validTarget(psObj, psCurr, weapon_slot) &&
+						if ( validTarget(psObj, psCurr, weapon_slot) &&
 							!aiObjIsWall(psCurr))
-                        {
+						{
 						    // See if in sensor range and visible
 						    xdiff = psCurr->x - psObj->x;
 						    ydiff = psCurr->y - psObj->y;
@@ -671,65 +673,16 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 							    psTarget = psCurr;
 							    tarDist = distSq;
 						    }
-                        }
+						}
 					}
 				}
 				psCurr = gridIterate();
 			}
 		}
 
-/*		for(player = 0; player < MAX_PLAYERS; player++)
-		{
-			if (player != psObj->player && !aiCheckAlliances(player,psObj->player) )
-			{
-				for(psCurr = (BASE_OBJECT *)apsDroidLists[player]; psCurr;
-					psCurr = psCurr->psNext)
-				{
-					// See if in sensor range and visible
-					xdiff = psCurr->x - psObj->x;
-					ydiff = psCurr->y - psObj->y;
-					distSq = xdiff*xdiff + ydiff*ydiff;
-					if (distSq < (SDWORD)radSquared &&
-						psCurr->visible[psObj->player] &&
-						distSq < tarDist)
-					{
-						psTarget = psCurr;
-						tarDist = distSq;
-					}
-				}
-			}
-		}
-
 		if (psTarget)
 		{
-			*ppsTarget = psTarget;
-			return TRUE;
-		}
-
-		for(player = 0; player < MAX_PLAYERS; player++)
-		{
-			if (player != psObj->player  && !aiCheckAlliances(player,psObj->player) )
-			{
-				for(psCurr = (BASE_OBJECT *)apsStructLists[player]; psCurr;
-					psCurr = psCurr->psNext)
-				{
-					// See if in sensor range and visible
-					xdiff = psCurr->x - psObj->x;
-					ydiff = psCurr->y - psObj->y;
-					distSq = xdiff*xdiff + ydiff*ydiff;
-					if (distSq < (SDWORD)radSquared &&
-						psCurr->visible[psObj->player] &&
-						distSq < tarDist)
-					{
-						psTarget = psCurr;
-						tarDist = distSq;
-					}
-				}
-			}
-		}*/
-
-		if (psTarget)
-		{
+			ASSERT(!psTarget->died, "aiChooseTarget: Structure found a dead target!");
 			*ppsTarget = psTarget;
 			return TRUE;
 		}
