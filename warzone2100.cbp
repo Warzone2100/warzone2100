@@ -421,7 +421,7 @@
 		<Unit filename="src/aud.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/base.h" />
+		<Unit filename="src/basedef.h" />
 		<Unit filename="src/bridge.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -430,8 +430,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/bucket3d.h" />
-		<Unit filename="src/bullet.h" />
-		<Unit filename="src/bulletdef.h" />
 		<Unit filename="src/cdspan.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -751,6 +749,7 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/projectile.h" />
+		<Unit filename="src/projectiledef.h" />
 		<Unit filename="src/radar.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -856,7 +855,7 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/warzoneconfig.h" />
-		<Unit filename="src/weapons.h" />
+		<Unit filename="src/weapondef.h" />
 		<Unit filename="src/winmain.h" />
 		<Unit filename="src/wrappers.c">
 			<Option compilerVar="CC" />
