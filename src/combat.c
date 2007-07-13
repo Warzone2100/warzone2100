@@ -357,7 +357,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	distSquared = xDiff*xDiff + yDiff*yDiff;
 	//Watermelon:dist
 	dist = (SDWORD)sqrtf(distSquared);
-	longRange = proj_GetLongRange(psStats, (SDWORD)psAttacker->z-(SDWORD)psTarget->z);
+	longRange = proj_GetLongRange(psStats);
 	if (distSquared <= (psStats->shortRange * psStats->shortRange) &&
 		distSquared >= (psStats->minRange * psStats->minRange))
 	{

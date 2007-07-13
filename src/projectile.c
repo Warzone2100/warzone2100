@@ -21,8 +21,6 @@
 /*
  * Projectile functions
  *
- * Gareth Jones 11/7/97
- *
  */
 /***************************************************************************/
 #include <string.h>
@@ -59,8 +57,6 @@
 #include "display.h"
 #include "multiplay.h"
 #include "multistat.h"
-
-// Watermelon:I need this one for map grid iteration
 #include "mapgrid.h"
 
 #define	PROJ_MAX_PITCH			30
@@ -73,35 +69,6 @@
 // Watermelon:they are from droid.c
 /* The range for neighbouring objects */
 #define PROJ_NAYBOR_RANGE		(TILE_UNITS*2)
-
-// macro to see if an object is in NAYBOR_RANGE
-// used by projGetNayb
-#define IN_PROJ_NAYBOR_RANGE(psTempObj) \
-	xdiff = dx - (SDWORD)psTempObj->x; \
-	if (xdiff < 0) \
-	{ \
-		xdiff = -xdiff; \
-	} \
-	if (xdiff > PROJ_NAYBOR_RANGE) \
-	{ \
-		continue; \
-	} \
-\
-	ydiff = dy - (SDWORD)psTempObj->y; \
-	if (ydiff < 0) \
-	{ \
-		ydiff = -ydiff; \
-	} \
-	if (ydiff > PROJ_NAYBOR_RANGE) \
-	{ \
-		continue; \
-	} \
-\
-	distSqr = xdiff*xdiff + ydiff*ydiff; \
-	if (distSqr > PROJ_NAYBOR_RANGE*PROJ_NAYBOR_RANGE) \
-	{ \
-		continue; \
-	} \
 
 // Watermelon:neighbour global info ripped from droid.c
 PROJ_NAYBOR_INFO	asProjNaybors[MAX_NAYBORS];
@@ -378,6 +345,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 
 	ASSERT( psWeapStats != NULL,
 			"proj_SendProjectile: invalid weapon stats" );
+	ASSERT(!psAttacker->died, "Attacker is dead, cannot shoot!");
 
 	/* get muzzle offset */
 	if (psAttacker == NULL)
@@ -425,6 +393,8 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	psObj->psSource		= NULL;
 	psObj->psDest		= NULL;
 	setProjectileDestination(psObj, psTarget);
+
+	ASSERT(!psTarget || !psTarget->died, "Aiming at dead target!");
 
 	/* If target is a VTOL or higher than ground, it is an air target. */
 	if ((psTarget != NULL && psTarget->type == OBJ_DROID && vtolDroid((DROID*)psTarget))
@@ -858,6 +828,11 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 			continue;
 		}
 
+		if (psTempObj->died)
+		{
+			continue;
+		}
+
 		if ( psTempObj->player != psObj->player &&
 			( psTempObj->type == OBJ_DROID ||
 			psTempObj->type == OBJ_STRUCTURE ||
@@ -1119,6 +1094,11 @@ proj_InFlightIndirectFunc( PROJECTILE *psObj )
 		//Watermelon:ignore oil resource and pickup
 		if ( psTempObj->type == OBJ_FEATURE &&
 			((FEATURE *)psTempObj)->psStats->damageable == 0 )
+		{
+			continue;
+		}
+
+		if (psTempObj->died)
 		{
 			continue;
 		}
@@ -1959,9 +1939,8 @@ BOOL proj_Direct(WEAPON_STATS *psStats)
 /***************************************************************************/
 
 // return the maximum range for a weapon
-SDWORD proj_GetLongRange(WEAPON_STATS *psStats, SDWORD dz)
+SDWORD proj_GetLongRange(WEAPON_STATS *psStats)
 {
-//	dz;
 	return (SDWORD)psStats->longRange;
 }
 
@@ -2341,7 +2320,32 @@ void projGetNaybors(PROJECTILE *psObj)
 	{
 		if (psTempObj != (BASE_OBJECT *)psObj && !psTempObj->died)
 		{
-			IN_PROJ_NAYBOR_RANGE(psTempObj);
+			// see if an object is in NAYBOR_RANGE
+			xdiff = dx - (SDWORD)psTempObj->x;
+			if (xdiff < 0)
+			{
+				xdiff = -xdiff;
+			}
+			if (xdiff > PROJ_NAYBOR_RANGE)
+			{
+				continue;
+			}
+
+			ydiff = dy - (SDWORD)psTempObj->y;
+			if (ydiff < 0)
+			{
+				ydiff = -ydiff;
+			}
+			if (ydiff > PROJ_NAYBOR_RANGE)
+			{
+				continue;
+			}
+
+			distSqr = xdiff*xdiff + ydiff*ydiff;
+			if (distSqr > PROJ_NAYBOR_RANGE*PROJ_NAYBOR_RANGE)
+			{
+				continue;
+			}
 
 			addProjNaybor(psTempObj, distSqr);
 		}

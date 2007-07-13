@@ -3363,7 +3363,7 @@ static void intSetWeaponStats(WEAPON_STATS *psStats)
 		"intSetWeaponStats: stats ref is out of range" );
 
 	/* range */
-	widgSetBarSize(psWScreen, IDDES_WEAPRANGE, proj_GetLongRange(psStats,0));
+	widgSetBarSize(psWScreen, IDDES_WEAPRANGE, proj_GetLongRange(psStats));
 	/* rate of fire */
 	widgSetBarSize(psWScreen, IDDES_WEAPROF, weaponROF(psStats));
 	/* damage */
@@ -3384,7 +3384,7 @@ static void intSetWeaponShadowStats(WEAPON_STATS *psStats)
 	if (psStats)
 	{
 		/* range */
-		widgSetMinorBarSize(psWScreen, IDDES_WEAPRANGE, proj_GetLongRange(psStats,0));
+		widgSetMinorBarSize(psWScreen, IDDES_WEAPRANGE, proj_GetLongRange(psStats));
 		/* rate of fire */
 		widgSetMinorBarSize(psWScreen, IDDES_WEAPROF, weaponROF(psStats));
 		/* damage */

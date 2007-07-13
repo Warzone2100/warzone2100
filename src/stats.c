@@ -797,7 +797,7 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 		// error check the ranges
 		if (psStats->flightSpeed > 0 && !proj_Direct(psStats))
 		{
-			longRange = (UDWORD)proj_GetLongRange(psStats, 0);
+			longRange = (UDWORD)proj_GetLongRange(psStats);
 		}
 		else
 		{

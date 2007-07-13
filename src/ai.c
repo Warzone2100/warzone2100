@@ -425,7 +425,7 @@ static BOOL aiStructHasRange(STRUCTURE *psStruct, BASE_OBJECT *psTarget, int wea
 
 	xdiff = (SDWORD)psStruct->x - (SDWORD)psTarget->x;
 	ydiff = (SDWORD)psStruct->y - (SDWORD)psTarget->y;
-	longRange = proj_GetLongRange(psWStats,0);
+	longRange = proj_GetLongRange(psWStats);
 	if (xdiff*xdiff + ydiff*ydiff < longRange*longRange)
 	{
 		// in range

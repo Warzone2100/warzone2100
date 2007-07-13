@@ -114,7 +114,7 @@ BOOL actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 		secondaryGetState(psDroid, DSO_HALTTYPE, &state) &&
 		(state == DSS_HALT_HOLD))
 	{
-		longRange = proj_GetLongRange(psStats, dz);
+		longRange = proj_GetLongRange(psStats);
 		rangeSq = longRange * longRange;
 	}
 	else
@@ -129,7 +129,7 @@ BOOL actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 			}
 			else
 			{
-				longRange = proj_GetLongRange(psStats, dz);
+				longRange = proj_GetLongRange(psStats);
 				rangeSq = longRange * longRange;
 			}
 			break;
@@ -137,12 +137,12 @@ BOOL actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 			rangeSq = psStats->shortRange * psStats->shortRange;
 			break;
 		case DSS_ARANGE_LONG:
-			longRange = proj_GetLongRange(psStats, dz);
+			longRange = proj_GetLongRange(psStats);
 			rangeSq = longRange * longRange;
 			break;
 		default:
 			ASSERT(!"unknown attackrange order", "actionInAttackRange: unknown attack range order");
-			longRange = proj_GetLongRange(psStats, dz);
+			longRange = proj_GetLongRange(psStats);
 			rangeSq = longRange * longRange;
 			break;
 		}
@@ -184,7 +184,7 @@ BOOL actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 
 	radSq = dx*dx + dy*dy;
 
-	longRange = proj_GetLongRange(psStats, dz);
+	longRange = proj_GetLongRange(psStats);
 	rangeSq = longRange * longRange;
 
 	/* check max range */
@@ -2398,7 +2398,7 @@ void actionUpdateDroid(DROID *psDroid)
 				xdiff = (SDWORD)psDroid->x - (SDWORD)psDroid->psTarget[0]->x;
 				ydiff = (SDWORD)psDroid->y - (SDWORD)psDroid->psTarget[0]->y;
 				// make sure the weapon droid is within 2/3 weapon range of the sensor
-				//rangeSq = 2 * proj_GetLongRange(asWeaponStats + psDroid->asWeaps[0].nStat, 0) / 3;
+				//rangeSq = 2 * proj_GetLongRange(asWeaponStats + psDroid->asWeaps[0].nStat) / 3;
 				rangeSq = asWeaponStats[psDroid->asWeaps[0].nStat].shortRange;
 				rangeSq = rangeSq * rangeSq;
 				if (xdiff*xdiff + ydiff*ydiff < rangeSq)

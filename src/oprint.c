@@ -183,7 +183,7 @@ void printWeaponInfo(WEAPON_STATS *psStats)
 	printComponentInfo((COMP_BASE_STATS *)psStats);
 	CONPRINTF(ConsoleString,(ConsoleString,"   sRng %d lRng %d mRng %d %s\n"
 			  "   sHt %d lHt %d pause %d dam %d\n",
-				psStats->shortRange, proj_GetLongRange(psStats,0), psStats->minRange,
+				psStats->shortRange, proj_GetLongRange(psStats), psStats->minRange,
 				proj_Direct(psStats) ? "direct" : "indirect",
 				//psStats->shortHit, psStats->longHit, psStats->firePause, psStats->damage));
 				weaponShortHit(psStats,(UBYTE)selectedPlayer), weaponLongHit(psStats,
