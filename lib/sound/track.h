@@ -100,8 +100,7 @@ BOOL	sound_Init(void);
 BOOL	sound_Shutdown(void);
 
 TRACK *	sound_LoadTrackFromFile(const char *fileName);
-BOOL	sound_SetTrackVals( TRACK *psTrack, BOOL bLoop, SDWORD iTrack,
-	                    SDWORD iVol, SDWORD iAudibleRadius);
+unsigned int sound_SetTrackVals(const char* fileName, BOOL loop, unsigned int volume, unsigned int audibleRadius);
 void	sound_ReleaseTrack( TRACK * psTrack );
 
 void	sound_StopTrack( AUDIO_SAMPLE *psSample );

@@ -36,8 +36,7 @@ extern BOOL		audio_Shutdown(void);
 extern BOOL		audio_Disabled( void );
 
 extern BOOL		audio_LoadTrackFromFile( char szFileName[] );
-extern BOOL		audio_SetTrackVals( const char* fileName, BOOL bLoop, int *iTrack,
-					int iVol, int iAudibleRadius );
+extern unsigned int audio_SetTrackVals(const char* fileName, BOOL loop, unsigned int volume, unsigned int audibleRadius);
 
 extern BOOL		audio_PlayStaticTrack( SDWORD iX, SDWORD iY, int iTrack );
 extern BOOL		audio_PlayObjStaticTrack( void * psObj, int iTrack );

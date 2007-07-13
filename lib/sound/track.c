@@ -96,42 +96,57 @@ BOOL sound_GetSystemActive( void )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_SetTrackVals
-	(
-		TRACK	*psTrack,
-		BOOL	bLoop,
-		SDWORD	iTrack,
-		SDWORD	iVol,
-		SDWORD	iAudibleRadius
-	)
+/** Retrieves loaded audio files and retrieves a TRACK from them on which some values are set and returns their respective ID numbers
+ *  \param fileName the filename of the track
+ *  \param loop whether the track should be looped until explicitly stopped
+ *  \param trackID[out] the track id number is returned into the variable this pointer points to
+ *  \param volume the volume this track should be played on (range is 0-100)
+ *  \param audibleRadius the radius from the source of sound where it can be heard
+ *  \return TRUE when succesfull, FALSE when the file is not found or no more tracks can be loaded (i.e. the limit is reached)
+ */
+unsigned int sound_SetTrackVals(const char* fileName, BOOL loop, unsigned int volume, unsigned int audibleRadius)
 {
-	if ( !(iTrack < MAX_TRACKS) )
+    unsigned int trackID;
+    TRACK* psTrack = resGetData( "WAV", fileName );
+	if (psTrack == NULL)
 	{
-		return FALSE;
+		debug(LOG_ERROR, "sound_SetTrackVals: track %s resource not found", fileName);
+		return 0;
 	}
 
-	if ( g_apTrack[iTrack] != NULL )
+	// get pre-assigned ID or produce one
+	trackID = audio_GetIDFromStr(fileName);
+	if (trackID == NO_SOUND)
 	{
-		debug( LOG_ERROR, "sound_SetTrackVals: track %i already set\n", iTrack );
+		// No pre-assigned ID available, produce one
+		trackID = sound_GetAvailableID();
+	}
+
+	if (g_apTrack[trackID] != NULL)
+	{
+		debug(LOG_ERROR, "sound_SetTrackVals: track %i already set (filename: \"%s\"\n", trackID, g_apTrack[trackID]->pName);
 		abort();
-		return FALSE;
+
+		return 0;
 	}
 
 	// set track members
-	psTrack->bLoop = bLoop;
-	psTrack->iVol = iVol;
-	psTrack->iAudibleRadius = iAudibleRadius;
-	psTrack->iTime =0;			//added, since they really should init all the values. -Q
+	psTrack->bLoop = loop;
+	psTrack->iVol = volume;
+	psTrack->iAudibleRadius = audibleRadius;
+
+	// RAII: Make sure to initialize all values (we don't want undefined values)!
+	psTrack->iTime = 0;
 	psTrack->iTimeLastFinished = 0;
 	psTrack->iNumPlaying = 0;
 
 	// set global
-	g_apTrack[iTrack] = psTrack;
+	g_apTrack[trackID] = psTrack;
 
-	// increment current sound
-	g_iCurTracks++;
+	// increment counter for amount of loaded tracks
+	++g_iCurTracks;
 
-	return TRUE;
+	return trackID;
 }
 
 //*
@@ -408,7 +423,7 @@ SDWORD sound_GetTrackID( TRACK *psTrack )
 //
 SDWORD sound_GetAvailableID()
 {
-	SDWORD	i;
+	unsigned int i;
 
 	// Iterate through the list of tracks until we find an unused ID slot
 	for (i = ID_SOUND_NEXT; i < MAX_TRACKS; ++i)
@@ -418,7 +433,7 @@ SDWORD sound_GetAvailableID()
 	}
 
 	ASSERT(i < MAX_TRACKS, "sound_GetTrackID: unused track not found!");
-	if (i >= MAX_TRACKS)
+	if ( i >= MAX_TRACKS )
 	{
 		return SAMPLE_NOT_ALLOCATED;
 	}

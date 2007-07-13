@@ -562,54 +562,20 @@ void audio_Update( void )
 }
 
 
-/** Loads audio files and constructs a TRACK from them and returns their respective ID numbers
- *  \param szFileName the filename of the track
- *  \param bLoop whether the track should be looped until explicitly stopped
- *  \param iTrack[out] the track id number is returned into the variable this pointer points to
- *  \param iVol the volume this track should be played on (range is 0-100)
- *  \param iAudibleRadius the radius from the source of sound where it can be heard
- *  \return TRUE when succesfull or audio is disabled, FALSE when the file is not found or no more tracks can be loaded (i.e. the limit is reached)
+/** Retrieves loaded audio files and retrieves a TRACK from them on which some values are set and returns their respective ID numbers
+ *  \param fileName the filename of the track
+ *  \param loop whether the track should be looped until explicitly stopped
+ *  \param volume the volume this track should be played on (range is 0-100)
+ *  \param audibleRadius the radius from the source of sound where it can be heard
+ *  \return a non-zero value when succesfull or audio is disabled, zero when the file is not found or no more tracks can be loaded (i.e. the limit is reached)
  */
-BOOL audio_SetTrackVals
-	(
-		const char	*fileName,
-		BOOL	bLoop,
-		int		*iTrack,
-		int		iVol,
-		int		iAudibleRadius
-	)
+unsigned int audio_SetTrackVals(const char* fileName, BOOL loop, unsigned int volume, unsigned int audibleRadius)
 {
-	//~~~~~~~~~~~~~
-	TRACK	*psTrack;
-	//~~~~~~~~~~~~~
-
-	// if audio not enabled return TRUE to carry on game without audio
+	// if audio not enabled return a random non-zero value to carry on game without audio
 	if ( g_bAudioEnabled == FALSE )
-	{
-		return TRUE;
-	}
+		return 1;
 
-	// get track pointer from resource
-	psTrack = (TRACK*)resGetData( "WAV", fileName );		//at this point we have 4 valid entries, and 8 invalid -Q
-	if ( psTrack == NULL )
-	{
-		debug( LOG_NEVER, "audio_SetTrackVals: track %s resource not found\n", fileName );
-		return FALSE;
-	}
-
-	// get current ID or spare one
-	if ( (*iTrack = audio_GetIDFromStr(fileName)) == NO_SOUND )
-	{
-		*iTrack = sound_GetAvailableID();
-	}
-
-	if ( *iTrack == SAMPLE_NOT_ALLOCATED )
-	{
-		debug( LOG_NEVER, "audio_SetTrackVals: couldn't get spare track ID\n" );
-		return FALSE;
-	}
-
-	return sound_SetTrackVals( psTrack, bLoop, *iTrack, iVol, iAudibleRadius );	//now psTrack should be fully set. -Q
+	return sound_SetTrackVals(fileName, loop, volume, audibleRadius);
 }
 
 //*

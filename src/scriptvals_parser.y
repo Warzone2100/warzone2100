@@ -663,7 +663,7 @@ var_init:		var_entry TYPE var_value
 						if (compIndex == SAMPLE_NOT_FOUND)
 						{
 							/* set track vals */
-							audio_SetTrackVals( $3.pString, FALSE, &compIndex, 100, 1800 );
+							compIndex = audio_SetTrackVals($3.pString, FALSE, 100, 1800);
 						}
 						/* save track ID */
 						data.v.ival = compIndex;

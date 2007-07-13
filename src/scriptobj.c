@@ -1149,9 +1149,10 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 		if (index == SAMPLE_NOT_FOUND)
 		{
 			// find empty id and set track vals
-			if (audio_SetTrackVals( pName, FALSE, &index, 100, 1800 ))
+			index = audio_SetTrackVals(pName, FALSE, 100, 1800);
+			if (!index)
 			{
-				debug( LOG_ERROR, "Sound ID not available %s not found", pName );
+				debug(LOG_ERROR, "Sound ID not available %s not found", pName);
 				abort();
 				break;
 			}
