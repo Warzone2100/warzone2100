@@ -73,13 +73,6 @@
 #include "multiplay.h"
 #include "multigifts.h"
 
-
-
-
-
-//static BOOL DebugP=FALSE;
-
-
 /* system definitions */
 
 #define	DROID_RUN_SOUND			1
@@ -1975,10 +1968,8 @@ static void moveGetDirection(DROID *psDroid, float *pX, float *pY)
 	SDWORD	mag;
 	float	root;
 	BOOL	bNoVector;
-
 	SDWORD	ndx,ndy, ntx,nty, nmag;
 	float	nroot;
-
 
 	tx = psDroid->sMove.targetX;
 	ty = psDroid->sMove.targetY;
@@ -2022,24 +2013,16 @@ static void moveGetDirection(DROID *psDroid, float *pX, float *pY)
 	}
 
 	if (bNoVector)
-
 	{
-
 		root = sqrtf(MAKEFRACT(mag));
 		*pX = FRACTdiv(MKF(dx), root);
 		*pY = FRACTdiv(MKF(dy), root);
-
-
-
 	}
-
 
 	if ( psDroid->droidType != DROID_TRANSPORTER )
 	{
 		moveGetObstVector4(psDroid, pX,pY);
 	}
-
-
 }
 
 
@@ -2184,7 +2167,7 @@ BOOL moveFormationSpeedLimitingOn( void )
 // Calculate the new speed for a droid
 SDWORD moveCalcDroidSpeed(DROID *psDroid)
 {
-	UDWORD			mapX,mapY, damLevel;//, tarSpeed;
+	UDWORD			mapX,mapY, damLevel;
 	SDWORD			speed, pitch;
 	WEAPON_STATS	*psWStats;
 
@@ -3406,13 +3389,6 @@ static void checkLocalFeatures(DROID *psDroid)
 /* Frame update for the movement of a tracked droid */
 void moveUpdateDroid(DROID *psDroid)
 {
-//	SDWORD		xdiff,ydiff, obstX,obstY;
-//	UDWORD		mapX,mapY, tarSpeed;
-//	float		newX,newY;
-//	float		speed;
-//	float		dangle;
-//	BASE_OBJECT	*psObst;
-
 	float				tx,ty;		 //adiff, dx,dy, mx,my;
 	float				tangle;		// thats DROID angle and TARGET angle - not some bizzare pun :-)
 									// doesn't matter - they're still shit names...! :-)
@@ -3424,7 +3400,6 @@ void moveUpdateDroid(DROID *psDroid)
 	PROPULSION_STATS	*psPropStats;
 	Vector3i pos;
 	BOOL				bStarted = FALSE, bStopped;
-//	UDWORD				landX,landY;
 
 //	ASSERT( psDroid->x != 0 && psDroid->y != 0,
 //		"moveUpdateUnit: unit at (0,0)" );
@@ -3574,6 +3549,7 @@ void moveUpdateDroid(DROID *psDroid)
 
 				moveSpeed = moveCalcDroidSpeed(psDroid);
 				moveDir = tangle;
+				ASSERT(moveDir >= 0 && moveDir <= 360, "Illegal movement direction");
 			}
 		}
 
@@ -3706,31 +3682,18 @@ void moveUpdateDroid(DROID *psDroid)
 			}*/
 		}
 #endif
-//		DebugP=FALSE;
-//		if ( psDroid->droidType == DROID_TRANSPORTER ) DebugP=TRUE;
 
 		// Calculate a target vector
 		moveGetDirection(psDroid, &tx,&ty);
 
-
 		// Turn the droid if necessary
 		// calculate the difference in the angles
-//		dangle = (float) psDroid->direction;
 		tangle = vectorToAngle(tx,ty);
-
-
-
 
 		moveSpeed = moveCalcDroidSpeed(psDroid);
 
 		moveDir = tangle;
-
-
-//if ( psDroid->droidType == DROID_TRANSPORTER )
-//{
-//			DBPRINTF(("dir %d,%d ($%x=%d)\n",tx,ty,tangle,moveDir));
-//	}
-
+		ASSERT(moveDir >= 0 && moveDir <= 360, "Illegal movement direction");
 
 		if ((psDroid->sMove.bumpTime != 0) &&
 			(psDroid->sMove.pauseTime + psDroid->sMove.bumpTime + BLOCK_PAUSETIME < gameTime))
@@ -3763,6 +3726,7 @@ void moveUpdateDroid(DROID *psDroid)
 		{
 			moveSpeed = 0;
 			moveDir = psDroid->sMove.psFormation->dir;
+			ASSERT(moveDir >= 0 && moveDir <= 360, "Illegal movement direction");
 		}
 		else
 		{
@@ -3790,6 +3754,7 @@ void moveUpdateDroid(DROID *psDroid)
 				psDroid->sMove.Status = MOVEINACTIVE;
 			}
 		}
+		ASSERT(moveDir >= 0 && moveDir <= 360, "Illegal movement direction");
 		break;
 	case MOVEHOVER:
 		/* change vtols to attack run mode if target found - but not if no ammo*/
@@ -3820,6 +3785,8 @@ void moveUpdateDroid(DROID *psDroid)
 			}
 /*			else
 			{
+				UDWORD	landX, landY;
+
 				// see if the landing position is clear
 				landX = psDroid->x;
 				landY = psDroid->y;
@@ -3843,11 +3810,7 @@ void moveUpdateDroid(DROID *psDroid)
 		driveSetDroidMove(psDroid);
 		moveSpeed = driveGetMoveSpeed();	//MAKEINT(psDroid->sMove.speed);
 		moveDir = driveGetMoveDir();		//psDroid->sMove.dir;
-//		DBPRINTF(("%d\n",frameGetFrameNumber()-LastMoveFrame);
-//		LastMoveFrame = frameGetFrameNumber();
-//		psDroid->sMove.speed = MAKEFRACT(driveSpeed);
-//		psDroid->sMove.dir = driveDir;
-//		psDroid->direction = driveDir;
+		ASSERT(moveDir >= 0 && moveDir <= 360, "Illegal movement direction");
 		break;
 
 	// Follow the droid being driven around by the player.
@@ -3872,6 +3835,8 @@ void moveUpdateDroid(DROID *psDroid)
 		break;
 	}
 
+	ASSERT(moveDir >= 0 && moveDir <= 360, "Illegal movement direction");
+
 	// Update the movement model for the droid
 	oldx = psDroid->x;
 	oldy = psDroid->y;
@@ -3880,8 +3845,7 @@ void moveUpdateDroid(DROID *psDroid)
 	{
 		moveUpdatePersonModel(psDroid, moveSpeed, moveDir);
 	}
-	//else if ( psDroid->droidType == DROID_CYBORG )
-    else if (cyborgDroid(psDroid))
+	else if (cyborgDroid(psDroid))
 	{
 		moveUpdateCyborgModel(psDroid, moveSpeed, moveDir, oldStatus);
 	}
@@ -3915,7 +3879,6 @@ void moveUpdateDroid(DROID *psDroid)
 //	// range of the driver.
 //	if(driveIsFollower(psDroid)) {
 //		if(DoFollowRangeCheck) {
-////DBPRINTF(("%d\n",gameTime);
 //			if(driveInDriverRange(psDroid)) {
 //				psDroid->sMove.Status = MOVEINACTIVE;
 ////				ClearFollowRangeCheck = TRUE;
@@ -3946,7 +3909,6 @@ void moveUpdateDroid(DROID *psDroid)
 		pos.y = psDroid->z + (psDroid->sDisplay.imd->ymax/3);
 		addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,FALSE,NULL,0);
 	}
-
 
 #if DROID_RUN_SOUND
 	movePlayAudio( psDroid, bStarted, bStopped, moveSpeed );
