@@ -835,8 +835,9 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 					return FALSE;
 				}
 
-				if ( ((audioID < 0) || (audioID >= ID_MAX_SOUND)) &&
-					 (audioID != NO_SOUND) )
+				if ((audioID < 0
+				  || audioID > ID_MAX_SOUND)
+				 && audioID != NO_SOUND)
 				{
 					debug( LOG_ERROR, "Invalid Weapon Sound ID - %d for weapon %s", audioID, audioName );
 					abort();

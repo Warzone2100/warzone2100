@@ -501,14 +501,14 @@ static AUDIO_ID_MAP asAudioID[] =
 
 INGAME_AUDIO audio_GetIDFromStr(const char* fileName)
 {
-	SDWORD i;
+	unsigned int i;
 
-	for ( i=0; i != ID_MAX_SOUND; i++ )
+	for (i = 0; i != ID_SOUND_NEXT; ++i)
 	{
-		if ( strcmp( fileName, asAudioID[i].fileName ) == 0 )
+		if (strcmp(fileName, asAudioID[i].fileName) == 0)
 		{
-			ASSERT( i == asAudioID[i].ID,
-			        "audioID_GetIDFromStr: %s stored IDs don't match", fileName );
+			ASSERT(i == asAudioID[i].ID,
+			        "audioID_GetIDFromStr: %s stored IDs don't match", fileName);
 
 			return asAudioID[i].ID;
 		}

@@ -487,11 +487,12 @@ typedef enum
 	ID_SOUND_PLASMA_FLAMER,
 	ID_SOUND_UPLINK,
 
-    /* added for upgrade - 2/9/99 AB*/
-    ID_SOUND_LAS_SAT_COUNTDOWN,
+	/* added for upgrade - 2/9/99 AB*/
+	ID_SOUND_LAS_SAT_COUNTDOWN,
 
 	/* Last ID */
-	ID_MAX_SOUND,
+	ID_SOUND_NEXT,  // Thanks to this dummy we don't have to redefine ID_MAX_SOUND every time in terms of the preceding enum value
+	ID_MAX_SOUND = ID_SOUND_NEXT - 1,
 }
 INGAME_AUDIO;
 

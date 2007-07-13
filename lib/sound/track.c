@@ -22,6 +22,7 @@
 
 #include "lib/framework/frameresource.h"
 #include "tracklib.h"
+#include "audio_id.h"
 
 //*
 //
@@ -405,22 +406,19 @@ SDWORD sound_GetTrackID( TRACK *psTrack )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-SDWORD sound_GetAvailableID( void )
+SDWORD sound_GetAvailableID()
 {
-	//~~~~~~
 	SDWORD	i;
-	//~~~~~~
 
-	for ( i = 0; i < MAX_TRACKS; i++ )
+	// Iterate through the list of tracks until we find an unused ID slot
+	for (i = ID_SOUND_NEXT; i < MAX_TRACKS; ++i)
 	{
-		if ( g_apTrack[i] == NULL )
-		{
+		if (g_apTrack[i] == NULL)
 			break;
-		}
 	}
 
-	ASSERT( i < MAX_TRACKS, "sound_GetTrackID: unused track not found!\n" );
-	if ( i >= MAX_TRACKS )
+	ASSERT(i < MAX_TRACKS, "sound_GetTrackID: unused track not found!");
+	if (i >= MAX_TRACKS)
 	{
 		return SAMPLE_NOT_ALLOCATED;
 	}

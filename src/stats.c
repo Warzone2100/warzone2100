@@ -2137,8 +2137,9 @@ statsGetAudioIDFromString( char *szStatName, char *szWavName, SDWORD *piWavID )
 			return FALSE;
 		}
 	}
-	if ( ((*piWavID < 0) || (*piWavID >= ID_MAX_SOUND)) &&
-		 (*piWavID != NO_SOUND) )
+	if ((*piWavID < 0
+	  || *piWavID > ID_MAX_SOUND)
+	 && *piWavID != NO_SOUND)
 	{
 		debug( LOG_ERROR, "statsGetAudioIDFromString: Invalid ID - %d for sound %s", *piWavID, szStatName );
 		abort();
