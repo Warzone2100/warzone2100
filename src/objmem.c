@@ -38,7 +38,10 @@
 #include "scriptcb.h"
 #include "mission.h"
 #include "structuredef.h"
+#include "structure.h"
+#include "droid.h"
 #include "formation.h"
+#include "mapgrid.h"
 
 static SDWORD	factoryDeliveryPointCheck[MAX_PLAYERS][NUM_FLAG_TYPES][MAX_FACTORY];
 
@@ -400,10 +403,20 @@ DROID* createDroid(UDWORD player)
  /*destroy a droid */
 void killDroid(DROID *psDel)
 {
+	int i;
+
 	ASSERT( psDel->type == OBJ_DROID,
 		"killUnit: pointer is not a unit" );
 	ASSERT( psDel->player < MAX_PLAYERS,
 		"killUnit: invalid player for unit" );
+
+	for (i = 0; i < DROID_MAXWEAPS; i++)
+	{
+		setDroidTarget(psDel, NULL, i);
+		setDroidActionTarget(psDel, NULL, i);
+	}
+	setDroidBase(psDel, NULL);
+
 	destroyObject((BASE_OBJECT**)apsDroidLists, (BASE_OBJECT*)psDel);
 }
 
@@ -460,10 +473,17 @@ void addStructure(STRUCTURE *psStructToAdd)
 /* Destroy a structure */
 void killStruct(STRUCTURE *psBuilding)
 {
+	int i;
+
 	ASSERT( psBuilding->type == OBJ_STRUCTURE,
 		"killStruct: pointer is not a droid" );
 	ASSERT( psBuilding->player < MAX_PLAYERS,
 		"killStruct: invalid player for stucture" );
+
+	for (i = 0; i < STRUCT_MAXWEAPS; i++)
+	{
+		setStructureTarget(psBuilding, NULL, i);
+	}
 
 	if (psBuilding->pFunctionality != NULL)
 	{
@@ -502,6 +522,9 @@ void killStruct(STRUCTURE *psBuilding)
 			}
 		}
 	}
+
+	// remove the object from the grid
+	gridRemoveObject((BASE_OBJECT *)psBuilding);
 
 	destroyObject((BASE_OBJECT**)apsStructLists, (BASE_OBJECT*)psBuilding);
 }

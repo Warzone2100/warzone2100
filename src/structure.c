@@ -3962,9 +3962,6 @@ void structureRelease(STRUCTURE *psBuilding)
 	// free up the space used by the functionality array
 	free(psBuilding->pFunctionality);
 	psBuilding->pFunctionality = NULL;
-
-	// remove the object from the grid
-	gridRemoveObject((BASE_OBJECT *)psBuilding);
 }
 
 
