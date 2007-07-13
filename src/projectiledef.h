@@ -70,6 +70,7 @@ typedef struct PROJECTILE
 	SDWORD			altChange;		/* Change in altitude */
 	UDWORD			born;
 	UDWORD			targetRadius;	// needed to backtrack the projectiles.
+	UDWORD			died;
 	
 	PROJECTILE_FUNC	pInFlightFunc;
 }

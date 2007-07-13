@@ -222,38 +222,6 @@ static void proj_Free(PROJECTILE *psObj)
 	free(psObj);
 }
 
-// Take a projectile out of the global list and shoot it...
-static void proj_Destroy(PROJECTILE *psObj)
-{
-	PROJECTILE *psCurr = psProjectileList, *psPrev = NULL;
-
-	CHECK_PROJECTILE(psObj);
-
-	// is it the first node?
-	if (psCurr == psObj)
-	{
-		psProjectileList = psCurr->psNext;
-		proj_Free(psCurr);
-		return;
-	}
-
-	// is in list
-	while (psCurr)
-	{
-		psPrev = psCurr;
-		psCurr = psCurr->psNext;
-		if (psCurr == psObj)
-		{
-			psPrev->psNext = psCurr->psNext;
-			proj_Free(psCurr);
-			return;
-		}
-	}
-
-	// oops
-	ASSERT(!"projectile not found", "projectile not in global list");
-}
-
 /***************************************************************************/
 
 // Reset the first/next methods, and give out the first projectile in the list.
@@ -392,6 +360,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	psObj->psDamaged	= NULL; // must initialize these to NULL first!
 	psObj->psSource		= NULL;
 	psObj->psDest		= NULL;
+	psObj->died		= 0;
 	setProjectileDestination(psObj, psTarget);
 
 	ASSERT(!psTarget || !psTarget->died, "Aiming at dead target!");
@@ -1362,7 +1331,7 @@ proj_ImpactFunc( PROJECTILE *psObj )
 		 && ((FEATURE *)psObj->psDest)->psStats->damageable == 0)
 		{
 			debug(LOG_NEVER, "proj_ImpactFunc: trying to damage non-damageable target,projectile removed");
-			proj_Destroy(psObj);
+			psObj->died = gameTime;
 			return;
 		}
 
@@ -1451,7 +1420,7 @@ proj_ImpactFunc( PROJECTILE *psObj )
 	// If the projectile does no splash damage and does not set fire to things
 	if ((psStats->radius == 0) && (psStats->incenTime == 0) )
 	{
-		proj_Destroy(psObj);
+		psObj->died = gameTime;
 		return;
 	}
 
@@ -1736,7 +1705,7 @@ proj_PostImpactFunc( PROJECTILE *psObj )
 	/* Time to finish postimpact effect? */
 	if (age > (SDWORD)psStats->radiusLife && age > (SDWORD)psStats->incenTime)
 	{
-		proj_Destroy(psObj);
+		psObj->died = gameTime;
 		return;
 	}
 
@@ -1812,11 +1781,39 @@ proj_Update( PROJECTILE *psObj )
 void
 proj_UpdateAll( void )
 {
-	PROJECTILE	*psObj;
+	PROJECTILE	*psObj, *psPrev;
 
 	for (psObj = psProjectileList; psObj != NULL; psObj = psObj->psNext)
 	{
 		proj_Update( psObj );
+	}
+
+	// Now delete any dead projectiles
+	psObj = psProjectileList;
+
+	// is the first node dead?
+	while (psObj && psObj == psProjectileList && psObj->died)
+	{
+		psProjectileList = psObj->psNext;
+		proj_Free(psObj);
+		psObj = psProjectileList;
+	}
+
+	// first object is now either NULL or not dead, so we have time to set this below
+	psPrev = NULL;
+
+	// are any in the list dead?
+	while (psObj)
+	{
+		if (psObj->died)
+		{
+			psPrev->psNext = psObj->psNext;
+			proj_Free(psObj);
+			psObj = psPrev->psNext;
+		} else {
+			psPrev = psObj;
+			psObj = psObj->psNext;
+		}
 	}
 }
 
