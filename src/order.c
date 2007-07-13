@@ -56,6 +56,7 @@
 #include "ai.h"
 #include "warcam.h"
 #include "lib/sound/audio_id.h"
+#include "lib/sound/audio.h"
 #include "fpath.h"
 #include "display3d.h"
 #include "combat.h"

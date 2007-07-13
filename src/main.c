@@ -46,6 +46,7 @@
 #include "lib/ivis_opengl/screen.h"
 #include "lib/netplay/netplay.h"
 #include "lib/script/script.h"
+#include "lib/sound/audio.h"
 #include "lib/widget/widget.h"
 
 #include "clparse.h"

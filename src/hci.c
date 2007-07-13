@@ -36,6 +36,7 @@
 
 #include "action.h"
 #include "lib/sound/audio_id.h"
+#include "lib/sound/audio.h"
 #include "console.h"
 #include "design.h"
 #include "display.h"

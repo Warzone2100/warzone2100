@@ -26,7 +26,6 @@
 #define _droiddef_h
 
 #include "lib/gamelib/animobj.h"
-#include "lib/sound/audio.h"
 
 #include "basedef.h"
 #include "deliverance.h"

@@ -31,6 +31,7 @@
 
 #include "action.h"
 #include "lib/sound/audio_id.h"
+#include "lib/sound/audio.h"
 #include "combat.h"
 #include "formation.h"
 #include "geometry.h"
