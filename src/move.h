@@ -79,25 +79,11 @@ extern void moveSetFormationSpeedLimiting( BOOL );
 extern void moveToggleFormationSpeedLimiting( void );
 extern BOOL moveFormationSpeedLimitingOn( void );
 
-
 /* audio callback used to kill movement sounds */
 extern BOOL moveCheckDroidMovingAndVisible( void *psObj );
 
 // set a vtol to be hovering in the air
 void moveMakeVtolHover( DROID *psDroid );
-
-//BOOL StartDriverMode(void);
-//void StopDriverMode(void);
-//BOOL driveModeActive(void);
-//BOOL driveIsDriven(DROID *psDroid);
-//BOOL driveIsFollower(DROID *psDroid);
-//DROID *driveGetDriven(void);
-//void driveDroidKilled(DROID *psDroid);
-//void driveSelectionChanged(void);
-//void driveNextDriver(void);
-//void driveUpdate(void);
-//extern void	setDrivingStatus( BOOL val );
-//extern BOOL	getDrivingStatus( void );
 
 #endif
 

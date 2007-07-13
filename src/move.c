@@ -29,8 +29,12 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/trig.h"
-
-//#define DEBUG_DRIVE_SPEED
+#include "lib/framework/fractions.h"
+#include "lib/netplay/netplay.h"
+#include "lib/gamelib/gtime.h"
+#include "lib/sound/audio.h"
+#include "lib/sound/audio_id.h"
+#include "lib/gamelib/animobj.h"
 
 #include "objects.h"
 #include "move.h"
@@ -39,11 +43,7 @@
 #include "map.h"
 #include "fpath.h"
 #include "loop.h"
-#include "lib/gamelib/gtime.h"
-#include "lib/sound/audio.h"
-#include "lib/sound/audio_id.h"
 #include "geometry.h"
-#include "lib/gamelib/animobj.h"
 #include "anim_id.h"
 #include "formationdef.h"
 #include "formation.h"
@@ -55,27 +55,21 @@
 #include "mapgrid.h"
 #include "display.h"	// needed for widgetsOn flag.
 #include "effects.h"
-#include "lib/framework/fractions.h"
 #include "power.h"
 #include "scores.h"
-
 #include "optimisepath.h"
+#include "multiplay.h"
+#include "multigifts.h"
 
-//#include "multigifts.h"
 #include "drive.h"
 
 #ifdef ARROWS
 #include "arrow.h"
 #endif
 
-
-#include "lib/netplay/netplay.h"
-#include "multiplay.h"
-#include "multigifts.h"
+//#define DEBUG_DRIVE_SPEED
 
 /* system definitions */
-
-#define	DROID_RUN_SOUND			1
 
 #define	FORMATIONS_DISABLE		0
 
@@ -155,7 +149,6 @@
 
 // distance from final way point to start slowing
 #define END_SPEED_RANGE		(3 * TILE_UNITS)
-
 
 // times for rerouting
 #define REROUTE_BASETIME	200
@@ -238,22 +231,19 @@
 /* The current base speed for this frame and averages for the last few seconds */
 float	baseSpeed;
 #define	BASE_FRAMES			10
-UDWORD	baseTimes[BASE_FRAMES];
+static UDWORD	baseTimes[BASE_FRAMES];
 
 /* The current base turn rate */
-float	baseTurn;
+static float	baseTurn;
 
 // The next object that should get the router when a lot of units are
 // in a MOVEROUTE state
 DROID	*psNextRouteDroid;
 
 /* Function prototypes */
-BOOL	tileInRange(UDWORD tileX, UDWORD tileY, DROID *psDroid);
-void	fillNewBlocks(DROID *psDroid);
-void	fillInitialView(DROID *psDroid);
-void	moveUpdatePersonModel(DROID *psDroid, SDWORD speed, SDWORD direction);
+static void	moveUpdatePersonModel(DROID *psDroid, SDWORD speed, SDWORD direction);
 // Calculate the boundary vector
-void	moveCalcBoundary(DROID *psDroid);
+static void	moveCalcBoundary(DROID *psDroid);
 /* Turn a vector into an angle - returns a float (!) */
 static float vectorToAngle(float vx, float vy);
 
@@ -267,15 +257,9 @@ static float vectorToAngle(float vx, float vy);
 #define Fmul(x,y)	FRACTmul(x,y)
 #define Fdiv(x,y)	FRACTdiv(x,y)
 
-//typedef enum MOVESOUNDTYPE	{ MOVESOUNDSTART, MOVESOUNDIDLE, MOVESOUNDMOVEOFF,
-//								MOVESOUNDMOVE, MOVESOUNDSTOPHISS, MOVESOUNDSHUTDOWN };
-
 extern UDWORD	selectedPlayer;
 
-
 static BOOL	g_bFormationSpeedLimitingOn = TRUE;
-
-
 
 
 /* Initialise the movement system */
@@ -299,7 +283,6 @@ BOOL moveInitialise(void)
 /* Update the base speed for all movement */
 void moveUpdateBaseSpeed(void)
 {
-//	UDWORD	totalTime=0, numFrames=0, i;
 	UDWORD	totalTime=0, i;
 
 	// Update the list of frame times
@@ -361,9 +344,6 @@ static BOOL _moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation
 			return FALSE;
 		}
 	}
-
-
-//	DBPRINTF(("movedroidto (%d,%d) -> (%d,%d)\n",psDroid->x,psDroid->y,x,y);
 
 #if FORMATIONS_DISABLE
 	retVal = FPR_OK;
@@ -508,7 +488,6 @@ static BOOL _moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation
 	{
 		psDroid->sMove.Status = MOVEINACTIVE;
 		actionDroid(psDroid, DACTION_SULK);
-//		DBPRINTF(("mdt: FALSE\n");
 		return(FALSE);
 	}
 
@@ -796,10 +775,7 @@ void updateDroidOrientation(DROID *psDroid)
 	ASSERT( psDroid->y < (mapHeight<< TILE_SHIFT),
 		"mapHeight: y coordinate bigger than map height" );
 
-
-	//if(psDroid->droidType == DROID_PERSON || psDroid->droidType == DROID_CYBORG ||
-    if(psDroid->droidType == DROID_PERSON || cyborgDroid(psDroid) ||
-        psDroid->droidType == DROID_TRANSPORTER)
+	if(psDroid->droidType == DROID_PERSON || cyborgDroid(psDroid) || psDroid->droidType == DROID_TRANSPORTER)
 	{
 		/* These guys always stand upright */
 		return;
@@ -877,8 +853,6 @@ static float vectorToAngle(float vx, float vy)
 	{
 		angle -= 360.0f;
 	}
-
-
 
 	return angle;
 }
@@ -976,7 +950,6 @@ static BOOL moveNextTarget(DROID *psDroid)
 	psDroid->sMove.targetX = tarX;
 	psDroid->sMove.targetY = tarY;
 	psDroid->sMove.Position++;
-
 
 	return TRUE;
 }
@@ -1202,11 +1175,6 @@ static void moveCalcSlideVector(DROID *psDroid,SDWORD objX, SDWORD objY, float *
 	}
 
 	// Choose the tangent vector to this on the same side as the target
-//	tarX = psDriod->sMove.targetX - (SDWORD)psDroid->x;
-//	tarY = psDriod->sMove.targetY - (SDWORD)psDroid->y;
-//	dotRes = FRACTmul(MAKEFRACT(obstY),*pMx);
-//	dotRes -= FRACTmul(MAKEFRACT(obstX),*pMy);
-//	dotRes = obstY * mx - obstX * my;
 	dotRes = FRACTmul(MAKEFRACT(obstY),mx) - FRACTmul(MAKEFRACT(obstX),my);
 	if (dotRes >= 0)
 	{
@@ -2027,7 +1995,7 @@ static void moveGetDirection(DROID *psDroid, float *pX, float *pY)
 
 
 // Calculate the boundary vector
-void moveCalcBoundary(DROID *psDroid)
+static void moveCalcBoundary(DROID *psDroid)
 {
 	SDWORD	absX, absY;
 	SDWORD	prevX,prevY, prevMag;
@@ -2135,7 +2103,6 @@ static BOOL moveReachedWayPoint(DROID *psDroid)
 		if ((psDroid->sMove.boundX * droidX + psDroid->sMove.boundY * droidY <= 0) &&
 			fpathTileLOS((SDWORD)psDroid->x >> TILE_SHIFT, (SDWORD)psDroid->y >> TILE_SHIFT, psDroid->sMove.targetX >> TILE_SHIFT, psDroid->sMove.targetY >> TILE_SHIFT))
 		{
-//		DBPRINTF(("Waypoint %d\n", psDroid->sMove.Position));
 			debug( LOG_MOVEMENT, "Next waypoint: droid %d bound (%d,%d) target (%d,%d)\n",
 					psDroid->id, psDroid->sMove.boundX,psDroid->sMove.boundY,
 					droidX,droidY);
@@ -2291,14 +2258,12 @@ static void moveUpdateDroidDirection( DROID *psDroid, SDWORD *pSpeed, SDWORD dir
 	if (adiff > iSpinAngle)
 	{
 		// large change in direction, spin on the spot
-// 		debug( LOG_NEVER, "Spin ");
 		moveCalcTurn(&temp, MKF(direction), iSpinSpeed);
 		*pSpeed = 0;
 	}
 	else
 	{
 		// small change in direction, turn while moving
-// 		debug( LOG_NEVER, "Curve ");
 		moveCalcTurn(&temp, MKF(direction), iTurnSpeed);
 	}
 
@@ -2423,9 +2388,7 @@ static void moveGetDroidPosDiffs( DROID *psDroid, float *pDX, float *pDY )
 {
 	float	move;
 
-
 	move = Fmul(psDroid->sMove.speed, baseSpeed);
-
 
 	*pDX = move * trigSin(psDroid->sMove.moveDir);
 	*pDY = move * trigCos(psDroid->sMove.moveDir);
@@ -2441,8 +2404,6 @@ static void moveCheckFinalWaypoint( DROID *psDroid, SDWORD *pSpeed )
 	{
 		minEndSpeed = MIN_END_SPEED;
 	}
-
-
 
 	// don't do this for VTOLs doing attack runs
 	if (vtolDroid(psDroid) && (psDroid->action == DACTION_VTOLATTACK))
@@ -2527,7 +2488,6 @@ static void moveUpdateDroidPos( DROID *psDroid, float dx, float dy )
 		"moveUpdateDroidPos: droid just moved off the map in the x direction" );
 	ASSERT( psDroid->y < (mapHeight<< TILE_SHIFT),
 		"moveUpdateDroidPos: droid just moved off the map in the y direction" );
-
 }
 
 /* Update a tracked droids position and speed given target values */
@@ -2635,7 +2595,7 @@ if(psDroid == driveGetDriven())	debug( LOG_NEVER, "%d\n", speed );
 }
 
 /* Update a persons position and speed given target values */
-void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, SDWORD direction)
+static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 {
 	float			fPerpSpeed, fNormalSpeed, dx, dy, fSpeed;
 	float			iDroidDir;
@@ -2676,8 +2636,6 @@ void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 		/* don't show move animations if inactive */
 		if ( psDroid->psCurAnim != NULL )
 		{
-//			DBPRINTF(("droid anim stopped %p\n",psDroid);
-//DBPRINTF(("vis 1 off %p\n",psDroid);
 			psDroid->psCurAnim->bVisible = FALSE;
 		}
 		return;
@@ -3088,7 +3046,6 @@ moveUpdateCyborgModel( DROID *psDroid, SDWORD moveSpeed, SDWORD moveDir, UBYTE o
 				bRet = animObj_Remove( &psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID );
 				ASSERT( bRet == TRUE, "moveUpdateCyborgModel : animObj_Remove failed" );
 				psDroid->psCurAnim = NULL;
-//DBPRINTF(("Removed cyborg run anim\n"));
 			}
 		}
 
@@ -3383,8 +3340,6 @@ static void checkLocalFeatures(DROID *psDroid)
 	}
 }
 
-
-//static UDWORD LastMoveFrame;
 
 /* Frame update for the movement of a tracked droid */
 void moveUpdateDroid(DROID *psDroid)
@@ -3910,8 +3865,5 @@ void moveUpdateDroid(DROID *psDroid)
 		addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,FALSE,NULL,0);
 	}
 
-#if DROID_RUN_SOUND
 	movePlayAudio( psDroid, bStarted, bStopped, moveSpeed );
-#endif
-
 }
