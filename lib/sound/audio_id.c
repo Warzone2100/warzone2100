@@ -308,7 +308,7 @@ static AUDIO_ID_MAP asAudioID[] =
 {ID_SOUND_GREEN_LIGHT_IN_4,                    "t-grnli4.ogg"},
 {ID_SOUND_GREEN_LIGHT_IN_3,                    "t-grnli3.ogg"},
 {ID_SOUND_GREEN_LIGHT_IN_2,                    "t-grnli2.ogg"},
-{ID_SOUND_GO_GO_GO,                            "t-gogogo,wav"},
+{ID_SOUND_GO_GO_GO,                            "t-gogogo.ogg"},
 {ID_SOUND_PREPARE_FOR_DUST_OFF,                "t-dustof.ogg"},
 
 /* VTol Pilots */
@@ -369,7 +369,7 @@ static AUDIO_ID_MAP asAudioID[] =
 {ID_SOUND_BABA_MG_HEAVY,                       "mgheavy.ogg"},
 {ID_SOUND_BABA_MG_TOWER,                       "mgtower.ogg"},
 {ID_SOUND_SPLASH,                              "splash.ogg"},
-{ID_SOUND_ASSAULT_MG,                          "asltmG.ogg"},
+{ID_SOUND_ASSAULT_MG,                          "asltmg.ogg"},
 {ID_SOUND_RAPID_CANNON,                        "rapdcan.ogg"},
 {ID_SOUND_HIVEL_CANNON,                        "hivelcan.ogg"},
 {ID_SOUND_NEXUS_TOWER,                         "nxstower.ogg"},
@@ -411,15 +411,15 @@ static AUDIO_ID_MAP asAudioID[] =
         /* Vtols */
 {ID_SOUND_VTOL_LAND,                           "vtolland.ogg"},
 {ID_SOUND_VTOL_OFF,                            "vtoloff.ogg"},
-{ID_SOUND_VTOL_MOVE,                           "vtolmove.ogg"},
+{ID_SOUND_VTOL_MOVE,                           "vtol-move.ogg"},
 
         /* Treads */
 {ID_SOUND_TREAD,                               "tread.ogg"},
 
         /* Hovers */
-{ID_SOUND_HOVER_MOVE,                          "hovMove.ogg"},
-{ID_SOUND_HOVER_START,                         "hovStart.ogg"},
-{ID_SOUND_HOVER_STOP,                          "hovStop.ogg"},
+{ID_SOUND_HOVER_MOVE,                          "hovmove.ogg"},
+{ID_SOUND_HOVER_START,                         "hovstart.ogg"},
+{ID_SOUND_HOVER_STOP,                          "hovstop.ogg"},
 
         /* Cyborgs */
 {ID_SOUND_CYBORG_MOVE,                         "cyber-move.ogg"},
@@ -505,7 +505,7 @@ INGAME_AUDIO audio_GetIDFromStr(const char* fileName)
 
 	for ( i=0; i != ID_MAX_SOUND; i++ )
 	{
-		if ( strcasecmp( fileName, asAudioID[i].fileName ) == 0 )
+		if ( strcmp( fileName, asAudioID[i].fileName ) == 0 )
 		{
 			ASSERT( i == asAudioID[i].ID,
 			        "audioID_GetIDFromStr: %s stored IDs don't match", fileName );

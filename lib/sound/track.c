@@ -52,8 +52,6 @@ static AUDIO_CALLBACK	g_pStopTrackCallback = NULL;
 //
 BOOL sound_Init( SDWORD iMaxSameSamples )
 {
-	SDWORD	i;
-
 	g_iMaxSameSamples = iMaxSameSamples;
 	g_iCurTracks = 0;
 	if (!sound_InitLibrary())
@@ -62,11 +60,13 @@ BOOL sound_Init( SDWORD iMaxSameSamples )
 		return FALSE;
 	}
 
-	// init audio array
-	g_apTrack = (TRACK **) malloc( sizeof(TRACK*) * MAX_TRACKS);
-	for ( i = 0; i < MAX_TRACKS; i++ )
+	// init audio array (with NULL pointers; which calloc ensures by setting all allocated memory to zero)
+	g_apTrack = calloc(MAX_TRACKS, sizeof(TRACK*));
+	if (!g_apTrack)
 	{
-		g_apTrack[i] = NULL;
+		debug(LOG_ERROR, "sound_Init: Out of memory");
+		abort();
+		return FALSE;
 	}
 
 	// set system active flag for callbacks
@@ -154,7 +154,7 @@ void sound_ReleaseTrack( TRACK *psTrack )
 		return;
 
 	// Run through the list of tracks and set the pointer to the track which is to be released to NULL
-	for (currTrack = &g_apTrack[0]; currTrack != &g_apTrack[g_iCurTracks]; ++currTrack)
+	for (currTrack = &g_apTrack[0]; currTrack != &g_apTrack[MAX_TRACKS]; ++currTrack)
 	{
 		if (*currTrack == psTrack)
 		{
