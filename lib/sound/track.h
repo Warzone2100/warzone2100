@@ -96,7 +96,7 @@ typedef struct TRACK
 /* functions
  */
 
-BOOL	sound_Init( SDWORD iMaxSameSamples );
+BOOL	sound_Init(void);
 BOOL	sound_Shutdown(void);
 
 TRACK *	sound_LoadTrackFromFile(const char *fileName);

@@ -74,7 +74,7 @@ BOOL audio_Init( AUDIO_CALLBACK pStopTrackCallback )
 	g_sPreviousSample.x = SAMPLE_COORD_INVALID;
 	g_sPreviousSample.y = SAMPLE_COORD_INVALID;
 	g_sPreviousSample.z = SAMPLE_COORD_INVALID;
-	g_bAudioEnabled = sound_Init(MAX_SAME_SAMPLES);
+	g_bAudioEnabled = sound_Init();
 	if (g_bAudioEnabled)
 	{
 		sound_SetStoppedCallback( pStopTrackCallback );

@@ -37,11 +37,6 @@ static TRACK			**g_apTrack;
 // number of tracks loaded
 static SDWORD			g_iCurTracks = 0;
 
-//
-// static SDWORD g_iMaxSamples;
-//
-static SDWORD			g_iMaxSameSamples;
-
 // flag set when system is active (for callbacks etc)
 static BOOL				g_bSystemActive = FALSE;
 static AUDIO_CALLBACK	g_pStopTrackCallback = NULL;
@@ -50,9 +45,8 @@ static AUDIO_CALLBACK	g_pStopTrackCallback = NULL;
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_Init( SDWORD iMaxSameSamples )
+BOOL sound_Init()
 {
-	g_iMaxSameSamples = iMaxSameSamples;
 	g_iCurTracks = 0;
 	if (!sound_InitLibrary())
 	{
