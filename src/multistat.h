@@ -43,14 +43,6 @@ typedef struct
 
 } PLAYERSTATS;
 
-// This is the definition of the multiplay/players/*.sta files
-typedef struct								// complete info.
-{
-	char        name[255];
-	PLAYERSTATS stats;
-} SAVEDPLAYERSTATS;
-
-
 typedef struct _forcemember {
 	DROID_TEMPLATE		*pTempl;			// pointer to template to use for this droid
 	struct _forcemember	*psNext;			// Pointer to next template

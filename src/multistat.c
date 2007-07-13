@@ -585,47 +585,52 @@ BOOL setMultiStats(SDWORD dp, PLAYERSTATS plStats, BOOL bLocal)
 	return TRUE;
 }
 
-
 // ////////////////////////////////////////////////////////////////////////////
 // Load Player Stats
-BOOL loadMultiStats(char *sPlayerName, PLAYERSTATS *playerStats)
+BOOL loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 {
 	char				fileName[255];
 	UDWORD				size;
 	char				*pFileData;
-	PLAYERSTATS			blankstats = {0};
-	SAVEDPLAYERSTATS		st;
 
 	// Prevent an empty player name (where the first byte is a 0x0 terminating char already)
 	if (!*sPlayerName)
+	{
 		strcpy(sPlayerName, _("Player"));
+	}
 
 	snprintf(fileName, sizeof(fileName), "%s%s.sta", MultiPlayersPath, sPlayerName);
 
 	debug(LOG_WZ, "loadMultiStats: %s", fileName);
+
 	// check player already exists
 	if ( !PHYSFS_exists( fileName ) )
 	{
+		PLAYERSTATS			blankstats;
+
+		memset(&blankstats, 0, sizeof(PLAYERSTATS));
 		saveMultiStats(sPlayerName,sPlayerName,&blankstats);		// didnt exist so create.
 	}
+	else
+	{
+		loadFile(fileName,&pFileData,&size);
 
-	loadFile(fileName,&pFileData,&size);
-	memcpy(&st, (SAVEDPLAYERSTATS*)pFileData, sizeof(SAVEDPLAYERSTATS));
+		if (strncmp(pFileData, "WZ.STA.v2", 9) != 0)
+		{
+			return FALSE; // wrong version or not a stats file
+		}
 
-	//set stats.
-	memcpy(playerStats,&(st.stats), sizeof(PLAYERSTATS));	// get
+		sscanf(pFileData, "WZ.STA.v2\n%s %u %u %u %u",
+		       sPlayerName, &st->wins, &st->losses, &st->totalKills, &st->totalScore);
 
-	//set the name. ASSUME STRING IS LONG ENOUGH!
-	strcpy(sPlayerName,st.name);
-
-	free(pFileData);
+		free(pFileData);
+	}
 
 	// reset recent scores
-	playerStats->recentKills = 0;
-	playerStats->recentScore = 0;
-	playerStats->killsToAdd  = 0;
-	playerStats->scoreToAdd  = 0;
-
+	st->recentKills = 0;
+	st->recentScore = 0;
+	st->killsToAdd  = 0;
+	st->scoreToAdd  = 0;
 
 	// clear any skirmish stats.
 	for(size = 0;size<MAX_PLAYERS;size++)
@@ -639,24 +644,20 @@ BOOL loadMultiStats(char *sPlayerName, PLAYERSTATS *playerStats)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Save Player Stats
-BOOL saveMultiStats(const char *sFileName, const char *sPlayerName, const PLAYERSTATS *playerStats)
+#define MAX_STA_SIZE 500
+BOOL saveMultiStats(const char *sFileName, const char *sPlayerName, const PLAYERSTATS *st)
 {
-	char				fileName[255]="";
-	SAVEDPLAYERSTATS		st;
+	char buffer[MAX_STA_SIZE];
+	char fileName[255]="";
 
-	// prepare file.
-	memcpy(&st.stats, playerStats, sizeof(PLAYERSTATS));
-	memset(st.name, 0, 255);
-	strcpy(st.name, sPlayerName);
+	snprintf(buffer, MAX_STA_SIZE, "WZ.STA.v2\n%s %u %u %u %u",
+	         sPlayerName, st->wins, st->losses, st->totalKills, st->totalScore);
 
 	strcpy(fileName,MultiPlayersPath);
 	strcat(fileName,sFileName);
 	strcat(fileName,".sta");
 
-	// we write some uninitialised bytes here (the last of the struct)
-	// this is caused by struct sizes getting rounded up to a nice value
-	// FIXME: ugly cast
-	saveFile(fileName, (char *)&st, sizeof(SAVEDPLAYERSTATS));
+	saveFile(fileName, buffer, strlen(buffer));
 
 	return TRUE;
 }
@@ -665,7 +666,7 @@ BOOL saveMultiStats(const char *sFileName, const char *sPlayerName, const PLAYER
 // score update functions
 
 // update players damage stats.
-void updateMultiStatsDamage	(UDWORD attacker, UDWORD defender, UDWORD inflicted)
+void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 {
 	PLAYERSTATS st;
 
