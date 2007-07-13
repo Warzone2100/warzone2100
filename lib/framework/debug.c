@@ -148,7 +148,7 @@ void debug_callback_file_init( void ** data )
 	const char * filename = (const char *)*data;
 	FILE * logfile = NULL;
 
-	logfile = fopen( filename, "a" );
+	logfile = fopen( filename, "w" );
 	if (!logfile) {
 		fprintf( stderr, "Could not open %s for appending!\n", filename );
 	} else {
