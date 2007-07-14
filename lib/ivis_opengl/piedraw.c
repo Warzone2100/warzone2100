@@ -214,14 +214,14 @@ static inline void pie_Polygon(const SDWORD numVerts, const PIEVERTEXF* pVrts, c
 			const Vector3f
 					p1 = { pVrts[0].sx, pVrts[0].sy, pVrts[0].sz },
 					p2 = { pVrts[1].sx, pVrts[1].sy, pVrts[1].sz },
-					p3 = { pVrts[2].sx, pVrts[2].sy, pVrts[2].sz };
-			Vector3f v1, v2, n;
+					p3 = { pVrts[2].sx, pVrts[2].sy, pVrts[2].sz },
+					v1 = Vector3f_Sub(p3, p1),
+					v2 = Vector3f_Sub(p2, p1),
+					normal = Vector3f_CrossP(v1, v2);
 
-			Vector3f_Sub(&v1, &p3, &p1);
-			Vector3f_Sub(&v2, &p2, &p1);
-			Vector3f_CP(&n, &v1, &v2);
+			STATIC_ASSERT(sizeof(Vector3f) == sizeof(float[3]));
 
-			glNormal3f(n.x, n.y, n.z);
+			glNormal3fv((float*)&normal);
 		}
 	}
 
@@ -568,10 +568,10 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 				Vector3f_Set(&p[j], pVertices[current].x, scale_y(pVertices[current].y, flag, flag_data), pVertices[current].z);
 			}
 
-			Vector3f_Sub(&v[0], &p[2], &p[0]);
-			Vector3f_Sub(&v[1], &p[1], &p[0]);
-			Vector3f_CP(&normal, &v[0], &v[1]);
-			if (Vector3f_SP(&normal, light) > 0)
+			v[0] = Vector3f_Sub(p[2], p[0]);
+			v[1] = Vector3f_Sub(p[1], p[0]);
+			normal = Vector3f_CrossP(v[0], v[1]);
+			if (Vector3f_ScalarP(normal, *light) > 0)
 			{
 				first = pPolys->pindex[0];
 				for (n = 1; n < pPolys->npnts; n++) {

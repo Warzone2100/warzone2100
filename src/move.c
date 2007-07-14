@@ -932,23 +932,26 @@ static BOOL moveNextTarget(DROID *psDroid)
 }
 
 /* Look at the next target point from the route */
-static void movePeekNextTarget(DROID *psDroid, SDWORD *pX, SDWORD *pY)
+static Vector2i movePeekNextTarget(DROID *psDroid)
 {
-	SDWORD	xdiff, ydiff;
-
 	// See if there is anything left in the move list
 	if (psDroid->sMove.Position == psDroid->sMove.numPoints)
 	{
 		// No points left - fudge one to continue the same direction
-		xdiff = psDroid->sMove.targetX - psDroid->sMove.srcX;
-		ydiff = psDroid->sMove.targetY - psDroid->sMove.srcY;
-		*pX = psDroid->sMove.targetX + xdiff;
-		*pY = psDroid->sMove.targetY + ydiff;
+		Vector2i
+			src = { psDroid->sMove.srcX, psDroid->sMove.srcY },
+			target = { psDroid->sMove.targetX, psDroid->sMove.targetY },
+			diff = Vector2i_Sub(target, src),
+			p = Vector2i_Add(diff, target);
+		return p;
 	}
 	else
 	{
-		*pX = (psDroid->sMove.asPath[psDroid->sMove.Position].x << TILE_SHIFT) + TILE_UNITS/2;
-		*pY = (psDroid->sMove.asPath[psDroid->sMove.Position].y << TILE_SHIFT) + TILE_UNITS/2;
+		Vector2i p = {
+			world_coord(psDroid->sMove.asPath[psDroid->sMove.Position].x) + TILE_UNITS/2,
+			world_coord(psDroid->sMove.asPath[psDroid->sMove.Position].y) + TILE_UNITS/2
+		};
+		return p;
 	}
 }
 
@@ -1714,30 +1717,25 @@ static void moveCalcDroidSlide(DROID *psDroid, float *pmx, float *pmy)
 #define REDARROW		179
 
 // get an obstacle avoidance vector
-static void moveGetObstVector4(DROID *psDroid, float *pX, float *pY)
+static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
 {
-	SDWORD				i,xdiff,ydiff, absx,absy, dist;
+	SDWORD				i, xdiff, ydiff, absx, absy, dist;
 	BASE_OBJECT			*psObj;
-	SDWORD				numObst, distTot;
-	float				dirX,dirY;
-	float				omag, ox,oy, ratio;
-	float				avoidX,avoidY;
-	SDWORD				mapX,mapY, tx,ty, td;
+	SDWORD				numObst = 0, distTot = 0;
+	float				dirX = 0, dirY = 0;
+	float				omag, ox, oy, ratio;
+	float				avoidX, avoidY;
+	SDWORD				mapX, mapY, tx, ty, td;
 	PROPULSION_STATS	*psPropStats;
 
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 	ASSERT( psPropStats != NULL,
 			"moveUpdateUnit: invalid propulsion stats pointer" );
 
-	numObst = 0;
-	dirX = 0;
-	dirY = 0;
-	distTot = 0;
-
 	droidGetNaybors(psDroid);
 
 	// scan the neighbours for obstacles
-	for(i=0; i<(SDWORD)numNaybors; i++)
+	for(i = 0; i < (SDWORD)numNaybors; i++)
 	{
 		psObj = asDroidNaybors[i].psObj;
 		if (psObj->type != OBJ_DROID ||
@@ -1872,140 +1870,146 @@ static void moveGetObstVector4(DROID *psDroid, float *pX, float *pY)
 		{
 			SDWORD	iHeadX, iHeadY, iHeadZ;
 
-			/* target direction - yellow */
+			// target direction - yellow
 			iHeadX = psDroid->sMove.targetX;
 			iHeadY = psDroid->sMove.targetY;
 			iHeadZ = map_Height( iHeadX, iHeadY );
 			arrowAdd( psDroid->x, psDroid->y, psDroid->z,
 						iHeadX, iHeadY, iHeadZ, YELLOWARROW );
 
-			/* average obstacle vector - green */
+			// average obstacle vector - green
 			iHeadX = MAKEINT(FRACTmul(ox, 200)) + psDroid->x;
 			iHeadY = MAKEINT(FRACTmul(oy, 200)) + psDroid->y;
 			arrowAdd( psDroid->x, psDroid->y, psDroid->z,
 						iHeadX, iHeadY, iHeadZ, GREENARROW );
 
-			/* normal - green */
+			// normal - green
 			iHeadX = MAKEINT(FRACTmul(avoidX, 100)) + psDroid->x;
 			iHeadY = MAKEINT(FRACTmul(avoidY, 100)) + psDroid->y;
 			arrowAdd( psDroid->x, psDroid->y, psDroid->z,
 						iHeadX, iHeadY, iHeadZ, GREENARROW );
 
-			/* resultant - white */
+			// resultant - white
 			iHeadX = MAKEINT(FRACTmul((*pX), 200)) + psDroid->x;
 			iHeadY = MAKEINT(FRACTmul((*pY), 200)) + psDroid->y;
 			arrowAdd( psDroid->x, psDroid->y, psDroid->z,
 						iHeadX, iHeadY, iHeadZ, WHITEARROW );
 		}
 #endif
-
 	}
 }
 
-/* Get a direction for a droid to avoid obstacles etc. */
-static void moveGetDirection(DROID *psDroid, float *pX, float *pY)
+
+/*!
+ * Get a direction for a droid to avoid obstacles etc.
+ * \param psDroid Which droid to examine
+ * \return The normalised direction vector
+ */
+static Vector2f moveGetDirection(DROID *psDroid)
 {
-	BOOL	bNoVector = TRUE; // true if we did not find a vector yet
-	// The basic vector
-	float	dx = psDroid->sMove.targetX - (SDWORD)psDroid->x;
-	float	dy = psDroid->sMove.targetY - (SDWORD)psDroid->y;
-	// If the droid is getting close to the way point then start to phase in the next target
-	float	mag = (dx * dx) + (dy * dy);
+	// Current position and destination direction
+	Vector2f
+		src = { psDroid->x, psDroid->y },
+		dest = { 0.0f, 0.0f };
+	// Current waypoint
+	Vector2f
+		target = { psDroid->sMove.targetX, psDroid->sMove.targetY },
+		delta = Vector2f_Sub(target, src);
+	float magnitude = Vector2f_ScalarP(delta, delta);
 
-	// fade in the next target point if we arn't at the end of the waypoints
-	if ((psDroid->sMove.Position != psDroid->sMove.numPoints) &&
-		(mag < WAYPOINT_DSQ))
+	// Dont fade in the next target point if we are at finished or too far away from the current
+	if (psDroid->sMove.Position == psDroid->sMove.numPoints || magnitude > WAYPOINT_DSQ)
 	{
-		SDWORD	ntx, nty, nmag;
-		float	ndx, ndy;
+		dest = Vector2f_Normalise(delta);
+	}
+	// We are in reach of the current waypoint and have further points to go
+	else
+	{
+		// Next waypoint
+		Vector2f
+			nextTarget = Vector2i_To2f( movePeekNextTarget(psDroid) ),
+			nextDelta = Vector2f_Sub(nextTarget, src);
+		float nextMagnitude = Vector2f_ScalarP(nextDelta, nextDelta);
 
-		// find the next target
-		movePeekNextTarget(psDroid, &ntx, &nty);
-		ndx = ntx - psDroid->x;
-		ndy = nty - psDroid->y;
-		nmag = ndx*ndx + ndy*ndy;
-
-		if (mag != 0 && nmag != 0)
+		// We are already there
+		if (magnitude == 0.0f && nextMagnitude == 0.0f)
 		{
-			// Get the size of the vectors
-			float	root = sqrtf(mag);
-			float	nroot = sqrtf(nmag);
-
-			// Split the proportion of the vectors based on how close to the point they are
-			ndx = (ndx * (WAYPOINT_DSQ - mag)) / WAYPOINT_DSQ;
-			ndy = (ndy * (WAYPOINT_DSQ - mag)) / WAYPOINT_DSQ;
-
-			dx = (dx * mag) / WAYPOINT_DSQ;
-			dy = (dy * mag) / WAYPOINT_DSQ;
-
-			// Calculate the normalised result
-			*pX = (dx / root) + (ndx / nroot);
-			*pY = (dy / root) + (ndy / nroot);
-			bNoVector = FALSE;
+			Vector2f zero = {0.0f, 0.0f};
+			return zero; // We are practically standing on our only waypoint
+		}
+		// We are passing the current waypoint, so directly head over to the next
+		else if (magnitude == 0.0f)
+		{
+			dest = Vector2f_Normalise(nextDelta);
+		}
+		// We are passing the next waypoint, so for now don't interpolate it
+		else if (nextMagnitude == 0.0f)
+		{
+			dest = Vector2f_Normalise(delta);
+		}
+		// Interpolate with the next target
+		else
+		{
+			// Interpolate the vectors based on how close to them we are
+			delta = Vector2f_Mult(delta, magnitude);
+			nextDelta = Vector2f_Mult(nextDelta, WAYPOINT_DSQ - magnitude);
+			
+			dest = Vector2f_Normalise( Vector2f_Add(delta, nextDelta) );
 		}
 	}
 
-	if (bNoVector)
-	{
-		float	root;
-
-		if (mag == 0)
-		{
-			*pX = 0;
-			*pY = 0;
-			return;		// We are practically standing on our only waypoint
-		}
-		root = sqrtf(mag);
-
-		*pX = (float) dx / root;
-		*pY = (float) dy / root;
-	}
-
+	// Transporters don't need to avoid obstacles, but everyone else should
 	if ( psDroid->droidType != DROID_TRANSPORTER )
 	{
-		moveGetObstVector4(psDroid, pX,pY);
+		moveGetObstacleVector(psDroid, &dest.x, &dest.y);
 	}
+
+	ASSERT(isfinite(dest.x) && isfinite(dest.y), "moveGetDirection: bad float");
+
+	return dest;
 }
 
 
 // Calculate the boundary vector
 static void moveCalcBoundary(DROID *psDroid)
 {
+	Vector2i
+		src = { psDroid->sMove.srcX, psDroid->sMove.srcY },
+		target = { psDroid->sMove.targetX, psDroid->sMove.targetY },
+		prev, next, nextTarget;
 	SDWORD	absX, absY;
-	SDWORD	prevX,prevY, prevMag;
-	SDWORD	nTarX,nTarY, nextX,nextY,nextMag;
-	SDWORD	sumX,sumY;
+	SDWORD	prevMag, nextMag;
+	SDWORD	sumX, sumY;
 
 	// No points left - simple case for the bound vector
 	if (psDroid->sMove.Position == psDroid->sMove.numPoints)
 	{
-		psDroid->sMove.boundX = (SWORD)(psDroid->sMove.srcX - psDroid->sMove.targetX);
-		psDroid->sMove.boundY = (SWORD)(psDroid->sMove.srcY - psDroid->sMove.targetY);
+		psDroid->sMove.boundX = src.x - target.x;
+		psDroid->sMove.boundY = src.y - target.y;
 		return;
 	}
 
 	// Calculate the vector back along the current path
-	prevX = psDroid->sMove.srcX - psDroid->sMove.targetX;
-	prevY = psDroid->sMove.srcY - psDroid->sMove.targetY;
-	absX = labs(prevX);
-	absY = labs(prevY);
-	prevMag = absX > absY ? absX + absY/2 : absY + absX/2;
-//	prevMag = sqrt(prevX*prevX + prevY*prevY);
+	prev = Vector2i_Sub(src, target),
+	absX = abs(prev.x);
+	absY = abs(prev.y);
+	prevMag = (absX > absY) ? (absX + absY/2) : (absY + absX/2);
+//	prevMag = Vector2i_Length(prev);
 
 	// Calculate the vector to the next target
-	movePeekNextTarget(psDroid, &nTarX, &nTarY);
-	nextX = nTarX - psDroid->sMove.targetX;
-	nextY = nTarY - psDroid->sMove.targetY;
-	absX = labs(nextX);
-	absY = labs(nextY);
-	nextMag = absX > absY ? absX + absY/2 : absY + absX/2;
-//	nextMag = sqrt(nextX*nextX + nextY*nextY);
+	nextTarget = movePeekNextTarget(psDroid);
+
+	next = Vector2i_Sub(nextTarget, target);
+	absX = abs(next.x);
+	absY = abs(next.y);
+	nextMag = (absX > absY) ? (absX + absY/2) : (absY + absX/2);
+//	nextMag = Vector2i_Length(next);
 
 	if (prevMag != 0 && nextMag == 0)
 	{
 		// don't bother mixing the boundaries - cos there isn't a next vector anyway
-		psDroid->sMove.boundX = (SWORD)(psDroid->sMove.srcX - psDroid->sMove.targetX);
-		psDroid->sMove.boundY = (SWORD)(psDroid->sMove.srcY - psDroid->sMove.targetY);
+		psDroid->sMove.boundX = src.x - target.x;
+		psDroid->sMove.boundY = src.y - target.y;
 		return;
 	}
 	else if (prevMag == 0 || nextMag == 0)
@@ -2016,20 +2020,20 @@ static void moveCalcBoundary(DROID *psDroid)
 	}
 
 	// Calculate the vector between the two
-	sumX = (prevX * BOUND_ACC)/prevMag + (nextX * BOUND_ACC)/nextMag;
-	sumY = (prevY * BOUND_ACC)/prevMag + (nextY * BOUND_ACC)/nextMag;
+	sumX = (prev.x * BOUND_ACC)/prevMag + (next.x * BOUND_ACC)/nextMag;
+	sumY = (prev.y * BOUND_ACC)/prevMag + (next.y * BOUND_ACC)/nextMag;
 
 	// Rotate by 90 degrees one way and see if it is the same side as the src vector
 	// if not rotate 90 the other.
-	if (prevX*sumY - prevY*sumX < 0)
+	if (prev.y*sumY - prev.y*sumX < 0)
 	{
-		psDroid->sMove.boundX = (SWORD)-sumY;
-		psDroid->sMove.boundY = (SWORD)sumX;
+		psDroid->sMove.boundX = -sumY;
+		psDroid->sMove.boundY = sumX;
 	}
 	else
 	{
-		psDroid->sMove.boundX = (SWORD)sumY;
-		psDroid->sMove.boundY = (SWORD)-sumX;
+		psDroid->sMove.boundX = sumY;
+		psDroid->sMove.boundY = -sumX;
 	}
 
 	debug( LOG_NEVER, "new boundary: droid %d boundary (%d,%d)\n",
@@ -3312,7 +3316,6 @@ static void checkLocalFeatures(DROID *psDroid)
 /* Frame update for the movement of a tracked droid */
 void moveUpdateDroid(DROID *psDroid)
 {
-	float				tx,ty;		 //adiff, dx,dy, mx,my;
 	float				tangle;		// thats DROID angle and TARGET angle - not some bizzare pun :-)
 									// doesn't matter - they're still shit names...! :-)
 	SDWORD				fx, fy;
@@ -3460,14 +3463,14 @@ void moveUpdateDroid(DROID *psDroid)
 			else
 			{
 				// Calculate a target vector
-				moveGetDirection(psDroid, &tx,&ty);
+				Vector2f target = moveGetDirection(psDroid);
 
 				// Turn the droid if necessary
-				tangle = vectorToAngle(tx,ty);
+				tangle = vectorToAngle(target.x, target.y);
 
 				if ( psDroid->droidType == DROID_TRANSPORTER )
 				{
-					debug( LOG_NEVER, "a) dir %g,%g (%g)\n", tx, ty, tangle );
+					debug( LOG_NEVER, "a) dir %g,%g (%g)\n", target.x, target.y, tangle );
 				}
 
 				moveSpeed = moveCalcDroidSpeed(psDroid);
@@ -3605,11 +3608,10 @@ void moveUpdateDroid(DROID *psDroid)
 #endif
 
 		// Calculate a target vector
-		moveGetDirection(psDroid, &tx,&ty);
+		Vector2f target = moveGetDirection(psDroid);
 
 		// Turn the droid if necessary
-		// calculate the difference in the angles
-		tangle = vectorToAngle(tx,ty);
+		tangle = vectorToAngle(target.x, target.y);
 
 		moveSpeed = moveCalcDroidSpeed(psDroid);
 
