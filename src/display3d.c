@@ -111,6 +111,10 @@
 
 #include "cmddroid.h"
 
+// HACK to be able to use static shadows for walls
+// We just store a separate IMD for each direction
+static iIMDShape otherDirections[3];
+static BOOL directionSet[3] = {FALSE, FALSE, FALSE};
 
 // Extremely magic!
 #define WATER_TILE 17			// ID of water tile.
@@ -965,6 +969,8 @@ BOOL init3DView(void)
 	bRender3DOnly = FALSE;
 
 	targetInitialise();
+
+	memset(directionSet, FALSE, sizeof(directionSet));
 
 	return TRUE;
 }
@@ -2419,12 +2425,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 	UDWORD			i;
 	Vector3f			*temp;
 	UDWORD			buildingBrightness, specular;
-	// HACK to be able to use static shadows for walls
-	// We just store a separate IMD for each direction
-	static iIMDShape otherDirections[3];
-	static BOOL directionSet[3] = {FALSE, FALSE, FALSE};
 	iIMDShape *originalDirection = NULL;
-
 
 	if(psStructure->visible[selectedPlayer] || godMode || demoGetStatus())
 	{
