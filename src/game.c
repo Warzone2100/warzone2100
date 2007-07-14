@@ -560,31 +560,18 @@ typedef struct _save_move_control
 {
 	UBYTE	Status;						// Inactive, Navigating or moving point to point status
 	UBYTE	Mask;						// Mask used for the creation of this path
-//	SBYTE	Direction;					// Direction object should be moving (0-7) 0=Up,1=Up-Right
-//	SDWORD	Speed;						// Speed at which object moves along the movement list
 	UBYTE	Position;	   				// Position in asPath
 	UBYTE	numPoints;					// number of points in asPath
-//	PATH_POINT	MovementList[TRAVELSIZE];
 	PATH_POINT	asPath[TRAVELSIZE];		// Pointer to list of block X,Y coordinates.
 										// When initialised list is terminated by (0xffff,0xffff)
 										// Values prefixed by 0x8000 are pixel coordinates instead of
 										// block coordinates
 	SDWORD	DestinationX;				// DestinationX,Y should match objects current X,Y
 	SDWORD	DestinationY;				//		location for this movement to be complete.
-//   	UDWORD	Direction3D;				// *** not necessary
-//	UDWORD	TargetDir;					// *** not necessary Direction the object should be facing
-//	SDWORD	Gradient;					// Gradient of line
-//	SDWORD	DeltaX;						// Distance from start to end position of current movement X
-//	SDWORD	DeltaY;						// Distance from start to end position of current movement Y
-//	SDWORD	XStep;						// Adjustment to the characters X position each movement
-//	SDWORD	YStep;						// Adjustment to the characters Y position each movement
-//	SDWORD	DestPixelX;					// Pixel coordinate destination for pixel movement (NOT the final X)
-//	SDWORD	DestPixelY;					// Pixel coordiante destination for pixel movement (NOT the final Y)
 	SDWORD	srcX,srcY,targetX,targetY;
 
 	/* Stuff for John's movement update */
 	float	fx,fy;						// droid location as a fract
-//	float	dx,dy;						// x and y change for current direction
 	// NOTE: this is supposed to replace Speed
 	float	speed;						// Speed of motion
 	SWORD	boundX,boundY;				// Vector for the end of path boundary
@@ -604,16 +591,6 @@ typedef struct _save_move_control
 	SWORD	iVertSpeed;
 	/* Watermelon:I need num of DROID_MAXWEAPS of iAttackRuns */
 	UWORD	iAttackRuns[DROID_MAXWEAPS];
-	/* Watermelon:guard radius */
-	//UDWORD	iGuardRadius;
-
-	/* Only needed for Alex's movement update ? */
-//	UDWORD	timeStarted;
-//	UDWORD	arrivalTime;
-//	UDWORD	pathStarted;
-//	BOOL	startedMoving;
-//	UDWORD	lastTime;
-//	BOOL	speedChange;
 } SAVE_MOVE_CONTROL;
 
 

@@ -318,7 +318,7 @@ void moveUpdateBaseSpeed(void)
 /* Set a target location for a droid to move to */
 // Now returns a BOOL based on the success of the routing
 // returns TRUE if the routing was successful ... if FALSE then the calling code should not try to route here again for a while
-static BOOL _moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
+static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 {
 	FPATH_RETVAL		retVal = FPR_OK;
 	SDWORD				fmx1,fmy1, fmx2,fmy2;
@@ -481,17 +481,6 @@ static BOOL _moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation
 
 	return TRUE;
 }
-
-
-// Shame about this but the find path code uses too much stack space
-// so we can't safely run it in the dcache.
-//
-static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
-{
-
-	return _moveDroidToBase(psDroid,x,y,bFormation);
-}
-
 
 // move a droid to a location, joining a formation
 BOOL moveDroidTo(DROID *psDroid, UDWORD x,UDWORD y)
@@ -2429,8 +2418,6 @@ static void moveUpdateDroidPos( DROID *psDroid, float dx, float dy )
 
 	psDroid->sMove.fx += dx;
 	psDroid->sMove.fy += dy;
-//	psDroid->sMove.dx = dx;
-//	psDroid->sMove.dy = dy;
 
 	iX = MAKEINT(psDroid->sMove.fx);
 	iY = MAKEINT(psDroid->sMove.fy);
@@ -2867,9 +2854,6 @@ WZ_DECL_UNUSED static void moveGetStatusStr( UBYTE status, char *szStr )
 			break;
 		case MOVEDRIVE:
 			strcpy( szStr, "MOVEDRIVE" );
-			break;
-		case MOVEDRIVEFOLLOW:
-			strcpy( szStr, "MOVEDRIVEFOLLOW" );
 			break;
 		default:
 			strcpy( szStr, "" );
@@ -3751,23 +3735,6 @@ void moveUpdateDroid(DROID *psDroid)
 		ASSERT(moveDir >= 0 && moveDir <= 360, "Illegal movement direction");
 		break;
 
-	// Follow the droid being driven around by the player.
-	case MOVEDRIVEFOLLOW:
-//		orderDroidLoc(psDroid,DORDER_MOVE, psDrivenDroid->x,psDrivenDroid->y)
-//		if (gameTime >= psDroid->sMove.bumpTime)
-//		{
-//			if(psDrivenDroid != NULL) {
-//				psDroid->sMove.DestinationX = psDrivenDroid->x;
-//				psDroid->sMove.DestinationY = psDrivenDroid->y;
-//				psDroid->sMove.fx = psDroid->x;
-//				psDroid->sMove.fy = psDroid->y;
-//				psDroid->sMove.bumpTime = 0;
-//				moveDroidTo(psDroid, psDroid->sMove.DestinationX,psDroid->sMove.DestinationY);
-//			} else {
-//				psDroid->sMove.Status = MOVEINACTIVE;
-//			}
-//		}
-		break;
 	default:
 		ASSERT( FALSE, "moveUpdateUnit: unknown move state" );
 		break;

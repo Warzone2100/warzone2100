@@ -637,7 +637,6 @@ void orderUpdateDroid(DROID *psDroid)
 
 			xdiff = (SDWORD)psDroid->x - (SDWORD)psDroid->orderX;
 			ydiff = (SDWORD)psDroid->y - (SDWORD)psDroid->orderY;
-			//if (xdiff*xdiff + ydiff*ydiff < psDroid->sMove.iGuardRadius * psDroid->sMove.iGuardRadius)
 			if (xdiff*xdiff + ydiff*ydiff <= 2000 * 2000)
 			{
 				if (psDroid->order == DORDER_CIRCLE)

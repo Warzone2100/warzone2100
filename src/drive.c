@@ -185,7 +185,6 @@ BOOL	getDrivingStatus( void )
 }
 
 
-
 // Start droid driving mode.
 //
 BOOL StartDriverMode(DROID *psOldDroid)
@@ -193,10 +192,7 @@ BOOL StartDriverMode(DROID *psOldDroid)
 	DROID *psDroid;
 	DROID *psLastDriven;
 
-//	DBPRINTF(("StartDriveMode\n"));
-
 	IdleTime = gameTime;
-
 
 	psLastDriven = psDrivenDroid;
 	psDrivenDroid = NULL;
@@ -212,9 +208,6 @@ BOOL StartDriverMode(DROID *psOldDroid)
 				}
 				psDrivenDroid = psDroid;
 				debug( LOG_NEVER, "New driven droid\n" );
-			} else if(psDroid != psDrivenDroid) {
-				// All the others become followers of the driven droid.
-//				psDroid->sMove.Status = MOVEDRIVEFOLLOW;
 			}
 		}
 	}
