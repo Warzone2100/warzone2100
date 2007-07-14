@@ -1725,13 +1725,15 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		if(((x >> TILE_SHIFT) < TOO_NEAR_EDGE) || ((x >> TILE_SHIFT) > (
 			mapWidth - TOO_NEAR_EDGE)))
 		{
-			ASSERT(!"attempting to build too closely to map-edge", "buildStructure: x coord (%u) too near edge (req. distance is %u)", x, TOO_NEAR_EDGE);
+			debug(LOG_ERROR, "buildStructure: attempting to build too closely to map-edge, "
+			      "x coord (%u) too near edge (req. distance is %u)", x, TOO_NEAR_EDGE);
 			return NULL;
 		}
 		if(((y >> TILE_SHIFT) < TOO_NEAR_EDGE) || ((y >> TILE_SHIFT) > (
 			mapHeight - TOO_NEAR_EDGE)))
 		{
-			ASSERT(!"attempting to build too closely to map-edge", "buildStructure: y coord (%u) too near edge (req. distance is %u)", y, TOO_NEAR_EDGE);
+			debug(LOG_ERROR, "buildStructure: attempting to build too closely to map-edge, "
+			      "y coord (%u) too near edge (req. distance is %u)", y, TOO_NEAR_EDGE);
 			return NULL;
 		}
 
@@ -1812,13 +1814,15 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 					}
 				}
 				// end of dodgy stuff
-				else
+				else if (TILE_HAS_STRUCTURE(psTile))
 				{
-					ASSERT(!(TILE_HAS_STRUCTURE(psTile)),
+					debug(LOG_ERROR,
 					       "buildStructure: building %s at (%d, %d) but found %s already at (%d, %d)",
 					       pStructureType->pName, mapX, mapY,
 					       getTileStructure(mapX + width, mapY + breadth)->pStructureType->pName,
 					       mapX + width, mapY + breadth);
+					free(psBuilding);
+					return NULL;
 				}
 
 				psTile->psObject = (BASE_OBJECT*)psBuilding;
@@ -2975,21 +2979,11 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 
 	CHECK_STRUCTURE(psStructure);
 
-	if (psStructure->numWeaps > 0)
+	for (i = 0; i < DROID_MAXWEAPS; i++)
 	{
-		for (i = 0;i < psStructure->numWeaps;i++)
+		if (psStructure->psTarget[i] && psStructure->psTarget[i]->died)
 		{
-			if (psStructure->psTarget[i] && psStructure->psTarget[i]->died)
-			{
-				setStructureTarget(psStructure, NULL, i);
-			}
-		}
-	}
-	else
-	{
-		if (psStructure->psTarget[0] && psStructure->psTarget[0]->died)
-		{
-			setStructureTarget(psStructure, NULL, 0);
+			setStructureTarget(psStructure, NULL, i);
 		}
 	}
 
