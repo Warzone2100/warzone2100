@@ -53,6 +53,7 @@
 #    define snprintf  _snprintf
 #    define fileno _fileno
 #    define inline __inline
+#    define isfinite _finite
 #  endif /* WZ_CC_MSVC */
 
 #elif defined(WZ_OS_UNIX)
