@@ -1903,42 +1903,33 @@ static void moveGetObstVector4(DROID *psDroid, float *pX, float *pY)
 }
 
 /* Get a direction for a droid to avoid obstacles etc. */
-// This routine smells ...
 static void moveGetDirection(DROID *psDroid, float *pX, float *pY)
 {
-	SDWORD	dx,dy, tx,ty;
-	SDWORD	mag;
-	float	root;
-	BOOL	bNoVector;
-	SDWORD	ndx,ndy, ntx,nty, nmag;
-	float	nroot;
-
-	tx = psDroid->sMove.targetX;
-	ty = psDroid->sMove.targetY;
-
-	// Calc the basic vector
-	dx = tx - (SDWORD)psDroid->x;
-	dy = ty - (SDWORD)psDroid->y;
-	// If the droid is getting close to the way point start to phase in the next target
-	mag = dx*dx + dy*dy;
-
-	bNoVector = TRUE;
+	BOOL	bNoVector = TRUE; // true if we did not find a vector yet
+	// The basic vector
+	float	dx = psDroid->sMove.targetX - (SDWORD)psDroid->x;
+	float	dy = psDroid->sMove.targetY - (SDWORD)psDroid->y;
+	// If the droid is getting close to the way point then start to phase in the next target
+	float	mag = (dx * dx) + (dy * dy);
 
 	// fade in the next target point if we arn't at the end of the waypoints
 	if ((psDroid->sMove.Position != psDroid->sMove.numPoints) &&
 		(mag < WAYPOINT_DSQ))
 	{
+		SDWORD	ntx, nty, nmag;
+		float	ndx, ndy;
+
 		// find the next target
 		movePeekNextTarget(psDroid, &ntx, &nty);
-		ndx = ntx - (SDWORD)psDroid->x;
-		ndy = nty - (SDWORD)psDroid->y;
+		ndx = ntx - psDroid->x;
+		ndy = nty - psDroid->y;
 		nmag = ndx*ndx + ndy*ndy;
 
 		if (mag != 0 && nmag != 0)
 		{
 			// Get the size of the vectors
-			root = sqrtf(mag);
-			nroot = sqrtf(nmag);
+			float	root = sqrtf(mag);
+			float	nroot = sqrtf(nmag);
 
 			// Split the proportion of the vectors based on how close to the point they are
 			ndx = (ndx * (WAYPOINT_DSQ - mag)) / WAYPOINT_DSQ;
@@ -1948,24 +1939,25 @@ static void moveGetDirection(DROID *psDroid, float *pX, float *pY)
 			dy = (dy * mag) / WAYPOINT_DSQ;
 
 			// Calculate the normalised result
-			*pX = FRACTdiv(dx, root) + FRACTdiv(ndx, nroot);
-			*pY = FRACTdiv(dy, root) + FRACTdiv(ndy, nroot);
+			*pX = (dx / root) + (ndx / nroot);
+			*pY = (dy / root) + (ndy / nroot);
 			bNoVector = FALSE;
 		}
 	}
 
 	if (bNoVector)
 	{
-		root = sqrtf(mag);
-		*pX = FRACTdiv(dx, root);
-		*pY = FRACTdiv(dy, root);
+		float	root = sqrtf(mag);
+
+		*pX = (float) dx / root;
+		*pY = (float) dy / root;
 	}
 
 	if ( psDroid->droidType != DROID_TRANSPORTER )
 	{
 		moveGetObstVector4(psDroid, pX,pY);
 	}
-	ASSERT(isfinite(*pX) && isfinite(*pY), "moveGetDirection: bad float, mag=%d", mag);
+	ASSERT(isfinite(*pX) && isfinite(*pY), "moveGetDirection: bad float, mag=%f", mag);
 }
 
 
