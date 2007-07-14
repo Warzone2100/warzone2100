@@ -1965,7 +1965,6 @@ static void moveGetDirection(DROID *psDroid, float *pX, float *pY)
 	{
 		moveGetObstVector4(psDroid, pX,pY);
 	}
-	ASSERT(finitef(*pX) && finitef(*pY), "moveGetDirection: bad float, mag=%f", mag);
 }
 
 
