@@ -1947,7 +1947,15 @@ static void moveGetDirection(DROID *psDroid, float *pX, float *pY)
 
 	if (bNoVector)
 	{
-		float	root = sqrtf(mag);
+		float	root;
+
+		if (mag == 0)
+		{
+			*pX = 0;
+			*pY = 0;
+			return;		// We are practically standing on our only waypoint
+		}
+		root = sqrtf(mag);
 
 		*pX = (float) dx / root;
 		*pY = (float) dy / root;
