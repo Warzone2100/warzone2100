@@ -70,7 +70,7 @@ run
 	tech[0][2]		RESEARCHSTAT		"R-Defense-Pillbox06"		//lancer bunker
 
 	//other tech: R-Vehicle-Prop-VTOL, R-Struc-VTOLPad, R-Struc-VTOLFactory
-	techCount[1]	int					24
+	techCount[1]	int					25
 	
 	//how many res facilities to use when finished researching all specified research topics
 	maxIdleRes[1]	int					3
@@ -80,29 +80,30 @@ run
 	tech[1][2]		RESEARCHSTAT		"R-Wpn-MG3Mk1"				//HMG
 	tech[1][3]		RESEARCHSTAT		"R-Cyborg-Wpn-MG"			//Machine gunner
 	tech[1][4]		RESEARCHSTAT		"R-Cyborg-Sys-Mechanic"		//mechanic
-	tech[1][5]		RESEARCHSTAT		"R-Cyborg-Wpn-Flamer"		//flamer
-	tech[1][6]		RESEARCHSTAT		"R-Wpn-Flamer-Damage03"		//flamer damage 03
-	tech[1][7]		RESEARCHSTAT		"R-Wpn-Flamer-ROF03"		//flamer ROF 03
+	tech[1][5]		RESEARCHSTAT		"R-Cyborg-Sys-ComEng"		//cyb engineer
+	tech[1][6]		RESEARCHSTAT		"R-Cyborg-Wpn-Flamer"		//flamer
+	tech[1][7]		RESEARCHSTAT		"R-Wpn-Flamer-Damage03"		//flamer damage 03
+	tech[1][8]		RESEARCHSTAT		"R-Wpn-Flamer-ROF03"		//flamer ROF 03
 	
-	tech[1][8]		RESEARCHSTAT		"R-Cyborg-Wpn-Cannon"		//heavy gunner
-	tech[1][9]		RESEARCHSTAT		"R-Wpn-Rocket01-LtAT"		//Lancer
-	tech[1][10]		RESEARCHSTAT		"R-Cyborg-Wpn-Rocket"		//Cyborg Lancer
-	tech[1][11]		RESEARCHSTAT		"R-Vehicle-Body08"			//Scorpion body
-	tech[1][12]		RESEARCHSTAT		"R-Struc-Power-Upgrade03a"	//power upgrade 03a
-	tech[1][13]		RESEARCHSTAT		"R-Wpn-RocketSlow-Accuracy03"	//lancer accuracy
-	tech[1][14]		RESEARCHSTAT		"R-Wpn-RocketSlow-Damage06"	//lancer damage 06 (all 6 can be researched at once)
+	tech[1][9]		RESEARCHSTAT		"R-Cyborg-Wpn-Cannon"		//heavy gunner
+	tech[1][10]		RESEARCHSTAT		"R-Wpn-Rocket01-LtAT"		//Lancer
+	tech[1][11]		RESEARCHSTAT		"R-Cyborg-Wpn-Rocket"		//Cyborg Lancer
+	tech[1][12]		RESEARCHSTAT		"R-Vehicle-Body08"			//Scorpion body
+	tech[1][13]		RESEARCHSTAT		"R-Struc-Power-Upgrade03a"	//power upgrade 03a
+	tech[1][14]		RESEARCHSTAT		"R-Wpn-RocketSlow-Accuracy03"	//lancer accuracy
+	tech[1][15]		RESEARCHSTAT		"R-Wpn-RocketSlow-Damage06"	//lancer damage 06 (all 6 can be researched at once)
 	
-	tech[1][15]		RESEARCHSTAT		"R-Cyborg-Wpn-RotMG-Grd"	//assault gunner
+	tech[1][16]		RESEARCHSTAT		"R-Cyborg-Wpn-RotMG-Grd"	//assault gunner
 	
 	
-	tech[1][16]		RESEARCHSTAT		"R-Wpn-Rocket03-HvAT"		//BB
-	tech[1][17]		RESEARCHSTAT		"R-Cyborg-Wpn-Rail1-Grd"	//needle gunner
-	tech[1][18]		RESEARCHSTAT		"R-Struc-VTOLPad-Upgrade06"
-	tech[1][19]		RESEARCHSTAT		"R-Struc-VTOLFactory-Upgrade06"
-	tech[1][20]		RESEARCHSTAT		"R-Sys-Autorepair-General"		//autorepair
-	tech[1][21]		RESEARCHSTAT		"R-Sys-Sensor-UpLink"
-	tech[1][22]		RESEARCHSTAT		"R-Sys-VTOLCBS-Turret01"
-	tech[1][23]		RESEARCHSTAT		"R-Sys-VTOLStrike-Tower01"
+	tech[1][17]		RESEARCHSTAT		"R-Wpn-Rocket03-HvAT"		//BB
+	tech[1][18]		RESEARCHSTAT		"R-Cyborg-Wpn-Rail1-Grd"	//needle gunner
+	tech[1][19]		RESEARCHSTAT		"R-Struc-VTOLPad-Upgrade06"
+	tech[1][20]		RESEARCHSTAT		"R-Struc-VTOLFactory-Upgrade06"
+	tech[1][21]		RESEARCHSTAT		"R-Sys-Autorepair-General"		//autorepair
+	tech[1][22]		RESEARCHSTAT		"R-Sys-Sensor-UpLink"
+	tech[1][23]		RESEARCHSTAT		"R-Sys-VTOLCBS-Turret01"
+	tech[1][24]		RESEARCHSTAT		"R-Sys-VTOLStrike-Tower01"
 
 	//tech[1][5]		RESEARCHSTAT			"R-Vehicle-Body04"				// Bug body
 
@@ -356,6 +357,7 @@ run
 	cybTempl[5]		TEMPLATE	"MP-Cyb-Needle-GRD"
 	
 	cybMechanic		TEMPLATE	"Cyb-Mechanic"
+	cybEngineer		TEMPLATE	"Cyb-ComEng"
 
 	superCyb[0]		TEMPLATE	"Cyb-Hvy-Mcannon"
 	superCyb[1]		TEMPLATE	"Cyb-Hvy-HPV"

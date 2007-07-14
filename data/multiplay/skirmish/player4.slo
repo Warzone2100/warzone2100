@@ -107,7 +107,7 @@ public	int				numTemplates[TECHS];
 public	TEMPLATE		tmpl[TECHS][70];
 private	TEMPLATE		tmplChoice[5];
 
-public	TEMPLATE		cybTempl[10],superCyb[4],cybMechanic;
+public	TEMPLATE		cybTempl[10],superCyb[4],cybMechanic,cybEngineer;
 
 public	TEMPLATE		vtols[18];
 public	int				numVtolTemplates;
@@ -285,6 +285,8 @@ function int numStructBusyByType(STRUCTURESTAT _busyStructType);
 function bool aiResponsibleForPlayer(int _player);
 function void reassignAI();
 function void shutDownAI();
+function bool buildUnit(TEMPLATE _tankTemplate, STRUCTURE _factory, STRUCTURESTAT _factoryType, bool _bIdleOnly);
+function STRUCTURE findIdleStructure(STRUCTURESTAT _structType, bool _bIdleOnly);
 #endregion triggers
 
 /////////////////////////////////////////////////////////////////////
@@ -1476,7 +1478,7 @@ event conDroids(conDroidsTr)
 
 }
 
-function void buildTruck()
+/* function void buildTruck()
 {
 	local 	int			_maxTrucks;
 	local 	STRUCTURE		_factory;
@@ -1490,7 +1492,10 @@ function void buildTruck()
 	_maxTruckFactories = 3; 		//max factories to use for truck production
 
 	_haveTrucks = buildGroup.members;
-	_numBuilding = numTemplatesInProduction(constructor,me);
+	
+	// Find out how many trucks and combat engineers are already in production
+	_numBuilding = numTemplatesInProduction(constructor,me);	//trucks
+	_numBuilding = _numBuilding + numTemplatesInProduction(cybEngineer,me);	//engineers
 
 	_totalTrucks = _numBuilding + _haveTrucks;
 
@@ -1503,7 +1508,7 @@ function void buildTruck()
 		{
 			if(getDroidCount(me) < MAX_DROIDS)
 			{
-				buildDroid(constructor, _factory, me, 1);// build constructor
+				buildDroid(constructor, _factory, me, 1);	// build constructor
 				_numBuilding++;
 				_totalTrucks++;
 			}
@@ -1511,6 +1516,116 @@ function void buildTruck()
 
 		_factory = enumStruct();
 	}
+} */
+
+function void buildTruck()
+{
+	local 	int			_maxTrucks;
+	local 	STRUCTURE	_factory;
+	local	int 		_numBuilding,_haveTrucks,_maxTruckFactories,_totalTrucks;
+	local	bool		_bStartedBuilding;
+
+	_maxTrucks = MAX_TRUCKS;
+	if(powerSave){
+		_maxTrucks = MIN_TRUCKS;
+	}
+
+	_maxTruckFactories = 3; 		//max factories to use for truck production
+
+	_haveTrucks = buildGroup.members;
+	
+	//Find out how many trucks and combat engineers are already in production
+	_numBuilding = numTemplatesInProduction(constructor,me);	//trucks
+	_numBuilding = _numBuilding + numTemplatesInProduction(cybEngineer,me);	//engineers
+
+	_totalTrucks = _numBuilding + _haveTrucks;
+	
+	initEnumStruct(FALSE,factory,me,me);
+	_factory = enumStruct();
+	
+	while((_factory != NULLOBJECT) and (_numBuilding < _maxTruckFactories)
+		and (_totalTrucks < _maxTrucks))
+	{
+		//Try to build a truck
+		_bStartedBuilding = buildUnit(constructor, _factory, factory, FALSE);	//build truck even if not idle
+		
+		//Update statistics if started building a truck
+		if(_bStartedBuilding)
+		{
+			_numBuilding++;
+			_totalTrucks++;
+		}
+		
+		_factory = enumStruct();
+	}
+	
+	//build cyborg engineers if needed, no building structure limit here
+	initEnumStruct(FALSE,cybFactory,me,me);
+	_factory = enumStruct();
+	
+	while((_factory != NULLOBJECT) and (_totalTrucks < _maxTrucks))
+	{
+		//Try to build a truck
+		_bStartedBuilding = buildUnit(cybEngineer, _factory, cybFactory, FALSE);	//build a cyb eng even if not idle
+		
+		//Update statistics if started building a cyborg engineer
+		if(_bStartedBuilding)
+		{
+			_numBuilding++;
+			_totalTrucks++;
+		}
+		
+		_factory = enumStruct();
+	}
+}
+
+
+//Build a droid
+function bool buildUnit(TEMPLATE _tankTemplate, STRUCTURE _factory, STRUCTURESTAT _factoryType, bool _bIdleOnly)
+{
+	//Factory was not provided, find an factory
+	if(_factory == NULLOBJECT)
+	{
+		_factory = findIdleStructure(_factoryType, _bIdleOnly);
+	}
+
+	//Build if got a factory
+	if(_factory != NULLOBJECT)
+	{
+		if(structureComplete(_factory) and (getDroidCount(me) < MAX_DROIDS))
+		{
+			if( !(_bIdleOnly and !structureIdle(_factory)) )	//don't build if only allowed to build whe idle and fac is not idle
+			{
+				buildDroid(_tankTemplate, _factory, me, 1);	// build a tank
+				return TRUE;	//success
+			}
+		}
+	}
+
+	return FALSE;		//failed
+}
+
+//Returns an idle structure of the provided type or NULLOBJECT if none found
+function STRUCTURE findIdleStructure(STRUCTURESTAT _structType, bool _bIdleOnly)
+{
+	local	STRUCTURE	_structure;
+
+	initEnumStruct(FALSE,_structType,me,me);
+	_structure = enumStruct();
+	while(_structure != NULLOBJECT)
+	{
+		if(structureComplete(_structure))
+		{
+			if( !(_bIdleOnly and !structureIdle(_structure)) )
+			{
+				return _structure;
+			}
+		}
+
+		_structure = enumStruct();
+	}
+	
+	return NULLOBJECT;	//none found
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -2622,7 +2737,7 @@ function void rearrangeAttackVtols()
 					(vtolAttackGr[_emptyGr].members < numAttackVtols))
 				{
 					groupAddDroid(vtolAttackGr[_emptyGr], _droid);	//refill the group
-					droid = iterateGroup(vtolAttackGr[_fillGr]);
+					_droid = iterateGroup(vtolAttackGr[_fillGr]);
 				}
 
 				_fillGr++;
