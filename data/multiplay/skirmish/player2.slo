@@ -1250,11 +1250,8 @@ event newfortify(fortifyTr)
 // droid building rules
 /////////////////////////////////////////////////////////////////////
 // deal with a droid being built
-event droidBuilt(droidBuiltTr)
+event droidBuiltAssign(droidBuiltTr)
 {
-	local STRUCTURE _repairFacility;
-
-
 	if(isVtol(droid))
 	{
 		if(vtolDefendGr.members < numDefendVtols)
@@ -1329,7 +1326,16 @@ event droidBuilt(droidBuiltTr)
 				}
 			}
 		}
+	}
+}
 
+//When droid built: set droid retreat level and start building next droid
+event droidBuilt(droidBuiltTr)
+{
+	local STRUCTURE _repairFacility;
+
+	if(!isVtol(droid))
+	{
 		_repairFacility = getStructure(repairFacility,me);
 		if(_repairFacility == NULLOBJECT)
 		{
