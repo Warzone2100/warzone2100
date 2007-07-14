@@ -92,17 +92,13 @@ BOOL sound_GetSystemActive( void )
 	return g_bSystemActive;
 }
 
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
 /** Retrieves loaded audio files and retrieves a TRACK from them on which some values are set and returns their respective ID numbers
  *  \param fileName the filename of the track
  *  \param loop whether the track should be looped until explicitly stopped
  *  \param trackID[out] the track id number is returned into the variable this pointer points to
  *  \param volume the volume this track should be played on (range is 0-100)
  *  \param audibleRadius the radius from the source of sound where it can be heard
- *  \return TRUE when succesfull, FALSE when the file is not found or no more tracks can be loaded (i.e. the limit is reached)
+ *  \return a non-zero value when succesfull, zero when the file is not found or no more tracks can be loaded (i.e. the limit is reached)
  */
 unsigned int sound_SetTrackVals(const char* fileName, BOOL loop, unsigned int volume, unsigned int audibleRadius)
 {
@@ -297,18 +293,13 @@ BOOL sound_Play2DTrack( AUDIO_SAMPLE *psSample, BOOL bQueued )
 {
 	TRACK	*psTrack;
 
+	// Check to make sure the requested track is loaded
 	if (!sound_CheckTrack(psSample->iTrack))
 	{
 		return FALSE;
 	}
 
 	psTrack = g_apTrack[psSample->iTrack];
-
-	if (psTrack == NULL)
-	{
-		return FALSE;
-	}
-
 	return sound_Play2DSample( psTrack, psSample, bQueued );
 }
 
@@ -320,6 +311,7 @@ BOOL sound_Play3DTrack( AUDIO_SAMPLE *psSample )
 {
 	TRACK	*psTrack;
 
+	// Check to make sure the requested track is loaded
 	if (!sound_CheckTrack(psSample->iTrack))
 	{
 		return FALSE;
@@ -396,23 +388,26 @@ void sound_FinishedCallback( AUDIO_SAMPLE *psSample )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-SDWORD sound_GetTrackID( TRACK *psTrack )
+SDWORD sound_GetTrackID(TRACK* psTrack)
 {
-	//~~~~~~~~~~
-	SDWORD	i = 0;
-	//~~~~~~~~~~
+	unsigned int i;
+
+	if (psTrack == NULL)
+	{
+		return SAMPLE_NOT_FOUND;
+	}
 
 	// find matching track
-	for ( i = 0; i < MAX_TRACKS; i++ )
+	for (i = 0; i < MAX_TRACKS; ++i)
 	{
-		if ( (g_apTrack[i] != NULL) && (g_apTrack[i] == psTrack) )
+		if (g_apTrack[i] == psTrack)
 		{
 			break;
 		}
 	}
 
 	// if matching track found return it else find empty track
-	if ( i >= MAX_TRACKS )
+	if (i >= MAX_TRACKS)
 	{
 		return SAMPLE_NOT_FOUND;
 	}

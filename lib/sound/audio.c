@@ -30,23 +30,10 @@
 #include "lib/framework/trig.h"
 #include "lib/ivis_common/pietypes.h"
 
-//*
-//
 // defines
 #define NO_SAMPLE				- 2
-#define AUDIO_SAMPLE_HEAP_INIT	1000
-#define AUDIO_SAMPLE_HEAP_EXT	10
 #define MAX_SAME_SAMPLES		2
-#define LOWERED_VOL				AUDIO_VOL_MAX / 4
 
-//*
-//
-// externs
-//*
-//
-// static functions
-//*
-//
 // global variables
 static AUDIO_SAMPLE *g_psSampleList = NULL;
 static AUDIO_SAMPLE *g_psSampleQueue = NULL;
