@@ -116,7 +116,6 @@ SDWORD	sound_GetTrackVolume( SDWORD iTrack );
 const char *	sound_GetTrackName( SDWORD iTrack );
 
 BOOL	sound_TrackLooped( SDWORD iTrack );
-SDWORD	sound_TrackAudibleRadius( SDWORD iTrack );
 void	sound_SetCallbackFunction( void * fn );
 
 BOOL	sound_Play2DTrack( AUDIO_SAMPLE *psSample, BOOL bQueued );

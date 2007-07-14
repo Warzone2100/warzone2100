@@ -200,16 +200,6 @@ BOOL sound_TrackLooped( SDWORD iTrack )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-SDWORD sound_TrackAudibleRadius( SDWORD iTrack )
-{
-	sound_CheckTrack( iTrack );
-	return g_apTrack[iTrack]->iAudibleRadius;
-}
-
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
 SDWORD sound_GetNumPlaying( SDWORD iTrack )
 {
 	sound_CheckTrack( iTrack );
@@ -263,7 +253,7 @@ SDWORD sound_GetTrackVolume( SDWORD iTrack )
 //
 SDWORD sound_GetTrackAudibleRadius( SDWORD iTrack )
 {
-	sound_CheckTrack( iTrack );
+	sound_CheckTrack(iTrack);
 	return g_apTrack[iTrack]->iAudibleRadius;
 }
 
