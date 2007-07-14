@@ -277,12 +277,15 @@ SDWORD sound_GetTrackAudibleRadius( SDWORD iTrack )
 //
 const char *sound_GetTrackName( SDWORD iTrack )
 {
-	if ( iTrack == SAMPLE_NOT_FOUND )
+	// If we get an invalid track ID or there are
+	// currently no tracks loaded then return NULL
+	if (iTrack == SAMPLE_NOT_FOUND
+	 || g_apTrack == NULL)
 	{
 		return NULL;
 	}
 
-	ASSERT( g_apTrack[iTrack] != NULL, "sound_GetTrackName: unallocated track" );
+	ASSERT(g_apTrack[iTrack] != NULL, "sound_GetTrackName: unallocated track (id number: %u)", iTrack);
 	return g_apTrack[iTrack] ? g_apTrack[iTrack]->pName : "unallocated";
 }
 
