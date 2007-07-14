@@ -68,13 +68,13 @@ typedef float FRACT_D;  /* But isn't this is supposed to be double? - Per */
 #define ROUND(x) ((x)>=0 ? (SDWORD)((x) + 0.5) : (SDWORD)((x) - 0.5))
 
 #define MAKEFRACT(x) ((float)(x))
-#define FRACTmul(x,y) ((x)*(y))
-#define FRACTdiv(x,y) ((x)/(y))
+#define FRACTmul(x,y) ((float)(x)*(float)(y))
+#define FRACTdiv(x,y) ((float)(x)/(float)(y))
 
 #define FRACTCONST(a,b) (((float)(a)) / ((float)(b)))
 #define MAKEFRACT_D(x) ((FRACT_D)(x))
-#define FRACTmul_D(x,y) ((x)*(y))
-#define FRACTdiv_D(x,y) ((x)/(y))
+#define FRACTmul_D(x,y) ((double)(x)*(double)(y))
+#define FRACTdiv_D(x,y) ((double)(x)/(double)(y))
 
 #define MAKEINT_D(x) ((SDWORD)(x))
 #define MAKEINT(x) ((SDWORD)(x))
