@@ -543,7 +543,7 @@ NOT						return _NOT;
 							}
 
 <_INCL_END_QUOTE>\"			{
-								UDWORD		line;
+								int	line;
 								char	*text;
 
 								ASSERT(scr_include_stack_ptr < MAX_SCR_INCLUDE_DEPTH,
