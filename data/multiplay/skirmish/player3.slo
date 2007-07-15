@@ -1277,11 +1277,15 @@ event droidBuiltAssign(droidBuiltTr)
 	}
 	else
 	{
-		if(droid.droidType == DROID_REPAIR)
+
+		if((droid.droidType == DROID_REPAIR)
+			or (droid.droidType == DROID_CYBORG_REPAIR))
 		{
 			numRepairUnits = numRepairUnits + 1;
 		}
-		if(droid.droidType == DROID_CONSTRUCT)				// if not constructor droid
+		
+		if((droid.droidType == DROID_CONSTRUCT)
+			or (droid.droidType == DROID_CYBORG_CONSTRUCT))				// if constructor droid
 		{
 			groupAddDroid(buildGroup, droid);
 		}
@@ -1305,10 +1309,8 @@ event droidBuiltAssign(droidBuiltTr)
 				{
 					groupAddDroid(defendGroup, droid);
 				}
-
-				else		// just make them scouts.
+				else
 				{
-
 					if(scoutGroup.members < maxScouts[curTech])
 					{
 						groupAddDroid(scoutGroup, droid);
@@ -4148,7 +4150,7 @@ event consoleEv(consoleTr)
 			{
 				if(not bRunning)		//make sure current machine is responsible for this AI and it's not already active
 				{
-					console(getPlayerName(me) & " activated");
+					console(getPlayerName(me) & " is active");
 
 					reassignAI();
 				}
@@ -4161,9 +4163,22 @@ event consoleEv(consoleTr)
 	{
 		if(bRunning)		//make sure this AI is active
 		{
-			console(getPlayerName(me) & " deactivated");
+			console(getPlayerName(me) & " is deactivated");
 			
 			shutDownAI();
 		}
+	}
+
+	if(message == "aidebug on")
+	{
+		console(getPlayerName(me) & " ai debug is on");
+		_DEBUG = TRUE;
+		dbgMsgOn(me, _DEBUG);
+	}
+	else if(message == "aidebug off")
+	{
+		console(getPlayerName(me) & " ai debug is off");
+		_DEBUG = FALSE;
+		dbgMsgOn(me, _DEBUG);
 	}
 }
