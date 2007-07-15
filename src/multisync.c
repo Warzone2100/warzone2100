@@ -274,13 +274,14 @@ static void packageCheck(UDWORD i, NETMSG *pMsg, DROID *pD)
 {
 //	UDWORD packtemp;
 	UWORD numkills;		//
+	uint16_t direction = pD->direction * 32;	// preserve some precision
 
 	pMsg->body[			i+0] =		(char)pD->player;
 	pMsg->body[			i+1] =		(char)pD->order;		// order being executed
 	NetAdd2( pMsg,		i+2,		pD->id);				// droid id
 	NetAdd2( pMsg,		i+6,		pD->secondaryOrder );
 	NetAdd2( pMsg,		i+10,		pD->body);				// damage points
-	NetAdd2( pMsg,		i+14,		pD->direction);			// direction
+	NetAdd2( pMsg,		i+14,		direction);			// direction
 
 	if(  pD->order == DORDER_ATTACK || pD->order == DORDER_ATTACK_M || pD->order == DORDER_MOVE || pD->order == DORDER_RTB    || pD->order == DORDER_RTR)
 	{
@@ -692,6 +693,8 @@ static BOOL sendStructureCheck(void)
 	pS = pickAStructure();
 	if(pS && (pS->status == SS_BUILT))			// only send info about complete buildings.
 	{
+		uint16_t direction = pS->direction * 32; // save some precision by multiplying by 32
+
 		m.body[0] = (char)pS->player;			// send struct details
 		NetAdd(m,1,pS->id);
 
@@ -700,7 +703,7 @@ static BOOL sendStructureCheck(void)
 		NetAdd(m,11,pS->x);						//position
 		NetAdd(m,13,pS->y);
 		NetAdd(m,15,pS->z);
-		NetAdd(m,17,pS->direction);
+		NetAdd(m, 17, direction);
 
 	    m.type = NET_CHECK_STRUCT;
 	    m.size = 19;
@@ -736,12 +739,13 @@ static BOOL sendStructureCheck(void)
 // receive checking info about a structure and update local world state
 BOOL recvStructureCheck( NETMSG *m)
 {
-	UWORD	x,y,z,dir;
+	UWORD	x,y,z;
 	UDWORD ref,type,j;
 	UBYTE	i,player;
 	UBYTE	cap;
 	STRUCTURE *pS;
 	STRUCTURE_STATS *psStats;
+	uint16_t direction;
 
 	player = m->body[0];
 	NetGet(m,1,ref);
@@ -750,7 +754,8 @@ BOOL recvStructureCheck( NETMSG *m)
 	if(pS)
 	{
 		NetGet(m,5,pS->body);							// Damage update.
-		NetGet(m,17,pS->direction);
+		NetGet(m, 17, direction);
+		pS->direction = (float)direction / 32;		// preserve some precision
 	}
 	else												// structure wasn't found, create it.
 	{
@@ -758,7 +763,7 @@ BOOL recvStructureCheck( NETMSG *m)
 		NetGet(m,11,x);
 		NetGet(m,13,y);
 		NetGet(m,15,z);
-		NetGet(m,17,dir);
+		NetGet(m, 17, direction);
 
 		NETlogEntry("scheck:structure check failed, adding struct. val=type",0,type-REF_STRUCTURE_START);
 
@@ -778,7 +783,7 @@ BOOL recvStructureCheck( NETMSG *m)
 				&& (pS->player == player )
 			  )
 			{
-				pS->direction = dir;
+				pS->direction = (float)direction / 32;
 				pS->id		= ref;
 				if(pS->status != SS_BUILT)
 				{
@@ -836,7 +841,7 @@ BOOL recvStructureCheck( NETMSG *m)
 	{
 		if( pS->status != SS_BUILT)							// check its finished
 		{
-			pS->direction = dir;
+			pS->direction = (float)direction / 32;
 			pS->id = ref;
 			pS->status = SS_BUILT;
 			buildingComplete(pS);

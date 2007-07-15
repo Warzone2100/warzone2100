@@ -845,6 +845,7 @@ BOOL sendWholeDroid(DROID *pD, UDWORD dest)
 	UDWORD	asWeaps[DROID_MAXWEAPS];
 	int		i;
 	BOOL	bNoTarget;
+	uint16_t direction = pD->direction * 32; // preserve precision
 
 	// these asserts are done on the receiving side too
 	ASSERT( pD->x < (mapWidth << TILE_SHIFT),
@@ -889,7 +890,7 @@ BOOL sendWholeDroid(DROID *pD, UDWORD dest)
 	NetAdd(m,sizecount,pD->NameVersion);			sizecount+=sizeof(pD->NameVersion);
 	NetAdd(m,sizecount,pD->droidType);				sizecount+=sizeof(pD->droidType);
 
-	NetAdd(m,sizecount,pD->direction);				sizecount+=sizeof(pD->direction);
+	NetAdd(m,sizecount,direction);				sizecount+=sizeof(direction);
 	NetAdd(m,sizecount,pD->pitch);					sizecount+=sizeof(pD->pitch);
 	NetAdd(m,sizecount,pD->roll);					sizecount+=sizeof(pD->roll);
 	NetAdd(m,sizecount,pD->visible);				sizecount+=sizeof(pD->visible);
@@ -945,6 +946,7 @@ BOOL receiveWholeDroid(NETMSG *m)
 	UDWORD id;
 	UBYTE player;
 	UBYTE i;
+	uint16_t direction;
 
 	// get the stuff
 	NetGet(m,sizecount,dt.asParts);				sizecount+=sizeof(dt.asParts);		// build a template
@@ -995,7 +997,8 @@ BOOL receiveWholeDroid(NETMSG *m)
 	NetGet(m,sizecount,pD->NameVersion);		sizecount+=sizeof(pD->NameVersion);
 	NetGet(m,sizecount,pD->droidType);			sizecount+=sizeof(pD->droidType);
 
-	NetGet(m,sizecount,pD->direction);			sizecount+=sizeof(pD->direction);
+	NetGet(m,sizecount, direction);			sizecount+=sizeof(direction);
+	pD->direction = (float)direction / 32;
 	NetGet(m,sizecount,pD->pitch);				sizecount+=sizeof(pD->pitch);
 	NetGet(m,sizecount,pD->roll);				sizecount+=sizeof(pD->roll);
 
