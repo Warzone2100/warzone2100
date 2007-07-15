@@ -3326,6 +3326,7 @@ void moveUpdateDroid(DROID *psDroid)
 	PROPULSION_STATS	*psPropStats;
 	Vector3i pos;
 	BOOL				bStarted = FALSE, bStopped;
+	Vector2f			target;
 
 //	ASSERT( psDroid->x != 0 && psDroid->y != 0,
 //		"moveUpdateUnit: unit at (0,0)" );
@@ -3608,7 +3609,7 @@ void moveUpdateDroid(DROID *psDroid)
 #endif
 
 		// Calculate a target vector
-		Vector2f target = moveGetDirection(psDroid);
+		target = moveGetDirection(psDroid);
 
 		// Turn the droid if necessary
 		tangle = vectorToAngle(target.x, target.y);
