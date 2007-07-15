@@ -20,7 +20,6 @@
 /*
  * Netplay.c
  *
- * Alex Lee sep97-> june98
  */
 
 // ////////////////////////////////////////////////////////////////////////
@@ -74,7 +73,8 @@ extern BOOL MultiPlayerLeave(UDWORD dpid); /* from src/multijoin.c ! */
 NETPLAY	NetPlay;
 static GAMESTRUCT game;
 
-void NETsetMessageSize(NETMSG* pMsg, unsigned int size) {
+static void NETsetMessageSize(NETMSG* pMsg, unsigned int size)
+{
 	unsigned int tmp = 8 - (size % 8);
 
 	if (tmp == 8) {
@@ -95,7 +95,8 @@ typedef struct {
 	unsigned int	bytes;
 } NETBUFSOCKET;
 
-static NETBUFSOCKET* NET_createBufferedSocket(void) {
+static NETBUFSOCKET* NET_createBufferedSocket(void)
+{
 	NETBUFSOCKET* bs = (NETBUFSOCKET*)malloc(sizeof(NETBUFSOCKET));
 
 	bs->socket = NULL;
@@ -106,12 +107,14 @@ static NETBUFSOCKET* NET_createBufferedSocket(void) {
 	return bs;
 }
 
-void NET_destroyBufferedSocket(NETBUFSOCKET* bs) {
+static void NET_destroyBufferedSocket(NETBUFSOCKET* bs)
+{
 	free(bs->buffer);
 	free(bs);
 }
 
-void NET_initBufferedSocket(NETBUFSOCKET* bs, TCPsocket s) {
+static void NET_initBufferedSocket(NETBUFSOCKET* bs, TCPsocket s)
+{
 	bs->socket = s;
 	if (bs->buffer == NULL) {
 		bs->buffer = (char*)malloc(NET_BUFFER_SIZE);
@@ -120,7 +123,7 @@ void NET_initBufferedSocket(NETBUFSOCKET* bs, TCPsocket s) {
 	bs->bytes = 0;
 }
 
-BOOL NET_fillBuffer(NETBUFSOCKET* bs, SDLNet_SocketSet socket_set)
+static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SDLNet_SocketSet socket_set)
 {
 	int size;
 	char* bufstart = bs->buffer + bs->buffer_start + bs->bytes;
@@ -153,7 +156,7 @@ BOOL NET_fillBuffer(NETBUFSOCKET* bs, SDLNet_SocketSet socket_set)
 	return FALSE;
 }
 
-BOOL NET_recvMessage(NETBUFSOCKET* bs, NETMSG* pMsg)
+static BOOL NET_recvMessage(NETBUFSOCKET* bs, NETMSG* pMsg)
 {
 	unsigned int size;
 	const NETMSG* message = (NETMSG*)(bs->buffer + bs->buffer_start);
@@ -247,7 +250,8 @@ typedef struct {
 
 static NET_PLAYER	players[MAX_CONNECTED_PLAYERS];
 
-static void NET_InitPlayers(void) {
+static void NET_InitPlayers(void)
+{
 	unsigned int i;
 
 	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i) {
@@ -256,14 +260,16 @@ static void NET_InitPlayers(void) {
 	}
 }
 
-void NETBroadcastPlayerInfo(int dpid) {
+static void NETBroadcastPlayerInfo(int dpid)
+{
 	message.type = MSG_PLAYER_INFO;
 	NETsetMessageSize(&message, sizeof(NET_PLAYER));
 	memcpy(message.body, &players[dpid], sizeof(NET_PLAYER));
 	NETbcast(&message, TRUE);
 }
 
-unsigned int NET_CreatePlayer(const char* name, unsigned int flags) {
+static unsigned int NET_CreatePlayer(const char* name, unsigned int flags)
+{
 	unsigned int i;
 
 	for (i = 1; i < MAX_CONNECTED_PLAYERS; ++i) {
@@ -279,7 +285,8 @@ unsigned int NET_CreatePlayer(const char* name, unsigned int flags) {
 	return 0;
 }
 
-void NET_DestroyPlayer(unsigned int id) {
+static void NET_DestroyPlayer(unsigned int id)
+{
 	players[id].allocated = FALSE;
 }
 
@@ -350,7 +357,8 @@ typedef struct {
 static NET_PLAYER_DATA	local_player_data[MAX_CONNECTED_PLAYERS] = { { 0, NULL, 0 } };
 static NET_PLAYER_DATA	global_player_data[MAX_CONNECTED_PLAYERS] = { { 0, NULL, 0 } };
 
-static void resize_local_player_data(unsigned int i, unsigned int size) {
+static void resize_local_player_data(unsigned int i, unsigned int size)
+{
 	if (local_player_data[i].buffer_size < size) {
 		if (local_player_data[i].data != NULL) {
 			free(local_player_data[i].data);
@@ -360,7 +368,8 @@ static void resize_local_player_data(unsigned int i, unsigned int size) {
 	}
 }
 
-static void resize_global_player_data(unsigned int i, unsigned int size) {
+static void resize_global_player_data(unsigned int i, unsigned int size)
+{
 	if (global_player_data[i].buffer_size < size) {
 		if (global_player_data[i].data != NULL) {
 			free(global_player_data[i].data);
@@ -429,13 +438,10 @@ BOOL NETsetGlobalPlayerData(UDWORD dpid, void *pData, SDWORD size)
 }
 
 
-
-
-
 // ///////////////////////////////////////////////////////////////////////
 // Game flags stuff...
 
-SDWORD NetGameFlags[4];
+static SDWORD NetGameFlags[4];
 
 // ////////////////////////////////////////////////////////////////////////
 // return one of the four user flags in the current sessiondescription.
@@ -467,10 +473,6 @@ BOOL NETsetGameFlags(UDWORD flag, SDWORD value)
 
 	return TRUE;
 }
-
-
-
-
 
 
 
@@ -663,11 +665,6 @@ UDWORD NETgetPacketsRecvd(void)
 		nStats.packetsRecvd = 0;
 	}
 	return lastsec;
-}
-
-UDWORD NETgetRecentPacketsRecvd(void)
-{
-	return nStats.packetsRecvd;
 }
 
 

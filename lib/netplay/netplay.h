@@ -71,7 +71,6 @@ typedef struct {
 	char 		body[MaxMsgSize];
 } NETMSG;
 
-#define		ENCRYPTFLAG		100	// added to type to determine packet is encrypted.
 #define		AUDIOMSG		255	// an audio packet (special message);
 #define		FILEMSG			254	// a file packet
 
@@ -112,7 +111,7 @@ typedef struct {
 	uint32_t        bCaptureInUse;			// true if someone is speaking.
 	uint32_t        bAllowCaptureRecord;		// true if speech can be recorded.
 	uint32_t        bAllowCapturePlay;		// true if speech can be played.
-} NETPLAY, *LPNETPLAY;
+} NETPLAY;
 
 // ////////////////////////////////////////////////////////////////////////
 // variables
@@ -139,7 +138,6 @@ extern UDWORD	NETgetPacketsRecvd(void);			// return packets sent/recv.  call reg
 extern UDWORD	NETgetRecentBytesSent(void);			// more immediate functions.
 extern UDWORD	NETgetRecentPacketsSent(void);
 extern UDWORD	NETgetRecentBytesRecvd(void);
-extern UDWORD	NETgetRecentPacketsRecvd(void);
 
 // from netjoin.c
 extern SDWORD	NETgetGameFlags(UDWORD flag);			// return one of the four flags(dword) about the game.
@@ -173,9 +171,6 @@ extern void NETsetGameserverPort(unsigned int port);
 #define NetAddUint8(m,pos,thing) \
 	*((Uint8*)(&((m).body[(pos)]))) = (thing)
 
-#define NetAddUint16(m,pos,thing) \
-	*((Uint16*)(&((m).body[(pos)]))) = (thing)
-
 #define NetAddUint32(m,pos,thing) \
 	*((Uint32*)(&((m).body[(pos)]))) = (thing)
 
@@ -192,11 +187,7 @@ extern void NETsetGameserverPort(unsigned int port);
 #define NetGetUint8(m,pos,thing) \
 	(thing) = *((Uint8*)(&((m)->body[(pos)])))
 
-#define NetGetUint16(m,pos,thing) \
-	(thing) = *((Uint16*)(&((m)->body[(pos)])))
-
 #define NetGetUint32(m,pos,thing) \
 	(thing) = *((Uint32*)(&((m)->body[(pos)])))
 
 #endif
-
