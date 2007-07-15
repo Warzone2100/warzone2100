@@ -54,6 +54,9 @@ extern SDWORD scr_macro_stack_ptr;		/* Pointer to the current flex macro input b
 
 extern char *pScrMacroBuffer[];
 
+/* Line count stack used with script includes */
+extern UDWORD scrInclLine[MAX_SCR_INCLUDE_DEPTH];
+
 /* Structure to hold script define directive information */
 typedef struct _scr_define
 {

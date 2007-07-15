@@ -37,6 +37,9 @@
 SDWORD scr_include_stack_ptr = 0;
 char *pScrInputBuffer[MAX_SCR_INCLUDE_DEPTH];
 
+/* Line counting stack */
+UDWORD scrInclLine[MAX_SCR_INCLUDE_DEPTH];
+
 /* Script defines stack */
 SDWORD scr_num_macros = 0;			/* Number of macros defined so far */
 SDWORD scr_macro_stack_ptr = 0;
@@ -5850,6 +5853,7 @@ BOOL scriptCompile(const char *pData, UDWORD fileSize,
 	for(i=0;i<MAX_SCR_INCLUDE_DEPTH;i++)
 	{
 		pScrInputBuffer[i] = NULL;
+		scrInclLine[i] = 0;
 	}
 
 	/* Set the initial input buffer */

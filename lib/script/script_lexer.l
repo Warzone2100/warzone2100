@@ -543,11 +543,23 @@ NOT						return _NOT;
 							}
 
 <_INCL_END_QUOTE>\"			{
+								UDWORD		line;
+								char	*text;
+
 								ASSERT(scr_include_stack_ptr < MAX_SCR_INCLUDE_DEPTH,
 									"FLEX:  scr_include_stack_ptr out of bounds: %d", scr_include_stack_ptr);
 
 								ASSERT(pScrInputBuffer[scr_include_stack_ptr] != NULL, "FLEX: failed to load include");
+	
+								RULE("FLEX: storing line number for include %d: ",
+									scr_include_stack_ptr - 1, scr_lineno);
 
+								/* Store the current line number in the current input buffer */
+								scriptGetErrorData(&line, &text);
+								scrInclLine[scr_include_stack_ptr - 1] = line;
+								scr_lineno = 1;		//we are at the beginning of the first line in a new input now
+
+								/* Switch to the new buffer */
 								yy_switch_to_buffer( yy_scan_bytes(pScrInputBuffer[scr_include_stack_ptr], InputLen) );
 
 								BEGIN (INITIAL);
@@ -597,7 +609,16 @@ NOT						return _NOT;
 
 										/* Pop previous script file */
 										yy_switch_to_buffer( include_stack[scr_include_stack_ptr - 1] );
+										
+										ASSERT(scr_include_stack_ptr - 1 >= 0,
+											"Can't restore line number of theprevious flex input");
 
+										/* Restore line count of the previous buffer from the line count stack */
+										scr_lineno = scrInclLine[scr_include_stack_ptr - 1];
+										RULE("FLEX: restoring line number for include %d: ",
+											scr_include_stack_ptr, scr_lineno);
+
+										/* Go to the previous flex input buffer */
 										scr_include_stack_ptr--;
 									}
 								}
