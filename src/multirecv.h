@@ -62,7 +62,6 @@ extern BOOL recvScoreSubmission		(NETMSG *pMsg);
 extern BOOL recvDestroyExtra		(NETMSG *pMsg);
 extern BOOL	recvAudioMsg			(NETMSG *pMsg);
 extern BOOL recvHappyVtol			(NETMSG *pMsg);
-extern BOOL recvVtolRearm			(NETMSG *pMsg);
 extern BOOL recvResearchStatus		(NETMSG *pMsg);
 extern BOOL recvLasSat				(NETMSG *pMsg);
 extern BOOL	recvMapFileData				(NETMSG *pMsg);

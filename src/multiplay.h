@@ -75,7 +75,7 @@ typedef enum _msgtype
 	NET_SCORESUBMIT,		//36 submission of scores to host.
 	NET_DESTROYXTRA,		//37 destroy droid with destroyer intact.
 	NET_VTOL,				//38 vtol rearmed
-	NET_VTOLREARM,			//39 vtol rearm
+	NET_UNUSED_39,			//39 unused
 
 	NET_WHITEBOARD,			//40 whiteboard.
     NET_SECONDARY_ALL,      //41 complete secondary order.
@@ -293,7 +293,6 @@ extern BOOL sendDroidEmbark     (DROID *psDroid);
 extern BOOL sendDroidDisEmbark  (DROID *psDroid);
 extern BOOL sendDestroyExtra	(BASE_OBJECT *psKilled,BASE_OBJECT *psKiller);
 extern BOOL sendHappyVtol		(DROID *psDroid);
-extern BOOL sendVtolRearm		(DROID *psDroid,STRUCTURE *psStruct, UBYTE chosen);
 
 // Startup. mulitopt
 extern BOOL multiTemplateSetup	(void);

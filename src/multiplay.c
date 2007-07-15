@@ -709,9 +709,6 @@ BOOL recvMessage(void)
 			case NET_VTOL:
 				recvHappyVtol(&msg);
 				break;
-			case NET_VTOLREARM:
-				recvVtolRearm(&msg);
-				break;
 			case NET_LASSAT:
 				recvLasSat(&msg);
 				break;
