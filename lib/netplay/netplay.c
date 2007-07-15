@@ -674,18 +674,17 @@ BOOL NETsend(NETMSG *msg, UDWORD player, BOOL guarantee)
 {
 	int size;
 
-	debug( LOG_NET, "NETsend\n" );
-
 	if(!NetPlay.bComms)
 	{
 		return TRUE;
 	}
 
 	if (player >= MAX_CONNECTED_PLAYERS) return FALSE;
-	//printf("Sending message %i to %i\n", msg->type, msg->destination);
 	msg->destination = player;
 
 	size = msg->size + sizeof(msg->size) + sizeof(msg->type) + sizeof(msg->paddedBytes) + sizeof(msg->destination);
+
+	NETlogPacket(msg, FALSE);
 
 	if (is_server) {
 		if (   player < MAX_CONNECTED_PLAYERS
@@ -723,6 +722,8 @@ BOOL NETbcast(NETMSG *msg, BOOL guarantee)
 	msg->destination = NET_ALL_PLAYERS;
 
 	size = msg->size + sizeof(msg->size) + sizeof(msg->type) + sizeof(msg->paddedBytes) + sizeof(msg->destination);
+
+	NETlogPacket(msg, FALSE);
 
 	if (is_server) {
 		unsigned int i;
@@ -934,6 +935,8 @@ receive_message:
 		}
 
 	} while (NETprocessSystemMessage(pMsg) == TRUE);
+
+	NETlogPacket(pMsg, TRUE);
 
 	return TRUE;
 }

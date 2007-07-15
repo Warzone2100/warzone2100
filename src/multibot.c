@@ -433,8 +433,7 @@ BOOL recvDroid(NETMSG * m)
 
 	if(!pT)
 	{
-		NETlogEntry("Couldn't find template to build recvd droid. val = player",0,player );
-		debug( LOG_NEVER, "Couldn't find template to build recvd droid" );
+		debug(LOG_NET, "Couldn't find template to build recvd droid");
 		sendRequestDroid(id);						// request the droid instead.
 		return FALSE;
 	}
@@ -444,10 +443,8 @@ BOOL recvDroid(NETMSG * m)
 	{
 		if (!usePower(player,pT->powerPoints))// take the power.
 		{
-//			DBCONPRINTF(ConsoleString,(ConsoleString,"MULTIPLAYER: not enough power to build remote droid."));
-			NETlogEntry("not enough power to build recvd droid, val=player",0,player);
-// build anyway..
-//			return FALSE;
+			debug(LOG_NET, "not enough power to build recvd droid, player=%u", player);
+			// build anyway..
 		}
 	}
 
@@ -716,13 +713,6 @@ BOOL recvDroidInfo(NETMSG *pMsg)
 // process droid order
 static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, OBJECT_TYPE desttype, UDWORD destid)
 {
-	UDWORD		i;
-	DROID		*pD;
-	STRUCTURE	*pS;
-	FEATURE		*pF;
-	BASE_OBJECT *psObj = NULL;
-	DROID_OACTION_INFO oaInfo = {{NULL}};
-
 	if(destid==0 && desttype==0)							// target is a location
 	{
 		if( abs(psDroid->x - x) < (TILE_UNITS/2)
@@ -742,10 +732,16 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWOR
 	}
 	else													//  target is object
 	{
+		DROID_OACTION_INFO oaInfo = {{NULL}};
+		UDWORD		i;
+		BASE_OBJECT	*psObj = NULL;
+		DROID		*pD;
+		STRUCTURE	*pS;
+		FEATURE		*pF;
+
 		switch(desttype)
 		{
 		case OBJ_DROID:
-			psObj = NULL;
 			for (i=0; i<MAX_PLAYERS && !psObj; i++)
 			{
 				for(pD=apsDroidLists[i];(pD) && (pD->id != destid);pD=pD->psNext);
@@ -757,7 +753,6 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWOR
 			break;
 
 		case OBJ_STRUCTURE:
-			psObj = NULL;
 			pS = IdToStruct(destid,ANYPLAYER);
 			if(pS)
 			{
@@ -766,7 +761,6 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWOR
 			break;
 
 		case OBJ_FEATURE:
-			psObj = NULL;
 			pF = IdToFeature(destid,ANYPLAYER);
 			if(pF)
 			{
@@ -775,13 +769,12 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWOR
 			break;
 
 		case OBJ_PROJECTILE: // shouldn't be getting this!
-			debug( LOG_ERROR, "multibot: order specified destination as a bullet. what am i to do??" );
-			abort();
+			debug(LOG_ERROR, "ProcessDroidOrder: order specified destination as a bullet. what am i to do??");
 			break;
 
 		default:
-			debug( LOG_ERROR, "unknown object type" );
-			abort();
+			debug( LOG_ERROR, "ProcessDroidOrder: unknown object type");
+			break;
 		}
 
 		if(!psObj)													// failed to find it;
@@ -800,7 +793,6 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWOR
 		orderDroidObj(psDroid, order, &oaInfo);
 		turnOffMultiMsg(FALSE);
 	}
-
 }
 
 

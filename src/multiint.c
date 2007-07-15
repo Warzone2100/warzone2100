@@ -228,14 +228,14 @@ void loadMapPreview(void)
 	pFileData = fileLoadBuffer;
 	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 	{
-		debug(LOG_NEVER, "loadMapPreview: Failed to load terrain types file");
+		debug(LOG_ERROR, "loadMapPreview: Failed to load terrain types file");
 		return;
 	}
 	if (pFileData)
 	{
 		if (!loadTerrainTypeMap(pFileData, fileSize))
 		{
-			debug(LOG_NEVER, "loadMapPreview: Failed to load terrain types");
+			debug(LOG_ERROR, "loadMapPreview: Failed to load terrain types");
 			return;
 		}
 	}
@@ -247,12 +247,12 @@ void loadMapPreview(void)
 	pFileData = fileLoadBuffer;
 	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 	{
-		debug(LOG_NEVER, "loadMapPreview: Failed to load map file");
+		debug(LOG_ERROR, "loadMapPreview: Failed to load map file");
 		return;
 	}
 	if (!mapLoad(pFileData, fileSize))
 	{
-		debug(LOG_NEVER, "loadMapPreview: Failed to load map");
+		debug(LOG_ERROR, "loadMapPreview: Failed to load map");
 		return;
 	}
 	gwShutDown();

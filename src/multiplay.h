@@ -91,7 +91,6 @@ typedef enum _msgtype
 	NET_BEACONMSG,
 	NET_SET_TEAMS,
 	NET_TEAMREQUEST
-
 } MESSAGE_TYPES;
 
 

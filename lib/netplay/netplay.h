@@ -67,7 +67,6 @@ typedef struct {
 	uint8_t		paddedBytes;		// numberofbytes appended for encryption
 	uint8_t		type;			// type of packet
 	uint8_t		destination;		// player to send to, or NET_ALL_PLAYERS
-	uint16_t	counter;		// where in body we are currently
 	char 		body[MaxMsgSize];
 } NETMSG;
 

@@ -96,8 +96,7 @@ BOOL recvGift(NETMSG *pMsg)
 		giftPower(from,to,FALSE);
 		break;
 	default:
-		debug( LOG_ERROR, "Unknown Gift recvd" );
-		abort();
+		debug(LOG_ERROR, "recvGift: Unknown Gift recvd");
 		return FALSE;
 		break;
 	}
@@ -561,7 +560,6 @@ BOOL recvAlliance(NETMSG *pMsg,BOOL allowAudio)
 		break;
 	default:
 		debug( LOG_ERROR, "Unknown alliance state recvd." );
-		abort();
 		break;
 	}
 

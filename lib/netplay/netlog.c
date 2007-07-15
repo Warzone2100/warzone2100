@@ -32,20 +32,93 @@
 // Logging for degug only
 // ////////////////////////////////////////////////////////////////////////
 
+// kluge, since I do not want to include src/multiplay.h here
+#define NET_MAX 52
+
+static const char *packetname[NET_MAX] =
+{
+	"NET_DROID",
+	"NET_DROIDINFO",
+	"NET_DROIDDEST",
+	"NET_DROIDMOVE",
+	"NET_GROUPORDER",
+	"NET_TEMPLATE",
+	"NET_TEMPLATEDEST",
+	"NET_FEATUREDEST",
+	"NET_PING",
+	"NET_CHECK_DROID",
+	"NET_CHECK_STRUCT",
+	"NET_CHECK_POWER",
+	"NET_VERSION",
+	"NET_BUILD",
+	"NET_STRUCTDEST",
+	"NET_BUILDFINISHED",
+	"NET_RESEARCH",
+	"NET_TEXTMSG",
+	"NET_LEAVING",
+	"NET_REQUESTDROID",
+	"NET_PLAYERCOMPLETE",
+	"NET_REQUESTPLAYER",
+	"NET_STRUCT",
+	"NET_WHOLEDROID",
+	"NET_FEATURES",
+	"NET_PLAYERRESPONDING",
+	"NET_OPTIONS",
+	"NET_KICK",
+	"NET_SECONDARY",
+	"NET_FIREUP",
+	"NET_ALLIANCE",
+	"NET_GIFT",
+	"NET_DEMOLISH",
+	"NET_COLOURREQUEST",
+	"NET_ARTIFACTS",
+	"NET_DMATCHWIN",
+	"NET_SCORESUBMIT",
+	"NET_DESTROYXTRA",
+	"NET_VTOL",
+	"NET_UNUSED_39",
+	"NET_WHITEBOARD",
+	"NET_SECONDARY_ALL",
+	"NET_DROIDEMBARK",
+	"NET_DROIDDISEMBARK",
+	"NET_RESEARCHSTATUS",
+	"NET_LASSAT",
+	"NET_REQUESTMAP",
+	"NET_AITEXTMSG",
+	"NET_TEAMS_ON",
+	"NET_BEACONMSG",
+	"NET_SET_TEAMS",
+	"NET_TEAMREQUEST"
+};
+
 static PHYSFS_file	*pFileHandle;
+static uint32_t		packetcount[2][NET_MAX];
+static uint32_t		packetsize[2][NET_MAX];
 
 BOOL NETstartLogging(void)
 {
 	time_t aclock;
 	struct tm *newtime;
 	char buf[256];
+	char *filename = "netplay.log";
+	int i;
+
+	for (i = 0; i < NET_MAX; i++)
+	{
+		packetcount[0][i] = 0;
+		packetsize[0][i] = 0;
+		packetcount[1][i] = 0;
+		packetsize[1][i] = 0;
+	}
 
 	time( &aclock );                 /* Get time in seconds */
 	newtime = localtime( &aclock );  /* Convert time to struct */
 
-	pFileHandle = PHYSFS_openWrite( "netplay.log" ); // open the file
+	pFileHandle = PHYSFS_openWrite( filename ); // open the file
 	if (!pFileHandle)
 	{
+		debug(LOG_ERROR, "Could not create net log %s: %s", filename,
+		      PHYSFS_getLastError());
 		return FALSE;
 	}
 	sprintf( buf, "NETPLAY log: %s\n", asctime( newtime ) );
@@ -55,14 +128,35 @@ BOOL NETstartLogging(void)
 
 BOOL NETstopLogging(void)
 {
+	char buf[256];
+	int i;
+
+	/* Output stats */
+	for (i = 0; i < NET_MAX; i++)
+	{
+		sprintf(buf, "%s: received %u times, %u bytes; sent %u times, %u bytes\n", packetname[i],
+			packetcount[0][i], packetsize[0][i], packetcount[1][i], packetsize[1][i]);
+		PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
+	}
+
 	if (!PHYSFS_close(pFileHandle))
 	{
 		debug(LOG_ERROR, "Could not close net log: %s", PHYSFS_getLastError());
 		return FALSE;
 	}
+
 	return TRUE;
 }
 
+void NETlogPacket(NETMSG *msg, BOOL received)
+{
+	if (msg->type >= NET_MAX)
+	{
+		return;
+	}
+	packetcount[received][msg->type]++;
+	packetsize[received][msg->type] += msg->size;
+}
 
 BOOL NETlogEntry(const char *str,UDWORD a,UDWORD b)
 {
