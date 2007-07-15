@@ -1375,8 +1375,12 @@ FUNC_SYMBOL asFuncTable[] =
 		0, { VAL_VOID },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "debugModeEnabled",		scrDebugModeEnabled,				VAL_BOOL,
+	{ "debugModeEnabled",		scrDebugModeEnabled,		VAL_BOOL,
 		0, { VAL_VOID },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "calcDroidPower",			scrCalcDroidPower,			VAL_INT,
+		1, { (INTERP_TYPE)ST_DROID },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
 	/* END new functions */

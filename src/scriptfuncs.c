@@ -11164,3 +11164,28 @@ BOOL scrDebugModeEnabled(void)
 
 	return TRUE;
 }
+
+/*
+ * Returns the cost of a droid
+ */
+BOOL scrCalcDroidPower(void)
+{
+	DROID	*psDroid;
+
+	if (!stackPopParams(1, ST_DROID, &psDroid))
+	{
+		return FALSE;
+	}
+
+	ASSERT(psDroid != NULL,
+		"scrDebugModeEnabled: can't calculate cost of a null-droid");
+
+	scrFunctionResult.v.ival = (SDWORD)calcDroidPower(psDroid);
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
+	{
+		debug(LOG_ERROR, "scrDebugModeEnabled(): failed to push result");
+		return FALSE;
+	}
+
+	return TRUE;
+}

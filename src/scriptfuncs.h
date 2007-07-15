@@ -635,6 +635,7 @@ extern BOOL scrSetTileHeight(void);
 extern BOOL scrGetTileStructure(void);
 extern BOOL scrPrintCallStack(void);
 extern BOOL scrDebugModeEnabled(void);
+extern BOOL scrCalcDroidPower(void);
 
 
 extern BOOL beingResearchedByAlly(SDWORD resIndex, SDWORD player);
