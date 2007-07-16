@@ -24,10 +24,11 @@
  *
  */
 
+#include "lib/framework/frame.h"
+
 #include <stdio.h>
 #include <string.h>
 
-#include "lib/framework/frame.h"
 #include "lib/framework/trig.h"
 #include "lib/framework/fractions.h"
 #include "lib/netplay/netplay.h"
