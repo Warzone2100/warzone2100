@@ -64,6 +64,58 @@
 #define RC_X	320+32
 #define	RANK_BAR_WIDTH	100
 #define STAT_BAR_WIDTH	100
+
+enum
+{
+	STR_MR_UNITS_LOST,
+	STR_MR_UNITS_KILLED,
+	STR_MR_STR_LOST,
+	STR_MR_STR_BLOWN_UP,
+	STR_MR_UNITS_BUILT,
+	STR_MR_UNITS_NOW,
+	STR_MR_STR_BUILT,
+	STR_MR_STR_NOW,
+
+	STR_MR_LEVEL_ROOKIE,
+	STR_MR_LEVEL_GREEN,
+	STR_MR_LEVEL_TRAINED,
+	STR_MR_LEVEL_REGULAR,
+	STR_MR_LEVEL_VETERAN,
+	STR_MR_LEVEL_CRACK,
+	STR_MR_LEVEL_ELITE,
+	STR_MR_LEVEL_SPECIAL,
+	STR_MR_LEVEL_ACE
+};
+
+
+// return translated string
+const char *getDescription(int id)
+{
+	switch ( id )
+	{
+		case STR_MR_UNITS_LOST   : return _("Own Units: %d");
+		case STR_MR_UNITS_KILLED : return _("Enemy Units: %d");
+		case STR_MR_STR_LOST     : return _("Own Structures: %d");
+		case STR_MR_STR_BLOWN_UP : return _("Enemy Structures: %d");
+		case STR_MR_UNITS_BUILT  : return _("Units Manufactured: %d");
+		case STR_MR_UNITS_NOW    : return _("Total Units: %d");
+		case STR_MR_STR_BUILT    : return _("Structures Built: %d");
+		case STR_MR_STR_NOW      : return _("Total Structures: %d");
+
+		case STR_MR_LEVEL_ROOKIE : return _("Rookie: %d");
+		case STR_MR_LEVEL_GREEN  : return _("Green: %d");
+		case STR_MR_LEVEL_TRAINED: return _("Trained: %d");
+		case STR_MR_LEVEL_REGULAR: return _("Regular: %d");
+		case STR_MR_LEVEL_VETERAN: return _("Professional: %d");
+		case STR_MR_LEVEL_CRACK  : return _("Veteran: %d");
+		case STR_MR_LEVEL_ELITE  : return _("Elite: %d");
+		case STR_MR_LEVEL_SPECIAL: return _("Special: %d");
+		case STR_MR_LEVEL_ACE    : return _("Hero: %d");
+
+		default: return "";  // make compiler shut up
+	}
+}
+
 STAT_BAR	infoBars[]=
 {
 	{LC_X,100,STAT_BAR_WIDTH,16,10,STR_MR_UNITS_LOST,0,FALSE,TRUE,0,165},	// left column		STAT_UNIT_LOST
@@ -322,8 +374,7 @@ UDWORD	div;
 				}
 			}
 			/* Now render the text by the bar */
-			sprintf(text,strresGetString(psStringRes,infoBars[index].stringID),
-					infoBars[index].number);
+			sprintf(text, getDescription(infoBars[index].stringID), infoBars[index].number);
 			iV_DrawText(text, x + width + 16, y + 12);
 
 			/* If we're beyond STAT_ROOKIE, then we're on rankings */

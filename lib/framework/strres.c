@@ -184,35 +184,6 @@ void strresDestroy(STR_RES *psRes)
 }
 
 
-/* Load a list of string ID's from a memory buffer */
-BOOL strresLoadFixedID(STR_RES *psRes, STR_ID *psID, UDWORD numID)
-{
-	UDWORD	i;
-
-	ASSERT( psRes != NULL,
-		"strresLoadFixedID: Invalid string res pointer" );
-
-	for (i=0; i<numID; i++)
-	{
-		ASSERT( psID->id == psRes->nextID,
-			"strresLoadFixedID: id out of sequence" );
-
-		// Store the ID string
-		if (!TREAP_ADD(psRes->psIDTreap, (void*)psID->pIDStr, psID))
-		{
-			debug( LOG_ERROR, "strresLoadFixedID: Out of memory" );
-			abort();
-			return FALSE;
-		}
-
-		psID += 1;
-		psRes->nextID += 1;
-	}
-
-	return TRUE;
-}
-
-
 /* Return the ID number for an ID string */
 BOOL strresGetIDNum(STR_RES *psRes, const char *pIDStr, UDWORD *pIDNum)
 {

@@ -169,3 +169,13 @@ src/warzoneconfig.c
 src/multijoin.c
 src/environ.c
 src/multimenu.c
+data/messages/strings/cam1strings.txt
+data/messages/strings/cam2strings.txt
+data/messages/strings/cam3strings.txt
+data/messages/strings/genstrings.txt
+data/messages/strings/names.txt
+data/messages/strings/resstrings.txt
+data/messages/strings/scrstrings.txt
+data/messages/strings/tutstrings.txt
+data/mp/messages/strings/names.txt
+data/mp/messages/strings/resstrings.txt

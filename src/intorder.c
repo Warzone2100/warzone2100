@@ -144,6 +144,64 @@ typedef struct {
 } AVORDER;
 
 
+enum
+{
+	STR_DORD_RANGE1,
+	STR_DORD_RANGE2,
+	STR_DORD_RANGE3,
+	STR_DORD_REPAIR1,
+	STR_DORD_REPAIR2,
+	STR_DORD_REPAIR3,
+	STR_DORD_FIRE1,
+	STR_DORD_FIRE2,
+	STR_DORD_FIRE3,
+	STR_DORD_PATROL,
+	STR_DORD_PERSUE,
+	STR_DORD_GUARD,
+	STR_DORD_HOLDPOS,
+	STR_DORD_RETREPAIR,
+	STR_DORD_RETBASE,
+	STR_DORD_EMBARK,
+	STR_DORD_ARMRECYCLE,
+	STR_DORD_RECYCLE,
+	STR_DORD_FACTORY,
+	STR_DORD_CYBORG_FACTORY,
+	STR_DORD_FIREDES,
+	STR_DORD_VTOL_FACTORY
+};
+
+// return translated text
+const char *getDORDDescription(int id)
+{
+		switch ( id )
+		{
+			case STR_DORD_RANGE1         : return _("Short Range");
+			case STR_DORD_RANGE2         : return _("Long Range");
+			case STR_DORD_RANGE3         : return _("Optimum Range");
+			case STR_DORD_REPAIR1        : return _("Retreat at Medium Damage");
+			case STR_DORD_REPAIR2        : return _("Retreat at Heavy Damage");
+			case STR_DORD_REPAIR3        : return _("Do or Die!");
+			case STR_DORD_FIRE1          : return _("Fire-At-Will");
+			case STR_DORD_FIRE2          : return _("Return Fire");
+			case STR_DORD_FIRE3          : return _("Hold Fire");
+			case STR_DORD_PATROL         : return _("Patrol");
+			case STR_DORD_PERSUE         : return _("Pursue");
+			case STR_DORD_GUARD          : return _("Guard Position");
+			case STR_DORD_HOLDPOS        : return _("Hold Position");
+			case STR_DORD_RETREPAIR      : return _("Return For Repair");
+			case STR_DORD_RETBASE        : return _("Return To HQ");
+			case STR_DORD_EMBARK         : return _("Go to Transport");
+			case STR_DORD_ARMRECYCLE     : return _("Return for Recycling");
+			case STR_DORD_RECYCLE        : return _("Recycle");
+			case STR_DORD_FACTORY        : return _("Assign Factory Production");
+			case STR_DORD_CYBORG_FACTORY : return _("Assign Cyborg Factory Production");
+			case STR_DORD_FIREDES        : return _("Assign Fire Support");
+			case STR_DORD_VTOL_FACTORY   : return _("Assign VTOL Factory Production");
+
+			default : return "";  // make compiler shut up
+		}
+};
+
 // Define the order button groups.
 ORDERBUTTONS OrderButtons[NUM_ORDERS]=
 {
@@ -735,7 +793,7 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 		}
 
 		for(i=0; i<OrderButtons[OrdIndex].AcNumButs; i++) {
-			sButInit.pTip = strresGetString(psStringRes, OrderButtons[OrdIndex].ButTips[i]);
+			sButInit.pTip = getDORDDescription(OrderButtons[OrdIndex].ButTips[i]);
 			sButInit.width = (UWORD)GetImageWidth(IntImages,OrderButtons[OrdIndex].ButImageID[i]);
 			sButInit.height = (UWORD)GetImageHeight(IntImages,OrderButtons[OrdIndex].ButImageID[i]);
 			sButInit.pUserData = (void*)PACKDWORD_TRI(OrderButtons[OrdIndex].ButGreyID[i],

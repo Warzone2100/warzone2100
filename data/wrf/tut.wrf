@@ -4,7 +4,6 @@
 
 
 directory	"messages/strings"
-file		STR_RES	"strings.txt"
 file		STR_RES	"genstrings.txt"
 file		STR_RES	"tutstrings.txt"
 file		STR_RES	"resstrings.txt"
