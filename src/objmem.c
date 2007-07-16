@@ -43,7 +43,9 @@
 #include "formation.h"
 #include "mapgrid.h"
 
-static SDWORD	factoryDeliveryPointCheck[MAX_PLAYERS][NUM_FLAG_TYPES][MAX_FACTORY];
+#ifdef DEBUG
+static SDWORD factoryDeliveryPointCheck[MAX_PLAYERS][NUM_FLAG_TYPES][MAX_FACTORY];
+#endif
 
 // the initial value for the object ID
 #define OBJ_ID_INIT		20000
@@ -66,7 +68,9 @@ FLAG_POSITION	*apsFlagPosLists[MAX_PLAYERS];
 BASE_OBJECT		*psDestroyedObj=NULL;
 
 /* Forward function declarations */
+#ifdef DEBUG
 static void objListIntegCheck(void);
+#endif
 
 
 /* Initialise the object heaps */
@@ -935,6 +939,7 @@ BOOL checkValidId(UDWORD id)
 
 
 // integrity check the lists
+#ifdef DEBUG
 static void objListIntegCheck(void)
 {
 	SDWORD			player;
@@ -970,3 +975,4 @@ static void objListIntegCheck(void)
 		ASSERT( psCurr->died > 0, "objListIntegCheck: Object in destroyed list but not dead!" );
 	}
 }
+#endif

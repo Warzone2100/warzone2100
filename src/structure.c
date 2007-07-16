@@ -315,7 +315,7 @@ void initFactoryNumFlag(void)
 void resetFactoryNumFlag(void)
 {
 	STRUCTURE*   psStruct;
-	uint8_t      mask;
+	uint8_t      mask = 0;
 	unsigned int i;
 
 	for(i = 0; i < MAX_PLAYERS; i++)

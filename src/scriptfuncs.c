@@ -10420,7 +10420,7 @@ BOOL objectInRangeVis(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range, SDW
 BOOL scrPursueResearch(void)
 {
 	RESEARCH			*psResearch;
-	SDWORD				foundIndex,player,cur,tempIndex,Stack[400];
+	SDWORD				foundIndex = 0,player,cur,tempIndex,Stack[400];
 	UDWORD				index;
 	SWORD				top;
 

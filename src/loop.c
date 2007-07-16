@@ -652,7 +652,7 @@ GAMECODE gameLoop(void)
 void videoLoop(void)
 {
 	bool bVolKilled = false;
-	float originalVolume;
+	float originalVolume = 0.0;
 
 	// There is something really odd here. - Per
 	static BOOL bActiveBackDrop = FALSE;
