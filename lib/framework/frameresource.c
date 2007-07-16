@@ -30,6 +30,7 @@
 #include "frame.h"
 #include "frameresource.h"
 #include "resly.h"
+#include <physfs.h>
 
 // Local prototypes
 static RES_TYPE *psResTypes=NULL;
@@ -372,6 +373,78 @@ static inline RES_DATA* resDataInit(const char *DebugName, UDWORD DataIDHash, vo
 }
 
 
+/*!
+ * Return the language part of the selected locale
+ */
+static WZ_DECL_CONST const char* getLanguage(void)
+{
+	static char language[4] = { '\0' }; // ISO639 language code has to fit in!
+
+#ifdef ENABLE_NLS
+	static BOOL haveLanguage = FALSE;
+
+	if ( ! haveLanguage )  // only get language name once for speed optimization
+	{
+		char *localeName = setlocale(LC_MESSAGES, NULL);
+		char *delim = NULL;
+
+		haveLanguage = TRUE;
+
+		if ( !localeName )
+		{
+			return language; // Return empty string on errors
+		}
+
+		strncpy(language, localeName, sizeof(language));
+		language[sizeof(language) - 1] = '\0';  // be sure to have a 0-terminated string
+
+		delim = strchr(language, '_');
+
+		if ( !delim )
+		{
+			delim = strchr(language, '.');
+		}
+
+		if ( delim )
+		{
+			*delim = '\0';
+		}
+	}
+#endif // ENABLE_NLS
+
+	return language;
+}
+
+
+/*!
+ * check if given file exists in a locale dependend subdir
+ * if so, modify given fileName to hold the locale dep. file,
+ * else do not change given fileName
+ */
+static void makeLocaleFile(char fileName[])  // given string must have MAX_PATH size
+{
+#ifdef ENABLE_NLS
+	const char * language = getLanguage();
+	char localeFile[MAX_PATH];
+
+	if ( language[0] == '\0' || // could not get language
+		 strlen(fileName) + strlen(language) + 1 >= MAX_PATH )
+	{
+		return;
+	}
+
+	snprintf(localeFile, sizeof(localeFile), "%s/%s", language, fileName);
+
+	if ( PHYSFS_exists(localeFile) )
+	{
+		strncpy(fileName, localeFile, sizeof(localeFile));
+		debug(LOG_WZ, "Found translated file: %s", fileName);
+	}
+#endif // ENABLE_NLS
+
+	return;
+}
+
 /* Call the load function for a file */
 BOOL resLoadFile(const char *pType, const char *pFile)
 {
@@ -414,6 +487,8 @@ BOOL resLoadFile(const char *pType, const char *pFile)
 	}
 	strcpy(aFileName, aCurrResDir);
 	strcat(aFileName, pFile);
+
+	makeLocaleFile(aFileName);  // check for translated file
 
 	strcpy(LastResourceFilename,pFile);	// Save the filename in case any routines need it
 
