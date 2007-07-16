@@ -3237,7 +3237,7 @@ BOOL scrGameOverMessage(void)
 	}
 
 	// stop the game time??
-	
+
 	//create the message
 	psMessage = addMessage(msgType, FALSE, player);
 
@@ -10482,7 +10482,8 @@ BOOL scrPursueResearch(void)
 		found = FALSE;
 		//DbgMsg("Research already in progress, %d", index);
 	}
-	else if(IsResearchPossible(&pPlayerRes[index]) || IsResearchCancelled(&pPlayerRes[index]))
+	else if(IsResearchPossible(&pPlayerRes[index])
+	     || IsResearchCancelled(&pPlayerRes[index]))
 	{
 		foundIndex = index;
 		found = TRUE;
@@ -10565,38 +10566,36 @@ BOOL scrPursueResearch(void)
 				break;
 			}
 
-		}//while((cur < asResearch[index].numPRRequired) && (top >= (-1)));
+		} // while(TRUE)
 	}
 
-	if(found)
+	if(found
+	 && foundIndex < numResearch)
 	{
-		if(foundIndex < numResearch)
+		pResearch = (asResearch + foundIndex);
+		pPlayerRes				= asPlayerResList[player]+ foundIndex;
+		psResFacilty->psSubject = (BASE_STATS*)pResearch;		  //set the subject up
+
+		if (IsResearchCancelled(pPlayerRes))
 		{
-			pResearch = (asResearch + foundIndex);
-			pPlayerRes				= asPlayerResList[player]+ foundIndex;
-			psResFacilty->psSubject = (BASE_STATS*)pResearch;		  //set the subject up
-
-			if (IsResearchCancelled(pPlayerRes))
-			{
-				psResFacilty->powerAccrued = pResearch->researchPower;//set up as if all power available for cancelled topics
-			}
-			else
-			{
-				psResFacilty->powerAccrued = 0;
-			}
-
-			MakeResearchStarted(pPlayerRes);
-			psResFacilty->timeStarted = ACTION_START_TIME;
-			psResFacilty->timeStartHold = 0;
-			psResFacilty->timeToResearch = pResearch->researchPoints / 	psResFacilty->researchPoints;
-			if (psResFacilty->timeToResearch == 0)
-			{
-				psResFacilty->timeToResearch = 1;
-			}
-
-			sprintf(sTemp,"player:%d starts topic: %s",player, asResearch[foundIndex].pName );
-			NETlogEntry(sTemp,0,0);
+			psResFacilty->powerAccrued = pResearch->researchPower;//set up as if all power available for cancelled topics
 		}
+		else
+		{
+			psResFacilty->powerAccrued = 0;
+		}
+
+		MakeResearchStarted(pPlayerRes);
+		psResFacilty->timeStarted = ACTION_START_TIME;
+		psResFacilty->timeStartHold = 0;
+		psResFacilty->timeToResearch = pResearch->researchPoints / 	psResFacilty->researchPoints;
+		if (psResFacilty->timeToResearch == 0)
+		{
+			psResFacilty->timeToResearch = 1;
+		}
+
+		sprintf(sTemp,"player:%d starts topic: %s",player, asResearch[foundIndex].pName );
+		NETlogEntry(sTemp,0,0);
 	}
 
 	scrFunctionResult.v.bval = found;
