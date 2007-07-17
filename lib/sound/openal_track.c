@@ -546,7 +546,9 @@ BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
 	}
 
 	alGenSources( 1, &(psSample->iSample) );
-	alSourcef( psSample->iSample, AL_PITCH, 1.0 );
+	// HACK: this is a workaround for a bug in the sample implementation of OpenAL 0.0.8 on GNU/Linux
+	// The AL_PITCH value really should be 1.0.
+	alSourcef( psSample->iSample, AL_PITCH, 1.001 );
 	alSourcef( psSample->iSample, AL_GAIN, sfx3d_volume );
 	sound_SetObjectPosition( psSample->iSample, psSample->x, psSample->y, psSample->z );
 	alSourcefv( psSample->iSample, AL_VELOCITY, zero );
