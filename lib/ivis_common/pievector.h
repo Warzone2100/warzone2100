@@ -72,6 +72,36 @@ static inline WZ_DECL_CONST int Vector2i_ScalarP(const Vector2i op1, const Vecto
 
 
 /*!
+ * Calculate the length of a vector.
+ * \param v Vector
+ * \return Length
+ */
+static inline WZ_DECL_CONST int Vector2i_Length(const Vector2i v)
+{
+	return sqrtf( Vector2i_ScalarP(v, v) );
+}
+
+
+/*!
+ * Checks to see if vector v is inside the circle whose centre is at point c
+ * with a radius of r.
+ * This function makes use of the following equation:
+ * (x - a)^2 + (y - b)^2 = r^2 which is used for drawing a circle of radius r
+ * with a centre (a, b). However we can also use it to see if a point is in a
+ * circle, which is the case so long as RHS > LHS.
+ * \param v Vector to test
+ * \param c Vector containing the centre of the circle
+ * \param r The radius of the circle
+ * \return If v falls within the circle
+ */
+static inline WZ_DECL_CONST BOOL Vector2i_InCircle(const Vector2i v, const Vector2i c, const unsigned int r)
+{
+	Vector2i delta = Vector2i_Sub(v, c);
+	return (delta.x * delta.x) + (delta.y * delta.y) < (r * r);
+}
+
+
+/*!
  * Add op2 to op1.
  * \param op1,op2 Operands
  * \return Result
@@ -220,3 +250,37 @@ static inline WZ_DECL_CONST Vector3f Vector3f_CrossP(const Vector3f op1, const V
 	};
 	return dest;
 }
+
+/*!
+ * Substract op2 from op1.
+ * \param op1,op2 Operands
+ * \return Result
+ */
+static inline WZ_DECL_CONST Vector3i Vector3i_Sub(const Vector3i op1, const Vector3i op2)
+{
+	Vector3i dest = {
+		op1.x - op2.x,
+		op1.y - op2.y,
+		op1.z - op2.z
+	};
+	return dest;
+}
+
+
+/*!
+ * Much the same as Vector2i_InCircle except that it works in 3-axis and with
+ * spheres.
+ * The equation used is also ever so slightly different:
+ * (x - a)^2 + (y - b)^2 + (z - c)^2 = r^2. Notice how it is still squared and
+ * _not_ cubed!
+ * \param v Vector to test
+ * \param c Vector containing the centre of the sphere
+ * \param r The radius of the sphere
+ * \return If v falls within the sphere
+ */
+static inline WZ_DECL_CONST BOOL Vector3i_InSphere (const Vector3i v, const Vector3i c, const unsigned int r)
+{
+	Vector3i delta = Vector3i_Sub(v, c);
+	return (delta.x * delta.x) + (delta.y * delta.y) + (delta.z * delta.z) < (r * r);
+}
+
