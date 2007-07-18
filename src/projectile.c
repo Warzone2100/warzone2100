@@ -313,7 +313,6 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 
 	ASSERT( psWeapStats != NULL,
 			"proj_SendProjectile: invalid weapon stats" );
-	ASSERT(!psAttacker || !psAttacker->died, "Attacker is dead, cannot shoot!");
 
 	/* get muzzle offset */
 	if (psAttacker == NULL)
