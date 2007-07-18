@@ -24,10 +24,8 @@
 #ifndef _INCLUDE_RAII_COUNTER_HPP_
 #define _INCLUDE_RAII_COUNTER_HPP_
 
-#include <boost/utility.hpp>
-
 // An exception safe (not thread safe though) counter
-class RAIICounter : boost::noncopyable
+class RAIICounter
 {
     public:
         RAIICounter();
@@ -51,6 +49,11 @@ class RAIICounter : boost::noncopyable
             private:
                 RAIICounter& _counter;
         };
+
+    private:
+        // Private and unimplemented copy constructor and copy assignment operator since we don't have sensible copy semantics
+        RAIICounter(const RAIICounter&);
+        RAIICounter& operator=(const RAIICounter&);
 
     private:
         unsigned int _count;
