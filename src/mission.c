@@ -1068,9 +1068,8 @@ void restoreMissionData(void)
 		mission.apsDroidLists[inc] = NULL;
 		for(psObj = (BASE_OBJECT *)apsDroidLists[inc]; psObj; psObj=psObj->psNext)
 		{
+			psObj->died = FALSE;	//make sure the died flag is not set
 			gridAddObject(psObj);
-            //make sure the died flag is not set
-            psObj->died = FALSE;
 		}
 
 		apsStructLists[inc] = mission.apsStructLists[inc];
@@ -4081,40 +4080,40 @@ void missionDestroyObjects(void)
 	STRUCTURE *psStruct;
 	UBYTE Player;
 
-	debug( LOG_NEVER, "missionDestroyObjects\n" );
+	debug(LOG_NEVER, "missionDestroyObjects");
+	proj_FreeAllProjectiles();
 	for(Player = 0; Player < MAX_PLAYERS; Player++) {
-		if(Player != selectedPlayer) {
+		if (Player != selectedPlayer) 
+		{
 
 			psDroid = apsDroidLists[Player];
 
-			while(psDroid != NULL) {
+			while (psDroid != NULL)
+			{
 				DROID *psNext = psDroid->psNext;
 				removeDroidBase(psDroid);
-//				droidRemove(psDroid, apsDroidLists);
-//				droidRelease(psDroid);
-//				free(psDroid);
 				psDroid = psNext;
 			}
 
-            //clear out the mission lists as well to make sure no Tranporters exist
-            apsDroidLists[Player] = mission.apsDroidLists[Player];
+			//clear out the mission lists as well to make sure no Tranporters exist
+			apsDroidLists[Player] = mission.apsDroidLists[Player];
 			psDroid = apsDroidLists[Player];
 
-			while(psDroid != NULL) {
+			while (psDroid != NULL)
+			{
 				DROID *psNext = psDroid->psNext;
-                //make sure its died flag is not set since we've swapped the apsDroidList pointers over
-                psDroid->died = FALSE;
+
+				//make sure its died flag is not set since we've swapped the apsDroidList pointers over
+				psDroid->died = FALSE;
 				removeDroidBase(psDroid);
-//				droidRemove(psDroid, apsDroidLists);
-//				droidRelease(psDroid);
-//				free(psDroid);
 				psDroid = psNext;
 			}
-            mission.apsDroidLists[Player] = NULL;
+			mission.apsDroidLists[Player] = NULL;
 
 			psStruct = apsStructLists[Player];
 
-			while(psStruct != NULL) {
+			while (psStruct != NULL)
+			{
 				STRUCTURE *psNext = psStruct->psNext;
 				removeStruct(psStruct, TRUE);
 				psStruct = psNext;
