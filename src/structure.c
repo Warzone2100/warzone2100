@@ -2913,14 +2913,14 @@ static BOOL maxDroidsByTypeReached(STRUCTURE *psStructure)
 	CHECK_STRUCTURE(psStructure);
 
 	if ( (droidTemplateType((DROID_TEMPLATE *)psFact->psSubject) == DROID_COMMAND) &&
-		(getNumCommandDroids(psStructure->player) >= 10) )
+		(getNumCommandDroids(psStructure->player) >= MAX_COMMAND_DROIDS) )
 	{
 		return TRUE;
 	}
 
 	if ( (droidTemplateType((DROID_TEMPLATE *)psFact->psSubject) == DROID_CONSTRUCT ||
 		droidTemplateType((DROID_TEMPLATE *)psFact->psSubject) == DROID_CYBORG_CONSTRUCT) &&
-		(getNumConstructorDroids(psStructure->player) >= 15) )
+		(getNumConstructorDroids(psStructure->player) >= MAX_CONSTRUCTOR_DROIDS) )
 	{
 		return TRUE;
 	}

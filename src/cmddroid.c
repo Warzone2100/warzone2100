@@ -177,7 +177,7 @@ BOOL cmdGetDroidMultiExpBoost()
 // get the maximum group size for a command droid
 unsigned int cmdDroidMaxGroup(DROID *psCommander)
 {
-	return getDroidLevel(psCommander) * 2 + 6;
+	return getDroidLevel(psCommander) * 2 + MIN_CMD_GROUP_DROIDS;
 }
 
 // update the kills of a command droid if psKiller is in a command group

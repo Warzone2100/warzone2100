@@ -297,14 +297,9 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 //		hitMod = hitMod + hitMod * cmdDroidHitMod((DROID *)psAttacker) / 100;
 		level = getDroidLevel((DROID *)psAttacker);
 		cmdLevel = cmdGetCommanderLevel((DROID *)psAttacker);
-		if (level > cmdLevel)
-		{
-			hitInc += 5 * level;
-		}
-		else
-		{
-			hitInc += 5 * cmdLevel;
-		}
+
+		// increase accuracy by EXP_ACCURACY_BONUS_PCT % for each experience level
+		hitInc += EXP_ACCURACY_BONUS_PCT * MAX(level,cmdLevel);
 	}
 
 	// subtract the defenders experience modifier
