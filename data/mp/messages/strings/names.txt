@@ -1883,3 +1883,7 @@ H-Scorp-Trk-Lancer			"Lancer Hydra Scorpion Tracks"
 H-Scorp-Trk-HC				"Heavy Cannon Hydra Scorpion Tracks"
 H-Scorp-VTOL-Lancer			"Hydra Scorpion Lancer VTOL"
 H-Scorp-VTOL-BB				"Hydra Scorpion BB VTOL"
+
+Viper-Trk-Com				"Viper Command Turret Tracks"
+Cobra-Trk-Com				"Cobra Command Turret Tracks"
+Scorp-Trk-Com				"Scorpion Command Turret Tracks"

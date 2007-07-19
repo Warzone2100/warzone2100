@@ -268,4 +268,7 @@ H-Scorp-Trk-Lancer,Rocket-LtA-T,NULL,NULL,6
 H-Scorp-Trk-HC,Cannon375mmMk1,NULL,NULL,6
 H-Scorp-VTOL-Lancer,Rocket-VTOL-LtA-T,NULL,NULL,6
 H-Scorp-VTOL-BB,Rocket-VTOL-BB,NULL,NULL,6
+Viper-Trk-Com,CommandTurret1,NULL,NULL,6
+Cobra-Trk-Com,CommandTurret1,NULL,NULL,6
+Scorp-Trk-Com,CommandTurret1,NULL,NULL,6
 ZNULLDESIGN,ZNULLWEAPON,ZNULLWEAPON,ZNULLWEAPON,0
