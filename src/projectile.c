@@ -1755,7 +1755,13 @@ proj_Update( PROJECTILE *psObj )
 		setProjectileDamaged(psObj, NULL);
 	}
 
-	//Watermelon:get naybors
+	// This extra check fixes a crash in cam2, mission1
+	if (worldOnMap(psObj->x, psObj->y) == FALSE)
+	{
+		psObj->died = TRUE;
+		return;
+	}
+
 	projGetNaybors((PROJECTILE *)psObj);
 
 	switch (psObj->state)
