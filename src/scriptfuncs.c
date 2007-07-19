@@ -7104,6 +7104,12 @@ BOOL scrNumDroidsByComponent(void)
 					break;
 				}
 				break;
+			case ST_BRAIN:
+				if (psDroid->asBits[ST_BRAIN].nStat == comp)
+				{
+					numFound++;
+				}
+				break;
 			default:
 				debug(LOG_ERROR, "scrNumDroidsByComponent(): unknown component type");
 				ASSERT( FALSE, "scrNumDroidsByComponent: unknown component type" );
@@ -8269,28 +8275,28 @@ BOOL scrNumStructsByStatInRange(void)
 
 	if (player >= MAX_PLAYERS)
 	{
-		ASSERT( FALSE, "scrStructureBuiltInRange:player number is too high" );
+		ASSERT( FALSE, "scrNumStructsByStatInRange:player number is too high" );
 		return FALSE;
 	}
 
 	if (x < (SDWORD)0 || (x >> TILE_SHIFT) > (SDWORD)mapWidth)
 	{
-		ASSERT( FALSE, "scrStructureBuiltInRange : invalid X coord" );
+		ASSERT( FALSE, "scrNumStructsByStatInRange : invalid X coord" );
 		return FALSE;
 	}
 	if (y < (SDWORD)0 || (y >> TILE_SHIFT) > (SDWORD)mapHeight)
 	{
-		ASSERT( FALSE,"scrStructureBuiltInRange : invalid Y coord" );
+		ASSERT( FALSE,"scrNumStructsByStatInRange : invalid Y coord" );
 		return FALSE;
 	}
 	if (index < (SDWORD)0 || index > (SDWORD)numStructureStats)
 	{
-		ASSERT( FALSE, "scrStructureBuiltInRange : Invalid structure stat" );
+		ASSERT( FALSE, "scrNumStructsByStatInRange : Invalid structure stat" );
 		return FALSE;
 	}
 	if (range < (SDWORD)0)
 	{
-		ASSERT( FALSE, "scrStructureBuiltInRange : Rnage is less than zero" );
+		ASSERT( FALSE, "scrNumStructsByStatInRange : Rnage is less than zero" );
 		return FALSE;
 	}
 
@@ -11180,7 +11186,7 @@ BOOL scrCalcDroidPower(void)
 		"scrDebugModeEnabled: can't calculate cost of a null-droid");
 
 	scrFunctionResult.v.ival = (SDWORD)calcDroidPower(psDroid);
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrDebugModeEnabled(): failed to push result");
 		return FALSE;

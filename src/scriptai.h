@@ -89,6 +89,9 @@ extern BOOL scrIterateCluster(void);
 // add a droid to a commander
 extern BOOL scrCmdDroidAddDroid(void);
 
+// returns max number of droids in a commander group
+extern BOOL scrCmdDroidMaxGroup(void);
+
 
 // types for structure targets
 typedef enum _scr_struct_tar

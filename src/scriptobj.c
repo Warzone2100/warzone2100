@@ -303,7 +303,16 @@ BOOL scrBaseObjGet(UDWORD index)
 		}
 
 		break;
+	case OBJID_GROUP:
+		if (psObj->type != OBJ_DROID)
+		{
+			debug(LOG_ERROR, "scrBaseObjGet: group only valid for a droid");
+			return FALSE;
+		}
 
+		type = (INTERP_TYPE)ST_GROUP;
+		scrFunctionResult.v.oval = ((DROID *)psObj)->psGroup;
+		break;
 	default:
 		debug(LOG_ERROR, "scrBaseObjGet: unknown variable index");
 		return FALSE;
@@ -501,6 +510,14 @@ BOOL scrGroupObjGet(UDWORD index)
 		}
 		type = VAL_INT;
 		scrFunctionResult.v.ival = lgHealth;
+		break;
+	case GROUPID_TYPE:
+		type = VAL_INT;
+		scrFunctionResult.v.ival = psGroup->type;
+		break;
+	case GROUPID_CMD:
+		type = ST_DROID;
+		scrFunctionResult.v.oval = psGroup->psCommander;
 		break;
 	default:
 		ASSERT( FALSE, "scrGroupObjGet: unknown variable index" );

@@ -48,8 +48,9 @@ enum _objids
 	OBJID_ORDERX,		// order coords.106
 	OBJID_ORDERY,
 	OBJID_ACTION,
-	OBJID_SELECTED,		//if droid is selected (humans only)
-	OBJID_TARGET,		//added object->psTarget
+	OBJID_SELECTED,		// if droid is selected (humans only)
+	OBJID_TARGET,		// added object->psTarget
+	OBJID_GROUP,		// group a droid belongs to
 };
 
 // id's for group variables
@@ -59,6 +60,8 @@ enum _groupids
 	GROUPID_POSY,		// average y of a group
 	GROUPID_MEMBERS,	// number of units in a group
 	GROUPID_HEALTH,		// average health of a group
+	GROUPID_TYPE,		// group type, one of: GT_NORMAL, GT_COMMAND or GT_TRANSPORTER
+	GROUPID_CMD,		// commander of the group if group type == GT_COMMAND
 };
 
 // Get values from a base object
