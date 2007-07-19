@@ -292,6 +292,13 @@ void droidRelease(DROID *psDroid)
 {
 	DROID	*psCurr, *psNext;
 
+	/* remove animation if present */
+	if (psDroid->psCurAnim != NULL)
+	{
+		animObj_Remove(&psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID);
+		psDroid->psCurAnim = NULL;
+	}
+
 	if (psDroid->droidType == DROID_TRANSPORTER)
 	{
 		if (psDroid->psGroup)
