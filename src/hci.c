@@ -3287,7 +3287,6 @@ void intDisplayWidgets(void)
 			bPlayerHasHQ = getHQExists(selectedPlayer);
 
 
-//			if(bPlayerHasHQ || (bMultiPlayer && (game.type == DMATCH)) )
 			if(bPlayerHasHQ)
 			{
 				drawRadar();

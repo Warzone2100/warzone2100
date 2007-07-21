@@ -333,98 +333,6 @@ BOOL joinCampaign(UDWORD gameNumber, char *sPlayer)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-// HostArena
-/*
-BOOL hostArena(char *sGame, char *sPlayer)
-{
-	PLAYERSTATS playerStats;
-	UDWORD		numpl,i,j,pl;
-
-	game.type = DMATCH;
-
-	freeMessages();
-	if(!NetPlay.bLobbyLaunched)
-	{
-		NEThostGame(sGame,sPlayer,DMATCH,0,0,0,game.maxPlayers);			// temporary stuff
-	}
-	else
-	{
-		NETsetGameFlags(1,DMATCH);
-	// 2 is average ping
-		NETsetGameFlags(3,0);
-		NETsetGameFlags(4,0);
-	}
-
-	bMultiPlayer = TRUE;
-
-	for(i=0;i<MAX_PLAYERS;i++)
-	{
-		player2dpid[i] =0;
-	}
-
-	//pick a player
-#if 0
-	pl =0;
-#else
-	pl = rand()%game.maxPlayers;
-#endif
-
-	player2dpid[pl] = NetPlay.dpidPlayer;							// add ourselves to the array.
-	selectedPlayer = pl;
-
-	ingame.localJoiningInProgress = TRUE;
-	ingame.JoiningInProgress[selectedPlayer] = TRUE;
-
-	loadMultiStats(sPlayer,&playerStats);						// load player stats!
-	setMultiStats(NetPlay.dpidPlayer,playerStats,FALSE);
-	setMultiStats(NetPlay.dpidPlayer,playerStats,TRUE);
-
-	numpl = NETplayerInfo(NULL);
-
-	// may be more than one player already. check and resolve!
-	if(numpl >1)
-	{
-		for(j = 0;j<MAX_PLAYERS;j++)
-		{
-			if(NetPlay.players[j].dpid && (NetPlay.players[j].dpid != NetPlay.dpidPlayer))
-			{
-				for(i = 0;player2dpid[i] != 0;i++);
-				player2dpid[i] = NetPlay.players[j].dpid;
-				ingame.JoiningInProgress[i] = TRUE;
-			}
-		}
-	}
-
-	return TRUE;
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-// JoinArena.
-BOOL joinArena(UDWORD gameNumber, char *playerName)
-{
-	PLAYERSTATS	playerStats;
-
-	if(!ingame.localJoiningInProgress)
-	{
-		game.type = DMATCH;
-		if(!NetPlay.bLobbyLaunched)
-		{
-			NETjoinGame(NetPlay.games[gameNumber].desc.guidInstance,playerName);	// join
-		}
-		ingame.localJoiningInProgress	= TRUE;
-
-		loadMultiStats(playerName,&playerStats);
-		setMultiStats(NetPlay.dpidPlayer,playerStats,FALSE);
-		setMultiStats(NetPlay.dpidPlayer,playerStats,TRUE);
-		return FALSE;
-	}
-
-	bMultiPlayer = TRUE;
-	return TRUE;
-}
-*/
-
-// ////////////////////////////////////////////////////////////////////////////
 // Lobby launched. fires the correct routine when the game was lobby launched.
 BOOL LobbyLaunched(void)
 {
@@ -612,13 +520,6 @@ BOOL multiTemplateSetup(void)
 
 	switch (game.type)
 	{
-//	case DMATCH:
-//		for(player=0;player<MAX_PLAYERS;player++)
-//		{
-//			 copyTemplateSet(DEATHMATCHTEMPLATES,player);
-//		}
-//		break;
-
 	case CAMPAIGN:
 		for(player=0;player<game.maxPlayers;player++)
 		{
@@ -836,75 +737,6 @@ static BOOL cleanMap(UDWORD player)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-// setup a deathmatch game.
-/*
-static BOOL dMatchInit()
-{
-	UDWORD	i;
-	NETMSG	msg;
-	UDWORD	player;
-	BOOL	resourceFound = FALSE;
-	char	sTemp[256];
-
-	turnOffMultiMsg(TRUE);
-
-	for(i =0 ; i<MAX_PLAYERS;i++)
-	{
-		setPower(i,LEV_HI);							// set deathmatch power to hi.
-	}
-
-	strcpy(sTemp, "multiplay/forces/");
-	strcat(sTemp, sForceName);
-	strcat(sTemp,".for");
-	loadForce( sTemp);
-
-
-	freeMessages();									// CLEAR MESSAGES
-
-	if(NetPlay.bHost)								// it's new.
-	{
-
-	}
-	else
-	{
-		for(player=0;player<MAX_PLAYERS;player++)			// remove droids.
-		{
-			while(apsDroidLists[player])
-			{
-				killDroid(apsDroidLists[player]);
-			}
-
-			while(apsFeatureLists[player])
-			{
-				removeFeature(apsFeatureLists[player]);
-			}
-
-			while(apsStructLists[player])
-			{
-				removeStruct(apsStructLists[player]);
-			}
-		}
-
-	}
-	turnOffMultiMsg(FALSE);
-
-	if(NetPlay.bHost)
-	{
-														// dont do anything.
-	}
-	else
-	{
-		NetAdd(msg,0,NetPlay.dpidPlayer);				// start to request info.
-		NetAdd(msg,4,arenaPlayersReceived);				// player we require.
-		msg.size = 8;
-		msg.type = NET_REQUESTPLAYER;
-		NETbcast(msg,TRUE);
-	}
-
-	return TRUE;
-}
-*/
-// ////////////////////////////////////////////////////////////////////////////
 // setup a campaign game
 static BOOL campInit(void)
 {
@@ -1031,19 +863,7 @@ BOOL multiGameInit(void)
 		openchannels[player] =TRUE;								//open comms to this player.
 	}
 
-//	if(game.type == DMATCH)
-//	{
-//		dMatchInit();
-//		if(NetPlay.bHost)
-//		{
-//			addDMatchDroid(1);							// each player adds a newdroid point.
-//			playerResponding();							// say hi, only if host, clients wait until all info recvd.
-//		}
-//	}
-//	else
-//	{
-		campInit();
-//	}
+	campInit();
 
 	InitializeAIExperience();
 	msgStackReset();	//for multiplayer msgs, reset message stack

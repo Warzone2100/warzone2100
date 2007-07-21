@@ -171,17 +171,6 @@ static BOOL enumerateMultiMaps(char *found, UDWORD *players,BOOL first, UBYTE ca
 	}
 	while(lev)
 	{
-//		if(game.type == DMATCH)
-//		{
-//			if(lev->type == DMATCH)
-//			{
-//				strcpy(found,lev->pName);
-//				*players = lev->players;
-//				lev = lev->psNext;
-//				return TRUE;
-//			}
-//		}
-//		else
 		if(game.type == SKIRMISH)
 		{
 			if(lev->type == MULTI_SKIRMISH2)
@@ -811,7 +800,6 @@ void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD
 
 		//c3-7 alliance
 		//manage buttons by showing or hiding them. gifts only in campaign,
-//		if(game.type != DMATCH)
 		{
 			if(game.alliance != NO_ALLIANCES)
 			{
@@ -847,14 +835,7 @@ void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD
 		iV_DrawText(str, x+MULTIMENU_C8, y+MULTIMENU_FONT_OSET);
 
 		//c9:kills,
-//		if(game.type == DMATCH)
-//		{
-//			sprintf(str,"%d",getMultiStats(player,TRUE).recentKills);
-//		}
-//		else
-//		{
-			sprintf(str,"%d",getMultiStats(player,TRUE).recentKills);
-//		}
+		sprintf(str,"%d",getMultiStats(player,TRUE).recentKills);
 		iV_DrawText(str, x+MULTIMENU_C9, y+MULTIMENU_FONT_OSET);
 
 		if(!getDebugMappingStatus())
@@ -1088,8 +1069,6 @@ void addMultiPlayer(UDWORD player,UDWORD pos)
 
 		sButInit.pDisplay = intDisplayImageHilight;
 
-//		if(game.type != DMATCH)
-//		{
 			// add the gift buttons.
 			sButInit.y		+= 1;	// move down a wee bit.
 
@@ -1118,8 +1097,6 @@ void addMultiPlayer(UDWORD player,UDWORD pos)
 			widgAddButton(psWScreen, &sButInit);
 
 			giftsUp[player] = TRUE;				// note buttons are up!
-//		}
-
 	}
 }
 

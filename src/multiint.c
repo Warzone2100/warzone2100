@@ -642,16 +642,7 @@ void runGameFind(void )
 			ingame.localOptionsReceived = FALSE;			// note we are awaiting options
 			strcpy(game.name, NetPlay.games[gameNumber].name);		// store name
 
-//			strcpy(sPlayer,"LastUsed");
-//			loadMultiStats(sPlayer,&nullStats);
-//			if(NETgetGameFlagsUnjoined(gameNumber,1) == DMATCH)
-//			{
-//				joinArena(gameNumber,(char*)sPlayer);
-//			}
-//			else
-//			{
-				joinCampaign(gameNumber,(char*)sPlayer);
-//			}
+			joinCampaign(gameNumber,(char*)sPlayer);
 
 			changeTitleMode(MULTIOPTION);
 		}
@@ -772,22 +763,16 @@ static void addGameOptions(BOOL bRedo)
 
 	// game type
 	addBlueForm(MULTIOP_OPTIONS,MULTIOP_GAMETYPE,_("Game"),MCOL0,MROW5,MULTIOP_BLUEFORMW,27);
-//	addMultiBut(psWScreen,MULTIOP_GAMETYPE,MULTIOP_ARENA,	MCOL1, 2 , MULTIOP_BUTW,MULTIOP_BUTH,
-//				_("Deathmatch Mode"),   IMAGE_ARENA,   IMAGE_ARENA_HI,TRUE);		//arena
 	addMultiBut(psWScreen,MULTIOP_GAMETYPE,MULTIOP_CAMPAIGN,MCOL1, 2 , MULTIOP_BUTW,MULTIOP_BUTH,
 				_("Campaign Mode"),IMAGE_CAMPAIGN,IMAGE_CAMPAIGN_HI,TRUE);	//camp
 	addMultiBut(psWScreen,MULTIOP_GAMETYPE,MULTIOP_SKIRMISH,MCOL2, 2 , MULTIOP_BUTW,MULTIOP_BUTH,
 				_("Skirmish"),IMAGE_SKIRMISH,IMAGE_SKIRMISH_HI,TRUE);	//skirmish
 
-//	widgSetButtonState(psWScreen, MULTIOP_ARENA,	0);
 	widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN,	0);
 	widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,	0);
 
 	switch(game.type)
 	{
-//	case DMATCH:
-//		widgSetButtonState(psWScreen,MULTIOP_ARENA,WBUT_LOCK);
-//		break;
 	case CAMPAIGN:
 		widgSetButtonState(psWScreen,MULTIOP_CAMPAIGN,WBUT_LOCK);
 		break;
@@ -799,7 +784,6 @@ static void addGameOptions(BOOL bRedo)
 	if(!NetPlay.bComms)
 	{
 		widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_DISABLE);
-//		widgSetButtonState(psWScreen, MULTIOP_ARENA,	WBUT_DISABLE);
 	}
 
 	//just display the game options.
@@ -822,14 +806,7 @@ static void addGameOptions(BOOL bRedo)
 	}
 
 		// alliances
-//		if(game.type == DMATCH)
-//		{
-//			addBlueForm(MULTIOP_OPTIONS,MULTIOP_ALLIANCES,_("Alliances"),MCOL0,MROW7,MULTIOP_BLUEFORMW,27);
-//		}
-//		else
-//		{
-			addBlueForm(MULTIOP_OPTIONS,MULTIOP_ALLIANCES,_("Alliances"),MCOL0,MROW8,MULTIOP_BLUEFORMW,27);
-//		}
+		addBlueForm(MULTIOP_OPTIONS, MULTIOP_ALLIANCES, _("Alliances"), MCOL0, MROW8, MULTIOP_BLUEFORMW, 27);
 
 		addMultiBut(psWScreen,MULTIOP_ALLIANCES,MULTIOP_ALLIANCE_N,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
 				_("No Alliances"),IMAGE_NOALLI,IMAGE_NOALLI_HI,TRUE);
@@ -866,36 +843,7 @@ static void addGameOptions(BOOL bRedo)
 			break;
 		}
 
-/*	if(game.type == DMATCH)
-	{
-
-		// limit options
-		addBlueForm(MULTIOP_OPTIONS,MULTIOP_LIMIT,_("Limits") ,MCOL0,MROW8,MULTIOP_BLUEFORMW,27);
-		addMultiBut(psWScreen,MULTIOP_LIMIT,MULTIOP_NOLIMIT,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
-			_("No Limits"),IMAGE_NOLIMIT,IMAGE_NOLIMIT_HI,TRUE);
-		addMultiBut(psWScreen,MULTIOP_LIMIT,MULTIOP_FRAGLIMIT,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
-			_("Kill Limit"),IMAGE_FRAGLIMIT,IMAGE_FRAGLIMIT_HI,TRUE);
-		addMultiBut(psWScreen,MULTIOP_LIMIT,MULTIOP_TIMELIMIT, MCOL3, 2,MULTIOP_BUTW,MULTIOP_BUTH,
-			_("Time Limit"),IMAGE_TIMELIMIT,IMAGE_TIMELIMIT_HI,TRUE);
-		widgSetButtonState(psWScreen, MULTIOP_NOLIMIT,0);		//hilight correct entry
-		widgSetButtonState(psWScreen, MULTIOP_FRAGLIMIT,0);
-		widgSetButtonState(psWScreen, MULTIOP_TIMELIMIT ,0);
-		switch(game.limit)
-		{
-		case NOLIMIT:
-			widgSetButtonState(psWScreen, MULTIOP_NOLIMIT,WBUT_LOCK);
-			break;
-		case FRAGLIMIT:
-			widgSetButtonState(psWScreen, MULTIOP_FRAGLIMIT,WBUT_LOCK);
-			break;
-		case TIMELIMIT:
-			widgSetButtonState(psWScreen, MULTIOP_TIMELIMIT,WBUT_LOCK);
-			break;
-		}
-	}
-*/
 	if  (game.type == SKIRMISH || game.base != CAMP_WALLS )
-//	  ||(game.type != DMATCH && game.base != CAMP_WALLS))
 	{
 		widgSetButtonState(psWScreen, MULTIOP_FNAME,WEDBS_DISABLE);		// disable force buts
 		widgSetButtonState(psWScreen, MULTIOP_FNAME_ICON,WBUT_DISABLE);
@@ -1008,7 +956,7 @@ static void addGameOptions(BOOL bRedo)
 
 	// hosted or hosting.
 	// limits button.
-	if(ingame.bHostSetup )//&& (game.type != DMATCH))
+	if(ingame.bHostSetup )
 	{
 		addMultiBut(psWScreen,MULTIOP_OPTIONS,MULTIOP_STRUCTLIMITS,MULTIOP_STRUCTLIMITSX,MULTIOP_STRUCTLIMITSY,
 					35,28, _("Set Structure Limits"),IMAGE_SLIM,IMAGE_SLIM_HI,FALSE);
@@ -1032,7 +980,6 @@ static void addGameOptions(BOOL bRedo)
 //	widgSetButtonState(psWScreen, MULTIOP_MAP_ICON,WBUT_DISABLE);
 
 	widgSetButtonState(psWScreen, MULTIOP_DEFENCE,WBUT_DISABLE);
-//	widgSetButtonState(psWScreen, MULTIOP_ARENA,WBUT_DISABLE);
 	widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,WBUT_DISABLE);
 #endif
 
@@ -1593,27 +1540,18 @@ static void disableMultiButs(void)
 
 	// force choice.
 	if  (game.type == SKIRMISH || game.base != CAMP_WALLS )
-//	if  (game.type == SKIRMISH ||(game.type != DMATCH && game.base != CAMP_WALLS ))
 	{
 		widgSetButtonState(psWScreen,MULTIOP_FNAME_ICON,WBUT_DISABLE);
 		widgSetButtonState(psWScreen,MULTIOP_FNAME,WEDBS_DISABLE);
 	}
 
 	if(game.type != CAMPAIGN)	widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_DISABLE);
-//	if(game.type != DMATCH)		widgSetButtonState(psWScreen, MULTIOP_ARENA,	WBUT_DISABLE);
 	if(game.type != SKIRMISH)	widgSetButtonState(psWScreen, MULTIOP_SKIRMISH, WBUT_DISABLE);
 
 	if(! NetPlay.bHost)
 	{
 		if( game.fog) widgSetButtonState(psWScreen,MULTIOP_FOG_OFF ,WBUT_DISABLE);		//fog
 		if(!game.fog) widgSetButtonState(psWScreen,MULTIOP_FOG_ON ,WBUT_DISABLE);
-
-//		if(  game.type == DMATCH )
-//		{
-//			if(game.limit != NOLIMIT)	widgSetButtonState(psWScreen, MULTIOP_NOLIMIT,WBUT_DISABLE);	// limit levels
-//			if(game.limit != FRAGLIMIT)	widgSetButtonState(psWScreen, MULTIOP_FRAGLIMIT,WBUT_DISABLE);
-//			if(game.limit != TIMELIMIT)	widgSetButtonState(psWScreen, MULTIOP_TIMELIMIT,WBUT_DISABLE);
-//		}
 
 		if( game.type == CAMPAIGN)
 		{
@@ -1633,7 +1571,7 @@ static void disableMultiButs(void)
 		}
 
 
-		if( /*game.type == DMATCH||*/ game.type == CAMPAIGN  || game.type == SKIRMISH)
+		if (game.type == CAMPAIGN || game.type == SKIRMISH)
 		{
 			if(game.alliance != NO_ALLIANCES)	widgSetButtonState(psWScreen,MULTIOP_ALLIANCE_N ,WBUT_DISABLE);	//alliance settings.
 			if(game.alliance != ALLIANCES)	widgSetButtonState(psWScreen,MULTIOP_ALLIANCE_Y ,WBUT_DISABLE);
@@ -1784,23 +1722,7 @@ static void processMultiopWidgets(UDWORD id)
 			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, 1, 2);
 			break;
 
-//		case MULTIOP_ARENA:										// turn on arena game
-//			widgSetButtonState(psWScreen, MULTIOP_ARENA, WBUT_LOCK);
-//			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, 0);
-//			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,0);
-//			game.type = DMATCH;
-//
-//			widgSetString(psWScreen, MULTIOP_MAP, "DeadValley");
-//			strcpy(game.map,widgGetString(psWScreen, MULTIOP_MAP));
-//			game.maxPlayers =8;
-//
-//			addGameOptions();
-//			widgSetButtonState(psWScreen, MULTIOP_FNAME,WEDBS_FIXED);
-//			widgSetButtonState(psWScreen, MULTIOP_FNAME_ICON,0);
-//			break;
-
 		case MULTIOP_CAMPAIGN:									// turn on campaign game
-//			widgSetButtonState(psWScreen, MULTIOP_ARENA, 0);
 			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_LOCK);
 			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,0);
 			game.type = CAMPAIGN;
@@ -1812,7 +1734,6 @@ static void processMultiopWidgets(UDWORD id)
 			break;
 
 		case MULTIOP_SKIRMISH:
-//			widgSetButtonState(psWScreen, MULTIOP_ARENA, 0);
 			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN,0 );
 			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,WBUT_LOCK);
 			game.type = SKIRMISH;
@@ -2114,18 +2035,10 @@ static void processMultiopWidgets(UDWORD id)
 		removeWildcards((char*)sPlayer);
 		removeWildcards(sForceName);
 
-//		if (game.type == DMATCH)
-//		{
-//			hostArena((char*)game.name,(char*)sPlayer);
-//			bHosted = TRUE;
-//		}
-//		else
-//		{
-			hostCampaign((char*)game.name,(char*)sPlayer);
-			bHosted = TRUE;
-//		}
+		hostCampaign((char*)game.name,(char*)sPlayer);
+		bHosted = TRUE;
 
-	// wait for players, when happy, send options.
+		// wait for players, when happy, send options.
 		if(NetPlay.bLobbyLaunched)
 		{
 			for(i=0;i<MAX_PLAYERS;i++)	// send options to everyone.
@@ -2545,22 +2458,6 @@ void runMultiOptions(void)
 		sendScoreCheck();
 		sendPing();
 	}
-
-	// check for being able to go!
-//	if(ingame.localJoiningInProgress
-//		&& (widgGetFromID(psWScreen,CON_OK) == NULL)	// oks not yet there.
-//		&& ingame.localOptionsReceived					// weve got the options
-//		&& (game.type == DMATCH))						// it's a dmatch game
-//	{
-//		for(i=0;i<MAX_PLAYERS;i++)
-//		{
-//			if( isHumanPlayer(i) && !ingame.JoiningInProgress[i])			// only go when someones ready..
-//			{
-//				addOkBut();
-//				break;
-//			}
-//		}
-//	}
 
 	// if typing and not in an edit box then jump to chat box.
 	k = getQwertyKey();
@@ -3459,11 +3356,6 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD 
 	iV_SetTextColour(-1);												//colour
 
 	//draw type overlay.
-//	if(NETgetGameFlagsUnjoined(i,1) == DMATCH)
-//	{
-//		iV_DrawImage(FrontImages,IMAGE_ARENA_OVER,x+59,y+3);
-//	}
-//	else
 	if( NETgetGameFlagsUnjoined(i,1) == CAMPAIGN)
 	{
 		iV_DrawImage(FrontImages,IMAGE_CAMPAIGN_OVER,x+59,y+3);

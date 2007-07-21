@@ -53,14 +53,6 @@
 #include "multimenu.h"			// for multimenu
 #include "multistat.h"
 
-//////////////////////////////////////////////////////////////////////////////
-
-//#define DMATCH_DROID_LIMIT	25			// max number of droids in a dmatch game (per player).
-
-#define	ENDFREQUENCY		5000		 // how often to check end game conditions
-#define MAXFRAGS			10000		 // max score in a frag match.
-#define MAXTIME				(5*60*1000) // max time in a time limit dmatch.
-
 ///////////////////////////////////////////////////////////////////////////////
 // prototypes
 
@@ -79,7 +71,6 @@ BOOL recvGift(NETMSG *pMsg)
 	t    = pMsg->body[0];	//decode msg
 	from = pMsg->body[1];
 	to   = pMsg->body[2];
-
 
 	switch(t)
 	{
@@ -768,13 +759,6 @@ void  addMultiPlayerRandomArtifacts(UDWORD quantity,SDWORD type)
 }
 
 // ///////////////////////////////////////////////////////////////
-BOOL addDMatchDroid(UDWORD count)
-{
-	addMultiPlayerRandomArtifacts(count,FEAT_GEN_ARTE);
-	return TRUE;
-}
-
-// ///////////////////////////////////////////////////////////////
 BOOL addOilDrum(UDWORD count)
 {
 	addMultiPlayerRandomArtifacts(count,FEAT_OIL_DRUM);
@@ -827,7 +811,7 @@ void giftArtifact(UDWORD owner,UDWORD x,UDWORD y)
 
 	if(owner == ANYPLAYER)
 	{
-//		foundDMatchDroid(selectedPlayer,x,y);
+		// nothing nowadays
 	}
 	else if(owner >= MAX_PLAYERS)	//1.04 bodge to stop savegame crash
 	{
@@ -883,16 +867,6 @@ void processMultiPlayerArtifacts(void)
 				position.y = pF->z;
 				addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_DISCOVERY,FALSE,NULL,FALSE);
 
-//				if(game.type == DMATCH)
-//				{
-//					x = pF->x;
-//					y = pF->y;
-//					removeFeature(pF);			// remove artifact+ send info.
-//					foundDMatchDroid(selectedPlayer, x,y);
-//					addDMatchDroid(1);
-//				}
-//				else
-//				{
 					x = pF->x;
 					y = pF->y;
 					pl= pF->player;
@@ -900,7 +874,6 @@ void processMultiPlayerArtifacts(void)
 					giftArtifact(pl,x,y);		// reward player.
 					pF->player = 0;
 					audio_QueueTrack( ID_SOUND_ARTIFACT_RECOVERED );
-//				}
 			}
 		}
 
@@ -920,7 +893,6 @@ void processMultiPlayerArtifacts(void)
 	}
 
 }
-
 
 /* Ally team members with each other */
 void createTeamAlliances(void)
@@ -943,214 +915,3 @@ void createTeamAlliances(void)
 	}
 
 }
-
-
-/*
-// ///////////////////////////////////////////////////////////////
-// deathmatch Stuff find/add droids using artifacts.
-
-// pick a template approximating the normal distribution around powerpoints.
-DROID_TEMPLATE * pickDistribTempl(UDWORD player)
-{
-	DROID_TEMPLATE *psTempl;
-	UDWORD	i,rn,rt,dist,min=UDWORD_MAX,max=0,av=0,num=0;
-
-	// gather data
-	for(psTempl=apsDroidTemplates[player];psTempl;psTempl=psTempl->psNext)
-	{
-		num++;
-		av += psTempl->powerPoints;
-		if(psTempl->powerPoints < min) min = psTempl->powerPoints;
-		if(psTempl->powerPoints > max) max = psTempl->powerPoints;
-	}
-
-	av = av / num; 		// get average build pts.
-	if(av-min > max-av)	// get furthest from average.
-	{
-		max = min;
-	}
-
-	rn = (rand()% abs(max-av) )+ av;	// pick a test level. av - max.
-	rn = abs(rn - av);					// rn is now a random distance from av.
-
-	dist = 0;					//init distn
-
-	while(dist <= rn)
-	{
-		//pick a template
-		rt = (rand()%num);	// template to pick
-		i =0;
-		for(psTempl=apsDroidTemplates[player];i<rt;psTempl=psTempl->psNext)
-		{
-			i++;
-		}
-
-		// distance of this template
-		dist = abs(psTempl->powerPoints - av);
-	}
-	return psTempl;
-
-}
-// ///////////////////////////////////////////////////////////////
-// player runs into a dmatch artifact
-BOOL foundDMatchDroid(UDWORD player,UDWORD x,UDWORD y)
-{
-	DROID_TEMPLATE *psTempl;
-	DROID	*psD;
-	UDWORD	count=0;
-
-	// check to see if player has too many droids.
-	for(psD = apsDroidLists[player];psD; psD=psD->psNext)
-	{
-		count++;
-	}
-	if(count >= DMATCH_DROID_LIMIT)
-	{
-		return TRUE;
-	}
-
-	psTempl = pickDistribTempl(player);	//pick a droid
-
-	// no longer need to turn off power, but just in case.
-	powerCalc(FALSE);					//turn off power temporarily.
-
-	psD=buildDroid(	psTempl,  x,  y,  player, FALSE);
-	if(psD)
-	{
-		addDroid(psD,apsDroidLists);	// add droid. telling everyone
-	}
-	powerCalc(TRUE);					// power back on.
-
-	return TRUE;
-}
-*/
-
-/*
-// ///////////////////////////////////////////////////////////////
-// check for respawn or win situations.
-BOOL deathmatchCheck(void)
-{
-	UDWORD			pl,maxScP;
-	SDWORD			maxSc;
-	static BOOL		gameComplete=FALSE;
-	static UDWORD	lastCheck=0;
-	char			sTemp[256];
-
-	// respawn check
-	if(apsDroidLists[selectedPlayer] == NULL)
-	{
-		setPower(selectedPlayer,LEV_HI);		// reset power.
-		sendPowerCheck(TRUE);					// tell everyone.
-
-		strcpy(sTemp, "multiplay/forces/");
-		strcat(sTemp, sForceName);
-		strcat(sTemp,".for");
-		loadForce( sTemp);
-
-		useTheForce(FALSE);
-
-		cameraToHome(selectedPlayer,FALSE);			// move camera.
-	}
-
-
-	// go no further if recently called.
-	if(lastCheck > gameTime)lastCheck = 0;
-	if(gameTime-lastCheck < ENDFREQUENCY)
-	{
-		return TRUE;
-	}
-	lastCheck = gameTime;
-
-	// end game conditions.
-	// fraglimit / timelimit.
-	if(NetPlay.bHost && !gameComplete)
-	{
-		switch(game.limit)
-		{
-		case FRAGLIMIT:		// check for fraglimit => FRAGLIMIT
-			for(pl=0; pl<MAX_PLAYERS;pl++)
-			{
-				if(isHumanPlayer(pl) && getMultiStats(pl,TRUE).recentScore >= MAXFRAGS)
-				{
-					gameComplete = TRUE;
-					dMatchWinner(pl,TRUE);
-					break;
-				}
-			}
-			break;
-
-		case TIMELIMIT:		// check for timelimit exceeded.
-			if(gameTime-ingame.startTime > MAXTIME)
-			{
-				// pick a winner.
-				maxScP = 0;
-				maxSc  = 0;
-				for(pl=0; pl<MAX_PLAYERS;pl++)
-				{
-					if(isHumanPlayer(pl) && getMultiStats(pl,FALSE).recentScore  > maxSc)
-					{
-						maxSc  = getMultiStats(pl,FALSE).recentScore;
-						maxScP = pl;
-					}
-				}
-				gameComplete == TRUE;
-				dMatchWinner(pl,TRUE);
-			}
-			break;
-
-		default:
-			break;
-		}
-
-
-	}
-
-	return TRUE;
-}
-
-// ///////////////////////////////////////////////////////////////
-// Winner recieved.
-
-BOOL recvdMatchWinner(NETMSG *pMsg)
-{
-	return dMatchWinner( (UDWORD)pMsg->body[0] ,FALSE);
-}
-
-// ///////////////////////////////////////////////////////////////
-// Winner.
-static BOOL dMatchWinner(UDWORD winplayer,BOOL bcast)
-{
-	NETMSG m;
-
-	if(bcast)
-	{
-		m.type = NET_DMATCHWIN;		// send a netmsg.
-		m.size = 1;
-		m.body[0] = (UBYTE)winplayer;
-		NETbcast(m,TRUE);
-	}
-
-	// declare player winner/looser.
-	if(winplayer == selectedPlayer)
-	{
-		displayGameOver(TRUE);		// winner.
-	}
-	else
-	{
-		displayGameOver(FALSE);		// looooseeer.
-	}
-
-	// throw up the multimenu
-	if(widgGetFromID(psWScreen,MULTIMENU_FORM) == NULL)
-	{
-		intAddMultiMenu();
-	}
-
-	// add some effects??
-
-	// fire up a new level????????
-
-	return TRUE;
-}
-
-*/

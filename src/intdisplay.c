@@ -3704,25 +3704,6 @@ void drawRadarBlips(void)
 		}
 	}
 	*/
-
-// deathmatch code
-//	if(bMultiPlayer && (game.type == DMATCH))
-//	{
-//		for (psFeature = apsFeatureLists[0]; psFeature != NULL; psFeature =
-//			psFeature->psNext)
-//		{
-//			if( psFeature->psStats->subType == FEAT_GEN_ARTE)	// it's an artifact.
-//			{
-//				worldPosToRadarPos(psFeature->x >> TILE_SHIFT ,
-//								   psFeature->y >> TILE_SHIFT,  &radarX,&radarY);
-//				if (radarX > 0 && radarX < (SDWORD)VisWidth &&			// it's visable.
-//					radarY > 0 && radarY < (SDWORD)VisHeight)
-//				{
-//					iV_DrawImage(IntImages,(UWORD)(IMAGE_RAD_ENM3),radarX + RADTLX, radarY + RADTLY);
-//				}
-//			}
-//		}
-//	}
 }
 
 /*draws blips on world to represent Proximity Messages - no longer the Green Arrow!*/

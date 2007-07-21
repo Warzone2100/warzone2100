@@ -221,13 +221,6 @@ BOOL multiPlayerLoop(void)
 	sendCheck();						// send some checking info if possible
 	processMultiPlayerArtifacts();		// process artifacts
 
-//	if( (game.type == DMATCH) && !ingame.localJoiningInProgress)
-//	{
-//		deathmatchCheck();
-//	}
-
-//	if (game.type != DMATCH)
-//	{
 		joinCount =0;
 		for(i=0;i<MAX_PLAYERS;i++)
 		{
@@ -260,7 +253,6 @@ BOOL multiPlayerLoop(void)
 				setWidgetsStatus(TRUE);
 			}
 		}
-//	}
 
 	recvMessage();						// get queued messages
 
@@ -700,9 +692,6 @@ BOOL recvMessage(void)
 			case NET_SCORESUBMIT:				//  a score update from another player
 				recvScoreSubmission(&msg);
 				break;
-//			case NET_DMATCHWIN:					// someone has won!.
-//				recvdMatchWinner(&msg);
-//				break;
 			case NET_VTOL:
 				recvHappyVtol(&msg);
 				break;

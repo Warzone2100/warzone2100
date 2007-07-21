@@ -340,12 +340,6 @@ void setupNewPlayer(UDWORD dpid, UDWORD player)
 	ingame.PingTimes[player] =0;						// reset ping time
 	ingame.JoiningInProgress[player] = TRUE;			// note that player is now joining.
 
-//	if (game.type == DMATCH)
-//	{
-//		// set the power level for that player..
-//		setPower(player, game.power);
-//	}
-
 	for(i=0;i<MAX_PLAYERS;i++)							// set all alliances to broken.
 	{
 		alliances[selectedPlayer][i] = ALLIANCE_BROKEN;

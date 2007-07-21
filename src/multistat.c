@@ -243,12 +243,6 @@ void useTheForce(BOOL bAddTempl)//Luke
 	UDWORD			x1,y1,x,y;
 	DROID_TEMPLATE *psTempl;
 
-//	if(game.type == DMATCH)
-//	{
-//		chooseForceLoc(&x,&y);
-//	}
-//	if(game.type == CAMPAIGN)
-//	{
 		if(apsDroidLists[selectedPlayer])
 		{
 			//set drop off point to pos of other droids.
@@ -262,7 +256,6 @@ void useTheForce(BOOL bAddTempl)//Luke
 			}
 
 		}
-//	}
 
 	x1 = x;													// now we have a coord, place droids
 	y1 = y;

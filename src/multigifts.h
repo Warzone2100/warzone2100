@@ -39,18 +39,9 @@ extern void addMultiPlayerRandomArtifacts	(UDWORD quantity,SDWORD type);
 extern void processMultiPlayerArtifacts		(void);
 
 extern void	giftArtifact					(UDWORD owner,UDWORD x,UDWORD y);
-
-// deathmatch stuff
 extern BOOL	addOilDrum						(UDWORD count);
 extern void	giftPower						(UDWORD from,UDWORD to,BOOL send);
 extern void giftRadar							(UDWORD from, UDWORD to,BOOL send);
-//extern BOOL	addDMatchDroid					(UDWORD count);
-//extern BOOL	foundDMatchDroid				(UDWORD player,UDWORD x,UDWORD y);
-//extern BOOL deathmatchCheck					(void);
-
-//extern BOOL	dMatchWinner					(UDWORD winplayer,BOOL bcast);
-//extern BOOL	recvdMatchWinner				(NETMSG *pMsg);
-
 
 #define RADAR_GIFT		1
 #define DROID_GIFT		2
