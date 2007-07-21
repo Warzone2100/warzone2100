@@ -56,7 +56,6 @@
 // ////////////////////////////////////////////////////////////////////////////
 // External Variables
 
-extern char	MultiForcesPath[255];
 extern char	buildTime[8];
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -407,8 +406,6 @@ BOOL sendLeavingMsg(void)
 // called in Init.c to shutdown the whole netgame gubbins.
 BOOL multiShutdown(void)
 {
-	FORCE_MEMBER *pF;
-
 	debug(LOG_MAIN, "shutting down audio capture");
 
 	debug(LOG_MAIN, "shutting down audio playback");
@@ -416,15 +413,6 @@ BOOL multiShutdown(void)
 	// shut down netplay lib.
 	debug(LOG_MAIN, "shutting down networking");
   	NETshutdown();
-
-	// clear any force we may have.
-	debug(LOG_MAIN, "free game data (forces)");
-	while(Force.pMembers)
-	{
-		pF = Force.pMembers;
-		Force.pMembers = pF->psNext;
-		free(pF);
-	}
 
 	debug(LOG_MAIN, "free game data (structure limits)");
 	if(ingame.numStructureLimits)
@@ -443,7 +431,7 @@ BOOL multiShutdown(void)
 
 BOOL addTemplate(UDWORD player, DROID_TEMPLATE *psNew)
 {
-	DROID_TEMPLATE	*psTempl = malloc(sizeof(DROID_TEMPLATE));
+	DROID_TEMPLATE  *psTempl = malloc(sizeof(DROID_TEMPLATE));
 
 	if (psTempl == NULL)
 	{
@@ -504,19 +492,6 @@ BOOL copyTemplateSet(UDWORD from,UDWORD to)
 BOOL multiTemplateSetup(void)
 {
 	UDWORD player, pcPlayer = 0;
-	char			sTemp[256];
-
-
-	if(game.type == CAMPAIGN && game.base == CAMP_WALLS)
-	{
-		strcpy(sTemp, MultiForcesPath);
-		strcat(sTemp, sForceName);
-		strcat(sTemp,".for");
-
-		loadForce(sTemp);
-//		useTheForce(TRUE);
-	}
-
 
 	switch (game.type)
 	{
@@ -827,11 +802,6 @@ static BOOL campInit(void)
 
 	playerResponding();			// say howdy!
 
-	if(game.type == CAMPAIGN && game.base == CAMP_WALLS)
-	{
-		useTheForce(TRUE);
-	}
-
 	return TRUE;
 }
 
@@ -902,7 +872,6 @@ BOOL multiGameShutdown(void)
 	NetPlay.bHost					= FALSE;
 	bMultiPlayer					= FALSE;	//back to single player mode
 	selectedPlayer					= 0;		//back to use player 0 (single player friendly)
-	bForceEditorLoaded				= FALSE;
 
 	return TRUE;
 }

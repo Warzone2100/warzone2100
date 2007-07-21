@@ -234,10 +234,6 @@ void changeTitleMode(tMode mode)
 	case PROTOCOL:
 		startConnectionScreen();
 		break;
-	case FORCESELECT:
-		bUsingKeyboard = FALSE;
-		startForceSelect();
-		break;
 	case MULTIOPTION:
 		bUsingKeyboard = FALSE;
 		if(oldMode == MULTILIMIT)
@@ -564,8 +560,7 @@ BOOL startMultiPlayerMenu(void)
 	addTextButton(FRONTEND_HOST,     FRONTEND_POS2X,FRONTEND_POS2Y, _("Host Game"),FALSE,FALSE);
 	addTextButton(FRONTEND_JOIN,     FRONTEND_POS3X,FRONTEND_POS3Y, _("Join Game"),FALSE,FALSE);
 
-	addTextButton(FRONTEND_FORCEEDIT,FRONTEND_POS4X,FRONTEND_POS4Y, _("Force Editor"),FALSE,FALSE);
-	addTextButton(FRONTEND_SKIRMISH, FRONTEND_POS5X,FRONTEND_POS5Y, _("One Player Skirmish"),FALSE,FALSE);
+	addTextButton(FRONTEND_SKIRMISH, FRONTEND_POS4X,FRONTEND_POS4Y, _("One Player Skirmish"),FALSE,FALSE);
 
 	addMultiBut(psWScreen,FRONTEND_BOTFORM,FRONTEND_QUIT,10,10,30,29, P_("menu", "Return"),IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);
 
@@ -591,40 +586,6 @@ BOOL runMultiPlayerMenu(void)
 		ingame.bHostSetup = FALSE;
 		changeTitleMode(PROTOCOL);
 		break;
-	case FRONTEND_FORCEEDIT:
-
-		if(!bForceEditorLoaded)
-		{
-			initLoadingScreen( TRUE );
-/*			if (!resLoad("wrf/forcedit.wrf", 500,
-						 fileLoadBuffer, FILE_LOAD_BUFFER_SIZE))
-				//need the object heaps to have been set up before loading
-			{
-				return FALSE;
-			}
-*/
-			if (!resLoad("wrf/piestats.wrf", 501,
-						 fileLoadBuffer, FILE_LOAD_BUFFER_SIZE))
-				//need the object heaps to have been set up before loading
-			{
-				return FALSE;
-			}
-
-			if (!resLoad("wrf/forcedit2.wrf", 502,
-						 fileLoadBuffer, FILE_LOAD_BUFFER_SIZE))
-				//need the object heaps to have been set up before loading
-			{
-				return FALSE;
-			}
-
-			bForceEditorLoaded = TRUE;
-			closeLoadingScreen();
-		}
-
-		changeTitleMode(FORCESELECT);
-		return TRUE;//skip draw.
-		break;
-
 	case FRONTEND_SKIRMISH:
 		ingame.bHostSetup = TRUE;
 

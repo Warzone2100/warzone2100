@@ -171,9 +171,6 @@ TITLECODE titleLoop(void)
 		case GAMEFIND:
 			runGameFind();
 			break;
-		case FORCESELECT:
-			runForceSelect();
-			break;
 		case MULTI:
 			runMultiPlayerMenu();
 			break;

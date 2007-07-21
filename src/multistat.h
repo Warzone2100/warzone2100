@@ -43,25 +43,6 @@ typedef struct
 
 } PLAYERSTATS;
 
-typedef struct _forcemember {
-	DROID_TEMPLATE		*pTempl;			// pointer to template to use for this droid
-	struct _forcemember	*psNext;			// Pointer to next template
-}FORCE_MEMBER;
-
-typedef struct _force {
-	DROID_TEMPLATE	*pForceTemplates;
-	FORCE_MEMBER	*pMembers;
-}FORCE;
-
-extern FORCE Force;														// the selected force.
-
-//  Force defs.
-extern BOOL	removeFromForce			(UDWORD number);					// remove a droid from force
-extern BOOL	addToForce				(DROID_TEMPLATE  *templ);			// add a droid (templ) to force
-extern void	useTheForce				(BOOL bAddTempl);					// place the force in the game
-extern BOOL	saveForce				(char *name,FORCE *pfForce);
-extern BOOL	loadForce				(char *name);
-
 // stat defs
 extern BOOL			saveMultiStats			(const char *sFName, const char *sPlayerName, const PLAYERSTATS *playerStats);	// to disk
 extern BOOL			loadMultiStats			(char *sPlayerName, PLAYERSTATS *playerStats);					// form disk
