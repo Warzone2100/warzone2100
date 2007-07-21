@@ -140,7 +140,6 @@ int seq_ClearMovie(void)
 
 int	seq_RenderOneFrameToBuffer(char *lpSF, int skip, SDWORD subMin, SDWORD subMax)
 {
-	//printf("seq_RenderOneFrameToBuffer %i\n", skip);
 	if (current_sequence == NULL) {
 		return VIDEO_FRAME_ERROR;
 	} else {
@@ -160,7 +159,6 @@ int	seq_RenderOneFrameToBuffer(char *lpSF, int skip, SDWORD subMin, SDWORD subMa
  */
 int	seq_RenderOneFrame(int skip, SDWORD subMin, SDWORD subMax)
 {
-	//printf("seq_RenderOneFrame %i\n", skip);
 	if (current_sequence == NULL)
 	{
 		return VIDEO_FRAME_ERROR;
@@ -181,7 +179,6 @@ int	seq_RenderOneFrame(int skip, SDWORD subMin, SDWORD subMax)
 
 BOOL	seq_RefreshVideoBuffers(void)
 {
-	//printf("seq_RefreshVideoBuffers\n");
 	return TRUE;
 }
 
@@ -204,7 +201,6 @@ BOOL	seq_ShutDown(void)
 
 BOOL	seq_GetFrameSize(SDWORD *pWidth, SDWORD* pHeight)
 {
-	//printf("seq_GetFrameSize\n");
 	if (current_sequence != NULL) {
 		*pWidth = current_sequence->width;
 		*pHeight = current_sequence->height;
@@ -218,7 +214,6 @@ BOOL	seq_GetFrameSize(SDWORD *pWidth, SDWORD* pHeight)
 
 int seq_GetCurrentFrame(void)
 {
-	//printf("seq_GetCurrentFrame\n");
 	if (current_sequence != NULL) {
 		return current_frame;
 	} else {
@@ -228,7 +223,6 @@ int seq_GetCurrentFrame(void)
 
 int seq_GetFrameTimeInClicks(void)
 {
-	//printf("seq_GetFrameTimeInClicks\n");
 	if (current_sequence != NULL) {
 		return (int)(1000.0f / current_sequence->fps);
 	} else {
@@ -238,12 +232,9 @@ int seq_GetFrameTimeInClicks(void)
 
 int seq_GetTotalFrames(void)
 {
-	//printf("seq_GetTotalFrames\n");
 	if (current_sequence != NULL) {
 		return current_sequence->nb_chunks;
 	} else {
 		return -1;
 	}
 }
-
-
