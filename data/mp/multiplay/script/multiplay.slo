@@ -133,7 +133,7 @@ event initialisedEvent2(CALL_GAMEINIT)
 		
 		setStructureLimits(factory,	5, playnum);	// set structure limits
 		setStructureLimits(powerGen,	5, playnum);
-		setStructureLimits(research,	3, playnum);
+		setStructureLimits(research,	5, playnum);
 		setStructureLimits(command,	1, playnum);
 		setStructureLimits(commandrelay,1, playnum);
 		setStructureLimits(cybfac,	5, playnum);
@@ -289,9 +289,12 @@ event checkEndConditions (endConditions)
 		//check computer/babas are wiped out completely
 		while(playnum<8)
 		{
-			if(anyDroidsLeft(playnum) or anyStructButWallsLeft(playnum))
+			if(not isHumanPlayer(playnum))
 			{
-				gamenotwon = TRUE;
+				if(anyDroidsLeft(playnum) or anyStructButWallsLeft(playnum))
+				{
+					gamenotwon = TRUE;
+				}
 			}
 			playnum = playnum + 1;			
 		}			
