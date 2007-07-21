@@ -798,7 +798,6 @@ static BOOL campInit(void)
 		memcpy(playerTeam,newPlayerTeam,MAX_PLAYERS * sizeof(newPlayerTeam[0]));
 	}
 
-
 	for(player = 0;player<game.maxPlayers;player++)			// clean up only to the player limit for this map..
 	{
 		if( (!isHumanPlayer(player)) && game.type != SKIRMISH)	// strip away unused players
@@ -810,7 +809,9 @@ static BOOL campInit(void)
 	}
 
 	// optionally remove other computer players.
-	if ((game.type == CAMPAIGN && !game.bComputerPlayers) || game.type == SKIRMISH)
+	// HACK: if actual number of players is 8, then drop baba player to avoid
+	// exceeding player number (babas need a player, too!) - Per
+	if ((game.type == CAMPAIGN && game.maxPlayers < 8) || game.type == SKIRMISH)
 	{
 		for(player=game.maxPlayers;player<MAX_PLAYERS;player++)
 		{

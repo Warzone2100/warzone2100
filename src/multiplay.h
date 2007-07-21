@@ -102,7 +102,6 @@ typedef struct {
 	char		version[8];					// version of warzone
 	UBYTE		maxPlayers;					// max players to allow
 	char		name[128];					// game name   (to be used)
-	BOOL		bComputerPlayers;			// Allow computer players
 	BOOL		fog;
 	UDWORD		power;						// power level for arena game
 //	UDWORD		techLevel;					// tech levels to use . 0= all levels.

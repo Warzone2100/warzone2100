@@ -764,7 +764,7 @@ static void addGameOptions(BOOL bRedo)
 	// game type
 	addBlueForm(MULTIOP_OPTIONS,MULTIOP_GAMETYPE,_("Game"),MCOL0,MROW5,MULTIOP_BLUEFORMW,27);
 	addMultiBut(psWScreen,MULTIOP_GAMETYPE,MULTIOP_CAMPAIGN,MCOL1, 2 , MULTIOP_BUTW,MULTIOP_BUTH,
-				_("Campaign Mode"),IMAGE_CAMPAIGN,IMAGE_CAMPAIGN_HI,TRUE);	//camp
+				_("Mayhem"), IMAGE_ARENA, IMAGE_ARENA_HI, TRUE);	//camp
 	addMultiBut(psWScreen,MULTIOP_GAMETYPE,MULTIOP_SKIRMISH,MCOL2, 2 , MULTIOP_BUTW,MULTIOP_BUTH,
 				_("Skirmish"),IMAGE_SKIRMISH,IMAGE_SKIRMISH_HI,TRUE);	//skirmish
 
@@ -790,7 +790,6 @@ static void addGameOptions(BOOL bRedo)
 	addMultiEditBox(MULTIOP_OPTIONS,MULTIOP_PNAME,MCOL0,MROW1, _("Select Player Name"),(char*) sPlayer,IMAGE_EDIT_PLAYER,MULTIOP_PNAME_ICON);
 	addMultiEditBox(MULTIOP_OPTIONS,MULTIOP_FNAME,MCOL0,MROW4, _("Select Force"), sForceName,IMAGE_EDIT_FORCE,MULTIOP_FNAME_ICON);
 
-
 	// Fog type
 	addBlueForm(MULTIOP_OPTIONS,MULTIOP_FOG,_("Fog"),MCOL0,MROW6,MULTIOP_BLUEFORMW,27);
 
@@ -805,6 +804,8 @@ static void addGameOptions(BOOL bRedo)
 		widgSetButtonState(psWScreen, MULTIOP_FOG_OFF,WBUT_LOCK);
 	}
 
+	if (game.type != CAMPAIGN)
+	{
 		// alliances
 		addBlueForm(MULTIOP_OPTIONS, MULTIOP_ALLIANCES, _("Alliances"), MCOL0, MROW8, MULTIOP_BLUEFORMW, 27);
 
@@ -821,15 +822,6 @@ static void addGameOptions(BOOL bRedo)
 		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,0);
 		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,0);
 
-		//can't have ALLIANCES_TEAMS in campaign mode
-		if(game.type == CAMPAIGN)
-		{
-			if(game.alliance == ALLIANCES_TEAMS)
-				game.alliance = NO_ALLIANCES;
-
-			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS, WBUT_DISABLE);		//disable
-		}
-
 		switch(game.alliance)
 		{
 		case NO_ALLIANCES:
@@ -842,6 +834,7 @@ static void addGameOptions(BOOL bRedo)
 			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,WBUT_LOCK);
 			break;
 		}
+	}
 
 	if  (game.type == SKIRMISH || game.base != CAMP_WALLS )
 	{
@@ -851,9 +844,15 @@ static void addGameOptions(BOOL bRedo)
 
 	if(game.type == CAMPAIGN || game.type == SKIRMISH)
 	{
-
 		// pow levels
-		addBlueForm(MULTIOP_OPTIONS,MULTIOP_POWER,_("Power"),MCOL0,MROW9,MULTIOP_BLUEFORMW,27);
+		if (game.type == CAMPAIGN)
+		{
+			addBlueForm(MULTIOP_OPTIONS,MULTIOP_POWER,_("Power"),MCOL0,MROW8,MULTIOP_BLUEFORMW,27);
+		}
+		else
+		{
+			addBlueForm(MULTIOP_OPTIONS,MULTIOP_POWER,_("Power"),MCOL0,MROW9,MULTIOP_BLUEFORMW,27);
+		}
 		addMultiBut(psWScreen,MULTIOP_POWER,MULTIOP_POWLEV_LOW,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
 			_("Low Power Levels"),IMAGE_POWLO,IMAGE_POWLO_HI,TRUE);
 		addMultiBut(psWScreen,MULTIOP_POWER,MULTIOP_POWLEV_MED,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
@@ -899,44 +898,6 @@ static void addGameOptions(BOOL bRedo)
 			widgSetButtonState(psWScreen, MULTIOP_DEFENCE,WBUT_LOCK);
 			break;
 		}
-	}
-
-	if (game.type == CAMPAIGN)
-	{
-
-		//type opposition/no computer opposition
-		if(game.type == CAMPAIGN)
-		{
-			addBlueForm(MULTIOP_OPTIONS,MULTIOP_COMPUTER,_("Computer"),MCOL0,MROW10,MULTIOP_BLUEFORMW,27);
-		}
-		else
-		{
-			addBlueForm(MULTIOP_OPTIONS,MULTIOP_COMPUTER,_("Computer"),MCOL0,MROW8,MULTIOP_BLUEFORMW,27);
-		}
-
-		addMultiBut(psWScreen,MULTIOP_COMPUTER,MULTIOP_COMPUTER_Y,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
-				_("Computer Opponents"),IMAGE_COMPUTER_Y,IMAGE_COMPUTER_Y_HI,TRUE);
-		addMultiBut(psWScreen,MULTIOP_COMPUTER,MULTIOP_COMPUTER_N,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
-				_("No Computer Opponents"),IMAGE_COMPUTER_N,IMAGE_COMPUTER_N_HI,TRUE);
-		widgSetButtonState(psWScreen, MULTIOP_COMPUTER_Y,0);						//hilight correct entry
-		widgSetButtonState(psWScreen, MULTIOP_COMPUTER_N,0);
-		switch(game.bComputerPlayers)
-		{
-		case FALSE:
-			widgSetButtonState(psWScreen, MULTIOP_COMPUTER_N,WBUT_LOCK);
-			break;
-		case TRUE:
-			widgSetButtonState(psWScreen, MULTIOP_COMPUTER_Y,WBUT_LOCK);
-			break;
-		}
-
-		//remove PC players for 7/8 player maps.
-		if(game.maxPlayers >6)
-		{
-			widgSetButtonState(psWScreen, MULTIOP_COMPUTER_N,WBUT_DISABLE);
-			widgSetButtonState(psWScreen, MULTIOP_COMPUTER_Y,WBUT_DISABLE);
-		}
-
 	}
 
 	// cancel
@@ -1009,22 +970,6 @@ static BOOL safeToUseColour(UDWORD player,UDWORD col)
 		}
 	}
 
-	// no computer player is using it
-/*	if(game.type == SKIRMISH)
-	{
-		if( (col<game.maxPlayers) )
-		{
-			for(i=0;i<game.maxPlayers;i++)
-			{
-				// check no player is using it...
-				if( (i!=player) && !isHumanPlayer(i) && (getPlayerColour(i) == col) )
-				{
-					return FALSE;
-				}
-			}
-		}
-	}
-	*/
 	return TRUE;
 }
 
@@ -1553,12 +1498,6 @@ static void disableMultiButs(void)
 		if( game.fog) widgSetButtonState(psWScreen,MULTIOP_FOG_OFF ,WBUT_DISABLE);		//fog
 		if(!game.fog) widgSetButtonState(psWScreen,MULTIOP_FOG_ON ,WBUT_DISABLE);
 
-		if( game.type == CAMPAIGN)
-		{
-			if(game.bComputerPlayers)	widgSetButtonState(psWScreen, MULTIOP_COMPUTER_N,WBUT_DISABLE);		// pow levels
-			if(!game.bComputerPlayers)	widgSetButtonState(psWScreen, MULTIOP_COMPUTER_Y,WBUT_DISABLE);
-		}
-
 		if(	game.type == CAMPAIGN || game.type == SKIRMISH)
 		{
 			if(game.base != CAMP_CLEAN)	widgSetButtonState(psWScreen,MULTIOP_CLEAN ,WBUT_DISABLE);	// camapign subtype.
@@ -1570,14 +1509,12 @@ static void disableMultiButs(void)
 			if(game.power != LEV_HI )	widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI,WBUT_DISABLE);
 		}
 
-
-		if (game.type == CAMPAIGN || game.type == SKIRMISH)
+		if (game.type == SKIRMISH)
 		{
 			if(game.alliance != NO_ALLIANCES)	widgSetButtonState(psWScreen,MULTIOP_ALLIANCE_N ,WBUT_DISABLE);	//alliance settings.
 			if(game.alliance != ALLIANCES)	widgSetButtonState(psWScreen,MULTIOP_ALLIANCE_Y ,WBUT_DISABLE);
 			if(game.alliance != ALLIANCES_TEAMS)	widgSetButtonState(psWScreen,MULTIOP_ALLIANCE_TEAMS ,WBUT_DISABLE);
 		}
-
 	}
 }
 
@@ -1729,6 +1666,7 @@ static void processMultiopWidgets(UDWORD id)
 			widgSetString(psWScreen, MULTIOP_MAP, DEFAULTCAMPAIGNMAP);
 			strcpy(game.map,widgGetString(psWScreen, MULTIOP_MAP));
 			game.maxPlayers = 4;
+			game.alliance = NO_ALLIANCES;
 
 			addGameOptions(FALSE);
 			break;
@@ -1752,26 +1690,6 @@ static void processMultiopWidgets(UDWORD id)
 	{
 		switch(id)
 		{
-		case MULTIOP_COMPUTER_Y:
-			widgSetButtonState(psWScreen, MULTIOP_COMPUTER_Y,WBUT_LOCK);
-			widgSetButtonState(psWScreen, MULTIOP_COMPUTER_N,0);
-			game.bComputerPlayers = TRUE;
-			if(bHosted)
-			{
-				sendOptions(0,0);
-			}
-			break;
-
-		case MULTIOP_COMPUTER_N:
-			widgSetButtonState(psWScreen, MULTIOP_COMPUTER_Y,0);
-			widgSetButtonState(psWScreen, MULTIOP_COMPUTER_N,WBUT_LOCK);
-			game.bComputerPlayers = FALSE;
-			if(bHosted)
-			{
-				sendOptions(0,0);
-			}
-			break;
-
 		case MULTIOP_FOG_ON:
 			widgSetButtonState(psWScreen, MULTIOP_FOG_ON,WBUT_LOCK);
 			widgSetButtonState(psWScreen, MULTIOP_FOG_OFF,0);
@@ -1862,10 +1780,7 @@ static void processMultiopWidgets(UDWORD id)
 			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,WBUT_LOCK);
 			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,0);
 
-			if(game.type != CAMPAIGN)
-				widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,0);
-			else
-				widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,WBUT_DISABLE);
+			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,0);
 
 			game.alliance = NO_ALLIANCES;	//0;
 			if(bHosted)
@@ -1878,10 +1793,7 @@ static void processMultiopWidgets(UDWORD id)
 			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,0);
 			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,0);
 
-			if(game.type != CAMPAIGN)
-				widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,WBUT_LOCK);
-			else
-				widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,WBUT_DISABLE);
+			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,WBUT_LOCK);
 
 			game.alliance = ALLIANCES;	//1;
 			if(bHosted)
@@ -2580,28 +2492,6 @@ BOOL startMultiOptions(BOOL bReenter)
 //			game.skDiff[i] = (rand()%19)+1;	//1-20
 			game.skDiff[i] = (DIFF_SLIDER_STOPS / 2);
 		}
-
-/*		//set defaults for game.
-		game.power					= LEV_MED;
-		if(NetPlay.bComms)
-		{
-			game.type				= CAMPAIGN;
-			strcpy(game.map, DEFAULTCAMPAIGNMAP);
-		}
-		else
-		{
-			game.type				= SKIRMISH;
-			strcpy(game.map, DEFAULTSKIRMISHMAP);
-		}
-		game.techLevel				= 1;
-		game.base					= CAMP_BASE;
-//		game.bHaveServer			= FALSE;
-		game.limit					= NOLIMIT;
-//		game.packetsPerSec			= 6;
-		game.maxPlayers				= 4;
-		game.bComputerPlayers		= FALSE;
-		strcpy(sForceName,	"Default");
-*/
 
 		// set the encrypt key.
 		if(NetPlay.bHost)
@@ -3358,7 +3248,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD 
 	//draw type overlay.
 	if( NETgetGameFlagsUnjoined(i,1) == CAMPAIGN)
 	{
-		iV_DrawImage(FrontImages,IMAGE_CAMPAIGN_OVER,x+59,y+3);
+		iV_DrawImage(FrontImages, IMAGE_ARENA_OVER, x + 59, y + 3);
 	}
 	else
 	{
