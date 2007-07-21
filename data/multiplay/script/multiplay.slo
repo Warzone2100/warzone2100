@@ -262,6 +262,7 @@ event checkEndConditions (endConditions)
 //		gameOver(FALSE);
 		gameOverMessage(endMsg, MISS_MSG, 0, FALSE);
 		setEventTrigger(checkEndConditions, inactive);
+		exit;
 	}
 	
 	
@@ -289,9 +290,12 @@ event checkEndConditions (endConditions)
 		//check computer/babas are wiped out completely
 		while(playnum<8)
 		{
-			if(anyDroidsLeft(playnum) or anyStructButWallsLeft(playnum))
+			if(not isHumanPlayer(playnum))
 			{
-				gamenotwon = TRUE;
+				if(anyDroidsLeft(playnum) or anyStructButWallsLeft(playnum))
+				{
+					gamenotwon = TRUE;
+				}
 			}
 			playnum = playnum + 1;			
 		}			
