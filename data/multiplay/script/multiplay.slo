@@ -301,26 +301,6 @@ event checkEndConditions (endConditions)
 		}			
 	}
 	
-	////////////////
-	// TeamPlay Game.. (same as campaign, but no alliance watching)
-	if(multiPlayerGameType == TEAMPLAY)
-	{
-		
-		gamenotwon = TRUE;
-		if(dominatingAlliance())
-		{
-			gamenotwon = FALSE;
-		}
-	}
-
-	////////////////
-	// Deathmatch Game (never ends)
-//	if(multiPlayerGameType == DMATCH)
-//{
-//		gamenotwon = TRUE;
-//}
-
-
 	if(gamenotwon == FALSE)
 	{
 //		addMessage(winMsg, MISS_MSG, 0, true);
