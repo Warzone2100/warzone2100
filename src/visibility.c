@@ -220,26 +220,21 @@ static BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 			psTile->inRange = UBYTE_MAX;
 		}
 
-		// new - ask alex M
-		if( (selectedPlayer!=rayPlayer) &&
-			(bMultiPlayer && (game.type == TEAMPLAY || game.alliance == ALLIANCES_TEAMS)
-			&& aiCheckAlliances(selectedPlayer,rayPlayer)) )
+		if (selectedPlayer != rayPlayer && bMultiPlayer && game.alliance == ALLIANCES_TEAMS
+		    && aiCheckAlliances(selectedPlayer, rayPlayer))
 		{
 			SET_TILE_VISIBLE(selectedPlayer,psTile);		//reveal radar
 		}
 
-		// new - ask Alex M
-	/* Not true visibility - done on sensor range */
+		/* Not true visibility - done on sensor range */
 
 		if(getRevealStatus())
 		{
-			if( ((UDWORD)rayPlayer == selectedPlayer) ||
-				// new - ask AM
-				(bMultiPlayer && (game.type == TEAMPLAY || game.alliance == ALLIANCES_TEAMS)
-				&& aiCheckAlliances(selectedPlayer,rayPlayer)) // can see opponent moving
-				// new - ask AM
-				)
+			if ((UDWORD)rayPlayer == selectedPlayer
+			    || (bMultiPlayer && game.alliance == ALLIANCES_TEAMS
+				&& aiCheckAlliances(selectedPlayer, rayPlayer)))
 			{
+				// can see opponent moving
 				avInformOfChange(x>>TILE_SHIFT,y>>TILE_SHIFT);		//reveal map
 			}
 		}
@@ -516,21 +511,6 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 		break;
 	}
 
-	// fix to see units and structures of your ally in teamplay mode
-	/*
-	if(bMultiPlayer && game.type == TEAMPLAY && aiCheckAlliances(psViewer->player,psTarget->player))
-	{
-		if( (psViewer->type == OBJ_DROID) || (psViewer->type == OBJ_STRUCTURE) )
-			{
-				if( (psTarget->type == OBJ_DROID) || (psTarget->type == OBJ_STRUCTURE) )
-				{
-					return(TRUE);
-				}
-			}
-	}
-	*/
-
-
 	/* First see if the target is in sensor range */
 	x = (SDWORD)psViewer->x;
 	xdiff = x - (SDWORD)psTarget->x;
@@ -721,7 +701,7 @@ void processVisibility(BASE_OBJECT *psObj)
 	gridStartIterate((SDWORD)psObj->x, (SDWORD)psObj->y);
 
 	// Make sure allies can see us
-	if( bMultiPlayer && (game.type == TEAMPLAY || game.alliance == ALLIANCES_TEAMS) )
+	if (bMultiPlayer && game.alliance == ALLIANCES_TEAMS)
 	{
 		for(player=0; player<MAX_PLAYERS; player++)
 		{
@@ -778,7 +758,7 @@ void processVisibility(BASE_OBJECT *psObj)
 	}
 
 	//forward out vision to our allies
-	if (bMultiPlayer && (game.type == TEAMPLAY || game.alliance == ALLIANCES_TEAMS))
+	if (bMultiPlayer && game.alliance == ALLIANCES_TEAMS)
 	{
 		for(player = 0; player < MAX_PLAYERS; player++)
 		{

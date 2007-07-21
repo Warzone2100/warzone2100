@@ -408,7 +408,6 @@ void formAlliance(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio,BOOL allowNotific
 {
 	DROID	*psDroid;
 	char	tm1[128];
-	UBYTE	i;
 
 	// dont add message if already allied,
 	if(bMultiPlayer && !(alliances[p1][p2] == ALLIANCE_FORMED) && allowNotification )
@@ -436,36 +435,7 @@ void formAlliance(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio,BOOL allowNotific
 		}
 	}
 
-	// teamplay init others vis.
-	if(bMultiPlayer && game.type == TEAMPLAY && (p1 == selectedPlayer || p2== selectedPlayer))
-	{
-		// THIS BIT ADDED BY AJL 28th april
-		for(i=0;i<MAX_PLAYERS;i++)
-		{
-			//for each alliance with the selectedPlayer make a new one with the newly allied player
-			if(p2 == selectedPlayer)
-			{
-				if ( p1 != i && p2 != i && aiCheckAlliances(p1,i) )
-				{
-					if (!aiCheckAlliances(p2,i))
-					{
-						formAlliance(p2,i,TRUE,FALSE,TRUE);
-					}
-				}
-			}
-			else
-			{
-				if( p1 != i && p2 != i && aiCheckAlliances(p2,i) )
-				{
-					if (!aiCheckAlliances(p1,i))
-					{
-						formAlliance(p1,i,TRUE,FALSE,TRUE);
-					}
-				}
-			}
-		}
-	}
-	else if((bMultiPlayer || game.type == SKIRMISH) && game.alliance == ALLIANCES_TEAMS)	//not campaign and alliances are transitive
+	if((bMultiPlayer || game.type == SKIRMISH) && game.alliance == ALLIANCES_TEAMS)	//not campaign and alliances are transitive
 	{
 		giftRadar(p1,p2,FALSE);
 		giftRadar(p2,p1,FALSE);
@@ -518,15 +488,6 @@ void sendAlliance(UBYTE from, UBYTE to, UBYTE state,SDWORD value)
 
 	m.type = NET_ALLIANCE;
 	NETbcast(&m,TRUE);
-
-/*
-	// teamplay init others vis.
-	if(bMultiPlayer && state == ALLIANCE_FORMED && game.type == TEAMPLAY && (from == selectedPlayer || to== selectedPlayer))
-	{
-		giftRadar(from,to,FALSE);
-		giftRadar(to,from,FALSE);
-	}
-*/
 }
 
 BOOL recvAlliance(NETMSG *pMsg,BOOL allowAudio)

@@ -1663,7 +1663,7 @@ BOOL stageThreeInitialise(void)
 	setAllPauseStates(FALSE);
 
 	/* decide if we have to create teams */
-	if(game.alliance == ALLIANCES_TEAMS && (game.type == TEAMPLAY || game.type == SKIRMISH))
+	if(game.alliance == ALLIANCES_TEAMS && game.type == SKIRMISH)
 	{
 		createTeamAlliances();
 

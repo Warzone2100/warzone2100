@@ -619,7 +619,6 @@ BOOL multiTemplateSetup(void)
 //		}
 //		break;
 
-	case TEAMPLAY:
 	case CAMPAIGN:
 		for(player=0;player<game.maxPlayers;player++)
 		{
@@ -979,9 +978,7 @@ static BOOL campInit(void)
 	}
 
 	// optionally remove other computer players.
-	if(  ( (game.type == TEAMPLAY || game.type == CAMPAIGN) && !game.bComputerPlayers )
-	   ||  (game.type == SKIRMISH)
-	  )
+	if ((game.type == CAMPAIGN && !game.bComputerPlayers) || game.type == SKIRMISH)
 	{
 		for(player=game.maxPlayers;player<MAX_PLAYERS;player++)
 		{

@@ -212,7 +212,7 @@ static BOOL enumerateMultiMaps(char *found, UDWORD *players,BOOL first, UBYTE ca
 				return TRUE;
 			}
 		}
-		else	//  campaign, teamplay
+		else	//  campaign
 		{
 // 'service pack 1'
 			if(lev->type == MULTI_CAMPAIGN2)
@@ -1366,8 +1366,7 @@ static BOOL intCheckAllianceValid( UBYTE player1, UBYTE player2 )
 {
 	UBYTE	i, iAlliances, iHumanPlayers;
 
-	/* only interested in teamplay */
-	if ( bMultiPlayer && game.type != TEAMPLAY )
+	if ( bMultiPlayer )
 	{
 		return TRUE;
 	}
@@ -1449,10 +1448,7 @@ void intProcessMultiMenu(UDWORD id)
 			break;
 
 		case ALLIANCE_FORMED:
-			if(game.type != TEAMPLAY)									// cant break state in teamplay..
-			{
-				breakAlliance((UBYTE)selectedPlayer,i,TRUE,TRUE);		// break an alliance
-			}
+			breakAlliance((UBYTE)selectedPlayer,i,TRUE,TRUE);		// break an alliance
 			break;
 		default:
 			break;

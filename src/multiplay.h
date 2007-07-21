@@ -173,7 +173,7 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 
 //#define DMATCH					11			// to easily distinguish game types when joining.
 #define CAMPAIGN				12
-#define TEAMPLAY				13
+//#define TEAMPLAY				13
 
 #define	SKIRMISH				14
 #define MULTI_SKIRMISH2			18

@@ -249,7 +249,7 @@ void loadMapPreview(void);
 
 //#define MULTIOP_ARENA			10260
 #define MULTIOP_CAMPAIGN		10261
-#define MULTIOP_TEAMPLAY		10262
+//#define MULTIOP_TEAMPLAY		10262
 #define MULTIOP_SKIRMISH		10263
 
 

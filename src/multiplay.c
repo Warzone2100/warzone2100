@@ -800,9 +800,7 @@ BOOL SendResearch(UBYTE player,UDWORD index)
 	m.size =5;
 	m.type = NET_RESEARCH;
 
-	// teamplay games share research....
-
-	if(game.type == TEAMPLAY || game.type == SKIRMISH)
+	if (game.type == SKIRMISH)
 	{
 		pPlayerRes = asPlayerResList[player];
 		pPlayerRes += index;
@@ -847,8 +845,7 @@ static BOOL recvResearch(NETMSG *m)
 		usePower(player, pResearch->researchPower);
 	}
 
-	// teamplay games share research....
-	if(game.type == TEAMPLAY || game.type == SKIRMISH)
+	if (game.type == SKIRMISH)
 	{
 		for(i=0;i<MAX_PLAYERS;i++)
 		{

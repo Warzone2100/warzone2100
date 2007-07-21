@@ -768,11 +768,10 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
    		for(psDroid = apsDroidLists[clan]; psDroid != NULL;
    			psDroid = psDroid->psNext)
    		{
-			if(psDroid->visible[selectedPlayer]
-				|| godMode
-				|| (bMultiPlayer && (game.type == TEAMPLAY || game.alliance == ALLIANCES_TEAMS)
-				&& aiCheckAlliances(selectedPlayer,psDroid->player))
-				)
+			if (psDroid->visible[selectedPlayer]
+			    || godMode
+			    || (bMultiPlayer && game.alliance == ALLIANCES_TEAMS
+			        && aiCheckAlliances(selectedPlayer,psDroid->player)))
 			{
    				x=(psDroid->x/TILE_UNITS)-RadarScrollX;
    				y=(psDroid->y/TILE_UNITS)-RadarScrollY;
@@ -848,11 +847,10 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
    		for(psStruct = apsStructLists[clan]; psStruct != NULL;
    			psStruct = psStruct->psNext)
    		{
-			if(psStruct->visible[selectedPlayer]
-				|| godMode
-				|| (bMultiPlayer && (game.type == TEAMPLAY || game.alliance == ALLIANCES_TEAMS)
-				&& aiCheckAlliances(selectedPlayer,psStruct->player))
-				)
+			if (psStruct->visible[selectedPlayer]
+			    || godMode
+			    || (bMultiPlayer && game.alliance == ALLIANCES_TEAMS
+			        && aiCheckAlliances(selectedPlayer,psStruct->player)))
 			{
    				x=(psStruct->x/TILE_UNITS)-RadarScrollX;
    				y=(psStruct->y/TILE_UNITS)-RadarScrollY;
