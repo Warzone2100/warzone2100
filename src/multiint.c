@@ -2339,12 +2339,14 @@ static void processMultiopWidgets(UDWORD id)
 		UDWORD newValue, oldValue;
 
 		if(		(id-MULTIOP_SKSLIDE == game.maxPlayers-1)
-			//&& 	(game.skDiff[id-MULTIOP_SKSLIDE] == 0)
 			&& (widgGetSliderPos(psWScreen,id) == 0)
 			)
 		{
-			game.skDiff[id-MULTIOP_SKSLIDE] = 1;
-			widgSetSliderPos(psWScreen,id,1);
+			if((NetPlay.bComms == 0) || (NetPlay.playercount == 1))	//allow to disable all AIs in an mp game
+			{
+				game.skDiff[id-MULTIOP_SKSLIDE] = 1;
+				widgSetSliderPos(psWScreen,id,1);
+			}
 		}
 
 		newValue = widgGetSliderPos(psWScreen,id);
