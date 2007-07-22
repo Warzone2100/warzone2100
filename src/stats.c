@@ -44,7 +44,6 @@
 /* The stores for the different stats */
 BODY_STATS			*asBodyStats;
 BRAIN_STATS			*asBrainStats;
-//POWER_STATS			*asPowerStats;
 PROPULSION_STATS	*asPropulsionStats;
 SENSOR_STATS		*asSensorStats;
 ECM_STATS			*asECMStats;
@@ -291,7 +290,6 @@ BOOL statsShutDown(void)
 	//STATS_DEALLOC(asBodyStats, numBodyStats, BODY_STATS);
 	deallocBodyStats();
 	STATS_DEALLOC(asBrainStats, numBrainStats, BRAIN_STATS);
-	//STATS_DEALLOC(asPowerStats, numPowerStats, POWER_STATS);
 	STATS_DEALLOC(asPropulsionStats, numPropulsionStats, PROPULSION_STATS);
 	STATS_DEALLOC(asSensorStats, numSensorStats, SENSOR_STATS);
 	STATS_DEALLOC(asECMStats, numECMStats, ECM_STATS);
@@ -354,11 +352,6 @@ BOOL statsAllocBrain(UDWORD	numStats)
 {
 	ALLOC_STATS(numStats, asBrainStats, numBrainStats, BRAIN_STATS);
 }
-/* Allocate Power Stats */
-/*BOOL statsAllocPower(UDWORD	numStats)
-{
-	ALLOC_STATS(numStats, asPowerStats, numPowerStats, POWER_STATS);
-}*/
 /* Allocate Propulsion Stats */
 BOOL statsAllocPropulsion(UDWORD	numStats)
 {
@@ -2369,11 +2362,6 @@ void statsSetBrain(BRAIN_STATS	*psStats, UDWORD index)
 	SET_STATS(psStats, asBrainStats, index, BRAIN_STATS, REF_BRAIN_START);
 }
 /* Set the stats for a particular power type */
-/*void statsSetPower(POWER_STATS	*psStats, UDWORD index)
-{
-	SET_STATS(psStats, asPowerStats, index, POWER_STATS, REF_POWER_START);
-}*/
-/* Set the stats for a particular power type */
 void statsSetPropulsion(PROPULSION_STATS	*psStats, UDWORD index)
 {
 	SET_STATS(psStats, asPropulsionStats, index, PROPULSION_STATS,
@@ -2469,22 +2457,6 @@ BRAIN_STATS *statsGetBrain(UDWORD ref)
 	ASSERT( FALSE, "statsGetBrain: Reference number not found in list: %x", ref );
 	return NULL;	// should never get here, but this stops the compiler complaining.
 }
-
-/*POWER_STATS *statsGetPower(UDWORD ref)
-{
-	UDWORD index;
-	ASSERT( (ref >= REF_POWER_START) && (ref < REF_POWER_START + REF_RANGE),
-		"statsGetPower: Invalid reference number: %x", ref );
-
-	for (index = 0; index < numPowerStats; index++)
-	{
-		if (asPowerStats[index].ref == ref)
-		{
-			return &asPowerStats[index];
-		}
-	}
-	ASSERT( FALSE, "statsGetPower: Reference number not found in list: %x", ref );
-}*/
 
 PROPULSION_STATS *statsGetPropulsion(UDWORD ref)
 {

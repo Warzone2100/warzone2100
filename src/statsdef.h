@@ -239,16 +239,6 @@ typedef struct _brain_stats
 	struct _weapon_stats	*psWeaponStat;	//weapon stats associated with this brain - for Command Droids
 } BRAIN_STATS;
 
-#if(0)
-typedef struct _power_stats
-{
-	// Common stats
-	COMPONENT_STATS;
-
-	UDWORD		output;				// Power output from the power plant
-} POWER_STATS;
-#endif
-
 //defines the left and right sides for propulsion IMDs
 typedef enum _prop_side
 {

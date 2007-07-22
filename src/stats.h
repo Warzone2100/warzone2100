@@ -35,7 +35,6 @@
 /* The stores for the different stats */
 extern BODY_STATS			*asBodyStats;
 extern BRAIN_STATS			*asBrainStats;
-//extern POWER_STATS			*asPowerStats;
 extern PROPULSION_STATS		*asPropulsionStats;
 extern SENSOR_STATS			*asSensorStats;
 extern ECM_STATS			*asECMStats;
@@ -220,9 +219,6 @@ extern void statsSetBody(BODY_STATS	*psStats, UDWORD index);
 /*Set the stats for a particular brain type*/
 extern void statsSetBrain(BRAIN_STATS	*psStats, UDWORD index);
 
-/*Set the stats for a particular power type*/
-//extern void statsSetPower(POWER_STATS	*psStats, UDWORD index);
-
 /*Set the stats for a particular propulsion type*/
 extern void statsSetPropulsion(PROPULSION_STATS	*psStats, UDWORD index);
 
@@ -245,7 +241,6 @@ extern WEAPON_STATS *statsGetWeapon(UDWORD ref);
 //extern ARMOUR_STATS *statsGetArmour(UDWORD ref);
 extern BODY_STATS *statsGetBody(UDWORD ref);
 extern BRAIN_STATS *statsGetBrain(UDWORD ref);
-//extern POWER_STATS *statsGetPower(UDWORD ref);
 extern PROPULSION_STATS *statsGetPropulsion(UDWORD ref);
 extern SENSOR_STATS *statsGetSensor(UDWORD ref);
 extern ECM_STATS *statsGetECM(UDWORD ref);
