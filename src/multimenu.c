@@ -807,8 +807,11 @@ void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD
 				{
 					if(player != selectedPlayer &&  !giftsUp[player] )
 					{
-						widgReveal(psWScreen,MULTIMENU_GIFT_RAD+ player);
-						widgReveal(psWScreen,MULTIMENU_GIFT_RES+ player);
+						if (game.alliance != ALLIANCES_TEAMS)
+						{
+							widgReveal(psWScreen,MULTIMENU_GIFT_RAD+ player);
+							widgReveal(psWScreen,MULTIMENU_GIFT_RES+ player);
+						}
 						widgReveal(psWScreen,MULTIMENU_GIFT_DRO+ player);
 						widgReveal(psWScreen,MULTIMENU_GIFT_POW+ player);
 						giftsUp[player] = TRUE;
@@ -818,8 +821,11 @@ void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD
 				{
 					if(player != selectedPlayer && giftsUp[player])
 					{
-						widgHide(psWScreen,MULTIMENU_GIFT_RAD+ player);
-						widgHide(psWScreen,MULTIMENU_GIFT_RES+ player);
+						if (game.alliance != ALLIANCES_TEAMS)
+						{
+							widgHide(psWScreen,MULTIMENU_GIFT_RAD+ player);
+							widgHide(psWScreen,MULTIMENU_GIFT_RES+ player);
+						}
 						widgHide(psWScreen,MULTIMENU_GIFT_DRO+ player);
 						widgHide(psWScreen,MULTIMENU_GIFT_POW+ player);
 						giftsUp[player] = FALSE;
@@ -1065,13 +1071,17 @@ void addMultiPlayer(UDWORD player,UDWORD pos)
 
 		//can't break alliances in 'Locked Teams' mode
 		if(game.alliance != ALLIANCES_TEAMS)
+		{
 			widgAddButton(psWScreen, &sButInit);
+		}
 
 		sButInit.pDisplay = intDisplayImageHilight;
 
 			// add the gift buttons.
 			sButInit.y		+= 1;	// move down a wee bit.
 
+		if (game.alliance != ALLIANCES_TEAMS)
+		{
 			sButInit.id		= MULTIMENU_GIFT_RAD+ player;
 			sButInit.x		= MULTIMENU_C4;
 			sButInit.pTip	= _("Give Visibility Report");
@@ -1083,6 +1093,7 @@ void addMultiPlayer(UDWORD player,UDWORD pos)
 			sButInit.pTip	= _("Leak Technology Documents");
 			sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_MULTI_TEK_HI , IMAGE_MULTI_TEK);
 			widgAddButton(psWScreen, &sButInit);
+		}
 
 			sButInit.id		= MULTIMENU_GIFT_DRO + player;
 			sButInit.x		= MULTIMENU_C6;
