@@ -786,7 +786,7 @@ static BOOL campInit(void)
 	// optionally remove other computer players.
 	// HACK: if actual number of players is 8, then drop baba player to avoid
 	// exceeding player number (babas need a player, too!) - Per
-	if ((game.type == CAMPAIGN && game.maxPlayers < 8) || game.type == SKIRMISH)
+	if ((game.type == CAMPAIGN && game.maxPlayers > 7) || game.type == SKIRMISH)
 	{
 		for(player=game.maxPlayers;player<MAX_PLAYERS;player++)
 		{

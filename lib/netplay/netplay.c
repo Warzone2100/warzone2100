@@ -40,6 +40,8 @@
 #include "netplay.h"
 #include "netlog.h"
 
+// HACK
+#include "../../src/deliverance.h"
 
 // WARNING !!! This is initialised via configuration.c !!!
 char masterserver_name[255] = {'\0'};
@@ -1461,10 +1463,16 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 			unsigned int* message_dpid = (unsigned int*)(message.body);
 
 			NetPlay.dpidPlayer = *message_dpid;
-//printf("I'm player %i\n", NetPlay.dpidPlayer);
+			debug(LOG_NET, "I'm player %u", NetPlay.dpidPlayer);
 			NetPlay.bHost = FALSE;
 			NetPlay.bSpectator = FALSE;
 
+			if (NetPlay.dpidPlayer >= MAX_PLAYERS)
+			{
+				debug(LOG_ERROR, "Bad player number (%u) received from host!",
+				      NetPlay.dpidPlayer);
+				return FALSE;
+			}
 			players[NetPlay.dpidPlayer].allocated = TRUE;
 			players[NetPlay.dpidPlayer].id = NetPlay.dpidPlayer;
 			strcpy(players[NetPlay.dpidPlayer].name, playername);
