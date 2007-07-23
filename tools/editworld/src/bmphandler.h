@@ -22,26 +22,54 @@
 #define	__BMPHANDLER_INCLUDED__
 
 class BMPHandler {
-public:
-	BMPHandler(void);
-	~BMPHandler(void);
-	BOOL ReadBMP(char *FilePath,BOOL Flip=FALSE);
-	BOOL Create(int Width,int Height,void *Bits,PALETTEENTRY *Palette,int BPP=8,BOOL Is555 = FALSE);
-	void Clear(void);
-	void DeleteDC(void *hdc);
-	void *CreateDC(void *hWnd);
-	BOOL WriteBMP(char *FilePath,BOOL Flip=FALSE);
-	LONG GetBitmapWidth(void) { return(m_BitmapInfo->bmiHeader.biWidth); }
-	LONG GetBitmapHeight(void) { return(abs(m_BitmapInfo->bmiHeader.biHeight)); }
-	WORD GetBitmapBitCount(void) { return(m_BitmapInfo->bmiHeader.biBitCount); }
-	void *GetBitmapBits(void) { return(m_DIBBits); }
-	HBITMAP GetBitmap(void) { return(m_DIBBitmap); }
-	PALETTEENTRY *GetBitmapPaletteEntries(void) { return(m_Palette); }
-protected:
-	BITMAPINFO* m_BitmapInfo;
-	HBITMAP	m_DIBBitmap;
-	void *m_DIBBits;
- 	PALETTEENTRY *m_Palette;
+	public:
+		BMPHandler();
+		~BMPHandler();
+
+		bool ReadBMP(char* FilePath, bool Flip = false);
+		bool Create(unsigned int Width, unsigned int Height, void* Bits, PALETTEENTRY* Palette, unsigned int BPP = 8, bool Is555 = false);
+		void Clear();
+
+		void DeleteDC(void* hdc);
+		void* CreateDC(void* hWnd);
+
+		bool WriteBMP(char* FilePath, bool Flip = false);
+		
+		LONG GetBitmapWidth()
+		{
+			return _BitmapInfo->bmiHeader.biWidth;
+		}
+		
+		unsigned int GetBitmapHeight()
+		{
+			return abs(_BitmapInfo->bmiHeader.biHeight);
+		}
+
+		WORD GetBitmapBitCount()
+		{
+			return _BitmapInfo->bmiHeader.biBitCount;
+		}
+
+		void* GetBitmapBits()
+		{
+			return _DIBBits;
+		}
+
+		HBITMAP GetBitmap()
+		{
+			return _DIBBitmap;
+		}
+
+		PALETTEENTRY* GetBitmapPaletteEntries()
+		{
+			return _Palette;
+		}
+
+	protected:
+		BITMAPINFO*   _BitmapInfo;
+		HBITMAP       _DIBBitmap;
+		void*         _DIBBits;
+ 		PALETTEENTRY* _Palette;
 };
 
-#endif
+#endif // __BMPHANDLER_INCLUDED__
