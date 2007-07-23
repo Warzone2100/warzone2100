@@ -1671,12 +1671,13 @@ void	kf_SelectNextCyborgFactory(void)
 
 void	kf_KillEnemy( void )
 {
-UDWORD	player;
-DROID	*psCDroid,*psNDroid;
-//STRUCTURE	*psCStruct, *psNStruct;
+	UDWORD		player;
+	DROID		*psCDroid,*psNDroid;
+	STRUCTURE	*psCStruct, *psNStruct;
 
+	CONPRINTF(ConsoleString, (ConsoleString, _("Enemy destroyed by cheating!")));
 
-	for(player = 0; player<MAX_PLAYERS && !bMultiPlayer; player++)
+	for (player = 0; player < MAX_PLAYERS; player++)
 	{
 		if(player!=selectedPlayer)
 		{
@@ -1687,11 +1688,11 @@ DROID	*psCDroid,*psNDroid;
 				destroyDroid(psCDroid);
 			}
 			// wipe out all their structures
-		  //	for(psCStruct=apsStructLists[player]; psCStruct; psCStruct=psNStruct)
-		  //	{
-		  //		psNStruct = psCStruct->psNext;
-		  //		destroyStruct(psCStruct);
-		  //	}
+		  	for(psCStruct=apsStructLists[player]; psCStruct; psCStruct=psNStruct)
+		  	{
+		  		psNStruct = psCStruct->psNext;
+		  		destroyStruct(psCStruct);
+		  	}
 		}
 	}
 }
@@ -1701,15 +1702,6 @@ void kf_KillSelected(void)
 {
 	DROID		*psCDroid, *psNDroid;
 	STRUCTURE	*psCStruct, *psNStruct;
-
-
-#ifndef DEBUG
-if(bMultiPlayer)
-{
-	return;
-}
-#endif
-
 
 	for(psCDroid=apsDroidLists[selectedPlayer]; psCDroid; psCDroid=psNDroid)
 	{
