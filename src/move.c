@@ -2409,11 +2409,6 @@ static void moveUpdateDroidPos( DROID *psDroid, float dx, float dy )
 {
 	SDWORD	iX = 0, iY = 0;
 
-	ASSERT( psDroid->x < (mapWidth << TILE_SHIFT),
-		"moveUpdateDroidPos: droid is already off the map in the x direction" );
-	ASSERT( psDroid->y < (mapHeight<< TILE_SHIFT),
-		"moveUpdateDroidPos: droid is already off the map in the y direction" );
-
 	if (psDroid->sMove.Status == MOVEPAUSE)
 	{
 		// don't actually move if the move is paused
@@ -2460,11 +2455,6 @@ static void moveUpdateDroidPos( DROID *psDroid, float dx, float dy )
 			psDroid->y = 1;
 		}
 	}
-
-	ASSERT( psDroid->x < (mapWidth << TILE_SHIFT),
-		"moveUpdateDroidPos: droid just moved off the map in the x direction" );
-	ASSERT( psDroid->y < (mapHeight<< TILE_SHIFT),
-		"moveUpdateDroidPos: droid just moved off the map in the y direction" );
 }
 
 /* Update a tracked droids position and speed given target values */
