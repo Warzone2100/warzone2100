@@ -72,6 +72,15 @@ extern BOOL MultiPlayerLeave(UDWORD dpid); /* from src/multijoin.c ! */
 NETPLAY	NetPlay;
 static GAMESTRUCT game;
 
+typedef struct {
+	unsigned int	size;
+	void*		data;
+	unsigned int	buffer_size;
+} NET_PLAYER_DATA;
+
+static NET_PLAYER_DATA	local_player_data[MAX_CONNECTED_PLAYERS] = { { 0, NULL, 0 } };
+static NET_PLAYER_DATA	global_player_data[MAX_CONNECTED_PLAYERS] = { { 0, NULL, 0 } };
+
 // *********** Socket with buffer that read NETMSGs ******************
 
 typedef struct {
@@ -140,6 +149,10 @@ static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SDLNet_SocketSet socket_set)
 	return FALSE;
 }
 
+// Check if we have a full message waiting for us. If not, return FALSE and wait for more data.
+// We are assuming that the data resides in a ring buffer, so if we do not find any data on the
+// first attempt, copy around any data residing before the current ring buffer pointer head
+// so that we can read that on the next call.
 static BOOL NET_recvMessage(NETBUFSOCKET* bs, NETMSG* pMsg)
 {
 	unsigned int size;
@@ -167,16 +180,17 @@ static BOOL NET_recvMessage(NETBUFSOCKET* bs, NETMSG* pMsg)
 	return TRUE;
 
 error:
-	if (bs->buffer_start != 0) {
+	if (bs->buffer_start != 0) 
+	{
 		static char* tmp_buffer = NULL;
 		char* buffer_start = bs->buffer + bs->buffer_start;
 		char* tmp;
 
-		//printf("Moving data in buffer\n");
+		// Moving data in buffer
 
 		// Create tmp buffer if necessary
-		if (tmp_buffer == NULL) {
-			//printf("Creating tmp buffer\n");
+		if (tmp_buffer == NULL) 
+		{
 			tmp_buffer = (char*)malloc(NET_BUFFER_SIZE);
 		}
 
@@ -255,8 +269,10 @@ static unsigned int NET_CreatePlayer(const char* name, unsigned int flags)
 {
 	unsigned int i;
 
-	for (i = 1; i < MAX_CONNECTED_PLAYERS; ++i) {
-		if (players[i].allocated == FALSE) {
+	for (i = 1; i < MAX_CONNECTED_PLAYERS; ++i) 
+	{
+		if (players[i].allocated == FALSE) 
+		{
 			players[i].allocated = TRUE;
 			strcpy(players[i].name, name);
 			players[i].flags = flags;
@@ -330,15 +346,6 @@ BOOL NETchangePlayerName(UDWORD dpid, char *newName)
 
 	return TRUE;
 }
-
-typedef struct {
-	unsigned int	size;
-	void*		data;
-	unsigned int	buffer_size;
-} NET_PLAYER_DATA;
-
-static NET_PLAYER_DATA	local_player_data[MAX_CONNECTED_PLAYERS] = { { 0, NULL, 0 } };
-static NET_PLAYER_DATA	global_player_data[MAX_CONNECTED_PLAYERS] = { { 0, NULL, 0 } };
 
 static void resize_local_player_data(unsigned int i, unsigned int size)
 {
@@ -806,8 +813,9 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 }
 
 // ////////////////////////////////////////////////////////////////////////
-// receive a message over the current connection
-
+// Receive a message over the current connection. We return TRUE if there
+// is a message for the higher level code to process, and FALSE otherwise.
+// We should not block here.
 BOOL NETrecv(NETMSG * pMsg)
 {
 	static unsigned int current = 0;
@@ -819,7 +827,8 @@ BOOL NETrecv(NETMSG * pMsg)
 		return FALSE;
 	}
 
-	if (is_server) {
+	if (is_server) 
+	{
 		NETallowJoining();
 	}
 
@@ -827,25 +836,40 @@ BOOL NETrecv(NETMSG * pMsg)
 receive_message:
 		received = FALSE;
 
-		if (is_server) {
-			if (connected_bsocket[current] == NULL) return FALSE;
+		if (is_server) 
+		{
+			if (connected_bsocket[current] == NULL)
+			{
+				return FALSE;
+			}
 
 			received = NET_recvMessage(connected_bsocket[current], pMsg);
 
-			if (received == FALSE) {
+			if (received == FALSE) 
+			{
 				unsigned int i = current + 1;
 
-				if (   socket_set == NULL
-				    || SDLNet_CheckSockets(socket_set, NET_READ_TIMEOUT) <= 0) {
+				if (socket_set == NULL
+				    || SDLNet_CheckSockets(socket_set, NET_READ_TIMEOUT) <= 0) 
+				{
 					return FALSE;
 				}
-				for (;;) {
-					if (connected_bsocket[i]->socket == NULL) {
-					} else if (NET_fillBuffer(connected_bsocket[i], socket_set)) {
+				for (;;) 
+				{
+					if (connected_bsocket[i]->socket == NULL) 
+					{
+						// do nothing
+					}
+					else if (NET_fillBuffer(connected_bsocket[i], socket_set)) 
+					{
+						// we received some data, add to buffer
 						received = NET_recvMessage(connected_bsocket[i], pMsg);
 						current = i;
 						break;
-					} else if (connected_bsocket[i]->socket == NULL) {
+					} 
+					else if (connected_bsocket[i]->socket == NULL) 
+					{
+						// check if we droped any players in the check above
 						unsigned int* message_dpid = (unsigned int*)(message.body);
 
 						game.desc.dwCurrentPlayers--;
@@ -858,56 +882,78 @@ receive_message:
 						NET_DestroyPlayer(i);
 						MultiPlayerLeave(i);
 					}
-					if (++i == MAX_CONNECTED_PLAYERS) {
+
+					if (++i == MAX_CONNECTED_PLAYERS) 
+					{
 						i = 0;
 					}
-					if (i == current+1) {
+
+					if (i == current+1) 
+					{
 						return FALSE;
 					}
 				}
 			}
 		} else {
-			if (bsocket == NULL) {
+			// we are a client
+			if (bsocket == NULL) 
+			{
 				return FALSE;
 			} else {
 				received = NET_recvMessage(bsocket, pMsg);
 
-				if (received == FALSE) {
+				if (received == FALSE) 
+				{
 					if (   socket_set != NULL
 					    && SDLNet_CheckSockets(socket_set, NET_READ_TIMEOUT) > 0
-					    && NET_fillBuffer(bsocket, socket_set)) {
+					    && NET_fillBuffer(bsocket, socket_set)) 
+					{
 						received = NET_recvMessage(bsocket, pMsg);
 					}
 				}
 			}
 		}
 
-		if (received == FALSE) {
+		if (received == FALSE) 
+		{
 			return FALSE;
-		} else {
+		}
+		else 
+		{
 			size =	  pMsg->size + sizeof(pMsg->size) + sizeof(pMsg->type)
 				+ sizeof(pMsg->destination);
-			if (is_server == FALSE) {
-			} else if (pMsg->destination == NET_ALL_PLAYERS) {
+			if (is_server == FALSE) 
+			{
+				// do nothing
+			} 
+			else if (pMsg->destination == NET_ALL_PLAYERS) 
+			{
 				unsigned int j;
 
-				for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j) {
+				// we are the host, and have received a broadcast packet; distribute it
+				for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j) 
+				{
 					if (   j != current
 					    && connected_bsocket[j] != NULL
-					    && connected_bsocket[j]->socket != NULL) {
+					    && connected_bsocket[j]->socket != NULL) 
+					{
 						SDLNet_TCP_Send(connected_bsocket[j]->socket,
 								pMsg, size);
 					}
 				}
-			} else if (pMsg->destination != NetPlay.dpidPlayer) {
+			} 
+			else if (pMsg->destination != NetPlay.dpidPlayer) 
+			{
+				// message was not meant for us; send it further
 				if (   pMsg->destination < MAX_CONNECTED_PLAYERS
 				    && connected_bsocket[pMsg->destination] != NULL
-				    && connected_bsocket[pMsg->destination]->socket != NULL) {
-					//printf("Reflecting message to UDWORD %i\n", pMsg->destination);
+				    && connected_bsocket[pMsg->destination]->socket != NULL) 
+				{
+					debug(LOG_NET, "Reflecting message type %hhu to UDWORD %hhu", pMsg->type, pMsg->destination);
 					SDLNet_TCP_Send(connected_bsocket[pMsg->destination]->socket,
 							pMsg, size);
 				} else {
-					//printf("Cannot reflect message %i to UDWORD %i\n", pMsg->type, pMsg->destination);
+					debug(LOG_NET, "Cannot reflect message type %hhu to %hhu\n", pMsg->type, pMsg->destination);
 				}
 
 				goto receive_message;
@@ -949,9 +995,7 @@ BOOL NETsetupTCPIP(void ** addr, char * machine)
 // ////////////////////////////////////////////////////////////////////////
 // File Transfer programs.
 // uses guaranteed messages to send files between clients.
-
 // send file. it returns % of file sent. when 100 it's complete. call until it returns 100.
-
 UBYTE NETsendFile(BOOL newFile, const char *fileName, UDWORD player)
 {
 	static PHYSFS_sint64	fileSize,currPos;
