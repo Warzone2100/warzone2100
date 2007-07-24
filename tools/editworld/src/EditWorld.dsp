@@ -374,7 +374,7 @@ SOURCE=.\macros.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\nainfrm.h
+SOURCE=.\mainfrm.h
 # End Source File
 # Begin Source File
 
