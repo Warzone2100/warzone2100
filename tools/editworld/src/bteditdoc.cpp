@@ -5470,7 +5470,7 @@ void CBTEditDoc::OnMapExportmapasbitmap()
 
 		// Create a big BMP to put the bitmap in.
 		BMPHandler *Bmp = new BMPHandler;
-		Bmp->Create(BigWidth,BigHeight,NULL,NULL,16,FALSE);
+		Bmp->Create(BigWidth, BigHeight, NULL, 16, FALSE);
 		// Create a device context for the BMP so we can blit into it.
 		HDC BmpHdc = (HDC)Bmp->CreateDC((void*)m_3DWnd);
 
