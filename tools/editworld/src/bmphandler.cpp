@@ -26,27 +26,43 @@
 
 #include <algorithm>
 
+// This definition is a variation of PALETTEENTRY which provides a copy operator (operator=)
+struct CopyAblePALETTEENTRY
+{
+	BYTE        peRed;
+	BYTE        peGreen;
+	BYTE        peBlue;
+	BYTE        peFlags;
+
+	CopyAblePALETTEENTRY& operator=(const PALETTEENTRY& rhs)
+	{
+		peRed   = rhs.peRed;
+		peGreen = rhs.peGreen;
+		peBlue  = rhs.peBlue;
+		peFlags = rhs.peFlags;
+
+		return *this;
+	}
+};
+
+extern char sa48_static_assert[!!(sizeof(CopyAblePALETTEENTRY) == sizeof(PALETTEENTRY)) * 2 - 1];
 
 BMPHandler::BMPHandler() :
 	_BitmapInfo(NULL),
 	_DIBBitmap(NULL),
-	_Palette(NULL),
 	_DIBBits(NULL)
 {
 }
-
 
 BMPHandler::~BMPHandler()
 {
 	DebugPrint("Deleted BMPHandler\n");
 
-	delete [] _Palette;
 	if(_DIBBitmap != NULL)
 		DeleteObject(_DIBBitmap);
 
 	delete [] _BitmapInfo;
 }
-
 
 bool BMPHandler::ReadBMP(char* FilePath, bool Flip)
 {
@@ -54,8 +70,7 @@ bool BMPHandler::ReadBMP(char* FilePath, bool Flip)
     if(fid == NULL)
 		return false;
 
-	delete [] _Palette;
-	_Palette = NULL;
+	_palette.clear();
 
 	if(_DIBBitmap != NULL)
 	{
@@ -110,18 +125,21 @@ bool BMPHandler::ReadBMP(char* FilePath, bool Flip)
 // If there's a palette then get it.
 	if(PaletteSize)
 	{
-		_Palette = new PALETTEENTRY[PaletteSize];
+		_palette.reserve(PaletteSize);
 
 		for (unsigned int i = 0; i < PaletteSize; ++i)
 		{
-			_Palette[i].peBlue  = (BYTE)getc(fid);
-			_Palette[i].peGreen = (BYTE)getc(fid);
-			_Palette[i].peRed   = (BYTE)getc(fid);
+			PALETTEENTRY newEntry;
+			newEntry.peBlue = static_cast<unsigned char>(getc(fid));
+			newEntry.peGreen = static_cast<unsigned char>(getc(fid));
+			newEntry.peRed   = static_cast<unsigned char>(getc(fid));
 			getc(fid);
-			_Palette[i].peFlags = 0;
+			newEntry.peFlags = 0;
+
+			_palette.push_back(newEntry);
 		}
 
-		memcpy(_BitmapInfo->bmiColors, _Palette, PaletteSize* sizeof(PALETTEENTRY));
+		std::copy(_palette.begin(), _palette.end(), reinterpret_cast<CopyAblePALETTEENTRY*>(&_BitmapInfo->bmiColors[0]));
 	}
 
 	_DIBBitmap = CreateDIBSection(NULL, _BitmapInfo, DIB_RGB_COLORS, &_DIBBits, NULL, 0);
@@ -156,27 +174,11 @@ bool BMPHandler::ReadBMP(char* FilePath, bool Flip)
 	return true;
 }
 
-
-bool BMPHandler::Create(unsigned int Width, unsigned int Height, void *Bits, PALETTEENTRY* Palette, unsigned int BPP, bool Is555)
+bool BMPHandler::Create(unsigned int Width, unsigned int Height, void *Bits, unsigned int BPP, bool Is555)
 {
 	const unsigned int Planes = 1;
-	unsigned int PaletteSize;
-
-	if(Palette)
-	{
-		PaletteSize = 1 << BPP;
-
-		_Palette = new PALETTEENTRY[PaletteSize];
-
-		for (unsigned int i=0; i < PaletteSize; ++i)
-		{
-			_Palette[i] = Palette[i];
-		}
-	}
-	else
-	{
-		PaletteSize = 3;
-	}
+	const unsigned int PaletteSize = 3;
+	_palette.clear();
 
 	delete [] _BitmapInfo;
 	_BitmapInfo = NULL;
@@ -208,33 +210,19 @@ bool BMPHandler::Create(unsigned int Width, unsigned int Height, void *Bits, PAL
 	_BitmapInfo->bmiHeader.biClrUsed=0;
 	_BitmapInfo->bmiHeader.biClrImportant=0;
 
-	if(Palette)
+	DWORD *PFormat = (DWORD*)_BitmapInfo->bmiColors;
+
+	if(Is555)
 	{
-		for(unsigned int i = 0; i < PaletteSize; ++i)
-		{
-			_BitmapInfo->bmiColors[i].rgbRed   = _Palette[i].peRed;
-			_BitmapInfo->bmiColors[i].rgbGreen = _Palette[i].peGreen;
-			_BitmapInfo->bmiColors[i].rgbBlue  = _Palette[i].peBlue;
-			_BitmapInfo->bmiColors[i].rgbReserved = 0;
-		}
+		PFormat[0] = 0x7c00;
+		PFormat[1] = 0x03e0;
+		PFormat[2] = 0x001f;
 	}
 	else
 	{
-
-		DWORD *PFormat = (DWORD*)_BitmapInfo->bmiColors;
-
-		if(Is555)
-		{
-			PFormat[0] = 0x7c00;
-			PFormat[1] = 0x03e0;
-			PFormat[2] = 0x001f;
-		}
-		else
-		{
-			PFormat[0] = 0xf800;
-			PFormat[1] = 0x07e0;
-			PFormat[2] = 0x001f;
-		}
+		PFormat[0] = 0xf800;
+		PFormat[1] = 0x07e0;
+		PFormat[2] = 0x001f;
 	}
 
 	_DIBBitmap = CreateDIBSection(NULL, _BitmapInfo, DIB_RGB_COLORS, &_DIBBits, NULL, 0);
@@ -294,7 +282,6 @@ bool BMPHandler::Create(unsigned int Width, unsigned int Height, void *Bits, PAL
 	return true;
 }
 
-
 void BMPHandler::Clear()
 {
 	int i,j,p;
@@ -326,7 +313,6 @@ void BMPHandler::Clear()
 	}
 }
 
-
 void *BMPHandler::CreateDC(void* hWnd)
 {
 	HDC BmpHdc;
@@ -348,8 +334,6 @@ void BMPHandler::DeleteDC(void *hdc)
 {
 	::DeleteDC((HDC)hdc);	
 }
-
-
 
 bool BMPHandler::WriteBMP(char *FilePath, bool Flip)
 {
@@ -414,11 +398,11 @@ bool BMPHandler::WriteBMP(char *FilePath, bool Flip)
 	// If there's a palette then put it.
 	if(PaletteSize)
 	{
-		for (unsigned int i = 0; i < PaletteSize; ++i)
+		for (std::vector<PALETTEENTRY>::const_iterator curPaletteEntry = _palette.begin(); curPaletteEntry != _palette.end(); ++curPaletteEntry)
 		{
-			putc(_Palette[i].peBlue, fid);
-			putc(_Palette[i].peGreen, fid);
-			putc(_Palette[i].peRed, fid);
+			putc(curPaletteEntry->peBlue, fid);
+			putc(curPaletteEntry->peGreen, fid);
+			putc(curPaletteEntry->peRed, fid);
 			putc(0, fid);
 		}
 	}
@@ -461,5 +445,3 @@ bool BMPHandler::WriteBMP(char *FilePath, bool Flip)
 
 	return true;
 }
-
-

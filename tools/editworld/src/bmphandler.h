@@ -21,13 +21,16 @@
 #ifndef __BMPHANDLER_INCLUDED__
 #define	__BMPHANDLER_INCLUDED__
 
-class BMPHandler {
+#include <vector>
+
+class BMPHandler
+{
 	public:
 		BMPHandler();
 		~BMPHandler();
 
 		bool ReadBMP(char* FilePath, bool Flip = false);
-		bool Create(unsigned int Width, unsigned int Height, void* Bits, PALETTEENTRY* Palette, unsigned int BPP = 8, bool Is555 = false);
+		bool Create(unsigned int Width, unsigned int Height, void* Bits, unsigned int BPP = 8, bool Is555 = false);
 		void Clear();
 
 		void DeleteDC(void* hdc);
@@ -35,7 +38,7 @@ class BMPHandler {
 
 		bool WriteBMP(char* FilePath, bool Flip = false);
 		
-		LONG GetBitmapWidth()
+		unsigned int GetBitmapWidth()
 		{
 			return _BitmapInfo->bmiHeader.biWidth;
 		}
@@ -45,31 +48,11 @@ class BMPHandler {
 			return abs(_BitmapInfo->bmiHeader.biHeight);
 		}
 
-		WORD GetBitmapBitCount()
-		{
-			return _BitmapInfo->bmiHeader.biBitCount;
-		}
-
-		void* GetBitmapBits()
-		{
-			return _DIBBits;
-		}
-
-		HBITMAP GetBitmap()
-		{
-			return _DIBBitmap;
-		}
-
-		PALETTEENTRY* GetBitmapPaletteEntries()
-		{
-			return _Palette;
-		}
-
-	protected:
+	private:
 		BITMAPINFO*   _BitmapInfo;
 		HBITMAP       _DIBBitmap;
 		void*         _DIBBits;
- 		PALETTEENTRY* _Palette;
+		std::vector<PALETTEENTRY> _palette;
 };
 
 #endif // __BMPHANDLER_INCLUDED__
