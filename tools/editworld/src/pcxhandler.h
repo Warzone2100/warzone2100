@@ -34,7 +34,8 @@ static inline bool IsPower2(int value)
 
 DWORD Power2(DWORD Value);
 
-struct PCXHeader {
+struct PCXHeader
+{
 	BYTE	Manufacturer;   // 1   Constant Flag  10 = ZSoft .PCX
 	BYTE	Version;        // 1   Version information:
 	                        // 0 = Version 2.5
@@ -62,27 +63,50 @@ struct PCXHeader {
 #define BMR_ROUNDUP	1
 
 class PCXHandler {
-public:
-	PCXHandler(void);
-	~PCXHandler(void);
-	BOOL Create(int Width,int Height,void *Bits,PALETTEENTRY *Palette);
-	BOOL ReadPCX(char *FilePath,DWORD Flags = 0);
-	BOOL WritePCX(char *FilePath);
-	LONG GetBitmapWidth(void) { return(m_BitmapInfo->bmiHeader.biWidth); }
-	LONG GetBitmapHeight(void) { return(abs(m_BitmapInfo->bmiHeader.biHeight)); }
-	WORD GetBitmapBitCount(void) { return(m_BitmapInfo->bmiHeader.biBitCount); }
-	void *GetBitmapBits(void) { return(m_DIBBits); }
-	HBITMAP GetBitmap(void) { return(m_DIBBitmap); }
-	PALETTEENTRY *GetBitmapPaletteEntries(void) { return(m_Palette); }
-protected:
-	PCXHeader	m_Header;
-	BITMAPINFO* m_BitmapInfo;
-	HBITMAP	m_DIBBitmap;
-	void *m_DIBBits;
- 	PALETTEENTRY *m_Palette;
-	WORD EncodedGet(WORD *pbyt, WORD *pcnt, FILE *fid);
-	WORD EncodeLine(UBYTE *inBuff, WORD inLen, FILE *fp);
-	WORD EncodedPut(UBYTE byt, UBYTE cnt, FILE *fid);
+	public:
+		PCXHandler();
+		~PCXHandler();
+
+		bool Create(int Width,int Height,void *Bits,PALETTEENTRY *Palette);
+		bool ReadPCX(const char *FilePath,DWORD Flags = 0);
+		bool WritePCX(char *FilePath);
+
+		inline unsigned int GetBitmapWidth()
+		{
+			return(_BitmapInfo->bmiHeader.biWidth);
+		}
+
+		inline unsigned int GetBitmapHeight()
+		{
+			return(abs(_BitmapInfo->bmiHeader.biHeight));
+		}
+
+		inline unsigned int GetBitmapBitCount()
+		{
+			return(_BitmapInfo->bmiHeader.biBitCount);
+		}
+
+		inline void* GetBitmapBits()
+		{
+			return(_DIBBits);
+		}
+
+		inline PALETTEENTRY* GetBitmapPaletteEntries()
+		{
+			return(_Palette);
+		}
+
+	private:
+		WORD EncodedGet(WORD *pbyt, WORD *pcnt, FILE *fid);
+		WORD EncodeLine(const char* inBuff, WORD inLen, FILE *fid);
+		WORD EncodedPut(UBYTE byt, UBYTE cnt, FILE *fid);
+
+	private:
+		PCXHeader     _Header;
+		BITMAPINFO*   _BitmapInfo;
+		HBITMAP       _DIBBitmap;
+		void*         _DIBBits;
+ 		PALETTEENTRY* _Palette;
 };
 
 #endif
