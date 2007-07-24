@@ -25,7 +25,13 @@
 #ifndef __PSXHANDLER_INCLUDED__
 #define	__PSXHANDLER_INCLUDED__
 
-BOOL IsPower2(DWORD Value);
+// Returns true if the given value is a power of two
+static inline bool IsPower2(int value)
+{
+	return value > 0
+	    && (value & (value - 1)) == 0;
+}
+
 DWORD Power2(DWORD Value);
 
 struct PCXHeader {

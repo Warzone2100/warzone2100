@@ -51,28 +51,6 @@ DWORD Power2(DWORD Value)
 	return 1<<(i+1);
 }
 
-// Return TRUE if the given value is a power of 2.
-//
-BOOL IsPower2(DWORD Value)
-{
-	int Bits = 0;
-
-	while(Value) {
-		if(Value & 1) {
-			Bits++;
-		}
-		Value = Value >> 1;
-	}
-
-	if(Bits != 1) {
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
-
-
 PCXHandler::PCXHandler(void)
 {
 	m_Palette=NULL;
