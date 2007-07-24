@@ -72,11 +72,6 @@ extern BOOL MultiPlayerLeave(UDWORD dpid); /* from src/multijoin.c ! */
 NETPLAY	NetPlay;
 static GAMESTRUCT game;
 
-static void NETsetMessageSize(NETMSG* pMsg, unsigned int size)
-{
-	pMsg->size = size;
-}
-
 // *********** Socket with buffer that read NETMSGs ******************
 
 typedef struct {
@@ -251,7 +246,7 @@ static void NET_InitPlayers(void)
 static void NETBroadcastPlayerInfo(int dpid)
 {
 	message.type = MSG_PLAYER_INFO;
-	NETsetMessageSize(&message, sizeof(NET_PLAYER));
+	message.size = sizeof(NET_PLAYER);
 	memcpy(message.body, &players[dpid], sizeof(NET_PLAYER));
 	NETbcast(&message, TRUE);
 }
@@ -415,7 +410,7 @@ BOOL NETsetGlobalPlayerData(UDWORD dpid, void *pData, SDWORD size)
 		unsigned int* p_dpid = (unsigned int*)(message.body);
 
 		message.type = MSG_PLAYER_DATA;
-		NETsetMessageSize(&message, sizeof(unsigned int)+size);
+		message.size = sizeof(unsigned int) + size;
 		*p_dpid = dpid;
 		memcpy(message.body+sizeof(unsigned int), pData, size);
 	}
@@ -455,7 +450,7 @@ BOOL NETsetGameFlags(UDWORD flag, SDWORD value)
 	}
 
 	message.type = MSG_GAME_FLAGS;
-	NETsetMessageSize(&message, sizeof(NetGameFlags));
+	message.size = sizeof(NetGameFlags);
 	memcpy(message.body, NetGameFlags, sizeof(NetGameFlags));
 	NETbcast(&message, TRUE);
 
@@ -856,7 +851,7 @@ receive_message:
 						game.desc.dwCurrentPlayers--;
 
 						message.type = MSG_PLAYER_LEFT;
-						NETsetMessageSize(&message, 4);
+						message.size = 4;
 						*message_dpid = i;
 						NETbcast(&message, TRUE);
 
@@ -1168,13 +1163,13 @@ static void NETallowJoining(void)
 					game.desc.dwCurrentPlayers++;
 
 					message.type = MSG_ACCEPTED;
-					NETsetMessageSize(&message, 4);
+					message.size = 4;
 					*message_dpid = dpid;
 					NETsend(&message, dpid, TRUE);
 
 					MultiPlayerJoin(dpid);
 					message.type = MSG_PLAYER_JOINED;
-					NETsetMessageSize(&message, 4);
+					message.size = 4;
 
 					// Send info about players to newcomer.
 					for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j) {
@@ -1436,7 +1431,7 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 	NET_initBufferedSocket(bsocket, tcp_socket);
 
 	message.type = MSG_JOIN;
-	NETsetMessageSize(&message, 64);
+	message.size = 64;
 	name = message.body;
 	strcpy(name, playername);
 	NETsend(&message, 1, TRUE);
