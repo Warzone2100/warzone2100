@@ -41,11 +41,12 @@
 #define MAP_MAXWIDTH	256
 #define MAP_MAXHEIGHT	256
 
-#define __GATEWAY_C_STUFF__
-#include "gateinterface.h"
 #include "debugprint.h"
 
 #include "gateway.hpp"
+
+#include "heightmap.h"
+#include "tiletypes.h"
 
 static inline list_remove(GATEWAY*& psHead, GATEWAY* psEntry)
 {
@@ -88,41 +89,38 @@ SDWORD		gwNumZones;
 char*  aNumEquiv;
 char** apEquivZones;
 
+
+CHeightMap* g_MapData;
+
 // link all the gateways together
-BOOL gwLinkGateways(void);
+BOOL gwLinkGateways();
 
 
 // Initialise the gateway system
-BOOL gwInitialise(void)
+bool gwInitialise()
 {
-	int i;
-
 	ASSERT((psGateways == NULL,
 		"gwInitialise: gatway list has not been reset"));
 
 	psGateways = NULL;
 
-	for(i=0; i<giGetNumGateways(); i++) {
-		SDWORD x0,y0,x1,y1;
+	for(unsigned int i = 0; i < g_MapData->GetNumGateways(); ++i)
+	{
+		int x0, y0, x1, y1;
 
-		if(!giGetGateway(i,&x0,&y0,&x1,&y1)) {
-			return FALSE;
-		}
-
-		if(!gwNewGateway(x0,y0,x1,y1)) {
-			return FALSE;
-		}
+		if (!g_MapData->GetGateway(i, &x0, &y0, &x1, &y1)
+		 || !gwNewGateway(x0,y0,x1,y1))
+			return false;
 	}
 
 	// need to handle FALSE.
-	if(!gwProcessMap()) {
-		return FALSE;
-	}
+	if(!gwProcessMap())
+		return false;
+
 //	if (!gwLinkGateways()) return FALSE;
 
-	return TRUE;
+	return true;
 }
-
 
 // Shutdown the gateway system
 void gwShutDown(void)
@@ -434,10 +432,12 @@ void gwFreeGateway(GATEWAY *psDel)
 		}
 	}
 
-	if(psDel->psLinks != NULL) {
+	if(psDel->psLinks != NULL)
+	{
 		FREE(psDel->psLinks);
 	}
-	FREE(psDel);
+
+	free(psDel);
 }
 
 
@@ -719,9 +719,7 @@ char* gwNewZoneLine(UDWORD Line,UDWORD Size)
 	ASSERT((Line < (UDWORD)gwMapHeight(),"gwNewZoneLine : Invalid line requested"));
 	ASSERT((apRLEZones != NULL,"gwNewZoneLine : NULL Zone map"));
 
-	if(apRLEZones[Line] != NULL) {
-		FREE(apRLEZones[Line]);
-	}
+	FREE(apRLEZones[Line]);
 
 	apRLEZones[Line] = reinterpret_cast<char*>(malloc(Size));
 	if (apRLEZones[Line] == NULL)
@@ -767,11 +765,13 @@ void gwFreeZoneMap(void)
 
 	if (apRLEZones)
 	{
-		for(i=0; i<gwMapHeight(); i++)
+		for(i = 0; i < gwMapHeight(); i++)
 		{
-			FREE(apRLEZones[i]);
+			free(apRLEZones[i]);
 		}
-		FREE(apRLEZones);
+
+		free(apRLEZones);
+		apRLEZones = NULL;
 	}
 }
 
@@ -849,10 +849,12 @@ void gwFreeEquivTable(void)
 		{
 			if (apEquivZones[i])
 			{
-				FREE(apEquivZones[i]);
+				free(apEquivZones[i]);
 			}
 		}
-		FREE(apEquivZones);
+
+		free(apEquivZones);
+		apEquivZones = NULL;
 	}
 }
 
@@ -892,29 +894,118 @@ BOOL gwSetZoneEquiv(SDWORD zone, SDWORD numEquiv, UBYTE *pEquiv)
 // get the size of the map
 SDWORD gwMapWidth(void)
 {
-	return giGetMapWidth();
+	return g_MapData->GetMapWidth();
 }
 
 SDWORD gwMapHeight(void)
 {
-	return giGetMapHeight();
+	return g_MapData->GetMapHeight();
 }
 
 
 // set the gateway flag on a tile
 void gwSetGatewayFlag(SDWORD x, SDWORD y)
 {
-	giSetGatewayFlag(x,y,TRUE);
+	g_MapData->SetTileGateway(x, y, TRUE);
 }
 
 // clear the gateway flag on a tile
 void gwClearGatewayFlag(SDWORD x, SDWORD y)
 {
-	giSetGatewayFlag(x,y,FALSE);
+	g_MapData->SetTileGateway(x, y, FALSE);
 }
 
 // check whether a gateway is on water
 BOOL gwTileIsWater(UDWORD x, UDWORD y)
 {
-	return giIsWater(x, y);
+	return g_MapData->GetTileType(x, y) == TF_TYPEWATER;
+}
+
+
+// previous interface functions
+bool giWriteZones(FILE *Stream)
+{
+	ZoneMapHeader Header;
+
+	Header.version = 2;
+	Header.numStrips = g_MapData->GetMapHeight();
+	Header.numZones = gwNumZones;
+
+	fwrite(&Header,sizeof(Header),1,Stream);
+
+	if(apRLEZones) {
+		UWORD Size = 0;
+		for(DWORD y=0; y < g_MapData->GetMapHeight(); y++) {
+			char* pCode = apRLEZones[y];
+			UWORD pos = 0, x =0;
+
+			while (x < g_MapData->GetMapWidth())
+			{
+				x += pCode[pos];
+				pos += 2;
+			}
+
+			Size += pos;
+
+			fwrite(&pos, sizeof(pos), 1, Stream);		// Size of this strip.
+			fwrite(apRLEZones[y], pos, 1, Stream);		// The strip.
+		}
+
+		DebugPrint("Total zone map size %d\n",Size);
+
+		Size = 0;
+		for(unsigned int i = 0; i < gwNumZones; ++i)
+		{
+			Size += aNumEquiv[i] + sizeof(char);
+
+			fwrite(&aNumEquiv[i], sizeof(char), 1, Stream);
+			fwrite(apEquivZones[i], aNumEquiv[i], 1, Stream);
+		}
+
+		DebugPrint("Total equivalence tables size %d\n",Size);
+
+		return true;
+	}
+
+	return false;
+}
+
+bool giCreateZones()
+{
+	giClearGatewayFlags();
+
+	// Check for and act on returning false;
+	return gwInitialise();
+}
+
+void giDeleteZones()
+{
+	gwShutDown();
+}
+
+void giUpdateMapZoneIDs()
+{
+	for (unsigned int z = 0; z < g_MapData->GetMapHeight(); ++z)
+	{
+		for (unsigned int x = 0; x < g_MapData->GetMapWidth(); ++x)
+		{
+			g_MapData->SetMapZoneID(x, z, gwGetZone(x, z));
+		}
+	}
+}
+
+void giClearGatewayFlags()
+{
+	for (unsigned int z = 0; z < g_MapData->GetMapHeight(); ++z)
+	{
+		for (unsigned int x = 0; x < g_MapData->GetMapWidth(); ++x)
+		{
+			g_MapData->SetTileGateway(x, z, false);
+		}
+	}
+}
+
+void giSetMapData(CHeightMap *MapData)
+{
+	g_MapData = MapData;
 }

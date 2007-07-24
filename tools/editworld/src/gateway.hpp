@@ -29,4 +29,24 @@ extern "C" {
 #include "gateway.h"
 }
 
+#include <stdio.h>
+
+// Forward declaration for pointer
+class CHeightMap;
+void giSetMapData(CHeightMap *MapData);
+
+struct ZoneMapHeader
+{
+	UWORD version;
+	UWORD numStrips;
+	UWORD numZones;
+	UWORD pad;
+};
+
+bool giCreateZones();
+void giDeleteZones();
+void giUpdateMapZoneIDs();
+void giClearGatewayFlags();
+bool giWriteZones(FILE* Stream);
+
 #endif // __INCLUDE_GATEWAY_HPP__

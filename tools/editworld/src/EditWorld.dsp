@@ -154,10 +154,6 @@ SOURCE=.\fileparse.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\gateinterface.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\gateway.cpp
 # End Source File
 # Begin Source File
@@ -323,10 +319,6 @@ SOURCE=.\exportinfo.h
 # Begin Source File
 
 SOURCE=.\fileparse.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\gateinterface.h
 # End Source File
 # Begin Source File
 

@@ -43,7 +43,7 @@
 #include "expandlimitsdlg.h"
 #include "exportinfo.h"
 #include "playermap.h"
-#include "gateinterface.h"
+#include "gateway.hpp"
 #include "pasteprefs.h"
 
 #include <string>

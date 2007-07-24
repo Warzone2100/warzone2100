@@ -39,7 +39,7 @@
 
 #include "assert.h"
 #include "undoredo.h"
-#include "gateinterface.h"
+#include "gateway.hpp"
 
 #include <fstream>
 #include <string>

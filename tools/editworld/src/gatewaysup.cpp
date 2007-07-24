@@ -44,31 +44,22 @@
 #define FREE(a) free(a); a = NULL;
 
 #include "typedefs.h"
+#include "tiletypes.h"
 
 #define MAP_MAXWIDTH	256
 #define MAP_MAXHEIGHT	256
 
-#define __GATEWAY_C_STUFF__
-#include "gateinterface.h"
 #include "debugprint.h"
 
 #include "assert.h"
 #include "gateway.hpp"
 
+#include "heightmap.h"
+
+extern CHeightMap* g_MapData;
+
 // Structures and defines for SeedFill().
 typedef int Pixel;		/* 1-channel frame buffer assumed */
-
-struct FRect {			/* window: a discrete 2-D rectangle */
-    int x0, y0;			/* xmin and ymin */
-    int x1, y1;			/* xmax and ymax (inclusive) */
-};
-
-struct Segment {
-	int y;			//                                                        
-	int xl;			// Filled horizontal segment of scanline y for xl<=x<=xr. 
-	int xr;			// Parent segment was on line y-dy.  dy=1 or -1           
-	int dy;			//
-};
 
 #define MAX 10000		/* max depth of stack */
 
@@ -86,7 +77,7 @@ struct Segment {
 BOOL bGwWaterFlood = FALSE;;
 
 // check for a blocking tile for the flood fill
-BOOL gwFloodBlock(SDWORD x, SDWORD y);
+bool gwFloodBlock(SDWORD x, SDWORD y);
 
 // generate the zone equivalence tables
 BOOL gwGenerateZoneEquiv(SDWORD numZones);
@@ -617,7 +608,7 @@ void gwSetZone(SDWORD x, SDWORD y, SDWORD zone)
 /******************************************************************************************************/
 /*                   Gateway data access functions                                                    */
 
-BOOL gwFloodBlock(SDWORD x, SDWORD y)
+bool gwFloodBlock(SDWORD x, SDWORD y)
 {
 //	MAPTILE		*psTile;
 //	SDWORD		type;
@@ -635,10 +626,13 @@ BOOL gwFloodBlock(SDWORD x, SDWORD y)
 
 //	return (type == TER_CLIFFFACE) || (type == TER_WATER) || gateway;
 
-	return giIsGateway(x,y) ||
-		   ( !bGwWaterFlood && (giIsClifface(x,y) || giIsWater(x,y))) ||
-		   ( bGwWaterFlood && !giIsWater(x,y) );
-//	return giIsClifface(x,y) || giIsWater(x,y) || giIsGateway(x,y);
+	return g_MapData->GetTileGateway(x, y)
+	    || (!bGwWaterFlood
+	     && (g_MapData->GetTileType(x, y) == TF_TYPECLIFFFACE
+	      || g_MapData->GetTileType(x, y) == TF_TYPEWATER))
+	    || (bGwWaterFlood
+	     && g_MapData->GetTileType(x, y) != TF_TYPEWATER);
+//	return g_MapData->GetTileType(x, y) == TF_TYPECLIFFFACE || g_MapData->GetTileType(x, y) == TF_TYPEWATER || g_MapData->GetTileGateway(x, y);
 }
 
 #endif
