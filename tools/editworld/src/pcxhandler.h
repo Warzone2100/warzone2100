@@ -25,6 +25,8 @@
 #ifndef __PSXHANDLER_INCLUDED__
 #define	__PSXHANDLER_INCLUDED__
 
+#include <windows.h>
+
 // Returns true if the given value is a power of two
 static inline bool IsPower2(int value)
 {
@@ -32,7 +34,8 @@ static inline bool IsPower2(int value)
 	    && (value & (value - 1)) == 0;
 }
 
-DWORD Power2(DWORD Value);
+// Round the given value up to the nearest power of 2.
+int Power2(int value);
 
 struct PCXHeader
 {

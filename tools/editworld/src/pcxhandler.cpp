@@ -31,22 +31,23 @@
 
 #include "pcxhandler.h"
 
-// Round the given value up to the nearest power of 2.
-//
-DWORD Power2(DWORD Value)
-{
-	if(IsPower2(Value))
-		return Value;
+#include <assert.h>
 
-	for(int i=31; i>=0; i--) {
-		if(Value & 1<<i) {
+// Round the given value up to the nearest power of 2.
+int Power2(int value)
+{
+	if(IsPower2(value))
+		return value;
+
+	for(int i = 31; i >= 0; --i)
+	{
+		if(value & 1 << i)
 			break;
-		}
 	}
 
-	ASSERT(i!=31);	// Overflow.
+	assert(i != 31);	// Overflow.
 
-	return 1<<(i+1);
+	return 1 << (i + 1);
 }
 
 PCXHandler::PCXHandler() :
