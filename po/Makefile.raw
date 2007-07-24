@@ -21,4 +21,4 @@ $(PACKAGE).pot: POTFILES.in
 	mv $@.new $@
 
 clean:
-	$(RM) $(PACKAGE).pot
+	$(RMF) $(PACKAGE).pot
