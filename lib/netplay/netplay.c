@@ -392,6 +392,7 @@ BOOL NETgetGlobalPlayerData(UDWORD dpid, void *pData, SDWORD *pSize)
 // ////////////////////////////////////////////////////////////////////////
 BOOL NETsetLocalPlayerData(UDWORD dpid,void *pData, SDWORD size)
 {
+	debug(LOG_NET, "NETsetLocalPlayerData(%u, %p, %d)", dpid, pData, size);
 	local_player_data[dpid].size = size;
 	resize_local_player_data(dpid, size);
 	memcpy(local_player_data[dpid].data, pData, size);
@@ -401,6 +402,7 @@ BOOL NETsetLocalPlayerData(UDWORD dpid,void *pData, SDWORD size)
 // ////////////////////////////////////////////////////////////////////////
 BOOL NETsetGlobalPlayerData(UDWORD dpid, void *pData, SDWORD size)
 {
+	debug(LOG_NET, "NETsetGlobalPlayerData(%u, %p, %d)", dpid, pData, size);
 	if(!NetPlay.bComms)
 	{
 		local_player_data[dpid].size = size;
@@ -749,7 +751,7 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 			NET_PLAYER* pi = (NET_PLAYER*)(pMsg->body);
 			int dpid = pi->id;
 
-			//printf("Receiving info for player %i\n", dpid);
+			debug(LOG_NET, "NETprocessSystemMessage: Receiving MSG_PLAYER_INFO for player %d", dpid);
 
 			memcpy(&players[dpid], pi, sizeof(NET_PLAYER));
 			NETplayerInfo();
@@ -766,7 +768,7 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 			int dpid = *pdpid;
 			unsigned int size = pMsg->size - sizeof(unsigned int);
 
-			//printf("Receiving DATA for player %i\n", dpid);
+			debug(LOG_NET, "NETprocessSystemMessage: Receiving MSG_PLAYER_DATA for player %d", dpid);
 
 			global_player_data[dpid].size = size;
 			resize_global_player_data(dpid, size);
@@ -780,8 +782,9 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 		}	break;
 
 		case MSG_PLAYER_JOINED: {
-			unsigned int* pdpid = (unsigned int*)(pMsg->body);
-			int dpid = *pdpid;
+			int dpid = pMsg->body[0];
+
+			debug(LOG_NET, "NETprocessSystemMessage: Receiving MSG_PLAYER_JOINED for player %d", dpid);
 
 			MultiPlayerJoin(dpid);
 		}	break;
@@ -790,12 +793,14 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 			unsigned int* pdpid = (unsigned int*)(pMsg->body);
 			int dpid = *pdpid;
 
+			debug(LOG_NET, "NETprocessSystemMessage: Receiving MSG_PLAYER_LEFT for player %d", dpid);
+
 			NET_DestroyPlayer(dpid);
 			MultiPlayerLeave(dpid);
 		}	break;
 
 		case MSG_GAME_FLAGS: {
-			//printf("Receiving game flags\n");
+			debug(LOG_NET, "NETprocessSystemMessage: Receiving game flags");
 
 			memcpy(NetGameFlags, pMsg->body, sizeof(NetGameFlags));
 
@@ -877,6 +882,7 @@ receive_message:
 						message.type = MSG_PLAYER_LEFT;
 						message.size = 4;
 						*message_dpid = i;
+						debug(LOG_NET, "NETrecv: dpid to send set to %d", i);
 						NETbcast(&message, TRUE);
 
 						NET_DestroyPlayer(i);
@@ -1149,19 +1155,27 @@ static void NETallowJoining(void)
 
 	NETregisterServer(1);
 
-	if (tmp_socket_set == NULL) {
+	if (tmp_socket_set == NULL) 
+	{
+		// initialize server socket set
+		// FIXME: why is this not done in NETinit()?? - Per
 		tmp_socket_set = SDLNet_AllocSocketSet(MAX_TMP_SOCKETS+1);
-		if (tmp_socket_set == NULL) {
+		if (tmp_socket_set == NULL) 
+		{
 			debug( LOG_ERROR, "NETallowJoining: Cannot create socket set: %s\n", SDLNet_GetError() );
 			return;
 		}
 		SDLNet_TCP_AddSocket(tmp_socket_set, tcp_socket);
 	}
 
-	if (SDLNet_CheckSockets(tmp_socket_set, NET_READ_TIMEOUT) > 0) {
-		if (SDLNet_SocketReady(tcp_socket)) {
-			for (i = 0; i < MAX_TMP_SOCKETS; ++i) {
-				if (tmp_socket[i] == NULL) {
+	if (SDLNet_CheckSockets(tmp_socket_set, NET_READ_TIMEOUT) > 0)
+	{
+		if (SDLNet_SocketReady(tcp_socket)) 
+		{
+			for (i = 0; i < MAX_TMP_SOCKETS; ++i) 
+			{
+				if (tmp_socket[i] == NULL) 
+				{
 					break;
 				}
 			}
@@ -1169,7 +1183,8 @@ static void NETallowJoining(void)
 			SDLNet_TCP_AddSocket(tmp_socket_set, tmp_socket[i]);
 			if (SDLNet_CheckSockets(tmp_socket_set, 1000) > 0
 			    && SDLNet_SocketReady(tmp_socket)
-			    && SDLNet_TCP_Recv(tmp_socket[i], buffer, 5)) {
+			    && SDLNet_TCP_Recv(tmp_socket[i], buffer, 5)) 
+			{
 				if(strcmp(buffer, "list")==0) {
 					SDLNet_TCP_Send(tmp_socket[i], &numgames, sizeof(UDWORD));
 					SDLNet_TCP_Send(tmp_socket[i], &game, sizeof(GAMESTRUCT));
@@ -1181,54 +1196,61 @@ static void NETallowJoining(void)
 				return;
 			}
 		}
-		for(i = 0; i < MAX_TMP_SOCKETS; ++i) {
+		for(i = 0; i < MAX_TMP_SOCKETS; ++i) 
+		{
 			if (   tmp_socket[i] != NULL
-			    && SDLNet_SocketReady(tmp_socket[i]) > 0) {
+			    && SDLNet_SocketReady(tmp_socket[i]) > 0) 
+			{
 				int size = SDLNet_TCP_Recv(tmp_socket[i], &message, sizeof(NETMSG));
 
-				if (size <= 0) {
+				if (size <= 0)
+				{
 					// socket probably disconnected.
 					SDLNet_TCP_DelSocket(tmp_socket_set, tmp_socket[i]);
 					SDLNet_TCP_Close(tmp_socket[i]);
 					tmp_socket[i] = NULL;
-				} else if (message.type == MSG_JOIN) {
+				}
+				else if (message.type == MSG_JOIN) 
+				{
 					int j;
 
 					char* name = message.body;
 					unsigned int dpid = NET_CreatePlayer(name, 0);
-					unsigned int* message_dpid = (unsigned int*)(message.body);
 
+					debug(LOG_NET, "NETallowJoining, MSG_JOIN: dpid set to %d", dpid);
 					SDLNet_TCP_DelSocket(tmp_socket_set, tmp_socket[i]);
 					NET_initBufferedSocket(connected_bsocket[dpid], tmp_socket[i]);
 					SDLNet_TCP_AddSocket(socket_set, connected_bsocket[dpid]->socket);
 					tmp_socket[i] = NULL;
 
-					//printf("Creating player %i\n", dpid);
 					game.desc.dwCurrentPlayers++;
 
 					message.type = MSG_ACCEPTED;
-					message.size = 4;
-					*message_dpid = dpid;
+					message.size = 1;
+					message.body[0] = dpid;
 					NETsend(&message, dpid, TRUE);
 
 					MultiPlayerJoin(dpid);
 					message.type = MSG_PLAYER_JOINED;
-					message.size = 4;
+					message.size = 1;
 
 					// Send info about players to newcomer.
-					for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j) {
+					for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j) 
+					{
 						if (   players[j].allocated
-						    && dpid != players[j].id) {
-							*message_dpid = players[j].id;
+						    && dpid != players[j].id) 
+						{
+							message.body[0] = players[j].id;
 							NETsend(&message, dpid, TRUE);
 						}
 					}
 
 					// Send info about newcomer to all players.
-					*message_dpid = dpid;
+					message.body[0] = dpid;
 					NETbcast(&message, TRUE);
 
-					for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j) {
+					for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j) 
+					{
 						NETBroadcastPlayerInfo(j);
 					}
 
@@ -1483,11 +1505,10 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 	for (;;) {
 		NETrecv(&message);
 
-		if (message.type == MSG_ACCEPTED) {
-			unsigned int* message_dpid = (unsigned int*)(message.body);
-
-			NetPlay.dpidPlayer = *message_dpid;
-			debug(LOG_NET, "I'm player %u", NetPlay.dpidPlayer);
+		if (message.type == MSG_ACCEPTED) 
+		{
+			NetPlay.dpidPlayer = message.body[0];
+			debug(LOG_NET, "NETjoinGame: I'm player %u", NetPlay.dpidPlayer);
 			NetPlay.bHost = FALSE;
 			NetPlay.bSpectator = FALSE;
 
