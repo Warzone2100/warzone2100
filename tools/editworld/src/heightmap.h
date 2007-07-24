@@ -33,6 +33,9 @@
 #include "devmap.h"
 #include "fileparse.h"
 #include "dibdraw.h"
+#include "directx.h"
+#include "geometry.h"
+#include "ddimage.h"
 
 #define MAXTILES 8192		// Max number of tiles.
 
@@ -137,7 +140,8 @@ extern SelVertex	SelVerticies[MAXSELECTEDVERTS];
 //#define	TF_ROT270	(3<<TF_TEXTUREROTSHIFT)
 
 
-struct CTile {
+struct CTile
+{
 	DWORD		TMapID;			// Texture index into list of type TextureDef.
 	DWORD		Flags;			// Flags for rotation, flipping etc. ( see TF_.... above ).
 	D3DVECTOR	Position;
@@ -661,426 +665,434 @@ struct Segment {
 //#define POP(Y, XL, XR, DY)	/* pop segment off stack */ \
 //    {sp--; Y = sp->y+(DY = sp->dy); XL = sp->xl; XR = sp->xr;}
 
-class CHeightMap : public CChnkIO {
-public:
-	SLONG m_MapWidth;
-	SLONG m_MapHeight;
-	CTile *m_MapTiles;
+class CHeightMap : public CChnkIO
+{
+	public:
+		SLONG m_MapWidth;
+		SLONG m_MapHeight;
+		CTile *m_MapTiles;
 
-	char m_TileTextureName[256];
-	char m_ObjectNames[256];
-	int m_BrushHeightMode[16];
-	int m_BrushHeight[16];
-	int m_BrushRandomRange[16];
-	int m_BrushTiles[16][16];
-	int m_BrushFlags[16][16];
-	int m_TileTypes[128];
-	BOOL m_EnablePlayers[MAX_PLAYERS];
-	int m_NumNames;
-	ObjNames m_ObjNames[MAX_OBJNAMES];
-	BOOL m_UseRealNames;
-	int m_SelectionBox0;
-	int m_SelectionX0;
-	int m_SelectionY0;
-	int m_SelectionBox1;
-	int m_SelectionX1;
-	int m_SelectionY1;
-	int m_SelectionWidth;
-	int m_SelectionHeight;
+		char m_TileTextureName[256];
+		char m_ObjectNames[256];
+		int m_BrushHeightMode[16];
+		int m_BrushHeight[16];
+		int m_BrushRandomRange[16];
+		int m_BrushTiles[16][16];
+		int m_BrushFlags[16][16];
+		int m_TileTypes[128];
+		BOOL m_EnablePlayers[MAX_PLAYERS];
+		int m_NumNames;
+		ObjNames m_ObjNames[MAX_OBJNAMES];
+		BOOL m_UseRealNames;
+		int m_SelectionBox0;
+		int m_SelectionX0;
+		int m_SelectionY0;
+		int m_SelectionBox1;
+		int m_SelectionX1;
+		int m_SelectionY1;
+		int m_SelectionWidth;
+		int m_SelectionHeight;
 
-	BOOL m_TerrainMorph;
-	BOOL m_IgnoreDroids;
-	BOOL m_Flatten;
-	BOOL m_NoObjectSnap;
-	DWORD m_NewObjectID;
-	char* m_FeatureSet;
-	int m_RenderPlayerID;
+		BOOL m_TerrainMorph;
+		BOOL m_IgnoreDroids;
+		BOOL m_Flatten;
+		BOOL m_NoObjectSnap;
+		DWORD m_NewObjectID;
+		char* m_FeatureSet;
+		int m_RenderPlayerID;
 
-	CHeightMap(CDirectDraw *DirectDrawView,CGeometry *DirectMaths,CMatManager *MatManager,
-			   SLONG MapWidth=128,SLONG MapHeight=128,SLONG TileWidth=128,SLONG TileHeight=128,SLONG TextureSize=64);
-	~CHeightMap(void);
-	CGrdLandIO *Read(FILE *Stream);
-	void EnableGouraud(BOOL Enable);
-	BOOL AddTexture(char *TextureName);
-	BOOL InitialiseTextures(DWORD NumTextures,char **TextureList,DWORD TextureWidth,DWORD TextureHeight);
-	void CopyTexture(UBYTE *SourceBits,int SourcePitch,int SourceX,int SourceY,
-							 UBYTE *DestBits,int DestPitch,int DestX,int DestY,int TileSize);
-	void InitialiseTextMaps(void);
-	char** GetTextureList(void);
-	DWORD GetNumTextures(void);
-	void SetTextureMap(DWORD TexNum,DWORD PageNum,DWORD x,DWORD y);
-	void DrawHeightMap(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
-	void Draw3DGrid(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
-	void Draw3DTiles(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
-	void DrawTile(DWORD TileNum,D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
-	void Draw3DSectors(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
-	void Draw3DVerticies(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
-	float GetVisibleRadius(void);
-	void DrawSea(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
-	void Draw2DMap(CDIBDraw *DIBDraw,DDImage **Images,int NumImages,int ScrollX, int ScrollY);
-	void DrawTileAttribute(CDIBDraw *DIBDraw,int XPos,int YPos,DWORD Flags);
+		CHeightMap(CDirectDraw* DirectDrawView,
+		           CGeometry* DirectMaths,
+		           CMatManager* MatManager,
+		           SLONG MapWidth = 128,
+		           SLONG MapHeight = 128,
+		           SLONG TileWidth = 128,
+		           SLONG TileHeight = 128,
+		           SLONG TextureSize = 64);
+		~CHeightMap();
 
-	int	FindVerticies(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition,
-							DWORD XPos,DWORD YPos);
-	int	SelectFace(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition,
-							DWORD XPos,DWORD YPos);
-	int Select2DFace(DWORD XPos,DWORD YPos,int ScrollX,int ScrollY);
+		CGrdLandIO *Read(FILE *Stream);
+		void EnableGouraud(BOOL Enable);
+		BOOL AddTexture(char *TextureName);
+		BOOL InitialiseTextures(DWORD NumTextures,char **TextureList,DWORD TextureWidth,DWORD TextureHeight);
+		void CopyTexture(UBYTE *SourceBits,int SourcePitch,int SourceX,int SourceY,
+								 UBYTE *DestBits,int DestPitch,int DestX,int DestY,int TileSize);
+		void InitialiseTextMaps(void);
+		char** GetTextureList(void);
+		DWORD GetNumTextures(void);
+		void SetTextureMap(DWORD TexNum,DWORD PageNum,DWORD x,DWORD y);
+		void DrawHeightMap(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
+		void Draw3DGrid(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
+		void Draw3DTiles(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
+		void DrawTile(DWORD TileNum,D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
+		void Draw3DSectors(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
+		void Draw3DVerticies(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
+		float GetVisibleRadius(void);
+		void DrawSea(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
+		void Draw2DMap(CDIBDraw *DIBDraw,DDImage **Images,int NumImages,int ScrollX, int ScrollY);
+		void DrawTileAttribute(CDIBDraw *DIBDraw,int XPos,int YPos,DWORD Flags);
 
-	void SetMapSize(DWORD MapWidth,DWORD MapHeight);
-	void SetTileSize(DWORD TileWidth,DWORD TileHeight);
-	void SetTextureSize(DWORD TextureWidth,DWORD TextureHeight);
-	void SetTileVisible(DWORD TileNum,DWORD Flag);
-	DWORD GetTileVisible(DWORD TileNum);
-	DWORD GetTileFlags(DWORD MapX,DWORD MapY);
-	DWORD GetTileFlags(DWORD TileNum);
-	void SetTileFlags(DWORD TileNum,DWORD Flags);
-	void SetTileType(DWORD TileNum,DWORD Type);
-	BOOL GetTileGateway(int x,int y);
-	void SetTileGateway(int x,int y,BOOL IsGateway);
-	BOOL GetTileGateway(DWORD TileNum);
-	void SetTileGateway(DWORD TileNum,BOOL IsGateway);
-	DWORD GetTileType(DWORD MapX,DWORD MapY);
-	DWORD GetTileType(DWORD TileNum);
-	void SetTextureID(DWORD TileNum,DWORD TMapID);
-	void SetVertexFlip(DWORD TileNum,DWORD VertexFlip);
-	void SetTextureFlip(DWORD TileNum,BOOL FlipX,BOOL FlipY);
-	void SetTextureRotate(DWORD TileNum,DWORD Rotate);
-	void RaiseTile(int Index,float dy);
-	void SetTileHeight(int Index,float Height);
-	float GetTileHeight(int Index);
-	void SetVertexHeight(DWORD TileNum,DWORD Index,float y);
-	void SetVertexHeight(CTile *Tile,DWORD Index,float y);
-	BOOL WriteHeightMap(char *FileName);
-	BOOL SetHeightFromBitmap(char *FileName);
-	void ApplyRandomness(int Selected,UDWORD SelFlags);
-	void FillMap(DWORD Selected,DWORD TextureID,DWORD Type,DWORD Flags);
-#if(0)
-	void FloodFill(SWORD x,SWORD y);
+		int	FindVerticies(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition,
+								DWORD XPos,DWORD YPos);
+		int	SelectFace(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition,
+								DWORD XPos,DWORD YPos);
+		int Select2DFace(DWORD XPos,DWORD YPos,int ScrollX,int ScrollY);
+
+		void SetMapSize(DWORD MapWidth,DWORD MapHeight);
+		void SetTileSize(DWORD TileWidth,DWORD TileHeight);
+		void SetTextureSize(DWORD TextureWidth,DWORD TextureHeight);
+		void SetTileVisible(DWORD TileNum,DWORD Flag);
+		DWORD GetTileVisible(DWORD TileNum);
+		DWORD GetTileFlags(DWORD MapX,DWORD MapY);
+		DWORD GetTileFlags(DWORD TileNum);
+		void SetTileFlags(DWORD TileNum,DWORD Flags);
+		void SetTileType(DWORD TileNum,DWORD Type);
+		BOOL GetTileGateway(int x,int y);
+		void SetTileGateway(int x,int y,BOOL IsGateway);
+		BOOL GetTileGateway(DWORD TileNum);
+		void SetTileGateway(DWORD TileNum,BOOL IsGateway);
+		DWORD GetTileType(DWORD MapX,DWORD MapY);
+		DWORD GetTileType(DWORD TileNum);
+		void SetTextureID(DWORD TileNum,DWORD TMapID);
+		void SetVertexFlip(DWORD TileNum,DWORD VertexFlip);
+		void SetTextureFlip(DWORD TileNum,BOOL FlipX,BOOL FlipY);
+		void SetTextureRotate(DWORD TileNum,DWORD Rotate);
+		void RaiseTile(int Index,float dy);
+		void SetTileHeight(int Index,float Height);
+		float GetTileHeight(int Index);
+		void SetVertexHeight(DWORD TileNum,DWORD Index,float y);
+		void SetVertexHeight(CTile *Tile,DWORD Index,float y);
+		BOOL WriteHeightMap(char *FileName);
+		BOOL SetHeightFromBitmap(char *FileName);
+		void ApplyRandomness(int Selected,UDWORD SelFlags);
+		void FillMap(DWORD Selected,DWORD TextureID,DWORD Type,DWORD Flags);
+#if 0
+		void FloodFill(SWORD x,SWORD y);
 #else
-	Pixel PixelRead(int x,int y);
-	BOOL PixelCompare(int x,int y,DWORD Tid,DWORD Type,DWORD Flags);
-	void PixelWrite(int x,int y,Pixel nv,DWORD Type,DWORD Flags);
-	void SeedFill(int x, int y, FRect *win, Pixel nv,DWORD Type,DWORD Flags);
+		Pixel PixelRead(int x,int y);
+		BOOL PixelCompare(int x,int y,DWORD Tid,DWORD Type,DWORD Flags);
+		void PixelWrite(int x,int y,Pixel nv,DWORD Type,DWORD Flags);
+		void SeedFill(int x, int y, FRect *win, Pixel nv,DWORD Type,DWORD Flags);
 #endif
 
-	CTile *GetMapTiles(void) { return m_MapTiles; }
-	DWORD GetMapWidth(void) { return m_MapWidth; }
-	DWORD GetMapHeight(void) { return m_MapHeight; }
-	void GetMapSize(DWORD *MapWidth,DWORD *MapHeight);
-	void GetTileSize(DWORD *TileWidth,DWORD *TileHeight);
-	DWORD GetTextureID(DWORD TileNum);
-	DWORD GetVertexFlip(DWORD TileNum);
-	BOOL GetTextureFlipX(DWORD TileNum);
-	BOOL GetTextureFlipY(DWORD TileNum);
-	DWORD GetTextureRotate(DWORD TileNum);
-	float GetVertexHeight(DWORD TileNum,DWORD Index);
-	void GetTextureSize(DWORD *TextureHeight,DWORD *TextureWidth);
-	DWORD GetHeightScale(void) { return m_HeightScale; }
-	void SetHeightScale(DWORD HeightScale);
-	float GetHeight(float x, float y);
-	float GetInterpolatedHeight(float xPos,float yPos);
-	DWORD GetSeaLevel(void) { return m_SeaLevel; }
-	void SetSeaLevel(DWORD SeaLevel) { m_SeaLevel = SeaLevel; }
+		CTile *GetMapTiles(void) { return m_MapTiles; }
+		DWORD GetMapWidth(void) { return m_MapWidth; }
+		DWORD GetMapHeight(void) { return m_MapHeight; }
+		void GetMapSize(DWORD *MapWidth,DWORD *MapHeight);
+		void GetTileSize(DWORD *TileWidth,DWORD *TileHeight);
+		DWORD GetTextureID(DWORD TileNum);
+		DWORD GetVertexFlip(DWORD TileNum);
+		BOOL GetTextureFlipX(DWORD TileNum);
+		BOOL GetTextureFlipY(DWORD TileNum);
+		DWORD GetTextureRotate(DWORD TileNum);
+		float GetVertexHeight(DWORD TileNum,DWORD Index);
+		void GetTextureSize(DWORD *TextureHeight,DWORD *TextureWidth);
+		DWORD GetHeightScale(void) { return m_HeightScale; }
+		void SetHeightScale(DWORD HeightScale);
+		float GetHeight(float x, float y);
+		float GetInterpolatedHeight(float xPos,float yPos);
+		DWORD GetSeaLevel(void) { return m_SeaLevel; }
+		void SetSeaLevel(DWORD SeaLevel) { m_SeaLevel = SeaLevel; }
 
-	void FixTileVerticies(CTile *Tile,SLONG x,SLONG z,DWORD Flags);
-	void FixTilePositions(void);
-	void FixTileNormals(CTile *Tile);
-	void FixTileTextures(CTile *Tile);
-	void FixTextureIDS(void);
-//	void SmoothNormals(void);
-	UDWORD GetTileFlipType(SDWORD MapX, SDWORD MapY);
-	void AddNormal(SDWORD MapX, SDWORD MapY,UDWORD AddedNormals,D3DVECTOR *SummedVector);
-	void SmoothNormals(void);
+		void FixTileVerticies(CTile *Tile,SLONG x,SLONG z,DWORD Flags);
+		void FixTilePositions(void);
+		void FixTileNormals(CTile *Tile);
+		void FixTileTextures(CTile *Tile);
+		void FixTextureIDS(void);
+//		void SmoothNormals(void);
+		UDWORD GetTileFlipType(SDWORD MapX, SDWORD MapY);
+		void AddNormal(SDWORD MapX, SDWORD MapY,UDWORD AddedNormals,D3DVECTOR *SummedVector);
+		void SmoothNormals(void);
 
 
-	void InitialiseSectors(void);
+		void InitialiseSectors(void);
 
-	void SwitchTriDirection(DWORD TileNum);
-	CTile *GetTile(DWORD TileNum) { return &m_MapTiles[TileNum]; }
+		void SwitchTriDirection(DWORD TileNum);
+		CTile *GetTile(DWORD TileNum) { return &m_MapTiles[TileNum]; }
 
-	void SetDrawRadius(SLONG Radius) { m_DrawRadius = Radius; }
-	SLONG GetDrawRadius(void) { return m_DrawRadius; }
+		void SetDrawRadius(SLONG Radius) { m_DrawRadius = Radius; }
+		SLONG GetDrawRadius(void) { return m_DrawRadius; }
 
-	TextureDef	m_TextureMaps[MAX_TILETEXTURES];	// Should be allocated.
+		TextureDef	m_TextureMaps[MAX_TILETEXTURES];	// Should be allocated.
 
-	void InitSmallestLargest(D3DVECTOR &Smallest,D3DVECTOR &Largest);
-	void UpdateSmallest(D3DVECTOR &v,D3DVECTOR &Smallest);
-	void UpdateLargest(D3DVECTOR &v,D3DVECTOR &Largest);
+		void InitSmallestLargest(D3DVECTOR &Smallest,D3DVECTOR &Largest);
+		void UpdateSmallest(D3DVECTOR &v,D3DVECTOR &Smallest);
+		void UpdateLargest(D3DVECTOR &v,D3DVECTOR &Largest);
 
-// Public functions related to objects.
-	BOOL ReadFeatureStats(char *ScriptFile,char *IMDDir,char *TextDir);
-	BOOL ReadStructureStats(char *ScriptFile,char *IMDDir,char *TextDir);
-	TECH_LEVEL CHeightMap::SetTechLevel(char *pLevel);
-	BOOL ReadTemplateStats(char *ScriptFile,char *IMDDir,char *TextDir);
-	BOOL ReadObjectNames(char *FileName);
-	int MatchObjName(char *IDString);
+		// Public functions related to objects.
+		BOOL ReadFeatureStats(char *ScriptFile,char *IMDDir,char *TextDir);
+		BOOL ReadStructureStats(char *ScriptFile,char *IMDDir,char *TextDir);
+		TECH_LEVEL CHeightMap::SetTechLevel(char *pLevel);
+		BOOL ReadTemplateStats(char *ScriptFile,char *IMDDir,char *TextDir);
+		BOOL ReadObjectNames(char *FileName);
+		int MatchObjName(char *IDString);
 
-private:
-	BOOL ReadObjects(fileParser& Parser,char *Begin,char *End,int TypeID);
-	BOOL ReadMisc(fileParser& Parser,char *Begin,char *End);
-	BOOL ReadFeatures(fileParser& Parser,char *Begin,char *End);
-	BOOL ReadStructures(fileParser& Parser,char *Begin,char *End);
-	BOOL ReadTemplates(fileParser& Parser,char *Begin,char *End);
+	private:
+		BOOL ReadObjects(fileParser& Parser,char *Begin,char *End,int TypeID);
+		BOOL ReadMisc(fileParser& Parser,char *Begin,char *End);
+		BOOL ReadFeatures(fileParser& Parser,char *Begin,char *End);
+		BOOL ReadStructures(fileParser& Parser,char *Begin,char *End);
+		BOOL ReadTemplates(fileParser& Parser,char *Begin,char *End);
 
-public:
-	BOOL ReadIMDObjects(char *ScriptFile);
-//	BOOL ReadObjects(char *ScripFile);
-	DWORD GetNumIMD(void) { return m_Num3DObjects; }
-	BOOL ReadIMD(char *FileName,char *Description,char *TextDir,int TypeID,BOOL Flanged = FALSE,BOOL Snap = FALSE,int ColourKeyIndex = FALSE,NORMALTYPE NType = NT_DEFAULTNORMALS,
-				 int StructureIndex = 0,int PlayerIndex = 0,C3DObject *Object=NULL);
-	void RenderIMD(C3DObject *Object);
-	void RenderFlatIMD(C3DObject *Object);
-	void RenderTerrainMorphIMD(C3DObject *Object,D3DVECTOR *Position,D3DVECTOR *Rotation);
-	void DrawIMD(DWORD ObjectID,D3DVECTOR &Rotation,D3DVECTOR &Position,
-				 D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition,BOOL GroundSnap=FALSE);
-	void DrawIMDStats(C3DObjectInstance *Data,
-						 D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
-	void DrawStats(HDC hdc,int x,int y,C3DObject *Object,C3DObjectInstance *Data);
-	void DrawIMDSphere(DWORD ObjectID,D3DVECTOR &Rotation,D3DVECTOR &Position,
-						 D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition,
-						 DWORD MatID,BOOL GroundSnap,UBYTE Red,UBYTE Green,UBYTE Blue);
-	void DrawIMDBox(DWORD ObjectID,D3DVECTOR &Rotation,D3DVECTOR &Position,
-		 		 D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition,DWORD MatID,BOOL GroundSnap,D3DCOLOR Colour);
-	void DrawIMDFootprint2D(CDIBDraw *DIBDraw,C3DObjectInstance *Instance,
-								int ScrollX,int ScrollY,COLORREF Colour,RECT *Clip);
-	void DrawIMDBox2D(CDIBDraw *DIBDraw,C3DObjectInstance *Instance,
-								int ScrollX,int ScrollY,COLORREF Colour,RECT *Clip);
-//	void DrawIMDBox2D(CDIBDraw *DIBDraw,DWORD ObjectID,
-//								D3DVECTOR &Rotation,D3DVECTOR &Position,
-//								int ScrollX,int ScrollY,COLORREF Colour);
-	BOOL ObjectHit3D(DWORD ObjectID,D3DVECTOR &Rotation,D3DVECTOR &Position,
-	    		 D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition,BOOL GroundSnap,
-	    		 int HitX,int HitY);
-	SDWORD ObjectHit3DSphere(DWORD ObjectID,D3DVECTOR &Rotation,D3DVECTOR &Position,
-				 D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition,BOOL GroundSnap,
-				 int HitX,int HitY);
-	BOOL ObjectHit2D(DWORD ObjectID,D3DVECTOR &Rotation,D3DVECTOR &Position,
-									int ScrollX,int ScrollY,
-									int HitX,int HitY);
+	public:
+		BOOL ReadIMDObjects(char *ScriptFile);
+//		BOOL ReadObjects(char *ScripFile);
+		DWORD GetNumIMD(void) { return m_Num3DObjects; }
+		BOOL ReadIMD(char *FileName,char *Description,char *TextDir,int TypeID,BOOL Flanged = FALSE,BOOL Snap = FALSE,int ColourKeyIndex = FALSE,NORMALTYPE NType = NT_DEFAULTNORMALS,
+					 int StructureIndex = 0,int PlayerIndex = 0,C3DObject *Object=NULL);
+		void RenderIMD(C3DObject *Object);
+		void RenderFlatIMD(C3DObject *Object);
+		void RenderTerrainMorphIMD(C3DObject *Object,D3DVECTOR *Position,D3DVECTOR *Rotation);
+		void DrawIMD(DWORD ObjectID,D3DVECTOR &Rotation,D3DVECTOR &Position,
+					 D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition,BOOL GroundSnap=FALSE);
+		void DrawIMDStats(C3DObjectInstance *Data,
+							 D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
+		void DrawStats(HDC hdc,int x,int y,C3DObject *Object,C3DObjectInstance *Data);
+		void DrawIMDSphere(DWORD ObjectID,D3DVECTOR &Rotation,D3DVECTOR &Position,
+							 D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition,
+							 DWORD MatID,BOOL GroundSnap,UBYTE Red,UBYTE Green,UBYTE Blue);
+		void DrawIMDBox(DWORD ObjectID,D3DVECTOR &Rotation,D3DVECTOR &Position,
+		 			 D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition,DWORD MatID,BOOL GroundSnap,D3DCOLOR Colour);
+		void DrawIMDFootprint2D(CDIBDraw *DIBDraw,C3DObjectInstance *Instance,
+									int ScrollX,int ScrollY,COLORREF Colour,RECT *Clip);
+		void DrawIMDBox2D(CDIBDraw *DIBDraw,C3DObjectInstance *Instance,
+									int ScrollX,int ScrollY,COLORREF Colour,RECT *Clip);
+//		void DrawIMDBox2D(CDIBDraw *DIBDraw,DWORD ObjectID,
+//									D3DVECTOR &Rotation,D3DVECTOR &Position,
+//									int ScrollX,int ScrollY,COLORREF Colour);
+		BOOL ObjectHit3D(DWORD ObjectID,D3DVECTOR &Rotation,D3DVECTOR &Position,
+	    			 D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition,BOOL GroundSnap,
+	    			 int HitX,int HitY);
+		SDWORD ObjectHit3DSphere(DWORD ObjectID,D3DVECTOR &Rotation,D3DVECTOR &Position,
+					 D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition,BOOL GroundSnap,
+					 int HitX,int HitY);
+		BOOL ObjectHit2D(DWORD ObjectID,D3DVECTOR &Rotation,D3DVECTOR &Position,
+										int ScrollX,int ScrollY,
+										int HitX,int HitY);
 
-	void Delete3DObjects(void);
-	void Delete3DObjectInstances(void);
+		void Delete3DObjects(void);
+		void Delete3DObjectInstances(void);
 
-	char *GetObjectInstanceScriptName(int Index);
-	void SetObjectInstanceScriptName(int Index,char *ScriptName);
+		char *GetObjectInstanceScriptName(int Index);
+		void SetObjectInstanceScriptName(int Index,char *ScriptName);
 
-	DWORD AddObject(DWORD ObjectID,D3DVECTOR &Rotation,D3DVECTOR &Position,DWORD PlayerID);
-	DWORD AddObject(DWORD ObjectID,D3DVECTOR &Rotation,D3DVECTOR &Position,DWORD UniqueID,
-					DWORD PlayerID,char *ScriptName);
-	void RemoveObject(DWORD Index);
-	void Select3DObject(DWORD Index);
-	void DeSelect3DObject(DWORD Index);
-	void SelectAll3DObjects(void);
-	void DeSelectAll3DObjects(void);
-	void Get3DObjectRotation(DWORD Index,D3DVECTOR &Rotation);
-	void Set3DObjectRotation(DWORD Index,D3DVECTOR &Rotation);
-	void DeleteSelected3DObjects(void);
-//	char **GetObjectNames(void) { return m_ObjectNames; }
+		DWORD AddObject(DWORD ObjectID,D3DVECTOR &Rotation,D3DVECTOR &Position,DWORD PlayerID);
+		DWORD AddObject(DWORD ObjectID,D3DVECTOR &Rotation,D3DVECTOR &Position,DWORD UniqueID,
+						DWORD PlayerID,char *ScriptName);
+		void RemoveObject(DWORD Index);
+		void Select3DObject(DWORD Index);
+		void DeSelect3DObject(DWORD Index);
+		void SelectAll3DObjects(void);
+		void DeSelectAll3DObjects(void);
+		void Get3DObjectRotation(DWORD Index,D3DVECTOR &Rotation);
+		void Set3DObjectRotation(DWORD Index,D3DVECTOR &Rotation);
+		void DeleteSelected3DObjects(void);
+//		char **GetObjectNames(void) { return m_ObjectNames; }
 
-	BOOL GetObjectInstanceFlanged(int Index);
+		BOOL GetObjectInstanceFlanged(int Index);
 
-	BOOL GetObjectInstanceSnap(int Index);
+		BOOL GetObjectInstanceSnap(int Index);
 
-	char *GetObjectName(int Index);	// { return m_3DObjects[Index].Name; }
-	char *GetObjectName(C3DObject *Object);
-	char *GetObjectInstanceName(int Index);	// { return m_3DObjects[Index].Name; }
-	char *GetObjectInstanceDescription(int Index);
+		char *GetObjectName(int Index);	// { return m_3DObjects[Index].Name; }
+		char *GetObjectName(C3DObject *Object);
+		char *GetObjectInstanceName(int Index);	// { return m_3DObjects[Index].Name; }
+		char *GetObjectInstanceDescription(int Index);
 
-	int GetObjectType(int Index);
-	int GetObjectPlayer(int Index);
-	BOOL GetObjectFlanged(int Index) { return m_3DObjects[Index].Flanged; }
+		int GetObjectType(int Index);
+		int GetObjectPlayer(int Index);
+		BOOL GetObjectFlanged(int Index) { return m_3DObjects[Index].Flanged; }
 
-	int GetObjectInstancePlayerID(int Index);
-	int GetObjectInstanceUniqueID(int Index);
-	void SetObjectInstancePlayerID(int Index,int PlayerID);
+		int GetObjectInstancePlayerID(int Index);
+		int GetObjectInstanceUniqueID(int Index);
+		void SetObjectInstancePlayerID(int Index,int PlayerID);
 
-	char *GetObjectTypeName(int Index);
-	char *GetObjectInstanceTypeName(int Index);
+		char *GetObjectTypeName(int Index);
+		char *GetObjectInstanceTypeName(int Index);
 
-	int GetObjectID(int Index);
+		int GetObjectID(int Index);
 
-	DWORD GetNum3DObjects(void) { return m_Num3DObjects; }
-	DWORD GetNumObjects(void) { return m_TotalInstances; }
-	void DrawObjects(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition,BOOL Boxed=FALSE);
-	void DrawObjects2D(CDIBDraw *DIBDraw,int ScrollX,int ScrollY,RECT *Clip);
-	C3DObjectInstance *GetObjectPointer(DWORD Index);
-	void SnapObject(DWORD Index);
-	int FindObjectHit3D(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition,int HitX,int HitY);
-	int FindObjectHit2D(int ScrollX,int ScrollY,int HitX,int HitY);
-	void DrawRadarObjects(CDIBDraw *DIBDraw,int Scale);
-	void SetObjectTileFlags(DWORD Index,DWORD Flags);
-	void SetObjectTileFlags(DWORD Flags);
-	void SetObjectTileHeights(DWORD Index);
-	void SetObjectTileHeights(void);
-	void Set3DObjectPosition(DWORD Index,D3DVECTOR &Position);
-	void Get3DObjectPosition(DWORD Index,D3DVECTOR &Position);
+		DWORD GetNum3DObjects(void) { return m_Num3DObjects; }
+		DWORD GetNumObjects(void) { return m_TotalInstances; }
+		void DrawObjects(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition,BOOL Boxed=FALSE);
+		void DrawObjects2D(CDIBDraw *DIBDraw,int ScrollX,int ScrollY,RECT *Clip);
+		C3DObjectInstance *GetObjectPointer(DWORD Index);
+		void SnapObject(DWORD Index);
+		int FindObjectHit3D(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition,int HitX,int HitY);
+		int FindObjectHit2D(int ScrollX,int ScrollY,int HitX,int HitY);
+		void DrawRadarObjects(CDIBDraw *DIBDraw,int Scale);
+		void SetObjectTileFlags(DWORD Index,DWORD Flags);
+		void SetObjectTileFlags(DWORD Flags);
+		void SetObjectTileHeights(DWORD Index);
+		void SetObjectTileHeights(void);
+		void Set3DObjectPosition(DWORD Index,D3DVECTOR &Position);
+		void Get3DObjectPosition(DWORD Index,D3DVECTOR &Position);
 
-	void CountObjects(int Exclude,int Include);
+		void CountObjects(int Exclude,int Include);
 
-	BOOL WriteObjectList(FILE *Stream);
-	BOOL WriteObjectList(FILE *Stream,UWORD StartX,UWORD StartY,UWORD Width,UWORD Height);
+		BOOL WriteObjectList(FILE *Stream);
+		BOOL WriteObjectList(FILE *Stream,UWORD StartX,UWORD StartY,UWORD Width,UWORD Height);
 
-	BOOL ReadObjectList(FILE *Stream);
-	LONG GetStructureID(char *Name,LONG PlayerID);
-	LONG GetObjectID(char *Name);
+		BOOL ReadObjectList(FILE *Stream);
+		LONG GetStructureID(char *Name,LONG PlayerID);
+		LONG GetObjectID(char *Name);
 
-//	BOOL ReadDeliveranceMap(FILE *Stream);
-//	BOOL ReadDeliveranceFeatures(FILE *Stream);
+//		BOOL ReadDeliveranceMap(FILE *Stream);
+//		BOOL ReadDeliveranceFeatures(FILE *Stream);
 
-	int CountObjectsOfType(int Type,int Exclude,int Include);
-	CWorldInfo *GetWorldInfo(void) { return &m_WorldInfo; }
+		int CountObjectsOfType(int Type,int Exclude,int Include);
+		CWorldInfo *GetWorldInfo(void) { return &m_WorldInfo; }
 
-	void GetLimitRect(int Index,LimitRect &Limit);
-	BOOL InLimit(float x,float z,int Index);
-	BOOL IncludeIt(float x,float z,int Exclude,int Include);
+		void GetLimitRect(int Index,LimitRect &Limit);
+		BOOL InLimit(float x,float z,int Index);
+		BOOL IncludeIt(float x,float z,int Exclude,int Include);
 
-	BOOL WriteDeliveranceGame(FILE *Stream,UDWORD GameType,int LimIndex);
-	BOOL WriteDeliveranceTileTypes(FILE *Stream);
-	BOOL WriteDeliveranceTagList(FILE *Stream);
-	BOOL WriteDeliveranceMap(FILE *Stream);
-	BOOL WriteDeliveranceFeatures(FILE *Stream,UDWORD GameType,int Exclude,int Include);
-	BOOL WriteDeliveranceStructures(FILE *Stream,UDWORD GameType,int Exclude,int Include);
-	BOOL WriteDeliveranceDroidInit(FILE *Stream,UDWORD GameType,int Exclude,int Include);
-	BOOL WriteDeliveranceDroids(FILE *Stream);
-	BOOL WriteDeliveranceTemplates(FILE *Stream);
+		BOOL WriteDeliveranceGame(FILE *Stream,UDWORD GameType,int LimIndex);
+		BOOL WriteDeliveranceTileTypes(FILE *Stream);
+		BOOL WriteDeliveranceTagList(FILE *Stream);
+		BOOL WriteDeliveranceMap(FILE *Stream);
+		BOOL WriteDeliveranceFeatures(FILE *Stream,UDWORD GameType,int Exclude,int Include);
+		BOOL WriteDeliveranceStructures(FILE *Stream,UDWORD GameType,int Exclude,int Include);
+		BOOL WriteDeliveranceDroidInit(FILE *Stream,UDWORD GameType,int Exclude,int Include);
+		BOOL WriteDeliveranceDroids(FILE *Stream);
+		BOOL WriteDeliveranceTemplates(FILE *Stream);
 
 //	BOOL WriteNecromancerMap(FILE *Stream);
 //	BOOL WriteNecromancerObjects(FILE *Stream);
 
-	void SetTileHeightUndo(int Index,float Height);
+		void SetTileHeightUndo(int Index,float Height);
 
-	void SetUniqueIDs(void);
-	BOOL CheckUniqueIDs(void);
-	BOOL CheckUniqueScriptNames(void);
+		void SetUniqueIDs(void);
+		BOOL CheckUniqueIDs(void);
+		BOOL CheckUniqueScriptNames(void);
 
-	void InitialiseScrollLimits(void);
-	void AddScrollLimit(int MinX,int MinZ,int MaxX,int MaxZ,char *ScriptName);
-	void SetScrollLimit(int Index,int MinX,int MinZ,int MaxX,int MaxZ,char *ScriptName);
-	void AddScrollLimit(int MinX,int MinZ,int MaxX,int MaxZ,DWORD UniqueID,char *ScriptName);
-	void DeleteAllScrollLimits(void);
-	DWORD FindScrollLimit(DWORD UniqueID);
-	DWORD FindScrollLimit(char *ScriptName);
-	void DeleteScrollLimit(DWORD Index);
-	void DrawScrollLimits(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
-	BOOL CheckLimitsWithin(int ExcludeIndex,int IncludeIndex);
-	BOOL CheckUniqueLimitsScriptNames(void);
-	BOOL WriteScrollLimits(FILE *Stream,int StartX,int StartY,int Width,int Height);
-	BOOL ReadScrollLimits(FILE *Stream);
-	BOOL WriteDeliveranceLimits(FILE *Stream);
-	int GetNumScrollLimits(void) { return m_NumScrollLimits; }
-	ListNode<CScrollLimits> *GetScrollLimits(void) { return m_ScrollLimits; }
+		void InitialiseScrollLimits(void);
+		void AddScrollLimit(int MinX,int MinZ,int MaxX,int MaxZ,char *ScriptName);
+		void SetScrollLimit(int Index,int MinX,int MinZ,int MaxX,int MaxZ,char *ScriptName);
+		void AddScrollLimit(int MinX,int MinZ,int MaxX,int MaxZ,DWORD UniqueID,char *ScriptName);
+		void DeleteAllScrollLimits(void);
+		DWORD FindScrollLimit(DWORD UniqueID);
+		DWORD FindScrollLimit(char *ScriptName);
+		void DeleteScrollLimit(DWORD Index);
+		void DrawScrollLimits(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
+		BOOL CheckLimitsWithin(int ExcludeIndex,int IncludeIndex);
+		BOOL CheckUniqueLimitsScriptNames(void);
+		BOOL WriteScrollLimits(FILE *Stream,int StartX,int StartY,int Width,int Height);
+		BOOL ReadScrollLimits(FILE *Stream);
+		BOOL WriteDeliveranceLimits(FILE *Stream);
+		int GetNumScrollLimits(void) { return m_NumScrollLimits; }
+		ListNode<CScrollLimits> *GetScrollLimits(void) { return m_ScrollLimits; }
 
-	void InitialiseGateways(void);
-	int AddGateway(int x0,int y0,int x1,int y1);
-	void DeleteGateway(int Index);
-	void DeleteAllGateways(void);
-	void DeSelectGateways(void);
-	void SelectGateway(int Index);
-	int FindGateway(int x,int y);
-	void SetGateway(int Index,int x0,int y0,int x1,int y1);
-	BOOL TileIsBlockingLand(int x,int y);
-	BOOL TileIsBlockingWater(int x,int y);
-	BOOL TileIsBlocking(int x,int y,int Water);
-	BOOL CheckGatewayBlockingTiles(int Index);
-	BOOL CheckGatewayOverlap(int CurIndex,int x0,int y0,int x1,int y1);
-	BOOL WriteGateways(FILE *Stream,int StartX,int StartY,int Width,int Height);
-	BOOL ReadGateways(FILE *Stream);
-	BOOL WriteDeliveranceGateways(FILE *Stream);
-	void DisplayGateways3D(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
-	void DisplayGateways2D(CDIBDraw *DIBDraw,int ScrollX, int ScrollY,RECT *Clip);
-	ListNode<GateWay> *GetGateWays(void) { return m_Gateways; }
-	int GetNumGateways(void) { return m_NumGateways; }
-	BOOL GetGateway(int Index,int *x0,int *y0,int *x1,int *y1);
-	void SetMapZoneID(int TileNum,int ID);
-	void SetMapZoneID(int x,int z,int ID);
+		void InitialiseGateways(void);
+		int AddGateway(int x0,int y0,int x1,int y1);
+		void DeleteGateway(int Index);
+		void DeleteAllGateways(void);
+		void DeSelectGateways(void);
+		void SelectGateway(int Index);
+		int FindGateway(int x,int y);
+		void SetGateway(int Index,int x0,int y0,int x1,int y1);
+		BOOL TileIsBlockingLand(int x,int y);
+		BOOL TileIsBlockingWater(int x,int y);
+		BOOL TileIsBlocking(int x,int y,int Water);
+		BOOL CheckGatewayBlockingTiles(int Index);
+		BOOL CheckGatewayOverlap(int CurIndex,int x0,int y0,int x1,int y1);
+		BOOL WriteGateways(FILE *Stream,int StartX,int StartY,int Width,int Height);
+		BOOL ReadGateways(FILE *Stream);
+		BOOL WriteDeliveranceGateways(FILE *Stream);
+		void DisplayGateways3D(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
+		void DisplayGateways2D(CDIBDraw *DIBDraw,int ScrollX, int ScrollY,RECT *Clip);
+		ListNode<GateWay> *GetGateWays(void) { return m_Gateways; }
+		int GetNumGateways(void) { return m_NumGateways; }
+		BOOL GetGateway(int Index,int *x0,int *y0,int *x1,int *y1);
+		void SetMapZoneID(int TileNum,int ID);
+		void SetMapZoneID(int x,int z,int ID);
 
-	BOOL SetTileIDsFromBitmap(char *FullPath);
-	BOOL WriteTileIDMap(char *FullPath);
+		BOOL SetTileIDsFromBitmap(char *FullPath);
+		BOOL WriteTileIDMap(char *FullPath);
 
-	BOOL ObjectIsStructure(int ObjectID);
-	BOOL StructureIsDefense(int ObjectID);
-	BOOL StructureIsWall(int ObjectID);
+		BOOL ObjectIsStructure(int ObjectID);
+		BOOL StructureIsDefense(int ObjectID);
+		BOOL StructureIsWall(int ObjectID);
 
-	void ClearSelectionBox(void);
-	void SetSelectionBox0(int TileID);
-	void SetSelectionBox1(int TileID);
-	void SetSelectionBox(int TileID,int Width,int Height);
-	BOOL SelectionBoxValid(void);
-	int GetSelectionBox0(void) { return m_SelectionBox0; }
-	int GetSelectionBox1(void) { return m_SelectionBox1; }
-	void ClipSelectionBox(void);
+		void ClearSelectionBox(void);
+		void SetSelectionBox0(int TileID);
+		void SetSelectionBox1(int TileID);
+		void SetSelectionBox(int TileID,int Width,int Height);
+		BOOL SelectionBoxValid(void);
+		int GetSelectionBox0(void) { return m_SelectionBox0; }
+		int GetSelectionBox1(void) { return m_SelectionBox1; }
+		void ClipSelectionBox(void);
 
-	void XFlipObjects(int x0,int y0,int x1,int y1);
-	void YFlipObjects(int x0,int y0,int x1,int y1);
-	void SetRenderPlayerID(DWORD PlayerID) { m_RenderPlayerID = PlayerID; }
+		void XFlipObjects(int x0,int y0,int x1,int y1);
+		void YFlipObjects(int x0,int y0,int x1,int y1);
+		void SetRenderPlayerID(DWORD PlayerID) { m_RenderPlayerID = PlayerID; }
 
-protected:
-	int m_MaxTileID;
-	int m_NumGateways;
-	ListNode<GateWay> *m_Gateways;
+	protected:
+		int m_MaxTileID;
+		int m_NumGateways;
+		ListNode<GateWay> *m_Gateways;
 
-	int m_NumScrollLimits;
-	ListNode<CScrollLimits> *m_ScrollLimits;
+		int m_NumScrollLimits;
+		ListNode<CScrollLimits> *m_ScrollLimits;
 
-	SLONG m_DrawRadius;
-	void HeightToV0(UBYTE Height,D3DVECTOR *Offset,D3DVECTOR *Result);
-	void HeightToV1(UBYTE Height,D3DVECTOR *Offset,D3DVECTOR *Result);
-	void HeightToV2(UBYTE Height,D3DVECTOR *Offset,D3DVECTOR *Result);
-	void HeightToV3(UBYTE Height,D3DVECTOR *Offset,D3DVECTOR *Result);
-	void FHeightToV0(UBYTE Height,D3DVECTOR *Offset,D3DVECTOR *Result);
-	void FHeightToV1(UBYTE Height,D3DVECTOR *Offset,D3DVECTOR *Result);
-	void FHeightToV2(UBYTE Height,D3DVECTOR *Offset,D3DVECTOR *Result);
-	void FHeightToV3(UBYTE Height,D3DVECTOR *Offset,D3DVECTOR *Result);
-	void InitialiseBoundingBox(CMapSector *Sector);
-	BOOL BoundsCheck(CMapSector *Sector);
-	void SetTileVertexUV(CTile *Tile,D3DVERTEX &v0,D3DVERTEX &v1,D3DVERTEX &v2,D3DVERTEX &v3);
-	CMapSector	*m_MapSectors;
-	CDirectDraw* m_DDView;
-	CGeometry* m_DirectMaths;
-	CMatManager* m_MatManager;
-	DWORD	m_NumSourceTextures;
-	DWORD	m_NumTextures;
-	DWORD	m_MaxTMapID;
-	char	**m_TextureList;
-	CTextureList m_Texture[256];
-	SLONG	m_TileWidth;
-	SLONG	m_TileHeight;
-	SLONG	m_SectorsPerRow;
-	SLONG	m_SectorsPerColumn;
-	SLONG	m_TilesPerSectorRow;
-	SLONG	m_TilesPerSectorColumn;
-	DWORD	m_TextureWidth;
-	DWORD	m_TextureHeight;
-	SLONG	m_NumPoints;
-	SLONG	m_HeightMult;
-	SLONG	m_ViewRadius;
-	SLONG	m_XRes,m_YRes;
-	DWORD	m_NumTiles;
-	DWORD	m_NumSectors;
-	DWORD	m_HeightScale;
-	DWORD	m_DefaultMaterial;
-	DWORD	m_SeaMaterial;
-	DWORD	m_SeaLevel;
-	DWORD	m_LineMaterial;
-	DWORD	m_LineMaterial2;
-	BOOL	m_Gouraud;
-	CWorldInfo m_WorldInfo;
+		SLONG m_DrawRadius;
+		void HeightToV0(UBYTE Height,D3DVECTOR *Offset,D3DVECTOR *Result);
+		void HeightToV1(UBYTE Height,D3DVECTOR *Offset,D3DVECTOR *Result);
+		void HeightToV2(UBYTE Height,D3DVECTOR *Offset,D3DVECTOR *Result);
+		void HeightToV3(UBYTE Height,D3DVECTOR *Offset,D3DVECTOR *Result);
+		void FHeightToV0(UBYTE Height,D3DVECTOR *Offset,D3DVECTOR *Result);
+		void FHeightToV1(UBYTE Height,D3DVECTOR *Offset,D3DVECTOR *Result);
+		void FHeightToV2(UBYTE Height,D3DVECTOR *Offset,D3DVECTOR *Result);
+		void FHeightToV3(UBYTE Height,D3DVECTOR *Offset,D3DVECTOR *Result);
+		void InitialiseBoundingBox(CMapSector *Sector);
+		BOOL BoundsCheck(CMapSector *Sector);
+		void SetTileVertexUV(CTile *Tile,D3DVERTEX &v0,D3DVERTEX &v1,D3DVERTEX &v2,D3DVERTEX &v3);
+		CMapSector	*m_MapSectors;
+		CDirectDraw* m_DDView;
+		CGeometry* m_DirectMaths;
+		CMatManager* m_MatManager;
+		DWORD	m_NumSourceTextures;
+		DWORD	m_NumTextures;
+		DWORD	m_MaxTMapID;
+		char	**m_TextureList;
+		CTextureList m_Texture[256];
+		SLONG	m_TileWidth;
+		SLONG	m_TileHeight;
+		SLONG	m_SectorsPerRow;
+		SLONG	m_SectorsPerColumn;
+		SLONG	m_TilesPerSectorRow;
+		SLONG	m_TilesPerSectorColumn;
+		DWORD	m_TextureWidth;
+		DWORD	m_TextureHeight;
+		SLONG	m_NumPoints;
+		SLONG	m_HeightMult;
+		SLONG	m_ViewRadius;
+		SLONG	m_XRes,m_YRes;
+		DWORD	m_NumTiles;
+		DWORD	m_NumSectors;
+		DWORD	m_HeightScale;
+		DWORD	m_DefaultMaterial;
+		DWORD	m_SeaMaterial;
+		DWORD	m_SeaLevel;
+		DWORD	m_LineMaterial;
+		DWORD	m_LineMaterial2;
+		BOOL	m_Gouraud;
+		CWorldInfo m_WorldInfo;
 
-	DWORD	m_Num3DObjects;
+		DWORD	m_Num3DObjects;
 //	char **m_ObjectNames;
-	C3DObject m_3DObjects[MAX3DOBJECTS];
+		C3DObject m_3DObjects[MAX3DOBJECTS];
 
-	int m_TotalInstances;
-	ListNode<C3DObjectInstance> *m_Objects;
+		int m_TotalInstances;
+		ListNode<C3DObjectInstance> *m_Objects;
 
-	int m_NumStructures;
-	_structure_stats *m_Structures;
+		int m_NumStructures;
+		_structure_stats *m_Structures;
 
-	int m_NumFeatures;
-	_feature_stats *m_Features;
+		int m_NumFeatures;
+		_feature_stats *m_Features;
 
-	int m_NumTemplates;
-	DroidTemplate *m_Templates;
+		int m_NumTemplates;
+		DroidTemplate *m_Templates;
 };
 
 #endif

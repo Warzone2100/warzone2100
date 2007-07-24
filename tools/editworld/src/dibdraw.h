@@ -27,6 +27,7 @@
 
 #define MAGIC 29121967	// For debuging.
 
+#include <windows.h>
 
 class CDIBDraw {
 public:

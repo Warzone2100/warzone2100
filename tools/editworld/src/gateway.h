@@ -45,7 +45,7 @@ extern char*  aNumEquiv;
 extern char** apEquivZones;
 
 // Initialise the gateway system
-BOOL gwInitialise(void);
+bool gwInitialise(void);
 
 // Shutdown the gateway system
 void gwShutDown(void);
