@@ -28,8 +28,6 @@
  *
  */
 
-#ifdef EDITORWORLD
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <malloc.h>
@@ -46,17 +44,6 @@
 #define __GATEWAY_C_STUFF__
 #include "gateinterface.h"
 #include "debugprint.h"
-
-#else
-
-// gateway linking printf's
-//#define DEBUG_GROUP0
-// water gate printf's
-//#define DEBUG_GROUP1
-#include "frame.h"
-#include "map.h"
-
-#endif
 
 #include "gateway.hpp"
 
@@ -108,16 +95,13 @@ BOOL gwLinkGateways(void);
 // Initialise the gateway system
 BOOL gwInitialise(void)
 {
-#ifdef EDITORWORLD
 	int i;
-#endif
 
 	ASSERT((psGateways == NULL,
 		"gwInitialise: gatway list has not been reset"));
 
 	psGateways = NULL;
 
-#ifdef EDITORWORLD
 	for(i=0; i<giGetNumGateways(); i++) {
 		SDWORD x0,y0,x1,y1;
 
@@ -134,7 +118,6 @@ BOOL gwInitialise(void)
 	if(!gwProcessMap()) {
 		return FALSE;
 	}
-#endif
 //	if (!gwLinkGateways()) return FALSE;
 
 	return TRUE;
@@ -906,8 +889,6 @@ BOOL gwSetZoneEquiv(SDWORD zone, SDWORD numEquiv, UBYTE *pEquiv)
 /******************************************************************************************************/
 /*                   Gateway data access functions                                                    */
 
-#ifdef EDITORWORLD
-
 // get the size of the map
 SDWORD gwMapWidth(void)
 {
@@ -937,52 +918,3 @@ BOOL gwTileIsWater(UDWORD x, UDWORD y)
 {
 	return giIsWater(x, y);
 }
-
-#else
-
-// get the size of the map
-SDWORD gwMapWidth(void)
-{
-	return (SDWORD)mapWidth;
-}
-SDWORD gwMapHeight(void)
-{
-	return (SDWORD)mapHeight;
-}
-
-
-// set the gateway flag on a tile
-void gwSetGatewayFlag(SDWORD x, SDWORD y)
-{
-	mapTile((UDWORD)x,(UDWORD)y)->tileInfoBits |= BITS_GATEWAY;
-}
-// clear the gateway flag on a tile
-void gwClearGatewayFlag(SDWORD x, SDWORD y)
-{
-	mapTile((UDWORD)x,(UDWORD)y)->tileInfoBits &= ~BITS_GATEWAY;
-}
-
-
-// check whether a tile is water
-BOOL gwTileIsWater(UDWORD x, UDWORD y)
-{
-	return TERRAIN_TYPE(mapTile(x ,y)) == TER_WATER;
-}
-
-
-// check if the gateway flag is set on a tile
-/*BOOL gwTileIsGateway(SDWORD x, SDWORD y)
-{
-	return (mapTile((UDWORD)x,(UDWORD)y)->tileInfoBits & BITS_GATEWAY) != 0;
-}*/
-
-
-// get the terrain type of a map tile
-/*SDWORD gwTileTerrainType(SDWORD x, SDWORD y)
-{
-	return TERRAIN_TYPE(mapTile((UDWORD)x,(UDWORD)y));
-}*/
-
-#endif
-
-

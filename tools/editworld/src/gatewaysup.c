@@ -37,7 +37,6 @@
 //#define DEBUG_GROUP4
 // equivalence printf's
 //#define DEBUG_GROUP5
-#ifdef EDITORWORLD
 
 #include <malloc.h>
 #include <string.h>
@@ -52,13 +51,6 @@
 
 #include "gateinterface.h"
 #include "debugprint.h"
-
-#else
-
-#include "frame.h"
-#include "map.h"
-
-#endif
 
 #include "assert.h"
 #include "gateway.h"
@@ -627,8 +619,6 @@ void gwSetZone(SDWORD x, SDWORD y, SDWORD zone)
 /******************************************************************************************************/
 /*                   Gateway data access functions                                                    */
 
-#ifdef EDITORWORLD
-
 BOOL gwFloodBlock(SDWORD x, SDWORD y)
 {
 //	MAPTILE		*psTile;
@@ -652,33 +642,5 @@ BOOL gwFloodBlock(SDWORD x, SDWORD y)
 		   ( bGwWaterFlood && !giIsWater(x,y) );
 //	return giIsClifface(x,y) || giIsWater(x,y) || giIsGateway(x,y);
 }
-
-#else
-
-// check for a blocking tile for the flood fill
-BOOL gwFloodBlock(SDWORD x, SDWORD y)
-{
-	MAPTILE		*psTile;
-	SDWORD		type;
-	BOOL		gateway;
-
-	if ((x < 0) || (x >= gwMapWidth()) ||
-		(y < 0) || (y >= gwMapHeight()))
-	{
-		return TRUE;
-	}
-
-	psTile = mapTile(x,y);
-	type = TERRAIN_TYPE(psTile);
-	gateway = (psTile->tileInfoBits & BITS_GATEWAY) != 0;
-
-	return gateway ||
-		   ( !bGwWaterFlood && ((type == TER_CLIFFFACE) || (type == TER_WATER))) ||
-		   ( bGwWaterFlood && (type != TER_WATER) );
-}
-
-#endif
-
-
 
 #endif
