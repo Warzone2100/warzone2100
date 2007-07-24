@@ -5503,7 +5503,7 @@ void CBTEditDoc::OnMapExportmapasbitmap()
 		// All done so delete the BMP's device context
 		Bmp->DeleteDC((void*)BmpHdc);				  
 		// save it to disk.
-   		Bmp->WriteBMP(FullPath,FALSE);
+   		Bmp->WriteBMP(FullPath);
 		// and delete the BMP.
 		delete Bmp;
 

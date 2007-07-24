@@ -152,7 +152,7 @@ void BMPHandler::DeleteDC(void *hdc)
 	::DeleteDC((HDC)hdc);	
 }
 
-bool BMPHandler::WriteBMP(char *FilePath, bool Flip)
+bool BMPHandler::WriteBMP(char *FilePath)
 {
 	FILE* fid = fopen(FilePath,"wb");
     if(fid == NULL)
@@ -185,49 +185,14 @@ bool BMPHandler::WriteBMP(char *FilePath, bool Flip)
 			break;
 	}
 
-//	if(_BitmapInfo->bmiHeader.biBitCount == 4) {
-//		bmfh.bfSize = bmfh.bfOffBits + (bmih.biWidth/2) * abs(bmih.biHeight);
-//	} else {
-//		bmfh.bfSize = bmfh.bfOffBits + bmih.biWidth * abs(bmih.biHeight);
-//	}
-
+	// Write file header
 	fwrite(&bmfh,sizeof(BITMAPFILEHEADER),1,fid);
 
+	// Write bitmap-info header
 	fwrite(&bmih,sizeof(BITMAPINFOHEADER),1,fid);
 
-	if (Flip)
-	{
-		int j; // Declared here instead of in the for declarations since MSVC's scoping sucks!
-
-		switch(bmih.biBitCount) {
-			case 4:
-				for (j = abs(bmih.biHeight) - 1; j >= 0; --j)
-				{
-					char* Src = reinterpret_cast<char*>(_DIBBits) + j * bmih.biWidth / 2 * bmih.biPlanes;
-		 			fwrite(Src, bmih.biWidth / 2 * bmih.biPlanes, 1, fid);
-				}
-				break;
-
-			case 8:
-				for (j = abs(bmih.biHeight) - 1; j >= 0; --j)
-				{
-					char* Src = reinterpret_cast<char*>(_DIBBits) + j * bmih.biWidth *bmih.biPlanes;
-		 			fwrite(Src, bmih.biWidth * bmih.biPlanes, 1, fid);
-				}
-				break;
-
-			case 16:
-				for (j = abs(bmih.biHeight) - 1; j >= 0; --j)
-				{
-					char* Src = reinterpret_cast<char*>(_DIBBits) + j * bmih.biWidth * 2 * bmih.biPlanes;
-		 			fwrite(Src, bmih.biWidth * 2 * bmih.biPlanes, 1, fid);
-				}
-		}
-	}
-	else
-	{
-	 	fwrite(_DIBBits, (bmfh.bfSize - bmfh.bfOffBits), 1, fid);
-	}
+	// Write bitmap data
+ 	fwrite(_DIBBits, (bmfh.bfSize - bmfh.bfOffBits), 1, fid);
 
 	fclose(fid);
 

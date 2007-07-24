@@ -32,7 +32,7 @@ class BMPHandler
 		void DeleteDC(void* hdc);
 		void* CreateDC(void* hWnd);
 
-		bool WriteBMP(char* FilePath, bool Flip = false);
+		bool WriteBMP(char* FilePath);
 		
 	private:
 		BITMAPINFO*   _BitmapInfo;
