@@ -3258,7 +3258,8 @@ static void endian_SaveGameV(SAVE_GAME* psSaveGame, UDWORD version) {
     UDWORD i,j;
 	/* SAVE_GAME is GAME_SAVE_V33 */
 	/* GAME_SAVE_V33 includes GAME_SAVE_V31 */
-	if(version >= VERSION_33) {
+	if(version >= VERSION_33) 
+	{
 		endian_udword(&psSaveGame->sGame.power);
 		endian_uword(&psSaveGame->sGame.bytesPerSec);
 		for(i = 0; i < MaxGames; i++) {
@@ -3275,8 +3276,6 @@ static void endian_SaveGameV(SAVE_GAME* psSaveGame, UDWORD version) {
 			endian_udword(&psSaveGame->sNetPlay.players[i].dpid);
 		endian_udword(&psSaveGame->sNetPlay.playercount);
 		endian_udword(&psSaveGame->sNetPlay.dpidPlayer);
-		for(i = 0; i < 4; i++)
-			endian_udword(&psSaveGame->sNetPlay.cryptKey[i]);
 		endian_udword(&psSaveGame->savePlayer);
 		for(i = 0; i < MAX_PLAYERS; i++)
 			endian_udword(&psSaveGame->sPlayer2dpid[i]);
@@ -4277,8 +4276,6 @@ BOOL writeGameFile(char *pFileName, SDWORD saveType)
 		endian_udword(&psSaveGame->sNetPlay.players[i].dpid);
 	endian_udword(&psSaveGame->sNetPlay.playercount);
 	endian_udword(&psSaveGame->sNetPlay.dpidPlayer);
-	for(i = 0; i < 4; i++)
-		endian_udword(&psSaveGame->sNetPlay.cryptKey[i]);
 	endian_udword(&psSaveGame->savePlayer);
 	for(i = 0; i < MAX_PLAYERS; i++)
 		endian_udword(&psSaveGame->sPlayer2dpid[i]);

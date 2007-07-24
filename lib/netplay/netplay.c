@@ -61,10 +61,7 @@ unsigned int masterserver_port = 0, gameserver_port = 0;
 #define MSG_PLAYER_LEFT		95
 #define MSG_GAME_FLAGS		96
 
-//#define NET_DEBUG
-
 static BOOL allow_joining = FALSE;
-
 static void NETallowJoining(void);
 extern BOOL MultiPlayerJoin(UDWORD dpid);  /* from src/multijoin.c ! */
 extern BOOL MultiPlayerLeave(UDWORD dpid); /* from src/multijoin.c ! */
@@ -77,15 +74,7 @@ static GAMESTRUCT game;
 
 static void NETsetMessageSize(NETMSG* pMsg, unsigned int size)
 {
-	unsigned int tmp = 8 - (size % 8);
-
-	if (tmp == 8) {
-		pMsg->size = size;
-		pMsg->paddedBytes = 0;
-	} else {
-		pMsg->size = size + tmp;
-		pMsg->paddedBytes = tmp;
-	}
+	pMsg->size = size;
 }
 
 // *********** Socket with buffer that read NETMSGs ******************
@@ -140,8 +129,6 @@ static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SDLNet_SocketSet socket_set)
 		return FALSE;
 	}
 
-
-
 	size = SDLNet_TCP_Recv(bs->socket, bufstart, bufsize);
 
 	if (size > 0) {
@@ -164,7 +151,6 @@ static BOOL NET_recvMessage(NETBUFSOCKET* bs, NETMSG* pMsg)
 	const NETMSG* message = (NETMSG*)(bs->buffer + bs->buffer_start);
 	const unsigned int headersize =   sizeof(message->size)
 					+ sizeof(message->type)
-					+ sizeof(message->paddedBytes)
 					+ sizeof(message->destination);
 
 	if (headersize > bs->bytes) {
@@ -684,7 +670,7 @@ BOOL NETsend(NETMSG *msg, UDWORD player, BOOL guarantee)
 	if (player >= MAX_CONNECTED_PLAYERS) return FALSE;
 	msg->destination = player;
 
-	size = msg->size + sizeof(msg->size) + sizeof(msg->type) + sizeof(msg->paddedBytes) + sizeof(msg->destination);
+	size = msg->size + sizeof(msg->size) + sizeof(msg->type) + sizeof(msg->destination);
 
 	NETlogPacket(msg, FALSE);
 
@@ -723,7 +709,7 @@ BOOL NETbcast(NETMSG *msg, BOOL guarantee)
 
 	msg->destination = NET_ALL_PLAYERS;
 
-	size = msg->size + sizeof(msg->size) + sizeof(msg->type) + sizeof(msg->paddedBytes) + sizeof(msg->destination);
+	size = msg->size + sizeof(msg->size) + sizeof(msg->type) + sizeof(msg->destination);
 
 	NETlogPacket(msg, FALSE);
 
@@ -905,7 +891,7 @@ receive_message:
 			return FALSE;
 		} else {
 			size =	  pMsg->size + sizeof(pMsg->size) + sizeof(pMsg->type)
-				+ sizeof(pMsg->paddedBytes) + sizeof(pMsg->destination);
+				+ sizeof(pMsg->destination);
 			if (is_server == FALSE) {
 			} else if (pMsg->destination == NET_ALL_PLAYERS) {
 				unsigned int j;
@@ -1013,7 +999,6 @@ UBYTE NETsendFile(BOOL newFile, const char *fileName, UDWORD player)
 	memcpy(&(msg.body[msg.size]),&inBuff,bytesRead);
 	msg.size	+= bytesRead;
 	msg.type	=  FILEMSG;
-	msg.paddedBytes = 0;
 	if(player==0)
 	{
 		NETbcast(&msg,TRUE);		// send it.
@@ -1115,7 +1100,8 @@ void NETregisterServer(int state) {
 // ////////////////////////////////////////////////////////////////////////
 // Host a game with a given name and player name. & 4 user game flags
 
-static void NETallowJoining(void) {
+static void NETallowJoining(void) 
+{
 	unsigned int i;
 	UDWORD numgames = SDL_SwapBE32(1);	// always 1 on normal server
 	char buffer[5];
@@ -1444,7 +1430,6 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 		} else {
 			strcpy(NetPlay.games[gameNumber].desc.host, tmpgame->desc.host);
 		}
-//printf("JoinGame: Received info for host %s\n", NetPlay.games[gameNumber].desc.host);
 	}
 
 	bsocket = NET_createBufferedSocket();

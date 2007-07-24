@@ -2415,12 +2415,6 @@ BOOL startMultiOptions(BOOL bReenter)
 			game.skDiff[i] = (DIFF_SLIDER_STOPS / 2);
 		}
 
-		// set the encrypt key.
-		if(NetPlay.bHost)
-		{
-			game.encryptKey = 0;
-		}
-
 		if(!NetPlay.bComms)			// firce skirmish if no comms.
 		{
 			game.type				= SKIRMISH;

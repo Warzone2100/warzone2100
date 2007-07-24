@@ -64,7 +64,6 @@ typedef struct {
 
 typedef struct {
 	uint16_t	size;			// used size of body
-	uint8_t		paddedBytes;		// numberofbytes appended for encryption
 	uint8_t		type;			// type of packet
 	uint8_t		destination;		// player to send to, or NET_ALL_PLAYERS
 	char 		body[MaxMsgSize];
@@ -100,11 +99,6 @@ typedef struct {
 	uint32_t        bHost;				// TRUE if we are hosting the session
 	uint32_t        bLobbyLaunched;			// true if app launched by a lobby
 	uint32_t        bSpectator;			// true if just spectating
-
-	uint32_t        bEncryptAllPackets;		// set to true to encrypt all communications.
-
-	// Legitimate uint32_t (i.e. a non-bool)
-	uint32_t        cryptKey[4];			// 4*32 bit encryption key
 
 	// booleans
 	uint32_t        bCaptureInUse;			// true if someone is speaking.
