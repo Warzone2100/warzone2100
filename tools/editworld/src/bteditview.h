@@ -25,6 +25,8 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
+#include "stdafx.h"
+
 #include "directx.h"
 #include "geometry.h"
 
@@ -44,6 +46,9 @@ enum {
 	DM3D_NODRAG,
 	DM3D_DRAGOBJECT,
 };
+
+// Forward declaration for pointer
+class CBTEditDoc;
 
 class CBTEditView : public CScrollView
 {
