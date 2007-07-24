@@ -41,7 +41,6 @@
 #include <malloc.h>
 #include <string.h>
 
-#define MALLOC(a) malloc(a)
 #define FREE(a) free(a); a = NULL;
 
 #include "typedefs.h"
@@ -49,11 +48,12 @@
 #define MAP_MAXWIDTH	256
 #define MAP_MAXHEIGHT	256
 
+#define __GATEWAY_C_STUFF__
 #include "gateinterface.h"
 #include "debugprint.h"
 
 #include "assert.h"
-#include "gateway.h"
+#include "gateway.hpp"
 
 // Structures and defines for SeedFill().
 typedef int Pixel;		/* 1-channel frame buffer assumed */
@@ -422,19 +422,17 @@ BOOL gwProcessMap(void)
 
 
 // see if a zone is already in the equivalence array
-static BOOL gwEquivZonePresent(UBYTE *aEquiv, SDWORD numEquiv, SDWORD zone)
+static inline bool gwEquivZonePresent(const char* aEquiv, unsigned int numEquiv, int zone)
 {
-	SDWORD	i;
-
-	for(i=0; i<numEquiv; i++)
+	for(unsigned int i = 0; i < numEquiv; ++i)
 	{
 		if (aEquiv[i] == zone)
 		{
-			return TRUE;
+			return true;
 		}
 	}
 
-	return FALSE;
+	return false;
 }
 
 
@@ -518,7 +516,7 @@ BOOL gwCreateBlankZoneMap(void)
 		gwFreeZoneMap();
 	}
 
-	apRLEZones = MALLOC(sizeof(UBYTE *) * gwMapHeight());
+	apRLEZones = reinterpret_cast<char**>(malloc(sizeof(char*) * gwMapHeight()));
 	if (apRLEZones == NULL)
 	{
 		DBERROR(("gwCreateBlankZoneMap: Out of memory"));
@@ -527,9 +525,9 @@ BOOL gwCreateBlankZoneMap(void)
 	for(i=0; i< gwMapHeight(); i++)
 	{
 #ifdef WIN32
-		apRLEZones[i] = MALLOC(gwMapWidth() * 2);
+		apRLEZones[i] = reinterpret_cast<char*>(malloc(gwMapWidth() * 2));
 #else
-		apRLEZones[i] = MALLOC(1 * 2);		// we need to get some memory back
+		apRLEZones[i] = reinterpret_cast<char*>(malloc(1 * 2));		// we need to get some memory back
 #endif
 		if (apRLEZones[i] == NULL)
 		{

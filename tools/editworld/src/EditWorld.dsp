@@ -162,7 +162,7 @@ SOURCE=.\gateway.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\gatewaysup.c
+SOURCE=.\gatewaysup.cpp
 # End Source File
 # Begin Source File
 
