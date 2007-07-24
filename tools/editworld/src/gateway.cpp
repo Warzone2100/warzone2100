@@ -34,41 +34,16 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <math.h>
+#include <string.h>
 
-#define MALLOC(a) malloc(a)
 #define FREE(a) free(a); a = NULL;
-
-//	ASSERT((psCurr!=NULL, "LIST_REMOVE: " __FILE__ "(%d): entry not found", __LINE__));
-
-#define LIST_REMOVE(psHead, psEntry, TYPE) \
-{ \
-	TYPE	*psPrev, *psCurr; \
-\
-	psPrev = NULL; \
-	for(psCurr = (psHead); psCurr; psCurr = psCurr->psNext) \
-	{ \
-		if (psCurr == (psEntry)) \
-		{ \
-			break; \
-		} \
-		psPrev = psCurr; \
-	} \
-	ASSERT((psCurr!=NULL, "LIST_REMOVE: entry not found")); \
-	if (psPrev == NULL) \
-	{ \
-		(psHead) = (psHead)->psNext; \
-	} \
-	else if (psCurr != NULL) \
-	{ \
-		psPrev->psNext = psCurr->psNext; \
-	} \
-}
 
 #include "typedefs.h"
 
 #define MAP_MAXWIDTH	256
 #define MAP_MAXHEIGHT	256
 
+#define __GATEWAY_C_STUFF__
 #include "gateinterface.h"
 #include "debugprint.h"
 
@@ -83,22 +58,48 @@
 
 #endif
 
-#include "gateway.h"
+#include "gateway.hpp"
+
+static inline list_remove(GATEWAY*& psHead, GATEWAY* psEntry)
+{
+	GATEWAY* psCurr;
+	GATEWAY* psPrev = NULL;
+
+	for(psCurr = psHead; psCurr != NULL; psCurr = psCurr->psNext)
+	{
+		if (psCurr == psEntry)
+		{
+			break;
+		}
+		psPrev = psCurr;
+	}
+
+	ASSERT(psCurr != NULL, "list_remove: entry not found");
+
+	if (psPrev == NULL)
+	{
+		psHead = psHead->psNext;
+	}
+	else if (psCurr != NULL)
+	{
+		psPrev->psNext = psCurr->psNext;
+	}
+}
 
 // the list of gateways on the current map
 GATEWAY		*psGateways;
 
 
 // the RLE map zones for each tile
-UBYTE		**apRLEZones;
+char** apRLEZones;
 
 // the number of map zones
 SDWORD		gwNumZones;
 
 // The zone equivalence tables - shows which land zones
 // border on a water zone
-UBYTE		*aNumEquiv;
-UBYTE		**apEquivZones;
+char*  aNumEquiv;
+char** apEquivZones;
 
 // link all the gateways together
 BOOL gwLinkGateways(void);
@@ -173,7 +174,7 @@ BOOL gwNewGateway(SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
 		return FALSE;
 	}
 
-	psNew = MALLOC(sizeof(GATEWAY));
+	psNew = reinterpret_cast<GATEWAY*>(malloc(sizeof(GATEWAY)));
 	if (!psNew)
 	{
 		DBERROR(("gwNewGateway: out of memory"));
@@ -244,7 +245,7 @@ BOOL gwNewLinkGateway(SDWORD x, SDWORD y)
 		return FALSE;
 	}
 
-	psNew = MALLOC(sizeof(GATEWAY));
+	psNew = reinterpret_cast<GATEWAY*>(malloc(sizeof(GATEWAY)));
 	if (!psNew)
 	{
 		DBERROR(("gwNewGateway: out of memory"));
@@ -430,7 +431,7 @@ void gwFreeGateway(GATEWAY *psDel)
 {
 	SDWORD	pos;
 
-	LIST_REMOVE(psGateways, psDel, GATEWAY);
+	list_remove(psGateways, psDel);
 
 	// clear the map flags
 	if (psDel->x1 == psDel->x2)
@@ -458,21 +459,21 @@ void gwFreeGateway(GATEWAY *psDel)
 
 
 // load a gateway list
-BOOL gwLoadGateways(UBYTE *pFileBuffer, UDWORD fileSize)
+BOOL gwLoadGateways(const char* pFileBuffer, UDWORD fileSize)
 {
 	SDWORD	numGW, x1,y1, x2,y2;
-	UBYTE	*pPos;
+	const char* pPos;
 
 	// get the number of gateways
 	pPos = pFileBuffer;
-	sscanf((STRING *)pPos, "%d", &numGW);
+	sscanf(pPos, "%d", &numGW);
 	for (; *pPos != '\n' && pPos < (pFileBuffer + fileSize); pPos += 1)
 		;
 	pPos += 1;
 
 	while ((pPos < (pFileBuffer + fileSize)) && (numGW > 0))
 	{
-		sscanf((STRING *)pPos, "%d %d %d %d", &x1,&y1, &x2, &y2);
+		sscanf(pPos, "%d %d %d %d", &x1,&y1, &x2, &y2);
 
 		if (!gwNewGateway(x1,y1, x2,y2))
 		{
@@ -590,7 +591,7 @@ BOOL gwLinkGateways(void)
 		}
 		if (zone1Links+zone2Links > 0)
 		{
-			psCurr->psLinks = MALLOC(sizeof(GATEWAY_LINK) * (zone1Links+zone2Links));
+			psCurr->psLinks = reinterpret_cast<GATEWAY_LINK*>(malloc(sizeof(GATEWAY_LINK) * (zone1Links+zone2Links)));
 			if (psCurr->psLinks == NULL)
 			{
 				DBERROR(("gwLinkGateways: out of memory"));
@@ -684,7 +685,7 @@ UDWORD gwNumZoneLines(void)
 // Get the size of a zone line.
 UDWORD gwZoneLineSize(UDWORD Line)
 {
-	UBYTE *pCode;
+	char* pCode;
 	UDWORD pos = 0;
 	UDWORD x = 0;
 
@@ -713,7 +714,7 @@ BOOL gwNewZoneMap(void)
 		gwFreeZoneMap();
 	}
 
-	apRLEZones = MALLOC(sizeof(UBYTE *) * gwMapHeight());
+	apRLEZones = reinterpret_cast<char**>(malloc(sizeof(char*) * gwMapHeight()));
 	if (apRLEZones == NULL)
 	{
 		DBERROR(("gwNewZoneMap: Out of memory"));
@@ -730,7 +731,7 @@ BOOL gwNewZoneMap(void)
 
 // Create a new empty zone map line in the zone map.
 //
-UBYTE * gwNewZoneLine(UDWORD Line,UDWORD Size)
+char* gwNewZoneLine(UDWORD Line,UDWORD Size)
 {
 	ASSERT((Line < (UDWORD)gwMapHeight(),"gwNewZoneLine : Invalid line requested"));
 	ASSERT((apRLEZones != NULL,"gwNewZoneLine : NULL Zone map"));
@@ -739,7 +740,7 @@ UBYTE * gwNewZoneLine(UDWORD Line,UDWORD Size)
 		FREE(apRLEZones[Line]);
 	}
 
-	apRLEZones[Line] = MALLOC(Size);
+	apRLEZones[Line] = reinterpret_cast<char*>(malloc(Size));
 	if (apRLEZones[Line] == NULL)
 	{
 		DBERROR(("gwNewZoneLine: Out of memory"));
@@ -754,7 +755,7 @@ UBYTE * gwNewZoneLine(UDWORD Line,UDWORD Size)
 BOOL gwCreateNULLZoneMap(void)
 {
 	SDWORD	y;
-	UBYTE	*pBuf;
+	char* pBuf;
 
 	if (!gwNewZoneMap())
 	{
@@ -825,7 +826,7 @@ BOOL gwNewEquivTable(SDWORD numZones)
 		"gwNewEquivTable: invalid number of zones"));
 
 	gwNumZones = numZones;
-	aNumEquiv = MALLOC(sizeof(UBYTE) * numZones);
+	aNumEquiv = reinterpret_cast<char*>(malloc(sizeof(char) * numZones));
 	if (aNumEquiv == NULL)
 	{
 		DBERROR(("gwNewEquivTable: out of memory"));
@@ -836,7 +837,7 @@ BOOL gwNewEquivTable(SDWORD numZones)
 		aNumEquiv[i] = 0;
 	}
 
-	apEquivZones = MALLOC(sizeof(UBYTE *) * numZones);
+	apEquivZones = reinterpret_cast<char**>(malloc(sizeof(char*) * numZones));
 	if (apEquivZones == NULL)
 	{
 		DBERROR(("gwNewEquivTable: out of memory"));
@@ -885,7 +886,7 @@ BOOL gwSetZoneEquiv(SDWORD zone, SDWORD numEquiv, UBYTE *pEquiv)
 	ASSERT((numEquiv <= gwNumZones,
 		"gwSetZoneEquiv: invalid number of zone equivalents"));
 
-	apEquivZones[zone] = MALLOC(sizeof(UBYTE) * numEquiv);
+	apEquivZones[zone] = reinterpret_cast<char*>(malloc(sizeof(char) * numEquiv));
 	if (apEquivZones[zone] == NULL)
 	{
 		DBERROR(("gwSetZoneEquiv: out of memory"));

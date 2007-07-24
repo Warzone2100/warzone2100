@@ -35,14 +35,14 @@
 // the list of gateways on the current map
 extern GATEWAY		*psGateways;
 // the RLE map zones for each tile
-extern UBYTE		**apRLEZones;
+extern char** apRLEZones;
 
 // the number of map zones
 extern SDWORD		gwNumZones;
 
 // The zone equivalence tables
-extern UBYTE		*aNumEquiv;
-extern UBYTE		**apEquivZones;
+extern char*  aNumEquiv;
+extern char** apEquivZones;
 
 // Initialise the gateway system
 BOOL gwInitialise(void);
@@ -63,7 +63,7 @@ BOOL gwGenerateLinkGates(void);
 void gwFreeGateway(GATEWAY *psDel);
 
 // load a gateway list
-BOOL gwLoadGateways(UBYTE *pFileBuffer, UDWORD fileSize);
+BOOL gwLoadGateways(const char* pFileBuffer, UDWORD fileSize);
 
 // Process the map to create all the map zones
 BOOL gwProcessMap(void);
@@ -88,7 +88,7 @@ SDWORD gwGetZone(SDWORD x, SDWORD y);
 BOOL gwNewZoneMap(void);
 
 // Create a new empty zone map line in the zone map.
-UBYTE * gwNewZoneLine(UDWORD Line,UDWORD Size);
+char* gwNewZoneLine(UDWORD Line,UDWORD Size);
 
 // Create a NULL zone map for when there is no zone info loaded
 BOOL gwCreateNULLZoneMap(void);

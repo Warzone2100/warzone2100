@@ -22,8 +22,11 @@
 	$HeadURL$
 */
 
+#ifndef __INCLUDE_GATEINTERFACE_H__
+#define __INCLUDE_GATEINTERFACE_H__
 
-#ifdef __cplusplus
+#if !defined(__GATEWAY_C_STUFF__) && defined(__cplusplus)
+
 
 struct ZoneMapHeader {
 	UWORD version;
@@ -41,6 +44,10 @@ BOOL giWriteZones(FILE *Stream);
 
 #else
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 int giGetMapWidth(void);
 int giGetMapHeight(void);
 void giSetGatewayFlag(int x,int y,BOOL IsGateway);
@@ -50,4 +57,10 @@ BOOL giIsGateway(int x,int y);
 int giGetNumGateways(void);
 BOOL giGetGateway(int Index,int *x0,int *y0,int *x1,int *y1);
 
+#ifdef __cplusplus
+}
 #endif
+
+#endif
+
+#endif // __INCLUDE_GATEINTERFACE_H__

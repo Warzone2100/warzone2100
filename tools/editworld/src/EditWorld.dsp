@@ -158,7 +158,7 @@ SOURCE=.\gateinterface.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\gateway.c
+SOURCE=.\gateway.cpp
 # End Source File
 # Begin Source File
 
@@ -331,6 +331,10 @@ SOURCE=.\gateinterface.h
 # Begin Source File
 
 SOURCE=.\gateway.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\gateway.hpp
 # End Source File
 # Begin Source File
 
