@@ -178,8 +178,8 @@ void iV_IMDRelease(iIMDShape *s)
 				if (s->polys[i].pTexAnim) {
 					free(s->polys[i].pTexAnim);
 				}
-				if (s->polys[i].vrt) {
-					free(s->polys[i].vrt);
+				if (s->polys[i].texCoord) {
+					free(s->polys[i].texCoord);
 				}
 			}
 			free(s->polys);

@@ -457,20 +457,6 @@ void pie_SetGeometricOffset(int x, int y)
 	psRendSurface->ycentre = y;
 }
 
-//*************************************************************************
-
-BOOL pie_Clockwise(iVertex *s)
-{
-	return (((s[1].y - s[0].y) * (s[2].x - s[1].x)) <=
-			((s[1].x - s[0].x) * (s[2].y - s[1].y)));
-}
-
-BOOL pie_PieClockwise(PIEVERTEX *s)
-{
-	return (((s[1].sy - s[0].sy) * (s[2].sx - s[1].sx)) <=
-			((s[1].sx - s[0].sx) * (s[2].sy - s[1].sy)));
-}
-
 
 //*************************************************************************
 //*** inverse rotate 3D vector with current rotation matrix

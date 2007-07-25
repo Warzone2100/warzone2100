@@ -120,10 +120,7 @@ extern void pie_VectorNormalise3fv(Vector3f *v);
 extern void pie_VectorInverseRotate0(Vector3i *v1, Vector3i *v2);
 extern void pie_SurfaceNormal3iv(Vector3i *p1, Vector3i *p2, Vector3i *p3, Vector3i *v);
 extern void pie_SurfaceNormal3fv(Vector3f *p1, Vector3f *p2, Vector3f *p3, Vector3f *v);
-extern BOOL pie_Clockwise(iVertex *s);
 extern void pie_SetGeometricOffset(int x, int y);
-
-extern BOOL pie_PieClockwise(PIEVERTEX *s);
 
 void pie_Begin3DScene(void);
 void pie_BeginInterface(void);

@@ -234,8 +234,6 @@ Sint32 playerXTile, playerZTile, rx, rz;
 static BOOL	mouseLocated = TRUE;
 
 /* The box used for multiple selection - present screen coordinates */
-/* The game palette */
-iPalette gamePal;
 UDWORD currentGameFrame;
 static UDWORD numTiles = 0;
 static SDWORD tileZ = 8000;

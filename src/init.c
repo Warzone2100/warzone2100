@@ -1167,10 +1167,6 @@ BOOL frontendInitialise(const char *ResourceFile)
 	keyClearMappings();
 	keyInitMappings(FALSE);
 
-#ifdef OLD_PALETTE
-	iV_PaletteSelect(iV_PaletteAdd(&gamePal[0]));
-#endif
-
 	frameSetCursorFromRes(IDC_DEFAULT);
 
 	SetFormAudioIDs(-1,ID_SOUND_WINDOWCLOSE);			// disable the open noise since distorted in 3dfx builds.
@@ -1205,7 +1201,6 @@ BOOL frontendShutdown(void)
 	scrShutDown();
 
 	//do this before shutting down the iV library
-//	D3DFreeTexturePages();
 	resReleaseAllData();
 
 	if (!objShutdown())

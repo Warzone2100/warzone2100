@@ -110,7 +110,7 @@ typedef struct {
 	int npnts;
 	Vector3f normal;
 	VERTEXID *pindex;
-	fVertex *vrt;
+	Vector2f *texCoord;
 	iTexAnim *pTexAnim;
 } iIMDPoly;
 

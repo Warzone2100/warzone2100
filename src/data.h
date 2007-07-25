@@ -28,8 +28,6 @@
 /* Pass all the data loading functions to the framework library */
 extern BOOL dataInitLoadFuncs(void);
 
-extern void dataIMGPAGERelease(void *pData);
-
 extern void dataSetSaveFlag(void);
 extern void dataClearSaveFlag(void);
 

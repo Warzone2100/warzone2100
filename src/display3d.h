@@ -91,9 +91,7 @@ extern Sint32 playerXTile, playerZTile, // -> lighting.c
  rx, rz; // -> atmos.c
 
 extern SDWORD scrollSpeed;
-extern iBitmap **tilesRAW;
 extern UDWORD worldAngle;
-extern iPalette gamePal;
 //extern void	assignSensorTarget( DROID *psDroid );
 extern void assignSensorTarget( BASE_OBJECT *psObj );
 extern void assignDestTarget( void );

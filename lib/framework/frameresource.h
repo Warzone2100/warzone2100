@@ -50,7 +50,7 @@ typedef struct res_data
 
 	UDWORD	HashedID;				// hashed version of the name of the id
 	struct	res_data *psNext;		// next entry - most likely to be following on!
-	UDWORD		usage;
+	UDWORD		usage; // Reference count
 } RES_DATA;
 
 
@@ -122,8 +122,8 @@ void resToLower(char *pStr);
 extern BOOL resGetHashfromData(const char *pType, const void *pData, UDWORD *pHash);
 
 //return last imd resource
-char *GetLastResourceFilename(void);
+const char *GetLastResourceFilename(void) WZ_DECL_PURE;
 // Set the resource name of the last resource file loaded
-void SetLastResourceFilename(char *pName);
+void SetLastResourceFilename(const char *pName);
 
 #endif

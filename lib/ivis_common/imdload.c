@@ -192,8 +192,8 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 		// PC texture coord routine
 		if (poly->flags & iV_IMD_TEX)
 		{
-			poly->vrt = (fVertex*)malloc(sizeof(fVertex) * poly->npnts);
-			if (poly->vrt == NULL)
+			poly->texCoord = malloc(sizeof(Vector2f) * poly->npnts);
+			if (poly->texCoord == NULL)
 			{
 				debug(LOG_ERROR, "(_load_polys) [poly %d] memory alloc fail (vertex struct)", i);
 				return FALSE;
@@ -209,14 +209,13 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 				}
 				pFileData += cnt;
 
-				poly->vrt[j].u = VertexU;
-				poly->vrt[j].v = VertexV;
-				poly->vrt[j].g = UINT8_MAX;
+				poly->texCoord[j].x = VertexU;
+				poly->texCoord[j].y = VertexV;
 			}
 		}
 		else
 		{
-			poly->vrt = NULL;
+			poly->texCoord = NULL;
 		}
 	}
 

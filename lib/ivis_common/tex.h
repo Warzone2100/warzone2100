@@ -61,7 +61,7 @@ extern void iV_unloadImage(iV_Image *image);
 extern unsigned int iV_getPixelFormat(const iV_Image *image);
 
 extern int pie_ReloadTexPage(const char *texpageName, const char *fileName);
-extern int pie_AddTexPage(iTexture* s, const char *filename, int type, BOOL bResource);
+extern int pie_AddTexPage(iV_Image* s, const char *filename, int type, BOOL bResource);
 extern void pie_ChangeTexPage(int tex_index, iTexture* s, int type, BOOL bResource);
 extern void pie_TexInit(void);
 

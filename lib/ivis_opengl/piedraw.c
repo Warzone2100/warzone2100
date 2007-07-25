@@ -435,8 +435,8 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 			pieVrts[n].sx = scrPoints[*index].x;
 			pieVrts[n].sy = scrPoints[*index].y;
 			pieVrts[n].sz = scrPoints[*index].z;
-			pieVrts[n].tu = pPolys->vrt[n].u;
-			pieVrts[n].tv = pPolys->vrt[n].v;
+			pieVrts[n].tu = pPolys->texCoord[n].x;
+			pieVrts[n].tv = pPolys->texCoord[n].y;
 			pieVrts[n].light.argb = colour.argb;
 			pieVrts[n].specular.argb = specular.argb;
 		}

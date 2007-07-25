@@ -129,13 +129,6 @@ typedef struct {SWORD x, y, w, h;} PIERECT; //screen rectangle
 typedef struct {SDWORD texPage; SWORD tu, tv, tw, th;} PIEIMAGE; //an area of texture
 typedef struct {UDWORD pieFlag; PIELIGHT colour, specular; UBYTE light, trans, scale, height;} PIESTYLE; //render style for pie draw functions
 
-// This is the new resource loaded structure (TEXPAGE)
-typedef struct
-{
-	iTexture *Texture;
-	iPalette *Palette;
-} TEXTUREPAGE;
-
 typedef struct {
 	UDWORD flags;
 	SDWORD nVrts;
