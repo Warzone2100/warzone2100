@@ -96,6 +96,12 @@ typedef struct {
 //
 //*************************************************************************
 
+/// Stores the from and to verticles from an edge
+typedef struct edge_
+{
+	int from, to;
+} EDGE;
+
 typedef int VERTEXID;	// Size of the entry for vertex id in the imd polygon structure
 
 typedef struct {
@@ -109,27 +115,26 @@ typedef struct {
 } iIMDPoly;
 
 typedef struct iIMDShape {
-	Sint32 texpage;
-	Sint32 oradius, sradius, radius, visRadius, xmin, xmax, ymin, ymax, zmin, zmax;
+	int texpage;
+	int sradius, radius, xmin, xmax, ymin, ymax, zmin, zmax;
 
 	Vector3f ocen;
-	UWORD numFrames;
-	UWORD animInterval;
-	int npoints;
-	int npolys; // After BSP this number is not updated - it stays the number of pre-bsp polys
-	int nconnectors; // After BSP this number is not updated - it stays the number of pre-bsp polys
+	unsigned short numFrames;
+	unsigned short animInterval;
 
+	unsigned int npoints;
 	Vector3f *points;
-	iIMDPoly *polys; // After BSP this is not changed - it stays the original chunk of polys - not all are now used,and others not in this array are, see BSPNode for a tree of all the post BSP polys
-	Vector3f *connectors; // After BSP this is not changed - it stays the original chunk of polys - not all are now used,and others not in this array are, see BSPNode for a tree of all the post BSP polys
 
-	int ntexanims;
-	iTexAnim **texanims;
+	unsigned int npolys;
+	iIMDPoly *polys;
+
+	unsigned int nconnectors;
+	Vector3f *connectors;
+
+	unsigned int nShadowEdges;
+	EDGE *shadowEdgeList;
 
 	struct iIMDShape *next; // next pie in multilevel pies (NULL for non multilevel !)
-
-	void *shadowEdgeList;
-	unsigned int nShadowEdges;
 } iIMDShape;
 
 

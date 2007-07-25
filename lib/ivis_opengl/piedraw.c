@@ -42,12 +42,6 @@
 #include "piematrix.h"
 #include "pietexture.h"
 
-/// Stores the from and to verticles from an edge
-typedef struct edge_
-{
-	int from, to;
-} EDGE;
-
 extern BOOL drawing_interface;
 
 /***************************************************************************/
@@ -553,7 +547,7 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 	pVertices = shape->points;
 	if( flag & pie_STATIC_SHADOW && shape->shadowEdgeList )
 	{
-		drawlist = (EDGE*)shape->shadowEdgeList;
+		drawlist = shape->shadowEdgeList;
 		edge_count = shape->nShadowEdges;
 	}
 	else

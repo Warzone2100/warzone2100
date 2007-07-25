@@ -85,7 +85,7 @@ BOOL iV_IMDSave(char *filename, iIMDShape *s, BOOL PieIMD)
 	fprintf(fp,"TYPE %x\n",s->flags);
 
 	// if textured write tex page file info
-	if (s->texpage != -1)
+	if (s->texpage != iV_TEX_INVALID)
 	{
 		fprintf(fp,"TEXTURE %d %s %d %d\n",iV_TEXTYPE(s->texpage),
 				iV_TEXNAME(s->texpage),iV_TEXWIDTH(s->texpage),

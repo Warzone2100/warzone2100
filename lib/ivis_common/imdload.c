@@ -113,12 +113,6 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 			debug(LOG_ERROR, "(_load_polys) [poly %d] memory alloc fail (poly indices)", i);
 			return FALSE;
 		}
-		poly->vrt = (fVertex*)malloc(sizeof(fVertex) * poly->npnts);
-		if (poly->vrt == NULL)
-		{
-			debug(LOG_ERROR, "(_load_polys) [poly %d] memory alloc fail (vertex struct)", i);
-			return FALSE;
-		}
 
 		for (j = 0; j < poly->npnts; j++)
 		{
@@ -198,6 +192,13 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 		// PC texture coord routine
 		if (poly->flags & iV_IMD_TEX)
 		{
+			poly->vrt = (fVertex*)malloc(sizeof(fVertex) * poly->npnts);
+			if (poly->vrt == NULL)
+			{
+				debug(LOG_ERROR, "(_load_polys) [poly %d] memory alloc fail (vertex struct)", i);
+				return FALSE;
+			}
+
 			for (j = 0; j < poly->npnts; j++)
 			{
 				float VertexU, VertexV;
@@ -212,6 +213,10 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 				poly->vrt[j].v = VertexV;
 				poly->vrt[j].g = UINT8_MAX;
 			}
+		}
+		else
+		{
+			poly->vrt = NULL;
 		}
 	}
 
@@ -282,7 +287,7 @@ static BOOL ReadPoints( const char **ppFileData, iIMDShape *s )
 static BOOL _imd_load_points( const char **ppFileData, iIMDShape *s )
 {
 	Vector3f *p = NULL;
-	Sint32 tempXMax, tempXMin, tempZMax, tempZMin, extremeX, extremeZ;
+	Sint32 tempXMax, tempXMin, tempZMax, tempZMin;
 	Sint32 xmax, ymax, zmax;
 	double dx, dy, dz, rad_sq, rad, old_to_p_sq, old_to_p, old_to_new;
 	double xspan, yspan, zspan, maxspan;
@@ -395,11 +400,6 @@ static BOOL _imd_load_points( const char **ppFileData, iIMDShape *s )
 		}
 	}
 
-	/* Centered about origin I can do the '-' thing below!! */
-	extremeX = MAX(tempXMax, -tempXMin);
-	extremeZ = MAX(tempZMax, -tempZMin);
-
-	s->visRadius = MAX(extremeX, extremeZ);
 	// no need to scale an IMD shape (only FSD)
 	xmax = MAX(s->xmax, -s->xmin);
 	ymax = MAX(s->ymax, -s->ymin);
@@ -488,9 +488,8 @@ static BOOL _imd_load_points( const char **ppFileData, iIMDShape *s )
 	}
 
 	s->ocen = cen;
-	s->oradius = rad;
 	debug(LOG_3D, "radius, sradius, %d, %d\n", s->radius, s->sradius);
-	debug(LOG_3D, "SPHERE: cen,rad = %f %f %f, %d\n", s->ocen.x, s->ocen.y, s->ocen.z, s->oradius);
+	debug(LOG_3D, "SPHERE: cen,rad = %f %f %f\n", s->ocen.x, s->ocen.y, s->ocen.z);
 
 // END: tight bounding sphere
 
@@ -572,12 +571,11 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 	s->points = NULL;
 	s->polys = NULL;
 	s->connectors = NULL;
-	s->texanims = NULL;
 	s->next = NULL;
 
 	s->shadowEdgeList = NULL;
 	s->nShadowEdges = 0;
-	s->texpage = -1;
+	s->texpage = iV_TEX_INVALID;
 
 
 	if (sscanf(pFileData, "%s %d%n", buffer, &s->npoints, &cnt) != 2)
@@ -791,9 +789,8 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 	// load texture page if specified
 	if (bTextured)
 	{
-		int texpage = -1;
+		int texpage = iV_GetTexture(texfile);
 
-		texpage = iV_GetTexture(texfile);
 		if (texpage < 0)
 		{
 			debug(LOG_ERROR, "iV_ProcessIMD %s could not load tex page %s", pFileName, texfile);
