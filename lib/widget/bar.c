@@ -169,7 +169,7 @@ void widgSetBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue)
 		psBGraph->iValue = psBGraph->iRange;
 	}
 
-	size = WBAR_SCALE * psBGraph->iValue / psBGraph->iRange;
+	size = WBAR_SCALE * psBGraph->iValue / MAX(psBGraph->iRange, 1);
 
 	psBGraph->majorSize = (UWORD)size;
 }
@@ -191,7 +191,7 @@ void widgSetMinorBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue )
 		return;
 	}
 
-	size = WBAR_SCALE * iValue / psBGraph->iRange;
+	size = WBAR_SCALE * iValue / MAX(psBGraph->iRange, 1);
 	if (size > WBAR_SCALE)
 	{
 		size = WBAR_SCALE;
