@@ -159,12 +159,12 @@ void AutoFlagDialog::OnOK(wxCommandEvent& event)
 	else if (Degree270_RadioButton->GetValue())
 		_Rotate = 3;
 
-	wxDialog::EndModal(wxID_OK);
+	wxDialog::OnOK(event);
 }
 
 void AutoFlagDialog::OnCancel(wxCommandEvent& event)
 {
-	wxDialog::EndModal(wxID_CANCEL);
+	wxDialog::OnCancel(event);
 }
 
 void AutoFlagDialog::OnRandRotate(wxCommandEvent& event)
