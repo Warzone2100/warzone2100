@@ -30,7 +30,7 @@
 #include	<assert.h>
 
 #include	"fileparse.h"
-#include	"debugprint.h"
+#include	"debugprint.hpp"
 
 
 fileParser::fileParser(std::istream& file, short flags) :

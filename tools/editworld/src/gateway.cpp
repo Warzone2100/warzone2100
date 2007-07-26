@@ -41,7 +41,7 @@
 #define MAP_MAXWIDTH	256
 #define MAP_MAXHEIGHT	256
 
-#include "debugprint.h"
+#include "debugprint.hpp"
 
 #include "gateway.hpp"
 

@@ -27,7 +27,7 @@
 #include "bteditdoc.h"
 #include "brush.h"
 #include "tiletypes.h"
-#include "debugprint.h"
+#include "debugprint.hpp"
 #include "assert.h"
 
 #ifdef _DEBUG

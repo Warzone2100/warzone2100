@@ -22,9 +22,8 @@
 	$HeadURL$
 */
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#ifndef __INCLUDE_DEBUGPRINT_HPP__
+#define __INCLUDE_DEBUGPRINT_HPP__
 
 //#define DEBUG0
 //#define DEBUG1
@@ -33,9 +32,6 @@ extern "C" {
 //#define DEBUG4
 #define DEBUG5
 	
-void DebugOpen(char* LogName);
-void DebugClose(void);
-
 #ifndef _TCHAR_DEFINED
 typedef char TCHAR, *PTCHAR;
 typedef unsigned char TBYTE , *PTBYTE ;
@@ -44,26 +40,27 @@ typedef unsigned char TBYTE , *PTBYTE ;
 
 
 #ifdef _DEBUG
+void DebugOpen(const char* LogName);
+void DebugClose();
 void DebugPrint(const TCHAR *format, ...);
 #else
+#define DebugOpen
+#define DebugClose
 #define DebugPrint
 #endif
 
 #ifdef __cplusplus
-	#ifndef ASSERT
-
-	#define ASSERT
-
-	#endif
+# ifndef ASSERT
+#  define ASSERT
+# endif
 #else
-	#ifndef ASSERT
+# ifndef ASSERT
+#  define DBG_ASSERT(a,b) if(!(a)) { DebugPrint("Assertion Failure in %s, line : %d\n",__FILE__, __LINE__); \
+          DebugPrint(b); \
+          DebugPrint("\n"); }
+#  define ASSERT(a) DBG_ASSERT a
 
-		#define DBG_ASSERT(a,b) if(!(a)) { DebugPrint("Assertion Failure in %s, line : %d\n",__FILE__, __LINE__); \
-								DebugPrint(b); \
-								DebugPrint("\n"); }
-		#define ASSERT(a) DBG_ASSERT a
-
-	#endif
+# endif
 #endif
 
 #define DBERROR(a) DebugPrint a;
@@ -106,7 +103,4 @@ void DebugPrint(const TCHAR *format, ...);
 #define DBP5
 #endif
 
-#ifdef __cplusplus
-}
-#endif
-
+#endif // __INCLUDE_DEBUGPRINT_HPP__

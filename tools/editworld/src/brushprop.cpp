@@ -28,7 +28,7 @@
 #include "btedit.h"
 #include "bteditdoc.h"
 #include "wfview.h"
-#include "debugprint.h"
+#include "debugprint.hpp"
 
 #include "brushprop.h"
 

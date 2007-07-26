@@ -24,33 +24,29 @@
 
 #include "windows.h"
 #include "windowsx.h"
-#include "stdio.h"
+#include <fstream>
 #include "tchar.h"
+#include "debugprint.hpp"
 
 #ifdef _DEBUG
 
 extern void DebugWinPrint(char *String);
 
-FILE* DebugStream=NULL;
+static std::ostream* DebugStream = NULL;
 
-void DebugOpen(char* LogName)
+void DebugOpen(const char* LogName)
 {
-	if(DebugStream) {
-		fclose(DebugStream);
-		DebugStream = NULL;
-	}
+	DebugClose();
 
-	DebugStream = fopen(LogName,"wb");
-	
-	fprintf(DebugStream,"This build : %s %s\n\n",__DATE__,__TIME__);
+	DebugStream = new std::ofstream(LogName, std::ios_base::binary);
+
+	*DebugStream << "This build : " << __DATE__ << " " << __TIME__ << "\n" << std::endl;
 }
 
-void DebugClose(void)
+void DebugClose()
 {
-	if(DebugStream) {
-		fclose(DebugStream);
-	}
-	DebugStream=NULL;
+	delete DebugStream;
+	DebugStream = NULL;
 }
 
 void DebugPrint(const TCHAR *format, ...)
@@ -61,23 +57,12 @@ void DebugPrint(const TCHAR *format, ...)
 	va_start(args,format);
 	_vsntprintf(buf,4096,format,args);
 	va_end(args);
+
+	// Display the debug string in any debugger (WINAPI function)
 	OutputDebugString(buf);
-	if(DebugStream!=NULL) {
-		fprintf(DebugStream,"%s",buf);
-	}
 
-//	DebugWinPrint(buf);
+	if(DebugStream)
+		*DebugStream << buf << std::endl;
 }
-
-#else
-
-void DebugOpen(char* LogName)
-{
-}
-
-void DebugClose(void)
-{
-}
-
 
 #endif

@@ -28,7 +28,7 @@
 #include "stdio.h"
 #include "math.h"
 #include "typedefs.h"
-#include "debugprint.h"
+#include "debugprint.hpp"
 
 #include "directx.h"
 #include "geometry.h"

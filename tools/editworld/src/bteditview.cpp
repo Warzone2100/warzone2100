@@ -31,7 +31,7 @@
 #include "bteditdoc.h"
 #include "bteditview.h"
 //#include "editstats.h"
-#include "debugprint.h"
+#include "debugprint.hpp"
 //#include "statsview.h"
 #include "tiletypes.h"
 #include "objectproperties.h"

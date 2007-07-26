@@ -26,7 +26,7 @@
 #include "windowsx.h"
 #include "stdio.h"
 #include "typedefs.h"
-#include "debugprint.h"
+#include "debugprint.hpp"
 
 #include "keyhandler.h"
 

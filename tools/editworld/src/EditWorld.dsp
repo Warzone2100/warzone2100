@@ -126,7 +126,7 @@ SOURCE=.\ddimage.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\debugprint.c
+SOURCE=.\debugprint.cpp
 # End Source File
 # Begin Source File
 
@@ -294,7 +294,7 @@ SOURCE=.\debug.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\debugprint.h
+SOURCE=.\debugprint.hpp
 # End Source File
 # Begin Source File
 

@@ -33,7 +33,7 @@
 
 #include "directx.h"
 #include "geometry.h"
-#include "debugprint.h"
+#include "debugprint.hpp"
 
 //#define FOGGY
 #define FILTER

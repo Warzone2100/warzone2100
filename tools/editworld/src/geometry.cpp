@@ -32,7 +32,7 @@
 #include <io.h>
 #include <math.h>
 
-#include "debugprint.h"
+#include "debugprint.hpp"
 #include "geometry.h"
 #include "directx.h"
 

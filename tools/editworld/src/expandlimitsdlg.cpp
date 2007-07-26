@@ -26,7 +26,7 @@
 
 #include "stdafx.h"
 #include "btedit.h"
-#include "debugprint.h"
+#include "debugprint.hpp"
 #include "expandlimitsdlg.h"
 
 #ifdef _DEBUG

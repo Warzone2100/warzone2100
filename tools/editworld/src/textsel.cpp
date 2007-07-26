@@ -25,7 +25,7 @@
 //
 
 #include "stdafx.h"
-#include "debugprint.h"
+#include "debugprint.hpp"
 #include "textsel.h"
 #include "heightmap.h"
 #include "tiletypes.h"

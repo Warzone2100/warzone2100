@@ -30,7 +30,7 @@
 #include "textureview.h"
 #include "tiletypes.h"
 #include "autoflagdialog.h"
-#include "debugprint.h"
+#include "debugprint.hpp"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

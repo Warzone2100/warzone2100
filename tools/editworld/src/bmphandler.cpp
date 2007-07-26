@@ -25,7 +25,7 @@
 #include "winstuff.h"
 #include "stdio.h"
 #include "assert.h"
-#include "debugprint.h"
+#include "debugprint.hpp"
 #include "bmphandler.h"
 
 BMPHandler::BMPHandler() :

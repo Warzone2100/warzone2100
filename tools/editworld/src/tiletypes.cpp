@@ -32,7 +32,7 @@
 #include "directx.h"
 #include "geometry.h"
 
-#include "debugprint.h"
+#include "debugprint.hpp"
 #include "ddimage.h"
 #include "heightmap.h"
 

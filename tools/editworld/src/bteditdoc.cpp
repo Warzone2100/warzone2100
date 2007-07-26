@@ -32,7 +32,7 @@
 #include "mapprefs.h"
 #include "textureprefs.h"
 #include "dibdraw.h"
-#include "debugprint.h"
+#include "debugprint.hpp"
 #include "wfview.h"
 #include "textureview.h"
 #include "bteditview.h"

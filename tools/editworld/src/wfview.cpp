@@ -31,7 +31,7 @@
 //#include "DBView.h"
 #include "tiletypes.h"
 //#include "EditStats.h"
-#include "debugprint.h"
+#include "debugprint.hpp"
 //#include "DebugWin.h"
 #include "objectproperties.h"
 

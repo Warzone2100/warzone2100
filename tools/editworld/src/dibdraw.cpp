@@ -32,7 +32,7 @@
 #include <assert.h>
 
 #include "dibdraw.h"
-#include "debugprint.h"
+#include "debugprint.hpp"
 
 
 // Create a DIBDraw class with user specified dimensions and colour depth.
