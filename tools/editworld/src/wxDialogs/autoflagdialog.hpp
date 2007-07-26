@@ -72,7 +72,6 @@ class AutoFlagDialog : public wxDialog
 	private:
 		//(*Handlers(AutoFlagDialog)
 		void OnOK(wxCommandEvent& event);
-		void OnCancel(wxCommandEvent& event);
 		void OnDegree(wxCommandEvent& event);
 		void OnXFlip(wxCommandEvent& event);
 		void OnYFlip(wxCommandEvent& event);

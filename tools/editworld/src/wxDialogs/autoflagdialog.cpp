@@ -86,8 +86,10 @@ AutoFlagDialog::AutoFlagDialog(wxWindow* parent,
 	Connect(XRCID("ID_CHK_RANDXFLIP"),wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&AutoFlagDialog::OnRandXFlip);
 	Connect(XRCID("ID_CHK_RANDYFLIP"),wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&AutoFlagDialog::OnRandYFlip);
 	Connect(XRCID("ID_OK"),wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&AutoFlagDialog::OnOK);
-	Connect(XRCID("ID_CANCEL"),wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&AutoFlagDialog::OnCancel);
 	//*)
+
+	// Use default handler for Cancel Button
+	Connect(XRCID("ID_CANCEL"), wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&wxDialog::OnCancel);
 }
 
 AutoFlagDialog::~AutoFlagDialog()
@@ -160,11 +162,6 @@ void AutoFlagDialog::OnOK(wxCommandEvent& event)
 		_Rotate = 3;
 
 	wxDialog::OnOK(event);
-}
-
-void AutoFlagDialog::OnCancel(wxCommandEvent& event)
-{
-	wxDialog::OnCancel(event);
 }
 
 void AutoFlagDialog::OnRandRotate(wxCommandEvent& event)
