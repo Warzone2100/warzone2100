@@ -1,5 +1,4 @@
  * Port the following files from using MFC to wxWidgets instead:
-  * autoflagdialog.cpp
   * btedit.cpp
   * bteditdoc.cpp
   * bteditview.cpp
