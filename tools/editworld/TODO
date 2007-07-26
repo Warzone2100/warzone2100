@@ -1,28 +1,25 @@
+ * Port the following files from using MFC to wxWidgets instead:
+  * autoflagdialog.cpp
+  * btedit.cpp
+  * bteditdoc.cpp
+  * bteditview.cpp
+  * expandlimitsdlg.cpp
+  * exportinfo.cpp
+  * initiallimitsdlg.cpp
+  * limitsdialog.cpp
+  * mainfrm.cpp
+  * mapprefs.cpp
+  * objectproperties.cpp
+  * pasteprefs.cpp
+  * playermap.cpp
+  * savesegmentsdialog.cpp
+  * tdview.cpp
+  * textureprefs.cpp
+  * textureview.cpp
+  * wfview.cpp
 
-(done) Set default scroll limits when creating new map.
-
-(done) Set default edge brushes for all tile sets.
-
-For multiplayer editor, replace "export start","expand" and "mission"
-with "export game".
-
-(done) Allow objects for individual players to be disabled in views.
-
-(done) Display game coords in both views, tile and world.
-
-(done) Rotate and flip clipboard.
-
-(done) Save texture selector rotate states.
-
-(done) Default height scale to 2.
-
-(done) Default see level to 0.
-
-Allow gateway editing in 3d view.
-
-Fix crash if you paint with an empty edge brush.
-
-Load data from game WDG.
-
-Save data to WDG.
-
+ * For multiplayer editor, replace "export start","expand" and "mission" with "export game".
+ * Allow gateway editing in 3d view.
+ * Fix crash if you paint with an empty edge brush.
+ * Load data from game WDG.
+ * Save data to WDG.
