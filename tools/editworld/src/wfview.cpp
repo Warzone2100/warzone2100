@@ -34,6 +34,7 @@
 #include "debugprint.hpp"
 //#include "DebugWin.h"
 #include "objectproperties.h"
+#include "keyhandler.hpp"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -76,7 +77,7 @@ CWFView::CWFView()
 	WFView = this;
 	m_ViewIsInitialised=FALSE;
 	m_DragMode=DM_NODRAG;
-	m_KeyHandler = new CKeyHandler();
+	m_KeyHandler = new KeyHandler();
 	m_HeightsChanged = FALSE;
 //	m_BrushDialog = new CBrushProp(this);
 }

@@ -28,32 +28,26 @@
 #include "typedefs.h"
 #include "debugprint.hpp"
 
-#include "keyhandler.h"
+#include "keyhandler.hpp"
 
-CKeyHandler::CKeyHandler(void)
+KeyHandler::KeyHandler()
 {
-	InitKeyTable();
 }
 
-void CKeyHandler::InitKeyTable(void)
+void KeyHandler::HandleKeyDown(unsigned int VKey)
 {
-	for(int i = 0; i<KEYTABSIZE; i++) {
-		m_KeyTable[i] = 0;
-	}
-}
-
-void CKeyHandler::HandleKeyDown(UINT VKey)
-{
-	if(VKey < KEYTABSIZE) {
+	if(VKey < _KeyTable.size())
+	{
 //		DebugPrint("KeyDown %d\n",VKey);
-		m_KeyTable[VKey] = 1;
+		_KeyTable.set(VKey);
 	}
 }
 
-void CKeyHandler::HandleKeyUp(UINT VKey)
+void KeyHandler::HandleKeyUp(unsigned int VKey)
 {
-	if(VKey < KEYTABSIZE) {
-		m_KeyTable[VKey] = 0;
+	if(VKey < _KeyTable.size())
+	{
+		_KeyTable.reset(VKey);
 //		DebugPrint("KeyUp %d\n",VKey);
 	}
 }

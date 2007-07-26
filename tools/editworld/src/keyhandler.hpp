@@ -22,20 +22,27 @@
 	$HeadURL$
 */
 
-#ifndef __INCLUDED_KEYHANDLER__
-#define __INCLUDED_KEYHANDLER__
+#ifndef __INCLUDE_KEYHANDLER_HPP__
+#define __INCLUDE_KEYHANDLER_HPP__
 
 #define KEYTABSIZE	256
+#include <bitset>
 
-class CKeyHandler {
-public:
-	CKeyHandler(void);
-	void InitKeyTable(void);
-	void HandleKeyDown(UINT VKey);
-	void HandleKeyUp(UINT VKey);
-	BOOL GetKeyState(UINT VKey) { return m_KeyTable[VKey]; }
-protected:
-	BOOL m_KeyTable[KEYTABSIZE];
+class KeyHandler
+{
+	public:
+		KeyHandler();
+
+		void HandleKeyDown(unsigned int VKey);
+		void HandleKeyUp(unsigned int VKey);
+
+		inline bool GetKeyState(unsigned int VKey)
+		{
+			return _KeyTable.test(VKey);
+		}
+
+	private:
+		std::bitset<256> _KeyTable;
 };
 
-#endif
+#endif // __INCLUDE_KEYHANDLER_HPP__

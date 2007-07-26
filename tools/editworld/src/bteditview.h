@@ -34,7 +34,6 @@
 #include "ddimage.h"
 #include "heightmap.h"
 #include "pcxhandler.h"
-#include "keyhandler.h"
 
 //#include "InfoDialog.h"
 
@@ -47,8 +46,9 @@ enum {
 	DM3D_DRAGOBJECT,
 };
 
-// Forward declaration for pointer
+// Forward declarations for pointers
 class CBTEditDoc;
+class KeyHandler;
 
 class CBTEditView : public CScrollView
 {
@@ -126,7 +126,7 @@ protected:
 	DWORD m_MouseX;
 	DWORD m_MouseY;
 	DWORD m_DragMode;
-	CKeyHandler *m_KeyHandler;
+	KeyHandler *m_KeyHandler;
 // Generated message map functions
 protected:
 	//{{AFX_MSG(CBTEditView)

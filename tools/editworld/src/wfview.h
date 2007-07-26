@@ -34,7 +34,6 @@
 #include "ddimage.h"
 #include "heightmap.h"
 #include "pcxhandler.h"
-#include "keyhandler.h"
 //#include "brushprop.h"
 
 #define	SCREEN_XRES	640
@@ -45,6 +44,9 @@ enum {
 	DM_NODRAG,
 	DM_DRAGOBJECT,
 };
+
+// Forward declarations for pointers
+class KeyHandler;
 
 class CWFView : public CScrollView
 {
@@ -121,7 +123,7 @@ protected:
 	DWORD	m_DragMode;
 //	CBrushProp *m_BrushDialog;
 
-	CKeyHandler *m_KeyHandler;
+	KeyHandler *m_KeyHandler;
 
 	// Generated message map functions
 	//{{AFX_MSG(CWFView)

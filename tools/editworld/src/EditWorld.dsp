@@ -350,7 +350,7 @@ SOURCE=.\initiallimitsdlg.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\keyhandler.h
+SOURCE=.\keyhandler.hpp
 # End Source File
 # Begin Source File
 

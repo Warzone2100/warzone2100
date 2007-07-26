@@ -35,6 +35,7 @@
 //#include "statsview.h"
 #include "tiletypes.h"
 #include "objectproperties.h"
+#include "keyhandler.hpp"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -121,7 +122,7 @@ CBTEditView::CBTEditView()
 	m_Selected = -1;
 	m_DragMode = DM3D_NODRAG;
 //	m_DirectMaths = NULL;
-	m_KeyHandler = new CKeyHandler();
+	m_KeyHandler = new KeyHandler();
 	m_HeightsChanged = FALSE;
 
 //	m_InfoDialog = new CInfoDialog(this);
