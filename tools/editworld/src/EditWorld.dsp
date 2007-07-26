@@ -250,7 +250,7 @@ SOURCE=.\wfview.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl;fi;fd"
 # Begin Source File
 
-SOURCE=.\autoflagdialog.h
+SOURCE=.\autoflagdialog.hpp
 # End Source File
 # Begin Source File
 

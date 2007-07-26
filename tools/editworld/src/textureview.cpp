@@ -29,7 +29,7 @@
 #include "bteditdoc.h"
 #include "textureview.h"
 #include "tiletypes.h"
-#include "autoflagdialog.h"
+#include "autoflagdialog.hpp"
 #include "debugprint.hpp"
 
 #ifdef _DEBUG
@@ -739,23 +739,25 @@ void CTextureView::OnLButtonDblClk(UINT nFlags, CPoint point)
 
 					DebugPrint("Double clicked on tile %d\n",Selected);
 
-					CAutoFlagDialog Dlg;
-					Dlg.m_IncRotate = Selector->GetTextureFlags(Selected) & SF_INCTEXTUREROTATE;
-					Dlg.m_TogXFlip = Selector->GetTextureFlags(Selected) & SF_TOGTEXTUREFLIPX;
-					Dlg.m_TogYFlip = Selector->GetTextureFlags(Selected) & SF_TOGTEXTUREFLIPY;
-					Dlg.m_RandRotate = Selector->GetTextureFlags(Selected) & SF_RANDTEXTUREROTATE;
-					Dlg.m_RandXFlip = Selector->GetTextureFlags(Selected) & SF_RANDTEXTUREFLIPX;
-					Dlg.m_RandYFlip = Selector->GetTextureFlags(Selected) & SF_RANDTEXTUREFLIPY;
-					Dlg.m_Rotate = Selector->GetTextureRotate(Selected);
-					Dlg.m_XFlip = Selector->GetTextureFlags(Selected) & SF_TEXTUREFLIPX;
-					Dlg.m_YFlip = Selector->GetTextureFlags(Selected) & SF_TEXTUREFLIPY;
-					if(Dlg.DoModal() == IDOK) {
-						Selector->SetTextureRotate(Selected,Dlg.m_Rotate);
-						Selector->SetTextureFlip(Selected,Dlg.m_XFlip,Dlg.m_YFlip);
-						Selector->SetTextureRandomFlip(Selected,Dlg.m_RandXFlip,Dlg.m_RandYFlip);
-						Selector->SetTextureToggleFlip(Selected,Dlg.m_TogXFlip,Dlg.m_TogYFlip);
-						Selector->SetTextureRandomRotate(Selected,Dlg.m_RandRotate);
-						Selector->SetTextureIncrementRotate(Selected,Dlg.m_IncRotate);
+					AutoFlagDialog Dlg(NULL,
+					                   Selector->GetTextureFlags(Selected) & SF_RANDTEXTUREROTATE,
+					                   Selector->GetTextureFlags(Selected) & SF_RANDTEXTUREFLIPX,
+					                   Selector->GetTextureFlags(Selected) & SF_RANDTEXTUREFLIPY,
+					                   Selector->GetTextureFlags(Selected) & SF_TEXTUREFLIPX,
+					                   Selector->GetTextureFlags(Selected) & SF_TEXTUREFLIPY,
+					                   Selector->GetTextureRotate(Selected),
+					                   Selector->GetTextureFlags(Selected) & SF_INCTEXTUREROTATE,
+					                   Selector->GetTextureFlags(Selected) & SF_TOGTEXTUREFLIPX,
+					                   Selector->GetTextureFlags(Selected) & SF_TOGTEXTUREFLIPY);
+
+					if(Dlg.DoModal() == IDOK)
+					{
+						Selector->SetTextureRotate(Selected, Dlg.Rotate());
+						Selector->SetTextureFlip(Selected, Dlg.XFlip(), Dlg.YFlip());
+						Selector->SetTextureRandomFlip(Selected, Dlg.RandXFlip(), Dlg.RandYFlip());
+						Selector->SetTextureToggleFlip(Selected, Dlg.ToggleXFlip(), Dlg.ToggleYFlip());
+						Selector->SetTextureRandomRotate(Selected, Dlg.RandRotate());
+						Selector->SetTextureIncrementRotate(Selected, Dlg.IncRotate());
 						pDoc->SelectTexture(SelX,SelY);
 						InvalidateRect(NULL,NULL);
 					}

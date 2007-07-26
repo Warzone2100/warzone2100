@@ -21,168 +21,224 @@
 	$Id$
 	$HeadURL$
 */
-// AutoFlagDialog.cpp : implementation file
-//
 
 #include "stdafx.h"
 #include "btedit.h"
-#include "autoflagdialog.h"
+#include "autoflagdialog.hpp"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
-// CAutoFlagDialog dialog
+// AutoFlagDialog dialog
 
 
-CAutoFlagDialog::CAutoFlagDialog(CWnd* pParent /*=NULL*/)
-	: CDialog(CAutoFlagDialog::IDD, pParent)
+AutoFlagDialog::AutoFlagDialog(CWnd* parent,
+                               bool RandRotate,
+                               bool RandXFlip,
+                               bool RandYFlip,
+                               bool XFlip,
+                               bool YFlip,
+                               unsigned int Rotate,
+                               bool IncRotate,
+                               bool ToggleXFlip,
+                               bool ToggleYFlip) :
+	CDialog(AutoFlagDialog::IDD, parent),
+	_RandRotate(RandRotate),
+	_RandXFlip(RandXFlip),
+	_RandYFlip(RandYFlip),
+	_XFlip(XFlip),
+	_YFlip(YFlip),
+	_Rotate(Rotate),
+	_IncRotate(IncRotate),
+	_ToggleXFlip(ToggleXFlip),
+	_ToggleYFlip(ToggleYFlip)
 {
-	//{{AFX_DATA_INIT(CAutoFlagDialog)
+	//{{AFX_DATA_INIT(AutoFlagDialog)
 	//}}AFX_DATA_INIT
 }
 
+bool AutoFlagDialog::RandRotate() const
+{
+    return _RandRotate;
+}
 
-void CAutoFlagDialog::DoDataExchange(CDataExchange* pDX)
+bool AutoFlagDialog::RandXFlip() const
+{
+    return _RandXFlip;
+}
+
+bool AutoFlagDialog::RandYFlip() const
+{
+    return _RandYFlip;
+}
+
+bool AutoFlagDialog::XFlip() const
+{
+    return _XFlip;
+}
+
+bool AutoFlagDialog::YFlip() const
+{
+    return _YFlip;
+}
+
+unsigned int AutoFlagDialog::Rotate() const
+{
+    return _Rotate;
+}
+
+bool AutoFlagDialog::IncRotate() const
+{
+    return _IncRotate;
+}
+
+bool AutoFlagDialog::ToggleXFlip() const
+{
+    return _ToggleXFlip;
+}
+
+bool AutoFlagDialog::ToggleYFlip() const
+{
+    return _ToggleYFlip;
+}
+
+void AutoFlagDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAutoFlagDialog)
+	//{{AFX_DATA_MAP(AutoFlagDialog)
 	//}}AFX_DATA_MAP
 }
 
-
-BEGIN_MESSAGE_MAP(CAutoFlagDialog, CDialog)
-	//{{AFX_MSG_MAP(CAutoFlagDialog)
-	ON_BN_CLICKED(IDC_CHKRANDROTATE, OnChkrandrotate)
-	ON_BN_CLICKED(IDC_CHKRANDXFLIP, OnChkrandxflip)
-	ON_BN_CLICKED(IDC_CHKRANDYFLIP, OnChkrandyflip)
-	ON_BN_CLICKED(IDC_ROT0, OnRot0)
-	ON_BN_CLICKED(IDC_ROT180, OnRot180)
-	ON_BN_CLICKED(IDC_ROT270, OnRot270)
-	ON_BN_CLICKED(IDC_ROT90, OnRot90)
-	ON_BN_CLICKED(IDC_XFLIP, OnXflip)
-	ON_BN_CLICKED(IDC_YFLIP, OnYflip)
+BEGIN_MESSAGE_MAP(AutoFlagDialog, CDialog)
+	//{{AFX_MSG_MAP(AutoFlagDialog)
+	ON_BN_CLICKED(IDC_CHKRANDROTATE, OnRandRotate)
+	ON_BN_CLICKED(IDC_CHKRANDXFLIP, OnRandXFlip)
+	ON_BN_CLICKED(IDC_CHKRANDYFLIP, OnRandYFlip)
+	ON_BN_CLICKED(IDC_ROT0, OnRotate)
+	ON_BN_CLICKED(IDC_ROT180, OnRotate)
+	ON_BN_CLICKED(IDC_ROT270, OnRotate)
+	ON_BN_CLICKED(IDC_ROT90, OnRotate)
+	ON_BN_CLICKED(IDC_XFLIP, OnXFlip)
+	ON_BN_CLICKED(IDC_YFLIP, OnYFlip)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
-// CAutoFlagDialog message handlers
+// AutoFlagDialog message handlers
 
-//int GetCheck( ) const;
-
-BOOL CAutoFlagDialog::OnInitDialog() 
+BOOL AutoFlagDialog::OnInitDialog() 
 {
 	CDialog::OnInitDialog();
 	
-//	((CButton*)GetDlgItem(IDC_CHKINCROTATE))->SetCheck(m_IncRotate);
-//	((CButton*)GetDlgItem(IDC_CHKTOGXFLIP))->SetCheck(m_TogXFlip);
-//	((CButton*)GetDlgItem(IDC_CHKTOGYFLIP))->SetCheck(m_TogYFlip);
-	((CButton*)GetDlgItem(IDC_XFLIP))->SetCheck(m_XFlip);
-	((CButton*)GetDlgItem(IDC_YFLIP))->SetCheck(m_YFlip);
-	((CButton*)GetDlgItem(IDC_CHKRANDROTATE))->SetCheck(m_RandRotate);
-	((CButton*)GetDlgItem(IDC_CHKRANDXFLIP))->SetCheck(m_RandXFlip);
-	((CButton*)GetDlgItem(IDC_CHKRANDYFLIP))->SetCheck(m_RandYFlip);
+	Degree0_RadioButton = (CButton*)GetDlgItem(IDC_ROT0);
+	Degree90_RadioButton = (CButton*)GetDlgItem(IDC_ROT90);
+	Degree180_RadioButton = (CButton*)GetDlgItem(IDC_ROT180);
+	Degree270_RadioButton = (CButton*)GetDlgItem(IDC_ROT270);
+	XFlip_CheckBox = (CButton*)GetDlgItem(IDC_XFLIP);
+	YFlip_CheckBox = (CButton*)GetDlgItem(IDC_YFLIP);
+	RandRotate_CheckBox = (CButton*)GetDlgItem(IDC_CHKRANDROTATE);
+	RandXFlip_CheckBox = (CButton*)GetDlgItem(IDC_CHKRANDXFLIP);
+	RandYFlip_CheckBox = (CButton*)GetDlgItem(IDC_CHKRANDYFLIP);
+	//IncrementRotate_CheckBox = (CButton*)GetDlgItem(IDC_CHKINCROTATE);
+	//ToggleXFlip_CheckBox = (CButton*)GetDlgItem(IDC_CHKTOGXFLIP);
+	//ToggleYFlip_CheckBox = (CButton*)GetDlgItem(IDC_CHKTOGYFLIP);
 
-	if(m_RandRotate == FALSE) {
-		switch(m_Rotate) {
+//	IncrementRotate_CheckBox->setCheck(_IncRotate);
+//	ToggleXFlip_CheckBox->setCheck(_ToggleXFlip);
+//	ToggleYFlip_CheckBox->setCheck(_ToggleYFlip);
+	XFlip_CheckBox->SetCheck(_XFlip);
+	YFlip_CheckBox->SetCheck(_YFlip);
+	RandRotate_CheckBox->SetCheck(_RandRotate);
+	RandXFlip_CheckBox->SetCheck(_RandXFlip);
+	RandYFlip_CheckBox->SetCheck(_RandYFlip);
+
+	if(!_RandRotate)
+	{
+		switch(_Rotate)
+		{
 			case 0:
-				((CButton*)GetDlgItem(IDC_ROT0))->SetCheck(1);
+				Degree0_RadioButton->SetCheck(1);
 				break;
 
 			case 1:
-				((CButton*)GetDlgItem(IDC_ROT90))->SetCheck(1);
+				Degree90_RadioButton->SetCheck(1);
 				break;
 
 			case 2:
-				((CButton*)GetDlgItem(IDC_ROT180))->SetCheck(1);
+				Degree180_RadioButton->SetCheck(1);
 				break;
 
 			case 3:
-				((CButton*)GetDlgItem(IDC_ROT270))->SetCheck(1);
+				Degree270_RadioButton->SetCheck(1);
 				break;
 		}
-	} else {
-		((CButton*)GetDlgItem(IDC_ROT0))->SetCheck(0);
-		((CButton*)GetDlgItem(IDC_ROT90))->SetCheck(0);
-		((CButton*)GetDlgItem(IDC_ROT180))->SetCheck(0);
-		((CButton*)GetDlgItem(IDC_ROT270))->SetCheck(0);
+	}
+	else
+	{
+		Degree0_RadioButton->SetCheck(0);
+		Degree90_RadioButton->SetCheck(0);
+		Degree180_RadioButton->SetCheck(0);
+		Degree270_RadioButton->SetCheck(0);
 	}
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	              // EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CAutoFlagDialog::OnOK() 
+void AutoFlagDialog::OnOK()
 {
-	m_IncRotate = 0;	//((CButton*)GetDlgItem(IDC_CHKINCROTATE))->GetCheck();
-	m_TogXFlip = 0;	//((CButton*)GetDlgItem(IDC_CHKTOGXFLIP))->GetCheck();
-	m_TogYFlip = 0;	//((CButton*)GetDlgItem(IDC_CHKTOGYFLIP))->GetCheck();
-	m_XFlip = ((CButton*)GetDlgItem(IDC_XFLIP))->GetCheck();
-	m_YFlip = ((CButton*)GetDlgItem(IDC_YFLIP))->GetCheck();
-	m_RandRotate = ((CButton*)GetDlgItem(IDC_CHKRANDROTATE))->GetCheck();
-	m_RandXFlip = ((CButton*)GetDlgItem(IDC_CHKRANDXFLIP))->GetCheck();
-	m_RandYFlip = ((CButton*)GetDlgItem(IDC_CHKRANDYFLIP))->GetCheck();
+	_IncRotate = false;	  //IncrementRotate_CheckBox->GetCheck();
+	_ToggleXFlip = false; //ToggleXFlip_CheckBox->GetCheck();
+	_ToggleYFlip = false; //ToggleYFlip_CheckBox->GetCheck();
+	_XFlip = XFlip_CheckBox->GetCheck();
+	_YFlip = XFlip_CheckBox->GetCheck();
+	_RandRotate = RandRotate_CheckBox->GetCheck();
+	_RandXFlip = RandXFlip_CheckBox->GetCheck();
+	_RandYFlip = RandYFlip_CheckBox->GetCheck();
 
-	if(((CButton*)GetDlgItem(IDC_ROT0))->GetCheck()) {
-		m_Rotate = 0;
-	} else if(((CButton*)GetDlgItem(IDC_ROT90))->GetCheck()) {
-		m_Rotate = 1;
-	} else if(((CButton*)GetDlgItem(IDC_ROT180))->GetCheck()) {
-		m_Rotate = 2;
-	} else if(((CButton*)GetDlgItem(IDC_ROT270))->GetCheck()) {
-		m_Rotate = 3;
-	}
-
+	if      (Degree0_RadioButton->GetCheck())
+		_Rotate = 0;
+	else if (Degree90_RadioButton->GetCheck())
+		_Rotate = 1;
+	else if (Degree180_RadioButton->GetCheck())
+		_Rotate = 2;
+	else if (Degree270_RadioButton->GetCheck())
+		_Rotate = 3;
 
 	CDialog::OnOK();
 }
 
-void CAutoFlagDialog::OnChkrandrotate() 
+void AutoFlagDialog::OnRandRotate()
 {
-	((CButton*)GetDlgItem(IDC_ROT0))->SetCheck( 0 );
-	((CButton*)GetDlgItem(IDC_ROT90))->SetCheck( 0 );
-	((CButton*)GetDlgItem(IDC_ROT180))->SetCheck( 0 );
-	((CButton*)GetDlgItem(IDC_ROT270))->SetCheck( 0 );
+	Degree0_RadioButton->SetCheck(0);
+	Degree90_RadioButton->SetCheck(0);
+	Degree180_RadioButton->SetCheck(0);
+	Degree270_RadioButton->SetCheck(0);
 }
 
-void CAutoFlagDialog::OnChkrandxflip() 
+void AutoFlagDialog::OnRandXFlip()
 {
-	((CButton*)GetDlgItem(IDC_XFLIP))->SetCheck( 0 );
+	XFlip_CheckBox->SetCheck(0);
 }
 
-void CAutoFlagDialog::OnChkrandyflip() 
+void AutoFlagDialog::OnRandYFlip()
 {
-	((CButton*)GetDlgItem(IDC_YFLIP))->SetCheck( 0 );
+	YFlip_CheckBox->SetCheck(0);
 }
 
-
-void CAutoFlagDialog::OnRot0() 
+void AutoFlagDialog::OnRotate()
 {
-	((CButton*)GetDlgItem(IDC_CHKRANDROTATE))->SetCheck( 0 );
+	RandRotate_CheckBox->SetCheck(0);
 }
 
-void CAutoFlagDialog::OnRot180() 
+void AutoFlagDialog::OnXFlip()
 {
-	((CButton*)GetDlgItem(IDC_CHKRANDROTATE))->SetCheck( 0 );
+	RandXFlip_CheckBox->SetCheck(0);
 }
 
-void CAutoFlagDialog::OnRot270() 
+void AutoFlagDialog::OnYFlip()
 {
-	((CButton*)GetDlgItem(IDC_CHKRANDROTATE))->SetCheck( 0 );
-}
-
-void CAutoFlagDialog::OnRot90() 
-{
-	((CButton*)GetDlgItem(IDC_CHKRANDROTATE))->SetCheck( 0 );
-}
-
-void CAutoFlagDialog::OnXflip() 
-{
-	((CButton*)GetDlgItem(IDC_CHKRANDXFLIP))->SetCheck( 0 );
-}
-
-void CAutoFlagDialog::OnYflip() 
-{
-	((CButton*)GetDlgItem(IDC_CHKRANDYFLIP))->SetCheck( 0 );
+	RandYFlip_CheckBox->SetCheck(0);
 }
