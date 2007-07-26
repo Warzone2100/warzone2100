@@ -394,7 +394,7 @@ SOURCE=.\resource.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\savesegmentdialog.h
+SOURCE=.\savesegmentdialog.hpp
 # End Source File
 # Begin Source File
 

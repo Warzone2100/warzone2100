@@ -37,7 +37,7 @@
 #include "textureview.h"
 #include "bteditview.h"
 #include "snapprefs.h"
-#include "savesegmentdialog.h"
+#include "savesegmentdialog.hpp"
 #include "limitsdialog.h"
 #include "initiallimitsdlg.h"
 #include "expandlimitsdlg.h"
@@ -5069,19 +5069,17 @@ void CBTEditDoc::OnUpdateEnableautosnap(CCmdUI* pCmdUI)
 
 void CBTEditDoc::OnFileSavemapsegment() 
 {
-	CSaveSegmentDialog Dlg;
+	SaveSegmentDialog Dlg(NULL, 0, 0, 16, 16);
 
-	Dlg.SetStartX(0);
-	Dlg.SetStartY(0);
-	Dlg.SetWidth(16);
-	Dlg.SetHeight(16);
-	if(Dlg.DoModal()==IDOK) {
+	if(Dlg.DoModal() == IDOK)
+	{
 		char FileName[256];
 		char PathName[256];
 		char FullPath[256];
 
-		if(GetFilePath((char*)LandscapeFilters,"lnd","*.lnd",FALSE,PathName,FileName,FullPath)) {
-			WriteProject(FullPath,Dlg.GetStartX(),Dlg.GetStartY(),Dlg.GetWidth(),Dlg.GetHeight());
+		if(GetFilePath((char*)LandscapeFilters, "lnd", "*.lnd", FALSE, PathName, FileName, FullPath))
+		{
+			WriteProject(FullPath, Dlg.StartX(), Dlg.StartY(), Dlg.Width(), Dlg.Height());
 		}
 	}
 }
