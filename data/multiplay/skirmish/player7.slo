@@ -1275,7 +1275,7 @@ event droidBuiltAssign(droidBuiltTr)
 			}
 		}
 	}
-	else
+	else if((droid.droidType != DROID_TRANSPORTER) and (droid.droidType != DROID_COMMAND))
 	{
 
 		if((droid.droidType == DROID_REPAIR)
@@ -1564,19 +1564,21 @@ function void buildTruck()
 	//build cyborg engineers if needed, no building structure limit here
 	initEnumStruct(FALSE,cybFactory,me,me);
 	_factory = enumStruct();
-	
 	while((_factory != NULLOBJECT) and (_totalTrucks < _maxTrucks))
 	{
 		//Try to build a truck
-		_bStartedBuilding = buildUnit(cybEngineer, _factory, cybFactory, FALSE);	//build a cyb eng even if not idle
-		
-		//Update statistics if started building a cyborg engineer
-		if(_bStartedBuilding)
+		if( skCanBuildTemplate(me,_factory, cybEngineer) )	//make sure we have researched cyb engineer
 		{
-			_numBuilding++;
-			_totalTrucks++;
+			_bStartedBuilding = buildUnit(cybEngineer, _factory, cybFactory, FALSE);	//build a cyb eng even if not idle
+			
+			//Update statistics if started building a cyborg engineer
+			if(_bStartedBuilding)
+			{
+				_numBuilding++;
+				_totalTrucks++;
+			}
 		}
-		
+
 		_factory = enumStruct();
 	}
 }
