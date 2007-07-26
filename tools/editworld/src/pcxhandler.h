@@ -73,7 +73,7 @@ class PCXHandler {
 
 		bool Create(int Width,int Height,void *Bits,PALETTEENTRY *Palette);
 		bool ReadPCX(std::istream& input, DWORD Flags = 0);
-		bool WritePCX(char *FilePath);
+		bool WritePCX(std::ostream& output);
 
 		inline unsigned int GetBitmapWidth()
 		{

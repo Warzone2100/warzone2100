@@ -35,8 +35,8 @@
 
 // Forward declarations of internal utility functions
 static inline WORD EncodedGet(WORD *pbyt, WORD *pcnt, std::istream& input);
-static inline WORD EncodeLine(const char* inBuff, WORD inLen, FILE *fid);
-static inline WORD EncodedPut(UBYTE byt, UBYTE cnt, FILE *fid);
+static inline WORD EncodeLine(const char* inBuff, WORD inLen, std::ostream& output);
+static inline WORD EncodedPut(UBYTE byt, UBYTE cnt, std::ostream& output);
 
 // Round the given value up to the nearest power of 2.
 int Power2(int value)
@@ -204,7 +204,6 @@ bool PCXHandler::ReadPCX(std::istream& input, DWORD Flags)
 	return true;
 }
 
-
 bool PCXHandler::Create(int Width,int Height,void *Bits, PALETTEENTRY *Palette)
 {
 	_Header.Manufacturer = 10;
@@ -282,42 +281,32 @@ bool PCXHandler::Create(int Width,int Height,void *Bits, PALETTEENTRY *Palette)
 	return true;
 }
 
-
-bool PCXHandler::WritePCX(char *FilePath)
+bool PCXHandler::WritePCX(std::ostream& output)
 {
-	FILE *fid = fopen(FilePath,"wb");
-    if(!fid)
-	{
-		MessageBox( NULL, FilePath, "Unable to create file.", MB_OK );
-		return false;
-	}
-
 // Write the PCX header.
-	fwrite(&_Header, sizeof(_Header), 1, fid);
+	output.write(reinterpret_cast<const char*>(&_Header), sizeof(_Header));
 
 // Encode and write the body.
 	char* Ptr = reinterpret_cast<char*>(_DIBBits);
 	for(unsigned int i = 0; i < GetBitmapHeight(); ++i)
 	{
-		EncodeLine(Ptr, (WORD)GetBitmapWidth(), fid);
+		EncodeLine(Ptr, (WORD)GetBitmapWidth(), output);
 		Ptr += GetBitmapWidth();
 	}
 
 // Write the palette.
-	putc(12, fid);
-	unsigned int PaletteSize = 1 << _Header.BitsPerPixel;
+	// Magic number for palette identification
+	output.put(12);
+	const unsigned int PaletteSize = 1 << _Header.BitsPerPixel;
 	for (i = 0; i < PaletteSize; ++i)
 	{
-		putc(_Palette[i].peRed, fid);
-		putc(_Palette[i].peGreen, fid);
-		putc(_Palette[i].peBlue, fid);
+		output.put(_Palette[i].peRed);
+		output.put(_Palette[i].peGreen);
+		output.put(_Palette[i].peBlue);
 	}
 	
-	fclose(fid);
-
 	return true;
 }
-
 
 /* This procedure reads one encoded block from the image file and
 stores a count and data byte. Result:
@@ -354,7 +343,7 @@ unsigned char *inBuff;  pointer to scanline data
 int inLen;              length of raw scanline in bytes
 FILE *fp;               file to be written to
 */
-static inline WORD EncodeLine(const char* inBuff, WORD inLen, FILE *fid)
+static inline WORD EncodeLine(const char* inBuff, WORD inLen, std::ostream& output)
 {  /* returns number of bytes written into outBuff, 0 if failed */
 
 	WORD i;
@@ -373,7 +362,7 @@ static inline WORD EncodeLine(const char* inBuff, WORD inLen, FILE *fid)
 			++runCount;  /* it encodes */
 			if (runCount == 63)
 			{
-				if (!(i = EncodedPut(last, runCount, fid)))
+				if (!(i = EncodedPut(last, runCount, output)))
 					return 0;
 
 				total += i;
@@ -384,7 +373,7 @@ static inline WORD EncodeLine(const char* inBuff, WORD inLen, FILE *fid)
 		{  /* thisone != last */
 			if (runCount)
 			{
-				if (!(i = EncodedPut(last, runCount, fid)))
+				if (!(i = EncodedPut(last, runCount, output)))
 					return 0;
 
 				total += i;
@@ -397,7 +386,7 @@ static inline WORD EncodeLine(const char* inBuff, WORD inLen, FILE *fid)
 
 	if (runCount)
 	{  /* finish up */
-		if (!(i = EncodedPut(last, runCount, fid)))
+		if (!(i = EncodedPut(last, runCount, output)))
 			return 0;
 
 		return total + i;
@@ -406,31 +395,36 @@ static inline WORD EncodeLine(const char* inBuff, WORD inLen, FILE *fid)
 	return total;
 }
 
-
-
 /* subroutine for writing an encoded byte pair 
 (or single byte  if it doesn't encode) to a file
 unsigned char byt, cnt;
 FILE *fid;
 */
-static inline WORD EncodedPut(UBYTE byt, UBYTE cnt, FILE *fid) /* returns count of bytes written, 0 if err */
+static inline WORD EncodedPut(UBYTE byt, UBYTE cnt, std::ostream& output) /* returns count of bytes written, 0 if err */
 {
 	if(cnt)
 	{
-		if((cnt==1) && (0xc0 != (0xc0&byt)))
+		if (cnt == 1
+		 && 0xc0 != (0xc0 & byt))
 		{
-			if(EOF == putc((int)byt, fid))
-				return 0; /* disk write error (probably full) */
+			output.put(byt);
+			if (output.bad()
+			 || output.fail())
+				return 0; /* write error (disk is probably full) */
 
 			return 1;
 		}
 		else
 		{
-			if(EOF == putc((int)0xC0 | cnt, fid))
-				return 0;  /* disk write error */
+			output.put(0xC0 | cnt);
+			if (output.bad()
+			 || output.fail())
+				return 0; /* write error (disk is probably full) */
 
-			if(EOF == putc((int)byt, fid))
-				return 0;  /* disk write error */
+			output.put(byt);
+			if (output.bad()
+			 || output.fail())
+				return 0; /* write error (disk is probably full) */
 
 			return 2;
 		}

@@ -846,11 +846,18 @@ BOOL CHeightMap::WriteHeightMap(char *FileName)
 		Palette[i].peFlags = 0;
 	}
 
-  	PCXHandler *TestPCX = new PCXHandler();
-  	if(TestPCX->Create(m_MapWidth,m_MapHeight,Bits,Palette)) {
-	  	TestPCX->WritePCX(FileName);
+	PCXHandler TestPCX;
+	if(TestPCX.Create(m_MapWidth,m_MapHeight,Bits,Palette))
+	{
+		std::ofstream output(FileName, std::ios_base::binary);
+		if(!output.is_open())
+		{
+			MessageBox(NULL, FileName, "Unable to create file.", MB_OK);
+			return FALSE;
+		}
+
+		TestPCX.WritePCX(output);
 	}
-  	delete TestPCX;
 
 	return TRUE;
 }
@@ -1059,11 +1066,18 @@ BOOL CHeightMap::WriteTileIDMap(char *FullPath)
 		Palette[i].peFlags = 0;
 	}
 
-  	PCXHandler *TestPCX = new PCXHandler();
-  	if(TestPCX->Create(m_MapWidth,m_MapHeight,Bits,Palette)) {
-	  	TestPCX->WritePCX(FullPath);
+	PCXHandler TestPCX;
+	if(TestPCX.Create(m_MapWidth,m_MapHeight,Bits,Palette))
+	{
+		std::ofstream output(FullPath, std::ios_base::binary);
+		if(!output.is_open())
+		{
+			MessageBox(NULL, FullPath, "Unable to create file.", MB_OK);
+			return FALSE;
+		}
+
+		TestPCX.WritePCX(output);
 	}
-  	delete TestPCX;
 
 	return TRUE;
 }
