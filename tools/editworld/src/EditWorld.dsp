@@ -290,10 +290,6 @@ SOURCE=.\ddimage.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\debug.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\debugprint.hpp
 # End Source File
 # Begin Source File
