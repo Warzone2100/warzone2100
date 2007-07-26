@@ -1,0 +1,28 @@
+FIXES:
+- search_depth option for pie_import.py which will keep looking in parent dirs
+	until it finds ./texpages.
+- looks like model needs to be mirrored on x axis to be correct.
+- still need info about one poly referencing the same point multiple times
+
+NEW:
+- add a separate validation script and run it implicitly at the start of an
+	export op.
+- add conf file to configure import/export vertex/poly maximums
+- coords of exported pies should be relative to their parent, and not the
+	scene. make sure this holds true. (shouldn't be a problem. make sure anyways)
+- add a pie_animate script to handle teamcolors and animation -- clone of pie
+	slicer's functionality.
+- add snap-to options for dealing with multiple pies with connectors as a
+	separate script.
+- along with snap-to, try to auto-detect the model's function (turret, body,
+	etc) based on file path and name, but always giving the option to select
+- add an import option that allows the user to skip the texpage selection
+	screen if the right texpage was found.
+
+NEW (low priority):
+- add dirty mesh support.
+- add gridlines if possible: determined values to be .512 spacing, 6 lines
+	(the blender -> python api doesn't seem to support setting these yet)
+- add translation support
+
+# vim: textwidth=79

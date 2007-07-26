@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """ Provides a serial parser and support functions for PIE models
 
 All parser events will be passed back as a list starting with the event
@@ -87,9 +89,16 @@ def _handle_texture(s):
   except ValueError:
     raise PIESyntaxError("expected integer")
 
+def _handle_type(s):
+  try:
+    return [int(s, 16)]
+  except ValueError:
+    raise PIESyntaxError("expected a hexadecimal integer")
+
 _directive_handlers = {
   'TEXTURE': _handle_texture,
-  'NOTEXTURE': _handle_texture
+  'NOTEXTURE': _handle_texture,
+  'TYPE': _handle_type
 }
 
 def parse(pie):
