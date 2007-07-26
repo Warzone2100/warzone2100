@@ -26,6 +26,7 @@
 #define	__PSXHANDLER_INCLUDED__
 
 #include <windows.h>
+#include <istream>
 
 // Returns true if the given value is a power of two
 static inline bool IsPower2(int value)
@@ -71,7 +72,7 @@ class PCXHandler {
 		~PCXHandler();
 
 		bool Create(int Width,int Height,void *Bits,PALETTEENTRY *Palette);
-		bool ReadPCX(const char *FilePath,DWORD Flags = 0);
+		bool ReadPCX(std::istream& input, DWORD Flags = 0);
 		bool WritePCX(char *FilePath);
 
 		inline unsigned int GetBitmapWidth()
@@ -98,11 +99,6 @@ class PCXHandler {
 		{
 			return(_Palette);
 		}
-
-	private:
-		WORD EncodedGet(WORD *pbyt, WORD *pcnt, FILE *fid);
-		WORD EncodeLine(const char* inBuff, WORD inLen, FILE *fid);
-		WORD EncodedPut(UBYTE byt, UBYTE cnt, FILE *fid);
 
 	private:
 		PCXHeader     _Header;

@@ -550,9 +550,18 @@ BOOL CHeightMap::InitialiseTextures(DWORD NumTextures,char **TextureList,DWORD T
 		if(strcmp(Ext,".PCX")==0) {	
 			DebugPrint("\nLoading terrain texture %d : %s\n",TexNum,FileName);
 // Load the PCX bitmap for the textures.
-			PCXHandler *PCXTexBitmap=new PCXHandler;
 
-			if(PCXTexBitmap->ReadPCX(FileName)==FALSE) {
+			std::ifstream PCXFile(FileName, std::ios_base::binary);
+			if (!PCXFile.is_open())
+			{
+				MessageBox(NULL, FileName, "Unable to open file.", MB_OK);
+				return FALSE;
+			}
+
+			PCXHandler* PCXTexBitmap = new PCXHandler;
+
+			if(!PCXTexBitmap->ReadPCX(PCXFile))
+			{
 				delete PCXTexBitmap;
 				return FALSE;
 			}
@@ -868,9 +877,18 @@ BOOL CHeightMap::SetHeightFromBitmap(char *FileName)
    	if(strcmp(Ext,".PCX")==0) {	
 
    	// Load the PCX bitmap for the textures.
-   		PCXHandler *PCXTexBitmap=new PCXHandler;
-   		if(!PCXTexBitmap->ReadPCX(FileName)) {
-			MessageBox(NULL,"The height map could not be found or may not be a valid PCX","Unable to load height map!",MB_OK);
+		std::ifstream PCXFile(FileName, std::ios_base::binary);
+		if (!PCXFile.is_open())
+		{
+			MessageBox(NULL, FileName, "Unable to open file.", MB_OK);
+			return FALSE;
+		}
+
+		PCXHandler* PCXTexBitmap = new PCXHandler;
+
+		if(!PCXTexBitmap->ReadPCX(PCXFile))
+		{
+			MessageBox(NULL,"The height map is not a valid PCX","Unable to load height map!",MB_OK);
 			delete PCXTexBitmap;
 			return FALSE;
 		}
@@ -955,11 +973,20 @@ BOOL CHeightMap::SetTileIDsFromBitmap(char *FullPath)
 		}
 	}
 
-   	if(strcmp(Ext,".PCX")==0) {	
+	if(strcmp(Ext,".PCX")==0)
+	{	
+		std::ifstream PCXFile(FullPath, std::ios_base::binary);
+		if (!PCXFile.is_open())
+		{
+			MessageBox(NULL, FullPath, "Unable to open file.", MB_OK);
+			return FALSE;
+		}
 
-   		PCXHandler *PCXTexBitmap=new PCXHandler;
-   		if(!PCXTexBitmap->ReadPCX(FullPath)) {
-			MessageBox(NULL,"The tile map could not be found or may not be a valid PCX","Unable to load height map!",MB_OK);
+		PCXHandler* PCXTexBitmap = new PCXHandler;
+
+		if(!PCXTexBitmap->ReadPCX(PCXFile))
+		{
+			MessageBox(NULL,"The tile map is not a valid PCX","Unable to load height map!",MB_OK);
 			delete PCXTexBitmap;
 			return FALSE;
 		}
@@ -4324,30 +4351,51 @@ BOOL CHeightMap::ReadIMD(char *FileName,char *Description,char *TextDir,int Type
 
 			DebugPrint("## %s ## \n",texfile);
 
-			char TName[256];
+			std::string TName;
 
-			if( (TextDir) && (TextDir[0] != 0) ) {
-				sprintf(TName,"%s\\%s%s",g_WorkDirectory,TextDir,texfile);
-			} else {
+			if((TextDir) && (TextDir[0] != 0))
+			{
+				TName = std::string(g_WorkDirectory) + "\\" + std::string(TextDir) + std::string(texfile);
+			}
+			else
+			{
 	// set the path for the texture to the path used for the .IMD
-				strcpy(TName,Drive);
-				strcat(TName,Dir);
-				strcat(TName,texfile);
+				TName = std::string(Drive) + std::string(Dir) + std::string(texfile);
 			}
   
 	// Read the specified bitmap.
-			PCXHandler *PCXTexBitmap=new PCXHandler;
-			if(!PCXTexBitmap->ReadPCX(TName,BMR_ROUNDUP)) {
-				strcpy(TName,Drive);
-				strcat(TName,Dir);
-				strcat(TName,texfile);
+			// HACK: using a pointer here to be able to reconstruct the std::ifstream
+			//       by means of delete followed by new, this since apparently MSVC's
+			//       std::ifstream implementation has trouble with a second attempt to
+			//       open another file using the same instance of std::ifstream
+			std::ifstream* PCXFile = new std::ifstream(TName.c_str(), std::ios_base::binary);
+			if (!PCXFile->is_open())
+			{
+				TName = std::string(Drive) + std::string(Dir) + std::string(texfile);
 
-				if(!PCXTexBitmap->ReadPCX(TName,BMR_ROUNDUP)) {
-					delete PCXTexBitmap;
-   					fclose(Stream);
+				// Reconstruct std::ifstream object;
+				// A simple PCXFile->close() followed by PCXFile->open(...) should work, but doesn't
+				delete PCXFile;
+				PCXFile = new std::ifstream(TName.c_str(), std::ios_base::binary);
+
+				if (!PCXFile->is_open())
+				{
+					MessageBox(NULL, TName.c_str(), "Unable to open file.", MB_OK);
+					fclose(Stream);
+					delete PCXFile;
 					return FALSE;
 				}
 			}
+
+			PCXHandler* PCXTexBitmap = new PCXHandler;
+			if(!PCXTexBitmap->ReadPCX(*PCXFile, BMR_ROUNDUP))
+			{
+				delete PCXTexBitmap;
+				fclose(Stream);
+				delete PCXFile;
+				return FALSE;
+			}
+			delete PCXFile;
 
 	// And create a D3D material from it.
 			Width = PCXTexBitmap->GetBitmapWidth();

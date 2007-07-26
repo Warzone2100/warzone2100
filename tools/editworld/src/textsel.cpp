@@ -30,6 +30,9 @@
 #include "heightmap.h"
 #include "tiletypes.h"
 
+#include <fstream>
+#include <string>
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -119,13 +122,23 @@ BOOL CTextureSelector::Read(DWORD NumTextures,char **TextureList,DWORD TextureWi
 			if(strcmp(Ext,".PCX")==0) {	
 
 			// Load the PCX bitmap for the textures.
-				PCXHandler *PCXTexBitmap=new PCXHandler;
-				if(!PCXTexBitmap->ReadPCX(FileName)) {
-					char CurDir[1024];
-					GetCurrentDirectory(sizeof(CurDir),CurDir);
-					strcat(CurDir,"\\");
-					strcat(CurDir,FileName);
-					MessageBox(NULL,"Error reading PCX",CurDir,MB_OK);
+				std::ifstream PCXFile(FileName, std::ios_base::binary);
+				if (!PCXFile.is_open())
+				{
+					MessageBox(NULL, FileName, "Unable to open file.", MB_OK);
+					return FALSE;
+				}
+
+				PCXHandler* PCXTexBitmap = new PCXHandler;
+
+				if(!PCXTexBitmap->ReadPCX(PCXFile))
+				{
+					char tmpCharArr[1024];
+					GetCurrentDirectory(sizeof(tmpCharArr), tmpCharArr);
+					std::string CurDir(tmpCharArr);
+					CurDir += "\\";
+					CurDir += FileName;
+					MessageBox(NULL, "Error reading PCX", CurDir.c_str(), MB_OK);
 					delete PCXTexBitmap;
 					return FALSE;
 				}
@@ -163,13 +176,21 @@ BOOL CTextureSelector::Read(DWORD NumTextures,char **TextureList,DWORD TextureWi
 		m_Height = (SpriteNum / (m_Width / m_TextureWidth)) * m_TextureHeight;
 	}
 
-	PCXHandler *PCXTexBitmap=new PCXHandler;
+	std::string Name(g_HomeDirectory);
+	Name += "\\Data\\Buttons.PCX";
 
-	char Name[256];
-	strcpy(Name,g_HomeDirectory);
-	strcat(Name,"\\Data\\Buttons.PCX");
-	if(!PCXTexBitmap->ReadPCX(Name)) {
-		MessageBox(NULL,"Error reading PCX",Name,MB_OK);
+	std::ifstream PCXFile(Name.c_str(), std::ios_base::binary);
+	if (!PCXFile.is_open())
+	{
+		MessageBox(NULL, Name.c_str(), "Unable to open file.", MB_OK);
+		return FALSE;
+	}
+
+	PCXHandler* PCXTexBitmap = new PCXHandler;
+
+	if(!PCXTexBitmap->ReadPCX(PCXFile))
+	{
+		MessageBox(NULL, "Error reading PCX", Name.c_str(), MB_OK);
 		delete PCXTexBitmap;
 		return FALSE;
 	}

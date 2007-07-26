@@ -33,6 +33,11 @@
 
 #include <assert.h>
 
+// Forward declarations of internal utility functions
+static inline WORD EncodedGet(WORD *pbyt, WORD *pcnt, std::istream& input);
+static inline WORD EncodeLine(const char* inBuff, WORD inLen, FILE *fid);
+static inline WORD EncodedPut(UBYTE byt, UBYTE cnt, FILE *fid);
+
 // Round the given value up to the nearest power of 2.
 int Power2(int value)
 {
@@ -69,28 +74,20 @@ PCXHandler::~PCXHandler()
 	delete _BitmapInfo;
 }
 
-bool PCXHandler::ReadPCX(const char* FilePath, DWORD Flags)
+bool PCXHandler::ReadPCX(std::istream& input, DWORD Flags)
 {
-	FILE* fid = fopen(FilePath,"rb");
-    if (!fid)
-	{
-		MessageBox( NULL, FilePath, "Unable to open file.", MB_OK );
-		return false;
-	}
-	
 // Read the PCX header.
-	fread(&_Header, sizeof(_Header), 1, fid);
+	input.read(reinterpret_cast<char*>(&_Header), sizeof(_Header));
 
 	if (_Header.Manufacturer != 10)
 	{
-		fclose(fid);
-		MessageBox(NULL, FilePath, "File is not a valid PCX.", MB_OK);
+		MessageBox(NULL, "", "File is not a valid PCX.", MB_OK);
 		return false;
 	}
 
 	if(_Header.NPlanes != 1)
 	{
-		MessageBox(NULL, FilePath, "Unable to load PCX. Not 256 colour.", MB_OK);
+		MessageBox(NULL, "", "Unable to load PCX. Not 256 colour.", MB_OK);
 		return false;
 	}
 
@@ -110,7 +107,8 @@ bool PCXHandler::ReadPCX(const char* FilePath, DWORD Flags)
 	LONG	decoded=0;
 	char*	bufr = Bitmap;
 
-	while( (!EncodedGet(&chr, &cnt, fid)) && (decoded < Size))
+	while (!EncodedGet(&chr, &cnt, input)
+	    && decoded < Size)
 	{
 		for(unsigned int i = 0; i < cnt; ++i)
 		{
@@ -129,8 +127,11 @@ bool PCXHandler::ReadPCX(const char* FilePath, DWORD Flags)
 	switch(_Header.Version)
 	{
 		case 5:
-			fseek(fid, -769, SEEK_END);
-			if(getc(fid) != 12)
+		{
+			input.seekg(-769, std::istream::end);
+			int paletteIdentifier = input.get();
+			if (paletteIdentifier != 12
+			 && paletteIdentifier != std::istream::traits_type::eof())
 				break;
 
 			PaletteSize = 1 << _Header.BitsPerPixel;
@@ -138,21 +139,19 @@ bool PCXHandler::ReadPCX(const char* FilePath, DWORD Flags)
 
 			for (i = 0; i < PaletteSize; ++i)
 			{
-				_Palette[i].peRed   = (BYTE)getc(fid);
-				_Palette[i].peGreen = (BYTE)getc(fid);
-				_Palette[i].peBlue  = (BYTE)getc(fid);
+				_Palette[i].peRed   = (BYTE)input.get();
+				_Palette[i].peGreen = (BYTE)input.get();
+				_Palette[i].peBlue  = (BYTE)input.get();
 				_Palette[i].peFlags = (BYTE)0;
 			}
-			break;
 
+			break;
+		}
 		default:
-			fclose(fid);
-			MessageBox(NULL, FilePath, "PCX version not supported.", MB_OK);
+			MessageBox(NULL, "", "PCX version not supported.", MB_OK);
 			return false;
 	}
 
-	fclose(fid);
-	
 	_BitmapInfo = reinterpret_cast<BITMAPINFO*>(new char[sizeof(BITMAPINFO) + sizeof(RGBQUAD) * PaletteSize]);
 	_BitmapInfo->bmiHeader.biSize          = sizeof(BITMAPINFOHEADER);
 	_BitmapInfo->bmiHeader.biWidth         = _Header.Window[2]+1;
@@ -178,7 +177,7 @@ bool PCXHandler::ReadPCX(const char* FilePath, DWORD Flags)
 
 	if(!_DIBBitmap)
 	{
-		MessageBox( NULL, FilePath, "Failed to create DIB.", MB_OK );
+		MessageBox( NULL, "", "Failed to create DIB.", MB_OK );
 		return false;
 	}
 
@@ -328,21 +327,21 @@ int *pbyt;     where to place data
 int *pcnt;     where to place count
 FILE *fid;     image file handle
 */
-WORD PCXHandler::EncodedGet(WORD *pbyt, WORD *pcnt, FILE *fid)
+static inline WORD EncodedGet(WORD *pbyt, WORD *pcnt, std::istream& input)
 {
 	*pcnt = 1;     /* safety play */
 
-	int i = getc(fid);
-	if (i == EOF)
-		return EOF;
+	int i = input.get();
+	if (i == std::istream::traits_type::eof())
+		return std::istream::traits_type::eof();
 
 	if ((0xc0 & i) == 0xc0)
 	{
 		*pcnt = 0x3f & i;
 
-		i = getc(fid);
-		if(i == EOF)
-			return EOF;
+		i = input.get();
+		if(i == std::istream::traits_type::eof())
+			return std::istream::traits_type::eof();
 	}
 
 	*pbyt = i;
@@ -350,13 +349,12 @@ WORD PCXHandler::EncodedGet(WORD *pbyt, WORD *pcnt, FILE *fid)
 	return 0;
 }
 
-
 /* This subroutine encodes one scanline and writes it to a file
 unsigned char *inBuff;  pointer to scanline data
 int inLen;              length of raw scanline in bytes
 FILE *fp;               file to be written to
 */
-WORD PCXHandler::EncodeLine(const char* inBuff, WORD inLen, FILE *fid)
+static inline WORD EncodeLine(const char* inBuff, WORD inLen, FILE *fid)
 {  /* returns number of bytes written into outBuff, 0 if failed */
 
 	WORD i;
@@ -415,7 +413,7 @@ WORD PCXHandler::EncodeLine(const char* inBuff, WORD inLen, FILE *fid)
 unsigned char byt, cnt;
 FILE *fid;
 */
-WORD PCXHandler::EncodedPut(UBYTE byt, UBYTE cnt, FILE *fid) /* returns count of bytes written, 0 if err */
+static inline WORD EncodedPut(UBYTE byt, UBYTE cnt, FILE *fid) /* returns count of bytes written, 0 if err */
 {
 	if(cnt)
 	{
