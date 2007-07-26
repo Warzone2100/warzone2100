@@ -27,6 +27,7 @@
 
 #include <windows.h>
 #include <istream>
+#include <ostream>
 
 // Returns true if the given value is a power of two
 static inline bool IsPower2(int value)
