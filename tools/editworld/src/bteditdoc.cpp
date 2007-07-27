@@ -1650,6 +1650,10 @@ class scrollLimitStringIterator : public ListNode<CScrollLimits>::iterator
 			ListNode<CScrollLimits>::iterator(ptr)
 		{}
 
+		inline scrollLimitStringIterator(const ListNode<CScrollLimits>::iterator& rhs) :
+			ListNode<CScrollLimits>::iterator(rhs)
+		{}
+
 		inline std::string operator*() const
 		{
 			return std::string(iterator::operator*().ScriptName);
@@ -2765,19 +2769,16 @@ void CBTEditDoc::DrawRadarMap2D(CDIBDraw *DIBDraw,DWORD XPos,DWORD YPos)
 		if(m_EditTool != ET_GATEWAY) {
 
 			if(m_HeightMap->GetNumScrollLimits()) {
-				ListNode<CScrollLimits> *Node;
-
 				HDC	dc=(HDC)DIBDraw->GetDIBDC();
 				HPEN NormalPen = CreatePen(PS_SOLID,1,RGB(255,0,255));
 				HPEN OldPen = (HPEN)SelectObject(dc,NormalPen);
 				
-				for(Node = m_HeightMap->GetScrollLimits(); Node != NULL; Node = Node->GetNextNode()) {
-					CScrollLimits *Data = Node->GetData();
-
-					int x0 = (Data->MinX + OVERSCAN)*m_RadarScale;
-					int y0 = (Data->MinZ + OVERSCAN)*m_RadarScale;
-					int x1 = (Data->MaxX + OVERSCAN)*m_RadarScale;
-					int y1 = (Data->MaxZ + OVERSCAN)*m_RadarScale;
+				for(ListNode<CScrollLimits>::iterator curNode = m_HeightMap->GetScrollLimits(); curNode != ListNode<CScrollLimits>::iterator(NULL); ++curNode)
+				{
+					int x0 = (curNode->MinX + OVERSCAN)*m_RadarScale;
+					int y0 = (curNode->MinZ + OVERSCAN)*m_RadarScale;
+					int x1 = (curNode->MaxX + OVERSCAN)*m_RadarScale;
+					int y1 = (curNode->MaxZ + OVERSCAN)*m_RadarScale;
 
 					MoveToEx(dc,x0,y0,NULL);
 					LineTo(dc,x1,y0);
@@ -2875,19 +2876,16 @@ void CBTEditDoc::DrawRadarMap3D(CDIBDraw *DIBDraw,D3DVECTOR &CamPos)
 		CDC	*dc=dc->FromHandle((HDC)DIBDraw->GetDIBDC());
 
 		if(m_HeightMap->GetNumScrollLimits()) {
-			ListNode<CScrollLimits> *Node;
-
 			HDC	dc=(HDC)DIBDraw->GetDIBDC();
 			HPEN NormalPen = CreatePen(PS_SOLID,1,RGB(255,0,255));
 			HPEN OldPen = (HPEN)SelectObject(dc,NormalPen);
 			
-			for(Node = m_HeightMap->GetScrollLimits(); Node != NULL; Node = Node->GetNextNode()) {
-				CScrollLimits *Data = Node->GetData();
-
-				int x0 = (Data->MinX + OVERSCAN)*m_RadarScale;
-				int y0 = (Data->MinZ + OVERSCAN)*m_RadarScale;
-				int x1 = (Data->MaxX + OVERSCAN)*m_RadarScale;
-				int y1 = (Data->MaxZ + OVERSCAN)*m_RadarScale;
+			for(ListNode<CScrollLimits>::iterator curNode = m_HeightMap->GetScrollLimits(); curNode != ListNode<CScrollLimits>::iterator(NULL); ++curNode)
+			{
+				int x0 = (curNode->MinX + OVERSCAN)*m_RadarScale;
+				int y0 = (curNode->MinZ + OVERSCAN)*m_RadarScale;
+				int x1 = (curNode->MaxX + OVERSCAN)*m_RadarScale;
+				int y1 = (curNode->MaxZ + OVERSCAN)*m_RadarScale;
 
 				MoveToEx(dc,x0,y0,NULL);
 				LineTo(dc,x1,y0);

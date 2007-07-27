@@ -71,22 +71,23 @@ BOOL CExpandLimitsDlg::OnInitDialog()
 	
 	CComboBox *List = (CComboBox*)GetDlgItem(IDC_EXCLUDELIST);
 
-	ListNode<CScrollLimits> *TmpNode = m_World->GetScrollLimits();
-	int ListSize = 0;
-	char *FirstString;
+	size_t ListSize = 0;
+	char* FirstString;
 
 	// Add the strings to the list box.
-	while(TmpNode!=NULL) {
-		List->AddString(TmpNode->GetData()->ScriptName);
-		if(ListSize == 0) {
-			FirstString = TmpNode->GetData()->ScriptName;
-		}
-		ListSize++;
-		TmpNode = TmpNode->GetNextNode();
+	ListNode<CScrollLimits>::iterator curNode;
+	for (curNode = m_World->GetScrollLimits(); curNode != ListNode<CScrollLimits>::iterator(NULL); ++curNode)
+	{
+		List->AddString(curNode->ScriptName);
+		if(ListSize == 0)
+			FirstString = curNode->ScriptName;
+
+		++ListSize;
 	}
 
 	// Set the default selection.
-	if(ListSize) {
+	if(ListSize)
+	{
 		List->SelectString(-1, FirstString);
 		m_ExcludeSelected = 0;
 	}
@@ -94,21 +95,21 @@ BOOL CExpandLimitsDlg::OnInitDialog()
 
 	List = (CComboBox*)GetDlgItem(IDC_INCLUDELIST);
 
-	TmpNode = m_World->GetScrollLimits();
 	ListSize = 0;
 
 	// Add the strings to the list box.
-	while(TmpNode!=NULL) {
-		List->AddString(TmpNode->GetData()->ScriptName);
-		if(ListSize == 0) {
-			FirstString = TmpNode->GetData()->ScriptName;
-		}
-		ListSize++;
-		TmpNode = TmpNode->GetNextNode();
+	for (curNode = m_World->GetScrollLimits(); curNode != ListNode<CScrollLimits>::iterator(NULL); ++curNode)
+	{
+		List->AddString(curNode->ScriptName);
+		if(ListSize == 0)
+			FirstString = curNode->ScriptName;
+
+		++ListSize;
 	}
 
 	// Set the default selection.
-	if(ListSize) {
+	if(ListSize)
+	{
 		List->SelectString(-1, FirstString);
 		m_IncludeSelected = 0;
 	}

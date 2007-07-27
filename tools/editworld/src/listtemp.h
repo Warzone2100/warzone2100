@@ -185,6 +185,8 @@ class ListNode
 				iterator& operator=(const iterator& rhs)
 				{
 					_nodePtr = rhs._nodePtr;
+
+					return *this;
 				}
 
 				bool operator==(const iterator& rhs) const
@@ -219,6 +221,11 @@ class ListNode
 					iterator tmp(*this);
 					++(*this);
 					return tmp;
+				}
+
+				void goToBegin()
+				{
+					_nodePtr = _nodePtr->GetFirstNode();
 				}
 
 			private:

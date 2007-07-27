@@ -29,6 +29,18 @@
 #include "debugprint.hpp"
 #include "limitsdialog.h"
 
+// Workaround for MSVC's implementation of std::advance (how could
+// anyone get something as simple as this algorithm implemented wrong ?)
+namespace std
+{
+	template<typename InputIterator, typename DistanceType>
+	inline void advance(InputIterator& i, DistanceType n)
+	{
+		for (; n; --n)
+			++i;
+	}
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // CLimitsDialog dialog
 
@@ -112,31 +124,32 @@ void CLimitsDialog::OnGetdispinfoListlimits(NMHDR* pNMHDR, LRESULT* pResult)
 	
 	char String[256];
 
-	ListNode<CScrollLimits> *ScrollLimits = m_World->GetScrollLimits();
-	CScrollLimits *Data = ScrollLimits->GetNthNode(item.iItem)->GetData();
+	ListNode<CScrollLimits>::iterator ScrollLimits = m_World->GetScrollLimits();
+	ScrollLimits.goToBegin();
+	std::advance(ScrollLimits, item.iItem);
 
 	switch (pDispInfo->item.iSubItem) {
 		case	0:
-		    strcpy (pDispInfo->item.pszText, Data->ScriptName);
+		    strcpy (pDispInfo->item.pszText, ScrollLimits->ScriptName);
 			break;
 		case	1:
-			sprintf(String,"%d",Data->UniqueID);
+			sprintf(String,"%d",ScrollLimits->UniqueID);
 			strcpy (pDispInfo->item.pszText, String);
 			break;
 		case	2:
-			sprintf(String,"%d",Data->MinX);
+			sprintf(String,"%d",ScrollLimits->MinX);
 		    strcpy (pDispInfo->item.pszText, String);
 			break;
 		case	3:
-			sprintf(String,"%d",Data->MinZ);
+			sprintf(String,"%d",ScrollLimits->MinZ);
 		    strcpy (pDispInfo->item.pszText, String);
 			break;
 		case	4:
-			sprintf(String,"%d",Data->MaxX);
+			sprintf(String,"%d",ScrollLimits->MaxX);
 		    strcpy (pDispInfo->item.pszText, String);
 			break;
 		case	5:
-			sprintf(String,"%d",Data->MaxZ);
+			sprintf(String,"%d",ScrollLimits->MaxZ);
 		    strcpy (pDispInfo->item.pszText, String);
 			break;
 	}
@@ -172,23 +185,24 @@ void CLimitsDialog::OnItemchangedListlimits(NMHDR* pNMHDR, LRESULT* pResult)
 	if(pNMListView->iItem != m_SelectedItemIndex) {
 		m_SelectedItemIndex = pNMListView->iItem;
 
-		ListNode<CScrollLimits> *ScrollLimits = m_World->GetScrollLimits();
-		ScrollLimits = ScrollLimits->GetNthNode(m_SelectedItemIndex);
-		if(ScrollLimits) {
-			CScrollLimits *Data = ScrollLimits->GetData();
+		ListNode<CScrollLimits>::iterator ScrollLimits = m_World->GetScrollLimits();
+		ScrollLimits.goToBegin();
+		std::advance(ScrollLimits, m_SelectedItemIndex);
 
-			GetDlgItem(IDC_SL_SCRIPTNAME)->SetWindowText(Data->ScriptName);
+		if(&*ScrollLimits != NULL)
+		{
+			GetDlgItem(IDC_SL_SCRIPTNAME)->SetWindowText(ScrollLimits->ScriptName);
 
-			sprintf(String,"%d",Data->MinX);
+			sprintf(String,"%d",ScrollLimits->MinX);
 			GetDlgItem(IDC_SL_MINX)->SetWindowText(String);
 
-			sprintf(String,"%d",Data->MinZ);
+			sprintf(String,"%d",ScrollLimits->MinZ);
 			GetDlgItem(IDC_SL_MINZ)->SetWindowText(String);
 
-			sprintf(String,"%d",Data->MaxX);
+			sprintf(String,"%d",ScrollLimits->MaxX);
 			GetDlgItem(IDC_SL_MAXX)->SetWindowText(String);
 
-			sprintf(String,"%d",Data->MaxZ);
+			sprintf(String,"%d",ScrollLimits->MaxZ);
 			GetDlgItem(IDC_SL_MAXZ)->SetWindowText(String);
 		} else {
 			m_SelectedItemIndex = -1;
@@ -257,17 +271,11 @@ void CLimitsDialog::RebuildList(void)
 
 	List->DeleteAllItems();
 
-	ListNode<CScrollLimits> *ScrollLimits = m_World->GetScrollLimits();
-	ListNode<CScrollLimits> *TmpNode;
-	CScrollLimits *Data;
-
-	int Index = 0;
-	TmpNode = ScrollLimits;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-		TmpNode = TmpNode->GetNextNode();
-		List->InsertItem(Index,Data->ScriptName);
-		Index++;
+	unsigned int Index = 0;
+	ListNode<CScrollLimits>::iterator curNode;
+	for (curNode = m_World->GetScrollLimits(); curNode != ListNode<CScrollLimits>::iterator(); ++curNode, ++Index)
+	{
+		List->InsertItem(Index, curNode->ScriptName);
 	}
 
 	GetDlgItem(IDC_LISTLIMITS)->UpdateWindow();

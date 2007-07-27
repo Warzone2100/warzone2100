@@ -980,7 +980,11 @@ class CHeightMap : public CChnkIO
 		BOOL ReadScrollLimits(FILE *Stream);
 		BOOL WriteDeliveranceLimits(FILE *Stream);
 		int GetNumScrollLimits(void) { return m_NumScrollLimits; }
-		ListNode<CScrollLimits> *GetScrollLimits(void) { return m_ScrollLimits; }
+
+		inline ListNode<CScrollLimits>::iterator GetScrollLimits()
+		{
+			return ListNode<CScrollLimits>::iterator(m_ScrollLimits);
+		}
 
 		void InitialiseGateways(void);
 		int AddGateway(int x0,int y0,int x1,int y1);
@@ -1026,7 +1030,7 @@ class CHeightMap : public CChnkIO
 		void YFlipObjects(int x0,int y0,int x1,int y1);
 		void SetRenderPlayerID(DWORD PlayerID) { m_RenderPlayerID = PlayerID; }
 
-	protected:
+	private:
 		int m_MaxTileID;
 		int m_NumGateways;
 		ListNode<GateWay> *m_Gateways;
