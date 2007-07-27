@@ -94,7 +94,7 @@
             <object class="sizeritem">
                 <object class="wxBoxSizer">
                     <object class="sizeritem">
-                        <object class="wxButton" name="ID_OK">
+                        <object class="wxButton" name="wxID_OK">
                             <label>OK</label>
                             <default>1</default>
                         </object>
@@ -102,7 +102,7 @@
                         <border>2</border>
                     </object>
                     <object class="sizeritem">
-                        <object class="wxButton" name="ID_CANCEL">
+                        <object class="wxButton" name="wxID_CANCEL">
                             <label>Cancel</label>
                         </object>
                         <flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>

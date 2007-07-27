@@ -73,10 +73,6 @@ SaveSegmentDialog::SaveSegmentDialog(wxWindow* parent,
 	StartY_TextCtrl->SetValidator(wxNumericTextValidator(&_StartY));
 	Width_TextCtrl->SetValidator(wxNumericTextValidator(&_Width));
 	Height_TextCtrl->SetValidator(wxNumericTextValidator(&_Height));
-
-	// Use default handlers for the OK and Cancel Button
-	Connect(XRCID("ID_OK"), wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&wxDialog::OnOK);
-	Connect(XRCID("ID_CANCEL"), wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&wxDialog::OnCancel);
 }
 
 SaveSegmentDialog::~SaveSegmentDialog()

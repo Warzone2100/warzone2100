@@ -42,7 +42,7 @@ class AutoFlagDialog : public wxDialog
 {
 	public:
 		// Construction
-		AutoFlagDialog(wxWindow* parent,
+		AutoFlagDialog(wxWindow* parent = NULL,
 		               bool RandRotate = false,
 		               bool RandXFlip = false,
 		               bool RandYFlip = false,
@@ -72,7 +72,7 @@ class AutoFlagDialog : public wxDialog
 	private:
 		//(*Handlers(AutoFlagDialog)
 		void OnOK(wxCommandEvent& event);
-		void OnDegree(wxCommandEvent& event);
+		void OnRotate(wxCommandEvent& event);
 		void OnXFlip(wxCommandEvent& event);
 		void OnYFlip(wxCommandEvent& event);
 		void OnRandRotate(wxCommandEvent& event);
@@ -90,8 +90,6 @@ class AutoFlagDialog : public wxDialog
 		wxCheckBox*  RandRotate_CheckBox;
 		wxCheckBox*  RandXFlip_CheckBox;
 		wxCheckBox*  RandYFlip_CheckBox;
-		wxButton*  OK_Button;
-		wxButton*  Cancel_Button;
 		//*)
 
 	private:

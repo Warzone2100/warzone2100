@@ -74,22 +74,17 @@ AutoFlagDialog::AutoFlagDialog(wxWindow* parent,
 	RandRotate_CheckBox = (wxCheckBox*)FindWindow(XRCID("ID_CHK_RANDROTATE"));
 	RandXFlip_CheckBox = (wxCheckBox*)FindWindow(XRCID("ID_CHK_RANDXFLIP"));
 	RandYFlip_CheckBox = (wxCheckBox*)FindWindow(XRCID("ID_CHK_RANDYFLIP"));
-	OK_Button = (wxButton*)FindWindow(XRCID("ID_OK"));
-	Cancel_Button = (wxButton*)FindWindow(XRCID("ID_CANCEL"));
-	Connect(XRCID("ID_RADIO_0DEGREE"),wxEVT_COMMAND_RADIOBUTTON_SELECTED,(wxObjectEventFunction)&AutoFlagDialog::OnDegree);
-	Connect(XRCID("ID_RADIO_90DEGREE"),wxEVT_COMMAND_RADIOBUTTON_SELECTED,(wxObjectEventFunction)&AutoFlagDialog::OnDegree);
-	Connect(XRCID("ID_RADIO_180DEGREE"),wxEVT_COMMAND_RADIOBUTTON_SELECTED,(wxObjectEventFunction)&AutoFlagDialog::OnDegree);
-	Connect(XRCID("ID_RADIO_270DEGREE"),wxEVT_COMMAND_RADIOBUTTON_SELECTED,(wxObjectEventFunction)&AutoFlagDialog::OnDegree);
+	Connect(XRCID("ID_RADIO_0DEGREE"),wxEVT_COMMAND_RADIOBUTTON_SELECTED,(wxObjectEventFunction)&AutoFlagDialog::OnRotate);
+	Connect(XRCID("ID_RADIO_90DEGREE"),wxEVT_COMMAND_RADIOBUTTON_SELECTED,(wxObjectEventFunction)&AutoFlagDialog::OnRotate);
+	Connect(XRCID("ID_RADIO_180DEGREE"),wxEVT_COMMAND_RADIOBUTTON_SELECTED,(wxObjectEventFunction)&AutoFlagDialog::OnRotate);
+	Connect(XRCID("ID_RADIO_270DEGREE"),wxEVT_COMMAND_RADIOBUTTON_SELECTED,(wxObjectEventFunction)&AutoFlagDialog::OnRotate);
 	Connect(XRCID("ID_CHK_XFLIP"),wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&AutoFlagDialog::OnXFlip);
 	Connect(XRCID("ID_CHK_YFLIP"),wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&AutoFlagDialog::OnYFlip);
 	Connect(XRCID("ID_CHK_RANDROTATE"),wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&AutoFlagDialog::OnRandRotate);
 	Connect(XRCID("ID_CHK_RANDXFLIP"),wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&AutoFlagDialog::OnRandXFlip);
 	Connect(XRCID("ID_CHK_RANDYFLIP"),wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&AutoFlagDialog::OnRandYFlip);
-	Connect(XRCID("ID_OK"),wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&AutoFlagDialog::OnOK);
+	Connect(XRCID("wxID_OK"),wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&AutoFlagDialog::OnOK);
 	//*)
-
-	// Use default handler for Cancel Button
-	Connect(XRCID("ID_CANCEL"), wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&wxDialog::OnCancel);
 }
 
 AutoFlagDialog::~AutoFlagDialog()
@@ -144,8 +139,8 @@ bool AutoFlagDialog::ToggleYFlip() const
 void AutoFlagDialog::OnOK(wxCommandEvent& event)
 {
 	_IncRotate = false; //IncrementRotate_CheckBox->GetValue();
-	_TogXFlip = false;  //ToggleXFlip_CheckBox->GetValue();
-	_TogYFlip = false;  //ToggleYFlip_CheckBox->GetValue();
+	_ToggleXFlip = false;  //ToggleXFlip_CheckBox->GetValue();
+	_ToggleYFlip = false;  //ToggleYFlip_CheckBox->GetValue();
 	_XFlip = XFlip_CheckBox->GetValue();
 	_YFlip = XFlip_CheckBox->GetValue();
 	_RandRotate = RandRotate_CheckBox->GetValue();
@@ -161,7 +156,7 @@ void AutoFlagDialog::OnOK(wxCommandEvent& event)
 	else if (Degree270_RadioButton->GetValue())
 		_Rotate = 3;
 
-	wxDialog::OnOK(event);
+	event.Skip();
 }
 
 void AutoFlagDialog::OnRandRotate(wxCommandEvent& event)
