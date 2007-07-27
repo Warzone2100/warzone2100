@@ -171,6 +171,60 @@ class ListNode
 			return count;
 		}
 
+		class iterator
+		{
+			public:
+				iterator(ListNode<T>* ptr = NULL) :
+					_nodePtr(ptr)
+				{}
+
+				iterator(const iterator& rhs) :
+					_nodePtr(rhs._nodePtr)
+				{}
+
+				iterator& operator=(const iterator& rhs)
+				{
+					_nodePtr = rhs._nodePtr;
+				}
+
+				bool operator==(const iterator& rhs) const
+				{
+					return _nodePtr == rhs._nodePtr;
+				}
+
+				bool operator!=(const iterator& rhs) const
+				{
+					return !(*this == rhs);
+				}
+
+				T& operator*() const
+				{
+					return *_nodePtr->GetData();
+				}
+
+				T* operator->() const
+				{
+					return _nodePtr->GetData();
+				}
+
+				iterator& operator++()
+				{
+					_nodePtr = _nodePtr->GetNextNode();
+
+					return *this;
+				}
+
+				iterator operator++(int)
+				{
+					iterator tmp(*this);
+					++(*this);
+					return tmp;
+				}
+
+			private:
+				ListNode<T>* _nodePtr;
+		};
+
 	protected:
 		ListNode<T>* PrevNode;
 		ListNode<T>* NextNode;
