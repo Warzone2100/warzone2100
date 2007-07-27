@@ -1116,21 +1116,9 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 							//Watermelon:to skip number of VTOL_CONNECTOR_START ground unit connectors
 							if ( iConnector < VTOL_CONNECTOR_START )
 							{
-								//Watermelon:midpoint for heavybody with only 1 weapon
-								if ( psDroid->numWeaps == 1 &&
-									((asBodyStats[psDroid->asBits[COMP_BODY].nStat]).weaponSlots == 3 ||
-									(asBodyStats[psDroid->asBits[COMP_BODY].nStat]).size >= SIZE_HEAVY))
-								{
-									pie_TRANSLATE( (SDWORD)((psShapeTemp->connectors[0].x + psShapeTemp->connectors[2].x) /2),
-												   psShapeTemp->connectors[0].z,
-												   (SDWORD)((psShapeTemp->connectors[0].y + psShapeTemp->connectors[2].y) /2)  );
-								}
-								else
-								{
-									pie_TRANSLATE( psShapeTemp->connectors[i].x,
-												   psShapeTemp->connectors[i].z,
-												   psShapeTemp->connectors[i].y  );
-								}
+								pie_TRANSLATE(psShapeTemp->connectors[i].x,
+								              psShapeTemp->connectors[i].z,
+								              psShapeTemp->connectors[i].y);
 							}
 							else
 							{
