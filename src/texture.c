@@ -35,9 +35,6 @@
 #define PAGE_DEPTH		4
 #define TEXTURE_PAGE_SIZE	PAGE_WIDTH*PAGE_HEIGHT*PAGE_DEPTH
 
-/* Stores the graphics data for the terrain tiles textures (in src/data.c) */
-static iTexture tilesPCX = { 0, 0, 0, NULL };
-
 /* How many pages have we loaded */
 static SDWORD	firstTexturePage;
 static SDWORD	numTexturePages;
@@ -50,47 +47,32 @@ static void getRectFromPage(UDWORD width, UDWORD height, unsigned char *src, UDW
 static void putRectIntoPage(UDWORD width, UDWORD height, unsigned char *dest, UDWORD bufWidth, unsigned char *src);
 static void buildTileIndexes(void);
 static void makeTileTexturePages(iV_Image * src, UDWORD tileWidth, UDWORD tileHeight);
-static void remakeTileTexturePages(iV_Image * src, UDWORD tileWidth, UDWORD tileHeight);
 static void freeTileTextures(void);
+static BOOL getTileRadarColours(iTexture *tilesPCX);
 
 void texInit()
 {
-	tilesPCX.bmp = NULL;
 }
 
 void texDone()
 {
 	freeTileTextures();
-	iV_unloadImage(&tilesPCX);
 }
 
 // just return a pointer because the resource handler wants to cuddle one
-void *texLoad(const char *fileName)
+void texLoad(const char *fileName)
 {
-	BOOL bTilesPCXLoaded = (tilesPCX.bmp != NULL);
-
-	if (bTilesPCXLoaded)
-	{
-		debug(LOG_TEXTURE, "Unloading terrain tiles");
-		iV_unloadImage(&tilesPCX);
-	}
+	iTexture tilesPCX;
 
 	if(!iV_loadImage_PNG(fileName, &tilesPCX))
 	{
-		debug( LOG_ERROR, "TERTILES load failed" );
-		return NULL;
+		debug(LOG_ERROR, "TERTILES load failed");
+		return;
 	}
 
-	getTileRadarColours();
-	if (bTilesPCXLoaded)
-	{
-		remakeTileTexturePages(&tilesPCX, TILE_WIDTH, TILE_HEIGHT);
-	}
-	else
-	{
-		makeTileTexturePages(&tilesPCX, TILE_WIDTH, TILE_HEIGHT);
-	}
-	return &tilesPCX;
+	getTileRadarColours(&tilesPCX);
+	makeTileTexturePages(&tilesPCX, TILE_WIDTH, TILE_HEIGHT);
+	free(tilesPCX.bmp);
 }
 
 /*
@@ -175,82 +157,21 @@ exit:
 	return;
 }
 
-void remakeTileTexturePages(iV_Image * src, UDWORD tileWidth, UDWORD tileHeight)
-{
-	UDWORD i, j;
-	UDWORD pageNumber = 0;
-	UDWORD tilesAcross = src->width / tileWidth, tilesDown = src->height / tileHeight;
-	UDWORD tilesAcrossPage = PAGE_WIDTH / tileWidth, tilesDownPage = PAGE_HEIGHT / tileHeight;
-	UDWORD tilesPerPage = tilesAcrossPage * tilesDownPage, tilesPerSource = tilesAcross * tilesDown;
-	UDWORD tilesProcessed = 0;
-	iTexture sprite = { PAGE_WIDTH, PAGE_HEIGHT, PAGE_DEPTH, malloc(TEXTURE_PAGE_SIZE) };
-	/* Get enough memory to store one tile */
-	unsigned char *tileStorage = malloc(tileWidth * tileHeight * PAGE_DEPTH);
-	unsigned char *presentLoc = sprite.bmp;
-	unsigned char *srcBmp = src->bmp;
-
-	debug(LOG_TEXTURE, "remakeTileTexturePages: src(%d,%d), tile(%d, %d)", src->width, src->height, tileWidth, tileHeight);
-
-	for (i=0; i<tilesDown; i++)
-	{
-		for (j=0; j<tilesAcross; j++)
-		{
-			getRectFromPage(tileWidth, tileHeight, srcBmp, src->width, tileStorage);
-			putRectIntoPage(tileWidth, tileHeight, presentLoc, PAGE_WIDTH, tileStorage);
-			tilesProcessed++;
-			presentLoc += tileWidth * PAGE_DEPTH;
-			srcBmp += tileWidth * PAGE_DEPTH;
-			/* Have we got all the tiles from the source!? */
-			if (tilesProcessed == tilesPerSource)
-			{
-				pie_ChangeTexPage(pageId[pageNumber], &sprite, 0, FALSE);
-				goto exit;
-			}
-
-			/* Have we run out of texture page? */
-			if (tilesProcessed % tilesPerPage == 0)
-			{
-				debug(LOG_TEXTURE, "remakeTileTexturePages: ran out of texture page ...");
-				debug(LOG_TEXTURE, "tilesDown=%d tilesAcross=%d tilesProcessed=%d tilesPerPage=%d", tilesDown, tilesAcross, tilesProcessed, tilesPerPage);
-				pie_ChangeTexPage(pageId[pageNumber], &sprite, 0, FALSE);
-				pageNumber++;
-				presentLoc = sprite.bmp;
-			}
-			else if (tilesProcessed % tilesAcrossPage == 0)
-			{
-				/* Right hand side of texture page */
-				/* So go to one tile down */
-				presentLoc += (tileHeight-1) * PAGE_WIDTH * PAGE_DEPTH;
-			}
-		}
-		srcBmp += (tileHeight-1) * src->width * PAGE_DEPTH;
-	}
-
-	//check numTexturePages == pageNumber;
-	ASSERT( numTexturePages >= (SDWORD)pageNumber, "New Tertiles too large" );
-
-exit:
-	free(tileStorage);
-	buildTileIndexes();
-	return;
-}
-
-
-BOOL getTileRadarColours(void)
+static BOOL getTileRadarColours(iTexture *tilesPCX)
 {
 	UDWORD x, y, i, j, w, h, t;
 	iBitmap *b, *s;
 	unsigned char tempBMP[TILE_WIDTH * TILE_HEIGHT];
 
-	w = tilesPCX.width / TILE_WIDTH;
-	h = tilesPCX.height / TILE_HEIGHT;
+	w = tilesPCX->width / TILE_WIDTH;
+	h = tilesPCX->height / TILE_HEIGHT;
 
 	t = 0;
 	for (i=0; i<h; i++)
 	{
 		for (j=0; j<w; j++)
 		{
-			b = tilesPCX.bmp + j * TILE_WIDTH + i * tilesPCX.width * TILE_HEIGHT;
+			b = tilesPCX->bmp + j * TILE_WIDTH + i * tilesPCX->width * TILE_HEIGHT;
 			s = &tempBMP[0];
 			if (s)
 			{
@@ -261,7 +182,7 @@ BOOL getTileRadarColours(void)
 					{
 						; /* NOP */
 					}
-					b+=tilesPCX.width;
+					b += tilesPCX->width;
 				}
 				calcRadarColour(&tempBMP[0],t);
 				t++;
@@ -281,6 +202,7 @@ static void freeTileTextures(void)
 
 	for (i = 0; i < numTexturePages; i++)
 	{
+debug(LOG_ERROR, "Unloading page %d + %u", firstTexturePage, i);
 		iV_unloadImage(&_TEX_PAGE[(firstTexturePage+i)].tex);
 	}
 }

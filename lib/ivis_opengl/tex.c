@@ -133,36 +133,6 @@ void pie_MakeTexPageName(char * filename)
 	}
 }
 
-void pie_ChangeTexPage(int tex_index, iV_Image * s, int type, BOOL bResource)
-{
-	assert(s != NULL);
-
-	/* DID come from a resource */
-	_TEX_PAGE[tex_index].bResource = bResource;
-	// Default values
-	_TEX_PAGE[tex_index].tex.bmp = s->bmp;
-	_TEX_PAGE[tex_index].tex.width = s->width;
-	_TEX_PAGE[tex_index].tex.height = s->height;
-	_TEX_PAGE[tex_index].tex.depth = s->depth;
-	_TEX_PAGE[tex_index].type = type;
-
-	glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[tex_index].id);
-
-	if ((s->width & (s->width-1)) == 0 && (s->height & (s->height-1)) == 0)
-	{
-		gluBuild2DMipmaps(GL_TEXTURE_2D, wz_texture_compression, s->width, s->height,
-			     iV_getPixelFormat(s), GL_UNSIGNED_BYTE, s->bmp);
-	} else {
-		debug(LOG_ERROR, "pie_ChangeTexPage: non POT texture %i", tex_index);
-	}
-
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-}
-
 /*!
  * Print the names of all loaded textures to LOG_ERROR
  */
@@ -231,16 +201,19 @@ void pie_TexShutDown(void)
 {
 	unsigned int i = 0, j = 0;
 
-	while (i < _TEX_INDEX) {
+	while (i < _TEX_INDEX) 
+	{
 		/*	Only free up the ones that were NOT allocated through resource handler cos they'll already be free */
 		if(_TEX_PAGE[i].bResource == FALSE)
 		{
-			if(_TEX_PAGE[i].tex.bmp) {
+			if(_TEX_PAGE[i].tex.bmp) 
+			{
 				j++;
 				free(_TEX_PAGE[i].tex.bmp);
 				_TEX_PAGE[i].tex.bmp = NULL;
 			}
 		}
+		glDeleteTextures(1, (GLuint *) &_TEX_PAGE[i].id);
 		i++;
 	}
 

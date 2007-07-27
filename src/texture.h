@@ -22,9 +22,7 @@
 
 void texInit();
 void texDone();
-void *texLoad(const char *fileName);
-
-extern BOOL getTileRadarColours(void);
+void texLoad(const char *fileName);
 
 typedef struct _tileTexInfo
 {

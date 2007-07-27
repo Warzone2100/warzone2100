@@ -681,9 +681,12 @@ static BOOL dataImageLoad(const char *fileName, void **ppData)
 // Tertiles (terrain tiles) loader.
 static BOOL dataTERTILESLoad(const char *fileName, void **ppData)
 {
-	
-	*ppData = texLoad(fileName);
+	texLoad(fileName);
 	debug(LOG_TEXTURE, "HW Tiles loaded");
+
+	// set a dummy value so the release function gets called
+	*ppData = (void *)1;
+
 	return TRUE;
 }
 
