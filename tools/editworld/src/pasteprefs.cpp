@@ -28,10 +28,6 @@
 #include "btedit.h"
 #include "pasteprefs.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 /////////////////////////////////////////////////////////////////////////////
 // CPastePrefs dialog
 

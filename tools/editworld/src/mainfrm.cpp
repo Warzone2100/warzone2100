@@ -35,10 +35,6 @@
 #include "textureview.h"
 #include "wfview.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 extern int g_MaxXRes;	// 3d view size.
 extern int g_MaxYRes;
 int g_DispXRes;

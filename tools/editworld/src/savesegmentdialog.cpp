@@ -27,10 +27,6 @@
 #include "stdafx.h"
 #include "savesegmentdialog.hpp"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 /////////////////////////////////////////////////////////////////////////////
 // SaveSegmentDialog dialog
 

@@ -26,10 +26,6 @@
 #include "btedit.h"
 #include "autoflagdialog.hpp"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 /////////////////////////////////////////////////////////////////////////////
 // AutoFlagDialog dialog
 

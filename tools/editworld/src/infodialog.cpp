@@ -28,10 +28,6 @@
 #include "btedit.h"
 #include "infodialog.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 /////////////////////////////////////////////////////////////////////////////
 // CInfoDialog dialog
 

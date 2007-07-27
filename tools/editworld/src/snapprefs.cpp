@@ -29,10 +29,6 @@
 #include "snapprefs.h"
 //#include "datatypes.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 /////////////////////////////////////////////////////////////////////////////
 // CSnapPrefs dialog
 

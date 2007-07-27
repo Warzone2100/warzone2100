@@ -29,10 +29,6 @@
 #include "debugprint.hpp"
 #include "expandlimitsdlg.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 /////////////////////////////////////////////////////////////////////////////
 // CExpandLimitsDlg dialog
 

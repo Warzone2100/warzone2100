@@ -28,10 +28,6 @@
 #include "btedit.h"
 #include "textureprefs.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 /////////////////////////////////////////////////////////////////////////////
 // CTexturePrefs dialog
 

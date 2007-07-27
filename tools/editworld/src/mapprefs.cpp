@@ -28,10 +28,6 @@
 #include "btedit.h"
 #include "mapprefs.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 /////////////////////////////////////////////////////////////////////////////
 // CMapPrefs dialog
 

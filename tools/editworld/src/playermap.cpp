@@ -28,10 +28,6 @@
 #include "btedit.h"
 #include "playermap.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 /////////////////////////////////////////////////////////////////////////////
 // CPlayerMap dialog
 

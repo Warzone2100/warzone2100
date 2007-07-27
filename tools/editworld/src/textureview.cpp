@@ -32,10 +32,6 @@
 #include "autoflagdialog.hpp"
 #include "debugprint.hpp"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 /////////////////////////////////////////////////////////////////////////////
 // CTextureView
 

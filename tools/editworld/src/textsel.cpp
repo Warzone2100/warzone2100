@@ -33,10 +33,6 @@
 #include <fstream>
 #include <string>
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 extern char g_HomeDirectory[1024];
 
 /////////////////////////////////////////////////////////////////////////////

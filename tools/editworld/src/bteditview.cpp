@@ -37,10 +37,6 @@
 #include "objectproperties.h"
 #include "keyhandler.hpp"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 #define KEY_SEAUP			'U'
 #define KEY_SEADOWN			'J'
 #define KEY_ORBITLEFT		188	//','

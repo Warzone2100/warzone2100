@@ -29,10 +29,6 @@
 #include "debugprint.hpp"
 #include "limitsdialog.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 /////////////////////////////////////////////////////////////////////////////
 // CLimitsDialog dialog
 

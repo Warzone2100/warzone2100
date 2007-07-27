@@ -28,10 +28,6 @@
 #include "btedit.h"
 #include "objectproperties.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 /////////////////////////////////////////////////////////////////////////////
 // CObjectProperties dialog
 

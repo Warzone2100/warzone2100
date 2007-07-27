@@ -28,10 +28,6 @@
 #include "btedit.h"
 #include "exportinfo.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 /////////////////////////////////////////////////////////////////////////////
 // CExportInfo dialog
 

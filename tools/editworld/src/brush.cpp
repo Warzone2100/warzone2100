@@ -30,10 +30,6 @@
 #include "debugprint.hpp"
 #include "assert.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 extern DWORD g_Flags[MAXTILES];
 extern CUndoRedo *g_UndoRedo;
 
