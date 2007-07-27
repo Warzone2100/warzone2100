@@ -692,7 +692,6 @@ static BOOL dataTERTILESLoad(const char *fileName, void **ppData)
 
 static void dataTERTILESRelease(void *pData)
 {
-	texDone();
 	pie_TexShutDown();
 }
 
@@ -745,7 +744,7 @@ static BOOL dataTexPageLoad(const char *fileName, void **ppData)
 
 		dataImageLoad(fileName, ppData);
 
-		pie_AddTexPage(*ppData, texpage, 1, TRUE);
+		pie_AddTexPage(*ppData, texpage, 1);
 	}
 
 	return TRUE;

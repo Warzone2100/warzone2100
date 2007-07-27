@@ -996,7 +996,6 @@ BOOL systemInitialise(void)
 	{
 		return FALSE;
 	}
-	texInit();
 
 #ifdef ARROWS
 	arrowInit();

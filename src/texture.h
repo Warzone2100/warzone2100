@@ -20,8 +20,6 @@
 #ifndef _texture_h
 #define _texture_h
 
-void texInit();
-void texDone();
 void texLoad(const char *fileName);
 
 typedef struct _tileTexInfo
