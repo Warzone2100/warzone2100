@@ -28,7 +28,6 @@
 #include <wx/wxprec.h>
 
 //(*Headers(SaveSegmentDialog)
-#include <wx/button.h>
 #include <wx/dialog.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>

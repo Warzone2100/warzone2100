@@ -83,8 +83,9 @@ AutoFlagDialog::AutoFlagDialog(wxWindow* parent,
 	Connect(XRCID("ID_CHK_RANDROTATE"),wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&AutoFlagDialog::OnRandRotate);
 	Connect(XRCID("ID_CHK_RANDXFLIP"),wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&AutoFlagDialog::OnRandXFlip);
 	Connect(XRCID("ID_CHK_RANDYFLIP"),wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&AutoFlagDialog::OnRandYFlip);
-	Connect(XRCID("wxID_OK"),wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&AutoFlagDialog::OnOK);
 	//*)
+
+	Connect(XRCID("wxID_OK"),wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&AutoFlagDialog::OnOK);
 }
 
 AutoFlagDialog::~AutoFlagDialog()

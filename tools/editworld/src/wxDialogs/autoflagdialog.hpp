@@ -28,7 +28,6 @@
 #include <wx/wxprec.h>
 
 //(*Headers(AutoFlagDialog)
-#include <wx/button.h>
 #include <wx/checkbox.h>
 #include <wx/dialog.h>
 #include <wx/radiobut.h>

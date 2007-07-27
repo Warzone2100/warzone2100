@@ -25,97 +25,99 @@
 <resource xmlns="http://www.wxwidgets.org/wxxrc">
     <object class="wxDialog" name="AutoFlagDialog">
         <title>Paint Orientation</title>
-        <object class="wxFlexGridSizer">
-            <cols>2</cols>
-            <rows>2</rows>
+        <object class="wxBoxSizer">
+            <orient>wxVERTICAL</orient>
             <object class="sizeritem">
-                <object class="wxStaticBoxSizer">
-                    <orient>wxVERTICAL</orient>
+                <object class="wxBoxSizer">
                     <object class="sizeritem">
-                        <object class="wxRadioButton" name="ID_RADIO_0DEGREE">
-                            <label>0 Degrees</label>
+                        <object class="wxStaticBoxSizer">
+                            <orient>wxVERTICAL</orient>
+                            <object class="sizeritem">
+                                <object class="wxRadioButton" name="ID_RADIO_0DEGREE">
+                                    <label>0 Degrees</label>
+                                </object>
+                                <flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                <border>2</border>
+                            </object>
+                            <object class="sizeritem">
+                                <object class="wxRadioButton" name="ID_RADIO_90DEGREE">
+                                    <label>90 Degrees</label>
+                                </object>
+                                <flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                <border>2</border>
+                            </object>
+                            <object class="sizeritem">
+                                <object class="wxRadioButton" name="ID_RADIO_180DEGREE">
+                                    <label>180 Degrees</label>
+                                </object>
+                                <flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                <border>2</border>
+                            </object>
+                            <object class="sizeritem">
+                                <object class="wxRadioButton" name="ID_RADIO_270DEGREE">
+                                    <label>270 Degrees</label>
+                                </object>
+                                <flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                <border>2</border>
+                            </object>
+                            <object class="sizeritem">
+                                <object class="wxCheckBox" name="ID_CHK_XFLIP">
+                                    <label>X Flip</label>
+                                </object>
+                                <flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                <border>2</border>
+                            </object>
+                            <object class="sizeritem">
+                                <object class="wxCheckBox" name="ID_CHK_YFLIP">
+                                    <label>Y Flip</label>
+                                </object>
+                                <flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                <border>2</border>
+                            </object>
                         </object>
-                        <flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                        <flag>wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
                         <border>2</border>
                     </object>
                     <object class="sizeritem">
-                        <object class="wxRadioButton" name="ID_RADIO_90DEGREE">
-                            <label>90 Degrees</label>
+                        <object class="wxStaticBoxSizer">
+                            <orient>wxVERTICAL</orient>
+                            <object class="sizeritem">
+                                <object class="wxCheckBox" name="ID_CHK_RANDROTATE">
+                                    <label>Random Rotate</label>
+                                </object>
+                                <flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                <border>2</border>
+                            </object>
+                            <object class="sizeritem">
+                                <object class="wxCheckBox" name="ID_CHK_RANDXFLIP">
+                                    <label>Random X Flip</label>
+                                </object>
+                                <flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                <border>2</border>
+                            </object>
+                            <object class="sizeritem">
+                                <object class="wxCheckBox" name="ID_CHK_RANDYFLIP">
+                                    <label>Random Y Flip</label>
+                                </object>
+                                <flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                                <border>2</border>
+                            </object>
                         </object>
-                        <flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                        <border>2</border>
-                    </object>
-                    <object class="sizeritem">
-                        <object class="wxRadioButton" name="ID_RADIO_180DEGREE">
-                            <label>180 Degrees</label>
-                        </object>
-                        <flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                        <border>2</border>
-                    </object>
-                    <object class="sizeritem">
-                        <object class="wxRadioButton" name="ID_RADIO_270DEGREE">
-                            <label>270 Degrees</label>
-                        </object>
-                        <flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                        <border>2</border>
-                    </object>
-                    <object class="sizeritem">
-                        <object class="wxCheckBox" name="ID_CHK_XFLIP">
-                            <label>X Flip</label>
-                        </object>
-                        <flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                        <border>2</border>
-                    </object>
-                    <object class="sizeritem">
-                        <object class="wxCheckBox" name="ID_CHK_YFLIP">
-                            <label>Y Flip</label>
-                        </object>
-                        <flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+                        <flag>wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
                         <border>2</border>
                     </object>
                 </object>
-                <flag>wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
-                <border>2</border>
             </object>
             <object class="sizeritem">
-                <object class="wxStaticBoxSizer">
-                    <orient>wxVERTICAL</orient>
-                    <object class="sizeritem">
-                        <object class="wxCheckBox" name="ID_CHK_RANDROTATE">
-                            <label>Random Rotate</label>
+                <object class="wxStdDialogButtonSizer">
+                    <object class="button">
+                        <object class="wxButton" name="wxID_OK">
+                            <default>1</default>
                         </object>
-                        <flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                        <border>2</border>
                     </object>
-                    <object class="sizeritem">
-                        <object class="wxCheckBox" name="ID_CHK_RANDXFLIP">
-                            <label>Random X Flip</label>
-                        </object>
-                        <flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                        <border>2</border>
+                    <object class="button">
+                        <object class="wxButton" name="wxID_CANCEL" />
                     </object>
-                    <object class="sizeritem">
-                        <object class="wxCheckBox" name="ID_CHK_RANDYFLIP">
-                            <label>Random Y Flip</label>
-                        </object>
-                        <flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                        <border>2</border>
-                    </object>
-                </object>
-                <flag>wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
-                <border>2</border>
-            </object>
-            <object class="sizeritem">
-                <object class="wxButton" name="wxID_OK">
-                    <label>OK</label>
-                    <default>1</default>
-                </object>
-                <flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-                <border>2</border>
-            </object>
-            <object class="sizeritem">
-                <object class="wxButton" name="wxID_CANCEL">
-                    <label>Cancel</label>
                 </object>
                 <flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
                 <border>2</border>

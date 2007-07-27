@@ -24,7 +24,7 @@
 -->
 <resource xmlns="http://www.wxwidgets.org/wxxrc">
     <object class="wxDialog" name="SaveSegmentDialog">
-        <title>Dialog</title>
+        <title>Save Map Segment</title>
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
             <object class="sizeritem">
@@ -92,21 +92,14 @@
                 <border>2</border>
             </object>
             <object class="sizeritem">
-                <object class="wxBoxSizer">
-                    <object class="sizeritem">
+                <object class="wxStdDialogButtonSizer">
+                    <object class="button">
                         <object class="wxButton" name="wxID_OK">
-                            <label>OK</label>
                             <default>1</default>
                         </object>
-                        <flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-                        <border>2</border>
                     </object>
-                    <object class="sizeritem">
-                        <object class="wxButton" name="wxID_CANCEL">
-                            <label>Cancel</label>
-                        </object>
-                        <flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-                        <border>2</border>
+                    <object class="button">
+                        <object class="wxButton" name="wxID_CANCEL" />
                     </object>
                 </object>
                 <flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
