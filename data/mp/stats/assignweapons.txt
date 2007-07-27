@@ -271,4 +271,8 @@ H-Scorp-VTOL-BB,Rocket-VTOL-BB,NULL,NULL,6
 Viper-Trk-Com,CommandTurret1,NULL,NULL,6
 Cobra-Trk-Com,CommandTurret1,NULL,NULL,6
 Scorp-Trk-Com,CommandTurret1,NULL,NULL,6
+CobraTrkLancer,Rocket-LtA-T,NULL,NULL,6
+MantisTrkHC,Cannon2A-TMk1,NULL,NULL,6
+MantisTKTracks,Rocket-HvyA-T,NULL,NULL,6
+ScorpTrkHMG,MG3Mk1,NULL,NULL,6
 ZNULLDESIGN,ZNULLWEAPON,ZNULLWEAPON,ZNULLWEAPON,0

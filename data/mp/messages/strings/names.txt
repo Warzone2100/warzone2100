@@ -1863,27 +1863,35 @@ A-Veng-Trk-Scourge			"Vengeance Tracks Guass Scourge"
 
 //Anti Structure VTOLs
 V-Bug-ClusterBomb			"Bug Cluster Bomb VTOL"
-V-Bug-BB				"Bug Bunker Buster VTOL"
+V-Bug-BB					"Bug Bunker Buster VTOL"
 V-Scor-ClusterBomb			"Scorpion Cluster Bomb VTOL"
-V-Scor-BB				"Scorpion Bunker Buster VTOL"
+V-Scor-BB					"Scorpion Bunker Buster VTOL"
 
 //Anti Tank VTOLs
 V-Bug-Lancer				"Bug Lancer VTOL"
-V-Bug-HPV				"Bug HPV VTOL"
+V-Bug-HPV					"Bug HPV VTOL"
 V-Scor-Lancer				"Scorpion Lancer VTOL"
-V-Scor-HPV				"Scorpion HPV VTOL"
+V-Scor-HPV					"Scorpion HPV VTOL"
 V-Mantis-Lancer				"Mantis Lancer VTOL"
 V-Mantis-HPV				"Mantis HPV VTOL"
 
 //Repair
-A-Rep-Cobra-Trk				"Cobra Repair Trucks"
-A-Rep-Mantis-Trk			"Mantis Repair Trucks"
+A-Rep-Cobra-Trk				"Cobra Repair Tracks"
+A-Rep-Mantis-Trk			"Mantis Repair Tracks"
 
-H-Scorp-Trk-Lancer			"Lancer Hydra Scorpion Tracks"
-H-Scorp-Trk-HC				"Heavy Cannon Hydra Scorpion Tracks"
-H-Scorp-VTOL-Lancer			"Hydra Scorpion Lancer VTOL"
-H-Scorp-VTOL-BB				"Hydra Scorpion BB VTOL"
+H-Scorp-Trk-Lancer			"Scorpion Lancer Tracks"
+H-Scorp-Trk-HC				"Scorpion Heavy Cannon Tracks"
+H-Scorp-VTOL-Lancer			"Scorpion Lancer VTOL"
+H-Scorp-VTOL-BB				"Scorpion BB VTOL"
 
 Viper-Trk-Com				"Viper Command Turret Tracks"
 Cobra-Trk-Com				"Cobra Command Turret Tracks"
 Scorp-Trk-Com				"Scorpion Command Turret Tracks"
+
+CobraTrkLancer				"Cobra Lancer Tracks"
+MantisTrkHC					"Mantis Heavy Cannon Tracks"
+MantisTKTracks				"Mantis Tank Killer Tracks"
+ScorpTrkHMG					"Scorpion Heavy Machinegun Tracks"
+
+ScorpRepairTrk				"Scorpion Repair Tracks"
+ScorpHRepairHover			"Scorpion Heavy Repair Hover"
