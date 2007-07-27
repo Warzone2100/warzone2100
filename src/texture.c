@@ -202,7 +202,6 @@ static void freeTileTextures(void)
 
 	for (i = 0; i < numTexturePages; i++)
 	{
-debug(LOG_ERROR, "Unloading page %d + %u", firstTexturePage, i);
 		iV_unloadImage(&_TEX_PAGE[(firstTexturePage+i)].tex);
 	}
 }

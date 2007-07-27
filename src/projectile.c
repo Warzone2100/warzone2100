@@ -68,7 +68,7 @@
 
 // Watermelon:they are from droid.c
 /* The range for neighbouring objects */
-#define PROJ_NAYBOR_RANGE		(TILE_UNITS*2)
+#define PROJ_NAYBOR_RANGE		(TILE_UNITS*4)
 
 // Watermelon:neighbour global info ripped from droid.c
 PROJ_NAYBOR_INFO	asProjNaybors[MAX_NAYBORS];
@@ -632,9 +632,6 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 	//Watermelon:extended 'lifespan' of a projectile
 	//no more disappeared projectiles.
 	SDWORD			extendRad;
-	//Watermelon:given explosive weapons some 'hit collision' bonus
-	//esp the AAGun,or it will never hit anything with the new hit system
-	UDWORD			wpRadius = 1;
 	//Watermelon:Penetrate or not
 	BOOL			bPenetrate;
 	WEAPON			asWeap;
@@ -696,7 +693,7 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 		psObj->x = (UWORD)iX;
 		psObj->y = (UWORD)iY;
 	}
-	psObj->z = (UWORD)(psObj->srcHeight) + (dist * dz / rad);
+	psObj->z = (UWORD)(psObj->srcHeight) + (UWORD)(dist * dz / rad);
 
 	if ( gfxVisible(psObj) )
 	{
@@ -738,13 +735,11 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 		psStats->weaponSubClass == WSC_SLOWROCKET ||
 		psStats->weaponSubClass == WSC_SLOWMISSILE )
 	{
-		wpRadius = 2; // Increase hitradius
 		bMissile = TRUE;
 	}
 	else if ( psStats->weaponSubClass == WSC_MGUN ||
 			psStats->weaponSubClass == WSC_COMMAND )
 	{
-		wpRadius = 2; // Increase hitradius
 		//Watermelon:extended life span
 		extendRad = (SDWORD)(rad * 1.2f);
 	}
@@ -756,13 +751,12 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 			psStats->weaponSubClass == WSC_ENERGY ||
 			psStats->weaponSubClass == WSC_GAUSS )
 	{
-		wpRadius = 2; // Increase hitradius
 		//Watermelon:extended life span
 		extendRad = (SDWORD)(rad * 1.5f);
 	}
 	else if ( psStats->weaponSubClass == WSC_AAGUN )
 	{
-		wpRadius = 16;
+		//increased radius 1.414 times
 		extendRad = rad;
 	}
 
@@ -771,12 +765,6 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 		BASE_OBJECT *psTempObj = asProjNaybors[i].psObj;
 
 		CHECK_OBJECT(psTempObj);
-
-		// Dont set the target as destination twice messes up memory
-		if ( psTempObj == psObj->psDest )
-		{
-			continue;
-		}
 
 		if ( psTempObj == psObj->psDamaged )
 		{
@@ -842,7 +830,7 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 				zdiff = abs((UDWORD)psObj->z - (UDWORD)psTempObj->z);
 
 				if ( zdiff < establishTargetHeight(psTempObj) &&
-					(xdiff*xdiff + ydiff*ydiff) < (SDWORD)( wpRadius * establishTargetRadius(psTempObj) * establishTargetRadius(psTempObj) ) )
+					(xdiff*xdiff + ydiff*ydiff) < (SDWORD)( establishTargetRadius(psTempObj) * establishTargetRadius(psTempObj) ) )
 				{
 					psNewTarget = psTempObj;
 					setProjectileDestination(psObj, psNewTarget);
@@ -900,7 +888,7 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 
 			//Watermelon:'real' hit check even if the projectile is about to 'timeout'
 			if ( zdiff < establishTargetHeight(psObj->psDest) &&
-				(xdiff*xdiff + ydiff*ydiff) < (SDWORD)( wpRadius * establishTargetRadius(psObj->psDest) * establishTargetRadius(psObj->psDest) ) )
+				(xdiff*xdiff + ydiff*ydiff) < (SDWORD)( establishTargetRadius(psObj->psDest) * establishTargetRadius(psObj->psDest) ) )
 			{
 			}
 			else
@@ -946,7 +934,6 @@ proj_InFlightIndirectFunc( PROJECTILE *psObj )
 	UDWORD			i;
 	SDWORD			xdiff,ydiff,extendRad;
 	UDWORD			zdiff;
-	UDWORD			wpRadius = 3;
 	BOOL			bPenetrate;
 	WEAPON			asWeap;
 
@@ -1047,12 +1034,6 @@ proj_InFlightIndirectFunc( PROJECTILE *psObj )
 
 		CHECK_OBJECT(psTempObj);
 
-		// Dont set the target as destination twice messes up memory
-		if ( psTempObj == psObj->psDest )
-		{
-			continue;
-		}
-
 		//Watermelon;dont collide with any other projectiles
 		if ( psTempObj->type == OBJ_PROJECTILE )
 		{
@@ -1100,7 +1081,7 @@ proj_InFlightIndirectFunc( PROJECTILE *psObj )
 				zdiff = abs((UDWORD)psObj->z - (UDWORD)psTempObj->z);
 
 				if ( zdiff < establishTargetHeight(psTempObj) &&
-					(UDWORD)(xdiff*xdiff + ydiff*ydiff) < ( wpRadius * (SDWORD)establishTargetRadius(psTempObj) * (SDWORD)establishTargetRadius(psTempObj) ) )
+					(UDWORD)(xdiff*xdiff + ydiff*ydiff) < ( (SDWORD)establishTargetRadius(psTempObj) * (SDWORD)establishTargetRadius(psTempObj) ) )
 				{
 					psNewTarget = psTempObj;
 					setProjectileDestination(psObj, psNewTarget);
@@ -1151,14 +1132,8 @@ proj_InFlightIndirectFunc( PROJECTILE *psObj )
 			ydiff = (SDWORD)psObj->y - (SDWORD)psObj->psDest->y;
 			zdiff = abs((UDWORD)psObj->z - (UDWORD)psObj->psDest->z);
 
-			//Watermelon:dont apply the 'hitbox' bonus if the target is a building
-			if ( psObj->psDest->type == OBJ_STRUCTURE )
-			{
-				wpRadius = 1;
-			}
-
 			if ( zdiff < establishTargetHeight(psObj->psDest) &&
-				(xdiff*xdiff + ydiff*ydiff) < (SDWORD)( wpRadius * establishTargetRadius(psObj->psDest) * establishTargetRadius(psObj->psDest) ) )
+				(xdiff*xdiff + ydiff*ydiff) < (SDWORD)( establishTargetRadius(psObj->psDest) * establishTargetRadius(psObj->psDest) ) )
 			{
 				psObj->state = PROJ_IMPACT;
 			}
@@ -1976,7 +1951,7 @@ FEATURE		*psFeat;
 				case DROID_CYBORG_REPAIR:
 				case DROID_CYBORG_SUPER:
 					//Watermelon:'hitbox' size is now based on imd size
-					radius = abs(psTarget->sDisplay.imd->radius);
+					radius = abs(psTarget->sDisplay.imd->radius) * 2;
 					break;
 				case DROID_DEFAULT:
 				case DROID_TRANSPORTER:
