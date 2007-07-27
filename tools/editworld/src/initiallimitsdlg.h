@@ -29,39 +29,65 @@
 #include "ddimage.h"
 #include "heightmap.h"
 
+#include <deque>
+#include <string>
+
 /////////////////////////////////////////////////////////////////////////////
-// CInitialLimitsDlg dialog
+// InitialLimitsDlg dialog
 
-class CInitialLimitsDlg : public CDialog
+class InitialLimitsDlg : public CDialog
 {
-// Construction
-public:
-	CInitialLimitsDlg(CHeightMap *World,CWnd* pParent = NULL);   // standard constructor
-	int GetSelected(void) { return m_Selected; }
+	// Construction
+	public:
+		template<typename InputIterator>
+		InitialLimitsDlg(InputIterator first, InputIterator last, CWnd* parent = NULL) :
+			CDialog(InitialLimitsDlg::IDD, parent),
+			_Selected(-1),
+			InitialLimits_Choice(NULL)
+		{
+			for (; first != last; ++first)
+			{
+				_stringList.push_back(*first);
+			}
+			//{{AFX_DATA_INIT(InitialLimitsDlg)
+				// NOTE: the ClassWizard will add member initialization here
+			//}}AFX_DATA_INIT
+		}
 
-// Dialog Data
-	//{{AFX_DATA(CInitialLimitsDlg)
-	enum { IDD = IDD_INITIALLIMITS };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		inline int GetSelected()
+		{
+			return _Selected;
+		}
+
+	// Dialog Data
+		//{{AFX_DATA(InitialLimitsDlg)
+		enum { IDD = IDD_INITIALLIMITS };
+			// NOTE: the ClassWizard will add data members here
+		//}}AFX_DATA
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CInitialLimitsDlg)
+	// Overrides
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+		// ClassWizard generated virtual function overrides
+		//{{AFX_VIRTUAL(InitialLimitsDlg)
+		virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+		//}}AFX_VIRTUAL
 
-// Implementation
-protected:
-	CHeightMap *m_World;
-	int	m_Selected;
+	// Implementation
+	private:
+		int	_Selected;
 
-	// Generated message map functions
-	//{{AFX_MSG(CInitialLimitsDlg)
-	virtual BOOL OnInitDialog();
-	afx_msg void OnSelchangeInitiallimits();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+		// Generated message map functions
+		//{{AFX_MSG(InitialLimitsDlg)
+		virtual BOOL OnInitDialog();
+		afx_msg void OnSelchangeInitiallimits();
+		//}}AFX_MSG
+
+		CComboBox* InitialLimits_Choice;
+
+	private:
+		DECLARE_MESSAGE_MAP()
+
+	private:
+		std::deque<std::string> _stringList;
 };

@@ -26,75 +26,54 @@
 
 #include "stdafx.h"
 #include "btedit.h"
-#include "debugprint.hpp"
 #include "initiallimitsdlg.h"
 
 /////////////////////////////////////////////////////////////////////////////
-// CInitialLimitsDlg dialog
+// InitialLimitsDlg dialog
 
 
-CInitialLimitsDlg::CInitialLimitsDlg(CHeightMap *World,CWnd* pParent /*=NULL*/)
-	: CDialog(CInitialLimitsDlg::IDD, pParent)
-{
-	m_World = World;
-	m_Selected = -1;
-
-	//{{AFX_DATA_INIT(CInitialLimitsDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
-}
-
-
-void CInitialLimitsDlg::DoDataExchange(CDataExchange* pDX)
+void InitialLimitsDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CInitialLimitsDlg)
+	//{{AFX_DATA_MAP(InitialLimitsDlg)
 		// NOTE: the ClassWizard will add DDX and DDV calls here
 	//}}AFX_DATA_MAP
 }
 
 
-BEGIN_MESSAGE_MAP(CInitialLimitsDlg, CDialog)
-	//{{AFX_MSG_MAP(CInitialLimitsDlg)
+BEGIN_MESSAGE_MAP(InitialLimitsDlg, CDialog)
+	//{{AFX_MSG_MAP(InitialLimitsDlg)
 	ON_CBN_SELCHANGE(IDC_INITIALLIMITS, OnSelchangeInitiallimits)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
-// CInitialLimitsDlg message handlers
+// InitialLimitsDlg message handlers
 
-BOOL CInitialLimitsDlg::OnInitDialog() 
+BOOL InitialLimitsDlg::OnInitDialog() 
 {
 	CDialog::OnInitDialog();
 
-	CComboBox *List = (CComboBox*)GetDlgItem(IDC_INITIALLIMITS);
-
-	ListNode<CScrollLimits> *TmpNode = m_World->GetScrollLimits();
-	int ListSize = 0;
-	char *FirstString;
+	InitialLimits_Choice = (CComboBox*)GetDlgItem(IDC_INITIALLIMITS);
 
 	// Add the strings to the list box.
-	while(TmpNode!=NULL) {
-		List->AddString(TmpNode->GetData()->ScriptName);
-		if(ListSize == 0) {
-			FirstString = TmpNode->GetData()->ScriptName;
-		}
-		ListSize++;
-		TmpNode = TmpNode->GetNextNode();
+	for (std::deque<std::string>::const_iterator curString = _stringList.begin(); curString != _stringList.end(); ++curString)
+	{
+		InitialLimits_Choice->AddString(curString->c_str());
 	}
 
 	// Set the default selection.
-	if(ListSize) {
-		List->SelectString(-1, FirstString);
-		m_Selected = 0;
+	if(!_stringList.empty())
+	{
+		InitialLimits_Choice->SelectString(-1, _stringList.front().c_str());
+		_Selected = 0;
 	}
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	              // EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CInitialLimitsDlg::OnSelchangeInitiallimits() 
+void InitialLimitsDlg::OnSelchangeInitiallimits() 
 {
-	CComboBox *List = (CComboBox*)GetDlgItem(IDC_INITIALLIMITS);
-	m_Selected = List->GetCurSel();
+	_Selected = InitialLimits_Choice->GetCurSel();
 }

@@ -1641,6 +1641,21 @@ void CBTEditDoc::DisplayExportSummary(void)
 	delete String;
 }
 
+// Proxy class that serves as InputIterator (as defined by the C++ standard in
+// section 24.1.1) for the initialisation of InitialLimitsDlg
+class scrollLimitStringIterator : public ListNode<CScrollLimits>::iterator
+{
+	public:
+		inline scrollLimitStringIterator(ListNode<CScrollLimits>* ptr = NULL) :
+			ListNode<CScrollLimits>::iterator(ptr)
+		{}
+
+		inline std::string operator*() const
+		{
+			return std::string(iterator::operator*().ScriptName);
+		}
+};
+
 	
 // Write out the map in Deliverance format ( Scenario Start ).
 //
@@ -1654,7 +1669,7 @@ BOOL CBTEditDoc::WriteDeliveranceStart(char *FileName)
 	_splitpath(FileName,Drive,Dir,FName,Ext);
 
 	// Need to specify scroll limits to use.
-	CInitialLimitsDlg Dlg(m_HeightMap);
+	InitialLimitsDlg Dlg(scrollLimitStringIterator(m_HeightMap->GetScrollLimits()), scrollLimitStringIterator());
 	if(Dlg.DoModal() != IDOK) {
 		return TRUE;
 	}
