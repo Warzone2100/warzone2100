@@ -25,16 +25,16 @@
 #ifndef __INCLUDE_NUMTEXTVAL_HPP__
 #define __INCLUDE_NUMTEXTVAL_HPP__
 
-#include <wx/wxprec.h>
-
 #include <wx/textctrl.h>
 #include <wx/validate.h>
 
 class wxNumericTextValidator : public wxValidator
 {
+DECLARE_DYNAMIC_CLASS(wxNumericTextValidator)
     public:
-        wxNumericTextValidator(long* val = NULL);
-        wxNumericTextValidator(unsigned long* val = NULL);
+        wxNumericTextValidator();
+        wxNumericTextValidator(long* val);
+        wxNumericTextValidator(unsigned long* val);
         wxNumericTextValidator(const wxNumericTextValidator& rhs);
         const wxNumericTextValidator& operator=(const wxNumericTextValidator& rhs);
 
@@ -42,7 +42,7 @@ class wxNumericTextValidator : public wxValidator
 
         // Called when the value in the window must be validated.
         // This function can pop up an error message.
-        virtual bool Validate(wxWindow *parent)
+        virtual bool Validate(wxWindow *parent);
 
         // Called to transfer data to the window
         virtual bool TransferToWindow();
@@ -63,6 +63,9 @@ class wxNumericTextValidator : public wxValidator
 
             return true;
         }
+
+    private:
+        DECLARE_EVENT_TABLE()
 
     private:
         long*          _longValue;

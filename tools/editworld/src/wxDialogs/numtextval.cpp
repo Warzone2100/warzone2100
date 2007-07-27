@@ -22,13 +22,29 @@
 	$HeadURL$
 */
 
-#include "numtextval.hpp"
-#include <wx/string.h>
-#include <wx/wxchar.h>
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
 
-BEGIN_EVENT_TABLE(wxTextValidator, wxValidator)
+#include "numtextval.hpp"
+
+#ifndef WX_PRECOMP
+  #include <wx/textctrl.h>
+  #include <wx/utils.h>
+  #include <wx/msgdlg.h>
+  #include <wx/intl.h>
+#endif
+
+IMPLEMENT_DYNAMIC_CLASS(wxNumericTextValidator, wxValidator)
+
+BEGIN_EVENT_TABLE(wxNumericTextValidator, wxValidator)
     EVT_CHAR(wxNumericTextValidator::OnChar)
 END_EVENT_TABLE()
+
+wxNumericTextValidator::wxNumericTextValidator() :
+    _longValue(NULL),
+    _UlongValue(NULL)
+{
+}
 
 wxNumericTextValidator::wxNumericTextValidator(long* val) :
     _longValue(val),
@@ -54,9 +70,11 @@ const wxNumericTextValidator& wxNumericTextValidator::operator=(const wxNumericT
     wxValidator::Copy(rhs);
     _longValue = rhs._longValue;
     _UlongValue = rhs._UlongValue;
+
+    return *this;
 }
 
-wxObject* wxNumericTextValidator::Clone() const;
+wxObject* wxNumericTextValidator::Clone() const
 {
     return new wxNumericTextValidator(*this);
 }
@@ -106,7 +124,7 @@ bool wxNumericTextValidator::Validate(wxWindow *parent)
         m_validatorWindow->SetFocus();
 
         wxString buf;
-        buf.Printf(_("'%s' should be numeric."), val.c_str());
+        buf.Printf(_("'%s' should be numeric."), control->GetValue().c_str());
 
         wxMessageBox(buf, _("Validation conflict"),
                      wxOK | wxICON_EXCLAMATION, parent);
@@ -133,9 +151,9 @@ bool wxNumericTextValidator::TransferToWindow()
         return false;
 
     if (_longValue)
-        control->SetValue(wxString::Format("%d", *_longValue));
+        control->SetValue(wxString::Format(_T("%d"), *_longValue));
     else
-        control->SetValue(wxString::Format("%u", *_UlongValue));
+        control->SetValue(wxString::Format(_T("%u"), *_UlongValue));
 
     return true;
 }
@@ -156,9 +174,9 @@ bool wxNumericTextValidator::TransferFromWindow()
         return false;
 
     if (_longValue)
-        control->ToLong(_longValue);
+        control->GetValue().ToLong(_longValue);
     else
-        control->ToULong(_UlongValue);
+        control->GetValue().ToULong(_UlongValue);
 
     return true;
 }
@@ -171,7 +189,7 @@ void wxNumericTextValidator::OnChar(wxKeyEvent& event)
 
     int keycode = event.GetKeyCode();
     // we don't filter special keys and Delete
-    if (keyCode < WXK_SPACE || keyCode == WXK_DELETE || keyCode > WXK_START)
+    if (keycode < WXK_SPACE || keycode == WXK_DELETE || keycode > WXK_START)
     {
         // Don't disable following event handlers in the chain (i.e. use the key)
         event.Skip();
