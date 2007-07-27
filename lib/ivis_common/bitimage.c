@@ -51,7 +51,7 @@ static unsigned short LoadTextureFile(const char *FileName, iTexture *pSprite)
 		}
 	}
 
-	return pie_AddTexPage(pSprite, FileName, 1);
+	return pie_AddTexPage(pSprite, FileName);
 }
 
 static inline IMAGEFILE* iV_AllocImageFile(size_t NumTPages, size_t NumImages)

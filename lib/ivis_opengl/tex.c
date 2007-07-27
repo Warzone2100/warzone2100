@@ -53,11 +53,11 @@ unsigned int _TEX_INDEX;
 
 	Returns the texture number of the image.
 **************************************************************************/
-int pie_AddTexPage(iV_Image * s, const char* filename, int type)
+int pie_AddTexPage(iV_Image * s, const char* filename)
 {
 	unsigned int i = 0;
 
-	debug(LOG_TEXTURE, "pie_AddTexPage: %s type=%d page=%d", filename, type, _TEX_INDEX);
+	debug(LOG_TEXTURE, "pie_AddTexPage: %s page=%d", filename, _TEX_INDEX);
 	assert(s != NULL);
 
 	/* Have we already loaded this one? (Should generally not happen here.) */

@@ -744,7 +744,7 @@ static BOOL dataTexPageLoad(const char *fileName, void **ppData)
 
 		dataImageLoad(fileName, ppData);
 
-		pie_AddTexPage(*ppData, texpage, 1);
+		pie_AddTexPage(*ppData, texpage);
 	}
 
 	return TRUE;

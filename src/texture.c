@@ -113,7 +113,7 @@ void makeTileTexturePages(iV_Image * src, UDWORD tileWidth, UDWORD tileHeight)
 			/* Have we got all the tiles from the source!? */
 			if (tilesProcessed == tilesPerSource)
 			{
-				pageId[pageNumber] = pie_AddTexPage(&sprite, "terrain", 0);
+				pageId[pageNumber] = pie_AddTexPage(&sprite, "terrain");
 				goto exit;
 			}
 
@@ -123,7 +123,7 @@ void makeTileTexturePages(iV_Image * src, UDWORD tileWidth, UDWORD tileHeight)
 				debug(LOG_TEXTURE, "makeTileTexturePages: ran out of texture page ...");
 				debug(LOG_TEXTURE, "tilesDown=%d tilesAcross=%d tilesProcessed=%d tilesPerPage=%d", tilesDown, tilesAcross, tilesProcessed, tilesPerPage);
 				/* If so, download this one and reset to start again */
-				pageId[pageNumber] = pie_AddTexPage(&sprite, "terrain", 0);
+				pageId[pageNumber] = pie_AddTexPage(&sprite, "terrain");
 				sprite.bmp = malloc(TEXTURE_PAGE_SIZE);
 				presentLoc = sprite.bmp;
 				pageNumber++;
