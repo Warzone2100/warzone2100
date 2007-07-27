@@ -296,7 +296,7 @@ BOOL scrIterateGroup(void)
 
 	if (psGroup != psScrIterateGroup)
 	{
-		ASSERT( FALSE, "scrIterateGroup: invalid group, InitGroupIterate not called?" );
+		debug(LOG_ERROR, "scrIterateGroup: invalid group, InitGroupIterate not called?" );
 		return FALSE;
 	}
 

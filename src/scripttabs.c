@@ -1390,6 +1390,10 @@ FUNC_SYMBOL asFuncTable[] =
 		1, { (INTERP_TYPE)ST_DROID },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
+	{ "getDroidRank",			scrGetDroidLevel,			VAL_INT,
+		1, { (INTERP_TYPE)ST_DROID },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
 	/* END new functions */
 
     /* This final entry marks the end of the function list */

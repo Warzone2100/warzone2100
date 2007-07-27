@@ -7732,13 +7732,13 @@ BOOL scrResearchCompleted(void)
 
 	if (!stackPopParams(2,ST_RESEARCH, &psResearch, VAL_INT, &player ))
 	{
-		debug(LOG_ERROR,   "scrResearchCompleted(): stack failed");
+		debug(LOG_ERROR,   "scrResearchCompleted: stack failed");
 		return FALSE;
 	}
 
 	if(psResearch == NULL)
 	{
-		ASSERT( FALSE, ": no such research topic" );
+		debug( LOG_ERROR, "scrResearchCompleted: no such research topic" );
 		return FALSE;
 	}
 
@@ -7747,7 +7747,7 @@ BOOL scrResearchCompleted(void)
 
 	if (index >= numResearch)
 	{
-		ASSERT( FALSE, "scrResearchCompleted: invalid research index" );
+		debug( LOG_ERROR, "scrResearchCompleted: invalid research index" );
 		return FALSE;
 	}
 
@@ -11183,12 +11183,37 @@ BOOL scrCalcDroidPower(void)
 	}
 
 	ASSERT(psDroid != NULL,
-		"scrDebugModeEnabled: can't calculate cost of a null-droid");
+		"scrCalcDroidPower: can't calculate cost of a null-droid");
 
 	scrFunctionResult.v.ival = (SDWORD)calcDroidPower(psDroid);
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
-		debug(LOG_ERROR, "scrDebugModeEnabled(): failed to push result");
+		debug(LOG_ERROR, "scrCalcDroidPower(): failed to push result");
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/*
+ * Returns experience level of a droid
+ */
+BOOL scrGetDroidLevel(void)
+{
+	DROID	*psDroid;
+
+	if (!stackPopParams(1, ST_DROID, &psDroid))
+	{
+		return FALSE;
+	}
+
+	ASSERT(psDroid != NULL,
+		"scrGetDroidLevel: null-pointer passed");
+
+	scrFunctionResult.v.ival = (SDWORD)getDroidLevel(psDroid);
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
+	{
+		debug(LOG_ERROR, "scrGetDroidLevel(): failed to push result");
 		return FALSE;
 	}
 
