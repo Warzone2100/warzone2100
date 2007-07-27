@@ -36,7 +36,8 @@
 #define TEXTURE_PAGE_SIZE	PAGE_WIDTH*PAGE_HEIGHT*PAGE_DEPTH
 
 /* Stores the graphics data for the terrain tiles textures (in src/data.c) */
-iTexture tilesPCX = { 0, 0, 0, NULL };
+static iTexture tilesPCX = { 0, 0, 0, NULL };
+static bool bTilesPCXLoaded = FALSE;
 
 /* How many pages have we loaded */
 SDWORD	firstTexturePage;
@@ -49,6 +50,47 @@ TILE_TEX_INFO tileTexInfo[MAX_TILES];
 static void getRectFromPage(UDWORD width, UDWORD height, unsigned char *src, UDWORD bufWidth, unsigned char *dest);
 static void putRectIntoPage(UDWORD width, UDWORD height, unsigned char *dest, UDWORD bufWidth, unsigned char *src);
 static void buildTileIndexes(void);
+static void makeTileTexturePages(iV_Image * src, UDWORD tileWidth, UDWORD tileHeight);
+static void remakeTileTexturePages(iV_Image * src, UDWORD tileWidth, UDWORD tileHeight);
+static void freeTileTextures(void);
+
+void texInit()
+{
+	tilesPCX.bmp = NULL;
+}
+
+void texDone()
+{
+	freeTileTextures();
+	iV_unloadImage(&tilesPCX);
+}
+
+// just return a pointer because the resource handler wants to cuddle one
+void *texLoad(const char *fileName)
+{
+	if (tilesPCX.bmp != NULL)
+	{
+		debug(LOG_TEXTURE, "Unloading terrain tiles");
+		iV_unloadImage(&tilesPCX);
+	}
+
+	if(!iV_loadImage_PNG(fileName, &tilesPCX))
+	{
+		debug( LOG_ERROR, "TERTILES load failed" );
+		return NULL;
+	}
+
+	getTileRadarColours();
+	if (bTilesPCXLoaded)
+	{
+		remakeTileTexturePages(&tilesPCX, TILE_WIDTH, TILE_HEIGHT);
+	}
+	else
+	{
+		makeTileTexturePages(&tilesPCX, TILE_WIDTH, TILE_HEIGHT);
+	}
+	return tilesPCX;
+}
 
 /*
 	Extracts the tile textures into separate texture pages and builds
@@ -232,7 +274,7 @@ BOOL getTileRadarColours(void)
 	return TRUE;
 }
 
-void freeTileTextures(void)
+static void freeTileTextures(void)
 {
 	unsigned int i;
 

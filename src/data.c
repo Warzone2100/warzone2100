@@ -73,8 +73,6 @@
  *
  *********************************************************/
 
-static BOOL bTilesPCXLoaded = FALSE;
-
 // whether a save game is currently being loaded
 static BOOL saveFlag = FALSE;
 extern char	aCurrResDir[255];		// Arse
@@ -680,61 +678,18 @@ static BOOL dataImageLoad(const char *fileName, void **ppData)
 }
 
 
-// Tertiles loader. This version for hardware renderer.
+// Tertiles (terrain tiles) loader.
 static BOOL dataTERTILESLoad(const char *fileName, void **ppData)
 {
-	// tile loader.
-	if (bTilesPCXLoaded)
-	{
-		debug( LOG_TEXTURE, "Reloading terrain tiles\n" );
-		iV_unloadImage(&tilesPCX);
-		if(!iV_loadImage_PNG(fileName, &tilesPCX))
-		{
-			debug( LOG_ERROR, "TERTILES reload failed" );
-			return FALSE;
-		}
-	}
-	else
-	{
-		debug( LOG_TEXTURE, "Loading terrain tiles\n" );
-		if(!iV_loadImage_PNG(fileName, &tilesPCX))
-		{
-			debug( LOG_ERROR, "TERTILES load failed" );
-			return FALSE;
-		}
-	}
-
-	getTileRadarColours();
-	if (bTilesPCXLoaded)
-	{
-		remakeTileTexturePages(&tilesPCX, TILE_WIDTH, TILE_HEIGHT);
-	}
-	else
-	{
-		makeTileTexturePages(&tilesPCX, TILE_WIDTH, TILE_HEIGHT);
-	}
-
-	if (bTilesPCXLoaded)
-	{
-		*ppData = NULL;
-	}
-	else
-	{
-		bTilesPCXLoaded = TRUE;
-		*ppData = &tilesPCX;
-	}
-	debug( LOG_TEXTURE, "HW Tiles loaded\n" );
+	
+	*ppData = texLoad(fileName);
+	debug(LOG_TEXTURE, "HW Tiles loaded");
 	return TRUE;
 }
 
 static void dataTERTILESRelease(void *pData)
 {
-	iTexture *psSprite = (iTexture*) pData;
-
-	freeTileTextures();
-	iV_unloadImage(psSprite);
-	// We are not allowed to free psSprite also, this would give an error on Windows: HEAP[Warzone.exe]: Invalid Address specified to RtlFreeHeap( xxx, xxx )
-	bTilesPCXLoaded = FALSE;
+	texDone();
 	pie_TexShutDown();
 }
 
