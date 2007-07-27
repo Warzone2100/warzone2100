@@ -62,6 +62,9 @@
 
 #define OLD_TARGET_THRESHOLD		(WEIGHT_DIST_TILE * 4)	//it only makes sense to switch target if new one is 4+ tiles closer
 
+#define	EMP_DISABLED_PENALTY_F		10						//EMP shouldn't attack emped targets again
+#define	EMP_STRUCT_PENALTY_F		(EMP_DISABLED_PENALTY_F * 2)	//EMP don't attack strzuctures, should be bigger than EMP_DISABLED_PENALTY_F
+
 // alliances
 extern UBYTE alliances[MAX_PLAYERS][MAX_PLAYERS];
 
