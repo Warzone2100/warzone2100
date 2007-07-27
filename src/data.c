@@ -762,7 +762,6 @@ static void dataImageRelease(void *pData)
 
 	if( psSprite )
 	{
-		iV_unloadImage(psSprite);
 		free(psSprite);
 	}
 }

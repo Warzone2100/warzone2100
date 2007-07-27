@@ -47,7 +47,6 @@ static void getRectFromPage(UDWORD width, UDWORD height, unsigned char *src, UDW
 static void putRectIntoPage(UDWORD width, UDWORD height, unsigned char *dest, UDWORD bufWidth, unsigned char *src);
 static void buildTileIndexes(void);
 static void makeTileTexturePages(iV_Image * src, UDWORD tileWidth, UDWORD tileHeight);
-static void freeTileTextures(void);
 static BOOL getTileRadarColours(iTexture *tilesPCX);
 
 void texInit()
@@ -56,7 +55,6 @@ void texInit()
 
 void texDone()
 {
-	freeTileTextures();
 }
 
 // just return a pointer because the resource handler wants to cuddle one
@@ -153,6 +151,7 @@ void makeTileTexturePages(iV_Image * src, UDWORD tileWidth, UDWORD tileHeight)
 exit:
 	numTexturePages = pageNumber+1;
 	free(tileStorage);
+	free(sprite.bmp);
 	buildTileIndexes();
 	return;
 }
@@ -194,16 +193,6 @@ static BOOL getTileRadarColours(iTexture *tilesPCX)
 		}
 	}
 	return TRUE;
-}
-
-static void freeTileTextures(void)
-{
-	unsigned int i;
-
-	for (i = 0; i < numTexturePages; i++)
-	{
-		iV_unloadImage(&_TEX_PAGE[(firstTexturePage+i)].tex);
-	}
 }
 
 static inline WZ_DECL_CONST unsigned int getTileUIndex(unsigned int tileNumber)

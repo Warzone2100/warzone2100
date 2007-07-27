@@ -57,7 +57,7 @@ int pie_AddTexPage(iV_Image * s, const char* filename, int type, BOOL bResource)
 {
 	unsigned int i = 0;
 
-	debug(LOG_TEXTURE, "pie_AddTexPage: %s type=%d resource=%s page=%d", filename, type, bResource ? "true" : "false", _TEX_INDEX);
+	debug(LOG_TEXTURE, "pie_AddTexPage: %s type=%d page=%d", filename, type, _TEX_INDEX);
 	assert(s != NULL);
 
 	/* Have we already loaded this one? (Should generally not happen here.) */
@@ -84,11 +84,6 @@ int pie_AddTexPage(iV_Image * s, const char* filename, int type, BOOL bResource)
 
 	/* Store away all the info */
 	/* DID come from a resource */
-	_TEX_PAGE[i].bResource = bResource;
-	_TEX_PAGE[i].tex.bmp = s->bmp;
-	_TEX_PAGE[i].tex.width = s->width;
-	_TEX_PAGE[i].tex.height = s->height;
-	_TEX_PAGE[i].tex.depth = s->depth;
 	_TEX_PAGE[i].type = type;
 
 	glGenTextures(1, (GLuint *) &_TEX_PAGE[i].id);
@@ -101,6 +96,8 @@ int pie_AddTexPage(iV_Image * s, const char* filename, int type, BOOL bResource)
 	} else {
 		debug(LOG_ERROR, "pie_AddTexPage: non POT texture %s", filename);
 	}
+	free(s->bmp); // it is uploaded, we do not need it anymore
+	s->bmp = NULL;
 
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
@@ -184,10 +181,8 @@ int pie_ReloadTexPage(const char *texpageName, const char *fileName)
 		return -1;
 	}
 
-	debug(LOG_TEXTURE, "Reloading texture %s from index %d, max is %d", texpageName, i, _TEX_INDEX);
-
-	iV_unloadImage(&_TEX_PAGE[i].tex);
-	iV_loadImage_PNG(fileName, &_TEX_PAGE[i].tex);
+	debug(LOG_ERROR, "Reloading texture %s from index %d, max is %d (NOT REALLY DOING ANYTHING)", 
+	      texpageName, i, _TEX_INDEX);
 
 	return i;
 }
@@ -199,25 +194,15 @@ int pie_ReloadTexPage(const char *texpageName, const char *fileName)
 */
 void pie_TexShutDown(void)
 {
-	unsigned int i = 0, j = 0;
+	unsigned int i = 0;
 
 	while (i < _TEX_INDEX) 
 	{
-		/*	Only free up the ones that were NOT allocated through resource handler cos they'll already be free */
-		if(_TEX_PAGE[i].bResource == FALSE)
-		{
-			if(_TEX_PAGE[i].tex.bmp) 
-			{
-				j++;
-				free(_TEX_PAGE[i].tex.bmp);
-				_TEX_PAGE[i].tex.bmp = NULL;
-			}
-		}
 		glDeleteTextures(1, (GLuint *) &_TEX_PAGE[i].id);
 		i++;
 	}
 
-	debug(LOG_TEXTURE, "pie_TexShutDown successful - did free %u texture pages\n", j);
+	debug(LOG_TEXTURE, "pie_TexShutDown successful - did free %u texture pages", i);
 }
 
 void pie_TexInit(void)
@@ -226,9 +211,6 @@ void pie_TexInit(void)
 
 	while (i < iV_TEX_MAX) {
 		_TEX_PAGE[i].name[0] = '\0';
-		_TEX_PAGE[i].tex.bmp = NULL;
-		_TEX_PAGE[i].tex.width = 0;
-		_TEX_PAGE[i].tex.height = 0;
 		i++;
 	}
 	debug(LOG_TEXTURE, "pie_TexInit successful - initialized %d texture pages\n", i);

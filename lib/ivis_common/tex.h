@@ -43,7 +43,6 @@
 
 typedef struct
 {
-	iTexture tex;
 	Uint8 type;
 	char name[iV_TEXNAME_MAX];
 	unsigned int id;
