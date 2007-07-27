@@ -37,12 +37,11 @@
 
 /* Stores the graphics data for the terrain tiles textures (in src/data.c) */
 static iTexture tilesPCX = { 0, 0, 0, NULL };
-static bool bTilesPCXLoaded = FALSE;
 
 /* How many pages have we loaded */
-SDWORD	firstTexturePage;
-SDWORD	numTexturePages;
-int		pageId[MAX_TERRAIN_PAGES];
+static SDWORD	firstTexturePage;
+static SDWORD	numTexturePages;
+static int	pageId[MAX_TERRAIN_PAGES];
 
 /* Texture page and coordinates for each tile */
 TILE_TEX_INFO tileTexInfo[MAX_TILES];
@@ -68,7 +67,9 @@ void texDone()
 // just return a pointer because the resource handler wants to cuddle one
 void *texLoad(const char *fileName)
 {
-	if (tilesPCX.bmp != NULL)
+	BOOL bTilesPCXLoaded = (tilesPCX.bmp != NULL);
+
+	if (bTilesPCXLoaded)
 	{
 		debug(LOG_TEXTURE, "Unloading terrain tiles");
 		iV_unloadImage(&tilesPCX);
@@ -89,7 +90,7 @@ void *texLoad(const char *fileName)
 	{
 		makeTileTexturePages(&tilesPCX, TILE_WIDTH, TILE_HEIGHT);
 	}
-	return tilesPCX;
+	return &tilesPCX;
 }
 
 /*

@@ -85,6 +85,7 @@
 #include "scripttabs.h"
 #include "scriptvals.h"
 #include "text.h"
+#include "texture.h"
 #include "transporter.h"
 #include "warzoneconfig.h"
 #include "winmain.h"
@@ -995,6 +996,7 @@ BOOL systemInitialise(void)
 	{
 		return FALSE;
 	}
+	texInit();
 
 #ifdef ARROWS
 	arrowInit();
