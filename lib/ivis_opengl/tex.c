@@ -82,10 +82,6 @@ int pie_AddTexPage(iV_Image * s, const char* filename, int type)
 	/* Stick the name into the tex page structures */
 	strncpy(_TEX_PAGE[i].name, filename, iV_TEXNAME_MAX);
 
-	/* Store away all the info */
-	/* DID come from a resource */
-	_TEX_PAGE[i].type = type;
-
 	glGenTextures(1, (GLuint *) &_TEX_PAGE[i].id);
 	// FIXME: This function is used instead of glBindTexture, but we're juggling with difficult to trace global state here. Look into pie_SetTexturePage's definition for details.
 	pie_SetTexturePage(i);

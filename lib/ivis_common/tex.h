@@ -30,25 +30,20 @@
 
 #define SKY_TEXPAGE "page-25"
 
-
 //*************************************************************************
 
-#define iV_TEXWIDTH(i)	(_TEX_PAGE[(i)].tex.width)
-#define iV_TEXHEIGHT(i) (_TEX_PAGE[(i)].tex.height)
 #define iV_TEXNAME(i)	((char *) (&_TEX_PAGE[(i)].name))
-#define iV_TEXTYPE(i)	(_TEX_PAGE[(i)].type)
-
 
 //*************************************************************************
 
 typedef struct
 {
-	Uint8 type;
 	char name[iV_TEXNAME_MAX];
 	unsigned int id;
 } iTexPage;
 
 //*************************************************************************
+
 extern unsigned int _TEX_INDEX;
 extern iTexPage _TEX_PAGE[iV_TEX_MAX];
 
