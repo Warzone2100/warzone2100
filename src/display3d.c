@@ -548,13 +548,12 @@ void	setProximityDraw(BOOL val)
 static void drawTiles(iView *camera, iView *player)
 {
 	UDWORD i, j;
-	SDWORD zMax;
 	MAPTILE *psTile;
 	UDWORD edgeX, edgeY;
 	BOOL bWaterTile = FALSE;
 	BOOL PushedDown = FALSE;
 	UBYTE TileIllum;
-	UDWORD shiftVal = 0;
+	int shiftVal = 0;
 	int numTilesAveraged = 0;
 	BOOL bEdgeTile;
 	static float angle = 0.0f;
@@ -757,7 +756,7 @@ static void drawTiles(iView *camera, iView *player)
 				if (bWaterTile)
 				{
 					// If it's the main water tile then bring it back up because it was pushed down for the river bed calc.
-					SDWORD tmp_y = tileScreenInfo[i][j].y;
+					int tmp_y = tileScreenInfo[i][j].y;
 
 					if (PushedDown)
 					{
@@ -819,7 +818,7 @@ static void drawTiles(iView *camera, iView *player)
 			if (tileScreenInfo[i][j].drawInfo == TRUE)
 			{
 				//get distance of furthest corner
-				zMax = MAX(tileScreenInfo[i][j].screen.z, tileScreenInfo[i+1][j].screen.z);
+				int zMax = MAX(tileScreenInfo[i][j].screen.z, tileScreenInfo[i+1][j].screen.z);
 				zMax = MAX(zMax, tileScreenInfo[i+1][j+1].screen.z);
 				zMax = MAX(zMax, tileScreenInfo[i][j+1].screen.z);
 
@@ -4190,25 +4189,25 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	/* Check for rotations and flips - this sets up the coordinates for texturing */
 	flipsAndRots(tileNumber & ~TILE_NUMMASK);
 
-	tileScreenInfo[i+0][j+0].tu = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + sP1.x;
-	tileScreenInfo[i+0][j+0].tv = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + sP1.y;
+	tileScreenInfo[i+0][j+0].u = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + sP1.x;
+	tileScreenInfo[i+0][j+0].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + sP1.y;
 
-	tileScreenInfo[i+0][j+1].tu = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + sP2.x;
-	tileScreenInfo[i+0][j+1].tv = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + sP2.y;
+	tileScreenInfo[i+0][j+1].u = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + sP2.x;
+	tileScreenInfo[i+0][j+1].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + sP2.y;
 
-	tileScreenInfo[i+1][j+1].tu = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + sP3.x;
-	tileScreenInfo[i+1][j+1].tv = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + sP3.y;
+	tileScreenInfo[i+1][j+1].u = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + sP3.x;
+	tileScreenInfo[i+1][j+1].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + sP3.y;
 
-	tileScreenInfo[i+1][j+0].tu = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + sP4.x;
-	tileScreenInfo[i+1][j+0].tv = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + sP4.y;
+	tileScreenInfo[i+1][j+0].u = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + sP4.x;
+	tileScreenInfo[i+1][j+0].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + sP4.y;
 
 	/* The first triangle */
 	memcpy(&vertices[0], &tileScreenInfo[i+0][j+0], sizeof(PIEVERTEX));
 	memcpy(&vertices[1], &tileScreenInfo[i+0][j+1], sizeof(PIEVERTEX));
 	if (onWaterEdge)
 	{
-		vertices[0].sy = tileScreenInfo[i+0][j+0].water_height;
-		vertices[1].sy = tileScreenInfo[i+0][j+1].water_height;
+		vertices[0].y = tileScreenInfo[i+0][j+0].water_height;
+		vertices[1].y = tileScreenInfo[i+0][j+1].water_height;
 	}
 
 	if (TRI_FLIPPED(psTile))
@@ -4216,7 +4215,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		memcpy(&vertices[2], &tileScreenInfo[i+1][j+0], sizeof(PIEVERTEX));
 		if (onWaterEdge)
 		{
-			vertices[2].sy = tileScreenInfo[i+1][j+0].water_height;
+			vertices[2].y = tileScreenInfo[i+1][j+0].water_height;
 		}
 	}
 	else
@@ -4224,7 +4223,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		memcpy(&vertices[2], &tileScreenInfo[i+1][j+1], sizeof(PIEVERTEX));
 		if (onWaterEdge)
 		{
-			vertices[2].sy = tileScreenInfo[i+1][j+1].water_height;
+			vertices[2].y = tileScreenInfo[i+1][j+1].water_height;
 		}
 	}
 
@@ -4238,7 +4237,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		memcpy(&vertices[0], &tileScreenInfo[i+0][j+1], sizeof(PIEVERTEX));
 		if (onWaterEdge)
 		{
-			vertices[0].sy = tileScreenInfo[i+0][j+1].water_height;
+			vertices[0].y = tileScreenInfo[i+0][j+1].water_height;
 		}
 	}
 	else
@@ -4246,7 +4245,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		memcpy(&vertices[0], &tileScreenInfo[i+0][j+0], sizeof(PIEVERTEX));
 		if (onWaterEdge)
 		{
-			vertices[0].sy = tileScreenInfo[i+0][j+0].water_height;
+			vertices[0].y = tileScreenInfo[i+0][j+0].water_height;
 		}
 	}
 
@@ -4254,8 +4253,8 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	memcpy(&vertices[2], &tileScreenInfo[i+1][j+0], sizeof(PIEVERTEX));
 	if ( onWaterEdge )
 	{
-		vertices[1].sy = tileScreenInfo[i+1][j+1].water_height;
-		vertices[2].sy = tileScreenInfo[i+1][j+0].water_height;
+		vertices[1].y = tileScreenInfo[i+1][j+1].water_height;
+		vertices[2].y = tileScreenInfo[i+1][j+0].water_height;
 	}
 
 
@@ -4321,31 +4320,31 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 		// Draw the main water tile.
 		pie_SetTexturePage(tileTexInfo[tileNumber & TILE_NUMMASK].texPage);
 
-		tileScreenInfo[i+0][j+0].tu = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + 1;
-		tileScreenInfo[i+0][j+0].tv = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset;
+		tileScreenInfo[i+0][j+0].u = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + 1;
+		tileScreenInfo[i+0][j+0].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset;
 
-		tileScreenInfo[i+0][j+1].tu = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + (xMult - 1);
-		tileScreenInfo[i+0][j+1].tv = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset;
+		tileScreenInfo[i+0][j+1].u = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + (xMult - 1);
+		tileScreenInfo[i+0][j+1].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset;
 
-		tileScreenInfo[i+1][j+1].tu = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + (xMult - 1);
-		tileScreenInfo[i+1][j+1].tv = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + (yMult - 1);
+		tileScreenInfo[i+1][j+1].u = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + (xMult - 1);
+		tileScreenInfo[i+1][j+1].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + (yMult - 1);
 
-		tileScreenInfo[i+1][j+0].tu = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + 1;
-		tileScreenInfo[i+1][j+0].tv = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + (yMult - 1);
+		tileScreenInfo[i+1][j+0].u = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + 1;
+		tileScreenInfo[i+1][j+0].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + (yMult - 1);
 
 
 		memcpy(&vertices[0], &tileScreenInfo[i+0][j+0], sizeof(PIEVERTEX));
-		vertices[0].sy = tileScreenInfo[i+0][j+0].water_height;
+		vertices[0].y = tileScreenInfo[i+0][j+0].water_height;
 		vertices[0].light = tileScreenInfo[i+0][j+0].wlight;
 		vertices[0].light.byte.a = WATER_ALPHA_LEVEL;
 
 		memcpy(&vertices[1], &tileScreenInfo[i+0][j+1], sizeof(PIEVERTEX));
-		vertices[1].sy = tileScreenInfo[i+0][j+1].water_height;
+		vertices[1].y = tileScreenInfo[i+0][j+1].water_height;
 		vertices[1].light = tileScreenInfo[i+0][j+1].wlight;
 		vertices[1].light.byte.a = WATER_ALPHA_LEVEL;
 
 		memcpy(&vertices[2], &tileScreenInfo[i+1][j+1], sizeof(PIEVERTEX));
-		vertices[2].sy = tileScreenInfo[i+1][j+1].water_height;
+		vertices[2].y = tileScreenInfo[i+1][j+1].water_height;
 		vertices[2].light = tileScreenInfo[i+1][j+1].wlight;
 		vertices[2].light.byte.a = WATER_ALPHA_LEVEL;
 
@@ -4356,7 +4355,7 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 
 		memcpy(&vertices[1], &vertices[2], sizeof(PIEVERTEX));
 		memcpy(&vertices[2], &tileScreenInfo[i+1][j+0], sizeof(PIEVERTEX));
-		vertices[2].sy = tileScreenInfo[i+1][j+0].water_height;
+		vertices[2].y = tileScreenInfo[i+1][j+0].water_height;
 		vertices[2].light = tileScreenInfo[i+1][j+0].wlight;
 		vertices[2].light.byte.a = WATER_ALPHA_LEVEL;
 
@@ -5101,9 +5100,9 @@ UDWORD	i;
 
 }
 
-static	void	addConstructionLine(DROID	*psDroid, STRUCTURE *psStructure)
+static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 {
-	PIEVERTEX	pts[3];
+	PIEVERTEX pts[3];
 	Vector3i each;
 	Vector3f *point;
 	UDWORD	pointIndex;
@@ -5124,9 +5123,9 @@ static	void	addConstructionLine(DROID	*psDroid, STRUCTURE *psStructure)
 
 	rx = player.p.x & (TILE_UNITS-1);
 	rz = player.p.z & (TILE_UNITS-1);
-	pts[0].sx = vec.x + rx;
-	pts[0].sy = vec.y;
-	pts[0].sz = vec.z - rz;
+	pts[0].x = vec.x + rx;
+	pts[0].y = vec.y;
+	pts[0].z = vec.z - rz;
 
 	pointIndex = rand()%(psStructure->sDisplay.imd->npoints-1);
 	point = &(psStructure->sDisplay.imd->points[pointIndex]);
@@ -5148,9 +5147,9 @@ static	void	addConstructionLine(DROID	*psDroid, STRUCTURE *psStructure)
 
 	rx = player.p.x & (TILE_UNITS-1);
 	rz = player.p.z & (TILE_UNITS-1);
-	pts[1].sx = vec.x + rx;
-	pts[1].sy = vec.y;
-	pts[1].sz = vec.z - rz;
+	pts[1].x = vec.x + rx;
+	pts[1].y = vec.y;
+	pts[1].z = vec.z - rz;
 
 	pointIndex = rand()%(psStructure->sDisplay.imd->npoints-1);
 	point = &(psStructure->sDisplay.imd->points[pointIndex]);
@@ -5166,9 +5165,9 @@ static	void	addConstructionLine(DROID	*psDroid, STRUCTURE *psStructure)
 
 	rx = player.p.x & (TILE_UNITS-1);
 	rz = player.p.z & (TILE_UNITS-1);
-	pts[2].sx = vec.x + rx;
-	pts[2].sy = vec.y;
-	pts[2].sz = vec.z - rz;
+	pts[2].x = vec.x + rx;
+	pts[2].y = vec.y;
+	pts[2].z = vec.z - rz;
 
 	// set the colour
 	colour = UBYTE_MAX;
@@ -5183,16 +5182,16 @@ static	void	addConstructionLine(DROID	*psDroid, STRUCTURE *psStructure)
 	pts[1].light.argb = 0xff000000;
 	pts[2].light.argb = 0xff000000;
 
-	pts[0].tu = 0;
-	pts[0].tv = 0;
+	pts[0].u = 0;
+	pts[0].v = 0;
 	pts[0].specular.argb = colour;
 
-	pts[1].tu = 0;
-	pts[1].tv = 0;
+	pts[1].u = 0;
+	pts[1].v = 0;
 	pts[1].specular.argb = 0;
 
-	pts[2].tu = 0;
-	pts[2].tv = 0;
+	pts[2].u = 0;
+	pts[2].v = 0;
 	pts[2].specular.argb = 0;
 
 

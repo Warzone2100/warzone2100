@@ -122,8 +122,8 @@ typedef struct {UBYTE b, g, r, a;} PIELIGHTBYTES; //for byte fields in a DWORD
 #endif
 typedef union  {PIELIGHTBYTES byte; UDWORD argb;} PIELIGHT;
 typedef struct {UBYTE r, g, b, a;} PIEVERTLIGHT;
-typedef struct {SDWORD sx, sy, sz; UWORD tu, tv; PIELIGHT light, specular;} PIEVERTEX;
-typedef struct {float sx, sy, sz, tu, tv; PIELIGHT light, specular;} PIEVERTEXF;
+typedef struct {int x, y, z; unsigned int u, v; PIELIGHT light, specular;} PIEVERTEX;
+typedef struct {float x, y, z, u, v; PIELIGHT light, specular;} PIEVERTEXF;
 
 typedef struct {SWORD x, y, w, h;} PIERECT; //screen rectangle
 typedef struct {SDWORD texPage; SWORD tu, tv, tw, th;} PIEIMAGE; //an area of texture

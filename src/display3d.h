@@ -123,11 +123,11 @@ extern const UDWORD visibleYTiles;
 // Expanded PIEVERTEX.
 typedef struct {
 	// PIEVERTEX.
-	SDWORD x, y, z; UWORD tu, tv; PIELIGHT light, specular;
+	int x, y, z; unsigned int u, v; PIELIGHT light, specular;
 	Vector3i screen; //! Screenspace tile coordinates
 	// Extra data for water:
 	Vector3i water; //! Screenspace water coordinates
-	SDWORD water_height; //! Worldspace water height
+	int water_height; //! Worldspace water height
 	PIELIGHT wlight; //! Special water lighting
 	UBYTE drawInfo; //! Draw this tile?
 	UBYTE bWater; //! Is it a watertile?

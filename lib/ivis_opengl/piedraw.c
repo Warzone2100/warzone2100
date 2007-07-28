@@ -206,9 +206,9 @@ static inline void pie_Polygon(const SDWORD numVerts, const PIEVERTEXF* pVrts, c
 		if (light)
 		{
 			const Vector3f
-					p1 = { pVrts[0].sx, pVrts[0].sy, pVrts[0].sz },
-					p2 = { pVrts[1].sx, pVrts[1].sy, pVrts[1].sz },
-					p3 = { pVrts[2].sx, pVrts[2].sy, pVrts[2].sz },
+					p1 = { pVrts[0].x, pVrts[0].y, pVrts[0].z },
+					p2 = { pVrts[1].x, pVrts[1].y, pVrts[1].z },
+					p3 = { pVrts[2].x, pVrts[2].y, pVrts[2].z },
 					v1 = Vector3f_Sub(p3, p1),
 					v2 = Vector3f_Sub(p2, p1),
 					normal = Vector3f_CrossP(v1, v2);
@@ -222,8 +222,8 @@ static inline void pie_Polygon(const SDWORD numVerts, const PIEVERTEXF* pVrts, c
 	for (i = 0; i < numVerts; i++)
 	{
 		glColor4ub(pVrts[i].light.byte.r, pVrts[i].light.byte.g, pVrts[i].light.byte.b, pVrts[i].light.byte.a);
-		glTexCoord2f(pVrts[i].tu, pVrts[i].tv);
-		glVertex3f(pVrts[i].sx, pVrts[i].sy, pVrts[i].sz);
+		glTexCoord2f(pVrts[i].u, pVrts[i].v);
+		glVertex3f(pVrts[i].x, pVrts[i].y, pVrts[i].z);
 	}
 
 	glEnd();
@@ -286,8 +286,8 @@ static inline void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, const BOOL ligh
 
 			for (j = 0; j < poly->nVrts; j++)
 			{
-				poly->pVrts[j].tu += uFrame;
-				poly->pVrts[j].tv += vFrame;
+				poly->pVrts[j].u += uFrame;
+				poly->pVrts[j].v += vFrame;
 			}
 		}
 	}
@@ -432,11 +432,11 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 				n < pPolys->npnts;
 				n++, index++)
 		{
-			pieVrts[n].sx = scrPoints[*index].x;
-			pieVrts[n].sy = scrPoints[*index].y;
-			pieVrts[n].sz = scrPoints[*index].z;
-			pieVrts[n].tu = pPolys->texCoord[n].x;
-			pieVrts[n].tv = pPolys->texCoord[n].y;
+			pieVrts[n].x = scrPoints[*index].x;
+			pieVrts[n].y = scrPoints[*index].y;
+			pieVrts[n].z = scrPoints[*index].z;
+			pieVrts[n].u = pPolys->texCoord[n].x;
+			pieVrts[n].v = pPolys->texCoord[n].y;
 			pieVrts[n].light.argb = colour.argb;
 			pieVrts[n].specular.argb = specular.argb;
 		}
@@ -1038,8 +1038,8 @@ void pie_DrawTexTriangle(const PIEVERTEX *aVrts, const void* psEffects)
 		for ( i = 0; i < 3; i++ )
 		{
 			glColor4ub( aVrts[i].light.byte.r, aVrts[i].light.byte.g, aVrts[i].light.byte.b, aVrts[i].light.byte.a );
-			glTexCoord2f( aVrts[i].tu, aVrts[i].tv + offset );
-			glVertex3f( aVrts[i].sx, aVrts[i].sy, aVrts[i].sz );
+			glTexCoord2f( aVrts[i].u, aVrts[i].v + offset );
+			glVertex3f( aVrts[i].x, aVrts[i].y, aVrts[i].z );
 		}
 	glEnd();
 
