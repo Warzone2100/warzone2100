@@ -99,6 +99,15 @@ int pie_AddTexPage(iV_Image * s, const char* filename)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+	// Use anisotropic filtering, if available, but only max 4.0 to reduce processor burden
+	if (check_extension("GL_EXT_texture_filter_anisotropic"))
+	{
+		GLfloat max;
+
+		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, MIN(4.0f, max));
+	}
+
 	if( strncmp( filename, SKY_TEXPAGE, iV_TEXNAME_MAX ) == 0 )
 	{
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
