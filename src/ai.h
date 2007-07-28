@@ -62,8 +62,12 @@
 
 #define OLD_TARGET_THRESHOLD		(WEIGHT_DIST_TILE * 4)	//it only makes sense to switch target if new one is 4+ tiles closer
 
-#define	EMP_DISABLED_PENALTY_F		10						//EMP shouldn't attack emped targets again
-#define	EMP_STRUCT_PENALTY_F		(EMP_DISABLED_PENALTY_F * 2)	//EMP don't attack strzuctures, should be bigger than EMP_DISABLED_PENALTY_F
+#define	EMP_DISABLED_PENALTY_F		10								//EMP shouldn't attack emped targets again
+#define	EMP_STRUCT_PENALTY_F		(EMP_DISABLED_PENALTY_F * 2)	//EMP don't attack structures, should be bigger than EMP_DISABLED_PENALTY_F
+
+//Some weights for the units attached to a commander
+#define	WEIGHT_CMD_RANK				(WEIGHT_DIST_TILE * 4)			//A single rank is as important as 4 tiles distance
+#define	WEIGHT_CMD_SAME_TARGET		WEIGHT_DIST_TILE				//Don't want this to be too high, since a commander can have many units assigned
 
 // alliances
 extern UBYTE alliances[MAX_PLAYERS][MAX_PLAYERS];
