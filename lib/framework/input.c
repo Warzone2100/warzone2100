@@ -40,6 +40,7 @@
 #include "frame.h"
 #include "frameint.h"
 #include "configfile.h"
+#include "lib/gamelib/gtime.h"
 
 /* The possible states for keys */
 typedef enum _key_state
@@ -53,9 +54,16 @@ typedef enum _key_state
 	KEY_DRAG,			// Only used by mouse keys
 } KEY_STATE;
 
+typedef struct _input_state {
+	KEY_STATE state; /// Last key/mouse state
+	UDWORD lastdown; /// last key/mouse button down timestamp
+} INPUT_STATE;
+
+/// constant for the interval between 2 singleclicks for doubleclick event in ms
+#define DOUBLE_CLICK_INTERVAL 500
 
 /* The current state of the keyboard */
-static KEY_STATE aKeyState[KEY_MAXSCAN];
+static INPUT_STATE aKeyState[KEY_MAXSCAN];
 
 /* The current location of the mouse */
 static Uint16 mouseXPos, mouseYPos;
@@ -70,7 +78,7 @@ static MOUSE_KEY_CODE dragKey;
 static SDWORD dragX, dragY;
 
 /* The current mouse button state */
-static KEY_STATE aMouseState[6];
+static INPUT_STATE aMouseState[6];
 
 
 /* The size of the input buffer */
@@ -115,12 +123,12 @@ void inputInitialise(void)
 
 	for (i = 0; i < KEY_MAXSCAN; i++)
 	{
-		aKeyState[i] = KEY_UP;
+		aKeyState[i].state = KEY_UP;
 	}
 
 	for (i = 0; i < 6; i++)
 	{
-		aMouseState[i] = KEY_UP;
+		aMouseState[i].state = KEY_UP;
 	}
 
 	pStartBuffer = pInputBuffer;
@@ -272,22 +280,33 @@ void inputHandleKeyEvent(SDL_KeyboardEvent * keyEvent)
 			inputAddBuffer(vk, char_code, 1);
 
 			code = sdlKeyToKeyCode(keyEvent->keysym.sym);
-			if ( aKeyState[code] == KEY_UP ||
-				 aKeyState[code] == KEY_RELEASED ||
-				 aKeyState[code] == KEY_PRESSRELEASE )
+			if ( aKeyState[code].state == KEY_UP ||
+				 aKeyState[code].state == KEY_RELEASED ||
+				 aKeyState[code].state == KEY_PRESSRELEASE )
 			{
-				aKeyState[code] = KEY_PRESSED;
+				//whether double key press or not
+				if ( gameTime - aKeyState[code].lastdown < DOUBLE_CLICK_INTERVAL )
+				{
+					aKeyState[code].state = KEY_DOUBLECLICK;
+					aKeyState[code].lastdown = 0;
+				}
+				else
+				{
+					aKeyState[code].state = KEY_PRESSED;
+					aKeyState[code].lastdown = gameTime;
+				}
 			}
 			break;
 		case SDL_KEYUP:
 			code = sdlKeyToKeyCode(keyEvent->keysym.sym);
-			if (aKeyState[code] == KEY_PRESSED)
+			if (aKeyState[code].state == KEY_PRESSED)
 			{
-				aKeyState[code] = KEY_PRESSRELEASE;
+				aKeyState[code].state = KEY_PRESSRELEASE;
 			}
-			else if (aKeyState[code] == KEY_DOWN)
+			else if (aKeyState[code].state == KEY_DOWN ||
+					aKeyState[code].state == KEY_DOUBLECLICK)
 			{
-				aKeyState[code] = KEY_RELEASED;
+				aKeyState[code].state = KEY_RELEASED;
 			}
 			break;
 		default:
@@ -304,11 +323,21 @@ void inputHandleMouseButtonEvent(SDL_MouseButtonEvent * buttonEvent)
 	switch (buttonEvent->type)
 	{
 		case SDL_MOUSEBUTTONDOWN:
-			if ( aMouseState[buttonEvent->button] == KEY_UP
-				|| aMouseState[buttonEvent->button] == KEY_RELEASED
-				|| aMouseState[buttonEvent->button] == KEY_PRESSRELEASE )
+			if ( aMouseState[buttonEvent->button].state == KEY_UP
+				|| aMouseState[buttonEvent->button].state == KEY_RELEASED
+				|| aMouseState[buttonEvent->button].state == KEY_PRESSRELEASE )
 			{
-				aMouseState[buttonEvent->button] = KEY_PRESSED;
+				//whether double click or not
+				if ( gameTime - aMouseState[buttonEvent->button].lastdown < DOUBLE_CLICK_INTERVAL )
+				{
+					aMouseState[buttonEvent->button].state = KEY_DOUBLECLICK;
+					aMouseState[buttonEvent->button].lastdown = 0;
+				}
+				else
+				{
+					aMouseState[buttonEvent->button].state = KEY_PRESSED;
+					aMouseState[buttonEvent->button].lastdown = gameTime;
+				}
 
 				if (buttonEvent->button < 4) // Not the mousewheel
 				{
@@ -317,17 +346,17 @@ void inputHandleMouseButtonEvent(SDL_MouseButtonEvent * buttonEvent)
 					dragY = mouseYPos;
 				}
 			}
-			// TODO: double click
 			break;
 		case SDL_MOUSEBUTTONUP:
-			if (aMouseState[buttonEvent->button] == KEY_PRESSED)
+			if (aMouseState[buttonEvent->button].state == KEY_PRESSED)
 			{
-				aMouseState[buttonEvent->button] = KEY_PRESSRELEASE;
+				aMouseState[buttonEvent->button].state = KEY_PRESSRELEASE;
 			}
-			else if ( aMouseState[buttonEvent->button] == KEY_DOWN
-					|| aMouseState[buttonEvent->button] == KEY_DRAG )
+			else if ( aMouseState[buttonEvent->button].state == KEY_DOWN
+					|| aMouseState[buttonEvent->button].state == KEY_DRAG 
+					|| aMouseState[buttonEvent->button].state == KEY_DOUBLECLICK)
 			{
-				aMouseState[buttonEvent->button] = KEY_RELEASED;
+				aMouseState[buttonEvent->button].state = KEY_RELEASED;
 			}
 			break;
 		default:
@@ -351,12 +380,12 @@ void inputHandleMouseMotionEvent(SDL_MouseMotionEvent * motionEvent)
 				mouseYPos = motionEvent->y;
 
 				/* now see if a drag has started */
-				if (  ( aMouseState[dragKey] == KEY_PRESSED ||
-						aMouseState[dragKey] == KEY_DOWN )
+				if (  ( aMouseState[dragKey].state == KEY_PRESSED ||
+						aMouseState[dragKey].state == KEY_DOWN )
 				&& ( ABSDIF(dragX, mouseXPos) > DRAG_THRESHOLD ||
 						ABSDIF(dragY, mouseYPos) > DRAG_THRESHOLD ) )
 				{
-					aMouseState[dragKey] = KEY_DRAG;
+					aMouseState[dragKey].state = KEY_DRAG;
 				}
 			}
 			break;
@@ -377,29 +406,29 @@ void inputNewFrame(void)
 	/* Do the keyboard */
 	for (i = 0; i < KEY_MAXSCAN; i++)
 	{
-		if (aKeyState[i] == KEY_PRESSED)
+		if (aKeyState[i].state == KEY_PRESSED)
 		{
-			aKeyState[i] = KEY_DOWN;
+			aKeyState[i].state = KEY_DOWN;
 		}
-		else if ( aKeyState[i] == KEY_RELEASED  ||
-		          aKeyState[i] == KEY_PRESSRELEASE )
+		else if ( aKeyState[i].state == KEY_RELEASED  ||
+		          aKeyState[i].state == KEY_PRESSRELEASE )
 		{
-			aKeyState[i] = KEY_UP;
+			aKeyState[i].state = KEY_UP;
 		}
 	}
 
 	/* Do the mouse */
 	for (i = 0; i < 6; i++)
 	{
-		if (aMouseState[i] == KEY_PRESSED)
+		if (aMouseState[i].state == KEY_PRESSED)
 		{
-			aMouseState[i] = KEY_DOWN;
+			aMouseState[i].state = KEY_DOWN;
 		}
-		else if ( aMouseState[i] == KEY_RELEASED
-		       || aMouseState[i] == KEY_DOUBLECLICK
-		       || aMouseState[i] == KEY_PRESSRELEASE )
+		else if ( aMouseState[i].state == KEY_RELEASED
+		       || aMouseState[i].state == KEY_DOUBLECLICK
+		       || aMouseState[i].state == KEY_PRESSRELEASE )
 		{
-			aMouseState[i] = KEY_UP;
+			aMouseState[i].state = KEY_UP;
 		}
 	}
 }
@@ -415,11 +444,11 @@ void inputLooseFocus(void)
 	/* Lost the window focus, have to take this as a global key up */
 	for(i = 0; i < KEY_MAXSCAN; i++)
 	{
-		aKeyState[i] = KEY_RELEASED;
+		aKeyState[i].state = KEY_RELEASED;
 	}
 	for (i = 0; i < 6; i++)
 	{
-		aMouseState[i] = KEY_RELEASED;
+		aMouseState[i].state = KEY_RELEASED;
 	}
 }
 
@@ -427,21 +456,21 @@ void inputLooseFocus(void)
 BOOL keyDown(KEY_CODE code)
 {
 	ASSERT( keyCodeToSDLKey(code) < KEY_MAXSCAN, "Invalid key code: %d", code );
-	return (aKeyState[code] != KEY_UP);
+	return (aKeyState[code].state != KEY_UP);
 }
 
 /* This returns true if the key went from being up to being down this frame */
 BOOL keyPressed(KEY_CODE code)
 {
 	ASSERT( keyCodeToSDLKey(code) < KEY_MAXSCAN, "Invalid key code: %d", code );
-	return ((aKeyState[code] == KEY_PRESSED) || (aKeyState[code] == KEY_PRESSRELEASE));
+	return ((aKeyState[code].state == KEY_PRESSED) || (aKeyState[code].state == KEY_PRESSRELEASE));
 }
 
 /* This returns true if the key went from being down to being up this frame */
 BOOL keyReleased(KEY_CODE code)
 {
 	ASSERT( keyCodeToSDLKey(code) < KEY_MAXSCAN, "Invalid key code: %d", code );
-	return ((aKeyState[code] == KEY_RELEASED) || (aKeyState[code] == KEY_PRESSRELEASE));
+	return ((aKeyState[code].state == KEY_RELEASED) || (aKeyState[code].state == KEY_PRESSRELEASE));
 }
 
 /* Return the X coordinate of the mouse */
@@ -459,34 +488,34 @@ Uint16 mouseY(void)
 /* This returns true if the mouse key is currently depressed */
 BOOL mouseDown(MOUSE_KEY_CODE code)
 {
-	return (aMouseState[code] != KEY_UP);
+	return (aMouseState[code].state != KEY_UP);
 }
 
 /* This returns true if the mouse key was double clicked */
 BOOL mouseDClicked(MOUSE_KEY_CODE code)
 {
-	return (aMouseState[code] == KEY_DOUBLECLICK);
+	return (aMouseState[code].state == KEY_DOUBLECLICK);
 }
 
 /* This returns true if the mouse key went from being up to being down this frame */
 BOOL mousePressed(MOUSE_KEY_CODE code)
 {
-	return ((aMouseState[code] == KEY_PRESSED) ||
-			(aMouseState[code] == KEY_PRESSRELEASE));
+	return ((aMouseState[code].state == KEY_PRESSED) ||
+			(aMouseState[code].state == KEY_PRESSRELEASE));
 }
 
 /* This returns true if the mouse key went from being down to being up this frame */
 BOOL mouseReleased(MOUSE_KEY_CODE code)
 {
-	return ((aMouseState[code] == KEY_RELEASED) ||
-			(aMouseState[code] == KEY_DOUBLECLICK) ||
-			(aMouseState[code] == KEY_PRESSRELEASE));
+	return ((aMouseState[code].state == KEY_RELEASED) ||
+			(aMouseState[code].state == KEY_DOUBLECLICK) ||
+			(aMouseState[code].state == KEY_PRESSRELEASE));
 }
 
 /* Check for a mouse drag, return the drag start coords if dragging */
 BOOL mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py)
 {
-	if (aMouseState[code] == KEY_DRAG)
+	if (aMouseState[code].state == KEY_DRAG)
 	{
 		*px = dragX;
 		*py = dragY;
