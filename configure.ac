@@ -77,7 +77,7 @@ AC_ARG_WITH(makensis,
 
 
 AC_ARG_WITH(installer_libdir,
-	AS_HELP_STRING([--with-installer-libdir],[Path to libraries for NSIS script]))
+	AS_HELP_STRING([--with-installer-extdir],[Path to external data for NSIS script]))
 
 
 AC_ARG_WITH(installer_version,
@@ -102,12 +102,12 @@ if test "x$enable_installer" = "xyes" ; then
 		AC_MSG_RESULT([$with_installer_version])
 		AC_SUBST(INSTALLER_VERSION, $with_installer_version)
 	fi
-	if test "x$with_installer_libdir" = "x" ; then
-		AC_MSG_ERROR([installer libdir not found])
+	if test "x$with_installer_extdir" = "x" ; then
+		AC_MSG_ERROR([installer external dir not found])
 	else
-		AC_MSG_CHECKING([for installer libdir])
-		AC_MSG_RESULT([$with_installer_libdir])
-		AC_SUBST(INSTALLER_LIBDIR, $with_installer_libdir)
+		AC_MSG_CHECKING([for installer extdir])
+		AC_MSG_RESULT([$with_installer_extdir])
+		AC_SUBST(INSTALLER_EXTDIR, $with_installer_extdir)
 	fi
 fi
 
