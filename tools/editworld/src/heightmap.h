@@ -29,6 +29,7 @@
 #include "bmphandler.h"
 #include "grdland.h"
 #include "listtemp.h"
+#include <list>
 #include "chnkio.h"
 #include "devmap.h"
 #include "fileparse.h"
@@ -717,9 +718,9 @@ class CHeightMap : public CChnkIO
 		BOOL InitialiseTextures(DWORD NumTextures,char **TextureList,DWORD TextureWidth,DWORD TextureHeight);
 		void CopyTexture(UBYTE *SourceBits,int SourcePitch,int SourceX,int SourceY,
 								 UBYTE *DestBits,int DestPitch,int DestX,int DestY,int TileSize);
-		void InitialiseTextMaps(void);
-		char** GetTextureList(void);
-		DWORD GetNumTextures(void);
+		void InitialiseTextMaps();
+		char** GetTextureList();
+		DWORD GetNumTextures();
 		void SetTextureMap(DWORD TexNum,DWORD PageNum,DWORD x,DWORD y);
 		void DrawHeightMap(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
 		void Draw3DGrid(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
@@ -727,7 +728,7 @@ class CHeightMap : public CChnkIO
 		void DrawTile(DWORD TileNum,D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
 		void Draw3DSectors(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
 		void Draw3DVerticies(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
-		float GetVisibleRadius(void);
+		float GetVisibleRadius();
 		void DrawSea(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
 		void Draw2DMap(CDIBDraw *DIBDraw,DDImage **Images,int NumImages,int ScrollX, int ScrollY);
 		void DrawTileAttribute(CDIBDraw *DIBDraw,int XPos,int YPos,DWORD Flags);
@@ -775,9 +776,21 @@ class CHeightMap : public CChnkIO
 		void SeedFill(int x, int y, FRect *win, Pixel nv,DWORD Type,DWORD Flags);
 #endif
 
-		CTile *GetMapTiles(void) { return m_MapTiles; }
-		DWORD GetMapWidth(void) { return m_MapWidth; }
-		DWORD GetMapHeight(void) { return m_MapHeight; }
+		inline CTile *GetMapTiles()
+		{
+			return m_MapTiles;
+		}
+
+		inline DWORD GetMapWidth()
+		{
+			return m_MapWidth;
+		}
+
+		inline DWORD GetMapHeight()
+		{
+			return m_MapHeight;
+		}
+
 		void GetMapSize(DWORD *MapWidth,DWORD *MapHeight);
 		void GetTileSize(DWORD *TileWidth,DWORD *TileHeight);
 		DWORD GetTextureID(DWORD TileNum);
@@ -787,31 +800,49 @@ class CHeightMap : public CChnkIO
 		DWORD GetTextureRotate(DWORD TileNum);
 		float GetVertexHeight(DWORD TileNum,DWORD Index);
 		void GetTextureSize(DWORD *TextureHeight,DWORD *TextureWidth);
-		DWORD GetHeightScale(void) { return m_HeightScale; }
+		inline DWORD GetHeightScale()
+		{
+			return m_HeightScale;
+		}
+
 		void SetHeightScale(DWORD HeightScale);
 		float GetHeight(float x, float y);
 		float GetInterpolatedHeight(float xPos,float yPos);
-		DWORD GetSeaLevel(void) { return m_SeaLevel; }
-		void SetSeaLevel(DWORD SeaLevel) { m_SeaLevel = SeaLevel; }
+		inline DWORD GetSeaLevel()
+		{
+			return m_SeaLevel;
+		}
+
+		inline void SetSeaLevel(DWORD SeaLevel)
+		{
+			m_SeaLevel = SeaLevel;
+		}
 
 		void FixTileVerticies(CTile *Tile,SLONG x,SLONG z,DWORD Flags);
-		void FixTilePositions(void);
+		void FixTilePositions();
 		void FixTileNormals(CTile *Tile);
 		void FixTileTextures(CTile *Tile);
-		void FixTextureIDS(void);
-//		void SmoothNormals(void);
+		void FixTextureIDS();
+//		void SmoothNormals();
 		UDWORD GetTileFlipType(SDWORD MapX, SDWORD MapY);
 		void AddNormal(SDWORD MapX, SDWORD MapY,UDWORD AddedNormals,D3DVECTOR *SummedVector);
-		void SmoothNormals(void);
+		void SmoothNormals();
 
 
-		void InitialiseSectors(void);
+		void InitialiseSectors();
 
 		void SwitchTriDirection(DWORD TileNum);
-		CTile *GetTile(DWORD TileNum) { return &m_MapTiles[TileNum]; }
+		inline CTile *GetTile(DWORD TileNum)
+		{
+			return &m_MapTiles[TileNum];
+		}
 
 		void SetDrawRadius(SLONG Radius) { m_DrawRadius = Radius; }
-		SLONG GetDrawRadius(void) { return m_DrawRadius; }
+		
+		inline SLONG GetDrawRadius()
+		{
+			return m_DrawRadius;
+		}
 
 		TextureDef	m_TextureMaps[MAX_TILETEXTURES];	// Should be allocated.
 
@@ -837,7 +868,11 @@ class CHeightMap : public CChnkIO
 	public:
 		BOOL ReadIMDObjects(char *ScriptFile);
 //		BOOL ReadObjects(char *ScripFile);
-		DWORD GetNumIMD(void) { return m_Num3DObjects; }
+		inline DWORD GetNumIMD()
+		{
+			return m_Num3DObjects;
+		}
+
 		BOOL ReadIMD(char *FileName,char *Description,char *TextDir,int TypeID,BOOL Flanged = FALSE,BOOL Snap = FALSE,int ColourKeyIndex = FALSE,NORMALTYPE NType = NT_DEFAULTNORMALS,
 					 int StructureIndex = 0,int PlayerIndex = 0,C3DObject *Object=NULL);
 		void RenderIMD(C3DObject *Object);
@@ -870,8 +905,8 @@ class CHeightMap : public CChnkIO
 										int ScrollX,int ScrollY,
 										int HitX,int HitY);
 
-		void Delete3DObjects(void);
-		void Delete3DObjectInstances(void);
+		void Delete3DObjects();
+		void Delete3DObjectInstances();
 
 		char *GetObjectInstanceScriptName(int Index);
 		void SetObjectInstanceScriptName(int Index,char *ScriptName);
@@ -882,12 +917,12 @@ class CHeightMap : public CChnkIO
 		void RemoveObject(DWORD Index);
 		void Select3DObject(DWORD Index);
 		void DeSelect3DObject(DWORD Index);
-		void SelectAll3DObjects(void);
-		void DeSelectAll3DObjects(void);
+		void SelectAll3DObjects();
+		void DeSelectAll3DObjects();
 		void Get3DObjectRotation(DWORD Index,D3DVECTOR &Rotation);
 		void Set3DObjectRotation(DWORD Index,D3DVECTOR &Rotation);
-		void DeleteSelected3DObjects(void);
-//		char **GetObjectNames(void) { return m_ObjectNames; }
+		void DeleteSelected3DObjects();
+//		char **GetObjectNames() { return m_ObjectNames; }
 
 		BOOL GetObjectInstanceFlanged(int Index);
 
@@ -900,7 +935,10 @@ class CHeightMap : public CChnkIO
 
 		int GetObjectType(int Index);
 		int GetObjectPlayer(int Index);
-		BOOL GetObjectFlanged(int Index) { return m_3DObjects[Index].Flanged; }
+		inline BOOL GetObjectFlanged(int Index)
+		{
+			return m_3DObjects[Index].Flanged;
+		}
 
 		int GetObjectInstancePlayerID(int Index);
 		int GetObjectInstanceUniqueID(int Index);
@@ -911,8 +949,16 @@ class CHeightMap : public CChnkIO
 
 		int GetObjectID(int Index);
 
-		DWORD GetNum3DObjects(void) { return m_Num3DObjects; }
-		DWORD GetNumObjects(void) { return m_TotalInstances; }
+		inline DWORD GetNum3DObjects()
+		{
+			return m_Num3DObjects;
+		}
+
+		inline DWORD GetNumObjects()
+		{
+			return m_TotalInstances;
+		}
+
 		void DrawObjects(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition,BOOL Boxed=FALSE);
 		void DrawObjects2D(CDIBDraw *DIBDraw,int ScrollX,int ScrollY,RECT *Clip);
 		C3DObjectInstance *GetObjectPointer(DWORD Index);
@@ -923,7 +969,7 @@ class CHeightMap : public CChnkIO
 		void SetObjectTileFlags(DWORD Index,DWORD Flags);
 		void SetObjectTileFlags(DWORD Flags);
 		void SetObjectTileHeights(DWORD Index);
-		void SetObjectTileHeights(void);
+		void SetObjectTileHeights();
 		void Set3DObjectPosition(DWORD Index,D3DVECTOR &Position);
 		void Get3DObjectPosition(DWORD Index,D3DVECTOR &Position);
 
@@ -940,7 +986,11 @@ class CHeightMap : public CChnkIO
 //		BOOL ReadDeliveranceFeatures(FILE *Stream);
 
 		int CountObjectsOfType(int Type,int Exclude,int Include);
-		CWorldInfo *GetWorldInfo(void) { return &m_WorldInfo; }
+		
+		inline CWorldInfo *GetWorldInfo()
+		{
+			return &m_WorldInfo;
+		}
 
 		void GetLimitRect(int Index,LimitRect &Limit);
 		BOOL InLimit(float x,float z,int Index);
@@ -961,36 +1011,40 @@ class CHeightMap : public CChnkIO
 
 		void SetTileHeightUndo(int Index,float Height);
 
-		void SetUniqueIDs(void);
-		BOOL CheckUniqueIDs(void);
-		BOOL CheckUniqueScriptNames(void);
+		void SetUniqueIDs();
+		BOOL CheckUniqueIDs();
+		BOOL CheckUniqueScriptNames();
 
-		void InitialiseScrollLimits(void);
+		void InitialiseScrollLimits();
 		void AddScrollLimit(int MinX,int MinZ,int MaxX,int MaxZ,char *ScriptName);
 		void SetScrollLimit(int Index,int MinX,int MinZ,int MaxX,int MaxZ,char *ScriptName);
 		void AddScrollLimit(int MinX,int MinZ,int MaxX,int MaxZ,DWORD UniqueID,char *ScriptName);
-		void DeleteAllScrollLimits(void);
+		void DeleteAllScrollLimits();
 		DWORD FindScrollLimit(DWORD UniqueID);
 		DWORD FindScrollLimit(char *ScriptName);
 		void DeleteScrollLimit(DWORD Index);
 		void DrawScrollLimits(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
 		BOOL CheckLimitsWithin(int ExcludeIndex,int IncludeIndex);
-		BOOL CheckUniqueLimitsScriptNames(void);
+		BOOL CheckUniqueLimitsScriptNames();
 		BOOL WriteScrollLimits(FILE *Stream,int StartX,int StartY,int Width,int Height);
 		BOOL ReadScrollLimits(FILE *Stream);
 		BOOL WriteDeliveranceLimits(FILE *Stream);
-		int GetNumScrollLimits(void) { return m_NumScrollLimits; }
+		
+		inline int GetNumScrollLimits()
+		{
+			return m_NumScrollLimits;
+		}
 
 		inline ListNode<CScrollLimits>::iterator GetScrollLimits()
 		{
 			return ListNode<CScrollLimits>::iterator(m_ScrollLimits);
 		}
 
-		void InitialiseGateways(void);
+		void InitialiseGateways();
 		int AddGateway(int x0,int y0,int x1,int y1);
 		void DeleteGateway(int Index);
-		void DeleteAllGateways(void);
-		void DeSelectGateways(void);
+		void DeleteAllGateways();
+		void DeSelectGateways();
 		void SelectGateway(int Index);
 		int FindGateway(int x,int y);
 		void SetGateway(int Index,int x0,int y0,int x1,int y1);
@@ -1004,8 +1058,17 @@ class CHeightMap : public CChnkIO
 		BOOL WriteDeliveranceGateways(FILE *Stream);
 		void DisplayGateways3D(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
 		void DisplayGateways2D(CDIBDraw *DIBDraw,int ScrollX, int ScrollY,RECT *Clip);
-		ListNode<GateWay> *GetGateWays(void) { return m_Gateways; }
-		int GetNumGateways(void) { return m_NumGateways; }
+		
+		inline ListNode<GateWay>* GetGateWays()
+		{
+			return m_Gateways;
+		}
+
+		inline int GetNumGateways() const
+		{
+			return m_NumGateways;
+		}
+
 		BOOL GetGateway(int Index,int *x0,int *y0,int *x1,int *y1);
 		void SetMapZoneID(int TileNum,int ID);
 		void SetMapZoneID(int x,int z,int ID);
@@ -1017,14 +1080,23 @@ class CHeightMap : public CChnkIO
 		BOOL StructureIsDefense(int ObjectID);
 		BOOL StructureIsWall(int ObjectID);
 
-		void ClearSelectionBox(void);
+		void ClearSelectionBox();
 		void SetSelectionBox0(int TileID);
 		void SetSelectionBox1(int TileID);
 		void SetSelectionBox(int TileID,int Width,int Height);
-		BOOL SelectionBoxValid(void);
-		int GetSelectionBox0(void) { return m_SelectionBox0; }
-		int GetSelectionBox1(void) { return m_SelectionBox1; }
-		void ClipSelectionBox(void);
+		BOOL SelectionBoxValid();
+
+		inline int GetSelectionBox0()
+		{
+			return m_SelectionBox0;
+		}
+
+		inline int GetSelectionBox1()
+		{
+			return m_SelectionBox1;
+		}
+
+		void ClipSelectionBox();
 
 		void XFlipObjects(int x0,int y0,int x1,int y1);
 		void YFlipObjects(int x0,int y0,int x1,int y1);
@@ -1087,7 +1159,7 @@ class CHeightMap : public CChnkIO
 		C3DObject m_3DObjects[MAX3DOBJECTS];
 
 		int m_TotalInstances;
-		ListNode<C3DObjectInstance> *m_Objects;
+		std::list<C3DObjectInstance> m_Objects;
 
 		int m_NumStructures;
 		_structure_stats *m_Structures;

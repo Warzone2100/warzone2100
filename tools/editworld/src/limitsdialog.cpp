@@ -31,14 +31,11 @@
 
 // Workaround for MSVC's implementation of std::advance (how could
 // anyone get something as simple as this algorithm implemented wrong ?)
-namespace std
+template<typename InputIterator, typename DistanceType>
+inline void advance(InputIterator& i, DistanceType n)
 {
-	template<typename InputIterator, typename DistanceType>
-	inline void advance(InputIterator& i, DistanceType n)
-	{
-		for (; n; --n)
-			++i;
-	}
+	for (; n; --n)
+		++i;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -126,7 +123,7 @@ void CLimitsDialog::OnGetdispinfoListlimits(NMHDR* pNMHDR, LRESULT* pResult)
 
 	ListNode<CScrollLimits>::iterator ScrollLimits = m_World->GetScrollLimits();
 	ScrollLimits.goToBegin();
-	std::advance(ScrollLimits, item.iItem);
+	advance(ScrollLimits, item.iItem);
 
 	switch (pDispInfo->item.iSubItem) {
 		case	0:
@@ -187,7 +184,7 @@ void CLimitsDialog::OnItemchangedListlimits(NMHDR* pNMHDR, LRESULT* pResult)
 
 		ListNode<CScrollLimits>::iterator ScrollLimits = m_World->GetScrollLimits();
 		ScrollLimits.goToBegin();
-		std::advance(ScrollLimits, m_SelectedItemIndex);
+		advance(ScrollLimits, m_SelectedItemIndex);
 
 		if(&*ScrollLimits != NULL)
 		{

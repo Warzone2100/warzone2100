@@ -333,7 +333,7 @@ CHeightMap::CHeightMap(CDirectDraw *DirectDrawView,CGeometry *DirectMaths,CMatMa
 }
 
 
-CHeightMap::~CHeightMap(void)
+CHeightMap::~CHeightMap()
 {
 // Free up the map.
 	delete m_MapTiles;
@@ -393,12 +393,12 @@ void CHeightMap::EnableGouraud(BOOL Enable)
 }
 
 
-char** CHeightMap::GetTextureList(void)
+char** CHeightMap::GetTextureList()
 {
 	return m_TextureList;
 }
 
-DWORD CHeightMap::GetNumTextures(void)
+DWORD CHeightMap::GetNumTextures()
 {
 	return m_NumSourceTextures;
 }
@@ -760,12 +760,12 @@ void CHeightMap::CopyTexture(UBYTE *SourceBits,int SourcePitch,int SourceX,int S
 	}
 }
 
-//	InitialiseTextMaps(void)
+//	InitialiseTextMaps()
 //
 // Creates an array of texture maps. Each element contains the UV coordinates for that map and the
 // ID of the D3D material it exists in.
 //
-void CHeightMap::InitialiseTextMaps(void)
+void CHeightMap::InitialiseTextMaps()
 {
 	DWORD	TexNum;
 	DWORD	MapNum = 0;
@@ -1123,14 +1123,14 @@ void CHeightMap::SetMapSize(DWORD MapWidth,DWORD MapHeight)
 	InitialiseSectors();
 }
 
-// FixTextureIDS(void)
+// FixTextureIDS()
 //
 // Go through entire map and if no texture page loaded then
 // set all tile texture ID's to 0 ( un-textured ). If texture page
 // is loaded then change any un-textured tiles to texture ID 1.
 // Also if texture ID is greater than max texture ID then cap it.
 //
-void CHeightMap::FixTextureIDS(void)
+void CHeightMap::FixTextureIDS()
 {
 	SLONG	x,z;
 	CTile *Tile = m_MapTiles;
@@ -1835,7 +1835,7 @@ void CHeightMap::FixTileVerticies(CTile *Tile,SLONG x,SLONG z,DWORD Flags)
 	}
 }
 
-void CHeightMap::FixTilePositions(void)
+void CHeightMap::FixTilePositions()
 {
 	CTile *Tile = m_MapTiles;
 
@@ -1852,7 +1852,7 @@ void CHeightMap::FixTilePositions(void)
 }
 
 #if(0)
-void CHeightMap::SmoothNormals(void)
+void CHeightMap::SmoothNormals()
 {
 	SLONG x,z;
 
@@ -1910,7 +1910,7 @@ void CHeightMap::SmoothNormals(void)
 
 UDWORD GetTileFlipType(SDWORD MapX, SDWORD MapY);
 void AddNormal(SDWORD MapX, SDWORD MapY,UDWORD AddedNormals,D3DVECTOR *SummedVector);
-void SmoothNormals(void);
+void SmoothNormals();
 
 // Returns the split type of the tile - see the little diagram above
 //
@@ -1977,7 +1977,7 @@ void CHeightMap::AddNormal(SDWORD MapX, SDWORD MapY,UDWORD AddedNormals,D3DVECTO
 
 
 // Calculates all the lighting levels for each vertex
-void CHeightMap::SmoothNormals(void)
+void CHeightMap::SmoothNormals()
 {
 	D3DVECTOR Normal;
 
@@ -2120,7 +2120,7 @@ void CHeightMap::FixTileTextures(CTile *Tile)
 }
 
 
-void CHeightMap::InitialiseSectors(void)
+void CHeightMap::InitialiseSectors()
 {
 /*
 	DWORD	NumTilesIn;
@@ -2546,7 +2546,7 @@ void CHeightMap::DrawTile(DWORD TileNum,D3DVECTOR &CameraRotation,D3DVECTOR &Cam
 }
 
 
-float CHeightMap::GetVisibleRadius(void)
+float CHeightMap::GetVisibleRadius()
 {
 	return (float)(m_DrawRadius * m_TileWidth);
 //	return (float)(m_TilesPerSectorRow * m_DrawRadius * m_TileWidth);
@@ -2757,7 +2757,7 @@ void CHeightMap::Draw3DTiles(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition
 }
 
 
-void CHeightMap::ClearSelectionBox(void)
+void CHeightMap::ClearSelectionBox()
 {
 	m_SelectionBox0 = 0;
 	m_SelectionBox1 = 0;
@@ -2807,7 +2807,7 @@ void CHeightMap::SetSelectionBox(int TileID,int Width,int Height)
 }
 
 
-BOOL CHeightMap::SelectionBoxValid(void)
+BOOL CHeightMap::SelectionBoxValid()
 {
 	if(m_SelectionX0 < 0) {
 		return FALSE;
@@ -2826,7 +2826,7 @@ BOOL CHeightMap::SelectionBoxValid(void)
 }
 
 
-void CHeightMap::ClipSelectionBox(void)
+void CHeightMap::ClipSelectionBox()
 {
 	DebugPrint("%d %d %d %d (%d,%d) (%d,%d)\n",m_SelectionX0,m_SelectionY0,m_SelectionX1,m_SelectionY1,m_SelectionWidth,m_SelectionHeight, m_MapWidth,m_MapHeight);
 
@@ -5794,41 +5794,31 @@ BOOL CHeightMap::ObjectHit2D(DWORD ObjectID,
 //
 DWORD CHeightMap::AddObject(DWORD ObjectID, const D3DVECTOR& Rotation, const D3DVECTOR& Position, DWORD PlayerID)
 {
-	ListNode<C3DObjectInstance> *TmpNode;
-	C3DObjectInstance *Data;
-	if(m_Objects == NULL) {
-		m_Objects = new ListNode<C3DObjectInstance>;
-		Data = m_Objects->GetData();
-	} else {
-		TmpNode = new ListNode<C3DObjectInstance>;
-		TmpNode->AppendNode(m_Objects);
-		Data = TmpNode->GetData();
-	}
-
 //	DebugPrint("Added Object, ID %d\n",ObjectID);
 
-	C3DObject *Object = &m_3DObjects[ObjectID];
+	C3DObject* Object = &m_3DObjects[ObjectID];
 
-	Data->ObjectID = ObjectID;
-	Data->Position = Position;
-	Data->Rotation = Rotation;
-	Data->Selected = FALSE;
-	Data->ScriptName[0] = 0;
+	C3DObjectInstance Data;
+	Data.ObjectID = ObjectID;
+	Data.Position = Position;
+	Data.Rotation = Rotation;
+	Data.Selected = FALSE;
+	Data.ScriptName[0] = 0;
 
 //	if(Object->TypeID == IMD_STRUCTURE) {
-//		Data->PlayerID = Object->PlayerID;
+//		Data.PlayerID = Object->PlayerID;
 //	} else {
-		Data->PlayerID = PlayerID;
+		Data.PlayerID = PlayerID;
 //	}
-	Data->UniqueID = m_NewObjectID;
+	Data.UniqueID = m_NewObjectID++;
 
-	m_NewObjectID++;
+	m_Objects.push_back(Data);
 
 //	SetObjectTileHeights(m_TotalInstances);
 
-	m_TotalInstances++;
+	++m_TotalInstances;
 
-	return m_TotalInstances-1;
+	return m_TotalInstances - 1;
 }
 
 
@@ -5837,39 +5827,32 @@ DWORD CHeightMap::AddObject(DWORD ObjectID, const D3DVECTOR& Rotation, const D3D
 DWORD CHeightMap::AddObject(DWORD ObjectID, const D3DVECTOR& Rotation, const D3DVECTOR& Position, DWORD UniqueID,
 							DWORD PlayerID, const char* ScriptName)
 {
-	ListNode<C3DObjectInstance> *TmpNode;
-	C3DObjectInstance *Data;
-	if(m_Objects == NULL) {
-		m_Objects = new ListNode<C3DObjectInstance>;
-		Data = m_Objects->GetData();
-	} else {
-		TmpNode = new ListNode<C3DObjectInstance>;
-		TmpNode->AppendNode(m_Objects);
-		Data = TmpNode->GetData();
-	}
-
 	C3DObject *Object = &m_3DObjects[ObjectID];
 
-	Data->ObjectID = ObjectID;
-	Data->Position = Position;
-	Data->Rotation = Rotation;
-	Data->Selected = FALSE;
-	strcpy(Data->ScriptName,ScriptName);
+	C3DObjectInstance Data;
+	Data.ObjectID = ObjectID;
+	Data.Position = Position;
+	Data.Rotation = Rotation;
+	Data.Selected = FALSE;
+	strcpy(Data.ScriptName, ScriptName);
 
 //	if(Object->TypeID == IMD_STRUCTURE) {
-//		Data->PlayerID = Object->PlayerID;
+//		Data.PlayerID = Object->PlayerID;
 //	} else {
-		Data->PlayerID = PlayerID;
+		Data.PlayerID = PlayerID;
 //	}
-	Data->UniqueID = UniqueID;
+	Data.UniqueID = UniqueID;
 
-	if(UniqueID >= m_NewObjectID) {
-		m_NewObjectID = UniqueID+1;
+	if(UniqueID >= m_NewObjectID)
+	{
+		m_NewObjectID = UniqueID + 1;
 	}
+
+	m_Objects.push_back(Data);
 
 //	SetObjectTileHeights(m_TotalInstances);
 
-	m_TotalInstances++;
+	++m_TotalInstances;
 
 	return m_TotalInstances-1;
 }
@@ -5880,17 +5863,15 @@ DWORD CHeightMap::AddObject(DWORD ObjectID, const D3DVECTOR& Rotation, const D3D
 //
 void CHeightMap::RemoveObject(DWORD Index)
 {
-	ListNode<C3DObjectInstance> *TmpNode;
-	C3DObjectInstance *Data = NULL;
+	if(m_Objects.empty()
+	 || Index >= m_Objects.size())
+		return;
 
-	if(m_Objects) {
-		TmpNode = m_Objects->GetNthNode(Index);
-		if(TmpNode) {
-			m_Objects = TmpNode->RemoveNode(m_Objects);
-			delete TmpNode;
-			m_TotalInstances--;
-		}
-	}
+	std::list<C3DObjectInstance>::iterator toRemove = m_Objects.begin();
+	std::advance(toRemove, Index);
+
+	m_Objects.erase(toRemove);
+	--m_TotalInstances;
 }
 
 
@@ -5912,47 +5893,42 @@ void CHeightMap::DeSelect3DObject(DWORD Index)
 
 // Select all objects.
 //
-void CHeightMap::SelectAll3DObjects(void)
+void CHeightMap::SelectAll3DObjects()
 {
-	ListNode<C3DObjectInstance> *TmpNode;
-
-	TmpNode = m_Objects;
-	while(TmpNode!=NULL) {
-		TmpNode->GetData()->Selected = TRUE;
-		TmpNode = TmpNode->GetNextNode();
+	for (std::list<C3DObjectInstance>::iterator curNode = m_Objects.begin(); curNode != m_Objects.end(); ++curNode)
+	{
+		curNode->Selected = TRUE;
 	}
 }
 
 
 // DeSelect all objects.
 //
-void CHeightMap::DeSelectAll3DObjects(void)
+void CHeightMap::DeSelectAll3DObjects()
 {
-	ListNode<C3DObjectInstance> *TmpNode;
-
-	TmpNode = m_Objects;
-	while(TmpNode!=NULL) {
-		TmpNode->GetData()->Selected = FALSE;
-		TmpNode = TmpNode->GetNextNode();
+	for (std::list<C3DObjectInstance>::iterator curNode = m_Objects.begin(); curNode != m_Objects.end(); ++curNode)
+	{
+		curNode->Selected = FALSE;
 	}
 }
 
 
 // Delete selected objects.
 //
-void CHeightMap::DeleteSelected3DObjects(void)
+void CHeightMap::DeleteSelected3DObjects()
 {
-	ListNode<C3DObjectInstance> *TmpNode,*NextNode;
+	for (std::list<C3DObjectInstance>::iterator curNode = m_Objects.begin(); curNode != m_Objects.end();)
+	{
+		if (curNode->Selected)
+		{
+			std::list<C3DObjectInstance>::iterator toRemove = curNode++;
+			m_Objects.erase(toRemove);
+			--m_TotalInstances;
 
-	TmpNode = m_Objects;
-	while(TmpNode!=NULL) {
-		NextNode = TmpNode->GetNextNode();
-		if(TmpNode->GetData()->Selected) {
-			m_Objects = TmpNode->RemoveNode(m_Objects);
-			delete TmpNode;
-			m_TotalInstances--;
+			continue;
 		}
-		TmpNode = NextNode;
+
+		++curNode;
 	}
 }
 
@@ -6089,7 +6065,7 @@ char *CHeightMap::GetObjectName(C3DObject *Object)
 
 
 
-void CHeightMap::Delete3DObjects(void)
+void CHeightMap::Delete3DObjects()
 {
 	for(int i=0; i<m_Num3DObjects; i++) {
 		m_MatManager->DeleteMaterial(m_3DObjects[i].TextureID);
@@ -6116,13 +6092,9 @@ void CHeightMap::Delete3DObjects(void)
 
 // Delete all data associated with 3d objects.
 //
-void CHeightMap::Delete3DObjectInstances(void)
+void CHeightMap::Delete3DObjectInstances()
 {
-	if(m_Objects) {
-		m_Objects->DeleteList();
-		m_Objects = NULL;
-	}
-
+	m_Objects.clear();
 	m_TotalInstances = 0;
 }
 
@@ -6168,54 +6140,55 @@ BOOL CHeightMap::StructureIsWall(int ObjectID)
 //
 void CHeightMap::DrawObjects(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition,BOOL Boxed)
 {
-	ListNode<C3DObjectInstance> *TmpNode;
-	C3DObjectInstance *Data;
-
-	int CullRadius = (int)GetVisibleRadius();
+	const int CullRadius = static_cast<int>(GetVisibleRadius());
 	
-	TmpNode = m_Objects;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
+	for (std::list<C3DObjectInstance>::iterator curNode = m_Objects.begin(); curNode != m_Objects.end(); ++curNode)
+	{
+		if(m_EnablePlayers[curNode->PlayerID] == TRUE)
+		{
+			SetRenderPlayerID(curNode->PlayerID);
 
-
-		if(m_EnablePlayers[Data->PlayerID] == TRUE) {
-
-			SetRenderPlayerID(Data->PlayerID);
-
-			if( abs((int)(Data->Position.x - CameraPosition.x)) < CullRadius) {
-				if( abs((int)(Data->Position.z - CameraPosition.z)) < CullRadius) {
-					if( (m_3DObjects[Data->ObjectID].TypeID == IMD_STRUCTURE) ||
-						(m_3DObjects[Data->ObjectID].TypeID == IMD_FEATURE) ||
-						(m_IgnoreDroids == FALSE) ) {
-
+			if(abs(static_cast<int>(curNode->Position.x - CameraPosition.x)) < CullRadius)
+			{
+				if( abs(static_cast<int>(curNode->Position.z - CameraPosition.z)) < CullRadius)
+				{
+					if (m_3DObjects[curNode->ObjectID].TypeID == IMD_STRUCTURE
+					 || m_3DObjects[curNode->ObjectID].TypeID == IMD_FEATURE
+					 || !m_IgnoreDroids)
+					{
 						m_TerrainMorph = FALSE;
-						if(m_3DObjects[Data->ObjectID].TypeID == IMD_STRUCTURE) {
-							if( (strcmp(m_Structures[m_3DObjects[Data->ObjectID].StructureID].Type,"WALL") == 0) || 
-								(strcmp(m_Structures[m_3DObjects[Data->ObjectID].StructureID].Type,"CORNER WALL") == 0) ) {
+						if(m_3DObjects[curNode->ObjectID].TypeID == IMD_STRUCTURE)
+						{
+							if (strcmp(m_Structures[m_3DObjects[curNode->ObjectID].StructureID].Type, "WALL") == 0
+							 || strcmp(m_Structures[m_3DObjects[curNode->ObjectID].StructureID].Type, "CORNER WALL") == 0)
+							{
 								m_TerrainMorph = TRUE;
 							}
 						}
-						DrawIMD(Data->ObjectID,Data->Rotation,Data->Position,CameraRotation,CameraPosition,TRUE);
+
+						DrawIMD(curNode->ObjectID, curNode->Rotation, curNode->Position, CameraRotation, CameraPosition, TRUE);
 					}
 
-					if(Boxed) {
-						if(Data->Selected) {
-							DrawIMDSphere(Data->ObjectID,Data->Rotation,Data->Position,
-								CameraRotation,CameraPosition,m_LineMaterial2,TRUE,255,0,0);
-						} else {
-							DrawIMDSphere(Data->ObjectID,Data->Rotation,Data->Position,
-								CameraRotation,CameraPosition,m_LineMaterial2,TRUE,255,255,255);
+					if(Boxed)
+					{
+						if(curNode->Selected)
+						{
+							DrawIMDSphere(curNode->ObjectID, curNode->Rotation, curNode->Position,
+								CameraRotation, CameraPosition, m_LineMaterial2, TRUE, 255, 0, 0);
+						}
+						else
+						{
+							DrawIMDSphere(curNode->ObjectID, curNode->Rotation, curNode->Position,
+								CameraRotation, CameraPosition, m_LineMaterial2, TRUE, 255, 255, 255);
 						}
 					}
 
-	//				if((Data->Selected) || (m_3DObjects[Data->ObjectID].TypeID == IMD_DROID)) {
-					if(Data->Selected) {
-						DrawIMDStats(Data,CameraRotation,CameraPosition);
-					}
+	//				if((curNode->Selected) || (m_3DObjects[curNode->ObjectID].TypeID == IMD_DROID))
+					if(curNode->Selected)
+						DrawIMDStats(&*curNode, CameraRotation, CameraPosition);
 				}
 			}
 		}
-		TmpNode = TmpNode->GetNextNode();
 	}
 }
 
@@ -6223,33 +6196,36 @@ void CHeightMap::DrawObjects(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition
 //
 void CHeightMap::DrawObjects2D(CDIBDraw *DIBDraw,int ScrollX,int ScrollY,RECT *Clip)
 {
-	ListNode<C3DObjectInstance> *TmpNode;
-	C3DObjectInstance *Data;
+	std::list<C3DObjectInstance>::iterator curNode;
 
-	TmpNode = m_Objects;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-		if(m_EnablePlayers[Data->PlayerID] == TRUE) {
-			if(Data->Selected) {
-				DrawIMDFootprint2D(DIBDraw,Data,ScrollX,ScrollY,RGB(255,0,0),Clip);
-			} else {
-				DrawIMDFootprint2D(DIBDraw,Data,ScrollX,ScrollY,RGB(255,255,255),Clip);
+	for (curNode = m_Objects.begin(); curNode != m_Objects.end(); ++curNode)
+	{
+		if (m_EnablePlayers[curNode->PlayerID])
+		{
+			if(curNode->Selected)
+			{
+				DrawIMDFootprint2D(DIBDraw, &*curNode, ScrollX, ScrollY, RGB(255, 0, 0), Clip);
+			}
+			else
+			{
+				DrawIMDFootprint2D(DIBDraw, &*curNode, ScrollX, ScrollY, RGB(255, 255, 255), Clip);
 			}
 		}
-		TmpNode = TmpNode->GetNextNode();
 	}
 
-	TmpNode = m_Objects;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-		if(m_EnablePlayers[Data->PlayerID] == TRUE) {
-			if(Data->Selected) {
-				DrawIMDBox2D(DIBDraw,Data,ScrollX,ScrollY,RGB(255,0,0),Clip);
-			} else {
-				DrawIMDBox2D(DIBDraw,Data,ScrollX,ScrollY,RGB(255,255,255),Clip);
+	for (curNode = m_Objects.begin(); curNode != m_Objects.end(); ++curNode)
+	{
+		if(m_EnablePlayers[curNode->PlayerID])
+		{
+			if(curNode->Selected)
+			{
+				DrawIMDBox2D(DIBDraw, &*curNode, ScrollX, ScrollY, RGB(255, 0, 0), Clip);
+			}
+			else
+			{
+				DrawIMDBox2D(DIBDraw, &*curNode, ScrollX, ScrollY, RGB(255, 255, 255), Clip);
 			}
 		}
-		TmpNode = TmpNode->GetNextNode();
 	}
 }
 
@@ -6257,9 +6233,6 @@ void CHeightMap::DrawObjects2D(CDIBDraw *DIBDraw,int ScrollX,int ScrollY,RECT *C
 //
 void CHeightMap::DrawRadarObjects(CDIBDraw *DIBDraw,int Scale)
 {
-	ListNode<C3DObjectInstance> *TmpNode;
-	C3DObjectInstance *Data;
-
 //	HDC	dc=(HDC)DIBDraw->GetDIBDC();
 //	HPEN NormalPen = CreatePen(PS_SOLID,2,RGB(0,255,0));
 //	HPEN OldPen = SelectObject(dc,NormalPen);
@@ -6269,47 +6242,52 @@ void CHeightMap::DrawRadarObjects(CDIBDraw *DIBDraw,int Scale)
 	UWORD PixelResource =  DIBDraw->GetDIBValue(255,0,0);
 
 
-	TmpNode = m_Objects;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-
-		if(m_EnablePlayers[Data->PlayerID] == TRUE) {
-			D3DVECTOR Position = Data->Position;
+	for (std::list<C3DObjectInstance>::iterator curNode = m_Objects.begin(); curNode != m_Objects.end(); ++curNode)
+	{
+		if (m_EnablePlayers[curNode->PlayerID])
+		{
+			D3DVECTOR Position = curNode->Position;
 
    			Position.z = -Position.z;
-   			Position.x /= (float)(m_TileWidth);
-   			Position.x += (float)(m_MapWidth/2);
+   			Position.x /= static_cast<float>(m_TileWidth);
+   			Position.x += static_cast<float>(m_MapWidth / 2);
 			Position.x *= Scale;
-   			Position.z /= (float)(m_TileHeight);
-   			Position.z += (float)(m_MapHeight/2);
+   			Position.z /= static_cast<float>(m_TileHeight);
+   			Position.z += static_cast<float>(m_MapHeight / 2);
 			Position.z *= Scale;
 
-			Position.x += OVERSCAN*Scale;
-			Position.z += OVERSCAN*Scale;
+			Position.x += OVERSCAN * Scale;
+			Position.z += OVERSCAN * Scale;
 
-			if(m_3DObjects[Data->ObjectID].TypeID == IMD_FEATURE) {
-	//			DebugPrint("%s\n",m_Features[m_3DObjects[Data->ObjectID].StructureID].featureName);
-				if(strcmp(m_Features[m_3DObjects[Data->ObjectID].StructureID].featureName,"OilResource") == 0) {
-					DIBDraw->PutDIBFatPixel(PixelResource,(int)Position.x,(int)Position.z);
-				} else {
-					DIBDraw->PutDIBFatPixel(PixelFeature,(int)Position.x,(int)Position.z);
+			if (m_3DObjects[curNode->ObjectID].TypeID == IMD_FEATURE)
+			{
+	//			DebugPrint("%s\n",m_Features[m_3DObjects[curNode->ObjectID].StructureID].featureName);
+				if (strcmp(m_Features[m_3DObjects[curNode->ObjectID].StructureID].featureName, "OilResource") == 0)
+				{
+					DIBDraw->PutDIBFatPixel(PixelResource, static_cast<int>(Position.x), static_cast<int>(Position.z));
+				}
+				else
+				{
+					DIBDraw->PutDIBFatPixel(PixelFeature, static_cast<int>(Position.x), static_cast<int>(Position.z));
 				}
 	//			DIBDraw->PutDIBFatPixel(PixelFeature,(int)Position.x,(int)Position.z);
-			} else if(m_3DObjects[Data->ObjectID].TypeID == IMD_STRUCTURE) {
-				DIBDraw->PutDIBFatPixel(PixelStructure,(int)Position.x,(int)Position.z);
-			} else if(m_3DObjects[Data->ObjectID].TypeID == IMD_DROID) {
-				DIBDraw->PutDIBFatPixel(PixelDroid,(int)Position.x,(int)Position.z);
+			}
+			else if (m_3DObjects[curNode->ObjectID].TypeID == IMD_STRUCTURE)
+			{
+				DIBDraw->PutDIBFatPixel(PixelStructure, static_cast<int>(Position.x), static_cast<int>(Position.z));
+			}
+			else if (m_3DObjects[curNode->ObjectID].TypeID == IMD_DROID)
+			{
+				DIBDraw->PutDIBFatPixel(PixelDroid, static_cast<int>(Position.x), static_cast<int>(Position.z));
 			}
 		}
-//		DIBDraw->PutDIBFatPixel(Pixel2,(int)Position.x,(int)Position.z);
+//		DIBDraw->PutDIBFatPixel(Pixel2, static_cast<int>(Position.x), static_cast<int>(Position.z));
 
-//		MoveToEx(dc,(int)Position.x,(int)Position.z,NULL);
-//		LineTo(dc,(int)Position.x,(int)Position.z);
-
-		TmpNode = TmpNode->GetNextNode();
+//		MoveToEx(dc, static_cast<int>(Position.x), static_cast<int>(Position.z), NULL);
+//		LineTo(dc, static_cast<int>(Position.x), static_cast<int>(Position.z));
 	}
 
-//	SelectObject(dc,OldPen);
+//	SelectObject(dc, OldPen);
 //	DeleteObject(NormalPen);
 }
 
@@ -6317,43 +6295,45 @@ void CHeightMap::DrawRadarObjects(CDIBDraw *DIBDraw,int Scale)
 //
 int CHeightMap::FindObjectHit3D(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition,int HitX,int HitY)
 {
-	ListNode<C3DObjectInstance> *TmpNode;
-	C3DObjectInstance *Data;
 	int Index = 0;
 
 	int CullRadius = (int)GetVisibleRadius();
 	int ClosestDist = -1;
 	int Closest = -1;
-	int Dist;
 
-#if(0)
-	TmpNode = m_Objects;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-		if( abs((int)(Data->Position.x - CameraPosition.x)) < CullRadius) {
-			if( abs((int)(Data->Position.z - CameraPosition.z)) < CullRadius) {
-				if(ObjectHit3D(Data->ObjectID,Data->Rotation,Data->Position,
-								CameraRotation,CameraPosition,TRUE,HitX,HitY)) {
+#if 0
+	for (std::list<C3DObjectInstance>::iterator curNode = m_Objects.begin(); curNode != m_Objects.end(); ++curNode)
+	{
+		if (abs(static_cast<int>(curNode->Position.x - CameraPosition.x)) < CullRadius)
+		{
+			if (abs(static_cast<int>(curNode->Position.z - CameraPosition.z)) < CullRadius)
+			{
+				if (ObjectHit3D(curNode->ObjectID, curNode->Rotation, curNode->Position,
+					            CameraRotation, CameraPosition, TRUE, HitX, HitY))
+				{
 					return Index;
 				}
 			}
 		}
-		Index++;
-		TmpNode = TmpNode->GetNextNode();
+		++Index;
 	}
 #else
-	TmpNode = m_Objects;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-		if(m_EnablePlayers[Data->PlayerID] == TRUE) {
-			if( abs((int)(Data->Position.x - CameraPosition.x)) < CullRadius) {
-				if( abs((int)(Data->Position.z - CameraPosition.z)) < CullRadius) {
+	for (std::list<C3DObjectInstance>::iterator curNode = m_Objects.begin(); curNode != m_Objects.end(); ++curNode)
+	{
+		if (m_EnablePlayers[curNode->PlayerID])
+		{
+			if (abs(static_cast<int>(curNode->Position.x - CameraPosition.x)) < CullRadius)
+			{
+				if (abs(static_cast<int>(curNode->Position.z - CameraPosition.z)) < CullRadius)
+				{
+					int Dist = ObjectHit3DSphere(curNode->ObjectID, curNode->Rotation, curNode->Position,
+					                             CameraRotation, CameraPosition, TRUE, HitX, HitY);
 
-					Dist = ObjectHit3DSphere(Data->ObjectID,Data->Rotation,Data->Position,
-									CameraRotation,CameraPosition,TRUE,HitX,HitY);
-
-					if((ClosestDist < 0) || (Dist < ClosestDist)) {
-						if(Dist >= 0) {
+					if (ClosestDist < 0
+					 || Dist < ClosestDist)
+					{
+						if (Dist >= 0)
+						{
 							ClosestDist = Dist;
 							Closest = Index;
 						}
@@ -6361,8 +6341,8 @@ int CHeightMap::FindObjectHit3D(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosit
 				}
 			}
 		}
-		Index++;
-		TmpNode = TmpNode->GetNextNode();
+
+		++Index;
 	}
 #endif
 
@@ -6373,21 +6353,18 @@ int CHeightMap::FindObjectHit3D(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosit
 //
 int CHeightMap::FindObjectHit2D(int ScrollX,int ScrollY,int HitX,int HitY)
 {
-	ListNode<C3DObjectInstance> *TmpNode;
-	C3DObjectInstance *Data;
 	int Index = 0;
 
-	TmpNode = m_Objects;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-		if(m_EnablePlayers[Data->PlayerID] == TRUE) {
-			if(ObjectHit2D(Data->ObjectID,Data->Rotation,Data->Position,
-							ScrollX,ScrollY,HitX,HitY)) {
-				return Index;
-			}
+	for (std::list<C3DObjectInstance>::iterator curNode = m_Objects.begin(); curNode != m_Objects.end(); ++curNode)
+	{
+		if(m_EnablePlayers[curNode->PlayerID]
+		 && ObjectHit2D(curNode->ObjectID, curNode->Rotation, curNode->Position,
+		                ScrollX, ScrollY, HitX, HitY))
+		{
+			return Index;
 		}
-		Index++;
-		TmpNode = TmpNode->GetNextNode();
+
+		++Index;
 	}
 
 	return -1;
@@ -6397,17 +6374,13 @@ int CHeightMap::FindObjectHit2D(int ScrollX,int ScrollY,int HitX,int HitY)
 //
 C3DObjectInstance *CHeightMap::GetObjectPointer(DWORD Index)
 {
-	ListNode<C3DObjectInstance> *TmpNode;
-	C3DObjectInstance *Data = NULL;
+	if (m_Objects.size() <= Index)
+		return NULL;
 
-	if(m_Objects) {
-		TmpNode = m_Objects->GetNthNode(Index);
-		if(TmpNode) {
-			Data = TmpNode->GetData();
-		}
-	}
+	std::list<C3DObjectInstance>::iterator curNode = m_Objects.begin();
+	std::advance(curNode, Index);
 
-	return Data;
+	return &*curNode;
 }
 
 // Snap an objects position to the landscape tiles.
@@ -6634,7 +6607,7 @@ void CHeightMap::SetObjectTileFlags(DWORD Flags)
 
 // Show or hide the tiles underneath all objects.
 //
-void CHeightMap::SetObjectTileHeights(void)
+void CHeightMap::SetObjectTileHeights()
 {
 	for(int i=0; i<m_TotalInstances; i++) {
 		SetObjectTileHeights(i);
@@ -6694,8 +6667,6 @@ BOOL CHeightMap::WriteObjectList(FILE *Stream)
 //
 BOOL CHeightMap::WriteObjectList(FILE *Stream,UWORD StartX,UWORD StartY,UWORD Width,UWORD Height)
 {
-	ListNode<C3DObjectInstance> *TmpNode;
-	C3DObjectInstance *Data;
 	C3DObject *Object;
 	char FeatureSet[256];
 	int NumObjects = 0;
@@ -6711,24 +6682,21 @@ BOOL CHeightMap::WriteObjectList(FILE *Stream,UWORD StartX,UWORD StartY,UWORD Wi
 	}
 
 // Count how many objects we need to save.
-	TmpNode = m_Objects;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
+	std::list<C3DObjectInstance>::iterator curNode;
+	for (curNode = m_Objects.begin(); curNode != m_Objects.end(); ++curNode)
+	{
+		float NewCx = static_cast<float>(m_MapWidth / 2 - (StartX + Width / 2)) * m_TileWidth;
+		float NewCz = static_cast<float>(m_MapHeight / 2 - (StartY + Height / 2)) * m_TileHeight;
+		float RadX =  static_cast<float>(Width / 2) * m_TileWidth;
+		float RadZ =  static_cast<float>(Height / 2) * m_TileHeight;
 
-		float NewCx = (float)(m_MapWidth/2 - (StartX + Width/2))*m_TileWidth;
-		float NewCz = (float)(m_MapHeight/2 - (StartY + Height/2))*m_TileHeight;
-		float RadX = (float)(Width/2)*m_TileWidth;
-		float RadZ = (float)(Height/2)*m_TileHeight;
-
-		D3DVECTOR Position = Data->Position;
+		D3DVECTOR Position = curNode->Position;
 		Position.x += NewCx;
 		Position.z -= NewCz;
 
-		if( (abs(Position.x) <= RadX) && (abs(Position.z) <= RadZ) ) {
-			NumObjects++;
-		}
-
-		TmpNode = TmpNode->GetNextNode();
+		if (abs(Position.x) <= RadX
+		 && abs(Position.z) <= RadZ)
+			++NumObjects;
 	}
 
 	fprintf(Stream,"ObjectList {\n");
@@ -6745,94 +6713,104 @@ BOOL CHeightMap::WriteObjectList(FILE *Stream,UWORD StartX,UWORD StartY,UWORD Wi
 //	fprintf(Stream,"    NumObjects %d\n",m_TotalInstances);
 	fprintf(Stream,"    Objects {\n");
 
-	TmpNode = m_Objects;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
+	for (curNode = m_Objects.begin(); curNode != m_Objects.end(); ++curNode)
+	{
+		float NewCx = static_cast<float>(m_MapWidth / 2 - (StartX + Width / 2)) * m_TileWidth;
+		float NewCz = static_cast<float>(m_MapHeight / 2 - (StartY + Height / 2)) * m_TileHeight;
+		float RadX = static_cast<float>(Width / 2) * m_TileWidth;
+		float RadZ = static_cast<float>(Height / 2) * m_TileHeight;
 
-		float NewCx = (float)(m_MapWidth/2 - (StartX + Width/2))*m_TileWidth;
-		float NewCz = (float)(m_MapHeight/2 - (StartY + Height/2))*m_TileHeight;
-		float RadX = (float)(Width/2)*m_TileWidth;
-		float RadZ = (float)(Height/2)*m_TileHeight;
-
-		D3DVECTOR Position = Data->Position;
+		D3DVECTOR Position = curNode->Position;
 		Position.x += NewCx;
 		Position.z -= NewCz;
 
-		if( (abs(Position.x) <= RadX) && (abs(Position.z) <= RadZ) ) {
-
+		if (abs(Position.x) <= RadX
+		 && abs(Position.z) <= RadZ)
+		{
 	#ifdef WRITENAMEDOBJECTS
-			Object = &m_3DObjects[Data->ObjectID];
+			Object = &m_3DObjects[curNode->ObjectID];
 
-			fprintf(Stream,"        %d ",Data->UniqueID);
-			fprintf(Stream,"%d ",Object->TypeID);
-			if(Object->TypeID == IMD_STRUCTURE) {
-				fprintf(Stream,"\"%s\" ",m_Structures[Object->StructureID].StructureName);
-				fprintf(Stream,"%d ",Data->PlayerID);
-				if(Data->ScriptName[0]) {
-					fprintf(Stream,"\"%s\" ",Data->ScriptName);
-				} else {
-					fprintf(Stream,"\"NONAME\" ");
+			fprintf(Stream, "        %d ", curNode->UniqueID);
+			fprintf(Stream, "%d ", Object->TypeID);
+			if(Object->TypeID == IMD_STRUCTURE)
+			{
+				fprintf(Stream, "\"%s\" ", m_Structures[Object->StructureID].StructureName);
+				fprintf(Stream, "%d ", curNode->PlayerID);
+
+				if(curNode->ScriptName[0])
+				{
+					fprintf(Stream, "\"%s\" ", curNode->ScriptName);
 				}
-			} else {
-				if(Object->Description) {
-					fprintf(Stream,"\"%s\" ",Object->Description);
-					fprintf(Stream,"%d ",Data->PlayerID);
-					if(Data->ScriptName[0]) {
-						fprintf(Stream,"\"%s\" ",Data->ScriptName);
-					} else {
-						fprintf(Stream,"\"NONAME\" ");
+				else
+				{
+					fprintf(Stream, "\"NONAME\" ");
+				}
+			}
+			else
+			{
+				if(Object->Description)
+				{
+					fprintf(Stream, "\"%s\" ", Object->Description);
+					fprintf(Stream, "%d ", curNode->PlayerID);
+
+					if(curNode->ScriptName[0])
+					{
+						fprintf(Stream, "\"%s\" ", curNode->ScriptName);
 					}
-				} else {
-					fprintf(Stream,"\"NONAME\" ");
-					fprintf(Stream,"%d ",Data->ObjectID);
+					else
+					{
+						fprintf(Stream, "\"NONAME\" ");
+					}
+				}
+				else
+				{
+					fprintf(Stream, "\"NONAME\" ");
+					fprintf(Stream, "%d ", curNode->ObjectID);
 				}
 			}
 	#else
-			fprintf(Stream,"        %d ",Data->ObjectID);
+			fprintf(Stream, "        %d ", curNode->ObjectID);
 	#endif
 
-			fprintf(Stream,"%.2f %.2f %.2f ",Position.x,Position.y,Position.z);
-			fprintf(Stream,"%.2f %.2f %.2f\n",Data->Rotation.x,Data->Rotation.y,Data->Rotation.z);
+			fprintf(Stream, "%.2f %.2f %.2f ", Position.x, Position.y, Position.z);
+			fprintf(Stream, "%.2f %.2f %.2f\n", curNode->Rotation.x, curNode->Rotation.y, curNode->Rotation.z);
 
 		}
-
-		TmpNode = TmpNode->GetNextNode();
 	}
 
-	fprintf(Stream,"    }\n");
-	fprintf(Stream,"}\n");
+	fprintf(Stream, "    }\n");
+	fprintf(Stream, "}\n");
 
 	return TRUE;
 }
 
 
-BOOL CHeightMap::CheckUniqueScriptNames(void)
+BOOL CHeightMap::CheckUniqueScriptNames()
 {
-	ListNode<C3DObjectInstance> *TmpNode;
-	C3DObjectInstance *Data;
 
 	int NumIDs = 0;
 	char *ScriptNames = new char[m_TotalInstances*MAX_SCRIPTNAME];
 	int NumDups = 0;
 
-	TmpNode = m_Objects;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-
-		for(int i=0; i<NumIDs; i++) {
-			if(Data->ScriptName[0]) {
-				if(_stricmp(Data->ScriptName,&ScriptNames[i*MAX_SCRIPTNAME]) == 0) {
-					NumDups++;
+	for (std::list<C3DObjectInstance>::iterator curNode = m_Objects.begin(); curNode != m_Objects.end(); ++curNode)
+	{
+		for (unsigned int i = 0; i < NumIDs; ++i)
+		{
+			if(curNode->ScriptName[0])
+			{
+				if(_stricmp(curNode->ScriptName, &ScriptNames[i * MAX_SCRIPTNAME]) == 0)
+				{
+					++NumDups;
 				}
 			}
 		}
 
-		if(Data->ScriptName[0]) {
-			strcpy(&ScriptNames[NumIDs*MAX_SCRIPTNAME],Data->ScriptName);
+		if (curNode->ScriptName[0])
+		{
+			strcpy(&ScriptNames[NumIDs * MAX_SCRIPTNAME], curNode->ScriptName);
 		}
-		NumIDs++;
 
-		TmpNode = TmpNode->GetNextNode();
+		++NumIDs;
 	}
 
 	delete ScriptNames;
@@ -6845,29 +6823,22 @@ BOOL CHeightMap::CheckUniqueScriptNames(void)
 }
 
 
-BOOL CHeightMap::CheckUniqueIDs(void)
+BOOL CHeightMap::CheckUniqueIDs()
 {
-	ListNode<C3DObjectInstance> *TmpNode;
-	C3DObjectInstance *Data;
-
 	int NumIDs = 0;
 	int *IDs = new int[m_TotalInstances];
 	int NumDups = 0;
 
-	TmpNode = m_Objects;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-
-		for(int i=0; i<NumIDs; i++) {
-			if(Data->UniqueID == IDs[i]) {
+	for (std::list<C3DObjectInstance>::iterator curNode = m_Objects.begin(); curNode != m_Objects.end(); ++curNode)
+	{
+		for(unsigned int i = 0; i < NumIDs; ++i)
+		{
+			if(curNode->UniqueID == IDs[i])
 				NumDups++;
-			}
 		}
 
-		IDs[NumIDs] = Data->UniqueID;
-		NumIDs++;
-
-		TmpNode = TmpNode->GetNextNode();
+		IDs[NumIDs] = curNode->UniqueID;
+		++NumIDs;
 	}
 
 	delete IDs;
@@ -6880,21 +6851,13 @@ BOOL CHeightMap::CheckUniqueIDs(void)
 }
 
 
-void CHeightMap::SetUniqueIDs(void)
+void CHeightMap::SetUniqueIDs()
 {
-	ListNode<C3DObjectInstance> *TmpNode;
-	C3DObjectInstance *Data;
+	unsigned int ID = 0;
 
-	int ID = 0;
-
-	TmpNode = m_Objects;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-
-		Data->UniqueID = ID;
-		ID++;
-
-		TmpNode = TmpNode->GetNextNode();
+	for (std::list<C3DObjectInstance>::iterator curNode = m_Objects.begin(); curNode != m_Objects.end(); ++curNode)
+	{
+		curNode->UniqueID = ID++;
 	}
 }
 
@@ -7324,48 +7287,41 @@ BOOL CHeightMap::WriteDeliveranceTagList(FILE *Stream)
 	Header.aFileType[3] = 'l';
 	Header.version = CURRENT_GAME_VERSION_NUM;
 
-	ListNode<C3DObjectInstance> *TmpNode;
-	C3DObjectInstance *Data;
-
-	TmpNode = m_Objects;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-		if(Data->ScriptName[0]) {
-			NumTags++;
-		}
-
-		TmpNode = TmpNode->GetNextNode();
+	std::list<C3DObjectInstance>::iterator curNode;
+	for (curNode = m_Objects.begin(); curNode != m_Objects.end(); ++curNode)
+	{
+		if (curNode->ScriptName[0])
+			++NumTags;
 	}
 
 	Header.quantity = NumTags + m_NumScrollLimits;
 
-	if( fwrite(&Header,TAGLIST_SAVEHEADER_SIZE,1,Stream) != 1) return FALSE;
+	if (fwrite(&Header, sizeof(Header), 1, Stream) != 1)
+		return FALSE;
 
 // Write out the tags for world objects.
-	TmpNode = m_Objects;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-		if(Data->ScriptName[0]) {
-			strcpy((char*)Tag.TagName,Data->ScriptName);
-			Tag.TagID = Data->UniqueID;
-			fwrite(&Tag,sizeof(Tag),1,Stream);
+	C3DObjectInstance* Data;
+	for (curNode = m_Objects.begin(); curNode != m_Objects.end(); ++curNode)
+	{
+		if(curNode->ScriptName[0])
+		{
+			strcpy((char*)Tag.TagName, curNode->ScriptName);
+			Tag.TagID = curNode->UniqueID;
+			fwrite(&Tag, sizeof(Tag), 1, Stream);
 		}
 
-		TmpNode = TmpNode->GetNextNode();
+		Data = &*curNode;
 	}
 
-	ListNode<CScrollLimits> *TmpNode2;
-	CScrollLimits *Data2;
-
 // Write out the tags for scroll limits.
-	TmpNode2 = m_ScrollLimits;
-	while(TmpNode2!=NULL) {
-		Data2 = TmpNode2->GetData();
-		strcpy((char*)Tag.TagName,Data->ScriptName);
-		Tag.TagID = Data2->UniqueID;
-		fwrite(&Tag,sizeof(Tag),1,Stream);
+	for (ListNode<CScrollLimits>::iterator curNode2 = m_ScrollLimits; curNode2 != ListNode<CScrollLimits>::iterator(); ++curNode2)
+	{
+		// FIXME: possible bug (that we're using Data instead of curNode2 here);
+		// this was already so in the original source release, I'm not sure if it's intented -- Giel
+		strcpy((char*)Tag.TagName, Data->ScriptName);
 
-		TmpNode2 = TmpNode2->GetNextNode();
+		Tag.TagID = curNode2->UniqueID;
+		fwrite(&Tag, sizeof(Tag), 1, Stream);
 	}
 
 	return TRUE;
@@ -7524,24 +7480,17 @@ BOOL CHeightMap::WriteDeliveranceMap(FILE *Stream)
 
 int CHeightMap::CountObjectsOfType(int Type,int Exclude,int Include)
 {
-	ListNode<C3DObjectInstance> *TmpNode;
-	C3DObjectInstance *Data;
-	int Count = 0;
+	unsigned int Count = 0;
 
-	TmpNode = m_Objects;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
+	for (std::list<C3DObjectInstance>::iterator curNode = m_Objects.begin(); curNode != m_Objects.end(); ++curNode)
+	{
+		if (IncludeIt(curNode->Position.x, curNode->Position.z, Exclude, Include))
+		{
+			C3DObject *Object = &m_3DObjects[curNode->ObjectID];
 
-		if(IncludeIt(Data->Position.x,Data->Position.z,Exclude,Include)) {
-
-			C3DObject *Object = &m_3DObjects[Data->ObjectID];
-
-			if(Object->TypeID == Type) {
-				Count++;
-			}
+			if(Object->TypeID == Type)
+				++Count;
 		}
-
-		TmpNode = TmpNode->GetNextNode();
 	}
 
 	return Count;
@@ -7608,9 +7557,6 @@ BOOL CHeightMap::IncludeIt(float x,float z,int Exclude,int Include)
 //
 BOOL CHeightMap::WriteDeliveranceFeatures(FILE *Stream,UDWORD GameType,int Exclude,int Include)
 {
-	ListNode<C3DObjectInstance> *TmpNode;
-	C3DObjectInstance *Data;
-
 	FEATURE_SAVEHEADER Header;
 	SAVE_FEATURE Feature;
 
@@ -7623,37 +7569,36 @@ BOOL CHeightMap::WriteDeliveranceFeatures(FILE *Stream,UDWORD GameType,int Exclu
 
 	fwrite(&Header,FEATURE_HEADER_SIZE,1,Stream);
 
-//	int Index = 0;
-
 	DebugPrint("Exporting features\n");
 	DebugPrint("Exclude %d Include %d\n",Exclude,Include);
 	DebugPrint("Quantity %d\n",Header.quantity);
 
-	TmpNode = m_Objects;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-
-		C3DObject *Object = &m_3DObjects[Data->ObjectID];
+	for (std::list<C3DObjectInstance>::iterator curNode = m_Objects.begin(); curNode != m_Objects.end(); ++curNode)
+	{
+		C3DObject *Object = &m_3DObjects[curNode->ObjectID];
 		_feature_stats *Stats = &m_Features[Object->StructureID];
 
-		if(Object->TypeID == IMD_FEATURE) {
+		if (Object->TypeID == IMD_FEATURE)
+		{
+			if (IncludeIt(curNode->Position.x, curNode->Position.z, Exclude, Include))
+			{
+				Feature.id = curNode->UniqueID;
 
-			if(IncludeIt(Data->Position.x,Data->Position.z,Exclude,Include)) {
+				Feature.x = static_cast<UDWORD>(curNode->Position.x + (m_MapWidth * m_TileWidth / 2));
+				Feature.y = static_cast<UDWORD>(-curNode->Position.z + (m_MapHeight * m_TileHeight / 2));
+				Feature.z = static_cast<UDWORD>(curNode->Position.y);
 
-				Feature.id = Data->UniqueID;
-
-				Feature.x = (UDWORD)(Data->Position.x + (m_MapWidth*m_TileWidth/2));
-				Feature.y = (UDWORD)(-Data->Position.z + (m_MapHeight*m_TileHeight/2));
-				Feature.z = (UDWORD)(Data->Position.y);
-
-				Feature.direction = ((UDWORD)Data->Rotation.y)%360;
+				Feature.direction = static_cast<UDWORD>(curNode->Rotation.y) % 360;
 
 				Feature.inFire = FALSE;
 				Feature.burnDamage = 0;
 
-				if(Object->Description) {
+				if(Object->Description)
+				{
 					strcpy((char*)Feature.name, Object->Description);
-				} else {
+				}
+				else
+				{
 					MessageBox(NULL,"Missing feature description","Error",MB_OK);
 					return FALSE;
 				}
@@ -7661,13 +7606,9 @@ BOOL CHeightMap::WriteDeliveranceFeatures(FILE *Stream,UDWORD GameType,int Exclu
 				DebugPrint("Included Feature : %s %d ( %d %d )\n",
 							Feature.name,Feature.id,Feature.x,Feature.y);
 
-				fwrite(&Feature,sizeof(Feature),1,Stream);
-
-//				Index++;
+				fwrite(&Feature, sizeof(Feature), 1, Stream);
 			}
 		}
-		
-		TmpNode = TmpNode->GetNextNode();
 	}
 
 	return TRUE;
@@ -7676,9 +7617,6 @@ BOOL CHeightMap::WriteDeliveranceFeatures(FILE *Stream,UDWORD GameType,int Exclu
 
 BOOL CHeightMap::WriteDeliveranceStructures(FILE *Stream,UDWORD GameType,int Exclude,int Include)
 {
-	ListNode<C3DObjectInstance> *TmpNode;
-	C3DObjectInstance *Data;
-
 	STRUCT_SAVEHEADER	Header;
 	SAVE_STRUCTURE		SaveStructure;
 
@@ -7695,26 +7633,24 @@ BOOL CHeightMap::WriteDeliveranceStructures(FILE *Stream,UDWORD GameType,int Exc
 	DebugPrint("Exclude %d Include %d\n",Exclude,Include);
 	DebugPrint("Quantity %d\n",Header.quantity);
 
-	TmpNode = m_Objects;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
+	for (std::list<C3DObjectInstance>::iterator curNode = m_Objects.begin(); curNode != m_Objects.end(); ++curNode)
+	{
+		C3DObject *Object = &m_3DObjects[curNode->ObjectID];
 
-		C3DObject *Object = &m_3DObjects[Data->ObjectID];
-
-		if(Object->TypeID == IMD_STRUCTURE) {
-
-			if(IncludeIt(Data->Position.x,Data->Position.z,Exclude,Include)) {
-
+		if (Object->TypeID == IMD_STRUCTURE)
+		{
+			if (IncludeIt(curNode->Position.x, curNode->Position.z, Exclude, Include))
+			{
 				_structure_stats *Struct = &m_Structures[Object->StructureID];
 
-				SaveStructure.id = Data->UniqueID;
+				SaveStructure.id = curNode->UniqueID;
 
-				SaveStructure.x = (UDWORD)(Data->Position.x + (m_MapWidth*m_TileWidth/2));
-				SaveStructure.y = (UDWORD)(-Data->Position.z + (m_MapHeight*m_TileHeight/2));
-				SaveStructure.z = (UDWORD)(Data->Position.y);
+				SaveStructure.x = static_cast<UDWORD>(curNode->Position.x + (m_MapWidth * m_TileWidth / 2));
+				SaveStructure.y = static_cast<UDWORD>(-curNode->Position.z + (m_MapHeight * m_TileHeight / 2));
+				SaveStructure.z = static_cast<UDWORD>(curNode->Position.y);
 
-				SaveStructure.direction = ((UDWORD)Data->Rotation.y)%360;
-				SaveStructure.player = Data->PlayerID;
+				SaveStructure.direction = static_cast<UDWORD>(curNode->Rotation.y) % 360;
+				SaveStructure.player = curNode->PlayerID;
 				SaveStructure.inFire = 0;
 				SaveStructure.burnStart = 0;
 				SaveStructure.burnDamage = 0;
@@ -7749,8 +7685,6 @@ BOOL CHeightMap::WriteDeliveranceStructures(FILE *Stream,UDWORD GameType,int Exc
 				fwrite(&SaveStructure,sizeof(SaveStructure),1,Stream);
 			}
 		}
-
-		TmpNode = TmpNode->GetNextNode();
 	}
 
 	return TRUE;
@@ -7759,9 +7693,6 @@ BOOL CHeightMap::WriteDeliveranceStructures(FILE *Stream,UDWORD GameType,int Exc
 
 BOOL CHeightMap::WriteDeliveranceDroidInit(FILE *Stream,UDWORD GameType,int Exclude,int Include)
 {
-	ListNode<C3DObjectInstance> *TmpNode;
-	C3DObjectInstance *Data;
-
 	DROIDINIT_SAVEHEADER	Header;
 	SAVE_DROIDINIT			Droid;
 
@@ -7778,40 +7709,39 @@ BOOL CHeightMap::WriteDeliveranceDroidInit(FILE *Stream,UDWORD GameType,int Excl
 	DebugPrint("Exclude %d Include %d\n",Exclude,Include);
 	DebugPrint("Quantity %d\n",Header.quantity);
 	
-	TmpNode = m_Objects;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
+	for (std::list<C3DObjectInstance>::iterator curNode = m_Objects.begin(); curNode != m_Objects.end(); ++curNode)
+	{
+		C3DObject *Object = &m_3DObjects[curNode->ObjectID];
 
-		C3DObject *Object = &m_3DObjects[Data->ObjectID];
+		if (Object->TypeID == IMD_DROID)
+		{
+			if (IncludeIt(curNode->Position.x, curNode->Position.z, Exclude, Include))
+			{
+				memset(&Droid, 0, sizeof(Droid));
 
-		if(Object->TypeID == IMD_DROID) {
-
-			if(IncludeIt(Data->Position.x,Data->Position.z,Exclude,Include)) {
-
-				memset(&Droid,0,sizeof(Droid));
-
-				if(Object->Description) {
-					strcpy((char*)Droid.name,Object->Description);
-				} else {
-					strcpy((char*)Droid.name,Object->Name);
+				if (Object->Description)
+				{
+					strcpy((char*)Droid.name, Object->Description);
+				}
+				else
+				{
+					strcpy((char*)Droid.name, Object->Name);
 				}
 
 
-				Droid.id = Data->UniqueID;
-				Droid.player = Data->PlayerID;
-				Droid.x = (UDWORD)(Data->Position.x + (m_MapWidth*m_TileWidth/2));
-				Droid.y = (UDWORD)(-Data->Position.z + (m_MapHeight*m_TileHeight/2));
-				Droid.z = (UDWORD)(Data->Position.y);
-				Droid.direction = ((UDWORD)Data->Rotation.y)%360;
+				Droid.id = curNode->UniqueID;
+				Droid.player = curNode->PlayerID;
+				Droid.x = static_cast<UDWORD>(curNode->Position.x + (m_MapWidth * m_TileWidth / 2));
+				Droid.y = static_cast<UDWORD>(-curNode->Position.z + (m_MapHeight * m_TileHeight / 2));
+				Droid.z = static_cast<UDWORD>(curNode->Position.y);
+				Droid.direction = static_cast<UDWORD>(curNode->Rotation.y) % 360;
 
 				DebugPrint("Included Droid : %s %d %d ( %d %d )\n",
-							Droid.name,Data->UniqueID,Data->PlayerID,Droid.x,Droid.y);
+				           Droid.name, curNode->UniqueID, curNode->PlayerID, Droid.x, Droid.y);
 
-				fwrite(&Droid,sizeof(SAVE_DROIDINIT),1,Stream);
+				fwrite(&Droid, sizeof(Droid), 1, Stream);
 			}
 		}
-
-		TmpNode = TmpNode->GetNextNode();
 	}
 
 	return TRUE;
@@ -7961,7 +7891,7 @@ void CHeightMap::SetTileHeightUndo(int Index,float Height)
 }
 
 
-void CHeightMap::InitialiseScrollLimits(void)
+void CHeightMap::InitialiseScrollLimits()
 {
 	m_NumScrollLimits = 0;
 	m_ScrollLimits = NULL;
@@ -8015,7 +7945,7 @@ void CHeightMap::SetScrollLimit(int Index,int MinX,int MinZ,int MaxX,int MaxZ,ch
 }
 
 
-void CHeightMap::DeleteAllScrollLimits(void)
+void CHeightMap::DeleteAllScrollLimits()
 {
 	if(m_ScrollLimits) {
 		m_ScrollLimits->DeleteList();
@@ -8135,7 +8065,7 @@ BOOL CHeightMap::CheckLimitsWithin(int ExcludeIndex,int IncludeIndex)
 }
 
 
-BOOL CHeightMap::CheckUniqueLimitsScriptNames(void)
+BOOL CHeightMap::CheckUniqueLimitsScriptNames()
 {
 	ListNode<CScrollLimits> *TmpNode;
 	CScrollLimits *Data;
@@ -8278,7 +8208,7 @@ BOOL CHeightMap::WriteDeliveranceLimits(FILE *Stream)
 
 // Initialise gateway data.
 //
-void CHeightMap::InitialiseGateways(void)
+void CHeightMap::InitialiseGateways()
 {
 	m_NumGateways = 0;
 	m_Gateways = NULL;
@@ -8360,7 +8290,7 @@ void CHeightMap::DeleteGateway(int Index)
 
 // Remove and de-allocate all gateways.
 //
-void CHeightMap::DeleteAllGateways(void)
+void CHeightMap::DeleteAllGateways()
 {
 	if(m_Gateways) {
 		m_Gateways->DeleteList();
@@ -8373,7 +8303,7 @@ void CHeightMap::DeleteAllGateways(void)
 
 // De-select all gateways.
 //
-void CHeightMap::DeSelectGateways(void)
+void CHeightMap::DeSelectGateways()
 {
 	ListNode<GateWay> *TmpNode;
 	GateWay *Data;
@@ -8878,11 +8808,8 @@ void CHeightMap::DisplayGateways2D(CDIBDraw *DIBDraw,int ScrollX, int ScrollY,RE
 
 void CHeightMap::CountObjects(int Exclude,int Include)
 {
-	ListNode<C3DObjectInstance> *TmpNode;
-	C3DObjectInstance *Data;
-	C3DObject *Object;
-
-	for(int i=0; i<MAX_PLAYERS; i++) {
+	for(unsigned int i = 0; i < MAX_PLAYERS; ++i)
+	{
 		m_WorldInfo.NumStructures[i] = 0;
 		m_WorldInfo.NumWalls[i] = 0;
 		m_WorldInfo.NumDroids[i] = 0;
@@ -8891,46 +8818,45 @@ void CHeightMap::CountObjects(int Exclude,int Include)
 	m_WorldInfo.NumFeatures = 0;
 	m_WorldInfo.NumObjects = 0;
 
-	TmpNode = m_Objects;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-		if(IncludeIt(Data->Position.x,Data->Position.z,Exclude,Include)) {
+	for (std::list<C3DObjectInstance>::iterator curNode = m_Objects.begin(); curNode != m_Objects.end(); ++curNode)
+	{
+		if(IncludeIt(curNode->Position.x, curNode->Position.z, Exclude, Include))
+		{
+			C3DObject* Object = &m_3DObjects[curNode->ObjectID];
 
-			Object = &m_3DObjects[Data->ObjectID];
-
-			switch(Object->TypeID) {
+			switch(Object->TypeID)
+			{
 				case IMD_STRUCTURE:
-					if( (strcmp(m_Structures[m_3DObjects[Data->ObjectID].StructureID].Type,"WALL") == 0) || 
-						(strcmp(m_Structures[m_3DObjects[Data->ObjectID].StructureID].Type,"CORNER WALL") == 0) ) {
-						m_WorldInfo.NumWalls[Data->PlayerID]++;
-					} else {
-						m_WorldInfo.NumStructures[Data->PlayerID]++;
+					if (strcmp(m_Structures[m_3DObjects[curNode->ObjectID].StructureID].Type,"WALL") == 0
+					 || strcmp(m_Structures[m_3DObjects[curNode->ObjectID].StructureID].Type,"CORNER WALL") == 0)
+					{
+						++m_WorldInfo.NumWalls[curNode->PlayerID];
+					}
+					else
+					{
+						++m_WorldInfo.NumStructures[curNode->PlayerID];
 					}
 					break;
 
 				case IMD_DROID:
-					m_WorldInfo.NumDroids[Data->PlayerID]++;
+					++m_WorldInfo.NumDroids[curNode->PlayerID];
 					break;
 
 				case IMD_FEATURE:
-					m_WorldInfo.NumFeatures++;
+					++m_WorldInfo.NumFeatures;
 					break;
 
 				case IMD_OBJECT:
-					m_WorldInfo.NumObjects++;
+					++m_WorldInfo.NumObjects;
 					break;
 			}
 		}
-
-		TmpNode = TmpNode->GetNextNode();
 	}
 }
 
 
 void CHeightMap::XFlipObjects(int x0,int y0,int x1,int y1)
 {
-	ListNode<C3DObjectInstance> *TmpNode;
-	C3DObjectInstance *Data;
 	float CenX,CenZ;
 
 	x1 ++;
@@ -8965,28 +8891,23 @@ void CHeightMap::XFlipObjects(int x0,int y0,int x1,int y1)
 	y1 -= m_MapHeight*m_TileHeight/2;
 	y1 = -y1;
 
-	TmpNode = m_Objects;
-
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-
-		if( (Data->Position.x >= x0) && (Data->Position.x <= x1) &&
-			(Data->Position.z >= y1) && (Data->Position.z <= y0)) {
-
-			Data->Position.x -= CenX;
-			Data->Position.x = -Data->Position.x;
-			Data->Position.x += CenX;
+	for (std::list<C3DObjectInstance>::iterator curNode = m_Objects.begin(); curNode != m_Objects.end(); ++curNode)
+	{
+		if (curNode->Position.x >= x0
+		 && curNode->Position.x <= x1
+		 && curNode->Position.z >= y1
+		 && curNode->Position.z <= y0)
+		{
+			curNode->Position.x -= CenX;
+			curNode->Position.x = -curNode->Position.x;
+			curNode->Position.x += CenX;
 		}
-
-		TmpNode = TmpNode->GetNextNode();
 	}
 }
 
 
 void CHeightMap::YFlipObjects(int x0,int y0,int x1,int y1)
 {
-	ListNode<C3DObjectInstance> *TmpNode;
-	C3DObjectInstance *Data;
 	float CenX,CenZ;
 
 	x1 ++;
@@ -9021,19 +8942,16 @@ void CHeightMap::YFlipObjects(int x0,int y0,int x1,int y1)
 	y1 -= m_MapHeight*m_TileHeight/2;
 	y1 = -y1;
 
-	TmpNode = m_Objects;
-
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-
-		if( (Data->Position.x >= x0) && (Data->Position.x <= x1) &&
-			(Data->Position.z >= y1) && (Data->Position.z <= y0)) {
-
-			Data->Position.z -= CenZ;
-			Data->Position.z = -Data->Position.z;
-			Data->Position.z += CenZ;
+	for (std::list<C3DObjectInstance>::iterator curNode = m_Objects.begin(); curNode != m_Objects.end(); ++curNode)
+	{
+		if (curNode->Position.x >= x0
+		 && curNode->Position.x <= x1
+		 && curNode->Position.z >= y1
+		 && curNode->Position.z <= y0)
+		{
+			curNode->Position.z -= CenZ;
+			curNode->Position.z = -curNode->Position.z;
+			curNode->Position.z += CenZ;
 		}
-
-		TmpNode = TmpNode->GetNextNode();
 	}
 }
