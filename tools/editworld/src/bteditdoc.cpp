@@ -296,59 +296,57 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CBTEditDoc construction/destruction
 
-CBTEditDoc::CBTEditDoc()
+CBTEditDoc::CBTEditDoc() :
+	m_EnableRefresh(FALSE),
+	m_PathName(NULL),
+	m_FileName(NULL),
+	m_FullPath(NULL),
+	m_RadarMap(NULL),
+	m_RadarMode(RADAR_TEXTURES),
+	m_TileBuffer(NULL),
+	m_ObjectBufferSize(0),
+	m_ObjectBuffer(NULL),
+	m_SnapX(16), m_SnapZ(m_SnapX),
+	m_EnableGravity(TRUE),
+	m_RotSnap(45),
+	m_2DMode(M2D_WORLD),
+	m_TVMode(MTV_TEXTURES),
+	m_DrawMode(DM_TEXTURED),
+	m_ShadeMode(SM_GOURAUD),
+	m_ShowLocators(TRUE),
+	m_ScaleLocators(FALSE),
+	m_ShowSeaLevel(FALSE),
+	m_ShowVerticies(FALSE),
+	m_2DGotFocus(FALSE),
+	m_3DGotFocus(FALSE),
+	m_CameraMode(MCAM_FREE),
+	m_TileMode(FALSE),
+	m_AutoSync(FALSE),
+	m_ViewFeatures(TRUE),
+	m_ShowBoxes(FALSE),
+	m_AutoHeight(TRUE),
+	m_CurrentPlayer(0),
+	m_ButtonLapse(0),
+	m_Captureing(FALSE),
+	m_PasteFlags(PF_PASTEALL),
+	m_PasteWithPlayerID(TRUE),
+	m_BrushProp(NULL /* new CBrushProp(NULL) */),
+	m_CurrentEdgeBrush(0),
+	m_EnableAutoSnap(TRUE)
 {
 	BTEditDoc = this;
+
+	g_UndoRedo = NULL;
 
 	DebugOpen("\\bteditlog.txt");
 //	SetCurrentDirectory("Data");
 
 	TRACE0("CBTEditDoc\n");
-	m_EnableRefresh = FALSE;
-	m_PathName = NULL;
-	m_FileName = NULL;
-	m_FullPath = NULL;
-	m_RadarMap = NULL;
-	m_RadarMode = RADAR_TEXTURES;
 
-	m_TileBuffer = NULL;
-
-	m_ObjectBufferSize = 0;
-	m_ObjectBuffer = NULL;
-
-	m_SnapX = m_SnapZ = 16;
-	m_EnableGravity = TRUE;
-	m_RotSnap = 45;
-	m_2DMode = M2D_WORLD;
-	m_TVMode = MTV_TEXTURES;
-	m_DrawMode = DM_TEXTURED;
-	m_ShadeMode = SM_GOURAUD;
-	m_ShowLocators = TRUE;
-	m_ScaleLocators = FALSE;
-	m_ShowSeaLevel = FALSE;
-	m_ShowVerticies = FALSE;
-	m_2DGotFocus = FALSE;
-	m_3DGotFocus = FALSE;
-	m_CameraMode = MCAM_FREE;
-	m_TileMode = FALSE;
-	m_AutoSync = FALSE;
-	m_ViewFeatures = TRUE;
-	m_ShowBoxes = FALSE;
-	m_AutoHeight = TRUE;
-	m_CurrentPlayer = 0;
-	g_UndoRedo = NULL;
-	m_ButtonLapse = 0;
-	m_Captureing = FALSE;
-	m_PasteFlags = PF_PASTEALL;
-	m_PasteWithPlayerID = TRUE;
-	m_BrushProp = NULL;	//new CBrushProp(NULL);
-
-	for(int i=0; i<MAXEDGEBRUSHES; i++) {
+	for(int i = 0; i < MAXEDGEBRUSHES; ++i)
+	{
 		m_EdgeBrush[i] = NULL;
 	}
-	m_CurrentEdgeBrush = 0;
-
-	m_EnableAutoSnap = TRUE;
 }
 
 CBTEditDoc::~CBTEditDoc()
