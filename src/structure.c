@@ -6061,7 +6061,7 @@ STRUCTURE_STATS* getModuleStat(STRUCTURE *psStruct)
 SDWORD countAssignedDroids(STRUCTURE *psStructure)
 {
 	DROID *psCurr;
-	SDWORD num, weapontype, i, hasindirect;
+	SDWORD num, weapontype, hasindirect;
 
 	if(psStructure == NULL)
 		return 0;
