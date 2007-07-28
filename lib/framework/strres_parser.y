@@ -73,6 +73,15 @@ line:			TEXT_T QTEXT_T
 									YYABORT;
 								}
 							}
+            | TEXT_T '_' '(' QTEXT_T ')'
+							{
+								/* Pass the text string to the string manager */
+								if (!strresStoreString(psCurrRes, $1, gettext($4)))
+								{
+									YYABORT;
+								}
+							}
+
 			;
 
 %%

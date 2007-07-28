@@ -2,7 +2,7 @@
 
 BASELIST = anims audio components effects features \
 	gamedesc.lev images messages misc multiplay novideo.rpl palette.bin script \
-	sequenceaudio stats structs texpages wrf
+	sequenceaudio stats structs texpages wrf locale
 PATCHLIST = addon.lev anims components effects \
 	messages multiplay stats structs wrf
 

@@ -442,7 +442,7 @@ static void makeLocaleFile(char fileName[])  // given string must have MAX_PATH 
 		return;
 	}
 
-	snprintf(localeFile, sizeof(localeFile), "%s/%s", language, fileName);
+	snprintf(localeFile, sizeof(localeFile), "locale/%s/%s", language, fileName);
 
 	if ( PHYSFS_exists(localeFile) )
 	{
@@ -646,7 +646,7 @@ void *resGetData(const char *pType, const char *pID)
 
 	if (psRes == NULL)
 	{
-		ASSERT( psRes != NULL, "resGetData: Unknown ID: %s", pID );
+		ASSERT( psRes != NULL, "resGetData: Unknown ID: %s of type %s", pID, pType );
 		return NULL;
 	}
 
