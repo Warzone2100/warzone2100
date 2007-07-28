@@ -6057,6 +6057,30 @@ STRUCTURE_STATS* getModuleStat(STRUCTURE *psStruct)
 	return psStat;
 }
 
+/* count the artillery droids assigned to a structure (only makes sence by sensor towers and headquarters) */
+SDWORD countAssignedDroids(STRUCTURE *psStructure)
+{
+	DROID *psCurr;
+	SDWORD num, weapontype, i, hasindirect;
+
+	if(psStructure == NULL)
+		return 0;
+
+	for (num = 0, psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
+	{
+		if(psCurr->psTarget[0] && psCurr->player == psStructure->player)
+		{
+			hasindirect = 0;
+			weapontype = asWeaponStats[psCurr->asWeaps[0].nStat].movementModel;
+			if(weapontype == MM_INDIRECT || weapontype == MM_HOMINGINDIRECT)
+				hasindirect = 1;
+			
+			if(psCurr->psTarget[0]->id == psStructure->id && hasindirect)
+				num++;
+		}
+	}
+	return num;
+}
 
 //print some info at the top of the screen dependant on the structure
 void printStructureInfo(STRUCTURE *psStructure)
@@ -6068,6 +6092,28 @@ void printStructureInfo(STRUCTURE *psStructure)
 
 	switch (psStructure->pStructureType->type)
 	{
+	case REF_HQ:
+		#ifdef DEBUG
+		CONPRINTF(ConsoleString,(ConsoleString,"%s - %d Units assigned - Unique ID %d",
+			getStatName(psStructure->pStructureType), countAssignedDroids(psStructure),
+			psStructure->id));
+		#else
+		CONPRINTF(ConsoleString,(ConsoleString,"%s - %d Units assigned",
+			getStatName(psStructure->pStructureType), countAssignedDroids(psStructure)));
+		#endif
+		break;
+	case REF_DEFENSE:
+		if(psStructure->pStructureType->pSensor != NULL) {
+			#ifdef DEBUG
+			CONPRINTF(ConsoleString,(ConsoleString,"%s - %d Units assigned - Unique ID %d",
+				getStatName(psStructure->pStructureType), countAssignedDroids(psStructure),
+				psStructure->id));
+			#else
+			CONPRINTF(ConsoleString,(ConsoleString,"%s - %d Units assigned",
+				getStatName(psStructure->pStructureType), countAssignedDroids(psStructure)));
+			#endif
+		}
+		break;
 	case REF_RESOURCE_EXTRACTOR:
 #ifdef DEBUG
 		CONPRINTF(ConsoleString,(ConsoleString,"%s - Unique ID %d",
