@@ -5796,7 +5796,7 @@ BOOL CHeightMap::ObjectHit2D(DWORD ObjectID,
 
 // Add an instantiation of a 3d object to be displayed in the world.
 //
-DWORD CHeightMap::AddObject(DWORD ObjectID,D3DVECTOR &Rotation,D3DVECTOR &Position,DWORD PlayerID)
+DWORD CHeightMap::AddObject(DWORD ObjectID, const D3DVECTOR& Rotation, const D3DVECTOR& Position, DWORD PlayerID)
 {
 	ListNode<C3DObjectInstance> *TmpNode;
 	C3DObjectInstance *Data;
@@ -5838,8 +5838,8 @@ DWORD CHeightMap::AddObject(DWORD ObjectID,D3DVECTOR &Rotation,D3DVECTOR &Positi
 
 // Add an instantiation of a 3d object to be displayed in the world.
 //
-DWORD CHeightMap::AddObject(DWORD ObjectID,D3DVECTOR &Rotation,D3DVECTOR &Position,DWORD UniqueID,
-							DWORD PlayerID,char *ScriptName)
+DWORD CHeightMap::AddObject(DWORD ObjectID, const D3DVECTOR& Rotation, const D3DVECTOR& Position, DWORD UniqueID,
+							DWORD PlayerID, const char* ScriptName)
 {
 	ListNode<C3DObjectInstance> *TmpNode;
 	C3DObjectInstance *Data;

@@ -876,9 +876,9 @@ class CHeightMap : public CChnkIO
 		char *GetObjectInstanceScriptName(int Index);
 		void SetObjectInstanceScriptName(int Index,char *ScriptName);
 
-		DWORD AddObject(DWORD ObjectID,D3DVECTOR &Rotation,D3DVECTOR &Position,DWORD PlayerID);
-		DWORD AddObject(DWORD ObjectID,D3DVECTOR &Rotation,D3DVECTOR &Position,DWORD UniqueID,
-						DWORD PlayerID,char *ScriptName);
+		DWORD AddObject(DWORD ObjectID, const D3DVECTOR& Rotation, const D3DVECTOR& Position, DWORD PlayerID);
+		DWORD AddObject(DWORD ObjectID, const D3DVECTOR& Rotation, const D3DVECTOR& Position, DWORD UniqueID,
+						DWORD PlayerID, const char *ScriptName);
 		void RemoveObject(DWORD Index);
 		void Select3DObject(DWORD Index);
 		void DeSelect3DObject(DWORD Index);
