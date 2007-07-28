@@ -34,7 +34,7 @@
 //#include "Object3D.h"
 #include "pcxhandler.h"
 #include "textsel.h"
-#include "listtemp.h"
+#include <list>
 #include "brush.h"
 #include "chnkio.h"
 #include "tiletypes.h"
@@ -445,7 +445,7 @@ public:
 	void StichTiles(int x0,int y0,int x1,int y1,BOOL AddUndo);
 	void XFlipTileRect(int Tile0,int Tile1);
 	void YFlipTileRect(int Tile0,int Tile1);
-protected:
+private:
 	void LoadTextures(char *FileName);
 	void DeleteProjectName(void);
 	void CreateDefaultTextureList(void);
@@ -499,7 +499,7 @@ protected:
 	UWORD *m_RadarMap;
 
 	int m_ObjectBufferSize;
-	ListNode<C3DObjectInstance> *m_ObjectBuffer;
+	std::list<C3DObjectInstance> m_ObjectBuffer;
 
 //	CDatabaseTypes *m_DatabaseTypes;
 

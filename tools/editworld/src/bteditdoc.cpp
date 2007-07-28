@@ -1399,10 +1399,7 @@ void CBTEditDoc::OnCloseDocument()
 	if(m_TileBuffer) delete m_TileBuffer;
 	m_TileBuffer = NULL;
 
-	if(m_ObjectBuffer) {
-		m_ObjectBuffer->DeleteList();
-		m_ObjectBuffer = NULL;
-	}
+	m_ObjectBuffer.clear();
 	m_ObjectBufferSize = 0;
 
 	DeleteData();
@@ -3255,10 +3252,7 @@ void CBTEditDoc::YFlipClipboard(void)
 //
 void CBTEditDoc::CopyObjectRect(int Tile0,int Tile1)
 {
-	if(m_ObjectBuffer) {
-		m_ObjectBuffer->DeleteList();
-		m_ObjectBuffer = NULL;
-	}
+	m_ObjectBuffer.clear();
 	m_ObjectBufferSize = 0;
 
 	int y0 = Tile0 / m_MapWidth;
@@ -3300,30 +3294,22 @@ void CBTEditDoc::CopyObjectRect(int Tile0,int Tile1)
 
 // Copy all the objects within the area into the object clipboard.
 	C3DObjectInstance *Instance;
-	for(int i=0; i<m_HeightMap->GetNumObjects(); i++) {
+	for (unsigned int i = 0; i < m_HeightMap->GetNumObjects(); ++i)
+	{
 		Instance = m_HeightMap->GetObjectPointer(i);
-		if( (Instance->Position.x >= tx0) &&
-			(Instance->Position.z >= tz0) &&
-			(Instance->Position.x <= tx1) &&
-			(Instance->Position.z <= tz1) ) {
+		if (Instance->Position.x >= tx0
+		 && Instance->Position.z >= tz0
+		 && Instance->Position.x <= tx1
+		 && Instance->Position.z <= tz1)
+		{
+			C3DObjectInstance Data = *Instance;
 
-			ListNode<C3DObjectInstance> *TmpNode;
-			C3DObjectInstance *Data;
-			if(m_ObjectBuffer == NULL) {
-				m_ObjectBuffer = new ListNode<C3DObjectInstance>;
-				Data = m_ObjectBuffer->GetData();
-			} else {
-				TmpNode = new ListNode<C3DObjectInstance>;
-				TmpNode->AppendNode(m_ObjectBuffer);
-				Data = TmpNode->GetData();
-			}
+			Data.Selected = FALSE;
+			Data.Position.x -= tx0;
+			Data.Position.z -= tz1;
 
-			*Data = *Instance;
-			Data->Selected = FALSE;
-			Data->Position.x -= tx0;
-			Data->Position.z -= tz1;
-
-			m_ObjectBufferSize++;
+			m_ObjectBuffer.push_back(Data);
+			++m_ObjectBufferSize;
 		}
 	}
 }
@@ -3331,11 +3317,11 @@ void CBTEditDoc::CopyObjectRect(int Tile0,int Tile1)
 
 BOOL CBTEditDoc::WriteClipboard(char *FileName)
 {
-	if(m_TileBuffer) {
-		FILE *Stream;
-
-		Stream = fopen(FileName,"wb");
-		if(Stream == NULL) return FALSE;
+	if(m_TileBuffer)
+	{
+		FILE* Stream = fopen(FileName,"wb");
+		if(Stream == NULL)
+			return FALSE;
 
 		ClipboardHeader Header;
 		Header.Type[0] = 'c';
@@ -3346,7 +3332,7 @@ BOOL CBTEditDoc::WriteClipboard(char *FileName)
 		Header.Height = m_TileBufferHeight;
 		Header.NumObjects = m_ObjectBufferSize;
 
-		fwrite((void*)&Header,sizeof(ClipboardHeader),1,Stream);
+		fwrite(reinterpret_cast<const char*>(&Header), sizeof(ClipboardHeader), 1, Stream);
 
 		CTile *SrcTile = m_TileBuffer;
 
@@ -3357,22 +3343,15 @@ BOOL CBTEditDoc::WriteClipboard(char *FileName)
 			}
 		}
 
-		if(m_ObjectBuffer) {
-			ListNode<C3DObjectInstance> *TmpNode;
-			C3DObjectInstance *Data;
-			TmpNode = m_ObjectBuffer;
-
-			while(TmpNode!=NULL) {
-				Data = TmpNode->GetData();
-
-				fwrite((void*)Data,sizeof(C3DObjectInstance),1,Stream);
-
-				TmpNode = TmpNode->GetNextNode();
-			}
+		for (std::list<C3DObjectInstance>::const_iterator curNode = m_ObjectBuffer.begin(); curNode != m_ObjectBuffer.end(); ++curNode)
+		{
+			fwrite(reinterpret_cast<const char*>(&*curNode), sizeof(*curNode), 1, Stream);
 		}
 
 		fclose(Stream);
-	} else {
+	}
+	else
+	{
 		MessageBox(NULL,"The clipboard is empty","Nothing to save",MB_OK);
 	}
 
@@ -3382,10 +3361,9 @@ BOOL CBTEditDoc::WriteClipboard(char *FileName)
 
 BOOL CBTEditDoc::ReadClipboard(char *FileName)
 {
-	FILE *Stream;
-
-	Stream = fopen(FileName,"rb");
-	if(Stream == NULL) return FALSE;
+	FILE* Stream = fopen(FileName,"rb");
+	if(Stream == NULL)
+		return FALSE;
 
 	ClipboardHeader Header;
 
@@ -3400,13 +3378,10 @@ BOOL CBTEditDoc::ReadClipboard(char *FileName)
 		return FALSE;
 	}
 
-	if(m_TileBuffer) delete m_TileBuffer;
+	delete m_TileBuffer;
 	m_TileBuffer = NULL;
 
-	if(m_ObjectBuffer) {
-		m_ObjectBuffer->DeleteList();
-		m_ObjectBuffer = NULL;
-	}
+	m_ObjectBuffer.clear();
 	m_ObjectBufferSize = 0;
 
 	m_TileBufferWidth = Header.Width;
@@ -3416,26 +3391,20 @@ BOOL CBTEditDoc::ReadClipboard(char *FileName)
 	m_TileBuffer = new CTile[m_TileBufferWidth*m_TileBufferHeight];
 	CTile *DstTile = m_TileBuffer;
 
-	for(int y=0; y<m_TileBufferHeight; y++) {
-		for(int x=0; x<m_TileBufferWidth; x++) {
-			fread((void*)DstTile,sizeof(CTile),1,Stream);
-			DstTile++;
+	for (int y = 0; y < m_TileBufferHeight; ++y)
+	{
+		for (int x = 0; x < m_TileBufferWidth; ++x)
+		{
+			fread(reinterpret_cast<char*>(DstTile), sizeof(*DstTile), 1, Stream);
+			++DstTile;
 		}
 	}
 
-	for(int i=0; i<m_ObjectBufferSize; i++) {
-		ListNode<C3DObjectInstance> *TmpNode;
-		C3DObjectInstance *Data;
-		if(m_ObjectBuffer == NULL) {
-			m_ObjectBuffer = new ListNode<C3DObjectInstance>;
-			Data = m_ObjectBuffer->GetData();
-		} else {
-			TmpNode = new ListNode<C3DObjectInstance>;
-			TmpNode->AppendNode(m_ObjectBuffer);
-			Data = TmpNode->GetData();
-		}
-
-		fread(Data,sizeof(C3DObjectInstance),1,Stream);
+	for (unsigned int i = 0; i < m_ObjectBufferSize; ++i)
+	{
+		C3DObjectInstance Data;
+		fread(&Data, sizeof(Data), 1, Stream);
+		m_ObjectBuffer.push_back(Data);
 	}
 
 	return TRUE;
@@ -3448,45 +3417,43 @@ BOOL CBTEditDoc::ReadClipboard(char *FileName)
 //
 void CBTEditDoc::PasteObjectRect(int Dest)
 {
-	if(m_ObjectBuffer) {
-		int y0 = Dest / m_MapWidth;
-		int x0 = Dest % m_MapWidth;
+	if (m_ObjectBuffer.empty())
+		return;
+
+	int y0 = Dest / m_MapWidth;
+	int x0 = Dest % m_MapWidth;
 
 // Convert the tile coordinates to world coordinates.
-		x0 *= m_TileWidth;
-		x0 -= m_MapWidth*m_TileWidth/2;
-		y0 *= m_TileHeight;
-		y0 -= m_MapHeight*m_TileHeight/2;
+	x0 *= m_TileWidth;
+	x0 -= m_MapWidth*m_TileWidth/2;
+	y0 *= m_TileHeight;
+	y0 -= m_MapHeight*m_TileHeight/2;
 
-		float tx0 = (float)x0;
-		float tz0 = -(float)y0;
+	float tx0 = (float)x0;
+	float tz0 = -(float)y0;
 
 // Add all the objects in the object clipboard to the world.
-		ListNode<C3DObjectInstance> *TmpNode;
-		C3DObjectInstance *Data;
-		TmpNode = m_ObjectBuffer;
+	for (std::list<C3DObjectInstance>::const_iterator curNode = m_ObjectBuffer.begin(); curNode != m_ObjectBuffer.end(); ++curNode)
+	{
+		D3DVECTOR Position = curNode->Position;
+		Position.x += tx0;
+		Position.z += tz0;
+		Position.y = m_HeightMap->GetHeight(Position.x,-Position.z);
 
-		while(TmpNode!=NULL) {
-			Data = TmpNode->GetData();
-			D3DVECTOR Position = Data->Position;
-			Position.x += tx0;
-			Position.z += tz0;
-			Position.y = m_HeightMap->GetHeight(Position.x,-Position.z);
-
-			int ObjID;
-			if(m_PasteWithPlayerID) {
-				// Paste object using current player id.
-				ObjID = m_HeightMap->AddObject(Data->ObjectID,Data->Rotation,Position,m_CurrentPlayer);
-			} else {
-				// Paste object using source player id.
-				ObjID = m_HeightMap->AddObject(Data->ObjectID,Data->Rotation,Position,Data->PlayerID);
-			}
-			m_HeightMap->SnapObject(ObjID);
-			m_HeightMap->SetObjectTileFlags(ObjID,TF_HIDE);
-			m_HeightMap->SetObjectTileHeights(ObjID);
-
-			TmpNode = TmpNode->GetNextNode();
+		int ObjID;
+		if(m_PasteWithPlayerID)
+		{
+			// Paste object using current player id.
+			ObjID = m_HeightMap->AddObject(curNode->ObjectID, curNode->Rotation, Position, m_CurrentPlayer);
 		}
+		else
+		{
+			// Paste object using source player id.
+			ObjID = m_HeightMap->AddObject(curNode->ObjectID, curNode->Rotation, Position, curNode->PlayerID);
+		}
+		m_HeightMap->SnapObject(ObjID);
+		m_HeightMap->SetObjectTileFlags(ObjID,TF_HIDE);
+		m_HeightMap->SetObjectTileHeights(ObjID);
 	}
 }
 
