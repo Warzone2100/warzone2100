@@ -405,6 +405,10 @@
 					RelativePath="..\lib\netplay\netplay.c"
 					>
 				</File>
+				<File
+					RelativePath="..\lib\netplay\nettypes.c"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="script"
@@ -1522,6 +1526,10 @@
 			</File>
 			<File
 				RelativePath="..\lib\netplay\netplay.h"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\netplay\nettypes.h"
 				>
 			</File>
 			<File

@@ -3,7 +3,8 @@ include $(MAKERULES)/configure.mk
 
 SRC=	netjoin_stub.c \
 	netlog.c \
-	netplay.c
+	netplay.c \
+	nettypes.c
 
 LIB=netplay
 

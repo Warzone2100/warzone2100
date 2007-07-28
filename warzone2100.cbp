@@ -254,6 +254,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="lib/netplay/netplay.h" />
+		<Unit filename="lib/netplay/nettypes.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib/netplay/nettypes.h" />
 		<Unit filename="lib/script/chat_lexer.l">
 			<Option compilerVar="CC" />
 			<Option compile="1" />
