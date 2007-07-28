@@ -175,53 +175,49 @@ float CosLook[SPHEREDIVS];
 
 
 CHeightMap::CHeightMap(CDirectDraw *DirectDrawView,CGeometry *DirectMaths,CMatManager *MatManager,
-					   SLONG MapWidth,SLONG MapHeight,SLONG TileWidth,SLONG TileHeight,SLONG TextureSize)
+					   SLONG MapWidth,SLONG MapHeight,SLONG TileWidth,SLONG TileHeight,SLONG TextureSize) :
+	m_MapTiles(NULL),
+	m_MapSectors(NULL),
+	m_DDView(DirectDrawView),
+	m_DirectMaths(DirectMaths),
+	m_MatManager(MatManager),
+	m_MapWidth(MapWidth),
+	m_MapHeight(MapHeight),
+	m_TileWidth(TileWidth),
+	m_TileHeight(TileHeight),
+	m_NumSourceTextures(0),
+	m_NumTextures(0),
+	m_TextureList(NULL),
+	m_HeightScale(1),
+//	m_SectorsPerRow(64),
+//	m_SectorsPerColumn(64),
+	m_SeaLevel(0),
+	m_DrawRadius(SECTORDRAWRADIUS),
+	m_TextureWidth(TextureSize),
+	m_TextureHeight(TextureSize),
+	m_Gouraud(TRUE),
+	m_NewObjectID(0),
+	m_FeatureSet(NULL),
+	m_Num3DObjects(0),
+	m_Objects(NULL),
+	m_TotalInstances(0),
+	m_Structures(NULL),
+	m_Features(NULL),
+	m_Templates(NULL),
+	m_NoObjectSnap(FALSE),
+	m_Flatten(FALSE),
+	m_IgnoreDroids(FALSE),
+	m_TerrainMorph(FALSE),
+	m_UseRealNames(TRUE),
+	m_RenderPlayerID(0)
 {
 	g_Font = CreateFont(10,0,0,0,FW_NORMAL,0,0,0,
 				DEFAULT_CHARSET,OUT_CHARACTER_PRECIS,CLIP_CHARACTER_PRECIS,
 				DEFAULT_QUALITY,DEFAULT_PITCH | FF_DONTCARE,"MS Sans Serif");
 
-
-	m_MapTiles = NULL;
-	m_MapSectors = NULL;
-	m_DDView = DirectDrawView;
-	m_DirectMaths = DirectMaths;
-	m_MatManager = MatManager;
-	m_MapWidth = MapWidth;
-	m_MapHeight = MapHeight;
-	m_TileWidth = TileWidth;
-	m_TileHeight = TileHeight;
-	m_NumSourceTextures = 0;
-	m_NumTextures = 0;
-	m_TextureList = NULL;
-	m_HeightScale = 1;
-//	m_SectorsPerRow = 64;
-//	m_SectorsPerColumn = 64;
 	m_Texture[0].TextureID = m_MatManager->GetMaterialID("Default");
-	m_SeaLevel = 0;
-	m_DrawRadius = SECTORDRAWRADIUS;
-	m_TextureWidth = TextureSize;
-	m_TextureHeight = TextureSize;
-	m_Gouraud = TRUE;
-	m_NewObjectID = 0;
 
-	m_FeatureSet = NULL;
-	m_Num3DObjects = 0;
-	m_Objects = NULL;
-	m_TotalInstances = 0;
-
-	m_Structures = NULL;
-	m_Features = NULL;
-	m_Templates = NULL;
-
-	m_NoObjectSnap = FALSE;
-	m_Flatten = FALSE;
-	m_IgnoreDroids = FALSE;
-	m_TerrainMorph = FALSE;
 	g_OverlayZoneIDs = FALSE;
-	m_UseRealNames = TRUE;
-
-	m_RenderPlayerID = 0;
 
 	SetMapSize(MapWidth,MapHeight);
 	SetTileSize(TileWidth,TileHeight);

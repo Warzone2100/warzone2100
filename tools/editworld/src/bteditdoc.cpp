@@ -2786,38 +2786,38 @@ void CBTEditDoc::DrawRadarMap2D(CDIBDraw *DIBDraw,DWORD XPos,DWORD YPos)
 			}
 		}
 
-		if(m_EditTool == ET_GATEWAY) {
-			ListNode<GateWay> *TmpNode;
-			GateWay *Data;
-
-			HDC	dc=(HDC)DIBDraw->GetDIBDC();
+		if(m_EditTool == ET_GATEWAY)
+		{
+			HDC	dc = (HDC)DIBDraw->GetDIBDC();
 			HPEN NormalPen = CreatePen(PS_SOLID,1,RGB(255,255,0));
 			HPEN OldPen = (HPEN)SelectObject(dc,NormalPen);
 
-			TmpNode = m_HeightMap->GetGateWays();
-			while(TmpNode!=NULL) {
-				Data = TmpNode->GetData();
-				int x0 = (((int)Data->x0) + OVERSCAN)*m_RadarScale;
-				int y0 = (((int)Data->y0) + OVERSCAN)*m_RadarScale;
-				int x1 = (((int)Data->x1) + OVERSCAN)*m_RadarScale;
-				int y1 = (((int)Data->y1) + OVERSCAN)*m_RadarScale;
+			for (ListNode<GateWay>::iterator curNode = m_HeightMap->GetGateWays(); curNode != ListNode<GateWay>::iterator(); ++curNode)
+			{
+				int x0 = (static_cast<int>(curNode->x0) + OVERSCAN) * m_RadarScale;
+				int y0 = (static_cast<int>(curNode->y0) + OVERSCAN) * m_RadarScale;
+				int x1 = (static_cast<int>(curNode->x1) + OVERSCAN) * m_RadarScale;
+				int y1 = (static_cast<int>(curNode->y1) + OVERSCAN) * m_RadarScale;
 
-				if(x0 == x1) {
-					for(; y0 < y1+1; y0++) {
-						MoveToEx(dc,x0,y0,NULL);
-						LineTo(dc,x0+1,y0);
-					}
-				} else {
-					for(; x0 < x1+1; x0++) {
-						MoveToEx(dc,x0,y0,NULL);
-						LineTo(dc,x0+1,y0);
+				if(x0 == x1)
+				{
+					for(; y0 < y1+1; y0++)
+					{
+						MoveToEx(dc, x0, y0, NULL);
+						LineTo(dc, x0 + 1, y0);
 					}
 				}
-
-				TmpNode = TmpNode->GetNextNode();
+				else
+				{
+					for (; x0 < x1+1; x0++)
+					{
+						MoveToEx(dc, x0, y0, NULL);
+						LineTo(dc, x0 + 1, y0);
+					}
+				}
 			}
 
-			SelectObject(dc,OldPen);
+			SelectObject(dc, OldPen);
 			DeleteObject(NormalPen);
 		}
 
