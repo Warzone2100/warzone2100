@@ -25,6 +25,8 @@
 #ifndef __INCLUDED_LISTTEMP__
 #define __INCLUDED_LISTTEMP__
 
+#include <cassert>
+
 template<class T>
 class ListNode
 {
