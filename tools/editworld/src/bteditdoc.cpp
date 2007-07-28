@@ -391,7 +391,6 @@ BOOL CBTEditDoc::OnNewDocument()
 	CenterCamera();
 
 //	m_UnitIDs = NULL;
-//	m_ObjectDatabase = NULL;
 //	m_DatabaseTypes = NULL;
 //	m_Deployments = NULL;
 

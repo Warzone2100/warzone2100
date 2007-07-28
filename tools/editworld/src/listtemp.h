@@ -201,11 +201,13 @@ class ListNode
 
 				T& operator*() const
 				{
+					assert(_nodePtr != NULL && _nodePtr->GetData() != NULL);
 					return *_nodePtr->GetData();
 				}
 
 				T* operator->() const
 				{
+					assert(_nodePtr != NULL && _nodePtr->GetData() != NULL);
 					return _nodePtr->GetData();
 				}
 

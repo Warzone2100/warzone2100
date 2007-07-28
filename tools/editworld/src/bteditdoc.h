@@ -369,8 +369,6 @@ public:
 	BOOL GetAutoSync(void) { return m_AutoSync; }
 	BOOL GetViewFeatures(void) { return m_ViewFeatures; }
 
-//	ListNode<CObjectDB>* GetObjectDatabase(void) { return m_ObjectDatabase; }
-//	void SetObjectDatabase(ListNode<CObjectDB>* ObjectDatabase);
 //	CObjectDB* GetSelectedObject(void);
 //	BOOL ObjectAlreadyLoaded(char *Name);
 	CGeometry* GetDirectMaths(void) { return m_DirectMaths; }
@@ -503,7 +501,6 @@ protected:
 	int m_ObjectBufferSize;
 	ListNode<C3DObjectInstance> *m_ObjectBuffer;
 
-//	ListNode<CObjectDB> *m_ObjectDatabase;
 //	CDatabaseTypes *m_DatabaseTypes;
 
 	BOOL m_EnableGravity;
