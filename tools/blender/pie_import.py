@@ -9,7 +9,7 @@ Tooltip: 'Load a Warzone model file'
 
 __author__ = "Rodolphe Suescun, Gerard Krol, Kevin Gillette"
 __url__ = ["blender"]
-__version__ = "1.1"
+__version__ = "1.1a"
 
 __bpydoc__ = """\
 This script imports PIE files to Blender.
@@ -483,37 +483,37 @@ def model_process():
 					v = min(i[pos + 1:end + 1:2])
 					finalU = u
 					if maximum < 1:
-						debug("maximum number of teamcolors/animation frames must be at least 1", "error")
-						if maximum is 1:
-							debug("maximum number of teamcolors/animation frames should be greater than 1", "warning")
-						else:
-							finalU += width
-						finalV = v
-						while finalU >= divisorX:
-							finalU -= divisorX
-							finalV += height
-						# team colors
-						if data['pie-version'] >= 5:
-							uv = [Mathutils.Vector(finalU - u + i[p], finalV - v + i[p + 1]) for p in range(pos, pos + 2 * nbPoints, 2)]
-						else:
-							uv = [Mathutils.Vector((finalU - u + i[p]) / divisorX, 1 - (finalV - v + i[p + 1]) / divisorY) for p in range(pos, pos + 2 * nbPoints, 2)]
-						debug("second teamcolor UVs: " + repr(uv))
-						mesh.activeUVLayer = 'second_teamcolor'
-						f.image = data['image']
-						f.uv = uv
-						finalU += width * (maximum - 2)
-						while finalU >= divisorX:
-							finalU -= divisorX
-							finalV += height
-						# team colors
-						if data['pie-version'] >= 5:
-							uv = [Mathutils.Vector(finalU - u + i[p], finalV - v + i[p + 1]) for p in range(pos, pos + 2 * nbPoints, 2)]
-						else:
-							uv = [Mathutils.Vector((finalU - u + i[p]) / divisorX, 1 - (finalV - v + i[p + 1]) / divisorY) for p in range(pos, pos + 2 * nbPoints, 2)]
-						debug("last teamcolor UVs: " + repr(uv))
-						mesh.activeUVLayer = 'last_teamcolor'
-						f.image = data['image']
-						f.uv = uv
+						debug("maximum number of teamcolors/animation frames must be at least 1", "error")			
+					if maximum is 1:
+						debug("maximum number of teamcolors/animation frames should be greater than 1", "warning")
+					else:
+						finalU += width
+					finalV = v
+					while finalU >= divisorX:
+						finalU -= divisorX
+						finalV += height
+					# team colors
+					if data['pie-version'] >= 5:
+						uv = [Mathutils.Vector(finalU - u + i[p], finalV - v + i[p + 1]) for p in range(pos, pos + 2 * nbPoints, 2)]
+					else:
+						uv = [Mathutils.Vector((finalU - u + i[p]) / divisorX, 1 - (finalV - v + i[p + 1]) / divisorY) for p in range(pos, pos + 2 * nbPoints, 2)]
+					debug("second teamcolor UVs: " + repr(uv))
+					mesh.activeUVLayer = 'second_teamcolor'
+					f.image = data['image']
+					f.uv = uv
+					finalU += width * (maximum - 2)
+					while finalU >= divisorX:
+						finalU -= divisorX
+						finalV += height
+					# team colors
+					if data['pie-version'] >= 5:
+						uv = [Mathutils.Vector(finalU - u + i[p], finalV - v + i[p + 1]) for p in range(pos, pos + 2 * nbPoints, 2)]
+					else:
+						uv = [Mathutils.Vector((finalU - u + i[p]) / divisorX, 1 - (finalV - v + i[p + 1]) / divisorY) for p in range(pos, pos + 2 * nbPoints, 2)]
+					debug("last teamcolor UVs: " + repr(uv))
+					mesh.activeUVLayer = 'last_teamcolor'
+					f.image = data['image']
+					f.uv = uv
 				mesh.activeUVLayer = 'base'
 				f.image = data['image']
 				if data['pie-version'] >= 5:
