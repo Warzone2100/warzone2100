@@ -499,6 +499,8 @@
 		02581C880BD5AD1100957CBC /* Zlib.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02356D830BD3BB4100E9A019 /* Zlib.framework */; };
 		02C8AEF80BE68A5600E9D8A7 /* png_util.c in Sources */ = {isa = PBXBuildFile; fileRef = 02C8AEF60BE68A5600E9D8A7 /* png_util.c */; };
 		02C8AEFC0BE68A6800E9D8A7 /* oggvorbis.c in Sources */ = {isa = PBXBuildFile; fileRef = 02C8AEFA0BE68A6800E9D8A7 /* oggvorbis.c */; };
+		02CBED8C0C5B8BEB00316CE2 /* nettypes.c in Sources */ = {isa = PBXBuildFile; fileRef = 02CBED8A0C5B8BEB00316CE2 /* nettypes.c */; };
+		02CBED8D0C5B8BEB00316CE2 /* nettypes.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02CBED8B0C5B8BEB00316CE2 /* nettypes.h */; };
 		02DDA81C0BD3C1420049AB60 /* analysis.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA7F50BD3C1420049AB60 /* analysis.c */; };
 		02DDA81D0BD3C1420049AB60 /* backends.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DDA7F60BD3C1420049AB60 /* backends.h */; };
 		02DDA81E0BD3C1420049AB60 /* bitrate.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA7F70BD3C1420049AB60 /* bitrate.c */; };
@@ -720,6 +722,7 @@
 				02581C870BD5AD1100957CBC /* Vorbis.framework in Copy frameworks */,
 				02581C880BD5AD1100957CBC /* Zlib.framework in Copy frameworks */,
 				02F1E2810C42007C007CE4B6 /* dec130.h in Copy frameworks */,
+				02CBED8D0C5B8BEB00316CE2 /* nettypes.h in Copy frameworks */,
 			);
 			name = "Copy frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1415,6 +1418,8 @@
 		02C8AEF70BE68A5600E9D8A7 /* png_util.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = png_util.h; path = ../lib/ivis_common/png_util.h; sourceTree = SOURCE_ROOT; };
 		02C8AEFA0BE68A6800E9D8A7 /* oggvorbis.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = oggvorbis.c; path = ../lib/sound/oggvorbis.c; sourceTree = SOURCE_ROOT; };
 		02C8AEFB0BE68A6800E9D8A7 /* oggvorbis.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = oggvorbis.h; path = ../lib/sound/oggvorbis.h; sourceTree = SOURCE_ROOT; };
+		02CBED8A0C5B8BEB00316CE2 /* nettypes.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = nettypes.c; path = ../lib/netplay/nettypes.c; sourceTree = SOURCE_ROOT; };
+		02CBED8B0C5B8BEB00316CE2 /* nettypes.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = nettypes.h; path = ../lib/netplay/nettypes.h; sourceTree = SOURCE_ROOT; };
 		02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Vorbis.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		02DDA7EF0BD3C03F0049AB60 /* Vorbis-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "Vorbis-Info.plist"; path = "Resources/Vorbis-Info.plist"; sourceTree = "<group>"; };
 		02DDA7F50BD3C1420049AB60 /* analysis.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = analysis.c; path = external/libvorbis/lib/analysis.c; sourceTree = "<group>"; };
@@ -1844,6 +1849,8 @@
 		0246A12B0BD3CC47004D1C70 /* Netplay */ = {
 			isa = PBXGroup;
 			children = (
+				02CBED8A0C5B8BEB00316CE2 /* nettypes.c */,
+				02CBED8B0C5B8BEB00316CE2 /* nettypes.h */,
 				0246A12E0BD3CC58004D1C70 /* netjoin_stub.c */,
 				0246A12F0BD3CC58004D1C70 /* netlog.c */,
 				0246A1300BD3CC58004D1C70 /* netlog.h */,
@@ -3458,6 +3465,7 @@
 				0246A2FD0BD3CCDC004D1C70 /* wrappers.c in Sources */,
 				02C8AEF80BE68A5600E9D8A7 /* png_util.c in Sources */,
 				02C8AEFC0BE68A6800E9D8A7 /* oggvorbis.c in Sources */,
+				02CBED8C0C5B8BEB00316CE2 /* nettypes.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
