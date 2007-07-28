@@ -256,7 +256,7 @@ static UDWORD	underwaterTile = WATER_TILE;
 static UDWORD	rubbleTile = 67;//WATER_TILE;
 
 UDWORD geoOffset;
-static	UDWORD	averageCentreTerrainHeight;
+static int averageCentreTerrainHeight;
 static	BOOL	bReloadBars = TRUE;
 static	BOOL	bEnergyBars = TRUE;
 static	BOOL	bTinyBars	= FALSE;
@@ -764,7 +764,7 @@ static void drawTiles(iView *camera, iView *player)
 					}
 
 					// Transform it into the wx,wy mesh members.
-					tileScreenInfo[i][j].water.z = pie_RotateProject((Vector3i*)&tileScreenInfo[i][j].x, (Vector2i*)&tileScreenInfo[i][j].water);
+					tileScreenInfo[i][j].water.z = pie_RotateProject((Vector3i*)&tileScreenInfo[i][j], (Vector2i*)&tileScreenInfo[i][j].water);
 					tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].y;
 
 					// Calc the light for modified y coord and ignore the specular component
@@ -780,7 +780,7 @@ static void drawTiles(iView *camera, iView *player)
 					tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].y;
 				}
 			}
-			tileScreenInfo[i][j].screen.z = pie_RotateProject((Vector3i*)&tileScreenInfo[i][j].x, (Vector2i*)&tileScreenInfo[i][j].screen);
+			tileScreenInfo[i][j].screen.z = pie_RotateProject((Vector3i*)&tileScreenInfo[i][j], (Vector2i*)&tileScreenInfo[i][j].screen);
 		}
 	}
 
