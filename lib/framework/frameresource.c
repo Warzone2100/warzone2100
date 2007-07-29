@@ -570,68 +570,23 @@ BOOL resLoadFile(const char *pType, const char *pFile)
 /* Return the resource for a type and hashedname */
 void *resGetDataFromHash(const char *pType, UDWORD HashedID)
 {
-	RES_TYPE	*psT;
-	RES_DATA	*psRes;
-	UDWORD HashedType;
-
+	RES_TYPE	*psT = NULL;
+	RES_DATA	*psRes = NULL;
 	// Find the correct type
-	HashedType=HashString(pType);	// la da la
+	UDWORD HashedType = HashString(pType);
 
 	for(psT = psResTypes; psT != NULL; psT = psT->psNext )
 	{
 		if (psT->HashedType==HashedType)
-		{
-			break;
-		}
-	}
-
-	if (psT == NULL)
-	{
-		ASSERT( FALSE, "resGetData: Unknown type: %s", pType );
-		return NULL;
-	}
-
-	for(psRes = psT->psRes; psRes; psRes = psRes->psNext)
-	{
-		if (psRes->HashedID == HashedID)
 		{
 			/* We found it */
 			break;
 		}
 	}
 
-	if (psRes == NULL)
-	{
-		ASSERT( psRes != NULL, "resGetDataFromHash: Unknown ID:" );
-		return NULL;
-	}
-
-	psRes->usage += 1;
-
-	return psRes->pData;
-}
-
-
-/* Return the resource for a type and ID */
-void *resGetData(const char *pType, const char *pID)
-{
-	RES_TYPE	*psT;
-	RES_DATA	*psRes;
-	// Find the correct type
-	UDWORD HashedType = HashString(pType);
-	UDWORD HashedID = HashStringIgnoreCase(pID);
-
-	for(psT = psResTypes; psT != NULL; psT = psT->psNext )
-	{
-		if (psT->HashedType == HashedType)
-		{
-			break;
-		}
-	}
-
+	ASSERT( psT != NULL, "resGetDataFromHash: Unknown type: %s", pType );
 	if (psT == NULL)
 	{
-		ASSERT( FALSE, "resGetData: Unknown type: %s", pType );
 		return NULL;
 	}
 
@@ -644,15 +599,22 @@ void *resGetData(const char *pType, const char *pID)
 		}
 	}
 
+	ASSERT( psRes != NULL, "resGetDataFromHash: Unknown ID: %0x Type: %s", HashedID, pType );
 	if (psRes == NULL)
 	{
-		ASSERT( psRes != NULL, "resGetData: Unknown ID: %s of type %s", pID, pType );
 		return NULL;
 	}
 
 	psRes->usage += 1;
 
 	return psRes->pData;
+}
+
+
+/* Return the resource for a type and ID */
+void *resGetData(const char *pType, const char *pID)
+{
+	return resGetDataFromHash(pType, HashStringIgnoreCase(pID));
 }
 
 
