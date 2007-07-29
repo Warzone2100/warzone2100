@@ -614,7 +614,9 @@ void *resGetDataFromHash(const char *pType, UDWORD HashedID)
 /* Return the resource for a type and ID */
 void *resGetData(const char *pType, const char *pID)
 {
-	return resGetDataFromHash(pType, HashStringIgnoreCase(pID));
+	void * data = resGetDataFromHash(pType, HashStringIgnoreCase(pID));
+	ASSERT(data != NULL, "resGetData: Unable to find data for %s type %s", pID, pType);
+	return data;
 }
 
 
