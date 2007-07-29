@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-07-28 14:38+0200\n"
+"POT-Creation-Date: 2007-07-29 23:26+0200\n"
 "PO-Revision-Date: 2007-06-05 14:46+0200\n"
 "Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -16,35 +16,35 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/multiplay.c:1894
+#: src/multiplay.c:1941
 msgid "Green"
 msgstr "Groen"
 
-#: src/multiplay.c:1895
+#: src/multiplay.c:1942
 msgid "Orange"
 msgstr "Oranje"
 
-#: src/multiplay.c:1896
+#: src/multiplay.c:1943
 msgid "Grey"
 msgstr "Grijs"
 
-#: src/multiplay.c:1897
+#: src/multiplay.c:1944
 msgid "Black"
 msgstr "Zwart"
 
-#: src/multiplay.c:1898
+#: src/multiplay.c:1945
 msgid "Red"
 msgstr "Rood"
 
-#: src/multiplay.c:1899
+#: src/multiplay.c:1946
 msgid "Blue"
 msgstr "Blauw"
 
-#: src/multiplay.c:1900
+#: src/multiplay.c:1947
 msgid "Pink"
 msgstr "Roze"
 
-#: src/multiplay.c:1901
+#: src/multiplay.c:1948
 msgid "Cyan"
 msgstr "Cyaan"
 
@@ -71,47 +71,47 @@ msgstr ""
 msgid "Player"
 msgstr "Spelers"
 
-#: src/multigifts.c:172
+#: src/multigifts.c:181
 #, c-format
 msgid "%s Gives You A Visibility Report"
 msgstr ""
 
-#: src/multigifts.c:199
+#: src/multigifts.c:212
 #, c-format
 msgid "%s Gives You Units"
 msgstr ""
 
-#: src/multigifts.c:294
+#: src/multigifts.c:311
 #, c-format
 msgid "%s Gives You Technology Documents"
 msgstr ""
 
-#: src/multigifts.c:334
+#: src/multigifts.c:352
 #, c-format
 msgid "%s Gives You Power"
 msgstr ""
 
-#: src/multigifts.c:355
+#: src/multigifts.c:373
 #, c-format
 msgid "%s Requests An Alliance With You"
 msgstr ""
 
-#: src/multigifts.c:363
+#: src/multigifts.c:381
 #, c-format
 msgid "You Invite %s To Form An Alliance"
 msgstr ""
 
-#: src/multigifts.c:382
+#: src/multigifts.c:402
 #, c-format
 msgid "%s Breaks The Alliance With %s"
 msgstr ""
 
-#: src/multigifts.c:407
+#: src/multigifts.c:429
 #, c-format
 msgid "%s Forms An Alliance With %s"
 msgstr ""
 
-#: src/multigifts.c:829
+#: src/multigifts.c:766
 #, c-format
 msgid "You Discover Blueprints For %s"
 msgstr ""
@@ -284,7 +284,7 @@ msgstr "Speciaal"
 msgid "Hero"
 msgstr "Held"
 
-#: src/multiint.c:356 src/multiint.c:1405 src/multilimit.c:175
+#: src/multiint.c:356 src/multiint.c:1414 src/multilimit.c:175
 msgid "Accept Settings"
 msgstr "Accepteer Instellingen"
 
@@ -371,7 +371,7 @@ msgstr "Geen Allianties Toestaan"
 msgid "Allow Alliances"
 msgstr "Allianties Toestaan"
 
-#: src/multiint.c:809 src/multiint.c:2037
+#: src/multiint.c:809 src/multiint.c:2046
 msgid "Locked Teams"
 msgstr "Vergrendelde Teams"
 
@@ -411,19 +411,19 @@ msgstr ""
 msgid "Set Structure Limits"
 msgstr ""
 
-#: src/multiint.c:1286
+#: src/multiint.c:1299
 msgid "PLAYERS"
 msgstr "SPELERS"
 
-#: src/multiint.c:1436
+#: src/multiint.c:1445
 msgid "CHAT"
 msgstr "CHAT"
 
-#: src/multiint.c:1978
+#: src/multiint.c:1987
 msgid "Host is Starting Game"
 msgstr ""
 
-#: src/multiint.c:2753
+#: src/multiint.c:2764
 msgid "Players"
 msgstr "Spelers"
 
@@ -1413,16 +1413,16 @@ msgstr ""
 msgid "Toggle reopening the build menu"
 msgstr ""
 
-#: src/multijoin.c:121 src/multijoin.c:122
+#: src/multijoin.c:100 src/multijoin.c:101
 msgid "Players Still Joining"
 msgstr ""
 
-#: src/multijoin.c:242
+#: src/multijoin.c:221
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s heeft het spel verlaten"
 
-#: src/multijoin.c:354
+#: src/multijoin.c:333
 #, c-format
 msgid "%s is Joining the Game"
 msgstr ""
