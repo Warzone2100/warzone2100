@@ -65,15 +65,15 @@ AutoFlagDialog::AutoFlagDialog(wxWindow* parent,
 {
 	//(*Initialize(AutoFlagDialog)
 	wxXmlResource::Get()->LoadObject(this,parent,_T("AutoFlagDialog"),_T("wxDialog"));
-	Degree0_RadioButton = (wxRadioButton*)FindWindow(XRCID("ID_RADIO_0DEGREE"));
-	Degree90_RadioButton = (wxRadioButton*)FindWindow(XRCID("ID_RADIO_90DEGREE"));
-	Degree180_RadioButton = (wxRadioButton*)FindWindow(XRCID("ID_RADIO_180DEGREE"));
-	Degree270_RadioButton = (wxRadioButton*)FindWindow(XRCID("ID_RADIO_270DEGREE"));
-	XFlip_CheckBox = (wxCheckBox*)FindWindow(XRCID("ID_CHK_XFLIP"));
-	YFlip_CheckBox = (wxCheckBox*)FindWindow(XRCID("ID_CHK_YFLIP"));
-	RandRotate_CheckBox = (wxCheckBox*)FindWindow(XRCID("ID_CHK_RANDROTATE"));
-	RandXFlip_CheckBox = (wxCheckBox*)FindWindow(XRCID("ID_CHK_RANDXFLIP"));
-	RandYFlip_CheckBox = (wxCheckBox*)FindWindow(XRCID("ID_CHK_RANDYFLIP"));
+	Degree0_RadioButton = dynamic_cast<wxRadioButton*>(FindWindow(XRCID("ID_RADIO_0DEGREE")));
+	Degree90_RadioButton = dynamic_cast<wxRadioButton*>(FindWindow(XRCID("ID_RADIO_90DEGREE")));
+	Degree180_RadioButton = dynamic_cast<wxRadioButton*>(FindWindow(XRCID("ID_RADIO_180DEGREE")));
+	Degree270_RadioButton = dynamic_cast<wxRadioButton*>(FindWindow(XRCID("ID_RADIO_270DEGREE")));
+	XFlip_CheckBox = dynamic_cast<wxCheckBox*>(FindWindow(XRCID("ID_CHK_XFLIP")));
+	YFlip_CheckBox = dynamic_cast<wxCheckBox*>(FindWindow(XRCID("ID_CHK_YFLIP")));
+	RandRotate_CheckBox = dynamic_cast<wxCheckBox*>(FindWindow(XRCID("ID_CHK_RANDROTATE")));
+	RandXFlip_CheckBox = dynamic_cast<wxCheckBox*>(FindWindow(XRCID("ID_CHK_RANDXFLIP")));
+	RandYFlip_CheckBox = dynamic_cast<wxCheckBox*>(FindWindow(XRCID("ID_CHK_RANDYFLIP")));
 	Connect(XRCID("ID_RADIO_0DEGREE"),wxEVT_COMMAND_RADIOBUTTON_SELECTED,(wxObjectEventFunction)&AutoFlagDialog::OnRotate);
 	Connect(XRCID("ID_RADIO_90DEGREE"),wxEVT_COMMAND_RADIOBUTTON_SELECTED,(wxObjectEventFunction)&AutoFlagDialog::OnRotate);
 	Connect(XRCID("ID_RADIO_180DEGREE"),wxEVT_COMMAND_RADIOBUTTON_SELECTED,(wxObjectEventFunction)&AutoFlagDialog::OnRotate);

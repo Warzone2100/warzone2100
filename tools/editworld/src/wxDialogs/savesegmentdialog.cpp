@@ -61,10 +61,10 @@ SaveSegmentDialog::SaveSegmentDialog(wxWindow* parent,
 {
 	//(*Initialize(SaveSegmentDialog)
 	wxXmlResource::Get()->LoadObject(this,parent,_T("SaveSegmentDialog"),_T("wxDialog"));
-	StartX_TextCtrl = (wxTextCtrl*)FindWindow(XRCID("ID_TEXT_STARTX"));
-	StartY_TextCtrl = (wxTextCtrl*)FindWindow(XRCID("ID_TEXT_STARTY"));
-	Width_TextCtrl = (wxTextCtrl*)FindWindow(XRCID("ID_TEXT_WIDTH"));
-	Height_TextCtrl = (wxTextCtrl*)FindWindow(XRCID("ID_TEXT_HEIGHT"));
+	StartX_TextCtrl = dynamic_cast<wxTextCtrl*>(FindWindow(XRCID("ID_TEXT_STARTX")));
+	StartY_TextCtrl = dynamic_cast<wxTextCtrl*>(FindWindow(XRCID("ID_TEXT_STARTY")));
+	Width_TextCtrl = dynamic_cast<wxTextCtrl*>(FindWindow(XRCID("ID_TEXT_WIDTH")));
+	Height_TextCtrl = dynamic_cast<wxTextCtrl*>(FindWindow(XRCID("ID_TEXT_HEIGHT")));
 	//*)
 
 	// Make sure all characters entered into these text controls
