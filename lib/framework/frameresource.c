@@ -509,39 +509,34 @@ void *resGetDataFromHash(STRING *pType, UDWORD HashedID)
 {
 	RES_TYPE	*psT;
 	RES_DATA	*psRes;
-	UDWORD HashedType;
-
 	// Find the correct type
-	HashedType=HashString(pType);	// la da la
+	UDWORD HashedType = HashString(pType);
 
 	for(psT = psResTypes; resValidType(psT); psT = resNextType(psT) )
 	{
-		if (psT->HashedType==HashedType)
+		if (psT->HashedType == HashedType)
 		{
 			break;
 		}
 	}
 	if (psT == NULL)
 	{
-		ASSERT( FALSE, "resGetData: Unknown type: %s", pType );
+		ASSERT( FALSE, "resGetDataFromHash: Unknown type: %s", pType );
 		return NULL;
 	}
 
+	for(psRes = psT->psRes; psRes; psRes = psRes->psNext)
 	{
-//		UDWORD HashedID=HashStringIgnoreCase(pID);
-		for(psRes = psT->psRes; psRes; psRes = psRes->psNext)
+		if (psRes->HashedID == HashedID)
 		{
-			if (psRes->HashedID==HashedID)
-			{
-				/* We found it */
-				break;
-			}
+			/* We found it */
+			break;
 		}
 	}
 
 	if (psRes == NULL)
 	{
-		ASSERT( FALSE, "resGetDataFromHash: Unknown ID:" );
+		ASSERT( FALSE, "resGetDataFromHash: Unknown ID: %0x Type: %s", HashedID, pType );
 		return NULL;
 	}
 
@@ -556,49 +551,11 @@ void *resGetData(STRING *pType, STRING *pID)
 {
 	RES_TYPE	*psT;
 	RES_DATA	*psRes;
-	UDWORD HashedType;
 	// Find the correct type
+	UDWORD HashedType = HashString(pType);
+	UDWORD HashedID = HashStringIgnoreCase(pID);
 
-	HashedType=HashString(pType);	// la da la
-//printf("[resGetData] entering with %s / %s  = %0x\n",pID,pType,HashedType);
-
-	for(psT = psResTypes; resValidType(psT); psT = resNextType(psT) )
-	{
-		if (psT->HashedType==HashedType)
-		{
-			break;
-		}
-	}
-	if (psT == NULL)
-	{
-		ASSERT( FALSE, "resGetData: Unknown type: %s", pType );
-		return NULL;
-	}
-
-	{
-		UDWORD HashedID=HashStringIgnoreCase(pID);
-		for(psRes = psT->psRes; psRes; psRes = psRes->psNext)
-		{
-			if (psRes->HashedID==HashedID)
-			{
-				/* We found it */
-//				printf("[resGetData] looking for %s = %0x  ******found!\n",pID,HashedID);
-				break;
-			}
-		}
-	}
-
-	if (psRes == NULL)
-	{
-		ASSERT( FALSE, "resGetData: Unknown ID: %s", pID );
-//		resLoadFile(pType,pID);
-//		resGetData(pType,pID);
-//		return NULL;
-	}
-
-	psRes->usage += 1;
-
-	return resGetResDataPointer(psRes);
+	return resGetDataFromHash(pType, HashedID);
 }
 
 
