@@ -36,7 +36,7 @@
 //*)
 
 #include <wx/valgen.h>
-#include <wx/string.h>
+#include "wxstringconv.hpp"
 
 /////////////////////////////////////////////////////////////////////////////
 // InitialLimitsDialog dialog
@@ -53,13 +53,13 @@ void InitialLimitsDialog::initialize(wxWindow* parent)
 {
 	//(*Initialize(InitialLimitsDialog)
 	wxXmlResource::Get()->LoadObject(this,parent,_T("InitialLimitsDialog"),_T("wxDialog"));
-	InitialLimits_Choice = (wxChoice*)FindWindow(XRCID("ID_CHOICE_INITIALLIMITS"));
+	InitialLimits_Choice = dynamic_cast<wxChoice*>(FindWindow(XRCID("ID_CHOICE_INITIALLIMITS")));
 	//*)
 
 	// Add the strings to the list box.
 	for (std::deque<std::string>::const_iterator curString = _stringList.begin(); curString != _stringList.end(); ++curString)
 	{
-		InitialLimits_Choice->Append(wxString(curString->c_str(), wxConvUTF8, curString->length()));
+		InitialLimits_Choice->Append(std2wxString(*curString));
 	}
 
 	// Set the default selection, and make sure the selection is returned into _selected
