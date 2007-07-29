@@ -82,7 +82,7 @@ int InitialLimitsDlg::Selected() const
 	return _selected;
 }
 
-const std::string& InitialLimitsDlg::SelectedString() const
+std::string InitialLimitsDlg::SelectedString() const
 {
 	if (_selected == -1)
 		return std::string();

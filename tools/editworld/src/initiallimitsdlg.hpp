@@ -53,7 +53,7 @@ class InitialLimitsDlg : public CDialog
 		}
 
 		int Selected() const;
-		const std::string& SelectedString() const;
+		std::string SelectedString() const;
 
 	// Dialog Data
 		//{{AFX_DATA(InitialLimitsDlg)
