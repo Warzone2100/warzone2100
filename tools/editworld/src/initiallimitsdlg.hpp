@@ -21,13 +21,11 @@
 	$Id$
 	$HeadURL$
 */
-// InitialLimitsDlg.h : header file
-//
 
-#include "directx.h"
-#include "geometry.h"
-#include "ddimage.h"
-#include "heightmap.h"
+#ifndef __INCLUDE__INITIALLIMITSDIALOG_HPP__
+#define __INCLUDE__INITIALLIMITSDIALOG_HPP__
+
+#include "resource.h"
 
 #include <deque>
 #include <string>
@@ -42,7 +40,7 @@ class InitialLimitsDlg : public CDialog
 		template<typename InputIterator>
 		InitialLimitsDlg(InputIterator first, InputIterator last, CWnd* parent = NULL) :
 			CDialog(InitialLimitsDlg::IDD, parent),
-			_Selected(-1),
+			_selected(-1),
 			InitialLimits_Choice(NULL)
 		{
 			for (; first != last; ++first)
@@ -54,10 +52,8 @@ class InitialLimitsDlg : public CDialog
 			//}}AFX_DATA_INIT
 		}
 
-		inline int GetSelected()
-		{
-			return _Selected;
-		}
+		int Selected() const;
+		const std::string& SelectedString() const;
 
 	// Dialog Data
 		//{{AFX_DATA(InitialLimitsDlg)
@@ -75,8 +71,6 @@ class InitialLimitsDlg : public CDialog
 
 	// Implementation
 	private:
-		int	_Selected;
-
 		// Generated message map functions
 		//{{AFX_MSG(InitialLimitsDlg)
 		virtual BOOL OnInitDialog();
@@ -89,5 +83,9 @@ class InitialLimitsDlg : public CDialog
 		DECLARE_MESSAGE_MAP()
 
 	private:
+		int	_selected;
 		std::deque<std::string> _stringList;
 };
+
+
+#endif // __INCLUDE__INITIALLIMITSDIALOG_HPP__

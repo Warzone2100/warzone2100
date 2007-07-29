@@ -39,7 +39,7 @@
 #include "snapprefs.h"
 #include "savesegmentdialog.hpp"
 #include "limitsdialog.h"
-#include "initiallimitsdlg.h"
+#include "initiallimitsdlg.hpp"
 #include "expandlimitsdlg.h"
 #include "exportinfo.h"
 #include "playermap.h"
@@ -1668,9 +1668,10 @@ BOOL CBTEditDoc::WriteDeliveranceStart(char *FileName)
 		return TRUE;
 	}
 
-	int LimitsIndex;
-	if( (LimitsIndex = Dlg.GetSelected()) < 0) {
-		MessageBox(NULL,"You must select some scroll limits","Error",MB_OK);
+	int LimitsIndex = Dlg.Selected();
+	if (LimitsIndex < 0)
+	{
+		MessageBox(NULL,"You must select some scroll limits", "Error", MB_OK);
 	}
 
 // Create the save game directory.

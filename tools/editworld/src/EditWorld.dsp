@@ -346,7 +346,7 @@ SOURCE=.\infodialog.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\initiallimitsdlg.h
+SOURCE=.\initiallimitsdlg.hpp
 # End Source File
 # Begin Source File
 

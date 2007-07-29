@@ -25,8 +25,7 @@
 //
 
 #include "stdafx.h"
-#include "btedit.h"
-#include "initiallimitsdlg.h"
+#include "initiallimitsdlg.hpp"
 
 /////////////////////////////////////////////////////////////////////////////
 // InitialLimitsDlg dialog
@@ -66,7 +65,7 @@ BOOL InitialLimitsDlg::OnInitDialog()
 	if(!_stringList.empty())
 	{
 		InitialLimits_Choice->SelectString(-1, _stringList.front().c_str());
-		_Selected = 0;
+		_selected = 0;
 	}
 
 	return TRUE;  // return TRUE unless you set the focus to a control
@@ -75,5 +74,18 @@ BOOL InitialLimitsDlg::OnInitDialog()
 
 void InitialLimitsDlg::OnSelchangeInitiallimits() 
 {
-	_Selected = InitialLimits_Choice->GetCurSel();
+	_selected = InitialLimits_Choice->GetCurSel();
+}
+
+int InitialLimitsDlg::Selected() const
+{
+	return _selected;
+}
+
+const std::string& InitialLimitsDlg::SelectedString() const
+{
+	if (_selected == -1)
+		return std::string();
+
+	return _stringList.at(_selected);
 }
