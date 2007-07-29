@@ -382,14 +382,13 @@ static inline RES_DATA* resDataInit(const char *DebugName, UDWORD DataIDHash, vo
 }
 
 
+#ifdef ENABLE_NLS
 /*!
  * Return the language part of the selected locale
  */
 static WZ_DECL_CONST const char* getLanguage(void)
 {
 	static char language[4] = { '\0' }; // ISO639 language code has to fit in!
-
-#ifdef ENABLE_NLS
 	static BOOL haveLanguage = FALSE;
 
 	if ( ! haveLanguage )  // only get language name once for speed optimization
@@ -419,10 +418,10 @@ static WZ_DECL_CONST const char* getLanguage(void)
 			*delim = '\0';
 		}
 	}
-#endif // ENABLE_NLS
 
 	return language;
 }
+#endif // ENABLE_NLS
 
 
 /*!
