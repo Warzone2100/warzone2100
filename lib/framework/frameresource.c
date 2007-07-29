@@ -549,11 +549,7 @@ void *resGetDataFromHash(STRING *pType, UDWORD HashedID)
 /* Return the resource for a type and ID */
 void *resGetData(STRING *pType, STRING *pID)
 {
-	// Find the correct type
-	UDWORD HashedType = HashString(pType);
-	UDWORD HashedID = HashStringIgnoreCase(pID);
-
-	return resGetDataFromHash(pType, HashedID);
+	return resGetDataFromHash(pType, HashStringIgnoreCase(pID));
 }
 
 
