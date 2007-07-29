@@ -72,11 +72,11 @@ BOOL CExpandLimitsDlg::OnInitDialog()
 	CComboBox *List = (CComboBox*)GetDlgItem(IDC_EXCLUDELIST);
 
 	size_t ListSize = 0;
-	char* FirstString;
+	const char* FirstString;
 
 	// Add the strings to the list box.
-	ListNode<CScrollLimits>::iterator curNode;
-	for (curNode = m_World->GetScrollLimits(); curNode != ListNode<CScrollLimits>::iterator(NULL); ++curNode)
+	std::list<CScrollLimits>::const_iterator curNode;
+	for (curNode = m_World->GetScrollLimits().begin(); curNode != m_World->GetScrollLimits().end(); ++curNode)
 	{
 		List->AddString(curNode->ScriptName);
 		if(ListSize == 0)
@@ -98,7 +98,7 @@ BOOL CExpandLimitsDlg::OnInitDialog()
 	ListSize = 0;
 
 	// Add the strings to the list box.
-	for (curNode = m_World->GetScrollLimits(); curNode != ListNode<CScrollLimits>::iterator(NULL); ++curNode)
+	for (curNode = m_World->GetScrollLimits().begin(); curNode != m_World->GetScrollLimits().end(); ++curNode)
 	{
 		List->AddString(curNode->ScriptName);
 		if(ListSize == 0)

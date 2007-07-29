@@ -43,6 +43,7 @@
 
 #include <fstream>
 #include <string>
+#include <algorithm>
 
 //#define MIPMAP_TILES
 
@@ -2388,36 +2389,33 @@ void CHeightMap::Draw2DMap(CDIBDraw *DIBDraw,DDImage **Images,int NumImages,int 
 	ScrollX/=(int)m_TextureWidth;
 	ScrollY/=(int)m_TextureHeight;
 
-	if(m_NumScrollLimits) {
-		ListNode<CScrollLimits> *Node = m_ScrollLimits;
-		assert(Node != NULL);
+	if (m_ScrollLimits.empty())
+		return;
 
-		HDC	dc=(HDC)DIBDraw->GetDIBDC();
-		NormalPen = CreatePen(PS_SOLID,1,RGB(255,0,255));
-		OldPen = (HPEN)SelectObject(dc,NormalPen);
-		
-		for(Node = m_ScrollLimits; Node != NULL; Node = Node->GetNextNode()) {
-			CScrollLimits *Data = Node->GetData();
+	HDC	dc=(HDC)DIBDraw->GetDIBDC();
+	NormalPen = CreatePen(PS_SOLID,1,RGB(255,0,255));
+	OldPen = (HPEN)SelectObject(dc,NormalPen);
+	
+	for (std::list<CScrollLimits>::const_iterator curNode = m_ScrollLimits.begin(); curNode != m_ScrollLimits.end(); ++curNode)
+	{
+		int x0 = (curNode->MinX - ScrollX) * m_TextureWidth;
+		int y0 = (curNode->MinZ - ScrollY) * m_TextureHeight;
+		int x1 = (curNode->MaxX - ScrollX) * m_TextureWidth; 
+		int y1 = (curNode->MaxZ - ScrollY) * m_TextureHeight;
 
-			int x0 = (Data->MinX - ScrollX)*m_TextureWidth;
-			int y0 = (Data->MinZ - ScrollY)*m_TextureHeight;
-			int x1 = (Data->MaxX - ScrollX)*m_TextureWidth; 
-			int y1 = (Data->MaxZ - ScrollY)*m_TextureHeight;
-
-			MoveToEx(dc,x0,y0,NULL);
-			LineTo(dc,x1,y0);
-			LineTo(dc,x1,y1);
-			LineTo(dc,x0,y1);
-			LineTo(dc,x0,y0);
-//			Data->MinX;
-//			Data->MinZ;
-//			Data->MaxX;
-//			Data->MaxZ;
-		}
-
-		SelectObject(dc,OldPen);
-		DeleteObject(NormalPen);
+		MoveToEx(dc, x0, y0, NULL);
+		LineTo(dc, x1, y0);
+		LineTo(dc, x1, y1);
+		LineTo(dc, x0, y1);
+		LineTo(dc, x0, y0);
+//		curNode->MinX;
+//		curNode->MinZ;
+//		curNode->MaxX;
+//		curNode->MaxZ;
 	}
+
+	SelectObject(dc,OldPen);
+	DeleteObject(NormalPen);
 }
 
 
@@ -7206,16 +7204,19 @@ BOOL CHeightMap::WriteDeliveranceGame(FILE *Stream,UDWORD GameType,int LimIndex)
 
 	SaveGame.GameType = GameType;
 
-	if(LimIndex >= 0) {
-		ListNode<CScrollLimits> *TmpNode = m_ScrollLimits->GetNthNode(LimIndex);
-		assert(TmpNode != NULL);
-		CScrollLimits *Data = TmpNode->GetData();
+	if (LimIndex >= 0)
+	{
+		assert(LimIndex < m_ScrollLimits.size());
+		std::list<CScrollLimits>::const_iterator curNode = m_ScrollLimits.begin();
+		std::advance(curNode, LimIndex);
 
-		SaveGame.ScrollMinX = Data->MinX;
-		SaveGame.ScrollMinY = Data->MinZ;
-		SaveGame.ScrollMaxX = Data->MaxX;
-		SaveGame.ScrollMaxY = Data->MaxZ;
-	} else {
+		SaveGame.ScrollMinX = curNode->MinX;
+		SaveGame.ScrollMinY = curNode->MinZ;
+		SaveGame.ScrollMaxX = curNode->MaxX;
+		SaveGame.ScrollMaxY = curNode->MaxZ;
+	}
+	else
+	{
 		SaveGame.ScrollMinX = 0;
 		SaveGame.ScrollMinY = 0;
 		SaveGame.ScrollMaxX = m_MapWidth;
@@ -7245,7 +7246,8 @@ BOOL CHeightMap::WriteDeliveranceGame(FILE *Stream,UDWORD GameType,int LimIndex)
 //
 //	SaveGame.NumLimits = i;
 
-	if( fwrite(&SaveGame,sizeof(SAVE_GAME),1,Stream) != 1) return FALSE;
+	if (fwrite(&SaveGame, sizeof(SAVE_GAME), 1, Stream) != 1)
+		return FALSE;
 
 	return TRUE;
 }
@@ -7314,7 +7316,7 @@ BOOL CHeightMap::WriteDeliveranceTagList(FILE *Stream)
 	}
 
 // Write out the tags for scroll limits.
-	for (ListNode<CScrollLimits>::iterator curNode2 = m_ScrollLimits; curNode2 != ListNode<CScrollLimits>::iterator(); ++curNode2)
+	for (std::list<CScrollLimits>::iterator curNode2 = m_ScrollLimits.begin(); curNode2 != m_ScrollLimits.end(); ++curNode2)
 	{
 		// FIXME: possible bug (that we're using Data instead of curNode2 here);
 		// this was already so in the original source release, I'm not sure if it's intented -- Giel
@@ -7494,19 +7496,18 @@ int CHeightMap::CountObjectsOfType(int Type,int Exclude,int Include)
 }
 
 
-void CHeightMap::GetLimitRect(int Index,LimitRect &Limit)
+void CHeightMap::GetLimitRect(int Index, LimitRect& Limit)
 {
-	ListNode<CScrollLimits> *ScrollNode;
+	assert(Index < m_ScrollLimits.size());
 
-	ScrollNode = m_ScrollLimits->GetNthNode(Index);
-	assert(ScrollNode != NULL);
-	CScrollLimits *Lim = ScrollNode->GetData();
+	std::list<CScrollLimits>::const_iterator ScrollNode = m_ScrollLimits.begin();
+	std::advance(ScrollNode, Index);
 
-	Limit.x0 = (Lim->MinX-(m_MapWidth/2)) * m_TileWidth;
-	Limit.z0 = (Lim->MinZ-(m_MapHeight/2)) * m_TileHeight;
+	Limit.x0 = (ScrollNode->MinX - (m_MapWidth / 2)) * m_TileWidth;
+	Limit.z0 = (ScrollNode->MinZ - (m_MapHeight / 2)) * m_TileHeight;
 
-	Limit.x1 = (Lim->MaxX-(m_MapWidth/2)) * m_TileWidth;
-	Limit.z1 = (Lim->MaxZ-(m_MapHeight/2)) * m_TileHeight;
+	Limit.x1 = (ScrollNode->MaxX - (m_MapWidth / 2)) * m_TileWidth;
+	Limit.z1 = (ScrollNode->MaxZ - (m_MapHeight / 2)) * m_TileHeight;
 }
 
 
@@ -7891,120 +7892,100 @@ void CHeightMap::SetTileHeightUndo(int Index,float Height)
 void CHeightMap::InitialiseScrollLimits()
 {
 	m_NumScrollLimits = 0;
-	m_ScrollLimits = NULL;
+	m_ScrollLimits.clear();
 }
 
 
-void CHeightMap::AddScrollLimit(int MinX,int MinZ,int MaxX,int MaxZ,char *ScriptName)
+void CHeightMap::AddScrollLimit(int MinX, int MinZ, int MaxX, int MaxZ, const char* ScriptName)
 {
-	AddScrollLimit(MinX,MinZ,MaxX,MaxZ,m_NewObjectID,ScriptName);
-	m_NewObjectID++;
+	AddScrollLimit(MinX, MinZ, MaxX, MaxZ, m_NewObjectID, ScriptName);
+	++m_NewObjectID;
 }
 
 
-void CHeightMap::AddScrollLimit(int MinX,int MinZ,int MaxX,int MaxZ,DWORD UniqueID,char *ScriptName)
+void CHeightMap::AddScrollLimit(int MinX, int MinZ, int MaxX, int MaxZ, DWORD UniqueID, const char* ScriptName)
 {
-	ListNode<CScrollLimits> *TmpNode;
-	CScrollLimits *Data;
+	CScrollLimits Data;
+   	Data.UniqueID = UniqueID;
+   	Data.MinX = MinX;
+   	Data.MinZ = MinZ;
+   	Data.MaxX = MaxX;
+   	Data.MaxZ = MaxZ;
+   	strcpy(Data.ScriptName, ScriptName);
 
-	if(m_ScrollLimits == NULL) {
-		m_ScrollLimits = new ListNode<CScrollLimits>;
-		Data = m_ScrollLimits->GetData();
-	} else {
-		TmpNode = new ListNode<CScrollLimits>;
-		TmpNode->AppendNode(m_ScrollLimits);
-		Data = TmpNode->GetData();
-	}
+	m_ScrollLimits.push_back(Data);
 
-   	Data->UniqueID = UniqueID;
-   	Data->MinX = MinX;
-   	Data->MinZ = MinZ;
-   	Data->MaxX = MaxX;
-   	Data->MaxZ = MaxZ;
-   	strcpy(Data->ScriptName,ScriptName);
-
-	m_NumScrollLimits++;
+	++m_NumScrollLimits;
 }
 
 
-void CHeightMap::SetScrollLimit(int Index,int MinX,int MinZ,int MaxX,int MaxZ,char *ScriptName)
+void CHeightMap::SetScrollLimit(int Index, int MinX, int MinZ, int MaxX, int MaxZ, const char* ScriptName)
 {
-	CScrollLimits *Data = m_ScrollLimits->GetNthNode(Index)->GetData();
+	if (Index >= m_ScrollLimits.size())
+		return;
 
-	if(Data != NULL) {
-		Data->MinX = MinX;
-		Data->MinZ = MinZ;
-		Data->MaxX = MaxX;
-		Data->MaxZ = MaxZ;
+	std::list<CScrollLimits>::iterator limits = m_ScrollLimits.begin();
+	std::advance(limits, Index);
 
-		strcpy(Data->ScriptName,ScriptName);
-	}
+	assert(limits != m_ScrollLimits.end());
+
+	limits->MinX = MinX;
+	limits->MinZ = MinZ;
+	limits->MaxX = MaxX;
+	limits->MaxZ = MaxZ;
+
+	strcpy(limits->ScriptName, ScriptName);
 }
 
 
 void CHeightMap::DeleteAllScrollLimits()
 {
-	if(m_ScrollLimits) {
-		m_ScrollLimits->DeleteList();
-		m_ScrollLimits = NULL;
-	}
-
+	m_ScrollLimits.clear();
 	m_NumScrollLimits = 0;
 }
 
 
-DWORD CHeightMap::FindScrollLimit(DWORD UniqueID)
+unsigned int CHeightMap::FindScrollLimit(unsigned int UniqueID)
 {
-	ListNode<CScrollLimits> *TmpNode;
-	CScrollLimits *Data;
-	DWORD Index = 0;
+	unsigned int Index = 0;
 
-	TmpNode = m_ScrollLimits;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-		if(Data->UniqueID = UniqueID) {
+	for (std::list<CScrollLimits>::const_iterator curNode = m_ScrollLimits.begin(); curNode != m_ScrollLimits.end(); ++curNode)
+	{
+		if(curNode->UniqueID == UniqueID)
 			return Index;
-		}
-		TmpNode = TmpNode->GetNextNode();
-		Index++;
+
+		++Index;
 	}
 
 	return 0;
 }
 
 
-DWORD CHeightMap::FindScrollLimit(char *ScriptName)
+unsigned int CHeightMap::FindScrollLimit(const char* ScriptName)
 {
-	ListNode<CScrollLimits> *TmpNode;
-	CScrollLimits *Data;
-	DWORD Index = 0;
+	unsigned int Index = 0;
 
-	TmpNode = m_ScrollLimits;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-		if(_stricmp(Data->ScriptName,ScriptName) == 0) {
+	for (std::list<CScrollLimits>::const_iterator curNode = m_ScrollLimits.begin(); curNode != m_ScrollLimits.end(); ++curNode)
+	{
+		if(_stricmp(curNode->ScriptName, ScriptName) == 0)
 			return Index;
-		}
-		TmpNode = TmpNode->GetNextNode();
-		Index++;
+
+		++Index;
 	}
 
 	return 0;
 }
 
 
-void CHeightMap::DeleteScrollLimit(DWORD Index)
+void CHeightMap::DeleteScrollLimit(unsigned int Index)
 {
-	ListNode<CScrollLimits> *TmpNode;
+	if (Index >= m_ScrollLimits.size())
+		return;
 
-	if(m_ScrollLimits) {
-		TmpNode = m_ScrollLimits->GetNthNode(Index);
-		if(TmpNode) {
-			m_ScrollLimits = TmpNode->RemoveNode(m_ScrollLimits);
-			delete TmpNode;
-			m_NumScrollLimits--;
-		}
-	}
+	std::list<CScrollLimits>::iterator toRemove = m_ScrollLimits.begin();
+	std::advance(toRemove, Index);
+	m_ScrollLimits.erase(toRemove);
+	--m_NumScrollLimits;
 }
 
 
@@ -8016,18 +7997,12 @@ void CHeightMap::DrawScrollLimits(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPos
 	m_DirectMaths->SetObjectMatrix(&ZeroVector,&ZeroVector,&CameraPosition);
 	m_DirectMaths->SetTransformation();
 
-	ListNode<CScrollLimits> *TmpNode;
-	CScrollLimits *Data;
-
-	TmpNode = m_ScrollLimits;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-		TmpNode = TmpNode->GetNextNode();
-
-		float MinX = (float)(Data->MinX - m_MapWidth/2)*m_TileWidth;
-		float MaxX = (float)(Data->MaxX - m_MapWidth/2)*m_TileWidth;
-		float MinZ = (float)(Data->MinZ - m_MapHeight/2)*m_TileHeight;
-		float MaxZ = (float)(Data->MaxZ - m_MapHeight/2)*m_TileHeight;
+	for (std::list<CScrollLimits>::const_iterator curNode = m_ScrollLimits.begin(); curNode != m_ScrollLimits.end(); ++curNode)
+	{
+		float MinX = static_cast<float>(curNode->MinX - m_MapWidth/2) * m_TileWidth;
+		float MaxX = static_cast<float>(curNode->MaxX - m_MapWidth/2) * m_TileWidth;
+		float MinZ = static_cast<float>(curNode->MinZ - m_MapHeight/2) * m_TileHeight;
+		float MaxZ = static_cast<float>(curNode->MaxZ - m_MapHeight/2) * m_TileHeight;
 		
 		D3DVERTEX Vertex[4];
 		Vertex[0].x = MinX;	Vertex[0].y = (float)128;	Vertex[0].z = MinZ;
@@ -8042,21 +8017,23 @@ void CHeightMap::DrawScrollLimits(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPos
 }
 
 
-BOOL CHeightMap::CheckLimitsWithin(int ExcludeIndex,int IncludeIndex)
+BOOL CHeightMap::CheckLimitsWithin(int ExcludeIndex, int IncludeIndex)
 {
-	ListNode<CScrollLimits> *TmpNode = m_ScrollLimits->GetNthNode(ExcludeIndex);
-	CScrollLimits *Exclude = TmpNode->GetData();
+	// HACK: Freakin MSVC's STL implemenation lacks std::max!! so this is a workaround
+	//assert(std::max(ExcludeIndex, IncludeIndex) < m_ScrollLimits.size());
+	assert((ExcludeIndex < IncludeIndex ? IncludeIndex : ExcludeIndex) < m_ScrollLimits.size());
 
-	TmpNode = m_ScrollLimits->GetNthNode(IncludeIndex);
-	CScrollLimits *Include = TmpNode->GetData();
+	std::list<CScrollLimits>::const_iterator Exclude = m_ScrollLimits.begin();
+	std::advance(Exclude, ExcludeIndex);
 
-	if( (Exclude->MinX < Include->MinX) ||
-		(Exclude->MaxX > Include->MaxX) ||
-		(Exclude->MinZ < Include->MinZ) ||
-		(Exclude->MaxZ > Include->MaxZ) ) {
+	std::list<CScrollLimits>::const_iterator Include = m_ScrollLimits.begin();
+	std::advance(Include, IncludeIndex);
 
+	if (Exclude->MinX < Include->MinX
+	 || Exclude->MaxX > Include->MaxX
+	 || Exclude->MinZ < Include->MinZ
+	 || Exclude->MaxZ > Include->MaxZ)
 		return FALSE;
-	}
 
 	return TRUE;
 }
@@ -8064,38 +8041,33 @@ BOOL CHeightMap::CheckLimitsWithin(int ExcludeIndex,int IncludeIndex)
 
 BOOL CHeightMap::CheckUniqueLimitsScriptNames()
 {
-	ListNode<CScrollLimits> *TmpNode;
-	CScrollLimits *Data;
+	unsigned int NumIDs = 0;
+	char* ScriptNames = new char[m_NumScrollLimits * MAX_SCRIPTNAME];
+	unsigned int NumDups = 0;
 
-	int NumIDs = 0;
-	char *ScriptNames = new char[m_NumScrollLimits*MAX_SCRIPTNAME];
-	int NumDups = 0;
-
-	TmpNode = m_ScrollLimits;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-
-		for(int i=0; i<NumIDs; i++) {
-			if(Data->ScriptName[0]) {
-				if(_stricmp(Data->ScriptName,&ScriptNames[i*MAX_SCRIPTNAME]) == 0) {
-					NumDups++;
-				}
+	for (std::list<CScrollLimits>::const_iterator curNode = m_ScrollLimits.begin(); curNode != m_ScrollLimits.end(); ++curNode)
+	{
+		for (unsigned int i = 0; i < NumIDs; ++i)
+		{
+			if(curNode->ScriptName[0])
+			{
+				if(_stricmp(curNode->ScriptName, &ScriptNames[i * MAX_SCRIPTNAME]) == 0)
+					++NumDups;
 			}
 		}
 
-		if(Data->ScriptName[0]) {
-			strcpy(&ScriptNames[NumIDs*MAX_SCRIPTNAME],Data->ScriptName);
+		if(curNode->ScriptName[0])
+		{
+			strcpy(&ScriptNames[NumIDs*MAX_SCRIPTNAME], curNode->ScriptName);
 		}
-		NumIDs++;
 
-		TmpNode = TmpNode->GetNextNode();
+		++NumIDs;
 	}
 
-	delete ScriptNames;
+	delete [] ScriptNames;
 
-	if(NumDups) {
+	if (NumDups)
 		return FALSE;
-	}
 
 	return TRUE;
 }
@@ -8108,19 +8080,14 @@ BOOL CHeightMap::WriteScrollLimits(FILE *Stream,int StartX,int StartY,int Width,
 	fprintf(Stream,"    NumLimits %d\n",m_NumScrollLimits);
 	fprintf(Stream,"    Limits {\n");
 
-	ListNode<CScrollLimits> *TmpNode;
-	CScrollLimits *Data;
-
-	TmpNode = m_ScrollLimits;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-		TmpNode = TmpNode->GetNextNode();
-		fprintf(Stream,"        \"%s\" %d %d %d %d %d\n",
-				Data->ScriptName,Data->UniqueID,Data->MinX,Data->MinZ,Data->MaxX,Data->MaxZ);
+	for (std::list<CScrollLimits>::const_iterator curNode = m_ScrollLimits.begin(); curNode != m_ScrollLimits.end(); ++curNode)
+	{
+		fprintf(Stream, "        \"%s\" %d %d %d %d %d\n",
+		        curNode->ScriptName, curNode->UniqueID, curNode->MinX, curNode->MinZ, curNode->MaxX, curNode->MaxZ);
 	}
 
-	fprintf(Stream,"    }\n");
-	fprintf(Stream,"}\n");
+	fprintf(Stream, "    }\n");
+	fprintf(Stream, "}\n");
 
 	return TRUE;
 }
@@ -8310,7 +8277,7 @@ void CHeightMap::SelectGateway(int Index)
 }
 
 
-BOOL CHeightMap::GetGateway(int Index,int *x0,int *y0,int *x1,int *y1)
+BOOL CHeightMap::GetGateway(int Index, int& x0, int& y0, int& x1, int& y1)
 {
 	if (Index >= m_Gateways.size())
 		return FALSE;
@@ -8318,10 +8285,10 @@ BOOL CHeightMap::GetGateway(int Index,int *x0,int *y0,int *x1,int *y1)
 	std::list<GateWay>::iterator curGateway = m_Gateways.begin();
 	std::advance(curGateway, Index);
 
-	*x0 = curGateway->x0;
-	*y0 = curGateway->y0;
-	*x1 = curGateway->x1;
-	*y1 = curGateway->y1;
+	x0 = curGateway->x0;
+	y0 = curGateway->y0;
+	x1 = curGateway->x1;
+	y1 = curGateway->y1;
 
 	return TRUE;
 }

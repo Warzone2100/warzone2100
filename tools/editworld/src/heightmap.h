@@ -1016,13 +1016,13 @@ class CHeightMap : public CChnkIO
 		BOOL CheckUniqueScriptNames();
 
 		void InitialiseScrollLimits();
-		void AddScrollLimit(int MinX,int MinZ,int MaxX,int MaxZ,char *ScriptName);
-		void SetScrollLimit(int Index,int MinX,int MinZ,int MaxX,int MaxZ,char *ScriptName);
-		void AddScrollLimit(int MinX,int MinZ,int MaxX,int MaxZ,DWORD UniqueID,char *ScriptName);
+		void AddScrollLimit(int MinX, int MinZ, int MaxX, int MaxZ, const char* ScriptName);
+		void SetScrollLimit(int Index, int MinX, int MinZ, int MaxX, int MaxZ, const char* ScriptName);
+		void AddScrollLimit(int MinX, int MinZ, int MaxX, int MaxZ, DWORD UniqueID, const char* ScriptName);
 		void DeleteAllScrollLimits();
-		DWORD FindScrollLimit(DWORD UniqueID);
-		DWORD FindScrollLimit(char *ScriptName);
-		void DeleteScrollLimit(DWORD Index);
+		unsigned int FindScrollLimit(unsigned int UniqueID);
+		unsigned int FindScrollLimit(const char* ScriptName);
+		void DeleteScrollLimit(unsigned int Index);
 		void DrawScrollLimits(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
 		BOOL CheckLimitsWithin(int ExcludeIndex,int IncludeIndex);
 		BOOL CheckUniqueLimitsScriptNames();
@@ -1035,9 +1035,9 @@ class CHeightMap : public CChnkIO
 			return m_NumScrollLimits;
 		}
 
-		inline ListNode<CScrollLimits>::iterator GetScrollLimits()
+		inline const std::list<CScrollLimits>& GetScrollLimits()
 		{
-			return ListNode<CScrollLimits>::iterator(m_ScrollLimits);
+			return m_ScrollLimits;
 		}
 
 		void InitialiseGateways();
@@ -1069,7 +1069,7 @@ class CHeightMap : public CChnkIO
 			return m_NumGateways;
 		}
 
-		BOOL GetGateway(int Index,int *x0,int *y0,int *x1,int *y1);
+		BOOL GetGateway(int Index, int& x0, int& y0, int& x1, int& y1);
 		void SetMapZoneID(int TileNum,int ID);
 		void SetMapZoneID(int x,int z,int ID);
 
@@ -1108,7 +1108,7 @@ class CHeightMap : public CChnkIO
 		std::list<GateWay> m_Gateways;
 
 		int m_NumScrollLimits;
-		ListNode<CScrollLimits> *m_ScrollLimits;
+		std::list<CScrollLimits> m_ScrollLimits;
 
 		SLONG m_DrawRadius;
 		void HeightToV0(UBYTE Height,D3DVECTOR *Offset,D3DVECTOR *Result);

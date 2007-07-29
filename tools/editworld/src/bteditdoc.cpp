@@ -1637,20 +1637,16 @@ void CBTEditDoc::DisplayExportSummary(void)
 
 // Proxy class that serves as InputIterator (as defined by the C++ standard in
 // section 24.1.1) for the initialisation of InitialLimitsDlg
-class scrollLimitStringIterator : public ListNode<CScrollLimits>::iterator
+class scrollLimitStringIterator : public std::list<CScrollLimits>::const_iterator
 {
 	public:
-		inline scrollLimitStringIterator(ListNode<CScrollLimits>* ptr = NULL) :
-			ListNode<CScrollLimits>::iterator(ptr)
-		{}
-
-		inline scrollLimitStringIterator(const ListNode<CScrollLimits>::iterator& rhs) :
-			ListNode<CScrollLimits>::iterator(rhs)
+		inline scrollLimitStringIterator(const std::list<CScrollLimits>::const_iterator& rhs) :
+			std::list<CScrollLimits>::const_iterator(rhs)
 		{}
 
 		inline std::string operator*() const
 		{
-			return std::string(iterator::operator*().ScriptName);
+			return std::string(const_iterator::operator*().ScriptName);
 		}
 };
 
@@ -1667,7 +1663,7 @@ BOOL CBTEditDoc::WriteDeliveranceStart(char *FileName)
 	_splitpath(FileName,Drive,Dir,FName,Ext);
 
 	// Need to specify scroll limits to use.
-	InitialLimitsDlg Dlg(scrollLimitStringIterator(m_HeightMap->GetScrollLimits()), scrollLimitStringIterator());
+	InitialLimitsDlg Dlg(scrollLimitStringIterator(m_HeightMap->GetScrollLimits().begin()), scrollLimitStringIterator(m_HeightMap->GetScrollLimits().end()));
 	if(Dlg.DoModal() != IDOK) {
 		return TRUE;
 	}
@@ -2767,7 +2763,7 @@ void CBTEditDoc::DrawRadarMap2D(CDIBDraw *DIBDraw,DWORD XPos,DWORD YPos)
 				HPEN NormalPen = CreatePen(PS_SOLID,1,RGB(255,0,255));
 				HPEN OldPen = (HPEN)SelectObject(dc,NormalPen);
 				
-				for(ListNode<CScrollLimits>::iterator curNode = m_HeightMap->GetScrollLimits(); curNode != ListNode<CScrollLimits>::iterator(NULL); ++curNode)
+				for(std::list<CScrollLimits>::const_iterator curNode = m_HeightMap->GetScrollLimits().begin(); curNode != m_HeightMap->GetScrollLimits().end(); ++curNode)
 				{
 					int x0 = (curNode->MinX + OVERSCAN)*m_RadarScale;
 					int y0 = (curNode->MinZ + OVERSCAN)*m_RadarScale;
@@ -2874,7 +2870,7 @@ void CBTEditDoc::DrawRadarMap3D(CDIBDraw *DIBDraw,D3DVECTOR &CamPos)
 			HPEN NormalPen = CreatePen(PS_SOLID,1,RGB(255,0,255));
 			HPEN OldPen = (HPEN)SelectObject(dc,NormalPen);
 			
-			for(ListNode<CScrollLimits>::iterator curNode = m_HeightMap->GetScrollLimits(); curNode != ListNode<CScrollLimits>::iterator(NULL); ++curNode)
+			for(std::list<CScrollLimits>::const_iterator curNode = m_HeightMap->GetScrollLimits().begin(); curNode != m_HeightMap->GetScrollLimits().end(); ++curNode)
 			{
 				int x0 = (curNode->MinX + OVERSCAN)*m_RadarScale;
 				int y0 = (curNode->MinZ + OVERSCAN)*m_RadarScale;

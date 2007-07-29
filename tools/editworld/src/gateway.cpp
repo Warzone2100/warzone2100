@@ -108,7 +108,7 @@ bool gwInitialise()
 	{
 		int x0, y0, x1, y1;
 
-		if (!g_MapData->GetGateway(i, &x0, &y0, &x1, &y1)
+		if (!g_MapData->GetGateway(i, x0, y0, x1, y1)
 		 || !gwNewGateway(x0,y0,x1,y1))
 			return false;
 	}

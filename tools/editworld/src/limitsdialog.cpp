@@ -28,15 +28,7 @@
 #include "btedit.h"
 #include "debugprint.hpp"
 #include "limitsdialog.h"
-
-// Workaround for MSVC's implementation of std::advance (how could
-// anyone get something as simple as this algorithm implemented wrong ?)
-template<typename InputIterator, typename DistanceType>
-inline void advance(InputIterator& i, DistanceType n)
-{
-	for (; n; --n)
-		++i;
-}
+#include <algorithm>
 
 /////////////////////////////////////////////////////////////////////////////
 // CLimitsDialog dialog
@@ -121,9 +113,8 @@ void CLimitsDialog::OnGetdispinfoListlimits(NMHDR* pNMHDR, LRESULT* pResult)
 	
 	char String[256];
 
-	ListNode<CScrollLimits>::iterator ScrollLimits = m_World->GetScrollLimits();
-	ScrollLimits.goToBegin();
-	advance(ScrollLimits, item.iItem);
+	std::list<CScrollLimits>::const_iterator ScrollLimits = m_World->GetScrollLimits().begin();
+	std::advance(ScrollLimits, item.iItem);
 
 	switch (pDispInfo->item.iSubItem) {
 		case	0:
@@ -182,12 +173,11 @@ void CLimitsDialog::OnItemchangedListlimits(NMHDR* pNMHDR, LRESULT* pResult)
 	if(pNMListView->iItem != m_SelectedItemIndex) {
 		m_SelectedItemIndex = pNMListView->iItem;
 
-		ListNode<CScrollLimits>::iterator ScrollLimits = m_World->GetScrollLimits();
-		ScrollLimits.goToBegin();
-		advance(ScrollLimits, m_SelectedItemIndex);
-
-		if(&*ScrollLimits != NULL)
+		if(m_SelectedItemIndex < m_World->GetScrollLimits().size())
 		{
+			std::list<CScrollLimits>::const_iterator ScrollLimits = m_World->GetScrollLimits().begin();
+			std::advance(ScrollLimits, m_SelectedItemIndex);
+
 			GetDlgItem(IDC_SL_SCRIPTNAME)->SetWindowText(ScrollLimits->ScriptName);
 
 			sprintf(String,"%d",ScrollLimits->MinX);
@@ -269,8 +259,7 @@ void CLimitsDialog::RebuildList(void)
 	List->DeleteAllItems();
 
 	unsigned int Index = 0;
-	ListNode<CScrollLimits>::iterator curNode;
-	for (curNode = m_World->GetScrollLimits(); curNode != ListNode<CScrollLimits>::iterator(); ++curNode, ++Index)
+	for (std::list<CScrollLimits>::const_iterator curNode = m_World->GetScrollLimits().begin(); curNode != m_World->GetScrollLimits().end(); ++curNode, ++Index)
 	{
 		List->InsertItem(Index, curNode->ScriptName);
 	}
