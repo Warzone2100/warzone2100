@@ -549,8 +549,6 @@ void *resGetDataFromHash(STRING *pType, UDWORD HashedID)
 /* Return the resource for a type and ID */
 void *resGetData(STRING *pType, STRING *pID)
 {
-	RES_TYPE	*psT;
-	RES_DATA	*psRes;
 	// Find the correct type
 	UDWORD HashedType = HashString(pType);
 	UDWORD HashedID = HashStringIgnoreCase(pID);
