@@ -140,7 +140,7 @@ void pie_TransColouredTriangle( PIEVERTEX *vrt, UDWORD rgb )
 
 /* ---------------------------------------------------------------------------------- */
 
-void pie_DrawSkybox(float scale, int u, int v, int w, int h)
+void pie_DrawSkybox(float scale, float u, float v, float w, float h)
 {
 	const float r = 1.0f; // just because it is shorter than 1.0f
 

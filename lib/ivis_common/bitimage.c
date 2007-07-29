@@ -112,10 +112,14 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 
 	for(ImageDef = &ImageFile->ImageDefs[0]; ImageDef != &ImageFile->ImageDefs[Header.NumImages]; ++ImageDef)
 	{
+		uint16_t dummy;
+
 		// Read image definition from file
 		PHYSFS_readULE16(fileHandle, &ImageDef->TPageID);
-		PHYSFS_readULE16(fileHandle, &ImageDef->Tu);
-		PHYSFS_readULE16(fileHandle, &ImageDef->Tv);
+		PHYSFS_readULE16(fileHandle, &dummy);
+		ImageDef->Tu = dummy / OLD_TEXTURE_SIZE_FIX;
+		PHYSFS_readULE16(fileHandle, &dummy);
+		ImageDef->Tv = dummy / OLD_TEXTURE_SIZE_FIX;
 		PHYSFS_readULE16(fileHandle, &ImageDef->Width);
 		PHYSFS_readULE16(fileHandle, &ImageDef->Height);
 		PHYSFS_readSLE16(fileHandle, &ImageDef->XOffset);

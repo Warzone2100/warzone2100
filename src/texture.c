@@ -233,8 +233,8 @@ static void buildTileIndexes(void)
 
 	for(i = 0; i < MAX_TILES; i++)
 	{
-		tileTexInfo[i].uOffset = getTileUIndex(i) * (256 / TILES_IN_PAGE_COLUMN);
-		tileTexInfo[i].vOffset = getTileVIndex(i) * (256 / TILES_IN_PAGE_ROW);
+		tileTexInfo[i].uOffset = getTileUIndex(i) / (float)TILES_IN_PAGE_COLUMN;
+		tileTexInfo[i].vOffset = getTileVIndex(i) / (float)TILES_IN_PAGE_ROW;
 		tileTexInfo[i].texPage = pageId[i / TILES_IN_PAGE];
 	}
 }

@@ -180,7 +180,7 @@ BOOL	godMode;
 
 static UWORD RiverBedTileID = RIVERBED_TILE;
 static float waterRealValue = 0.0f;
-#define WAVE_SPEED 4.0f
+#define WAVE_SPEED 0.05f
 #define MAX_FIRE_STAGE 32
 
 UDWORD	barMode = BAR_FULL; // configured in configuration.c
@@ -213,7 +213,7 @@ SVMESH tileScreenInfo[LAND_YGRD][LAND_XGRD];
 static TILE_BUCKET tileIJ[LAND_YGRD][LAND_XGRD];
 
 /* Points for flipping the texture around if the tile is flipped or rotated */
-static Vector2i sP1, sP2, sP3, sP4;
+static Vector2f sP1, sP2, sP3, sP4;
 
 /* Records the present X and Y values for the current mouse tile (in tiles */
 SDWORD mouseTileX, mouseTileY;
@@ -256,7 +256,7 @@ static UDWORD	underwaterTile = WATER_TILE;
 static UDWORD	rubbleTile = 67;//WATER_TILE;
 
 UDWORD geoOffset;
-static int averageCentreTerrainHeight;
+static float averageCentreTerrainHeight;
 static	BOOL	bReloadBars = TRUE;
 static	BOOL	bEnergyBars = TRUE;
 static	BOOL	bTinyBars	= FALSE;
@@ -447,7 +447,7 @@ void draw3DScene( void )
 	if(!getWarCamStatus())
 	{
 		/* Move the autonomous camera if necessary */
-		trackHeight(2 * averageCentreTerrainHeight);
+		trackHeight(2.0f * averageCentreTerrainHeight);
 	}
 	else
 	{
@@ -562,7 +562,7 @@ static void drawTiles(iView *camera, iView *player)
 	if(!gamePaused())
 	{
 		waterRealValue += (WAVE_SPEED * frameTime2) / GAME_TICKS_PER_SEC;
-		if(waterRealValue >= 64/2)
+		if(waterRealValue >= 0.125f)
 		{
 			waterRealValue = 0.0f;
 		}
@@ -985,24 +985,27 @@ void disp3d_getView(iView *newView)
 	memcpy(newView,&player,sizeof(iView));
 }
 
+// FIXME HACK Should be set depending on the current anisotropic filter setting
+static const float anisotropicFilterFix = 0.002f;
+
 /* John's routine - deals with flipping around the vertex ordering for source textures
 when flips and rotations are being done */
 static void flipsAndRots(int texture)
 {
 	/* Used to calculate texture coordinates, which are 0-255 in value */
-	const UDWORD xMult = (256 / TILES_IN_PAGE_COLUMN);
-	const UDWORD yMult = (256 / TILES_IN_PAGE_ROW);
-	Vector2i sPTemp;
+	const float xMult = 1.0f / TILES_IN_PAGE_COLUMN;
+	const float yMult = 1.0f / TILES_IN_PAGE_ROW;
+	Vector2f sPTemp;
 
 	/* Store the source rect as four points */
-	sP1.x = 1;
-	sP1.y = 1;
-	sP2.x = (xMult - 1);
-	sP2.y = 1;
-	sP3.x = (xMult - 1);
-	sP3.y = (yMult - 1);
-	sP4.x = 1;
-	sP4.y = (yMult - 1);
+	sP1.x = 0.0f + anisotropicFilterFix;
+	sP1.y = 0.0f + anisotropicFilterFix;
+	sP2.x = xMult - anisotropicFilterFix;
+	sP2.y = 0.0f + anisotropicFilterFix;
+	sP3.x = xMult - anisotropicFilterFix;
+	sP3.y = yMult - anisotropicFilterFix;
+	sP4.x = 0.0f + anisotropicFilterFix;
+	sP4.y = yMult - anisotropicFilterFix;
 
 	if (texture & TILE_XFLIP)
 	{
@@ -1019,6 +1022,7 @@ static void flipsAndRots(int texture)
 		sPTemp = sP1;
 		sP1 = sP4;
 		sP4 = sPTemp;
+
 		sPTemp = sP2;
 		sP2 = sP3;
 		sP3 = sPTemp;
@@ -3958,7 +3962,7 @@ static void renderSurroundings(void)
 			wind = 0.0f;
 		}
 	}
-	pie_DrawSkybox(skybox_scale, 0, 128, 256, 128);
+	pie_DrawSkybox(skybox_scale, 0.0f, 0.5f, 1.0f, 0.5f);
 
 	// Load Saved State
 	pie_MatEnd();
@@ -4074,7 +4078,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	MAPTILE *psTile = NULL;
 	BOOL bOutlined = FALSE;
 	UDWORD tileNumber = 0;
-	PIEVERTEX vertices[3];
+	PIEVERTEXF2 vertices[3];
 	UBYTE oldColours[4] = { 0, 0, 0, 0 };
 	UDWORD oldColoursWord[4] = { 0, 0, 0, 0 };
 #if defined(SHOW_ZONES) || defined(SHOW_GATEWAYS)
@@ -4142,6 +4146,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		/* Clear it for next time round */
 		CLEAR_TILE_HIGHLIGHT(psTile);
 		bOutlined = TRUE;
+
 		//set tilenumber
 		if ( i < (LAND_XGRD-1) && j < (LAND_YGRD-1) ) // FIXME
 		{
@@ -4202,8 +4207,8 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	tileScreenInfo[i+1][j+0].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + sP4.y;
 
 	/* The first triangle */
-	memcpy(&vertices[0], &tileScreenInfo[i+0][j+0], sizeof(PIEVERTEX));
-	memcpy(&vertices[1], &tileScreenInfo[i+0][j+1], sizeof(PIEVERTEX));
+	memcpy(&vertices[0], &tileScreenInfo[i+0][j+0], sizeof(PIEVERTEXF2));
+	memcpy(&vertices[1], &tileScreenInfo[i+0][j+1], sizeof(PIEVERTEXF2));
 	if (onWaterEdge)
 	{
 		vertices[0].y = tileScreenInfo[i+0][j+0].water_height;
@@ -4212,7 +4217,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 
 	if (TRI_FLIPPED(psTile))
 	{
-		memcpy(&vertices[2], &tileScreenInfo[i+1][j+0], sizeof(PIEVERTEX));
+		memcpy(&vertices[2], &tileScreenInfo[i+1][j+0], sizeof(PIEVERTEXF2));
 		if (onWaterEdge)
 		{
 			vertices[2].y = tileScreenInfo[i+1][j+0].water_height;
@@ -4220,7 +4225,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	}
 	else
 	{
-		memcpy(&vertices[2], &tileScreenInfo[i+1][j+1], sizeof(PIEVERTEX));
+		memcpy(&vertices[2], &tileScreenInfo[i+1][j+1], sizeof(PIEVERTEXF2));
 		if (onWaterEdge)
 		{
 			vertices[2].y = tileScreenInfo[i+1][j+1].water_height;
@@ -4234,7 +4239,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	/* The second triangle */
 	if (TRI_FLIPPED(psTile))
 	{
-		memcpy(&vertices[0], &tileScreenInfo[i+0][j+1], sizeof(PIEVERTEX));
+		memcpy(&vertices[0], &tileScreenInfo[i+0][j+1], sizeof(PIEVERTEXF2));
 		if (onWaterEdge)
 		{
 			vertices[0].y = tileScreenInfo[i+0][j+1].water_height;
@@ -4242,15 +4247,15 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	}
 	else
 	{
-		memcpy(&vertices[0], &tileScreenInfo[i+0][j+0], sizeof(PIEVERTEX));
+		memcpy(&vertices[0], &tileScreenInfo[i+0][j+0], sizeof(PIEVERTEXF2));
 		if (onWaterEdge)
 		{
 			vertices[0].y = tileScreenInfo[i+0][j+0].water_height;
 		}
 	}
 
-	memcpy(&vertices[1], &tileScreenInfo[i+1][j+1], sizeof(PIEVERTEX));
-	memcpy(&vertices[2], &tileScreenInfo[i+1][j+0], sizeof(PIEVERTEX));
+	memcpy(&vertices[1], &tileScreenInfo[i+1][j+1], sizeof(PIEVERTEXF2));
+	memcpy(&vertices[2], &tileScreenInfo[i+1][j+0], sizeof(PIEVERTEXF2));
 	if ( onWaterEdge )
 	{
 		vertices[1].y = tileScreenInfo[i+1][j+1].water_height;
@@ -4311,39 +4316,39 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 	if (TERRAIN_TYPE( mapTile(actualX, actualY) ) == TER_WATER)
 	{
 		/* Used to calculate texture coordinates, which are 0-255 in value */
-		const unsigned int
-				xMult = 256 / TILES_IN_PAGE_COLUMN,
-				yMult = 256 / (2 * TILES_IN_PAGE_ROW);
+		const float
+				xMult = 1.0f / TILES_IN_PAGE_COLUMN,
+				yMult = 1.0f / (2.0f * TILES_IN_PAGE_ROW);
 		const unsigned int tileNumber = getWaterTileNum();
-		PIEVERTEX vertices[3];
+		PIEVERTEXF2 vertices[3];
 
 		// Draw the main water tile.
 		pie_SetTexturePage(tileTexInfo[tileNumber & TILE_NUMMASK].texPage);
 
-		tileScreenInfo[i+0][j+0].u = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + 1;
-		tileScreenInfo[i+0][j+0].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset;
+		tileScreenInfo[i+0][j+0].u = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + anisotropicFilterFix;
+		tileScreenInfo[i+0][j+0].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + anisotropicFilterFix;
 
-		tileScreenInfo[i+0][j+1].u = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + (xMult - 1);
-		tileScreenInfo[i+0][j+1].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset;
+		tileScreenInfo[i+0][j+1].u = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + xMult - anisotropicFilterFix;
+		tileScreenInfo[i+0][j+1].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + anisotropicFilterFix;
 
-		tileScreenInfo[i+1][j+1].u = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + (xMult - 1);
-		tileScreenInfo[i+1][j+1].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + (yMult - 1);
+		tileScreenInfo[i+1][j+1].u = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + xMult - anisotropicFilterFix;
+		tileScreenInfo[i+1][j+1].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + yMult - anisotropicFilterFix;
 
-		tileScreenInfo[i+1][j+0].u = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + 1;
-		tileScreenInfo[i+1][j+0].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + (yMult - 1);
+		tileScreenInfo[i+1][j+0].u = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + anisotropicFilterFix;
+		tileScreenInfo[i+1][j+0].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + yMult - anisotropicFilterFix;
 
 
-		memcpy(&vertices[0], &tileScreenInfo[i+0][j+0], sizeof(PIEVERTEX));
+		memcpy(&vertices[0], &tileScreenInfo[i+0][j+0], sizeof(PIEVERTEXF2));
 		vertices[0].y = tileScreenInfo[i+0][j+0].water_height;
 		vertices[0].light = tileScreenInfo[i+0][j+0].wlight;
 		vertices[0].light.byte.a = WATER_ALPHA_LEVEL;
 
-		memcpy(&vertices[1], &tileScreenInfo[i+0][j+1], sizeof(PIEVERTEX));
+		memcpy(&vertices[1], &tileScreenInfo[i+0][j+1], sizeof(PIEVERTEXF2));
 		vertices[1].y = tileScreenInfo[i+0][j+1].water_height;
 		vertices[1].light = tileScreenInfo[i+0][j+1].wlight;
 		vertices[1].light.byte.a = WATER_ALPHA_LEVEL;
 
-		memcpy(&vertices[2], &tileScreenInfo[i+1][j+1], sizeof(PIEVERTEX));
+		memcpy(&vertices[2], &tileScreenInfo[i+1][j+1], sizeof(PIEVERTEXF2));
 		vertices[2].y = tileScreenInfo[i+1][j+1].water_height;
 		vertices[2].light = tileScreenInfo[i+1][j+1].wlight;
 		vertices[2].light.byte.a = WATER_ALPHA_LEVEL;
@@ -4353,8 +4358,8 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 		pie_DrawTexTriangle(vertices, &waterRealValue);
 
 
-		memcpy(&vertices[1], &vertices[2], sizeof(PIEVERTEX));
-		memcpy(&vertices[2], &tileScreenInfo[i+1][j+0], sizeof(PIEVERTEX));
+		memcpy(&vertices[1], &vertices[2], sizeof(PIEVERTEXF2));
+		memcpy(&vertices[2], &tileScreenInfo[i+1][j+0], sizeof(PIEVERTEXF2));
 		vertices[2].y = tileScreenInfo[i+1][j+0].water_height;
 		vertices[2].light = tileScreenInfo[i+1][j+0].wlight;
 		vertices[2].light.byte.a = WATER_ALPHA_LEVEL;

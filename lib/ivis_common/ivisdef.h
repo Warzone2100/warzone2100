@@ -85,8 +85,8 @@ typedef struct {
 typedef struct {
 	int nFrames;
 	int playbackRate;
-	int textureWidth;
-	int textureHeight;
+	float textureWidth;
+	float textureHeight;
 } iTexAnim;
 
 
@@ -155,12 +155,12 @@ typedef struct {
 
 typedef struct {
 	uint16_t TPageID;
-	uint16_t Tu;
-	uint16_t Tv;
 	uint16_t Width;
 	uint16_t Height;
 	int16_t XOffset;
 	int16_t YOffset;
+	float Tu;
+	float Tv;
 } IMAGEDEF;
 
 

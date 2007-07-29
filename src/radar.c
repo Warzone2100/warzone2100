@@ -158,12 +158,12 @@ BOOL InitRadar(void)
 	memset(radarBuffer,0,RADWIDTH*RADHEIGHT);
 
 	RadarImage.TPageID = RADAR_3DFX_TPAGEID;	// 3dfx only,radar is hard coded to texture page 31 - sort this out?
-	RadarImage.Tu = 0;
-	RadarImage.Tv = 0;
+	RadarImage.Tu = 0.0f;
+	RadarImage.Tv = 0.0f;
 	RadarImage.Width = (UWORD)RadarWidth;
 	RadarImage.Height = (UWORD)RadarHeight;
-	RadarImage.XOffset = 0;
-	RadarImage.YOffset = 0;
+	RadarImage.XOffset = 0.0f;
+	RadarImage.YOffset = 0.0f;
 
 	colRadarBorder	= COL_GREY;
 	colBlack = 0;

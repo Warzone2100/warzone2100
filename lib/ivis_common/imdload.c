@@ -181,8 +181,8 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 
 			/* Uses Max metric playback rate */
 			s->animInterval = pbRate;
-			poly->pTexAnim->textureWidth = tWidth;
-			poly->pTexAnim->textureHeight = tHeight;
+			poly->pTexAnim->textureWidth = tWidth / OLD_TEXTURE_SIZE_FIX;
+			poly->pTexAnim->textureHeight = tHeight / OLD_TEXTURE_SIZE_FIX;
 		}
 		else
 		{
@@ -209,8 +209,8 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 				}
 				pFileData += cnt;
 
-				poly->texCoord[j].x = VertexU;
-				poly->texCoord[j].y = VertexV;
+				poly->texCoord[j].x = VertexU / OLD_TEXTURE_SIZE_FIX;
+				poly->texCoord[j].y = VertexV / OLD_TEXTURE_SIZE_FIX;
 			}
 		}
 		else
