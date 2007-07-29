@@ -141,7 +141,7 @@ BOOL iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	// Filler is, however, for an unknown reason required for tertilesc[23]
 
 	/* tell libpng to strip 16 bit/color files down to 8 bits/color */
-// 	png_set_strip_16(png_ptr);
+ 	png_set_strip_16(png_ptr);
 
 	/* Extract multiple pixels with bit depths of 1, 2, and 4 from a single
 	 * byte into separate bytes (useful for paletted and grayscale images).
@@ -150,14 +150,12 @@ BOOL iV_loadImage_PNG(const char *fileName, iV_Image *image)
 
 	/* More transformations to ensure we end up with 32bpp, 4 channel RGBA */
 // 	png_set_gray_to_rgb(png_ptr);
-// 	png_set_palette_to_rgb(png_ptr);
-// 	png_set_tRNS_to_alpha(png_ptr);
+ 	png_set_palette_to_rgb(png_ptr);
+ 	png_set_tRNS_to_alpha(png_ptr);
 	png_set_filler(png_ptr, 0xff, PNG_FILLER_AFTER);
 // 	png_set_gray_1_2_4_to_8(png_ptr);
 
-
 	png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
-
 
 	image->width = info_ptr->width;
 	image->height = info_ptr->height;
