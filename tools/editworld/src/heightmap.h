@@ -1059,7 +1059,7 @@ class CHeightMap : public CChnkIO
 		void DisplayGateways3D(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPosition);
 		void DisplayGateways2D(CDIBDraw *DIBDraw,int ScrollX, int ScrollY,RECT *Clip);
 		
-		inline ListNode<GateWay>* GetGateWays()
+		inline const std::list<GateWay>& GetGateWays()
 		{
 			return m_Gateways;
 		}
@@ -1105,7 +1105,7 @@ class CHeightMap : public CChnkIO
 	private:
 		int m_MaxTileID;
 		int m_NumGateways;
-		ListNode<GateWay> *m_Gateways;
+		std::list<GateWay> m_Gateways;
 
 		int m_NumScrollLimits;
 		ListNode<CScrollLimits> *m_ScrollLimits;

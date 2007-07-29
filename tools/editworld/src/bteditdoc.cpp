@@ -2792,12 +2792,12 @@ void CBTEditDoc::DrawRadarMap2D(CDIBDraw *DIBDraw,DWORD XPos,DWORD YPos)
 			HPEN NormalPen = CreatePen(PS_SOLID,1,RGB(255,255,0));
 			HPEN OldPen = (HPEN)SelectObject(dc,NormalPen);
 
-			for (ListNode<GateWay>::iterator curNode = m_HeightMap->GetGateWays(); curNode != ListNode<GateWay>::iterator(); ++curNode)
+			for (std::list<GateWay>::const_iterator curGateway = m_HeightMap->GetGateWays().begin(); curGateway != m_HeightMap->GetGateWays().end(); ++curGateway)
 			{
-				int x0 = (static_cast<int>(curNode->x0) + OVERSCAN) * m_RadarScale;
-				int y0 = (static_cast<int>(curNode->y0) + OVERSCAN) * m_RadarScale;
-				int x1 = (static_cast<int>(curNode->x1) + OVERSCAN) * m_RadarScale;
-				int y1 = (static_cast<int>(curNode->y1) + OVERSCAN) * m_RadarScale;
+				int x0 = (static_cast<int>(curGateway->x0) + OVERSCAN) * m_RadarScale;
+				int y0 = (static_cast<int>(curGateway->y0) + OVERSCAN) * m_RadarScale;
+				int x1 = (static_cast<int>(curGateway->x1) + OVERSCAN) * m_RadarScale;
+				int y1 = (static_cast<int>(curGateway->y1) + OVERSCAN) * m_RadarScale;
 
 				if(x0 == x1)
 				{

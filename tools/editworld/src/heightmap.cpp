@@ -7389,28 +7389,25 @@ BOOL CHeightMap::WriteDeliveranceMap(FILE *Stream)
 		if( fwrite(&Tile,SAVE_TILE_SIZE,1,Stream) != 1) return FALSE;
 	}
 
-	ListNode<GateWay> *TmpNode;
-	GateWay *Data;
 	GATEWAY_SAVEHEADER GateHeader;
-	GATEWAY_SAVE Gate;
 
 	GateHeader.version = CURRENT_GATEWAY_VERSION;
 	GateHeader.numGateways = m_NumGateways;
 	
-	if( fwrite(&GateHeader,sizeof(GateHeader),1,Stream) != 1) return FALSE;
+	if (fwrite(&GateHeader, sizeof(GateHeader), 1, Stream) != 1)
+		return FALSE;
 
-	TmpNode = m_Gateways;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
 
-		Gate.x0 = (UBYTE)Data->x0;
-		Gate.y0 = (UBYTE)Data->y0;
-		Gate.x1 = (UBYTE)Data->x1;
-		Gate.y1 = (UBYTE)Data->y1;
+	for (std::list<GateWay>::const_iterator curNode = m_Gateways.begin(); curNode != m_Gateways.end(); ++curNode)
+	{
+		GATEWAY_SAVE Gate;
+		Gate.x0 = static_cast<UBYTE>(curNode->x0);
+		Gate.y0 = static_cast<UBYTE>(curNode->y0);
+		Gate.x1 = static_cast<UBYTE>(curNode->x1);
+		Gate.y1 = static_cast<UBYTE>(curNode->y1);
 
-		if( fwrite(&Gate,sizeof(Gate),1,Stream) != 1) return FALSE;
-
-		TmpNode = TmpNode->GetNextNode();
+		if (fwrite(&Gate, sizeof(Gate), 1, Stream) != 1)
+			return FALSE;
 	}
 
 	giSetMapData(this);
@@ -8211,7 +8208,7 @@ BOOL CHeightMap::WriteDeliveranceLimits(FILE *Stream)
 void CHeightMap::InitialiseGateways()
 {
 	m_NumGateways = 0;
-	m_Gateways = NULL;
+	m_Gateways.clear();
 }
 
 
@@ -8219,18 +8216,6 @@ void CHeightMap::InitialiseGateways()
 //
 int CHeightMap::AddGateway(int x0,int y0,int x1,int y1)
 {
-	ListNode<GateWay> *TmpNode;
-	GateWay *Data;
-
-	if(m_Gateways == NULL) {
-		m_Gateways = new ListNode<GateWay>;
-		Data = m_Gateways->GetData();
-	} else {
-		TmpNode = new ListNode<GateWay>;
-		TmpNode->AppendNode(m_Gateways);
-		Data = TmpNode->GetData();
-	}
-
 	int dx = x1-x0;
 	int dy = y1-y0;
 
@@ -8256,16 +8241,19 @@ int CHeightMap::AddGateway(int x0,int y0,int x1,int y1)
 		y1 = tmp;
 	}
 
-	Data->Selected = FALSE;
-   	Data->Flags = GATEF_GROUND;
-   	Data->x0 = x0;
-   	Data->y0 = y0;
-   	Data->x1 = x1;
-   	Data->y1 = y1;
+	GateWay Data;
+	Data.Selected = FALSE;
+   	Data.Flags = GATEF_GROUND;
+   	Data.x0 = x0;
+   	Data.y0 = y0;
+   	Data.x1 = x1;
+   	Data.y1 = y1;
+
+	m_Gateways.push_back(Data);
 
 	DebugPrint("Gateway added : %d %d %d %d\n",x0,y0,x1,y1);
 
-	m_NumGateways++;
+	++m_NumGateways;
 
 	return m_NumGateways-1;
 }
@@ -8275,16 +8263,14 @@ int CHeightMap::AddGateway(int x0,int y0,int x1,int y1)
 //
 void CHeightMap::DeleteGateway(int Index)
 {
-	ListNode<GateWay> *TmpNode;
+	if (m_Gateways.empty()
+	 || m_Gateways.size() <= Index)
+		return;
 
-	if(m_Gateways) {
-		TmpNode = m_Gateways->GetNthNode(Index);
-		if(TmpNode) {
-			m_Gateways = TmpNode->RemoveNode(m_Gateways);
-			delete TmpNode;
-			m_NumGateways--;
-		}
-	}
+	std::list<GateWay>::iterator toRemove = m_Gateways.begin();
+	std::advance(toRemove, Index);
+	m_Gateways.erase(toRemove);
+	--m_NumGateways;
 }
 
 
@@ -8292,11 +8278,7 @@ void CHeightMap::DeleteGateway(int Index)
 //
 void CHeightMap::DeleteAllGateways()
 {
-	if(m_Gateways) {
-		m_Gateways->DeleteList();
-		m_Gateways = NULL;
-	}
-
+	m_Gateways.clear();
 	m_NumGateways = 0;
 }
 
@@ -8305,14 +8287,9 @@ void CHeightMap::DeleteAllGateways()
 //
 void CHeightMap::DeSelectGateways()
 {
-	ListNode<GateWay> *TmpNode;
-	GateWay *Data;
-
-	TmpNode = m_Gateways;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-		Data->Selected = FALSE;
-		TmpNode = TmpNode->GetNextNode();
+	for (std::list<GateWay>::iterator curGateway = m_Gateways.begin(); curGateway != m_Gateways.end(); ++curGateway)
+	{
+		curGateway->Selected = FALSE;
 	}
 }
 
@@ -8321,31 +8298,32 @@ void CHeightMap::DeSelectGateways()
 //
 void CHeightMap::SelectGateway(int Index)
 {
-	GateWay *Data;
-
 	DeSelectGateways();
 
-	if(Index < m_NumGateways) {
-		Data = m_Gateways->GetNthNode(Index)->GetData();
-		Data->Selected = TRUE;
-	}
+	if (Index >= m_Gateways.size())
+		return;
+
+	std::list<GateWay>::iterator toSelect = m_Gateways.begin();
+	std::advance(toSelect, Index);
+
+	toSelect->Selected = TRUE;
 }
 
 
 BOOL CHeightMap::GetGateway(int Index,int *x0,int *y0,int *x1,int *y1)
 {
-	GateWay *Data;
+	if (Index >= m_Gateways.size())
+		return FALSE;
 
-	if(Index < m_NumGateways) {
-		Data = m_Gateways->GetNthNode(Index)->GetData();
-		*x0 = Data->x0;
-		*y0 = Data->y0;
-		*x1 = Data->x1;
-		*y1 = Data->y1;
-		return TRUE;
-	}
+	std::list<GateWay>::iterator curGateway = m_Gateways.begin();
+	std::advance(curGateway, Index);
 
-	return FALSE;
+	*x0 = curGateway->x0;
+	*y0 = curGateway->y0;
+	*x1 = curGateway->x1;
+	*y1 = curGateway->y1;
+
+	return TRUE;
 }
 
 
@@ -8353,64 +8331,59 @@ BOOL CHeightMap::GetGateway(int Index,int *x0,int *y0,int *x1,int *y1)
 //
 int CHeightMap::FindGateway(int x,int y)
 {
-	ListNode<GateWay> *TmpNode;
-	GateWay *Data;
-	int i = 0;
+	unsigned int i = 0;
 
-	TmpNode = m_Gateways;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-
-		if( ((x >= Data->x0) && (x <= Data->x1)) &&
-			((y >= Data->y0) && (y <= Data->y1)) ) {
+	for (std::list<GateWay>::iterator curGateway = m_Gateways.begin(); curGateway != m_Gateways.end(); ++curGateway)
+	{
+		if (x >= curGateway->x0
+		 && x <= curGateway->x1
+		 && y >= curGateway->y0
+		 && y <= curGateway->y1)
 			return i;
-		}
 
-		i++;
-		TmpNode = TmpNode->GetNextNode();
+		++i;
 	}
 
 	return -1;
 }
 
 
-void CHeightMap::SetGateway(int Index,int x0,int y0,int x1,int y1)
+void CHeightMap::SetGateway(int Index, int x0, int y0, int x1, int y1)
 {
-	GateWay *Data;
+	if (Index >= m_Gateways.size())
+		return;
 
-	if(Index < m_NumGateways) {
-		Data = m_Gateways->GetNthNode(Index)->GetData();
+	std::list<GateWay>::iterator curGateway = m_Gateways.begin();
+	std::advance(curGateway, Index);
 
-		int dx = x1-x0;
-		int dy = y1-y0;
+	int dx = x1-x0;
+	int dy = y1-y0;
 
-		// Check for vertical or horizontal
-		if((dx != 0) && (dy != 0)) {
-			// not the case..
-			if(abs(dx) > abs(dy)) {	// More horizontal than vertical..
-				y1 = y0; // make it horizontal,
-			} else {
-				x1 = x0; // otherwise make it vertical.
-			}
+	// Check for vertical or horizontal
+	if (dx != 0
+	 && dy != 0)
+	{
+		// not the case..
+		if (abs(dx) > abs(dy)) // More horizontal than vertical..
+		{
+			y1 = y0; // make it horizontal,
 		}
-
-		if(x0 > x1) {
-			int tmp = x0;
-			x0 = x1;
-			x1 = tmp;
+		else
+		{
+			x1 = x0; // otherwise make it vertical.
 		}
-		
-		if(y0 > y1) {
-			int tmp = y0;
-			y0 = y1;
-			y1 = tmp;
-		}
-
-		Data->x0 = x0;
-		Data->y0 = y0;
-		Data->x1 = x1;
-		Data->y1 = y1;
 	}
+
+	if(x0 > x1)
+		std::swap(x0, x1);
+	
+	if(y0 > y1)
+		std::swap(y0, y1);
+
+	curGateway->x0 = x0;
+	curGateway->y0 = y0;
+	curGateway->x1 = x1;
+	curGateway->y1 = y1;
 }
 
 
@@ -8451,38 +8424,36 @@ BOOL CHeightMap::TileIsBlocking(int x,int y,int Water)
 //
 BOOL CHeightMap::CheckGatewayBlockingTiles(int Index)
 {
-	GateWay *Data;
-	BOOL Water;
+	if (Index >= m_Gateways.size())
+		return TRUE;
 
-	if(Index < m_NumGateways) {
-		Data = m_Gateways->GetNthNode(Index)->GetData();
+	std::list<GateWay>::const_iterator curGateway = m_Gateways.begin();
+	std::advance(curGateway, Index);
 
 
-		Water = FALSE;
-		// If the 1st tile in the gateway is water then assume were doing
-		// a gateway over water.
-		if(GetTileType(Data->x0,Data->y0) == TF_TYPEWATER) {
-			Water = TRUE;
+	// If the 1st tile in the gateway is water then assume were doing
+	// a gateway over water.
+	bool Water = GetTileType(curGateway->x0, curGateway->y0) == TF_TYPEWATER;
+
+	if (curGateway->x0 == curGateway->x1) // Vertical
+	{
+		// Now check tiles to left & right are not blocking and tiles
+		// along span are not blocking.
+		for (int y = curGateway->y0; y <= curGateway->y1; ++y)
+		{
+			if (TileIsBlocking(curGateway->x0, y, Water))
+				return FALSE;
 		}
 
-		if(Data->x0 == Data->x1) {	// Vertical
-			// Now check tiles to left & right are not blocking and tiles
-			// along span are not blocking.
-			for(int y=Data->y0; y <= Data->y1;  y++) {
-				if(TileIsBlocking(Data->x0,y,Water)) {
-					return FALSE;
-				}
-			}
-
-		} else { // Horizontal.
-			// Now check tiles above and below are not blocking and tiles
-			// along span are not blocking.
-			for(int x=Data->x0; x <= Data->x1;  x++) {
-				if(TileIsBlocking(x,Data->y0,Water)) {
-					return FALSE;
-				}
-			}
-
+	}
+	else // Horizontal.
+	{
+		// Now check tiles above and below are not blocking and tiles
+		// along span are not blocking.
+		for (int x = curGateway->x0; x <= curGateway->x1; ++x)
+		{
+			if (TileIsBlocking(x, curGateway->y0, Water))
+				return FALSE;
 		}
 
 	}
@@ -8574,9 +8545,6 @@ BOOL CHeightMap::CheckGatewayBlockingTiles(int Index)
 //
 BOOL CHeightMap::CheckGatewayOverlap(int CurIndex,int x0,int y0,int x1,int y1)
 {
-	ListNode<GateWay> *TmpNode;
-	GateWay *Data;
-
 	int dx = x1-x0;
 	int dy = y1-y0;
 
@@ -8609,50 +8577,67 @@ BOOL CHeightMap::CheckGatewayOverlap(int CurIndex,int x0,int y0,int x1,int y1)
 	}
 
 
-	int Index = 0;
+	unsigned int Index = 0;
 
-	TmpNode = m_Gateways;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-
-		if(Index != CurIndex) {
-			if(Vertical) {
-				if(Data->x0 == Data->x1) {	// Vertical against vertical.
-					if(x0 == Data->x0) {
-						if( ((y0 >= Data->y0) && (y0 <= Data->y1)) ||
-							((y1 >= Data->y0) && (y1 <= Data->y1)) ||
-							((Data->y0 >= y0) && (Data->y0 <= y1)) ||
-							((Data->y1 >= y0) && (Data->y1 <= y1)) ) {
+	for (std::list<GateWay>::iterator curGateway = m_Gateways.begin(); curGateway != m_Gateways.end(); ++curGateway)
+	{
+		if (Index != CurIndex)
+		{
+			if(Vertical)
+			{
+				if(curGateway->x0 == curGateway->x1) // Vertical against vertical.
+				{
+					if(x0 == curGateway->x0)
+					{
+						if ((y0 >= curGateway->y0
+						  && y0 <= curGateway->y1)
+						 ||	(y1 >= curGateway->y0
+						  && y1 <= curGateway->y1)
+						 || (curGateway->y0 >= y0
+						  && curGateway->y0 <= y1)
+						 || (curGateway->y1 >= y0
+						  && curGateway->y1 <= y1))
 							return FALSE;
-						}
-					}
-				} else {	// Vertical against horizontal.
-					if( (x0 >= Data->x0) && (x0 <= Data->x1) &&
-						(y0 <= Data->y0) && (y1 >= Data->y0) ) {
-						return FALSE;
 					}
 				}
-			} else {
-				if(Data->x0 == Data->x1) {	// Horizontal against vertical.
-					if( (y0 >= Data->y0) && (y0 <= Data->y1) &&
-						(x0 <= Data->x0) && (x1 >= Data->x0) ) {
+				else // Vertical against horizontal.
+				{
+					if (x0 >= curGateway->x0
+					 && x0 <= curGateway->x1
+					 && y0 <= curGateway->y0
+					 && y1 >= curGateway->y0)
 						return FALSE;
-					}
-				} else {	// Horizontal against horizontal.
-					if(y0 == Data->y0) {
-						if( ((x0 >= Data->x0) && (x0 <= Data->x1)) ||
-							((x1 >= Data->x0) && (x1 <= Data->x1)) ||
-							((Data->x0 >= x0) && (Data->x0 <= x1)) ||
-							((Data->x1 >= x0) && (Data->x1 <= x1)) ) {
+				}
+			}
+			else
+			{
+				if (curGateway->x0 == curGateway->x1)
+				{	// Horizontal against vertical.
+					if (y0 >= curGateway->y0
+					 && y0 <= curGateway->y1
+					 && x0 <= curGateway->x0
+					 && x1 >= curGateway->x0)
+						return FALSE;
+				}
+				else
+				{	// Horizontal against horizontal.
+					if (y0 == curGateway->y0)
+					{
+						if ((x0 >= curGateway->x0
+						  && x0 <= curGateway->x1)
+						 || (x1 >= curGateway->x0
+						  && x1 <= curGateway->x1)
+						 || (curGateway->x0 >= x0
+						  && curGateway->x0 <= x1)
+						 || (curGateway->x1 >= x0
+						  && curGateway->x1 <= x1))
 							return FALSE;
-						}
 					}
 				}
 			}
 		}
 
-		Index++;
-		TmpNode = TmpNode->GetNextNode();
+		++Index;
 	}
 
 	return TRUE;
@@ -8661,27 +8646,20 @@ BOOL CHeightMap::CheckGatewayOverlap(int CurIndex,int x0,int y0,int x1,int y1)
 
 // Write gateways to the project file.
 //
-BOOL CHeightMap::WriteGateways(FILE *Stream,int StartX,int StartY,int Width,int Height)
+BOOL CHeightMap::WriteGateways(FILE* Stream, int StartX, int StartY, int Width, int Height)
 {
-	ListNode<GateWay> *TmpNode;
-	GateWay *Data;
-
 	fprintf(Stream,"Gateways {\n");
 	fprintf(Stream,"    Version %d\n",CURRENT_GATEWAY_VERSION);
 	fprintf(Stream,"    NumGateways %d\n",m_NumGateways);
 	fprintf(Stream,"    Gates {\n");
 
-	TmpNode = m_Gateways;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-
-		fprintf(Stream,"        %d %d %d %d\n",Data->x0,Data->y0,Data->x1,Data->y1);
-
-		TmpNode = TmpNode->GetNextNode();
+	for (std::list<GateWay>::iterator curGateway = m_Gateways.begin(); curGateway != m_Gateways.end(); ++curGateway)
+	{
+		fprintf(Stream, "        %d %d %d %d\n", curGateway->x0, curGateway->y0, curGateway->x1, curGateway->y1);
 	}
 
-	fprintf(Stream,"    }\n");
-	fprintf(Stream,"}\n");
+	fprintf(Stream, "    }\n");
+	fprintf(Stream, "}\n");
 
 	return TRUE;
 }
@@ -8723,18 +8701,11 @@ BOOL CHeightMap::ReadGateways(FILE *Stream)
 //
 BOOL CHeightMap::WriteDeliveranceGateways(FILE *Stream)
 {
-	ListNode<GateWay> *TmpNode;
-	GateWay *Data;
+	fprintf(Stream, "%d\r\n", m_NumGateways);
 
-	fprintf(Stream,"%d\r\n",m_NumGateways);
-
-	TmpNode = m_Gateways;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-
-		fprintf(Stream,"%d %d %d %d\r\n",Data->x0,Data->y0,Data->x1,Data->y1);
-
-		TmpNode = TmpNode->GetNextNode();
+	for (std::list<GateWay>::iterator curGateway = m_Gateways.begin(); curGateway != m_Gateways.end(); ++curGateway)
+	{
+		fprintf(Stream, "%d %d %d %d\r\n", curGateway->x0, curGateway->y0, curGateway->x1, curGateway->y1);
 	}
 
 	return TRUE;
@@ -8752,9 +8723,6 @@ void CHeightMap::DisplayGateways3D(D3DVECTOR &CameraRotation,D3DVECTOR &CameraPo
 //
 void CHeightMap::DisplayGateways2D(CDIBDraw *DIBDraw,int ScrollX, int ScrollY,RECT *Clip)
 {
-	ListNode<GateWay> *TmpNode;
-	GateWay *Data;
-
 	ScrollX /= (int)m_TextureWidth;
 	ScrollY /= (int)m_TextureHeight;
 
@@ -8762,45 +8730,47 @@ void CHeightMap::DisplayGateways2D(CDIBDraw *DIBDraw,int ScrollX, int ScrollY,RE
 	HPEN NormalPen = CreatePen(PS_SOLID,1,RGB(0,255,255));
 	HPEN OldPen = (HPEN)SelectObject(dc,NormalPen);
 
-	TmpNode = m_Gateways;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-		int cw = (int)m_TextureWidth;
-		int ch = (int)m_TextureHeight;
+	for (std::list<GateWay>::iterator curGateway = m_Gateways.begin(); curGateway != m_Gateways.end(); ++curGateway)
+	{
+		int cw = static_cast<int>(m_TextureWidth);
+		int ch = static_cast<int>(m_TextureHeight);
 
-		int x0 = (((int)Data->x0) - ScrollX)*cw;
-		int y0 = (((int)Data->y0) - ScrollY)*ch;
-		int x1 = (((int)Data->x1) - ScrollX)*cw;
-		int y1 = (((int)Data->y1) - ScrollY)*ch;
+		int x0 = (static_cast<int>(curGateway->x0) - ScrollX) * cw;
+		int y0 = (static_cast<int>(curGateway->y0) - ScrollY) * ch;
+		int x1 = (static_cast<int>(curGateway->x1) - ScrollX) * cw;
+		int y1 = (static_cast<int>(curGateway->y1) - ScrollY) * ch;
 
-		if(x0 == x1) {
-			for(; y0 < y1+ch; y0+=ch) {
-				MoveToEx(dc,x0,y0,NULL);
-				LineTo(dc,x0+cw,y0);
-				LineTo(dc,x0+cw,y0+ch);
-				LineTo(dc,x0,y0+ch);
-				LineTo(dc,x0,y0);
-				LineTo(dc,x0+cw,y0+ch);
-				MoveToEx(dc,x0+cw,y0,NULL);
-				LineTo(dc,x0,y0+ch);
-			}
-		} else {
-			for(; x0 < x1+cw; x0+=cw) {
-				MoveToEx(dc,x0,y0,NULL);
-				LineTo(dc,x0+cw,y0);
-				LineTo(dc,x0+cw,y0+ch);
-				LineTo(dc,x0,y0+ch);
-				LineTo(dc,x0,y0);
-				LineTo(dc,x0+cw,y0+ch);
-				MoveToEx(dc,x0+cw,y0,NULL);
-				LineTo(dc,x0,y0+ch);
+		if (x0 == x1)
+		{
+			for (; y0 < y1 + ch; y0 += ch)
+			{
+				MoveToEx(dc, x0, y0, NULL);
+				LineTo(dc, x0 + cw, y0);
+				LineTo(dc, x0 + cw, y0 + ch);
+				LineTo(dc, x0, y0 + ch);
+				LineTo(dc, x0, y0);
+				LineTo(dc, x0 + cw, y0 + ch);
+				MoveToEx(dc, x0 + cw, y0, NULL);
+				LineTo(dc, x0, y0 + ch);
 			}
 		}
-
-		TmpNode = TmpNode->GetNextNode();
+		else
+		{
+			for (; x0 < x1 + cw; x0 += cw)
+			{
+				MoveToEx(dc, x0,y0,NULL);
+				LineTo(dc, x0 + cw, y0);
+				LineTo(dc, x0 + cw, y0 + ch);
+				LineTo(dc, x0, y0 + ch);
+				LineTo(dc, x0, y0);
+				LineTo(dc, x0 + cw, y0 + ch);
+				MoveToEx(dc, x0 + cw, y0, NULL);
+				LineTo(dc, x0, y0 + ch);
+			}
+		}
 	}
 
-	SelectObject(dc,OldPen);
+	SelectObject(dc, OldPen);
 	DeleteObject(NormalPen);
 }
 
