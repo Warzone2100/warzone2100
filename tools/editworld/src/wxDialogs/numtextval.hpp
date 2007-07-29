@@ -58,7 +58,7 @@ DECLARE_DYNAMIC_CLASS(wxNumericTextValidator)
         {
             wxCHECK_MSG( m_validatorWindow, false,
                          _T("No window associated with validator") );
-            wxCHECK_MSG( m_validatorWindow->IsKindOf(CLASSINFO(wxTextCtrl)), false,
+            wxCHECK_MSG( dynamic_cast<wxTextCtrl*>(m_validatorWindow) != NULL, false,
                          _T("wxNumericTextValidator is only for wxTextCtrl's") );
 
             return true;
