@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-07-29 23:26+0200\n"
+"POT-Creation-Date: 2007-07-30 02:46+0200\n"
 "PO-Revision-Date: 2007-07-22 12:25+0100\n"
 "Last-Translator: Ryo <RyoOhkli@gmx.de>\n"
 "Language-Team: Deutsch\n"
@@ -20,35 +20,35 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Bookmarks: 458,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
-#: src/multiplay.c:1941
+#: src/multiplay.c:1894
 msgid "Green"
 msgstr "Gr�n"
 
-#: src/multiplay.c:1942
+#: src/multiplay.c:1895
 msgid "Orange"
 msgstr "Orange"
 
-#: src/multiplay.c:1943
+#: src/multiplay.c:1896
 msgid "Grey"
 msgstr "Grau"
 
-#: src/multiplay.c:1944
+#: src/multiplay.c:1897
 msgid "Black"
 msgstr "Schwarz"
 
-#: src/multiplay.c:1945
+#: src/multiplay.c:1898
 msgid "Red"
 msgstr "Rot"
 
-#: src/multiplay.c:1946
+#: src/multiplay.c:1899
 msgid "Blue"
 msgstr "Blau"
 
-#: src/multiplay.c:1947
+#: src/multiplay.c:1900
 msgid "Pink"
 msgstr "Pink"
 
-#: src/multiplay.c:1948
+#: src/multiplay.c:1901
 msgid "Cyan"
 msgstr "Cyan"
 
@@ -75,47 +75,47 @@ msgstr "Baufahrzeug wurde beordert einen �lbohrturm zu bauen"
 msgid "Player"
 msgstr "Spieler"
 
-#: src/multigifts.c:181
+#: src/multigifts.c:172
 #, c-format
 msgid "%s Gives You A Visibility Report"
 msgstr "%s �bertr�gt Radardaten"
 
-#: src/multigifts.c:212
+#: src/multigifts.c:199
 #, c-format
 msgid "%s Gives You Units"
 msgstr "%s �bertr�gt Einheiten"
 
-#: src/multigifts.c:311
+#: src/multigifts.c:294
 #, c-format
 msgid "%s Gives You Technology Documents"
 msgstr "%s �bertr�gt technologische Dokumente"
 
-#: src/multigifts.c:352
+#: src/multigifts.c:334
 #, c-format
 msgid "%s Gives You Power"
 msgstr "%s �bertr�gt Energie"
 
-#: src/multigifts.c:373
+#: src/multigifts.c:355
 #, c-format
 msgid "%s Requests An Alliance With You"
 msgstr "%s w�nscht eine Allianz mit dir"
 
-#: src/multigifts.c:381
+#: src/multigifts.c:363
 #, c-format
 msgid "You Invite %s To Form An Alliance"
 msgstr "Du hast %s eingeladen eine Allianz zu bilden"
 
-#: src/multigifts.c:402
+#: src/multigifts.c:382
 #, c-format
 msgid "%s Breaks The Alliance With %s"
 msgstr "%s bricht die Allianz mit %s"
 
-#: src/multigifts.c:429
+#: src/multigifts.c:407
 #, c-format
 msgid "%s Forms An Alliance With %s"
 msgstr "%s bildet eine Allianz mit %s"
 
-#: src/multigifts.c:766
+#: src/multigifts.c:829
 #, c-format
 msgid "You Discover Blueprints For %s"
 msgstr "Du hast Entw�rfe f�r %s entdeckt"
@@ -282,7 +282,7 @@ msgstr "Spezialist"
 msgid "Hero"
 msgstr "Held"
 
-#: src/multiint.c:356 src/multiint.c:1414 src/multilimit.c:175
+#: src/multiint.c:356 src/multiint.c:1405 src/multilimit.c:175
 msgid "Accept Settings"
 msgstr "Einstellungen akzeptieren"
 
@@ -367,7 +367,7 @@ msgstr "Keine Allianzen"
 msgid "Allow Alliances"
 msgstr "Allianzen erlauben"
 
-#: src/multiint.c:809 src/multiint.c:2046
+#: src/multiint.c:809 src/multiint.c:2037
 msgid "Locked Teams"
 msgstr "Festgelegte Teams"
 
@@ -407,19 +407,19 @@ msgstr "Spiel beginnen"
 msgid "Set Structure Limits"
 msgstr "Geb�udelimits einstellen"
 
-#: src/multiint.c:1299
+#: src/multiint.c:1286
 msgid "PLAYERS"
 msgstr "SPIELER"
 
-#: src/multiint.c:1445
+#: src/multiint.c:1436
 msgid "CHAT"
 msgstr "CHAT"
 
-#: src/multiint.c:1987
+#: src/multiint.c:1978
 msgid "Host is Starting Game"
 msgstr "Host startet das Spiel"
 
-#: src/multiint.c:2764
+#: src/multiint.c:2753
 msgid "Players"
 msgstr "Spieler"
 
@@ -1405,16 +1405,16 @@ msgstr "N�chste Cyborg Fabrik ausw�hlen"
 msgid "Toggle reopening the build menu"
 msgstr "Wieder�ffnen des Bau Men�s umschalten"
 
-#: src/multijoin.c:100 src/multijoin.c:101
+#: src/multijoin.c:121 src/multijoin.c:122
 msgid "Players Still Joining"
 msgstr "Es treten noch Spieler bei"
 
-#: src/multijoin.c:221
+#: src/multijoin.c:242
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s hat das Spiel verlassen"
 
-#: src/multijoin.c:333
+#: src/multijoin.c:354
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s ist dem Spiel beigetreten"
@@ -10701,6 +10701,408 @@ msgstr "Multifunktions-Sensor"
 msgid "Wide Spectrum Sensor Tower"
 msgstr "Multifunktions-Sensorturm"
 
+#: data/mp/messages/strings/names.txt:1714
+#: data/mp/messages/strings/names.txt:1715
+msgid "Plasma Cannon"
+msgstr "Plasmakanone"
+
+#: data/mp/messages/strings/names.txt:1716
+#: data/mp/messages/strings/names.txt:1717
+msgid "Plasma Cannon Emplacement"
+msgstr "Stellung f�r Plasmakanone"
+
+#: data/mp/messages/strings/names.txt:1719
+#: data/mp/messages/strings/names.txt:1720
+#: data/mp/messages/strings/names.txt:1721
+#: data/mp/messages/strings/names.txt:1722
+msgid "Super Pulse Laser Cyborg"
+msgstr "Super Pulslaser Cyborg"
+
+#: data/mp/messages/strings/names.txt:1724
+#: data/mp/messages/strings/names.txt:1725
+#: data/mp/messages/strings/names.txt:1726
+#: data/mp/messages/strings/names.txt:1727
+msgid "Super Rail-Gunner"
+msgstr "Super Railgunsch�tze"
+
+#: data/mp/messages/strings/names.txt:1729
+#: data/mp/messages/strings/names.txt:1730
+#: data/mp/messages/strings/names.txt:1731
+#: data/mp/messages/strings/names.txt:1732
+msgid "Super Scourge Cyborg"
+msgstr "Super Scourg Cyborg"
+
+#: data/mp/messages/strings/names.txt:1734
+#: data/mp/messages/strings/names.txt:1735
+msgid "NEXUS Link Tower"
+msgstr "Turm mit Nexus-Link"
+
+#: data/mp/messages/strings/names.txt:1737
+#: data/mp/messages/strings/names.txt:1740
+msgid "EMP Cannon"
+msgstr "EMP-Kanone"
+
+#: data/mp/messages/strings/names.txt:1738
+#: data/mp/messages/strings/names.txt:1739
+msgid "EMP Cannon Tower"
+msgstr "Turm mit EMP-Kanone"
+
+#: data/mp/messages/strings/names.txt:1744
+#: data/mp/messages/strings/names.txt:1746
+msgid "Mass Driver Fortress"
+msgstr "Massebeschleunigerfestung"
+
+#: data/mp/messages/strings/names.txt:1748
+#: data/mp/messages/strings/names.txt:1750
+msgid "Cannon Fortress"
+msgstr "Kanonenfestung"
+
+#: data/mp/messages/strings/names.txt:1752
+#: data/mp/messages/strings/names.txt:1754
+msgid "Heavy Rocket Bastion"
+msgstr "Schwere Raketenbastion"
+
+#: data/mp/messages/strings/names.txt:1756
+#: data/mp/messages/strings/names.txt:1758
+msgid "Missile Fortress"
+msgstr "Raketenfestung"
+
+#: data/mp/messages/strings/names.txt:1762
+msgid "Super Heavy Body - Wyvern"
+msgstr "Superschwerer Rumpf - Wyvern"
+
+#: data/mp/messages/strings/names.txt:1763
+msgid "Wyvern"
+msgstr "Wyvern"
+
+#: data/mp/messages/strings/names.txt:1765
+msgid "Super Heavy Body - Dragon"
+msgstr "Superschwerer Rumpf - Dragon"
+
+#: data/mp/messages/strings/names.txt:1766
+msgid "Dragon"
+msgstr "Dragon"
+
+#: data/mp/messages/strings/names.txt:1768
+msgid "Superhot Plasmite gel"
+msgstr "Superhei�es Plasmagel"
+
+#: data/mp/messages/strings/names.txt:1769
+msgid "Superhot Plasmite gel Mk2"
+msgstr "Superhei�es Plasmagel MK2"
+
+#: data/mp/messages/strings/names.txt:1770
+msgid "Superhot Plasmite gel Mk3"
+msgstr "Superhei�es Plasmagel MK3"
+
+#: data/mp/messages/strings/names.txt:1774
+#: data/mp/messages/strings/names.txt:1775
+#: data/mp/messages/strings/names.txt:1776
+#: data/mp/messages/strings/names.txt:1777
+msgid "EMP Mortar"
+msgstr "EMP M�rser"
+
+#: data/mp/messages/strings/names.txt:1778
+#: data/mp/messages/strings/names.txt:1779
+#: data/mp/messages/strings/names.txt:1780
+#: data/mp/messages/strings/names.txt:1781
+msgid "Stormbringer AA Laser"
+msgstr "Stormbringer Luftabwehrlaser"
+
+#: data/mp/messages/strings/names.txt:1782
+#: data/mp/messages/strings/names.txt:1783
+msgid "Vindicator Hardpoint"
+msgstr "Vindicator Hardpoint"
+
+#: data/mp/messages/strings/names.txt:1784
+#: data/mp/messages/strings/names.txt:1785
+msgid "Whirlwind Hardpoint"
+msgstr "whirlwind Hardpoint"
+
+#: data/mp/messages/strings/names.txt:1786
+#: data/mp/messages/strings/names.txt:1787
+msgid "Cyclone Hardpoint"
+msgstr "Cyclone Hardpoint"
+
+#: data/mp/messages/strings/names.txt:1788
+#: data/mp/messages/strings/names.txt:1789
+msgid "Avenger Hardpoint"
+msgstr "Hardpoint f�r Avenger"
+
+#: data/mp/messages/strings/names.txt:1793
+#: data/mp/messages/strings/names.txt:1794
+#: data/mp/messages/strings/names.txt:1795
+#: data/mp/messages/strings/names.txt:1796
+msgid "Twin Assault Gun"
+msgstr "Zwillings Sturmgesch�tz"
+
+#: data/mp/messages/strings/names.txt:1798
+#: data/mp/messages/strings/names.txt:1799
+msgid "Plasmite Bomb"
+msgstr "Plasmabomb"
+
+#: data/mp/messages/strings/names.txt:1800
+#: data/mp/messages/strings/names.txt:1801
+msgid "EMP Missile Launcher"
+msgstr "EMP Lenkwaffenwerfer"
+
+#: data/mp/messages/strings/names.txt:1805
+#: data/mp/messages/strings/names.txt:1806
+msgid "Command turret MkII"
+msgstr "Kommandoturm Mk II"
+
+#: data/mp/messages/strings/names.txt:1807
+#: data/mp/messages/strings/names.txt:1808
+msgid "Command turret MkIII"
+msgstr "Kommandoturm Mk III"
+
+#: data/mp/messages/strings/names.txt:1809
+#: data/mp/messages/strings/names.txt:1810
+msgid "Command turret MkIV"
+msgstr "Kommandoturm MkIV"
+
+#: data/mp/messages/strings/names.txt:1820
+msgid "Cobra Hover Heavy-Repair"
+msgstr "Cobra Hover schwerer Reparaturturm"
+
+#: data/mp/messages/strings/names.txt:1821
+msgid "Viper HMG Wheels"
+msgstr "Viper schweres Maschinengewehr R�der"
+
+#: data/mp/messages/strings/names.txt:1822
+msgid "Scourge Mantis Hover"
+msgstr "Scourge Mantis Hover"
+
+#: data/mp/messages/strings/names.txt:1823
+msgid "TK Mantis Hover"
+msgstr "TankKiller Mantis Hover"
+
+#: data/mp/messages/strings/names.txt:1824
+msgid "Cobra HMG Tracks"
+msgstr "Cobra Ketten schweres Maschinengewehr"
+
+#: data/mp/messages/strings/names.txt:1825
+msgid "Cobra Hover HC"
+msgstr "Cobra Hover schwere Kanone"
+
+#: data/mp/messages/strings/names.txt:1830
+msgid "Viper Wheels Machinegun"
+msgstr "Viper R�der Maschinenegewehr"
+
+#: data/mp/messages/strings/names.txt:1831
+msgid "Viper Wheels Twin Machinegun"
+msgstr "Viper R�der Zwillings-Maschinenegewehr"
+
+#: data/mp/messages/strings/names.txt:1832
+msgid "Viper Wheels Heavy Machinegun"
+msgstr "Viper R�der schweres Maschinenegewehr"
+
+#: data/mp/messages/strings/names.txt:1833
+msgid "Cobra Wheels Heavy Machinegun"
+msgstr "Cobra R�der schweres Maschinenegewehr"
+
+#: data/mp/messages/strings/names.txt:1834
+msgid "Cobra Hover Heavy Machinegun"
+msgstr "Cobra Hover schweres Maschinenegewehr"
+
+#: data/mp/messages/strings/names.txt:1836
+msgid "Viper Tracks Machinegun"
+msgstr "Viper Ketten Maschinengewehr"
+
+#: data/mp/messages/strings/names.txt:1837
+msgid "Viper Tracks Twin Machinegun"
+msgstr "Viper Ketten Zwillings-Maschinengewehr"
+
+#: data/mp/messages/strings/names.txt:1838
+msgid "Viper Tracks Heavy Machinegun"
+msgstr "Viper Ketten schweres Maschinengewehr"
+
+#: data/mp/messages/strings/names.txt:1839
+msgid "Cobra Tracks Heavy Machinegun"
+msgstr "Cobra Ketten schweres Maschinengewehr"
+
+#: data/mp/messages/strings/names.txt:1841
+msgid "Cobra Hover Medium Cannon"
+msgstr "Cobra Hover mittlere Kanone"
+
+#: data/mp/messages/strings/names.txt:1842
+msgid "Scorpion Hover Medium Cannon"
+msgstr "Scorpion Hover mittlere Kanone"
+
+#: data/mp/messages/strings/names.txt:1843
+msgid "Scorpion Tracks Medium Cannon"
+msgstr "Scorpion Ketten mittlere Kanone"
+
+#: data/mp/messages/strings/names.txt:1844
+msgid "Python Hover Medium Cannon"
+msgstr "Python Hover mittlere Kanone"
+
+#: data/mp/messages/strings/names.txt:1845
+msgid "Python Hover Heavy Cannon"
+msgstr "Python Hover schwere Kanone"
+
+#: data/mp/messages/strings/names.txt:1846
+msgid "Python Tracks Heavy Cannon"
+msgstr "Python Ketten schwere Kanone"
+
+#: data/mp/messages/strings/names.txt:1847
+msgid "Mantis Tracks Railgun"
+msgstr "Mantis Ketten Railgun"
+
+#: data/mp/messages/strings/names.txt:1848
+msgid "Mantis Tracks Pulse Laser"
+msgstr "Mantis Ketten Puls-Laser"
+
+#: data/mp/messages/strings/names.txt:1849
+msgid "Python Tracks Lancer"
+msgstr "Python Ketten Lancer"
+
+#: data/mp/messages/strings/names.txt:1850
+msgid "Mantis Tracks Lancer"
+msgstr "Mantis Ketten Lancer"
+
+#: data/mp/messages/strings/names.txt:1851
+msgid "Vengeance Tracks Tank Killer"
+msgstr "Vengeance Ketten Tank Killer"
+
+#: data/mp/messages/strings/names.txt:1856
+msgid "Tiger Tracks Heavy Cannon"
+msgstr "Tiger Ketten schwere Kanone"
+
+#: data/mp/messages/strings/names.txt:1857
+msgid "Tiger Tracks Needle Gun"
+msgstr "Tiger Ketten Needle Gun"
+
+#: data/mp/messages/strings/names.txt:1858
+msgid "Retribution Tracks Needle Gun"
+msgstr "Retribution Ketten Needle Gun"
+
+#: data/mp/messages/strings/names.txt:1859
+msgid "Vengeance Tracks Needle Gun"
+msgstr "Vengeance Ketten Needle Gun"
+
+#: data/mp/messages/strings/names.txt:1860
+msgid "Vengeance Tracks Rail Gun"
+msgstr "Vengeance Ketten RailGun"
+
+#: data/mp/messages/strings/names.txt:1861
+msgid "Vengeance Tracks Guass Cannon"
+msgstr "Vengeance Ketten Gausskanone"
+
+#: data/mp/messages/strings/names.txt:1862
+msgid "Vengeance Tracks Guass Scourge"
+msgstr "Vengeance Ketten Scourge"
+
+#: data/mp/messages/strings/names.txt:1865
+msgid "Bug Cluster Bomb VTOL"
+msgstr "Bug Cluster Bomb VTOL"
+
+#: data/mp/messages/strings/names.txt:1866
+msgid "Bug Bunker Buster VTOL"
+msgstr "Bug Bunker Buster VTOL"
+
+#: data/mp/messages/strings/names.txt:1867
+msgid "Scorpion Cluster Bomb VTOL"
+msgstr "Scorpion Cluster Bomb VTOL"
+
+#: data/mp/messages/strings/names.txt:1868
+msgid "Scorpion Bunker Buster VTOL"
+msgstr "Scorpion Bunker Buster VTOL"
+
+#: data/mp/messages/strings/names.txt:1871
+msgid "Bug Lancer VTOL"
+msgstr "Bug Lancer VTOL"
+
+#: data/mp/messages/strings/names.txt:1872
+msgid "Bug HPV VTOL"
+msgstr "Bug HPV VTOL"
+
+#: data/mp/messages/strings/names.txt:1873
+#: data/mp/messages/strings/names.txt:1884
+msgid "Scorpion Lancer VTOL"
+msgstr "Scorpion Lancer VTOL"
+
+#: data/mp/messages/strings/names.txt:1874
+msgid "Scorpion HPV VTOL"
+msgstr "Scorpion HPV VTOL"
+
+#: data/mp/messages/strings/names.txt:1875
+msgid "Mantis Lancer VTOL"
+msgstr "Mantis Lancer VTOL"
+
+#: data/mp/messages/strings/names.txt:1876
+msgid "Mantis HPV VTOL"
+msgstr "Mantis Hochgeschwindigkeitsgesch�tz VTOL"
+
+#: data/mp/messages/strings/names.txt:1879
+msgid "Cobra Repair Trucks"
+msgstr "Cobra Reparatur Ketten"
+
+#: data/mp/messages/strings/names.txt:1880
+#, fuzzy
+msgid "Mantis Repair Trucks"
+msgstr "Mantis Reparatur Ketten"
+
+#: data/mp/messages/strings/names.txt:1882
+#, fuzzy
+msgid "Scorpion Lancer Tracks"
+msgstr "Scorpion Lancer VTOL"
+
+#: data/mp/messages/strings/names.txt:1883
+#, fuzzy
+msgid "Scorpion Heavy Cannon Tracks"
+msgstr "Cobra Schwere Kanone Ketten"
+
+#: data/mp/messages/strings/names.txt:1885
+#, fuzzy
+msgid "Scorpion BB VTOL"
+msgstr "Scorpion HPV VTOL"
+
+#: data/mp/messages/strings/names.txt:1887
+#, fuzzy
+msgid "Viper Command Turret Tracks"
+msgstr "Cobra Kommandoturm Halbketten"
+
+#: data/mp/messages/strings/names.txt:1888
+#, fuzzy
+msgid "Cobra Command Turret Tracks"
+msgstr "Cobra Kommandoturm Halbketten"
+
+#: data/mp/messages/strings/names.txt:1889
+#, fuzzy
+msgid "Scorpion Command Turret Tracks"
+msgstr "Cobra Kommandoturm Halbketten"
+
+#: data/mp/messages/strings/names.txt:1891
+#, fuzzy
+msgid "Cobra Lancer Tracks"
+msgstr "Cobra Flammenwerfer Ketten"
+
+#: data/mp/messages/strings/names.txt:1892
+#, fuzzy
+msgid "Mantis Heavy Cannon Tracks"
+msgstr "Cobra Schwere Kanone Ketten"
+
+#: data/mp/messages/strings/names.txt:1893
+#, fuzzy
+msgid "Mantis Tank Killer Tracks"
+msgstr "Mantis Reparatur Ketten"
+
+#: data/mp/messages/strings/names.txt:1894
+#, fuzzy
+msgid "Scorpion Heavy Machinegun Tracks"
+msgstr "Viper Schweres Maschinengewehr Ketten"
+
+#: data/mp/messages/strings/names.txt:1896
+#, fuzzy
+msgid "Scorpion Repair Tracks"
+msgstr "Cobra Reparatur Ketten"
+
+#: data/mp/messages/strings/names.txt:1897
+#, fuzzy
+msgid "Scorpion Heavy Repair Hover"
+msgstr "Schwerer Reparaturturm"
+
 #: data/mp/messages/strings/resstrings.txt:67
 msgid "Cyborg Transport Available"
 msgstr "Cyborg Transporter verf�gbar"
@@ -11238,234 +11640,6 @@ msgstr "Verbesserter taktischer Computer"
 
 #~ msgid "Compatible"
 #~ msgstr "Kompatibel"
-
-#~ msgid "Plasma Cannon"
-#~ msgstr "Plasmakanone"
-
-#~ msgid "Plasma Cannon Emplacement"
-#~ msgstr "Stellung f�r Plasmakanone"
-
-#~ msgid "Super Pulse Laser Cyborg"
-#~ msgstr "Super Pulslaser Cyborg"
-
-#~ msgid "Super Rail-Gunner"
-#~ msgstr "Super Railgunsch�tze"
-
-#~ msgid "Super Scourge Cyborg"
-#~ msgstr "Super Scourg Cyborg"
-
-#~ msgid "NEXUS Link Tower"
-#~ msgstr "Turm mit Nexus-Link"
-
-#~ msgid "EMP Cannon"
-#~ msgstr "EMP-Kanone"
-
-#~ msgid "EMP Cannon Tower"
-#~ msgstr "Turm mit EMP-Kanone"
-
-#~ msgid "Mass Driver Fortress"
-#~ msgstr "Massebeschleunigerfestung"
-
-#~ msgid "Cannon Fortress"
-#~ msgstr "Kanonenfestung"
-
-#~ msgid "Heavy Rocket Bastion"
-#~ msgstr "Schwere Raketenbastion"
-
-#~ msgid "Missile Fortress"
-#~ msgstr "Raketenfestung"
-
-#~ msgid "Super Heavy Body - Wyvern"
-#~ msgstr "Superschwerer Rumpf - Wyvern"
-
-#~ msgid "Wyvern"
-#~ msgstr "Wyvern"
-
-#~ msgid "Super Heavy Body - Dragon"
-#~ msgstr "Superschwerer Rumpf - Dragon"
-
-#~ msgid "Dragon"
-#~ msgstr "Dragon"
-
-#~ msgid "Superhot Plasmite gel"
-#~ msgstr "Superhei�es Plasmagel"
-
-#~ msgid "Superhot Plasmite gel Mk2"
-#~ msgstr "Superhei�es Plasmagel MK2"
-
-#~ msgid "Superhot Plasmite gel Mk3"
-#~ msgstr "Superhei�es Plasmagel MK3"
-
-#~ msgid "EMP Mortar"
-#~ msgstr "EMP M�rser"
-
-#~ msgid "Stormbringer AA Laser"
-#~ msgstr "Stormbringer Luftabwehrlaser"
-
-#~ msgid "Vindicator Hardpoint"
-#~ msgstr "Vindicator Hardpoint"
-
-#~ msgid "Whirlwind Hardpoint"
-#~ msgstr "whirlwind Hardpoint"
-
-#~ msgid "Cyclone Hardpoint"
-#~ msgstr "Cyclone Hardpoint"
-
-#~ msgid "Avenger Hardpoint"
-#~ msgstr "Hardpoint f�r Avenger"
-
-#~ msgid "Twin Assault Gun"
-#~ msgstr "Zwillings Sturmgesch�tz"
-
-#~ msgid "Plasmite Bomb"
-#~ msgstr "Plasmabomb"
-
-#~ msgid "EMP Missile Launcher"
-#~ msgstr "EMP Lenkwaffenwerfer"
-
-#~ msgid "Command turret MkII"
-#~ msgstr "Kommandoturm Mk II"
-
-#~ msgid "Command turret MkIII"
-#~ msgstr "Kommandoturm Mk III"
-
-#~ msgid "Command turret MkIV"
-#~ msgstr "Kommandoturm MkIV"
-
-#~ msgid "Cobra Hover Heavy-Repair"
-#~ msgstr "Cobra Hover schwerer Reparaturturm"
-
-#~ msgid "Viper HMG Wheels"
-#~ msgstr "Viper schweres Maschinengewehr R�der"
-
-#~ msgid "Scourge Mantis Hover"
-#~ msgstr "Scourge Mantis Hover"
-
-#~ msgid "TK Mantis Hover"
-#~ msgstr "TankKiller Mantis Hover"
-
-#~ msgid "Cobra HMG Tracks"
-#~ msgstr "Cobra Ketten schweres Maschinengewehr"
-
-#~ msgid "Cobra Hover HC"
-#~ msgstr "Cobra Hover schwere Kanone"
-
-#~ msgid "Viper Wheels Machinegun"
-#~ msgstr "Viper R�der Maschinenegewehr"
-
-#~ msgid "Viper Wheels Twin Machinegun"
-#~ msgstr "Viper R�der Zwillings-Maschinenegewehr"
-
-#~ msgid "Viper Wheels Heavy Machinegun"
-#~ msgstr "Viper R�der schweres Maschinenegewehr"
-
-#~ msgid "Cobra Wheels Heavy Machinegun"
-#~ msgstr "Cobra R�der schweres Maschinenegewehr"
-
-#~ msgid "Cobra Hover Heavy Machinegun"
-#~ msgstr "Cobra Hover schweres Maschinenegewehr"
-
-#~ msgid "Viper Tracks Machinegun"
-#~ msgstr "Viper Ketten Maschinengewehr"
-
-#~ msgid "Viper Tracks Twin Machinegun"
-#~ msgstr "Viper Ketten Zwillings-Maschinengewehr"
-
-#~ msgid "Viper Tracks Heavy Machinegun"
-#~ msgstr "Viper Ketten schweres Maschinengewehr"
-
-#~ msgid "Cobra Tracks Heavy Machinegun"
-#~ msgstr "Cobra Ketten schweres Maschinengewehr"
-
-#~ msgid "Cobra Hover Medium Cannon"
-#~ msgstr "Cobra Hover mittlere Kanone"
-
-#~ msgid "Scorpion Hover Medium Cannon"
-#~ msgstr "Scorpion Hover mittlere Kanone"
-
-#~ msgid "Scorpion Tracks Medium Cannon"
-#~ msgstr "Scorpion Ketten mittlere Kanone"
-
-#~ msgid "Python Hover Medium Cannon"
-#~ msgstr "Python Hover mittlere Kanone"
-
-#~ msgid "Python Hover Heavy Cannon"
-#~ msgstr "Python Hover schwere Kanone"
-
-#~ msgid "Python Tracks Heavy Cannon"
-#~ msgstr "Python Ketten schwere Kanone"
-
-#~ msgid "Mantis Tracks Railgun"
-#~ msgstr "Mantis Ketten Railgun"
-
-#~ msgid "Mantis Tracks Pulse Laser"
-#~ msgstr "Mantis Ketten Puls-Laser"
-
-#~ msgid "Python Tracks Lancer"
-#~ msgstr "Python Ketten Lancer"
-
-#~ msgid "Mantis Tracks Lancer"
-#~ msgstr "Mantis Ketten Lancer"
-
-#~ msgid "Vengeance Tracks Tank Killer"
-#~ msgstr "Vengeance Ketten Tank Killer"
-
-#~ msgid "Tiger Tracks Heavy Cannon"
-#~ msgstr "Tiger Ketten schwere Kanone"
-
-#~ msgid "Tiger Tracks Needle Gun"
-#~ msgstr "Tiger Ketten Needle Gun"
-
-#~ msgid "Retribution Tracks Needle Gun"
-#~ msgstr "Retribution Ketten Needle Gun"
-
-#~ msgid "Vengeance Tracks Needle Gun"
-#~ msgstr "Vengeance Ketten Needle Gun"
-
-#~ msgid "Vengeance Tracks Rail Gun"
-#~ msgstr "Vengeance Ketten RailGun"
-
-#~ msgid "Vengeance Tracks Guass Cannon"
-#~ msgstr "Vengeance Ketten Gausskanone"
-
-#~ msgid "Vengeance Tracks Guass Scourge"
-#~ msgstr "Vengeance Ketten Scourge"
-
-#~ msgid "Bug Cluster Bomb VTOL"
-#~ msgstr "Bug Cluster Bomb VTOL"
-
-#~ msgid "Bug Bunker Buster VTOL"
-#~ msgstr "Bug Bunker Buster VTOL"
-
-#~ msgid "Scorpion Cluster Bomb VTOL"
-#~ msgstr "Scorpion Cluster Bomb VTOL"
-
-#~ msgid "Scorpion Bunker Buster VTOL"
-#~ msgstr "Scorpion Bunker Buster VTOL"
-
-#~ msgid "Bug Lancer VTOL"
-#~ msgstr "Bug Lancer VTOL"
-
-#~ msgid "Bug HPV VTOL"
-#~ msgstr "Bug HPV VTOL"
-
-#~ msgid "Scorpion Lancer VTOL"
-#~ msgstr "Scorpion Lancer VTOL"
-
-#~ msgid "Scorpion HPV VTOL"
-#~ msgstr "Scorpion HPV VTOL"
-
-#~ msgid "Mantis Lancer VTOL"
-#~ msgstr "Mantis Lancer VTOL"
-
-#~ msgid "Mantis HPV VTOL"
-#~ msgstr "Mantis Hochgeschwindigkeitsgesch�tz VTOL"
-
-#~ msgid "Cobra Repair Trucks"
-#~ msgstr "Cobra Reparatur Ketten"
-
-#~ msgid "Mantis Repair Tracks"
-#~ msgstr "Mantis Reparatur Ketten"
 
 #~ msgid "Lancer Hydra Scorpion Tracks"
 #~ msgstr "Lancer Hydra Scorpion Ketten"
