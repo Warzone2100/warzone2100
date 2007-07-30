@@ -12,8 +12,8 @@ CLEANFILES = resource_parser.tab.h strres_parser.tab.h
 noinst_LIBRARIES = libframework.a
 noinst_HEADERS = configfile.h cursors.h cursors16.h debug.h fractions.h frame.h \
 	frameint.h frameresource.h input.h listmacs.h resly.h \
-	strres.h strresly.h treap.h treapint.h trig.h types.h
+	strres.h strresly.h treap.h treapint.h trig.h types.h utf8.h
 
 libframework_a_SOURCES = SDL_framerate.c configfile.c debug.c exceptionhandler.c \
 	frame.c frameresource.c input.c resource_lexer.lex.c resource_parser.tab.c \
-	strres.c strres_lexer.lex.c strres_parser.tab.c treap.c trig.c
+	strres.c strres_lexer.lex.c strres_parser.tab.c treap.c trig.c utf8.c
