@@ -1711,187 +1711,187 @@ AutoRepair					"*AutoRepair*"
 
 // added by Marc 23rd June 1999 Tech 3 Super-Cyborgs, Plasma Cannon and EMP Cannon
 
-R-Wpn-PlasmaCannon			"Plasma Cannon"
-Laser4-PlasmaCannon			"Plasma Cannon"
-R-Defense-PlasmaCannon			"Plasma Cannon Emplacement"
-Emplacement-PlasmaCannon		"Plasma Cannon Emplacement"
+R-Wpn-PlasmaCannon			_("Plasma Cannon")
+Laser4-PlasmaCannon			_("Plasma Cannon")
+R-Defense-PlasmaCannon			_("Plasma Cannon Emplacement")
+Emplacement-PlasmaCannon		_("Plasma Cannon Emplacement")
 
-R-Cyborg-Hvywpn-PulseLsr		"Super Pulse Laser Cyborg"
-Cyb-Hvy-PulseLsr				"Super Pulse Laser Cyborg"
-Cyb-Hvybod-PulseLsr			"Super Pulse Laser Cyborg"
-Cyb-Hvywpn-PulseLsr			"Super Pulse Laser Cyborg"
+R-Cyborg-Hvywpn-PulseLsr		_("Super Pulse Laser Cyborg")
+Cyb-Hvy-PulseLsr				_("Super Pulse Laser Cyborg")
+Cyb-Hvybod-PulseLsr			_("Super Pulse Laser Cyborg")
+Cyb-Hvywpn-PulseLsr			_("Super Pulse Laser Cyborg")
 
-R-Cyborg-Hvywpn-RailGunner		"Super Rail-Gunner"
-Cyb-Hvy-RailGunner			"Super Rail-Gunner"
-Cyb-Hvybod-RailGunner			"Super Rail-Gunner"
-Cyb-Hvywpn-RailGunner			"Super Rail-Gunner"
+R-Cyborg-Hvywpn-RailGunner		_("Super Rail-Gunner")
+Cyb-Hvy-RailGunner			_("Super Rail-Gunner")
+Cyb-Hvybod-RailGunner			_("Super Rail-Gunner")
+Cyb-Hvywpn-RailGunner			_("Super Rail-Gunner")
 
-R-Cyborg-Hvywpn-A-T			"Super Scourge Cyborg"
-Cyb-Hvy-A-T					"Super Scourge Cyborg"
-Cyb-Hvybod-A-T				"Super Scourge Cyborg"
-Cyb-Hvywpn-A-T				"Super Scourge Cyborg"
+R-Cyborg-Hvywpn-A-T			_("Super Scourge Cyborg")
+Cyb-Hvy-A-T					_("Super Scourge Cyborg")
+Cyb-Hvybod-A-T				_("Super Scourge Cyborg")
+Cyb-Hvywpn-A-T				_("Super Scourge Cyborg")
 
-Sys-SpyTower				"NEXUS Link Tower"
-R-Sys-SpyTower				"NEXUS Link Tower"
+Sys-SpyTower				_("NEXUS Link Tower")
+R-Sys-SpyTower				_("NEXUS Link Tower")
 
-EMP-Cannon					"EMP Cannon"
-WallTower-EMP				"EMP Cannon Tower"
-R-Defense-EMPCannon			"EMP Cannon Tower"
-R-Wpn-EMPCannon				"EMP Cannon"
+EMP-Cannon					_("EMP Cannon")
+WallTower-EMP				_("EMP Cannon Tower")
+R-Defense-EMPCannon			_("EMP Cannon Tower")
+R-Wpn-EMPCannon				_("EMP Cannon")
 
 // added by SEBG for September patch
 
-X-Super-MassDriver			"Mass Driver Fortress"
+X-Super-MassDriver			_("Mass Driver Fortress")
 MassDriver					"*Mass Driver Weapon*"
-R-Defense-MassDriver			"Mass Driver Fortress"
+R-Defense-MassDriver			_("Mass Driver Fortress")
 
-X-Super-Cannon				"Cannon Fortress"
+X-Super-Cannon				_("Cannon Fortress")
 CannonSuper					"*Fortress Cannon Weapon*"
-R-Defense-Super-Cannon 			"Cannon Fortress"
+R-Defense-Super-Cannon 			_("Cannon Fortress")
 
-X-Super-Rocket				"Heavy Rocket Bastion"
+X-Super-Rocket				_("Heavy Rocket Bastion")
 RocketSuper					"*Rocket Bastion Weapon*"
-R-Defense-Super-Rocket 			"Heavy Rocket Bastion"
+R-Defense-Super-Rocket 			_("Heavy Rocket Bastion")
 
-X-Super-Missile				"Missile Fortress"
+X-Super-Missile				_("Missile Fortress")
 MissileSuper				"*Missile Fortress Weapon*"
-R-Defense-Super-Missile 		"Missile Fortress"
+R-Defense-Super-Missile 		_("Missile Fortress")
 
 // added by Marc 1st September - Super Heavy bodies, Flamer Upgrades
 
-R-Vehicle-Body13				"Super Heavy Body - Wyvern"
-Body13SUP					"Wyvern"
+R-Vehicle-Body13				_("Super Heavy Body - Wyvern")
+Body13SUP					_("Wyvern")
 
-R-Vehicle-Body14				"Super Heavy Body - Dragon"
-Body14SUP					"Dragon"
+R-Vehicle-Body14				_("Super Heavy Body - Dragon")
+Body14SUP					_("Dragon")
 
-R-Wpn-Flamer-Damage07			"Superhot Plasmite gel"
-R-Wpn-Flamer-Damage08			"Superhot Plasmite gel Mk2"
-R-Wpn-Flamer-Damage09			"Superhot Plasmite gel Mk3"
+R-Wpn-Flamer-Damage07			_("Superhot Plasmite gel")
+R-Wpn-Flamer-Damage08			_("Superhot Plasmite gel Mk2")
+R-Wpn-Flamer-Damage09			_("Superhot Plasmite gel Mk3")
 
 // added by Marc 13th September - EMP Mortar, AA laser, AA Hardpoints, Sam Hardpoints
 
-MortarEMP					"EMP Mortar"
-Emplacement-MortarEMP			"EMP Mortar"
-R-Wpn-MortarEMP				"EMP Mortar"
-R-Defense-EMPMortar			"EMP Mortar"
-AAGunLaser					"Stormbringer AA Laser"
-R-Defense-AA-Laser			"Stormbringer AA Laser"
-R-Wpn-AALaser				"Stormbringer AA Laser"
-P0-AASite-Laser				"Stormbringer AA Laser"
-R-Defense-WallTower-SamHvy		"Vindicator Hardpoint"
-WallTower-SamHvy				"Vindicator Hardpoint"
-WallTower-QuadRotAAGun			"Whirlwind Hardpoint"
-R-Defense-WallTower-QuadRotAA		"Whirlwind Hardpoint"
-WallTower-DoubleAAGun			"Cyclone Hardpoint"
-R-Defense-WallTower-DoubleAAgun	"Cyclone Hardpoint"
-R-Defense-WallTower-SamSite		"Avenger Hardpoint"
-WallTower-SamSite				"Avenger Hardpoint"
+MortarEMP					_("EMP Mortar")
+Emplacement-MortarEMP			_("EMP Mortar")
+R-Wpn-MortarEMP				_("EMP Mortar")
+R-Defense-EMPMortar			_("EMP Mortar")
+AAGunLaser					_("Stormbringer AA Laser")
+R-Defense-AA-Laser			_("Stormbringer AA Laser")
+R-Wpn-AALaser				_("Stormbringer AA Laser")
+P0-AASite-Laser				_("Stormbringer AA Laser")
+R-Defense-WallTower-SamHvy		_("Vindicator Hardpoint")
+WallTower-SamHvy				_("Vindicator Hardpoint")
+WallTower-QuadRotAAGun			_("Whirlwind Hardpoint")
+R-Defense-WallTower-QuadRotAA		_("Whirlwind Hardpoint")
+WallTower-DoubleAAGun			_("Cyclone Hardpoint")
+R-Defense-WallTower-DoubleAAgun	_("Cyclone Hardpoint")
+R-Defense-WallTower-SamSite		_("Avenger Hardpoint")
+WallTower-SamSite				_("Avenger Hardpoint")
 
 // added by Marc 15th September - Twin Rotary MG, VTOL Plasmite Bomb and VTOL EMP Missile Launcher
 
-MG5TWINROTARY				"Twin Assault Gun"
-R-Wpn-MG5					"Twin Assault Gun"
-WallTower-TwinAssaultGun		"Twin Assault Gun"
-R-Defense-WallTower-TwinAGun		"Twin Assault Gun"
+MG5TWINROTARY				_("Twin Assault Gun")
+R-Wpn-MG5					_("Twin Assault Gun")
+WallTower-TwinAssaultGun		_("Twin Assault Gun")
+R-Defense-WallTower-TwinAGun		_("Twin Assault Gun")
 
-Bomb5-VTOL-Plasmite			"Plasmite Bomb"
-R-Wpn-Bomb05				"Plasmite Bomb"
-Bomb6-VTOL-EMP				"EMP Missile Launcher"
-R-Wpn-Bomb06				"EMP Missile Launcher"
+Bomb5-VTOL-Plasmite			_("Plasmite Bomb")
+R-Wpn-Bomb05				_("Plasmite Bomb")
+Bomb6-VTOL-EMP				_("EMP Missile Launcher")
+R-Wpn-Bomb06				_("EMP Missile Launcher")
 
 // added by Marc 15th September - Upgraded Command Turrets
 
-CommandTurret2				"Command turret MkII"
-R-Comp-CommandTurret02			"Command turret MkII"
-CommandTurret3				"Command turret MkIII"
-R-Comp-CommandTurret03			"Command turret MkIII"
-CommandTurret4				"Command turret MkIV"
-R-Comp-CommandTurret04			"Command turret MkIV"
+CommandTurret2				_("Command turret MkII")
+R-Comp-CommandTurret02			_("Command turret MkII")
+CommandTurret3				_("Command turret MkIII")
+R-Comp-CommandTurret03			_("Command turret MkIII")
+CommandTurret4				_("Command turret MkIV")
+R-Comp-CommandTurret04			_("Command turret MkIV")
 
 			/////////////////
 			//NEW TEMPLATES//
 			/////////////////
 
 	/* Aivolution */
-//TransporterU				"Unit transport"
-//TransporterBodyU			"Unit transport Body"
-//R-Cyborg-TransportU			"Unit transport"
-CobraHRepairHover			"Cobra Hover Heavy-Repair"
-ViperHMGWheels				"Viper HMG Wheels"
-Scourge-Mantis-H			"Scourge Mantis Hover"
-TK-Mantis-H				"TK Mantis Hover"
-CobraHMGTracks				"Cobra HMG Tracks"
-Cobra-Hover-HC				"Cobra Hover HC"
+//TransporterU				_("Unit transport")
+//TransporterBodyU			_("Unit transport Body")
+//R-Cyborg-TransportU			_("Unit transport")
+CobraHRepairHover			_("Cobra Hover Heavy-Repair")
+ViperHMGWheels				_("Viper HMG Wheels")
+Scourge-Mantis-H			_("Scourge Mantis Hover")
+TK-Mantis-H				_("TK Mantis Hover")
+CobraHMGTracks				_("Cobra HMG Tracks")
+Cobra-Hover-HC				_("Cobra Hover HC")
 
 //======================================================================
 //GK
 //======================================================================
-A-Viper-Wheels-MG			"Viper Wheels Machinegun"
-A-Viper-Wheels-TMG			"Viper Wheels Twin Machinegun"
-A-Viper-Wheels-HMG			"Viper Wheels Heavy Machinegun"
-A-Cobra-Wheels-HMG			"Cobra Wheels Heavy Machinegun"
-A-Cobra-Hover-HMG			"Cobra Hover Heavy Machinegun"
+A-Viper-Wheels-MG			_("Viper Wheels Machinegun")
+A-Viper-Wheels-TMG			_("Viper Wheels Twin Machinegun")
+A-Viper-Wheels-HMG			_("Viper Wheels Heavy Machinegun")
+A-Cobra-Wheels-HMG			_("Cobra Wheels Heavy Machinegun")
+A-Cobra-Hover-HMG			_("Cobra Hover Heavy Machinegun")
 
-A-Viper-Trk-MG				"Viper Tracks Machinegun"
-A-Viper-Trk-TMG				"Viper Tracks Twin Machinegun"
-A-Viper-Trk-HMG				"Viper Tracks Heavy Machinegun"
-A-Cobra-Trk-HMG				"Cobra Tracks Heavy Machinegun"
+A-Viper-Trk-MG				_("Viper Tracks Machinegun")
+A-Viper-Trk-TMG				_("Viper Tracks Twin Machinegun")
+A-Viper-Trk-HMG				_("Viper Tracks Heavy Machinegun")
+A-Cobra-Trk-HMG				_("Cobra Tracks Heavy Machinegun")
 
-A-Cobra-Hover-MC			"Cobra Hover Medium Cannon"
-A-Scorp-Hover-MC			"Scorpion Hover Medium Cannon"
-A-Scorp-Trk-MC				"Scorpion Tracks Medium Cannon"
-A-Python-Hover-MC			"Python Hover Medium Cannon"
-A-Python-Hover-HC			"Python Hover Heavy Cannon"
-A-Python-Trk-HC				"Python Tracks Heavy Cannon"
-A-Mantis-Trk-Rail			"Mantis Tracks Railgun"
-A-Mantis-Trk-Pulse			"Mantis Tracks Pulse Laser"
-A-Python-Trk-Lancer			"Python Tracks Lancer"
-A-Mantis-Trk-Lancer			"Mantis Tracks Lancer"
-A-Veng-Trk-TK				"Vengeance Tracks Tank Killer"
+A-Cobra-Hover-MC			_("Cobra Hover Medium Cannon")
+A-Scorp-Hover-MC			_("Scorpion Hover Medium Cannon")
+A-Scorp-Trk-MC				_("Scorpion Tracks Medium Cannon")
+A-Python-Hover-MC			_("Python Hover Medium Cannon")
+A-Python-Hover-HC			_("Python Hover Heavy Cannon")
+A-Python-Trk-HC				_("Python Tracks Heavy Cannon")
+A-Mantis-Trk-Rail			_("Mantis Tracks Railgun")
+A-Mantis-Trk-Pulse			_("Mantis Tracks Pulse Laser")
+A-Python-Trk-Lancer			_("Python Tracks Lancer")
+A-Mantis-Trk-Lancer			_("Mantis Tracks Lancer")
+A-Veng-Trk-TK				_("Vengeance Tracks Tank Killer")
 
-//A-Python-Trk-HLaser			"Python Tracks Heavy Laser"
-//A-Python-Trk-Scour			"Python Tracks Scourge"
+//A-Python-Trk-HLaser			_("Python Tracks Heavy Laser")
+//A-Python-Trk-Scour			_("Python Tracks Scourge")
 
-A-Tiger-Trk-HC				"Tiger Tracks Heavy Cannon"
-A-Tiger-Trk-Needle			"Tiger Tracks Needle Gun"
-A-Retrib-Trk-Needle			"Retribution Tracks Needle Gun"
-A-Veng-Trk-Needle			"Vengeance Tracks Needle Gun"
-A-Veng-Trk-Rail				"Vengeance Tracks Rail Gun"
-A-Veng-Trk-Guass			"Vengeance Tracks Guass Cannon"
-A-Veng-Trk-Scourge			"Vengeance Tracks Guass Scourge"
+A-Tiger-Trk-HC				_("Tiger Tracks Heavy Cannon")
+A-Tiger-Trk-Needle			_("Tiger Tracks Needle Gun")
+A-Retrib-Trk-Needle			_("Retribution Tracks Needle Gun")
+A-Veng-Trk-Needle			_("Vengeance Tracks Needle Gun")
+A-Veng-Trk-Rail				_("Vengeance Tracks Rail Gun")
+A-Veng-Trk-Guass			_("Vengeance Tracks Guass Cannon")
+A-Veng-Trk-Scourge			_("Vengeance Tracks Guass Scourge")
 
 //Anti Structure VTOLs
-V-Bug-ClusterBomb			"Bug Cluster Bomb VTOL"
-V-Bug-BB					"Bug Bunker Buster VTOL"
-V-Scor-ClusterBomb			"Scorpion Cluster Bomb VTOL"
-V-Scor-BB					"Scorpion Bunker Buster VTOL"
+V-Bug-ClusterBomb			_("Bug Cluster Bomb VTOL")
+V-Bug-BB				_("Bug Bunker Buster VTOL")
+V-Scor-ClusterBomb			_("Scorpion Cluster Bomb VTOL")
+V-Scor-BB				_("Scorpion Bunker Buster VTOL")
 
 //Anti Tank VTOLs
-V-Bug-Lancer				"Bug Lancer VTOL"
-V-Bug-HPV					"Bug HPV VTOL"
-V-Scor-Lancer				"Scorpion Lancer VTOL"
-V-Scor-HPV					"Scorpion HPV VTOL"
-V-Mantis-Lancer				"Mantis Lancer VTOL"
-V-Mantis-HPV				"Mantis HPV VTOL"
+V-Bug-Lancer				_("Bug Lancer VTOL")
+V-Bug-HPV				_("Bug HPV VTOL")
+V-Scor-Lancer				_("Scorpion Lancer VTOL")
+V-Scor-HPV				_("Scorpion HPV VTOL")
+V-Mantis-Lancer				_("Mantis Lancer VTOL")
+V-Mantis-HPV				_("Mantis HPV VTOL")
 
 //Repair
-A-Rep-Cobra-Trk				"Cobra Repair Tracks"
-A-Rep-Mantis-Trk			"Mantis Repair Tracks"
+A-Rep-Cobra-Trk				_("Cobra Repair Trucks")
+A-Rep-Mantis-Trk			_("Mantis Repair Trucks")
 
-H-Scorp-Trk-Lancer			"Scorpion Lancer Tracks"
-H-Scorp-Trk-HC				"Scorpion Heavy Cannon Tracks"
-H-Scorp-VTOL-Lancer			"Scorpion Lancer VTOL"
-H-Scorp-VTOL-BB				"Scorpion BB VTOL"
+H-Scorp-Trk-Lancer			_("Scorpion Lancer Tracks")
+H-Scorp-Trk-HC				_("Scorpion Heavy Cannon Tracks")
+H-Scorp-VTOL-Lancer			_("Scorpion Lancer VTOL")
+H-Scorp-VTOL-BB				_("Scorpion BB VTOL")
 
-Viper-Trk-Com				"Viper Command Turret Tracks"
-Cobra-Trk-Com				"Cobra Command Turret Tracks"
-Scorp-Trk-Com				"Scorpion Command Turret Tracks"
+Viper-Trk-Com				_("Viper Command Turret Tracks")
+Cobra-Trk-Com				_("Cobra Command Turret Tracks")
+Scorp-Trk-Com				_("Scorpion Command Turret Tracks")
 
-CobraTrkLancer				"Cobra Lancer Tracks"
-MantisTrkHC					"Mantis Heavy Cannon Tracks"
-MantisTKTracks				"Mantis Tank Killer Tracks"
-ScorpTrkHMG					"Scorpion Heavy Machinegun Tracks"
+CobraTrkLancer				_("Cobra Lancer Tracks")
+MantisTrkHC				_("Mantis Heavy Cannon Tracks")
+MantisTKTracks				_("Mantis Tank Killer Tracks")
+ScorpTrkHMG				_("Scorpion Heavy Machinegun Tracks")
 
-ScorpRepairTrk				"Scorpion Repair Tracks"
-ScorpHRepairHover			"Scorpion Heavy Repair Hover"
+ScorpRepairTrk				_("Scorpion Repair Tracks")
+ScorpHRepairHover			_("Scorpion Heavy Repair Hover")
