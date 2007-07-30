@@ -278,7 +278,7 @@ static inline void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, const BOOL ligh
 		{
 			// HACK - fix this!!!!
 			// should be: framesPerLine = iV_TEXTEX(texPage)->width / poly->pTexAnim->textureWidth;
-			const unsigned int framesPerLine = 1.0f / poly->pTexAnim->textureWidth;
+			const unsigned int framesPerLine = 256 / poly->pTexAnim->textureWidth;
 			const unsigned int
 					uFrame = (frame % framesPerLine) * poly->pTexAnim->textureWidth,
 					vFrame = (frame / framesPerLine) * poly->pTexAnim->textureHeight;
@@ -1017,7 +1017,7 @@ void pie_DrawRect( SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour )
  *
  ***************************************************************************/
 
-void pie_DrawTexTriangle(const PIEVERTEXF2 *aVrts, const void* psEffects)
+void pie_DrawTexTriangle(const PIEVERTEX *aVrts, const void* psEffects)
 {
 	GLfloat offset = 0.0f;
 	unsigned int i = 0;

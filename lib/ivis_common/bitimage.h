@@ -35,14 +35,14 @@ static inline WZ_DECL_PURE unsigned short iV_GetImageHeight(const IMAGEFILE *Ima
 }
 
 
-static inline WZ_DECL_PURE float iV_GetImageXOffset(const IMAGEFILE *ImageFile, const unsigned short ID)
+static inline WZ_DECL_PURE short iV_GetImageXOffset(const IMAGEFILE *ImageFile, const unsigned short ID)
 {
 	assert(ID < ImageFile->Header.NumImages);
 	return ImageFile->ImageDefs[ID].XOffset;
 }
 
 
-static inline WZ_DECL_PURE float iV_GetImageYOffset(const IMAGEFILE *ImageFile, const unsigned short ID)
+static inline WZ_DECL_PURE short iV_GetImageYOffset(const IMAGEFILE *ImageFile, const unsigned short ID)
 {
 	assert(ID < ImageFile->Header.NumImages);
 	return ImageFile->ImageDefs[ID].YOffset;

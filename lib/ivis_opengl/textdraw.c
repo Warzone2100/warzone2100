@@ -649,8 +649,8 @@ static void pie_TextRender270(IMAGEFILE *ImageFile, UWORD ImageID, int x, int y)
 	pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
 	pieImage.tu = Image->Tu;
 	pieImage.tv = Image->Tv;
-	pieImage.tw = Image->Width / OLD_TEXTURE_SIZE_FIX;
-	pieImage.th = Image->Height / OLD_TEXTURE_SIZE_FIX;
+	pieImage.tw = Image->Width;
+	pieImage.th = Image->Height;
 	dest.x = x + Image->YOffset;
 	dest.y = y + Image->XOffset - Image->Width;
 	dest.w = Image->Width;

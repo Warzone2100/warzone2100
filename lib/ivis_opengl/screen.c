@@ -172,6 +172,9 @@ BOOL screenInitialise(
 	glLoadIdentity();
 	glOrtho(0, width, height, 0, 1, -1);
 
+	glMatrixMode(GL_TEXTURE);
+	glScalef(1/256.0, 1/256.0, 1); // FIXME Scaling texture coords to 256x256!
+
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glCullFace(GL_FRONT);
@@ -286,13 +289,13 @@ void screen_Upload(const char *newBackDropBmp)
 	glColor3f(1, 1, 1);
 
 	glBegin(GL_TRIANGLE_STRIP);
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex2f(0.0f, 0.0f);
-		glTexCoord2f(1.0f, 0.0f);
-		glVertex2f(screenWidth, 0.0f);
-		glTexCoord2f(0.0f, 1.0f);
-		glVertex2f(0.0f, screenHeight);
-		glTexCoord2f(1.0f, 1.0f);
+		glTexCoord2f(0, 0);
+		glVertex2f(0, 0);
+		glTexCoord2f(255, 0);
+		glVertex2f(screenWidth, 0);
+		glTexCoord2f(0, 255);
+		glVertex2f(0, screenHeight);
+		glTexCoord2f(255, 255);
 		glVertex2f(screenWidth, screenHeight);
 	glEnd();
 }

@@ -186,7 +186,7 @@ int pie_ReloadTexPage(const char *texpageName, const char *fileName)
 		return -1;
 	}
 
-	debug(LOG_ERROR, "Reloading texture %s from index %d, max is %d (NOT REALLY DOING ANYTHING)",
+	debug(LOG_ERROR, "Reloading texture %s from index %d, max is %d (NOT REALLY DOING ANYTHING)", 
 	      texpageName, i, _TEX_INDEX);
 
 	return i;
@@ -201,7 +201,7 @@ void pie_TexShutDown(void)
 {
 	unsigned int i = 0;
 
-	while (i < _TEX_INDEX)
+	while (i < _TEX_INDEX) 
 	{
 		glDeleteTextures(1, (GLuint *) &_TEX_PAGE[i].id);
 		i++;

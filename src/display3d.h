@@ -120,10 +120,10 @@ extern BOOL bRender3DOnly;
 extern const UDWORD visibleXTiles;
 extern const UDWORD visibleYTiles;
 
-// Expanded PIEVERTEXF2
+// Expanded PIEVERTEX.
 typedef struct {
-	// PIEVERTEXF2
-	int x, y, z; float u, v; PIELIGHT light, specular;
+	// PIEVERTEX.
+	int x, y, z; unsigned int u, v; PIELIGHT light, specular;
 	Vector3i screen; //! Screenspace tile coordinates
 	// Extra data for water:
 	Vector3i water; //! Screenspace water coordinates

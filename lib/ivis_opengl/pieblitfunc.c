@@ -229,8 +229,8 @@ void pie_DrawImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 	pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
 	pieImage.tu = Image->Tu;
 	pieImage.tv = Image->Tv;
-	pieImage.tw = Image->Width / OLD_TEXTURE_SIZE_FIX;
-	pieImage.th = Image->Height / OLD_TEXTURE_SIZE_FIX;
+	pieImage.tw = Image->Width;
+	pieImage.th = Image->Height;
 	dest.x = x + Image->XOffset;
 	dest.y = y + Image->YOffset;
 	dest.w = Image->Width;
@@ -277,8 +277,8 @@ void pie_ImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 	pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
 	pieImage.tu = Image->Tu;
 	pieImage.tv = Image->Tv;
-	pieImage.tw = Image->Width / OLD_TEXTURE_SIZE_FIX;
-	pieImage.th = Image->Height / OLD_TEXTURE_SIZE_FIX;
+	pieImage.tw = Image->Width;
+	pieImage.th = Image->Height;
 	dest.x = x + Image->XOffset;
 	dest.y = y + Image->YOffset;
 	dest.w = Image->Width;
@@ -308,8 +308,8 @@ void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 	pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
 	pieImage.tu = Image->Tu;
 	pieImage.tv = Image->Tv;
-	pieImage.tw = Image->Width / OLD_TEXTURE_SIZE_FIX;
-	pieImage.th = Image->Height / OLD_TEXTURE_SIZE_FIX;
+	pieImage.tw = Image->Width;
+	pieImage.th = Image->Height;
 
 	dest.x = x + Image->XOffset;
 	dest.y = y + Image->YOffset;
@@ -321,7 +321,7 @@ void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 
 	for (vRep = 0; vRep < Height/Image->Height; vRep++)
 	{
-		pieImage.tw = Image->Width / OLD_TEXTURE_SIZE_FIX;
+		pieImage.tw = Image->Width;
 		dest.x = x + Image->XOffset;
 		dest.w = Image->Width;
 
@@ -334,7 +334,7 @@ void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 		//draw remainder
 		if (hRemainder > 0)
 		{
-			pieImage.tw = hRemainder / OLD_TEXTURE_SIZE_FIX;
+			pieImage.tw = hRemainder;
 			dest.w = hRemainder;
 			pie_DrawImage(&pieImage, &dest, &rendStyle);
 		}
@@ -346,11 +346,11 @@ void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 	if (vRemainder > 0)
 	{
 		//as above
-		pieImage.tw = Image->Width / OLD_TEXTURE_SIZE_FIX;
+		pieImage.tw = Image->Width;
 		dest.x = x + Image->XOffset;
 		dest.w = Image->Width;
 
-		pieImage.th = vRemainder / OLD_TEXTURE_SIZE_FIX;
+		pieImage.th = vRemainder;
 		dest.h = vRemainder;
 
 		for (hRep = 0; hRep < Width/Image->Width; hRep++)
@@ -362,7 +362,7 @@ void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 		//draw remainder
 		if (hRemainder > 0)
 		{
-			pieImage.tw = hRemainder / OLD_TEXTURE_SIZE_FIX;
+			pieImage.tw = hRemainder;
 			dest.w = hRemainder;
 			pie_DrawImage(&pieImage, &dest, &rendStyle);
 		}
@@ -386,8 +386,8 @@ void pie_ImageFileIDStretch(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Wi
 	pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
 	pieImage.tu = Image->Tu;
 	pieImage.tv = Image->Tv;
-	pieImage.tw = Image->Width / OLD_TEXTURE_SIZE_FIX;
-	pieImage.th = Image->Height / OLD_TEXTURE_SIZE_FIX;
+	pieImage.tw = Image->Width;
+	pieImage.th = Image->Height;
 
 	dest.x = x + Image->XOffset;
 	dest.y = y + Image->YOffset;
@@ -455,10 +455,10 @@ void pie_RenderRadar( int x, int y )
 	pie_SetColourKeyedBlack(TRUE);
 	//special case function because texture is held outside of texture list
 	pieImage.texPage = radarTexture;
-	pieImage.tu = 0.0f;
-	pieImage.tv = 0.0f;
-	pieImage.tw = 1.0f;
-	pieImage.th = 1.0f;
+	pieImage.tu = 0;
+	pieImage.tv = 0;
+	pieImage.tw = 256;
+	pieImage.th = 256;
 	dest.x = x;
 	dest.y = y;
 	dest.w = 128;
