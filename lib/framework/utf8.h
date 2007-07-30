@@ -27,6 +27,10 @@
 
 #include "frame.h"
 
+/** Used to store a UTF-32 character in
+ */
+typedef uint_fast32_t utf_32_char;
+
 /** Determines the amount of unicode characters in a UTF-8 encoded string
  *  \param utf8_string the UTF-8 encoded string to count
  *  \return the amount of characters found in the UTF-8 string
@@ -37,18 +41,18 @@ size_t utf8_character_count(const char* utf8_string);
  *  \param unicode_string the string to determine the UTF-8 buffer length of
  *  \return the size required to hold unicode_string if encoded in UTF-8
  */
-size_t unicode_utf8_buffer_length(const uint_fast32_t* unicode_string);
+size_t unicode_utf8_buffer_length(const utf_32_char* unicode_string);
 
 /** Encodes a UTF-32 encoded unicode string to a UTF-8 encoded string
  *  \param unicode_string the UTF-32 encoded unicode string to encode into UTF-8
  *  \return a UTF-8 encoded unicode nul terminated string (use free() to deallocate it)
  */
-char* utf8_encode(const uint_fast32_t* unicode_string);
+char* utf8_encode(const utf_32_char* unicode_string);
 
 /** Decodes a UTF-8 encode string to a UTF-32 encoded string (native endianess)
  *  \param utf8_string a UTF-8 encoded nul terminated string
  *  \return a UTF-32 encoded unicode nul terminated string (use free() to deallocate it)
  */
-uint_fast32_t* utf8_decode(const char* utf8_string);
+utf_32_char* utf8_decode(const char* utf8_string);
 
 #endif // __INCLUDE_LIB_FRAMEWORK_UTF8_H__

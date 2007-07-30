@@ -114,9 +114,9 @@ size_t utf8_character_count(const char* utf8_string)
 	return length;
 }
 
-size_t unicode_utf8_buffer_length(const uint_fast32_t* unicode_string)
+size_t unicode_utf8_buffer_length(const utf_32_char* unicode_string)
 {
-	const uint_fast32_t* curChar;
+	const utf_32_char* curChar;
 
 	// Determine length of string (in octets) when encoded in UTF-8
 	size_t length = 0;
@@ -142,9 +142,9 @@ size_t unicode_utf8_buffer_length(const uint_fast32_t* unicode_string)
 	return length;
 }
 
-char* utf8_encode(const uint_fast32_t* unicode_string)
+char* utf8_encode(const utf_32_char* unicode_string)
 {
-	const uint_fast32_t* curChar;
+	const utf_32_char* curChar;
 
 	const size_t utf8_length = unicode_utf8_buffer_length(unicode_string);
 
@@ -241,14 +241,14 @@ char* utf8_encode(const uint_fast32_t* unicode_string)
 	return utf8_string;
 }
 
-uint_fast32_t* utf8_decode(const char* utf8_string)
+utf_32_char* utf8_decode(const char* utf8_string)
 {
 	const char* curChar = utf8_string;
 	const size_t unicode_length = utf8_character_count(utf8_string);
 
 	// Allocate memory to hold the UTF-32 encoded string (plus a terminating nul)
-	uint_fast32_t* unicode_string = malloc(sizeof(uint_fast32_t) * (unicode_length + 1));
-	uint_fast32_t* curOutPos = unicode_string;
+	utf_32_char* unicode_string = malloc(sizeof(utf_32_char) * (unicode_length + 1));
+	utf_32_char* curOutPos = unicode_string;
 
 	if (unicode_string == NULL)
 	{
