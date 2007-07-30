@@ -3704,7 +3704,7 @@ void drawRadarBlips()
 	for(i=0; i<MAX_PLAYERS; i++)
 	{
 		/* Go through all the proximity Displays*/
-		for (psProxDisp = apsProxDisp[i]; psProxDisp != NULL; 
+		for (psProxDisp = apsProxDisp[i]; psProxDisp != NULL;
 			psProxDisp = psProxDisp->psNext)
 		{
 			if(psProxDisp->psMessage->type == MSG_PROXIMITY)
@@ -3713,7 +3713,9 @@ void drawRadarBlips()
 
 				if(((VIEWDATA *)psCurr->pViewData)->type == VIEW_HELP)
 				{
-					if((((VIEW_PROXIMITY *)((VIEWDATA *)psCurr->pViewData)->pData)->timeAdded + 60000) <= gameTime)
+					assert(((VIEWDATA *)psCurr->pViewData)->pData != NULL); // FIXME This should never happen since type==VIEW_HELP should imply pData!=NULL. This is apparently not the case for everyone and always. The real problem is somewhere else and should be fixed there.
+					if( ((VIEWDATA *)psCurr->pViewData)->pData != NULL &&
+					   (((VIEW_PROXIMITY *)((VIEWDATA *)psCurr->pViewData)->pData)->timeAdded + 60000) <= gameTime)
 					{
 						debug(LOG_WZ, "blip timeout for %d, from %d", i, (((VIEW_PROXIMITY *)((VIEWDATA *)psCurr->pViewData)->pData)->sender));
 						removeMessage(psCurr, i);	//remove beacon
