@@ -178,6 +178,7 @@ unsigned int iV_GetTextWidth(const char *String)
 unsigned int iV_GetCharWidth(const char Char)
 {
 	UWORD ImageID;
+	IVIS_FONT* Font = &iVFonts[ActiveFontID];
 
 	if (Char == ASCII_COLOURMODE)
 		return 0;
@@ -185,7 +186,7 @@ unsigned int iV_GetCharWidth(const char Char)
 	if (Char == ASCII_SPACE)
 		return Font->FontSpaceSize;
 
-	ImageID = iVFonts[ActiveFontID].AsciiTable[Char];
+	ImageID = Font->AsciiTable[(unsigned char)Char];
 	return iV_GetImageWidth(Font->FontFile, ImageID) + 1;
 }
 
@@ -266,7 +267,7 @@ UBYTE ExtentsMode=EXTENTS_USEMAXWIDTH;
 //
 // Returns y coord of next text line.
 //
-UDWORD pie_DrawFormattedText( char *String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify )
+UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify)
 {
 	int i,osi;
 	UDWORD si, Len = strlen(String);
