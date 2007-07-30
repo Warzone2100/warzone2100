@@ -25,9 +25,93 @@
 #include "utf8.h"
 #include "debug.h"
 
+// Assert that non-starting octets are of the form 10xxxxxx
+#define ASSERT_NON_START_OCTET(octet) \
+	assert((octet & 0xC0) == 0x80 && "invalid non-start UTF-8 octet")
+
 size_t utf8_character_count(const char* utf8_string)
 {
-	// Yet to implement
+	const char* curChar = utf8_string;
+
+	size_t length = 0;
+	while (*curChar != '\0')
+	{
+		// first octect: 0xxxxxxx: 7 bit (ASCII)
+		if      ((*curChar & 0x80) == 0x00)
+		{
+			// 1 byte long encoding
+			curChar += 1;
+		}
+		// first octect: 110xxxxx
+		else if ((*curChar & 0xe0) == 0xc0)
+		{
+			// 2 byte long encoding
+			ASSERT_NON_START_OCTET(curChar[1]);
+			curChar += 2;
+		}
+		// first octect: 1110xxxx
+		else if ((*curChar & 0xf0) == 0xe0)
+		{
+			// 3 byte long encoding
+			ASSERT_NON_START_OCTET(curChar[1]);
+			ASSERT_NON_START_OCTET(curChar[2]);
+			curChar += 3;
+		}
+		// first octect: 11110xxx
+		else if ((*curChar & 0xf8) == 0xf0)
+		{
+			// 4 byte long encoding
+			ASSERT_NON_START_OCTET(curChar[1]);
+			ASSERT_NON_START_OCTET(curChar[2]);
+			ASSERT_NON_START_OCTET(curChar[3]);
+			curChar += 4;
+		}
+		// first octect: 111110xx
+		else if ((*curChar & 0xfc) == 0xf8)
+		{
+			// 5 byte long encoding
+			ASSERT_NON_START_OCTET(curChar[1]);
+			ASSERT_NON_START_OCTET(curChar[2]);
+			ASSERT_NON_START_OCTET(curChar[3]);
+			ASSERT_NON_START_OCTET(curChar[4]);
+			curChar += 5;
+		}
+		// first octect: 1111110x
+		else if ((*curChar & 0xfe) == 0xfc)
+		{
+			// 6 byte long encoding
+			ASSERT_NON_START_OCTET(curChar[1]);
+			ASSERT_NON_START_OCTET(curChar[2]);
+			ASSERT_NON_START_OCTET(curChar[3]);
+			ASSERT_NON_START_OCTET(curChar[4]);
+			ASSERT_NON_START_OCTET(curChar[5]);
+			curChar += 6;
+		}
+		// first octect: 11111110
+		else if ((*curChar & 0xff) == 0xfe)
+		{
+			// 7 byte long encoding
+			ASSERT_NON_START_OCTET(curChar[1]);
+			ASSERT_NON_START_OCTET(curChar[2]);
+			ASSERT_NON_START_OCTET(curChar[3]);
+			ASSERT_NON_START_OCTET(curChar[4]);
+			ASSERT_NON_START_OCTET(curChar[5]);
+			ASSERT_NON_START_OCTET(curChar[6]);
+			curChar += 7;
+		}
+		// first octet: 11111111
+		else
+		{
+			// apparently this character uses more than 36 bit
+			// this decoder is not developed to cope with those
+			// characters so error out
+			ASSERT(!"out-of-range UTF-8 character", "utf8_character_count: this UTF-8 character is too large (> 36bits) for this UTF-8 decoder");
+		}
+
+		++length;
+	}
+
+	return length;
 }
 
 size_t unicode_utf8_buffer_length(const uint_fast32_t* unicode_string)
