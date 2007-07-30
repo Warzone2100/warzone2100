@@ -40,8 +40,8 @@ extern void iV_GetTextExtents(char *String,int *Width,int *y0,int *y1);
 extern int iV_GetTextAboveBase(void);
 extern int iV_GetTextBelowBase(void);
 extern int iV_GetTextLineSize(void);
-extern int iV_GetTextWidth(const char *String);
-extern int iV_GetCharWidth(const char Char);
+extern unsigned int iV_GetTextWidth(const char* String);
+extern unsigned int iV_GetCharWidth(char Char);
 extern void iV_SetTextColour(SWORD Index);
 
 #define ASCII_SPACE			(32)

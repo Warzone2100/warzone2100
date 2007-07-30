@@ -165,48 +165,28 @@ int iV_GetTextBelowBase(void)
 
 int iV_GetTextWidth(const char *String)
 {
-	int Index;
-	int MaxX = 0;
-	UWORD ImageID;
-	IVIS_FONT *Font = &iVFonts[ActiveFontID];
-
-	while (*String!=0) {
-		Index = (unsigned char)*String;
-
-		if(Index != ASCII_COLOURMODE) {
-			if(Index != ASCII_SPACE) {
-				ImageID = (UWORD)Font->AsciiTable[Index];
-				MaxX += iV_GetImageWidth(Font->FontFile, ImageID) + 1;
-			} else {
-				MaxX += Font->FontSpaceSize;
-			}
-		}
-		String++;
+	unsigned int width = 0;
+	while (*String != 0)
+	{
+		width += iV_GetCharWidth(*(String++));
 	}
 
-	return MaxX;
+	return width;
 }
 
 
-int iV_GetCharWidth(const char Char)
+unsigned int iV_GetCharWidth(const char Char)
 {
-	int Index;
 	UWORD ImageID;
-	int Width = 0;
-	IVIS_FONT *Font = &iVFonts[ActiveFontID];
 
-	Index = (unsigned char)Char;
+	if (Char == ASCII_COLOURMODE)
+		return 0;
 
-	if(Index != ASCII_COLOURMODE) {
-		if(Index != ASCII_SPACE) {
-			ImageID = (UWORD)Font->AsciiTable[Index];
-			Width = iV_GetImageWidth(Font->FontFile, ImageID) + 1;
-		} else {
-			Width = Font->FontSpaceSize;
-		}
-	}
+	if (Char == ASCII_SPACE)
+		return Font->FontSpaceSize;
 
-	return Width;
+	ImageID = iVFonts[ActiveFontID].AsciiTable[Char];
+	return iV_GetImageWidth(Font->FontFile, ImageID) + 1;
 }
 
 void iV_SetTextColour(SWORD Index)
