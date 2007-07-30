@@ -243,5 +243,132 @@ char* utf8_encode(const uint_fast32_t* unicode_string)
 
 uint_fast32_t* utf8_decode(const char* utf8_string)
 {
-	// Yet to implement
+	const char* curChar = utf8_string;
+	const size_t unicode_length = utf8_character_count(utf8_string);
+
+	// Allocate memory to hold the UTF-32 encoded string (plus a terminating nul)
+	uint_fast32_t* unicode_string = malloc(sizeof(uint_fast32_t) * (unicode_length + 1));
+	uint_fast32_t* curOutPos = unicode_string;
+
+	if (unicode_string == NULL)
+	{
+	    debug(LOG_ERROR, "utf8_decode: Out of memory");
+	    return NULL;
+	}
+
+	while (*curChar != '\0')
+	{
+		// first octect: 0xxxxxxx: 7 bit (ASCII)
+		if      ((*curChar & 0x80) == 0x00)
+		{
+			// 1 byte long encoding
+			*curOutPos = *(curChar++);
+		}
+		// first octect: 110xxxxx: 11 bit
+		else if ((*curChar & 0xe0) == 0xc0)
+		{
+			// 2 byte long encoding
+			ASSERT_NON_START_OCTET(curChar[1]);
+
+			*curOutPos  = (*(curChar++) & 0x1f) << 6;
+			*curOutPos |= (*(curChar++) & 0x3f) << 0;
+		}
+		// first octect: 1110xxxx: 16 bit
+		else if ((*curChar & 0xf0) == 0xe0)
+		{
+			// 3 byte long encoding
+			ASSERT_NON_START_OCTET(curChar[1]);
+			ASSERT_NON_START_OCTET(curChar[2]);
+
+			*curOutPos  = (*(curChar++) & 0x0f) << 12;
+			*curOutPos |= (*(curChar++) & 0x3f) << 6;
+			*curOutPos |= (*(curChar++) & 0x3f) << 0;
+		}
+		// first octect: 11110xxx: 21 bit
+		else if ((*curChar & 0xf8) == 0xf0)
+		{
+			// 4 byte long encoding
+			ASSERT_NON_START_OCTET(curChar[1]);
+			ASSERT_NON_START_OCTET(curChar[2]);
+			ASSERT_NON_START_OCTET(curChar[3]);
+
+			*curOutPos  = (*(curChar++) & 0x07) << 18;
+			*curOutPos |= (*(curChar++) & 0x3f) << 12;
+			*curOutPos |= (*(curChar++) & 0x3f) << 6;
+			*curOutPos |= (*(curChar++) & 0x3f) << 0;
+		}
+		// first octect: 111110xx: 26 bit
+		else if ((*curChar & 0xfc) == 0xf8)
+		{
+			// 5 byte long encoding
+			ASSERT_NON_START_OCTET(curChar[1]);
+			ASSERT_NON_START_OCTET(curChar[2]);
+			ASSERT_NON_START_OCTET(curChar[3]);
+			ASSERT_NON_START_OCTET(curChar[4]);
+
+			*curOutPos  = (*(curChar++) & 0x03) << 24;
+			*curOutPos |= (*(curChar++) & 0x3f) << 18;
+			*curOutPos |= (*(curChar++) & 0x3f) << 12;
+			*curOutPos |= (*(curChar++) & 0x3f) << 6;
+			*curOutPos |= (*(curChar++) & 0x3f) << 0;
+		}
+		// first octect: 1111110x: 31 bit
+		else if ((*curChar & 0xfe) == 0xfc)
+		{
+			// 6 byte long encoding
+			ASSERT_NON_START_OCTET(curChar[1]);
+			ASSERT_NON_START_OCTET(curChar[2]);
+			ASSERT_NON_START_OCTET(curChar[3]);
+			ASSERT_NON_START_OCTET(curChar[4]);
+			ASSERT_NON_START_OCTET(curChar[5]);
+
+			*curOutPos  = (*(curChar++) & 0x01) << 30;
+			*curOutPos |= (*(curChar++) & 0x3f) << 24;
+			*curOutPos |= (*(curChar++) & 0x3f) << 18;
+			*curOutPos |= (*(curChar++) & 0x3f) << 12;
+			*curOutPos |= (*(curChar++) & 0x3f) << 6;
+			*curOutPos |= (*(curChar++) & 0x3f) << 0;
+		}
+		// first octect: 11111110: 36 bit (we'll only use 32bit though)
+		else if ((*curChar & 0xff) == 0xfe)
+		{
+			// 7 byte long encoding
+			ASSERT_NON_START_OCTET(curChar[1]);
+			ASSERT_NON_START_OCTET(curChar[2]);
+			ASSERT_NON_START_OCTET(curChar[3]);
+			ASSERT_NON_START_OCTET(curChar[4]);
+			ASSERT_NON_START_OCTET(curChar[5]);
+			ASSERT_NON_START_OCTET(curChar[6]);
+
+			// original: *curOutPos  = (*(curChar++) & 0x00) << 36;
+			// The first octect contains no data bits
+			*curOutPos = 0; ++curChar;
+
+			// original: *curOutPos |= (*(curChar++) & 0x3f) << 30;
+			// Use only the 2 least significant bits of this byte
+			// to make sure we use 32bit at maximum
+			*curOutPos |= (*(curChar++) & 0x03) << 30;
+
+			*curOutPos |= (*(curChar++) & 0x3f) << 24;
+			*curOutPos |= (*(curChar++) & 0x3f) << 18;
+			*curOutPos |= (*(curChar++) & 0x3f) << 12;
+			*curOutPos |= (*(curChar++) & 0x3f) << 6;
+			*curOutPos |= (*(curChar++) & 0x3f) << 0;
+		}
+		// first octet: 11111111: 41 bit or more
+		else
+		{
+			// apparently this character uses more than 36 bit
+			// this decoder is not developed to cope with those
+			// characters so error out
+			ASSERT(!"out-of-range UTF-8 character", "utf8_character_count: this UTF-8 character is too large (> 36bits) for this UTF-8 decoder");
+		}
+
+		++curOutPos;
+	}
+
+	// Terminate the string with a nul
+	unicode_string[unicode_length] = '\0';
+
+	return unicode_string;
 }
