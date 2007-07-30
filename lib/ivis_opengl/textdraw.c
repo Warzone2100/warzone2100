@@ -163,7 +163,7 @@ int iV_GetTextBelowBase(void)
 
 
 
-int iV_GetTextWidth(const char *String)
+unsigned int iV_GetTextWidth(const char *String)
 {
 	unsigned int width = 0;
 	while (*String != 0)
