@@ -269,8 +269,7 @@ UBYTE ExtentsMode=EXTENTS_USEMAXWIDTH;
 //
 UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify)
 {
-	int i,osi;
-	UDWORD si, Len = strlen(String);
+	int i;
 	int jx = x;		// Default to left justify.
 	int jy = y;
 	UDWORD WWidth;
@@ -280,16 +279,20 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 	int t;
 	int TWidth;
 
-	si = 0;
-
+	const char* curChar = String;
+	const char* osiChar;
 
 //	DBPRINTF(("[%s] @(%d,%d) extentsmode=%d just=%d\n",String,x,y,ExtentsMode,Justify));
 
-	while(si < Len) {
+	curChar = String;
+	while (*curChar != 0)
+	{
 		// Remove leading spaces, usefull when doing centre justify.
-		if(FFlags & FTEXTF_SKIP_LEADING_SPACES) {
-			while( (si < strlen(String)) && (String[si] == ' ') ) {
-				si++;
+		if(FFlags & FTEXTF_SKIP_LEADING_SPACES)
+		{
+			while(*curChar == ' ')
+			{
+				++curChar;
 			}
 		}
 
@@ -309,8 +312,9 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 		NewLine = FALSE;
 
 		// Parse through the string, adding words until width is achieved.
-		while( (si < strlen((char*)String)) && (WWidth <= Width) && (!NewLine)) {
-			osi = si;
+		while (*curChar != 0 && WWidth <= Width && !NewLine)
+		{
+			osiChar = curChar;
 
 			// Get the next word.
    			i = 0;
@@ -327,32 +331,36 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 				}
 			}
 
-			while( (String[si] != 0) && (String[si] != ' ') && (WWidth <= Width)) {
+			while (*curChar != 0 && *curChar != ' ' && WWidth <= Width)
+			{
 				// Check for new line character.
-				if(String[si] == ASCII_COLOURMODE) {	// If it's a colour mode toggle char then just add it to the word.
-					FWord[i] = String[si];
-   					i++;
-   					si++;
+				if(*curChar == ASCII_COLOURMODE) // If it's a colour mode toggle char then just add it to the word.
+				{
+					FWord[i] = *curChar;
+					++i;
+					++curChar;
 				} else {
 					// Update this lines pixel width.
-					WWidth += iV_GetCharWidth(String[si]);
+					WWidth += iV_GetCharWidth(*curChar);
 
 					// If width ok then add this character to the current word.
-					if(WWidth <= Width) {
-						FWord[i] = String[si];
-	   					i++;
-	   					si++;
+					if(WWidth <= Width)
+					{
+						FWord[i] = *curChar;
+						++i;
+						++curChar;
 					}
 				}
    			}
 
    			// Don't forget the space.
-   			if(String[si] == ' ') {
+			if(*curChar == ' ')
+			{
    				WWidth += iV_GetCharWidth(' ');
    				if(WWidth <= Width) {
 					FWord[i] = ' ';
-					i++;
-					si++;
+					++i;
+					++curChar;
 					GotSpace = TRUE;
 				}
 			}
@@ -360,11 +368,12 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 			// If we've passed a space and the word goes past the width then rewind
 			// to that space and finish this line.
 			if(GotSpace) {
-				if( (WWidth >= Width) ) {
+				if (WWidth >= Width)
+				{
 					if(FWord[i-1] == ' ') {
 						FWord[i] = 0;
 					} else {
-						si = osi;
+						curChar = osiChar;
 						break;
 					}
 				}
