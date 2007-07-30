@@ -372,3 +372,12 @@ utf_32_char* utf8_decode(const char* utf8_string)
 
 	return unicode_string;
 }
+
+size_t unicode_strlen(const utf_32_char* unicode_string)
+{
+	size_t length = 0;
+	while (*(unicode_string++))
+	{
+		++length;
+	}
+}

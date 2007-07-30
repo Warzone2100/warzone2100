@@ -55,4 +55,11 @@ char* utf8_encode(const utf_32_char* unicode_string);
  */
 utf_32_char* utf8_decode(const char* utf8_string);
 
+/** Determines the amount of characters found in a UTF-32 encoded string
+ *  This function is similar to strlen, except that it operates on a string of utf_32_char's
+ *  \param unicode_string the string to determine the length of
+ *  \return the amount of characters found
+ */
+size_t unicode_strlen(const utf_32_char* unicode_string);
+
 #endif // __INCLUDE_LIB_FRAMEWORK_UTF8_H__
