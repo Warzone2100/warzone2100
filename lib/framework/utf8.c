@@ -380,4 +380,6 @@ size_t unicode_strlen(const utf_32_char* unicode_string)
 	{
 		++length;
 	}
+
+	return length;
 }
