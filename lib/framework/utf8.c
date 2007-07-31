@@ -29,6 +29,10 @@
 #define ASSERT_NON_START_OCTET(octet) \
 	assert((octet & 0xC0) == 0x80 && "invalid non-start UTF-8 octet")
 
+// Assert that starting octets are either of the form 0xxxxxxx (ASCII) or 11xxxxxx
+#define ASSERT_START_OCTECT(octet) \
+	assert((octet & 0x80) == 0x00 && (octet & 0xC0) == 0xC0 && "invalid starting UTF-8 octet")
+
 size_t utf8_character_count(const char* utf8_string)
 {
 	const char* curChar = utf8_string;
@@ -36,6 +40,8 @@ size_t utf8_character_count(const char* utf8_string)
 	size_t length = 0;
 	while (*curChar != '\0')
 	{
+		ASSERT_START_OCTECT(*curChar);
+
 		// first octect: 0xxxxxxx: 7 bit (ASCII)
 		if      ((*curChar & 0x80) == 0x00)
 		{
@@ -258,6 +264,8 @@ utf_32_char* utf8_decode(const char* utf8_string)
 
 	while (*curChar != '\0')
 	{
+		ASSERT_START_OCTECT(*curChar);
+
 		// first octect: 0xxxxxxx: 7 bit (ASCII)
 		if      ((*curChar & 0x80) == 0x00)
 		{
