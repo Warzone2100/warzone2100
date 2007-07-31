@@ -17,7 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/* Texture stuff. Alex McLean, Pumpkin Studios, EIDOS Interactive, 1997 */
+
+/* This is where we do texture atlas generation */
+
 #include <string.h>
 
 #include "lib/framework/frame.h"
@@ -26,47 +28,86 @@
 #include "lib/ivis_common/tex.h"
 #include "lib/ivis_common/piepalette.h"
 #include "lib/ivis_opengl/pietexture.h"
+#include "lib/ivis_opengl/screen.h"
 #include "display3ddef.h"
 #include "texture.h"
 #include "radar.h"
 
-#define MAX_TERRAIN_PAGES	20
-// 4 byte depth == 32 bpp
-#define PAGE_DEPTH		4
-#define TEXTURE_PAGE_SIZE	PAGE_WIDTH*PAGE_HEIGHT*PAGE_DEPTH
+#include <physfs.h>
+#include <SDL/SDL_opengl.h>
+#ifdef __APPLE__
+#include <opengl/glu.h>
+#else
+#include <GL/glu.h>
+#endif
 
-/* How many pages have we loaded */
-static SDWORD	firstTexturePage;
-static SDWORD	numTexturePages;
-static int	pageId[MAX_TERRAIN_PAGES];
+#define MIPMAP_LEVELS		4
+#define MIPMAP_MIN		16
+#define MIPMAP_MAX		128
 
 /* Texture page and coordinates for each tile */
 TILE_TEX_INFO tileTexInfo[MAX_TILES];
 
-static void getRectFromPage(UDWORD width, UDWORD height, unsigned char *src, UDWORD bufWidth, unsigned char *dest);
-static void putRectIntoPage(UDWORD width, UDWORD height, unsigned char *dest, UDWORD bufWidth, unsigned char *src);
-static void buildTileIndexes(void);
-static void makeTileTexturePages(iV_Image * src, UDWORD tileWidth, UDWORD tileHeight);
+static int firstPage; // the last used page before we start adding terrain textures
+
+// Generate a new texture page both in the texture page table, and on the graphics card
+static int newPage(const char *name, int level, int width, int height, int count)
+{
+	int texPage = firstPage + ((count + 1) / TILES_IN_PAGE);
+
+	// debug(LOG_TEXTURE, "newPage: texPage=%d firstPage=%d %s %d (%d,%d) (count %d + 1) / %d _TEX_INDEX=%u", 
+	//      texPage, firstPage, name, level, width, height, count, TILES_IN_PAGE, _TEX_INDEX);
+	if (texPage == _TEX_INDEX)
+	{
+		// We need to create a new texture page; create it and increase texture table to store it
+		glGenTextures(1, (GLuint *) &_TEX_PAGE[texPage].id);
+		_TEX_INDEX++;
+	}
+
+	ASSERT(_TEX_INDEX > texPage, "newPage: Index too low (%d > %d)", _TEX_INDEX, texPage);
+	ASSERT(_TEX_INDEX < iV_TEX_MAX, "Too many texture pages used");
+
+	strncpy(_TEX_PAGE[texPage].name, name, iV_TEXNAME_MAX);
+
+	pie_SetTexturePage(texPage);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, MIPMAP_LEVELS - 1);
+	// debug(LOG_TEXTURE, "newPage: glTexImage2D(page=%d, level=%d) opengl id=%u", texPage, level, _TEX_PAGE[texPage].id);
+	glTexImage2D(GL_TEXTURE_2D, level, wz_texture_compression, width, height, 0,
+	             GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	return texPage;
+}
+
+static inline WZ_DECL_CONST unsigned int getTileUIndex(unsigned int tileNumber)
+{
+	return (tileNumber % TILES_IN_PAGE) % TILES_IN_PAGE_COLUMN;
+}
+
+static inline WZ_DECL_CONST unsigned int getTileVIndex(unsigned int tileNumber)
+{
+	return (tileNumber % TILES_IN_PAGE) / TILES_IN_PAGE_ROW;
+}
 
 void texLoad(const char *fileName)
 {
 	char fullPath[MAX_PATH], partialPath[MAX_PATH], *buffer;
 	unsigned int i, j, k, size;
-	iTexture tilesPCX;
+	int texPage;
 
-	if(!iV_loadImage_PNG(fileName, &tilesPCX))
-	{
-		debug(LOG_ERROR, "TERTILES load failed");
-		return;
-	}
+	firstPage = _TEX_INDEX;
+
+	ASSERT(_TEX_INDEX < iV_TEX_MAX, "Too many texture pages used");
+	ASSERT(MIPMAP_MAX == TILE_WIDTH && MIPMAP_MAX == TILE_HEIGHT, "Bad tile sizes");
 
 	/* Get and set radar colours */
 
-	strcpy(partialPath, fileName);
-	buffer = strrchr(partialPath, '.'); // temporary hack to remove ".png"
-	*buffer = '\0';
-
-	sprintf(fullPath, "%s.radar", partialPath);
+	sprintf(fullPath, "%s.radar", fileName);
 	if (!loadFile(fullPath, &buffer, &size))
 	{
 		debug(LOG_ERROR, "texLoad: Could not find radar colours at %s", fullPath);
@@ -89,142 +130,68 @@ void texLoad(const char *fileName)
 	} while (k >= 3 && j < size);
 	free(buffer);
 
-	makeTileTexturePages(&tilesPCX, TILE_WIDTH, TILE_HEIGHT);
-	free(tilesPCX.bmp);
-}
+	/* Now load the actual tiles */
 
-/*
-	Extracts the tile textures into separate texture pages and builds
-	a table of which texture page to find each tile in, as well as which one it is
-	within that page.
-
-	0123
-	4567
-	89AB
-	CDEF
-
-	The above shows the different possible locations for a tile in the page.
-	So we have a table of MAX_TILES showing
-
-	pageNumber and [0..15]
-
-	We must then make sure that we source in that texture page and set the
-	texture coordinate for a complete tile to be its position.
-*/
-void makeTileTexturePages(iV_Image * src, UDWORD tileWidth, UDWORD tileHeight)
-{
-	UDWORD i, j;
-	UDWORD pageNumber = 0;
-	UDWORD tilesAcross = src->width / tileWidth, tilesDown = src->height / tileHeight;
-	UDWORD tilesAcrossPage = PAGE_WIDTH / tileWidth, tilesDownPage = PAGE_HEIGHT / tileHeight;
-	UDWORD tilesPerPage = tilesAcrossPage * tilesDownPage, tilesPerSource = tilesAcross * tilesDown;
-	UDWORD tilesProcessed = 0;
-	iTexture sprite = { PAGE_WIDTH, PAGE_HEIGHT, PAGE_DEPTH, malloc(TEXTURE_PAGE_SIZE) };
-	/* Get enough memory to store one tile */
-	unsigned char *tileStorage = malloc(tileWidth * tileHeight * PAGE_DEPTH);
-	unsigned char *presentLoc = sprite.bmp;
-	unsigned char *srcBmp = src->bmp;
-
-	/* This is how many pages are already used on hardware */
-	firstTexturePage = pie_GetLastPageDownloaded();
-
-	debug(LOG_TEXTURE, "makeTileTexturePages: src(%d,%d) tile(%d,%d) pages used=%d", src->width, src->height, tileWidth, tileHeight, firstTexturePage);
-
-	for (i=0; i<tilesDown; i++)
+	i = MIPMAP_MAX; // i is used to keep track of the tile dimensions
+	for (j = 0; j < MIPMAP_LEVELS; j++)
 	{
-		for (j=0; j<tilesAcross; j++)
-		{
-			getRectFromPage(tileWidth, tileHeight, srcBmp, src->width, tileStorage);
-			putRectIntoPage(tileWidth, tileHeight, presentLoc, PAGE_WIDTH, tileStorage);
-			tilesProcessed++;
-			presentLoc += tileWidth * PAGE_DEPTH;
-			srcBmp += tileWidth * PAGE_DEPTH;
-			/* Have we got all the tiles from the source!? */
-			if (tilesProcessed == tilesPerSource)
-			{
-				pageId[pageNumber] = pie_AddTexPage(&sprite, "terrain");
-				goto exit;
-			}
+		int xOffset = 0, yOffset = 0; // offsets into the texture atlas
+		int xSize = TILES_IN_PAGE_COLUMN * i;
+		int ySize = TILES_IN_PAGE_ROW * i;
 
-			/* Have we run out of texture page? */
-			if (tilesProcessed % tilesPerPage == 0)
+		// Generate the empty texture buffer in VRAM
+		texPage = newPage(fileName, j, xSize, ySize, 0);
+
+		sprintf(partialPath, "%s-%02d", fileName, i);
+
+		// Load until we cannot find anymore of them
+		for (k = 0; k < MAX_TILES; k++)
+		{
+			iTexture tile;
+
+			sprintf(fullPath, "%s/tile-%02d.png", partialPath, k);
+			if (PHYSFS_exists(fullPath)) // avoid dire warning
 			{
-				debug(LOG_TEXTURE, "makeTileTexturePages: ran out of texture page ...");
-				debug(LOG_TEXTURE, "tilesDown=%d tilesAcross=%d tilesProcessed=%d tilesPerPage=%d", tilesDown, tilesAcross, tilesProcessed, tilesPerPage);
-				/* If so, download this one and reset to start again */
-				pageId[pageNumber] = pie_AddTexPage(&sprite, "terrain");
-				sprite.bmp = malloc(TEXTURE_PAGE_SIZE);
-				presentLoc = sprite.bmp;
-				pageNumber++;
+				BOOL retval = iV_loadImage_PNG(fullPath, &tile);
+				ASSERT(retval, "texLoad: Could not load %s", fullPath);
 			}
-			else if (tilesProcessed % tilesAcrossPage == 0)
+			else
 			{
-				/* Right hand side of texture page */
-				/* So go to one tile down */
-				presentLoc += (tileHeight-1) * PAGE_WIDTH * PAGE_DEPTH;
+				// no more textures in this set
+				ASSERT(k > 0, "texLoad: Could not find %s", fullPath);
+				break;
+			}
+			// Insert into texture page
+			glTexSubImage2D(GL_TEXTURE_2D, j, xOffset, yOffset, tile.width, tile.height, 
+			                GL_RGBA, GL_UNSIGNED_BYTE, tile.bmp);
+			free(tile.bmp);
+			xOffset += i; // i is width of tile
+			if (xOffset >= xSize)
+			{
+				yOffset += i; // i is also height of tile
+				xOffset = 0;
+			}
+			if (i == TILE_WIDTH) // dealing with main texture page; so register coordinates
+			{
+				// 256 is an integer hack for GLfloat texture coordinates
+				tileTexInfo[k].uOffset = getTileUIndex(k) * (256 / TILES_IN_PAGE_COLUMN);
+				tileTexInfo[k].vOffset = getTileVIndex(k) * (256 / TILES_IN_PAGE_ROW);
+				tileTexInfo[k].texPage = texPage;
+				//debug(LOG_TEXTURE, "  texLoad: Registering k=%d i=%d u=%f v=%f xoff=%u yoff=%u tex=%d (%s)", 
+				//     k, i, tileTexInfo[k].uOffset, tileTexInfo[k].vOffset, xOffset, yOffset, texPage, fullPath);
+			}
+			if (yOffset >= ySize)
+			{
+				/* Change to next texture page */
+				xOffset = 0;
+				yOffset = 0;
+				debug(LOG_TEXTURE, "texLoad: Extra page added at %d for %s, was page %d, opengl id %u", 
+				      k, partialPath, texPage, _TEX_PAGE[texPage].id);
+				texPage = newPage(fileName, j, xSize, ySize, k);
 			}
 		}
-		srcBmp += (tileHeight-1) * src->width * PAGE_DEPTH;
-	}
-	ASSERT(FALSE, "we should have exited the loop using the goto");
-
-exit:
-	numTexturePages = pageNumber+1;
-	free(tileStorage);
-	free(sprite.bmp);
-	buildTileIndexes();
-	return;
-}
-
-static inline WZ_DECL_CONST unsigned int getTileUIndex(unsigned int tileNumber)
-{
-	return (tileNumber % TILES_IN_PAGE) % TILES_IN_PAGE_COLUMN;
-}
-
-static inline WZ_DECL_CONST unsigned int getTileVIndex(unsigned int tileNumber)
-{
-	return (tileNumber % TILES_IN_PAGE) / TILES_IN_PAGE_ROW;
-}
-
-/* Extracts a rectangular buffer from a source buffer, storing result in one contiguous
-   chunk	*/
-static void getRectFromPage(UDWORD width, UDWORD height, unsigned char *src, UDWORD bufWidth, unsigned char *dest)
-{
-	unsigned int i, j;
-
-	for (i = 0; i < height; i++)
-	{
-		for(j = 0; j < width * PAGE_DEPTH; j++)
-		{
-			*dest++ = *src++;
-		}
-		src += (bufWidth - width) * PAGE_DEPTH;
-	}
-}
-
-/* Inserts a rectangle into a dest rectangle */
-static void putRectIntoPage(UDWORD width, UDWORD height, unsigned char *dest, UDWORD bufWidth, unsigned char *src)
-{
-	unsigned int i, j;
-
-	for(i = 0; i < height; i++)
-	{
-		for(j = 0; j < width * PAGE_DEPTH; j++)
-		{
-			*dest++ = *src++;
-		}
-		dest += (bufWidth - width) * PAGE_DEPTH;
-	}
-}
-
-static void buildTileIndexes(void)
-{
-	unsigned int i;
-
-	for(i = 0; i < MAX_TILES; i++)
-	{
-		tileTexInfo[i].uOffset = getTileUIndex(i) * (256 / TILES_IN_PAGE_COLUMN);
-		tileTexInfo[i].vOffset = getTileVIndex(i) * (256 / TILES_IN_PAGE_ROW);
-		tileTexInfo[i].texPage = pageId[i / TILES_IN_PAGE];
+		debug(LOG_TEXTURE, "texLoad: Found %d textures for %s mipmap level %d, added to page %d, opengl id %u", 
+		      k, partialPath, i, texPage, _TEX_PAGE[texPage].id);
+		i /= 2;	// halve the dimensions for the next series; OpenGL mipmaps start with largest at level zero
 	}
 }
