@@ -1227,7 +1227,9 @@ BOOL frontendShutdown(void)
 		return FALSE;
 	}
 */
+	debug(LOG_TEXTURE, "=== frontendShutdown ===");
 	pie_TexShutDown();
+	pie_TexInit(); // ready for restart
 
 	return TRUE;
 }
@@ -1420,7 +1422,9 @@ BOOL stageOneShutDown(void)
 		return FALSE;
 	}
 
+	debug(LOG_TEXTURE, "=== stageOneShutDown ===");
 	pie_TexShutDown();
+	pie_TexInit(); // restart it
 
 	viewDataHeapShutDown();
 

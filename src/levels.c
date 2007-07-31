@@ -641,7 +641,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 	SDWORD			i;
 	BOOL            bCamChangeSaveGame;
 
-	debug(LOG_WZ, "Loading level %s", pName);
+	debug(LOG_WZ, "Loading level %s (%s)", pName, pSaveName);
 	// reset fog
 //	fogStatus = 0;
 //	pie_EnableFog(FALSE);//removed, always set by script or save game
@@ -692,25 +692,27 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 				(psCurrLevel->type >= LDS_NONE && psNewLevel->type  < LDS_NONE))
 			{
 				// there is a dataset loaded but it isn't the correct one
-				debug( LOG_WZ, "levLoadData: Incorrect base dataset loaded - levReleaseAll()\n" );
+				debug(LOG_WZ, "levLoadData: Incorrect base dataset loaded - levReleaseAll()");
 				levReleaseAll();	// this sets psCurrLevel to NULL
+			}
+			else
+			{
+				debug(LOG_WZ, "levLoadData: Correct base dataset already loaded.");
 			}
 		}
 
 		// setup the correct dataset to load if necessary
 		if (psCurrLevel == NULL)
 		{
-#ifdef DEBUG_GROUP0
 			if (psNewLevel->psBaseData != NULL)
 			{
-				debug( LOG_NEVER, "levLoadData: Setting base dataset to load: %s\n", psNewLevel->psBaseData->pName );
+				debug(LOG_WZ, "levLoadData: Setting base dataset to load: %s", psNewLevel->psBaseData->pName);
 			}
-#endif
 			psBaseData = psNewLevel->psBaseData;
 		}
 		else
 		{
-			debug( LOG_NEVER, "levLoadData: No base dataset to load\n" );
+			debug(LOG_WZ, "levLoadData: No base dataset to load");
 			psBaseData = NULL;
 		}
 	}
@@ -720,7 +722,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 	// reset the old mission data if necessary
 	if (psCurrLevel != NULL)
 	{
-		debug( LOG_NEVER, "levLoadData: reseting old mission data\n" );
+		debug(LOG_WZ, "levLoadData: reseting old mission data");
 		if (!gameReset())
 		{
 			return FALSE;
@@ -741,11 +743,11 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 		}
 	}
 
-
 	// initialise if necessary
 	if (psNewLevel->type == LDS_COMPLETE || //psNewLevel->type >= MULTI_TYPE_START ||
 		psBaseData != NULL)
 	{
+		debug(LOG_WZ, "levLoadData: Calling stageOneInitialise!");
 		if (!stageOneInitialise())
 		{
 			return FALSE;

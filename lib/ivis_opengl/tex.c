@@ -144,7 +144,8 @@ static void pie_PrintLoadedTextures(void)
 
 	debug(LOG_ERROR, "Available texture pages in memory (%d out of %d max):", _TEX_INDEX, iV_TEX_MAX);
 
-	for ( i = 0; i < iV_TEX_MAX; i++ ) {
+	for ( i = 0; i < iV_TEX_MAX && _TEX_PAGE[i].name[0] != '\0'; i++ )
+	{
 		debug(LOG_ERROR, "%02d : %s", i, _TEX_PAGE[i].name);
 	}
 }

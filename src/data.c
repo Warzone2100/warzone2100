@@ -692,6 +692,7 @@ static BOOL dataTERTILESLoad(const char *fileName, void **ppData)
 
 static void dataTERTILESRelease(void *pData)
 {
+	debug(LOG_TEXTURE, "=== dataTERTILESRelease ===");
 	pie_TexShutDown();
 }
 
@@ -748,7 +749,6 @@ static BOOL dataTexPageLoad(const char *fileName, void **ppData)
 	}
 
 	return TRUE;
-
 }
 
 
