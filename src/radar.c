@@ -1158,65 +1158,7 @@ BOOL CoordInRadar(int x,int y)
 }
 
 
-
-void	calcRadarColour(iBitmap *tileBitmap, UDWORD tileNumber)
+void radarColour(UDWORD tileNumber, uint8_t r, uint8_t g, uint8_t b)
 {
-	UDWORD	i, j;
-	UBYTE	penNumber;
-	UBYTE	fRed,fGreen,fBlue;
-	UBYTE	red,green,blue;
-	UDWORD	tRed,tGreen,tBlue;
-	iColour*	psPalette;
-	tRed = tGreen = tBlue = 0;
-#define SAMPLES 8
-#if 0
-	/* Got through every pixel */
-	//what all 4096 of them
-	for(i=0; i<TILE_SIZE; i++)
-	{
-		/* Get pixel colour index */
-		penNumber = (UBYTE) tileBitmap[i];
-		/* Get the r,g,b components */
-		red		=	_iVPALETTE[penNumber].r;
-		green	=	_iVPALETTE[penNumber].g;
-		blue	=	_iVPALETTE[penNumber].b;
-		/* Add them to totals */
-		tRed	+=	red;
-		tGreen	+=	green;
-		tBlue	+=	blue;
-	}
-	/* Get average of each component */
-	fRed	=	(UBYTE) (tRed/TILE_SIZE);
-	fGreen	=	(UBYTE) (tGreen/TILE_SIZE);
-	fBlue	=	(UBYTE) (tBlue/TILE_SIZE);
-#else
-	//this routine only checks 64 pixels
-	//offset half a step at the start
-	tileBitmap += ((TILE_HEIGHT/(2*SAMPLES)) * TILE_WIDTH);
-	tileBitmap += (TILE_WIDTH/(2*SAMPLES));
-	psPalette = pie_GetGamePal();
-	for(i=0; i<SAMPLES; i++)
-	{
-		for(j=0; j<SAMPLES; j++)
-		{
-		/* Get pixel colour index */
-		penNumber = (UBYTE) tileBitmap[j*(TILE_WIDTH/SAMPLES)];//stepping across a few steps
-		/* Get the r,g,b components */
-		red		=	psPalette[penNumber].r;
-		green	=	psPalette[penNumber].g;
-		blue	=	psPalette[penNumber].b;
-		/* Add them to totals */
-		tRed	+=	red;
-		tGreen	+=	green;
-		tBlue	+=	blue;
-		}
-		//step down a few lines
-		tileBitmap += ((TILE_HEIGHT/(SAMPLES)) * TILE_WIDTH);
-	}
-	/* Get average of each component */
-	fRed	=	(UBYTE) (tRed/(SAMPLES*SAMPLES));
-	fGreen	=	(UBYTE) (tGreen/(SAMPLES*SAMPLES));
-	fBlue	=	(UBYTE) (tBlue/(SAMPLES*SAMPLES));
-#endif
-	tileColours[tileNumber] = (UBYTE)iV_PaletteNearestColour(fRed,fGreen,fBlue);
+	tileColours[tileNumber] = (UBYTE)iV_PaletteNearestColour(r, g, b);
 }

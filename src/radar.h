@@ -20,17 +20,10 @@
 #ifndef _radar_h
 #define _radar_h
 
-
-extern void	calcRadarColour(iBitmap *tileBitmap, UDWORD tileNumber);
-
-
+void radarColour(UDWORD tileNumber, uint8_t r, uint8_t g, uint8_t b);
 
 #define RGB_ENTRIES	3
-
 #define MAX_RADARZOOM 2
-
-
-//#define RADAR_POSITION_AT_ZOOM
 
 /* Radar.h */
 extern void resetRadarRedraw(void);
@@ -44,8 +37,6 @@ extern void SetRadarZoom(UWORD ZoomLevel);
 extern UDWORD GetRadarZoom(void);
 extern BOOL CoordInRadar(int x,int y);
 extern void GetRadarPlayerPos(UDWORD *XPos,UDWORD *YPos);
-
-//#define RADAR_ROT	1
 
 //different mini-map draw modes
 typedef enum _radar_draw_mode

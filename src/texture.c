@@ -47,10 +47,11 @@ static void getRectFromPage(UDWORD width, UDWORD height, unsigned char *src, UDW
 static void putRectIntoPage(UDWORD width, UDWORD height, unsigned char *dest, UDWORD bufWidth, unsigned char *src);
 static void buildTileIndexes(void);
 static void makeTileTexturePages(iV_Image * src, UDWORD tileWidth, UDWORD tileHeight);
-static BOOL getTileRadarColours(iTexture *tilesPCX);
 
 void texLoad(const char *fileName)
 {
+	char fullPath[MAX_PATH], partialPath[MAX_PATH], *buffer;
+	unsigned int i, j, k, size;
 	iTexture tilesPCX;
 
 	if(!iV_loadImage_PNG(fileName, &tilesPCX))
@@ -59,7 +60,35 @@ void texLoad(const char *fileName)
 		return;
 	}
 
-	getTileRadarColours(&tilesPCX);
+	/* Get and set radar colours */
+
+	strcpy(partialPath, fileName);
+	buffer = strrchr(partialPath, '.'); // temporary hack to remove ".png"
+	*buffer = '\0';
+
+	sprintf(fullPath, "%s.radar", partialPath);
+	if (!loadFile(fullPath, &buffer, &size))
+	{
+		debug(LOG_ERROR, "texLoad: Could not find radar colours at %s", fullPath);
+		abort(); // cannot recover; we could possibly generate a random palette?
+	}
+	i = 0; // tile
+	k = 0; // number of values read
+	j = 0; // place in buffer
+	do {
+		uint8_t r, g, b;
+		int cnt;
+
+		k = sscanf(buffer, "%2hhx%2hhx%2hhx%n", &r, &g, &b, &cnt);
+		j += cnt;
+		if (k >= 3)
+		{
+			radarColour(i, r, g, b);
+		}
+		i++; // next tile
+	} while (k >= 3 && j < size);
+	free(buffer);
+
 	makeTileTexturePages(&tilesPCX, TILE_WIDTH, TILE_HEIGHT);
 	free(tilesPCX.bmp);
 }
@@ -145,45 +174,6 @@ exit:
 	free(sprite.bmp);
 	buildTileIndexes();
 	return;
-}
-
-static BOOL getTileRadarColours(iTexture *tilesPCX)
-{
-	UDWORD x, y, i, j, w, h, t;
-	iBitmap *b, *s;
-	unsigned char tempBMP[TILE_WIDTH * TILE_HEIGHT];
-
-	w = tilesPCX->width / TILE_WIDTH;
-	h = tilesPCX->height / TILE_HEIGHT;
-
-	t = 0;
-	for (i=0; i<h; i++)
-	{
-		for (j=0; j<w; j++)
-		{
-			b = tilesPCX->bmp + j * TILE_WIDTH + i * tilesPCX->width * TILE_HEIGHT;
-			s = &tempBMP[0];
-			if (s)
-			{
-				//copy the bitmap to temp buffer for colour calc
-				for (y=0; y<TILE_HEIGHT; y++)
-				{
-					for (x=0; x<TILE_WIDTH; *s++ = b[x++])
-					{
-						; /* NOP */
-					}
-					b += tilesPCX->width;
-				}
-				calcRadarColour(&tempBMP[0],t);
-				t++;
-			}
-			else
-			{
-				return FALSE;
-			}
-		}
-	}
-	return TRUE;
 }
 
 static inline WZ_DECL_CONST unsigned int getTileUIndex(unsigned int tileNumber)
