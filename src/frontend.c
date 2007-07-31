@@ -773,7 +773,19 @@ BOOL startGameOptions2Menu(void)
 	}
 	else
 	{
-		addTextButton(FRONTEND_SUBTITLES_R,	FRONTEND_POS6M-55,FRONTEND_POS5Y, _("Off"),TRUE,TRUE);
+		addTextButton(FRONTEND_SUBTITLES_R, FRONTEND_POS5M - 55, FRONTEND_POS5Y, _("Off"), TRUE, TRUE);
+	}
+
+	////////////
+	//shadows
+	addTextButton(FRONTEND_SHADOWS, FRONTEND_POS7X - 35, FRONTEND_POS7Y, _("Shadows"), TRUE, FALSE);
+	if (getDrawShadows())
+	{
+		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS7M - 55,  FRONTEND_POS7Y, _("On"), TRUE, FALSE);
+	}
+	else
+	{	// not flipped
+		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS7M - 55,  FRONTEND_POS7Y, _("Off"), TRUE, FALSE);
 	}
 
 	////////////
@@ -854,6 +866,19 @@ BOOL runGameOptions2Menu(void)
 		{// turn on
 			seq_SetSubtitles(TRUE);
 			widgSetString(psWScreen,FRONTEND_SUBTITLES_R,_("On"));
+		}
+		break;
+
+	case FRONTEND_SHADOWS:
+	case FRONTEND_SHADOWS_R:
+		setDrawShadows(!getDrawShadows());
+		if (getDrawShadows())
+		{
+			widgSetString(psWScreen, FRONTEND_SHADOWS_R, _("On"));
+		}
+		else
+		{
+			widgSetString(psWScreen, FRONTEND_SHADOWS_R, _("Off"));
 		}
 		break;
 
