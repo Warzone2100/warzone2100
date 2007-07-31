@@ -46,8 +46,6 @@
 # define UINT8_MAX              (255)
 # define UINT16_MAX             (65535)
 # define UINT32_MAX             (4294967295U)
-
-typedef uint32_t uint_fast32_t;
 #else
 /* Compilers that have support for C99 have all of the above defined in stdint.h */
 # include <stdint.h>

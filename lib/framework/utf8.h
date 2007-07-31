@@ -29,7 +29,7 @@
 
 /** Used to store a UTF-32 character in
  */
-typedef uint_fast32_t utf_32_char;
+typedef uint32_t utf_32_char;
 
 /** Determines the amount of unicode characters in a UTF-8 encoded string
  *  \param utf8_string the UTF-8 encoded string to count

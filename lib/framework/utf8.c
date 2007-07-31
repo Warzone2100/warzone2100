@@ -24,6 +24,7 @@
 
 #include "utf8.h"
 #include "debug.h"
+#include <assert.h>
 
 // Assert that non-starting octets are of the form 10xxxxxx
 #define ASSERT_NON_START_OCTET(octet) \
@@ -31,7 +32,7 @@
 
 // Assert that starting octets are either of the form 0xxxxxxx (ASCII) or 11xxxxxx
 #define ASSERT_START_OCTECT(octet) \
-	assert((octet & 0x80) == 0x00 && (octet & 0xC0) == 0xC0 && "invalid starting UTF-8 octet")
+	assert((octet & 0x80) == 0x00 || (octet & 0xC0) == 0xC0 && "invalid starting UTF-8 octet")
 
 size_t utf8_character_count(const char* utf8_string)
 {
@@ -258,8 +259,8 @@ utf_32_char* utf8_decode(const char* utf8_string)
 
 	if (unicode_string == NULL)
 	{
-	    debug(LOG_ERROR, "utf8_decode: Out of memory");
-	    return NULL;
+		debug(LOG_ERROR, "utf8_decode: Out of memory");
+		return NULL;
 	}
 
 	while (*curChar != '\0')
