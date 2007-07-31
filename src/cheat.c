@@ -64,6 +64,7 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"time toggle", kf_ToggleMissionTimer},
 	{"work harder", kf_FinishResearch},
 	{"no faults", kf_NoFaults},//carol vorderman
+	{"tileinfo", kf_TileInfo}, // output debug info about a tile
 	{"end of list",NULL}
 };
 
