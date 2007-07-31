@@ -36,7 +36,6 @@ extern void iV_ClearFonts(void);
 extern void iV_SetFont(int FontID);
 extern int iV_CreateFontIndirect(IMAGEFILE *ImageFile,UWORD *AsciiTable,int SpaceSize);
 extern int iV_CreateFont(IMAGEFILE *ImageFile,UWORD StartID,UWORD EndID,int SpaceSize,BOOL bInGame);
-extern void iV_GetTextExtents(char *String,int *Width,int *y0,int *y1);
 extern int iV_GetTextAboveBase(void);
 extern int iV_GetTextBelowBase(void);
 extern int iV_GetTextLineSize(void);
