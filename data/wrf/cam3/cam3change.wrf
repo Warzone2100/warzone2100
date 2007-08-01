@@ -7,7 +7,7 @@
 
 
 directory	"texpages"
-file 		TERTILES	"tertilesc3hw.png"
+file 		TERTILES	"tertilesc3hw"
 file 		TEXPAGE		"page-6-features-rockies.png"
 file		TEXPAGE		"page-7-barbarians-kevlar.png"
 file		TEXPAGE		"page-8-player buildings-bases-rockies.png"
