@@ -41,6 +41,8 @@
 iTexPage _TEX_PAGE[iV_TEX_MAX];
 unsigned int _TEX_INDEX;
 
+static void pie_PrintLoadedTextures(void);
+
 //*************************************************************************
 
 
@@ -49,35 +51,39 @@ unsigned int _TEX_INDEX;
 	table.  We check first if the given image has already been loaded,
 	as a sanity check (should never happen).  The texture numbers are
 	stored in a special texture table, not in the resource system, for
-	some unknown reason.
+	some unknown reason. Start looking for an available slot in the
+	texture table at the given slot number.
 
 	Returns the texture number of the image.
 **************************************************************************/
-int pie_AddTexPage(iV_Image * s, const char* filename)
+int pie_AddTexPage(iV_Image *s, const char* filename, int slot)
 {
 	unsigned int i = 0;
 
-	debug(LOG_TEXTURE, "pie_AddTexPage: %s page=%d", filename, _TEX_INDEX);
-	assert(s != NULL);
-
-	/* Have we already loaded this one? (Should generally not happen here.) */
-	while (i < _TEX_INDEX) {
-		if (strncmp(filename, _TEX_PAGE[i].name, iV_TEXNAME_MAX) == 0) {
-			// this happens with terrain for some reason, which is necessary
-			debug(LOG_TEXTURE, "pie_AddTexPage: %s loaded again", filename);
+	/* Have we already loaded this one? Should not happen here. */
+	while (i < _TEX_INDEX)
+	{
+		if (strncmp(filename, _TEX_PAGE[i].name, iV_TEXNAME_MAX) == 0)
+		{
+			pie_PrintLoadedTextures();
 		}
+		ASSERT(strncmp(filename, _TEX_PAGE[i].name, iV_TEXNAME_MAX) != 0, 
+		       "pie_AddTexPage: %s loaded again! Already loaded as %s|%u", filename,
+		       _TEX_PAGE[i].name, i);
 		i++;
 	}
 
-	/* Get next available texture page */
-	i = _TEX_INDEX;
-
-	/* Have we used up too many? */
-	if (_TEX_INDEX >= iV_TEX_MAX) {
-		debug(LOG_ERROR, "pie_AddTexPage: too many texture pages");
-		assert(!"too many texture pages");
-		return -1;
+	/* Use first unused slot */
+	for (i = slot; i < iV_TEX_MAX && _TEX_PAGE[i].name[0] != '\0'; i++);
+	
+	if (i == _TEX_INDEX)
+	{
+		_TEX_INDEX++; // increase table
 	}
+	ASSERT(i != iV_TEX_MAX, "pie_AddTexPage: too many texture pages");
+
+	debug(LOG_TEXTURE, "pie_AddTexPage: %s page=%d", filename, _TEX_INDEX);
+	assert(s != NULL);
 
 	/* Stick the name into the tex page structures */
 	strncpy(_TEX_PAGE[i].name, filename, iV_TEXNAME_MAX);
@@ -178,17 +184,27 @@ int iV_GetTexture(const char *filename)
 }
 
 
-int pie_ReloadTexPage(const char *texpageName, const char *fileName)
+/**************************************************************************
+	WRF files may specify overrides for the textures on a map. This
+	is done through an ugly hack involving cutting the texture name
+	down to just "page-NN", where NN is the page number, and 
+	replaceing the texture page with the same name if another file
+	with this prefix is loaded.
+**************************************************************************/
+int pie_ReplaceTexPage(iV_Image *s, const char *texPage)
 {
-	int i = iV_GetTexture(texpageName);
+	int i = iV_GetTexture(texPage);
 
+	ASSERT(i >= 0, "pie_ReplaceTexPage: Cannot find any %s to replace!", texPage);
 	if (i < 0)
 	{
 		return -1;
 	}
 
-	debug(LOG_ERROR, "Reloading texture %s from index %d, max is %d (NOT REALLY DOING ANYTHING)", 
-	      texpageName, i, _TEX_INDEX);
+	glDeleteTextures(1, (GLuint *) &_TEX_PAGE[i].id);
+	debug(LOG_ERROR, "Reloading texture %s from index %d", texPage, i);
+	_TEX_PAGE[i].name[0] = '\0';
+	pie_AddTexPage(s, texPage, i);
 
 	return i;
 }

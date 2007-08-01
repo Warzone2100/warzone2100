@@ -724,28 +724,20 @@ static BOOL dataTexPageLoad(const char *fileName, void **ppData)
 	strncpy(texpage, GetLastResourceFilename(), MAX_PATH);
 
 	pie_MakeTexPageName(texpage);
+	dataImageLoad(fileName, ppData);
 
 	// see if this texture page has already been loaded
 	if (resPresent("TEXPAGE", texpage))
 	{
-		int id;
-
 		// replace the old texture page with the new one
 		debug(LOG_TEXTURE, "fileTexPageLoad: replacing %s with new texture %s", texpage, fileName);
-
-		id = pie_ReloadTexPage(texpage, fileName);
-
-		ASSERT( id >= 0, "pie_ReloadTexPage failed" );
-
-		*ppData = NULL;
+		(void) pie_ReplaceTexPage(*ppData, texpage);
 	}
 	else
 	{
 		debug(LOG_TEXTURE, "fileTexPageLoad: adding page %s with texture %s", texpage, fileName);
-
-		dataImageLoad(fileName, ppData);
-
-		pie_AddTexPage(*ppData, texpage);
+		SetLastResourceFilename(texpage);
+		(void) pie_AddTexPage(*ppData, texpage, 0);
 	}
 
 	return TRUE;

@@ -33,8 +33,6 @@ static unsigned short LoadTextureFile(const char *FileName, iTexture *pSprite)
 {
 	unsigned int i;
 
-	debug(LOG_TEXTURE, "LoadTextureFile: %s", FileName);
-
 	ASSERT(resPresent("IMGPAGE", FileName), "Texture file \"%s\" not preloaded.", FileName);
 
 	*pSprite = *(iTexture*)resGetData("IMGPAGE", FileName);
@@ -51,7 +49,7 @@ static unsigned short LoadTextureFile(const char *FileName, iTexture *pSprite)
 		}
 	}
 
-	return pie_AddTexPage(pSprite, FileName);
+	return pie_AddTexPage(pSprite, FileName, 0);
 }
 
 static inline IMAGEFILE* iV_AllocImageFile(size_t NumTPages, size_t NumImages)
