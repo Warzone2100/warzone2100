@@ -292,9 +292,6 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 
 			// Get the next word.
    			i = 0;
-#ifdef TESTBED
-			memset(FWord,0,256);
-#endif
 			if (AddLeadingSpace)
 			{
 				WWidth += iV_GetCharWidth(' ');
@@ -367,7 +364,7 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 		if(FFlags & FTEXTF_SKIP_TRAILING_SPACES)
 		{
 			char* curSpaceChar = &FString[strlen(FString) - 1];
-			while (curSpaceChar != &FString[-1] && *curSpaceChar != ASCII_SPACE)
+			while (curSpaceChar != &FString[-1] && *curSpaceChar == ASCII_SPACE)
 			{
 				*(curSpaceChar--) = 0;
 			}
