@@ -209,7 +209,7 @@ static char FWord[256];
 static int LastX;				// Cursor position after last draw.
 static int LastY;
 static int LastTWidth;			// Pixel width of the last string draw.
-static UDWORD FFlags = FTEXTF_SKIP_TRAILING_SPACES | FTEXTF_INSERT_SPACE_ON_APPEND;
+static UDWORD FFlags = FTEXTF_SKIP_TRAILING_SPACES;
 static int RecordExtents = EXTENTS_NONE;
 static int ExtentsStartX;
 static int ExtentsStartY;
@@ -245,12 +245,7 @@ UBYTE ExtentsMode=EXTENTS_USEMAXWIDTH;
 //							FTEXT_LEFTJUSTIFY
 //							FTEXT_CENTRE
 //							FTEXT_RIGHTJUSTIFY
-//							FTEXT_LEFTJUSTIFYAPPEND
 //	BOOL DrawBack		If TRUE then draws transparent box behind text.
-//
-// NOTE,
-//	FTEXT_LEFTJUSTIFYAPPEND should only be used immediatly after calling with FTEXT_LEFTJUSTIFY
-//  or FTEXT_LEFTJUSTIFYAPPEND
 //
 // Returns y coord of next text line.
 //
@@ -263,7 +258,6 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 	BOOL GotSpace;
 	BOOL NewLine;
 	BOOL AddLeadingSpace = FALSE;
-	int t;
 	int TWidth;
 
 	const char* curChar = String;
@@ -274,7 +268,7 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 	curChar = String;
 	while (*curChar != 0)
 	{
-		// Remove leading spaces, usefull when doing centre justify.
+		// Remove leading spaces, usefull when doing center alignment.
 		if(FFlags & FTEXTF_SKIP_LEADING_SPACES)
 		{
 			while(*curChar == ' ')
@@ -285,15 +279,8 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 
 		FString[0] = 0;
 
-		if(Justify == FTEXT_LEFTJUSTIFYAPPEND) {
-			WWidth = LastTWidth;
-			if(FFlags & FTEXTF_INSERT_SPACE_ON_APPEND) {
-				AddLeadingSpace = TRUE;
-			}
-		} else {
-			WWidth = 0;
-			AddLeadingSpace = FALSE;
-		}
+		WWidth = 0;
+		AddLeadingSpace = FALSE;
 
 		GotSpace = FALSE;
 		NewLine = FALSE;
@@ -308,11 +295,13 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 #ifdef TESTBED
 			memset(FWord,0,256);
 #endif
-			if(AddLeadingSpace) {
-   				WWidth += iV_GetCharWidth(' ');
-   				if(WWidth <= Width) {
+			if (AddLeadingSpace)
+			{
+				WWidth += iV_GetCharWidth(' ');
+				if(WWidth <= Width)
+				{
 					FWord[i] = ' ';
-					i++;
+					++i;
 					GotSpace = TRUE;
 					AddLeadingSpace = FALSE;
 				}
@@ -374,13 +363,13 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
    		}
 
 
-		// Remove trailing spaces, usefull when doing centre justify.
-		if(FFlags & FTEXTF_SKIP_TRAILING_SPACES) {
-			for (t = strlen(FString) - 1; t >= 0; t--) {
-				if(FString[t] != ' ') {
-					break;
-				}
-				FString[t] = 0;
+		// Remove trailing spaces, useful when doing center alignment.
+		if(FFlags & FTEXTF_SKIP_TRAILING_SPACES)
+		{
+			char* curSpaceChar = &FString[strlen(FString) - 1];
+			while (curSpaceChar != &FString[-1] && *curSpaceChar != ASCII_SPACE)
+			{
+				*(curSpaceChar--) = 0;
 			}
 		}
 
@@ -397,24 +386,19 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 //		DBPRINTF(("string[%s] is %d of %d pixels wide (according to DrawFormattedText)\n",FString,TWidth,Width));
 
 		// Do justify.
-		switch(Justify) {
-			case	FTEXT_CENTRE:
+		switch(Justify)
+		{
+			case FTEXT_CENTRE:
 				jx = x + (Width-TWidth)/2;
 				break;
 
-			case	FTEXT_RIGHTJUSTIFY:
+			case FTEXT_RIGHTJUSTIFY:
 
 				jx = x + Width-TWidth;
 				break;
 
-			case	FTEXT_LEFTJUSTIFY:
+			case FTEXT_LEFTJUSTIFY:
 				jx = x;
-				break;
-
-			case	FTEXT_LEFTJUSTIFYAPPEND:
-				jx = LastX;
-				jy = LastY;
-				Justify = FTEXT_LEFTJUSTIFY;
 				break;
 		}
 
@@ -498,30 +482,38 @@ static SWORD OldTextColourIndex = -1;
 
 void pie_DrawText(const char *string, UDWORD x, UDWORD y)
 {
-	int Index;
-	UWORD ImageID;
 	IVIS_FONT *Font = &iVFonts[ActiveFontID];
 
 	/* Colour selection */
 	pie_BeginTextRender(Font->FontColourIndex);
 
-	while (*string!=0) {
-		Index = (unsigned char)*string;
+	while (*string != 0)
+	{
+		unsigned int Index = (unsigned char)*string;
 
 		// Toggle colour mode?
-		if(Index == ASCII_COLOURMODE) {
-			if(TextColourIndex >= 0) {
+		if(Index == ASCII_COLOURMODE)
+		{
+			if (TextColourIndex >= 0)
+			{
 				OldTextColourIndex = TextColourIndex;
 				TextColourIndex = -1;
-			} else {
-				if(OldTextColourIndex >= 0) {
+			}
+			else
+			{
+				if(OldTextColourIndex >= 0)
+				{
 					TextColourIndex = OldTextColourIndex;
 				}
 			}
-		} else if(Index == ASCII_SPACE) {
+		}
+		else if(Index == ASCII_SPACE)
+		{
 			x += Font->FontSpaceSize;
-		} else {
-			ImageID = (UWORD)Font->AsciiTable[Index];
+		}
+		else
+		{
+			UWORD ImageID = Font->AsciiTable[Index];
 			pie_TextRender(Font->FontFile, ImageID, x, y);
 			x += iV_GetImageWidth(Font->FontFile, ImageID) + 1;
 		}
@@ -529,40 +521,43 @@ void pie_DrawText(const char *string, UDWORD x, UDWORD y)
 		// Don't use this any more, If the text needs to wrap then use
 		// pie_DrawFormattedText() defined above.
 		/* New bit to make text wrap */
-		if(x > (pie_GetVideoBufferWidth() - Font->FontSpaceSize) )
+		if (Font->FontSpaceSize > (pie_GetVideoBufferWidth() - x))
 		{
 			/* Drop it to the next line if we hit screen edge */
 			x = 0;
 			y += iV_GetTextLineSize();
 		}
-		string++;
+
+		++string;
 	}
 }
 
 
 void pie_DrawText270(const char *String, int XPos, int YPos)
 {
-	int Index;
-	UWORD ImageID;
 	IVIS_FONT *Font = &iVFonts[ActiveFontID];
 
-	YPos += iV_GetImageWidth(Font->FontFile,(UWORD)Font->AsciiTable[33]) + 1;
+	YPos += iV_GetImageWidth(Font->FontFile, Font->AsciiTable[33]) + 1;
 
 	pie_BeginTextRender(Font->FontColourIndex);
 
-	while (*String!=0)
+	while (*String != 0)
 	{
-		Index = (unsigned char)*String;
+		unsigned int Index = (unsigned char)*String;
 
-		if (Index != ASCII_SPACE) {
-			ImageID = (UWORD)Font->AsciiTable[Index];
+		if (Index != ASCII_SPACE)
+		{
+			UWORD ImageID = Font->AsciiTable[Index];
 			pie_TextRender270(Font->FontFile,ImageID,XPos,YPos);
 
-			YPos -= (iV_GetImageWidth(Font->FontFile,ImageID) +1) ;
-		} else {
-			YPos -= (Font->FontSpaceSize);
+			YPos -= (iV_GetImageWidth(Font->FontFile, ImageID) + 1);
 		}
-		String++;
+		else
+		{
+			YPos -= Font->FontSpaceSize;
+		}
+
+		++String;
 	}
 }
 
@@ -582,16 +577,27 @@ void pie_TextRender(IMAGEFILE *ImageFile,UWORD ID,int x,int y)
 	iColour* psPalette;
 
 
-	if ((TextColourIndex == PIE_TEXT_WHITE) || (TextColourIndex == 255)) {
+	if (TextColourIndex == PIE_TEXT_WHITE
+	 || TextColourIndex == 255)
+	{
 		pie_SetColour(MAX_LIGHT);
-	} else {
-		if (TextColourIndex == PIE_TEXT_WHITE) {
+	}
+	else
+	{
+		if (TextColourIndex == PIE_TEXT_WHITE)
+		{
 			pie_SetColour(PIE_TEXT_WHITE_COLOUR);
-		} else if (TextColourIndex == PIE_TEXT_LIGHTBLUE) {
+		}
+		else if (TextColourIndex == PIE_TEXT_LIGHTBLUE)
+		{
 			pie_SetColour(PIE_TEXT_LIGHTBLUE_COLOUR);
-		} else if (TextColourIndex == PIE_TEXT_DARKBLUE) {
+		}
+		else if (TextColourIndex == PIE_TEXT_DARKBLUE)
+		{
 			pie_SetColour(PIE_TEXT_DARKBLUE_COLOUR);
-		} else {
+		}
+		else
+		{
 			psPalette = pie_GetGamePal();
 			Red  = psPalette[TextColourIndex].r;
 			Green= psPalette[TextColourIndex].g;
@@ -616,20 +622,29 @@ static void pie_TextRender270(IMAGEFILE *ImageFile, UWORD ImageID, int x, int y)
 	iColour* psPalette;
 
 	Image = &(ImageFile->ImageDefs[ImageID]);
+
 	//not coloured yet
-	if (TextColourIndex == PIE_TEXT_WHITE) {
+	if (TextColourIndex == PIE_TEXT_WHITE)
+	{
 		pie_SetColour(PIE_TEXT_WHITE_COLOUR & 0x80ffffff);//special case semi transparent for rotated text
-	} else if (TextColourIndex == PIE_TEXT_LIGHTBLUE) {
+	}
+	else if (TextColourIndex == PIE_TEXT_LIGHTBLUE)
+	{
 		pie_SetColour(PIE_TEXT_LIGHTBLUE_COLOUR);
-	} else if (TextColourIndex == PIE_TEXT_DARKBLUE) {
+	}
+	else if (TextColourIndex == PIE_TEXT_DARKBLUE)
+	{
 		pie_SetColour(PIE_TEXT_DARKBLUE_COLOUR);
-	} else {
+	}
+	else
+	{
 		psPalette = pie_GetGamePal();
 		Red  = psPalette[TextColourIndex].r;
 		Green= psPalette[TextColourIndex].g;
 		Blue = psPalette[TextColourIndex].b;
 		pie_SetColour(((Alpha<<24) | (Red<<16) | (Green<<8) | Blue));
 	}
+
 	pie_SetRendMode(REND_ALPHA_TEXT);
 	pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
 	pieImage.tu = Image->Tu;

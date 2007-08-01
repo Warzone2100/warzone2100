@@ -47,15 +47,12 @@ extern void iV_SetTextColour(SWORD Index);
 #define ASCII_NEWLINE		('@')
 #define ASCII_COLOURMODE	('#')
 
-
-
 // Valid values for "Justify" argument of pie_DrawFormattedText().
 
 enum {
 	FTEXT_LEFTJUSTIFY,			// Left justify.
 	FTEXT_CENTRE,				// Centre justify.
 	FTEXT_RIGHTJUSTIFY,			// Right justify.
-	FTEXT_LEFTJUSTIFYAPPEND,	// Start from end of last print and then left justify.
 };
 
 
@@ -66,8 +63,6 @@ enum {
 #define	FTEXTF_SKIP_LEADING_SPACES		1
 // Skip trailing spaces at the end of each line of text, improves centre justification.
 #define	FTEXTF_SKIP_TRAILING_SPACES		2
-// Inserts a space before the first word in the string, usefull when use FTEXT_LEFTJUSTIFYAPPEND
-#define	FTEXTF_INSERT_SPACE_ON_APPEND	4
 
 extern void pie_SetFormattedTextFlags(UDWORD Flags);
 extern UDWORD pie_GetFormattedTextFlags(void);
