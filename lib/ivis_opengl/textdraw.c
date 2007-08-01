@@ -498,7 +498,7 @@ void pie_DrawText(const char *string, UDWORD x, UDWORD y)
 	/* Colour selection */
 	pie_BeginTextRender(Font->FontColourIndex);
 
-	while (*string != 0)
+	for (; *string != 0; ++string)
 	{
 		unsigned int Index = (unsigned char)*string;
 		UWORD ImageID;
@@ -538,8 +538,6 @@ void pie_DrawText(const char *string, UDWORD x, UDWORD y)
 
 		// Advance the drawing position
 		x += iV_GetImageWidth(Font->FontFile, ImageID) + 1;
-
-		++string;
 	}
 }
 
