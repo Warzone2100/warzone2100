@@ -68,8 +68,8 @@ static IVIS_FONT iVFonts[MAX_IVIS_FONTS];
  *	Local ProtoTypes
  */
 /***************************************************************************/
-void pie_BeginTextRender(SWORD ColourIndex);
-void pie_TextRender(IMAGEFILE *ImageFile, UWORD ID, int x, int y);
+static void pie_BeginTextRender(SWORD ColourIndex);
+static void pie_TextRender(IMAGEFILE *ImageFile, UWORD ID, int x, int y);
 static void pie_TextRender270(IMAGEFILE *ImageFile, UWORD ImageID, int x, int y);
 
 /***************************************************************************/
@@ -235,7 +235,7 @@ UDWORD pie_GetFormattedTextFlags(void)
 #define EXTENTS_USELASTX (1)
 //UBYTE ExtentsMode=EXTENTS_USEMAXWIDTH;
 
-UBYTE ExtentsMode = EXTENTS_USEMAXWIDTH;
+static UBYTE ExtentsMode = EXTENTS_USEMAXWIDTH;
 
 
 // Draws formatted text with word wrap, long word splitting, embedded
@@ -491,8 +491,6 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 
 
 
-static SWORD OldTextColourIndex = -1;
-
 void pie_DrawText(const char *string, UDWORD x, UDWORD y)
 {
 	IVIS_FONT *Font = &iVFonts[ActiveFontID];
@@ -503,10 +501,13 @@ void pie_DrawText(const char *string, UDWORD x, UDWORD y)
 	while (*string != 0)
 	{
 		unsigned int Index = (unsigned char)*string;
+		UWORD ImageID;
 
 		// Toggle colour mode?
 		if (Index == ASCII_COLOURMODE)
 		{
+			static SWORD OldTextColourIndex = -1;
+
 			if (TextColourIndex >= 0)
 			{
 				OldTextColourIndex = TextColourIndex;
@@ -519,27 +520,24 @@ void pie_DrawText(const char *string, UDWORD x, UDWORD y)
 					TextColourIndex = OldTextColourIndex;
 				}
 			}
+
+			// Don't draw this character
+			continue;
 		}
 		else if (Index == ASCII_SPACE)
 		{
 			x += Font->FontSpaceSize;
-		}
-		else
-		{
-			UWORD ImageID = Font->AsciiTable[Index];
-			pie_TextRender(Font->FontFile, ImageID, x, y);
-			x += iV_GetImageWidth(Font->FontFile, ImageID) + 1;
+
+			// Don't draw this character
+			continue;
 		}
 
-		// Don't use this any more, If the text needs to wrap then use
-		// pie_DrawFormattedText() defined above.
-		/* New bit to make text wrap */
-		if (Font->FontSpaceSize > (pie_GetVideoBufferWidth() - x))
-		{
-			/* Drop it to the next line if we hit screen edge */
-			x = 0;
-			y += iV_GetTextLineSize();
-		}
+		// Draw the character
+		ImageID = Font->AsciiTable[Index];
+		pie_TextRender(Font->FontFile, ImageID, x, y);
+
+		// Advance the drawing position
+		x += iV_GetImageWidth(Font->FontFile, ImageID) + 1;
 
 		++string;
 	}
@@ -581,7 +579,7 @@ void pie_BeginTextRender(SWORD ColourIndex)
 	pie_SetBilinear(FALSE);
 }
 
-void pie_TextRender(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
+static void pie_TextRender(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 {
 	UDWORD Red;
 	UDWORD Green;
