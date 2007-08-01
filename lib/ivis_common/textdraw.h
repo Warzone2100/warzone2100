@@ -78,9 +78,4 @@ extern UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWO
 extern void pie_DrawText(const char *string, UDWORD x, UDWORD y);
 extern void pie_DrawText270(const char *String, int XPos, int YPos);
 
-typedef void (*RENDERTEXT_CALLBACK)(const char *String, UDWORD X, UDWORD Y);
-// routines used for textdraw
-void SetIndirectDrawTextCallback(RENDERTEXT_CALLBACK routine);
-RENDERTEXT_CALLBACK GetIndirectDrawTextCallback(void);
-
-#endif
+#endif // _INCLUDED_TEXTDRAW_

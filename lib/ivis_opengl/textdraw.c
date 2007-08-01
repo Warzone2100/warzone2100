@@ -226,19 +226,6 @@ UDWORD pie_GetFormattedTextFlags(void)
 	return FFlags;
 }
 
-static RENDERTEXT_CALLBACK Indirect_pie_DrawText= pie_DrawText;
-
-void SetIndirectDrawTextCallback( RENDERTEXT_CALLBACK routine)
-{
-	Indirect_pie_DrawText=routine;
-}
-
-RENDERTEXT_CALLBACK GetIndirectDrawTextCallback( void)
-{
-	return(Indirect_pie_DrawText);
-}
-
-
 #define EXTENTS_USEMAXWIDTH (0)
 #define EXTENTS_USELASTX (1)
 //UBYTE ExtentsMode=EXTENTS_USEMAXWIDTH;
@@ -432,9 +419,7 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 		}
 
 		// draw the text.
-		// This is an indirect routine
-		if (Indirect_pie_DrawText)
-			Indirect_pie_DrawText(FString,jx,jy);
+		pie_DrawText(FString, jx, jy);
 
 
 //DBPRINTF(("[%s] @ %d,%d\n",FString,jx,jy));
