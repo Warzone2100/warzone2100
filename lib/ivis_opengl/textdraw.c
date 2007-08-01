@@ -38,7 +38,8 @@
 
 #define MAX_IVIS_FONTS	8
 
-typedef struct {
+typedef struct
+{
 	IMAGEFILE *FontFile;	// The image data that contains the font.
 //	UWORD FontStartID;		// The image ID of character ASCII 33.
 //	UWORD FontEndID;		// The image ID of last character in the font.
@@ -68,8 +69,8 @@ static IVIS_FONT iVFonts[MAX_IVIS_FONTS];
  */
 /***************************************************************************/
 void pie_BeginTextRender(SWORD ColourIndex);
-void pie_TextRender(IMAGEFILE *ImageFile,UWORD ID,int x,int y);
-static void pie_TextRender270( IMAGEFILE *ImageFile, UWORD ImageID, int x, int y );
+void pie_TextRender(IMAGEFILE *ImageFile, UWORD ID, int x, int y);
+static void pie_TextRender270(IMAGEFILE *ImageFile, UWORD ImageID, int x, int y);
 
 /***************************************************************************/
 /*
@@ -92,12 +93,12 @@ void iV_ClearFonts(void)
 //
 int iV_CreateFontIndirect(IMAGEFILE *ImageFile, UWORD *AsciiTable, int SpaceSize)
 {
-	int Above,Below;
+	int Above, Below;
 	int Height;
-	UWORD Index,c;
+	UWORD Index, c;
 	IVIS_FONT *Font;
 
-	assert(NumFonts < MAX_IVIS_FONTS-1);
+	assert(NumFonts < MAX_IVIS_FONTS - 1);
 
 	Font = &iVFonts[NumFonts];
 
@@ -109,22 +110,26 @@ int iV_CreateFontIndirect(IMAGEFILE *ImageFile, UWORD *AsciiTable, int SpaceSize
 	Font->FontBelow = 0;
 
 	// Initialise the font metrics.
-	for(c=0; c<256; c++) {
+	for (c = 0; c < 256; c++)
+	{
 		Index = (UWORD)AsciiTable[c];
-		Above = iV_GetImageYOffset(Font->FontFile,Index);
-		Below = Above + iV_GetImageHeight(Font->FontFile,Index);
+		Above = iV_GetImageYOffset(Font->FontFile, Index);
+		Below = Above + iV_GetImageHeight(Font->FontFile, Index);
 
 		Height = abs(Above) + abs(Below);
 
-		if(Above  < Font->FontAbove) {
+		if (Above  < Font->FontAbove)
+		{
 			Font->FontAbove = Above;
 		}
 
-		if(Below  > Font->FontBelow) {
+		if (Below  > Font->FontBelow)
+		{
 			Font->FontBelow = Below;
 		}
 
-		if(Height > Font->FontLineSize) {
+		if (Height > Font->FontLineSize)
+		{
 			Font->FontLineSize = Height;
 		}
 	}
@@ -133,7 +138,7 @@ int iV_CreateFontIndirect(IMAGEFILE *ImageFile, UWORD *AsciiTable, int SpaceSize
 
 	NumFonts++;
 
-	return NumFonts-1;
+	return NumFonts - 1;
 }
 
 void iV_SetFont(int FontID)
@@ -230,7 +235,7 @@ UDWORD pie_GetFormattedTextFlags(void)
 #define EXTENTS_USELASTX (1)
 //UBYTE ExtentsMode=EXTENTS_USEMAXWIDTH;
 
-UBYTE ExtentsMode=EXTENTS_USEMAXWIDTH;
+UBYTE ExtentsMode = EXTENTS_USEMAXWIDTH;
 
 
 // Draws formatted text with word wrap, long word splitting, embedded
@@ -269,9 +274,9 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 	while (*curChar != 0)
 	{
 		// Remove leading spaces, usefull when doing center alignment.
-		if(FFlags & FTEXTF_SKIP_LEADING_SPACES)
+		if (FFlags & FTEXTF_SKIP_LEADING_SPACES)
 		{
-			while(*curChar == ' ')
+			while (*curChar == ' ')
 			{
 				++curChar;
 			}
@@ -291,11 +296,11 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 			osiChar = curChar;
 
 			// Get the next word.
-   			i = 0;
+			i = 0;
 			if (AddLeadingSpace)
 			{
 				WWidth += iV_GetCharWidth(' ');
-				if(WWidth <= Width)
+				if (WWidth <= Width)
 				{
 					FWord[i] = ' ';
 					++i;
@@ -307,30 +312,33 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 			while (*curChar != 0 && *curChar != ' ' && WWidth <= Width)
 			{
 				// Check for new line character.
-				if(*curChar == ASCII_COLOURMODE) // If it's a colour mode toggle char then just add it to the word.
+				if (*curChar == ASCII_COLOURMODE) // If it's a colour mode toggle char then just add it to the word.
 				{
 					FWord[i] = *curChar;
 					++i;
 					++curChar;
-				} else {
+				}
+				else
+				{
 					// Update this lines pixel width.
 					WWidth += iV_GetCharWidth(*curChar);
 
 					// If width ok then add this character to the current word.
-					if(WWidth <= Width)
+					if (WWidth <= Width)
 					{
 						FWord[i] = *curChar;
 						++i;
 						++curChar;
 					}
 				}
-   			}
+			}
 
-   			// Don't forget the space.
-			if(*curChar == ' ')
+			// Don't forget the space.
+			if (*curChar == ' ')
 			{
-   				WWidth += iV_GetCharWidth(' ');
-   				if(WWidth <= Width) {
+				WWidth += iV_GetCharWidth(' ');
+				if (WWidth <= Width)
+				{
 					FWord[i] = ' ';
 					++i;
 					++curChar;
@@ -340,12 +348,16 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 
 			// If we've passed a space and the word goes past the width then rewind
 			// to that space and finish this line.
-			if(GotSpace) {
+			if (GotSpace)
+			{
 				if (WWidth >= Width)
 				{
-					if(FWord[i-1] == ' ') {
+					if (FWord[i-1] == ' ')
+					{
 						FWord[i] = 0;
-					} else {
+					}
+					else
+					{
 						curChar = osiChar;
 						break;
 					}
@@ -357,11 +369,11 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 
 			// And add it to the output string.
 			strcat(FString, FWord);
-   		}
+		}
 
 
 		// Remove trailing spaces, useful when doing center alignment.
-		if(FFlags & FTEXTF_SKIP_TRAILING_SPACES)
+		if (FFlags & FTEXTF_SKIP_TRAILING_SPACES)
 		{
 			char* curSpaceChar = &FString[strlen(FString) - 1];
 			while (curSpaceChar != &FString[-1] && *curSpaceChar == ASCII_SPACE)
@@ -372,8 +384,9 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 
 #ifdef _TESTBED
 		// Replace spaces with ~.
-		for (t = 0; t < strlen(FString); t++) {
-			if(FString[t] == ' ') FString[t] = '~';
+		for (t = 0; t < strlen(FString); t++)
+		{
+			if (FString[t] == ' ') FString[t] = '~';
 		}
 #endif
 
@@ -383,15 +396,15 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 //		DBPRINTF(("string[%s] is %d of %d pixels wide (according to DrawFormattedText)\n",FString,TWidth,Width));
 
 		// Do justify.
-		switch(Justify)
+		switch (Justify)
 		{
 			case FTEXT_CENTRE:
-				jx = x + (Width-TWidth)/2;
+				jx = x + (Width - TWidth) / 2;
 				break;
 
 			case FTEXT_RIGHTJUSTIFY:
 
-				jx = x + Width-TWidth;
+				jx = x + Width - TWidth;
 				break;
 
 			case FTEXT_LEFTJUSTIFY:
@@ -405,30 +418,30 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 
 //DBPRINTF(("[%s] @ %d,%d\n",FString,jx,jy));
 
-/* callback type for resload display callback*/
+		/* callback type for resload display callback*/
 		// remember where we were..
 		LastX = jx + TWidth;
 		LastY = jy;
 		LastTWidth = TWidth;
 
 
-		if (ExtentsMode==EXTENTS_USELASTX)
+		if (ExtentsMode == EXTENTS_USELASTX)
 		{
-			if (RecordExtents==EXTENTS_START)
+			if (RecordExtents == EXTENTS_START)
 			{
 //
 				ExtentsStartY = y + iV_GetTextAboveBase();
-				ExtentsEndY = jy - iV_GetTextLineSize()+iV_GetTextBelowBase();
+				ExtentsEndY = jy - iV_GetTextLineSize() + iV_GetTextBelowBase();
 
 				RecordExtents = EXTENTS_END;
-				ExtentsStartX=jx;
-				ExtentsEndX=LastX;
+				ExtentsStartX = jx;
+				ExtentsEndX = LastX;
 			}
 			else
 			{
-				if (jx<ExtentsStartX) ExtentsStartX=jx;
+				if (jx < ExtentsStartX) ExtentsStartX = jx;
 
-				if (LastX>ExtentsEndX) ExtentsEndX=LastX;
+				if (LastX > ExtentsEndX) ExtentsEndX = LastX;
 			}
 
 //			DBPRINTF(("extentsstartx = %d extentsendx=%d\n",ExtentsStartX,ExtentsEndX));
@@ -439,13 +452,14 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 		jy += iV_GetTextLineSize();
 	}
 
-	if(RecordExtents == EXTENTS_START) {
+	if (RecordExtents == EXTENTS_START)
+	{
 		RecordExtents = EXTENTS_END;
 
 		ExtentsStartY = y + iV_GetTextAboveBase();
-		ExtentsEndY = jy - iV_GetTextLineSize()+iV_GetTextBelowBase();
+		ExtentsEndY = jy - iV_GetTextLineSize() + iV_GetTextBelowBase();
 
-		if (ExtentsMode==EXTENTS_USEMAXWIDTH)
+		if (ExtentsMode == EXTENTS_USEMAXWIDTH)
 		{
 			ExtentsStartX = x;	// Was jx, but this broke the console centre justified text background.
 //			ExtentsEndX = jx + TWidth;
@@ -454,16 +468,18 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 		}
 		else
 		{
-			if (jx<ExtentsStartX) ExtentsStartX=jx;
-			if (LastX>ExtentsEndX) ExtentsEndX=LastX;
+			if (jx < ExtentsStartX) ExtentsStartX = jx;
+			if (LastX > ExtentsEndX) ExtentsEndX = LastX;
 
 		}
 
 
-	} else if(RecordExtents == EXTENTS_END) {
-		ExtentsEndY = jy - iV_GetTextLineSize()+iV_GetTextBelowBase();
+	}
+	else if (RecordExtents == EXTENTS_END)
+	{
+		ExtentsEndY = jy - iV_GetTextLineSize() + iV_GetTextBelowBase();
 
-		if (ExtentsMode==EXTENTS_USEMAXWIDTH)
+		if (ExtentsMode == EXTENTS_USEMAXWIDTH)
 		{
 			ExtentsEndX = x + Width;
 		}
@@ -489,7 +505,7 @@ void pie_DrawText(const char *string, UDWORD x, UDWORD y)
 		unsigned int Index = (unsigned char)*string;
 
 		// Toggle colour mode?
-		if(Index == ASCII_COLOURMODE)
+		if (Index == ASCII_COLOURMODE)
 		{
 			if (TextColourIndex >= 0)
 			{
@@ -498,13 +514,13 @@ void pie_DrawText(const char *string, UDWORD x, UDWORD y)
 			}
 			else
 			{
-				if(OldTextColourIndex >= 0)
+				if (OldTextColourIndex >= 0)
 				{
 					TextColourIndex = OldTextColourIndex;
 				}
 			}
 		}
-		else if(Index == ASCII_SPACE)
+		else if (Index == ASCII_SPACE)
 		{
 			x += Font->FontSpaceSize;
 		}
@@ -545,7 +561,7 @@ void pie_DrawText270(const char *String, int XPos, int YPos)
 		if (Index != ASCII_SPACE)
 		{
 			UWORD ImageID = Font->AsciiTable[Index];
-			pie_TextRender270(Font->FontFile,ImageID,XPos,YPos);
+			pie_TextRender270(Font->FontFile, ImageID, XPos, YPos);
 
 			YPos -= (iV_GetImageWidth(Font->FontFile, ImageID) + 1);
 		}
@@ -565,7 +581,7 @@ void pie_BeginTextRender(SWORD ColourIndex)
 	pie_SetBilinear(FALSE);
 }
 
-void pie_TextRender(IMAGEFILE *ImageFile,UWORD ID,int x,int y)
+void pie_TextRender(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 {
 	UDWORD Red;
 	UDWORD Green;
@@ -597,13 +613,13 @@ void pie_TextRender(IMAGEFILE *ImageFile,UWORD ID,int x,int y)
 		{
 			psPalette = pie_GetGamePal();
 			Red  = psPalette[TextColourIndex].r;
-			Green= psPalette[TextColourIndex].g;
+			Green = psPalette[TextColourIndex].g;
 			Blue = psPalette[TextColourIndex].b;
-			pie_SetColour(((Alpha<<24) | (Red<<16) | (Green<<8) | Blue));
+			pie_SetColour(((Alpha << 24) | (Red << 16) | (Green << 8) | Blue));
 		}
 	}
 	pie_SetColourKeyedBlack(TRUE);
-	pie_DrawImageFileID(ImageFile,ID,x,y);
+	pie_DrawImageFileID(ImageFile, ID, x, y);
 	pie_SetColourKeyedBlack(FALSE);
 }
 
@@ -637,9 +653,9 @@ static void pie_TextRender270(IMAGEFILE *ImageFile, UWORD ImageID, int x, int y)
 	{
 		psPalette = pie_GetGamePal();
 		Red  = psPalette[TextColourIndex].r;
-		Green= psPalette[TextColourIndex].g;
+		Green = psPalette[TextColourIndex].g;
 		Blue = psPalette[TextColourIndex].b;
-		pie_SetColour(((Alpha<<24) | (Red<<16) | (Green<<8) | Blue));
+		pie_SetColour(((Alpha << 24) | (Red << 16) | (Green << 8) | Blue));
 	}
 
 	pie_SetRendMode(REND_ALPHA_TEXT);
@@ -654,6 +670,6 @@ static void pie_TextRender270(IMAGEFILE *ImageFile, UWORD ImageID, int x, int y)
 	dest.h = Image->Height;
 
 	pie_SetColourKeyedBlack(TRUE);
-	pie_DrawImage270( &pieImage, &dest );
+	pie_DrawImage270(&pieImage, &dest);
 	pie_SetColourKeyedBlack(FALSE);
 }
