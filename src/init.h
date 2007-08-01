@@ -42,12 +42,9 @@ extern BOOL stageOneInitialise(void);
 extern BOOL stageOneShutDown(void);
 extern BOOL stageTwoInitialise(void);
 extern BOOL stageTwoShutDown(void);
-
 extern BOOL stageThreeInitialise(void);
-
 extern BOOL stageThreeShutDown(void);
-extern BOOL gameReset(void);
-extern BOOL newMapInitialise(void);
+
 // Reset the game between campaigns
 extern BOOL campaignReset(void);
 // Reset the game when loading a save game

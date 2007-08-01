@@ -723,10 +723,6 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 	if (psCurrLevel != NULL)
 	{
 		debug(LOG_WZ, "levLoadData: reseting old mission data");
-		if (!gameReset())
-		{
-			return FALSE;
-		}
 		if (!levReleaseMissionData())
 		{
 			return FALSE;
@@ -809,11 +805,6 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 
 			debug( LOG_NEVER, "levLoadData: loading savegame: %s\n", pSaveName );
 			if (!loadGame(pSaveName, FALSE, TRUE,TRUE))
-			{
-				return FALSE;
-			}
-
-			if (!newMapInitialise())
 			{
 				return FALSE;
 			}
@@ -994,19 +985,6 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 						return FALSE;
 					}
 					break;
-				}
-			}
-
-			// set the view position if necessary
-			if ((pSaveName != NULL)
-				|| ((psNewLevel->type != LDS_BETWEEN)
-				&& (psNewLevel->type != LDS_EXPAND)
-				&& (psNewLevel->type != LDS_EXPAND_LIMBO)
-				))
-			{
-				if (!newMapInitialise())
-				{
-					return FALSE;
 				}
 			}
 		}

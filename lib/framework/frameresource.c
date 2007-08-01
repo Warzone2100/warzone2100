@@ -681,18 +681,17 @@ BOOL resPresent(const char *pType, const char *pID)
 	}
 
 	/* Bow out if unrecognised type */
+	ASSERT(psT != NULL, "resPresent: Unknown type");
 	if (psT == NULL)
 	{
-//		ASSERT( FALSE, "resPresent: Unknown type" );
 		return FALSE;
 	}
 
 	{
 		UDWORD HashedID=HashStringIgnoreCase(pID);
-//		DBPRINTF(("%x - %d\n",HashedID,pID));
+
 		for(psRes = psT->psRes; psRes; psRes = psRes->psNext)
 		{
-//	DBPRINTF(("!= %x\n",psRes->HashedID));
 			if (psRes->HashedID==HashedID)
 			{
 				/* We found it */
@@ -740,7 +739,7 @@ void resReleaseAllData(void)
 		{
 			if (psRes->usage == 0)
 			{
-				debug(LOG_WZ, "resReleaseAllData: %s resource: %s(%04x) not used", psT->aType, psRes->aID, psRes->HashedID);
+				debug(LOG_NEVER, "resReleaseAllData: %s resource: %s(%04x) not used", psT->aType, psRes->aID, psRes->HashedID);
 			}
 
 			if (psT->release != NULL)
@@ -774,7 +773,7 @@ void resReleaseBlockData(SDWORD blockID)
 			{
 				if (psRes->usage == 0)
 				{
-					debug(LOG_WZ, "resReleaseBlockData: %s resource: %s(%04x) not used", psT->aType, psRes->aID,
+					debug(LOG_NEVER, "resReleaseBlockData: %s resource: %s(%04x) not used", psT->aType, psRes->aID,
 					      psRes->HashedID);
 				}
 				if(psT->release != NULL)
