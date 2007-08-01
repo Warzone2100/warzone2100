@@ -58,11 +58,8 @@ enum {
 
 // Valid values for paramaters for pie_SetFormattedTextFlags().
 
-// Skip leading spaces at the start of each line of text. Improves centre justification
-// but may result in unwanted word breaks.
-#define	FTEXTF_SKIP_LEADING_SPACES		1
 // Skip trailing spaces at the end of each line of text, improves centre justification.
-#define	FTEXTF_SKIP_TRAILING_SPACES		2
+#define	FTEXTF_SKIP_TRAILING_SPACES 1
 
 extern void pie_SetFormattedTextFlags(UDWORD Flags);
 extern UDWORD pie_GetFormattedTextFlags(void);

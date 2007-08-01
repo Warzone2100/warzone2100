@@ -262,7 +262,6 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 	UDWORD WWidth;
 	BOOL GotSpace;
 	BOOL NewLine;
-	BOOL AddLeadingSpace = FALSE;
 	int TWidth;
 
 	const char* curChar = String;
@@ -273,19 +272,10 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 	curChar = String;
 	while (*curChar != 0)
 	{
-		// Remove leading spaces, usefull when doing center alignment.
-		if (FFlags & FTEXTF_SKIP_LEADING_SPACES)
-		{
-			while (*curChar == ' ')
-			{
-				++curChar;
-			}
-		}
-
+		// Reset text draw buffer
 		FString[0] = 0;
 
 		WWidth = 0;
-		AddLeadingSpace = FALSE;
 
 		GotSpace = FALSE;
 		NewLine = FALSE;
@@ -297,40 +287,26 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 
 			// Get the next word.
 			i = 0;
-			if (AddLeadingSpace)
-			{
-				WWidth += iV_GetCharWidth(' ');
-				if (WWidth <= Width)
-				{
-					FWord[i] = ' ';
-					++i;
-					GotSpace = TRUE;
-					AddLeadingSpace = FALSE;
-				}
-			}
-
-			while (*curChar != 0 && *curChar != ' ' && WWidth <= Width)
+			for (; *curChar != 0 && *curChar != ' '; ++i, ++curChar)
 			{
 				// Check for new line character.
 				if (*curChar == ASCII_COLOURMODE) // If it's a colour mode toggle char then just add it to the word.
 				{
 					FWord[i] = *curChar;
-					++i;
-					++curChar;
-				}
-				else
-				{
-					// Update this lines pixel width.
-					WWidth += iV_GetCharWidth(*curChar);
 
-					// If width ok then add this character to the current word.
-					if (WWidth <= Width)
-					{
-						FWord[i] = *curChar;
-						++i;
-						++curChar;
-					}
+					// this character won't be drawn so don't deal with its width
+					continue;
 				}
+
+				// Update this lines pixel width.
+				WWidth += iV_GetCharWidth(*curChar);
+
+				// If this word doesn't fit on the current line then break out
+				if (WWidth > Width)
+					break;
+
+				// If width ok then add this character to the current word.
+				FWord[i] = *curChar;
 			}
 
 			// Don't forget the space.
@@ -348,19 +324,17 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 
 			// If we've passed a space and the word goes past the width then rewind
 			// to that space and finish this line.
-			if (GotSpace)
+			if (GotSpace
+			 && WWidth >= Width)
 			{
-				if (WWidth >= Width)
+				if (FWord[i - 1] == ' ')
 				{
-					if (FWord[i-1] == ' ')
-					{
-						FWord[i] = 0;
-					}
-					else
-					{
-						curChar = osiChar;
-						break;
-					}
+					FWord[i] = 0;
+				}
+				else
+				{
+					curChar = osiChar;
+					break;
 				}
 			}
 
