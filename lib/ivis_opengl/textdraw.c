@@ -260,36 +260,35 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 	int jx = x;		// Default to left justify.
 	int jy = y;
 	UDWORD WWidth;
-	BOOL GotSpace;
-	BOOL NewLine;
 	int TWidth;
 
 	const char* curChar = String;
-	const char* osiChar;
 
 //	DBPRINTF(("[%s] @(%d,%d) extentsmode=%d just=%d\n",String,x,y,ExtentsMode,Justify));
 
 	curChar = String;
 	while (*curChar != 0)
 	{
+		bool GotSpace = false;
+		bool NewLine = false;
+
 		// Reset text draw buffer
 		FString[0] = 0;
 
 		WWidth = 0;
 
-		GotSpace = FALSE;
-		NewLine = FALSE;
-
 		// Parse through the string, adding words until width is achieved.
-		while (*curChar != 0 && WWidth <= Width && !NewLine)
+		while (*curChar != 0 && WWidth < Width && !NewLine)
 		{
-			osiChar = curChar;
+			const char* startOfWord = curChar;
 
 			// Get the next word.
 			i = 0;
-			for (; *curChar != 0 && *curChar != ' '; ++i, ++curChar)
+			for (; *curChar != 0
+			    && *curChar != ASCII_SPACE
+			    && *curChar != ASCII_NEWLINE;
+			     ++i, ++curChar)
 			{
-				// Check for new line character.
 				if (*curChar == ASCII_COLOURMODE) // If it's a colour mode toggle char then just add it to the word.
 				{
 					FWord[i] = *curChar;
@@ -310,7 +309,7 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 			}
 
 			// Don't forget the space.
-			if (*curChar == ' ')
+			if (*curChar == ASCII_SPACE)
 			{
 				WWidth += iV_GetCharWidth(' ');
 				if (WWidth <= Width)
@@ -318,24 +317,27 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 					FWord[i] = ' ';
 					++i;
 					++curChar;
-					GotSpace = TRUE;
+					GotSpace = true;
 				}
 			}
-
-			// If we've passed a space and the word goes past the width then rewind
-			// to that space and finish this line.
-			if (GotSpace
-			 && WWidth >= Width)
+			// Check for new line character.
+			else if (*curChar == ASCII_NEWLINE)
 			{
-				if (FWord[i - 1] == ' ')
-				{
-					FWord[i] = 0;
-				}
-				else
-				{
-					curChar = osiChar;
-					break;
-				}
+				NewLine = true;
+				++curChar;
+			}
+
+			// If we've passed a space on this line and the word goes past the
+			// maximum width and this isn't caused by the appended space then
+			// rewind to the start of this word and finish this line.
+			if (GotSpace
+			 && WWidth > Width
+			 && FWord[i - 1] != ' ')
+			{
+				// Skip back to the beginning of this
+				// word and draw it on the next line
+				curChar = startOfWord;
+				break;
 			}
 
 			// Terminate the word.
