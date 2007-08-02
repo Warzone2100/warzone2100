@@ -1270,16 +1270,34 @@ void	kf_TogglePauseMode( void )
 
 // --------------------------------------------------------------------------
 // finish all the research for the selected player
+void	kf_FinishAllResearch(void)
+{
+	UDWORD	j;
+
+	for (j = 0; j < numResearch; j++)
+	{
+		PLAYER_RESEARCH	*pPlayerRes = asPlayerResList[selectedPlayer];
+
+		pPlayerRes += j; // select right tech
+		if (IsResearchCompleted(pPlayerRes) == FALSE)
+		{
+			MakeResearchCompleted(pPlayerRes);
+			researchResult(j, selectedPlayer, FALSE);
+		}
+	}
+	CONPRINTF(ConsoleString, (ConsoleString, _("Researched EVERYTHING for you!")));
+}
+
+// --------------------------------------------------------------------------
+// finish all the research for the selected player
 void	kf_FinishResearch( void )
 {
 	STRUCTURE	*psCurr;
 
-	//for (psCurr=apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
 	for (psCurr=interfaceStructList(); psCurr; psCurr = psCurr->psNext)
 	{
 		if (psCurr->pStructureType->type == REF_RESEARCH)
 		{
-			//((RESEARCH_FACILITY *)psCurr->pFunctionality)->timeStarted = 0;
 			((RESEARCH_FACILITY *)psCurr->pFunctionality)->timeStarted = gameTime + 100000;
 			//set power accrued to high value so that will trigger straight away
 			((RESEARCH_FACILITY *)psCurr->pFunctionality)->powerAccrued = 10000;
@@ -1297,19 +1315,17 @@ void	kf_FinishResearch( void )
 // --------------------------------------------------------------------------
 void	kf_ToggleEnergyBars( void )
 {
-
 	toggleEnergyBars();
 	CONPRINTF(ConsoleString,(ConsoleString, _("Energy bars display toggled") ));
-
 }
+
 // --------------------------------------------------------------------------
 void	kf_ToggleReloadBars( void )
 {
-
 	toggleReloadBarDisplay();
 	CONPRINTF(ConsoleString,(ConsoleString, _("Energy bars display toggled") ));
-
 }
+
 // --------------------------------------------------------------------------
 void	kf_ToggleDemoMode( void )
 {
@@ -1450,6 +1466,7 @@ void	kf_SensorDisplayOff( void )
 #define IDRET_DESIGN		7		// design droids button
 #define IDRET_CANCEL		8		// central cancel button
 */
+
 // --------------------------------------------------------------------------
 void	kf_ChooseCommand( void )
 {
@@ -1457,15 +1474,8 @@ void	kf_ChooseCommand( void )
 	{
 		setKeyButtonMapping(IDRET_COMMAND);
 	}
-/*
-WIDGET *psWidg;
-W_BUTTON *psButton;
-
-	psWidg = widgGetFromID(psWScreen,IDRET_COMMAND);
-	psButton = (W_BUTTON*)psWidg;
-	buttonClicked(psButton,WKEY_PRIMARY);
-	*/
 }
+
 // --------------------------------------------------------------------------
 void	kf_ChooseManufacture( void )
 {
@@ -1473,17 +1483,8 @@ void	kf_ChooseManufacture( void )
 	{
 		setKeyButtonMapping(IDRET_MANUFACTURE);
 	}
-
-	/*
-WIDGET *psWidg;
-W_BUTTON *psButton;
-
-	psWidg = widgGetFromID(psWScreen,IDRET_MANUFACTURE);
-	psButton = (W_BUTTON*)psWidg;
-	buttonClicked(psButton,WKEY_PRIMARY);
-	*/
-
 }
+
 // --------------------------------------------------------------------------
 void	kf_ChooseResearch( void )
 {
@@ -1491,15 +1492,8 @@ void	kf_ChooseResearch( void )
 	{
 		setKeyButtonMapping(IDRET_RESEARCH);
 	}
-
-	/*
-WIDGET *psWidg;
-W_BUTTON *psButton;
-	psWidg = widgGetFromID(psWScreen,IDRET_RESEARCH);
-	psButton = (W_BUTTON*)psWidg;
-	buttonClicked(psButton,WKEY_PRIMARY);
-	 */
 }
+
 // --------------------------------------------------------------------------
 void	kf_ChooseBuild( void )
 {
@@ -1507,14 +1501,6 @@ void	kf_ChooseBuild( void )
 	{
 		setKeyButtonMapping(IDRET_BUILD);
 	}
-
-	/*
-WIDGET *psWidg;
-W_BUTTON *psButton;
-	psWidg = widgGetFromID(psWScreen,IDRET_BUILD);
-	psButton = (W_BUTTON*)psWidg;
-	buttonClicked(psButton,WKEY_PRIMARY);
-	*/
 }
 
 // --------------------------------------------------------------------------
@@ -1524,15 +1510,8 @@ void	kf_ChooseDesign( void )
 	{
 		setKeyButtonMapping(IDRET_DESIGN);
 	}
-
-	/*
-WIDGET *psWidg;
-W_BUTTON *psButton;
-	psWidg = widgGetFromID(psWScreen,IDRET_DESIGN);
-	psButton = (W_BUTTON*)psWidg;
-	buttonClicked(psButton,WKEY_PRIMARY);
-	*/
 }
+
 // --------------------------------------------------------------------------
 void	kf_ChooseIntelligence( void )
 {
@@ -1540,31 +1519,15 @@ void	kf_ChooseIntelligence( void )
 	{
 		setKeyButtonMapping(IDRET_INTEL_MAP);
 	}
-
-	/*
-WIDGET *psWidg;
-W_BUTTON *psButton;
-	psWidg = widgGetFromID(psWScreen,IDRET_INTEL_MAP);
-	psButton = (W_BUTTON*)psWidg;
-	buttonClicked(psButton,WKEY_PRIMARY);
-	*/
-
 }
+
 // --------------------------------------------------------------------------
 
 void	kf_ChooseCancel( void )
 {
 	setKeyButtonMapping(IDRET_CANCEL);
-
-/*
-WIDGET *psWidg;
-W_BUTTON *psButton;
-	psWidg = widgGetFromID(psWScreen,IDRET_CANCEL);
-	psButton = (W_BUTTON*)psWidg;
-	buttonClicked(psButton,WKEY_PRIMARY);
-  */
-
 }
+
 // --------------------------------------------------------------------------
 void	kf_ToggleDrivingMode( void )
 {
@@ -1622,6 +1585,7 @@ void	kf_MovePause( void )
 		}
 	}
 }
+
 // --------------------------------------------------------------------------
 void	kf_MoveToLastMessagePos( void )
 {
@@ -1765,12 +1729,10 @@ void kf_ShowGridInfo(void)
 // --------------------------------------------------------------------------
 void kf_GiveTemplateSet(void)
 {
-
 	addTemplateSet(4,0);
 	addTemplateSet(4,1);
 	addTemplateSet(4,2);
 	addTemplateSet(4,3);
-
 }
 
 // --------------------------------------------------------------------------
