@@ -35,6 +35,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-Werror-implicit-function-declaration" />
+			<Add option="-std=gnu99" />
 			<Add option='-DVERSION=\\&quot;TRUNK\\&quot;' />
 			<Add option='-DLOCALEDIR=\\&quot;\\&quot;' />
 			<Add option='-DPACKAGE=\\&quot;warzone2100\\&quot;' />
@@ -132,11 +133,11 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="lib/framework/trig.h" />
+		<Unit filename="lib/framework/types.h" />
 		<Unit filename="lib/framework/utf8.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="lib/framework/utf8.h" />
-		<Unit filename="lib/framework/types.h" />
 		<Unit filename="lib/framework/wzglobal.h" />
 		<Unit filename="lib/gamelib/anim.c">
 			<Option compilerVar="CC" />
