@@ -118,16 +118,16 @@ void texLoad(const char *fileName)
 	j = 0; // place in buffer
 	do {
 		uint8_t r, g, b;
-		int cnt;
+		int cnt = 0;
 
-		k = sscanf(buffer, "%2hhx%2hhx%2hhx%n", &r, &g, &b, &cnt);
+		k = sscanf(buffer + j, "%2hhx%2hhx%2hhx%n", &r, &g, &b, &cnt);
 		j += cnt;
 		if (k >= 3)
 		{
 			radarColour(i, r, g, b);
 		}
 		i++; // next tile
-	} while (k >= 3 && j < size);
+	} while (k >= 3 && j + 6 < size);
 	free(buffer);
 
 	/* Now load the actual tiles */
