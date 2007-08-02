@@ -116,6 +116,7 @@ typedef enum {
   LOG_MOVEMENT,
   LOG_ATTACK,
   LOG_FOG,
+  LOG_SENSOR,
   LOG_LAST /* _must_ be last! */
 } code_part;
 

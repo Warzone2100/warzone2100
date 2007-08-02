@@ -59,6 +59,7 @@ static const char *code_part_names[] = {
 	"movement",
 	"attack",
 	"fog",
+	"sensor",
 	"last"
 };
 
