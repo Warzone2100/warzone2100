@@ -62,12 +62,6 @@ extern unsigned int cmdDroidMaxGroup(DROID *psCommander);
 // update the kills of a command droid if psKiller is in a command group
 extern void cmdDroidUpdateKills(DROID *psKiller, UDWORD percentDamage);
 
-// get the to hit modifier for a droid due to command droids
-extern SDWORD cmdDroidHitMod(DROID *psDroid);
-
-// get the evasion modifier for a droid due to command droids
-extern SDWORD cmdDroidEvasionMod(DROID *psDroid);
-
 // get the level of a droids commander, if any
 extern unsigned int cmdGetCommanderLevel(DROID *psDroid);
 

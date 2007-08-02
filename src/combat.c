@@ -101,7 +101,6 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	SDWORD			targetDir,dirDiff;
 	SDWORD			longRange;
 	DROID			*psDroid = NULL;
-	SDWORD			level, cmdLevel;
 	int				minOffset = 5;
 	//Watermelon:predicted X,Y offset per sec
 	SDWORD			predictX;
@@ -251,38 +250,25 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	// base hit increment of zero
 	hitInc = 0;
 
-	// apply upgrades - do these when know if its longHit or shortHit
-	//hitMod = hitMod * (asWeaponUpgrade[psAttacker->player]
-	//							[psStats->weaponSubClass].shortHit + 100) / 100;
-
-	// add the attackers experience modifier
+	// add the attacker's experience
 	if (psAttacker->type == OBJ_DROID)
 	{
-//		hitMod = hitMod + (hitMod * 5) * getDroidLevel((DROID *)psAttacker) / 100;
-//		hitMod = hitMod + hitMod * cmdDroidHitMod((DROID *)psAttacker) / 100;
-		level = getDroidLevel((DROID *)psAttacker);
-		cmdLevel = cmdGetCommanderLevel((DROID *)psAttacker);
+		SDWORD	level = getDroidLevel((DROID *)psAttacker);
+		SDWORD	cmdLevel = cmdGetCommanderLevel((DROID *)psAttacker);
 
-		// increase accuracy by EXP_ACCURACY_BONUS_PCT % for each experience level
-		hitInc += EXP_ACCURACY_BONUS_PCT * MAX(level,cmdLevel);
+		// increase total accuracy by EXP_ACCURACY_BONUS_PCT % for each experience level
+		hitInc += EXP_ACCURACY_BONUS_PCT * MAX(level, cmdLevel);
 	}
 
-	// subtract the defenders experience modifier
-/*	if (psTarget->type == OBJ_DROID)
+	// as above, but subtract the defender's experience, not counting commander this time,
+	// and using hitMod instead of hitInc, which means we modify the weapon's hit chance
+	if (psTarget->type == OBJ_DROID)
 	{
-//		hitMod = hitMod - hitMod * 2 * getDroidLevel((DROID *)psTarget) / 100;
-//		hitMod = hitMod - hitMod * cmdDroidEvasionMod((DROID *)psTarget) / 100;
-		level = getDroidLevel((DROID *)psTarget);
-		cmdLevel = cmdGetCommanderLevel((DROID *)psTarget);
-		if (level > cmdLevel)
-		{
-			hitInc -= 5 * level;
-		}
-		else
-		{
-			hitInc -= 5 * cmdLevel;
-		}
-	}*/
+		SDWORD	level = getDroidLevel((DROID *)psTarget);
+
+		// increase weapon accuracy by EXP_ACCURACY_BONUS_PCT % for each experience level
+		hitMod -= EXP_ACCURACY_BONUS_PCT * level;
+	}
 
 	// fire while moving modifiers
 	if (psAttacker->type == OBJ_DROID &&
