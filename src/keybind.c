@@ -1781,165 +1781,181 @@ void kf_SendTextMessage(void)
 	char tmp[100];
 	SDWORD	i;
 
+	if(bAllowOtherKeyPresses)									// just starting.
 	{
-		if(bAllowOtherKeyPresses)									// just starting.
+		bAllowOtherKeyPresses = FALSE;
+		strcpy(sTextToSend,"");
+		strcpy(sCurrentConsoleText,"");							//for beacons
+		inputClearBuffer();
+	}
+
+	ch = (char)inputGetKey();
+	while (ch != 0)												// in progress
+	{
+		// Kill if they hit return - it maxes out console or it's more than one line long
+	   	if ((ch == INPBUF_CR) || (strlen(sTextToSend)>=MAX_CONSOLE_STRING_LENGTH-16) // Prefixes with ERROR: and terminates with '?'
+		 || iV_GetTextWidth(sTextToSend) > (pie_GetVideoBufferWidth()-64))// sendit
+	   //	if((ch == INPBUF_CR) || (strlen(sTextToSend)==MAX_TYPING_LENGTH)
 		{
-			bAllowOtherKeyPresses = FALSE;
-			strcpy(sTextToSend,"");
-			strcpy(sCurrentConsoleText,"");							//for beacons
-			inputClearBuffer();
+			bAllowOtherKeyPresses = TRUE;
+		 //	flushConsoleMessages();
+
+			strcpy(sCurrentConsoleText,"");		//reset beacon msg, since console is empty now
+
+			// don't send empty lines to other players
+			if(!strcmp(sTextToSend, ""))
+				return;
+
+			/* process console commands (only if skirmish or multiplayer, not a campaign) */
+			if((game.type == SKIRMISH) || bMultiPlayer)
+			{
+				if(processConsoleCommands(sTextToSend))
+				{
+					return;	//it was a console command, so don't send
+				}
+			}
+
+			//console callback message
+			//--------------------------
+			ConsolePlayer = selectedPlayer;
+			strcpy(ConsoleMsg,sTextToSend);
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_CONSOLE);
+
+
+			if(bMultiPlayer && NetPlay.bComms)
+			{
+				sendTextMessage(sTextToSend,FALSE);
+			}
+			else
+			{
+				//show the message we sent on our local console as well (even in skirmish, to see console commands)
+				//sprintf(tmp,"%d",selectedPlayer);
+
+				sprintf(tmp,"%s",getPlayerName(selectedPlayer));
+				strcat(tmp," : ");											// seperator
+				strcat(tmp,sTextToSend);											// add message
+				addConsoleMessage(tmp,DEFAULT_JUSTIFY);
+
+				//in skirmish send directly to AIs, for command and chat procesing
+				for(i=0; i<game.maxPlayers; i++)		//don't use MAX_PLAYERS here, although possible
+				{
+					if(openchannels[i] && i != selectedPlayer)
+					{
+						sendAIMessage(sTextToSend, selectedPlayer, i);
+					}
+				}
+
+				if (getDebugMappingStatus())
+				{
+					attemptCheatCode(sTextToSend);
+				}
+			}
+			return;
+		}
+		else if(ch == INPBUF_BKSPACE )							// delete
+		{
+			if(sTextToSend[0] != '\0')							// cant delete nothing!
+			{
+				sTextToSend[strlen(sTextToSend)-1]= '\0';
+				strcpy(sCurrentConsoleText,sTextToSend);		//beacons
+			}
+		}
+		else if(ch == INPBUF_ESC)								//abort.
+		{
+			bAllowOtherKeyPresses = TRUE;
+			strcpy(sCurrentConsoleText,"");
+		 //	flushConsoleMessages();
+			return;
+		}
+		else							 						// display
+		{
+			sprintf(sTextToSend,"%s%c",sTextToSend,inputGetCharKey());
+			strcpy(sCurrentConsoleText,sTextToSend);
 		}
 
 		ch = (char)inputGetKey();
-		while(ch != 0)												// in progress
-		{
-			// Kill if they hit return - it maxes out console or it's more than one line long
-		   	if((ch == INPBUF_CR) || (strlen(sTextToSend)>=MAX_CONSOLE_STRING_LENGTH-16) // Prefixes with ERROR: and terminates with '?'
-				|| iV_GetTextWidth(sTextToSend) > (pie_GetVideoBufferWidth()-64))// sendit
-		   //	if((ch == INPBUF_CR) || (strlen(sTextToSend)==MAX_TYPING_LENGTH)
-			{
-				bAllowOtherKeyPresses = TRUE;
-			 //	flushConsoleMessages();
-
-				strcpy(sCurrentConsoleText,"");		//reset beacon msg, since console is empty now
-
-				// don't send empty lines to other players
-				if(!strcmp(sTextToSend, ""))
-					return;
-
-				/* process console commands (only if skirmish or multiplayer, not a campaign) */
-				if((game.type == SKIRMISH) || bMultiPlayer)
-				{
-					if(processConsoleCommands(sTextToSend))
-					{
-						return;	//it was a console command, so don't send
-					}
-				}
-
-				//console callback message
-				//--------------------------
-				ConsolePlayer = selectedPlayer;
-				strcpy(ConsoleMsg,sTextToSend);
-				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_CONSOLE);
-
-
-				if(bMultiPlayer && NetPlay.bComms)
-				{
-					sendTextMessage(sTextToSend,FALSE);
-				}
-				else
-				{
-					//show the message we sent on our local console as well (even in skirmish, to see console commands)
-					//sprintf(tmp,"%d",selectedPlayer);
-
-					sprintf(tmp,"%s",getPlayerName(selectedPlayer));
-					strcat(tmp," : ");											// seperator
-					strcat(tmp,sTextToSend);											// add message
-					addConsoleMessage(tmp,DEFAULT_JUSTIFY);
-
-					//in skirmish send directly to AIs, for command and chat procesing
-					for(i=0; i<game.maxPlayers; i++)		//don't use MAX_PLAYERS here, although possible
-					{
-						if(openchannels[i] && i != selectedPlayer)
-						{
-							(void)sendAIMessage(sTextToSend, selectedPlayer, i);
-						}
-					}
-
-					if (getDebugMappingStatus())
-					{
-						(void) attemptCheatCode(sTextToSend);
-					}
-				}
-				return;
-			}
-			else if(ch == INPBUF_BKSPACE )							// delete
-			{
-				if(sTextToSend[0] != '\0')							// cant delete nothing!
-				{
-					sTextToSend[strlen(sTextToSend)-1]= '\0';
-					strcpy(sCurrentConsoleText,sTextToSend);		//beacons
-				}
-			}
-			else if(ch == INPBUF_ESC)								//abort.
-			{
-				bAllowOtherKeyPresses = TRUE;
-				strcpy(sCurrentConsoleText,"");
-			 //	flushConsoleMessages();
-				return;
-			}
-			else							 						// display
-			{
-				sprintf(sTextToSend,"%s%c",sTextToSend,inputGetCharKey());
-				strcpy(sCurrentConsoleText,sTextToSend);
-			}
-
-			ch = (char)inputGetKey();
-		}
-
-		// macro store stuff
-		if(keyPressed(KEY_F1)){
-			if(keyDown(KEY_LCTRL)){
-				strcpy(ingame.phrases[0],sTextToSend );
-			}else{
-				strcpy(sTextToSend,ingame.phrases[0]);
-				bAllowOtherKeyPresses = TRUE;
-			 //	flushConsoleMessages();
-				sendTextMessage(sTextToSend,FALSE);
-				return;
-			}
-		}
-		if(keyPressed(KEY_F2)){
-			if(keyDown(KEY_LCTRL)){
-				strcpy(ingame.phrases[1],sTextToSend );
-			}else{
-				strcpy(sTextToSend,ingame.phrases[1]);
-				bAllowOtherKeyPresses = TRUE;
-			//	flushConsoleMessages();
-				sendTextMessage(sTextToSend,FALSE);
-				return;
-			}
-		}
-		if(keyPressed(KEY_F3)){
-			if(keyDown(KEY_LCTRL)){
-				strcpy(ingame.phrases[2],sTextToSend );
-			}else{
-				strcpy(sTextToSend,ingame.phrases[2]);
-				bAllowOtherKeyPresses = TRUE;
-			//	flushConsoleMessages();
-				sendTextMessage(sTextToSend,FALSE);
-				return;
-			}
-		}
-		if(keyPressed(KEY_F4)){
-			if(keyDown(KEY_LCTRL)){
-				strcpy(ingame.phrases[3],sTextToSend );
-			}else{
-				strcpy(sTextToSend,ingame.phrases[3]);
-				bAllowOtherKeyPresses = TRUE;
-			//	flushConsoleMessages();
-				sendTextMessage(sTextToSend,FALSE);
-				return;
-			}
-		}
-		if(keyPressed(KEY_F5)){
-			if(keyDown(KEY_LCTRL)){
-				strcpy(ingame.phrases[4],sTextToSend );
-			}else{
-				strcpy(sTextToSend,ingame.phrases[4]);
-				bAllowOtherKeyPresses = TRUE;
-			 //	flushConsoleMessages();
-				sendTextMessage(sTextToSend,FALSE);
-				return;
-			}
-		}
-
-//		flushConsoleMessages();								//clear
-//		addConsoleMessage(sTextToSend,DEFAULT_JUSTIFY);		//display
-//		iV_DrawText(sTextToSend,16+D_W,RADTLY+D_H-16);
-		return;
 	}
 
+	// macro store stuff
+	if (keyPressed(KEY_F1))
+	{
+		if(keyDown(KEY_LCTRL))
+		{
+			strcpy(ingame.phrases[0],sTextToSend );
+		}
+		else
+		{
+			strcpy(sTextToSend,ingame.phrases[0]);
+			bAllowOtherKeyPresses = TRUE;
+		 //	flushConsoleMessages();
+			sendTextMessage(sTextToSend,FALSE);
+			return;
+		}
+	}
+	if (keyPressed(KEY_F2))
+	{
+		if(keyDown(KEY_LCTRL))
+		{
+			strcpy(ingame.phrases[1],sTextToSend );
+		}
+		else
+		{
+			strcpy(sTextToSend,ingame.phrases[1]);
+			bAllowOtherKeyPresses = TRUE;
+		//	flushConsoleMessages();
+			sendTextMessage(sTextToSend,FALSE);
+			return;
+		}
+	}
+	if (keyPressed(KEY_F3))
+	{
+		if(keyDown(KEY_LCTRL))
+		{
+			strcpy(ingame.phrases[2],sTextToSend );
+		}
+		else
+		{
+			strcpy(sTextToSend,ingame.phrases[2]);
+			bAllowOtherKeyPresses = TRUE;
+		//	flushConsoleMessages();
+			sendTextMessage(sTextToSend,FALSE);
+			return;
+		}
+	}
+	if (keyPressed(KEY_F4))
+	{
+		if(keyDown(KEY_LCTRL))
+		{
+			strcpy(ingame.phrases[3],sTextToSend );
+		}
+		else
+		{
+			strcpy(sTextToSend,ingame.phrases[3]);
+			bAllowOtherKeyPresses = TRUE;
+		//	flushConsoleMessages();
+			sendTextMessage(sTextToSend,FALSE);
+			return;
+		}
+	}
+	if (keyPressed(KEY_F5))
+	{
+		if(keyDown(KEY_LCTRL))
+		{
+			strcpy(ingame.phrases[4],sTextToSend );
+		}
+		else
+		{
+			strcpy(sTextToSend,ingame.phrases[4]);
+			bAllowOtherKeyPresses = TRUE;
+		 //	flushConsoleMessages();
+			sendTextMessage(sTextToSend,FALSE);
+			return;
+		}
+	}
+
+//	flushConsoleMessages();								//clear
+//	addConsoleMessage(sTextToSend,DEFAULT_JUSTIFY);		//display
+//	iV_DrawText(sTextToSend,16+D_W,RADTLY+D_H-16);
 }
 // --------------------------------------------------------------------------
 void	kf_ToggleConsole( void )
