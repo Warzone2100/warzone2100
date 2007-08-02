@@ -1778,7 +1778,7 @@ void kf_GiveTemplateSet(void)
 void kf_SendTextMessage(void)
 {
 	char	ch;
-	char tmp[100];
+	char tmp[MAX_CONSOLE_STRING_LENGTH + 100];
 	SDWORD	i;
 
 	if(bAllowOtherKeyPresses)									// just starting.
