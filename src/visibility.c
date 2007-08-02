@@ -51,8 +51,8 @@ static SDWORD			numRayObjects = 0;
 static SDWORD			currObj;
 
 // rate to change visibility level
-#define VIS_LEVEL_INC		255*2
-#define VIS_LEVEL_DEC		50
+const static float VIS_LEVEL_INC = 255 * 2;
+const static float VIS_LEVEL_DEC = 50;
 
 // fractional accumulator of how much to change visibility this frame
 static float			visLevelIncAcc, visLevelDecAcc;
