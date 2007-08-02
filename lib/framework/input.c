@@ -501,6 +501,7 @@ BOOL mouseDClicked(MOUSE_KEY_CODE code)
 BOOL mousePressed(MOUSE_KEY_CODE code)
 {
 	return ((aMouseState[code].state == KEY_PRESSED) ||
+			(aMouseState[code].state == KEY_DOUBLECLICK) ||
 			(aMouseState[code].state == KEY_PRESSRELEASE));
 }
 
