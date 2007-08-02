@@ -42,20 +42,12 @@
 #include "cmddroid.h"
 #include "power.h"
 #include "mission.h"
-
 #include "frend.h"		// frontend ids.
 #include "intimage.h"
-
-
 #include "multiplay.h"
 
-
-
-//#include "intfac.h"		// Interface image id's.
-
-
 //used to calc the research power
-#define RESEARCH_FACTOR		32//16
+#define RESEARCH_FACTOR		32
 #define RESEARCH_MAX_POWER  450
 
 // The stores for the research stats
@@ -66,26 +58,10 @@ UDWORD					numResearch;
 RESEARCH                *psCBLastResearch;
 
 //research is now loaded per campaign - this hopefully is the max there will be in any one campaign!
-//changing above a UBYTE size will require changes throughout research - put the designers off if you can!
-
-//#define MAX_RESEARCH        (216 + 20)
-//#define MAX_RESEARCH        (255)
-//new levels required for Patch
 #define MAX_RESEARCH        (450)
-
 
 //need to define max's for each of the lists associated with the research - these
 //values have been chosen based on the current research stats - 21/12/98
-
-//#define MAX_RESEARCH_PR             (280 + 20)
-/*#define MAX_RESEARCH_PR             (400)
-#define MAX_RESEARCH_STRUCT_PR      (24 + 5)
-#define MAX_RESEARCH_FUNC           (150 + 25)
-#define MAX_RESEARCH_STRUCT_RED     (10 + 2)
-#define MAX_RESEARCH_ARTE_RED       (20 + 5)
-#define MAX_RESEARCH_STRUCT_RES     (44 + 5)
-#define MAX_RESEARCH_ARTE_RES       (65 + 5)*/
-//new levels required for Patches
 #define MAX_RESEARCH_PR             (650)
 #define MAX_RESEARCH_STRUCT_PR      (44 + 5)
 #define MAX_RESEARCH_FUNC           (250 + 25)
@@ -94,13 +70,8 @@ RESEARCH                *psCBLastResearch;
 #define MAX_RESEARCH_STRUCT_RES     (84 + 5)
 #define MAX_RESEARCH_ARTE_RES       (125 + 5)
 
-
-
-
 //need corresponding arrays for the above
-//needs to be a UWORD* for the Patches
 static UWORD*            pResearchPR;
-//UBYTE               *pResearchPR;
 static UWORD*            pResearchStructPR;
 static FUNCTION**        pResearchFunc;
 static UWORD*            pResearchStructRed;
@@ -109,10 +80,7 @@ static UWORD*            pResearchStructRes;
 static COMP_BASE_STATS** pResearchArteRes;
 static COMP_BASE_STATS** pResearchArteRep;
 
-
 static UWORD numResearchPR;
-
-
 static UWORD numResearchStructPR;
 static UWORD numResearchFunc;
 static UWORD numResearchStructRed;
@@ -157,7 +125,7 @@ BOOL researchInitVars(void)
 {
 	int i;
 
-    psCBLastResearch = NULL;
+	psCBLastResearch = NULL;
 	asResearch = NULL;
     //research is a pre-defined size now
 	asResearch = (RESEARCH *)malloc(sizeof(RESEARCH)* MAX_RESEARCH);
@@ -167,9 +135,9 @@ BOOL researchInitVars(void)
 		abort();
 		return FALSE;
 	}
-    memset(asResearch, 0, (MAX_RESEARCH * sizeof(RESEARCH)));
+	memset(asResearch, 0, (MAX_RESEARCH * sizeof(RESEARCH)));
 
-    //create the PLAYER_RESEARCH arrays
+	// create the PLAYER_RESEARCH arrays
 	for (i=0; i < MAX_PLAYERS; i++)
 	{
 		asPlayerResList[i] = (PLAYER_RESEARCH*)malloc(MAX_RESEARCH *
@@ -288,7 +256,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 
 	numResearch = researchCount;
 
-    ASSERT( (numResearch) <= MAX_RESEARCH, "Too many ResearchStats!! - max allowed %d", MAX_RESEARCH );
+	ASSERT(numResearch <= MAX_RESEARCH, "Too many ResearchStats! - max allowed %d", MAX_RESEARCH);
 
 	//init all the counts
 	numResearchPR = numResearchFunc = numResearchArteRed = numResearchArteRes = numResearchArteRep = 0;
@@ -351,7 +319,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		msgName[0] = '\0';
 		structName[0] = '\0';
 		compName[0] = '\0';
-        compType[0] = '\0';
+		compType[0] = '\0';
 
 		{
 			UDWORD numPRRequired;
@@ -392,7 +360,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		}
 
 		//check the tech code is valid
-        if (techCode > 1)
+		if (techCode > 1)
 		//if (pResearch->techCode != TC_MAJOR && pResearch->techCode != TC_MINOR)
 		{
 			debug( LOG_ERROR, "Invalid tech code for research topic - %s ", getResearchName(pResearch) );
@@ -417,7 +385,6 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		{
 			pResearch->iconID = NO_RESEARCH_ICON;
 		}
-
 
 		//get the IMDs used in the interface
 		if (strcmp(structName, "0"))
@@ -1173,24 +1140,16 @@ the 'possible' flag set.
 There can only be 'limit' number of entries
 'topic' is the currently researched topic
 */
-//needs to be UWORD sized for Patches
-//UBYTE fillResearchList(UBYTE *plist, UDWORD playerID, UWORD topic, UWORD limit)
-
 // NOTE by AJL may 99 - skirmish now has it's own version of this, skTopicAvail.
-
 UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, UWORD limit)
 {
-	//UBYTE				inc, count=0;
-    UWORD				inc, count=0;
+	UWORD				inc, count=0;
 	UDWORD				incPR, incS;
 	PLAYER_RESEARCH		*pPlayerRes = asPlayerResList[playerID];
 	BOOL				bPRFound, bStructFound;
 
-    //needs to be UWORD sized for Patches
 	ASSERT( numResearch < UWORD_MAX,
 		"fillResearchList: only using a UWORD for storage - need more!" );
-	//ASSERT( numResearch < UBYTE_MAX,
-	//	"fillResearchList: only using a UBYTE for storage - need more!" );
 	for (inc=0; inc < numResearch; inc++)
 	{
 		//if the inc matches the 'topic' - automatically add to the list
@@ -1211,7 +1170,6 @@ UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, UWORD limit)
 				goto add_research;
 			}
 		}
-
 
 		//if single player mode and key topic, then ignore cos can't do it!
 		if (!bMultiPlayer)
@@ -1282,7 +1240,6 @@ add_research: //if passed all the tests - add it to the list
 	}
 	return count;
 }
-
 
 /* process the results of a completed research topic */
 void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay)
@@ -1962,75 +1919,16 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay)
 /*This function is called when the research files are reloaded*/
 BOOL ResearchShutDown(void)
 {
-    //we don't malloc these anymore this way - 10/12/98
-	/*UDWORD inc;
-	RESEARCH* pList = asResearch;
+	UBYTE   i;
 
-	for (inc=0; inc < numResearch; inc++)
-	{
-#if !defined (RESOURCE_NAMES) && !defined (STORE_RESOURCE_ID)
-		free(pList->pName);
-#endif
-		//free(pList->pTechnologyName);
-//		free(pList->pSubGroupName);
-		if (pList->numRedArtefacts > 0)
-		{
-			free(pList->pRedArtefacts);
-		}
-		if (pList->numArteResults > 0)
-		{
-			free(pList->pArtefactResults);
-			free(pList->pReplacedArtefacts);
-		}
-		if (pList->numPRRequired > 0)
-		{
-			free(pList->pPRList);
-		}
-		if (pList->numStructures > 0)
-		{
-			free(pList->pStructList);
-		}
-		if (pList->numRedStructs > 0)
-		{
-			free(pList->pRedStructs);
-		}
-		if (pList->numStructResults > 0)
-		{
-			free(pList->pStructureResults);
-		}
-		if (pList->numFunctions > 0)
-		{
-			free(pList->pFunctionList);
-		}
-		pList++;
-	}
-
-	if(numResearch)
-	{
-		free(asResearch);
-		asResearch = NULL;
-	}
-
-	//free up the lists for each player
-	for (inc = 0; inc < MAX_PLAYERS; inc++)
-	{
-		if(asPlayerResList[inc]) {
-			FREE (asPlayerResList[inc]);
-		}
-	}*/
-
-    UBYTE   i;
-
-    //don't allocate the memory now - done in initResearch, so just initialise it
-    memset(asResearch, 0, (MAX_RESEARCH * sizeof(RESEARCH)));
+	memset(asResearch, 0, (MAX_RESEARCH * sizeof(RESEARCH)));
 
 	for (i=0; i < MAX_PLAYERS; i++)
 	{
    		memset(asPlayerResList[i], 0, (MAX_RESEARCH * sizeof(PLAYER_RESEARCH)));
-    }
+	}
 
     //and init all the other arrays used
-    //needs to be UWORD sized for the Patches
     memset(pResearchPR, 0, (MAX_RESEARCH_PR * sizeof(UWORD)));
     //memset(pResearchPR, 0, (MAX_RESEARCH_PR * sizeof(UBYTE)));
     memset(pResearchStructPR, 0, (MAX_RESEARCH_STRUCT_PR * sizeof(UWORD)));
@@ -2476,7 +2374,6 @@ SDWORD	mapIconToRID(UDWORD iconID)
 	}
 }
 
-
 /* returns a pointer to a component based on the name - used to load in the research */
 COMP_BASE_STATS * getComponentDetails(char *pName, char *pCompName)
 {
@@ -2602,7 +2499,6 @@ static void replaceComponent(COMP_BASE_STATS *pNewComponent, COMP_BASE_STATS *pO
 {
 	DROID_TEMPLATE	*psTemplates;
 	UDWORD			inc, oldType, newType, oldCompInc, newCompInc;
-
 
 	//get the type and index of the old component
 	oldType = statType(pOldComponent->ref);
