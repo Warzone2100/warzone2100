@@ -11,38 +11,17 @@ More difficult:
 
 - Create one single place where platform dependend defines reside.
 
-- Create a "super header" which is included in every header before any other headers.
-    This is needed eg for debugging memleaks through malloc redefinitions (eg when using MSVCRT).
-
 - [separation] Work out an engine part (lib/) and a game part (src/),
     where no engine part depends on any game part
 
 - [separation2] Separate the engine parts so they have only a minimum dependency on each other
     and rearrange them logically (depends on [separation])
 
-- [LUA] Rewrite the scripting engine to use LUA
-    (adding a 2nd engine which handles all LUA scripts would be enough atm)
-    (depends on [separation2])
-
-- Convert existing scripts to LUA (depends on [LUA])
-
-- [GUI] Rewrite the GUI to be scriptable. Use CEGUI? (depends on [LUA])
-
-- Improve the menus for usability (esp. networking) (depends on [GUI])
+- Improve the menus for usability (esp. networking)
 
 - Improve loading of data / dataformat. Should be possible to load all maps
     in all techlevels for campaign as well as multiplay mode. This would hopefully
     fix those bugs where maps are missing or the campaign breaks because of maps.
-    Would involve modification of data and YaCC/Lex files. Use LUA?
+    Would involve modification of data and YaCC/Lex files.
 
-- [network] Rewrite the system how Warzone handles networking.
-    New system should be more stable (no out of sync bugs)
-    and handle cheat checking without preventing games between ppl using Windows and Linux
-
-- Integrate Karma's masterserver into Warzone
-
-- Use OGRE3D for rendering? Also have a look at Irrlicht? It seems to be unstable...
-
-- Remove dependencies on sound libraries?
-
-- Revise input handling to support multiple keymaps. (eg. for task #3506)
+- Revise input handling to support multiple keymaps.
