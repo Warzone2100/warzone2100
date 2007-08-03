@@ -165,8 +165,8 @@ BOOL loadConfig(void)
 	}
 	else
 	{
-		setShakeStatus(TRUE);
-		setWarzoneKeyNumeric("shake", TRUE);
+		setShakeStatus(FALSE);
+		setWarzoneKeyNumeric("shake", FALSE);
 	}
 
 	// //////////////////////////
