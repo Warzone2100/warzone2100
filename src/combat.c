@@ -342,8 +342,8 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 
 	// cap resultHitChance to 0-100%, just in case
-	resultHitChance = max(0, resultHitChance);
-	resultHitChance = min(100, resultHitChance);
+	resultHitChance = MAX(0, resultHitChance);
+	resultHitChance = MIN(100, resultHitChance);
 
 	HIT_ROLL(dice);
 
