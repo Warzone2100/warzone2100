@@ -1412,20 +1412,16 @@ void addText(int FontID,UDWORD FormID,UDWORD id,  UDWORD PosX, UDWORD PosY, char
 // show a background piccy
 static void displayTitleBitmap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
-    const size_t sTmpSize = 200;
-
-	char	sTmp[200];			//Couldn't have sTmp[sTmpSize], .net did NOT like that, so for now...
+#ifdef DEBUG
+	static const char versionString[] = "Version " VERSION " - Built " __DATE__ " - DEBUG";
+#else
+	static const char versionString[] = "Version " VERSION " - Built " __DATE__;
+#endif
 
 	iV_SetFont(WFont);
 	iV_SetTextColour(-1);
 
-#ifdef DEBUG
-	snprintf( sTmp, sTmpSize, "Version %s - Built %s - DEBUG", VERSION, __DATE__ );
-#else
-	snprintf( sTmp, sTmpSize, "Version %s - Built %s", VERSION, __DATE__ );
-#endif
-
-	iV_DrawTextRotated(sTmp, pie_GetVideoBufferWidth() - 10, pie_GetVideoBufferHeight() - 15, 270.f);
+	iV_DrawTextRotated(versionString, pie_GetVideoBufferWidth() - 10, pie_GetVideoBufferHeight() - 15, 270.f);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
