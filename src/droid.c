@@ -223,8 +223,8 @@ SDWORD droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD wea
 			level = MAX(level, cmdLevel);
 		}
 
-		// Reduce damage taken by EXP_REDUCE_DAMAGE_PCT % for each experience level
-		actualDamage = (actualDamage * (100 - EXP_REDUCE_DAMAGE_PCT * level)) / 100;
+		// Reduce damage taken by EXP_REDUCE_DAMAGE % for each experience level
+		actualDamage = (actualDamage * (100 - EXP_REDUCE_DAMAGE * level)) / 100;
 
 		debug( LOG_ATTACK, "        penetrated: %d\n", actualDamage);
 	}
