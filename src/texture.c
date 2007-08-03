@@ -117,10 +117,10 @@ void texLoad(const char *fileName)
 	k = 0; // number of values read
 	j = 0; // place in buffer
 	do {
-		uint8_t r, g, b;
+		unsigned int r, g, b;
 		int cnt = 0;
 
-		k = sscanf(buffer + j, "%2hhx%2hhx%2hhx%n", &r, &g, &b, &cnt);
+		k = sscanf(buffer + j, "%2x%2x%2x%n", &r, &g, &b, &cnt);
 		j += cnt;
 		if (k >= 3)
 		{
