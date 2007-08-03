@@ -60,6 +60,7 @@ static const char *code_part_names[] = {
 	"attack",
 	"fog",
 	"sensor",
+	"gui",
 	"last"
 };
 
