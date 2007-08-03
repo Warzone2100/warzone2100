@@ -55,34 +55,16 @@
 
 #include "seqdisp.h"
 
-
 #include "multiplay.h"
 #include "lib/sound/cdaudio.h"
 
 #include "scriptextern.h"
-
-
-
 #include "csnap.h"
 
 #define NO_VIDEO
 
-// See research.txt for research entry to be displayed
-// By defined this we jump straight to the research entry when clicking on any button in the intelmap screen
-//#define DBG_RESEARCH_ENTRY (28)			// Weapon research test
-//#define DBG_RESEARCH_ENTRY (100)			// Engineering research test
-//#define DBG_RESEARCH_ENTRY (65)				// Structure Tech
-
-
-//Height to view the world from in Intelligence Screen
-/*
-#define INTELMAP_VIEWHEIGHT		2250
-*/
-
 /* Intelligence Map screen IDs */
-//#define IDINTMAP_FORM			6000	//The intelligence map base form
 #define IDINTMAP_MSGFORM		6001	//The intelligence map tabbed form
-//#define IDINTMAP_MSGVIEW		6002	//The message 3D view for the intelligence screen
 #define IDINTMAP_CLOSE			6004	//The close button icon for the 3D view
 #define	IDINTMAP_PAUSELABEL		6005	//The paused message
 #define	IDINITMAP_TITLEVIEW		6006	//The Title view part of MSGVIEW
@@ -96,10 +78,6 @@
 #define	IDINTMAP_MSGEND			6139	//The last button on the intelligence form (40 MAX)
 
 #define IDINTMAP_SEQTEXTSTART		6200	//Sequence subtitle text tabs
-
-//Proximity Messages no longer displayed in Intel Screen
-//#define IDINTMAP_PROXSTART		6200	//The first proximity button
-//#define IDINTMAP_PROXEND		6299	//The last proximity button
 
 /* Intelligence Map screen positions */
 #define INTMAP_X				OBJ_BACKX
@@ -118,32 +96,12 @@
 #define INTMAP_MSGWIDTH			OBJ_WIDTH
 #define INTMAP_MSGHEIGHT		OBJ_HEIGHT
 
-/*3D View message form screen positions relative to INTMAP_FORM */
-//#define INTMAP_VIEWX			211
-//#define INTMAP_VIEWY			(-260)
-//#define INTMAP_VIEWWIDTH		MSG_BUFFER_WIDTH
-//#define INTMAP_VIEWHEIGHT		MSG_BUFFER_HEIGHT
-
-/* Length of time the message stays on the bottom of the screen for in milliseconds */
-#define	INTEL_TXT_LIFE			2000
-
 //define the 3D View sizes and positions that are required - relative to INTMAP_FORM
 #define	INTMAP_RESEARCHX		(100 + D_W)
 #define INTMAP_RESEARCHY		(30	+ D_H)
 
 #define	INTMAP_RESEARCHWIDTH	440
 #define INTMAP_RESEARCHHEIGHT	288
-
-
-//define the 3D View sizes and positions that are required - relative to INTMAP_FORM
-/*#define INTMAP_MISSIONX			(OBJ_BACKX)
-#define INTMAP_MISSIONY			(46)
-#define INTMAP_MISSIONWIDTH		(OBJ_WIDTH)
-#define INTMAP_MISSIONHEIGHT	(215)
-#define INTMAP_PROXIMITYX		(350)
-#define INTMAP_PROXIMITYY		(70)
-#define INTMAP_PROXIMITYWIDTH	(200)
-#define INTMAP_PROXIMITYHEIGHT	(175)*/
 
 /*dimensions for Title view section relative to IDINTMAP_MSGVIEW*/
 /*dimensions for PIE view section relative to IDINTMAP_MSGVIEW*/
@@ -155,8 +113,6 @@
 #define	INTMAP_PIEX				3
 #define INTMAP_PIEY				24
 
-//#define INTMAP_PIEWIDTH		240
-//#define INTMAP_PIEHEIGHT		169
 /*dimensions for FLIC view section relative to IDINTMAP_MSGVIEW*/
 #define	INTMAP_FLICX			245
 #define INTMAP_FLICY			24
@@ -183,9 +139,7 @@
 #define INTMAP_SEQTEXTTABWIDTH		INTMAP_SEQTEXTWIDTH
 #define INTMAP_SEQTEXTTABHEIGHT		INTMAP_SEQTEXTHEIGHT
 
-
 //position for text on full screen video
-
 #define VIDEO_TEXT_TOP_X				20
 #define VIDEO_TEXT_TOP_Y				20
 #define VIDEO_TEXT_BOTTOM_X				20
@@ -197,15 +151,8 @@
 /* the widget screen */
 extern W_SCREEN		*psWScreen;
 
-/* Static variables ********************/
-//static SDWORD			viewAngle;
-//static SDWORD			viewHeight;
 static UDWORD			messageID;
 static BOOL				immediateMessage = FALSE;
-
-
-//How many proximity messages are currently being displayed
-//static UDWORD			numProxMsg;
 
 //flags whether to open the Intel Screen with a message
 static BOOL				playCurrent;
@@ -215,35 +162,10 @@ static BOOL intAddMessageForm(BOOL playCurrent);
 /*Displays the buttons used on the intelligence map */
 static void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset,
 							  UDWORD yOffset, UDWORD *pColours);
-/* displays the 3D view for the current message */
-//static void intDisplayMessageView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
-//					  UDWORD *pColours);
-
-/* Add the Proximity message buttons */
-//static BOOL intAddProximityButton(MESSAGE *pMessage, UDWORD inc);
-
-/*Displays the proximity messages used on the intelligence map */
-//static void intDisplayProximityButton(WIDGET *psWidget, UDWORD xOffset,
-//							  UDWORD yOffset, UDWORD *pColours);
 
 /*deal with the actual button press - proxMsg is set to true if a proximity
   button has been pressed*/
 static void intIntelButtonPressed(BOOL proxMsg, UDWORD id);
-
-/*this sets the width and height for the Intel map surface so that it fill the
-appropriate sized image for the view*/
-//static void setIntelBufferSize(UDWORD type);
-
-/*sets the intel map surface back to the size it was created with */
-//static void resetIntelBufferSize(void);
-
-//static BOOL checkMessageOverlap(MESSAGE *psMessage, SWORD x, SWORD y);
-
-/* draws the text message in the message window - only allows for one at the moment!*/
-//static void displayIntelligenceMessage(MESSAGE *psMessage);
-
-/* Remove the Message View from the Intelligence screen without animation*/
-//static void intRemoveMessageViewNoAnim(BOOL animated);
 
 static void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 					  UDWORD *pColours);
@@ -265,7 +187,6 @@ static BOOL intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
 				      size_t *major, size_t *minor);
 
 
-
 /*********************** VARIABLES ****************************/
 // The current message being displayed
 MESSAGE			*psCurrentMsg = NULL;
@@ -273,13 +194,8 @@ MESSAGE			*psCurrentMsg = NULL;
 // The display stats for the current messages' text
 TEXT_DISPLAY	currentTextDisplay;
 
-
-
-
 #define PAUSE_DISPLAY_CONDITION (!bMultiPlayer)
 #define PAUSEMESSAGE_YOFFSET (0)
-
-
 
 
 /* Add the Intelligence Map widgets to the widget screen */
@@ -348,7 +264,8 @@ BOOL intAddIntelMap(void)
 	sFormInit.y = (SWORD)INTMAP_Y;
 	sFormInit.width = INTMAP_WIDTH;
 	sFormInit.height = INTMAP_HEIGHT;
-// If the window was closed then do open animation.
+
+	// If the window was closed then do open animation.
 	if(Animate)
 	{
 		sFormInit.pDisplay = intOpenPlainForm;
@@ -356,7 +273,7 @@ BOOL intAddIntelMap(void)
 	}
 	else
 	{
-// otherwise just recreate it.
+		// otherwise just recreate it.
 		sFormInit.pDisplay = intDisplayPlainForm;
 	}
 
@@ -402,28 +319,21 @@ static BOOL intAddMessageForm(BOOL playCurrent)
 	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
 
 	numButtons = 0;
-	//numProxMsg = 0;
 	/*work out the number of buttons */
 	for(psMessage = apsMessages[selectedPlayer]; psMessage; psMessage =
 		psMessage->psNext)
 	{
 		//ignore proximity messages here
-		if (psMessage->type == MSG_PROXIMITY)
-		{
-			//intAddProximityButton(psMessage, numProxMsg);
-			//numProxMsg++;
-		}
-		else
+		if (psMessage->type != MSG_PROXIMITY)
 		{
 			numButtons++;
 		}
 
-        //stop adding the buttons once max has been reached
+		// stop adding the buttons once max has been reached
 		if (numButtons > (IDINTMAP_MSGEND - IDINTMAP_MSGSTART))
 		{
 			break;
 		}
-
 	}
 
 	//set the number of tabs required
@@ -526,7 +436,7 @@ static BOOL intAddMessageForm(BOOL playCurrent)
 		/* Update the init struct for the next button */
 		sBFormInit.id += 1;
 
-        //stop adding the buttons when at max
+		// stop adding the buttons when at max
 		if (sBFormInit.id > IDINTMAP_MSGEND)
 		{
 			break;
@@ -572,13 +482,6 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	BOOL			Animate = TRUE;
 	RESEARCH		*psResearch;
 
-/*	ASSERT( psMessage->type == MSG_RESEARCH,
- *		"intAddMessageView: invalid message type" );
- *	had to comment out this check, since the 'Fast Play' tutorial triggered it
- *	with psMessage->type=MSG_MISSION and ((VIEWDATA)*psMessage->pViewData)->type=VIEW_RPL,
- * 	but which is probably using the wrong function. - Per
- */
-
 	// Is the form already up?
 	if(widgGetFromID(psWScreen,IDINTMAP_MSGVIEW) != NULL)
 	{
@@ -596,35 +499,6 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	sFormInit.height = INTMAP_RESEARCHHEIGHT;
 	sFormInit.x = (SWORD)INTMAP_RESEARCHX;
 	sFormInit.y = (SWORD)INTMAP_RESEARCHY;
-
-	/*switch (type)
-	{
-	case MSG_RESEARCH:
-		sFormInit.width = INTMAP_CAMPAIGNWIDTH;
-		sFormInit.height = INTMAP_CAMPAIGNHEIGHT;
-		sFormInit.x = INTMAP_CAMPAIGNX;
-		sFormInit.y = INTMAP_CAMPAIGNY;
-		break;
-	//these are Full Screen FMV now
-	case MSG_CAMPAIGN:
-	case MSG_MISSION:
-	//case MSG_TUTORIAL:
-		sFormInit.width = INTMAP_MISSIONWIDTH;
-		sFormInit.height = INTMAP_MISSIONHEIGHT;
-		sFormInit.x = INTMAP_MISSIONX;
-		sFormInit.y = INTMAP_MISSIONY;
-		break;
-	//these are no longer displayed in Intel Screen
-	case MSG_PROXIMITY:
-		sFormInit.width = INTMAP_PROXIMITYWIDTH;
-		sFormInit.height = INTMAP_PROXIMITYHEIGHT;
-		sFormInit.x = INTMAP_PROXIMITYX;
-		sFormInit.y = INTMAP_PROXIMITYY;
-		break;
-	default:
-		ASSERT( FALSE, "Unknown message type" );
-		return FALSE;
-	}*/
 
 	// If the window was closed then do open animation.
 	if(Animate)
@@ -733,21 +607,6 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 		return TRUE;
 	}
 
-	/*Add the Title box*/
-	/*memset(&sFormInit, 0, sizeof(W_FORMINIT));
-	sFormInit.formID = IDINTMAP_MSGVIEW;
-	sFormInit.id = IDINITMAP_TITLEVIEW;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = INTMAP_TITLEX;
-	sFormInit.y = INTMAP_TITLEY;
-	sFormInit.width = INTMAP_TITLEWIDTH;
-	sFormInit.height = INTMAP_TITLEHEIGHT;
-	sFormInit.pDisplay = intDisplayPlainForm;
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return FALSE;
-	}*/
-
 	/*add the Label for the title box*/
 	memset(&sLabInit,0,sizeof(W_LABINIT));
 	sLabInit.id = IDINTMAP_TITLELABEL;
@@ -838,19 +697,12 @@ void intProcessIntelMap(UDWORD id)
 	{
 		intIntelButtonPressed(FALSE, id);
 	}
-	/*else if (id >= IDINTMAP_PROXSTART && id <= IDINTMAP_PROXEND)
-	{
-		intIntelButtonPressed(TRUE, id);
-	}*/
-
 	else if (id == IDINTMAP_CLOSE)
 	{
 		//if close button pressed on 3D View then close the view only
 		psCurrentMsg = NULL;
-		//initTextDisplay(psCurrentMsg, WFont, 255);
 		intRemoveMessageView(TRUE);
 	}
-
 }
 
 
@@ -948,10 +800,10 @@ static void intDisplaySeqTextView(WIDGET *psWidget,
 // Add all the Video Sequences for a message
 static void StartMessageSequences(MESSAGE *psMessage, BOOL Start)
 {
-
 	BOOL bLoop = FALSE;
 
-//		printf("start message sequence\n");		//[testing if we hit this] -Q
+	debug(LOG_GUI, "StartMessageSequences: start message sequence");
+
 	//should never have a proximity message here
 	if (psMessage->type == MSG_PROXIMITY)
 	{
@@ -967,7 +819,6 @@ static void StartMessageSequences(MESSAGE *psMessage, BOOL Start)
 		UDWORD Sequence;
 
 	// Surely we don't need to set up psCurrentMsg when we pass the message into this routine ... tim
-//		psViewReplay = (VIEW_REPLAY *)((VIEWDATA *)psCurrentMsg->pViewData)->pData;
 		psViewReplay = (VIEW_REPLAY *)((VIEWDATA *)psMessage->pViewData)->pData;
 
 		seq_ClearSeqList();
@@ -988,13 +839,7 @@ static void StartMessageSequences(MESSAGE *psMessage, BOOL Start)
 
 			seq_AddSeqToList(psViewReplay->pSeqList[Sequence].sequenceName, psViewReplay->pSeqList[Sequence].pAudio, NULL, bLoop);
 
-
-//	{
-//		char String[256];
-//		sprintf(String,"seqadded %d of %d [%s]\n",Sequence,psViewReplay->numSeq,psViewReplay->pSeqList[Sequence].sequenceName);
-//		prnt(1,String,0,0);
-//	}
-			debug( LOG_NEVER, "sequence=%d\n", Sequence );
+			debug(LOG_GUI, "StartMessageSequences: sequence=%d", Sequence);
 			addVideoText(&psViewReplay->pSeqList[Sequence],Sequence);
 		}
 		//play first full screen video
@@ -1022,20 +867,6 @@ static void StartMessageSequences(MESSAGE *psMessage, BOOL Start)
 
 }
 
-
-
-UDWORD ButtonPresses=0;
-
-
-#ifdef DBG_RESEARCH_ENTRY
-
-MESSAGE TimsMessage=
-{
-	MSG_RESEARCH,NULL,NULL,FALSE,0
-};
-#endif
-
-
 /*
 deal with the actual button press - proxMsg is set to true if a proximity
 button has been pressed
@@ -1062,12 +893,10 @@ void intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 		widgSetButtonState(psWScreen, messageID, 0);
 		intRemoveMessageView(FALSE);
 		psCurrentMsg = NULL;
-		//initTextDisplay(psCurrentMsg, WFont, 255);
 	}
 
 	/* Lock the new button */
 	// This means we can't click on the same movie button twice.
-//	widgSetButtonState(psWScreen, id, WBUT_LOCK);
 	widgSetButtonState(psWScreen, id, WBUT_CLICKLOCK);
 	messageID = id;
 
@@ -1086,35 +915,18 @@ void intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 		}
 	}
 
-#ifdef DBG_RESEARCH_ENTRY
-#warning DEBUG MESSAGE CODE ADDED ---- REMOVE BEFORE FINAL BUILD !!!!!!
-	ButtonPresses++;
-	if (ButtonPresses>=2)	// 2nd time only !!!
-	{
-		psMessage=&TimsMessage;
-		TimsMessage.pViewData= asResearch[DBG_RESEARCH_ENTRY].pViewData;
-	}
-#endif
-
 	//deal with the message if one
 	if (psMessage)
 	{
-
 		//set the current message
 		psCurrentMsg = psMessage;
-		//initTextDisplay(psCurrentMsg, WFont, 255);
 
 		//set the read flag
 		psCurrentMsg->read = TRUE;
 
-		//this is for the deaf! - done in intDisplayMessageView()
-		/*if (psMessage->pViewData->pTextMsg)
-		{
-			addGameMessage(psMessage->pViewData->pTextMsg, INTEL_TXT_LIFE,
-				TRUE);
-		}*/
+		debug(LOG_GUI, "intIntelButtonPressed: Dealing with a new message type=%d", 
+		      psMessage->type);
 
-//DBPRINTF(("Dealing with a new message !!! type=%d\n",psMessage->pViewData->type);
 		//should never have a proximity message
 		if (psMessage->type == MSG_PROXIMITY)
 		{
@@ -1134,22 +946,6 @@ void intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 		}
 		else if (((VIEWDATA *)psMessage->pViewData)->type == VIEW_RES)
 		{
-
-			//this must be for the blind
-			//with forsight this information was removed from the meassage text
-/*
-			if (((VIEW_RESEARCH *)((VIEWDATA *)psMessage->pViewData)->pData)->pAudio != NULL)
-			{
-				ASSERT( strlen(((VIEW_RESEARCH *)((VIEWDATA *)psMessage->pViewData)->
-					pData)->pAudio)<244,"sequence path+name greater than max string" );
-				strcpy(aAudioName,"sequenceaudio/");
-				strcat(aAudioName,((VIEW_RESEARCH *)((VIEWDATA *)psMessage->
-					pViewData)->pData)->pAudio);
-
-				audio_PlayStream(aAudioName, AUDIO_VOL_MAX, NULL);
-			}
-*/
-			//This hack replaces it
 			psResearch = getResearchForMsg((VIEWDATA *)psMessage->pViewData);
 			if (psResearch != NULL)
 			{
@@ -1179,18 +975,14 @@ void intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 				case IMAGE_RES_DEFENCE:
 					audio_PlayStream("sequenceaudio/res_strutech.ogg", AUDIO_VOL_MAX, NULL);
 						break;
-	//				default:
 				}
 			}
-
 
 			//and finally for the dumb?
 			if (psMessage->pViewData)
 			{
 				intAddMessageView(psMessage);
 			}
-
-
 		}
 	}
 }
@@ -1214,9 +1006,6 @@ static void intCleanUpIntelMap(void)
 	immediateMessage = FALSE;
 
 	cdAudio_Resume();
-
-	// FIXME: NOT SURE IT'S CORRECT. this makes the transports come.
-	//eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
 
 	if (interpProcessorActive())
 	{
@@ -1266,14 +1055,8 @@ void intRemoveIntelMap(void)
 /* Remove the Intelligence Map widgets from the screen */
 void intRemoveIntelMapNoAnim(void)
 {
-	//UDWORD buttonID;
 	WIDGET *Widg;
 
-	//remove each proximity button
-	/*for (buttonID = 0; buttonID < numProxMsg; buttonID++)
-	{
-		widgDelete(psWScreen, IDINTMAP_PROXSTART + buttonID);
-	}*/
 	//remove 3dView if still there
 	Widg = widgGetFromID(psWScreen,IDINTMAP_MSGVIEW);
 	if(Widg)
@@ -1286,11 +1069,6 @@ void intRemoveIntelMapNoAnim(void)
 	widgDelete(psWScreen, IDINTMAP_PAUSELABEL);
 
 	intCleanUpIntelMap();
-
-
-//	resetIntelligencePauseState();
-//
-//	immediateMessage = FALSE;
 }
 
 /* Remove the Message View from the Intelligence screen */
@@ -1424,10 +1202,7 @@ void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset,
 		//do we have the same icon for the top right hand corner?
 		if (image > 0)
 		{
-			//RenderToButton(IntImages,(UWORD)image,pResearch,selectedPlayer,psBuffer,Down,
-			//				IMDType,TOPBUTTON);											// ajl, changed from 0 to selectedPLayer
-			RenderToButton(IntImages,(UWORD)image,psResGraphic,selectedPlayer,
-                psBuffer,Down,IMDType,TOPBUTTON);
+			RenderToButton(IntImages, (UWORD)image, psResGraphic, selectedPlayer, psBuffer,Down, IMDType, TOPBUTTON);
 		}
 		else
 		{
@@ -1599,7 +1374,6 @@ void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 		//add each message
 		for (i = 0; i < ((VIEWDATA *)psMessage->pViewData)->numText; i++)
 		{
-			//displayIntelligenceMessage(psMessage);
 			//check haven't run out of room first!
 			if (i * linePitch > Form->height)
 			{
@@ -1610,12 +1384,8 @@ void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 			iV_DrawText(((VIEWDATA *)psMessage->pViewData)->ppTextMsg[i], x0 + TEXT_XINDENT,
 				(ty + TEXT_YINDENT*3) + (i * linePitch));
 		}
-
 	}
-
-
 }
-
 
 
 //adds text to full screen video
@@ -1647,103 +1417,6 @@ void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence)
 	}
 }
 
-
-/*rotate the view so looking directly down if forward = TRUE or
- back to previous view if forward = FALSE */
-/*void intelMapView(BOOL forward)
-{
-	if (forward)
-	{
-		//save the current viewing angle
-		viewAngle = player.r.x;
-		viewHeight = player.p.y;
-		//rotate to top down view
-		player.r.x = DEG(-90);
-		player.p.y = INTELMAP_VIEWHEIGHT;
-	}
-	else
-	{
-		//rotate back to previous view angle
-		player.r.x = viewAngle;
-		player.p.y = viewHeight;
-	}
-}*/
-
-/*this sets the width and height for the Intel map surface so that it fill the
-appropriate sized image for the view*/
-/*void setIntelBufferSize(UDWORD type)
-{
-	switch (type)
-	{
-	case MSG_CAMPAIGN:
-	case MSG_RESEARCH:
-		pIntelMapSurface->width = INTMAP_CAMPAIGNWIDTH;
-		pIntelMapSurface->height = INTMAP_CAMPAIGNHEIGHT;
-		break;
-	case MSG_MISSION:
-	//case MSG_TUTORIAL:
-		pIntelMapSurface->width = INTMAP_MISSIONWIDTH;
-		pIntelMapSurface->height = INTMAP_MISSIONHEIGHT;
-		break;
-	case MSG_PROXIMITY:
-		pIntelMapSurface->width = INTMAP_PROXIMITYWIDTH;
-		pIntelMapSurface->height = INTMAP_PROXIMITYHEIGHT;
-		break;
-	default:
-		ASSERT( FALSE, "Invalid message type" );
-	}
-}
-*/
-/*sets the intel map surface back to the size it was created with */
-/*void resetIntelBufferSize(void)
-{
-	pIntelMapSurface->width = MSG_BUFFER_WIDTH;
-	pIntelMapSurface->height = MSG_BUFFER_HEIGHT;
-}*/
-
-/* draws the text message in the message window - only allows for one at the moment!*/
-/*void displayIntelligenceMessage(MESSAGE *psMessage)
-{
-	UDWORD	x1, x2, y, indent = 10;
-
-
-	x1 = INTMAP_TEXTX;
-	x2 = INTMAP_TEXTX + INTMAP_TEXTWIDTH;
-	y = INTMAP_TEXTY + INTMAP_TEXTHEIGHT + indent;
-
-	//size and position depends on the type of message
-	//switch (psMessage->type)
-	{
-	case MSG_RESEARCH:
-		x1 = INTMAP_RESEARCHX;
-		x2 = INTMAP_RESEARCHX + INTMAP_RESEARCHWIDTH;
-		y = INTMAP_RESEARCHY + INTMAP_RESEARCHHEIGHT + indent;
-		break;
-	case MSG_MISSION:
-      case MSG_CAMPAIGN:
-	//case MSG_TUTORIAL:
-		x1 = INTMAP_MISSIONX;
-		x2 = INTMAP_MISSIONX + INTMAP_MISSIONWIDTH;
-		y = INTMAP_MISSIONY + INTMAP_MISSIONHEIGHT + indent;// + INTMAP_TEXTWINDOWHEIGHT;// - indent;
-		break;
-	case MSG_PROXIMITY:
-		x1 = INTMAP_PROXIMITYX;
-		x2 = INTMAP_PROXIMITYX + INTMAP_PROXIMITYWIDTH;
-		y = INTMAP_PROXIMITYY + INTMAP_PROXIMITYHEIGHT + indent;// + INTMAP_TEXTWINDOWHEIGHT;// - indent;
-		break;
-	default:
-		ASSERT( FALSE, "Unknown message type" );
-	}
-
-//	screenSetTextColour(255,255,255);
-//	screenTextOut(x+1,y+1,psMessage->pViewData->pTextMsg);
-	//scrollMessage(psMessage->pViewData->pTextMsg, x2, x1, y, 5);
-
-	setConsoleSizePos(x1, y, (x2-x1));
-	setConsolePermanence(TRUE);
-	addConsoleMessage(psMessage->pViewData->pTextMsg, LEFT_JUSTIFY);
-}
-*/
 /*sets psCurrentMsg for the Intelligence screen*/
 void setCurrentMsg(void)
 {
@@ -1760,318 +1433,6 @@ void setCurrentMsg(void)
 	}
 	psCurrentMsg = psLastMsg;
 }
-
-//initialise the text display stats for the current message
-/*void initTextDisplay(MESSAGE *psMessage, UDWORD fontID, UWORD fontColour)
-{
-	UDWORD		width, currentLength, strLen, frames, inc;
-
-	currentTextDisplay.font = fontID;
-	currentTextDisplay.fontColour = fontColour;
-	currentTextDisplay.startTime = 0;
-	currentTextDisplay.text[0] = '\0';
-
-	if (psMessage == NULL || psMessage->pViewData->pTextMsg == NULL)
-	{
-		currentTextDisplay.totalFrames = 0;
-		return;
-	}
-
-	//size of the text window depends on the message type
-	switch (psMessage->type)
-	{
-	//case MSG_CAMPAIGN:
-	case MSG_RESEARCH:
-		width = INTMAP_RESEARCHWIDTH;
-		break;
-	//case MSG_MISSION:
-	//case MSG_TUTORIAL:
-	//	width = INTMAP_MISSIONWIDTH;
-	//	break;
-	//case MSG_PROXIMITY:
-	//	width = INTMAP_PROXIMITYWIDTH;
-	//	break;
-	default:
-		ASSERT( FALSE, "Unknown message type" );
-		return;
-	}
-
-	currentLength = 0;
-	strLen = strlen(psMessage->pViewData->pTextMsg);
-	frames = 0;
-	currentTextDisplay.totalFrames = 0;
-
-	//get the length of the text message
-	for (inc=0; inc < strLen; inc++)
-	{
-		currentLength += iV_GetCharWidth(psMessage->pViewData->pTextMsg[inc]);
-	}
-
-	width += currentLength;
-
-	currentLength = 0;
-	//how long for string to completely pass along width of view
-	for (inc=0; inc < MAX_STR_LENGTH; inc++)
-	{
-		if (inc < strLen)
-		{
-			currentLength += iV_GetCharWidth(psMessage->pViewData->pTextMsg[inc]);
-		}
-		else
-		{
-			currentLength += iV_GetCharWidth(' ');
-		}
-
-		if (currentLength > width)
-		{
-			break;
-		}
-		currentTextDisplay.totalFrames++;
-	}
-	currentTextDisplay.startTime = gameTime2;
-}*/
-
-/* scroll the text message from right to left - aka tickertape messages */
-/*void scrollMessage(char *pText, UDWORD startX, UDWORD endX, UDWORD y, UDWORD gap)
-{
-	UDWORD			frames, inc, strLen;
-	SDWORD			position, startChar, currentLength;
-	UDWORD			endChar, text;
-
-	//work out current frame
-	frames = 20 * (gameTime2 - currentTextDisplay.startTime)/GAME_TICKS_PER_SEC;
-
-	//get the number of chars in the string
-	strLen = strlen(pText);
-
-	currentLength = 0;
-
-	//work out position of the string
-	for (inc = 0; inc < frames; inc++)
-	{
-		//framesMinus1 = frames - 1;
-		if ((frames - 1 - inc) > (strLen-1))
-		{
-			//add a blank for 'characters' at the end of the sentence
-			currentLength += iV_GetCharWidth(' ');
-			//nothing to draw so go to next inc
-			continue;
-		}
-
-		//increment the current amount drawn
-		currentLength += iV_GetCharWidth(pText[frames - 1 - inc]);
-
-		if (((SDWORD)startX - currentLength) < (SDWORD)endX)
-		{
-			//ignore this character since off the scale
-			inc--;
-			break;
-		}
-		position = startX - currentLength;
-	}
-	startChar = frames - 1 - inc;
-	if (startChar < 0)
-	{
-		startChar = 0;
-	}
-	endChar = frames;
-	if (endChar > strLen)
-	{
-		endChar = strLen;
-	}
-	text = 0;
-	for (inc = startChar; inc != endChar && inc < strLen; inc++)
-	{
-		currentTextDisplay.text[text++] = pText[inc];
-	}
-	currentTextDisplay.text[text] = '\0';
-	iV_SetFont(currentTextDisplay.font);
-	iV_SetTextColour(currentTextDisplay.fontColour);
-	iV_DrawText(currentTextDisplay.text, position, y);
-
-	//time to redo message
-	if (frames > currentTextDisplay.totalFrames + gap)
-	{
-		//start again
-		currentTextDisplay.startTime = gameTime2;
-	}
-}*/
-
-/* Process return code from the Message View for Tutorial Mode*/
-/*void intProcessMessageView(UDWORD id)
-{
-	if (id == IDINTMAP_CLOSE)
-	{
-		//if close button pressed on 3D View then close the view only
-		psCurrentMsg = NULL;
-		initTextDisplay(psCurrentMsg, WFont, 255);
-		//intRemoveMessageView();
-		intRemoveMessageViewNoAnim();
-		intResetScreen(TRUE);
-	}
-}*/
-
-/* Add the Proximity message buttons */
-/*BOOL intAddProximityButton(MESSAGE *pMessage, UDWORD inc)
-{
-	W_FORMINIT		sBFormInit;
-	VIEW_LOCATION	*pViewLocation = (VIEW_LOCATION*)pMessage->pViewData->pData;
-
-	memset(&sBFormInit, 0, sizeof(W_FORMINIT));
-	sBFormInit.formID = 0;
-	sBFormInit.id = IDINTMAP_PROXSTART + inc;
-	ASSERT( sBFormInit.id < IDINTMAP_PROXEND,"Too many message buttons" );
-	sBFormInit.majorID = 0;
-	sBFormInit.minorID = 0;
-	sBFormInit.style = WFORM_CLICKABLE;
-	//width and height is dependant on the state of the message - see intDisplayProximityButton
-	//the x and y need to be set up each time the button is drawn - see intDisplayProximityButton
-
-	sBFormInit.pDisplay = intDisplayProximityButton;
-	//set the data for this button
-	sBFormInit.pUserData = pMessage;
-
-	if (!widgAddForm(psWScreen, &sBFormInit))
-	{
-		return FALSE;
-	}
-	return TRUE;
-}*/
-
-
-/*Displays the proximity messages used on the intelligence map */
-/*void intDisplayProximityButton(WIDGET *psWidget, UDWORD xOffset,
-							  UDWORD yOffset, UDWORD *pColours)
-{
-	W_CLICKFORM			*psButton = (W_CLICKFORM*)psWidget;
-	MESSAGE				*psMsg = (MESSAGE*)psButton->pUserData;
-	PROXIMITY_DISPLAY	*psProximityDisplay;
-	BOOL				Hilight = FALSE;
-	VIEW_LOCATION		*psViewLocation;
-	UBYTE				imageID;
-	UDWORD				delay = 100;
-
-	(void)pColours;
-	(void)xOffset;
-	(void)yOffset;
-
-	// Get the object associated with this widget.
-	psMsg = (MESSAGE *)psButton->pUserData;
-	ASSERT( psMsg->type == MSG_PROXIMITY, "Invalid message type" );
-
-	psViewLocation = (VIEW_LOCATION *)psMsg->pViewData->pData;
-
-	//if not within view ignore message
-	if (!clipXY(psViewLocation->location.x,	psViewLocation->location.z))
-	{
-		return;
-	}
-
-	psProximityDisplay = getProximityDisplay(psMsg);
-	psButton->x = (SWORD)psProximityDisplay->screenX;
-	psButton->y = (SWORD)psProximityDisplay->screenY;
-
-	//get the screen coords for the message - check not 'off' the screen
-	if (psButton->x < 0 || psButton->x > DISP_WIDTH || psButton->y < 0 ||
-		psButton->y > DISP_HEIGHT)
-	{
-		return;
-	}
-
-	Hilight = psButton->state & WBUTS_HILITE;
-
-	//if hilighted
-	if (Hilight)
-	{
-		imageID = IMAGE_INTEL_PROXHILI;
-		psButton->width = iV_GetImageWidth(IntImages,IMAGE_INTEL_PROXHILI);
-		psButton->height = iV_GetImageHeight(IntImages,IMAGE_INTEL_PROXHILI);
-	}
-	else if (psMsg->read)
-	{
-		//if the message is read - don't animate
-		imageID = IMAGE_INTEL_PROXREAD;
-		psButton->width = iV_GetImageWidth(IntImages,IMAGE_INTEL_PROXREAD);
-		psButton->height = iV_GetImageHeight(IntImages,IMAGE_INTEL_PROXREAD);
-	}
-	else
-	{
-		//draw animated
-		if ((GetTickCount() - psProximityDisplay->timeLastDrawn) > delay)
-		{
-			psProximityDisplay->strobe++;
-			if (psProximityDisplay->strobe > 2)
-			{
-				psProximityDisplay->strobe = 0;
-			}
-			psProximityDisplay->timeLastDrawn = GetTickCount();
-		}
-		imageID = (UBYTE)(IMAGE_INTEL_PROXIMITY + psProximityDisplay->strobe);
-		psButton->width = iV_GetImageWidth(IntImages,IMAGE_INTEL_PROXIMITY);
-		psButton->height = iV_GetImageHeight(IntImages,IMAGE_INTEL_PROXIMITY);
-	}
-	//adjust button x and y for width and height of button
-	psButton->x = (SWORD)(psButton->x - psButton->width/(UWORD)2);
-	psButton->y = (SWORD)(psButton->y - psButton->height/(UWORD)2);
-	if (psButton->x < 0 || psButton->x > DISP_WIDTH || psButton->y < 0 ||
-		psButton->y > DISP_HEIGHT)
-	{
-		return;
-	}
-
-	//if there is a message 3Dview up - don't draw the proximity messages underneath
-	if (psCurrentMsg && psCurrentMsg->pViewData)
-	{
-		if (!checkMessageOverlap(psCurrentMsg, psButton->x, psButton->y))
-		{
-			return;
-		}
-	}
-
-	//draw the 'button'
-	iV_DrawImage(IntImages,imageID, psButton->x, psButton->y);
-}*/
-/*check the x and y are within the messages 3D view if on screen */
-/*BOOL checkMessageOverlap(MESSAGE *psMessage, SWORD x, SWORD y)
-{
-	SWORD		messageX, messageY, messageWidth, messageHeight;
-
-	switch (psMessage->type)
-	{
-	case MSG_CAMPAIGN:
-	case MSG_RESEARCH:
-		messageX = INTMAP_CAMPAIGNX;
-		messageY = INTMAP_CAMPAIGNY;
-		messageWidth = INTMAP_CAMPAIGNWIDTH;
-		messageHeight = INTMAP_CAMPAIGNHEIGHT;
-		break;
-	case MSG_MISSION:
-		messageX = INTMAP_MISSIONX;
-		messageY = INTMAP_MISSIONY;
-		messageWidth = INTMAP_MISSIONWIDTH;
-		messageHeight = INTMAP_MISSIONHEIGHT;
-		break;
-	case MSG_PROXIMITY:
-		messageX = INTMAP_PROXIMITYX;
-		messageY = INTMAP_PROXIMITYY;
-		messageWidth = INTMAP_PROXIMITYWIDTH;
-		messageHeight = INTMAP_PROXIMITYHEIGHT;
-		break;
-	default:
-		ASSERT( FALSE, "Unknown message type" );
-		return FALSE;
-	}
-
-	if ((x > messageX && x < (messageX + messageWidth)) &&
-		(y > messageY && y < (messageY + messageHeight)))
-	{
-		return FALSE;
-	}
-	else
-	{
-		return TRUE;
-	}
-}*/
 
 /*sets which states need to be paused when the intelligence screen is up*/
 void setIntelligencePauseState(void)

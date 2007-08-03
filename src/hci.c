@@ -385,7 +385,6 @@ DROID_TEMPLATE			*psCurrTemplate = NULL;
 static FEATURE_STATS	**apsFeatureList;
 
 /*Store a list of research indices which can be performed*/
-//needs to be UWORD sized for Patches
 static UWORD			*pList;
 static UWORD			*pSList;
 
@@ -1310,8 +1309,6 @@ void intResetScreen(BOOL NoAnim)
 		break;
 
 	case INT_INTELMAP:
-		//rotate the map back to previous view position on leaving the Intelligence Map
-		//intelMapView(FALSE);
 		if (NoAnim)
 		{
 			intRemoveIntelMapNoAnim();
@@ -2264,7 +2261,6 @@ static void intRunStats(void)
 
 	if(intMode != INT_EDITSTAT && objMode == IOBJ_MANUFACTURE)
 	{
-//#ifdef INCLUDE_PRODSLIDER
 		psOwner = (BASE_OBJECT *)widgGetUserData(psWScreen, IDSTAT_SLIDERCOUNT);
 		psStruct = (STRUCTURE *)psOwner;
 		psFactory = (FACTORY *)psStruct->pFunctionality;
@@ -2320,7 +2316,6 @@ static void intRunStats(void)
 		}
 
 		ProductionRun = Quantity;
-//#endif
 	}
 #endif
 #ifdef INCLUDE_FACTORYLISTS
@@ -2767,7 +2762,6 @@ static void intProcessStats(UDWORD id)
 		/* deal with RMB clicks */
 		if (widgGetButtonKey(psWScreen) & WKEY_SECONDARY)
 		{
-//printf("WKEY_SECONDARY : %d\n",id);
 			intStatsRMBPressed(id);
 		}
 		/* deal with LMB clicks */
@@ -3059,7 +3053,6 @@ void intSetMapPos(UDWORD x, UDWORD y)
 //		setPlayerPos((SDWORD)x, (SDWORD)y);
 		mapX = x >> TILE_SHIFT;
 		mapY = y >> TILE_SHIFT;
-//		DBPRINTF(("intSetMapPos\n");
 	}
 }
 
@@ -4313,7 +4306,6 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	if(numObjects == 0) {
 		// No objects so close the stats window if it's up...
 		if(widgGetFromID(psWScreen,IDSTAT_FORM) != NULL) {
-//DBPRINTF(("No objects, intRemoveStatsNoAnim\n");
 			intRemoveStatsNoAnim();
 		}
 		// and return.
@@ -4740,7 +4732,6 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 					psStats->ref < REF_TEMPLATE_START + REF_RANGE)
 				{
 					sBFormInit2.pTip = getTemplateName((DROID_TEMPLATE *)psStats);
-//printf("Tip %s\n",sBFormInit2.pTip);
 				}
 				else
 				{
@@ -4861,7 +4852,6 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 			{
 				displayForm = sBFormInit.majorID;
 				statID = sBFormInit2.id;
-//				DBPRINTF(("Selected %d\n",statID);
 			}
 
 			/* Set up the next button (Objects) */
@@ -5078,8 +5068,6 @@ void intRemoveStats(void)
 
 	StatsUp = FALSE;
 	psStatsScreenOwner = NULL;
-//DBPRINTF(("intRemoveStats\n");
-
 }
 
 
@@ -5098,7 +5086,6 @@ void intRemoveStatsNoAnim(void)
 
 	StatsUp = FALSE;
 	psStatsScreenOwner = NULL;
-//DBPRINTF(("intRemoveStatsNoAnim\n");
 }
 
 // Poll for closing windows and handle them, ensure called even if game is paused.
@@ -5361,7 +5348,6 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 			psStats->ref < REF_TEMPLATE_START + REF_RANGE)
 		{
 			sFormInit.pTip = getTemplateName((DROID_TEMPLATE *)psStats);
-//printf("Tip2 %s\n",sFormInit.pTip);
 		}
 		else
 		{
@@ -5465,16 +5451,12 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 
 	Animate = FALSE;
 
-//	// return if there's no owner? Option screen calls with psOwner == NULL.
-//	if(psOwner == NULL) {
-//		ASSERT( FALSE,"intAddStats : psOwner == NULL" );	// Actually an error condition.
-//		return FALSE;
-//	}
-
-	if(psOwner != NULL) {
+	if (psOwner != NULL)
+	{
 		// Return if the owner is dead.
-		if(psOwner->died != 0) {
-//DBPRINTF(("intAddStats : Owner is dead\n");
+		if (psOwner->died)
+		{
+			debug(LOG_GUI, "intAddStats: Owner is dead");
 			return FALSE;
 		}
 	}
@@ -5505,7 +5487,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	}
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
-//DBPRINTF(("widgAdd failed : %d\n",__LINE__);
+		debug(LOG_ERROR, "intAddStats: Failed to add form");
 		return FALSE;
 	}
 
@@ -5788,7 +5770,6 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		{
 
 			sBFormInit.pTip = getTemplateName((DROID_TEMPLATE *)ppsStatsList[i]);
-//printf("Tip3 %s\n",sBFormInit.pTip);
 		}
 		else
 		{
@@ -5877,7 +5858,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 			if(sBarInit.size > 100) sBarInit.size = 100;
 
 
-// if multiplayer, if research topic is being done by another ally then mark as such..
+			// if multiplayer, if research topic is being done by another ally then mark as such..
 			if(bMultiPlayer)
 			{
 				STRUCTURE *psOtherStruct;
@@ -5896,7 +5877,6 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 							  )
 							{
 								// add a label.
-							//	DBPRINTF(("!"));
 								memset(&sLabInit,0,sizeof(W_LABINIT));
 								sLabInit.formID = sBFormInit.id ;
 								sLabInit.id = IDSTAT_ALLYSTART+(sBFormInit.id - IDSTAT_START);
@@ -5983,7 +5963,6 @@ donelab:
 		}
 	}
 
-//DBPRINTF(("intAddStats OK\n");
 	return TRUE;
 }
 
@@ -6093,7 +6072,6 @@ static BASE_STATS *getConstructionStats(BASE_OBJECT *psObj)
 static BOOL setConstructionStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 {
 	STRUCTURE_STATS		*psSStats;
-	//UDWORD				i;
 	DROID				*psDroid;
 
 	ASSERT( psObj != NULL && psObj->type == OBJ_DROID,
@@ -6115,20 +6093,12 @@ static BOOL setConstructionStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 			// the build positioning interface and therefore requires a construction droid
 			// to be selected.
 			clearSel();
-//			psDroid->selected = TRUE;
 			SelectDroid(psDroid);
 			if(driveModeActive()) {
 				driveSelectionChanged();
 			}
 			return TRUE;
 		}
-
-        //Power is obtained gradually so no need to check
-		/* check enough power to build*/
-		/*if (!checkPower(selectedPlayer, psSStats->powerToBuild, TRUE))
-		{
-			return FALSE;
-		}*/
 
 		/* Store the stats for future use */
 		psPositionStats = psStats;
@@ -6327,29 +6297,6 @@ static BOOL setManufactureStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 			}
 		}
 	}
-	/*else
-	{
-		// Stop manufacturing.
-		//return half the power cost if cancelled mid production
-		if (((FACTORY*)Structure->pFunctionality)->timeStarted != ACTION_START_TIME)
-		{
-			if (((FACTORY*)Structure->pFunctionality)->psSubject != NULL)
-			{
-				addPower(Structure->player, ((DROID_TEMPLATE *)((FACTORY*)Structure->
-					pFunctionality)->psSubject)->powerPoints / 2);
-			}
-		}
-		else
-		{
-			//return the power accrued
-			addPower(Structure->player, ((FACTORY*)Structure->pFunctionality)->powerAccrued);
-		}
-		((FACTORY*)Structure->pFunctionality)->quantity = 0;
-		((FACTORY*)Structure->pFunctionality)->psSubject = NULL;
-		((FACTORY*)Structure->pFunctionality)->powerAccrued = 0;
-		intManufactureFinished(Structure);
-	}*/
-
 #endif
 
 #ifdef INCLUDE_PRODSLIDER
@@ -6371,7 +6318,6 @@ static BOOL setManufactureStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		if (ProductionRun == STAT_SLDSTOPS)
 		{
 			ProductionRun = NON_STOP_PRODUCTION;
-//			DBMB(("Non stop production"));
 		}
 		/* check power if factory not on infinte production*/
 		if (ProductionRun != NON_STOP_PRODUCTION)
@@ -6514,7 +6460,6 @@ static void intStatsRMBPressed(UDWORD id)
 	DROID_TEMPLATE		*psNext;
 #endif
 
-
 	ASSERT( id - IDSTAT_START < numStatsListEntries,
 			"intStatsRMBPressed: Invalid structure stats id" );
 
@@ -6598,13 +6543,6 @@ static void intStatsRMBPressed(UDWORD id)
 		intResetScreen(TRUE);
 		// open up the design screen
 		widgSetButtonState(psWScreen, IDRET_DESIGN, WBUT_CLICKLOCK);
-
-/*
-		if( !bMultiPlayer)
-		{
-		gameTimeStop();
-		}
-*/
 
 		/*add the power bar - for looks! */
 		intShowPowerBar();
@@ -6706,7 +6644,6 @@ static void intObjStatRMBPressed(UDWORD id)
 
 
 //sets up the Intelligence Screen as far as the interface is concerned
-//void addIntelScreen(BOOL playImmediate)
 void addIntelScreen(void)
 {
 	BOOL	radOnScreen;
@@ -6718,22 +6655,11 @@ void addIntelScreen(void)
 
 	intResetScreen(FALSE);
 
-/*
-	if(!bMultiPlayer)
-	{
-		gameTimeStop();
-	}
-*/
-
-	//done in intAddIntelMap()
-	//setIntelligencePauseState();
-
 	//lock the reticule button
 	widgSetButtonState(psWScreen, IDRET_INTEL_MAP, WBUT_CLICKLOCK);
+
 	//add the power bar - for looks!
 	intShowPowerBar();
-
-	//get the background image for the Intelligence screen
 
 	// Only do this in main game.
 	if((GetGameMode() == GS_NORMAL) && !bMultiPlayer)
@@ -6753,7 +6679,6 @@ void addIntelScreen(void)
 	}
 
 	//add all the intelligence screen interface
-	//(void)intAddIntelMap(playImmediate);
 	(void)intAddIntelMap();
 	intMode = INT_INTELMAP;
 
@@ -6775,7 +6700,6 @@ void addIntelScreen(void)
 		widgSetButtonState(psWScreen, IDRET_INTEL_MAP, WBUT_CLICKLOCK);
 		//add the power bar - for looks!
 		(void)intAddPower();
-		intelMapView(TRUE);
 		(void)intAddIntelMap(playImmediate);
 		intMode = INT_INTELMAP;
 	}*/
@@ -6980,7 +6904,6 @@ STRUCTURE* intCheckForStructure(UDWORD structType)
 {
 	STRUCTURE	*psStruct, *psSel = NULL;
 
-//	for (psStruct = apsStructLists[player]; psStruct != NULL; psStruct =
 	for (psStruct = interfaceStructList(); psStruct != NULL; psStruct =
 		psStruct->psNext)
 	{
@@ -7008,19 +6931,14 @@ DROID* intCheckForDroid(UDWORD droidType)
 {
 	DROID	*psDroid, *psSel = NULL;
 
-//	clearSelection();
 	for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
 	{
 		if (psDroid->selected && psDroid->droidType == droidType)
 		{
 			if (psSel != NULL)
 			{
-/* Was...
-				clearSelection();
-				SelectDroid(psSel);
-*/
-				if (droidType != DROID_CONSTRUCT &&
-                    droidType != DROID_CYBORG_CONSTRUCT)
+				if (droidType != DROID_CONSTRUCT
+				    && droidType != DROID_CYBORG_CONSTRUCT)
 				{
 					clearSelection();
 				}

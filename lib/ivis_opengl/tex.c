@@ -202,7 +202,7 @@ int pie_ReplaceTexPage(iV_Image *s, const char *texPage)
 	}
 
 	glDeleteTextures(1, (GLuint *) &_TEX_PAGE[i].id);
-	debug(LOG_ERROR, "Reloading texture %s from index %d", texPage, i);
+	debug(LOG_TEXTURE, "Reloading texture %s from index %d", texPage, i);
 	_TEX_PAGE[i].name[0] = '\0';
 	pie_AddTexPage(s, texPage, i);
 
