@@ -96,7 +96,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	UDWORD			xDiff, yDiff, distSquared;
 	UDWORD			dice, damLevel;
 	SDWORD			missDir, missDist, missX,missY;
-	SDWORD			hitChance=0, fireChance;
+	SDWORD			resultHitChance=0,baseHitChance=0,fireChance;
 	UDWORD			firePause;
 	SDWORD			targetDir,dirDiff;
 	SDWORD			longRange;
@@ -244,9 +244,9 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		}
 	}
 
-	// hit chance, based on weapon's chance to hit as defined in
-	// weapons.txt and applied weapon upgrades
-	hitChance = 0;
+	// base hit chance, based on weapon's chance to hit as defined in
+	// weapons.txt and with applied weapon upgrades, without any accuracy modifiers
+	baseHitChance = 0;
 
 	/* Now see if the target is in range  - also check not too near */
 	xDiff = abs(psAttacker->x - psTarget->x);
@@ -259,7 +259,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		distSquared >= (psStats->minRange * psStats->minRange))
 	{
 		// get weapon chance to hit in the short range
-		hitChance = weaponShortHit(psStats,psAttacker->player);
+		baseHitChance = weaponShortHit(psStats,psAttacker->player);
 	}
 	else if ((SDWORD)distSquared <= longRange * longRange &&
 			 ( (distSquared >= psStats->minRange * psStats->minRange) ||
@@ -267,7 +267,8 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 			   !proj_Direct(psStats) &&
 			   actionInsideMinRange(psDroid, psTarget, weapon_slot)) ))
 	{
-		hitChance = weaponLongHit(psStats,psAttacker->player);
+		// get weapon chance to hit in the long range
+		baseHitChance = weaponLongHit(psStats,psAttacker->player);
 	}
 	else
 	{
@@ -277,7 +278,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 
 	// if target was in range deal with weapon fire
-	if(hitChance > 0)
+	if(baseHitChance > 0)
 	{
 		/* note when the weapon fired */
 		psWeap->lastFired = gameTime;
@@ -289,6 +290,10 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		}
 	}
 
+	// apply experience accuracy modifiers to the base
+	//hit chance, not to the final hit chance
+	resultHitChance = baseHitChance;
+
 	// add the attacker's experience
 	if (psAttacker->type == OBJ_DROID)
 	{
@@ -296,7 +301,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		SDWORD	cmdLevel = cmdGetCommanderLevel((DROID *)psAttacker);
 
 		// increase total accuracy by EXP_ACCURACY_BONUS % for each experience level
-		hitChance += EXP_ACCURACY_BONUS * MAX(level, cmdLevel) * hitChance / 100;
+		resultHitChance += EXP_ACCURACY_BONUS * MAX(level, cmdLevel) * baseHitChance / 100;
 	}
 
 	// subtract the defender's experience
@@ -306,7 +311,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		SDWORD	cmdLevel = cmdGetCommanderLevel((DROID *)psTarget);
 
 		// decrease weapon accuracy by EXP_ACCURACY_BONUS % for each experience level
-		hitChance -= EXP_ACCURACY_BONUS * MAX(level, cmdLevel) * hitChance / 100;
+		resultHitChance -= EXP_ACCURACY_BONUS * MAX(level, cmdLevel) * baseHitChance / 100;
 
 	}
 
@@ -321,7 +326,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 			return;
 			break;
 		case FOM_PARTIAL:
-			hitChance = FOM_PARTIAL_ACCURACY_PENALTY * hitChance / 100;
+			resultHitChance = FOM_PARTIAL_ACCURACY_PENALTY * resultHitChance / 100;
 			break;
 		case FOM_YES:
 			// can fire while moving
@@ -333,13 +338,17 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	//if (psTarget->visible[psAttacker->player] < VIS_ATTACK_MOD_LEVEL)
 	if (psTarget->visible[psAttacker->player] == 0)		//not sure if this can ever be > 0 here
 	{
-		hitChance = INVISIBLE_ACCURACY_PENALTY * hitChance / 100;
+		resultHitChance = INVISIBLE_ACCURACY_PENALTY * resultHitChance / 100;
 	}
+
+	// cap resultHitChance to 0-100%, just in case
+	resultHitChance = max(0, resultHitChance);
+	resultHitChance = min(100, resultHitChance);
 
 	HIT_ROLL(dice);
 
 	// see if we were lucky to hit the target
-	if (dice <= hitChance)
+	if (dice <= resultHitChance)
 	{
 		/* Kerrrbaaang !!!!! a hit */
 		//Watermelon:Target prediction
@@ -375,15 +384,15 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		goto missed;
 	}
 
-	debug(LOG_SENSOR, "combFire: %u[%s]->%u: hitChance=%d, visibility=%hhu : ",
-	      psAttacker->id, psStats->pName, psTarget->id, hitChance, psTarget->visible[psAttacker->player]);
+	debug(LOG_SENSOR, "combFire: %u[%s]->%u: resultHitChance=%d, visibility=%hhu : ",
+	      psAttacker->id, psStats->pName, psTarget->id, resultHitChance, psTarget->visible[psAttacker->player]);
 
 	return;
 
 missed:
 	/* Deal with a missed shot */
 
-	missDist = 2 * (100 - hitChance);
+	missDist = 2 * (100 - resultHitChance);
 	missDir = rand() % BUL_MAXSCATTERDIR;
 	missX = aScatterDir[missDir].x * missDist + psTarget->x + minOffset;
 	missY = aScatterDir[missDir].y * missDist + psTarget->y + minOffset;
