@@ -3917,6 +3917,6 @@ void intDisplayAllyIcon(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD
 
 //	iV_SetTextColour(-1);
 //	sprintf(&str,"%d",i);
-//	pie_DrawText(&str, x+6, y-1 );
+//	iV_DrawText(&str, x+6, y-1 );
 
 }

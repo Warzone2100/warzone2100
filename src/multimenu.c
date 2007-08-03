@@ -293,7 +293,7 @@ void displayCamTypeBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD 
 	} else {
 		iV_SetTextColour(PIE_TEXT_LIGHTBLUE);
 	}
-	pie_DrawText(buffer, x+2, y+12);
+	iV_DrawText(buffer, x+2, y+12);
 
 }
 
@@ -314,7 +314,7 @@ void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWO
 	} else {
 		sprintf(buffer, "%iP", (int)(psWidget->UserData));
 	}
-	pie_DrawText(buffer, x+2, y+12);
+	iV_DrawText(buffer, x+2, y+12);
 
 }
 

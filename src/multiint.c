@@ -649,7 +649,7 @@ FAIL:
 	if(safeSearch)
 	{
 		iV_SetFont(FEFont);
-		pie_DrawText(_("Searching"), D_W+260, D_H+460);
+		iV_DrawText(_("Searching"), D_W+260, D_H+460);
 	}
 }
 

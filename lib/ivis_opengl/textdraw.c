@@ -255,7 +255,7 @@ static UBYTE ExtentsMode = EXTENTS_USEMAXWIDTH;
 //
 // Returns y coord of next text line.
 //
-UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify)
+UDWORD iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify)
 {
 	int i;
 	int jx = x;		// Default to left justify.
@@ -390,7 +390,7 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 		}
 
 		// draw the text.
-		pie_DrawText(FString, jx, jy);
+		iV_DrawText(FString, jx, jy);
 
 
 //DBPRINTF(("[%s] @ %d,%d\n",FString,jx,jy));
@@ -468,7 +468,7 @@ UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Widt
 
 
 
-void pie_DrawText(const char *string, UDWORD x, UDWORD y)
+void iV_DrawText(const char *string, UDWORD x, UDWORD y)
 {
 	IVIS_FONT *Font = &iVFonts[ActiveFontID];
 

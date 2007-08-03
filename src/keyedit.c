@@ -336,11 +336,11 @@ void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 	iV_SetFont(WFont);											// font
 	iV_SetTextColour(-1);										//colour
 
-	pie_DrawText(psMapping->pName, x + 2, y + (psWidget->height / 2) + 3);
+	iV_DrawText(psMapping->pName, x + 2, y + (psWidget->height / 2) + 3);
 
 	// draw binding
 	keyMapToString(sKey,psMapping);
-	pie_DrawText(sKey, x + 370, y + (psWidget->height / 2) + 3);
+	iV_DrawText(sKey, x + 370, y + (psWidget->height / 2) + 3);
 
 	return;
 }

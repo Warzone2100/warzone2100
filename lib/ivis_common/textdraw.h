@@ -21,9 +21,6 @@
 #define _INCLUDED_TEXTDRAW_
 
 #include "ivisdef.h"
-#define iV_DrawText			pie_DrawText
-#define iV_DrawText270(text, x, y) \
-	iV_DrawTextRotated(text, x, y, 270.f)
 
 #define PIE_TEXT_WHITE				(-1)
 #define PIE_TEXT_LIGHTBLUE			(-2)
@@ -48,7 +45,7 @@ extern void iV_SetTextColour(SWORD Index);
 #define ASCII_NEWLINE		('@')
 #define ASCII_COLOURMODE	('#')
 
-// Valid values for "Justify" argument of pie_DrawFormattedText().
+// Valid values for "Justify" argument of iV_DrawFormattedText().
 
 enum {
 	FTEXT_LEFTJUSTIFY,			// Left justify.
@@ -66,9 +63,10 @@ extern void pie_SetFormattedTextFlags(UDWORD Flags);
 extern UDWORD pie_GetFormattedTextFlags(void);
 extern void pie_StartTextExtents(void);
 extern void pie_FillTextExtents(int BorderThickness,UBYTE r,UBYTE g,UBYTE b,BOOL Alpha);
-extern UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify);
 
-extern void pie_DrawText(const char *string, UDWORD x, UDWORD y);
+extern UDWORD iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify);
+
+extern void iV_DrawText(const char* string, UDWORD x, UDWORD y);
 extern void iV_DrawTextRotated(const char* string, unsigned int XPos, unsigned int YPos, float rotation);
 
 #endif // _INCLUDED_TEXTDRAW_

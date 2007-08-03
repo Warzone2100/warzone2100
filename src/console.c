@@ -493,10 +493,11 @@ UDWORD	exceed;
 		psMessage = psMessage->psNext)
 	{
  		/* Draw the text string */
-		MesY = pie_DrawFormattedText(psMessage->text,
-									mainConsole.topX,MesY,
-									mainConsole.width,
-									psMessage->JustifyType);
+		MesY = iV_DrawFormattedText(psMessage->text,
+		                            mainConsole.topX,
+		                            MesY,
+                                    mainConsole.width,
+                                    psMessage->JustifyType);
 		/* Move on */
 		numProcessed++;
 	}
@@ -582,7 +583,7 @@ UDWORD	MesY;
 
 		buildWidth = iV_GetTextWidth(buildData);
 
-		pie_DrawText(buildData,((mainConsole.topX+mainConsole.width) - buildWidth - 16),
+		iV_DrawText(buildData,((mainConsole.topX+mainConsole.width) - buildWidth - 16),
 			mainConsole.topY);
 	}
 	*/
@@ -591,16 +592,18 @@ UDWORD	MesY;
 	for(i=count-1; i>0; i--)
 	{
 		/* Draw the text string */
-		MesY = pie_DrawFormattedText(consoleStorage[history[i]].text,
-									mainConsole.topX,MesY,
-									mainConsole.width,
-									consoleStorage[history[i]].JustifyType);
+		MesY = iV_DrawFormattedText(consoleStorage[history[i]].text,
+                                    mainConsole.topX,
+                                    MesY,
+                                    mainConsole.width,
+                                    consoleStorage[history[i]].JustifyType);
 	}
 	/* Draw the top one */
-	(void) pie_DrawFormattedText(consoleStorage[history[0]].text,
-									mainConsole.topX,MesY,
-									mainConsole.width,
-									consoleStorage[history[0]].JustifyType);
+	iV_DrawFormattedText(consoleStorage[history[0]].text,
+	                     mainConsole.topX,
+	                     MesY,
+	                     mainConsole.width,
+	                     consoleStorage[history[0]].JustifyType);
 
 	/* Return how much to drop the existing console by... Fix this for lines>screenWIDTH */
 	if(count)
@@ -628,10 +631,11 @@ UDWORD	MesY;
 			while(!bQuit && consoleStorage[thisIndex].id && count<8)
 			{
  				/* Draw the text string */
-				MesY = pie_DrawFormattedText(consoleStorage[thisIndex].text,
-											mainConsole.topX,MesY,
-											mainConsole.width,
-											consoleStorage[thisIndex].JustifyType);
+				MesY = iV_DrawFormattedText(consoleStorage[thisIndex].text,
+				                            mainConsole.topX,
+				                            MesY,
+				                            mainConsole.width,
+				                            consoleStorage[thisIndex].JustifyType);
 				count++;
 				if(thisIndex) thisIndex--;
 				else thisIndex = MAX_CONSOLE_MESSAGES-1;

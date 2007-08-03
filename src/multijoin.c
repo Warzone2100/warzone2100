@@ -118,11 +118,11 @@ BOOL intDisplayMultiJoiningStatus(UBYTE joinCount)
 	RenderWindowFrame(&FrameNormal, x, y ,w, h);		// draw a wee blu box.
 
 	// display how far done..
-	pie_DrawText(_("Players Still Joining"),
+	iV_DrawText(_("Players Still Joining"),
 					x+(w/2)-(iV_GetTextWidth(_("Players Still Joining"))/2),
 					y+(h/2)-8 );
 	sprintf(sTmp,"%d%%", PERCENT((NetPlay.playercount-joinCount),NetPlay.playercount) );
-	pie_DrawText(sTmp ,x + (w / 2) - 10, y + (h / 2) + 10);
+	iV_DrawText(sTmp ,x + (w / 2) - 10, y + (h / 2) + 10);
 
 	return TRUE;
 }

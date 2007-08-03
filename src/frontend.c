@@ -1425,7 +1425,7 @@ static void displayTitleBitmap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	snprintf( sTmp, sTmpSize, "Version %s - Built %s", VERSION, __DATE__ );
 #endif
 
-	iV_DrawText270(sTmp, pie_GetVideoBufferWidth() - 10, pie_GetVideoBufferHeight() - 15);
+	iV_DrawTextRotated(sTmp, pie_GetVideoBufferWidth() - 10, pie_GetVideoBufferHeight() - 15, 270.f);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1522,7 +1522,7 @@ void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *
 	fy = yOffset + psWidget->y + iV_GetTextWidth(psLab->aText) ;
 
 
-	iV_DrawText270( psLab->aText, fx, fy);
+	iV_DrawTextRotated(psLab->aText, fx, fy, 270.f);
 }
 
 
