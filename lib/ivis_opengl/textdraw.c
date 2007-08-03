@@ -30,6 +30,8 @@
 #include "lib/ivis_common/textdraw.h"
 #include "lib/ivis_common/bitimage.h"
 
+#include <GL/gl.h>
+
 /***************************************************************************/
 /*
  *	Local Definitions
@@ -70,7 +72,6 @@ static IVIS_FONT iVFonts[MAX_IVIS_FONTS];
 /***************************************************************************/
 static void pie_BeginTextRender(SWORD ColourIndex);
 static void pie_TextRender(IMAGEFILE *ImageFile, UWORD ID, int x, int y);
-static void pie_TextRender270(IMAGEFILE *ImageFile, UWORD ImageID, int x, int y);
 
 /***************************************************************************/
 /*
@@ -518,32 +519,16 @@ void pie_DrawText(const char *string, UDWORD x, UDWORD y)
 }
 
 
-void pie_DrawText270(const char *String, int XPos, int YPos)
+void iV_DrawTextRotated(const char* string, unsigned int XPos, unsigned int YPos, float rotation)
 {
-	IVIS_FONT *Font = &iVFonts[ActiveFontID];
+	glTranslatef((float)XPos, (float)YPos, 0.f);
+	glRotatef(rotation, 0.f, 0.f, 1.f);
 
-	YPos += iV_GetImageWidth(Font->FontFile, Font->AsciiTable[33]) + 1;
+	// Now call iV_DrawText at position (0,0) of the translated matrix
+	iV_DrawText(string, 0, 0);
 
-	pie_BeginTextRender(Font->FontColourIndex);
-
-	while (*String != 0)
-	{
-		unsigned int Index = (unsigned char)*String;
-
-		if (Index != ASCII_SPACE)
-		{
-			UWORD ImageID = Font->AsciiTable[Index];
-			pie_TextRender270(Font->FontFile, ImageID, XPos, YPos);
-
-			YPos -= (iV_GetImageWidth(Font->FontFile, ImageID) + 1);
-		}
-		else
-		{
-			YPos -= Font->FontSpaceSize;
-		}
-
-		++String;
-	}
+	// Reset the tranlation matrix
+	glLoadIdentity();
 }
 
 void pie_BeginTextRender(SWORD ColourIndex)
@@ -592,56 +577,5 @@ static void pie_TextRender(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 	}
 	pie_SetColourKeyedBlack(TRUE);
 	pie_DrawImageFileID(ImageFile, ID, x, y);
-	pie_SetColourKeyedBlack(FALSE);
-}
-
-static void pie_TextRender270(IMAGEFILE *ImageFile, UWORD ImageID, int x, int y)
-{
-	UDWORD Red;
-	UDWORD Green;
-	UDWORD Blue;
-	UDWORD Alpha = MAX_UB_LIGHT;
-	IMAGEDEF *Image;
-	PIEIMAGE pieImage;
-	PIERECT dest;
-	iColour* psPalette;
-
-	Image = &(ImageFile->ImageDefs[ImageID]);
-
-	//not coloured yet
-	if (TextColourIndex == PIE_TEXT_WHITE)
-	{
-		pie_SetColour(PIE_TEXT_WHITE_COLOUR & 0x80ffffff);//special case semi transparent for rotated text
-	}
-	else if (TextColourIndex == PIE_TEXT_LIGHTBLUE)
-	{
-		pie_SetColour(PIE_TEXT_LIGHTBLUE_COLOUR);
-	}
-	else if (TextColourIndex == PIE_TEXT_DARKBLUE)
-	{
-		pie_SetColour(PIE_TEXT_DARKBLUE_COLOUR);
-	}
-	else
-	{
-		psPalette = pie_GetGamePal();
-		Red  = psPalette[TextColourIndex].r;
-		Green = psPalette[TextColourIndex].g;
-		Blue = psPalette[TextColourIndex].b;
-		pie_SetColour(((Alpha << 24) | (Red << 16) | (Green << 8) | Blue));
-	}
-
-	pie_SetRendMode(REND_ALPHA_TEXT);
-	pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
-	pieImage.tu = Image->Tu;
-	pieImage.tv = Image->Tv;
-	pieImage.tw = Image->Width;
-	pieImage.th = Image->Height;
-	dest.x = x + Image->YOffset;
-	dest.y = y + Image->XOffset - Image->Width;
-	dest.w = Image->Width;
-	dest.h = Image->Height;
-
-	pie_SetColourKeyedBlack(TRUE);
-	pie_DrawImage270(&pieImage, &dest);
 	pie_SetColourKeyedBlack(FALSE);
 }

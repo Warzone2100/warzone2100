@@ -949,43 +949,6 @@ void pie_DrawImage(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style)
 }
 
 /***************************************************************************
- * pie_Drawimage270
- *
- * General purpose blit function
- * Will support zbuffering, non_textured, coloured lighting and alpha effects
- *
- * replaces all ivis blit functions
- *
- ***************************************************************************/
-
-void pie_DrawImage270( PIEIMAGE *image, PIERECT *dest )
-{
-	PIELIGHT colour;
-
-	polyCount++;
-
-	pie_SetTexturePage(image->texPage);
-
-	colour.argb = pie_GetColour();
-
-	glColor4ub(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a);
-
-	glBegin(GL_TRIANGLE_FAN);
-		glTexCoord2f(image->tu + image->tw, image->tv);
-		glVertex2f(dest->x, dest->y);
-
-		glTexCoord2f(image->tu + image->tw, image->tv + image->th);
-		glVertex2f(dest->x + dest->h, dest->y);
-
-		glTexCoord2f(image->tu, image->tv + image->th);
-		glVertex2f(dest->x + dest->h, dest->y + dest->w);
-
-		glTexCoord2f(image->tu, image->tv);
-		glVertex2f(dest->x, dest->y + dest->w);
-	glEnd();
-}
-
-/***************************************************************************
  * pie_DrawRect
  *
  * universal rectangle function for hardware

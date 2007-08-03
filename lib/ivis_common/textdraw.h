@@ -22,7 +22,8 @@
 
 #include "ivisdef.h"
 #define iV_DrawText			pie_DrawText
-#define iV_DrawText270		pie_DrawText270
+#define iV_DrawText270(text, x, y) \
+	iV_DrawTextRotated(text, x, y, 270.f)
 
 #define PIE_TEXT_WHITE				(-1)
 #define PIE_TEXT_LIGHTBLUE			(-2)
@@ -68,6 +69,6 @@ extern void pie_FillTextExtents(int BorderThickness,UBYTE r,UBYTE g,UBYTE b,BOOL
 extern UDWORD pie_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify);
 
 extern void pie_DrawText(const char *string, UDWORD x, UDWORD y);
-extern void pie_DrawText270(const char *String, int XPos, int YPos);
+extern void iV_DrawTextRotated(const char* string, unsigned int XPos, unsigned int YPos, float rotation);
 
 #endif // _INCLUDED_TEXTDRAW_

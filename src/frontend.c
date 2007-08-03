@@ -1425,7 +1425,7 @@ static void displayTitleBitmap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	snprintf( sTmp, sTmpSize, "Version %s - Built %s", VERSION, __DATE__ );
 #endif
 
-	pie_DrawText270(sTmp, pie_GetVideoBufferWidth()-10, pie_GetVideoBufferHeight()-15);
+	iV_DrawText270(sTmp, pie_GetVideoBufferWidth() - 10, pie_GetVideoBufferHeight() - 15);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
