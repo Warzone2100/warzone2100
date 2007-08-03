@@ -1876,8 +1876,8 @@ V-Mantis-Lancer				_("Mantis Lancer VTOL")
 V-Mantis-HPV				_("Mantis HPV VTOL")
 
 //Repair
-A-Rep-Cobra-Trk				_("Cobra Repair Trucks")
-A-Rep-Mantis-Trk			_("Mantis Repair Trucks")
+A-Rep-Cobra-Trk				_("Cobra Repair Tracks")
+A-Rep-Mantis-Trk			_("Mantis Repair Tracks")
 
 H-Scorp-Trk-Lancer			_("Scorpion Lancer Tracks")
 H-Scorp-Trk-HC				_("Scorpion Heavy Cannon Tracks")
