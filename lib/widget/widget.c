@@ -53,7 +53,7 @@ static WIDGET	*psRetWidget;
 static	BOOL	bWidgetsActive = TRUE;
 
 /* The widget the mouse is over this update */
-static WIDGET	*psMouseOverWidget;
+static WIDGET	*psMouseOverWidget = NULL;
 
 static UDWORD	pressed, released;
 
@@ -165,7 +165,6 @@ void widgReleaseWidgetList(WIDGET *psWidgets)
 			break;
 		}
 	}
-
 }
 
 /* Release a screen and all its associated data */
