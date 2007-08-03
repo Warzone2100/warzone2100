@@ -180,7 +180,7 @@ unsigned int iV_GetTextWidth(const char *String)
 }
 
 
-unsigned int iV_GetCharWidth(const char Char)
+unsigned int iV_GetCharWidth(char Char)
 {
 	UWORD ImageID;
 	IVIS_FONT* Font = &iVFonts[ActiveFontID];
