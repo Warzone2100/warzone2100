@@ -6093,34 +6093,51 @@ void printStructureInfo(STRUCTURE *psStructure)
 	switch (psStructure->pStructureType->type)
 	{
 	case REF_HQ:
-		#ifdef DEBUG
-		CONPRINTF(ConsoleString,(ConsoleString,"%s - %d Units assigned - Unique ID %d",
-			getStatName(psStructure->pStructureType), countAssignedDroids(psStructure),
-			psStructure->id));
-		#else
-		CONPRINTF(ConsoleString,(ConsoleString,"%s - %d Units assigned",
-			getStatName(psStructure->pStructureType), countAssignedDroids(psStructure)));
-		#endif
+#ifdef DEBUG
+		if (getDebugMappingStatus())
+		{
+			CONPRINTF(ConsoleString, (ConsoleString, "%s - %d Units assigned - ID %d - sensor range %hu power %hu - ECM %u",
+			          getStatName(psStructure->pStructureType), countAssignedDroids(psStructure),
+			          psStructure->id, psStructure->sensorRange, psStructure->sensorPower, psStructure->ecmPower));
+		}
+		else
+#endif
+		{
+			CONPRINTF(ConsoleString, (ConsoleString, _("%s - %d Units assigned"),
+			          getStatName(psStructure->pStructureType), countAssignedDroids(psStructure)));
+		}
 		break;
 	case REF_DEFENSE:
-		if(psStructure->pStructureType->pSensor != NULL) {
-			#ifdef DEBUG
-			CONPRINTF(ConsoleString,(ConsoleString,"%s - %d Units assigned - Unique ID %d",
+		if (psStructure->pStructureType->pSensor == NULL) 
+		{
+			break;
+		}
+#ifdef DEBUG
+		else if (getDebugMappingStatus())
+		{
+			CONPRINTF(ConsoleString, (ConsoleString, "%s - %d Units assigned - ID %d - sensor range %hu power %hu - ECM %u",
 				getStatName(psStructure->pStructureType), countAssignedDroids(psStructure),
-				psStructure->id));
-			#else
-			CONPRINTF(ConsoleString,(ConsoleString,"%s - %d Units assigned",
+				psStructure->id, psStructure->sensorRange, psStructure->sensorPower, psStructure->ecmPower));
+		}
+#endif
+		else
+		{
+			CONPRINTF(ConsoleString, (ConsoleString, _("%s - %d Units assigned"),
 				getStatName(psStructure->pStructureType), countAssignedDroids(psStructure)));
-			#endif
 		}
 		break;
 	case REF_RESOURCE_EXTRACTOR:
 #ifdef DEBUG
-		CONPRINTF(ConsoleString,(ConsoleString,"%s - Unique ID %d",
-			getStatName(psStructure->pStructureType), psStructure->id));
-#else
-		CONPRINTF(ConsoleString,(ConsoleString,getStatName(psStructure->pStructureType)));
+		if (getDebugMappingStatus())
+		{
+			CONPRINTF(ConsoleString,(ConsoleString, "%s - Unique ID %d",
+			          getStatName(psStructure->pStructureType), psStructure->id));
+		}
+		else
 #endif
+		{
+			CONPRINTF(ConsoleString, (ConsoleString, getStatName(psStructure->pStructureType)));
+		}
 		break;
 	case REF_POWER_GEN:
 		psPowerGen = &psStructure->pFunctionality->powerGenerator;
@@ -6133,24 +6150,34 @@ void printStructureInfo(STRUCTURE *psStructure)
 			}
 		}
 #ifdef DEBUG
-		CONPRINTF(ConsoleString,(ConsoleString,"%s -  Connected %d of %d - Unique ID %d",
-			getStatName(psStructure->pStructureType), numConnected, NUM_POWER_MODULES,
-			psStructure->id));
-#else
-		CONPRINTF(ConsoleString,(ConsoleString,_("%s - Connected %d of %d"),
-			getStatName(psStructure->pStructureType), numConnected, NUM_POWER_MODULES));
+		if (getDebugMappingStatus())
+		{
+			CONPRINTF(ConsoleString, (ConsoleString, "%s -  Connected %d of %d - Unique ID %d",
+			          getStatName(psStructure->pStructureType), numConnected, NUM_POWER_MODULES,
+			          psStructure->id));
+		}
+		else
 #endif
+		{
+			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Connected %d of %d"),
+			          getStatName(psStructure->pStructureType), numConnected, NUM_POWER_MODULES));
+		}
 		break;
 	default:
 #ifdef DEBUG
-		CONPRINTF(ConsoleString,(ConsoleString,"%s - Damage %d%% - Unique ID %d",
-			getStatName(psStructure->pStructureType), 100 - PERCENT(psStructure->body,
-			structureBody(psStructure)), psStructure->id));
-#else
-		CONPRINTF(ConsoleString,(ConsoleString,
-			getStatName(psStructure->pStructureType), 100 - PERCENT(psStructure->body,
-			structureBody(psStructure))));
+		if (getDebugMappingStatus())
+		{
+			CONPRINTF(ConsoleString, (ConsoleString, "%s - Damage %d%% - Unique ID %d",
+			          getStatName(psStructure->pStructureType), 100 - PERCENT(psStructure->body,
+			          structureBody(psStructure)), psStructure->id));
+		}
+		else
 #endif
+		{
+			CONPRINTF(ConsoleString, (ConsoleString,
+			          getStatName(psStructure->pStructureType), 100 - PERCENT(psStructure->body,
+			          structureBody(psStructure))));
+		}
 		break;
 	}
 }
