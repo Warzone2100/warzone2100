@@ -82,9 +82,6 @@ extern char *strresGetString(STR_RES *psRes, UDWORD id);
 /* Load a string resource file */
 extern BOOL strresLoad(STR_RES* psRes, const char* fileName);
 
-/* Return the the length of a char */
-extern UDWORD stringLen(const char *pStr);
-
 /* Copy a char */
 extern void stringCpy(char *pDest, const char *pSrc);
 

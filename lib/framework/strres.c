@@ -231,7 +231,7 @@ BOOL strresGetIDString(STR_RES *psRes, const char *pIDStr, char **ppStoredID)
 
 
 /* Store a string */
-BOOL strresStoreString(STR_RES *psRes, char *pID, char *pString)
+BOOL strresStoreString(STR_RES *psRes, char *pID, const char *pString)
 {
 	STR_ID		*psID;
 	char		*pNew;
@@ -253,7 +253,7 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, char *pString)
 			abort();
 			return FALSE;
 		}
-		psID->pIDStr = (char*)malloc(sizeof(char) * (stringLen(pID) + 1));
+		psID->pIDStr = (char*)malloc(sizeof(char) * (strlen(pID) + 1));
 		if (!psID->pIDStr)
 		{
 			debug( LOG_ERROR, "strresStoreString: Out of memory" );
@@ -301,7 +301,7 @@ BOOL strresStoreString(STR_RES *psRes, char *pID, char *pString)
 	}
 
 	// Allocate a copy of the string
-	pNew = (char*)malloc(sizeof(char) * (stringLen(pString) + 1));
+	pNew = (char*)malloc(sizeof(char) * (strlen(pString) + 1));
 	if (!pNew)
 	{
 		debug( LOG_ERROR, "strresStoreString: Out of memory" );
@@ -374,20 +374,6 @@ BOOL strresLoad(STR_RES* psRes, const char* fileName)
 	PHYSFS_close(fileHandle);
 
 	return TRUE;
-}
-
-
-/* Return the the length of a char */
-UDWORD stringLen(const char *pStr)
-{
-	UDWORD	count=0;
-
-	while (*pStr++)
-	{
-		count += 1;
-	}
-
-	return count;
 }
 
 /* Copy a char */
