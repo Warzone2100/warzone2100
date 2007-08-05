@@ -29,7 +29,6 @@
 #include "lib/widget/widget.h"
 
 #include "cdspan.h"
-#include "csnap.h"
 #include "message.h"
 
 // store the objects that are being used for the object bar
@@ -316,8 +315,6 @@ as big as Pie View in Research Msg now*/
 
 /* pointer to hold the imd to use for a new template in the design screen */
 extern iIMDShape	*pNewDesignIMD;
-
-extern CURSORSNAP InterfaceSnap;
 
 extern BOOL ClosingMessageView;
 extern BOOL ClosingIntelMap;

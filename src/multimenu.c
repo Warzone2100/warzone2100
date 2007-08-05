@@ -44,7 +44,6 @@
 #include "loadsave.h"		// for drawbluebox
 #include "console.h"
 #include "ai.h"
-#include "csnap.h"
 #include "frend.h"
 #include "lib/netplay/netplay.h"
 #include "multiplay.h"
@@ -272,8 +271,6 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWO
 	{
 		iV_DrawImage(FrontImages,IMAGE_WEE_GUY,(x+(6*count)+6),y+16);
 	}
-
-	AddCursorSnap(&InterfaceSnap, (SWORD)(x+5),(SWORD)(y+5),psWidget->formID,psWidget->id,NULL);
 
 }
 

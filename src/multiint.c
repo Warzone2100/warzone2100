@@ -54,7 +54,6 @@
 #include "intdisplay.h"
 #include "design.h"
 #include "hci.h"
-#include "csnap.h"
 #include "power.h"
 #include "loadsave.h"			// for blueboxes.
 // FIXME Direct iVis implementation include!
@@ -429,8 +428,6 @@ void runConnectionScreen(void )
 	static char addr[128];
 	void * finalconnection;
 
-	processFrontendSnap(TRUE);
-
 	if(SettingsUp ==1)
 	{
 		id = widgRunScreen(psConScreen);				// Run the current set of widgets
@@ -510,8 +507,6 @@ void runConnectionScreen(void )
 			changeTitleMode(GAMEFIND);
 		}
 	}
-
-	StartCursorSnap(&InterfaceSnap);
 
 	widgDisplayScreen(psWScreen);							// show the widgets currently running
 	if(SettingsUp == 1)
@@ -598,8 +593,6 @@ void runGameFind(void )
 		addGames();									//redraw list
 	}
 
-	processFrontendSnap(FALSE);
-
 	id = widgRunScreen(psWScreen);						// Run the current set of widgets
 
 	if(id == CON_CANCEL)								// ok
@@ -642,8 +635,6 @@ void runGameFind(void )
 	}
 
 FAIL:
-
-	StartCursorSnap(&InterfaceSnap);
 
 	widgDisplayScreen(psWScreen);								// show the widgets currently running
 	if(safeSearch)
@@ -2232,8 +2223,6 @@ void runMultiOptions(void)
 	KEY_CODE		k;
 	char			str[3];
 
-	processFrontendSnap(FALSE);
-
 	frontendMultiMessages();
 
 
@@ -2376,8 +2365,6 @@ void runMultiOptions(void)
 		id = widgRunScreen(psWScreen);								// run the widgets.
 		processMultiopWidgets(id);
 	}
-
-	StartCursorSnap(&InterfaceSnap);
 
 	widgDisplayScreen(psWScreen);									// show the widgets currently running
 
@@ -2663,10 +2650,6 @@ void displayChatEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *p
 	UDWORD y = yOffset+psWidget->y -4;			// 4 is the magic number.
 	iV_Line(x, y, x+psWidget->width , y, iV_PaletteNearestColour(100,100,160) );
 
-	AddCursorSnap(&InterfaceSnap,
-				(SWORD)(x+(psWidget->width/2)) ,
-				(SWORD)(y+(psWidget->height/2)) ,psWidget->formID,psWidget->id,NULL);
-
 	return;
 }
 
@@ -2755,9 +2738,6 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD 
 		iV_DrawText(tmp, x + 17, y + 33);
 	}
 
-	AddCursorSnap(&InterfaceSnap,
-				(SWORD)(x+(psWidget->width/2)),
-				(SWORD)(y+(psWidget->height/2)),psWidget->formID,psWidget->id,NULL);
 }
 
 
@@ -3040,9 +3020,6 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 		//	iV_DrawImage(FrontImages,IMAGE_PLAYER_PC,x+2,y+9);
 		//}
 	}
-	AddCursorSnap(&InterfaceSnap,
-				(SWORD)(x+(psWidget->width/2)),
-				(SWORD)(y+(psWidget->height/2)),psWidget->formID,psWidget->id,NULL);
 
 }
 
@@ -3079,9 +3056,6 @@ void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWOR
 		pie_UniTransBoxFill(x,y, x+psWidget->width+psWidget->height ,y+psWidget->height,(FILLRED<<16) | (FILLGREEN<<8) | FILLBLUE, FILLTRANS);
 	}
 
-	AddCursorSnap(&InterfaceSnap,
-					(SWORD)(x+(psWidget->width/2)),
-					(SWORD)(y+(psWidget->height/2)),psWidget->formID,psWidget->id,NULL);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -3182,11 +3156,6 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *p
 	if (Grey) {
 		// disabled, render something over it!
 		iV_TransBoxFill(x,y,x+psWidget->width,y+psWidget->height);
-	} else {
-		// add a snap.
-		AddCursorSnap(&InterfaceSnap,
-						(SWORD)(x+(psWidget->width/2)),
-						(SWORD)(y+(psWidget->height/2)),psWidget->formID,psWidget->id,NULL);
 	}
 }
 

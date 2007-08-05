@@ -476,10 +476,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/console.h" />
-		<Unit filename="src/csnap.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/csnap.h" />
 		<Unit filename="src/data.c">
 			<Option compilerVar="CC" />
 		</Unit>

@@ -47,7 +47,6 @@
 #include "scriptextern.h"	// for tutorial
 #include "keybind.h"
 #include "multiplay.h"
-#include "csnap.h"
 #include "ingameop.h"
 #include "mission.h"
 #include "transporter.h"
@@ -94,8 +93,6 @@ static BOOL addQuitOptions(void)
 	W_FORMINIT		sFormInit;
 //	UWORD WindowWidth;
 
-	DisableCursorSnapsExcept(INTINGAMEOP);
-
 	if (widgGetFromID(psWScreen,INTINGAMEOP))
 	{
 		widgDelete(psWScreen, INTINGAMEOP);		// get rid of the old stuff.
@@ -122,13 +119,8 @@ static BOOL addQuitOptions(void)
 	//resume
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_Y, _("Resume Game"), OPALIGN);
 
-
-	SetCurrentSnapID(&InterfaceSnap,INTINGAMEOP_RESUME);
-
 	//  quit
 	addIGTextButton(INTINGAMEOP_QUIT_CONFIRM, INTINGAMEOP_2_Y, _("Quit"), OPALIGN);
-
-	SetMousePos(INTINGAMEOP3_X + INTINGAMEOP_1_X, INTINGAMEOP3_Y + INTINGAMEOP_1_Y); // move mouse to resume.
 
 	return TRUE;
 }
@@ -137,8 +129,6 @@ static BOOL addQuitOptions(void)
 static BOOL _addSlideOptions(void)
 {
 	W_FORMINIT		sFormInit;
-
-	DisableCursorSnapsExcept(INTINGAMEOP);
 
 	if (widgGetFromID(psWScreen,INTINGAMEOP))
 	{
@@ -177,8 +167,6 @@ static BOOL _addSlideOptions(void)
 	addIGTextButton(INTINGAMEOP_CDVOL, INTINGAMEOP_3_Y, _("Music Volume"), WBUT_PLAIN);
 	addFESlider(INTINGAMEOP_CDVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOP_3_Y-5,
 				AUDIO_VOL_MAX, (int)(sound_GetMusicVolume() * 100), INTINGAMEOP_CDVOL);
-
-	SetCurrentSnapID(&InterfaceSnap, INTINGAMEOP_RESUME);
 
 	/*
 	// gamma
@@ -219,7 +207,6 @@ static BOOL _intAddInGameOptions(void)
 
 
 	setWidgetsStatus(TRUE);
-	DisableCursorSnapsExcept(INTINGAMEOP);
 
 	//if already open, then close!
 	if (widgGetFromID(psWScreen,INTINGAMEOP))
@@ -283,8 +270,6 @@ static BOOL _intAddInGameOptions(void)
 	// add 'resume'
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_Y, _("Resume Game"), OPALIGN);
 
-	SetCurrentSnapID(&InterfaceSnap,INTINGAMEOP_RESUME);
-
 	// add 'options'
 	addIGTextButton(INTINGAMEOP_OPTIONS, INTINGAMEOP_2_Y, _("Options"), OPALIGN);
 
@@ -299,8 +284,8 @@ static BOOL _intAddInGameOptions(void)
 
 	intMode		= INT_INGAMEOP;			// change interface mode.
 	InGameOpUp	= TRUE;					// inform interface.
-	SetMousePos(INTINGAMEOP_X + INTINGAMEOP_1_X, INTINGAMEOP_Y + INTINGAMEOP_1_Y); // move mouse to resume.
 
+	// TODO: find out if the line below is needed (may be for old csnap stuff)
 	frameSetCursorFromRes(IDC_DEFAULT);						// reset cursor	(sw)
 
 	return TRUE;
@@ -328,7 +313,6 @@ static void ProcessOptionFinished(void)
 	}
 
 
-	EnableAllCursorSnaps();
 }
 
 void intCloseInGameOptionsNoAnim(BOOL bResetMissionWidgets)
@@ -391,15 +375,6 @@ BOOL intCloseInGameOptions(BOOL bPutUpLoadSave, BOOL bResetMissionWidgets)
     return TRUE;
 }
 
-// ////////////////////////////////////////////////////////////////////////////
-// In Game Options house keeping stuff.
-BOOL intRunInGameOptions(void)
-{
-
-	processFrontendSnap(FALSE);
-
-	return TRUE;
-}
 
 // ////////////////////////////////////////////////////////////////////////////
 // process clicks made by user.
@@ -451,7 +426,6 @@ void intProcessInGameOptions(UDWORD id)
 	case INTINGAMEOP_3DFXVOL:
 	case INTINGAMEOP_CDVOL:
 //	case INTINGAMEOP_GAMMA:
-		SetMousePos(INTINGAMEOP2_X + INTINGAMEOP_MID + 5, mouseY());	// move mouse
 		break;
 
 

@@ -48,7 +48,6 @@
 #include "group.h"
 #include "text.h"
 #include "frontend.h"		// for displaytextoption.
-#include "csnap.h"			// cursor snapping
 #include "intdisplay.h"
 #include "winmain.h"
 #include "display.h"
@@ -3383,7 +3382,6 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 			sButInit.y			= MISSION_2_Y-8;
 			sButInit.pText		= _("Quit To Main Menu");
 			widgAddButton(psWScreen, &sButInit);
-			intSetCurrentCursorPosition(&InterfaceSnap,sButInit.id);
 		}
         else
         {
@@ -3392,7 +3390,6 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 			sButInit.id			= IDMISSIONRES_CONTINUE;
 			sButInit.pText		= _("Continue Game");//"Continue Game";
 			widgAddButton(psWScreen, &sButInit);
-			intSetCurrentCursorPosition(&InterfaceSnap,sButInit.id);
 		}
 
 		/* Only add save option if in the game for real, ie, not fastplay.
@@ -3406,7 +3403,6 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 			sButInit.y			= MISSION_1_Y;
 			sButInit.pText		= _("Save Game");//"Save Game";
 			widgAddButton(psWScreen, &sButInit);
-			intSetCurrentCursorPosition(&InterfaceSnap,sButInit.id);
 		}
 	}
 	else
@@ -3417,7 +3413,6 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 		sButInit.y			= MISSION_1_Y;
 		sButInit.pText		= _("Load Saved Game");//"Load Saved Game";
 		widgAddButton(psWScreen, &sButInit);
-		intSetCurrentCursorPosition(&InterfaceSnap,sButInit.id);
 		//quit
 		sButInit.id			= IDMISSIONRES_QUIT;
 		sButInit.x			= MISSION_2_X;
@@ -3482,7 +3477,6 @@ void intRemoveMissionResultNoAnim(void)
 void intRunMissionResult(void)
 {
 
-	processFrontendSnap(FALSE);
 	frameSetCursorFromRes(IDC_DEFAULT);
 
 	if(bLoadSaveUp)

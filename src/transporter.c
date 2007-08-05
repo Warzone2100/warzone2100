@@ -56,9 +56,6 @@
 
 #include "multiplay.h"
 
-
-#include "csnap.h"
-
 //#define IDTRANS_FORM			9000	//The Transporter base form
 #define IDTRANS_TABFORM			9001	//The Transporter tabbed form
 #define IDTRANS_CLOSE			9002	//The close button icon
@@ -443,9 +440,6 @@ BOOL intAddTransporterContents(void)
 		{
 			return FALSE;
 		}
-		if(!AlreadyUp) {
-			intSetCurrentCursorPosition(&InterfaceSnap,sButFInit.id);
-		}
 	}
 
 	if (!intAddTransContentsForm())
@@ -793,7 +787,6 @@ BOOL intAddTransContentsForm(void)
 			{
 				return FALSE;
 			}
-//			intSetCurrentCursorPosition(&InterfaceSnap,sBFormInit.id);
 
 			/* Update the init struct for the next button */
 			sBFormInit.id += 1;
@@ -1053,11 +1046,6 @@ BOOL intAddDroidsAvailForm(void)
 			if (!widgAddForm(psWScreen, &sBFormInit))
 			{
 				return FALSE;
-			}
-
-			// Snap to the first button in the form.
-			if(sBFormInit.id == IDTRANS_DROIDSTART) {
-				intSetCurrentCursorPosition(&InterfaceSnap,sBFormInit.id);
 			}
 
             //add bar to indicate stare of repair

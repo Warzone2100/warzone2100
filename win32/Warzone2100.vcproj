@@ -590,10 +590,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\csnap.c"
-					>
-				</File>
-				<File
 					RelativePath="..\src\data.c"
 					>
 				</File>
@@ -1154,10 +1150,6 @@
 			</File>
 			<File
 				RelativePath="..\src\console.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\csnap.h"
 				>
 			</File>
 			<File

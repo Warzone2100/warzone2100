@@ -83,7 +83,6 @@
 #include "edit3d.h"
 #include "drive.h"
 #include "target.h"
-#include "csnap.h"
 #include "fpath.h"
 #include "scriptextern.h"
 #include "cluster.h"
@@ -452,7 +451,6 @@ GAMECODE gameLoop(void)
 
 		if(InGameOpUp)		// ingame options menu up, run it!
 		{
-			intRunInGameOptions();
 			widgval = widgRunScreen(psWScreen);
 			intProcessInGameOptions(widgval);
 			if(widgval == INTINGAMEOP_QUIT_CONFIRM)

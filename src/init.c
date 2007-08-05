@@ -672,7 +672,6 @@ BOOL InitialiseGlobals(void)
 	radarInitVars();
 	Edit3DInitVars();
 
-	snapInitVars();
 	driveInitVars(TRUE);
 
 	return TRUE;
@@ -1342,9 +1341,6 @@ BOOL stageOneInitialise(void)
     //need to reset the event timer too - AB 14/01/99
     eventTimeReset(gameTime/SCR_TICKRATE);
 
-	// Set the cursor snap max distances.
-	SetMaxDist(64,64);
-
 	return TRUE;
 }
 
@@ -1620,7 +1616,6 @@ BOOL stageThreeInitialise(void)
 
 	// Re-inititialise some static variables.
 
-	snapInitVars();
 	driveInitVars(FALSE);
 	displayInitVars();
 

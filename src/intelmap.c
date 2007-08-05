@@ -59,7 +59,6 @@
 #include "lib/sound/cdaudio.h"
 
 #include "scriptextern.h"
-#include "csnap.h"
 
 #define NO_VIDEO
 
@@ -422,8 +421,6 @@ static BOOL intAddMessageForm(BOOL playCurrent)
 		{
 			return FALSE;
 		}
-
-		intSetCurrentCursorPosition(&InterfaceSnap,sBFormInit.id);
 
 		/* if the current message matches psSelected lock the button */
 		if (psMessage == psCurrentMsg)

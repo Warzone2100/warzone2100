@@ -25,7 +25,6 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/strres.h"
-#include "csnap.h"
 #include "lib/widget/widget.h"
 #include "hci.h"
 #include "text.h"
@@ -263,7 +262,6 @@ void runLimitScreen(void)
 {
 	UDWORD id,statid;
 
-	processFrontendSnap(FALSE);
 	frontendMultiMessages();							// network stuff.
 
 	id = widgRunScreen(psWScreen);						// Run the current set of widgets
@@ -313,8 +311,6 @@ void runLimitScreen(void)
 			break;
 		}
 	}
-
-	StartCursorSnap(&InterfaceSnap);
 
 	widgDisplayScreen(psWScreen);						// show the widgets currently running
 }
@@ -457,9 +453,6 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	// draw limit
 	sprintf(str,"%d",((W_SLIDER*)(widgGetFromID(psWScreen,psWidget->id+1)))->pos);
 	iV_DrawText(str, x+270, y+(psWidget->height/2)+3);
-
-	// add snap
-	AddCursorSnap(&InterfaceSnap,(SWORD)(x+10) , (SWORD)(y+10) , psWidget->formID,psWidget->id,NULL);
 
 	return;
 }

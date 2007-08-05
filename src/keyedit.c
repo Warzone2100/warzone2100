@@ -43,7 +43,6 @@
 #include "init.h"
 #include "loadsave.h"
 #include "keymap.h"
-#include "csnap.h"
 #include "intimage.h"
 #include "lib/ivis_common/bitimage.h"
 #include "intdisplay.h"
@@ -277,7 +276,6 @@ BOOL runKeyMapEditor(void)
 		}
 	}
 
-	StartCursorSnap(&InterfaceSnap);
 	widgDisplayScreen(psWScreen);				// show the widgets currently running
 
 	return TRUE;

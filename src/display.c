@@ -34,7 +34,6 @@
 #include "map.h"
 #include "loop.h"
 #include "atmos.h"	// temporary only for here
-#include "csnap.h"
 /* Includes direct access to render library */
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piestate.h"

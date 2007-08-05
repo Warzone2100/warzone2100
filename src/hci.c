@@ -69,8 +69,6 @@
 #include "winmain.h"
 #include "wrappers.h"
 
-#define	MAX_INTERFACE_SNAPS	64
-#define	MAX_RADAR_SNAPS 1
 
 #define RETXOFFSET (0)// Reticule button offset
 #define RETYOFFSET (0)
@@ -140,8 +138,6 @@ BOOL ClosingTransCont = FALSE;
 BOOL ClosingTransDroids = FALSE;
 BOOL ReticuleUp = FALSE;
 BOOL Refreshing = FALSE;
-
-CURSORSNAP InterfaceSnap;
 
 
 /***************************************************************************************/
@@ -532,9 +528,6 @@ BOOL intInitialise(void)
 {
 	UDWORD			comp, inc;
 
-	AllocateSnapBuffer(&InterfaceSnap,MAX_INTERFACE_SNAPS);
-
-
 
 	intInitialiseReticule();
 
@@ -780,8 +773,6 @@ void intShutDown(void)
 //	widgEndScreen(psWScreen);
 	widgReleaseScreen(psWScreen);
 
-	ReleaseSnapBuffer(&InterfaceSnap);
-
 	free(apsStructStatsList);
 	free(ppResearchList);
 	free(pList);
@@ -820,11 +811,6 @@ static BOOL IntRefreshPending = FALSE;
 void intRefreshScreen(void)
 {
 	IntRefreshPending = TRUE;
-}
-
-
-void intSetCurrentCursorPosition(CURSORSNAP *Snap,UDWORD id)
-{
 }
 
 
@@ -1706,10 +1692,6 @@ INT_RETVAL intRunWidgets(void)
 				}
 			}
 		}
-	}
-	else if(InGameOpUp)
-	{
-		intRunInGameOptions();
 	}
 
 	if (MissionResUp) {
@@ -3296,8 +3278,6 @@ void intDisplayWidgets(void)
 
 	//draw the proximity blips onto the world - done as buttons on the interface now
 	//drawProximityBlips();
-
-	StartCursorSnap(&InterfaceSnap);
 
 	widgDisplayScreen(psWScreen);
 
@@ -4916,14 +4896,9 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 			objStatID = statID;
 			intAddObjectStats(psSelected, statID);
 			intMode = INT_STAT;
-			if(!bForceStats) {
-				intSetCurrentCursorPosition(&InterfaceSnap,statID);
-			}
-
 		} else {
 			widgSetButtonState(psWScreen, statID, WBUT_CLICKLOCK);
 			intMode = INT_OBJECT;
-			intSetCurrentCursorPosition(&InterfaceSnap,statID);
 		}
 	}
 	else if (psSelected)
@@ -4940,12 +4915,10 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 		widgSetButtonState(psWScreen, statID, WBUT_CLICKLOCK);
 
 		intMode = INT_CMDORDER;
-		intSetCurrentCursorPosition(&InterfaceSnap,statID);
 	}
 	else
 	{
 		intMode = INT_OBJECT;
-		intSetCurrentCursorPosition(&InterfaceSnap,statID);
 	}
 
 
@@ -5937,7 +5910,6 @@ donelab:
 	{
 		widgSetTabs(psWScreen, IDSTAT_TABFORM, (UWORD)statForm, 0);
 		widgSetButtonState(psWScreen, statID, WBUT_CLICKLOCK);
-		intSetCurrentCursorPosition(&InterfaceSnap,statID);
 	}
 
 

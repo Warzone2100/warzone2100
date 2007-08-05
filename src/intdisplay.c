@@ -65,7 +65,6 @@
 #include "console.h"
 #include "cmddroid.h"
 #include "group.h"
-#include "csnap.h"
 #include "text.h"
 #include "transporter.h"
 #include "mission.h"

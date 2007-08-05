@@ -90,7 +90,6 @@ SRC=ai.c \
 	bucket3d.c \
 	clparse.c \
 	configuration.c \
-	csnap.c \
 	display3d.c \
 	drive.c \
 	function.c \
