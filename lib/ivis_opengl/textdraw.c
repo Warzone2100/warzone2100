@@ -215,29 +215,11 @@ static char FWord[256];
 static int LastX;				// Cursor position after last draw.
 static int LastY;
 static int LastTWidth;			// Pixel width of the last string draw.
-static UDWORD FFlags = FTEXTF_SKIP_TRAILING_SPACES;
 static int RecordExtents = EXTENTS_NONE;
 static int ExtentsStartX;
 static int ExtentsStartY;
 static int ExtentsEndX;
 static int ExtentsEndY;
-
-void pie_SetFormattedTextFlags(UDWORD Flags)
-{
-	FFlags = Flags;
-}
-
-UDWORD pie_GetFormattedTextFlags(void)
-{
-	return FFlags;
-}
-
-#define EXTENTS_USEMAXWIDTH (0)
-#define EXTENTS_USELASTX (1)
-//UBYTE ExtentsMode=EXTENTS_USEMAXWIDTH;
-
-static UBYTE ExtentsMode = EXTENTS_USEMAXWIDTH;
-
 
 // Draws formatted text with word wrap, long word splitting, embedded
 // newlines ( uses @ rather than \n ) and colour mode toggle ( # ) which enables
@@ -270,6 +252,8 @@ UDWORD iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width
 	curChar = String;
 	while (*curChar != 0)
 	{
+		char* curSpaceChar;
+
 		bool GotSpace = false;
 		bool NewLine = false;
 
@@ -350,22 +334,11 @@ UDWORD iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width
 
 
 		// Remove trailing spaces, useful when doing center alignment.
-		if (FFlags & FTEXTF_SKIP_TRAILING_SPACES)
+		curSpaceChar = &FString[strlen(FString) - 1];
+		while (curSpaceChar != &FString[-1] && *curSpaceChar == ASCII_SPACE)
 		{
-			char* curSpaceChar = &FString[strlen(FString) - 1];
-			while (curSpaceChar != &FString[-1] && *curSpaceChar == ASCII_SPACE)
-			{
-				*(curSpaceChar--) = 0;
-			}
+			*(curSpaceChar--) = 0;
 		}
-
-#ifdef _TESTBED
-		// Replace spaces with ~.
-		for (t = 0; t < strlen(FString); t++)
-		{
-			if (FString[t] == ' ') FString[t] = '~';
-		}
-#endif
 
 		TWidth = iV_GetTextWidth(FString);
 
@@ -401,30 +374,6 @@ UDWORD iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width
 		LastY = jy;
 		LastTWidth = TWidth;
 
-
-		if (ExtentsMode == EXTENTS_USELASTX)
-		{
-			if (RecordExtents == EXTENTS_START)
-			{
-//
-				ExtentsStartY = y + iV_GetTextAboveBase();
-				ExtentsEndY = jy - iV_GetTextLineSize() + iV_GetTextBelowBase();
-
-				RecordExtents = EXTENTS_END;
-				ExtentsStartX = jx;
-				ExtentsEndX = LastX;
-			}
-			else
-			{
-				if (jx < ExtentsStartX) ExtentsStartX = jx;
-
-				if (LastX > ExtentsEndX) ExtentsEndX = LastX;
-			}
-
-//			DBPRINTF(("extentsstartx = %d extentsendx=%d\n",ExtentsStartX,ExtentsEndX));
-		}
-
-
 		// and move down a line.
 		jy += iV_GetTextLineSize();
 	}
@@ -436,31 +385,15 @@ UDWORD iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width
 		ExtentsStartY = y + iV_GetTextAboveBase();
 		ExtentsEndY = jy - iV_GetTextLineSize() + iV_GetTextBelowBase();
 
-		if (ExtentsMode == EXTENTS_USEMAXWIDTH)
-		{
-			ExtentsStartX = x;	// Was jx, but this broke the console centre justified text background.
-//			ExtentsEndX = jx + TWidth;
-			ExtentsEndX = x + Width;
-
-		}
-		else
-		{
-			if (jx < ExtentsStartX) ExtentsStartX = jx;
-			if (LastX > ExtentsEndX) ExtentsEndX = LastX;
-
-		}
-
-
+		ExtentsStartX = x;	// Was jx, but this broke the console centre justified text background.
+//		ExtentsEndX = jx + TWidth;
+		ExtentsEndX = x + Width;
 	}
 	else if (RecordExtents == EXTENTS_END)
 	{
 		ExtentsEndY = jy - iV_GetTextLineSize() + iV_GetTextBelowBase();
 
-		if (ExtentsMode == EXTENTS_USEMAXWIDTH)
-		{
-			ExtentsEndX = x + Width;
-		}
-
+		ExtentsEndX = x + Width;
 	}
 
 	return jy;
@@ -537,6 +470,10 @@ void pie_BeginTextRender(SWORD ColourIndex)
 	pie_SetRendMode(REND_TEXT);
 	pie_SetBilinear(FALSE);
 }
+
+#define PIE_TEXT_WHITE_COLOUR		(0xffffffff)
+#define PIE_TEXT_LIGHTBLUE_COLOUR	(0xffa0a0ff)
+#define PIE_TEXT_DARKBLUE_COLOUR	(0xff6060c0)
 
 static void pie_TextRender(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 {
