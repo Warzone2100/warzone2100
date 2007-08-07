@@ -477,7 +477,7 @@ char *sound_GetTrackName( SDWORD iTrack )
 //
 UDWORD sound_GetTrackHashName( SDWORD iTrack )
 {
-	if (iTrack == 0 || iTrack == SAMPLE_NOT_FOUND)
+	if (iTrack <= 0 || iTrack >= MAX_TRACKS || iTrack == SAMPLE_NOT_FOUND)
 		return 0;
 	ASSERT( g_apTrack[iTrack] != NULL, "sound_GetTrackName: unallocated track" );
 	return g_apTrack[iTrack] ? g_apTrack[iTrack]->resID : 0;
