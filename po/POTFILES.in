@@ -72,7 +72,6 @@ src/wrappers.c
 src/display.c
 src/gatewaysup.c
 src/multistat.c
-src/csnap.c
 src/multisync.c
 src/component.c
 src/multigifts.c
