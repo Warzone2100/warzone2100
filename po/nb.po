@@ -18,31 +18,31 @@ msgstr ""
 
 #: src/multiplay.c:1894
 msgid "Green"
-msgstr ""
+msgstr "Grønn"
 
 #: src/multiplay.c:1895
 msgid "Orange"
-msgstr ""
+msgstr "Oransje"
 
 #: src/multiplay.c:1896
 msgid "Grey"
-msgstr ""
+msgstr "Grå"
 
 #: src/multiplay.c:1897
 msgid "Black"
-msgstr ""
+msgstr "Svart"
 
 #: src/multiplay.c:1898
 msgid "Red"
-msgstr ""
+msgstr "Rød"
 
 #: src/multiplay.c:1899
 msgid "Blue"
-msgstr ""
+msgstr "Blå"
 
 #: src/multiplay.c:1900
 msgid "Pink"
-msgstr ""
+msgstr "Rosa"
 
 #: src/multiplay.c:1901
 msgid "Cyan"
@@ -50,7 +50,7 @@ msgstr ""
 
 #: src/display.c:1893
 msgid "Cannot Build. Oil Resource Burning."
-msgstr ""
+msgstr "Kan ikke bygge her. Oljeressurs brenner."
 
 #: src/display.c:2022
 #, c-format
@@ -68,47 +68,47 @@ msgstr ""
 
 #: src/multistat.c:104 src/configuration.c:375 src/configuration.c:376
 msgid "Player"
-msgstr ""
+msgstr "Spiller"
 
 #: src/multigifts.c:172
 #, c-format
 msgid "%s Gives You A Visibility Report"
-msgstr ""
+msgstr "%s gir deg oversiktskart"
 
 #: src/multigifts.c:199
 #, c-format
 msgid "%s Gives You Units"
-msgstr ""
+msgstr "%s gir deg enheter"
 
 #: src/multigifts.c:294
 #, c-format
 msgid "%s Gives You Technology Documents"
-msgstr ""
+msgstr "%s gir deg teknologidokumenter"
 
 #: src/multigifts.c:334
 #, c-format
 msgid "%s Gives You Power"
-msgstr ""
+msgstr "%s gir deg energi"
 
 #: src/multigifts.c:355
 #, c-format
 msgid "%s Requests An Alliance With You"
-msgstr ""
+msgstr "%s spør etter en allianse med deg"
 
 #: src/multigifts.c:363
 #, c-format
 msgid "You Invite %s To Form An Alliance"
-msgstr ""
+msgstr "Du inviterer %s til å gå inn i en allianse"
 
 #: src/multigifts.c:382
 #, c-format
 msgid "%s Breaks The Alliance With %s"
-msgstr ""
+msgstr "%s bryter allianse med %s"
 
 #: src/multigifts.c:407
 #, c-format
 msgid "%s Forms An Alliance With %s"
-msgstr ""
+msgstr "%s går inn i alianse med %s"
 
 #: src/multigifts.c:829
 #, c-format
@@ -124,7 +124,7 @@ msgstr "Lukk"
 
 #: src/hci.c:1697 src/mission.c:3504 src/loop.c:482 src/loop.c:494
 msgid "GAME SAVED!"
-msgstr ""
+msgstr "SPILL LAGRET!"
 
 #: src/hci.c:3756 src/keymap.c:292
 msgid "Commanders"
@@ -140,7 +140,7 @@ msgstr ""
 
 #: src/hci.c:3804 src/keymap.c:290
 msgid "Design"
-msgstr ""
+msgstr "Design"
 
 #: src/hci.c:3820 src/keymap.c:288
 msgid "Research"
@@ -152,11 +152,11 @@ msgstr "Bygg"
 
 #: src/hci.c:3916 src/multiint.c:834 src/multiint.c:838
 msgid "Power"
-msgstr ""
+msgstr "Energi"
 
 #: src/hci.c:4078 src/ingameop.c:294
 msgid "Load Game"
-msgstr ""
+msgstr "Last Spill"
 
 #: src/hci.c:4086 src/mission.c:3407 src/mission.c:3557 src/ingameop.c:296
 #: src/ingameop.c:445
@@ -165,7 +165,7 @@ msgstr ""
 
 #: src/hci.c:4170
 msgid "Exit Game"
-msgstr ""
+msgstr "Avslutt Spill"
 
 #: src/hci.c:4527 src/intdisplay.c:277 src/intdisplay.c:320
 #: src/intdisplay.c:367
