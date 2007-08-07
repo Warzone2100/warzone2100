@@ -308,6 +308,8 @@ mostlyclean:
 	rm -f stamp-poT
 	rm -f core core.* $(DOMAIN).po $(DOMAIN).1po $(DOMAIN).2po *.new.po
 	rm -fr *.o
+	rm -f warzone.pot
+	rm -f *~
 
 clean: mostlyclean
 
@@ -392,9 +394,10 @@ $(DUMMYPOFILES):
 update-gmo: Makefile $(GMOFILES)
 	@:
 
-Makefile: Makefile.in.in Makevars $(top_builddir)/config.status @POMAKEFILEDEPS@
+Makefile: Makefile.in.in $(top_builddir)/config.status POTFILES.in
 	cd $(top_builddir) \
-	  && $(SHELL) ./config.status $(subdir)/$@.in po-directories
+	  && CONFIG_FILES=$(subdir)/$@.in CONFIG_HEADERS= \
+	       $(SHELL) ./config.status
 
 force:
 
