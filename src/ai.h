@@ -54,6 +54,7 @@
 
 #define	WEIGHT_SERVICE_DROIDS		(WEIGHT_DIST_TILE_DROID * 5)		//We don't want them to be repairing droids or structures while we are after them
 #define	WEIGHT_WEAPON_DROIDS		(WEIGHT_DIST_TILE_DROID * 3)		//We prefer to go after anything that has a gun and can hurt us
+#define	WEIGHT_COMMAND_DROIDS		(WEIGHT_DIST_TILE_DROID * 7)		//Commanders get a higher priority
 #define	WEIGHT_MILITARY_STRUCT		WEIGHT_DIST_TILE_STRUCT				//Droid/cyborg factories, repair facility; shouldn't have too much weight
 #define	WEIGHT_WEAPON_STRUCT		WEIGHT_WEAPON_DROIDS				//Same as weapon droids (?)
 #define	WEIGHT_DERRICK_STRUCT		(WEIGHT_WEAPON_STRUCT +	WEIGHT_DIST_TILE_STRUCT * 4)	//Even if it's 4 tiles further away than defenses we still choose it

@@ -396,8 +396,11 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 			case DROID_CYBORG:
 			case DROID_WEAPON:
 			case DROID_CYBORG_SUPER:
-			case DROID_COMMAND:			//or should it get more priority?
 				targetTypeBonus = WEIGHT_WEAPON_DROIDS;
+				break;
+
+			case DROID_COMMAND:
+				targetTypeBonus = WEIGHT_COMMAND_DROIDS;
 				break;
 
 			case DROID_CONSTRUCT:
