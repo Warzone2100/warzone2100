@@ -26,6 +26,8 @@
 #ifndef _netplay_h
 #define _netplay_h
 
+#include "nettypes.h"
+
 // ////////////////////////////////////////////////////////////////////////
 // Include this file in your game to add multiplayer facilities.
 
@@ -67,6 +69,7 @@ typedef struct {
 	uint8_t		type;			// type of packet
 	uint8_t		destination;		// player to send to, or NET_ALL_PLAYERS
 	char 		body[MaxMsgSize];
+	BOOL		status;			// If the packet compiled or not (this is _not_ sent!)
 } NETMSG;
 
 #define		AUDIOMSG		255	// an audio packet (special message);
@@ -111,6 +114,8 @@ typedef struct {
 
 extern NETPLAY				NetPlay;
 
+extern NETMSG NetMsg;
+
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.
 extern BOOL   NETinit(BOOL bFirstCall);				//init(guid can be NULL)
@@ -149,6 +154,9 @@ extern BOOL	NETgetLocalPlayerData(UDWORD dpid, void *pData, SDWORD *pSize);
 extern BOOL	NETgetGlobalPlayerData(UDWORD dpid, void *pData, SDWORD *pSize);
 extern BOOL	NETsetLocalPlayerData(UDWORD dpid, void *pData, SDWORD size);
 extern BOOL	NETsetGlobalPlayerData(UDWORD dpid, void *pData, SDWORD size);
+
+extern void NETsetPacketDir(PACKETDIR dir);
+extern PACKETDIR NETgetPacketDir(void);
 
 #include "netlog.h"
 

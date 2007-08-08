@@ -16,3 +16,356 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
+/*
+ * Nettypes.c
+ *
+ * Contains the 'new' Network API functiosn for sending and receiving both
+ * low-level primitives and higher-level types.
+ */
+
+#include "lib/framework/wzglobal.h"
+#include "lib/framework/strnlen1.h"
+#include <string.h>
+
+#ifdef WZ_OS_WIN
+# include <winsock.h>
+#else
+# include <arpa/inet.h>
+#endif
+
+#include "../framework/frame.h"
+#include "netplay.h"
+#include "nettypes.h"
+
+/*
+ * Begin & End functions
+ */
+
+/*
+ * Initialises the packet and sets the type of the packet to type
+ * FIXME: Use an enum for the packet type.
+ */
+void NETbegin(uint8_t type, PACKETDIR dir)
+{
+	NETsetPacketDir(dir);
+	NetMsg.type		= type;
+	NetMsg.size		= 0;
+	NetMsg.status	= TRUE;
+
+	// If encoding zero the message body and size
+	if (dir == PACKET_ENCODE)
+	{
+		memset(&NetMsg.body, '\0', MaxMsgSize);
+	}
+}
+
+/*
+ * Sends the packet, sending it to the player specified. If player is equal to
+ * NET_ALL_PLAYERS then the packet is, as expected, sent to everyone.
+ */
+BOOL NETend(uint8_t player)
+{
+	assert(NETgetPacketDir() != PACKET_INVALID);
+
+	// If the packet is not being sent or failed to compile
+	if (NETgetPacketDir() != PACKET_ENCODE || !NetMsg.status)
+	{
+		return FALSE;
+	}
+
+	// We have sent the packet, so make it invalid (to prevent re-sending)
+	NETsetPacketDir(PACKET_INVALID);
+
+	// Send the packet, updating the send functions is on my todo list!
+	if (player == NET_ALL_PLAYERS)
+	{
+		return NETbcast(&NetMsg, TRUE);
+	}
+	else
+	{
+		return NETsend(&NetMsg, player, TRUE);
+	}
+}
+
+/*
+ * Primitive functions (ints and strings). Due to the lack of C++ and the fact
+ * that I hate macros this is a lot longer than it should be.
+ */
+
+BOOL NETint8_t(int8_t *ip)
+{
+	int8_t *store = (int8_t *) &NetMsg.body[NetMsg.size];
+
+	// Make sure there is enough data/space left in the packet
+	if (sizeof(int8_t) + NetMsg.size > MaxMsgSize || !NetMsg.status)
+	{
+		return NetMsg.status = FALSE;
+	}
+
+	// 8-bit (1 byte) integers need no endian-swapping!
+	if (NETgetPacketDir() == PACKET_ENCODE)
+	{
+		*store = *ip;
+	}
+	else if (NETgetPacketDir() == PACKET_DECODE)
+	{
+		*ip = *store;
+	}
+
+	// Increment the size of the message
+	NetMsg.size += sizeof(int8_t);
+
+	return TRUE;
+}
+
+BOOL NETuint8_t(uint8_t *ip)
+{
+	uint8_t *store = (uint8_t *) &NetMsg.body[NetMsg.size];
+
+	// Make sure there is enough data/space left in the packet
+	if (sizeof(uint8_t) + NetMsg.size > MaxMsgSize || !NetMsg.status)
+	{
+		return NetMsg.status = FALSE;
+	}
+
+	// 8-bit (1 byte) integers need no endian-swapping!
+	if (NETgetPacketDir() == PACKET_ENCODE)
+	{
+		*store = *ip;
+	}
+	else if (NETgetPacketDir() == PACKET_DECODE)
+	{
+		*ip = *store;
+	}
+
+	// Increment the size of the message
+	NetMsg.size += sizeof(uint8_t);
+
+	return TRUE;
+}
+
+BOOL NETint16_t(int16_t *ip)
+{
+	int16_t *store = (int16_t *) &NetMsg.body[NetMsg.size];
+
+	// Make sure there is enough data/space left in the packet
+	if (sizeof(int16_t) + NetMsg.size > MaxMsgSize || !NetMsg.status)
+	{
+		return NetMsg.status = FALSE;
+	}
+
+	// Convert the integer into the network byte order (big endian)
+	if (NETgetPacketDir() == PACKET_ENCODE)
+	{
+		*store = htons(*ip);
+	}
+	else if (NETgetPacketDir() == PACKET_DECODE)
+	{
+		*ip = ntohs(*store);
+	}
+
+	// Increment the size of the message
+	NetMsg.size += sizeof(int16_t);
+
+	return TRUE;
+}
+
+BOOL NETuint16_t(uint16_t *ip)
+{
+	uint16_t *store = (uint16_t *) &NetMsg.body[NetMsg.size];
+
+	// Make sure there is enough data/space left in the packet
+	if (sizeof(uint16_t) + NetMsg.size > MaxMsgSize || !NetMsg.status)
+	{
+		return NetMsg.status = FALSE;
+	}
+
+	// Convert the integer into the network byte order (big endian)
+	if (NETgetPacketDir() == PACKET_ENCODE)
+	{
+		*store = htons(*ip);
+	}
+	else if (NETgetPacketDir() == PACKET_DECODE)
+	{
+		*ip = ntohs(*store);
+	}
+
+	// Increment the size of the message
+	NetMsg.size += sizeof(uint16_t);
+
+	return TRUE;
+}
+
+BOOL NETint32_t(int32_t *ip)
+{
+	int32_t *store = (int32_t *) &NetMsg.body[NetMsg.size];
+
+	// Make sure there is enough data/space left in the packet
+	if (sizeof(int32_t) + NetMsg.size > MaxMsgSize || !NetMsg.status)
+	{
+		return NetMsg.status = FALSE;
+	}
+
+	// Convert the integer into the network byte order (big endian)
+	if (NETgetPacketDir() == PACKET_ENCODE)
+	{
+		*store = htonl(*ip);
+	}
+	else if (NETgetPacketDir() == PACKET_DECODE)
+	{
+		*ip = ntohl(*store);
+	}
+
+	// Increment the size of the message
+	NetMsg.size += sizeof(int32_t);
+
+	return TRUE;
+}
+
+BOOL NETuint32_t(uint32_t *ip)
+{
+	uint32_t *store = (uint32_t *) &NetMsg.body[NetMsg.size];
+
+	// Make sure there is enough data/space left in the packet
+	if (sizeof(uint32_t) + NetMsg.size > MaxMsgSize || !NetMsg.status)
+	{
+		return NetMsg.status = FALSE;
+	}
+
+	// Convert the integer into the network byte order (big endian)
+	if (NETgetPacketDir() == PACKET_ENCODE)
+	{
+		*store = htonl(*ip);
+	}
+	else if (NETgetPacketDir() == PACKET_DECODE)
+	{
+		*ip = ntohl(*store);
+	}
+
+	// Increment the size of the message
+	NetMsg.size += sizeof(uint32_t);
+
+	return TRUE;
+}
+
+BOOL NETfloat(float* fp)
+{
+	/*
+	 * NB: Not portable.
+	 * This routine only works on machines with IEEE754 floating point numbers.
+	 */
+
+	#if !defined(__STDC_IEC_559__) \
+	 && !defined(__m68k__) && !defined(__sparc__) && !defined(__i386__) \
+	 && !defined(__mips__) && !defined(__ns32k__) && !defined(__alpha__) \
+	 && !defined(__arm__) && !defined(__ppc__) && !defined(__ia64__) \
+	 && !defined(__arm26__) && !defined(__sparc64__) && !defined(__amd64__)
+	# error "this platform hasn't been confirmed to support IEEE754 floating point numbers"
+	#endif
+
+	// IEEE754 floating point numbers can be treated the same as 32bit integers
+	// with regards to endian conversion
+	STATIC_ASSERT(sizeof(float) == sizeof(int32_t));
+
+	return NETint32_t((int32_t*) fp);
+}
+
+BOOL NETbool(BOOL *bp)
+{
+	// Bools are converted to uint8_ts
+	uint8_t tmp = (uint8_t) *bp;
+	NETuint8_t(&tmp);
+
+	// If we are decoding and managed to extract the value set it
+	if (NETgetPacketDir() == PACKET_DECODE && NetMsg.status)
+	{
+		*bp = (BOOL) tmp;
+	}
+
+	return NetMsg.status;
+}
+
+/*
+ * NETnull should be used to either add 4 bytes of padding to a message, or to
+ * discard 4 bytes of data from a message.
+ */
+BOOL NETnull ()
+{
+	uint32_t zero = 0;
+	return NETuint32_t(&zero);
+}
+
+BOOL NETstring(char *str, uint16_t maxlen)
+{
+	/*
+	 * Strings sent over the network are prefixed with their length, sent as an
+	 * unsigned 16-bit integer.
+	 */
+
+	// Work out the length of the string if we are encoding
+	uint16_t len = (NETgetPacketDir() == PACKET_ENCODE) ? strnlen1(str, maxlen) : 0;
+	char *store;
+
+	// Add/fetch the length from the packet
+	NETuint16_t(&len);
+
+	// Map store to the message buffer
+	store = (char *) &NetMsg.body[NetMsg.size];
+
+	// Make sure there is enough data/space left in the packet
+	if (len + NetMsg.size > MaxMsgSize || !NetMsg.status)
+	{
+		return NetMsg.status = FALSE;
+	}
+
+	if (NETgetPacketDir() == PACKET_ENCODE)
+	{
+		memcpy(store, str, len);
+	}
+	else if (NETgetPacketDir() == PACKET_DECODE)
+	{
+		memcpy(str, store, len);
+	}
+
+	// Increment the size of the message
+	NetMsg.size += sizeof(len) + len;
+
+	return TRUE;
+}
+
+static void NETcoder(PACKETDIR dir)
+{
+	char str[100];
+	char *original = "THIS IS A TEST STRING";
+	BOOL b = TRUE;
+	uint32_t u32 = 32;
+	uint16_t u16 = 16;
+	uint8_t u8 = 8;
+	int32_t i32 = -32;
+	int16_t i16 = -16;
+	int8_t i8 = -8;
+
+	strcpy(str, original);
+	NETbegin(0, dir);
+	NETbool(&b);			assert(b == TRUE);
+	NETuint32_t(&u32);  assert(u32 == 32);
+	NETuint16_t(&u16);  assert(u16 == 16);
+	NETuint8_t(&u8);    assert(u8 == 8);
+	NETint32_t(&i32);   assert(i32 == -32);
+	NETint16_t(&i16);   assert(i16 == -16);
+	NETint8_t(&i8);     assert(i8 == -8);
+	NETstring(str, 99); assert(strncmp(str, original, 99) == 0);
+	NETend(0);
+}
+
+void NETtest()
+{
+	NETMSG cmp;
+
+	memset(&cmp, 0, sizeof(cmp));
+	memset(&NetMsg, 0, sizeof(NetMsg));
+	NETcoder(PACKET_ENCODE);
+	memcpy(&cmp, &NetMsg, sizeof(cmp));
+	NETcoder(PACKET_DECODE);
+	ASSERT(memcmp(&cmp, &NetMsg, sizeof(cmp)) == 0, "nettypes unit test failed");
+}

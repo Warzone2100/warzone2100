@@ -65,6 +65,12 @@ static void NETallowJoining(void);
 extern BOOL MultiPlayerJoin(UDWORD dpid);  /* from src/multijoin.c ! */
 extern BOOL MultiPlayerLeave(UDWORD dpid); /* from src/multijoin.c ! */
 
+/*
+ * Network globals, these are part of the new network API
+ */
+NETMSG NetMsg;
+static PACKETDIR NetDir;
+
 // ////////////////////////////////////////////////////////////////////////
 // Types
 
@@ -221,14 +227,14 @@ static BOOL NET_recvMessage(NETBUFSOCKET* bs, NETMSG* pMsg)
 	return TRUE;
 
 error:
-	if (bs->buffer_start != 0) 
+	if (bs->buffer_start != 0)
 	{
 		static char* tmp_buffer = NULL;
 		char* buffer_start = bs->buffer + bs->buffer_start;
 		char* tmp;
 
 		// Create tmp buffer if necessary
-		if (tmp_buffer == NULL) 
+		if (tmp_buffer == NULL)
 		{
 			tmp_buffer = (char*)malloc(NET_BUFFER_SIZE);
 		}
@@ -271,9 +277,9 @@ static unsigned int NET_CreatePlayer(const char* name, unsigned int flags)
 {
 	unsigned int i;
 
-	for (i = 1; i < MAX_CONNECTED_PLAYERS; ++i) 
+	for (i = 1; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
-		if (players[i].allocated == FALSE) 
+		if (players[i].allocated == FALSE)
 		{
 			players[i].allocated = TRUE;
 			strcpy(players[i].name, name);
@@ -859,7 +865,7 @@ BOOL NETrecv(NETMSG * pMsg)
 		return FALSE;
 	}
 
-	if (is_server) 
+	if (is_server)
 	{
 		NETallowJoining();
 	}
@@ -868,7 +874,7 @@ BOOL NETrecv(NETMSG * pMsg)
 receive_message:
 		received = FALSE;
 
-		if (is_server) 
+		if (is_server)
 		{
 			if (connected_bsocket[current] == NULL)
 			{
@@ -877,29 +883,29 @@ receive_message:
 
 			received = NET_recvMessage(connected_bsocket[current], pMsg);
 
-			if (received == FALSE) 
+			if (received == FALSE)
 			{
 				unsigned int i = current + 1;
 
 				if (socket_set == NULL
-				    || SDLNet_CheckSockets(socket_set, NET_READ_TIMEOUT) <= 0) 
+				    || SDLNet_CheckSockets(socket_set, NET_READ_TIMEOUT) <= 0)
 				{
 					return FALSE;
 				}
-				for (;;) 
+				for (;;)
 				{
-					if (connected_bsocket[i]->socket == NULL) 
+					if (connected_bsocket[i]->socket == NULL)
 					{
 						// do nothing
 					}
-					else if (NET_fillBuffer(connected_bsocket[i], socket_set)) 
+					else if (NET_fillBuffer(connected_bsocket[i], socket_set))
 					{
 						// we received some data, add to buffer
 						received = NET_recvMessage(connected_bsocket[i], pMsg);
 						current = i;
 						break;
-					} 
-					else if (connected_bsocket[i]->socket == NULL) 
+					}
+					else if (connected_bsocket[i]->socket == NULL)
 					{
 						// check if we droped any players in the check above
 						unsigned int* message_dpid = (unsigned int*)(message.body);
@@ -916,12 +922,12 @@ receive_message:
 						MultiPlayerLeave(i);
 					}
 
-					if (++i == MAX_CONNECTED_PLAYERS) 
+					if (++i == MAX_CONNECTED_PLAYERS)
 					{
 						i = 0;
 					}
 
-					if (i == current+1) 
+					if (i == current+1)
 					{
 						return FALSE;
 					}
@@ -929,17 +935,17 @@ receive_message:
 			}
 		} else {
 			// we are a client
-			if (bsocket == NULL) 
+			if (bsocket == NULL)
 			{
 				return FALSE;
 			} else {
 				received = NET_recvMessage(bsocket, pMsg);
 
-				if (received == FALSE) 
+				if (received == FALSE)
 				{
 					if (   socket_set != NULL
 					    && SDLNet_CheckSockets(socket_set, NET_READ_TIMEOUT) > 0
-					    && NET_fillBuffer(bsocket, socket_set)) 
+					    && NET_fillBuffer(bsocket, socket_set))
 					{
 						received = NET_recvMessage(bsocket, pMsg);
 					}
@@ -947,40 +953,40 @@ receive_message:
 			}
 		}
 
-		if (received == FALSE) 
+		if (received == FALSE)
 		{
 			return FALSE;
 		}
-		else 
+		else
 		{
 			size =	  pMsg->size + sizeof(pMsg->size) + sizeof(pMsg->type)
 				+ sizeof(pMsg->destination);
-			if (is_server == FALSE) 
+			if (is_server == FALSE)
 			{
 				// do nothing
-			} 
-			else if (pMsg->destination == NET_ALL_PLAYERS) 
+			}
+			else if (pMsg->destination == NET_ALL_PLAYERS)
 			{
 				unsigned int j;
 
 				// we are the host, and have received a broadcast packet; distribute it
-				for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j) 
+				for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
 				{
 					if (   j != current
 					    && connected_bsocket[j] != NULL
-					    && connected_bsocket[j]->socket != NULL) 
+					    && connected_bsocket[j]->socket != NULL)
 					{
 						SDLNet_TCP_Send(connected_bsocket[j]->socket,
 								pMsg, size);
 					}
 				}
-			} 
-			else if (pMsg->destination != NetPlay.dpidPlayer) 
+			}
+			else if (pMsg->destination != NetPlay.dpidPlayer)
 			{
 				// message was not meant for us; send it further
 				if (   pMsg->destination < MAX_CONNECTED_PLAYERS
 				    && connected_bsocket[pMsg->destination] != NULL
-				    && connected_bsocket[pMsg->destination]->socket != NULL) 
+				    && connected_bsocket[pMsg->destination]->socket != NULL)
 				{
 					debug(LOG_NET, "Reflecting message type %hhu to UDWORD %hhu", pMsg->type, pMsg->destination);
 					SDLNet_TCP_Send(connected_bsocket[pMsg->destination]->socket,
@@ -1179,7 +1185,7 @@ void NETregisterServer(int state)
 // ////////////////////////////////////////////////////////////////////////
 // Host a game with a given name and player name. & 4 user game flags
 
-static void NETallowJoining(void) 
+static void NETallowJoining(void)
 {
 	unsigned int i;
 	UDWORD numgames = SDL_SwapBE32(1);	// always 1 on normal server
@@ -1189,12 +1195,12 @@ static void NETallowJoining(void)
 
 	NETregisterServer(1);
 
-	if (tmp_socket_set == NULL) 
+	if (tmp_socket_set == NULL)
 	{
 		// initialize server socket set
 		// FIXME: why is this not done in NETinit()?? - Per
 		tmp_socket_set = SDLNet_AllocSocketSet(MAX_TMP_SOCKETS+1);
-		if (tmp_socket_set == NULL) 
+		if (tmp_socket_set == NULL)
 		{
 			debug(LOG_ERROR, "NETallowJoining: Cannot create socket set: %s", SDLNet_GetError());
 			return;
@@ -1204,11 +1210,11 @@ static void NETallowJoining(void)
 
 	if (SDLNet_CheckSockets(tmp_socket_set, NET_READ_TIMEOUT) > 0)
 	{
-		if (SDLNet_SocketReady(tcp_socket)) 
+		if (SDLNet_SocketReady(tcp_socket))
 		{
-			for (i = 0; i < MAX_TMP_SOCKETS; ++i) 
+			for (i = 0; i < MAX_TMP_SOCKETS; ++i)
 			{
-				if (tmp_socket[i] == NULL) 
+				if (tmp_socket[i] == NULL)
 				{
 					break;
 				}
@@ -1217,7 +1223,7 @@ static void NETallowJoining(void)
 			SDLNet_TCP_AddSocket(tmp_socket_set, tmp_socket[i]);
 			if (SDLNet_CheckSockets(tmp_socket_set, 1000) > 0
 			    && SDLNet_SocketReady(tmp_socket)
-			    && SDLNet_TCP_Recv(tmp_socket[i], buffer, 5)) 
+			    && SDLNet_TCP_Recv(tmp_socket[i], buffer, 5))
 			{
 				if(strcmp(buffer, "list")==0)
 				{
@@ -1233,10 +1239,10 @@ static void NETallowJoining(void)
 				return;
 			}
 		}
-		for(i = 0; i < MAX_TMP_SOCKETS; ++i) 
+		for(i = 0; i < MAX_TMP_SOCKETS; ++i)
 		{
 			if (   tmp_socket[i] != NULL
-			    && SDLNet_SocketReady(tmp_socket[i]) > 0) 
+			    && SDLNet_SocketReady(tmp_socket[i]) > 0)
 			{
 				int size = SDLNet_TCP_Recv(tmp_socket[i], &message, sizeof(NETMSG));
 
@@ -1247,7 +1253,7 @@ static void NETallowJoining(void)
 					SDLNet_TCP_Close(tmp_socket[i]);
 					tmp_socket[i] = NULL;
 				}
-				else if (message.type == MSG_JOIN) 
+				else if (message.type == MSG_JOIN)
 				{
 					int j;
 
@@ -1272,10 +1278,10 @@ static void NETallowJoining(void)
 					message.size = 1;
 
 					// Send info about players to newcomer.
-					for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j) 
+					for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
 					{
 						if (   players[j].allocated
-						    && dpid != players[j].id) 
+						    && dpid != players[j].id)
 						{
 							message.body[0] = players[j].id;
 							NETsend(&message, dpid, TRUE);
@@ -1286,7 +1292,7 @@ static void NETallowJoining(void)
 					message.body[0] = dpid;
 					NETbcast(&message, TRUE);
 
-					for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j) 
+					for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
 					{
 						NETBroadcastPlayerInfo(j);
 					}
@@ -1560,7 +1566,7 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 	{
 		NETrecv(&message);
 
-		if (message.type == MSG_ACCEPTED) 
+		if (message.type == MSG_ACCEPTED)
 		{
 			NetPlay.dpidPlayer = message.body[0];
 			debug(LOG_NET, "NETjoinGame: I'm player %u", NetPlay.dpidPlayer);
@@ -1585,6 +1591,15 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 	return FALSE;
 }
 
+void NETsetPacketDir(PACKETDIR dir)
+{
+    NetDir = dir;
+}
+
+PACKETDIR NETgetPacketDir()
+{
+    return NetDir;
+}
 
 /*!
  * Set the masterserver name

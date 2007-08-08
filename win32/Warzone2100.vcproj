@@ -240,6 +240,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\lib\framework\strnlen1.c"
+					>
+				</File>
+				<File
 					RelativePath="..\lib\framework\strres.c"
 					>
 				</File>
@@ -1278,6 +1282,10 @@
 			</File>
 			<File
 				RelativePath="..\lib\framework\frameresource.h"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\framework\strnlen1.h"
 				>
 			</File>
 			<File

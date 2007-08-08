@@ -36,24 +36,34 @@
 			<Add option="-Wall" />
 			<Add option="-Werror-implicit-function-declaration" />
 			<Add option="-std=gnu99" />
-			<Add option='-DVERSION=\\&quot;TRUNK\\&quot;' />
-			<Add option='-DLOCALEDIR=\\&quot;\\&quot;' />
-			<Add option='-DPACKAGE=\\&quot;warzone2100\\&quot;' />
+			<Add option='-DVERSION=\&quot;TRUNK-r2026\&quot;' />
+			<Add option='-DLOCALEDIR=\&quot;\&quot;' />
+			<Add option='-DPACKAGE=\&quot;warzone2100\&quot;' />
+			<Add option="-DWIN32" />
+			<Add option="-DYY_STATIC" />
 			<Add directory="." />
+			<Add directory="C:\devpkg\include" />
 		</Compiler>
 		<Linker>
+			<Add library="mingw32" />
+			<Add library="SDLmain" />
 			<Add library="physfs" />
 			<Add library="png" />
-			<Add library="m" />
+			<Add library="z" />
 			<Add library="SDL" />
-			<Add library="pthread" />
+			<Add library="gdi32" />
 			<Add library="SDL_net" />
-			<Add library="GL" />
-			<Add library="GLU" />
-			<Add library="openal" />
+			<Add library="opengl32" />
+			<Add library="glu32" />
+			<Add library="openal32" />
 			<Add library="vorbisfile" />
 			<Add library="vorbis" />
 			<Add library="ogg" />
+			<Add library="dbghelp" />
+			<Add library="winmm" />
+			<Add library="wsock32" />
+			<Add library="glc32" />
+			<Add directory="C:\devpkg\lib" />
 		</Linker>
 		<Unit filename="lib/framework/SDL_framerate.c">
 			<Option compilerVar="CC" />
@@ -106,6 +116,10 @@
 			<Option weight="10" />
 			<Option compiler="gcc" use="1" buildCommand="bison -y -d -olib/framework/resource_parser.tab.c $file\n$compiler $options $includes -c lib/framework/resource_parser.tab.c -o $object" />
 		</Unit>
+		<Unit filename="lib/framework/strnlen1.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib/framework/strnlen1.h" />
 		<Unit filename="lib/framework/strres.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -866,6 +880,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/wrappers.h" />
+		<Unit filename="win32\warzone2100.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
 		<Extensions>
 			<code_completion />
 		</Extensions>
