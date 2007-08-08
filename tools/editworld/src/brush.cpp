@@ -29,6 +29,7 @@
 #include "tiletypes.h"
 #include "debugprint.hpp"
 #include "assert.h"
+#include "undoredo.h"
 
 extern DWORD g_Flags[MAXTILES];
 extern CUndoRedo *g_UndoRedo;

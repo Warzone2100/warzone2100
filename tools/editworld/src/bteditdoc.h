@@ -39,7 +39,6 @@
 #include "chnkio.h"
 #include "tiletypes.h"
 
-#include "undoredo.h"
 #include "brushprop.h"
 
 #define EBVIEW_YOFFSET 32

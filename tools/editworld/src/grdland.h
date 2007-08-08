@@ -26,6 +26,7 @@
 #define __GRDLAND_INCLUDED__
 
 #include "chnkio.h"
+#include "typedefs.h"
 
 class CGrdTileIO : public CChnkIO {
 public:

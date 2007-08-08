@@ -36,6 +36,7 @@
 #include "tiletypes.h"
 #include "objectproperties.h"
 #include "keyhandler.hpp"
+#include "undoredo.h"
 
 #define KEY_SEAUP			'U'
 #define KEY_SEADOWN			'J'

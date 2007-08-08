@@ -35,6 +35,7 @@
 //#include "DebugWin.h"
 #include "objectproperties.h"
 #include "keyhandler.hpp"
+#include "undoredo.h"
 
 #define KEY_ROTATETILE	'R'
 #define KEY_ROTATETILE2	'E'

@@ -242,6 +242,10 @@ SOURCE=.\tiletypes.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\undoredo.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\wfview.cpp
 # End Source File
 # End Group
