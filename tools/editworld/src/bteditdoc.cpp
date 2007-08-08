@@ -36,7 +36,6 @@
 #include "wfview.h"
 #include "textureview.h"
 #include "bteditview.h"
-#include "snapprefs.h"
 #include "savesegmentdialog.hpp"
 #include "limitsdialog.h"
 #include "initiallimitsdlg.hpp"

@@ -282,10 +282,6 @@ SOURCE=.\chnkio.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\d3dwrap.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\ddimage.h
 # End Source File
 # Begin Source File
