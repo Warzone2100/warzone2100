@@ -4,7 +4,8 @@
    * Fix: Improve POSIX exception handler reliability (GDB could have had trouble locating the executable)
    * Fix: Workaround a bug in OpenAL SI 0.0.8 GNU/Linux, which could lead to a crash
    * Fix: Dead objects could be targeted when structures used commanders and counterbatteries for targeting
-   * Fix: Fix a bug where we would crash upon receiving invalid sound ID numbers (bug #9694)
+   * Fix: bug #9694: crash upon receiving invalid sound ID numbers (out of bounds array access)
+   * Fix: bug #9704: prevent divide by zero errors caused by ordering a VTOL to attack a droid at the same X & Y coordinates
 
 2007-06-22: Version 2.0.7
  * General:
