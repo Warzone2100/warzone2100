@@ -265,7 +265,9 @@ const char *sound_GetTrackName( SDWORD iTrack )
 {
 	// If we get an invalid track ID or there are
 	// currently no tracks loaded then return NULL
-	if (iTrack == SAMPLE_NOT_FOUND
+	if (iTrack <= 0
+	 || iTrack >= MAX_TRACKS
+	 || iTrack == SAMPLE_NOT_FOUND
 	 || g_apTrack == NULL)
 	{
 		return NULL;

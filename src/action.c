@@ -653,7 +653,7 @@ BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 static void actionAddVtolAttackRun( DROID *psDroid )
 {
 	FRACT_D		fA;
-	SDWORD		iVNx, iVNy, iA, iX, iY;
+	SDWORD		deltaX, deltaY, iA, iX, iY;
 	BASE_OBJECT	*psTarget;
 #if 0
 	SDWORD		iVx, iVy;
@@ -675,11 +675,11 @@ static void actionAddVtolAttackRun( DROID *psDroid )
 	}
 
 	/* get normal vector from droid to target */
-	iVNx = psTarget->x - psDroid->x;
-	iVNy = psTarget->y - psDroid->y;
+	deltaX = psTarget->x - psDroid->x;
+	deltaY = psTarget->y - psDroid->y;
 
-	/* get magnitude of normal vector */
-	fA = trigIntSqrt( iVNx*iVNx + iVNy*iVNy );
+	/* get magnitude of normal vector (Pythagorean theorem) */
+	fA = trigIntSqrt( deltaX*deltaX + deltaY*deltaY );
 	iA = MAKEINT(fA);
 
 #if 0
@@ -687,8 +687,8 @@ static void actionAddVtolAttackRun( DROID *psDroid )
 	 * swap normal vector elements and negate y:
 	 * scale to attack ellipse width
 	 */
-	iVx =  iVNy * VTOL_ATTACK_WIDTH / iA;
-	iVy = -iVNx * VTOL_ATTACK_WIDTH / iA;
+	iVx =  deltaY * VTOL_ATTACK_WIDTH / iA;
+	iVy = -deltaX * VTOL_ATTACK_WIDTH / iA;
 
 	/* add waypoint left perpendicular to target*/
 	iX = psTarget->x + iVx;
@@ -696,8 +696,23 @@ static void actionAddVtolAttackRun( DROID *psDroid )
 #endif
 
 	/* add waypoint behind target attack length away*/
-	iX = psTarget->x + (iVNx * VTOL_ATTACK_LENGTH / iA);
-	iY = psTarget->y + (iVNy * VTOL_ATTACK_LENGTH / iA);
+	if (iA != 0)
+	{
+		iX = psTarget->x + (deltaX * VTOL_ATTACK_LENGTH / iA);
+		iY = psTarget->y + (deltaY * VTOL_ATTACK_LENGTH / iA);
+	}
+	else
+	{
+		// We should only ever get here if both deltaX and deltaY
+		// are zero (look at the above pythagoeran theorem).
+		// This code is here to prevent a divide by zero error
+		//
+		// The next values are valid because if both deltas are zero
+		// then iA will be zero as well resulting in:
+		// (deltaXY * VTOL_ATTACK_LENGTH / iA) = (0 * VTOL_ATTACK_LENGTH / 0) = (0 / 0) = 0
+		iX = psTarget->x;
+		iY = psTarget->y;
+	}
 
 	if ( iX<=0 || iY<=0 ||
 		 iX>(SDWORD)(GetWidthOfMap()<<TILE_SHIFT) ||
