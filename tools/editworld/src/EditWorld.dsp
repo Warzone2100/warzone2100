@@ -394,10 +394,6 @@ SOURCE=.\savesegmentdialog.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\snapprefs.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\stdafx.h
 # End Source File
 # Begin Source File
