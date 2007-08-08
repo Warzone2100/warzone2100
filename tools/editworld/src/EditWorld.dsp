@@ -342,10 +342,6 @@ SOURCE=.\heightmap.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\infodialog.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\initiallimitsdlg.hpp
 # End Source File
 # Begin Source File
