@@ -34,34 +34,30 @@
 // CLimitsDialog dialog
 
 
-CLimitsDialog::CLimitsDialog(CHeightMap *World,CWnd* pParent /*=NULL*/)
-	: CDialog(CLimitsDialog::IDD, pParent)
+CLimitsDialog::CLimitsDialog(CHeightMap* World, CWnd* pParent) :
+	CDialog(CLimitsDialog::IDD, pParent),
+	_MaxX(0),
+	_MaxZ(0),
+	_MinX(0),
+	_MinZ(0),
+	_ScriptName(_T("")),
+	_World(World),
+	_SelectedItemIndex(-1)
 {
-	//{{AFX_DATA_INIT(CLimitsDialog)
-	m_MaxX = 0;
-	m_MaxZ = 0;
-	m_MinX = 0;
-	m_MinZ = 0;
-	m_ScriptName = _T("");
-	//}}AFX_DATA_INIT
-
-	m_World = World;
-	m_SelectedItemIndex = -1;
 }
 
-//	CListCtrl *List = (CListCtrl*)GetDlgItem(IDC_LISTLIMITS);
-//    List->InsertColumn (0, "Script Name", LVCFMT_LEFT, 128);
+//    Limits_ListCtrl->InsertColumn (0, "Script Name", LVCFMT_LEFT, 128);
 
 void CLimitsDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CLimitsDialog)
-	DDX_Text(pDX, IDC_SL_MAXX, m_MaxX);
-	DDX_Text(pDX, IDC_SL_MAXZ, m_MaxZ);
-	DDX_Text(pDX, IDC_SL_MINX, m_MinX);
-	DDX_Text(pDX, IDC_SL_MINZ, m_MinZ);
-	DDX_Text(pDX, IDC_SL_SCRIPTNAME, m_ScriptName);
-	DDV_MaxChars(pDX, m_ScriptName, 32);
+	DDX_Text(pDX, IDC_SL_MAXX, _MaxX);
+	DDX_Text(pDX, IDC_SL_MAXZ, _MaxZ);
+	DDX_Text(pDX, IDC_SL_MINX, _MinX);
+	DDX_Text(pDX, IDC_SL_MINZ, _MinZ);
+	DDX_Text(pDX, IDC_SL_SCRIPTNAME, _ScriptName);
+	DDV_MaxChars(pDX, _ScriptName, 32);
 	//}}AFX_DATA_MAP
 }
 
@@ -90,14 +86,19 @@ BOOL CLimitsDialog::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	CListCtrl *List = (CListCtrl*)GetDlgItem(IDC_LISTLIMITS);
+	Limits_ListCtrl = (CListCtrl*)GetDlgItem(IDC_LISTLIMITS);
+	ScriptName_EditBox = (CEdit*)GetDlgItem(IDC_SL_SCRIPTNAME);
+	MaxX_EditBox = (CEdit*)GetDlgItem(IDC_SL_MAXX);
+	MaxZ_EditBox = (CEdit*)GetDlgItem(IDC_SL_MAXZ);
+	MinX_EditBox = (CEdit*)GetDlgItem(IDC_SL_MINX);
+	MinZ_EditBox = (CEdit*)GetDlgItem(IDC_SL_MINZ);
 
-    List->InsertColumn (0, "Name", LVCFMT_LEFT, 128);
-    List->InsertColumn (1, "Unique ID", LVCFMT_LEFT, 64);
-    List->InsertColumn (2, "Min X", LVCFMT_LEFT, 48);
-    List->InsertColumn (3, "Min Z", LVCFMT_LEFT, 48);
-    List->InsertColumn (4, "Max X", LVCFMT_LEFT, 48);
-    List->InsertColumn (5, "Max Z", LVCFMT_LEFT, 48);
+    Limits_ListCtrl->InsertColumn (0, "Name",      LVCFMT_LEFT, 128);
+    Limits_ListCtrl->InsertColumn (1, "Unique ID", LVCFMT_LEFT, 64);
+    Limits_ListCtrl->InsertColumn (2, "Min X",     LVCFMT_LEFT, 48);
+    Limits_ListCtrl->InsertColumn (3, "Min Z",     LVCFMT_LEFT, 48);
+    Limits_ListCtrl->InsertColumn (4, "Max X",     LVCFMT_LEFT, 48);
+    Limits_ListCtrl->InsertColumn (5, "Max Z",     LVCFMT_LEFT, 48);
 
 	RebuildList();
 
@@ -113,7 +114,7 @@ void CLimitsDialog::OnGetdispinfoListlimits(NMHDR* pNMHDR, LRESULT* pResult)
 	
 	char String[256];
 
-	std::list<CScrollLimits>::const_iterator ScrollLimits = m_World->GetScrollLimits().begin();
+	std::list<CScrollLimits>::const_iterator ScrollLimits = _World->GetScrollLimits().begin();
 	std::advance(ScrollLimits, item.iItem);
 
 	switch (pDispInfo->item.iSubItem) {
@@ -150,13 +151,13 @@ void CLimitsDialog::OnKeydownListlimits(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LV_KEYDOWN* pLVKeyDown = (LV_KEYDOWN*)pNMHDR;
 
-	CListCtrl *List = (CListCtrl*)GetDlgItem(IDC_LISTLIMITS);
-
-	switch(pLVKeyDown->wVKey) {
+	switch(pLVKeyDown->wVKey)
+	{
 		case	VK_DELETE:
-			if(m_SelectedItemIndex != -1) {
-				m_World->DeleteScrollLimit(m_SelectedItemIndex);
-				List->DeleteItem(m_SelectedItemIndex);
+			if (_SelectedItemIndex != -1)
+			{
+				_World->DeleteScrollLimit(_SelectedItemIndex);
+				Limits_ListCtrl->DeleteItem(_SelectedItemIndex);
 			}
 			break;
 	}
@@ -170,34 +171,37 @@ void CLimitsDialog::OnItemchangedListlimits(NMHDR* pNMHDR, LRESULT* pResult)
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
 	char String[256];
 	
-	if(pNMListView->iItem != m_SelectedItemIndex) {
-		m_SelectedItemIndex = pNMListView->iItem;
+	if(pNMListView->iItem != _SelectedItemIndex)
+	{
+		_SelectedItemIndex = pNMListView->iItem;
 
-		if(m_SelectedItemIndex < m_World->GetScrollLimits().size())
+		if(_SelectedItemIndex < _World->GetScrollLimits().size())
 		{
-			std::list<CScrollLimits>::const_iterator ScrollLimits = m_World->GetScrollLimits().begin();
-			std::advance(ScrollLimits, m_SelectedItemIndex);
+			std::list<CScrollLimits>::const_iterator ScrollLimits = _World->GetScrollLimits().begin();
+			std::advance(ScrollLimits, _SelectedItemIndex);
 
-			GetDlgItem(IDC_SL_SCRIPTNAME)->SetWindowText(ScrollLimits->ScriptName);
+			ScriptName_EditBox->SetWindowText(ScrollLimits->ScriptName);
 
 			sprintf(String,"%d",ScrollLimits->MinX);
-			GetDlgItem(IDC_SL_MINX)->SetWindowText(String);
+			MinX_EditBox->SetWindowText(String);
 
 			sprintf(String,"%d",ScrollLimits->MinZ);
-			GetDlgItem(IDC_SL_MINZ)->SetWindowText(String);
+			MinZ_EditBox->SetWindowText(String);
 
 			sprintf(String,"%d",ScrollLimits->MaxX);
-			GetDlgItem(IDC_SL_MAXX)->SetWindowText(String);
+			MaxX_EditBox->SetWindowText(String);
 
 			sprintf(String,"%d",ScrollLimits->MaxZ);
-			GetDlgItem(IDC_SL_MAXZ)->SetWindowText(String);
-		} else {
-			m_SelectedItemIndex = -1;
-			GetDlgItem(IDC_SL_SCRIPTNAME)->SetWindowText("");
-			GetDlgItem(IDC_SL_MINX)->SetWindowText("");
-			GetDlgItem(IDC_SL_MINZ)->SetWindowText("");
-			GetDlgItem(IDC_SL_MAXX)->SetWindowText("");
-			GetDlgItem(IDC_SL_MAXZ)->SetWindowText("");
+			MaxZ_EditBox->SetWindowText(String);
+		}
+		else
+		{
+			_SelectedItemIndex = -1;
+			ScriptName_EditBox->SetWindowText("");
+			MinX_EditBox->SetWindowText("");
+			MinZ_EditBox->SetWindowText("");
+			MaxX_EditBox->SetWindowText("");
+			MaxZ_EditBox->SetWindowText("");
 		}
 	}
 
@@ -210,16 +214,14 @@ void CLimitsDialog::OnAddlimits()
 	int MinX,MinZ,MaxX,MaxZ;
 	char ScriptName[MAX_SCRIPTNAME];
 
-	if(! GetEditFields(TRUE,MinX,MinZ,MaxX,MaxZ,ScriptName) ) {
+	if(! GetEditFields(MinX,MinZ,MaxX,MaxZ,ScriptName) ) {
 		return;
 	}
 
-	CListCtrl *List = (CListCtrl*)GetDlgItem(IDC_LISTLIMITS);
+	Limits_ListCtrl->InsertItem(_World->GetNumScrollLimits(), ScriptName);
+	_World->AddScrollLimit(MinX, MinZ, MaxX, MaxZ, ScriptName);
 
-	List->InsertItem(m_World->GetNumScrollLimits(),ScriptName);
-	m_World->AddScrollLimit(MinX,MinZ,MaxX,MaxZ,ScriptName);
-
-	GetDlgItem(IDC_LISTLIMITS)->SetFocus();
+	Limits_ListCtrl->SetFocus();
 }
 
 
@@ -229,93 +231,88 @@ void CLimitsDialog::OnModify()
 	char ScriptName[MAX_SCRIPTNAME];
 	char String[256];
 
-	if(! GetEditFields(TRUE,MinX,MinZ,MaxX,MaxZ,ScriptName) ) {
+	if(! GetEditFields(MinX,MinZ,MaxX,MaxZ,ScriptName) ) {
 		return;
 	}
 
-	if(m_SelectedItemIndex >= 0) {
-		m_World->SetScrollLimit(m_SelectedItemIndex,MinX,MinZ,MaxX,MaxZ,ScriptName);
-		CListCtrl *List = (CListCtrl*)GetDlgItem(IDC_LISTLIMITS);
-		List->SetItem( m_SelectedItemIndex, 0, LVIF_TEXT, ScriptName, 0, 0, 0, NULL);
+	if(_SelectedItemIndex >= 0)
+	{
+		_World->SetScrollLimit(_SelectedItemIndex, MinX, MinZ, MaxX, MaxZ, ScriptName);
+		Limits_ListCtrl->SetItem(_SelectedItemIndex, 0, LVIF_TEXT, ScriptName, 0, 0, 0, NULL);
 
-   		sprintf(String,"%d",MinX);
-		List->SetItem( m_SelectedItemIndex, 2, LVIF_TEXT, String, 0, 0, 0, NULL);
-   		sprintf(String,"%d",MinZ);
-		List->SetItem( m_SelectedItemIndex, 3, LVIF_TEXT, String, 0, 0, 0, NULL);
-   		sprintf(String,"%d",MaxX);
-		List->SetItem( m_SelectedItemIndex, 4, LVIF_TEXT, String, 0, 0, 0, NULL);
-   		sprintf(String,"%d",MaxZ);
-		List->SetItem( m_SelectedItemIndex, 5, LVIF_TEXT, String, 0, 0, 0, NULL);
+   		sprintf(String, "%d", MinX);
+		Limits_ListCtrl->SetItem(_SelectedItemIndex, 2, LVIF_TEXT, String, 0, 0, 0, NULL);
+   		sprintf(String, "%d", MinZ);
+		Limits_ListCtrl->SetItem(_SelectedItemIndex, 3, LVIF_TEXT, String, 0, 0, 0, NULL);
+   		sprintf(String, "%d", MaxX);
+		Limits_ListCtrl->SetItem(_SelectedItemIndex, 4, LVIF_TEXT, String, 0, 0, 0, NULL);
+   		sprintf(String, "%d", MaxZ);
+		Limits_ListCtrl->SetItem(_SelectedItemIndex, 5, LVIF_TEXT, String, 0, 0, 0, NULL);
 	}
 
-	GetDlgItem(IDC_LISTLIMITS)->SetFocus();
+	Limits_ListCtrl->SetFocus();
 }
 
 
 void CLimitsDialog::RebuildList(void)
 {
-	CListCtrl *List = (CListCtrl*)GetDlgItem(IDC_LISTLIMITS);
-
-	List->DeleteAllItems();
+	Limits_ListCtrl->DeleteAllItems();
 
 	unsigned int Index = 0;
-	for (std::list<CScrollLimits>::const_iterator curNode = m_World->GetScrollLimits().begin(); curNode != m_World->GetScrollLimits().end(); ++curNode, ++Index)
+	for (std::list<CScrollLimits>::const_iterator curNode = _World->GetScrollLimits().begin(); curNode != _World->GetScrollLimits().end(); ++curNode, ++Index)
 	{
-		List->InsertItem(Index, curNode->ScriptName);
+		Limits_ListCtrl->InsertItem(Index, curNode->ScriptName);
 	}
 
-	GetDlgItem(IDC_LISTLIMITS)->UpdateWindow();
-	GetDlgItem(IDC_LISTLIMITS)->SetFocus();
+	Limits_ListCtrl->UpdateWindow();
+	Limits_ListCtrl->SetFocus();
 }
 
 
-BOOL CLimitsDialog::GetEditFields(BOOL CheckDup,int &MinX,int &MinZ,int &MaxX,int &MaxZ,char *ScriptName)
+bool CLimitsDialog::GetEditFields(int& MinX, int& MinZ, int& MaxX, int& MaxZ, char* ScriptName)
 {
 	char String[MAX_SCRIPTNAME];
 
-	GetDlgItem(IDC_SL_MINX)->GetWindowText(String,MAX_SCRIPTNAME);
+	MinX_EditBox->GetWindowText(String,MAX_SCRIPTNAME);
 	if( sscanf(String,"%d",&MinX) != 1) {
-		return FALSE;
+		return false;
 	}
 
-	GetDlgItem(IDC_SL_MINZ)->GetWindowText(String,MAX_SCRIPTNAME);
+	MinZ_EditBox->GetWindowText(String,MAX_SCRIPTNAME);
 	if( sscanf(String,"%d",&MinZ) != 1) {
-		return FALSE;
+		return false;
 	}
 
-	GetDlgItem(IDC_SL_MAXX)->GetWindowText(String,MAX_SCRIPTNAME);
+	MaxX_EditBox->GetWindowText(String,MAX_SCRIPTNAME);
 	if( sscanf(String,"%d",&MaxX) != 1) {
-		return FALSE;
+		return false;
 	}
 
-	GetDlgItem(IDC_SL_MAXZ)->GetWindowText(String,MAX_SCRIPTNAME);
+	MaxZ_EditBox->GetWindowText(String,MAX_SCRIPTNAME);
 	if( sscanf(String,"%d",&MaxZ) != 1) {
-		return FALSE;
+		return false;
 	}
 
-	GetDlgItem(IDC_SL_SCRIPTNAME)->GetWindowText(String,MAX_SCRIPTNAME);
+	ScriptName_EditBox->GetWindowText(String,MAX_SCRIPTNAME);
 	strcpy(ScriptName,String);
 
 	if( (MaxX <= MinX) || ( MaxZ <= MinZ) ) {
-		return FALSE;
+		return false;
 	}
 
 	if( (MinX < 0) || (MinZ < 0) ||
 		(MaxX < 0) || (MaxZ < 0) ) {
-		return FALSE;
+		return false;
 	}
 
 	DWORD MapWidth,MapHeight;
-	m_World->GetMapSize(&MapWidth,&MapHeight);
+	_World->GetMapSize(&MapWidth,&MapHeight);
 
-	if( (MinX > MapWidth) || (MinZ > MapHeight) ||
-		(MaxX > MapWidth) || (MaxZ > MapHeight) ) {
-		return FALSE;
-	}
+	if (MinX > MapWidth
+	 || MinZ > MapHeight
+	 || MaxX > MapWidth
+	 || MaxZ > MapHeight)
+		return false;
 
-	// Check for duplicate script name.
-	if(CheckDup) {
-	}
-
-	return TRUE;
+	return true;
 }
