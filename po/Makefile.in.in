@@ -308,7 +308,7 @@ mostlyclean:
 	rm -f stamp-poT
 	rm -f core core.* $(DOMAIN).po $(DOMAIN).1po $(DOMAIN).2po *.new.po
 	rm -fr *.o
-	rm -f warzone.pot
+	rm -f warzone2100.pot
 	rm -f *~
 
 clean: mostlyclean
