@@ -112,7 +112,9 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 	// Watermelon:added a protection against no weapon droid 'numWeaps'
 	// The ai orders a non-combat droid to patrol = crash without it...
 	if(psDroid->asWeaps[0].nStat == 0 || psDroid->numWeaps == 0)
+	{
 		return failure;
+	}
 
 	droidGetNaybors(psDroid);
 
@@ -281,9 +283,11 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 	WEAPON_STATS	*attackerWeapon;
 	BOOL			bEmpWeap=FALSE,bCmdAttached=FALSE,bTargetingCmd=FALSE;
 
-	if(psTarget == NULL || psAttacker == NULL){
+	if (psTarget == NULL || psAttacker == NULL)
+	{
 		return noTarget;
 	}
+	ASSERT(psTarget != psAttacker, "targetAttackWeight: Wanted to evaluate the worth of attacking ourselves...");
 
 	targetTypeBonus = 0;			//Sensors/ecm droids, non-military structures get lower priority
 
@@ -564,7 +568,7 @@ static BOOL aiObjIsWall(BASE_OBJECT *psObj)
 BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot, BOOL bUpdateTarget)
 {
 	UDWORD	radSquared;
-	BASE_OBJECT		*psTarget;
+	BASE_OBJECT		*psTarget = NULL;
 	SDWORD			xdiff,ydiff, distSq, tarDist, minDist;//, longRange;
 	BOOL			bCBTower;
 	STRUCTURE		*psCStruct;
@@ -618,12 +622,16 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 	/* See if there is a something in range */
 	if (psObj->type == OBJ_DROID)
 	{
+		BASE_OBJECT *psCurrTarget = ((DROID *)psObj)->psActionTarget[0];
+
 		/* find a new target */
 		newTargetWeight = aiBestNearestTarget((DROID *)psObj, &psTarget, weapon_slot);
 
-		/* Calculate weight of the current target if updating */
-		if(bUpdateTarget){
-			curTargetWeight = targetAttackWeight(((DROID *)psObj)->psActionTarget[0], psObj, weapon_slot);
+		/* Calculate weight of the current target if updating; but take care not to target
+		 * ourselves... */
+		if (bUpdateTarget && psCurrTarget != psObj)
+		{
+			curTargetWeight = targetAttackWeight(psCurrTarget, psObj, weapon_slot);
 		}
 
 		if (newTargetWeight >= 0 &&		//found a new target
@@ -983,8 +991,7 @@ void aiUpdateDroid(DROID *psDroid)
 
 	// only computer sensor droids in the single player game aquire targets
 	if ((psDroid->droidType == DROID_SENSOR && psDroid->player == selectedPlayer)
-		&& !bMultiPlayer
-		)
+	    && !bMultiPlayer)
 	{
 		lookForTarget = FALSE;
 		updateTarget = FALSE;
@@ -1030,7 +1037,6 @@ void aiUpdateDroid(DROID *psDroid)
 
 	if (lookForTarget && !updateTarget)
 	{
-		//console("Choosing first-time target");
 		turnOffMultiMsg(TRUE);
 		if (psDroid->droidType == DROID_SENSOR)
 		{
@@ -1066,10 +1072,7 @@ void aiUpdateDroid(DROID *psDroid)
 				}
 			}
 		}
-			//debug( LOG_NEVER, "Unit(%s) attacking : %d\n",
-			//		psDroid->pName, psTarget->id);
 		turnOffMultiMsg(FALSE);
-
 	}
 }
 

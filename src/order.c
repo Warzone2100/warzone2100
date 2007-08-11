@@ -4484,57 +4484,6 @@ void orderGroupMoralCheck(DROID_GROUP *psGroup)
 	}
 }
 
-// do a health check for a group - do we need this function?
-/*void orderGroupHealthCheck(DROID_GROUP *psGroup)
-{
-	DROID		*psCurr;
-	RUN_DATA	*psRunData;
-    SBYTE       healthLevel;
-
-	psRunData = &psGroup->sRunData;
-
-    healthLevel = psRunData->healthLevel;
-    if (!healthLevel)
-    {
-        //if not set use player'
-        healthLevel = asRunData[psGroup->psList->player].healthLevel;
-    }
-
-    //if a health level has not been set - quit!
-    if (!healthLevel)
-    {
-        return;
-    }
-
-    // check the health value of all the units in the group
-	for(psCurr=psGroup->psList; psCurr; psCurr=psCurr->psGrpNext)
-	{
-        //check if ANY unit in the group has less than the set level
-		if (PERCENT(psCurr->body, psCurr->originalBody) < psRunData->healthLevel)
-        {
-            break;
-        }
-    }
-
-	// order each unit in the group to run - unless already doing so
-	for(psCurr = psGroup->psList; psCurr; psCurr=psCurr->psGrpNext)
-	{
-		if (orderState(psCurr, DORDER_RUN) ||
-			orderState(psCurr, DORDER_RUNBURN) ||
-			orderState(psCurr, DORDER_RETREAT) ||
-			orderState(psCurr, DORDER_RTB) ||
-			orderState(psCurr, DORDER_RTR) ||
-			orderState(psCurr, DORDER_DESTRUCT))
-		{
-			// already running - ignore
-			continue;
-		}
-
-		debug( LOG_NEVER, "   DORDER_RUN: droid %d\n", psCurr->id);
-		orderDroidLoc(psCurr, DORDER_RUN, psRunData->sPos.x, psRunData->sPos.y);
-	}
-}*/
-
 // do a health check for a droid
 void orderHealthCheck(DROID *psDroid)
 {
