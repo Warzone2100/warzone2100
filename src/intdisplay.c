@@ -233,8 +233,7 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 		return;
 	}
 
-//	ASSERT( !psObj->died,"intUpdateProgressBar: object is dead" );
-	if(psObj->died && psObj->died != NOT_CURRENT_LIST)
+	if (isDead((BASE_OBJECT *)psObj))
 	{
 		return;
 	}
@@ -416,7 +415,7 @@ void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 	if( (psObj != NULL) &&
 		(psObj->type == OBJ_STRUCTURE) && (StructureIsManufacturing(Structure)) )
 	{
-		ASSERT( !psObj->died,"intUpdateQuantity: object is dead" );
+		ASSERT(!isDead(psObj),"intUpdateQuantity: object is dead");
 
 		/*Quantity = StructureGetFactory(Structure)->quantity;
 		if (Quantity == NON_STOP_PRODUCTION)
@@ -470,7 +469,7 @@ void intAddFactoryInc(WIDGET *psWidget, W_CONTEXT *psContext)
 		ASSERT( psObj != NULL,
 			"intAddFactoryInc: invalid structure pointer" );
 
-		ASSERT( !psObj->died,"intAddFactoryInc: object is dead" );
+		ASSERT(!isDead(psObj), "intAddFactoryInc: object is dead");
 
 		Structure = (STRUCTURE*)psObj;
 
@@ -591,7 +590,7 @@ void intUpdateCommandSize(WIDGET *psWidget, W_CONTEXT *psContext)
 		ASSERT( psObj != NULL,
 			"intUpdateCommandSize: invalid droid pointer" );
 
-		ASSERT( !psObj->died,"intUpdateCommandSize: droid has died" );
+		ASSERT(!isDead(psObj), "intUpdateCommandSize: droid has died");
 
 		psDroid = (DROID *)psObj;
 
@@ -623,7 +622,7 @@ void intUpdateCommandExp(WIDGET *psWidget, W_CONTEXT *psContext)
 		ASSERT( psObj != NULL && psObj->type == OBJ_DROID,
 			"intUpdateCommandSize: invalid droid pointer" );
 
-		ASSERT( !psObj->died,"intUpdateCommandSize: droid has died" );
+		ASSERT(!isDead(psObj), "intUpdateCommandSize: droid has died");
 
 		psDroid = (DROID *)psObj;
 
@@ -661,7 +660,7 @@ void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext)
 		ASSERT( psObj != NULL && psObj->type == OBJ_DROID,
 			"intUpdateCommandSize: invalid droid pointer" );
 
-		ASSERT( !psObj->died,"intUpdateCommandSize: droid has died" );
+		ASSERT(!isDead(psObj), "intUpdateCommandSize: droid has died");
 
 		psDroid = (DROID *)psObj;
 
@@ -898,7 +897,6 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UD
 	Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
 
 	{
-
 		Hilight = Form->state & WCLICK_HILITE;
 
 		if(Hilight) {
@@ -913,7 +911,7 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UD
 		Image = -1;
 		psObj = (BASE_OBJECT*)Buffer->Data;	// Get the object associated with this widget.
 
-		if (psObj && (psObj->died) && (psObj->died != NOT_CURRENT_LIST))
+		if (psObj && isDead(psObj))
 		{
 			// this may catch this horrible crash bug we've been having,
 			// who knows?.... Shipping tomorrow, la de da :-)
@@ -1106,7 +1104,6 @@ void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UD
 	Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
 
 	{
-
 		Hilight = Form->state & WCLICK_HILITE;
 
 		if(Hilight) {
@@ -1120,7 +1117,7 @@ void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UD
 		Object = NULL;
 		psObj = (BASE_OBJECT*)Buffer->Data;	// Get the object associated with this widget.
 
-		if (psObj && psObj->died && psObj->died != NOT_CURRENT_LIST)
+		if (psObj && isDead(psObj))
 		{
 			// this may catch this horrible crash bug we've been having,
 			// who knows?.... Shipping tomorrow, la de da :-)

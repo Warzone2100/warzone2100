@@ -642,7 +642,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 					(secondaryGetState((DROID *)psObj, DSO_HALTTYPE, &state) &&	//in case we got this target from a friendly unit see if can pursue it
 					(state != DSS_HALT_HOLD)))									//make sure it's guard or pursue
 				{
-					ASSERT(!psTarget->died, "aiChooseTarget: Droid found a dead target!");
+					ASSERT(!isDead(psTarget), "aiChooseTarget: Droid found a dead target!");
 				    *ppsTarget = psTarget;
 				    return TRUE;
 				}
@@ -787,7 +787,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 
 		if (psTarget)
 		{
-			ASSERT(!psTarget->died, "aiChooseTarget: Structure found a dead target!");
+			ASSERT(!isDead(psTarget), "aiChooseTarget: Structure found a dead target!");
 			*ppsTarget = psTarget;
 			return TRUE;
 		}

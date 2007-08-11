@@ -34,6 +34,9 @@
 #include "deliverance.h"
 #include "displaydef.h"
 
+//the died flag for a droid is set to this when it gets added to the non-current list
+#define     NOT_CURRENT_LIST        1
+
 #define TURRET_ROTATION_RATE    360
 /***************************************************************************/
 
@@ -106,6 +109,12 @@ typedef struct SIMPLE_OBJECT
 SIMPLE_OBJECT;
 
 /***************************************************************************/
+
+static inline bool isDead(BASE_OBJECT *psObj)
+{
+	// See objmem.c for comments on the NOT_CURRENT_LIST hack
+	return (psObj->died > NOT_CURRENT_LIST);
+}
 
 /* assert if object is bad */
 #define CHECK_OBJECT(object) \

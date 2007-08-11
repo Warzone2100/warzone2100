@@ -229,8 +229,7 @@ static BOOL _intAddTransporter(DROID *psSelected, BOOL offWorld)
     multiPlayer where the transporter can be killed*/
     if (bMultiPlayer)
     {
-        if (psCurrTransporter && psCurrTransporter->died &&
-            psCurrTransporter->died != NOT_CURRENT_LIST)
+        if (psCurrTransporter && isDead((BASE_OBJECT *)psCurrTransporter))
         {
             intRemoveTransNoAnim();
             return TRUE;
@@ -1106,8 +1105,8 @@ UDWORD calcRemainingCapacity(DROID *psTransporter)
 	SDWORD	capacity = TRANSPORTER_CAPACITY;
 	DROID *psDroid,*psNext;
 
-	// If it's dead, and it really is dead then just return 0.
-	if ( ( psTransporter->died ) && (psTransporter->died != NOT_CURRENT_LIST) )
+	// If it's dead then just return 0.
+	if (isDead((BASE_OBJECT *)psTransporter))
 	{
 		return 0;
 	}

@@ -404,7 +404,7 @@ void	removeDroidBase(DROID *psDel)
 	//tell the power system its gone
 	powerDestroyObject((BASE_OBJECT *)psDel);
 
-	if (psDel->died && psDel->died != NOT_CURRENT_LIST)
+	if (isDead((BASE_OBJECT *)psDel))
 	{
 		// droid has already been killed, quit
 		return;
@@ -658,7 +658,7 @@ BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 	//tell the power system its gone
 	powerDestroyObject((BASE_OBJECT *)psDroid);
 
-	if (psDroid->died && psDroid->died != NOT_CURRENT_LIST)
+	if (isDead((BASE_OBJECT *)psDroid))
 	{
 		// droid has already been killed, quit
 		return FALSE;

@@ -28,9 +28,6 @@
 
 #include "objectdef.h"
 
-//the died flag for a droid is set to this when it gets added to the non-current list
-#define     NOT_CURRENT_LIST        1
-
 /* The lists of objects allocated */
 extern DROID			*apsDroidLists[MAX_PLAYERS];
 extern STRUCTURE		*apsStructLists[MAX_PLAYERS];

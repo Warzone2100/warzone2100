@@ -175,7 +175,7 @@ void scrvUpdateBasePointers(void)
 			psVal = asBasePointers[i];
 			psObj = (BASE_OBJECT *)psVal->v.oval;
 
-			if (psObj && psObj->died && psObj->died != NOT_CURRENT_LIST)
+			if (psObj && isDead(psObj))
 			{
 				psVal->v.oval = NULL;
 			}

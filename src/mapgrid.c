@@ -205,7 +205,7 @@ static void gridCalcCoverage(BASE_OBJECT *psObj, SDWORD objx, SDWORD objy, COVER
 // add an object to the grid system
 void gridAddObject(BASE_OBJECT *psObj)
 {
-	ASSERT(!psObj->died, "Added a dead object to the map grid!");
+	ASSERT(!isDead(psObj), "Added a dead object to the map grid!");
     gridCalcCoverage(psObj, (SDWORD)psObj->x, (SDWORD)psObj->y, GRID_ADDOBJECT);
 }
 
