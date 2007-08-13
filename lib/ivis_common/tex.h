@@ -24,7 +24,7 @@
 
 //*************************************************************************
 
-#define iV_TEX_MAX 64
+#define iV_TEX_MAX 128
 #define iV_TEX_INVALID -1
 #define iV_TEXNAME_MAX 64
 
