@@ -6561,7 +6561,6 @@ BOOL scrSetDroidKills(void)
 BOOL scrGetDroidKills(void)
 {
 	DROID	*psDroid;
-	SDWORD	kills;
 
 	if (!stackPopParams(1, ST_DROID, &psDroid))
 	{
