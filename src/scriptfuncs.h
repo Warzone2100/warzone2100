@@ -505,6 +505,9 @@ extern BOOL	scrClearConsole(void);
 // set the number of kills for a droid
 extern BOOL scrSetDroidKills(void);
 
+// get the number of kills for a droid
+extern BOOL scrGetDroidKills(void);
+
 // reset the visibility for a player
 extern BOOL scrResetPlayerVisibility(void);
 

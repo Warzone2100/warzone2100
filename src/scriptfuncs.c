@@ -6552,7 +6552,34 @@ BOOL scrSetDroidKills(void)
 		return FALSE;
 	}
 
-	psDroid->numKills = (UWORD)kills;
+	psDroid->numKills = (UWORD)kills * 100;
+
+	return TRUE;
+}
+
+// get the number of kills for a droid
+BOOL scrGetDroidKills(void)
+{
+	DROID	*psDroid;
+	SDWORD	kills;
+
+	if (!stackPopParams(1, ST_DROID, &psDroid))
+	{
+		return TRUE;
+	}
+
+	if ((psDroid == NULL) ||
+		(psDroid->type != OBJ_DROID))
+	{
+		ASSERT( FALSE, "scrGetDroidKills: NULL/invalid unit pointer" );
+		return FALSE;
+	}
+
+	scrFunctionResult.v.ival = psDroid->numKills;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
+	{
+		return FALSE;
+	}
 
 	return TRUE;
 }
