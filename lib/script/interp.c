@@ -225,26 +225,19 @@ static BOOL interpGetArrayVarData(INTERP_VAL **pip, VAL_CHUNK *psGlobals, SCRIPT
 
 	if (base >= psProg->numArrays)
 	{
-		ASSERT( FALSE,
+		debug( LOG_ERROR,
 			"interpGetArrayVarData: array base index out of range" );
 		return FALSE;
 	}
 	if (dimensions != psProg->psArrayInfo[base].dimensions)
 	{
-		ASSERT( FALSE,
+		debug( LOG_ERROR,
 			"interpGetArrayVarData: dimensions do not match" );
 		return FALSE;
 	}
 
 	// get the number of elements for each dimension
 	elements = psProg->psArrayInfo[base].elements;
-/*	pElem = (UBYTE *) (ip + 1);
-	for(i=0; i<dimensions; i+=1)
-	{
-		elements[i] = *pElem;
-
-		pElem += 1;
-	}*/
 
 	// calculate the index of the array element
 	size = 1;
@@ -258,7 +251,7 @@ static BOOL interpGetArrayVarData(INTERP_VAL **pip, VAL_CHUNK *psGlobals, SCRIPT
 
 		if ( (val < 0) || (val >= elements[i]) )
 		{
-			ASSERT( FALSE, "interpGetArrayVarData: Array index for dimension %d out of range (passed index = %d, max index = %d)", i , val, elements[i]);
+			debug( LOG_ERROR, "interpGetArrayVarData: Array index for dimension %d out of range (passed index = %d, max index = %d)", i , val, elements[i]);
 			return FALSE;
 		}
 
@@ -281,15 +274,12 @@ static BOOL interpGetArrayVarData(INTERP_VAL **pip, VAL_CHUNK *psGlobals, SCRIPT
 	// check the index is valid
 	if (index > psProg->arraySize)
 	{
-		ASSERT( FALSE, "interpGetArrayVarData: Array indexes out of variable space" );
+		debug( LOG_ERROR, "interpGetArrayVarData: Array indexes out of variable space" );
 		return FALSE;
 	}
 
 	// get the variable data
 	*ppsVal = interpGetVarData(psGlobals, psProg->psArrayInfo[base].base + index);
-
-	// calculate the number of DWORDs needed to store the number of elements for each dimension of the array
-//	elementDWords = (dimensions - 1)/4 + 1;
 
 	// update the instruction pointer
 	*pip += 1;// + elementDWords;
