@@ -66,13 +66,13 @@ BOOL scrGroupAddDroid(void)
 	}
 	if (psDroid->droidType == DROID_COMMAND)
 	{
-		ASSERT( FALSE,
+		debug( LOG_ERROR,
 			"scrGroupAdd: cannot add a command droid to a group" );
 		return FALSE;
 	}
 	if (psDroid->droidType == DROID_TRANSPORTER)
 	{
-		ASSERT( FALSE,
+		debug( LOG_ERROR,
 			"scrGroupAdd: cannot add a transporter to a group" );
 		return FALSE;
 	}
