@@ -467,28 +467,42 @@ void script_debug(const char *pFormat, ...);
 	free(psDcl)
 
 /* Allocate a variable declaration block */
+static inline CODE_ERROR do_ALLOC_VARIDENTDECL(VAR_IDENT_DECL** psDcl, const char* ident, unsigned int dim)
+{
+	// Allocate memory
+	*psDcl = malloc(sizeof(VAR_IDENT_DECL));
+	if (*psDcl == NULL)
+	{
+		scr_error("Out of memory");
+		ALLOC_ERROR_ACTION;
+	}
+
+	// Copy over the "ident" string (if it's there)
+	if (ident != NULL)
+	{
+		(*psDcl)->pIdent = strdup(ident);
+		if ((*psDcl)->pIdent == NULL)
+		{
+			scr_error("Out of memory");
+			ALLOC_ERROR_ACTION;
+		}
+	}
+	else
+	{
+		(*psDcl)->pIdent = NULL;
+	}
+
+	(*psDcl)->dimensions = dim;
+
+	return CE_OK;
+}
+
 #define ALLOC_VARIDENTDECL(psDcl, ident, dim) \
-	(psDcl)=malloc(sizeof(VAR_IDENT_DECL)); \
-	if ((psDcl) == NULL) \
-	{ \
-		scr_error("Out of memory"); \
-		ALLOC_ERROR_ACTION; \
-	} \
-	if ((ident) != NULL) \
-	{ \
-		(psDcl)->pIdent=malloc(strlen(ident)+1); \
-		if ((psDcl)->pIdent == NULL) \
-		{ \
-			scr_error("Out of memory"); \
-			ALLOC_ERROR_ACTION; \
-		} \
-		strcpy((psDcl)->pIdent, (ident)); \
-	} \
-	else \
-	{ \
-		(psDcl)->pIdent = NULL; \
-	} \
-	(psDcl)->dimensions = (dim)
+{ \
+	CODE_ERROR err = do_ALLOC_VARIDENTDECL(&psDcl, ident, dim); \
+	if (err != CE_OK) \
+		return err; \
+}
 
 /* Free a variable declaration block */
 #define FREE_VARIDENTDECL(psDcl) \
