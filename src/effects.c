@@ -2690,200 +2690,208 @@ BOOL	bOnFire;
 }
 // -----------------------------------------------------------------------------------
 /* This will save out the effects data */
-BOOL	writeFXData( char *pFileName )
+bool writeFXData(const char* fileName)
 {
-	char *pFileData;		// Pointer to the necessary allocated memory
-EFFECT			*pFXData;
-UDWORD			fileSize;		// How many bytes we need - depends on compression
-FX_SAVEHEADER	*psHeader;		// Pointer to the header part of the file
-UDWORD			fxEntries;		// Effectively, how many tiles are there?
-UDWORD			i;
-UDWORD			imdHashedNumber;
-iIMDShape		*psOrig;
+	unsigned int i;
 
-	/* How many FX do we write out data from? Only write active ones! */
-	for(i=0,fxEntries = 0; i<MAX_EFFECTS; i++)
+	FX_SAVEHEADER fileHeader;
+
+	PHYSFS_file*  fileHandle = openSaveFile(fileName);
+	if (!fileHandle)
+	{
+		return false;
+	}
+
+	fileHeader.aFileType[0] = 'f';
+	fileHeader.aFileType[1] = 'x';
+	fileHeader.aFileType[2] = 'd';
+	fileHeader.aFileType[3] = 'a';
+
+	fileHeader.version = CURRENT_VERSION_NUM;
+
+	// Count all the active EFFECTs
+	for (i=0, fileHeader.entries = 0; i < MAX_EFFECTS; ++i)
 	{
 		if(effectStatus[i] == ES_ACTIVE)
 		{
-			fxEntries++;
+			++fileHeader.entries;
 		}
 	}
 
-	/* Calculate memory required */
-	fileSize = ( sizeof(struct _fx_save_header) + ( fxEntries*sizeof(struct _effect_def) ) );
-
-	/* Try and allocate it - freed up in same function */
-	pFileData = (char*)malloc(fileSize);
-
-	/* Did we get it? */
-	if(!pFileData)
+	if (PHYSFS_write(fileHandle, fileHeader.aFileType, sizeof(fileHeader.aFileType), 1) != 1
+	 || !PHYSFS_writeUBE32(fileHandle, fileHeader.version)
+	 || !PHYSFS_writeUBE32(fileHandle, fileHeader.entries))
 	{
-		/* Nope, so do one */
-		debug( LOG_ERROR, "Saving FX data : Cannot get the memory! (%d)", fileSize );
-		abort();
-		return(FALSE);
+		debug(LOG_ERROR, "writeFXData: could not write to %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
+		PHYSFS_close(fileHandle);
+		return false;
 	}
 
-	/* We got the memory, so put the file header on the file */
-	psHeader = (FX_SAVEHEADER *)pFileData;
-	psHeader->aFileType[0] = 'f';
-	psHeader->aFileType[1] = 'x';
-	psHeader->aFileType[2] = 'd';
-	psHeader->aFileType[3] = 'a';
-	psHeader->entries = fxEntries;
-
-	/* Write out the version number - unlikely to change for FX data */
-	psHeader->version = CURRENT_VERSION_NUM;
-
-	/* FX_SAVEHEADER */
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->entries);
-
-	/* Skip past the header to the raw data area */
-	pFXData = (EFFECT*)(pFileData + sizeof(struct _fx_save_header));
-
-	for(i=0; i<MAX_EFFECTS; i++)
+	for (i = 0; i < MAX_EFFECTS; ++i)
 	{
-		if(effectStatus[i] == ES_ACTIVE)
+		const EFFECT* curEffect = &asEffectsList[i];
+		uint32_t imdHashedNumber;
+
+		// Don't save inactive effects
+		if (effectStatus[i] != ES_ACTIVE)
+			continue;
+
+
+		// Retrieve the IMD hash number
+		if (curEffect->imd)
 		{
-			/*
-			restore = FALSE;
-			// Can't save out the pointer, so hash it first
-			if(asEffectsList[i].imd)
-			{
-				restore = TRUE;
-				psTemp = asEffectsList[i].imd;
-				psOrig =asEffectsList[i].imd;
-				asEffectsList[i].imd = (iIMDShape*)resGetHashfromData("IMD",psOrig,&imdHashedNumber);
-			}
-			memcpy(pFXData,&asEffectsList[i],sizeof(struct _effect_def));
-			if(restore)
-			{
-				asEffectsList[i].imd = psTemp;
-			}
-			*/
-			memcpy(pFXData,&asEffectsList[i],sizeof(struct _effect_def));
-			/* Is there an imd? */
-			if(asEffectsList[i].imd)
-			{
-				psOrig = asEffectsList[i].imd;
-				// Gerard: FIXME: not 64bit compatible
-				resGetHashfromData("IMD",psOrig,&imdHashedNumber);
-				endian_udword(&imdHashedNumber);
-				pFXData->imd = (iIMDShape*)imdHashedNumber;
-			}
+			resGetHashfromData("IMD", curEffect->imd, &imdHashedNumber);
+		}
+		else
+		{
+			imdHashedNumber = 0;
+		}
 
-			/* EFFECT */
-			endian_uword(&pFXData->size);
-			endian_fract(&pFXData->position.x);
-			endian_fract(&pFXData->position.y);
-			endian_fract(&pFXData->position.z);
-			endian_fract(&pFXData->velocity.x);
-			endian_fract(&pFXData->velocity.y);
-			endian_fract(&pFXData->velocity.z);
-			endian_sdword(&pFXData->rotation.x);
-			endian_sdword(&pFXData->rotation.y);
-			endian_sdword(&pFXData->rotation.z);
-			endian_sdword(&pFXData->spin.x);
-			endian_sdword(&pFXData->spin.y);
-			endian_sdword(&pFXData->spin.z);
-			endian_udword(&pFXData->birthTime);
-			endian_udword(&pFXData->lastFrame);
-			endian_uword(&pFXData->frameDelay);
-			endian_uword(&pFXData->lifeSpan);
-			endian_uword(&pFXData->radius);
+		// Write the current EFFECT to the file with endianness swapped correctly
+		// And abort on the first encountered error
+		if (!PHYSFS_writeUBE8 (fileHandle, curEffect->  control)
+		 || !PHYSFS_writeUBE8 (fileHandle, curEffect->  group)
+		 || !PHYSFS_writeUBE8 (fileHandle, curEffect->  type)
+		 || !PHYSFS_writeUBE8 (fileHandle, curEffect->  frameNumber)
+		 || !PHYSFS_writeUBE16(fileHandle, curEffect->  size)
+		 || !PHYSFS_writeUBE8 (fileHandle, curEffect->  baseScale)
+		 || !PHYSFS_writeUBE8 (fileHandle, curEffect->  specific)
 
-			pFXData++;
+		 // Write Vector3f types
+		 || !PHYSFS_writeBEFloat(fileHandle, curEffect->position.x)
+		 || !PHYSFS_writeBEFloat(fileHandle, curEffect->position.y)
+		 || !PHYSFS_writeBEFloat(fileHandle, curEffect->position.z)
+		 || !PHYSFS_writeBEFloat(fileHandle, curEffect->velocity.x)
+		 || !PHYSFS_writeBEFloat(fileHandle, curEffect->velocity.y)
+		 || !PHYSFS_writeBEFloat(fileHandle, curEffect->velocity.z)
+
+		 // Write Vector3i types
+		 || !PHYSFS_writeSBE32(fileHandle, curEffect->  rotation.x)
+		 || !PHYSFS_writeSBE32(fileHandle, curEffect->  rotation.y)
+		 || !PHYSFS_writeSBE32(fileHandle, curEffect->  rotation.z)
+		 || !PHYSFS_writeSBE32(fileHandle, curEffect->  spin.x)
+		 || !PHYSFS_writeSBE32(fileHandle, curEffect->  spin.y)
+		 || !PHYSFS_writeSBE32(fileHandle, curEffect->  spin.z)
+
+		 || !PHYSFS_writeUBE32(fileHandle, curEffect->  birthTime)
+		 || !PHYSFS_writeUBE32(fileHandle, curEffect->  lastFrame)
+		 || !PHYSFS_writeUBE16(fileHandle, curEffect->  frameDelay)
+		 || !PHYSFS_writeUBE16(fileHandle, curEffect->  lifeSpan)
+		 || !PHYSFS_writeUBE16(fileHandle, curEffect->  radius)
+		 || !PHYSFS_writeUBE32(fileHandle, imdHashedNumber))
+		{
+			debug(LOG_ERROR, "writeFXData: could not write to %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
+			PHYSFS_close(fileHandle);
+			return false;
 		}
 	}
 
-	/* Have a bash at opening the file to write */
-	if (!saveFile(pFileName, pFileData, fileSize)) {
-		debug(LOG_ERROR, "Saving FX data: couldn't open file %s", pFileName);
-		return FALSE;
-	}
+	// Close the file
+	PHYSFS_close(fileHandle);
 
-	/* And free up the memory we used */
-	if (pFileData != NULL)
-	{
-		free(pFileData);
-	}
-	/* Everything is just fine! */
-	return TRUE;
+	// Everything is just fine!
+	return true;
 }
 
 // -----------------------------------------------------------------------------------
 /* This will read in the effects data */
-BOOL readFXData(char *pFileData, UDWORD fileSize)
+bool readFXData(PHYSFS_file* fileHandle)
 {
-UDWORD				expectedFileSize;
-FX_SAVEHEADER		*psHeader;
-UDWORD				i;
-EFFECT				*pFXData;
+	FX_SAVEHEADER fileHeader;
+	unsigned int expectedFileSize, fileSize;
+	unsigned int i;
 
-	/* See if we've been given the right file type? */
-	psHeader = (FX_SAVEHEADER *)pFileData;
-	if (psHeader->aFileType[0] != 'f' || psHeader->aFileType[1] != 'x' ||
-		psHeader->aFileType[2] != 'd' || psHeader->aFileType[3] != 'a')	{
-		debug(LOG_ERROR, "Read FX data: Weird file type found? Has header letters "
-				  "- %c %c %c %c", psHeader->aFileType[0], psHeader->aFileType[1],
-								  psHeader->aFileType[2], psHeader->aFileType[3]);
-		return FALSE;
-	}
-
-	/* FX_SAVEHEADER */
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->entries);
-
-	/* How much data are we expecting? */
-	expectedFileSize = (sizeof(struct _fx_save_header) + (psHeader->entries*sizeof(struct _effect_def)) );
-
-	/* Is that what we've been given? */
-	if(fileSize!=expectedFileSize)
+	// Read the header from the file
+	if (PHYSFS_read(fileHandle, fileHeader.aFileType, sizeof(fileHeader.aFileType), 1) != 1
+	 || !PHYSFS_readUBE32(fileHandle, &fileHeader.version)
+	 || !PHYSFS_readUBE32(fileHandle, &fileHeader.entries))
 	{
-		/* No, so bomb out */
-		debug( LOG_ERROR, "Read FX data : Weird file size!" );
-		abort();
-		return(FALSE);
+		debug(LOG_ERROR, "readFXData: error while reading file: %s", PHYSFS_getLastError());
+		return false;
 	}
 
-	/* Skip past the header gubbins - can check version number here too */
-	pFXData = (EFFECT*)(pFileData + sizeof(struct _fx_save_header));
+	// Check the header to see if we've been given a file of the right type
+	if (fileHeader.aFileType[0] != 'f'
+	 || fileHeader.aFileType[1] != 'x'
+	 || fileHeader.aFileType[2] != 'd'
+	 || fileHeader.aFileType[3] != 'a')
+	{
+		debug(LOG_ERROR, "readFXData: Weird file type found? Has header letters - '%c' '%c' '%c' '%c' (should be 'f' 'x' 'd' 'a')",
+		      fileHeader.aFileType[0],
+		      fileHeader.aFileType[1],
+		      fileHeader.aFileType[2],
+		      fileHeader.aFileType[3]);
 
-	/* Clear out anything that's there already! */
+		return false;
+	}
+
+	// Validate the filesize
+	expectedFileSize = sizeof(FX_SAVEHEADER) + fileHeader.entries * 74; // 74 = sizeof(EFFECT) without the padding
+	fileSize = PHYSFS_fileLength(fileHandle);
+	if (PHYSFS_fileLength(fileHandle) != expectedFileSize)
+	{
+		ASSERT(!"readFXData: unexpected filesize", "readFXData: unexpected filesize; should be %u, but is %u", expectedFileSize, fileSize);
+		abort();
+		return false;
+	}
+
+	// Clear out anything that's there already!
 	initEffectsSystem();
 
-	/* For every FX... */
-	for(i=0; i<psHeader->entries; i++)
+	// Load all EFFECTs
+	for(i = 0; i < fileHeader.entries; ++i)
 	{
-		/* EFFECT */
-		endian_uword(&pFXData->size);
-		endian_fract(&pFXData->position.x);
-		endian_fract(&pFXData->position.y);
-		endian_fract(&pFXData->position.z);
-		endian_fract(&pFXData->velocity.x);
-		endian_fract(&pFXData->velocity.y);
-		endian_fract(&pFXData->velocity.z);
-		endian_sdword(&pFXData->rotation.x);
-		endian_sdword(&pFXData->rotation.y);
-		endian_sdword(&pFXData->rotation.z);
-		endian_sdword(&pFXData->spin.x);
-		endian_sdword(&pFXData->spin.y);
-		endian_sdword(&pFXData->spin.z);
-		endian_udword(&pFXData->birthTime);
-		endian_udword(&pFXData->lastFrame);
-		endian_uword(&pFXData->frameDelay);
-		endian_uword(&pFXData->lifeSpan);
-		endian_uword(&pFXData->radius);
+		EFFECT* curEffect = &asEffectsList[i];
+		uint32_t imdHashedNumber;
 
-		memcpy(&asEffectsList[i],pFXData++,sizeof(struct _effect_def));
-		if(asEffectsList[i].imd)
+		ASSERT(i < MAX_EFFECTS, "readFXData: more effects in this file than our array can contain");
+
+		// Read the current EFFECT from the file with endianness swapped correctly
+		// And abort on the first encountered error
+		if (!PHYSFS_readUBE8 (fileHandle, &curEffect->  control)
+		 || !PHYSFS_readUBE8 (fileHandle, &curEffect->  group)
+		 || !PHYSFS_readUBE8 (fileHandle, &curEffect->  type)
+		 || !PHYSFS_readUBE8 (fileHandle, &curEffect->  frameNumber)
+		 || !PHYSFS_readUBE16(fileHandle, &curEffect->  size)
+		 || !PHYSFS_readUBE8 (fileHandle, &curEffect->  baseScale)
+		 || !PHYSFS_readUBE8 (fileHandle, &curEffect->  specific)
+
+		 // Write Vector3f types
+		 || !PHYSFS_readBEFloat(fileHandle, &curEffect->position.x)
+		 || !PHYSFS_readBEFloat(fileHandle, &curEffect->position.y)
+		 || !PHYSFS_readBEFloat(fileHandle, &curEffect->position.z)
+		 || !PHYSFS_readBEFloat(fileHandle, &curEffect->velocity.x)
+		 || !PHYSFS_readBEFloat(fileHandle, &curEffect->velocity.y)
+		 || !PHYSFS_readBEFloat(fileHandle, &curEffect->velocity.z)
+
+		 // Write Vector3i types
+		 || !PHYSFS_readSBE32(fileHandle, &curEffect->  rotation.x)
+		 || !PHYSFS_readSBE32(fileHandle, &curEffect->  rotation.y)
+		 || !PHYSFS_readSBE32(fileHandle, &curEffect->  rotation.z)
+		 || !PHYSFS_readSBE32(fileHandle, &curEffect->  spin.x)
+		 || !PHYSFS_readSBE32(fileHandle, &curEffect->  spin.y)
+		 || !PHYSFS_readSBE32(fileHandle, &curEffect->  spin.z)
+
+		 || !PHYSFS_readUBE32(fileHandle, &curEffect->  birthTime)
+		 || !PHYSFS_readUBE32(fileHandle, &curEffect->  lastFrame)
+		 || !PHYSFS_readUBE16(fileHandle, &curEffect->  frameDelay)
+		 || !PHYSFS_readUBE16(fileHandle, &curEffect->  lifeSpan)
+		 || !PHYSFS_readUBE16(fileHandle, &curEffect->  radius)
+		 || !PHYSFS_readUBE32(fileHandle, &imdHashedNumber))
 		{
-			/* Restore the pointer from the hashed ID */
-			// Gerard: FIXME: not 64bit compatible
-			endian_udword((UDWORD*)&asEffectsList[i].imd);
-			asEffectsList[i].imd = (iIMDShape*)resGetDataFromHash("IMD",(UDWORD)asEffectsList[i].imd);
+			debug(LOG_ERROR, "readFXData: error while reading file: %s", PHYSFS_getLastError());
+			PHYSFS_close(fileHandle);
+			return false;
+		}
+
+		if (imdHashedNumber)
+		{
+			// Restore the pointer from the hashed ID
+			curEffect->imd = (iIMDShape*)resGetDataFromHash("IMD", imdHashedNumber);
+		}
+		else
+		{
+			curEffect->imd = NULL;
 		}
 	}
 
@@ -2891,5 +2899,5 @@ EFFECT				*pFXData;
 	freeEffect = i;
 
 	/* Hopefully everything's just fine by now */
-	return(TRUE);
+	return true;
 }

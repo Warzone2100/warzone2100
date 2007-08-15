@@ -272,6 +272,23 @@ void frameShutDown(void)
 	resShutDown();
 }
 
+PHYSFS_file* openLoadFile(const char* fileName, bool hard_fail)
+{
+	PHYSFS_file* fileHandle = PHYSFS_openRead(fileName);
+	if (!fileHandle)
+	{
+		if (hard_fail)
+		{
+			ASSERT(!"unable to open file", "openLoadFile: file %s could not be opened: %s", fileName, PHYSFS_getLastError());
+		}
+		else
+		{
+			debug(LOG_WARNING, "openLoadFile: optional file %s could not be opened: %s", fileName, PHYSFS_getLastError());
+		}
+	}
+
+	return fileHandle;
+}
 
 /***************************************************************************
   Load the file with name pointed to by pFileName into a memory buffer.
@@ -288,20 +305,12 @@ static BOOL loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 	PHYSFS_sint64 filesize;
 	PHYSFS_sint64 length_read;
 
-	pfile = PHYSFS_openRead(pFileName);
+	pfile = openLoadFile(pFileName, hard_fail);
 	if (!pfile)
 	{
-		if (hard_fail)
-		{
-			debug(LOG_ERROR, "loadFile2: file %s could not be opened: %s", pFileName, PHYSFS_getLastError());
-			assert(!"unable to open file");
-		}
-		else
-		{
-			debug(LOG_WARNING, "loadFile2: optional file %s could not be opened: %s", pFileName, PHYSFS_getLastError());
-		}
 		return FALSE;
 	}
+
 	filesize = PHYSFS_fileLength(pfile);
 
 	//debug(LOG_WZ, "loadFile2: %s opened, size %i", pFileName, filesize);
@@ -367,6 +376,25 @@ static BOOL loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 	return TRUE;
 }
 
+PHYSFS_file* openSaveFile(const char* fileName)
+{
+	PHYSFS_file* fileHandle = PHYSFS_openWrite(fileName);
+	if (!fileHandle)
+	{
+		const char *found = PHYSFS_getRealDir(fileName);
+
+		debug(LOG_ERROR, "saveFile: %s could not be opened: %s", fileName, PHYSFS_getLastError());
+		if (found)
+		{
+			debug(LOG_ERROR, "saveFile: %s found as %s", fileName, found);
+		}
+
+		assert(!"openSaveFile: couldn't open file for writing");
+	}
+
+	return fileHandle;
+}
+
 /***************************************************************************
 	Save the data in the buffer into the given file.
 ***************************************************************************/
@@ -376,18 +404,12 @@ BOOL saveFile(const char *pFileName, const char *pFileData, UDWORD fileSize)
 	PHYSFS_uint32 size = fileSize;
 
 	debug(LOG_WZ, "We are to write (%s) of size %d", pFileName, fileSize);
-	pfile = PHYSFS_openWrite(pFileName);
-	if (!pfile) {
-		const char *found = PHYSFS_getRealDir(pFileName);
-
-		debug(LOG_ERROR, "saveFile: %s could not be opened: %s", pFileName,
-		      PHYSFS_getLastError());
-		if (found) {
-			debug(LOG_ERROR, "saveFile: %s found as %s", pFileName, found);
-		}
-		assert(FALSE);
+	pfile = openSaveFile(pFileName);
+	if (!pfile)
+	{
 		return FALSE;
 	}
+
 	if (PHYSFS_write(pfile, pFileData, 1, size) != size) {
 		debug(LOG_ERROR, "saveFile: %s could not write: %s", pFileName,
 		      PHYSFS_getLastError());

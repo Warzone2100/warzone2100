@@ -195,23 +195,23 @@ typedef enum
 
 typedef struct	_effect_def
 {
-UBYTE			control;		// Controls the bits above - essential,flips etc
-UBYTE			group;			// what	group is it - explosion, building effect etc....
-UBYTE			type;			// what type is it within the group?
-UBYTE			frameNumber;	// what frame number is the imd on?
-UWORD			size;			// Size in terms of percent of original imd.
-UBYTE			baseScale;		// if scaled, what's bottom line?
-UBYTE			specific;		// how many times has it bounced?
-Vector3f		position;		// world coordinates of the effect - floats on the PC.
-Vector3f		velocity;		// movement values per update
-Vector3i			rotation;		// current rotation - only for gravitons
-Vector3i			spin;			// rotation info for spinning things.
-UDWORD			birthTime;		// what time was it introduced into the world?
-UDWORD			lastFrame;		// when did we last update the frame?
-UWORD			frameDelay;		// how many game ticks between each frame?
-UWORD			lifeSpan;		// what is it's life expectancy?
-UWORD			radius;			// Used for area effects
-struct iIMDShape		*imd;			// pointer to the imd the effect uses.
+	uint8_t           control;		// Controls the bits above - essential,flips etc
+	uint8_t           group;			// what	group is it - explosion, building effect etc....
+	uint8_t           type;			// what type is it within the group?
+	uint8_t           frameNumber;	// what frame number is the imd on?
+	uint16_t          size;			// Size in terms of percent of original imd.
+	uint8_t           baseScale;		// if scaled, what's bottom line?
+	uint8_t           specific;		// how many times has it bounced?
+	Vector3f          position;		// world coordinates of the effect - floats on the PC.
+	Vector3f          velocity;		// movement values per update
+	Vector3i          rotation;		// current rotation - only for gravitons
+	Vector3i          spin;			// rotation info for spinning things.
+	uint32_t          birthTime;		// what time was it introduced into the world?
+	uint32_t          lastFrame;		// when did we last update the frame?
+	uint16_t          frameDelay;		// how many game ticks between each frame?
+	uint16_t          lifeSpan;		// what is it's life expectancy?
+	uint16_t          radius;			// Used for area effects
+	struct iIMDShape  *imd;			// pointer to the imd the effect uses.
 } EFFECT;
 
 /* Maximum number of effects in the world - need to investigate what this should be */
@@ -245,8 +245,8 @@ extern void	initPerimeterSmoke			( iIMDShape *pImd, UDWORD x, UDWORD y, UDWORD z
 #define SKY_MULT	1
 #define SKY_SHIMMY_BASE	((DEG(1)*SKY_MULT)/2)
 #define SKY_SHIMMY (SKY_SHIMMY_BASE - (rand()%(2*SKY_SHIMMY_BASE)))
-BOOL readFXData(char *pFileData, UDWORD fileSize);
-extern BOOL	writeFXData( char *pFileName );
+bool readFXData(PHYSFS_file* fileHandle);
+extern bool	writeFXData(const char *fileName);
 extern	void	effectSetSize(UDWORD size);
 extern void	effectSetLandLightSpec(LAND_LIGHT_SPEC spec);
 

@@ -2464,25 +2464,29 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		if ((gameType == GTYPE_SAVE_START) ||
 			(gameType == GTYPE_SAVE_MIDMISSION))
 		{
+			PHYSFS_file* FXDataFile;
+
 			//load in the message list file
 			aFileName[fileExten] = '\0';
 			strcat(aFileName, "fxstate.bjo");
 			// Load in the chosen file data
 			pFileData = fileLoadBuffer;
-			if (loadFileToBufferNoError(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+
+			// Open the file
+			FXDataFile = openLoadFile(aFileName, false);
+			//load the fx data
+			if (FXDataFile)
 			{
-				//load the fx data
-				if (pFileData)
+				if (!readFXData(FXDataFile))
 				{
-					if (!readFXData(pFileData, fileSize))
-					{
-						debug( LOG_NEVER, "loadgame: Fail33\n" );
-						goto error;
-					}
+					debug(LOG_ERROR, "loadgame: Fail33");
+
+					PHYSFS_close(FXDataFile);
+					goto error;
 				}
+
+				PHYSFS_close(FXDataFile);
 			}
-
-
 		}
 	}
 
@@ -3258,7 +3262,7 @@ static void endian_SaveGameV(SAVE_GAME* psSaveGame, UDWORD version) {
     UDWORD i,j;
 	/* SAVE_GAME is GAME_SAVE_V33 */
 	/* GAME_SAVE_V33 includes GAME_SAVE_V31 */
-	if(version >= VERSION_33) 
+	if(version >= VERSION_33)
 	{
 		endian_udword(&psSaveGame->sGame.power);
 		endian_uword(&psSaveGame->sGame.bytesPerSec);
