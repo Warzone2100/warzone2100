@@ -6,6 +6,7 @@
    * Fix: Dead objects could be targeted when structures used commanders and counterbatteries for targeting
    * Fix: bug #9694: crash upon receiving invalid sound ID numbers (out of bounds array access)
    * Fix: bug #9704: prevent divide by zero errors caused by ordering a VTOL to attack a droid at the same X & Y coordinates
+   * New: Repeat keypresses if the key is hold long enough (e.g. one press of 'A' becomes 'AAAAAAAAAA' if just held long enough)
 
 2007-06-22: Version 2.0.7
  * General:

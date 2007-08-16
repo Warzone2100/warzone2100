@@ -137,6 +137,7 @@ void inputInitialise(void)
 	dragKey = MOUSE_LMB;
 
 	SDL_EnableUNICODE(1);
+	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 }
 
 /* add count copies of the characater code to the input buffer */
