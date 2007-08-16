@@ -34,6 +34,7 @@ install-data-local: $(BASEARCHIVE) $(PATCHARCHIVE) $(GRIMARCHIVE)
 	$(MKDIR_P) $(DESTDIR)$(pkgdatadir)
 	$(INSTALL_DATA) $(srcdir)/$(BASEARCHIVE) $(DESTDIR)$(pkgdatadir)/$(BASEARCHIVE)
 	$(INSTALL_DATA) $(srcdir)/$(PATCHARCHIVE) $(DESTDIR)$(pkgdatadir)/$(PATCHARCHIVE)
+	$(INSTALL) -d $(DESTDIR)$(pkgdatadir)/mods/global
 	$(INSTALL_DATA) $(srcdir)/$(GRIMARCHIVE) $(DESTDIR)$(pkgdatadir)/mods/global/$(GRIMARCHIVE)
 
 uninstall-local:
