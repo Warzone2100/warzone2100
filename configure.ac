@@ -31,7 +31,7 @@ case $host_os in
 	mingw32)
 		host_os_mingw32=yes
 		AC_CHECK_TOOL([WINDRES], [windres], AC_MSG_ERROR([windres not found]))
-		WIN32_LIBS="-lintl -lshfolder -lwinmm -lwsock32 -L\$(srcdir) -ldbghelp"
+		WIN32_LIBS="-ldbghelp -lintl -lshfolder -lwinmm -lwsock32"
 		;;
 	*)
 		AC_DEFINE([_XOPEN_SOURCE], 600, [Enable POSIX extensions if present])
