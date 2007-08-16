@@ -141,6 +141,7 @@ void inputInitialise(void)
 	dragKey = MOUSE_LMB;
 
 	SDL_EnableUNICODE(1);
+	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 }
 
 /* add count copies of the characater code to the input buffer */
@@ -353,7 +354,7 @@ void inputHandleMouseButtonEvent(SDL_MouseButtonEvent * buttonEvent)
 				aMouseState[buttonEvent->button].state = KEY_PRESSRELEASE;
 			}
 			else if ( aMouseState[buttonEvent->button].state == KEY_DOWN
-					|| aMouseState[buttonEvent->button].state == KEY_DRAG 
+					|| aMouseState[buttonEvent->button].state == KEY_DRAG
 					|| aMouseState[buttonEvent->button].state == KEY_DOUBLECLICK)
 			{
 				aMouseState[buttonEvent->button].state = KEY_RELEASED;
