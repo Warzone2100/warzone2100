@@ -142,7 +142,7 @@ void texLoad(const char *fileName)
 		// Generate the empty texture buffer in VRAM
 		texPage = newPage(fileName, j, xSize, ySize, 0);
 
-		sprintf(partialPath, "%s-%02d", fileName, i);
+		sprintf(partialPath, "%s-%d", fileName, i);
 
 		// Load until we cannot find anymore of them
 		for (k = 0; k < MAX_TILES; k++)
