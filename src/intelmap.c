@@ -779,7 +779,7 @@ static void intDisplaySeqTextView(WIDGET *psWidget,
 	if(Form->style & WFORM_TABBED)
 	{
 		// Gerard 2007-04-07: dead code?
-		ASSERT(FALSE,"the form is tabbed?");
+		ASSERT(!"the form is tabbed", "intDisplaySeqTextView: the form is tabbed");
 		for (page = 0; page < Form->majorT; page++)
 		{
 			intDisplaySeqTextViewPage(psViewReplay, x0, y0,
@@ -921,7 +921,7 @@ void intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 		//set the read flag
 		psCurrentMsg->read = TRUE;
 
-		debug(LOG_GUI, "intIntelButtonPressed: Dealing with a new message type=%d", 
+		debug(LOG_GUI, "intIntelButtonPressed: Dealing with a new message type=%d",
 		      psMessage->type);
 
 		//should never have a proximity message
