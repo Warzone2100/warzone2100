@@ -6,13 +6,15 @@ BASELIST = anims audio components effects features \
 	script sequenceaudio stats structs texpages wrf
 PATCHLIST = addon.lev anims components effects \
 	messages multiplay stats structs wrf
+GRIMLIST = components structs texpages wrf
 
 BASEARCHIVE=warzone.wz
 PATCHARCHIVE=mp.wz
+GRIMARCHIVE=grim.wz
 
 all:
 ifdef DATA
-all: $(BASEARCHIVE) $(PATCHARCHIVE)
+all: $(BASEARCHIVE) $(PATCHARCHIVE) $(GRIMARCHIVE)
 endif
 
 $(BASEARCHIVE): $(BASELIST)
@@ -23,6 +25,11 @@ $(PATCHARCHIVE): $(PATCHLIST:%=mp/%)
 	cd mp && zip -ru0 ../$@ $(PATCHLIST) -x *svn*
 	zip -T $@
 
+$(GRIMARCHIVE): $(GRIMLIST:%=grim/%)
+	cd grim && zip -ru0 ../$@ $(GRIMLIST) -x *svn*
+	zip -T $@
+
 clean:
 	$(RMF) $(BASEARCHIVE)
 	$(RMF) $(PATCHARCHIVE)
+	$(RMF) $(GRIMARCHIVE)
