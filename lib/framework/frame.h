@@ -232,12 +232,18 @@ static inline bool PHYSFS_readUBE8(PHYSFS_file* file, uint8_t* val)
 
 static inline bool PHYSFS_writeBEFloat(PHYSFS_file* file, float val)
 {
-	uint32_t writeValue = *(uint32_t*)&val;
+	// For the purpose of endian conversions a IEEE754 float can be considered
+	// the same to a 32bit integer.
+	// We're casting through a void pointer here to prevent warnings about type-
+	// punned pointers breaking strict-aliasing rules.
+	uint32_t writeValue = *(uint32_t*)(void*)&val;
 	return (PHYSFS_writeUBE32(file, writeValue) != 0);
 }
 
 static inline bool PHYSFS_readBEFloat(PHYSFS_file* file, float* val)
 {
+	// For the purpose of endian conversions a IEEE754 float can be considered
+	// the same to a 32bit integer.
 	uint32_t* readValue = (uint32_t*)val;
 	return (PHYSFS_readUBE32(file, readValue) != 0);
 }
