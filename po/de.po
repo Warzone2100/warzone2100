@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-07-30 02:46+0200\n"
+"POT-Creation-Date: 2007-08-17 01:02+0200\n"
 "PO-Revision-Date: 2007-07-22 12:25+0100\n"
 "Last-Translator: Ryo <RyoOhkli@gmx.de>\n"
 "Language-Team: Deutsch\n"
@@ -20,54 +20,48 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Bookmarks: 458,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
-#: src/multiplay.c:1894
+#: src/multiplay.c:1856
 msgid "Green"
 msgstr "Gr�n"
 
-#: src/multiplay.c:1895
+#: src/multiplay.c:1857
 msgid "Orange"
 msgstr "Orange"
 
-#: src/multiplay.c:1896
+#: src/multiplay.c:1858
 msgid "Grey"
 msgstr "Grau"
 
-#: src/multiplay.c:1897
+#: src/multiplay.c:1859
 msgid "Black"
 msgstr "Schwarz"
 
-#: src/multiplay.c:1898
+#: src/multiplay.c:1860
 msgid "Red"
 msgstr "Rot"
 
-#: src/multiplay.c:1899
+#: src/multiplay.c:1861
 msgid "Blue"
 msgstr "Blau"
 
-#: src/multiplay.c:1900
+#: src/multiplay.c:1862
 msgid "Pink"
 msgstr "Pink"
 
-#: src/multiplay.c:1901
+#: src/multiplay.c:1863
 msgid "Cyan"
 msgstr "Cyan"
 
-#: src/display.c:1893
+#: src/display.c:1892
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Bau nicht m�glich. �lquelle brennt."
 
-#: src/display.c:2022
-#, c-format
-msgid "%s - Damage %d%% - Serial ID %d - Kills %d order %d action %d, %s"
-msgstr ""
-"%s - Schaden %d%% - Serien Nr %d - Absch�sse %d, Befehl %d Aktion %d, %s"
-
-#: src/display.c:2033
+#: src/display.c:2044
 #, c-format
 msgid "%s - Damage %d%% - Kills %d, %s"
 msgstr "%s - Schaden %d%% - Absch�sse %d, %s"
 
-#: src/display.c:2280
+#: src/display.c:2291
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Baufahrzeug wurde beordert einen �lbohrturm zu bauen"
 
@@ -75,145 +69,145 @@ msgstr "Baufahrzeug wurde beordert einen �lbohrturm zu bauen"
 msgid "Player"
 msgstr "Spieler"
 
-#: src/multigifts.c:172
+#: src/multigifts.c:181
 #, c-format
 msgid "%s Gives You A Visibility Report"
 msgstr "%s �bertr�gt Radardaten"
 
-#: src/multigifts.c:199
+#: src/multigifts.c:208
 #, c-format
 msgid "%s Gives You Units"
 msgstr "%s �bertr�gt Einheiten"
 
-#: src/multigifts.c:294
+#: src/multigifts.c:307
 #, c-format
 msgid "%s Gives You Technology Documents"
 msgstr "%s �bertr�gt technologische Dokumente"
 
-#: src/multigifts.c:334
+#: src/multigifts.c:348
 #, c-format
 msgid "%s Gives You Power"
 msgstr "%s �bertr�gt Energie"
 
-#: src/multigifts.c:355
+#: src/multigifts.c:369
 #, c-format
 msgid "%s Requests An Alliance With You"
 msgstr "%s w�nscht eine Allianz mit dir"
 
-#: src/multigifts.c:363
+#: src/multigifts.c:377
 #, c-format
 msgid "You Invite %s To Form An Alliance"
 msgstr "Du hast %s eingeladen eine Allianz zu bilden"
 
-#: src/multigifts.c:382
+#: src/multigifts.c:398
 #, c-format
 msgid "%s Breaks The Alliance With %s"
 msgstr "%s bricht die Allianz mit %s"
 
-#: src/multigifts.c:407
+#: src/multigifts.c:425
 #, c-format
 msgid "%s Forms An Alliance With %s"
 msgstr "%s bildet eine Allianz mit %s"
 
-#: src/multigifts.c:829
+#: src/multigifts.c:762
 #, c-format
 msgid "You Discover Blueprints For %s"
 msgstr "Du hast Entw�rfe f�r %s entdeckt"
 
-#: src/hci.c:1063 src/hci.c:3854 src/hci.c:4008 src/hci.c:4451 src/hci.c:5691
-#: src/transporter.c:296 src/transporter.c:385 src/transporter.c:886
-#: src/intorder.c:661 src/loadsave.c:259 src/intelmap.c:655
-#: src/multimenu.c:454 src/multimenu.c:1296
+#: src/hci.c:1048 src/hci.c:3827 src/hci.c:3981 src/hci.c:4423 src/hci.c:5646
+#: src/transporter.c:292 src/transporter.c:381 src/transporter.c:878
+#: src/intorder.c:661 src/loadsave.c:259 src/intelmap.c:526
+#: src/multimenu.c:451 src/multimenu.c:1293
 msgid "Close"
 msgstr "Schlie�en"
 
-#: src/hci.c:1697 src/mission.c:3504 src/loop.c:482 src/loop.c:494
+#: src/hci.c:1680 src/mission.c:3498 src/loop.c:480 src/loop.c:492
 msgid "GAME SAVED!"
 msgstr "SPIEL GESPEICHERT!"
 
-#: src/hci.c:3756 src/keymap.c:292
+#: src/hci.c:3729 src/keymap.c:292
 msgid "Commanders"
 msgstr "Kommandanten"
 
-#: src/hci.c:3772 src/keymap.c:291
+#: src/hci.c:3745 src/keymap.c:291
 msgid "Intelligence Display"
 msgstr "Nachrichtendienst"
 
-#: src/hci.c:3788 src/keymap.c:287
+#: src/hci.c:3761 src/keymap.c:287
 msgid "Manufacture"
 msgstr "Produzieren"
 
-#: src/hci.c:3804 src/keymap.c:290
+#: src/hci.c:3777 src/keymap.c:290
 msgid "Design"
 msgstr "Entwerfen"
 
-#: src/hci.c:3820 src/keymap.c:288
+#: src/hci.c:3793 src/keymap.c:288
 msgid "Research"
 msgstr "Forschen"
 
-#: src/hci.c:3836 src/keymap.c:289
+#: src/hci.c:3809 src/keymap.c:289
 msgid "Build"
 msgstr "Bauen"
 
-#: src/hci.c:3916 src/multiint.c:834 src/multiint.c:838
+#: src/hci.c:3889 src/multiint.c:825 src/multiint.c:829
 msgid "Power"
 msgstr "Energie"
 
-#: src/hci.c:4078 src/ingameop.c:294
+#: src/hci.c:4051 src/ingameop.c:279
 msgid "Load Game"
 msgstr "Spiel laden"
 
-#: src/hci.c:4086 src/mission.c:3407 src/mission.c:3557 src/ingameop.c:296
-#: src/ingameop.c:445
+#: src/hci.c:4059 src/mission.c:3404 src/mission.c:3551 src/ingameop.c:281
+#: src/ingameop.c:420
 msgid "Save Game"
 msgstr "Spiel speichern"
 
-#: src/hci.c:4170
+#: src/hci.c:4143
 msgid "Exit Game"
 msgstr "Spiel verlassen"
 
-#: src/hci.c:4527 src/intdisplay.c:277 src/intdisplay.c:320
-#: src/intdisplay.c:367
+#: src/hci.c:4499 src/intdisplay.c:275 src/intdisplay.c:318
+#: src/intdisplay.c:365
 msgid "Progress Bar"
 msgstr "Fortschrittsbalken"
 
-#: src/hci.c:5605
+#: src/hci.c:5560
 msgid "Factory Delivery Point"
 msgstr "Fabrik-Auslieferungspunkt"
 
-#: src/hci.c:5624
+#: src/hci.c:5579
 msgid "Loop Production"
 msgstr "Produktion wiederholen"
 
-#: src/transporter.c:435 src/transporter.c:492
+#: src/transporter.c:431 src/transporter.c:485
 msgid "Launch Transport"
 msgstr "Transport starten"
 
-#: src/transporter.c:1879
+#: src/transporter.c:1866
 msgid "Reinforcements landing"
 msgstr "Verst�rkung landet"
 
-#: src/mission.c:2871
+#: src/mission.c:2870
 msgid "Load Transport"
 msgstr "Transport beladen"
 
-#: src/mission.c:3352
+#: src/mission.c:3351
 msgid "OBJECTIVE ACHIEVED"
 msgstr "MISSION ERFOLGREICH"
 
-#: src/mission.c:3358
+#: src/mission.c:3357
 msgid "OBJECTIVE FAILED"
 msgstr "MISSION FEHLGESCHLAGEN"
 
-#: src/mission.c:3384 src/mission.c:3425 src/mission.c:3573
+#: src/mission.c:3383 src/mission.c:3420 src/mission.c:3567
 msgid "Quit To Main Menu"
 msgstr "Zur�ck zum Hauptmen�"
 
-#: src/mission.c:3393
+#: src/mission.c:3391
 msgid "Continue Game"
 msgstr "Spiel fortsetzen"
 
-#: src/mission.c:3418 src/mission.c:3554 src/ingameop.c:441 src/frontend.c:515
+#: src/mission.c:3414 src/mission.c:3548 src/ingameop.c:416 src/frontend.c:427
 msgid "Load Saved Game"
 msgstr "Speicherstand laden"
 
@@ -282,132 +276,132 @@ msgstr "Spezialist"
 msgid "Hero"
 msgstr "Held"
 
-#: src/multiint.c:356 src/multiint.c:1405 src/multilimit.c:175
+#: src/multiint.c:355 src/multiint.c:1405 src/multilimit.c:174
 msgid "Accept Settings"
 msgstr "Einstellungen akzeptieren"
 
-#: src/multiint.c:367
+#: src/multiint.c:366
 msgid "IP Address or Machine Name"
 msgstr "IP Addresse oder Hostname"
 
-#: src/multiint.c:408
+#: src/multiint.c:407
 msgid "CONNECTION"
 msgstr "VERBINDUNG"
 
-#: src/multiint.c:411 src/multiint.c:459 src/multiint.c:666 src/multiint.c:899
-#: src/keyedit.c:382 src/multilimit.c:167
+#: src/multiint.c:410 src/multiint.c:456 src/multiint.c:657 src/multiint.c:890
+#: src/keyedit.c:380 src/multilimit.c:166
 msgid "Return To Previous Screen"
 msgstr "Zur�ck zum vorherigen Bildschirm"
 
-#: src/multiint.c:422
+#: src/multiint.c:421
 msgid "Internet"
 msgstr "Internet"
 
-#: src/multiint.c:652
+#: src/multiint.c:643
 msgid "Searching"
 msgstr "Suche..."
 
-#: src/multiint.c:663
+#: src/multiint.c:654
 msgid "GAMES"
 msgstr "SPIELE"
 
-#: src/multiint.c:673
+#: src/multiint.c:664
 msgid "Refresh Games List"
 msgstr "Spielliste aktualisieren"
 
-#: src/multiint.c:748
+#: src/multiint.c:739
 msgid "OPTIONS"
 msgstr "OPTIONEN"
 
-#: src/multiint.c:750
+#: src/multiint.c:741
 msgid "Select Game Name"
 msgstr "Spielname ausw�hlen"
 
-#: src/multiint.c:751
+#: src/multiint.c:742
 msgid "Select Map"
 msgstr "Karte ausw�hlen"
 
-#: src/multiint.c:756
+#: src/multiint.c:747
 msgid "Game"
 msgstr "Spiel"
 
-#: src/multiint.c:758
+#: src/multiint.c:749
 msgid "Mayhem"
 msgstr ""
 
-#: src/multiint.c:760
+#: src/multiint.c:751
 msgid "Skirmish"
 msgstr "Gepl�nkel"
 
-#: src/multiint.c:781
+#: src/multiint.c:772
 msgid "Select Player Name"
 msgstr "Spielernamen ausw�hlen"
 
-#: src/multiint.c:784 src/frontend.c:727
+#: src/multiint.c:775 src/frontend.c:625
 msgid "Fog"
 msgstr "Nebel"
 
-#: src/multiint.c:786 src/frontend.c:734 src/frontend.c:831
+#: src/multiint.c:777 src/frontend.c:632 src/frontend.c:739
 msgid "Fog Of War"
 msgstr "Nebel des Krieges"
 
-#: src/multiint.c:787
+#: src/multiint.c:778
 msgid "Distance Fog"
 msgstr "Entfernungsnebel"
 
-#: src/multiint.c:800 src/multimenu.c:744
+#: src/multiint.c:791 src/multimenu.c:741
 msgid "Alliances"
 msgstr "Allianzen"
 
-#: src/multiint.c:803
+#: src/multiint.c:794
 msgid "No Alliances"
 msgstr "Keine Allianzen"
 
-#: src/multiint.c:805
+#: src/multiint.c:796
 msgid "Allow Alliances"
 msgstr "Allianzen erlauben"
 
-#: src/multiint.c:809 src/multiint.c:2037
+#: src/multiint.c:800 src/multiint.c:2037
 msgid "Locked Teams"
 msgstr "Festgelegte Teams"
 
-#: src/multiint.c:841
+#: src/multiint.c:832
 msgid "Low Power Levels"
 msgstr "Niedriges Energielevel"
 
-#: src/multiint.c:843
+#: src/multiint.c:834
 msgid "Medium Power Levels"
 msgstr "Mittleres Energielevel"
 
-#: src/multiint.c:845
+#: src/multiint.c:836
 msgid "High Power Levels"
 msgstr "Hohes Energielevel"
 
-#: src/multiint.c:865 src/multiint.c:869
+#: src/multiint.c:856 src/multiint.c:860
 msgid "Base"
 msgstr "Basis"
 
-#: src/multiint.c:872
+#: src/multiint.c:863
 msgid "Start with No Bases"
 msgstr "Ohne Basen starten"
 
-#: src/multiint.c:874
+#: src/multiint.c:865
 msgid "Start with Bases"
 msgstr "Mit Basen starten"
 
-#: src/multiint.c:876
+#: src/multiint.c:867
 msgid "Start with Advanced Bases"
 msgstr "Mit erweiterten Basen starten"
 
-#: src/multiint.c:906
+#: src/multiint.c:897
 msgid "Start Hosting Game"
 msgstr "Spiel beginnen"
 
-#: src/multiint.c:914
+#: src/multiint.c:905
 msgid "Set Structure Limits"
 msgstr "Geb�udelimits einstellen"
 
-#: src/multiint.c:1286
+#: src/multiint.c:1290
 msgid "PLAYERS"
 msgstr "SPIELER"
 
@@ -419,7 +413,7 @@ msgstr "CHAT"
 msgid "Host is Starting Game"
 msgstr "Host startet das Spiel"
 
-#: src/multiint.c:2753
+#: src/multiint.c:2750
 msgid "Players"
 msgstr "Spieler"
 
@@ -431,65 +425,69 @@ msgstr "Entwickelt von Pumpkin Studios"
 msgid "Published by EIDOS Interactive"
 msgstr "Ver�ffentlicht von EIDOS Interactive"
 
-#: src/keybind.c:1219
+#: src/keybind.c:1232
 msgid "View Aligned to North"
 msgstr "Sicht nach Norden ausgerichtet"
 
-#: src/keybind.c:1243 src/intelmap.c:328
+#: src/keybind.c:1256 src/intelmap.c:243
 msgid "PAUSED"
 msgstr "PAUSE"
 
-#: src/keybind.c:1289 src/keybind.c:1297
+#: src/keybind.c:1288
+msgid "Researched EVERYTHING for you!"
+msgstr ""
+
+#: src/keybind.c:1319 src/keybind.c:1326
 msgid "Energy bars display toggled"
 msgstr "Anzeige der Energiebalken umgeschaltet"
 
-#: src/keybind.c:1363
+#: src/keybind.c:1392
 msgid "Unable to locate any resource extractors!"
 msgstr "Kann keine Resourcenextraktoren finden"
 
-#: src/keybind.c:1678
+#: src/keybind.c:1655
 msgid "Enemy destroyed by cheating!"
 msgstr ""
 
-#: src/keybind.c:2272
+#: src/keybind.c:2263
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Auf Spieler HQ zentriert, Blickrichtung Norden"
 
-#: src/keybind.c:2284
+#: src/keybind.c:2275
 msgid "Unable to locate HQ!"
 msgstr "Kann Hauptquartier nicht finden!"
 
-#: src/keybind.c:2300
+#: src/keybind.c:2291
 msgid "Formation speed limiting OFF"
 msgstr "Formationsgeschwindigkeitslimit AUS"
 
-#: src/keybind.c:2304
+#: src/keybind.c:2295
 msgid "Formation speed limiting ON"
 msgstr "Formationsgeschwindigkeitslimit AN"
 
-#: src/keybind.c:2434 src/keybind.c:2461 src/keybind.c:2476
+#: src/keybind.c:2425 src/keybind.c:2452 src/keybind.c:2467
 msgid "Game Speed Reset"
 msgstr "Spielgeschwindigkeit zur�ckgesetzt"
 
-#: src/keybind.c:2436
+#: src/keybind.c:2427
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Spielgeschwindigkeit auf %3.1f erh�ht"
 
-#: src/keybind.c:2463
+#: src/keybind.c:2454
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Spielgeschwindigkeit auf %3.1f gesenkt"
 
-#: src/keybind.c:2489
+#: src/keybind.c:2480
 msgid "Build menu will reopen"
 msgstr "Baumenu wird sich wieder �ffnen"
 
-#: src/keybind.c:2493
+#: src/keybind.c:2484
 msgid "Build menu will not reopen"
 msgstr "Baumenu wird sich nicht wieder �ffnen"
 
-#: src/intdisplay.c:267 src/intdisplay.c:312 src/intdisplay.c:360
+#: src/intdisplay.c:265 src/intdisplay.c:310 src/intdisplay.c:358
 msgid "Power Accrued"
 msgstr "Energie angesammelt"
 
@@ -497,49 +495,54 @@ msgstr "Energie angesammelt"
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Kommandantenkontrolllimit erreicht - Produktion eingestellt"
 
-#: src/structure.c:6140
+#: src/structure.c:6106 src/structure.c:6125
+#, fuzzy, c-format
+msgid "%s - %d Units assigned"
+msgstr "%d Einheiten zu Gruppe %d hinzugef�gt"
+
+#: src/structure.c:6162
 #, c-format
 msgid "%s - Connected %d of %d"
 msgstr "%s - %d von %d verbunden"
 
-#: src/structure.c:6270 src/structure.c:6321
+#: src/structure.c:6296 src/structure.c:6347
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektrisch besch�digt"
 
-#: src/structure.c:6546
+#: src/structure.c:6576
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronik Belohnung - Sichtbarkeits Bericht"
 
-#: src/structure.c:6586
+#: src/structure.c:6616
 msgid "Factory Reward - Propulsion"
 msgstr "Belohnung f�r Fabrik - Antrieb"
 
-#: src/structure.c:6610
+#: src/structure.c:6640
 msgid "Factory Reward - Body"
 msgstr "Belohnung f�r Fabrik - Rumpf"
 
-#: src/structure.c:6634
+#: src/structure.c:6664
 msgid "Factory Reward - Weapon"
 msgstr "Belohnung f�r Fabrik - Waffe"
 
-#: src/structure.c:6643
+#: src/structure.c:6673
 msgid "Factory Reward - Nothing"
 msgstr "Belohnung f�r Fabrik - Nichts"
 
-#: src/structure.c:6671
+#: src/structure.c:6701
 msgid "Repair Facility Award - Repair"
 msgstr "Pr�mie f�r Reparatureinheit - Reparatur"
 
-#: src/structure.c:6678
+#: src/structure.c:6708
 msgid "Repair Facility Award - Nothing"
 msgstr "Pr�mie f�r Reparatureinheit - Nichts"
 
-#: src/keyedit.c:360
+#: src/keyedit.c:358
 msgid "KEY MAPPING"
 msgstr "TASTENZUORDNUNG"
 
-#: src/keyedit.c:387
+#: src/keyedit.c:385
 msgid "Select Default"
 msgstr "Voreinstellung ausw�hlen"
 
@@ -564,16 +567,16 @@ msgstr "Kann keine Sensoreinheit finden!"
 msgid "Unable to locate any Commanders!"
 msgstr "Kann keine Kommandanten finden!"
 
-#: src/research.c:1904
+#: src/research.c:1861
 #, c-format
 msgid "Research completed: %s"
 msgstr "Forschung fertiggestellt: %s"
 
-#: src/research.c:1909
+#: src/research.c:1866
 msgid "Research Completed"
 msgstr "Vorschung fertiggestellt"
 
-#: src/research.c:2770
+#: src/research.c:2666
 msgid "Research Award"
 msgstr "Forschungs Pr�mie"
 
@@ -777,299 +780,304 @@ msgstr "Unterst�tzungsfeuer zuordnen"
 msgid "Assign VTOL Factory Production"
 msgstr "Produktion der VTOL-Fabrik zuordnen"
 
-#: src/ingameop.c:123 src/ingameop.c:164 src/ingameop.c:284
+#: src/ingameop.c:120 src/ingameop.c:154 src/ingameop.c:271
 msgid "Resume Game"
 msgstr "Spiel fortsetzen"
 
-#: src/ingameop.c:129 src/ingameop.c:275 src/ingameop.c:280
+#: src/ingameop.c:123 src/ingameop.c:262 src/ingameop.c:267
 msgid "Quit"
 msgstr "Beenden"
 
-#: src/ingameop.c:167 src/frontend.c:905
+#: src/ingameop.c:157 src/frontend.c:825
 msgid "Voice Volume"
 msgstr "Sprachlautst�rke"
 
-#: src/ingameop.c:172 src/frontend.c:909
+#: src/ingameop.c:162 src/frontend.c:829
 msgid "FX Volume"
 msgstr "Effektlautst�rke"
 
-#: src/ingameop.c:177 src/frontend.c:913
+#: src/ingameop.c:167 src/frontend.c:833
 msgid "Music Volume"
 msgstr "Musiklautst�rke"
 
-#: src/ingameop.c:289 src/frontend.c:300
+#: src/ingameop.c:274 src/frontend.c:235
 msgid "Options"
 msgstr "Optionen"
 
-#: src/design.c:478 src/design.c:500 src/design.c:4049
+#: src/design.c:472 src/design.c:494 src/design.c:3657
 msgid "New Vehicle"
 msgstr "Neues Fahrzeug"
 
-#: src/design.c:547
+#: src/design.c:541
 msgid "Vehicle Body"
 msgstr "Fahrzeugrumpf"
 
-#: src/design.c:569
+#: src/design.c:563
 msgid "Vehicle Propulsion"
 msgstr "Fahrzeug-Antrieb"
 
-#: src/design.c:592 src/design.c:617 src/design.c:643
+#: src/design.c:586 src/design.c:611 src/design.c:637
 msgid "Vehicle Turret"
 msgstr "Fahrzeug-Gesch�tzturm"
 
-#: src/design.c:664
+#: src/design.c:658
 msgid "Delete Design"
 msgstr "Design l�schen"
 
-#: src/design.c:718 src/design.c:767
+#: src/design.c:712 src/design.c:761
 msgid "Kinetic Armour"
 msgstr "Kinetische Panzerung"
 
-#: src/design.c:727 src/design.c:779
+#: src/design.c:721 src/design.c:773
 msgid "Thermal Armour"
 msgstr "Thermische Panzerung"
 
-#: src/design.c:743 src/design.c:800
+#: src/design.c:737 src/design.c:794
 msgid "Engine Output"
 msgstr "Motorleistung"
 
-#: src/design.c:751 src/design.c:810 src/design.c:1783 src/design.c:1834
-#: src/design.c:1867 src/design.c:1885 src/design.c:1918 src/design.c:1936
-#: src/design.c:1978 src/design.c:2017 src/design.c:2175 src/design.c:2192
-#: src/design.c:2235 src/design.c:2271
+#: src/design.c:745 src/design.c:804 src/design.c:1651 src/design.c:1692
+#: src/design.c:1717 src/design.c:1735 src/design.c:1760 src/design.c:1778
+#: src/design.c:1820 src/design.c:1855 src/design.c:1994 src/design.c:2011
+#: src/design.c:2046 src/design.c:2082
 msgid "Weight"
 msgstr "Gewicht"
 
-#: src/design.c:841 src/design.c:861
+#: src/design.c:835 src/design.c:855
 msgid "Total Power Required"
 msgstr "Ben�tigte Gesamtenergie"
 
-#: src/design.c:874 src/design.c:895
+#: src/design.c:868 src/design.c:889
 msgid "Total Body Points"
 msgstr "Gesamte Strukturpunkte"
 
-#: src/design.c:1080 src/design.c:1112
+#: src/design.c:1074 src/design.c:1106
 msgid "Power Usage"
 msgstr "Energieverbrauch"
 
-#: src/design.c:1520
+#: src/design.c:1403
 msgid "Transporter"
 msgstr "Transporter"
 
-#: src/design.c:1763
+#: src/design.c:1633
 msgid "Sensor Range"
 msgstr "Sensorenreichweite"
 
-#: src/design.c:1773
+#: src/design.c:1642
 msgid "Sensor Power"
 msgstr "Sensorenenergie"
 
-#: src/design.c:1824
+#: src/design.c:1683
 msgid "ECM Power"
 msgstr "ECM Energie"
 
-#: src/design.c:1859 src/design.c:1876 src/design.c:1910 src/design.c:1927
+#: src/design.c:1709 src/design.c:1726 src/design.c:1752 src/design.c:1769
 msgid "Build Points"
 msgstr "Baupunkte"
 
-#: src/design.c:1954 src/design.c:1987
+#: src/design.c:1796 src/design.c:1828
 msgid "Range"
 msgstr "Reichweite"
 
-#: src/design.c:1962 src/design.c:1997
+#: src/design.c:1804 src/design.c:1837
 msgid "Damage"
 msgstr "Schaden"
 
-#: src/design.c:1970 src/design.c:2007
+#: src/design.c:1812 src/design.c:1846
 msgid "Rate-of-Fire"
 msgstr "Feuerrate"
 
-#: src/design.c:2167 src/design.c:2183
+#: src/design.c:1986 src/design.c:2002
 msgid "Air Speed"
 msgstr "Fluggeschwindigkeit"
 
-#: src/design.c:2211 src/design.c:2244
+#: src/design.c:2022 src/design.c:2055
 msgid "Road Speed"
 msgstr "Stra�engeschwindigkeit"
 
-#: src/design.c:2219 src/design.c:2253
+#: src/design.c:2030 src/design.c:2064
 msgid "Off-Road Speed"
 msgstr "Gel�ndegeschwindigkeit"
 
-#: src/design.c:2227 src/design.c:2262
+#: src/design.c:2038 src/design.c:2073
 msgid "Water Speed"
 msgstr "Wassergeschwindigkeit"
 
-#: src/design.c:2550
+#: src/design.c:2203
 msgid "Weapons"
 msgstr "Waffen"
 
-#: src/design.c:2574
+#: src/design.c:2227
 msgid "Systems"
 msgstr "Systeme"
 
-#: src/design.c:2593
+#: src/design.c:2246
 msgid "Command Turrets"
 msgstr "Kommando T�rme"
 
-#: src/frontend.c:290
+#: src/frontend.c:225
 msgid "Single Player Campaign"
 msgstr "Einzelspieler Kampagne"
 
-#: src/frontend.c:293 src/frontend.c:297
+#: src/frontend.c:228 src/frontend.c:232
 msgid "Multi Player Game"
 msgstr "Mehrspieler Spiel"
 
-#: src/frontend.c:299 src/frontend.c:359
+#: src/frontend.c:234 src/frontend.c:288
 msgid "Tutorial"
 msgstr "Tutorial"
 
-#: src/frontend.c:302
+#: src/frontend.c:237
 msgid "Quit Game"
 msgstr "Spiel Beenden"
 
-#: src/frontend.c:304
+#: src/frontend.c:239
 msgid "MAIN MENU"
 msgstr "HAUPTMEN�"
 
-#: src/frontend.c:360
+#: src/frontend.c:289
 msgid "Fast Play"
 msgstr "Schnelles Spiel"
 
-#: src/frontend.c:361
+#: src/frontend.c:290
 msgid "TUTORIALS"
 msgstr "TUTORIALS"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.c:363 src/frontend.c:426 src/frontend.c:565 src/frontend.c:629
-#: src/frontend.c:781 src/frontend.c:917 src/frontend.c:1026
+#: src/frontend.c:292 src/frontend.c:348 src/frontend.c:474 src/frontend.c:533
+#: src/frontend.c:691 src/frontend.c:837 src/frontend.c:942
 msgctxt "menu"
 msgid "Return"
 msgstr "Zur�ck"
 
-#: src/frontend.c:421
+#: src/frontend.c:344
 msgid "Load Campaign"
 msgstr "Kampagne laden"
 
-#: src/frontend.c:422
+#: src/frontend.c:345
 msgid "New Campaign"
 msgstr "Neue Kampagne"
 
-#: src/frontend.c:424
+#: src/frontend.c:347
 msgid "SINGLE PLAYER"
 msgstr "Einzelspieler"
 
-#: src/frontend.c:558
+#: src/frontend.c:467
 msgid "MULTI PLAYER"
 msgstr "Mehrspieler"
 
-#: src/frontend.c:560
+#: src/frontend.c:469
 msgid "Host Game"
 msgstr "Spiel hosten"
 
-#: src/frontend.c:561
+#: src/frontend.c:470
 msgid "Join Game"
 msgstr "Spiel beitreten"
 
-#: src/frontend.c:563
+#: src/frontend.c:472
 msgid "One Player Skirmish"
 msgstr "Einzelspieler Gepl�nkel"
 
-#: src/frontend.c:624 src/frontend.c:920 src/frontend.c:1029
+#: src/frontend.c:528 src/frontend.c:840 src/frontend.c:945
 msgid "GAME OPTIONS"
 msgstr "Spieloptionen"
 
-#: src/frontend.c:625
+#: src/frontend.c:529
 msgid "Game Options"
 msgstr "Spieloptionen"
 
-#: src/frontend.c:626
+#: src/frontend.c:530
 msgid "Graphics Options"
 msgstr "Grafikeinstellungen"
 
-#: src/frontend.c:627
+#: src/frontend.c:531
 msgid "Audio Options"
 msgstr "Audioeinstellungen"
 
-#: src/frontend.c:628
+#: src/frontend.c:532
 msgid "Key Mappings"
 msgstr "Tastenzuordnung"
 
-#: src/frontend.c:703
+#: src/frontend.c:601
 msgid "Reverse Mouse"
 msgstr "Maus umkehren"
 
-#: src/frontend.c:706 src/frontend.c:718 src/frontend.c:771 src/frontend.c:806
-#: src/frontend.c:820 src/frontend.c:856
+#: src/frontend.c:604 src/frontend.c:616 src/frontend.c:669 src/frontend.c:682
+#: src/frontend.c:714 src/frontend.c:728 src/frontend.c:764 src/frontend.c:773
 msgid "On"
 msgstr "An"
 
-#: src/frontend.c:710 src/frontend.c:722 src/frontend.c:767 src/frontend.c:776
-#: src/frontend.c:801 src/frontend.c:815 src/frontend.c:851
+#: src/frontend.c:608 src/frontend.c:620 src/frontend.c:665 src/frontend.c:674
+#: src/frontend.c:686 src/frontend.c:709 src/frontend.c:723 src/frontend.c:759
+#: src/frontend.c:777
 msgid "Off"
 msgstr "Aus"
 
-#: src/frontend.c:715
+#: src/frontend.c:613
 msgid "Screen Shake"
 msgstr "Bildersch�tterungen"
 
-#: src/frontend.c:730 src/frontend.c:838
+#: src/frontend.c:628 src/frontend.c:746
 msgid "Mist"
 msgstr "Dunst"
 
-#: src/frontend.c:739
+#: src/frontend.c:637
 msgid "Video Playback"
 msgstr "Videowiedergabe"
 
-#: src/frontend.c:742 src/frontend.c:875
+#: src/frontend.c:640 src/frontend.c:796
 msgid "Full"
 msgstr "Vollbild"
 
-#: src/frontend.c:746 src/frontend.c:865
+#: src/frontend.c:644 src/frontend.c:786
 msgid "Windowed"
 msgstr "Fenster"
 
-#: src/frontend.c:749 src/frontend.c:870
+#: src/frontend.c:647 src/frontend.c:791
 msgid "Minimal"
 msgstr "Minimiert"
 
-#: src/frontend.c:756 src/frontend.c:760
+#: src/frontend.c:654 src/frontend.c:658
 msgid "Subtitles"
 msgstr "Untertitel"
 
-#: src/frontend.c:991
+#: src/frontend.c:679
+msgid "Shadows"
+msgstr ""
+
+#: src/frontend.c:907
 msgid "Difficulty"
 msgstr "Schwierigkeit"
 
-#: src/frontend.c:995 src/frontend.c:1080
+#: src/frontend.c:911 src/frontend.c:993
 msgid "Easy"
 msgstr "Einfach"
 
-#: src/frontend.c:998 src/frontend.c:1072
+#: src/frontend.c:914 src/frontend.c:985
 msgid "Normal"
 msgstr "Normal"
 
-#: src/frontend.c:1002 src/frontend.c:1076
+#: src/frontend.c:918 src/frontend.c:989
 msgid "Hard"
 msgstr "Schwer"
 
-#: src/frontend.c:1007
+#: src/frontend.c:923
 msgid "Scroll Speed"
 msgstr "Scrollgeschwindigkeit"
 
-#: src/frontend.c:1023
+#: src/frontend.c:939
 msgid "Unit Colour"
 msgstr "Einheitenfarbe"
 
-#: src/intelmap.c:491
+#: src/intelmap.c:400
 msgid "Research Update"
 msgstr "Forschungsaktualisierung"
 
-#: src/intelmap.c:495
+#: src/intelmap.c:404
 msgid "Project Goals"
 msgstr "Missionsziele"
 
-#: src/intelmap.c:498
+#: src/intelmap.c:407
 msgid "Current Objective"
 msgstr "Aktuelles Missionsziel"
 
@@ -1405,81 +1413,81 @@ msgstr "N�chste Cyborg Fabrik ausw�hlen"
 msgid "Toggle reopening the build menu"
 msgstr "Wieder�ffnen des Bau Men�s umschalten"
 
-#: src/multijoin.c:121 src/multijoin.c:122
+#: src/multijoin.c:100 src/multijoin.c:101
 msgid "Players Still Joining"
 msgstr "Es treten noch Spieler bei"
 
-#: src/multijoin.c:242
+#: src/multijoin.c:221
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s hat das Spiel verlassen"
 
-#: src/multijoin.c:354
+#: src/multijoin.c:333
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s ist dem Spiel beigetreten"
 
-#: src/multimenu.c:586
+#: src/multimenu.c:583
 msgid "Technology level 1"
 msgstr "Technologie Stufe 1"
 
-#: src/multimenu.c:594
+#: src/multimenu.c:591
 msgid "Technology level 2"
 msgstr "Technologie Stufe 2"
 
-#: src/multimenu.c:600
+#: src/multimenu.c:597
 msgid "Technology level 3"
 msgstr "Technologie Stufe 3"
 
-#: src/multimenu.c:606
+#: src/multimenu.c:603
 msgid "Any number of players"
 msgstr "Beliebige Spielerzahl"
 
-#: src/multimenu.c:613
+#: src/multimenu.c:610
 msgid "2 players"
 msgstr "2 Spieler"
 
-#: src/multimenu.c:619
+#: src/multimenu.c:616
 msgid "4 players"
 msgstr "4 Spieler"
 
-#: src/multimenu.c:625
+#: src/multimenu.c:622
 msgid "8 players"
 msgstr "8 Spieler"
 
-#: src/multimenu.c:745
+#: src/multimenu.c:742
 msgid "Score"
 msgstr "Punktzahl"
 
-#: src/multimenu.c:746
+#: src/multimenu.c:743
 msgid "Kills"
 msgstr "Absch�sse"
 
-#: src/multimenu.c:755
+#: src/multimenu.c:752
 msgid "Ping"
 msgstr "Ping"
 
-#: src/multimenu.c:756
+#: src/multimenu.c:753
 msgid "Played"
 msgstr "Gespielt"
 
-#: src/multimenu.c:1068
+#: src/multimenu.c:1065
 msgid "Toggle Alliance State"
 msgstr "Verb�ndungsstatus umschalten"
 
-#: src/multimenu.c:1087
+#: src/multimenu.c:1084
 msgid "Give Visibility Report"
 msgstr "Sensordaten �bertragen"
 
-#: src/multimenu.c:1093
+#: src/multimenu.c:1090
 msgid "Leak Technology Documents"
 msgstr "Technologie �bertragen"
 
-#: src/multimenu.c:1100
+#: src/multimenu.c:1097
 msgid "Hand Over Selected Units"
 msgstr "�bergebe ausgew�hlte Einheiten"
 
-#: src/multimenu.c:1106
+#: src/multimenu.c:1103
 msgid "Give Power To Player"
 msgstr "Energie �bertragen"
 
@@ -1493,16 +1501,12 @@ msgstr "Ziel: Finden und bergen Sie die Technologie f�r Neurale Synapsen"
 
 #: data/messages/strings/cam1strings.txt:6
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr ""
-"Errichten Sie eine Basis, suchen Sie dann nach Geb�uden aus der Zeit vor "
-"dem Zusammenbruch"
+msgstr "Errichten Sie eine Basis, suchen Sie dann nach Geb�uden aus der Zeit vor dem Zusammenbruch"
 
 #: data/messages/strings/cam1strings.txt:7
 msgid ""
 "This structure contains technology vital for the success of the Project."
-msgstr ""
-"Dieses Geb�ude enth�lt Technologie, die �berlebenswichtig f�r den "
-"Erfolg des Projektes ist."
+msgstr "Dieses Geb�ude enth�lt Technologie, die �berlebenswichtig f�r den Erfolg des Projektes ist."
 
 #: data/messages/strings/cam1strings.txt:9
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
@@ -1539,9 +1543,7 @@ msgstr "Das NewParadigm kontrolliert �berlegene Waffentechnologie."
 
 #: data/messages/strings/cam1strings.txt:19
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr ""
-"Sie k�nnten die Technologie der Synaptischen Verbindungen besitzen; es is "
-"immens wichtig, da� wir diese bergen."
+msgstr "Sie k�nnten die Technologie der Synaptischen Verbindungen besitzen; es is immens wichtig, da� wir diese bergen."
 
 #: data/messages/strings/cam1strings.txt:21
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
@@ -1593,27 +1595,20 @@ msgstr "Durchsuchen Sie diese Gegen nach feindlichen Forschungseinrichtungen"
 
 #: data/messages/strings/cam1strings.txt:35
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
-msgstr ""
-"R�cken sie vor zur Landezone #2. Greifen Sie zu diesem Zeitpunkt den "
-"Gegner noch nicht an!"
+msgstr "R�cken sie vor zur Landezone #2. Greifen Sie zu diesem Zeitpunkt den Gegner noch nicht an!"
 
 #: data/messages/strings/cam1strings.txt:37
 msgid "TRANSPORT MISSION: Synaptic Link Location"
-msgstr ""
-"TRANSPORT MISSION: Position der Technologie f�r synaptische Verbindungen"
+msgstr "TRANSPORT MISSION: Position der Technologie f�r synaptische Verbindungen"
 
 #: data/messages/strings/cam1strings.txt:38
 msgid ""
 "The New Paradigm are analyzing synaptic link technology at this location."
-msgstr ""
-"Das NewParadigm analysiert an dieser Position die Technik f�r synaptische "
-"Verbindungen"
+msgstr "Das NewParadigm analysiert an dieser Position die Technik f�r synaptische Verbindungen"
 
 #: data/messages/strings/cam1strings.txt:39
 msgid "Assemble an attack team and recover the synaptic link technology."
-msgstr ""
-"Stellen sie eine Angriffstruppe zusammen und bergen Sie die Technologie "
-"f�r synaptische Verbindungen."
+msgstr "Stellen sie eine Angriffstruppe zusammen und bergen Sie die Technologie f�r synaptische Verbindungen."
 
 #: data/messages/strings/cam1strings.txt:41
 msgid "TRANSPORT MISSION: New Objectives"
@@ -1633,8 +1628,7 @@ msgstr "TRANSPORT MISSION: Feindbasis im Bau"
 
 #: data/messages/strings/cam1strings.txt:46
 msgid "Enemy forces are establishing a forward base at this location."
-msgstr ""
-"Feindliche Kr�fte errichten an dieser Position eine vorgelagerte Basis."
+msgstr "Feindliche Kr�fte errichten an dieser Position eine vorgelagerte Basis."
 
 #: data/messages/strings/cam1strings.txt:47
 msgid "Eradicate the base and secure the area."
@@ -1675,9 +1669,7 @@ msgstr "Wir orten feindliche Truppen an diesen Positionen."
 
 #: data/messages/strings/cam1strings.txt:60
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
-msgstr ""
-"Das ist unsere Chance das NewParadigm zu besiegen und ihre Basis zu "
-"zerst�ren."
+msgstr "Das ist unsere Chance das NewParadigm zu besiegen und ihre Basis zu zerst�ren."
 
 #: data/messages/strings/cam1strings.txt:64
 #: data/messages/strings/cam1strings.txt:75
@@ -1737,8 +1729,7 @@ msgstr "Es gibt nichts zu melden."
 
 #: data/messages/strings/cam1strings.txt:88
 msgid "We've discovered no artifacts and encountered no hostiles."
-msgstr ""
-"Wir haben weder Artefakte gefunden noch sind wir auf Wiederstand gesto�en."
+msgstr "Wir haben weder Artefakte gefunden noch sind wir auf Wiederstand gesto�en."
 
 #: data/messages/strings/cam1strings.txt:91
 msgid "ALPHA BASE INTELLIGENCE REPORT: Enemy Attack"
@@ -1786,9 +1777,7 @@ msgstr "Erg�nzend"
 
 #: data/messages/strings/cam1strings.txt:112
 msgid "The synaptic link technology was at this location but was removed."
-msgstr ""
-"Die Technologie f�r synaptische Verbindungen war hier, wurde jedoch "
-"entfernt"
+msgstr "Die Technologie f�r synaptische Verbindungen war hier, wurde jedoch entfernt"
 
 #: data/messages/strings/cam1strings.txt:114
 msgid ""
@@ -1803,8 +1792,7 @@ msgstr "Das NewParadigm kam aus dieser Zone"
 
 #: data/messages/strings/cam1strings.txt:119
 msgid "Establish a forward base near the site of the Research Centre."
-msgstr ""
-"Errichten Sie eine vorgelagerte Basis in der N�he der Forschungsanlage."
+msgstr "Errichten Sie eine vorgelagerte Basis in der N�he der Forschungsanlage."
 
 #: data/messages/strings/cam1strings.txt:122
 msgid "INCOMING TRANSMISSION"
@@ -1841,15 +1829,11 @@ msgstr "Die Technologie der synaptischen Verbindungen wurde geborgen!"
 
 #: data/messages/strings/cam1strings.txt:138
 msgid "Initial research confirms it will be of great benefit to the Project."
-msgstr ""
-"Anf�ngliche Analysen best�tigen das sie f�r das Projekt von gro�en "
-"Vorteil sein werden."
+msgstr "Anf�ngliche Analysen best�tigen das sie f�r das Projekt von gro�en Vorteil sein werden."
 
 #: data/messages/strings/cam1strings.txt:141
 msgid "Base Beta is under heavy attack, they may need assistance."
-msgstr ""
-"Beta-Basis liegt unter schweren Angriffen, sie k�nnten Unterst�tzung "
-"brauchen."
+msgstr "Beta-Basis liegt unter schweren Angriffen, sie k�nnten Unterst�tzung brauchen."
 
 #: data/messages/strings/cam1strings.txt:142
 msgid "We will send further updates as they arrive."
@@ -1890,8 +1874,7 @@ msgstr ""
 
 #: data/messages/strings/cam1strings.txt:160
 msgid "Nexus has technology and weapons and is not friendly."
-msgstr ""
-"NEXUS verf�gt �ber Technologien und Waffen und ist nicht freundlich."
+msgstr "NEXUS verf�gt �ber Technologien und Waffen und ist nicht freundlich."
 
 #: data/messages/strings/cam1strings.txt:163
 msgid "POWER MODULE ARTIFACT"
@@ -1918,9 +1901,7 @@ msgstr "Besiegen Sie die Scavenger und sichern sie alle Artefakte."
 #: data/messages/strings/cam1strings.txt:173
 msgid ""
 "Congratulations on defeating the New Paradigm, this sector is now secure."
-msgstr ""
-"Herzlichen Gl�ckwunsch zu Ihrem Sieg �ber das NewParadigm, dieser Sektor "
-"ist nun sicher."
+msgstr "Herzlichen Gl�ckwunsch zu Ihrem Sieg �ber das NewParadigm, dieser Sektor ist nun sicher."
 
 #: data/messages/strings/cam1strings.txt:174
 msgid "The Nexus Intruder Program was in the New Paradigm system."
@@ -1944,8 +1925,7 @@ msgstr "BETA-BASIS MISSION: �stlicher Sektor"
 
 #: data/messages/strings/cam2strings.txt:5
 msgid "Upon arrival you are to assume command of the base."
-msgstr ""
-"Sobald Sie angekommen sind �bernehmen Sie das Kommando �ber die Basis."
+msgstr "Sobald Sie angekommen sind �bernehmen Sie das Kommando �ber die Basis."
 
 #: data/messages/strings/cam2strings.txt:6
 msgid "You must defend it and hold it."
@@ -1988,8 +1968,7 @@ msgstr ""
 
 #: data/messages/strings/cam2strings.txt:23
 msgid "It is under attack from The Collective at this location."
-msgstr ""
-"Er wird an dieser Position von Streitkr�ften des Kollektiv angegriffen."
+msgstr "Er wird an dieser Position von Streitkr�ften des Kollektiv angegriffen."
 
 #: data/messages/strings/cam2strings.txt:24
 msgid "Assemble a rescue team to recover the transport and its cargo."
@@ -2004,8 +1983,7 @@ msgstr "MISSIONSBESPRECHUNG"
 #: data/messages/strings/cam2strings.txt:28
 msgid ""
 "Team Beta are searching for Vertical Takeoff and Landing (VTOL) technology."
-msgstr ""
-"Team Beta sucht nach der Technik f�r Vertikale Starts und Landungen (VTOL)"
+msgstr "Team Beta sucht nach der Technik f�r Vertikale Starts und Landungen (VTOL)"
 
 #: data/messages/strings/cam2strings.txt:29
 msgid "It's believed to be at a pre-Collapse airbase in this area."
@@ -2047,9 +2025,7 @@ msgstr "Wir haben Boden- und Lufttruppen im Norden entdeckt."
 msgid ""
 "Hold your position and repulse these attacks, then eradicate the enemy's "
 "northern base."
-msgstr ""
-"Halten Sie die Stellung und schlagen sie die Angriffe zur�ck, zerst�ren "
-"sie dann die n�rdliche Feindbasis."
+msgstr "Halten Sie die Stellung und schlagen sie die Angriffe zur�ck, zerst�ren sie dann die n�rdliche Feindbasis."
 
 #: data/messages/strings/cam2strings.txt:52
 msgid "TRANSPORT MISSION: Intercept convoy."
@@ -2071,9 +2047,7 @@ msgstr ""
 #: data/messages/strings/cam2strings.txt:56
 msgid ""
 "An enemy commander is collecting a shipment from NEXUS at this location."
-msgstr ""
-"Ein feindlicher Kommandant transportiert eine Lieferung f�r NEXUS an "
-"dieser Position."
+msgstr "Ein feindlicher Kommandant transportiert eine Lieferung f�r NEXUS an dieser Position."
 
 #: data/messages/strings/cam2strings.txt:57
 msgid "Once at the LZ, eradicate the enemy commander and recover the shipment."
@@ -2149,8 +2123,7 @@ msgstr "BETA-BASIS MISSION: Luftst�tzpunkt zerst�ren und VTOLs bergen"
 #: data/messages/strings/cam2strings.txt:87
 msgid ""
 "The location of the enemy airbase is here; this is your primary objective."
-msgstr ""
-"Der gegnerische Luftst�tzpunkt ist hier; dieser ist ihr prim�res Ziel."
+msgstr "Der gegnerische Luftst�tzpunkt ist hier; dieser ist ihr prim�res Ziel."
 
 #: data/messages/strings/cam2strings.txt:88
 msgid "Eradicate all Collective forces and recover all artifacts."
@@ -2193,8 +2166,7 @@ msgstr "Sie m�ssen aufgehalten werden!"
 
 #: data/messages/strings/cam2strings.txt:107
 msgid "Proceed from the LZ to the reactor and destroy it."
-msgstr ""
-"R�cken Sie von der Landezone zum Reaktor vor und zerst�ren Sie ihn."
+msgstr "R�cken Sie von der Landezone zum Reaktor vor und zerst�ren Sie ihn."
 
 #: data/messages/strings/cam2strings.txt:108
 msgid "Do not allow the Collective to bring the reactor on-line."
@@ -2215,9 +2187,7 @@ msgstr "einen Energietransfer zu dieser Position vorbereitete."
 
 #: data/messages/strings/cam2strings.txt:117
 msgid "Capture NASDA central before NEXUS and the Collective can use it."
-msgstr ""
-"Nehmen Sie die NASDA-Zentrale ein, bevor NEXUS oder das Kollektiv sie "
-"verwenden k�nnen."
+msgstr "Nehmen Sie die NASDA-Zentrale ein, bevor NEXUS oder das Kollektiv sie verwenden k�nnen."
 
 #: data/messages/strings/cam2strings.txt:121
 #: data/messages/strings/cam2strings.txt:126
@@ -2237,9 +2207,7 @@ msgstr ""
 #: data/messages/strings/cam2strings.txt:127
 msgid ""
 "We are detecting transmissions from this site that are reaching high orbit."
-msgstr ""
-"Wir empfangen �bertragungen aus dieser Anlage die in den Orbit gerichtet "
-"sind."
+msgstr "Wir empfangen �bertragungen aus dieser Anlage die in den Orbit gerichtet sind."
 
 #: data/messages/strings/cam2strings.txt:128
 msgid "NEXUS has now reconnected itself with the NASDA satellites."
@@ -2262,15 +2230,11 @@ msgstr "TRASNPORTER MISSION: Feindliche Boden-Luft Stellungen ausschalten"
 msgid ""
 "If you are to escape, eradicate the surface-to-air missile sites around your "
 "base."
-msgstr ""
-"Um fliehen zu k�nnen m�ssen Sie die Boden-Luft Raketenstellungen um "
-"ihrer Basis zerst�ren."
+msgstr "Um fliehen zu k�nnen m�ssen Sie die Boden-Luft Raketenstellungen um ihrer Basis zerst�ren."
 
 #: data/messages/strings/cam2strings.txt:138
 msgid "Fly to the LZ, then head overland to destroy the SAM sites."
-msgstr ""
-"Fliegen Sie zur Landezone, r�cken Sie dann vor um die Boden-Lust-"
-"Stellungen zu zerst�ren"
+msgstr "Fliegen Sie zur Landezone, r�cken Sie dann vor um die Boden-Lust-Stellungen zu zerst�ren"
 
 #: data/messages/strings/cam2strings.txt:141
 #: data/messages/strings/cam2strings.txt:146
@@ -2279,14 +2243,11 @@ msgstr "TRANSPORTERMISSION"
 
 #: data/messages/strings/cam2strings.txt:142
 msgid "We can confirm a missile is heading for Alpha Base."
-msgstr ""
-"Wir k�nnen best�tigen, dass sich eine Rakete auf dem Weg zur Alpha-Basis "
-"befindet"
+msgstr "Wir k�nnen best�tigen, dass sich eine Rakete auf dem Weg zur Alpha-Basis befindet"
 
 #: data/messages/strings/cam2strings.txt:143
 msgid "You are to establish a safe haven for evacuation of Beta Base."
-msgstr ""
-"Sie m�ssen einen sicheren Posten zur Evakuierung der Beta-Basis errichten"
+msgstr "Sie m�ssen einen sicheren Posten zur Evakuierung der Beta-Basis errichten"
 
 #: data/messages/strings/cam2strings.txt:147
 msgid "Eradicate any enemy and secure the area."
@@ -2294,9 +2255,7 @@ msgstr "Vernichten sie jeglichen Gegner und sichern sie die Zone"
 
 #: data/messages/strings/cam2strings.txt:148
 msgid "Once a safe haven is established, return to the LZ for further orders."
-msgstr ""
-"Kehren Sie f�r weitere Instruktionen zur Landezone zur�ck sobald eine "
-"Sicherheitszone eingerichtet ist."
+msgstr "Kehren Sie f�r weitere Instruktionen zur Landezone zur�ck sobald eine Sicherheitszone eingerichtet ist."
 
 #: data/messages/strings/cam2strings.txt:151
 #: data/messages/strings/cam2strings.txt:156
@@ -2351,9 +2310,7 @@ msgstr "Gl�chwunsch zu ihrer erfolgreichen Evakuierung der Beta-Basis."
 msgid ""
 "NEXUS has gained access to nuclear weapons and is determined to destroy the "
 "Project."
-msgstr ""
-"NEXUS hat sich Zugriff zu aomaren Waffen verschafft und will das Projekt "
-"zerst�ren."
+msgstr "NEXUS hat sich Zugriff zu aomaren Waffen verschafft und will das Projekt zerst�ren."
 
 #: data/messages/strings/cam3strings.txt:11
 msgid "Take your forces to the Northern Sector"
@@ -2396,8 +2353,7 @@ msgstr "Auf dem NASDA-Gel�nde befindet sich mindestens noch eine Rakete."
 
 #: data/messages/strings/cam3strings.txt:26
 msgid "We are transmitting coordinates of an LZ near the silos."
-msgstr ""
-"Wir �bermitteln die Koordinaten einer Landezone in der N�he des Silos."
+msgstr "Wir �bermitteln die Koordinaten einer Landezone in der N�he des Silos."
 
 #: data/messages/strings/cam3strings.txt:27
 #: data/messages/strings/cam3strings.txt:63
@@ -2406,9 +2362,7 @@ msgstr "Download der koordinaten abgeschlossen."
 
 #: data/messages/strings/cam3strings.txt:31
 msgid "Secure your LZ, then head overland to destroy the missile silo."
-msgstr ""
-"Sicher Sie die Landezone, greifen Sie dann �ber den Landweg das "
-"Raketensilo an."
+msgstr "Sicher Sie die Landezone, greifen Sie dann �ber den Landweg das Raketensilo an."
 
 #: data/messages/strings/cam3strings.txt:35
 #: data/messages/strings/cam3strings.txt:40
@@ -2417,13 +2371,11 @@ msgstr "MISSION IM N�RDLICHEN SEKTOR: Atomare Explosion"
 
 #: data/messages/strings/cam3strings.txt:36
 msgid "All units must escape the area before the warhead detonates."
-msgstr ""
-"Alle einheiten m�ssen das Gebiet verlassen bevor der Sprengkopf explodiert."
+msgstr "Alle einheiten m�ssen das Gebiet verlassen bevor der Sprengkopf explodiert."
 
 #: data/messages/strings/cam3strings.txt:37
 msgid "Air-lift by transport is not possible. You'll have to head overland."
-msgstr ""
-"Luftevakuierung ist nicht m�glich. Sie m�ssen �ber den Landweg fliehen."
+msgstr "Luftevakuierung ist nicht m�glich. Sie m�ssen �ber den Landweg fliehen."
 
 #: data/messages/strings/cam3strings.txt:41
 msgid "The mountain range to the east should shield you from the blast."
@@ -2440,15 +2392,11 @@ msgstr "NEUIGKEITEN VOM AU?ENTEAM"
 #: data/messages/strings/cam3strings.txt:46
 msgid ""
 "All communication with the away team was lost after the nuclear explosions."
-msgstr ""
-"S�mmtliche Kommunikation zum Au�enteam riss nach der nuklearen Explosion "
-"ab."
+msgstr "S�mmtliche Kommunikation zum Au�enteam riss nach der nuklearen Explosion ab."
 
 #: data/messages/strings/cam3strings.txt:47
 msgid "Their last transmission indicated they were heading back to base."
-msgstr ""
-"Ihre letzte �bertragung l�sst darauf schlie�en das sie sich auf dem "
-"R�ckweg zur Basis befinden."
+msgstr "Ihre letzte �bertragung l�sst darauf schlie�en das sie sich auf dem R�ckweg zur Basis befinden."
 
 #: data/messages/strings/cam3strings.txt:50
 msgid "NORTHERN SECTOR MISSION: Assist Team Gamma"
@@ -2477,9 +2425,7 @@ msgstr "kommander, wir haben NEXUS besiegt."
 msgid ""
 "Unfortunately, our systems' performance has been affected by NEXUS. We are "
 "trying to rectify this."
-msgstr ""
-"Ungl�cklicherweise ist unsere Systemleistung durch NEXUS beinflusst. Wir "
-"versuchen dies zu beheben."
+msgstr "Ungl�cklicherweise ist unsere Systemleistung durch NEXUS beinflusst. Wir versuchen dies zu beheben."
 
 #: data/messages/strings/cam3strings.txt:60
 msgid "We are currently receiving this transmission."
@@ -2491,24 +2437,18 @@ msgstr "TRANSPORTMISSION: Team Alpha entdeckt"
 
 #: data/messages/strings/cam3strings.txt:67
 msgid "Take a scout force to these coordinates and evaluate the situation."
-msgstr ""
-"F�hren sie eine Aufkl�rungstruppe zu diesen Koordinaten und kl�ren Sie "
-"die Situation."
+msgstr "F�hren sie eine Aufkl�rungstruppe zu diesen Koordinaten und kl�ren Sie die Situation."
 
 #: data/messages/strings/cam3strings.txt:68
 msgid ""
 "Determine whether they are Team Alpha. If so, rescue and escort them back to "
 "the LZ."
-msgstr ""
-"stellen Sie sicher das sie zu Team Alpha geh�ren und eskortieren Sie sie "
-"zur Landezone."
+msgstr "stellen Sie sicher das sie zu Team Alpha geh�ren und eskortieren Sie sie zur Landezone."
 
 #: data/messages/strings/cam3strings.txt:70
 msgid ""
 "This group are part of Team Alpha, Rescue them and escort them to the LZ."
-msgstr ""
-"Diese Gruppe geh�rt zu Team Alpha, retten Sie sie und bringen Sie sie "
-"zur�ck zur Landezone"
+msgstr "Diese Gruppe geh�rt zu Team Alpha, retten Sie sie und bringen Sie sie zur�ck zur Landezone"
 
 #: data/messages/strings/cam3strings.txt:73
 msgid "NORTHERN SECTOR MISSION: Team Alpha Debrief"
@@ -2553,9 +2493,7 @@ msgstr ""
 #: data/messages/strings/cam3strings.txt:88
 msgid ""
 "Before NEXUS was expelled, we intercepted this message - Decoding completed."
-msgstr ""
-"Bevor NEXUS vertrieben wurde konnten wie diese Nachricht abh�ren - "
-"Entschl�sselung abgeschlossen"
+msgstr "Bevor NEXUS vertrieben wurde konnten wie diese Nachricht abh�ren - Entschl�sselung abgeschlossen"
 
 #: data/messages/strings/cam3strings.txt:91
 msgid "A NEXUS task force is heading for these coordinates."
@@ -2563,9 +2501,7 @@ msgstr "Eine Einsatztruppe von NEXUS bewegt sich auf diese koordinaten zu."
 
 #: data/messages/strings/cam3strings.txt:92
 msgid "You have an opportunity to destroy NEXUS before they get there."
-msgstr ""
-"Sie haben die M�glichkeit NEXUS' Truppen zu zerst�ren bevor sie diese "
-"erreichen."
+msgstr "Sie haben die M�glichkeit NEXUS' Truppen zu zerst�ren bevor sie diese erreichen."
 
 #: data/messages/strings/cam3strings.txt:93
 msgid ""
@@ -2600,8 +2536,7 @@ msgstr "Unsere aktuelle Position ist hier."
 
 #: data/messages/strings/cam3strings.txt:108
 msgid "Take control of our forces and lead us."
-msgstr ""
-"�bernehmen sie die Kontrolle �ber unsere Truppen und f�hren sie uns an."
+msgstr "�bernehmen sie die Kontrolle �ber unsere Truppen und f�hren sie uns an."
 
 #: data/messages/strings/cam3strings.txt:111
 msgid "Control transfer successful."
@@ -2622,9 +2557,7 @@ msgstr "Teile des Gamme-Teams haben uns kontaktiert."
 #: data/messages/strings/cam3strings.txt:119
 msgid ""
 "They claim to be free of NEXUS, and offer their base as a site of operations."
-msgstr ""
-"Sie behaupten sie sind nicht von NEXUS befallen und biehten ihre Basis als "
-"ausgangspunkt f�r Operationen an."
+msgstr "Sie behaupten sie sind nicht von NEXUS befallen und biehten ihre Basis als ausgangspunkt f�r Operationen an."
 
 #: data/messages/strings/cam3strings.txt:120
 msgid "Base coordinates download in progress."
@@ -2632,9 +2565,7 @@ msgstr "Download der Basiskoordinaten."
 
 #: data/messages/strings/cam3strings.txt:123
 msgid "Proceed with caution. Scout and confirm Gamma are not contaminated."
-msgstr ""
-"R�cken Sie vorsichtig vor.Stellen Sie sicher das Gamma nicht infiziert "
-"wurde."
+msgstr "R�cken Sie vorsichtig vor.Stellen Sie sicher das Gamma nicht infiziert wurde."
 
 #: data/messages/strings/cam3strings.txt:124
 msgid "Secure this zone."
@@ -2738,9 +2669,7 @@ msgstr "Wir versuchen auf die Raketenkontrollcodes zuzugreifen."
 #: data/messages/strings/cam3strings.txt:169
 msgid ""
 "A research facility is required to crack the code. Allocate one immediately."
-msgstr ""
-"Um den code zu knacken wird eine Forschungseinrichtung ben�tigt.Weise Sie "
-"schnellstm�glich eine zu."
+msgstr "Um den code zu knacken wird eine Forschungseinrichtung ben�tigt.Weise Sie schnellstm�glich eine zu."
 
 #: data/messages/strings/cam3strings.txt:170
 msgid "Protect the missile silos from NEXUS attacks."
@@ -6254,8 +6183,7 @@ msgstr "Neues taktisches Computersystem"
 #: data/mp/messages/strings/resstrings.txt:2144
 #: data/mp/messages/strings/resstrings.txt:2150
 msgid "Commander leads groups acts as factory delivery point"
-msgstr ""
-"Kommandant f�hrt Gruppen und dient als Auslieferungspunkt f�r Fabriken"
+msgstr "Kommandant f�hrt Gruppen und dient als Auslieferungspunkt f�r Fabriken"
 
 #: data/messages/strings/resstrings.txt:21
 #: data/messages/strings/resstrings.txt:1122
@@ -6893,8 +6821,7 @@ msgstr "Hochdehnbarer Beton-Kunststoff-Komposit"
 #: data/messages/strings/resstrings.txt:230
 #: data/mp/messages/strings/resstrings.txt:284
 msgid "Bonded metallic laminates formed into walls and defenses"
-msgstr ""
-"Verbundene Metalllaminierungen wird f�r W�nde oder Verteidigung verwendet"
+msgstr "Verbundene Metalllaminierungen wird f�r W�nde oder Verteidigung verwendet"
 
 #: data/messages/strings/resstrings.txt:235
 #: data/messages/strings/resstrings.txt:241
@@ -7100,9 +7027,7 @@ msgstr "Raketenbatterie f�r indirekten Beschuss"
 #: data/mp/messages/strings/resstrings.txt:399
 #: data/mp/messages/strings/resstrings.txt:2084
 msgid "Assigned automatically to nearest sensor or CB tower"
-msgstr ""
-"Wird automatisch dem n�chsten Sensor und Artilleriebek�mpfungssensor "
-"zugewiesen"
+msgstr "Wird automatisch dem n�chsten Sensor und Artilleriebek�mpfungssensor zugewiesen"
 
 #: data/messages/strings/resstrings.txt:278
 #: data/mp/messages/strings/resstrings.txt:332
@@ -7862,9 +7787,7 @@ msgstr "Weisen sie dem VTOL eine Landeplattform zu als w�hre sie ein Ziel"
 #: data/messages/strings/resstrings.txt:744
 #: data/mp/messages/strings/resstrings.txt:822
 msgid "The VTOL returns to the selected pad for rearming"
-msgstr ""
-"Das VTOL kehrt zur angew�hlten Landeplattform zur Aufmunitionierung "
-"zur�ck"
+msgstr "Das VTOL kehrt zur angew�hlten Landeplattform zur Aufmunitionierung zur�ck"
 
 #: data/messages/strings/resstrings.txt:747
 #: data/messages/strings/resstrings.txt:753
@@ -8085,9 +8008,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:912
 #: data/mp/messages/strings/resstrings.txt:918
 msgid "Counter-battery fire continues until enemy battery is suppressed"
-msgstr ""
-"Beschuss Artilleriebek�mpfungs wird fortgesetzt bis Feindartillerie "
-"ausgeschaltet ist"
+msgstr "Beschuss Artilleriebek�mpfungs wird fortgesetzt bis Feindartillerie ausgeschaltet ist"
 
 #: data/messages/strings/resstrings.txt:832
 #: data/mp/messages/strings/resstrings.txt:916
@@ -8206,9 +8127,7 @@ msgstr "Zugewiesene VTOLs greifen feindliche Ziele an"
 #: data/messages/strings/resstrings.txt:888
 #: data/mp/messages/strings/resstrings.txt:972
 msgid "Strike mission continues until enemy destroyed or they retreat"
-msgstr ""
-"Luftangriffe werden fortgesetzt bis der Feind zerst�rt ist oder sich "
-"zur�ckzieht"
+msgstr "Luftangriffe werden fortgesetzt bis der Feind zerst�rt ist oder sich zur�ckzieht"
 
 #: data/messages/strings/resstrings.txt:892
 #: data/mp/messages/strings/resstrings.txt:976
@@ -9276,9 +9195,7 @@ msgstr "Panzerbrechenden, fl�gelstabilisierten Treibk�figgeschosse"
 #: data/messages/strings/resstrings.txt:1348
 #: data/mp/messages/strings/resstrings.txt:1451
 msgid "High-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
-msgstr ""
-"Panzerbrechenden, fl�gelstabilisierten Hochgeschwindigkeits-"
-"Treibk�figgeschosse"
+msgstr "Panzerbrechenden, fl�gelstabilisierten Hochgeschwindigkeits-Treibk�figgeschosse"
 
 #: data/messages/strings/resstrings.txt:1354
 #: data/messages/strings/resstrings.txt:1390
@@ -9705,8 +9622,7 @@ msgstr "Verbesserter Ketten-Lademechanismus"
 #: data/messages/strings/resstrings.txt:1558
 #: data/mp/messages/strings/resstrings.txt:1679
 msgid "Robotic advances make new chaingun upgrade available"
-msgstr ""
-"Fortschritte der Robotik erm�glichen Verbesserung der Maschinengewehre"
+msgstr "Fortschritte der Robotik erm�glichen Verbesserung der Maschinengewehre"
 
 #: data/messages/strings/resstrings.txt:1563
 #: data/messages/strings/resstrings.txt:1569
@@ -10285,29 +10201,22 @@ msgstr "Um einen �lbohrturm zu bauen, w�hlen Sie eines ihrer Baufahrzeuge"
 msgid ""
 "Left click the oil pool indicated by the radar pulse to order your truck to "
 "build"
-msgstr ""
-"Machen Sie einen Linksklick auf eine �lquelle, die im Radar angezeigt "
-"wird, um Ihrem Baufahrzeug einen Bauauftrag zu geben"
+msgstr "Machen Sie einen Linksklick auf eine �lquelle, die im Radar angezeigt wird, um Ihrem Baufahrzeug einen Bauauftrag zu geben"
 
 #: data/messages/strings/tutstrings.txt:10
 msgid ""
 "The oil derrick is currently dormant. Build a power generator to convert the "
 "oil into power"
-msgstr ""
-"Die �lquelle ruht derzeit. Bauen sie einen Stromgenerator um das �l in "
-"Energie umzuwandeln"
+msgstr "Die �lquelle ruht derzeit. Bauen sie einen Stromgenerator um das �l in Energie umzuwandeln"
 
 #: data/messages/strings/tutstrings.txt:11
 msgid ""
 "Position the square at your base and left click to start the build process"
-msgstr ""
-"Platzieren Sie das Quadrat in dIhrer Basis und machen Sie einen Linksklick "
-"um den Bauproze� zu starten"
+msgstr "Platzieren Sie das Quadrat in dIhrer Basis und machen Sie einen Linksklick um den Bauproze� zu starten"
 
 #: data/messages/strings/tutstrings.txt:12
 msgid "To increase your build rate, select your second truck"
-msgstr ""
-"Um die Baugeschwindigkeit zu erh�hen, w�hlen Sie ihr zweites Baufahrzeug"
+msgstr "Um die Baugeschwindigkeit zu erh�hen, w�hlen Sie ihr zweites Baufahrzeug"
 
 #: data/messages/strings/tutstrings.txt:13
 msgid "Use a truck to search for the artifact indicated by the radar pulse"
@@ -10357,14 +10266,11 @@ msgstr "W�hlen Sie das Fahrzeug-Antrieb Symbol"
 
 #: data/messages/strings/tutstrings.txt:23
 msgid "Then left click the machinegun to complete your design"
-msgstr ""
-"Linksklicken Sie auf das Maschinengewehr um den Entwurf abzuschlie�en"
+msgstr "Linksklicken Sie auf das Maschinengewehr um den Entwurf abzuschlie�en"
 
 #: data/messages/strings/tutstrings.txt:24
 msgid "To finalize your design, left click the CLOSE icon"
-msgstr ""
-"Um den Entwurf abzuschlie�en, machen Sie einen Linksklick auf das "
-"SCHLIESSEN Symbol"
+msgstr "Um den Entwurf abzuschlie�en, machen Sie einen Linksklick auf das SCHLIESSEN Symbol"
 
 #: data/messages/strings/tutstrings.txt:25
 msgid "A factory is now required to manufacture your new vehicle"
@@ -10402,8 +10308,7 @@ msgstr "Machen sie einen Linksklick auf das Blinkende BAUEN Symbol"
 
 #: data/messages/strings/tutstrings.txt:34
 msgid "Now left click the power generator in the build menu on the left"
-msgstr ""
-"Linksklicken sie auf den Stromgenerator im Bauen-Men� auf der linken Seite"
+msgstr "Linksklicken sie auf den Stromgenerator im Bauen-Men� auf der linken Seite"
 
 #: data/messages/strings/tutstrings.txt:35
 msgid "Presently unused"
@@ -10447,9 +10352,7 @@ msgstr ""
 
 #: data/messages/strings/tutstrings.txt:43
 msgid "Now left click the units you want to build from the menu at the left"
-msgstr ""
-"Machen Sie nun im Men� auf der linken Seite einene Linksklick auf die "
-"Einheit die Sie produzieren m�chten"
+msgstr "Machen Sie nun im Men� auf der linken Seite einene Linksklick auf die Einheit die Sie produzieren m�chten"
 
 #: data/messages/strings/tutstrings.txt:44
 msgid "The other truck will now help to build the power generator"
@@ -10457,20 +10360,15 @@ msgstr "Das andere Baufahrzeug wird jetzt beim Bau des Stromgenerators helfen"
 
 #: data/messages/strings/tutstrings.txt:45
 msgid "Move the pointer over the artifact and left click to recover it"
-msgstr ""
-"Bewegen Sie den Mauszeiger �ber das Artefakt und bergen Sie es mit einem "
-"Linksklick"
+msgstr "Bewegen Sie den Mauszeiger �ber das Artefakt und bergen Sie es mit einem Linksklick"
 
 #: data/messages/strings/tutstrings.txt:46
 msgid "You can move the delivery point at any time by left clicking it"
-msgstr ""
-"Sie k�nnen den Auslieferungspunkt jederzeit verschieben, indem sie einen "
-"Linksklick darauf machen"
+msgstr "Sie k�nnen den Auslieferungspunkt jederzeit verschieben, indem sie einen Linksklick darauf machen"
 
 #: data/messages/strings/tutstrings.txt:47
 msgid "In this training session you'll learn how to build an effective base"
-msgstr ""
-"In dieser �bungseinheit werden sie lernen wie man eine effektive Basis baut"
+msgstr "In dieser �bungseinheit werden sie lernen wie man eine effektive Basis baut"
 
 #: data/messages/strings/tutstrings.txt:48
 msgid "Oil resources are key to your success"
@@ -10478,8 +10376,7 @@ msgstr "�lquellen sind der Schl�ssel zu Ihrem Erfolg"
 
 #: data/messages/strings/tutstrings.txt:49
 msgid "Now click where you want to position the delivery point"
-msgstr ""
-"Klicken Sie nun dorthin, wo Sie den Auslieferungspunkt platzieren m�chten"
+msgstr "Klicken Sie nun dorthin, wo Sie den Auslieferungspunkt platzieren m�chten"
 
 #: data/messages/strings/tutstrings.txt:50
 msgid "Now left click the power generator site"
@@ -10489,9 +10386,7 @@ msgstr "Mache sie jetzt einen Linksklick auf die Baustelle des Stromgenerator"
 msgid ""
 "During missions you need to locate and recover technologies from before the "
 "Collapse"
-msgstr ""
-"Finden und bergen Sie w�hrend der Mission Technologien aus der Zeit vor "
-"dem Zusammenbruch "
+msgstr "Finden und bergen Sie w�hrend der Mission Technologien aus der Zeit vor dem Zusammenbruch "
 
 #: data/mp/messages/strings/names.txt:387
 #: data/mp/messages/strings/names.txt:922
@@ -11035,12 +10930,13 @@ msgid "Mantis HPV VTOL"
 msgstr "Mantis Hochgeschwindigkeitsgesch�tz VTOL"
 
 #: data/mp/messages/strings/names.txt:1879
-msgid "Cobra Repair Trucks"
+#, fuzzy
+msgid "Cobra Repair Tracks"
 msgstr "Cobra Reparatur Ketten"
 
 #: data/mp/messages/strings/names.txt:1880
 #, fuzzy
-msgid "Mantis Repair Trucks"
+msgid "Mantis Repair Tracks"
 msgstr "Mantis Reparatur Ketten"
 
 #: data/mp/messages/strings/names.txt:1882
@@ -11270,8 +11166,7 @@ msgstr "Mit Railgun f�r Cyborgs bewaffnet"
 
 #: data/mp/messages/strings/resstrings.txt:2017
 msgid "Uses advanced mass driver railgun technology"
-msgstr ""
-"Verwendet fortgeschrittene Massebeschleuniger Technologien f�r Railgun"
+msgstr "Verwendet fortgeschrittene Massebeschleuniger Technologien f�r Railgun"
 
 #: data/mp/messages/strings/resstrings.txt:2019
 #: data/mp/messages/strings/resstrings.txt:2025
@@ -11388,6 +11283,9 @@ msgstr "Verbesserter Kommandoturm verf�gbar"
 #: data/mp/messages/strings/resstrings.txt:2149
 msgid "Upgraded battlefield computer system"
 msgstr "Verbesserter taktischer Computer"
+
+#~ msgid "%s - Damage %d%% - Serial ID %d - Kills %d order %d action %d, %s"
+#~ msgstr "%s - Schaden %d%% - Serien Nr %d - Absch�sse %d, Befehl %d Aktion %d, %s"
 
 #~ msgid "Campaign Mode"
 #~ msgstr "Kampagnen Modus"
