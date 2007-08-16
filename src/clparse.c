@@ -128,9 +128,9 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 		if ( strcasecmp(tokenType, "--version") == 0 )
 		{
 #ifdef DEBUG
-			fprintf( stdout, "Warzone 2100 - Version %s - Built %s - DEBUG\n", VERSION, __DATE__ );
+			fprintf(stdout, "Warzone 2100 - Version " VERSION " - Built " __DATE__ " - DEBUG\n");
 #else
-			fprintf( stdout, "Warzone 2100 - Version %s - Built %s\n", VERSION, __DATE__ );
+			fprintf(stdout, "Warzone 2100 - Version " VERSION " - Built " __DATE__ "\n");
 #endif
 			return FALSE;
 		}
