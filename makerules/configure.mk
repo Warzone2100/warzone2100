@@ -62,6 +62,11 @@ else
 CFLAGS+=-DNDEBUG
 endif
 
+ifeq ($(strip $(USE_GETTEXT)),yes)
+CFLAGS+=-DENABLE_NLS=1
+LDFLAGS+=-lintl
+endif
+
 ifeq ($(strip $(PLATFORM)),windows)
 DIRSEP=\\
 RMF=del /F

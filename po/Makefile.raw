@@ -1,16 +1,20 @@
 MAKERULES=../makerules
 include $(MAKERULES)/configure.mk
 
-.PHONY: all clean update-po po-files
+.PHONY: all clean update-po po-files mo-files
 
 all:
 ifdef USE_GETTEXT
-all: po-files
+all: po-files mo-files
 endif
 
-po-files: nb.po de.po da.po nl.po la.po
+PO_FILES=nb.po de.po da.po nl.po la.po
+MO_FILES=$(patsubst %.po,..$(DIRSEP)data$(DIRSEP)locale$(DIRSEP)%$(DIRSEP)LC_MESSAGES$(DIRSEP)$(PACKAGE).mo, $(PO_FILES))
 
-update-po: clean po-files
+po-files: $(PO_FILES)
+mo-files: $(MO_FILES)
+
+update-po: clean all
 
 $(PACKAGE).pot: POTFILES.in
 	$(XGETTEXT) --default-domain=$(PACKAGE) --directory=.. --add-comments=TRANSLATORS: --keyword=_ --keyword=N_ --keyword=P_:1c,2 --keyword=NP_:1c,2 --files-from=$< --copyright-holder="Warzone Resurrection Project" --msgid-bugs-address="warzone-dev@gna.org"
@@ -20,5 +24,13 @@ $(PACKAGE).pot: POTFILES.in
 	$(MSGMERGE) $@ $(PACKAGE).pot -o $@.new
 	mv $@.new $@
 
+..$(DIRSEP)data$(DIRSEP)locale$(DIRSEP)%$(DIRSEP)LC_MESSAGES$(DIRSEP)$(PACKAGE).mo: %.po
+	@-mkdir ..$(DIRSEP)data$(DIRSEP)locale$(DIRSEP)$(patsubst %.po,%, $<)
+	@-mkdir ..$(DIRSEP)data$(DIRSEP)locale$(DIRSEP)$(patsubst %.po,%, $<)$(DIRSEP)LC_MESSAGES
+	$(MSGFMT) -c -o $@ $<
+
 clean:
 	$(RMF) $(PACKAGE).pot
+	$(RMF) $(MO_FILES)
+	@-rmdir $(patsubst %$(DIRSEP)$(PACKAGE).mo,%, $(MO_FILES))
+	@-rmdir $(patsubst %$(DIRSEP)LC_MESSAGES$(DIRSEP)$(PACKAGE).mo,%, $(MO_FILES))

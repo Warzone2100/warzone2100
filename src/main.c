@@ -745,13 +745,6 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
-	/*** Initialize translations ***/
-	setlocale(LC_ALL, "");
-	(void)bindtextdomain(PACKAGE, LOCALEDIR);
-	(void)textdomain(PACKAGE);
-
-	SDL_initFramerate( &wzFPSmanager );
-
 	/*** Initialize PhysicsFS ***/
 	PHYSFS_init(argv[0]);
 	initialize_PhysicsFS();
@@ -767,6 +760,27 @@ int main(int argc, char *argv[])
 	setRegistryFilePath("config");
 	strcpy(KeyMapPath, "keymap.map");
 	strcpy(UserMusicPath, "music");
+
+	/*** Initialize translations ***/
+	setlocale(LC_ALL, "");
+#if defined(WZ_OS_WIN)
+	{
+		// Retrieve an absolute path to the locale directory
+		char localeDir[MAX_PATH];
+		snprintf(localeDir, MAX_PATH, "%s\\" LOCALEDIR, PHYSFS_getBaseDir());
+
+		// Guarantee to NUL-terminate
+		localeDir[sizeof(localeDir) - 1] = '\0';
+
+		// Set locale directory and translation domain name
+		(void)bindtextdomain(PACKAGE, localeDir);
+	}
+#else
+	(void)bindtextdomain(PACKAGE, LOCALEDIR);
+#endif
+	(void)textdomain(PACKAGE);
+
+	SDL_initFramerate( &wzFPSmanager );
 
 	// initialise all the command line states
 	war_SetDefaultStates();
