@@ -1,14 +1,20 @@
 MAKERULES=../../../makerules
 include $(MAKERULES)/configure.mk
 
-GRIMLIST = components structs texpages wrf
+AIVOLUTIONLIST = multiplay commands.txt installation.txt
+GRIMLIST = components structs texpages wrf COPYING
 
+AIVOLUTIONARCHIVE=aivolution.wz
 GRIMARCHIVE=grim.wz
 
 all:
 ifdef DATA
-all: $(GRIMARCHIVE)
+all: $(AIVOLUTIONARCHIVE) $(GRIMARCHIVE)
 endif
+
+$(AIVOLUTIONARCHIVE): $(AIVOLUTIONLIST:%=aivolution/%)
+	cd aivolution && zip -ru0 ../$@ $(AIVOLUTIONLIST) -x *svn*
+	zip -T $@
 
 $(GRIMARCHIVE): $(GRIMLIST:%=grim/%)
 	cd grim && zip -ru0 ../$@ $(GRIMLIST) -x *svn*
@@ -16,3 +22,4 @@ $(GRIMARCHIVE): $(GRIMLIST:%=grim/%)
 
 clean:
 	$(RMF) $(GRIMARCHIVE)
+	$(RMF) $(AIVOLUTIONARCHIVE)
