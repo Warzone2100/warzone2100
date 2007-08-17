@@ -3145,14 +3145,14 @@ static void intSetTemplatePowerShadowStats(COMP_BASE_STATS *psStats)
 	UDWORD				power, i;
 
 	if (psStats != NULL) {
-        UDWORD bodyPower        = (asBodyStats + sCurrDesign.asParts[COMP_BODY])->buildPower;
-        UDWORD brainPower       = (asBrainStats + sCurrDesign.asParts[COMP_BRAIN])->buildPower;
-        UDWORD sensorPower      = (asSensorStats + sCurrDesign.asParts[COMP_SENSOR])->buildPower;
-        UDWORD ECMPower         = (asECMStats + sCurrDesign.asParts[COMP_ECM])->buildPower;
-        UDWORD repairPower      = (asRepairStats + sCurrDesign.asParts[COMP_REPAIRUNIT])->buildPower;
-        UDWORD constructPower   = (asConstructStats + sCurrDesign.asParts[COMP_CONSTRUCT])->buildPower;
-        UDWORD propulsionPower  = (asPropulsionStats + sCurrDesign.asParts[COMP_PROPULSION])->buildPower;
-        UDWORD weaponPower      = (asWeaponStats + sCurrDesign.asWeaps[0])->buildPower;
+        UDWORD bodyPower        = asBodyStats[sCurrDesign.asParts[COMP_BODY]].buildPower;
+        UDWORD brainPower       = asBrainStats[sCurrDesign.asParts[COMP_BRAIN]].buildPower;
+        UDWORD sensorPower      = asSensorStats[sCurrDesign.asParts[COMP_SENSOR]].buildPower;
+        UDWORD ECMPower         = asECMStats[sCurrDesign.asParts[COMP_ECM]].buildPower;
+        UDWORD repairPower      = asRepairStats[sCurrDesign.asParts[COMP_REPAIRUNIT]].buildPower;
+        UDWORD constructPower   = asConstructStats[sCurrDesign.asParts[COMP_CONSTRUCT]].buildPower;
+        UDWORD propulsionPower  = asPropulsionStats[sCurrDesign.asParts[COMP_PROPULSION]].buildPower;
+        UDWORD weaponPower      = asWeaponStats[sCurrDesign.asWeaps[0]].buildPower;
 
 
 		type = statType(psStats->ref);
@@ -3205,7 +3205,7 @@ static void intSetTemplatePowerShadowStats(COMP_BASE_STATS *psStats)
         power += weaponPower;
     	for(i=1; i<sCurrDesign.numWeaps; i++)
     	{
-    		power += (asWeaponStats + sCurrDesign.asWeaps[i])->buildPower;
+    		power += asWeaponStats[sCurrDesign.asWeaps[i]].buildPower;
     	}
    		widgSetMinorBarSize( psWScreen, IDDES_POWERBAR,
 								power);
@@ -3232,14 +3232,14 @@ static void intSetTemplateBodyShadowStats(COMP_BASE_STATS *psStats)
 	UDWORD				body, i;
 
 	if (psStats != NULL) {
-        UDWORD bodyBody        = (asBodyStats + sCurrDesign.asParts[COMP_BODY])->body;
-        UDWORD brainBody       = (asBrainStats + sCurrDesign.asParts[COMP_BRAIN])->body;
-        UDWORD sensorBody      = (asSensorStats + sCurrDesign.asParts[COMP_SENSOR])->body;
-        UDWORD ECMBody         = (asECMStats + sCurrDesign.asParts[COMP_ECM])->body;
-        UDWORD repairBody      = (asRepairStats + sCurrDesign.asParts[COMP_REPAIRUNIT])->body;
-        UDWORD constructBody   = (asConstructStats + sCurrDesign.asParts[COMP_CONSTRUCT])->body;
-        UDWORD propulsionBody  = (asPropulsionStats + sCurrDesign.asParts[COMP_PROPULSION])->body;
-        UDWORD weaponBody      = (asWeaponStats + sCurrDesign.asWeaps[0])->body;
+        UDWORD bodyBody        = asBodyStats[sCurrDesign.asParts[COMP_BODY]].body;
+        UDWORD brainBody       = asBrainStats[sCurrDesign.asParts[COMP_BRAIN]].body;
+        UDWORD sensorBody      = asSensorStats[sCurrDesign.asParts[COMP_SENSOR]].body;
+        UDWORD ECMBody         = asECMStats[sCurrDesign.asParts[COMP_ECM]].body;
+        UDWORD repairBody      = asRepairStats[sCurrDesign.asParts[COMP_REPAIRUNIT]].body;
+        UDWORD constructBody   = asConstructStats[sCurrDesign.asParts[COMP_CONSTRUCT]].body;
+        UDWORD propulsionBody  = asPropulsionStats[sCurrDesign.asParts[COMP_PROPULSION]].body;
+        UDWORD weaponBody      = asWeaponStats[sCurrDesign.asWeaps[0]].body;
 
 
 		type = statType(psStats->ref);
@@ -3291,7 +3291,7 @@ static void intSetTemplateBodyShadowStats(COMP_BASE_STATS *psStats)
         body += weaponBody;
     	for(i=1; i<sCurrDesign.numWeaps; i++)
     	{
-    		body += (asWeaponStats + sCurrDesign.asWeaps[i])->body;
+    		body += asWeaponStats[sCurrDesign.asWeaps[i]].body;
     	}
     	body += (body * asBodyUpgrade[selectedPlayer]->body / 100);
    		widgSetMinorBarSize( psWScreen, IDDES_BODYPOINTS,
