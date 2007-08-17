@@ -253,6 +253,17 @@ FunctionEnd
 
 
 
+  LangString TEXT_SecBase ${LANG_DUTCH} "Standard installatie"
+  LangString DESC_SecBase ${LANG_DUTCH} "Standard installatie."
+
+  LangString TEXT_SecMods ${LANG_DUTCH} "Mods"
+  LangString DESC_SecMods ${LANG_DUTCH} "Verschillende mods."
+
+  LangString TEXT_SecGrimMod ${LANG_DUTCH} "Grim's graphische-update"
+  LangString DESC_SecGrimMod ${LANG_DUTCH} "Grim's graphische-update. Bevat meer gedetaïleerde textures voor campaign 1 en extra texture- en model-updates. Copyright (C) 2005-2007 Grim Moroe, gebruik is alleen toegestaan voor Warzone 2100."
+
+
+
   LangString TEXT_SecBase ${LANG_GERMAN} "Standardinstallation"
   LangString DESC_SecBase ${LANG_GERMAN} "Standardinstallation."
 
