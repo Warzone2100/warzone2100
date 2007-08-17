@@ -259,7 +259,9 @@ BOOL NETfloat(float* fp)
 	 && !defined(__m68k__) && !defined(__sparc__) && !defined(__i386__) \
 	 && !defined(__mips__) && !defined(__ns32k__) && !defined(__alpha__) \
 	 && !defined(__arm__) && !defined(__ppc__) && !defined(__ia64__) \
-	 && !defined(__arm26__) && !defined(__sparc64__) && !defined(__amd64__)
+	 && !defined(__arm26__) && !defined(__sparc64__) && !defined(__amd64__) \
+	 && !defined(WZ_WZ_CC_MSVC) // Assume that all platforms supported by
+	                            // MSVC provide IEEE754 floating point numbers
 	# error "this platform hasn't been confirmed to support IEEE754 floating point numbers"
 	#endif
 
