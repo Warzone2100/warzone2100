@@ -3152,7 +3152,7 @@ static void intSetTemplatePowerShadowStats(COMP_BASE_STATS *psStats)
         UDWORD repairPower      = asRepairStats[sCurrDesign.asParts[COMP_REPAIRUNIT]].buildPower;
         UDWORD constructPower   = asConstructStats[sCurrDesign.asParts[COMP_CONSTRUCT]].buildPower;
         UDWORD propulsionPower  = asPropulsionStats[sCurrDesign.asParts[COMP_PROPULSION]].buildPower;
-        UDWORD weaponPower      = asWeaponStats[sCurrDesign.asWeaps[0]].buildPower;
+        UDWORD weaponPower      = asWeaponStats[sCurrDesign.numWeaps ? sCurrDesign.asWeaps[0] : 0].buildPower;
 
 
 		type = statType(psStats->ref);
@@ -3239,7 +3239,7 @@ static void intSetTemplateBodyShadowStats(COMP_BASE_STATS *psStats)
         UDWORD repairBody      = asRepairStats[sCurrDesign.asParts[COMP_REPAIRUNIT]].body;
         UDWORD constructBody   = asConstructStats[sCurrDesign.asParts[COMP_CONSTRUCT]].body;
         UDWORD propulsionBody  = asPropulsionStats[sCurrDesign.asParts[COMP_PROPULSION]].body;
-        UDWORD weaponBody      = asWeaponStats[sCurrDesign.asWeaps[0]].body;
+        UDWORD weaponBody      = asWeaponStats[sCurrDesign.numWeaps ? sCurrDesign.asWeaps[0] : 0].body;
 
 
 		type = statType(psStats->ref);
@@ -3948,8 +3948,9 @@ void intProcessDesign(UDWORD id)
 			}
 			*/
 
-			//check that the weapon is valid for this propulsion
-			if (!intCheckValidWeaponForProp())
+			//check that the weapon (if any) is valid for this propulsion
+			if (sCurrDesign.numWeaps
+			 && !intCheckValidWeaponForProp())
 			{
 				//no way of allocating more than one weapon is there?
 				if (sCurrDesign.numWeaps > 1)
