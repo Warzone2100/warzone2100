@@ -55,16 +55,15 @@ msgstr "Kan niet bouwen. Oliebron brand."
 #: src/display.c:2044
 #, c-format
 msgid "%s - Damage %d%% - Kills %d, %s"
-msgstr ""
+msgstr "%s - Schade %d%% - Kills %d, %s"
 
 #: src/display.c:2291
 msgid "Truck ordered to build Oil Derrick"
 msgstr ""
 
 #: src/multistat.c:104 src/configuration.c:375 src/configuration.c:376
-#, fuzzy
 msgid "Player"
-msgstr "Spelers"
+msgstr "Speler"
 
 #: src/multigifts.c:172
 #, c-format
@@ -165,16 +164,14 @@ msgstr "Spel Verlaten"
 
 #: src/hci.c:4499 src/intdisplay.c:275 src/intdisplay.c:318
 #: src/intdisplay.c:365
-#, fuzzy
 msgid "Progress Bar"
-msgstr "Vooruitgangsbalk"
+msgstr "Voortgangsbalk"
 
 #: src/hci.c:5560
 msgid "Factory Delivery Point"
 msgstr ""
 
 #: src/hci.c:5579
-#, fuzzy
 msgid "Loop Production"
 msgstr "Productie Herhalen"
 
@@ -199,7 +196,6 @@ msgid "OBJECTIVE FAILED"
 msgstr "DOEL MISLUKT"
 
 #: src/mission.c:3383 src/mission.c:3420 src/mission.c:3567
-#, fuzzy
 msgid "Quit To Main Menu"
 msgstr "Afsluiten Naar Hoofdmenu"
 
@@ -213,7 +209,6 @@ msgid "Load Saved Game"
 msgstr "Laden Opgeslagen Spel"
 
 #: src/droid.c:248
-#, fuzzy
 msgid "Unit Lost!"
 msgstr "Eenheid verloren!"
 
@@ -271,7 +266,6 @@ msgid "Elite"
 msgstr "Elite"
 
 #: src/droid.c:4137
-#, fuzzy
 msgid "Special"
 msgstr "Speciaal"
 
@@ -608,7 +602,7 @@ msgstr ""
 #: src/scores.c:100
 #, fuzzy, c-format
 msgid "Units Manufactured: %d"
-msgstr "Produceren"
+msgstr "Eenheden Geproduceerd: %d"
 
 #: src/scores.c:101
 #, c-format
@@ -626,14 +620,14 @@ msgid "Total Structures: %d"
 msgstr ""
 
 #: src/scores.c:105
-#, fuzzy, c-format
+#, c-format
 msgid "Rookie: %d"
-msgstr "Groentje"
+msgstr "Groentje: %d"
 
 #: src/scores.c:106
-#, fuzzy, c-format
+#, c-format
 msgid "Green: %d"
-msgstr "Groen"
+msgstr "Groen: %d"
 
 #: src/scores.c:107
 #, c-format
@@ -651,24 +645,24 @@ msgid "Professional: %d"
 msgstr ""
 
 #: src/scores.c:110
-#, fuzzy, c-format
+#, c-format
 msgid "Veteran: %d"
-msgstr "Veteraan"
+msgstr "Veteraan: %d"
 
 #: src/scores.c:111
-#, fuzzy, c-format
+#, c-format
 msgid "Elite: %d"
-msgstr "Elite"
+msgstr "Elite: %d"
 
 #: src/scores.c:112
-#, fuzzy, c-format
+#, c-format
 msgid "Special: %d"
-msgstr "Speciaal"
+msgstr "Speciaal: %d"
 
 #: src/scores.c:113
-#, fuzzy, c-format
+#, c-format
 msgid "Hero: %d"
-msgstr "Held"
+msgstr "Held: %d"
 
 #: src/scores.c:320
 msgid "Unit Losses"
@@ -771,9 +765,8 @@ msgid "Recycle"
 msgstr ""
 
 #: src/intorder.c:196
-#, fuzzy
 msgid "Assign Factory Production"
-msgstr "Productie Herhalen"
+msgstr ""
 
 #: src/intorder.c:197
 msgid "Assign Cyborg Factory Production"
@@ -926,7 +919,7 @@ msgstr ""
 
 #: src/frontend.c:225
 msgid "Single Player Campaign"
-msgstr ""
+msgstr "Veldtocht"
 
 #: src/frontend.c:228 src/frontend.c:232
 msgid "Multi Player Game"
@@ -961,11 +954,11 @@ msgstr "Terug"
 
 #: src/frontend.c:344
 msgid "Load Campaign"
-msgstr ""
+msgstr "Laad Veldtocht"
 
 #: src/frontend.c:345
 msgid "New Campaign"
-msgstr ""
+msgstr "Nieuwe Veldtocht"
 
 #: src/frontend.c:347
 msgid "SINGLE PLAYER"
@@ -1453,19 +1446,16 @@ msgid "Any number of players"
 msgstr ""
 
 #: src/multimenu.c:610
-#, fuzzy
 msgid "2 players"
-msgstr "Spelers"
+msgstr "2 spelers"
 
 #: src/multimenu.c:616
-#, fuzzy
 msgid "4 players"
-msgstr "Spelers"
+msgstr "4 spelers"
 
 #: src/multimenu.c:622
-#, fuzzy
 msgid "8 players"
-msgstr "Spelers"
+msgstr "8 spelers"
 
 #: src/multimenu.c:742
 msgid "Score"
@@ -1810,9 +1800,8 @@ msgid "Decoding in progress....."
 msgstr ""
 
 #: data/messages/strings/cam1strings.txt:127
-#, fuzzy
 msgid "Commander."
-msgstr "Commandanten"
+msgstr "Commandant."
 
 #: data/messages/strings/cam1strings.txt:128
 msgid "We have decoded the incoming message to the New Paradigm..."
@@ -1855,9 +1844,8 @@ msgid "It originates from the east."
 msgstr ""
 
 #: data/messages/strings/cam1strings.txt:149
-#, fuzzy
 msgid "Commander"
-msgstr "Commandanten"
+msgstr "Commandant"
 
 #: data/messages/strings/cam1strings.txt:150
 msgid "Congratulations on defeating the New Paradigm."
@@ -2277,9 +2265,8 @@ msgstr ""
 
 #: data/messages/strings/cam2strings.txt:163
 #: data/messages/strings/cam3strings.txt:32
-#, fuzzy
 msgid "Good luck, Commander."
-msgstr "Selecteer Commandant 1"
+msgstr "Success, Commandant."
 
 #: data/messages/strings/cam3strings.txt:3
 msgid "Argle Bargle - Please Remove when some text here!"
@@ -2730,9 +2717,8 @@ msgid "Scavenger Outpost"
 msgstr ""
 
 #: data/messages/strings/genstrings.txt:10
-#, fuzzy
 msgid "Power Resource"
-msgstr "Energie Verbruik"
+msgstr ""
 
 #: data/messages/strings/genstrings.txt:11
 msgid "Unknown Artifact"
@@ -2747,15 +2733,13 @@ msgid "Landing Zone"
 msgstr ""
 
 #: data/messages/strings/genstrings.txt:16
-#, fuzzy
 msgid "Return to LZ"
-msgstr "Keer terug naar Hoofdkwartier"
+msgstr "Keer terug naar de landingsplek"
 
 #: data/messages/strings/genstrings.txt:17
 #: data/messages/strings/genstrings.txt:27
-#, fuzzy
 msgid "Mission Target"
-msgstr "Missie Tijd - %s"
+msgstr "Missie Doelwit"
 
 #: data/messages/strings/genstrings.txt:18
 msgid "Pre-Collapse Research Center"
@@ -2766,9 +2750,8 @@ msgid "En-route To Mission Site"
 msgstr ""
 
 #: data/messages/strings/genstrings.txt:21
-#, fuzzy
 msgid "Mission Failed"
-msgstr "Missie Tijd - %s"
+msgstr "Missie Mislukt"
 
 #: data/messages/strings/genstrings.txt:22
 msgid "Mission Successful"
@@ -2974,9 +2957,8 @@ msgid "Missile Silo"
 msgstr ""
 
 #: data/messages/strings/names.txt:12 data/mp/messages/strings/names.txt:12
-#, fuzzy
 msgid "New Design"
-msgstr "Ontwerp"
+msgstr "Nieuw Ontwerp"
 
 #: data/messages/strings/names.txt:15 data/mp/messages/strings/names.txt:15
 msgid "Transport"
@@ -3129,9 +3111,8 @@ msgid "Python Heavy Cannon Tracks"
 msgstr ""
 
 #: data/messages/strings/names.txt:196 data/mp/messages/strings/names.txt:197
-#, fuzzy
 msgid "Python Commander Tracks"
-msgstr "Commandanten"
+msgstr ""
 
 #: data/messages/strings/names.txt:199 data/mp/messages/strings/names.txt:200
 msgid "Scavenger"
@@ -3193,9 +3174,8 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:545
 #: data/mp/messages/strings/names.txt:684
 #: data/mp/messages/strings/names.txt:1071
-#, fuzzy
 msgid "Flamer"
-msgstr "Spelers"
+msgstr ""
 
 #: data/messages/strings/names.txt:214 data/messages/strings/names.txt:219
 #: data/messages/strings/names.txt:226 data/messages/strings/names.txt:528
@@ -3263,27 +3243,24 @@ msgid "Retribution"
 msgstr ""
 
 #: data/messages/strings/names.txt:246 data/mp/messages/strings/names.txt:247
-#, fuzzy
 msgid "Scorpion"
-msgstr "Score"
+msgstr ""
 
 #: data/messages/strings/names.txt:247 data/mp/messages/strings/names.txt:248
 msgid "Tiger"
 msgstr ""
 
 #: data/messages/strings/names.txt:248 data/mp/messages/strings/names.txt:249
-#, fuzzy
 msgid "Vengeance"
-msgstr "Veteraan"
+msgstr ""
 
 #: data/messages/strings/names.txt:249 data/mp/messages/strings/names.txt:250
 msgid "Python"
 msgstr ""
 
 #: data/messages/strings/names.txt:250 data/mp/messages/strings/names.txt:251
-#, fuzzy
 msgid "Mantis"
-msgstr "Nevel"
+msgstr ""
 
 #: data/messages/strings/names.txt:252 data/mp/messages/strings/names.txt:253
 msgid "Transport Body"
@@ -3297,9 +3274,8 @@ msgstr ""
 #: data/messages/strings/names.txt:654 data/mp/messages/strings/names.txt:308
 #: data/mp/messages/strings/names.txt:549
 #: data/mp/messages/strings/names.txt:655
-#, fuzzy
 msgid "Command Turret"
-msgstr "Commandanten"
+msgstr ""
 
 #: data/messages/strings/names.txt:310 data/mp/messages/strings/names.txt:311
 msgid "Z NULL PROGRAM"
@@ -3344,9 +3320,8 @@ msgid "Tracks III"
 msgstr ""
 
 #: data/messages/strings/names.txt:328 data/mp/messages/strings/names.txt:329
-#, fuzzy
 msgid "Hover"
-msgstr "Held"
+msgstr ""
 
 #: data/messages/strings/names.txt:329 data/mp/messages/strings/names.txt:330
 msgid "Hover II"
@@ -3403,9 +3378,8 @@ msgstr ""
 #: data/messages/strings/names.txt:347 data/messages/strings/names.txt:698
 #: data/mp/messages/strings/names.txt:348
 #: data/mp/messages/strings/names.txt:701
-#, fuzzy
 msgid "Cyborg Propulsion"
-msgstr "Voertuig Aandrijving"
+msgstr "Cyborg Aandrijving"
 
 #: data/messages/strings/names.txt:351 data/mp/messages/strings/names.txt:352
 msgid "Z NULL REPAIR"
@@ -3429,24 +3403,21 @@ msgstr ""
 #: data/messages/strings/names.txt:894 data/mp/messages/strings/names.txt:374
 #: data/mp/messages/strings/names.txt:430
 #: data/mp/messages/strings/names.txt:901
-#, fuzzy
 msgid "Sensor Tower"
-msgstr "Sensor Vermogen"
+msgstr "Sensor Toren"
 
 #: data/messages/strings/names.txt:374 data/messages/strings/names.txt:430
 #: data/messages/strings/names.txt:895 data/mp/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:431
 #: data/mp/messages/strings/names.txt:902
-#, fuzzy
 msgid "Hardened Sensor Tower"
-msgstr "Sensor Vermogen"
+msgstr "Verharde Sensor Toren"
 
 #: data/messages/strings/names.txt:375 data/messages/strings/names.txt:893
 #: data/mp/messages/strings/names.txt:376
 #: data/mp/messages/strings/names.txt:900
-#, fuzzy
 msgid "Sensor Turret"
-msgstr "Sensor Bereik"
+msgstr "Sensor Koepel"
 
 #: data/messages/strings/names.txt:377 data/messages/strings/names.txt:378
 #: data/mp/messages/strings/names.txt:378
@@ -3465,9 +3436,8 @@ msgstr ""
 #: data/messages/strings/names.txt:382 data/messages/strings/names.txt:912
 #: data/mp/messages/strings/names.txt:383
 #: data/mp/messages/strings/names.txt:919
-#, fuzzy
 msgid "VTOL Strike Turret"
-msgstr "Voertuig Geschutkoepel"
+msgstr ""
 
 #: data/messages/strings/names.txt:383 data/mp/messages/strings/names.txt:384
 msgid "VTOL CB Radar Turret"
@@ -3478,18 +3448,16 @@ msgid "NEXUS Link"
 msgstr ""
 
 #: data/messages/strings/names.txt:386 data/messages/strings/names.txt:915
-#, fuzzy
 msgid "Scrambler Turret"
-msgstr "Voertuig Geschutkoepel"
+msgstr ""
 
 #: data/messages/strings/names.txt:389 data/mp/messages/strings/names.txt:390
 msgid "Oil Derrick"
 msgstr ""
 
 #: data/messages/strings/names.txt:390 data/mp/messages/strings/names.txt:391
-#, fuzzy
 msgid "Command Center"
-msgstr "Commandanten"
+msgstr "Commando Centrum"
 
 #: data/messages/strings/names.txt:391 data/mp/messages/strings/names.txt:392
 msgid "Factory"
@@ -3508,21 +3476,18 @@ msgstr ""
 #: data/messages/strings/names.txt:394 data/messages/strings/names.txt:822
 #: data/mp/messages/strings/names.txt:395
 #: data/mp/messages/strings/names.txt:827
-#, fuzzy
 msgid "Power Module"
-msgstr "Energie Toegenomen"
+msgstr "Energie Module"
 
 #: data/messages/strings/names.txt:395 data/mp/messages/strings/names.txt:396
-#, fuzzy
 msgid "Research Facility"
-msgstr "Selecteer het volgende Onderzoekscentrum"
+msgstr "Onderzoekscentrum"
 
 #: data/messages/strings/names.txt:396 data/messages/strings/names.txt:837
 #: data/mp/messages/strings/names.txt:397
 #: data/mp/messages/strings/names.txt:842
-#, fuzzy
 msgid "Research Module"
-msgstr "Onderzoek Voltooid"
+msgstr "Onderzoeks Module"
 
 #: data/messages/strings/names.txt:397 data/mp/messages/strings/names.txt:398
 msgid "Demolish Structure"
@@ -3535,9 +3500,8 @@ msgid "Repair Center"
 msgstr ""
 
 #: data/messages/strings/names.txt:400 data/mp/messages/strings/names.txt:401
-#, fuzzy
 msgid "Command Relay Center"
-msgstr "Commandanten"
+msgstr ""
 
 #: data/messages/strings/names.txt:401 data/mp/messages/strings/names.txt:402
 msgid "Hardcrete Corner Wall"
@@ -3637,9 +3601,8 @@ msgstr ""
 #: data/messages/strings/names.txt:432 data/messages/strings/names.txt:898
 #: data/mp/messages/strings/names.txt:433
 #: data/mp/messages/strings/names.txt:905
-#, fuzzy
 msgid "CB Tower"
-msgstr "Energie"
+msgstr ""
 
 #: data/messages/strings/names.txt:433 data/messages/strings/names.txt:905
 #: data/mp/messages/strings/names.txt:434
@@ -3854,16 +3817,14 @@ msgid "Assault Cannon"
 msgstr ""
 
 #: data/messages/strings/names.txt:487 data/mp/messages/strings/names.txt:488
-#, fuzzy
 msgid "Inferno"
-msgstr "Internet"
+msgstr ""
 
 #: data/messages/strings/names.txt:489 data/messages/strings/names.txt:1067
 #: data/mp/messages/strings/names.txt:490
 #: data/mp/messages/strings/names.txt:1074
-#, fuzzy
 msgid "Howitzer"
-msgstr "Energie"
+msgstr ""
 
 #: data/messages/strings/names.txt:491 data/mp/messages/strings/names.txt:492
 msgid "Ground Shaker"
@@ -3890,9 +3851,8 @@ msgstr ""
 #: data/messages/strings/names.txt:1106 data/mp/messages/strings/names.txt:502
 #: data/mp/messages/strings/names.txt:547
 #: data/mp/messages/strings/names.txt:1113
-#, fuzzy
 msgid "Machinegun"
-msgstr "Zoeken"
+msgstr "Machinegeweer"
 
 #: data/messages/strings/names.txt:503 data/messages/strings/names.txt:1107
 #: data/mp/messages/strings/names.txt:504
@@ -4045,22 +4005,19 @@ msgstr ""
 #: data/messages/strings/names.txt:551 data/messages/strings/names.txt:987
 #: data/mp/messages/strings/names.txt:552
 #: data/mp/messages/strings/names.txt:994
-#, fuzzy
 msgid "Cyclone Flak Turret"
-msgstr "Voertuig Geschutkoepel"
+msgstr ""
 
 #: data/messages/strings/names.txt:556 data/messages/strings/names.txt:989
 #: data/mp/messages/strings/names.txt:557
-#, fuzzy
 msgid "Whirlwind AA Turret"
-msgstr "Voertuig Geschutkoepel"
+msgstr ""
 
 #: data/messages/strings/names.txt:557 data/messages/strings/names.txt:988
 #: data/mp/messages/strings/names.txt:558
 #: data/mp/messages/strings/names.txt:995
-#, fuzzy
 msgid "Hurricane AA Turret"
-msgstr "Voertuig Geschutkoepel"
+msgstr ""
 
 #: data/messages/strings/names.txt:564 data/mp/messages/strings/names.txt:565
 msgid "LasSat"
@@ -4223,19 +4180,16 @@ msgid "Third Level Missile Firing Codes"
 msgstr ""
 
 #: data/messages/strings/names.txt:661 data/mp/messages/strings/names.txt:662
-#, fuzzy
 msgid "Cyborg Thermal Armor"
-msgstr "Hitte Schild"
+msgstr "Cyborg Hitte Schild"
 
 #: data/messages/strings/names.txt:662 data/mp/messages/strings/names.txt:663
-#, fuzzy
 msgid "Cyborg Thermal Armor Mk2"
-msgstr "Hitte Schild"
+msgstr "Cyborg Hitte Schild Mk2"
 
 #: data/messages/strings/names.txt:663 data/mp/messages/strings/names.txt:664
-#, fuzzy
 msgid "Cyborg Thermal Armor Mk3"
-msgstr "Hitte Schild"
+msgstr "Cyborg Hitte Schild Mk3"
 
 #: data/messages/strings/names.txt:664 data/mp/messages/strings/names.txt:665
 msgid "Cyborg High Intensity Thermal Armor"
@@ -4302,9 +4256,8 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:689
 #: data/mp/messages/strings/names.txt:1451
 #: data/mp/messages/strings/names.txt:1518
-#, fuzzy
 msgid "Scourge"
-msgstr "Score"
+msgstr ""
 
 #: data/messages/strings/names.txt:687 data/messages/strings/names.txt:1446
 #: data/mp/messages/strings/names.txt:690
@@ -4346,9 +4299,8 @@ msgid "Cyborg Jump Pack"
 msgstr ""
 
 #: data/messages/strings/names.txt:703 data/mp/messages/strings/names.txt:706
-#, fuzzy
 msgid "Hardcrete"
-msgstr "Moeilijk"
+msgstr ""
 
 #: data/messages/strings/names.txt:705 data/mp/messages/strings/names.txt:708
 msgid "NP-Hardcrete"
@@ -4480,17 +4432,15 @@ msgid "Gauss Cannon Hardpoint"
 msgstr ""
 
 #: data/messages/strings/names.txt:786 data/mp/messages/strings/names.txt:791
-#, fuzzy
 msgid "Command Relay Post"
-msgstr "Commandanten"
+msgstr ""
 
 #: data/messages/strings/names.txt:789
 #: data/messages/strings/resstrings.txt:604
 #: data/mp/messages/strings/names.txt:794
 #: data/mp/messages/strings/resstrings.txt:682
-#, fuzzy
 msgid "Automated Cyborg Production"
-msgstr "Productie Herhalen"
+msgstr "Geautomatiseerde Cybor Productie"
 
 #: data/messages/strings/names.txt:790 data/mp/messages/strings/names.txt:795
 msgid "Automated Cyborg Production Mk2"
@@ -4504,9 +4454,8 @@ msgstr ""
 #: data/messages/strings/resstrings.txt:610
 #: data/mp/messages/strings/names.txt:797
 #: data/mp/messages/strings/resstrings.txt:688
-#, fuzzy
 msgid "Robotic Cyborg Production"
-msgstr "Productie Herhalen"
+msgstr "Gerobotiseerde Cyborg Productie"
 
 #: data/messages/strings/names.txt:793 data/mp/messages/strings/names.txt:798
 msgid "Robotic Cyborg Production Mk2"
@@ -4521,7 +4470,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:800
 #: data/mp/messages/strings/resstrings.txt:694
 msgid "Advanced Cyborg Production"
-msgstr ""
+msgstr "Geavanceerde Cyborg Productie"
 
 #: data/messages/strings/names.txt:796 data/mp/messages/strings/names.txt:801
 msgid "Advanced Cyborg Production Mk2"
@@ -4537,7 +4486,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:712
 #, fuzzy
 msgid "Automated Factory Production"
-msgstr "Productie Herhalen"
+msgstr "Geautomatiseerde Fabrieks Productie"
 
 #: data/messages/strings/names.txt:801 data/mp/messages/strings/names.txt:806
 msgid "Automated Factory Production Mk2"
@@ -4550,7 +4499,7 @@ msgstr ""
 #: data/messages/strings/names.txt:803 data/mp/messages/strings/names.txt:808
 #, fuzzy
 msgid "Robotic Factory Production"
-msgstr "Productie Herhalen"
+msgstr "Gerobotiseerde Fabrieks Productie"
 
 #: data/messages/strings/names.txt:804 data/mp/messages/strings/names.txt:809
 msgid "Robotic Factory Production Mk2"
@@ -4564,8 +4513,9 @@ msgstr ""
 #: data/messages/strings/resstrings.txt:646
 #: data/mp/messages/strings/names.txt:811
 #: data/mp/messages/strings/resstrings.txt:724
+#, fuzzy
 msgid "Advanced Factory Production"
-msgstr ""
+msgstr "Geavanceerde Fabrieks Productie"
 
 #: data/messages/strings/names.txt:807 data/mp/messages/strings/names.txt:812
 msgid "Advanced Factory Production Mk2"
@@ -4750,35 +4700,31 @@ msgstr ""
 #: data/messages/strings/resstrings.txt:730
 #: data/mp/messages/strings/names.txt:862
 #: data/mp/messages/strings/resstrings.txt:808
-#, fuzzy
 msgid "Robotic VTOL Production"
-msgstr "Productie Herhalen"
+msgstr "Gerobotiseerde VTOL Productie"
 
 #: data/messages/strings/names.txt:858 data/mp/messages/strings/names.txt:863
-#, fuzzy
 msgid "Robotic VTOL Production Mk2"
-msgstr "Productie Herhalen"
+msgstr "Gerobotiseerde VTOL Productie Mk2"
 
 #: data/messages/strings/names.txt:859 data/mp/messages/strings/names.txt:864
-#, fuzzy
 msgid "Robotic VTOL Production Mk3"
-msgstr "Productie Herhalen"
+msgstr "Gerobotiseerde VTOL Productie Mk3"
 
 #: data/messages/strings/names.txt:860
 #: data/messages/strings/resstrings.txt:736
 #: data/mp/messages/strings/names.txt:865
 #: data/mp/messages/strings/resstrings.txt:814
-#, fuzzy
 msgid "Advanced VTOL Production"
-msgstr "Productie Herhalen"
+msgstr "Geavanceerde VTOL Productie"
 
 #: data/messages/strings/names.txt:861 data/mp/messages/strings/names.txt:866
 msgid "Advanced VTOL Production Mk2"
-msgstr ""
+msgstr "Geavanceerde VTOL Productie Mk2"
 
 #: data/messages/strings/names.txt:862 data/mp/messages/strings/names.txt:867
 msgid "Advanced VTOL Production Mk3"
-msgstr ""
+msgstr "Geavanceerde VTOL Productie Mk3"
 
 #: data/messages/strings/names.txt:864 data/mp/messages/strings/names.txt:869
 msgid "Cyborg Self-Repair"
@@ -4830,9 +4776,8 @@ msgstr ""
 
 #: data/messages/strings/names.txt:880 data/mp/messages/strings/names.txt:887
 #: data/mp/messages/strings/names.txt:1515
-#, fuzzy
 msgid "Sensor Upgrade"
-msgstr "Sensor Bereik"
+msgstr "Sensor Opwaardering"
 
 #: data/messages/strings/names.txt:882 data/mp/messages/strings/names.txt:889
 msgid "Construction Unit"
@@ -4866,14 +4811,12 @@ msgid "Mobile Repair Upgrade Mk2"
 msgstr ""
 
 #: data/messages/strings/names.txt:897 data/mp/messages/strings/names.txt:904
-#, fuzzy
 msgid "CB Turret"
-msgstr "Voertuig Geschutkoepel"
+msgstr ""
 
 #: data/messages/strings/names.txt:899 data/mp/messages/strings/names.txt:906
-#, fuzzy
 msgid "CB Sensor Upgrade"
-msgstr "Sensor Bereik"
+msgstr ""
 
 #: data/messages/strings/names.txt:900 data/mp/messages/strings/names.txt:907
 msgid "CB Sensor Upgrade 2"
@@ -4941,29 +4884,25 @@ msgid "NEXUS Resistance Circuits Mk3"
 msgstr ""
 
 #: data/messages/strings/names.txt:924 data/mp/messages/strings/names.txt:931
-#, fuzzy
 msgid "Sensor Lock"
-msgstr "Sensor Vermogen"
+msgstr ""
 
 #: data/messages/strings/names.txt:928 data/mp/messages/strings/names.txt:935
-#, fuzzy
 msgid "Thermal Armor"
 msgstr "Hitte Schild"
 
 #: data/messages/strings/names.txt:929 data/mp/messages/strings/names.txt:936
-#, fuzzy
 msgid "Thermal Armor Mk2"
-msgstr "Hitte Schild"
+msgstr "Hitte Schild Mk2"
 
 #: data/messages/strings/names.txt:930 data/mp/messages/strings/names.txt:937
-#, fuzzy
 msgid "Thermal Armor Mk3"
-msgstr "Hitte Schild"
+msgstr "Hitte Schild Mk3"
 
 #: data/messages/strings/names.txt:931 data/mp/messages/strings/names.txt:938
 #, fuzzy
 msgid "High Intensity Thermal Armor"
-msgstr "Hitte Schild"
+msgstr "Hoge Intensie Hitte Schild"
 
 #: data/messages/strings/names.txt:932 data/mp/messages/strings/names.txt:939
 msgid "High Intensity Thermal Armor Mk2"
@@ -5103,56 +5042,47 @@ msgid "Superdense Composite Alloys Mk3"
 msgstr ""
 
 #: data/messages/strings/names.txt:970 data/mp/messages/strings/names.txt:977
-#, fuzzy
 msgid "Hover Propulsion"
-msgstr "Voertuig Aandrijving"
+msgstr ""
 
 #: data/messages/strings/names.txt:971 data/mp/messages/strings/names.txt:978
-#, fuzzy
 msgid "Hover Propulsion II"
-msgstr "Voertuig Aandrijving"
+msgstr ""
 
 #: data/messages/strings/names.txt:973 data/mp/messages/strings/names.txt:980
-#, fuzzy
 msgid "Half-tracked Propulsion"
-msgstr "Voertuig Aandrijving"
+msgstr ""
 
 #: data/messages/strings/names.txt:974 data/mp/messages/strings/names.txt:981
 msgid "Half-tracked Propulsion II"
 msgstr ""
 
 #: data/messages/strings/names.txt:976 data/mp/messages/strings/names.txt:983
-#, fuzzy
 msgid "Tracked Propulsion"
-msgstr "Voertuig Aandrijving"
+msgstr ""
 
 #: data/messages/strings/names.txt:977 data/mp/messages/strings/names.txt:984
-#, fuzzy
 msgid "Tracked Propulsion II"
-msgstr "Voertuig Aandrijving"
+msgstr ""
 
 #: data/messages/strings/names.txt:979 data/mp/messages/strings/names.txt:986
-#, fuzzy
 msgid "VTOL Propulsion"
-msgstr "Voertuig Aandrijving"
+msgstr ""
 
 #: data/messages/strings/names.txt:980 data/mp/messages/strings/names.txt:987
-#, fuzzy
 msgid "VTOL Propulsion II"
-msgstr "Voertuig Aandrijving"
+msgstr ""
 
 #: data/messages/strings/names.txt:982
 #: data/messages/strings/resstrings.txt:1138
 #: data/mp/messages/strings/names.txt:989
 #: data/mp/messages/strings/resstrings.txt:1235
-#, fuzzy
 msgid "Wheeled Propulsion"
-msgstr "Voertuig Aandrijving"
+msgstr ""
 
 #: data/messages/strings/names.txt:983 data/mp/messages/strings/names.txt:990
-#, fuzzy
 msgid "Wheeled Propulsion II"
-msgstr "Voertuig Aandrijving"
+msgstr ""
 
 #: data/messages/strings/names.txt:990 data/mp/messages/strings/names.txt:997
 msgid "AA Thermal Imaging Sensor"
@@ -5506,9 +5436,8 @@ msgstr ""
 
 #: data/messages/strings/names.txt:1086
 #: data/mp/messages/strings/names.txt:1093
-#, fuzzy
 msgid "Fast Loader"
-msgstr "Snel Spelen"
+msgstr ""
 
 #: data/messages/strings/names.txt:1088
 #: data/mp/messages/strings/names.txt:1095
@@ -5911,15 +5840,13 @@ msgstr ""
 
 #: data/messages/strings/names.txt:1199
 #: data/mp/messages/strings/names.txt:1206
-#, fuzzy
 msgid "Collective Command Center"
-msgstr "Selecteer Commandant 1"
+msgstr "Collectief Commando Centrum"
 
 #: data/messages/strings/names.txt:1209
 #: data/mp/messages/strings/names.txt:1216
-#, fuzzy
 msgid "Scavenger Factory"
-msgstr "Selecteer de volgende Fabriek"
+msgstr ""
 
 #: data/messages/strings/names.txt:1210
 #: data/mp/messages/strings/names.txt:1217
@@ -5998,9 +5925,8 @@ msgstr ""
 
 #: data/messages/strings/names.txt:1273
 #: data/mp/messages/strings/names.txt:1280
-#, fuzzy
 msgid "Ruined Factory"
-msgstr "Selecteer de volgende Fabriek"
+msgstr ""
 
 #: data/messages/strings/names.txt:1274
 #: data/mp/messages/strings/names.txt:1281
@@ -6039,9 +5965,8 @@ msgstr ""
 
 #: data/messages/strings/names.txt:1323
 #: data/mp/messages/strings/names.txt:1330
-#, fuzzy
 msgid "Wrecked Vehicle"
-msgstr "Nieuw Voertuig"
+msgstr ""
 
 #: data/messages/strings/names.txt:1324
 #: data/mp/messages/strings/names.txt:1331
@@ -6125,9 +6050,8 @@ msgstr ""
 
 #: data/messages/strings/names.txt:1430
 #: data/mp/messages/strings/names.txt:1437
-#, fuzzy
 msgid "Commander Python Tracks"
-msgstr "Commandanten"
+msgstr ""
 
 #: data/messages/strings/names.txt:1431
 #: data/mp/messages/strings/names.txt:1438
@@ -6177,39 +6101,33 @@ msgstr ""
 
 #: data/messages/strings/resstrings.txt:7
 #: data/mp/messages/strings/resstrings.txt:7
-#, fuzzy
 msgid "Structure Research Completed"
-msgstr "Onderzoek Voltooid"
+msgstr ""
 
 #: data/messages/strings/resstrings.txt:8
 #: data/mp/messages/strings/resstrings.txt:8
-#, fuzzy
 msgid "Power Research Completed"
-msgstr "Onderzoek Voltooid"
+msgstr "Energie-onderzoek Voltooid"
 
 #: data/messages/strings/resstrings.txt:9
 #: data/mp/messages/strings/resstrings.txt:9
-#, fuzzy
 msgid "Computer Research Completed"
-msgstr "Onderzoek Voltooid"
+msgstr "Computer-onderzoek Voltooid"
 
 #: data/messages/strings/resstrings.txt:10
 #: data/mp/messages/strings/resstrings.txt:10
-#, fuzzy
 msgid "Unit Research Completed"
-msgstr "Onderzoek Voltooid"
+msgstr ""
 
 #: data/messages/strings/resstrings.txt:11
 #: data/mp/messages/strings/resstrings.txt:11
-#, fuzzy
 msgid "Systems Research Completed"
-msgstr "Onderzoek Voltooid"
+msgstr ""
 
 #: data/messages/strings/resstrings.txt:12
 #: data/mp/messages/strings/resstrings.txt:12
-#, fuzzy
 msgid "Weapon Research Completed"
-msgstr "Onderzoek Voltooid"
+msgstr "Wapen-onderzoek Voltooid"
 
 #: data/messages/strings/resstrings.txt:18
 #: data/messages/strings/resstrings.txt:825
@@ -6445,9 +6363,8 @@ msgstr ""
 #: data/messages/strings/resstrings.txt:97
 #: data/mp/messages/strings/resstrings.txt:97
 #: data/mp/messages/strings/resstrings.txt:103
-#, fuzzy
 msgid "Cyborg Thermal Armor Improved"
-msgstr "Hitte Schild"
+msgstr "Cyborg Hitte Schild Verbeterd"
 
 #: data/messages/strings/resstrings.txt:92
 #: data/messages/strings/resstrings.txt:98
@@ -6462,7 +6379,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:105
 #, fuzzy
 msgid "Thermal Armor increased"
-msgstr "Hitte Schild"
+msgstr "Hitte Schild verhoogd"
 
 #: data/messages/strings/resstrings.txt:103
 #: data/messages/strings/resstrings.txt:109
@@ -7509,9 +7426,8 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:653
 #: data/mp/messages/strings/resstrings.txt:659
 #: data/mp/messages/strings/resstrings.txt:665
-#, fuzzy
 msgid "Increases Repair Speed"
-msgstr "Verhoog Speel Snelheid"
+msgstr "Verhoogd Repareer Snelheid"
 
 #: data/messages/strings/resstrings.txt:576
 #: data/messages/strings/resstrings.txt:582
@@ -7633,9 +7549,8 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:717
 #: data/mp/messages/strings/resstrings.txt:723
 #: data/mp/messages/strings/resstrings.txt:729
-#, fuzzy
 msgid "Vehicle Production Improved"
-msgstr "Voertuig Aandrijving"
+msgstr ""
 
 #: data/messages/strings/resstrings.txt:636
 #: data/messages/strings/resstrings.txt:642
@@ -7713,9 +7628,8 @@ msgstr ""
 
 #: data/messages/strings/resstrings.txt:675
 #: data/mp/messages/strings/resstrings.txt:753
-#, fuzzy
 msgid "Research Module Available"
-msgstr "Onderzoek Voltooid"
+msgstr "Onderzoeks Module Beschikbaar"
 
 #: data/messages/strings/resstrings.txt:676
 #: data/mp/messages/strings/resstrings.txt:754
@@ -7730,9 +7644,8 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:761
 #: data/mp/messages/strings/resstrings.txt:767
 #: data/mp/messages/strings/resstrings.txt:773
-#, fuzzy
 msgid "Increases research speed"
-msgstr "Verhoog Speel Snelheid"
+msgstr "Verhoogd onderzoeks Snelheid"
 
 #: data/messages/strings/resstrings.txt:678
 #: data/mp/messages/strings/resstrings.txt:756
@@ -7745,9 +7658,8 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:759
 #: data/mp/messages/strings/resstrings.txt:765
 #: data/mp/messages/strings/resstrings.txt:771
-#, fuzzy
 msgid "Research Improved"
-msgstr "Onderzoek Voltooid"
+msgstr "Onderzoek Verbeterd"
 
 #: data/messages/strings/resstrings.txt:682
 #: data/mp/messages/strings/resstrings.txt:760
@@ -7771,9 +7683,8 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:783
 #: data/mp/messages/strings/resstrings.txt:789
 #: data/mp/messages/strings/resstrings.txt:795
-#, fuzzy
 msgid "Increases Damage Resistance"
-msgstr "Verhoog Speel Snelheid"
+msgstr "Verhoogd Schade Bestendigheid"
 
 #: data/messages/strings/resstrings.txt:702
 #: data/messages/strings/resstrings.txt:708
@@ -7943,9 +7854,8 @@ msgstr ""
 
 #: data/messages/strings/resstrings.txt:797
 #: data/mp/messages/strings/resstrings.txt:881
-#, fuzzy
 msgid "Increases repair speed"
-msgstr "Verhoog Speel Snelheid"
+msgstr "Verhoogd repareer snelheid"
 
 #: data/messages/strings/resstrings.txt:798
 #: data/mp/messages/strings/resstrings.txt:882
@@ -7961,9 +7871,8 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:886
 #: data/mp/messages/strings/resstrings.txt:1977
 #: data/mp/messages/strings/resstrings.txt:2049
-#, fuzzy
 msgid "Improved sensor range"
-msgstr "Sensor Bereik"
+msgstr "Verbeterd sensor bereik"
 
 #: data/messages/strings/resstrings.txt:803
 #: data/mp/messages/strings/resstrings.txt:887
@@ -7992,9 +7901,8 @@ msgstr ""
 
 #: data/messages/strings/resstrings.txt:808
 #: data/mp/messages/strings/resstrings.txt:892
-#, fuzzy
 msgid "Extended sensor range"
-msgstr "Sensor Bereik"
+msgstr "Uitgebreid sensor bereik"
 
 #: data/messages/strings/resstrings.txt:809
 #: data/mp/messages/strings/resstrings.txt:893
@@ -8021,9 +7929,8 @@ msgstr ""
 
 #: data/messages/strings/resstrings.txt:819
 #: data/mp/messages/strings/resstrings.txt:903
-#, fuzzy
 msgid "Sensors Improved"
-msgstr "Sensor Vermogen"
+msgstr "Sensors Verbeterd"
 
 #: data/messages/strings/resstrings.txt:820
 #: data/mp/messages/strings/resstrings.txt:904
@@ -8032,9 +7939,8 @@ msgstr ""
 
 #: data/messages/strings/resstrings.txt:821
 #: data/mp/messages/strings/resstrings.txt:905
-#, fuzzy
 msgid "Extends Sensor Range"
-msgstr "Sensor Bereik"
+msgstr "Breid Sensor Bereik Uit"
 
 #: data/messages/strings/resstrings.txt:822
 #: data/mp/messages/strings/resstrings.txt:906
@@ -8071,9 +7977,8 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:921
 #: data/mp/messages/strings/resstrings.txt:927
 #: data/mp/messages/strings/resstrings.txt:933
-#, fuzzy
 msgid "CB Sensor Improved"
-msgstr "Sensor Vermogen"
+msgstr ""
 
 #: data/messages/strings/resstrings.txt:838
 #: data/messages/strings/resstrings.txt:868
@@ -8088,9 +7993,8 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:923
 #: data/mp/messages/strings/resstrings.txt:929
 #: data/mp/messages/strings/resstrings.txt:935
-#, fuzzy
 msgid "Extends CB Range"
-msgstr "Sensor Bereik"
+msgstr ""
 
 #: data/messages/strings/resstrings.txt:840
 #: data/messages/strings/resstrings.txt:846
@@ -8264,9 +8168,8 @@ msgstr ""
 
 #: data/messages/strings/resstrings.txt:923
 #: data/mp/messages/strings/resstrings.txt:1007
-#, fuzzy
 msgid "Increases scrambler rate"
-msgstr "Verhoog Speel Snelheid"
+msgstr ""
 
 #: data/messages/strings/resstrings.txt:924
 #: data/mp/messages/strings/resstrings.txt:1008
@@ -8651,9 +8554,8 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:1170
 #: data/mp/messages/strings/resstrings.txt:1176
 #: data/mp/messages/strings/resstrings.txt:2096
-#, fuzzy
 msgid "Increases Thermal Armor"
-msgstr "Hitte Schild"
+msgstr "Verhoogd Hitte Schild"
 
 #: data/messages/strings/resstrings.txt:1083
 #: data/messages/strings/resstrings.txt:1101
@@ -8696,9 +8598,8 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:1246
 #: data/mp/messages/strings/resstrings.txt:1258
 #: data/mp/messages/strings/resstrings.txt:1264
-#, fuzzy
 msgid "Vehicle Propulsion Improved"
-msgstr "Voertuig Aandrijving"
+msgstr "Voertuig Aandrijving Verbeterd"
 
 #: data/messages/strings/resstrings.txt:1092
 #: data/messages/strings/resstrings.txt:1098
@@ -9321,9 +9222,8 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:1488
 #: data/mp/messages/strings/resstrings.txt:1494
 #: data/mp/messages/strings/resstrings.txt:2078
-#, fuzzy
 msgid "Increases Flamer damage"
-msgstr "Verhoog Speel Snelheid"
+msgstr ""
 
 #: data/messages/strings/resstrings.txt:1380
 #: data/messages/strings/resstrings.txt:1386
@@ -9343,9 +9243,8 @@ msgstr ""
 
 #: data/messages/strings/resstrings.txt:1391
 #: data/mp/messages/strings/resstrings.txt:1500
-#, fuzzy
 msgid "Increases Flamer ROF"
-msgstr "Verhoog Speel Snelheid"
+msgstr ""
 
 #: data/messages/strings/resstrings.txt:1395
 #: data/messages/strings/resstrings.txt:1401
@@ -9527,9 +9426,8 @@ msgstr ""
 
 #: data/messages/strings/resstrings.txt:1475
 #: data/mp/messages/strings/resstrings.txt:1590
-#, fuzzy
 msgid "Increases Laser damage"
-msgstr "Verhoog Speel Snelheid"
+msgstr ""
 
 #: data/messages/strings/resstrings.txt:1480
 #: data/mp/messages/strings/resstrings.txt:1595
@@ -9538,9 +9436,8 @@ msgstr ""
 
 #: data/messages/strings/resstrings.txt:1481
 #: data/mp/messages/strings/resstrings.txt:1596
-#, fuzzy
 msgid "Increases Laser ROF"
-msgstr "Verhoog Speel Snelheid"
+msgstr ""
 
 #: data/messages/strings/resstrings.txt:1486
 #: data/mp/messages/strings/resstrings.txt:1607
@@ -9616,9 +9513,8 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:1650
 #: data/mp/messages/strings/resstrings.txt:1656
 #: data/mp/messages/strings/resstrings.txt:1662
-#, fuzzy
 msgid "Increases Machinegun damage"
-msgstr "IP Adres of Computer Naam"
+msgstr ""
 
 #: data/messages/strings/resstrings.txt:1518
 #: data/messages/strings/resstrings.txt:1524
@@ -9637,7 +9533,7 @@ msgstr "IP Adres of Computer Naam"
 #: data/mp/messages/strings/resstrings.txt:1675
 #: data/mp/messages/strings/resstrings.txt:1681
 msgid "All machineguns upgraded automatically"
-msgstr ""
+msgstr "Alle machinegeweren zijn automatisch opgewaardeerd"
 
 #: data/messages/strings/resstrings.txt:1522
 #: data/mp/messages/strings/resstrings.txt:1643
@@ -10314,9 +10210,8 @@ msgid "Now left click the Viper Body"
 msgstr ""
 
 #: data/messages/strings/tutstrings.txt:22
-#, fuzzy
 msgid "Select the Vehicle Propulsion icon"
-msgstr "Voertuig Aandrijving"
+msgstr "Selecteer het Voertuig Aandrijvings icoon"
 
 #: data/messages/strings/tutstrings.txt:23
 msgid "Then left click the machinegun to complete your design"
@@ -10364,11 +10259,11 @@ msgstr ""
 
 #: data/messages/strings/tutstrings.txt:35
 msgid "Presently unused"
-msgstr ""
+msgstr "Momenteel ongebruikt"
 
 #: data/messages/strings/tutstrings.txt:36
 msgid "Now left click the research facility and position it at your base"
-msgstr ""
+msgstr "Klik nu links op het onderzoeks centrum en plaats het in je basis"
 
 #: data/messages/strings/tutstrings.txt:37
 msgid "Use your other truck to help build the research facility"
@@ -10471,9 +10366,8 @@ msgid "Auto-Repair"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:996
-#, fuzzy
 msgid "Whirlwind AATurret"
-msgstr "Voertuig Geschutkoepel"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1111
 msgid "Rapid Fire Chaingun"
@@ -10487,9 +10381,8 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:1521
 #: data/mp/messages/strings/names.txt:1522
 #: data/mp/messages/strings/names.txt:1525
-#, fuzzy
 msgid "Power Upgrade"
-msgstr "Energie Verbruik"
+msgstr "Energie Opwaardering"
 
 #: data/mp/messages/strings/names.txt:1517
 msgid "R-Struc-Power-Cam2"
@@ -10503,17 +10396,17 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:1615
 #: data/mp/messages/strings/names.txt:1618
 msgid "Grenadier"
-msgstr ""
+msgstr "Grenadier"
 
 #: data/mp/messages/strings/names.txt:1622
 #: data/mp/messages/strings/names.txt:1625
 msgid "Combat Engineer"
-msgstr ""
+msgstr "Gevechts Ingenieur"
 
 #: data/mp/messages/strings/names.txt:1627
 #: data/mp/messages/strings/names.txt:1630
 msgid "Cyborg Mechanic"
-msgstr ""
+msgstr "Cyborg Monteur"
 
 #: data/mp/messages/strings/names.txt:1634
 #: data/mp/messages/strings/names.txt:1635
@@ -10757,15 +10650,13 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1784
 #: data/mp/messages/strings/names.txt:1785
-#, fuzzy
 msgid "Whirlwind Hardpoint"
-msgstr "Voertuig Geschutkoepel"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1786
 #: data/mp/messages/strings/names.txt:1787
-#, fuzzy
 msgid "Cyclone Hardpoint"
-msgstr "Voertuig Geschutkoepel"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1788
 #: data/mp/messages/strings/names.txt:1789
@@ -10791,21 +10682,18 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1805
 #: data/mp/messages/strings/names.txt:1806
-#, fuzzy
 msgid "Command turret MkII"
-msgstr "Commandanten"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1807
 #: data/mp/messages/strings/names.txt:1808
-#, fuzzy
 msgid "Command turret MkIII"
-msgstr "Commandanten"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1809
 #: data/mp/messages/strings/names.txt:1810
-#, fuzzy
 msgid "Command turret MkIV"
-msgstr "Commandanten"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1820
 msgid "Cobra Hover Heavy-Repair"
@@ -10832,9 +10720,8 @@ msgid "Cobra Hover HC"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1830
-#, fuzzy
 msgid "Viper Wheels Machinegun"
-msgstr "Zoeken"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1831
 msgid "Viper Wheels Twin Machinegun"
@@ -10853,9 +10740,8 @@ msgid "Cobra Hover Heavy Machinegun"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1836
-#, fuzzy
 msgid "Viper Tracks Machinegun"
-msgstr "Zoeken"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1837
 msgid "Viper Tracks Twin Machinegun"
@@ -10902,9 +10788,8 @@ msgid "Mantis Tracks Pulse Laser"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1849
-#, fuzzy
 msgid "Python Tracks Lancer"
-msgstr "Commandanten"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1850
 msgid "Mantis Tracks Lancer"
@@ -10972,9 +10857,8 @@ msgid "Scorpion Lancer VTOL"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1874
-#, fuzzy
 msgid "Scorpion HPV VTOL"
-msgstr "Score"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1875
 msgid "Mantis Lancer VTOL"
@@ -10985,47 +10869,40 @@ msgid "Mantis HPV VTOL"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1879
-#, fuzzy
 msgid "Cobra Repair Tracks"
-msgstr "Commandanten"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1880
 msgid "Mantis Repair Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1882
-#, fuzzy
 msgid "Scorpion Lancer Tracks"
-msgstr "Commandanten"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1883
 msgid "Scorpion Heavy Cannon Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1885
-#, fuzzy
 msgid "Scorpion BB VTOL"
-msgstr "Score"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1887
-#, fuzzy
 msgid "Viper Command Turret Tracks"
-msgstr "Commandanten"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1888
-#, fuzzy
 msgid "Cobra Command Turret Tracks"
-msgstr "Commandanten"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1889
-#, fuzzy
 msgid "Scorpion Command Turret Tracks"
-msgstr "Commandanten"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1891
-#, fuzzy
 msgid "Cobra Lancer Tracks"
-msgstr "Commandanten"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1892
 msgid "Mantis Heavy Cannon Tracks"
@@ -11053,7 +10930,7 @@ msgstr ""
 
 #: data/mp/messages/strings/resstrings.txt:68
 msgid "Armed with Machinegun"
-msgstr ""
+msgstr "Bewapend met Machinegeweer"
 
 #: data/mp/messages/strings/resstrings.txt:70
 msgid "Requires heavy VTOL factory to produce"
@@ -11065,7 +10942,7 @@ msgstr ""
 
 #: data/mp/messages/strings/resstrings.txt:146
 msgid "Armed with grenades"
-msgstr ""
+msgstr "Bewapend met grenaten"
 
 #: data/mp/messages/strings/resstrings.txt:152
 msgid "Armed with medium cannon"
@@ -11082,7 +10959,7 @@ msgstr ""
 
 #: data/mp/messages/strings/resstrings.txt:176
 msgid "Mechanic with repair ability"
-msgstr ""
+msgstr "Monteur met repareer vermogen"
 
 #: data/mp/messages/strings/resstrings.txt:182
 msgid "Combat engineer with construction ability"
@@ -11110,7 +10987,7 @@ msgstr ""
 
 #: data/mp/messages/strings/resstrings.txt:1014
 msgid "Enables self-repair"
-msgstr ""
+msgstr "Maakt zelf-repareren mogelijk"
 
 #: data/mp/messages/strings/resstrings.txt:1041
 msgid "New Electronic Technology Discovered"
@@ -11331,31 +11208,3 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:2149
 msgid "Upgraded battlefield computer system"
 msgstr ""
-
-#~ msgid "Select Force"
-#~ msgstr "Kies Strijdkracht"
-
-#~ msgid "Computer"
-#~ msgstr "Computer"
-
-#~ msgid "Computer Opponents"
-#~ msgstr "Computer Tegenstanders"
-
-#~ msgid "No Computer Opponents"
-#~ msgstr "Geen Computer Tegenstanders"
-
-#~ msgid "TEMPLATES"
-#~ msgstr "SJABLONEN"
-
-#~ msgid "Load Force"
-#~ msgstr "Laad Strijdkracht"
-
-#~ msgid "Save Force"
-#~ msgstr "Strijdkracht opslaan"
-
-#, fuzzy
-#~ msgid "Clear Current Force"
-#~ msgstr "Maak Huidige Strijdkracht Leeg"
-
-#~ msgid "Force Editor"
-#~ msgstr "Strijdkrachten Bewerker"
