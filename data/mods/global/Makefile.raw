@@ -1,0 +1,18 @@
+MAKERULES=../../../makerules
+include $(MAKERULES)/configure.mk
+
+GRIMLIST = components structs texpages wrf
+
+GRIMARCHIVE=grim.wz
+
+all:
+ifdef DATA
+all: $(GRIMARCHIVE)
+endif
+
+$(GRIMARCHIVE): $(GRIMLIST:%=grim/%)
+	cd grim && zip -ru0 ../$@ $(GRIMLIST) -x *svn*
+	zip -T $@
+
+clean:
+	$(RMF) $(GRIMARCHIVE)

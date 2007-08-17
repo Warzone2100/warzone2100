@@ -1,3 +1,8 @@
+SUBDIRS=mods
+
+$(SUBDIRS):
+	$(MAKE) -f Makefile.raw -C $@ $(MAKECMDGOALS)
+
 MAKERULES=../makerules
 include $(MAKERULES)/configure.mk
 
@@ -6,15 +11,13 @@ BASELIST = anims audio components effects features \
 	script sequenceaudio stats structs texpages wrf
 PATCHLIST = addon.lev anims components effects \
 	messages multiplay stats structs wrf
-GRIMLIST = components structs texpages wrf
 
 BASEARCHIVE=warzone.wz
 PATCHARCHIVE=mp.wz
-GRIMARCHIVE=grim.wz
 
 all:
 ifdef DATA
-all: $(BASEARCHIVE) $(PATCHARCHIVE) $(GRIMARCHIVE)
+all: $(BASEARCHIVE) $(PATCHARCHIVE) $(SUBDIRS)
 endif
 
 $(BASEARCHIVE): $(BASELIST)
@@ -25,11 +28,8 @@ $(PATCHARCHIVE): $(PATCHLIST:%=mp/%)
 	cd mp && zip -ru0 ../$@ $(PATCHLIST) -x *svn*
 	zip -T $@
 
-$(GRIMARCHIVE): $(GRIMLIST:%=grim/%)
-	cd grim && zip -ru0 ../$@ $(GRIMLIST) -x *svn*
-	zip -T $@
-
-clean:
+clean: $(SUBDIRS)
 	$(RMF) $(BASEARCHIVE)
 	$(RMF) $(PATCHARCHIVE)
-	$(RMF) $(GRIMARCHIVE)
+
+.PHONY: all clean $(SUBDIRS)

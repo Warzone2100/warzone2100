@@ -266,6 +266,8 @@ AC_CONFIG_FILES([Makefile
 		po/Makefile.in
 		icons/Makefile
 		data/Makefile
+		data/mods/Makefile
+		data/mods/global/Makefile
 		nsis/Makefile
 		win32/Makefile
 		lib/Makefile
