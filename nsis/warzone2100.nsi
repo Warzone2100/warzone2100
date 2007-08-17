@@ -208,6 +208,25 @@ SectionEnd
 
 SectionGroupEnd
 
+Section $(TEXT_SecNLS) SecNLS
+
+  SetOutPath "$INSTDIR\${LOCALEDIR}\da\LC_MESSAGES"
+  File "..\data\locale\da\LC_MESSAGES\${PACKAGE}.mo"
+
+  SetOutPath "$INSTDIR\${LOCALEDIR}\de\LC_MESSAGES"
+  File "..\data\locale\de\LC_MESSAGES\${PACKAGE}.mo"
+
+  SetOutPath "$INSTDIR\${LOCALEDIR}\la\LC_MESSAGES"
+  File "..\data\locale\la\LC_MESSAGES\${PACKAGE}.mo"
+
+  SetOutPath "$INSTDIR\${LOCALEDIR}\nb\LC_MESSAGES"
+  File "..\data\locale\nb\LC_MESSAGES\${PACKAGE}.mo"
+
+  SetOutPath "$INSTDIR\${LOCALEDIR}\nl\LC_MESSAGES"
+  File "..\data\locale\nl\LC_MESSAGES\${PACKAGE}.mo"
+
+SectionEnd
+
 
 
 ;--------------------------------
@@ -239,6 +258,9 @@ FunctionEnd
   LangString TEXT_SecGrimMod ${LANG_ENGLISH} "Grim's graphics-update"
   LangString DESC_SecGrimMod ${LANG_ENGLISH} "Grim's graphics-update. Contains more detailed textures for campaign 1 as well as additional texture- and model-updates. Copyright (C) 2005-2007 Grim Moroe, Use is only permited for Warzone 2100."
 
+  LangString TEXT_SecNLS ${LANG_ENGLISH} "NLS"
+  LangString DESC_SecNLS ${LANG_ENGLISH} "Support for languages other than English."
+
 
 
   LangString TEXT_SecBase ${LANG_DUTCH} "Standaard installatie"
@@ -253,6 +275,9 @@ FunctionEnd
   LangString TEXT_SecGrimMod ${LANG_DUTCH} "Grim's grafische-update"
   LangString DESC_SecGrimMod ${LANG_DUTCH} "Grim's grafische-update. Bevat meer gedetaïleerde textures voor campaign 1 en extra texture- en model-updates. Copyright (C) 2005-2007 Grim Moroe, gebruik is alleen toegestaan voor Warzone 2100."
 
+  LangString TEXT_SecNLS ${LANG_DUTCH} "NLS"
+  LangString DESC_SecNLS ${LANG_DUTCH} "Ondersteuning voor andere talen dan Engels (Nederlands inbegrepen)."
+
 
 
   LangString TEXT_SecBase ${LANG_GERMAN} "Standardinstallation"
@@ -266,6 +291,9 @@ FunctionEnd
 
   LangString TEXT_SecGrimMod ${LANG_GERMAN} "Grims Grafik-Update"
   LangString DESC_SecGrimMod ${LANG_GERMAN} "Grims Grafik-Update. Enthält detailliertere Texturen für Kampagne 1 sowie einige andere Textur- und Model-Updates. Copyright (C) 2005-2007 Grim Moroe, Verwendung nur für Warzone 2100 gestattet."
+
+  LangString TEXT_SecNLS ${LANG_GERMAN} "NLS"
+  LangString DESC_SecNLS ${LANG_GERMAN} "Unterstützung für Sprachen anders als Englisch (Deutsch enthalten)."
 
 
 
@@ -283,6 +311,8 @@ FunctionEnd
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecMods} $(DESC_SecMods)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecGrimMod} $(DESC_SecGrimMod)
+
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecNLS} $(DESC_SecNLS)
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 
@@ -316,6 +346,28 @@ Section "Uninstall"
   RMDir "$INSTDIR\mods\global"
   RMDir "$INSTDIR\mods"
   RMDir "$INSTDIR"
+
+  Delete "$INSTDIR\${LOCALEDIR}\da\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\${LOCALEDIR}\da\LC_MESSAGES"
+  RMDir "$INSTDIR\${LOCALEDIR}\da"
+
+  Delete "$INSTDIR\${LOCALEDIR}\de\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\${LOCALEDIR}\de\LC_MESSAGES"
+  RMDir "$INSTDIR\${LOCALEDIR}\de"
+
+  Delete "$INSTDIR\${LOCALEDIR}\la\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\${LOCALEDIR}\la\LC_MESSAGES"
+  RMDir "$INSTDIR\${LOCALEDIR}\la"
+
+  Delete "$INSTDIR\${LOCALEDIR}\nb\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\${LOCALEDIR}\nb\LC_MESSAGES"
+  RMDir "$INSTDIR\${LOCALEDIR}\nb"
+
+  Delete "$INSTDIR\${LOCALEDIR}\nl\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\${LOCALEDIR}\nl\LC_MESSAGES"
+  RMDir "$INSTDIR\${LOCALEDIR}\nl"
+
+  RMDir "$INSTDIR\${LOCALEDIR}"
 
   Delete "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk"
   Delete "$SMPROGRAMS\$STARTMENU_FOLDER\Warzone 2100.lnk"

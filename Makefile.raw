@@ -7,4 +7,4 @@ $(SUBDIRS):
 	$(MAKE) -f Makefile.raw -C $@ $(MAKECMDGOALS)
 
 src: win32 lib
-nsis: data src
+nsis: data src po

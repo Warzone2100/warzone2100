@@ -11,7 +11,7 @@ endif
 endif
 
 $(SETUPFILE): warzone2100.nsi ../src/warzone2100.exe ../data/warzone.wz ../data/mp.wz ../data/grim.wz
-	$(MAKENSIS) -DVERSION="$(VERSION)" -DVERSIONNUM="$(INSTALLER_VERSION)" -DEXTDIR="$(DEVDIR)\bin" $<
+	$(MAKENSIS) -DVERSION="$(VERSION)" -DVERSIONNUM="$(INSTALLER_VERSION)" -DEXTDIR="$(DEVDIR)\bin" -DLOCALEDIR=$(LOCALEDIR) -DPACKAGE="$(PACKAGE)" $<
 
 clean:
 	$(RM) $(SETUPFILE)
