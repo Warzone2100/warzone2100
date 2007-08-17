@@ -234,10 +234,13 @@ static inline bool PHYSFS_writeBEFloat(PHYSFS_file* file, float val)
 {
 	// For the purpose of endian conversions a IEEE754 float can be considered
 	// the same to a 32bit integer.
-	// We're casting through a void pointer here to prevent warnings about type-
-	// punned pointers breaking strict-aliasing rules.
-	uint32_t writeValue = *(uint32_t*)(void*)&val;
-	return (PHYSFS_writeUBE32(file, writeValue) != 0);
+	// We're using a union here to prevent type punning of pointers.
+	union {
+		float f;
+		uint32_t i;
+	} writeValue;
+	writeValue.f = val;
+	return (PHYSFS_writeUBE32(file, writeValue.i) != 0);
 }
 
 static inline bool PHYSFS_readBEFloat(PHYSFS_file* file, float* val)
