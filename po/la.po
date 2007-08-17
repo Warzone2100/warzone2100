@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-08-17 01:02+0200\n"
+"POT-Creation-Date: 2007-08-17 12:11+0200\n"
 "PO-Revision-Date: 2007-04-13 14:34+0200\n"
 "Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
 "Language-Team: Latin\n"
@@ -15,37 +15,37 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/multiplay.c:1856
+#: src/multiplay.c:1894
 #, fuzzy
 msgid "Green"
 msgstr "Viridum"
 
-#: src/multiplay.c:1857
+#: src/multiplay.c:1895
 msgid "Orange"
 msgstr ""
 
-#: src/multiplay.c:1858
+#: src/multiplay.c:1896
 msgid "Grey"
 msgstr "Canum"
 
-#: src/multiplay.c:1859
+#: src/multiplay.c:1897
 msgid "Black"
 msgstr "Nĭgrum"
 
-#: src/multiplay.c:1860
+#: src/multiplay.c:1898
 #, fuzzy
 msgid "Red"
 msgstr "Rubrum"
 
-#: src/multiplay.c:1861
+#: src/multiplay.c:1899
 msgid "Blue"
 msgstr ""
 
-#: src/multiplay.c:1862
+#: src/multiplay.c:1900
 msgid "Pink"
 msgstr ""
 
-#: src/multiplay.c:1863
+#: src/multiplay.c:1901
 msgid "Cyan"
 msgstr ""
 
@@ -66,47 +66,47 @@ msgstr ""
 msgid "Player"
 msgstr ""
 
-#: src/multigifts.c:181
+#: src/multigifts.c:172
 #, c-format
 msgid "%s Gives You A Visibility Report"
 msgstr "%s tibi visibilitatem relatum dāt"
 
-#: src/multigifts.c:208
+#: src/multigifts.c:199
 #, c-format
 msgid "%s Gives You Units"
 msgstr ""
 
-#: src/multigifts.c:307
+#: src/multigifts.c:294
 #, c-format
 msgid "%s Gives You Technology Documents"
 msgstr ""
 
-#: src/multigifts.c:348
+#: src/multigifts.c:334
 #, c-format
 msgid "%s Gives You Power"
 msgstr "%s dō "
 
-#: src/multigifts.c:369
+#: src/multigifts.c:355
 #, c-format
 msgid "%s Requests An Alliance With You"
 msgstr ""
 
-#: src/multigifts.c:377
+#: src/multigifts.c:363
 #, c-format
 msgid "You Invite %s To Form An Alliance"
 msgstr ""
 
-#: src/multigifts.c:398
+#: src/multigifts.c:382
 #, c-format
 msgid "%s Breaks The Alliance With %s"
 msgstr ""
 
-#: src/multigifts.c:425
+#: src/multigifts.c:407
 #, c-format
 msgid "%s Forms An Alliance With %s"
 msgstr ""
 
-#: src/multigifts.c:762
+#: src/multigifts.c:829
 #, c-format
 msgid "You Discover Blueprints For %s"
 msgstr ""
@@ -279,7 +279,7 @@ msgstr ""
 msgid "Hero"
 msgstr "Heros"
 
-#: src/multiint.c:355 src/multiint.c:1405 src/multilimit.c:174
+#: src/multiint.c:355 src/multiint.c:1396 src/multilimit.c:174
 msgid "Accept Settings"
 msgstr ""
 
@@ -364,7 +364,7 @@ msgstr ""
 msgid "Allow Alliances"
 msgstr ""
 
-#: src/multiint.c:800 src/multiint.c:2037
+#: src/multiint.c:800 src/multiint.c:2028
 msgid "Locked Teams"
 msgstr ""
 
@@ -404,19 +404,19 @@ msgstr ""
 msgid "Set Structure Limits"
 msgstr ""
 
-#: src/multiint.c:1290
+#: src/multiint.c:1277
 msgid "PLAYERS"
 msgstr ""
 
-#: src/multiint.c:1436
+#: src/multiint.c:1427
 msgid "CHAT"
 msgstr ""
 
-#: src/multiint.c:1978
+#: src/multiint.c:1969
 msgid "Host is Starting Game"
 msgstr ""
 
-#: src/multiint.c:2750
+#: src/multiint.c:2736
 msgid "Players"
 msgstr ""
 
@@ -509,36 +509,36 @@ msgstr ""
 msgid "%s - Connected %d of %d"
 msgstr ""
 
-#: src/structure.c:6296 src/structure.c:6347
+#: src/structure.c:6297 src/structure.c:6348
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr ""
 
-#: src/structure.c:6576
+#: src/structure.c:6573
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.c:6616
+#: src/structure.c:6613
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.c:6640
+#: src/structure.c:6637
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.c:6664
+#: src/structure.c:6661
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.c:6673
+#: src/structure.c:6670
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.c:6701
+#: src/structure.c:6698
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.c:6708
+#: src/structure.c:6705
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 
@@ -1417,16 +1417,16 @@ msgstr ""
 msgid "Toggle reopening the build menu"
 msgstr ""
 
-#: src/multijoin.c:100 src/multijoin.c:101
+#: src/multijoin.c:121 src/multijoin.c:122
 msgid "Players Still Joining"
 msgstr ""
 
-#: src/multijoin.c:221
+#: src/multijoin.c:242
 #, c-format
 msgid "%s has Left the Game"
 msgstr ""
 
-#: src/multijoin.c:333
+#: src/multijoin.c:354
 #, c-format
 msgid "%s is Joining the Game"
 msgstr ""

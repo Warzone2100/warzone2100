@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-08-17 01:02+0200\n"
+"POT-Creation-Date: 2007-08-17 12:11+0200\n"
 "PO-Revision-Date: 2007-07-22 12:25+0100\n"
 "Last-Translator: Ryo <RyoOhkli@gmx.de>\n"
 "Language-Team: Deutsch\n"
@@ -20,35 +20,35 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Bookmarks: 458,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
-#: src/multiplay.c:1856
+#: src/multiplay.c:1894
 msgid "Green"
 msgstr "Gr�n"
 
-#: src/multiplay.c:1857
+#: src/multiplay.c:1895
 msgid "Orange"
 msgstr "Orange"
 
-#: src/multiplay.c:1858
+#: src/multiplay.c:1896
 msgid "Grey"
 msgstr "Grau"
 
-#: src/multiplay.c:1859
+#: src/multiplay.c:1897
 msgid "Black"
 msgstr "Schwarz"
 
-#: src/multiplay.c:1860
+#: src/multiplay.c:1898
 msgid "Red"
 msgstr "Rot"
 
-#: src/multiplay.c:1861
+#: src/multiplay.c:1899
 msgid "Blue"
 msgstr "Blau"
 
-#: src/multiplay.c:1862
+#: src/multiplay.c:1900
 msgid "Pink"
 msgstr "Pink"
 
-#: src/multiplay.c:1863
+#: src/multiplay.c:1901
 msgid "Cyan"
 msgstr "Cyan"
 
@@ -69,47 +69,47 @@ msgstr "Baufahrzeug wurde beordert einen �lbohrturm zu bauen"
 msgid "Player"
 msgstr "Spieler"
 
-#: src/multigifts.c:181
+#: src/multigifts.c:172
 #, c-format
 msgid "%s Gives You A Visibility Report"
 msgstr "%s �bertr�gt Radardaten"
 
-#: src/multigifts.c:208
+#: src/multigifts.c:199
 #, c-format
 msgid "%s Gives You Units"
 msgstr "%s �bertr�gt Einheiten"
 
-#: src/multigifts.c:307
+#: src/multigifts.c:294
 #, c-format
 msgid "%s Gives You Technology Documents"
 msgstr "%s �bertr�gt technologische Dokumente"
 
-#: src/multigifts.c:348
+#: src/multigifts.c:334
 #, c-format
 msgid "%s Gives You Power"
 msgstr "%s �bertr�gt Energie"
 
-#: src/multigifts.c:369
+#: src/multigifts.c:355
 #, c-format
 msgid "%s Requests An Alliance With You"
 msgstr "%s w�nscht eine Allianz mit dir"
 
-#: src/multigifts.c:377
+#: src/multigifts.c:363
 #, c-format
 msgid "You Invite %s To Form An Alliance"
 msgstr "Du hast %s eingeladen eine Allianz zu bilden"
 
-#: src/multigifts.c:398
+#: src/multigifts.c:382
 #, c-format
 msgid "%s Breaks The Alliance With %s"
 msgstr "%s bricht die Allianz mit %s"
 
-#: src/multigifts.c:425
+#: src/multigifts.c:407
 #, c-format
 msgid "%s Forms An Alliance With %s"
 msgstr "%s bildet eine Allianz mit %s"
 
-#: src/multigifts.c:762
+#: src/multigifts.c:829
 #, c-format
 msgid "You Discover Blueprints For %s"
 msgstr "Du hast Entw�rfe f�r %s entdeckt"
@@ -276,7 +276,7 @@ msgstr "Spezialist"
 msgid "Hero"
 msgstr "Held"
 
-#: src/multiint.c:355 src/multiint.c:1405 src/multilimit.c:174
+#: src/multiint.c:355 src/multiint.c:1396 src/multilimit.c:174
 msgid "Accept Settings"
 msgstr "Einstellungen akzeptieren"
 
@@ -361,7 +361,7 @@ msgstr "Keine Allianzen"
 msgid "Allow Alliances"
 msgstr "Allianzen erlauben"
 
-#: src/multiint.c:800 src/multiint.c:2037
+#: src/multiint.c:800 src/multiint.c:2028
 msgid "Locked Teams"
 msgstr "Festgelegte Teams"
 
@@ -401,19 +401,19 @@ msgstr "Spiel beginnen"
 msgid "Set Structure Limits"
 msgstr "Geb�udelimits einstellen"
 
-#: src/multiint.c:1290
+#: src/multiint.c:1277
 msgid "PLAYERS"
 msgstr "SPIELER"
 
-#: src/multiint.c:1436
+#: src/multiint.c:1427
 msgid "CHAT"
 msgstr "CHAT"
 
-#: src/multiint.c:1978
+#: src/multiint.c:1969
 msgid "Host is Starting Game"
 msgstr "Host startet das Spiel"
 
-#: src/multiint.c:2750
+#: src/multiint.c:2736
 msgid "Players"
 msgstr "Spieler"
 
@@ -505,36 +505,36 @@ msgstr "%d Einheiten zu Gruppe %d hinzugef�gt"
 msgid "%s - Connected %d of %d"
 msgstr "%s - %d von %d verbunden"
 
-#: src/structure.c:6296 src/structure.c:6347
+#: src/structure.c:6297 src/structure.c:6348
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektrisch besch�digt"
 
-#: src/structure.c:6576
+#: src/structure.c:6573
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronik Belohnung - Sichtbarkeits Bericht"
 
-#: src/structure.c:6616
+#: src/structure.c:6613
 msgid "Factory Reward - Propulsion"
 msgstr "Belohnung f�r Fabrik - Antrieb"
 
-#: src/structure.c:6640
+#: src/structure.c:6637
 msgid "Factory Reward - Body"
 msgstr "Belohnung f�r Fabrik - Rumpf"
 
-#: src/structure.c:6664
+#: src/structure.c:6661
 msgid "Factory Reward - Weapon"
 msgstr "Belohnung f�r Fabrik - Waffe"
 
-#: src/structure.c:6673
+#: src/structure.c:6670
 msgid "Factory Reward - Nothing"
 msgstr "Belohnung f�r Fabrik - Nichts"
 
-#: src/structure.c:6701
+#: src/structure.c:6698
 msgid "Repair Facility Award - Repair"
 msgstr "Pr�mie f�r Reparatureinheit - Reparatur"
 
-#: src/structure.c:6708
+#: src/structure.c:6705
 msgid "Repair Facility Award - Nothing"
 msgstr "Pr�mie f�r Reparatureinheit - Nichts"
 
@@ -1413,16 +1413,16 @@ msgstr "N�chste Cyborg Fabrik ausw�hlen"
 msgid "Toggle reopening the build menu"
 msgstr "Wieder�ffnen des Bau Men�s umschalten"
 
-#: src/multijoin.c:100 src/multijoin.c:101
+#: src/multijoin.c:121 src/multijoin.c:122
 msgid "Players Still Joining"
 msgstr "Es treten noch Spieler bei"
 
-#: src/multijoin.c:221
+#: src/multijoin.c:242
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s hat das Spiel verlassen"
 
-#: src/multijoin.c:333
+#: src/multijoin.c:354
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s ist dem Spiel beigetreten"

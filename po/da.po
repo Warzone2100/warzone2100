@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: da\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-08-17 01:02+0200\n"
+"POT-Creation-Date: 2007-08-17 12:11+0200\n"
 "PO-Revision-Date: 2007-04-17 23:03+0200\n"
 "Last-Translator: Christian Vest Hansen <karmazilla@gmail.com>\n"
 "Language-Team: Dansk <en@li.org>\n"
@@ -16,35 +16,35 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: src/multiplay.c:1856
+#: src/multiplay.c:1894
 msgid "Green"
 msgstr "Grøn"
 
-#: src/multiplay.c:1857
+#: src/multiplay.c:1895
 msgid "Orange"
 msgstr "Orange"
 
-#: src/multiplay.c:1858
+#: src/multiplay.c:1896
 msgid "Grey"
 msgstr "Grå"
 
-#: src/multiplay.c:1859
+#: src/multiplay.c:1897
 msgid "Black"
 msgstr "Sort"
 
-#: src/multiplay.c:1860
+#: src/multiplay.c:1898
 msgid "Red"
 msgstr "Rød"
 
-#: src/multiplay.c:1861
+#: src/multiplay.c:1899
 msgid "Blue"
 msgstr "Blå"
 
-#: src/multiplay.c:1862
+#: src/multiplay.c:1900
 msgid "Pink"
 msgstr "Pink"
 
-#: src/multiplay.c:1863
+#: src/multiplay.c:1901
 msgid "Cyan"
 msgstr "Cyan"
 
@@ -66,47 +66,47 @@ msgstr "Truck beordret til at bygge oliebrøn."
 msgid "Player"
 msgstr "Spillere"
 
-#: src/multigifts.c:181
+#: src/multigifts.c:172
 #, c-format
 msgid "%s Gives You A Visibility Report"
 msgstr "%s Giver dig en rekonniseringsrapport"
 
-#: src/multigifts.c:208
+#: src/multigifts.c:199
 #, c-format
 msgid "%s Gives You Units"
 msgstr "%s Giver dig enheder"
 
-#: src/multigifts.c:307
+#: src/multigifts.c:294
 #, c-format
 msgid "%s Gives You Technology Documents"
 msgstr "%s Giver dig teknologi"
 
-#: src/multigifts.c:348
+#: src/multigifts.c:334
 #, c-format
 msgid "%s Gives You Power"
 msgstr "%s Giver dig energi"
 
-#: src/multigifts.c:369
+#: src/multigifts.c:355
 #, c-format
 msgid "%s Requests An Alliance With You"
 msgstr "%s Vil indgå en aliance med dig"
 
-#: src/multigifts.c:377
+#: src/multigifts.c:363
 #, c-format
 msgid "You Invite %s To Form An Alliance"
 msgstr "Du inviterede %s til at danne en aliance"
 
-#: src/multigifts.c:398
+#: src/multigifts.c:382
 #, c-format
 msgid "%s Breaks The Alliance With %s"
 msgstr "%s Bryder aliancen med %s"
 
-#: src/multigifts.c:425
+#: src/multigifts.c:407
 #, c-format
 msgid "%s Forms An Alliance With %s"
 msgstr "%s Danner aliance med %s"
 
-#: src/multigifts.c:762
+#: src/multigifts.c:829
 #, c-format
 msgid "You Discover Blueprints For %s"
 msgstr "Du opdager plantegninger for %s"
@@ -274,7 +274,7 @@ msgstr "Oberst"
 msgid "Hero"
 msgstr "General"
 
-#: src/multiint.c:355 src/multiint.c:1405 src/multilimit.c:174
+#: src/multiint.c:355 src/multiint.c:1396 src/multilimit.c:174
 msgid "Accept Settings"
 msgstr "Acceptér Indstillinger"
 
@@ -361,7 +361,7 @@ msgstr "Uden alliancer"
 msgid "Allow Alliances"
 msgstr "Med alliancer"
 
-#: src/multiint.c:800 src/multiint.c:2037
+#: src/multiint.c:800 src/multiint.c:2028
 msgid "Locked Teams"
 msgstr "Låste hold"
 
@@ -403,19 +403,19 @@ msgstr "Værten starter spillet"
 msgid "Set Structure Limits"
 msgstr "Tabte bygninger"
 
-#: src/multiint.c:1290
+#: src/multiint.c:1277
 msgid "PLAYERS"
 msgstr "SPILLERE"
 
-#: src/multiint.c:1436
+#: src/multiint.c:1427
 msgid "CHAT"
 msgstr "BESKEDER"
 
-#: src/multiint.c:1978
+#: src/multiint.c:1969
 msgid "Host is Starting Game"
 msgstr "Værten starter spillet"
 
-#: src/multiint.c:2750
+#: src/multiint.c:2736
 msgid "Players"
 msgstr "Spillere"
 
@@ -507,36 +507,36 @@ msgstr "%d Enheder tildelt gruppe %d"
 msgid "%s - Connected %d of %d"
 msgstr "%s - Forbundet %d af %d"
 
-#: src/structure.c:6296 src/structure.c:6347
+#: src/structure.c:6297 src/structure.c:6348
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronisk beskadiget"
 
-#: src/structure.c:6576
+#: src/structure.c:6573
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronisk gevinst - Rekonniseringsrapport"
 
-#: src/structure.c:6616
+#: src/structure.c:6613
 msgid "Factory Reward - Propulsion"
 msgstr "Fabriksgevinst - Fremdrift"
 
-#: src/structure.c:6640
+#: src/structure.c:6637
 msgid "Factory Reward - Body"
 msgstr "Fabriksgevinst - Skrog"
 
-#: src/structure.c:6664
+#: src/structure.c:6661
 msgid "Factory Reward - Weapon"
 msgstr "Frabriskgevinst - Våben"
 
-#: src/structure.c:6673
+#: src/structure.c:6670
 msgid "Factory Reward - Nothing"
 msgstr "Fabriksgevinst - Ingen"
 
-#: src/structure.c:6701
+#: src/structure.c:6698
 msgid "Repair Facility Award - Repair"
 msgstr "Reperationsgevinst - Reperation"
 
-#: src/structure.c:6708
+#: src/structure.c:6705
 msgid "Repair Facility Award - Nothing"
 msgstr "Reperationsgevinst - Ingen"
 
@@ -1423,16 +1423,16 @@ msgstr "Find næste cyborg fabrik"
 msgid "Toggle reopening the build menu"
 msgstr "Slå genåbning af konstruktionsmenuen til/fra"
 
-#: src/multijoin.c:100 src/multijoin.c:101
+#: src/multijoin.c:121 src/multijoin.c:122
 msgid "Players Still Joining"
 msgstr "Spillere tilkobler stadig"
 
-#: src/multijoin.c:221
+#: src/multijoin.c:242
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s har forladt spillet"
 
-#: src/multijoin.c:333
+#: src/multijoin.c:354
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s kom med i spillet"
