@@ -19,7 +19,7 @@
 /*
  * Nettypes.c
  *
- * Contains the 'new' Network API functiosn for sending and receiving both
+ * Contains the 'new' Network API functions for sending and receiving both
  * low-level primitives and higher-level types.
  */
 

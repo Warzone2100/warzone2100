@@ -41,6 +41,7 @@ BOOL NETint16_t(int16_t *ip);
 BOOL NETuint16_t(uint16_t *ip);
 BOOL NETint32_t(int32_t *ip);
 BOOL NETuint32_t(uint32_t *ip);
+BOOL NETfloat(float* fp);
 BOOL NETbool(BOOL *bp);
 BOOL NETnull(void);
 BOOL NETstring(char *str, uint16_t maxlen);
