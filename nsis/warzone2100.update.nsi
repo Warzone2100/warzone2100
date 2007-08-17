@@ -207,7 +207,7 @@ Section $(TEXT_SecGrimMod) SecGrimMod
 
   SetOutPath "$INSTDIR\mods\global"
 
-;  File "..\data\grim.wz"
+;  File "..\data\mods\global\grim.wz"
 ;  !insertmacro VPatchFile "grim.wz.vpatch" "$INSTDIR\grim.wz" "$INSTDIR\grim.wz.tmp"
 
   SetOutPath "$INSTDIR"

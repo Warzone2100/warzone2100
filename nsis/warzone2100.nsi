@@ -196,7 +196,7 @@ Section $(TEXT_SecGrimMod) SecGrimMod
 
   SetOutPath "$INSTDIR\mods\global"
 
-  File "..\data\grim.wz"
+  File "..\data\mods\global\grim.wz"
 
   SetOutPath "$INSTDIR"
 

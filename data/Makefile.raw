@@ -1,8 +1,5 @@
 SUBDIRS=mods
 
-$(SUBDIRS):
-	$(MAKE) -f Makefile.raw -C $@ $(MAKECMDGOALS)
-
 MAKERULES=../makerules
 include $(MAKERULES)/configure.mk
 
@@ -19,6 +16,9 @@ all:
 ifdef DATA
 all: $(BASEARCHIVE) $(PATCHARCHIVE) $(SUBDIRS)
 endif
+
+$(SUBDIRS):
+	$(MAKE) -f Makefile.raw -C $@ $(MAKECMDGOALS)
 
 $(BASEARCHIVE): $(BASELIST)
 	zip -ru0 $@ $(BASELIST) -x *svn*
