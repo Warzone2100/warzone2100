@@ -2475,22 +2475,13 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			//load in the message list file
 			aFileName[fileExten] = '\0';
 			strcat(aFileName, "score.bjo");
-			// Load in the chosen file data
-			pFileData = fileLoadBuffer;
-			if (loadFileToBufferNoError(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+
+			// Load the fx data from the chosen file
+			if (!readScoreData(aFileName))
 			{
-				//load the fx data
-				if (pFileData)
-				{
-					if (!readScoreData(pFileData, fileSize))
-					{
-						debug( LOG_NEVER, "loadgame: Fail33\n" );
-						goto error;
-					}
-				}
+				debug( LOG_NEVER, "loadgame: Fail33\n" );
+				goto error;
 			}
-
-
 		}
 	}
 

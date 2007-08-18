@@ -39,17 +39,17 @@ WD_BARBARIANS_MOWED_DOWN
 /* The mission results data */
 typedef	struct mission_data
 {
-UDWORD	unitsBuilt;		// How many units were built
-UDWORD	unitsKilled;	// How many enemy units you blew up
-UDWORD	unitsLost;		// How many units were lost
-UDWORD	strBuilt;		// How many structures we built
-UDWORD	strKilled;		// How many enemy structures you blew up
-UDWORD	strLost;		// How many structures were lost
-UDWORD	artefactsFound;	// How many artefacts were found
-UDWORD	missionStarted;	// When was the mission started
-UDWORD	shotsOnTarget;	// How many hits
-UDWORD	shotsOffTarget;	// How many misses
-UDWORD	babasMowedDown; // How many barbarians did we mow down?
+	uint32_t    unitsBuilt;		// How many units were built
+	uint32_t    unitsKilled;	// How many enemy units you blew up
+	uint32_t    unitsLost;		// How many units were lost
+	uint32_t    strBuilt;		// How many structures we built
+	uint32_t    strKilled;		// How many enemy structures you blew up
+	uint32_t    strLost;		// How many structures were lost
+	uint32_t    artefactsFound;	// How many artefacts were found
+	uint32_t    missionStarted;	// When was the mission started
+	uint32_t    shotsOnTarget;	// How many hits
+	uint32_t    shotsOffTarget;	// How many misses
+	uint32_t    babasMowedDown; // How many barbarians did we mow down?
 } MISSION_DATA;
 
 // Could use widgets, but hey.....
@@ -68,35 +68,35 @@ UDWORD	colour;			// What colour is this bar then?
 
 enum
 {
-STAT_UNIT_LOST,       
-STAT_UNIT_KILLED,         
-STAT_STR_LOST,            
-STAT_STR_BLOWN_UP,        
-STAT_UNITS_BUILT,         
-STAT_UNITS_NOW,           
-STAT_STR_BUILT,           
-STAT_STR_NOW,             
-STAT_ROOKIE,      
-STAT_GREEN,       
-STAT_TRAINED, 
-STAT_REGULAR, 
-STAT_VETERAN, 
-STAT_CRACK,       
-STAT_ELITE,       
-STAT_SPECIAL, 
+STAT_UNIT_LOST,
+STAT_UNIT_KILLED,
+STAT_STR_LOST,
+STAT_STR_BLOWN_UP,
+STAT_UNITS_BUILT,
+STAT_UNITS_NOW,
+STAT_STR_BUILT,
+STAT_STR_NOW,
+STAT_ROOKIE,
+STAT_GREEN,
+STAT_TRAINED,
+STAT_REGULAR,
+STAT_VETERAN,
+STAT_CRACK,
+STAT_ELITE,
+STAT_SPECIAL,
 STAT_ACE
-};     
+};
 
 
 
 extern BOOL	scoreInitSystem			( void );
 extern void	scoreUpdateVar			( DATA_INDEX var );
 extern void	scoreDataToConsole		( void );
-extern void	scoreDataToScreen		( void );	
+extern void	scoreDataToScreen		( void );
 extern void constructTime			( char *psText, UDWORD hours, UDWORD minutes, UDWORD seconds );
 extern void	getAsciiTime			( char *psText, UDWORD time );
-extern BOOL	readScoreData			( char *pFileData, UDWORD fileSize );
-extern BOOL	writeScoreData			( char *pFileName );
+extern bool readScoreData			( const char* fileName );
+extern bool writeScoreData			( const char* fileName );
 
 #endif
 

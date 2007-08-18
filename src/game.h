@@ -114,10 +114,10 @@ typedef struct _fx_save_header
 typedef struct _score_save_header
 {
 	char		aFileType[4];
-	UDWORD		version;
-	UDWORD		entries;	// should always be one for this?
+	uint32_t    version;
+	uint32_t    entries;	// should always be one for this?
 
-}SCORE_SAVEHEADER;
+} SCORE_SAVEHEADER;
 
 /***************************************************************************/
 /*

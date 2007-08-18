@@ -524,129 +524,157 @@ void	fillUpStats( void )
 	infoBars[STAT_UNITS_NOW].number = numUnits;
 	infoBars[STAT_STR_BUILT].number = missionData.strBuilt;
 }
+
+/** Write the given MISSION_DATA to the given file with endianness swapped correctly
+ *  \param fileHandle a PhysicsFS file handle of the file to write to
+ *  \param serializeScore a pointer to the MISSION_DATA to write serialized into the file
+ *  \return true on success or false on the first encounterd error
+ */
+static bool serializeScoreData(PHYSFS_file* fileHandle, const MISSION_DATA* serializeScore)
+{
+	return (PHYSFS_writeUBE32(fileHandle, serializeScore->unitsBuilt)
+	     && PHYSFS_writeUBE32(fileHandle, serializeScore->unitsKilled)
+	     && PHYSFS_writeUBE32(fileHandle, serializeScore->unitsLost)
+	     && PHYSFS_writeUBE32(fileHandle, serializeScore->strBuilt)
+	     && PHYSFS_writeUBE32(fileHandle, serializeScore->strKilled)
+	     && PHYSFS_writeUBE32(fileHandle, serializeScore->strLost)
+	     && PHYSFS_writeUBE32(fileHandle, serializeScore->artefactsFound)
+	     && PHYSFS_writeUBE32(fileHandle, serializeScore->missionStarted)
+	     && PHYSFS_writeUBE32(fileHandle, serializeScore->shotsOnTarget)
+	     && PHYSFS_writeUBE32(fileHandle, serializeScore->shotsOffTarget)
+	     && PHYSFS_writeUBE32(fileHandle, serializeScore->babasMowedDown));
+}
+
+/** Read a MISSION_DATA from the given file with endianness swapped correctly
+ *  \param fileHandle a PhysicsFS file handle of the file to read from
+ *  \param serializeScore a pointer to a MISSION_DATA to write the deserialized data from the file into
+ *  \return true on success or false on the first encounterd error
+ */
+static bool deserializeScoreData(PHYSFS_file* fileHandle, MISSION_DATA* serializeScore)
+{
+	return (PHYSFS_readUBE32(fileHandle, &serializeScore->unitsBuilt)
+	     && PHYSFS_readUBE32(fileHandle, &serializeScore->unitsKilled)
+	     && PHYSFS_readUBE32(fileHandle, &serializeScore->unitsLost)
+	     && PHYSFS_readUBE32(fileHandle, &serializeScore->strBuilt)
+	     && PHYSFS_readUBE32(fileHandle, &serializeScore->strKilled)
+	     && PHYSFS_readUBE32(fileHandle, &serializeScore->strLost)
+	     && PHYSFS_readUBE32(fileHandle, &serializeScore->artefactsFound)
+	     && PHYSFS_readUBE32(fileHandle, &serializeScore->missionStarted)
+	     && PHYSFS_readUBE32(fileHandle, &serializeScore->shotsOnTarget)
+	     && PHYSFS_readUBE32(fileHandle, &serializeScore->shotsOffTarget)
+	     && PHYSFS_readUBE32(fileHandle, &serializeScore->babasMowedDown));
+}
+
 // -----------------------------------------------------------------------------------
 /* This will save out the score data */
-BOOL writeScoreData(char *pFileName)
+bool writeScoreData(const char* fileName)
 {
-	char *pFileData;		// Pointer to the necessary allocated memory
-MISSION_DATA	*pScoreData;
-UDWORD			fileSize;		// How many bytes we need - depends on compression
-SCORE_SAVEHEADER	*psHeader;		// Pointer to the header part of the file
-	BOOL status = TRUE;
+	SCORE_SAVEHEADER fileHeader;
 
-	/* Calculate memory required */
-	fileSize = ( sizeof(struct _score_save_header) + sizeof(struct mission_data) );
-
-	/* Try and allocate it - freed up in same function */
-	pFileData = (char*)malloc(fileSize);
-
-	/* Did we get it? */
-	if(!pFileData)
+	PHYSFS_file* fileHandle = openSaveFile(fileName);
+	if (!fileHandle)
 	{
-		/* Nope, so do one */
-		debug( LOG_ERROR, "Saving Score data : Cannot get the memory! (%d)", fileSize );
-		abort();
-		return(FALSE);
+		return false;
 	}
 
-	/* We got the memory, so put the file header on the file */
-	psHeader = (SCORE_SAVEHEADER *)pFileData;
-	psHeader->aFileType[0] = 's';
-	psHeader->aFileType[1] = 'c';
-	psHeader->aFileType[2] = 'd';
-	psHeader->aFileType[3] = 'a';
-	psHeader->entries = 1;	// always for score save?
+	fileHeader.aFileType[0] = 's';
+	fileHeader.aFileType[1] = 'c';
+	fileHeader.aFileType[2] = 'd';
+	fileHeader.aFileType[3] = 'a';
 
-	/* Write out the version number - unlikely to change for FX data */
-	psHeader->version = CURRENT_VERSION_NUM;
+	fileHeader.version = CURRENT_VERSION_NUM;
+	fileHeader.entries = 1; // always for score save?
 
-	/* Skip past the header to the raw data area */
-	pScoreData = (MISSION_DATA*)(pFileData + sizeof(struct _score_save_header));
-
-	/* copy over the score data */
-	memcpy(pScoreData,&missionData,sizeof(struct mission_data));
-
-	/* SCORE_SAVEHEADER */
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->entries);
-
-	/* MISSION_DATA */
-	endian_udword(&pScoreData->unitsBuilt);
-	endian_udword(&pScoreData->unitsKilled);
-	endian_udword(&pScoreData->unitsLost);
-	endian_udword(&pScoreData->strBuilt);
-	endian_udword(&pScoreData->strKilled);
-	endian_udword(&pScoreData->strLost);
-	endian_udword(&pScoreData->artefactsFound);
-	endian_udword(&pScoreData->missionStarted);
-	endian_udword(&pScoreData->shotsOnTarget);
-	endian_udword(&pScoreData->shotsOffTarget);
-	endian_udword(&pScoreData->babasMowedDown);
-
-	/* Have a bash at opening the file to write */
-	status = saveFile(pFileName, pFileData, fileSize);
-
-	/* And free up the memory we used */
-	if (pFileData != NULL)
+	// Write out the current file header
+	if (PHYSFS_write(fileHandle, fileHeader.aFileType, sizeof(fileHeader.aFileType), 1) != 1
+	 || !PHYSFS_writeUBE32(fileHandle, fileHeader.version)
+	 || !PHYSFS_writeUBE32(fileHandle, fileHeader.entries))
 	{
-		free(pFileData);
+		debug(LOG_ERROR, "writeScoreData: could not write header to %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
+		PHYSFS_close(fileHandle);
+		return false;
 	}
-	return status;
+
+	// Write out the score data
+	if (!serializeScoreData(fileHandle, &missionData))
+	{
+		debug(LOG_ERROR, "writeScoreData: could not write to %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
+		PHYSFS_close(fileHandle);
+		return false;
+	}
+
+	// Close the file
+	PHYSFS_close(fileHandle);
+
+	// Everything is just fine!
+	return true;
 }
 
 // -----------------------------------------------------------------------------------
 /* This will read in the score data */
-BOOL readScoreData(char *pFileData, UDWORD fileSize)
+bool readScoreData(const char* fileName)
 {
-UDWORD				expectedFileSize;
-SCORE_SAVEHEADER	*psHeader;
-MISSION_DATA		*pScoreData;
+	SCORE_SAVEHEADER fileHeader;
 
-	/* See if we've been given the right file type? */
-	psHeader = (SCORE_SAVEHEADER *)pFileData;
-	if (psHeader->aFileType[0] != 's' || psHeader->aFileType[1] != 'c' ||
-		psHeader->aFileType[2] != 'd' || psHeader->aFileType[3] != 'a')	{
-		debug( LOG_ERROR, "Read Score data : Weird file type found? Has header letters  - %c %c %c %c", psHeader->aFileType[0],psHeader->aFileType[1], psHeader->aFileType[2],psHeader->aFileType[3] );
-		abort();
-		return FALSE;
-	}
+	unsigned int expectedFileSize, fileSize;
 
-	/* SCORE_SAVEHEADER */
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->entries);
-
-	/* How much data are we expecting? */
-	expectedFileSize = (sizeof(struct _score_save_header) + (psHeader->entries*sizeof(struct mission_data)) );
-
-	/* Is that what we've been given? */
-	if(fileSize!=expectedFileSize)
+	PHYSFS_file* fileHandle = openLoadFile(fileName, false);
+	if (!fileHandle)
 	{
-		/* No, so bomb out */
-		debug( LOG_ERROR, "Read Score data : Weird file size!" );
-		abort();
-		return(FALSE);
+		// Failure to open the file is no failure to read it
+		return true;
 	}
 
-	/* Skip past the header gubbins - can check version number here too */
-	pScoreData = (MISSION_DATA*)(pFileData + sizeof(struct _score_save_header));
+	// Read the header from the file
+	if (PHYSFS_read(fileHandle, fileHeader.aFileType, sizeof(fileHeader.aFileType), 1) != 1
+	 || !PHYSFS_readUBE32(fileHandle, &fileHeader.version)
+	 || !PHYSFS_readUBE32(fileHandle, &fileHeader.entries))
+	{
+		debug(LOG_ERROR, "readScoreData: error while reading header from file: %s", PHYSFS_getLastError());
+		PHYSFS_close(fileHandle);
+		return false;
+	}
 
-	/* MISSION_DATA */
-	endian_udword(&pScoreData->unitsBuilt);
-	endian_udword(&pScoreData->unitsKilled);
-	endian_udword(&pScoreData->unitsLost);
-	endian_udword(&pScoreData->strBuilt);
-	endian_udword(&pScoreData->strKilled);
-	endian_udword(&pScoreData->strLost);
-	endian_udword(&pScoreData->artefactsFound);
-	endian_udword(&pScoreData->missionStarted);
-	endian_udword(&pScoreData->shotsOnTarget);
-	endian_udword(&pScoreData->shotsOffTarget);
-	endian_udword(&pScoreData->babasMowedDown);
+	// Check the header to see if we've been given a file of the right type
+	if (fileHeader.aFileType[0] != 's'
+	 || fileHeader.aFileType[1] != 'c'
+	 || fileHeader.aFileType[2] != 'd'
+	 || fileHeader.aFileType[3] != 'a')
+	{
+		debug(LOG_ERROR, "readScoreData: Weird file type found? Has header letters - '%c' '%c' '%c' '%c' (should be 's' 'c' 'd' 'a')",
+		      fileHeader.aFileType[0],
+		      fileHeader.aFileType[1],
+		      fileHeader.aFileType[2],
+		      fileHeader.aFileType[3]);
 
-	memcpy(&missionData,pScoreData,sizeof(struct mission_data));
+		PHYSFS_close(fileHandle);
+		return false;
+	}
+
+	// Validate the filesize
+	expectedFileSize = sizeof(fileHeader.aFileType) + sizeof(fileHeader.version) + sizeof(fileHeader.entries) + fileHeader.entries * sizeof(MISSION_DATA);
+	fileSize = PHYSFS_fileLength(fileHandle);
+	if (fileSize != expectedFileSize)
+	{
+		PHYSFS_close(fileHandle);
+		ASSERT(!"readScoreData: unexpected filesize", "readScoreData: unexpected filesize; should be %u, but is %u", expectedFileSize, fileSize);
+		abort();
+		return false;
+	}
+
+	// Write out the score data
+	if (!deserializeScoreData(fileHandle, &missionData))
+	{
+		debug(LOG_ERROR, "readScoreData: could not read from %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
+		PHYSFS_close(fileHandle);
+		return false;
+	}
+
+	// Close the file
+	PHYSFS_close(fileHandle);
 
 	/* Hopefully everything's just fine by now */
-	return(TRUE);
+	return true;
 }
 // -----------------------------------------------------------------------------------
 
