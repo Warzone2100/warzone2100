@@ -400,7 +400,6 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 	char		sTemp[MAX_STR_LENGTH];
 	UDWORD		i;
 	W_CONTEXT		context;
-	BOOL		bSkipCD = FALSE;
 
 	id = widgRunScreen(psRequestScreen);
 
@@ -553,7 +552,7 @@ failure:
 
 // success on load.
 success:
-	setCampaignNumber( getCampaign(sRequestResult,&bSkipCD) );
+	setCampaignNumber( getCampaign(sRequestResult) );
 successforce:
 	closeLoadSave();
 	bRequestLoad = TRUE;

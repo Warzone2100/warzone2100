@@ -126,9 +126,10 @@ typedef struct _score_save_header
 /***************************************************************************/
 
 extern BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGame);	// UserSaveGame is TRUE when the save game is not a new level (User Save Game)
+
 /*This just loads up the .gam file to determine which level data to set up - split up
 so can be called in levLoadData when starting a game from a load save game*/
-extern BOOL loadGameInit(const char *pGameToLoad);
+extern bool loadGameInit(const char* fileName);
 
 extern BOOL loadMissionExtras(const char *pGameToLoad, SWORD levelType);
 
@@ -139,12 +140,12 @@ extern BOOL loadScriptState(char *pFileName);
 extern BOOL loadTerrainTypeMap(const char *pFileData, UDWORD filesize);
 
 //direct access for forceloader
-extern BOOL gameLoad(char *pFileData, UDWORD filesize);
+extern bool gameLoad(const char* fileName);
 
 extern BOOL saveGame(char *aFileName, SDWORD saveType);
 
 // Get the campaign number for loadGameInit game
-extern UDWORD getCampaign(char *pGameToLoad, BOOL *bSkipCDCheck);
+extern UDWORD getCampaign(const char* fileName);
 
 /*calls windows find file tree*/
 extern BOOL getSaveGameName(char *pName);

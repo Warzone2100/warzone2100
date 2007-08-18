@@ -2929,6 +2929,8 @@ bool readFXData(const char* fileName)
 			PHYSFS_close(fileHandle);
 			return false;
 		}
+
+		effectStatus[i] = ES_ACTIVE;
 	}
 
 	/* Ensure free effects kept up to date */

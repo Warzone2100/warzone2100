@@ -97,22 +97,22 @@ typedef enum _msgtype
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 // Game Options Structure. Enough info to completely describe the static stuff in amultiplay game.
 typedef struct {
-	UBYTE		type;						// DMATCH/CAMPAIGN/SKIRMISH/TEAMPLAY etc...
+	uint8_t		type;						// DMATCH/CAMPAIGN/SKIRMISH/TEAMPLAY etc...
 	char		map[128];					// name of multiplayer map being used.
 	char		version[8];					// version of warzone
-	UBYTE		maxPlayers;					// max players to allow
+	uint8_t		maxPlayers;					// max players to allow
 	char		name[128];					// game name   (to be used)
 	BOOL		fog;
-	UDWORD		power;						// power level for arena game
-//	UDWORD		techLevel;					// tech levels to use . 0= all levels.
-	UBYTE		base;						// clean/base/base&defence
-	UBYTE		alliance;					// no/yes/AIs vs Humans
-	UBYTE		limit;						// limit no/time/frag
-	UWORD		bytesPerSec;				// maximum bitrate achieved before dropping checks.
-	UBYTE		packetsPerSec;				// maximum packets to send before dropping checks.
-	UBYTE		encryptKey;					// key to use for encryption.
-//	UBYTE		skirmishPlayers[MAX_PLAYERS];// players to use in skirmish game.
-	UBYTE		skDiff[MAX_PLAYERS];			// skirmish game difficulty settings.
+	uint32_t    power;						// power level for arena game
+//	uint32_t    techLevel;					// tech levels to use . 0= all levels.
+	uint8_t		base;						// clean/base/base&defence
+	uint8_t		alliance;					// no/yes/AIs vs Humans
+	uint8_t		limit;						// limit no/time/frag
+	uint16_t    bytesPerSec;				// maximum bitrate achieved before dropping checks.
+	uint8_t		packetsPerSec;				// maximum packets to send before dropping checks.
+	uint8_t		encryptKey;					// key to use for encryption.
+//	uint8_t		skirmishPlayers[MAX_PLAYERS];// players to use in skirmish game.
+	uint8_t		skDiff[MAX_PLAYERS];			// skirmish game difficulty settings.
 
 } MULTIPLAYERGAME, *LPMULTIPLAYERGAME;
 

@@ -32,14 +32,14 @@
 //hopefully they'll never need to set it this high for other reasons!
 #define SCR_LZ_COMPROMISED_TIME     999999
 //this is used to compare the value passed in from the scripts with which is multiplied by 100
-#define LZ_COMPROMISED_TIME         99999900        
+#define LZ_COMPROMISED_TIME         99999900
 
 typedef struct _landing_zone
 {
-	UBYTE	x1;
-	UBYTE	y1;
-	UBYTE	x2;
-	UBYTE	y2;
+	uint8_t x1;
+	uint8_t y1;
+	uint8_t x2;
+	uint8_t y2;
 } LANDING_ZONE;
 
 //storage structure for values that need to be kept between missions

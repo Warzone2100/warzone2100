@@ -493,7 +493,7 @@ GAMECODE gameLoop(void)
 					}
 					else
 					{
-						ASSERT( FALSE,"Mid Mission: saveGame Failed" );
+						ASSERT(!"saveGame(sRequestResult, GTYPE_SAVE_MIDMISSION) failed", "Mid Mission: saveGame Failed" );
 						deleteSaveGame(sRequestResult);
 					}
 				}

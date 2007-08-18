@@ -95,8 +95,8 @@ UDWORD RemapPlayerNumber(UDWORD OldNumber);
 
 typedef struct _game_save_header
 {
-	char		aFileType[4];
-	UDWORD		version;
+	char        aFileType[4];
+	uint32_t    version;
 } GAME_SAVEHEADER;
 
 typedef struct _droid_save_header
@@ -269,24 +269,322 @@ typedef struct _save_weapon
 
 typedef struct _savePower
 {
-	UDWORD		currentPower;
-	UDWORD		extractedPower;
+	uint32_t    currentPower;
+	uint32_t    extractedPower;
 } SAVE_POWER;
 
+static bool serializeSavePowerData(PHYSFS_file* fileHandle, const SAVE_POWER* serializePower)
+{
+	return (PHYSFS_writeUBE32(fileHandle, serializePower->currentPower)
+	     && PHYSFS_writeUBE32(fileHandle, serializePower->extractedPower));
+}
+
+static bool deserializeSavePowerData(PHYSFS_file* fileHandle, SAVE_POWER* serializePower)
+{
+	return (PHYSFS_readUBE32(fileHandle, &serializePower->currentPower)
+	     && PHYSFS_readUBE32(fileHandle, &serializePower->extractedPower));
+}
+
+static bool serializeVector3i(PHYSFS_file* fileHandle, const Vector3i* serializeVector)
+{
+	return (PHYSFS_writeSBE32(fileHandle, serializeVector->x)
+	     && PHYSFS_writeSBE32(fileHandle, serializeVector->y)
+	     && PHYSFS_writeSBE32(fileHandle, serializeVector->z));
+}
+
+static bool deserializeVector3i(PHYSFS_file* fileHandle, Vector3i* serializeVector)
+{
+	int32_t x, y, z;
+
+	if (!PHYSFS_readSBE32(fileHandle, &x)
+	 || !PHYSFS_readSBE32(fileHandle, &y)
+	 || !PHYSFS_readSBE32(fileHandle, &z))
+		return false;
+
+	serializeVector-> x = x;
+	serializeVector-> y = y;
+	serializeVector-> z = z;
+
+	return true;
+}
+
+static bool serializeVector2i(PHYSFS_file* fileHandle, const Vector2i* serializeVector)
+{
+	return (PHYSFS_writeSBE32(fileHandle, serializeVector->x)
+	     && PHYSFS_writeSBE32(fileHandle, serializeVector->y));
+}
+
+static bool deserializeVector2i(PHYSFS_file* fileHandle, Vector2i* serializeVector)
+{
+	int32_t x, y;
+
+	if (!PHYSFS_readSBE32(fileHandle, &x)
+	 || !PHYSFS_readSBE32(fileHandle, &y))
+		return false;
+
+	serializeVector-> x = x;
+	serializeVector-> y = y;
+
+	return true;
+}
+
+static bool serializeiViewData(PHYSFS_file* fileHandle, const iView* serializeView)
+{
+	return (serializeVector3i(fileHandle, &serializeView->p)
+	     && serializeVector3i(fileHandle, &serializeView->r));
+}
+
+static bool deserializeiViewData(PHYSFS_file* fileHandle, iView* serializeView)
+{
+	return (deserializeVector3i(fileHandle, &serializeView->p)
+	     && deserializeVector3i(fileHandle, &serializeView->r));
+}
+
+static bool serializeRunData(PHYSFS_file* fileHandle, const RUN_DATA* serializeRun)
+{
+	return (serializeVector2i(fileHandle, &serializeRun->sPos)
+	     && PHYSFS_writeUBE8(fileHandle, serializeRun->forceLevel)
+	     && PHYSFS_writeUBE8(fileHandle, serializeRun->healthLevel)
+	     && PHYSFS_writeUBE8(fileHandle, serializeRun->leadership));
+}
+
+static bool deserializeRunData(PHYSFS_file* fileHandle, RUN_DATA* serializeRun)
+{
+	return (deserializeVector2i(fileHandle, &serializeRun->sPos)
+	     && PHYSFS_readUBE8(fileHandle, &serializeRun->forceLevel)
+	     && PHYSFS_readUBE8(fileHandle, &serializeRun->healthLevel)
+	     && PHYSFS_readUBE8(fileHandle, &serializeRun->leadership));
+}
+
+static bool serializeLandingZoneData(PHYSFS_file* fileHandle, const LANDING_ZONE* serializeLandZone)
+{
+	return (PHYSFS_writeUBE8(fileHandle, serializeLandZone->x1)
+	     && PHYSFS_writeUBE8(fileHandle, serializeLandZone->y1)
+	     && PHYSFS_writeUBE8(fileHandle, serializeLandZone->x2)
+	     && PHYSFS_writeUBE8(fileHandle, serializeLandZone->y2));
+}
+
+static bool deserializeLandingZoneData(PHYSFS_file* fileHandle, LANDING_ZONE* serializeLandZone)
+{
+	return (PHYSFS_readUBE8(fileHandle, &serializeLandZone->x1)
+	     && PHYSFS_readUBE8(fileHandle, &serializeLandZone->y1)
+	     && PHYSFS_readUBE8(fileHandle, &serializeLandZone->x2)
+	     && PHYSFS_readUBE8(fileHandle, &serializeLandZone->y2));
+}
+
+static bool serializeMultiplayerGame(PHYSFS_file* fileHandle, const MULTIPLAYERGAME* serializeMulti)
+{
+	unsigned int i;
+
+	if (!PHYSFS_writeUBE8(fileHandle, serializeMulti->type)
+	 || PHYSFS_write(fileHandle, serializeMulti->map, 1, 128) != 128
+	 || PHYSFS_write(fileHandle, serializeMulti->version, 1, 8) != 8
+	 || !PHYSFS_writeUBE8(fileHandle, serializeMulti->maxPlayers)
+	 || PHYSFS_write(fileHandle, serializeMulti->name, 1, 128) != 128
+	 || !PHYSFS_writeSBE32(fileHandle, serializeMulti->fog)
+	 || !PHYSFS_writeUBE32(fileHandle, serializeMulti->power)
+//	 || !PHYSFS_writeUBE8(fileHandle, serializeMulti->techLevel)
+	 || !PHYSFS_writeUBE8(fileHandle, serializeMulti->base)
+	 || !PHYSFS_writeUBE8(fileHandle, serializeMulti->alliance)
+	 || !PHYSFS_writeUBE8(fileHandle, serializeMulti->limit)
+	 || !PHYSFS_writeUBE16(fileHandle, serializeMulti->bytesPerSec)
+	 || !PHYSFS_writeUBE8(fileHandle, serializeMulti->packetsPerSec)
+	 || !PHYSFS_writeUBE8(fileHandle, serializeMulti->encryptKey))
+		return false;
+
+//	for (i = 0; i < MAX_PLAYERS; ++i)
+//	{
+//		if (!PHYSFS_writeUBE8(fileHandle, serializeMulti->skirmishPlayers[i]))
+//			return false;
+//	}
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (!PHYSFS_writeUBE8(fileHandle, serializeMulti->skDiff[i]))
+			return false;
+	}
+
+	return true;
+}
+
+static bool deserializeMultiplayerGame(PHYSFS_file* fileHandle, MULTIPLAYERGAME* serializeMulti)
+{
+	unsigned int i;
+	int32_t boolFog;
+
+	if (!PHYSFS_readUBE8(fileHandle, &serializeMulti->type)
+	 || PHYSFS_read(fileHandle, serializeMulti->map, 1, 128) != 128
+	 || PHYSFS_read(fileHandle, serializeMulti->version, 1, 8) != 8
+	 || !PHYSFS_readUBE8(fileHandle, &serializeMulti->maxPlayers)
+	 || PHYSFS_read(fileHandle, serializeMulti->name, 1, 128) != 128
+	 || !PHYSFS_readSBE32(fileHandle, &boolFog)
+	 || !PHYSFS_readUBE32(fileHandle, &serializeMulti->power)
+//	 || !PHYSFS_readUBE8(fileHandle, &serializeMulti->techLevel)
+	 || !PHYSFS_readUBE8(fileHandle, &serializeMulti->base)
+	 || !PHYSFS_readUBE8(fileHandle, &serializeMulti->alliance)
+	 || !PHYSFS_readUBE8(fileHandle, &serializeMulti->limit)
+
+	 || !PHYSFS_readUBE16(fileHandle, &serializeMulti->bytesPerSec)
+	 || !PHYSFS_readUBE8(fileHandle, &serializeMulti->packetsPerSec)
+	 || !PHYSFS_readUBE8(fileHandle, &serializeMulti->encryptKey))
+		return false;
+
+	serializeMulti->fog = boolFog;
+
+//	for (i = 0; i < MAX_PLAYERS; ++i)
+//	{
+//		if (!PHYSFS_readUBE8(fileHandle, &serializeMulti->skirmishPlayers[i]))
+//			return false;
+//	}
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (!PHYSFS_readUBE8(fileHandle, &serializeMulti->skDiff[i]))
+			return false;
+	}
+
+	return true;
+}
+
+static bool serializeSessionDesc(PHYSFS_file* fileHandle, const SESSIONDESC* serializeDesc)
+{
+	return (PHYSFS_writeSBE32(fileHandle, serializeDesc->dwSize)
+	     && PHYSFS_writeSBE32(fileHandle, serializeDesc->dwFlags)
+	     && PHYSFS_write(fileHandle, serializeDesc->host, 1, 16) == 16
+	     && PHYSFS_writeSBE32(fileHandle, serializeDesc->dwMaxPlayers)
+	     && PHYSFS_writeSBE32(fileHandle, serializeDesc->dwCurrentPlayers)
+	     && PHYSFS_writeSBE32(fileHandle, serializeDesc->dwUser1)
+	     && PHYSFS_writeSBE32(fileHandle, serializeDesc->dwUser2)
+	     && PHYSFS_writeSBE32(fileHandle, serializeDesc->dwUser3)
+	     && PHYSFS_writeSBE32(fileHandle, serializeDesc->dwUser4));
+}
+
+static bool deserializeSessionDesc(PHYSFS_file* fileHandle, SESSIONDESC* serializeDesc)
+{
+	return (PHYSFS_readSBE32(fileHandle, &serializeDesc->dwSize)
+	     && PHYSFS_readSBE32(fileHandle, &serializeDesc->dwFlags)
+	     && PHYSFS_read(fileHandle, serializeDesc->host, 1, 16) == 16
+	     && PHYSFS_readSBE32(fileHandle, &serializeDesc->dwMaxPlayers)
+	     && PHYSFS_readSBE32(fileHandle, &serializeDesc->dwCurrentPlayers)
+	     && PHYSFS_readSBE32(fileHandle, &serializeDesc->dwUser1)
+	     && PHYSFS_readSBE32(fileHandle, &serializeDesc->dwUser2)
+	     && PHYSFS_readSBE32(fileHandle, &serializeDesc->dwUser3)
+	     && PHYSFS_readSBE32(fileHandle, &serializeDesc->dwUser4));
+}
+
+static bool serializeGameStruct(PHYSFS_file* fileHandle, const GAMESTRUCT* serializeGame)
+{
+	return (PHYSFS_write(fileHandle, serializeGame->name, StringSize, 1) == 1
+	     && serializeSessionDesc(fileHandle, &serializeGame->desc));
+}
+
+static bool deserializeGameStruct(PHYSFS_file* fileHandle, GAMESTRUCT* serializeGame)
+{
+	return (PHYSFS_read(fileHandle, serializeGame->name, StringSize, 1) == 1
+	     && deserializeSessionDesc(fileHandle, &serializeGame->desc));
+}
+
+static bool serializePlayer(PHYSFS_file* fileHandle, const PLAYER* serializePlayer)
+{
+	return (PHYSFS_writeUBE32(fileHandle, serializePlayer->dpid)
+	     && PHYSFS_write(fileHandle, serializePlayer->name, StringSize, 1) == 1
+	     && PHYSFS_writeUBE32(fileHandle, serializePlayer->bHost)
+	     && PHYSFS_writeUBE32(fileHandle, serializePlayer->bSpectator));
+}
+
+static bool deserializePlayer(PHYSFS_file* fileHandle, PLAYER* serializePlayer)
+{
+	return (PHYSFS_readUBE32(fileHandle, &serializePlayer->dpid)
+	     && PHYSFS_read(fileHandle, serializePlayer->name, StringSize, 1) == 1
+	     && PHYSFS_readUBE32(fileHandle, &serializePlayer->bHost)
+	     && PHYSFS_readUBE32(fileHandle, &serializePlayer->bSpectator));
+}
+
+static bool serializeNetPlay(PHYSFS_file* fileHandle, const NETPLAY* serializeNetPlay)
+{
+	unsigned int i;
+
+	for (i = 0; i < MaxGames; ++i)
+	{
+		if (!serializeGameStruct(fileHandle, &serializeNetPlay->games[i]))
+			return false;
+	}
+
+	for (i = 0; i < MaxNumberOfPlayers; ++i)
+	{
+		if (!serializePlayer(fileHandle, &serializeNetPlay->players[i]))
+			return false;
+	}
+
+	return (PHYSFS_writeUBE32(fileHandle, serializeNetPlay->bComms)
+	     && PHYSFS_writeUBE32(fileHandle, serializeNetPlay->bHost)
+	     && PHYSFS_writeUBE32(fileHandle, serializeNetPlay->bLobbyLaunched)
+	     && PHYSFS_writeUBE32(fileHandle, serializeNetPlay->bSpectator)
+	     && PHYSFS_writeUBE32(fileHandle, serializeNetPlay->bCaptureInUse)
+	     && PHYSFS_writeUBE32(fileHandle, serializeNetPlay->bAllowCaptureRecord)
+	     && PHYSFS_writeUBE32(fileHandle, serializeNetPlay->bAllowCapturePlay));
+}
+
+static bool deserializeNetPlay(PHYSFS_file* fileHandle, NETPLAY* serializeNetPlay)
+{
+	unsigned int i;
+
+	for (i = 0; i < MaxGames; ++i)
+	{
+		if (!deserializeGameStruct(fileHandle, &serializeNetPlay->games[i]))
+			return false;
+	}
+
+	for (i = 0; i < MaxNumberOfPlayers; ++i)
+	{
+		if (!deserializePlayer(fileHandle, &serializeNetPlay->players[i]))
+			return false;
+	}
+
+	return (PHYSFS_readUBE32(fileHandle, &serializeNetPlay->bComms)
+	     && PHYSFS_readUBE32(fileHandle, &serializeNetPlay->bHost)
+	     && PHYSFS_readUBE32(fileHandle, &serializeNetPlay->bLobbyLaunched)
+	     && PHYSFS_readUBE32(fileHandle, &serializeNetPlay->bSpectator)
+	     && PHYSFS_readUBE32(fileHandle, &serializeNetPlay->bCaptureInUse)
+	     && PHYSFS_readUBE32(fileHandle, &serializeNetPlay->bAllowCaptureRecord)
+	     && PHYSFS_readUBE32(fileHandle, &serializeNetPlay->bAllowCapturePlay));
+}
 
 #define GAME_SAVE_V7	\
-	UDWORD	gameTime;	\
-	UDWORD	GameType;		/* Type of game , one of the GTYPE_... enums. */ \
-	SDWORD	ScrollMinX;		/* Scroll Limits */ \
-	SDWORD	ScrollMinY; \
-	UDWORD	ScrollMaxX; \
-	UDWORD	ScrollMaxY; \
+	uint32_t    gameTime;	\
+	uint32_t    GameType;		/* Type of game , one of the GTYPE_... enums. */ \
+	int32_t     ScrollMinX;		/* Scroll Limits */ \
+	int32_t     ScrollMinY; \
+	uint32_t    ScrollMaxX; \
+	uint32_t    ScrollMaxY; \
 	char	levelName[MAX_LEVEL_SIZE]	//name of the level to load up when mid game
 
 typedef struct save_game_v7
 {
 	GAME_SAVE_V7;
 } SAVE_GAME_V7;
+
+static bool serializeSaveGameV7Data(PHYSFS_file* fileHandle, const SAVE_GAME_V7* serializeGame)
+{
+	return (PHYSFS_writeUBE32(fileHandle, serializeGame->gameTime)
+	     && PHYSFS_writeUBE32(fileHandle, serializeGame->GameType)
+	     && PHYSFS_writeSBE32(fileHandle, serializeGame->ScrollMinX)
+	     && PHYSFS_writeSBE32(fileHandle, serializeGame->ScrollMinY)
+	     && PHYSFS_writeUBE32(fileHandle, serializeGame->ScrollMaxX)
+	     && PHYSFS_writeUBE32(fileHandle, serializeGame->ScrollMaxY)
+	     && PHYSFS_write(fileHandle, serializeGame->levelName, MAX_LEVEL_SIZE, 1) == 1);
+}
+
+static bool deserializeSaveGameV7Data(PHYSFS_file* fileHandle, SAVE_GAME_V7* serializeGame)
+{
+	return (PHYSFS_readUBE32(fileHandle, &serializeGame->gameTime)
+	     && PHYSFS_readUBE32(fileHandle, &serializeGame->GameType)
+	     && PHYSFS_readSBE32(fileHandle, &serializeGame->ScrollMinX)
+	     && PHYSFS_readSBE32(fileHandle, &serializeGame->ScrollMinY)
+	     && PHYSFS_readUBE32(fileHandle, &serializeGame->ScrollMaxX)
+	     && PHYSFS_readUBE32(fileHandle, &serializeGame->ScrollMaxY)
+	     && PHYSFS_read(fileHandle, serializeGame->levelName, MAX_LEVEL_SIZE, 1) == 1);
+}
 
 #define GAME_SAVE_V10	\
 	GAME_SAVE_V7;		\
@@ -297,6 +595,38 @@ typedef struct save_game_v10
 	GAME_SAVE_V10;
 } SAVE_GAME_V10;
 
+static bool serializeSaveGameV10Data(PHYSFS_file* fileHandle, const SAVE_GAME_V10* serializeGame)
+{
+	unsigned int i;
+
+	if (!serializeSaveGameV7Data(fileHandle, (const SAVE_GAME_V7*) serializeGame))
+		return false;
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (!serializeSavePowerData(fileHandle, &serializeGame->power[i]))
+			return false;
+	}
+
+	return true;
+}
+
+static bool deserializeSaveGameV10Data(PHYSFS_file* fileHandle, SAVE_GAME_V10* serializeGame)
+{
+	unsigned int i;
+
+	if (!deserializeSaveGameV7Data(fileHandle, (SAVE_GAME_V7*) serializeGame))
+		return false;
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (!deserializeSavePowerData(fileHandle, &serializeGame->power[i]))
+			return false;
+	}
+
+	return true;
+}
+
 #define GAME_SAVE_V11	\
 	GAME_SAVE_V10;		\
 	iView currentPlayerPos
@@ -306,50 +636,241 @@ typedef struct save_game_v11
 	GAME_SAVE_V11;
 } SAVE_GAME_V11;
 
+static bool serializeSaveGameV11Data(PHYSFS_file* fileHandle, const SAVE_GAME_V11* serializeGame)
+{
+	return (serializeSaveGameV10Data(fileHandle, (const SAVE_GAME_V10*) serializeGame)
+	     && serializeiViewData(fileHandle, &serializeGame->currentPlayerPos));
+}
+
+static bool deserializeSaveGameV11Data(PHYSFS_file* fileHandle, SAVE_GAME_V11* serializeGame)
+{
+	return (deserializeSaveGameV10Data(fileHandle, (SAVE_GAME_V10*) serializeGame)
+	     && deserializeiViewData(fileHandle, &serializeGame->currentPlayerPos));
+}
+
 #define GAME_SAVE_V12	\
 	GAME_SAVE_V11;		\
-	UDWORD	missionTime;\
-	UDWORD	saveKey
+	uint32_t    missionTime;\
+	uint32_t    saveKey
 
 typedef struct save_game_v12
 {
 	GAME_SAVE_V12;
 } SAVE_GAME_V12;
 
+static bool serializeSaveGameV12Data(PHYSFS_file* fileHandle, const SAVE_GAME_V12* serializeGame)
+{
+	return (serializeSaveGameV11Data(fileHandle, (const SAVE_GAME_V11*) serializeGame)
+	     && PHYSFS_writeUBE32(fileHandle, serializeGame->missionTime)
+	     && PHYSFS_writeUBE32(fileHandle, serializeGame->saveKey));
+}
+
+static bool deserializeSaveGameV12Data(PHYSFS_file* fileHandle, SAVE_GAME_V12* serializeGame)
+{
+	return (deserializeSaveGameV11Data(fileHandle, (SAVE_GAME_V11*) serializeGame)
+	     && PHYSFS_readUBE32(fileHandle, &serializeGame->missionTime)
+	     && PHYSFS_readUBE32(fileHandle, &serializeGame->saveKey));
+}
+
 #define GAME_SAVE_V14			\
 	GAME_SAVE_V12;				\
-	SDWORD	missionOffTime;		\
-	SDWORD	missionETA;			\
-    UWORD   missionHomeLZ_X;	\
-    UWORD   missionHomeLZ_Y;	\
-	SDWORD	missionPlayerX;		\
-	SDWORD	missionPlayerY;		\
-	UWORD	iTranspEntryTileX[MAX_PLAYERS];	\
-	UWORD	iTranspEntryTileY[MAX_PLAYERS];	\
-	UWORD	iTranspExitTileX[MAX_PLAYERS];	\
-	UWORD	iTranspExitTileY[MAX_PLAYERS];	\
-	UDWORD 	aDefaultSensor[MAX_PLAYERS];	\
-	UDWORD	aDefaultECM[MAX_PLAYERS];		\
-	UDWORD	aDefaultRepair[MAX_PLAYERS]
+	int32_t     missionOffTime;		\
+	int32_t     missionETA;			\
+    uint16_t    missionHomeLZ_X;	\
+    uint16_t    missionHomeLZ_Y;	\
+	int32_t     missionPlayerX;		\
+	int32_t     missionPlayerY;		\
+	uint16_t    iTranspEntryTileX[MAX_PLAYERS];	\
+	uint16_t    iTranspEntryTileY[MAX_PLAYERS];	\
+	uint16_t    iTranspExitTileX[MAX_PLAYERS];	\
+	uint16_t    iTranspExitTileY[MAX_PLAYERS];	\
+	uint32_t    aDefaultSensor[MAX_PLAYERS];	\
+	uint32_t    aDefaultECM[MAX_PLAYERS];		\
+	uint32_t    aDefaultRepair[MAX_PLAYERS]
 
 typedef struct save_game_v14
 {
 	GAME_SAVE_V14;
 } SAVE_GAME_V14;
 
+static bool serializeSaveGameV14Data(PHYSFS_file* fileHandle, const SAVE_GAME_V14* serializeGame)
+{
+	unsigned int i;
+
+	if (!serializeSaveGameV12Data(fileHandle, (const SAVE_GAME_V12*) serializeGame)
+	 || !PHYSFS_writeSBE32(fileHandle, serializeGame->missionOffTime)
+	 || !PHYSFS_writeSBE32(fileHandle, serializeGame->missionETA)
+	 || !PHYSFS_writeUBE16(fileHandle, serializeGame->missionHomeLZ_X)
+	 || !PHYSFS_writeUBE16(fileHandle, serializeGame->missionHomeLZ_Y)
+	 || !PHYSFS_writeSBE32(fileHandle, serializeGame->missionPlayerX)
+	 || !PHYSFS_writeSBE32(fileHandle, serializeGame->missionPlayerY))
+		return false;
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+	     if (!PHYSFS_writeUBE16(fileHandle, serializeGame->iTranspEntryTileX[i]))
+		     return false;
+	}
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+	     if (!PHYSFS_writeUBE16(fileHandle, serializeGame->iTranspEntryTileY[i]))
+		     return false;
+	}
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+	     if (!PHYSFS_writeUBE16(fileHandle, serializeGame->iTranspExitTileX[i]))
+		     return false;
+	}
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+	     if (!PHYSFS_writeUBE16(fileHandle, serializeGame->iTranspExitTileY[i]))
+		     return false;
+	}
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+	     if (!PHYSFS_writeUBE32(fileHandle, serializeGame->aDefaultSensor[i]))
+		     return false;
+	}
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+	     if (!PHYSFS_writeUBE32(fileHandle, serializeGame->aDefaultECM[i]))
+		     return false;
+	}
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+	     if (!PHYSFS_writeUBE32(fileHandle, serializeGame->aDefaultRepair[i]))
+		     return false;
+	}
+
+	return true;
+}
+
+static bool deserializeSaveGameV14Data(PHYSFS_file* fileHandle, SAVE_GAME_V14* serializeGame)
+{
+	unsigned int i;
+
+	if (!deserializeSaveGameV12Data(fileHandle, (SAVE_GAME_V12*) serializeGame)
+	 || !PHYSFS_readSBE32(fileHandle, &serializeGame->missionOffTime)
+	 || !PHYSFS_readSBE32(fileHandle, &serializeGame->missionETA)
+	 || !PHYSFS_readUBE16(fileHandle, &serializeGame->missionHomeLZ_X)
+	 || !PHYSFS_readUBE16(fileHandle, &serializeGame->missionHomeLZ_Y)
+	 || !PHYSFS_readSBE32(fileHandle, &serializeGame->missionPlayerX)
+	 || !PHYSFS_readSBE32(fileHandle, &serializeGame->missionPlayerY))
+		return false;
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+	     if (!PHYSFS_readUBE16(fileHandle, &serializeGame->iTranspEntryTileX[i]))
+		     return false;
+	}
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+	     if (!PHYSFS_readUBE16(fileHandle, &serializeGame->iTranspEntryTileY[i]))
+		     return false;
+	}
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+	     if (!PHYSFS_readUBE16(fileHandle, &serializeGame->iTranspExitTileX[i]))
+		     return false;
+	}
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+	     if (!PHYSFS_readUBE16(fileHandle, &serializeGame->iTranspExitTileY[i]))
+		     return false;
+	}
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+	     if (!PHYSFS_readUBE32(fileHandle, &serializeGame->aDefaultSensor[i]))
+		     return false;
+	}
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+	     if (!PHYSFS_readUBE32(fileHandle, &serializeGame->aDefaultECM[i]))
+		     return false;
+	}
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+	     if (!PHYSFS_readUBE32(fileHandle, &serializeGame->aDefaultRepair[i]))
+		     return false;
+	}
+
+	return true;
+}
+
 #define GAME_SAVE_V15			\
 	GAME_SAVE_V14;				\
-	BOOL	offWorldKeepLists;\
-	UBYTE	aDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS];\
-	UDWORD	RubbleTile;\
-	UDWORD	WaterTile;\
-	UDWORD	fogColour;\
-	UDWORD	fogState
+	BOOL        offWorldKeepLists;\
+	uint8_t     aDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS];\
+	uint32_t    RubbleTile;\
+	uint32_t    WaterTile;\
+	uint32_t    fogColour;\
+	uint32_t    fogState
 
 typedef struct save_game_v15
 {
 	GAME_SAVE_V15;
 } SAVE_GAME_V15;
+
+static bool serializeSaveGameV15Data(PHYSFS_file* fileHandle, const SAVE_GAME_V15* serializeGame)
+{
+	unsigned int i, j;
+
+	if (!serializeSaveGameV14Data(fileHandle, (const SAVE_GAME_V14*) serializeGame)
+	 || !PHYSFS_writeSBE32(fileHandle, serializeGame->offWorldKeepLists))
+		return false;
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+		for (j = 0; j < MAX_RECYCLED_DROIDS; ++j)
+		{
+			if (!PHYSFS_writeUBE8(fileHandle, serializeGame->aDroidExperience[i][j]))
+				return false;
+		}
+	}
+
+	return (PHYSFS_writeUBE32(fileHandle, serializeGame->RubbleTile)
+	     && PHYSFS_writeUBE32(fileHandle, serializeGame->WaterTile)
+	     && PHYSFS_writeUBE32(fileHandle, serializeGame->fogColour)
+	     && PHYSFS_writeUBE32(fileHandle, serializeGame->fogState));
+}
+
+static bool deserializeSaveGameV15Data(PHYSFS_file* fileHandle, SAVE_GAME_V15* serializeGame)
+{
+	unsigned int i, j;
+	int32_t boolOffWorldKeepLists;
+
+	if (!deserializeSaveGameV14Data(fileHandle, (SAVE_GAME_V14*) serializeGame)
+	 || !PHYSFS_readSBE32(fileHandle, &boolOffWorldKeepLists))
+		return false;
+
+	serializeGame->offWorldKeepLists = boolOffWorldKeepLists;
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+		for (j = 0; j < MAX_RECYCLED_DROIDS; ++j)
+		{
+			if (!PHYSFS_readUBE8(fileHandle, &serializeGame->aDroidExperience[i][j]))
+				return false;
+		}
+	}
+
+	return (PHYSFS_readUBE32(fileHandle, &serializeGame->RubbleTile)
+	     && PHYSFS_readUBE32(fileHandle, &serializeGame->WaterTile)
+	     && PHYSFS_readUBE32(fileHandle, &serializeGame->fogColour)
+	     && PHYSFS_readUBE32(fileHandle, &serializeGame->fogState));
+}
 
 #define GAME_SAVE_V16			\
 	GAME_SAVE_V15;				\
@@ -360,46 +881,190 @@ typedef struct save_game_v16
 	GAME_SAVE_V16;
 } SAVE_GAME_V16;
 
+static bool serializeSaveGameV16Data(PHYSFS_file* fileHandle, const SAVE_GAME_V16* serializeGame)
+{
+	unsigned int i;
+
+	if (!serializeSaveGameV15Data(fileHandle, (const SAVE_GAME_V15*) serializeGame))
+		return false;
+
+	for (i = 0; i < MAX_NOGO_AREAS; ++i)
+	{
+		if (!serializeLandingZoneData(fileHandle, &serializeGame->sLandingZone[i]))
+			return false;
+	}
+
+	return true;
+}
+
+static bool deserializeSaveGameV16Data(PHYSFS_file* fileHandle, SAVE_GAME_V16* serializeGame)
+{
+	unsigned int i;
+
+	if (!deserializeSaveGameV15Data(fileHandle, (SAVE_GAME_V15*) serializeGame))
+		return false;
+
+	for (i = 0; i < MAX_NOGO_AREAS; ++i)
+	{
+		if (!deserializeLandingZoneData(fileHandle, &serializeGame->sLandingZone[i]))
+			return false;
+	}
+
+	return true;
+}
+
 #define GAME_SAVE_V17			\
 	GAME_SAVE_V16;				\
-	UDWORD   objId
+	uint32_t    objId
 
 typedef struct save_game_v17
 {
 	GAME_SAVE_V17;
 } SAVE_GAME_V17;
 
+static bool serializeSaveGameV17Data(PHYSFS_file* fileHandle, const SAVE_GAME_V17* serializeGame)
+{
+	return (serializeSaveGameV16Data(fileHandle, (const SAVE_GAME_V16*) serializeGame)
+	     && PHYSFS_writeUBE32(fileHandle, serializeGame->objId));
+}
+
+static bool deserializeSaveGameV17Data(PHYSFS_file* fileHandle, SAVE_GAME_V17* serializeGame)
+{
+	return (deserializeSaveGameV16Data(fileHandle, (SAVE_GAME_V16*) serializeGame)
+	     && PHYSFS_readUBE32(fileHandle, &serializeGame->objId));
+}
+
 #define GAME_SAVE_V18			\
 	GAME_SAVE_V17;				\
-	char		buildDate[MAX_STR_LENGTH];		\
-	UDWORD		oldestVersion;	\
-	UDWORD		validityKey
+	char        buildDate[MAX_STR_LENGTH];		\
+	uint32_t    oldestVersion;	\
+	uint32_t    validityKey
 
 typedef struct save_game_v18
 {
 	GAME_SAVE_V18;
 } SAVE_GAME_V18;
 
+static bool serializeSaveGameV18Data(PHYSFS_file* fileHandle, const SAVE_GAME_V18* serializeGame)
+{
+	return (serializeSaveGameV17Data(fileHandle, (const SAVE_GAME_V17*) serializeGame)
+	     && PHYSFS_write(fileHandle, serializeGame->buildDate, MAX_STR_LENGTH, 1) == 1
+	     && PHYSFS_writeUBE32(fileHandle, serializeGame->oldestVersion)
+	     && PHYSFS_writeUBE32(fileHandle, serializeGame->validityKey));
+}
+
+static bool deserializeSaveGameV18Data(PHYSFS_file* fileHandle, SAVE_GAME_V18* serializeGame)
+{
+	return (deserializeSaveGameV17Data(fileHandle, (SAVE_GAME_V17*) serializeGame)
+	     && PHYSFS_read(fileHandle, serializeGame->buildDate, MAX_STR_LENGTH, 1) == 1
+	     && PHYSFS_readUBE32(fileHandle, &serializeGame->oldestVersion)
+	     && PHYSFS_readUBE32(fileHandle, &serializeGame->validityKey));
+}
+
 #define GAME_SAVE_V19			\
 	GAME_SAVE_V18;				\
-	UBYTE alliances[MAX_PLAYERS][MAX_PLAYERS];\
-	UBYTE playerColour[MAX_PLAYERS];\
-	UBYTE radarZoom
+	uint8_t     alliances[MAX_PLAYERS][MAX_PLAYERS];\
+	uint8_t     playerColour[MAX_PLAYERS];\
+	uint8_t     radarZoom
 
 typedef struct save_game_v19
 {
 	GAME_SAVE_V19;
 } SAVE_GAME_V19;
 
+static bool serializeSaveGameV19Data(PHYSFS_file* fileHandle, const SAVE_GAME_V19* serializeGame)
+{
+	unsigned int i, j;
+
+	if (!serializeSaveGameV18Data(fileHandle, (const SAVE_GAME_V18*) serializeGame))
+		return false;
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+		for (j = 0; j < MAX_PLAYERS; ++j)
+		{
+			if (!PHYSFS_writeUBE8(fileHandle, serializeGame->alliances[i][j]))
+				return false;
+		}
+	}
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (!PHYSFS_writeUBE8(fileHandle, serializeGame->playerColour[i]))
+			return false;
+	}
+
+	return PHYSFS_writeUBE8(fileHandle, serializeGame->radarZoom);
+}
+
+static bool deserializeSaveGameV19Data(PHYSFS_file* fileHandle, SAVE_GAME_V19* serializeGame)
+{
+	unsigned int i, j;
+
+	if (!deserializeSaveGameV18Data(fileHandle, (SAVE_GAME_V18*) serializeGame))
+		return false;
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+		for (j = 0; j < MAX_PLAYERS; ++j)
+		{
+			if (!PHYSFS_readUBE8(fileHandle, &serializeGame->alliances[i][j]))
+				return false;
+		}
+	}
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (!PHYSFS_readUBE8(fileHandle, &serializeGame->playerColour[i]))
+			return false;
+	}
+
+	return PHYSFS_readUBE8(fileHandle, &serializeGame->radarZoom);
+}
+
 #define GAME_SAVE_V20			\
 	GAME_SAVE_V19;				\
-	UBYTE bDroidsToSafetyFlag;	\
-	Vector2i asVTOLReturnPos[MAX_PLAYERS]
+	uint8_t     bDroidsToSafetyFlag;	\
+	Vector2i    asVTOLReturnPos[MAX_PLAYERS]
 
 typedef struct save_game_v20
 {
 	GAME_SAVE_V20;
 } SAVE_GAME_V20;
+
+static bool serializeSaveGameV20Data(PHYSFS_file* fileHandle, const SAVE_GAME_V20* serializeGame)
+{
+	unsigned int i;
+
+	if (!serializeSaveGameV19Data(fileHandle, (const SAVE_GAME_V19*) serializeGame)
+	 || !PHYSFS_writeUBE8(fileHandle, serializeGame->bDroidsToSafetyFlag))
+		return false;
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (!serializeVector2i(fileHandle, &serializeGame->asVTOLReturnPos[i]))
+			return false;
+	}
+
+	return true;
+}
+
+static bool deserializeSaveGameV20Data(PHYSFS_file* fileHandle, SAVE_GAME_V20* serializeGame)
+{
+	unsigned int i;
+
+	if (!deserializeSaveGameV19Data(fileHandle, (SAVE_GAME_V19*) serializeGame)
+	 || !PHYSFS_readUBE8(fileHandle, &serializeGame->bDroidsToSafetyFlag))
+		return false;
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (!deserializeVector2i(fileHandle, &serializeGame->asVTOLReturnPos[i]))
+			return false;
+	}
+
+	return true;
+}
 
 #define GAME_SAVE_V22			\
 	GAME_SAVE_V20;				\
@@ -410,67 +1075,74 @@ typedef struct save_game_v22
 	GAME_SAVE_V22;
 } SAVE_GAME_V22;
 
+static bool serializeSaveGameV22Data(PHYSFS_file* fileHandle, const SAVE_GAME_V22* serializeGame)
+{
+	unsigned int i;
+
+	if (!serializeSaveGameV20Data(fileHandle, (const SAVE_GAME_V20*) serializeGame))
+		return false;
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (!serializeRunData(fileHandle, &serializeGame->asRunData[i]))
+			return false;
+	}
+
+	return true;
+}
+
+static bool deserializeSaveGameV22Data(PHYSFS_file* fileHandle, SAVE_GAME_V22* serializeGame)
+{
+	unsigned int i;
+
+	if (!deserializeSaveGameV20Data(fileHandle, (SAVE_GAME_V20*) serializeGame))
+		return false;
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (!deserializeRunData(fileHandle, &serializeGame->asRunData[i]))
+			return false;
+	}
+
+	return true;
+}
+
 #define GAME_SAVE_V24			\
 	GAME_SAVE_V22;				\
-	UDWORD reinforceTime;		\
-	UBYTE bPlayCountDown;	\
-	UBYTE bPlayerHasWon;	\
-	UBYTE bPlayerHasLost;	\
-	UBYTE dummy3
+	uint32_t    reinforceTime;		\
+	uint8_t     bPlayCountDown;	\
+	uint8_t     bPlayerHasWon;	\
+	uint8_t     bPlayerHasLost;	\
+	uint8_t     dummy3
 
 typedef struct save_game_v24
 {
 	GAME_SAVE_V24;
 } SAVE_GAME_V24;
 
+static bool serializeSaveGameV24Data(PHYSFS_file* fileHandle, const SAVE_GAME_V24* serializeGame)
+{
+	return (serializeSaveGameV22Data(fileHandle, (const SAVE_GAME_V22*) serializeGame)
+	     && PHYSFS_writeUBE32(fileHandle, serializeGame->reinforceTime)
+	     && PHYSFS_writeUBE8(fileHandle, serializeGame->bPlayCountDown)
+	     && PHYSFS_writeUBE8(fileHandle, serializeGame->bPlayerHasWon)
+	     && PHYSFS_writeUBE8(fileHandle, serializeGame->bPlayerHasLost)
+	     && PHYSFS_writeUBE8(fileHandle, serializeGame->dummy3));
+}
+
+static bool deserializeSaveGameV24Data(PHYSFS_file* fileHandle, SAVE_GAME_V24* serializeGame)
+{
+	return (deserializeSaveGameV22Data(fileHandle, (SAVE_GAME_V22*) serializeGame)
+	     && PHYSFS_readUBE32(fileHandle, &serializeGame->reinforceTime)
+	     && PHYSFS_readUBE8(fileHandle, &serializeGame->bPlayCountDown)
+	     && PHYSFS_readUBE8(fileHandle, &serializeGame->bPlayerHasWon)
+	     && PHYSFS_readUBE8(fileHandle, &serializeGame->bPlayerHasLost)
+	     && PHYSFS_readUBE8(fileHandle, &serializeGame->dummy3));
+}
+
 /*
 #define GAME_SAVE_V27		\
-	UDWORD	gameTime;		\
-	UDWORD	GameType;		\
-	SDWORD	ScrollMinX;		\
-	SDWORD	ScrollMinY;		\
-	UDWORD	ScrollMaxX;		\
-	UDWORD	ScrollMaxY;		\
-	char	levelName[MAX_LEVEL_SIZE];	\
-	SAVE_POWER	power[MAX_PLAYERS];		\
-	iView	currentPlayerPos;	\
-	UDWORD	missionTime;	\
-	UDWORD	saveKey;		\
-	SDWORD	missionOffTime;	\
-	SDWORD	missionETA;		\
-    UWORD   missionHomeLZ_X;\
-    UWORD   missionHomeLZ_Y;\
-	SDWORD	missionPlayerX;	\
-	SDWORD	missionPlayerY;	\
-	UWORD	iTranspEntryTileX[MAX_PLAYERS];	\
-	UWORD	iTranspEntryTileY[MAX_PLAYERS];	\
-	UWORD	iTranspExitTileX[MAX_PLAYERS];	\
-	UWORD	iTranspExitTileY[MAX_PLAYERS];	\
-	UDWORD 	aDefaultSensor[MAX_PLAYERS];	\
-	UDWORD	aDefaultECM[MAX_PLAYERS];		\
-	UDWORD	aDefaultRepair[MAX_PLAYERS];	\
-	BOOL	offWorldKeepLists;\
-	UWORD	aDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS];\
-	UDWORD	RubbleTile;		\
-	UDWORD	WaterTile;		\
-	UDWORD	fogColour;		\
-	UDWORD	fogState;		\
-	LANDING_ZONE   sLandingZone[MAX_NOGO_AREAS];\
-	UDWORD  objId;			\
-	char	buildDate[MAX_STR_LENGTH];		\
-	UDWORD	oldestVersion;	\
-	UDWORD	validityKey;\
-	UBYTE	alliances[MAX_PLAYERS][MAX_PLAYERS];\
-	UBYTE	playerColour[MAX_PLAYERS];\
-	UBYTE	radarZoom;		\
-	UBYTE	bDroidsToSafetyFlag;	\
-	POINT	asVTOLReturnPos[MAX_PLAYERS];\
-	RUN_DATA asRunData[MAX_PLAYERS];\
-	UDWORD	reinforceTime;	\
-	UBYTE	bPlayCountDown;	\
-	UBYTE	bPlayerHasWon;	\
-	UBYTE	bPlayerHasLost;	\
-	UBYTE	dummy3
+	GAME_SAVE_V24
 
 typedef struct save_game_v27
 {
@@ -479,41 +1151,115 @@ typedef struct save_game_v27
 */
 #define GAME_SAVE_V27			\
 	GAME_SAVE_V24;				\
-	UWORD	awDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS]
+	uint16_t    awDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS]
 
 typedef struct save_game_v27
 {
 	GAME_SAVE_V27;
 } SAVE_GAME_V27;
 
+static bool serializeSaveGameV27Data(PHYSFS_file* fileHandle, const SAVE_GAME_V27* serializeGame)
+{
+	unsigned int i, j;
+
+	if (!serializeSaveGameV24Data(fileHandle, (const SAVE_GAME_V24*) serializeGame))
+		return false;
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+		for (j = 0; j < MAX_RECYCLED_DROIDS; ++j)
+		{
+			if (!PHYSFS_writeUBE16(fileHandle, serializeGame->awDroidExperience[i][j]))
+				return false;
+		}
+	}
+
+	return true;
+}
+
+static bool deserializeSaveGameV27Data(PHYSFS_file* fileHandle, SAVE_GAME_V27* serializeGame)
+{
+	unsigned int i, j;
+
+	if (!deserializeSaveGameV24Data(fileHandle, (SAVE_GAME_V24*) serializeGame))
+		return false;
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+		for (j = 0; j < MAX_RECYCLED_DROIDS; ++j)
+		{
+			if (!PHYSFS_readUBE16(fileHandle, &serializeGame->awDroidExperience[i][j]))
+				return false;
+		}
+	}
+
+	return true;
+}
+
 #define GAME_SAVE_V29			\
 	GAME_SAVE_V27;				\
-	UWORD	missionScrollMinX;  \
-	UWORD	missionScrollMinY;  \
-	UWORD	missionScrollMaxX;  \
-	UWORD	missionScrollMaxY
+	uint16_t    missionScrollMinX;  \
+	uint16_t    missionScrollMinY;  \
+	uint16_t    missionScrollMaxX;  \
+	uint16_t    missionScrollMaxY
 
 typedef struct save_game_v29
 {
 	GAME_SAVE_V29;
 } SAVE_GAME_V29;
 
+static bool serializeSaveGameV29Data(PHYSFS_file* fileHandle, const SAVE_GAME_V29* serializeGame)
+{
+	return (serializeSaveGameV27Data(fileHandle, (const SAVE_GAME_V27*) serializeGame)
+	     && PHYSFS_writeUBE16(fileHandle, serializeGame->missionScrollMinX)
+	     && PHYSFS_writeUBE16(fileHandle, serializeGame->missionScrollMinY)
+	     && PHYSFS_writeUBE16(fileHandle, serializeGame->missionScrollMaxX)
+	     && PHYSFS_writeUBE16(fileHandle, serializeGame->missionScrollMaxY));
+}
+
+static bool deserializeSaveGameV29Data(PHYSFS_file* fileHandle, SAVE_GAME_V29* serializeGame)
+{
+	return (deserializeSaveGameV27Data(fileHandle, (SAVE_GAME_V27*) serializeGame)
+	     && PHYSFS_readUBE16(fileHandle, &serializeGame->missionScrollMinX)
+	     && PHYSFS_readUBE16(fileHandle, &serializeGame->missionScrollMinY)
+	     && PHYSFS_readUBE16(fileHandle, &serializeGame->missionScrollMaxX)
+	     && PHYSFS_readUBE16(fileHandle, &serializeGame->missionScrollMaxY));
+}
+
 #define GAME_SAVE_V30			\
 	GAME_SAVE_V29;				\
-    SDWORD  scrGameLevel;       \
-    UBYTE   bExtraVictoryFlag;  \
-    UBYTE   bExtraFailFlag;     \
-    UBYTE   bTrackTransporter
+    int32_t     scrGameLevel;       \
+    uint8_t     bExtraVictoryFlag;  \
+    uint8_t     bExtraFailFlag;     \
+    uint8_t     bTrackTransporter
 
 typedef struct save_game_v30
 {
 	GAME_SAVE_V30;
 } SAVE_GAME_V30;
 
+static bool serializeSaveGameV30Data(PHYSFS_file* fileHandle, const SAVE_GAME_V30* serializeGame)
+{
+	return (serializeSaveGameV29Data(fileHandle, (const SAVE_GAME_V29*) serializeGame)
+	     && PHYSFS_writeSBE32(fileHandle, serializeGame->scrGameLevel)
+	     && PHYSFS_writeUBE8(fileHandle, serializeGame->bExtraVictoryFlag)
+	     && PHYSFS_writeUBE8(fileHandle, serializeGame->bExtraFailFlag)
+	     && PHYSFS_writeUBE8(fileHandle, serializeGame->bTrackTransporter));
+}
+
+static bool deserializeSaveGameV30Data(PHYSFS_file* fileHandle, SAVE_GAME_V30* serializeGame)
+{
+	return (deserializeSaveGameV29Data(fileHandle, (SAVE_GAME_V29*) serializeGame)
+	     && PHYSFS_readSBE32(fileHandle, &serializeGame->scrGameLevel)
+	     && PHYSFS_readUBE8(fileHandle, &serializeGame->bExtraVictoryFlag)
+	     && PHYSFS_readUBE8(fileHandle, &serializeGame->bExtraFailFlag)
+	     && PHYSFS_readUBE8(fileHandle, &serializeGame->bTrackTransporter));
+}
+
 //extra code for the patch - saves out whether cheated with the mission timer
 #define GAME_SAVE_V31           \
     GAME_SAVE_V30;				\
-    SDWORD	missionCheatTime
+    int32_t     missionCheatTime
 
 typedef struct save_game_v31
 {
@@ -521,20 +1267,77 @@ typedef struct save_game_v31
 } SAVE_GAME_V31;
 
 
+static bool serializeSaveGameV31Data(PHYSFS_file* fileHandle, const SAVE_GAME_V31* serializeGame)
+{
+	return (serializeSaveGameV30Data(fileHandle, (const SAVE_GAME_V30*) serializeGame)
+	     && PHYSFS_writeSBE32(fileHandle, serializeGame->missionCheatTime));
+}
+
+static bool deserializeSaveGameV31Data(PHYSFS_file* fileHandle, SAVE_GAME_V31* serializeGame)
+{
+	return (deserializeSaveGameV30Data(fileHandle, (SAVE_GAME_V30*) serializeGame)
+	     && PHYSFS_readSBE32(fileHandle, &serializeGame->missionCheatTime));
+}
+
 // alexl. skirmish saves
 #define GAME_SAVE_V33           \
     GAME_SAVE_V31;				\
 	MULTIPLAYERGAME sGame;		\
-	NETPLAY			sNetPlay;	\
-	UDWORD			savePlayer;	\
-	char			sPName[32];	\
-	BOOL			multiPlayer;\
-	UDWORD			sPlayer2dpid[MAX_PLAYERS]
+	NETPLAY         sNetPlay;	\
+	uint32_t        savePlayer;	\
+	char            sPName[32];	\
+	BOOL            multiPlayer;\
+	uint32_t        sPlayer2dpid[MAX_PLAYERS]
 
 typedef struct save_game_v33
 {
 	GAME_SAVE_V33;
 } SAVE_GAME_V33;
+
+static bool serializeSaveGameV33Data(PHYSFS_file* fileHandle, const SAVE_GAME_V33* serializeGame)
+{
+	unsigned int i;
+
+	if (!serializeSaveGameV31Data(fileHandle, (const SAVE_GAME_V31*) serializeGame)
+	 || !serializeMultiplayerGame(fileHandle, &serializeGame->sGame)
+	 || !serializeNetPlay(fileHandle, &serializeGame->sNetPlay)
+	 || !PHYSFS_writeUBE32(fileHandle, serializeGame->savePlayer)
+	 || !PHYSFS_write(fileHandle, serializeGame->sPName, 1, 32) == 32
+	 || !PHYSFS_writeSBE32(fileHandle, serializeGame->multiPlayer))
+		return false;
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (!PHYSFS_writeUBE32(fileHandle, serializeGame->sPlayer2dpid[i]))
+			return false;
+	}
+
+	return true;
+}
+
+static bool deserializeSaveGameV33Data(PHYSFS_file* fileHandle, SAVE_GAME_V33* serializeGame)
+{
+	unsigned int i;
+	int32_t boolMultiPlayer;
+
+	if (!deserializeSaveGameV31Data(fileHandle, (SAVE_GAME_V31*) serializeGame)
+	 || !deserializeMultiplayerGame(fileHandle, &serializeGame->sGame)
+	 || !deserializeNetPlay(fileHandle, &serializeGame->sNetPlay)
+	 || !PHYSFS_readUBE32(fileHandle, &serializeGame->savePlayer)
+	 || PHYSFS_read(fileHandle, serializeGame->sPName, 1, 32) != 32
+	 || !PHYSFS_readSBE32(fileHandle, &boolMultiPlayer))
+		return false;
+
+	serializeGame->multiPlayer = boolMultiPlayer;
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (!PHYSFS_readUBE32(fileHandle, &serializeGame->sPlayer2dpid[i]))
+			return false;
+	}
+
+	return true;
+}
 
 #define GAME_SAVE_V34           \
     GAME_SAVE_V33;				\
@@ -547,10 +1350,50 @@ typedef struct save_game_v34
 } SAVE_GAME_V34;
 
 
+static bool serializeSaveGameV34Data(PHYSFS_file* fileHandle, const SAVE_GAME_V34* serializeGame)
+{
+	unsigned int i;
+	if (!serializeSaveGameV33Data(fileHandle, (const SAVE_GAME_V33*) serializeGame))
+		return false;
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (PHYSFS_write(fileHandle, serializeGame->sPlayerName[i], StringSize, 1) != 1)
+			return false;
+	}
+
+	return true;
+}
+
+static bool deserializeSaveGameV34Data(PHYSFS_file* fileHandle, SAVE_GAME_V34* serializeGame)
+{
+	unsigned int i;
+	if (!deserializeSaveGameV33Data(fileHandle, (SAVE_GAME_V33*) serializeGame))
+		return false;
+
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (PHYSFS_read(fileHandle, serializeGame->sPlayerName[i], StringSize, 1) != 1)
+			return false;
+	}
+
+	return true;
+}
+
 typedef struct save_game
 {
 	GAME_SAVE_V34;
 } SAVE_GAME;
+
+static bool serializeSaveGameData(PHYSFS_file* fileHandle, const SAVE_GAME* serializeGame)
+{
+	return serializeSaveGameV34Data(fileHandle, (const SAVE_GAME_V34*) serializeGame);
+}
+
+static bool deserializeSaveGameData(PHYSFS_file* fileHandle, SAVE_GAME* serializeGame)
+{
+	return deserializeSaveGameV34Data(fileHandle, (SAVE_GAME_V34*) serializeGame);
+}
 
 #define TEMP_DROID_MAXPROGS	3
 #define	SAVE_COMP_PROGRAM	8
@@ -1237,10 +2080,10 @@ static BOOL IsScenario;
  *	Local ProtoTypes
  */
 /***************************************************************************/
-static BOOL gameLoadV7(char *pFileData, UDWORD filesize);
-static BOOL gameLoadV(char *pFileData, UDWORD filesize, UDWORD version);
-static BOOL writeGameFile(char *pFileName, SDWORD saveType);
-static BOOL writeMapFile(char *pFileName);
+static bool gameLoadV7(PHYSFS_file* fileHandle);
+static bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version);
+static bool writeGameFile(const char* fileName, SDWORD saveType);
+static bool writeMapFile(const char* fileName);
 
 static BOOL loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity);
 
@@ -1340,39 +2183,25 @@ static char *getSaveStructNameV(SAVE_STRUCTURE *psSaveStructure)
 so can be called in levLoadData when starting a game from a load save game*/
 
 // -----------------------------------------------------------------------------------------
-BOOL loadGameInit(const char *pGameToLoad )
+bool loadGameInit(const char* fileName)
 {
-	char			*pFileData = NULL;
-	UDWORD			fileSize;
-
-	/* Load in the chosen file data */
-	pFileData = fileLoadBuffer;
-	if (!loadFileToBuffer(pGameToLoad, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
-	{
-		debug(LOG_ERROR, "loadGameInit: Fail1\n" );
-		goto error;
-	}
-
-	if (!gameLoad(pFileData, fileSize))
+	if (!gameLoad(fileName))
 	{
 		// FIXME Probably should never arrive here?
-		debug(LOG_ERROR, "loadGameInit: Fail2\n" );
-		goto error;
+		debug(LOG_ERROR, "loadGameInit: Fail2\n");
+
+		/* Start the game clock */
+		gameTimeStart();
+
+//		if (multiPlayerInUse)
+//		{
+//			bMultiPlayer = TRUE;				// reenable multi player messages.
+//			multiPlayerInUse = FALSE;
+//		}
+		return FALSE;
 	}
 
-	return TRUE;
-
-error:
-
-	/* Start the game clock */
-	gameTimeStart();
-
-//	if (multiPlayerInUse)
-//	{
-//		bMultiPlayer = TRUE;				// reenable multi player messages.
-//		multiPlayerInUse = FALSE;
-//	}
-	return FALSE;
+	return true;
 }
 
 
@@ -2815,6 +3644,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	/* Write the data to the file */
 	if (!writeGameFile(aFileName, saveType))
 	{
+		debug(LOG_ERROR, "saveGame: writeGameFile(\"%s\") failed", aFileName);
 		goto error;
 	}
 
@@ -3139,22 +3969,25 @@ error:
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL writeMapFile(char *pFileName)
+bool writeMapFile(const char* fileName)
 {
-	char *pFileData = NULL;
+	char* pFileData = NULL;
 	UDWORD fileSize;
-	BOOL status = TRUE;
 
 	/* Get the save data */
-	status = mapSave(&pFileData, &fileSize);
+	bool status = mapSave(&pFileData, &fileSize);
 
-	if (status) {
+	if (status)
+	{
 		/* Write the data to the file */
-		status = saveFile(pFileName, pFileData, fileSize);
+		status = saveFile(fileName, pFileData, fileSize);
 	}
-	if (pFileData != NULL) {
+
+	if (pFileData != NULL)
+	{
 		free(pFileData);
 	}
+
 	return status;
 }
 
@@ -3162,339 +3995,155 @@ BOOL writeMapFile(char *pFileName)
 
 
 // -----------------------------------------------------------------------------------------
-BOOL gameLoad(char *pFileData, UDWORD filesize)
+bool gameLoad(const char* fileName)
 {
-	GAME_SAVEHEADER			*psHeader;
+	GAME_SAVEHEADER fileHeader;
 
-	debug( LOG_WZ, "gameLoad" );
-
-	/* Check the file type */
-	psHeader = (GAME_SAVEHEADER *)pFileData;
-	if (psHeader->aFileType[0] != 'g' || psHeader->aFileType[1] != 'a' ||
-		psHeader->aFileType[2] != 'm' || psHeader->aFileType[3] != 'e')
+	PHYSFS_file* fileHandle = openLoadFile(fileName, true);
+	if (!fileHandle)
 	{
-		debug( LOG_ERROR, "gameLoad: Incorrect file type" );
-		abort();
-		return FALSE;
+		// Failure to open the file is a failure to load the specified savegame
+		return true;
 	}
 
-	/* GAME_SAVEHEADER */
-	endian_udword(&psHeader->version);
+	debug(LOG_WZ, "gameLoad");
 
-	//increment to the start of the data
-	pFileData += GAME_HEADER_SIZE;
+	// Read the header from the file
+	if (PHYSFS_read(fileHandle, fileHeader.aFileType, sizeof(fileHeader.aFileType), 1) != 1
+	 || !PHYSFS_readUBE32(fileHandle, &fileHeader.version))
+	{
+		debug(LOG_ERROR, "gameLoad: error while reading header from file (%s): %s", fileName, PHYSFS_getLastError());
+		PHYSFS_close(fileHandle);
+		return false;
+	}
 
-	debug( LOG_NEVER, "gl .gam file is version %d\n", psHeader->version );
+	// Check the header to see if we've been given a file of the right type
+	if (fileHeader.aFileType[0] != 'g'
+	 || fileHeader.aFileType[1] != 'a'
+	 || fileHeader.aFileType[2] != 'm'
+	 || fileHeader.aFileType[3] != 'e')
+	{
+		debug(LOG_ERROR, "gameLoad: Weird file type found? Has header letters - '%c' '%c' '%c' '%c' (should be 'g' 'a' 'm' 'e')",
+		      fileHeader.aFileType[0],
+		      fileHeader.aFileType[1],
+		      fileHeader.aFileType[2],
+		      fileHeader.aFileType[3]);
+
+		PHYSFS_close(fileHandle);
+		abort();
+		return false;
+	}
+
+	debug(LOG_NEVER, "gl .gam file is version %d\n", fileHeader.version);
+
 	//set main version Id from game file
-	saveGameVersion = psHeader->version;
+	saveGameVersion = fileHeader.version;
 
 
 	/* Check the file version */
-	if (psHeader->version < VERSION_7)
+	if (fileHeader.version < VERSION_7)
 	{
-		debug( LOG_ERROR, "gameLoad: unsupported save format version %d", psHeader->version );
+		debug(LOG_ERROR, "gameLoad: unsupported save format version %d", fileHeader.version);
 		abort();
-		return FALSE;
+		return false;
 	}
-	else if (psHeader->version < VERSION_9)
+	else if (fileHeader.version < VERSION_9)
 	{
-		if (!gameLoadV7(pFileData, filesize))
-		{
-			return FALSE;
-		}
+		return gameLoadV7(fileHandle);
 	}
-	else if (psHeader->version <= CURRENT_VERSION_NUM)
+	else if (fileHeader.version <= CURRENT_VERSION_NUM)
 	{
-		if (!gameLoadV(pFileData, filesize, psHeader->version))
-		{
-			return FALSE;
-		}
+		return gameLoadV(fileHandle, fileHeader.version);
 	}
 	else
 	{
-		debug( LOG_ERROR, "gameLoad: undefined save format version %d", psHeader->version );
+		debug(LOG_ERROR, "gameLoad: undefined save format version %d", fileHeader.version);
 		abort();
-		return FALSE;
-	}
-
-//	DBMB(("IsScenario = %d\nfor the game that's being loaded.", IsScenario));
-
-	return TRUE;
-}
-
-// Fix endianness of a savegame
-static void endian_SaveGameV(SAVE_GAME* psSaveGame, UDWORD version) {
-    UDWORD i,j;
-	/* SAVE_GAME is GAME_SAVE_V33 */
-	/* GAME_SAVE_V33 includes GAME_SAVE_V31 */
-	if(version >= VERSION_33)
-	{
-		endian_udword(&psSaveGame->sGame.power);
-		endian_uword(&psSaveGame->sGame.bytesPerSec);
-		for(i = 0; i < MaxGames; i++) {
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwSize);
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwFlags);
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwMaxPlayers);
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwCurrentPlayers);
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser1);
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser2);
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser3);
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser4);
-		}
-		for(i = 0; i < MaxNumberOfPlayers; i++)
-			endian_udword(&psSaveGame->sNetPlay.players[i].dpid);
-		endian_udword(&psSaveGame->sNetPlay.playercount);
-		endian_udword(&psSaveGame->sNetPlay.dpidPlayer);
-		endian_udword(&psSaveGame->savePlayer);
-		for(i = 0; i < MAX_PLAYERS; i++)
-			endian_udword(&psSaveGame->sPlayer2dpid[i]);
-	}
-	/* GAME_SAVE_V31 includes GAME_SAVE_V30 */
-	if(version >= VERSION_31) {
-		endian_sdword(&psSaveGame->missionCheatTime);
-	}
-	/* GAME_SAVE_V30 includes GAME_SAVE_V29 */
-	if(version >= VERSION_30) {
-		endian_sdword(&psSaveGame->scrGameLevel);
-	}
-	/* GAME_SAVE_V29 includes GAME_SAVE_V27 */
-	if(version >= VERSION_29) {
-		endian_uword(&psSaveGame->missionScrollMinX);
-		endian_uword(&psSaveGame->missionScrollMinY);
-		endian_uword(&psSaveGame->missionScrollMaxX);
-		endian_uword(&psSaveGame->missionScrollMaxY);
-	}
-	/* GAME_SAVE_V27 includes GAME_SAVE_V24 */
-	if(version >= VERSION_27) {
-		for(i = 0; i < MAX_PLAYERS; i++)
-			for(j = 0; j < MAX_RECYCLED_DROIDS; j++)
-				endian_uword(&psSaveGame->awDroidExperience[i][j]);
-	}
-	/* GAME_SAVE_V24 includes GAME_SAVE_V22 */
-	if(version >= VERSION_24) {
-		endian_udword(&psSaveGame->reinforceTime);
-	}
-	/* GAME_SAVE_V22 includes GAME_SAVE_V20 */
-	if(version >= VERSION_22) {
-		for(i = 0; i < MAX_PLAYERS; i++) {
-			endian_sdword(&psSaveGame->asRunData[i].sPos.x);
-			endian_sdword(&psSaveGame->asRunData[i].sPos.y);
-		}
-	}
-	/* GAME_SAVE_V20 includes GAME_SAVE_V19 */
-	if(version >= VERSION_20) {
-		for(i = 0; i < MAX_PLAYERS; i++) {
-			endian_sdword(&psSaveGame->asVTOLReturnPos[i].x);
-			endian_sdword(&psSaveGame->asVTOLReturnPos[i].y);
-		}
-	}
-	/* GAME_SAVE_V19 includes GAME_SAVE_V18 */
-	if(version >= VERSION_19) {
-	}
-	/* GAME_SAVE_V18 includes GAME_SAVE_V17 */
-	if(version >= VERSION_18) {
-		endian_udword(&psSaveGame->oldestVersion);
-		endian_udword(&psSaveGame->validityKey);
-	}
-	/* GAME_SAVE_V17 includes GAME_SAVE_V16 */
-	if(version >= VERSION_17) {
-		endian_udword(&psSaveGame->objId);
-	}
-	/* GAME_SAVE_V16 includes GAME_SAVE_V15 */
-	if(version >= VERSION_16) {
-	}
-	/* GAME_SAVE_V15 includes GAME_SAVE_V14 */
-	if(version >= VERSION_15) {
-		endian_udword(&psSaveGame->RubbleTile);
-		endian_udword(&psSaveGame->WaterTile);
-		endian_udword(&psSaveGame->fogColour);
-		endian_udword(&psSaveGame->fogState);
-	}
-	/* GAME_SAVE_V14 includes GAME_SAVE_V12 */
-	if(version >= VERSION_14) {
-		endian_sdword(&psSaveGame->missionOffTime);
-		endian_sdword(&psSaveGame->missionETA);
-		endian_uword(&psSaveGame->missionHomeLZ_X);
-		endian_uword(&psSaveGame->missionHomeLZ_Y);
-		endian_sdword(&psSaveGame->missionPlayerX);
-		endian_sdword(&psSaveGame->missionPlayerY);
-		for(i = 0; i < MAX_PLAYERS; i++) {
-			endian_uword(&psSaveGame->iTranspEntryTileX[i]);
-			endian_uword(&psSaveGame->iTranspEntryTileY[i]);
-			endian_uword(&psSaveGame->iTranspExitTileX[i]);
-			endian_uword(&psSaveGame->iTranspExitTileY[i]);
-			endian_udword(&psSaveGame->aDefaultSensor[i]);
-			endian_udword(&psSaveGame->aDefaultECM[i]);
-			endian_udword(&psSaveGame->aDefaultRepair[i]);
-		}
-	}
-	/* GAME_SAVE_V12 includes GAME_SAVE_V11 */
-	if(version >= VERSION_12) {
-		endian_udword(&psSaveGame->missionTime);
-		endian_udword(&psSaveGame->saveKey);
-	}
-	/* GAME_SAVE_V11 includes GAME_SAVE_V10 */
-	if(version >= VERSION_11) {
-		endian_sdword(&psSaveGame->currentPlayerPos.p.x);
-		endian_sdword(&psSaveGame->currentPlayerPos.p.y);
-		endian_sdword(&psSaveGame->currentPlayerPos.p.z);
-		endian_sdword(&psSaveGame->currentPlayerPos.r.x);
-		endian_sdword(&psSaveGame->currentPlayerPos.r.y);
-		endian_sdword(&psSaveGame->currentPlayerPos.r.z);
-	}
-	/* GAME_SAVE_V10 includes GAME_SAVE_V7 */
-	if(version >= VERSION_10) {
-		for(i = 0; i < MAX_PLAYERS; i++) {
-			endian_udword(&psSaveGame->power[i].currentPower);
-			endian_udword(&psSaveGame->power[i].extractedPower);
-		}
-	}
-	/* GAME_SAVE_V7 */
-	if(version >= VERSION_7) {
-		endian_udword(&psSaveGame->gameTime);
-		endian_udword(&psSaveGame->GameType);
-		endian_sdword(&psSaveGame->ScrollMinX);
-		endian_sdword(&psSaveGame->ScrollMinY);
-		endian_udword(&psSaveGame->ScrollMaxX);
-		endian_udword(&psSaveGame->ScrollMaxY);
+		return false;
 	}
 }
 
 // -----------------------------------------------------------------------------------------
 // Get campaign number stuff is not needed in this form on the PSX (thank you very much)
-static BOOL getCampaignV(char *pFileData, UDWORD filesize, UDWORD version)
+static UDWORD getCampaignV(PHYSFS_file* fileHandle, unsigned int version)
 {
-	SAVE_GAME		*psSaveGame;
-	UDWORD			sizeOfSaveGame = 0;
-	UDWORD			campaign;
+	SAVE_GAME_V14 saveGame;
 
-	debug(LOG_WZ, "getCampaignV: version=%d", version);
+	debug(LOG_WZ, "getCampaignV: version = %u", version);
 
-	psSaveGame = (SAVE_GAME *) pFileData;
-
-
-	//size is now variable so only check old save games
 	if (version < VERSION_14)
 	{
 		return 0;
 	}
-	else if (version <= VERSION_16)
-	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V16);
-	}
-	else if (version <= VERSION_17)
-	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V17);
-	}
-	else if (version <= VERSION_18)
-	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V18);
-	}
-	else if (version <= VERSION_19)
-	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V19);
-	}
-	else if (version <= VERSION_21)
-	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V20);
-	}
-	else if (version <= VERSION_23)
-	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V22);
-	}
-	else if (version <= VERSION_26)
-	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V24);
-	}
-	else if (version <= VERSION_28)
-	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V27);
-	}
-    else if (version <= VERSION_29)
-    {
-        sizeOfSaveGame = sizeof(SAVE_GAME_V29);
-    }
-    else if (version <= VERSION_30)
-    {
-        sizeOfSaveGame = sizeof(SAVE_GAME_V30);
-    }
-	else if (version <= VERSION_32)
-    {
-        sizeOfSaveGame = sizeof(SAVE_GAME_V31);
-    }
-	else if (version <= VERSION_33)
-    {
-        sizeOfSaveGame = sizeof(SAVE_GAME_V33);
-    }
+	// We only need VERSION 12 data (saveGame.saveKey)
 	else if (version <= CURRENT_VERSION_NUM)
 	{
-		sizeOfSaveGame = sizeof(SAVE_GAME);
+		if (!deserializeSaveGameV14Data(fileHandle, &saveGame))
+		{
+			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			abort();
+			return 0;
+		}
 	}
 
-	if ((sizeOfSaveGame + GAME_HEADER_SIZE) > filesize)
-	{
-		debug( LOG_ERROR, "getCampaign: unexpected end of file (expected %d, have %d)" ,
-			(sizeOfSaveGame + GAME_HEADER_SIZE) , filesize);
-		abort();
-		return FALSE;
-	}
+//	savedGameTime = saveGame.gameTime;
 
-	endian_SaveGameV(psSaveGame, version);
-
-//	savedGameTime = psSaveGame->gameTime;
-
-	campaign = psSaveGame->saveKey;
-	campaign &= (SAVEKEY_ONMISSION - 1);
-	return campaign;
+	return saveGame.saveKey & (SAVEKEY_ONMISSION - 1);
 }
 
 // -----------------------------------------------------------------------------------------
 // Returns the campaign number  --- apparently this is does alot less than it look like
     /// it now does even less than it looks like on the psx ... cause its pc only
-UDWORD getCampaign(char *pGameToLoad, BOOL *bSkipCDCheck)
+UDWORD getCampaign(const char* fileName)
 {
-	char *pFileData = NULL;
-	UDWORD			fileSize;
-	GAME_SAVEHEADER			*psHeader;
+	GAME_SAVEHEADER fileHeader;
 
-	debug(LOG_WZ, "getCampaign: %s", pGameToLoad);
-
-	/* Load in the chosen file data */
-	pFileData = fileLoadBuffer;
-	if (!loadFileToBuffer(pGameToLoad, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+	PHYSFS_file* fileHandle = openLoadFile(fileName, true);
+	if (!fileHandle)
 	{
-		debug( LOG_NEVER, "loadgame: Fail2\n" );
-		return 0;
+		// Failure to open the file is a failure to load the specified savegame
+		return true;
 	}
 
-	// loaded the .gam file so parse the data
-	/* Check the file type */
-	psHeader = (GAME_SAVEHEADER *)pFileData;
-	if (psHeader->aFileType[0] != 'g' || psHeader->aFileType[1] != 'a' ||
-		psHeader->aFileType[2] != 'm' || psHeader->aFileType[3] != 'e')
+	debug(LOG_WZ, "getCampaign: %s", fileName);
+
+	// Read the header from the file
+	if (PHYSFS_read(fileHandle, fileHeader.aFileType, sizeof(fileHeader.aFileType), 1) != 1
+	 || !PHYSFS_readUBE32(fileHandle, &fileHeader.version))
 	{
-		debug( LOG_ERROR, "getCampaign: Incorrect file type" );
+		debug(LOG_ERROR, "getCampaign: error while reading header from file (%s): %s", fileName, PHYSFS_getLastError());
+		PHYSFS_close(fileHandle);
+		return false;
+	}
+
+	// Check the header to see if we've been given a file of the right type
+	if (fileHeader.aFileType[0] != 'g'
+	 || fileHeader.aFileType[1] != 'a'
+	 || fileHeader.aFileType[2] != 'm'
+	 || fileHeader.aFileType[3] != 'e')
+	{
+		debug(LOG_ERROR, "getCampaign: Weird file type found? Has header letters - '%c' '%c' '%c' '%c' (should be 'g' 'a' 'm' 'e')",
+		      fileHeader.aFileType[0],
+		      fileHeader.aFileType[1],
+		      fileHeader.aFileType[2],
+		      fileHeader.aFileType[3]);
+
+		PHYSFS_close(fileHandle);
 		abort();
-		return 0;
+		return false;
 	}
 
-	/* GAME_SAVEHEADER */
-	endian_udword(&psHeader->version);
+	debug(LOG_NEVER, "gl .gam file is version %d\n", fileHeader.version);
 
-	//increment to the start of the data
-	pFileData += GAME_HEADER_SIZE;
-
-	debug( LOG_NEVER, "gl .gam file is version %d\n", psHeader->version );
 	//set main version Id from game file
-	saveGameVersion = psHeader->version;
+	saveGameVersion = fileHeader.version;
 
 
 	/* Check the file version */
-	if (psHeader->version < VERSION_14)
+	if (fileHeader.version < VERSION_14)
 	{
 		return 0;
 	}
-
 
 	// what the arse bollocks is this
 			// the campaign number is fine prior to saving
@@ -3502,24 +4151,14 @@ UDWORD getCampaign(char *pGameToLoad, BOOL *bSkipCDCheck)
 			// then don't bother putting it back in again
 			// when loading so it screws loads of stuff?!?
 	// dont check skirmish saves.
-	else if( psHeader->version >= VERSION_33)
+	if (fileHeader.version <= CURRENT_VERSION_NUM)
 	{
-		if(((SAVE_GAME *)pFileData)->multiPlayer == 1)
-		{
-//			return 0;
-			*bSkipCDCheck = TRUE;
-		}
-	}
-
-
-	if (psHeader->version <= CURRENT_VERSION_NUM)
-	{
-		return getCampaignV(pFileData, fileSize, psHeader->version);
+		return getCampaignV(fileHandle, fileHeader.version);
 	}
 
 	else
 	{
-		debug( LOG_ERROR, "getCampaign: undefined save format version %d", psHeader->version );
+		debug(LOG_ERROR, "getCampaign: undefined save format version %d", fileHeader.version);
 		abort();
 		return 0;
 	}
@@ -3538,63 +4177,53 @@ void game_SetValidityKey(UDWORD keys)
 
 // -----------------------------------------------------------------------------------------
 /* code specific to version 7 of a save game */
-BOOL gameLoadV7(char *pFileData, UDWORD filesize)
+bool gameLoadV7(PHYSFS_file* fileHandle)
 {
-	SAVE_GAME_V7				*psSaveGame;
-	LEVEL_DATASET				*psNewLevel;
+	SAVE_GAME_V7 saveGame;
+	if (!deserializeSaveGameV7Data(fileHandle, &saveGame))
+	{
+		debug(LOG_ERROR, "gameLoadV7: error while reading file: %s", PHYSFS_getLastError());
+		abort();
+		return false;
+	}
+
 
 //	DBERROR(("gameLoadV7: this is and outdated save game"));
 
-	psSaveGame = (SAVE_GAME_V7 *) pFileData;
-
-	if ((sizeof(SAVE_GAME_V7) + GAME_HEADER_SIZE) > filesize)
-	{
-		debug( LOG_ERROR, "gameLoad: unexpected end of file" );
-		abort();
-		return FALSE;
-	}
-
-	/* GAME_SAVE_V7 */
-	endian_udword(&psSaveGame->gameTime);
-	endian_udword(&psSaveGame->GameType);
-	endian_sdword(&psSaveGame->ScrollMinX);
-	endian_sdword(&psSaveGame->ScrollMinY);
-	endian_udword(&psSaveGame->ScrollMaxX);
-	endian_udword(&psSaveGame->ScrollMaxY);
-
-	savedGameTime = psSaveGame->gameTime;
+	savedGameTime = saveGame.gameTime;
 
 	//set the scroll varaibles
-	startX = psSaveGame->ScrollMinX;
-	startY = psSaveGame->ScrollMinY;
-	width = psSaveGame->ScrollMaxX - psSaveGame->ScrollMinX;
-	height = psSaveGame->ScrollMaxY - psSaveGame->ScrollMinY;
-	gameType = psSaveGame->GameType;
+	startX = saveGame.ScrollMinX;
+	startY = saveGame.ScrollMinY;
+	width = saveGame.ScrollMaxX - saveGame.ScrollMinX;
+	height = saveGame.ScrollMaxY - saveGame.ScrollMinY;
+	gameType = saveGame.GameType;
 	//set IsScenario to TRUE if not a user saved game
 	if (gameType == GTYPE_SAVE_START)
 	{
+		LEVEL_DATASET* psNewLevel;
+
 		IsScenario = FALSE;
 		//copy the level name across
-		strcpy(pLevelName, psSaveGame->levelName);
+		strcpy(pLevelName, saveGame.levelName);
 		//load up the level dataset
 		if (!levLoadData(pLevelName, saveGameName, gameType))
 		{
-			return FALSE;
+			return false;
 		}
 		// find the level dataset
 		if (!levFindDataSet(pLevelName, &psNewLevel))
 		{
-			debug( LOG_ERROR, "gameLoadV6: couldn't find level data" );
+			debug( LOG_ERROR, "gameLoadV7: couldn't find level data" );
 			abort();
-			return FALSE;
+			return false;
 		}
 		//check to see whether mission automatically starts
 		//shouldn't be able to be any other value at the moment!
 		if (psNewLevel->type == LDS_CAMSTART
-			|| psNewLevel->type == LDS_BETWEEN
-			|| psNewLevel->type == LDS_EXPAND
-			|| psNewLevel->type == LDS_EXPAND_LIMBO
-		    )
+		 || psNewLevel->type == LDS_BETWEEN
+		 || psNewLevel->type == LDS_EXPAND
+		 || psNewLevel->type == LDS_EXPAND_LIMBO)
 		{
 			launchMission();
 		}
@@ -3605,118 +4234,198 @@ BOOL gameLoadV7(char *pFileData, UDWORD filesize)
 		IsScenario = TRUE;
 	}
 
-	return TRUE;
+	return true;
 }
 
 // -----------------------------------------------------------------------------------------
 /* non specific version of a save game */
-BOOL gameLoadV(char *pFileData, UDWORD filesize, UDWORD version)
+bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 {
-	SAVE_GAME		*psSaveGame;
-//	LEVEL_DATASET	*psNewLevel;
-	UBYTE			inc;
-	SDWORD			i, j;
+	unsigned int i, j;
 	static	SAVE_POWER	powerSaved[MAX_PLAYERS];
-	UDWORD			sizeOfSaveGame = 0;
 	UDWORD			player;
 	char			date[MAX_STR_LENGTH];
 
-	debug(LOG_WZ, "gameLoadV: version %d", version);
-
-	psSaveGame = &saveGameData;
-
-	memcpy(psSaveGame, pFileData,sizeof(SAVE_GAME));
+	debug(LOG_WZ, "gameLoadV: version %u", version);
 
   	//VERSION_7 AND EARLIER LOADED SEPARATELY
 
 	//size is now variable so only check old save games
 	if (version <= VERSION_10)
 	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V10);
+		if (!deserializeSaveGameV10Data(fileHandle, (SAVE_GAME_V10*)&saveGameData))
+		{
+			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			abort();
+			return false;
+		}
 	}
 	else if (version == VERSION_11)
 	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V11);
+		if (!deserializeSaveGameV11Data(fileHandle, (SAVE_GAME_V11*)&saveGameData))
+		{
+			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			abort();
+			return false;
+		}
 	}
 	else if (version <= VERSION_12)
 	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V12);
+		if (!deserializeSaveGameV12Data(fileHandle, (SAVE_GAME_V12*)&saveGameData))
+		{
+			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			abort();
+			return false;
+		}
 	}
 	else if (version <= VERSION_14)
 	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V14);
+		if (!deserializeSaveGameV14Data(fileHandle, (SAVE_GAME_V14*)&saveGameData))
+		{
+			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			abort();
+			return false;
+		}
 	}
 	else if (version <= VERSION_15)
 	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V15);
+		if (!deserializeSaveGameV15Data(fileHandle, (SAVE_GAME_V15*)&saveGameData))
+		{
+			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			abort();
+			return false;
+		}
 	}
 	else if (version <= VERSION_16)
 	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V16);
+		if (!deserializeSaveGameV16Data(fileHandle, (SAVE_GAME_V16*)&saveGameData))
+		{
+			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			abort();
+			return false;
+		}
 	}
 	else if (version <= VERSION_17)
 	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V17);
+		if (!deserializeSaveGameV17Data(fileHandle, (SAVE_GAME_V17*)&saveGameData))
+		{
+			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			abort();
+			return false;
+		}
 	}
 	else if (version <= VERSION_18)
 	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V18);
+		if (!deserializeSaveGameV18Data(fileHandle, (SAVE_GAME_V18*)&saveGameData))
+		{
+			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			abort();
+			return false;
+		}
 	}
 	else if (version <= VERSION_19)
 	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V19);
+		if (!deserializeSaveGameV19Data(fileHandle, (SAVE_GAME_V19*)&saveGameData))
+		{
+			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			abort();
+			return false;
+		}
 	}
 	else if (version <= VERSION_21)
 	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V20);
+		if (!deserializeSaveGameV20Data(fileHandle, (SAVE_GAME_V20*)&saveGameData))
+		{
+			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			abort();
+			return false;
+		}
 	}
 	else if (version <= VERSION_23)
 	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V22);
+		if (!deserializeSaveGameV22Data(fileHandle, (SAVE_GAME_V22*)&saveGameData))
+		{
+			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			abort();
+			return false;
+		}
 	}
 	else if (version <= VERSION_26)
 	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V24);
+		if (!deserializeSaveGameV24Data(fileHandle, (SAVE_GAME_V24*)&saveGameData))
+		{
+			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			abort();
+			return false;
+		}
 	}
 	else if (version <= VERSION_28)
 	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V27);
+		if (!deserializeSaveGameV27Data(fileHandle, (SAVE_GAME_V27*)&saveGameData))
+		{
+			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			abort();
+			return false;
+		}
 	}
 	else if (version <= VERSION_29)
 	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V29);
+		if (!deserializeSaveGameV29Data(fileHandle, (SAVE_GAME_V29*)&saveGameData))
+		{
+			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			abort();
+			return false;
+		}
 	}
 	else if (version <= VERSION_30)
 	{
-		sizeOfSaveGame = sizeof(SAVE_GAME_V30);
+		if (!deserializeSaveGameV30Data(fileHandle, (SAVE_GAME_V30*)&saveGameData))
+		{
+			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			abort();
+			return false;
+		}
 	}
 	else if (version <= VERSION_32)
     {
-        sizeOfSaveGame = sizeof(SAVE_GAME_V31);
+		if (!deserializeSaveGameV31Data(fileHandle, (SAVE_GAME_V31*)&saveGameData))
+		{
+			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			abort();
+			return false;
+		}
     }
 	else if (version <= VERSION_33)
     {
-        sizeOfSaveGame = sizeof(SAVE_GAME_V33);
+		if (!deserializeSaveGameV33Data(fileHandle, (SAVE_GAME_V33*)&saveGameData))
+		{
+			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			abort();
+			return false;
+		}
     }
 	else if (version <= CURRENT_VERSION_NUM)
 	{
-		sizeOfSaveGame = sizeof(SAVE_GAME);
+		if (!deserializeSaveGameData(fileHandle, &saveGameData))
+		{
+			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			abort();
+			return false;
+		}
 	}
-
-	if ((sizeOfSaveGame + GAME_HEADER_SIZE) > filesize)
+	else
 	{
-		debug( LOG_ERROR, "gameLoad: unexpected end of file" );
+		debug(LOG_ERROR, "gameLoadV: out of range version number for savegame %u", version);
 		abort();
-		return FALSE;
+		return false;
 	}
-    endian_SaveGameV(psSaveGame, version);
 
-	savedGameTime = psSaveGame->gameTime;
+	savedGameTime = saveGameData.gameTime;
 
 	if (version >= VERSION_12)
 	{
-		mission.startTime = psSaveGame->missionTime;
-		if (psSaveGame->saveKey & SAVEKEY_ONMISSION)
+		mission.startTime = saveGameData.missionTime;
+		if (saveGameData.saveKey & SAVEKEY_ONMISSION)
 		{
 			saveGameOnMission = TRUE;
 		}
@@ -3731,16 +4440,16 @@ BOOL gameLoadV(char *pFileData, UDWORD filesize, UDWORD version)
 		saveGameOnMission = FALSE;
 	}
 	//set the scroll varaibles
-	startX = psSaveGame->ScrollMinX;
-	startY = psSaveGame->ScrollMinY;
-	width = psSaveGame->ScrollMaxX - psSaveGame->ScrollMinX;
-	height = psSaveGame->ScrollMaxY - psSaveGame->ScrollMinY;
-	gameType = psSaveGame->GameType;
+	startX = saveGameData.ScrollMinX;
+	startY = saveGameData.ScrollMinY;
+	width = saveGameData.ScrollMaxX - saveGameData.ScrollMinX;
+	height = saveGameData.ScrollMaxY - saveGameData.ScrollMinY;
+	gameType = saveGameData.GameType;
 
 	if (version >= VERSION_11)
 	{
 		//camera position
-		disp3d_setView(&(psSaveGame->currentPlayerPos));
+		disp3d_setView(&saveGameData.currentPlayerPos);
 	}
 
 	//load mission data from save game these values reloaded after load game
@@ -3748,35 +4457,36 @@ BOOL gameLoadV(char *pFileData, UDWORD filesize, UDWORD version)
 	if (version >= VERSION_14)
 	{
 		//mission data
-		mission.time		=	psSaveGame->missionOffTime;
-		mission.ETA			=	psSaveGame->missionETA;
-		mission.homeLZ_X	=	psSaveGame->missionHomeLZ_X;
-		mission.homeLZ_Y	=	psSaveGame->missionHomeLZ_Y;
-		mission.playerX		=	psSaveGame->missionPlayerX;
-		mission.playerY		=	psSaveGame->missionPlayerY;
+		mission.time     = saveGameData.missionOffTime;
+		mission.ETA      = saveGameData.missionETA;
+		mission.homeLZ_X = saveGameData.missionHomeLZ_X;
+		mission.homeLZ_Y = saveGameData.missionHomeLZ_Y;
+		mission.playerX  = saveGameData.missionPlayerX;
+		mission.playerY  = saveGameData.missionPlayerY;
+
 		for (player = 0; player < MAX_PLAYERS; player++)
 		{
-			mission.iTranspEntryTileX[player]	= psSaveGame->iTranspEntryTileX[player];
-			mission.iTranspEntryTileY[player]	= psSaveGame->iTranspEntryTileY[player];
-			mission.iTranspExitTileX[player]	= psSaveGame->iTranspExitTileX[player];
-			mission.iTranspExitTileY[player]	= psSaveGame->iTranspExitTileY[player];
-			aDefaultSensor[player]				= psSaveGame->aDefaultSensor[player];
-			aDefaultECM[player]					= psSaveGame->aDefaultECM[player];
-			aDefaultRepair[player]				= psSaveGame->aDefaultRepair[player];
+			mission.iTranspEntryTileX[player]	= saveGameData.iTranspEntryTileX[player];
+			mission.iTranspEntryTileY[player]	= saveGameData.iTranspEntryTileY[player];
+			mission.iTranspExitTileX[player]	= saveGameData.iTranspExitTileX[player];
+			mission.iTranspExitTileY[player]	= saveGameData.iTranspExitTileY[player];
+			aDefaultSensor[player]				= saveGameData.aDefaultSensor[player];
+			aDefaultECM[player]					= saveGameData.aDefaultECM[player];
+			aDefaultRepair[player]				= saveGameData.aDefaultRepair[player];
 		}
 	}
 
 	if (version >= VERSION_15)
 	{
-		offWorldKeepLists	= psSaveGame->offWorldKeepLists;
-		setRubbleTile(psSaveGame->RubbleTile);
-		setUnderwaterTile(psSaveGame->WaterTile);
-		if (psSaveGame->fogState == 0)//no fog
+		offWorldKeepLists	= saveGameData.offWorldKeepLists;
+		setRubbleTile(saveGameData.RubbleTile);
+		setUnderwaterTile(saveGameData.WaterTile);
+		if (saveGameData.fogState == 0)//no fog
 		{
 			pie_EnableFog(FALSE);
 			fogStatus = 0;
 		}
-		else if (psSaveGame->fogState == 1)//fog using old code assume background and depth
+		else if (saveGameData.fogState == 1)//fog using old code assume background and depth
 		{
 			if (war_GetFog())
 			{
@@ -3798,22 +4508,22 @@ BOOL gameLoadV(char *pFileData, UDWORD filesize, UDWORD version)
 			{
 				pie_EnableFog(FALSE);
 			}
-			fogStatus = psSaveGame->fogState;
+			fogStatus = saveGameData.fogState;
 			fogStatus &= FOG_FLAGS;
 		}
-		pie_SetFogColour(psSaveGame->fogColour);
+		pie_SetFogColour(saveGameData.fogColour);
 	}
 
 	if (version >= VERSION_17)
 	{
-		objID = psSaveGame->objId;// this must be done before any new Ids added
-		savedObjId = psSaveGame->objId;
+		objID = saveGameData.objId;// this must be done before any new Ids added
+		savedObjId = saveGameData.objId;
 	}
 
 	if (version >= VERSION_18)//version 18
 	{
-		validityKey = psSaveGame->validityKey;
-		oldestSaveGameVersion = psSaveGame->oldestVersion;
+		validityKey = saveGameData.validityKey;
+		oldestSaveGameVersion = saveGameData.oldestVersion;
 		if (oldestSaveGameVersion > version)
 		{
 			oldestSaveGameVersion = version;
@@ -3826,10 +4536,10 @@ BOOL gameLoadV(char *pFileData, UDWORD filesize, UDWORD version)
 
 		strcpy(date,__DATE__);
 		ASSERT( strlen(date)<MAX_STR_LENGTH,"BuildDate; String error" );
-		if (strcmp(psSaveGame->buildDate,date) != 0)
+		if (strcmp(saveGameData.buildDate,date) != 0)
 		{
 //			ASSERT( gameType != GTYPE_SAVE_MIDMISSION,"Mid-game save out of date. Continue with caution." );
-			debug( LOG_NEVER, "saveGame build date differs;\nsavegame %s\n build    %s\n", psSaveGame->buildDate, date );
+			debug( LOG_NEVER, "saveGame build date differs;\nsavegame %s\n build    %s\n", saveGameData.buildDate, date );
 			validityKey = validityKey|VALIDITYKEY_DATE;
 			if (gameType == GTYPE_SAVE_MIDMISSION)
 			{
@@ -3839,7 +4549,7 @@ BOOL gameLoadV(char *pFileData, UDWORD filesize, UDWORD version)
 	}
 	else
 	{
-		debug( LOG_NEVER, "saveGame build date differs;\nsavegame pre-Version 18 (%s)\n build    %s\n", psSaveGame->buildDate, date );
+		debug( LOG_NEVER, "saveGame build date differs;\nsavegame pre-Version 18 (%s)\n build    %s\n", saveGameData.buildDate, date );
 		oldestSaveGameVersion = 1;
 		validityKey = VALIDITYKEY_DATE;
 	}
@@ -3851,78 +4561,78 @@ BOOL gameLoadV(char *pFileData, UDWORD filesize, UDWORD version)
 		{
 			for(j=0; j<MAX_PLAYERS; j++)
 			{
-				alliances[i][j] = psSaveGame->alliances[i][j];
+				alliances[i][j] = saveGameData.alliances[i][j];
 			}
 		}
 		for(i=0; i<MAX_PLAYERS; i++)
 		{
-			setPlayerColour(i,psSaveGame->playerColour[i]);
+			setPlayerColour(i,saveGameData.playerColour[i]);
 		}
-		SetRadarZoom(psSaveGame->radarZoom);
+		SetRadarZoom(saveGameData.radarZoom);
 	}
 
 	if (version >= VERSION_20)//version 20
 	{
-		setDroidsToSafetyFlag(psSaveGame->bDroidsToSafetyFlag);
-		for (inc = 0; inc < MAX_PLAYERS; inc++)
+		setDroidsToSafetyFlag(saveGameData.bDroidsToSafetyFlag);
+		for (i = 0; i < MAX_PLAYERS; ++i)
 		{
-			memcpy(&asVTOLReturnPos[inc], &(psSaveGame->asVTOLReturnPos[inc]), sizeof(Vector2i));
+			memcpy(&asVTOLReturnPos[i], &saveGameData.asVTOLReturnPos[i], sizeof(Vector2i));
 		}
 	}
 
 	if (version >= VERSION_22)//version 22
 	{
-		for (inc = 0; inc < MAX_PLAYERS; inc++)
+		for (i = 0; i < MAX_PLAYERS; ++i)
 		{
-			memcpy(&asRunData[inc], &(psSaveGame->asRunData[inc]), sizeof(RUN_DATA));
+			memcpy(&asRunData[i], &saveGameData.asRunData[i], sizeof(RUN_DATA));
 		}
 	}
 
 	if (saveGameVersion >= VERSION_24)//V24
 	{
-		missionSetReinforcementTime(psSaveGame->reinforceTime);
+		missionSetReinforcementTime(saveGameData.reinforceTime);
 
 		// horrible hack to catch savegames that were saving garbage into these fields
-		if (psSaveGame->bPlayCountDown <= 1)
+		if (saveGameData.bPlayCountDown <= 1)
 		{
-			setPlayCountDown(psSaveGame->bPlayCountDown);
+			setPlayCountDown(saveGameData.bPlayCountDown);
 		}
-		if (psSaveGame->bPlayerHasWon <= 1)
+		if (saveGameData.bPlayerHasWon <= 1)
 		{
-			setPlayerHasWon(psSaveGame->bPlayerHasWon);
+			setPlayerHasWon(saveGameData.bPlayerHasWon);
 		}
-		if (psSaveGame->bPlayerHasLost <= 1)
+		if (saveGameData.bPlayerHasLost <= 1)
 		{
-			setPlayerHasLost(psSaveGame->bPlayerHasLost);
+			setPlayerHasLost(saveGameData.bPlayerHasLost);
 		}
 	}
 
     if (saveGameVersion >= VERSION_29)
     {
-        mission.scrollMinX = psSaveGame->missionScrollMinX;
-        mission.scrollMinY = psSaveGame->missionScrollMinY;
-        mission.scrollMaxX = psSaveGame->missionScrollMaxX;
-        mission.scrollMaxY = psSaveGame->missionScrollMaxY;
+        mission.scrollMinX = saveGameData.missionScrollMinX;
+        mission.scrollMinY = saveGameData.missionScrollMinY;
+        mission.scrollMaxX = saveGameData.missionScrollMaxX;
+        mission.scrollMaxY = saveGameData.missionScrollMaxY;
     }
 
     if (saveGameVersion >= VERSION_30)
     {
-        scrGameLevel = psSaveGame->scrGameLevel;
-        bExtraVictoryFlag = psSaveGame->bExtraVictoryFlag;
-        bExtraFailFlag = psSaveGame->bExtraFailFlag;
-        bTrackTransporter = psSaveGame->bTrackTransporter;
+        scrGameLevel = saveGameData.scrGameLevel;
+        bExtraVictoryFlag = saveGameData.bExtraVictoryFlag;
+        bExtraFailFlag = saveGameData.bExtraFailFlag;
+        bTrackTransporter = saveGameData.bTrackTransporter;
     }
 
     if (saveGameVersion >= VERSION_31)
     {
-        mission.cheatTime = psSaveGame->missionCheatTime;
+        mission.cheatTime = saveGameData.missionCheatTime;
     }
 
     for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		for (inc = 0; inc < MAX_RECYCLED_DROIDS; inc++)
+		for (i = 0; i < MAX_RECYCLED_DROIDS; ++i)
 		{
-			aDroidExperience[player][inc]	= 0;//clear experience before
+			aDroidExperience[player][i]	= 0;//clear experience before
 		}
 	}
 
@@ -3930,24 +4640,24 @@ BOOL gameLoadV(char *pFileData, UDWORD filesize, UDWORD version)
 	if ((gameType == GTYPE_SAVE_START) ||
 		(gameType == GTYPE_SAVE_MIDMISSION))
 	{
-		for (inc = 0; inc < MAX_PLAYERS; inc++)
+		for (i = 0; i < MAX_PLAYERS; ++i)
 		{
-			powerSaved[inc].currentPower = psSaveGame->power[inc].currentPower;
-			powerSaved[inc].extractedPower = psSaveGame->power[inc].extractedPower;
+			powerSaved[i].currentPower = saveGameData.power[i].currentPower;
+			powerSaved[i].extractedPower = saveGameData.power[i].extractedPower;
 		}
 
 		for (player = 0; player < MAX_PLAYERS; player++)
 		{
-			for (inc = 0; inc < MAX_RECYCLED_DROIDS; inc++)
+			for (i = 0; i < MAX_RECYCLED_DROIDS; ++i)
 			{
-				aDroidExperience[player][inc]	= 0;//clear experience before building saved units
+				aDroidExperience[player][i] = 0;//clear experience before building saved units
 			}
 		}
 
 
 		IsScenario = FALSE;
 		//copy the level name across
-		strcpy(pLevelName, psSaveGame->levelName);
+		strcpy(pLevelName, saveGameData.levelName);
 		//load up the level dataset
 		if (!levLoadData(pLevelName, saveGameName, gameType))
 		{
@@ -3973,19 +4683,19 @@ BOOL gameLoadV(char *pFileData, UDWORD filesize, UDWORD version)
 		{
 			PLAYERSTATS		playerStats;
 
-			bMultiPlayer	= psSaveGame->multiPlayer;
-			NetPlay			= psSaveGame->sNetPlay;
-			selectedPlayer	= psSaveGame->savePlayer;
+			bMultiPlayer	= saveGameData.multiPlayer;
+			NetPlay			= saveGameData.sNetPlay;
+			selectedPlayer	= saveGameData.savePlayer;
 			productionPlayer = selectedPlayer;
-			game			= psSaveGame->sGame;
+			game			= saveGameData.sGame;
 			cmdDroidMultiExpBoost(TRUE);
-			for(inc=0;inc<MAX_PLAYERS;inc++)
+			for(i = 0; i < MAX_PLAYERS; ++i)
 			{
-				player2dpid[inc] = psSaveGame->sPlayer2dpid[inc];
+				player2dpid[i] = saveGameData.sPlayer2dpid[i];
 			}
 			if(bMultiPlayer)
 			{
-				loadMultiStats(psSaveGame->sPName,&playerStats);				// stats stuff
+				loadMultiStats(saveGameData.sPName,&playerStats);				// stats stuff
 				setMultiStats(NetPlay.dpidPlayer,playerStats,FALSE);
 				setMultiStats(NetPlay.dpidPlayer,playerStats,TRUE);
 			}
@@ -4001,23 +4711,23 @@ BOOL gameLoadV(char *pFileData, UDWORD filesize, UDWORD version)
 	if (saveGameVersion >= VERSION_34)
 	{
 		for(i=0;i<MAX_PLAYERS;i++)
-			(void)setPlayerName(i, psSaveGame->sPlayerName[i]);
+			(void)setPlayerName(i, saveGameData.sPlayerName[i]);
 	}
 
     //don't adjust any power if a camStart (gameType is set to GTYPE_SCENARIO_START when a camChange saveGame is loaded)
     if (gameType != GTYPE_SCENARIO_START)
     {
 	    //set the players power
-	    for (inc = 0; inc < MAX_PLAYERS; inc++)
+	    for (i = 0; i < MAX_PLAYERS; ++i)
 	    {
             //only overwrite selectedPlayer's power on a startMission save game
-            if (gameType == GTYPE_SAVE_MIDMISSION || inc == selectedPlayer)
+            if (gameType == GTYPE_SAVE_MIDMISSION || i == selectedPlayer)
             {
-    		    asPower[inc]->currentPower = powerSaved[inc].currentPower;
-	    	    asPower[inc]->extractedPower = powerSaved[inc].extractedPower;
+    		    asPower[i]->currentPower = powerSaved[i].currentPower;
+	    	    asPower[i]->extractedPower = powerSaved[i].extractedPower;
             }
 		    //init the last structure
-		    asPower[inc]->psLastPowered = NULL;
+		    asPower[i]->psLastPowered = NULL;
 	    }
     }
 
@@ -4029,48 +4739,44 @@ BOOL gameLoadV(char *pFileData, UDWORD filesize, UDWORD version)
 /*
 Writes the game specifics to a file
 */
-BOOL writeGameFile(char *pFileName, SDWORD saveType)
+static bool writeGameFile(const char* fileName, SDWORD saveType)
 {
-	char *pFileData = NULL;
-	UDWORD				fileSize, inc;
-	UDWORD				player;
-	SDWORD				i, j;
-	GAME_SAVEHEADER		*psHeader;
-	SAVE_GAME			*psSaveGame;
-	LANDING_ZONE		*psLandingZone;
-	char				date[MAX_STR_SIZE];
-	BOOL status = TRUE;
+	GAME_SAVEHEADER fileHeader;
+	SAVE_GAME       saveGame;
+	bool            status;
+	unsigned int    i, j;
+
+	PHYSFS_file* fileHandle = openSaveFile(fileName);
+	if (!fileHandle)
+	{
+		debug(LOG_ERROR, "writeGameFile: openSaveFile(\"%s\") failed", fileName);
+		return false;
+	}
+
+	fileHeader.aFileType[0] = 'g';
+	fileHeader.aFileType[1] = 'a';
+	fileHeader.aFileType[2] = 'm';
+	fileHeader.aFileType[3] = 'e';
+
+	fileHeader.version = CURRENT_VERSION_NUM;
+
+	if (PHYSFS_write(fileHandle, fileHeader.aFileType, sizeof(fileHeader.aFileType), 1) != 1
+	 || !PHYSFS_writeUBE32(fileHandle, fileHeader.version))
+	{
+		debug(LOG_ERROR, "game.c:writeGameFile: could not write header to %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
+		PHYSFS_close(fileHandle);
+		return false;
+	}
 
 	ASSERT( saveType == GTYPE_SAVE_START ||
 			saveType == GTYPE_SAVE_MIDMISSION,
 			"writeGameFile: invalid save type" );
 
-
-	/* Allocate the data buffer */
-	fileSize = GAME_HEADER_SIZE + sizeof(SAVE_GAME);
-	pFileData = (char*)malloc(fileSize);
-	if (pFileData == NULL)
-	{
-		debug( LOG_ERROR, "Out of memory" );
-		abort();
-		return FALSE;
-	}
-
-	/* Put the file header on the file */
-	psHeader = (GAME_SAVEHEADER *)pFileData;
-	psHeader->aFileType[0] = 'g';
-	psHeader->aFileType[1] = 'a';
-	psHeader->aFileType[2] = 'm';
-	psHeader->aFileType[3] = 'e';
-	psHeader->version = CURRENT_VERSION_NUM;
-
-	psSaveGame = (SAVE_GAME*)(pFileData + GAME_HEADER_SIZE);
-
 	// saveKeymissionIsOffworld
-	psSaveGame->saveKey = getCampaignNumber();
+	saveGame.saveKey = getCampaignNumber();
 	if (missionIsOffworld())
 	{
-		psSaveGame->saveKey |= SAVEKEY_ONMISSION;
+		saveGame.saveKey |= SAVEKEY_ONMISSION;
 		saveGameOnMission = TRUE;
 	}
 	else
@@ -4080,16 +4786,16 @@ BOOL writeGameFile(char *pFileName, SDWORD saveType)
 
 
 	/* Put the save game data into the buffer */
-	psSaveGame->gameTime = gameTime;
-	psSaveGame->missionTime = mission.startTime;
+	saveGame.gameTime = gameTime;
+	saveGame.missionTime = mission.startTime;
 
 	//put in the scroll data
-	psSaveGame->ScrollMinX = scrollMinX;
-	psSaveGame->ScrollMinY = scrollMinY;
-	psSaveGame->ScrollMaxX = scrollMaxX;
-	psSaveGame->ScrollMaxY = scrollMaxY;
+	saveGame.ScrollMinX = scrollMinX;
+	saveGame.ScrollMinY = scrollMinY;
+	saveGame.ScrollMaxX = scrollMaxX;
+	saveGame.ScrollMaxY = scrollMaxY;
 
-	psSaveGame->GameType = saveType;
+	saveGame.GameType = saveType;
 
 	//save the current level so we can load up the STARTING point of the mission
 	if (strlen(pLevelName) > MAX_LEVEL_SIZE)
@@ -4097,249 +4803,144 @@ BOOL writeGameFile(char *pFileName, SDWORD saveType)
 		ASSERT( FALSE,
 			"writeGameFile:Unable to save level name - too long (max20) - %s",
 			pLevelName );
-		goto error;
+
+		return false;
 	}
-	strcpy(psSaveGame->levelName, pLevelName);
+	strcpy(saveGame.levelName, pLevelName);
 
 	//save out the players power
-	for (inc=0; inc < MAX_PLAYERS; inc++)
+	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		psSaveGame->power[inc].currentPower = asPower[inc]->currentPower;
-		psSaveGame->power[inc].extractedPower = asPower[inc]->extractedPower;
+		saveGame.power[i].currentPower = asPower[i]->currentPower;
+		saveGame.power[i].extractedPower = asPower[i]->extractedPower;
 	}
 
 	//camera position
-	disp3d_getView(&(psSaveGame->currentPlayerPos));
+	disp3d_getView(&(saveGame.currentPlayerPos));
 
 	//mission data
-//	psSaveGame->missionStartTime =		mission.startTime;
-	psSaveGame->missionOffTime =		mission.time;
-	psSaveGame->missionETA =			mission.ETA;
-    psSaveGame->missionCheatTime =		mission.cheatTime;
-	psSaveGame->missionHomeLZ_X =		mission.homeLZ_X;
-	psSaveGame->missionHomeLZ_Y =		mission.homeLZ_Y;
-	psSaveGame->missionPlayerX =		mission.playerX;
-	psSaveGame->missionPlayerY =		mission.playerY;
-    psSaveGame->missionScrollMinX =     (UWORD)mission.scrollMinX;
-    psSaveGame->missionScrollMinY =     (UWORD)mission.scrollMinY;
-    psSaveGame->missionScrollMaxX =     (UWORD)mission.scrollMaxX;
-    psSaveGame->missionScrollMaxY =     (UWORD)mission.scrollMaxY;
+//	saveGame.missionStartTime =		mission.startTime;
+	saveGame.missionOffTime =		mission.time;
+	saveGame.missionETA =			mission.ETA;
+    saveGame.missionCheatTime =		mission.cheatTime;
+	saveGame.missionHomeLZ_X =		mission.homeLZ_X;
+	saveGame.missionHomeLZ_Y =		mission.homeLZ_Y;
+	saveGame.missionPlayerX =		mission.playerX;
+	saveGame.missionPlayerY =		mission.playerY;
+    saveGame.missionScrollMinX =     (UWORD)mission.scrollMinX;
+    saveGame.missionScrollMinY =     (UWORD)mission.scrollMinY;
+    saveGame.missionScrollMaxX =     (UWORD)mission.scrollMaxX;
+    saveGame.missionScrollMaxY =     (UWORD)mission.scrollMaxY;
 
-	psSaveGame->offWorldKeepLists = offWorldKeepLists;
-	psSaveGame->RubbleTile	= getRubbleTileNum();
-	psSaveGame->WaterTile	= getWaterTileNum();
-	psSaveGame->fogColour	= pie_GetFogColour();
-	psSaveGame->fogState	= fogStatus;
+	saveGame.offWorldKeepLists = offWorldKeepLists;
+	saveGame.RubbleTile	= getRubbleTileNum();
+	saveGame.WaterTile	= getWaterTileNum();
+	saveGame.fogColour	= pie_GetFogColour();
+	saveGame.fogState	= fogStatus;
 	if(pie_GetFogEnabled())
 	{
-		psSaveGame->fogState	= fogStatus | FOG_ENABLED;
+		saveGame.fogState	= fogStatus | FOG_ENABLED;
 	}
 
-	for (player = 0; player < MAX_PLAYERS; player++)
+	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		psSaveGame->iTranspEntryTileX[player]	= mission.iTranspEntryTileX[player];
-		psSaveGame->iTranspEntryTileY[player]	= mission.iTranspEntryTileY[player];
-		psSaveGame->iTranspExitTileX[player]	= mission.iTranspExitTileX[player];
-		psSaveGame->iTranspExitTileY[player]	= mission.iTranspExitTileY[player];
-		psSaveGame->aDefaultSensor[player]		= aDefaultSensor[player];
-		psSaveGame->aDefaultECM[player]			= aDefaultECM[player];
-		psSaveGame->aDefaultRepair[player]		= aDefaultRepair[player];
-		for (inc = 0; inc < MAX_RECYCLED_DROIDS; inc++)
+		saveGame.iTranspEntryTileX[i] = mission.iTranspEntryTileX[i];
+		saveGame.iTranspEntryTileY[i] = mission.iTranspEntryTileY[i];
+		saveGame.iTranspExitTileX[i]  = mission.iTranspExitTileX[i];
+		saveGame.iTranspExitTileY[i]  = mission.iTranspExitTileY[i];
+		saveGame.aDefaultSensor[i]    = aDefaultSensor[i];
+		saveGame.aDefaultECM[i]       = aDefaultECM[i];
+		saveGame.aDefaultRepair[i]    = aDefaultRepair[i];
+
+		for (j = 0; j < MAX_RECYCLED_DROIDS; ++j)
 		{
-			psSaveGame->awDroidExperience[player][inc]	= aDroidExperience[player][inc];
+			saveGame.awDroidExperience[i][j]	= aDroidExperience[i][j];
 		}
 	}
 
-	for (inc = 0; inc < MAX_NOGO_AREAS; inc++)
+	for (i = 0; i < MAX_NOGO_AREAS; ++i)
 	{
-		psLandingZone = getLandingZone(inc);
-		psSaveGame->sLandingZone[inc].x1	= psLandingZone->x1;//incase struct changes
-		psSaveGame->sLandingZone[inc].x2	= psLandingZone->x2;
-		psSaveGame->sLandingZone[inc].y1	= psLandingZone->y1;
-		psSaveGame->sLandingZone[inc].y2	= psLandingZone->y2;
+		LANDING_ZONE* psLandingZone = getLandingZone(i);
+		saveGame.sLandingZone[i].x1	= psLandingZone->x1; // in case struct changes
+		saveGame.sLandingZone[i].x2	= psLandingZone->x2;
+		saveGame.sLandingZone[i].y1	= psLandingZone->y1;
+		saveGame.sLandingZone[i].y2	= psLandingZone->y2;
 	}
 
 	//version 17
-	psSaveGame->objId = objID;
+	saveGame.objId = objID;
 
 	//version 18
-	strcpy(date,__DATE__);
-	ASSERT( strlen(date)<MAX_STR_LENGTH,"BuildDate; String error" );
-	strcpy(psSaveGame->buildDate,date);
-	psSaveGame->oldestVersion = oldestSaveGameVersion;
-	psSaveGame->validityKey = validityKey;
+	ASSERT(strlen(__DATE__) < MAX_STR_LENGTH, "BuildDate; String error" );
+	strcpy(saveGame.buildDate, __DATE__);
+	saveGame.oldestVersion = oldestSaveGameVersion;
+	saveGame.validityKey = validityKey;
 
 	//version 19
 	for(i=0; i<MAX_PLAYERS; i++)
 	{
 		for(j=0; j<MAX_PLAYERS; j++)
 		{
-			psSaveGame->alliances[i][j] = alliances[i][j];
+			saveGame.alliances[i][j] = alliances[i][j];
 		}
 	}
 	for(i=0; i<MAX_PLAYERS; i++)
 	{
-		psSaveGame->playerColour[i] = getPlayerColour(i);
+		saveGame.playerColour[i] = getPlayerColour(i);
 	}
-	psSaveGame->radarZoom = (UBYTE)GetRadarZoom();
+	saveGame.radarZoom = (UBYTE)GetRadarZoom();
 
 
 	//version 20
-	psSaveGame->bDroidsToSafetyFlag = (UBYTE)getDroidsToSafetyFlag();
+	saveGame.bDroidsToSafetyFlag = (UBYTE)getDroidsToSafetyFlag();
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		memcpy(&(psSaveGame->asVTOLReturnPos[i]), &asVTOLReturnPos[i], sizeof(Vector2i));
+		memcpy(&saveGame.asVTOLReturnPos[i], &asVTOLReturnPos[i], sizeof(Vector2i));
 	}
 
 	//version 22
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		memcpy(&(psSaveGame->asRunData[i]),&asRunData[i],sizeof(RUN_DATA));
+		memcpy(&saveGame.asRunData[i], &asRunData[i], sizeof(RUN_DATA));
 	}
 
 	//version 24
-	psSaveGame->reinforceTime = missionGetReinforcementTime();
-	psSaveGame->bPlayCountDown = (UBYTE)getPlayCountDown();
-	psSaveGame->bPlayerHasWon =  (UBYTE)testPlayerHasWon();
-	psSaveGame->bPlayerHasLost = (UBYTE)testPlayerHasLost();
+	saveGame.reinforceTime = missionGetReinforcementTime();
+	saveGame.bPlayCountDown = (UBYTE)getPlayCountDown();
+	saveGame.bPlayerHasWon =  (UBYTE)testPlayerHasWon();
+	saveGame.bPlayerHasLost = (UBYTE)testPlayerHasLost();
 
     //version 30
-    psSaveGame->scrGameLevel = scrGameLevel;
-    psSaveGame->bExtraFailFlag = (UBYTE)bExtraFailFlag;
-    psSaveGame->bExtraVictoryFlag = (UBYTE)bExtraVictoryFlag;
-    psSaveGame->bTrackTransporter = (UBYTE)bTrackTransporter;
+    saveGame.scrGameLevel = scrGameLevel;
+    saveGame.bExtraFailFlag = (UBYTE)bExtraFailFlag;
+    saveGame.bExtraVictoryFlag = (UBYTE)bExtraVictoryFlag;
+    saveGame.bTrackTransporter = (UBYTE)bTrackTransporter;
 
 
 	// version 33
-	psSaveGame->sGame		= game;
-	psSaveGame->savePlayer	= selectedPlayer;
-	psSaveGame->multiPlayer = bMultiPlayer;
-	psSaveGame->sNetPlay	= NetPlay;
-	strcpy(psSaveGame->sPName,getPlayerName(selectedPlayer));
-	for(inc=0;inc<MAX_PLAYERS;inc++)
+	saveGame.sGame		= game;
+	saveGame.savePlayer	= selectedPlayer;
+	saveGame.multiPlayer = bMultiPlayer;
+	saveGame.sNetPlay	= NetPlay;
+	strcpy(saveGame.sPName, getPlayerName(selectedPlayer));
+	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		psSaveGame->sPlayer2dpid[inc]= player2dpid[inc];
+		saveGame.sPlayer2dpid[i] = player2dpid[i];
 	}
 
 	//version 34
-	for(inc=0;inc<MAX_PLAYERS;inc++)
+	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		strcpy(psSaveGame->sPlayerName[inc],getPlayerName(inc));
+		strcpy(saveGame.sPlayerName[i], getPlayerName(i));
 	}
 
-	/* SAVE_GAME is GAME_SAVE_V33 */
-	/* GAME_SAVE_V33 includes GAME_SAVE_V31 */
-	endian_udword(&psSaveGame->sGame.power);
-	endian_uword(&psSaveGame->sGame.bytesPerSec);
-	for(i = 0; i < MaxGames; i++) {
-		endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwSize);
-		endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwFlags);
-		endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwMaxPlayers);
-		endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwCurrentPlayers);
-		endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser1);
-		endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser2);
-		endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser3);
-		endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser4);
-	}
-	for(i = 0; i < MaxNumberOfPlayers; i++)
-		endian_udword(&psSaveGame->sNetPlay.players[i].dpid);
-	endian_udword(&psSaveGame->sNetPlay.playercount);
-	endian_udword(&psSaveGame->sNetPlay.dpidPlayer);
-	endian_udword(&psSaveGame->savePlayer);
-	for(i = 0; i < MAX_PLAYERS; i++)
-		endian_udword(&psSaveGame->sPlayer2dpid[i]);
-	/* GAME_SAVE_V31 includes GAME_SAVE_V30 */
-	endian_sdword(&psSaveGame->missionCheatTime);
-	/* GAME_SAVE_V30 includes GAME_SAVE_V29 */
-	endian_sdword(&psSaveGame->scrGameLevel);
-	/* GAME_SAVE_V29 includes GAME_SAVE_V27 */
-	endian_uword(&psSaveGame->missionScrollMinX);
-	endian_uword(&psSaveGame->missionScrollMinY);
-	endian_uword(&psSaveGame->missionScrollMaxX);
-	endian_uword(&psSaveGame->missionScrollMaxY);
-	/* GAME_SAVE_V27 includes GAME_SAVE_V24 */
-	for(i = 0; i < MAX_PLAYERS; i++)
-		for(j = 0; j < MAX_RECYCLED_DROIDS; j++)
-			endian_uword(&psSaveGame->awDroidExperience[i][j]);
-	/* GAME_SAVE_V24 includes GAME_SAVE_V22 */
-	endian_udword(&psSaveGame->reinforceTime);
-	/* GAME_SAVE_V22 includes GAME_SAVE_V20 */
-	for(i = 0; i < MAX_PLAYERS; i++) {
-		endian_sdword(&psSaveGame->asRunData[i].sPos.x);
-		endian_sdword(&psSaveGame->asRunData[i].sPos.y);
-	}
-	/* GAME_SAVE_V20 includes GAME_SAVE_V19 */
-	for(i = 0; i < MAX_PLAYERS; i++) {
-		endian_sdword(&psSaveGame->asVTOLReturnPos[i].x);
-		endian_sdword(&psSaveGame->asVTOLReturnPos[i].y);
-	}
-	/* GAME_SAVE_V19 includes GAME_SAVE_V18 */
-	/* GAME_SAVE_V18 includes GAME_SAVE_V17 */
-	endian_udword(&psSaveGame->oldestVersion);
-	endian_udword(&psSaveGame->validityKey);
-	/* GAME_SAVE_V17 includes GAME_SAVE_V16 */
-	endian_udword(&psSaveGame->objId);
-	/* GAME_SAVE_V16 includes GAME_SAVE_V15 */
-	/* GAME_SAVE_V15 includes GAME_SAVE_V14 */
-	endian_udword(&psSaveGame->RubbleTile);
-	endian_udword(&psSaveGame->WaterTile);
-	endian_udword(&psSaveGame->fogColour);
-	endian_udword(&psSaveGame->fogState);
-	/* GAME_SAVE_V14 includes GAME_SAVE_V12 */
-	endian_sdword(&psSaveGame->missionOffTime);
-	endian_sdword(&psSaveGame->missionETA);
-	endian_uword(&psSaveGame->missionHomeLZ_X);
-	endian_uword(&psSaveGame->missionHomeLZ_Y);
-	endian_sdword(&psSaveGame->missionPlayerX);
-	endian_sdword(&psSaveGame->missionPlayerY);
-	for(i = 0; i < MAX_PLAYERS; i++) {
-		endian_uword(&psSaveGame->iTranspEntryTileX[i]);
-		endian_uword(&psSaveGame->iTranspEntryTileY[i]);
-		endian_uword(&psSaveGame->iTranspExitTileX[i]);
-		endian_uword(&psSaveGame->iTranspExitTileY[i]);
-		endian_udword(&psSaveGame->aDefaultSensor[i]);
-		endian_udword(&psSaveGame->aDefaultECM[i]);
-		endian_udword(&psSaveGame->aDefaultRepair[i]);
-	}
-	/* GAME_SAVE_V12 includes GAME_SAVE_V11 */
-	endian_udword(&psSaveGame->missionTime);
-	endian_udword(&psSaveGame->saveKey);
-	/* GAME_SAVE_V11 includes GAME_SAVE_V10 */
-	endian_sdword(&psSaveGame->currentPlayerPos.p.x);
-	endian_sdword(&psSaveGame->currentPlayerPos.p.y);
-	endian_sdword(&psSaveGame->currentPlayerPos.p.z);
-	endian_sdword(&psSaveGame->currentPlayerPos.r.x);
-	endian_sdword(&psSaveGame->currentPlayerPos.r.y);
-	endian_sdword(&psSaveGame->currentPlayerPos.r.z);
-	/* GAME_SAVE_V10 includes GAME_SAVE_V7 */
-	for(i = 0; i < MAX_PLAYERS; i++) {
-		endian_udword(&psSaveGame->power[i].currentPower);
-		endian_udword(&psSaveGame->power[i].extractedPower);
-	}
-	/* GAME_SAVE_V7 */
-	endian_udword(&psSaveGame->gameTime);
-	endian_udword(&psSaveGame->GameType);
-	endian_sdword(&psSaveGame->ScrollMinX);
-	endian_sdword(&psSaveGame->ScrollMinY);
-	endian_udword(&psSaveGame->ScrollMaxX);
-	endian_udword(&psSaveGame->ScrollMaxY);
+	status = serializeSaveGameData(fileHandle, &saveGame);
 
-	/* GAME_SAVEHEADER */
-	endian_udword(&psHeader->version);
+	// Close the file
+	PHYSFS_close(fileHandle);
 
-	/* Write the data to the file */
-	if (pFileData != NULL) {
-		status = saveFile(pFileName, pFileData, fileSize);
-		free(pFileData);
-		return status;
-	}
-
-error:
-	if (pFileData != NULL)
-	{
-		free(pFileData);
-	}
-	return FALSE;
+	// Return our success status with writing out the file!
+	return status;
 }
 
 // -----------------------------------------------------------------------------------------

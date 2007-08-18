@@ -28,10 +28,10 @@
 // data for barbarians retreating
 typedef struct _run_data
 {
-	Vector2i sPos; // position to retreat to
-	UBYTE forceLevel; // number of units below which might run
-	UBYTE healthLevel; // %health value below which to turn and run - FOR GROUPS ONLY
-	UBYTE leadership; // basic chance to run
+	Vector2i    sPos; // position to retreat to
+	uint8_t     forceLevel; // number of units below which might run
+	uint8_t     healthLevel; // %health value below which to turn and run - FOR GROUPS ONLY
+	uint8_t     leadership; // basic chance to run
 } RUN_DATA;
 
 typedef struct _droid_order_data
