@@ -2688,6 +2688,113 @@ BOOL	bOnFire;
 	}
 	return(bOnFire);
 }
+
+/** Write the given EFFECT to the given file with endianness swapped correctly
+ *  \param fileHandle a PhysicsFS file handle of the file to write to
+ *  \param serializeEffect a pointer to the EFFECT to write serialized into the file
+ *  \return true on success or false on the first encounterd error
+ */
+static bool serializeFXData(PHYSFS_file* fileHandle, const EFFECT* serializeEffect)
+{
+	uint32_t imdHashedNumber;
+
+	// Retrieve the IMD hash number
+	if (serializeEffect->imd)
+	{
+		resGetHashfromData("IMD", serializeEffect->imd, &imdHashedNumber);
+	}
+	else
+	{
+		imdHashedNumber = 0;
+	}
+
+	return (PHYSFS_writeUBE8 (fileHandle, serializeEffect->  control)
+	     && PHYSFS_writeUBE8 (fileHandle, serializeEffect->  group)
+	     && PHYSFS_writeUBE8 (fileHandle, serializeEffect->  type)
+	     && PHYSFS_writeUBE8 (fileHandle, serializeEffect->  frameNumber)
+	     && PHYSFS_writeUBE16(fileHandle, serializeEffect->  size)
+	     && PHYSFS_writeUBE8 (fileHandle, serializeEffect->  baseScale)
+	     && PHYSFS_writeUBE8 (fileHandle, serializeEffect->  specific)
+
+	     // Write Vector3f types
+	     && PHYSFS_writeBEFloat(fileHandle, serializeEffect->position.x)
+	     && PHYSFS_writeBEFloat(fileHandle, serializeEffect->position.y)
+	     && PHYSFS_writeBEFloat(fileHandle, serializeEffect->position.z)
+	     && PHYSFS_writeBEFloat(fileHandle, serializeEffect->velocity.x)
+	     && PHYSFS_writeBEFloat(fileHandle, serializeEffect->velocity.y)
+	     && PHYSFS_writeBEFloat(fileHandle, serializeEffect->velocity.z)
+
+	     // Write Vector3i types
+	     && PHYSFS_writeSBE32(fileHandle, serializeEffect->  rotation.x)
+	     && PHYSFS_writeSBE32(fileHandle, serializeEffect->  rotation.y)
+	     && PHYSFS_writeSBE32(fileHandle, serializeEffect->  rotation.z)
+	     && PHYSFS_writeSBE32(fileHandle, serializeEffect->  spin.x)
+	     && PHYSFS_writeSBE32(fileHandle, serializeEffect->  spin.y)
+	     && PHYSFS_writeSBE32(fileHandle, serializeEffect->  spin.z)
+
+	     && PHYSFS_writeUBE32(fileHandle, serializeEffect->  birthTime)
+	     && PHYSFS_writeUBE32(fileHandle, serializeEffect->  lastFrame)
+	     && PHYSFS_writeUBE16(fileHandle, serializeEffect->  frameDelay)
+	     && PHYSFS_writeUBE16(fileHandle, serializeEffect->  lifeSpan)
+	     && PHYSFS_writeUBE16(fileHandle, serializeEffect->  radius)
+	     && PHYSFS_writeUBE32(fileHandle, imdHashedNumber));
+}
+
+/** Read an EFFECT from the given file with endianness swapped correctly
+ *  \param fileHandle a PhysicsFS file handle of the file to read from
+ *  \param serializeEffect a pointer to an EFFECT to write the deserialized data from the file into
+ *  \return true on success or false on the first encounterd error
+ */
+static bool deserializeFXData(PHYSFS_file* fileHandle, EFFECT* serializeEffect)
+{
+	uint32_t imdHashedNumber;
+
+	if (!PHYSFS_readUBE8 (fileHandle, &serializeEffect->  control)
+	 || !PHYSFS_readUBE8 (fileHandle, &serializeEffect->  group)
+	 || !PHYSFS_readUBE8 (fileHandle, &serializeEffect->  type)
+	 || !PHYSFS_readUBE8 (fileHandle, &serializeEffect->  frameNumber)
+	 || !PHYSFS_readUBE16(fileHandle, &serializeEffect->  size)
+	 || !PHYSFS_readUBE8 (fileHandle, &serializeEffect->  baseScale)
+	 || !PHYSFS_readUBE8 (fileHandle, &serializeEffect->  specific)
+
+	 // Write Vector3f types
+	 || !PHYSFS_readBEFloat(fileHandle, &serializeEffect->position.x)
+	 || !PHYSFS_readBEFloat(fileHandle, &serializeEffect->position.y)
+	 || !PHYSFS_readBEFloat(fileHandle, &serializeEffect->position.z)
+	 || !PHYSFS_readBEFloat(fileHandle, &serializeEffect->velocity.x)
+	 || !PHYSFS_readBEFloat(fileHandle, &serializeEffect->velocity.y)
+	 || !PHYSFS_readBEFloat(fileHandle, &serializeEffect->velocity.z)
+
+	 // Write Vector3i types
+	 || !PHYSFS_readSBE32(fileHandle, &serializeEffect->  rotation.x)
+	 || !PHYSFS_readSBE32(fileHandle, &serializeEffect->  rotation.y)
+	 || !PHYSFS_readSBE32(fileHandle, &serializeEffect->  rotation.z)
+	 || !PHYSFS_readSBE32(fileHandle, &serializeEffect->  spin.x)
+	 || !PHYSFS_readSBE32(fileHandle, &serializeEffect->  spin.y)
+	 || !PHYSFS_readSBE32(fileHandle, &serializeEffect->  spin.z)
+	 || !PHYSFS_readUBE32(fileHandle, &serializeEffect->  birthTime)
+	 || !PHYSFS_readUBE32(fileHandle, &serializeEffect->  lastFrame)
+	 || !PHYSFS_readUBE16(fileHandle, &serializeEffect->  frameDelay)
+	 || !PHYSFS_readUBE16(fileHandle, &serializeEffect->  lifeSpan)
+	 || !PHYSFS_readUBE16(fileHandle, &serializeEffect->  radius)
+	 || !PHYSFS_readUBE32(fileHandle, &imdHashedNumber))
+	{
+		return false;
+	}
+
+	if (imdHashedNumber)
+	{
+		// Restore the pointer from the hashed ID
+		serializeEffect->imd = (iIMDShape*)resGetDataFromHash("IMD", imdHashedNumber);
+	}
+	else
+	{
+		serializeEffect->imd = NULL;
+	}
+
+	return true;
+}
+
 // -----------------------------------------------------------------------------------
 /* This will save out the effects data */
 bool writeFXData(const char* fileName)
@@ -2696,7 +2803,7 @@ bool writeFXData(const char* fileName)
 
 	FX_SAVEHEADER fileHeader;
 
-	PHYSFS_file*  fileHandle = openSaveFile(fileName);
+	PHYSFS_file* fileHandle = openSaveFile(fileName);
 	if (!fileHandle)
 	{
 		return false;
@@ -2730,55 +2837,14 @@ bool writeFXData(const char* fileName)
 	for (i = 0; i < MAX_EFFECTS; ++i)
 	{
 		const EFFECT* curEffect = &asEffectsList[i];
-		uint32_t imdHashedNumber;
 
 		// Don't save inactive effects
 		if (effectStatus[i] != ES_ACTIVE)
 			continue;
 
-
-		// Retrieve the IMD hash number
-		if (curEffect->imd)
-		{
-			resGetHashfromData("IMD", curEffect->imd, &imdHashedNumber);
-		}
-		else
-		{
-			imdHashedNumber = 0;
-		}
-
 		// Write the current EFFECT to the file with endianness swapped correctly
 		// And abort on the first encountered error
-		if (!PHYSFS_writeUBE8 (fileHandle, curEffect->  control)
-		 || !PHYSFS_writeUBE8 (fileHandle, curEffect->  group)
-		 || !PHYSFS_writeUBE8 (fileHandle, curEffect->  type)
-		 || !PHYSFS_writeUBE8 (fileHandle, curEffect->  frameNumber)
-		 || !PHYSFS_writeUBE16(fileHandle, curEffect->  size)
-		 || !PHYSFS_writeUBE8 (fileHandle, curEffect->  baseScale)
-		 || !PHYSFS_writeUBE8 (fileHandle, curEffect->  specific)
-
-		 // Write Vector3f types
-		 || !PHYSFS_writeBEFloat(fileHandle, curEffect->position.x)
-		 || !PHYSFS_writeBEFloat(fileHandle, curEffect->position.y)
-		 || !PHYSFS_writeBEFloat(fileHandle, curEffect->position.z)
-		 || !PHYSFS_writeBEFloat(fileHandle, curEffect->velocity.x)
-		 || !PHYSFS_writeBEFloat(fileHandle, curEffect->velocity.y)
-		 || !PHYSFS_writeBEFloat(fileHandle, curEffect->velocity.z)
-
-		 // Write Vector3i types
-		 || !PHYSFS_writeSBE32(fileHandle, curEffect->  rotation.x)
-		 || !PHYSFS_writeSBE32(fileHandle, curEffect->  rotation.y)
-		 || !PHYSFS_writeSBE32(fileHandle, curEffect->  rotation.z)
-		 || !PHYSFS_writeSBE32(fileHandle, curEffect->  spin.x)
-		 || !PHYSFS_writeSBE32(fileHandle, curEffect->  spin.y)
-		 || !PHYSFS_writeSBE32(fileHandle, curEffect->  spin.z)
-
-		 || !PHYSFS_writeUBE32(fileHandle, curEffect->  birthTime)
-		 || !PHYSFS_writeUBE32(fileHandle, curEffect->  lastFrame)
-		 || !PHYSFS_writeUBE16(fileHandle, curEffect->  frameDelay)
-		 || !PHYSFS_writeUBE16(fileHandle, curEffect->  lifeSpan)
-		 || !PHYSFS_writeUBE16(fileHandle, curEffect->  radius)
-		 || !PHYSFS_writeUBE32(fileHandle, imdHashedNumber))
+		if (!serializeFXData(fileHandle, curEffect))
 		{
 			debug(LOG_ERROR, "writeFXData: could not write to %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
 			PHYSFS_close(fileHandle);
@@ -2842,56 +2908,16 @@ bool readFXData(PHYSFS_file* fileHandle)
 	for(i = 0; i < fileHeader.entries; ++i)
 	{
 		EFFECT* curEffect = &asEffectsList[i];
-		uint32_t imdHashedNumber;
 
 		ASSERT(i < MAX_EFFECTS, "readFXData: more effects in this file than our array can contain");
 
 		// Read the current EFFECT from the file with endianness swapped correctly
 		// And abort on the first encountered error
-		if (!PHYSFS_readUBE8 (fileHandle, &curEffect->  control)
-		 || !PHYSFS_readUBE8 (fileHandle, &curEffect->  group)
-		 || !PHYSFS_readUBE8 (fileHandle, &curEffect->  type)
-		 || !PHYSFS_readUBE8 (fileHandle, &curEffect->  frameNumber)
-		 || !PHYSFS_readUBE16(fileHandle, &curEffect->  size)
-		 || !PHYSFS_readUBE8 (fileHandle, &curEffect->  baseScale)
-		 || !PHYSFS_readUBE8 (fileHandle, &curEffect->  specific)
-
-		 // Write Vector3f types
-		 || !PHYSFS_readBEFloat(fileHandle, &curEffect->position.x)
-		 || !PHYSFS_readBEFloat(fileHandle, &curEffect->position.y)
-		 || !PHYSFS_readBEFloat(fileHandle, &curEffect->position.z)
-		 || !PHYSFS_readBEFloat(fileHandle, &curEffect->velocity.x)
-		 || !PHYSFS_readBEFloat(fileHandle, &curEffect->velocity.y)
-		 || !PHYSFS_readBEFloat(fileHandle, &curEffect->velocity.z)
-
-		 // Write Vector3i types
-		 || !PHYSFS_readSBE32(fileHandle, &curEffect->  rotation.x)
-		 || !PHYSFS_readSBE32(fileHandle, &curEffect->  rotation.y)
-		 || !PHYSFS_readSBE32(fileHandle, &curEffect->  rotation.z)
-		 || !PHYSFS_readSBE32(fileHandle, &curEffect->  spin.x)
-		 || !PHYSFS_readSBE32(fileHandle, &curEffect->  spin.y)
-		 || !PHYSFS_readSBE32(fileHandle, &curEffect->  spin.z)
-
-		 || !PHYSFS_readUBE32(fileHandle, &curEffect->  birthTime)
-		 || !PHYSFS_readUBE32(fileHandle, &curEffect->  lastFrame)
-		 || !PHYSFS_readUBE16(fileHandle, &curEffect->  frameDelay)
-		 || !PHYSFS_readUBE16(fileHandle, &curEffect->  lifeSpan)
-		 || !PHYSFS_readUBE16(fileHandle, &curEffect->  radius)
-		 || !PHYSFS_readUBE32(fileHandle, &imdHashedNumber))
+		if (!deserializeFXData(fileHandle, curEffect))
 		{
 			debug(LOG_ERROR, "readFXData: error while reading file: %s", PHYSFS_getLastError());
 			PHYSFS_close(fileHandle);
 			return false;
-		}
-
-		if (imdHashedNumber)
-		{
-			// Restore the pointer from the hashed ID
-			curEffect->imd = (iIMDShape*)resGetDataFromHash("IMD", imdHashedNumber);
-		}
-		else
-		{
-			curEffect->imd = NULL;
 		}
 	}
 
