@@ -1930,19 +1930,12 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		//load in the visibility file
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "misvis.bjo");
-		/* Load in the chosen file data */
-		pFileData = fileLoadBuffer;
-		if (loadFileToBufferNoError(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+
+		// Load in the visibility data from the chosen file
+		if (!readVisibilityData(aFileName))
 		{
-			//load the visibility data
-			if (pFileData)
-			{
-				if (!readVisibilityData(pFileData, fileSize))
-				{
-					debug( LOG_NEVER, "loadgame: Fail33\n" );
-					goto error;
-				}
-			}
+			debug( LOG_NEVER, "loadgame: Fail33\n" );
+			goto error;
 		}
 
 	// reload the objects that were in the mission list
@@ -2407,21 +2400,13 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			//load in the visibility file
 			aFileName[fileExten] = '\0';
 			strcat(aFileName, "visstate.bjo");
-			// Load in the chosen file data
-			pFileData = fileLoadBuffer;
-			if (loadFileToBufferNoError(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
-			{
-				//load the visibility data
-				if (pFileData)
-				{
-					if (!readVisibilityData(pFileData, fileSize))
-					{
-						debug( LOG_NEVER, "loadgame: Fail33\n" );
-						goto error;
-					}
-				}
-			}
 
+			// Load in the visibility data from the chosen file
+			if (!readVisibilityData(aFileName))
+			{
+				debug( LOG_NEVER, "loadgame: Fail33\n" );
+				goto error;
+			}
 		}
 	}
 //#endif
@@ -2464,28 +2449,17 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		if ((gameType == GTYPE_SAVE_START) ||
 			(gameType == GTYPE_SAVE_MIDMISSION))
 		{
-			PHYSFS_file* FXDataFile;
-
 			//load in the message list file
 			aFileName[fileExten] = '\0';
 			strcat(aFileName, "fxstate.bjo");
 			// Load in the chosen file data
 			pFileData = fileLoadBuffer;
 
-			// Open the file
-			FXDataFile = openLoadFile(aFileName, false);
-			//load the fx data
-			if (FXDataFile)
+			// load the fx data from the file
+			if (!readFXData(aFileName))
 			{
-				if (!readFXData(FXDataFile))
-				{
-					debug(LOG_ERROR, "loadgame: Fail33");
-
-					PHYSFS_close(FXDataFile);
-					goto error;
-				}
-
-				PHYSFS_close(FXDataFile);
+				debug(LOG_ERROR, "loadgame: Fail33");
+				goto error;
 			}
 		}
 	}

@@ -2861,11 +2861,18 @@ bool writeFXData(const char* fileName)
 
 // -----------------------------------------------------------------------------------
 /* This will read in the effects data */
-bool readFXData(PHYSFS_file* fileHandle)
+bool readFXData(const char* fileName)
 {
 	FX_SAVEHEADER fileHeader;
 	unsigned int expectedFileSize, fileSize;
 	unsigned int i;
+
+	PHYSFS_file* fileHandle = openLoadFile(fileName, false);
+	if (!fileHandle)
+	{
+		// Failure to open the file is no failure to read it
+		return true;
+	}
 
 	// Read the header from the file
 	if (PHYSFS_read(fileHandle, fileHeader.aFileType, sizeof(fileHeader.aFileType), 1) != 1
@@ -2873,6 +2880,7 @@ bool readFXData(PHYSFS_file* fileHandle)
 	 || !PHYSFS_readUBE32(fileHandle, &fileHeader.entries))
 	{
 		debug(LOG_ERROR, "readFXData: error while reading file: %s", PHYSFS_getLastError());
+		PHYSFS_close(fileHandle);
 		return false;
 	}
 
@@ -2888,14 +2896,16 @@ bool readFXData(PHYSFS_file* fileHandle)
 		      fileHeader.aFileType[2],
 		      fileHeader.aFileType[3]);
 
+		PHYSFS_close(fileHandle);
 		return false;
 	}
 
 	// Validate the filesize
-	expectedFileSize = sizeof(FX_SAVEHEADER) + fileHeader.entries * 74; // 74 = sizeof(EFFECT) without the padding
+	expectedFileSize = sizeof(fileHeader.aFileType) + sizeof(fileHeader.version) + sizeof(fileHeader.entries) + fileHeader.entries * 74; // 74 = sizeof(EFFECT) without the padding
 	fileSize = PHYSFS_fileLength(fileHandle);
-	if (PHYSFS_fileLength(fileHandle) != expectedFileSize)
+	if (fileSize != expectedFileSize)
 	{
+		PHYSFS_close(fileHandle);
 		ASSERT(!"readFXData: unexpected filesize", "readFXData: unexpected filesize; should be %u, but is %u", expectedFileSize, fileSize);
 		abort();
 		return false;
@@ -2923,6 +2933,9 @@ bool readFXData(PHYSFS_file* fileHandle)
 
 	/* Ensure free effects kept up to date */
 	freeEffect = i;
+
+	// Close the file
+	PHYSFS_close(fileHandle);
 
 	/* Hopefully everything's just fine by now */
 	return true;

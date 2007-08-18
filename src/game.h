@@ -99,9 +99,9 @@ enum {
 
 typedef struct _vis_save_header
 {
-	char		aFileType[4];
-	UDWORD		version;
-}VIS_SAVEHEADER;
+	char        aFileType[4];
+	uint32_t    version;
+} VIS_SAVEHEADER;
 
 typedef struct _fx_save_header
 {

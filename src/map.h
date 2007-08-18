@@ -121,7 +121,7 @@ extern UBYTE terrainTypes[MAX_TILE_TEXTURES];
 typedef struct _maptile
 {
 	UBYTE			tileInfoBits;
-	UBYTE			tileVisBits;	// COMPRESSED - bit per player
+	uint8_t			tileVisBits;	// COMPRESSED - bit per player
 	UBYTE			height;			// The height at the top left of the tile
 	UBYTE			illumination;	// How bright is this tile?
 	UWORD			texture;		// Which graphics texture is on this tile
@@ -266,8 +266,8 @@ extern void getTileMaxMin(UDWORD x, UDWORD y, UDWORD *pMax, UDWORD *pMin);
 MAPTILE *GetCurrentMap(void);	// returns a pointer to the current loaded map data
 UDWORD GetHeightOfMap(void);
 UDWORD GetWidthOfMap(void);
-extern BOOL	readVisibilityData(char *pFileData, UDWORD fileSize);
-extern BOOL	writeVisibilityData( char *pFileName );
+extern bool readVisibilityData(const char* fileName);
+extern bool	writeVisibilityData(const char* fileName);
 
 //scroll min and max values
 extern SDWORD		scrollMinX, scrollMaxX, scrollMinY, scrollMaxY;

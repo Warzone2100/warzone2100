@@ -648,7 +648,7 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 /* Shutdown the map module */
 BOOL mapShutdown(void)
 {
-	if(psMapTiles) 
+	if(psMapTiles)
 	{
 		free(psMapTiles);
 	}
@@ -892,123 +892,120 @@ UDWORD GetWidthOfMap(void)
 
 UDWORD GetHeightOfMap(void)
 {
-
 	return mapHeight;
 }
 
 
 // -----------------------------------------------------------------------------------
 /* This will save out the visibility data */
-BOOL	writeVisibilityData( char *pFileName )
+bool writeVisibilityData(const char* fileName)
 {
-	char *pFileData;		// Pointer to the necessary allocated memory
-	char *pVisData;			// Pointer to the start of the map data
-	UDWORD fileSize;		// How many bytes we need - depends on compression
-	VIS_SAVEHEADER *psHeader;		// Pointer to the header part of the file
-	UDWORD mapEntries;		// Effectively, how many tiles are there?
-	UDWORD i;
-	BOOL status = TRUE;
+	unsigned int i;
+	VIS_SAVEHEADER fileHeader;
 
-	/* How many tiles do we write out data from? */
-	mapEntries = mapWidth*mapHeight;
-
-	/* Calculate memory required */
-	fileSize = ( sizeof(struct _vis_save_header) + ( mapEntries*sizeof(UBYTE) ) );
-
-	/* Try and allocate it - freed up in same function */
-	pFileData = (char*)malloc(fileSize);
-
-	/* Did we get it? */
-	if(!pFileData)
+	PHYSFS_file* fileHandle = openSaveFile(fileName);
+	if (!fileHandle)
 	{
-		/* Nope, so do one */
-		debug( LOG_ERROR, "Saving visibility data : Cannot get the memory! (%d)", fileSize );
-		abort();
-		return(FALSE);
+		return false;
 	}
 
-	/* We got the memory, so put the file header on the file */
-	psHeader = (VIS_SAVEHEADER *)pFileData;
-	psHeader->aFileType[0] = 'v';
-	psHeader->aFileType[1] = 'i';
-	psHeader->aFileType[2] = 's';
-	psHeader->aFileType[3] = 'd';
+	fileHeader.aFileType[0] = 'v';
+	fileHeader.aFileType[1] = 'i';
+	fileHeader.aFileType[2] = 's';
+	fileHeader.aFileType[3] = 'd';
 
-	/* Wirte out the version number - unlikely to change for visibility data */
-	psHeader->version = CURRENT_VERSION_NUM;
+	fileHeader.version = CURRENT_VERSION_NUM;
 
-	/* VIS_SAVEHEADER */
-	endian_udword(&psHeader->version);
-
-	/* Skip past the header to the raw data area */
-	pVisData = pFileData + sizeof(struct _vis_save_header);
-
-
-	for(i=0; i<mapWidth*mapHeight; i++)
+	// Write out the current file header
+	if (PHYSFS_write(fileHandle, fileHeader.aFileType, sizeof(fileHeader.aFileType), 1) != 1
+	 || !PHYSFS_writeUBE32(fileHandle, fileHeader.version))
 	{
-			pVisData[i] = psMapTiles[i].tileVisBits;
+		debug(LOG_ERROR, "writeVisibilityData: could not write header to %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
+		PHYSFS_close(fileHandle);
+		return false;
 	}
 
-	/* Have a bash at opening the file to write */
-	status = saveFile(pFileName, pFileData, fileSize);
-
-	/* And free up the memory we used */
-	if (pFileData != NULL)
+	for (i = 0; i < mapWidth * mapHeight; ++i)
 	{
-		free(pFileData);
+		if (!PHYSFS_writeUBE8(fileHandle, psMapTiles[i].tileVisBits))
+		{
+			debug(LOG_ERROR, "writeVisibilityData: could not write to %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
+			PHYSFS_close(fileHandle);
+			return false;
+		}
 	}
 
-	/* Everything is just fine! */
-	return status;
+	// Everything is just fine!
+	return true;
 }
 
 // -----------------------------------------------------------------------------------
 /* This will read in the visibility data */
-BOOL	readVisibilityData(char *pFileData, UDWORD fileSize)
+bool readVisibilityData(const char* fileName)
 {
-UDWORD				expectedFileSize;
-UDWORD				mapEntries;
-VIS_SAVEHEADER		*psHeader;
-UDWORD				i;
-UBYTE				*pVisData;
+	VIS_SAVEHEADER fileHeader;
+	unsigned int expectedFileSize, fileSize;
+	unsigned int i;
 
-	/* See if we've been given the right file type? */
-	psHeader = (VIS_SAVEHEADER *)pFileData;
-	if (psHeader->aFileType[0] != 'v' || psHeader->aFileType[1] != 'i' ||
-		psHeader->aFileType[2] != 's' || psHeader->aFileType[3] != 'd')	{
-		debug(LOG_ERROR, "Read visibility data: Weird file type found? Has header letters"
-				  " - %c %c %c %c", psHeader->aFileType[0],psHeader->aFileType[1],
-								  psHeader->aFileType[2],psHeader->aFileType[3]);
-		return FALSE;
-	}
-
-	/* VIS_SAVEHEADER */
-	endian_udword(&psHeader->version);
-
-	/* How much data are we expecting? */
-	mapEntries = (mapWidth*mapHeight);
-	expectedFileSize = (sizeof(struct _vis_save_header) + 	(mapEntries*sizeof(UBYTE)) );
-
-	/* Is that what we've been given? */
-	if(fileSize!=expectedFileSize)
+	PHYSFS_file* fileHandle = openLoadFile(fileName, false);
+	if (!fileHandle)
 	{
-		/* No, so bomb out */
-		debug( LOG_ERROR, "Read visibility data : Weird file size for %d by %d sized map?", mapWidth, mapHeight );
-		abort();
-		return(FALSE);
+		// Failure to open the file is no failure to read it
+		return true;
 	}
 
-	/* Skip past the header gubbins - can check version number here too */
-	pVisData = (UBYTE*)pFileData + sizeof(struct _vis_save_header);
+	// Read the header from the file
+	if (PHYSFS_read(fileHandle, fileHeader.aFileType, sizeof(fileHeader.aFileType), 1) != 1
+	 || !PHYSFS_readUBE32(fileHandle, &fileHeader.version))
+	{
+		debug(LOG_ERROR, "readVisibilityData: error while reading header from file: %s", PHYSFS_getLastError());
+		PHYSFS_close(fileHandle);
+		return false;
+	}
 
-	/* For every tile... */
+	// Check the header to see if we've been given a file of the right type
+	if (fileHeader.aFileType[0] != 'v'
+	 || fileHeader.aFileType[1] != 'i'
+	 || fileHeader.aFileType[2] != 's'
+	 || fileHeader.aFileType[3] != 'd')
+	{
+		debug(LOG_ERROR, "readVisibilityData: Weird file type found? Has header letters - '%c' '%c' '%c' '%c' (should be 'v' 'i' 's' 'd')",
+		      fileHeader.aFileType[0],
+		      fileHeader.aFileType[1],
+		      fileHeader.aFileType[2],
+		      fileHeader.aFileType[3]);
+
+		PHYSFS_close(fileHandle);
+		return false;
+	}
+
+	// Validate the filesize
+	expectedFileSize = sizeof(fileHeader.aFileType) + sizeof(fileHeader.version) + mapWidth * mapHeight * sizeof(uint8_t);
+	fileSize = PHYSFS_fileLength(fileHandle);
+	if (fileSize != expectedFileSize)
+	{
+		PHYSFS_close(fileHandle);
+		ASSERT(!"readVisibilityData: unexpected filesize", "readVisibilityData: unexpected filesize; should be %u, but is %u", expectedFileSize, fileSize);
+		abort();
+		return false;
+	}
+
+	// For every tile...
 	for(i=0; i<mapWidth*mapHeight; i++)
 	{
 		/* Get the visibility data */
-		psMapTiles[i].tileVisBits = pVisData[i];
+		if (!PHYSFS_readUBE8(fileHandle, &psMapTiles[i].tileVisBits))
+		{
+			debug(LOG_ERROR, "readVisibilityData: could not read from %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
+			PHYSFS_close(fileHandle);
+			return false;
+		}
 	}
 
+	// Close the file
+	PHYSFS_close(fileHandle);
+
 	/* Hopefully everything's just fine by now */
-	return(TRUE);
+	return true;
 }
 // -----------------------------------------------------------------------------------
