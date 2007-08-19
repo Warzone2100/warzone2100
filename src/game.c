@@ -99,6 +99,56 @@ typedef struct _game_save_header
 	uint32_t    version;
 } GAME_SAVEHEADER;
 
+static bool serializeSaveGameHeader(PHYSFS_file* fileHandle, const GAME_SAVEHEADER* serializeHeader)
+{
+	if (PHYSFS_write(fileHandle, serializeHeader->aFileType, 4, 1) != 1)
+		return false;
+
+	// Write version numbers below version 35 as little-endian, and those above as big-endian
+	if (serializeHeader->version < VERSION_35)
+		return PHYSFS_writeULE32(fileHandle, serializeHeader->version);
+    else
+		return PHYSFS_writeUBE32(fileHandle, serializeHeader->version);
+}
+
+static bool deserializeSaveGameHeader(PHYSFS_file* fileHandle, GAME_SAVEHEADER* serializeHeader)
+{
+	// Read in the header from the file
+	if (PHYSFS_read(fileHandle, serializeHeader->aFileType, 4, 1) != 1
+	 || PHYSFS_read(fileHandle, &serializeHeader->version, sizeof(uint32_t), 1) != 1)
+		return false;
+
+	// All save game file versions below version 35 (i.e. _not_ version 35 itself)
+	// have their version numbers stored as little endian. Versions from 35 and
+	// onward use big-endian. This basically means that, because of endian
+	// swapping, numbers from 35 and onward will be rediculously high if a
+	// little-endian byte-order is assumed.
+
+	// Convert from little endian to native byte-order and check if we get a
+	// rediculously high number
+	endian_udword(&serializeHeader->version);
+
+	if (serializeHeader->version <= VERSION_34)
+	{
+		// Apparently we don't get a rediculously high number if we assume
+		// little-endian, so lets assume our version number is 34 at max and return
+		return true;
+	}
+	else
+	{
+		// Apparently we get a larger number than expected if using little-endian.
+		// So assume we have a version of 35 and onward
+
+		// Reverse the little-endian decoding
+		endian_udword(&serializeHeader->version);
+	}
+
+	// Considering that little-endian didn't work we now use big-endian instead
+	serializeHeader->version = PHYSFS_swapUBE32(serializeHeader->version);
+
+	return true;
+}
+
 typedef struct _droid_save_header
 {
 	char		aFileType[4];
@@ -676,8 +726,8 @@ static bool deserializeSaveGameV12Data(PHYSFS_file* fileHandle, SAVE_GAME_V12* s
 	GAME_SAVE_V12;				\
 	int32_t     missionOffTime;		\
 	int32_t     missionETA;			\
-    uint16_t    missionHomeLZ_X;	\
-    uint16_t    missionHomeLZ_Y;	\
+	uint16_t    missionHomeLZ_X;	\
+	uint16_t    missionHomeLZ_Y;	\
 	int32_t     missionPlayerX;		\
 	int32_t     missionPlayerY;		\
 	uint16_t    iTranspEntryTileX[MAX_PLAYERS];	\
@@ -708,44 +758,44 @@ static bool serializeSaveGameV14Data(PHYSFS_file* fileHandle, const SAVE_GAME_V1
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-	     if (!PHYSFS_writeUBE16(fileHandle, serializeGame->iTranspEntryTileX[i]))
-		     return false;
+		if (!PHYSFS_writeUBE16(fileHandle, serializeGame->iTranspEntryTileX[i]))
+			return false;
 	}
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-	     if (!PHYSFS_writeUBE16(fileHandle, serializeGame->iTranspEntryTileY[i]))
-		     return false;
+		if (!PHYSFS_writeUBE16(fileHandle, serializeGame->iTranspEntryTileY[i]))
+			return false;
 	}
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-	     if (!PHYSFS_writeUBE16(fileHandle, serializeGame->iTranspExitTileX[i]))
-		     return false;
+		if (!PHYSFS_writeUBE16(fileHandle, serializeGame->iTranspExitTileX[i]))
+			return false;
 	}
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-	     if (!PHYSFS_writeUBE16(fileHandle, serializeGame->iTranspExitTileY[i]))
-		     return false;
+		if (!PHYSFS_writeUBE16(fileHandle, serializeGame->iTranspExitTileY[i]))
+			return false;
 	}
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-	     if (!PHYSFS_writeUBE32(fileHandle, serializeGame->aDefaultSensor[i]))
-		     return false;
+		if (!PHYSFS_writeUBE32(fileHandle, serializeGame->aDefaultSensor[i]))
+			return false;
 	}
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-	     if (!PHYSFS_writeUBE32(fileHandle, serializeGame->aDefaultECM[i]))
-		     return false;
+		if (!PHYSFS_writeUBE32(fileHandle, serializeGame->aDefaultECM[i]))
+			return false;
 	}
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-	     if (!PHYSFS_writeUBE32(fileHandle, serializeGame->aDefaultRepair[i]))
-		     return false;
+		if (!PHYSFS_writeUBE32(fileHandle, serializeGame->aDefaultRepair[i]))
+			return false;
 	}
 
 	return true;
@@ -766,44 +816,44 @@ static bool deserializeSaveGameV14Data(PHYSFS_file* fileHandle, SAVE_GAME_V14* s
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-	     if (!PHYSFS_readUBE16(fileHandle, &serializeGame->iTranspEntryTileX[i]))
-		     return false;
+		if (!PHYSFS_readUBE16(fileHandle, &serializeGame->iTranspEntryTileX[i]))
+			return false;
 	}
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-	     if (!PHYSFS_readUBE16(fileHandle, &serializeGame->iTranspEntryTileY[i]))
-		     return false;
+		if (!PHYSFS_readUBE16(fileHandle, &serializeGame->iTranspEntryTileY[i]))
+			return false;
 	}
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-	     if (!PHYSFS_readUBE16(fileHandle, &serializeGame->iTranspExitTileX[i]))
-		     return false;
+		if (!PHYSFS_readUBE16(fileHandle, &serializeGame->iTranspExitTileX[i]))
+			return false;
 	}
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-	     if (!PHYSFS_readUBE16(fileHandle, &serializeGame->iTranspExitTileY[i]))
-		     return false;
+		if (!PHYSFS_readUBE16(fileHandle, &serializeGame->iTranspExitTileY[i]))
+			return false;
 	}
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-	     if (!PHYSFS_readUBE32(fileHandle, &serializeGame->aDefaultSensor[i]))
-		     return false;
+		if (!PHYSFS_readUBE32(fileHandle, &serializeGame->aDefaultSensor[i]))
+			return false;
 	}
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-	     if (!PHYSFS_readUBE32(fileHandle, &serializeGame->aDefaultECM[i]))
-		     return false;
+		if (!PHYSFS_readUBE32(fileHandle, &serializeGame->aDefaultECM[i]))
+			return false;
 	}
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-	     if (!PHYSFS_readUBE32(fileHandle, &serializeGame->aDefaultRepair[i]))
-		     return false;
+		if (!PHYSFS_readUBE32(fileHandle, &serializeGame->aDefaultRepair[i]))
+			return false;
 	}
 
 	return true;
@@ -1228,10 +1278,10 @@ static bool deserializeSaveGameV29Data(PHYSFS_file* fileHandle, SAVE_GAME_V29* s
 
 #define GAME_SAVE_V30			\
 	GAME_SAVE_V29;				\
-    int32_t     scrGameLevel;       \
-    uint8_t     bExtraVictoryFlag;  \
-    uint8_t     bExtraFailFlag;     \
-    uint8_t     bTrackTransporter
+	int32_t     scrGameLevel;       \
+	uint8_t     bExtraVictoryFlag;  \
+	uint8_t     bExtraFailFlag;     \
+	uint8_t     bTrackTransporter
 
 typedef struct save_game_v30
 {
@@ -1258,8 +1308,8 @@ static bool deserializeSaveGameV30Data(PHYSFS_file* fileHandle, SAVE_GAME_V30* s
 
 //extra code for the patch - saves out whether cheated with the mission timer
 #define GAME_SAVE_V31           \
-    GAME_SAVE_V30;				\
-    int32_t     missionCheatTime
+	GAME_SAVE_V30;				\
+	int32_t     missionCheatTime
 
 typedef struct save_game_v31
 {
@@ -1281,7 +1331,7 @@ static bool deserializeSaveGameV31Data(PHYSFS_file* fileHandle, SAVE_GAME_V31* s
 
 // alexl. skirmish saves
 #define GAME_SAVE_V33           \
-    GAME_SAVE_V31;				\
+	GAME_SAVE_V31;				\
 	MULTIPLAYERGAME sGame;		\
 	NETPLAY         sNetPlay;	\
 	uint32_t        savePlayer;	\
@@ -1340,7 +1390,7 @@ static bool deserializeSaveGameV33Data(PHYSFS_file* fileHandle, SAVE_GAME_V33* s
 }
 
 #define GAME_SAVE_V34           \
-    GAME_SAVE_V33;				\
+	GAME_SAVE_V33;				\
 	char		sPlayerName[MAX_PLAYERS][StringSize]
 
 //Now holds AI names for multiplayer
@@ -1380,19 +1430,39 @@ static bool deserializeSaveGameV34Data(PHYSFS_file* fileHandle, SAVE_GAME_V34* s
 	return true;
 }
 
-typedef struct save_game
-{
-	GAME_SAVE_V34;
-} SAVE_GAME;
+// First version to utilize (de)serialization API and first to be big-endian (instead of little-endian)
+#define GAME_SAVE_V35           \
+	GAME_SAVE_V34
 
-static bool serializeSaveGameData(PHYSFS_file* fileHandle, const SAVE_GAME* serializeGame)
+typedef struct save_game_v35
+{
+	GAME_SAVE_V35;
+} SAVE_GAME_V35;
+
+static bool serializeSaveGameV35Data(PHYSFS_file* fileHandle, const SAVE_GAME_V35* serializeGame)
 {
 	return serializeSaveGameV34Data(fileHandle, (const SAVE_GAME_V34*) serializeGame);
 }
 
-static bool deserializeSaveGameData(PHYSFS_file* fileHandle, SAVE_GAME* serializeGame)
+static bool deserializeSaveGameV35Data(PHYSFS_file* fileHandle, SAVE_GAME_V35* serializeGame)
 {
 	return deserializeSaveGameV34Data(fileHandle, (SAVE_GAME_V34*) serializeGame);
+}
+
+// Current save game version
+typedef struct save_game
+{
+	GAME_SAVE_V35;
+} SAVE_GAME;
+
+static bool serializeSaveGameData(PHYSFS_file* fileHandle, const SAVE_GAME* serializeGame)
+{
+	return serializeSaveGameV35Data(fileHandle, (const SAVE_GAME_V35*) serializeGame);
+}
+
+static bool deserializeSaveGameData(PHYSFS_file* fileHandle, SAVE_GAME* serializeGame)
+{
+	return deserializeSaveGameV35Data(fileHandle, (SAVE_GAME_V35*) serializeGame);
 }
 
 #define TEMP_DROID_MAXPROGS	3
@@ -2198,7 +2268,7 @@ bool loadGameInit(const char* fileName)
 //			bMultiPlayer = TRUE;				// reenable multi player messages.
 //			multiPlayerInUse = FALSE;
 //		}
-		return FALSE;
+		return false;
 	}
 
 	return true;
@@ -4009,8 +4079,7 @@ bool gameLoad(const char* fileName)
 	debug(LOG_WZ, "gameLoad");
 
 	// Read the header from the file
-	if (PHYSFS_read(fileHandle, fileHeader.aFileType, sizeof(fileHeader.aFileType), 1) != 1
-	 || !PHYSFS_readUBE32(fileHandle, &fileHeader.version))
+	if (!deserializeSaveGameHeader(fileHandle, &fileHeader))
 	{
 		debug(LOG_ERROR, "gameLoad: error while reading header from file (%s): %s", fileName, PHYSFS_getLastError());
 		PHYSFS_close(fileHandle);
@@ -4034,7 +4103,7 @@ bool gameLoad(const char* fileName)
 		return false;
 	}
 
-	debug(LOG_NEVER, "gl .gam file is version %d\n", fileHeader.version);
+	debug(LOG_NEVER, "gl .gam file is version %u\n", fileHeader.version);
 
 	//set main version Id from game file
 	saveGameVersion = fileHeader.version;
@@ -4044,22 +4113,167 @@ bool gameLoad(const char* fileName)
 	if (fileHeader.version < VERSION_7)
 	{
 		debug(LOG_ERROR, "gameLoad: unsupported save format version %d", fileHeader.version);
+		PHYSFS_close(fileHandle);
 		abort();
 		return false;
 	}
 	else if (fileHeader.version < VERSION_9)
 	{
-		return gameLoadV7(fileHandle);
+		bool retVal = gameLoadV7(fileHandle);
+		PHYSFS_close(fileHandle);
+		return retVal;
 	}
 	else if (fileHeader.version <= CURRENT_VERSION_NUM)
 	{
-		return gameLoadV(fileHandle, fileHeader.version);
+		bool retVal = gameLoadV(fileHandle, fileHeader.version);
+		PHYSFS_close(fileHandle);
+		return retVal;
 	}
 	else
 	{
-		debug(LOG_ERROR, "gameLoad: undefined save format version %d", fileHeader.version);
+		debug(LOG_ERROR, "gameLoad: undefined save format version %u", fileHeader.version);
+		PHYSFS_close(fileHandle);
 		abort();
 		return false;
+	}
+}
+
+// Fix endianness of a savegame
+static void endian_SaveGameV(SAVE_GAME* psSaveGame, UDWORD version)
+{
+	unsigned int i, j;
+	/* SAVE_GAME is GAME_SAVE_V33 */
+	/* GAME_SAVE_V33 includes GAME_SAVE_V31 */
+	if(version >= VERSION_33)
+	{
+		endian_udword(&psSaveGame->sGame.power);
+		endian_uword(&psSaveGame->sGame.bytesPerSec);
+		for(i = 0; i < MaxGames; i++) {
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwSize);
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwFlags);
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwMaxPlayers);
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwCurrentPlayers);
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser1);
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser2);
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser3);
+			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser4);
+		}
+		for(i = 0; i < MaxNumberOfPlayers; i++)
+			endian_udword(&psSaveGame->sNetPlay.players[i].dpid);
+		endian_udword(&psSaveGame->sNetPlay.playercount);
+		endian_udword(&psSaveGame->sNetPlay.dpidPlayer);
+		endian_udword(&psSaveGame->savePlayer);
+		for(i = 0; i < MAX_PLAYERS; i++)
+			endian_udword(&psSaveGame->sPlayer2dpid[i]);
+	}
+	/* GAME_SAVE_V31 includes GAME_SAVE_V30 */
+	if(version >= VERSION_31) {
+		endian_sdword(&psSaveGame->missionCheatTime);
+	}
+	/* GAME_SAVE_V30 includes GAME_SAVE_V29 */
+	if(version >= VERSION_30) {
+		endian_sdword(&psSaveGame->scrGameLevel);
+	}
+	/* GAME_SAVE_V29 includes GAME_SAVE_V27 */
+	if(version >= VERSION_29) {
+		endian_uword(&psSaveGame->missionScrollMinX);
+		endian_uword(&psSaveGame->missionScrollMinY);
+		endian_uword(&psSaveGame->missionScrollMaxX);
+		endian_uword(&psSaveGame->missionScrollMaxY);
+	}
+	/* GAME_SAVE_V27 includes GAME_SAVE_V24 */
+	if(version >= VERSION_27) {
+		for(i = 0; i < MAX_PLAYERS; i++)
+			for(j = 0; j < MAX_RECYCLED_DROIDS; j++)
+				endian_uword(&psSaveGame->awDroidExperience[i][j]);
+	}
+	/* GAME_SAVE_V24 includes GAME_SAVE_V22 */
+	if(version >= VERSION_24) {
+		endian_udword(&psSaveGame->reinforceTime);
+	}
+	/* GAME_SAVE_V22 includes GAME_SAVE_V20 */
+	if(version >= VERSION_22) {
+		for(i = 0; i < MAX_PLAYERS; i++) {
+			endian_sdword(&psSaveGame->asRunData[i].sPos.x);
+			endian_sdword(&psSaveGame->asRunData[i].sPos.y);
+		}
+	}
+	/* GAME_SAVE_V20 includes GAME_SAVE_V19 */
+	if(version >= VERSION_20) {
+		for(i = 0; i < MAX_PLAYERS; i++) {
+			endian_sdword(&psSaveGame->asVTOLReturnPos[i].x);
+			endian_sdword(&psSaveGame->asVTOLReturnPos[i].y);
+		}
+	}
+	/* GAME_SAVE_V19 includes GAME_SAVE_V18 */
+	if(version >= VERSION_19) {
+	}
+	/* GAME_SAVE_V18 includes GAME_SAVE_V17 */
+	if(version >= VERSION_18) {
+		endian_udword(&psSaveGame->oldestVersion);
+		endian_udword(&psSaveGame->validityKey);
+	}
+	/* GAME_SAVE_V17 includes GAME_SAVE_V16 */
+	if(version >= VERSION_17) {
+		endian_udword(&psSaveGame->objId);
+	}
+	/* GAME_SAVE_V16 includes GAME_SAVE_V15 */
+	if(version >= VERSION_16) {
+	}
+	/* GAME_SAVE_V15 includes GAME_SAVE_V14 */
+	if(version >= VERSION_15) {
+		endian_udword(&psSaveGame->RubbleTile);
+		endian_udword(&psSaveGame->WaterTile);
+		endian_udword(&psSaveGame->fogColour);
+		endian_udword(&psSaveGame->fogState);
+	}
+	/* GAME_SAVE_V14 includes GAME_SAVE_V12 */
+	if(version >= VERSION_14) {
+		endian_sdword(&psSaveGame->missionOffTime);
+		endian_sdword(&psSaveGame->missionETA);
+		endian_uword(&psSaveGame->missionHomeLZ_X);
+		endian_uword(&psSaveGame->missionHomeLZ_Y);
+		endian_sdword(&psSaveGame->missionPlayerX);
+		endian_sdword(&psSaveGame->missionPlayerY);
+		for(i = 0; i < MAX_PLAYERS; i++) {
+			endian_uword(&psSaveGame->iTranspEntryTileX[i]);
+			endian_uword(&psSaveGame->iTranspEntryTileY[i]);
+			endian_uword(&psSaveGame->iTranspExitTileX[i]);
+			endian_uword(&psSaveGame->iTranspExitTileY[i]);
+			endian_udword(&psSaveGame->aDefaultSensor[i]);
+			endian_udword(&psSaveGame->aDefaultECM[i]);
+			endian_udword(&psSaveGame->aDefaultRepair[i]);
+		}
+	}
+	/* GAME_SAVE_V12 includes GAME_SAVE_V11 */
+	if(version >= VERSION_12) {
+		endian_udword(&psSaveGame->missionTime);
+		endian_udword(&psSaveGame->saveKey);
+	}
+	/* GAME_SAVE_V11 includes GAME_SAVE_V10 */
+	if(version >= VERSION_11) {
+		endian_sdword(&psSaveGame->currentPlayerPos.p.x);
+		endian_sdword(&psSaveGame->currentPlayerPos.p.y);
+		endian_sdword(&psSaveGame->currentPlayerPos.p.z);
+		endian_sdword(&psSaveGame->currentPlayerPos.r.x);
+		endian_sdword(&psSaveGame->currentPlayerPos.r.y);
+		endian_sdword(&psSaveGame->currentPlayerPos.r.z);
+	}
+	/* GAME_SAVE_V10 includes GAME_SAVE_V7 */
+	if(version >= VERSION_10) {
+		for(i = 0; i < MAX_PLAYERS; i++) {
+			endian_udword(&psSaveGame->power[i].currentPower);
+			endian_udword(&psSaveGame->power[i].extractedPower);
+		}
+	}
+	/* GAME_SAVE_V7 */
+	if(version >= VERSION_7) {
+		endian_udword(&psSaveGame->gameTime);
+		endian_udword(&psSaveGame->GameType);
+		endian_sdword(&psSaveGame->ScrollMinX);
+		endian_sdword(&psSaveGame->ScrollMinY);
+		endian_udword(&psSaveGame->ScrollMaxX);
+		endian_udword(&psSaveGame->ScrollMaxY);
 	}
 }
 
@@ -4076,11 +4290,23 @@ static UDWORD getCampaignV(PHYSFS_file* fileHandle, unsigned int version)
 		return 0;
 	}
 	// We only need VERSION 12 data (saveGame.saveKey)
+	else if (version <= VERSION_34)
+	{
+		if (PHYSFS_read(fileHandle, &saveGame, sizeof(SAVE_GAME_V14), 1) != 1)
+		{
+			debug(LOG_ERROR, "getCampaignV: error while reading file: %s", PHYSFS_getLastError());
+			abort();
+			return 0;
+		}
+
+		// Convert from little-endian to native byte-order
+		endian_SaveGameV((SAVE_GAME*)&saveGame, VERSION_14);
+	}
 	else if (version <= CURRENT_VERSION_NUM)
 	{
 		if (!deserializeSaveGameV14Data(fileHandle, &saveGame))
 		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			debug(LOG_ERROR, "getCampaignV: error while reading file: %s", PHYSFS_getLastError());
 			abort();
 			return 0;
 		}
@@ -4102,14 +4328,13 @@ UDWORD getCampaign(const char* fileName)
 	if (!fileHandle)
 	{
 		// Failure to open the file is a failure to load the specified savegame
-		return true;
+		return false;
 	}
 
 	debug(LOG_WZ, "getCampaign: %s", fileName);
 
 	// Read the header from the file
-	if (PHYSFS_read(fileHandle, fileHeader.aFileType, sizeof(fileHeader.aFileType), 1) != 1
-	 || !PHYSFS_readUBE32(fileHandle, &fileHeader.version))
+	if (!deserializeSaveGameHeader(fileHandle, &fileHeader))
 	{
 		debug(LOG_ERROR, "getCampaign: error while reading header from file (%s): %s", fileName, PHYSFS_getLastError());
 		PHYSFS_close(fileHandle);
@@ -4142,6 +4367,7 @@ UDWORD getCampaign(const char* fileName)
 	/* Check the file version */
 	if (fileHeader.version < VERSION_14)
 	{
+		PHYSFS_close(fileHandle);
 		return 0;
 	}
 
@@ -4153,18 +4379,21 @@ UDWORD getCampaign(const char* fileName)
 	// dont check skirmish saves.
 	if (fileHeader.version <= CURRENT_VERSION_NUM)
 	{
-		return getCampaignV(fileHandle, fileHeader.version);
+		UDWORD retVal = getCampaignV(fileHandle, fileHeader.version);
+		PHYSFS_close(fileHandle);
+		return retVal;
 	}
-
 	else
 	{
 		debug(LOG_ERROR, "getCampaign: undefined save format version %d", fileHeader.version);
+		PHYSFS_close(fileHandle);
 		abort();
 		return 0;
 	}
 
 //	DBMB(("IsScenario = %d\nfor the game that's being loaded.", IsScenario));
 
+	PHYSFS_close(fileHandle);
 	return 0;
 }
 
@@ -4180,7 +4409,8 @@ void game_SetValidityKey(UDWORD keys)
 bool gameLoadV7(PHYSFS_file* fileHandle)
 {
 	SAVE_GAME_V7 saveGame;
-	if (!deserializeSaveGameV7Data(fileHandle, &saveGame))
+
+	if (PHYSFS_read(fileHandle, &saveGame, sizeof(saveGame), 1) != 1)
 	{
 		debug(LOG_ERROR, "gameLoadV7: error while reading file: %s", PHYSFS_getLastError());
 		abort();
@@ -4189,6 +4419,14 @@ bool gameLoadV7(PHYSFS_file* fileHandle)
 
 
 //	DBERROR(("gameLoadV7: this is and outdated save game"));
+
+	/* GAME_SAVE_V7 */
+	endian_udword(&saveGame.gameTime);
+	endian_udword(&saveGame.GameType);
+	endian_sdword(&saveGame.ScrollMinX);
+	endian_sdword(&saveGame.ScrollMinY);
+	endian_udword(&saveGame.ScrollMaxX);
+	endian_udword(&saveGame.ScrollMaxY);
 
 	savedGameTime = saveGame.gameTime;
 
@@ -4248,176 +4486,193 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 
 	debug(LOG_WZ, "gameLoadV: version %u", version);
 
-  	//VERSION_7 AND EARLIER LOADED SEPARATELY
+	// Version 7 and earlier are loaded separately in gameLoadV7
 
 	//size is now variable so only check old save games
 	if (version <= VERSION_10)
 	{
-		if (!deserializeSaveGameV10Data(fileHandle, (SAVE_GAME_V10*)&saveGameData))
+		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V10), 1) != 1)
 		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
 			abort();
 			return false;
 		}
 	}
 	else if (version == VERSION_11)
 	{
-		if (!deserializeSaveGameV11Data(fileHandle, (SAVE_GAME_V11*)&saveGameData))
+		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V11), 1) != 1)
 		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
 			abort();
 			return false;
 		}
 	}
 	else if (version <= VERSION_12)
 	{
-		if (!deserializeSaveGameV12Data(fileHandle, (SAVE_GAME_V12*)&saveGameData))
+		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V12), 1) != 1)
 		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
 			abort();
 			return false;
 		}
 	}
 	else if (version <= VERSION_14)
 	{
-		if (!deserializeSaveGameV14Data(fileHandle, (SAVE_GAME_V14*)&saveGameData))
+		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V14), 1) != 1)
 		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
 			abort();
 			return false;
 		}
 	}
 	else if (version <= VERSION_15)
 	{
-		if (!deserializeSaveGameV15Data(fileHandle, (SAVE_GAME_V15*)&saveGameData))
+		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V15), 1) != 1)
 		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
 			abort();
 			return false;
 		}
 	}
 	else if (version <= VERSION_16)
 	{
-		if (!deserializeSaveGameV16Data(fileHandle, (SAVE_GAME_V16*)&saveGameData))
+		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V16), 1) != 1)
 		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
 			abort();
 			return false;
 		}
 	}
 	else if (version <= VERSION_17)
 	{
-		if (!deserializeSaveGameV17Data(fileHandle, (SAVE_GAME_V17*)&saveGameData))
+		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V17), 1) != 1)
 		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
 			abort();
 			return false;
 		}
 	}
 	else if (version <= VERSION_18)
 	{
-		if (!deserializeSaveGameV18Data(fileHandle, (SAVE_GAME_V18*)&saveGameData))
+		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V18), 1) != 1)
 		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
 			abort();
 			return false;
 		}
 	}
 	else if (version <= VERSION_19)
 	{
-		if (!deserializeSaveGameV19Data(fileHandle, (SAVE_GAME_V19*)&saveGameData))
+		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V19), 1) != 1)
 		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
 			abort();
 			return false;
 		}
 	}
 	else if (version <= VERSION_21)
 	{
-		if (!deserializeSaveGameV20Data(fileHandle, (SAVE_GAME_V20*)&saveGameData))
+		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V20), 1) != 1)
 		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
 			abort();
 			return false;
 		}
 	}
 	else if (version <= VERSION_23)
 	{
-		if (!deserializeSaveGameV22Data(fileHandle, (SAVE_GAME_V22*)&saveGameData))
+		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V22), 1) != 1)
 		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
 			abort();
 			return false;
 		}
 	}
 	else if (version <= VERSION_26)
 	{
-		if (!deserializeSaveGameV24Data(fileHandle, (SAVE_GAME_V24*)&saveGameData))
+		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V24), 1) != 1)
 		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
 			abort();
 			return false;
 		}
 	}
 	else if (version <= VERSION_28)
 	{
-		if (!deserializeSaveGameV27Data(fileHandle, (SAVE_GAME_V27*)&saveGameData))
+		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V27), 1) != 1)
 		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
 			abort();
 			return false;
 		}
 	}
 	else if (version <= VERSION_29)
 	{
-		if (!deserializeSaveGameV29Data(fileHandle, (SAVE_GAME_V29*)&saveGameData))
+		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V29), 1) != 1)
 		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
 			abort();
 			return false;
 		}
 	}
 	else if (version <= VERSION_30)
 	{
-		if (!deserializeSaveGameV30Data(fileHandle, (SAVE_GAME_V30*)&saveGameData))
+		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V30), 1) != 1)
 		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
 			abort();
 			return false;
 		}
 	}
 	else if (version <= VERSION_32)
-    {
-		if (!deserializeSaveGameV31Data(fileHandle, (SAVE_GAME_V31*)&saveGameData))
+	{
+		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V31), 1) != 1)
 		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
 			abort();
 			return false;
 		}
-    }
+	}
 	else if (version <= VERSION_33)
-    {
-		if (!deserializeSaveGameV33Data(fileHandle, (SAVE_GAME_V33*)&saveGameData))
+	{
+		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V33), 1) != 1)
 		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
 			abort();
 			return false;
 		}
-    }
+	}
+	else if (version <= VERSION_34)
+	{
+		if (PHYSFS_read(fileHandle, &saveGameData, sizeof(SAVE_GAME_V34), 1) != 1)
+		{
+			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, PHYSFS_getLastError());
+			abort();
+			return false;
+		}
+	}
 	else if (version <= CURRENT_VERSION_NUM)
 	{
 		if (!deserializeSaveGameData(fileHandle, &saveGameData))
 		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file: %s", PHYSFS_getLastError());
+			debug(LOG_ERROR, "gameLoadV: error while reading data from file for deserialization (with version number %u): %s", version, PHYSFS_getLastError());
 			abort();
 			return false;
 		}
 	}
 	else
 	{
-		debug(LOG_ERROR, "gameLoadV: out of range version number for savegame %u", version);
+		debug(LOG_ERROR, "gameLoadV: out of range version number (%u) for savegame", version);
 		abort();
 		return false;
+	}
+
+	// All savegames from version 34 or before are little endian so swap them. All
+	// from version 35, and onward, are already swapped to the native byte-order
+	// by the (de)serialization API
+	if (version <= VERSION_34)
+	{
+		endian_SaveGameV(&saveGameData, version);
 	}
 
 	savedGameTime = saveGameData.gameTime;
@@ -4760,8 +5015,7 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 
 	fileHeader.version = CURRENT_VERSION_NUM;
 
-	if (PHYSFS_write(fileHandle, fileHeader.aFileType, sizeof(fileHeader.aFileType), 1) != 1
-	 || !PHYSFS_writeUBE32(fileHandle, fileHeader.version))
+	if (!serializeSaveGameHeader(fileHandle, &fileHeader))
 	{
 		debug(LOG_ERROR, "game.c:writeGameFile: could not write header to %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
 		PHYSFS_close(fileHandle);
