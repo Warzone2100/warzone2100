@@ -1,3 +1,5 @@
+All commands must be entered without quotes.
+
 "ally me"				- ask AI to ally you
 "go center"				- ask AI to send all attack units to the center of the map
 "status?"				- ask AI what it is currently busy with
@@ -7,16 +9,16 @@
 "help me"				- ask AI for help
 "i'm ok"				- notify AI that you don't need his help anymore
 "go <player>"			- tell AI to attack some payer, where <player> is player name (blue, red etc) or player number
-"<player> has vtols"	- inform AI that some player has VTOLs, will make AI build some additional AI defences
+"<player> has vtols"	- inform AI that some player has VTOLs, will make AI build some additional AA defences
 
 Addressing only certain AI players:
 
 If you want only certain AIs to react on your chat message simply address them the way you would have addressed human players, example:
 
-Red, blue, orange: go cyan!
+"Red, blue, orange: go cyan!"
 
 or:
 
-orange help me
+"orange help me"
 
 etc
