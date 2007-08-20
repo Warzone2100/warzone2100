@@ -1,3 +1,28 @@
+---------- pie_export.py v1.0 ----------
+
+- completely compatible with the data loaded from the import script.
+	conversely, the import script is completely compatible with pie's exported in
+	blender.
+- now handles any number of layers
+- number of teamcolors no longer assumed to be 8 -- supports any number of
+	teamcolors.
+- now exports in either compliant pie 5 (working spec) or pie 2 formats
+- the entirety of the pie spec (versions 2 and 5) are supported during export
+	(as well as import)
+- all valid pie objects can be exported at once
+
+---------- pie_common.py v1.0 ----------
+
+- a lot of shared operations have been abstracted into here, including basic
+	gui support.
+- various gui components now utilize the scroll wheel for handling content
+	longer than can be fit on screen, instead of the previous "page" method.
+
+---------- pie_import.py v1.2 ----------
+
+- uses a more portable ui chaining system that will appear in pie_export.py
+- ui now prefers scrolling with the mousewheel over using a "page" system
+
 ---------- pie_import.py v1.1 ----------
 
 - all contents of a pie will be sub-objects of a PIE object.
@@ -24,6 +49,7 @@
 - fixed a nasty and hard to notice bug that always occured during import where
 	the model got mirrored along the x axis on import. afaict, *all* versions of
 	the import script	always did this.
+- fixed a teamcolor problem where teamcolors would never import correctly.
 
 ---------- pie_levels_to_layers.py v0.2 ----------
 - user can now have levels re-layered at will be running a script on any number

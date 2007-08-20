@@ -154,7 +154,10 @@ def parse(pie):
     else:
       vals[0] = "data"
       vals.append(first)
-      vals.extend(rest[1].split())
+      try:
+        vals.extend(rest[1].split())
+      except IndexError:
+        yield ["error", lineno, line, PIESyntaxError("malformed line")]
     yield vals
 
 def data_mutator(gen):
