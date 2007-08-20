@@ -206,6 +206,20 @@ Section $(TEXT_SecGrimMod) SecGrimMod
 
 SectionEnd
 
+Section $(TEXT_SecAIvolutionMod) SecAIvolutionMod
+
+  SetOutPath "$INSTDIR\mods\global"
+
+  File "..\data\mods\global\aivolution.wz"
+
+  SetOutPath "$INSTDIR"
+
+  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Warzone 2100 - AIvolution.lnk" "$INSTDIR\warzone2100.exe" "--mod aivolution.wz"
+  !insertmacro MUI_STARTMENU_WRITE_END
+
+SectionEnd
+
 SectionGroupEnd
 
 Section $(TEXT_SecNLS) SecNLS
@@ -258,6 +272,9 @@ FunctionEnd
   LangString TEXT_SecGrimMod ${LANG_ENGLISH} "Grim's graphics-update"
   LangString DESC_SecGrimMod ${LANG_ENGLISH} "Grim's graphics-update. Contains more detailed textures for campaign 1 as well as additional texture- and model-updates. Copyright (C) 2005-2007 Grim Moroe, Use is only permited for Warzone 2100."
 
+  LangString TEXT_SecAIvolutionMod ${LANG_ENGLISH} "AIvolution"
+  LangString DESC_SecAIvolutionMod ${LANG_ENGLISH} "Improved artificial intelligence that learns."
+
   LangString TEXT_SecNLS ${LANG_ENGLISH} "NLS"
   LangString DESC_SecNLS ${LANG_ENGLISH} "Support for languages other than English."
 
@@ -275,6 +292,9 @@ FunctionEnd
   LangString TEXT_SecGrimMod ${LANG_DUTCH} "Grim's grafische-update"
   LangString DESC_SecGrimMod ${LANG_DUTCH} "Grim's grafische-update. Bevat meer gedetaïleerde textures voor campaign 1 en extra texture- en model-updates. Copyright (C) 2005-2007 Grim Moroe, gebruik is alleen toegestaan voor Warzone 2100."
 
+  LangString TEXT_SecAIvolutionMod ${LANG_DUTCH} "AIvolution"
+  LangString DESC_SecAIvolutionMod ${LANG_DUTCH} "Verbeterde kunstmatige intelligentie die leert."
+
   LangString TEXT_SecNLS ${LANG_DUTCH} "NLS"
   LangString DESC_SecNLS ${LANG_DUTCH} "Ondersteuning voor andere talen dan Engels (Nederlands inbegrepen)."
 
@@ -291,6 +311,9 @@ FunctionEnd
 
   LangString TEXT_SecGrimMod ${LANG_GERMAN} "Grims Grafik-Update"
   LangString DESC_SecGrimMod ${LANG_GERMAN} "Grims Grafik-Update. Enthält detailliertere Texturen für Kampagne 1 sowie einige andere Textur- und Model-Updates. Copyright (C) 2005-2007 Grim Moroe, Verwendung nur für Warzone 2100 gestattet."
+
+  LangString TEXT_SecAIvolutionMod ${LANG_GERMAN} "AIvolutino"
+  LangString DESC_SecAIvolutionMod ${LANG_GERMAN} "Verbesserte künstliche Intelligenz die erlernt."
 
   LangString TEXT_SecNLS ${LANG_GERMAN} "NLS"
   LangString DESC_SecNLS ${LANG_GERMAN} "Unterstützung für Sprachen anders als Englisch (Deutsch inbegriffen)."
@@ -311,6 +334,7 @@ FunctionEnd
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecMods} $(DESC_SecMods)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecGrimMod} $(DESC_SecGrimMod)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecAIvolutionMod} $(DESC_SecAIvolutionMod)
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecNLS} $(DESC_SecNLS)
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
