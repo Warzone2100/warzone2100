@@ -27,4 +27,22 @@
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #define ABS(a) (((a) < 0) ? (-(a)) : (a))
 
+#define ABSDIF(a,b) ((a)>(b) ? (a)-(b) : (b)-(a))
+
+
+/*
+   defines for ONEINX
+   Use: if (ONEINX) { code... }
+*/
+#define	ONEINTWO				(rand()%2==0)
+#define ONEINTHREE				(rand()%3==0)
+#define ONEINFOUR				(rand()%4==0)
+#define ONEINFIVE				(rand()%5==0)
+#define ONEINSIX				(rand()%6==0)
+#define ONEINSEVEN				(rand()%7==0)
+#define ONEINEIGHT				(rand()%8==0)
+#define ONEINNINE				(rand()%9==0)
+#define ONEINTEN				(rand()%10==0)
+
+
 #endif // MACROS_H

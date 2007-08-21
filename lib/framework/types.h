@@ -18,7 +18,8 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /*! \file types.h
- *  * \brief Simple type definitions.
+ *  \brief Simple type definitions.
+ *  Includes wzglobal.h
  */
 #ifndef _types_h
 #define _types_h
@@ -31,7 +32,7 @@
 #error Framework header files MUST be included from Frame.h ONLY.
 #endif
 
-#include "platform.h"
+#include "wzglobal.h"
 
 // Defines C99 types for C99 incompatible compilers (e.g. MSVC)
 #include <SDL/SDL_types.h>
@@ -60,9 +61,7 @@ typedef uint32_t UDWORD;
 typedef int32_t  SDWORD;
 
 #ifndef WZ_OS_WIN
-
 typedef int BOOL;
-
 #endif /* !WZ_OS_WIN */
 
 // If we are C99 compatible, the "bool" macro will be defined in <stdbool.h> (as _Bool)
@@ -108,26 +107,5 @@ typedef int BOOL;
 #define FALSE	(0)
 #endif
 
-/* defines for ONEINX - use
-
-   if (ONEINX)
-	{
-		code.....
-	}
-
-*/
-
-#define	ONEINTWO				rand()%2==0
-#define ONEINTHREE				rand()%3==0
-#define ONEINFOUR				rand()%4==0
-#define ONEINFIVE				rand()%5==0
-#define ONEINSIX				rand()%6==0
-#define ONEINSEVEN				rand()%7==0
-#define ONEINEIGHT				rand()%8==0
-#define ONEINNINE				rand()%9==0
-#define ONEINTEN				rand()%10==0
-
-#define	ABSDIF(a,b) ((a)>(b) ? (a)-(b) : (b)-(a))
-#define CAT(a,b) a##b
 
 #endif

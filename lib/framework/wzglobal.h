@@ -18,11 +18,11 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /*! \file wzglobal.h
- *  \brief Global definitions
-
-	Shamelessly stolen from Qt4 (Qt/qglobal.h) by Dennis.
-	This has been stripped down, feel free to add checks as you need them.
-*/
+ *  \brief Platform detection, workarounds and compat fixes
+ *
+ *  OS and CC detection code shamelessly stolen from Qt4 (Qt/qglobal.h) by Dennis.
+ *  This has been stripped down, feel free to add checks as you need them.
+ */
 
 #ifndef WZGLOBAL_H
 #define WZGLOBAL_H
@@ -35,6 +35,9 @@
 #ifdef __MACOSX__
 #include "config-macosx.h"
 #endif
+
+
+/* ---- Platform detection ---- */
 
 
 /*
@@ -216,14 +219,28 @@
    The supported C standard, must be one of: (WZ_Cxx)
 
      99       - ISO/IEC 9899:1999 / C99
-
 */
 #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
 # define WZ_C99
 #endif /* WZ_Cxx */
 
 
-/**
+/*
+   Convenience macros to test the versions of gcc.
+   Copied from glibc's features.h.
+*/
+#if defined(WZ_CC_GNU) && defined __GNUC__ && defined __GNUC_MINOR__
+#  define WZ_CC_GNU_PREREQ(maj, min) \
+          ((__GNUC__ << 16) + __GNUC_MINOR__ >= ((maj) << 16) + (min))
+#else
+#  define WZ_CC_GNU_PREREQ(maj, min) 0
+#endif
+
+
+/* ---- Declaration attributes ---- */
+
+
+/*!
  * \def WZ_DECL_DEPRECATED
  *
  * The WZ_DECL_DEPRECATED macro can be used to trigger compile-time warnings
@@ -261,7 +278,7 @@
  * Description copied from KDE4, code copied from Qt4.
  *
  */
-#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 2))
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && WZ_CC_GNU_PREREQ(3,2)
 #  define WZ_DECL_DEPRECATED __attribute__ ((__deprecated__))
 #elif defined(WZ_CC_MSVC) && (_MSC_VER >= 1300)
 #  define WZ_DECL_DEPRECATED __declspec(deprecated)
@@ -274,7 +291,7 @@
  * \def WZ_DECL_UNUSED
  * This function is not used, but shall not generate an unused warning either.
  */
-#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 2))
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && WZ_CC_GNU_PREREQ(3,2)
 #  define WZ_DECL_UNUSED __attribute__((__unused__))
 #else
 #  define WZ_DECL_UNUSED
@@ -285,7 +302,7 @@
  * \def WZ_DECL_PURE
  * "Many functions have no effects except the return value and their return value depends only on the parameters and/or global variables. Such a function can be subject to common subexpression elimination and loop optimization just as an arithmetic operator would be."
  */
-#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && (__GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 96))
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && WZ_CC_GNU_PREREQ(2,96)
 #  define WZ_DECL_PURE __attribute__((__pure__))
 #else
 #  define WZ_DECL_PURE
@@ -296,7 +313,7 @@
  * \def WZ_DECL_CONST
  * "Many functions do not examine any values except their arguments, and have no effects except the return value. Basically this is just slightly more strict class than the pure attribute below, since function is not allowed to read global memory."
  */
-#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && (__GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 5))
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && WZ_CC_GNU_PREREQ(2,5)
 #  define WZ_DECL_CONST __attribute__((__const__))
 #else
 #  define WZ_DECL_CONST
@@ -306,12 +323,53 @@
 /*! \def WZ_DECL_FORMAT
  * "The format attribute specifies that a function takes printf, scanf, strftime or strfmon style arguments which should be type-checked against a format string."
  */
-#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && (__GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 5))
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && WZ_CC_GNU_PREREQ(2,5)
 #  define WZ_DECL_FORMAT(archetype, string_index, first_to_check) \
           __attribute__((__format__ (archetype, string_index, first_to_check)))
 #else
 #  define WZ_DECL_FORMAT
 #endif
+
+
+/* ---- Platform specific setup ---- */
+
+
+#if defined(WZ_OS_WIN)
+
+#  if defined(WZ_CC_MINGW)
+#    include <w32api.h>
+#    define _WIN32_IE IE5
+#  endif /* WZ_CC_GNU */
+
+#  if defined(WZ_CC_MSVC)
+#    if defined(_DEBUG)
+#      define DEBUG
+#      define _CRTDBG_MAP_ALLOC
+#      include <stdlib.h>
+#      include <crtdbg.h>
+#    endif /* _DEBUG */
+#  endif /* WZ_CC_MSVC */
+
+#  define WIN32_LEAN_AND_MEAN
+#  define WIN32_EXTRA_LEAN
+#  include <windows.h>
+
+#  if defined(WZ_CC_MSVC)
+#    define strcasecmp _stricmp
+#    define strncasecmp _strnicmp
+#    define vsnprintf _vsnprintf
+#    define snprintf  _snprintf
+#    define fileno _fileno
+#    define inline __inline
+#    define isfinite _finite
+#  endif /* WZ_CC_MSVC */
+
+#elif defined(WZ_OS_UNIX)
+
+#  include <limits.h>
+#  define MAX_PATH PATH_MAX
+
+#endif /* WZ_OS_* */
 
 
 #endif /* WZGLOBAL_H */

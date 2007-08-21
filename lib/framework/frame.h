@@ -23,7 +23,7 @@
 #ifndef _frame_h
 #define _frame_h
 
-#include "platform.h"
+#include "wzglobal.h"
 
 /* This one must be invoked *after* platform.h to get _GNU_SOURCE! */
 #include <string.h>

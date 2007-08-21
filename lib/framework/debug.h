@@ -28,14 +28,14 @@
  * are used outside of the framework library.
  */
 
-#include <stdio.h>
-
 #if !defined(_frame_h) && !defined(FRAME_LIB_INCLUDE)
-#error Framework header files MUST be included from Frame.h ONLY.
+# error Framework header files MUST be included from Frame.h ONLY.
 #endif
 
+#include <stdio.h>
 #include <assert.h>
 #include <stdarg.h>
+
 #include "types.h"
 
 /****************************************************************************************
@@ -43,11 +43,6 @@
  * Basic debugging macro's
  *
  */
-#ifdef _MSC_VER
-#ifdef _DEBUG
-#define DEBUG
-#endif
-#endif
 
 /* stores name of the last function or event called by scripts */
 #define MAX_EVENT_NAME_LEN	100
