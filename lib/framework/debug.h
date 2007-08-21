@@ -85,19 +85,6 @@ extern char last_called_script_event[MAX_EVENT_NAME_LEN];
  ***
  ***/
 
-/* Want to use GCC's __attribute__ keyword to check variadic
- * parameters to printf-like functions, without upsetting other
- * compilers: put any required defines magic here.
- * If other compilers have something equivalent, could also
- * work that out here.   Should this use configure stuff somehow?
- * --dwp
- */
-#if defined(__GNUC__)
-#define wz__attribute(x)  __attribute__(x)
-#else
-#define wz__attribute(x)
-#endif
-
 /* Must match code_part_names in debug.c */
 typedef enum {
   LOG_ALL, /* special: sets all to on */
@@ -180,6 +167,6 @@ BOOL debug_enable_switch(const char *str);
  */
 #define debug(part, ...) do { if (enabled_debug[part]) _debug(part, __VA_ARGS__); } while(0)
 void _debug( code_part part, const char *str, ...)
-		wz__attribute((format (printf, 2, 3)) );
+		WZ_DECL_FORMAT(printf, 2, 3);
 
 #endif

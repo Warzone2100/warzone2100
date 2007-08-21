@@ -21,7 +21,7 @@
  *  \brief Global definitions
 
 	Shamelessly stolen from Qt4 (Qt/qglobal.h) by Dennis.
-	This has been greatly stripped down, feel free to add checks as you need them.
+	This has been stripped down, feel free to add checks as you need them.
 */
 
 #ifndef WZGLOBAL_H
@@ -40,26 +40,54 @@
 /*
    The operating system, must be one of: (WZ_OS_x)
 
-     MAC      - Mac OS
-     CYGWIN   - Cygwin
+     DARWIN   - Darwin OS (synonym for WZ_OS_MAC)
+     MSDOS    - MS-DOS and Windows
+     OS2      - OS/2
+     OS2EMX   - XFree86 on OS/2 (not PM)
      WIN32    - Win32 (Windows 95/98/ME and Windows NT/2000/XP)
-     WIN64    - Win64
+     CYGWIN   - Cygwin
+     SOLARIS  - Sun Solaris
+     HPUX     - HP-UX
+     ULTRIX   - DEC Ultrix
      LINUX    - Linux
      FREEBSD  - FreeBSD
      NETBSD   - NetBSD
      OPENBSD  - OpenBSD
      BSDI     - BSD/OS
+     IRIX     - SGI Irix
+     OSF      - HP Tru64 UNIX
+     SCO      - SCO OpenServer 5
+     UNIXWARE - UnixWare 7, Open UNIX 8
+     AIX      - AIX
+     HURD     - GNU Hurd
+     DGUX     - DG/UX
+     RELIANT  - Reliant UNIX
+     DYNIX    - DYNIX/ptx
      QNX      - QNX
      QNX6     - QNX RTP 6.1
+     LYNX     - LynxOS
      BSD4     - Any BSD 4.4 system
      UNIX     - Any UNIX BSD/SYSV system
-     WIN      - Any Windows system
 */
 
-#if defined(__MACOSX__)
-#  define WZ_OS_MAC
+#if defined(__APPLE__) && (defined(__GNUC__) || defined(__xlC__) || defined(__xlc__))
+#  define WZ_OS_DARWIN
+#  define WZ_OS_BSD4
+#  ifdef __LP64__
+#    define WZ_OS_DARWIN64
+#  else
+#    define WZ_OS_DARWIN32
+#  endif
 #elif defined(__CYGWIN__)
 #  define WZ_OS_CYGWIN
+#elif defined(MSDOS) || defined(_MSDOS)
+#  define WZ_OS_MSDOS
+#elif defined(__OS2__)
+#  if defined(__EMX__)
+#    define WZ_OS_OS2EMX
+#  else
+#    define WZ_OS_OS2
+#  endif
 #elif !defined(SAG_COM) && (defined(WIN64) || defined(_WIN64) || defined(__WIN64__))
 #  define WZ_OS_WIN32
 #  define WZ_OS_WIN64
@@ -67,20 +95,55 @@
 #  define WZ_OS_WIN32
 #elif defined(__MWERKS__) && defined(__INTEL__)
 #  define WZ_OS_WIN32
+#elif defined(__sun) || defined(sun)
+#  define WZ_OS_SOLARIS
+#elif defined(hpux) || defined(__hpux)
+#  define WZ_OS_HPUX
+#elif defined(__ultrix) || defined(ultrix)
+#  define WZ_OS_ULTRIX
+#elif defined(sinix)
+#  define WZ_OS_RELIANT
 #elif defined(__linux__) || defined(__linux)
 #  define WZ_OS_LINUX
 #elif defined(__FreeBSD__) || defined(__DragonFly__)
 #  define WZ_OS_FREEBSD
+#  define WZ_OS_BSD4
 #elif defined(__NetBSD__)
 #  define WZ_OS_NETBSD
+#  define WZ_OS_BSD4
 #elif defined(__OpenBSD__)
 #  define WZ_OS_OPENBSD
+#  define WZ_OS_BSD4
 #elif defined(__bsdi__)
 #  define WZ_OS_BSDI
+#  define WZ_OS_BSD4
+#elif defined(__sgi)
+#  define WZ_OS_IRIX
+#elif defined(__osf__)
+#  define WZ_OS_OSF
+#elif defined(_AIX)
+#  define WZ_OS_AIX
+#elif defined(__Lynx__)
+#  define WZ_OS_LYNX
+#elif defined(__GNU__)
+#  define WZ_OS_HURD
+#elif defined(__DGUX__)
+#  define WZ_OS_DGUX
 #elif defined(__QNXNTO__)
 #  define WZ_OS_QNX6
 #elif defined(__QNX__)
 #  define WZ_OS_QNX
+#elif defined(_SEQUENT_)
+#  define WZ_OS_DYNIX
+#elif defined(_SCO_DS) /* SCO OpenServer 5 + GCC */
+#  define WZ_OS_SCO
+#elif defined(__USLC__) /* all SCO platforms + UDK or OUDK */
+#  define WZ_OS_UNIXWARE
+#elif defined(__svr4__) && defined(i386) /* Open UNIX 8 + GCC */
+#  define WZ_OS_UNIXWARE
+#elif defined(__INTEGRITY)
+#  define WZ_OS_INTEGRITY
+#elif defined(__MAKEDEPEND__)
 #else
 #  error "Warzone has not been tested on this OS. Please contact warzone-dev@gna.org"
 #endif /* WZ_OS_x */
@@ -89,22 +152,29 @@
 #  define WZ_OS_WIN
 #endif /* WZ_OS_WIN32 */
 
-#if defined(WZ_OS_FREEBSD) || defined(WZ_OS_NETBSD) || defined(WZ_OS_OPENBSD) || defined(WZ_OS_BSDI)
-#  define WZ_OS_BSD4
-#endif /* WZ_OS_FREEBSD */
+#if defined(WZ_OS_DARWIN)
+#  define WZ_OS_MAC /* WZ_OS_MAC is mostly for compatibility, but also more clear */
+#  define WZ_OS_MACX /* WZ_OS_MACX is only for compatibility.*/
+#  if defined(WZ_OS_DARWIN64)
+#     define WZ_OS_MAC64
+#  elif defined(WZ_OS_DARWIN32)
+#     define WZ_OS_MAC32
+#  endif
+#endif /* WZ_OS_DARWIN */
 
-#if defined(WZ_OS_WIN)
+#if defined(WZ_OS_MSDOS) || defined(WZ_OS_OS2) || defined(WZ_OS_WIN)
 #  undef WZ_OS_UNIX
 #elif !defined(WZ_OS_UNIX)
 #  define WZ_OS_UNIX
-#endif /* WZ_OS_WIN */
+#endif /* WZ_OS_* */
 
 
 /*
    The compiler, must be one of: (WZ_CC_x)
 
-     MSVC     - Microsoft Visual C/C++
+     MSVC     - Microsoft Visual C/C++, Intel C++ for Windows
      GNU      - GNU C++
+     INTEL    - Intel C++ for Linux, Intel C++ for Windows
 
    Should be sorted most to least authoritative.
 */
@@ -115,8 +185,28 @@
 #  if _MSC_VER >= 1300
 #    define WZ_CC_MSVC_NET
 #  endif
+/* Intel C++ disguising as Visual C++: the `using' keyword avoids warnings */
+#  if defined(__INTEL_COMPILER)
+#    define WZ_CC_INTEL
+#  endif
+/* x64 does not support mmx intrinsics on windows */
+#  if (defined(ZS_OS_WIN64) && defined(_M_X64))
+#    undef ZS_HAVE_SSE
+#    undef ZS_HAVE_SSE2
+#    undef ZS_HAVE_MMX
+#    undef ZS_HAVE_3DNOW
+#  endif
+
 #elif defined(__GNUC__)
 #  define WZ_CC_GNU
+#  if defined(__MINGW32__)
+#    define WZ_CC_MINGW
+#  endif
+#  if defined(__INTEL_COMPILER)
+/* Intel C++ also masquerades as GCC 3.2.0 */
+#    define WZ_CC_INTEL
+#  endif
+
 #else
 #  error "Warzone has not been tested on this compiler. Please contact warzone-dev@gna.org"
 #endif /* WZ_CC_x */
@@ -171,7 +261,7 @@
  * Description copied from KDE4, code copied from Qt4.
  *
  */
-#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && (__GNUC__ - 0 > 3 || (__GNUC__ - 0 == 3 && __GNUC_MINOR__ - 0 >= 2))
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 2))
 #  define WZ_DECL_DEPRECATED __attribute__ ((__deprecated__))
 #elif defined(WZ_CC_MSVC) && (_MSC_VER >= 1300)
 #  define WZ_DECL_DEPRECATED __declspec(deprecated)
@@ -184,7 +274,7 @@
  * \def WZ_DECL_UNUSED
  * This function is not used, but shall not generate an unused warning either.
  */
-#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && (__GNUC__ - 0 > 3 || (__GNUC__ - 0 == 3 && __GNUC_MINOR__ - 0 >= 2))
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 2))
 #  define WZ_DECL_UNUSED __attribute__((__unused__))
 #else
 #  define WZ_DECL_UNUSED
@@ -195,7 +285,7 @@
  * \def WZ_DECL_PURE
  * "Many functions have no effects except the return value and their return value depends only on the parameters and/or global variables. Such a function can be subject to common subexpression elimination and loop optimization just as an arithmetic operator would be."
  */
-#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 2))
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && (__GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 96))
 #  define WZ_DECL_PURE __attribute__((__pure__))
 #else
 #  define WZ_DECL_PURE
@@ -206,10 +296,21 @@
  * \def WZ_DECL_CONST
  * "Many functions do not examine any values except their arguments, and have no effects except the return value. Basically this is just slightly more strict class than the pure attribute below, since function is not allowed to read global memory."
  */
-#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 2))
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && (__GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 5))
 #  define WZ_DECL_CONST __attribute__((__const__))
 #else
 #  define WZ_DECL_CONST
+#endif
+
+
+/*! \def WZ_DECL_FORMAT
+ * "The format attribute specifies that a function takes printf, scanf, strftime or strfmon style arguments which should be type-checked against a format string."
+ */
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && (__GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 5))
+#  define WZ_DECL_FORMAT(archetype, string_index, first_to_check) \
+          __attribute__((__format__ (archetype, string_index, first_to_check)))
+#else
+#  define WZ_DECL_FORMAT
 #endif
 
 
