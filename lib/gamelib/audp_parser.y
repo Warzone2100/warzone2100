@@ -101,17 +101,17 @@ anim_module_header:		ANIM_MODULE '{'
 						;
 
 anim_module:			anim_module_header anim_file_list   '}' |
-						anim_module_header anim_config_list '}' |
+						anim_module_header anim_config_list '}'
 						/* NULL */
 						;
 
 anim_config_list:		anim_config_list anim_config |
-						anim_config |
+						anim_config
 						/* NULL */
 						;
 
 anim_file_list:			anim_file_list anim_file |
-						anim_file |
+						anim_file
 						/* NULL */
 						;
 

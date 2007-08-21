@@ -6,8 +6,8 @@
 
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
-BUILT_SOURCES = scriptvals_parser.tab.h
-CLEANFILES = scriptvals_parser.tab.h
+BUILT_SOURCES = scriptvals_parser.tab.c scriptvals_parser.tab.h
+CLEANFILES = scriptvals_parser.tab.c scriptvals_parser.tab.h
 
 bin_PROGRAMS = warzone2100
 noinst_HEADERS = action.h advvis.h ai.h aiexperience.h anim_id.h \
