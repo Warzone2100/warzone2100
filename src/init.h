@@ -30,7 +30,7 @@
 
 // the size of the file loading buffer
 // FIXME Totally inappropriate place for this.
-#define FILE_LOAD_BUFFER_SIZE (1024*1024)
+#define FILE_LOAD_BUFFER_SIZE (1024*1024*4)
 extern char fileLoadBuffer[];
 
 extern BOOL InitialiseGlobals(void);
