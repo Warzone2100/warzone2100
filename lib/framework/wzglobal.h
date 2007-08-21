@@ -335,20 +335,20 @@
 
 
 #if defined(WZ_OS_WIN)
-
 #  if defined(WZ_CC_MINGW)
+#    include <unistd.h>
+#    include <sys/param.h>
 #    include <w32api.h>
 #    define _WIN32_IE IE5
-#  endif /* WZ_CC_GNU */
 
-#  if defined(WZ_CC_MSVC)
+#  elif defined(WZ_CC_MSVC)
 #    if defined(_DEBUG)
 #      define DEBUG
 #      define _CRTDBG_MAP_ALLOC
 #      include <stdlib.h>
 #      include <crtdbg.h>
 #    endif /* _DEBUG */
-#  endif /* WZ_CC_MSVC */
+#  endif /* WZ_CC_* */
 
 #  define WIN32_LEAN_AND_MEAN
 #  define WIN32_EXTRA_LEAN
@@ -366,9 +366,7 @@
 #  endif /* WZ_CC_MSVC */
 
 #elif defined(WZ_OS_UNIX)
-
 #  include <unistd.h>
-
 #endif /* WZ_OS_* */
 
 
