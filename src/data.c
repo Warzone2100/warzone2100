@@ -718,10 +718,10 @@ static void dataIMGRelease(void *pData)
 /* Load a texturepage into memory */
 static BOOL dataTexPageLoad(const char *fileName, void **ppData)
 {
-	char texpage[MAX_PATH] = {'\0'};
+	char texpage[PATH_MAX] = {'\0'};
 
 	// This hackery is needed, because fileName will include the directory name, whilst the LastResourceFilename will not, and we need a short name to identify the texpage
-	strncpy(texpage, GetLastResourceFilename(), MAX_PATH);
+	strncpy(texpage, GetLastResourceFilename(), PATH_MAX);
 
 	pie_MakeTexPageName(texpage);
 	dataImageLoad(fileName, ppData);

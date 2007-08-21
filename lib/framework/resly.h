@@ -27,8 +27,8 @@
 #define TEXT_BUFFERS	10
 
 /* The initial resource directory and the current resource directory */
-extern char aResDir[MAX_PATH];
-extern char aCurrResDir[MAX_PATH];
+extern char aResDir[PATH_MAX];
+extern char aCurrResDir[PATH_MAX];
 
 /* Set the current input buffer for the lexer - used by resLoad */
 extern void resSetInputBuffer(char *pBuffer, UDWORD size);

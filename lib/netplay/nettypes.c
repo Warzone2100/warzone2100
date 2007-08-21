@@ -23,7 +23,7 @@
  * low-level primitives and higher-level types.
  */
 
-#include "lib/framework/platform.h"
+#include "lib/framework/wzglobal.h"
 #include "lib/framework/strnlen1.h"
 #include <string.h>
 

@@ -55,7 +55,7 @@ static int newPage(const char *name, int level, int width, int height, int count
 {
 	int texPage = firstPage + ((count + 1) / TILES_IN_PAGE);
 
-	// debug(LOG_TEXTURE, "newPage: texPage=%d firstPage=%d %s %d (%d,%d) (count %d + 1) / %d _TEX_INDEX=%u", 
+	// debug(LOG_TEXTURE, "newPage: texPage=%d firstPage=%d %s %d (%d,%d) (count %d + 1) / %d _TEX_INDEX=%u",
 	//      texPage, firstPage, name, level, width, height, count, TILES_IN_PAGE, _TEX_INDEX);
 	if (texPage == _TEX_INDEX)
 	{
@@ -96,7 +96,7 @@ static inline WZ_DECL_CONST unsigned int getTileVIndex(unsigned int tileNumber)
 
 void texLoad(const char *fileName)
 {
-	char fullPath[MAX_PATH], partialPath[MAX_PATH], *buffer;
+	char fullPath[PATH_MAX], partialPath[PATH_MAX], *buffer;
 	unsigned int i, j, k, size;
 	int texPage;
 
@@ -162,7 +162,7 @@ void texLoad(const char *fileName)
 				break;
 			}
 			// Insert into texture page
-			glTexSubImage2D(GL_TEXTURE_2D, j, xOffset, yOffset, tile.width, tile.height, 
+			glTexSubImage2D(GL_TEXTURE_2D, j, xOffset, yOffset, tile.width, tile.height,
 			                GL_RGBA, GL_UNSIGNED_BYTE, tile.bmp);
 			free(tile.bmp);
 			xOffset += i; // i is width of tile
@@ -177,7 +177,7 @@ void texLoad(const char *fileName)
 				tileTexInfo[k].uOffset = getTileUIndex(k) * (256 / TILES_IN_PAGE_COLUMN);
 				tileTexInfo[k].vOffset = getTileVIndex(k) * (256 / TILES_IN_PAGE_ROW);
 				tileTexInfo[k].texPage = texPage;
-				//debug(LOG_TEXTURE, "  texLoad: Registering k=%d i=%d u=%f v=%f xoff=%u yoff=%u tex=%d (%s)", 
+				//debug(LOG_TEXTURE, "  texLoad: Registering k=%d i=%d u=%f v=%f xoff=%u yoff=%u tex=%d (%s)",
 				//     k, i, tileTexInfo[k].uOffset, tileTexInfo[k].vOffset, xOffset, yOffset, texPage, fullPath);
 			}
 			if (yOffset >= ySize)
@@ -185,12 +185,12 @@ void texLoad(const char *fileName)
 				/* Change to next texture page */
 				xOffset = 0;
 				yOffset = 0;
-				debug(LOG_TEXTURE, "texLoad: Extra page added at %d for %s, was page %d, opengl id %u", 
+				debug(LOG_TEXTURE, "texLoad: Extra page added at %d for %s, was page %d, opengl id %u",
 				      k, partialPath, texPage, _TEX_PAGE[texPage].id);
 				texPage = newPage(fileName, j, xSize, ySize, k);
 			}
 		}
-		debug(LOG_TEXTURE, "texLoad: Found %d textures for %s mipmap level %d, added to page %d, opengl id %u", 
+		debug(LOG_TEXTURE, "texLoad: Found %d textures for %s mipmap level %d, added to page %d, opengl id %u",
 		      k, partialPath, i, texPage, _TEX_PAGE[texPage].id);
 		i /= 2;	// halve the dimensions for the next series; OpenGL mipmaps start with largest at level zero
 	}

@@ -53,7 +53,7 @@
 
 extern BOOL NETsetupTCPIP(void ** addr, char * machine);
 
-extern char	datadir[MAX_PATH];
+extern char	datadir[PATH_MAX];
 extern char * global_mods[MAX_MODS];
 extern char * campaign_mods[MAX_MODS];
 extern char * multiplay_mods[MAX_MODS];

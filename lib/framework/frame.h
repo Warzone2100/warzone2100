@@ -25,7 +25,7 @@
 
 #include "wzglobal.h"
 
-/* This one must be invoked *after* platform.h to get _GNU_SOURCE! */
+/* This one must be invoked *after* wzglobal.h to get _GNU_SOURCE! */
 #include <string.h>
 #include <locale.h>
 #include <stdlib.h>

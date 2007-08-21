@@ -157,7 +157,7 @@ BOOL SavePlayerAIExperience(SDWORD nPlayer, BOOL bNotify)
 BOOL SetUpOutputFile(SDWORD nPlayer)
 {
 	char			sPlayer[255] = "";
-	char			SaveDir[MAX_PATH] = "multiplay/learndata/";
+	char			SaveDir[PATH_MAX] = "multiplay/learndata/";
 	char			FileName[255] = "";
 
 	//debug(LOG_ERROR,"SetUpOutputFile");
@@ -199,7 +199,7 @@ BOOL SetUpInputFile(SDWORD nPlayer)
 {
 	char			FileName[255] = "";
 	char			sPlayer[255] = "";
-	char			SaveDir[MAX_PATH] = "";		// "multiplay/learndata/";
+	char			SaveDir[PATH_MAX] = "";		// "multiplay/learndata/";
 
 	/* assemble "multiplay\learndata\" */
 	strcat( SaveDir, "multiplay/learndata/" );

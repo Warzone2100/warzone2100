@@ -36,10 +36,10 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 {
 	LPCSTR applicationName = "Warzone 2100";
 
-	char miniDumpPath[MAX_PATH] = {'\0'}, resultMessage[MAX_PATH] = {'\0'};
+	char miniDumpPath[PATH_MAX] = {'\0'}, resultMessage[PATH_MAX] = {'\0'};
 
 	// Write to temp dir, to support unprivileged users
-	if (!GetTempPathA( MAX_PATH, miniDumpPath ))
+	if (!GetTempPathA( PATH_MAX, miniDumpPath ))
 		strcpy( miniDumpPath, "c:\\temp\\" );
 	strcat( miniDumpPath, "warzone2100.mdmp" );
 
@@ -130,8 +130,8 @@ static BOOL gdbIsAvailable = FALSE, programIsAvailable = FALSE, sysInfoValid = F
 static char
 	executionDate[MAX_DATE_STRING] = {'\0'},
 	programPID[MAX_PID_STRING] = {'\0'},
-	programPath[MAX_PATH] = {'\0'},
-	gdbPath[MAX_PATH] = {'\0'};
+	programPath[PATH_MAX] = {'\0'},
+	gdbPath[PATH_MAX] = {'\0'};
 static const char * gdmpPath = "/tmp/warzone2100.gdmp";
 
 
@@ -561,12 +561,12 @@ void setupExceptionHandler(const char * programCommand)
 	SetUnhandledExceptionFilter(windowsExceptionHandler);
 #elif defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
 	// Prepare 'which' command for popen
-	char whichProgramCommand[MAX_PATH] = {'\0'};
-	snprintf( whichProgramCommand, MAX_PATH, "which %s", programCommand );
+	char whichProgramCommand[PATH_MAX] = {'\0'};
+	snprintf( whichProgramCommand, PATH_MAX, "which %s", programCommand );
 
 	// Get full path to this program. Needed for gdb to find the binary.
 	FILE * whichProgramStream = popen(whichProgramCommand, "r");
-	fread( programPath, 1, MAX_PATH, whichProgramStream );
+	fread( programPath, 1, PATH_MAX, whichProgramStream );
 	pclose(whichProgramStream);
 
 	// Were we able to find ourselves?
@@ -583,7 +583,7 @@ void setupExceptionHandler(const char * programCommand)
 
 	// Get full path to 'gdb'
 	FILE * whichGDBStream = popen("which gdb", "r");
-	fread( gdbPath, 1, MAX_PATH, whichGDBStream );
+	fread( gdbPath, 1, PATH_MAX, whichGDBStream );
 	pclose(whichGDBStream);
 
 	// Did we find GDB?

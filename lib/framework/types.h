@@ -37,6 +37,8 @@
 // Defines C99 types for C99 incompatible compilers (e.g. MSVC)
 #include <SDL/SDL_types.h>
 
+#include <limits.h>
+
 #ifdef WZ_CC_MSVC
 # define INT8_MIN               (-128)
 # define INT16_MIN              (-32767-1)

@@ -362,12 +362,12 @@
 #    define fileno _fileno
 #    define inline __inline
 #    define isfinite _finite
+#    define PATH_MAX MAX_PATH
 #  endif /* WZ_CC_MSVC */
 
 #elif defined(WZ_OS_UNIX)
 
-#  include <limits.h>
-#  define MAX_PATH PATH_MAX
+#  include <unistd.h>
 
 #endif /* WZ_OS_* */
 

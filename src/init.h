@@ -52,7 +52,7 @@ extern BOOL saveGameReset(void);
 
 typedef struct _wzSearchPath
 {
-	char path[MAX_PATH];
+	char path[PATH_MAX];
 	unsigned int priority;
 	struct _wzSearchPath * higherPriority, * lowerPriority;
 } wzSearchPath;

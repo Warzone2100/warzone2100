@@ -56,7 +56,7 @@ BOOL    bUpload = FALSE;
 //fog
 SDWORD	fogColour = 0;
 
-static char screendump_filename[MAX_PATH];
+static char screendump_filename[PATH_MAX];
 static BOOL screendump_required = FALSE;
 
 static GLuint backDropTexture = ~0;
@@ -348,7 +348,7 @@ void screenDumpToDisk(const char* path) {
 
 	while (++screendump_num != 0) {
 		// We can safely use '/' as path separator here since PHYSFS uses that as its default separator
-		snprintf(screendump_filename, MAX_PATH, "%s/wz2100_shot_%03i.png", path, screendump_num);
+		snprintf(screendump_filename, PATH_MAX, "%s/wz2100_shot_%03i.png", path, screendump_num);
 		if (!PHYSFS_exists(screendump_filename)) {
 			// Found a usable filename, so we'll stop searching.
 			break;

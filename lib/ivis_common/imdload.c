@@ -548,7 +548,7 @@ static BOOL _imd_load_connectors(const char **ppFileData, iIMDShape *s)
 static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataEnd, int nlevels)
 {
 	const char *pFileData = *ppFileData;
-	char buffer[MAX_PATH] = {'\0'};
+	char buffer[PATH_MAX] = {'\0'};
 	int cnt = 0, n = 0;
 	iIMDShape *s = NULL;
 
@@ -663,7 +663,7 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 {
 	const char *pFileName = GetLastResourceFilename(); // Last loaded texture page filename
 	const char *pFileData = *ppFileData;
-	char buffer[MAX_PATH], texfile[MAX_PATH];
+	char buffer[PATH_MAX], texfile[PATH_MAX];
 	int cnt, nlevels;
 	iIMDShape *shape, *psShape;
 	UDWORD level;
@@ -712,14 +712,14 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 	if (strncmp(buffer, "TEXTURE", 7) == 0)
 	{
 		int i, pwidth, pheight;
-		char ch, texType[MAX_PATH];
+		char ch, texType[PATH_MAX];
 
 		/* the first parameter for textures is always ignored; which is why we ignore
 		 * nlevels read in above */
 		ch = *pFileData++;
 
 		// Run up to the dot or till the buffer is filled. Leave room for the extension.
-		for( i = 0; i < MAX_PATH-5 && (ch = *pFileData++) != EOF && ch != '.'; i++ )
+		for( i = 0; i < PATH_MAX-5 && (ch = *pFileData++) != EOF && ch != '.'; i++ )
 		{
  			texfile[i] = (char)ch;
 		}

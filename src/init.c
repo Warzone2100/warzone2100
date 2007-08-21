@@ -767,7 +767,7 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 {
 	static searchPathMode current_mode = mod_clean;
 	wzSearchPath * curSearchPath = searchPathRegistry;
-	char tmpstr[MAX_PATH] = "\0";
+	char tmpstr[PATH_MAX] = "\0";
 
 	if ( mode != current_mode || force )
 	{
