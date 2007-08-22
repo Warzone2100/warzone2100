@@ -327,7 +327,7 @@
 #  define WZ_DECL_FORMAT(archetype, string_index, first_to_check) \
           __attribute__((__format__ (archetype, string_index, first_to_check)))
 #else
-#  define WZ_DECL_FORMAT
+#  define WZ_DECL_FORMAT(archetype, string_index, first_to_check)
 #endif
 
 
