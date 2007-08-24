@@ -236,6 +236,7 @@ static void chat_reset_command(SDWORD cmdIndex)
 %token _T_LASSAT
 %token _T_LETS
 %token _T_ME
+%token _T_NEED
 %token _T_NO
 %token _T_NOW
 %token _T_OFCOURSE
@@ -565,6 +566,8 @@ R_WONDER_IF_HAVE_POWER:						R_DO_YOU_HAVE_ANY _T_POWER R_EOQ;		/* do you have p
 /* Ask for help */
 R_DEMAND_HELP:									_T_HELP _T_ME R_EOS		/* help me!!!!! */
 											|	_T_HELP R_EOS				/* help!?!? */
+											|	_T_NEED _T_HELP R_EOS		/* need help */
+											|	_T_I R_DEMAND_HELP			/* I need help */
 											;
 
 R_GRATITUDE:									_T_THANK_YOU

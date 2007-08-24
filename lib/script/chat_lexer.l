@@ -115,6 +115,7 @@ static SDWORD playerIndex;
 "lassat"					{ return _T_LASSAT; }
 "let's"						{ return _T_LETS; }
 "me"						{ return _T_ME; }
+"need"						{ return _T_NEED; }
 "no"						{ return _T_NO; }
 "now"						{ return _T_NOW; }
 "of course"					{ return _T_OFCOURSE; }
