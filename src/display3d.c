@@ -995,14 +995,14 @@ static void flipsAndRots(int texture)
 	Vector2i sPTemp;
 
 	/* Store the source rect as four points */
-	sP1.x = 1;
-	sP1.y = 1;
-	sP2.x = (xMult - 1);
-	sP2.y = 1;
-	sP3.x = (xMult - 1);
-	sP3.y = (yMult - 1);
-	sP4.x = 1;
-	sP4.y = (yMult - 1);
+	sP1.x = 0;
+	sP1.y = 0;
+	sP2.x = xMult;
+	sP2.y = 0;
+	sP3.x = xMult;
+	sP3.y = yMult;
+	sP4.x = 0;
+	sP4.y = yMult;
 
 	if (texture & TILE_XFLIP)
 	{
