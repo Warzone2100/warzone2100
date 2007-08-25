@@ -24,22 +24,41 @@
 // LimitsDialog.h : header file
 //
 
-#include "directx.h"
-#include "geometry.h"
-#include "ddimage.h"
 #include "heightmap.h"
+#include <deque>
 
 /////////////////////////////////////////////////////////////////////////////
-// CLimitsDialog dialog
+// LimitsDialog dialog
 
-class CLimitsDialog : public CDialog
+class LimitsDialog : public CDialog
 {
 	// Construction
 	public:
-		CLimitsDialog(CHeightMap *World,CWnd* pParent = NULL);   // standard constructor
+		template<typename InputIterator>
+		LimitsDialog(InputIterator first, InputIterator last, unsigned int MapWidth, unsigned int MapHeight, CWnd* parent = NULL) :
+			CDialog(LimitsDialog::IDD, parent),
+			_MaxX(0),
+			_MaxZ(0),
+			_MinX(0),
+			_MinZ(0),
+			_ScriptName(_T("")),
+			_MapWidth(MapWidth),
+			_MapHeight(MapHeight),
+			_SelectedItemIndex(-1)
+		{
+			for (; first != last; ++first)
+			{
+				_limitsList.push_back(*first);
+			}
+		}
 
+	public:
+		std::deque<CScrollLimits>::const_iterator firstLimit();
+		std::deque<CScrollLimits>::const_iterator lastLimit();
+
+	private:
 	// Dialog Data
-		//{{AFX_DATA(CLimitsDialog)
+		//{{AFX_DATA(LimitsDialog)
 		enum { IDD = IDD_SCROLLLIMITS };
 		int     _MaxX;
 		int     _MaxZ;
@@ -48,12 +67,13 @@ class CLimitsDialog : public CDialog
 		CString _ScriptName;
 		//}}AFX_DATA
 
-		CHeightMap* _World;
-		int         _SelectedItemIndex;
+		const unsigned int _MapWidth;
+		const unsigned int _MapHeight;
+		int _SelectedItemIndex;
 
 	// Overrides
 		// ClassWizard generated virtual function overrides
-		//{{AFX_VIRTUAL(CLimitsDialog)
+		//{{AFX_VIRTUAL(LimitsDialog)
 		public:
 		virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
 		protected:
@@ -62,11 +82,11 @@ class CLimitsDialog : public CDialog
 
 	// Implementation
 	private:
-		void RebuildList(void);
+		void RebuildList();
 		bool GetEditFields(int& MinX, int& MinZ, int& MaxX, int& MaxZ, char* ScriptName);
 
 		// Generated message map functions
-		//{{AFX_MSG(CLimitsDialog)
+		//{{AFX_MSG(LimitsDialog)
 		virtual BOOL OnInitDialog();
 		afx_msg void OnGetdispinfoListlimits(NMHDR* pNMHDR, LRESULT* pResult);
 		afx_msg void OnKeydownListlimits(NMHDR* pNMHDR, LRESULT* pResult);
@@ -82,5 +102,9 @@ class CLimitsDialog : public CDialog
 		CEdit* MinX_EditBox;
 		CEdit* MinZ_EditBox;
 
+	private:
 		DECLARE_MESSAGE_MAP()
+
+	private:
+		std::deque<CScrollLimits> _limitsList;
 };

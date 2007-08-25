@@ -781,17 +781,17 @@ class CHeightMap : public CChnkIO
 			return m_MapTiles;
 		}
 
-		inline DWORD GetMapWidth()
+		unsigned int GetMapWidth()
 		{
 			return m_MapWidth;
 		}
 
-		inline DWORD GetMapHeight()
+		unsigned int GetMapHeight()
 		{
 			return m_MapHeight;
 		}
 
-		void GetMapSize(DWORD *MapWidth,DWORD *MapHeight);
+		void GetMapSize(unsigned int& MapWidth, unsigned int& MapHeight);
 		void GetTileSize(DWORD *TileWidth,DWORD *TileHeight);
 		DWORD GetTextureID(DWORD TileNum);
 		DWORD GetVertexFlip(DWORD TileNum);
@@ -1035,9 +1035,16 @@ class CHeightMap : public CChnkIO
 			return m_NumScrollLimits;
 		}
 
-		inline const std::list<CScrollLimits>& GetScrollLimits()
+		const std::list<CScrollLimits>& GetScrollLimits() const
 		{
 			return m_ScrollLimits;
+		}
+
+		
+		template <typename InputIterator>
+		void SetScrollLimits(InputIterator first, InputIterator last)
+		{
+			m_ScrollLimits.assign(first, last);
 		}
 
 		void InitialiseGateways();

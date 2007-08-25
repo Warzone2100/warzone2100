@@ -37,7 +37,7 @@
 #include "textureview.h"
 #include "bteditview.h"
 #include "savesegmentdialog.hpp"
-#include "limitsdialog.h"
+#include "limitsdialog.hpp"
 #include "initiallimitsdlg.hpp"
 #include "expandlimitsdlg.h"
 #include "exportinfo.h"
@@ -1109,18 +1109,12 @@ void CBTEditDoc::UpdateTextureView(void)
 
 DWORD CBTEditDoc::Get2DViewWidth(void)
 {
-	DWORD MapWidth,MapHeight;
-	m_HeightMap->GetMapSize(&MapWidth,&MapHeight);
-
-	return MapWidth*m_TextureWidth;
+	return m_HeightMap->GetMapWidth() * m_TextureWidth;
 }
 
 DWORD CBTEditDoc::Get2DViewHeight(void)
 {
-	DWORD MapWidth,MapHeight;
-	m_HeightMap->GetMapSize(&MapWidth,&MapHeight);
-
-	return MapHeight*m_TextureHeight;
+	return m_HeightMap->GetMapHeight() * m_TextureHeight;
 }
 
 
@@ -1411,11 +1405,7 @@ void CBTEditDoc::OnCloseDocument()
 
 BOOL CBTEditDoc::WriteProject(char *FileName)
 {
-	DWORD MapWidth,MapHeight;
-
-	m_HeightMap->GetMapSize(&MapWidth,&MapHeight);
-
-	return WriteProject(FileName,0,0,MapWidth,MapHeight);
+	return WriteProject(FileName, 0, 0, m_HeightMap->GetMapWidth(), m_HeightMap->GetMapHeight());
 }
 
 
@@ -1455,9 +1445,6 @@ BOOL CBTEditDoc::WriteProject(char *FileName,UWORD StartX,UWORD StartY,UWORD Wid
 	Project.SetGravity(m_EnableGravity);
 	Project.SetSeaLevel(m_HeightMap->GetSeaLevel());
 
-	DWORD MapWidth,MapHeight;
-	m_HeightMap->GetMapSize(&MapWidth,&MapHeight);
-
 	Project.SetMapSize(Width,Height);
  	DWORD TileWidth,TileHeight;
 	m_HeightMap->GetTileSize(&TileWidth,&TileHeight);
@@ -1475,9 +1462,11 @@ BOOL CBTEditDoc::WriteProject(char *FileName,UWORD StartX,UWORD StartY,UWORD Wid
 
 
 	int GIndex = 0;
-	for(int y=StartY; y<StartY+Height; y++) {
-		for(int x=StartX; x<StartX+Width; x++) {
-			int Index = x + y*MapWidth;
+	for(int y=StartY; y<StartY+Height; y++)
+	{
+		for(int x=StartX; x<StartX+Width; x++)
+		{
+			int Index = x + y * m_HeightMap->GetMapWidth();
 
 			GrdTile = Project.GetTile(GIndex);
    			GrdTile->SetTextureID(m_HeightMap->GetTextureID(Index));
@@ -5001,8 +4990,13 @@ BOOL CBTEditDoc::OnOpenDocument(LPCTSTR lpszPathName)
 
 void CBTEditDoc::OnMapEditscrolllimits() 
 {
-	CLimitsDialog LimitsDlg(m_HeightMap);
-	LimitsDlg.DoModal();
+	LimitsDialog LimitsDlg(m_HeightMap->GetScrollLimits().begin(), m_HeightMap->GetScrollLimits().end(), m_HeightMap->GetMapWidth(), m_HeightMap->GetMapHeight());
+
+	// Don't use the resulting list of scrolllimits if the user didn't press OK
+	if (LimitsDlg.DoModal() != IDOK)
+		return;
+
+	m_HeightMap->SetScrollLimits(LimitsDlg.firstLimit(), LimitsDlg.lastLimit());
 }
 
 

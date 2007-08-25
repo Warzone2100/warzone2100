@@ -1698,10 +1698,10 @@ void CHeightMap::GetTextureSize(DWORD *TextureHeight,DWORD *TextureWidth)
 	*TextureHeight = m_TextureHeight;
 }
 
-void CHeightMap::GetMapSize(DWORD *MapWidth,DWORD *MapHeight)
+void CHeightMap::GetMapSize(unsigned int& MapWidth, unsigned int& MapHeight)
 {
-	*MapWidth = m_MapWidth;
-	*MapHeight = m_MapHeight;
+	MapWidth = m_MapWidth;
+	MapHeight = m_MapHeight;
 }
 
 void CHeightMap::GetTileSize(DWORD *TileWidth,DWORD *TileHeight)
@@ -7337,10 +7337,10 @@ BOOL CHeightMap::WriteDeliveranceMap(FILE *Stream)
 {
 	MAP_SAVEHEADER Header;
 	MAP_SAVETILE Tile;
-	DWORD MapWidth,MapHeight;
+	unsigned int MapWidth,MapHeight;
 
 // Get the size of the map
-	GetMapSize(&MapWidth,&MapHeight);
+	GetMapSize(MapWidth, MapHeight);
 
 // Fill in the header.
 	Header.aFileType[0] = 'm';
@@ -7355,7 +7355,8 @@ BOOL CHeightMap::WriteDeliveranceMap(FILE *Stream)
 	if( fwrite(&Header,SAVE_HEADER_SIZE,1,Stream) != 1) return FALSE;
 
 // Now write out the tiles.
-	for(UDWORD i=0; i<MapWidth*MapHeight; i++) {
+	for(UDWORD i=0; i < MapWidth * MapHeight; ++i)
+	{
 		UBYTE TMapID = (UBYTE)GetTextureID(i);
 		UDWORD Texture;
 		if(TMapID == 0) {

@@ -350,7 +350,7 @@ SOURCE=.\keyhandler.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\limitsdialog.h
+SOURCE=.\limitsdialog.hpp
 # End Source File
 # Begin Source File
 
