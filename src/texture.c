@@ -149,7 +149,7 @@ void texLoad(const char *fileName)
 		{
 			iTexture tile;
 
-			sprintf(fullPath, "%s/tile-%02d.png", partialPath, k);
+			sprintf(fullPath, "%s/tile-%d.png", partialPath, k);
 			if (PHYSFS_exists(fullPath)) // avoid dire warning
 			{
 				BOOL retval = iV_loadImage_PNG(fullPath, &tile);
