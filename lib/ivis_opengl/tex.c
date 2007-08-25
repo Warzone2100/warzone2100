@@ -114,8 +114,10 @@ int pie_AddBMPtoTexPages(iSprite* s, STRING* filename, int type, iBool bColourKe
 	_TEX_PAGE[i].tex.bColourKeyed = bColourKeyed;
 	_TEX_PAGE[i].type = type;
 
-	glGenTextures(1, &_TEX_PAGE[i].textPage3dfx);
-	glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[i].textPage3dfx);
+	glGenTextures(1, (GLuint *) &_TEX_PAGE[i].textPage3dfx);
+	// FIXME: This function is used instead of glBindTexture, but we're juggling with difficult
+	//        to trace global state here. Look into pie_SetTexturePage's definition for details.
+	pie_SetTexturePage(i);
 
 	if (   (s->width & (s->width-1)) == 0
 	    && (s->height & (s->height-1)) == 0) {
