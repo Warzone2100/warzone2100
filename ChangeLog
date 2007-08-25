@@ -1,12 +1,13 @@
 0000-00-00: Version 2.0.8
  * General:
-   * Fix: Remove invalid references to software renderer textures (caused crashes between campaign 1-2 and 2-3)
+   * New: Repeat keypresses if the key is hold long enough (e.g. one press of 'A' becomes 'AAAAAAAAAA' if just held long enough)
+   * Fix: Remove invalid references to software renderer textures (caused crashes between campaign 1-2 and 2-3) (bug #9497)
    * Fix: Improve POSIX exception handler reliability (GDB could have had trouble locating the executable)
    * Fix: Workaround a bug in OpenAL SI 0.0.8 GNU/Linux, which could lead to a crash
    * Fix: Dead objects could be targeted when structures used commanders and counterbatteries for targeting
-   * Fix: bug #9694: crash upon receiving invalid sound ID numbers (out of bounds array access)
-   * Fix: bug #9704: prevent divide by zero errors caused by ordering a VTOL to attack a droid at the same X & Y coordinates
-   * New: Repeat keypresses if the key is hold long enough (e.g. one press of 'A' becomes 'AAAAAAAAAA' if just held long enough)
+   * Fix: Crash upon receiving invalid sound ID numbers (out of bounds array access) (bug #9694)
+   * Fix: Prevent divide by zero errors caused by ordering a VTOL to attack a droid at the same X & Y coordinates (bug #9704)
+   * Fix: Make progress bar white again
 
 2007-06-22: Version 2.0.7
  * General:
