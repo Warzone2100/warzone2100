@@ -52,8 +52,6 @@ class InitialLimitsDialog : public wxDialog
 			initialize(parent);
 		}
 
-		virtual ~InitialLimitsDialog();
-
 		int Selected() const;
 		std::string SelectedString() const;
 

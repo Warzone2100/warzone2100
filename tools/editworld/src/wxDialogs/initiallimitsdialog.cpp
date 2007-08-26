@@ -66,10 +66,6 @@ void InitialLimitsDialog::initialize(wxWindow* parent)
 	InitialLimits_Choice->SetValidator(wxGenericValidator(&_selected));
 }
 
-InitialLimitsDialog::~InitialLimitsDialog()
-{
-}
-
 int InitialLimitsDialog::Selected() const
 {
 	return _selected;

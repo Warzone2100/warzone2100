@@ -88,10 +88,6 @@ AutoFlagDialog::AutoFlagDialog(wxWindow* parent,
 	Connect(XRCID("wxID_OK"),wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&AutoFlagDialog::OnOK);
 }
 
-AutoFlagDialog::~AutoFlagDialog()
-{
-}
-
 bool AutoFlagDialog::RandRotate() const
 {
     return _RandRotate;

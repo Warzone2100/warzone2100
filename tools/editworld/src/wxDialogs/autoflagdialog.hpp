@@ -52,8 +52,6 @@ class AutoFlagDialog : public wxDialog
 		               bool ToggleXFlip = false,
 		               bool ToggleYFlip = false);
 
-		virtual ~AutoFlagDialog();
-
 		bool RandRotate() const;
 		bool RandXFlip() const;
 		bool RandYFlip() const;

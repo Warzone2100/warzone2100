@@ -47,8 +47,6 @@ class SaveSegmentDialog: public wxDialog
 		                  unsigned int Width_ = 0,
 		                  unsigned int Height_ = 0);   // default constructor
 
-		virtual ~SaveSegmentDialog();
-
 		//(*Identifiers(SaveSegmentDialog)
 		//*)
 

@@ -25,8 +25,13 @@
 #ifndef __INCLUDE_NUMTEXTVAL_HPP__
 #define __INCLUDE_NUMTEXTVAL_HPP__
 
-#include <wx/textctrl.h>
-#include <wx/validate.h>
+// For compilers that support precompilation, includes "wx.h".
+#include <wx/wxprec.h>
+
+#ifndef WX_PRECOMP
+  #include <wx/textctrl.h>
+  #include <wx/validate.h>
+#endif
 
 class wxNumericTextValidator : public wxValidator
 {

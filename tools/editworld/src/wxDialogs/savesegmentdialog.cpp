@@ -75,10 +75,6 @@ SaveSegmentDialog::SaveSegmentDialog(wxWindow* parent,
 	Height_TextCtrl->SetValidator(wxNumericTextValidator(&_Height));
 }
 
-SaveSegmentDialog::~SaveSegmentDialog()
-{
-}
-
 void SaveSegmentDialog::StartX(unsigned long StartX_)
 {
 	_StartX = StartX_;

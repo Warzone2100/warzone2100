@@ -4,7 +4,6 @@
   * bteditview.cpp
   * expandlimitsdlg.cpp
   * exportinfo.cpp
-  * limitsdialog.cpp
   * mainfrm.cpp
   * mapprefs.cpp
   * objectproperties.cpp
@@ -18,5 +17,5 @@
  * For multiplayer editor, replace "export start","expand" and "mission" with "export game".
  * Allow gateway editing in 3d view.
  * Fix crash if you paint with an empty edge brush.
- * Load data from game WDG.
- * Save data to WDG.
+ * Load data from game WZ zipfile.
+ * Save data to WZ zipfile.
