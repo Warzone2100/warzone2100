@@ -21,12 +21,8 @@
 	$Id$
 	$HeadURL$
 */
-// LimitsDialog.cpp : implementation file
-//
 
 #include "stdafx.h"
-#include "btedit.h"
-#include "debugprint.hpp"
 #include "limitsdialog.hpp"
 #include <algorithm>
 
@@ -55,8 +51,8 @@ BEGIN_MESSAGE_MAP(LimitsDialog, CDialog)
 	ON_NOTIFY(LVN_GETDISPINFO, IDC_LISTLIMITS, OnGetdispinfoListlimits)
 	ON_NOTIFY(LVN_KEYDOWN, IDC_LISTLIMITS, OnKeydownListlimits)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LISTLIMITS, OnItemchangedListlimits)
-	ON_BN_CLICKED(IDC_ADDLIMITS, OnAddlimits)
-	ON_BN_CLICKED(IDC_MODIFY, OnModify)
+	ON_BN_CLICKED(IDC_ADDLIMITS, OnAddLimits_ButtonClick)
+	ON_BN_CLICKED(IDC_MODIFY, OnModify_ButtonClick)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -91,12 +87,12 @@ BOOL LimitsDialog::OnInitDialog()
 	MinX_EditBox = (CEdit*)GetDlgItem(IDC_SL_MINX);
 	MinZ_EditBox = (CEdit*)GetDlgItem(IDC_SL_MINZ);
 
-    Limits_ListCtrl->InsertColumn (0, "Name",      LVCFMT_LEFT, 128);
-    Limits_ListCtrl->InsertColumn (1, "Unique ID", LVCFMT_LEFT, 64);
-    Limits_ListCtrl->InsertColumn (2, "Min X",     LVCFMT_LEFT, 48);
-    Limits_ListCtrl->InsertColumn (3, "Min Z",     LVCFMT_LEFT, 48);
-    Limits_ListCtrl->InsertColumn (4, "Max X",     LVCFMT_LEFT, 48);
-    Limits_ListCtrl->InsertColumn (5, "Max Z",     LVCFMT_LEFT, 48);
+	Limits_ListCtrl->InsertColumn(0, _T("Name"),      LVCFMT_LEFT, 128);
+	Limits_ListCtrl->InsertColumn(1, _T("Unique ID"), LVCFMT_LEFT, 64);
+	Limits_ListCtrl->InsertColumn(2, _T("Min X"),     LVCFMT_LEFT, 48);
+	Limits_ListCtrl->InsertColumn(3, _T("Min Z"),     LVCFMT_LEFT, 48);
+	Limits_ListCtrl->InsertColumn(4, _T("Max X"),     LVCFMT_LEFT, 48);
+	Limits_ListCtrl->InsertColumn(5, _T("Max Z"),     LVCFMT_LEFT, 48);
 
 	RebuildList();
 
@@ -203,7 +199,7 @@ void LimitsDialog::OnItemchangedListlimits(NMHDR* pNMHDR, LRESULT* pResult)
 }
 
 
-void LimitsDialog::OnAddlimits() 
+void LimitsDialog::OnAddLimits_ButtonClick() 
 {
 	CScrollLimits limits;
 
@@ -219,7 +215,7 @@ void LimitsDialog::OnAddlimits()
 }
 
 
-void LimitsDialog::OnModify() 
+void LimitsDialog::OnModify_ButtonClick() 
 {
 	if (_SelectedItemIndex < 0
 	 || _SelectedItemIndex >= _limitsList.size())

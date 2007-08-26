@@ -21,10 +21,12 @@
 	$Id$
 	$HeadURL$
 */
-// LimitsDialog.h : header file
-//
+
+#ifndef __INCLUDE__LIMITSDIALOG_HPP__
+#define __INCLUDE__LIMITSDIALOG_HPP__
 
 #include "heightmap.h"
+#include "resource.h"
 #include <deque>
 
 /////////////////////////////////////////////////////////////////////////////
@@ -44,12 +46,9 @@ class LimitsDialog : public CDialog
 			_ScriptName(_T("")),
 			_MapWidth(MapWidth),
 			_MapHeight(MapHeight),
-			_SelectedItemIndex(-1)
+			_SelectedItemIndex(-1),
+			_limitsList(first, last)
 		{
-			for (; first != last; ++first)
-			{
-				_limitsList.push_back(*first);
-			}
 		}
 
 	public:
@@ -57,20 +56,6 @@ class LimitsDialog : public CDialog
 		std::deque<CScrollLimits>::const_iterator lastLimit();
 
 	private:
-	// Dialog Data
-		//{{AFX_DATA(LimitsDialog)
-		enum { IDD = IDD_SCROLLLIMITS };
-		int     _MaxX;
-		int     _MaxZ;
-		int     _MinX;
-		int     _MinZ;
-		CString _ScriptName;
-		//}}AFX_DATA
-
-		const unsigned int _MapWidth;
-		const unsigned int _MapHeight;
-		int _SelectedItemIndex;
-
 	// Overrides
 		// ClassWizard generated virtual function overrides
 		//{{AFX_VIRTUAL(LimitsDialog)
@@ -91,8 +76,8 @@ class LimitsDialog : public CDialog
 		afx_msg void OnGetdispinfoListlimits(NMHDR* pNMHDR, LRESULT* pResult);
 		afx_msg void OnKeydownListlimits(NMHDR* pNMHDR, LRESULT* pResult);
 		afx_msg void OnItemchangedListlimits(NMHDR* pNMHDR, LRESULT* pResult);
-		afx_msg void OnAddlimits();
-		afx_msg void OnModify();
+		afx_msg void OnAddLimits_ButtonClick();
+		afx_msg void OnModify_ButtonClick();
 		//}}AFX_MSG
 
 		CListCtrl* Limits_ListCtrl;
@@ -106,5 +91,22 @@ class LimitsDialog : public CDialog
 		DECLARE_MESSAGE_MAP()
 
 	private:
+	// Dialog Data
+		//{{AFX_DATA(LimitsDialog)
+		enum { IDD = IDD_SCROLLLIMITS };
+		int     _MaxX;
+		int     _MaxZ;
+		int     _MinX;
+		int     _MinZ;
+		CString _ScriptName;
+		//}}AFX_DATA
+
+		const unsigned int _MapWidth;
+		const unsigned int _MapHeight;
+
+		int _SelectedItemIndex;
+
 		std::deque<CScrollLimits> _limitsList;
 };
+
+#endif // __INCLUDE__LIMITSDIALOG_HPP__
