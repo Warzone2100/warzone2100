@@ -222,10 +222,6 @@ SOURCE=.\savesegmentdialog.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\stdafx.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\tdview.cpp
 # End Source File
 # Begin Source File
