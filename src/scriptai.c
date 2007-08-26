@@ -467,7 +467,8 @@ BOOL scrOrderGroupObj(void)
 		order != DORDER_OBSERVE &&
 		order != DORDER_EMBARK &&
 		order != DORDER_FIRESUPPORT &&
-		order != DORDER_ATTACK_M)
+		order != DORDER_ATTACK_M &&
+		order != DORDER_DROIDREPAIR)
 	{
 		ASSERT( FALSE,
 			"scrOrderGroupObj: Invalid order" );
@@ -476,6 +477,7 @@ BOOL scrOrderGroupObj(void)
 
 	debug( LOG_NEVER, "scrOrderGroupObj: group %p (%d) order %d,  obj type %d player %d id %d\n",
 		psGroup, grpNumMembers(psGroup), order, psObj->type, psObj->player, psObj->id);
+
 	orderGroupObj(psGroup, order, psObj);
 
 	return TRUE;

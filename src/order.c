@@ -2008,7 +2008,6 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		actionDroidObj( psDroid, DACTION_REPAIR, &oaInfo);
 		break;
 	case DORDER_DROIDREPAIR:
-		//if (psDroid->droidType != DROID_REPAIR)
         if (!(psDroid->droidType == DROID_REPAIR ||
             psDroid->droidType == DROID_CYBORG_REPAIR))
 		{
@@ -2492,10 +2491,11 @@ BOOL orderStateLoc(DROID *psDroid, DROID_ORDER order, UDWORD *pX, UDWORD *pY)
 void orderDroidObj(DROID *psDroid, DROID_ORDER order, DROID_OACTION_INFO *psObj)
 {
 	DROID_ORDER_DATA	sOrder;
-	UBYTE i;
+	UBYTE				i;
 
 	ASSERT( psDroid != NULL,
 		"orderUnitObj: Invalid unit pointer" );
+
 	ASSERT( order == DORDER_NONE ||
 			order == DORDER_HELPBUILD ||
 			order == DORDER_DEMOLISH ||
