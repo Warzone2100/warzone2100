@@ -25,6 +25,7 @@
 <resource xmlns="http://www.wxwidgets.org/wxxrc">
     <object class="wxDialog" name="LimitsDialog">
         <title>Scroll Limits</title>
+        <style>wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</style>
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
             <object class="sizeritem">
@@ -33,6 +34,7 @@
                 </object>
                 <flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
                 <border>2</border>
+                <option>6</option>
             </object>
             <object class="sizeritem">
                 <object class="wxBoxSizer">
@@ -100,7 +102,7 @@
                                 <border>2</border>
                             </object>
                         </object>
-                        <flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+                        <flag>wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
                         <border>2</border>
                     </object>
                     <object class="sizeritem">
@@ -127,6 +129,7 @@
                 </object>
                 <flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
                 <border>2</border>
+                <option>5</option>
             </object>
             <object class="sizeritem">
                 <object class="wxStdDialogButtonSizer">
@@ -141,6 +144,7 @@
                 </object>
                 <flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
                 <border>2</border>
+                <option>1</option>
             </object>
         </object>
     </object>
