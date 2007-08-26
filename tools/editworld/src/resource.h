@@ -33,11 +33,8 @@
 #define IDC_POINTER_FILL                107
 #define IDR_MAINFRAME                   128
 #define IDR_BTEDITTYPE                  129
-#define IDD_SETSTATSVALUE               130
 #define IDD_MAPPREFS                    131
-#define IDD_SETSTATSCHOICE              132
 #define IDD_TEXTUREPREFS                134
-#define IDD_HEIGHTSCALE                 139
 #define IDC_POINTER_HGTDRAG             142
 #define IDC_POINTER_SELRECT             143
 #define IDC_PIPET                       146
@@ -52,12 +49,9 @@
 #define IDI_LARGEBRUSH2                 158
 #define IDI_SMALLBRUSH                  159
 #define IDI_SMALLBRUSH2                 160
-#define IDD_EDITSTATS                   162
 #define IDR_3DPOPUP                     163
-#define IDD_SETSTATSCOMBO               163
 #define IDR_2DPOPUP                     164
 #define IDR_DBPOPUP                     165
-#define IDD_OBJECTTYPES                 168
 #define IDR_TILEFLAGS                   169
 #define IDR_OBJECTSTATS                 171
 #define IDD_SAVEMAPSEGMENT              173
