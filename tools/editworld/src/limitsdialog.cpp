@@ -48,9 +48,9 @@ void LimitsDialog::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(LimitsDialog, CDialog)
 	//{{AFX_MSG_MAP(LimitsDialog)
-	ON_NOTIFY(LVN_GETDISPINFO, IDC_LISTLIMITS, OnGetdispinfoListlimits)
-	ON_NOTIFY(LVN_KEYDOWN, IDC_LISTLIMITS, OnKeydownListlimits)
-	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LISTLIMITS, OnItemchangedListlimits)
+	ON_NOTIFY(LVN_GETDISPINFO, IDC_LISTLIMITS, OnGetItemText)
+	ON_NOTIFY(LVN_KEYDOWN, IDC_LISTLIMITS, OnLimits_ListCtrlKeyDown)
+	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LISTLIMITS, OnLimits_ListCtrlItemFocused)
 	ON_BN_CLICKED(IDC_ADDLIMITS, OnAddLimits_ButtonClick)
 	ON_BN_CLICKED(IDC_MODIFY, OnModify_ButtonClick)
 	//}}AFX_MSG_MAP
@@ -101,7 +101,7 @@ BOOL LimitsDialog::OnInitDialog()
 }
 
 
-void LimitsDialog::OnGetdispinfoListlimits(NMHDR* pNMHDR, LRESULT* pResult) 
+void LimitsDialog::OnGetItemText(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	LVITEMA& item = reinterpret_cast<LV_DISPINFO*>(pNMHDR)->item;
 
@@ -138,7 +138,7 @@ void LimitsDialog::OnGetdispinfoListlimits(NMHDR* pNMHDR, LRESULT* pResult)
 }
 
 
-void LimitsDialog::OnKeydownListlimits(NMHDR* pNMHDR, LRESULT* pResult) 
+void LimitsDialog::OnLimits_ListCtrlKeyDown(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	LV_KEYDOWN* pLVKeyDown = (LV_KEYDOWN*)pNMHDR;
 
@@ -159,7 +159,7 @@ void LimitsDialog::OnKeydownListlimits(NMHDR* pNMHDR, LRESULT* pResult)
 }
 
 
-void LimitsDialog::OnItemchangedListlimits(NMHDR* pNMHDR, LRESULT* pResult) 
+void LimitsDialog::OnLimits_ListCtrlItemFocused(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
 	char String[256];

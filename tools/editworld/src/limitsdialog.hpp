@@ -73,9 +73,9 @@ class LimitsDialog : public CDialog
 		// Generated message map functions
 		//{{AFX_MSG(LimitsDialog)
 		virtual BOOL OnInitDialog();
-		afx_msg void OnGetdispinfoListlimits(NMHDR* pNMHDR, LRESULT* pResult);
-		afx_msg void OnKeydownListlimits(NMHDR* pNMHDR, LRESULT* pResult);
-		afx_msg void OnItemchangedListlimits(NMHDR* pNMHDR, LRESULT* pResult);
+		afx_msg void OnGetItemText(NMHDR* pNMHDR, LRESULT* pResult);
+		afx_msg void OnLimits_ListCtrlKeyDown(NMHDR* pNMHDR, LRESULT* pResult);
+		afx_msg void OnLimits_ListCtrlItemFocused(NMHDR* pNMHDR, LRESULT* pResult);
 		afx_msg void OnAddLimits_ButtonClick();
 		afx_msg void OnModify_ButtonClick();
 		//}}AFX_MSG
