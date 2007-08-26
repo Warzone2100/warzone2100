@@ -90,6 +90,10 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;hpj;bat;for;f90"
 # Begin Source File
 
+SOURCE=.\aboutdialog.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\autoflagdialog.cpp
 # End Source File
 # Begin Source File
@@ -252,6 +256,10 @@ SOURCE=.\wfview.cpp
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl;fi;fd"
+# Begin Source File
+
+SOURCE=.\aboutdialog.hpp
+# End Source File
 # Begin Source File
 
 SOURCE=.\autoflagdialog.hpp
