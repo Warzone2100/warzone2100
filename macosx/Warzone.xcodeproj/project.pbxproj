@@ -729,6 +729,23 @@
 		};
 /* End PBXBuildRule section */
 
+/* Begin PBXBuildStyle section */
+		02E783220C8333A800890600 /* Development */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = Development;
+		};
+		02E783230C8333A800890600 /* Deployment */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+			};
+			name = Deployment;
+		};
+/* End PBXBuildStyle section */
+
 /* Begin PBXContainerItemProxy section */
 		022B313E0BD56915002E64E3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3518,6 +3535,12 @@
 		02356D660BD3BB2600E9A019 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 02356D670BD3BB2600E9A019 /* Build configuration list for PBXProject "Warzone" */;
+			buildSettings = {
+			};
+			buildStyles = (
+				02E783220C8333A800890600 /* Development */,
+				02E783230C8333A800890600 /* Deployment */,
+			);
 			hasScannedForEncodings = 0;
 			mainGroup = 02356D640BD3BB2600E9A019;
 			productRefGroup = 02356D760BD3BB3400E9A019 /* Products */;
@@ -4571,8 +4594,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					DEBUG,
 					"_XOPEN_SOURCE=600L",
+					DEBUG,
+					__MACOSX__,
 					"$(inherited)",
 				);
 				HEADER_SEARCH_PATHS = (
@@ -4615,6 +4639,7 @@
 				GCC_PREFIX_HEADER = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"_XOPEN_SOURCE=600L",
+					__MACOSX__,
 					"$(inherited)",
 				);
 				HEADER_SEARCH_PATHS = (
@@ -4950,6 +4975,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					__MACOSX__,
 					HAVE_CONFIG_H,
 					"$(inherited)",
 				);
@@ -4978,6 +5004,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					__MACOSX__,
 					HAVE_CONFIG_H,
 					"$(inherited)",
 				);
