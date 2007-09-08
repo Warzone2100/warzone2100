@@ -45,7 +45,7 @@ void DebugClose();
 void DebugPrint(const TCHAR *format, ...);
 #else
 #define DebugOpen
-#define DebugClose
+static inline void DebugClose() {};
 #define DebugPrint
 #endif
 
