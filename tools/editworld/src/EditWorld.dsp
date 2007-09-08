@@ -450,14 +450,6 @@ SOURCE=.\res\bitmap1.bmp
 # End Source File
 # Begin Source File
 
-SOURCE=.\res\bitmap2.bmp
-# End Source File
-# Begin Source File
-
-SOURCE=.\res\bmp00001.bmp
-# End Source File
-# Begin Source File
-
 SOURCE=.\res\bmp00002.bmp
 # End Source File
 # Begin Source File

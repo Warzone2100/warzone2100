@@ -40,8 +40,6 @@
 #define IDC_PIPET                       146
 #define IDC_PLIERS                      147
 #define IDB_BITMAP1                     148
-#define IDB_LARGEDOC                    150
-#define IDB_SMALLDOC                    151
 #define IDD_OBJECTPREFS                 154
 #define IDI_INCREMENT                   155
 #define IDI_DECREMENT                   156
