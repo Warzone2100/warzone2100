@@ -358,10 +358,6 @@ SOURCE=.\limitsdialog.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\listtemp.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\macros.h
 # End Source File
 # Begin Source File

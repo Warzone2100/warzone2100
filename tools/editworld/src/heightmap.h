@@ -28,7 +28,6 @@
 #include "pcxhandler.h"
 #include "bmphandler.h"
 #include "grdland.h"
-#include "listtemp.h"
 #include <list>
 #include "chnkio.h"
 #include "devmap.h"

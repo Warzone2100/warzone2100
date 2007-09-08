@@ -6860,67 +6860,6 @@ void CHeightMap::SetUniqueIDs()
 }
 
 
-
-
-
-
-/*
-// Write the object list.
-//
-BOOL CHeightMap::WriteObjectList(FILE *Stream,UWORD StartX,UWORD StartY,UWORD Width,UWORD Height)
-{
-	ListNode<C3DObjectInstance> *TmpNode;
-	C3DObjectInstance *Data;
-	C3DObject *Object;
-	char FeatureSet[256];
-
-	fprintf(Stream,"ObjectList {\n");
-#ifdef WRITENAMEDOBJECTS
-	fprintf(Stream,"    Version %d\n",CURRENT_OBJECTLIST_VERSION);
-#endif
-	if(m_FeatureSet) {
-		StripPath(FeatureSet,m_FeatureSet);
-		fprintf(Stream,"	FeatureSet %s\n",FeatureSet);
-	} else {
-		fprintf(Stream,"	FeatureSet %s\n",NULL);
-	}
-	fprintf(Stream,"    NumObjects %d\n",m_TotalInstances);
-	fprintf(Stream,"    Objects {\n");
-
-	TmpNode = m_Objects;
-	while(TmpNode!=NULL) {
-		Data = TmpNode->GetData();
-#ifdef WRITENAMEDOBJECTS
-		Object = &m_3DObjects[Data->ObjectID];
-
-		fprintf(Stream,"        %d ",Data->UniqueID);
-		fprintf(Stream,"%d ",Object->TypeID);
-		if(Object->TypeID == IMD_STRUCTURE) {
-			fprintf(Stream,"\"%s\" ",m_Structures[Object->StructureID].StructureName);
-			fprintf(Stream,"%d ",Object->PlayerID);
-		} else {
-			if(Object->Description) {
-				fprintf(Stream,"\"%s\" ",Object->Description);
-				fprintf(Stream,"%d ",0);
-			} else {
-				fprintf(Stream,"\"NONAME\" ");
-				fprintf(Stream,"%d ",Data->ObjectID);
-			}
-		}
-#else
-		fprintf(Stream,"        %d ",Data->ObjectID);
-#endif
-		fprintf(Stream,"%.2f %.2f %.2f ",Data->Position.x,Data->Position.y,Data->Position.z);
-		fprintf(Stream,"%.2f %.2f %.2f\n",Data->Rotation.x,Data->Rotation.y,Data->Rotation.z);
-		TmpNode = TmpNode->GetNextNode();
-	}
-	fprintf(Stream,"    }\n");
-	fprintf(Stream,"}\n");
-
-	return TRUE;
-}
-*/
-
 // Read the object list.
 //
 BOOL CHeightMap::ReadObjectList(FILE *Stream)
@@ -7425,57 +7364,55 @@ BOOL CHeightMap::WriteDeliveranceMap(FILE *Stream)
 }
 
 
-//BOOL CHeightMap::ReadDeliveranceFeatures(FILE *Stream)
-//{
-//	ListNode<C3DObjectInstance> *TmpNode;
-//	C3DObjectInstance *Data;
-//
-//	FEATURE_SAVEHEADER Header;
-//	SAVE_FEATURE Feature;
-//
-//	fread(&Header,1,FEATURE_HEADER_SIZE,Stream);
-//
-//	if( (Header.aFileType[0] != 'f') ||
-//		(Header.aFileType[1] != 'e') ||
-//		(Header.aFileType[2] != 'a') ||
-//		(Header.aFileType[3] != 't') ) {
-//		return FALSE;
-//	}
-//
-//	if(Header.version != 1) {
-//		return FALSE;
-//	}
-//
-//	for(int Index = 0; Index<Header.quantity; Index++) {
-//		fread(&Feature,1,sizeof(Feature),Stream);
-//
-//		C3DObject *Object = &m_3DObjects[Feature.featureInc];
-//
-//		D3DVECTOR Position;
-//		D3DVECTOR Rotation={0.0F,0.0F,0.0F};
-//
-//		Rotation.y = (float)Feature.direction;
-//		Position.y = 0.0F;
-//
-//#ifdef ADJUSTFEATURECOORDS
-//		Position.x = (float)Feature.x - (float)(m_MapWidth*m_TileWidth/2);
-//		Position.x += (abs(Object->Largest.x - Object->Smallest.x) / m_TileWidth ) * m_TileWidth / 2;
-//
-//		Position.z = (float)Feature.y - (float)(m_MapHeight*m_TileHeight/2);
-//		Position.z += (abs(Object->Largest.z - Object->Smallest.z) / m_TileHeight ) * m_TileHeight / 2;
-//		Position.z = -Position.z;
-//#else
-//		Position.x = (float)Feature.x - (float)(m_MapWidth*m_TileWidth/2);
-//
-//		Position.z = (float)Feature.y - (float)(m_MapHeight*m_TileHeight/2);
-//		Position.z = -Position.z;
-//#endif
-//		int ObjID = AddObject(Feature.featureInc,Rotation,Position);
-//		SnapObject(ObjID);
-//	}
-//
-//	return TRUE;
-//}
+#if 0
+BOOL CHeightMap::ReadDeliveranceFeatures(FILE *Stream)
+{
+	FEATURE_SAVEHEADER Header;
+	SAVE_FEATURE Feature;
+
+	fread(&Header, 1, FEATURE_HEADER_SIZE, Stream);
+
+	if (Header.aFileType[0] != 'f'
+	 || Header.aFileType[1] != 'e'
+	 || Header.aFileType[2] != 'a'
+	 || Header.aFileType[3] != 't')
+		return FALSE;
+
+	if(Header.version != 1)
+		return FALSE;
+
+
+	for(int Index = 0; Index<Header.quantity; Index++) {
+		fread(&Feature,1,sizeof(Feature),Stream);
+
+		C3DObject *Object = &m_3DObjects[Feature.featureInc];
+
+		D3DVECTOR Position;
+		D3DVECTOR Rotation={0.0F,0.0F,0.0F};
+
+		Rotation.y = (float)Feature.direction;
+		Position.y = 0.0F;
+
+#ifdef ADJUSTFEATURECOORDS
+		Position.x = (float)Feature.x - (float)(m_MapWidth*m_TileWidth/2);
+		Position.x += (abs(Object->Largest.x - Object->Smallest.x) / m_TileWidth ) * m_TileWidth / 2;
+
+		Position.z = (float)Feature.y - (float)(m_MapHeight*m_TileHeight/2);
+		Position.z += (abs(Object->Largest.z - Object->Smallest.z) / m_TileHeight ) * m_TileHeight / 2;
+		Position.z = -Position.z;
+#else
+		Position.x = (float)Feature.x - (float)(m_MapWidth*m_TileWidth/2);
+
+		Position.z = (float)Feature.y - (float)(m_MapHeight*m_TileHeight/2);
+		Position.z = -Position.z;
+#endif
+		int ObjID = AddObject(Feature.featureInc,Rotation,Position);
+		SnapObject(ObjID);
+	}
+
+	return TRUE;
+}
+#endif
 
 
 int CHeightMap::CountObjectsOfType(int Type,int Exclude,int Include)
@@ -7782,52 +7719,50 @@ BOOL CHeightMap::WriteDeliveranceTemplates(FILE *Stream)
 
 
 
-//BOOL CHeightMap::WriteNecromancerMap(FILE *Stream)
-//{
-//	return WriteDeliveranceMap(Stream);
-//}
-//
-//
-//BOOL CHeightMap::WriteNecromancerObjects(FILE *Stream)
-//{
-//	ListNode<C3DObjectInstance> *TmpNode;
-//	C3DObjectInstance *Data;
-//
-//	NOB_SAVEHEADER Header;
-//	NOB_ENTRY Nob;
-//
-//	Header.aFileType[0] = 'n';
-//	Header.aFileType[1] = 'o';
-//	Header.aFileType[2] = 'b';
-//	Header.aFileType[3] = 'f';
-//	Header.version = 1;
-//	Header.quantity = CountObjectsOfType(IMD_OBJECT,-1,-1);
-//
-//	fwrite(&Header,FEATURE_HEADER_SIZE,1,Stream);
-//
-//	TmpNode = m_Objects;
-//	while(TmpNode!=NULL) {
-//		Data = TmpNode->GetData();
-//
-//		C3DObject *Object = &m_3DObjects[Data->ObjectID];
-//
-//		if(Object->TypeID == IMD_OBJECT) {
-//			Nob.id = Data->ObjectID;
-//			Nob.XPos = (SDWORD)Data->Position.x;
-//			Nob.YPos = (SDWORD)Data->Position.y;
-//			Nob.ZPos = (SDWORD)Data->Position.z;
-//			Nob.XRot = (SDWORD)Data->Rotation.x;
-//			Nob.YRot = (SDWORD)Data->Rotation.y;
-//			Nob.ZRot = (SDWORD)Data->Rotation.z;
-//			fwrite(&Nob,sizeof(Nob),1,Stream);
-//		}
-//		
-//		TmpNode = TmpNode->GetNextNode();
-//	}
-//
-//	return TRUE;
-//}
-//
+#if 0
+BOOL CHeightMap::WriteNecromancerMap(FILE *Stream)
+{
+	return WriteDeliveranceMap(Stream);
+}
+#endif
+
+
+#if 0
+BOOL CHeightMap::WriteNecromancerObjects(FILE *Stream)
+{
+	NOB_SAVEHEADER Header;
+
+	Header.aFileType[0] = 'n';
+	Header.aFileType[1] = 'o';
+	Header.aFileType[2] = 'b';
+	Header.aFileType[3] = 'f';
+	Header.version = 1;
+	Header.quantity = CountObjectsOfType(IMD_OBJECT,-1,-1);
+
+	fwrite(&Header,FEATURE_HEADER_SIZE,1,Stream);
+
+	for (std::list<C3DObjectInstance>::const_iterator curNode = m_Objects.begin(); curNode != m_Objects.end(); ++curNode)
+	{
+		const C3DObject& Object = m_3DObjects[curNode->ObjectID];
+
+		if(Object.TypeID == IMD_OBJECT)
+		{
+			NOB_ENTRY Nob;
+
+			Nob.id = curNode->ObjectID;
+			Nob.XPos = (SDWORD)curNode->Position.x;
+			Nob.YPos = (SDWORD)curNode->Position.y;
+			Nob.ZPos = (SDWORD)curNode->Position.z;
+			Nob.XRot = (SDWORD)curNode->Rotation.x;
+			Nob.YRot = (SDWORD)curNode->Rotation.y;
+			Nob.ZRot = (SDWORD)curNode->Rotation.z;
+			fwrite(&Nob, sizeof(Nob), 1, Stream);
+		}
+	}
+
+	return TRUE;
+}
+#endif
 
 
 void CHeightMap::SetTileHeightUndo(int Index,float Height)
@@ -8137,36 +8072,35 @@ BOOL CHeightMap::ReadScrollLimits(FILE *Stream)
 
 BOOL CHeightMap::WriteDeliveranceLimits(FILE *Stream)
 {
-//	LIMITS_SAVEHEADER Header;
-//	LIMITS Limit;
-//
-//	Header.aFileType[0] = 'l';
-//	Header.aFileType[1] = 'm';
-//	Header.aFileType[2] = 't';
-//	Header.aFileType[3] = 's';
-//	Header.version = CURRENT_GAME_VERSION_NUM;
-//	Header.quantity = m_NumScrollLimits;
-//
-//	ListNode<CScrollLimits> *TmpNode;
-//	CScrollLimits *Data;
-//
-//	if( fwrite(&Header,LIMITS_SAVEHEADER_SIZE,1,Stream) != 1) return FALSE;
-//
-//	TmpNode = m_ScrollLimits;
-//	while(TmpNode!=NULL) {
-//		Data = TmpNode->GetData();
-//		if(Data->ScriptName[0]) {
-//			Limit.LimitID = Data->UniqueID;
-//			Limit.MinX = Data->MinX;
-//			Limit.MinZ = Data->MinZ;
-//			Limit.MaxX = Data->MaxX;
-//			Limit.MaxZ = Data->MaxZ;
-//			fwrite(&Limit,sizeof(Limit),1,Stream);
-//		}
-//
-//		TmpNode = TmpNode->GetNextNode();
-//	}
-//
+#if 0
+	LIMITS_SAVEHEADER Header;
+
+	Header.aFileType[0] = 'l';
+	Header.aFileType[1] = 'm';
+	Header.aFileType[2] = 't';
+	Header.aFileType[3] = 's';
+	Header.version = CURRENT_GAME_VERSION_NUM;
+	Header.quantity = m_NumScrollLimits;
+
+	if (fwrite(&Header, LIMITS_SAVEHEADER_SIZE, 1, Stream) != 1)
+		return FALSE;
+
+	for (std::list<CScrollLimits>::const_iterator curNode = m_ScrollLimits.begin(); curNode != m_ScrollLimits.end(); ++curNode)
+	{
+		if(curNode->ScriptName[0])
+		{
+			LIMITS Limit;
+
+			Limit.LimitID = curNode->UniqueID;
+			Limit.MinX = curNode->MinX;
+			Limit.MinZ = curNode->MinZ;
+			Limit.MaxX = curNode->MaxX;
+			Limit.MaxZ = curNode->MaxZ;
+			fwrite(&Limit, sizeof(Limit), 1, Stream);
+		}
+	}
+#endif
+
 	return TRUE;
 }
 
@@ -8429,85 +8363,6 @@ BOOL CHeightMap::CheckGatewayBlockingTiles(int Index)
 	return TRUE;
 }
 
-
-
-/*
-// Check no blocking tiles in gateway span.
-//
-BOOL CHeightMap::CheckGatewayBlockingTiles(int Index)
-{
-	ListNode<GateWay> *TmpNode;
-	GateWay *Data;
-	int Type;
-
-	if(Index < m_NumGateways) {
-		Data = m_Gateways->GetNthNode(Index)->GetData();
-
-		if(Data->x0 == Data->x1) {	// Vertical
-//			// First check tile above top is blocking.
-//			Type = GetTileType(Data->x0,Data->y0-1);
-//			if((Type != TF_TYPEWATER) && (Type != TF_TYPECLIFFFACE)) {
-//				return FALSE;
-//			}
-//
-//			// Now check tile below bottom is blocking.
-//			Type = GetTileType(Data->x0,Data->y1+1);
-//			if((Type != TF_TYPEWATER) && (Type != TF_TYPECLIFFFACE)) {
-//				return FALSE;
-//			}
-
-			// Now check tiles to left & right are not blocking and tiles
-			// along span are not blocking.
-			for(int y=Data->y0; y <= Data->y1;  y++) {
-				if(TileIsBlockingLand(Data->x0,y)) {
-					return FALSE;
-				}
-//				Type = GetTileType(Data->x0+1,y);
-//				if((Type == TF_TYPEWATER) || (Type == TF_TYPECLIFFFACE)) {
-//					return FALSE;
-//				}
-//				Type = GetTileType(Data->x0-1,y);
-//				if((Type == TF_TYPEWATER) || (Type == TF_TYPECLIFFFACE)) {
-//					return FALSE;
-//				}
-			}
-
-		} else { // Horizontal.
-			// First check tile to left is blocking.
-//			Type = GetTileType(Data->x0-1,Data->y0);
-//			if((Type != TF_TYPEWATER) && (Type != TF_TYPECLIFFFACE)) {
-//				return FALSE;
-//			}
-//
-//			// Now check tile to right is blocking.
-//			Type = GetTileType(Data->x1+1,Data->y0);
-//			if((Type != TF_TYPEWATER) && (Type != TF_TYPECLIFFFACE)) {
-//				return FALSE;
-//			}
-
-			// Now check tiles above and below are not blocking and tiles
-			// along span are not blocking.
-			for(int x=Data->x0; x <= Data->x1;  x++) {
-				if(TileIsBlockingLand(x,Data->y0)) {
-					return FALSE;
-				}
-//				Type = GetTileType(x,Data->y0-1);
-//				if((Type == TF_TYPEWATER) || (Type == TF_TYPECLIFFFACE)) {
-//					return FALSE;
-//				}
-//				Type = GetTileType(x,Data->y0+1);
-//				if((Type == TF_TYPEWATER) || (Type == TF_TYPECLIFFFACE)) {
-//					return FALSE;
-//				}
-			}
-
-		}
-
-	}
-
-	return TRUE;
-}
-*/
 
 // Check a gateway dos'nt overlap any others.
 //
