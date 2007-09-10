@@ -476,6 +476,7 @@ BOOL startMultiPlayerMenu(void)
 	return TRUE;
 }
 
+
 BOOL runMultiPlayerMenu(void)
 {
 	UDWORD id;
@@ -483,25 +484,15 @@ BOOL runMultiPlayerMenu(void)
 	id = widgRunScreen(psWScreen);						// Run the current set of widgets
 	switch(id)
 	{
+	case FRONTEND_SKIRMISH:
+		NetPlay.bComms = FALSE; // use network = false
 	case FRONTEND_HOST:
 		ingame.bHostSetup = TRUE;
-		changeTitleMode(PROTOCOL);
+		changeTitleMode(MULTIOPTION);
 		break;
 	case FRONTEND_JOIN:
 		ingame.bHostSetup = FALSE;
 		changeTitleMode(PROTOCOL);
-		break;
-	case FRONTEND_SKIRMISH:
-		ingame.bHostSetup = TRUE;
-
-		// only pretend its a multiplayer.
-		NetPlay.bComms = FALSE; // use network = false
-
-//		strcpy(sPlayer,"LastUsed");					// initialize name string.
-//		loadMultiStats(sPlayer,&nullStats);
-//		NETchangePlayerName(1,sPlayer);
-
-		changeTitleMode(MULTIOPTION);
 		break;
 
 	case FRONTEND_QUIT:
@@ -511,7 +502,7 @@ BOOL runMultiPlayerMenu(void)
 		break;
 	}
 
-	widgDisplayScreen(psWScreen);					// show the widgets currently running
+	widgDisplayScreen(psWScreen); // show the widgets currently running
 
 	return TRUE;
 }
