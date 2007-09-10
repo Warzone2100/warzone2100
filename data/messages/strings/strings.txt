@@ -146,6 +146,8 @@ MUL_FRAGLIM			"Kill Limit"
 
 CON_MODEM			"Modem"
 CON_INTERNET			"Internet"
+CON_LOBBY			"Lobby"
+CON_IP			"IP"
 CON_LAN				"IPX Network"
 CON_CABLE			"Serial Cable"
 CON_MORE			"More"

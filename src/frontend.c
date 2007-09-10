@@ -697,14 +697,17 @@ BOOL runMultiPlayerMenu(VOID)
 	id = widgRunScreen(psWScreen);						// Run the current set of widgets
 	switch(id)
 	{
+	case FRONTEND_SKIRMISH:
+		NETuseNetwork(FALSE);						// pretend its a multiplayer.
 	case FRONTEND_HOST:
 		ingame.bHostSetup = TRUE;
-		changeTitleMode(PROTOCOL);
+		changeTitleMode(MULTIOPTION);
 		break;
 	case FRONTEND_JOIN:
 		ingame.bHostSetup = FALSE;
 		changeTitleMode(PROTOCOL);
 		break;
+
 	case FRONTEND_FORCEEDIT:
 
 		if(!bForceEditorLoaded)
@@ -737,18 +740,6 @@ BOOL runMultiPlayerMenu(VOID)
 
 		changeTitleMode(FORCESELECT);
 		return TRUE;//skip draw.
-		break;
-
-	case FRONTEND_SKIRMISH:
-		ingame.bHostSetup = TRUE;
-
-		NETuseNetwork(FALSE);						// pretend its a multiplayer.
-
-//		strcpy(sPlayer,"LastUsed");					// initialize name string.
-//		loadMultiStats(sPlayer,&nullStats);
-//		NETchangePlayerName(1,sPlayer);
-
-		changeTitleMode(MULTIOPTION);
 		break;
 
 	case FRONTEND_QUIT:

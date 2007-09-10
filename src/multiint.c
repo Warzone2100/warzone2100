@@ -105,7 +105,7 @@ BOOL						bHosted			= FALSE;				//we have set up a game
 char						sPlayer[128];							// player name (to be used)
 char						buildTime[8]	 = "67HGDV3"; //RODZ was __TIME__ ;
 static BOOL					bColourChooserUp= FALSE;
-static SWORD				SettingsUp		= 0;
+static BOOL				SettingsUp		= FALSE;
 static UBYTE				InitialProto	= 0;
 static W_SCREEN				*psConScreen;
 static DWORD				dwSelectedGame	=0;						//player[] and games[] indexes
@@ -429,12 +429,6 @@ static BOOL OptionsInet(UDWORD parentID)			//internet options
 	W_FORMINIT		sFormInit;
 	W_LABINIT		sLabInit;
 
-	if(ingame.bHostSetup)
-	{
-		SettingsUp = -1;
-		return TRUE;
-	}
-
 	widgCreateScreen(&psConScreen);
 	widgSetTipFont(psConScreen,WFont);
 
@@ -483,7 +477,7 @@ static BOOL OptionsInet(UDWORD parentID)			//internet options
 	{
 		return FALSE;
 	}
-	SettingsUp = 1;
+	SettingsUp = TRUE;
 	return TRUE;
 }
 
@@ -495,10 +489,11 @@ BOOL startConnectionScreen(VOID)
 	addTopForm();										// logo
 	addBottomForm();
 
-	SettingsUp		= 0;
+	SettingsUp		= FALSE;
 	InitialProto	= 0;
 	safeSearch		= FALSE;
 
+	// don't pretend we are running a network game. Really do it!
 	NETuseNetwork(TRUE);								// don't pretend!!
 
 	addSideText(FRONTEND_SIDETEXT,  FRONTEND_SIDEX, FRONTEND_SIDEY,strresGetString(psStringRes,STR_MUL_SIDECONNECTION));
@@ -514,20 +509,17 @@ BOOL startConnectionScreen(VOID)
 // add connections
 static void addConnections(UDWORD begin)
 {
-	UDWORD	pos = 50;
-	addTextButton(CON_TYPESID_START+begin,FRONTEND_POS1X,pos, strresGetString(psStringRes,STR_CON_INTERNET),FALSE,FALSE);
+	addTextButton(CON_TYPESID_START+begin+0,FRONTEND_POS2X,FRONTEND_POS2Y, strresGetString(psStringRes, STR_CON_LOBBY),FALSE,FALSE);
+	addTextButton(CON_TYPESID_START+begin+1,FRONTEND_POS3X,FRONTEND_POS3Y, strresGetString(psStringRes, STR_CON_IP),   FALSE,FALSE);
 }
 
-VOID runConnectionScreen(void )
+void runConnectionScreen(void )
 {
 	UDWORD id;
-	static UDWORD chosenproto;
 	static char addr[128];
-	LPVOID finalconnection;
+	void * finalconnection;
 
-	processFrontendSnap(TRUE);
-
-	if(SettingsUp ==1)
+	if(SettingsUp == TRUE)
 	{
 		id = widgRunScreen(psConScreen);				// Run the current set of widgets
 	}
@@ -536,245 +528,53 @@ VOID runConnectionScreen(void )
 		id = widgRunScreen(psWScreen);					// Run the current set of widgets
 	}
 
-
-	if(id == CON_CANCEL)								//cancel
+	switch(id)
 	{
-		changeTitleMode(MULTI);
-		bMultiPlayer = FALSE;
-	}
+		case CON_CANCEL: //cancel
+			changeTitleMode(MULTI);
+			bMultiPlayer = FALSE;
+			break;
+		case CON_TYPESID_MORE:
+			widgDelete(psWScreen,FRONTEND_BOTFORM);
 
-	if(id == CON_TYPESID_MORE)
-	{
-		widgDelete(psWScreen,FRONTEND_BOTFORM);
+			SettingsUp = FALSE;
+			InitialProto +=5;
 
-		SettingsUp = 0;
-		InitialProto +=5;
+			addBottomForm();
+			addMultiBut(psWScreen,FRONTEND_BOTFORM,CON_CANCEL,10,10,MULTIOP_OKW,MULTIOP_OKH,
+			STR_MUL_CANCEL,IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);	// goback buttpn levels
 
-		addBottomForm();
-		addMultiBut(psWScreen,FRONTEND_BOTFORM,CON_CANCEL,10,10,MULTIOP_OKW,MULTIOP_OKH,
-		STR_MUL_CANCEL,IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);	// goback buttpn levels
-
-		addConnections(InitialProto);
-	}
-
-
-	if(  SettingsUp==0 &&  (id >= CON_TYPESID_START) && (id<=CON_TYPESID_END) )
-	{
-
-		/* RODZ
-		if (IsEqualGUID(&(NetPlay.protocols[id-CON_TYPESID_START].guid), &DPSPGUID_MODEM))
-		{
-			chosenproto =1;
-			OptionsModem(id);
-		}
-
-		else if (IsEqualGUID(&(NetPlay.protocols[id-CON_TYPESID_START].guid), &DPSPGUID_TCPIP))
-		{
-		*/
-			chosenproto =2;
+			addConnections(InitialProto);
+			break;
+		case CON_TYPESID_START+0: // Lobby button
+			changeTitleMode(GAMEFIND);
+			break;
+		case CON_TYPESID_START+1: // IP button
 			OptionsInet(id);
-		/* RODZ
-		}
-
-		else if (IsEqualGUID(&(NetPlay.protocols[id-CON_TYPESID_START].guid), &DPSPGUID_IPX))
-		{
-			chosenproto =3;
-			OptionsIPX(id);
-		}
-
-		else if (IsEqualGUID(&(NetPlay.protocols[id-CON_TYPESID_START].guid), &DPSPGUID_SERIAL))
-		{
-			chosenproto =4;
-			baud = 19200;
-			com  = 1;
-			OptionsCable(id);
-			widgSetButtonState(psConScreen, CON_COM1,WBUT_LOCK);
-			widgSetButtonState(psConScreen, CON_19200,WBUT_LOCK);
-		}
-
-		else if(IsEqualGUID(&(NetPlay.protocols[id-CON_TYPESID_START].guid), &SPGUID_MPLAYER) ) // mplayer
-		{
-			if(system("multiplay/mplaynow/mplaynow.exe") != -1) 		// launch gizmo, if present. If not, tough...
+			break;
+		case CON_IP: // ip entered
+			strcpy(addr, widgGetString(psConScreen, CON_IP));
+			break;
+		case CON_OK:
+			if(SettingsUp == TRUE)
 			{
-				changeTitleMode(QUIT);									// shut down warzone...
+				widgReleaseScreen(psConScreen);
+				SettingsUp = FALSE;
 			}
-		}
-		else if( strncmp(NetPlay.protocols[id-CON_TYPESID_START].name,"Simulator For",12) == 0)	// DIRECTPLAY 6 TEST MODE
-		{
-			OptionsUnknown(id);
-			chosenproto =5;
-		}
-		else
-		{
-//  comment to allow no other connectionmethod (+below)
-			OptionsUnknown(id);
-			finalconnection = NetPlay.protocols[id-CON_TYPESID_START].connection;
-		}
-		*/
-	}
 
-	switch(id)												// settings buttons
-	{
+			game.bytesPerSec = INETBYTESPERSEC;
+			game.packetsPerSec = INETPACKETS;
+			NETsetupTCPIP(&finalconnection, addr); //inet
 
-	/* RODZ
-	case CON_PHONE:											//phone no entered
-		strcpy(telno,widgGetString(psConScreen, CON_PHONE));
-		break;
-	*/
-	case CON_IP:											// ip entered
-		strcpy(addr,widgGetString(psConScreen, CON_IP));
-		break;
-	/* RODZ
-	case CON_COM1:											// com1
-		com = 1;
-		widgSetButtonState(psConScreen, CON_COM1,WBUT_LOCK);// change hilight
-		widgSetButtonState(psConScreen, CON_COM2,0);
-		widgSetButtonState(psConScreen, CON_COM3,0);
-		widgSetButtonState(psConScreen, CON_COM4,0);
-		break;
-	case CON_COM2:										// com 2
-		com = 2;
-		widgSetButtonState(psConScreen, CON_COM1,0);	// change hilight
-		widgSetButtonState(psConScreen, CON_COM2,WBUT_LOCK);
-		widgSetButtonState(psConScreen, CON_COM3,0);
-		widgSetButtonState(psConScreen, CON_COM4,0);
-
-		break;
-	case CON_COM3:										// com 3
-		com = 3;
-		widgSetButtonState(psConScreen, CON_COM1,0);	// change hilight
-		widgSetButtonState(psConScreen, CON_COM2,0);
-		widgSetButtonState(psConScreen, CON_COM3,WBUT_LOCK);
-		widgSetButtonState(psConScreen, CON_COM4,0);
-		break;
-	case CON_COM4:										// com 4
-		com = 4;
-		widgSetButtonState(psConScreen, CON_COM1,0);	// change hilight
-		widgSetButtonState(psConScreen, CON_COM2,0);
-		widgSetButtonState(psConScreen, CON_COM3,0);
-		widgSetButtonState(psConScreen, CON_COM4,WBUT_LOCK);
-		break;
-	case CON_14400:										// 14400
-		baud = 14400;
-		widgSetButtonState(psConScreen, CON_14400,WBUT_LOCK);	// change hilight
-		widgSetButtonState(psConScreen, CON_19200,0);
-		widgSetButtonState(psConScreen, CON_57600,0);
-		widgSetButtonState(psConScreen, CON_11520,0);
-		break;
-	case CON_19200:										// 19200
-		baud = 19200;
-		widgSetButtonState(psConScreen, CON_14400,0);
-		widgSetButtonState(psConScreen, CON_19200,WBUT_LOCK);
-		widgSetButtonState(psConScreen, CON_57600,0);
-		widgSetButtonState(psConScreen, CON_11520,0);
-		break;
-	case CON_57600:										// 57600
-		baud = 57600;
-		widgSetButtonState(psConScreen, CON_14400,0);
-		widgSetButtonState(psConScreen, CON_19200,0);
-		widgSetButtonState(psConScreen, CON_57600,WBUT_LOCK);
-		widgSetButtonState(psConScreen, CON_11520,0);
-		break;
-	case CON_11520:										// 11520
-		baud = 115200;
-		widgSetButtonState(psConScreen, CON_14400,0);
-		widgSetButtonState(psConScreen, CON_19200,0);
-		widgSetButtonState(psConScreen, CON_57600,0);
-		widgSetButtonState(psConScreen, CON_11520,WBUT_LOCK);
-		break;
-	*/
-	default:
-		break;
-	}
-
-	if(id==CON_OK || SettingsUp == -1)
-	{
-		if(SettingsUp == 1)
-		{
-			widgReleaseScreen(psConScreen);
-			SettingsUp =0;
-		}
-
-		switch(chosenproto)
-		{
-		/* RODZ
-		case 1:
-			game.bytesPerSec			= MODEMBYTESPERSEC;
-			game.packetsPerSec			= MODEMPACKETS;
-			DBPRINTF(("using modem %d\n",ingame.modem));
-			NETsetupModem(&finalconnection,telno,ingame.modem);	//modem
+			changeTitleMode(GAMEFIND);
 			break;
-		*/
-		case 2:
-			game.bytesPerSec			= INETBYTESPERSEC;
-			game.packetsPerSec			= INETPACKETS;
-			NETsetupTCPIP(&finalconnection, addr);			//inet
-			break;
-		/* RODZ
-		case 3:												//ipx
-			game.bytesPerSec			= IPXBYTESPERSEC;
-			game.packetsPerSec			= IPXPACKETS;
-			safeSearch = TRUE;
-			for(i=0;
-				i<MaxProtocols && !IsEqualGUID(&(NetPlay.protocols[i].guid), &DPSPGUID_IPX);
-				i++);
-			finalconnection = NetPlay.protocols[i].connection;
-			break;
-		case 4:												//cable
-			game.bytesPerSec			= CABLEBYTESPERSEC;
-			game.packetsPerSec			= CABLEPACKETS;
-			NETsetupSerial(&finalconnection,com,baud,ONESTOPBIT,NOPARITY,DPCPA_RTSFLOW);
-			break;
-		case 5:												// dplay6 tester.
-			game.bytesPerSec			= INETBYTESPERSEC;
-			game.packetsPerSec			= INETPACKETS;
-			for(i=0;
-					i<MaxProtocols
-					&& strncmp(NetPlay.protocols[id-CON_TYPESID_START].name,"Simulator For",12) != 0;
-				i++);
-			finalconnection = NetPlay.protocols[i].connection;
-			break;
-
-		*/
-		default:
-			game.bytesPerSec			= DEFAULTBYTESPERSEC;// possibly a lobby, so default.
-			game.packetsPerSec			= DEFAULTPACKETS;
-// swap comments below to allow other providers.
-			// RODZ finalconnection = NetPlay.protocols[id-CON_TYPESID_START].connection;
-			break;
-//			return;	//dont work on anything else!
-		}
-
-/*
-		if(NETselectProtocol(finalconnection))			// start the connection.
-		{
-*/
-			if(ingame.bHostSetup)
-			{
-				changeTitleMode(MULTIOPTION);
-			}
-			else
-			{
-				changeTitleMode(GAMEFIND);
-			}
-/* RODZ
-			if(chosenproto==1 || chosenproto==2 || chosenproto==4)		// this hack fixes the
-			{											// memory leak in netplay
-				FREE(finalconnection);					// cant do it in the lib, since requires protochosen!
-			}
-		}
-		else
-		{
-			DBPRINTF(("Protocol Init Failed."));
-		}
-*/
 	}
 
 	StartCursorSnap(&InterfaceSnap);
 	DrawBegin();
 
 	widgDisplayScreen(psWScreen);							// show the widgets currently running
-	if(SettingsUp == 1)
+	if(SettingsUp == TRUE)
 	{
 		widgDisplayScreen(psConScreen);						// show the widgets currently running
 	}
@@ -1787,16 +1587,9 @@ VOID	stopJoining(void)
 			}
 			return;
 		}
-		if(NetPlay.bComms)	// not even connected.
-		{
-			changeTitleMode(PROTOCOL);
-			selectedPlayer =0;
-		}
-		else
-		{
-			changeTitleMode(MULTI);
-			selectedPlayer =0;
-		}
+
+		changeTitleMode(MULTI);
+		selectedPlayer = 0;
 
 		if (ingame.bHostSetup) {
 #ifdef COVERMOUNT
