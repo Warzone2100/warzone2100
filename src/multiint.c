@@ -418,7 +418,7 @@ BOOL startConnectionScreen(void)
 static void addConnections(UDWORD begin)
 {
 	UDWORD	pos = 50;
-	addTextButton(CON_TYPESID_START+begin,FRONTEND_POS1X,pos, _("Internet"),FALSE,FALSE);
+	addTextButton(CON_TYPESID_START+begin,FRONTEND_POS1X,pos, _("Network"),FALSE,FALSE);
 }
 
 void runConnectionScreen(void )
