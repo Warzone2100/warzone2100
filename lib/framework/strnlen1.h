@@ -23,6 +23,9 @@
 	$HeadURL$
 */
 
+/** \file strnlen1.h
+ *  \brief provides a safe variant of strlen
+ */
 #ifndef __INCLUDED_LIB_FRAMEWORK_STRNLEN1_H__
 #define __INCLUDED_LIB_FRAMEWORK_STRNLEN1_H__
 
@@ -33,12 +36,16 @@
 extern "C" {
 #endif
 
-
-/* Find the length of STRING + 1, but scan at most MAXLEN bytes.
-   If no '\0' terminator is found in that many characters, return MAXLEN.  */
-/* This is the same as strnlen (string, maxlen - 1) + 1.  */
+/** Finds the length of the required buffer to store string.
+ *  \param string holds the string to scan the required buffer size for
+ *  \param maxlen the maximum amount of bytes to scan in string
+ *  \return the required size for a buffer to hold \c string or \c maxlen if
+ *          no terminating '\\0' is found.
+ *
+ *  \note This is the same as strnlen(string, maxlen - 1) + 1 when using the
+ *        GNU C library.
+ */
 extern size_t strnlen1 (const char* string, size_t maxlen);
-
 
 #ifdef __cplusplus
 }

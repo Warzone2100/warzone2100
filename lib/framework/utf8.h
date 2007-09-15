@@ -31,13 +31,13 @@
  */
 typedef uint32_t utf_32_char;
 
-/** Determines the amount of unicode characters in a UTF-8 encoded string
+/** Determines the amount of unicode codepoints in a UTF-8 encoded string
  *  \param utf8_string the UTF-8 encoded string to count
- *  \return the amount of characters found in the UTF-8 string
+ *  \return the amount of codepoints found in the UTF-8 string
  */
 size_t utf8_character_count(const char* utf8_string);
 
-/** Determines the amount of octets required to store this string if it's decoded into UTF-8
+/** Determines the amount of octets required to store this string if it's encoded as UTF-8
  *  \param unicode_string the string to determine the UTF-8 buffer length of
  *  \return the size required to hold unicode_string if encoded in UTF-8
  */
