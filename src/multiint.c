@@ -87,8 +87,8 @@
 
 // ////////////////////////////////////////////////////////////////////////////
 // vars
-extern char	MultiCustomMapsPath[255];
-extern char	MultiPlayersPath[255];
+extern char	MultiCustomMapsPath[PATH_MAX];
+extern char	MultiPlayersPath[PATH_MAX];
 
 extern BOOL				bSendingMap;
 

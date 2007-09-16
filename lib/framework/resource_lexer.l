@@ -40,9 +40,8 @@
 
 void res_error(const char *pMessage,...);
 
-#ifndef YYLMAX
+/* Maximum length for any TEXT_T value */
 #define YYLMAX 8192
-#endif
 
 /* Store for any string values */
 char aText[TEXT_BUFFERS][YYLMAX];		// No longer static ... lets use this area globally

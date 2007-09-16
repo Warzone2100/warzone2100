@@ -45,7 +45,7 @@
 #include "multiint.h"
 #include "fpath.h"
 
-extern char	MultiPlayersPath[255];
+extern char	MultiPlayersPath[PATH_MAX];
 
 // ////////////////////////////////////////////////////////////////////////////
 // STATS STUFF

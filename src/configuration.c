@@ -49,6 +49,7 @@
 #include "radar.h"
 // HACK bAllowDebugMode shouldn't be in clparse
 #include "clparse.h"
+#include "multiint.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -57,9 +58,6 @@
 #define DEFAULTGAMMA	20
 #define DEFAULTSCROLL	800
 #define DEFAULTMAPNAME	"Rush"
-
-extern  char	sForceName[256];
-extern	UBYTE	sPlayer[128];
 
 extern void registry_clear(void); // from configfile.c
 

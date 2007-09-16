@@ -62,7 +62,7 @@
 
 W_SCREEN  *psRScreen;			// requester stuff.
 
-extern char	MultiCustomMapsPath[255];
+extern char	MultiCustomMapsPath[PATH_MAX];
 extern void	displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
 BOOL	MultiMenuUp			= FALSE;

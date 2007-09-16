@@ -33,7 +33,7 @@ def set_options(opt):
 
 def configure(conf):
 	# Check for C-Compiler, the Lexer/Parser tools and get the checks module for checkEndian
-	conf.check_tool('compiler_cc flex bison checks')
+	conf.check_tool('compiler_cc batched_cc flex bison checks')
 
 	# Big or little endian?
 	conf.checkEndian()
@@ -79,6 +79,7 @@ def configure(conf):
 	conf.add_define('YY_STATIC', 1)
 	conf.add_define('LOCALEDIR', '')
 	conf.add_define('PACKAGE', 'warzone2100')
+	conf.env['CCFLAGS'] += ['-pipe', '-combine']
 
 	# Split off debug variant before adding variant specific defines
 	conf.set_env_name('debug', conf.env.deepcopy())

@@ -44,7 +44,7 @@
 void strres_error(const char *pMessage,...);
 
 /* Maximum length for any TEXT_T value */
-#define YYLMAX	255
+#define YYLMAX 8192
 
 /* Store for any string values */
 extern char aText[TEXT_BUFFERS][YYLMAX];

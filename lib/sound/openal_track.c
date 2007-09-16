@@ -42,6 +42,7 @@
 
 #include "tracklib.h"
 #include "audio.h"
+#include "cdaudio.h"
 #include "oggvorbis.h"
 
 #define ATTENUATION_FACTOR	0.0003f
@@ -67,8 +68,6 @@ static ALCcontext* context = 0;
 #endif
 
 BOOL openal_initialized = FALSE;
-
-BOOL		cdAudio_Update( void );
 
 #ifndef WZ_NOSOUND
 static void PrintOpenALVersion(void)

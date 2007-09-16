@@ -75,7 +75,6 @@
 
 // whether a save game is currently being loaded
 static BOOL saveFlag = FALSE;
-extern char	aCurrResDir[255];		// Arse
 
 extern int scr_lineno;
 
