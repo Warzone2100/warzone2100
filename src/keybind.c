@@ -270,8 +270,8 @@ void	kf_MaxPower( void )
 {
 	if(!bMultiPlayer|| (NetPlay.bComms == 0))
 	{
-		asPower[selectedPlayer]->currentPower=SDWORD_MAX;
-		addConsoleMessage("Max Power!!",LEFT_JUSTIFY);
+		asPower[selectedPlayer]->currentPower = SDWORD_MAX / 2;
+		addConsoleMessage("Power overwhelming",LEFT_JUSTIFY);
 	}
 }
 

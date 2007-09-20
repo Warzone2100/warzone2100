@@ -44,6 +44,8 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"count me", kf_ShowNumObjects}, // give a count of objects in the world
 	{"give all", kf_AllAvailable},	// give all
 	{"research all", kf_FinishAllResearch}, // research everything at once
+	{"superpower", kf_MaxPower}, // get tons of power
+	{"more power", kf_UpThePower}, // get tons of power
 	{"deity", kf_ToggleGodMode},	//from above
 	{"droidinfo", kf_DebugDroidInfo},	//show unit stats
 	{"sensors", kf_ToggleSensorDisplay},	//show sensor ranges
