@@ -248,7 +248,7 @@ BOOL NETuint32_t(uint32_t *ip)
 	return TRUE;
 }
 
-BOOL NETfloat(float* fp)
+BOOL NETfloat(float *fp)
 {
 	/*
 	 * NB: Not portable.
@@ -265,11 +265,11 @@ BOOL NETfloat(float* fp)
 	# error "this platform hasn't been confirmed to support IEEE754 floating point numbers"
 	#endif
 
-	// IEEE754 floating point numbers can be treated the same as 32bit integers
+	// IEEE754 floating point numbers can be treated the same as 32-bit integers
 	// with regards to endian conversion
 	STATIC_ASSERT(sizeof(float) == sizeof(int32_t));
 
-	return NETint32_t((int32_t*) fp);
+	return NETint32_t((int32_t *) fp);
 }
 
 BOOL NETbool(BOOL *bp)
