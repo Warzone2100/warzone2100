@@ -8,7 +8,7 @@ all: $(INSTALLERFILE)
 endif
 
 data:
-	$(MAKE) -C ../data/ data
+	$(MAKE) $(AM_MAKEFLAGS) -C ../data/ data
 
 $(INSTALLERFILE): warzone2100.nsi ../src/warzone2100.exe data
 	$(MAKENSIS) -DVERSION="$(VERSION)" -DVERSIONNUM="$(INSTALLER_VERSION)" -DEXTDIR="$(INSTALLER_EXTDIR)" $<

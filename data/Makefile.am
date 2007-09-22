@@ -1,5 +1,3 @@
-## Process this file with automake to produce Makefile.in
-
 SUBDIRS = mods
 
 BASELIST = anims audio components effects features \
@@ -17,6 +15,7 @@ CLEANFILES=$(BASEARCHIVE) $(PATCHARCHIVE)
 MKDIR_P=$(mkdir_p)
 
 data: $(BASEARCHIVE) $(PATCHARCHIVE)
+	$(MAKE) $(AM_MAKEFLAGS) -C mods data
 
 $(BASEARCHIVE): $(BASELIST)
 	zip -ru0 $@ $(BASELIST) -x *svn*

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-08-17 12:11+0200\n"
+"POT-Creation-Date: 2007-09-22 12:31+0200\n"
 "PO-Revision-Date: 2007-04-13 14:34+0200\n"
 "Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
 "Language-Team: Latin\n"
@@ -62,7 +62,7 @@ msgstr ""
 msgid "Truck ordered to build Oil Derrick"
 msgstr ""
 
-#: src/multistat.c:104 src/configuration.c:375 src/configuration.c:376
+#: src/multistat.c:104 src/configuration.c:373 src/configuration.c:374
 msgid "Player"
 msgstr ""
 
@@ -148,7 +148,7 @@ msgstr "Invenio"
 msgid "Build"
 msgstr "Construo"
 
-#: src/hci.c:3889 src/multiint.c:825 src/multiint.c:829
+#: src/hci.c:3889 src/multiint.c:789 src/multiint.c:793
 #, fuzzy
 msgid "Power"
 msgstr "Vigor"
@@ -279,144 +279,148 @@ msgstr ""
 msgid "Hero"
 msgstr "Heros"
 
-#: src/multiint.c:355 src/multiint.c:1396 src/multilimit.c:174
+#: src/multiint.c:349 src/multiint.c:1360 src/multilimit.c:174
 msgid "Accept Settings"
 msgstr ""
 
-#: src/multiint.c:366
+#: src/multiint.c:360
 msgid "IP Address or Machine Name"
 msgstr ""
 
-#: src/multiint.c:407
+#: src/multiint.c:401
 msgid "CONNECTION"
 msgstr ""
 
-#: src/multiint.c:410 src/multiint.c:456 src/multiint.c:657 src/multiint.c:890
+#: src/multiint.c:404 src/multiint.c:447 src/multiint.c:621 src/multiint.c:854
 #: src/keyedit.c:380 src/multilimit.c:166
 msgid "Return To Previous Screen"
 msgstr ""
 
-#: src/multiint.c:421
-msgid "Internet"
+#: src/multiint.c:414
+msgid "Lobby"
 msgstr ""
 
-#: src/multiint.c:643
+#: src/multiint.c:415
+msgid "IP"
+msgstr ""
+
+#: src/multiint.c:607
 msgid "Searching"
 msgstr ""
 
-#: src/multiint.c:654
+#: src/multiint.c:618
 msgid "GAMES"
 msgstr ""
 
-#: src/multiint.c:664
+#: src/multiint.c:628
 msgid "Refresh Games List"
 msgstr ""
 
-#: src/multiint.c:739
+#: src/multiint.c:703
 msgid "OPTIONS"
 msgstr ""
 
-#: src/multiint.c:741
+#: src/multiint.c:705
 msgid "Select Game Name"
 msgstr ""
 
-#: src/multiint.c:742
+#: src/multiint.c:706
 msgid "Select Map"
 msgstr ""
 
-#: src/multiint.c:747
+#: src/multiint.c:711
 msgid "Game"
 msgstr ""
 
-#: src/multiint.c:749
+#: src/multiint.c:713
 msgid "Mayhem"
 msgstr ""
 
-#: src/multiint.c:751
+#: src/multiint.c:715
 msgid "Skirmish"
 msgstr ""
 
-#: src/multiint.c:772
+#: src/multiint.c:736
 msgid "Select Player Name"
 msgstr ""
 
-#: src/multiint.c:775 src/frontend.c:625
+#: src/multiint.c:739 src/frontend.c:616
 msgid "Fog"
 msgstr ""
 
-#: src/multiint.c:777 src/frontend.c:632 src/frontend.c:739
+#: src/multiint.c:741 src/frontend.c:623 src/frontend.c:730
 msgid "Fog Of War"
 msgstr ""
 
-#: src/multiint.c:778
+#: src/multiint.c:742
 msgid "Distance Fog"
 msgstr ""
 
-#: src/multiint.c:791 src/multimenu.c:741
+#: src/multiint.c:755 src/multimenu.c:741
 msgid "Alliances"
 msgstr ""
 
-#: src/multiint.c:794
+#: src/multiint.c:758
 msgid "No Alliances"
 msgstr ""
 
-#: src/multiint.c:796
+#: src/multiint.c:760
 msgid "Allow Alliances"
 msgstr ""
 
-#: src/multiint.c:800 src/multiint.c:2028
+#: src/multiint.c:764 src/multiint.c:1985
 msgid "Locked Teams"
 msgstr ""
 
-#: src/multiint.c:832
+#: src/multiint.c:796
 msgid "Low Power Levels"
 msgstr ""
 
-#: src/multiint.c:834
+#: src/multiint.c:798
 msgid "Medium Power Levels"
 msgstr ""
 
-#: src/multiint.c:836
+#: src/multiint.c:800
 msgid "High Power Levels"
 msgstr ""
 
-#: src/multiint.c:856 src/multiint.c:860
+#: src/multiint.c:820 src/multiint.c:824
 msgid "Base"
 msgstr ""
 
-#: src/multiint.c:863
+#: src/multiint.c:827
 msgid "Start with No Bases"
 msgstr ""
 
-#: src/multiint.c:865
+#: src/multiint.c:829
 msgid "Start with Bases"
 msgstr ""
 
-#: src/multiint.c:867
+#: src/multiint.c:831
 msgid "Start with Advanced Bases"
 msgstr ""
 
-#: src/multiint.c:897
+#: src/multiint.c:861
 msgid "Start Hosting Game"
 msgstr ""
 
-#: src/multiint.c:905
+#: src/multiint.c:869
 msgid "Set Structure Limits"
 msgstr ""
 
-#: src/multiint.c:1277
+#: src/multiint.c:1241
 msgid "PLAYERS"
 msgstr ""
 
-#: src/multiint.c:1427
+#: src/multiint.c:1391
 msgid "CHAT"
 msgstr ""
 
-#: src/multiint.c:1969
+#: src/multiint.c:1926
 msgid "Host is Starting Game"
 msgstr ""
 
-#: src/multiint.c:2736
+#: src/multiint.c:2693
 msgid "Players"
 msgstr ""
 
@@ -792,15 +796,15 @@ msgstr ""
 msgid "Quit"
 msgstr ""
 
-#: src/ingameop.c:157 src/frontend.c:825
+#: src/ingameop.c:157 src/frontend.c:816
 msgid "Voice Volume"
 msgstr ""
 
-#: src/ingameop.c:162 src/frontend.c:829
+#: src/ingameop.c:162 src/frontend.c:820
 msgid "FX Volume"
 msgstr ""
 
-#: src/ingameop.c:167 src/frontend.c:833
+#: src/ingameop.c:167 src/frontend.c:824
 msgid "Music Volume"
 msgstr ""
 
@@ -948,8 +952,8 @@ msgid "TUTORIALS"
 msgstr ""
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.c:292 src/frontend.c:348 src/frontend.c:474 src/frontend.c:533
-#: src/frontend.c:691 src/frontend.c:837 src/frontend.c:942
+#: src/frontend.c:292 src/frontend.c:348 src/frontend.c:474 src/frontend.c:524
+#: src/frontend.c:682 src/frontend.c:828 src/frontend.c:933
 msgctxt "menu"
 msgid "Return"
 msgstr ""
@@ -982,94 +986,94 @@ msgstr ""
 msgid "One Player Skirmish"
 msgstr ""
 
-#: src/frontend.c:528 src/frontend.c:840 src/frontend.c:945
+#: src/frontend.c:519 src/frontend.c:831 src/frontend.c:936
 msgid "GAME OPTIONS"
 msgstr ""
 
-#: src/frontend.c:529
+#: src/frontend.c:520
 msgid "Game Options"
 msgstr ""
 
-#: src/frontend.c:530
+#: src/frontend.c:521
 msgid "Graphics Options"
 msgstr ""
 
-#: src/frontend.c:531
+#: src/frontend.c:522
 msgid "Audio Options"
 msgstr ""
 
-#: src/frontend.c:532
+#: src/frontend.c:523
 msgid "Key Mappings"
 msgstr ""
 
-#: src/frontend.c:601
+#: src/frontend.c:592
 msgid "Reverse Mouse"
 msgstr ""
 
-#: src/frontend.c:604 src/frontend.c:616 src/frontend.c:669 src/frontend.c:682
-#: src/frontend.c:714 src/frontend.c:728 src/frontend.c:764 src/frontend.c:773
+#: src/frontend.c:595 src/frontend.c:607 src/frontend.c:660 src/frontend.c:673
+#: src/frontend.c:705 src/frontend.c:719 src/frontend.c:755 src/frontend.c:764
 msgid "On"
 msgstr ""
 
-#: src/frontend.c:608 src/frontend.c:620 src/frontend.c:665 src/frontend.c:674
-#: src/frontend.c:686 src/frontend.c:709 src/frontend.c:723 src/frontend.c:759
-#: src/frontend.c:777
+#: src/frontend.c:599 src/frontend.c:611 src/frontend.c:656 src/frontend.c:665
+#: src/frontend.c:677 src/frontend.c:700 src/frontend.c:714 src/frontend.c:750
+#: src/frontend.c:768
 msgid "Off"
 msgstr ""
 
-#: src/frontend.c:613
+#: src/frontend.c:604
 msgid "Screen Shake"
 msgstr ""
 
-#: src/frontend.c:628 src/frontend.c:746
+#: src/frontend.c:619 src/frontend.c:737
 msgid "Mist"
 msgstr ""
 
-#: src/frontend.c:637
+#: src/frontend.c:628
 msgid "Video Playback"
 msgstr ""
 
-#: src/frontend.c:640 src/frontend.c:796
+#: src/frontend.c:631 src/frontend.c:787
 msgid "Full"
 msgstr ""
 
-#: src/frontend.c:644 src/frontend.c:786
+#: src/frontend.c:635 src/frontend.c:777
 msgid "Windowed"
 msgstr ""
 
-#: src/frontend.c:647 src/frontend.c:791
+#: src/frontend.c:638 src/frontend.c:782
 msgid "Minimal"
 msgstr ""
 
-#: src/frontend.c:654 src/frontend.c:658
+#: src/frontend.c:645 src/frontend.c:649
 msgid "Subtitles"
 msgstr ""
 
-#: src/frontend.c:679
+#: src/frontend.c:670
 msgid "Shadows"
 msgstr ""
 
-#: src/frontend.c:907
+#: src/frontend.c:898
 msgid "Difficulty"
 msgstr ""
 
-#: src/frontend.c:911 src/frontend.c:993
+#: src/frontend.c:902 src/frontend.c:984
 msgid "Easy"
 msgstr ""
 
-#: src/frontend.c:914 src/frontend.c:985
+#: src/frontend.c:905 src/frontend.c:976
 msgid "Normal"
 msgstr ""
 
-#: src/frontend.c:918 src/frontend.c:989
+#: src/frontend.c:909 src/frontend.c:980
 msgid "Hard"
 msgstr ""
 
-#: src/frontend.c:923
+#: src/frontend.c:914
 msgid "Scroll Speed"
 msgstr ""
 
-#: src/frontend.c:939
+#: src/frontend.c:930
 msgid "Unit Colour"
 msgstr ""
 
