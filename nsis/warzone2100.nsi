@@ -1,4 +1,4 @@
-;  This file is part of Warzone 2100.
+;  This file is part of ${PACKAGE_NAME}.
 ;  Copyright (C) 2006-2007  Warzone Resurrection Project
 ;  Copyright (C) 2006       Dennis Schridde
 ;
@@ -29,14 +29,14 @@
 ;General
 
   ;Name and file
-  Name "Warzone 2100"
-  OutFile "warzone2100-${VERSION}.exe"
+  Name "${PACKAGE_NAME}"
+  OutFile "${PACKAGE}-${PACKAGE_VERSION}.exe"
 
   ;Default installation folder
-  InstallDir "$PROGRAMFILES\Warzone 2100"
+  InstallDir "$PROGRAMFILES\${PACKAGE_NAME}"
 
   ;Get installation folder from registry if available
-  InstallDirRegKey HKLM "Software\Warzone 2100" ""
+  InstallDirRegKey HKLM "Software\${PACKAGE_NAME}" ""
 
   SetCompressor /FINAL /SOLID lzma
 
@@ -45,13 +45,13 @@
 
 VIProductVersion "${VERSIONNUM}"
 VIAddVersionKey "CompanyName"		"Warzone Resurrection Project"
-VIAddVersionKey "FileDescription"	"Warzone 2100 Installer"
-VIAddVersionKey "FileVersion"		"${VERSION}"
-VIAddVersionKey "InternalName"		"Warzone 2100"
+VIAddVersionKey "FileDescription"	"${PACKAGE_NAME} Installer"
+VIAddVersionKey "FileVersion"		"${PACKAGE_VERSION}"
+VIAddVersionKey "InternalName"		"${PACKAGE_NAME}"
 VIAddVersionKey "LegalCopyright"	"Copyright © 2006 Warzone Resurrection Project"
-VIAddVersionKey "OriginalFilename"	"warzone2100-${VERSION}.exe"
-VIAddVersionKey "ProductName"		"Warzone 2100"
-VIAddVersionKey "ProductVersion"	"${VERSION}"
+VIAddVersionKey "OriginalFilename"	"${PACKAGE}-${PACKAGE_VERSION}.exe"
+VIAddVersionKey "ProductName"		"${PACKAGE_NAME}"
+VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
 
 ;--------------------------------
 ;Variables
@@ -69,7 +69,7 @@ VIAddVersionKey "ProductVersion"	"${VERSION}"
 
   ;Start Menu Folder Page Configuration (for MUI_PAGE_STARTMENU)
   !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM"
-  !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\Warzone 2100"
+  !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${PACKAGE_NAME}"
   !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
 
   ; These indented statements modify settings for MUI_PAGE_FINISH
@@ -88,7 +88,7 @@ VIAddVersionKey "ProductVersion"	"${VERSION}"
   !insertmacro MUI_PAGE_LICENSE $(MUILicense)
   !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_DIRECTORY
-  !insertmacro MUI_PAGE_STARTMENU Application $STARTMENU_FOLDER
+  !insertmacro MUI_PAGE_STARTMENU "Application" $STARTMENU_FOLDER
   !insertmacro MUI_PAGE_INSTFILES
   !insertmacro MUI_PAGE_FINISH
 
@@ -134,7 +134,7 @@ Section $(TEXT_SecBase) SecBase
   ;ADD YOUR OWN FILES HERE...
 
   ; Main executable
-  File "..\src\warzone2100.exe"
+  File "..\src\${PACKAGE}.exe"
 
   ; Windows dbghelp library
   File "${EXTDIR}\dbghelp.dll.license.txt"
@@ -152,18 +152,18 @@ Section $(TEXT_SecBase) SecBase
 
 
   ;Store installation folder
-  WriteRegStr HKLM "Software\Warzone 2100" "" $INSTDIR
+  WriteRegStr HKLM "Software\${PACKAGE_NAME}" "" $INSTDIR
 
   ; Write the Windows-uninstall keys
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Warzone 2100" "DisplayName" "Warzone 2100"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Warzone 2100" "DisplayVersion" "${VERSION}"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Warzone 2100" "DisplayIcon" "$INSTDIR\warzone2100.exe,0"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Warzone 2100" "Publisher" "Warzone Resurrection Project"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Warzone 2100" "URLInfoAbout" "http://wz2100.net/"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Warzone 2100" "InstallLocation" "$INSTDIR"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Warzone 2100" "UninstallString" "$INSTDIR\uninstall.exe"
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Warzone 2100" "NoModify" 1
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Warzone 2100" "NoRepair" 1
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "DisplayName" "${PACKAGE_NAME}"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "DisplayVersion" "${PACKAGE_VERSION}"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "DisplayIcon" "$INSTDIR\${PACKAGE}.exe,0"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "Publisher" "Warzone Resurrection Project"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "URLInfoAbout" "${PACKAGE_BUGREPORT}"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "InstallLocation" "$INSTDIR"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "UninstallString" "$INSTDIR\uninstall.exe"
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "NoModify" 1
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "NoRepair" 1
 
   ;Create uninstaller
   WriteUninstaller "$INSTDIR\uninstall.exe"
@@ -173,7 +173,7 @@ Section $(TEXT_SecBase) SecBase
     ;Create shortcuts
     CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
     CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" "$INSTDIR\uninstall.exe"
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Warzone 2100.lnk" "$INSTDIR\warzone2100.exe"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME}.lnk" "$INSTDIR\${PACKAGE}.exe"
 
   !insertmacro MUI_STARTMENU_WRITE_END
 
@@ -201,7 +201,7 @@ Section $(TEXT_SecGrimMod) SecGrimMod
   SetOutPath "$INSTDIR"
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Warzone 2100 - Grim's GFX.lnk" "$INSTDIR\warzone2100.exe" "--mod grim.wz"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Grim's GFX.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod grim.wz"
   !insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
@@ -214,8 +214,8 @@ Section $(TEXT_SecAIvolutionMod) SecAIvolutionMod
 
   SetOutPath "$INSTDIR"
 
-  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Warzone 2100 - AIvolution.lnk" "$INSTDIR\warzone2100.exe" "--mod aivolution.wz"
+  !insertmacro MUI_STARTMENU_WRITE_BEGIN "Application"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - AIvolution.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod aivolution.wz"
   !insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
@@ -224,20 +224,20 @@ SectionGroupEnd
 
 Section $(TEXT_SecNLS) SecNLS
 
-  SetOutPath "$INSTDIR\${LOCALEDIR}\da\LC_MESSAGES"
-  File "..\data\locale\da\LC_MESSAGES\${PACKAGE}.mo"
+  SetOutPath "$INSTDIR\locale\da\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\po\da.gmo"
 
-  SetOutPath "$INSTDIR\${LOCALEDIR}\de\LC_MESSAGES"
-  File "..\data\locale\de\LC_MESSAGES\${PACKAGE}.mo"
+  SetOutPath "$INSTDIR\locale\de\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\po\de.gmo"
 
-  SetOutPath "$INSTDIR\${LOCALEDIR}\la\LC_MESSAGES"
-  File "..\data\locale\la\LC_MESSAGES\${PACKAGE}.mo"
+  SetOutPath "$INSTDIR\locale\la\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\po\la.gmo"
 
-  SetOutPath "$INSTDIR\${LOCALEDIR}\nb\LC_MESSAGES"
-  File "..\data\locale\nb\LC_MESSAGES\${PACKAGE}.mo"
+  SetOutPath "$INSTDIR\locale\nb\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\po\nb.gmo"
 
-  SetOutPath "$INSTDIR\${LOCALEDIR}\nl\LC_MESSAGES"
-  File "..\data\locale\nl\LC_MESSAGES\${PACKAGE}.mo"
+  SetOutPath "$INSTDIR\locale\nl\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\po\nl.gmo"
 
 SectionEnd
 
@@ -253,7 +253,7 @@ Function .onInit
 FunctionEnd
 
 Function LaunchLink
-  ExecShell "" "$SMPROGRAMS\$STARTMENU_FOLDER\Warzone 2100.lnk"
+  ExecShell "" "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME}.lnk"
 FunctionEnd
 
 ;--------------------------------
@@ -270,7 +270,7 @@ FunctionEnd
   LangString DESC_SecMods ${LANG_ENGLISH} "Various mods."
 
   LangString TEXT_SecGrimMod ${LANG_ENGLISH} "Grim's graphics-update"
-  LangString DESC_SecGrimMod ${LANG_ENGLISH} "Grim's graphics-update. Contains more detailed textures for campaign 1 as well as additional texture- and model-updates. Copyright (C) 2005-2007 Grim Moroe, Use is only permited for Warzone 2100."
+  LangString DESC_SecGrimMod ${LANG_ENGLISH} "Grim's graphics-update. Contains more detailed textures for campaign 1 as well as additional texture- and model-updates. Copyright (C) 2005-2007 Grim Moroe, Use is only permited for ${PACKAGE_NAME}."
 
   LangString TEXT_SecAIvolutionMod ${LANG_ENGLISH} "AIvolution"
   LangString DESC_SecAIvolutionMod ${LANG_ENGLISH} "Improved artificial intelligence that learns."
@@ -290,7 +290,7 @@ FunctionEnd
   LangString DESC_SecMods ${LANG_DUTCH} "Verschillende mods."
 
   LangString TEXT_SecGrimMod ${LANG_DUTCH} "Grim's grafische-update"
-  LangString DESC_SecGrimMod ${LANG_DUTCH} "Grim's grafische-update. Bevat meer gedetaïleerde textures voor campaign 1 en extra texture- en model-updates. Copyright (C) 2005-2007 Grim Moroe, gebruik is alleen toegestaan voor Warzone 2100."
+  LangString DESC_SecGrimMod ${LANG_DUTCH} "Grim's grafische-update. Bevat meer gedetaïleerde textures voor campaign 1 en extra texture- en model-updates. Copyright (C) 2005-2007 Grim Moroe, gebruik is alleen toegestaan voor ${PACKAGE_NAME}."
 
   LangString TEXT_SecAIvolutionMod ${LANG_DUTCH} "AIvolution"
   LangString DESC_SecAIvolutionMod ${LANG_DUTCH} "Verbeterde kunstmatige intelligentie die leert."
@@ -310,7 +310,7 @@ FunctionEnd
   LangString DESC_SecMods ${LANG_GERMAN} "Verschiedene Mods."
 
   LangString TEXT_SecGrimMod ${LANG_GERMAN} "Grims Grafik-Update"
-  LangString DESC_SecGrimMod ${LANG_GERMAN} "Grims Grafik-Update. Enthält detailliertere Texturen für Kampagne 1 sowie einige andere Textur- und Model-Updates. Copyright (C) 2005-2007 Grim Moroe, Verwendung nur für Warzone 2100 gestattet."
+  LangString DESC_SecGrimMod ${LANG_GERMAN} "Grims Grafik-Update. Enthält detailliertere Texturen für Kampagne 1 sowie einige andere Textur- und Model-Updates. Copyright (C) 2005-2007 Grim Moroe, Verwendung nur für ${PACKAGE_NAME} gestattet."
 
   LangString TEXT_SecAIvolutionMod ${LANG_GERMAN} "AIvolutino"
   LangString DESC_SecAIvolutionMod ${LANG_GERMAN} "Verbesserte künstliche Intelligenz die erlernt."
@@ -320,9 +320,9 @@ FunctionEnd
 
 
 
-  LangString TEXT_RunWarzone ${LANG_ENGLISH} "Run Warzone 2100"
-  LangString TEXT_RunWarzone ${LANG_DUTCH} "Start Warzone 2100"
-  LangString TEXT_RunWarzone ${LANG_GERMAN} "Starte Warzone 2100"
+  LangString TEXT_RunWarzone ${LANG_ENGLISH} "Run ${PACKAGE_NAME}"
+  LangString TEXT_RunWarzone ${LANG_DUTCH} "Start ${PACKAGE_NAME}"
+  LangString TEXT_RunWarzone ${LANG_GERMAN} "Starte ${PACKAGE_NAME}"
 
 
 
@@ -348,7 +348,7 @@ Section "Uninstall"
 
   ;ADD YOUR OWN FILES HERE...
 
-  Delete "$INSTDIR\warzone2100.exe"
+  Delete "$INSTDIR\${PACKAGE}.exe"
 
   Delete "$INSTDIR\oalinst.exe"
 
@@ -367,35 +367,35 @@ Section "Uninstall"
 
   Delete "$INSTDIR\mods\global\grim.wz"
 
+  Delete "$INSTDIR\locale\da\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\da\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\da"
+
+  Delete "$INSTDIR\locale\de\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\de\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\de"
+
+  Delete "$INSTDIR\locale\la\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\la\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\la"
+
+  Delete "$INSTDIR\locale\nb\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\nb\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\nb"
+
+  Delete "$INSTDIR\locale\nl\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\nl\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\nl"
+
+  RMDir "$INSTDIR\locale"
+
   RMDir "$INSTDIR\mods\global"
   RMDir "$INSTDIR\mods"
   RMDir "$INSTDIR"
 
-  Delete "$INSTDIR\${LOCALEDIR}\da\LC_MESSAGES\${PACKAGE}.mo"
-  RMDir "$INSTDIR\${LOCALEDIR}\da\LC_MESSAGES"
-  RMDir "$INSTDIR\${LOCALEDIR}\da"
-
-  Delete "$INSTDIR\${LOCALEDIR}\de\LC_MESSAGES\${PACKAGE}.mo"
-  RMDir "$INSTDIR\${LOCALEDIR}\de\LC_MESSAGES"
-  RMDir "$INSTDIR\${LOCALEDIR}\de"
-
-  Delete "$INSTDIR\${LOCALEDIR}\la\LC_MESSAGES\${PACKAGE}.mo"
-  RMDir "$INSTDIR\${LOCALEDIR}\la\LC_MESSAGES"
-  RMDir "$INSTDIR\${LOCALEDIR}\la"
-
-  Delete "$INSTDIR\${LOCALEDIR}\nb\LC_MESSAGES\${PACKAGE}.mo"
-  RMDir "$INSTDIR\${LOCALEDIR}\nb\LC_MESSAGES"
-  RMDir "$INSTDIR\${LOCALEDIR}\nb"
-
-  Delete "$INSTDIR\${LOCALEDIR}\nl\LC_MESSAGES\${PACKAGE}.mo"
-  RMDir "$INSTDIR\${LOCALEDIR}\nl\LC_MESSAGES"
-  RMDir "$INSTDIR\${LOCALEDIR}\nl"
-
-  RMDir "$INSTDIR\${LOCALEDIR}"
-
   Delete "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk"
-  Delete "$SMPROGRAMS\$STARTMENU_FOLDER\Warzone 2100.lnk"
-  Delete "$SMPROGRAMS\$STARTMENU_FOLDER\Warzone 2100 - Grim's GFX.lnk"
+  Delete "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME}.lnk"
+  Delete "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Grim's GFX.lnk"
 
   ;Delete empty start menu parent diretories
   !insertmacro MUI_STARTMENU_GETFOLDER Application $MUI_TEMP
@@ -411,12 +411,12 @@ Section "Uninstall"
     StrCmp $MUI_TEMP $SMPROGRAMS startMenuDeleteLoopDone startMenuDeleteLoop
   startMenuDeleteLoopDone:
 
-  DeleteRegValue HKLM "Software\Warzone 2100" "Start Menu Folder"
-  DeleteRegValue HKLM "Software\Warzone 2100" ""
-  DeleteRegKey /ifempty HKLM "Software\Warzone 2100"
+  DeleteRegValue HKLM "Software\${PACKAGE_NAME}" "Start Menu Folder"
+  DeleteRegValue HKLM "Software\${PACKAGE_NAME}" ""
+  DeleteRegKey /ifempty HKLM "Software\${PACKAGE_NAME}"
 
   ; Unregister with Windows' uninstall system
-  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Warzone 2100"
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}"
 
 SectionEnd
 
