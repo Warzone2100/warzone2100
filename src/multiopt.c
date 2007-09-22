@@ -109,24 +109,19 @@ void sendOptions(UDWORD dest, UDWORD play)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
+/*!
+ * check the wdg files that are being used.
+ */
 static BOOL checkGameWdg(const char *nm)
 {
 	LEVEL_DATASET *lev;
 
-	//
-	// now check the wdg files that are being used.
-	//
-
-	// game.map must be available in xxx list.
-
-	lev = psLevels;
-	while(lev)
+	for (lev = psLevels; lev; lev = lev->psNext)
 	{
-		if( strcmp(lev->pName, nm) == 0)
+		if (strcmp(lev->pName, nm) == 0)
 		{
 			return TRUE;
 		}
-		lev=lev->psNext;
 	}
 
 	return FALSE;
@@ -139,17 +134,17 @@ void recvOptions(NETMSG *pMsg)
 	UDWORD	pos=0,play,id;
 	UDWORD	newPl;
 
-	NetGet(pMsg,0,game);									// get details.
+	NetGet(pMsg,0,game);
 	pos += sizeof(game);
 	if(strncmp((char*)game.version,buildTime,8) != 0)
 	{
 
 #ifndef DEBUG
-		debug( LOG_ERROR, "Host is running a different version of Warzone2100." );
+		debug(LOG_ERROR, "Host is running a different version of Warzone2100.");
 		abort();
 #endif
 	}
-	if(ingame.numStructureLimits)							// free old limits.
+	if(ingame.numStructureLimits) // Free old limits
 	{
 			ingame.numStructureLimits = 0;
 			free(ingame.pStructureLimits);
@@ -185,43 +180,46 @@ void recvOptions(NETMSG *pMsg)
 		memcpy(ingame.pStructureLimits, &(pMsg->body[pos]) ,ingame.numStructureLimits*(sizeof(UDWORD)+sizeof(UBYTE)));
 	}
 
-	// process
-	if(newPl != 0)
+	// Post process
+	if (newPl != 0)
 	{
-		if(newPl == NetPlay.dpidPlayer)
+		// If we are the new player
+		if (newPl == NetPlay.dpidPlayer)
 		{
 			// it's us thats new
-			selectedPlayer = play;							// select player
-			NETplayerInfo();							// get player info
-			powerCalculated = FALSE;						// turn off any power requirements.
+			selectedPlayer = play; // select player
+			NETplayerInfo(); // get player info
+			powerCalculated = FALSE; // turn off any power requirements.
 		}
+		// Someone else is joining
 		else
 		{
 			// someone else is joining.
-			setupNewPlayer( newPl, play);
+			setupNewPlayer(newPl, play);
 		}
 	}
 
 
-	// do the skirmish slider settings if they are up,
-	for(id=0;id<MAX_PLAYERS;id++)
+	// Do the skirmish slider settings if they are up
+	for (id = 0; id < MAX_PLAYERS; id++)
 	{
-		if(widgGetFromID(psWScreen,MULTIOP_SKSLIDE+id))
+		if (widgGetFromID(psWScreen, MULTIOP_SKSLIDE + id))
 		{
-			widgSetSliderPos(psWScreen,MULTIOP_SKSLIDE+id,game.skDiff[id]);
+			widgSetSliderPos(psWScreen, MULTIOP_SKSLIDE + id, game.skDiff[id]);
 		}
 	}
 
-	if(!checkGameWdg(game.map) )
+	// See if we have the map or not
+	if (!checkGameWdg(game.map))
 	{
-		// request the map from the host. NET_REQUESTMAP
+		// Request the map from the host
 		{
 			NETMSG m;
 			NetAdd(m,0,NetPlay.dpidPlayer);
 			m.type = NET_REQUESTMAP;
 			m.size =4;
 			NETbcast(&m,TRUE);
-			addConsoleMessage("MAP REQUESTED!",DEFAULT_JUSTIFY);
+			addConsoleMessage("MAP REQUESTED!", DEFAULT_JUSTIFY);
 		}
 	}
 	else
@@ -230,10 +228,6 @@ void recvOptions(NETMSG *pMsg)
 	}
 
 }
-
-
-
-
 
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -246,7 +240,7 @@ BOOL hostCampaign(char *sGame, char *sPlayer)
 	debug(LOG_WZ, "Hosting campaign: '%s', player: '%s'", sGame, sPlayer);
 
 	freeMessages();
-	if(!NetPlay.bLobbyLaunched)
+	if (!NetPlay.bLobbyLaunched)
 	{
 		NEThostGame(sGame,sPlayer,game.type,0,0,0,game.maxPlayers); // temporary stuff
 	}
@@ -258,10 +252,10 @@ BOOL hostCampaign(char *sGame, char *sPlayer)
 		NETsetGameFlags(4,0);
 	}
 
-	for(i=0;i<MAX_PLAYERS;i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		player2dpid[i] =0;
-		(void)setPlayerName(i, "");			//Clear custom names (use default ones instead)
+		player2dpid[i] = 0;
+		setPlayerName(i, ""); //Clear custom names (use default ones instead)
 	}
 
 
@@ -390,9 +384,12 @@ BOOL multiInitialise(void)
 BOOL sendLeavingMsg(void)
 {
 	NETMSG m;
-        UBYTE bHost = (UBYTE)NetPlay.bHost;
-	// send a leaving message, This resolves a problem with tcpip which
-	// occasionally doesn't automatically notice a player leaving.
+	UBYTE bHost = (UBYTE)NetPlay.bHost;
+	
+	/*
+	 * Send a leaving message, This resolves a problem with tcpip which
+	 * occasionally doesn't automatically notice a player leaving
+	 */
 	NetAdd(m,0,player2dpid[selectedPlayer]);
 	NetAdd(m,4,bHost);
 	m.size = 5;
@@ -812,12 +809,15 @@ void playerResponding(void)
 	NETMSG	msg;
 
 	ingame.startTime = gameTime;
-	ingame.localJoiningInProgress = FALSE;				// no longer joining.
+	ingame.localJoiningInProgress = FALSE; // No longer joining.
 	ingame.JoiningInProgress[selectedPlayer] = FALSE;
 
-	cameraToHome(selectedPlayer,FALSE);						// home the camera to the player.
+	// Home the camera to the player
+	cameraToHome(selectedPlayer, FALSE);
 
-	NetAdd(msg,0,selectedPlayer);						// tell the world we're here.
+	// Tell the world we're here
+	NetAdd(msg,0,selectedPlayer);
+
 	msg.size = sizeof(UDWORD);
 	msg.type = NET_PLAYERRESPONDING;
 	NETbcast(&msg,TRUE);
@@ -829,7 +829,7 @@ BOOL multiGameInit(void)
 {
 	UDWORD player;
 
-	for(player=0;player<MAX_PLAYERS;player++)
+	for (player = 0; player < MAX_PLAYERS; player++)
 	{
 		openchannels[player] =TRUE;								//open comms to this player.
 	}
@@ -852,26 +852,27 @@ BOOL multiGameShutdown(void)
 	sendLeavingMsg();							// say goodbye
 	updateMultiStatsGames();					// update games played.
 
-	st = getMultiStats(selectedPlayer,TRUE);	// save stats
+	st = getMultiStats(selectedPlayer, TRUE);	// save stats
 
-	saveMultiStats(getPlayerName(selectedPlayer),getPlayerName(selectedPlayer),&st);
+	saveMultiStats(getPlayerName(selectedPlayer), getPlayerName(selectedPlayer), &st);
 
-	NETclose();									// close game.
+	// close game
+	NETclose();
 
-	if(ingame.numStructureLimits)
+	if (ingame.numStructureLimits)
 	{
 		ingame.numStructureLimits = 0;
 		free(ingame.pStructureLimits);
 		ingame.pStructureLimits = NULL;
 	}
 
-	ingame.localJoiningInProgress   = FALSE;	// clean up
-	ingame.localOptionsReceived		= FALSE;
-	ingame.bHostSetup				= FALSE;	//dont attempt a host
-	NetPlay.bLobbyLaunched			= FALSE;	//revert back to main menu, not multioptions.
+	ingame.localJoiningInProgress = FALSE; // Clean up
+	ingame.localOptionsReceived = FALSE;
+	ingame.bHostSetup = FALSE;	// Dont attempt a host
+	NetPlay.bLobbyLaunched			= FALSE;	// Revert back to main menu, not multioptions.
 	NetPlay.bHost					= FALSE;
-	bMultiPlayer					= FALSE;	//back to single player mode
-	selectedPlayer					= 0;		//back to use player 0 (single player friendly)
+	bMultiPlayer					= FALSE;	// Back to single player mode
+	selectedPlayer					= 0;		// Back to use player 0 (single player friendly)
 
 	return TRUE;
 }

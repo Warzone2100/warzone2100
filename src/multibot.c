@@ -72,7 +72,7 @@ BOOL sendHappyVtol(DROID *psDroid)
 {
 	NETMSG m;
 
-	if(!myResponsibility(psDroid->player))
+	if (!myResponsibility(psDroid->player))
 	{
 		return FALSE;
 	}
@@ -95,15 +95,17 @@ BOOL recvHappyVtol(NETMSG *pMsg)
 	NetGet(pMsg,0,player);
 	NetGet(pMsg,1,id);
 
-	if(!IdToDroid(id,player,&pD))			//find droid.
+	if (!IdToDroid(id,player,&pD)) //find droid.
 	{
 		return FALSE;
 	}
 
-	for (i = 0;i < pD->numWeaps;i++)
+	// Rearming also repairs VTOLs
+	pD->body = pD->originalBody;
+
+	for (i = 0; i < pD->numWeaps; i++)
 	{
-		pD->sMove.iAttackRuns[i] =0;						// finish it for next time round.
-		pD->body = pD->originalBody;
+		pD->sMove.iAttackRuns[i] = 0; // finish it for next time round.
 		pD->asWeaps[i].ammo = asWeaponStats[pD->asWeaps[i].nStat].numRounds;
 		pD->asWeaps[i].lastFired = 0;
 	}
@@ -115,7 +117,7 @@ BOOL recvHappyVtol(NETMSG *pMsg)
 // ////////////////////////////////////////////////////////////////////////////
 // Secondary Orders.
 
-// send
+// Send
 BOOL sendDroidSecondary(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state)
 {
 	NETMSG	m;
@@ -143,12 +145,15 @@ BOOL recvDroidSecondary(NETMSG *pMsg)
 	NetGet(pMsg,8,state);
 	player = pMsg->body[12];
 
-	if(!IdToDroid(id,player,&psDroid))		//find droid.
+	// If we can not find the droid should we not ask for it?
+	if(!IdToDroid(id,player,&psDroid)) //find droid.
 	{
 		return FALSE;
 	}
+
+	// Set the droids secondary order
 	turnOffMultiMsg(TRUE);
-	secondarySetState(psDroid,sec,state);	// set order
+	secondarySetState(psDroid, sec, state);
 	turnOffMultiMsg(FALSE);
 
 	return TRUE;
@@ -183,12 +188,12 @@ BOOL recvDroidSecondaryAll(NETMSG *pMsg)
 		return FALSE;
 	}
 
-    if(psDroid)
-    {
-        psDroid->secondaryOrder = sorder;
-    }
+	if(psDroid)
+	{
+		psDroid->secondaryOrder = sorder;
+	}
 
-    return TRUE;
+	return TRUE;
 }
 
 BOOL sendDroidEmbark(DROID *psDroid)
@@ -220,10 +225,10 @@ BOOL recvDroidEmbark(NETMSG *pMsg)
 
 	if(psDroid)
 	{
-		// take it out of the world without destroying it
+		// Take it out of the world without destroying it
 		droidRemove(psDroid, apsDroidLists);
 
-		//init the order for when disembark
+		// Init the order for when disembark
 		psDroid->order = DORDER_NONE;
 		clearDroidTargets(psDroid);
 		psDroid->psTarStats[0] = NULL;
@@ -237,8 +242,8 @@ BOOL sendDroidDisEmbark(DROID *psDroid)
 	NETMSG	m;
 
 	NetAdd(m,0,psDroid->id);
-    NetAdd(m,4,psDroid->x);
-    NetAdd(m,6,psDroid->y);
+	NetAdd(m,4,psDroid->x);
+	NetAdd(m,6,psDroid->y);
 	m.body[8] = (char) psDroid->player;
 
 	m.size = 9;
@@ -250,41 +255,46 @@ BOOL sendDroidDisEmbark(DROID *psDroid)
 
 BOOL recvDroidDisEmbark(NETMSG *pMsg)
 {
-    DROID			*psDroid;
-	UDWORD			id,player;
-    UWORD           x, y;
+	DROID *psDroid;
+	UDWORD id, player;
+	UWORD x, y;
 
 	NetGet(pMsg,0,id);
-    NetGet(pMsg,4,x);
-    NetGet(pMsg,6,y);
+	NetGet(pMsg,4,x);
+	NetGet(pMsg,6,y);
 	player = pMsg->body[8];
 
-	if(!IdToDroid(id,player,&psDroid))		//find droid.
+	if(!IdToDroid(id,player,&psDroid)) //find droid.
 	{
 		return FALSE;
 	}
 
-    if(psDroid)
-    {
-        //add it back into the world at the x/y
-        psDroid->x = x;
-        psDroid->y = y;
-        if (!worldOnMap(x, y))
+	if(psDroid)
 	{
-		debug(LOG_ERROR, "recvDroidDisEmbark: droid not disembarked on map");
-		return FALSE;
-	}
-	    updateDroidOrientation(psDroid);
-		//initialise the movement data
-    	initDroidMovement(psDroid);
-	    //reset droid orders
+		// Add it back into the world at the x/y
+		psDroid->x = x;
+		psDroid->y = y;
+
+		if (!worldOnMap(x, y))
+		{
+			debug(LOG_ERROR, "recvDroidDisEmbark: droid not disembarked on map");
+			return FALSE;
+		}
+
+		updateDroidOrientation(psDroid);
+
+		// Initialise the movement data
+		initDroidMovement(psDroid);
+
+		// Reset droid orders
 		orderDroid(psDroid, DORDER_STOP);
 		gridAddObject((BASE_OBJECT *)psDroid);
 		psDroid->cluster = 0;
-        addDroid(psDroid, apsDroidLists);
-    }
 
-    return TRUE;
+		addDroid(psDroid, apsDroidLists);
+	}
+	
+	return TRUE;
 }
 
 
@@ -293,52 +303,32 @@ BOOL recvDroidDisEmbark(NETMSG *pMsg)
 // Droids
 
 // posibly Send an updated droid movement order.
-BOOL SendDroidMove(DROID *pDroid, UDWORD x, UDWORD y,BOOL bFormation)
+BOOL SendDroidMove(DROID *pDroid, uint32_t x, uint32_t y, BOOL bFormation)
 {
 	NETMSG m;
-	BOOL sendit = TRUE;								// wether or not to send
-	BOOL allow = TRUE;								// wether or not to allow the move to proceed.
 
-	switch (pDroid->action)							// look at the action. Some actions shouldn't be sent.
+	// Don't allow a move to happen at all if it is not our responsibility
+	if (!myResponsibility(pDroid->player))
 	{
-		case DACTION_NONE:
-			sendit = FALSE;							// don't send if no action is taking place
-			break;
-		default:
-			sendit = TRUE;
-			break;
+		return FALSE; // Do not allow move
 	}
 
-	switch (pDroid->order)							// next look at the order.
+	// If the unit has no actions or orders, allow it to happen but do not send
+	if (pDroid->action == DACTION_NONE || pDroid->order == DORDER_MOVE)
 	{
-		case DORDER_MOVE:
-			sendit = FALSE;							// dont bother sending if the order is just a move
-			break;
-		default:
-			break;
+		return TRUE;
 	}
 
-	if (!myResponsibility(pDroid->player))			// we may not be responsible, find out.
-	{
-		allow = FALSE;
-		sendit = FALSE;
-	}
+	NetAdd(m,0,pDroid->id);						//droid to move
+	NetAdd(m,4,x);								//x pos
+	NetAdd(m,8,y);								//y pos
+	NetAdd(m,12,pDroid->player);			//owner of droid(for speed!)
+	NetAdd(m,13,bFormation);				//use a formation?
+	m.size = 14;
+	m.type = NET_DROIDMOVE;
+	NETbcast(&m,FALSE);
 
-	if(sendit)										// send the mesg if required.
-	{
-		char player, formation;
-		player = (char)pDroid->player;
-		formation = (char)bFormation;
-		NetAdd(m,0,pDroid->id);						//droid to move
-		NetAdd(m,4,x);								//x pos
-		NetAdd(m,8,y);								//y pos
-		NetAdd(m,12,player);			//owner of droid(for speed!)
-		NetAdd(m,13,formation);				//use a formation?
-		m.size = 14;
-		m.type = NET_DROIDMOVE;
-		NETbcast(&m,FALSE);
-	}
-	return allow;
+	return TRUE;
 
 }
 
@@ -355,20 +345,24 @@ BOOL recvDroidMove(NETMSG *m)
 	player = m->body[12];
 	NetGet(m,13,bFormation);
 
-	if(!(IdToDroid(id,player,&psDroid)))			// find the droid
+	/*
+	 * If we could not find the droid, request it. We can safely return here
+	 * as when the droid is sent it will contain the updated movement position.
+	 */
+	if(!(IdToDroid(id,player,&psDroid)))
 	{
-		sendRequestDroid(id);						// if we can't find it, ask for it!
+		sendRequestDroid(id);
 		return TRUE;
 	}
 
 	turnOffMultiMsg(TRUE);
-	if(bFormation)
+	if (bFormation)
 	{
-		moveDroidTo(psDroid, x, y);						// do the move
+		moveDroidTo(psDroid, x, y); // Do the move
 	}
 	else
 	{
-		moveDroidToNoFormation(psDroid,x,y);			// move, no form...
+		moveDroidToNoFormation(psDroid, x, y); // Move, no form...
 	}
 	turnOffMultiMsg(FALSE);
 
@@ -377,18 +371,21 @@ BOOL recvDroidMove(NETMSG *m)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Send a new Droid to the other players
-BOOL SendDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UBYTE player,UDWORD id)
+BOOL SendDroid(DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id)
 {
 	NETMSG m;
 
-	if( ingame.localJoiningInProgress )
+	// Dont send other droids during campaign setup
+	if (ingame.localJoiningInProgress)
 	{
-		return TRUE;								// dont send other droids during campaign setup.
+		return TRUE;
 	}
 
-	if( !myResponsibility(player) )					// only send the droid if we are responsible
+	// Only send the droid if we are responsible
+	if (!myResponsibility(player))
 	{
-		return FALSE;								// dont' build if we are not responsible.
+		// Don't build if we are not responsible
+		return FALSE;
 	}
 
 
@@ -397,14 +394,7 @@ BOOL SendDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UBYTE player,UDWOR
 	NetAdd(m,5,y);									//y pos of new droid
 	NetAdd(m,9,id);									//id of droid to create
 
-	if(powerCalculated)
-	{
-		m.body[13] = 1;
-	}
-	else
-	{
-		m.body[13] = 0;
-	}
+	m.body[13] = powerCalculated;
 
 	// new version
 	NetAdd(m,14,pTemplate->multiPlayerID);
@@ -435,132 +425,177 @@ BOOL recvDroid(NETMSG * m)
 
 	pT = IdToTemplate(targetRef,player);
 
-	if(!pT)
+	// If we can not find the template ask for the entire droid instead
+	if (!pT)
 	{
 		debug(LOG_NET, "Couldn't find template to build recvd droid");
-		sendRequestDroid(id);						// request the droid instead.
+		sendRequestDroid(id);
 		return FALSE;
 	}
 
-
+	// If the power to build the droid has been calculated
 	if(m->body[13] != 0)
 	{
-		if (!usePower(player,pT->powerPoints))// take the power.
+		// Use the power required to build the droid
+		if (!usePower(player,pT->powerPoints))
 		{
-			debug(LOG_NET, "not enough power to build recvd droid, player=%u", player);
-			// build anyway..
+			debug(LOG_NET, "Not enough power to build recvd droid, player=%u", player);
+			// Build anyway..
 		}
 	}
 
+	// Create that droid on this machine.
 	turnOffMultiMsg(TRUE);
-	d = buildDroid(pT,x,y,player, FALSE);			// create that droid on this machine.
+	d = buildDroid(pT, x, y, player, FALSE);
 	turnOffMultiMsg(FALSE);
 
-	if(d)
+	// If we were able to build the droid set it up
+	if (d)
 	{
 		d->id = id;
-		addDroid(d, apsDroidLists);					// put droid in world
+		addDroid(d, apsDroidLists);
 	}
 	else
 	{
-		DBCONPRINTF(ConsoleString,(ConsoleString,"MULTIPLAYER: Couldn't build a remote droid, relying on checking to resync"));
+		DBCONPRINTF(ConsoleString, (ConsoleString, "MULTIPLAYER: Couldn't build a remote droid, relying on checking to resync"));
 		return FALSE;
 	}
 
-	return (TRUE);
+	return TRUE;
 }
 
+
+/*!
+ * Type of the target of the movement
+ */
+typedef enum {
+	NET_ORDER_SUBTYPE_POSITION,
+	NET_ORDER_SUBTYPE_OBJECT,
+	NET_ORDER_SUBTYPE_SPECIAL // x and y are 0, no idea what that means
+} NET_ORDER_SUBTYPE;
+
+
 // ////////////////////////////////////////////////////////////////////////////
-// Droid Group/selection orders.
-// minimises comms by sending orders for whole groups, rather than each droid
-
-BOOL SendGroupOrderSelected(UBYTE player, UDWORD x, UDWORD y, BASE_OBJECT *psObj)
+/*!
+ * Droid Group/selection orders.
+ * Minimises comms by sending orders for whole groups, rather than each droid
+ */
+BOOL SendGroupOrderSelected(uint8_t player, uint32_t x, uint32_t y, BASE_OBJECT *psObj)
 {
-	NETMSG	m;
-	DROID	*pDroid;
-	UWORD	droidcount=0;
+	NETMSG m;
+	DROID *pDroid;
+	uint16_t droidCount = 0;
+	DROID_ORDER order = UNKNOWN;
+	NET_ORDER_SUBTYPE subType = (psObj) ? NET_ORDER_SUBTYPE_OBJECT : NET_ORDER_SUBTYPE_POSITION;
+	BOOL cmdOrder = FALSE;
+	unsigned int i;
 
-	if (psObj == NULL)							//it's a position order
+	switch (subType)
 	{
-		NetAdd(m,0,x);
-		NetAdd(m,4,y);
-		m.body[8] = 0;							// subtype flag
+		// If they are being ordered to `goto' an object
+		case NET_ORDER_SUBTYPE_OBJECT:
+			NetAdd(m,0, psObj->id);
+			NetAdd(m,4, psObj->type);
+			break;
+		// If the droids are being ordered to `goto' a specific position
+		case NET_ORDER_SUBTYPE_POSITION:
+			NetAdd(m,0,x);
+			NetAdd(m,4,y);
+			break;
+		default:
+			assert(!"Unexpected droid-order-targettype!");
+			break;
 	}
-	else										// it's a object order
+	
+	m.body[8] = subType;
+	
+	m.body[10] = cmdOrder;		// not a cmd order.
+
+	m.body[12] = order;	// set the order.
+
+	m.size = 13;
+
+	// Work out the number of droids to send
+	for (pDroid = apsDroidLists[player]; pDroid; pDroid = pDroid->psNext)
 	{
-		NetAdd(m,0, psObj->id);
-		NetAdd(m,4, psObj->type);
-		m.body[8]=1;							// subtype flag
+		if (pDroid->selected)
+			droidCount++;
 	}
-	m.body[10]=0;		// not a cmd order.
 
-	m.body[12] = UNKNOWN;	// set the order.
+	// If there are less than 2 droids don't bother (to allow individual orders)
+	if (droidCount < 2)
+	{
+		return FALSE;
+	}
 
-	m.size=13;
-
-	//now add the list of droid id's to order
-
-	for(pDroid = apsDroidLists[player]; pDroid; pDroid=pDroid->psNext)
+	// Add the droids to the message (break when reached droidCount, as the rest must be unselected droids)
+	for (i = 0, pDroid = apsDroidLists[player]; i < droidCount && pDroid; pDroid = pDroid->psNext)
 	{
 		if (pDroid->selected)
 		{
 			NetAdd(m,m.size,pDroid->id);
 			m.size += sizeof(UDWORD);
-			droidcount ++;
+			i++;
 		}
 	}
 
-	if( droidcount >1	) 							// return TRUE if it's worth using.
-	{
-		NetAdd(m,9,droidcount);						// note how many in this message.
-		m.type = NET_GROUPORDER;					// send it
-		NETbcast(&m,FALSE);
-		return TRUE;
-	}
-	else
-	{	// didn't bother using it, so return false, to allow individiual orders.
-		return FALSE;
-	}
+	// Add the number of droids to the message
+	NetAdd(m,9,droidCount);
+	m.type = NET_GROUPORDER;
+	NETbcast(&m,FALSE);
+
+	return TRUE;
 }
 
-BOOL SendGroupOrderGroup(DROID_GROUP *psGroup, DROID_ORDER order,UDWORD x,UDWORD y,BASE_OBJECT *psObj)
+BOOL SendGroupOrderGroup(DROID_GROUP *psGroup, DROID_ORDER order, uint32_t x, uint32_t y, BASE_OBJECT *psObj)
 {
-	NETMSG	m;
-	DROID	*pDroid;
-	UWORD	droidcount=0;
+	NETMSG m;
+	DROID *pDroid;
+	uint16_t droidCount = 0;
+	NET_ORDER_SUBTYPE subType = (psObj) ? NET_ORDER_SUBTYPE_OBJECT : NET_ORDER_SUBTYPE_POSITION;
+	BOOL cmdOrder = FALSE;
 
-	if (psObj == NULL)							//it's a position order
+	switch (subType)
 	{
-		NetAdd(m,0,x);
-		NetAdd(m,4,y);
-		m.body[8] = 0;							// subtype flag
-	}
-	else										// it's a object order
-	{
-		NetAdd(m,0, psObj->id);
-		NetAdd(m,4, psObj->type);
-		m.body[8]=1;							// subtype flag
+		// If they are being ordered to `goto' an object
+		case NET_ORDER_SUBTYPE_OBJECT:
+			NetAdd(m,0, psObj->id);
+			NetAdd(m,4, psObj->type);
+			break;
+		// If the droids are being ordered to `goto' a specific position
+		case NET_ORDER_SUBTYPE_POSITION:
+			NetAdd(m,0,x);
+			NetAdd(m,4,y);
+			break;
+		default:
+			assert(!"Unexpected droid-order-targettype!");
+			break;
 	}
 
-
-	// check this!!!!!
-	m.body[10]=0;		// not a cmd order.
+	m.body[8] = subType;
+	
+	m.body[10] = cmdOrder;		// not a cmd order.
 
 	m.body[12] = order;	// set the order.
 
-	m.size=13;
+	m.size = 13;
 
-	//now add the list of droid id's to order
+	// Work out the number of droids to send
+	for (pDroid = psGroup->psList; pDroid; pDroid = pDroid->psGrpNext)
+	{
+		droidCount++;
+	}
 
-	for(pDroid = psGroup->psList; pDroid; pDroid=pDroid->psGrpNext)
+	// Add the droids to the message
+	for (pDroid = psGroup->psList; pDroid; pDroid = pDroid->psGrpNext)
 	{
 		NetAdd(m,m.size,pDroid->id);
 		m.size += sizeof(UDWORD);
-		droidcount ++;
 	}
 
-	NetAdd(m,9,droidcount);						// note how many in this message.
-	m.type = NET_GROUPORDER;					// send it
+	// Add the number of droids to the message
+	NetAdd(m,9,droidCount);
+	m.type = NET_GROUPORDER;
 	NETbcast(&m,FALSE);
 	return TRUE;
 
@@ -570,74 +605,73 @@ BOOL SendGroupOrderGroup(DROID_GROUP *psGroup, DROID_ORDER order,UDWORD x,UDWORD
 // receive a group order.
 BOOL recvGroupOrder(NETMSG *pMsg)
 {
-	UDWORD		x,y,id,destid;
-	DROID		*psDroid=NULL;
-	OBJECT_TYPE	desttype;
-	UWORD		droidcount;
+	uint32_t x = 0, y = 0, id = 0, destid = 0;
+	DROID *psDroid = NULL;
+	OBJECT_TYPE desttype = OBJ_DROID;
+	DROID_ORDER order = pMsg->body[12];
+	NET_ORDER_SUBTYPE subType = pMsg->body[8];
+	BOOL cmdOrder = pMsg->body[10];
+	uint16_t droidCount;
+	unsigned int i;
 
-//	DROID		*psPrev = NULL;	// fomation vars.
-//	FORMATION	*psFormation = NULL;
-	BOOL		bCmdOr = FALSE;
-	DROID_ORDER	order;
+	// Get the droid count
+	NetGet(pMsg,9,droidCount);
 
-	bCmdOr = pMsg->body[10];
-
-	order = pMsg->body[12];
-
-	NetGet(pMsg,9,droidcount);
-	if(pMsg->body[8] == 1)											// it's target is an object
+	switch (subType)
 	{
-		NetGet(pMsg,0,destid);
-		NetGet(pMsg,4,desttype);
-		x=0;
-		y=0;
-	}
-	else															// it's target is a position
-	{
-		NetGet(pMsg,0,x);											// x coord
-		NetGet(pMsg,4,y);											// y coord
-		destid=0;
-		desttype=0;
+		// It's target is an object
+		case NET_ORDER_SUBTYPE_OBJECT:
+			NetGet(pMsg,0,destid);
+			NetGet(pMsg,4,desttype);
+			break;
+		// It's target is a position
+		case NET_ORDER_SUBTYPE_POSITION:
+			NetGet(pMsg,0,x);
+			NetGet(pMsg,4,y);
+			break;
+		default:
+			assert(!"Unexpected droid-order-targettype!");
+			break;
 	}
 
 	// for each droid
-	while (droidcount > 0)
+	for (i = 0; i < droidCount; i++)
 	{
-		NetGet(pMsg,13+((droidcount-1) * sizeof(UDWORD)) ,id);
-		IdToDroid(id, ANYPLAYER, &psDroid);							// find the droid
-		if (psDroid==NULL)
+		NetGet(pMsg, 13 + i * sizeof(UDWORD), id);
+		IdToDroid(id, ANYPLAYER, &psDroid); // find the droid
+		if (psDroid == NULL)
 		{
-			sendRequestDroid(id);									//droid not found, request it.
-			return (FALSE);
+			sendRequestDroid(id); //droid not found, request it.
+			return FALSE;
 		}
 
-		if(!bCmdOr)
+		/*
+		 * If the current order not is a command order and we are not a
+		 * commander yet are in the commander group remove us from it.
+		 */
+		if (!cmdOrder && psDroid->droidType != DROID_COMMAND
+		 && psDroid->psGroup != NULL && psDroid->psGroup->type == GT_COMMAND)
 		{
-			if(	(psDroid->droidType != DROID_COMMAND) &&
-				(psDroid->psGroup != NULL) &&
-				(psDroid->psGroup->type == GT_COMMAND)
-			  )
-			{
-				grpLeave(psDroid->psGroup, psDroid);
-			}
+			grpLeave(psDroid->psGroup, psDroid);
 		}
 
+		// Process the droids order
 		ProcessDroidOrder(psDroid,order,x,y,desttype,destid);		// process the order.
-
-		// no need to do formation stuff anymore.
-		droidcount--;
 	}
+
 	return TRUE;
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////
 // Droid update information
-BOOL SendDroidInfo(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, BASE_OBJECT *psObj)
+BOOL SendDroidInfo(DROID *psDroid, DROID_ORDER order, uint32_t x, uint32_t y, BASE_OBJECT *psObj)
 {
 	NETMSG m;
+	NET_ORDER_SUBTYPE subType = psObj ? NET_ORDER_SUBTYPE_OBJECT :
+			( (x == 0 && y == 0) ? NET_ORDER_SUBTYPE_SPECIAL : NET_ORDER_SUBTYPE_POSITION );
 
-	if(!myResponsibility(psDroid->player))
+	if (!myResponsibility(psDroid->player))
 	{
 		return TRUE;
 	}
@@ -645,28 +679,26 @@ BOOL SendDroidInfo(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, BASE_O
 	NetAdd(m,0,psDroid->id);
 	NetAdd(m,4,order);
 
-	if((x==0) &&(y==0) && (psObj==NULL))
+	switch (subType)
 	{
-		NetAdd(m,8,x);	//note: x,y not needed
-		NetAdd(m,12,y);
-		m.body[16] = 2;
-	}
-	else if (psObj == NULL)											//it's a position order
-	{
-		NetAdd(m,8,x);
-		NetAdd(m,12,y);
-		m.body[16] = 0;												// subtype flag
-	}
-	else															// it's a object order
-	{
-		NetAdd(m,8, psObj->id);
-		NetAdd(m,12,psObj->type);
-		m.body[16]=1;												// subtype flag
+		// If they are being ordered to `goto' an object
+		case NET_ORDER_SUBTYPE_OBJECT:
+			NetAdd(m,8, psObj->id);
+			NetAdd(m,12,psObj->type);
+			break;
+		// If the droids are being ordered to `goto' a specific position or have special orders
+		case NET_ORDER_SUBTYPE_POSITION:
+		case NET_ORDER_SUBTYPE_SPECIAL:
+			NetAdd(m,8,x);
+			NetAdd(m,12,y);
+			break;
 	}
 
-	m.size=( 4*(sizeof(UDWORD)) )+1;
-	m.type = NET_DROIDINFO;											// set the type
-	return( NETbcast(&m,FALSE));										// send it.
+	m.body[16] = subType;
+
+	m.size= (4*(sizeof(UDWORD))) + 1;
+	m.type = NET_DROIDINFO;
+	return NETbcast(&m,FALSE);
 }
 
 
@@ -676,124 +708,115 @@ BOOL SendDroidInfo(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, BASE_O
 // receive droid information form other players.
 BOOL recvDroidInfo(NETMSG *pMsg)
 {
-	UDWORD		x,y,id,destid;
+	uint32_t x = 0, y = 0, id = 0, destid = 0;
 	DROID_ORDER order;
-	DROID		*psDroid=NULL;
-	OBJECT_TYPE	desttype;
+	NET_ORDER_SUBTYPE subType = pMsg->body[16];
+	DROID *psDroid = NULL;
+	OBJECT_TYPE desttype = OBJ_DROID;
 
-	NetGet(pMsg,0,id);												//droid's id
-	NetGet(pMsg,4,order);											//droid's order
+	NetGet(pMsg,0,id); //droid's id
+	NetGet(pMsg,4,order); //droid's order
 
+	// If we could not find the droid, request it
 	if(!IdToDroid(id, ANYPLAYER, &psDroid))
 	{
-		sendRequestDroid(id);										//droid not found, request it.
+		sendRequestDroid(id);
 		return (FALSE);
 	}
 
-	// now process the actual order..
-	if(pMsg->body[16] == 2)
+	// Now process the actual order
+	switch (subType)
 	{
-		turnOffMultiMsg(TRUE);
-		orderDroid(psDroid, order);
-		turnOffMultiMsg(FALSE);
+		// If they are being ordered to `goto' an object
+		case NET_ORDER_SUBTYPE_OBJECT:
+			NetGet(pMsg,8,destid);
+			NetGet(pMsg,12,desttype);
+			ProcessDroidOrder(psDroid, order, 0, 0, desttype, destid);
+			break;
+		// If the droids are being ordered to `goto' a specific position
+		case NET_ORDER_SUBTYPE_POSITION:
+			NetGet(pMsg,8,x);
+			NetGet(pMsg,12,y);
+			ProcessDroidOrder(psDroid, order, x, y, 0, 0);
+			break;
+		case NET_ORDER_SUBTYPE_SPECIAL:
+			turnOffMultiMsg(TRUE);
+			orderDroid(psDroid, order);
+			turnOffMultiMsg(FALSE);
+			break;
 	}
-	else if(pMsg->body[16] == 1)											// it's an object order
-	{
-		NetGet(pMsg,8,destid);
-		NetGet(pMsg,12,desttype);
-		ProcessDroidOrder(psDroid,order,0,0,desttype,destid);
-	}
-	else															// it's a position order
-	{
-		NetGet(pMsg,8,x);											// x coord
-		NetGet(pMsg,12,y);											// y coord
-		ProcessDroidOrder(psDroid,order,x,y,0,0);
-	}
+
 	return TRUE;
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////
 // process droid order
-static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, OBJECT_TYPE desttype, UDWORD destid)
+static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, uint32_t x, uint32_t y, OBJECT_TYPE desttype, uint32_t destid)
 {
-	if(destid==0 && desttype==0)							// target is a location
+	// Target is a location
+	if (destid == 0 && desttype == 0)
 	{
-		if( abs(psDroid->x - x) < (TILE_UNITS/2)
-			&& abs(psDroid->y - y) < (TILE_UNITS/2) )		// don't bother if close.
+		// Don't bother if it is close
+		if (abs(psDroid->x - x) < (TILE_UNITS/2)
+		 && abs(psDroid->y - y) < (TILE_UNITS/2))
 		{
 			return;
 		}
 
-		if(order == UNKNOWN)	// get the order to do if we didn't specify it.
+		// If no specific order was passed work one out based on the location
+		if (order == UNKNOWN)
 		{
-			order = chooseOrderLoc(psDroid, x,y);
+			order = chooseOrderLoc(psDroid, x, y);
 		}
 
 		turnOffMultiMsg(TRUE);
-		orderDroidLoc(psDroid, order, x,y);
+		orderDroidLoc(psDroid, order, x, y);
 		turnOffMultiMsg(FALSE);
 	}
-	else													//  target is object
+	// Target is an object
+	else
 	{
 		DROID_OACTION_INFO oaInfo = {{NULL}};
-		UDWORD		i;
-		BASE_OBJECT	*psObj = NULL;
+		BASE_OBJECT *psObj = NULL;
 		DROID		*pD;
-		STRUCTURE	*pS;
-		FEATURE		*pF;
 
-		switch(desttype)
+		switch (desttype)
 		{
-		case OBJ_DROID:
-			for (i=0; i<MAX_PLAYERS && !psObj; i++)
-			{
-				for(pD=apsDroidLists[i];(pD) && (pD->id != destid);pD=pD->psNext);
-				if(pD)
-				{
-					psObj = (BASE_OBJECT*)pD;
-				}
-			}
-			break;
+			case OBJ_DROID:
+				IdToDroid(destid,ANYPLAYER,&pD);
+				psObj = (BASE_OBJECT*)pD;
+				break;
+			case OBJ_STRUCTURE:
+				psObj = (BASE_OBJECT*)IdToStruct(destid,ANYPLAYER);
+				break;
+			case OBJ_FEATURE:
+				psObj = (BASE_OBJECT*)IdToFeature(destid,ANYPLAYER);
+				break;
 
-		case OBJ_STRUCTURE:
-			pS = IdToStruct(destid,ANYPLAYER);
-			if(pS)
-			{
-				psObj = (BASE_OBJECT*)pS;
-			}
-			break;
-
-		case OBJ_FEATURE:
-			pF = IdToFeature(destid,ANYPLAYER);
-			if(pF)
-			{
-				psObj = (BASE_OBJECT*)pF;
-			}
-			break;
-
-		case OBJ_PROJECTILE: // shouldn't be getting this!
-			debug(LOG_ERROR, "ProcessDroidOrder: order specified destination as a bullet. what am i to do??");
-			break;
-
-		default:
-			debug( LOG_ERROR, "ProcessDroidOrder: unknown object type");
-			break;
+			// We should not get this!
+			case OBJ_PROJECTILE:
+				debug(LOG_ERROR, "ProcessDroidOrder: order specified destination as a bullet. what am i to do??");
+				break;
+			default:
+				debug(LOG_ERROR, "ProcessDroidOrder: unknown object type");
+				break;
 		}
 
-		if(!psObj)													// failed to find it;
+		// If we did not find anything, return
+		if (!psObj)													// failed to find it;
 		{
 			return;
 		}
 
-		// if we didn't sepcify an order, then make one..
-		if(order == UNKNOWN)	// get the order to do if we didn't specify it.
+		// If we didn't sepcify an order, then pick one
+		if (order == UNKNOWN)
 		{
-			order = chooseOrderObj(psDroid,psObj);
+			order = chooseOrderObj(psDroid, psObj);
 		}
 
 		turnOffMultiMsg(TRUE);
-		oaInfo.objects[0] = (BASE_OBJECT *)psObj;
+		oaInfo.objects[0] = psObj;
 		orderDroidObj(psDroid, order, &oaInfo);
 		turnOffMultiMsg(FALSE);
 	}
@@ -821,20 +844,19 @@ BOOL recvDestroyDroid(NETMSG *pMsg)
 	UDWORD r;
 
 	NetGet(pMsg,0,r);								// get the id of the droid.
-	if( IdToDroid(r, ANYPLAYER, &pD) )
-	{
-		if(!pD->died)
-		{
-			turnOffMultiMsg(TRUE);
-			destroyDroid(pD);						// remove the droid recvd from the remote players machine.
-			turnOffMultiMsg(FALSE);
-		}
-		return (TRUE);
-	}
-	else
+	if( !IdToDroid(r, ANYPLAYER, &pD) )
 	{
 		return FALSE;
 	}
+		
+	if(!pD->died)
+	{
+		turnOffMultiMsg(TRUE);
+		destroyDroid(pD);						// remove the droid recvd from the remote players machine.
+		turnOffMultiMsg(FALSE);
+	}
+	
+	return TRUE;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -843,12 +865,12 @@ BOOL recvDestroyDroid(NETMSG *pMsg)
 BOOL sendWholeDroid(DROID *pD, UDWORD dest)
 {
 	NETMSG	m;
-	UDWORD	sizecount=0;
-	UDWORD	noTarget =0;
+	UDWORD	sizecount = 0;
+	UDWORD	noTarget = 0;
 	SDWORD	asParts[DROID_MAXCOMP];
 	UDWORD	asWeaps[DROID_MAXWEAPS];
-	int		i;
-	BOOL	bNoTarget;
+	unsigned int i;
+	BOOL bNoTarget = TRUE;
 	uint16_t direction = pD->direction * 32; // preserve precision
 
 	if (pD->numWeaps == 0)
@@ -903,9 +925,7 @@ BOOL sendWholeDroid(DROID *pD, UDWORD dest)
 	NetAdd(m,sizecount,pD->orderX2);				sizecount+=sizeof(pD->orderX2);
 	NetAdd(m,sizecount,pD->orderY2);				sizecount+=sizeof(pD->orderY2);
 
-	bNoTarget = TRUE;
-	//Watermelon:net packet size increase
-	for (i = 0;i < pD->numWeaps;i++)
+	for (i = 0; i < pD->numWeaps; i++)
 	{
 		if (pD->psTarget[i])
 		{
@@ -1025,11 +1045,11 @@ BOOL receiveWholeDroid(NETMSG *m)
 // Functions for cases where a machine receives a netmessage about a certain
 // droid. The droid is unknown, so the machine uses tese functions in order to
 // find out about it.
-BOOL sendRequestDroid(UDWORD droidId)
+BOOL sendRequestDroid(uint32_t droidId)
 {
 	NETMSG msg;
 
-	if(ingame.localJoiningInProgress)		// dont worry if still joining.
+	if (ingame.localJoiningInProgress)		// Don't worry if still joining.
 	{
 		return FALSE;
 	}
@@ -1056,14 +1076,17 @@ BOOL recvRequestDroid(NETMSG *pMsg)
 	NetGet(pMsg,4,dpid);									// get the player who needs it.
 
 
-	if(!(IdToDroid(droidid , ANYPLAYER,&pDroid) )  )		// find the droid
+	// Get the droid
+	if (!(IdToDroid(droidid, ANYPLAYER, &pDroid)))
 	{
-		return TRUE;										// can't find it, so ignore.
+		// Can't find it, so ignore
+		return TRUE;
 	}
 
-	if(myResponsibility(pDroid->player))					// if resposible
+	// If we are responsible, send it
+	if (myResponsibility(pDroid->player))
 	{
-		sendWholeDroid(pDroid,dpid);						// send the whole of the droid
+		sendWholeDroid(pDroid,dpid);
 	}
 
 	return TRUE;
