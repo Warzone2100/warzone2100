@@ -95,15 +95,14 @@ BOOL sound_GetSystemActive( void )
 /** Retrieves loaded audio files and retrieves a TRACK from them on which some values are set and returns their respective ID numbers
  *  \param fileName the filename of the track
  *  \param loop whether the track should be looped until explicitly stopped
- *  \param trackID[out] the track id number is returned into the variable this pointer points to
  *  \param volume the volume this track should be played on (range is 0-100)
  *  \param audibleRadius the radius from the source of sound where it can be heard
- *  \return a non-zero value when succesfull, zero when the file is not found or no more tracks can be loaded (i.e. the limit is reached)
+ *  \return a non-zero value representing the track id number when succesfull, zero when the file is not found or no more tracks can be loaded (i.e. the limit is reached)
  */
 unsigned int sound_SetTrackVals(const char* fileName, BOOL loop, unsigned int volume, unsigned int audibleRadius)
 {
-    unsigned int trackID;
-    TRACK* psTrack = resGetData( "WAV", fileName );
+	unsigned int trackID;
+	TRACK* psTrack = resGetData( "WAV", fileName );
 	if (psTrack == NULL)
 	{
 		debug(LOG_ERROR, "sound_SetTrackVals: track %s resource not found", fileName);
