@@ -6,54 +6,128 @@
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
-			<Target title="Debug">
-				<Option output="bin/Debug/warzone2100" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj/Debug/" />
+			<Target title="Debug-Linux">
+				<Option platforms="Unix;" />
+				<Option output="bin\Debug\warzone2100" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Option parameters="--datadir data" />
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-DDEBUG" />
+					<Add option='-DVERSION=\\&quot;TRUNK\\&quot;' />
+					<Add option='-DLOCALEDIR=\\&quot;\\&quot;' />
+					<Add option='-DPACKAGE=\\&quot;warzone2100\\&quot;' />
 				</Compiler>
+				<Linker>
+					<Add library="m" />
+					<Add library="pthread" />
+					<Add library="GL" />
+					<Add library="GLU" />
+					<Add library="openal" />
+				</Linker>
 			</Target>
-			<Target title="Release">
-				<Option output="bin/Release/warzone2100" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj/Release/" />
+			<Target title="Release-Linux">
+				<Option platforms="Unix;" />
+				<Option output="bin\Release\warzone2100" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Option parameters="--datadir data" />
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="-DNDEBUG" />
+					<Add option='-DVERSION=\\&quot;TRUNK\\&quot;' />
+					<Add option='-DLOCALEDIR=\\&quot;\\&quot;' />
+					<Add option='-DPACKAGE=\\&quot;warzone2100\\&quot;' />
 				</Compiler>
 				<Linker>
+					<Add library="m" />
+					<Add library="pthread" />
+					<Add library="GL" />
+					<Add library="GLU" />
+					<Add library="openal" />
+					<Add option="-s" />
+				</Linker>
+			</Target>
+			<Target title="Debug-Windows">
+				<Option platforms="Windows;" />
+				<Option output="bin\Debug\warzone2100" prefix_auto="1" extension_auto="1" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Option parameters="--datadir data" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DDEBUG" />
+					<Add option='-DVERSION=\&quot;TRUNK\&quot;' />
+					<Add option='-DLOCALEDIR=\&quot;\&quot;' />
+					<Add option='-DPACKAGE=\&quot;warzone2100\&quot;' />
+					<Add option="-DWIN32" />
+					<Add option="-DYY_STATIC" />
+					<Add directory="$(#warzone_devpkg.include)" />
+				</Compiler>
+				<Linker>
+					<Add library="mingw32" />
+					<Add library="SDLmain" />
+					<Add library="z" />
+					<Add library="gdi32" />
+					<Add library="opengl32" />
+					<Add library="glu32" />
+					<Add library="openal32" />
+					<Add library="dbghelp" />
+					<Add library="winmm" />
+					<Add library="wsock32" />
+					<Add directory="$(#warzone_devpkg.lib)" />
+				</Linker>
+			</Target>
+			<Target title="Release-Windows">
+				<Option platforms="Windows;" />
+				<Option output="bin\Release\warzone2100" prefix_auto="1" extension_auto="1" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Option parameters="--datadir data" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-DNDEBUG" />
+					<Add option='-DVERSION=\&quot;TRUNK\&quot;' />
+					<Add option='-DLOCALEDIR=\&quot;\&quot;' />
+					<Add option='-DPACKAGE=\&quot;warzone2100\&quot;' />
+					<Add option="-DWIN32" />
+					<Add option="-DYY_STATIC" />
+					<Add directory="$(#warzone_devpkg.include)" />
+				</Compiler>
+				<Linker>
+					<Add library="mingw32" />
+					<Add library="SDLmain" />
+					<Add library="z" />
+					<Add library="gdi32" />
+					<Add library="opengl32" />
+					<Add library="glu32" />
+					<Add library="openal32" />
+					<Add library="dbghelp" />
+					<Add library="winmm" />
+					<Add library="wsock32" />
+					<Add directory="$(#warzone_devpkg.lib)" />
 					<Add option="-s" />
 				</Linker>
 			</Target>
 		</Build>
 		<VirtualTargets>
-			<Add alias="All" targets="Debug;Release;" />
+			<Add alias="All-Linux" targets="Debug-Linux;Release-Linux;" />
+			<Add alias="All-Windows" targets="Debug-Windows;Release-Windows;" />
 		</VirtualTargets>
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-Werror-implicit-function-declaration" />
 			<Add option="-std=gnu99" />
-			<Add option='-DVERSION=\\&quot;TRUNK\\&quot;' />
-			<Add option='-DLOCALEDIR=\\&quot;\\&quot;' />
-			<Add option='-DPACKAGE=\\&quot;warzone2100\\&quot;' />
 			<Add directory="." />
 		</Compiler>
 		<Linker>
 			<Add library="physfs" />
 			<Add library="png" />
-			<Add library="m" />
 			<Add library="SDL" />
-			<Add library="pthread" />
 			<Add library="SDL_net" />
-			<Add library="GL" />
-			<Add library="GLU" />
-			<Add library="openal" />
 			<Add library="vorbisfile" />
 			<Add library="vorbis" />
 			<Add library="ogg" />
@@ -873,6 +947,11 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/wrappers.h" />
+		<Unit filename="win32/warzone2100.rc">
+			<Option compilerVar="WINDRES" />
+			<Option target="Debug-Windows" />
+			<Option target="Release-Windows" />
+		</Unit>
 		<Extensions>
 			<code_completion />
 		</Extensions>
