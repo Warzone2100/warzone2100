@@ -440,7 +440,7 @@ do { \
 \
 	assert(droid->direction <= 360.0f && droid->direction >= 0.0f); \
 	assert(droid->numWeaps <= DROID_MAXWEAPS); \
-	assert(droid->listSize < ORDER_LIST_MAX); \
+	assert(droid->listSize <= ORDER_LIST_MAX); \
 	assert(droid->player < MAX_PLAYERS); \
 \
 	for (i = 0; i < DROID_MAXWEAPS; ++i) \
