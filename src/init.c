@@ -88,7 +88,7 @@
 #include "texture.h"
 #include "transporter.h"
 #include "warzoneconfig.h"
-#include "winmain.h"
+#include "main.h"
 #include "wrappers.h"
 
 #ifdef ARROWS

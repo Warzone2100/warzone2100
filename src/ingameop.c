@@ -50,7 +50,7 @@
 #include "ingameop.h"
 #include "mission.h"
 #include "transporter.h"
-#include "winmain.h"
+#include "main.h"
 
 extern void addText(int FontID,UDWORD FormID,UDWORD id,  UDWORD PosX, UDWORD PosY, char *txt, UDWORD attachID,BOOL *State);
 

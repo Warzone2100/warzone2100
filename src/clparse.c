@@ -31,7 +31,7 @@
 #include "lib/framework/frame.h"
 #include "lib/widget/widget.h"
 
-#include "winmain.h"
+#include "main.h"
 #include "frontend.h"
 
 #include "lib/ivis_common/pieclip.h"

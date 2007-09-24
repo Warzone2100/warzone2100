@@ -35,7 +35,7 @@
 
 #include "multiplay.h"
 
-#include "winmain.h"
+#include "main.h"
 #include "hci.h"
 #include "lib/gamelib/gtime.h"
 

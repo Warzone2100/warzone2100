@@ -28,7 +28,7 @@
 #include "map.h"
 #include "game.h"			// for loading maps
 #include "message.h"		// for clearing messages.
-#include "winmain.h"
+#include "main.h"
 #include "display3d.h"		// for changing the viewpoint
 #include "power.h"
 #include "lib/widget/widget.h"

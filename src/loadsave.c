@@ -40,7 +40,7 @@
 #include "lib/sound/audio_id.h"
 #include "lib/sound/audio.h"
 #include "frontend.h"
-#include "winmain.h"
+#include "main.h"
 #include "display3d.h"
 #include "display.h"
 #ifndef WIN32

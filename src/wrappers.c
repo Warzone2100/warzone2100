@@ -45,7 +45,7 @@
 #include "hci.h"		// access to widget screen.
 #include "lib/widget/widget.h"
 #include "wrappers.h"
-#include "winmain.h"
+#include "main.h"
 #include "objects.h"
 #include "display.h"
 #include "display3d.h"

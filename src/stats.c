@@ -32,7 +32,7 @@
 #include "objects.h"
 #include "stats.h"
 #include "map.h"
-#include "winmain.h"
+#include "main.h"
 #include "lib/sound/audio_id.h"
 #include "projectile.h"
 #include "text.h"

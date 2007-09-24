@@ -66,7 +66,7 @@
 #include "text.h"
 #include "transporter.h"
 #include "warcam.h"
-#include "winmain.h"
+#include "main.h"
 #include "wrappers.h"
 
 

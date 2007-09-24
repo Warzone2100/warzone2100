@@ -58,7 +58,7 @@
 #include "seqdisp.h"
 #include "text.h"
 #include "warzoneconfig.h"
-#include "winmain.h"
+#include "main.h"
 #include "wrappers.h"
 
 static int StartWithGame = 1; // New game starts in Cam 1.

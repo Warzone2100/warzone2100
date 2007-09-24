@@ -650,6 +650,7 @@
 		<Unit filename="src/main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/main.h" />
 		<Unit filename="src/map.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -868,7 +869,6 @@
 		</Unit>
 		<Unit filename="src/warzoneconfig.h" />
 		<Unit filename="src/weapondef.h" />
-		<Unit filename="src/winmain.h" />
 		<Unit filename="src/wrappers.c">
 			<Option compilerVar="CC" />
 		</Unit>

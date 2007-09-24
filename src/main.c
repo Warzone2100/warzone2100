@@ -64,7 +64,7 @@
 #include "research.h"
 #include "seqdisp.h"
 #include "warzoneconfig.h"
-#include "winmain.h"
+#include "main.h"
 #include "wrappers.h"
 
 #ifndef DATADIR

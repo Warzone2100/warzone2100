@@ -28,7 +28,7 @@ noinst_HEADERS = action.h advvis.h ai.h aiexperience.h anim_id.h \
 	researchdef.h resource.h scores.h scriptai.h scriptcb.h scriptextern.h scriptfuncs.h \
 	scriptobj.h scripttabs.h scriptvals.h selection.h seqdisp.h stats.h statsdef.h \
 	structure.h structuredef.h target.h text.h texture.h transporter.h visibility.h \
-	warcam.h warzoneconfig.h weapondef.h winmain.h wrappers.h
+	warcam.h warzoneconfig.h weapondef.h main.h wrappers.h
 
 warzone2100_SOURCES = scriptvals_parser.tab.c scriptvals_lexer.lex.c \
 	level_lexer.lex.c ai.c aiexperience.c astar.c action.c advvis.c atmos.c bridge.c \

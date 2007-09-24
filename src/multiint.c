@@ -35,7 +35,7 @@
 #include "lib/ivis_opengl/screen.h"
 #include "lib/widget/widget.h"
 
-#include "winmain.h"
+#include "main.h"
 #include "objects.h"
 #include "display.h"// pal stuff
 #include "display3d.h"

@@ -62,7 +62,7 @@
 #include "lib/widget/slider.h"
 #include "lib/framework/fractions.h"
 #include "order.h"
-#include "winmain.h"
+#include "main.h"
 
 #include "intimage.h"
 

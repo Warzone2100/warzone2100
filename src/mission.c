@@ -49,7 +49,7 @@
 #include "text.h"
 #include "frontend.h"		// for displaytextoption.
 #include "intdisplay.h"
-#include "winmain.h"
+#include "main.h"
 #include "display.h"
 #include "loadsave.h"
 #include "lib/script/script.h"

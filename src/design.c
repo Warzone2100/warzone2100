@@ -70,7 +70,7 @@
 #include "component.h"
 #include "lib/script/script.h"
 #include "scripttabs.h"
-#include "winmain.h"
+#include "main.h"
 #include "objects.h"
 #include "display.h"
 #include "console.h"
