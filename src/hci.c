@@ -4107,7 +4107,7 @@ BOOL intAddOptions(void)
 	/* Add the add object buttons */
 	sButInit.id = IDOPT_DROID;
 	sButInit.x += OPT_GAP + OPT_BUTWIDTH;
-	sButInit.pText = "Unit";
+	sButInit.pText = _("Unit");
 	sButInit.pTip = "Place Unit on map";
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
@@ -4116,7 +4116,7 @@ BOOL intAddOptions(void)
 
 	sButInit.id = IDOPT_STRUCT;
 	sButInit.x += OPT_GAP + OPT_BUTWIDTH;
-	sButInit.pText = "Struct";
+	sButInit.pText = _("Struct");
 	sButInit.pTip = "Place Structures on map";
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
@@ -4125,7 +4125,7 @@ BOOL intAddOptions(void)
 
 	sButInit.id = IDOPT_FEATURE;
 	sButInit.x += OPT_GAP + OPT_BUTWIDTH;
-	sButInit.pText = "Feat";
+	sButInit.pText = _("Feat");
 	sButInit.pTip = "Place Features on map";
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
@@ -4139,7 +4139,7 @@ BOOL intAddOptions(void)
 	sButInit.y = OPT_HEIGHT - OPT_GAP - OPT_BUTHEIGHT;
 	sButInit.width = OPT_WIDTH - OPT_GAP*2;
 	sButInit.height = OPT_BUTHEIGHT;
-	sButInit.pText = "Quit";
+	sButInit.pText = _("Quit");
 	sButInit.pTip = _("Exit Game");
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
