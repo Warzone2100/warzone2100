@@ -9,6 +9,9 @@
    * New: Top, bottom, left, right, front and rear armor types for units.
    * New: Improved scripting language documentation.
    * Fix: Skirmish difficulty slider now applies settings to the right players.
+ * Campaign Mode:
+   * Fix: accuracy, damage and ROF upgrades, which were mistakenly applied to Mini-Pods and Mini-Rocket
+          Artillery, are now correctly applied to Lancer, Bunker Buster, Tank Killer and Ripple Rockets.
  * Unit AI:
    * New: Multi-criteria target selection routine to automatically choose the best suitable target.
    * New: Units and structures will constantly look for a better target taking into consideration
