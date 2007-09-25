@@ -55,7 +55,7 @@ extern void iV_DrawTextRotated(const char* string, float x, float y, float rotat
 
 static inline void iV_DrawText(const char* string, float x, float y)
 {
-    iV_DrawTextRotated(string, x, y, 0.f);
+	iV_DrawTextRotated(string, x, y, 0.f);
 }
 
 #endif // _INCLUDED_TEXTDRAW_
