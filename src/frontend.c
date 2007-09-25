@@ -1290,14 +1290,14 @@ void addText(int FontID,UDWORD FormID,UDWORD id,  UDWORD PosX, UDWORD PosY, char
 // show a background piccy
 static void displayTitleBitmap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
+	static const char versionString[] = "Version " VERSION " - Built " __DATE__
 #ifdef DEBUG
-	static const char versionString[] = "Version " VERSION " - Built " __DATE__ " - DEBUG";
-#else
-	static const char versionString[] = "Version " VERSION " - Built " __DATE__;
+	                                                                            " - DEBUG"
 #endif
+	;
 
 	iV_SetFont(WFont);
-	iV_SetTextColour(-1);
+	iV_SetTextColour(PIE_TEXT_WHITE);
 
 	iV_DrawTextRotated(versionString, pie_GetVideoBufferWidth() - 10, pie_GetVideoBufferHeight() - 15, 270.f);
 }
