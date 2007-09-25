@@ -132,10 +132,10 @@ Weapon Upgrade,Wpn-Missile-Damage03,MISSILE,0,0,0,90,0,0,0
 Weapon Upgrade,Wpn-Missile-ROF01,MISSILE,20,0,0,0,0,0,0
 Weapon Upgrade,Wpn-Missile-ROF02,MISSILE,40,0,0,0,0,0,0
 Weapon Upgrade,Wpn-Missile-ROF03,MISSILE,60,0,0,0,0,0,0
-Weapon Upgrade,Wpn-MissileSlow-Damage01,MISSILE,0,0,0,30,0,0,0
-Weapon Upgrade,Wpn-MissileSlow-Damage02,MISSILE,0,0,0,60,0,0,0
-Weapon Upgrade,Wpn-MissileSlow-Damage03,MISSILE,0,0,0,90,0,0,0
-Weapon Upgrade,Wpn-MissileSlow-ROF01,MISSILE,20,0,0,0,0,0,0
+Weapon Upgrade,Wpn-MissileSlow-Damage01,SLOW MISSILE,0,0,0,30,0,0,0
+Weapon Upgrade,Wpn-MissileSlow-Damage02,SLOW MISSILE,0,0,0,60,0,0,0
+Weapon Upgrade,Wpn-MissileSlow-Damage03,SLOW MISSILE,0,0,0,90,0,0,0
+Weapon Upgrade,Wpn-MissileSlow-ROF01,SLOW MISSILE,20,0,0,0,0,0,0
 Weapon Upgrade,Wpn-Mortar-Acc01,MORTARS,0,10,10,0,0,0,0
 Weapon Upgrade,Wpn-Mortar-Acc02,MORTARS,0,20,20,0,0,0,0
 Weapon Upgrade,Wpn-Mortar-Acc03,MORTARS,0,30,30,0,0,0,0
@@ -161,18 +161,18 @@ Weapon Upgrade,Wpn-Rocket-Accuracy02,ROCKET,0,20,20,0,0,0,0
 Weapon Upgrade,Wpn-Rocket-Damage04,ROCKET,0,0,0,120,0,0,0
 Weapon Upgrade,Wpn-Rocket-Damage05,ROCKET,0,0,0,150,0,0,0
 Weapon Upgrade,Wpn-Rocket-Damage06,ROCKET,0,0,0,180,0,0,0
-Weapon Upgrade,Wpn-RocketSlow-Accuracy01,ROCKET,0,10,10,0,0,0,0
-Weapon Upgrade,Wpn-RocketSlow-Accuracy02,ROCKET,0,20,20,0,0,0,0
-Weapon Upgrade,Wpn-RocketSlow-Accuracy03,ROCKET,0,30,30,0,0,0,0
-Weapon Upgrade,Wpn-RocketSlow-Damage01,ROCKET,0,0,0,30,0,0,0
-Weapon Upgrade,Wpn-RocketSlow-Damage02,ROCKET,0,0,0,60,0,0,0
-Weapon Upgrade,Wpn-RocketSlow-Damage03,ROCKET,0,0,0,90,0,0,0
-Weapon Upgrade,Wpn-RocketSlow-Damage04,ROCKET,0,0,0,120,0,0,0
-Weapon Upgrade,Wpn-RocketSlow-Damage05,ROCKET,0,0,0,150,0,0,0
-Weapon Upgrade,Wpn-RocketSlow-Damage06,ROCKET,0,0,0,180,0,0,0
-Weapon Upgrade,Wpn-RocketSlow-ROF01,ROCKET,20,0,0,0,0,0,0
-Weapon Upgrade,Wpn-RocketSlow-ROF02,ROCKET,40,0,0,0,0,0,0
-Weapon Upgrade,Wpn-RocketSlow-ROF03,ROCKET,60,0,0,0,0,0,0
+Weapon Upgrade,Wpn-RocketSlow-Accuracy01,SLOW ROCKET,0,10,10,0,0,0,0
+Weapon Upgrade,Wpn-RocketSlow-Accuracy02,SLOW ROCKET,0,20,20,0,0,0,0
+Weapon Upgrade,Wpn-RocketSlow-Accuracy03,SLOW ROCKET,0,30,30,0,0,0,0
+Weapon Upgrade,Wpn-RocketSlow-Damage01,SLOW ROCKET,0,0,0,30,0,0,0
+Weapon Upgrade,Wpn-RocketSlow-Damage02,SLOW ROCKET,0,0,0,60,0,0,0
+Weapon Upgrade,Wpn-RocketSlow-Damage03,SLOW ROCKET,0,0,0,90,0,0,0
+Weapon Upgrade,Wpn-RocketSlow-Damage04,SLOW ROCKET,0,0,0,120,0,0,0
+Weapon Upgrade,Wpn-RocketSlow-Damage05,SLOW ROCKET,0,0,0,150,0,0,0
+Weapon Upgrade,Wpn-RocketSlow-Damage06,SLOW ROCKET,0,0,0,180,0,0,0
+Weapon Upgrade,Wpn-RocketSlow-ROF01,SLOW ROCKET,20,0,0,0,0,0,0
+Weapon Upgrade,Wpn-RocketSlow-ROF02,SLOW ROCKET,40,0,0,0,0,0,0
+Weapon Upgrade,Wpn-RocketSlow-ROF03,SLOW ROCKET,60,0,0,0,0,0,0
 Wall Function,Basic Wall Function,A0BabaCornerWall,31
 Wall Function,Hardcrete Wall1,A0HardcreteMk1CWall,69
 Wall Function,baba Wall Function,A0BabaCornerWall,73

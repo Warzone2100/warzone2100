@@ -141,10 +141,10 @@ Weapon Upgrade,Wpn-Missile-Damage03,MISSILE,0,0,0,90,0,0,0
 Weapon Upgrade,Wpn-Missile-ROF01,MISSILE,20,0,0,0,0,0,0
 Weapon Upgrade,Wpn-Missile-ROF02,MISSILE,40,0,0,0,0,0,0
 Weapon Upgrade,Wpn-Missile-ROF03,MISSILE,60,0,0,0,0,0,0
-Weapon Upgrade,Wpn-MissileSlow-Damage01,MISSILE,0,0,0,30,0,0,0
-Weapon Upgrade,Wpn-MissileSlow-Damage02,MISSILE,0,0,0,60,0,0,0
-Weapon Upgrade,Wpn-MissileSlow-Damage03,MISSILE,0,0,0,90,0,0,0
-Weapon Upgrade,Wpn-MissileSlow-ROF01,MISSILE,20,0,0,0,0,0,0
+Weapon Upgrade,Wpn-MissileSlow-Damage01,SLOW MISSILE,0,0,0,30,0,0,0
+Weapon Upgrade,Wpn-MissileSlow-Damage02,SLOW MISSILE,0,0,0,60,0,0,0
+Weapon Upgrade,Wpn-MissileSlow-Damage03,SLOW MISSILE,0,0,0,90,0,0,0
+Weapon Upgrade,Wpn-MissileSlow-ROF01,SLOW MISSILE,20,0,0,0,0,0,0
 Weapon Upgrade,Wpn-Mortar-Acc01,MORTARS,0,10,10,0,0,0,0
 Weapon Upgrade,Wpn-Mortar-Acc02,MORTARS,0,20,20,0,0,0,0
 Weapon Upgrade,Wpn-Mortar-Acc03,MORTARS,0,30,30,0,0,0,0
