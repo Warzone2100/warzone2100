@@ -9,7 +9,7 @@ all: po-files mo-files
 endif
 
 PO_FILES=nb.po de.po da.po nl.po la.po
-MO_FILES=$(patsubst %.po,..$(DIRSEP)data$(DIRSEP)locale$(DIRSEP)%$(DIRSEP)LC_MESSAGES$(DIRSEP)$(PACKAGE).mo, $(PO_FILES))
+MO_FILES=$(patsubst %.po,%.gmo, $(PO_FILES))
 
 po-files: $(PO_FILES)
 mo-files: $(MO_FILES)
@@ -24,13 +24,9 @@ $(PACKAGE).pot: POTFILES.in
 	$(MSGMERGE) $@ $(PACKAGE).pot -o $@.new
 	mv $@.new $@
 
-..$(DIRSEP)data$(DIRSEP)locale$(DIRSEP)%$(DIRSEP)LC_MESSAGES$(DIRSEP)$(PACKAGE).mo: %.po
-	@-mkdir ..$(DIRSEP)data$(DIRSEP)locale$(DIRSEP)$(patsubst %.po,%, $<)
-	@-mkdir ..$(DIRSEP)data$(DIRSEP)locale$(DIRSEP)$(patsubst %.po,%, $<)$(DIRSEP)LC_MESSAGES
+%.gmo: %.po
 	$(MSGFMT) -c -o $@ $<
 
 clean:
 	$(RMF) $(PACKAGE).pot
 	$(RMF) $(MO_FILES)
-	@-rmdir $(patsubst %$(DIRSEP)$(PACKAGE).mo,%, $(MO_FILES))
-	@-rmdir $(patsubst %$(DIRSEP)LC_MESSAGES$(DIRSEP)$(PACKAGE).mo,%, $(MO_FILES))
