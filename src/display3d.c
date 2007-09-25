@@ -297,23 +297,23 @@ static DEF_COLOURS	defaultColours;
 
 /********************  Functions  ********************/
 
-static void displayMultiChat( void )
+static void displayMultiChat(void)
 {
-UDWORD	pixelLength;
-UDWORD	pixelHeight;
+	UDWORD	pixelLength;
+	UDWORD	pixelHeight;
 
-		pixelLength = iV_GetTextWidth(sTextToSend);
-		pixelHeight = iV_GetTextLineSize();
+	pixelLength = iV_GetTextWidth(sTextToSend);
+	pixelHeight = iV_GetTextLineSize();
 
-		if(gameTime2%500<250)
-		{
-			iV_BoxFill( RET_X + pixelLength + 3, 474 + E_H - (pixelHeight/4), RET_X + pixelLength + 10, 473 + E_H, 255 );
-		}
+	if((gameTime2 % 500) < 250)
+	{
+		iV_BoxFill( RET_X + pixelLength + 3, 474 + E_H - (pixelHeight/4), RET_X + pixelLength + 10, 473 + E_H, 255 );
+	}
 
-		/* GET RID OF THE MAGIC NUMBERS BELOW */
-		iV_TransBoxFill( RET_X + 1, 474 + E_H - pixelHeight, RET_X + 1 + pixelLength + 2, 473 + E_H );
+	/* FIXME: GET RID OF THE MAGIC NUMBERS BELOW */
+	iV_TransBoxFill(RET_X + 1, 474 + E_H - pixelHeight, RET_X + 1 + pixelLength + 2, 473 + E_H);
 
-		iV_DrawText( sTextToSend, RET_X + 3, 469 + E_H );
+	iV_DrawText(sTextToSend, RET_X + 3, 469 + E_H);
 }
 
 // Optimisation to stop it being calculated every frame
