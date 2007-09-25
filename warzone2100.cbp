@@ -217,10 +217,6 @@
 		</Unit>
 		<Unit filename="lib/framework/trig.h" />
 		<Unit filename="lib/framework/types.h" />
-		<Unit filename="lib/framework/utf8.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="lib/framework/utf8.h" />
 		<Unit filename="lib/framework/wzglobal.h" />
 		<Unit filename="lib/gamelib/anim.c">
 			<Option compilerVar="CC" />

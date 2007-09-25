@@ -263,10 +263,6 @@
 					RelativePath="..\lib\framework\trig.c"
 					>
 				</File>
-				<File
-					RelativePath="..\lib\framework\utf8.c"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="gamelib"
@@ -1286,10 +1282,6 @@
 			</File>
 			<File
 				RelativePath="..\lib\framework\strnlen1.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\utf8.h"
 				>
 			</File>
 			<File
