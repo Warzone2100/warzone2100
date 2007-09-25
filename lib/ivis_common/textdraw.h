@@ -51,7 +51,11 @@ enum {
 
 extern UDWORD iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify);
 
-extern void iV_DrawText(const char* string, UDWORD x, UDWORD y);
-extern void iV_DrawTextRotated(const char* string, unsigned int XPos, unsigned int YPos, float rotation);
+extern void iV_DrawTextRotated(const char* string, float x, float y, float rotation);
+
+static inline void iV_DrawText(const char* string, float x, float y)
+{
+    iV_DrawTextRotated(string, x, y, 0.f);
+}
 
 #endif // _INCLUDED_TEXTDRAW_

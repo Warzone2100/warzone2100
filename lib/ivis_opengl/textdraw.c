@@ -401,14 +401,18 @@ UDWORD iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width
 
 
 
-void iV_DrawText(const char *string, UDWORD x, UDWORD y)
+void iV_DrawTextRotated(const char* string, float x, float y, float rotation)
 {
 	IVIS_FONT *Font = &iVFonts[ActiveFontID];
+
+	// Move to the correct position and rotation for text rendering
+	glTranslatef(x, y, 0.f);
+	glRotatef(rotation, 0.f, 0.f, 1.f);
 
 	/* Colour selection */
 	pie_BeginTextRender(Font->FontColourIndex);
 
-	for (; *string != 0; ++string)
+	for (unsigned int curX = 0; *string != 0; ++string)
 	{
 		unsigned int Index = (unsigned char)*string;
 		UWORD ImageID;
@@ -436,7 +440,7 @@ void iV_DrawText(const char *string, UDWORD x, UDWORD y)
 		}
 		else if (Index == ASCII_SPACE)
 		{
-			x += Font->FontSpaceSize;
+			curX += Font->FontSpaceSize;
 
 			// Don't draw this character
 			continue;
@@ -444,21 +448,11 @@ void iV_DrawText(const char *string, UDWORD x, UDWORD y)
 
 		// Draw the character
 		ImageID = Font->AsciiTable[Index];
-		pie_TextRender(Font->FontFile, ImageID, x, y);
+		pie_TextRender(Font->FontFile, ImageID, curX, 0);
 
 		// Advance the drawing position
-		x += iV_GetImageWidth(Font->FontFile, ImageID) + 1;
+		curX += iV_GetImageWidth(Font->FontFile, ImageID) + 1;
 	}
-}
-
-
-void iV_DrawTextRotated(const char* string, unsigned int XPos, unsigned int YPos, float rotation)
-{
-	glTranslatef((float)XPos, (float)YPos, 0.f);
-	glRotatef(rotation, 0.f, 0.f, 1.f);
-
-	// Now call iV_DrawText at position (0,0) of the translated matrix
-	iV_DrawText(string, 0, 0);
 
 	// Reset the tranlation matrix
 	glLoadIdentity();
