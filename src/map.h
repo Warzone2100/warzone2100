@@ -163,6 +163,12 @@ extern MAPTILE *psMapTiles;
 /* The number of units accross a tile */
 #define TILE_UNITS (1<<TILE_SHIFT)
 
+/* Make sure world coordinates are inside the map */
+#define CLIP_WORLD_OFFMAP(worldX, worldY) \
+	worldX = MAX(0, worldX); \
+	worldY = MAX(0, worldY); \
+	worldX = MIN((SDWORD)mapWidth << TILE_SHIFT, worldX); \
+	worldY = MIN((SDWORD)mapHeight << TILE_SHIFT, worldY);
 
 static inline UDWORD world_coord(UDWORD mapCoord)
 {

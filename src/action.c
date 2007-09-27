@@ -906,6 +906,9 @@ static void actionCalcPullBackPoint(BASE_OBJECT *psObj, BASE_OBJECT *psTarget, S
 	// create the position
 	*px = (SDWORD)psObj->x + xdiff * PULL_BACK_DIST;
 	*py = (SDWORD)psObj->y + ydiff * PULL_BACK_DIST;
+
+	// make sure coordinates stay inside of the map
+	CLIP_WORLD_OFFMAP(*px, *py);
 }
 
 
