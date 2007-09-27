@@ -403,6 +403,8 @@ UDWORD iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width
 
 void iV_DrawTextRotated(const char* string, float x, float y, float rotation)
 {
+	unsigned int curX;
+
 	IVIS_FONT *Font = &iVFonts[ActiveFontID];
 
 	// Move to the correct position and rotation for text rendering
@@ -412,7 +414,7 @@ void iV_DrawTextRotated(const char* string, float x, float y, float rotation)
 	/* Colour selection */
 	pie_BeginTextRender(Font->FontColourIndex);
 
-	for (unsigned int curX = 0; *string != 0; ++string)
+	for (curX = 0; *string != 0; ++string)
 	{
 		unsigned int Index = (unsigned char)*string;
 		UWORD ImageID;
