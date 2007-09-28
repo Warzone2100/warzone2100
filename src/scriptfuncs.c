@@ -1713,11 +1713,11 @@ BOOL scrGetFeature(void)
 	// begin searching the feature list for the required stat.
 	while(psFeat)
 	{
-		if(	( psFeat->psStats->subType == psFeatureStatToFind[bucket]->subType)
-			&&( psFeat->visible[playerToEnum[bucket]]	!= 0)
-			&&!TILE_HAS_STRUCTURE(mapTile(psFeat->x>>TILE_SHIFT,psFeat->y>>TILE_SHIFT) )
-			&&!fireOnLocation(psFeat->x,psFeat->y)		// not burning.
-			)
+		if (psFeat->psStats->subType == psFeatureStatToFind[bucket]->subType
+		 && psFeat->visible[playerToEnum[bucket]] != 0
+		 && !TILE_HAS_STRUCTURE(mapTile(map_coord(psFeat->x), map_coord(psFeat->y)))
+		 && !fireOnLocation(psFeat->x,psFeat->y)		// not burning.
+		   )
 		{
 			scrFunctionResult.v.oval = psFeat;
 			if (!stackPushResult((INTERP_TYPE)ST_FEATURE, &scrFunctionResult))	//	push scrFunctionResult
@@ -1778,7 +1778,7 @@ BOOL scrGetFeatureB(void)
 	{
 		if(	( psCurrEnumFeature[bucket]->psStats->subType == psFeatureStatToFind[bucket]->subType)
 			&&( psCurrEnumFeature[bucket]->visible[playerToEnum[bucket]]	!= 0)
-			&&!TILE_HAS_STRUCTURE(mapTile(psCurrEnumFeature[bucket]->x>>TILE_SHIFT,psCurrEnumFeature[bucket]->y>>TILE_SHIFT) )
+			&&!TILE_HAS_STRUCTURE(mapTile(map_coord(psCurrEnumFeature[bucket]->x), map_coord(psCurrEnumFeature[bucket]->y)))
 			 /*&&!fireOnLocation(psCurrEnumFeature[bucket]->x,psCurrEnumFeature[bucket]->y )*/		// not burning.
 			)
 		{
@@ -1826,7 +1826,7 @@ BOOL scrGetFeature(void)
 			&&
 			( psCurrEnumFeature[bucket]->visible[playerToEnum[bucket]]	!= 0)
 			&&
-			!TILE_HAS_STRUCTURE(mapTile(psCurrEnumFeature[bucket]->x>>TILE_SHIFT,psCurrEnumFeature[bucket]->y>>TILE_SHIFT) )
+			!TILE_HAS_STRUCTURE(mapTile(map_coord(psCurrEnumFeature[bucket]->x), map_coord(psCurrEnumFeature[bucket]->y)))
 		   )
 		{
 			if (!stackPushResult(ST_FEATURE,(UDWORD) psCurrEnumFeature[bucket]))			//	push scrFunctionResult
@@ -1869,14 +1869,14 @@ BOOL scrAddFeature(void)
 
 	if ( psStat != NULL )
 	{
-		iMapX = iX >> TILE_SHIFT;
-		iMapY = iY >> TILE_SHIFT;
+		iMapX = map_coord(iX);
+		iMapY = map_coord(iY);
 
 		/* check for wrecked feature already on-tile and remove */
 		for(psFeat = apsFeatureLists[0]; psFeat; psFeat = psFeat->psNext)
 		{
-			iTestX = psFeat->x >> TILE_SHIFT;
-			iTestY = psFeat->y >> TILE_SHIFT;
+			iTestX = map_coord(psFeat->x);
+			iTestY = map_coord(psFeat->y);
 
 			if ( (iTestX == iMapX) && (iTestY == iMapY) )
 			{
@@ -1933,8 +1933,8 @@ BOOL scrAddStructure(void)
 		iX -= psStat->baseWidth*TILE_UNITS/2;
 		iY -= psStat->baseBreadth*TILE_UNITS/2;*/
 
-		iMapX = iX >> TILE_SHIFT;
-		iMapY = iY >> TILE_SHIFT;
+		iMapX = map_coord(iX);
+		iMapY = map_coord(iY);
 
 		/* check for structure already on-tile */
 		if(TILE_HAS_STRUCTURE(mapTile(iMapX,iMapY)))
@@ -2337,7 +2337,7 @@ BOOL scrCentreView(void)
 	}
 
 	//centre the view on the objects x/y
-	setViewPos(psObj->x >> TILE_SHIFT, psObj->y >> TILE_SHIFT,FALSE);
+	setViewPos(map_coord(psObj->x), map_coord(psObj->y), FALSE);
 
 	return TRUE;
 }
@@ -2361,7 +2361,7 @@ BOOL scrCentreViewPos(void)
 	}
 
 	//centre the view on the objects x/y
-	setViewPos(x >> TILE_SHIFT, y >> TILE_SHIFT,FALSE);
+	setViewPos(map_coord(x), map_coord(y), FALSE);
 
 	return TRUE;
 }
@@ -4319,12 +4319,14 @@ BOOL scrStructureBuiltInRange(void)
 		return FALSE;
 	}
 
-	if (x < (SDWORD)0 || (x >> TILE_SHIFT) > (SDWORD)mapWidth)
+	if (x < 0
+	 || map_coord(x) > (SDWORD)mapWidth)
 	{
 		ASSERT( FALSE, "scrStructureBuiltInRange : invalid X coord" );
 		return FALSE;
 	}
-	if (y < (SDWORD)0 || (y >> TILE_SHIFT) > (SDWORD)mapHeight)
+	if (y < 0
+	 || map_coord(y) > (SDWORD)mapHeight)
 	{
 		ASSERT( FALSE,"scrStructureBuiltInRange : invalid Y coord" );
 		return FALSE;
@@ -5676,17 +5678,17 @@ BOOL scrPickStructLocation(void)
 
     // check for wacky coords.
 	if(		*pX < 0
-		||	*pX > (SDWORD)(mapWidth<<TILE_SHIFT)
+		||	*pX > world_coord(mapWidth)
 		||	*pY < 0
-		||	*pY > (SDWORD)(mapHeight<<TILE_SHIFT)
+		||	*pY > world_coord(mapHeight)
 	  )
 	{
 		goto failedstructloc;
 	}
 
 	psStat = &asStructureStats[index];			// get stat.
-	startX = *pX >> TILE_SHIFT;					// change to tile coords.
-	startY = *pY >> TILE_SHIFT;
+	startX = map_coord(*pX);					// change to tile coords.
+	startY = map_coord(*pY);
 
 	x = startX;
 	y = startY;
@@ -5755,8 +5757,8 @@ BOOL scrPickStructLocation(void)
 	if(found)	// did It!
 	{
 		// back to world coords.
-		*pX = (x << TILE_SHIFT) + (psStat->baseWidth * (TILE_UNITS/2));
-		*pY = (y << TILE_SHIFT) + (psStat->baseBreadth * (TILE_UNITS/2));
+		*pX = world_coord(x) + (psStat->baseWidth * (TILE_UNITS / 2));
+		*pY = world_coord(y) + (psStat->baseBreadth * (TILE_UNITS / 2));
 
 		scrFunctionResult.v.bval = TRUE;
 		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// success!
@@ -5806,17 +5808,17 @@ BOOL scrPickStructLocationB(void)
 
     // check for wacky coords.
 	if(		*pX < 0
-		||	*pX > (SDWORD)(mapWidth<<TILE_SHIFT)
+		||	*pX > world_coord(mapWidth)
 		||	*pY < 0
-		||	*pY > (SDWORD)(mapHeight<<TILE_SHIFT)
+		||	*pY > world_coord(mapHeight)
 	  )
 	{
 		goto failedstructloc;
 	}
 
 	psStat = &asStructureStats[index];			// get stat.
-	startX = *pX >> TILE_SHIFT;					// change to tile coords.
-	startY = *pY >> TILE_SHIFT;
+	startX = map_coord(*pX);					// change to tile coords.
+	startY = map_coord(*pY);
 
 	x = startX;
 	y = startY;
@@ -5885,8 +5887,8 @@ BOOL scrPickStructLocationB(void)
 	if(found)	// did It!
 	{
 		// back to world coords.
-		*pX = (x << TILE_SHIFT) + (psStat->baseWidth * (TILE_UNITS/2));
-		*pY = (y << TILE_SHIFT) + (psStat->baseBreadth * (TILE_UNITS/2));
+		*pX = world_coord(x) + (psStat->baseWidth * (TILE_UNITS / 2));
+		*pY = world_coord(y) + (psStat->baseBreadth * (TILE_UNITS / 2));
 
 		scrFunctionResult.v.bval = TRUE;
 		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// success!
@@ -6109,25 +6111,25 @@ BOOL scrTakeOverDroidsInArea(void)
 		return FALSE;
 	}
 
-	if (x1 > (SDWORD)(MAP_MAXWIDTH << TILE_SHIFT))
+	if (x1 > world_coord(MAP_MAXWIDTH))
 	{
 		ASSERT( FALSE, "scrTakeOverUnitsInArea: x1 is greater than max mapWidth" );
 		return FALSE;
 	}
 
-    if (x2 > (SDWORD)(MAP_MAXWIDTH << TILE_SHIFT))
+    if (x2 > world_coord(MAP_MAXWIDTH))
 	{
 		ASSERT( FALSE, "scrTakeOverUnitsInArea: x2 is greater than max mapWidth" );
 		return FALSE;
 	}
 
-    if (y1 > (SDWORD)(MAP_MAXHEIGHT << TILE_SHIFT))
+    if (y1 > world_coord(MAP_MAXHEIGHT))
 	{
 		ASSERT( FALSE, "scrTakeOverUnitsInArea: y1 is greater than max mapHeight" );
 		return FALSE;
 	}
 
-    if (y2 > (SDWORD)(MAP_MAXHEIGHT << TILE_SHIFT))
+    if (y2 > world_coord(MAP_MAXHEIGHT))
 	{
 		ASSERT( FALSE, "scrTakeOverUnitsInArea: y2 is greater than max mapHeight" );
 		return FALSE;
@@ -6213,25 +6215,25 @@ BOOL scrTakeOverDroidsInAreaExp(void)
 		return FALSE;
 	}
 
-	if (x1 > (SDWORD)(MAP_MAXWIDTH << TILE_SHIFT))
+	if (x1 > world_coord(MAP_MAXWIDTH))
 	{
 		ASSERT( FALSE, "scrTakeOverUnitsInArea: x1 is greater than max mapWidth" );
 		return FALSE;
 	}
 
-    if (x2 > (SDWORD)(MAP_MAXWIDTH << TILE_SHIFT))
+    if (x2 > world_coord(MAP_MAXWIDTH))
 	{
 		ASSERT( FALSE, "scrTakeOverUnitsInArea: x2 is greater than max mapWidth" );
 		return FALSE;
 	}
 
-    if (y1 > (SDWORD)(MAP_MAXHEIGHT << TILE_SHIFT))
+    if (y1 > world_coord(MAP_MAXHEIGHT))
 	{
 		ASSERT( FALSE, "scrTakeOverUnitsInArea: y1 is greater than max mapHeight" );
 		return FALSE;
 	}
 
-    if (y2 > (SDWORD)(MAP_MAXHEIGHT << TILE_SHIFT))
+    if (y2 > world_coord(MAP_MAXHEIGHT))
 	{
 		ASSERT( FALSE, "scrTakeOverUnitsInArea: y2 is greater than max mapHeight" );
 		return FALSE;
@@ -6355,25 +6357,25 @@ BOOL scrTakeOverStructsInArea(void)
 		return FALSE;
 	}
 
-	if (x1 > (SDWORD)(MAP_MAXWIDTH << TILE_SHIFT))
+	if (x1 > world_coord(MAP_MAXWIDTH))
 	{
 		ASSERT( FALSE, "scrTakeOverStructsInArea: x1 is greater than max mapWidth" );
 		return FALSE;
 	}
 
-    if (x2 > (SDWORD)(MAP_MAXWIDTH << TILE_SHIFT))
+    if (x2 > world_coord(MAP_MAXWIDTH))
 	{
 		ASSERT( FALSE, "scrTakeOverStructsInArea: x2 is greater than max mapWidth" );
 		return FALSE;
 	}
 
-    if (y1 > (SDWORD)(MAP_MAXHEIGHT << TILE_SHIFT))
+    if (y1 > world_coord(MAP_MAXHEIGHT))
 	{
 		ASSERT( FALSE, "scrTakeOverStructsInArea: y1 is greater than max mapHeight" );
 		return FALSE;
 	}
 
-    if (y2 > (SDWORD)(MAP_MAXHEIGHT << TILE_SHIFT))
+    if (y2 > world_coord(MAP_MAXHEIGHT))
 	{
 		ASSERT( FALSE, "scrTakeOverStructsInArea: y2 is greater than max mapHeight" );
 		return FALSE;
@@ -7371,8 +7373,8 @@ BOOL ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, BO
 	STRUCTURE			*psStruct;
 	DROID				*psDroid;
 
-	tx = rangeX >> TILE_SHIFT;
-	ty = rangeY >> TILE_SHIFT;
+	tx = map_coord(rangeX);
+	ty = map_coord(rangeY);
 
 	for(i=0;i<MAX_PLAYERS;i++)
 	{
@@ -7396,8 +7398,8 @@ BOOL ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, BO
 					case REF_VTOL_FACTORY:
 					case REF_REARM_PAD:
 
-					if((range < 0) || ((dirtySqrt(tx, ty, psStruct->x >> TILE_SHIFT, psStruct->y >> TILE_SHIFT)
-						<< TILE_SHIFT) < range))	//enemy in range
+					if (range < 0
+					 || world_coord(dirtySqrt(tx, ty, map_coord(psStruct->x), map_coord(psStruct->y))) < range)	//enemy in range
 					{
 						return TRUE;
 					}
@@ -7426,8 +7428,8 @@ BOOL ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, BO
 					continue;
 				}
 
-				if((range < 0) || ((dirtySqrt(tx, ty , psDroid->x >> TILE_SHIFT, psDroid->y >> TILE_SHIFT)
-					<< TILE_SHIFT) < range))	//enemy in range
+				if (range < 0
+				 || world_coord(dirtySqrt(tx, ty , map_coord(psDroid->x), map_coord(psDroid->y))) < range)	//enemy in range
 				{
 					return TRUE;
 				}
@@ -7457,19 +7459,19 @@ BOOL scrFogTileInRange(void)
 
     //Check coords
 	if(		pwLookerX < 0
-		||	pwLookerX > (SDWORD)(mapWidth<<TILE_SHIFT)
+		||	pwLookerX > world_coord(mapWidth)
 		||	pwLookerY < 0
-		||	pwLookerY > (SDWORD)(mapHeight<<TILE_SHIFT) )
+		||	pwLookerY > world_coord(mapHeight))
 	{
 		debug(LOG_ERROR, "scrFogTileInRange: coords off map");
 		return FALSE;
 	}
 
-	tRangeX = wRangeX >> TILE_SHIFT;				//cache to tile coords, for faster calculations
-	tRangeY = wRangeY >> TILE_SHIFT;
+	tRangeX = map_coord(wRangeX);				//cache to tile coords, for faster calculations
+	tRangeY = map_coord(wRangeY);
 
-	tx = pwLookerX >> TILE_SHIFT;					// change to tile coords.
-	ty = pwLookerY >> TILE_SHIFT;
+	tx = map_coord(pwLookerX);					// change to tile coords.
+	ty = map_coord(pwLookerY);
 
 	wBestDist = 99999;
 	tBestX = -1; tBestY = -1;
@@ -7482,10 +7484,11 @@ BOOL scrFogTileInRange(void)
 		   	if(!TEST_TILE_VISIBLE(player,psTile))	//not vis
 		  	{
 				//within base range
-				if((wRange <= 0 ) || ((dirtySqrt(tRangeX, tRangeY, i, j) << TILE_SHIFT) < wRange))		//dist in world units between baseX/baseY and the tile
+				if (wRange <= 0
+				 || world_coord(dirtySqrt(tRangeX, tRangeY, i, j)) < wRange)		//dist in world units between baseX/baseY and the tile
 				{
 					//calc dist between this tile and looker
-					wDist = (dirtySqrt(tx, ty, i, j) << TILE_SHIFT);
+					wDist = world_coord(dirtySqrt(tx, ty, i, j));
 
 					//closer than last one?
 					if(wDist < wBestDist)
@@ -7498,7 +7501,7 @@ BOOL scrFogTileInRange(void)
 							//if((tmpX == i) && (tmpY == j))	//can't allow to change coords, otherwise might send to the same unrevealed tile next time
 															//and units will stuck forever
 							//{
-							if((threadRange <= 0) || (!ThreatInRange(player, threadRange, i << TILE_SHIFT, j << TILE_SHIFT, FALSE)))
+							if((threadRange <= 0) || (!ThreatInRange(player, threadRange, world_coord(i), world_coord(j), FALSE)))
 							{
 									wBestDist = wDist;
 									tBestX = i;
@@ -7515,8 +7518,8 @@ BOOL scrFogTileInRange(void)
 
 	if(ok)	//something found
 	{
-		*wTileX = tBestX<<TILE_SHIFT;
-		*wTileY = tBestY<<TILE_SHIFT;
+		*wTileX = world_coord(tBestX);
+		*wTileY = world_coord(tBestY);
 
 		scrFunctionResult.v.bval = TRUE;
 		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -7551,17 +7554,17 @@ BOOL scrMapRevealedInRange(void)
 	}
 
     //Check coords
-	if(		wRangeX < 0
-		||	wRangeX > (SDWORD)(mapWidth<<TILE_SHIFT)
-		||	wRangeY < 0
-		||	wRangeY > (SDWORD)(mapHeight<<TILE_SHIFT) )
+	if (wRangeX < 0
+	 || wRangeX > world_coord(mapWidth)
+	 || wRangeY < 0
+	 || wRangeY > world_coord(mapHeight))
 	{
 		debug(LOG_ERROR,  "scrMapRevealedInRange: coords off map");
 		return FALSE;
 	}
 
-	tRangeX = wRangeX >> TILE_SHIFT;				//cache to tile coords, for faster calculations
-	tRangeY = wRangeY >> TILE_SHIFT;
+	tRangeX = map_coord(wRangeX);				//cache to tile coords, for faster calculations
+	tRangeY = map_coord(wRangeY);
 
 	for(i=0; i<mapWidth;i++)
 	{
@@ -7570,7 +7573,7 @@ BOOL scrMapRevealedInRange(void)
 		   	if(TEST_TILE_VISIBLE( player,mapTile(i,j) ))	//not vis
 		  	{
 				//within range
-				if((dirtySqrt(tRangeX, tRangeY, i, j) << TILE_SHIFT) < wRange)		//dist in world units between x/y and the tile
+				if (world_coord(dirtySqrt(tRangeX, tRangeY, i, j)) < wRange)		//dist in world units between x/y and the tile
 				{
 					scrFunctionResult.v.bval = TRUE;
 					if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -7947,8 +7950,8 @@ UDWORD numPlayerWeapStructsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD r
 	UDWORD				tx,ty,numEnemies;
 	STRUCTURE			*psStruct;
 
-	tx = rangeX >> TILE_SHIFT;
-	ty = rangeY >> TILE_SHIFT;
+	tx = map_coord(rangeX);
+	ty = map_coord(rangeY);
 
 	numEnemies = 0;
 
@@ -7959,8 +7962,8 @@ UDWORD numPlayerWeapStructsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD r
 		{
 			if(psStruct->pStructureType->type == REF_DEFENSE)
 			{
-				if((range < 0) || ((dirtySqrt(tx, ty, psStruct->x >> TILE_SHIFT, psStruct->y >> TILE_SHIFT)
-					<< TILE_SHIFT) < range))	//enemy in range
+				if (range < 0
+				 || world_coord(dirtySqrt(tx, ty, map_coord(psStruct->x), map_coord(psStruct->y))) < range)	//enemy in range
 				{
 					numEnemies++;
 				}
@@ -8232,8 +8235,8 @@ UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 	STRUCTURE			*psStruct;
 	DROID				*psDroid;
 
-	tx = rangeX >> TILE_SHIFT;
-	ty = rangeY >> TILE_SHIFT;
+	tx = map_coord(rangeX);
+	ty = map_coord(rangeY);
 
 	numEnemies = 0;
 
@@ -8251,8 +8254,8 @@ UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 			{
 				//if(psStruct->pStructureType->type == REF_DEFENSE)
 				//{
-					if((range < 0) || ((dirtySqrt(tx, ty, psStruct->x >> TILE_SHIFT, psStruct->y >> TILE_SHIFT)
-						<< TILE_SHIFT) < range))	//enemy in range
+					if (range < 0
+					 || world_coord(dirtySqrt(tx, ty, map_coord(psStruct->x), map_coord(psStruct->y))) < range)	//enemy in range
 					{
 						numEnemies++;
 					}
@@ -8271,8 +8274,8 @@ UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 					continue;
 				}
 
-				if((range < 0) || ((dirtySqrt(tx, ty , psDroid->x >> TILE_SHIFT, psDroid->y >> TILE_SHIFT)
-					<< TILE_SHIFT) < range))	//enemy in range
+				if (range < 0
+				 || world_coord(dirtySqrt(tx, ty , map_coord(psDroid->x), map_coord(psDroid->y))) < range)	//enemy in range
 				{
 					numEnemies++;
 				}
@@ -8305,12 +8308,14 @@ BOOL scrNumStructsByStatInRange(void)
 		return FALSE;
 	}
 
-	if (x < (SDWORD)0 || (x >> TILE_SHIFT) > (SDWORD)mapWidth)
+	if (x < 0
+	 || map_coord(x) > (SDWORD)mapWidth)
 	{
 		ASSERT( FALSE, "scrNumStructsByStatInRange : invalid X coord" );
 		return FALSE;
 	}
-	if (y < (SDWORD)0 || (y >> TILE_SHIFT) > (SDWORD)mapHeight)
+	if (y < 0
+	 || map_coord(y) > (SDWORD)mapHeight)
 	{
 		ASSERT( FALSE,"scrNumStructsByStatInRange : invalid Y coord" );
 		return FALSE;
@@ -8439,13 +8444,15 @@ BOOL scrNumStructsByTypeInRange(void)
 		return FALSE;
 	}
 
-	if (x < (SDWORD)0 || (x >> TILE_SHIFT) > (SDWORD)mapWidth)
+	if (x < 0
+	 || map_coord(x) > (SDWORD)mapWidth)
 	{
 		ASSERT( FALSE, "scrNumStructsByTypeInRange : invalid X coord" );
 		return FALSE;
 	}
 
-	if (y < (SDWORD)0 || (y >> TILE_SHIFT) > (SDWORD)mapHeight)
+	if (y < 0
+	 || map_coord(y) > (SDWORD)mapHeight)
 	{
 		ASSERT( FALSE,"scrNumStructsByTypeInRange : invalid Y coord" );
 		return FALSE;
@@ -8507,13 +8514,15 @@ BOOL scrNumFeatByTypeInRange(void)
 		return FALSE;
 	}
 
-	if (x < (SDWORD)0 || (x >> TILE_SHIFT) > (SDWORD)mapWidth)
+	if (x < 0
+	 || map_coord(x) > (SDWORD)mapWidth)
 	{
 		ASSERT( FALSE, "scrNumFeatByTypeInRange : invalid X coord" );
 		return FALSE;
 	}
 
-	if (y < (SDWORD)0 || (y >> TILE_SHIFT) > (SDWORD)mapHeight)
+	if (y < 0
+	 || map_coord(y) > (SDWORD)mapHeight)
 	{
 		ASSERT( FALSE,"scrNumFeatByTypeInRange : invalid Y coord" );
 		return FALSE;
@@ -8576,12 +8585,14 @@ BOOL scrNumStructsButNotWallsInRangeVis(void)
 		return FALSE;
 	}
 
-	if (x < (SDWORD)0 || (x >> TILE_SHIFT) > (SDWORD)mapWidth)
+	if (x < 0
+	 || map_coord(x) > (SDWORD)mapWidth)
 	{
 		ASSERT( FALSE, "scrNumStructsButNotWallsInRangeVis : invalid X coord" );
 		return FALSE;
 	}
-	if (y < (SDWORD)0 || (y >> TILE_SHIFT) > (SDWORD)mapHeight)
+	if (y < 0
+	 || map_coord(y) > (SDWORD)mapHeight)
 	{
 		ASSERT( FALSE,"scrNumStructsButNotWallsInRangeVis : invalid Y coord" );
 		return FALSE;
@@ -8688,22 +8699,22 @@ BOOL scrChooseValidLoc(void)
 	}
 
     //Check coords
-	if(		sendX < 0
-		||	sendX > (SDWORD)(mapWidth<<TILE_SHIFT)
-		||	sendY < 0
-		||	sendY > (SDWORD)(mapHeight<<TILE_SHIFT) )
+	if (sendX < 0
+	 || sendX > world_coord(mapWidth)
+	 || sendY < 0
+	 || sendY > world_coord(mapHeight))
 	{
 		debug(LOG_ERROR, "scrChooseValidLoc: coords off map");
 		return FALSE;
 	}
 
-	tx = (sendX >> TILE_SHIFT);
-	ty = (sendY >> TILE_SHIFT);
+	tx = map_coord(sendX);
+	ty = map_coord(sendY);
 
 	if(pickATileGenThreat(&tx, &ty, LOOK_FOR_EMPTY_TILE, threatRange, player, zonedPAT))
 	{
-		*x = (tx << TILE_SHIFT);
-		*y = (ty << TILE_SHIFT);
+		*x = world_coord(tx);
+		*y = world_coord(ty);
 		scrFunctionResult.v.bval = TRUE;
 		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 		{
@@ -8740,17 +8751,17 @@ BOOL scrGetClosestEnemy(void)
 	}
 
     //Check coords
-	if(		x < 0
-		||	x > (SDWORD)(mapWidth<<TILE_SHIFT)
-		||	y < 0
-		||	y > (SDWORD)(mapHeight<<TILE_SHIFT) )
+	if (x < 0
+	 || x > world_coord(mapWidth)
+	 || y < 0
+	 || y > world_coord(mapHeight))
 	{
 		debug(LOG_ERROR,"scrGetClosestEnemy: coords off map");
 		return FALSE;
 	}
 
-	tx = x >> TILE_SHIFT;
-	ty = y >> TILE_SHIFT;
+	tx = map_coord(x);
+	ty = map_coord(y);
 
 	bestDist = 99999;
 
@@ -8783,7 +8794,7 @@ BOOL scrGetClosestEnemy(void)
 					continue;
 				}
 
-				dist = dirtySqrt(tx, ty , psDroid->x >> TILE_SHIFT, psDroid->y >> TILE_SHIFT) << TILE_SHIFT;
+				dist = world_coord(dirtySqrt(tx, ty , map_coord(psDroid->x), map_coord(psDroid->y)));
 				if(dist < bestDist)
 				{
 					if((range < 0) || (dist < range))	//enemy in range
@@ -8808,7 +8819,7 @@ BOOL scrGetClosestEnemy(void)
 					continue;
 				}
 
-				dist = dirtySqrt(tx, ty, psStruct->x >> TILE_SHIFT, psStruct->y >> TILE_SHIFT) << TILE_SHIFT;
+				dist = world_coord(dirtySqrt(tx, ty, map_coord(psStruct->x), map_coord(psStruct->y)));
 				if(dist < bestDist)
 				{
 					if((range < 0) || (dist < range))	//in range
@@ -9143,17 +9154,17 @@ BOOL scrGetClosestEnemyDroidByType(void)
 	}
 
     //Check coords
-	if(		x < 0
-		||	x > (SDWORD)(mapWidth<<TILE_SHIFT)
-		||	y < 0
-		||	y > (SDWORD)(mapHeight<<TILE_SHIFT) )
+	if (x < 0
+	 || x > world_coord(mapWidth)
+	 || y < 0
+	 || y > world_coord(mapHeight))
 	{
 		debug(LOG_ERROR,"scrGetClosestEnemyDroidByType: coords off map");
 		return FALSE;
 	}
 
-	tx = x >> TILE_SHIFT;
-	ty = y >> TILE_SHIFT;
+	tx = map_coord(x);
+	ty = map_coord(y);
 
 	bestDist = 99999;
 
@@ -9181,7 +9192,7 @@ BOOL scrGetClosestEnemyDroidByType(void)
 					continue;
 				}
 
-				dist = dirtySqrt(tx, ty , psDroid->x >> TILE_SHIFT, psDroid->y >> TILE_SHIFT) << TILE_SHIFT;
+				dist = world_coord(dirtySqrt(tx, ty , map_coord(psDroid->x), map_coord(psDroid->y)));
 				if(dist < bestDist)
 				{
 					if(dist < range)	//enemy in range
@@ -9231,17 +9242,17 @@ BOOL scrGetClosestEnemyStructByType(void)
 	}
 
     //Check coords
-	if(		x < 0
-		||	x > (SDWORD)(mapWidth<<TILE_SHIFT)
-		||	y < 0
-		||	y > (SDWORD)(mapHeight<<TILE_SHIFT) )
+	if (x < 0
+	 || x > world_coord(mapWidth)
+	 || y < 0
+	 || y > world_coord(mapHeight))
 	{
 		debug(LOG_ERROR,"scrGetClosestEnemyStructByType: coords off map");
 		return FALSE;
 	}
 
-	tx = x >> TILE_SHIFT;
-	ty = y >> TILE_SHIFT;
+	tx = map_coord(x);
+	ty = map_coord(y);
 
 	bestDist = 99999;
 
@@ -9263,7 +9274,7 @@ BOOL scrGetClosestEnemyStructByType(void)
 					continue;
 				}
 
-				dist = dirtySqrt(tx, ty, psStruct->x >> TILE_SHIFT, psStruct->y >> TILE_SHIFT) << TILE_SHIFT;
+				dist = world_coord(dirtySqrt(tx, ty, map_coord(psStruct->x), map_coord(psStruct->y)));
 				if(dist < bestDist)
 				{
 					if((range < 0) || (dist < range))	//in range or no range check
@@ -9430,8 +9441,8 @@ BOOL scrNumAAinRange(void)
 		return FALSE;
 	}
 
-	tx = rangeX >> TILE_SHIFT;
-	ty = rangeY >> TILE_SHIFT;
+	tx = map_coord(rangeX);
+	ty = map_coord(rangeY);
 
 	numFound = 0;
 
@@ -9443,8 +9454,8 @@ BOOL scrNumAAinRange(void)
 			if((psStruct->pStructureType->type == REF_DEFENSE) &&
 				(asWeaponStats[psStruct->asWeaps[0].nStat].surfaceToAir == SHOOT_IN_AIR) )
 			{
-				if((range < 0) || ((dirtySqrt(tx, ty, psStruct->x >> TILE_SHIFT, psStruct->y >> TILE_SHIFT)
-					<< TILE_SHIFT) < range))	//enemy in range
+				if (range < 0
+				 || world_coord(dirtySqrt(tx, ty, map_coord(psStruct->x), map_coord(psStruct->y))) < range)	//enemy in range
 				{
 					numFound++;
 				}
@@ -9592,8 +9603,10 @@ BOOL scrLearnPlayerBaseLoc(void)
 		return FALSE;
 	}
 
-	if ( (x < 0) || (x >= (SDWORD)mapWidth<<TILE_SHIFT) ||
-		 (y < 0) || (y >= (SDWORD)mapHeight<<TILE_SHIFT))
+	if (x < 0
+	 || x >= world_coord(mapWidth)
+	 || y < 0
+	 || y >= world_coord(mapHeight))
 	{
 		debug(LOG_ERROR, "scrLearnPlayerBaseLoc: coords off map");
 		return FALSE;
@@ -9716,8 +9729,10 @@ BOOL scrLearnBaseDefendLoc(void)
 		return FALSE;
 	}
 
-	if ( (x < 0) || (x >= (SDWORD)mapWidth<<TILE_SHIFT) ||
-		 (y < 0) || (y >= (SDWORD)mapHeight<<TILE_SHIFT))
+	if (x < 0
+	 || x >= world_coord(mapWidth)
+	 || y < 0
+	 || y >= world_coord(mapHeight))
 	{
 		debug(LOG_ERROR,"scrLearnBaseDefendLoc: coords off map");
 		return FALSE;
@@ -9758,8 +9773,10 @@ BOOL scrLearnOilDefendLoc(void)
 		return FALSE;
 	}
 
-	if ( (x < 0) || (x >= (SDWORD)mapWidth<<TILE_SHIFT) ||
-		 (y < 0) || (y >= (SDWORD)mapHeight<<TILE_SHIFT))
+	if (x < 0
+	 || x >= world_coord(mapWidth)
+	 || y < 0
+	 || y >= world_coord(mapHeight))
 	{
 		debug(LOG_ERROR,"scrLearnOilDefendLoc: coords off map");
 		return FALSE;
@@ -9799,8 +9816,10 @@ BOOL scrGetBaseDefendLocIndex(void)
 		return FALSE;
 	}
 
-	if ( (x < 0) || (x >= (SDWORD)mapWidth<<TILE_SHIFT) ||
-		 (y < 0) || (y >= (SDWORD)mapHeight<<TILE_SHIFT))
+	if (x < 0
+	 || x >= world_coord(mapWidth)
+	 || y < 0
+	 || y >= world_coord(mapHeight))
 	{
 		debug(LOG_ERROR, "scrGetBaseDefendLocIndex: coords off map");
 		return FALSE;
@@ -9839,8 +9858,10 @@ BOOL scrGetOilDefendLocIndex(void)
 		return FALSE;
 	}
 
-	if ( (x < 0) || (x >= (SDWORD)mapWidth<<TILE_SHIFT) ||
-		 (y < 0) || (y >= (SDWORD)mapHeight<<TILE_SHIFT))
+	if (x < 0
+	 || x >= world_coord(mapWidth)
+	 || y < 0
+	 || y >= world_coord(mapHeight))
 	{
 		debug(LOG_ERROR, "scrGetOilDefendLocIndex: coords off map");
 		return FALSE;
@@ -10313,7 +10334,7 @@ BOOL scrClosestDamagedGroupDroid(void)
 	{
 		if((psDroid->body * 100 / psDroid->originalBody) <= healthLeft)	//in%
 		{
-			wDist = (dirtySqrt(psDroid->x, psDroid->y, x, y) >> TILE_SHIFT);	//in tiles
+			wDist = map_coord(dirtySqrt(psDroid->x, psDroid->y, x, y));	//in tiles
 			if(wDist < wBestDist)
 			{
 				if((maxRepairedBy < 0) || (getNumRepairedBy(psDroid, player) <= maxRepairedBy))

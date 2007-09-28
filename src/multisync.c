@@ -771,12 +771,12 @@ BOOL recvStructureCheck( NETMSG *m)
 		psStats = &(asStructureStats[i]);
 
 		// check for similar buildings, to avoid overlaps
-		if( TILE_HAS_STRUCTURE(mapTile(x>>TILE_SHIFT,y>>TILE_SHIFT))   )
+		if (TILE_HAS_STRUCTURE(mapTile(map_coord(x), map_coord(y))))
 		{
 			NETlogEntry("scheck:Tile has structure val=player",0,player);
 
 			// if correct type && player then complete & modify
-			pS = getTileStructure(x>>TILE_SHIFT, y>>TILE_SHIFT);
+			pS = getTileStructure(map_coord(x), map_coord(y));
 
 			if( pS
 				&& (pS->pStructureType->type == type )

@@ -133,8 +133,10 @@ static BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 	SDWORD		newH, newG;		// The new gradient
 	MAPTILE		*psTile;
 
-	ASSERT( x >= 0 && x < ((SDWORD)mapWidth << TILE_SHIFT) &&
-			y >= 0 && y < ((SDWORD)mapHeight << TILE_SHIFT),
+	ASSERT(x >= 0
+	    && x < world_coord(mapWidth)
+	    && y >= 0
+	    && y < world_coord(mapHeight),
 			"rayTerrainCallback: coords off map" );
 
 	psTile = mapTile(map_coord(x), map_coord(y));
@@ -174,7 +176,7 @@ static BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 				&& aiCheckAlliances(selectedPlayer, rayPlayer)))
 			{
 				// can see opponent moving
-				avInformOfChange(x>>TILE_SHIFT,y>>TILE_SHIFT);		//reveal map
+				avInformOfChange(map_coord(x), map_coord(y));		//reveal map
 			}
 		}
 
@@ -191,8 +193,10 @@ static BOOL rayLOSCallback(SDWORD x, SDWORD y, SDWORD dist)
 	SDWORD		tileX,tileY;
 	MAPTILE		*psTile;
 
-	ASSERT( x >= 0 && x < ((SDWORD)mapWidth << TILE_SHIFT) &&
-			y >= 0 && y < ((SDWORD)mapHeight << TILE_SHIFT),
+	ASSERT(x >= 0
+	    && x < world_coord(mapWidth)
+	    && y >= 0
+	    && y < world_coord(mapHeight),
 			"rayLOSCallback: coords off map" );
 
 	distSq = dist*dist;
@@ -511,14 +515,14 @@ BOOL visGetBlockingWall(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget, STRUCTURE 
 	psWall = NULL;
 	if (numWalls == 1)
 	{
-		tileX = wallX >> TILE_SHIFT;
-		tileY = wallY >> TILE_SHIFT;
+		tileX = map_coord(wallX);
+		tileY = map_coord(wallY);
 		for(player=0; player<MAX_PLAYERS; player += 1)
 		{
 			for(psCurr = apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
 			{
-				if (((psCurr->x >> TILE_SHIFT) == tileX) &&
-					((psCurr->y >> TILE_SHIFT) == tileY))
+				if (map_coord(psCurr->x) == tileX
+				 && map_coord(psCurr->y) == tileY)
 				{
 					psWall = psCurr;
 					goto found;
@@ -745,8 +749,8 @@ void processVisibility(BASE_OBJECT *psObj)
 		the selected Player - if there isn't an Resource Extractor on it*/
 		if (((FEATURE *)psObj)->psStats->subType == FEAT_OIL_RESOURCE)
 		{
-			if(!TILE_HAS_STRUCTURE(mapTile(psObj->x >> TILE_SHIFT,
-				psObj->y >> TILE_SHIFT)))
+			if(!TILE_HAS_STRUCTURE(mapTile(map_coord(psObj->x),
+			                               map_coord(psObj->y))))
 			{
 				psMessage = addMessage(MSG_PROXIMITY, TRUE, selectedPlayer);
 				if (psMessage)
@@ -794,8 +798,8 @@ MAPTILE		*psTile;
 		psStats = psFeature->psStats;
 		width = psStats->baseWidth;
 		breadth = psStats->baseBreadth;
-	 	mapX = (psFeature->x - width * TILE_UNITS / 2) >> TILE_SHIFT;
-		mapY = (psFeature->y - breadth * TILE_UNITS / 2) >> TILE_SHIFT;
+	 	mapX = map_coord(psFeature->x - width * TILE_UNITS / 2);
+		mapY = map_coord(psFeature->y - breadth * TILE_UNITS / 2);
 	}
 	else
 	{
@@ -803,8 +807,8 @@ MAPTILE		*psTile;
 		psStructure = (STRUCTURE*)psObj;
 		width = psStructure->pStructureType->baseWidth;
 		breadth = psStructure->pStructureType->baseBreadth;
-		mapX = (psStructure->x - width * TILE_UNITS / 2) >> TILE_SHIFT;
-		mapY = (psStructure->y - breadth * TILE_UNITS / 2) >> TILE_SHIFT;
+		mapX = map_coord(psStructure->x - width * TILE_UNITS / 2);
+		mapY = map_coord(psStructure->y - breadth * TILE_UNITS / 2);
 	}
 
 	for (i = 0; i < width; i++)

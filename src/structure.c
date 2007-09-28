@@ -1494,8 +1494,8 @@ static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 	memset(aWallPresent, 0, sizeof(aWallPresent));
 	for(psStruct=apsStructLists[player]; psStruct; psStruct=psStruct->psNext)
 	{
-		xdiff = (SDWORD)mapX - ((SDWORD)psStruct->x >> TILE_SHIFT);
-		ydiff = (SDWORD)mapY - ((SDWORD)psStruct->y >> TILE_SHIFT);
+		xdiff = (SDWORD)mapX - map_coord((SDWORD)psStruct->x);
+		ydiff = (SDWORD)mapY - map_coord((SDWORD)psStruct->y);
 		if (xdiff >= -2 && xdiff <= 2 &&
 			ydiff >= -2 && ydiff <= 2 &&
 			(psStruct->pStructureType->type == REF_WALL ||
@@ -1613,8 +1613,8 @@ void setStructTileDraw(STRUCTURE *psStruct)
 
 	CHECK_STRUCTURE(psStruct);
 
-	mapX = (psStruct->x >> TILE_SHIFT) - (pStructureType->baseWidth/2);
-	mapY = (psStruct->y >> TILE_SHIFT) - (pStructureType->baseBreadth/2);
+	mapX = map_coord(psStruct->x) - (pStructureType->baseWidth/2);
+	mapY = map_coord(psStruct->y) - (pStructureType->baseBreadth/2);
 	for (width = 0; width < pStructureType->baseWidth; width++)
 	{
 		for (breadth = 0; breadth < pStructureType->baseBreadth; breadth++)
@@ -1630,8 +1630,8 @@ void setStructTileDraw(STRUCTURE *psStruct)
 
 void buildFlatten(STRUCTURE_STATS *pStructureType, UDWORD atx, UDWORD aty,UDWORD h )
 {
-	UDWORD				x = atx >> TILE_SHIFT;
-	UDWORD				y = aty >> TILE_SHIFT;
+	UDWORD				x = map_coord(atx);
+	UDWORD				y = map_coord(aty);
 	UBYTE				width;
 	UBYTE				breadth;
 
@@ -1722,15 +1722,15 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		y = ((pStructureType->baseBreadth % 2) == 0) ? (y & ~TILE_MASK) : (y & ~TILE_MASK) + TILE_UNITS/2;
 
 		//check not trying to build too near the edge
-		if(((x >> TILE_SHIFT) < TOO_NEAR_EDGE) || ((x >> TILE_SHIFT) > (
-			mapWidth - TOO_NEAR_EDGE)))
+		if (map_coord(x) < TOO_NEAR_EDGE
+		 || map_coord(x) > (mapWidth - TOO_NEAR_EDGE))
 		{
 			debug(LOG_ERROR, "buildStructure: attempting to build too closely to map-edge, "
 			      "x coord (%u) too near edge (req. distance is %u)", x, TOO_NEAR_EDGE);
 			return NULL;
 		}
-		if(((y >> TILE_SHIFT) < TOO_NEAR_EDGE) || ((y >> TILE_SHIFT) > (
-			mapHeight - TOO_NEAR_EDGE)))
+		if (map_coord(y) < TOO_NEAR_EDGE
+		 || map_coord(y) > (mapHeight - TOO_NEAR_EDGE))
 		{
 			debug(LOG_ERROR, "buildStructure: attempting to build too closely to map-edge, "
 			      "y coord (%u) too near edge (req. distance is %u)", y, TOO_NEAR_EDGE);
@@ -1739,7 +1739,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 
 		if (!FromSave && pStructureType->type == REF_WALL)
 		{
-			wallType = structChooseWallType(player, x >> TILE_SHIFT, y >> TILE_SHIFT);
+			wallType = structChooseWallType(player, map_coord(x), map_coord(y));
 			if (wallType == WALL_CORNER)
 			{
 				if (pStructureType->asFuncList[0]->type == WALL_TYPE)
@@ -1766,8 +1766,8 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 
 		//This needs to be done before the functionality bit...
 		//load into the map data and structure list if not an upgrade
-		mapX = (x >> TILE_SHIFT) - (pStructureType->baseWidth/2);
-		mapY = (y >> TILE_SHIFT) - (pStructureType->baseBreadth/2);
+		mapX = map_coord(x) - (pStructureType->baseWidth/2);
+		mapY = map_coord(y) - (pStructureType->baseBreadth/2);
 
 		//set up the imd to use for the display
 		psBuilding->sDisplay.imd = pStructureType->pIMD;
@@ -1838,7 +1838,7 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		/* DEFENSIVE structures are pulled to the terrain */
 		if(pStructureType->type != REF_DEFENSE)
 		{
-			buildFlatten(pStructureType, mapX<<TILE_SHIFT, mapY<<TILE_SHIFT ,mapH );
+			buildFlatten(pStructureType, world_coord(mapX), world_coord(mapY), mapH);
 			psBuilding->z = (UWORD)mapH;
 		}
 		else
@@ -2556,8 +2556,8 @@ static BOOL structClearTile(UWORD x, UWORD y)
 	{
 		for(psCurr = apsDroidLists[player]; psCurr; psCurr=psCurr->psNext)
 		{
-			if (psCurr->x >> TILE_SHIFT == x &&
-				psCurr->y >> TILE_SHIFT == y)
+			if (map_coord(psCurr->x) == x
+			 && map_coord(psCurr->y) == y)
 			{
 				debug( LOG_NEVER, "structClearTile: failed\n");
 				return FALSE;
@@ -2579,9 +2579,9 @@ BOOL placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY)
 
 	/* Get the tile coords for the top left of the structure */
 	sx = (SWORD)(psStructure->x - psStructure->pStructureType->baseWidth * TILE_UNITS/2);
-	sx = (SWORD)(sx >> TILE_SHIFT);
+	sx = map_coord(sx);
 	sy = (SWORD)(psStructure->y - psStructure->pStructureType->baseBreadth * TILE_UNITS/2);
-	sy = (SWORD)(sy >> TILE_SHIFT);
+	sy = map_coord(sy);
 
 	/* Find the four corners of the square */
 	xmin = (SWORD)(sx - 1);
@@ -2697,7 +2697,7 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 	if (placed)
 	{
 		//create a droid near to the structure
-		psNewDroid = buildDroid(psTempl, x << TILE_SHIFT, y << TILE_SHIFT,
+		psNewDroid = buildDroid(psTempl, world_coord(x), world_coord(y),
 			psStructure->player, FALSE);
 		if (!psNewDroid)
 		{
@@ -4260,8 +4260,8 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 	for (psCurrFlag = apsFlagPosLists[selectedPlayer]; psCurrFlag; psCurrFlag = psCurrFlag->psNext)
 	{
 		ASSERT(psCurrFlag->coords.x != ~0, "flag has invalid position");
-		i = psCurrFlag->coords.x >>TILE_SHIFT;
-		j = psCurrFlag->coords.y >>TILE_SHIFT;
+		i = map_coord(psCurrFlag->coords.x);
+		j = map_coord(psCurrFlag->coords.y);
 
 		if (i >= site.xTL && i <= site.xBR &&
 			j >= site.yTL && j <= site.yBR)
@@ -4277,8 +4277,8 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 		if (psStruct->pStructureType->type == REF_REPAIR_FACILITY)
 		{
 			// get the top left of the struct
-			i = (psStruct->x >> TILE_SHIFT) - 1;
-			j = (psStruct->y >> TILE_SHIFT) - 1;
+			i = map_coord(psStruct->x) - 1;
+			j = map_coord(psStruct->y) - 1;
 
 			// see if the x extents overlap
 			if ((site.xTL >= i && site.xTL <= (i+2)) ||
@@ -4606,11 +4606,11 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 									//check if any corner is within the build site
 									size = ((STRUCTURE_STATS *)psDroid->asOrderList[order].
 										psOrderTarget)->baseWidth;
-									left = ((psDroid->asOrderList[order].x) >> TILE_SHIFT) - size/2;
+									left = map_coord(psDroid->asOrderList[order].x) - size/2;
 									right = left + size;
 									size = ((STRUCTURE_STATS *)psDroid->asOrderList[order].
 										psOrderTarget)->baseBreadth;
-									up = ((psDroid->asOrderList[order].y) >> TILE_SHIFT) - size/2;
+									up = map_coord(psDroid->asOrderList[order].y) - size/2;
 									down = up + size;
 									// increase the size of a repair facility
 									if (((STRUCTURE_STATS *)psDroid->asOrderList[
@@ -4702,8 +4702,8 @@ BOOL getDroidDestination(BASE_STATS *psStats, UDWORD structX,
 	if (start == 0 || start < width)
 	{
 		//top side first
-		structTileX = structX >> TILE_SHIFT;
-		structTileY = (structY >> TILE_SHIFT) - 1;
+		structTileX = map_coord(structX);
+		structTileY = map_coord(structY) - 1;
 		if (checkWidth(width, structTileX, structTileY, pDroidX, pDroidY))
 		{
 			return TRUE;
@@ -4715,7 +4715,7 @@ BOOL getDroidDestination(BASE_STATS *psStats, UDWORD structX,
 		{
 			return TRUE;
 		}
-		structTileX = structX >> TILE_SHIFT;
+		structTileX = map_coord(structX);
 		structTileY += breadth;
 
 		if (checkWidth(width, structTileX, structTileY, pDroidX, pDroidY))
@@ -4723,7 +4723,7 @@ BOOL getDroidDestination(BASE_STATS *psStats, UDWORD structX,
 			return TRUE;
 		}
 		structTileX -= 1;
-		structTileY = structY >> TILE_SHIFT;
+		structTileY = map_coord(structY);
 
 		if (checkLength(breadth, structTileX, structTileY, pDroidX, pDroidY))
 		{
@@ -4733,14 +4733,14 @@ BOOL getDroidDestination(BASE_STATS *psStats, UDWORD structX,
 	else if (start == width || start < (width + breadth))
 	{
 		//right side first
-		structTileX = (structX >> TILE_SHIFT) + width;
-		structTileY = structY >> TILE_SHIFT;
+		structTileX = (map_coord(structX)) + width;
+		structTileY = map_coord(structY);
 
 		if (checkLength(breadth, structTileX, structTileY,pDroidX, pDroidY))
 		{
 			return TRUE;
 		}
-		structTileX = structX >> TILE_SHIFT;
+		structTileX = map_coord(structX);
 		structTileY += breadth;
 
 		if (checkWidth(width, structTileX, structTileY, pDroidX, pDroidY))
@@ -4748,7 +4748,7 @@ BOOL getDroidDestination(BASE_STATS *psStats, UDWORD structX,
 			return TRUE;
 		}
 		structTileX -= 1;
-		structTileY = structY >> TILE_SHIFT;
+		structTileY = map_coord(structY);
 
 		if (checkLength(breadth, structTileX, structTileY, pDroidX, pDroidY))
 		{
@@ -4765,15 +4765,15 @@ BOOL getDroidDestination(BASE_STATS *psStats, UDWORD structX,
 	else if (start == (width + breadth) || start < (width * breadth))
 	{
 		//bottom first
-		structTileX = structX >> TILE_SHIFT;
-		structTileY = (structY >> TILE_SHIFT) + breadth;
+		structTileX = map_coord(structX);
+		structTileY = map_coord(structY) + breadth;
 
 		if (checkWidth(width, structTileX, structTileY, pDroidX, pDroidY))
 		{
 			return TRUE;
 		}
 		structTileX -= 1;
-		structTileY = structY >> TILE_SHIFT;
+		structTileY = map_coord(structY);
 
 		if (checkLength(breadth, structTileX, structTileY, pDroidX, pDroidY))
 		{
@@ -4797,8 +4797,8 @@ BOOL getDroidDestination(BASE_STATS *psStats, UDWORD structX,
 	else
 	{
 		//left side first
-		structTileX = (structX >> TILE_SHIFT) - 1;
-		structTileY = structY >> TILE_SHIFT;
+		structTileX = (map_coord(structX)) - 1;
+		structTileY = map_coord(structY);
 
 		if (checkLength(breadth, structTileX, structTileY, pDroidX, pDroidY))
 		{
@@ -4818,7 +4818,7 @@ BOOL getDroidDestination(BASE_STATS *psStats, UDWORD structX,
 		{
 			return TRUE;
 		}
-		structTileX = structX >> TILE_SHIFT;
+		structTileX = map_coord(structX);
 		structTileY += breadth;
 
 		if (checkWidth(width, structTileX, structTileY, pDroidX, pDroidY))
@@ -4840,8 +4840,8 @@ BOOL checkWidth(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDWORD *pD
 	{
 		if( x+side < mapWidth && y < mapHeight && !TILE_OCCUPIED(mapTile(x+side,y)) )
 		{
-			*pDroidX = (x + side) << TILE_SHIFT;
-			*pDroidY = y << TILE_SHIFT;
+			*pDroidX = world_coord(x + side);
+			*pDroidY = world_coord(y);
 
 			ASSERT( worldOnMap(*pDroidX,*pDroidY),"checkWidth : Insane droid position" );
 
@@ -4861,8 +4861,8 @@ BOOL checkLength(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDWORD *p
 	{
 		if(y+side < mapHeight && x < mapWidth && !TILE_OCCUPIED(mapTile(x,y+side)) )
 		{
-			*pDroidX = x << TILE_SHIFT;
-			*pDroidY = (y + side) << TILE_SHIFT;
+			*pDroidX = world_coord(x);
+			*pDroidY = world_coord(y + side);
 
 			ASSERT( worldOnMap(*pDroidX,*pDroidY),"checkHeight : Insane droid position" );
 
@@ -4882,8 +4882,8 @@ static void removeStructFromMap(STRUCTURE *psStruct)
 	MAPTILE		*psTile;
 
 	/* set tiles drawing */
-	mapX = (psStruct->x - psStruct->pStructureType->baseWidth * TILE_UNITS / 2) >> TILE_SHIFT;
-	mapY = (psStruct->y - psStruct->pStructureType->baseBreadth * TILE_UNITS / 2) >> TILE_SHIFT;
+	mapX = map_coord(psStruct->x - psStruct->pStructureType->baseWidth * TILE_UNITS / 2);
+	mapY = map_coord(psStruct->y - psStruct->pStructureType->baseBreadth * TILE_UNITS / 2);
 	for (i = 0; i < psStruct->pStructureType->baseWidth; i++)
 	{
 		for (j = 0; j < psStruct->pStructureType->baseBreadth; j++)
@@ -4928,7 +4928,7 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 			if (psDel->pFunctionality->resourceExtractor.power)
 			{
 				//clear the tile nodraw attribute so that will get set up when building the feature
-				CLEAR_TILE_NODRAW(mapTile(psDel->x >> TILE_SHIFT,psDel->y >> TILE_SHIFT));
+				CLEAR_TILE_NODRAW(mapTile(map_coord(psDel->x), map_coord(psDel->y)));
 				buildFeature(&asFeatureStats[oilResFeature], psDel->x, psDel->y, FALSE);
 				resourceFound = TRUE;
 			}
@@ -5080,11 +5080,11 @@ BOOL destroyStruct(STRUCTURE *psDel)
 		// Set off a fire, provide dimensions for the fire
 		if(bMinor)
 		{
-			effectGiveAuxVar( (psDel->pStructureType->baseWidth<<TILE_SHIFT)/4 );
+			effectGiveAuxVar(world_coord(psDel->pStructureType->baseWidth) / 4);
 		}
 		else
 		{
-			effectGiveAuxVar( (psDel->pStructureType->baseWidth<<TILE_SHIFT)/3 );
+			effectGiveAuxVar(world_coord(psDel->pStructureType->baseWidth) / 3);
 		}
 		if(bMinor)							 // walls
 		{
@@ -5154,8 +5154,8 @@ BOOL destroyStruct(STRUCTURE *psDel)
 		if (!resourceFound && !(psDel->pStructureType->type == REF_WALL) &&
 			!(psDel->pStructureType->type == REF_WALLCORNER))
 		{
-			mapX = (psDel->x - psDel->pStructureType->baseWidth * TILE_UNITS / 2) >> TILE_SHIFT;
-			mapY = (psDel->y - psDel->pStructureType->baseBreadth * TILE_UNITS / 2) >> TILE_SHIFT;
+			mapX = map_coord(psDel->x - psDel->pStructureType->baseWidth * TILE_UNITS / 2);
+			mapY = map_coord(psDel->y - psDel->pStructureType->baseBreadth * TILE_UNITS / 2);
 			for (width = 0; width < psDel->pStructureType->baseWidth; width++)
 			{
 				for (breadth = 0; breadth < psDel->pStructureType->baseBreadth; breadth++)
@@ -5207,8 +5207,8 @@ SWORD buildFoundation(STRUCTURE_STATS *psStructStats, UDWORD x, UDWORD y)
 	UDWORD	startX, startY;
 	SWORD	height,foundationMin, foundationMax;
 
-	startX = (x >> TILE_SHIFT) - psStructStats->baseWidth/2;
-	startY = (y >> TILE_SHIFT) - psStructStats->baseBreadth/2;
+	startX = map_coord(x) - psStructStats->baseWidth/2;
+	startY = map_coord(y) - psStructStats->baseBreadth/2;
 
 	//check the terrain is the correct type return -1 if not
 
@@ -5229,8 +5229,8 @@ SWORD buildFoundation(STRUCTURE_STATS *psStructStats, UDWORD x, UDWORD y)
 	//may also have to check that overlapping terrain can be set to the average height
 	//eg water - don't want it to 'flow' into the structure if this effect is coded!
 
-	startX = (x >> TILE_SHIFT) - psStructStats->baseWidth/2;
-	startY = (y >> TILE_SHIFT) - psStructStats->baseBreadth/2;
+	startX = map_coord(x) - psStructStats->baseWidth/2;
+	startY = map_coord(y) - psStructStats->baseBreadth/2;
 
 	//initialise the starting values so they get set in loop
 	foundationMin = TILE_MAX_HEIGHT;
@@ -5434,15 +5434,15 @@ void setAssemblyPoint(FLAG_POSITION *psAssemblyPoint, UDWORD x, UDWORD y,
 		"setAssemblyPoint: invalid AssemblyPoint pointer" );
 
 	//check its valid
-	x = x >> TILE_SHIFT;
-	y = y >> TILE_SHIFT;
+	x = map_coord(x);
+	y = map_coord(y);
 	if (bCheck)
 	{
 		findAssemblyPointPosition(&x, &y, player);
 	}
 	//add half a tile so the centre is in the middle of the tile
-	x = (x << TILE_SHIFT) + TILE_UNITS/2;
-	y = (y << TILE_SHIFT) + TILE_UNITS/2;
+	x = world_coord(x) + TILE_UNITS/2;
+	y = world_coord(y) + TILE_UNITS/2;
 
 	psAssemblyPoint->coords.x = x;
 	psAssemblyPoint->coords.y = y;
@@ -6074,7 +6074,7 @@ SDWORD countAssignedDroids(STRUCTURE *psStructure)
 			weapontype = asWeaponStats[psCurr->asWeaps[0].nStat].movementModel;
 			if(weapontype == MM_INDIRECT || weapontype == MM_HOMINGINDIRECT)
 				hasindirect = 1;
-			
+
 			if(psCurr->psTarget[0]->id == psStructure->id && hasindirect)
 				num++;
 		}
@@ -6108,7 +6108,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		}
 		break;
 	case REF_DEFENSE:
-		if (psStructure->pStructureType->pSensor == NULL) 
+		if (psStructure->pStructureType->pSensor == NULL)
 		{
 			break;
 		}
@@ -7305,11 +7305,11 @@ void checkDeliveryPoints(UDWORD version)
 							addFlagPosition(psRepair->psDeliveryPoint);
 							setFlagPositionInc(psStruct->pFunctionality, psStruct->player, REPAIR_FLAG);
 							//initialise the assembly point position
-							x = (psStruct->x+256) >> TILE_SHIFT;
-							y = (psStruct->y+256) >> TILE_SHIFT;
+							x = map_coord(psStruct->x + 256);
+							y = map_coord(psStruct->y + 256);
 							// Belt and braces - shouldn't be able to build too near edge
-							setAssemblyPoint( psRepair->psDeliveryPoint, x << TILE_SHIFT,
-								y << TILE_SHIFT, inc, TRUE);
+							setAssemblyPoint( psRepair->psDeliveryPoint, world_coord(x),
+								world_coord(y), inc, TRUE);
 						}
 					}
 					else//check existing one
@@ -7605,16 +7605,15 @@ void ensureRearmPadClear(STRUCTURE *psStruct, DROID *psDroid)
 	DROID	*psCurr;
 	SDWORD	tx,ty;
 
-	tx = psStruct->x >> TILE_SHIFT;
-	ty = psStruct->y >> TILE_SHIFT;
+	tx = map_coord(psStruct->x);
+	ty = map_coord(psStruct->y);
 
 	for(psCurr = apsDroidLists[psDroid->player]; psCurr; psCurr=psCurr->psNext)
 	{
-		if ( (psCurr != psDroid) &&
-			(psCurr->x >> TILE_SHIFT == tx) &&
-			(psCurr->y >> TILE_SHIFT == ty) &&
-			(vtolDroid(psCurr))
-			)
+		if (psCurr != psDroid
+		 && map_coord(psCurr->x) == tx
+		 && map_coord(psCurr->y) == ty
+		 && vtolDroid(psCurr))
 		{
 			DROID_OACTION_INFO oaInfo = {{(BASE_OBJECT *)psStruct}};
 			actionDroidObj(psCurr, DACTION_CLEARREARMPAD, &oaInfo);
@@ -7630,15 +7629,15 @@ BOOL vtolOnRearmPad(STRUCTURE *psStruct, DROID *psDroid)
 	SDWORD	tx,ty;
 	BOOL	found;
 
-	tx = psStruct->x >> TILE_SHIFT;
-	ty = psStruct->y >> TILE_SHIFT;
+	tx = map_coord(psStruct->x);
+	ty = map_coord(psStruct->y);
 
 	found = FALSE;
 	for(psCurr = apsDroidLists[psDroid->player]; psCurr; psCurr=psCurr->psNext)
 	{
-		if ( (psCurr != psDroid) &&
-			(psCurr->x >> TILE_SHIFT == tx) &&
-			(psCurr->y >> TILE_SHIFT == ty) )
+		if (psCurr != psDroid
+		 && map_coord(psCurr->x) == tx
+		 && map_coord(psCurr->y) == ty)
 		{
 			found = TRUE;
 			break;

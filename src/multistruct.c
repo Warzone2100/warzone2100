@@ -209,10 +209,10 @@ BOOL recvBuildFinished(NETMSG *m)
 	psStr = 0;
 
 	// check for similar buildings, to avoid overlaps
-	if( TILE_HAS_STRUCTURE(mapTile(x>>TILE_SHIFT,y>>TILE_SHIFT))   )
+	if (TILE_HAS_STRUCTURE(mapTile(map_coord(x), map_coord(y))))
 	{
 		// get structure;
-		psStr = getTileStructure(x>>TILE_SHIFT, y>>TILE_SHIFT);
+		psStr = getTileStructure(map_coord(x), map_coord(y));
 		if(asStructureStats[typeindex].type == psStr->pStructureType->type)
 		{
 			// correct type, correct location, just rename the id's to sync it.. (urgh)

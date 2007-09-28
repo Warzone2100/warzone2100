@@ -271,16 +271,16 @@ void playerNewDroid(DROID *psDroid)
 */
 	//This now happens in buildDroid - AB 6/1/98
 	//move droid to assembly point
-	//orderDroidLoc(psDroid, DORDER_MOVE,	aAssemblyPos[player].x << TILE_SHIFT,
-	//		aAssemblyPos[player].y << TILE_SHIFT);
+	//orderDroidLoc(psDroid, DORDER_MOVE, world_coord(aAssemblyPos[player].x),
+	//		world_coord(aAssemblyPos[player].y));
 
 	//SCRIPTED NOW
 	/* Move the droid to the assembly point
 	if (asPlayerAI[player].groupPoints < attackPoints[player])
 	{
 		orderDroidLoc(psDroid, DORDER_MOVE,
-					aAssemblyPos[player].x << TILE_SHIFT,
-					aAssemblyPos[player].y << TILE_SHIFT);
+					world_coord(aAssemblyPos[player].x),
+					world_coord(aAssemblyPos[player].y));
 	}
 	else
 	{
@@ -290,8 +290,8 @@ void playerNewDroid(DROID *psDroid)
 		radSquared = DROID_SCAN*DROID_SCAN;
 		for(psCurr = apsDroidLists[0]; psCurr; psCurr = psCurr->psNext)
 		{
-			xdiff = (psCurr->x >> TILE_SHIFT) - aBasePos[player].x;
-			ydiff = (psCurr->y >> TILE_SHIFT) - aBasePos[player].y;
+			xdiff = map_coord(psCurr->x) - aBasePos[player].x;
+			ydiff = map_coord(psCurr->y) - aBasePos[player].y;
 			if (xdiff*xdiff + ydiff*ydiff < radSquared)
 			{
 				foundDroid = TRUE;
@@ -300,7 +300,7 @@ void playerNewDroid(DROID *psDroid)
 		}
 		if (!foundDroid)
 		{
-			orderGroupLoc(psDroid, DORDER_MOVE, ATTACKX << TILE_SHIFT, ATTACKY << TILE_SHIFT);
+			orderGroupLoc(psDroid, DORDER_MOVE, world_coord(ATTACKX), world_coord(ATTACKY));
 //				asPlayerAI[player].psAttackGrp = NULL;
 			asPlayerAI[player].groupPoints = 0;
 		}
@@ -405,8 +405,8 @@ void playerNewDroid(DROID *psDroid)
 /*sets the point new droids go to - x/y in world coords*/
 /*void setAssemblyPoint(UDWORD x, UDWORD y, UDWORD player)
 {
-	aAssemblyPos[player].x = x >> TILE_SHIFT;
-	aAssemblyPos[player].y = y >> TILE_SHIFT;
+	aAssemblyPos[player].x = map_coord(x);
+	aAssemblyPos[player].y = map_coord(y);
 }*/
 
 /* sends players droids to attack a specified x/y. Checks to see if any enemy
@@ -435,8 +435,8 @@ void attackLocation(UDWORD x, UDWORD y, UDWORD player)
 	//first see if there are any droids close to the base
 	for(psCurr = apsDroidLists[0]; psCurr; psCurr = psCurr->psNext)
 	{
-		xdiff = (psCurr->x >> TILE_SHIFT) - aBasePos[player].x;
-		ydiff = (psCurr->y >> TILE_SHIFT) - aBasePos[player].y;
+		xdiff = map_coord(psCurr->x) - aBasePos[player].x;
+		ydiff = map_coord(psCurr->y) - aBasePos[player].y;
 		if (xdiff*xdiff + ydiff*ydiff < radSquared)
 		{
 			foundDroid = TRUE;

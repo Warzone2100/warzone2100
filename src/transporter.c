@@ -1511,21 +1511,21 @@ void transporterRemoveDroid(UDWORD id)
             if (bMultiPlayer)
             {
                 //set the units next to the transporter's current location
-                droidX = psCurrTransporter->x >> TILE_SHIFT;
-                droidY = psCurrTransporter->y >> TILE_SHIFT;
+                droidX = map_coord(psCurrTransporter->x);
+                droidY = map_coord(psCurrTransporter->y);
             }
             else
             {
         		//pick a tile because save games won't remember where the droid was when it was loaded
-	        	droidX = getLandingX(0) >> TILE_SHIFT;
-		        droidY = getLandingY(0) >> TILE_SHIFT;
+	        	droidX = map_coord(getLandingX(0));
+		        droidY = map_coord(getLandingY(0));
             }
     		if (!pickATileGen(&droidX, &droidY,LOOK_FOR_EMPTY_TILE,zonedPAT))
 	    	{
 		    	ASSERT( FALSE, "transporterRemoveUnit: Unable to find a valid location" );
     		}
-	    	psDroid->x = (UWORD)(droidX << TILE_SHIFT);
-		    psDroid->y = (UWORD)(droidY << TILE_SHIFT);
+	    	psDroid->x = (UWORD)world_coord(droidX);
+		    psDroid->y = (UWORD)world_coord(droidY);
     		psDroid->z = map_Height(psDroid->x, psDroid->y);
 	    	updateDroidOrientation(psDroid);
 		    //initialise the movement data

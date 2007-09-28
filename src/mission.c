@@ -781,21 +781,22 @@ void missionGetNearestCorner( UWORD iX, UWORD iY, UWORD *piOffX, UWORD *piOffY )
 	UDWORD	iMidX = (scrollMinX + scrollMaxX)/2,
 			iMidY = (scrollMinY + scrollMaxY)/2;
 
-	if ( ((UDWORD)(iX>>TILE_SHIFT)) < iMidX )
+	if (map_coord(iX) < iMidX)
 	{
-		*piOffX = (UWORD) ((scrollMinX << TILE_SHIFT) + (EDGE_SIZE*TILE_UNITS));
+		*piOffX = (UWORD) (world_coord(scrollMinX) + (EDGE_SIZE * TILE_UNITS));
 	}
 	else
 	{
-		*piOffX = (UWORD) ((scrollMaxX << TILE_SHIFT) - (EDGE_SIZE*TILE_UNITS));
+		*piOffX = (UWORD) (world_coord(scrollMaxX) - (EDGE_SIZE * TILE_UNITS));
 	}
-	if ( ((UDWORD)(iY>>TILE_SHIFT)) < iMidY )
+
+	if (map_coord(iY) < iMidY)
 	{
-		*piOffY = (UWORD) ((scrollMinY << TILE_SHIFT) + (EDGE_SIZE*TILE_UNITS));
+		*piOffY = (UWORD) (world_coord(scrollMinY) + (EDGE_SIZE * TILE_UNITS));
 	}
 	else
 	{
-		*piOffY = (UWORD) ((scrollMaxY << TILE_SHIFT) - (EDGE_SIZE*TILE_UNITS));
+		*piOffY = (UWORD) (world_coord(scrollMaxY) - (EDGE_SIZE * TILE_UNITS));
 	}
 }
 
@@ -1189,15 +1190,15 @@ void saveMissionLimboData(void)
     for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid =
         psDroid->psNext)
     {
-		droidX = getLandingX(LIMBO_LANDING) >> TILE_SHIFT;
-		droidY = getLandingY(LIMBO_LANDING) >> TILE_SHIFT;
+		droidX = map_coord(getLandingX(LIMBO_LANDING));
+		droidY = map_coord(getLandingY(LIMBO_LANDING));
 		pickRes = pickHalfATile(&droidX, &droidY,LOOK_FOR_EMPTY_TILE);
 		if (pickRes == NO_FREE_TILE )
 		{
 			ASSERT( FALSE, "saveMissionLimboData: Unable to find a free location" );
 		}
-		psDroid->x = (UWORD)(droidX << TILE_SHIFT);
-		psDroid->y = (UWORD)(droidY << TILE_SHIFT);
+		psDroid->x = (UWORD)world_coord(droidX);
+		psDroid->y = (UWORD)world_coord(droidY);
 		if (pickRes == HALF_FREE_TILE )
 		{
 			psDroid->x += TILE_UNITS;
@@ -1205,8 +1206,8 @@ void saveMissionLimboData(void)
 		}
 		psDroid->z = map_Height(psDroid->x, psDroid->y);
 		updateDroidOrientation(psDroid);
-		//psDroid->lastTile = mapTile(psDroid->x >> TILE_SHIFT,
-		//	psDroid->y >> TILE_SHIFT);
+		//psDroid->lastTile = mapTile(map_coord(psDroid->x),
+		//	map_coord(psDroid->y));
 		psDroid->selected = FALSE;
         //this is mainly for VTOLs
         psDroid->psBaseStruct = NULL;
@@ -1257,15 +1258,15 @@ void placeLimboDroids(void)
                 continue;
 		    }
             //set up location for each of the droids
-	    	droidX = getLandingX(LIMBO_LANDING) >> TILE_SHIFT;
-		    droidY = getLandingY(LIMBO_LANDING) >> TILE_SHIFT;
+	    	droidX = map_coord(getLandingX(LIMBO_LANDING));
+		    droidY = map_coord(getLandingY(LIMBO_LANDING));
 		    pickRes = pickHalfATile(&droidX, &droidY,LOOK_FOR_EMPTY_TILE);
 		    if (pickRes == NO_FREE_TILE )
 		    {
 			    ASSERT( FALSE, "placeLimboUnits: Unable to find a free location" );
 		    }
-		    psDroid->x = (UWORD)(droidX << TILE_SHIFT);
-		    psDroid->y = (UWORD)(droidY << TILE_SHIFT);
+		    psDroid->x = (UWORD)world_coord(droidX);
+		    psDroid->y = (UWORD)world_coord(droidY);
 		    if (pickRes == HALF_FREE_TILE )
 		    {
 			    psDroid->x += TILE_UNITS;
@@ -1274,8 +1275,8 @@ void placeLimboDroids(void)
 		    ASSERT(worldOnMap(psDroid->x,psDroid->y), "limbo droid is not on the map");
 		    psDroid->z = map_Height(psDroid->x, psDroid->y);
 		    updateDroidOrientation(psDroid);
-		    //psDroid->lastTile = mapTile(psDroid->x >> TILE_SHIFT,
-		    //	psDroid->y >> TILE_SHIFT);
+		    //psDroid->lastTile = mapTile(map_coord(psDroid->x),
+		    //	map_coord(psDroid->y));
 		    psDroid->selected = FALSE;
             //this is mainly for VTOLs
 			setDroidBase(psDroid, NULL);
@@ -1647,8 +1648,8 @@ static void processMission(void)
 		    //set the x/y for now
 	    	//psDroid->x = getHomeLandingX() + 256;
     		//psDroid->y = getHomeLandingY() + 256;
-		    //droidX = getLandingX(psDroid->player) >> TILE_SHIFT; //getHomeLandingX() >> TILE_SHIFT;
-	    	//droidY = getLandingY(psDroid->player) >> TILE_SHIFT; //getHomeLandingY() >> TILE_SHIFT;
+		    //droidX = map_coord(getLandingX(psDroid->player)); //map_coord(getHomeLandingX());
+	    	//droidY = map_coord(getLandingY(psDroid->player)); //map_coord(getHomeLandingY());
             droidX = getHomeLandingX();
             droidY = getHomeLandingY();
 		    //swap the droid and map pointers
@@ -1659,8 +1660,8 @@ static void processMission(void)
 		    {
 			    ASSERT( FALSE, "processMission: Unable to find a free location" );
     		}
-	    	psDroid->x = (UWORD)(droidX << TILE_SHIFT);
-		    psDroid->y = (UWORD)(droidY << TILE_SHIFT);
+	    	psDroid->x = (UWORD)world_coord(droidX);
+		    psDroid->y = (UWORD)world_coord(droidY);
     		if (pickRes == HALF_FREE_TILE )
 	    	{
 		    	psDroid->x += TILE_UNITS;
@@ -1669,8 +1670,8 @@ static void processMission(void)
 		    ASSERT(worldOnMap(psDroid->x,psDroid->y), "the droid is not on the map");
 		    psDroid->z = map_Height(psDroid->x, psDroid->y);
 		    updateDroidOrientation(psDroid);
-/*		    psDroid->lastTile = mapTile(psDroid->x >> TILE_SHIFT,
-			psDroid->y >> TILE_SHIFT);
+/*		    psDroid->lastTile = mapTile(map_coord(psDroid->x),
+			map_coord(psDroid->y));
 */
 	    	//swap the droid and map pointers back again
     		swapMissionPointers();
@@ -2441,8 +2442,8 @@ void missionResetDroids(void)
 				/*placed = placeDroid(psStruct, &x, &y);
 				if (placed)
 				{
-					psDroid->x = (UWORD)(x << TILE_SHIFT);
-					psDroid->y = (UWORD)(y << TILE_SHIFT);
+					psDroid->x = (UWORD)world_coord(x);
+					psDroid->y = (UWORD)world_coord(y);
 				}
 				else
 				{
@@ -2452,13 +2453,13 @@ void missionResetDroids(void)
                 //use factory DP if one
                 if (psFactory->psAssemblyPoint)
                 {
-                    x = (UWORD)(psFactory->psAssemblyPoint->coords.x >> TILE_SHIFT);
-                    y = (UWORD)(psFactory->psAssemblyPoint->coords.y >> TILE_SHIFT);
+                    x = (UWORD)map_coord(psFactory->psAssemblyPoint->coords.x);
+                    y = (UWORD)map_coord(psFactory->psAssemblyPoint->coords.y);
                 }
                 else
                 {
-                    x = (UWORD)(psStruct->x >> TILE_SHIFT);
-                    y = (UWORD)(psStruct->y >> TILE_SHIFT);
+                    x = (UWORD)map_coord(psStruct->x);
+                    y = (UWORD)map_coord(psStruct->y);
                 }
 		        pickRes = pickHalfATile(&x, &y,LOOK_FOR_EMPTY_TILE);
 		        if (pickRes == NO_FREE_TILE )
@@ -2468,8 +2469,8 @@ void missionResetDroids(void)
 		        }
                 else
                 {
-    		        psDroid->x = (UWORD)(x << TILE_SHIFT);
-	    	        psDroid->y = (UWORD)(y << TILE_SHIFT);
+    		        psDroid->x = (UWORD)world_coord(x);
+	    	        psDroid->y = (UWORD)world_coord(y);
 		            if (pickRes == HALF_FREE_TILE )
 		            {
 			            psDroid->x += TILE_UNITS;
@@ -2492,8 +2493,8 @@ void missionResetDroids(void)
 						placed = TRUE;
 						break;*/
                         //use pickATile again...
-                        x = (UWORD)(psStruct->x >> TILE_SHIFT);
-                        y = (UWORD)(psStruct->y >> TILE_SHIFT);
+                        x = (UWORD)map_coord(psStruct->x);
+                        y = (UWORD)map_coord(psStruct->y);
 		                pickRes = pickHalfATile(&x, &y,LOOK_FOR_EMPTY_TILE);
 		                if (pickRes == NO_FREE_TILE )
 		                {
@@ -2502,8 +2503,8 @@ void missionResetDroids(void)
 		                }
                         else
                         {
-    		                psDroid->x = (UWORD)(x << TILE_SHIFT);
-	    	                psDroid->y = (UWORD)(y << TILE_SHIFT);
+    		                psDroid->x = (UWORD)world_coord(x);
+	    	                psDroid->y = (UWORD)world_coord(y);
 		                    if (pickRes == HALF_FREE_TILE )
 		                    {
 			                    psDroid->x += TILE_UNITS;
@@ -2546,15 +2547,15 @@ void missionResetDroids(void)
 					    continue;
 				    }
 					// Check there is nothing on the map
-				    /*if ( TILE_OCCUPIED(mapTile(x >> TILE_SHIFT, y >> TILE_SHIFT)) )
+				    /*if (TILE_OCCUPIED(mapTile(map_coord(x), map_coord(y))))
 				    {
 					    DBPRINTF(("missionResetDroids: tile occupied\n");
 	    `				removeDroid(psDroid, apsDroidLists);
 					    droidRelease(psDroid);
 					    free(psDroid);
 				    }*/
-/*				    mapX = psDroid->x >> TILE_SHIFT;
-				    mapY = psDroid->y >> TILE_SHIFT;
+/*				    mapX = map_coord(psDroid->x);
+				    mapY = map_coord(psDroid->y);
 				    psDroid->lastTile = mapTile(mapX,mapY);
 */
 				    //set droid height
@@ -2644,8 +2645,8 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 				orderSelectedLoc(psDroid->player, x + 3*TILE_UNITS, y + 3*TILE_UNITS);
 			}*/
 			//starting point...based around the value passed in
-			droidX = x >> TILE_SHIFT;
-			droidY = y >> TILE_SHIFT;
+			droidX = map_coord(x);
+			droidY = map_coord(y);
 			if (goingHome)
 			{
 				//swap the droid and map pointers
@@ -2655,8 +2656,8 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 			{
 				ASSERT( FALSE, "unloadTransporter: Unable to find a valid location" );
 			}
-			psDroid->x = (UWORD)(droidX << TILE_SHIFT);
-			psDroid->y = (UWORD)(droidY << TILE_SHIFT);
+			psDroid->x = (UWORD)world_coord(droidX);
+			psDroid->y = (UWORD)world_coord(droidY);
 			psDroid->z = map_Height(psDroid->x, psDroid->y);
 			updateDroidOrientation(psDroid);
 			// a commander needs to get it's group back
@@ -3601,7 +3602,7 @@ DROID * buildMissionDroid(DROID_TEMPLATE *psTempl, UDWORD x, UDWORD y,
 {
 	DROID		*psNewDroid;
 
-	psNewDroid = buildDroid(psTempl, x << TILE_SHIFT, y << TILE_SHIFT,
+	psNewDroid = buildDroid(psTempl, world_coord(x), world_coord(y),
 		player, TRUE);
 	if (!psNewDroid)
 	{
@@ -3949,32 +3950,32 @@ BOOL withinLandingZone(UDWORD x, UDWORD y)
 UWORD getLandingX( SDWORD iPlayer )
 {
 	ASSERT( iPlayer<MAX_NOGO_AREAS, "getLandingX: player %d out of range", iPlayer );
-	return (UWORD)((sLandingZone[iPlayer].x1 + (sLandingZone[iPlayer].x2 -
-		sLandingZone[iPlayer].x1)/2) << TILE_SHIFT);
+	return (UWORD)world_coord((sLandingZone[iPlayer].x1 + (sLandingZone[iPlayer].x2 -
+		sLandingZone[iPlayer].x1)/2));
 }
 
 //returns the y coord for where the Transporter can land
 UWORD getLandingY( SDWORD iPlayer )
 {
 	ASSERT( iPlayer<MAX_NOGO_AREAS, "getLandingY: player %d out of range", iPlayer );
-	return (UWORD)((sLandingZone[iPlayer].y1 + (sLandingZone[iPlayer].y2 -
-		sLandingZone[iPlayer].y1)/2) << TILE_SHIFT);
+	return (UWORD)world_coord((sLandingZone[iPlayer].y1 + (sLandingZone[iPlayer].y2 -
+		sLandingZone[iPlayer].y1)/2));
 }
 
 //returns the x coord for where the Transporter can land back at home base
 UDWORD getHomeLandingX(void)
 {
-	//return ((mission.homeLZ.x1 + (mission.homeLZ.x2 -
-	//	mission.homeLZ.x1)/2) << TILE_SHIFT);
-    return (mission.homeLZ_X >> TILE_SHIFT);
+	//return world_coord((mission.homeLZ.x1 + (mission.homeLZ.x2 -
+	//	mission.homeLZ.x1)/2));
+    return map_coord(mission.homeLZ_X);
 }
 
 //returns the y coord for where the Transporter can land back at home base
 UDWORD getHomeLandingY(void)
 {
-	//return ((mission.homeLZ.y1 + (mission.homeLZ.y2 -
-	//	mission.homeLZ.y1)/2) << TILE_SHIFT);
-    return (mission.homeLZ_Y >> TILE_SHIFT);
+	//return world_coord(mission.homeLZ.y1 + (mission.homeLZ.y2 -
+	//	mission.homeLZ.y1)/2);
+	return map_coord(mission.homeLZ_Y);
 }
 
 void missionSetTransporterEntry( SDWORD iPlayer, SDWORD iEntryTileX, SDWORD iEntryTileY )
@@ -4031,16 +4032,16 @@ void missionGetTransporterEntry( SDWORD iPlayer, UWORD *iX, UWORD *iY )
 {
 	ASSERT( iPlayer<MAX_PLAYERS, "missionGetTransporterEntry: player %i too high", iPlayer );
 
-	*iX = (UWORD) (mission.iTranspEntryTileX[iPlayer] << TILE_SHIFT);
-	*iY = (UWORD) (mission.iTranspEntryTileY[iPlayer] << TILE_SHIFT);
+	*iX = (UWORD) world_coord(mission.iTranspEntryTileX[iPlayer]);
+	*iY = (UWORD) world_coord(mission.iTranspEntryTileY[iPlayer]);
 }
 
 void missionGetTransporterExit( SDWORD iPlayer, UWORD *iX, UWORD *iY )
 {
 	ASSERT( iPlayer<MAX_PLAYERS, "missionGetTransporterExit: player %i too high", iPlayer );
 
-	*iX = (UWORD) (mission.iTranspExitTileX[iPlayer] << TILE_SHIFT);
-	*iY = (UWORD) (mission.iTranspExitTileY[iPlayer] << TILE_SHIFT);
+	*iX = (UWORD) world_coord(mission.iTranspExitTileX[iPlayer]);
+	*iY = (UWORD) world_coord(mission.iTranspExitTileY[iPlayer]);
 }
 
 /*update routine for mission details */
@@ -4077,7 +4078,7 @@ void missionDestroyObjects(void)
 	debug(LOG_NEVER, "missionDestroyObjects");
 	proj_FreeAllProjectiles();
 	for(Player = 0; Player < MAX_PLAYERS; Player++) {
-		if (Player != selectedPlayer) 
+		if (Player != selectedPlayer)
 		{
 
 			psDroid = apsDroidLists[Player];
@@ -4150,8 +4151,8 @@ void processPreviousCampDroids(void)
                 {
 		            addDroid(psDroid, apsDroidLists);
 		            //set the x/y
-		            droidX = getLandingX(psDroid->player) >> TILE_SHIFT;
-		            droidY = getLandingY(psDroid->player) >> TILE_SHIFT;
+		            droidX = map_coord(getLandingX(psDroid->player));
+		            droidY = map_coord(getLandingY(psDroid->player));
                     bPlaced = pickATileGen(&droidX, &droidY,LOOK_FOR_EMPTY_TILE,normalPAT);
                     if (!bPlaced)
 		            {
@@ -4161,12 +4162,12 @@ void processPreviousCampDroids(void)
 		            }
                     else
                     {
-    		            psDroid->x = (UWORD)(droidX << TILE_SHIFT);
-	    	            psDroid->y = (UWORD)(droidY << TILE_SHIFT);
+    		            psDroid->x = (UWORD)world_coord(droidX);
+	    	            psDroid->y = (UWORD)world_coord(droidY);
 		                psDroid->z = map_Height(psDroid->x, psDroid->y);
 		                updateDroidOrientation(psDroid);
-		                //psDroid->lastTile = mapTile(psDroid->x >> TILE_SHIFT,
-			            //    psDroid->y >> TILE_SHIFT);
+		                //psDroid->lastTile = mapTile(map_coord(psDroid->x),
+			            //    map_coord(psDroid->y));
 
 					    psDroid->selected = FALSE;
 		                psDroid->cluster = 0;

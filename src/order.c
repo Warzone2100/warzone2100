@@ -1028,8 +1028,8 @@ void orderUpdateDroid(DROID *psDroid)
 			(psDroid->action == DACTION_BUILD && psDroid->psTarget[0] == NULL))
 		{
 			// finished building the current structure
-			if (psDroid->orderX >> TILE_SHIFT == psDroid->orderX2 >> TILE_SHIFT &&
-				psDroid->orderY >> TILE_SHIFT == psDroid->orderY2 >> TILE_SHIFT)
+			if (map_coord(psDroid->orderX) == map_coord(psDroid->orderX2)
+			 && map_coord(psDroid->orderY) == map_coord(psDroid->orderY2))
 			{
 				// finished all the structures - done
 				psDroid->order = DORDER_NONE;
@@ -1039,7 +1039,7 @@ void orderUpdateDroid(DROID *psDroid)
 			}
 
 			// update the position for another structure
-			if (psDroid->orderX >> TILE_SHIFT == psDroid->orderX2 >> TILE_SHIFT)
+			if (map_coord(psDroid->orderX) == map_coord(psDroid->orderX2))
 			{
 				// still got building to do - working vertically
 				if (psDroid->orderY < psDroid->orderY2)
@@ -1051,7 +1051,7 @@ void orderUpdateDroid(DROID *psDroid)
 					psDroid->orderY -= TILE_UNITS;
 				}
 			}
-			else if (psDroid->orderY >> TILE_SHIFT == psDroid->orderY2 >> TILE_SHIFT)
+			else if (map_coord(psDroid->orderY) == map_coord(psDroid->orderY2))
 			{
 				// still got building to do - working horizontally
 				if (psDroid->orderX < psDroid->orderX2)
@@ -1687,23 +1687,25 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	case DORDER_MOVE:
 	case DORDER_SCOUT:
 		// can't move vtols to blocking tiles
-		if (vtolDroid(psDroid) &&
-			( fpathGroundBlockingTile(psOrder->x >> TILE_SHIFT,psOrder->y >> TILE_SHIFT) ||
-			  !TEST_TILE_VISIBLE(psDroid->player, mapTile(psOrder->x >> TILE_SHIFT,psOrder->y >> TILE_SHIFT)) ) )
+		if (vtolDroid(psDroid)
+		 && (fpathGroundBlockingTile(map_coord(psOrder->x), map_coord(psOrder->y))
+		  || !TEST_TILE_VISIBLE(psDroid->player, mapTile(map_coord(psOrder->x), map_coord(psOrder->y)))))
 		{
 			break;
 		}
-        //in multiPlayer, cannot move Transporter to blocking tile either
-        if (game.maxPlayers > 0)
-        {
-            if (psDroid->droidType == DROID_TRANSPORTER &&
-              ( fpathGroundBlockingTile(psOrder->x >> TILE_SHIFT,
-              psOrder->y >> TILE_SHIFT) || !TEST_TILE_VISIBLE(psDroid->player,
-              mapTile(psOrder->x >> TILE_SHIFT, psOrder->y >> TILE_SHIFT))) )
-            {
-                break;
-            }
-        }
+		//in multiPlayer, cannot move Transporter to blocking tile either
+		if (game.maxPlayers > 0)
+		{
+			if (psDroid->droidType == DROID_TRANSPORTER
+			 && (fpathGroundBlockingTile(map_coord(psOrder->x),
+			                             map_coord(psOrder->y))
+			  || !TEST_TILE_VISIBLE(psDroid->player,
+			                        mapTile(map_coord(psOrder->x),
+			                        map_coord(psOrder->y)))))
+			{
+				break;
+			}
+		}
 		// move a droid to a location
 		psDroid->order = psOrder->order;
 		psDroid->orderX = psOrder->x;
@@ -1904,8 +1906,8 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		if (bposGetLocation(psDroid->player, clustGetClusterID(psRepairFac),
 									psOrder->psStats, &iDX, &iDY))
 		{
-			psOrder->x = iDX << TILE_SHIFT;
-			psOrder->y = iDY << TILE_SHIFT;
+			psOrder->x = world_coord(iDX);
+			psOrder->y = world_coord(iDY);
 		}
 #endif
 		//if (getDroidDestination((STRUCTURE_STATS *)psOrder->psStats,
@@ -2284,8 +2286,8 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			psDroid->order  = DORDER_RECYCLE;
 			psDroid->orderX = psFactory->x;
 			psDroid->orderY = (UWORD)(psFactory->y +
-					(psFactory->pStructureType->baseBreadth<<TILE_SHIFT)/2 +
-					TILE_UNITS/2);
+					world_coord(psFactory->pStructureType->baseBreadth) / 2 +
+					TILE_UNITS / 2);
 			setDroidTarget(psDroid, (BASE_OBJECT *) psFactory, 0);
 			actionDroidObjLoc( psDroid, DACTION_MOVE, (BASE_OBJECT *) psFactory,
 								psDroid->orderX, psDroid->orderY);

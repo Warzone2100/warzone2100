@@ -196,7 +196,7 @@ void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, RAY_CALLBACK callbac
 
 #if RAY_CLIP == 0
 			// clipping
-			newLen = (((mapHeight << TILE_SHIFT) - ((SDWORD)y + TILE_UNITS/4))
+			newLen = ((world_coord(mapHeight) - ((SDWORD)y + TILE_UNITS / 4))
 						* rayFPInvCos[ray])	>> RAY_ACC;
 			if (newLen < clipLen)
 			{
@@ -248,7 +248,7 @@ void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, RAY_CALLBACK callbac
 
 #if RAY_CLIP == 0
 			// clipping
-			newLen = ((((SDWORD)x + TILE_UNITS/4) - (mapWidth << TILE_SHIFT))
+			newLen = ((((SDWORD)x + TILE_UNITS / 4) - world_coord(mapWidth))
 						* rayFPInvSin[ray])	>> RAY_ACC;
 			if (newLen < clipLen)
 			{
@@ -337,8 +337,8 @@ void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, RAY_CALLBACK callbac
 		if (hDist < vDist)
 		{
 			// clip to the edge of the map
-			if (sHoriz.x < 0 || (sHoriz.x >> RAY_ACC) >= (SDWORD)(mapWidth << TILE_SHIFT) ||
-				sHoriz.y < 0 || sHoriz.y >= (SDWORD)(mapHeight << TILE_SHIFT))
+			if (sHoriz.x < 0 || (sHoriz.x >> RAY_ACC) >= world_coord(mapWidth) ||
+				sHoriz.y < 0 || sHoriz.y >= world_coord(mapHeight))
 			{
 				return;
 			}
@@ -358,8 +358,8 @@ void rayCast(UDWORD x, UDWORD y, UDWORD ray, UDWORD length, RAY_CALLBACK callbac
 		else
 		{
 			// clip to the edge of the map
-			if (sVert.x < 0 || sVert.x >= (SDWORD)(mapWidth << TILE_SHIFT) ||
-				sVert.y < 0 || (sVert.y >> RAY_ACC) >= (SDWORD)(mapHeight << TILE_SHIFT))
+			if (sVert.x < 0 || sVert.x >= world_coord(mapWidth) ||
+				sVert.y < 0 || (sVert.y >> RAY_ACC) >= world_coord(mapHeight))
 			{
 				return;
 			}
@@ -511,15 +511,15 @@ static BOOL	getTileHeightCallback(SDWORD x, SDWORD y, SDWORD dist)
 	/* Are we still on the grid? */
 	if(clipXY(x,y))
 	{
-		HasTallStructure = TILE_HAS_TALLSTRUCTURE(mapTile(x>>TILE_SHIFT,y>>TILE_SHIFT));
+		HasTallStructure = TILE_HAS_TALLSTRUCTURE(mapTile(map_coord(x), map_coord(y)));
 
 		if( (dist>TILE_UNITS) || HasTallStructure)
 		{
 		// Only do it the current tile is > TILE_UNITS away from the starting tile. Or..
 		// there is a tall structure  on the current tile and the current tile is not the starting tile.
 //		if( (dist>TILE_UNITS) ||
-//			( (HasTallStructure = TILE_HAS_TALLSTRUCTURE(mapTile(x>>TILE_SHIFT,y>>TILE_SHIFT))) &&
-//			((x >> TILE_SHIFT != gStartTileX) || (y >> TILE_SHIFT != gStartTileY)) ) ) {
+//			( (HasTallStructure = TILE_HAS_TALLSTRUCTURE(mapTile(map_coord(x), map_coord(y)))) &&
+//			((map_coord(x) != gStartTileX) || (map_coord(y) != gStartTileY)) ) ) {
 			/* Get height at this intersection point */
 			height = map_Height(x,y);
 
@@ -578,8 +578,8 @@ void	getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, UDWORD direction, SDWORD *pitc
 	/* Set global var to clear */
 	gPitch = MAKEFRACT(0);
 	gHeight = map_Height(x,y);
-	gStartTileX = x >> TILE_SHIFT;
-	gStartTileY = y >> TILE_SHIFT;
+	gStartTileX = map_coord(x);
+	gStartTileY = map_coord(y);
 //#ifdef TEST_RAY
 //DBPRINTF(("%d\n",direction);
 //#endif

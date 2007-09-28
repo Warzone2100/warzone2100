@@ -411,8 +411,8 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 				// align the formation with the last path of the route
 				fmx2 = psDroid->sMove.asPath[psDroid->sMove.numPoints -1].x;
 				fmy2 = psDroid->sMove.asPath[psDroid->sMove.numPoints -1].y;
-				fmx2 = (fmx2 << TILE_SHIFT) + TILE_UNITS/2;
-				fmy2 = (fmy2 << TILE_SHIFT) + TILE_UNITS/2;
+				fmx2 = world_coord(fmx2) + TILE_UNITS / 2;
+				fmy2 = world_coord(fmy2) + TILE_UNITS / 2;
 				if (psDroid->sMove.numPoints == 1)
 				{
 					fmx1 = (SDWORD)psDroid->x;
@@ -422,8 +422,8 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 				{
 					fmx1 = psDroid->sMove.asPath[psDroid->sMove.numPoints -2].x;
 					fmy1 = psDroid->sMove.asPath[psDroid->sMove.numPoints -2].y;
-					fmx1 = (fmx1 << TILE_SHIFT) + TILE_UNITS/2;
-					fmy1 = (fmy1 << TILE_SHIFT) + TILE_UNITS/2;
+					fmx1 = world_coord(fmx1) + TILE_UNITS / 2;
+					fmy1 = world_coord(fmy1) + TILE_UNITS / 2;
 				}
 
 				// no formation so create a new one
@@ -597,18 +597,18 @@ static void moveShuffleDroid(DROID *psDroid, UDWORD shuffleStart, SDWORD sx, SDW
 	svy = rvx; // sy * SHUFFLE_MOVE / shuffleMag;
 
 	// check for blocking tiles
-	if ( fpathBlockingTile( ((SDWORD)psDroid->x + lvx) >> TILE_SHIFT,
-						    ((SDWORD)psDroid->y + lvy) >> TILE_SHIFT ) )
+	if (fpathBlockingTile(map_coord((SDWORD)psDroid->x + lvx),
+	                      map_coord((SDWORD)psDroid->y + lvy)))
 	{
 		leftClear = FALSE;
 	}
-	else if ( fpathBlockingTile( ((SDWORD)psDroid->x + rvx) >> TILE_SHIFT,
-								 ((SDWORD)psDroid->y + rvy) >> TILE_SHIFT ) )
+	else if (fpathBlockingTile(map_coord((SDWORD)psDroid->x + rvx),
+	                           map_coord((SDWORD)psDroid->y + rvy)))
 	{
 		rightClear = FALSE;
 	}
-	else if ( fpathBlockingTile( ((SDWORD)psDroid->x + svx) >> TILE_SHIFT,
-								 ((SDWORD)psDroid->y + svy) >> TILE_SHIFT ) )
+	else if (fpathBlockingTile(map_coord((SDWORD)psDroid->x + svx),
+	                           map_coord((SDWORD)psDroid->y + svy)))
 	{
 		frontClear = FALSE;
 	}
@@ -748,9 +748,9 @@ void updateDroidOrientation(DROID *psDroid)
 	SDWORD newPitch, dPitch, pitchLimit;
 	double dx, dy;
 	double direction, pitch, roll;
-	ASSERT( psDroid->x < (mapWidth << TILE_SHIFT),
+	ASSERT( psDroid->x < world_coord(mapWidth),
 		"mapHeight: x coordinate bigger than map width" );
-	ASSERT( psDroid->y < (mapHeight<< TILE_SHIFT),
+	ASSERT( psDroid->y < world_coord(mapHeight),
 		"mapHeight: y coordinate bigger than map height" );
 
 	if(psDroid->droidType == DROID_PERSON || cyborgDroid(psDroid) || psDroid->droidType == DROID_TRANSPORTER)
@@ -911,8 +911,8 @@ static BOOL moveNextTarget(DROID *psDroid)
 		return FALSE;
 	}
 
-	tarX = (psDroid->sMove.asPath[psDroid->sMove.Position].x << TILE_SHIFT) + TILE_UNITS/2;
-	tarY = (psDroid->sMove.asPath[psDroid->sMove.Position].y << TILE_SHIFT) + TILE_UNITS/2;
+	tarX = world_coord(psDroid->sMove.asPath[psDroid->sMove.Position].x) + TILE_UNITS / 2;
+	tarY = world_coord(psDroid->sMove.asPath[psDroid->sMove.Position].y) + TILE_UNITS / 2;
 	if (psDroid->sMove.Position == 0)
 	{
 		psDroid->sMove.srcX = (SDWORD)psDroid->x;
@@ -920,8 +920,8 @@ static BOOL moveNextTarget(DROID *psDroid)
 	}
 	else
 	{
-		srcX = (psDroid->sMove.asPath[psDroid->sMove.Position -1].x << TILE_SHIFT) + TILE_UNITS/2;
-		srcY = (psDroid->sMove.asPath[psDroid->sMove.Position -1].y << TILE_SHIFT) + TILE_UNITS/2;
+		srcX = world_coord(psDroid->sMove.asPath[psDroid->sMove.Position -1].x) + TILE_UNITS / 2;
+		srcY = world_coord(psDroid->sMove.asPath[psDroid->sMove.Position -1].y) + TILE_UNITS / 2;
 		psDroid->sMove.srcX = srcX;
 		psDroid->sMove.srcY = srcY ;
 	}
@@ -1119,8 +1119,8 @@ static BOOL moveBlocked(DROID *psDroid)
 		// if the unit cannot see the next way point - reroute it's got stuck
 		if ( ( bMultiPlayer || (psDroid->player == selectedPlayer) ) &&
 			(psDroid->sMove.Position != psDroid->sMove.numPoints) &&
-			!fpathTileLOS((SDWORD)psDroid->x >> TILE_SHIFT, (SDWORD)psDroid->y >> TILE_SHIFT,
-						  psDroid->sMove.DestinationX >> TILE_SHIFT, psDroid->sMove.DestinationY >> TILE_SHIFT))
+			!fpathTileLOS(map_coord((SDWORD)psDroid->x), map_coord((SDWORD)psDroid->y),
+						  map_coord(psDroid->sMove.DestinationX), map_coord(psDroid->sMove.DestinationY)))
 		{
 			moveDroidTo(psDroid, psDroid->sMove.DestinationX, psDroid->sMove.DestinationY);
 			return FALSE;
@@ -1209,12 +1209,12 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 	rady = 0;
 
 	// calculate the new coords and see if they are on a different tile
-	tx = MAKEINT(psDroid->sMove.fx) >> TILE_SHIFT;
-	ty = MAKEINT(psDroid->sMove.fy) >> TILE_SHIFT;
+	tx = map_coord(psDroid->sMove.fx);
+	ty = map_coord(psDroid->sMove.fy);
 	nx = psDroid->sMove.fx + mx;
 	ny = psDroid->sMove.fy + my;
-	ntx = MAKEINT(nx) >> TILE_SHIFT;
-	nty = MAKEINT(ny) >> TILE_SHIFT;
+	ntx = map_coord(nx);
+	nty = map_coord(ny);
 
 	// is the new tile blocking?
 	if (fpathBlockingTile(ntx,nty))
@@ -1240,12 +1240,12 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 
 		nx = psDroid->sMove.fx + radx;
 		ny = psDroid->sMove.fy + rady;
-		tx = MAKEINT(nx) >> TILE_SHIFT;
-		ty = MAKEINT(ny) >> TILE_SHIFT;
+		tx = map_coord(nx);
+		ty = map_coord(ny);
 		nx += mx;
 		ny += my;
-		ntx = MAKEINT(nx) >> TILE_SHIFT;
-		nty = MAKEINT(ny) >> TILE_SHIFT;
+		ntx = map_coord(nx);
+		nty = map_coord(ny);
 
 		// is the new tile blocking?
 		if (fpathBlockingTile(ntx,nty))
@@ -1259,12 +1259,12 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 	{
 		nx = psDroid->sMove.fx - rady;
 		ny = psDroid->sMove.fy + radx;
-		tx = MAKEINT(nx) >> TILE_SHIFT;
-		ty = MAKEINT(ny) >> TILE_SHIFT;
+		tx = map_coord(nx);
+		ty = map_coord(ny);
 		nx += mx;
 		ny += my;
-		ntx = MAKEINT(nx) >> TILE_SHIFT;
-		nty = MAKEINT(ny) >> TILE_SHIFT;
+		ntx = map_coord(nx);
+		nty = map_coord(ny);
 
 		// is the new tile blocking?
 		if (fpathBlockingTile(ntx,nty))
@@ -1281,12 +1281,12 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 	{
 		nx = psDroid->sMove.fx + rady;
 		ny = psDroid->sMove.fy - radx;
-		tx = MAKEINT(nx) >> TILE_SHIFT;
-		ty = MAKEINT(ny) >> TILE_SHIFT;
+		tx = map_coord(nx);
+		ty = map_coord(ny);
 		nx += mx;
 		ny += my;
-		ntx = MAKEINT(nx) >> TILE_SHIFT;
-		nty = MAKEINT(ny) >> TILE_SHIFT;
+		ntx = map_coord(nx);
+		nty = map_coord(ny);
 
 		// is the new tile blocking?
 		if (fpathBlockingTile(ntx,nty))
@@ -1298,8 +1298,8 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 		}
 	}*/
 
-	blkCX = (ntx << TILE_SHIFT) + TILE_UNITS/2;
-	blkCY = (nty << TILE_SHIFT) + TILE_UNITS/2;
+	blkCX = world_coord(ntx) + TILE_UNITS/2;
+	blkCY = world_coord(nty) + TILE_UNITS/2;
 
 	// is the new tile blocking?
 	if (!blocked)
@@ -1573,7 +1573,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 	nx = psDroid->sMove.fx + *pmx;
 	ny = psDroid->sMove.fy + *pmy;
 
-//	ASSERT( slide || (!fpathBlockingTile(MAKEINT(nx)>>TILE_SHIFT, MAKEINT(ny)>>TILE_SHIFT)),
+//	ASSERT( slide || (!fpathBlockingTile(map_coord(nx)), map_coord(ny))),
 //		"moveCalcBlockingSlide: slid onto a blocking tile" );
 #endif
 
@@ -1788,8 +1788,8 @@ static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
 	}
 
 	// now scan for blocking tiles
-	mapX = (SDWORD)(psDroid->x >> TILE_SHIFT);
-	mapY = (SDWORD)(psDroid->y >> TILE_SHIFT);
+	mapX = map_coord(psDroid->x);
+	mapY = map_coord(psDroid->y);
 	for(ydiff=-2; ydiff<=2; ydiff++)
 	{
 		for(xdiff=-2; xdiff<=2; xdiff++)
@@ -1801,8 +1801,8 @@ static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
 			}
 			if (fpathBlockingTile(mapX+xdiff, mapY+ydiff))
 			{
-				tx = xdiff << TILE_SHIFT;
-				ty = ydiff << TILE_SHIFT;
+				tx = world_coord(xdiff);
+				ty = world_coord(ydiff);
 				td = tx*tx + ty*ty;
 				if (td < AVOID_DIST*AVOID_DIST)
 				{
@@ -1954,7 +1954,7 @@ static Vector2f moveGetDirection(DROID *psDroid)
 			// Interpolate the vectors based on how close to them we are
 			delta = Vector2f_Mult(delta, magnitude);
 			nextDelta = Vector2f_Mult(nextDelta, WAYPOINT_DSQ - magnitude);
-			
+
 			dest = Vector2f_Normalise( Vector2f_Add(delta, nextDelta) );
 		}
 	}
@@ -2080,7 +2080,7 @@ static BOOL moveReachedWayPoint(DROID *psDroid)
 		// but only move onto the next way point if we can see the previous one
 		// (this helps units that have got nudged off course).
 		if ((psDroid->sMove.boundX * droidX + psDroid->sMove.boundY * droidY <= 0) &&
-			fpathTileLOS((SDWORD)psDroid->x >> TILE_SHIFT, (SDWORD)psDroid->y >> TILE_SHIFT, psDroid->sMove.targetX >> TILE_SHIFT, psDroid->sMove.targetY >> TILE_SHIFT))
+			fpathTileLOS(map_coord(psDroid->x), map_coord(psDroid->y), map_coord(psDroid->sMove.targetX), map_coord(psDroid->sMove.targetY)))
 		{
 			debug( LOG_MOVEMENT, "Next waypoint: droid %d bound (%d,%d) target (%d,%d)\n",
 					psDroid->id, psDroid->sMove.boundX,psDroid->sMove.boundY,
@@ -2117,8 +2117,8 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	SDWORD			speed, pitch;
 	WEAPON_STATS	*psWStats;
 
-	mapX = psDroid->x >> TILE_SHIFT;
-	mapY = psDroid->y >> TILE_SHIFT;
+	mapX = map_coord(psDroid->x);
+	mapY = map_coord(psDroid->y);
 	speed = (SDWORD) calcDroidSpeed(psDroid->baseSpeed, TERRAIN_TYPE(mapTile(mapX,mapY)),
 							  psDroid->asBits[COMP_PROPULSION].nStat);
 
@@ -3542,8 +3542,8 @@ void moveUpdateDroid(DROID *psDroid)
 			pos = ((pos - 1) <= 0) ? 0 : (pos - 1);
 			for(; pos < psDroid->sMove.numPoints; pos += 1)
 			{
-				x = (psDroid->sMove.asPath[pos].x << TILE_SHIFT) + TILE_UNITS/2;
-				y = (psDroid->sMove.asPath[pos].y << TILE_SHIFT) + TILE_UNITS/2;
+				x = world_coord(psDroid->sMove.asPath[pos].x) + TILE_UNITS/2;
+				y = world_coord(psDroid->sMove.asPath[pos].y) + TILE_UNITS/2;
 				z = map_Height( x,y );
 				arrowAdd( px,py,pz, x,y,z, REDARROW );
 
@@ -3706,8 +3706,8 @@ void moveUpdateDroid(DROID *psDroid)
 				landX = psDroid->x;
 				landY = psDroid->y;
 				actionVTOLLandingPos(psDroid, &landX,&landY);
-				if ((SDWORD)(landX >> TILE_SHIFT) != (psDroid->x >> TILE_SHIFT) &&
-					(SDWORD)(landY >> TILE_SHIFT) != (psDroid->y >> TILE_SHIFT))
+				if (map_coord(landX) != map_coord(psDroid->x)
+				 && map_coord(landY) != map_coord(psDroid->y))
 				{
 					moveDroidToDirect(psDroid, landX,landY);
 				}
@@ -3756,8 +3756,8 @@ void moveUpdateDroid(DROID *psDroid)
 		moveUpdateGroundModel(psDroid, moveSpeed, moveDir);
 	}
 
-	if ((SDWORD)oldx >> TILE_SHIFT != psDroid->x >> TILE_SHIFT ||
-		(SDWORD)oldy >> TILE_SHIFT != psDroid->y >> TILE_SHIFT)
+	if (map_coord(oldx) != map_coord(psDroid->x)
+	 || map_coord(oldy) != map_coord(psDroid->y))
 	{
 		visTilesUpdate((BASE_OBJECT *)psDroid,FALSE);
 		gridMoveObject((BASE_OBJECT *)psDroid, (SDWORD)oldx,(SDWORD)oldy);

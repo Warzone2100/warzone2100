@@ -533,15 +533,15 @@ void  technologyGiveAway(STRUCTURE *pS)
 	if(pS->pStructureType->type == REF_FACTORY  &&  myResponsibility(pS->player))
 	{
 
-		x = (pS->x >> TILE_SHIFT);
-		y = (pS->y >> TILE_SHIFT);
+		x = map_coord(pS->x);
+		y = map_coord(pS->y);
 		if (!pickATileGen(&x,&y,LOOK_FOR_EMPTY_TILE,zonedPAT))
 		{
 			ASSERT( FALSE, "technologyGiveAway: Unable to find a free location" );
 		}
 
 		for(i=0; (i<numFeatureStats) && (asFeatureStats[i].subType != FEAT_GEN_ARTE); i++);
-		pF = buildFeature((asFeatureStats+i),x<<TILE_SHIFT, y<<TILE_SHIFT,FALSE);
+		pF = buildFeature((asFeatureStats+i), world_coord(x), world_coord(y), FALSE);
 		if(pF)
 		{
 			pF->player = pS->player;
@@ -629,8 +629,8 @@ void addLoserGifts(void)
 
 		for(count = 0;count<quantity;count++)
 		{
-			x = apsStructLists[selectedPlayer]->x >> TILE_SHIFT;
-			y = apsStructLists[selectedPlayer]->y >> TILE_SHIFT;
+			x = map_coord(apsStructLists[selectedPlayer]->x);
+			y = map_coord(apsStructLists[selectedPlayer]->y);
 			if (!pickATileGen(&x,&y,LOOK_FOR_EMPTY_TILE,zonedPAT))
 			{
 				ASSERT( FALSE, "addlosergifts: Unable to find a free location" );
@@ -638,7 +638,7 @@ void addLoserGifts(void)
 
 			NETlogEntry("gift",0,0);
 
-			pF = buildFeature((asFeatureStats+i),x<<TILE_SHIFT, y<<TILE_SHIFT,FALSE);
+			pF = buildFeature((asFeatureStats+i), world_coord(x), world_coord(y), FALSE);
 
 			nx = (UWORD)x;
 			ny = (UWORD)y;
@@ -673,15 +673,15 @@ void addLoserGifts(void)
 			// give player a construction Droid.right now!
 			if(apsStructLists[selectedPlayer])
 			{
-				x = apsStructLists[selectedPlayer]->x >>TILE_SHIFT;
-				y = apsStructLists[selectedPlayer]->y >>TILE_SHIFT;
-				z = apsStructLists[selectedPlayer]->z >>TILE_SHIFT;
+				x = map_coord(apsStructLists[selectedPlayer]->x);
+				y = map_coord(apsStructLists[selectedPlayer]->y);
+				z = map_coord(apsStructLists[selectedPlayer]->z);
 
 				pickATileGen(&x,&y,LOOK_FOR_EMPTY_TILE,normalPAT);
 
-				position.x = x<<TILE_SHIFT;				// Add an effect
-				position.z = y<<TILE_SHIFT;
-				position.y = z<<TILE_SHIFT;
+				position.x = world_coord(x);				// Add an effect
+				position.z = world_coord(y);
+				position.y = world_coord(z);
 
 				if(gameTime - lastgift< GIFTFREQ)
 				{
@@ -689,7 +689,7 @@ void addLoserGifts(void)
 				}
 				lastgift = gameTime;
 				powerCalc(FALSE);
-				psD=buildDroid(	psTempl, x<<TILE_SHIFT,  y<<TILE_SHIFT, selectedPlayer, FALSE);
+				psD=buildDroid(	psTempl, world_coord(x), world_coord(y), selectedPlayer, FALSE);
 				if(psD)
 				{
 					audio_QueueTrack(ID_GIFT);
@@ -735,7 +735,7 @@ void  addMultiPlayerRandomArtifacts(UDWORD quantity,SDWORD type)
 			ASSERT( FALSE, "addMultiPlayerRandomArtifacts: Unable to find a free location" );
 		}
 
-		pF = buildFeature((asFeatureStats+i),x<<TILE_SHIFT, y<<TILE_SHIFT,FALSE);
+		pF = buildFeature((asFeatureStats+i), world_coord(x), world_coord(y), FALSE);
 
 		nx = (UWORD)x;
 		ny = (UWORD)y;
@@ -792,7 +792,7 @@ void recvMultiPlayerRandomArtifacts(NETMSG *pMsg)
 
 		NetGet(pMsg,index,ref);
 		index += sizeof(ref);
-		pF = buildFeature((asFeatureStats+i),tx<<TILE_SHIFT, ty<<TILE_SHIFT,FALSE);
+		pF = buildFeature((asFeatureStats+i), world_coord(tx), world_coord(ty), FALSE);
 		if(pF)
 		{
 			pF->id		= ref;

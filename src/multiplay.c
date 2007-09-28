@@ -194,12 +194,20 @@ BOOL multiplayerWinSequence(BOOL firstCall)
 	if(rand()%3 == 0)
 	{
 		pos2=pos;
-		pos2.x +=  (rand()%(8<<TILE_SHIFT))-(4<<TILE_SHIFT);
-		pos2.z +=  (rand()%(8<<TILE_SHIFT))-(4<<TILE_SHIFT);
-		if(pos2.x <0) pos2.x =128;
-		if((unsigned)pos2.x > mapWidth<<TILE_SHIFT) pos2.x =mapWidth<<TILE_SHIFT;
-		if(pos2.z <0) pos2.z =128;
-		if((unsigned)pos2.z >mapHeight<<TILE_SHIFT) pos2.z =mapHeight<<TILE_SHIFT;
+		pos2.x +=  (rand() % world_coord(8)) - world_coord(4);
+		pos2.z +=  (rand() % world_coord(8)) - world_coord(4);
+
+		if (pos2.x < 0)
+			pos2.x = 128;
+
+		if ((unsigned)pos2.x > world_coord(mapWidth))
+			pos2.x = world_coord(mapWidth);
+
+		if (pos2.z < 0)
+			pos2.z = 128;
+
+		if ((unsigned)pos2.z > world_coord(mapHeight))
+			pos2.z = world_coord(mapHeight);
 
 		addEffect(&pos2,EFFECT_FIREWORK,FIREWORK_TYPE_LAUNCHER,FALSE,NULL,0);	// throw up some fire works.
 	}
@@ -568,18 +576,18 @@ Vector3i cameraToHome(UDWORD player,BOOL scroll)
 
 	if(psBuilding)
 	{
-		x= (psBuilding->x  >> TILE_SHIFT);
-		y= (psBuilding->y  >> TILE_SHIFT);
+		x= map_coord(psBuilding->x);
+		y= map_coord(psBuilding->y);
 	}
 	else if (apsDroidLists[player])				// or first droid
 	{
-		 x= (apsDroidLists[player]->x >> TILE_SHIFT);
-		 y=	(apsDroidLists[player]->y >> TILE_SHIFT);
+		 x= map_coord(apsDroidLists[player]->x);
+		 y=	map_coord(apsDroidLists[player]->y);
 	}
 	else if (apsStructLists[player])							// center on first struct
 	{
-		x= (apsStructLists[player]->x  >> TILE_SHIFT);
-		y= (apsStructLists[player]->y  >> TILE_SHIFT);
+		x= map_coord(apsStructLists[player]->x);
+		y= map_coord(apsStructLists[player]->y);
 	}
 	else														//or map center.
 	{
@@ -590,16 +598,16 @@ Vector3i cameraToHome(UDWORD player,BOOL scroll)
 
 	if(scroll)
 	{
-		requestRadarTrack(x<<TILE_SHIFT,y<<TILE_SHIFT);
+		requestRadarTrack(world_coord(x), world_coord(y));
 	}
 	else
 	{
 		setViewPos(x,y,TRUE);
 	}
 
-	res.x = x<<TILE_SHIFT;
+	res.x = world_coord(x);
 	res.y = map_TileHeight(x,y);
-	res.z = y<<TILE_SHIFT;
+	res.z = world_coord(y);
 	return res;
 }
 
