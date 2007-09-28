@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-09-23 19:23+0200\n"
+"POT-Creation-Date: 2007-09-28 15:10+0200\n"
 "PO-Revision-Date: 2007-06-05 14:46+0200\n"
 "Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -157,6 +157,22 @@ msgstr "Laad Spel"
 #: src/ingameop.c:420
 msgid "Save Game"
 msgstr "Spel opslaan"
+
+#: src/hci.c:4110
+msgid "Unit"
+msgstr ""
+
+#: src/hci.c:4119
+msgid "Struct"
+msgstr ""
+
+#: src/hci.c:4128
+msgid "Feat"
+msgstr ""
+
+#: src/hci.c:4142 src/ingameop.c:123 src/ingameop.c:262 src/ingameop.c:267
+msgid "Quit"
+msgstr "Afsluiten"
 
 #: src/hci.c:4143
 msgid "Exit Game"
@@ -787,10 +803,6 @@ msgstr ""
 #: src/ingameop.c:120 src/ingameop.c:154 src/ingameop.c:271
 msgid "Resume Game"
 msgstr "Hervat Spel"
-
-#: src/ingameop.c:123 src/ingameop.c:262 src/ingameop.c:267
-msgid "Quit"
-msgstr "Afsluiten"
 
 #: src/ingameop.c:157 src/frontend.c:816
 msgid "Voice Volume"
