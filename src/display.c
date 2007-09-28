@@ -1294,15 +1294,15 @@ void scroll(void)
 #ifdef VISIBLE_SCROLL
 	newx = player.p.x + xDif;
 	newy = player.p.z + yDif;
-	if (mapTile((((VISIBLE_XTILES/2)<<TILE_SHIFT) + newx) >> TILE_SHIFT,
-				(((VISIBLE_YTILES/2)<<TILE_SHIFT) + newy) >> TILE_SHIFT)->tileVisBits & (1 << selectedPlayer))
+	if (mapTile(map_coord(world_coord(VISIBLE_XTILES / 2) + newx),
+				map_coord(world_coord(VISIBLE_YTILES / 2) + newy))->tileVisBits & (1 << selectedPlayer))
 	{
 		player.p.x = newx;
 		player.p.z = newy;
 	}
 	else
 	{
-		if (player.p.x >> TILE_SHIFT != newx >> TILE_SHIFT)
+		if (map_coord(player.p.x) != map_coord(newx))
 		{
 			scrollSpeedLeftRight = 0;
 		}
@@ -1310,7 +1310,7 @@ void scroll(void)
 		{
 			player.p.x = newx;
 		}
-		if (player.p.z >> TILE_SHIFT != newy >> TILE_SHIFT)
+		if (map_coord(player.p.z) != map_coord(newy))
 		{
 			scrollSpeedUpDown = 0;
 		}
@@ -1659,7 +1659,7 @@ void FinishDeliveryPosition(UDWORD xPos,UDWORD yPos,void *UserData)
 {
 	//This deals with adding waypoints and moving the primary
 	processDeliveryPoint(((FLAG_POSITION*)UserData)->player,
-		xPos<<TILE_SHIFT, yPos<<TILE_SHIFT);
+		world_coord(xPos), world_coord(yPos));
 
 	//deselect it
 	((FLAG_POSITION*)UserData)->selected = FALSE;
@@ -2020,8 +2020,8 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 		{
 			CONPRINTF(ConsoleString, (ConsoleString,
 			          "%s - Damage %d%% - ID %d - kills %d, %s - order %d - action %d - sensor range %hu power %hu - ECM %u",
-			          droidGetName(psDroid), 100 - PERCENT(psDroid->body, psDroid->originalBody), psDroid->id, 
-			          psDroid->numKills / 100, getDroidLevelName(psDroid), psDroid->order, psDroid->action, psDroid->sensorRange, 
+			          droidGetName(psDroid), 100 - PERCENT(psDroid->body, psDroid->originalBody), psDroid->id,
+			          psDroid->numKills / 100, getDroidLevelName(psDroid), psDroid->order, psDroid->action, psDroid->sensorRange,
 			          psDroid->sensorPower, psDroid->ECMMod));
 			FeedbackClickedOn();
 		}
@@ -2800,8 +2800,9 @@ void dealWithRMB( void )
 						psStructure = findDeliveryFactory((FLAG_POSITION *)psLocation);
 						if (psStructure)
 						{
-							setViewPos(psStructure->x >> TILE_SHIFT,
-								psStructure->y >> TILE_SHIFT,TRUE);
+							setViewPos(map_coord(psStructure->x),
+							           map_coord(psStructure->y),
+							           TRUE);
 						}
 					}
 					break;

@@ -777,7 +777,7 @@ static BOOL fpathVisCallback(SDWORD x, SDWORD y, SDWORD dist)
 		return FALSE;
 	}
 
-	if (fpathBlockingTile(x>>TILE_SHIFT,y>>TILE_SHIFT))
+	if (fpathBlockingTile(map_coord(x), map_coord(y)))
 	{
 		// found an obstruction
 		obstruction = TRUE;
@@ -792,10 +792,10 @@ static BOOL fpathVisCallback(SDWORD x, SDWORD y, SDWORD dist)
 BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
 {
 	// convert to world coords
-	x1 = (x1 << TILE_SHIFT) + TILE_UNITS/2;
-	y1 = (y1 << TILE_SHIFT) + TILE_UNITS/2;
-	x2 = (x2 << TILE_SHIFT) + TILE_UNITS/2;
-	y2 = (y2 << TILE_SHIFT) + TILE_UNITS/2;
+	x1 = world_coord(x1) + TILE_UNITS / 2;
+	y1 = world_coord(y1) + TILE_UNITS / 2;
+	x2 = world_coord(x2) + TILE_UNITS / 2;
+	y2 = world_coord(y2) + TILE_UNITS / 2;
 
 	// Initialise the callback variables
 	finalX = x2;
@@ -864,8 +864,11 @@ BOOL fpathAStarRoute(ASTAR_ROUTE *psRoutePoints,
 	astarOuter=0;
 	astarRemove=0;*/
 
-	tileSX = sx >> TILE_SHIFT; tileSY = sy >> TILE_SHIFT;
-	tileFX = fx >> TILE_SHIFT; tileFY = fy >> TILE_SHIFT;
+	tileSX = map_coord(sx);
+	tileSY = map_coord(sy);
+
+	tileFX = map_coord(fx);
+	tileFY = map_coord(fy);
 
 	// Add the start point to the open list
 	psCurr = fpathNewNode(tileSX,tileSY, 0, NULL);
@@ -1004,9 +1007,9 @@ BOOL fpathAStarRoute(ASTAR_ROUTE *psRoutePoints,
 			if (index < numPoints)
 			{
 				psMoveCntl->MovementList[index].XCoordinate =
-					(psCurr->x << TILE_SHIFT) + TILE_UNITS/2;
+					world_coord(psCurr->x) + TILE_UNITS/2;
 				psMoveCntl->MovementList[index].YCoordinate =
-					(psCurr->y << TILE_SHIFT) + TILE_UNITS/2;
+					world_coord(psCurr->y) + TILE_UNITS/2;
 			}
 			index -= 1;
 			psCurr = psCurr->psRoute;
@@ -1051,8 +1054,11 @@ static 	FP_NODE		*psNearest, *psRoute;
 	astarOuter=0;
 	astarRemove=0;*/
 
-	tileSX = sx >> TILE_SHIFT; tileSY = sy >> TILE_SHIFT;
-	tileFX = fx >> TILE_SHIFT; tileFY = fy >> TILE_SHIFT;
+	tileSX = map_coord(sx);
+	tileSY = map_coord(sy);
+
+	tileFX = map_coord(fx);
+	tileFY = map_coord(fy);
 
 	if (routeMode == ASR_NEWROUTE)
 	{
@@ -1106,7 +1112,7 @@ static 	FP_NODE		*psNearest, *psRoute;
 			   5  6  7
 			     \|/
 			   4 -I- 0
-			     /|\  
+			     /|\
 			   3  2  1
 			   odd:orthogonal-adjacent tiles even:non-orthogonal-adjacent tiles
 			   odd ones get extra 4 units(1.414 times) of distance/costs
@@ -1198,8 +1204,8 @@ static 	FP_NODE		*psNearest, *psRoute;
 //		!((psNearest->x == tileSX) && (psNearest->y == tileSY)))
 	{
 		psRoute = psNearest;
-		fx = (psNearest->x << TILE_SHIFT) + TILE_UNITS/2;
-		fy = (psNearest->y << TILE_SHIFT) + TILE_UNITS/2;
+		fx = world_coord(psNearest->x) + TILE_UNITS / 2;
+		fy = world_coord(psNearest->y) + TILE_UNITS / 2;
 		retval = ASR_NEAREST;
 	}
 

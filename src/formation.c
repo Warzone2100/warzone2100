@@ -473,7 +473,7 @@ static void formationFindFree(FORMATION *psFormation, BASE_OBJECT *psObj,
 			{
 				// calculate the position on the line
 				formationCalcPos(psFormation, line, currDist+objRadius, &x,&y);
-				if (fpathBlockingTile(x>>TILE_SHIFT,y>>TILE_SHIFT))
+				if (fpathBlockingTile(map_coord(x), map_coord(y)))
 				{
 					// blocked, try the next rank
 					found = FALSE;
@@ -825,8 +825,8 @@ BOOL formationGetPos( FORMATION *psFormation, BASE_OBJECT *psObj,
 	}
 
 	// check the unit can get to the formation position
-	if ( bCheckLOS && !fpathTileLOS(psObj->x >> TILE_SHIFT,psObj->y >> TILE_SHIFT,
-									x >> TILE_SHIFT,y >> TILE_SHIFT))
+	if ( bCheckLOS && !fpathTileLOS(map_coord(psObj->x), map_coord(psObj->y),
+									map_coord(x), map_coord(y)))
 	{
 		return FALSE;
 	}

@@ -291,7 +291,7 @@ BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y)
 		}
 
 		/* approaching cliff face; block if below it */
-		iLiftHeight = (SDWORD) map_Height( x<<TILE_SHIFT, y<<TILE_SHIFT ) -
+		iLiftHeight = (SDWORD) map_Height(world_coord(x), world_coord(y)) -
 					  (SDWORD) map_Height( g_psObjRoute->x, g_psObjRoute->y );
 		if ( iLiftHeight > iBlockingHeight )
 		{
@@ -335,8 +335,8 @@ static SDWORD fpathDistToTile(SDWORD tileX,SDWORD tileY, SDWORD pointX, SDWORD p
 	SDWORD	tx,ty;
 
 	// get the difference in tile coords
-	xdiff = tileX - (pointX >> TILE_SHIFT);
-	ydiff = tileY - (pointY >> TILE_SHIFT);
+	xdiff = tileX - map_coord(pointX);
+	ydiff = tileY - map_coord(pointY);
 
 	ASSERT( (xdiff >= -1 && xdiff <= 1 && ydiff >= -1 && ydiff <= 1),
 		"fpathDistToTile: points are more than one tile apart" );
@@ -408,7 +408,7 @@ static BOOL fpathEndPointCallback(SDWORD x, SDWORD y, SDWORD dist)
 	}
 
 	// note the last clear tile
-	if (!fpathBlockingTile(x>>TILE_SHIFT,y>>TILE_SHIFT))
+	if (!fpathBlockingTile(map_coord(x), map_coord(y)))
 	{
 		clearX = (x & ~TILE_MASK) + TILE_UNITS/2;
 		clearY = (y & ~TILE_MASK) + TILE_UNITS/2;
@@ -444,8 +444,8 @@ void fpathSetDirectRoute( BASE_OBJECT *psObj, SDWORD targetX, SDWORD targetY )
 //		psMoveCntl->MovementList[1].XCoordinate = -1;
 //		psMoveCntl->MovementList[1].YCoordinate = -1;
 		psMoveCntl->numPoints = 1;
-		psMoveCntl->asPath[0].x = (UBYTE)(targetX >> TILE_SHIFT);
-		psMoveCntl->asPath[0].y = (UBYTE)(targetY >> TILE_SHIFT);
+		psMoveCntl->asPath[0].x = map_coord(targetX);
+		psMoveCntl->asPath[0].y = map_coord(targetY);
 	}
 }
 

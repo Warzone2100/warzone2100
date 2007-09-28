@@ -199,8 +199,8 @@ void	processParticle( ATPART *psPart )
 				psPart->status = APS_INACTIVE;
 				if(psPart->type == AP_RAIN)
 				{
-					x = (MAKEINT(psPart->position.x))>>TILE_SHIFT;
-					y = (MAKEINT(psPart->position.z))>>TILE_SHIFT;
+					x = map_coord(psPart->position.x);
+					y = map_coord(psPart->position.z);
 					psTile = mapTile(x,y);
 					if(TERRAIN_TYPE(psTile) == TER_WATER && TEST_TILE_VISIBLE(selectedPlayer,psTile))
 					{
@@ -350,8 +350,8 @@ void	renderParticle( ATPART *psPart )
 	/* Scale it... */
 	pie_MatScale(psPart->size);
 	/* Draw it... */
-	centreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
-	centreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
+	centreX = player.p.x + world_coord(visibleXTiles / 2);
+	centreZ = player.p.z + world_coord(visibleYTiles / 2);
 	brightness = lightDoFogAndIllumination(pie_MAX_BRIGHT_LEVEL,centreX - x,centreZ - z, &specular);
    	pie_Draw3DShape(psPart->imd, 0, 0, brightness, 0, pie_NO_BILINEAR, 0);
 	iV_MatrixEnd();

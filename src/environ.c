@@ -260,19 +260,19 @@ extern UDWORD map_MistValue(UDWORD x, UDWORD y)
 	UDWORD tileX, tileY, tileYOffset;
 	SDWORD h0, hx, hy, hxy;
 	SDWORD dx, dy, ox, oy;
-/*	ASSERT( x < (mapWidth << TILE_SHIFT),
+/*	ASSERT( x < world_coord(mapWidth),
 		"mapHeight: x coordinate bigger than map width" );
-	ASSERT( y < (mapHeight<< TILE_SHIFT),
+	ASSERT( y < world_coord(mapHeight),
 		"mapHeight: y coordinate bigger than map height" );
 */
     x = x > SDWORD_MAX ? 0 : x;//negative SDWORD passed as UDWORD
-    x = x >= (mapWidth << TILE_SHIFT) ? ((mapWidth-1) << TILE_SHIFT) : x;
+    x = x >= world_coord(mapWidth) ? world_coord(mapWidth - 1) : x;
     y = y > SDWORD_MAX ? 0 : y;//negative SDWORD passed as UDWORD
-	y = y >= (mapHeight << TILE_SHIFT) ? ((mapHeight-1) << TILE_SHIFT) : y;
+	y = y >= world_coord(mapHeight) ? world_coord(mapHeight - 1) : y;
 
 	/* Tile comp */
-	tileX = x >> TILE_SHIFT;
-	tileY = y >> TILE_SHIFT;
+	tileX = map_coord(x);
+	tileY = map_coord(y);
 
 	/* Inter tile comp */
 	ox = map_round(x);
@@ -286,8 +286,8 @@ extern UDWORD map_MistValue(UDWORD x, UDWORD y)
 
 	tileYOffset = (tileY * mapWidth);
 
-//	ox = (SDWORD)x - (SDWORD)(tileX << TILE_SHIFT);
-//	oy = (SDWORD)y - (SDWORD)(tileY << TILE_SHIFT);
+//	ox = (SDWORD)x - world_coord(tileX);
+//	oy = (SDWORD)y - world_coord(tileY);
 
 	ASSERT( ox < TILE_UNITS, "mapHeight: x offset too big" );
 	ASSERT( oy < TILE_UNITS, "mapHeight: y offset too big" );

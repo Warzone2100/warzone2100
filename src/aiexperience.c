@@ -765,7 +765,7 @@ SDWORD GetBaseDefendLocIndex(SDWORD x, SDWORD y, SDWORD nPlayer)
 {
 	UDWORD	i,range;
 
-	range  = SAME_LOC_RANGE << TILE_SHIFT;		//in world units
+	range  = world_coord(SAME_LOC_RANGE);		//in world units
 
 	for(i=0; i < MAX_BASE_DEFEND_LOCATIONS; i++)
 	{
@@ -847,7 +847,7 @@ void BaseExperienceDebug(SDWORD nPlayer)
 	printf_console("-------------");
 	for(i=0; i< MAX_BASE_DEFEND_LOCATIONS; i++)
 	{
-		printf_console("%d) %d - %d (%d)",i,baseDefendLocation[nPlayer][i][0] >> TILE_SHIFT ,baseDefendLocation[nPlayer][i][1] >> TILE_SHIFT, baseDefendLocPrior[nPlayer][i] );
+		printf_console("%d) %d - %d (%d)", i, map_coord(baseDefendLocation[nPlayer][i][0]), map_coord(baseDefendLocation[nPlayer][i][1]), baseDefendLocPrior[nPlayer][i]);
 	}
 	printf_console("-------------");
 }
@@ -859,7 +859,7 @@ void OilExperienceDebug(SDWORD nPlayer)
 	printf_console("-------------");
 	for(i=0; i< MAX_OIL_DEFEND_LOCATIONS; i++)
 	{
-		printf_console("%d) %d - %d (%d)",i,oilDefendLocation[nPlayer][i][0] >> TILE_SHIFT ,oilDefendLocation[nPlayer][i][1] >> TILE_SHIFT, oilDefendLocPrior[nPlayer][i] );
+		printf_console("%d) %d - %d (%d)", i, map_coord(oilDefendLocation[nPlayer][i][0]), map_coord(oilDefendLocation[nPlayer][i][1]), oilDefendLocPrior[nPlayer][i]);
 	}
 	printf_console("-------------");
 }
@@ -916,7 +916,7 @@ SDWORD GetOilDefendLocIndex(SDWORD x, SDWORD y, SDWORD nPlayer)
 {
 	UDWORD	i,range;
 
-	range  = SAME_LOC_RANGE << TILE_SHIFT;		//in world units
+	range  = world_coord(SAME_LOC_RANGE);		//in world units
 
 	for(i=0; i < MAX_OIL_DEFEND_LOCATIONS; i++)
 	{

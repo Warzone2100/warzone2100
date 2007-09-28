@@ -105,16 +105,15 @@ audio_ObjectDead( void * psObj )
 
 /***************************************************************************/
 
-void
-audio_Get3DPlayerPos( SDWORD *piX, SDWORD *piY, SDWORD *piZ )
+void audio_Get3DPlayerPos(SDWORD *piX, SDWORD *piY, SDWORD *piZ)
 {
 	/* player's y and z interchanged */
-	*piX = player.p.x + ((visibleXTiles/2) << TILE_SHIFT);
-	*piY = player.p.z + ((visibleYTiles/2) << TILE_SHIFT);
+	*piX = player.p.x + world_coord(visibleXTiles / 2);
+	*piY = player.p.z + world_coord(visibleYTiles / 2);
 	*piZ = player.p.y;
 
 	/* invert y to match QSOUND axes */
-	*piY = (GetHeightOfMap() << TILE_SHIFT) - *piY;
+	*piY = world_coord(GetHeightOfMap()) - *piY;
 }
 
 /***************************************************************************/
@@ -137,21 +136,17 @@ audio_Get3DPlayerRotAboutVerticalAxis( SDWORD *piA )
  */
 /***************************************************************************/
 
-void
-audio_GetStaticPos( SDWORD iWorldX, SDWORD iWorldY,
-					SDWORD *piX, SDWORD *piY, SDWORD *piZ )
+void audio_GetStaticPos(SDWORD iWorldX, SDWORD iWorldY, SDWORD *piX, SDWORD *piY, SDWORD *piZ)
 {
 	*piX = iWorldX;
-	*piZ = map_TileHeight( iWorldX >> TILE_SHIFT,
-						   iWorldY >> TILE_SHIFT );
+	*piZ = map_TileHeight(map_coord(iWorldX), map_coord(iWorldY));
 	/* invert y to match QSOUND axes */
-	*piY = (GetHeightOfMap() << TILE_SHIFT) - iWorldY;
+	*piY = world_coord(GetHeightOfMap()) - iWorldY;
 }
 
 /***************************************************************************/
 
-void
-audio_GetObjectPos( void *psObj, SDWORD *piX, SDWORD *piY, SDWORD *piZ )
+void audio_GetObjectPos(void *psObj, SDWORD *piX, SDWORD *piY, SDWORD *piZ)
 {
 	BASE_OBJECT	*psBaseObj = (BASE_OBJECT *) psObj;
 
@@ -160,11 +155,10 @@ audio_GetObjectPos( void *psObj, SDWORD *piX, SDWORD *piY, SDWORD *piZ )
 			"audio_GetObjectPos: game object pointer invalid\n" );
 
 	*piX = psBaseObj->x;
-	*piZ = map_TileHeight( psBaseObj->x >> TILE_SHIFT,
-						   psBaseObj->y >> TILE_SHIFT );
+	*piZ = map_TileHeight(map_coord(psBaseObj->x), map_coord(psBaseObj->y));
 
 	/* invert y to match QSOUND axes */
-	*piY = (GetHeightOfMap() << TILE_SHIFT) - psBaseObj->y;
+	*piY = world_coord(GetHeightOfMap()) - psBaseObj->y;
 }
 
 /***************************************************************************/

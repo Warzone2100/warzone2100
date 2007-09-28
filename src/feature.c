@@ -314,8 +314,8 @@ void setFeatTileDraw(FEATURE *psFeat)
 	FEATURE_STATS	*psStats = psFeat->psStats;
 	UDWORD			width,breadth, mapX,mapY;
 
-	mapX = (psFeat->x >> TILE_SHIFT) - (psStats->baseWidth/2);
-	mapY = (psFeat->y >> TILE_SHIFT) - (psStats->baseBreadth/2);
+	mapX = map_coord(psFeat->x) - psStats->baseWidth / 2;
+	mapY = map_coord(psFeat->y) - psStats->baseBreadth / 2;
 	if (!psStats->tileDraw)
 	{
 		for (width = 0; width < psStats->baseWidth; width++)
@@ -350,8 +350,8 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	addFeature(psFeature);
 
 	// get the terrain average height
-	startX = x >> TILE_SHIFT;
-	startY = y >> TILE_SHIFT;
+	startX = map_coord(x);
+	startY = map_coord(y);
 	foundationMin = TILE_MAX_HEIGHT;
 	foundationMax = TILE_MIN_HEIGHT;
 	for (breadth = 0; breadth < psStats->baseBreadth; breadth++)
@@ -440,11 +440,11 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	//load into the map data
 
 	if(FromSave) {
-		mapX = (x >> TILE_SHIFT) - (psStats->baseWidth/2);
-		mapY = (y >> TILE_SHIFT) - (psStats->baseBreadth/2);
+		mapX = map_coord(x) - psStats->baseWidth / 2;
+		mapY = map_coord(y) - psStats->baseBreadth / 2;
 	} else {
-		mapX = x >> TILE_SHIFT;
-		mapY = y >> TILE_SHIFT;
+		mapX = map_coord(x);
+		mapY = map_coord(y);
 	}
 
 	// set up the imd for the feature
@@ -585,8 +585,8 @@ void removeFeature(FEATURE *psDel)
 
 
 	//remove from the map data
-	mapX = (psDel->x - psDel->psStats->baseWidth * TILE_UNITS / 2) >> TILE_SHIFT;
-	mapY = (psDel->y - psDel->psStats->baseBreadth * TILE_UNITS / 2) >> TILE_SHIFT;
+	mapX = map_coord(psDel->x - psDel->psStats->baseWidth * TILE_UNITS / 2);
+	mapY = map_coord(psDel->y - psDel->psStats->baseBreadth * TILE_UNITS / 2);
 	for (width = 0; width < psDel->psStats->baseWidth; width++)
 	{
 		for (breadth = 0; breadth < psDel->psStats->baseBreadth; breadth++)
@@ -637,19 +637,19 @@ void removeFeature(FEATURE *psDel)
 	//struct FEATURE in its place - ?!
 	if (psDel->psStats->subType == FEAT_BUILDING)
 	{
-		mapX = (psDel->x - psDel->psStats->baseWidth * TILE_UNITS / 2) >> TILE_SHIFT;
-		mapY = (psDel->y - psDel->psStats->baseBreadth * TILE_UNITS / 2) >> TILE_SHIFT;
+		mapX = map_coord(psDel->x - psDel->psStats->baseWidth * TILE_UNITS / 2);
+		mapY = map_coord(psDel->y - psDel->psStats->baseBreadth * TILE_UNITS / 2);
 		/*for (width = 0; width < psDel->psStats->baseWidth; width++)
 		{
 			for (breadth = 0; breadth < psDel->psStats->baseBreadth; breadth++)
 			{
 				buildFeature((asFeatureStats + structFeature),
-						(mapX+width) << TILE_SHIFT, (mapY+breadth) << TILE_SHIFT, FALSE);
+						world_coord(mapX + width), world_coord(mapY + breadth), FALSE);
 			}
 		}*/
 
-//		buildFeature((asFeatureStats + structFeature), mapX << TILE_SHIFT,
-//			mapY << TILE_SHIFT, FALSE);
+//		buildFeature((asFeatureStats + structFeature), world_coord(mapX),
+//			world_coord(mapY), FALSE);
 	}
 
 }
@@ -707,8 +707,8 @@ void destroyFeature(FEATURE *psDel)
 
 			// ----- Flip all the tiles under the skyscraper to a rubble tile
 			// smoke effect should disguise this happening
-			mapX = (psDel->x - psDel->psStats->baseWidth * TILE_UNITS / 2) >> TILE_SHIFT;
-			mapY = (psDel->y - psDel->psStats->baseBreadth * TILE_UNITS / 2) >> TILE_SHIFT;
+			mapX = map_coord(psDel->x - psDel->psStats->baseWidth * TILE_UNITS / 2);
+			mapY = map_coord(psDel->y - psDel->psStats->baseBreadth * TILE_UNITS / 2);
 //			if(psDel->sDisplay.imd->ymax>300)
 			if (psDel->psStats->subType == FEAT_SKYSCRAPER)
 			{
@@ -801,8 +801,8 @@ FEATURE	* checkForWreckage(DROID *psDroid)
 	UDWORD		startX, startY, incX, incY;
 	SDWORD		x=0, y=0;
 
-	startX = psDroid->x >> TILE_SHIFT;
-	startY = psDroid->y >> TILE_SHIFT;
+	startX = map_coord(psDroid->x);
+	startY = map_coord(psDroid->y);
 
 	//look around the droid - max 2 tiles distance
 	for (incX = 1, incY = 1; incX < WRECK_SEARCH; incX++, incY++)

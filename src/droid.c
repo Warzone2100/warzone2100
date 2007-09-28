@@ -614,8 +614,8 @@ void destroyDroid(DROID *psDel)
 		UDWORD width,breadth;
 		MAPTILE	*psTile;
 
-		mapX = (psDel->x ) >> TILE_SHIFT;
-		mapY = (psDel->y ) >> TILE_SHIFT;
+		mapX = map_coord(psDel->x);
+		mapY = map_coord(psDel->y);
 		for (width = mapX-1; width <= mapX+1; width++)
 		{
 			for (breadth = mapY-1; breadth <= mapY+1; breadth++)
@@ -1143,8 +1143,8 @@ static BOOL droidNextToStruct(DROID *psDroid, BASE_OBJECT *psStruct)
 
 	CHECK_DROID(psDroid);
 
-	minX = (SDWORD)(psDroid->x >> TILE_SHIFT)-1;
-	y = (SDWORD)(psDroid->y >> TILE_SHIFT)-1;
+	minX = map_coord(psDroid->x) - 1;
+	y = map_coord(psDroid->y) - 1;
 	maxX = minX + 2;
 	maxY = y + 2;
 	if (minX < 0)
@@ -1324,7 +1324,7 @@ static void addConstructorEffect(STRUCTURE *psStruct)
 		widthRange = (psStruct->pStructureType->baseWidth*TILE_UNITS)/4;
 		breadthRange = (psStruct->pStructureType->baseBreadth*TILE_UNITS)/4;
 		temp.x = psStruct->x+((rand()%(2*widthRange)) - widthRange);
-		temp.y = map_TileHeight(psStruct->x>>TILE_SHIFT, psStruct->y>>TILE_SHIFT)+
+		temp.y = map_TileHeight(map_coord(psStruct->x), map_coord(psStruct->y))+
 						((psStruct->sDisplay.imd->ymax)/6);
 		temp.z = psStruct->y+((rand()%(2*breadthRange)) - breadthRange);
 //FIXFX				addExplosion(&temp,TYPE_EXPLOSION_SMOKE_CLOUD,NULL);
@@ -1439,10 +1439,10 @@ BOOL droidUpdateBuild(DROID *psDroid)
 	{
 		//set the illumination of the tiles back to original value as building is completed
 
-		mapX = (psStruct->x - psStruct->pStructureType->baseWidth *
-			TILE_UNITS / 2) >> TILE_SHIFT;
-		mapY = (psStruct->y - psStruct->pStructureType->baseBreadth *
-			TILE_UNITS / 2) >> TILE_SHIFT;
+		mapX = map_coord(psStruct->x - psStruct->pStructureType->baseWidth *
+			TILE_UNITS / 2);
+		mapY = map_coord(psStruct->y - psStruct->pStructureType->baseBreadth *
+			TILE_UNITS / 2);
 
 		for (i = 0; i < psStruct->pStructureType->baseWidth+1; i++)
 		{
@@ -1503,10 +1503,10 @@ BOOL droidUpdateBuild(DROID *psDroid)
 
 
 		//only play the sound if selected player
-		if ((psStruct->player == selectedPlayer) &&
-			(psDroid->order != DORDER_LINEBUILD ||
-			(psDroid->orderX >> TILE_SHIFT == psDroid->orderX2 >> TILE_SHIFT &&
-			 psDroid->orderY >> TILE_SHIFT == psDroid->orderY2 >> TILE_SHIFT)))
+		if (psStruct->player == selectedPlayer
+		 && (psDroid->order != DORDER_LINEBUILD
+		  || (map_coord(psDroid->orderX) == map_coord(psDroid->orderX2)
+		   && map_coord(psDroid->orderY) == map_coord(psDroid->orderY2))))
 		{
 			audio_QueueTrackPos( ID_SOUND_STRUCTURE_COMPLETED,
 					psStruct->x, psStruct->y, psStruct->z );
@@ -1540,7 +1540,7 @@ BOOL droidUpdateBuild(DROID *psDroid)
 //				widthRange = (psStruct->pStructureType->baseWidth*TILE_UNITS)/3;
 //				breadthRange = (psStruct->pStructureType->baseBreadth*TILE_UNITS)/3;
 //				temp.x = psStruct->x+((rand()%(2*widthRange)) - widthRange);
-//				temp.y = map_TileHeight(psStruct->x>>TILE_SHIFT, psStruct->y>>TILE_SHIFT)+
+//				temp.y = map_TileHeight(map_coord(psStruct->x), map_coord(psStruct->y))+
 //								((psStruct->sDisplay.imd->ymax)/2);
 //				temp.z = psStruct->y+((rand()%(2*breadthRange)) - breadthRange);
 ////FIXFX				addExplosion(&temp,TYPE_EXPLOSION_SMOKE_CLOUD,NULL);
@@ -3739,7 +3739,7 @@ FLAG_POSITION	*psFlagPos;
 				if(getWarCamStatus())
 				{
 					camToggleStatus();			 // messy - fix this
-			//		setViewPos(psCentreDroid->x>>TILE_SHIFT,psCentreDroid->y>>TILE_SHIFT);
+			//		setViewPos(map_coord(psCentreDroid->x), map_coord(psCentreDroid->y));
 					processWarCam(); //odd, but necessary
 					camToggleStatus();				// messy - FIXME
 				}
@@ -3748,7 +3748,7 @@ FLAG_POSITION	*psFlagPos;
 				{
 	//				camToggleStatus();
 					/* Centre display on him if warcam isn't active */
-					setViewPos(psCentreDroid->x>>TILE_SHIFT,psCentreDroid->y>>TILE_SHIFT,TRUE);
+					setViewPos(map_coord(psCentreDroid->x), map_coord(psCentreDroid->y), TRUE);
 				}
 
 			}
@@ -4296,9 +4296,9 @@ BOOL noDroid(UDWORD x, UDWORD y)
 	{
 		for(pD = apsDroidLists[i]; pD ; pD= pD->psNext)
 		{
-			if((UDWORD)(pD->x >> TILE_SHIFT) == x)
+			if (map_coord(pD->x) == x)
 			{
-				if((UDWORD)(pD->y >> TILE_SHIFT) == y)
+				if (map_coord(pD->y) == y)
 				{
 					return FALSE;
 				}
@@ -4320,9 +4320,9 @@ static BOOL oneDroid(UDWORD x, UDWORD y)
 	{
 		for(pD = apsDroidLists[i]; pD ; pD= pD->psNext)
 		{
-			if((UDWORD)(pD->x >> TILE_SHIFT) == x)
+			if (map_coord(pD->x) == x)
 			{
-				if((UDWORD)(pD->y >> TILE_SHIFT) == y)
+				if (map_coord(pD->y) == y)
 				{
 					if (bFound)
 					{
@@ -4496,7 +4496,7 @@ UDWORD	passes;
 				if(i==startX || i==endX || j==startY || j==endY)
 				{
 					/* Good enough? */
-					if(function(i,j) && ((threatRange <=0) || (!ThreatInRange(player, threatRange, i << TILE_SHIFT, j << TILE_SHIFT, FALSE))))		//TODO: vtols check really not needed?
+					if(function(i,j) && ((threatRange <=0) || (!ThreatInRange(player, threatRange, world_coord(i), world_coord(j), FALSE))))		//TODO: vtols check really not needed?
 					{
 						/* Set exit conditions and get out NOW */
 						*x = i;	*y = j;
@@ -4838,8 +4838,8 @@ void setUpBuildModule(DROID *psDroid)
 	UDWORD		tileX, tileY;
 	STRUCTURE	*psStruct;
 
-	tileX = psDroid->orderX >> TILE_SHIFT;
-	tileY = psDroid->orderY >> TILE_SHIFT;
+	tileX = map_coord(psDroid->orderX);
+	tileY = map_coord(psDroid->orderY);
 
 	//check not another Truck started
 	psStruct = getTileStructure(tileX,tileY);

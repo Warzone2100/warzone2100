@@ -714,9 +714,10 @@ static void actionAddVtolAttackRun( DROID *psDroid )
 		iY = psTarget->y;
 	}
 
-	if ( iX<=0 || iY<=0 ||
-		 iX>(SDWORD)(GetWidthOfMap()<<TILE_SHIFT) ||
-		 iY>(SDWORD)(GetHeightOfMap()<<TILE_SHIFT)   )
+	if (iX <= 0
+	 || iY<=0
+	 || iX > world_coord(GetWidthOfMap())
+	 || iY > world_coord(GetHeightOfMap()))
 	{
 		debug( LOG_NEVER, "*** actionAddVtolAttackRun: run off map! ***\n" );
 	}
@@ -922,8 +923,8 @@ BOOL actionReachedBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psSta
 	// do all calculations in half tile units so that
 	// the droid moves to within half a tile of the target
 	// NOT ANY MORE - JOHN
-	dx = (SDWORD)(psDroid->x >> (TILE_SHIFT));
-	dy = (SDWORD)(psDroid->y >> (TILE_SHIFT));
+	dx = map_coord(psDroid->x);
+	dy = map_coord(psDroid->y);
 
 	if (StatIsStructure(psStats))
 	{
@@ -936,8 +937,8 @@ BOOL actionReachedBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psSta
 		breadth = ((FEATURE_STATS *)psStats)->baseBreadth;
 	}
 
-	tx = x >> (TILE_SHIFT);
-	ty = y >> (TILE_SHIFT);
+	tx = map_coord(x);
+	ty = map_coord(y);
 
 	// move the x,y to the top left of the structure
 	tx -= width/2;
@@ -971,8 +972,8 @@ BOOL actionDroidOnBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psSta
 
 	CHECK_DROID(psDroid);
 
-	dx = (SDWORD)(psDroid->x >> (TILE_SHIFT));
-	dy = (SDWORD)(psDroid->y >> (TILE_SHIFT));
+	dx = map_coord(psDroid->x);
+	dy = map_coord(psDroid->y);
 	if (StatIsStructure(psStats))
 	{
 		width = ((STRUCTURE_STATS *)psStats)->baseWidth;
@@ -984,11 +985,13 @@ BOOL actionDroidOnBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psSta
 		breadth = ((FEATURE_STATS *)psStats)->baseBreadth;
 	}
 
-	tx = (x >> (TILE_SHIFT)) - (width/2);
-	ty = (y >> (TILE_SHIFT)) - (breadth/2);
+	tx = map_coord(x) - (width / 2);
+	ty = map_coord(y) - (breadth / 2);
 
-	if ( (dx >= tx) && (dx < tx+width) &&
-		 (dy >= ty) && (dy < ty+breadth) )
+	if (dx >= tx
+	 && dx < tx + width
+	 && dy >= ty
+	 && dy < ty + breadth)
 	{
 		return TRUE;
 	}
@@ -1954,10 +1957,10 @@ void actionUpdateDroid(DROID *psDroid)
 					debug( LOG_NEVER, "DACTION_MOVETOBUILD: setUpBuildModule\n");
 					setUpBuildModule(psDroid);
 				}
-				else if ( TILE_HAS_STRUCTURE(mapTile(psDroid->orderX >> TILE_SHIFT, psDroid->orderY >> TILE_SHIFT)) )
+				else if (TILE_HAS_STRUCTURE(mapTile(map_coord(psDroid->orderX), map_coord(psDroid->orderY))))
 				{
 					// structure on the build location - see if it is the same type
-					psStruct = getTileStructure(psDroid->orderX >> TILE_SHIFT, psDroid->orderY >> TILE_SHIFT);
+					psStruct = getTileStructure(map_coord(psDroid->orderX), map_coord(psDroid->orderY));
 					if (psStruct->pStructureType == (STRUCTURE_STATS *)psDroid->psTarStats[0])
 					{
 						// same type - do a help build
@@ -1985,7 +1988,10 @@ void actionUpdateDroid(DROID *psDroid)
 					}
 				}
 				else if (!validLocation((BASE_STATS*)psDroid->psTarStats[0],
-					tlx >> TILE_SHIFT, tly >> TILE_SHIFT, psDroid->player, FALSE))
+				                        map_coord(tlx),
+				                        map_coord(tly),
+				                        psDroid->player,
+				                        FALSE))
 				{
 					debug( LOG_NEVER, "DACTION_MOVETOBUILD: !validLocation\n");
 					psDroid->action = DACTION_NONE;
@@ -2002,15 +2008,15 @@ void actionUpdateDroid(DROID *psDroid)
 					psStructStats->type == REF_DEFENSE))
 			{
 				// building a wall.
-				psTile = mapTile(psDroid->orderX>>TILE_SHIFT, psDroid->orderY>>TILE_SHIFT);
-				if ((psDroid->psTarget[0] == NULL) &&
-				(TILE_HAS_STRUCTURE(psTile) ||
-					TILE_HAS_FEATURE(psTile)))
+				psTile = mapTile(map_coord(psDroid->orderX), map_coord(psDroid->orderY));
+				if (psDroid->psTarget[0] == NULL
+				 && (TILE_HAS_STRUCTURE(psTile)
+				  || TILE_HAS_FEATURE(psTile)))
 				{
 					if (TILE_HAS_STRUCTURE(psTile))
 					{
 						// structure on the build location - see if it is the same type
-						psStruct = getTileStructure(psDroid->orderX >> TILE_SHIFT, psDroid->orderY >> TILE_SHIFT);
+						psStruct = getTileStructure(map_coord(psDroid->orderX), map_coord(psDroid->orderY));
 						if (psStruct->pStructureType == (STRUCTURE_STATS *)psDroid->psTarStats[0])
 						{
 							// same type - do a help build
@@ -2275,7 +2281,7 @@ void actionUpdateDroid(DROID *psDroid)
 	case DACTION_BUILD_FOUNDATION:
 		//building a structure's foundation - flattening the ground for now
 		{
-			psTile = mapTile(psDroid->orderX>>TILE_SHIFT, psDroid->orderY>>TILE_SHIFT);
+			psTile = mapTile(map_coord(psDroid->orderX), map_coord(psDroid->orderY));
 			psStructStats = (STRUCTURE_STATS*)psDroid->psTarStats[0];
 			tlx = (SDWORD)psDroid->orderX - (SDWORD)(psStructStats->baseWidth * TILE_UNITS)/2;
 			tly = (SDWORD)psDroid->orderY - (SDWORD)(psStructStats->baseBreadth * TILE_UNITS)/2;
@@ -2286,7 +2292,7 @@ void actionUpdateDroid(DROID *psDroid)
 				if (TILE_HAS_STRUCTURE(psTile))
 				{
 					// structure on the build location - see if it is the same type
-					psStruct = getTileStructure(psDroid->orderX >> TILE_SHIFT, psDroid->orderY >> TILE_SHIFT);
+					psStruct = getTileStructure(map_coord(psDroid->orderX), map_coord(psDroid->orderY));
 					if (psStruct->pStructureType == (STRUCTURE_STATS *)psDroid->psTarStats[0])
 					{
 						// same type - do a help build
@@ -2298,7 +2304,10 @@ void actionUpdateDroid(DROID *psDroid)
 					}
 				}
 				else if (!validLocation((BASE_STATS*)psDroid->psTarStats[0],
-					tlx >> TILE_SHIFT, tly >> TILE_SHIFT, psDroid->player, FALSE))
+				                        map_coord(tlx),
+				                        map_coord(tly),
+				                        psDroid->player,
+				                        FALSE))
 				{
 					psDroid->action = DACTION_NONE;
 				}
@@ -3144,8 +3153,8 @@ BOOL actionVTOLLandingPos(DROID *psDroid, UDWORD *px, UDWORD *py)
 	CHECK_DROID(psDroid);
 
 	/* Initial box dimensions and set iteration count to zero */
-	startX = endX = (SDWORD)*px >> TILE_SHIFT;
-	startY = endY = (SDWORD)*py >> TILE_SHIFT;
+	startX = endX = map_coord(*px);
+	startY = endY = map_coord(*py);
 	passes = 0;
 
 	// set blocking flags for all the other droids
@@ -3153,13 +3162,13 @@ BOOL actionVTOLLandingPos(DROID *psDroid, UDWORD *px, UDWORD *py)
 	{
 		if (DROID_STOPPED(psCurr))
 		{
-			tx = psCurr->x >> TILE_SHIFT;
-			ty = psCurr->y >> TILE_SHIFT;
+			tx = map_coord(psCurr->x);
+			ty = map_coord(psCurr->y);
 		}
 		else
 		{
-			tx = psCurr->sMove.DestinationX >> TILE_SHIFT;
-			ty = psCurr->sMove.DestinationY >> TILE_SHIFT;
+			tx = map_coord(psCurr->sMove.DestinationX);
+			ty = map_coord(psCurr->sMove.DestinationY);
 		}
 		if (psCurr != psDroid)
 		{
@@ -3187,8 +3196,8 @@ BOOL actionVTOLLandingPos(DROID *psDroid, UDWORD *px, UDWORD *py)
 					{
 						/* Set exit conditions and get out NOW */
 						debug( LOG_NEVER, "Unit %d landing pos (%d,%d)\n",psDroid->id, i,j);
-						*px = (i << TILE_SHIFT) + TILE_UNITS/2;
-						*py = (j << TILE_SHIFT) + TILE_UNITS/2;
+						*px = world_coord(i) + TILE_UNITS / 2;
+						*py = world_coord(j) + TILE_UNITS / 2;
 						result = TRUE;
 						goto exit;
 					}
@@ -3206,13 +3215,13 @@ exit:
 	{
 		if (DROID_STOPPED(psCurr))
 		{
-			tx = psCurr->x >> TILE_SHIFT;
-			ty = psCurr->y >> TILE_SHIFT;
+			tx = map_coord(psCurr->x);
+			ty = map_coord(psCurr->y);
 		}
 		else
 		{
-			tx = psCurr->sMove.DestinationX >> TILE_SHIFT;
-			ty = psCurr->sMove.DestinationY >> TILE_SHIFT;
+			tx = map_coord(psCurr->sMove.DestinationX);
+			ty = map_coord(psCurr->sMove.DestinationY);
 		}
         if (tileOnMap(tx, ty))
         {
