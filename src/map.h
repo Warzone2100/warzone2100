@@ -163,13 +163,6 @@ extern MAPTILE *psMapTiles;
 /* The number of units accross a tile */
 #define TILE_UNITS (1<<TILE_SHIFT)
 
-/* Make sure world coordinates are inside the map */
-#define CLIP_WORLD_OFFMAP(worldX, worldY) \
-	worldX = MAX(0, worldX); \
-	worldY = MAX(0, worldY); \
-	worldX = MIN((SDWORD)mapWidth << TILE_SHIFT, worldX); \
-	worldY = MIN((SDWORD)mapHeight << TILE_SHIFT, worldY);
-
 static inline UDWORD world_coord(UDWORD mapCoord)
 {
 	return mapCoord * TILE_UNITS;
@@ -178,6 +171,21 @@ static inline UDWORD world_coord(UDWORD mapCoord)
 static inline UDWORD map_coord(UDWORD worldCoord)
 {
 	return worldCoord / TILE_UNITS;
+}
+
+/* Make sure world coordinates are inside the map */
+/** Clip world coordinates to make sure they're inside the map's boundaries
+ *  \param worldX a pointer to a X coordinate inside the map
+ *  \param worldY a pointer to a Y coordinate inside the map
+ *  \post 0 <= *worldX <= world_coord(mapWidth) and
+ *        0 <= *worldy <= world_coord(mapHeight)
+ */
+static inline void clip_world_offmap(int* worldX, int* worldY)
+{
+	*worldX = MAX(0, *worldX);
+	*worldY = MAX(0, *worldY);
+	*worldX = MIN(world_coord(mapWidth), *worldX);
+	*worldY = MIN(world_coord(mapHeight), *worldY);
 }
 
 /* maps a position down to the corner of a tile */

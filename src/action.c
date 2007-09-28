@@ -807,7 +807,7 @@ static void actionUpdateTransporter( DROID *psDroid )
 	}
 
 
-	// check that the target has not become on the same side as psDroid, 
+	// check that the target has not become on the same side as psDroid,
 	// eg through Electronic Warfare
 	if (psDroid->psActionTarget[0] != NULL
 	    && psDroid->player == psDroid->psActionTarget[0]->player)
@@ -908,7 +908,7 @@ static void actionCalcPullBackPoint(BASE_OBJECT *psObj, BASE_OBJECT *psTarget, S
 	*py = (SDWORD)psObj->y + ydiff * PULL_BACK_DIST;
 
 	// make sure coordinates stay inside of the map
-	CLIP_WORLD_OFFMAP(*px, *py);
+	clip_world_offmap(px, py);
 }
 
 
