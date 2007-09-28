@@ -1946,10 +1946,10 @@ INT_RETVAL intRunWidgets(void)
 				{
 					// Send the droid off to build the structure assuming the droid
 					// can get to the location chosen
-					structX = (structX << TILE_SHIFT) + TILE_UNITS/2;
-					structY = (structY << TILE_SHIFT) + TILE_UNITS/2;
-					structX2 = (structX2 << TILE_SHIFT) + TILE_UNITS/2;
-					structY2 = (structY2 << TILE_SHIFT) + TILE_UNITS/2;
+					structX = world_coord(structX) + TILE_UNITS / 2;
+					structY = world_coord(structY) + TILE_UNITS / 2;
+					structX2 = world_coord(structX2) + TILE_UNITS / 2;
+					structY2 = world_coord(structY2) + TILE_UNITS / 2;
 
 					if(IsPlayerStructureLimitReached(selectedPlayer)) {
 						/* Nothing */
@@ -1998,8 +1998,8 @@ INT_RETVAL intRunWidgets(void)
 
 					// Send the droid off to build the structure assuming the droid
 					// can get to the location chosen
-//					structX = structX << TILE_SHIFT;
-//					structY = structY << TILE_SHIFT;
+//					structX = world_coord(structX);
+//					structY = world_coord(structY);
 					intCalcStructCenter((STRUCTURE_STATS *)psPositionStats, structX,structY,
 												&structX,&structY);
 
@@ -2096,13 +2096,13 @@ INT_RETVAL intRunWidgets(void)
 					psPositionStats->ref < REF_FEATURE_START + REF_RANGE)
 				{
 					buildFeature((FEATURE_STATS *)psPositionStats,
-								 structX<<TILE_SHIFT, structY<<TILE_SHIFT, FALSE);
+								 world_coord(structX), world_coord(structY), FALSE);
 				}
 				else if (psPositionStats->ref >= REF_TEMPLATE_START &&
 						 psPositionStats->ref < REF_TEMPLATE_START + REF_RANGE)
 				{
 					psDroid = buildDroid((DROID_TEMPLATE *)psPositionStats,
-								 (structX<<TILE_SHIFT)+TILE_UNITS/2, (structY<<TILE_SHIFT)+TILE_UNITS/2,
+								 world_coord(structX) + TILE_UNITS / 2, world_coord(structY) + TILE_UNITS / 2,
 								 selectedPlayer, FALSE);
 					if (psDroid)
 					{
@@ -3031,10 +3031,10 @@ static void intProcessStats(UDWORD id)
 void intSetMapPos(UDWORD x, UDWORD y)
 {
 	if(!driveModeActive()) {
-		setViewPos(x >> TILE_SHIFT, y >> TILE_SHIFT,TRUE);
+		setViewPos(map_coord(x), map_coord(y), TRUE);
 //		setPlayerPos((SDWORD)x, (SDWORD)y);
-		mapX = x >> TILE_SHIFT;
-		mapY = y >> TILE_SHIFT;
+		mapX = map_coord(x);
+		mapY = map_coord(y);
 	}
 }
 
@@ -6546,10 +6546,9 @@ static void intObjectRMBPressed(UDWORD id)
 				psStructure->pStructureType->type == REF_VTOL_FACTORY)
 			{
 				//centre the view on the delivery point
-				setViewPos(((FACTORY *)psStructure->pFunctionality)->
-					psAssemblyPoint->coords.x >> TILE_SHIFT,
-					((FACTORY *)psStructure->pFunctionality)->psAssemblyPoint->
-					coords.y >> TILE_SHIFT,TRUE);
+				setViewPos(map_coord(((FACTORY *)psStructure->pFunctionality)->psAssemblyPoint->coords.x),
+				           map_coord(((FACTORY *)psStructure->pFunctionality)->psAssemblyPoint->coords.y),
+				           TRUE);
 			}
 		}
 	}

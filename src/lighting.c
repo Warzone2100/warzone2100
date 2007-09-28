@@ -211,31 +211,31 @@ static void normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant)
 		{
 			if(quadrant==0)
 			{
-			 	corner1.x = (tileX+1)<<TILE_SHIFT;
-				corner1.y = tileY<<TILE_SHIFT;
+			 	corner1.x = world_coord(tileX + 1);
+				corner1.y = world_coord(tileY);
 				corner1.z = tileRight->height - rMod;
 
-				corner2.x = (tileX+1)<<TILE_SHIFT;
-				corner2.y = (tileY+1)<<TILE_SHIFT;
+				corner2.x = world_coord(tileX + 1);
+				corner2.y = world_coord(tileY + 1);
 				corner2.z = tileDownRight->height - drMod;
 
-				corner3.x = tileX<<TILE_SHIFT;
-				corner3.y = (tileY+1)<<TILE_SHIFT;
+				corner3.x = world_coord(tileX);
+				corner3.y = world_coord(tileY + 1);
 				corner3.z = tileDown->height - dMod;
 				pie_SurfaceNormal3iv(&corner1,&corner2,&corner3,&normals[numNormals++]);
 			}
 			else
 			{
-				corner1.x = tileX<<TILE_SHIFT;
-				corner1.y = tileY<<TILE_SHIFT;
+				corner1.x = world_coord(tileX);
+				corner1.y = world_coord(tileY);
 				corner1.z = psTile->height - nMod;
 
-				corner2.x = (tileX+1)<<TILE_SHIFT;
-				corner2.y = tileY<<TILE_SHIFT;
+				corner2.x = world_coord(tileX + 1);
+				corner2.y = world_coord(tileY);
 				corner2.z = tileRight->height - rMod;
 
-				corner3.x = tileX<<TILE_SHIFT;
-				corner3.y = (tileY+1)<<TILE_SHIFT;
+				corner3.x = world_coord(tileX);
+				corner3.y = world_coord(tileY + 1);
 				corner3.z = tileDown->height - dMod;
 				pie_SurfaceNormal3iv(&corner1,&corner2,&corner3,&normals[numNormals++]);
 			}
@@ -243,29 +243,29 @@ static void normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant)
 		else
 		{
 			/* Otherwise, it's not flipped and so two triangles*/
-			corner1.x = tileX<<TILE_SHIFT;
-			corner1.y = tileY<<TILE_SHIFT;
+			corner1.x = world_coord(tileX);
+			corner1.y = world_coord(tileY);
 			corner1.z = psTile->height - nMod;
 
-			corner2.x = (tileX+1)<<TILE_SHIFT;
-			corner2.y = tileY<<TILE_SHIFT;
+			corner2.x = world_coord(tileX + 1);
+			corner2.y = world_coord(tileY);
 			corner2.z = tileRight->height - rMod;
 
-			corner3.x = (tileX+1)<<TILE_SHIFT;
-			corner3.y = (tileY+1)<<TILE_SHIFT;
+			corner3.x = world_coord(tileX + 1);
+			corner3.y = world_coord(tileY + 1);
 			corner3.z = tileDownRight->height - drMod;
 			pie_SurfaceNormal3iv(&corner1,&corner2,&corner3,&normals[numNormals++]);
 
-			corner1.x = tileX<<TILE_SHIFT;
-			corner1.y = tileY<<TILE_SHIFT;
+			corner1.x = world_coord(tileX);
+			corner1.y = world_coord(tileY);
 			corner1.z = psTile->height - nMod;
 
-			corner2.x = (tileX+1)<<TILE_SHIFT;
-			corner2.y = (tileY+1)<<TILE_SHIFT;
+			corner2.x = world_coord(tileX + 1);
+			corner2.y = world_coord(tileY + 1);
 			corner2.z = tileDownRight->height - drMod;
 
-			corner3.x = tileX<<TILE_SHIFT;
-			corner3.y = (tileY+1)<<TILE_SHIFT;
+			corner3.x = world_coord(tileX);
+			corner3.y = world_coord(tileY + 1);
 			corner3.z = tileDown->height - dMod;
 			pie_SurfaceNormal3iv(&corner1,&corner2,&corner3,&normals[numNormals++]);
 		}
@@ -275,29 +275,29 @@ static void normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant)
 		/* Is it flipped? In this case two triangles  */
 		if(TRI_FLIPPED(psTile))
 		{
-	   	 	corner1.x = tileX<<TILE_SHIFT;
-	   		corner1.y = tileY<<TILE_SHIFT;
+	   	 	corner1.x = world_coord(tileX);
+	   		corner1.y = world_coord(tileY);
 	   		corner1.z = psTile->height - nMod;
 
-	   		corner2.x = (tileX+1)<<TILE_SHIFT;
-	   		corner2.y = tileY<<TILE_SHIFT;
+	   		corner2.x = world_coord(tileX + 1);
+	   		corner2.y = world_coord(tileY);
 	   		corner2.z = tileRight->height - rMod;
 
-	   		corner3.x = tileX<<TILE_SHIFT;
-	   		corner3.y = (tileY+1)<<TILE_SHIFT;
+	   		corner3.x = world_coord(tileX);
+	   		corner3.y = world_coord(tileY + 1);
 	   		corner3.z = tileDown->height - dMod;
 			pie_SurfaceNormal3iv(&corner1,&corner2,&corner3,&normals[numNormals++]);
 
-			corner1.x = (tileX+1)<<TILE_SHIFT;
-	   		corner1.y = tileY<<TILE_SHIFT;
+			corner1.x = world_coord(tileX + 1);
+	   		corner1.y = world_coord(tileY);
 	   		corner1.z = tileRight->height - rMod;
 
-			corner2.x = (tileX+1)<<TILE_SHIFT;
-	   		corner2.y = (tileY+1)<<TILE_SHIFT;
+			corner2.x = world_coord(tileX + 1);
+	   		corner2.y = world_coord(tileY + 1);
 	   		corner2.z = tileDownRight->height - drMod;
 
-	   		corner3.x = tileX<<TILE_SHIFT;
-	   		corner3.y = (tileY+1)<<TILE_SHIFT;
+	   		corner3.x = world_coord(tileX);
+	   		corner3.y = world_coord(tileY + 1);
 	   		corner3.z = tileDown->height - dMod;
 	   		pie_SurfaceNormal3iv(&corner1,&corner2,&corner3,&normals[numNormals++]);
 		}
@@ -305,31 +305,31 @@ static void normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant)
 		{
 			if(quadrant==1)
 			{
-			 	corner1.x = tileX<<TILE_SHIFT;
-				corner1.y = tileY<<TILE_SHIFT;
+			 	corner1.x = world_coord(tileX);
+				corner1.y = world_coord(tileY);
 				corner1.z = psTile->height - nMod;
 
-				corner2.x = (tileX+1)<<TILE_SHIFT;
-				corner2.y = (tileY+1)<<TILE_SHIFT;
+				corner2.x = world_coord(tileX + 1);
+				corner2.y = world_coord(tileY + 1);
 				corner2.z = tileDownRight->height - drMod;
 
-				corner3.x = tileX<<TILE_SHIFT;
-				corner3.y = (tileY+1)<<TILE_SHIFT;
+				corner3.x = world_coord(tileX);
+				corner3.y = world_coord(tileY + 1);
 				corner3.z = tileDown->height - dMod;
 				pie_SurfaceNormal3iv(&corner1,&corner2,&corner3,&normals[numNormals++]);
 			}
 			else
 			{
-				corner1.x = tileX<<TILE_SHIFT;
-				corner1.y = tileY<<TILE_SHIFT;
+				corner1.x = world_coord(tileX);
+				corner1.y = world_coord(tileY);
 				corner1.z = psTile->height - nMod;
 
-				corner2.x = (tileX+1)<<TILE_SHIFT;
-				corner2.y = tileY<<TILE_SHIFT;
+				corner2.x = world_coord(tileX + 1);
+				corner2.y = world_coord(tileY);
 				corner2.z = tileRight->height - rMod;
 
-				corner3.x = (tileX+1)<<TILE_SHIFT;
-				corner3.y = (tileY+1)<<TILE_SHIFT;
+				corner3.x = world_coord(tileX + 1);
+				corner3.y = world_coord(tileY + 1);
 				corner3.z = tileDownRight->height - drMod;
 				pie_SurfaceNormal3iv(&corner1,&corner2,&corner3,&normals[numNormals++]);
 			}
@@ -609,7 +609,7 @@ UDWORD	lightDoFogAndIllumination(UBYTE brightness, SDWORD dx, SDWORD dz, UDWORD*
 	SDWORD	colour;
 	SDWORD	fog = 0;
 
-	penumbraRadius = (visibleXTiles/2)<<TILE_SHIFT;
+	penumbraRadius = world_coord(visibleXTiles / 2);
 
 	umbraRadius = penumbraRadius - UMBRA_RADIUS;
 
@@ -702,8 +702,8 @@ UDWORD	lightDoFogAndIllumination(UBYTE brightness, SDWORD dx, SDWORD dz, UDWORD*
 	if ((fogStatus & FOG_GROUND) && (pie_GetFogStatus()))
 	{
 		//add mist
-		centreX = ( player.p.x + ((visibleXTiles/2)<<TILE_SHIFT) );
-		centreZ = ( player.p.z + ((visibleYTiles/2)<<TILE_SHIFT) );
+		centreX = player.p.x + world_coord(visibleXTiles / 2);
+		centreZ = player.p.z + world_coord(visibleYTiles / 2);
 		mist = map_MistValue(centreX-dx,centreZ-dz);
 		if (!(fogStatus & FOG_BACKGROUND))//black penumbra so fade fog effect
 		{

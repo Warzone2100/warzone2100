@@ -465,10 +465,10 @@ static void fpathAppendRoute( MOVE_CONTROL *psMoveCntl, ASTAR_ROUTE *psAStarRout
 	{
 //		psMoveCntl->MovementList[mi].XCoordinate =
 		psMoveCntl->asPath[mi].x = (UBYTE)(psAStarRoute->asPos[ai].x);
-//			(UBYTE)(psAStarRoute->asPos[ai].x >> TILE_SHIFT);
+//			map_coord(psAStarRoute->asPos[ai].x);
 //		psMoveCntl->MovementList[mi].YCoordinate =
 		psMoveCntl->asPath[mi].y = (UBYTE)(psAStarRoute->asPos[ai].y);
-//			(UBYTE)(psAStarRoute->asPos[ai].y >> TILE_SHIFT);
+//			map_coord(psAStarRoute->asPos[ai].y);
 
 		ai += 1;
 		mi += 1;
@@ -477,8 +477,8 @@ static void fpathAppendRoute( MOVE_CONTROL *psMoveCntl, ASTAR_ROUTE *psAStarRout
 //	psMoveCntl->MovementList[mi].XCoordinate = -1;
 //	psMoveCntl->MovementList[mi].YCoordinate = -1;
 	psMoveCntl->numPoints = (UBYTE)(psMoveCntl->numPoints + ai);
-	psMoveCntl->DestinationX = (psAStarRoute->finalX << TILE_SHIFT) + TILE_UNITS/2;
-	psMoveCntl->DestinationY = (psAStarRoute->finalY << TILE_SHIFT) + TILE_UNITS/2;
+	psMoveCntl->DestinationX = world_coord(psAStarRoute->finalX) + TILE_UNITS/2;
+	psMoveCntl->DestinationY = world_coord(psAStarRoute->finalY) + TILE_UNITS/2;
 }
 
 
@@ -549,8 +549,8 @@ static void fpathAppendRoute( MOVE_CONTROL *psMoveCntl, ASTAR_ROUTE *psAStarRout
 // check whether a WORLD coordinate point is within a gateway's tiles
 static BOOL fpathPointInGateway(SDWORD x, SDWORD y, GATEWAY *psGate)
 {
-	x = x >> TILE_SHIFT;
-	y = y >> TILE_SHIFT;
+	x = map_coord(x);
+	y = map_coord(y);
 
 	if ((x >= psGate->x1) && (x <= psGate->x2) &&
 		(y >= psGate->y1) && (y <= psGate->y2))
@@ -606,7 +606,7 @@ static void fpathSetGatewayBlock(SDWORD zone, GATEWAY *psLast, GATEWAY *psNext)
 		{
 			for(ty = psLast->y1 - 1; ty <= psLast->y2 + 1; ty ++)
 			{
-				if (!fpathPointInGateway(tx << TILE_SHIFT, ty << TILE_SHIFT, psLast) &&
+				if (!fpathPointInGateway(world_coord(tx), world_coord(ty), psLast) &&
 					tileOnMap(tx,ty) && gwGetZone(tx,ty) == blockZone)
 				{
 					psTile = mapTile(tx, ty);
@@ -623,7 +623,7 @@ static void fpathSetGatewayBlock(SDWORD zone, GATEWAY *psLast, GATEWAY *psNext)
 		{
 			for(ty = psNext->y1 - 1; ty <= psNext->y2 + 1; ty ++)
 			{
-				if (!fpathPointInGateway(tx << TILE_SHIFT, ty << TILE_SHIFT, psNext) &&
+				if (!fpathPointInGateway(world_coord(tx), world_coord(ty), psNext) &&
 					tileOnMap(tx,ty) && gwGetZone(tx,ty) == blockZone)
 				{
 					psTile = mapTile(tx, ty);
@@ -674,7 +674,7 @@ static void fpathClearGatewayBlock(SDWORD zone, GATEWAY *psLast, GATEWAY *psNext
 		{
 			for(ty = psLast->y1 - 1; ty <= psLast->y2 + 1; ty ++)
 			{
-				if (!fpathPointInGateway(tx << TILE_SHIFT, ty << TILE_SHIFT, psLast) &&
+				if (!fpathPointInGateway(world_coord(tx), world_coord(ty), psLast) &&
 					tileOnMap(tx,ty) && gwGetZone(tx,ty) == blockZone)
 				{
 					psTile = mapTile(tx, ty);
@@ -690,7 +690,7 @@ static void fpathClearGatewayBlock(SDWORD zone, GATEWAY *psLast, GATEWAY *psNext
 		{
 			for(ty = psNext->y1 - 1; ty <= psNext->y2 + 1; ty ++)
 			{
-				if (!fpathPointInGateway(tx << TILE_SHIFT, ty << TILE_SHIFT, psNext) &&
+				if (!fpathPointInGateway(world_coord(tx), world_coord(ty), psNext) &&
 					tileOnMap(tx,ty) && gwGetZone(tx,ty) == blockZone)
 				{
 					psTile = mapTile(tx, ty);
@@ -869,8 +869,8 @@ SDWORD fpathGatewayRouteOld(BASE_OBJECT *psObj, SDWORD routeMode, SDWORD GWTerra
 			fpathGatewayCoords(psCurrRoute, &gwx, &gwy);
 
 			debug( LOG_MOVEMENT, "   astar route : (%d,%d) -> (%d,%d)n",
-				linkx>>TILE_SHIFT, linky>>TILE_SHIFT,
-				gwx>>TILE_SHIFT, gwy>>TILE_SHIFT));
+				map_coord(linkx), map_coord(linky),
+				map_coord(gwx), map_coord(gwy));
 			asret = fpathAStarRoute(routeMode, &sAStarRoute, linkx,linky, gwx,gwy);
 			routeMode = ASR_NEWROUTE;
 			if ((asret == ASR_NEAREST) &&
@@ -1024,12 +1024,12 @@ static BOOL fpathRouteCloser(MOVE_CONTROL *psMoveCntl, ASTAR_ROUTE *psAStarRoute
 	}
 
 	// see which route is closest to the final destination
-	xdiff = (psMoveCntl->asPath[psMoveCntl->numPoints - 1].x << TILE_SHIFT) + TILE_UNITS/2 - tx;
-	ydiff = (psMoveCntl->asPath[psMoveCntl->numPoints - 1].y << TILE_SHIFT) + TILE_UNITS/2 - ty;
+	xdiff = world_coord(psMoveCntl->asPath[psMoveCntl->numPoints - 1].x) + TILE_UNITS/2 - tx;
+	ydiff = world_coord(psMoveCntl->asPath[psMoveCntl->numPoints - 1].y) + TILE_UNITS/2 - ty;
 	prevDist = xdiff*xdiff + ydiff*ydiff;
 
-	xdiff = (psAStarRoute->finalX << TILE_SHIFT) + TILE_UNITS/2 - tx;
-	ydiff = (psAStarRoute->finalY << TILE_SHIFT) + TILE_UNITS/2 - ty;
+	xdiff = world_coord(psAStarRoute->finalX) + TILE_UNITS/2 - tx;
+	ydiff = world_coord(psAStarRoute->finalY) + TILE_UNITS/2 - ty;
 	nextDist = xdiff*xdiff + ydiff*ydiff;
 
 	if (nextDist < prevDist)
@@ -1146,7 +1146,7 @@ static FPATH_RETVAL fpathGatewayRoute(BASE_OBJECT *psObj, SDWORD routeMode, SDWO
 				// the final route coordinates
 				gwx = fx;
 				gwy = fy;
-				zone = gwGetZone(fx >> TILE_SHIFT, fy >> TILE_SHIFT);
+				zone = gwGetZone(map_coord(fx), map_coord(fy));
 			}
 			else
 			{
@@ -1161,8 +1161,8 @@ static FPATH_RETVAL fpathGatewayRoute(BASE_OBJECT *psObj, SDWORD routeMode, SDWO
 //				psMoveCntl->numPoints = (UBYTE)matchPoints;
 
 				debug( LOG_MOVEMENT, "   astar route : (%d,%d) -> (%d,%d) zone %d\n",
-					linkx>>TILE_SHIFT, linky>>TILE_SHIFT,
-					gwx>>TILE_SHIFT, gwy>>TILE_SHIFT, zone);
+					map_coord(linkx), map_coord(linky),
+					map_coord(gwx), map_coord(gwy), zone);
 				fpathSetGatewayBlock(zone, psLastGW, psCurrRoute);
 				asret = fpathAStarRoute(routeMode, &sAStarRoute, linkx,linky, gwx,gwy);
 				fpathClearGatewayBlock(zone, psLastGW, psCurrRoute);
@@ -1227,8 +1227,8 @@ static FPATH_RETVAL fpathGatewayRoute(BASE_OBJECT *psObj, SDWORD routeMode, SDWO
 /*			else
 			{
 				debug( LOG_MOVEMENT, "   matched previous route : (%d,%d) -> (%d,%d)n",
-					linkx>>TILE_SHIFT, linky>>TILE_SHIFT,
-					gwx>>TILE_SHIFT, gwy>>TILE_SHIFT));
+					map_coord(linkx), map_coord(linky),
+					map_coord(gwx), map_coord(gwy)));
 			}*/
 #endif
 
@@ -1382,7 +1382,7 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 			!psCurr->selected &&
 			psCurr->sMove.Status == MOVEINACTIVE)
 		{
-			psTile = mapTile(psCurr->x >> TILE_SHIFT, psCurr->y >> TILE_SHIFT);
+			psTile = mapTile(map_coord(psCurr->x), map_coord(psCurr->y));
 			psTile->tileInfoBits |= BITS_FPATHBLOCK;
 		}
 	}*/
@@ -1393,15 +1393,15 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 	{
 		// check whether the start point of the route
 		// is a blocking tile and find an alternative if it is
-		if (fpathBlockingTile(startX >> TILE_SHIFT, startY >> TILE_SHIFT))
+		if (fpathBlockingTile(map_coord(startX), map_coord(startY)))
 		{
 			// find the nearest non blocking tile to the object
 			minDist = SDWORD_MAX;
 			nearestDir = NUM_DIR;
 			for(dir=0; dir<NUM_DIR; dir++)
 			{
-				x = (startX>>TILE_SHIFT) + aDirOffset[dir].x;
-				y = (startY>>TILE_SHIFT) + aDirOffset[dir].y;
+				x = map_coord(startX) + aDirOffset[dir].x;
+				y = map_coord(startY) + aDirOffset[dir].y;
 				if (!fpathBlockingTile(x,y))
 				{
 					tileDist = fpathDistToTile(x,y, startX,startY);
@@ -1422,10 +1422,10 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 			}
 			else
 			{
-				startX = (((startX>>TILE_SHIFT) + aDirOffset[nearestDir].x) << TILE_SHIFT)
-							+ TILE_SHIFT/2;
-				startY = (((startY>>TILE_SHIFT) + aDirOffset[nearestDir].y) << TILE_SHIFT)
-							+ TILE_SHIFT/2;
+				startX = world_coord(map_coord(startX) + aDirOffset[nearestDir].x)
+							+ TILE_SHIFT / 2;
+				startY = world_coord(map_coord(startY) + aDirOffset[nearestDir].y)
+							+ TILE_SHIFT / 2;
 			}
 		}
 
@@ -1459,7 +1459,7 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 
 		// check whether the end point of the route
 		// is a blocking tile and find an alternative if it is
-		if (fpathBlockingTile(targetX >> TILE_SHIFT, targetY >> TILE_SHIFT))
+		if (fpathBlockingTile(map_coord(targetX), map_coord(targetY)))
 		{
 			// route to the last clear tile found by the raycast
 			targetX = clearX;
@@ -1550,7 +1550,7 @@ exit:
 	{
 		if (psCurr->sMove.Status == MOVEINACTIVE)
 		{
-			psTile = mapTile(psCurr->x >> TILE_SHIFT, psCurr->y >> TILE_SHIFT);
+			psTile = mapTile(map_coord(psCurr->x), map_coord(psCurr->y));
 			psTile->tileInfoBits &= ~BITS_FPATHBLOCK;
 		}
 	}*/

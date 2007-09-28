@@ -698,7 +698,7 @@ extern SWORD map_Height(UDWORD x, UDWORD y)
 		/*
 		lowerHeightOffset = waves[(y%(MAX_RIPPLES-1))];
 		upperHeightOffset = waves[((y%(MAX_RIPPLES-1))+1)];
-		oy = (SDWORD)y - (SDWORD)(tileY << TILE_SHIFT);
+		oy = (SDWORD)y - world_coord(tileY);
 		oy = TILE_UNITS - oy;
 		dy = ((lowerHeightOffset - upperHeightOffset) * oy )/ TILE_UNITS;
 
@@ -822,8 +822,8 @@ extern SWORD map_Height(UDWORD x, UDWORD y)
 extern BOOL mapObjIsAboveGround( BASE_OBJECT *psObj )
 {
 	SDWORD	iZ,
-			tileX = psObj->x >> TILE_SHIFT,
-			tileY = psObj->y >> TILE_SHIFT,
+			tileX = map_coord(psObj->x),
+			tileY = map_coord(psObj->y),
 			tileYOffset1 = (tileY * mapWidth),
 			tileYOffset2 = ((tileY+1) * mapWidth),
 			h1 = psMapTiles[tileYOffset1 + tileX    ].height,

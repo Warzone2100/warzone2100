@@ -169,10 +169,10 @@ static void gridCalcCoverage(BASE_OBJECT *psObj, SDWORD objx, SDWORD objy, COVER
 	miny = objy - range;
 	maxy = objy + range;
 
-	minx = (minx >> TILE_SHIFT) / GRID_SIZE;
-	maxx = (maxx >> TILE_SHIFT) / GRID_SIZE;
-	miny = (miny >> TILE_SHIFT) / GRID_SIZE;
-	maxy = (maxy >> TILE_SHIFT) / GRID_SIZE;
+	minx = map_coord(minx) / GRID_SIZE;
+	maxx = map_coord(maxx) / GRID_SIZE;
+	miny = map_coord(miny) / GRID_SIZE;
+	maxy = map_coord(maxy) / GRID_SIZE;
 
 	// see which ones are covered by the object
 	for (x=minx; x<=maxx; x++)
@@ -213,8 +213,8 @@ void gridAddObject(BASE_OBJECT *psObj)
 // oldX,oldY are the old position of the object in world coords
 void gridMoveObject(BASE_OBJECT *psObj, SDWORD oldX, SDWORD oldY)
 {
-	if ( ((psObj->x >> TILE_SHIFT) == ((UDWORD)oldX >> TILE_SHIFT)) &&
-		 ((psObj->y >> TILE_SHIFT) == ((UDWORD)oldY >> TILE_SHIFT)) )
+	if (map_coord(psObj->x) == map_coord(oldX)
+	 && map_coord(psObj->y) == map_coord(oldY))
 	{
 		// havn't changed the tile the object is on, don't bother updating
 		return;

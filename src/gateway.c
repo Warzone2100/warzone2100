@@ -596,8 +596,8 @@ static SDWORD gwRouteLength(GATEWAY *psStart, GATEWAY *psEnd)
 		astarResetCounters();
 		sRoute.numPoints = 0;
 		ret = fpathAStarRoute(routeMode, &sRoute,
-					sx<<TILE_SHIFT,sy<<TILE_SHIFT,
-					ex<<TILE_SHIFT,ey<<TILE_SHIFT);
+					world_coord(sx), world_coord(sy),
+					world_coord(ex), world_coord(ey));
 		if (ret == ASR_PARTIAL)
 		{
 			routeMode = ASR_CONTINUE;

@@ -7268,8 +7268,8 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 		//for modules - need to check the base structure exists
 		if (IsStatExpansionModule(psStats))
 		{
-			psStructure = getTileStructure(psSaveStructure->x >> TILE_SHIFT,
-				psSaveStructure->y >> TILE_SHIFT);
+			psStructure = getTileStructure(map_coord(psSaveStructure->x),
+				map_coord(psSaveStructure->y));
 			if (psStructure == NULL)
 			{
 				debug( LOG_ERROR, "No owning structure for module - %s for player - %d", getSaveStructNameV19((SAVE_STRUCTURE_V17*)psSaveStructure), psSaveStructure->player );
@@ -7287,15 +7287,15 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
         }*/
 
         //check not trying to build too near the edge
-    	if(((psSaveStructure->x >> TILE_SHIFT) < TOO_NEAR_EDGE) || ((
-            psSaveStructure->x >> TILE_SHIFT) > (mapWidth - TOO_NEAR_EDGE)))
+    	if (map_coord(psSaveStructure->x) < TOO_NEAR_EDGE
+    	 || map_coord(psSaveStructure->x) > mapWidth - TOO_NEAR_EDGE)
         {
 			debug( LOG_ERROR, "Structure %s, x coord too near the edge of the map. id - %d", getSaveStructNameV19((SAVE_STRUCTURE_V17*)psSaveStructure), psSaveStructure->id );
 			abort();
             continue;
         }
-    	if(((psSaveStructure->y >> TILE_SHIFT) < TOO_NEAR_EDGE) || ((
-            psSaveStructure->y >> TILE_SHIFT) > (mapHeight - TOO_NEAR_EDGE)))
+    	if (map_coord(psSaveStructure->y) < TOO_NEAR_EDGE
+    	 || map_coord(psSaveStructure->y) > mapHeight - TOO_NEAR_EDGE)
         {
 			debug( LOG_ERROR, "Structure %s, y coord too near the edge of the map. id - %d", getSaveStructNameV19((SAVE_STRUCTURE_V17*)psSaveStructure), psSaveStructure->id );
 			abort();
@@ -7559,8 +7559,8 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 		//for modules - need to check the base structure exists
 		if (IsStatExpansionModule(psStats))
 		{
-			psStructure = getTileStructure(psSaveStructure->x >> TILE_SHIFT,
-				psSaveStructure->y >> TILE_SHIFT);
+			psStructure = getTileStructure(map_coord(psSaveStructure->x),
+				map_coord(psSaveStructure->y));
 			if (psStructure == NULL)
 			{
 				debug( LOG_ERROR, "No owning structure for module - %s for player - %d", getSaveStructNameV19(psSaveStructure), psSaveStructure->player );
@@ -7576,15 +7576,15 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
             continue;
         }*/
         //check not trying to build too near the edge
-    	if(((psSaveStructure->x >> TILE_SHIFT) < TOO_NEAR_EDGE) || ((
-            psSaveStructure->x >> TILE_SHIFT) > (mapWidth - TOO_NEAR_EDGE)))
+    	if (map_coord(psSaveStructure->x) < TOO_NEAR_EDGE
+    	 || map_coord(psSaveStructure->x) > mapWidth - TOO_NEAR_EDGE)
         {
 			debug( LOG_ERROR, "Structure %s, x coord too near the edge of the map. id - %d", getSaveStructNameV19((SAVE_STRUCTURE_V17*)psSaveStructure), psSaveStructure->id );
 			abort();
             continue;
         }
-    	if(((psSaveStructure->y >> TILE_SHIFT) < TOO_NEAR_EDGE) || ((
-            psSaveStructure->y >> TILE_SHIFT) > (mapHeight - TOO_NEAR_EDGE)))
+    	if (map_coord(psSaveStructure->y) < TOO_NEAR_EDGE
+    	 || map_coord(psSaveStructure->y) > mapHeight - TOO_NEAR_EDGE)
         {
 			debug( LOG_ERROR, "Structure %s, y coord too near the edge of the map. id - %d", getSaveStructNameV19((SAVE_STRUCTURE_V17*)psSaveStructure), psSaveStructure->id );
 			abort();
@@ -8007,8 +8007,8 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 		//for modules - need to check the base structure exists
 		if (IsStatExpansionModule(psStats))
 		{
-			psStructure = getTileStructure(psSaveStructure->x >> TILE_SHIFT,
-				psSaveStructure->y >> TILE_SHIFT);
+			psStructure = getTileStructure(map_coord(psSaveStructure->x),
+			                               map_coord(psSaveStructure->y));
 			if (psStructure == NULL)
 			{
 				debug( LOG_ERROR, "No owning structure for module - %s for player - %d", getSaveStructNameV(psSaveStructure), psSaveStructure->player );
@@ -8024,15 +8024,15 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
             continue;
         }*/
         //check not trying to build too near the edge
-    	if(((psSaveStructure->x >> TILE_SHIFT) < TOO_NEAR_EDGE) || ((
-            psSaveStructure->x >> TILE_SHIFT) > (mapWidth - TOO_NEAR_EDGE)))
+    	if (map_coord(psSaveStructure->x) < TOO_NEAR_EDGE
+    	 || map_coord(psSaveStructure->x) > mapWidth - TOO_NEAR_EDGE)
         {
 			debug( LOG_ERROR, "Structure %s, x coord too near the edge of the map. id - %d", getSaveStructNameV((SAVE_STRUCTURE*)psSaveStructure), psSaveStructure->id );
 			abort();
             continue;
         }
-    	if(((psSaveStructure->y >> TILE_SHIFT) < TOO_NEAR_EDGE) || ((
-            psSaveStructure->y >> TILE_SHIFT) > (mapHeight - TOO_NEAR_EDGE)))
+    	if (map_coord(psSaveStructure->y) < TOO_NEAR_EDGE
+    	 || map_coord(psSaveStructure->y) > mapHeight - TOO_NEAR_EDGE)
         {
 			debug( LOG_ERROR, "Structure %s, y coord too near the edge of the map. id - %d", getSaveStructNameV((SAVE_STRUCTURE*)psSaveStructure), psSaveStructure->id );
 			abort();
@@ -12314,44 +12314,44 @@ BOOL plotStructurePreview(iTexture *backDropSprite, UBYTE scale, UDWORD offX, UD
 		if (psHeader->version < VERSION_12)
 		{
 			memcpy(psSaveStructure2, pFileData, sizeOfSaveStruture);
-			xx = (psSaveStructure2->x >>TILE_SHIFT);
-			yy = (psSaveStructure2->y >>TILE_SHIFT);
+			xx = map_coord(psSaveStructure2->x);
+			yy = map_coord(psSaveStructure2->y);
 		}
 		else if (psHeader->version < VERSION_14)
 		{
 			memcpy(psSaveStructure12, pFileData, sizeOfSaveStruture);
-			xx = (psSaveStructure12->x >>TILE_SHIFT);
-			yy = (psSaveStructure12->y >>TILE_SHIFT);
+			xx = map_coord(psSaveStructure12->x);
+			yy = map_coord(psSaveStructure12->y);
 		}
 		else if (psHeader->version <= VERSION_14)
 		{
 			memcpy(psSaveStructure14, pFileData, sizeOfSaveStruture);
-			xx = (psSaveStructure14->x >>TILE_SHIFT);
-			yy = (psSaveStructure14->y >>TILE_SHIFT);
+			xx = map_coord(psSaveStructure14->x);
+			yy = map_coord(psSaveStructure14->y);
 		}
 		else if (psHeader->version <= VERSION_16)
 		{
 			memcpy(psSaveStructure15, pFileData, sizeOfSaveStruture);
-			xx = (psSaveStructure15->x >>TILE_SHIFT);
-			yy = (psSaveStructure15->y >>TILE_SHIFT);
+			xx = map_coord(psSaveStructure15->x);
+			yy = map_coord(psSaveStructure15->y);
 		}
 		else if (psHeader->version <= VERSION_19)
 		{
 			memcpy(psSaveStructure17, pFileData, sizeOfSaveStruture);
-			xx = (psSaveStructure17->x >>TILE_SHIFT);
-			yy = (psSaveStructure17->y >>TILE_SHIFT);
+			xx = map_coord(psSaveStructure17->x);
+			yy = map_coord(psSaveStructure17->y);
 		}
 		else if (psHeader->version <= VERSION_20)
 		{
 			memcpy(psSaveStructure20, pFileData, sizeOfSaveStruture);
-			xx = (psSaveStructure20->x >>TILE_SHIFT);
-			yy = (psSaveStructure20->y >>TILE_SHIFT);
+			xx = map_coord(psSaveStructure20->x);
+			yy = map_coord(psSaveStructure20->y);
 		}
 		else
 		{
 			memcpy(psSaveStructure, pFileData, sizeOfSaveStruture);
-			xx = (psSaveStructure->x >>TILE_SHIFT);
-			yy = (psSaveStructure->y >>TILE_SHIFT);
+			xx = map_coord(psSaveStructure->x);
+			yy = map_coord(psSaveStructure->y);
 		}
 
 		for(x = (xx*scale);x < (xx*scale)+scale ;x++)
@@ -12471,8 +12471,8 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 			endian_udword(&psSaveStructure2->burnStart);
 			endian_udword(&psSaveStructure2->burnDamage);
 
-			xx = (psSaveStructure2->x >>TILE_SHIFT);
-			yy = (psSaveStructure2->y >>TILE_SHIFT);
+			xx = map_coord(psSaveStructure2->x);
+			yy = map_coord(psSaveStructure2->y);
 		}
 		else if (psHeader->version < VERSION_14)
 		{
@@ -12505,8 +12505,8 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 			endian_udword(&psSaveStructure12->burnStart);
 			endian_udword(&psSaveStructure12->burnDamage);
 
-			xx = (psSaveStructure12->x >>TILE_SHIFT);
-			yy = (psSaveStructure12->y >>TILE_SHIFT);
+			xx = map_coord(psSaveStructure12->x);
+			yy = map_coord(psSaveStructure12->y);
 		}
 		else if (psHeader->version <= VERSION_14)
 		{
@@ -12540,8 +12540,8 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 			endian_udword(&psSaveStructure14->burnStart);
 			endian_udword(&psSaveStructure14->burnDamage);
 
-			xx = (psSaveStructure14->x >>TILE_SHIFT);
-			yy = (psSaveStructure14->y >>TILE_SHIFT);
+			xx = map_coord(psSaveStructure14->x);
+			yy = map_coord(psSaveStructure14->y);
 		}
 		else if (psHeader->version <= VERSION_16)
 		{
@@ -12576,8 +12576,8 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 			endian_udword(&psSaveStructure15->burnStart);
 			endian_udword(&psSaveStructure15->burnDamage);
 
-			xx = (psSaveStructure15->x >>TILE_SHIFT);
-			yy = (psSaveStructure15->y >>TILE_SHIFT);
+			xx = map_coord(psSaveStructure15->x);
+			yy = map_coord(psSaveStructure15->y);
 		}
 		else if (psHeader->version <= VERSION_19)
 		{
@@ -12614,8 +12614,8 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 			endian_udword(&psSaveStructure17->burnStart);
 			endian_udword(&psSaveStructure17->burnDamage);
 
-			xx = (psSaveStructure17->x >>TILE_SHIFT);
-			yy = (psSaveStructure17->y >>TILE_SHIFT);
+			xx = map_coord(psSaveStructure17->x);
+			yy = map_coord(psSaveStructure17->y);
 		}
 		else if (psHeader->version <= VERSION_20)
 		{
@@ -12649,8 +12649,8 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 			endian_udword(&psSaveStructure20->burnStart);
 			endian_udword(&psSaveStructure20->burnDamage);
 
-			xx = (psSaveStructure20->x >>TILE_SHIFT);
-			yy = (psSaveStructure20->y >>TILE_SHIFT);
+			xx = map_coord(psSaveStructure20->x);
+			yy = map_coord(psSaveStructure20->y);
 		}
 		else
 		{
@@ -12687,8 +12687,8 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 			endian_udword(&psSaveStructure->burnStart);
 			endian_udword(&psSaveStructure->burnDamage);
 
-			xx = (psSaveStructure->x >>TILE_SHIFT);
-			yy = (psSaveStructure->y >>TILE_SHIFT);
+			xx = map_coord(psSaveStructure->x);
+			yy = map_coord(psSaveStructure->y);
 		}
 
 		for(x = (xx*scale);x < (xx*scale)+scale ;x++)

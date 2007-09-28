@@ -1384,7 +1384,7 @@ SDWORD	xJump,yJump;
 		player.p.x = xJump;
 		player.p.z = yJump;
 		player.r.y = 0; // face north
-		setViewPos(psStruct->x>>TILE_SHIFT,psStruct->y>>TILE_SHIFT,TRUE);
+		setViewPos(map_coord(psStruct->x), map_coord(psStruct->y), TRUE);
 		psOldRE = psStruct;
 	}
 	else

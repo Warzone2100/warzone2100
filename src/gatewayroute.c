@@ -188,8 +188,11 @@ SDWORD gwrAStarRoute(SDWORD player, UDWORD terrain,
 	BOOL		add;
 
 	*ppsRoute = NULL;
-	tileSX = sx >> TILE_SHIFT; tileSY = sy >> TILE_SHIFT;
-	tileFX = fx >> TILE_SHIFT; tileFY = fy >> TILE_SHIFT;
+	tileSX = map_coord(sx);
+	tileSY = map_coord(sy);
+
+	tileFX = map_coord(fx);
+	tileFY = map_coord(fy);
 
 	// reset the flags on the gateways
 	for(psCurr = psGateways; psCurr; psCurr=psCurr->psNext)

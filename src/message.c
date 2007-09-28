@@ -1172,8 +1172,8 @@ void addOilResourceProximities(void)
             if (psFeat->visible[selectedPlayer])
             {
                 //if there isn't an oil derrick built on it
-				if(!TILE_HAS_STRUCTURE(mapTile(psFeat->x >> TILE_SHIFT,
-					psFeat->y >> TILE_SHIFT)))
+				if (!TILE_HAS_STRUCTURE(mapTile(map_coord(psFeat->x),
+					map_coord(psFeat->y))))
 				{
                     //add a proximity message
 					psMessage = addMessage(MSG_PROXIMITY, TRUE, selectedPlayer);
