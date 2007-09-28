@@ -129,137 +129,63 @@ else
 fi
 
 
-#   --disable-ogg will build without Ogg Vorbis support
-AC_ARG_ENABLE(ogg,
-	AS_HELP_STRING([--disable-ogg],[Do not built support for Ogg files]))
+# Checks for modules:
+
+PKG_CHECK_MODULES([SDL], [sdl >= 1.2])
+PKG_CHECK_MODULES([PNG], [libpng >= 1.2])
+PKG_CHECK_MODULES([OGGVORBIS], [ogg >= 1.1 vorbis >= 1.1 vorbisfile >= 1.1])
 
 
 # Checks for libraries:
 
 AC_CHECK_LIB(m, pow)
-# PhysFS needs this, since on sometimes it is not properly linked:
+# PhysFS needs this, since on some systems it is not properly linked:
 AC_CHECK_LIB(z, deflate)
 
-# Look for image libs
-AC_CHECK_LIB(png, main, , AC_MSG_ERROR([libpng not found.]))
-AC_CHECK_HEADER(png.h, , AC_MSG_ERROR([png header not found.]))
-
 # Look for PhysicsFS
-AC_CHECK_LIB(physfs, PHYSFS_init, , AC_MSG_ERROR([PhysicsFS not found]))
 AC_CHECK_HEADER(physfs.h, , AC_MSG_ERROR([PhysicsFS header not found]))
+AC_CHECK_LIB(physfs, PHYSFS_init, , AC_MSG_ERROR([PhysicsFS not found]))
+
+# Look for SDL_net
+AC_CHECK_HEADER(SDL/SDL_net.h, , AC_MSG_ERROR([SDL_net header not found]))
+AC_CHECK_LIB(SDL_net, SDLNet_Init, , AC_MSG_ERROR([SDL_net not found]), [-lSDL ${WIN32_LIBS}])
 
 
-AM_PATH_SDL([1.1.4],[
-	WZ_CFLAGS="${WZ_CFLAGS} ${SDL_CFLAGS}" WZ_LIBS="${WZ_LIBS} ${SDL_LIBS}"],
-	AC_MSG_ERROR([SDL is not installed]))
+# Look for OpenGL
+AC_CHECK_HEADER(SDL/SDL_opengl.h, ,
+	AC_MSG_ERROR([You need to install SDL with OpenGL support.]))
+AC_CHECK_LIB(GL, main,
+	OPENGL_LIBS="-lGL",
+	AC_CHECK_LIB(opengl32, main,
+		OPENGL_LIBS="-lopengl32",
+		AC_MSG_ERROR([You need to install OpenGL.])))
+AC_CHECK_LIB(GLU, main,
+	OPENGL_LIBS="${OPENGL_LIBS} -lGLU",
+	AC_CHECK_LIB(glu32, main,
+		OPENGL_LIBS="${OPENGL_LIBS} -lglu32",
+		AC_MSG_ERROR([You need to install GLU.])))
 
-AC_PATH_SDLNET([
-	WZ_CFLAGS="${WZ_CFLAGS} ${SDLNETINC}" WZ_LIBS="${WZ_LIBS} ${SDLNETLIB}"],
-	AC_MSG_ERROR([SDL_net is not installed]))
-
-
-if test "x$enable_opengl" != "xno" ; then
-	if test "x$GL_lib" != "xyes" ; then
-		AC_CHECK_HEADER(SDL/SDL_opengl.h, GL_h=yes, GL_h=no)
-		AC_CHECK_LIB(GL, main, GLLIB=-lGL GL_lib=yes,
-			AC_CHECK_LIB(opengl32, main, GLLIB=-lopengl32 GL_lib=yes, GL_lib=no))
-		AC_CHECK_LIB(GLU, main, GLULIB=-lGLU GLU_lib=yes,
-			AC_CHECK_LIB(glu32, main, GLULIB=-lglu32 GLU_lib=yes, GLU_lib=no))
-	fi
-
-	if test "x$GL_lib" = "xno" -o "x$GLU_lib" = "xno" ; then
-		if test "x$enable_opengl" = "xyes" ; then
-			AC_MSG_ERROR([You need to install OpenGL and GLU.])
-		else
-			enable_opengl=no
-		fi
-	elif test "x$GL_h" = "xno" -o "x$GLU_h" = "xno" ; then
-		if test "x$enable_opengl" = "xyes" ; then
-			AC_MSG_ERROR([You need to install OpenGL and GLU header files (usually a -dev package).])
-		else
-			enable_opengl=no
-		fi
-	else
-		enable_opengl=yes
-	fi
-fi
-
-AC_MSG_CHECKING([OpenGL])
-if test "x$enable_opengl" = "xyes" ; then
-	AC_DEFINE(WZ_OPENGL, 1, [OpenGL acceleration])
-	WZ_LIBS="${WZ_LIBS} ${GLLIB} ${GLULIB}"
-	AC_MSG_RESULT([yes])
-else
-	AC_MSG_RESULT([no])
-	AC_MSG_ERROR([OpenGL is currently mandatory])
-fi
+# Look for OpenAL
+AC_CHECK_HEADER(AL/al.h, ,
+	AC_MSG_ERROR([You need to install OpenAL headers.]))
+AC_CHECK_LIB(openal, main,
+	OPENAL_LIBS="-lopenal",
+	AC_CHECK_LIB(openal32, main,
+		OPENAL_LIBS="-lopenal32",
+		AC_MSG_ERROR([You need to install OpenAL.])))
 
 
-if test "x$enable_openal" != "xno" ; then
-	if test "x$AL_lib" != "xyes" ; then
-		AC_CHECK_HEADER(AL/al.h, AL_h=yes,
-			[AC_CHECK_HEADER(openal/al.h, AL_h=mac, AL_h=no)])
-		AC_CHECK_LIB(openal, main, ALLIB=-lopenal AL_lib=yes,
-			[AC_CHECK_LIB(openal32, main, ALLIB=-lopenal32 AL_lib=yes, AL_lib=no)])
-	fi
-
-	if test "x$AL_lib" = "xno" ; then
-		if test "x$enable_openal" = "xyes" ; then
-			AC_MSG_ERROR([You need to install OpenAL.])
-		else
-			enable_openal=no
-		fi
-	elif test "x$AL_h" = "xno" ; then
-		if test "x$enable_openal" = "xyes" ; then
-			AC_MSG_ERROR([You need to install OpenAL header files (usually a -dev package).])
-		else
-			enable_openal=no
-		fi
-	else
-		enable_openal=yes
-	fi
-fi
-
-AC_MSG_CHECKING([OpenAL])
-if test "x$enable_openal" = "xyes" ; then
-	AC_DEFINE(WZ_OPENAL, 1, [OpenAL support])
-	WZ_LIBS="${WZ_LIBS} ${ALLIB}"
-	AC_MSG_RESULT([yes])
-	if test "x$AL_h" = "xmac"; then
-		AC_DEFINE(WZ_OPENAL_MAC_H, 1, [OpenAL MacOSX header support])
-	fi
-else
-	AC_MSG_RESULT([no])
-	AC_MSG_ERROR([OpenAL is currently mandatory])
-fi
-
-
-if test "x$enable_ogg" != "xno" ; then
-	XIPH_PATH_OGG(have_ogg=yes, have_ogg=no)
-	XIPH_PATH_VORBIS(have_vorbis=yes, have_vorbis=no)
-	if test "x$have_ogg" = "xno" -o "x$have_vorbis" = "xno" ; then
-		if test "x$enable_ogg" = "xyes" ; then
-			AC_MSG_ERROR([You need to install OGG/Vorbis.])
-		else
-			enable_ogg=no
-			AC_DEFINE(WZ_NOOGG, 1, [Disable ogg/vorbis support])
-		fi
-	else
-		enable_ogg=yes
-		WZ_LIBS="${WZ_LIBS} -lvorbisfile -lvorbis -logg"
-	fi
-else
-	AC_DEFINE(WZ_NOOGG, 1, [Disable ogg/vorbis support])
-fi
+AC_DEFINE(DATADIR, "${datadir}/${PACKAGE}", [Directory with gamedata])
+AC_DEFINE(LOCALEDIR, "${localedir}", [Directory with gettext locales])
 
 
 # add some required C flags here
 # -DYY_STATIC is required by flex
-WZ_CFLAGS="${WZ_CFLAGS} -DYY_STATIC -DLOCALEDIR=\\\"${localedir}\\\" -DDATADIR=\\\"${datadir}/${PACKAGE}\\\""
+WZ_CFLAGS="${WZ_CFLAGS} -DYY_STATIC"
 
 CPPFLAGS="${CPPFLAGS} -I\$(top_srcdir)"
-CFLAGS="${CFLAGS} ${WZ_CFLAGS}"
-LIBS="${LIBS} ${WZ_LIBS} ${WIN32_LIBS}"
+CFLAGS="${SDL_CFLAGS} ${PNG_CFLAGS} ${OGGVORBIS_CFLAGS} $} ${OPENAL_CFLAGS} ${OPENGL_CFLAGS} ${CFLAGS} ${WZ_CFLAGS}"
+LIBS="${SDL_LIBS} ${PNG_LIBS} ${OGGVORBIS_LIBS} ${OPENAL_LIBS} ${OPENGL_LIBS} ${LIBS} ${WIN32_LIBS}"
 
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_FILES([Makefile
@@ -283,15 +209,8 @@ AC_CONFIG_FILES([Makefile
 		src/Makefile])
 AC_OUTPUT
 
-echo ""
-echo "Warzone 2100 will compile with the following components:"
-echo ""
-echo " OpenGL acceleration:   $enable_opengl"
-echo " OpenAL sound system:   $enable_openal"
-echo " OGG music support:     $enable_ogg"
-echo ""
-
 if test "x$enable_debug" = xyes; then
+	echo ""
 	echo " *** Running in debug mode! ***"
 	echo ""
 fi
