@@ -165,7 +165,7 @@ void texLoad(const char *fileName)
 				tileTexInfo[k].uOffset = xOffset / (xSize / 256);
 				tileTexInfo[k].vOffset = yOffset / (ySize / 256);
 				tileTexInfo[k].texPage = texPage;
-				debug(LOG_ERROR, "  texLoad: Registering k=%d i=%d u=%f v=%f xoff=%d yoff=%d xsize=%d ysize=%d tex=%d (%s)",
+				debug(LOG_TEXTURE, "  texLoad: Registering k=%d i=%d u=%f v=%f xoff=%d yoff=%d xsize=%d ysize=%d tex=%d (%s)",
 				     k, i, tileTexInfo[k].uOffset, tileTexInfo[k].vOffset, xOffset, yOffset, xSize, ySize, texPage, fullPath);
 			}
 			xOffset += i; // i is width of tile
