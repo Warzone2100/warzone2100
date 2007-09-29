@@ -10,6 +10,7 @@
    * Fix: Crash upon receiving invalid sound ID numbers (out of bounds array access) (bug #9694)
    * Fix: Prevent divide by zero errors caused by ordering a VTOL to attack a droid at the same X & Y coordinates (bug #9704)
    * Fix: Make progress bar white again
+   * Fix: Workaround mysterious crash when updating beacons (bug #9455)
 
 2007-06-22: Version 2.0.7
  * General:
