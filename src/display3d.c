@@ -990,8 +990,8 @@ when flips and rotations are being done */
 static void flipsAndRots(int texture)
 {
 	/* Used to calculate texture coordinates, which are 0-255 in value */
-	const UDWORD xMult = (256 / TILES_IN_PAGE_COLUMN);
-	const UDWORD yMult = (256 / TILES_IN_PAGE_ROW);
+	const UDWORD xMult = (256 / (PAGE_WIDTH / TILE_WIDTH));
+	const UDWORD yMult = (256 / (PAGE_HEIGHT / TILE_HEIGHT));
 	Vector2i sPTemp;
 
 	/* Store the source rect as four points */
