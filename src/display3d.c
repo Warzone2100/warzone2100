@@ -579,8 +579,8 @@ static void drawTiles(iView *camera, iView *player)
 	terrainMidY = visibleYTiles/2;
 
 	/* Find our position in tile coordinates */
-	playerXTile = map_coord(player->p.x);
-	playerZTile = map_coord(player->p.z);
+	playerXTile = player->p.x >> TILE_SHIFT;
+	playerZTile = player->p.z >> TILE_SHIFT;
 
 	/* Get the x,z translation components */
 	rx = (player->p.x) & (TILE_UNITS-1);
