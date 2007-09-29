@@ -11455,28 +11455,3 @@ BOOL scrGetDroidLevel(void)
 
 	return TRUE;
 }
-
-/*
- * Returns true if droid is not moving
- */
-BOOL scrMoveDroidStopped(void)
-{
-	DROID	*psDroid;
-
-	if (!stackPopParams(1, ST_DROID, &psDroid))
-	{
-		return FALSE;
-	}
-
-	ASSERT(psDroid != NULL,
-		"scrMoveDroidStopped: null-pointer passed");
-
-	scrFunctionResult.v.bval = moveDroidStopped(psDroid, 0);
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		debug(LOG_ERROR, "scrMoveDroidStopped(): failed to push result");
-		return FALSE;
-	}
-
-	return TRUE;
-}
