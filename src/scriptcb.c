@@ -750,24 +750,33 @@ BOOL scrCBVtolOffMap(void)
 BOOL scrCBResCompleted(void)
 {
 	RESEARCH	**ppsResearch;
+	STRUCTURE	**ppsResFac;
 	BOOL	    retVal;
+	SDWORD		resFacOwner;
 
-	if (!stackPopParams(1, VAL_REF|ST_RESEARCH, &ppsResearch))
+	if (!stackPopParams(3, VAL_REF|ST_RESEARCH, &ppsResearch,
+		VAL_REF|ST_STRUCTURE, &ppsResFac ,VAL_INT, &resFacOwner))
 	{
 		return FALSE;
 	}
 
-	if (psCBLastResearch == NULL)
+	retVal = FALSE;
+	*ppsResearch = NULL;
+	*ppsResFac = NULL;
+
+	if(resFacOwner == -1 || resFacOwner == CBResFacilityOwner)
 	{
-		ASSERT( FALSE, "scrCBResCompleted: no research has been set" );
-        retVal = FALSE;
-        *ppsResearch = NULL;
-    }
-    else
-    {
-        retVal = TRUE;
-        *ppsResearch = psCBLastResearch;
-    }
+		if (psCBLastResearch != NULL)
+		{
+			retVal = TRUE;
+			*ppsResearch = psCBLastResearch;
+			*ppsResFac = psCBLastResStructure;
+		}
+		else
+		{
+			ASSERT( FALSE, "scrCBResCompleted: no research has been set" );
+		}
+	}
 
 	scrFunctionResult.v.bval = retVal;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))

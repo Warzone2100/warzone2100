@@ -77,7 +77,9 @@ extern		UDWORD					numResearch;
 extern PLAYER_RESEARCH*		asPlayerResList[MAX_PLAYERS];
 
 //used for Callbacks to say which topic was last researched
-extern RESEARCH                *psCBLastResearch;
+extern RESEARCH				*psCBLastResearch;
+extern STRUCTURE			*psCBLastResStructure;
+extern SDWORD				CBResFacilityOwner;
 
 /* Default level of sensor, repair and ECM */
 extern UDWORD	aDefaultSensor[MAX_PLAYERS];
@@ -104,7 +106,7 @@ extern UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic,
                               UWORD limit);
 
 /* process the results of a completed research topic */
-extern void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay);
+extern void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay, STRUCTURE *psResearchFacility);
 
 //this just inits all the research arrays
 extern BOOL ResearchShutDown(void);

@@ -1282,7 +1282,7 @@ void	kf_FinishAllResearch(void)
 		if (IsResearchCompleted(pPlayerRes) == FALSE)
 		{
 			MakeResearchCompleted(pPlayerRes);
-			researchResult(j, selectedPlayer, FALSE);
+			researchResult(j, selectedPlayer, FALSE, NULL);
 		}
 	}
 	CONPRINTF(ConsoleString, (ConsoleString, _("Researched EVERYTHING for you!")));

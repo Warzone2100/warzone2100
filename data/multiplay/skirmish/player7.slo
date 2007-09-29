@@ -3666,7 +3666,7 @@ function int numAlliesInBase(bool _bVtols)
 
 	_numAllies = numFriendlyWeapDroidsInRange(me, baseX, baseY, W_BASE_THREAT_RANGE, _bVtols);
 	_numAllies = _numAllies +
-					numFriendlyWeapStructsInRange(me, baseX, baseY, W_BASE_THREAT_RANGE) / 3;
+					numFriendlyWeapStructsInRange(me, baseX, baseY, W_BASE_THREAT_RANGE, true) / 3;
 
 	return _numAllies;
 }
@@ -3677,7 +3677,7 @@ function int numEnemiesInBase(bool _bVtols)
 
 	_numEnemies = numEnemyWeapDroidsInRange(me, baseX, baseY, W_BASE_THREAT_RANGE, _bVtols);
 	_numEnemies = _numEnemies +
-				numEnemyWeapStructsInRange(me, baseX, baseY, W_BASE_THREAT_RANGE) / 4;
+				numEnemyWeapStructsInRange(me, baseX, baseY, W_BASE_THREAT_RANGE, true) / 4;
 
 	return _numEnemies;
 }

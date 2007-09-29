@@ -265,7 +265,7 @@ static void giftResearch(UDWORD from,UDWORD to,BOOL send)
 			if(IsResearchCompleted(&pRto[i])==FALSE)
 			{
 				MakeResearchCompleted(&pRto[i]);
-				researchResult(i,(UBYTE)to,FALSE);
+				researchResult(i,(UBYTE)to,FALSE,NULL);
 			}
 		}
 	}

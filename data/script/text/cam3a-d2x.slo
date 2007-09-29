@@ -31,13 +31,13 @@ private		int		count, uplinkPlayer;
 private     RESEARCHSTAT    researchDone;
 private		GROUP		grpGroup[1];
 private		DROID		droid;
-private		STRUCTURE	testStruc;	
+private		STRUCTURE	testStruc,structure;	
 
 trigger clearMessageTrig(wait, 100);	//10 second delay
 trigger	nexusGoTrig(wait, 2950);		//wait 5 mins (- 5secs) after warning
 
 trigger captureDeadTrig(((silo[0] == NULLOBJECT) and (silo[1] == NULLOBJECT) and (silo[2] == NULLOBJECT)), 17);
-trigger resDoneTrig(CALL_RESEARCHCOMPLETED, ref  researchDone);	//use playerRes[res] to check against what's been completed	//trigger for research completed
+trigger resDoneTrig(CALL_RESEARCHCOMPLETED, ref  researchDone, ref structure, -1);	//use playerRes[res] to check against what's been completed	//trigger for research completed
 trigger missileLaunchTrig(wait, 20);	//play launch sequence
 
 trigger fireLasSatTrig(wait, 100);	//every 10 seconds

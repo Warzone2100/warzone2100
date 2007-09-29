@@ -2136,7 +2136,7 @@ void aiUpdateMissionStructure(STRUCTURE *psStructure)
 					psResFacility->psSubject = NULL;
 					intResearchFinished(psStructure);
 					researchResult(pSubject->ref - REF_RESEARCH_START,
-						psStructure->player, TRUE);
+						psStructure->player, TRUE, psStructure);
 					//check if this result has enabled another topic
 					intCheckResearchButton();
 				}

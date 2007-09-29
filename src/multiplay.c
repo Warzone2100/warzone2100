@@ -810,7 +810,7 @@ BOOL SendResearch(UBYTE player,UDWORD index)
 				if(IsResearchCompleted(pPlayerRes)==FALSE)
 				{
 					MakeResearchCompleted(pPlayerRes);		// do the research for that player
-					researchResult(index, i,FALSE);
+					researchResult(index, i,FALSE,NULL);
 				}
 			}
 		}
@@ -835,7 +835,7 @@ static BOOL recvResearch(NETMSG *m)
 	if(IsResearchCompleted(pPlayerRes)==FALSE)
 	{
 		MakeResearchCompleted(pPlayerRes);
-		researchResult(index, player,FALSE);
+		researchResult(index, player, FALSE, NULL);
 
 		//take off the power if available.
 		pResearch = asResearch + index;
@@ -853,7 +853,7 @@ static BOOL recvResearch(NETMSG *m)
 				if(IsResearchCompleted(pPlayerRes)==FALSE)
 				{
 					MakeResearchCompleted(pPlayerRes);		// do the research for that player
-					researchResult(index, i,FALSE);
+					researchResult(index, i, FALSE, NULL);
 				}
 			}
 		}

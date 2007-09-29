@@ -4480,7 +4480,7 @@ BOOL scrCompleteResearch(void)
 		return FALSE;
 	}
 
-	researchResult(researchIndex, (UBYTE)player, FALSE);
+	researchResult(researchIndex, (UBYTE)player, FALSE, NULL);
 
 
 	if(bMultiPlayer && (gameTime > 2 ))
@@ -7388,23 +7388,26 @@ BOOL ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, BO
 		{
 			if(psStruct->visible[player])	//if can see it
 			{
-				structType = psStruct->pStructureType->type;
-
-				switch(structType)		//dangerous to get near these structures
+				if(psStruct->status == SS_BUILT)
 				{
-					case REF_DEFENSE:
-					case REF_CYBORG_FACTORY:
-					case REF_FACTORY:
-					case REF_VTOL_FACTORY:
-					case REF_REARM_PAD:
+					structType = psStruct->pStructureType->type;
 
-					if (range < 0
-					 || world_coord(dirtySqrt(tx, ty, map_coord(psStruct->x), map_coord(psStruct->y))) < range)	//enemy in range
+					switch(structType)		//dangerous to get near these structures
 					{
-						return TRUE;
-					}
+						case REF_DEFENSE:
+						case REF_CYBORG_FACTORY:
+						case REF_FACTORY:
+						case REF_VTOL_FACTORY:
+						case REF_REARM_PAD:
 
-					break;
+						if (range < 0
+						 || world_coord(dirtySqrt(tx, ty, map_coord(psStruct->x), map_coord(psStruct->y))) < range)	//enemy in range
+						{
+							return TRUE;
+						}
+
+						break;
+					}
 				}
 			}
 		}
@@ -7876,10 +7879,10 @@ BOOL scrNumEnemyWeapObjInRange(void)
 {
 	SDWORD				lookingPlayer,range,rangeX,rangeY,i;
 	UDWORD				numEnemies = 0;
-	BOOL				bVTOLs;
+	BOOL				bVTOLs,bFinished;
 
-	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
+	if (!stackPopParams(6, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
+		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
 	{
 		debug(LOG_ERROR,  "scrNumEnemyWeapObjInRange(): stack failed");
 		return FALSE;
@@ -7893,14 +7896,83 @@ BOOL scrNumEnemyWeapObjInRange(void)
 			continue;
 		}
 
-		numEnemies = numEnemies + numPlayerWeapDroidsInRange(i, lookingPlayer, range, rangeX, rangeY, bVTOLs);
-		numEnemies = numEnemies + numPlayerWeapStructsInRange(i, lookingPlayer, range, rangeX, rangeY);
+		numEnemies += numPlayerWeapDroidsInRange(i, lookingPlayer, range, rangeX, rangeY, bVTOLs);
+		numEnemies += numPlayerWeapStructsInRange(i, lookingPlayer, range, rangeX, rangeY, bFinished);
 	}
 
 	scrFunctionResult.v.ival = numEnemies;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrNumEnemyWeapObjInRange(): failed to push result");
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/* Calculates the total cost of enemy weapon objects in a certain area */
+BOOL scrEnemyWeapObjCostInRange(void)
+{
+	SDWORD				lookingPlayer,range,rangeX,rangeY,i;
+	UDWORD				enemyCost = 0;
+	BOOL				bVTOLs,bFinished;
+
+	if (!stackPopParams(6, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
+		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
+	{
+		debug(LOG_ERROR,  "scrEnemyWeapObjCostInRange(): stack failed");
+		return FALSE;
+	}
+
+	for(i=0;i<MAX_PLAYERS;i++)
+	{
+		if((alliances[lookingPlayer][i] == ALLIANCE_FORMED) || (i == lookingPlayer))	//skip allies and myself
+		{
+			continue;
+		}
+
+		enemyCost += playerWeapDroidsCostInRange(i, lookingPlayer, range, rangeX, rangeY, bVTOLs);
+		enemyCost += playerWeapStructsCostInRange(i, lookingPlayer, range, rangeX, rangeY, bFinished);
+	}
+
+	scrFunctionResult.v.ival = enemyCost;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
+	{
+		debug(LOG_ERROR, "scrEnemyWeapObjCostInRange(): failed to push result");
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/* Calculates the total cost of ally (+ looking player)
+ * weapon objects in a certain area
+ */
+BOOL scrFriendlyWeapObjCostInRange(void)
+{
+	SDWORD				player,range,rangeX,rangeY,i;
+	UDWORD				friendlyCost = 0;
+	BOOL				bVTOLs,bFinished;
+
+	if (!stackPopParams(6, VAL_INT, &player, VAL_INT, &rangeX,
+		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
+	{
+		debug(LOG_ERROR,  "scrFriendlyWeapObjCostInRange(): stack failed");
+		return FALSE;
+	}
+
+	for(i=0;i<MAX_PLAYERS;i++)
+	{
+		if((alliances[player][i] == ALLIANCE_FORMED) || (i == player))	//skip enemies
+		{
+			friendlyCost += numPlayerWeapDroidsInRange(i, player, range, rangeX, rangeY, bVTOLs);
+			friendlyCost += numPlayerWeapStructsInRange(i, player, range, rangeX, rangeY,bFinished);
+		}
+	}
+
+	scrFunctionResult.v.ival = friendlyCost;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
+	{
 		return FALSE;
 	}
 
@@ -7943,17 +8015,55 @@ UDWORD numPlayerWeapDroidsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD ra
 	return numEnemies;
 }
 
-
-
-UDWORD numPlayerWeapStructsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range, SDWORD rangeX, SDWORD rangeY)
+UDWORD playerWeapDroidsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range,
+								   SDWORD rangeX, SDWORD rangeY, BOOL bVTOLs)
 {
-	UDWORD				tx,ty,numEnemies;
+	UDWORD				droidCost;
+	DROID				*psDroid;
+
+	droidCost = 0;
+
+	//check droids
+	for(psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	{
+		if(psDroid->visible[lookingPlayer])		//can see this droid?
+		{
+			if (psDroid->droidType != DROID_WEAPON &&
+				psDroid->droidType != DROID_PERSON &&
+				psDroid->droidType != DROID_CYBORG &&
+				psDroid->droidType != DROID_CYBORG_SUPER)
+			{
+				continue;
+			}
+
+			//if VTOLs are excluded, skip them
+			if(!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == LIFT) || (psDroid->droidType == DROID_TRANSPORTER)))
+			{
+				continue;
+			}
+
+			if((range < 0) || (dirtySqrt(rangeX, rangeY , psDroid->x, psDroid->y) < range))	//enemy in range
+			{
+				droidCost += calcDroidPower(psDroid);
+			}
+		}
+	}
+
+	return droidCost;
+}
+
+
+
+UDWORD numPlayerWeapStructsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range,
+								   SDWORD rangeX, SDWORD rangeY, BOOL bFinished)
+{
+	UDWORD				tx,ty,numStructs;
 	STRUCTURE			*psStruct;
 
 	tx = map_coord(rangeX);
 	ty = map_coord(rangeY);
 
-	numEnemies = 0;
+	numStructs = 0;
 
 	//check structures
 	for(psStruct = apsStructLists[player]; psStruct; psStruct=psStruct->psNext)
@@ -7962,16 +8072,52 @@ UDWORD numPlayerWeapStructsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD r
 		{
 			if(psStruct->pStructureType->type == REF_DEFENSE)
 			{
-				if (range < 0
-				 || world_coord(dirtySqrt(tx, ty, map_coord(psStruct->x), map_coord(psStruct->y))) < range)	//enemy in range
+				if(!bFinished || psStruct->status == SS_BUILT)
 				{
-					numEnemies++;
+					if (range < 0
+					 || world_coord(dirtySqrt(tx, ty, map_coord(psStruct->x), map_coord(psStruct->y))) < range)	//enemy in range
+					{
+						numStructs++;
+					}
 				}
 			}
 		}
 	}
 
-	return numEnemies;
+	return numStructs;
+}
+
+UDWORD playerWeapStructsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range,
+								   SDWORD rangeX, SDWORD rangeY, BOOL bFinished)
+{
+	UDWORD				tx,ty,structsCost;
+	STRUCTURE			*psStruct;
+
+	tx = rangeX >> TILE_SHIFT;
+	ty = rangeY >> TILE_SHIFT;
+
+	structsCost = 0;
+
+	//check structures
+	for(psStruct = apsStructLists[player]; psStruct; psStruct=psStruct->psNext)
+	{
+		if(psStruct->visible[lookingPlayer])	//if can see it
+		{
+			if(psStruct->pStructureType->type == REF_DEFENSE)
+			{
+				if(!bFinished || psStruct->status == SS_BUILT)
+				{
+					if((range < 0) || ((dirtySqrt(tx, ty, psStruct->x >> TILE_SHIFT, psStruct->y >> TILE_SHIFT)
+						<< TILE_SHIFT) < range))	//enemy in range
+					{
+						structsCost += structPowerToBuild(psStruct);
+					}
+				}
+			}
+		}
+	}
+
+	return structsCost;
 }
 
 BOOL scrNumEnemyWeapDroidsInRange(void)
@@ -7994,7 +8140,7 @@ BOOL scrNumEnemyWeapDroidsInRange(void)
 			continue;
 		}
 
-		numEnemies = numEnemies + numPlayerWeapDroidsInRange(i, lookingPlayer, range, rangeX, rangeY, bVTOLs);
+		numEnemies += numPlayerWeapDroidsInRange(i, lookingPlayer, range, rangeX, rangeY, bVTOLs);
 	}
 
 	scrFunctionResult.v.ival = numEnemies;
@@ -8013,9 +8159,10 @@ BOOL scrNumEnemyWeapStructsInRange(void)
 {
 	SDWORD				lookingPlayer,range,rangeX,rangeY,i;
 	UDWORD				numEnemies = 0;
+	BOOL				bFinished;
 
-	if (!stackPopParams(4, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range))
+	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
+		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bFinished))
 	{
 		debug(LOG_ERROR,  "scrNumEnemyWeapStructsInRange(): stack failed");
 		return FALSE;
@@ -8028,7 +8175,7 @@ BOOL scrNumEnemyWeapStructsInRange(void)
 			continue;
 		}
 
-		numEnemies = numEnemies + numPlayerWeapStructsInRange(i, lookingPlayer, range, rangeX, rangeY);
+		numEnemies += numPlayerWeapStructsInRange(i, lookingPlayer, range, rangeX, rangeY, bFinished);
 	}
 
 	scrFunctionResult.v.ival = numEnemies;
@@ -8045,10 +8192,10 @@ BOOL scrNumFriendlyWeapObjInRange(void)
 {
 	SDWORD				player,range,rangeX,rangeY,i;
 	UDWORD				numFriends = 0;
-	BOOL				bVTOLs;
+	BOOL				bVTOLs,bFinished;
 
-	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
+	if (!stackPopParams(6, VAL_INT, &player, VAL_INT, &rangeX,
+		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
 	{
 		debug(LOG_ERROR,  "scrNumFriendlyWeapObjInRange(): stack failed");
 		return FALSE;
@@ -8058,8 +8205,8 @@ BOOL scrNumFriendlyWeapObjInRange(void)
 	{
 		if((alliances[player][i] == ALLIANCE_FORMED) || (i == player))	//skip enemies
 		{
-			numFriends = numFriends + numPlayerWeapDroidsInRange(i, player, range, rangeX, rangeY, bVTOLs);
-			numFriends = numFriends + numPlayerWeapStructsInRange(i, player, range, rangeX, rangeY);
+			numFriends += numPlayerWeapDroidsInRange(i, player, range, rangeX, rangeY, bVTOLs);
+			numFriends += numPlayerWeapStructsInRange(i, player, range, rangeX, rangeY,bFinished);
 		}
 	}
 
@@ -8089,7 +8236,7 @@ BOOL scrNumFriendlyWeapDroidsInRange(void)
 	{
 		if((alliances[lookingPlayer][i] == ALLIANCE_FORMED) || (i == lookingPlayer))
 		{
-			numEnemies = numEnemies + numPlayerWeapDroidsInRange(i, lookingPlayer, range, rangeX, rangeY, bVTOLs);
+			numEnemies += numPlayerWeapDroidsInRange(i, lookingPlayer, range, rangeX, rangeY, bVTOLs);
 		}
 	}
 
@@ -8110,19 +8257,20 @@ BOOL scrNumFriendlyWeapStructsInRange(void)
 {
 	SDWORD				lookingPlayer,range,rangeX,rangeY,i;
 	UDWORD				numEnemies = 0;
+	BOOL				bFinished;
 
-	if (!stackPopParams(4, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range))
+	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
+		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bFinished))
 	{
 		debug(LOG_ERROR, "scrNumFriendlyWeapStructsInRange(): stack failed");
 		return FALSE;
 	}
 
-	for(i=0;i<MAX_PLAYERS;i++)
+	for(i=0; i<MAX_PLAYERS; i++)
 	{
 		if((alliances[lookingPlayer][i] == ALLIANCE_FORMED) || (i == lookingPlayer))	//skip enemies
 		{
-			numEnemies = numEnemies + numPlayerWeapStructsInRange(i, lookingPlayer, range, rangeX, rangeY);
+			numEnemies += numPlayerWeapStructsInRange(i, lookingPlayer, range, rangeX, rangeY, bFinished);
 		}
 	}
 
@@ -8162,15 +8310,16 @@ BOOL scrNumPlayerWeapDroidsInRange(void)
 BOOL scrNumPlayerWeapStructsInRange(void)
 {
 	SDWORD		targetPlayer,lookingPlayer,range,rangeX,rangeY;
+	BOOL		bFinished;
 
-	if (!stackPopParams(5, VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer,
-		VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range))
+	if (!stackPopParams(6, VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer,
+		VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bFinished))
 	{
 		debug(LOG_ERROR,"scrNumPlayerWeapStructsInRange(): stack failed");
 		return FALSE;
 	}
 
-	scrFunctionResult.v.ival = numPlayerWeapStructsInRange(targetPlayer, lookingPlayer, range, rangeX, rangeY);
+	scrFunctionResult.v.ival = numPlayerWeapStructsInRange(targetPlayer, lookingPlayer, range, rangeX, rangeY, bFinished);
 
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
@@ -8185,17 +8334,18 @@ BOOL scrNumPlayerWeapObjInRange(void)
 {
 	SDWORD				targetPlayer,lookingPlayer,range,rangeX,rangeY;
 	UDWORD				numEnemies = 0;
-	BOOL				bVTOLs;
+	BOOL				bVTOLs,bFinished;
 
-	if (!stackPopParams(6, VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer,
-		VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
+	if (!stackPopParams(7, VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer,
+						VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range,
+						VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
 	{
 		debug(LOG_ERROR,"scrNumPlayerWeapObjInRange(): stack failed");
 		return FALSE;
 	}
 
-	numEnemies = numEnemies + numPlayerWeapDroidsInRange(targetPlayer, lookingPlayer, range, rangeX, rangeY, bVTOLs);
-	numEnemies = numEnemies + numPlayerWeapStructsInRange(targetPlayer, lookingPlayer, range, rangeX, rangeY);
+	numEnemies += numPlayerWeapDroidsInRange(targetPlayer, lookingPlayer, range, rangeX, rangeY, bVTOLs);
+	numEnemies += numPlayerWeapStructsInRange(targetPlayer, lookingPlayer, range, rangeX, rangeY, bFinished);
 
 	scrFunctionResult.v.ival = numEnemies;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
@@ -8210,16 +8360,16 @@ BOOL scrNumPlayerWeapObjInRange(void)
 BOOL scrNumEnemyObjInRange(void)
 {
 	SDWORD				lookingPlayer,range,rangeX,rangeY;
-	BOOL				bVTOLs;
+	BOOL				bVTOLs,bFinished;
 
-	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
+	if (!stackPopParams(6, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
+		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
 	{
 		debug(LOG_ERROR, "scrNumEnemyObjInRange(): stack failed");
 		return FALSE;
 	}
 
-	scrFunctionResult.v.ival = numEnemyObjInRange(lookingPlayer, range, rangeX, rangeY, bVTOLs);;
+	scrFunctionResult.v.ival = numEnemyObjInRange(lookingPlayer, range, rangeX, rangeY, bVTOLs, bFinished);
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrNumEnemyObjInRange(): failed to push result");
@@ -8229,7 +8379,8 @@ BOOL scrNumEnemyObjInRange(void)
 	return TRUE;
 }
 
-UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, BOOL bVTOLs)
+UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY,
+						  BOOL bVTOLs, BOOL bFinished)
 {
 	UDWORD				i,tx,ty,numEnemies;
 	STRUCTURE			*psStruct;
@@ -8252,14 +8403,14 @@ UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 		{
 			if(psStruct->visible[player])	//if can see it
 			{
-				//if(psStruct->pStructureType->type == REF_DEFENSE)
-				//{
+				if(!bFinished || psStruct->status == SS_BUILT)
+				{
 					if (range < 0
 					 || world_coord(dirtySqrt(tx, ty, map_coord(psStruct->x), map_coord(psStruct->y))) < range)	//enemy in range
 					{
 						numEnemies++;
 					}
-				//}
+				}
 			}
 		}
 
@@ -9318,8 +9469,8 @@ BOOL scrCirclePerimPoint(void)
 	UDWORD				dist;
 	float				factor,tempx,tempy;
 
-	if (!stackPopParams(5, VAL_INT, &basex, VAL_INT, &basey, VAL_REF|VAL_INT, &grx, VAL_REF|VAL_INT, &gry,
-		 VAL_INT, &radius))
+	if (!stackPopParams(5, VAL_INT, &basex, VAL_INT, &basey, VAL_REF|VAL_INT, &grx,
+		VAL_REF|VAL_INT, &gry, VAL_INT, &radius))
 	{
 		debug(LOG_ERROR,"scrCirclePerimPoint(): stack failed");
 		return FALSE;
@@ -10911,6 +11062,44 @@ BOOL scrToPow(void)
 	return TRUE;
 }
 
+/* Exponential function */
+BOOL scrExp(void)
+{
+	float		fArg;
+
+	if (!stackPopParams(1, VAL_FLOAT, &fArg))
+	{
+		return FALSE;
+	}
+
+	scrFunctionResult.v.fval = exp(fArg);
+	if (!stackPushResult(VAL_FLOAT, &scrFunctionResult))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/* Square root */
+BOOL scrSqrt(void)
+{
+	float		fArg;
+
+	if (!stackPopParams(1, VAL_FLOAT, &fArg))
+	{
+		return FALSE;
+	}
+
+	scrFunctionResult.v.fval = sqrt(fArg);
+	if (!stackPushResult(VAL_FLOAT, &scrFunctionResult))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
 /* Show/Hide multiplayer debug menu */
 BOOL scrDebugMenu(void)
 {
@@ -11261,6 +11450,31 @@ BOOL scrGetDroidLevel(void)
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrGetDroidLevel(): failed to push result");
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/*
+ * Returns true if droid is not moving
+ */
+BOOL scrMoveDroidStopped(void)
+{
+	DROID	*psDroid;
+
+	if (!stackPopParams(1, ST_DROID, &psDroid))
+	{
+		return FALSE;
+	}
+
+	ASSERT(psDroid != NULL,
+		"scrMoveDroidStopped: null-pointer passed");
+
+	scrFunctionResult.v.bval = moveDroidStopped(psDroid, 0);
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
+	{
+		debug(LOG_ERROR, "scrMoveDroidStopped(): failed to push result");
 		return FALSE;
 	}
 

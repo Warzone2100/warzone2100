@@ -21,7 +21,7 @@ private     	RESEARCHSTAT    researchDone;
 trigger factoryTrig(every, 300);	//nexus factory trigger
 trigger nexusTrig(every, 300);		//30sec time between taking over structures
 trigger changeDroidsTrig(every, 100);	//10sec time between taking over droids
-trigger resDoneTrig(CALL_RESEARCHCOMPLETED, ref  researchDone);	//check if player has researched resistance circuits
+trigger resDoneTrig(CALL_RESEARCHCOMPLETED, ref  researchDone, ref structure, -1);	//check if player has researched resistance circuits
 
 //player wins by first researching resistance circuits, then having no enemy structures or enemy units
 trigger delayWinTrig((not anyStructButWallsLeft(enemy)) and (getDroidCount(enemy) == 0), 41);

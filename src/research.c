@@ -56,6 +56,8 @@ UDWORD					numResearch;
 
 //used for Callbacks to say which topic was last researched
 RESEARCH                *psCBLastResearch;
+STRUCTURE				*psCBLastResStructure;
+SDWORD					CBResFacilityOwner;
 
 //research is now loaded per campaign - this hopefully is the max there will be in any one campaign!
 #define MAX_RESEARCH        (450)
@@ -126,6 +128,8 @@ BOOL researchInitVars(void)
 	int i;
 
 	psCBLastResearch = NULL;
+	psCBLastResStructure = NULL;
+	CBResFacilityOwner = -1;
 	asResearch = NULL;
     //research is a pre-defined size now
 	asResearch = (RESEARCH *)malloc(sizeof(RESEARCH)* MAX_RESEARCH);
@@ -1242,7 +1246,8 @@ add_research: //if passed all the tests - add it to the list
 }
 
 /* process the results of a completed research topic */
-void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay)
+void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
+					STRUCTURE *psResearchFacility)
 {
 	RESEARCH					*pResearch = asResearch + researchIndex;
 	UDWORD						type, inc;//, upgrade;
@@ -1868,11 +1873,15 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay)
 	}
 
 #ifdef SCRIPTS
-    if ((player == selectedPlayer) && bDisplay)
+    if ((bMultiPlayer || player == selectedPlayer) && bDisplay)
     {
         psCBLastResearch = pResearch;
+		CBResFacilityOwner = player;
+		psCBLastResStructure = psResearchFacility;
 	    eventFireCallbackTrigger((TRIGGER_TYPE)CALL_RESEARCHCOMPLETED);
-        psCBLastResearch = NULL;
+		psCBLastResStructure = NULL;
+        CBResFacilityOwner = -1;
+		psCBLastResearch = NULL;
     }
 #endif
 
@@ -1900,14 +1909,16 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay)
                 }
                 if (compInc >= 32)
                 {
-			debug(LOG_ERROR, "researchResult - more than 32 weapons now available");
-                    //don't bother checking any more
+					debug(LOG_ERROR, "researchResult - more than 32 weapons now available");
+                   
+					//don't bother checking any more
                     break;
                 }
                 if (vtolCompInc >= 32)
                 {
-			debug(LOG_ERROR, "researchResult - more than 32 vtol weapons now available");
-                    //don't bother checking any more
+					debug(LOG_ERROR, "researchResult - more than 32 vtol weapons now available");
+                    
+					//don't bother checking any more
                     break;
                 }
             }
@@ -2658,7 +2669,7 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	//if a topic was found give the reward player the results of that research
 	if (rewardID)
 	{
-		researchResult(rewardID, rewardPlayer, TRUE);
+		researchResult(rewardID, rewardPlayer, TRUE, NULL);
 		if (rewardPlayer == selectedPlayer)
 		{
 			//name the actual reward

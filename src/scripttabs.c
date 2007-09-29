@@ -1114,7 +1114,7 @@ FUNC_SYMBOL asFuncTable[] =
 		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "numEnemyWeapObjInRange",scrNumEnemyWeapObjInRange,VAL_INT,
-		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL },
+		6, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL, VAL_BOOL },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "numEnemyWeapDroidsInRange",scrNumEnemyWeapDroidsInRange,VAL_INT,
@@ -1122,11 +1122,11 @@ FUNC_SYMBOL asFuncTable[] =
 		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "numEnemyWeapStructsInRange",scrNumEnemyWeapStructsInRange,VAL_INT,
-		4, { VAL_INT, VAL_INT , VAL_INT, VAL_INT },
+		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "numFriendlyWeapObjInRange",scrNumFriendlyWeapObjInRange,VAL_INT,
-		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL },
+		6, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL, VAL_BOOL },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "numFriendlyWeapDroidsInRange",scrNumFriendlyWeapDroidsInRange,VAL_INT,
@@ -1134,23 +1134,31 @@ FUNC_SYMBOL asFuncTable[] =
 		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "numFriendlyWeapStructsInRange",scrNumFriendlyWeapStructsInRange,VAL_INT,
-		4, { VAL_INT, VAL_INT , VAL_INT, VAL_INT },
+		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "numPlayerWeapObjInRange",scrNumPlayerWeapObjInRange,VAL_INT,
+		7, { VAL_INT, VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL, VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "numPlayerWeapDroidsInRange",	scrNumPlayerWeapDroidsInRange,		VAL_INT,
 		6, { VAL_INT, VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "numPlayerWeapDroidsInRange",			scrNumPlayerWeapDroidsInRange,		VAL_INT,
-	6, { VAL_INT, VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL },
+	{ "numPlayerWeapStructsInRange",scrNumPlayerWeapStructsInRange,		VAL_INT,
+		6, { VAL_INT, VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "numPlayerWeapStructsInRange",		scrNumPlayerWeapStructsInRange,		VAL_INT,
-	5, { VAL_INT, VAL_INT, VAL_INT , VAL_INT, VAL_INT },
+	{ "numEnemyObjInRange",		scrNumEnemyObjInRange,			VAL_INT,
+		6, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL, VAL_BOOL },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "numEnemyObjInRange",			scrNumEnemyObjInRange,			VAL_INT,
-		5, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL },
+	{ "enemyWeapObjCostInRange",scrEnemyWeapObjCostInRange,VAL_INT,
+		6, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL, VAL_BOOL },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "friendlyWeapObjCostInRange",scrFriendlyWeapObjCostInRange,VAL_INT,
+		6, { VAL_INT, VAL_INT , VAL_INT, VAL_INT, VAL_BOOL, VAL_BOOL },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "alliancesLocked",		scrAlliancesLocked,		VAL_BOOL,
@@ -1342,6 +1350,14 @@ FUNC_SYMBOL asFuncTable[] =
 
 	{ "toPow",					scrToPow,					VAL_FLOAT,
 		2, { VAL_FLOAT, VAL_FLOAT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "exp",				scrExp,							VAL_FLOAT,
+		1, { VAL_FLOAT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "sqrt",				scrSqrt,						VAL_FLOAT,
+		1, { VAL_FLOAT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "debugMenu",				scrDebugMenu,				VAL_VOID,
@@ -2015,7 +2031,7 @@ CALLBACK_SYMBOL asCallbackTable[] =
 
 	// callback triggers with parameters
     { "CALL_RESEARCHCOMPLETED",	(TRIGGER_TYPE)CALL_RESEARCHCOMPLETED,
-		scrCBResCompleted,	1,	{ VAL_REF|(INTERP_TYPE)ST_RESEARCH } },
+		scrCBResCompleted,	3,	{ VAL_REF|(INTERP_TYPE)ST_RESEARCH, VAL_REF|(INTERP_TYPE)ST_STRUCTURE, VAL_INT } },
 
 	{ "CALL_NEWDROID",			(TRIGGER_TYPE)CALL_NEWDROID,
 		scrCBNewDroid,		3,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_DROID, VAL_REF|(INTERP_TYPE)ST_STRUCTURE } },
@@ -2080,33 +2096,33 @@ CALLBACK_SYMBOL asCallbackTable[] =
 	{ "CALL_ALLIANCEOFFER",		(TRIGGER_TYPE)CALL_ALLIANCEOFFER,
 		scrCBAllianceOffer,	2,	{ VAL_REF|VAL_INT,VAL_REF|VAL_INT }},
 
-		// new callbacks
-		//-------------------------------------------------------------------------------
+	// new callbacks
+	//-------------------------------------------------------------------------------
 
-			//console callback
+	//console callback
 	{ "CALL_CONSOLE",			(TRIGGER_TYPE)CALL_CONSOLE,
 		scrCallConsole,		2,	{ VAL_REF|VAL_INT,VAL_REF|VAL_STRING }},
 
-		//59
+	//59
 	{ "CALL_AI_MSG",			(TRIGGER_TYPE)CALL_AI_MSG,
 		scrCallMultiMsg,	3,	{ VAL_INT, VAL_REF|VAL_INT,VAL_REF|VAL_STRING }},
 
-		//59
+	//59
 	{ "CALL_BEACON",			(TRIGGER_TYPE)CALL_BEACON,
 		scrCallBeacon,		5,	{ VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_STRING }},
 
 	{ "CALL_STRUCTBUILT",		(TRIGGER_TYPE)CALL_STRUCTBUILT,
 		scrCBStructBuilt,	3,	{ VAL_INT, VAL_REF|ST_DROID, VAL_REF|ST_STRUCTURE } },
 
-		//new transporter landed callback
+	// new transporter landed callback
 	{ "CALL_TRANSPORTER_LANDED_B",(TRIGGER_TYPE)CALL_TRANSPORTER_LANDED_B,
 		scrCBTransporterLandedB,3,	{ (INTERP_TYPE)ST_GROUP, VAL_INT, VAL_REF|ST_DROID } },
 
-		//fired when droid received DORDER_STOP order
+	// fired when droid received DORDER_STOP order
 	{ "CALL_DORDER_STOP",	(TRIGGER_TYPE)CALL_DORDER_STOP,
 		scrCBDorderStop,	2,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_DROID } },
 
-		//fired when droid reached the destination and stopped on its own
+	// fired when droid reached the destination and stopped on its own
 	{ "CALL_DROID_REACH_LOCATION",(TRIGGER_TYPE)CALL_DROID_REACH_LOCATION,
 		scrCBDorderReachedLocation,3,	{ VAL_INT, VAL_REF|(INTERP_TYPE)ST_DROID, VAL_REF | VAL_INT } },
 

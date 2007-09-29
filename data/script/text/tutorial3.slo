@@ -194,6 +194,8 @@ public	int	WEAP_BUT, SYS_BUT, COMM_BUT;
 //holder for the researchCompleted callback - can use it if we want, but not really necessary
 private  RESEARCHSTAT		researchDone;
 
+private	STRUCTURE			structure;
+
 //triggers
 trigger droidSelTrig(CALL_DROID_SELECTED, ref selDroid);
 trigger droidHelpTrig((selDroid.order==DORDER_HELPBUILD), 5);
@@ -747,7 +749,7 @@ event	artefactChosen(inactive)
 	setEventTrigger(artefactChosen,inactive);
 }
 // -------------------------------------------------------------
-event	researchCompleted(CALL_RESEARCHCOMPLETED, ref researchDone)
+event	researchCompleted(CALL_RESEARCHCOMPLETED, ref researchDone, ref structure, -1)
 {
 	tutState = 18;
 
