@@ -84,6 +84,10 @@ baseRes[1]	RESEARCHSTAT			"R-Wpn-MG1Mk1"
 baseRes[2]	RESEARCHSTAT			"R-Sys-Engineering01"
 
 
+CyborgSpade		CONSTRUCT			"CyborgSpade"		//cyborg construction component
+CyborgRepair	REPAIR				"CyborgRepair"		//cyborg repair component
+
+
 /////////////////////////////////////////////////////////////////////////
 // Other Guff.
 

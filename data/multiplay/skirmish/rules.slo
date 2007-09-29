@@ -19,7 +19,7 @@ public 	STRUCTURESTAT	vtolfac;
 
 ////////
 // starting technologies.
-public	int				numCleanTech,	numBaseTech,	numDefTech;
+public	int				numCleanTech,	numBaseTech,	numDefTech, numBaseComp;
 public	RESEARCHSTAT	defTech[50];
 
 // research topics
@@ -38,6 +38,9 @@ private	int				t;
 public	SOUND			attackSnd1;	
 
 public	INTMESSAGE		endMsg, winMsg;
+
+public	CONSTRUCT		CyborgSpade;
+public	REPAIR			CyborgRepair;
 
 // /////////////////////////////////////////////////////////////////
 
@@ -85,7 +88,7 @@ event initialisedEvent(CALL_GAMEINIT)
 event initialisedEventTwo(CALL_GAMEINIT)
 {
 	
-	playnum=0;
+	playnum = 0;
 	while (playnum < 8)
 	{
 		count = 0;								
@@ -94,6 +97,11 @@ event initialisedEventTwo(CALL_GAMEINIT)
 			enableResearch(baseRes[count], playnum);
 			count = count +1;
 		}
+
+		// enable cyborgs components that can't be enabled with research
+		// making cyborg templates stay unavailable for AI
+		makeComponentAvailable(CyborgSpade, playnum);
+		makeComponentAvailable(CyborgRepair, playnum);
 
 		if(multiPlayerBaseType == CAMP_CLEAN)
 		{
