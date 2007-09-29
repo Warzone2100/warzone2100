@@ -1,0 +1,207 @@
+Warzone 2100 - Readme
+=====================
+Content
+-------
+1. Contents of Warzone 2100 GPL
+2. State of the game
+ 2.1 Reporting bugs
+3. Configuration
+ 3.1 WZ-dir and configuration file
+ 3.2 Command-line options
+ 3.3 Music
+ 3.4 Multiplaying via internet
+4. Important hotkeys
+5. Additional resources
+
+1. Contents of Warzone 2100 GPL
+===============================
+Back in 1999 Warzone 2100 was released as a commercial, innovative 3D real-time
+strategy game. When it was liberated everything despite music and ingame-videos
+has been open-sourced. The original campaign is still playable though.
+
+Additionally all multiplayer-maps that were available in Warzone 2100 1.10,
+the last official patch by Pumpkin Studios, are available in Warzone 2100 GPL as
+well.
+
+2. State of the game
+====================
+After the liberation of the Warzone 2100 source-code on December 6th, 2004, all
+proprietary technologies had been replaced with open-source-counterparts.
+
+Right now supported platforms are GNU/Linux, Mac OS X 10.4 (Tiger) and Windows
+(98 - XP). There are reports that Warzone 2100 GPL is working on BSD, too. Some
+people even run it under Windows Vista, which is not directly supported.
+
+The game is still in a beta-state, so do not expect the game to run without any
+issues.
+
+2.1 Reporting Bugs
+------------------
+This game still has bugs and if you run into one, please use the bugtracker
+(https://gna.org/bugs/?group=warzone) to report this bug. In order to faster fix
+those bugs the developers require that you follow these rules:
+
+   1. If the game crashes you may save a memory dump. Please do so and upload it
+      when reporting the bug. (Linux locates that file at /tmp/warzone2100.gdmp)
+      A self created backtrace is just as useful.
+   2. Give as much information about what you were doing before the crash/bug
+      occured.
+   3. Try to reproduce the bug and add a description of the process to your bug-
+      report.
+   4. You may even upload save-games. These consist of one or two file(s) and
+      one folder. All two/three are named after your save-game (e.g.
+      MySaveGame.es, MySaveGame.gam and the folder MySaveGame).
+   5. Bug-reports are no submit-&-forget-reports. It may be that you forgot some
+      information or forgot to upload a file. So it is, too, in your interest to
+      watch the bug-report after it has been submitted. Additionally you receive
+      e-mails of comments to your bug-report.
+
+3. Configuration
+================
+3.1 WZ-dir and configuration file
+---------------------------------
+Warzone saves your configuration data in a file named "config". Where this file
+is located depends on your operating system.
+
+Warzone-dir under GNU/Linux
+***************************
+Under GNU/Linux the warzone-dir can be found in your home-directory, it's called
+".warzone2100". The leading dot indicates that it is a hidden folder so
+depending on your configuration you may not be able to see it. However, you can
+still access it by typing the path into your address-bar.
+
+Warzone-dir under Windows
+*************************
+The folder is called "Warzone 2100" and is located in "My Documents".
+
+3.2 Command-line options
+------------------------
+Additionally to the configuration-file Warzone can be started with different
+parameters.
+
+Note: This parameters all have two dashes (--), not one dash only (-). Trying to
+use the parameters with one dash only will not work.
+Parameter			Effect
+--fullscreen 			play in fullscreen-mode
+--window 			play in windowed mode
+--resolution WIDTHxHEIGHT 	sets the size of the viewport, usable with
+				fullscreen and windowed
+--datadir DIR 			sets the default data-dir to DIR
+--shadows 			enables shadows
+--noshadows 			disables shadows
+--sound 			enables sound
+--nosound 			disables sound
+--cheat 			enables the usage of cheats and debug-keys
+
+Note: All mentioned command-line parameters except --datadir change the appro-
+priate value in your config-file. Starting warzone by double-clicking the exe-
+cutable/binary will then start the game with the settings used last time. So
+don't wonder, if there is no sound, when you started warzone with --nosound last
+time.
+
+Note: This is list is not complete. A complete list and further information on
+command-line options (http://wiki.wz2100.net/command_line_options) can be found
+at the Wiki of Warzone Resurrection Project (http://wiki.wz2100.net/).
+
+3.3 Music
+---------
+As the original game music is part of the data that was not liberated, we are
+reintroducing music, but in a different way. We use a playlist system that can
+point to any *.ogg or *.mp3-file in your warzone-data-path. This is still
+experimental and we are gradually making this more usable.
+
+Warzone reads the following two playlists (in the order they are mentioned) and
+the first playlist found will be used:
+
+* Warzone-directory in your personal directory:
+	o for GNU/Linux: ~/.warzone2100/music/music.wpl
+	o for Windows: ~/My Documents/Warzone 2100/music/music.wpl
+* Warzone-install-path:
+	o <whereverwarzoneisinstalled>/music/music.wpl
+
+Using the playlist
+******************
+The playlist contains two sections, [game] and [menu]. For each section you can
+define a list of songs you want to played in-game. Supported file-formats are
+OGG and MP3 as long as all necessary libraries are installed.
+
+With "shuffle=yes" you specify that you want the songs to played in random
+order. You need to set this for each section individually.
+
+Using "path=." you specify that the following files are found in the folder the
+playlist was found. If you do not specify a path all file-names have to be given
+with "absolute" path. This "absolute" path is still relative to your
+warzone-data-dir. All file-names should be lower-case. However file-names have
+to match those in the file-system.
+
+This example shows how a playlist-file could look like:
+--------------------------------------------------------------------------------
+[game]
+path=.
+shuffle=yes
+neos_aurore.ogg
+neos_chocolat.ogg
+neos_down.ogg
+neos_esperance.ogg
+neos_indy.ogg
+
+[menu]
+path=.
+neos_symphonie_du_vide.ogg
+--------------------------------------------------------------------------------
+
+3.4 Multiplaying via internet
+-----------------------------
+There are two methods to start a multiplayer-game via internet: using the host's
+IP or using the lobby-server. Make sure to be able to communicate on TCP-ports
+9998 and 9999.
+
+You can choose whether to connect via Lobby or IP:
+
+* If you choose IP, Warzone 2100 asks you for the ip-address of the host and
+  will try to connect to that IP.
+* If you choose Lobby, Warzone 2100 will connect to the lobby server, as long as
+  the lobby-server-address in your config-file has not been changed.
+
+You will see a list of games from which you can select one.
+
+Currently Warzone 2100 lacks a kick-feature for hosts, so you will not be able
+to kick out unwanted players.
+
+When you are hosting a game it will automatically be listed on the lobby-server.
+If you do not want your games to be listed on the lobby-server, you have to
+change the entry "masterserver_name=lobby.wz2100.net" in your config to some-
+thing invalid as "nomasterserverplease".
+
+If you then want to see the games that are listed on the lobby-server you may
+enter "lobby.wz2100.net" when prompted to enter the host's IP or change the
+entry in the config-file back. You will have to restart Warzone 2100 in order
+for config-changes to take effect.
+
+4. Important hotkeys
+====================
+Hotkey				Effect
+Ctrl + Tab 			toggle display of terrain in map
+Shift + Tab 			toggle friend/foe-colours in map (you: white,
+				ally: yellow, foe: red)
+Alt + Tab (Linux + X11 only) 	toggle between fullscreen and windowed mode
+Alt + S 			toggle shadows
+Shift + Backspace 		allow/disallow usage of cheats
+Ctrl + O 			display debug-menu
+
+5. Additional resources
+=======================
+Homepage of the Warzone Resurrection Project (English):
+http://wz2100.net/
+
+Gna!-Project site of Warzone (English):
+https://gna.org/projects/warzone/
+
+Warzone-Wiki (English):
+http://wiki.wz2100.net/
+
+Warzone2100.de (German):
+http://warzone2100.de/
+
+AUTHOR: Kreuvf (kreuvf@warzone2100.de)
+LAST UPDATE: 2007/09/29
