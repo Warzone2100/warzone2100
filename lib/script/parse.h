@@ -47,7 +47,7 @@ extern SDWORD scr_include_stack_ptr;
 /* Script defines */
 #define MAX_SCR_MACRO_DEPTH		10
 #define MAX_SCR_MACROS			150		/* Max defines in a file */
-#define MAX_SCR_MACRO_LEN		30
+#define MAX_SCR_MACRO_LEN		32
 
 extern SDWORD scr_num_macros;			/* Number of mactos defined so far */
 extern SDWORD scr_macro_stack_ptr;		/* Pointer to the current flex macro input buffer */
