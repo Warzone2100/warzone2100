@@ -1,4 +1,4 @@
-;  This file is part of ${PACKAGE_NAME}.
+;  This file is part of Warzone 2100.
 ;  Copyright (C) 2006-2007  Warzone Resurrection Project
 ;  Copyright (C) 2006       Dennis Schridde
 ;
