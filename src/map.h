@@ -165,12 +165,12 @@ extern MAPTILE *psMapTiles;
 
 static inline int32_t world_coord(int32_t mapCoord)
 {
-	return mapCoord * TILE_UNITS;
+	return mapCoord << TILE_SHIFT;
 }
 
 static inline int32_t map_coord(int32_t worldCoord)
 {
-	return worldCoord / TILE_UNITS;
+	return worldCoord >> TILE_SHIFT;
 }
 
 /* Make sure world coordinates are inside the map */
