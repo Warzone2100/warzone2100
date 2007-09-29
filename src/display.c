@@ -96,9 +96,6 @@
 
 struct	_dragBox dragBox3D,wallDrag;
 
-// control whether the scroll is limited to visible tiles
-//#define VISIBLE_SCROLL
-
 #define POSSIBLE_SELECTIONS		13
 #define POSSIBLE_TARGETS		23
 
@@ -1082,9 +1079,6 @@ void scroll(void)
 	float	radians;
 	float	cosine, sine;
 	SDWORD	xDif,yDif;
-#ifdef VISIBLE_SCROLL
-	SDWORD	newx,newy;
-#endif
 	UDWORD	timeDiff;
 	BOOL	bRetardScroll = FALSE;
 	BOOL mouseAtLeft = FALSE, mouseAtRight = FALSE,
@@ -1291,38 +1285,8 @@ void scroll(void)
 	yDif = ROUND(sine * scrollStepLeftRight - cosine * scrollStepUpDown);
 
 	/* Adjust player's position by these components */
-#ifdef VISIBLE_SCROLL
-	newx = player.p.x + xDif;
-	newy = player.p.z + yDif;
-	if (mapTile(map_coord(world_coord(VISIBLE_XTILES / 2) + newx),
-				map_coord(world_coord(VISIBLE_YTILES / 2) + newy))->tileVisBits & (1 << selectedPlayer))
-	{
-		player.p.x = newx;
-		player.p.z = newy;
-	}
-	else
-	{
-		if (map_coord(player.p.x) != map_coord(newx))
-		{
-			scrollSpeedLeftRight = 0;
-		}
-		else
-		{
-			player.p.x = newx;
-		}
-		if (map_coord(player.p.z) != map_coord(newy))
-		{
-			scrollSpeedUpDown = 0;
-		}
-		else
-		{
-			player.p.z = newy;
-		}
-	}
-#else
 	player.p.x += xDif;
 	player.p.z += yDif;
-#endif
 
 	edgeOfMap = CheckScrollLimits();
 }
