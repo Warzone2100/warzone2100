@@ -303,7 +303,7 @@ fi
 # add some required C flags here
 # -DYY_STATIC is required by flex
 # -m32 forces 32-bit compile, since code is not clean enough for 64-bit yet
-WZ_CFLAGS="${WZ_CFLAGS} -m32 -DYY_STATIC -DDATADIR=\\\"${datadir}/${PACKAGE}\\\""
+WZ_CFLAGS="${WZ_CFLAGS} -m32 -fno-strict-aliasing -DYY_STATIC -DDATADIR=\\\"${datadir}/${PACKAGE}\\\""
 
 CPPFLAGS="${CPPFLAGS} -I\$(top_srcdir)"
 CFLAGS="${CFLAGS} ${WZ_CFLAGS}"
