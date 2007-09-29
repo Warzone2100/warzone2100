@@ -84,16 +84,6 @@ static int newPage(const char *name, int level, int width, int height, int count
 	return texPage;
 }
 
-static inline WZ_DECL_CONST unsigned int getTileUIndex(unsigned int tileNumber)
-{
-	return (tileNumber % TILES_IN_PAGE) % TILES_IN_PAGE_COLUMN;
-}
-
-static inline WZ_DECL_CONST unsigned int getTileVIndex(unsigned int tileNumber)
-{
-	return (tileNumber % TILES_IN_PAGE) / TILES_IN_PAGE_ROW;
-}
-
 void texLoad(const char *fileName)
 {
 	char fullPath[PATH_MAX], partialPath[PATH_MAX], *buffer;
@@ -136,8 +126,12 @@ void texLoad(const char *fileName)
 	for (j = 0; j < MIPMAP_LEVELS; j++)
 	{
 		int xOffset = 0, yOffset = 0; // offsets into the texture atlas
-		int xSize = TILES_IN_PAGE_COLUMN * i;
-		int ySize = TILES_IN_PAGE_ROW * i;
+		int xSize = 1;
+		int ySize = 1;
+
+		// pad width and height into ^2 values
+		while (TILES_IN_PAGE_COLUMN * i > (xSize *= 2));
+		while (TILES_IN_PAGE_ROW * i > (ySize *= 2));
 
 		// Generate the empty texture buffer in VRAM
 		texPage = newPage(fileName, j, xSize, ySize, 0);
@@ -165,20 +159,20 @@ void texLoad(const char *fileName)
 			glTexSubImage2D(GL_TEXTURE_2D, j, xOffset, yOffset, tile.width, tile.height,
 			                GL_RGBA, GL_UNSIGNED_BYTE, tile.bmp);
 			free(tile.bmp);
+			if (i == TILE_WIDTH) // dealing with main texture page; so register coordinates
+			{
+				// 256 is an integer hack for GLfloat texture coordinates
+				tileTexInfo[k].uOffset = xOffset / (xSize / 256);
+				tileTexInfo[k].vOffset = yOffset / (ySize / 256);
+				tileTexInfo[k].texPage = texPage;
+				debug(LOG_ERROR, "  texLoad: Registering k=%d i=%d u=%f v=%f xoff=%d yoff=%d xsize=%d ysize=%d tex=%d (%s)",
+				     k, i, tileTexInfo[k].uOffset, tileTexInfo[k].vOffset, xOffset, yOffset, xSize, ySize, texPage, fullPath);
+			}
 			xOffset += i; // i is width of tile
 			if (xOffset >= xSize)
 			{
 				yOffset += i; // i is also height of tile
 				xOffset = 0;
-			}
-			if (i == TILE_WIDTH) // dealing with main texture page; so register coordinates
-			{
-				// 256 is an integer hack for GLfloat texture coordinates
-				tileTexInfo[k].uOffset = getTileUIndex(k) * (256 / TILES_IN_PAGE_COLUMN);
-				tileTexInfo[k].vOffset = getTileVIndex(k) * (256 / TILES_IN_PAGE_ROW);
-				tileTexInfo[k].texPage = texPage;
-				//debug(LOG_TEXTURE, "  texLoad: Registering k=%d i=%d u=%f v=%f xoff=%u yoff=%u tex=%d (%s)",
-				//     k, i, tileTexInfo[k].uOffset, tileTexInfo[k].vOffset, xOffset, yOffset, texPage, fullPath);
 			}
 			if (yOffset >= ySize)
 			{
