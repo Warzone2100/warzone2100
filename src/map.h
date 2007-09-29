@@ -163,12 +163,12 @@ extern MAPTILE *psMapTiles;
 /* The number of units accross a tile */
 #define TILE_UNITS (1<<TILE_SHIFT)
 
-static inline UDWORD world_coord(UDWORD mapCoord)
+static inline int32_t world_coord(int32_t mapCoord)
 {
 	return mapCoord * TILE_UNITS;
 }
 
-static inline UDWORD map_coord(UDWORD worldCoord)
+static inline int32_t map_coord(int32_t worldCoord)
 {
 	return worldCoord / TILE_UNITS;
 }
