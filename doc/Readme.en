@@ -165,8 +165,8 @@ You can choose whether to connect via Lobby or IP:
 
 You will see a list of games from which you can select one.
 
-Currently Warzone 2100 lacks a kick-feature for hosts, so you will not be able
-to kick out unwanted players.
+You can kick unwanted players out of not-yet-started game by clicking left on
+them while holding the right mouse button.
 
 When you are hosting a game it will automatically be listed on the lobby-server.
 If you do not want your games to be listed on the lobby-server, you have to
