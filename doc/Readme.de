@@ -197,15 +197,15 @@ Warzone 2100 neustarten müssen, damit Änderungen an der config wirksam werden.
 
 4. Wichtige Tastenkombinationen
 ===============================
-Taste(nkombination) 		Auswirkung
-Strg + Tab 			Darstellung des Untergrundes in der Karte
-				umschalten
-Umschalt + Tab 			Freund-Feind-Farben in der Karte umschalten
-				(Sie: weiß, Verbündete: gelb, Feind: rot)
-Alt + Enter (nur Linux + X11) 	zwischen Vollbildmodus und Fenstermodus wechseln
-Alt + S 			Schatten umschalten
-Umschalt + Rücktaste 		Cheatbenutzung erlauben/verbieten
-Ctrl + O 			Debug-Menü anzeigen
+Taste(nkombination)           Auswirkung
+Strg + Tab                    Darstellung des Untergrundes in der Karte
+                              umschalten
+Umschalt + Tab                Freund-Feind-Farben in der Karte umschalten
+                              (Sie: weiß, Verbündete: gelb, Feind: rot)
+Alt + Enter (nur Linux + X11) Zwischen Vollbildmodus und Fenstermodus wechseln
+Alt + S                       Schatten umschalten
+Umschalt + Rücktaste          Cheatbenutzung erlauben/verbieten
+Ctrl + O                      Debug-Menü anzeigen
 
 5. Weitere Ressourcen
 =====================

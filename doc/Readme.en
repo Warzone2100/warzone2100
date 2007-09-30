@@ -180,14 +180,14 @@ for config-changes to take effect.
 
 4. Important hotkeys
 ====================
-Hotkey				Effect
-Ctrl + Tab 			toggle display of terrain in map
-Shift + Tab 			toggle friend/foe-colours in map (you: white,
-				ally: yellow, foe: red)
-Alt + Tab (Linux + X11 only) 	toggle between fullscreen and windowed mode
-Alt + S 			toggle shadows
-Shift + Backspace 		allow/disallow usage of cheats
-Ctrl + O 			display debug-menu
+Hotkey                         Effect
+Ctrl + Tab                     Toggle display of terrain in map
+Shift + Tab                    Toggle friend/foe-colours in map
+                               (you: white, ally: yellow, foe: red)
+Alt + Enter (Linux + X11 only) Toggle between fullscreen and windowed mode
+Alt + S                        Toggle shadows
+Shift + Backspace              Allow/disallow usage of cheats
+Ctrl + O                       Display debug-menu
 
 5. Additional resources
 =======================
