@@ -128,10 +128,12 @@ void texLoad(const char *fileName)
 		int xOffset = 0, yOffset = 0; // offsets into the texture atlas
 		int xSize = 1;
 		int ySize = 1;
+		const int xLimit = TILES_IN_PAGE_COLUMN * i;
+		const int yLimit = TILES_IN_PAGE_ROW * i;
 
 		// pad width and height into ^2 values
-		while (TILES_IN_PAGE_COLUMN * i > (xSize *= 2));
-		while (TILES_IN_PAGE_ROW * i > (ySize *= 2));
+		while (xLimit > (xSize *= 2));
+		while (yLimit > (ySize *= 2));
 
 		// Generate the empty texture buffer in VRAM
 		texPage = newPage(fileName, j, xSize, ySize, 0);
@@ -169,12 +171,12 @@ void texLoad(const char *fileName)
 				     k, i, tileTexInfo[k].uOffset, tileTexInfo[k].vOffset, xOffset, yOffset, xSize, ySize, texPage, fullPath);
 			}
 			xOffset += i; // i is width of tile
-			if (xOffset >= xSize)
+			if (xOffset + i > xLimit)
 			{
 				yOffset += i; // i is also height of tile
 				xOffset = 0;
 			}
-			if (yOffset >= ySize)
+			if (yOffset + i > yLimit)
 			{
 				/* Change to next texture page */
 				xOffset = 0;
