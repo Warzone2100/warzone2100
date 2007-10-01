@@ -331,7 +331,7 @@ void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 	}
 
 	// draw name
-	iV_SetFont(WFont);											// font
+	iV_SetFont(font_regular);											// font
 	iV_SetTextColour(-1);										//colour
 
 	iV_DrawText(psMapping->pName, x + 2, y + (psWidget->height / 2) + 3);

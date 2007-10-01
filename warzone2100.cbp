@@ -25,6 +25,7 @@
 					<Add library="pthread" />
 					<Add library="GL" />
 					<Add library="GLU" />
+					<Add library="GLC" />
 					<Add library="openal" />
 				</Linker>
 			</Target>
@@ -47,6 +48,7 @@
 					<Add library="pthread" />
 					<Add library="GL" />
 					<Add library="GLU" />
+					<Add library="GLC" />
 					<Add library="openal" />
 					<Add option="-s" />
 				</Linker>
@@ -75,6 +77,7 @@
 					<Add library="gdi32" />
 					<Add library="opengl32" />
 					<Add library="glu32" />
+					<Add library="glc32" />
 					<Add library="openal32" />
 					<Add library="dbghelp" />
 					<Add library="winmm" />
@@ -106,6 +109,7 @@
 					<Add library="gdi32" />
 					<Add library="opengl32" />
 					<Add library="glu32" />
+					<Add library="glc32" />
 					<Add library="openal32" />
 					<Add library="dbghelp" />
 					<Add library="winmm" />

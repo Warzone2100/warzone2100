@@ -729,7 +729,7 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD
 
 	BarWidth = BarGraph->width;
 #if	DRAW_POWER_BAR_TEXT
-    iV_SetFont(WFont);
+    iV_SetFont(font_regular);
 	sprintf( szVal, "%d", realPower );
 	textWidth = iV_GetTextWidth( szVal );
 	BarWidth -= textWidth;

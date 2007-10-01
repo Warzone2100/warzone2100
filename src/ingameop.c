@@ -80,7 +80,7 @@ static BOOL addIGTextButton(UDWORD id, UWORD y, const char *string, UDWORD Style
 	sButInit.width		= INTINGAMEOP_OP_W;
 	sButInit.height		= INTINGAMEOP_OP_H;
 
-	sButInit.FontID		= WFont;
+	sButInit.FontID		= font_regular;
 	sButInit.pDisplay	= displayTextOption;
 	sButInit.pText		= string;
 	widgAddButton(psWScreen, &sButInit);

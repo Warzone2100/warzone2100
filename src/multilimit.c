@@ -446,7 +446,7 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 
 	// draw name
-	iV_SetFont(WFont);											// font
+	iV_SetFont(font_regular);											// font
 	iV_SetTextColour(-1);										//colour
 	iV_DrawText(getName(stat->pName), x+80, y+(psWidget->height/2)+3);
 

@@ -276,10 +276,6 @@ extern INTMODE intMode;
 /* The widget screen */
 extern W_SCREEN		*psWScreen;
 
-/* the widget font */
-extern int WFont;
-extern int SmallWFont;
-
 /* Which is the currently selected player */
 extern UDWORD			selectedPlayer;
 

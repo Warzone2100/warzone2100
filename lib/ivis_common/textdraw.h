@@ -17,28 +17,45 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
+
 #ifndef _INCLUDED_TEXTDRAW_
 #define _INCLUDED_TEXTDRAW_
 
 #include "ivisdef.h"
 
+enum iV_fonts
+{
+    font_regular,
+    font_large,
+};
+
 #define PIE_TEXT_WHITE				(-1)
 #define PIE_TEXT_LIGHTBLUE			(-2)
 #define PIE_TEXT_DARKBLUE			(-3)
 
-extern void iV_ClearFonts(void);
-extern void iV_SetFont(int FontID);
-extern int iV_CreateFontIndirect(IMAGEFILE *ImageFile,UWORD *AsciiTable,int SpaceSize);
+extern void iV_TextInit(void);
+extern void iV_TextShutdown(void);
+
+extern void iV_SetFont(enum iV_fonts FontID);
 extern int iV_GetTextAboveBase(void);
 extern int iV_GetTextBelowBase(void);
 extern int iV_GetTextLineSize(void);
 extern unsigned int iV_GetTextWidth(const char* String);
-extern unsigned int iV_GetCharWidth(char Char);
+extern unsigned int iV_GetCountedTextWidth(const char* string, size_t string_length);
+extern unsigned int iV_GetCharWidth(uint32_t charCode);
+
+extern unsigned int iV_GetTextHeight(const char* string);
 extern void iV_SetTextColour(SWORD Index);
 
 #define ASCII_SPACE			(32)
 #define ASCII_NEWLINE		('@')
 #define ASCII_COLOURMODE	('#')
+
+#define TEXT_UTF8_SPACE       " "
+#define TEXT_UTF8_NEWLINE     "\n"
+
+static const char text_space_utf8[] = TEXT_UTF8_SPACE;
+static const char text_newline_utf8[] = TEXT_UTF8_NEWLINE;
 
 // Valid values for "Justify" argument of iV_DrawFormattedText().
 
@@ -52,6 +69,7 @@ enum {
 extern UDWORD iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify);
 
 extern void iV_DrawTextRotated(const char* string, float x, float y, float rotation);
+extern void iV_SetTextSize(float size);
 
 static inline void iV_DrawText(const char* string, float x, float y)
 {

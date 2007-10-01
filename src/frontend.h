@@ -63,8 +63,6 @@ extern tMode titleMode;					// the global case
 
 #define MAX_LEVEL_NAME_SIZE	(256)
 
-extern int FEFont;
-
 extern char	pLevelName[MAX_LEVEL_NAME_SIZE+1];	//256];			// vital! the wrf file to use.
 
 extern BOOL	bUsingKeyboard;	// to disable mouse pointer when using keys.

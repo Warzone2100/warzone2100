@@ -2,13 +2,13 @@ Source: warzone2100
 Section: games
 Priority: optional
 Maintainer: Angus Lees <gus@debian.org>
-Build-Depends: autotools-dev, libopenal-dev, zlib1g-dev, libsdl1.2-dev, libsdl-net1.2-dev, libvorbis-dev, libphysfs-dev, libpng12-dev, netpbm, gettext (>= 0.15)
+Build-Depends: autotools-dev, libopenal-dev, zlib1g-dev, libsdl1.2-dev, libsdl-net1.2-dev, libvorbis-dev, libphysfs-dev, libpng12-dev, netpbm, gettext (>= 0.15), quesoglc-dev
 Build-Depends-Indep: debhelper (>= 4.2.21), zip
 Standards-Version: 3.6.2
 
 Package: warzone2100
 Architecture: any
-Depends: warzone2100-data (= ${Source-Version}), ${shlibs:Depends}
+Depends: warzone2100-data (= ${Source-Version}), ${shlibs:Depends}, ttf-dejavu
 Description: Post-nuclear 3D real-time strategy game
  Warzone 2100 was an innovative 3D real-time strategy game back in
  1999, and most will agree it didn't enjoy the commercial success it

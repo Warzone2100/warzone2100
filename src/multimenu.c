@@ -256,7 +256,7 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWO
 
 	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
 
-	iV_SetFont(WFont);					// font
+	iV_SetFont(font_regular);					// font
 	iV_SetTextColour(-1);					//colour
 
 	while(iV_GetTextWidth(butString) > psWidget->width -10 )
@@ -388,7 +388,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 	}
 
 	widgCreateScreen(&psRScreen);			/// move this to intinit or somewhere like that.. (close too.)
-	widgSetTipFont(psRScreen,WFont);
+	widgSetTipFont(psRScreen,font_regular);
 
 	/* Calculate how many buttons will go on a single form */
 	butPerForm = ((M_REQUEST_W - 0 - 4) /
@@ -449,7 +449,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
-	sButInit.FontID = WFont;
+	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	widgAddButton(psRScreen, &sButInit);
@@ -465,7 +465,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 	sButInit.height		= R_BUT_H;
 	sButInit.pUserData	= (void*)0;
 	sButInit.pDisplay	= displayRequestOption;
-	sButInit.FontID		= WFont;
+	sButInit.FontID		= font_regular;
 
 	for (currFile = fileList, count = 0; *currFile != NULL && count < (butPerForm * 4); ++currFile)
 	{
@@ -579,7 +579,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 		sButInit.width		= 17;
 		sButInit.height		= 17;
 		sButInit.UserData	= 1;
-		sButInit.FontID		= WFont;
+		sButInit.FontID		= font_regular;
 		sButInit.pTip		= _("Technology level 1");
 		sButInit.pDisplay	= displayCamTypeBut;
 
@@ -735,7 +735,7 @@ void displayExtraGubbins(UDWORD height)
 			MULTIMENU_FORM_X+MULTIMENU_FORM_W, MULTIMENU_FORM_Y+MULTIMENU_PLAYER_H, iV_COL_BLACK);
 
 	//draw titles.
-	iV_SetFont(WFont);											// font
+	iV_SetFont(font_regular);											// font
 	iV_SetTextColour(-1);										//colour
 
 	iV_DrawText(_("Alliances"), MULTIMENU_FORM_X+MULTIMENU_C0, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
@@ -779,7 +779,7 @@ void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD
 		displayExtraGubbins(widgGetFromID(psWScreen,MULTIMENU_FORM)->height);
 	}
 
-	iV_SetFont(WFont);											// font
+	iV_SetFont(font_regular);											// font
 	iV_SetTextColour(-1);										//colour
 
 	if(isHumanPlayer(player) || (game.type == SKIRMISH && player<game.maxPlayers) )
@@ -929,7 +929,7 @@ void displayDebugMenu(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *
 
 	index = (int)psWidget->pUserData;
 
-	iV_SetFont(WFont);											// font
+	iV_SetFont(font_regular);											// font
 	iV_SetTextColour(-1);										//colour
 
 	if(strcmp(debugMenuEntry[index],""))
@@ -1045,7 +1045,7 @@ void addMultiPlayer(UDWORD player,UDWORD pos)
 		sButInit.y		= 5;
 		sButInit.width	= 35;
 		sButInit.height = 24;
-		sButInit.FontID = WFont;
+		sButInit.FontID = font_regular;
 		sButInit.id		= MULTIMENU_CHANNEL + player;
 		sButInit.pTip	= "channel";
 		sButInit.pDisplay = displayChannelState;
@@ -1060,7 +1060,7 @@ void addMultiPlayer(UDWORD player,UDWORD pos)
 		sButInit.y		= 5;
 		sButInit.width	= 35;
 		sButInit.height = 24;
-		sButInit.FontID = WFont;
+		sButInit.FontID = font_regular;
 		sButInit.id		= MULTIMENU_ALLIANCE_BASE + player;
 		sButInit.pTip	= _("Toggle Alliance State");
 		sButInit.pDisplay = displayAllianceState;
@@ -1213,7 +1213,7 @@ BOOL addDebugMenu(BOOL bAdd)
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
-	sButInit.FontID = WFont;
+	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))
@@ -1291,7 +1291,7 @@ BOOL intAddMultiMenu(void)
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
-	sButInit.FontID = WFont;
+	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))

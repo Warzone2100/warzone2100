@@ -279,9 +279,6 @@ char StringBuffer[STRING_BUFFER_SIZE];
 /* the widget screen */
 extern W_SCREEN		*psWScreen;
 
-/* the widget font */
-extern int WFont;
-
 extern	UDWORD				objID;					// unique ID creation thing..
 
 /* default droid design template */
@@ -470,7 +467,7 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	sEdInit.width = DES_NAMEBOXWIDTH;
 	sEdInit.height = DES_NAMEBOXHEIGHT;
 	sEdInit.pText = _("New Vehicle");
-	sEdInit.FontID = WFont;
+	sEdInit.FontID = font_regular;
 	sEdInit.pBoxDisplay = intDisplayEditBox;
 	if (!widgAddEditBox(psWScreen, &sEdInit))
 	{
@@ -539,7 +536,7 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_BODY);
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_BODY);
 	sButInit.pTip = _("Vehicle Body");
-	sButInit.FontID = WFont;
+	sButInit.FontID = font_regular;
 #ifdef FLASH_BUTTONS
 	sButInit.pDisplay = intDisplayButtonFlash;
 #else
@@ -561,7 +558,7 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_PROPULSION);
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_PROPULSION);
 	sButInit.pTip = _("Vehicle Propulsion");
-	sButInit.FontID = WFont;
+	sButInit.FontID = font_regular;
 #ifdef FLASH_BUTTONS
 	sButInit.pDisplay = intDisplayButtonFlash;
 #else
@@ -584,7 +581,7 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_TURRET);
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_TURRET);
 	sButInit.pTip = _("Vehicle Turret");
-	sButInit.FontID = WFont;
+	sButInit.FontID = font_regular;
 #ifdef FLASH_BUTTONS
 	sButInit.pDisplay = intDisplayButtonFlash;
 #else
@@ -609,7 +606,7 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_TURRET);
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_TURRET);
 	sButInit.pTip = _("Vehicle Turret");
-	sButInit.FontID = WFont;
+	sButInit.FontID = font_regular;
 #ifdef FLASH_BUTTONS
 	sButInit.pDisplay = intDisplayButtonFlash;
 #else
@@ -635,7 +632,7 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_TURRET);
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_TURRET);
 	sButInit.pTip = _("Vehicle Turret");
-	sButInit.FontID = WFont;
+	sButInit.FontID = font_regular;
 #ifdef FLASH_BUTTONS
 	sButInit.pDisplay = intDisplayButtonFlash;
 #else
@@ -656,7 +653,7 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	sButInit.x = DES_PARTSEPARATIONX;
 	sButInit.y = (UWORD)(DES_PARTFORMHEIGHT - sButInit.height - DES_PARTSEPARATIONY);
 	sButInit.pTip = _("Delete Design");
-	sButInit.FontID = WFont;
+	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayButtonHilight;
 	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_DES_BINH, IMAGE_DES_BIN);
 	if (!widgAddButton(psWScreen, &sButInit))
@@ -759,7 +756,7 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	sLabInit.height = DES_CLICKBARHEIGHT;
 //	sLabInit.pText = "Armour against Kinetic weapons";
 	sLabInit.pTip = _("Kinetic Armour");
-	sLabInit.FontID = WFont;
+	sLabInit.FontID = font_regular;
 	sLabInit.pDisplay = intDisplayImage;
     //just to confuse things even more - the graphics were named incorrectly!
 	sLabInit.pUserData = (void*)IMAGE_DES_ARMOUR_EXPLOSIVE;//IMAGE_DES_ARMOUR_KINETIC;
@@ -1596,7 +1593,7 @@ static BOOL _intSetSystemForm(COMP_BASE_STATS *psStats)
 	sLabInit.y = DES_CLICKBARY - DES_CLICKBARHEIGHT/3;
 	sLabInit.width = DES_CLICKBARNAMEWIDTH;
 	sLabInit.height = DES_CLICKBARHEIGHT;
-	sLabInit.FontID = WFont;
+	sLabInit.FontID = font_regular;
 
 	/* See what type of system stats we've got */
 	if (psStats->ref >= REF_SENSOR_START &&
@@ -1974,7 +1971,7 @@ static BOOL intSetPropulsionForm(PROPULSION_STATS *psStats)
 	sLabInit.y = DES_CLICKBARY - DES_CLICKBARHEIGHT/3;
 	sLabInit.width = DES_CLICKBARNAMEWIDTH;
 	sLabInit.height = DES_CLICKBARNAMEHEIGHT;	//DES_CLICKBARHEIGHT;
-	sLabInit.FontID = WFont;
+	sLabInit.FontID = font_regular;
 
 	/* See what type of propulsion we've got */
 	switch (desPropMode)
@@ -2201,7 +2198,7 @@ static BOOL intAddSystemButtons(SDWORD mode)
 	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_WEAPONS);
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_WEAPONS);
 	sButInit.pTip = _("Weapons");
-	sButInit.FontID = WFont;
+	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayButtonHilight;
 	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_DES_EXTRAHI , IMAGE_DES_WEAPONS);
 	if (!widgAddButton(psWScreen, &sButInit))
@@ -2225,7 +2222,7 @@ static BOOL intAddSystemButtons(SDWORD mode)
 	    sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_SYSTEMS);
 	    sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_SYSTEMS);
 	    sButInit.pTip = _("Systems");
-	    sButInit.FontID = WFont;
+	    sButInit.FontID = font_regular;
 	    sButInit.pDisplay = intDisplayButtonHilight;
 	    sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_DES_EXTRAHI , IMAGE_DES_SYSTEMS);
 	    if (!widgAddButton(psWScreen, &sButInit))
@@ -2244,7 +2241,7 @@ static BOOL intAddSystemButtons(SDWORD mode)
 	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_COMMAND);
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_COMMAND);
 	sButInit.pTip = _("Command Turrets");
-	sButInit.FontID = WFont;
+	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayButtonHilight;
 	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_DES_EXTRAHI , IMAGE_DES_COMMAND);
 	if (!widgAddButton(psWScreen, &sButInit))

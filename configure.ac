@@ -165,6 +165,15 @@ AC_CHECK_LIB(GLU, main,
 		OPENGL_LIBS="${OPENGL_LIBS} -lglu32",
 		AC_MSG_ERROR([You need to install GLU.])))
 
+# Look for OpenGLC
+AC_CHECK_HEADER(GL/glc.h, ,
+	AC_MSG_ERROR([OpenGLC header not found]))
+AC_CHECK_LIB(GLC, main,
+	OPENGLC_LIBS="-lGLC",
+	AC_CHECK_LIB(glc32, main,
+		OPENGLC_LIBS="-lglc32",
+		AC_MSG_ERROR([You need to install OpenGLC.])))
+
 # Look for OpenAL
 AC_CHECK_HEADER(AL/al.h, ,
 	AC_MSG_ERROR([You need to install OpenAL headers.]))
@@ -185,7 +194,7 @@ WZ_CFLAGS="${WZ_CFLAGS} -DYY_STATIC"
 
 CPPFLAGS="${CPPFLAGS} -I\$(top_srcdir)"
 CFLAGS="${SDL_CFLAGS} ${PNG_CFLAGS} ${OGGVORBIS_CFLAGS} $} ${OPENAL_CFLAGS} ${OPENGL_CFLAGS} ${CFLAGS} ${WZ_CFLAGS}"
-LIBS="${SDL_LIBS} ${PNG_LIBS} ${OGGVORBIS_LIBS} ${OPENAL_LIBS} ${OPENGL_LIBS} ${LIBS} ${WIN32_LIBS}"
+LIBS="${SDL_LIBS} ${PNG_LIBS} ${OGGVORBIS_LIBS} ${OPENAL_LIBS} ${OPENGLC_LIBS} ${OPENGL_LIBS} ${LIBS} ${WIN32_LIBS}"
 
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_FILES([Makefile

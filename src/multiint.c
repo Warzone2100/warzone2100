@@ -332,7 +332,7 @@ static BOOL OptionsInet(UDWORD parentID)			//internet options
 	W_LABINIT		sLabInit;
 
 	widgCreateScreen(&psConScreen);
-	widgSetTipFont(psConScreen,WFont);
+	widgSetTipFont(psConScreen,font_regular);
 
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));		//Connection Settings
 	sFormInit.formID = 0;
@@ -358,7 +358,7 @@ static BOOL OptionsInet(UDWORD parentID)			//internet options
 	sLabInit.width	= CON_SETTINGSWIDTH;
 	sLabInit.height = 20;
 	sLabInit.pText	= _("IP Address or Machine Name");
-	sLabInit.FontID = WFont;
+	sLabInit.FontID = font_regular;
 	widgAddLabel(psConScreen, &sLabInit);
 
 
@@ -371,7 +371,7 @@ static BOOL OptionsInet(UDWORD parentID)			//internet options
 	sEdInit.width = CON_NAMEBOXWIDTH;
 	sEdInit.height = CON_NAMEBOXHEIGHT;
 	sEdInit.pText = "";									//_("IP Address or Machine Name");
-	sEdInit.FontID = WFont;
+	sEdInit.FontID = font_regular;
 //	sEdInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_DES_EDITBOXLEFTH , IMAGE_DES_EDITBOXLEFT);
 //	sEdInit.pBoxDisplay = intDisplayButtonHilight;
 	sEdInit.pBoxDisplay = intDisplayEditBox;
@@ -502,7 +502,7 @@ static void addGames(void)
 	sButInit.style = WBUT_PLAIN;
 	sButInit.width = GAMES_GAMEWIDTH;
 	sButInit.height = GAMES_GAMEHEIGHT;
-	sButInit.FontID = WFont;
+	sButInit.FontID = font_regular;
 	sButInit.pDisplay = displayRemoteGame;
 
 	for(i=0;i<MaxGames;i++)							// draw games
@@ -603,7 +603,7 @@ FAIL:
 	widgDisplayScreen(psWScreen);								// show the widgets currently running
 	if(safeSearch)
 	{
-		iV_SetFont(FEFont);
+		iV_SetFont(font_large);
 		iV_DrawText(_("Searching"), D_W+260, D_H+460);
 	}
 }
@@ -666,7 +666,7 @@ static void addBlueForm(UDWORD parent,UDWORD id, const char *txt,UDWORD x,UDWORD
 		sLabInit.height = 20;
 		sLabInit.pText	= txt;
 //		sLabInit.pDisplay = displayFeText;
-		sLabInit.FontID = WFont;
+		sLabInit.FontID = font_regular;
 		widgAddLabel(psWScreen, &sLabInit);
 	}
 	return;
@@ -687,7 +687,7 @@ static void addGameOptions(BOOL bRedo)
 	widgDelete(psWScreen,MULTIOP_OPTIONS);  				// clear options list
 	widgDelete(psWScreen,FRONTEND_SIDETEXT3);				// del text..
 
-	iV_SetFont(WFont);
+	iV_SetFont(font_regular);
 
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));				// draw options box.
 	sFormInit.formID = FRONTEND_BACKDROP;
@@ -1165,7 +1165,7 @@ static void addTeamChooser(UDWORD player)
 
 		sButInit.pTip = "Team";
 
-		sButInit.FontID = WFont;
+		sButInit.FontID = font_regular;
 		sButInit.pDisplay = displayMultiBut;
 		sButInit.pUserData = (void*)PACKDWORD_TRI(FALSE,IMAGE_TEAM0+i , IMAGE_TEAM0+i);
 		sButInit.pText = "Team0";
@@ -1256,7 +1256,7 @@ UDWORD addPlayerBox(BOOL players)
 				sButInit.width = MULTIOP_TEAMSWIDTH;
 				sButInit.height = MULTIOP_TEAMSHEIGHT;
 				sButInit.pTip = "Choose team";	//Players[i].name;
-				sButInit.FontID = WFont;
+				sButInit.FontID = font_regular;
 				sButInit.pDisplay = displayTeamChooser;//intDisplayButtonHilight;
 				sButInit.pUserData = (void*) i;
 
@@ -1281,7 +1281,7 @@ UDWORD addPlayerBox(BOOL players)
 				sButInit.width = MULTIOP_PLAYERWIDTH - MULTIOP_TEAMSWIDTH;
 				sButInit.height = MULTIOP_PLAYERHEIGHT;
 				sButInit.pTip = NULL;//Players[i].name;
-				sButInit.FontID = WFont;
+				sButInit.FontID = font_regular;
 				sButInit.pDisplay = displayPlayer;//intDisplayButtonHilight;
 				sButInit.pUserData = (void*) i;
 
@@ -1407,7 +1407,7 @@ static void addChatBox(void)
 	sEdInit.style = WEDB_PLAIN;
 	sEdInit.width = MULTIOP_CHATEDITW;
 	sEdInit.height = MULTIOP_CHATEDITH;
-	sEdInit.FontID = WFont;
+	sEdInit.FontID = font_regular;
 
 	sEdInit.pUserData = NULL;
 	sEdInit.pBoxDisplay = displayChatEdit;
@@ -2332,7 +2332,7 @@ void runMultiOptions(void)
 
 	if(widgGetFromID(psWScreen,MULTIOP_CHATBOX))
 	{
-		iV_SetFont(WFont);											// switch to small font.
+		iV_SetFont(font_regular);											// switch to small font.
 		displayConsoleMessages();									// draw the chatbox
 	}
 
@@ -2582,7 +2582,7 @@ static BOOL addWhiteBoard(void)
 	// clear whiteboard
 	memset(&whiteBoard,0,sizeof(whiteBoard));
 	widgCreateScreen(&psWhiteScreen);
-	widgSetTipFont(psWhiteScreen,WFont);
+	widgSetTipFont(psWhiteScreen,font_regular);
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));		//Connection Settings
 	sFormInit.formID = 0;
 	sFormInit.id = 999;
@@ -2641,7 +2641,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD 
 	drawBlueBox(x,y,55,psWidget->height);
 
 	//draw game info
-	iV_SetFont(WFont);													// font
+	iV_SetFont(font_regular);													// font
 	iV_SetTextColour(-1);												//colour
 
 	//draw type overlay.
@@ -2772,7 +2772,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 
 		for(j=0; player2dpid[j] != NetPlay.players[i].dpid && j<MAX_PLAYERS; j++);// get the in game playernumber.
 
-		iV_SetFont(WFont);														// font
+		iV_SetFont(font_regular);														// font
 		iV_SetTextColour(-1);													// colour
 
 		// name
@@ -3135,7 +3135,7 @@ static BOOL addMultiEditBox(UDWORD formid,UDWORD id,UDWORD x, UDWORD y, const ch
 	sEdInit.width = MULTIOP_EDITBOXW;
 	sEdInit.height = MULTIOP_EDITBOXH;
 	sEdInit.pText = tipres;
-	sEdInit.FontID = WFont;
+	sEdInit.FontID = font_regular;
 	sEdInit.pUserData = (void*)icon;
 	sEdInit.pBoxDisplay = displayMultiEditBox;
 	if (!widgAddEditBox(psWScreen, &sEdInit))
@@ -3166,7 +3166,7 @@ BOOL addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y,
 	sButInit.width = (unsigned short) width;
 	sButInit.height= (unsigned short) height;
 	sButInit.pTip = tipres;
-	sButInit.FontID = WFont;
+	sButInit.FontID = font_regular;
 	sButInit.pDisplay = displayMultiBut;
 	sButInit.pUserData = (void*)PACKDWORD_TRI(hiIt,norm , hi);
 

@@ -203,7 +203,7 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 	(void) PHYSFS_mkdir(sSearchPath); // just in case
 
 	widgCreateScreen(&psRequestScreen);			// init the screen.
-	widgSetTipFont(psRequestScreen,WFont);
+	widgSetTipFont(psRequestScreen,font_regular);
 
 	/* add a form to place the tabbed form on */
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
@@ -241,7 +241,7 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 	sLabInit.width	= LOADSAVE_W-(2*LOADSAVE_HGAP);	//LOADSAVE_W;
 	sLabInit.height = LOADSAVE_BANNER_DEPTH;		//This looks right -Q
 	sLabInit.pText	= title;
-	sLabInit.FontID = WFont;
+	sLabInit.FontID = font_regular;
 	widgAddLabel(psRequestScreen, &sLabInit);
 
 
@@ -257,7 +257,7 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 	sButInit.id = LOADSAVE_CANCEL;
 	sButInit.style = WBUT_PLAIN;
 	sButInit.pTip = _("Close");
-	sButInit.FontID = WFont;
+	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
 	widgAddButton(psRequestScreen, &sButInit);
 
@@ -268,7 +268,7 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 	sButInit.width		= LOADENTRY_W;
 	sButInit.height		= LOADENTRY_H;
 	sButInit.pDisplay	= displayLoadSlot;
-	sButInit.FontID		= WFont;
+	sButInit.FontID		= font_regular;
 
 	for(slotCount = 0; slotCount< totalslots; slotCount++)
 	{
@@ -447,7 +447,7 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 				sEdInit.width = widgGetFromID(psRequestScreen,id)->width;
 				sEdInit.height= widgGetFromID(psRequestScreen,id)->height;
 				sEdInit.pText = ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText;
-				sEdInit.FontID= WFont;
+				sEdInit.FontID= font_regular;
 				sEdInit.pBoxDisplay = displayLoadSaveEdit;
 				widgAddEditBox(psRequestScreen, &sEdInit);
 
@@ -649,7 +649,7 @@ static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UD
 	{
 		strcpy(butString,((W_BUTTON *)psWidget)->pTip);
 
-		iV_SetFont(WFont);									// font
+		iV_SetFont(font_regular);									// font
 		iV_SetTextColour(-1);								//colour
 
 		while(iV_GetTextWidth(butString) > psWidget->width)

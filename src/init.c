@@ -1153,8 +1153,6 @@ BOOL frontendInitialise(const char *ResourceFile)
 #endif
 
 	FrontImages = (IMAGEFILE*)resGetData("IMG", "frend.img");
-	FEFont = iV_CreateFontIndirect(FrontImages,FEAsciiLookup,4);
-
    	/* Shift the interface initialisation here temporarily so that it
    		can pick up the stats after they have been loaded */
 	if (!intInitialise())

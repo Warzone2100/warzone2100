@@ -22,6 +22,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/widget/widget.h"
+#include "lib/ivis_common/textdraw.h"
 #include "objects.h"
 #include "loop.h"
 #include "map.h"
@@ -469,7 +470,6 @@ ORDERBUTTONS OrderButtons[NUM_ORDERS]=
 
 extern BOOL ClosingOrder;
 extern W_SCREEN *psWScreen;
-extern int WFont;
 extern UDWORD currentGameFrame;
 extern void intDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
@@ -659,7 +659,7 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
-	sButInit.FontID = WFont;
+	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))
@@ -673,7 +673,7 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 	sButInit.id = IDORDER_CLOSE+1;
 	sButInit.style = WBUT_PLAIN;
 	sButInit.pDisplay = intDisplayAltButtonHilight;
-	sButInit.FontID = WFont;
+	sButInit.FontID = font_regular;
 	sButInit.y = ORDER_BUTY;
 
 	Height = 0;

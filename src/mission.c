@@ -27,6 +27,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
+#include "lib/ivis_common/textdraw.h"
 #include "mission.h"
 #include "lib/gamelib/gtime.h"
 #include "game.h"
@@ -2830,7 +2831,7 @@ BOOL intAddMissionTimer(void)
 	sLabInit.width = sFormInit.width;//TIMER_WIDTH;
 	sLabInit.height = sFormInit.height;//TIMER_HEIGHT;
 	sLabInit.pText = "00:00:00";
-	sLabInit.FontID = WFont;
+	sLabInit.FontID = font_regular;
 	sLabInit.pCallback = intUpdateMissionTimer;
 
 	if (!widgAddLabel(psWScreen, &sLabInit))
@@ -2887,7 +2888,7 @@ BOOL intAddTransporterTimer(void)
 	sLabInit.y = TRAN_TIMER_Y;
 	sLabInit.width = TRAN_TIMER_WIDTH;
 	sLabInit.height = sFormInit.height;
-	sLabInit.FontID = WFont;
+	sLabInit.FontID = font_regular;
 	sLabInit.pCallback = intUpdateTransporterTimer;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
@@ -2904,7 +2905,7 @@ BOOL intAddTransporterTimer(void)
 	sLabInit.width = 16;
 	sLabInit.height = 16;
 	sLabInit.pText = "00/10";
-	sLabInit.FontID = WFont;
+	sLabInit.FontID = font_regular;
 	sLabInit.pCallback = intUpdateTransCapacity;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
@@ -2958,7 +2959,7 @@ BOOL intAddTransporterTimer(void)
 	//{
 	//	fillTimeDisplay(sLabInit.pText, mission.ETA);
 	}
-	sLabInit.FontID = WFont;
+	sLabInit.FontID = font_regular;
 	sLabInit.pCallback = intUpdateTransporterTimer;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
@@ -2973,7 +2974,7 @@ BOOL intAddTransporterTimer(void)
 	sButInit.y = 0;//TRAN_FORM_Y;
 	sButInit.width = sFormInit.width;
 	sButInit.height = sFormInit.height;
-	sButInit.FontID = WFont;
+	sButInit.FontID = font_regular;
 	sButInit.style = WBUT_PLAIN;
 	//sButInit.pText = "T";
 	sButInit.pTip = _("Load Transport");
@@ -3357,7 +3358,7 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 	{
 	  	sLabInit.pText = _("OBJECTIVE FAILED");//"Objective Failed;
 	}
-	sLabInit.FontID = WFont;
+	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
 		return FALSE;
@@ -3368,7 +3369,7 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 	sButInit.style		= WBUT_PLAIN | WBUT_TXTCENTRE;
 	sButInit.width		= MISSION_TEXT_W;
 	sButInit.height		= MISSION_TEXT_H;
-	sButInit.FontID		= WFont;
+	sButInit.FontID		= font_regular;
 	sButInit.pTip		= NULL;
 	sButInit.pDisplay	= displayTextOption;
     //if won or in debug mode
@@ -3559,7 +3560,7 @@ void intProcessMissionResult(UDWORD id)
 			sButInit.style		= WBUT_PLAIN | WBUT_TXTCENTRE;
 			sButInit.width		= MISSION_TEXT_W;
 			sButInit.height		= MISSION_TEXT_H;
-			sButInit.FontID		= WFont;
+			sButInit.FontID		= font_regular;
 			sButInit.pTip		= NULL;
 			sButInit.pDisplay	= displayTextOption;
 			sButInit.id			= IDMISSIONRES_QUIT;

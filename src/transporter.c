@@ -27,6 +27,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/widget/widget.h"
+#include "lib/ivis_common/textdraw.h"
 
 #include "stats.h"
 #include "hci.h"
@@ -290,7 +291,7 @@ static BOOL _intAddTransporter(DROID *psSelected, BOOL offWorld)
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
-	sButInit.FontID = WFont;
+	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))
@@ -379,7 +380,7 @@ BOOL intAddTransporterContents(void)
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
-	sButInit.FontID = WFont;
+	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))
@@ -406,7 +407,7 @@ BOOL intAddTransporterContents(void)
 		sLabInit.width = 16;
 		sLabInit.height = 16;
 		sLabInit.pText = "10";
-		sLabInit.FontID = WFont;
+		sLabInit.FontID = font_regular;
 		sLabInit.pCallback = intUpdateTransCapacity;
 		if (!widgAddLabel(psWScreen, &sLabInit))
 		{
@@ -430,7 +431,7 @@ BOOL intAddTransporterContents(void)
 		sButFInit.height = iV_GetImageHeight(IntImages,IMAGE_LAUNCHUP);
 		sButFInit.pTip = _("Launch Transport");
 		//sButInit.pText = "Launch";
-//		sButFInit.FontID = WFont;
+//		sButFInit.FontID = font_regular;
 		sButFInit.pDisplay = intDisplayImageHilight;
 
 		sButFInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_LAUNCHDOWN,IMAGE_LAUNCHUP);
@@ -500,7 +501,7 @@ BOOL intAddTransporterLaunch(DROID *psDroid)
 	sLabInit.width = 16;
 	sLabInit.height = 16;
 	sLabInit.pText = "00/10";
-	sLabInit.FontID = WFont;
+	sLabInit.FontID = font_regular;
 	sLabInit.pCallback = intUpdateTransCapacity;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
@@ -876,7 +877,7 @@ BOOL intAddDroidsAvailForm(void)
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
-	sButInit.FontID = WFont;
+	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))

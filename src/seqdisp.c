@@ -203,7 +203,7 @@ BOOL	seq_RenderVideoToBuffer( iSurface *pSurface, char *sequenceName, int time, 
 		}
 
 
-		iV_SetFont(WFont);
+		iV_SetFont(font_regular);
 		iV_SetTextColour(-1);
 
 
@@ -469,7 +469,7 @@ static BOOL seq_StartFullScreenVideo(const char* videoName, const char* audioNam
 	{
 		cdAudio_Pause();
 		loop_SetVideoPlaybackMode();
-		iV_SetFont(WFont);
+		iV_SetFont(font_regular);
 		iV_SetTextColour(-1);
 	}
 
@@ -751,7 +751,7 @@ BOOL seq_AddTextForVideo(char* pText, SDWORD xOffset, SDWORD yOffset, SDWORD sta
 	SDWORD justification;
 static SDWORD lastX;
 
-	iV_SetFont(WFont);
+	iV_SetFont(font_regular);
 
 	ASSERT( aSeqList[currentSeq].currentText < MAX_TEXT_OVERLAYS,
 		"seq_AddTextForVideo: too many text lines" );

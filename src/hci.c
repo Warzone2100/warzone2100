@@ -274,11 +274,6 @@ static const char	*apPlayerTip[] =
 /* The widget screen */
 W_SCREEN		*psWScreen;
 
-
-/* the widget font */
-int WFont;	// Ivis Font ID.
-
-
 /* The current player */
 UDWORD				selectedPlayer=0;
 
@@ -658,10 +653,6 @@ BOOL intInitialise(void)
 
 	LOADBARCALLBACK();	//	loadingScreenCallback();
 
-
-	WFont = iV_CreateFontIndirect(IntImages,AsciiLookup,4);
-
-
 	if (!widgCreateScreen(&psWScreen))
 	{
 		debug( LOG_ERROR, "intInitialise: Couldn't create widget screen (Out of memory ?)" );
@@ -669,7 +660,7 @@ BOOL intInitialise(void)
 		return FALSE;
 	}
 
-	widgSetTipFont(psWScreen, WFont);
+	widgSetTipFont(psWScreen, font_regular);
 
 	if(GetGameMode() == GS_NORMAL) {
 
@@ -1029,7 +1020,7 @@ static BOOL intAddEdit(void)
 	sLabInit.width = ED_WIDTH;
 	sLabInit.height = ED_BUTHEIGHT;
 	sLabInit.pText = "Edit";
-	sLabInit.FontID = WFont;
+	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
 		return FALSE;
@@ -1043,7 +1034,7 @@ static BOOL intAddEdit(void)
 	sButInit.y = ED_GAP;
 	sButInit.width = CLOSE_SIZE;
 	sButInit.height = CLOSE_SIZE;
-	sButInit.FontID = WFont;
+	sButInit.FontID = font_regular;
 	sButInit.pText = pCloseText;
 	sButInit.pTip = _("Close");
 	if (!widgAddButton(psWScreen, &sButInit))
@@ -3716,7 +3707,7 @@ BOOL intAddReticule(void)
 		sButInit.id = IDRET_COMMAND;
 		sButInit.width = RET_BUTWIDTH;
 		sButInit.height = RET_BUTHEIGHT;
-		sButInit.FontID = WFont;
+		sButInit.FontID = font_regular;
 
 		//add buttons as required...
 
@@ -3961,7 +3952,7 @@ BOOL intAddOptions(void)
 	sLabInit.width = OPT_BUTWIDTH;
 	sLabInit.height = OPT_BUTHEIGHT;
 	sLabInit.pText = "Options";
-	sLabInit.FontID = WFont;
+	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
 		return FALSE;
@@ -3976,7 +3967,7 @@ BOOL intAddOptions(void)
 	sButInit.y = OPT_GAP;
 	sButInit.width = CLOSE_SIZE;
 	sButInit.height = CLOSE_SIZE;
-	sButInit.FontID = WFont;
+	sButInit.FontID = font_regular;
 	sButInit.pText = pCloseText;
 	sButInit.pTip = _("Close");
 	if (!widgAddButton(psWScreen, &sButInit))
@@ -4005,7 +3996,7 @@ BOOL intAddOptions(void)
 	sLabInit.x = OPT_GAP;
 	sLabInit.y = OPT_GAP;
 	sLabInit.pText = "Map:";
-	sLabInit.FontID = WFont;
+	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
 		return FALSE;
@@ -4074,7 +4065,7 @@ BOOL intAddOptions(void)
 	sEdInit.height = OPT_BUTHEIGHT;
 	sEdInit.pText = aText;
 	sprintf(aText, "%d", mapWidth);
-	sEdInit.FontID = WFont;
+	sEdInit.FontID = font_regular;
 	if (!widgAddEditBox(psWScreen, &sEdInit))
 	{
 		return FALSE;
@@ -4166,7 +4157,7 @@ BOOL intAddOptions(void)
 	sLabInit.x = OPT_GAP;
 	sLabInit.y = OPT_GAP;
 	sLabInit.pText = "Current Player:";
-	sLabInit.FontID = WFont;
+	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
 		return FALSE;
@@ -4180,7 +4171,7 @@ BOOL intAddOptions(void)
 	sButInit.y = OPT_BUTHEIGHT + OPT_GAP*2;
 	sButInit.width = OPT_BUTWIDTH;
 	sButInit.height = OPT_BUTHEIGHT;
-	sButInit.FontID = WFont;
+	sButInit.FontID = font_regular;
 	for(player = 0; player < MAX_PLAYERS; player++)
 	{
 		sButInit.pText = apPlayerText[player];
@@ -4421,7 +4412,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
-	sButInit.FontID = WFont;
+	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))
@@ -4517,7 +4508,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sLabInit.width = 16;
 	sLabInit.height = 16;
 	sLabInit.pText = "10";
-	sLabInit.FontID = WFont;
+	sLabInit.FontID = font_regular;
 
 	memset(&sLabInitCmdFac,0,sizeof(W_LABINIT));
 	sLabInitCmdFac.id = IDOBJ_CMDFACSTART;
@@ -4527,7 +4518,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sLabInitCmdFac.width = 16;
 	sLabInitCmdFac.height = 16;
 	sLabInitCmdFac.pText = "10";
-	sLabInitCmdFac.FontID = WFont;
+	sLabInitCmdFac.FontID = font_regular;
 
 	memset(&sLabInitCmdFac2,0,sizeof(W_LABINIT));
 	sLabInitCmdFac2.id = IDOBJ_CMDVTOLFACSTART;
@@ -4537,7 +4528,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sLabInitCmdFac2.width = 16;
 	sLabInitCmdFac2.height = 16;
 	sLabInitCmdFac2.pText = "10";
-	sLabInitCmdFac2.FontID = WFont;
+	sLabInitCmdFac2.FontID = font_regular;
 
 	memset(&sLabIntObjText,0,sizeof(W_LABINIT));
 	sLabIntObjText.id = IDOBJ_FACTORYSTART;
@@ -4547,7 +4538,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sLabIntObjText.width = 16;
 	sLabIntObjText.height = 16;
 	sLabIntObjText.pText = "xxx/xxx - overrun";
-	sLabIntObjText.FontID = WFont;
+	sLabIntObjText.FontID = font_regular;
 
 	memset(&sLabInitCmdExp,0,sizeof(W_LABINIT));
 	sLabInitCmdExp.id = IDOBJ_CMDEXPSTART;
@@ -4557,7 +4548,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sLabInitCmdExp.width = 16;
 	sLabInitCmdExp.height = 16;
 	sLabInitCmdExp.pText = "@@@@@ - overrun";
-	sLabInitCmdExp.FontID = WFont;
+	sLabInitCmdExp.FontID = font_regular;
 
 
 	displayForm = 0;
@@ -5309,7 +5300,7 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 	sLabInit.width = 16;
 	sLabInit.height = 16;
 	sLabInit.pText = "10";
-	sLabInit.FontID = WFont;
+	sLabInit.FontID = font_regular;
 
 
 	if (psStats)
@@ -5479,7 +5470,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		sButInit.height = iV_GetImageHeight(IntImages,IMAGE_INFINITE_DOWN);
 	//	sButInit.pText = pCloseText;
 		sButInit.pTip = "Infinite Production";
-		sButInit.FontID = WFont;
+		sButInit.FontID = font_regular;
 		sButInit.pDisplay = intDisplayButtonPressed;
 		sButInit.pUserData = (void*)PACKDWORD_TRI(IMAGE_INFINITE_DOWN,
 			IMAGE_INFINITE_HI, IMAGE_INFINITE_UP);
@@ -5497,7 +5488,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		sLabInit.y = STAT_SLDY + 3;
 		sLabInit.width = 16;
 		sLabInit.height = 16;
-		sLabInit.FontID = WFont;
+		sLabInit.FontID = font_regular;
 		sLabInit.pUserData = (void*)psOwner;//1;
 		//sLabInit.pCallback = intUpdateSlider;
 		sLabInit.pDisplay = intDisplayNumber;
@@ -5558,7 +5549,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		sButInit.width = iV_GetImageWidth(IntImages,IMAGE_FDP_DOWN);
 		sButInit.height = iV_GetImageHeight(IntImages,IMAGE_FDP_DOWN);
 		sButInit.pTip = _("Factory Delivery Point");
-		sButInit.FontID = WFont;
+		sButInit.FontID = font_regular;
 		sButInit.pDisplay = intDisplayDPButton;
 		sButInit.pUserData = (void*)psOwner;
 
@@ -5577,7 +5568,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		sButInit.width = iV_GetImageWidth(IntImages,IMAGE_LOOP_DOWN);
 		sButInit.height = iV_GetImageHeight(IntImages,IMAGE_LOOP_DOWN);
 		sButInit.pTip = _("Loop Production");
-		sButInit.FontID = WFont;
+		sButInit.FontID = font_regular;
 		sButInit.pDisplay = intDisplayButtonPressed;
 		sButInit.pUserData = (void*)PACKDWORD_TRI(IMAGE_LOOP_DOWN,
 			IMAGE_LOOP_HI, IMAGE_LOOP_UP);
@@ -5605,7 +5596,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		sLabInit.y = sButInit.y;
 		sLabInit.width = 12;
 		sLabInit.height = 15;
-		sLabInit.FontID = WFont;
+		sLabInit.FontID = font_regular;
 		sLabInit.pUserData = (void*)psOwner;
 		sLabInit.pCallback = intAddLoopQuantity;
 		if (!widgAddLabel(psWScreen, &sLabInit))
@@ -5625,7 +5616,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 
 		sLabInit.width = 12;
 		sLabInit.height = 15;
-		sLabInit.FontID = WFont;
+		sLabInit.FontID = font_regular;
 		sLabInit.pCallback = intAddProdQuantity;
 
 	}
@@ -5644,7 +5635,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
-	sButInit.FontID = WFont;
+	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))

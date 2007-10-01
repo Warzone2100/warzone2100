@@ -64,7 +64,6 @@
 static int StartWithGame = 1; // New game starts in Cam 1.
 
 tMode titleMode; // the global case
-int				FEFont;
 char			pLevelName[MAX_LEVEL_NAME_SIZE+1];	//256];			// vital! the wrf file to use.
 
 BOOL			bForceEditorLoaded = FALSE;
@@ -223,14 +222,7 @@ BOOL startTitleMenu(void)
 	addBottomForm();
 
 	addTextButton(FRONTEND_SINGLEPLAYER, FRONTEND_POS2X, FRONTEND_POS2Y, _("Single Player Campaign"), FALSE, FALSE);
-	if(!bDisableLobby)
-	{
-		addTextButton(FRONTEND_MULTIPLAYER, FRONTEND_POS3X,FRONTEND_POS3Y, _("Multi Player Game"), FALSE, FALSE);
-	}
-	else
-	{
-		addTextButton(FRONTEND_MULTIPLAYER, FRONTEND_POS3X, FRONTEND_POS3Y, _("Multi Player Game"),FALSE,TRUE);
-	}
+	addTextButton(FRONTEND_MULTIPLAYER, FRONTEND_POS3X, FRONTEND_POS3Y, _("Multi Player Game"), FALSE, bDisableLobby);
 	addTextButton(FRONTEND_TUTORIAL, FRONTEND_POS4X, FRONTEND_POS4Y, _("Tutorial") ,FALSE,FALSE);
 	addTextButton(FRONTEND_OPTIONS, FRONTEND_POS5X, FRONTEND_POS5Y, _("Options") ,FALSE,FALSE);
 
@@ -1205,7 +1197,7 @@ void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt,BOOL bA
 
 	sButInit.height = FRONTEND_BUTHEIGHT;
 	sButInit.pDisplay = displayTextOption;
-	sButInit.FontID = FEFont;
+	sButInit.FontID = font_large;
 	sButInit.pText = txt;
 	widgAddButton(psWScreen, &sButInit);
 
@@ -1253,7 +1245,7 @@ void addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt)
 	sLabInit.width = 30;
 	sLabInit.height = FRONTEND_BOTFORMH;
 
-	sLabInit.FontID = FEFont;
+	sLabInit.FontID = font_large;
 
 	sLabInit.pDisplay = displayTextAt270;
 	sLabInit.pText = txt;
@@ -1296,7 +1288,7 @@ static void displayTitleBitmap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 #endif
 	;
 
-	iV_SetFont(WFont);
+	iV_SetFont(font_regular);
 	iV_SetTextColour(PIE_TEXT_WHITE);
 
 	iV_DrawTextRotated(versionString, pie_GetVideoBufferWidth() - 10, pie_GetVideoBufferHeight() - 15, 270.f);
@@ -1372,7 +1364,7 @@ void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *
 
 	psLab = (W_LABEL *)psWidget;
 
-	iV_SetFont(FEFont);
+	iV_SetFont(font_large);
 
 
 	iV_SetTextColour(PIE_TEXT_WHITE);

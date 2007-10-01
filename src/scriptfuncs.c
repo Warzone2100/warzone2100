@@ -1446,7 +1446,7 @@ BOOL scrRemoveMessage(void)
 
 	//play the tutorial message immediately
 	psCurrentMsg = &tutorialMessage;
-	initTextDisplay(psCurrentMsg, WFont, 255);
+	initTextDisplay(psCurrentMsg, font_regular, 255);
 	addIntelScreen(TRUE);
 
 	return TRUE;

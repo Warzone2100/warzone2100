@@ -241,7 +241,7 @@ BOOL intAddIntelMap(void)
 			sLabInit.width = INTMAP_LABELWIDTH;
 			sLabInit.height = INTMAP_LABELHEIGHT;
 			sLabInit.pText = _("PAUSED");
-			sLabInit.FontID = WFont;
+			sLabInit.FontID = font_regular;
 			if (!widgAddLabel(psWScreen, &sLabInit))
 			{
 				return FALSE;
@@ -624,7 +624,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	//sLabInit.pText=psResearch->pName;
 	sLabInit.pText = getStatName(psResearch);
 
-	sLabInit.FontID = WFont;
+	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
 		return FALSE;
@@ -722,7 +722,7 @@ static BOOL intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
 	y1 = y0 + height;
 	ty = y0;
 
-	iV_SetFont(WFont);
+	iV_SetFont(font_regular);
 	/* Get the travel to the next line */
 	linePitch = iV_GetTextLineSize();
 	/* Fix for spacing.... */
@@ -1358,7 +1358,7 @@ void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 
 	if (psMessage)
 	{
-		iV_SetFont(WFont);
+		iV_SetFont(font_regular);
 		/* Get the travel to the next line */
 		linePitch = iV_GetTextLineSize();
 		/* Fix for spacing.... */
