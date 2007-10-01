@@ -216,16 +216,15 @@ int pie_ReloadTexPage(STRING *filename, char *pBuffer)
 	while (stricmp(filename,_TEX_PAGE[i].name) != 0) {
 		i++;
 		if (i >= _TEX_INDEX) {
-			debug(LOG_TEXTURE, "Texture %s not in resources", filename);
+			debug(LOG_TEXTURE, "pie_ReloadTexPage: Cannot find any %s to replace!", filename);
 			return -1;
 		}
 	}
-	//got the old texture page so load bmp straight in
-	s.width = _TEX_PAGE[i].tex.width;
-	s.height = _TEX_PAGE[i].tex.height;
-	s.bmp = _TEX_PAGE[i].tex.bmp;
 
+	debug(LOG_TEXTURE, "Reloading texture %s from index %d", filename, i);
+	free(_TEX_PAGE[i].tex.bmp);
 	pie_PNGLoadMem(pBuffer, &s, NULL);
+	pie_ChangeTexPage(i, &s, 1, FALSE, TRUE);
 
 	return i;
 }
