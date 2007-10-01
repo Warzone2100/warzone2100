@@ -9,6 +9,7 @@
    * New: Top, bottom, left, right, front and rear armor types for units.
    * New: Improved scripting language documentation.
    * Fix: Skirmish difficulty slider now applies settings to the right players.
+   * New: UTF-8 and font rendering support added (aids in i18n). This depends on QuesoGLC.
  * Campaign Mode:
    * Fix: accuracy, damage and ROF upgrades, which were mistakenly applied to Mini-Pods and Mini-Rocket
           Artillery, are now correctly applied to Lancer, Bunker Buster, Tank Killer and Ripple Rockets.
