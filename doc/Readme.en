@@ -15,9 +15,11 @@ Content
 
 1. Contents of Warzone 2100 GPL
 ===============================
-Back in 1999 Warzone 2100 was released as a commercial, innovative 3D real-time
-strategy game. When it was liberated everything despite music and ingame-videos
-has been open-sourced. The original campaign is still playable though.
+Warzone 2100, released in 1999 and developed by Pumpkin Studios,
+was a groundbreaking and innovative 3D real-time strategy game.
+In 2004 Eidos, in collaboration with Pumpkin Studios, decided to release
+the source for the game under the terms of the GNU GPL, including everything
+but the music and in-game video sequences.
 
 Additionally all multiplayer-maps that were available in Warzone 2100 1.10,
 the last official patch by Pumpkin Studios, are available in Warzone 2100 GPL as
