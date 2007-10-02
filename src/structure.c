@@ -1314,7 +1314,7 @@ SDWORD structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass
 	// Do at least one point of damage
 	unsigned int actualDamage = 1;
 	float		body = (float) psStructure->body;
-	float		originalBody = (float) psStructure->pStructureType->bodyPoints;
+	float		originalBody = (float) structureBody(psStructure);
 
 	CHECK_STRUCTURE(psStructure);
 
