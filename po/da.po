@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: da\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-09-28 15:10+0200\n"
+"POT-Creation-Date: 2007-10-02 00:22+0200\n"
 "PO-Revision-Date: 2007-04-17 23:03+0200\n"
 "Last-Translator: Christian Vest Hansen <karmazilla@gmail.com>\n"
 "Language-Team: Dansk <en@li.org>\n"
@@ -16,48 +16,48 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: src/multiplay.c:1894
+#: src/multiplay.c:1902
 msgid "Green"
 msgstr "Grøn"
 
-#: src/multiplay.c:1895
+#: src/multiplay.c:1903
 msgid "Orange"
 msgstr "Orange"
 
-#: src/multiplay.c:1896
+#: src/multiplay.c:1904
 msgid "Grey"
 msgstr "Grå"
 
-#: src/multiplay.c:1897
+#: src/multiplay.c:1905
 msgid "Black"
 msgstr "Sort"
 
-#: src/multiplay.c:1898
+#: src/multiplay.c:1906
 msgid "Red"
 msgstr "Rød"
 
-#: src/multiplay.c:1899
+#: src/multiplay.c:1907
 msgid "Blue"
 msgstr "Blå"
 
-#: src/multiplay.c:1900
+#: src/multiplay.c:1908
 msgid "Pink"
 msgstr "Pink"
 
-#: src/multiplay.c:1901
+#: src/multiplay.c:1909
 msgid "Cyan"
 msgstr "Cyan"
 
-#: src/display.c:1892
+#: src/display.c:1856
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Kan ikke bygge på brændende oilebrøn."
 
-#: src/display.c:2044
+#: src/display.c:2008
 #, c-format
 msgid "%s - Damage %d%% - Kills %d, %s"
 msgstr "%s - Skade %d%% - Drab %d, %s"
 
-#: src/display.c:2291
+#: src/display.c:2255
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Truck beordret til at bygge oliebrøn."
 
@@ -118,7 +118,7 @@ msgstr "Du opdager plantegninger for %s"
 msgid "Close"
 msgstr "Luk"
 
-#: src/hci.c:1680 src/mission.c:3498 src/loop.c:480 src/loop.c:492
+#: src/hci.c:1680 src/mission.c:3499 src/loop.c:480 src/loop.c:492
 msgid "GAME SAVED!"
 msgstr "SPIL GEMT!"
 
@@ -154,7 +154,7 @@ msgstr "Energi"
 msgid "Load Game"
 msgstr "Indlæs spil"
 
-#: src/hci.c:4059 src/mission.c:3404 src/mission.c:3551 src/ingameop.c:281
+#: src/hci.c:4059 src/mission.c:3405 src/mission.c:3552 src/ingameop.c:281
 #: src/ingameop.c:420
 msgid "Save Game"
 msgstr "Gem spil"
@@ -200,27 +200,27 @@ msgstr "Afsend transportskib"
 msgid "Reinforcements landing"
 msgstr "Forstærkninger er ankommet"
 
-#: src/mission.c:2870
+#: src/mission.c:2871
 msgid "Load Transport"
 msgstr "Fyld transportskib"
 
-#: src/mission.c:3351
+#: src/mission.c:3352
 msgid "OBJECTIVE ACHIEVED"
 msgstr "MISSIONEN LYKKEDES"
 
-#: src/mission.c:3357
+#: src/mission.c:3358
 msgid "OBJECTIVE FAILED"
 msgstr "MISSIONEN FEJLEDE"
 
-#: src/mission.c:3383 src/mission.c:3420 src/mission.c:3567
+#: src/mission.c:3384 src/mission.c:3421 src/mission.c:3568
 msgid "Quit To Main Menu"
 msgstr "Tilbage til hovedmenu"
 
-#: src/mission.c:3391
+#: src/mission.c:3392
 msgid "Continue Game"
 msgstr "Fortsæt"
 
-#: src/mission.c:3414 src/mission.c:3548 src/ingameop.c:416 src/frontend.c:427
+#: src/mission.c:3415 src/mission.c:3549 src/ingameop.c:416 src/frontend.c:427
 msgid "Load Saved Game"
 msgstr "Indlæs gemt spil"
 
@@ -589,16 +589,16 @@ msgstr "Kan ikke finde nogle rekonniseringsenheder!"
 msgid "Unable to locate any Commanders!"
 msgstr "Kan ikke finde nogle kommandører!"
 
-#: src/research.c:1861
+#: src/research.c:1866
 #, fuzzy, c-format
 msgid "Research completed: %s"
 msgstr "Forskning fuldendt: %s"
 
-#: src/research.c:1866
+#: src/research.c:1871
 msgid "Research Completed"
 msgstr "Forskning fuldendt"
 
-#: src/research.c:2666
+#: src/research.c:2677
 msgid "Research Award"
 msgstr "Forskningsgevinst"
 

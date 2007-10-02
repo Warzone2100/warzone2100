@@ -20,7 +20,7 @@ void SDL_initFramerate(FPSmanager * manager)
      */
     manager->framecount = 0;
     manager->rate = FPS_DEFAULT;
-    manager->rateticks = (1000.0 / (float) FPS_DEFAULT);
+    manager->rateticks = (1000.0f / (float) FPS_DEFAULT);
     manager->lastticks = 0;
 }
 
@@ -33,7 +33,7 @@ int SDL_setFramerate(FPSmanager * manager, int rate)
     if ((rate >= FPS_LOWER_LIMIT) && (rate <= FPS_UPPER_LIMIT)) {
 	manager->framecount = 0;
 	manager->rate = rate;
-	manager->rateticks = (1000.0 / (float) rate);
+	manager->rateticks = (1000.0f / (float) rate);
 	return (0);
     } else {
 	return (-1);

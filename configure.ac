@@ -26,7 +26,15 @@ AC_GNU_SOURCE
 AM_GNU_GETTEXT([external])
 
 
-# Check for Windows.
+# Check for compiler
+case $CC in
+	icc)
+		cc_icc=yes
+		;;
+esac
+
+
+# Check for operating system
 case $host_os in
 	mingw32)
 		host_os_mingw32=yes
@@ -121,7 +129,11 @@ AC_ARG_ENABLE(debug,
 AC_MSG_CHECKING([whether to compile in debug mode])
 AC_MSG_RESULT([$enable_debug])
 if test "x$enable_debug" = "xyes" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -DDEBUG -Wall -Werror -Wno-unused-label -Wno-int-to-pointer-cast -Wno-pointer-to-int-cast"
+	if test "x$cc_icc" = "xyes" ; then
+		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -DDEBUG -Wall -Werror"
+	else
+		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -DDEBUG -Wall -Werror -Wno-unused-label -Wno-int-to-pointer-cast -Wno-pointer-to-int-cast"
+	fi
 elif test "x$enable_debug" = "xrelaxed" ; then
 	WZ_CFLAGS="${WZ_CFLAGS} -g -DDEBUG -Wall -Wextra"
 else
