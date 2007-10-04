@@ -545,26 +545,13 @@ void intAddLoopQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 	{
 		psFactory = (FACTORY *)((STRUCTURE *)Label->pUserData)->pFunctionality;
 
-		if (psFactory->quantity)
+		if (psFactory->quantity == INFINITE_PRODUCTION)
 		{
-			if (psFactory->quantity == INFINITE_PRODUCTION)
-			{
-				Label->aText[0] = (UBYTE)(7);
-				Label->aText[1] = (UBYTE)('\0');
-			}
-			else
-			{
-				Label->aText[0] = (UBYTE)('0' + psFactory->quantity / 10);
-				Label->aText[1] = (UBYTE)('0' + (psFactory->quantity + DEFAULT_LOOP) % 10);
-				Label->aText[2] = (UBYTE)('\0');
-			}
+			strncpy(Label->aText, "∞", sizeof(Label->aText));
 		}
 		else
 		{
-			//set to default loop quantity
-			Label->aText[0] = (UBYTE)('0');
-			Label->aText[1] = (UBYTE)('0' + DEFAULT_LOOP);
-			Label->aText[2] = (UBYTE)('\0');
+			snprintf(Label->aText, sizeof(Label->aText), "%02u", psFactory->quantity + DEFAULT_LOOP);
 		}
 		Label->style &= ~WIDG_HIDDEN;
 	}
