@@ -33,6 +33,10 @@
 #include <GL/gl.h>
 #include <GL/glc.h>
 
+static const char font_family[] = "DejaVu Sans Mono";
+static const char font_face_regular[] = "Book";
+static const char font_face_bold[] = "Bold";
+
 static float font_size = 12.f;
 // Contains the font color in the following order: red, green, blue, alpha
 static float font_colour[4] = {1.f, 1.f, 1.f, 1.f};
@@ -51,7 +55,10 @@ static inline void iV_printFontList()
 {
 	unsigned int i;
 	GLint font_count = glcGeti(GLC_CURRENT_FONT_COUNT);
-	debug(LOG_ERROR, "GLC_CURRENT_FONT_COUNT = %d", font_count);
+	debug(LOG_NEVER, "GLC_CURRENT_FONT_COUNT = %d", font_count);
+
+	if (font_count == 0)
+		debug(LOG_ERROR, "iV_printFontList: The required font (%s) isn't loaded", font_family);
 
 	for (i = 0; i < font_count; ++i)
 	{
@@ -65,7 +72,7 @@ static inline void iV_printFontList()
 		prBuffer[sizeof(prBuffer) - 1] = 0;
 		strncat(prBuffer, glcGetFontFace(font), sizeof(prBuffer));
 		prBuffer[sizeof(prBuffer) - 1] = 0;
-		debug(LOG_ERROR, prBuffer);
+		debug(LOG_NEVER, prBuffer);
 	}
 }
 
@@ -87,10 +94,6 @@ static void iV_initializeGLC()
 
 	GLC_Font_Regular = glcGenFontID();
 	GLC_Font_Bold = glcGenFontID();
-
-	static const char* font_family = "DejaVu Sans Mono";
-	static const char* font_face_regular = "Book";
-	static const char* font_face_bold = "Bold";
 
 	if (!glcNewFontFromFamily(GLC_Font_Regular, font_family))
 			debug(LOG_ERROR, "glcNewFontFromFamily(GLC_Font_Regular (%d), \"%s\") failed", GLC_Font_Regular, font_family);
@@ -114,10 +117,6 @@ static void iV_initializeGLC()
 
 	debug(LOG_NEVER, "finished initializing GLC");
 
-#ifdef DEBUG
-    iV_printFontList();
-#endif
-
 	// Set GLC's string type to UTF-8
 	glcStringType(GLC_UTF8_QSO);
 }
@@ -126,6 +125,10 @@ void iV_TextInit()
 {
 	iV_initializeGLC();
 	iV_SetFont(font_regular);
+
+#ifdef DEBUG
+	iV_printFontList();
+#endif
 }
 
 void iV_TextShutdown()
