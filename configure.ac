@@ -179,12 +179,12 @@ AC_CHECK_LIB(GLU, main,
 
 # Look for OpenGLC
 AC_CHECK_HEADER(GL/glc.h, ,
-	AC_MSG_ERROR([OpenGLC header not found]))
+	AC_MSG_ERROR([OpenGLC header not found. You need to install QuesoGLC: http://quesoglc.sourceforge.net/]))
 AC_CHECK_LIB(GLC, main,
 	OPENGLC_LIBS="-lGLC",
 	AC_CHECK_LIB(glc32, main,
 		OPENGLC_LIBS="-lglc32",
-		AC_MSG_ERROR([You need to install OpenGLC.])))
+		AC_MSG_ERROR([You need to install QuesoGLC. http://quesoglc.sourceforge.net/])))
 
 # Look for OpenAL
 AC_CHECK_HEADER(AL/al.h, ,
