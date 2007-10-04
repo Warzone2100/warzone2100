@@ -45,6 +45,8 @@ static GLint GLC_Context = 0;
 static GLint GLC_Font_Regular = 0;
 static GLint GLC_Font_Bold = 0;
 
+static bool anti_aliasing = true;
+
 /***************************************************************************/
 /*
  *	Source
@@ -143,6 +145,16 @@ void iV_TextShutdown()
 
 	if (GLC_Context)
 		glcDeleteContext(GLC_Context);
+}
+
+void iV_SetTextAntialias(bool enable)
+{
+	anti_aliasing = enable;
+}
+
+bool iV_TextAntialiased()
+{
+	return anti_aliasing;
 }
 
 void iV_SetFont(enum iV_fonts FontID)
@@ -573,10 +585,13 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 {
 	pie_SetTexturePage(-2);
 
-	// Enable Anti Aliasing
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-	glEnable(GL_POLYGON_SMOOTH);
+	// Enable Anti Aliasing if it's enabled
+	if (anti_aliasing)
+	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+		glEnable(GL_POLYGON_SMOOTH);
+	}
 
 	if (rotation != 0.f)
 		rotation = 360.f - rotation;
@@ -592,9 +607,12 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 	glcRenderString(string);
 	glFrontFace(GL_CCW);
 
-	// Turn off anti aliasing
-	glDisable(GL_BLEND);
-	glDisable(GL_POLYGON_SMOOTH);
+	// Turn off anti aliasing (if we enabled it above)
+	if (anti_aliasing)
+	{
+		glDisable(GL_BLEND);
+		glDisable(GL_POLYGON_SMOOTH);
+	}
 
 	// Reset the current model view matrix
 	glLoadIdentity();
