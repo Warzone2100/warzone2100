@@ -60,7 +60,13 @@ static inline void iV_printFontList()
 	debug(LOG_NEVER, "GLC_CURRENT_FONT_COUNT = %d", font_count);
 
 	if (font_count == 0)
+	{
 		debug(LOG_ERROR, "iV_printFontList: The required font (%s) isn't loaded", font_family);
+
+		// Fall back to unselected fonts since the requested font apparently
+		// isn't available.
+		glcEnable(GLC_AUTO_FONT);
+	}
 
 	for (i = 0; i < font_count; ++i)
 	{
