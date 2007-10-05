@@ -828,9 +828,9 @@ BOOL scrvLookUpArray(const char *pIdent, UDWORD *pIndex)
 
 
 // Load a script value file
-BOOL scrvLoad(const char *pData, UDWORD size)
+BOOL scrvLoad(PHYSFS_file* fileHandle)
 {
-	scrvSetInputBuffer(pData, size);
+	scrvSetInputFile(fileHandle);
 
 	if (scrv_parse() != 0)
 	{

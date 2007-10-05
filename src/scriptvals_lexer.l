@@ -31,6 +31,8 @@
 #include "lib/script/script.h"
 #include "src/scriptvals.h"
 
+#include <physfs.h>
+
 /* Get the Yacc definitions */
 #include "scriptvals_parser.tab.h"
 
@@ -46,19 +48,37 @@ static UDWORD currText=0;
 // Note if we are in a comment
 static BOOL inComment = FALSE;
 
-/* Pointer to the input buffer */
-static const char *pInputBuffer = NULL;
-static const char *pEndBuffer = NULL;
+/* Handle to the input file */
+static PHYSFS_file* pReadFile = NULL;
 
 #define YY_INPUT(buf,result,max_size) \
-      if (pInputBuffer != pEndBuffer) { \
-        buf[0] = *(pInputBuffer++); result = 1; \
-      } else { \
-        buf[0] = EOF; result = YY_NULL; \
-      }
+		if (PHYSFS_eof(pReadFile)) \
+		{ \
+			buf[0] = EOF; result = YY_NULL; \
+		} \
+		else { \
+			result = PHYSFS_read(pReadFile, buf, 1, max_size); \
+			if (result == -1) \
+			{ \
+				buf[0] = EOF; result = YY_NULL; \
+			} \
+		}
+
+static inline int PHYSFS_getc()
+{
+	char read_char;
+
+	if (PHYSFS_eof(pReadFile))
+		return EOF;
+
+	if (PHYSFS_read(pReadFile, &read_char, 1, 1) != 1)
+		return EOF;
+
+	return read_char;
+}
 
 #undef scrv_getc
-#define scrv_getc() (pInputBuffer != pEndBuffer ? *(pInputBuffer++) : EOF)
+#define scrv_getc PHYSFS_getc
 
 %}
 
@@ -150,11 +170,10 @@ FALSE						{ scrv_lval.bval = FALSE;	 return BOOLEAN_T; }
 
 %%
 
-/* Set the current input buffer for the lexer */
-void scrvSetInputBuffer(const char *pBuffer, UDWORD size)
+/* Set the current input file for the lexer */
+void scrvSetInputFile(PHYSFS_file* fileHandle)
 {
-	pInputBuffer = pBuffer;
-	pEndBuffer = pBuffer + size;
+	pReadFile = fileHandle;
 
 	/* Reset the lexer in case it's been used before */
 	scrv__flush_buffer(YY_CURRENT_BUFFER);

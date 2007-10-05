@@ -26,6 +26,7 @@
 #define _scriptvals_h
 
 #include "basedef.h"
+#include <physfs.h>
 
 // The possible types of initialisation values
 typedef enum _init_type
@@ -53,7 +54,7 @@ typedef struct _array_indexes
 } ARRAY_INDEXES;
 
 /* Set the current input buffer for the lexer */
-extern void scrvSetInputBuffer(const char *pBuffer, UDWORD size);
+extern void scrvSetInputFile(PHYSFS_file* fileHandle);
 
 extern void scrvGetErrorData(int *pLine, char **ppText);
 
@@ -112,7 +113,7 @@ extern void scrvShutDown(void);
 extern void scrvReset(void);
 
 // Load a script value file
-extern BOOL scrvLoad(const char *pData, UDWORD size);
+extern BOOL scrvLoad(PHYSFS_file* fileHandle);
 
 // Link any object types to the actual pointer values
 //extern BOOL scrvLinkValues(void);

@@ -900,8 +900,11 @@ static BOOL dataScriptLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 // Load a script variable values file
-static BOOL dataScriptLoadVals(const char *pBuffer, UDWORD size, void **ppData)
+static BOOL dataScriptLoadVals(const char* fileName, void **ppData)
 {
+	BOOL success;
+	PHYSFS_file* fileHandle;
+
 	*ppData = NULL;
 
 	// don't load anything if a saved game is being loaded
@@ -910,16 +913,23 @@ static BOOL dataScriptLoadVals(const char *pBuffer, UDWORD size, void **ppData)
 		return TRUE;
 	}
 
-	debug(LOG_WZ, "Loading script data %s",GetLastResourceFilename());
+	debug(LOG_WZ, "Loading script data %s", GetLastResourceFilename());
 
-	if (!scrvLoad(pBuffer, size))
+	fileHandle = PHYSFS_openRead(fileName);
+
+	if (fileHandle == NULL)
 	{
-		debug(LOG_ERROR, "Script %s did not compile", GetLastResourceFilename());
 		return FALSE;
 	}
 
-	*ppData = NULL;
-	return TRUE;
+	success = scrvLoad(fileHandle);
+
+	if (!success)
+		debug(LOG_ERROR, "Script %s did not compile", GetLastResourceFilename());
+
+	PHYSFS_close(fileHandle);
+
+	return success;
 }
 
 // New reduced resource type ... specially for PSX
@@ -968,7 +978,6 @@ static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
 	{"RFUNC", bufferRFUNCLoad, NULL},
 	{"SMSG", bufferSMSGLoad, dataSMSGRelease},
 	{"SCRIPT", dataScriptLoad, (RES_FREE)scriptFreeCode},
-	{"SCRIPTVAL", dataScriptLoadVals, NULL},
 	{"IMD", dataIMDBufferLoad, (RES_FREE)iV_IMDRelease},
 };
 
@@ -989,6 +998,7 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"TERTILES", dataTERTILESLoad, dataTERTILESRelease},
 	{"IMG", dataIMGLoad, dataIMGRelease},
 	{"TEXPAGE", dataTexPageLoad, dataImageRelease},
+	{"SCRIPTVAL", dataScriptLoadVals, NULL},
 	{"STR_RES", dataStrResLoad, dataStrResRelease},
 };
 
