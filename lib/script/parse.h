@@ -25,6 +25,8 @@
 #ifndef _parse_h
 #define _parse_h
 
+#include <physfs.h>
+
 #ifndef MAXSTRLEN
 #define MAXSTRLEN 255
 #endif
@@ -41,21 +43,10 @@
 /* Script includes */
 #define MAX_SCR_INCLUDE_DEPTH	10
 
-extern char *pScrInputBuffer[];
-extern SDWORD scr_include_stack_ptr;
-
 /* Script defines */
 #define MAX_SCR_MACRO_DEPTH		10
 #define MAX_SCR_MACROS			150		/* Max defines in a file */
 #define MAX_SCR_MACRO_LEN		32
-
-extern SDWORD scr_num_macros;			/* Number of mactos defined so far */
-extern SDWORD scr_macro_stack_ptr;		/* Pointer to the current flex macro input buffer */
-
-extern char *pScrMacroBuffer[];
-
-/* Line count stack used with script includes */
-extern UDWORD scrInclLine[MAX_SCR_INCLUDE_DEPTH];
 
 /* Structure to hold script define directive information */
 typedef struct _scr_define
@@ -299,8 +290,8 @@ extern CONST_SYMBOL		*asScrConstantTab;
 /* The table of callback triggers */
 extern CALLBACK_SYMBOL	*asScrCallbackTab;
 
-/* Set the current input buffer for the lexer */
-extern void scriptSetInputBuffer(const char *pBuffer, UDWORD size);
+/* Set the current input file for the lexer */
+extern void scriptSetInputFile(PHYSFS_file* fileHandle);
 
 /* Initialise the parser ready for a new script */
 extern BOOL scriptInitParser(void);

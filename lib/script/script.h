@@ -93,8 +93,16 @@ extern UDWORD retStackCallDepth(void);
  * Compiler functions
  */
 
-/* Compile a script program */
-extern BOOL scriptCompile(const char *pData, UDWORD fileSize, SCRIPT_CODE **ppsProg, SCR_DEBUGTYPE debugType);
+/** Compile a script program
+ *  \param fileHandle a PhysicsFS file handle to the script-file to compile
+ *  \param debugType whether debugging information should be generated or not.
+ *                   Select \c SCR_DEBUGINFO to generate debugging information,
+ *                   choose any other parameter if you don't want debugging
+ *                   information attached.
+ *  \return a valid, non-null pointer on success,
+ *          otherwise a null pointer on failure.
+ */
+extern SCRIPT_CODE* scriptCompile(PHYSFS_file* fileHandle, SCR_DEBUGTYPE debugType);
 
 /* Free a SCRIPT_CODE structure */
 extern void scriptFreeCode(SCRIPT_CODE *psCode);

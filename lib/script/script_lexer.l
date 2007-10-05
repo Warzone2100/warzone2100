@@ -50,11 +50,36 @@ static YY_BUFFER_STATE include_stack[MAX_SCR_INCLUDE_DEPTH];
 /* FLEX define buffer stack */
 static YY_BUFFER_STATE macro_stack[MAX_SCR_MACRO_DEPTH];
 static SCR_MACRO scr_macro[MAX_SCR_MACROS];
-static char *tmpMacroBuffer;
 
-static PHYSFS_file *newInput;
+/* Script include files stack */
+static unsigned int scr_include_stack_ptr = 0;
+static PHYSFS_file* pScrInputFiles[MAX_SCR_INCLUDE_DEPTH];
 
-static PHYSFS_sint64 InputLen = 0;
+/* Line count stack used with script includes */
+static unsigned int scrInclLine[MAX_SCR_INCLUDE_DEPTH];
+
+/* Script defines stack */
+static unsigned int scr_num_macros;       /* Number of macros defined so far */
+static int scr_macro_stack_ptr;  /* Pointer to the current flex macro input buffer */
+static char *pScrMacroBuffer[MAX_SCR_MACRO_DEPTH];
+
+#define YY_INPUT(buf,result,max_size) \
+	{ \
+		if (PHYSFS_eof(pScrInputFiles[scr_include_stack_ptr])) \
+		{ \
+			buf[0] = EOF; \
+			result = YY_NULL; \
+		} \
+		else \
+		{ \
+			result = PHYSFS_read(pScrInputFiles[scr_include_stack_ptr], buf, 1, max_size); \
+			if (result == -1) \
+			{ \
+				buf[0] = EOF; \
+				result = YY_NULL; \
+			} \
+		} \
+	}
 
 static YYSTYPE dummy;
 
@@ -305,9 +330,9 @@ SDWORD scriptGetCustomFuncToken(EVENT_SYMBOL *psFunc)
 /* Look up defined macro and return new define buffer */
 BOOL scriptLoopUpMacro(const char *pMacro, char **ppMacroBody)
 {
-	int i;
+	unsigned int i;
 
-	for ( i = 0; i < scr_num_macros; i++ )
+	for (i = 0; i < scr_num_macros; ++i)
 	{
 		if(strcmp(pMacro, &(scr_macro[i].scr_define_macro[0]) ) == 0)
 		{
@@ -343,8 +368,8 @@ void popMacroStack(void)
 /* Store macro name */
 void storeMacroName(const char *pMacroName)
 {
-	ASSERT(scr_num_macros >= 0 && scr_num_macros < MAX_SCR_MACROS,
-		"FLEX: macro count out of bounds: %d", scr_num_macros);
+	ASSERT(scr_num_macros < MAX_SCR_MACROS,
+		"FLEX: macro count out of bounds: %u", scr_num_macros);
 
 	/* Make sure this name isn't already reserved */
 	if((scriptLookUpType(pMacroName, &dummy.tval)) ||
@@ -366,8 +391,8 @@ void storeMacroName(const char *pMacroName)
 /* Store macro body */
 void storeMacroBody(const char *pMacroBody)
 {
-	ASSERT(scr_num_macros >= 0 && scr_num_macros < MAX_SCR_MACROS,
-		"FLEX: macro count out of bounds: %d", scr_num_macros);
+	ASSERT(scr_num_macros < MAX_SCR_MACROS,
+		"FLEX: macro count out of bounds: %u", scr_num_macros);
 
 	/* Store macro body */
 	strcpy( &(scr_macro[scr_num_macros].scr_define_body[0]), pMacroBody);
@@ -378,6 +403,8 @@ void storeMacroBody(const char *pMacroBody)
 /* include directive encountered - push current buffer, set up new one */
 void pushInclude(const char *pIncludePath)
 {
+	PHYSFS_file* newInput;
+
 	if ( scr_include_stack_ptr >= MAX_SCR_INCLUDE_DEPTH ){
 		scr_error("FLEX: Includes nested too deeply" );
 	}
@@ -398,24 +425,10 @@ void pushInclude(const char *pIncludePath)
 	include_stack[scr_include_stack_ptr] = YY_CURRENT_BUFFER;
 	scr_include_stack_ptr++;
 
-	/* Get file length */
-	InputLen = PHYSFS_fileLength(newInput);
+	ASSERT(scr_include_stack_ptr < MAX_SCR_INCLUDE_DEPTH,
+		"FLEX: scr_include_stack_ptr out of bounds: %u", scr_include_stack_ptr);
 
-	ASSERT(scr_include_stack_ptr > 0 && scr_include_stack_ptr < MAX_SCR_INCLUDE_DEPTH,
-		"FLEX: scr_include_stack_ptr out of bounds: %d", scr_include_stack_ptr);
-
-	/* Allocate enough space for the new include */
-	pScrInputBuffer[scr_include_stack_ptr] = (char *)malloc(InputLen);
-
-	/* Read include */
-	if (PHYSFS_read(newInput, pScrInputBuffer[scr_include_stack_ptr], 1, InputLen ) != InputLen ){
-		scr_error( "FLEX: Couldn't read include: '%s'", pIncludePath);
-	}
-
-	/* Close include */
-	if(newInput){
-		(void)PHYSFS_close(newInput);
-	}
+	pScrInputFiles[scr_include_stack_ptr] = newInput;
 }
 
 
@@ -533,7 +546,7 @@ NOT						return _NOT;
 "#include"[ \t]+\"			{ BEGIN (_INCL); }	/* Match '#include' and skip whitespace until quotation */
 
 <_INCL>[^ \t\n\"]+   		{ 	/* got the include file name */
-								RULE("FLEX: Opening include '%s' (scr_include_stack_ptr: %d)", scr_text, scr_include_stack_ptr);
+								RULE("FLEX: Opening include '%s' (scr_include_stack_ptr: %u)", scr_text, scr_include_stack_ptr);
 
 								/* Set up new input buffer, push current one to stack */
 								pushInclude(scr_text);
@@ -545,13 +558,14 @@ NOT						return _NOT;
 <_INCL_END_QUOTE>\"			{
 								int	line;
 								char	*text;
+								YY_BUFFER_STATE includeBuffer;
 
 								ASSERT(scr_include_stack_ptr < MAX_SCR_INCLUDE_DEPTH,
-									"FLEX:  scr_include_stack_ptr out of bounds: %d", scr_include_stack_ptr);
+									"FLEX:  scr_include_stack_ptr out of bounds: %u", scr_include_stack_ptr);
 
-								ASSERT(pScrInputBuffer[scr_include_stack_ptr] != NULL, "FLEX: failed to load include");
-	
-								RULE("FLEX: storing line number for include %d: ",
+								ASSERT(pScrInputFiles[scr_include_stack_ptr] != NULL, "FLEX: failed to load include");
+
+								RULE("FLEX: storing line number for include %u: ",
 									scr_include_stack_ptr - 1, scr_lineno);
 
 								/* Store the current line number in the current input buffer */
@@ -559,17 +573,20 @@ NOT						return _NOT;
 								scrInclLine[scr_include_stack_ptr - 1] = line;
 								scr_lineno = 1;		//we are at the beginning of the first line in a new input now
 
+								/* Create a new YY_BUFFER_STATE for this file */
+								includeBuffer = yy_create_buffer(NULL, YY_BUF_SIZE);
+
 								/* Switch to the new buffer */
-								yy_switch_to_buffer( yy_scan_bytes(pScrInputBuffer[scr_include_stack_ptr], InputLen) );
+								yy_switch_to_buffer(includeBuffer);
 
 								BEGIN (INITIAL);
 							}
 
 <<EOF>> 						{
-								RULE("FLEX: EOF: scr_include_stack_ptr: %d; scr_macro_stack_ptr: %d",
+								RULE("FLEX: EOF: scr_include_stack_ptr: %u; scr_macro_stack_ptr: %d",
 									scr_include_stack_ptr, scr_macro_stack_ptr);
 
-								ASSERT(pScrInputBuffer[scr_include_stack_ptr] != NULL, "FLEX: can't unload, buffer is NULL");
+								ASSERT(pScrInputFiles[scr_include_stack_ptr] != NULL, "FLEX: can't unload, buffer is NULL");
 
 								if ( scr_include_stack_ptr == 0 )
 								{
@@ -598,24 +615,24 @@ NOT						return _NOT;
 									}
 									else	//no macros, return to previous include
 									{
-										RULE("FLEX: returning from parsing include %d", scr_include_stack_ptr);
+										RULE("FLEX: returning from parsing include %u", scr_include_stack_ptr);
 
 										/* Free include buffer */
-										free(pScrInputBuffer[scr_include_stack_ptr]);
-										pScrInputBuffer[scr_include_stack_ptr] = NULL;
+										PHYSFS_close(pScrInputFiles[scr_include_stack_ptr]);
+										pScrInputFiles[scr_include_stack_ptr] = NULL;
 
 										/* Delete flex buffer */
 										yy_delete_buffer( YY_CURRENT_BUFFER );
 
 										/* Pop previous script file */
 										yy_switch_to_buffer( include_stack[scr_include_stack_ptr - 1] );
-										
-										ASSERT(scr_include_stack_ptr - 1 >= 0,
+
+										ASSERT(scr_include_stack_ptr != 0,
 											"Can't restore line number of theprevious flex input");
 
 										/* Restore line count of the previous buffer from the line count stack */
 										scr_lineno = scrInclLine[scr_include_stack_ptr - 1];
-										RULE("FLEX: restoring line number for include %d: ",
+										RULE("FLEX: restoring line number for include %u: ",
 											scr_include_stack_ptr, scr_lineno);
 
 										/* Go to the previous flex input buffer */
@@ -704,11 +721,11 @@ NOT						return _NOT;
 
 									return CALLBACK_SYM;
 								}
-								else if(scriptLoopUpMacro(scr_text, &tmpMacroBuffer))
+								else if(scriptLoopUpMacro(scr_text, &pScrMacroBuffer[scr_macro_stack_ptr]))
 								{
 									RULE( "'%s' is a macro", scr_text);
 
-									ASSERT(tmpMacroBuffer != NULL,
+									ASSERT(pScrMacroBuffer[scr_macro_stack_ptr] != NULL,
 										"FLEX: failed to allocate memory for macro buffer %d", scr_macro_stack_ptr);
 
 									ASSERT(scr_macro_stack_ptr >= 0 && scr_macro_stack_ptr < MAX_SCR_MACRO_DEPTH,
@@ -719,8 +736,6 @@ NOT						return _NOT;
 									 */
 									macro_stack[scr_macro_stack_ptr] = YY_CURRENT_BUFFER;
 									scr_macro_stack_ptr++;
-
-									pScrMacroBuffer[scr_macro_stack_ptr] = tmpMacroBuffer;	//assign to the new input buffer
 
 									/* Feed flex with the new macro buffer */
 									yy_switch_to_buffer( yy_scan_string( pScrMacroBuffer[scr_macro_stack_ptr] ) );
@@ -772,13 +787,43 @@ NOT						return _NOT;
 
 %%
 
-/* Set the current input buffer for the lexer */
-void scriptSetInputBuffer(const char *pBuffer, UDWORD size)
+/* Set the current input file for the lexer */
+void scriptSetInputFile(PHYSFS_file* fileHandle)
 {
+	YY_BUFFER_STATE inputScript;
+	unsigned int i;
+
 	/* Reset the lexer in case it's been used before */
 	scr__flush_buffer( YY_CURRENT_BUFFER );
 
-	yy_switch_to_buffer(yy_scan_bytes(pBuffer, size));
+	/* Reset include stack */
+	scr_include_stack_ptr = 0;
+
+	/* Initialize include input files */
+	for(i = 0; i < MAX_SCR_INCLUDE_DEPTH; ++i)
+	{
+		pScrInputFiles[i] = NULL;
+		scrInclLine[i] = 0;
+	}
+
+	/* Set the initial input buffer */
+	pScrInputFiles[0] = fileHandle;
+
+	inputScript = yy_create_buffer(NULL, YY_BUF_SIZE);
+
+	yy_switch_to_buffer(inputScript);
+
+	/* Reset number of macros */
+	scr_num_macros = 0;
+
+	/* Reset macro stack */
+	scr_macro_stack_ptr = 0;
+
+	/* Initialize macro input buffers */
+	for(i = 0; i < MAX_SCR_MACRO_DEPTH; ++i)
+	{
+		pScrMacroBuffer[i] = NULL;
+	}
 }
 
 void scriptGetErrorData(int *pLine, char **ppText)

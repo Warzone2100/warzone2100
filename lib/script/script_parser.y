@@ -30,20 +30,12 @@
 #include "lib/script/parse.h"
 #include "lib/script/script.h"
 
+#include <physfs.h>
+
 /* this will give us a more detailed error output */
 #define YYERROR_VERBOSE TRUE
 
-/* Script includes stack */
-SDWORD scr_include_stack_ptr = 0;
-char *pScrInputBuffer[MAX_SCR_INCLUDE_DEPTH];
-
-/* Line counting stack */
-UDWORD scrInclLine[MAX_SCR_INCLUDE_DEPTH];
-
 /* Script defines stack */
-SDWORD scr_num_macros = 0;			/* Number of macros defined so far */
-SDWORD scr_macro_stack_ptr = 0;
-char *pScrMacroBuffer[MAX_SCR_MACRO_DEPTH];
 
 extern int scr_lex(void);
 
@@ -5855,39 +5847,10 @@ static void scriptResetTables(void)
 }
 
 /* Compile a script program */
-BOOL scriptCompile(const char *pData, UDWORD fileSize,
-				   SCRIPT_CODE **ppsProg, SCR_DEBUGTYPE debugType)
+SCRIPT_CODE* scriptCompile(PHYSFS_file* fileHandle, SCR_DEBUGTYPE debugType)
 {
-	UDWORD i;
-
-	/* Reset include stack */
-	scr_include_stack_ptr = 0;
-
-	/* Initialize include input buffers */
-	for(i=0;i<MAX_SCR_INCLUDE_DEPTH;i++)
-	{
-		pScrInputBuffer[i] = NULL;
-		scrInclLine[i] = 0;
-	}
-
-	/* Set the initial input buffer */
-	pScrInputBuffer[0] = (char *)pData;
-
-
-	/* Reset number of macros */
-	scr_num_macros = 0;
-
-	/* Reset macro stack */
-	scr_macro_stack_ptr = 0;
-
-	/* Initialize macro input buffers */
-	for(i=0;i<MAX_SCR_MACRO_DEPTH;i++)
-	{
-		pScrMacroBuffer[i] = NULL;
-	}
-
 	/* Feed flex with initial input buffer */
-	scriptSetInputBuffer(pScrInputBuffer[0], fileSize);
+	scriptSetInputFile(fileHandle);
 
 	scriptResetTables();
 	psFinalProg = NULL;
@@ -5902,14 +5865,12 @@ BOOL scriptCompile(const char *pData, UDWORD fileSize,
 
 	if (scr_parse() != 0 || bError)
 	{
-		return FALSE;
+		return NULL;
 	}
 
 	scriptResetTables();
 
-	*ppsProg = psFinalProg;
-
-	return TRUE;
+	return psFinalProg;
 }
 
 
