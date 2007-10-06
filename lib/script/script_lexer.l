@@ -657,6 +657,7 @@ NOT						return _NOT;
 	/* Match identifiers */
 {_IDENTIFIER}				{
 								RULE( "looking up '%s'", scr_text);
+								char* tmpMacroBuffer;
 
 								/* See if this identifier has been defined as a type */
 								if (scriptLookUpType(scr_text, &scr_lval.tval))	//STRUCTURESTAT etc
@@ -721,11 +722,11 @@ NOT						return _NOT;
 
 									return CALLBACK_SYM;
 								}
-								else if(scriptLoopUpMacro(scr_text, &pScrMacroBuffer[scr_macro_stack_ptr]))
+								else if(scriptLoopUpMacro(scr_text, &tmpMacroBuffer))
 								{
 									RULE( "'%s' is a macro", scr_text);
 
-									ASSERT(pScrMacroBuffer[scr_macro_stack_ptr] != NULL,
+									ASSERT(tmpMacroBuffer != NULL,
 										"FLEX: failed to allocate memory for macro buffer %d", scr_macro_stack_ptr);
 
 									ASSERT(scr_macro_stack_ptr >= 0 && scr_macro_stack_ptr < MAX_SCR_MACRO_DEPTH,
@@ -736,6 +737,8 @@ NOT						return _NOT;
 									 */
 									macro_stack[scr_macro_stack_ptr] = YY_CURRENT_BUFFER;
 									scr_macro_stack_ptr++;
+
+									pScrMacroBuffer[scr_macro_stack_ptr] = tmpMacroBuffer; // Assign to the new input buffer
 
 									/* Feed flex with the new macro buffer */
 									yy_switch_to_buffer( yy_scan_string( pScrMacroBuffer[scr_macro_stack_ptr] ) );
