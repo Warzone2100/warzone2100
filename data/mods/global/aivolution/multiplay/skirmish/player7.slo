@@ -2824,8 +2824,8 @@ function int checkAllyThreat()
 		{
 			if(knowBase[count])		//know where his base is?
 			{
-				result = numEnemyWeapObjInRange(me, curBase[count][0], curBase[count][1], range, FALSE);
-				result2 = numFriendlyWeapObjInRange(me, curBase[count][0], curBase[count][1], range, FALSE);
+				result = numEnemyWeapObjInRange(me, curBase[count][0], curBase[count][1], range, FALSE, TRUE);
+				result2 = numFriendlyWeapObjInRange(me, curBase[count][0], curBase[count][1], range, FALSE, TRUE);
 
 				if(result > result2)
 				{
@@ -3223,7 +3223,7 @@ event buildNormalOilDefenses(inactive)
 		if((result < 0) or (not bLearn))		//no defense loc stored for this derrick
 		{
 			/* check if too many defenses around already */
-			result = numFriendlyWeapStructsInRange(me, structure.x, structure.y, defensesRange);
+			result = numFriendlyWeapStructsInRange(me, structure.x, structure.y, defensesRange, TRUE);
 			if(result < count)
 			{
 				/* make sure derrick is not in the base */
@@ -3494,7 +3494,7 @@ function STRUCTURE findEnemyDerrick(int _targetPlayer)
 
 	//see if we can deal with this many defenses
 	_numAttackers = numAvailableAttackers();
-	_numEnemies = numEnemyWeapObjInRange(me, tempStruct.x, tempStruct.y, (8 * 128), FALSE);
+	_numEnemies = numEnemyWeapObjInRange(me, tempStruct.x, tempStruct.y, (8 * 128), FALSE, TRUE);
 
 	if(_numAttackers < (_numEnemies + 1))
 	{
@@ -3540,7 +3540,7 @@ function STRUCTURE findBestEnemyDerrick(int _targetPlayer, int _numAttackers)
 				if(not isNearEnemyBase(_x, _y))
 				{
 					//make sure not too well defended
-					_numEnemies = numEnemyWeapObjInRange(me, _x, _y, (8 * 128), TRUE);	//check VTOLs too
+					_numEnemies = numEnemyWeapObjInRange(me, _x, _y, (8 * 128), TRUE, TRUE);	//check VTOLs too
 					if(_numEnemies < _numAttackers)	//this one has less defenses than the amount of units we will use for attack
 					{
 						_dist = distBetweenTwoPoints(_x, _y, baseX, baseY) / 128;	// my base-derrick distance
@@ -3677,14 +3677,14 @@ function int posWeight(int _owner, int _x, int _y, int _range)
 	//dbg("ally _result = " & _result, me);
 
 	//also check enemy defenses nearby
-	_temp3 = numEnemyWeapObjInRange(me, _x, _y, ((_range + 2) * 128), TRUE);	//also check VTOLs
+	_temp3 = numEnemyWeapObjInRange(me, _x, _y, ((_range + 2) * 128), TRUE, TRUE);	//also check VTOLs
 
 	//dbg("num defenses = " & _temp3, me);
 
 	_result = _result + _temp3;
 
 	//also take into account possible ally and my objects nearby
-	_temp3 = numFriendlyWeapObjInRange(me, _x, _y, ((_range + 2) * 128), TRUE);	//also check VTOLs
+	_temp3 = numFriendlyWeapObjInRange(me, _x, _y, ((_range + 2) * 128), TRUE, TRUE);	//also check VTOLs
 	_result = _result - _temp3;
 
 	return(_result);
@@ -4909,7 +4909,7 @@ event structBuilt(inactive)
 
 
 		/* check if too many defenses around already */
-		result3 = numFriendlyWeapStructsInRange(me, structure.x, structure.y, defensesRange);
+		result3 = numFriendlyWeapStructsInRange(me, structure.x, structure.y, defensesRange, FALSE);
 
 		/* make sure not too many trucks are busy with defenses */
 		result = numBuildingNoBaseDefenses();
@@ -5066,8 +5066,8 @@ function void assignDroid(DROID _droid)
 			{
 				if((defendX != none) and (defendY != none))
 				{
-					result = numFriendlyWeapObjInRange(me, defendX, defendY, (10 * 128), FALSE);
-					result2 = numEnemyWeapObjInRange(me, defendX, defendY, (10 * 128), FALSE);
+					result = numFriendlyWeapObjInRange(me, defendX, defendY, (10 * 128), FALSE, TRUE);
+					result2 = numEnemyWeapObjInRange(me, defendX, defendY, (10 * 128), FALSE, TRUE);
 
 					if((defendGr.members >= minDefenders) or (result >= result2))	//don't send one by one or if dangerous
 					{
@@ -5569,7 +5569,7 @@ function void buildInitialDefenses(bool _bForceBuild)	//returns TRUE if finished
 					buildY = y;
 
 					//count if not too many built on this site already (using corrected coords!)
-					if(numFriendlyWeapStructsInRange(me, buildX, buildY, range) < curInitialBaseDef)	//don't build too many
+					if(numFriendlyWeapStructsInRange(me, buildX, buildY, range, FALSE) < curInitialBaseDef)	//don't build too many
 					{
 						if(pickStructLocation(def[best], ref buildX, ref buildY, me))
 						{
@@ -5655,7 +5655,7 @@ function void buildDefenses()
 
 				//count if not too many built on this site already (using corrected coords!)
 				//if(numStructsByTypeInRange(me, me, REF_DEFENSE, buildX, buildY, range) < numBaseDef)	//max
-				if(numFriendlyWeapStructsInRange(me, buildX, buildY, range) < numBaseDef)
+				if(numFriendlyWeapStructsInRange(me, buildX, buildY, range, FALSE) < numBaseDef)
 				{
 					if(pickStructLocation(def[best], ref buildX, ref buildY, me))
 					{
@@ -5862,7 +5862,7 @@ event objectAttacked(inactive)
 
 	if(distBetweenTwoPoints(baseX, baseY, obj2.x, obj2.y) < range)	//not too far
 	{
-		if(numEnemyWeapObjInRange(me, obj2.x, obj2.y, (6 * 128), FALSE) < (defendGr.members - 1))	//safe
+		if(numEnemyWeapObjInRange(me, obj2.x, obj2.y, (6 * 128), FALSE, TRUE) < (defendGr.members - 1))	//safe
 		{
 			//dbg("actively defending the base", me);
 
@@ -6952,7 +6952,7 @@ function void checkBaseThreat()
 			_attackerUnitForce = numPlayerWeapDroidsInRange(_attacker, me, baseX, baseY, _range, FALSE);
 			_enemyUnits = _enemyUnits + _attackerUnitForce;
 
-			_attackerStructureForce = numPlayerWeapStructsInRange(_attacker, me, baseX, baseY, _range);
+			_attackerStructureForce = numPlayerWeapStructsInRange(_attacker, me, baseX, baseY, _range, TRUE);
 			_enemyStructures = _enemyStructures + _attackerStructureForce;
 
 
@@ -6974,10 +6974,10 @@ function void checkBaseThreat()
 	_enemyStructures = _enemyStructures / 3;
 
 	//_enemyUnits = numEnemyWeapDroidsInRange(me, baseX, baseY, _range, FALSE);
-	//_enemyStructures = numEnemyWeapStructsInRange(me, baseX, baseY, _range) / 3;
+	//_enemyStructures = numEnemyWeapStructsInRange(me, baseX, baseY, _range, TRUE) / 3;
 
 	_allyUnits = numFriendlyWeapDroidsInRange(me, baseX, baseY, _range, FALSE);
-	_allyStructures = numFriendlyWeapStructsInRange(me, baseX, baseY, _range) / 3;
+	_allyStructures = numFriendlyWeapStructsInRange(me, baseX, baseY, _range, TRUE) / 3;
 
 	_totalEnemies = _enemyUnits + _enemyStructures;	//total enemies
 	_totalAllies = _allyUnits + _allyStructures;	//total allies
@@ -7051,7 +7051,7 @@ function void checkBaseThreat()
 							// see if we have a chance to win
 
 							_counterEnemyForce = numPlayerWeapDroidsInRange(_counterEnemy, me, _enemyX, _enemyY, -1, FALSE) +
-										  numPlayerWeapStructsInRange(_counterEnemy, me, _enemyX, _enemyY, _range) / 3;
+										  numPlayerWeapStructsInRange(_counterEnemy, me, _enemyX, _enemyY, _range, TRUE) / 3;
 
 							if(numAttackUnits() > _counterEnemyForce)
 							{
@@ -7544,7 +7544,7 @@ event defendBase(inactive)
 	/* if attacking en enemy, check if it's still safe to do so otherwise retreat */
 	if(baseDefendObj != NULLOBJECT)
 	{
-		if(numEnemyWeapObjInRange(me, baseDefendObj.x, baseDefendObj.y, (6 * 128), FALSE) >= (defendGr.members - 1))
+		if(numEnemyWeapObjInRange(me, baseDefendObj.x, baseDefendObj.y, (6 * 128), FALSE, TRUE) >= (defendGr.members - 1))
 		{
 			//dbg("NOT SAFE TO FOLLOW ATTACKER ANYMORE", me);
 
@@ -7648,8 +7648,8 @@ function void defendArea(GROUP	_defendGr, int _range, int _defendX, int _defendY
 			}
 		}
 
-		_result = numFriendlyWeapObjInRange(me, _x, _y, (10 * 128), FALSE);
-		_result2 = numEnemyWeapObjInRange(me, _x, _y, (10 * 128), FALSE);
+		_result = numFriendlyWeapObjInRange(me, _x, _y, (10 * 128), FALSE, TRUE);
+		_result2 = numEnemyWeapObjInRange(me, _x, _y, (10 * 128), FALSE, TRUE);
 
 		if((_defendGr.members >= _minDefenders) or (_result >= _result2))	//don't send one by one or if dangerous
 		{
@@ -7661,7 +7661,7 @@ function void defendArea(GROUP	_defendGr, int _range, int _defendX, int _defendY
 
 				/* if unit already going to defend loc, check if there's actually an enemy left at that loc */
 				_bResult = FALSE;
-				if(_bResult2 and (_droid.orderx > 0) and (numEnemyWeapObjInRange(me, _droid.orderx, _droid.ordery, (7 * 128), FALSE) == 0)) 	//if we have an enemy inside, then cancel order to the perim
+				if(_bResult2 and (_droid.orderx > 0) and (numEnemyWeapObjInRange(me, _droid.orderx, _droid.ordery, (7 * 128), FALSE, TRUE) == 0)) 	//if we have an enemy inside, then cancel order to the perim
 				{
 					_bResult = TRUE;
 				}
@@ -9469,10 +9469,10 @@ event coordinatePhases(inactive)
 
 		//check if we can cancel guarding oil since have defenses
 		//if(numStructsByTypeInRange(me, me, REF_DEFENSE, sendForceX, sendForceY, (8 * 128)) >= 1)
-		if(numFriendlyWeapStructsInRange(me, sendForceX, sendForceY,  (8 * 128)) >= 1)	//also include ally's defenses
+		if(numFriendlyWeapStructsInRange(me, sendForceX, sendForceY,  (8 * 128), TRUE) >= 1)	//also include ally's defenses
 		{
 			//if(numEnemyObjInRange(me, sendForceX, sendForceY, (8 * 128), FALSE) == 0)
-			if(numEnemyWeapObjInRange(me, sendForceX, sendForceY, (8 * 128), FALSE) == 0)
+			if(numEnemyWeapObjInRange(me, sendForceX, sendForceY, (8 * 128), FALSE, TRUE) == 0)
 			{
 				dbg("TAKE OIL: oil is well-defended, rtb!!!!!!!!!!!!!", me);
 				stopTakingOil();
@@ -9481,7 +9481,7 @@ event coordinatePhases(inactive)
 		}
 
 		//see if it's hopeless to go on
-		if((attackGr.members + sendAttackGr.members + 1) < numEnemyWeapObjInRange(me, sendForceX, sendForceY, (8 * 128), FALSE))
+		if((attackGr.members + sendAttackGr.members + 1) < numEnemyWeapObjInRange(me, sendForceX, sendForceY, (8 * 128), FALSE, TRUE))
 		{
 			dbg("TAKE OIL: they have more than us", me);
 			stopTakingOil();
@@ -9493,7 +9493,7 @@ event coordinatePhases(inactive)
 		if(phase != phGuardingPos)	//not set yet
 		{
 			//if(numEnemyObjInRange(me, sendForceX, sendForceY, (8 * 128), FALSE) == 0)	//enemy derrick is destroyed and no enemy defenses left
-			if(numEnemyWeapObjInRange(me, sendForceX, sendForceY, (8 * 128), FALSE) == 0)
+			if(numEnemyWeapObjInRange(me, sendForceX, sendForceY, (8 * 128), FALSE, TRUE) == 0)
 			{
 				if(attackGr.members > 0)	//if we reached destination
 				{
@@ -9736,7 +9736,7 @@ function bool canAlly(int _player)
 	/* check if attacked by this player */
 	if(state == stDefending)
 	{
-		if(numPlayerWeapObjInRange(_player, me, baseX, baseY, baseRange + (5 * 128), FALSE) > 5)	//attacking us
+		if(numPlayerWeapObjInRange(_player, me, baseX, baseY, baseRange + (5 * 128), FALSE, TRUE) > 5)	//attacking us
 		{
 			return(TRUE);
 		}
