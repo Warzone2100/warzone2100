@@ -656,8 +656,8 @@ NOT						return _NOT;
 
 	/* Match identifiers */
 {_IDENTIFIER}				{
-								RULE( "looking up '%s'", scr_text);
 								char* tmpMacroBuffer;
+								RULE( "looking up '%s'", scr_text);
 
 								/* See if this identifier has been defined as a type */
 								if (scriptLookUpType(scr_text, &scr_lval.tval))	//STRUCTURESTAT etc
