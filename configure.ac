@@ -22,7 +22,15 @@ if test "x$LEX" != "xflex" ; then
 	AC_MSG_ERROR([Flex is not installed])
 fi
 
+
+# Check for pkg-config
+PKG_PROG_PKG_CONFIG
+
+
+# Enable Compiler/LibC GNU extensions
 AC_GNU_SOURCE
+
+# Check for gettext
 AM_GNU_GETTEXT([external])
 
 
@@ -155,45 +163,45 @@ AC_CHECK_LIB(m, pow)
 AC_CHECK_LIB(z, deflate)
 
 # Look for PhysicsFS
-AC_CHECK_HEADER(physfs.h, , AC_MSG_ERROR([PhysicsFS header not found]))
-AC_CHECK_LIB(physfs, PHYSFS_init, , AC_MSG_ERROR([PhysicsFS not found]))
+AC_CHECK_HEADER(physfs.h, , AC_MSG_ERROR([PhysicsFS header not found.]))
+AC_CHECK_LIB(physfs, PHYSFS_init, , AC_MSG_ERROR([PhysicsFS not found.]))
 
 # Look for SDL_net
-AC_CHECK_HEADER(SDL/SDL_net.h, , AC_MSG_ERROR([SDL_net header not found]))
-AC_CHECK_LIB(SDL_net, SDLNet_Init, , AC_MSG_ERROR([SDL_net not found]), [-lSDL ${WIN32_LIBS}])
+AC_CHECK_HEADER(SDL/SDL_net.h, , AC_MSG_ERROR([SDL_net header not found.]))
+AC_CHECK_LIB(SDL_net, SDLNet_Init, , AC_MSG_ERROR([SDL_net not found.]), [-lSDL ${WIN32_LIBS}])
 
 
 # Look for OpenGL
 AC_CHECK_HEADER(SDL/SDL_opengl.h, ,
-	AC_MSG_ERROR([You need to install SDL with OpenGL support.]))
+	AC_MSG_ERROR([SDL OpenGL header not found. Please install SDL with OpenGL support.]))
 AC_CHECK_LIB(GL, main,
 	OPENGL_LIBS="-lGL",
 	AC_CHECK_LIB(opengl32, main,
 		OPENGL_LIBS="-lopengl32",
-		AC_MSG_ERROR([You need to install OpenGL.])))
+		AC_MSG_ERROR([OpenGL library not found.])))
 AC_CHECK_LIB(GLU, main,
 	OPENGL_LIBS="${OPENGL_LIBS} -lGLU",
 	AC_CHECK_LIB(glu32, main,
 		OPENGL_LIBS="${OPENGL_LIBS} -lglu32",
-		AC_MSG_ERROR([You need to install GLU.])))
+		AC_MSG_ERROR([GLU library not found.])))
 
 # Look for OpenGLC
 AC_CHECK_HEADER(GL/glc.h, ,
-	AC_MSG_ERROR([OpenGLC header not found. You need to install QuesoGLC: http://quesoglc.sourceforge.net/]))
+	AC_MSG_ERROR([OpenGLC header not found. Please install QuesoGLC: http://quesoglc.sourceforge.net/]))
 AC_CHECK_LIB(GLC, main,
 	OPENGLC_LIBS="-lGLC",
 	AC_CHECK_LIB(glc32, main,
 		OPENGLC_LIBS="-lglc32",
-		AC_MSG_ERROR([You need to install QuesoGLC. http://quesoglc.sourceforge.net/])))
+		AC_MSG_ERROR([OpenGLC library not found. Please install QuesoGLC: http://quesoglc.sourceforge.net/])))
 
 # Look for OpenAL
 AC_CHECK_HEADER(AL/al.h, ,
-	AC_MSG_ERROR([You need to install OpenAL headers.]))
+	AC_MSG_ERROR([OpenAL header not found.]))
 AC_CHECK_LIB(openal, main,
 	OPENAL_LIBS="-lopenal",
 	AC_CHECK_LIB(openal32, main,
 		OPENAL_LIBS="-lopenal32",
-		AC_MSG_ERROR([You need to install OpenAL.])))
+		AC_MSG_ERROR([OpenAL library not found.])))
 
 
 WZ_CFLAGS="${WZ_CFLAGS} -DDATADIR=\"\\\"\${datadir}/\${PACKAGE}\\\"\""
