@@ -196,8 +196,8 @@ AC_CHECK_LIB(openal, main,
 		AC_MSG_ERROR([You need to install OpenAL.])))
 
 
-WZ_CFLAGS="${WZ_CFLAGS} -DDATADIR=\"\${datadir}/\${PACKAGE}\""
-WZ_CFLAGS="${WZ_CFLAGS} -DLOCALEDIR=\"\${localedir}\""
+WZ_CFLAGS="${WZ_CFLAGS} -DDATADIR=\"\\\"\${datadir}/\${PACKAGE}\\\"\""
+WZ_CFLAGS="${WZ_CFLAGS} -DLOCALEDIR=\"\\\"\${localedir}\\\"\""
 
 
 # add some required C flags here
