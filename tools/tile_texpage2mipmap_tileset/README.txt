@@ -1,6 +1,6 @@
 Splits and scales tertile texpages into mipmaps.
 
-version "1.0" author "Kevin Gillette"
+version "1.2" author "Kevin Gillette"
 
 Finds and filters files based on the 'extension' configuration setting, and
 of those, groups where available to allow mipmap output to be created from

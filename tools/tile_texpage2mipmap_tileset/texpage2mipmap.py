@@ -31,11 +31,11 @@ per group.
 
 """
 
-__version__ = "1.1"
+__version__ = "1.2"
 __author__ = "Kevin Gillette"
 
 # --------------------------------------------------------------------------
-# texpage_convert.py v1.0 by Kevin Gillette (kage)
+# texpage_convert.py v1.2 by Kevin Gillette (kage)
 # --------------------------------------------------------------------------
 # ***** BEGIN GPL LICENSE BLOCK *****
 #
@@ -304,7 +304,7 @@ def process():
 		print "splitting tiles from", f, "into", dirpath, "at", tilesize, "resolution"
 		args = [convert_path, '-depth', '8']
 		args.extend(['-crop', '%ix%i' % (tilesize, tilesize)])
-		args.extend([fpath, os.path.join(dirpath, 'tile.png')])
+		args.extend([fpath, os.path.join(dirpath, 'tile-%02d.png')])
 		p = Popen(args, stderr=PIPE, shell=use_shell)
 		o = p.communicate()
 		if p.returncode:
