@@ -26,6 +26,11 @@
   * IDD_PASTEPREFS        (pasteprefs.cpp)
   * IDD_TEXTUREPREFS      (textureprefs.cpp)
 
+ * Port the following files from using DirectX to OpenGL instead:
+  * ddimage.cpp
+  * directx.cpp
+  * geometry.cpp
+
  * For multiplayer editor, replace "export start","expand" and "mission" with "export game".
  * Allow gateway editing in 3d view.
  * Fix crash if you paint with an empty edge brush.
