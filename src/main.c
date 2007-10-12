@@ -762,7 +762,8 @@ int main(int argc, char *argv[])
 	strcpy(UserMusicPath, "music");
 
 	/*** Initialize translations ***/
-	setlocale(LC_ALL, "");
+	setlocale(LC_MESSAGES, "");
+	setlocale(LC_NUMERIC, "C");		// set radix character to the period (".")
 #if defined(WZ_OS_WIN)
 	{
 		// Retrieve an absolute path to the locale directory
