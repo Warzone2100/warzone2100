@@ -40,11 +40,7 @@ char aResDir[PATH_MAX];
 char aCurrResDir[PATH_MAX];
 
 // the current resource block ID
-static SDWORD	resBlockID;
-
-// buffer to load file data into
-static char	*pFileBuffer = NULL;
-static SDWORD	fileBufferSize = 0;
+static SDWORD resBlockID;
 
 // prototypes
 static void ResetResourceFile(void);
@@ -108,10 +104,6 @@ BOOL resLoad(const char *pResFile, SDWORD blockID,
 	UDWORD	size;
 
 	strcpy(aCurrResDir, aResDir);
-
-	// Note the buffer for file data
-	pFileBuffer = pLoadBuffer;
-	fileBufferSize = bufferSize;
 
 	// Note the block id number
 	resBlockID = blockID;
@@ -311,15 +303,6 @@ static BOOL RetreiveResourceFile(char *ResourceName, RESOURCEFILE **NewResource)
 
 	ResData= &LoadedResourceFiles[ResID];
 	*NewResource=ResData;
-
-#if 0
-	if (pFileBuffer && loadFile(ResourceName, &pBuffer, &size)) {
-		ResData->type=RESFILETYPE_PC_SBL;
-		ResData->size=size;
-		ResData->pBuffer=pBuffer;
-		return(TRUE);
-	}
-#endif
 
 	// This is needed for files that do not fit in the WDG cache ... (VAB file for example)
 	if (!loadFile(ResourceName, &pBuffer, &size))

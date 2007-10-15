@@ -454,10 +454,10 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 		write(dumpFile, "Pointers: Unknown\n\n", strlen("Pointers: Unknown\n\n"));
 
 
-	write(dumpFile, "Dump caused by signal: ",
-		  strlen("Dump caused by signal: "));
-	write(dumpFile, wz_strsignal(siginfo->si_signo, siginfo->si_code),
-		  strlen(wz_strsignal(siginfo->si_signo, siginfo->si_code)));
+	write(dumpFile, "Dump caused by signal: ", strlen("Dump caused by signal: "));
+
+	const char * signal = wz_strsignal(siginfo->si_signo, siginfo->si_code);
+	write(dumpFile, signal, strlen(signal));
 	write(dumpFile, "\n\n", 2);
 
 

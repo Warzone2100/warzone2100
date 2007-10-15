@@ -12,7 +12,7 @@ typedef struct { float x, y, z; } Vector3f;
  */
 static inline WZ_DECL_CONST Vector2f Vector2i_To2f(const Vector2i v)
 {
-	Vector2f dest = { v.x, v.y };
+	Vector2f dest = { (float)v.x, (float)v.y };
 	return dest;
 }
 
@@ -78,7 +78,7 @@ static inline WZ_DECL_CONST int Vector2i_ScalarP(const Vector2i op1, const Vecto
  */
 static inline WZ_DECL_CONST int Vector2i_Length(const Vector2i v)
 {
-	return sqrtf( Vector2i_ScalarP(v, v) );
+	return sqrtf( (float)Vector2i_ScalarP(v, v) );
 }
 
 

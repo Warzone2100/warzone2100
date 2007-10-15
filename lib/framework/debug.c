@@ -279,9 +279,9 @@ void _debug( code_part part, const char *str, ... )
 		repeated++;
 		if (repeated == next) {
 			if (repeated > 2) {
-				snprintf( outputBuffer, sizeof(outputBuffer), "last message repeated %d times (total %d repeats)", repeated - prev, repeated );
+				snprintf( outputBuffer, sizeof(outputBuffer), "last message repeated %u times (total %u repeats)", repeated - prev, repeated );
 			} else {
-				snprintf( outputBuffer, sizeof(outputBuffer), "last message repeated %d times", repeated - prev );
+				snprintf( outputBuffer, sizeof(outputBuffer), "last message repeated %u times", repeated - prev );
 			}
 			while (curCallback) {
 				curCallback->callback( &curCallback->data, outputBuffer );
@@ -296,9 +296,9 @@ void _debug( code_part part, const char *str, ... )
 		if (repeated > 0 && repeated != prev && repeated != 1) {
 			/* just repeat the previous message when only one repeat occurred */
 			if (repeated > 2) {
-				snprintf( outputBuffer, sizeof(outputBuffer), "last message repeated %d times (total %d repeats)", repeated - prev, repeated );
+				snprintf( outputBuffer, sizeof(outputBuffer), "last message repeated %u times (total %u repeats)", repeated - prev, repeated );
 			} else {
-				snprintf( outputBuffer, sizeof(outputBuffer), "last message repeated %d times", repeated - prev );
+				snprintf( outputBuffer, sizeof(outputBuffer), "last message repeated %u times", repeated - prev );
 			}
 			while (curCallback)
 			{

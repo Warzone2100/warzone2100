@@ -55,6 +55,6 @@ BOOL NETstring(char *str, uint16_t maxlen);
 	*(enumPtr) = _val; \
 }
 
-void NETtest();
+void NETtest(void);
 
 #endif

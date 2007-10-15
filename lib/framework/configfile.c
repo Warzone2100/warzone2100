@@ -209,7 +209,7 @@ static BOOL registry_load( const char *filename )
 			bptr++;	// skip EOL
 		}
 		buffer[count] = '\0';
-		if (sscanf(buffer, " %[^=] = %n", key, &l) == 1) {
+		if (sscanf(buffer, " %[^=] = %u", key, &l) == 1) {
 			unsigned int i;
 
 			for (i = l;; ++i) {

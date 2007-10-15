@@ -237,6 +237,19 @@
 #endif
 
 
+/*
+   Convenience macros to test the versions of icc.
+*/
+#if defined(WZ_CC_INTEL) && defined __ICC
+#  define WZ_CC_INTEL_PREREQ(maj, min) \
+          ((__ICC) >= ((maj) * 100) + (min))
+#else
+#  define WZ_CC_INTEL_PREREQ(maj, min) 0
+#endif
+
+
+
+
 /* ---- Declaration attributes ---- */
 
 
@@ -278,7 +291,7 @@
  * Description copied from KDE4, code copied from Qt4.
  *
  */
-#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && WZ_CC_GNU_PREREQ(3,2)
+#if WZ_CC_GNU_PREREQ(3,2) || WZ_CC_INTEL_PREREQ(10,0)
 #  define WZ_DECL_DEPRECATED __attribute__ ((__deprecated__))
 #elif defined(WZ_CC_MSVC) && (_MSC_VER >= 1300)
 #  define WZ_DECL_DEPRECATED __declspec(deprecated)
@@ -291,7 +304,7 @@
  * \def WZ_DECL_UNUSED
  * This function is not used, but shall not generate an unused warning either.
  */
-#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && WZ_CC_GNU_PREREQ(3,2)
+#if WZ_CC_GNU_PREREQ(3,2) || WZ_CC_INTEL_PREREQ(10,0)
 #  define WZ_DECL_UNUSED __attribute__((__unused__))
 #else
 #  define WZ_DECL_UNUSED

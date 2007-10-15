@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-10-08 22:37+0200\n"
+"POT-Creation-Date: 2007-10-15 20:03+0200\n"
 "PO-Revision-Date: 2007-03-24 17:49+0100\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -61,7 +61,7 @@ msgstr ""
 msgid "Truck ordered to build Oil Derrick"
 msgstr ""
 
-#: src/multistat.c:104 src/configuration.c:373 src/configuration.c:374
+#: src/multistat.c:104 src/configuration.c:374 src/configuration.c:375
 msgid "Player"
 msgstr "Spiller"
 

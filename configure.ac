@@ -138,7 +138,7 @@ AC_MSG_CHECKING([whether to compile in debug mode])
 AC_MSG_RESULT([$enable_debug])
 if test "x$enable_debug" = "xyes" ; then
 	if test "x$cc_icc" = "xyes" ; then
-		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -DDEBUG -Wall -Werror"
+		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -DDEBUG -Wcheck -Werror"
 	else
 		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -DDEBUG -Wall -Werror -Wno-unused-label -Wno-int-to-pointer-cast -Wno-pointer-to-int-cast"
 	fi
@@ -210,7 +210,7 @@ WZ_CFLAGS="${WZ_CFLAGS} -DLOCALEDIR=\"\\\"\${localedir}\\\"\""
 
 # add some required C flags here
 # -DYY_STATIC is required by flex
-WZ_CFLAGS="${WZ_CFLAGS} -DYY_STATIC"
+WZ_CFLAGS="${WZ_CFLAGS} -DYY_STATIC -std=c99"
 
 CPPFLAGS="${CPPFLAGS} -I\$(top_srcdir)"
 CFLAGS="${SDL_CFLAGS} ${PNG_CFLAGS} ${OGGVORBIS_CFLAGS} $} ${OPENAL_CFLAGS} ${OPENGL_CFLAGS} ${CFLAGS} ${WZ_CFLAGS}"

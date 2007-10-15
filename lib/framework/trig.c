@@ -53,7 +53,7 @@ static float aSqrt[SQRT_ACCURACY];
 /* Initialise the Trig tables */
 BOOL trigInitialise(void)
 {
-	float val = 0.0, inc = 2.0 * M_PI / TRIG_DEGREES;
+	float val = 0.0f, inc = 2.0f * (float)M_PI / TRIG_DEGREES;
 	int i;
 
 	// Initialise the tables
@@ -64,12 +64,12 @@ BOOL trigInitialise(void)
 		val += inc;
 	}
 
-	inc = 2.0 / (TRIG_ACCURACY-1);
+	inc = 2.0f / (TRIG_ACCURACY-1);
 	val = -1;
 	for (i = 0; i < TRIG_ACCURACY; i++)
 	{
-		aInvSin[i] = asinf(val) * (float)TRIG_DEGREES / (2.0 * M_PI);
-		aInvCos[i] = acosf(val) * (float)TRIG_DEGREES / (2.0 * M_PI);
+		aInvSin[i] = asinf(val) * (float)TRIG_DEGREES / (2.0f * (float)M_PI);
+		aInvCos[i] = acosf(val) * (float)TRIG_DEGREES / (2.0f * (float)M_PI);
 		val += inc;
 	}
 
