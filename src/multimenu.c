@@ -483,7 +483,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 		// Copy all of the filename except for the extension into the tiptext string
 		strncpy(tips[tip_index], *currFile, tipStringLength);
 		// Null terminate the string
-		fileList[count][tipStringLength] = '\0';
+		tips[count][tipStringLength] = '\0';
 
 		sButInit.pTip		= tips[tip_index];
 		sButInit.pText		= tips[tip_index];
