@@ -176,7 +176,7 @@ static BOOL registry_load( const char *filename )
 	char buffer[MAXLINESIZE];
 	char *bptr = NULL, *bufstart = NULL;
 	char key[32];
-	int l;
+	int l; // sscanf expects an int to recieve %n, not an unsigned int
 	UDWORD filesize;
 
 	debug(LOG_WZ, "Loading the registry from %s", filename);
