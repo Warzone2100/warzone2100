@@ -210,7 +210,9 @@ WZ_CFLAGS="${WZ_CFLAGS} -DLOCALEDIR=\"\\\"\${localedir}\\\"\""
 
 # add some required C flags here
 # -DYY_STATIC is required by flex
-WZ_CFLAGS="${WZ_CFLAGS} -DYY_STATIC -std=c99"
+WZ_CFLAGS="${WZ_CFLAGS} -DYY_STATIC"
+
+AC_PROG_CC_STDC
 
 CPPFLAGS="${CPPFLAGS} -I\$(top_srcdir)"
 CFLAGS="${SDL_CFLAGS} ${PNG_CFLAGS} ${OGGVORBIS_CFLAGS} $} ${OPENAL_CFLAGS} ${OPENGL_CFLAGS} ${CFLAGS} ${WZ_CFLAGS}"
