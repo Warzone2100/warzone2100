@@ -29,6 +29,9 @@ endif
 	pngtopnm $< | pnmscale -xysize 32 32 | ppmtoxpm -alphamask $@.alpha > $@
 	$(RM) $@.alpha
 
+configure:
+	sh autogen.sh
+
 config.status: configure
 	dh_testdir
 

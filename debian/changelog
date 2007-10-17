@@ -1,3 +1,15 @@
+warzone2100 (2.0.8_rc1-0) unstable; urgency=low
+
+  * Bump upstream version number
+
+ -- Dennis Schridde <devurandom@gna.org>  Sat, 29 Sep 2007 00:00:00 +0100
+
+warzone2100 (2.0.7-0svn1) unstable; urgency=low
+
+  * Bump upstream version number
+
+ -- Giel van Schijndel <muggenhor@gna.org>  Fri, 22 Jun 2007 18:54:53 +0100
+
 warzone2100 (2.0.6-0svn2) unstable; urgency=low
 
   * Move icons and desktop from /debian/ into /icons/.
