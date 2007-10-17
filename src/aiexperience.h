@@ -18,12 +18,14 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 //aiexperience.h
-#define MAX_OIL_ENTRIES 600				//(Max number of derricks or oil resources) / 2
+#define	SAVE_FORMAT_VERSION			2
 
-#define	MAX_OIL_DEFEND_LOCATIONS  100		//max number of attack locations to store
-#define	MAX_OIL_LOCATIONS  300			//max number of oil locations to store
-#define	MAX_BASE_DEFEND_LOCATIONS  30	//max number of base locations to store
-#define SAME_LOC_RANGE 8				//if within this range, consider it the same loc
+#define MAX_OIL_ENTRIES				600		//(Max number of derricks or oil resources) / 2
+
+#define	MAX_OIL_DEFEND_LOCATIONS	100		//max number of attack locations to store
+#define	MAX_OIL_LOCATIONS			300		//max number of oil locations to store
+#define	MAX_BASE_DEFEND_LOCATIONS	30		//max number of base locations to store
+#define SAME_LOC_RANGE				8		//if within this range, consider it the same loc
 
 extern SDWORD baseLocation[MAX_PLAYERS][MAX_PLAYERS][2];
 extern SDWORD baseDefendLocation[MAX_PLAYERS][MAX_BASE_DEFEND_LOCATIONS][2];

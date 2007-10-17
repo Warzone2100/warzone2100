@@ -254,7 +254,8 @@ BOOL WriteAISaveData(SDWORD nPlayer)
 	SDWORD					x=0,y=0;
 	SDWORD					NumEntries=0;	//How many derricks/oil resources will be saved
 	UDWORD					PosXY[MAX_OIL_ENTRIES];		//Locations, 0=x,1=y,2=x etc
-	SDWORD						i;
+	UDWORD					i,j;
+	BOOL					bTileVisible;
 
 	/* prepare experience file for the current map */
 	if(!SetUpOutputFile(nPlayer))
@@ -269,7 +270,7 @@ BOOL WriteAISaveData(SDWORD nPlayer)
 
 
 		/* Version */
-		NumEntries = 1;		//Version
+		NumEntries = SAVE_FORMAT_VERSION;		//Version
 		if(PHYSFS_write(aiSaveFile[nPlayer], &NumEntries, sizeof(NumEntries), 1) != 1)
 		{
 			debug(LOG_ERROR,"WriteAISaveData: failed to write version for player %d",nPlayer);
@@ -461,6 +462,25 @@ BOOL WriteAISaveData(SDWORD nPlayer)
 				return FALSE;
 			}
 		}
+
+		/************************/
+		/*		Fog of War		*/
+		/************************/
+		NumEntries = MAX_OIL_DEFEND_LOCATIONS;
+
+		for(i=0;i<mapWidth;i++)
+		{
+			for(j=0;j<mapHeight;j++)
+			{
+				/* Write tile visibility */
+				bTileVisible = TEST_TILE_VISIBLE(nPlayer, mapTile(i, j));
+				if(PHYSFS_write(aiSaveFile[nPlayer], &bTileVisible, sizeof(BOOL), 1) < 1)
+				{
+					debug(LOG_ERROR,"WriteAISaveData: failed to write fog of war at tile %d-%d for player %d", i, j, nPlayer);
+					return FALSE;
+				}
+			}
+		}
 	}
 	else
 	{
@@ -497,8 +517,9 @@ BOOL ReadAISaveData(SDWORD nPlayer)
 	FEATURE					*psFeature;
 	SDWORD					NumEntries=0;	//How many derricks/oil resources will be saved
 	UDWORD					PosXY[MAX_OIL_ENTRIES];		//Locations, 0=x,1=y,2=x etc
-	SDWORD						i;
-	BOOL					Found;
+	UDWORD					i,j;
+	BOOL					Found,bTileVisible;
+	UDWORD					version;
 
 	if(!SetUpInputFile(nPlayer))
 	{	//printf_console
@@ -508,10 +529,16 @@ BOOL ReadAISaveData(SDWORD nPlayer)
 	else
 	{
 		/* Read data version */
-		if (PHYSFS_read(aiSaveFile[nPlayer], &NumEntries, sizeof(NumEntries), 1 ) != 1 )
+		if (PHYSFS_read(aiSaveFile[nPlayer], &version, sizeof(NumEntries), 1 ) != 1 )
 		{
 			debug(LOG_ERROR,"ReadAISaveData(): Failed to read version number for player '%d'",nPlayer);
 			return FALSE;
+		}
+
+		// Check version, assume backward compatibility
+		if(version > SAVE_FORMAT_VERSION)
+		{
+			debug(LOG_ERROR,"ReadAISaveData(): Incompatible version of the learn data (%d, expected %d) for player '%d'", version, SAVE_FORMAT_VERSION, nPlayer);
 		}
 
 		//debug(LOG_ERROR,"version: %d", NumEntries);
@@ -674,6 +701,30 @@ BOOL ReadAISaveData(SDWORD nPlayer)
 
 				//if(!Found)		//Couldn't find oil resource with this coords on the map
 				//	printf_console("!!Failed to match oil resource #%d at x: %d y: %d", i,PosXY[i * 2]/128,PosXY[i * 2 + 1]/128);
+			}
+
+			/************************/
+			/*		Fog of War		*/
+			/************************/
+			if(version >= 2)
+			{
+				for(i=0;i<mapWidth;i++)
+				{
+					for(j=0;j<mapWidth;j++)
+					{
+						if (PHYSFS_read(aiSaveFile[nPlayer], &bTileVisible, sizeof(BOOL), 1 ) != 1 )
+						{
+							debug(LOG_ERROR,"ReadAISaveData(): Failed to load tile visibility at tile %d-%d for player '%d'", i, j, nPlayer);
+							return FALSE;
+						}
+
+						// Restore tile visibility
+						if(bTileVisible)
+						{
+							SET_TILE_VISIBLE(selectedPlayer,mapTile(i,j));
+						}
+					}
+				}
 			}
 		}
 	}
