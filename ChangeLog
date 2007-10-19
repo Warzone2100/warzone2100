@@ -1,4 +1,4 @@
-2007-09-29: Version 2.0.8 RC1
+2007-10-20: Version 2.0.8 RC1
  * General:
    * New: Repeat keypresses if the key is hold long enough (e.g. one press of 'A' becomes 'AAAAAAAAAA' if just held long enough)
    * Change: Protocol-selection removed from "Host Game", since the only option was "Internet"
