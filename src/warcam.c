@@ -1002,8 +1002,6 @@ SDWORD	worldAngle;
 float	separation;
 SDWORD	xConcern, yConcern, zConcern;
 BOOL	bTooLow;
-DROID	*psDroid;
-UDWORD	droidHeight,mapHeight,difHeight;
 PROPULSION_STATS	*psPropStats;
 SDWORD	pitch;
 BOOL	bGotFlying = FALSE;
@@ -1012,14 +1010,16 @@ SDWORD	xPos,yPos,zPos;
 	bTooLow = FALSE;
 	if(trackingCamera.target->type == OBJ_DROID)
 	{
-		psDroid = (DROID*)trackingCamera.target;
+		DROID *psDroid = (DROID*)trackingCamera.target;
 		psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 		if(psPropStats->propulsionType == LIFT)
 		{
+			UDWORD	droidHeight, difHeight, droidMapHeight;
+
 			bGotFlying = TRUE;
 			droidHeight = psDroid->z;
-			mapHeight = map_Height(psDroid->x,psDroid->y);
-			difHeight = abs(droidHeight - mapHeight);
+			droidMapHeight = map_Height(psDroid->x, psDroid->y);
+			difHeight = abs(droidHeight - droidMapHeight);
 			if(difHeight < MIN_TRACK_HEIGHT)
 			{
 				bTooLow = TRUE;
@@ -1073,7 +1073,6 @@ SDWORD	xPos,yPos,zPos;
 	{
 		if(trackingCamera.target->type == OBJ_DROID && !bGotFlying)
 		{
-			psDroid = (DROID*)trackingCamera.target;
 			getTrackingConcerns(&xPos,&yPos,&zPos);
 			if(trackingCamera.target->selected)
 			{
