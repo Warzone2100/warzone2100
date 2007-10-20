@@ -1,4 +1,4 @@
-SUBDIRS = win32 lib src data icons nsis
+SUBDIRS = win32 lib src data doc icons nsis
 
 dist_doc_DATA = AUTHORS ChangeLog README COPYING COPYING.README
 
