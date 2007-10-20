@@ -220,6 +220,7 @@ LIBS="${SDL_LIBS} ${PNG_LIBS} ${OGGVORBIS_LIBS} ${OPENAL_LIBS} ${OPENGLC_LIBS} $
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_FILES([Makefile
 		po/Makefile.in
+		doc/Makefile
 		icons/Makefile
 		data/Makefile
 		data/mods/Makefile
