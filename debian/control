@@ -8,7 +8,7 @@ Standards-Version: 3.6.2
 
 Package: warzone2100
 Architecture: any
-Depends: warzone2100-data (= ${Source-Version}), ${shlibs:Depends}
+Depends: ${shlibs:Depends}
 Description: Post-nuclear 3D real-time strategy game
  Warzone 2100 was an innovative 3D real-time strategy game back in
  1999, and most will agree it didn't enjoy the commercial success it
@@ -28,16 +28,3 @@ Description: Post-nuclear 3D real-time strategy game
   - fast find system for units & structures
   - set factories to constant production
   - automatically send each factory's units to where you want them.
-
-Package: warzone2100-data
-Architecture: all
-Recommends: warzone2100
-Description: data files for Warzone 2100 game
- Warzone 2100 was an innovative 3D real-time strategy game back in
- 1999, and most will agree it didn't enjoy the commercial success it
- should have had. The game's source code was liberated on December
- 6th, 2004, under a GPL license (see COPYING in this directory for
- details). Soon after that, the Warzone Resurrection project was
- formed to take care of its future.
- .
- This package contains the data files for the game.
