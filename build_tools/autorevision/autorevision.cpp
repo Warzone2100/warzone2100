@@ -6,8 +6,8 @@
  * the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
  *
  * Nicely taken from:
- * Revision: 4366
- * Id: autorevision.cpp 4366 2007-08-12 19:08:51Z killerbot
+ * Revision: 3543
+ * Id: autorevision.cpp 3543 2007-01-27 00:25:43Z daniel2000
  * HeadURL: http://svn.berlios.de/svnroot/repos/codeblocks/trunk/src/build_tools/autorevision/autorevision.cpp
  *
  * $Revision$
@@ -18,9 +18,6 @@
 #include <stdio.h>
 #include <string>
 #include <fstream>
-
-#include "tinyxml/tinystr.h"
-#include "tinyxml/tinyxml.h"
 
 using namespace std;
 
@@ -87,12 +84,21 @@ int main(int argc, char** argv)
     if(outputFile.empty())
         outputFile.assign("autorevision.h");
 
+    string docFile(workingDir);
+    docFile.append("/.svn/entries");
+    string docFile2(workingDir);
+    docFile2.append("/_svn/entries");
+
     string revision;
     string date;
     string comment;
     string old;
 
-    QuerySvn(workingDir, revision, date);
+    QuerySvn(workingDir, revision, date) || ParseFile(docFile, revision, date) || ParseFile(docFile2, revision, date);
+
+    if(revision == "")
+        revision = "0";
+
     WriteOutput(outputFile, revision, date);
 
     return 0;
@@ -102,41 +108,62 @@ int main(int argc, char** argv)
 
 bool QuerySvn(const string& workingDir, string& revision, string &date)
 {
-    revision = "0";
-    date = "unknown date";
-    string svncmd("svn info --xml --non-interactive ");
+    string svncmd("svn info ");
     svncmd.append(workingDir);
-
+    set_env("LANG", "en_US");
     FILE *svn = popen(svncmd.c_str(), "r");
 
     if(svn)
     {
-        char buf[16384] = {'0'};
-        fread(buf, 16383, 1, svn);
-        pclose(svn);
-
-        TiXmlDocument doc;
-        doc.Parse(buf);
-
-        if(doc.Error())
-            return 0;
-
-        TiXmlHandle hCommit(&doc);
-        hCommit = hCommit.FirstChildElement("info").FirstChildElement("entry").FirstChildElement("commit");
-        if(const TiXmlElement* e = hCommit.ToElement())
+        char buf[1024];
+        string line;
+        while(fgets(buf, 4095, svn))
         {
-            revision = e->Attribute("revision") ? e->Attribute("revision") : "";
-            const TiXmlElement* d = e->FirstChildElement("date");
-            if(d && d->GetText())
+            line.assign(buf);
+            if(line.find("Revision:") != string::npos)
             {
-                date = d->GetText();
+                revision = line.substr(strlen("Revision: "));
+
+                    string lbreak("\r\n");
+                    size_t i;
+                    while((i = revision.find_first_of(lbreak)) != string::npos)
+                        revision.erase(revision.length()-1);
             }
-            return 1;
+            if(line.find("Last Changed Date: ") != string::npos)
+            {
+                    date = line.substr(strlen("Last Changed Date: "), strlen("2006-01-01 12:34:56"));
+            }
         }
     }
-    return 0;
+    pclose(svn);
+    return !revision.empty();
 }
 
+
+bool ParseFile(const string& docFile, string& revision, string &date)
+{
+    string token[6];
+    date.clear();
+    revision.clear();
+    int c = 0;
+
+    ifstream inFile(docFile.c_str());
+    if (!inFile)
+    {
+        return false;
+    }
+    else
+    {
+        while(!inFile.eof() && c < 6)
+            inFile >> token[c++];
+
+        revision = token[2];
+        date = token[5].substr(0, strlen("2006-01-01T12:34:56"));
+        date[10] = 32;
+
+        return true;
+    }
+}
 
 
 bool WriteOutput(const string& outputFile, string& revision, string& date)
@@ -171,7 +198,6 @@ bool WriteOutput(const string& outputFile, string& revision, string& date)
     }
 
     fprintf(header, "%s\n", comment.c_str());
-    fprintf(header, "//don't include this header, only configmanager-revision.cpp should do this.\n");
     fprintf(header, "#ifndef AUTOREVISION_H\n");
     fprintf(header, "#define AUTOREVISION_H\n\n\n");
 
@@ -180,8 +206,11 @@ bool WriteOutput(const string& outputFile, string& revision, string& date)
     if(do_wx)
         fprintf(header, "#include <wx/string.h>\n");
 
+    fprintf(header, "\n#define SVN_REVISION \"%s\"\n", revision.c_str());
+    fprintf(header, "\n#define SVN_DATE     \"%s\"\n\n", date.c_str());
+
     if(do_int || do_std || do_wx)
-        fprintf(header, "\nnamespace autorevision\n{\n");
+        fprintf(header, "namespace autorevision\n{\n");
 
     if(do_int)
         fprintf(header, "\tconst unsigned int svn_revision = %s;\n", revision.c_str());
@@ -201,11 +230,6 @@ bool WriteOutput(const string& outputFile, string& revision, string& date)
         fprintf(header, "\tconst std::string svn_revision_s(%s);\n", revision.c_str());
     if(do_wx)
         fprintf(header, "\tconst wxString svnRevision(%s);\n", revision.c_str());
-
-    if(do_std)
-        fprintf(header, "\tconst std::string svn_date_s(%s);\n", date.c_str());
-    if(do_wx)
-        fprintf(header, "\tconst wxString svnDate(%s);\n", date.c_str());
 
     if(do_int || do_std || do_wx)
         fprintf(header, "}\n\n");
