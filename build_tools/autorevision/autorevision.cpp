@@ -35,15 +35,16 @@ using namespace std;
 
 bool QuerySvn(const string& workingDir, string& revision, string &date);
 bool ParseFile(const string& docFile, string& revision, string &date);
-bool WriteOutput(const string& outputFile, string& revision, string& date);
+bool WriteOutput(const string& outputFile, const string& revision, const string& date);
 int main(int argc, char** argv);
 
 
-bool do_int = false;
-bool do_std = false;
-bool do_wx  = false;
-bool do_translate  = false;
-bool be_verbose  = false;
+static bool do_int  = false;
+static bool do_std  = false;
+static bool do_cstr = false;
+static bool do_wx   = false;
+static bool do_translate = false;
+static bool be_verbose  = false;
 
 int main(int argc, char** argv)
 {
@@ -57,6 +58,8 @@ int main(int argc, char** argv)
             do_int = true;
         else if(strcmp("+std", argv[i]) == 0)
             do_std = true;
+        else if(strcmp("+cstr", argv[i]) == 0)
+            do_cstr = true;
         else if(strcmp("+wx", argv[i]) == 0)
             do_wx = true;
         else if(strcmp("+t", argv[i]) == 0)
@@ -75,11 +78,12 @@ int main(int argc, char** argv)
     {
         cout << "Usage: autorevision [options] directory [autorevision.h]\n"
              << "Options:\n"
-             << "         +int assign const unsigned int\n"
-             << "         +std assign const std::string\n"
+             << "         +int  assign const unsigned int\n"
+             << "         +std  assign const std::string\n"
+             << "         +cstr assign const char[]\n"
              << "         +wx  assing const wxString\n"
-             << "         +t   add Unicode translation macros to strings\n"
-             << "         -v   be verbose\n";
+             << "         +t    add Unicode translation macros to strings\n"
+             << "         -v    be verbose\n";
 
         return 1;
     }
@@ -97,10 +101,14 @@ int main(int argc, char** argv)
     string comment;
     string old;
 
-    QuerySvn(workingDir, revision, date) || ParseFile(docFile, revision, date) || ParseFile(docFile2, revision, date);
+    if (!QuerySvn(workingDir, revision, date) && !ParseFile(docFile, revision, date) && !ParseFile(docFile2, revision, date)
+     || revision == "")
+    {
+        cerr << "Error: failed retrieving version information.\n"
+             << "Warning: using 0 as revision.\n";
 
-    if(revision == "")
         revision = "0";
+    }
 
     WriteOutput(outputFile, revision, date);
 
@@ -148,55 +156,62 @@ bool ParseFile(const string& docFile, string& revision, string &date)
     string token[6];
     date.clear();
     revision.clear();
-    int c = 0;
 
     ifstream inFile(docFile.c_str());
     if (!inFile)
     {
+        cerr << "Warning: could not open input file.\n"
+             << "         This does not seem to be a revision controlled project.\n";
+
         return false;
     }
-    else
-    {
-        while(!inFile.eof() && c < 6)
-            inFile >> token[c++];
 
-        revision = token[2];
-        date = token[5].substr(0, strlen("2006-01-01T12:34:56"));
-        date[10] = 32;
+    unsigned int c = 0;
 
-        return true;
-    }
+    // Read in the first entry's data (represents the current directory's entry)
+    while(!inFile.eof() && c < 6)
+        inFile >> token[c++];
+
+    // The third non-empty line (zero-index) from the start contains the revision number
+    revision = token[2];
+
+    // The sixth non-empty line from the start contains the revision date
+    date = token[5].substr(0, strlen("2006-01-01T12:34:56"));
+    // Set the 11th character from a 'T' to a space (' ')
+    date[10] = ' ';
+
+    return true;
 }
 
 
-bool WriteOutput(const string& outputFile, string& revision, string& date)
+bool WriteOutput(const string& outputFile, const string& revision, const string& date)
 {
-    string old;
-    string comment("/*");
-    comment.append(revision);
-    comment.append("*/");
+    string comment("/*" + revision + "*/");
 
+    // Check whether this file already contains the correct revision date. Don't
+    // modify it if it does, we don't want to go messing with it's timestamp for
+    // no gain.
     {
         ifstream in(outputFile.c_str());
-        if (!in.bad() && !in.eof())
+        if (!in.bad() && !in.eof() && in.is_open())
         {
+            string old;
             in >> old;
             if(old >= comment)
             {
                 if(be_verbose)
-                    printf("Revision unchanged (%s). Skipping.", revision.c_str());
-                in.close();
+                    cout << "Revision unchanged (" << revision << "). Skipping.\n";
+
                 return false;
             }
         }
-        in.close();
     }
 
 
-    ofstream header(outputFile.c_str(), ios_base::out | ios_base::binary);
+    ofstream header(outputFile.c_str());
     if(!header.is_open())
     {
-        puts("Error: Could not open output file.");
+        cerr << "Error: Could not open output file.";
         return false;
     }
 
@@ -209,37 +224,44 @@ bool WriteOutput(const string& outputFile, string& revision, string& date)
     if(do_wx)
         header << "#include <wx/string.h>\n";
 
-    header << "\n#define SVN_REVISION \"" << revision << "\"\n"
+    header << "\n#define SVN_REV       " << revision << "\n"
+           << "\n#define SVN_REVISION \"" << revision << "\"\n"
            << "\n#define SVN_DATE     \"" << date << "\"\n\n";
 
+    // Open namespace
     if(do_int || do_std || do_wx)
         header << "namespace autorevision\n{\n";
 
     if(do_int)
         header << "\tconst unsigned int svn_revision = " << revision << ";\n";
 
-    if(do_translate)
-    {
-        revision = "_T(\"" + revision + "\")";
-        date = "_T(\"" + date + "\")";
-    }
-    else
-    {
-        revision = "\"" + revision + "\"";
-        date = "\"" + date + "\"";
-    }
-
     if(do_std)
-        header << "\tconst std::string svn_revision_s(" << revision << ");\n";
+        header << "\tconst std::string svn_revision_s(\"" << revision << "\");\n"
+               << "\tconst std::string svn_date_s(\"" << date << "\");\n";
+    if(do_cstr)
+        header << "\tconst char svn_revision_cstr[] = \"" << revision << "\";\n"
+               << "\tconst char svn_date_cstr[] = \"" << date << "\";\n";
     if(do_wx)
-        header << "\tconst wxString svnRevision(" << revision << ");\n";
+    {
+        header << "\tconst wxString svnRevision(";
 
+        if(do_translate)
+            header << "wxT";
+
+        header << "(\"" << revision << "\"));\n"
+               << "\tconst wxString svnDate(";
+
+        if(do_translate)
+            header << "wxT";
+
+        header << "(\"" << date << "\"));\n";
+    }
+
+    // Terminate/close namespace
     if(do_int || do_std || do_wx)
         header << "}\n\n";
 
     header << "\n\n#endif\n";
-    header.close();
 
     return true;
 }
-
