@@ -1,6 +1,8 @@
 /*
  * autorevision - a tool to incorporate Subversion revisions into binary builds
  * Copyright (C) 2005 Thomas Denk
+ * Copyright (C) 2007 Giel van Schijndel
+ * Copyright (C) 2007 Warzone Resurrection Project
  *
  * This program is distributed under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
@@ -15,7 +17,7 @@
  * $HeadURL$
  */
 
-#include <stdio.h>
+#include <iostream>
 #include <string>
 #include <fstream>
 
@@ -71,13 +73,14 @@ int main(int argc, char** argv)
 
     if (workingDir.empty())
     {
-        puts("Usage: autorevision [options] directory [autorevision.h]");
-        puts("Options:");
-        puts("         +int assign const unsigned int");
-        puts("         +std assign const std::string");
-        puts("         +wx  assing const wxString");
-        puts("         +t   add Unicode translation macros to strings");
-        puts("         -v   be verbose");
+        cout << "Usage: autorevision [options] directory [autorevision.h]\n"
+             << "Options:\n"
+             << "         +int assign const unsigned int\n"
+             << "         +std assign const std::string\n"
+             << "         +wx  assing const wxString\n"
+             << "         +t   add Unicode translation macros to strings\n"
+             << "         -v   be verbose\n";
+
         return 1;
     }
 
@@ -190,30 +193,30 @@ bool WriteOutput(const string& outputFile, string& revision, string& date)
     }
 
 
-    FILE *header = fopen(outputFile.c_str(), "wb");
-    if(!header)
+    ofstream header(outputFile.c_str(), ios_base::out | ios_base::binary);
+    if(!header.is_open())
     {
         puts("Error: Could not open output file.");
         return false;
     }
 
-    fprintf(header, "%s\n", comment.c_str());
-    fprintf(header, "#ifndef AUTOREVISION_H\n");
-    fprintf(header, "#define AUTOREVISION_H\n\n\n");
+    header << comment << "\n"
+           << "#ifndef AUTOREVISION_H\n"
+           << "#define AUTOREVISION_H\n\n\n";
 
     if(do_std)
-        fprintf(header, "#include <string>\n");
+        header << "#include <string>\n";
     if(do_wx)
-        fprintf(header, "#include <wx/string.h>\n");
+        header << "#include <wx/string.h>\n";
 
-    fprintf(header, "\n#define SVN_REVISION \"%s\"\n", revision.c_str());
-    fprintf(header, "\n#define SVN_DATE     \"%s\"\n\n", date.c_str());
+    header << "\n#define SVN_REVISION \"" << revision << "\"\n"
+           << "\n#define SVN_DATE     \"" << date << "\"\n\n";
 
     if(do_int || do_std || do_wx)
-        fprintf(header, "namespace autorevision\n{\n");
+        header << "namespace autorevision\n{\n";
 
     if(do_int)
-        fprintf(header, "\tconst unsigned int svn_revision = %s;\n", revision.c_str());
+        header << "\tconst unsigned int svn_revision = " << revision << ";\n";
 
     if(do_translate)
     {
@@ -227,15 +230,15 @@ bool WriteOutput(const string& outputFile, string& revision, string& date)
     }
 
     if(do_std)
-        fprintf(header, "\tconst std::string svn_revision_s(%s);\n", revision.c_str());
+        header << "\tconst std::string svn_revision_s(" << revision << ");\n";
     if(do_wx)
-        fprintf(header, "\tconst wxString svnRevision(%s);\n", revision.c_str());
+        header << "\tconst wxString svnRevision(" << revision << ");\n";
 
     if(do_int || do_std || do_wx)
-        fprintf(header, "}\n\n");
+        header << "}\n\n";
 
-    fprintf(header, "\n\n#endif\n");
-    fclose(header);
+    header << "\n\n#endif\n";
+    header.close();
 
     return true;
 }
