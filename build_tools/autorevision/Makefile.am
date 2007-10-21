@@ -1,9 +1,10 @@
 noinst_PROGRAMS = auto_revision
 auto_revision_SOURCES = autorevision.cpp
 
-INCLUDES = -I$(top_srcdir)/src/include
-
-auto_revision_LDADD = ../../base/tinyxml/libtinyxml.la
-
+# Add Autorevision header to source directory
 all-local: auto_revision
-	./auto_revision +int +wx +t $(top_srcdir) $(top_srcdir)/src/include/autorevision.h
+	./auto_revision +cstr -v $(top_srcdir) $(top_srcdir)/src/autorevision.h
+
+# Remove Autorevision header from source directory
+clean-local:
+	-rm -f $(top_srcdir)/src/autorevision.h
