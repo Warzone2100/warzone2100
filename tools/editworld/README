@@ -325,34 +325,78 @@ in Deliverance\Data.
 Directory structure changed. The directory structure is now much more rational. An example tree
 for Warzone would be:
 
-Deliverance\Data\	// The Warzone data directory.
-    MyScenario.lnd	// The project file saved by the editor.
-    Textures.pcx	// Terrain textures , referenced by MyScenario.lnd.
-    DataSet.txt		// File defining the data set, referenced by MyScenerio.lnd.
-    Stats\		// Directory containing the stats
-        Structures.txt	// Stats text file defining the structures used in the game.
-    Structs\		// Directory containing all the IMD's and PCX's needed for the structures.
-        ....
-    Features\		// Directory containing all the IMD's and PCX's needed for the features.
-        ....
-    MyScenario.gam      // Save game file created when you export the scenario from the editor.
-    MyScenario\		// Save game directory created when you export the scenario from the editor.
-        Game.map	// Save game data...
+Deliverance/Data/
+        The Warzone data directory.
+
+    MyScenario.lnd
+        The project file saved by the editor.
+
+    Textures.pcx
+        Terrain textures , referenced by MyScenario.lnd.
+
+    DataSet.txt
+        File defining the data set, referenced by MyScenerio.lnd.
+
+    Stats/
+        Directory containing the stats
+
+        Structures.txt
+            Stats text file defining the structures used in the game.
+
+    Structs/
+        Directory containing all the IMD's and PCX's needed for the structures.
+
+        xxxx
+
+
+    Features/
+        Directory containing all the IMD's and PCX's needed for the features.
+
+        xxxx
+    MyScenario.gam
+        Save game file created when you export the scenario from the editor.
+
+    MyScenario/
+        Save game directory created when you export the scenario from the editor.
+
+        Game.map
+            Save game data...
+
         Struct.bjo
+
         Feat.bjo
+
         Droid.bjo
+
         Templ.bjo
+
 
 An example tree for Necromancy would be:
 
-Necromancy\Data\	// The Necromancy data directory.
-    MyScenario.lnd	// The project file saved by the editor.
-    Textures.pcx	// Terrain textures , referenced by MyScenario.lnd.
-    DataSet.txt		// File defining the data set, referenced by MyScenerio.lnd.
-    Objects\		// Directory containing all the IMD's and PCX's needed for the structures.
-        ....		// Directory containing the stats
-    MyScenario.map	// Game map file created when you export the scenario from the editor.
-    MyScenario.nob	// Object map file created when you export the scenario from the editor.
+Necromancy/Data/
+    The Necromancy data directory.
+
+    MyScenario.lnd
+        The project file saved by the editor.
+
+    Textures.pcx
+        Terrain textures , referenced by MyScenario.lnd.
+
+    DataSet.txt
+        File defining the data set, referenced by MyScenerio.lnd.
+
+    Objects/
+        Directory containing all the IMD's and PCX's needed for the structures.
+
+        xxxx
+            Directory containing the stats
+
+    MyScenario.map
+        Game map file created when you export the scenario from the editor.
+
+    MyScenario.nob
+        Object map file created when you export the scenario from the editor.
+
 
 Now checks for transparancy flags in IMD's and does colour keying accordingly.
 
@@ -394,9 +438,11 @@ Save Project now only saves the project file (.LND) use the seperate Export func
 scenarios for Warzone or Necromancer.
 
 When exporting Warzone scenarios now creates the following files.
-		MyScenario.GAM
-		MyScenario/Game.MAP
-		MyScenario/Feat.BJO
+
+	* MyScenario.GAM
+	* MyScenario/Game.MAP
+	* MyScenario/Feat.BJO
+
 	These can be copied to the Deliverance/Data directory although for now you will have to
  	copy the droid.bjo , struct.bjo and templ.bjo files from an existing game directory to
         the MyScenario directory as the editor dos'nt export these files.
@@ -416,6 +462,7 @@ Much more robust.
 Colour keying of object textures. You need to specify an extra flag in the object set text
 file ( ie features1.txt ) for each IMD. NOKEY for no colour keying or KEYn where n is the palette
 index of the transparent colour ie KEY0.
+
 	eg...
 		mislick.imd OVERLAYED TILESNAP KEY0
 		mibould1.imd FLANGED TILESNAP NOKEY
@@ -436,5 +483,3 @@ Can now place , drag and rotate objects in 3d view as well as 2d view.
 W and Q keys increase and decrease the 3d draw distance.
 
 Option added to toggle smooth shading of landscape.
-
-
