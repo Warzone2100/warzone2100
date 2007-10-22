@@ -294,6 +294,10 @@ const char *tagGetErrorString()
 
 static bool scan_to(element_t tag)
 {
+	if (tag == TAG_SEPARATOR)
+	{
+		return true; // does not exist in definition
+	}
 	// Set the right node
 	for (; current->next && current->element < tag; current = current->next);
 	if (current->element != tag)
@@ -333,7 +337,7 @@ static bool scanforward(element_t tag)
 	{
 		if (read_tag == tag)
 		{
-			assert(current->element == tag);
+			assert(current->element == tag || tag == TAG_SEPARATOR);
 			return true;
 		}
 		else if (read_tag == TAG_GROUP_END
