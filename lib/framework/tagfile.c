@@ -50,7 +50,6 @@ static char errbuf[ERR_BUF_SIZE];
 do { \
 	tag_error = true; \
 	snprintf(errbuf, ERR_BUF_SIZE, __VA_ARGS__); \
-	printf("ERROR: "); printf(__VA_ARGS__); printf("\n"); \
 	assert(false); \
 } while(0)
 
@@ -166,9 +165,6 @@ static bool scan_defines(struct define *node, struct define *group)
 			bufptr++; // discard rest of line
 		}
 
-		fprintf(stderr, "Read line %d which contained tag %d with VR=%c%c VM=%d; we are in group %d, default value is: %d)\n", line, 
-			node->element, 
-			node->vr[0], node->vr[1], node->vm, node->parent != NULL ? node->parent->element : 0, (int)node->val.uint32_tval);
 		if (node->vr[0] == 'G' || node->vr[1] == 'R')
 		{
 			bool success;
@@ -318,14 +314,12 @@ static bool scanforward(element_t tag)
 {
 	element_t read_tag;
 	uint8_t tag_type;
-	struct define *group = current;
 	PHYSFS_sint64 readsize = 0, fpos;
 	uint16_t array_size;
 
 	assert(readmode);
 	if (tag_error || current == NULL || !readmode)
 	{
-		printf("scanforward: early return: tag=%d, tag_error=%d\n", (int)tag, (int)tag_error);
 		return false;
 	}
 
@@ -339,7 +333,6 @@ static bool scanforward(element_t tag)
 	{
 		if (read_tag == tag)
 		{
-			printf("scanforward: found tag %d (%d == %d)\n", (int)tag, (int)current->element, (int)group->element);
 			assert(current->element == tag);
 			return true;
 		}
@@ -414,7 +407,6 @@ static bool scanforward(element_t tag)
 		fpos = PHYSFS_tell(handle);
 		fpos -= sizeof(element_t);
 		PHYSFS_seek(handle, fpos);
-		printf("scanforward: late return; checking for default; now at element %d\n", (int)current->element);
 		assert(current != NULL);
 		assert(current->element == tag);
 
@@ -437,12 +429,10 @@ bool tagReadNext()
 	}
 	if (current->parent == NULL)
 	{
-		printf("reset uppermost search space\n");
 		current = first; // topmost group
 	}
 	else
 	{
-		printf("reset search space in group %d\n", (int)current->parent->element);
 		current = current->parent->group; // reset to start of group tag index
 	}
 	return true;
@@ -458,7 +448,6 @@ uint16_t tagReadEnter(element_t tag)
 	{
 		return 0; // none found; avoid error reporting here
 	}
-	printf("ENTERING GROUP AT TAG %d\n", (int)tag);
 	if (!PHYSFS_readUBE8(handle, &tagtype))
 	{
 		TF_ERROR("Error reading group type: %s", PHYSFS_getLastError());
@@ -473,10 +462,6 @@ uint16_t tagReadEnter(element_t tag)
 	{
 		TF_ERROR("Error accessing group size: %s", PHYSFS_getLastError());
 		return 0;
-	}
-	if (elements == 0)
-	{
-		TF_ERROR("Read empty group: %s", PHYSFS_getLastError()); // but do not return here; need to leave
 	}
 	if (!current->group)
 	{
@@ -506,8 +491,6 @@ void tagReadLeave(element_t tag)
 		TF_ERROR("Cannot leave group, at highest level already!");
 		return;
 	}
-	printf("leaving group %d at element %d, going back to element %d\n", (int)current->parent->current->element, (int)current->element, 
-		(int)current->parent->current->element);
 	current = current->parent->current; // resume at next tag
 	if (current->element != tag)
 	{
@@ -584,21 +567,18 @@ int32_t tagReads(element_t tag)
 	{
 		int32_t val;
 		(void) PHYSFS_readSBE32(handle, &val);
-		printf("tagreads: %d", (int)val);
 		return val;
 	}
 	else if (tagtype == TF_INT_S16)
 	{
 		int16_t val;
 		(void) PHYSFS_readSBE16(handle, &val);
-		printf("tagreads: %d", (int)val);
 		return val;
 	}
 	else if (tagtype == TF_INT_S8)
 	{
 		int8_t val;
 		(void) PHYSFS_readSBE8(handle, &val);
-		printf("tagreads: %d", (int)val);
 		return val;
 	}
 	else
@@ -779,7 +759,6 @@ static bool write_tag(element_t tag)
 
 	if (tag_error || current == NULL || readmode)
 	{
-		printf("write_tag: early return: tag_error=%d\n", (int)tag_error);
 		return false;
 	}
 	size = PHYSFS_write(handle, &tag, 1, 1);
@@ -788,24 +767,21 @@ static bool write_tag(element_t tag)
 		TF_ERROR("Could not write tag: %s", PHYSFS_getLastError());
 		return false;
 	}
-	printf("write_tag: wrote tag %d\n", (int)tag);
 	return true;
 }
 
 bool tagWriteSeparator()
 {
-	if (tag_error || !write_tag(TAG_SEPARATOR) || !scan_to(TAG_SEPARATOR))
+	if (tag_error || !write_tag(TAG_SEPARATOR))
 	{
 		return false;
 	}
 	if (current->parent == NULL)
 	{
-		printf("reset uppermost search space\n");
 		current = first; // topmost group
 	}
 	else
 	{
-		printf("reset search space in group %d\n", (int)current->parent->element);
 		current = current->parent->group; // reset to start of group tag index
 	}
 	// it has no payload
@@ -819,7 +795,6 @@ bool tagWriteEnter(element_t tag, uint16_t elements)
 	{
 		return false;
 	}
-	printf("WRITING GROUP %d\n", (int)tag);
 	assert(current->element == tag);
 	ASSERT(current->vr[0] == 'G' && current->vr[1] == 'R', "Wrong type in writing %d", (int)tag);
 	ASSERT(current->group != NULL, "Cannot write group, none defined for element %d!", tag);
@@ -844,8 +819,6 @@ bool tagWriteLeave(element_t tag)
 		TF_ERROR("Cannot leave group, at highest level already!");
 		return false;
 	}
-	printf("writing group end %d at element %d, going back to element %d\n", (int)current->parent->current->element, (int)current->element, 
-		(int)current->parent->current->element);
 	current = current->parent->current; // resume at next tag
 	if (current->element != tag)
 	{
@@ -868,7 +841,6 @@ bool tagWrite(element_t tag, uint32_t val)
 	ASSERT(current->vr[0] == 'U' && current->vr[1] == 'S', "Wrong type in writing %d", (int)tag);
 	if (current->defaultval && current->val.uint32_tval == val)
 	{
-		printf("saving disk space for tag %d\n", (int)tag);
 		return true; // using default value to save disk space
 	}
 	if (!write_tag(tag))
@@ -903,7 +875,6 @@ bool tagWrites(element_t tag, int32_t val)
 	ASSERT(current->vr[0] == 'S' && current->vr[1] == 'I', "Wrong type in writing %d", (int)tag);
 	if (current->defaultval && current->val.int32_tval == val)
 	{
-		printf("saving disk space for s-tag %d\n", (int)tag);
 		return true; // using default value to save disk space
 	}
 	if (!write_tag(tag))
@@ -938,7 +909,6 @@ bool tagWritef(element_t tag, float val)
 	ASSERT(current->vr[0] == 'F' && current->vr[1] == 'P', "Wrong type in writing %d", (int)tag);
 	if (current->defaultval && current->val.floatval == val)
 	{
-		printf("saving disk space for f-tag %d\n", (int)tag);
 		return true; // using default value to save disk space
 	}
 	if (!write_tag(tag))
@@ -1065,11 +1035,9 @@ void tagTest()
 	memset(fv, 0, 6);
 	tagOpenRead("testdata/tagfile_basic.def", writename);
 	tagReadString(0x01, 200, format);
-	printf("FORMAT: %s\n", format);
 	assert(strncmp(format, cformat, 9) == 0);
 	tagReadEnter(0x02);
 		assert(tagRead(0x01) == 101);
-		printf("TAG 01 INSIDE GROUP 02: 101\n");
 		tagRead16v(0x02, 3, droidpos);
 		assert(droidpos[0] == 11);
 		assert(droidpos[1] == 13);

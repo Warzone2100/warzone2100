@@ -75,7 +75,7 @@ bool tagWriteString(element_t tag, const char *string);
 /*** tagread ***/
 
 /* Enter, leave and jump to next instance of tags in a group. */
-uint16_t tagread_enter(element_t tag);
+uint16_t tagReadEnter(element_t tag);
 void tagReadLeave(element_t tag); // pass in group we are leaving for error checking
 bool tagReadNext(); // false if no more entities to read
 
