@@ -13,6 +13,7 @@ SRC=configfile.c \
 	strres.c \
 	strres_parser.tab.c \
 	strres_lexer.lex.c \
+	tagfile.c \
 	treap.c \
 	trig.c \
 	SDL_framerate.c

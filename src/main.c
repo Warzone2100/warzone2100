@@ -39,6 +39,7 @@
 #include "lib/framework/configfile.h"
 #include "lib/framework/input.h"
 #include "lib/framework/SDL_framerate.h"
+#include "lib/framework/tagfile.h"
 
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_common/piestate.h"
@@ -802,6 +803,12 @@ int main(int argc, char *argv[])
 
 	// Find out where to find the data
 	scanDataDirs();
+
+#ifdef DEBUG
+	/* Runtime unit testing */
+	NETtest();
+	tagTest();
+#endif
 
 	// find out if the lobby stuff has been disabled
 	if (!bDisableLobby && !lobbyInitialise()) // ajl. Init net stuff. Lobby can modify startup conditions like commandline.
