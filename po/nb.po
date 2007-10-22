@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-10-15 20:03+0200\n"
+"POT-Creation-Date: 2007-10-22 22:50+0200\n"
 "PO-Revision-Date: 2007-03-24 17:49+0100\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -509,50 +509,50 @@ msgstr ""
 msgid "Power Accrued"
 msgstr ""
 
-#: src/structure.c:2946
+#: src/structure.c:2940
 msgid "Command Control Limit Reached - Production Halted"
 msgstr ""
 
-#: src/structure.c:6106 src/structure.c:6125
+#: src/structure.c:6099 src/structure.c:6118
 #, c-format
 msgid "%s - %d Units assigned"
 msgstr ""
 
-#: src/structure.c:6162
+#: src/structure.c:6155
 #, c-format
 msgid "%s - Connected %d of %d"
 msgstr ""
 
-#: src/structure.c:6297 src/structure.c:6348
+#: src/structure.c:6290 src/structure.c:6341
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr ""
 
-#: src/structure.c:6573
+#: src/structure.c:6566
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.c:6613
+#: src/structure.c:6606
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.c:6637
+#: src/structure.c:6630
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.c:6661
+#: src/structure.c:6654
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.c:6670
+#: src/structure.c:6663
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.c:6698
+#: src/structure.c:6691
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.c:6705
+#: src/structure.c:6698
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 
