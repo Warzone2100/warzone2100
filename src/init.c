@@ -1000,6 +1000,9 @@ BOOL systemInitialise(void)
 	arrowInit();
 #endif
 
+	// Initialize the iVis text rendering module
+	iV_TextInit();
+
 	iV_Reset();								// Reset the IV library.
 	initLoadingScreen(TRUE);
 

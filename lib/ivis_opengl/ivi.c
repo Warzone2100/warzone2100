@@ -26,7 +26,6 @@
 void iV_Reset()
 {
 	_TEX_INDEX = 0;
-	iV_TextInit(); // Initialise the IVIS font module.
 }
 
 
