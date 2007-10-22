@@ -1,4 +1,5 @@
 Easy:
+
 - Add an option to directly host or join a multiplay game to src/clparse.c
 
 - Make Warzone respond to the SDL_QUIT event so it can be closed with ^C, ALT+F4 or closing the window.
@@ -7,6 +8,7 @@ Easy:
 - Fix memleaks in lexer files. Appears in functions like strres_ensure_buffer_stack or strres__create_buffer.
 
 More difficult:
+
 - Display "backdrops" instead of novideo.rpl so a story can be told using subtitles and be illustrated with pictures.
 
 - Create one single place where platform dependend defines reside.
