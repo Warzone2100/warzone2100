@@ -211,6 +211,10 @@
 			<Option compiler="gcc" use="1" buildCommand="bison -y -d -olib/framework/strres_parser.tab.c $file\n$compiler $options $includes -c lib/framework/strres_parser.tab.c -o $object" />
 		</Unit>
 		<Unit filename="lib/framework/strresly.h" />
+		<Unit filename="lib/framework/tagfile.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib/framework/tagfile.h" />
 		<Unit filename="lib/framework/treap.c">
 			<Option compilerVar="CC" />
 		</Unit>
