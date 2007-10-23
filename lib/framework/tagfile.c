@@ -16,7 +16,7 @@
 enum internal_types
 {
 	TF_INT_U8, TF_INT_U16, TF_INT_U32, TF_INT_S8, TF_INT_S16, TF_INT_S32, TF_INT_FLOAT, 
-	TF_INT_U16_ARRAY, TF_INT_FLOAT_ARRAY, TF_INT_U8_ARRAY, TF_INT_GROUP
+	TF_INT_U16_ARRAY, TF_INT_FLOAT_ARRAY, TF_INT_U8_ARRAY, TF_INT_GROUP, TF_INT_BOOL
 };
 
 struct define
@@ -136,15 +136,15 @@ static bool scan_defines(struct define *node, struct define *group)
 		node->vr[0] = vr[0];
 		node->vr[1] = vr[1];
 		bufptr += count;
-		if (node->vr[0] == 'S' || node->vr[1] == 'I')
+		if (node->vr[0] == 'S' && node->vr[1] == 'I')
 		{
 			retval = sscanf(bufptr, " %d", &node->val.int32_tval);
 		}
-		else if (node->vr[0] == 'U' || node->vr[1] == 'S')
+		else if ((node->vr[0] == 'U' && node->vr[1] == 'S') || (node->vr[0] == 'B' && node->vr[1] == 'O'))
 		{
 			retval = sscanf(bufptr, " %u", &node->val.uint32_tval);
 		}
-		else if (node->vr[0] == 'F' || node->vr[1] == 'P')
+		else if (node->vr[0] == 'F' && node->vr[1] == 'P')
 		{
 			retval = sscanf(bufptr, " %f", &node->val.floatval);
 		}
@@ -623,6 +623,37 @@ float tagReadf(element_t tag)
 	}
 }
 
+bool tagReadBool(element_t tag)
+{
+	uint8_t tagtype;
+
+	if (!scanforward(tag))
+	{
+		if (current->defaultval && current->element == tag)
+		{
+			return current->val.uint32_tval;
+		}
+		return 0;
+	}
+
+	if (!PHYSFS_readUBE8(handle, &tagtype))
+	{
+		TF_ERROR("tagReadBool: Tag type not found: %d", (int)tag);
+		return 0;
+	}
+	if (tagtype == TF_INT_BOOL || tagtype == TF_INT_U8)
+	{
+		uint8_t val;
+		(void) PHYSFS_readUBE8(handle, &val);
+		return val;
+	}
+	else
+	{
+		TF_ERROR("readTagBool: Error reading tag %d, bad type", (int)tag);
+		return 0;
+	}
+}
+
 bool tagReadfv(element_t tag, uint16_t size, float *vals)
 {
 	uint8_t tagtype;
@@ -924,6 +955,27 @@ bool tagWritef(element_t tag, float val)
 	return true;
 }
 
+bool tagWriteBool(element_t tag, bool val)
+{
+	assert(tag != TAG_SEPARATOR && tag != TAG_GROUP_END);
+	if (!scan_to(tag))
+	{
+		return false;
+	}
+	ASSERT(current->vr[0] == 'B' && current->vr[1] == 'O', "Wrong type in writing %d", (int)tag);
+	if (current->defaultval && current->val.uint32_tval == val)
+	{
+		return true; // using default value to save disk space
+	}
+	if (!write_tag(tag))
+	{
+		return false;
+	}
+	(void) PHYSFS_writeUBE8(handle, TF_INT_BOOL);
+	(void) PHYSFS_writeUBE8(handle, val);
+	return true;
+}
+
 bool tagWritefv(element_t tag, uint16_t count, float *vals)
 {
 	int i;
@@ -1013,6 +1065,7 @@ void tagTest()
 	formatdup = tagReadStringDup(0x06);
 	assert(strncmp(formatdup, cformat, 9) == 0);
 	free(formatdup);
+	assert(tagReads(0x07) == 1);
 	ASSERT(!tagGetError(), "Error 2: %s", tagGetErrorString());
 	tagClose();
 

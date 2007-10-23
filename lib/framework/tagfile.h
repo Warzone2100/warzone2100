@@ -68,9 +68,7 @@ bool tagWritef(element_t tag, float val);
 bool tagWritefv(element_t tag, uint16_t count, float *vals);
 bool tagWrite16v(element_t tag, uint16_t count, uint16_t *vals);
 bool tagWriteString(element_t tag, const char *string);
-
-#define TAGWRITE_ENUM(tag, enumval) \
-  do { int32_t val = enumval; (void) tagwrites(tag, val); } while(0)
+bool tagWriteBool(element_t tag, bool val);
 
 /*** tagread ***/
 
@@ -82,6 +80,7 @@ bool tagReadNext(); // false if no more entities to read
 /* Read methods */
 uint32_t tagRead(element_t tag);
 int32_t tagReads(element_t tag);
+bool tagReadBool(element_t tag);
 float tagReadf(element_t tag);
 bool tagReadfv(element_t tag, uint16_t size, float *vals);
 bool tagRead16v(element_t tag, uint16_t size, uint16_t *vals);
