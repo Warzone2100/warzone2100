@@ -103,6 +103,7 @@ typedef enum {
   LOG_FOG,
   LOG_SENSOR,
   LOG_GUI,
+  LOG_MAP,
   LOG_LAST /* _must_ be last! */
 } code_part;
 
