@@ -75,12 +75,10 @@ extern void	initWarCam			( void );
 extern void	setWarCamActive		( BOOL status );
 extern BOOL	getWarCamStatus		( void );
 extern void camToggleStatus		( void );
-extern void camSetOldView(int x,int y,int z,int rx,int ry,int dist);
 extern BOOL processWarCam		( void );
 extern void	camToggleInfo		( void );
 extern void	requestRadarTrack	( SDWORD x, SDWORD y );
 extern BOOL	getRadarTrackingStatus( void );
-extern void	dispWarCamLogo		( void );
 extern void	toggleRadarAllignment( void );
 extern void	camInformOfRotation ( Vector3i *rotation );
 extern BASE_OBJECT *camFindDroidTarget(void);
@@ -88,8 +86,5 @@ extern DROID *getTrackingDroid( void );
 extern SDWORD	getPresAngle( void );
 extern UDWORD	getNumDroidsSelected( void );
 extern void	camAllignWithTarget(BASE_OBJECT *psTarget);
-
-extern UDWORD getTestAngle(void);
-extern void updateTestAngle( void );
 
 #endif

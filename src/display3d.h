@@ -77,7 +77,7 @@ extern BOOL	clipXY ( SDWORD x, SDWORD y);
 
 extern BOOL init3DView(void);
 extern void initViewPosition(void);
-extern iView player,camera;
+extern iView player;
 extern UDWORD distance;
 extern UDWORD terrainOutline;
 extern UDWORD xOffset,yOffset;

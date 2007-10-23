@@ -195,7 +195,8 @@ UDWORD	mapX=45, mapY=80;
 BOOL	selectAttempt = FALSE;
 
 /* Vectors that hold the player and camera directions and positions */
-iView	player, camera;
+iView	player;
+static iView	camera;
 
 /* Temporary rotation vectors to store rotations for droids etc */
 static Vector3i	imdRot,imdRot2;

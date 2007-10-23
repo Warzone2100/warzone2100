@@ -52,21 +52,16 @@
 #include "e3demo.h"
 #include "raycast.h"
 #include "display3d.h"
-#ifndef PAUL
 #include "selection.h"
-#endif
-
 
 #define MODFRACT(value,mod) \
 	while((value) < 0)	{ (value) += (mod); } \
 	while((value) > (mod)) { (value) -= (mod); }
 
-
 #define MIN_TRACK_HEIGHT 16
 
 extern BOOL bTrackingTransporter;
 
-static	UDWORD	testAngle=250;
 /* Holds all the details of our camera */
 static	WARCAM	trackingCamera;
 
@@ -79,9 +74,7 @@ static	BASE_OBJECT	radarTarget;
 /* Do we trun to face when doing a radar jump? */
 static	BOOL	bRadarAllign;
 
-SDWORD	presAvAngle = 0;;
-/* Camera logo spins at 120 degrees a second */
-#define	LOGO_ROT_SPEED DEG(120)
+static SDWORD	presAvAngle = 0;;
 
 /*	These are the DEFAULT offsets that make us track _behind_ a droid and allow
 	it to be pretty far _down_ the screen, so we can see more
@@ -101,7 +94,6 @@ static	BOOL bFullInfo = FALSE;
 static	BOOL bRadarTrackingRequested = FALSE;
 
 /* World coordinates for a radar track/jump */
-//static  SDWORD	 radarX,radarY;
 static  float	 radarX,radarY;
 
 /*	Where we were up to (pos and rot) last update - allows us to see whether
@@ -432,18 +424,6 @@ BOOL Status = TRUE;
 		abort();
 		break;
 	}
-	/* TBR
-	flushConsoleMessages();
-	CONPRINTF(ConsoleString,(ConsoleString,"Acceleration of movement constant : %.2f",accelConstant));
-	CONPRINTF(ConsoleString,(ConsoleString,"Velocity of movement constant : %.2f",velocityConstant));
-	CONPRINTF(ConsoleString,(ConsoleString,"Acceleration of rotation constant : %.2f",rotAccelConstant));
-	CONPRINTF(ConsoleString,(ConsoleString,"Velocity of rotation constant : %.2f",rotVelocityConstant));
-	CONPRINTF(ConsoleString,(ConsoleString,"Tracking droid direction : %d",trackingCamera.droid->direction));
-	CONPRINTF(ConsoleString,(ConsoleString,"Tracking droid pitch : %d",trackingCamera.droid->pitch));
-	CONPRINTF(ConsoleString,(ConsoleString,"Tracking droid roll : %d",trackingCamera.droid->roll));
-	CONPRINTF(ConsoleString,(ConsoleString,"Tracking droid height (z) : %d",trackingCamera.droid->z));
-	CONPRINTF(ConsoleString,(ConsoleString,"position.p.y : %d",player.p.y));
-	*/
 
 	return Status;
 }
@@ -510,26 +490,11 @@ BASE_OBJECT	*camFindDroidTarget(void)
 		}
 	}
 
-//printf("camFindUnitTarget : NOT FOUND\n");
 	/* We didn't find one */
 	return(NULL);
 }
 
 
-//-----------------------------------------------------------------------------------
-UDWORD	getTestAngle(void)
-{
-	return(testAngle);
-}
-//-----------------------------------------------------------------------------------
-void	updateTestAngle( void )
-{
-	testAngle += 1;
-	if(testAngle>=360)
-	{
-		testAngle = 0;
-	}
-}
 //-----------------------------------------------------------------------------------
 
 /* Stores away old viewangle info and sets up new distance and angles */
@@ -914,7 +879,6 @@ SDWORD	angle;
 
 static void updateCameraVelocity( UBYTE update )
 {
-//UDWORD	frameTime;
 float	fraction;
 
 	/*	Get the time fraction of a second - the next two lines are present in 4
@@ -922,7 +886,6 @@ float	fraction;
 		it may be an idea to calculate these higher up and store them in a static but
 		I've left them in for clarity for now */
 
-//	frameTime = gameTime - trackingCamera.lastUpdate;
 	fraction = (MAKEFRACT(frameTime2) / (float)GAME_TICKS_PER_SEC);
 
 	if(update & X_UPDATE)
@@ -945,7 +908,6 @@ float	fraction;
 
 static void	updateCameraPosition(UBYTE update)
 {
-//UDWORD	frameTime;
 BOOL	bFlying;
 float	fraction;
 DROID	*psDroid;
@@ -962,7 +924,6 @@ PROPULSION_STATS	*psPropStats;
 		}
 	}
 	/* See above */
-//	frameTime = gameTime - trackingCamera.lastUpdate;
 	fraction = (MAKEFRACT(frameTime2) / (float)GAME_TICKS_PER_SEC);
 
 	if(update & X_UPDATE)
@@ -973,18 +934,8 @@ PROPULSION_STATS	*psPropStats;
 
 	if(update & Y_UPDATE)
 	{
-//		if(trackingCamera.target->type == OBJ_TARGET)
-//		{
 			/* Need to update position along y axis */
-//		if(!bFlying)
-//		{
 			trackingCamera.position.y +=(trackingCamera.velocity.y * fraction);
-//		}
-//		else
-//		{
-//			trackingCamera.position.y += MAKEINT(((float)trackingCamera.velocity.y * fraction));
-//		}
-//		}
 	}
 
 	if(update & Z_UPDATE)
@@ -1159,10 +1110,8 @@ SDWORD	xPos,yPos,zPos;
 	calculated acceleration */
 static void updateCameraRotationVelocity( UBYTE update )
 {
-//UDWORD	frameTime;
 float	fraction;
 
-//	frameTime = gameTime - trackingCamera.lastUpdate;
 	fraction = (MAKEFRACT(frameTime2) / (float)GAME_TICKS_PER_SEC);
 
 	if(update & Y_UPDATE)
@@ -1184,10 +1133,8 @@ float	fraction;
 /* Move the camera around by adding the velocity */
 static void updateCameraRotationPosition( UBYTE update )
 {
-//UDWORD	frameTime;
 float	fraction;
 
-//	frameTime = gameTime - trackingCamera.lastUpdate;
 	fraction = (MAKEFRACT(frameTime2) / (float)GAME_TICKS_PER_SEC);
 
  	if(update & Y_UPDATE)
@@ -1421,35 +1368,7 @@ SDWORD	getPresAngle( void )
 UDWORD	getNumDroidsSelected( void )
 {
 	return(selNumSelected(selectedPlayer));
-/*
-DROID	*psDroid;
-UDWORD	count;
-
-	for(psDroid = apsDroidLists[selectedPlayer],count = 0;
-		psDroid; psDroid = psDroid->psNext)
-	{
-		if(psDroid->selected)
-		{
-			count++;
-		}
-	}
-	return(count);
-*/
 }
-
-//-----------------------------------------------------------------------------------
-void camSetOldView(int x,int y,int z,int rx,int ry,int dist)
-{
-//DBPRINTF(("camSetOldView(%d %d %d %d %d %d)\n",x,y,z,rx,ry,dist));
-//DBPRINTF(("%d %d %d %d %d %d\n",player.p.x,player.p.y,player.r.x,player.r.y,getViewDistance()));
-//	trackingCamera.oldView.p.x = x;
-//	trackingCamera.oldView.p.y = y;
-//	trackingCamera.oldView.p.z = z;
-//	trackingCamera.oldView.r.x = rx;
-//	trackingCamera.oldView.r.y = ry;
-//	trackingCamera.oldDistance = dist;
-}
-
 
 //-----------------------------------------------------------------------------------
 
@@ -1473,8 +1392,6 @@ BOOL	getWarCamStatus( void )
 /* Flips the status of tracking to the opposite of what it presently is */
 void	camToggleStatus( void )
 {
-
-
  	/* If it's off */
 	if(trackingCamera.status == CAM_INACTIVE)
 	{
@@ -1503,11 +1420,6 @@ void	camToggleInfo(void)
 /* Informs the tracking camera that we want to start tracking to a new radar target */
 void	requestRadarTrack(SDWORD x, SDWORD y)
 {
-/*
-	ASSERT( x<mapWidth*TILE_UNITS,"Weirdy x coordinate for tracking" );
-	ASSERT( y<mapHeight*TILE_UNITS,"Weirdy y coordinate for tracking" );
-*/
-
 	radarX = (SWORD)x;
  	radarY = (SWORD)y;
  	bRadarTrackingRequested = TRUE;
@@ -1539,31 +1451,6 @@ BOOL	retVal;
 		}
 	}
 	return(retVal);
-}
-
-/* Displays a spinning MTV style logo in the top right of the screen */
-void	dispWarCamLogo( void )
-{
-//Vecotr3i		dv;
-//
-//	if(gamePaused())
-//	{
-//		/* get out if we're paused */
-//		return;
-//	}
-//
-//	warCamLogoRotation += MAKEINT( (MAKEFRACT(LOGO_ROT_SPEED) * fraction) );
-//	dv.x = 280;
-//	dv.y = 165;
-//	dv.z = 1000;
-//	iV_MatrixBegin();							/* Push the indentity matrix */
-//	iV_TRANSLATE(dv.x,dv.y,dv.z);
-//	scaleMatrix(15);
-//	iV_MatrixRotateY(warCamLogoRotation);
-//	iV_MatrixRotateX(player.r.x);
-//
-//	pie_Draw3DShape(cameraImd, 0, 0, pie_MAX_BRIGHT_LEVEL, 0, pie_BUTTON, 0);
-//	iV_MatrixEnd();
 }
 
 void	toggleRadarAllignment( void )
