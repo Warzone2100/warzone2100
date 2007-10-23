@@ -25,21 +25,25 @@
  */
 #include <stdio.h>
 #include <string.h>
+#include <physfs.h>
 
 /* map line printf's */
 #include <assert.h>
 #include "lib/framework/frame.h"
 #include "lib/framework/frameint.h"
+#include "lib/framework/tagfile.h"
 #include "map.h"
 #include "lib/gamelib/gtime.h"
+#include "lib/ivis_common/tex.h"
 #include "hci.h"
 #include "projectile.h"
 #include "display3d.h"
 #include "lighting.h"
 #include "game.h"
-
+#include "texture.h"
 #include "environ.h"
 #include "advvis.h"
+#include "research.h"
 
 #include "gateway.h"
 #include "wrappers.h"
@@ -495,6 +499,267 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 	return TRUE;
 }
 
+BOOL mapSaveTagged(char *pFileName)
+{
+	MAPTILE *psTile;
+	GATEWAY *psCurrGate;
+	int numGateways = 0, i = 0, x = 0, y = 0, plr;
+	float cam[3];
+	const char *definition = "testdata/tagfile_map.def";
+
+	// find the number of non water gateways
+	for (psCurrGate = gwGetGateways(); psCurrGate; psCurrGate = psCurrGate->psNext)
+	{
+		if (!(psCurrGate->flags & GWR_WATERLINK))
+		{
+			numGateways += 1;
+		}
+	}
+
+	if (!tagOpenWrite(definition, pFileName))
+	{
+		debug(LOG_ERROR, "mapSaveTagged: Failed to create savegame %s", pFileName);
+		return FALSE;
+	}
+	debug(LOG_MAP, "Creating tagged savegame %s with definition %s:", pFileName, definition);
+
+	tagWriteEnter(0x03, 1); // map info group
+	tagWrite(0x01, mapWidth);
+	tagWrite(0x02, mapHeight);
+	tagWriteLeave(0x03);
+
+	tagWriteEnter(0x04, 1); // camera info group
+	cam[0] = player.p.x;
+	cam[1] = player.p.y;
+	cam[2] = player.p.z; /* Transform position to float */
+	tagWritefv(0x01, 3, cam);
+	cam[0] = player.r.x;
+	cam[1] = player.r.y;
+	cam[2] = player.r.z; /* Transform rotation to float */
+	tagWritefv(0x02, 3, cam);
+	debug(LOG_MAP, " * Writing player position(%d, %d, %d) and rotation(%d, %d, %d)",
+	      (int)player.p.x, (int)player.p.y, (int)player.p.z, (int)player.r.x,
+	      (int)player.r.y, (int)player.r.z);
+	tagWriteLeave(0x04);
+
+	tagWriteEnter(0x05, _TEX_INDEX - 1); // texture group
+	for (i = 0; i < _TEX_INDEX - 1; i++)
+	{
+		tagWriteString(0x01, _TEX_PAGE[i].name);
+		tagWriteSeparator(); // add repeating group separator
+	}
+	debug(LOG_MAP, " * Writing info about %d texture pages", (int)_TEX_INDEX - 1);
+	tagWriteLeave(0x05);
+
+	tagWriteEnter(0x0a, mapWidth * mapHeight); // tile group
+	psTile = GetCurrentMap();
+	for (i = 0, x = 0, y = 0; i < mapWidth * mapHeight; i++)
+	{
+		tagWrite(0x01, TERRAIN_TYPE(psTile));
+		tagWrite(0x02, psTile->texture & TILE_NUMMASK);
+		tagWrite(0x03, TRI_FLIPPED(psTile));
+		tagWrite(0x04, psTile->texture & TILE_XFLIP);
+		tagWrite(0x05, psTile->texture & TILE_YFLIP);
+		tagWrite(0x06, TILE_IS_NOTBLOCKING(psTile));
+		tagWrite(0x07, !TILE_DRAW(psTile));
+		tagWrite(0x08, psTile->height); // should multiply by ELEVATION_SCALE? If so, use map_TileHeight()
+
+		psTile++;
+		x++;
+		if (x == mapWidth)
+		{
+			x = 0; y++;
+		}
+		tagWriteSeparator();
+	}
+	debug(LOG_MAP, " * Writing info about %d tiles", (int)mapWidth * mapHeight);
+	tagWriteLeave(0x0a);
+
+	tagWriteEnter(0x0b, numGateways); // gateway group
+	for (psCurrGate = gwGetGateways(); psCurrGate; psCurrGate = psCurrGate->psNext)
+	{
+		if (!(psCurrGate->flags & GWR_WATERLINK))
+		{
+			uint16_t p[4];
+
+			p[0] = psCurrGate->x1;
+			p[1] = psCurrGate->y1;
+			p[2] = psCurrGate->x2;
+			p[3] = psCurrGate->y2;
+			tagWrite16v(0x01, 4, p);
+			tagWriteSeparator();
+		}
+	}
+	debug(LOG_MAP, " * Writing info about %d gateways", (int)numGateways);
+	tagWriteLeave(0x0b);
+
+	tagWriteEnter(0x0c, MAX_TILE_TEXTURES); // terrain type <=> texture mapping group
+	for (i = 0; i < MAX_TILE_TEXTURES; i++)
+        {
+                tagWrite(0x01, terrainTypes[i]);
+		tagWriteSeparator();
+        }
+	debug(LOG_MAP, " * Writing info about %d textures' type", (int)MAX_TILE_TEXTURES);
+	tagWriteLeave(0x0c);
+
+	tagWriteEnter(0x0d, MAX_PLAYERS); // player info group
+	for (plr = 0; plr < MAX_PLAYERS; plr++)
+	{
+		RESEARCH *psResearch = asResearch;
+		STRUCTURE_STATS *psStructStats = asStructureStats;
+		FLAG_POSITION *psFlag;
+		STRUCTURE *psStruct;
+		FLAG_POSITION *flagList[NUM_FLAG_TYPES * MAX_FACTORY];
+
+		tagWriteEnter(0x01, numResearch); // research group
+		for (i = 0; i < numResearch; i++, psResearch++)
+		{
+			tagWrite(0x01, IsResearchPossible(&asPlayerResList[plr][i]));
+			tagWrite(0x02, asPlayerResList[plr][i].ResearchStatus & RESBITS);
+			tagWrite(0x03, asPlayerResList[plr][i].currentPoints);
+			tagWriteSeparator();
+		}
+		tagWriteLeave(0x01);
+
+		tagWriteEnter(0x02, numStructureStats); // structure limits group
+		for (i = 0; i < numStructureStats; i++, psStructStats++)
+		{
+			tagWriteString(0x01, psStructStats->pName);
+			tagWrite(0x02, asStructLimits[plr][i].limit);
+			tagWriteSeparator();
+		}
+		tagWriteLeave(0x02);
+
+		// count and list flags in list
+		for (i = 0, psFlag = apsFlagPosLists[plr]; psFlag != NULL; psFlag = psFlag->psNext)
+		{
+			flagList[i] = psFlag;
+			i++;
+		}
+		y = i; // remember separation point between registered and unregistered flags
+		// count flags not in list (commanders)
+		for (psStruct = apsStructLists[plr]; psStruct != NULL; psStruct = psStruct->psNext)
+		{
+			if (psStruct->pFunctionality
+			    && (psStruct->pStructureType->type == REF_FACTORY
+			        || psStruct->pStructureType->type == REF_CYBORG_FACTORY
+			        || psStruct->pStructureType->type == REF_VTOL_FACTORY))
+			{
+				FACTORY *psFactory = ((FACTORY *)psStruct->pFunctionality);
+
+				if (psFactory->psCommander && psFactory->psAssemblyPoint != NULL)
+				{
+					flagList[i] = psFactory->psAssemblyPoint;
+					i++;
+				}
+			}
+		}
+		tagWriteEnter(0x03, i); // flag group
+		for (x = 0; x < i; x++)
+		{
+			uint16_t p[3];
+
+			tagWrite(0x01, flagList[x]->type);
+			tagWrite(0x02, flagList[x]->frameNumber);
+			p[0] = flagList[x]->screenX;
+			p[1] = flagList[x]->screenY;
+			p[2] = flagList[x]->screenR;
+			tagWrite16v(0x03, 3, p);
+			tagWrite(0x04, flagList[x]->player);
+			tagWriteBool(0x05, flagList[x]->selected);
+			p[0] = flagList[x]->coords.x;
+			p[1] = flagList[x]->coords.y;
+			p[2] = flagList[x]->coords.z;
+			tagWrite16v(0x06, 3, p);
+			tagWrite(0x07, flagList[x]->factoryInc);
+			tagWrite(0x08, flagList[x]->factoryType);
+			if (flagList[x]->factoryType == REPAIR_FLAG)
+			{
+				tagWrite(0x09, getRepairIdFromFlag(flagList[x]));
+			}
+			if (x >= y)
+			{
+				tagWriteBool(0x0a, 1); // do not register this flag in flag list
+			}
+		}
+		tagWriteLeave(0x03);
+
+		tagWriteSeparator();
+	}
+	debug(LOG_MAP, " * Writing info about %d players", (int)MAX_PLAYERS);
+	tagWriteLeave(0x0d);
+
+	tagWriteEnter(0x0e, NUM_FACTORY_TYPES); // production runs group
+	for (i = 0; i < NUM_FACTORY_TYPES; i++)
+	{
+		int factoryNum, runNum;
+
+		tagWriteEnter(0x01, MAX_FACTORY);
+		for (factoryNum = 0; factoryNum < MAX_FACTORY; factoryNum++)
+		{
+			tagWriteEnter(0x01, MAX_PROD_RUN);
+			for (runNum = 0; runNum < MAX_PROD_RUN; runNum++)
+			{
+				PRODUCTION_RUN *psCurrentProd = &asProductionRun[i][factoryNum][runNum];
+
+				tagWrite(0x01, psCurrentProd->quantity);
+				tagWrite(0x02, psCurrentProd->built);
+				if (psCurrentProd->psTemplate != NULL)
+                                {
+					tagWrite(0x03, psCurrentProd->psTemplate->multiPlayerID);
+                                }
+				tagWriteSeparator();
+			}
+			tagWriteLeave(0x01);
+			tagWriteSeparator();
+		}
+		tagWriteLeave(0x01);
+		tagWriteSeparator();
+	}
+	tagWriteLeave(0x0e);
+
+	tagClose();
+	return TRUE;
+}
+
+BOOL mapLoadTagged(char *pFileName)
+{
+	int count, i, mapx, mapy;
+	float cam[3];
+	const char *definition = "testdata/tagfile_map.def";
+
+	if (!tagOpenRead(definition, pFileName))
+	{
+		debug(LOG_ERROR, "mapLoadTagged: Failed to open savegame %s", pFileName);
+		return FALSE;
+	}
+	debug(LOG_MAP, "Reading tagged savegame %s with definition %s:", pFileName, definition);
+
+	tagReadEnter(0x03); // map info group
+	mapx = tagRead(0x01);
+	mapy = tagRead(0x02);
+	debug(LOG_MAP, " * Map size: %d, %d", (int)mapx, (int)mapy);
+	tagReadLeave(0x03);
+
+	tagReadEnter(0x04); // camera info group
+	tagReadfv(0x01, 3, cam); debug(LOG_MAP, " * Camera position: %f, %f, %f", cam[0], cam[1], cam[2]);
+	tagReadfv(0x02, 3, cam); debug(LOG_MAP, " * Camera rotation: %f, %f, %f", cam[0], cam[1], cam[2]);
+	tagReadLeave(0x04);
+
+	count = tagReadEnter(0x05); // texture group
+	for (i = 0; i < count; i++)
+	{
+		char mybuf[200];
+
+		tagReadString(0x01, 200, mybuf);
+		debug(LOG_MAP, " * Texture[%d]: %s", i, mybuf);
+		tagReadNext();
+	}
+	tagReadLeave(0x05);
+
+	tagClose();
+	return TRUE;
+}
 
 /* Save the map data */
 BOOL mapSave(char **ppFileData, UDWORD *pFileSize)

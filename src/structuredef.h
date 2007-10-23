@@ -91,11 +91,6 @@ typedef struct _flag_position
 {
 	POSITION_OBJ;
 	Vector3i		coords;							//the world coords of the Position
-	//UDWORD		frameNumber;					//when the Position was last drawn
-	//UDWORD		screenX, screenY, screenR;		//screen coords and radius of Position imd
-	//UDWORD		player;							//which player the Position belongs to
-	//BOOL		selected;						//flag to indicate whether the
-												//Position is to be highlighted
 	UBYTE		factoryInc;						//indicates whether the first, second etc factory
 	UBYTE		factoryType;					//indicates whether standard, cyborg or vtol factory
 //	UBYTE		factorySub;						//sub value. needed to order production points.

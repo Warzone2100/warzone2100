@@ -201,6 +201,9 @@ extern BOOL mapLoad(char *pFileData, UDWORD fileSize);
 /* Save the map data */
 extern BOOL mapSave(char **ppFileData, UDWORD *pFileSize);
 
+/* New savegame format */
+BOOL mapSaveTagged(char *pFileName);
+BOOL mapLoadTagged(char *pFileName);
 
 /* Return a pointer to the tile structure at x,y */
 static inline WZ_DECL_PURE MAPTILE *mapTile(UDWORD x, UDWORD y)

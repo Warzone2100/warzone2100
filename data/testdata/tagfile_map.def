@@ -38,4 +38,29 @@
     02 US 01 0		# Research status
     03 US 01 0		# Current research points
     FF EN 00 -
+  02 GR 00 -		# STRUCTURE LIMITS GROUP
+    01 ST 80 -		# Name of structure
+    02 US 01 255	# Limit
+    FF EN 00 -
+  03 GR 00 -		# FLAGS GROUP
+    01 US 01 -		# Type
+    02 US 01 0		# Frame number last drawn
+    03 US 03 -		# Screen coordinates and radius (x, y, r)
+    04 US 04 -		# Player that the position belongs to
+    05 BO 05 0		# Is position selected by the player?
+    06 US 03 -		# World coordinates (x, y, z)
+    07 US 01 0		# Factory index
+    08 US 01 0		# Factory type
+    09 US 01 -		# Repair ID - only set if factory type is REPAIR_FLAG
+    0a BO 01 0		# Do not register flag in flag list (commanders)
+    FF EN 00 -
+  FF EN 00 -
+0e GR 00 -		# PRODUCTION RUNS GROUP (factory types)
+  01 GR 00 -		# Number of factories
+    01 GR 00 -		# Production runs for each factory
+      01 US 01 0	# Quantity
+      02 US 01 0	# Built
+      03 US 01 4294967295	# Template multiplayerID (UDWORD_MAX default)
+      FF EN 00 -
+    FF EN 00 -
   FF EN 00 -
