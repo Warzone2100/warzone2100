@@ -248,6 +248,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\lib\framework\tagfile.c"
+					>
+				</File>
+				<File
 					RelativePath=".\strres_lexer.lex.c"
 					>
 				</File>
@@ -1278,6 +1282,10 @@
 			</File>
 			<File
 				RelativePath="..\lib\framework\frameresource.h"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\framework\tagfile.h"
 				>
 			</File>
 			<File
