@@ -24,7 +24,7 @@
 
 #ifndef __game_io_h
 #define __game_io_h
-#include "SDL.h"
+#include <SDL/SDL.h>
 
 /* Simple implementation of singleclick doubleclick holdbutton via SDL */
 

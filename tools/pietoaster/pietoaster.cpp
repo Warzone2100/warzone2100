@@ -26,8 +26,8 @@
 #include "stdio.h"
 #include "string.h"
 
-#include "SDL.h"
-#include "AntTweakBar.h"
+#include <SDL/SDL.h>
+#include <AntTweakBar.h>
 
 #ifdef _WIN32
 	#include <windows.h>	// required by gl.h

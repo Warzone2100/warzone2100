@@ -22,7 +22,6 @@
 #define _pie_types_h
 
 #include "base_types.h"
-#include "vector_types.h"
 
 typedef struct Vector3f { float x, y, z; } Vector3f;
 typedef struct Vector2f { float x, y; } Vector2f;

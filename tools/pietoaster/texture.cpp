@@ -18,7 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#include <SDL_opengl.h>
+#include <SDL/SDL_opengl.h>
 #ifdef __APPLE__
 #include <opengl/glu.h>
 #else

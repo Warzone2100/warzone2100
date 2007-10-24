@@ -25,8 +25,8 @@
 #ifndef _base_types_h
 #define _base_types_h
 
-#include "SDL.h"
-#include "math.h"
+#include <SDL/SDL.h>
+#include <cmath>
 
 #ifdef _MSC_VER
 #define _CRT_SECURE_NO_DEPRECATE

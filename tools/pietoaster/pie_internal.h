@@ -30,7 +30,7 @@
 #include "imdloader.h"
 #include "texture.h"
 
-#include "AntTweakBar.h"
+#include <AntTweakBar.h>
 
 extern TwType g_pieVertexType;
 extern TwType g_pieVector2fType;

@@ -29,8 +29,8 @@
 #endif
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include <sdl_opengl.h>
-#include <SDL_image.h>
+#include <SDL/SDL_opengl.h>
+#include <SDL/SDL_image.h>
 
 #include "texture.h"
 

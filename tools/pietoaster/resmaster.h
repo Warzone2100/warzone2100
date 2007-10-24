@@ -40,7 +40,7 @@
 
 #include "texture_mapper.h"
 
-#include "AntTweakBar.h"
+#include <AntTweakBar.h>
 
 
 class CResMaster {
