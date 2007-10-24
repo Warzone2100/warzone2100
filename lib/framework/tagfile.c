@@ -209,9 +209,17 @@ static bool init(const char *definition, const char *datafile, bool write)
 	
 	fsize = PHYSFS_fileLength(fp);
 	assert(fsize > 0);
+
 	buffer = bufptr = malloc(fsize + 1);
+	if (!buffer || !bufptr)
+	{
+		debug(LOG_ERROR, __FILE__ ":init(): Out of memory");
+		abort();
+		return false;
+	}
+
 	bufptr[fsize] = '\0'; // ensure it is zero terminated
-	assert(*bufptr != 0);
+
  	fsize2 = PHYSFS_read(fp, bufptr, 1, fsize);
 	if (fsize != fsize2)
 	{
