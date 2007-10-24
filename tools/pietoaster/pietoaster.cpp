@@ -206,6 +206,7 @@ int main(int argc, char *argv[])
 	bool bQuit = false;
 	const char path[] = "./";
 
+	PHYSFS_init(argv[0]);
 
 	PHYSFS_setWriteDir(path);
 	if (!PHYSFS_addToSearchPath( PHYSFS_getWriteDir(), 0 ))
