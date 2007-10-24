@@ -211,8 +211,10 @@ void audp_error(char *pMessage,...)
 	va_list	args;
 
 	va_start(args, pMessage);
-	vsprintf(aTxtBuf, pMessage, args);
+	vsnprintf(aTxtBuf, sizeof(aTxtBuf), pMessage, args);
 	va_end(args);
+	// Guarantee to nul-terminate
+	aTxtBuf[sizeof(aTxtBuf) - 1] = '\0';
 
 	parseGetErrorData( &line, &pText );
 	debug( LOG_ERROR, "RES file parse error:\n%s at line %d\nToken: %d, Text: '%s'\n", aTxtBuf, line, audp_char, pText );

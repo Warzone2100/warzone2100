@@ -477,19 +477,22 @@ void pie_LoadBackDrop(SCREENTYPE screenType)
 	{
 	case SCREEN_RANDOMBDROP:
 		if ( rand()%2 == 0 )
-			sprintf(backd,"texpages/bdrops/0%i-bdrop.png", rand()%7); // Range: 0-6
+			snprintf(backd, sizeof(backd), "texpages/bdrops/0%i-bdrop.png", rand()%7); // Range: 0-6
 		else
-			sprintf(backd,"texpages/bdrops/wzlogo_%i.png", rand()%5); // Range: 0-4
+			snprintf(backd, sizeof(backd), "texpages/bdrops/wzlogo_%i.png", rand()%5); // Range: 0-4
 		break;
 	case SCREEN_MISSIONEND:
-		sprintf(backd,"texpages/bdrops/missionend.png");
+		snprintf(backd, sizeof(backd), "texpages/bdrops/missionend.png");
 		break;
 
 	case SCREEN_CREDITS:
 	default:
-		sprintf(backd,"texpages/bdrops/credits.png");
+		snprintf(backd, sizeof(backd), "texpages/bdrops/credits.png");
 		break;
 	}
+
+	// Guarantee to nul-terminate
+	backd[sizeof(backd) - 1] = '\0';
 
 	screen_SetBackDropFromFile(backd);
 }

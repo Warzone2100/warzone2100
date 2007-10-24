@@ -82,7 +82,9 @@ static PHYSFS_file* pReadFile = NULL;
 
 	/* Match text values */
 [a-zA-Z][-0-9_a-zA-Z]*		{
-								strcpy(aText[currText], strres_text);
+								strncpy(aText[currText], strres_text, sizeof(aText[currText]));
+								// Guarantee to nul-terminate
+								aText[currText][sizeof(aText[currText]) - 1] = '\0';
 								strres_lval.sval = aText[currText];
 								currText = (currText + 1) % TEXT_BUFFERS;
 								return TEXT_T;
@@ -93,7 +95,9 @@ static PHYSFS_file* pReadFile = NULL;
 <QUOTE>\"					{ BEGIN 0; }
 <QUOTE>\n					{ strres_error("Unexpected end of line in string"); }
 <QUOTE>[^\"\n]*				{
-								strcpy(aText[currText], strres_text);
+								strncpy(aText[currText], strres_text, sizeof(aText[currText]));
+								// Guarantee to nul-terminate
+								aText[currText][sizeof(aText[currText]) - 1] = '\0';
 								strres_lval.sval = aText[currText];
 								currText = (currText + 1) % TEXT_BUFFERS;
 								return QTEXT_T;

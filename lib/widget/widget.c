@@ -1128,20 +1128,20 @@ const char *widgGetString(W_SCREEN *psScreen, UDWORD id)
 				aStringRetBuffer[0] = '\0';
 				break;
 			case WIDG_LABEL:
-				strcpy(aStringRetBuffer, ((W_LABEL *)psWidget)->aText);
+				strncpy(aStringRetBuffer, ((W_LABEL *)psWidget)->aText, sizeof(aStringRetBuffer));
 				break;
 			case WIDG_BUTTON:
 				if (((W_BUTTON *)psWidget)->pText)
 				{
-					strcpy(aStringRetBuffer, ((W_BUTTON *)psWidget)->pText);
+					strncpy(aStringRetBuffer, ((W_BUTTON *)psWidget)->pText, sizeof(aStringRetBuffer));
 				}
 				else
 				{
-					aStringRetBuffer[0]=0;
+					aStringRetBuffer[0] = '\0';
 				}
 				break;
 			case WIDG_EDITBOX:
-				strcpy(aStringRetBuffer, ((W_EDITBOX *)psWidget)->aText);
+				strncpy(aStringRetBuffer, ((W_EDITBOX *)psWidget)->aText, sizeof(aStringRetBuffer));
 				break;
 			case WIDG_BARGRAPH:
 				ASSERT( FALSE, "widgGetString: Bar Graphs do not have a string" );
@@ -1156,6 +1156,9 @@ const char *widgGetString(W_SCREEN *psScreen, UDWORD id)
 				aStringRetBuffer[0]=0;
 				break;
 		}
+
+		// Guarantee to nul-terminate
+		aStringRetBuffer[sizeof(aStringRetBuffer) - 1]= '\0';
 	}
 	else
 	{

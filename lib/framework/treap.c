@@ -44,14 +44,13 @@ void treapSetCallPos(const char *pFileName, SDWORD lineNumber)
 {
 	cLine = lineNumber;
 
-	pCFile = (char *)malloc(strlen(pFileName) + 1);
-	if (pCFile)
+	pCFile = strdup(pFileName);
+	if (pCFile == NULL)
 	{
-		strcpy(pCFile, pFileName);
-	}
-	else
-	{
+		debug(LOG_ERROR, "treapSetCallPos: Out of memory!");
+		abort();
 		pCFile = pCFileNone;
+		return;
 	}
 }
 

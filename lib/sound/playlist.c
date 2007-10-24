@@ -72,7 +72,9 @@ char PlayList_Read(const char* path)
 	char buffer[BUFFER_SIZE], ByteBuf = '\0';
 	unsigned int ByteBufPos = 0;
 
-	sprintf(buffer, "%s/music.wpl", path);
+	snprintf(buffer, sizeof(buffer), "%s/music.wpl", path);
+	// Guarantee to nul-terminate
+	buffer[sizeof(buffer) - 1] = '\0';
 
 	f = PHYSFS_openRead(buffer);
 
@@ -120,13 +122,33 @@ char PlayList_Read(const char* path)
 			   && strlen(filename) != 0) {
 			char* filepath;
 
-			if (path_to_music == NULL) {
-				filepath = (char*)malloc(strlen(filename)+1);
-				sprintf(filepath, "%s", filename);
-			} else {
-				filepath = (char*)malloc(  strlen(filename)
-						  + strlen(path_to_music)+2);
-				sprintf(filepath, "%s/%s", path_to_music, filename);
+			if (path_to_music == NULL)
+			{
+				filepath = strdup(filename);
+				if (filename == NULL)
+				{
+					debug(LOG_ERROR, "PlayList_Read: Out of memory!");
+					abort();
+					return 1;
+				}
+			}
+			else
+			{
+				// Determine the length of the string we're about to construct
+				size_t path_length = strlen(path_to_music) + 1 + strlen(path_to_music) + 2;
+
+				// Allocate memory for our string
+				filepath = (char*)malloc(path_length);
+				if (filepath == NULL)
+				{
+					debug(LOG_ERROR, "PlayList_Read: Out of memory!");
+					abort();
+					return 1;
+				}
+
+				snprintf(filepath, path_length, "%s/%s", path_to_music, filename);
+				// Guarantee to null terminate
+				filepath[path_length - 1] = '\0';
 			}
 			debug( LOG_SOUND, "  adding song %s\n", filepath );
 

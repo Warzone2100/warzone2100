@@ -721,25 +721,33 @@ BOOL stackBinaryOp(OPCODE opcode)
 			switch (psV1->type)
 			{
 			case VAL_INT:		//first value isn't string, but can be converted to string
-				sprintf(tempstr1,"%d",psV1->v.ival);	//int->string
+				snprintf(tempstr1, sizeof(tempstr1), "%d", psV1->v.ival);	//int->string
+				// Guarantee to nul-terminate
+				tempstr1[sizeof(tempstr1) - 1] = '\0';
 				psV1->type = VAL_STRING;			//Mark as string
 				psV1->v.sval =  (char*)malloc(MAXSTRLEN);				//allocate space for the string, since the result (string) of concatenation will be saved here
 				break;
 
 			case VAL_BOOL:
-				sprintf(tempstr1,"%d",psV1->v.bval);	//bool->string
+				snprintf(tempstr1, sizeof(tempstr1), "%d",psV1->v.bval);	//bool->string
+				// Guarantee to nul-terminate
+				tempstr1[sizeof(tempstr1) - 1] = '\0';
 				psV1->type = VAL_STRING;			//Mark as string
 				psV1->v.sval =  (char*)malloc(MAXSTRLEN);				//allocate space for the string, since the result (string) of concatenation will be saved here
 				break;
 
 			case VAL_FLOAT:
-				sprintf(tempstr1,"%f",psV1->v.fval);	//float->string
+				snprintf(tempstr1, sizeof(tempstr1), "%f", psV1->v.fval);	//float->string
+				// Guarantee to nul-terminate
+				tempstr1[sizeof(tempstr1) - 1] = '\0';
 				psV1->type = VAL_STRING;			//Mark as string
 				psV1->v.sval =  (char*)malloc(MAXSTRLEN);				//allocate space for the string, since the result (string) of concatenation will be saved here
 				break;
 
 			case VAL_STRING:
-				strcpy(tempstr1,psV1->v.sval);
+				strncpy(tempstr1, psV1->v.sval, sizeof(tempstr1));
+				// Guarantee to nul-terminate
+				tempstr1[sizeof(tempstr1) - 1] = '\0';
 				break;
 
 			default:
@@ -752,19 +760,27 @@ BOOL stackBinaryOp(OPCODE opcode)
 			switch (psV2->type)
 			{
 			case VAL_INT:
-				sprintf(tempstr2,"%d",psV2->v.ival);		//int->string
+				snprintf(tempstr2, sizeof(tempstr2), "%d", psV2->v.ival);		//int->string
+				// Guarantee to nul-terminate
+				tempstr2[sizeof(tempstr2) - 1] = '\0';
 				break;
 
 			case VAL_BOOL:
-				sprintf(tempstr2,"%d",psV2->v.bval);		//bool->string
+				snprintf(tempstr2, sizeof(tempstr2), "%d", psV2->v.bval);		//bool->string
+				// Guarantee to nul-terminate
+				tempstr2[sizeof(tempstr2) - 1] = '\0';
 				break;
 
 			case VAL_FLOAT:
-				sprintf(tempstr2,"%f",psV2->v.fval);		//float->string
+				snprintf(tempstr2, sizeof(tempstr2), "%f", psV2->v.fval);		//float->string
+				// Guarantee to nul-terminate
+				tempstr2[sizeof(tempstr2) - 1] = '\0';
 				break;
 
 			case VAL_STRING:
-				strcpy(tempstr2,psV2->v.sval);
+				strncpy(tempstr2, psV2->v.sval, sizeof(tempstr2));
+				// Guarantee to nul-terminate
+				tempstr2[sizeof(tempstr2) - 1] = '\0';
 				break;
 
 			default:
@@ -773,7 +789,10 @@ BOOL stackBinaryOp(OPCODE opcode)
 				break;
 			}
 
-			strcat(tempstr1,tempstr2);
+			strncat(tempstr1, tempstr2, sizeof(tempstr1));
+			// Guarantee to nul-terminate
+			tempstr1[sizeof(tempstr1) - 1] = '\0';
+
 			strcpy(psV1->v.sval,tempstr1);		//Assign
 		}
 		break;

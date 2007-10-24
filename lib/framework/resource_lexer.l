@@ -78,7 +78,9 @@ file						{ return FILETOKEN; }
 
 	/* Match text values */
 [a-zA-Z][-0-9_a-zA-Z]*		{
-								strcpy(aText[currText], res_text);
+								strncpy(aText[currText], res_text, sizeof(aText[currText]));
+								// Guarantee to nul-terminate
+								aText[currText][sizeof(aText[currText]) - 1] = '\0';
 								res_lval.sval = aText[currText];
 								currText = (currText + 1) % TEXT_BUFFERS;
 								return TEXT_T;
@@ -89,7 +91,9 @@ file						{ return FILETOKEN; }
 <QUOTE>\"					{ BEGIN 0; }
 <QUOTE>\n					{ res_error("Unexpected end of line in string"); }
 <QUOTE>[^\"\n]*				{
-								strcpy(aText[currText], res_text);
+								strncpy(aText[currText], res_text, sizeof(aText[currText]));
+								// Guarantee to nul-terminate
+								aText[currText][sizeof(aText[currText]) - 1] = '\0';
 								res_lval.sval = aText[currText];
 								currText = (currText + 1) % TEXT_BUFFERS;
 								return QTEXT_T;

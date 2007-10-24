@@ -747,7 +747,9 @@ NOT						return _NOT;
 								{
 									RULE( "'%s' is an ident", scr_text);
 
-									strcpy(aText[currText], scr_text);
+									strncpy(aText[currText], scr_text, sizeof(aText[currText]));
+									// Guarantee to nul-terminate
+									aText[currText][sizeof(aText[currText]) - 1] = '\0';
 									scr_lval.sval = aText[currText];
 									currText = (currText + 1) % TEXT_BUFFERS;
 									return IDENT;
@@ -763,7 +765,9 @@ NOT						return _NOT;
 \"							{ BEGIN (QUOTE); }
 <QUOTE>\"					{ BEGIN (INITIAL); }
 <QUOTE>[^\"\n]*				{
-								strcpy(aText[currText], scr_text);
+								strncpy(aText[currText], scr_text, sizeof(aText[currText]));
+								// Guarantee to nul-terminate
+								aText[currText][sizeof(aText[currText]) - 1] = '\0';
 								scr_lval.sval = aText[currText];
 								currText = (currText + 1) % TEXT_BUFFERS;
 								//debug(LOG_SCRIPT, "%s is QTEXT", scr_text);

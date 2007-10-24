@@ -230,7 +230,9 @@ const char *eventGetTriggerID(SCRIPT_CODE *psCode, SDWORD trigger)
 
 	if (psCode->psDebug == NULL || type != TR_CODE)
 	{
-		sprintf(aIDNum, "%d (%s)", trigger, pTrigType);
+		snprintf(aIDNum, sizeof(aIDNum), "%d (%s)", trigger, pTrigType);
+		// Guarantee to nul-terminate
+		aIDNum[sizeof(aIDNum) - 1] = '\0';
 	}
 	else
 	{
@@ -243,7 +245,9 @@ const char *eventGetTriggerID(SCRIPT_CODE *psCode, SDWORD trigger)
 				break;
 			}
 		}
-		sprintf(aIDNum, "%s (%s)", pID, pTrigType);
+		snprintf(aIDNum, sizeof(aIDNum), "%s (%s)", pID, pTrigType);
+		// Guarantee to nul-terminate
+		aIDNum[sizeof(aIDNum) - 1] = '\0';
 	}
 
 	return aIDNum;
@@ -259,7 +263,10 @@ const char *eventGetEventID(SCRIPT_CODE *psCode, SDWORD event)
 	if ((psCode->psDebug == NULL) ||
 		(event < 0) || (event > psCode->numEvents))
 	{
-		sprintf(aIDNum, "%d", event);
+		snprintf(aIDNum, sizeof(aIDNum), "%d", event);
+		// Guarantee to nul-terminate
+		aIDNum[sizeof(aIDNum) - 1] = '\0';
+
 		return aIDNum;
 	}
 

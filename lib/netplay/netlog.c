@@ -121,7 +121,9 @@ BOOL NETstartLogging(void)
 		      PHYSFS_getLastError());
 		return FALSE;
 	}
-	sprintf( buf, "NETPLAY log: %s\n", asctime( newtime ) );
+	snprintf(buf, sizeof(buf), "NETPLAY log: %s\n", asctime(newtime));
+	// Guarantee to nul-terminate
+	buf[sizeof(buf) - 1] = '\0';
 	PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
 	return TRUE;
 }
@@ -134,8 +136,10 @@ BOOL NETstopLogging(void)
 	/* Output stats */
 	for (i = 0; i < NET_MAX; i++)
 	{
-		sprintf(buf, "%s: received %u times, %u bytes; sent %u times, %u bytes\n", packetname[i],
+		snprintf(buf, sizeof(buf), "%s: received %u times, %u bytes; sent %u times, %u bytes\n", packetname[i],
 			packetcount[0][i], packetsize[0][i], packetcount[1][i], packetsize[1][i]);
+		// Guarantee to nul-terminate
+		buf[sizeof(buf) - 1] = '\0';
 		PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
 	}
 
@@ -160,6 +164,7 @@ void NETlogPacket(NETMSG *msg, BOOL received)
 
 BOOL NETlogEntry(const char *str,UDWORD a,UDWORD b)
 {
+	static const char star_line[] = "************************************************************\n";
 	static UDWORD lastframe = 0;
 	UDWORD frame= frameGetFrameNumber();
 	time_t aclock;
@@ -179,125 +184,32 @@ BOOL NETlogEntry(const char *str,UDWORD a,UDWORD b)
 	// check to see if a new frame.
 	if(frame != lastframe)
 	{
+		static const char dash_line[] = "-----------------------------------------------------------\n";
+
 		lastframe = frame;
-		sprintf( buf, "-----------------------------------------------------------\n" );
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
+
+		PHYSFS_write(pFileHandle, dash_line, strlen(dash_line), 1);
 	}
 
-	switch(a)		// replace common msgs with txt descriptions
-	{
-	case 1:
-		sprintf( buf, "%s \t: NET_DROIDINFO  \t:%d\t\t%s",str,b,asctime( newtime ));
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		break;
-	case 2:
-		sprintf( buf, "%s \t: NET_DROIDDEST  \t:%d\t\t%s",str,b,asctime( newtime ));
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		break;
-	case 3:
-		sprintf( buf, "%s \t: NET_DROIDMOVE  \t:%d\t\t%s",str,b,asctime( newtime ));
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		break;
-	case 4:
-		sprintf( buf, "%s \t: NET_GROUPORDER  \t:%d\t\t%s",str,b,asctime( newtime ));
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		break;
-	case 8:
-		sprintf( buf, "%s \t: NET_PING \t:%d\t\t%s",str,b,asctime( newtime ));
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		break;
-	case 9:
-		sprintf( buf, "%s \t: NET_CHECK_DROID \t:%d\t\t%s",str,b,asctime( newtime ));
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		break;
-	case 10:
-		sprintf( buf, "%s \t: NET_CHECK_STRUCT \t:%d\t\t%s",str,b,asctime( newtime ));
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		break;
-	case 11:
-		sprintf( buf, "%s \t: NET_CHECK_POWER \t:%d\t\t%s",str,b,asctime( newtime ));
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		break;
-	case 13:
-		sprintf( buf, "%s \t: NET_BUILD \t:%d\t\t%s",str,b,asctime( newtime ));
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		break;
-	case 15:
-		sprintf( buf, "%s \t: NET_BUILDFINISHED \t:%d\t\t%s",str,b,asctime( newtime ));
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		break;
-	case 17:
-		sprintf( buf, "%s \t: NET_TXTMSG \t:%d\t\t%s",str,b,asctime( newtime ));
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		break;
-	case 18:
-		sprintf( buf, "************************************************************\n");
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		sprintf( buf, "%s \t: NET_LEAVING \t:%d\t\t%s",str,b,asctime( newtime ));
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		sprintf( buf, "************************************************************\n");
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		break;
-	case 19:
-		sprintf( buf, "%s \t: NET_REQUESTDROID \t:%d\t\t%s",str,b,asctime( newtime ));
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		break;
-	case 23:
-		sprintf( buf, "%s \t: NET_WHOLEDROID \t:%d\t\t%s",str,b,asctime( newtime ));
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		break;
-	case 22:
-		sprintf( buf, "%s \t: NET_STRUCT (Whole) \t:%d\t\t%s",str,b,asctime( newtime ));
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		break;
-	case 25:
-		sprintf( buf, "%s \t: NET_PLAYERRESPONDING \t:%d\t\t%s",str,b,asctime( newtime ));
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		break;
-	case 26:
-		sprintf( buf, "%s \t: NET_OPTIONS \t:%d\t\t%s",str,b,asctime( newtime ));
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		break;
-	case 27:
-		sprintf( buf, "%s \t: NET_WAYPOINT \t:%d\t\t%s",str,b,asctime( newtime ));
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		break;
-	case 28:
-		sprintf( buf, "%s \t: NET_SECONDARY \t:%d\t\t%s",str,b,asctime( newtime ));
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		break;
-	case 29:
-		sprintf( buf, "%s \t: NET_FIREUP \t:%d\t\t%s",str,b,asctime( newtime ));
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		break;
-	case 34:
-		sprintf( buf, "%s \t: NET_ARTIFACTS \t:%d\t\t%s",str,b,asctime( newtime ));
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		break;
-	case 36:
-		sprintf( buf, "%s \t: NET_SCORESUBMIT \t:%d\t\t%s",str,b,asctime( newtime ));
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		break;
-	case 37:
-		sprintf( buf, "%s \t: NET_DESTROYXTRA \t:%d\t\t%s",str,b,asctime( newtime ));
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		break;
-	case 38:
-		sprintf( buf, "%s \t: NET_VTOL \t:%d\t\t%s",str,b,asctime( newtime ));
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		break;
-	case 39:
-		sprintf( buf, "%s \t: NET_VTOLREARM \t:%d\t\t%s",str,b,asctime( newtime ));
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		break;
+	if (a <= 51)
+		// replace common msgs with txt descriptions
+		snprintf(buf, sizeof(buf), "%s \t: %s \t:%d\t\t%s", str, packetname[a], b, asctime(newtime));
+	else
+		snprintf(buf, sizeof(buf), "%s \t:%d \t\t\t:%d\t\t%s", str, a, b, asctime(newtime));
 
-	default:
-		sprintf( buf, "%s \t:%d \t\t\t:%d\t\t%s",str,a,b,asctime( newtime ));
-		PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
-		break;
-	}
+	// Guarantee to nul-terminate
+	buf[sizeof(buf) - 1] = '\0';
+
+	if (a == 28) // NET_LEAVING
+		// Write a starry line above NET_LEAVING messages
+		PHYSFS_write(pFileHandle, star_line, strlen(star_line), 1);
+
+	PHYSFS_write(pFileHandle, buf, strlen( buf ), 1);
+
+	if (a == 28) // NET_LEAVING
+		// Write a starry line below NET_LEAVING messages
+		PHYSFS_write(pFileHandle, star_line, strlen(star_line), 1);
+
 	PHYSFS_flush(pFileHandle);
 	return TRUE;
 }
-
-// ////////////////////////////////////////////////////////////////////////

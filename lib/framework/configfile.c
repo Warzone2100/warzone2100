@@ -349,7 +349,10 @@ BOOL setWarzoneKeyNumeric( const char *pName, SDWORD val )
 	char	buf[32];
 	//~~~~~~~~~~~~
 
-	sprintf( buf, "%i", val );
+	snprintf(buf, sizeof(buf), "%i", val);
+	// Guarantee to nul-terminate
+	buf[sizeof(buf) - 1] = '\0';
+
 	registry_set_key( pName, buf );
 	return TRUE;
 }

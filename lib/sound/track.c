@@ -119,7 +119,7 @@ unsigned int sound_SetTrackVals(const char* fileName, BOOL loop, unsigned int vo
 
 	if (g_apTrack[trackID] != NULL)
 	{
-		debug(LOG_ERROR, "sound_SetTrackVals: track %i already set (filename: \"%s\"\n", trackID, g_apTrack[trackID]->pName);
+		debug(LOG_ERROR, "sound_SetTrackVals: track %i already set (filename: \"%s\"\n", trackID, g_apTrack[trackID]->fileName);
 		abort();
 
 		return 0;
@@ -181,7 +181,7 @@ void sound_CheckAllUnloaded( void )
 
 	for (currTrack = &g_apTrack[0]; currTrack != &g_apTrack[MAX_TRACKS]; ++currTrack)
 	{
-		ASSERT(*currTrack == NULL, "sound_CheckAllUnloaded: a track is not unloaded yet (%s); check audio.cfg for duplicate IDs", (*currTrack)->pName);
+		ASSERT(*currTrack == NULL, "sound_CheckAllUnloaded: a track is not unloaded yet (%s); check audio.cfg for duplicate IDs", (*currTrack)->fileName);
 	}
 }
 
@@ -273,7 +273,7 @@ const char *sound_GetTrackName( SDWORD iTrack )
 	}
 
 	ASSERT(g_apTrack[iTrack] != NULL, "sound_GetTrackName: unallocated track (id number: %u)", iTrack);
-	return g_apTrack[iTrack] ? g_apTrack[iTrack]->pName : "unallocated";
+	return g_apTrack[iTrack] ? g_apTrack[iTrack]->fileName : "unallocated";
 }
 
 //*

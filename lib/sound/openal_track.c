@@ -345,9 +345,13 @@ TRACK* sound_LoadTrackFromFile(const char *fileName)
 	// Initialize everyting (except for the filename) to zero
 	memset(pTrack, 0, sizeof(TRACK));
 
-	// Set filename pointer and copy the filename into struct
-	pTrack->pName = (char*)pTrack + sizeof(TRACK);
-	strcpy(pTrack->pName, GetLastResourceFilename());
+#if !defined(WZ_C99)
+	// Set filename pointer
+	pTrack->fileName = (const char*)pTrack + sizeof(TRACK);
+#endif
+
+	// Copy the filename into the struct
+	strcpy((char*)pTrack->fileName, GetLastResourceFilename());
 
 	// Now use sound_ReadTrackFromBuffer to decode the file's contents
 	pTrack = sound_DecodeOggVorbisTrack(pTrack, fileHandle);

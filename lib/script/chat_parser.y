@@ -706,7 +706,9 @@ BOOL chatLoad(char *pData, UDWORD size)
 	parseResult = chat_parse();
 
 	/* Remember last message we parsed */
-	strcpy(&(chat_msg.lastMessage[0]), pData);
+	strncpy(chat_msg.lastMessage, pData, sizeof(chat_msg.lastMessage));
+	// Guarantee to nul-terminate
+	chat_msg.lastMessage[sizeof(chat_msg.lastMessage) - 1] = '\0';
 
 	/* See if we were successfull parsing */
 	if (parseResult != 0)
@@ -727,7 +729,9 @@ void chat_error(const char *pMessage,...)
 
 	va_start(args, pMessage);
 
-	vsprintf(aTxtBuf, pMessage, args);
+	vsnprintf(aTxtBuf, sizeof(aTxtBuf), pMessage, args);
+	// Guarantee to nul-terminate
+	aTxtBuf[sizeof(aTxtBuf) - 1] = '\0';
 	chatGetErrorData(&line, &pText);
 	//debug(LOG_WARNING, "multiplayer message parse error: %s at line %d, token: %d, text: '%s'",
 	//      aTxtBuf, line, chat_char, pText);

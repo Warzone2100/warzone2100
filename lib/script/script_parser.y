@@ -706,7 +706,9 @@ void script_debug(const char *pFormat, ...)
 
 	va_start(pArgs, pFormat);
 
-	(void)vsprintf(buffer, pFormat, pArgs);
+	(void)vsnprintf(buffer, sizeof(buffer), pFormat, pArgs);
+	// Guarantee to nul-terminate
+	buffer[sizeof(buffer) - 1] = '\0';
 
 	debug(LOG_SCRIPT, buffer);
 }
@@ -747,7 +749,9 @@ static CODE_ERROR scriptCodeFunction(FUNC_SYMBOL	*psFSymbol,		// The function be
 			if (!interpCheckEquiv(type1, type2))
 			{
 				debug(LOG_ERROR, "scriptCodeFunction: Type mismatch for paramter %d (%d/%d)", i, psFSymbol->aParams[i], psPBlock->aParams[i]);
-				sprintf(aErrorString, "Type mismatch for paramter %d", i);
+				snprintf(aErrorString, sizeof(aErrorString), "Type mismatch for paramter %d", i);
+				// Guarantee to nul-terminate
+				aErrorString[sizeof(aErrorString) - 1] = '\0';
 				scr_error(aErrorString);
 				typeError = TRUE;
 			}
@@ -761,7 +765,9 @@ static CODE_ERROR scriptCodeFunction(FUNC_SYMBOL	*psFSymbol,		// The function be
 	/* Check the number of parameters matches that expected */
 	if (psFSymbol->numParams != psPBlock->numParams)
 	{
-		sprintf(aErrorString, "Expected %d parameters", psFSymbol->numParams);
+		snprintf(aErrorString, sizeof(aErrorString), "Expected %d parameters", psFSymbol->numParams);
+		// Guarantee to nul-terminate
+		aErrorString[sizeof(aErrorString) - 1] = '\0';
 		scr_error(aErrorString);
 		*ppsCBlock = NULL;
 		return CE_PARSE;
@@ -915,7 +921,9 @@ static CODE_ERROR scriptCodeCallbackParams(
 	{
 		if (!interpCheckEquiv(psCBSymbol->aParams[i], psPBlock->aParams[i]))
 		{
-			sprintf(aErrorString, "Type mismatch for paramter %d", i);
+			snprintf(aErrorString, sizeof(aErrorString), "Type mismatch for paramter %d", i);
+			// Guarantee to nul-terminate
+			aErrorString[sizeof(aErrorString) - 1] = '\0';
 			scr_error(aErrorString);
 			typeError = TRUE;
 		}
@@ -930,7 +938,9 @@ static CODE_ERROR scriptCodeCallbackParams(
 	}
 	else if (psCBSymbol->numParams != psPBlock->numParams)
 	{
-		sprintf(aErrorString, "Expected %d parameters", psCBSymbol->numParams);
+		snprintf(aErrorString, sizeof(aErrorString), "Expected %d parameters", psCBSymbol->numParams);
+		// Guarantee to nul-terminate
+		aErrorString[sizeof(aErrorString)] = '\0';
 		scr_error(aErrorString);
 		*ppsTDecl = NULL;
 		return CE_PARSE;
@@ -5883,8 +5893,11 @@ void scr_error(const char *pMessage, ...)
 	char	aBuff[1024];
 
 	va_start(args, pMessage);
-	vsprintf(aBuff, pMessage, args);
+	vsnprintf(aBuff, sizeof(aBuff), pMessage, args);
 	va_end(args);
+	// Guarantee to nul-terminate
+	aBuff[sizeof(aBuff) - 1] = '\0';
+
 	scriptGetErrorData(&line, &text);
 
 	bError = TRUE;

@@ -111,10 +111,14 @@ void debug_callback_win32debug( void ** data, const char * outputBuffer )
 {
 	char tmpStr[MAX_LEN_LOG_LINE];
 
-	strcpy( tmpStr, outputBuffer );
-	if ( !strchr( tmpStr, '\n' ) ) {
-		strcat( tmpStr, "\n" );
+	strncpy(tmpStr, outputBuffer, sizeof(tmpStr));
+	if (!strchr(tmpStr, '\n'))
+	{
+		strncat(tmpStr, "\n", sizeof(tmpStr));
 	}
+	// Guarantee to nul-terminate
+	tmpStr[sizeof(tmpStr) - 1] = '\0';
+
 	OutputDebugStringA( tmpStr );
 }
 #endif // WIN32

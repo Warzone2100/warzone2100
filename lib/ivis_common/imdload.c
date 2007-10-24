@@ -737,7 +737,10 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 			debug(LOG_ERROR, "iV_ProcessIMD %s: only png textures supported", pFileName);
 			return NULL;
 		}
-		strcat(texfile, ".png");
+		strncat(texfile, ".png", sizeof(texfile));
+		// Guarantee to nul-terminate
+		texfile[sizeof(texfile) - 1] = '\0';
+
 		pie_MakeTexPageName(texfile);
 
 		if (sscanf(pFileData, "%d %d%n", &pwidth, &pheight, &cnt) != 2)

@@ -103,7 +103,9 @@ BOOL resLoad(const char *pResFile, SDWORD blockID,
 	char *pBuffer;
 	UDWORD	size;
 
-	strcpy(aCurrResDir, aResDir);
+	strncpy(aCurrResDir, aResDir, sizeof(aCurrResDir));
+	// Guarantee to nul-terminate
+	aCurrResDir[sizeof(aCurrResDir) - 1] = '\0';
 
 	// Note the block id number
 	resBlockID = blockID;
@@ -483,8 +485,13 @@ BOOL resLoadFile(const char *pType, const char *pFile)
 		debug(LOG_ERROR, "resLoadFile: Filename too long!! %s%s", aCurrResDir, pFile);
 		return FALSE;
 	}
-	strcpy(aFileName, aCurrResDir);
-	strcat(aFileName, pFile);
+	strncpy(aFileName, aCurrResDir, sizeof(aFileName));
+	// Guarantee to nul-terminate
+	aFileName[sizeof(aFileName) - 1] = '\0';
+
+	strncat(aFileName, pFile, sizeof(aFileName));
+	// Guarantee to nul-terminate
+	aFileName[sizeof(aFileName) - 1] = '\0';
 
 	makeLocaleFile(aFileName);  // check for translated file
 

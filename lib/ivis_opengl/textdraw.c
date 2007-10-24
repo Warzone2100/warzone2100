@@ -516,7 +516,9 @@ UDWORD iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width
 			FWord[i] = 0;
 
 			// And add it to the output string.
-			strcat(FString, FWord);
+			strncat(FString, FWord, sizeof(FString));
+			// Guarantee to nul-terminate
+			FString[sizeof(FString) - 1] = '\0';
 		}
 
 

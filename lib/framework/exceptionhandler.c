@@ -40,13 +40,25 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 
 	// Write to temp dir, to support unprivileged users
 	if (!GetTempPathA( PATH_MAX, miniDumpPath ))
-		strcpy( miniDumpPath, "c:\\temp\\" );
-	strcat( miniDumpPath, "warzone2100.mdmp" );
+	{
+		strncpy(miniDumpPath, "c:\\temp\\", sizeof(miniDumpPath));
+		// Guarantee to nul-terminate
+		miniDumpPath[sizeof(miniDumpPath) - 1] = '\0';
+	}
+
+	// Append the filename
+	strncat(miniDumpPath, "warzone2100.mdmp", sizeof(miniDumpPath));
+	// Guarantee to nul-terminate
+	miniDumpPath[sizeof(miniDumpPath) - 1] = '\0';
 
 	/*
 	Alternative:
 	GetModuleFileName( NULL, miniDumpPath, MAX_PATH );
-	strcat( miniDumpPath, ".mdmp" );
+
+	// Append extension
+	strncat(miniDumpPath, ".mdmp", sizeof(miniDumpPath));
+	// Guarantee to nul-terminate
+	miniDumpPath[sizeof(miniDumpPath) - 1] = '\0';
 	*/
 
 	if ( MessageBoxA( NULL, "Warzone crashed unexpectedly, would you like to save a diagnostic file?", applicationName, MB_YESNO ) == IDYES )
@@ -68,19 +80,26 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 					&uInfo,
 					NULL ) )
 			{
-				sprintf( resultMessage, "Saved dump file to '%s'", miniDumpPath );
-				MessageBoxA( NULL, resultMessage, applicationName, MB_OK );
+				snprintf(resultMessage, sizeof(resultMessage), "Saved dump file to '%s'", miniDumpPath);
 			}
 			else
 			{
-				sprintf( resultMessage, "Failed to save dump file to '%s' (error %d)", miniDumpPath, (int)GetLastError() );
-				MessageBoxA( NULL, resultMessage, applicationName, MB_OK );
+				snprintf(resultMessage, sizeof(resultMessage), "Failed to save dump file to '%s' (error %d)", miniDumpPath, (int)GetLastError());
 			}
+
+			// Guarantee to nul-terminate
+			resultMessage[sizeof(resultMessage) - 1] = '\0';
+
+			MessageBoxA( NULL, resultMessage, applicationName, MB_OK );
+
 			CloseHandle(miniDumpFile);
 		}
 		else
 		{
-			sprintf( resultMessage, "Failed to create dump file '%s' (error %d)", miniDumpPath, (int)GetLastError() );
+			snprintf(resultMessage, sizeof(resultMessage), "Failed to create dump file '%s' (error %d)", miniDumpPath, (int)GetLastError());
+			// Guarantee to nul-terminate
+			resultMessage[sizeof(resultMessage) - 1] = '\0';
+
 			MessageBoxA( NULL, resultMessage, applicationName, MB_OK );
 		}
 	}

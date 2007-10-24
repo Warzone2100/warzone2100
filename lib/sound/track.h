@@ -89,7 +89,11 @@ typedef struct TRACK
 #ifndef WZ_NOSOUND
 	ALuint          iBufferName;            // OpenAL name of the buffer
 #endif
-	char            *pName;                 // resource name of the track
+#if defined(WZ_C99)
+	const char      fileName[];
+#else
+	const char*     fileName;
+#endif /* WZ_C99 */
 } TRACK;
 
 /***************************************************************************/

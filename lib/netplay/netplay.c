@@ -282,7 +282,9 @@ static unsigned int NET_CreatePlayer(const char* name, unsigned int flags)
 		if (players[i].allocated == FALSE)
 		{
 			players[i].allocated = TRUE;
-			strcpy(players[i].name, name);
+			strncpy(players[i].name, name, sizeof(players[i].name));
+			// Guarantee to nul-terminate
+			players[i].name[sizeof(players[i].name) - 1] = '\0';
 			players[i].flags = flags;
 			NETBroadcastPlayerInfo(i);
 			return i;
@@ -321,7 +323,9 @@ UDWORD NETplayerInfo(void)
 		if (players[i].allocated == TRUE)
 		{
 			NetPlay.players[NetPlay.playercount].dpid = i;
-			strcpy(NetPlay.players[NetPlay.playercount].name, players[i].name);
+			strncpy(NetPlay.players[NetPlay.playercount].name, players[i].name, sizeof(NetPlay.players[NetPlay.playercount].name));
+			// Guarantee to nul-terminate
+			NetPlay.players[NetPlay.playercount].name[sizeof(NetPlay.players[NetPlay.playercount].name) - 1] = '\0';
 
 			if (players[i].flags & PLAYER_HOST)
 			{
@@ -355,11 +359,15 @@ BOOL NETchangePlayerName(UDWORD dpid, char *newName)
 {
 	if(!NetPlay.bComms)
 	{
-		strcpy(NetPlay.players[0].name, newName);
+		strncpy(NetPlay.players[0].name, newName, sizeof(NetPlay.players[0].name));
+		// Guarantee to nul-terminate
+		NetPlay.players[0].name[sizeof(NetPlay.players[0].name) - 1] = '\0';
 		return TRUE;
 	}
 
-	strcpy(players[dpid].name, newName);
+	strncpy(players[dpid].name, newName, sizeof(players[dpid].name));
+	// Guarantee to nul-terminate
+	players[dpid].name[sizeof(players[dpid].name) - 1] = '\0';
 
 	NETBroadcastPlayerInfo(dpid);
 
@@ -1350,11 +1358,13 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 
 	is_server = TRUE;
 
-	strcpy(game.name, SessionName);
+	strncpy(game.name, SessionName, sizeof(game.name));
+	// Guarantee to nul-terminate
+	game.name[sizeof(game.name) - 1] = '\0';
 	memset(&game.desc, 0, sizeof(SESSIONDESC));
 	game.desc.dwSize = sizeof(SESSIONDESC);
 	//game.desc.guidApplication = GAME_GUID;
-	strcpy(game.desc.host, "");
+	game.desc.host[0] = '\0';
 	game.desc.dwCurrentPlayers = 1;
 	game.desc.dwMaxPlayers = plyrs;
 	game.desc.dwFlags = 0;
@@ -1456,7 +1466,9 @@ BOOL NETfindGame(void)
 		    && SDLNet_TCP_Recv(tcp_socket, buffer, sizeof(GAMESTRUCT)) == sizeof(GAMESTRUCT)
 		    && tmpgame->desc.dwSize == sizeof(SESSIONDESC))
 		{
-			strcpy(NetPlay.games[gamecount].name, tmpgame->name);
+			strncpy(NetPlay.games[gamecount].name, tmpgame->name, sizeof(NetPlay.games[gamecount].name));
+			// Guarantee to nul-terminate
+			NetPlay.games[gamecount].name[sizeof(NetPlay.games[gamecount].name) - 1] = '\0';
 			NetPlay.games[gamecount].desc.dwSize = tmpgame->desc.dwSize;
 			NetPlay.games[gamecount].desc.dwCurrentPlayers = tmpgame->desc.dwCurrentPlayers;
 			NetPlay.games[gamecount].desc.dwMaxPlayers = tmpgame->desc.dwMaxPlayers;
@@ -1464,15 +1476,21 @@ BOOL NETfindGame(void)
 			{
 				unsigned char* address = (unsigned char*)(&(ip.host));
 
-				sprintf(NetPlay.games[gamecount].desc.host,
+				snprintf(NetPlay.games[gamecount].desc.host, sizeof(NetPlay.games[gamecount].desc.host),
 					"%i.%i.%i.%i",
  					(int)(address[0]),
  					(int)(address[1]),
  					(int)(address[2]),
  					(int)(address[3]));
-			} else {
-				strcpy(NetPlay.games[gamecount].desc.host, tmpgame->desc.host);
 			}
+			else
+			{
+				strncpy(NetPlay.games[gamecount].desc.host, tmpgame->desc.host, sizeof(NetPlay.games[gamecount].desc.host));
+			}
+
+			// Guarantee to nul-terminate
+			NetPlay.games[gamecount].desc.host[sizeof(NetPlay.games[gamecount].desc.host) - 1] = '\0';
+
 			gamecount++;
 		}
 	} while (gamecount<gamesavailable);
@@ -1533,24 +1551,34 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 	    && SDLNet_TCP_Recv(tcp_socket, buffer, sizeof(GAMESTRUCT)*2) == sizeof(GAMESTRUCT)
 	    && tmpgame->desc.dwSize == sizeof(SESSIONDESC))
 	{
-		strcpy(NetPlay.games[gameNumber].name, tmpgame->name);
+		strncpy(NetPlay.games[gameNumber].name, tmpgame->name, sizeof(NetPlay.games[gameNumber].name));
+		// Guarantee to nul-terminate
+		NetPlay.games[gameNumber].name[sizeof(NetPlay.games[gameNumber].name) - 1] = '\0';
+
 		NetPlay.games[gameNumber].desc.dwSize = tmpgame->desc.dwSize;
 		NetPlay.games[gameNumber].desc.dwCurrentPlayers = tmpgame->desc.dwCurrentPlayers;
 		NetPlay.games[gameNumber].desc.dwMaxPlayers = tmpgame->desc.dwMaxPlayers;
-		strcpy(NetPlay.games[gameNumber].desc.host, tmpgame->desc.host);
+		strncpy(NetPlay.games[gameNumber].desc.host, tmpgame->desc.host, sizeof(NetPlay.games[gameNumber].desc.host));
+		// Guarantee to nul-terminate
+		NetPlay.games[gameNumber].desc.host[sizeof(NetPlay.games[gameNumber].desc.host) - 1] = '\0';
 		if (tmpgame->desc.host[0] == '\0')
 		{
 			unsigned char* address = (unsigned char*)(&(ip.host));
 
-			sprintf(NetPlay.games[gameNumber].desc.host,
+			snprintf(NetPlay.games[gameNumber].desc.host, sizeof(NetPlay.games[gameNumber].desc.host),
 				"%i.%i.%i.%i",
 				(int)(address[0]),
 				(int)(address[1]),
 				(int)(address[2]),
 				(int)(address[3]));
-		} else {
-			strcpy(NetPlay.games[gameNumber].desc.host, tmpgame->desc.host);
 		}
+		else
+		{
+			strncpy(NetPlay.games[gameNumber].desc.host, tmpgame->desc.host, sizeof(NetPlay.games[gameNumber].desc.host));
+		}
+
+		// Guarantee to nul-terminate
+		NetPlay.games[gameNumber].desc.host[sizeof(NetPlay.games[gameNumber].desc.host) - 1] = '\0';
 	}
 
 	bsocket = NET_createBufferedSocket();
@@ -1581,7 +1609,9 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 			}
 			players[NetPlay.dpidPlayer].allocated = TRUE;
 			players[NetPlay.dpidPlayer].id = NetPlay.dpidPlayer;
-			strcpy(players[NetPlay.dpidPlayer].name, playername);
+			strncpy(players[NetPlay.dpidPlayer].name, playername, sizeof(players[NetPlay.dpidPlayer].name));
+			// Guarantee to nul-terminate
+			players[NetPlay.dpidPlayer].name[sizeof(players[NetPlay.dpidPlayer].name) - 1] = '\0';
 			players[NetPlay.dpidPlayer].flags = 0;
 
 			return TRUE;
