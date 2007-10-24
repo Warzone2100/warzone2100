@@ -339,20 +339,19 @@ static void FreeResourceFile(RESOURCEFILE *OldResource)
 
 static inline RES_DATA* resDataInit(const char *DebugName, UDWORD DataIDHash, void *pData, UDWORD BlockID)
 {
-	RES_DATA* psRes = malloc(sizeof(RES_DATA));
+	// Allocate memory to hold the RES_DATA structure plus the identifying string
+	RES_DATA* psRes = malloc(sizeof(RES_DATA) + strlen(DebugName) + 1);
 	if (!psRes)
 	{
 		debug(LOG_ERROR, "resDataInit: Out of memory");
 		return NULL;
 	}
 
-	psRes->aID = malloc(strlen(DebugName) + 1);
-	if (!psRes->aID)
-	{
-		debug(LOG_ERROR, "resDataInit: Out of memory");
-		return NULL;
-	}
+#if !defined(WZ_C99)
+	psRes->aID = (char*)(psRes + 1);
+#endif /* WZ_C99 */
 
+	// Copy over the identifying string
 	strcpy((char*)psRes->aID, DebugName);
 
 	psRes->pData = pData;
