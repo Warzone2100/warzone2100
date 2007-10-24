@@ -43,7 +43,7 @@ TwType g_pieVector2fType;
 void TW_CALL addVerticeCB(void *clientData) {
 	PIE_INTERNAL_CB	*pie_internal_cb = (PIE_INTERNAL_CB*)clientData;
 	CPieInternal	*instance = reinterpret_cast<CPieInternal*>(pie_internal_cb->pInstance);
-	Uint8	i = pie_internal_cb->Id;
+	uint8_t	i = pie_internal_cb->Id;
 
 	if (!instance->addVertice(i))
 	{
@@ -65,7 +65,7 @@ void TW_CALL removeSelectedCB(void *clientData) {
 void TW_CALL removeVerticeAtCB(void *clientData) {
 	PIE_INTERNAL_CB	*pie_internal_cb = (PIE_INTERNAL_CB*)clientData;
 	CPieInternal	*instance = reinterpret_cast<CPieInternal*>(pie_internal_cb->pInstance);
-	Uint8	i = pie_internal_cb->Id;
+	uint8_t	i = pie_internal_cb->Id;
 
 	if (!instance->removeVerticeAt(i))
 	{
@@ -77,7 +77,7 @@ void TW_CALL removeVerticeAtCB(void *clientData) {
 void TW_CALL removeConnectorAtCB(void *clientData) {
 	PIE_INTERNAL_CB	*pie_internal_cb = (PIE_INTERNAL_CB*)clientData;
 	CPieInternal	*instance = reinterpret_cast<CPieInternal*>(pie_internal_cb->pInstance);
-	Uint8	i = pie_internal_cb->Id;
+	uint8_t	i = pie_internal_cb->Id;
 
 	if (!instance->removeConnectorAt(i))
 	{
@@ -107,7 +107,7 @@ void TW_CALL removeSelectedVertices(void *clientData) {
 void TW_CALL symmetricSelectedVertices(void *clientData) {
 	PIE_INTERNAL_CB	*pie_internal_cb = (PIE_INTERNAL_CB*)clientData;
 	CPieInternal	*instance = reinterpret_cast<CPieInternal*>(pie_internal_cb->pInstance);
-	Uint8	axis = pie_internal_cb->Id;
+	uint8_t	axis = pie_internal_cb->Id;
 
 	instance->symmetricSelected(axis);
 	instance->updateGUI();
@@ -137,11 +137,11 @@ void	CPolygonLinker::flush(void) {
 	m_MakePolygon = false;
 }
 
-void	CPolygonLinker::setTarget(Sint32 target) {
+void	CPolygonLinker::setTarget(int32_t target) {
 	m_Target = target;
 }
 
-Uint16	CPolygonLinker::getTarget(void) {
+uint16_t	CPolygonLinker::getTarget(void) {
 	return m_Target;
 }
 
@@ -149,8 +149,8 @@ bool	CPolygonLinker::isUp(void) {
 	return (m_Up);
 }
 
-bool	CPolygonLinker::isDuplicated(Uint16 vertId) {
-	Uint8 i = 0;
+bool	CPolygonLinker::isDuplicated(uint16_t vertId) {
+	uint8_t i = 0;
 
 	if (!m_LinkedIndex)
 	{
@@ -168,7 +168,7 @@ bool	CPolygonLinker::isDuplicated(Uint16 vertId) {
 	return false;
 }
 
-bool	CPolygonLinker::canLink(Uint16 vertId) {
+bool	CPolygonLinker::canLink(uint16_t vertId) {
 	//Skips self-link(dot) and line link(2 points line)
 	if (isDuplicated(vertId) && m_LinkedIndex < 3)
 	{
@@ -178,7 +178,7 @@ bool	CPolygonLinker::canLink(Uint16 vertId) {
 	return true;
 }
 
-bool	CPolygonLinker::Link(Uint16 vertId) {
+bool	CPolygonLinker::Link(uint16_t vertId) {
 	if(!canLink(vertId))
 	{
 		return false;
@@ -198,8 +198,8 @@ bool	CPolygonLinker::Link(Uint16 vertId) {
 }
 
 void	CPolygonLinker::draw(CPieInternal *target) {
-	Uint16		i;
-	Uint8		color[4] = {128, 1, 1, 255};
+	uint16_t		i;
+	uint8_t		color[4] = {128, 1, 1, 255};
 
 	for (i = 0;i < m_LinkedIndex;i++)
 	{
@@ -222,8 +222,8 @@ void	CPolygonLinker::draw(CPieInternal *target) {
 }
 
 void	CPolygonLinker::makePolygon(CPieInternal *target) {
-	Uint8		i;
-	Uint16		polyIndex;
+	uint8_t		i;
+	uint16_t		polyIndex;
 
 	polyIndex = target->findFreeSlot(1);
 
@@ -354,8 +354,8 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 
 
 ///Constructed from a imd
-CPieInternal::CPieInternal(Uint16 uid, iIMDShape *imd, const char *name) {
-	Uint32 i, j, vertIndex = 0;
+CPieInternal::CPieInternal(uint16_t uid, iIMDShape *imd, const char *name) {
+	uint32_t i, j, vertIndex = 0;
 
 	strncpy(&m_Name[0], name, 255);
 
@@ -445,7 +445,7 @@ CPieInternal::CPieInternal(Uint16 uid, iIMDShape *imd, const char *name) {
 }
 
 ///Newly generated CPieInternal
-CPieInternal::CPieInternal(Uint16 uid, const char *name, Sint32 textureId) {
+CPieInternal::CPieInternal(uint16_t uid, const char *name, int32_t textureId) {
 	m_polyCount = m_vertCount = m_connCount = 0;
 	m_newVerticeX = m_newVerticeY = m_newVerticeZ = 0.0f;
 	m_VelocityX = m_VelocityY = m_VelocityZ = 0.0f;
@@ -466,7 +466,7 @@ CPieInternal::CPieInternal(Uint16 uid, const char *name, Sint32 textureId) {
 
 ///Constructed from a imd
 CPieInternal::~CPieInternal() {
-	Uint32 i;
+	uint32_t i;
 
 	for (i = 0;i < m_polyCount;i++)
 	{
@@ -553,7 +553,7 @@ void	CPieInternal::setInstance(void) {
 ///Convert to iIMDShape
 iIMDShape* CPieInternal::ToIMD(void) {
 	iIMDShape *newIMD = NULL;
-	Uint32 i, vertIndex = 0, newPolyIndex, newVertIndex, newConnIndex;
+	uint32_t i, vertIndex = 0, newPolyIndex, newVertIndex, newConnIndex;
 
 	newIMD = (iIMDShape*)malloc(sizeof(iIMDShape));
 
@@ -665,7 +665,7 @@ bool	CPieInternal::ToFile(const char *filename) {
 }
 
 bool	CPieInternal::isVerticeDuplicated(Vector3f v) {
-	Uint16	i;
+	uint16_t	i;
 
 	for (i = 0;i < m_vertCount;i++)
 	{
@@ -679,8 +679,8 @@ bool	CPieInternal::isVerticeDuplicated(Vector3f v) {
 	return false;
 }
 
-Uint16	CPieInternal::findFreeSlot(Uint8 type) {
-	Uint16 i;
+uint16_t	CPieInternal::findFreeSlot(uint8_t type) {
+	uint16_t i;
 
 	switch(type)
 	{
@@ -718,8 +718,8 @@ Uint16	CPieInternal::findFreeSlot(Uint8 type) {
 	}
 }
 
-bool	CPieInternal::addVertice(Uint8 type) {
-	Uint16	slot;
+bool	CPieInternal::addVertice(uint8_t type) {
+	uint16_t	slot;
 
 	slot = this->findFreeSlot(type);
 
@@ -771,8 +771,8 @@ bool	CPieInternal::addVertice(Uint8 type) {
 	}
 }
 
-bool	CPieInternal::removeVerticeAt(Uint16 position) {
-	Uint16		i, j;
+bool	CPieInternal::removeVerticeAt(uint16_t position) {
+	uint16_t		i, j;
 	VERTEXID	*vertexId;
 
 	for (i = 0;i < m_polyCount;i++)
@@ -822,7 +822,7 @@ bool	CPieInternal::removeVerticeAt(Uint16 position) {
 	return false;
 }
 
-bool	CPieInternal::removeConnectorAt(Uint16 position) {
+bool	CPieInternal::removeConnectorAt(uint16_t position) {
 	if (m_Connectors[position])
 	{
 		free(m_Connectors[position]);
@@ -835,7 +835,7 @@ bool	CPieInternal::removeConnectorAt(Uint16 position) {
 }
 
 void	CPieInternal::moveSelected(void) {
-	Uint16	i;
+	uint16_t	i;
 
 	for (i = 0;i < m_vertCount;i++)
 	{
@@ -850,7 +850,7 @@ void	CPieInternal::moveSelected(void) {
 
 ///Remove selected vertices and connectors
 void	CPieInternal::removeSelected(void) {
-	Uint16	i;
+	uint16_t	i;
 	for (i = 0;i < m_vertCount;i++)
 	{
 		if (m_Vertices[i] && m_Vertices[i]->selected)
@@ -869,13 +869,13 @@ void	CPieInternal::removeSelected(void) {
 }
 
 //TODO:finish this
-void	CPieInternal::symmetricSelected(Uint8	Axis) {
+void	CPieInternal::symmetricSelected(uint8_t	Axis) {
 
 }
 
 void	CPieInternal::checkSelection(float x1, float y1, float z1,
 									 float x2, float y2, float z2) {
-	Uint16	i, chosen;
+	uint16_t	i, chosen;
 	float	mag, minDist;
 	float	xdiff = x2 - x1, ydiff = y2 - y1, zdiff = z2 - z1;
 	Vector3f	slope = {xdiff, ydiff, zdiff};
@@ -917,7 +917,7 @@ void	CPieInternal::checkSelection(float x1, float y1, float z1,
 				{
 					if (m_SharedVertices[i].numShared)
 					{
-						Uint16	index, newIndex;
+						uint16_t	index, newIndex;
 
 						for (index = 0;index < m_SharedVertices[i].numShared;index++)
 						{
@@ -1059,7 +1059,7 @@ void	CPieInternal::setPosition(float x, float y, float z) {
 }
 
 void	CPieInternal::constructSharedVerticeList(void) {
-	Uint16	i, count, count2;
+	uint16_t	i, count, count2;
 
 	count = count2 = 0;
 	for (i = 0;i < m_vertCount;i++)
@@ -1117,7 +1117,7 @@ void	CPieInternal::drawNewVertice(void) {
 }
 
 void	CPieInternal::highLightVertices(void) {
-	Uint16	i;
+	uint16_t	i;
 
 	glDisable(GL_DEPTH_TEST);
 
@@ -1141,7 +1141,7 @@ void	CPieInternal::highLightVertices(void) {
 }
 
 void	CPieInternal::highLightConnectors(void) {
-	Uint16	i;
+	uint16_t	i;
 
 	glDisable(GL_DEPTH_TEST);
 
@@ -1164,7 +1164,7 @@ void	CPieInternal::highLightConnectors(void) {
 }
 
 void	CPieInternal::highLightSelected(void) {
-	Uint16	i;
+	uint16_t	i;
 
 	glDisable(GL_DEPTH_TEST);
 
@@ -1199,7 +1199,7 @@ void	CPieInternal::highLightSelected(void) {
 	glEnable(GL_DEPTH_TEST);
 }
 
-void	CPieInternal::bindTexture(Sint32 num)
+void	CPieInternal::bindTexture(int32_t num)
 {
 	glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[num].id);
 }
@@ -1290,7 +1290,7 @@ void	CPieInternal::draw(void) {
 }
 
 bool CPieInternal::addGUI(void) {
-	Uint16		i, n, totalVertices = 0;
+	uint16_t		i, n, totalVertices = 0;
 	VERTEXID	*index;
 
 	//Utility bar
@@ -1522,7 +1522,7 @@ bool CPieInternal::addGUI(void) {
 }
 
 void	CPieInternal::updateGUI(void) {
-	Uint16		i, n, totalVertices = 0;
+	uint16_t		i, n, totalVertices = 0;
 	VERTEXID	*index;
 
 	//Utility bar
@@ -1727,7 +1727,7 @@ void	CPieInternal::updateGUI(void) {
 }
 
 void	CPieInternal::hideGUI(void) {
-	Uint16		i;
+	uint16_t		i;
 
 	//Utility bar
 	char	toolBarName[255] = "toolbar";
@@ -1873,7 +1873,7 @@ void	CPieInternal::hideGUI(void) {
 }
 
 void	CPieInternal::showGUI(void) {
-	Uint16		i;
+	uint16_t		i;
 
 	//Utility bar
 	char	toolBarName[255] = "toolbar";

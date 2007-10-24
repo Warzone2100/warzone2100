@@ -29,15 +29,15 @@
 /* Simple implementation of singleclick doubleclick holdbutton via SDL */
 
 ///use max possible sdl keys
-const Uint32 MAX_KEYS = SDLK_LAST;
+const uint32_t MAX_KEYS = SDLK_LAST;
 ///use max possible sdl mouse buttons(UNUSED?,LEFT,RIGHT,MIDDLE)
-const Uint8 MAX_MOUSE_BUTTONS = 4;
+const uint8_t MAX_MOUSE_BUTTONS = 4;
 
 
 ///timer for hold,the interval between 2 key events < 100ms triggers OH_KEY_HOLD
-const Uint32 KEY_HOLD_TIMER = 100;
+const uint32_t KEY_HOLD_TIMER = 100;
 ///timer for double down(double click for mouse),the interval between 2 key events < 500ms triggers OH_KEY_DDOWN
-const Uint32 KEY_DDOWN_TIMER = 500;
+const uint32_t KEY_DDOWN_TIMER = 500;
 
 ///state for both mouse and keyboard
 enum _key_state {
@@ -51,33 +51,33 @@ enum _key_state {
 ///input element with hold event duration
 typedef struct _input_elem {
 	///key state
-	Uint32	data;
+	uint32_t	data;
 	///last down timestamp
-	Uint32	lastDown;
+	uint32_t	lastDown;
 	///duration of hold
-	Uint32	duration;
+	uint32_t	duration;
 } INPUT_ELEM;
 
-extern Uint16 MouseX;
-extern Uint16 MouseY;
-extern Sint16 MouseMoveX;
-extern Sint16 MouseMoveY;
+extern uint16_t MouseX;
+extern uint16_t MouseY;
+extern int16_t MouseMoveX;
+extern int16_t MouseMoveY;
 extern INPUT_ELEM KeyStates[MAX_KEYS];
 extern INPUT_ELEM MouseStates[MAX_MOUSE_BUTTONS];
 
 extern void inputInitialize(void);
 
-extern void inputButtonMouseEvent(SDL_MouseButtonEvent button, Uint8 newState);
+extern void inputButtonMouseEvent(SDL_MouseButtonEvent button, uint8_t newState);
 extern void inputMotionMouseEvent(SDL_MouseMotionEvent motion);
 
-extern void inputKeyEvent(SDL_KeyboardEvent key, Uint8 newState);
+extern void inputKeyEvent(SDL_KeyboardEvent key, uint8_t newState);
 
 bool isKeyDown(SDLKey key);
 bool isKeyDoubleDown(SDLKey key);
 bool isKeyHold(SDLKey key);
-bool isMouseButtonDown(Uint8 button);
-bool isMouseButtonDoubleDown(Uint8 button);
-bool isMouseButtonHold(Uint8 button);
+bool isMouseButtonDown(uint8_t button);
+bool isMouseButtonDoubleDown(uint8_t button);
+bool isMouseButtonHold(uint8_t button);
 
 extern void inputUpdate(void);
 

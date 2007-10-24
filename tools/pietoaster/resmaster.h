@@ -53,23 +53,23 @@ public:
 		FLAT = 1
 	};
 
-	Uint32	m_textureToProcess;
-	Uint32	m_pieCount;
-	Uint32	m_numNewPies;
+	uint32_t	m_textureToProcess;
+	uint32_t	m_pieCount;
+	uint32_t	m_numNewPies;
 
 	float	m_rotateX;	///<rotation of models X
 	float	m_rotateY;	///<rotation of models X
 	float	m_scale;	///<scale of models
-	Uint32	m_polygonMode;	///<polygon mode to render polygons
+	uint32_t	m_polygonMode;	///<polygon mode to render polygons
 	bool	m_highLightVertices;	///<highlight vertice or not
 	bool	m_highLightConnectors;	///<highlight connector or not
 	bool	m_highLightSelected;
 	bool	m_drawAxis;	///<whether to draw X,Y,Z axis or not
 	bool	m_drawTexture;	///<whether to draw textures or not
 	bool	m_drawNewVertice;	///<whether to draw new vertice position or not
-	Uint32	m_shadeMode;	///<shade mode of polygons
+	uint32_t	m_shadeMode;	///<shade mode of polygons
 	float	m_gamma;	///<gamma correction of renderer
-	Sint32	m_newPieTextureId;	///<new pie textureId
+	int32_t	m_newPieTextureId;	///<new pie textureId
 
 	CResMaster() :  m_textureToProcess(0), m_pieCount(0), m_numNewPies(0), m_rotateX(0.0f), m_rotateY(0.0f),
 					m_scale(1.0f), m_polygonMode(0), m_highLightVertices(true), m_highLightConnectors(true),

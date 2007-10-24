@@ -35,10 +35,10 @@
 
 class CScreen {
 public:
-	Uint16	m_width;
-	Uint16	m_height;
-	Sint32	m_bpp;
-	Uint32	m_flags;
+	uint16_t	m_width;
+	uint16_t	m_height;
+	int32_t	m_bpp;
+	uint32_t	m_flags;
 
 	int		initialize(void);
 	bool	setVideoMode(void);

@@ -44,7 +44,7 @@ CResMaster *ResMaster;
 ///Callback to create new pie
 void TW_CALL newPieCB(void *clientData) {
 	CPieInternal	*tmpPieInternal, *tmp2;
-	Uint16			i;
+	uint16_t			i;
 	char			name[255];
 
 	tmpPieInternal = ResMaster->getPies();
@@ -78,7 +78,7 @@ void TW_CALL deactiveLinkerCB(void *clientData) {
 //discards clientData
 void TW_CALL savePiesCB(void *clientData) {
 	CPieInternal	*tmpPieInternal;
-	Uint16			i;
+	uint16_t			i;
 
 	tmpPieInternal = ResMaster->getPies();
 
@@ -113,7 +113,7 @@ static int numCR(char *pFileBuffer, int fileSize)
 }
 
 CResMaster::~CResMaster() {
-	Uint16	i;
+	uint16_t	i;
 
 	for (i = 0;i < m_pieCount;i++)
 	{
@@ -145,7 +145,7 @@ void	CResMaster::deactiveLinker(void) {
 bool	CResMaster::readTextureList(const char *filename) {
 	FILE *file;
 	char *buffer, *bufferTmp;
-	Uint32 cnt, size;
+	uint32_t cnt, size;
 
 	file = fopen(filename, "rb");
 
@@ -182,7 +182,7 @@ bool	CResMaster::readTextureList(const char *filename) {
 
 bool	CResMaster::loadTexPages(void) {
 	iV_Image *tmpImage;
-	Uint32	i;
+	uint32_t	i;
 
 	tmpImage = (iV_Image*)malloc(sizeof(iV_Image));
 
@@ -208,7 +208,7 @@ bool	CResMaster::loadTexPages(void) {
 }
 
 bool	CResMaster::freeTexPages(void) {
-	Uint32	i;
+	uint32_t	i;
 
 	for (i = 0;i < m_textureToProcess;i++)
 	{
@@ -281,7 +281,7 @@ bool	CResMaster::addGUI(void) {
 
 	TwDefine(defineString2);
 
-	Uint32	i;
+	uint32_t	i;
 	for (i = 0;i < m_textureToProcess;i++)
 	{
 		char	tmpName[255];
@@ -295,7 +295,7 @@ bool	CResMaster::addGUI(void) {
 }
 
 void	CResMaster::draw(void) {
-	Uint32	i;
+	uint32_t	i;
 
 	if (this->m_TextureMapper.m_Up)
 	{
@@ -536,7 +536,7 @@ void	CResMaster::updateInput(void) {
 	if (isMouseButtonDown(1))
 	{
 		double x1, y1, z1, x2, y2, z2;
-		Uint32	i, j;
+		uint32_t	i, j;
 
 		this->unprojectMouseXY(&x1, &y1, &z1, &x2, &y2, &z2);
 
@@ -585,7 +585,7 @@ void	CResMaster::updateInput(void) {
 }
 
 void CResMaster::startMapTexture(void) {
-	Uint16	i, j;
+	uint16_t	i, j;
 
 	for (i = 0;i < this->m_pieCount;i++)
 	{
@@ -607,7 +607,7 @@ void CResMaster::startMapTexture(void) {
 }
 
 void CResMaster::stopMapTexture(void) {
-	Uint16	i;
+	uint16_t	i;
 
 	ResMaster->m_TextureMapper.removeTargets();
 

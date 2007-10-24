@@ -70,7 +70,7 @@ bool iV_IMDSave(const char *filename, iIMDShape *s, bool PieIMD)
 	iIMDShape *sp;
 	iIMDPoly *poly;
 	int nlevel, i, j, d;
-	const Uint32 dummyFlags = 0xDEADBEEF;
+	const uint32_t dummyFlags = 0xDEADBEEF;
 
 	if ((fp = fopen(filename,"w")) == NULL) {
 		return false;

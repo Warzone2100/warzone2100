@@ -51,7 +51,7 @@ static bool textboxUp = false; //whether textbox is up or not
 static char *text_pointer = NULL;
 
 // the dumbest shift kmod char handling function on planet earth :)
-static Uint16 shiftChar(Uint16 key)
+static uint16_t shiftChar(uint16_t key)
 {
 	switch (key)
 	{
@@ -118,11 +118,11 @@ static Uint16 shiftChar(Uint16 key)
 	return key;
 }
 
-static void mychars_incr(Uint16 key)
+static void mychars_incr(uint16_t key)
 {
 	if (mychars_index < 255 - 1)
 	{
-		char str = (Uint8)key;
+		char str = (uint8_t)key;
 
 		strncpy(&mychars[mychars_index], &str, 1);
 		mychars_index++;
@@ -346,7 +346,7 @@ int main(int argc, char *argv[])
 			{
 				if (event.type == SDL_KEYDOWN)
 				{
-					Uint16 key = event.key.keysym.sym;
+					uint16_t key = event.key.keysym.sym;
 					SDLMod modifier = event.key.keysym.mod;
 
 					if (key == SDLK_BACKSPACE)

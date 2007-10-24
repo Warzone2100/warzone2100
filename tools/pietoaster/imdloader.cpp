@@ -77,7 +77,7 @@ static inline void Vector3f_Set(Vector3f* v, const float x, const float y, const
 
 static void pie_VectorNormalise3iv(Vector3i *v)
 {
-	Sint32 size;
+	int32_t size;
 	Vector3i av = {abs(v->x), abs(v->y), abs(v->z)};
 
 	if (av.x >= av.y)
@@ -105,7 +105,7 @@ static void pie_VectorNormalise3iv(Vector3i *v)
 
 static void pie_VectorNormalise3fv(Vector3f *v)
 {
-	Sint32 size;
+	int32_t size;
 	Vector3f av = {abs(v->x), abs(v->y), abs(v->z)};
 
 	if (av.x >= av.y) {
@@ -394,8 +394,8 @@ static bool ReadPoints( const char **ppFileData, iIMDShape *s )
 static bool _imd_load_points( const char **ppFileData, iIMDShape *s )
 {
 	Vector3f *p = NULL;
-	Sint32 tempXMax, tempXMin, tempZMax, tempZMin;
-	Sint32 xmax, ymax, zmax;
+	int32_t tempXMax, tempXMin, tempZMax, tempZMin;
+	int32_t xmax, ymax, zmax;
 	double dx, dy, dz, rad_sq, rad, old_to_p_sq, old_to_p, old_to_new;
 	double xspan, yspan, zspan, maxspan;
 	Vector3f dia1, dia2, cen;
@@ -774,8 +774,8 @@ iIMDShape *iV_ProcessIMD( const char *filename )
 	int cnt, nlevels, filelength;
 	iIMDShape *shape, *psShape;
 	UDWORD level;
-	Sint32 imd_version;
-	Uint32 imd_flags; // FIXME UNUSED
+	int32_t imd_version;
+	uint32_t imd_flags; // FIXME UNUSED
 	bool bTextured = false;
 	FILE *FileToOpen = NULL;
 
