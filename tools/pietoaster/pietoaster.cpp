@@ -154,15 +154,15 @@ static void TW_CALL addTextBox(void *clientData)
 	text_pointer = string;
 
 	textBar = TwNewBar("TextBox");
-	//_snprintf(&test2[15], size, "%s", string);
-	//_snprintf(&test2[15 + size], 1, "\'");
+	//snprintf(&test2[15], size, "%s", string);
+	//snprintf(&test2[15 + size], 1, "\'");
 
 	//TwDefine(&test2);
 	TwDefine("TextBox position = '200 400'");
 	TwDefine("TextBox size = '400 50'");
 
-	_snprintf(&test[8], size, "%s", string);
-	_snprintf(&test[8 + size], 1, "\'");
+	snprintf(&test[8], size, "%s", string);
+	snprintf(&test[8 + size], 1, "\'");
 	//strcat(&test[0], attr);
 
 	textboxUp = TRUE;
@@ -194,8 +194,8 @@ static void updateTextBox(void)
 
 	TwRemoveVar(textBar, "textbox");
 
-	_snprintf(&test[8], mychars_index, "%s", &mychars[0]);
-	_snprintf(&test[8 + mychars_index], 1, "\'");
+	snprintf(&test[8], mychars_index, "%s", &mychars[0]);
+	snprintf(&test[8 + mychars_index], 1, "\'");
 
 	TwAddVarRO(textBar, "textbox", TW_TYPE_INT32, &mychars_index, test);
 }

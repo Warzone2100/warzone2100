@@ -60,7 +60,7 @@ void TW_CALL newPieCB(void *clientData) {
 	}
 
 	ResMaster->m_pieCount = 0;
-	_snprintf(name, 255, "newpoly%3u.pie", ResMaster->m_numNewPies);
+	snprintf(name, 255, "newpoly%3u.pie", ResMaster->m_numNewPies);
 	ResMaster->addPie(NULL, name);
 	ResMaster->m_numNewPies++;
 }
@@ -250,7 +250,7 @@ CPieInternal* CResMaster::getPies(void) {
 
 bool	CResMaster::addGUI(void) {
 	char	defineString[255];
-	_snprintf(defineString, 255, "utilBar position = '0 0' color = '%d %d %d %d' size = '%d %d'",
+	snprintf(defineString, 255, "utilBar position = '0 0' color = '%d %d %d %d' size = '%d %d'",
 				guiMajorAlpha, guiMajorRed, guiMajorGreen, guiMajorBlue, guiMajorWidth, guiMajorHeight);
 
 	m_utilBar = TwNewBar("utilBar");
@@ -275,7 +275,7 @@ bool	CResMaster::addGUI(void) {
 
 	m_textureBar = TwNewBar("textureBar");
 	char	defineString2[255];
-	_snprintf(defineString2, 255, "textureBar position = '%d %d' color = '%d %d %d %d' size = '%d %d'",
+	snprintf(defineString2, 255, "textureBar position = '%d %d' color = '%d %d %d %d' size = '%d %d'",
 				g_Screen.m_width/2 - 200, g_Screen.m_height/2 + 200,
 				guiMajorAlpha, guiMajorRed, guiMajorGreen, guiMajorBlue, guiMajorWidth, guiMajorHeight);
 
@@ -286,8 +286,8 @@ bool	CResMaster::addGUI(void) {
 	{
 		char	tmpName[255];
 		char	tmpName2[255];
-		_snprintf(tmpName, 255, "pageId%d", i);
-		_snprintf(tmpName2, 255, "pageName%d", i);
+		snprintf(tmpName, 255, "pageId%d", i);
+		snprintf(tmpName2, 255, "pageName%d", i);
 		TwAddVarRO(m_textureBar, tmpName, TW_TYPE_UINT32, &_TEX_PAGE[i].id, "label = 'Page Id'");
 		TwAddVarRO(m_textureBar, tmpName2, TW_TYPE_CSSTRING(255), &_TEX_PAGE[i].name, "label = 'Page Name'");
 	}

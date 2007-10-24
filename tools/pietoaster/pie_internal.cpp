@@ -1299,24 +1299,24 @@ bool CPieInternal::addGUI(void) {
 
 	if (this->uid < 10)
 	{
-		_snprintf(&toolBarName[7], 1, "0");
-		_snprintf(&toolBarName[8], 1, "%u", this->uid);
+		snprintf(&toolBarName[7], 1, "0");
+		snprintf(&toolBarName[8], 1, "%u", this->uid);
 		strcpy(toolBarDefine, toolBarName);
-		_snprintf(&toolBarDefine[9], 100, " label = 'Pie %u ToolBar' position = '0 200' color = '%d %d %d %d' size = '%d %d'",
+		snprintf(&toolBarDefine[9], 100, " label = 'Pie %u ToolBar' position = '0 200' color = '%d %d %d %d' size = '%d %d'",
 					this->uid, guiMajorAlpha, guiMajorRed, guiMajorGreen, guiMajorBlue, guiMajorWidth, guiMajorHeight);
 	}
 	else if (this->uid < 100)
 	{
-		_snprintf(&toolBarName[7], 2, "%2u", this->uid);
+		snprintf(&toolBarName[7], 2, "%2u", this->uid);
 		strcpy(toolBarDefine, toolBarName);
-		_snprintf(&toolBarDefine[9], 100, " label = 'Pie %u ToolBar' position = '0 200' color = '%d %d %d %d' size = '%d %d'",
+		snprintf(&toolBarDefine[9], 100, " label = 'Pie %u ToolBar' position = '0 200' color = '%d %d %d %d' size = '%d %d'",
 					this->uid, guiMajorAlpha, guiMajorRed, guiMajorGreen, guiMajorBlue, guiMajorWidth, guiMajorHeight);
 	}
 	else
 	{
-		_snprintf(&toolBarName[7], 3, "3%u", this->uid);
+		snprintf(&toolBarName[7], 3, "3%u", this->uid);
 		strcpy(toolBarDefine, toolBarName);
-		_snprintf(&toolBarDefine[10], 100, " label = 'Pie %u ToolBar' position = '0 200' color = '%d %d %d %d' size = '%d %d'",
+		snprintf(&toolBarDefine[10], 100, " label = 'Pie %u ToolBar' position = '0 200' color = '%d %d %d %d' size = '%d %d'",
 					this->uid, guiMajorAlpha, guiMajorRed, guiMajorGreen, guiMajorBlue, guiMajorWidth, guiMajorHeight);
 	}
 
@@ -1347,7 +1347,7 @@ bool CPieInternal::addGUI(void) {
 	strncpy(vertBarName, toolBarName, 255);
 	strcat(vertBarName, "vertBar");
 
-	_snprintf(vertBarDefine, 255, "%s label = 'Pie %u VerticeList' position = '%d %d' color = '%d %d %d %d' size = '%d %d'",
+	snprintf(vertBarDefine, 255, "%s label = 'Pie %u VerticeList' position = '%d %d' color = '%d %d %d %d' size = '%d %d'",
 			vertBarName, this->uid, g_Screen.m_width - 100, 0, guiMajorAlpha, guiMajorRed,
 			guiMajorGreen, guiMajorBlue, guiMajorWidth, guiMajorHeight);
 
@@ -1359,7 +1359,7 @@ bool CPieInternal::addGUI(void) {
 		if (m_Vertices[i])
 		{
 			char	name[255] = "vert";
-			_snprintf(&name[4], 3, "%3u", i);
+			snprintf(&name[4], 3, "%3u", i);
 			TwAddVarRW(m_vertBar, name, g_pieVertexType, m_Vertices[i], "");
 		}
 	}
@@ -1371,7 +1371,7 @@ bool CPieInternal::addGUI(void) {
 	strncpy(connBarName, toolBarName, 255);
 	strcat(connBarName, "connBar");
 
-	_snprintf(connBarDefine, 255, "%s label = 'Pie %u ConnectorList' position = '%d %d' color = '%d %d %d %d' size = '%d %d'",
+	snprintf(connBarDefine, 255, "%s label = 'Pie %u ConnectorList' position = '%d %d' color = '%d %d %d %d' size = '%d %d'",
 			connBarName, this->uid, g_Screen.m_width - 100, 400, guiMajorAlpha, guiMajorRed,
 			guiMajorGreen, guiMajorBlue, guiMajorWidth, guiMajorHeight);
 
@@ -1383,7 +1383,7 @@ bool CPieInternal::addGUI(void) {
 		if (m_Connectors[i])
 		{
 			char	name[255] = "conn";
-			_snprintf(&name[4], 3, "%3u", i);
+			snprintf(&name[4], 3, "%3u", i);
 			TwAddVarRW(m_connBar, name, g_pieVertexType, m_Connectors[i], "");
 		}
 	}
@@ -1399,87 +1399,87 @@ bool CPieInternal::addGUI(void) {
 		//utterly hack to add zero's to make Bar names unique -_-
 		if (i < 10)
 		{
-			_snprintf(&tmpString[4], 1, "0");
-			_snprintf(&tmpString[5], 1, "%u", i);
+			snprintf(&tmpString[4], 1, "0");
+			snprintf(&tmpString[5], 1, "%u", i);
 
 			if (this->uid < 10)
 			{
-				_snprintf(&tmpString[6], 1, "0");
-				_snprintf(&tmpString[7], 1, "%u", this->uid);
+				snprintf(&tmpString[6], 1, "0");
+				snprintf(&tmpString[7], 1, "%u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[8], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
+				snprintf(&tmpString2[8], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
 					this->uid, i , guiMinorAlpha, guiMinorRed, guiMinorGreen, guiMinorBlue, guiMinorWidth, guiMinorHeight);
 			}
 			else if (this->uid < 100)
 			{
-				_snprintf(&tmpString[6], 2, "%2u", this->uid);
+				snprintf(&tmpString[6], 2, "%2u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[8], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
+				snprintf(&tmpString2[8], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
 					this->uid, i , guiMinorAlpha, guiMinorRed, guiMinorGreen, guiMinorBlue, guiMinorWidth, guiMinorHeight);
 			}
 			else
 			{
-				_snprintf(&tmpString[6], 3, "3%u", this->uid);
+				snprintf(&tmpString[6], 3, "3%u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[9], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
+				snprintf(&tmpString2[9], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
 					this->uid, i , guiMinorAlpha, guiMinorRed, guiMinorGreen, guiMinorBlue, guiMinorWidth, guiMinorHeight);
 			}
 
 			strcpy(tmpString2, tmpString);
-			_snprintf(&tmpString2[8], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
+			snprintf(&tmpString2[8], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
 					this->uid, i , guiMinorAlpha, guiMinorRed, guiMinorGreen, guiMinorBlue, guiMinorWidth, guiMinorHeight);
 		}
 		else if (i < 100)
 		{
-			_snprintf(&tmpString[4], 2, "%2u", i);
+			snprintf(&tmpString[4], 2, "%2u", i);
 
 			if (this->uid < 10)
 			{
-				_snprintf(&tmpString[6], 1, "0");
-				_snprintf(&tmpString[7], 1, "%u", this->uid);
+				snprintf(&tmpString[6], 1, "0");
+				snprintf(&tmpString[7], 1, "%u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[8], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
+				snprintf(&tmpString2[8], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
 					this->uid, i , guiMinorAlpha, guiMinorRed, guiMinorGreen, guiMinorBlue, guiMinorWidth, guiMinorHeight);
 			}
 			else if (this->uid < 100)
 			{
-				_snprintf(&tmpString[6], 2, "%2u", this->uid);
+				snprintf(&tmpString[6], 2, "%2u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[8], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
+				snprintf(&tmpString2[8], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
 					this->uid, i , guiMinorAlpha, guiMinorRed, guiMinorGreen, guiMinorBlue, guiMinorWidth, guiMinorHeight);
 			}
 			else
 			{
-				_snprintf(&tmpString[6], 3, "3%u", this->uid);
+				snprintf(&tmpString[6], 3, "3%u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[9], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
+				snprintf(&tmpString2[9], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
 					this->uid, i , guiMinorAlpha, guiMinorRed, guiMinorGreen, guiMinorBlue, guiMinorWidth, guiMinorHeight);
 			}
 		}
 		else
 		{
-			_snprintf(&tmpString[4], 3, "%3u", i);
+			snprintf(&tmpString[4], 3, "%3u", i);
 
 			if (this->uid < 10)
 			{
-				_snprintf(&tmpString[7], 1, "0");
-				_snprintf(&tmpString[8], 1, "%u", this->uid);
+				snprintf(&tmpString[7], 1, "0");
+				snprintf(&tmpString[8], 1, "%u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[9], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
+				snprintf(&tmpString2[9], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
 					this->uid, i , guiMinorAlpha, guiMinorRed, guiMinorGreen, guiMinorBlue, guiMinorWidth, guiMinorHeight);
 			}
 			else if (this->uid < 100)
 			{
-				_snprintf(&tmpString[7], 2, "%2u", this->uid);
+				snprintf(&tmpString[7], 2, "%2u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[9], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
+				snprintf(&tmpString2[9], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
 					this->uid, i , guiMinorAlpha, guiMinorRed, guiMinorGreen, guiMinorBlue, guiMinorWidth, guiMinorHeight);
 			}
 			else
 			{
-				_snprintf(&tmpString[7], 3, "3%u", this->uid);
+				snprintf(&tmpString[7], 3, "3%u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[10], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
+				snprintf(&tmpString2[10], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
 					this->uid, i , guiMinorAlpha, guiMinorRed, guiMinorGreen, guiMinorBlue, guiMinorWidth, guiMinorHeight);
 			}
 		}
@@ -1496,7 +1496,7 @@ bool CPieInternal::addGUI(void) {
 		{
 			char	stringTemp[255] = "vert";
 
-			_snprintf(&stringTemp[4], 55, " id%3u uid%3u", *index, totalVertices++);
+			snprintf(&stringTemp[4], 55, " id%3u uid%3u", *index, totalVertices++);
 
 			TwAddVarRW(m_polyBars[i], stringTemp, g_pieVertexType, m_Vertices[*index], "");
 #if 0
@@ -1505,10 +1505,10 @@ bool CPieInternal::addGUI(void) {
 			char	stringZ[255] = "verticeZ";
 			char	stringBool[255] = "bool";
 
-			_snprintf(&stringX[8], 9, "vert%3u", ++totalVertices);
-			_snprintf(&stringY[8], 9, "vert%3u", ++totalVertices);
-			_snprintf(&stringZ[8], 9, "vert%3u", ++totalVertices);
-			_snprintf(&stringBool[4], 9, "bool%3u", totalVertices);
+			snprintf(&stringX[8], 9, "vert%3u", ++totalVertices);
+			snprintf(&stringY[8], 9, "vert%3u", ++totalVertices);
+			snprintf(&stringZ[8], 9, "vert%3u", ++totalVertices);
+			snprintf(&stringBool[4], 9, "bool%3u", totalVertices);
 
 			TwAddVarRW(m_polyBars[i], stringX, TW_TYPE_FLOAT, &m_Vertices[*index]->vertice.x, "label = 'Vertice X' step = 0.1");
 			TwAddVarRW(m_polyBars[i], stringY, TW_TYPE_FLOAT, &m_Vertices[*index]->vertice.y, "label = 'Vertice Y' step = 0.1");
@@ -1531,24 +1531,24 @@ void	CPieInternal::updateGUI(void) {
 
 	if (this->uid < 10)
 	{
-		_snprintf(&toolBarName[7], 1, "0");
-		_snprintf(&toolBarName[8], 1, "%u", this->uid);
+		snprintf(&toolBarName[7], 1, "0");
+		snprintf(&toolBarName[8], 1, "%u", this->uid);
 		strcpy(toolBarDefine, toolBarName);
-		_snprintf(&toolBarDefine[9], 100, " label = 'Pie %u ToolBar' position = '0 200' color = '%d %d %d %d' size = '%d %d'",
+		snprintf(&toolBarDefine[9], 100, " label = 'Pie %u ToolBar' position = '0 200' color = '%d %d %d %d' size = '%d %d'",
 					this->uid, guiMajorAlpha, guiMajorRed, guiMajorGreen, guiMajorBlue, guiMajorWidth, guiMajorHeight);
 	}
 	else if (this->uid < 100)
 	{
-		_snprintf(&toolBarName[7], 2, "%2u", this->uid);
+		snprintf(&toolBarName[7], 2, "%2u", this->uid);
 		strcpy(toolBarDefine, toolBarName);
-		_snprintf(&toolBarDefine[9], 100, " label = 'Pie %u ToolBar' position = '0 200' color = '%d %d %d %d' size = '%d %d'",
+		snprintf(&toolBarDefine[9], 100, " label = 'Pie %u ToolBar' position = '0 200' color = '%d %d %d %d' size = '%d %d'",
 					this->uid, guiMajorAlpha, guiMajorRed, guiMajorGreen, guiMajorBlue, guiMajorWidth, guiMajorHeight);
 	}
 	else
 	{
-		_snprintf(&toolBarName[7], 3, "3%u", this->uid);
+		snprintf(&toolBarName[7], 3, "3%u", this->uid);
 		strcpy(toolBarDefine, toolBarName);
-		_snprintf(&toolBarDefine[10], 100, " label = 'Pie %u ToolBar' position = '0 200' color = '%d %d %d %d' size = '%d %d'",
+		snprintf(&toolBarDefine[10], 100, " label = 'Pie %u ToolBar' position = '0 200' color = '%d %d %d %d' size = '%d %d'",
 					this->uid, guiMajorAlpha, guiMajorRed, guiMajorGreen, guiMajorBlue, guiMajorWidth, guiMajorHeight);
 	}
 
@@ -1559,7 +1559,7 @@ void	CPieInternal::updateGUI(void) {
 	strncpy(vertBarName, toolBarName, 255);
 	strcat(vertBarName, "vertBar");
 
-	_snprintf(vertBarDefine, 255, "%s label = 'Pie %u VerticeList' position = '%d %d' color = '%d %d %d %d' size = '%d %d'",
+	snprintf(vertBarDefine, 255, "%s label = 'Pie %u VerticeList' position = '%d %d' color = '%d %d %d %d' size = '%d %d'",
 			vertBarName, this->uid, g_Screen.m_width - 100, 0, guiMajorAlpha, guiMajorRed,
 			guiMajorGreen, guiMajorBlue, guiMajorWidth, guiMajorHeight);
 
@@ -1572,7 +1572,7 @@ void	CPieInternal::updateGUI(void) {
 		if (m_Vertices[i])
 		{
 			char	name[255] = "vert";
-			_snprintf(&name[4], 3, "%3u", i);
+			snprintf(&name[4], 3, "%3u", i);
 			if (!TwAddVarRW(m_vertBar, name, g_pieVertexType, m_Vertices[i], ""))
 			{
 				fprintf(stderr, TwGetLastError());
@@ -1587,7 +1587,7 @@ void	CPieInternal::updateGUI(void) {
 	strncpy(connBarName, toolBarName, 255);
 	strcat(connBarName, "connBar");
 
-	_snprintf(connBarDefine, 255, "%s label = 'Pie %u ConnectorList' position = '%d %d' color = '%d %d %d %d' size = '%d %d'",
+	snprintf(connBarDefine, 255, "%s label = 'Pie %u ConnectorList' position = '%d %d' color = '%d %d %d %d' size = '%d %d'",
 			connBarName, this->uid, g_Screen.m_width - 100, 400, guiMajorAlpha, guiMajorRed,
 			guiMajorGreen, guiMajorBlue, guiMajorWidth, guiMajorHeight);
 
@@ -1600,7 +1600,7 @@ void	CPieInternal::updateGUI(void) {
 		if (m_Connectors[i])
 		{
 			char	name[255] = "conn";
-			_snprintf(&name[4], 3, "%3u", i);
+			snprintf(&name[4], 3, "%3u", i);
 			TwAddVarRW(m_connBar, name, g_pieVertexType, m_Connectors[i], "");
 		}
 	}
@@ -1621,87 +1621,87 @@ void	CPieInternal::updateGUI(void) {
 		//utterly hack to add zero's to make Bar names unique -_-
 		if (i < 10)
 		{
-			_snprintf(&tmpString[4], 1, "0");
-			_snprintf(&tmpString[5], 1, "%u", i);
+			snprintf(&tmpString[4], 1, "0");
+			snprintf(&tmpString[5], 1, "%u", i);
 
 			if (this->uid < 10)
 			{
-				_snprintf(&tmpString[6], 1, "0");
-				_snprintf(&tmpString[7], 1, "%u", this->uid);
+				snprintf(&tmpString[6], 1, "0");
+				snprintf(&tmpString[7], 1, "%u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[8], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
+				snprintf(&tmpString2[8], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
 					this->uid, i , guiMinorAlpha, guiMinorRed, guiMinorGreen, guiMinorBlue, guiMinorWidth, guiMinorHeight);
 			}
 			else if (this->uid < 100)
 			{
-				_snprintf(&tmpString[6], 2, "%2u", this->uid);
+				snprintf(&tmpString[6], 2, "%2u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[8], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
+				snprintf(&tmpString2[8], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
 					this->uid, i , guiMinorAlpha, guiMinorRed, guiMinorGreen, guiMinorBlue, guiMinorWidth, guiMinorHeight);
 			}
 			else
 			{
-				_snprintf(&tmpString[6], 3, "3%u", this->uid);
+				snprintf(&tmpString[6], 3, "3%u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[9], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
+				snprintf(&tmpString2[9], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
 					this->uid, i , guiMinorAlpha, guiMinorRed, guiMinorGreen, guiMinorBlue, guiMinorWidth, guiMinorHeight);
 			}
 
 			strcpy(tmpString2, tmpString);
-			_snprintf(&tmpString2[8], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
+			snprintf(&tmpString2[8], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
 					this->uid, i , guiMinorAlpha, guiMinorRed, guiMinorGreen, guiMinorBlue, guiMinorWidth, guiMinorHeight);
 		}
 		else if (i < 100)
 		{
-			_snprintf(&tmpString[4], 2, "%2u", i);
+			snprintf(&tmpString[4], 2, "%2u", i);
 
 			if (this->uid < 10)
 			{
-				_snprintf(&tmpString[6], 1, "0");
-				_snprintf(&tmpString[7], 1, "%u", this->uid);
+				snprintf(&tmpString[6], 1, "0");
+				snprintf(&tmpString[7], 1, "%u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[8], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
+				snprintf(&tmpString2[8], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
 					this->uid, i , guiMinorAlpha, guiMinorRed, guiMinorGreen, guiMinorBlue, guiMinorWidth, guiMinorHeight);
 			}
 			else if (this->uid < 100)
 			{
-				_snprintf(&tmpString[6], 2, "%2u", this->uid);
+				snprintf(&tmpString[6], 2, "%2u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[8], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
+				snprintf(&tmpString2[8], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
 					this->uid, i , guiMinorAlpha, guiMinorRed, guiMinorGreen, guiMinorBlue, guiMinorWidth, guiMinorHeight);
 			}
 			else
 			{
-				_snprintf(&tmpString[6], 3, "3%u", this->uid);
+				snprintf(&tmpString[6], 3, "3%u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[9], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
+				snprintf(&tmpString2[9], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
 					this->uid, i , guiMinorAlpha, guiMinorRed, guiMinorGreen, guiMinorBlue, guiMinorWidth, guiMinorHeight);
 			}
 		}
 		else
 		{
-			_snprintf(&tmpString[4], 3, "%3u", i);
+			snprintf(&tmpString[4], 3, "%3u", i);
 
 			if (this->uid < 10)
 			{
-				_snprintf(&tmpString[7], 1, "0");
-				_snprintf(&tmpString[8], 1, "%u", this->uid);
+				snprintf(&tmpString[7], 1, "0");
+				snprintf(&tmpString[8], 1, "%u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[9], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
+				snprintf(&tmpString2[9], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
 					this->uid, i , guiMinorAlpha, guiMinorRed, guiMinorGreen, guiMinorBlue, guiMinorWidth, guiMinorHeight);
 			}
 			else if (this->uid < 100)
 			{
-				_snprintf(&tmpString[7], 2, "%2u", this->uid);
+				snprintf(&tmpString[7], 2, "%2u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[9], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
+				snprintf(&tmpString2[9], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
 					this->uid, i , guiMinorAlpha, guiMinorRed, guiMinorGreen, guiMinorBlue, guiMinorWidth, guiMinorHeight);
 			}
 			else
 			{
-				_snprintf(&tmpString[7], 3, "3%u", this->uid);
+				snprintf(&tmpString[7], 3, "3%u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[10], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
+				snprintf(&tmpString2[10], 100, " label = 'Pie %u Poly %u' position = '0 400' color = '%d %d %d %d' size = '%d %d'",
 					this->uid, i , guiMinorAlpha, guiMinorRed, guiMinorGreen, guiMinorBlue, guiMinorWidth, guiMinorHeight);
 			}
 		}
@@ -1719,7 +1719,7 @@ void	CPieInternal::updateGUI(void) {
 		{
 			char	stringTemp[255] = "vert";
 
-			_snprintf(&stringTemp[4], 55, " id%3u uid%3u", *index, totalVertices++);
+			snprintf(&stringTemp[4], 55, " id%3u uid%3u", *index, totalVertices++);
 
 			TwAddVarRW(m_polyBars[i], stringTemp, g_pieVertexType, m_Vertices[*index], "");
 		}
@@ -1735,22 +1735,22 @@ void	CPieInternal::hideGUI(void) {
 
 	if (this->uid < 10)
 	{
-		_snprintf(&toolBarName[7], 1, "0");
-		_snprintf(&toolBarName[8], 1, "%u", this->uid);
+		snprintf(&toolBarName[7], 1, "0");
+		snprintf(&toolBarName[8], 1, "%u", this->uid);
 		strcpy(toolBarDefine, toolBarName);
-		_snprintf(&toolBarDefine[9], 100, " hide");
+		snprintf(&toolBarDefine[9], 100, " hide");
 	}
 	else if (this->uid < 100)
 	{
-		_snprintf(&toolBarName[7], 2, "%2u", this->uid);
+		snprintf(&toolBarName[7], 2, "%2u", this->uid);
 		strcpy(toolBarDefine, toolBarName);
-		_snprintf(&toolBarDefine[9], 100, " hide");
+		snprintf(&toolBarDefine[9], 100, " hide");
 	}
 	else
 	{
-		_snprintf(&toolBarName[7], 3, "3%u", this->uid);
+		snprintf(&toolBarName[7], 3, "3%u", this->uid);
 		strcpy(toolBarDefine, toolBarName);
-		_snprintf(&toolBarDefine[10], 100, " hide");
+		snprintf(&toolBarDefine[10], 100, " hide");
 	}
 
 	//Vertice list bar
@@ -1760,7 +1760,7 @@ void	CPieInternal::hideGUI(void) {
 	strncpy(vertBarName, toolBarName, 255);
 	strcat(vertBarName, "vertBar");
 
-	_snprintf(vertBarDefine, 255, "%s hide",
+	snprintf(vertBarDefine, 255, "%s hide",
 			vertBarName);
 
 	TwDefine(vertBarDefine);
@@ -1772,7 +1772,7 @@ void	CPieInternal::hideGUI(void) {
 	strncpy(connBarName, toolBarName, 255);
 	strcat(connBarName, "connBar");
 
-	_snprintf(connBarDefine, 255, "%s hide",
+	snprintf(connBarDefine, 255, "%s hide",
 			connBarName);
 
 	TwDefine(connBarDefine);
@@ -1793,78 +1793,78 @@ void	CPieInternal::hideGUI(void) {
 		//utterly hack to add zero's to make Bar names unique -_-
 		if (i < 10)
 		{
-			_snprintf(&tmpString[4], 1, "0");
-			_snprintf(&tmpString[5], 1, "%u", i);
+			snprintf(&tmpString[4], 1, "0");
+			snprintf(&tmpString[5], 1, "%u", i);
 
 			if (this->uid < 10)
 			{
-				_snprintf(&tmpString[6], 1, "0");
-				_snprintf(&tmpString[7], 1, "%u", this->uid);
+				snprintf(&tmpString[6], 1, "0");
+				snprintf(&tmpString[7], 1, "%u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[8], 100, " hide");
+				snprintf(&tmpString2[8], 100, " hide");
 			}
 			else if (this->uid < 100)
 			{
-				_snprintf(&tmpString[6], 2, "%2u", this->uid);
+				snprintf(&tmpString[6], 2, "%2u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[8], 100, " hide");
+				snprintf(&tmpString2[8], 100, " hide");
 			}
 			else
 			{
-				_snprintf(&tmpString[6], 3, "3%u", this->uid);
+				snprintf(&tmpString[6], 3, "3%u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[9], 100, " hide");
+				snprintf(&tmpString2[9], 100, " hide");
 			}
 
 			strcpy(tmpString2, tmpString);
-			_snprintf(&tmpString2[8], 100, " hide");
+			snprintf(&tmpString2[8], 100, " hide");
 		}
 		else if (i < 100)
 		{
-			_snprintf(&tmpString[4], 2, "%2u", i);
+			snprintf(&tmpString[4], 2, "%2u", i);
 
 			if (this->uid < 10)
 			{
-				_snprintf(&tmpString[6], 1, "0");
-				_snprintf(&tmpString[7], 1, "%u", this->uid);
+				snprintf(&tmpString[6], 1, "0");
+				snprintf(&tmpString[7], 1, "%u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[8], 100, " hide");
+				snprintf(&tmpString2[8], 100, " hide");
 			}
 			else if (this->uid < 100)
 			{
-				_snprintf(&tmpString[6], 2, "%2u", this->uid);
+				snprintf(&tmpString[6], 2, "%2u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[8], 100, " hide");
+				snprintf(&tmpString2[8], 100, " hide");
 			}
 			else
 			{
-				_snprintf(&tmpString[6], 3, "3%u", this->uid);
+				snprintf(&tmpString[6], 3, "3%u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[9], 100, " hide");
+				snprintf(&tmpString2[9], 100, " hide");
 			}
 		}
 		else
 		{
-			_snprintf(&tmpString[4], 3, "%3u", i);
+			snprintf(&tmpString[4], 3, "%3u", i);
 
 			if (this->uid < 10)
 			{
-				_snprintf(&tmpString[7], 1, "0");
-				_snprintf(&tmpString[8], 1, "%u", this->uid);
+				snprintf(&tmpString[7], 1, "0");
+				snprintf(&tmpString[8], 1, "%u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[9], 100, " hide");
+				snprintf(&tmpString2[9], 100, " hide");
 			}
 			else if (this->uid < 100)
 			{
-				_snprintf(&tmpString[7], 2, "%2u", this->uid);
+				snprintf(&tmpString[7], 2, "%2u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[9], 100, " hide");
+				snprintf(&tmpString2[9], 100, " hide");
 			}
 			else
 			{
-				_snprintf(&tmpString[7], 3, "3%u", this->uid);
+				snprintf(&tmpString[7], 3, "3%u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[10], 100, " hide");
+				snprintf(&tmpString2[10], 100, " hide");
 			}
 		}
 
@@ -1881,22 +1881,22 @@ void	CPieInternal::showGUI(void) {
 
 	if (this->uid < 10)
 	{
-		_snprintf(&toolBarName[7], 1, "0");
-		_snprintf(&toolBarName[8], 1, "%u", this->uid);
+		snprintf(&toolBarName[7], 1, "0");
+		snprintf(&toolBarName[8], 1, "%u", this->uid);
 		strcpy(toolBarDefine, toolBarName);
-		_snprintf(&toolBarDefine[9], 100, " show");
+		snprintf(&toolBarDefine[9], 100, " show");
 	}
 	else if (this->uid < 100)
 	{
-		_snprintf(&toolBarName[7], 2, "%2u", this->uid);
+		snprintf(&toolBarName[7], 2, "%2u", this->uid);
 		strcpy(toolBarDefine, toolBarName);
-		_snprintf(&toolBarDefine[9], 100, " show");
+		snprintf(&toolBarDefine[9], 100, " show");
 	}
 	else
 	{
-		_snprintf(&toolBarName[7], 3, "3%u", this->uid);
+		snprintf(&toolBarName[7], 3, "3%u", this->uid);
 		strcpy(toolBarDefine, toolBarName);
-		_snprintf(&toolBarDefine[10], 100, " show");
+		snprintf(&toolBarDefine[10], 100, " show");
 	}
 
 	TwDefine(toolBarDefine);
@@ -1908,7 +1908,7 @@ void	CPieInternal::showGUI(void) {
 	strncpy(vertBarName, toolBarName, 255);
 	strcat(vertBarName, "vertBar");
 
-	_snprintf(vertBarDefine, 255, "%s show",
+	snprintf(vertBarDefine, 255, "%s show",
 			vertBarName);
 
 	TwDefine(vertBarDefine);
@@ -1920,7 +1920,7 @@ void	CPieInternal::showGUI(void) {
 	strncpy(connBarName, toolBarName, 255);
 	strcat(connBarName, "connBar");
 
-	_snprintf(connBarDefine, 255, "%s show",
+	snprintf(connBarDefine, 255, "%s show",
 			connBarName);
 
 	TwDefine(connBarDefine);
@@ -1941,78 +1941,78 @@ void	CPieInternal::showGUI(void) {
 		//utterly hack to add zero's to make Bar names unique -_-
 		if (i < 10)
 		{
-			_snprintf(&tmpString[4], 1, "0");
-			_snprintf(&tmpString[5], 1, "%u", i);
+			snprintf(&tmpString[4], 1, "0");
+			snprintf(&tmpString[5], 1, "%u", i);
 
 			if (this->uid < 10)
 			{
-				_snprintf(&tmpString[6], 1, "0");
-				_snprintf(&tmpString[7], 1, "%u", this->uid);
+				snprintf(&tmpString[6], 1, "0");
+				snprintf(&tmpString[7], 1, "%u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[8], 100, " show");
+				snprintf(&tmpString2[8], 100, " show");
 			}
 			else if (this->uid < 100)
 			{
-				_snprintf(&tmpString[6], 2, "%2u", this->uid);
+				snprintf(&tmpString[6], 2, "%2u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[8], 100, " show");
+				snprintf(&tmpString2[8], 100, " show");
 			}
 			else
 			{
-				_snprintf(&tmpString[6], 3, "3%u", this->uid);
+				snprintf(&tmpString[6], 3, "3%u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[9], 100, " show");
+				snprintf(&tmpString2[9], 100, " show");
 			}
 
 			strcpy(tmpString2, tmpString);
-			_snprintf(&tmpString2[8], 100, " show");
+			snprintf(&tmpString2[8], 100, " show");
 		}
 		else if (i < 100)
 		{
-			_snprintf(&tmpString[4], 2, "%2u", i);
+			snprintf(&tmpString[4], 2, "%2u", i);
 
 			if (this->uid < 10)
 			{
-				_snprintf(&tmpString[6], 1, "0");
-				_snprintf(&tmpString[7], 1, "%u", this->uid);
+				snprintf(&tmpString[6], 1, "0");
+				snprintf(&tmpString[7], 1, "%u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[8], 100, " show");
+				snprintf(&tmpString2[8], 100, " show");
 			}
 			else if (this->uid < 100)
 			{
-				_snprintf(&tmpString[6], 2, "%2u", this->uid);
+				snprintf(&tmpString[6], 2, "%2u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[8], 100, " show");
+				snprintf(&tmpString2[8], 100, " show");
 			}
 			else
 			{
-				_snprintf(&tmpString[6], 3, "3%u", this->uid);
+				snprintf(&tmpString[6], 3, "3%u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[9], 100, " show");
+				snprintf(&tmpString2[9], 100, " show");
 			}
 		}
 		else
 		{
-			_snprintf(&tmpString[4], 3, "%3u", i);
+			snprintf(&tmpString[4], 3, "%3u", i);
 
 			if (this->uid < 10)
 			{
-				_snprintf(&tmpString[7], 1, "0");
-				_snprintf(&tmpString[8], 1, "%u", this->uid);
+				snprintf(&tmpString[7], 1, "0");
+				snprintf(&tmpString[8], 1, "%u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[9], 100, " show");
+				snprintf(&tmpString2[9], 100, " show");
 			}
 			else if (this->uid < 100)
 			{
-				_snprintf(&tmpString[7], 2, "%2u", this->uid);
+				snprintf(&tmpString[7], 2, "%2u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[9], 100, " show");
+				snprintf(&tmpString2[9], 100, " show");
 			}
 			else
 			{
-				_snprintf(&tmpString[7], 3, "3%u", this->uid);
+				snprintf(&tmpString[7], 3, "3%u", this->uid);
 				strcpy(tmpString2, tmpString);
-				_snprintf(&tmpString2[10], 100, " show");
+				snprintf(&tmpString2[10], 100, " show");
 			}
 		}
 

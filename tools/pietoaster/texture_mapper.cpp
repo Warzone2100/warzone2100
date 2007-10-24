@@ -209,7 +209,7 @@ void	CTextureMapper::addGUI(void) {
 	m_GUI = TwNewBar("TextureMapper");
 
 	char	tmDefine[255];
-	_snprintf(tmDefine, 255, "TextureMapper ");
+	snprintf(tmDefine, 255, "TextureMapper ");
 
 	Uint16	i, j;
 
@@ -222,9 +222,9 @@ void	CTextureMapper::addGUI(void) {
 			char	varName[255];
 			char	varDefine[255];
 
-			_snprintf(varName, 255, "target%uN%u", i, j);
+			snprintf(varName, 255, "target%uN%u", i, j);
 			//TODO:non-power-of-two support?
-			_snprintf(varDefine, 255, "label = 'vertice%u'", j);
+			snprintf(varDefine, 255, "label = 'vertice%u'", j);
 
 			TwAddVarRW(m_GUI, varName, g_pieVector2fType, &m_targets[i]->texCoord[j], varDefine);
 
