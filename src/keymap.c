@@ -240,8 +240,6 @@ _keymapsave keyMapSaveTable[] =
 	kf_RaiseTile,
 	kf_ToggleOutline,
 	kf_TriFlip,
-	kf_UpDroidScale,
-	kf_DownDroidScale,
 	kf_RaiseGamma,
 	kf_LowerGamma,
 	kf_ToggleWatchWindow,
@@ -445,18 +443,16 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_G,KEYMAP_PRESSED,kf_ToggleGodMode,				"Toggle god Mode Status");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_O,KEYMAP_PRESSED,kf_ChooseOptions,				"Display Options Screen");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_X,KEYMAP_PRESSED,kf_FinishResearch,				"Complete current research");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_SPACE,KEYMAP_PRESSED,kf_ToggleWatchWindow,			"Toggle watch window");
+	keyAddMapping(KEYMAP__DEBUG,KEY_LSHIFT,KEY_W,KEYMAP_PRESSED,kf_ToggleWatchWindow,			"Toggle watch window");
 
 	saveKeyMap();	// save out the default key mappings.
 
 //  ------------------------ OLD STUFF - Store here!
 	/*
+	keyAddMapping(KEYMAP__DEBUG,KEY_LSHIFT,KEY_D,KEYMAP_PRESSED,kf_ToggleDrivingMode, 			"Toggle Driving Mode");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_F6,KEYMAP_DOWN,kf_UpGeoOffset,"Raise the geometric offset");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_F7,KEYMAP_DOWN,kf_DownGeoOffset,"Lower the geometric offset");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_F8,KEYMAP_DOWN,kf_UpDroidScale,"Increase droid Scaling");
-	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_F9,KEYMAP_DOWN,kf_DownDroidScale,"Decrease droid Scaling");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_C,KEYMAP_PRESSED,kf_SimCloseDown,"Simulate Screen Close Down");
-	keyAddMapping(KEYMAP_ALWAYS,KEY_IGNORE,KEY_D,KEYMAP_PRESSED,kf_ToggleDrivingMode,"Toggle Driving Mode");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_E,KEYMAP_PRESSED,kf_ToggleDroidInfo,"Display droid info whilst tracking");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_I,KEYMAP_PRESSED,kf_ToggleWidgets,"Toggle Widgets");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_J,KEYMAP_PRESSED,kf_ToggleRadarAllign,"Toggles Radar allignment");

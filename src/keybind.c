@@ -647,6 +647,7 @@ void	kf_ToggleCamera( void )
 /* Toggle 'watch' window on/off */
 void kf_ToggleWatchWindow( void )
 {
+	addConsoleMessage("WATCH WINDOW!", LEFT_JUSTIFY); // what is this? - per
 	(void)addDebugMenu(!DebugMenuUp);
 }
 
@@ -1137,21 +1138,7 @@ void	kf_DownGeoOffset( void )
 	geoOffset--;
 
 }
-// --------------------------------------------------------------------------
-/* Ups the droid scale */
-void	kf_UpDroidScale( void )
-{
-	droidScale++;
-}
-// --------------------------------------------------------------------------
-/* Lowers the droid scale */
-void	kf_DownDroidScale( void )
-{
-	if(droidScale>2)
-	{
-		droidScale--;
-	}
-}
+
 // --------------------------------------------------------------------------
 /* Toggles the power bar display on and off*/
 void	kf_TogglePowerBar( void )
@@ -1531,22 +1518,25 @@ void	kf_ChooseCancel( void )
 // --------------------------------------------------------------------------
 void	kf_ToggleDrivingMode( void )
 {
+	addConsoleMessage("Toggle driver mode", LEFT_JUSTIFY); // what does this do? - per
+
 	/* No point unless we're tracking */
 	if(getWarCamStatus())
 	{
 		if(getDrivingStatus())
 		{
 			StopDriverMode();
+			addConsoleMessage("DriverMode off", LEFT_JUSTIFY);
 		}
 		else
 		{
 			if(	(driveModeActive() == FALSE) &&	(demoGetStatus() == FALSE) && !bMultiPlayer)
 			{
 				StartDriverMode( NULL );
+				addConsoleMessage("DriverMode on", LEFT_JUSTIFY);
 			}
 		}
 	}
-
 }
 
 BOOL	bMovePause = FALSE;

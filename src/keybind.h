@@ -89,8 +89,6 @@ extern void	kf_JumpToMapMarker( void );
 extern void	kf_TogglePowerBar( void );
 extern void	kf_UpGeoOffset( void );
 extern void	kf_DownGeoOffset( void );
-extern void	kf_UpDroidScale( void );
-extern void	kf_DownDroidScale( void );
 extern void	kf_ToggleDebugMappings( void );
 extern void	kf_ToggleGodMode( void );
 extern void	kf_SeekNorth( void );

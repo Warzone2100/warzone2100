@@ -99,8 +99,6 @@ extern void	compPersonToBits(DROID *psDroid);
 #define MUZZLE_FLASH_PIE(DROID,PLAYER)	(asWeaponStats[DROID->asWeaps[0].nStat].pMuzzleGraphic)
 
 /* Don't know what these might be? */
-extern BOOL		leftFirst;
-extern UDWORD	droidScale;	//testing only - remove when decided
 extern void	updateLightLevels(void);
 extern SDWORD	rescaleButtonObject(SDWORD radius, SDWORD baseScale,SDWORD baseRadius);
 
