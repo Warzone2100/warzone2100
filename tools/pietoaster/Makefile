@@ -19,7 +19,7 @@ OBJECTFILES=$(SOURCES:%.cpp=%.o)
 all: pietoaster
 
 clean:
-	-rm $(OBJECTFILES) pietoaster
+	-rm -f $(OBJECTFILES) pietoaster
 
 pietoaster: $(OBJECTFILES)
 	$(CXX) -o $@ $^ -lSDL_image -lSDL -lpng -lphysfs -lGLU -lGL -lAntTweakBar
