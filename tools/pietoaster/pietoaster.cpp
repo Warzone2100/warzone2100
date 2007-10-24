@@ -204,7 +204,7 @@ int main(int argc, char *argv[])
 {
 	const SDL_VideoInfo* video = NULL;
 	bool bQuit = false;
-	char *path = "./";
+	const char path[] = "./";
 
 
 	PHYSFS_setWriteDir(path);

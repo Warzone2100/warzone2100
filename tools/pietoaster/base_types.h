@@ -50,6 +50,7 @@ typedef unsigned __int64	uint64_t;
 		#define FORCEINLINE __inline
 	#endif
 #elif defined(__GNUC__)
+#  include <stdint.h>
 #  include <limits.h>
 #  define MAX_PATH PATH_MAX
 #define HAVE_STDINT_H	1
