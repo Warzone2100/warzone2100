@@ -46,7 +46,7 @@
 static char mychars[255]; //temp char
 static int mychars_index = 0; //temp char current index
 static TwBar *textBar; //text box bar
-static BOOL textboxUp = FALSE; //whether textbox is up or not
+static bool textboxUp = false; //whether textbox is up or not
 
 static char *text_pointer = NULL;
 
@@ -165,7 +165,7 @@ static void TW_CALL addTextBox(void *clientData)
 	snprintf(&test[8 + size], 1, "\'");
 	//strcat(&test[0], attr);
 
-	textboxUp = TRUE;
+	textboxUp = true;
 
 	strncpy(&mychars[0], string, size);
 	mychars_index = size;
@@ -185,7 +185,7 @@ static void deleteTextBox()
 	}
 
 	TwDeleteBar(textBar);
-	textboxUp = FALSE;
+	textboxUp = false;
 }
 
 static void updateTextBox(void)
@@ -411,7 +411,7 @@ int main(int argc, char *argv[])
 					inputButtonMouseEvent(event.button, event.type);
 					break;
 				case SDL_QUIT:	// Window is closed
-					bQuit = TRUE;
+					bQuit = true;
 					break;
 				case SDL_VIDEORESIZE:	// Window size has changed
 					// Resize SDL video mode

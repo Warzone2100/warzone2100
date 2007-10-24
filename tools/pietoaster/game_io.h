@@ -28,10 +28,6 @@
 
 /* Simple implementation of singleclick doubleclick holdbutton via SDL */
 
-#define Bool int
-#define TRUE 1
-#define FALSE 0
-
 ///use max possible sdl keys
 const Uint32 MAX_KEYS = SDLK_LAST;
 ///use max possible sdl mouse buttons(UNUSED?,LEFT,RIGHT,MIDDLE)
@@ -76,12 +72,12 @@ extern void inputMotionMouseEvent(SDL_MouseMotionEvent motion);
 
 extern void inputKeyEvent(SDL_KeyboardEvent key, Uint8 newState);
 
-Bool isKeyDown(SDLKey key);
-Bool isKeyDoubleDown(SDLKey key);
-Bool isKeyHold(SDLKey key);
-Bool isMouseButtonDown(Uint8 button);
-Bool isMouseButtonDoubleDown(Uint8 button);
-Bool isMouseButtonHold(Uint8 button);
+bool isKeyDown(SDLKey key);
+bool isKeyDoubleDown(SDLKey key);
+bool isKeyHold(SDLKey key);
+bool isMouseButtonDown(Uint8 button);
+bool isMouseButtonDoubleDown(Uint8 button);
+bool isMouseButtonHold(Uint8 button);
 
 extern void inputUpdate(void);
 

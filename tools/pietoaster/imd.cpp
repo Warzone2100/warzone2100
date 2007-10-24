@@ -61,7 +61,7 @@ void _imd_save_connectors(FILE *fp, iIMDShape *s)
 //* params	filename = name of file to save to including .IMD extention
 //*			s 			= pointer to IMD shape
 //*
-//* returns TRUE -> ok, FLASE -> error
+//* returns true -> ok, FLASE -> error
 //*
 //******
 bool iV_IMDSave(const char *filename, iIMDShape *s, bool PieIMD)

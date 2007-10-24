@@ -48,7 +48,7 @@ static bool check_extension(const char* extension_name)
 	const char *tmp = extension_list;
 	unsigned int first_extension_length;
 
-	if (!extension_name || !extension_list) return FALSE;
+	if (!extension_name || !extension_list) return false;
 
 	while (tmp[0]) {
 		first_extension_length = strcspn(tmp, " ");

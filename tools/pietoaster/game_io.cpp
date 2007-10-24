@@ -77,27 +77,27 @@ void inputKeyEvent(SDL_KeyboardEvent key, Uint8 newState) {
 	}
 }
 
-Bool isKeyDown(SDLKey key) {
+bool isKeyDown(SDLKey key) {
 	return (KeyStates[key].data & OH_KEY_RELEASE);
 }
 
-Bool isKeyDoubleDown(SDLKey key) {
+bool isKeyDoubleDown(SDLKey key) {
 	return (KeyStates[key].data & OH_KEY_DDOWN && KeyStates[key].data & OH_KEY_RELEASE );
 }
 
-Bool isKeyHold(SDLKey key) {
+bool isKeyHold(SDLKey key) {
 	return (KeyStates[key].duration);
 }
 
-Bool isMouseButtonDown(Uint8 button) {
+bool isMouseButtonDown(Uint8 button) {
 	return (MouseStates[button].data & OH_KEY_RELEASE);
 }
 
-Bool isMouseButtonDoubleDown(Uint8 button) {
+bool isMouseButtonDoubleDown(Uint8 button) {
 	return (MouseStates[button].data & OH_KEY_DDOWN && MouseStates[button].data & OH_KEY_RELEASE);
 }
 
-Bool isMouseButtonHold(Uint8 button) {
+bool isMouseButtonHold(Uint8 button) {
 	return (MouseStates[button].duration);
 }
 
