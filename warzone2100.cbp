@@ -153,9 +153,11 @@
 			<Add option="-Wall" />
 			<Add option="-Werror-implicit-function-declaration" />
 			<Add option="-std=gnu99" />
+			<Add option="-DENABLE_NLS=1" />
 			<Add directory="." />
 		</Compiler>
 		<Linker>
+			<Add library="intl" />
 			<Add library="physfs" />
 			<Add library="png" />
 			<Add library="SDL" />
