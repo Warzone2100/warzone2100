@@ -33,9 +33,9 @@ using namespace std;
     inline void set_env(const char* k, const char* v) { setenv(k, v, 1); };
 #endif
 
-bool QuerySvn(const string& workingDir, string& revision, string &date);
-bool ParseFile(const string& docFile, string& revision, string &date);
-bool WriteOutput(const string& outputFile, const string& revision, const string& date);
+bool QuerySvn(const string& workingDir, string& revision, string& date, string& wc_uri);
+bool ParseFile(const string& docFile, string& revision, string &date, string& wc_uri);
+bool WriteOutput(const string& outputFile, const string& revision, const string& date, const string& wc_uri);
 int main(int argc, char** argv);
 
 
@@ -96,12 +96,11 @@ int main(int argc, char** argv)
     string docFile2(workingDir);
     docFile2.append("/_svn/entries");
 
-    string revision;
-    string date;
-    string comment;
-    string old;
+    // Strings to extract Subversion information we want into
+    // wc_uri: working copy root, e.g. trunk, branches/2.0, etc.
+    string revision, date, wc_uri;
 
-    if (!QuerySvn(workingDir, revision, date) && !ParseFile(docFile, revision, date) && !ParseFile(docFile2, revision, date)
+    if (!QuerySvn(workingDir, revision, date, wc_uri) && !ParseFile(docFile, revision, date, wc_uri) && !ParseFile(docFile2, revision, date, wc_uri)
      || revision == "")
     {
         cerr << "Error: failed retrieving version information.\n"
@@ -110,14 +109,20 @@ int main(int argc, char** argv)
         revision = "0";
     }
 
-    WriteOutput(outputFile, revision, date);
+    WriteOutput(outputFile, revision, date, wc_uri);
 
     return 0;
 }
 
+void removeAfterNewLine(string& str)
+{
+    // Find a newline and erase everything that comes after it
+    string::size_type lbreak_pos = str.find_first_of("\r\n");
+    if (lbreak_pos != string::npos)
+        str.erase(lbreak_pos);
+}
 
-
-bool QuerySvn(const string& workingDir, string& revision, string &date)
+bool QuerySvn(const string& workingDir, string& revision, string& date, string& wc_uri)
 {
     string svncmd("svn info ");
     svncmd.append(workingDir);
@@ -127,23 +132,38 @@ bool QuerySvn(const string& workingDir, string& revision, string &date)
     if(svn)
     {
         char buf[1024];
-        string line;
-        while(fgets(buf, 4095, svn))
+        string line, wc_repo_root;
+
+        while(fgets(buf, sizeof(buf), svn))
         {
             line.assign(buf);
-            if(line.find("Revision:") != string::npos)
+            if(line.find("Revision: ") != string::npos)
             {
                 revision = line.substr(strlen("Revision: "));
 
-                    string lbreak("\r\n");
-                    size_t i;
-                    while((i = revision.find_first_of(lbreak)) != string::npos)
-                        revision.erase(revision.length()-1);
+                removeAfterNewLine(revision);
             }
             if(line.find("Last Changed Date: ") != string::npos)
             {
-                    date = line.substr(strlen("Last Changed Date: "), strlen("2006-01-01 12:34:56"));
+                date = line.substr(strlen("Last Changed Date: "), strlen("2006-01-01 12:34:56"));
             }
+            if (line.find("Repository Root: ") != string::npos)
+            {
+                wc_repo_root = line.substr(strlen("Repository Root: "));
+
+                removeAfterNewLine(wc_repo_root);
+            }
+            if (line.find("URL: ") != string::npos)
+            {
+                wc_uri = line.substr(strlen("URL: "));
+
+                removeAfterNewLine(wc_uri);
+            }
+        }
+
+        if (wc_uri.find(wc_repo_root) != string::npos)
+        {
+            wc_uri.erase(0, wc_repo_root.length() + 1); // + 1 to remove the prefixed slash also
         }
     }
     pclose(svn);
@@ -151,7 +171,7 @@ bool QuerySvn(const string& workingDir, string& revision, string &date)
 }
 
 
-bool ParseFile(const string& docFile, string& revision, string &date)
+bool ParseFile(const string& docFile, string& revision, string &date, string& wc_uri)
 {
     string token[6];
     date.clear();
@@ -175,6 +195,11 @@ bool ParseFile(const string& docFile, string& revision, string &date)
     // The third non-empty line (zero-index) from the start contains the revision number
     revision = token[2];
 
+    // The fourth non-empty line from the start contains the working copy URL. The fifth
+    // non-empty line contains the repository root, which is the part of the working
+    // copy URL we're not interested in.
+    wc_uri = token[3].substr(token[4].length() + 1); // + 1 to remove the prefixed slash also
+
     // The sixth non-empty line from the start contains the revision date
     date = token[5].substr(0, strlen("2006-01-01T12:34:56"));
     // Set the 11th character from a 'T' to a space (' ')
@@ -184,7 +209,7 @@ bool ParseFile(const string& docFile, string& revision, string &date)
 }
 
 
-bool WriteOutput(const string& outputFile, const string& revision, const string& date)
+bool WriteOutput(const string& outputFile, const string& revision, const string& date, const string& wc_uri)
 {
     string comment("/*" + revision + "*/");
 
@@ -216,45 +241,63 @@ bool WriteOutput(const string& outputFile, const string& revision, const string&
     }
 
     header << comment << "\n"
-           << "#ifndef AUTOREVISION_H\n"
-           << "#define AUTOREVISION_H\n\n\n";
+              "#ifndef AUTOREVISION_H\n"
+              "#define AUTOREVISION_H\n"
+              "\n"
+              "\n"
+              "#ifndef SVN_AUTOREVISION_STATIC\n"
+              "#define SVN_AUTOREVISION_STATIC\n"
+              "#endif\n"
+              "\n"
+              "\n";
 
     if(do_std)
         header << "#include <string>\n";
     if(do_wx)
         header << "#include <wx/string.h>\n";
 
-    header << "\n#define SVN_REV       " << revision << "\n"
-           << "\n#define SVN_REVISION \"" << revision << "\"\n"
-           << "\n#define SVN_DATE     \"" << date << "\"\n\n";
+    header << "\n#define SVN_REV       " << revision << ""
+           << "\n#define SVN_REVISION \"" << revision << "\""
+           << "\n#define SVN_DATE     \"" << date << "\""
+           << "\n#define SVN_URI      \"" << wc_uri << "\"\n";
 
     // Open namespace
     if(do_int || do_std || do_wx)
         header << "namespace autorevision\n{\n";
 
     if(do_int)
-        header << "\tconst unsigned int svn_revision = " << revision << ";\n";
+        header << "\tSVN_AUTOREVISION_STATIC const unsigned int svn_revision = " << revision << ";\n";
 
     if(do_std)
-        header << "\tconst std::string svn_revision_s(\"" << revision << "\");\n"
-               << "\tconst std::string svn_date_s(\"" << date << "\");\n";
+        header << "\tSVN_AUTOREVISION_STATIC const std::string svn_revision_s(\"" << revision << "\");\n"
+               << "\tSVN_AUTOREVISION_STATIC const std::string svn_date_s(\"" << date << "\");\n"
+               << "\tSVN_AUTOREVISION_STATIC const std::string svn_uri_s(\"" << wc_uri << "\");\n";
     if(do_cstr)
-        header << "\tconst char svn_revision_cstr[] = \"" << revision << "\";\n"
-               << "\tconst char svn_date_cstr[] = \"" << date << "\";\n";
+        header << "\tSVN_AUTOREVISION_STATIC const char svn_revision_cstr[] = \"" << revision << "\";\n"
+               << "\tSVN_AUTOREVISION_STATIC const char svn_date_cstr[] = \"" << date << "\";\n"
+               << "\tSVN_AUTOREVISION_STATIC const char svn_uri_cstr[] = \"" << wc_uri << "\";\n";
     if(do_wx)
     {
-        header << "\tconst wxString svnRevision(";
+        header << "\tSVN_AUTOREVISION_STATIC const wxString svnRevision(";
 
         if(do_translate)
             header << "wxT";
 
         header << "(\"" << revision << "\"));\n"
-               << "\tconst wxString svnDate(";
+
+               << "\tSVN_AUTOREVISION_STATIC const wxString svnDate(";
 
         if(do_translate)
             header << "wxT";
 
-        header << "(\"" << date << "\"));\n";
+        header << "(\"" << date << "\"));\n"
+
+               << "\tSVN_AUTOREVISION_STATIC const wxString svnUri(";
+
+        if(do_translate)
+            header << "wxT";
+
+        header << "(\"" << wc_uri << "\"));\n";
     }
 
     // Terminate/close namespace
