@@ -435,6 +435,17 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 	write(dumpFile, __DATE__, strlen(__DATE__));
 	write(dumpFile, "\n", 1);
 
+	write(dumpFile, "Compiled by: ", strlen("Compiled by: "));
+# if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL)
+	write(dumpFile, "GCC " __VERSION__, strlen("GCC " __VERSION__));
+# elif defined(WZ_CC_INTEL)
+	// Intel includes the compiler name within the version string
+	write(dumpFile, __VERSION__, strlen(__VERSION__));
+# else
+	write(dumpFile, "UNKNOWN", strlen("UNKNOWN"));
+# endif
+	write(dumpFile, "\n", 1);
+
 	write(dumpFile, "Executed on: ", strlen("Executed on: "));
 	write(dumpFile, executionDate, strlen(executionDate));
 	write(dumpFile, "\n\n", 2);
