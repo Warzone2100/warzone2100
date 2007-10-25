@@ -38,7 +38,7 @@ AM_GNU_GETTEXT([external])
 
 
 # Check for compiler
-case $CC in
+case ${CC} in
 	icc)
 		cc_icc=yes
 		;;
@@ -46,11 +46,12 @@ esac
 
 
 # Check for operating system
-case $host_os in
+case ${host_os} in
 	mingw32)
 		host_os_mingw32=yes
 		AC_CHECK_TOOL([WINDRES], [windres], AC_MSG_ERROR([windres not found]))
-		WIN32_LIBS="-lintl -ldbghelp -lshfolder -lwinmm -lwsock32"
+		WIN32_LIBS='-lintl -ldbghelp -lshfolder -lwinmm -lwsock32'
+		AC_SUBST([WIN32_LIBS], [${WIN32_LIBS}])
 		;;
 	*)
 		AC_DEFINE([_XOPEN_SOURCE], 600, [Enable POSIX extensions if present])
@@ -63,21 +64,21 @@ AM_CONDITIONAL([MINGW32], test "x$host_os_mingw32" = "xyes")
 
 AC_ARG_WITH(icondir,
 	AS_HELP_STRING([--with-icondir=DIR],[icon files [DATADIR/icons]]),
-	[ with_icondir=$withval ], [ with_icondir=$datadir/icons ])
+	[ with_icondir=${withval} ], [ with_icondir=${datadir}/icons ])
 
 
 AC_ARG_WITH(applicationdir,
 	AS_HELP_STRING([--with-applicationdir=DIR],[application files [DATADIR/applications]]),
-	[ with_applicationdir=$withval ], [ with_applicationdir=$datadir/applications ])
+	[ with_applicationdir=${withval} ], [ with_applicationdir=${datadir}/applications ])
 
 
-AC_SUBST(icondir, $with_icondir)
-AC_SUBST(applicationdir, $with_applicationdir)
+AC_SUBST([icondir], [${with_icondir}])
+AC_SUBST([applicationdir], [${with_applicationdir}])
 if test "x$docdir" = "x" ; then
-	AC_SUBST(docdir, $datarootdir/doc/$AC_PACKAGE_TARNAME)
+	AC_SUBST([docdir], [${datarootdir}/doc/${AC_PACKAGE_TARNAME}])
 fi
 if test "x$localedir" = "x" ; then
-	AC_SUBST(localedir, $datadir/locale)
+	AC_SUBST([localedir], [${datadir}/locale])
 fi
 
 
@@ -85,10 +86,10 @@ fi
 
 AC_ARG_ENABLE([installer],
 	AS_HELP_STRING([--enable-installer],[Build NSIS installer [no]]),
-	[ enable_installer=$enableval ], [ enable_installer=no ])
+	[ enable_installer=${enableval} ], [ enable_installer=no ])
 AM_CONDITIONAL(INSTALLER, test "x$enable_installer" = "xyes")
 AC_MSG_CHECKING([whether to build NSIS installer])
-AC_MSG_RESULT([$enable_installer])
+AC_MSG_RESULT([${enable_installer}])
 
 
 AC_ARG_WITH(makensis,
@@ -111,22 +112,22 @@ if test "x$enable_installer" = "xyes" ; then
 		fi
 	else
 		AC_MSG_CHECKING([for makensis])
-		AC_MSG_RESULT([$with_makensis])
-		AC_SUBST(MAKENSIS, $with_makensis)
+		AC_MSG_RESULT([${with_makensis}])
+		AC_SUBST([MAKENSIS], [${with_makensis}])
 	fi
 	if test "x$with_installer_version" = "x" ; then
 		AC_MSG_ERROR([installer version invalid])
 	else
 		AC_MSG_CHECKING([for installer version])
-		AC_MSG_RESULT([$with_installer_version])
-		AC_SUBST(INSTALLER_VERSION, $with_installer_version)
+		AC_MSG_RESULT([${with_installer_version}])
+		AC_SUBST([INSTALLER_VERSION], [${with_installer_version}])
 	fi
 	if test "x$with_installer_extdir" = "x" ; then
 		AC_MSG_ERROR([installer external dir not found])
 	else
 		AC_MSG_CHECKING([for installer extdir])
-		AC_MSG_RESULT([$with_installer_extdir])
-		AC_SUBST(INSTALLER_EXTDIR, $with_installer_extdir)
+		AC_MSG_RESULT([${with_installer_extdir}])
+		AC_SUBST([INSTALLER_EXTDIR], [${with_installer_extdir}])
 	fi
 fi
 
@@ -136,9 +137,9 @@ fi
 # Add later for stricter checking: -Wextra -Wmissing-declarations -Wstrict-prototypes
 AC_ARG_ENABLE(debug,
 	AS_HELP_STRING([--enable-debug[=yes/relaxed/no]],[Compile debug version [no]]),
-	[ enable_debug=$enableval ], [ enable_debug=no ])
+	[ enable_debug=${enableval} ], [ enable_debug=no ])
 AC_MSG_CHECKING([whether to compile in debug mode])
-AC_MSG_RESULT([$enable_debug])
+AC_MSG_RESULT([${enable_debug}])
 if test "x$enable_debug" = "xyes" ; then
 	if test "x$cc_icc" = "xyes" ; then
 		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -DDEBUG -Wcheck -Werror"
@@ -161,18 +162,13 @@ PKG_CHECK_MODULES([OGGVORBIS], [ogg >= 1.1 vorbis >= 1.1 vorbisfile >= 1.1])
 
 # Checks for libraries:
 
-AC_CHECK_LIB(m, pow)
-# PhysFS needs this, since on some systems it is not properly linked:
-AC_CHECK_LIB(z, deflate)
-
 # Look for PhysicsFS
 AC_CHECK_HEADER(physfs.h, , AC_MSG_ERROR([PhysicsFS header not found.]))
-AC_CHECK_LIB(physfs, PHYSFS_init, , AC_MSG_ERROR([PhysicsFS not found.]))
+AC_CHECK_LIB(physfs, PHYSFS_init, AC_SUBST([PHYSFS_LIBS], [-lphysfs]), AC_MSG_ERROR([PhysicsFS not found.]))
 
 # Look for SDL_net
 AC_CHECK_HEADER(SDL/SDL_net.h, , AC_MSG_ERROR([SDL_net header not found.]))
-AC_CHECK_LIB(SDL_net, SDLNet_Init, , AC_MSG_ERROR([SDL_net not found.]), [-lSDL ${WIN32_LIBS}])
-
+AC_CHECK_LIB(SDL_net, SDLNet_Init, AC_SUBST([SDL_NET_LIBS], [-lSDL_net]), AC_MSG_ERROR([SDL_net not found.]), [-lSDL ${WIN32_LIBS}])
 
 # Look for OpenGL
 AC_CHECK_HEADER(SDL/SDL_opengl.h, ,
@@ -187,6 +183,7 @@ AC_CHECK_LIB(GLU, main,
 	AC_CHECK_LIB(glu32, main,
 		OPENGL_LIBS="${OPENGL_LIBS} -lglu32",
 		AC_MSG_ERROR([GLU library not found.])))
+AC_SUBST([OPENGL_LIBS], [${OPENGL_LIBS}])
 
 # Look for OpenGLC
 AC_CHECK_HEADER(GL/glc.h, ,
@@ -196,6 +193,7 @@ AC_CHECK_LIB(GLC, main,
 	AC_CHECK_LIB(glc32, main,
 		OPENGLC_LIBS="-lglc32",
 		AC_MSG_ERROR([OpenGLC library not found. Please install QuesoGLC: http://quesoglc.sourceforge.net/])))
+AC_SUBST([OPENGLC_LIBS], [${OPENGLC_LIBS}])
 
 # Look for OpenAL
 AC_CHECK_HEADER(AL/al.h, ,
@@ -205,6 +203,7 @@ AC_CHECK_LIB(openal, main,
 	AC_CHECK_LIB(openal32, main,
 		OPENAL_LIBS="-lopenal32",
 		AC_MSG_ERROR([OpenAL library not found.])))
+AC_SUBST([OPENAL_LIBS], [${OPENAL_LIBS}])
 
 
 WZ_CFLAGS="${WZ_CFLAGS} -DDATADIR=\"\\\"\${datadir}/\${PACKAGE}\\\"\""
@@ -218,7 +217,7 @@ WZ_CFLAGS="${WZ_CFLAGS} -DYY_STATIC"
 
 CPPFLAGS="${CPPFLAGS} -I\$(top_srcdir)"
 CFLAGS="${SDL_CFLAGS} ${PNG_CFLAGS} ${OGGVORBIS_CFLAGS} $} ${OPENAL_CFLAGS} ${OPENGL_CFLAGS} ${CFLAGS} ${WZ_CFLAGS}"
-LIBS="${SDL_LIBS} ${PNG_LIBS} ${OGGVORBIS_LIBS} ${OPENAL_LIBS} ${OPENGLC_LIBS} ${OPENGL_LIBS} ${LIBS} ${WIN32_LIBS}"
+
 
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_FILES([Makefile
@@ -245,7 +244,7 @@ AC_CONFIG_FILES([Makefile
 		src/Makefile])
 AC_OUTPUT
 
-if test "x$enable_debug" = xyes; then
+if test "x$enable_debug" = "xyes" ; then
 	echo ""
 	echo " *** Running in debug mode! ***"
 	echo ""
