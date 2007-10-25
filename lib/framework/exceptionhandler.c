@@ -87,21 +87,17 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 				snprintf(resultMessage, sizeof(resultMessage), "Failed to save dump file to '%s' (error %d)", miniDumpPath, (int)GetLastError());
 			}
 
-			// Guarantee to nul-terminate
-			resultMessage[sizeof(resultMessage) - 1] = '\0';
-
-			MessageBoxA( NULL, resultMessage, applicationName, MB_OK );
-
 			CloseHandle(miniDumpFile);
 		}
 		else
 		{
 			snprintf(resultMessage, sizeof(resultMessage), "Failed to create dump file '%s' (error %d)", miniDumpPath, (int)GetLastError());
-			// Guarantee to nul-terminate
-			resultMessage[sizeof(resultMessage) - 1] = '\0';
-
-			MessageBoxA( NULL, resultMessage, applicationName, MB_OK );
 		}
+
+		// Guarantee to nul-terminate
+		resultMessage[sizeof(resultMessage) - 1] = '\0';
+
+		MessageBoxA( NULL, resultMessage, applicationName, MB_OK );
 	}
 
 	return EXCEPTION_CONTINUE_SEARCH;
