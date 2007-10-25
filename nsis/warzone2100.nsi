@@ -61,7 +61,7 @@ VIAddVersionKey "ProductVersion"	"${VERSION}"
   !define MUI_FINISHPAGE_RUN_TEXT $(TEXT_RunWarzone)
   !define MUI_FINISHPAGE_RUN_FUNCTION "LaunchLink"
   !define MUI_FINISHPAGE_SHOWREADME_NOTCHECKED
-  !define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\Readme.txt"
+  !define MUI_FINISHPAGE_SHOWREADME $(TEXT_Readme)
 
 ;--------------------------------
 ;Pages
@@ -128,7 +128,10 @@ Section $(TEXT_SecBase) SecBase
   File "/oname=ChangeLog.txt" "..\ChangeLog"
   File "/oname=Authors.txt" "..\AUTHORS"
   File "/oname=License.txt" "..\COPYING"
-  File "/oname=Readme.txt" "..\README"
+  File "/oname=Readme.en.txt" "..\doc\Readme.en"
+  File "/oname=Readme.de.txt" "..\doc\Readme.de"
+  File "/oname=Readme.en.xhtml" "..\doc\Readme.en.xhtml"
+  File "/oname=Readme.de.xhtml" "..\doc\Readme.de.xhtml"
 
 
   ;Store installation folder
@@ -239,6 +242,9 @@ FunctionEnd
   LangString TEXT_RunWarzone ${LANG_GERMAN} "Starte Warzone 2100"
 
 
+  LangString TEXT_Readme ${LANG_ENGLISH} "$INSTDIR\Readme.en.xhtml"
+  LangString TEXT_Readme ${LANG_GERMAN} "$INSTDIR\Readme.de.xhtml"
+
 
   ;Assign language strings to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
@@ -269,7 +275,11 @@ Section "Uninstall"
   Delete "$INSTDIR\warzone.wz"
   Delete "$INSTDIR\mp.wz"
 
-  Delete "$INSTDIR\Readme.txt"
+  Delete "$INSTDIR\Readme.en.txt"
+  Delete "$INSTDIR\Readme.de.txt"
+  Delete "$INSTDIR\Readme.en.xhtml"
+  Delete "$INSTDIR\Readme.de.xhtml"
+
   Delete "$INSTDIR\License.txt"
   Delete "$INSTDIR\Authors.txt"
   Delete "$INSTDIR\ChangeLog.txt"
