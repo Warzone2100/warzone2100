@@ -1037,6 +1037,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\lib\framework\strlfuncs.h"
+				>
+			</File>
+			<File
 				RelativePath="..\src\arrow.h"
 				>
 			</File>

@@ -341,6 +341,12 @@
 			<Option target="DBGWindows" />
 			<Option target="NDBGWindows" />
 		</Unit>
+		<Unit filename="lib/framework/strlfuncs.h">
+			<Option target="DBGUnix" />
+			<Option target="NDBGUnix" />
+			<Option target="DBGWindows" />
+			<Option target="NDBGWindows" />
+		</Unit>
 		<Unit filename="lib/framework/strnlen1.c">
 			<Option compilerVar="CC" />
 			<Option target="DBGUnix" />
