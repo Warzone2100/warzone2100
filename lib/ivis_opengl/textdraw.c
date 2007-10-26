@@ -87,13 +87,19 @@ static inline void iV_printFontList()
 static void iV_initializeGLC()
 {
 	if (GLC_Context)
+	{
 		return;
+	}
 
 	GLC_Context = glcGenContext();
 	if (!GLC_Context)
+	{
 		debug(LOG_ERROR, "glcGenContext() failed");
+	}
 	else
+	{
 		debug(LOG_NEVER, "glcGenContext() succesful: GLC_Context = %d", GLC_Context);
+	}
 
 	glcContext(GLC_Context);
 
@@ -104,24 +110,40 @@ static void iV_initializeGLC()
 	GLC_Font_Bold = glcGenFontID();
 
 	if (!glcNewFontFromFamily(GLC_Font_Regular, font_family))
-			debug(LOG_ERROR, "glcNewFontFromFamily(GLC_Font_Regular (%d), \"%s\") failed", GLC_Font_Regular, font_family);
-		else
-			debug(LOG_NEVER, "glcNewFontFromFamily(GLC_Font_Regular (%d), \"%s\") succesful", GLC_Font_Regular, font_family);
+	{
+		debug(LOG_ERROR, "glcNewFontFromFamily(GLC_Font_Regular (%d), \"%s\") failed", GLC_Font_Regular, font_family);
+	}
+	else
+	{
+		debug(LOG_NEVER, "glcNewFontFromFamily(GLC_Font_Regular (%d), \"%s\") succesful", GLC_Font_Regular, font_family);
+	}
 
 	if (!glcFontFace(GLC_Font_Regular, font_face_regular))
-			debug(LOG_ERROR, "glcFontFace(GLC_Font_Regular (%d), \"%s\") failed", GLC_Font_Regular, font_face_regular);
-		else
-			debug(LOG_NEVER, "glcFontFace(GLC_Font_Regular (%d), \"%s\") succesful", GLC_Font_Regular, font_face_regular);
+	{
+		debug(LOG_ERROR, "glcFontFace(GLC_Font_Regular (%d), \"%s\") failed", GLC_Font_Regular, font_face_regular);
+	}
+	else
+	{
+		debug(LOG_NEVER, "glcFontFace(GLC_Font_Regular (%d), \"%s\") succesful", GLC_Font_Regular, font_face_regular);
+	}
 
 	if (!glcNewFontFromFamily(GLC_Font_Bold, font_family))
-			debug(LOG_ERROR, "glcNewFontFromFamily(GLC_Font_Bold (%d), \"%s\") failed", GLC_Font_Bold, font_family);
-		else
-			debug(LOG_NEVER, "glcNewFontFromFamily(GLC_Font_Bold (%d), \"%s\") succesful", GLC_Font_Bold, font_family);
+	{
+		debug(LOG_ERROR, "glcNewFontFromFamily(GLC_Font_Bold (%d), \"%s\") failed", GLC_Font_Bold, font_family);
+	}
+	else
+	{
+		debug(LOG_NEVER, "glcNewFontFromFamily(GLC_Font_Bold (%d), \"%s\") succesful", GLC_Font_Bold, font_family);
+	}
 
 	if (!glcFontFace(GLC_Font_Bold, font_face_bold))
-			debug(LOG_ERROR, "glcFontFace(GLC_Font_Bold (%d), \"%s\") failed", GLC_Font_Bold, font_face_bold);
-		else
-			debug(LOG_NEVER, "glcFontFace(GLC_Font_Bold (%d), \"%s\") succesful", GLC_Font_Bold, font_face_bold);
+	{
+		debug(LOG_ERROR, "glcFontFace(GLC_Font_Bold (%d), \"%s\") failed", GLC_Font_Bold, font_face_bold);
+	}
+	else
+	{
+		debug(LOG_NEVER, "glcFontFace(GLC_Font_Bold (%d), \"%s\") succesful", GLC_Font_Bold, font_face_bold);
+	}
 
 	debug(LOG_NEVER, "finished initializing GLC");
 
@@ -142,15 +164,21 @@ void iV_TextInit()
 void iV_TextShutdown()
 {
 	if (GLC_Font_Regular)
+	{
 		glcDeleteFont(GLC_Font_Regular);
+	}
 
 	if (GLC_Font_Bold)
+	{
 		glcDeleteFont(GLC_Font_Bold);
+	}
 
 	glcContext(0);
 
 	if (GLC_Context)
+	{
 		glcDeleteContext(GLC_Context);
+	}
 }
 
 void iV_SetTextAntialias(bool enable)
@@ -185,7 +213,9 @@ static inline float getGLCResolution()
 
 	// The default resolution as used by OpenGLC is 72 dpi
 	if (resolution == 0.f)
+	{
 		return 72.f;
+	}
 
 	return resolution;
 }
@@ -472,7 +502,9 @@ UDWORD iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width
 
 				// If this word doesn't fit on the current line then break out
 				if (WWidth > Width)
+				{
 					break;
+				}
 
 				// If width ok then add this character to the current word.
 				FWord[i] = *curChar;
