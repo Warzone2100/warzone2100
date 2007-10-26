@@ -949,14 +949,14 @@ PROPULSION_STATS	*psPropStats;
 /* Calculate the acceleration that the camera spins around at */
 static void updateCameraRotationAcceleration( UBYTE update )
 {
-SDWORD	worldAngle;
-float	separation;
-SDWORD	xConcern, yConcern, zConcern;
-BOOL	bTooLow;
-PROPULSION_STATS	*psPropStats;
-SDWORD	pitch;
-BOOL	bGotFlying = FALSE;
-SDWORD	xPos,yPos,zPos;
+	SDWORD	worldAngle;
+	float	separation;
+	SDWORD	xConcern, yConcern, zConcern;
+	BOOL	bTooLow;
+	PROPULSION_STATS *psPropStats;
+	SDWORD	pitch;
+	BOOL	bGotFlying = FALSE;
+	SDWORD	xPos = 0, yPos = 0, zPos = 0;
 
 	bTooLow = FALSE;
 	if(trackingCamera.target->type == OBJ_DROID)
