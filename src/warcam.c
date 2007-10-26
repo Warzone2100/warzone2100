@@ -726,7 +726,7 @@ UDWORD	droidHeight,mapHeight,difHeight;
 PROPULSION_STATS	*psPropStats;
 SDWORD	pitch;
 BOOL	bGotFlying = FALSE;
-SDWORD	xPos,yPos,zPos;
+SDWORD	xPos = 0, yPos = 0, zPos = 0;
 
 	bTooLow = FALSE;
 	if(trackingCamera.target->type == OBJ_DROID)
