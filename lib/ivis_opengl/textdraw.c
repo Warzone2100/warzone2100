@@ -252,7 +252,7 @@ unsigned int iV_GetCountedTextWidth(const char* string, size_t string_length)
 	glcMeasureCountedString(GL_FALSE, string_length, string);
 	if (!glcGetStringMetric(GLC_BOUNDS, boundingbox))
 	{
-		debug(LOG_ERROR, "iV_GetTextWidth: couldn't retrieve a bounding box for the string");
+		debug(LOG_ERROR, "iV_GetCountedTextWidth: couldn't retrieve a bounding box for the string");
 		return 0;
 	}
 
@@ -301,7 +301,7 @@ int iV_GetTextLineSize()
 
 	if (!glcGetMaxCharMetric(GLC_BOUNDS, boundingbox))
 	{
-		debug(LOG_ERROR, "iV_GetCharWidth: couldn't retrieve a bounding box for the character");
+		debug(LOG_ERROR, "iV_GetTextLineSize: couldn't retrieve a bounding box for the character");
 		return 0;
 	}
 
@@ -332,7 +332,7 @@ int iV_GetTextAboveBase(void)
 
 	if (!glcGetMaxCharMetric(GLC_BOUNDS, boundingbox))
 	{
-		debug(LOG_ERROR, "iV_GetCharWidth: couldn't retrieve a bounding box for the character");
+		debug(LOG_ERROR, "iV_GetTextAboveBase: couldn't retrieve a bounding box for the character");
 		return 0;
 	}
 
@@ -351,7 +351,7 @@ int iV_GetTextBelowBase(void)
 
 	if (!glcGetMaxCharMetric(GLC_BOUNDS, boundingbox))
 	{
-		debug(LOG_ERROR, "iV_GetCharWidth: couldn't retrieve a bounding box for the character");
+		debug(LOG_ERROR, "iV_GetTextBelowBase: couldn't retrieve a bounding box for the character");
 		return 0;
 	}
 
@@ -433,8 +433,6 @@ UDWORD iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width
 
 	const char* curChar = String;
 
-//	DBPRINTF(("[%s] @(%d,%d) extentsmode=%d just=%d\n",String,x,y,ExtentsMode,Justify));
-
 	curChar = String;
 	while (*curChar != 0)
 	{
@@ -483,7 +481,7 @@ UDWORD iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width
 			// Don't forget the space.
 			if (*curChar == ASCII_SPACE)
 			{
-				WWidth += iV_GetCharWidth(' ');
+				WWidth += iV_GetCharWidth('-'); // cannot use space; QuesoGLC may hang
 				if (WWidth <= Width)
 				{
 					FWord[i] = ' ';
@@ -531,9 +529,6 @@ UDWORD iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width
 
 		TWidth = iV_GetTextWidth(FString);
 
-
-//		DBPRINTF(("string[%s] is %d of %d pixels wide (according to DrawFormattedText)\n",FString,TWidth,Width));
-
 		// Do justify.
 		switch (Justify)
 		{
@@ -542,7 +537,6 @@ UDWORD iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width
 				break;
 
 			case FTEXT_RIGHTJUSTIFY:
-
 				jx = x + Width - TWidth;
 				break;
 
@@ -554,9 +548,6 @@ UDWORD iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width
 		// draw the text.
 		//iV_SetTextSize(12.f);
 		iV_DrawText(FString, jx, jy);
-
-
-//DBPRINTF(("[%s] @ %d,%d\n",FString,jx,jy));
 
 		/* callback type for resload display callback*/
 		// remember where we were..
@@ -576,7 +567,6 @@ UDWORD iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width
 		ExtentsEndY = jy - iV_GetTextLineSize() + iV_GetTextBelowBase();
 
 		ExtentsStartX = x;	// Was jx, but this broke the console centre justified text background.
-//		ExtentsEndX = jx + TWidth;
 		ExtentsEndX = x + Width;
 	}
 	else if (RecordExtents == EXTENTS_END)
@@ -602,7 +592,9 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 	}
 
 	if (rotation != 0.f)
+	{
 		rotation = 360.f - rotation;
+	}
 
 	glTranslatef(XPos, YPos, 0.f);
 	glRotatef(180.f, 1.f, 0.f, 0.f);
