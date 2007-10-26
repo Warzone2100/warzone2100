@@ -930,15 +930,18 @@ extern SWORD map_Height(UDWORD x, UDWORD y)
 	UDWORD tileX, tileY, tileYOffset;
 	UDWORD tileX2, tileY2Offset;
 	SDWORD h0, hx, hy, hxy, wTL = 0, wTR = 0, wBL = 0, wBR = 0;
-	//SDWORD	lowerHeightOffset,upperHeightOffset;
 	SDWORD dx, dy, ox, oy;
 	BOOL	bWaterTile = FALSE;
 
 	// Print out a debug message when we get SDWORDs passed as if they're UDWORDs
 	if (x > SDWORD_MAX)
-		debug(LOG_ERROR, "map_Height: x coordinate is a negative SDWORD passed as an UDWORD: %d", (SDWORD)x);
+	{
+		debug(LOG_ERROR, "map_Height: x coordinate is a negative SDWORD passed as an UDWORD: %d", (int)x);
+	}
 	if (y > SDWORD_MAX)
-		debug(LOG_ERROR, "map_Height: y coordinate is a negative SDWORD passed as an UDWORD: %d", (SDWORD)y);
+	{
+		debug(LOG_ERROR, "map_Height: y coordinate is a negative SDWORD passed as an UDWORD: %d", (int)y);
+	}
 
 	x = x > SDWORD_MAX ? 0 : x;//negative SDWORD passed as UDWORD
 	x = x >= world_coord(mapWidth) ? world_coord(mapWidth - 1) : x;
