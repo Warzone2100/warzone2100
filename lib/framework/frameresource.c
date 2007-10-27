@@ -93,7 +93,7 @@ void resShutDown(void)
 // set the base resource directory
 void resSetBaseDir(char *pResDir)
 {
-	strncpy(aResDir, pResDir, PATH_MAX - 1);
+	strlcpy(aResDir, pResDir, sizeof(aResDir));
 }
 
 /* Parse the res file */
@@ -103,9 +103,7 @@ BOOL resLoad(const char *pResFile, SDWORD blockID,
 	char *pBuffer;
 	UDWORD	size;
 
-	strncpy(aCurrResDir, aResDir, sizeof(aCurrResDir));
-	// Guarantee to nul-terminate
-	aCurrResDir[sizeof(aCurrResDir) - 1] = '\0';
+	strlcpy(aCurrResDir, aResDir, sizeof(aCurrResDir));
 
 	// Note the block id number
 	resBlockID = blockID;
@@ -158,8 +156,7 @@ static RES_TYPE* resAlloc(const char *pType)
 	}
 
 	// setup the structure
-	strncpy(psT->aType, pType, RESTYPE_MAXCHAR - 1);
-	psT->aType[RESTYPE_MAXCHAR - 1] = 0;
+	strlcpy(psT->aType, pType, sizeof(psT->aType));
 
 	psT->HashedType=HashString(psT->aType);		// store a hased version for super speed !
 
@@ -243,8 +240,7 @@ const char *GetLastResourceFilename(void)
  */
 void SetLastResourceFilename(const char *pName)
 {
-	strncpy(LastResourceFilename, pName, PATH_MAX-1);
-	LastResourceFilename[PATH_MAX-1] = '\0';
+	strlcpy(LastResourceFilename, pName, sizeof(LastResourceFilename));
 }
 
 
@@ -387,8 +383,7 @@ static WZ_DECL_CONST const char* getLanguage(void)
 			return language; // Return empty string on errors
 		}
 
-		strncpy(language, localeName, sizeof(language));
-		language[sizeof(language) - 1] = '\0';  // be sure to have a 0-terminated string
+		strlcpy(language, localeName, sizeof(language));
 
 		delim = strchr(language, '_');
 
@@ -485,11 +480,8 @@ BOOL resLoadFile(const char *pType, const char *pFile)
 		debug(LOG_ERROR, "resLoadFile: Filename too long!! %s%s", aCurrResDir, pFile);
 		return FALSE;
 	}
-	strncpy(aFileName, aCurrResDir, sizeof(aFileName));
-	// Guarantee to nul-terminate
-	aFileName[sizeof(aFileName) - 1] = '\0';
-
-	strncat(aFileName, pFile, sizeof(aFileName) - strlen(aFileName) - 1);
+	strlcpy(aFileName, aCurrResDir, sizeof(aFileName));
+	strlcat(aFileName, pFile, sizeof(aFileName));
 
 	makeLocaleFile(aFileName);  // check for translated file
 

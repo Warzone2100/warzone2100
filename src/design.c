@@ -1081,7 +1081,7 @@ BOOL intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight,
 
 
 			// On the playstation the tips are additionaly setup when they are displayed ... because we only have one text name buffer
-			strncpy(aButText, getTemplateName( psTempl ), DES_COMPBUTMAXCHAR);
+			strlcpy(aButText, getTemplateName( psTempl ), sizeof(aButText));
 			sButInit.pTip = getTemplateName(psTempl);
 
 			BufferID = GetStatBuffer();
@@ -2394,7 +2394,7 @@ static BOOL intAddComponentButtons(COMP_BASE_STATS *psStats, UDWORD size,
 		}
 
 		/* Set the tip and add the button */
-		strncpy(aButText, getStatName(psCurrStats), DES_COMPBUTMAXCHAR);
+		strlcpy(aButText, getStatName(psCurrStats), sizeof(aButText));
 		sButInit.pTip = getStatName(psCurrStats);
 
 		BufferID = GetObjectBuffer();
@@ -2594,7 +2594,7 @@ static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 			}
 
 			// Set the tip and add the button
-			strncpy(aButText, getStatName(psCurrStats), DES_COMPBUTMAXCHAR);
+			strlcpy(aButText, getStatName(psCurrStats), sizeof(aButText));
 			sButInit.pTip = getStatName(psCurrStats);
 
 			BufferID = sButInit.id-IDDES_EXTRASYSSTART;
@@ -3695,7 +3695,7 @@ void intProcessDesign(UDWORD id)
 			{
 				/* Set the new template */
 				memcpy(&sCurrDesign, psTempl, sizeof(DROID_TEMPLATE));
-				strncpy( aCurrName, getTemplateName(psTempl), WIDG_MAXSTR-1);
+				strlcpy(aCurrName, getTemplateName(psTempl), sizeof(aCurrName));
 
 				/* reveal body and propulsion component buttons */
 				widgReveal( psWScreen, IDDES_BODYBUTTON );
@@ -4229,9 +4229,8 @@ void intProcessDesign(UDWORD id)
 			break;
 			/* The name edit box */
 		case IDDES_NAMEBOX:
-			strncpy(sCurrDesign.aName, widgGetString(psWScreen, IDDES_NAMEBOX),
-						DROID_MAXNAME);
-			strncpy(aCurrName, sCurrDesign.aName,WIDG_MAXSTR-1);
+			strlcpy(sCurrDesign.aName, widgGetString(psWScreen, IDDES_NAMEBOX), sizeof(sCurrDesign.aName));
+			strlcpy(aCurrName, sCurrDesign.aName, sizeof(aCurrName));
 			break;
 		case IDDES_BIN:
 			/* Find the template for the current button */
@@ -4930,8 +4929,7 @@ static BOOL saveTemplate(void)
 
 		/* Copy the template */
 		memcpy(psTempl, &sCurrDesign, sizeof(DROID_TEMPLATE));
-		strncpy(psTempl->aName, aCurrName, DROID_MAXNAME);
-		psTempl->aName[DROID_MAXNAME - 1] = 0;
+		strlcpy(psTempl->aName, aCurrName, sizeof(psTempl->aName));
 
 		/* Now update the droid template form */
 		widgDelete(psWScreen, IDDES_TEMPLFORM);

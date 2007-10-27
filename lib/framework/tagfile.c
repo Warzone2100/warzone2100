@@ -70,12 +70,12 @@ static void print_nested_groups(struct define *group)
 	if (parent != NULL)
 	{
 		snprintf(groupdesc, PRNG_LEN, "\nNested inside element %d", (int)parent->element);
-		strncat(errbuf, groupdesc, sizeof(errbuf) - strlen(errbuf) - 1);
+		strlcat(errbuf, groupdesc, sizeof(errbuf));
 		print_nested_groups(parent);
 	}
 	if (parent == NULL)
 	{
-		strncat(errbuf, "\n", sizeof(errbuf) - strlen(errbuf) - 1);
+		strlcat(errbuf, "\n", sizeof(errbuf));
 	}
 }
 

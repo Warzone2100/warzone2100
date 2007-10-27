@@ -420,7 +420,7 @@ void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 		/*Quantity = StructureGetFactory(Structure)->quantity;
 		if (Quantity == NON_STOP_PRODUCTION)
 		{
-			strncpy(Label->aText, "*", sizeof(Label->aText));
+			strlcpy(Label->aText, "*", sizeof(Label->aText));
 		}
 		else
 		{
@@ -544,11 +544,13 @@ void intAddLoopQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 
 		if (psFactory->quantity == INFINITE_PRODUCTION)
 		{
-			strncpy(Label->aText, "∞", sizeof(Label->aText));
+			strlcpy(Label->aText, "∞", sizeof(Label->aText));
 		}
 		else
 		{
 			snprintf(Label->aText, sizeof(Label->aText), "%02u", psFactory->quantity + DEFAULT_LOOP);
+			// Guarantee to nul-terminate
+			Label->aText[sizeof(Label->aText) - 1] = '\0';
 		}
 		Label->style &= ~WIDG_HIDDEN;
 	}

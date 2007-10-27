@@ -41,22 +41,18 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 	// Write to temp dir, to support unprivileged users
 	if (!GetTempPathA( PATH_MAX, miniDumpPath ))
 	{
-		strncpy(miniDumpPath, "c:\\temp\\", sizeof(miniDumpPath));
-		// Guarantee to nul-terminate
-		miniDumpPath[sizeof(miniDumpPath) - 1] = '\0';
+		strlcpy(miniDumpPath, "c:\\temp\\", sizeof(miniDumpPath));
 	}
 
 	// Append the filename
-	strncat(miniDumpPath, "warzone2100.mdmp", sizeof(miniDumpPath) - strlen(miniDumpPath) - 1);
+	strlcat(miniDumpPath, "warzone2100.mdmp", sizeof(miniDumpPath));
 
 	/*
 	Alternative:
 	GetModuleFileName( NULL, miniDumpPath, MAX_PATH );
 
 	// Append extension
-	strncat(miniDumpPath, ".mdmp", sizeof(miniDumpPath));
-	// Guarantee to nul-terminate
-	miniDumpPath[sizeof(miniDumpPath) - 1] = '\0';
+	strlcat(miniDumpPath, ".mdmp", sizeof(miniDumpPath));
 	*/
 
 	if ( MessageBoxA( NULL, "Warzone crashed unexpectedly, would you like to save a diagnostic file?", applicationName, MB_YESNO ) == IDYES )
@@ -625,9 +621,9 @@ void setupExceptionHandler(const char * programCommand)
 	sysInfoValid = (uname(&sysInfo) == 0);
 
 	time_t currentTime = time(NULL);
-	strncpy( executionDate, ctime(&currentTime), MAX_DATE_STRING );
+	strlcpy(executionDate, ctime(&currentTime), sizeof(executionDate));
 
-	snprintf( programPID, MAX_PID_STRING, "%i", getpid() );
+	snprintf(programPID, sizeof(programPID), "%i", getpid());
 
 	setFatalSignalHandler(posixExceptionHandler);
 #endif // WZ_OS_*

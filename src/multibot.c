@@ -976,8 +976,7 @@ BOOL receiveWholeDroid(NETMSG *m)
 	NetGet(m,sizecount,player);					sizecount+=sizeof(player);
 
 	dt.pName = (char*)&dt.aName;
-	strncpy(dt.aName, &(m->body[sizecount]), DROID_MAXNAME-1);
-	dt.aName[DROID_MAXNAME-1]=0;		// just in case.
+	strlcpy(dt.aName, &(m->body[sizecount]), sizeof(dt.aName));
 	sizecount+=strlen(dt.pName)+1;		// name is pointed at directly into the buffer.
 
 	if(dt.asWeaps[0] == 0)

@@ -156,10 +156,10 @@ void addSubdirs( const char * basedir, const char * subdir, const BOOL appendToP
 #endif // DEBUG
 		if( !checkList || inList( checkList, *i ) )
 		{
-			strcpy( tmpstr, basedir );
-			strcat( tmpstr, subdir );
-			strcat( tmpstr, PHYSFS_getDirSeparator() );
-			strcat( tmpstr, *i );
+			strlcpy(tmpstr, basedir, sizeof(tmpstr));
+			strlcat(tmpstr, subdir, sizeof(tmpstr));
+			strlcat(tmpstr, PHYSFS_getDirSeparator(), sizeof(tmpstr));
+			strlcat(tmpstr, *i, sizeof(tmpstr));
 #ifdef DEBUG
 			debug( LOG_NEVER, "addSubdirs: Adding [%s] to search path", tmpstr );
 #endif // DEBUG
@@ -182,10 +182,10 @@ void removeSubdirs( const char * basedir, const char * subdir, char * checkList[
 #endif // DEBUG
 		if( !checkList || inList( checkList, *i ) )
 		{
-			strcpy( tmpstr, basedir );
-			strcat( tmpstr, subdir );
-			strcat( tmpstr, PHYSFS_getDirSeparator() );
-			strcat( tmpstr, *i );
+			strlcpy(tmpstr, basedir, sizeof(tmpstr));
+			strlcat(tmpstr, subdir, sizeof(tmpstr));
+			strlcat(tmpstr, PHYSFS_getDirSeparator(), sizeof(tmpstr));
+			strlcat(tmpstr, *i, sizeof(tmpstr));
 #ifdef DEBUG
 			debug( LOG_NEVER, "removeSubdirs: Removing [%s] from search path", tmpstr );
 #endif // DEBUG
@@ -269,8 +269,8 @@ static void initialize_PhysicsFS(void)
 	}
 
 	// Append the Warzone subdir
-	strcat( tmpstr, WZ_WRITEDIR );
-	strcat( tmpstr, PHYSFS_getDirSeparator() );
+	strlcat(tmpstr, WZ_WRITEDIR, sizeof(tmpstr));
+	strlcat(tmpstr, PHYSFS_getDirSeparator(), sizeof(tmpstr));
 
 	if ( !PHYSFS_setWriteDir( tmpstr ) ) {
 		debug( LOG_ERROR, "Error setting write directory to \"%s\": %s",
@@ -303,14 +303,23 @@ static void initialize_PhysicsFS(void)
  */
 static void scanDataDirs( void )
 {
-	char tmpstr[PATH_MAX] = {'\0'}, prefix[PATH_MAX] = {'\0'};
+	char tmpstr[PATH_MAX], prefix[PATH_MAX];
+	char* separator;
 
 	// Find out which PREFIX we are in...
-	strcpy( tmpstr, PHYSFS_getBaseDir() );
-	*strrchr( tmpstr, *PHYSFS_getDirSeparator() ) = '\0'; // Trim ending '/', which getBaseDir always provides
+	strlcpy(prefix, PHYSFS_getBaseDir(), sizeof(prefix));
 
-	strncpy( prefix, PHYSFS_getBaseDir(), // Skip the last dir from base dir
-		strrchr( tmpstr, *PHYSFS_getDirSeparator() ) - tmpstr );
+	separator = strrchr(prefix, *PHYSFS_getDirSeparator());
+	if (separator)
+	{
+		*separator = '\0'; // Trim ending '/', which getBaseDir always provides
+
+		separator = strrchr(prefix, *PHYSFS_getDirSeparator());
+		if (separator)
+		{
+			*separator = '\0'; // Skip the last dir from base dir
+		}
+	}
 
 	atexit( cleanSearchPath );
 
@@ -325,16 +334,16 @@ static void scanDataDirs( void )
 	if( !PHYSFS_exists("gamedesc.lev") )
 	{
 		// Data in SVN dir
-		strcpy( tmpstr, prefix );
-		strcat( tmpstr, "/data/" );
+		strlcpy(tmpstr, prefix, sizeof(tmpstr));
+		strlcat(tmpstr, "/data/", sizeof(tmpstr));
 		registerSearchPath( tmpstr, 3 );
 		rebuildSearchPath( mod_multiplay, TRUE );
 
 		if( !PHYSFS_exists("gamedesc.lev") )
 		{
 			// Relocation for AutoPackage
-			strcpy( tmpstr, prefix );
-			strcat( tmpstr, "/share/warzone2100/" );
+			strlcpy(tmpstr, prefix, sizeof(tmpstr));
+			strlcat(tmpstr, "/share/warzone2100/", sizeof(tmpstr));
 			registerSearchPath( tmpstr, 4 );
 			rebuildSearchPath( mod_multiplay, TRUE );
 
@@ -759,8 +768,8 @@ int main(int argc, char *argv[])
 
 	/* Put these files in the writedir root */
 	setRegistryFilePath("config");
-	strcpy(KeyMapPath, "keymap.map");
-	strcpy(UserMusicPath, "music");
+	strlcpy(KeyMapPath, "keymap.map", sizeof(KeyMapPath));
+	strlcpy(UserMusicPath, "music", sizeof(UserMusicPath));
 
 	/*** Initialize translations ***/
 	setlocale(LC_MESSAGES, "");

@@ -199,7 +199,7 @@ BOOL ParseCommandLine(int argc, char** argv)
 				debug( LOG_ERROR, "Unrecognised datadir\n" );
 				return FALSE;
 			}
-			strncpy(datadir, token, sizeof(datadir));
+			strlcpy(datadir, token, sizeof(datadir));
 		}
 		else if ( strcasecmp(tokenType, "--cheat") == 0 )
 		{

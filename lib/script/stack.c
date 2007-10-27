@@ -745,9 +745,7 @@ BOOL stackBinaryOp(OPCODE opcode)
 				break;
 
 			case VAL_STRING:
-				strncpy(tempstr1, psV1->v.sval, sizeof(tempstr1));
-				// Guarantee to nul-terminate
-				tempstr1[sizeof(tempstr1) - 1] = '\0';
+				strlcpy(tempstr1, psV1->v.sval, sizeof(tempstr1));
 				break;
 
 			default:
@@ -778,9 +776,7 @@ BOOL stackBinaryOp(OPCODE opcode)
 				break;
 
 			case VAL_STRING:
-				strncpy(tempstr2, psV2->v.sval, sizeof(tempstr2));
-				// Guarantee to nul-terminate
-				tempstr2[sizeof(tempstr2) - 1] = '\0';
+				strlcpy(tempstr2, psV2->v.sval, sizeof(tempstr2));
 				break;
 
 			default:
@@ -789,7 +785,7 @@ BOOL stackBinaryOp(OPCODE opcode)
 				break;
 			}
 
-			strncat(tempstr1, tempstr2, sizeof(tempstr1) - strlen(tempstr1) - 1);
+			strlcat(tempstr1, tempstr2, sizeof(tempstr1));
 
 			strcpy(psV1->v.sval,tempstr1);		//Assign
 		}

@@ -4278,8 +4278,7 @@ char *droidGetName(DROID *psDroid)
 //
 void droidSetName(DROID *psDroid,const char *pName)
 {
-	strncpy(psDroid->aName,pName, DROID_MAXNAME);
-	psDroid->aName[DROID_MAXNAME-1] = 0;
+	strlcpy(psDroid->aName, pName, sizeof(psDroid->aName));
 }
 
 

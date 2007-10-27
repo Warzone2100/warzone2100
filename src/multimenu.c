@@ -471,7 +471,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 	{
 		const unsigned int tip_index = check_tip_index(sButInit.id - M_REQUEST_BUT);
 		const unsigned int fileNameLength = strlen(*currFile);
-		const unsigned int tipStringLength = MIN(fileNameLength - extensionLength, MAX_STR_SIZE - 1);
+		const unsigned int tipStringLength = fileNameLength - extensionLength;
 
 		// Check to see if this file matches the given extension
 		if (!(fileNameLength > extensionLength)
@@ -481,9 +481,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 		// Set the tip and add the button
 
 		// Copy all of the filename except for the extension into the tiptext string
-		strncpy(tips[tip_index], *currFile, tipStringLength);
-		// Null terminate the string
-		tips[count][tipStringLength] = '\0';
+		strlcpy(tips[tip_index], *currFile, MIN(tipStringLength + 1, sizeof(tips[tip_index])));
 
 		sButInit.pTip		= tips[tip_index];
 		sButInit.pText		= tips[tip_index];
@@ -506,9 +504,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 				continue;
 
 			mapTextLength = tipStringLength - (mapText - *currFile);
-			strncpy(tips[tip_index], mapText, mapTextLength);
-			// Null terminate the string
-			tips[tip_index][mapTextLength] = '\0';
+			strlcpy(tips[tip_index], mapText, MIN(mapTextLength + 1, sizeof(tips[tip_index])));
 		}
 
 		++count;

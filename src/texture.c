@@ -67,7 +67,7 @@ static int newPage(const char *name, int level, int width, int height, int count
 	ASSERT(_TEX_INDEX > texPage, "newPage: Index too low (%d > %d)", _TEX_INDEX, texPage);
 	ASSERT(_TEX_INDEX < iV_TEX_MAX, "Too many texture pages used");
 
-	strncpy(_TEX_PAGE[texPage].name, name, iV_TEXNAME_MAX);
+	strlcpy(_TEX_PAGE[texPage].name, name, sizeof(_TEX_PAGE[texPage].name));
 
 	pie_SetTexturePage(texPage);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);

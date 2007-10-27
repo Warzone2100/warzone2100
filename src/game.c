@@ -5340,8 +5340,7 @@ static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 	//set up the template
 	//copy the values across
 
-	strncpy(psTemplate->aName, psSaveDroid->name, DROID_MAXNAME);
-	psTemplate->aName[DROID_MAXNAME-1]=0;
+	strlcpy(psTemplate->aName, psSaveDroid->name, sizeof(psTemplate->aName));
 	//ignore the first comp - COMP_UNKNOWN
 	found = TRUE;
 	for (i=1; i < DROID_MAXCOMP; i++)
@@ -5448,8 +5447,7 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 	//set up the template
 	//copy the values across
 
-	strncpy(psTemplate->aName, psSaveDroid->name, DROID_MAXNAME);
-	psTemplate->aName[DROID_MAXNAME-1]=0;
+	strlcpy(psTemplate->aName, psSaveDroid->name, sizeof(psTemplate->aName));
 
 	//ignore the first comp - COMP_UNKNOWN
 	found = TRUE;
@@ -5685,8 +5683,7 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	//set up the template
 	//copy the values across
 
-	strncpy(psTemplate->aName, psSaveDroid->name, DROID_MAXNAME);
-	psTemplate->aName[DROID_MAXNAME-1]=0;
+	strlcpy(psTemplate->aName, psSaveDroid->name, sizeof(psTemplate->aName));
 	//ignore the first comp - COMP_UNKNOWN
 	found = TRUE;
 	for (i=1; i < DROID_MAXCOMP; i++)
@@ -9020,8 +9017,7 @@ BOOL loadSaveTemplateV7(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		//copy the values across
 
 		psTemplate->pName = NULL;
-		strncpy(psTemplate->aName, psSaveTemplate->name, DROID_MAXNAME);
-		psTemplate->aName[DROID_MAXNAME-1]=0;
+		strlcpy(psTemplate->aName, psSaveTemplate->name, sizeof(psTemplate->aName));
 
 		psTemplate->ref = psSaveTemplate->ref;
 		psTemplate->droidType = psSaveTemplate->droidType;
@@ -9153,9 +9149,7 @@ BOOL loadSaveTemplateV14(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		//copy the values across
 
 		psTemplate->pName = NULL;
-		strncpy(psTemplate->aName, psSaveTemplate->name, DROID_MAXNAME);
-		psTemplate->aName[DROID_MAXNAME-1]=0;
-
+		strlcpy(psTemplate->aName, psSaveTemplate->name, sizeof(psTemplate->aName));
 
 		psTemplate->ref = psSaveTemplate->ref;
 		psTemplate->droidType = psSaveTemplate->droidType;
@@ -9310,9 +9304,7 @@ BOOL loadSaveTemplateV(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		//copy the values across
 
 		psTemplate->pName = NULL;
-		strncpy(psTemplate->aName, psSaveTemplate->name, DROID_MAXNAME);
-		psTemplate->aName[DROID_MAXNAME-1]=0;
-
+		strlcpy(psTemplate->aName, psSaveTemplate->name, sizeof(psTemplate->aName));
 
 		psTemplate->ref = psSaveTemplate->ref;
 		psTemplate->droidType = psSaveTemplate->droidType;

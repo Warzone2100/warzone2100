@@ -2366,7 +2366,7 @@ BOOL startMultiOptions(BOOL bReenter)
 			game.maxPlayers = 4;
 		}
 
-		strncpy(game.version, buildTime, 8);		// note buildtime.
+		strlcpy(game.version, buildTime, sizeof(game.version));		// note buildtime.
 
 		ingame.localOptionsReceived = FALSE;
 		if(ingame.numStructureLimits)
