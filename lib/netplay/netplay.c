@@ -282,9 +282,7 @@ static unsigned int NET_CreatePlayer(const char* name, unsigned int flags)
 		if (players[i].allocated == FALSE)
 		{
 			players[i].allocated = TRUE;
-			strncpy(players[i].name, name, sizeof(players[i].name));
-			// Guarantee to nul-terminate
-			players[i].name[sizeof(players[i].name) - 1] = '\0';
+			strlcpy(players[i].name, name, sizeof(players[i].name));
 			players[i].flags = flags;
 			NETBroadcastPlayerInfo(i);
 			return i;
@@ -323,9 +321,7 @@ UDWORD NETplayerInfo(void)
 		if (players[i].allocated == TRUE)
 		{
 			NetPlay.players[NetPlay.playercount].dpid = i;
-			strncpy(NetPlay.players[NetPlay.playercount].name, players[i].name, sizeof(NetPlay.players[NetPlay.playercount].name));
-			// Guarantee to nul-terminate
-			NetPlay.players[NetPlay.playercount].name[sizeof(NetPlay.players[NetPlay.playercount].name) - 1] = '\0';
+			strlcpy(NetPlay.players[NetPlay.playercount].name, players[i].name, sizeof(NetPlay.players[NetPlay.playercount].name));
 
 			if (players[i].flags & PLAYER_HOST)
 			{
@@ -359,15 +355,11 @@ BOOL NETchangePlayerName(UDWORD dpid, char *newName)
 {
 	if(!NetPlay.bComms)
 	{
-		strncpy(NetPlay.players[0].name, newName, sizeof(NetPlay.players[0].name));
-		// Guarantee to nul-terminate
-		NetPlay.players[0].name[sizeof(NetPlay.players[0].name) - 1] = '\0';
+		strlcpy(NetPlay.players[0].name, newName, sizeof(NetPlay.players[0].name));
 		return TRUE;
 	}
 
-	strncpy(players[dpid].name, newName, sizeof(players[dpid].name));
-	// Guarantee to nul-terminate
-	players[dpid].name[sizeof(players[dpid].name) - 1] = '\0';
+	strlcpy(players[dpid].name, newName, sizeof(players[dpid].name));
 
 	NETBroadcastPlayerInfo(dpid);
 
@@ -1358,9 +1350,7 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 
 	is_server = TRUE;
 
-	strncpy(game.name, SessionName, sizeof(game.name));
-	// Guarantee to nul-terminate
-	game.name[sizeof(game.name) - 1] = '\0';
+	strlcpy(game.name, SessionName, sizeof(game.name));
 	memset(&game.desc, 0, sizeof(SESSIONDESC));
 	game.desc.dwSize = sizeof(SESSIONDESC);
 	//game.desc.guidApplication = GAME_GUID;
@@ -1466,9 +1456,7 @@ BOOL NETfindGame(void)
 		    && SDLNet_TCP_Recv(tcp_socket, buffer, sizeof(GAMESTRUCT)) == sizeof(GAMESTRUCT)
 		    && tmpgame->desc.dwSize == sizeof(SESSIONDESC))
 		{
-			strncpy(NetPlay.games[gamecount].name, tmpgame->name, sizeof(NetPlay.games[gamecount].name));
-			// Guarantee to nul-terminate
-			NetPlay.games[gamecount].name[sizeof(NetPlay.games[gamecount].name) - 1] = '\0';
+			strlcpy(NetPlay.games[gamecount].name, tmpgame->name, sizeof(NetPlay.games[gamecount].name));
 			NetPlay.games[gamecount].desc.dwSize = tmpgame->desc.dwSize;
 			NetPlay.games[gamecount].desc.dwCurrentPlayers = tmpgame->desc.dwCurrentPlayers;
 			NetPlay.games[gamecount].desc.dwMaxPlayers = tmpgame->desc.dwMaxPlayers;
@@ -1482,14 +1470,14 @@ BOOL NETfindGame(void)
  					(int)(address[1]),
  					(int)(address[2]),
  					(int)(address[3]));
+
+				// Guarantee to nul-terminate
+				NetPlay.games[gamecount].desc.host[sizeof(NetPlay.games[gamecount].desc.host) - 1] = '\0';
 			}
 			else
 			{
-				strncpy(NetPlay.games[gamecount].desc.host, tmpgame->desc.host, sizeof(NetPlay.games[gamecount].desc.host));
+				strlcpy(NetPlay.games[gamecount].desc.host, tmpgame->desc.host, sizeof(NetPlay.games[gamecount].desc.host));
 			}
-
-			// Guarantee to nul-terminate
-			NetPlay.games[gamecount].desc.host[sizeof(NetPlay.games[gamecount].desc.host) - 1] = '\0';
 
 			gamecount++;
 		}
@@ -1550,16 +1538,12 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 	    && SDLNet_TCP_Recv(tcp_socket, buffer, sizeof(GAMESTRUCT)*2) == sizeof(GAMESTRUCT)
 	    && tmpgame->desc.dwSize == sizeof(SESSIONDESC))
 	{
-		strncpy(NetPlay.games[gameNumber].name, tmpgame->name, sizeof(NetPlay.games[gameNumber].name));
-		// Guarantee to nul-terminate
-		NetPlay.games[gameNumber].name[sizeof(NetPlay.games[gameNumber].name) - 1] = '\0';
+		strlcpy(NetPlay.games[gameNumber].name, tmpgame->name, sizeof(NetPlay.games[gameNumber].name));
 
 		NetPlay.games[gameNumber].desc.dwSize = tmpgame->desc.dwSize;
 		NetPlay.games[gameNumber].desc.dwCurrentPlayers = tmpgame->desc.dwCurrentPlayers;
 		NetPlay.games[gameNumber].desc.dwMaxPlayers = tmpgame->desc.dwMaxPlayers;
-		strncpy(NetPlay.games[gameNumber].desc.host, tmpgame->desc.host, sizeof(NetPlay.games[gameNumber].desc.host));
-		// Guarantee to nul-terminate
-		NetPlay.games[gameNumber].desc.host[sizeof(NetPlay.games[gameNumber].desc.host) - 1] = '\0';
+		strlcpy(NetPlay.games[gameNumber].desc.host, tmpgame->desc.host, sizeof(NetPlay.games[gameNumber].desc.host));
 		if (tmpgame->desc.host[0] == '\0')
 		{
 			unsigned char* address = (unsigned char*)(&(ip.host));
@@ -1570,14 +1554,14 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 				(int)(address[1]),
 				(int)(address[2]),
 				(int)(address[3]));
+
+			// Guarantee to nul-terminate
+			NetPlay.games[gameNumber].desc.host[sizeof(NetPlay.games[gameNumber].desc.host) - 1] = '\0';
 		}
 		else
 		{
-			strncpy(NetPlay.games[gameNumber].desc.host, tmpgame->desc.host, sizeof(NetPlay.games[gameNumber].desc.host));
+			strlcpy(NetPlay.games[gameNumber].desc.host, tmpgame->desc.host, sizeof(NetPlay.games[gameNumber].desc.host));
 		}
-
-		// Guarantee to nul-terminate
-		NetPlay.games[gameNumber].desc.host[sizeof(NetPlay.games[gameNumber].desc.host) - 1] = '\0';
 	}
 
 	bsocket = NET_createBufferedSocket();
@@ -1607,9 +1591,7 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 			}
 			players[NetPlay.dpidPlayer].allocated = TRUE;
 			players[NetPlay.dpidPlayer].id = NetPlay.dpidPlayer;
-			strncpy(players[NetPlay.dpidPlayer].name, playername, sizeof(players[NetPlay.dpidPlayer].name));
-			// Guarantee to nul-terminate
-			players[NetPlay.dpidPlayer].name[sizeof(players[NetPlay.dpidPlayer].name) - 1] = '\0';
+			strlcpy(players[NetPlay.dpidPlayer].name, playername, sizeof(players[NetPlay.dpidPlayer].name));
 			players[NetPlay.dpidPlayer].flags = 0;
 
 			return TRUE;
@@ -1635,13 +1617,7 @@ PACKETDIR NETgetPacketDir()
  */
 void NETsetMasterserverName(const char* hostname)
 {
-	size_t name_size = strlen(hostname);
-
-	if ( name_size > 255 )
-	{
-		name_size = 255;
-	}
-	strncpy(masterserver_name, hostname, name_size);
+	strlcpy(masterserver_name, hostname, sizeof(masterserver_name));
 }
 
 

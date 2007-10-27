@@ -316,9 +316,7 @@ anim_SetVals( char szFileName[], UWORD uwAnimID )
 
 	/* set anim vals */
 	psAnim->uwID = uwAnimID;
-	strncpy(psAnim->szFileName, szFileName, sizeof(psAnim->szFileName));
-	// Guarantee to nul-terminate
-	psAnim->szFileName[sizeof(psAnim->szFileName) - 1] = '\0';
+	strlcpy(psAnim->szFileName, szFileName, sizeof(psAnim->szFileName));
 }
 
 /***************************************************************************/

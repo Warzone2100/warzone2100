@@ -24,6 +24,8 @@
  * Lex file for parsing string resource files
  */
 
+#include "frame.h"
+
 #include <stdio.h>
 
 /* Allow frame header files to be singly included */
@@ -82,9 +84,7 @@ static PHYSFS_file* pReadFile = NULL;
 
 	/* Match text values */
 [a-zA-Z][-0-9_a-zA-Z]*		{
-								strncpy(aText[currText], strres_text, sizeof(aText[currText]));
-								// Guarantee to nul-terminate
-								aText[currText][sizeof(aText[currText]) - 1] = '\0';
+								strlcpy(aText[currText], strres_text, sizeof(aText[currText]));
 								strres_lval.sval = aText[currText];
 								currText = (currText + 1) % TEXT_BUFFERS;
 								return TEXT_T;
@@ -95,9 +95,7 @@ static PHYSFS_file* pReadFile = NULL;
 <QUOTE>\"					{ BEGIN 0; }
 <QUOTE>\n					{ strres_error("Unexpected end of line in string"); }
 <QUOTE>[^\"\n]*				{
-								strncpy(aText[currText], strres_text, sizeof(aText[currText]));
-								// Guarantee to nul-terminate
-								aText[currText][sizeof(aText[currText]) - 1] = '\0';
+								strlcpy(aText[currText], strres_text, sizeof(aText[currText]));
 								strres_lval.sval = aText[currText];
 								currText = (currText + 1) % TEXT_BUFFERS;
 								return QTEXT_T;

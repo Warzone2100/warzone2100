@@ -101,10 +101,7 @@ BOOL editBoxCreate(W_EDITBOX **ppsWidget, W_EDBINIT *psInit)
 
 	if (psInit->pText)
 	{
-		strncpy((*ppsWidget)->aText, psInit->pText, sizeof((*ppsWidget)->aText));
-
-		// Terminate the string with a NUL character
-		(*ppsWidget)->aText[sizeof((*ppsWidget)->aText) - 1] = '\0';
+		strlcpy((*ppsWidget)->aText, psInit->pText, sizeof((*ppsWidget)->aText));
 	}
 	else
 	{
@@ -218,8 +215,7 @@ static void putSelection(char *pBuffer, UDWORD *pPos)
 	get_scrap(T('T','E','X','T'), &scraplen, &scrap);
 	if (scraplen > 0 && scraplen < WIDG_MAXSTR-2)
 	{
-		strncpy(pBuffer, scrap, scraplen);
-		pBuffer[scraplen] = '\0';
+		strlcpy(pBuffer, scrap, scraplen);
 		*pPos = scraplen;
 	}
 }
@@ -577,9 +573,7 @@ void editBoxSetString(W_EDITBOX *psWidget, const char *pText)
 	ASSERT( psWidget != NULL,
 		"editBoxSetString: Invalid edit box pointer" );
 
-	strncpy(psWidget->aText, pText, sizeof(psWidget->aText));
-	// Terminate the string with a NUL character
-	psWidget->aText[sizeof(psWidget->aText) - 1] = '\0';
+	strlcpy(psWidget->aText, pText, sizeof(psWidget->aText));
 
 	psWidget->state = WEDBS_FIXED;
 	psWidget->printStart = 0;

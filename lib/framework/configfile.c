@@ -260,10 +260,7 @@ static BOOL registry_save( const char *filename )
 
 void setRegistryFilePath(const char* fileName)
 {
-	strncpy(RegFilePath, fileName, sizeof(RegFilePath) - 1);
-
-	// Guarantee to terminate string with a NUL char
-	RegFilePath[sizeof(RegFilePath) - 1] = '\0';
+	strlcpy(RegFilePath, fileName, sizeof(RegFilePath));
 }
 
 ///

@@ -333,7 +333,7 @@ static BOOL eventLoadContext(SDWORD version, char *pBuffer, UDWORD *pSize, BOOL 
 					//load string
 					if(stringLen > 0)
 					{
-						strncpy(data.v.sval, (char *)pPos, stringLen);
+						strlcpy(data.v.sval, (char *)pPos, MIN(stringLen + 1, MAXSTRLEN));
 						pPos += stringLen;
 						size += stringLen;
 					}

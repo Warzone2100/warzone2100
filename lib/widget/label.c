@@ -79,10 +79,7 @@ BOOL labelCreate(W_LABEL **ppsWidget, W_LABINIT *psInit)
 
 	if (psInit->pText)
 	{
-		strncpy((*ppsWidget)->aText, psInit->pText, sizeof((*ppsWidget)->aText));
-
-		// Terminate the string with a NUL character
-		(*ppsWidget)->aText[sizeof((*ppsWidget)->aText) - 1] = '\0';
+		strlcpy((*ppsWidget)->aText, psInit->pText, sizeof((*ppsWidget)->aText));
 	}
 	else
 	{

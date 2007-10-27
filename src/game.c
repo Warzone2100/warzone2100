@@ -4963,7 +4963,7 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 
 		return false;
 	}
-	strlcpy(saveGame.levelName, aLevelName, sizeof(aLevelName));
+	strlcpy(saveGame.levelName, aLevelName, sizeof(saveGame.levelName));
 
 	//save out the players power
 	for (i = 0; i < MAX_PLAYERS; ++i)
