@@ -24,6 +24,18 @@
 #include <string.h>
 #include <stddef.h>
 
+/** \def STR_L_FUNC_TRUNCATION_DETECT
+ *  The "original" strlcpy() and strlcat() functions will return the amount
+ *  of characters the destination string would be long, if no truncation has
+ *  occurred.
+ *  
+ *  When STR_L_FUNC_TRUNCATION_DETECT is defined this behaviour will be
+ *  simulated.
+ *
+ *  Right now though this behaviour isn't required, and as such it isn't
+ *  compiled in by leaving STR_L_FUNC_TRUNCATION_DETECT undefined.
+ */
+
 #ifdef STR_L_FUNC_TRUNCATION_DETECT
 static inline size_t strlcpy(char* dest, const char* src, size_t size)
 #else

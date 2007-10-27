@@ -347,9 +347,7 @@ static void NETcoder(PACKETDIR dir)
 	int16_t i16 = -16;
 	int8_t i8 = -8;
 
-	strncpy(str, original, sizeof(str));
-	// Guarantee to nul-terminate
-	str[sizeof(str) - 1] = '\0';
+	strlcpy(str, original, sizeof(str));
 
 	NETbegin(0, dir);
 	NETbool(&b);			assert(b == TRUE);
