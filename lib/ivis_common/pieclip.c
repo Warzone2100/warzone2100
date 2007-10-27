@@ -336,11 +336,15 @@ int pie_ClipTextured(int npoints, PIEVERTEX *points, PIEVERTEX *clip)
 	for (i = 0, n1 = 0; i < npoints; i++, p0++, p1++)
 	{
 		if (i == (npoints-1))
+		{
 			p1 = &points[0];
+		}
 
 		// FIXME MAGIC
 		if ((p0->x == 1<<15) || (p0->y == -1<<15))//check for invalid points jps19aug97
+		{
 			return 0;
+		}
 
 		n1 += pie_ClipXT(p0, p1, &xclip[n1]);
 	}
@@ -351,58 +355,11 @@ int pie_ClipTextured(int npoints, PIEVERTEX *points, PIEVERTEX *clip)
 	for (i = 0, n = 0; i < n1; p0++, p1++, i++)
 	{
 		if (i == (n1-1))
+		{
 			p1 = &xclip[0];
+		}
 		n += pie_ClipYT(p0, p1, &clip[n]);
 	}
 
 	return n;
 }
-
-#ifdef NEVER_USED_ANYWHERE
-// I leave this around just for potential inspirational purposes. - Per
-
-//*************************************************************************
-/* Alex - much faster tri clipper - won't clip owt else tho' */
-int	pie_ClipTexturedTriangleFast(PIEVERTEX *v1, PIEVERTEX *v2, PIEVERTEX *v3, PIEVERTEX *clipped)
-{
-	static	PIEVERTEX	xClip[iV_POLY_MAX_POINTS+4];	// plus 4 hopefully is limit?
-	static	PIEVERTEX	*p0,*p1;
-	UDWORD	numPreY,numAll;
-	UDWORD	i;
-
-	numPreY = 0;
-	if( (v1->x > LONG_TEST) || (v1->y > LONG_TEST) )
-	{
-		/* bomb out for out of range points */
-		return(0);
-	}
-	numPreY += pie_ClipXT(v1, v2, &xClip[numPreY]);
-
-	if( (v2->x > LONG_TEST) || (v2->y > LONG_TEST) )
-	{
-		/* bomb out for out of range points */
-		return(0);
-	}
-	numPreY += pie_ClipXT(v2, v3, &xClip[numPreY]);
-
-	if( (v3->x > LONG_TEST) || (v3->y > LONG_TEST) )
-	{
-		/* bomb out for out of range points */
-		return(0);
-	}
-	numPreY += pie_ClipXT(v3, v1, &xClip[numPreY]);
-
-	/* We've now clipped against x axis - now for Y */
-
-	p0 = &xClip[0];
-	p1 = &xClip[1];
-
-	for (i = 0, numAll = 0; i <n umPreY; p0++, p1++, i++) {
-		if (i == (numPreY-1))
-			p1 = &xClip[0];
-		numAll += pie_ClipYT(p0, p1, &clipped[numAll]);
-	}
-
-	return numAll;
-}
-#endif

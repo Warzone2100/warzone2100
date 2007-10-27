@@ -42,14 +42,6 @@
 
 /***************************************************************************/
 /*
- *	Local Variables
- */
-/***************************************************************************/
-static PIEVERTEX pieVrts[pie_MAX_VERTICES_PER_POLYGON];
-static PIEVERTEX clippedVrts[pie_MAX_VERTICES_PER_POLYGON];
-
-/***************************************************************************/
-/*
  *	Source
  */
 /***************************************************************************/
@@ -58,16 +50,17 @@ static PIEVERTEX clippedVrts[pie_MAX_VERTICES_PER_POLYGON];
 
 void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, UDWORD colour)
 {
+	PIEVERTEX pieVrts[pie_MAX_VERTICES_PER_POLYGON];
+	PIEVERTEX clippedVrts[pie_MAX_VERTICES_PER_POLYGON + 2]; // no idea why + 2 but fixes crash - Per
 	SDWORD clip, i;
 
 	pie_SetTexturePage(-1);
 	pie_SetRendMode(REND_ALPHA_FLAT);
-//PIE verts
+
 	pieVrts[0].x = v[1].x;
 	pieVrts[0].y = v[1].y;
 	//cull triangles with off screen points
 	pieVrts[0].z  = (int)INTERFACE_DEPTH;
-
 
 	pieVrts[0].u = 0;
 	pieVrts[0].v = 0;
@@ -90,6 +83,7 @@ void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD 
 
 	pie_Set2DClip(x1,y1,x2-1,y2-1);
 	clip = pie_ClipTextured(4, &pieVrts[0], &clippedVrts[0]);
+	ASSERT(clip <= pie_MAX_VERTICES_PER_POLYGON + 2, "clip index exceeds clippedVrts array"); // see above
 	pie_Set2DClip(CLIP_BORDER,CLIP_BORDER,psRendSurface->width-CLIP_BORDER,psRendSurface->height-CLIP_BORDER);
 
 	if (clip >= 3) {
