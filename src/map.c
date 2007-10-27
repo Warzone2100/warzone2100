@@ -681,6 +681,7 @@ BOOL mapSaveTagged(char *pFileName)
 			{
 				tagWriteBool(0x0a, 1); // do not register this flag in flag list
 			}
+			tagWriteSeparator();
 		}
 		tagWriteLeave(0x03);
 
