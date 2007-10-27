@@ -67,7 +67,7 @@ iSurface *iV_SurfaceCreate(Uint32 flags, int width, int height, int xp, int yp, 
 	s->clip.top = 0;
 	s->clip.bottom = height-1;
 
-	debug(LOG_3D, "vid[SurfaceCreate] = created surface width %d, height %d\n",width,height);
+	debug(LOG_3D, "vid[SurfaceCreate] = created surface width %d, height %d", width, height);
 
 	return s;
 }
@@ -96,7 +96,6 @@ void iV_RenderAssign(iSurface *s)
 	/* Need to look into this - won't the unwanted called still set render surface? */
 	psRendSurface = s;
 
-	debug(LOG_3D, "vid[RenderAssign] = assigned renderer :\n");
-	debug(LOG_3D, "flags %x\nxcentre %d, ycentre %d\nbuffer %p\n",
+	debug(LOG_3D, "iV_RenderAssign: flags %x; xcentre %d; ycentre %d; buffer %p",
 			s->flags, s->xcentre, s->ycentre, s->buffer);
 }

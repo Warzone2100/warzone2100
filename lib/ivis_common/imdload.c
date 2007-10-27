@@ -482,13 +482,13 @@ static BOOL _imd_load_points( const char **ppFileData, iIMDShape *s )
 			cen.x = (rad*cen.x + old_to_new*p->x) / old_to_p;
 			cen.y = (rad*cen.y + old_to_new*p->y) / old_to_p;
 			cen.z = (rad*cen.z + old_to_new*p->z) / old_to_p;
-			debug(LOG_3D, "NEW SPHERE: cen,rad = %f %f %f, %f\n", cen.x, cen.y, cen.z, rad);
+			debug(LOG_3D, "NEW SPHERE: cen,rad = %f %f %f, %f", cen.x, cen.y, cen.z, rad);
 		}
 	}
 
 	s->ocen = cen;
-	debug(LOG_3D, "radius, sradius, %d, %d\n", s->radius, s->sradius);
-	debug(LOG_3D, "SPHERE: cen,rad = %f %f %f\n", s->ocen.x, s->ocen.y, s->ocen.z);
+	debug(LOG_3D, "radius, sradius, %d, %d", s->radius, s->sradius);
+	debug(LOG_3D, "SPHERE: cen,rad = %f %f %f", s->ocen.x, s->ocen.y, s->ocen.z);
 
 // END: tight bounding sphere
 
@@ -630,7 +630,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 		// might be "BSP" or "LEVEL"
 		if (strcmp(buffer, "LEVEL") == 0)
 		{
-			debug(LOG_3D, "imd[_load_level] = npoints %d, npolys %d\n", s->npoints, s->npolys);
+			debug(LOG_3D, "imd[_load_level] = npoints %d, npolys %d", s->npoints, s->npolys);
 			s->next = _imd_load_level(&pFileData, FileDataEnd, nlevels - 1);
 		}
 		else if (strcmp(buffer, "CONNECTORS") == 0)

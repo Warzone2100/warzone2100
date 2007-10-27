@@ -508,5 +508,5 @@ void pie_MatInit(void)
 	pie_MatReset();
 
 
-	debug(LOG_3D, "geo[_geo_setup] = setup successful\n");
+	debug(LOG_3D, "geo[_geo_setup] = setup successful");
 }

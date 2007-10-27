@@ -159,11 +159,28 @@ BOOL screenInitialise(
 	}
 	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &glval);
 	debug( LOG_TEXTURE, "Maximum texture size: %dx%d", (int)glval, (int)glval );
-	if ( glval < 512 ) // FIXME: Replace by a define that gives us the real maximum
+	if (glval < 512) // PAGE_WIDTH and PAGE_HEIGHT from src/texture.h
 	{
 		debug( LOG_ERROR, "OpenGL reports a texture size (%d) that is less than required!", (int)glval );
 		debug( LOG_ERROR, "This is either a bug in OpenGL or your graphics card is really old!" );
 		debug( LOG_ERROR, "Trying to run the game anyway..." );
+	}
+	debug(LOG_3D, "OpenGL extensions supported:");
+	if (check_extension("GL_ARB_texture_compression"))
+	{
+		debug(LOG_3D, "  * Texture compression supported.");
+	}
+	if (check_extension("GL_EXT_stencil_two_side"))
+	{
+		debug(LOG_3D, "  * Two side stencil supported.");
+	}
+	if (check_extension("GL_EXT_stencil_wrap"))
+	{
+		debug(LOG_3D, "  * Stencil wrap supported.");
+	}
+	if (check_extension("GL_EXT_texture_filter_anisotropic"))
+	{
+		debug(LOG_3D, "  * Anisotropic filtering supported.");
 	}
 
 	glViewport(0, 0, width, height);

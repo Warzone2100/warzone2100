@@ -120,7 +120,7 @@ BOOL iV_IMDSave(char *filename, iIMDShape *s, BOOL PieIMD)
 				if (poly->flags & iV_IMD_TEXANIM) {
 
 					if (poly->pTexAnim == NULL) {
-						debug( LOG_3D, "No TexAnim pointer!\n" );
+						debug(LOG_3D, "No TexAnim pointer!");
 					} else {
 						fprintf(fp," %d %d %d %d",
 							poly->pTexAnim->nFrames,
@@ -189,7 +189,7 @@ void iV_IMDRelease(iIMDShape *s)
 			free(s->shadowEdgeList);
 			s->shadowEdgeList = NULL;
 		}
-		debug(LOG_3D, "imd[IMDRelease] = release successful\n");
+		debug(LOG_3D, "imd[IMDRelease] = release successful");
 		d = s->next;
 		free(s);
 		iV_IMDRelease(d);
