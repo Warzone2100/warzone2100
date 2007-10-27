@@ -371,7 +371,7 @@
 #    define strcasecmp _stricmp
 #    define strncasecmp _strnicmp
 #    define vsnprintf _vsnprintf
-#    define snprintf  _snprintf
+#    define snprintf(_str, _size, ...)  _snprintf_s(_str, _size, _TRUNCATE, __VA_ARGS__)
 #    define fileno _fileno
 #    define inline __inline
 #    define isfinite _finite
