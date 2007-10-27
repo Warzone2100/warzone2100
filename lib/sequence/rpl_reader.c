@@ -32,19 +32,7 @@ static unsigned int rpl_decode_video_unknown(RPL* rpl, char* in, unsigned int in
 
 //*************************************************************************************
 
-char* data_buffer = NULL;
-unsigned int data_buffer_size = 0;
-
-static void resize_data_buffer(unsigned int size)
-{
-	if (size > data_buffer_size)
-	{
-		free(data_buffer);
-
-		data_buffer = (char*)malloc(size);
-		data_buffer_size = size;
-	}
-}
+static char* data_buffer = NULL;
 
 //*************************************************************************************
 
@@ -117,12 +105,16 @@ RPL* rpl_open(const char* filename)
 	rpl->f = f;
 
 	if (strcmp(readline(f, buf, len), "ARMovie") != 0)
+	{
 		debug(LOG_NEVER, "%s missing RPL magic number\n", filename);
+	}
 	readline(f, buf, len); /* discard filename */
 	readline(f, buf, len); /* discard copyright */
 	if (strcmp(readline(f, buf, len), "ESCAPE 2.0") != 0)
+	{
 		/* This field is really "author", but.. */
 		debug(LOG_NEVER, "%s not in \"ESCAPE 2.0\" format?\n", filename);
+	}
 
 
 	tmp = readint(f, buf, len);
@@ -138,16 +130,9 @@ RPL* rpl_open(const char* filename)
 	}
 
 	rpl->width = readint(f, buf, len);
-	//printf("width : %i\n", rpl->width);
-
 	rpl->height = readint(f, buf, len);
-	//printf("height : %i\n", rpl->height);
-
 	rpl->bpp = readint(f, buf, len);
-	//printf("bpp : %i\n", rpl->bpp);
-
 	rpl->fps = readfloat(f, buf, len);
-	//printf("fps : %f\n\n", rpl->fps);
 	rpl->current_video_frame = 0;
 
 	rpl->soundCodecID = readint(f, buf, len);
@@ -171,40 +156,19 @@ RPL* rpl_open(const char* filename)
 			debug(LOG_SOUND, "Unknown sound format %i\n", tmp);
 			break;
 	}
+
 	rpl->current_sound_frame = 0;
-
 	rpl->samples = readint(f, buf, len);
-	//printf("samples : %i\n", rpl->samples);
-
 	rpl->channels = readint(f, buf, len);
-	//printf("channels : %i\n", rpl->channels);
-
 	rpl->bps = readint(f, buf, len);
-	//printf("bits per sample : %i\n\n", rpl->bps);
-
 	rpl->fpc = readint(f, buf, len);
-	//printf("frames per chunk : %i\n", rpl->fpc);
-
 	rpl->nb_chunks = readint(f, buf, len) + 1;
-	//printf("chunks : %i\n", rpl->nb_chunks);
-
 	rpl->ocs = readint(f, buf, len);
-	//printf("odd chunk size : %i\n", rpl->ocs);
-
 	rpl->ecs = readint(f, buf, len);
-	//printf("even chunk size : %i\n", rpl->ecs);
-
 	rpl->otcc = readint(f, buf, len);
-	//printf("offset to chunk cat : %i\n\n", rpl->otcc);
-
 	rpl->ots = readint(f, buf, len);
-	//printf("offset to sprite : %i\n", rpl->ots);
-
 	rpl->sprite_size = readint(f, buf, len);
-	//printf("size of sprite : %i\n\n", rpl->sprite_size);
-
 	rpl->otkf = readint(f, buf, len);
-	//printf("offset to key frames : %i\n", rpl->otkf);
 
 	{
 		unsigned int i;
@@ -228,9 +192,10 @@ RPL* rpl_open(const char* filename)
 			}
 		}
 
-		resize_data_buffer(max_video_size);
+		ASSERT(data_buffer == NULL, "Memory buffer not empty; memory loss in rpl_reader.c!");
+		data_buffer = malloc(max_video_size);
+		ASSERT(data_buffer != NULL, "Out of memory allocating %d bytes", (int)max_video_size);
 	}
-
 
 	return rpl;
 
@@ -377,7 +342,9 @@ int rpl_decode_next_image(RPL* rpl, char* buffer)
 void rpl_close(RPL* rpl)
 {
 	if (rpl == NULL)
+	{
 		return;
+	}
 
 	switch (rpl->soundCodecID)
 	{
@@ -387,6 +354,8 @@ void rpl_close(RPL* rpl)
 	}
 
 	PHYSFS_close(rpl->f);
+	free(data_buffer);
+	data_buffer = NULL;
 	free(rpl->chunks);
 	free(rpl);
 }
