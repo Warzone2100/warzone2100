@@ -469,7 +469,7 @@ GAMECODE gameLoop(void)
 			if(bRequestLoad)
 			{
 				loopMissionState = LMS_LOADGAME;
-				strcpy(saveGameName, sRequestResult);
+				strlcpy(saveGameName, sRequestResult, sizeof(saveGameName));
 			}
 			else
 			{

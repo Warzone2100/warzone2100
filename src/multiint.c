@@ -309,15 +309,15 @@ void loadMapPreview(void)
 static void decideWRF(void)
 {
 	// try and load it from the maps directory first,
-	strcpy(pLevelName, MultiCustomMapsPath);
-	strcat(pLevelName, game.map);
-	strcat(pLevelName, ".wrf");
-	debug(LOG_WZ, "decideWRF: %s", pLevelName);
+	strlcpy(aLevelName, MultiCustomMapsPath, sizeof(aLevelName));
+	strlcat(aLevelName, game.map, sizeof(aLevelName));
+	strlcat(aLevelName, ".wrf", sizeof(aLevelName));
+	debug(LOG_WZ, "decideWRF: %s", aLevelName);
 	//if the file exists in the downloaded maps dir then use that one instead.
 	// FIXME: Try to incorporate this into physfs setup somehow for sane paths
-	if ( !PHYSFS_exists(pLevelName) )
+	if ( !PHYSFS_exists(aLevelName) )
 	{
-		strcpy(pLevelName, game.map);		// doesn't exist, must be a predefined one.
+		strlcpy(aLevelName, game.map, sizeof(aLevelName));		// doesn't exist, must be a predefined one.
 	}
 }
 

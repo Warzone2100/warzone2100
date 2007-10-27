@@ -2244,8 +2244,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		}
 
 		//get the string from the id and copy into the Name space
-		strcpy(pDroidDesign->aName,strresGetString(psStringRes, id));
-		pDroidDesign->aName[DROID_MAXNAME-1] = 0;
+		strlcpy(pDroidDesign->aName, strresGetString(psStringRes, id), sizeof(pDroidDesign->aName));
 
 		//store the unique template id
 		pDroidDesign->multiPlayerID = templateID;
@@ -5572,16 +5571,16 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
         templateSetParts(psD, &sTemplate);
 
         //copy the name across
-        strcpy(sTemplate.aName, psD->aName);
+        strlcpy(sTemplate.aName, psD->aName, sizeof(sTemplate.aName));
 
         x = psD->x;
         y = psD->y;
         body = psD->body;
-		for (impact_side = 0;impact_side < NUM_HIT_SIDES;impact_side=impact_side+1)
-		{
-			armourK[impact_side] = psD->armour[impact_side][WC_KINETIC];
-			armourH[impact_side] = psD->armour[impact_side][WC_HEAT];
-		}
+	for (impact_side = 0;impact_side < NUM_HIT_SIDES;impact_side=impact_side+1)
+	{
+		armourK[impact_side] = psD->armour[impact_side][WC_KINETIC];
+		armourH[impact_side] = psD->armour[impact_side][WC_HEAT];
+	}
         numKills = psD->numKills;
         direction = psD->direction;
         //only play the sound if unit being taken over is selectedPlayer's but not going to the selectedPlayer

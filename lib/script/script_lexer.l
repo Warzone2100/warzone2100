@@ -385,7 +385,7 @@ void storeMacroName(const char *pMacroName)
 	}
 
 	/* Store define macro */
-	strcpy( &(scr_macro[scr_num_macros].scr_define_macro[0]), pMacroName );
+	strlcpy(scr_macro[scr_num_macros].scr_define_macro, pMacroName, sizeof(scr_macro[scr_num_macros].scr_define_macro));
 }
 
 /* Store macro body */
@@ -395,7 +395,7 @@ void storeMacroBody(const char *pMacroBody)
 		"FLEX: macro count out of bounds: %u", scr_num_macros);
 
 	/* Store macro body */
-	strcpy( &(scr_macro[scr_num_macros].scr_define_body[0]), pMacroBody);
+	strlcpy(scr_macro[scr_num_macros].scr_define_body, pMacroBody, sizeof(scr_macro[scr_num_macros].scr_define_body));
 
 	scr_num_macros++;
 }

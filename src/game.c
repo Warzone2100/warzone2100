@@ -4346,14 +4346,14 @@ bool gameLoadV7(PHYSFS_file* fileHandle)
 
 		IsScenario = FALSE;
 		//copy the level name across
-		strcpy(pLevelName, saveGame.levelName);
+		strlcpy(aLevelName, saveGame.levelName, sizeof(aLevelName));
 		//load up the level dataset
-		if (!levLoadData(pLevelName, saveGameName, gameType))
+		if (!levLoadData(aLevelName, saveGameName, gameType))
 		{
 			return false;
 		}
 		// find the level dataset
-		if (!levFindDataSet(pLevelName, &psNewLevel))
+		if (!levFindDataSet(aLevelName, &psNewLevel))
 		{
 			debug( LOG_ERROR, "gameLoadV7: couldn't find level data" );
 			abort();
@@ -4815,14 +4815,14 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 
 		IsScenario = FALSE;
 		//copy the level name across
-		strcpy(pLevelName, saveGameData.levelName);
+		strlcpy(aLevelName, saveGameData.levelName, sizeof(aLevelName));
 		//load up the level dataset
-		if (!levLoadData(pLevelName, saveGameName, gameType))
+		if (!levLoadData(aLevelName, saveGameName, gameType))
 		{
 			return FALSE;
 		}
 		// find the level dataset
-/*		if (!levFindDataSet(pLevelName, &psNewLevel))
+/*		if (!levFindDataSet(aLevelName, &psNewLevel))
 		{
 			DBERROR(("gameLoadV6: couldn't find level data"));
 			return FALSE;
@@ -4831,7 +4831,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		if (gameType == GTYPE_SAVE_START)
 		{
 //			launchMission();
-			if (!levLoadData(pLevelName, NULL, 0))
+			if (!levLoadData(aLevelName, NULL, 0))
 			{
 				return FALSE;
 			}
@@ -4955,15 +4955,15 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 	saveGame.GameType = saveType;
 
 	//save the current level so we can load up the STARTING point of the mission
-	if (strlen(pLevelName) > MAX_LEVEL_SIZE)
+	if (strlen(aLevelName) > MAX_LEVEL_SIZE)
 	{
 		ASSERT( FALSE,
 			"writeGameFile:Unable to save level name - too long (max20) - %s",
-			pLevelName );
+			aLevelName );
 
 		return false;
 	}
-	strcpy(saveGame.levelName, pLevelName);
+	strlcpy(saveGame.levelName, aLevelName, sizeof(aLevelName));
 
 	//save out the players power
 	for (i = 0; i < MAX_PLAYERS; ++i)

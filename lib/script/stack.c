@@ -789,9 +789,7 @@ BOOL stackBinaryOp(OPCODE opcode)
 				break;
 			}
 
-			strncat(tempstr1, tempstr2, sizeof(tempstr1));
-			// Guarantee to nul-terminate
-			tempstr1[sizeof(tempstr1) - 1] = '\0';
+			strncat(tempstr1, tempstr2, sizeof(tempstr1) - strlen(tempstr1) - 1);
 
 			strcpy(psV1->v.sval,tempstr1);		//Assign
 		}

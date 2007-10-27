@@ -71,7 +71,7 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"end of list",NULL}
 };
 
-BOOL	attemptCheatCode( char *pName )
+BOOL attemptCheatCode(const char* cheat_name)
 {
 	UDWORD	index;
 	char	errorString[255];
@@ -80,7 +80,7 @@ BOOL	attemptCheatCode( char *pName )
 
 	while(cheatCodes[index].function!=NULL)
 	{
-		if (strcmp(pName, cheatCodes[index].pName) == 0)
+		if (strcmp(cheat_name, cheatCodes[index].pName) == 0)
 		{
 			/* We've got our man... */
 			cheatCodes[index].function();	// run it
@@ -90,7 +90,9 @@ BOOL	attemptCheatCode( char *pName )
 		index++;
 	}
 	/* We didn't find it */
-	sprintf(errorString,"%s?",pName);
+	strlcpy(errorString, cheat_name, sizeof(errorString));
+	strlcat(errorString, "?", sizeof(errorString));
+
 	addConsoleMessage(errorString,LEFT_JUSTIFY);
 	return(FALSE);
 }

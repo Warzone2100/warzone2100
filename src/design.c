@@ -482,14 +482,14 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	if (psCurrTemplate != NULL)
 	{
 		memcpy(&sCurrDesign, psCurrTemplate, sizeof(DROID_TEMPLATE));
-		strncpy(aCurrName, getStatName( psCurrTemplate ), WIDG_MAXSTR - 1);
-		strcpy( sCurrDesign.aName, aCurrName );
+		strlcpy(aCurrName, getStatName(psCurrTemplate), sizeof(aCurrName));
+		strlcpy(sCurrDesign.aName, aCurrName, sizeof(sCurrDesign.aName));
 	}
 	else
 	{
 		memcpy(&sCurrDesign, &sDefaultDesignTemplate, sizeof(DROID_TEMPLATE));
-		strcpy(aCurrName, _("New Vehicle"));
-		strcpy( sCurrDesign.aName, aCurrName );
+		strlcpy(aCurrName, _("New Vehicle"), sizeof(aCurrName));
+		strlcpy(sCurrDesign.aName, aCurrName, sizeof(sCurrDesign.aName));
 	}
 
 	/* Add the design templates form */
@@ -1100,11 +1100,15 @@ BOOL intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight,
 			sBarInit.size = (UWORD)(psTempl->powerPoints  / POWERPOINTS_DROIDDIV);
 			if(sBarInit.size > WBAR_SCALE) sBarInit.size = WBAR_SCALE;
 
-			sprintf(TempString,"%s - %d",_("Power Usage"),psTempl->powerPoints);
+			snprintf(TempString, sizeof(TempString), "%s - %d",_("Power Usage"), psTempl->powerPoints);
+			// Guarantee to nul-terminate
+			TempString[sizeof(TempString) - 1] = '\0';
+
 			ASSERT( BufferPos+strlen(TempString)+1 < STRING_BUFFER_SIZE,"String Buffer Overrun" );
-			strcpy(&StringBuffer[BufferPos],TempString);
+
+			strlcpy(&StringBuffer[BufferPos], TempString, sizeof(StringBuffer) - BufferPos);
 			sBarInit.pTip = &StringBuffer[BufferPos];
-			BufferPos += strlen(TempString)+1;
+			BufferPos += strlen(TempString) + 1;
 
 			sBarInit.formID = sButInit.id;
 			if (!widgAddBarGraph(psWScreen, &sBarInit))
@@ -1413,13 +1417,13 @@ static const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 		 psTemplate->asParts[COMP_BRAIN]		!= 0    )
 	{
 		const char * pStr = getStatName( psStats );
-		strcpy( aCurrName, pStr );
-		strcat( aCurrName, " " );
+		strlcpy(aCurrName, pStr, sizeof(aCurrName));
+		strlcat(aCurrName, " ", sizeof(aCurrName));
 	}
 
 	if ( psTemplate->numWeaps > 1 )
 	{
-		strcat( aCurrName, "Hydra " );
+		strlcat(aCurrName, "Hydra ", sizeof(aCurrName));
 	}
 
 	psStats = (COMP_BASE_STATS *) (asBodyStats + psTemplate->asParts[COMP_BODY]);
@@ -1433,8 +1437,8 @@ static const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 			return NULL;
 		}
 
-		strcat( aCurrName, pStr );
-		strcat( aCurrName, " " );
+		strlcat(aCurrName, pStr, sizeof(aCurrName));
+		strlcat(aCurrName, " ", sizeof(aCurrName));
 	}
 
 	psStats = (COMP_BASE_STATS *) (asPropulsionStats + psTemplate->asParts[COMP_PROPULSION]);
@@ -1448,7 +1452,7 @@ static const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 			return NULL;
 		}
 
-		strcat( aCurrName, pStr );
+		strlcat(aCurrName, pStr, sizeof(aCurrName));
 	}
 
 	return aCurrName;
@@ -1463,12 +1467,12 @@ static void intSetEditBoxTextFromTemplate( DROID_TEMPLATE *psTemplate )
 	widgSetString(psWScreen, IDDES_NAMEBOX, getStatName(psTemplate));
 #else
 
-	strcpy( aCurrName, "" );
+	strlcpy(aCurrName, "", sizeof(aCurrName));
 
 	/* show component names if default template else show stat name */
 	if ( psTemplate->droidType != DROID_DEFAULT )
 	{
-		strcpy( aCurrName, getTemplateName(psTemplate) );
+		strlcpy(aCurrName, getTemplateName(psTemplate), sizeof(aCurrName));
 	}
 	else
 	{
@@ -3552,7 +3556,7 @@ static BOOL intValidTemplate(DROID_TEMPLATE *psTempl)
 	psTempl->droidType = droidTemplateType(psTempl);
 
 	/* copy current name into template */
-	strcpy( sCurrDesign.aName, aCurrName );
+	strlcpy(sCurrDesign.aName, aCurrName, sizeof(sCurrDesign.aName));
 
 	return TRUE;
 }
@@ -3651,9 +3655,8 @@ void intProcessDesign(UDWORD id)
 		{
 			desCreateDefaultTemplate();
 
-			strncpy(aCurrName, _("New Vehicle"),
-				WIDG_MAXSTR-1);
-			strcpy( sCurrDesign.aName, aCurrName );
+			strlcpy(aCurrName, _("New Vehicle"), sizeof(aCurrName));
+			strlcpy(sCurrDesign.aName, aCurrName, sizeof(sCurrDesign.aName));
 
 			/* hide body and system component buttons */
 			widgHide( psWScreen, IDDES_SYSTEMBUTTON );
@@ -4009,8 +4012,7 @@ void intProcessDesign(UDWORD id)
 		/* update name if not customised */
 		if ( bTemplateNameCustomised == FALSE )
 		{
-			strcpy( sCurrDesign.aName,
-					GetDefaultTemplateName(&sCurrDesign) );
+			strlcpy(sCurrDesign.aName, GetDefaultTemplateName(&sCurrDesign), sizeof(sCurrDesign.aName));
 		}
 
 		/* Update the name in the edit box */
@@ -4174,8 +4176,7 @@ void intProcessDesign(UDWORD id)
 		/* update name if not customised */
 		if ( bTemplateNameCustomised == FALSE )
 		{
-			strcpy( sCurrDesign.aName,
-					GetDefaultTemplateName(&sCurrDesign) );
+			strlcpy(sCurrDesign.aName, GetDefaultTemplateName(&sCurrDesign), sizeof(sCurrDesign.aName));
 		}
 
 		/* Update the name in the edit box */
@@ -4312,8 +4313,8 @@ void intProcessDesign(UDWORD id)
 
 				/* Set the new template */
 				memcpy(&sCurrDesign, psTempl, sizeof(DROID_TEMPLATE));
-				//strcpy( sCurrDesign.aName, aCurrName );
-				strncpy( aCurrName, getTemplateName(psTempl), WIDG_MAXSTR-1);
+				//strlcpy(sCurrDesign.aName, aCurrName, sizeof(aCurrName));
+				strlcpy(aCurrName, getTemplateName(psTempl), sizeof(aCurrName));
 
 				intSetEditBoxTextFromTemplate( psTempl );
 

@@ -489,9 +489,7 @@ BOOL resLoadFile(const char *pType, const char *pFile)
 	// Guarantee to nul-terminate
 	aFileName[sizeof(aFileName) - 1] = '\0';
 
-	strncat(aFileName, pFile, sizeof(aFileName));
-	// Guarantee to nul-terminate
-	aFileName[sizeof(aFileName) - 1] = '\0';
+	strncat(aFileName, pFile, sizeof(aFileName) - strlen(aFileName) - 1);
 
 	makeLocaleFile(aFileName);  // check for translated file
 

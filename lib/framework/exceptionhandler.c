@@ -47,9 +47,7 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 	}
 
 	// Append the filename
-	strncat(miniDumpPath, "warzone2100.mdmp", sizeof(miniDumpPath));
-	// Guarantee to nul-terminate
-	miniDumpPath[sizeof(miniDumpPath) - 1] = '\0';
+	strncat(miniDumpPath, "warzone2100.mdmp", sizeof(miniDumpPath) - strlen(miniDumpPath) - 1);
 
 	/*
 	Alternative:

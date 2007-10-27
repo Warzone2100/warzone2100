@@ -32,10 +32,10 @@ int res_lex (void);
 // directory printfs
 #define DEBUG_GROUP0
 
+#include "lib/framework/frame.h"
 #include <string.h>
 #include <stdlib.h>
 
-#include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/resly.h"
 
@@ -88,13 +88,12 @@ dir_line:			DIRECTORY QTEXT_T		{
 												$2[0] == '/')
 											{
 												// the new dir is rooted
-												strcpy(aCurrResDir, $2);
+												strlcpy(aCurrResDir, $2, sizeof(aCurrResDir));
 											}
 											else
 											{
-												strcpy(aCurrResDir, aResDir);
-												strcpy(aCurrResDir + strlen(aResDir),
-													   $2);
+												strlcpy(aCurrResDir, aResDir, sizeof(aCurrResDir));
+												strlcat(aCurrResDir, $2, sizeof(aCurrResDir));
 											}
 											if (strlen($2) > 0)
 											{

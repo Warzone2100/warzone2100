@@ -452,7 +452,7 @@ static void startGameLoop(void)
 {
 	SetGameMode(GS_NORMAL);
 
-	if (!levLoadData(pLevelName, NULL, 0))
+	if (!levLoadData(aLevelName, NULL, 0))
 	{
 		debug( LOG_ERROR, "Shutting down after failure" );
 		exit(EXIT_FAILURE);

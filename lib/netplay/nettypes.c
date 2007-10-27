@@ -347,7 +347,10 @@ static void NETcoder(PACKETDIR dir)
 	int16_t i16 = -16;
 	int8_t i8 = -8;
 
-	strcpy(str, original);
+	strncpy(str, original, sizeof(str));
+	// Guarantee to nul-terminate
+	str[sizeof(str) - 1] = '\0';
+
 	NETbegin(0, dir);
 	NETbool(&b);			assert(b == TRUE);
 	NETuint32_t(&u32);  assert(u32 == 32);

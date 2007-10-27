@@ -375,13 +375,15 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 					psFoundData->psChange = psDataSet;
 				}
 				// store the level name
-				psDataSet->pName = (char*)malloc(strlen(pLevToken) + 1);
-				if (!psDataSet->pName)
+				psDataSet->pName = strdup(pLevToken);
+				if (psDataSet->pName == NULL)
 				{
+					debug(LOG_ERROR, "levParse: Out of memory!");
 					levError("Out of memory");
+					abort();
 					return FALSE;
 				}
-				strcpy(psDataSet->pName, pLevToken);
+
 				state = LP_LEVELDONE;
 			}
 			else if (state == LP_DATASET)
@@ -416,14 +418,16 @@ BOOL levParse(char *pBuffer, SDWORD size, searchPathMode datadir)
 				}
 
 				// store the data name
-				psDataSet->apDataFiles[currData] = (char*)malloc(strlen(pLevToken) + 1);
-				if (!psDataSet->apDataFiles[currData])
+				psDataSet->apDataFiles[currData] = strdup(pLevToken);
+				if (psDataSet->apDataFiles[currData] == NULL)
 				{
+					debug(LOG_ERROR, "levParse: Out of memory!");
 					levError("Out of memory");
+					abort();
 					return FALSE;
 				}
+
 				resToLower(pLevToken);
-				strcpy(psDataSet->apDataFiles[currData], pLevToken);
 
 				currData += 1;
 				state = LP_WAITDATA;
@@ -656,7 +660,7 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 	}
 
 	/* Keep a copy of the present level name */
-	strcpy(currentLevelName,pName);
+	strlcpy(currentLevelName, pName, sizeof(currentLevelName));
 
 	bCamChangeSaveGame = FALSE;
 	if (pSaveName && saveType == GTYPE_SAVE_START)

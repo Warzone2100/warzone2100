@@ -186,14 +186,14 @@ BOOL loadFunctionStats(const char *pFunctionData, UDWORD bufferSize)
 // Allocate storage for the name
 static BOOL storeName(FUNCTION* pFunction, const char* pNameToStore)
 {
-	pFunction->pName = (char *)malloc(strlen(pNameToStore)+1);
+	pFunction->pName = strdup(pNameToStore);
 	if (pFunction->pName == NULL)
 	{
 		debug( LOG_ERROR, "Function Name - Out of memory" );
 		abort();
 		return FALSE;
 	}
-	strcpy(pFunction->pName, pNameToStore);
+
 	return TRUE;
 }
 

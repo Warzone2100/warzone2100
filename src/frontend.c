@@ -64,7 +64,7 @@
 static int StartWithGame = 1; // New game starts in Cam 1.
 
 tMode titleMode; // the global case
-char			pLevelName[MAX_LEVEL_NAME_SIZE+1];	//256];			// vital! the wrf file to use.
+char			aLevelName[MAX_LEVEL_NAME_SIZE+1];	//256];			// vital! the wrf file to use.
 
 BOOL			bForceEditorLoaded = FALSE;
 BOOL			bUsingKeyboard = FALSE;		// to disable mouse pointer when using keys.
@@ -294,13 +294,13 @@ BOOL runTutorialMenu(void)
 	switch(id)
 	{
 		case FRONTEND_TUTORIAL:
-			strcpy(pLevelName,TUTORIAL_LEVEL);
+			strlcpy(aLevelName, TUTORIAL_LEVEL, sizeof(aLevelName));
 			changeTitleMode(STARTGAME);
 
 			break;
 
 		case FRONTEND_FASTPLAY:
-			strcpy(pLevelName,"FASTPLAY");
+			strlcpy(aLevelName, "FASTPLAY", sizeof(aLevelName));
 			changeTitleMode(STARTGAME);
 
 			break;
@@ -344,7 +344,7 @@ static void frontEndNewGame( void )
 {
 	switch(StartWithGame) {
 		case 1:
-			strcpy(pLevelName,DEFAULT_LEVEL);
+			strlcpy(aLevelName, DEFAULT_LEVEL, sizeof(aLevelName));
 			seq_ClearSeqList();
 
 			seq_AddSeqToList("cam1/c001.rpl",NULL,"cam1/c001.txa",FALSE);
@@ -353,11 +353,11 @@ static void frontEndNewGame( void )
             break;
 
 		case 2:
-			strcpy(pLevelName,"CAM_2A");
+			strlcpy(aLevelName, "CAM_2A", sizeof(aLevelName));
 			break;
 
 		case 3:
-			strcpy(pLevelName,"CAM_3A");
+			strlcpy(aLevelName, "CAM_3A", sizeof(aLevelName));
 			break;
 	}
 
@@ -368,7 +368,7 @@ void loadOK( void )
 {
 	if(strlen(sRequestResult))
 	{
-		strcpy(saveGameName,sRequestResult);
+		strlcpy(saveGameName, sRequestResult, sizeof(saveGameName));
 		changeTitleMode(LOADSAVEGAME);
 	}
 }
@@ -396,7 +396,7 @@ BOOL runSinglePlayerMenu(void)
 				break;
 
 			case FRONTEND_LOADCAM2:
-				strcpy(pLevelName,"CAM_2A");
+				strlcpy(aLevelName, "CAM_2A", sizeof(aLevelName));
 				changeTitleMode(STARTGAME);
  #ifdef LOADINGBACKDROPS
 				AddLoadingBackdrop(TRUE);
@@ -406,7 +406,7 @@ BOOL runSinglePlayerMenu(void)
 				break;
 
 			case FRONTEND_LOADCAM3:
-				strcpy(pLevelName,"CAM_3A");
+				strlcpy(aLevelName, "CAM_3A", sizeof(aLevelName));
 				changeTitleMode(STARTGAME);
  #ifdef LOADINGBACKDROPS
 				AddLoadingBackdrop(TRUE);

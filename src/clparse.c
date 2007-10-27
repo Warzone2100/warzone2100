@@ -220,7 +220,7 @@ BOOL ParseCommandLine(int argc, char** argv)
 				abort();
 				return FALSE;
 			}
-			strncpy(pLevelName, token, 254);
+			strlcpy(aLevelName, token, sizeof(aLevelName));
 			SetGameMode(GS_NORMAL);
 		}
 		else if ( strcasecmp(tokenType, "--mod") == 0 )
@@ -277,9 +277,9 @@ BOOL ParseCommandLine(int argc, char** argv)
 				abort();
 				return FALSE;
 			}
-			strcpy(saveGameName, SaveGamePath);
-			strcat(saveGameName, "/");
-			strncat(saveGameName, token, 240);
+			strlcpy(saveGameName, SaveGamePath, sizeof(saveGameName));
+			strlcat(saveGameName, "/", sizeof(saveGameName));
+			strlcat(saveGameName, token, sizeof(saveGameName));
 			SetGameMode(GS_SAVEGAMELOAD);
 		}
 		else if ( strcasecmp( tokenType, "--shadows" ) == 0 )

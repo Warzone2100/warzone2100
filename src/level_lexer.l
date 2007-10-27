@@ -88,7 +88,7 @@ miss_clear					return LTK_MCLEAR;
 
 	/* Match text values */
 [a-zA-Z][-0-9_a-zA-Z]*		{
-								strcpy(aText, lev_text);
+								strlcpy(aText, lev_text, sizeof(aText));
 								pLevToken = aText;
 								return LTK_IDENT;
 							}
@@ -98,7 +98,7 @@ miss_clear					return LTK_MCLEAR;
 <QUOTE>\"					{ BEGIN 0; }
 <QUOTE>\n					{ levError("Unexpected end of line in string"); }
 <QUOTE>[^\"]*				{
-								strcpy(aText, lev_text);
+								strlcpy(aText, lev_text, sizeof(aText));
 								pLevToken = aText;
 								return LTK_STRING;
 							}

@@ -1503,7 +1503,6 @@ BOOL NETfindGame(void)
 // Functions used to setup and join games.
 BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 {
-	char* name;
 	IPaddress ip;
 	char buffer[sizeof(GAMESTRUCT)*2];
 	GAMESTRUCT* tmpgame = (GAMESTRUCT*)buffer;
@@ -1586,8 +1585,7 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 
 	message.type = MSG_JOIN;
 	message.size = 64;
-	name = message.body;
-	strcpy(name, playername);
+	strlcpy(message.body, playername, sizeof(message.body));
 	NETsend(&message, 1, TRUE);
 
 	for (;;)

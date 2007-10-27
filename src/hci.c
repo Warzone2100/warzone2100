@@ -1662,7 +1662,7 @@ INT_RETVAL intRunWidgets(void)
 				{
 //					loadGame(sRequestResult,TRUE,FALSE,TRUE);
 					loopMissionState = LMS_LOADGAME;
-					strcpy(saveGameName, sRequestResult);
+					strlcpy(saveGameName, sRequestResult, sizeof(saveGameName));
 				}
 				else
 				{

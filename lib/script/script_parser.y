@@ -5009,9 +5009,7 @@ stringexp:
 					$$ = psCurrBlock;
 
 					/* Manage string stack */
-					strncpy(STRSTACK[CURSTACKSTR], yyvsp[0].sval, sizeof(STRSTACK[CURSTACKSTR]));
-					// Terminate the string with a NUL character
-					STRSTACK[CURSTACKSTR][sizeof(STRSTACK[CURSTACKSTR]) - 1] = '\0';
+					strlcpy(STRSTACK[CURSTACKSTR], yyvsp[0].sval, sizeof(STRSTACK[CURSTACKSTR]));
 
 					CURSTACKSTR = CURSTACKSTR + 1;		/* Increment 'pointer' to the top of the string stack */
 

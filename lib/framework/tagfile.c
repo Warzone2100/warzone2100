@@ -49,7 +49,8 @@ static char errbuf[ERR_BUF_SIZE];
 #define TF_ERROR(...) \
 do { \
 	tag_error = true; \
-	snprintf(errbuf, ERR_BUF_SIZE, __VA_ARGS__); \
+	snprintf(errbuf, sizeof(errbuf), __VA_ARGS__); \
+	errbuf[sizeof(errbuf) - 1] = '\0'; /* Guarantee to nul-terminate */ \
 	assert(false); \
 } while(0)
 
@@ -69,12 +70,12 @@ static void print_nested_groups(struct define *group)
 	if (parent != NULL)
 	{
 		snprintf(groupdesc, PRNG_LEN, "\nNested inside element %d", (int)parent->element);
-		strncat(errbuf, groupdesc, ERR_BUF_SIZE);
+		strncat(errbuf, groupdesc, sizeof(errbuf) - strlen(errbuf) - 1);
 		print_nested_groups(parent);
 	}
 	if (parent == NULL)
 	{
-		strncat(errbuf, "\n", ERR_BUF_SIZE);
+		strncat(errbuf, "\n", sizeof(errbuf) - strlen(errbuf) - 1);
 	}
 }
 

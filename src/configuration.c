@@ -355,7 +355,7 @@ BOOL loadConfig(void)
 	// game name
 	if (getWarzoneKeyString("gameName", sBuf))
 	{
-		strcpy(game.name, sBuf);
+		strlcpy(game.name, sBuf, sizeof(game.name));
 	}
 	else
 	{
@@ -367,22 +367,22 @@ BOOL loadConfig(void)
 	if (getWarzoneKeyString("playerName", sBuf)
 	 && *sBuf != '\0')
 	{
-		strcpy((char*)sPlayer, sBuf);
+		strlcpy(sPlayer, sBuf, sizeof(sPlayer));
 	}
 	else
 	{
 		setWarzoneKeyString("playerName", _("Player"));
-		strcpy((char*)sPlayer, _("Player"));
+		strlcpy(sPlayer, _("Player"), sizeof(sPlayer));
 	}
 
 	// map name
 	if(getWarzoneKeyString("mapName", sBuf))
 	{
-		strcpy(game.map, sBuf);
+		strlcpy(game.map, sBuf, sizeof(game.map));
 	}
 	else
 	{
-		strcpy(game.map, DEFAULTMAPNAME);
+		strlcpy(game.map, DEFAULTMAPNAME, sizeof(game.map));
 		setWarzoneKeyString("mapName", game.map);
 	}
 
@@ -466,11 +466,11 @@ BOOL loadConfig(void)
 	// force name
 	if(getWarzoneKeyString("forceName", sBuf))
 	{
-		strcpy(sForceName, sBuf);
+		strlcpy(sForceName, sBuf, sizeof(sForceName));
 	}
 	else
 	{
-		strcpy(sForceName, "Default");
+		strlcpy(sForceName, "Default", sizeof(sForceName));
 		setWarzoneKeyString("forceName", sForceName);
 	}
 

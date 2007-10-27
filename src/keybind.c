@@ -1736,8 +1736,8 @@ void kf_SendTextMessage(void)
 	if(bAllowOtherKeyPresses)									// just starting.
 	{
 		bAllowOtherKeyPresses = FALSE;
-		strcpy(sTextToSend,"");
-		strcpy(sCurrentConsoleText,"");							//for beacons
+		strlcpy(sTextToSend, "", sizeof(sTextToSend));
+		strlcpy(sCurrentConsoleText, "", sizeof(sTextToSend));							//for beacons
 		inputClearBuffer();
 	}
 
@@ -1752,7 +1752,7 @@ void kf_SendTextMessage(void)
 			bAllowOtherKeyPresses = TRUE;
 		 //	flushConsoleMessages();
 
-			strcpy(sCurrentConsoleText,"");		//reset beacon msg, since console is empty now
+			strlcpy(sCurrentConsoleText, "", sizeof(sCurrentConsoleText));		//reset beacon msg, since console is empty now
 
 			// don't send empty lines to other players
 			if(!strcmp(sTextToSend, ""))
@@ -1770,7 +1770,7 @@ void kf_SendTextMessage(void)
 			//console callback message
 			//--------------------------
 			ConsolePlayer = selectedPlayer;
-			strcpy(ConsoleMsg,sTextToSend);
+			strlcpy(ConsoleMsg, sTextToSend, sizeof(ConsoleMsg));
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_CONSOLE);
 
 
@@ -1783,9 +1783,9 @@ void kf_SendTextMessage(void)
 				//show the message we sent on our local console as well (even in skirmish, to see console commands)
 				//sprintf(tmp,"%d",selectedPlayer);
 
-				sprintf(tmp,"%s",getPlayerName(selectedPlayer));
-				strcat(tmp," : ");											// seperator
-				strcat(tmp,sTextToSend);											// add message
+				strlcpy(tmp, getPlayerName(selectedPlayer), sizeof(tmp));
+				strlcat(tmp, " : ", sizeof(tmp));        // seperator
+				strlcat(tmp, sTextToSend, sizeof(tmp));  // add message
 				addConsoleMessage(tmp,DEFAULT_JUSTIFY);
 
 				//in skirmish send directly to AIs, for command and chat procesing
@@ -1809,20 +1809,23 @@ void kf_SendTextMessage(void)
 			if(sTextToSend[0] != '\0')							// cant delete nothing!
 			{
 				sTextToSend[strlen(sTextToSend)-1]= '\0';
-				strcpy(sCurrentConsoleText,sTextToSend);		//beacons
+				strlcpy(sCurrentConsoleText, sTextToSend, sizeof(sCurrentConsoleText));		//beacons
 			}
 		}
 		else if(ch == INPBUF_ESC)								//abort.
 		{
 			bAllowOtherKeyPresses = TRUE;
-			strcpy(sCurrentConsoleText,"");
+			strlcpy(sCurrentConsoleText, "", sizeof(sCurrentConsoleText));
 		 //	flushConsoleMessages();
 			return;
 		}
 		else							 						// display
 		{
-			sprintf(sTextToSend,"%s%c",sTextToSend,inputGetCharKey());
-			strcpy(sCurrentConsoleText,sTextToSend);
+			snprintf(sTextToSend, sizeof(sTextToSend), "%s%c", sTextToSend, inputGetCharKey());
+			// Guarantee to nul-terminate
+			sTextToSend[sizeof(sTextToSend) - 1] = '\0';
+
+			strlcpy(sCurrentConsoleText, sTextToSend, sizeof(sCurrentConsoleText));
 		}
 
 		ch = (char)inputGetKey();
@@ -1833,11 +1836,11 @@ void kf_SendTextMessage(void)
 	{
 		if(keyDown(KEY_LCTRL))
 		{
-			strcpy(ingame.phrases[0],sTextToSend );
+			strlcpy(ingame.phrases[0], sTextToSend, sizeof(ingame.phrases[0]));
 		}
 		else
 		{
-			strcpy(sTextToSend,ingame.phrases[0]);
+			strlcpy(sTextToSend, ingame.phrases[0], sizeof(sTextToSend));
 			bAllowOtherKeyPresses = TRUE;
 		 //	flushConsoleMessages();
 			sendTextMessage(sTextToSend,FALSE);
@@ -1848,11 +1851,11 @@ void kf_SendTextMessage(void)
 	{
 		if(keyDown(KEY_LCTRL))
 		{
-			strcpy(ingame.phrases[1],sTextToSend );
+			strlcpy(ingame.phrases[1], sTextToSend, sizeof(ingame.phrases[1]));
 		}
 		else
 		{
-			strcpy(sTextToSend,ingame.phrases[1]);
+			strlcpy(sTextToSend, ingame.phrases[1], sizeof(sTextToSend));
 			bAllowOtherKeyPresses = TRUE;
 		//	flushConsoleMessages();
 			sendTextMessage(sTextToSend,FALSE);
@@ -1863,11 +1866,11 @@ void kf_SendTextMessage(void)
 	{
 		if(keyDown(KEY_LCTRL))
 		{
-			strcpy(ingame.phrases[2],sTextToSend );
+			strlcpy(ingame.phrases[2], sTextToSend, sizeof(ingame.phrases[2]));
 		}
 		else
 		{
-			strcpy(sTextToSend,ingame.phrases[2]);
+			strlcpy(sTextToSend, ingame.phrases[2], sizeof(sTextToSend));
 			bAllowOtherKeyPresses = TRUE;
 		//	flushConsoleMessages();
 			sendTextMessage(sTextToSend,FALSE);
@@ -1878,11 +1881,11 @@ void kf_SendTextMessage(void)
 	{
 		if(keyDown(KEY_LCTRL))
 		{
-			strcpy(ingame.phrases[3],sTextToSend );
+			strlcpy(ingame.phrases[3], sTextToSend, sizeof(ingame.phrases[3]));
 		}
 		else
 		{
-			strcpy(sTextToSend,ingame.phrases[3]);
+			strlcpy(sTextToSend, ingame.phrases[3], sizeof(sTextToSend));
 			bAllowOtherKeyPresses = TRUE;
 		//	flushConsoleMessages();
 			sendTextMessage(sTextToSend,FALSE);
@@ -1893,11 +1896,11 @@ void kf_SendTextMessage(void)
 	{
 		if(keyDown(KEY_LCTRL))
 		{
-			strcpy(ingame.phrases[4],sTextToSend );
+			strlcpy(ingame.phrases[4], sTextToSend, sizeof(ingame.phrases[4]));
 		}
 		else
 		{
-			strcpy(sTextToSend,ingame.phrases[4]);
+			strlcpy(sTextToSend, ingame.phrases[4], sizeof(sTextToSend));
 			bAllowOtherKeyPresses = TRUE;
 		 //	flushConsoleMessages();
 			sendTextMessage(sTextToSend,FALSE);
@@ -2612,16 +2615,16 @@ void	kf_AddHelpBlip( void )
 	//if chat message is empty, just send player name
 	//if(!strcmp(sCurrentConsoleText, ""))
 	//{
-		sprintf(tempStr,"%s",getPlayerName(selectedPlayer));		//temporary solution
+		strlcpy(tempStr, getPlayerName(selectedPlayer), sizeof(tempStr));		//temporary solution
 	//}
 	//else
 	//{
-	//	strcpy(tempStr,sCurrentConsoleText);
+	//	strlcpy(tempStr, sCurrentConsoleText, sizeof(tempStr));
 	//}
 
 
 	/* add beacon for the sender */
-	strcpy(beaconMsg[selectedPlayer], tempStr);
+	strlcpy(beaconMsg[selectedPlayer], tempStr, sizeof(beaconMsg[selectedPlayer]));
 	sendBeaconToPlayer(worldX, worldY, selectedPlayer, selectedPlayer, beaconMsg[selectedPlayer]);
 
 	/* send beacon to other players */
@@ -2629,7 +2632,7 @@ void	kf_AddHelpBlip( void )
 	{
 		if(openchannels[i] && (i != selectedPlayer))
 		{
-			strcpy(beaconMsg[i], tempStr);
+			strlcpy(beaconMsg[i], tempStr, sizeof(beaconMsg[i]));
 			sendBeaconToPlayer(worldX, worldY, i, selectedPlayer, beaconMsg[i]);
 		}
 	}

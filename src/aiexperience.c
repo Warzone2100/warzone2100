@@ -165,9 +165,9 @@ BOOL SetUpOutputFile(SDWORD nPlayer)
 	/* Assemble dir string */
 	sprintf(sPlayer,"%d",nPlayer);
 
-	strcat( SaveDir, "player");
-	strcat( SaveDir, sPlayer );
-	//strcat( SaveDir, "/" );	//like "multiplay/learndata/player0/"
+	strlcat(SaveDir, "player", sizeof(SaveDir));
+	strlcat(SaveDir, sPlayer, sizeof(SaveDir));
+	//strlcat(SaveDir, "/", sizeof(SaveDir));	//like "multiplay/learndata/player0/"
 
 	/* Create dir on disk */
 	if ( !PHYSFS_mkdir(SaveDir))
@@ -176,12 +176,13 @@ BOOL SetUpOutputFile(SDWORD nPlayer)
 		return FALSE;
 	}
 
-	strcat( SaveDir, "/" );
+	strlcat(SaveDir, "/", sizeof(SaveDir));
 
 	/* Create filename */
-	strcpy(FileName,SaveDir);
-	strcat(FileName,game.map);		//Map name
-	strcat(FileName,".lrn");		//Like "multiplay/learndata/player0/Rush.lrn"
+	strlcpy(FileName, SaveDir, sizeof(FileName));
+
+	strlcat(FileName, game.map, sizeof(FileName));		//Map name
+	strlcat(FileName, ".lrn", sizeof(FileName));		//Like "multiplay/learndata/player0/Rush.lrn"
 
 	/* Open file */
 	aiSaveFile[nPlayer] = NULL;
@@ -199,22 +200,22 @@ BOOL SetUpInputFile(SDWORD nPlayer)
 {
 	char			FileName[255] = "";
 	char			sPlayer[255] = "";
-	char			SaveDir[PATH_MAX] = "";		// "multiplay/learndata/";
-
-	/* assemble "multiplay\learndata\" */
-	strcat( SaveDir, "multiplay/learndata/" );
+	char			SaveDir[PATH_MAX] = "multiplay/learndata/";		// "multiplay/learndata/";
 
 	/* Assemble dir */
-	sprintf(sPlayer,"%d",nPlayer);
+	snprintf(sPlayer, sizeof(sPlayer), "%d", nPlayer);
+	// Guarantee to nul-terminate
+	sPlayer[sizeof(sPlayer) - 1] = '\0';
 
-	strcat(SaveDir,"player");
-	strcat(SaveDir,sPlayer);
-	strcat(SaveDir,"/");	//like "multiplay\learndata\player0\"
+	strlcat(SaveDir, "player", sizeof(SaveDir));
+	strlcat(SaveDir, sPlayer, sizeof(SaveDir));
+	strlcat(SaveDir, "/", sizeof(SaveDir));	//like "multiplay\learndata\player0\"
 
 	/* Create filename */
-	strcpy(FileName,SaveDir);
-	strcat(FileName,game.map);		//map name
-	strcat(FileName,".lrn");		//Like "multiplay\learndata\player0\Rush.lrn"
+	strlcpy(FileName, SaveDir, sizeof(FileName));
+
+	strlcat(FileName, game.map, sizeof(FileName));		//map name
+	strlcat(FileName, ".lrn", sizeof(FileName));		//Like "multiplay\learndata\player0\Rush.lrn"
 
 	aiSaveFile[nPlayer] = NULL;
 	aiSaveFile[nPlayer] = PHYSFS_openRead(FileName);

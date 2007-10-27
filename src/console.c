@@ -258,7 +258,7 @@ CONSOLE_MESSAGE	*psMessage;
 	}
 
 	/* Copy over the text of the message */
-	strcpy(consoleStorage[messageIndex].text,messageText);
+	strlcpy(consoleStorage[messageIndex].text, messageText, sizeof(consoleStorage[messageIndex].text));
 
 	/* Set the time when it was added - this might not be needed */
 	consoleStorage[messageIndex].timeAdded = gameTime2;
@@ -753,7 +753,9 @@ va_list	arguments;		// Formatting info
 	va_start(arguments,layout);
 
 	/* 'print' it out into our buffer */
-	(void)vsprintf(consoleString,layout,arguments);
+	vsnprintf(consoleString, sizeof(consoleString), layout, arguments);
+	// Guarantee to nul-terminate
+	consoleString[sizeof(consoleString) - 1] = '\0';
 
 	/* Add the message through the normal channels! */
 	addConsoleMessage(consoleString,DEFAULT_JUSTIFY);
@@ -783,7 +785,9 @@ void printf_console(const char *pFormat, ...)
 	va_start(pArgs, pFormat);
 
 	/* Print out the string */
-	(void)vsprintf(aBuffer, pFormat, pArgs);
+	vsnprintf(aBuffer, sizeof(aBuffer), pFormat, pArgs);
+	// Guarantee to nul-terminate
+	aBuffer[sizeof(aBuffer) - 1] = '\0';
 
 	/* Output it */
 
@@ -801,7 +805,9 @@ void console(const char *pFormat, ...)
 	va_start(pArgs, pFormat);
 
 	/* Print out the string */
-	(void)vsprintf(aBuffer, pFormat, pArgs);
+	vsnprintf(aBuffer, sizeof(aBuffer), pFormat, pArgs);
+	// Guarantee to nul-terminate
+	aBuffer[sizeof(aBuffer) - 1] = '\0';
 
 	/* Output it */
 

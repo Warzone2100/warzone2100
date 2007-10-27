@@ -3716,7 +3716,7 @@ BOOL scrStartMission(void)
 
 	// tell the loop that a new level has to be loaded up - not yet!
 	//loopNewLevel = TRUE;
-	strcpy(pLevelName, pGame);
+	strlcpy(aLevelName, pGame, sizeof(aLevelName));
 
 	// find the level dataset
 	if (!levFindDataSet(pGame, &psNewLevel))
@@ -6704,7 +6704,7 @@ BOOL scrTutorialTemplates(void)
 	char			pName[MAX_NAME_SIZE];
 
 	// find ViperLtMGWheels
-	strcpy(pName,"ViperLtMGWheels");
+	strlcpy(pName, "ViperLtMGWheels", sizeof(pName));
 	if (!getResourceName(pName))
 	{
 		debug( LOG_ERROR, "tutorial template setup failed" );
@@ -10320,14 +10320,12 @@ VIEWDATA *HelpViewData(SDWORD sender, char *textMsg, UDWORD LocX, UDWORD LocY)
 	name[2] = 'l';
 	name[3] = 'p';
 	name[4] = '\0';
- 	psViewData->pName = (char *)malloc((strlen(name))+1);
+ 	psViewData->pName = strdup(name);
 	if (psViewData->pName == NULL)
 	{
 		debug(LOG_ERROR,"prepairHelpViewData() - ViewData Name - Out of memory");
 		return NULL;
 	}
-
-	strcpy(psViewData->pName,name);
 
 	//allocate space for text strings
 	psViewData->ppTextMsg = (char **) malloc(sizeof(char *));
@@ -11215,11 +11213,15 @@ BOOL scrGetChatCmdDescription(void)
 
 	/* Allocate memory for the comamnd string */
 	pChatCommand = (char*)malloc(MAXSTRLEN);
-
-	ASSERT(pChatCommand != NULL, "scrGetCommandDescription: out of memory");
+	if (pChatCommand == NULL)
+	{
+		debug(LOG_ERROR, "scrGetCmdDescription: Out of memory!");
+		abort();
+		return FALSE;
+	}
 
 	/* Copy command */
-	strcpy(pChatCommand, chat_msg.cmdData[cmdIndex].pCmdDescription);
+	strlcpy(pChatCommand, chat_msg.cmdData[cmdIndex].pCmdDescription, MAXSTRLEN);
 
 	/* Make scrFunctionResult point to the valid command */
 	scrFunctionResult.v.sval = pChatCommand;

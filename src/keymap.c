@@ -501,15 +501,21 @@ KEY_MAPPING	*newMapping;
 
 	/* Get some memory for our binding */
 	newMapping = (KEY_MAPPING*)malloc(sizeof(KEY_MAPPING));
-
-	ASSERT( newMapping != NULL, "Couldn't allocate memory for a key mapping" );
-
-	/* Plus one for the terminator */
-	newMapping->pName = (char*)malloc(strlen(name)+1);
-	ASSERT( newMapping->pName != NULL, "Couldn't allocate the memory for the string in a mapping" );
+	if (newMapping == NULL)
+	{
+		debug(LOG_ERROR, "keyAddMapping: Out of memory!");
+		abort();
+		return NULL;
+	}
 
 	/* Copy over the name */
-	strcpy(newMapping->pName,name);
+	newMapping->pName = strdup(name);
+	if (newMapping->pName == NULL)
+	{
+		debug(LOG_ERROR, "keyAddMapping: Out of memory!");
+		abort();
+		return NULL;
+	}
 
 	/* Fill up our entries, first the ones that activate it */
 	newMapping->metaKeyCode	= metaCode;
