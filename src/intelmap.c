@@ -1142,7 +1142,7 @@ void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset,
 		pResearch = getResearchForMsg((VIEWDATA *)psMsg->pViewData);
 		//IMDType = IMDTYPE_RESEARCH;
         	//set the IMDType depending on what stat is associated with the research
-        	if (pResearch->psStat)
+		if (pResearch && pResearch->psStat)
         	{
 			//we have a Stat associated with this research topic
 			if  (StatIsStructure(pResearch->psStat))
