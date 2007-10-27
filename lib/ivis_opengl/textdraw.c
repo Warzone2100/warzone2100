@@ -512,7 +512,9 @@ UDWORD iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width
 			// Don't forget the space.
 			if (*curChar == ASCII_SPACE)
 			{
-				WWidth += iV_GetCharWidth('-'); // cannot use space; QuesoGLC may hang
+				// Should be a space below, not '-', but need to work around bug in QuesoGLC
+				// which was fixed in CVS snapshot as of 2007/10/26, same day as I reported it :) - Per
+				WWidth += iV_GetCharWidth('-');
 				if (WWidth <= Width)
 				{
 					FWord[i] = ' ';
