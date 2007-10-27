@@ -1341,18 +1341,13 @@ void orderUpdateDroid(DROID *psDroid)
 		ASSERT( FALSE, "orderUpdateUnit: unknown order" );
 	}
 
-
 	// catch any vtol that is rearming but has finished his order
-	if ((psDroid->order == DORDER_NONE) &&
-		vtolRearming(psDroid))
+	if (psDroid->order == DORDER_NONE && vtolRearming(psDroid)
+	    && (psDroid->psActionTarget[0] == NULL || !psDroid->psActionTarget[0]->died))
 	{
-//		DBPRINTF(("VTOL %d: reseting to rearm order\n", psDroid->id));
 		psDroid->order = DORDER_REARM;
 		setDroidTarget(psDroid, psDroid->psActionTarget[0], 0);
 	}
-
-//	ASSERT( psDroid->x != 0 && psDroid->y != 0,
-//		"orderUpdateUnit: unit at (0,0)" );
 }
 
 
