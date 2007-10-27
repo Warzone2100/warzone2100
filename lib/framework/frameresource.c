@@ -91,7 +91,7 @@ void resShutDown(void)
 
 
 // set the base resource directory
-void resSetBaseDir(char *pResDir)
+void resSetBaseDir(const char* pResDir)
 {
 	strlcpy(aResDir, pResDir, sizeof(aResDir));
 }
@@ -407,6 +407,7 @@ static WZ_DECL_CONST const char* getLanguage(void)
  * check if given file exists in a locale dependend subdir
  * if so, modify given fileName to hold the locale dep. file,
  * else do not change given fileName
+ * \param fileName[out] must be at least MAX_PATH bytes large
  */
 static void makeLocaleFile(char fileName[])  // given string must have MAX_PATH size
 {
@@ -424,7 +425,7 @@ static void makeLocaleFile(char fileName[])  // given string must have MAX_PATH 
 
 	if ( PHYSFS_exists(localeFile) )
 	{
-		strncpy(fileName, localeFile, sizeof(localeFile));
+		strlcpy(fileName, localeFile, sizeof(localeFile));
 		debug(LOG_WZ, "Found translated file: %s", fileName);
 	}
 #endif // ENABLE_NLS

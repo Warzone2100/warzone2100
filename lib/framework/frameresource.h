@@ -91,7 +91,7 @@ extern BOOL resInitialise(void);
 extern void resShutDown(void);
 
 // set the base resource directory
-extern void resSetBaseDir(char *pResDir);
+extern void resSetBaseDir(const char* pResDir);
 
 /* Parse the res file */
 BOOL resLoad(const char *pResFile, SDWORD blockID,
