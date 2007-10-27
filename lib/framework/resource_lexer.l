@@ -24,7 +24,7 @@
  * Lex file for parsing res files
  */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 
 #include <stdio.h>
 

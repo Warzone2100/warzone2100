@@ -24,7 +24,7 @@
  * Lex file for parsing string resource files
  */
 
-#include "frame.h"
+#include "lib/framework/frame.h"
 
 #include <stdio.h>
 
