@@ -1898,6 +1898,7 @@ static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
 		}
 #endif
 	}
+	ASSERT(isfinite(*pX) && isfinite(*pY), "moveGetObstacleVector: bad float");
 }
 
 
@@ -1958,6 +1959,8 @@ static Vector2f moveGetDirection(DROID *psDroid)
 			dest = Vector2f_Normalise( Vector2f_Add(delta, nextDelta) );
 		}
 	}
+
+	ASSERT(isfinite(dest.x) && isfinite(dest.y), "moveGetDirection: bad float, early check");
 
 	// Transporters don't need to avoid obstacles, but everyone else should
 	if ( psDroid->droidType != DROID_TRANSPORTER )

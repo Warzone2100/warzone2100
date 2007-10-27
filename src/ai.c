@@ -255,6 +255,7 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 
 	if (bestTarget)
 	{
+		ASSERT(!bestTarget->died, "aiBestNearestTarget: AI gave us a target that is already dead.");
 		/* See if target is blocked by a wall; only affects direct weapons */
 		if(proj_Direct( asWeaponStats +  psDroid->asWeaps[weapon_slot].nStat) && visGetBlockingWall((BASE_OBJECT *)psDroid, bestTarget, &targetStructure) )
 		{
@@ -795,7 +796,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 
 		if (psTarget)
 		{
-			ASSERT(!isDead(psTarget), "aiChooseTarget: Structure found a dead target!");
+			ASSERT(!psTarget->died, "aiChooseTarget: Structure found a dead target!");
 			*ppsTarget = psTarget;
 			return TRUE;
 		}
@@ -888,6 +889,7 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 
 		if (psTemp)
 		{
+			ASSERT(!psTemp->died, "aiChooseSensorTarget gave us a dead target");
 			*ppsTarget = psTemp;
 			return TRUE;
 		}
@@ -1083,6 +1085,11 @@ BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot)
 {
 	BOOL	bTargetInAir, bValidTarget = FALSE;
 	UBYTE	surfaceToAir;
+
+	if (!psTarget)
+	{
+		return FALSE;
+	}
 
 	//need to check propulsion type of target
 	switch (psTarget->type)
