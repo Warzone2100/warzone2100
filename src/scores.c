@@ -93,24 +93,24 @@ const char *getDescription(int id)
 {
 	switch ( id )
 	{
-		case STR_MR_UNITS_LOST   : return _("Own Units: %d");
-		case STR_MR_UNITS_KILLED : return _("Enemy Units: %d");
-		case STR_MR_STR_LOST     : return _("Own Structures: %d");
-		case STR_MR_STR_BLOWN_UP : return _("Enemy Structures: %d");
-		case STR_MR_UNITS_BUILT  : return _("Units Manufactured: %d");
-		case STR_MR_UNITS_NOW    : return _("Total Units: %d");
-		case STR_MR_STR_BUILT    : return _("Structures Built: %d");
-		case STR_MR_STR_NOW      : return _("Total Structures: %d");
+		case STR_MR_UNITS_LOST   : return _("Own Units: %u");
+		case STR_MR_UNITS_KILLED : return _("Enemy Units: %u");
+		case STR_MR_STR_LOST     : return _("Own Structures: %u");
+		case STR_MR_STR_BLOWN_UP : return _("Enemy Structures: %u");
+		case STR_MR_UNITS_BUILT  : return _("Units Manufactured: %u");
+		case STR_MR_UNITS_NOW    : return _("Total Units: %u");
+		case STR_MR_STR_BUILT    : return _("Structures Built: %u");
+		case STR_MR_STR_NOW      : return _("Total Structures: %u");
 
-		case STR_MR_LEVEL_ROOKIE : return _("Rookie: %d");
-		case STR_MR_LEVEL_GREEN  : return _("Green: %d");
-		case STR_MR_LEVEL_TRAINED: return _("Trained: %d");
-		case STR_MR_LEVEL_REGULAR: return _("Regular: %d");
-		case STR_MR_LEVEL_VETERAN: return _("Professional: %d");
-		case STR_MR_LEVEL_CRACK  : return _("Veteran: %d");
-		case STR_MR_LEVEL_ELITE  : return _("Elite: %d");
-		case STR_MR_LEVEL_SPECIAL: return _("Special: %d");
-		case STR_MR_LEVEL_ACE    : return _("Hero: %d");
+		case STR_MR_LEVEL_ROOKIE : return _("Rookie: %u");
+		case STR_MR_LEVEL_GREEN  : return _("Green: %u");
+		case STR_MR_LEVEL_TRAINED: return _("Trained: %u");
+		case STR_MR_LEVEL_REGULAR: return _("Regular: %u");
+		case STR_MR_LEVEL_VETERAN: return _("Professional: %u");
+		case STR_MR_LEVEL_CRACK  : return _("Veteran: %u");
+		case STR_MR_LEVEL_ELITE  : return _("Elite: %u");
+		case STR_MR_LEVEL_SPECIAL: return _("Special: %u");
+		case STR_MR_LEVEL_ACE    : return _("Hero: %u");
 
 		default: return "";  // make compiler shut up
 	}

@@ -251,7 +251,7 @@ Gens if any are available*/
 extern void releasePowerGen(STRUCTURE *psRelease);
 
 /* count the droids assigned to a structure (only sence by sensor towers and headquarters) */
-extern SDWORD countAssignedDroids(STRUCTURE *psStructure);
+extern unsigned int countAssignedDroids(STRUCTURE *psStructure);
 
 //print some info at the top of the screen dependant on the structure
 extern void printStructureInfo(STRUCTURE *psStructure);

@@ -121,9 +121,9 @@ char	selInfo[255];
 	}
 
 	/* Send back the return value */
-	sprintf(selInfo,_("%d Unit(s) Selected"),retVal);
-	addConsoleMessage(selInfo,RIGHT_JUSTIFY);
-	return(retVal);
+	snprintf(selInfo, sizeof(selInfo), ngettext("%u unit selected", "%u units selected", retVal), retVal);
+	addConsoleMessage(selInfo, RIGHT_JUSTIFY);
+	return retVal;
 }
 
 // ---------------------------------------------------------------------

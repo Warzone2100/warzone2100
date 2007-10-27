@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-10-22 22:50+0200\n"
+"POT-Creation-Date: 2007-10-27 23:33+0200\n"
 "PO-Revision-Date: 2007-08-12 16:30+0100\n"
 "Last-Translator: Thomas Rösner <translation-bugs@digital-trauma.de>\n"
 "Language-Team: Deutsch\n"
@@ -20,35 +20,35 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Bookmarks: 458,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
-#: src/multiplay.c:1902
+#: src/multiplay.c:1901
 msgid "Green"
 msgstr "Grün"
 
-#: src/multiplay.c:1903
+#: src/multiplay.c:1902
 msgid "Orange"
 msgstr "Orange"
 
-#: src/multiplay.c:1904
+#: src/multiplay.c:1903
 msgid "Grey"
 msgstr "Grau"
 
-#: src/multiplay.c:1905
+#: src/multiplay.c:1904
 msgid "Black"
 msgstr "Schwarz"
 
-#: src/multiplay.c:1906
+#: src/multiplay.c:1905
 msgid "Red"
 msgstr "Rot"
 
-#: src/multiplay.c:1907
+#: src/multiplay.c:1906
 msgid "Blue"
 msgstr "Blau"
 
-#: src/multiplay.c:1908
+#: src/multiplay.c:1907
 msgid "Pink"
 msgstr "Pink"
 
-#: src/multiplay.c:1909
+#: src/multiplay.c:1908
 msgid "Cyan"
 msgstr "Cyan"
 
@@ -65,7 +65,7 @@ msgstr "%s - Schaden %d%% - Abschüsse %d, %s"
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Baufahrzeug wurde beauftragt, einen Ölbohrturm zu bauen"
 
-#: src/multistat.c:104 src/configuration.c:374 src/configuration.c:375
+#: src/multistat.c:104 src/configuration.c:373 src/configuration.c:374
 msgid "Player"
 msgstr "Spieler"
 
@@ -117,7 +117,7 @@ msgstr "Sie haben Entwürfe für %s entdeckt"
 #: src/hci.c:1039 src/hci.c:3818 src/hci.c:3972 src/hci.c:4414 src/hci.c:5637
 #: src/transporter.c:293 src/transporter.c:382 src/transporter.c:879
 #: src/intorder.c:661 src/loadsave.c:259 src/intelmap.c:526
-#: src/multimenu.c:451 src/multimenu.c:1293
+#: src/multimenu.c:451 src/multimenu.c:1289
 msgid "Close"
 msgstr "Schließen"
 
@@ -125,27 +125,27 @@ msgstr "Schließen"
 msgid "GAME SAVED!"
 msgstr "SPIEL GESPEICHERT!"
 
-#: src/hci.c:3720 src/keymap.c:292
+#: src/hci.c:3720 src/keymap.c:290
 msgid "Commanders"
 msgstr "Kommandoeinheiten"
 
-#: src/hci.c:3736 src/keymap.c:291
+#: src/hci.c:3736 src/keymap.c:289
 msgid "Intelligence Display"
 msgstr "Nachrichtendienst"
 
-#: src/hci.c:3752 src/keymap.c:287
+#: src/hci.c:3752 src/keymap.c:285
 msgid "Manufacture"
 msgstr "Produzieren"
 
-#: src/hci.c:3768 src/keymap.c:290
+#: src/hci.c:3768 src/keymap.c:288
 msgid "Design"
 msgstr "Entwürfe"
 
-#: src/hci.c:3784 src/keymap.c:288
+#: src/hci.c:3784 src/keymap.c:286
 msgid "Research"
 msgstr "Forschung"
 
-#: src/hci.c:3800 src/keymap.c:289
+#: src/hci.c:3800 src/keymap.c:287
 msgid "Build"
 msgstr "Bauen"
 
@@ -235,60 +235,68 @@ msgstr "Einheit verloren!"
 msgid "Structure Restored"
 msgstr "Gebäude wiederhergestellt"
 
-#: src/droid.c:3825
-#, c-format
-msgid "Group %d Selected - %d Unit(s)"
-msgstr "Gruppe %d ausgewählt - %d Einheit(en)"
+#: src/droid.c:3826
+#, fuzzy, c-format
+msgid "Group %u selected - %u Unit"
+msgid_plural "Group %u selected - %u Units"
+msgstr[0] "Gruppe %d ausgewählt - %d Einheit(en)"
+msgstr[1] "Gruppe %d ausgewählt - %d Einheit(en)"
 
-#: src/droid.c:3837
-#, c-format
-msgid "%d Unit(s) Assigned to Group %d"
-msgstr "%d Einheit(en) zu Gruppe %d hinzugefügt"
-
-#: src/droid.c:3849
-#, c-format
-msgid "Centered on Group %d - %d Unit(s)"
-msgstr "Auf Gruppe %d zentriert - %d Einheit(en)"
+#: src/droid.c:3840
+#, fuzzy, c-format
+msgid "%u unit assigned to Group %u"
+msgid_plural "%u units assigned to Group %u"
+msgstr[0] "%d Einheit(en) zu Gruppe %d hinzugefügt"
+msgstr[1] "%d Einheit(en) zu Gruppe %d hinzugefügt"
 
 #: src/droid.c:3853
-#, c-format
-msgid "Aligning with Group %d - %d Unit(s)"
-msgstr "An Gruppe %d ausgerichtet - %d Einheit(en)"
+#, fuzzy, c-format
+msgid "Centered on Group %u - %u Unit"
+msgid_plural "Centered on Group %u - %u Units"
+msgstr[0] "Auf Gruppe %d zentriert - %d Einheit(en)"
+msgstr[1] "Auf Gruppe %d zentriert - %d Einheit(en)"
 
-#: src/droid.c:4130
+#: src/droid.c:3857
+#, fuzzy, c-format
+msgid "Aligning with Group %u - %u Unit"
+msgid_plural "Aligning with Group %u - %u Units"
+msgstr[0] "An Gruppe %d ausgerichtet - %d Einheit(en)"
+msgstr[1] "An Gruppe %d ausgerichtet - %d Einheit(en)"
+
+#: src/droid.c:4134
 msgid "Rookie"
 msgstr "Neuling"
 
-#: src/droid.c:4131
+#: src/droid.c:4135
 msgctxt "rank"
 msgid "Green"
 msgstr "Unerfahren"
 
-#: src/droid.c:4132
+#: src/droid.c:4136
 msgid "Trained"
 msgstr "Geübt"
 
-#: src/droid.c:4133
+#: src/droid.c:4137
 msgid "Regular"
 msgstr "Soldat"
 
-#: src/droid.c:4134
+#: src/droid.c:4138
 msgid "Professional"
 msgstr "Profi"
 
-#: src/droid.c:4135
+#: src/droid.c:4139
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.c:4136
+#: src/droid.c:4140
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:4137
+#: src/droid.c:4141
 msgid "Special"
 msgstr "Spezialist"
 
-#: src/droid.c:4138
+#: src/droid.c:4142
 msgid "Hero"
 msgstr "Held"
 
@@ -369,7 +377,7 @@ msgstr "Nebel des Krieges"
 msgid "Distance Fog"
 msgstr "Entfernungsnebel"
 
-#: src/multiint.c:755 src/multimenu.c:741
+#: src/multiint.c:755 src/multimenu.c:737
 msgid "Alliances"
 msgstr "Allianzen"
 
@@ -437,73 +445,73 @@ msgstr "Gastgeber startet das Spiel"
 msgid "Players"
 msgstr "Spieler"
 
-#: src/display3d.c:420
+#: src/display3d.c:421
 msgid "Developed by Pumpkin Studios"
 msgstr "Entwickelt von Pumpkin Studios"
 
-#: src/display3d.c:421
+#: src/display3d.c:422
 msgid "Published by EIDOS Interactive"
 msgstr "Veröffentlicht von EIDOS Interactive"
 
-#: src/keybind.c:1232
+#: src/keybind.c:1219
 msgid "View Aligned to North"
 msgstr "Sicht nach Norden ausgerichtet"
 
-#: src/keybind.c:1256 src/intelmap.c:243
+#: src/keybind.c:1243 src/intelmap.c:243
 msgid "PAUSED"
 msgstr "PAUSE"
 
-#: src/keybind.c:1288
+#: src/keybind.c:1275
 msgid "Researched EVERYTHING for you!"
 msgstr "ALLES für Sie erforscht!"
 
-#: src/keybind.c:1319 src/keybind.c:1326
+#: src/keybind.c:1306 src/keybind.c:1313
 msgid "Energy bars display toggled"
 msgstr "Anzeige der Energiebalken umgeschaltet"
 
-#: src/keybind.c:1392
+#: src/keybind.c:1379
 msgid "Unable to locate any resource extractors!"
 msgstr "Kann keine Resourcenextraktoren finden"
 
-#: src/keybind.c:1655
+#: src/keybind.c:1645
 msgid "Enemy destroyed by cheating!"
 msgstr "Feind via cheat zerstört!"
 
-#: src/keybind.c:2263
+#: src/keybind.c:2256
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Auf Spieler HQ zentriert, Blickrichtung Norden"
 
-#: src/keybind.c:2275
+#: src/keybind.c:2268
 msgid "Unable to locate HQ!"
 msgstr "Kann Hauptquartier nicht finden!"
 
-#: src/keybind.c:2291
+#: src/keybind.c:2284
 msgid "Formation speed limiting OFF"
 msgstr "Formationsgeschwindigkeitslimit AUS"
 
-#: src/keybind.c:2295
+#: src/keybind.c:2288
 msgid "Formation speed limiting ON"
 msgstr "Formationsgeschwindigkeitslimit AN"
 
-#: src/keybind.c:2425 src/keybind.c:2452 src/keybind.c:2467
+#: src/keybind.c:2418 src/keybind.c:2445 src/keybind.c:2460
 msgid "Game Speed Reset"
 msgstr "Spielgeschwindigkeit zurückgesetzt"
 
-#: src/keybind.c:2427
+#: src/keybind.c:2420
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Spielgeschwindigkeit auf %3.1f erhöht"
 
-#: src/keybind.c:2454
+#: src/keybind.c:2447
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Spielgeschwindigkeit auf %3.1f gesenkt"
 
-#: src/keybind.c:2480
+#: src/keybind.c:2473
 msgid "Build menu will reopen"
 msgstr "Baumenu wird sich wieder öffnen"
 
-#: src/keybind.c:2484
+#: src/keybind.c:2477
 msgid "Build menu will not reopen"
 msgstr "Baumenu wird sich nicht wieder öffnen"
 
@@ -515,46 +523,53 @@ msgstr "Energie angesammelt"
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Kommandoeinheit hat Kontrolllimit erreicht - Produktion eingestellt"
 
-#: src/structure.c:6099 src/structure.c:6118
-#, c-format
-msgid "%s - %d Units assigned"
-msgstr "Gruppe %s: %d Einheiten hinzugefügt"
+#: src/structure.c:6103 src/structure.c:6124
+#, fuzzy, c-format
+msgid "%s - %u Unit assigned"
+msgid_plural "%s - %u Units assigned"
+msgstr[0] "Gruppe %s: %d Einheiten hinzugefügt"
+msgstr[1] "Gruppe %s: %d Einheiten hinzugefügt"
 
-#: src/structure.c:6155
-#, c-format
-msgid "%s - Connected %d of %d"
+#: src/structure.c:6161
+#, fuzzy, c-format
+msgid "%s - Connected %u of %u"
 msgstr "%s - %d von %d verbunden"
 
-#: src/structure.c:6290 src/structure.c:6341
+#: src/structure.c:6176
+#, fuzzy, c-format
+msgid "%s - Damage %u%%"
+msgstr "%s - Schaden %d%%"
+
+#: src/structure.c:6296 src/structure.c:6347
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronisch beschädigt"
 
-#: src/structure.c:6566
+#: src/structure.c:6572
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronikprämie - Sichtbarkeitsbericht"
 
-#: src/structure.c:6606
+#: src/structure.c:6612
 msgid "Factory Reward - Propulsion"
 msgstr "Fabrikprämie - Antrieb"
 
-#: src/structure.c:6630
+#: src/structure.c:6636
 msgid "Factory Reward - Body"
 msgstr "Fabrikprämie - Rumpf"
 
-#: src/structure.c:6654
+#: src/structure.c:6660
 msgid "Factory Reward - Weapon"
 msgstr "Fabrikprämie - Waffe"
 
-#: src/structure.c:6663
+#: src/structure.c:6669
 msgid "Factory Reward - Nothing"
 msgstr "Fabrikprämie - Nichts"
 
-#: src/structure.c:6691
+#: src/structure.c:6697
 msgid "Repair Facility Award - Repair"
 msgstr "Reparaturwerkstattprämie - Reparatur"
 
-#: src/structure.c:6698
+#: src/structure.c:6704
 msgid "Repair Facility Award - Nothing"
 msgstr "Reparaturwerkstattprämie - Nichts"
 
@@ -567,9 +582,11 @@ msgid "Select Default"
 msgstr "Voreinstellung auswählen"
 
 #: src/selection.c:124
-#, c-format
-msgid "%d Unit(s) Selected"
-msgstr "%d Einheit(en) ausgewählt"
+#, fuzzy, c-format
+msgid "%u unit selected"
+msgid_plural "%u units selected"
+msgstr[0] "%d Einheit(en) ausgewählt"
+msgstr[1] "%d Einheit(en) ausgewählt"
 
 #: src/selection.c:441 src/selection.c:530 src/selection.c:608
 msgid "Unable to locate any repair units!"
@@ -601,88 +618,88 @@ msgid "Research Award"
 msgstr "Forschungsprämie"
 
 #: src/scores.c:96
-#, c-format
-msgid "Own Units: %d"
+#, fuzzy, c-format
+msgid "Own Units: %u"
 msgstr "Eigene Einheiten: %d"
 
 #: src/scores.c:97
-#, c-format
-msgid "Enemy Units: %d"
+#, fuzzy, c-format
+msgid "Enemy Units: %u"
 msgstr "Feindliche Einheiten: %d"
 
 #: src/scores.c:98
-#, c-format
-msgid "Own Structures: %d"
+#, fuzzy, c-format
+msgid "Own Structures: %u"
 msgstr "Eigene Gebäude: %d"
 
 #: src/scores.c:99
-#, c-format
-msgid "Enemy Structures: %d"
+#, fuzzy, c-format
+msgid "Enemy Structures: %u"
 msgstr "Feindliche Gebäude: %d"
 
 #: src/scores.c:100
-#, c-format
-msgid "Units Manufactured: %d"
+#, fuzzy, c-format
+msgid "Units Manufactured: %u"
 msgstr "Einheiten produziert: %d"
 
 #: src/scores.c:101
-#, c-format
-msgid "Total Units: %d"
+#, fuzzy, c-format
+msgid "Total Units: %u"
 msgstr "Einheiten insgesamt: %d"
 
 #: src/scores.c:102
-#, c-format
-msgid "Structures Built: %d"
+#, fuzzy, c-format
+msgid "Structures Built: %u"
 msgstr "Gebäude gebaut: %d"
 
 #: src/scores.c:103
-#, c-format
-msgid "Total Structures: %d"
+#, fuzzy, c-format
+msgid "Total Structures: %u"
 msgstr "Gebäude gesamt: %d"
 
 #: src/scores.c:105
-#, c-format
-msgid "Rookie: %d"
+#, fuzzy, c-format
+msgid "Rookie: %u"
 msgstr "Neuling: %d"
 
 #: src/scores.c:106
-#, c-format
-msgid "Green: %d"
+#, fuzzy, c-format
+msgid "Green: %u"
 msgstr "Unerfahren: %d"
 
 #: src/scores.c:107
-#, c-format
-msgid "Trained: %d"
+#, fuzzy, c-format
+msgid "Trained: %u"
 msgstr "Geübt: %d"
 
 #: src/scores.c:108
-#, c-format
-msgid "Regular: %d"
+#, fuzzy, c-format
+msgid "Regular: %u"
 msgstr "Soldat: %d"
 
 #: src/scores.c:109
-#, c-format
-msgid "Professional: %d"
+#, fuzzy, c-format
+msgid "Professional: %u"
 msgstr "Profi: %d"
 
 #: src/scores.c:110
-#, c-format
-msgid "Veteran: %d"
+#, fuzzy, c-format
+msgid "Veteran: %u"
 msgstr "Veteran: %d"
 
 #: src/scores.c:111
-#, c-format
-msgid "Elite: %d"
+#, fuzzy, c-format
+msgid "Elite: %u"
 msgstr "Elite: %d"
 
 #: src/scores.c:112
-#, c-format
-msgid "Special: %d"
+#, fuzzy, c-format
+msgid "Special: %u"
 msgstr "Spezialist: %d"
 
 #: src/scores.c:113
-#, c-format
-msgid "Hero: %d"
+#, fuzzy, c-format
+msgid "Hero: %u"
 msgstr "Held: %d"
 
 #: src/scores.c:320
@@ -712,27 +729,27 @@ msgstr "Missionszeit - %s"
 msgid "Total Game Time - %s"
 msgstr "Gesamte Spielzeit - %s"
 
-#: src/intorder.c:179 src/keymap.c:380
+#: src/intorder.c:179 src/keymap.c:378
 msgid "Short Range"
 msgstr "Kurze Distanz"
 
-#: src/intorder.c:180 src/keymap.c:386
+#: src/intorder.c:180 src/keymap.c:384
 msgid "Long Range"
 msgstr "Große Distanz"
 
-#: src/intorder.c:181 src/keymap.c:379
+#: src/intorder.c:181 src/keymap.c:377
 msgid "Optimum Range"
 msgstr "Optimale Distanz"
 
-#: src/intorder.c:182 src/keymap.c:399
+#: src/intorder.c:182 src/keymap.c:397
 msgid "Retreat at Medium Damage"
 msgstr "Rückzug bei mittlerem Schaden"
 
-#: src/intorder.c:183 src/keymap.c:400
+#: src/intorder.c:183 src/keymap.c:398
 msgid "Retreat at Heavy Damage"
 msgstr "Rückzug bei schwerem Schaden"
 
-#: src/intorder.c:184 src/keymap.c:401
+#: src/intorder.c:184 src/keymap.c:399
 msgid "Do or Die!"
 msgstr "Sieg oder Tod!"
 
@@ -740,19 +757,19 @@ msgstr "Sieg oder Tod!"
 msgid "Fire-At-Will"
 msgstr "freies Feuer"
 
-#: src/intorder.c:186 src/keymap.c:376
+#: src/intorder.c:186 src/keymap.c:374
 msgid "Return Fire"
 msgstr "Feuer erwidern"
 
-#: src/intorder.c:187 src/keymap.c:374
+#: src/intorder.c:187 src/keymap.c:372
 msgid "Hold Fire"
 msgstr "Feuer einstellen"
 
-#: src/intorder.c:188 src/keymap.c:382
+#: src/intorder.c:188 src/keymap.c:380
 msgid "Patrol"
 msgstr "Patroullieren"
 
-#: src/intorder.c:189 src/keymap.c:381
+#: src/intorder.c:189 src/keymap.c:379
 msgid "Pursue"
 msgstr "Verfolgen"
 
@@ -760,11 +777,11 @@ msgstr "Verfolgen"
 msgid "Guard Position"
 msgstr "Position bewachen"
 
-#: src/intorder.c:191 src/keymap.c:384
+#: src/intorder.c:191 src/keymap.c:382
 msgid "Hold Position"
 msgstr "Nicht bewegen"
 
-#: src/intorder.c:192 src/keymap.c:383
+#: src/intorder.c:192 src/keymap.c:381
 msgid "Return For Repair"
 msgstr "Zur Reparatur"
 
@@ -776,7 +793,7 @@ msgstr "Zum Hauptquartier"
 msgid "Go to Transport"
 msgstr "Zum Transporter"
 
-#: src/intorder.c:195 src/keymap.c:410
+#: src/intorder.c:195 src/keymap.c:408
 msgid "Return for Recycling"
 msgstr "Zum Recycling"
 
@@ -820,7 +837,7 @@ msgstr "Musiklautstärke"
 msgid "Options"
 msgstr "Optionen"
 
-#: src/design.c:469 src/design.c:491 src/design.c:3654
+#: src/design.c:469 src/design.c:491 src/design.c:3658
 msgid "New Vehicle"
 msgstr "Neues Fahrzeug"
 
@@ -852,10 +869,10 @@ msgstr "Thermische Panzerung"
 msgid "Engine Output"
 msgstr "Motorleistung"
 
-#: src/design.c:742 src/design.c:801 src/design.c:1648 src/design.c:1689
-#: src/design.c:1714 src/design.c:1732 src/design.c:1757 src/design.c:1775
-#: src/design.c:1817 src/design.c:1852 src/design.c:1991 src/design.c:2008
-#: src/design.c:2043 src/design.c:2079
+#: src/design.c:742 src/design.c:801 src/design.c:1652 src/design.c:1693
+#: src/design.c:1718 src/design.c:1736 src/design.c:1761 src/design.c:1779
+#: src/design.c:1821 src/design.c:1856 src/design.c:1995 src/design.c:2012
+#: src/design.c:2047 src/design.c:2083
 msgid "Weight"
 msgstr "Gewicht"
 
@@ -871,63 +888,63 @@ msgstr "Gesamte Strukturpunkte"
 msgid "Power Usage"
 msgstr "Energieverbrauch"
 
-#: src/design.c:1400
+#: src/design.c:1404
 msgid "Transporter"
 msgstr "Transporter"
 
-#: src/design.c:1630
+#: src/design.c:1634
 msgid "Sensor Range"
 msgstr "Sensorenreichweite"
 
-#: src/design.c:1639
+#: src/design.c:1643
 msgid "Sensor Power"
 msgstr "Sensorenenergie"
 
-#: src/design.c:1680
+#: src/design.c:1684
 msgid "ECM Power"
 msgstr "ECM Energie"
 
-#: src/design.c:1706 src/design.c:1723 src/design.c:1749 src/design.c:1766
+#: src/design.c:1710 src/design.c:1727 src/design.c:1753 src/design.c:1770
 msgid "Build Points"
 msgstr "Baupunkte"
 
-#: src/design.c:1793 src/design.c:1825
+#: src/design.c:1797 src/design.c:1829
 msgid "Range"
 msgstr "Reichweite"
 
-#: src/design.c:1801 src/design.c:1834
+#: src/design.c:1805 src/design.c:1838
 msgid "Damage"
 msgstr "Schaden"
 
-#: src/design.c:1809 src/design.c:1843
+#: src/design.c:1813 src/design.c:1847
 msgid "Rate-of-Fire"
 msgstr "Feuerrate"
 
-#: src/design.c:1983 src/design.c:1999
+#: src/design.c:1987 src/design.c:2003
 msgid "Air Speed"
 msgstr "Fluggeschwindigkeit"
 
-#: src/design.c:2019 src/design.c:2052
+#: src/design.c:2023 src/design.c:2056
 msgid "Road Speed"
 msgstr "Straßengeschwindigkeit"
 
-#: src/design.c:2027 src/design.c:2061
+#: src/design.c:2031 src/design.c:2065
 msgid "Off-Road Speed"
 msgstr "Geländegeschwindigkeit"
 
-#: src/design.c:2035 src/design.c:2070
+#: src/design.c:2039 src/design.c:2074
 msgid "Water Speed"
 msgstr "Wassergeschwindigkeit"
 
-#: src/design.c:2200
+#: src/design.c:2204
 msgid "Weapons"
 msgstr "Waffen"
 
-#: src/design.c:2224
+#: src/design.c:2228
 msgid "Systems"
 msgstr "Systeme"
 
-#: src/design.c:2243
+#: src/design.c:2247
 msgid "Command Turrets"
 msgstr "Kommandotürme"
 
@@ -1097,335 +1114,335 @@ msgstr "Missionsziele"
 msgid "Current Objective"
 msgstr "Aktuelles Missionsziel"
 
-#: src/keymap.c:293
+#: src/keymap.c:291
 msgid "Toggle Radar"
 msgstr "Radar umschalten"
 
-#: src/keymap.c:294
+#: src/keymap.c:292
 msgid "Toggle Console Display"
 msgstr "Konsolenanzeige umschalten"
 
-#: src/keymap.c:295
+#: src/keymap.c:293
 msgid "Toggle Damage Bars On/Off"
 msgstr "Schadensbalken umschalten"
 
-#: src/keymap.c:296
+#: src/keymap.c:294
 msgid "Take Screen Shot"
 msgstr "Bildschirmfoto erstellen"
 
-#: src/keymap.c:297
+#: src/keymap.c:295
 msgid "Toggle Formation Speed Limiting"
 msgstr "Formationsgeschwindigkeitslimit umschalten"
 
-#: src/keymap.c:298
+#: src/keymap.c:296
 msgid "View Location of Previous Message"
 msgstr "Zeige Ort der letzten Meldung"
 
-#: src/keymap.c:303
+#: src/keymap.c:301
 msgid "Assign Group 1"
 msgstr "Gruppe 1 zuteilen"
 
-#: src/keymap.c:304
+#: src/keymap.c:302
 msgid "Assign Group 2"
 msgstr "Gruppe 2 zuteilen"
 
-#: src/keymap.c:305
+#: src/keymap.c:303
 msgid "Assign Group 3"
 msgstr "Gruppe 3 zuteilen"
 
-#: src/keymap.c:306
+#: src/keymap.c:304
 msgid "Assign Group 4"
 msgstr "Gruppe 4 zuteilen"
 
-#: src/keymap.c:307
+#: src/keymap.c:305
 msgid "Assign Group 5"
 msgstr "Gruppe 5 zuteilen"
 
-#: src/keymap.c:308
+#: src/keymap.c:306
 msgid "Assign Group 6"
 msgstr "Gruppe 6 zuteilen"
 
-#: src/keymap.c:309
+#: src/keymap.c:307
 msgid "Assign Group 7"
 msgstr "Gruppe 7 zuteilen"
 
-#: src/keymap.c:310
+#: src/keymap.c:308
 msgid "Assign Group 8"
 msgstr "Gruppe 8 zuteilen"
 
-#: src/keymap.c:311
+#: src/keymap.c:309
 msgid "Assign Group 9"
 msgstr "Gruppe 9 zuteilen"
 
-#: src/keymap.c:315
+#: src/keymap.c:313
 msgid "Select Group 1"
 msgstr "Gruppe 1 auswählen"
 
-#: src/keymap.c:316
+#: src/keymap.c:314
 msgid "Select Group 2"
 msgstr "Gruppe 2 auswählen"
 
-#: src/keymap.c:317
+#: src/keymap.c:315
 msgid "Select Group 3"
 msgstr "Gruppe 3 auswählen"
 
-#: src/keymap.c:318
+#: src/keymap.c:316
 msgid "Select Group 4"
 msgstr "Gruppe 4 auswählen"
 
-#: src/keymap.c:319
+#: src/keymap.c:317
 msgid "Select Group 5"
 msgstr "Gruppe 5 auswählen"
 
-#: src/keymap.c:320
+#: src/keymap.c:318
 msgid "Select Group 6"
 msgstr "Gruppe 6 auswählen"
 
-#: src/keymap.c:321
+#: src/keymap.c:319
 msgid "Select Group 7"
 msgstr "Gruppe 7 auswählen"
 
-#: src/keymap.c:322
+#: src/keymap.c:320
 msgid "Select Group 8"
 msgstr "Gruppe 8 auswählen"
 
-#: src/keymap.c:323
+#: src/keymap.c:321
 msgid "Select Group 9"
 msgstr "Gruppe 9 auswählen"
 
-#: src/keymap.c:327
+#: src/keymap.c:325
 msgid "Select Commander 1"
 msgstr "Kommandoeinheit 1 auswählen"
 
-#: src/keymap.c:328
+#: src/keymap.c:326
 msgid "Select Commander 2"
 msgstr "Kommandoeinheit 2 auswählen"
 
-#: src/keymap.c:329
+#: src/keymap.c:327
 msgid "Select Commander 3"
 msgstr "Kommandoeinheit 3 auswählen"
 
-#: src/keymap.c:330
+#: src/keymap.c:328
 msgid "Select Commander 4"
 msgstr "Kommandoeinheit 4 auswählen"
 
-#: src/keymap.c:331
+#: src/keymap.c:329
 msgid "Select Commander 5"
 msgstr "Kommandoeinheit 5 auswählen"
 
-#: src/keymap.c:332
+#: src/keymap.c:330
 msgid "Select Commander 6"
 msgstr "Kommandoeinheit 6 auswählen"
 
-#: src/keymap.c:333
+#: src/keymap.c:331
 msgid "Select Commander 7"
 msgstr "Kommandoeinheit 7 auswählen"
 
-#: src/keymap.c:334
+#: src/keymap.c:332
 msgid "Select Commander 8"
 msgstr "Kommandoeinheit 8 auswählen"
 
-#: src/keymap.c:335
+#: src/keymap.c:333
 msgid "Select Commander 9"
 msgstr "Kommandoeinheit 9 auswählen"
 
-#: src/keymap.c:339
+#: src/keymap.c:337
 msgid "Multiplayer Options"
 msgstr "Mehrspielereinstellungen"
 
-#: src/keymap.c:340
+#: src/keymap.c:338
 msgid "Start Multiplayer Audio"
 msgstr "Starte Mehrspieler Ton"
 
-#: src/keymap.c:341
+#: src/keymap.c:339
 msgid "Stop Multiplayer Audio"
 msgstr "Stoppe Mehrspieler Ton"
 
-#: src/keymap.c:344
+#: src/keymap.c:342
 msgid "Snap View to North"
 msgstr "Sicht nach Norden ausrichten"
 
-#: src/keymap.c:345
+#: src/keymap.c:343
 msgid "Toggle Tracking Camera"
 msgstr "Verfolgerkamera umschalten"
 
-#: src/keymap.c:346
+#: src/keymap.c:344
 msgid "Display In-Game Options"
 msgstr "Zeige Spieleinstellungen"
 
-#: src/keymap.c:347
+#: src/keymap.c:345
 msgid "Zoom Radar Out"
 msgstr "Radar herauszoomen"
 
-#: src/keymap.c:348
+#: src/keymap.c:346
 msgid "Zoom Radar In"
 msgstr "Radar hereinzoomen"
 
-#: src/keymap.c:349
+#: src/keymap.c:347
 msgid "Zoom In"
 msgstr "Hereinzoomen"
 
-#: src/keymap.c:350
+#: src/keymap.c:348
 msgid "Zoom Out"
 msgstr "Herauszoomen"
 
-#: src/keymap.c:351
+#: src/keymap.c:349
 msgid "Pitch Forward"
 msgstr "Nach vorne neigen"
 
-#: src/keymap.c:352
+#: src/keymap.c:350
 msgid "Rotate Left"
 msgstr "Nach links rotieren"
 
-#: src/keymap.c:353
+#: src/keymap.c:351
 msgid "Reset Pitch"
 msgstr "Neigung zurücksetzen"
 
-#: src/keymap.c:354
+#: src/keymap.c:352
 msgid "Rotate Right"
 msgstr "Nach rechts rotieren"
 
-#: src/keymap.c:355
+#: src/keymap.c:353
 msgid "Pitch Back"
 msgstr "Nach hinten neigen"
 
-#: src/keymap.c:356
+#: src/keymap.c:354
 msgid "Orders Menu"
 msgstr "Befehls-Menü"
 
-#: src/keymap.c:357
+#: src/keymap.c:355
 msgid "Decrease Game Speed"
 msgstr "Spielgeschwindigkeit veringern"
 
-#: src/keymap.c:358
+#: src/keymap.c:356
 msgid "Increase Game Speed"
 msgstr "Spielgeschwindigkeit erhöhen"
 
-#: src/keymap.c:359
+#: src/keymap.c:357
 msgid "Reset Game Speed"
 msgstr "Spielgeschwindigkeit zurücksetzen"
 
-#: src/keymap.c:360
+#: src/keymap.c:358
 msgid "View North"
 msgstr "Sicht nach Norden"
 
-#: src/keymap.c:361
+#: src/keymap.c:359
 msgid "View South"
 msgstr "Sicht nach Süden"
 
-#: src/keymap.c:362
+#: src/keymap.c:360
 msgid "View East"
 msgstr "Sicht nach Osten"
 
-#: src/keymap.c:363
+#: src/keymap.c:361
 msgid "View West"
 msgstr "Sicht nach Westen"
 
-#: src/keymap.c:364
+#: src/keymap.c:362
 msgid "View next Oil Derrick"
 msgstr "Zeige nächsten Ölbohrturm"
 
-#: src/keymap.c:365
+#: src/keymap.c:363
 msgid "View next Repair Unit"
 msgstr "Zeige nächste Reparatur Einheit"
 
-#: src/keymap.c:366
+#: src/keymap.c:364
 msgid "View next Truck"
 msgstr "Zeige nächstes Baufahrzeug"
 
-#: src/keymap.c:367
+#: src/keymap.c:365
 msgid "View next Sensor Unit"
 msgstr "Zeige nächste Sensoreneinheit"
 
-#: src/keymap.c:368
+#: src/keymap.c:366
 msgid "View next Commander"
 msgstr "Zeige nächste Kommandoeinheit"
 
-#: src/keymap.c:369
+#: src/keymap.c:367
 msgid "Toggle Overlays"
 msgstr "Überblendungen umschalten"
 
-#: src/keymap.c:370
+#: src/keymap.c:368
 msgid "Console On/Off"
 msgstr "Konsole ein/aus"
 
-#: src/keymap.c:373
+#: src/keymap.c:371
 msgid "Center View on HQ"
 msgstr "Zentriere Ansicht auf das Hauptquartier"
 
-#: src/keymap.c:375
+#: src/keymap.c:373
 msgid "View Unassigned Units"
 msgstr "Zeige nicht zugeordnete Einheiten"
 
-#: src/keymap.c:377
+#: src/keymap.c:375
 msgid "Fire at Will"
 msgstr "Freies Feuer"
 
-#: src/keymap.c:378
+#: src/keymap.c:376
 msgid "Return to HQ"
 msgstr "Gehe zum Hauptquartier"
 
-#: src/keymap.c:385
+#: src/keymap.c:383
 msgid "Send Text Message"
 msgstr "Sende Textnachricht"
 
-#: src/keymap.c:405
+#: src/keymap.c:403
 msgid "Select all Combat Units"
 msgstr "Alle Kampfeinheiten auswählen"
 
-#: src/keymap.c:406
+#: src/keymap.c:404
 msgid "Select all Heavily Damaged Units"
 msgstr "Alle schwer beschädigten Einheiten auswählen"
 
-#: src/keymap.c:408
+#: src/keymap.c:406
 msgid "Select all Half-tracks"
 msgstr "Alle Halbkettenfahrzeuge auswählen"
 
-#: src/keymap.c:409
+#: src/keymap.c:407
 msgid "Select all Hovers"
 msgstr "Alle Schwebefahrzeuge auswählen"
 
-#: src/keymap.c:411
+#: src/keymap.c:409
 msgid "Select all Units on Screen"
 msgstr "Alle sichtbaren Einheiten auswählen"
 
-#: src/keymap.c:412
+#: src/keymap.c:410
 msgid "Select all Tracks"
 msgstr "Alle Kettenfahrzeuge auswählen"
 
-#: src/keymap.c:413
+#: src/keymap.c:411
 msgid "Select EVERY unit"
 msgstr "ALLE Einheiten auswählen"
 
-#: src/keymap.c:414
+#: src/keymap.c:412
 msgid "Select all VTOLs"
 msgstr "Alle VTOLs auswählen"
 
-#: src/keymap.c:415
+#: src/keymap.c:413
 msgid "Select all Wheels"
 msgstr "Alle Radfahrzeuge auswählen"
 
-#: src/keymap.c:417
+#: src/keymap.c:415
 msgid "Select all Similiar Units"
 msgstr "Alle gleichartigen Einheiten auswählen"
 
-#: src/keymap.c:421
+#: src/keymap.c:419
 msgid "Select next Factory"
 msgstr "Nächste Fabrik auswählen"
 
-#: src/keymap.c:422
+#: src/keymap.c:420
 msgid "Select next Research Facility"
 msgstr "Nächste Forschungseinrichtung auswählen"
 
-#: src/keymap.c:423
+#: src/keymap.c:421
 msgid "Select next Power Generator"
 msgstr "Nächsten Stromgenerator auswählen"
 
-#: src/keymap.c:424
+#: src/keymap.c:422
 msgid "Select next Cyborg Factory"
 msgstr "Nächste Cyborgfabrik auswählen"
 
-#: src/keymap.c:425
+#: src/keymap.c:423
 msgid "Toggle reopening the build menu"
 msgstr "Wiederöffnen des Baumenüs umschalten"
 
@@ -1443,67 +1460,67 @@ msgstr "%s hat das Spiel verlassen"
 msgid "%s is Joining the Game"
 msgstr "%s ist dem Spiel beigetreten"
 
-#: src/multimenu.c:583
+#: src/multimenu.c:579
 msgid "Technology level 1"
 msgstr "Technologiestufe 1"
 
-#: src/multimenu.c:591
+#: src/multimenu.c:587
 msgid "Technology level 2"
 msgstr "Technologiestufe 2"
 
-#: src/multimenu.c:597
+#: src/multimenu.c:593
 msgid "Technology level 3"
 msgstr "Technologiestufe 3"
 
-#: src/multimenu.c:603
+#: src/multimenu.c:599
 msgid "Any number of players"
 msgstr "Beliebige Spielerzahl"
 
-#: src/multimenu.c:610
+#: src/multimenu.c:606
 msgid "2 players"
 msgstr "2 Spieler"
 
-#: src/multimenu.c:616
+#: src/multimenu.c:612
 msgid "4 players"
 msgstr "4 Spieler"
 
-#: src/multimenu.c:622
+#: src/multimenu.c:618
 msgid "8 players"
 msgstr "8 Spieler"
 
-#: src/multimenu.c:742
+#: src/multimenu.c:738
 msgid "Score"
 msgstr "Punktestand"
 
-#: src/multimenu.c:743
+#: src/multimenu.c:739
 msgid "Kills"
 msgstr "Abschüsse"
 
-#: src/multimenu.c:752
+#: src/multimenu.c:748
 msgid "Ping"
 msgstr "Ping"
 
-#: src/multimenu.c:753
+#: src/multimenu.c:749
 msgid "Played"
 msgstr "Gespielt"
 
-#: src/multimenu.c:1065
+#: src/multimenu.c:1061
 msgid "Toggle Alliance State"
 msgstr "Verbündungsstatus umschalten"
 
-#: src/multimenu.c:1084
+#: src/multimenu.c:1080
 msgid "Give Visibility Report"
 msgstr "Sensordaten übertragen"
 
-#: src/multimenu.c:1090
+#: src/multimenu.c:1086
 msgid "Leak Technology Documents"
 msgstr "Technologie übertragen"
 
-#: src/multimenu.c:1097
+#: src/multimenu.c:1093
 msgid "Hand Over Selected Units"
 msgstr "Übergebe ausgewählte Einheiten"
 
-#: src/multimenu.c:1103
+#: src/multimenu.c:1099
 msgid "Give Power To Player"
 msgstr "Energie übertragen"
 
@@ -11567,9 +11584,6 @@ msgstr "Verbesserter taktischer Computer"
 
 #~ msgid "%s - Resource Remaining %d"
 #~ msgstr "%s - Ressourcen verbleibend %d"
-
-#~ msgid "%s - Damage %d%%"
-#~ msgstr "%s - Schaden %d%%"
 
 #~ msgid "Game Over"
 #~ msgstr "Game Over"

@@ -6051,10 +6051,11 @@ STRUCTURE_STATS* getModuleStat(STRUCTURE *psStruct)
 }
 
 /* count the artillery droids assigned to a structure (only makes sence by sensor towers and headquarters) */
-SDWORD countAssignedDroids(STRUCTURE *psStructure)
+unsigned int countAssignedDroids(STRUCTURE *psStructure)
 {
 	DROID *psCurr;
-	SDWORD num, weapontype, hasindirect;
+	SDWORD weapontype, hasindirect;
+	unsigned int num;
 
 	if(psStructure == NULL)
 		return 0;
@@ -6072,13 +6073,14 @@ SDWORD countAssignedDroids(STRUCTURE *psStructure)
 				num++;
 		}
 	}
+
 	return num;
 }
 
 //print some info at the top of the screen dependant on the structure
 void printStructureInfo(STRUCTURE *psStructure)
 {
-	UBYTE		numConnected, i;
+	unsigned int numConnected, i;
 	POWER_GEN	*psPowerGen;
 
 	ASSERT( psStructure != NULL, "printStructureInfo: Invalid Structure pointer" );
@@ -6096,8 +6098,10 @@ void printStructureInfo(STRUCTURE *psStructure)
 		else
 #endif
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, _("%s - %d Units assigned"),
-			          getStatName(psStructure->pStructureType), countAssignedDroids(psStructure)));
+			unsigned int assigned_droids = countAssignedDroids(psStructure);
+
+			CONPRINTF(ConsoleString, (ConsoleString, ngettext("%s - %u Unit assigned", "%s - %u Units assigned", assigned_droids),
+			          getStatName(psStructure->pStructureType), assigned_droids));
 		}
 		break;
 	case REF_DEFENSE:
@@ -6115,8 +6119,10 @@ void printStructureInfo(STRUCTURE *psStructure)
 #endif
 		else
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, _("%s - %d Units assigned"),
-				getStatName(psStructure->pStructureType), countAssignedDroids(psStructure)));
+			unsigned int assigned_droids = countAssignedDroids(psStructure);
+
+			CONPRINTF(ConsoleString, (ConsoleString, ngettext("%s - %u Unit assigned", "%s - %u Units assigned", assigned_droids),
+				getStatName(psStructure->pStructureType), assigned_droids));
 		}
 		break;
 	case REF_RESOURCE_EXTRACTOR:
@@ -6145,14 +6151,14 @@ void printStructureInfo(STRUCTURE *psStructure)
 #ifdef DEBUG
 		if (getDebugMappingStatus())
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s -  Connected %d of %d - Unique ID %d",
+			CONPRINTF(ConsoleString, (ConsoleString, "%s -  Connected %u of %u - Unique ID %u",
 			          getStatName(psStructure->pStructureType), numConnected, NUM_POWER_MODULES,
 			          psStructure->id));
 		}
 		else
 #endif
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Connected %d of %d"),
+			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Connected %u of %u"),
 			          getStatName(psStructure->pStructureType), numConnected, NUM_POWER_MODULES));
 		}
 		break;
@@ -6160,14 +6166,14 @@ void printStructureInfo(STRUCTURE *psStructure)
 #ifdef DEBUG
 		if (getDebugMappingStatus())
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s - Damage %d%% - Unique ID %d",
+			CONPRINTF(ConsoleString, (ConsoleString, "%s - Damage %u%% - Unique ID %u",
 			          getStatName(psStructure->pStructureType), 100 - PERCENT(psStructure->body,
 			          structureBody(psStructure)), psStructure->id));
 		}
 		else
 #endif
 		{
-			CONPRINTF(ConsoleString, (ConsoleString,
+			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Damage %u%%"),
 			          getStatName(psStructure->pStructureType), 100 - PERCENT(psStructure->body,
 			          structureBody(psStructure))));
 		}
