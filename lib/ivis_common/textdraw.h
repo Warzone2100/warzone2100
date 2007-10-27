@@ -47,17 +47,6 @@ extern unsigned int iV_GetCharWidth(uint32_t charCode);
 extern unsigned int iV_GetTextHeight(const char* string);
 extern void iV_SetTextColour(SWORD Index);
 
-/** Enable or disable anti-aliasing of text
- *  \param enable set this to true to enable anti-aliassing of text,
- *                set it to false to disable it.
- */
-extern void iV_SetTextAntialias(bool enable);
-
-/** Find out if anti-aliasing of text is enabled or disabled
- *  \return true if anti-aliassing of text is enabled, false otherwise
- */
-extern bool iV_TextAntialiased(void);
-
 #define ASCII_SPACE			(32)
 #define ASCII_NEWLINE		('@')
 #define ASCII_COLOURMODE	('#')

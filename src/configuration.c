@@ -33,7 +33,6 @@
 #include "lib/sound/track.h"		// audio
 #include "lib/sound/cdaudio.h"	// audio
 #include "lib/ivis_common/piestate.h"	// setgamma.
-#include "lib/ivis_common/textdraw.h" // text-antialiassing
 #include "warzoneconfig.h"	// renderMode
 #include "component.h"
 #include "text.h"
@@ -517,16 +516,6 @@ BOOL loadConfig(void)
 		setWarzoneKeyNumeric("radarTerrainMode", radarDrawMode);
 	}
 
-	if (getWarzoneKeyNumeric("text-antialiassing", &val))
-	{
-		iV_SetTextAntialias(val);
-	}
-	else
-	{
-		iV_SetTextAntialias(true);
-		setWarzoneKeyNumeric("text-antialiassing", true);
-	}
-
 	return closeWarzoneKey();
 }
 
@@ -632,8 +621,6 @@ BOOL saveConfig(void)
 		setWarzoneKeyString("phrase3", ingame.phrases[3]);
 		setWarzoneKeyString("phrase4", ingame.phrases[4]);
 	}
-
-	setWarzoneKeyNumeric("text-antialiassing", iV_TextAntialiased());
 
 	return closeWarzoneKey();
 }

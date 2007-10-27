@@ -45,8 +45,6 @@ static GLint GLC_Context = 0;
 static GLint GLC_Font_Regular = 0;
 static GLint GLC_Font_Bold = 0;
 
-static bool anti_aliasing = true;
-
 /***************************************************************************/
 /*
  *	Source
@@ -103,7 +101,7 @@ static void iV_initializeGLC()
 	glcContext(GLC_Context);
 
 	glcDisable(GLC_AUTO_FONT);
-	glcRenderStyle(GLC_TRIANGLE);
+	glcRenderStyle(GLC_TEXTURE);
 
 	GLC_Font_Regular = glcGenFontID();
 	GLC_Font_Bold = glcGenFontID();
@@ -178,16 +176,6 @@ void iV_TextShutdown()
 	{
 		glcDeleteContext(GLC_Context);
 	}
-}
-
-void iV_SetTextAntialias(bool enable)
-{
-	anti_aliasing = enable;
-}
-
-bool iV_TextAntialiased()
-{
-	return anti_aliasing;
 }
 
 void iV_SetFont(enum iV_fonts FontID)
@@ -612,15 +600,15 @@ UDWORD iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width
 
 void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotation)
 {
+	GLint matrix_mode = 0;
+
 	pie_SetTexturePage(-2);
 
-	// Enable Anti Aliasing if it's enabled
-	if (anti_aliasing)
-	{
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-		glEnable(GL_POLYGON_SMOOTH);
-	}
+	glGetIntegerv(GL_MATRIX_MODE, &matrix_mode);
+	glMatrixMode(GL_TEXTURE);
+	glPushMatrix();
+	glLoadIdentity();
+	glMatrixMode(matrix_mode);
 
 	if (rotation != 0.f)
 	{
@@ -638,12 +626,9 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 	glcRenderString(string);
 	glFrontFace(GL_CCW);
 
-	// Turn off anti aliasing (if we enabled it above)
-	if (anti_aliasing)
-	{
-		glDisable(GL_BLEND);
-		glDisable(GL_POLYGON_SMOOTH);
-	}
+	glMatrixMode(GL_TEXTURE);
+	glPopMatrix();
+	glMatrixMode(matrix_mode);
 
 	// Reset the current model view matrix
 	glLoadIdentity();
