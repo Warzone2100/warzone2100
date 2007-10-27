@@ -1821,9 +1821,9 @@ void kf_SendTextMessage(void)
 		}
 		else							 						// display
 		{
-			snprintf(sTextToSend, sizeof(sTextToSend), "%s%c", sTextToSend, inputGetCharKey());
-			// Guarantee to nul-terminate
-			sTextToSend[sizeof(sTextToSend) - 1] = '\0';
+			const char input_char[2] = { inputGetCharKey(), '\0' };
+
+			strlcat(sTextToSend, input_char, sizeof(sTextToSend));
 
 			strlcpy(sCurrentConsoleText, sTextToSend, sizeof(sCurrentConsoleText));
 		}
