@@ -174,7 +174,18 @@ static inline WZ_DECL_CONST float Vector2f_Length(const Vector2f v)
 static inline WZ_DECL_CONST Vector2f Vector2f_Normalise(const Vector2f v)
 {
 	float length = Vector2f_Length(v);
-	Vector2f dest = {v.x / length, v.y / length};
+	Vector2f dest;
+
+	if (length == 0.0f)
+	{
+		dest.x = 0.0f;
+		dest.y = 0.0f;
+	}
+	else
+	{
+		dest.x = v.x / length;
+		dest.y = v.y / length;
+	}
 	return dest;
 }
 
