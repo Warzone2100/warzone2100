@@ -285,6 +285,50 @@ SDWORD droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD wea
 	return (SDWORD) ((float) actualDamage / originalBody * 100);
 }
 
+// Check that psVictimDroid is not referred to by any other object in the game
+BOOL droidCheckReferences(DROID *psVictimDroid)
+{
+	int plr, i;
+
+	for (plr = 0; plr < MAX_PLAYERS; plr++)
+	{
+		STRUCTURE *psStruct;
+		DROID *psDroid;
+
+		for (psStruct = apsStructLists[plr]; psStruct != NULL; psStruct = psStruct->psNext)
+		{
+			for (i = 0; i < psStruct->numWeaps; i++)
+			{
+				if ((DROID *)psStruct->psTarget[i] == psVictimDroid)
+				{
+					ASSERT(FALSE, "Illegal reference to droid from %s line %d",
+					       psStruct->targetFunc[i], psStruct->targetLine[i]);
+					return FALSE;
+				}
+			}
+		}
+		for (psDroid = apsDroidLists[plr]; psDroid != NULL; psDroid = psDroid->psNext)
+		{
+			for (i = 0; i < psDroid->numWeaps; i++)
+			{
+				if ((DROID *)psDroid->psTarget[i] == psVictimDroid && psVictimDroid != psDroid)
+				{
+					ASSERT(FALSE, "Illegal reference to droid from %s line %d",
+					       psDroid->targetFunc[i], psDroid->targetLine[i]);
+					return FALSE;
+				}
+				if ((DROID *)psDroid->psActionTarget[i] == psVictimDroid && psVictimDroid != psDroid)
+				{
+					ASSERT(FALSE, "Illegal action reference to droid from %s line %d",
+					       psDroid->actionTargetFunc[i], psDroid->actionTargetLine[i]);
+					return FALSE;
+				}
+			}
+		}
+	}
+	return TRUE;
+}
+
 /* droidRelease: release all resources associated with a droid -
  * should only be called by objmem - use vanishDroid preferably
  */

@@ -8112,3 +8112,53 @@ static void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid)
 	psScrCBNewDroid = NULL;
 	psScrCBNewDroidFact = NULL;
 }
+
+// Check that psVictimStruct is not referred to by any other object in the game
+BOOL structureCheckReferences(STRUCTURE *psVictimStruct)
+{
+	int plr, i;
+
+	for (plr = 0; plr < MAX_PLAYERS; plr++)
+	{
+		STRUCTURE *psStruct;
+		DROID *psDroid;
+
+		for (psStruct = apsStructLists[plr]; psStruct != NULL; psStruct = psStruct->psNext)
+		{
+			for (i = 0; i < psStruct->numWeaps; i++)
+			{
+				if ((STRUCTURE *)psStruct->psTarget[i] == psVictimStruct && psVictimStruct != psStruct)
+				{
+					ASSERT(FALSE, "Illegal reference to structure from %s line %d",
+					       psStruct->targetFunc[i], psStruct->targetLine[i]);
+					return FALSE;
+				}
+			}
+		}
+		for (psDroid = apsDroidLists[plr]; psDroid != NULL; psDroid = psDroid->psNext)
+		{
+			for (i = 0; i < psDroid->numWeaps; i++)
+			{
+				if ((STRUCTURE *)psDroid->psTarget[i] == psVictimStruct)
+				{
+					ASSERT(FALSE, "Illegal reference to structure from %s line %d",
+					       psDroid->targetFunc[i], psDroid->targetLine[i]);
+					return FALSE;
+				}
+				if ((STRUCTURE *)psDroid->psActionTarget[i] == psVictimStruct)
+				{
+					ASSERT(FALSE, "Illegal action reference to structure from %s line %d",
+					       psDroid->actionTargetFunc[i], psDroid->actionTargetLine[i]);
+					return FALSE;
+				}
+			}
+			if ((STRUCTURE *)psDroid->psBaseStruct == psVictimStruct)
+			{
+				ASSERT(FALSE, "Illegal action reference to structure from %s line %d",
+				       psDroid->baseFunc, psDroid->baseLine);
+				return FALSE;
+			}
+		}
+	}
+	return TRUE;
+}

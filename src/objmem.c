@@ -95,11 +95,19 @@ static void objmemDestroy(BASE_OBJECT *psObj)
 	{
 		case OBJ_DROID:
 			debug(LOG_MEMORY, "objmemUpdate: freeing droid at %p", psObj);
+			if (!droidCheckReferences((DROID *)psObj))
+			{
+				return;
+			}
 			droidRelease((DROID *)psObj);
 			break;
 
 		case OBJ_STRUCTURE:
 			debug(LOG_MEMORY, "objmemUpdate: freeing structure at %p", psObj);
+			if (!structureCheckReferences((STRUCTURE *)psObj))
+			{
+				return;
+			}
 			structureRelease((STRUCTURE *)psObj);
 			break;
 

@@ -335,6 +335,12 @@ typedef struct _structure
 	//Watermelon:more targets
 	BASE_OBJECT	*psTarget[STRUCT_MAXWEAPS];
 
+#ifdef DEBUG
+	// these are to help tracking down dangling pointers
+	char				targetFunc[STRUCT_MAXWEAPS][MAX_EVENT_NAME_LEN];
+	int				targetLine[STRUCT_MAXWEAPS];
+#endif
+
 	/* anim data */
 	ANIM_OBJECT	*psCurAnim;
 

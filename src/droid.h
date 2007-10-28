@@ -396,36 +396,69 @@ extern BOOL droidAudioTrackStopped( void *psObj );
 /*returns TRUE if droid type is one of the Cyborg types*/
 extern BOOL cyborgDroid(DROID *psDroid);
 
+// check for illegal references to droid we want to release
+BOOL droidCheckReferences(DROID *psVictimDroid);
+
 /** helper functions for future refcount patch **/
 
-static inline void setDroidTarget(DROID *psDroid, BASE_OBJECT *psNewTarget, UWORD idx)
+#define setDroidTarget(_psDroid, _psNewTarget, _idx) _setDroidTarget(_psDroid, _psNewTarget, _idx, __LINE__, __FUNCTION__)
+static inline void _setDroidTarget(DROID *psDroid, BASE_OBJECT *psNewTarget, UWORD idx, int line, const char *func)
 {
 	psDroid->psTarget[idx] = psNewTarget;
+	ASSERT(psNewTarget == NULL || !psNewTarget->died, "setDroidTarget: Set dead target");
+#ifdef DEBUG
+	psDroid->targetLine[idx] = line;
+	strlcpy(psDroid->targetFunc[idx], func, MAX_EVENT_NAME_LEN);
+#endif
 }
 
-static inline void setDroidActionTarget(DROID *psDroid, BASE_OBJECT *psNewTarget, UWORD idx)
+#define setDroidActionTarget(_psDroid, _psNewTarget, _idx) _setDroidActionTarget(_psDroid, _psNewTarget, _idx, __LINE__, __FUNCTION__)
+static inline void _setDroidActionTarget(DROID *psDroid, BASE_OBJECT *psNewTarget, UWORD idx, int line, const char *func)
 {
 	psDroid->psActionTarget[idx] = psNewTarget;
+	ASSERT(psNewTarget == NULL || !psNewTarget->died, "setDroidActionTarget: Set dead target");
+#ifdef DEBUG
+	psDroid->actionTargetLine[idx] = line;
+	strlcpy(psDroid->actionTargetFunc[idx], func, MAX_EVENT_NAME_LEN);
+#endif
 }
 
-static inline void setDroidBase(DROID *psDroid, STRUCTURE *psNewBase)
+#define setDroidBase(_psDroid, _psNewTarget) _setDroidBase(_psDroid, _psNewTarget, __LINE__, __FUNCTION__)
+static inline void _setDroidBase(DROID *psDroid, STRUCTURE *psNewBase, int line, const char *func)
 {
 	psDroid->psBaseStruct = psNewBase;
+	ASSERT(psNewBase == NULL || !psNewBase->died, "setDroidBase: Set dead target");
+#ifdef DEBUG
+	psDroid->baseLine = line;
+	strlcpy(psDroid->baseFunc, func, MAX_EVENT_NAME_LEN);
+#endif
 }
 
 static inline void setSaveDroidTarget(DROID *psSaveDroid, BASE_OBJECT *psNewTarget, UWORD idx)
 {
 	psSaveDroid->psTarget[idx] = psNewTarget;
+#ifdef DEBUG
+	psSaveDroid->targetLine[idx] = 0;
+	strlcpy(psSaveDroid->targetFunc[idx], "savegame", MAX_EVENT_NAME_LEN);
+#endif
 }
 
 static inline void setSaveDroidActionTarget(DROID *psSaveDroid, BASE_OBJECT *psNewTarget, UWORD idx)
 {
 	psSaveDroid->psActionTarget[idx] = psNewTarget;
+#ifdef DEBUG
+	psSaveDroid->actionTargetLine[idx] = 0;
+	strlcpy(psSaveDroid->actionTargetFunc[idx], "savegame", MAX_EVENT_NAME_LEN);
+#endif
 }
 
 static inline void setSaveDroidBase(DROID *psSaveDroid, STRUCTURE *psNewBase)
 {
 	psSaveDroid->psBaseStruct = psNewBase;
+#ifdef DEBUG
+	psSaveDroid->baseLine = 0;
+	strlcpy(psSaveDroid->baseFunc, "savegame", MAX_EVENT_NAME_LEN);
+#endif
 }
 
 /* assert if droid is bad */

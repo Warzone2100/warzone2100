@@ -399,10 +399,18 @@ extern BOOL	ptInStructure(STRUCTURE *psStruct, UDWORD x, UDWORD y);
 selected - returns TRUE if valid*/
 extern BOOL lasSatStructSelected(STRUCTURE *psStruct);
 
-static inline void setStructureTarget(STRUCTURE *psBuilding, BASE_OBJECT *psNewTarget, UWORD idx)
+BOOL structureCheckReferences(STRUCTURE *psVictimStruct);
+
+#define setStructureTarget(_psBuilding, _psNewTarget, _idx) _setStructureTarget(_psBuilding, _psNewTarget, _idx, __LINE__, __FUNCTION__)
+static inline void _setStructureTarget(STRUCTURE *psBuilding, BASE_OBJECT *psNewTarget, UWORD idx, int line, const char *func)
 {
 	assert(idx < STRUCT_MAXWEAPS);
 	psBuilding->psTarget[idx] = psNewTarget;
+	ASSERT(psNewTarget == NULL || !psNewTarget->died, "setStructureTarget set dead target");
+#ifdef DEBUG
+	psBuilding->targetLine[idx] = line;
+	strlcpy(psBuilding->targetFunc[idx], func, MAX_EVENT_NAME_LEN);
+#endif
 }
 
 #define CHECK_STRUCTURE(object) \
