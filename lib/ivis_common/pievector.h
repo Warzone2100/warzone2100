@@ -169,24 +169,22 @@ static inline WZ_DECL_CONST float Vector2f_Length(const Vector2f v)
 /*!
  * Normalise a Vector
  * \param v Vector
- * \return Normalised vector
+ * \return Normalised vector, nullvector when input was nullvector or very small
  */
 static inline WZ_DECL_CONST Vector2f Vector2f_Normalise(const Vector2f v)
 {
 	float length = Vector2f_Length(v);
-	Vector2f dest;
 
 	if (length == 0.0f)
 	{
-		dest.x = 0.0f;
-		dest.y = 0.0f;
+		Vector2f dest = { 0.0f, 0.0f };
+		return dest;
 	}
 	else
 	{
-		dest.x = v.x / length;
-		dest.y = v.y / length;
+		Vector2f dest = { v.x / length, v.y / length };
+		return dest;
 	}
-	return dest;
 }
 
 
@@ -294,4 +292,3 @@ static inline WZ_DECL_CONST BOOL Vector3i_InSphere (const Vector3i v, const Vect
 	Vector3i delta = Vector3i_Sub(v, c);
 	return (delta.x * delta.x) + (delta.y * delta.y) + (delta.z * delta.z) < (r * r);
 }
-

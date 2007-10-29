@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: da\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-10-27 23:33+0200\n"
+"POT-Creation-Date: 2007-10-29 19:46+0100\n"
 "PO-Revision-Date: 2007-04-17 23:03+0200\n"
 "Last-Translator: Christian Vest Hansen <karmazilla@gmail.com>\n"
 "Language-Team: Dansk <en@li.org>\n"
@@ -228,73 +228,73 @@ msgstr "Indlæs gemt spil"
 msgid "Unit Lost!"
 msgstr "Enhed tabt!"
 
-#: src/droid.c:1921
+#: src/droid.c:1971
 msgid "Structure Restored"
 msgstr "Bygning restoreret"
 
-#: src/droid.c:3826
+#: src/droid.c:3876
 #, fuzzy, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Gruppe %d valgt - %d Enheder"
 msgstr[1] "Gruppe %d valgt - %d Enheder"
 
-#: src/droid.c:3840
+#: src/droid.c:3890
 #, fuzzy, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%d Enheder tildelt gruppe %d"
 msgstr[1] "%d Enheder tildelt gruppe %d"
 
-#: src/droid.c:3853
+#: src/droid.c:3903
 #, fuzzy, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Fokuseret på gruppe %d - %d Enheder"
 msgstr[1] "Fokuseret på gruppe %d - %d Enheder"
 
-#: src/droid.c:3857
+#: src/droid.c:3907
 #, fuzzy, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Korigerede med gruppe %d - %d Enheder"
 msgstr[1] "Korigerede med gruppe %d - %d Enheder"
 
-#: src/droid.c:4134
+#: src/droid.c:4184
 msgid "Rookie"
 msgstr "Menig"
 
-#: src/droid.c:4135
+#: src/droid.c:4185
 #, fuzzy
 msgctxt "rank"
 msgid "Green"
 msgstr "Grøn"
 
-#: src/droid.c:4136
+#: src/droid.c:4186
 msgid "Trained"
 msgstr "Sasjant"
 
-#: src/droid.c:4137
+#: src/droid.c:4187
 msgid "Regular"
 msgstr "Oversasjant"
 
-#: src/droid.c:4138
+#: src/droid.c:4188
 msgid "Professional"
 msgstr "Løjtnant"
 
-#: src/droid.c:4139
+#: src/droid.c:4189
 msgid "Veteran"
 msgstr "Kaptajn"
 
-#: src/droid.c:4140
+#: src/droid.c:4190
 msgid "Elite"
 msgstr "Major"
 
-#: src/droid.c:4141
+#: src/droid.c:4191
 msgid "Special"
 msgstr "Oberst"
 
-#: src/droid.c:4142
+#: src/droid.c:4192
 msgid "Hero"
 msgstr "General"
 

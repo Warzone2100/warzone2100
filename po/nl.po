@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-10-27 23:33+0200\n"
+"POT-Creation-Date: 2007-10-29 19:46+0100\n"
 "PO-Revision-Date: 2007-06-05 14:46+0200\n"
 "Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -227,72 +227,72 @@ msgstr "Laden Opgeslagen Spel"
 msgid "Unit Lost!"
 msgstr "Eenheid verloren!"
 
-#: src/droid.c:1921
+#: src/droid.c:1971
 msgid "Structure Restored"
 msgstr ""
 
-#: src/droid.c:3826
+#: src/droid.c:3876
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Groep %u geselecteerd - %u Eenheid"
 msgstr[1] "Groep %u geselecteerd - %u Eenheden"
 
-#: src/droid.c:3840
+#: src/droid.c:3890
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u eenheid aan Groep %u toegewezen"
 msgstr[1] "%u eenheden aan Groep %u toegewezen"
 
-#: src/droid.c:3853
+#: src/droid.c:3903
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Gecentreerd op Groep %u - %u Eenheid"
 msgstr[1] "Gecentreerd op Groep %u - %u Eenheden"
 
-#: src/droid.c:3857
+#: src/droid.c:3907
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:4134
+#: src/droid.c:4184
 msgid "Rookie"
 msgstr "Groentje"
 
-#: src/droid.c:4135
+#: src/droid.c:4185
 msgctxt "rank"
 msgid "Green"
 msgstr ""
 
-#: src/droid.c:4136
+#: src/droid.c:4186
 msgid "Trained"
 msgstr ""
 
-#: src/droid.c:4137
+#: src/droid.c:4187
 msgid "Regular"
 msgstr ""
 
-#: src/droid.c:4138
+#: src/droid.c:4188
 msgid "Professional"
 msgstr ""
 
-#: src/droid.c:4139
+#: src/droid.c:4189
 msgid "Veteran"
 msgstr "Veteraan"
 
-#: src/droid.c:4140
+#: src/droid.c:4190
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:4141
+#: src/droid.c:4191
 msgid "Special"
 msgstr "Speciaal"
 
-#: src/droid.c:4142
+#: src/droid.c:4192
 msgid "Hero"
 msgstr "Held"
 
