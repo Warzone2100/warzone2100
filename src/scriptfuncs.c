@@ -2637,32 +2637,13 @@ BOOL scrSetScrollParams(void)
 		return FALSE;
 	}
 
-	//check the values entered are valid
-	if (minX < 0)
-	{
-		ASSERT( FALSE, "Minimum scroll x value %d is less than zero - ", minX );
-		return FALSE;
-	}
-	if (minY < 0)
-	{
-		ASSERT( FALSE, "Minimum scroll y value %d is less than zero - ", minY );
-	}
-	if (maxX > (SDWORD)mapWidth)
-	{
-		ASSERT( FALSE, "Maximum scroll x value %d is greater than mapWidth - ", maxX );
-	}
-	if (maxX < (SDWORD)(visibleXTiles+1))
-	{
-		ASSERT( FALSE, "Maximum scroll x %d has to be bigger than Visible Width(22) - ", maxX );
-	}
-	if (maxY > (SDWORD)mapHeight)
-	{
-		ASSERT( FALSE, "Maximum scroll y value %d is greater than mapWidth - ", maxY );
-	}
-	if (maxY < (SDWORD)(visibleYTiles+1))
-	{
-		ASSERT( FALSE, "Maximum scroll y %d has to be bigger than Visible Height(22) - ", maxY );
-	}
+	// check that the values entered are valid
+	ASSERT(minX >= 0, "Minimum scroll x value %d is less than zero - ", minX);
+	ASSERT(minY >= 0, "Minimum scroll y value %d is less than zero - ", minY);
+	ASSERT(maxX <= mapWidth, "Maximum scroll x value %d is greater than mapWidth %d", maxX, (int)mapWidth);
+	ASSERT(maxY <= mapHeight, "Maximum scroll y value %d is greater than mapHeight %d", maxY, (int)mapHeight);
+	ASSERT(maxX <= visibleXTiles, "Maximum scroll x %d has to be bigger than visible width %d - ", maxX, visibleXTiles);
+	ASSERT(maxY <= visibleYTiles, "Maximum scroll y %d has to be bigger than visible width %d - ", maxY, visibleYTiles);
 
     prevMinX = scrollMinX;
     prevMinY = scrollMinY;
