@@ -551,6 +551,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 	for (i=0; i < numData; i++)
 	{
 		UDWORD numText;
+		int readint;
 
 		memset(psViewData, 0, sizeof(VIEWDATA));
 
@@ -607,8 +608,8 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 
 		}
 
-		//sscanf(pViewMsgData,"%d", &psViewData->type);
-		sscanf(pViewMsgData,",%d%n", (int*) &psViewData->type,&cnt);
+		sscanf(pViewMsgData, ",%d%n", &readint, &cnt);
+		psViewData->type = readint;
                 pViewMsgData += cnt;
 
 		//allocate data according to type
