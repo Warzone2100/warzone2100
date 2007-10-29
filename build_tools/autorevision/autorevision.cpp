@@ -126,7 +126,7 @@ bool QuerySvn(const string& workingDir, string& revision, string& date, string& 
 {
     string svncmd("svn info ");
     svncmd.append(workingDir);
-    set_env("LANG", "en_US");
+    set_env("LANG", "C");
     FILE *svn = popen(svncmd.c_str(), "r");
 
     if(svn)
