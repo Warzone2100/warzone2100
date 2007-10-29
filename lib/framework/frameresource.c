@@ -345,9 +345,8 @@ static inline RES_DATA* resDataInit(const char *DebugName, UDWORD DataIDHash, vo
 		return NULL;
 	}
 
-#if !defined(WZ_C99)
+	// Initialize the pointer for our ID string
 	psRes->aID = (char*)(psRes + 1);
-#endif /* WZ_C99 */
 
 	// Copy over the identifying string
 	strcpy((char*)psRes->aID, DebugName);

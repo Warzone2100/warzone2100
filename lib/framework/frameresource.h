@@ -54,11 +54,7 @@ typedef struct res_data
 	UDWORD		usage; // Reference count
 
 	// ID of the resource - filename from the .wrf - e.g. "TRON.PIE"
-#if defined(WZ_C99)
-	const char aID[];
-#else
 	const char* aID;
-#endif /* WZ_C99 */
 } RES_DATA;
 
 
