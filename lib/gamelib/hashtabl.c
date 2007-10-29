@@ -29,8 +29,7 @@
 
 /***************************************************************************/
 
-static UDWORD
-HashTest( int iKey1, int iKey2 )
+static UDWORD HashTest(int64_t iKey1, int64_t iKey2)
 {
 	return (UDWORD) iKey1 + iKey2;
 }
@@ -181,8 +180,7 @@ hashTable_GetElement( HASHTABLE *psTable )
 
 /***************************************************************************/
 
-static UDWORD
-hashTable_GetHashKey( HASHTABLE *psTable, int iKey1, int iKey2 )
+static UDWORD hashTable_GetHashKey(HASHTABLE *psTable, int64_t iKey1, int64_t iKey2)
 {
 	ASSERT( psTable != NULL,
 		"hashTable_GetFirst: hash table pointer invalid\n" );
@@ -193,9 +191,7 @@ hashTable_GetHashKey( HASHTABLE *psTable, int iKey1, int iKey2 )
 
 /***************************************************************************/
 
-void
-hashTable_InsertElement( HASHTABLE *psTable, void *psElement,
-							int iKey1, int iKey2 )
+void hashTable_InsertElement(HASHTABLE *psTable, void *psElement, int64_t iKey1, int64_t iKey2)
 {
 	UDWORD		udwHashIndex;
 	HASHNODE	*psNode;
@@ -229,8 +225,7 @@ hashTable_InsertElement( HASHTABLE *psTable, void *psElement,
  */
 /***************************************************************************/
 
-void *
-hashTable_FindElement( HASHTABLE *psTable, int iKey1, int iKey2 )
+void *hashTable_FindElement(HASHTABLE *psTable, int64_t iKey1, int64_t iKey2)
 {
 	UDWORD		udwHashIndex;
 	HASHNODE	*psNode;
@@ -299,8 +294,7 @@ hashTable_SetNextNode( HASHTABLE *psTable, BOOL bMoveToNextNode )
 /***************************************************************************/
 
 BOOL
-hashTable_RemoveElement( HASHTABLE *psTable, void *psElement,
-							int iKey1, int iKey2 )
+hashTable_RemoveElement(HASHTABLE *psTable, void *psElement, int64_t iKey1, int64_t iKey2)
 {
 	UDWORD		udwHashIndex;
 	HASHNODE	*psNode, *psPrev;

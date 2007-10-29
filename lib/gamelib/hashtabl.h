@@ -46,7 +46,7 @@
  * \return calculated hash-value for the keys
  * \see hashTable_SetHashFunction
  */
-typedef UDWORD	(* HASHFUNC)		( int iKey1, int iKey2 );
+typedef UDWORD	(* HASHFUNC)		(int64_t iKey1, int64_t iKey2);
 
 /**
  * Free Element function
@@ -62,9 +62,9 @@ typedef void	(* HASHFREEFUNC)	( void *psElement );
 
 typedef struct HASHNODE
 {
-	int					iKey1;
-	int					iKey2;
-	void				*psElement;
+	int64_t			iKey1;
+	int64_t			iKey2;
+	void			*psElement;
 	struct HASHNODE		*psNext;
 }
 HASHNODE;
@@ -130,8 +130,7 @@ void *	hashTable_GetElement( HASHTABLE *psTable );
  * \param	iKey1		first key
  * \param	iKey2		second key
  */
-void	hashTable_InsertElement( HASHTABLE *psTable, void *psElement,
-										int iKey1, int iKey2 );
+void hashTable_InsertElement(HASHTABLE *psTable, void *psElement, int64_t iKey1, int64_t iKey2);
 
 /**
  * Function to remove an element from the hashtable
@@ -142,8 +141,7 @@ void	hashTable_InsertElement( HASHTABLE *psTable, void *psElement,
  * \param	iKey2		second key
  * \return	true, if the element was contained in the hashtable
  */
-BOOL	hashTable_RemoveElement( HASHTABLE *psTable, void *psElement,
-										int iKey1, int iKey2 );
+BOOL hashTable_RemoveElement(HASHTABLE *psTable, void *psElement, int64_t iKey1, int64_t iKey2);
 
 /**
  * Calculates hash index from keys and returns element in hash table
@@ -153,8 +151,7 @@ BOOL	hashTable_RemoveElement( HASHTABLE *psTable, void *psElement,
  * \param	iKey2		second key
  * \return	the element
  */
-void *	hashTable_FindElement( HASHTABLE *psTable,
-										int iKey1, int iKey2 );
+void *hashTable_FindElement(HASHTABLE *psTable, int64_t iKey1, int64_t iKey2);
 
 /**
  * Gets the first allocated element from the hashtable
