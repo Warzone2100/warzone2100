@@ -124,7 +124,7 @@ typedef union  {PIELIGHTBYTES byte; UDWORD argb;} PIELIGHT;
 typedef struct {UBYTE r, g, b, a;} PIEVERTLIGHT;
 typedef struct
 {
-	int x, y, z;
+	Vector3i pos;
 	unsigned int u, v;
 	PIELIGHT light, specular;
 	Vector3i screen; //! Screenspace tile coordinates

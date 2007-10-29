@@ -57,10 +57,10 @@ void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD 
 	pie_SetTexturePage(-1);
 	pie_SetRendMode(REND_ALPHA_FLAT);
 
-	pieVrts[0].x = v[1].x;
-	pieVrts[0].y = v[1].y;
+	pieVrts[0].pos.x = v[1].x;
+	pieVrts[0].pos.y = v[1].y;
 	//cull triangles with off screen points
-	pieVrts[0].z  = (int)INTERFACE_DEPTH;
+	pieVrts[0].pos.z  = (int)INTERFACE_DEPTH;
 
 	pieVrts[0].u = 0;
 	pieVrts[0].v = 0;
@@ -72,14 +72,14 @@ void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD 
 	pieVrts[3] = pieVrts[0];
 	pieVrts[4] = pieVrts[0];
 
-	pieVrts[1].x = v[0].x;
-	pieVrts[1].y = v[0].y;
+	pieVrts[1].pos.x = v[0].x;
+	pieVrts[1].pos.y = v[0].y;
 
-	pieVrts[2].x = v[2].x;
-	pieVrts[2].y = v[2].y;
+	pieVrts[2].pos.x = v[2].x;
+	pieVrts[2].pos.y = v[2].y;
 
-	pieVrts[3].x = v[3].x;
-	pieVrts[3].y = v[3].y;
+	pieVrts[3].pos.x = v[3].x;
+	pieVrts[3].pos.y = v[3].y;
 
 	pie_Set2DClip(x1,y1,x2-1,y2-1);
 	clip = pie_ClipTextured(4, &pieVrts[0], &clippedVrts[0]);
@@ -96,7 +96,7 @@ void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD 
 		glBegin(GL_TRIANGLE_FAN);
 			for (i = 0; i < clip; i++)
 			{
-				glVertex2f(clippedVrts[i].x, clippedVrts[i].y);
+				glVertex2f(clippedVrts[i].pos.x, clippedVrts[i].pos.y);
 			}
 		glEnd();
 
@@ -105,9 +105,9 @@ void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD 
 		glBegin(GL_LINE_STRIP);
 			for (i = 0; i < clip; i++)
 			{
-				glVertex2f(clippedVrts[i].x, clippedVrts[i].y);
+				glVertex2f(clippedVrts[i].pos.x, clippedVrts[i].pos.y);
 			}
-		glVertex2f(clippedVrts[0].x, clippedVrts[0].y);
+		glVertex2f(clippedVrts[0].pos.x, clippedVrts[0].pos.y);
 		glEnd();
 	}
 }
@@ -128,7 +128,7 @@ void pie_TransColouredTriangle( TERRAIN_VERTEX *vrt, UDWORD rgb )
 	glBegin(GL_TRIANGLE_FAN);
 		for (i = 0; i < 3; ++i)
 		{
-			glVertex3f(vrt[i].x, vrt[i].y, vrt[i].z);
+			glVertex3f(vrt[i].pos.x, vrt[i].pos.y, vrt[i].pos.z);
 		}
 	glEnd();}
 

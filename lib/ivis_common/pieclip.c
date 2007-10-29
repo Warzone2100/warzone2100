@@ -68,7 +68,7 @@ static void pie_ClipUV(TERRAIN_VERTEX *s1, TERRAIN_VERTEX *s2, TERRAIN_VERTEX *c
 {
 	clip->u = s1->u + ((t * (s2->u - s1->u)) >> iV_DIVSHIFT);
 	clip->v = s1->v + ((t * (s2->v - s1->v)) >> iV_DIVSHIFT);
-	clip->z = s1->z + ((t * (s2->z - s1->z)) >> iV_DIVSHIFT);
+	clip->pos.z = s1->pos.z + ((t * (s2->pos.z - s1->pos.z)) >> iV_DIVSHIFT);
 
 	clip->light.byte.r = s1->light.byte.r + ((t * (s2->light.byte.r - s1->light.byte.r)) >> iV_DIVSHIFT);
 	clip->light.byte.g = s1->light.byte.g + ((t * (s2->light.byte.g - s1->light.byte.g)) >> iV_DIVSHIFT);
@@ -81,28 +81,30 @@ static int pie_ClipXT(TERRAIN_VERTEX *s1, TERRAIN_VERTEX *s2, TERRAIN_VERTEX *cl
 	int n = 1, dx;
 	Sint32 t;
 
-	if (s2->x >= s1->x)
+	if (s2->pos.x >= s1->pos.x)
 	{
-		if (s1->x < psRendSurface->clip.left)
+		if (s1->pos.x < psRendSurface->clip.left)
 		{
-			if (s2->x <= psRendSurface->clip.left)
+			if (s2->pos.x <= psRendSurface->clip.left)
+			{
 				return 0;
+			}
 
-			dx = s2->x - s1->x;
+			dx = s2->pos.x - s1->pos.x;
 
 			if (dx != 0)
 			{
-				clip->y = s1->y + (s2->y - s1->y) * (psRendSurface->clip.left - s1->x) / dx;
+				clip->pos.y = s1->pos.y + (s2->pos.y - s1->pos.y) * (psRendSurface->clip.left - s1->pos.x) / dx;
 			}
 			else
 			{
-				clip->y = s1->y;
+				clip->pos.y = s1->pos.y;
 			}
 
-			clip->x = psRendSurface->clip.left;
+			clip->pos.x = psRendSurface->clip.left;
 
 			// clip uv
-			t = ((clip->x - s1->x) << iV_DIVSHIFT) / dx;
+			t = ((clip->pos.x - s1->pos.x) << iV_DIVSHIFT) / dx;
 			pie_ClipUV(s1, s2, clip, t);
 		}
 		else
@@ -110,27 +112,29 @@ static int pie_ClipXT(TERRAIN_VERTEX *s1, TERRAIN_VERTEX *s2, TERRAIN_VERTEX *cl
 			*clip = *s1;
 		}
 
-		if (s2->x > psRendSurface->clip.right)
+		if (s2->pos.x > psRendSurface->clip.right)
 		{
-			if (s1->x > psRendSurface->clip.right)
+			if (s1->pos.x > psRendSurface->clip.right)
+			{
 				return 0;
+			}
 
 			clip++;
-			dx = s2->x - s1->x;
+			dx = s2->pos.x - s1->pos.x;
 
 			if (dx != 0)
 			{
-				clip->y = s2->y - (s2->y - s1->y) * (s2->x - psRendSurface->clip.right) / dx;
+				clip->pos.y = s2->pos.y - (s2->pos.y - s1->pos.y) * (s2->pos.x - psRendSurface->clip.right) / dx;
 			}
 			else
 			{
-				clip->y = s2->y;
+				clip->pos.y = s2->pos.y;
 			}
 
-			clip->x = psRendSurface->clip.right;
+			clip->pos.x = psRendSurface->clip.right;
 
 			// clip uv
-			t = ((clip->x - s1->x) << iV_DIVSHIFT) / dx;
+			t = ((clip->pos.x - s1->pos.x) << iV_DIVSHIFT) / dx;
 			pie_ClipUV(s1, s2, clip, t);
 
 			n = 2;
@@ -140,26 +144,28 @@ static int pie_ClipXT(TERRAIN_VERTEX *s1, TERRAIN_VERTEX *s2, TERRAIN_VERTEX *cl
 	}
 	else
 	{
-		if (s1->x > psRendSurface->clip.right)
+		if (s1->pos.x > psRendSurface->clip.right)
 		{
-			if (s2->x >= psRendSurface->clip.right)
+			if (s2->pos.x >= psRendSurface->clip.right)
+			{
 				return 0;
+			}
 
-			dx = s1->x - s2->x;
+			dx = s1->pos.x - s2->pos.x;
 
 			if (dx != 0)
 			{
-				clip->y = s1->y - (s1->y - s2->y) * (s1->x - psRendSurface->clip.right) / dx;
+				clip->pos.y = s1->pos.y - (s1->pos.y - s2->pos.y) * (s1->pos.x - psRendSurface->clip.right) / dx;
 			}
 			else
 			{
-				clip->y = s1->y;
+				clip->pos.y = s1->pos.y;
 			}
 
-			clip->x = psRendSurface->clip.right;
+			clip->pos.x = psRendSurface->clip.right;
 
 			// clip uv
-			t = ((clip->x - s1->x) << iV_DIVSHIFT) / dx;
+			t = ((clip->pos.x - s1->pos.x) << iV_DIVSHIFT) / dx;
 			pie_ClipUV(s1, s2, clip, t);
 		}
 		else
@@ -167,27 +173,29 @@ static int pie_ClipXT(TERRAIN_VERTEX *s1, TERRAIN_VERTEX *s2, TERRAIN_VERTEX *cl
 			*clip = *s1;
 		}
 
-		if (s2->x < psRendSurface->clip.left)
+		if (s2->pos.x < psRendSurface->clip.left)
 		{
-			if (s1->x < psRendSurface->clip.left)
+			if (s1->pos.x < psRendSurface->clip.left)
+			{
 				return 0;
+			}
 
 			clip++;
-			dx = s1->x - s2->x;
+			dx = s1->pos.x - s2->pos.x;
 
 			if (dx != 0)
 			{
-				clip->y = s2->y + (s1->y - s2->y) * (psRendSurface->clip.left - s2->x) / dx;
+				clip->pos.y = s2->pos.y + (s1->pos.y - s2->pos.y) * (psRendSurface->clip.left - s2->pos.x) / dx;
 			}
 			else
 			{
-				clip->y = s2->y;
+				clip->pos.y = s2->pos.y;
 			}
 
-			clip->x = psRendSurface->clip.left;
+			clip->pos.x = psRendSurface->clip.left;
 
 			// clip uv
-			t = ((clip->x - s1->x)<<iV_DIVSHIFT) / dx;
+			t = ((clip->pos.x - s1->pos.x)<<iV_DIVSHIFT) / dx;
 			pie_ClipUV(s1, s2, clip, t);
 
 			n = 2;
@@ -202,28 +210,30 @@ static int pie_ClipYT(TERRAIN_VERTEX *s1, TERRAIN_VERTEX *s2, TERRAIN_VERTEX *cl
 	int n = 1, dy;
 	Sint32 t;
 
-	if (s2->y >= s1->y)
+	if (s2->pos.y >= s1->pos.y)
 	{
-		if (s1->y < psRendSurface->clip.top)
+		if (s1->pos.y < psRendSurface->clip.top)
 		{
-			if (s2->y <= psRendSurface->clip.top)
+			if (s2->pos.y <= psRendSurface->clip.top)
+			{
 				return 0;
+			}
 
-			dy = s2->y - s1->y;
+			dy = s2->pos.y - s1->pos.y;
 
 			if (dy != 0)
 			{
-				clip->x = s1->x + (s2->x - s1->x) * (psRendSurface->clip.top - s1->y) / dy;
+				clip->pos.x = s1->pos.x + (s2->pos.x - s1->pos.x) * (psRendSurface->clip.top - s1->pos.y) / dy;
 			}
 			else
 			{
-				clip->x = s1->x;
+				clip->pos.x = s1->pos.x;
 			}
 
-			clip->y = psRendSurface->clip.top;
+			clip->pos.y = psRendSurface->clip.top;
 
 			// clip uv
-			t = ((clip->y - s1->y) << iV_DIVSHIFT) / dy;
+			t = ((clip->pos.y - s1->pos.y) << iV_DIVSHIFT) / dy;
 			pie_ClipUV(s1, s2, clip, t);
 		}
 		else
@@ -231,29 +241,29 @@ static int pie_ClipYT(TERRAIN_VERTEX *s1, TERRAIN_VERTEX *s2, TERRAIN_VERTEX *cl
 			*clip = *s1;
 		}
 
-		if (s2->y > psRendSurface->clip.bottom)
+		if (s2->pos.y > psRendSurface->clip.bottom)
 		{
-			if (s1->y > psRendSurface->clip.bottom)
+			if (s1->pos.y > psRendSurface->clip.bottom)
 			{
 				return 0;
 			}
 
 			clip++;
 
-			dy = s2->y - s1->y;
+			dy = s2->pos.y - s1->pos.y;
 
 			if (dy != 0)
 			{
-				clip->x = s2->x - (s2->x - s1->x) * (s2->y - psRendSurface->clip.bottom) / dy;
+				clip->pos.x = s2->pos.x - (s2->pos.x - s1->pos.x) * (s2->pos.y - psRendSurface->clip.bottom) / dy;
 			}
 			else
 			{
-				clip->x = s2->x;
+				clip->pos.x = s2->pos.x;
 			}
 
-			clip->y = psRendSurface->clip.bottom;
+			clip->pos.y = psRendSurface->clip.bottom;
 
-			t = ((clip->y - s1->y) << iV_DIVSHIFT) / dy;
+			t = ((clip->pos.y - s1->pos.y) << iV_DIVSHIFT) / dy;
 			pie_ClipUV(s1, s2, clip, t);
 
 			n = 2;
@@ -264,26 +274,28 @@ static int pie_ClipYT(TERRAIN_VERTEX *s1, TERRAIN_VERTEX *s2, TERRAIN_VERTEX *cl
 	}
 	else
 	{
-		if (s1->y > psRendSurface->clip.bottom)
+		if (s1->pos.y > psRendSurface->clip.bottom)
 		{
-			if (s2->y >= psRendSurface->clip.bottom)
+			if (s2->pos.y >= psRendSurface->clip.bottom)
+			{
 				return 0;
+			}
 
-			dy = s1->y - s2->y;
+			dy = s1->pos.y - s2->pos.y;
 
 			if (dy != 0)
 			{
-				clip->x = s1->x - (s1->x - s2->x) * (s1->y - psRendSurface->clip.bottom) / dy;
+				clip->pos.x = s1->pos.x - (s1->pos.x - s2->pos.x) * (s1->pos.y - psRendSurface->clip.bottom) / dy;
 			}
 			else
 			{
-				clip->x = s1->x;
+				clip->pos.x = s1->pos.x;
 			}
 
-			clip->y = psRendSurface->clip.bottom;
+			clip->pos.y = psRendSurface->clip.bottom;
 
 			// clip uv
-			t = ((clip->y - s1->y) << iV_DIVSHIFT) / dy;
+			t = ((clip->pos.y - s1->pos.y) << iV_DIVSHIFT) / dy;
 			pie_ClipUV(s1, s2, clip, t);
 
 		}
@@ -292,29 +304,29 @@ static int pie_ClipYT(TERRAIN_VERTEX *s1, TERRAIN_VERTEX *s2, TERRAIN_VERTEX *cl
 			*clip = *s1;
 		}
 
-		if (s2->y < psRendSurface->clip.top)
+		if (s2->pos.y < psRendSurface->clip.top)
 		{
-			if (s1->y < psRendSurface->clip.top)
+			if (s1->pos.y < psRendSurface->clip.top)
 			{
 				return 0;
 			}
 
 			clip++;
 
-			dy = s1->y - s2->y;
+			dy = s1->pos.y - s2->pos.y;
 
 			if (dy != 0)
 			{
-				clip->x = s2->x + (s1->x - s2->x) * (psRendSurface->clip.top - s2->y) / dy;
+				clip->pos.x = s2->pos.x + (s1->pos.x - s2->pos.x) * (psRendSurface->clip.top - s2->pos.y) / dy;
 			}
 			else
 			{
-				clip->x = s2->x;
+				clip->pos.x = s2->pos.x;
 			}
 
-			clip->y = psRendSurface->clip.top;
+			clip->pos.y = psRendSurface->clip.top;
 
-			t = ((clip->y - s1->y) << iV_DIVSHIFT) / dy;
+			t = ((clip->pos.y - s1->pos.y) << iV_DIVSHIFT) / dy;
 			pie_ClipUV(s1, s2, clip, t);
 
 			n = 2;
@@ -341,7 +353,7 @@ int pie_ClipTextured(int npoints, TERRAIN_VERTEX *points, TERRAIN_VERTEX *clip)
 		}
 
 		// FIXME MAGIC
-		if ((p0->x == 1<<15) || (p0->y == -1<<15))//check for invalid points jps19aug97
+		if ((p0->pos.x == 1<<15) || (p0->pos.y == -1<<15))//check for invalid points jps19aug97
 		{
 			return 0;
 		}

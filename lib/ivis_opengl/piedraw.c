@@ -998,7 +998,7 @@ void pie_DrawTexTriangle(const TERRAIN_VERTEX *aVrts, const void* psEffects)
 		{
 			glColor4ub( aVrts[i].light.byte.r, aVrts[i].light.byte.g, aVrts[i].light.byte.b, aVrts[i].light.byte.a );
 			glTexCoord2f( aVrts[i].u, aVrts[i].v + offset );
-			glVertex3f( aVrts[i].x, aVrts[i].y, aVrts[i].z );
+			glVertex3f( aVrts[i].pos.x, aVrts[i].pos.y, aVrts[i].pos.z );
 		}
 	glEnd();
 

@@ -628,8 +628,8 @@ static void drawTiles(iView *camera, iView *player)
 		/* Go through the x's */
 		for (j = 0; j < (SDWORD)visibleXTiles+1; j++)
 		{
-			tileScreenInfo[i][j].x = world_coord(j - terrainMidX);
-			tileScreenInfo[i][j].z = world_coord(terrainMidY - i);
+			tileScreenInfo[i][j].pos.x = world_coord(j - terrainMidX);
+			tileScreenInfo[i][j].pos.z = world_coord(terrainMidY - i);
 
 			if( playerXTile+j < 0 ||
 				playerZTile+i < 0 ||
@@ -650,7 +650,7 @@ static void drawTiles(iView *camera, iView *player)
 				else if (playerZTile+i > (SDWORD)(mapHeight-1) )
 					edgeY = mapHeight-1;
 
-				tileScreenInfo[i][j].y = 0; // map_TileHeight(edgeX, edgeY);
+				tileScreenInfo[i][j].pos.y = 0; // map_TileHeight(edgeX, edgeY);
 
 				if (pie_GetFogEnabled())
 				{
@@ -660,7 +660,7 @@ static void drawTiles(iView *camera, iView *player)
 				else
 				{
 					TileIllum = mapTile(edgeX, edgeY)->illumination;
-					tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination( TileIllum, rx - tileScreenInfo[i][j].x, rz - world_coord(i-terrainMidY), &tileScreenInfo[i][j].specular.argb );
+					tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination( TileIllum, rx - tileScreenInfo[i][j].pos.x, rz - world_coord(i-terrainMidY), &tileScreenInfo[i][j].specular.argb );
 				}
 
 				if( playerXTile+j < -1 ||
@@ -692,7 +692,7 @@ static void drawTiles(iView *camera, iView *player)
 					bWaterTile = FALSE;
 				}
 
-				tileScreenInfo[i][j].y = map_TileHeight(playerXTile + j, playerZTile + i);
+				tileScreenInfo[i][j].pos.y = map_TileHeight(playerXTile + j, playerZTile + i);
 
 				/* Is it in the centre and therefore worth averaging height over? */
 				if ( i > MIN_TILE_Y &&
@@ -700,7 +700,7 @@ static void drawTiles(iView *camera, iView *player)
 					 j > MIN_TILE_X &&
 					 j < MAX_TILE_X )
 				{
-					averageCentreTerrainHeight += tileScreenInfo[i][j].y;
+					averageCentreTerrainHeight += tileScreenInfo[i][j].pos.y;
 					numTilesAveraged++;
 				}
 
@@ -724,7 +724,7 @@ static void drawTiles(iView *camera, iView *player)
 					TileIllum = psTile->illumination;
 				}
 
-				tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination(TileIllum, rx - tileScreenInfo[i][j].x, rz - world_coord(i-terrainMidY), &tileScreenInfo[i][j].specular.argb);
+				tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination(TileIllum, rx - tileScreenInfo[i][j].pos.x, rz - world_coord(i - terrainMidY), &tileScreenInfo[i][j].specular.argb);
 
 				if ( playerXTile+j <= 1 ||
 					 playerZTile+i <= 1 ||
@@ -744,7 +744,7 @@ static void drawTiles(iView *camera, iView *player)
 					// Push the terrain down for the river bed.
 					PushedDown = TRUE;
 					shiftVal = WATER_DEPTH + environGetData(playerXTile+j, playerZTile+i) * 1.5f;
-					tileScreenInfo[i][j].y -= shiftVal;
+					tileScreenInfo[i][j].pos.y -= shiftVal;
 					// And darken it.
 					TileIllum = (UBYTE)(TileIllum * 0.75f);
 				}
@@ -757,31 +757,31 @@ static void drawTiles(iView *camera, iView *player)
 				if (bWaterTile)
 				{
 					// If it's the main water tile then bring it back up because it was pushed down for the river bed calc.
-					int tmp_y = tileScreenInfo[i][j].y;
+					int tmp_y = tileScreenInfo[i][j].pos.y;
 
 					if (PushedDown)
 					{
-						tileScreenInfo[i][j].y += shiftVal;
+						tileScreenInfo[i][j].pos.y += shiftVal;
 					}
 
 					// Transform it into the wx,wy mesh members.
-					tileScreenInfo[i][j].water.z = pie_RotateProject((Vector3i*)&tileScreenInfo[i][j], (Vector2i*)&tileScreenInfo[i][j].water);
-					tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].y;
+					tileScreenInfo[i][j].water.z = pie_RotateProject(&tileScreenInfo[i][j].pos, (Vector2i*)&tileScreenInfo[i][j].water);
+					tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].pos.y;
 
 					// Calc the light for modified y coord and ignore the specular component
-					tileScreenInfo[i][j].wlight.argb = lightDoFogAndIllumination(TileIllum, rx - tileScreenInfo[i][j].x, rz - world_coord(i-terrainMidY), NULL);
+					tileScreenInfo[i][j].wlight.argb = lightDoFogAndIllumination(TileIllum, rx - tileScreenInfo[i][j].pos.x, rz - world_coord(i - terrainMidY), NULL);
 
-					tileScreenInfo[i][j].y = tmp_y;
+					tileScreenInfo[i][j].pos.y = tmp_y;
 				}
 				else
 				{
 					// If it wasnt a water tile then need to ensure water.xyz are valid because
 					// a water tile might be sharing verticies with it.
 					tileScreenInfo[i][j].water = tileScreenInfo[i][j].screen;
-					tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].y;
+					tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].pos.y;
 				}
 			}
-			tileScreenInfo[i][j].screen.z = pie_RotateProject((Vector3i*)&tileScreenInfo[i][j], (Vector2i*)&tileScreenInfo[i][j].screen);
+			tileScreenInfo[i][j].screen.z = pie_RotateProject(&tileScreenInfo[i][j].pos, (Vector2i*)&tileScreenInfo[i][j].screen);
 		}
 	}
 
@@ -4207,8 +4207,8 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	vertices[1] = tileScreenInfo[i + 0][j + 1];
 	if (onWaterEdge)
 	{
-		vertices[0].y = tileScreenInfo[i+0][j+0].water_height;
-		vertices[1].y = tileScreenInfo[i+0][j+1].water_height;
+		vertices[0].pos.y = tileScreenInfo[i + 0][j + 0].water_height;
+		vertices[1].pos.y = tileScreenInfo[i + 0][j + 1].water_height;
 	}
 
 	if (TRI_FLIPPED(psTile))
@@ -4216,7 +4216,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		vertices[2] = tileScreenInfo[i + 1][j + 0];
 		if (onWaterEdge)
 		{
-			vertices[2].y = tileScreenInfo[i+1][j+0].water_height;
+			vertices[2].pos.y = tileScreenInfo[i + 1][j + 0].water_height;
 		}
 	}
 	else
@@ -4224,7 +4224,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		vertices[2] = tileScreenInfo[i + 1][j + 1];
 		if (onWaterEdge)
 		{
-			vertices[2].y = tileScreenInfo[i+1][j+1].water_height;
+			vertices[2].pos.y = tileScreenInfo[i + 1][j + 1].water_height;
 		}
 	}
 
@@ -4236,7 +4236,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		vertices[0] = tileScreenInfo[i + 0][j + 1];
 		if (onWaterEdge)
 		{
-			vertices[0].y = tileScreenInfo[i+0][j+1].water_height;
+			vertices[0].pos.y = tileScreenInfo[i + 0][j + 1].water_height;
 		}
 	}
 	else
@@ -4244,7 +4244,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		vertices[0] = tileScreenInfo[i + 0][j + 0];
 		if (onWaterEdge)
 		{
-			vertices[0].y = tileScreenInfo[i+0][j+0].water_height;
+			vertices[0].pos.y = tileScreenInfo[i + 0][j + 0].water_height;
 		}
 	}
 
@@ -4252,8 +4252,8 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	vertices[2] = tileScreenInfo[i + 1][j + 0];
 	if ( onWaterEdge )
 	{
-		vertices[1].y = tileScreenInfo[i+1][j+1].water_height;
-		vertices[2].y = tileScreenInfo[i+1][j+0].water_height;
+		vertices[1].pos.y = tileScreenInfo[i + 1][j + 1].water_height;
+		vertices[2].pos.y = tileScreenInfo[i + 1][j + 0].water_height;
 	}
 
 	pie_DrawTexTriangle(vertices, NULL);
@@ -4330,17 +4330,17 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 		tileScreenInfo[i+1][j+0].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + (yMult - 1);
 
 		vertices[0] = tileScreenInfo[i + 0][j + 0];
-		vertices[0].y = tileScreenInfo[i+0][j+0].water_height;
+		vertices[0].pos.y = tileScreenInfo[i + 0][j + 0].water_height;
 		vertices[0].light = tileScreenInfo[i+0][j+0].wlight;
 		vertices[0].light.byte.a = WATER_ALPHA_LEVEL;
 
 		vertices[1] = tileScreenInfo[i + 0][j + 1];
-		vertices[1].y = tileScreenInfo[i+0][j+1].water_height;
+		vertices[1].pos.y = tileScreenInfo[i + 0][j + 1].water_height;
 		vertices[1].light = tileScreenInfo[i+0][j+1].wlight;
 		vertices[1].light.byte.a = WATER_ALPHA_LEVEL;
 
 		vertices[2] = tileScreenInfo[i + 1][j + 1];
-		vertices[2].y = tileScreenInfo[i+1][j+1].water_height;
+		vertices[2].pos.y = tileScreenInfo[i + 1][j + 1].water_height;
 		vertices[2].light = tileScreenInfo[i+1][j+1].wlight;
 		vertices[2].light.byte.a = WATER_ALPHA_LEVEL;
 
@@ -4350,7 +4350,7 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 
 		vertices[1] = vertices[2];
 		vertices[2] = tileScreenInfo[i + 1][j + 0];
-		vertices[2].y = tileScreenInfo[i+1][j+0].water_height;
+		vertices[2].pos.y = tileScreenInfo[i + 1][j + 0].water_height;
 		vertices[2].light = tileScreenInfo[i+1][j+0].wlight;
 		vertices[2].light.byte.a = WATER_ALPHA_LEVEL;
 
@@ -5118,9 +5118,9 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 
 	rx = player.p.x & (TILE_UNITS-1);
 	rz = player.p.z & (TILE_UNITS-1);
-	pts[0].x = vec.x + rx;
-	pts[0].y = vec.y;
-	pts[0].z = vec.z - rz;
+	pts[0].pos.x = vec.x + rx;
+	pts[0].pos.y = vec.y;
+	pts[0].pos.z = vec.z - rz;
 
 	pointIndex = rand()%(psStructure->sDisplay.imd->npoints-1);
 	point = &(psStructure->sDisplay.imd->points[pointIndex]);
@@ -5142,9 +5142,9 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 
 	rx = player.p.x & (TILE_UNITS-1);
 	rz = player.p.z & (TILE_UNITS-1);
-	pts[1].x = vec.x + rx;
-	pts[1].y = vec.y;
-	pts[1].z = vec.z - rz;
+	pts[1].pos.x = vec.x + rx;
+	pts[1].pos.y = vec.y;
+	pts[1].pos.z = vec.z - rz;
 
 	pointIndex = rand()%(psStructure->sDisplay.imd->npoints-1);
 	point = &(psStructure->sDisplay.imd->points[pointIndex]);
@@ -5160,9 +5160,9 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 
 	rx = player.p.x & (TILE_UNITS-1);
 	rz = player.p.z & (TILE_UNITS-1);
-	pts[2].x = vec.x + rx;
-	pts[2].y = vec.y;
-	pts[2].z = vec.z - rz;
+	pts[2].pos.x = vec.x + rx;
+	pts[2].pos.y = vec.y;
+	pts[2].pos.z = vec.z - rz;
 
 	// set the colour
 	colour = UBYTE_MAX;
@@ -5189,6 +5189,5 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 	pts[2].v = 0;
 	pts[2].specular.argb = 0;
 
-
-	pie_TransColouredTriangle( (TERRAIN_VERTEX*)&pts, colour );
+	pie_TransColouredTriangle(pts, colour);
 }
