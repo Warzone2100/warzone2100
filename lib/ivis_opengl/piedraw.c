@@ -153,7 +153,7 @@ void pie_BeginLighting(const Vector3f * light)
 	glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
 	glEnable(GL_LIGHT0);
 
-	lighting = TRUE;
+//	lighting = TRUE;
 	shadows = TRUE;
 }
 
@@ -534,7 +534,6 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 	int edge_count = 0;
 	static EDGE *edgelist = NULL;
 	static int edgelistsize = 256;
-
 	EDGE *drawlist = NULL;
 
 	if(!edgelist)
@@ -602,7 +601,7 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 			edge_count = j;
 			// then store it in the imd
 			shape->nShadowEdges = edge_count;
-			shape->shadowEdgeList = malloc(sizeof(EDGE) * shape->nShadowEdges);
+			shape->shadowEdgeList = realloc(shape->shadowEdgeList, sizeof(EDGE) * shape->nShadowEdges);
 			memcpy(shape->shadowEdgeList, edgelist, sizeof(EDGE) * shape->nShadowEdges);
 		}
 	}
