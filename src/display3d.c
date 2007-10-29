@@ -208,7 +208,7 @@ UDWORD		distance = START_DISTANCE;//(DISTANCE - (DISTANCE/6));
 UDWORD		terrainOutline = FALSE;
 
 /* Stores the screen coordinates of the transformed terrain tiles */
-SVMESH tileScreenInfo[LAND_YGRD][LAND_XGRD];
+TERRAIN_VERTEX tileScreenInfo[LAND_YGRD][LAND_XGRD];
 
 /* Stores the tilepointers for rendered tiles */
 static TILE_BUCKET tileIJ[LAND_YGRD][LAND_XGRD];
@@ -4075,7 +4075,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	MAPTILE *psTile = NULL;
 	BOOL bOutlined = FALSE;
 	UDWORD tileNumber = 0;
-	PIEVERTEX vertices[3];
+	TERRAIN_VERTEX vertices[3];
 	UBYTE oldColours[4] = { 0, 0, 0, 0 };
 	UDWORD oldColoursWord[4] = { 0, 0, 0, 0 };
 #if defined(SHOW_ZONES) || defined(SHOW_GATEWAYS)
@@ -4203,8 +4203,8 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	tileScreenInfo[i+1][j+0].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + sP4.y;
 
 	/* The first triangle */
-	memcpy(&vertices[0], &tileScreenInfo[i+0][j+0], sizeof(PIEVERTEX));
-	memcpy(&vertices[1], &tileScreenInfo[i+0][j+1], sizeof(PIEVERTEX));
+	vertices[0] = tileScreenInfo[i + 0][j + 0];
+	vertices[1] = tileScreenInfo[i + 0][j + 1];
 	if (onWaterEdge)
 	{
 		vertices[0].y = tileScreenInfo[i+0][j+0].water_height;
@@ -4213,7 +4213,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 
 	if (TRI_FLIPPED(psTile))
 	{
-		memcpy(&vertices[2], &tileScreenInfo[i+1][j+0], sizeof(PIEVERTEX));
+		vertices[2] = tileScreenInfo[i + 1][j + 0];
 		if (onWaterEdge)
 		{
 			vertices[2].y = tileScreenInfo[i+1][j+0].water_height;
@@ -4221,21 +4221,19 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	}
 	else
 	{
-		memcpy(&vertices[2], &tileScreenInfo[i+1][j+1], sizeof(PIEVERTEX));
+		vertices[2] = tileScreenInfo[i + 1][j + 1];
 		if (onWaterEdge)
 		{
 			vertices[2].y = tileScreenInfo[i+1][j+1].water_height;
 		}
 	}
 
-
 	pie_DrawTexTriangle(vertices, NULL);
-
 
 	/* The second triangle */
 	if (TRI_FLIPPED(psTile))
 	{
-		memcpy(&vertices[0], &tileScreenInfo[i+0][j+1], sizeof(PIEVERTEX));
+		vertices[0] = tileScreenInfo[i + 0][j + 1];
 		if (onWaterEdge)
 		{
 			vertices[0].y = tileScreenInfo[i+0][j+1].water_height;
@@ -4243,24 +4241,22 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	}
 	else
 	{
-		memcpy(&vertices[0], &tileScreenInfo[i+0][j+0], sizeof(PIEVERTEX));
+		vertices[0] = tileScreenInfo[i + 0][j + 0];
 		if (onWaterEdge)
 		{
 			vertices[0].y = tileScreenInfo[i+0][j+0].water_height;
 		}
 	}
 
-	memcpy(&vertices[1], &tileScreenInfo[i+1][j+1], sizeof(PIEVERTEX));
-	memcpy(&vertices[2], &tileScreenInfo[i+1][j+0], sizeof(PIEVERTEX));
+	vertices[1] = tileScreenInfo[i + 1][j + 1];
+	vertices[2] = tileScreenInfo[i + 1][j + 0];
 	if ( onWaterEdge )
 	{
 		vertices[1].y = tileScreenInfo[i+1][j+1].water_height;
 		vertices[2].y = tileScreenInfo[i+1][j+0].water_height;
 	}
 
-
 	pie_DrawTexTriangle(vertices, NULL);
-
 
 	/* Outline the tile if necessary */
 	if(!onWaterEdge && terrainOutline)
@@ -4316,7 +4312,7 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 				xMult = 256 / TILES_IN_PAGE_COLUMN,
 				yMult = 256 / (2 * TILES_IN_PAGE_ROW);
 		const unsigned int tileNumber = getWaterTileNum();
-		PIEVERTEX vertices[3];
+		TERRAIN_VERTEX vertices[3];
 
 		// Draw the main water tile.
 		pie_SetTexturePage(tileTexInfo[tileNumber & TILE_NUMMASK].texPage);
@@ -4333,18 +4329,17 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 		tileScreenInfo[i+1][j+0].u = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + 1;
 		tileScreenInfo[i+1][j+0].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + (yMult - 1);
 
-
-		memcpy(&vertices[0], &tileScreenInfo[i+0][j+0], sizeof(PIEVERTEX));
+		vertices[0] = tileScreenInfo[i + 0][j + 0];
 		vertices[0].y = tileScreenInfo[i+0][j+0].water_height;
 		vertices[0].light = tileScreenInfo[i+0][j+0].wlight;
 		vertices[0].light.byte.a = WATER_ALPHA_LEVEL;
 
-		memcpy(&vertices[1], &tileScreenInfo[i+0][j+1], sizeof(PIEVERTEX));
+		vertices[1] = tileScreenInfo[i + 0][j + 1];
 		vertices[1].y = tileScreenInfo[i+0][j+1].water_height;
 		vertices[1].light = tileScreenInfo[i+0][j+1].wlight;
 		vertices[1].light.byte.a = WATER_ALPHA_LEVEL;
 
-		memcpy(&vertices[2], &tileScreenInfo[i+1][j+1], sizeof(PIEVERTEX));
+		vertices[2] = tileScreenInfo[i + 1][j + 1];
 		vertices[2].y = tileScreenInfo[i+1][j+1].water_height;
 		vertices[2].light = tileScreenInfo[i+1][j+1].wlight;
 		vertices[2].light.byte.a = WATER_ALPHA_LEVEL;
@@ -4353,9 +4348,8 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 
 		pie_DrawTexTriangle(vertices, &waterRealValue);
 
-
-		memcpy(&vertices[1], &vertices[2], sizeof(PIEVERTEX));
-		memcpy(&vertices[2], &tileScreenInfo[i+1][j+0], sizeof(PIEVERTEX));
+		vertices[1] = vertices[2];
+		vertices[2] = tileScreenInfo[i + 1][j + 0];
 		vertices[2].y = tileScreenInfo[i+1][j+0].water_height;
 		vertices[2].light = tileScreenInfo[i+1][j+0].wlight;
 		vertices[2].light.byte.a = WATER_ALPHA_LEVEL;
@@ -5103,7 +5097,7 @@ UDWORD	i;
 
 static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 {
-	PIEVERTEX pts[3];
+	TERRAIN_VERTEX pts[3];
 	Vector3i each;
 	Vector3f *point;
 	UDWORD	pointIndex;
@@ -5196,5 +5190,5 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 	pts[2].specular.argb = 0;
 
 
-	pie_TransColouredTriangle( (PIEVERTEX*)&pts, colour );
+	pie_TransColouredTriangle( (TERRAIN_VERTEX*)&pts, colour );
 }

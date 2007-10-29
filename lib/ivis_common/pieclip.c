@@ -64,7 +64,7 @@ void pie_Set2DClip(int x0, int y0, int x1, int y1)
 	psRendSurface->clip.bottom = y1;
 }
 
-static void pie_ClipUV(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip, Sint32 t)
+static void pie_ClipUV(TERRAIN_VERTEX *s1, TERRAIN_VERTEX *s2, TERRAIN_VERTEX *clip, Sint32 t)
 {
 	clip->u = s1->u + ((t * (s2->u - s1->u)) >> iV_DIVSHIFT);
 	clip->v = s1->v + ((t * (s2->v - s1->v)) >> iV_DIVSHIFT);
@@ -76,7 +76,7 @@ static void pie_ClipUV(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip, Sint32 t)
 	clip->light.byte.a = s1->light.byte.a + ((t * (s2->light.byte.a - s1->light.byte.a)) >> iV_DIVSHIFT);
 }
 
-static int pie_ClipXT(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip)
+static int pie_ClipXT(TERRAIN_VERTEX *s1, TERRAIN_VERTEX *s2, TERRAIN_VERTEX *clip)
 {
 	int n = 1, dx;
 	Sint32 t;
@@ -197,7 +197,7 @@ static int pie_ClipXT(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip)
 	}
 }
 
-static int pie_ClipYT(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip)
+static int pie_ClipYT(TERRAIN_VERTEX *s1, TERRAIN_VERTEX *s2, TERRAIN_VERTEX *clip)
 {
 	int n = 1, dy;
 	Sint32 t;
@@ -324,10 +324,10 @@ static int pie_ClipYT(PIEVERTEX *s1, PIEVERTEX *s2, PIEVERTEX *clip)
 	}
 }
 
-int pie_ClipTextured(int npoints, PIEVERTEX *points, PIEVERTEX *clip)
+int pie_ClipTextured(int npoints, TERRAIN_VERTEX *points, TERRAIN_VERTEX *clip)
 {
-	static PIEVERTEX xclip[iV_POLY_MAX_POINTS+4];
-	PIEVERTEX *p0, *p1;
+	static TERRAIN_VERTEX xclip[iV_POLY_MAX_POINTS+4];
+	TERRAIN_VERTEX *p0, *p1;
 	int n1, n, i;
 
 	p0 = &points[0];

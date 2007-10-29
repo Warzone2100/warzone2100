@@ -122,8 +122,19 @@ typedef struct {UBYTE b, g, r, a;} PIELIGHTBYTES; //for byte fields in a DWORD
 #endif
 typedef union  {PIELIGHTBYTES byte; UDWORD argb;} PIELIGHT;
 typedef struct {UBYTE r, g, b, a;} PIEVERTLIGHT;
-typedef struct {int x, y, z; unsigned int u, v; PIELIGHT light, specular;} PIEVERTEX;
-typedef struct {float x, y, z, u, v; PIELIGHT light, specular;} PIEVERTEXF;
+typedef struct
+{
+	int x, y, z;
+	unsigned int u, v;
+	PIELIGHT light, specular;
+	Vector3i screen; //! Screenspace tile coordinates
+	Vector3i water; //! Screenspace water coordinates
+	int water_height; //! Worldspace water height
+	PIELIGHT wlight; //! Special water lighting
+	UBYTE drawInfo; //! Draw this tile?
+	UBYTE bWater; //! Is it a watertile?
+} TERRAIN_VERTEX;
+typedef struct {float x, y, z, u, v; PIELIGHT light, specular;} TERRAIN_VERTEXF;
 
 typedef struct {SWORD x, y, w, h;} PIERECT; //screen rectangle
 typedef struct {SDWORD texPage; SWORD tu, tv, tw, th;} PIEIMAGE; //an area of texture
@@ -132,7 +143,7 @@ typedef struct {UDWORD pieFlag; PIELIGHT colour, specular; UBYTE light, trans, s
 typedef struct {
 	UDWORD flags;
 	SDWORD nVrts;
-	PIEVERTEXF *pVrts;
+	TERRAIN_VERTEXF *pVrts;
 	iTexAnim *pTexAnim;
 } PIEPOLY;
 
@@ -145,7 +156,7 @@ typedef struct {
 extern void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD colour, UDWORD specular, int pieFlag, int pieData);
 extern void pie_DrawImage(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style);
 
-extern void pie_DrawTexTriangle(const PIEVERTEX *aVrts, const void* psEffects);
+extern void pie_DrawTexTriangle(const TERRAIN_VERTEX *aVrts, const void* psEffects);
 
 extern void pie_GetResetCounts(unsigned int* pPieCount, unsigned int* pTileCount, unsigned int* pPolyCount, unsigned int* pStateCount);
 

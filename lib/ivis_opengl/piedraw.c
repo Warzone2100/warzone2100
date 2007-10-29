@@ -123,7 +123,7 @@ static BOOL stencil_one_pass(void)
  */
 /***************************************************************************/
 
-static PIEVERTEXF pieVrts[pie_MAX_VERTICES_PER_POLYGON];
+static TERRAIN_VERTEXF pieVrts[pie_MAX_VERTICES_PER_POLYGON];
 static unsigned int pieCount = 0;
 static unsigned int tileCount = 0;
 static unsigned int polyCount = 0;
@@ -164,7 +164,7 @@ void pie_EndLighting(void)
 }
 
 
-static inline void pie_Polygon(const SDWORD numVerts, const PIEVERTEXF* pVrts, const BOOL light)
+static inline void pie_Polygon(const SDWORD numVerts, const TERRAIN_VERTEXF* pVrts, const BOOL light)
 {
 	unsigned int i = 0;
 
@@ -976,7 +976,7 @@ void pie_DrawRect( SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour )
  *
  ***************************************************************************/
 
-void pie_DrawTexTriangle(const PIEVERTEX *aVrts, const void* psEffects)
+void pie_DrawTexTriangle(const TERRAIN_VERTEX *aVrts, const void* psEffects)
 {
 	GLfloat offset = 0.0f;
 	unsigned int i = 0;

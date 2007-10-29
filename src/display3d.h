@@ -120,20 +120,7 @@ extern BOOL bRender3DOnly;
 extern const UDWORD visibleXTiles;
 extern const UDWORD visibleYTiles;
 
-// Expanded PIEVERTEX.
-typedef struct {
-	// PIEVERTEX.
-	int x, y, z; unsigned int u, v; PIELIGHT light, specular;
-	Vector3i screen; //! Screenspace tile coordinates
-	// Extra data for water:
-	Vector3i water; //! Screenspace water coordinates
-	int water_height; //! Worldspace water height
-	PIELIGHT wlight; //! Special water lighting
-	UBYTE drawInfo; //! Draw this tile?
-	UBYTE bWater; //! Is it a watertile?
-} SVMESH;
-
-extern SVMESH tileScreenInfo[LAND_YGRD][LAND_XGRD];
+extern TERRAIN_VERTEX tileScreenInfo[LAND_YGRD][LAND_XGRD];
 
 /* load IMDs AFTER RESOURCE FILE */
 extern BOOL loadExtraIMDs(void);

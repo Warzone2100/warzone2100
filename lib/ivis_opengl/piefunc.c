@@ -50,8 +50,8 @@
 
 void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, UDWORD colour)
 {
-	PIEVERTEX pieVrts[pie_MAX_VERTICES_PER_POLYGON];
-	PIEVERTEX clippedVrts[pie_MAX_VERTICES_PER_POLYGON + 2]; // no idea why + 2 but fixes crash - Per
+	TERRAIN_VERTEX pieVrts[pie_MAX_VERTICES_PER_POLYGON];
+	TERRAIN_VERTEX clippedVrts[pie_MAX_VERTICES_PER_POLYGON + 2]; // no idea why + 2 but fixes crash - Per
 	SDWORD clip, i;
 
 	pie_SetTexturePage(-1);
@@ -67,10 +67,10 @@ void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD 
 	pieVrts[0].light.argb = colour;//0x7fffffff;
 	pieVrts[0].specular.argb = 0;
 
-	memcpy(&pieVrts[1], &pieVrts[0], sizeof(PIEVERTEX));
-	memcpy(&pieVrts[2], &pieVrts[0], sizeof(PIEVERTEX));
-	memcpy(&pieVrts[3], &pieVrts[0], sizeof(PIEVERTEX));
-	memcpy(&pieVrts[4], &pieVrts[0], sizeof(PIEVERTEX));
+	pieVrts[1] = pieVrts[0];
+	pieVrts[2] = pieVrts[0];
+	pieVrts[3] = pieVrts[0];
+	pieVrts[4] = pieVrts[0];
 
 	pieVrts[1].x = v[0].x;
 	pieVrts[1].y = v[0].y;
@@ -113,7 +113,7 @@ void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD 
 }
 
 /* ---------------------------------------------------------------------------------- */
-void pie_TransColouredTriangle( PIEVERTEX *vrt, UDWORD rgb )
+void pie_TransColouredTriangle( TERRAIN_VERTEX *vrt, UDWORD rgb )
 {
 	PIELIGHT c;
 	UDWORD i;
