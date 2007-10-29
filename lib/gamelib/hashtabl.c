@@ -27,20 +27,6 @@
 
 #include "hashtabl.h"
 
-extern void *	g_ElementToBeRemoved;
-
-/***************************************************************************/
-
-#define	HASHTEST
-
-/* next four used in HashPJW */
-#define	BITS_IN_int		32
-#define	THREE_QUARTERS	((UDWORD) ((BITS_IN_int * 3) / 4))
-#define	ONE_EIGHTH		((UDWORD) (BITS_IN_int / 8))
-
-//#define	HIGH_BITS		( ~((UDWORD)(~0) >> ONE_EIGHTH ))       /* DOES NOT WORK ON THE PSX ! use the version below */
-#define	HIGH_BITS		((UDWORD)( ~((0xffffffff) >> ONE_EIGHTH )))
-
 /***************************************************************************/
 
 static UDWORD
@@ -48,42 +34,6 @@ HashTest( int iKey1, int iKey2 )
 {
 	return (UDWORD) iKey1 + iKey2;
 }
-
-#ifndef HASHTEST
-/***************************************************************************/
-/*
- * HashPJW
- *
- * Adaptation of Peter Weinberger's (PJW) generic hashing algorithm listed
- * in Binstock+Rex, "Practical Algorithms" p 69.
- *
- * Accepts element pointer and returns hashed integer.
- */
-/***************************************************************************/
-
-static UDWORD
-HashPJW( int iKey1, int iKey2 )
-{
-	UDWORD	iHashValue, i;
-	char	*c = (char *) iKey1; // FIXME OUCH: Storing a pointer in an int!
-
-	/* don't use second key in this one */
-	iKey2 = UNUSED_KEY;
-
-	for ( iHashValue=0; *c; ++c )
-	{
-		iHashValue = ( iHashValue << ONE_EIGHTH ) + *c;
-
-		if ( (i = iHashValue & HIGH_BITS) != 0 )
-		{
-			iHashValue = ( iHashValue ^ ( i >> THREE_QUARTERS ) ) &
-							~HIGH_BITS;
-		}
-	}
-
-	return iHashValue;
-}
-#endif
 
 /***************************************************************************/
 
@@ -94,7 +44,6 @@ hashTable_Create( HASHTABLE **ppsTable, UDWORD udwTableSize,
 	UDWORD			udwSize;
 
 	/* allocate and init table */
-
 
 	(*ppsTable) = (HASHTABLE*)malloc( sizeof(HASHTABLE) );
 	udwSize = udwTableSize * sizeof(HASHNODE *);
@@ -111,11 +60,7 @@ hashTable_Create( HASHTABLE **ppsTable, UDWORD udwTableSize,
 	(*ppsTable)->pFreeFunc      = NULL;
 
 	/* set hash function to internal */
-#ifdef HASHTEST
 	hashTable_SetHashFunction( (*ppsTable), HashTest );
-#else
-	hashTable_SetHashFunction( (*ppsTable), HashPJW );
-#endif
 
 	return TRUE;
 }
@@ -230,7 +175,6 @@ hashTable_GetElement( HASHTABLE *psTable )
 		debug(LOG_ERROR, "hashTable_GetElement: Out of memory");
 		return NULL;
 	}
-
 
 	return psElement;
 }

@@ -24,7 +24,7 @@
  *
  * The hashtable can store elements indexed by two keys.
  * Additionally traversing the stored elements similar to an
- * singliy-linked list is possible.
+ * singly-linked list is possible.
  */
 
 #ifndef _HASHTABL_H_
@@ -33,13 +33,6 @@
 /***************************************************************************/
 
 #include "lib/framework/frame.h"
-
-/***************************************************************************/
-/* defines
- */
-
-/* flags key not used in hash function */
-#define	UNUSED_KEY	-747
 
 /***************************************************************************/
 /* macros
