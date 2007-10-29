@@ -1582,8 +1582,9 @@ void displayInitVars(void)
 void StartDeliveryPosition( OBJECT_POSITION *psLocation )
 {
 	FLAG_POSITION	*psFlagPos;
-	/* clear the selection */
-//	clearSelection();
+	STRUCTURE_STATS	*tmpStructStats;
+	BASE_STATS	*tmpBaseStats;
+
 	//clear the Deliv Point if one
 	for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos;
 		psFlagPos = psFlagPos->psNext)
@@ -1612,8 +1613,9 @@ void StartDeliveryPosition( OBJECT_POSITION *psLocation )
 	buildSite.xBR = (UWORD)(buildSite.xTL-1);
 	buildSite.yBR = (UWORD)(buildSite.yTL-1);
 
-
-	init3DBuilding((BASE_STATS *)&ReposStats, FinishDeliveryPosition, psLocation);
+	tmpStructStats = &ReposStats;
+	tmpBaseStats = (BASE_STATS *)tmpStructStats;
+	init3DBuilding(tmpBaseStats, FinishDeliveryPosition, psLocation);
 }
 
 
