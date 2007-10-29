@@ -8129,8 +8129,10 @@ BOOL structureCheckReferences(STRUCTURE *psVictimStruct)
 			{
 				if ((STRUCTURE *)psStruct->psTarget[i] == psVictimStruct && psVictimStruct != psStruct)
 				{
-					ASSERT(FALSE, "Illegal reference to structure from %s line %d",
+#ifdef DEBUG
+					ASSERT(!"Illegal reference to structure", "Illegal reference to structure from %s line %d",
 					       psStruct->targetFunc[i], psStruct->targetLine[i]);
+#endif
 					return FALSE;
 				}
 			}
@@ -8141,21 +8143,27 @@ BOOL structureCheckReferences(STRUCTURE *psVictimStruct)
 			{
 				if ((STRUCTURE *)psDroid->psTarget[i] == psVictimStruct)
 				{
-					ASSERT(FALSE, "Illegal reference to structure from %s line %d",
+#ifdef DEBUG
+					ASSERT(!"Illegal reference to structure", "Illegal reference to structure from %s line %d",
 					       psDroid->targetFunc[i], psDroid->targetLine[i]);
+#endif
 					return FALSE;
 				}
 				if ((STRUCTURE *)psDroid->psActionTarget[i] == psVictimStruct)
 				{
-					ASSERT(FALSE, "Illegal action reference to structure from %s line %d",
+#ifdef DEBUG
+					ASSERT(!"Illegal reference to structure", "Illegal action reference to structure from %s line %d",
 					       psDroid->actionTargetFunc[i], psDroid->actionTargetLine[i]);
+#endif
 					return FALSE;
 				}
 			}
 			if ((STRUCTURE *)psDroid->psBaseStruct == psVictimStruct)
 			{
-				ASSERT(FALSE, "Illegal action reference to structure from %s line %d",
+#ifdef DEBUG
+				ASSERT(!"Illegal reference to structure", "Illegal action reference to structure from %s line %d",
 				       psDroid->baseFunc, psDroid->baseLine);
+#endif
 				return FALSE;
 			}
 		}

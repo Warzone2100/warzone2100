@@ -301,8 +301,10 @@ BOOL droidCheckReferences(DROID *psVictimDroid)
 			{
 				if ((DROID *)psStruct->psTarget[i] == psVictimDroid)
 				{
-					ASSERT(FALSE, "Illegal reference to droid from %s line %d",
+#ifdef DEBUG
+					ASSERT(!"Illegal reference to droid", "Illegal reference to droid from %s line %d",
 					       psStruct->targetFunc[i], psStruct->targetLine[i]);
+#endif
 					return FALSE;
 				}
 			}
@@ -313,14 +315,18 @@ BOOL droidCheckReferences(DROID *psVictimDroid)
 			{
 				if ((DROID *)psDroid->psTarget[i] == psVictimDroid && psVictimDroid != psDroid)
 				{
-					ASSERT(FALSE, "Illegal reference to droid from %s line %d",
+#ifdef DEBUG
+					ASSERT(!"Illegal reference to droid", "Illegal reference to droid from %s line %d",
 					       psDroid->targetFunc[i], psDroid->targetLine[i]);
+#endif
 					return FALSE;
 				}
 				if ((DROID *)psDroid->psActionTarget[i] == psVictimDroid && psVictimDroid != psDroid)
 				{
-					ASSERT(FALSE, "Illegal action reference to droid from %s line %d",
+#ifdef DEBUG
+					ASSERT(!"Illegal reference to droid", "Illegal action reference to droid from %s line %d",
 					       psDroid->actionTargetFunc[i], psDroid->actionTargetLine[i]);
+#endif
 					return FALSE;
 				}
 			}
