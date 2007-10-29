@@ -1222,7 +1222,7 @@ static void NETallowJoining(void)
 			tmp_socket[i] = SDLNet_TCP_Accept(tcp_socket);
 			SDLNet_TCP_AddSocket(tmp_socket_set, tmp_socket[i]);
 			if (SDLNet_CheckSockets(tmp_socket_set, 1000) > 0
-			    && SDLNet_SocketReady(&tmp_socket[0])
+			    && SDLNet_SocketReady(tmp_socket[0])
 			    && SDLNet_TCP_Recv(tmp_socket[i], buffer, 5))
 			{
 				if(strcmp(buffer, "list")==0)
