@@ -1,6 +1,6 @@
 SUBDIRS = mods
 
-BASELIST = anims audio components effects features \
+BASELIST = anims audio components effects features testdata \
 	gamedesc.lev images messages misc multiplay novideo.rpl palette.bin script \
 	sequenceaudio stats structs texpages wrf
 PATCHLIST = addon.lev anims components effects \
