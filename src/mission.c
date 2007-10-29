@@ -2590,7 +2590,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 	DROID		*psDroid, *psNext;
 	DROID		**ppCurrentList, **ppStoredList;
 	UDWORD		droidX, droidY;
-	UWORD		iX, iY;
+	UDWORD		iX, iY;
 	DROID_GROUP	*psGroup;
 
 	if (goingHome)
@@ -4037,12 +4037,12 @@ void missionGetTransporterEntry( SDWORD iPlayer, UWORD *iX, UWORD *iY )
 	*iY = (UWORD) world_coord(mission.iTranspEntryTileY[iPlayer]);
 }
 
-void missionGetTransporterExit( SDWORD iPlayer, UWORD *iX, UWORD *iY )
+void missionGetTransporterExit( SDWORD iPlayer, UDWORD *iX, UDWORD *iY )
 {
 	ASSERT( iPlayer<MAX_PLAYERS, "missionGetTransporterExit: player %i too high", iPlayer );
 
-	*iX = (UWORD) world_coord(mission.iTranspExitTileX[iPlayer]);
-	*iY = (UWORD) world_coord(mission.iTranspExitTileY[iPlayer]);
+	*iX = world_coord(mission.iTranspExitTileX[iPlayer]);
+	*iY = world_coord(mission.iTranspExitTileY[iPlayer]);
 }
 
 /*update routine for mission details */

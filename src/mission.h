@@ -169,7 +169,7 @@ extern DROID * buildMissionDroid(DROID_TEMPLATE *psTempl, UDWORD x, UDWORD y,
 extern void missionSetTransporterEntry( SDWORD iPlayer, SDWORD iEntryTileX, SDWORD iEntryTileY );
 extern void missionSetTransporterExit( SDWORD iPlayer, SDWORD iExitTileX, SDWORD iExitTileY );
 extern void missionGetTransporterEntry( SDWORD iPlayer, UWORD *iX, UWORD *iY );
-extern void missionGetTransporterExit( SDWORD iPlayer, UWORD *iX, UWORD *iY );
+extern void missionGetTransporterExit( SDWORD iPlayer, UDWORD *iX, UDWORD *iY );
 
 //access functions for droidsToSafety flag
 extern void setDroidsToSafetyFlag(BOOL set);

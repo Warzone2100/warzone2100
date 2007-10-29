@@ -1092,7 +1092,6 @@ done:
 // Update the action state for a droid
 void actionUpdateDroid(DROID *psDroid)
 {
-//	UDWORD				structX,structY;
 	UDWORD				droidX,droidY;
 	UDWORD				tlx,tly;
 	STRUCTURE			*psStruct;
@@ -1276,9 +1275,9 @@ void actionUpdateDroid(DROID *psDroid)
 				}
 				addDroid(psDroid, apsDroidLists);
 				//set the x/y up since they were set to INVALID_XY when moved offWorld
-				missionGetTransporterExit(selectedPlayer, (UWORD*)&droidX, (UWORD*)&droidY); // FIXME passing type-punned pointer of wrong size!
-				psDroid->x = (UWORD)droidX;
-				psDroid->y = (UWORD)droidY;
+				missionGetTransporterExit(selectedPlayer, &droidX, &droidY);
+				psDroid->x = droidX;
+				psDroid->y = droidY;
 				//fly Transporter back to get some more droids
 				orderDroidLoc( psDroid, DORDER_TRANSPORTIN,
 					getLandingX(selectedPlayer), getLandingY(selectedPlayer));
