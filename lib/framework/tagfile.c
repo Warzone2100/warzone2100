@@ -51,7 +51,7 @@ do { \
 	tag_error = true; \
 	snprintf(errbuf, sizeof(errbuf), __VA_ARGS__); \
 	errbuf[sizeof(errbuf) - 1] = '\0'; /* Guarantee to nul-terminate */ \
-	assert(false); \
+	ASSERT(!"tagfile error", errbuf); \
 } while(0)
 
 // function to printf into errbuf the calling strack for nested groups on error
