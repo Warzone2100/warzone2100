@@ -45,6 +45,8 @@ static char *bufptr = NULL;
 static PHYSFS_file *handle = NULL;
 #define ERR_BUF_SIZE 200
 static char errbuf[ERR_BUF_SIZE];
+static int lastAccess = -1; // track last accessed tag to detect user errors
+static int countGroups = 0; // check group recursion count while reading definition
 
 #define TF_ERROR(...) \
 do { \
@@ -170,6 +172,7 @@ static bool scan_defines(struct define *node, struct define *group)
 		{
 			bool success;
 
+			countGroups++;
 			node->group = malloc(sizeof(*node));
 			success = scan_defines(node->group, node);
 
@@ -181,6 +184,7 @@ static bool scan_defines(struct define *node, struct define *group)
 		else if (node->vr[0] == 'E' || node->vr[1] == 'N')
 		{
 			group_end = true; // un-recurse now
+			countGroups--;
 		}
 		if (*bufptr != '\0' && !group_end)
 		{
@@ -238,6 +242,13 @@ static bool init(const char *definition, const char *datafile, bool write)
 	bufptr = NULL;
 	PHYSFS_close(fp);
 
+	if (countGroups != 0)
+	{
+		TF_ERROR("Error in definition file %s - group tags do not match end tags!", definition);
+		countGroups = 0;
+		return false;
+	}
+
 	if (write)
 	{
 		fp = PHYSFS_openWrite(datafile);
@@ -288,6 +299,7 @@ void tagClose()
 {
 	PHYSFS_close(handle);
 	remove_defines(first);
+	lastAccess = -1; // reset sanity counter
 }
 
 bool tagGetError()
@@ -307,6 +319,12 @@ static bool scan_to(element_t tag)
 	{
 		return true; // does not exist in definition
 	}
+	if (lastAccess >= tag)
+	{
+		TF_ERROR("Trying to read tag %d that is not larger than previous tag.", (int)tag);
+		return false;
+	}
+	lastAccess = tag;
 	// Set the right node
 	for (; current->next && current->element < tag; current = current->next);
 	if (current->element != tag)
@@ -440,6 +458,7 @@ bool tagReadNext()
 	{
 		return false;
 	}
+	lastAccess = -1; // reset requirement that tags are increasing in value
 	if (current->parent == NULL)
 	{
 		current = first; // topmost group
@@ -461,6 +480,7 @@ uint16_t tagReadEnter(element_t tag)
 	{
 		return 0; // none found; avoid error reporting here
 	}
+	lastAccess = -1; // reset requirement that tags are increasing in value
 	if (!PHYSFS_readUBE8(handle, &tagtype))
 	{
 		TF_ERROR("Error reading group type: %s", PHYSFS_getLastError());
@@ -504,13 +524,14 @@ void tagReadLeave(element_t tag)
 		TF_ERROR("Cannot leave group, at highest level already!");
 		return;
 	}
-	current = current->parent->current; // resume at next tag
+	current = current->parent->current; // resume iteration
 	if (current->element != tag)
 	{
 		TF_ERROR("Trying to leave the wrong group! We are in %d, leaving %d",
 		         current->parent != NULL ? (int)current->parent->element : 0, (int)tag);
 		return;
 	}
+	lastAccess = current->element; // restart iteration requirement
 	assert(current != NULL);
 }
 
@@ -828,6 +849,7 @@ bool tagWriteSeparator()
 	{
 		current = current->parent->group; // reset to start of group tag index
 	}
+	lastAccess = -1; // reset sanity counter
 	// it has no payload
 	return true;
 }
@@ -847,6 +869,7 @@ bool tagWriteEnter(element_t tag, uint16_t elements)
 	(void) PHYSFS_writeUBE16(handle, elements);
 	current->group->parent->current = current; // save where we are. ok, this is very contrived code.
 	current = current->group;
+	lastAccess = -1; // reset sanity counter, since we are in a new group
 	return true;
 }
 
@@ -864,14 +887,15 @@ bool tagWriteLeave(element_t tag)
 		return false;
 	}
 	current = current->parent->current; // resume at next tag
+	assert(current != NULL);
 	if (current->element != tag)
 	{
 		TF_ERROR("Trying to leave the wrong group! We are in %d, leaving %d",
 		         current->parent != NULL ? (int)current->parent->element : 0, (int)tag);
 		return false;
 	}
+	lastAccess = current->element; // restart iteration requirement
 	// it has no payload
-	assert(current != NULL);
 	return true;
 }
 
