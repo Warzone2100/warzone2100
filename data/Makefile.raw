@@ -32,4 +32,4 @@ clean: $(SUBDIRS)
 	$(RMF) $(BASEARCHIVE)
 	$(RMF) $(PATCHARCHIVE)
 
-.PHONY: all clean $(SUBDIRS)
+.PHONY: all clean $(SUBDIRS) $(BASEARCHIVE) $(PATCHARCHIVE)
