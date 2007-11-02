@@ -71,7 +71,7 @@ typedef struct AUDIO_SAMPLE
 	ALuint                  iSample;        // OpenAL name of the sound source
 #endif
 	SDWORD                  x, y, z;
-	float                   fVol;		// computed volume of sample
+	float                   fVol;           // computed volume of sample
 	BOOL                    bFinishedPlaying;
 	AUDIO_CALLBACK          pCallback;
 	void                    *psObj;
