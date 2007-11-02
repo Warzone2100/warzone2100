@@ -17,6 +17,9 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+#ifndef __INCLUDED_LIB_IVIS_PIEVECTOR_H__
+#define __INCLUDED_LIB_IVIS_PIEVECTOR_H__
+
 typedef struct { int x, y; } Vector2i;
 typedef struct { float x, y; } Vector2f;
 typedef struct { int x, y, z; } Vector3i;
@@ -311,3 +314,5 @@ static inline WZ_DECL_CONST BOOL Vector3i_InSphere (const Vector3i v, const Vect
 	Vector3i delta = Vector3i_Sub(v, c);
 	return (delta.x * delta.x) + (delta.y * delta.y) + (delta.z * delta.z) < (r * r);
 }
+
+#endif // __INCLUDED_LIB_IVIS_PIEVECTOR_H__
