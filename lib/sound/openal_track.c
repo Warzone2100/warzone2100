@@ -421,8 +421,8 @@ BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
 		return FALSE;
 	}
 	volume = ((float)psTrack->iVol / 100.0f);	// each object can have OWN volume!
+	psSample->fVol = volume;			// save volume
 	volume *= sfx_volume;				// and now take into account the Users sound Prefs.
-	psSample->fVol = volume;			// save computed volume
 	alGenSources( 1, &(psSample->iSample) );
 	alSourcef( psSample->iSample, AL_PITCH, 1.0f );
 	alSourcef( psSample->iSample, AL_GAIN,volume );
