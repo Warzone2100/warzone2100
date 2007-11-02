@@ -413,17 +413,19 @@ static BOOL sound_SetupChannel( AUDIO_SAMPLE *psSample )
 BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
 {
 #ifndef WZ_NOSOUND
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	ALfloat zero[3] = { 0.0, 0.0, 0.0 };
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	ALfloat volume;
 
-	if (sfx_volume == 0.0) {
+	if (sfx_volume == 0.0)
+	{
 		return FALSE;
 	}
-
+	volume = ((float)psTrack->iVol / 100.0f);	// each object can have OWN volume!
+	volume *= sfx_volume;				// and now take into account the Users sound Prefs.
+	psSample->fVol = volume;			// save computed volume
 	alGenSources( 1, &(psSample->iSample) );
 	alSourcef( psSample->iSample, AL_PITCH, 1.0f );
-	alSourcef( psSample->iSample, AL_GAIN, sfx_volume );
+	alSourcef( psSample->iSample, AL_GAIN,volume );
 	alSourcefv( psSample->iSample, AL_POSITION, zero );
 	alSourcefv( psSample->iSample, AL_VELOCITY, zero );
 	alSourcei( psSample->iSample, AL_BUFFER, psTrack->iBufferName );
@@ -451,17 +453,21 @@ BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
 {
 #ifndef WZ_NOSOUND
 	ALfloat zero[3] = { 0.0, 0.0, 0.0 };
+	ALfloat volume;
 
-	if (sfx3d_volume == 0.0) {
+	if (sfx3d_volume == 0.0)
+	{
 		return FALSE;
 	}
-
+	
+	volume = ((float)psTrack->iVol / 100.0);	// max range is 0-100
+	psSample->fVol = volume;			// store results for later
 	alGenSources( 1, &(psSample->iSample) );
 	// HACK: this is a workaround for a bug in the 64bit implementation of OpenAL on GNU/Linux
 	// The AL_PITCH value really should be 1.0.
 	alSourcef( psSample->iSample, AL_PITCH, 1.001 );
-	alSourcef( psSample->iSample, AL_GAIN, sfx3d_volume );
-	sound_SetObjectPosition( psSample->iSample, psSample->x, psSample->y, psSample->z );
+	
+	sound_SetObjectPosition( psSample );
 	alSourcefv( psSample->iSample, AL_VELOCITY, zero );
 	alSourcei( psSample->iSample, AL_BUFFER, psTrack->iBufferName );
 	alSourcei( psSample->iSample, AL_LOOPING, (sound_SetupChannel(psSample)) ? AL_TRUE : AL_FALSE );
@@ -536,7 +542,7 @@ void sound_SetPlayerOrientation( SDWORD iX, SDWORD iY, SDWORD iZ )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-void sound_SetObjectPosition( SDWORD iSample, SDWORD iX, SDWORD iY, SDWORD iZ )
+void sound_SetObjectPosition(AUDIO_SAMPLE *psSample)
 {
 #ifndef WZ_NOSOUND
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -549,23 +555,25 @@ void sound_SetObjectPosition( SDWORD iSample, SDWORD iX, SDWORD iY, SDWORD iZ )
 
 	// compute distance
 	alGetListener3f( AL_POSITION, &listenerX, &listenerY, &listenerZ );
-	dX = iX - listenerX; // distances on all axis
-	dY = iY - listenerY;
-	dZ = iZ - listenerZ;
+	dX = psSample->x  - listenerX; // distances on all axis
+	dY = psSample->y - listenerY;
+	dZ = psSample->z - listenerZ;
 	distance = sqrtf(dX * dX + dY * dY + dZ * dZ); // Pythagorean theorem
 
-	// compute gain
-	gain = 1 - distance * ATTENUATION_FACTOR;
-
+	// compute gain         
+	gain = (1.0 - (distance * ATTENUATION_FACTOR)) * psSample->fVol * sfx3d_volume;
+	if (gain > 1.0)
+	{
+		gain = 1.0;
+	}
 	if ( gain < 0.0 )
 	{
 		gain = 0.0;
 	}
-
-	alSourcef( iSample, AL_GAIN, gain * sfx3d_volume );
+	alSourcef( psSample->iSample, AL_GAIN, gain );
 
 	// the alSource3i variant would be better, if it wouldn't provide linker errors however
-	alSource3f( iSample, AL_POSITION, iX, iY, iZ );
+	alSource3f( psSample->iSample, AL_POSITION, (float)psSample->x,(float)psSample->x,(float)psSample->x );
 #endif
 }
 

@@ -66,9 +66,8 @@ BOOL	sound_QueueSamplePlaying( void );
 
 void	sound_SetPlayerPos( SDWORD iX, SDWORD iY, SDWORD iZ );
 void	sound_SetPlayerOrientation( SDWORD iX, SDWORD iY, SDWORD iZ );
-void	sound_SetObjectPosition( SDWORD iSample,
-									SDWORD iX, SDWORD iY, SDWORD iZ );
-
+void	sound_SetObjectPosition( AUDIO_SAMPLE *psSample ); 
+									
 void *	sound_GetObject( SDWORD iSample );
 void	sound_SetObject( SDWORD iSample, void *pObj );
 
