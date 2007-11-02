@@ -20,6 +20,14 @@
 #ifndef __INCLUDED_LIB_IVIS_PIEVECTOR_H__
 #define __INCLUDED_LIB_IVIS_PIEVECTOR_H__
 
+#include "lib/framework/wzglobal.h"
+
+#if defined(WZ_CC_MSVC)
+// Prevent nasty "nonstandard extension used : non-constant aggregate initializer" warning when using MSVC
+#pragma warning(disable:4204)
+#endif
+
+
 typedef struct { int x, y; } Vector2i;
 typedef struct { float x, y; } Vector2f;
 typedef struct { int x, y, z; } Vector3i;
