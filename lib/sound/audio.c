@@ -277,14 +277,13 @@ static AUDIO_SAMPLE *audio_QueueSample( SDWORD iTrack )
 		return NULL;
 	}
 
-	psSample = malloc(sizeof(AUDIO_SAMPLE));
+	psSample = calloc(1, sizeof(AUDIO_SAMPLE));
 	if ( psSample == NULL )
 	{
 		debug(LOG_ERROR, "audio_QueueSample: Out of memory");
 		return NULL;
 	}
 
-	memset( psSample, 0, sizeof(AUDIO_SAMPLE) );		//[check] -Q
 	psSample->iTrack = iTrack;
 	psSample->x = SAMPLE_COORD_INVALID;
 	psSample->y = SAMPLE_COORD_INVALID;
@@ -767,14 +766,13 @@ BOOL audio_PlayStream( const char szFileName[], SDWORD iVol, AUDIO_CALLBACK pUse
 		return FALSE;
 	}
 
-	psSample = malloc(sizeof(AUDIO_SAMPLE));
+	psSample = calloc(1, sizeof(AUDIO_SAMPLE));
 	if ( psSample == NULL )
 	{
 		debug(LOG_ERROR, "audio_PlayStream: Out of memory");
 		return FALSE;
 	}
 
-	memset( psSample, 0, sizeof(AUDIO_SAMPLE) );
 	psSample->pCallback = pUserCallback;
 	psSample->bFinishedPlaying = FALSE;
 
@@ -909,7 +907,7 @@ void audio_ResumeAll( void )
 void audio_StopAll( void )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	AUDIO_SAMPLE	*psSample, *psSampleTemp;
+	AUDIO_SAMPLE* psSample;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
@@ -919,23 +917,31 @@ void audio_StopAll( void )
 	}
 
 	//
-	// * empty list - audio_Update will free samples because callbacks have to come in
-	// * first
+	// * empty list - audio_Update will free samples because callbacks have to come in first
 	//
-	psSample = g_psSampleList;
-	while ( psSample != NULL )
+	for (psSample = g_psSampleList; psSample != NULL; psSample = psSample->psNext)
 	{
-		sound_StopTrack( psSample );
-		psSample = psSample->psNext;
+		// Stop this sound sample
+		sound_StopTrack(psSample);
+
+		// Make sure to set psObj to NULL if it will soon be invalidated
+		if (audio_ObjectDead(psSample->psObj))
+		{
+			psSample->psObj = NULL;
+		}
 	}
 
 	// empty sample queue
 	psSample = g_psSampleQueue;
 	while ( psSample != NULL )
 	{
-		psSampleTemp = psSample->psNext;
-		free(psSample);
-		psSample = psSampleTemp;
+		AUDIO_SAMPLE* psSampleTemp = psSample;
+
+		// Advance the sample iterator (before invalidating it)
+		psSample = psSample->psNext;
+
+		// Destroy the sample
+		free(psSampleTemp);
 	}
 
 	g_psSampleQueue = NULL;
