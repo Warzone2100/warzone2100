@@ -49,7 +49,6 @@ warzone2100_SOURCES = scriptvals_parser.tab.c scriptvals_lexer.lex.c \
 	target.c warzoneconfig.c
 
 warzone2100_LDADD = \
-	$(SDL_LIBS) $(SDL_NET_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(OGGVORBIS_LIBS) $(OPENGL_LIBS) $(OPENGLC_LIBS) $(OPENAL_LIBS) \
 	$(top_builddir)/lib/widget/libwidget.a \
 	$(top_builddir)/lib/sequence/libsequence.a \
 	$(top_builddir)/lib/sound/libsound.a \
@@ -58,7 +57,8 @@ warzone2100_LDADD = \
 	$(top_builddir)/lib/ivis_opengl/libivis_opengl.a \
 	$(top_builddir)/lib/ivis_common/libivis_common.a \
 	$(top_builddir)/lib/gamelib/libgamelib.a \
-	$(top_builddir)/lib/framework/libframework.a
+	$(top_builddir)/lib/framework/libframework.a \
+	$(SDL_LIBS) $(SDL_NET_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(OGGVORBIS_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS)
 
 if MINGW32
 warzone2100_LDADD += $(top_builddir)/win32/warzone2100.o
