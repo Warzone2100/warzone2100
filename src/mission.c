@@ -2215,24 +2215,6 @@ void aiUpdateMissionStructure(STRUCTURE *psStructure)
 						intRefreshScreen();	// update the interface.
 					}
 
-                    //store the factory as the droid's baseStructure instead
-					//add it to the factory group
-					/*if (!psFactory->psGroup)
-					{
-						//create the factory group
-						if (!grpCreate(&psFactory->psGroup))
-						{
-							DBPRINTF(("missionUpdateStructure: unable to create group\n"));
-						}
-						else
-						{
-							grpJoin(psFactory->psGroup, psNewDroid);
-						}
-					}
-					else
-					{
-						grpJoin(psFactory->psGroup, psNewDroid);
-					}*/
 					setDroidBase(psNewDroid, psStructure);
 
 					//reset the start time

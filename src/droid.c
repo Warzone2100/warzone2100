@@ -5513,15 +5513,6 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 
 	CHECK_DROID(psD);
 
-    //leave any group it belongs to  - this gets called in droidRemove()
-	/*if(psD->psGroup)
-	{
-		grpLeave( psD->psGroup, psD);
-		psD->psGroup = NULL;
-	}*/
-	// remove the droid from the cluster systerm - this gets called in droidRemove()
-	//clustRemoveObject((BASE_OBJECT *)psD);
-
 	if(psD->player == to)
 	{
 		return psD;
