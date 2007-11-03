@@ -41,21 +41,6 @@
 #include "piematrix.h"
 #include "screen.h"
 
-extern BOOL dtm_LoadRadarSurface(UBYTE* radarBuffer);
-extern SDWORD dtm_GetRadarTexImageSize(void);
-
-/***************************************************************************/
-/*
- *	Local Definitions
- */
-/***************************************************************************/
-SDWORD gSurfaceOffsetX;
-SDWORD gSurfaceOffsetY;
-UWORD* pgSrcData = NULL;
-SDWORD gSrcWidth;
-SDWORD gSrcHeight;
-SDWORD gSrcStride;
-
 #define COLOURINTENSITY 0xffffffff
 /***************************************************************************/
 /*
@@ -63,14 +48,9 @@ SDWORD gSrcStride;
  */
 /***************************************************************************/
 
-PIESTYLE rendStyle;
-Vector2i rectVerts[4];
-
-/***************************************************************************/
-/*
- *	Local ProtoTypes
- */
-/***************************************************************************/
+static PIESTYLE rendStyle;
+static UDWORD radarTexture;
+static unsigned char radarBitmap[128 * 128 * 4];
 
 /***************************************************************************/
 /*
@@ -79,8 +59,6 @@ Vector2i rectVerts[4];
 /***************************************************************************/
 void pie_Line(int x0, int y0, int x1, int y1, Uint32 colour)
 {
-//	PIELIGHT light;
-
 	pie_SetRendMode(REND_FLAT);
 	pie_SetColour(colour);
 	pie_SetTexturePage(-1);
@@ -95,9 +73,6 @@ void pie_Line(int x0, int y0, int x1, int y1, Uint32 colour)
 
 void pie_Box(int x0,int y0, int x1, int y1, Uint32 colour)
 {
-//	PIELIGHT light;
-//	iColour* psPalette;
-
 	pie_SetRendMode(REND_FLAT);
 	pie_SetColour(colour);
 	pie_SetTexturePage(-1);
@@ -105,7 +80,9 @@ void pie_Box(int x0,int y0, int x1, int y1, Uint32 colour)
 
 	if (x0>psRendSurface->clip.right || x1<psRendSurface->clip.left ||
 		y0>psRendSurface->clip.bottom || y1<psRendSurface->clip.top)
-	return;
+	{
+		return;
+	}
 
 	if (x0<psRendSurface->clip.left)
 		x0 = psRendSurface->clip.left;
@@ -137,7 +114,9 @@ void pie_BoxFillIndex(int x0,int y0, int x1, int y1, UBYTE colour)
 
 	if (x0>psRendSurface->clip.right || x1<psRendSurface->clip.left ||
 		y0>psRendSurface->clip.bottom || y1<psRendSurface->clip.top)
-	return;
+	{
+		return;
+	}
 
 	if (x0<psRendSurface->clip.left)
 		x0 = psRendSurface->clip.left;
@@ -163,7 +142,9 @@ void pie_BoxFill(int x0,int y0, int x1, int y1, Uint32 colour)
 
 	if (x0>psRendSurface->clip.right || x1<psRendSurface->clip.left ||
 		y0>psRendSurface->clip.bottom || y1<psRendSurface->clip.top)
-	return;
+	{
+		return;
+	}
 
 	if (x0<psRendSurface->clip.left)
 		x0 = psRendSurface->clip.left;
@@ -183,6 +164,7 @@ void pie_TransBoxFill(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1)
 {
 	UDWORD rgb;
 	UDWORD transparency;
+
 	rgb = (pie_FILLRED<<16) | (pie_FILLGREEN<<8) | pie_FILLBLUE;//blue
 	transparency = pie_FILLTRANS;
 	pie_UniTransBoxFill(x0, y0, x1, y1, rgb, transparency);
@@ -195,7 +177,9 @@ void pie_UniTransBoxFill(SDWORD x0,SDWORD y0, SDWORD x1, SDWORD y1, UDWORD rgb, 
 
 	if (x0>psRendSurface->clip.right || x1<psRendSurface->clip.left ||
 		y0>psRendSurface->clip.bottom || y1<psRendSurface->clip.top)
-	return;
+	{
+		return;
+	}
 
 	if (x0<psRendSurface->clip.left)
 		x0 = psRendSurface->clip.left;
@@ -238,21 +222,6 @@ void pie_DrawImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 	pie_DrawImage(&pieImage, &dest, &rendStyle);
 }
 
-BOOL	bAddSprites = FALSE;
-UDWORD	addSpriteLevel;
-
-void	pie_SetAdditiveSprites(BOOL val) {
-	bAddSprites = val;
-}
-
-void	pie_SetAdditiveSpriteLevel(UDWORD val) {
-	addSpriteLevel = val;
-}
-
-static BOOL pie_GetAdditiveSprites( void ) {
-	return bAddSprites;
-}
-
 void pie_ImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 {
 	IMAGEDEF *Image;
@@ -262,16 +231,9 @@ void pie_ImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 	assert(ID < ImageFile->Header.NumImages);
 	Image = &ImageFile->ImageDefs[ID];
 
-   	if(pie_GetAdditiveSprites()) {
-		pie_SetBilinear(TRUE);
-		pie_SetRendMode(REND_ALPHA_TEX);
-		pie_SetColour(addSpriteLevel);
-
-	} else {
-		pie_SetBilinear(FALSE);
-		pie_SetRendMode(REND_GOURAUD_TEX);
-		pie_SetColour(COLOURINTENSITY);
-	}
+	pie_SetBilinear(FALSE);
+	pie_SetRendMode(REND_GOURAUD_TEX);
+	pie_SetColour(COLOURINTENSITY);
 	pie_SetColourKeyedBlack(TRUE);
 
 	pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
@@ -285,9 +247,6 @@ void pie_ImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 	dest.h = Image->Height;
 	pie_DrawImage(&pieImage, &dest, &rendStyle);
 }
-
-
-/***************************************************************************/
 
 void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, int Height)
 {
@@ -369,42 +328,12 @@ void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 	}
 }
 
-void pie_ImageFileIDStretch(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, int Height)
-{
-	IMAGEDEF *Image;
-	PIEIMAGE pieImage;
-	PIERECT dest;
-	assert(ID < ImageFile->Header.NumImages);
-
-	Image = &ImageFile->ImageDefs[ID];
-
-	pie_SetBilinear(FALSE);
-	pie_SetRendMode(REND_GOURAUD_TEX);
-	pie_SetColour(COLOURINTENSITY);
-	pie_SetColourKeyedBlack(TRUE);
-
-	pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
-	pieImage.tu = Image->Tu;
-	pieImage.tv = Image->Tv;
-	pieImage.tw = Image->Width;
-	pieImage.th = Image->Height;
-
-	dest.x = x + Image->XOffset;
-	dest.y = y + Image->YOffset;
-	dest.w = Width;
-	dest.h = Height;
-	pie_DrawImage(&pieImage, &dest, &rendStyle);
-}
-
 /* FIXME: WTF is this supposed to do? Looks like some other functionality
  * was retrofitted onto something else. - Per */
 void pie_UploadDisplayBuffer()
 {
 	screen_Upload(NULL);
 }
-
-UDWORD radarTexture;
-unsigned char radarBitmap[128*128*4];
 
 BOOL pie_InitRadar(void)
 {
@@ -417,7 +346,6 @@ BOOL pie_ShutdownRadar(void)
 	glDeleteTextures(1, &radarTexture);
 	return TRUE;
 }
-
 
 void pie_DownLoadRadar( unsigned char *buffer )
 {

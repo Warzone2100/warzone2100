@@ -65,7 +65,6 @@ extern void pie_BoxFill(int x0,int y0, int x1, int y1, Uint32 colour);
 extern void pie_DrawImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y);
 extern void pie_ImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y);
 extern void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, int Height);
-extern void pie_ImageFileIDStretch(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, int Height);
 
 extern void pie_TransBoxFill(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1);
 extern void pie_UniTransBoxFill(SDWORD x0,SDWORD y0, SDWORD x1, SDWORD y1, UDWORD rgb, UDWORD transparency);
@@ -78,9 +77,6 @@ extern void pie_DownLoadRadar( unsigned char *buffer );
 extern void pie_RenderRadar( int x, int y );
 
 extern void pie_UploadDisplayBuffer(void);
-
-extern	void	pie_SetAdditiveSprites(BOOL	val);
-extern	void	pie_SetAdditiveSpriteLevel(UDWORD	val);
 
 typedef enum _screenType
 {
