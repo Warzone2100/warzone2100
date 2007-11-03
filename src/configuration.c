@@ -35,7 +35,6 @@
 #include "lib/ivis_common/piestate.h"	// setgamma.
 #include "warzoneconfig.h"	// renderMode
 #include "component.h"
-#include "text.h"
 #include "seqdisp.h"
 #include "difficulty.h"
 #include "lib/netplay/netplay.h"

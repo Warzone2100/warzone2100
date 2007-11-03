@@ -66,7 +66,6 @@
 #include "intimage.h"
 #include "intdisplay.h"
 #include "design.h"
-#include "text.h"
 #include "component.h"
 #include "lib/script/script.h"
 #include "scripttabs.h"

@@ -63,7 +63,6 @@
 #include "scriptextern.h"
 #include "scripttabs.h"
 #include "seqdisp.h"
-#include "text.h"
 #include "transporter.h"
 #include "warcam.h"
 #include "main.h"

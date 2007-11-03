@@ -84,7 +84,6 @@
 #include "mapgrid.h"
 #include "order.h"
 #include "drive.h"
-#include "text.h"
 #include "selection.h"
 #include "difficulty.h"
 #include "scriptcb.h"		/* for console callback */

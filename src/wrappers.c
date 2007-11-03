@@ -53,7 +53,6 @@
 #include "frend.h"		// display logo.
 #include "console.h"
 #include "intimage.h"
-#include "text.h"
 #include "intdisplay.h"	//for shutdown
 #include "lib/sound/audio.h"
 #include "lib/gamelib/gtime.h"

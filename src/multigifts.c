@@ -34,7 +34,6 @@
 #include "group.h"
 #include "anim_id.h"
 #include "hci.h"
-#include "text.h"
 #include "scriptfuncs.h"		// for objectinrange.
 #include "lib/gamelib/gtime.h"
 #include "effects.h"

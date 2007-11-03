@@ -27,7 +27,6 @@
 #include "lib/framework/strres.h"
 #include "lib/widget/widget.h"
 #include "hci.h"
-#include "text.h"
 #include "intimage.h"
 #include "intdisplay.h"
 #include "init.h"		// for gameheap

@@ -43,7 +43,6 @@
 #include "hci.h"									// for byte packing funcs.
 #include "display3ddef.h"							// tile size constants.
 #include "console.h"
-#include "text.h"									// to access strings
 #include "geometry.h"								// for gettilestructure
 #include "mapgrid.h"								// for move droids directly.
 #include "lib/netplay/netplay.h"

@@ -41,7 +41,6 @@
 #include "basedef.h"
 #include "statsdef.h"
 #include "hci.h"
-#include "text.h"
 #include "miscimd.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include "display3d.h"

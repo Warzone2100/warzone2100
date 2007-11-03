@@ -32,7 +32,6 @@
 #include "lib/gamelib/gtime.h"
 #include "research.h"
 #include "message.h"
-#include "text.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
 #include "lib/script/script.h"

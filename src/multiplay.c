@@ -40,7 +40,6 @@
 #include "display3d.h"								// for changing the viewpoint
 #include "console.h"								// for screen messages
 #include "power.h"
-#include "text.h"
 #include "cmddroid.h"								//  for commanddroidupdatekills
 #include "wrappers.h"								// for game over
 #include "component.h"

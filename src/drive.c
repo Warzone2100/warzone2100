@@ -58,7 +58,6 @@
 #include "display3ddef.h"
 #include "display3d.h"
 #include "console.h"
-#include "text.h"
 #include "intdisplay.h"
 #include "multiplay.h"
 #include "target.h"

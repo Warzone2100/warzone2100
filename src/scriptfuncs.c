@@ -45,7 +45,6 @@
 #include "display3d.h"
 #include "research.h"
 #include "lib/sound/audio.h"
-#include "text.h"
 #include "lib/sound/audio_id.h"
 #include "power.h"
 #include "console.h"

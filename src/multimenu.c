@@ -28,7 +28,6 @@
 
 #include "display3d.h"
 #include "intdisplay.h"
-#include "text.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piedef.h"

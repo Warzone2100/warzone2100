@@ -42,7 +42,6 @@
 #include "intimage.h"
 #include "intdisplay.h"
 #include "intorder.h"
-#include "text.h"
 
 #include "scriptextern.h"
 

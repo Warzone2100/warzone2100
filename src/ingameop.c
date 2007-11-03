@@ -39,7 +39,6 @@
 #include "intdisplay.h"
 #include "hci.h"			// for wFont def.& intmode.
 #include "loop.h"
-#include "text.h"
 #include "resource.h"
 #include "frontend.h"		// for textdisplay function
 #include "loadsave.h"		// for textdisplay function

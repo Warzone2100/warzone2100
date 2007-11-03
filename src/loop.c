@@ -67,7 +67,6 @@
 #include "intelmap.h"
 #include "loadsave.h"
 #include "game.h"
-#include "text.h"
 // FIXME Direct iVis implementation inlcude!
 #include "lib/ivis_opengl/screen.h"
 #include "multijoin.h"

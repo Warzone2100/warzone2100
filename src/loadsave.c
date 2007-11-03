@@ -51,7 +51,6 @@
 #include "lib/netplay/netplay.h"
 #include "loop.h"
 #include "intdisplay.h"
-#include "text.h"
 #include "mission.h"
 #include "lib/gamelib/gtime.h"
 //======================================================================================

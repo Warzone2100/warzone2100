@@ -45,7 +45,6 @@
 #include "intelmap.h"
 #include "mapdisplay.h"
 #include "lib/sound/audio.h"
-#include "text.h"
 #include "console.h"
 #include "research.h"
 #include "lib/gamelib/gtime.h"

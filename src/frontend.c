@@ -56,7 +56,6 @@
 #include "multilimit.h"
 #include "multiplay.h"
 #include "seqdisp.h"
-#include "text.h"
 #include "warzoneconfig.h"
 #include "main.h"
 #include "wrappers.h"

@@ -32,7 +32,6 @@
 #include "basedef.h"
 #include "droiddef.h"
 #include "statsdef.h"
-#include "text.h"
 #include "geometry.h"
 #include "console.h"
 #include "selection.h"

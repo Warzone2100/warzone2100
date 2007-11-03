@@ -37,7 +37,6 @@
 #include "lib/widget/widget.h"
 #include "frontend.h"
 #include "frend.h"
-#include "text.h"
 #include "lib/ivis_common/textdraw.h"
 #include "hci.h"
 #include "init.h"

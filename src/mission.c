@@ -47,7 +47,6 @@
 #include "resource.h"		// for mousecursors
 #include "transporter.h"
 #include "group.h"
-#include "text.h"
 #include "frontend.h"		// for displaytextoption.
 #include "intdisplay.h"
 #include "main.h"

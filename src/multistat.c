@@ -35,7 +35,6 @@
 #include "power.h"
 #include "map.h"
 #include "lib/widget/widget.h"
-#include "text.h"
 #include "effects.h"	// for discovery flash
 #include "lib/netplay/netplay.h"
 #include "cmddroid.h"

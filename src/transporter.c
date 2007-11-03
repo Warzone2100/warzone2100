@@ -35,7 +35,6 @@
 #include "objmem.h"
 #include "transporter.h"
 #include "group.h"
-#include "text.h"
 #include "display3d.h"
 #include "mission.h"
 #include "objects.h"

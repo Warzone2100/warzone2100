@@ -44,7 +44,6 @@
 #include "game.h"					// for loading maps
 #include "player.h"
 #include "message.h"				// for clearing game messages
-#include "text.h"					// for string resources.
 #include "order.h"
 #include "console.h"
 #include "orderdef.h"				// for droid_order_data
