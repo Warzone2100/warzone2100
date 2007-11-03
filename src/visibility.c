@@ -44,9 +44,6 @@
 // accuracy for the height gradient
 #define GRAD_MUL	10000
 
-// list of objects intersecting a ray and the distance to them
-static SDWORD			numRayObjects = 0;
-
 // which object is being considered by the callback
 static SDWORD			currObj;
 
@@ -426,6 +423,13 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 		break;
 	}
 
+	/* Implement ECM by making sensor range two thirds of normal when
+	 * enemy's ECM rating is higher than our sensor power rating. */
+	if (ecmPower > senPower)
+	{
+		range = range * 2 / 3;
+	}
+
 	/* First see if the target is in sensor range */
 	x = (SDWORD)psViewer->x;
 	xdiff = x - (SDWORD)psTarget->x;
@@ -474,9 +478,6 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 	ray = NUM_RAYS-1 - calcDirection(psViewer->x,psViewer->y, psTarget->x,psTarget->y);
 	finalX = map_coord(psTarget->x);
 	finalY = map_coord(psTarget->y);
-
-	// don't check for any objects intersecting the ray
-	numRayObjects = 0;
 
 	// Cast a ray from the viewer to the target
 	rayCast(x,y, ray, range, rayLOSCallback);
@@ -570,6 +571,11 @@ void processVisibility(BASE_OBJECT *psObj)
 			psDroid->ECMMod = ecmPoints;
 			maxPower = psDroid->ECMMod;
 		}
+		// innate cyborg bonus
+		if (cyborgDroid((DROID*)psObj))
+		{
+			psDroid->ECMMod += 500;
+		}
 		break;
 	case OBJ_STRUCTURE:
 		psBuilding = (STRUCTURE *)psObj;
@@ -606,7 +612,6 @@ void processVisibility(BASE_OBJECT *psObj)
 	{
 		memcpy(currVis, prevVis, sizeof(BOOL) * MAX_PLAYERS);
 	}
-
 
 	// get all the objects from the grid the droid is in
 	gridStartIterate((SDWORD)psObj->x, (SDWORD)psObj->y);
@@ -728,7 +733,6 @@ void processVisibility(BASE_OBJECT *psObj)
 	if (psObj->type == OBJ_STRUCTURE && !prevVis[selectedPlayer] && psObj->visible[selectedPlayer])
 	{
 		setStructTileDraw((STRUCTURE *)psObj);
-
 	}
 
 	/* Make sure all tiles under a feature/structure become visible when you see it */
