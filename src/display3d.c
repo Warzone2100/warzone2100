@@ -627,6 +627,8 @@ static void drawTiles(iView *camera, iView *player)
 		/* Go through the x's */
 		for (j = 0; j < (SDWORD)visibleXTiles+1; j++)
 		{
+			Vector2i screen;
+
 			tileScreenInfo[i][j].pos.x = world_coord(j - terrainMidX);
 			tileScreenInfo[i][j].pos.z = world_coord(terrainMidY - i);
 
@@ -757,6 +759,7 @@ static void drawTiles(iView *camera, iView *player)
 				{
 					// If it's the main water tile then bring it back up because it was pushed down for the river bed calc.
 					int tmp_y = tileScreenInfo[i][j].pos.y;
+					Vector2i water;
 
 					if (PushedDown)
 					{
@@ -764,7 +767,14 @@ static void drawTiles(iView *camera, iView *player)
 					}
 
 					// Transform it into the wx,wy mesh members.
-					tileScreenInfo[i][j].water.z = pie_RotateProject(&tileScreenInfo[i][j].pos, (Vector2i*)&tileScreenInfo[i][j].water);
+
+					// hack since tileScreenInfo[i][j].water is Vector3i and pie_RotateProject takes Vector2i as 2nd param
+					water.x = tileScreenInfo[i][j].water.x;
+					water.y = tileScreenInfo[i][j].water.y;
+					tileScreenInfo[i][j].water.z = pie_RotateProject(&tileScreenInfo[i][j].pos, &water);
+					tileScreenInfo[i][j].water.x = water.x;
+					tileScreenInfo[i][j].water.y = water.y;
+
 					tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].pos.y;
 
 					// Calc the light for modified y coord and ignore the specular component
@@ -780,7 +790,12 @@ static void drawTiles(iView *camera, iView *player)
 					tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].pos.y;
 				}
 			}
-			tileScreenInfo[i][j].screen.z = pie_RotateProject(&tileScreenInfo[i][j].pos, (Vector2i*)&tileScreenInfo[i][j].screen);
+			// hack since tileScreenInfo[i][j].screen is Vector3i and pie_RotateProject takes Vector2i as 2nd param
+			screen.x = tileScreenInfo[i][j].screen.x;
+			screen.y = tileScreenInfo[i][j].screen.y;
+			tileScreenInfo[i][j].screen.z = pie_RotateProject(&tileScreenInfo[i][j].pos, &screen);
+			tileScreenInfo[i][j].screen.x = screen.x;
+			tileScreenInfo[i][j].screen.y = screen.y;
 		}
 	}
 
