@@ -66,14 +66,11 @@ extern char last_called_script_event[MAX_EVENT_NAME_LEN];
 
 /*!
  * Compile time assert
+ * Not to be used in global context!
  * \param expr Expression to evaluate
  */
 #define STATIC_ASSERT( expr ) \
-	WZ_DECL_UNUSED extern char MKID(static_assert_, __LINE__) [ (expr) ? 1 : -1 ]
-
-// Helper macro for STATIC_ASSERT
-#define MKID(a, b) MKID_(a, b)
-#define MKID_(a, b) a ## b
+	do { enum { assert_static__ = 1/(expr) }; } while(0)
 
 
 /***
