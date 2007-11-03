@@ -138,7 +138,7 @@ static void preprocessTiles(void);
 static BOOL	renderWallSection(STRUCTURE *psStructure);
 static void	drawDragBox(void);
 static void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR);
-static void	flipsAndRots(int texture);
+static void	flipsAndRots(UDWORD tileNumber, int i, int j);
 static void	displayTerrain(void);
 static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDWORD direction);
 static void	drawTiles(iView *camera, iView *player);
@@ -212,9 +212,6 @@ TERRAIN_VERTEX tileScreenInfo[LAND_YGRD][LAND_XGRD];
 
 /* Stores the tilepointers for rendered tiles */
 static TILE_BUCKET tileIJ[LAND_YGRD][LAND_XGRD];
-
-/* Points for flipping the texture around if the tile is flipped or rotated */
-static Vector2i sP1, sP2, sP3, sP4;
 
 /* Records the present X and Y values for the current mouse tile (in tiles */
 SDWORD mouseTileX, mouseTileY;
@@ -990,12 +987,19 @@ void disp3d_getView(iView *newView)
 
 /* John's routine - deals with flipping around the vertex ordering for source textures
 when flips and rotations are being done */
-static void flipsAndRots(int texture)
+static void flipsAndRots(UDWORD tileNumber, int i, int j)
 {
+	/* Points for flipping the texture around if the tile is flipped or rotated */
+	Vector2i sP1, sP2, sP3, sP4;
+
 	/* Used to calculate texture coordinates, which are 0-255 in value */
 	const UDWORD xMult = (256 / (PAGE_WIDTH / TILE_WIDTH));
 	const UDWORD yMult = (256 / (PAGE_HEIGHT / TILE_HEIGHT));
 	Vector2i sPTemp;
+
+	/* unmask proper values from compressed data */
+	int texture = tileNumber & ~TILE_NUMMASK;
+	int tile = tileNumber & TILE_NUMMASK;
 
 	/* Store the source rect as four points */
 	sP1.x = 1;
@@ -1052,6 +1056,18 @@ static void flipsAndRots(int texture)
 			sP4 = sPTemp;
 			break;
 	}
+
+	tileScreenInfo[i + 0][j + 0].u = tileTexInfo[tile].uOffset + sP1.x;
+	tileScreenInfo[i + 0][j + 0].v = tileTexInfo[tile].vOffset + sP1.y;
+
+	tileScreenInfo[i + 0][j + 1].u = tileTexInfo[tile].uOffset + sP2.x;
+	tileScreenInfo[i + 0][j + 1].v = tileTexInfo[tile].vOffset + sP2.y;
+
+	tileScreenInfo[i + 1][j + 1].u = tileTexInfo[tile].uOffset + sP3.x;
+	tileScreenInfo[i + 1][j + 1].v = tileTexInfo[tile].vOffset + sP3.y;
+
+	tileScreenInfo[i + 1][j + 0].u = tileTexInfo[tile].uOffset + sP4.x;
+	tileScreenInfo[i + 1][j + 0].v = tileTexInfo[tile].vOffset + sP4.y;
 }
 
 
@@ -4190,19 +4206,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	pie_SetTexturePage(tileTexInfo[tileNumber & TILE_NUMMASK].texPage);
 
 	/* Check for rotations and flips - this sets up the coordinates for texturing */
-	flipsAndRots(tileNumber & ~TILE_NUMMASK);
-
-	tileScreenInfo[i+0][j+0].u = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + sP1.x;
-	tileScreenInfo[i+0][j+0].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + sP1.y;
-
-	tileScreenInfo[i+0][j+1].u = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + sP2.x;
-	tileScreenInfo[i+0][j+1].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + sP2.y;
-
-	tileScreenInfo[i+1][j+1].u = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + sP3.x;
-	tileScreenInfo[i+1][j+1].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + sP3.y;
-
-	tileScreenInfo[i+1][j+0].u = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + sP4.x;
-	tileScreenInfo[i+1][j+0].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + sP4.y;
+	flipsAndRots(tileNumber, i, j);
 
 	/* The first triangle */
 	vertices[0] = tileScreenInfo[i + 0][j + 0];
