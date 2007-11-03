@@ -242,8 +242,6 @@ static Vector3f alteredPoints[iV_IMD_MAX_POINTS];
 
 //number of tiles visible
 // FIXME This should become dynamic! (A function of resolution, angle and zoom maybe.)
-/*const UDWORD	visibleXTiles = VISIBLE_XTILES;
-const UDWORD	visibleYTiles = VISIBLE_YTILES;*/
 const Vector2i visibleTiles = { VISIBLE_XTILES, VISIBLE_YTILES };
 
 UDWORD	terrainMidX;
