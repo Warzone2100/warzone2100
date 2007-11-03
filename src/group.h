@@ -43,6 +43,7 @@ typedef struct _droid_group
 	DROID		*psList;			// list of droids in the group
 	DROID		*psCommander;		// the command droid of a command group
 	RUN_DATA	sRunData;			// where the group should retreat to
+	struct _droid_group *psNext, *psPrev;	// keep linked to destroy all (a workaround hack)
 } DROID_GROUP;
 
 // initialise the group system

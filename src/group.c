@@ -32,6 +32,9 @@
 
 #include "multiplay.h"
 
+static DROID_GROUP *firstGroup = NULL;
+static BOOL grpInitialized = FALSE;
+
 // sizes for the group heap
 #define GRP_HEAP_INIT	45
 #define GRP_HEAP_EXT	15
@@ -39,39 +42,67 @@
 // initialise the group system
 BOOL grpInitialise(void)
 {
+	firstGroup = NULL;
+	grpInitialized = TRUE;
 	return TRUE;
 }
-
 
 // shutdown the group system
 void grpShutDown(void)
 {
-}
+	/* Since we are not very diligent removing groups after we have
+	 * created them; we need this hack to remove them on level end. */
+	DROID_GROUP *iter = firstGroup, *psDel;
 
+	while (iter != NULL)
+	{
+		psDel = iter;
+		iter = iter->psNext;
+		free(psDel);
+	}
+	firstGroup = NULL;
+	grpInitialized = FALSE;
+}
 
 // create a new group
 BOOL grpCreate(DROID_GROUP	**ppsGroup)
 {
-	*ppsGroup = malloc(sizeof(DROID_GROUP));
+	ASSERT(grpInitialized, "Group code not initialized yet");
+	*ppsGroup = calloc(1, sizeof(DROID_GROUP));
 	if (*ppsGroup == NULL)
 	{
 		debug(LOG_ERROR, "grpCreate: Out of memory");
 		return FALSE;
 	}
 
+	// Add node to beginning of list
+	if (firstGroup != NULL)
+	{
+		(*ppsGroup)->psNext = firstGroup;
+		(*ppsGroup)->psPrev = NULL;
+		firstGroup->psPrev = *ppsGroup;
+		firstGroup = *ppsGroup;
+	}
+	else
+	{
+		firstGroup = *ppsGroup;
+		(*ppsGroup)->psPrev = NULL;
+		(*ppsGroup)->psNext = NULL;
+	}
+
 	(*ppsGroup)->type = GT_NORMAL;
 	(*ppsGroup)->refCount = 0;
 	(*ppsGroup)->psList = NULL;
 	(*ppsGroup)->psCommander = NULL;
-	memset(&(*ppsGroup)->sRunData, 0, sizeof(RUN_DATA));
 
 	return TRUE;
 }
 
-
 // add a droid to a group
 void grpJoin(DROID_GROUP *psGroup, DROID *psDroid)
 {
+	ASSERT(grpInitialized, "Group code not initialized yet");
+
 	psGroup->refCount += 1;
 
 	ASSERT( psGroup != NULL,
@@ -117,7 +148,6 @@ void grpJoin(DROID_GROUP *psGroup, DROID *psDroid)
 	}
 }
 
-
 // add a droid to a group at the end of the list
 void grpJoinEnd(DROID_GROUP *psGroup, DROID *psDroid)
 {
@@ -125,6 +155,7 @@ void grpJoinEnd(DROID_GROUP *psGroup, DROID *psDroid)
 
 	psGroup->refCount += 1;
 
+	ASSERT(grpInitialized, "Group code not initialized yet");
 	ASSERT( psGroup != NULL,
 		"grpJoin: invalid group pointer" );
 
@@ -172,22 +203,20 @@ void grpJoinEnd(DROID_GROUP *psGroup, DROID *psDroid)
 	}
 }
 
-
 // remove a droid from a group
 void grpLeave(DROID_GROUP *psGroup, DROID *psDroid)
 {
 	DROID	*psPrev, *psCurr;
 
+	ASSERT(grpInitialized, "Group code not initialized yet");
 	ASSERT( psGroup != NULL,
 		"grpLeave: invalid group pointer" );
 
-	if (   (psDroid != NULL )
-		&& (psDroid->psGroup != psGroup) )
+	if (psDroid != NULL && psDroid->psGroup != psGroup)
 	{
 		ASSERT( FALSE, "grpLeave: droid group does not match" );
 		return;
 	}
-
 
 	psGroup->refCount -= 1;
 
@@ -240,6 +269,18 @@ void grpLeave(DROID_GROUP *psGroup, DROID *psDroid)
 	// free the group structure if necessary
 	if (psGroup->refCount <= 0)
 	{
+		if (firstGroup == psGroup)
+		{
+			firstGroup = psGroup->psNext;
+		}
+		if (psGroup->psNext)
+		{
+			psGroup->psNext->psPrev = psGroup->psPrev;
+		}
+		if (psGroup->psPrev)
+		{
+			psGroup->psPrev->psNext = psGroup->psNext;
+		}
 		free(psGroup);
 	}
 }
@@ -250,6 +291,7 @@ SDWORD grpNumMembers(DROID_GROUP *psGroup)
 	DROID	*psCurr;
 	SDWORD	num;
 
+	ASSERT(grpInitialized, "Group code not initialized yet");
 	ASSERT( psGroup != NULL,
 		"grpNumMembers: invalid droid group" );
 
@@ -262,12 +304,12 @@ SDWORD grpNumMembers(DROID_GROUP *psGroup)
 	return num;
 }
 
-
 // remove all droids from a group
 void grpReset(DROID_GROUP *psGroup)
 {
 	DROID	*psCurr, *psNext;
 
+	ASSERT(grpInitialized, "Group code not initialized yet");
 	ASSERT( psGroup != NULL,
 		"grpReset: invalid droid group" );
 
@@ -279,36 +321,11 @@ void grpReset(DROID_GROUP *psGroup)
 }
 
 /* Give a group an order */
-//void orderGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
-//{
-//	DROID *psCurr;
-//	BOOL usedgrouporder=FALSE;
-
-//	ASSERT( psGroup != NULL,
-//		"orderGroupBase: invalid droid group" );
-//
-//	if (bMultiPlayer && SendGroupOrder(	psGroup, psData->x,	psData->y,	psData->psObj) )
-//	{	// turn off multiplay messages,since we've send a group one instead.
-//		bMultiPlayer =FALSE;
-//		usedgrouporder = TRUE;
-//	}
-//
-//	for (psCurr = psGroup->psList; psCurr; psCurr=psCurr->psGrpNext)
-//	{
-//		orderDroidBase(psCurr, psData);
-//	}
-
-//	if( usedgrouporder)
-//	{
-//		bMultiPlayer = TRUE;
-//	}
-//}
-
-/* Give a group an order */
 void orderGroup(DROID_GROUP *psGroup, DROID_ORDER order)
 {
 	DROID *psCurr;
 
+	ASSERT(grpInitialized, "Group code not initialized yet");
 	ASSERT( psGroup != NULL,
 		"orderGroup: invalid droid group" );
 
@@ -323,6 +340,7 @@ void orderGroupLoc(DROID_GROUP *psGroup, DROID_ORDER order, UDWORD x, UDWORD y)
 {
 	DROID	*psCurr;
 
+	ASSERT(grpInitialized, "Group code not initialized yet");
 	ASSERT( psGroup != NULL,
 		"orderGroupLoc: invalid droid group" );
 
@@ -346,7 +364,6 @@ void orderGroupLoc(DROID_GROUP *psGroup, DROID_ORDER order, UDWORD x, UDWORD y)
 		}
 	}
 }
-
 
 /* Give a group of droids an order */
 void orderGroupObj(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj)
@@ -383,6 +400,7 @@ void grpSetSecondary(DROID_GROUP *psGroup, SECONDARY_ORDER sec, SECONDARY_STATE 
 {
 	DROID	*psCurr;
 
+	ASSERT(grpInitialized, "Group code not initialized yet");
 	ASSERT( psGroup != NULL,
 		"grpSetSecondary: invalid droid group" );
 
