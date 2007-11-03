@@ -1197,7 +1197,7 @@ void audio_ResumeAll( void )
 void audio_StopAll( void )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	AUDIO_SAMPLE	*psSample, *psSampleTemp;
+	AUDIO_SAMPLE* psSample;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
@@ -1210,23 +1210,40 @@ void audio_StopAll( void )
 	g_bStopAll = TRUE;
 
 	//
-	// * empty list - audio_Update will free samples because callbacks have to come in
-	// * first
+	// * empty list - audio_Update will free samples because callbacks have to come in first
 	//
-	psSample = g_psSampleList;
-	while ( psSample != NULL )
+	for (psSample = g_psSampleList; psSample != NULL; psSample = psSample->psNext)
 	{
-		sound_StopTrack( psSample );
-		psSample = psSample->psNext;
+		// Stop this sound sample
+		sound_StopTrack(psSample);
+
+		// HACK:
+		// Make sure to set psObj to NULL, since sometimes it becomes
+		// invalidated, i.e. dangling, before audio_Update() gets the
+		// chance to clean it up.
+		//
+		// Meaning at this place in the code audio_ObjectDead(psObj)
+		// would indicate that psObj is still valid and will remain
+		// such. While in reality, before audio_Update() can get the
+		// chance to check again, this pointer will have become
+		// dangling.
+		//
+		// NOTE: This would always happen when audio_StopAll() had been
+		// invoked by stageThreeShutDown().
+		psSample->psObj = NULL;
 	}
 
 	// empty sample queue
 	psSample = g_psSampleQueue;
 	while ( psSample != NULL )
 	{
-		psSampleTemp = psSample->psNext;
-		HEAP_FREE( g_psSampleHeap, psSample );
-		psSample = psSampleTemp;
+		AUDIO_SAMPLE* psSampleTemp = psSample;
+
+		// Advance the sample iterator (before invalidating it)
+		psSample = psSample->psNext;
+
+		// Destroy the sample
+		HEAP_FREE(g_psSampleHeap, psSampleTemp);
 	}
 
 	g_psSampleQueue = NULL;
