@@ -2122,7 +2122,7 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 
 	mapX = map_coord(psDroid->x);
 	mapY = map_coord(psDroid->y);
-	speed = (SDWORD) calcDroidSpeed(psDroid->baseSpeed, TERRAIN_TYPE(mapTile(mapX,mapY)),
+	speed = (SDWORD) calcDroidSpeed(psDroid->baseSpeed, terrainType(mapTile(mapX,mapY)),
 							  psDroid->asBits[COMP_PROPULSION].nStat);
 
 /*	if ( vtolDroid(psDroid) &&
@@ -3797,7 +3797,7 @@ void moveUpdateDroid(DROID *psDroid)
 //		"moveUpdateUnit (end): unit at (0,0)" );
 
 	/* If it's sitting in water then it's got to go with the flow! */
-	if(TERRAIN_TYPE(mapTile(psDroid->x/TILE_UNITS,psDroid->y/TILE_UNITS)) == TER_WATER)
+	if (terrainType(mapTile(psDroid->x/TILE_UNITS,psDroid->y/TILE_UNITS)) == TER_WATER)
 	{
 		updateDroidOrientation(psDroid);
 	}

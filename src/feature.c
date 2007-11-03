@@ -712,22 +712,20 @@ void destroyFeature(FEATURE *psDel)
 					{
 						MAPTILE *psTile = mapTile(mapX+width,mapY+breadth);
 						// stops water texture chnaging for underwateer festures
-					 	if(TERRAIN_TYPE(psTile) != TER_WATER)
+					 	if (terrainType(psTile) != TER_WATER)
 						{
-							if(TERRAIN_TYPE(psTile) != TER_CLIFFFACE)
+							if (terrainType(psTile) != TER_CLIFFFACE)
 							{
 						   		/* Clear feature bits */
 								psTile->psObject = NULL;
-								texture = (psTile->texture & (~TILE_NUMMASK));
-								texture |= DRIVE_OVER_RUBBLE_TILE;//getRubbleTileNum();
+								texture = TileNumber_texture(psTile->texture) | DRIVE_OVER_RUBBLE_TILE;
 								psTile->texture = (UWORD)texture;
 							}
 							else
 							{
 							   /* This remains a blocking tile */
 								psTile->psObject = NULL;
-								texture = (psTile->texture & (~TILE_NUMMASK));
-								texture |= NO_DRIVE_OVER_RUBBLE_TILE;//getRubbleTileNum();
+								texture = TileNumber_texture(psTile->texture) | NO_DRIVE_OVER_RUBBLE_TILE;
 								psTile->texture = (UWORD)texture;
 
 							}

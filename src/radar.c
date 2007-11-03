@@ -383,8 +383,8 @@ static void CalcRadarScroll(UWORD boxSizeH,UWORD boxSizeV)
 	}
 
 
-	BorderX = (RadVisWidth - visibleXTiles*boxSizeH) / 2;
-	BorderY = (RadVisHeight - visibleYTiles*boxSizeV) / 2;
+	BorderX = (RadVisWidth - visibleTiles.x*boxSizeH) / 2;
+	BorderY = (RadVisHeight - visibleTiles.y*boxSizeV) / 2;
 	BorderX /= boxSizeH;
 	BorderY /= boxSizeV;
 
@@ -407,7 +407,7 @@ static void CalcRadarScroll(UWORD boxSizeH,UWORD boxSizeV)
 		RadarScrollX += viewX-BorderX;
 	}
 
-	viewX += visibleXTiles;
+	viewX += visibleTiles.x;
 	if(viewX > (RadVisWidth/boxSizeH)-BorderX) {
 		RadarScrollX += viewX-(RadVisWidth/boxSizeH)+BorderX;
 	}
@@ -416,7 +416,7 @@ static void CalcRadarScroll(UWORD boxSizeH,UWORD boxSizeV)
 		RadarScrollY += viewY-BorderY;
 	}
 
-	viewY += visibleYTiles;
+	viewY += visibleTiles.y;
 	if(viewY > (RadVisHeight/boxSizeV)-BorderY) {
 		RadarScrollY += viewY-(RadVisHeight/boxSizeV)+BorderY;
 	}
@@ -604,7 +604,7 @@ static void DrawRadarTiles(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD box
 						case RADAR_MODE_TERRAIN:
 							{
 								//draw radar terrain on/off feature
-								int i = tileColours[(WTile->texture & TILE_NUMMASK)] * iV_PALETTE_SHADE_LEVEL;
+								int i = tileColours[TileNumber_tile(WTile->texture)] * iV_PALETTE_SHADE_LEVEL;
 								int j = WTile->illumination >> ShadeDiv;
 								*WScr = iV_SHADE_TABLE[i + j];
 							}
@@ -641,7 +641,7 @@ static void DrawRadarTiles(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD box
 				/* Only draw if discovered or in GOD mode */
 				if ( TEST_TILE_VISIBLE(selectedPlayer,WTile) || godMode)
 				{
-					UBYTE Val = tileColours[(WTile->texture & TILE_NUMMASK)];
+					UBYTE Val = tileColours[TileNumber_tile(WTile->texture)];
 					Val = iV_SHADE_TABLE[(Val * iV_PALETTE_SHADE_LEVEL+
 											(WTile->illumination >> ShadeDiv))];
 
@@ -1006,8 +1006,8 @@ static void RotateVector2D(Vector3i *Vector, Vector3i *TVector, Vector3i *Pos, i
 //
 void GetRadarPlayerPos(UDWORD *XPos,UDWORD *YPos)
 {
-	*XPos = player.p.x + (visibleXTiles/2)*TILE_UNITS;
-	*YPos = player.p.z + (visibleYTiles/2)*TILE_UNITS;
+	*XPos = player.p.x + (visibleTiles.x/2)*TILE_UNITS;
+	*YPos = player.p.z + (visibleTiles.y/2)*TILE_UNITS;
 }
 
 static SDWORD getDistanceAdjust( void )
@@ -1051,10 +1051,10 @@ static void drawViewingWindow( UDWORD x, UDWORD y, UDWORD boxSizeH, UDWORD boxSi
 	UDWORD	colour = 0;
 	UDWORD	camNumber;
 
-	shortX = ((visibleXTiles/4)-(dif/6)) * boxSizeH;
-	longX = ((visibleXTiles/2)-(dif/4)) * boxSizeH;
-	yDropVar = ((visibleYTiles/2)-(dif2/3)) * boxSizeV;
-	yDrop = ((visibleYTiles/2)-dif2/3) * boxSizeV;
+	shortX = ((visibleTiles.x/4)-(dif/6)) * boxSizeH;
+	longX = ((visibleTiles.x/2)-(dif/4)) * boxSizeH;
+	yDropVar = ((visibleTiles.y/2)-(dif2/3)) * boxSizeV;
+	yDrop = ((visibleTiles.y/2)-dif2/3) * boxSizeV;
 
  	v[0].x = longX; // FIXME -unsigned will remain unsigned!!!
 	v[0].y = -yDropVar;
@@ -1068,8 +1068,8 @@ static void drawViewingWindow( UDWORD x, UDWORD y, UDWORD boxSizeH, UDWORD boxSi
 	v[3].x = -shortX;
 	v[3].y = yDrop;
 
-	centre.x = RADTLX+x+(visibleXTiles*boxSizeH)/2;
-	centre.y = RADTLY+y+(visibleYTiles*boxSizeV)/2;
+	centre.x = RADTLX+x+(visibleTiles.x*boxSizeH)/2;
+	centre.y = RADTLY+y+(visibleTiles.y*boxSizeV)/2;
 
 	RotateVector2D(v,tv,&centre,player.r.y,4);
   //	iV_Line(tv[0].x,tv[0].y,tv[1].x,tv[1].y,colWhite);

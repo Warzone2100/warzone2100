@@ -138,7 +138,7 @@ static void preprocessTiles(void);
 static BOOL	renderWallSection(STRUCTURE *psStructure);
 static void	drawDragBox(void);
 static void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR);
-static void	flipsAndRots(UDWORD tileNumber, int i, int j);
+static void	flipsAndRots(unsigned int tileNumber, unsigned int i, unsigned int j);
 static void	displayTerrain(void);
 static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDWORD direction);
 static void	drawTiles(iView *camera, iView *player);
@@ -242,8 +242,9 @@ static Vector3f alteredPoints[iV_IMD_MAX_POINTS];
 
 //number of tiles visible
 // FIXME This should become dynamic! (A function of resolution, angle and zoom maybe.)
-const UDWORD	visibleXTiles = VISIBLE_XTILES;
-const UDWORD	visibleYTiles = VISIBLE_YTILES;
+/*const UDWORD	visibleXTiles = VISIBLE_XTILES;
+const UDWORD	visibleYTiles = VISIBLE_YTILES;*/
+const Vector2i visibleTiles = { VISIBLE_XTILES, VISIBLE_YTILES };
 
 UDWORD	terrainMidX;
 UDWORD	terrainMidY;
@@ -333,8 +334,8 @@ void draw3DScene( void )
 	BOOL bPlayerHasHQ = FALSE;
 
 	// the world centre - used for decaying lighting etc
-	gridCentreX = player.p.x + world_coord(visibleXTiles / 2);
-	gridCentreZ = player.p.z + world_coord(visibleYTiles / 2);
+	gridCentreX = player.p.x + world_coord(visibleTiles.x / 2);
+	gridCentreZ = player.p.z + world_coord(visibleTiles.y / 2);
 
 	camera.p.z = distance;
 	camera.p.y = 0;
@@ -575,8 +576,8 @@ static void drawTiles(iView *camera, iView *player)
 	/* Do boundary and extent checking                                  */
 	/* ---------------------------------------------------------------- */
 	/* Get the mid point of the grid */
-	terrainMidX = visibleXTiles/2;
-	terrainMidY = visibleYTiles/2;
+	terrainMidX = visibleTiles.x/2;
+	terrainMidY = visibleTiles.y/2;
 
 	/* Find our position in tile coordinates */
 	playerXTile = map_coord(player->p.x);
@@ -622,10 +623,10 @@ static void drawTiles(iView *camera, iView *player)
 		of the tiles in the grid
 	*/
 	averageCentreTerrainHeight = 0;
-	for (i = 0; i < visibleYTiles+1; i++)
+	for (i = 0; i < visibleTiles.y+1; i++)
 	{
 		/* Go through the x's */
-		for (j = 0; j < (SDWORD)visibleXTiles+1; j++)
+		for (j = 0; j < (SDWORD)visibleTiles.x+1; j++)
 		{
 			Vector2i screen;
 
@@ -682,7 +683,7 @@ static void drawTiles(iView *camera, iView *player)
 
 				/* Get a pointer to the tile at this location */
 				psTile = mapTile(playerXTile + j, playerZTile + i);
-				if (TERRAIN_TYPE(psTile) == TER_WATER)
+				if (terrainType(psTile) == TER_WATER)
 				{
 					tileScreenInfo[i][j].bWater = TRUE;
 					bWaterTile = TRUE;
@@ -740,7 +741,7 @@ static void drawTiles(iView *camera, iView *player)
 				}
 
 				// If it's the main water tile (has water texture) then..
-				if ( (psTile->texture & TILE_NUMMASK) == WATER_TILE && !bEdgeTile )
+				if ( TileNumber_tile(psTile->texture) == WATER_TILE && !bEdgeTile )
 				{
 					// Push the terrain down for the river bed.
 					PushedDown = TRUE;
@@ -826,9 +827,9 @@ static void drawTiles(iView *camera, iView *player)
 	/* ---------------------------------------------------------------- */
 	/* Draw all the tiles or add them to bucket sort                     */
 	/* ---------------------------------------------------------------- */
-	for (i = 0; i < MIN(visibleYTiles, mapHeight); i++)
+	for (i = 0; i < MIN(visibleTiles.y, mapHeight); i++)
 	{
-		for (j = 0; j < MIN(visibleXTiles, mapWidth); j++)
+		for (j = 0; j < MIN(visibleTiles.x, mapWidth); j++)
 		{
 			if (tileScreenInfo[i][j].drawInfo == TRUE)
 			{
@@ -855,7 +856,7 @@ static void drawTiles(iView *camera, iView *player)
 					bucketAddTypeToList(RENDER_WATERTILE, &tileIJ[i][j]);
 
 					// check if we need to draw a water edge
-					if ( (mapTile(playerXTile+j, playerZTile+i)->texture & TILE_NUMMASK) != WATER_TILE )
+					if ( TileNumber_tile(mapTile(playerXTile+j, playerZTile+i)->texture) != WATER_TILE )
 					{
 						// the edge is in front of the water (which is drawn at z-index -1)
 						pie_SetDepthOffset(-2.0);
@@ -914,8 +915,8 @@ static void drawTiles(iView *camera, iView *player)
 BOOL init3DView(void)
 {
 	// the world centre - used for decaying lighting etc
-	gridCentreX = player.p.x + world_coord(visibleXTiles / 2);
-	gridCentreZ = player.p.z + world_coord(visibleYTiles / 2);
+	gridCentreX = player.p.x + world_coord(visibleTiles.x / 2);
+	gridCentreZ = player.p.z + world_coord(visibleTiles.y / 2);
 
 	edgeTile.texture = 0;
 
@@ -1002,29 +1003,26 @@ void disp3d_getView(iView *newView)
 
 /* John's routine - deals with flipping around the vertex ordering for source textures
 when flips and rotations are being done */
-static void flipsAndRots(UDWORD tileNumber, int i, int j)
+static void flipsAndRots(unsigned int tileNumber, unsigned int i, unsigned int j)
 {
-	/* Points for flipping the texture around if the tile is flipped or rotated */
-	Vector2i sP1, sP2, sP3, sP4;
+	/* unmask proper values from compressed data */
+	const unsigned short texture = TileNumber_texture(tileNumber);
+	const unsigned short tile = TileNumber_tile(tileNumber);
 
 	/* Used to calculate texture coordinates, which are 0-255 in value */
-	const UDWORD xMult = (256 / (PAGE_WIDTH / TILE_WIDTH));
-	const UDWORD yMult = (256 / (PAGE_HEIGHT / TILE_HEIGHT));
-	Vector2i sPTemp;
+	const unsigned int xMult = (256 / (PAGE_WIDTH / TILE_WIDTH));
+	const unsigned int yMult = (256 / (PAGE_HEIGHT / TILE_HEIGHT));
 
-	/* unmask proper values from compressed data */
-	int texture = tileNumber & ~TILE_NUMMASK;
-	int tile = tileNumber & TILE_NUMMASK;
-
-	/* Store the source rect as four points */
-	sP1.x = 1;
-	sP1.y = 1;
-	sP2.x = (xMult - 1);
-	sP2.y = 1;
-	sP3.x = (xMult - 1);
-	sP3.y = (yMult - 1);
-	sP4.x = 1;
-	sP4.y = (yMult - 1);
+	/*
+	 * Points for flipping the texture around if the tile is flipped or rotated
+	 * Store the source rect as four points
+	 */
+	Vector2i
+		sP1 = {1, 1},
+		sP2 = {xMult - 1, 1},
+		sP3 = {xMult - 1, yMult - 1},
+		sP4 = {1, yMult - 1},
+		sPTemp;
 
 	if (texture & TILE_XFLIP)
 	{
@@ -1089,9 +1087,9 @@ static void flipsAndRots(UDWORD tileNumber, int i, int j)
 /* Clips anything - not necessarily a droid */
 BOOL clipXY(SDWORD x, SDWORD y)
 {
-	if (x > (SDWORD)player.p.x &&  x < (SDWORD)(player.p.x+(visibleXTiles*
+	if (x > (SDWORD)player.p.x &&  x < (SDWORD)(player.p.x+(visibleTiles.x*
 		TILE_UNITS)) &&
-		y > (SDWORD)player.p.z && y < (SDWORD)(player.p.z+(visibleYTiles*TILE_UNITS)))
+		y > (SDWORD)player.p.z && y < (SDWORD)(player.p.z+(visibleTiles.y*TILE_UNITS)))
 		return(TRUE);
 	else
 		return(FALSE);
@@ -1231,8 +1229,8 @@ void	renderProjectile(PROJECTILE *psCurr)
 		iV_MatrixRotateX(imdRot2.x);
 
 		/* Spin the bullet around - remove later */
-//		centreX = player.p.x + world_coord(visibleXTiles / 2);
-//		centreZ = player.p.z + world_coord(visibleYTiles / 2);
+//		centreX = player.p.x + world_coord(visibleTiles.x / 2);
+//		centreZ = player.p.z + world_coord(visibleTiles.y / 2);
 
 		brightness = (UDWORD)lightDoFogAndIllumination(pie_MAX_BRIGHT_LEVEL,getCentreX()-psCurr->x,getCentreZ()-psCurr->y, &specular);
 		if(psStats->weaponSubClass == WSC_ROCKET || psStats->weaponSubClass == WSC_MISSILE ||
@@ -1597,8 +1595,8 @@ void setViewPos( UDWORD x, UDWORD y, WZ_DECL_UNUSED BOOL Pan )
 	SDWORD midX,midY;
 
 	/* Find centre of grid thats actually DRAWN */
-	midX = x-(visibleXTiles/2);
-	midY = y-(visibleYTiles/2);
+	midX = x-(visibleTiles.x/2);
+	midY = y-(visibleTiles.y/2);
 
 	player.p.x = midX*TILE_UNITS;
 	player.p.z = midY*TILE_UNITS;
@@ -1615,8 +1613,8 @@ void setViewPos( UDWORD x, UDWORD y, WZ_DECL_UNUSED BOOL Pan )
 
 void getPlayerPos(SDWORD *px, SDWORD *py)
 {
-	*px = player.p.x + (visibleXTiles/2)*TILE_UNITS;
-	*py = player.p.z + (visibleYTiles/2)*TILE_UNITS;
+	*px = player.p.x + (visibleTiles.x/2)*TILE_UNITS;
+	*py = player.p.z + (visibleTiles.y/2)*TILE_UNITS;
 }
 
 void setPlayerPos(SDWORD x, SDWORD y)
@@ -1629,8 +1627,8 @@ void setPlayerPos(SDWORD x, SDWORD y)
 		"setPlayerPos: position off map" );
 
 	// Find centre of grid thats actually DRAWN
-	midX = map_coord(x) - visibleXTiles / 2;
-	midY = map_coord(y) - visibleYTiles / 2;
+	midX = map_coord(x) - visibleTiles.x / 2;
+	midY = map_coord(y) - visibleTiles.y / 2;
 
 	player.p.x = midX*TILE_UNITS;
 	player.p.z = midY*TILE_UNITS;
@@ -2464,8 +2462,8 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 		/* Get it's x and y coordinates so we don't have to deref. struct later */
 		structX = psStructure->x;
 		structY = psStructure->y;
-//		centreX = ( player.p.x + world_coord(visibleXTiles / 2) );
-//		centreZ = ( player.p.z + world_coord(visibleYTiles / 2) );
+//		centreX = ( player.p.x + world_coord(visibleTiles.x / 2) );
+//		centreZ = ( player.p.z + world_coord(visibleTiles.y / 2) );
 		buildingBrightness = 200 - (100-PERCENT( psStructure->body , structureBody(psStructure)));
 
 		if(psStructure->selected)
@@ -3886,10 +3884,10 @@ static void locateMouse(void)
 	unsigned int i;
 	int nearestZ = INT_MAX;
 
-	for(i = 0; i < visibleXTiles; ++i)
+	for(i = 0; i < visibleTiles.x; ++i)
 	{
 		unsigned int j;
-		for(j = 0; j < visibleYTiles; ++j)
+		for(j = 0; j < visibleTiles.y; ++j)
 		{
 			BOOL bWaterTile = tileScreenInfo[i][j].bWater;
 			int tileZ = (bWaterTile ? tileScreenInfo[i][j].water.z : tileScreenInfo[i][j].screen.z);
@@ -3939,7 +3937,7 @@ static void renderSurroundings(void)
 	static float wind = 0.0f;
 	const float skybox_scale = 10000.0f;
 	const float height = 10.0f * TILE_UNITS;
-	const float wider  = 2.0f * (visibleXTiles * TILE_UNITS);
+	const float wider  = 2.0f * (visibleTiles.x * TILE_UNITS);
 	int left, right, front, back;
 
 	// set up matrices and textures
@@ -3964,10 +3962,10 @@ static void renderSurroundings(void)
 	rz = (player.p.z) & (TILE_UNITS-1);
 	pie_TRANSLATE(-rx, -player.p.y, rz);
 
-	left  = TILE_UNITS * MIN(visibleXTiles/2, playerXTile+visibleXTiles/2+1);
-	right = TILE_UNITS * MIN(visibleXTiles/2, mapWidth-playerXTile-visibleXTiles/2);
-	front = TILE_UNITS * MIN(visibleYTiles/2, playerZTile+visibleYTiles/2+1);
-	back  = TILE_UNITS * MIN(visibleYTiles/2, mapHeight-playerZTile-visibleYTiles/2);
+	left  = TILE_UNITS * MIN(visibleTiles.x/2, playerXTile+visibleTiles.x/2+1);
+	right = TILE_UNITS * MIN(visibleTiles.x/2, mapWidth-playerXTile-visibleTiles.x/2);
+	front = TILE_UNITS * MIN(visibleTiles.y/2, playerZTile+visibleTiles.y/2+1);
+	back  = TILE_UNITS * MIN(visibleTiles.y/2, mapHeight-playerZTile-visibleTiles.y/2);
 
 	pie_DrawFogBox(left, right, front, back, height, wider);
 
@@ -4129,7 +4127,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		psTile = mapTile(actualX, actualY);
 #if defined(SHOW_ZONES)
 		if (!fpathBlockingTile(actualX, actualY) ||
-			TERRAIN_TYPE(psTile) == TER_WATER)
+			terrainType(psTile) == TER_WATER)
 		{
 			zone = gwGetZone(actualX, actualY);
 		}
@@ -4147,7 +4145,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		return;
 	}
 
-	if ( TERRAIN_TYPE(psTile) != TER_WATER || onWaterEdge )
+	if ( terrainType(psTile) != TER_WATER || onWaterEdge )
 	{
 		// what tile texture number is it?
 		tileNumber = psTile->texture;
@@ -4218,7 +4216,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 
 	/* Get the right texture page; it is pre stored and indexed on
 	* the graphics card */
-	pie_SetTexturePage(tileTexInfo[tileNumber & TILE_NUMMASK].texPage);
+	pie_SetTexturePage(tileTexInfo[TileNumber_tile(tileNumber)].texPage);
 
 	/* Check for rotations and flips - this sets up the coordinates for texturing */
 	flipsAndRots(tileNumber, i, j);
@@ -4326,7 +4324,7 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 	}
 
 	// If it's a water tile then draw the water
-	if (TERRAIN_TYPE( mapTile(actualX, actualY) ) == TER_WATER)
+	if (terrainType( mapTile(actualX, actualY) ) == TER_WATER)
 	{
 		/* Used to calculate texture coordinates, which are 0-255 in value */
 		const unsigned int
@@ -4336,19 +4334,19 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 		TERRAIN_VERTEX vertices[3];
 
 		// Draw the main water tile.
-		pie_SetTexturePage(tileTexInfo[tileNumber & TILE_NUMMASK].texPage);
+		pie_SetTexturePage(tileTexInfo[TileNumber_tile(tileNumber)].texPage);
 
-		tileScreenInfo[i+0][j+0].u = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + 1;
-		tileScreenInfo[i+0][j+0].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset;
+		tileScreenInfo[i+0][j+0].u = tileTexInfo[TileNumber_tile(tileNumber)].uOffset + 1;
+		tileScreenInfo[i+0][j+0].v = tileTexInfo[TileNumber_tile(tileNumber)].vOffset;
 
-		tileScreenInfo[i+0][j+1].u = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + (xMult - 1);
-		tileScreenInfo[i+0][j+1].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset;
+		tileScreenInfo[i+0][j+1].u = tileTexInfo[TileNumber_tile(tileNumber)].uOffset + (xMult - 1);
+		tileScreenInfo[i+0][j+1].v = tileTexInfo[TileNumber_tile(tileNumber)].vOffset;
 
-		tileScreenInfo[i+1][j+1].u = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + (xMult - 1);
-		tileScreenInfo[i+1][j+1].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + (yMult - 1);
+		tileScreenInfo[i+1][j+1].u = tileTexInfo[TileNumber_tile(tileNumber)].uOffset + (xMult - 1);
+		tileScreenInfo[i+1][j+1].v = tileTexInfo[TileNumber_tile(tileNumber)].vOffset + (yMult - 1);
 
-		tileScreenInfo[i+1][j+0].u = tileTexInfo[tileNumber & TILE_NUMMASK].uOffset + 1;
-		tileScreenInfo[i+1][j+0].v = tileTexInfo[tileNumber & TILE_NUMMASK].vOffset + (yMult - 1);
+		tileScreenInfo[i+1][j+0].u = tileTexInfo[TileNumber_tile(tileNumber)].uOffset + 1;
+		tileScreenInfo[i+1][j+0].v = tileTexInfo[TileNumber_tile(tileNumber)].vOffset + (yMult - 1);
 
 		vertices[0] = tileScreenInfo[i + 0][j + 0];
 		vertices[0].pos.y = tileScreenInfo[i + 0][j + 0].water_height;
@@ -4391,8 +4389,8 @@ UDWORD	getSuggestedPitch( void )
 	worldAngle = (UDWORD) ((UDWORD)player.r.y/DEG_1)%360;
 	/* Now, we need to track angle too - to avoid near z clip! */
 
-	xPos = player.p.x + world_coord(visibleXTiles/2);
-	yPos = player.p.z + world_coord(visibleYTiles/2);
+	xPos = player.p.x + world_coord(visibleTiles.x/2);
+	yPos = player.p.z + world_coord(visibleTiles.y/2);
 // 	getBestPitchToEdgeOfGrid(xPos,yPos,360-worldAngle,&pitch);
 	getPitchToHighestPoint(xPos, yPos, 360-worldAngle, 0, &pitch);
 

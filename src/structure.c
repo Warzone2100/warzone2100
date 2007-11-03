@@ -4324,8 +4324,8 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 					for (j = site.yTL; j <= site.yBR && valid; j++)
 					{
 						psTile = mapTile(i,j);
-						if ((TERRAIN_TYPE(psTile) == TER_WATER) ||
-							(TERRAIN_TYPE(psTile) == TER_CLIFFFACE) )
+						if ((terrainType(psTile) == TER_WATER) ||
+							(terrainType(psTile) == TER_CLIFFFACE) )
 						{
 							valid = FALSE;
 						}

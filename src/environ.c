@@ -106,7 +106,7 @@ MAPTILE	*psTile;
 		{
 			index = (i*mapWidth) + j;
 			psTile = mapTile(j,i);
-			if(TERRAIN_TYPE(psTile) == TER_WATER)
+			if(terrainType(psTile) == TER_WATER)
 			{
 				bWaterOnMap = TRUE;
 				pEnvironData[index].type = ET_WATER;
@@ -164,8 +164,8 @@ void	environUpdate( void )
 	}
 
 	/* Find bottom right */
-	endX = startX + visibleXTiles;
-	endY = startY + visibleYTiles;
+	endX = startX + visibleTiles.x;
+	endY = startY + visibleTiles.y;
 
 	/* Clip, as we may be off map */
 	if(endX>mapWidth-1) endX = mapWidth-1;

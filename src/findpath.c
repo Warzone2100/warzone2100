@@ -62,7 +62,7 @@ BOOL blockingTile(UDWORD x, UDWORD y, UDWORD mask)
 /*	if (!(TERRAIN_TYPE(psTile) & mask) ||
 		(!(mask & TER_OBJECT) && TILE_OCCUPIED(psTile)))*/
 	if (mask == 0 &&// TILE_OCCUPIED(psTile))
-		(TILE_OCCUPIED(psTile) || TERRAIN_TYPE(psTile) == TER_CLIFFFACE))
+		(TILE_OCCUPIED(psTile) || terrainType(psTile) == TER_CLIFFFACE))
 	{
 		return TRUE;
 	}
@@ -527,7 +527,7 @@ BOOL AALineOfSight (SDWORD StartX, SDWORD StartY, SDWORD EndX, SDWORD EndY, UBYT
 //			!(aMapLinePoints[i].psTile->type & Mask))
 //			!(TERRAIN_TYPE(aMapLinePoints[i].psTile) & Mask))
 		if (TILE_OCCUPIED(aMapLinePoints[i].psTile) ||
-			TERRAIN_TYPE(aMapLinePoints[i].psTile) == TER_CLIFFFACE)
+			terrainType(aMapLinePoints[i].psTile) == TER_CLIFFFACE)
 		{
 			los = FALSE;
 			break;

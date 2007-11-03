@@ -477,7 +477,7 @@ void	kf_TileInfo(void)
 	MAPTILE	*psTile = mapTile(mouseTileX, mouseTileY);
 
 	debug(LOG_ERROR, "Tile position=(%d, %d) Terrain=%hhu Texture=%u Height=%hhu Illumination=%hhu",
-	      mouseTileX, mouseTileY, TERRAIN_TYPE(psTile), psTile->texture & TILE_NUMMASK, psTile->height,
+	      mouseTileX, mouseTileY, terrainType(psTile), TileNumber_tile(psTile->texture), psTile->height,
 	      psTile->illumination);
 	addConsoleMessage("Tile info dumped into log", DEFAULT_JUSTIFY);
 }
@@ -1365,8 +1365,8 @@ SDWORD	xJump,yJump;
 	psStruct = getRExtractor(psOldRE);
 	if(psStruct)
 	{
-		xJump = (psStruct->x - ((visibleXTiles/2)*TILE_UNITS));
-		yJump = (psStruct->y - ((visibleYTiles/2)*TILE_UNITS));
+		xJump = (psStruct->x - ((visibleTiles.x/2)*TILE_UNITS));
+		yJump = (psStruct->y - ((visibleTiles.y/2)*TILE_UNITS));
 		player.p.x = xJump;
 		player.p.z = yJump;
 		player.r.y = 0; // face north
@@ -2244,8 +2244,8 @@ UDWORD		xJump = 0, yJump = 0;
 		if(psStruct->pStructureType->type == REF_HQ)
 		{
 			bGotHQ = TRUE;
-			xJump = (psStruct->x - ((visibleXTiles/2)*TILE_UNITS));
-			yJump = (psStruct->y - ((visibleYTiles/2)*TILE_UNITS));
+			xJump = (psStruct->x - ((visibleTiles.x/2)*TILE_UNITS));
+			yJump = (psStruct->y - ((visibleTiles.y/2)*TILE_UNITS));
 		}
 	}
 

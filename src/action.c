@@ -3131,8 +3131,8 @@ static BOOL vtolLandingTile(SDWORD x, SDWORD y)
 
 	if ((psTile->tileInfoBits & BITS_FPATHBLOCK) ||
 		(TILE_OCCUPIED(psTile)) ||
-		(TERRAIN_TYPE(psTile) == TER_CLIFFFACE) ||
-		(TERRAIN_TYPE(psTile) == TER_WATER))
+		(terrainType(psTile) == TER_CLIFFFACE) ||
+		(terrainType(psTile) == TER_WATER))
 	{
 		return FALSE;
 	}

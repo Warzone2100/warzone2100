@@ -1888,7 +1888,7 @@ static BOOL defenseLocation(BOOL variantB)
 				{
 					count++;
 				}
-				if(TERRAIN_TYPE(mapTile(gX,gY)) == TER_WATER)
+				if (terrainType(mapTile(gX,gY)) == TER_WATER)
 				{
 					noWater = FALSE;
 				}
@@ -1908,7 +1908,7 @@ static BOOL defenseLocation(BOOL variantB)
 				{
 					count++;
 				}
-				if(TERRAIN_TYPE(mapTile(gX,gY)) == TER_WATER)
+				if (terrainType(mapTile(gX,gY)) == TER_WATER)
 				{
 					noWater = FALSE;
 				}

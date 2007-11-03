@@ -1036,7 +1036,7 @@ void processMouseClickInput(void)
 				selection = SC_DROID_INDIRECT;
 			}
 			else if (item == MT_TERRAIN
-					&& TERRAIN_TYPE(mapTile(mouseTileX,mouseTileY)) == TER_CLIFFFACE)
+					&& terrainType(mapTile(mouseTileX,mouseTileY)) == TER_CLIFFFACE)
 			{
 				item = MT_BLOCKING;
 			}
@@ -1341,10 +1341,10 @@ BOOL CheckInScrollLimits(SDWORD *xPos,SDWORD *zPos)
 	{
 		maxY = ((mapHeight-1-(visibleYTiles/2)) * TILE_UNITS);
 	}*/
-	minX = (scrollMinX - (visibleXTiles/2)) * TILE_UNITS;
-	maxX = ((scrollMaxX - 1) - (visibleXTiles/2)) * TILE_UNITS;
-	minY = (scrollMinY - (visibleYTiles/2)) * TILE_UNITS;
-	maxY = ((scrollMaxY - 1) - (visibleYTiles/2)) * TILE_UNITS;
+	minX = (scrollMinX - (visibleTiles.x/2)) * TILE_UNITS;
+	maxX = ((scrollMaxX - 1) - (visibleTiles.x/2)) * TILE_UNITS;
+	minY = (scrollMinY - (visibleTiles.y/2)) * TILE_UNITS;
+	maxY = ((scrollMaxY - 1) - (visibleTiles.y/2)) * TILE_UNITS;
 
 	//scroll is limited to what can be seen for current campaign
 	if (*xPos < minX)

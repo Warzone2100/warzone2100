@@ -555,8 +555,8 @@ BOOL mapSaveTagged(char *pFileName)
 	psTile = GetCurrentMap();
 	for (i = 0, x = 0, y = 0; i < mapWidth * mapHeight; i++)
 	{
-		tagWrite(0x01, TERRAIN_TYPE(psTile));
-		tagWrite(0x02, psTile->texture & TILE_NUMMASK);
+		tagWrite(0x01, terrainType(psTile));
+		tagWrite(0x02, TileNumber_tile(psTile->texture));
 		tagWrite(0x03, TRI_FLIPPED(psTile));
 		tagWrite(0x04, psTile->texture & TILE_XFLIP);
 		tagWrite(0x05, psTile->texture & TILE_YFLIP);
@@ -957,7 +957,7 @@ extern SWORD map_Height(UDWORD x, UDWORD y)
 	ox = map_round(x);
 	oy = map_round(y);
 
-	if(TERRAIN_TYPE(mapTile(tileX,tileY)) == TER_WATER)
+	if (terrainType(mapTile(tileX,tileY)) == TER_WATER)
 	{
 		bWaterTile = TRUE;
 		wTL = environGetValue(tileX,tileY)/2;

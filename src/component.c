@@ -814,7 +814,7 @@ void displayComponentObject(BASE_OBJECT *psObj)
 		if ( tileX < mapWidth && tileY < mapHeight )
 		{
 			psTile = mapTile(tileX,tileY);
-			if(TERRAIN_TYPE(psTile) != TER_WATER)
+			if (terrainType(psTile) != TER_WATER)
 			{
 			   	frame = gameTime/BLIP_ANIM_DURATION + psDroid->id; //visible[selectedPlayer];
 			   	pie_Draw3DShape(getImdFromIndex(MI_BLIP), frame, 0, pie_MAX_BRIGHT_LEVEL, 0, pie_ADDITIVE, (psDroid->visible[selectedPlayer]/2));

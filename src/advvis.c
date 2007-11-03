@@ -55,9 +55,9 @@ SDWORD	lowerX,upperX,lowerY,upperY;
 	if(psTile->level == UBYTE_MAX)
 	{
 		lowerX = player.p.x/TILE_UNITS;
-		upperX = lowerX + visibleXTiles;
+		upperX = lowerX + visibleTiles.x;
 		lowerY = player.p.z/TILE_UNITS;
-		upperY = lowerY + visibleYTiles;
+		upperY = lowerY + visibleTiles.y;
 		if(lowerX<0) lowerX = 0;
 		if(lowerY<0) lowerY = 0;
 		if(x>lowerX && x<upperX && y>lowerY && y<upperY)
@@ -137,8 +137,8 @@ UDWORD	i,j;
 	}
 
 	/* Find bottom right */
-	endX = startX + visibleXTiles;
-	endY = startY + visibleYTiles;
+	endX = startX + visibleTiles.x;
+	endY = startY + visibleTiles.y;
 
 	/* Clip, as we may be off map */
 	if(startX<0) startX = 0;
@@ -155,7 +155,7 @@ UDWORD	i,j;
 		}
 	}
 
-	avConsidered = (visibleXTiles * visibleYTiles);
+	avConsidered = (visibleTiles.x * visibleTiles.y);
 }
 
 

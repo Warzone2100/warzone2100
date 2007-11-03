@@ -260,7 +260,7 @@ static BOOL gwBlockingTile(SDWORD x,SDWORD y)
 	}
 
 	psTile = mapTile((UDWORD)x, (UDWORD)y);
-	if (TERRAIN_TYPE(psTile) == TER_CLIFFFACE)
+	if (terrainType(psTile) == TER_CLIFFFACE)
 	{
 		return TRUE;
 	}
@@ -1167,7 +1167,7 @@ void gwClearGatewayFlag(SDWORD x, SDWORD y)
 // check whether a tile is water
 BOOL gwTileIsWater(UDWORD x, UDWORD y)
 {
-	return TERRAIN_TYPE(mapTile(x ,y)) == TER_WATER;
+	return terrainType(mapTile(x ,y)) == TER_WATER;
 }
 
 

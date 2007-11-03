@@ -117,8 +117,7 @@ extern UDWORD lightLevel;
 
 extern BOOL bRender3DOnly;
 
-extern const UDWORD visibleXTiles;
-extern const UDWORD visibleYTiles;
+extern const Vector2i visibleTiles;
 
 extern TERRAIN_VERTEX tileScreenInfo[LAND_YGRD][LAND_XGRD];
 

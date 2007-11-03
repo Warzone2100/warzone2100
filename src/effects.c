@@ -1191,7 +1191,7 @@ static void updateGraviton(EFFECT *psEffect)
 	if( (MAKEINT(psEffect->position.y) < (SDWORD)groundHeight))
 	{
 		psTile = mapTile(map_coord(psEffect->position.x), map_coord(psEffect->position.z));
-	   	if(TERRAIN_TYPE(psTile) == TER_WATER)
+	   	if (terrainType(psTile) == TER_WATER)
 		{
 			killEffect(psEffect);
 			return;

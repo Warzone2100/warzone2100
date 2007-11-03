@@ -1275,7 +1275,7 @@ proj_ImpactFunc( PROJECTILE *psObj )
 		if (gfxVisible(psObj))
 		{
 			// The graphic to show depends on if we hit water or not
-			if (TERRAIN_TYPE(mapTile(map_coord(psObj->x), map_coord(psObj->y))) == TER_WATER)
+			if (terrainType(mapTile(map_coord(psObj->x), map_coord(psObj->y))) == TER_WATER)
 			{
 				imd = psStats->pWaterHitGraphic;
 			}

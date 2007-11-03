@@ -665,7 +665,7 @@ BOOL gwFloodBlock(SDWORD x, SDWORD y)
 	}
 
 	psTile = mapTile(x,y);
-	type = TERRAIN_TYPE(psTile);
+	type = terrainType(psTile);
 	gateway = (psTile->tileInfoBits & BITS_GATEWAY) != 0;
 
 	return gateway ||

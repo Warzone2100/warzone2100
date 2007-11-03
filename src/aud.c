@@ -108,8 +108,8 @@ audio_ObjectDead( void * psObj )
 void audio_Get3DPlayerPos(SDWORD *piX, SDWORD *piY, SDWORD *piZ)
 {
 	/* player's y and z interchanged */
-	*piX = player.p.x + world_coord(visibleXTiles / 2);
-	*piY = player.p.z + world_coord(visibleYTiles / 2);
+	*piX = player.p.x + world_coord(visibleTiles.x / 2);
+	*piY = player.p.z + world_coord(visibleTiles.x / 2);
 	*piZ = player.p.y;
 
 	/* invert y to match QSOUND axes */

@@ -462,10 +462,10 @@ UDWORD	droidIndex;
 /* Hack! */
 BOOL	tooNearEdge( UDWORD x, UDWORD y )
 {
-	if( (x > ((visibleXTiles/2) * TILE_UNITS)) &&
-		(x < ((mapWidth-(visibleXTiles/2)) * TILE_UNITS)) &&
-		(y > ((visibleYTiles/2) * TILE_UNITS)) &&
-		(y < ((mapHeight-(visibleYTiles/2)) * TILE_UNITS)) )
+	if( (x > ((visibleTiles.x/2) * TILE_UNITS)) &&
+		(x < ((mapWidth-(visibleTiles.x/2)) * TILE_UNITS)) &&
+		(y > ((visibleTiles.y/2) * TILE_UNITS)) &&
+		(y < ((mapHeight-(visibleTiles.y/2)) * TILE_UNITS)) )
 	{
 		return(FALSE);
 	}

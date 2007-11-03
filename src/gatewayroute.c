@@ -131,12 +131,12 @@ static BOOL gwrBlockedGateway(GATEWAY *psGate, SDWORD player, UDWORD terrain)
 
 	psTile = mapTile( (psGate->x1+psGate->x2)/2,
 					  (psGate->y1+psGate->y2)/2);
-	if ( (TERRAIN_TYPE(psTile) == TER_WATER) &&
+	if ( (terrainType(psTile) == TER_WATER) &&
 		 !(terrain & GWR_TER_WATER))
 	{
 		blocked = TRUE;
 	}
-	if ( (TERRAIN_TYPE(psTile) != TER_WATER) &&
+	if ( (terrainType(psTile) != TER_WATER) &&
 		 !(terrain & GWR_TER_LAND))
 	{
 		blocked = TRUE;

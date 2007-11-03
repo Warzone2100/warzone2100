@@ -95,7 +95,7 @@ void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
 			    psTile->illumination = 16;
 
                 //give water tiles at edge of map a border
-				if(TERRAIN_TYPE(psTile) == TER_WATER)
+				if (terrainType(psTile) == TER_WATER)
 				{
 					psTile->texture = 0;
 				}
@@ -188,7 +188,7 @@ static void normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant)
 	tileDownRight	= mapTile(tileX+1,tileY+1);
 	tileDown		= mapTile(tileX,tileY+1);
 
-	if(TERRAIN_TYPE(psTile) == TER_WATER)
+	if (terrainType(psTile) == TER_WATER)
 	{
  		nMod = 100 + (2*environGetData(tileX,tileY));
 		rMod = 100 + (2*environGetData(tileX+1,tileY));
@@ -418,8 +418,8 @@ UDWORD	percent;
 				yIndex = j - playerZTile;
 				// Might go off the grid for light ranges > one tile
 				if ( xIndex >= 0 && yIndex >= 0 &&
-					xIndex < (SDWORD)visibleXTiles &&
-					yIndex < (SDWORD)visibleYTiles )
+					xIndex < (SDWORD)visibleTiles.x &&
+					yIndex < (SDWORD)visibleTiles.y )
 				{
 					colourTile(xIndex, yIndex, psLight->colour, (UBYTE)(2*percent));
 				}
@@ -609,7 +609,7 @@ UDWORD	lightDoFogAndIllumination(UBYTE brightness, SDWORD dx, SDWORD dz, UDWORD*
 	SDWORD	colour;
 	SDWORD	fog = 0;
 
-	penumbraRadius = world_coord(visibleXTiles / 2);
+	penumbraRadius = world_coord(visibleTiles.x / 2);
 
 	umbraRadius = penumbraRadius - UMBRA_RADIUS;
 

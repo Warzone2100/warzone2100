@@ -183,8 +183,8 @@ BOOL fpathGroundBlockingTile(SDWORD x, SDWORD y)
 #ifndef TEST_BED
 	if ((psTile->tileInfoBits & BITS_FPATHBLOCK) ||
 		(TILE_OCCUPIED(psTile) && !TILE_IS_NOTBLOCKING(psTile)) ||
-		(TERRAIN_TYPE(psTile) == TER_CLIFFFACE) ||
-		(TERRAIN_TYPE(psTile) == TER_WATER))
+		(terrainType(psTile) == TER_CLIFFFACE) ||
+		(terrainType(psTile) == TER_WATER))
 #else
 	if (psTile->tileInfoBits & BLOCKED)
 #endif
@@ -214,7 +214,7 @@ BOOL fpathHoverBlockingTile(SDWORD x, SDWORD y)
 
 	if ((psTile->tileInfoBits & BITS_FPATHBLOCK) ||
 		(TILE_OCCUPIED(psTile) && !TILE_IS_NOTBLOCKING(psTile)) ||
-		(TERRAIN_TYPE(psTile) == TER_CLIFFFACE))
+		(terrainType(psTile) == TER_CLIFFFACE))
 	{
 		return TRUE;
 	}
@@ -273,7 +273,7 @@ BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y)
 	psTile = mapTile((UDWORD)x, (UDWORD)y);
 
 	/* consider cliff faces */
-	if ( TERRAIN_TYPE(psTile) == TER_CLIFFFACE )
+	if ( terrainType(psTile) == TER_CLIFFFACE )
 	{
 		switch ( (asBodyStats + psDroid->asBits[COMP_BODY].nStat)->size )
 		{

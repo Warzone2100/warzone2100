@@ -126,10 +126,10 @@ void	atmosUpdateSystem( void )
 		for(i=0; i<numberToAdd; i++)
 		{
 
-			pos.x = player.p.x + ((visibleXTiles/2)*TILE_UNITS);
-			pos.z = player.p.z + ((visibleYTiles/2)*TILE_UNITS);
-			pos.x += (((visibleXTiles/2) - rand()%visibleXTiles) * TILE_UNITS);
-			pos.z += (((visibleXTiles/2) - rand()%visibleXTiles) * TILE_UNITS);
+			pos.x = player.p.x + ((visibleTiles.x/2)*TILE_UNITS);
+			pos.z = player.p.z + ((visibleTiles.y/2)*TILE_UNITS);
+			pos.x += (((visibleTiles.x/2) - rand()%visibleTiles.x) * TILE_UNITS);
+			pos.z += (((visibleTiles.x/2) - rand()%visibleTiles.x) * TILE_UNITS);
 			pos.y = 1000;
 
 			/* If we've got one on the grid */
@@ -202,7 +202,7 @@ void	processParticle( ATPART *psPart )
 					x = map_coord(psPart->position.x);
 					y = map_coord(psPart->position.z);
 					psTile = mapTile(x,y);
-					if(TERRAIN_TYPE(psTile) == TER_WATER && TEST_TILE_VISIBLE(selectedPlayer,psTile))
+					if (terrainType(psTile) == TER_WATER && TEST_TILE_VISIBLE(selectedPlayer,psTile))
 					{
 						pos.x = MAKEINT(psPart->position.x);
 						pos.z = MAKEINT(psPart->position.z);
@@ -350,8 +350,8 @@ void	renderParticle( ATPART *psPart )
 	/* Scale it... */
 	pie_MatScale(psPart->size);
 	/* Draw it... */
-	centreX = player.p.x + world_coord(visibleXTiles / 2);
-	centreZ = player.p.z + world_coord(visibleYTiles / 2);
+	centreX = player.p.x + world_coord(visibleTiles.x / 2);
+	centreZ = player.p.z + world_coord(visibleTiles.y / 2);
 	brightness = lightDoFogAndIllumination(pie_MAX_BRIGHT_LEVEL,centreX - x,centreZ - z, &specular);
    	pie_Draw3DShape(psPart->imd, 0, 0, brightness, 0, pie_NO_BILINEAR, 0);
 	iV_MatrixEnd();
@@ -364,25 +364,25 @@ void	testParticleWrap( ATPART *psPart )
 	/* Gone off left side */
 	if(psPart->position.x < player.p.x)
 	{
-		psPart->position.x += (visibleXTiles*TILE_UNITS);
+		psPart->position.x += (visibleTiles.x*TILE_UNITS);
 	}
 
 	/* Gone off right side */
-	else if(psPart->position.x > (player.p.x + (visibleXTiles*TILE_UNITS)))
+	else if(psPart->position.x > (player.p.x + (visibleTiles.x*TILE_UNITS)))
 	{
-		psPart->position.x -= (visibleXTiles*TILE_UNITS);
+		psPart->position.x -= (visibleTiles.x*TILE_UNITS);
 	}
 
 	/* Gone off top */
 	if(psPart->position.z < player.p.z)
 	{
-		psPart->position.z += (visibleYTiles*TILE_UNITS);
+		psPart->position.z += (visibleTiles.y*TILE_UNITS);
 	}
 
 	/* Gone off bottom */
-	else if(psPart->position.z > (player.p.z + (visibleYTiles*TILE_UNITS)))
+	else if(psPart->position.z > (player.p.z + (visibleTiles.y*TILE_UNITS)))
 	{
-		psPart->position.z -= (visibleYTiles*TILE_UNITS);
+		psPart->position.z -= (visibleTiles.y*TILE_UNITS);
 	}
 }
 
