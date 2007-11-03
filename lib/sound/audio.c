@@ -924,11 +924,20 @@ void audio_StopAll( void )
 		// Stop this sound sample
 		sound_StopTrack(psSample);
 
-		// Make sure to set psObj to NULL if it will soon be invalidated
-		if (audio_ObjectDead(psSample->psObj))
-		{
-			psSample->psObj = NULL;
-		}
+		// HACK:
+		// Make sure to set psObj to NULL, since sometimes it becomes
+		// invalidated, i.e. dangling, before audio_Update() gets the
+		// chance to clean it up.
+		//
+		// Meaning at this place in the code audio_ObjectDead(psObj)
+		// would indicate that psObj is still valid and will remain
+		// such. While in reality, before audio_Update() can get the
+		// chance to check again, this pointer will have become
+		// dangling.
+		//
+		// NOTE: This would always happen when audio_StopAll() had been
+		// invoked by stageThreeShutDown().
+		psSample->psObj = NULL;
 	}
 
 	// empty sample queue
