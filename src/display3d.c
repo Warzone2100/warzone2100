@@ -154,7 +154,6 @@ static void	processDestinationTarget(void);
 static BOOL	eitherSelected(DROID *psDroid);
 static void	testEffect(void);
 static void	showDroidSensorRanges(void);
-WZ_DECL_UNUSED static void	showSensorRange1(DROID *psDroid);
 static void	showSensorRange2(BASE_OBJECT *psObj);
 static void	drawRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius);
 static void	addConstructionLine(DROID *psDroid, STRUCTURE *psStructure);
@@ -4788,32 +4787,6 @@ STRUCTURE	*psStruct;
 	}//end if we want to display...
 }
 
-//this one doesn't do a circle, it displays 30 or so units at a time
-static void	showSensorRange1(DROID *psDroid)
-{
-	SDWORD	val;
-	SDWORD	radius;
-	UDWORD	angle;
-	SDWORD	xDif,yDif;
-	UDWORD	sensorRange;
-	Vector3i pos;
-
-	angle = gameTime%3600;
-	val = angle/10;
-	sensorRange = asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].range;
-	radius = sensorRange;
-	xDif = radius * (SIN(DEG(val)));
-	yDif = radius * (COS(DEG(val)));
-
-	xDif = xDif/4096;	 // cos it's fixed point
-	yDif = yDif/4096;
-	pos.x = psDroid->x - xDif;
-	pos.z = psDroid->y - yDif;
-	pos.y = map_Height(pos.x,pos.z)+ 16;	// 64 up to get to base of spire
-	effectGiveAuxVar(80);	// half normal plasma size...
-	addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LASER,FALSE,NULL,0);
-}
-
 static void	showSensorRange2(BASE_OBJECT *psObj)
 {
 	SDWORD	radius;
@@ -4838,7 +4811,6 @@ static void	showSensorRange2(BASE_OBJECT *psObj)
 			sensorRange = psStruct->sensorRange;
 			bBuilding = TRUE;
 		}
-//		printf("sensorRange=%d\n",sensorRange);
 		radius = sensorRange;
 		xDif = radius * (SIN(DEG(i)));
 		yDif = radius * (COS(DEG(i)));
@@ -4916,7 +4888,6 @@ UDWORD  getDroidRankGraphic(DROID *psDroid)
 	/* Not found yet */
 	gfxId = UDWORD_MAX;
 
-//#ifdef JOHN
 	/* Establish the numerical value of the droid's rank */
 	switch(getDroidLevel(psDroid))
 	{
@@ -4950,80 +4921,6 @@ UDWORD  getDroidRankGraphic(DROID *psDroid)
 			ASSERT(!"out of range droid rank", "Weird droid level in drawDroidRank");
 		break;
 	}
-//#else
-#if 0
-	switch(getDroidLevel(psDroid))
-	{
-		case 0:
-//			gfxId = IMAGE_GN_0;	// Unexperienced
-			break;
-		case 1:
-			gfxId = IMAGE_GN_1;
-			break;
-		case 2:
-			gfxId = IMAGE_GN_2;
-			break;
-		case 3:
-			gfxId = IMAGE_GN_3;
-			break;
-		case 4:
-			gfxId = IMAGE_GN_4;
-			break;
-		case 5:
-			gfxId = IMAGE_GN_5;
-			break;
-		case 6:
-			gfxId = IMAGE_GN_6;	// Experienced
-			break;
-		case 7:
-			gfxId = IMAGE_GN_7;
-			break;
-		case 8:
-			gfxId = IMAGE_GN_8;
-			break;
-		default:
-			ASSERT(!"out of range droid rank", "Weird droid level in drawDroidRank");
-		break;
-	}
-#endif
-//#endif
-
-
-#if 0
-	// John's routing debug code
-	switch (psDroid->sMove.Status)
-	{
-		case MOVEINACTIVE:
-			gfxId = IMAGE_GN_0;	// Unexperienced
-			break;
-		case MOVENAVIGATE:
-			gfxId = IMAGE_GN_1;
-			break;
-		case MOVETURN:
-			gfxId = IMAGE_GN_2;
-			break;
-		case MOVEPAUSE:
-			gfxId = IMAGE_GN_3;
-			break;
-		case MOVEPOINTTOPOINT:
-			gfxId = IMAGE_GN_4;
-			break;
-		case MOVEROUTE:
-			gfxId = IMAGE_GN_5;
-			break;
-		case MOVEWAITROUTE:
-			gfxId = IMAGE_GN_6;	// Experienced
-			break;
-		case MOVESHUFFLE:
-			gfxId = IMAGE_GN_7;
-			break;
-		case MOVEROUTESHUFFLE:
-			gfxId = IMAGE_GN_8;
-			break;
-		default:
-		break;
-	}
-#endif
 
 	return gfxId;
 }
