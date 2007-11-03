@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-11-03 23:03+0100\n"
+"POT-Creation-Date: 2007-11-03 23:44+0100\n"
 "PO-Revision-Date: 2007-08-12 16:30+0100\n"
 "Last-Translator: Thomas Rösner <translation-bugs@digital-trauma.de>\n"
 "Language-Team: Deutsch\n"
@@ -444,14 +444,6 @@ msgstr "Gastgeber startet das Spiel"
 #: src/multiint.c:2693
 msgid "Players"
 msgstr "Spieler"
-
-#: src/display3d.c:417
-msgid "Published by EIDOS Interactive"
-msgstr "Veröffentlicht von EIDOS Interactive"
-
-#: src/display3d.c:419
-msgid "Developed by Pumpkin Studios"
-msgstr "Entwickelt von Pumpkin Studios"
 
 #: src/keybind.c:1218
 msgid "View Aligned to North"
@@ -11406,6 +11398,12 @@ msgstr "Stärkerer Kommandoturm verfügbar"
 #: data/mp/messages/strings/resstrings.txt:2149
 msgid "Upgraded battlefield computer system"
 msgstr "Verbesserter taktischer Computer"
+
+#~ msgid "Published by EIDOS Interactive"
+#~ msgstr "Veröffentlicht von EIDOS Interactive"
+
+#~ msgid "Developed by Pumpkin Studios"
+#~ msgstr "Entwickelt von Pumpkin Studios"
 
 #~ msgid "Internet"
 #~ msgstr "Internet"

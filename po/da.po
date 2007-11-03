@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: da\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-11-03 23:03+0100\n"
+"POT-Creation-Date: 2007-11-03 23:44+0100\n"
 "PO-Revision-Date: 2007-04-17 23:03+0200\n"
 "Last-Translator: Christian Vest Hansen <karmazilla@gmail.com>\n"
 "Language-Team: Dansk <en@li.org>\n"
@@ -446,14 +446,6 @@ msgstr "Værten starter spillet"
 #: src/multiint.c:2693
 msgid "Players"
 msgstr "Spillere"
-
-#: src/display3d.c:417
-msgid "Published by EIDOS Interactive"
-msgstr ""
-
-#: src/display3d.c:419
-msgid "Developed by Pumpkin Studios"
-msgstr ""
 
 #: src/keybind.c:1218
 msgid "View Aligned to North"
