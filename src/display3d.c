@@ -209,9 +209,6 @@ UDWORD		terrainOutline = FALSE;
 /* Stores the screen coordinates of the transformed terrain tiles */
 TERRAIN_VERTEX tileScreenInfo[LAND_YGRD][LAND_XGRD];
 
-/* Stores the tilepointers for rendered tiles */
-static TILE_BUCKET tileIJ[LAND_YGRD][LAND_XGRD];
-
 /* Records the present X and Y values for the current mouse tile (in tiles */
 SDWORD mouseTileX, mouseTileY;
 
@@ -809,10 +806,7 @@ static void drawTiles(iView *camera, iView *player)
 		avUpdateTiles();
 	}
 
-	//doBuildingLights();
-	/* ---------------------------------------------------------------- */
-	/* Draw all the tiles or add them to bucket sort                     */
-	/* ---------------------------------------------------------------- */
+	// Draw all the normal tiles
 	for (i = 0; i < MIN(visibleTiles.y, mapHeight); i++)
 	{
 		for (j = 0; j < MIN(visibleTiles.x, mapWidth); j++)
@@ -821,10 +815,10 @@ static void drawTiles(iView *camera, iView *player)
 			{
 				//get distance of furthest corner
 				int zMax = MAX(tileScreenInfo[i][j].screen.z, tileScreenInfo[i+1][j].screen.z);
-				zMax = MAX(zMax, tileScreenInfo[i+1][j+1].screen.z);
-				zMax = MAX(zMax, tileScreenInfo[i][j+1].screen.z);
+				zMax = MAX(zMax, tileScreenInfo[i + 1][j + 1].screen.z);
+				zMax = MAX(zMax, tileScreenInfo[i][j + 1].screen.z);
 
-				if(zMax < 0)
+				if (zMax < 0)
 				{
 					// clipped
 					continue;
@@ -832,24 +826,37 @@ static void drawTiles(iView *camera, iView *player)
 
 				drawTerrainTile(i, j, FALSE);
 
-				if(tileScreenInfo[i][j].bWater)
+				// check if we need to draw a water edge
+				if (tileScreenInfo[i][j].bWater
+				    && TileNumber_tile(mapTile(playerXTile + j, playerZTile + i)->texture) != WATER_TILE)
 				{
-					tileIJ[i][j].i = i;
-					tileIJ[i][j].j = j;
-					tileIJ[i][j].depth = zMax;
-
-					// add the (possibly) transparent water to the bucket sort
-					bucketAddTypeToList(RENDER_WATERTILE, &tileIJ[i][j]);
-
-					// check if we need to draw a water edge
-					if ( TileNumber_tile(mapTile(playerXTile+j, playerZTile+i)->texture) != WATER_TILE )
-					{
-						// the edge is in front of the water (which is drawn at z-index -1)
-						pie_SetDepthOffset(-2.0);
-						drawTerrainTile(i, j, TRUE);
-						pie_SetDepthOffset(0.0);
-					}
+					// the edge is in front of the water (which is drawn at z-index -1)
+					pie_SetDepthOffset(-2.0);
+					drawTerrainTile(i, j, TRUE);
+					pie_SetDepthOffset(0.0);
 				}
+			}
+		}
+	}
+	// Now draw the water tiles in a second pass to get alpha sort order correct
+	for (i = 0; i < MIN(visibleTiles.y, mapHeight); i++)
+	{
+		for (j = 0; j < MIN(visibleTiles.x, mapWidth); j++)
+		{
+			if (tileScreenInfo[i][j].drawInfo == TRUE && tileScreenInfo[i][j].bWater)
+			{
+				//get distance of furthest corner
+				int zMax = MAX(tileScreenInfo[i][j].screen.z, tileScreenInfo[i + 1][j].screen.z);
+				zMax = MAX(zMax, tileScreenInfo[i + 1][j + 1].screen.z);
+				zMax = MAX(zMax, tileScreenInfo[i][j + 1].screen.z);
+
+				if (zMax < 0)
+				{
+					// clipped
+					continue;
+				}
+
+				drawTerrainWaterTile(i, j);
 			}
 		}
 	}
