@@ -22,6 +22,7 @@
 #include <string.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/wzglobal.h"
 
 #include "playlist.h"
 
@@ -40,8 +41,6 @@ static unsigned int current_track = 0;
 static unsigned int current_song = 0;
 
 static WZ_TRACK playlist[NB_TRACKS];
-
-#define CURRENT_TRACK playlist[current_track]
 
 void PlayList_Init(void) {
 	unsigned int i;
@@ -65,61 +64,82 @@ void PlayList_Quit(void) {
 	}
 }
 
-char PlayList_Read(const char* path) 
+bool PlayList_Read(const char* path) 
 {
-	PHYSFS_file * f;
+	PHYSFS_file* fileHandle;
 	char* path_to_music = NULL;
-	char buffer[BUFFER_SIZE], ByteBuf = '\0';
-	unsigned int ByteBufPos = 0;
 
-	snprintf(buffer, sizeof(buffer), "%s/music.wpl", path);
-	// Guarantee to nul-terminate
-	buffer[sizeof(buffer) - 1] = '\0';
+	char fileName[PATH_MAX];
 
-	f = PHYSFS_openRead(buffer);
+	// Construct file name
+	snprintf(fileName, sizeof(fileName), "%s/music.wpl", path);
 
-	if (f == NULL) {
-		return 1;
+	// Attempt to open the playlist file
+	fileHandle = PHYSFS_openRead(fileName);
+	if (fileHandle == NULL)
+	{
+		debug(LOG_ERROR, "sound_LoadTrackFromFile: PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, PHYSFS_getLastError());
+		return false;
 	}
 
-	while (!PHYSFS_eof(f)) {
+	while (!PHYSFS_eof(fileHandle))
+	{
+		char line_buf[BUFFER_SIZE];
+		size_t buf_pos = 0;
 		char* filename;
 
-		while( ByteBufPos < BUFFER_SIZE - 1 && PHYSFS_read( f, &ByteBuf, 1, 1 ) && ByteBuf != '\n' && ByteBuf != '\r' )
+		while (buf_pos < sizeof(line_buf) - 1
+		    && PHYSFS_read(fileHandle, &line_buf[buf_pos], 1, 1)
+		    && line_buf[buf_pos] != '\n'
+		    && line_buf[buf_pos] != '\r')
 		{
-			buffer[ByteBufPos]=ByteBuf;
-			ByteBufPos++;
+			++buf_pos;
 		}
-		buffer[ByteBufPos]='\0';
-		ByteBufPos=0;
 
-		if (strncmp(buffer, "[game]", 6) == 0) {
+		// Nul-terminate string
+		line_buf[buf_pos] = '\0';
+		buf_pos = 0;
+
+		if (strncmp(line_buf, "[game]", 6) == 0)
+		{
 			current_track = 1;
 			free(path_to_music);
 			path_to_music = NULL;
-			CURRENT_TRACK.shuffle = FALSE;
-		} else if (strncmp(buffer, "[menu]", 6) == 0) {
+			playlist[current_track].shuffle = FALSE;
+		}
+		else if (strncmp(line_buf, "[menu]", 6) == 0)
+		{
 			current_track = 2;
 			free(path_to_music);
 			path_to_music = NULL;
-			CURRENT_TRACK.shuffle = FALSE;
-		} else if (strncmp(buffer, "path=", 5) == 0) {
+			playlist[current_track].shuffle = FALSE;
+		}
+		else if (strncmp(line_buf, "path=", 5) == 0)
+		{
 			free(path_to_music);
-			path_to_music = strtok(buffer+5, "\n");
-			if (strcmp(path_to_music, ".") == 0) {
+			path_to_music = strtok(line_buf+5, "\n");
+			if (strcmp(path_to_music, ".") == 0)
+			{
 				path_to_music = strdup(path);
-			} else {
+			}
+			else
+			{
 				path_to_music = strdup(path_to_music);
 			}
-			debug( LOG_SOUND, "  path = %s\n", path_to_music );
-		} else if (strncmp(buffer, "shuffle=", 8) == 0) {
-			if (strcmp(strtok(buffer+8, "\n"), "yes") == 0) {
-				CURRENT_TRACK.shuffle = TRUE;
+			debug(LOG_SOUND, "playlist: path = %s", path_to_music );
+		}
+		else if (strncmp(line_buf, "shuffle=", 8) == 0)
+		{
+			if (strcmp(strtok(line_buf+8, "\n"), "yes") == 0)
+			{
+				playlist[current_track].shuffle = TRUE;
 			}
-			debug( LOG_SOUND, "  shuffle = yes\n" );
-		} else if (   buffer[0] != '\0'
-			   && (filename = strtok(buffer, "\n")) != NULL
-			   && strlen(filename) != 0) {
+			debug( LOG_SOUND, "playlist: shuffle = yes" );
+		}
+		else if (line_buf[0] != '\0'
+		      && (filename = strtok(line_buf, "\n")) != NULL
+		      && strlen(filename) != 0)
+		{
 			char* filepath;
 
 			if (path_to_music == NULL)
@@ -128,8 +148,9 @@ char PlayList_Read(const char* path)
 				if (filename == NULL)
 				{
 					debug(LOG_ERROR, "PlayList_Read: Out of memory!");
+					PHYSFS_close(fileHandle);
 					abort();
-					return 1;
+					return false;
 				}
 			}
 			else
@@ -142,43 +163,56 @@ char PlayList_Read(const char* path)
 				if (filepath == NULL)
 				{
 					debug(LOG_ERROR, "PlayList_Read: Out of memory!");
+					free(path_to_music);
+					PHYSFS_close(fileHandle);
 					abort();
-					return 1;
+					return false;
 				}
 
 				snprintf(filepath, path_length, "%s/%s", path_to_music, filename);
-				// Guarantee to null terminate
-				filepath[path_length - 1] = '\0';
 			}
-			debug( LOG_SOUND, "  adding song %s\n", filepath );
+			debug(LOG_SOUND, "playlist: adding song %s", filepath );
 
-			if (CURRENT_TRACK.nb_songs == CURRENT_TRACK.list_size) {
-				CURRENT_TRACK.list_size <<= 1;
-				CURRENT_TRACK.songs = (char**)realloc(CURRENT_TRACK.songs,
-							      CURRENT_TRACK.list_size*sizeof(char*));
+			if (playlist[current_track].nb_songs == playlist[current_track].list_size)
+			{
+				char** songs;
+				playlist[current_track].list_size *= 2;
+
+				songs = (char**)realloc(playlist[current_track].songs,
+				                        playlist[current_track].list_size * sizeof(char*));
+				if (songs == NULL)
+				{
+					debug(LOG_ERROR, "PlayList_Read: Out of memory!");
+					free(path_to_music);
+					PHYSFS_close(fileHandle);
+					abort();
+					return false;
+				}
+
+				playlist[current_track].songs = songs;
 			}
 
-			CURRENT_TRACK.songs[CURRENT_TRACK.nb_songs++] = filepath;
+			playlist[current_track].songs[playlist[current_track].nb_songs++] = filepath;
 		}
 	}
 
 	free(path_to_music);
 
-	PHYSFS_close(f);
+	PHYSFS_close(fileHandle);
 
-	return 0;
+	return true;
 }
 
 static void PlayList_Shuffle(void) {
-	if (CURRENT_TRACK.shuffle) {
+	if (playlist[current_track].shuffle) {
 		unsigned int i;
 
-		for (i = CURRENT_TRACK.nb_songs-1; i > 0; --i) {
+		for (i = playlist[current_track].nb_songs-1; i > 0; --i) {
 			unsigned int j = rand() % (i + 1);
-			char* swap = CURRENT_TRACK.songs[j];
+			char* swap = playlist[current_track].songs[j];
 
-			CURRENT_TRACK.songs[j] = CURRENT_TRACK.songs[i];
-			CURRENT_TRACK.songs[i] = swap;
+			playlist[current_track].songs[j] = playlist[current_track].songs[i];
+			playlist[current_track].songs[i] = swap;
 		}
 	}
 }
@@ -194,22 +228,22 @@ void PlayList_SetTrack(unsigned int t) {
 }
 
 char* PlayList_CurrentSong(void) {
-	if (current_song >= CURRENT_TRACK.nb_songs) {
+	if (current_song >= playlist[current_track].nb_songs) {
 		return NULL;
 	} else {
-		return CURRENT_TRACK.songs[current_song];
+		return playlist[current_track].songs[current_song];
 	}
 }
 
 char* PlayList_NextSong(void) {
-	if (++current_song >= CURRENT_TRACK.nb_songs) {
+	if (++current_song >= playlist[current_track].nb_songs) {
 		PlayList_Shuffle();
 		current_song = 0;
 	}
 
-	if (CURRENT_TRACK.nb_songs == 0) {
+	if (playlist[current_track].nb_songs == 0) {
 		return NULL;
 	} else {
-		return CURRENT_TRACK.songs[current_song];
+		return playlist[current_track].songs[current_song];
 	}
 }

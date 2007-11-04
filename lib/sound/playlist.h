@@ -17,22 +17,17 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/***************************************************************************/
 
 #ifndef _PLAYLIST_H_
 #define _PLAYLIST_H_
 
-/***************************************************************************/
+#include "lib/framework/types.h"
 
 void PlayList_Init(void);
 void PlayList_Quit(void);
-char PlayList_Read(const char* path);
+bool PlayList_Read(const char* path);
 void PlayList_SetTrack(unsigned int t);
 char* PlayList_CurrentSong(void);
 char* PlayList_NextSong(void);
 
-/***************************************************************************/
-
 #endif /* _PLAYLIST_H_ */
-
-/***************************************************************************/

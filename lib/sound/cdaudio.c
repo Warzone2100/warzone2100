@@ -107,9 +107,10 @@ BOOL cdAudio_Open( const char* user_musicdir )
 
 	PlayList_Init();
 
-	if ( ( user_musicdir == NULL
-		|| PlayList_Read(user_musicdir) )
-	    && PlayList_Read("music") ) {
+	if ((user_musicdir == NULL
+	  || !PlayList_Read(user_musicdir))
+	 && !PlayList_Read("music"))
+	{
 		return FALSE;
 	}
 
