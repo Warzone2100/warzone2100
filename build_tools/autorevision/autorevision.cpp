@@ -33,8 +33,81 @@ using namespace std;
     inline void set_env(const char* k, const char* v) { setenv(k, v, 1); };
 #endif
 
-bool QuerySvn(const string& workingDir, string& revision, string& date, string& wc_uri);
-bool ParseFile(const string& docFile, string& revision, string &date, string& wc_uri);
+/** Abstract base class for classes that extract revision information.
+ *  Most of these will extract this revision information from a Subversion
+ *  working copy.
+ *
+ *  This class utilizes the "Chain of Responsibility" pattern to delegate tasks
+ *  that the current concrete class cannot perform to another, succesive,
+ *  subclass.
+ */
+class RevisionExtractor
+{
+    public:
+        /** Constructor
+         *  \param s successor of this instantation. If this instantation fails
+         *           retrieving the revision, the successor pointed to by \c s,
+         *           will attempt to do it instead.
+         */
+        RevisionExtractor(RevisionExtractor* s = NULL) :
+            _successor(s)
+        {}
+
+        virtual ~RevisionExtractor()
+        {}
+
+        /** This function will perform the actual work of extracting the
+         *  revision information.
+         *
+         *  RevisionExtractor::extractRevision can be used by subclasses to
+         *  delegate the task to its successor if it cannot succeed itself.
+         *
+         *  For that purpose simply use a line like:
+         *    "return extractRevision(revision, date, wc_uri);"
+         */
+        virtual bool extractRevision(std::string& revision, std::string& date, std::string& wc_uri) = 0;
+		
+    private:
+        // Declare the pointer itself const; not whatever it points to
+        RevisionExtractor* const _successor;
+};
+
+bool RevisionExtractor::extractRevision(std::string& revision, std::string& date, std::string& wc_uri)
+{
+    if (_successor)
+        return _successor->extractRevision(revision, date, wc_uri);
+
+    return false;
+}
+
+class RevSVNQuery : public RevisionExtractor
+{
+    public:
+        RevSVNQuery(const std::string& workingDir, RevisionExtractor* s = NULL) :
+            RevisionExtractor(s),
+            _workingDir(workingDir)
+        {}
+
+        virtual bool extractRevision(std::string& revision, std::string& date, std::string& wc_uri);
+
+    private:
+        const std::string _workingDir;
+};
+
+class RevFileParse : public RevisionExtractor
+{
+    public:
+        RevFileParse(const std::string& docFile, RevisionExtractor* s = NULL) :
+            RevisionExtractor(s),
+            _docFile(docFile)
+        {}
+
+        virtual bool extractRevision(std::string& revision, std::string& date, std::string& wc_uri);
+
+    private:
+        const std::string _docFile;
+};
+
 bool WriteOutput(const string& outputFile, const string& revision, const string& date, const string& wc_uri);
 int main(int argc, char** argv);
 
@@ -89,18 +162,18 @@ int main(int argc, char** argv)
     }
 
     if(outputFile.empty())
-        outputFile.assign("autorevision.h");
+        outputFile = "autorevision.h";
 
-    string docFile(workingDir);
-    docFile.append("/.svn/entries");
-    string docFile2(workingDir);
-    docFile2.append("/_svn/entries");
+    RevFileParse revRetr2(workingDir + "/_svn/entries");
+    RevFileParse revRetr1(workingDir + "/.svn/entries", &revRetr2);
+
+    RevSVNQuery  revRetr(workingDir, &revRetr1);
 
     // Strings to extract Subversion information we want into
     // wc_uri: working copy root, e.g. trunk, branches/2.0, etc.
     string revision, date, wc_uri;
 
-    if (!QuerySvn(workingDir, revision, date, wc_uri) && !ParseFile(docFile, revision, date, wc_uri) && !ParseFile(docFile2, revision, date, wc_uri)
+    if (!revRetr.extractRevision(revision, date, wc_uri)
      || revision == "")
     {
         cerr << "Error: failed retrieving version information.\n"
@@ -122,10 +195,9 @@ void removeAfterNewLine(string& str)
         str.erase(lbreak_pos);
 }
 
-bool QuerySvn(const string& workingDir, string& revision, string& date, string& wc_uri)
+bool RevSVNQuery::extractRevision(std::string& revision, std::string& date, std::string& wc_uri)
 {
-    string svncmd("svn info ");
-    svncmd.append(workingDir);
+    string svncmd("svn info " + _workingDir);
     set_env("LANG", "C");
     FILE *svn = popen(svncmd.c_str(), "r");
 
@@ -167,23 +239,26 @@ bool QuerySvn(const string& workingDir, string& revision, string& date, string& 
         }
     }
     pclose(svn);
-    return !revision.empty();
+
+    if (revision.empty())
+        return RevisionExtractor::extractRevision(revision, date, wc_uri);
+
+    return true;
 }
 
-
-bool ParseFile(const string& docFile, string& revision, string &date, string& wc_uri)
+bool RevFileParse::extractRevision(std::string& revision, std::string& date, std::string& wc_uri)
 {
     string token[6];
     date.clear();
     revision.clear();
 
-    ifstream inFile(docFile.c_str());
+    ifstream inFile(_docFile.c_str());
     if (!inFile)
     {
         cerr << "Warning: could not open input file.\n"
              << "         This does not seem to be a revision controlled project.\n";
 
-        return false;
+        return RevisionExtractor::extractRevision(revision, date, wc_uri);
     }
 
     unsigned int c = 0;
