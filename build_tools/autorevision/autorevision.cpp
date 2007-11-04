@@ -20,6 +20,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -32,6 +33,25 @@ using namespace std;
     #include <stdlib.h>
     inline void set_env(const char* k, const char* v) { setenv(k, v, 1); };
 #endif
+
+struct RevisionInformation
+{
+    RevisionInformation() :
+        wc_modified(false),
+        wc_switched(false)
+    {}
+
+    std::string low_revision;
+    std::string revision;
+
+    std::string date;
+
+    /// working copy root, e.g. trunk, branches/2.0, etc.
+    std::string wc_uri;
+
+    bool wc_modified;
+    bool wc_switched;
+};
 
 /** Abstract base class for classes that extract revision information.
  *  Most of these will extract this revision information from a Subversion
@@ -65,20 +85,34 @@ class RevisionExtractor
          *  For that purpose simply use a line like:
          *    "return extractRevision(revision, date, wc_uri);"
          */
-        virtual bool extractRevision(std::string& revision, std::string& date, std::string& wc_uri) = 0;
+        virtual bool extractRevision(RevisionInformation& rev_info) = 0;
 		
     private:
         // Declare the pointer itself const; not whatever it points to
         RevisionExtractor* const _successor;
 };
 
-bool RevisionExtractor::extractRevision(std::string& revision, std::string& date, std::string& wc_uri)
+bool RevisionExtractor::extractRevision(RevisionInformation& rev_info)
 {
     if (_successor)
-        return _successor->extractRevision(revision, date, wc_uri);
+        return _successor->extractRevision(rev_info);
 
     return false;
 }
+
+class RevSVNVersionQuery : public RevisionExtractor
+{
+    public:
+        RevSVNVersionQuery(const std::string& workingDir, RevisionExtractor* s = NULL) :
+            RevisionExtractor(s),
+            _workingDir(workingDir)
+        {}
+
+        virtual bool extractRevision(RevisionInformation& rev_info);
+
+    private:
+        const std::string _workingDir;
+};
 
 class RevSVNQuery : public RevisionExtractor
 {
@@ -88,7 +122,7 @@ class RevSVNQuery : public RevisionExtractor
             _workingDir(workingDir)
         {}
 
-        virtual bool extractRevision(std::string& revision, std::string& date, std::string& wc_uri);
+        virtual bool extractRevision(RevisionInformation& rev_info);
 
     private:
         const std::string _workingDir;
@@ -102,13 +136,13 @@ class RevFileParse : public RevisionExtractor
             _docFile(docFile)
         {}
 
-        virtual bool extractRevision(std::string& revision, std::string& date, std::string& wc_uri);
+        virtual bool extractRevision(RevisionInformation& rev_info);
 
     private:
         const std::string _docFile;
 };
 
-bool WriteOutput(const string& outputFile, const string& revision, const string& date, const string& wc_uri);
+bool WriteOutput(const string& outputFile, const RevisionInformation& rev_info);
 int main(int argc, char** argv);
 
 
@@ -164,25 +198,25 @@ int main(int argc, char** argv)
     if(outputFile.empty())
         outputFile = "autorevision.h";
 
-    RevFileParse revRetr2(workingDir + "/_svn/entries");
-    RevFileParse revRetr1(workingDir + "/.svn/entries", &revRetr2);
+    RevFileParse revRetr3(workingDir + "/_svn/entries");
+    RevFileParse revRetr2(workingDir + "/.svn/entries", &revRetr3);
+    RevSVNQuery  revRetr1(workingDir, &revRetr2);
 
-    RevSVNQuery  revRetr(workingDir, &revRetr1);
+    RevSVNVersionQuery revRetr(workingDir, &revRetr1);
 
     // Strings to extract Subversion information we want into
-    // wc_uri: working copy root, e.g. trunk, branches/2.0, etc.
-    string revision, date, wc_uri;
+    RevisionInformation rev_info;
 
-    if (!revRetr.extractRevision(revision, date, wc_uri)
-     || revision == "")
+    if (!revRetr.extractRevision(rev_info)
+     || rev_info.revision == "")
     {
         cerr << "Error: failed retrieving version information.\n"
              << "Warning: using 0 as revision.\n";
 
-        revision = "0";
+        rev_info.revision = "0";
     }
 
-    WriteOutput(outputFile, revision, date, wc_uri);
+    WriteOutput(outputFile, rev_info);
 
     return 0;
 }
@@ -195,62 +229,114 @@ void removeAfterNewLine(string& str)
         str.erase(lbreak_pos);
 }
 
-bool RevSVNQuery::extractRevision(std::string& revision, std::string& date, std::string& wc_uri)
+bool RevSVNVersionQuery::extractRevision(RevisionInformation& rev_info)
+{
+    string svncmd("svnversion " + _workingDir);
+    set_env("LANG", "C");
+    FILE* svn_version = popen(svncmd.c_str(), "r");
+
+    if (!svn_version)
+        return RevisionExtractor::extractRevision(rev_info);
+
+    char buf[1024];
+    string line;
+
+    while (fgets(buf, sizeof(buf), svn_version))
+    {
+        line.assign(buf);
+        removeAfterNewLine(line);
+
+        std::string::size_type char_pos = line.find(':');
+
+        if (char_pos != string::npos)
+        // If a colon is present svnversion's output is as follows:
+        // "XXXX:YYYYMS". X represents the low revision, Y the high revision,
+        // M the working copy's modification state, and S the switch state.
+        {
+            rev_info.low_revision = line.substr(0, char_pos);
+            line.erase(0, char_pos + 1);
+        }
+
+        char_pos = line.find('M');
+        if (char_pos != string::npos)
+        {
+            rev_info.wc_modified = true;
+            line.erase(char_pos, 1);
+        }
+
+        char_pos = line.find('S');
+        if (char_pos != string::npos)
+        {
+            rev_info.wc_switched = true;
+            line.erase(char_pos, 1);
+        }
+
+        rev_info.revision = line;
+    }
+
+    pclose(svn_version);
+
+    // The working copy URI still needs to be extracted. "svnversion" cannot
+    // help us with that task, so delegate that task to another link in the
+    // chain of responsibility.
+    return RevisionExtractor::extractRevision(rev_info);
+}
+
+bool RevSVNQuery::extractRevision(RevisionInformation& rev_info)
 {
     string svncmd("svn info " + _workingDir);
     set_env("LANG", "C");
     FILE *svn = popen(svncmd.c_str(), "r");
 
-    if(svn)
+    if(!svn)
+        return RevisionExtractor::extractRevision(rev_info);
+
+    char buf[1024];
+    string line, wc_repo_root;
+
+    while(fgets(buf, sizeof(buf), svn))
     {
-        char buf[1024];
-        string line, wc_repo_root;
-
-        while(fgets(buf, sizeof(buf), svn))
+        line.assign(buf);
+        if(line.find("Revision: ") != string::npos)
         {
-            line.assign(buf);
-            if(line.find("Revision: ") != string::npos)
-            {
-                revision = line.substr(strlen("Revision: "));
+            std::string revision = line.substr(strlen("Revision: "));
 
-                removeAfterNewLine(revision);
-            }
-            if(line.find("Last Changed Date: ") != string::npos)
-            {
-                date = line.substr(strlen("Last Changed Date: "), strlen("2006-01-01 12:34:56"));
-            }
-            if (line.find("Repository Root: ") != string::npos)
-            {
-                wc_repo_root = line.substr(strlen("Repository Root: "));
-
-                removeAfterNewLine(wc_repo_root);
-            }
-            if (line.find("URL: ") != string::npos)
-            {
-                wc_uri = line.substr(strlen("URL: "));
-
-                removeAfterNewLine(wc_uri);
-            }
+            removeAfterNewLine(revision);
         }
-
-        if (wc_uri.find(wc_repo_root) != string::npos)
+        if(line.find("Last Changed Date: ") != string::npos)
         {
-            wc_uri.erase(0, wc_repo_root.length() + 1); // + 1 to remove the prefixed slash also
+            rev_info.date = line.substr(strlen("Last Changed Date: "), strlen("2006-01-01 12:34:56"));
+        }
+        if (line.find("Repository Root: ") != string::npos)
+        {
+            wc_repo_root = line.substr(strlen("Repository Root: "));
+
+            removeAfterNewLine(wc_repo_root);
+        }
+        if (line.find("URL: ") != string::npos)
+        {
+            rev_info.wc_uri = line.substr(strlen("URL: "));
+
+            removeAfterNewLine(rev_info.wc_uri);
         }
     }
+
     pclose(svn);
 
-    if (revision.empty())
-        return RevisionExtractor::extractRevision(revision, date, wc_uri);
+    if (rev_info.wc_uri.find(wc_repo_root) != string::npos)
+    {
+        rev_info.wc_uri.erase(0, wc_repo_root.length() + 1); // + 1 to remove the prefixed slash also
+    }
+
+    if (rev_info.revision == "")
+        return RevisionExtractor::extractRevision(rev_info);
 
     return true;
 }
 
-bool RevFileParse::extractRevision(std::string& revision, std::string& date, std::string& wc_uri)
+bool RevFileParse::extractRevision(RevisionInformation& rev_info)
 {
     string token[6];
-    date.clear();
-    revision.clear();
 
     ifstream inFile(_docFile.c_str());
     if (!inFile)
@@ -258,7 +344,7 @@ bool RevFileParse::extractRevision(std::string& revision, std::string& date, std
         cerr << "Warning: could not open input file.\n"
              << "         This does not seem to be a revision controlled project.\n";
 
-        return RevisionExtractor::extractRevision(revision, date, wc_uri);
+        return RevisionExtractor::extractRevision(rev_info);
     }
 
     unsigned int c = 0;
@@ -268,25 +354,42 @@ bool RevFileParse::extractRevision(std::string& revision, std::string& date, std
         inFile >> token[c++];
 
     // The third non-empty line (zero-index) from the start contains the revision number
-    revision = token[2];
+    rev_info.revision = token[2];
 
     // The fourth non-empty line from the start contains the working copy URL. The fifth
     // non-empty line contains the repository root, which is the part of the working
     // copy URL we're not interested in.
-    wc_uri = token[3].substr(token[4].length() + 1); // + 1 to remove the prefixed slash also
+    rev_info.wc_uri = token[3].substr(token[4].length() + 1); // + 1 to remove the prefixed slash also
 
     // The sixth non-empty line from the start contains the revision date
-    date = token[5].substr(0, strlen("2006-01-01T12:34:56"));
+    rev_info.date = token[5].substr(0, strlen("2006-01-01T12:34:56"));
     // Set the 11th character from a 'T' to a space (' ')
-    date[10] = ' ';
+    rev_info.date[10] = ' ';
 
     return true;
 }
 
 
-bool WriteOutput(const string& outputFile, const string& revision, const string& date, const string& wc_uri)
+bool WriteOutput(const string& outputFile, const RevisionInformation& rev_info)
 {
-    string comment("/*" + revision + "*/");
+    std::stringstream comment_str;
+
+    comment_str << "/*";
+    if (!rev_info.low_revision.empty()
+     && rev_info.low_revision != rev_info.revision)
+        comment_str << rev_info.low_revision << ":";
+
+    comment_str << rev_info.revision;
+
+    if (rev_info.wc_modified)
+        comment_str << "M";
+
+    if (rev_info.wc_switched)
+        comment_str << "S";
+
+    comment_str << "*/";
+
+    string comment(comment_str.str());
 
     // Check whether this file already contains the correct revision date. Don't
     // modify it if it does, we don't want to go messing with it's timestamp for
@@ -297,10 +400,11 @@ bool WriteOutput(const string& outputFile, const string& revision, const string&
         {
             string old;
             in >> old;
-            if(old >= comment)
+            if(old == comment)
             {
                 if(be_verbose)
-                    cout << "Revision unchanged (" << revision << "). Skipping.\n";
+                    cout << "Revision unchanged (" << rev_info.revision << "). Skipping.\n"
+                         << "old = \"" << old.substr(2, old.length() - 4) << "\"; new = \"" << comment.substr(2, comment.length() - 4) << "\"\n";
 
                 return false;
             }
@@ -331,48 +435,63 @@ bool WriteOutput(const string& outputFile, const string& revision, const string&
     if(do_wx)
         header << "#include <wx/string.h>\n";
 
-    header << "\n#define SVN_REV       " << revision << ""
-           << "\n#define SVN_REVISION \"" << revision << "\""
-           << "\n#define SVN_DATE     \"" << date << "\""
-           << "\n#define SVN_URI      \"" << wc_uri << "\"\n";
+    header << "\n#define SVN_LOW_REV      " << (rev_info.low_revision.empty() ? rev_info.revision : rev_info.low_revision)
+           << "\n#define SVN_LOW_REV_STR \"" << (rev_info.low_revision.empty() ? rev_info.revision : rev_info.low_revision) << "\""
+           << "\n#define SVN_REV          " << rev_info.revision
+           << "\n#define SVN_REV_STR     \"" << rev_info.revision << "\""
+           << "\n#define SVN_DATE        \"" << rev_info.date << "\""
+           << "\n#define SVN_URI         \"" << rev_info.wc_uri << "\"\n";
+
+    header << "\n#define SVN_WC_MODIFIED " << rev_info.wc_modified
+           << "\n#define SVN_WC_SWITCHED " << rev_info.wc_switched << "\n\n";
 
     // Open namespace
     if(do_int || do_std || do_wx)
         header << "namespace autorevision\n{\n";
 
     if(do_int)
-        header << "\tSVN_AUTOREVISION_STATIC const unsigned int svn_revision = " << revision << ";\n";
+        header << "\tSVN_AUTOREVISION_STATIC const unsigned int svn_low_revision = " << rev_info.low_revision << ";\n"
+               << "\tSVN_AUTOREVISION_STATIC const unsigned int svn_revision = " << rev_info.revision << ";\n";
 
     if(do_std)
-        header << "\tSVN_AUTOREVISION_STATIC const std::string svn_revision_s(\"" << revision << "\");\n"
-               << "\tSVN_AUTOREVISION_STATIC const std::string svn_date_s(\"" << date << "\");\n"
-               << "\tSVN_AUTOREVISION_STATIC const std::string svn_uri_s(\"" << wc_uri << "\");\n";
+        header << "\tSVN_AUTOREVISION_STATIC const std::string svn_low_revision_s(\"" << rev_info.low_revision << "\");\n"
+               << "\tSVN_AUTOREVISION_STATIC const std::string svn_revision_s(\"" << rev_info.revision << "\");\n"
+               << "\tSVN_AUTOREVISION_STATIC const std::string svn_date_s(\"" << rev_info.date << "\");\n"
+               << "\tSVN_AUTOREVISION_STATIC const std::string svn_uri_s(\"" << rev_info.wc_uri << "\");\n";
     if(do_cstr)
-        header << "\tSVN_AUTOREVISION_STATIC const char svn_revision_cstr[] = \"" << revision << "\";\n"
-               << "\tSVN_AUTOREVISION_STATIC const char svn_date_cstr[] = \"" << date << "\";\n"
-               << "\tSVN_AUTOREVISION_STATIC const char svn_uri_cstr[] = \"" << wc_uri << "\";\n";
+        header << "\tSVN_AUTOREVISION_STATIC const char svn_low_revision_cstr[] = \"" << rev_info.low_revision << "\";\n"
+               << "\tSVN_AUTOREVISION_STATIC const char svn_revision_cstr[] = \"" << rev_info.revision << "\";\n"
+               << "\tSVN_AUTOREVISION_STATIC const char svn_date_cstr[] = \"" << rev_info.date << "\";\n"
+               << "\tSVN_AUTOREVISION_STATIC const char svn_uri_cstr[] = \"" << rev_info.wc_uri << "\";\n";
     if(do_wx)
     {
-        header << "\tSVN_AUTOREVISION_STATIC const wxString svnRevision(";
+        header << "\tSVN_AUTOREVISION_STATIC const wxString svnLowRevision(";
 
         if(do_translate)
             header << "wxT";
 
-        header << "(\"" << revision << "\"));\n"
+        header << "(\"" << rev_info.low_revision << "\"));\n"
+
+               << "\tSVN_AUTOREVISION_STATIC const wxString svnRevision(";
+
+        if(do_translate)
+            header << "wxT";
+
+        header << "(\"" << rev_info.revision << "\"));\n"
 
                << "\tSVN_AUTOREVISION_STATIC const wxString svnDate(";
 
         if(do_translate)
             header << "wxT";
 
-        header << "(\"" << date << "\"));\n"
+        header << "(\"" << rev_info.date << "\"));\n"
 
                << "\tSVN_AUTOREVISION_STATIC const wxString svnUri(";
 
         if(do_translate)
             header << "wxT";
 
-        header << "(\"" << wc_uri << "\"));\n";
+        header << "(\"" << rev_info.wc_uri << "\"));\n";
     }
 
     // Terminate/close namespace
