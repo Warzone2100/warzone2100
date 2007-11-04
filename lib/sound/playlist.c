@@ -87,7 +87,7 @@ bool PlayList_Read(const char* path)
 	fileHandle = PHYSFS_openRead(fileName);
 	if (fileHandle == NULL)
 	{
-		debug(LOG_ERROR, "sound_LoadTrackFromFile: PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, PHYSFS_getLastError());
+		debug(LOG_NEVER, "sound_LoadTrackFromFile: PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, PHYSFS_getLastError());
 		return false;
 	}
 
