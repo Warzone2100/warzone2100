@@ -43,7 +43,6 @@ extern void	kf_ToggleFogColour( void );
 extern void	kf_ToggleFog( void );
 extern void	kf_ToggleShadows( void );
 extern void	kf_ToggleCamera( void );
-extern void	kf_SimCloseDown( void );
 extern void	kf_RaiseTile( void );
 extern void	kf_LowerTile( void );
 extern void	kf_SystemClose( void );

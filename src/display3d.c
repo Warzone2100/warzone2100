@@ -172,9 +172,9 @@ static void drawTerrainWaterTile(UDWORD i, UDWORD j);
 // Should be cleaned up properly and be put in structures.
 
 BOOL	bRender3DOnly;
-BOOL	bSensorDisplay = TRUE;		//was FALSE	**COUGH and I spend 2 days making my own. LOL -Q 5-10-05
-BOOL	bRangeDisplay = FALSE;
-SDWORD	rangeCenterX,rangeCenterY,rangeRadius;
+static BOOL	bSensorDisplay = TRUE;
+static BOOL	bRangeDisplay = FALSE;
+static SDWORD	rangeCenterX,rangeCenterY,rangeRadius;
 static BOOL	bDrawBlips=TRUE;
 static BOOL	bDrawProximitys=TRUE;
 BOOL	godMode;
@@ -185,9 +185,6 @@ static float waterRealValue = 0.0f;
 #define MAX_FIRE_STAGE 32
 
 UDWORD	barMode = BAR_FULL; // configured in configuration.c
-
-/* Is the scene spinning round - just for showcase stuff */
-BOOL	spinScene = FALSE;
 
 /* Have we made a selection by clicking the mouse - used for dragging etc */
 BOOL	selectAttempt = FALSE;
@@ -550,9 +547,6 @@ static void drawTiles(iView *camera, iView *player)
 			waterRealValue = 0.0f;
 		}
 	}
-	/* Is the scene spinning? - showcase demo stuff */
-	if (spinScene)
-		player->r.y += DEG(3);
 
 	/* ---------------------------------------------------------------- */
 	/* Do boundary and extent checking                                  */

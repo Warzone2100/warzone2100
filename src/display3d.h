@@ -28,8 +28,6 @@
 #include "objectdef.h"
 #include "message.h"
 
-extern BOOL xInOrder, yInOrder, yBeforeX, spinScene;
-
 extern void	setViewAngle(SDWORD angle);
 extern UDWORD getViewDistance(void);
 extern void	setViewDistance(UDWORD dist);
@@ -101,12 +99,7 @@ extern void setRubbleTile(UDWORD num);
 extern SDWORD	getCentreX( void );
 extern SDWORD	getCentreZ( void );
 
-
 extern SDWORD mouseTileX, mouseTileY;
-extern BOOL yBeforeX;
-extern UDWORD numDroidsSelected;
-extern UDWORD intensity1, intensity2, intensity3;
-extern UDWORD lightLevel;
 
 #define INITIAL_DESIRED_PITCH (325)
 #define INITIAL_STARTING_PITCH (-75)
@@ -117,9 +110,6 @@ extern BOOL bRender3DOnly;
 extern const Vector2i visibleTiles;
 
 extern TERRAIN_VERTEX tileScreenInfo[LAND_YGRD][LAND_XGRD];
-
-/* load IMDs AFTER RESOURCE FILE */
-extern BOOL loadExtraIMDs(void);
 
 /*returns the graphic ID for a droid rank*/
 extern UDWORD  getDroidRankGraphic(DROID *psDroid);

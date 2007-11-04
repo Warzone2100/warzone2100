@@ -652,22 +652,6 @@ void kf_ToggleWatchWindow( void )
 
 // --------------------------------------------------------------------------
 
-/* Simulates a close down */
-/*
-void	kf_SimCloseDown( void )
-{
-  		bScreenClose = TRUE;
-		audio_PlayTrack( ID_SOUND_THX_SHUTDOWN );
-
-		closingTimeStart = gameTime;
-//		widgetsOn = FALSE;
-		spinScene = TRUE;
-		radarOnScreen = FALSE;
-		screenCloseState = SC_CLOSING_DOWN;
-}
-*/
-// --------------------------------------------------------------------------
-
 /* Raises the tile under the mouse */
 void	kf_RaiseTile( void )
 {
