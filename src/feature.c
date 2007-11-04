@@ -59,13 +59,9 @@
 #include "gateway.h"
 
 
-
 /* The statistics for the features */
 FEATURE_STATS	*asFeatureStats;
 UDWORD			numFeatureStats;
-
-#define	DRIVE_OVER_RUBBLE_TILE		54
-#define NO_DRIVE_OVER_RUBBLE_TILE	67
 
 //Value is stored for easy access to this feature in destroyDroid()/destroyStruct()
 //UDWORD			droidFeature;
@@ -718,14 +714,14 @@ void destroyFeature(FEATURE *psDel)
 							{
 						   		/* Clear feature bits */
 								psTile->psObject = NULL;
-								texture = TileNumber_texture(psTile->texture) | DRIVE_OVER_RUBBLE_TILE;
+								texture = TileNumber_texture(psTile->texture) | DRIVE_OVER_RUBBLE_TILE_ID;
 								psTile->texture = (UWORD)texture;
 							}
 							else
 							{
 							   /* This remains a blocking tile */
 								psTile->psObject = NULL;
-								texture = TileNumber_texture(psTile->texture) | NO_DRIVE_OVER_RUBBLE_TILE;
+								texture = TileNumber_texture(psTile->texture) | NO_DRIVE_OVER_RUBBLE_TILE_ID;
 								psTile->texture = (UWORD)texture;
 
 							}

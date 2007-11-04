@@ -116,11 +116,6 @@
 static iIMDShape otherDirections[3];
 static BOOL directionSet[3] = {FALSE, FALSE, FALSE};
 
-// Extremely magic!
-#define WATER_TILE 17			// ID of water tile.
-#define RIVERBED_TILE 5				// ID of river bed tile.
-
-
 #define WATER_ALPHA_LEVEL 255 //was 164	// Amount to alpha blend water.
 #define WATER_ZOFFSET 32		// Sorting offset for main water tile.
 #define WATER_EDGE_ZOFFSET 64	// Sorting offset for water edge tiles.
@@ -179,7 +174,6 @@ static BOOL	bDrawBlips=TRUE;
 static BOOL	bDrawProximitys=TRUE;
 BOOL	godMode;
 
-static UWORD RiverBedTileID = RIVERBED_TILE;
 static float waterRealValue = 0.0f;
 #define WAVE_SPEED 4.0f
 #define MAX_FIRE_STAGE 32
@@ -241,8 +235,9 @@ UDWORD	terrainMidY;
 UDWORD	terrainMaxX;
 UDWORD	terrainMaxY;
 
-static UDWORD	underwaterTile = WATER_TILE;
-static UDWORD	rubbleTile = 67;//WATER_TILE;
+/* Initialise from macro instead of const variable */
+static unsigned int underwaterTile = _WATER_TILE_ID;
+static unsigned int rubbleTile = _NO_DRIVE_OVER_RUBBLE_TILE_ID;
 
 UDWORD geoOffset;
 static int averageCentreTerrainHeight;
@@ -717,7 +712,7 @@ static void drawTiles(iView *camera, iView *player)
 				}
 
 				// If it's the main water tile (has water texture) then..
-				if ( TileNumber_tile(psTile->texture) == WATER_TILE && !bEdgeTile )
+				if ( TileNumber_tile(psTile->texture) == WATER_TILE_ID && !bEdgeTile )
 				{
 					// Push the terrain down for the river bed.
 					PushedDown = TRUE;
@@ -824,7 +819,7 @@ static void drawTiles(iView *camera, iView *player)
 
 				// check if we need to draw a water edge
 				if (tileScreenInfo[i][j].bWater
-				    && TileNumber_tile(mapTile(playerXTile + j, playerZTile + i)->texture) != WATER_TILE)
+				    && TileNumber_tile(mapTile(playerXTile + j, playerZTile + i)->texture) != WATER_TILE_ID)
 				{
 					// the edge is in front of the water (which is drawn at z-index -1)
 					pie_SetDepthOffset(-2.0);
@@ -4142,7 +4137,7 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	else
 	{
 		// If it's a water tile then force it to be the river bed texture.
-		tileNumber = RiverBedTileID;
+		tileNumber = RIVERBED_TILE_ID;
 	}
 
 #if defined(SHOW_ZONES)

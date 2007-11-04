@@ -27,6 +27,7 @@
 #define _feature_h
 
 #include "objectdef.h"
+
 #define ONEMIN			(1000 * 60)
 #define WRECK_LIFETIME	(0)	//they're just not there anymore!!!!! Ye ha!
 
