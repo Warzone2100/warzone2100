@@ -1171,7 +1171,7 @@ if(!bMultiPlayer || myResponsibility(psDroid->player))
 
 	// catch any vtol that is rearming but has finished his order
 	if (psDroid->order == DORDER_NONE && vtolRearming(psDroid)
-	    && (psDroid->psActionTarget[0] == NULL || !psDroid->psActionTarget[0]->died))
+	 && (psDroid->psActionTarget == NULL || !psDroid->psActionTarget->died))
 	{
 		psDroid->order = DORDER_REARM;
 		psDroid->psTarget = psDroid->psActionTarget;
