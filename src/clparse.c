@@ -314,10 +314,6 @@ BOOL ParseCommandLine(int argc, char** argv)
 		{
 			war_setFullscreen(FALSE);
 		}
-		else if ( strcasecmp( tokenType,"--noTranslucent") == 0 )
-		{
-			war_SetTranslucent(FALSE);
-		}
 		else if ( strcasecmp( tokenType,"--noFog") == 0 )
 		{
 			pie_SetFogCap(FOG_CAP_NO);

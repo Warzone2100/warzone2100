@@ -2727,12 +2727,7 @@ static void	drawDragBox( void )
 		iV_Box(minX, minY,
 				maxX, maxY,
 				boxPulseColours[dragBox3D.boxColourIndex]);
-		if (war_GetTranslucent())
-		{
-			pie_UniTransBoxFill(minX+1, minY+1,
-					maxX-1, maxY-1,
-					0x00ffffff, 16);
-		}
+		pie_UniTransBoxFill(minX + 1, minY + 1, maxX - 1, maxY - 1, 0x00ffffff, 16);
 		pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 	}
 }

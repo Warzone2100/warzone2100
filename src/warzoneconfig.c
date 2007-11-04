@@ -48,7 +48,6 @@ typedef struct _warzoneGlobals
 {
 	SEQ_MODE	seqMode;
 	BOOL		bFog;
-	BOOL		bTranslucent;
 	SWORD		effectsLevel;
 	BOOL		allowSubtitles;
 	BOOL		playAudioCDs;
@@ -80,10 +79,7 @@ void war_SetDefaultStates(void)//Sets all states
 	//set those here and reset in clParse or loadConfig
 	pie_SetFogCap(FOG_CAP_UNDEFINED);
 	war_SetFog(FALSE);
-	war_SetTranslucent(TRUE);
-
 	war_SetPlayAudioCDs(TRUE);
-
 	war_setSoundEnabled( TRUE );
 }
 
@@ -134,21 +130,6 @@ void war_SetFog(BOOL val)
 BOOL war_GetFog(void)
 {
 	return  warGlobs.bFog;
-}
-
-/***************************************************************************/
-/***************************************************************************/
-void war_SetTranslucent(BOOL val)
-{
-	if (warGlobs.bTranslucent != val)
-	{
-		warGlobs.bTranslucent = val;
-	}
-}
-
-BOOL war_GetTranslucent(void)
-{
-	return  warGlobs.bTranslucent;
 }
 
 /***************************************************************************/
