@@ -135,7 +135,7 @@ char PlayList_Read(const char* path)
 			else
 			{
 				// Determine the length of the string we're about to construct
-				size_t path_length = strlen(path_to_music) + 1 + strlen(path_to_music) + 2;
+				size_t path_length = strlen(path_to_music) + 1 + strlen(filename) + 2;
 
 				// Allocate memory for our string
 				filepath = (char*)malloc(path_length);
