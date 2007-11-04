@@ -658,10 +658,9 @@ static void removeDroidFX(DROID *psDel)
 
 void destroyDroid(DROID *psDel)
 {
-
 	if(psDel->lastHitWeapon==WSC_LAS_SAT)		// darken tile if lassat.
 	{
-		UDWORD width,breadth;
+		UDWORD width, breadth, mapX, mapY;
 		MAPTILE	*psTile;
 
 		mapX = map_coord(psDel->x);

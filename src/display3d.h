@@ -30,7 +30,6 @@
 
 extern BOOL xInOrder, yInOrder, yBeforeX, spinScene;
 
-extern UDWORD mapX,mapY;
 extern void	setViewAngle(SDWORD angle);
 extern UDWORD getViewDistance(void);
 extern void	setViewDistance(UDWORD dist);

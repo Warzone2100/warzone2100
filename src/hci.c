@@ -3020,16 +3020,11 @@ static void intProcessStats(UDWORD id)
 /* Set the map view point to the world coordinates x,y */
 void intSetMapPos(UDWORD x, UDWORD y)
 {
-	if(!driveModeActive()) {
+	if (!driveModeActive())
+	{
 		setViewPos(map_coord(x), map_coord(y), TRUE);
-//		setPlayerPos((SDWORD)x, (SDWORD)y);
-		mapX = map_coord(x);
-		mapY = map_coord(y);
 	}
 }
-
-
-
 
 
 /* Sync the interface to an object */

@@ -189,9 +189,6 @@ UDWORD	barMode = BAR_FULL; // configured in configuration.c
 /* Is the scene spinning round - just for showcase stuff */
 BOOL	spinScene = FALSE;
 
-/* Initial 3D world origins */
-UDWORD	mapX=45, mapY=80;
-
 /* Have we made a selection by clicking the mouse - used for dragging etc */
 BOOL	selectAttempt = FALSE;
 
