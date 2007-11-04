@@ -976,22 +976,12 @@ void pie_DrawRect( SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour )
  *
  ***************************************************************************/
 
-void pie_DrawTexTriangle(const TERRAIN_VERTEX *aVrts, const void* psEffects)
+void pie_DrawTerrainTriangle(const TERRAIN_VERTEX *aVrts, float offset)
 {
-	GLfloat offset = 0.0f;
 	unsigned int i = 0;
 
 	/* Since this is only used from within source for the terrain draw - we can backface cull the polygons. */
 	tileCount++;
-	pie_SetFogStatus(TRUE);
-	if (psEffects != NULL)
-	{
-		/* Translucent water with animation */
-		pie_SetRendMode(REND_ALPHA_TEX);
-		pie_SetColourKeyedBlack(FALSE);
-		offset = *((GLfloat*)psEffects);
-	}
-	pie_SetBilinear(TRUE);
 
 	glBegin(GL_TRIANGLE_FAN);
 		for ( i = 0; i < 3; i++ )
@@ -1001,13 +991,6 @@ void pie_DrawTexTriangle(const TERRAIN_VERTEX *aVrts, const void* psEffects)
 			glVertex3f( aVrts[i].pos.x, aVrts[i].pos.y, aVrts[i].pos.z );
 		}
 	glEnd();
-
-	if (psEffects != NULL)
-	{
-		/* Solid terrain */
-		pie_SetRendMode(REND_GOURAUD_TEX);
-		pie_SetColourKeyedBlack(TRUE);
-	}
 }
 
 void pie_GetResetCounts(unsigned int* pPieCount, unsigned int* pTileCount, unsigned int* pPolyCount, unsigned int* pStateCount)

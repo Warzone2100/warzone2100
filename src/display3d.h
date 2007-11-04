@@ -48,8 +48,6 @@ extern void renderDroid					( DROID *psDroid );
 extern void renderStructure				( STRUCTURE *psStructure );
 extern void renderFeature				( FEATURE *psFeature );
 extern void renderProximityMsg			( PROXIMITY_DISPLAY	*psProxDisp);
-extern void drawTerrainTile				( UDWORD i, UDWORD j, BOOL onWaterEdge );
-extern void drawTerrainWaterTile		( UDWORD i, UDWORD j);
 extern void renderProjectile			( PROJECTILE *psCurr);
 extern void renderAnimComponent			( const COMPONENT_OBJECT *psObj );
 extern void renderDeliveryPoint			( FLAG_POSITION *psPosition );

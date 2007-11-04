@@ -278,11 +278,13 @@ extern BOOL bucketRenderCurrentList(void)
 #endif
 				break;
 				case RENDER_TILE:
-					drawTerrainTile(((TILE_BUCKET*)thisTag->pObject)->i,((TILE_BUCKET*)thisTag->pObject)->j, FALSE);
+					//drawTerrainTile(((TILE_BUCKET*)thisTag->pObject)->i,((TILE_BUCKET*)thisTag->pObject)->j, FALSE);
+					assert(false);
 				break;
 
 				case RENDER_WATERTILE:
-					drawTerrainWaterTile(((TILE_BUCKET*)thisTag->pObject)->i,((TILE_BUCKET*)thisTag->pObject)->j);
+					//drawTerrainWaterTile(((TILE_BUCKET*)thisTag->pObject)->i,((TILE_BUCKET*)thisTag->pObject)->j);
+					assert(false);
 				break;
 
 				case RENDER_PROJECTILE:

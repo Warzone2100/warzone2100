@@ -165,6 +165,8 @@ static void	drawDroidSensorLock(DROID *psDroid);
 BOOL	doWeDrawRadarBlips(void);
 BOOL	doWeDrawProximitys(void);
 
+static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge);
+static void drawTerrainWaterTile(UDWORD i, UDWORD j);
 
 /********************  Variables  ********************/
 // Should be cleaned up properly and be put in structures.
@@ -807,6 +809,8 @@ static void drawTiles(iView *camera, iView *player)
 	}
 
 	// Draw all the normal tiles
+	pie_SetFogStatus(TRUE);
+	pie_SetBilinear(TRUE);
 	for (i = 0; i < MIN(visibleTiles.y, mapHeight); i++)
 	{
 		for (j = 0; j < MIN(visibleTiles.x, mapWidth); j++)
@@ -838,7 +842,10 @@ static void drawTiles(iView *camera, iView *player)
 			}
 		}
 	}
+
 	// Now draw the water tiles in a second pass to get alpha sort order correct
+	pie_SetRendMode(REND_ALPHA_TEX);
+	pie_SetColourKeyedBlack(FALSE);
 	for (i = 0; i < MIN(visibleTiles.y, mapHeight); i++)
 	{
 		for (j = 0; j < MIN(visibleTiles.x, mapWidth); j++)
@@ -860,6 +867,8 @@ static void drawTiles(iView *camera, iView *player)
 			}
 		}
 	}
+	pie_SetRendMode(REND_GOURAUD_TEX);
+	pie_SetColourKeyedBlack(TRUE);
 
 	targetOpenList((BASE_OBJECT*)driveGetDriven());
 
@@ -4092,7 +4101,7 @@ static void getDefaultColours( void )
 // -------------------------------------------------------------------------------------
 /* New improved (and much faster) tile drawer */
 // -------------------------------------------------------------------------------------
-void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
+static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 {
 	/* Get the correct tile index for the x/y coordinates */
 	SDWORD actualX = playerXTile + j, actualY = playerZTile + i;
@@ -4240,7 +4249,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		}
 	}
 
-	pie_DrawTexTriangle(vertices, NULL);
+	pie_DrawTerrainTriangle(vertices, 0);
 
 	/* The second triangle */
 	if (TRI_FLIPPED(psTile))
@@ -4268,7 +4277,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		vertices[2].pos.y = tileScreenInfo[i + 1][j + 0].water_height;
 	}
 
-	pie_DrawTexTriangle(vertices, NULL);
+	pie_DrawTerrainTriangle(vertices, 0);
 
 	/* Outline the tile if necessary */
 	if(!onWaterEdge && terrainOutline)
@@ -4305,7 +4314,7 @@ void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 
 // Render a water tile.
 //
-void drawTerrainWaterTile(UDWORD i, UDWORD j)
+static void drawTerrainWaterTile(UDWORD i, UDWORD j)
 {
 	/* Get the correct tile index for the x/y coordinates */
 	const unsigned int actualX = playerXTile + j, actualY = playerZTile + i;
@@ -4358,7 +4367,7 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 
 		pie_SetDepthOffset(-1.0);
 
-		pie_DrawTexTriangle(vertices, &waterRealValue);
+		pie_DrawTerrainTriangle(vertices, waterRealValue);
 
 		vertices[1] = vertices[2];
 		vertices[2] = tileScreenInfo[i + 1][j + 0];
@@ -4366,7 +4375,7 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 		vertices[2].light = tileScreenInfo[i+1][j+0].wlight;
 		vertices[2].light.byte.a = WATER_ALPHA_LEVEL;
 
-		pie_DrawTexTriangle(vertices, &waterRealValue);
+		pie_DrawTerrainTriangle(vertices, waterRealValue);
 
 		pie_SetDepthOffset(0.0);
 	}
