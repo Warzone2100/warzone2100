@@ -537,33 +537,6 @@ extern void	kf_ToggleDistanceFog( void )
 
 }
 
-void	kf_ToggleMistFog( void )
-{
-
-	static BOOL bEnabled  = TRUE;//start in nicks mode
-
-		if (bEnabled)//true, so go to false
-		{
-			bEnabled = FALSE;
-			fogStatus &= FOG_FLAGS-FOG_GROUND;//clear highest bit of 3
-			if (fogStatus == 0)
-			{
-				pie_SetFogStatus(FALSE);
-				pie_EnableFog(FALSE);
-			}
-		}
-		else
-		{
-			bEnabled = TRUE;
-			if (fogStatus == 0)
-			{
-				pie_EnableFog(TRUE);
-			}
-			fogStatus |= FOG_GROUND;//set highest bit of 3
-		}
-
-}
-
 void	kf_ToggleFogColour( void )
 {
 

@@ -52,14 +52,15 @@
 /*	The vector that holds the sun's lighting direction - planar */
 Vector3f	theSun;
 UDWORD	fogStatus = 0;
-/*	Module function Prototypes */
 
+/*	Module function Prototypes */
 static void colourTile(SDWORD xIndex, SDWORD yIndex, LIGHT_COLOUR colour, UBYTE percent);
 static void normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant);
 static UDWORD calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos);
 
-UDWORD	numNormals;		// How many normals have we got?
-Vector3i normals[8];		// Maximum 8 possible normals
+static UDWORD	numNormals;		// How many normals have we got?
+static Vector3i normals[8];		// Maximum 8 possible normals
+
 extern void	draw3dLine(Vector3i *src, Vector3i *dest, UBYTE col);
 
 
@@ -69,7 +70,6 @@ extern void	draw3dLine(Vector3i *src, Vector3i *dest, UBYTE col);
  */
 /*****************************************************************************/
 
-//should do the same as above except cuts down on the loop count!
 //By passing in params - it means that if the scroll limits are changed mid-mission
 //we can re-do over the area that hasn't been seen
 void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
@@ -625,34 +625,6 @@ UDWORD	lightDoFogAndIllumination(UBYTE brightness, SDWORD dx, SDWORD dz, UDWORD*
 	{
 			umbra = 255 - (((distance-umbraRadius)*255)/(UMBRA_RADIUS));
 	}
-#ifdef EDGE_FOG
-	if(player.p.x < penumbraRadius)//fog lefthand edge
-	{
-		if (pie_GetFogEnabled())
-		{
-			if (player.p.x - dx + penumbraRadius < 0)
-			{
-				edge = 0;
-			}
-			else if (player.p.x - dx + penumbraRadius > UMBRA_RADIUS)
-			{
-				edge = 255;
-			}
-			else
-			{
-				edge = (((player.p.x - dx + penumbraRadius)*255)/(UMBRA_RADIUS));
-			}
-		}
-		else
-		{
-			edge = 255;
-		}
-	}
-	else
-	{
-		edge = 255;
-	}
-#endif
 
 	if ((distance) < 32)
 	{
@@ -698,33 +670,6 @@ UDWORD	lightDoFogAndIllumination(UBYTE brightness, SDWORD dx, SDWORD dz, UDWORD*
 		}
 	}
 
-   	/*
-	if ((fogStatus & FOG_GROUND) && (pie_GetFogStatus()))
-	{
-		//add mist
-		centreX = player.p.x + world_coord(visibleXTiles / 2);
-		centreZ = player.p.z + world_coord(visibleYTiles / 2);
-		mist = map_MistValue(centreX-dx,centreZ-dz);
-		if (!(fogStatus & FOG_BACKGROUND))//black penumbra so fade fog effect
-		{
-			mist = mist - (255 - umbra);
-		}
-		if (mist < 0)
-		{
-			mist = 0;
-		}
-		else if (mist > 255)
-		{
-			mist = 255;
-		}
-	}
-
-	fog = fog + mist;
-	if (fog > 255)
-	{
-		fog = 255;
-	}
-	*/
 	if ((fogStatus & FOG_BACKGROUND) && (pie_GetFogEnabled()))
 	{
 		//fog the umbra but only for distant points
@@ -740,17 +685,6 @@ UDWORD	lightDoFogAndIllumination(UBYTE brightness, SDWORD dx, SDWORD dz, UDWORD*
 				fog = 0;
 			}
 		}
-#ifdef EDGE_FOG
-		fog = fog + (255 - edge);
-		if (fog > 255)
-		{
-			fog = 255;
-		}
-		if (fog < 0)
-		{
-			fog = 0;
-		}
-#endif
 	}
 	else
 	{

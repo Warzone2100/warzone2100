@@ -222,7 +222,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_TogglePower,
 	kf_ToggleWeather,
 	kf_SelectPlayer,
-	kf_ToggleMistFog,
+	NULL, // unused
 	kf_ToggleFogColour,
 	kf_AddMissionOffWorld,
 	kf_KillSelected,
@@ -422,7 +422,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN,KEYMAP_PRESSED,kf_ToggleReopenBuildMenu,_("Toggle reopening the build menu"));
 
 	// NOTE THIS!!!!!!!
-	// available: ctrl+e, ctrl+m
+	// available: ctrl+e, ctrl+m, ctrl+k
 	keyAddMapping(KEYMAP___HIDE,KEY_LSHIFT,KEY_BACKSPACE,KEYMAP_PRESSED,kf_ToggleDebugMappings,			"TOGGLE Debug Mappings");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_M,KEYMAP_PRESSED,kf_ShowMappings,				"Show all keyboard mappings - use pause!");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_V,KEYMAP_PRESSED,kf_ToggleVisibility,			"Toggle visibility");
@@ -431,7 +431,6 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_Y,KEYMAP_PRESSED,kf_ToggleDemoMode,				"Toggles on/off DEMO Mode");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_B,KEYMAP_PRESSED,kf_EndMissionOffWorld,			"End Mission");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_J,KEYMAP_PRESSED,kf_ToggleFog,					"Toggles All fog");
-	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_K,KEYMAP_PRESSED,kf_ToggleMistFog,				"Toggle Mist Fog");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_L,KEYMAP_PRESSED,kf_ToggleFogColour,				"Toggle Fog Colour Fog");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_Q,KEYMAP_PRESSED,kf_ToggleWeather,				"Trigger some weather");
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_K,KEYMAP_PRESSED,kf_TriFlip,					"Flip terrain triangle");
@@ -524,7 +523,6 @@ KEY_MAPPING	*newMapping;
 	newMapping->lastCalled	= gameTime;
 
 	/* And what gets called when it's activated */
-	//newMapping->function	= function;
 	newMapping->function	= pKeyMapFunc;
 
 	/* Is it functional on the key being down or just pressed */
@@ -698,11 +696,8 @@ SDWORD		i;
 		return;
 	}
 
-
-
 	/* Jump out if we've got a new mapping */
   	(void) checkQwertyKeys();
-
 
 	/* Check for the meta keys */
 	if(keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LALT)
@@ -736,6 +731,10 @@ SDWORD		i;
 			continue;
 		}
 
+		if (keyToProcess->function == NULL)
+		{
+			continue;
+		}
 
 		if(keyToProcess->metaKeyCode==KEY_IGNORE && !bMetaKeyDown &&
 			!(keyToProcess->status==KEYMAP__DEBUG && bDoingDebugMappings == FALSE) )
@@ -786,14 +785,14 @@ SDWORD		i;
 			!(keyToProcess->status==KEYMAP__DEBUG && bDoingDebugMappings == FALSE))
  		{
  			/* It's a combo keypress - one held down and the other pressed */
- 			if(keyDown(keyToProcess->metaKeyCode) && keyPressed(keyToProcess->subKeyCode) )
+ 			if (keyDown(keyToProcess->metaKeyCode) && keyPressed(keyToProcess->subKeyCode))
  			{
  				lastMetaKey = keyToProcess->metaKeyCode;
  				lastSubKey = keyToProcess->subKeyCode;
  				keyToProcess->function();
 				bKeyProcessed = TRUE;
  			}
-			else if(keyToProcess->altMetaKeyCode!=KEY_IGNORE)
+			else if (keyToProcess->altMetaKeyCode != KEY_IGNORE)
 			{
 				if(keyDown(keyToProcess->altMetaKeyCode) && keyPressed(keyToProcess->subKeyCode))
 				{
@@ -804,14 +803,6 @@ SDWORD		i;
 				}
 			}
  		}
-		if(bKeyProcessed)
-		{
-			if(keyToProcess->status==KEYMAP__DEBUG && bDoingDebugMappings)
-			{
-				// this got really annoying. what purpose? - Per
-				// CONPRINTF(ConsoleString,(ConsoleString,"DEBUG MAPPING : %s",keyToProcess->pName));
-			}
-		}
 	}
 
 	/* Script callback - find out what meta key was pressed */
@@ -1067,37 +1058,6 @@ BOOL		bFound;
 	return(bFound);
 }
 
-/*
-BOOL	keyReAssignMappingName(char *pName, KEY_CODE newMetaCode, KEY_CODE newSubCode)
-							   )
-{
-KEY_MAPPING	*psMapping;
-KEY_CODE	origMetaCode,origSubCode;
-BOOL	bReplaced;
-
-  	for(psMapping = keyMappings,bReplaced = FALSE; psMapping && !bReplaced;
-		psMapping = psMapping->psNext)
-	{
-		if(strcmp(psMapping->pName,pName) == FALSE)	//negative
-		{
-			if(psMapping->status==KEYMAP_ASSIGNABLE)
-			{
-				(void)keyAddMapping(psMapping->status,newMetaCode,
-					newSubCode, psMapping->action,psMapping->function,psMapping->pName);
-				bReplaced = TRUE;
-				origMetaCode = psMapping->metaKeyCode;
-				origSubCode = psMapping->subKeyCode;
-			}
-		}
-	}
-
-	if(bReplaced)
-	{
-		keyRemoveMapping(origMetaCode, origSubCode);
-	}
-	return(bReplaced);
-}
-*/
 // ----------------------------------------------------------------------------------
 KEY_MAPPING	*getKeyMapFromName(char *pName)
 {
@@ -1111,6 +1071,7 @@ KEY_MAPPING	*psMapping;
 		}
 	return(NULL);
 }
+
 // ----------------------------------------------------------------------------------
 BOOL	keyReAssignMappingName(char *pName,KEY_CODE newMetaCode, KEY_CODE newSubCode)
 {
