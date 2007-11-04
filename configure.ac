@@ -4,6 +4,9 @@ AC_PREREQ(2.56)
 AC_INIT([Warzone 2100],[TRUNK],[http://wz2100.net/],[warzone2100])
 AM_INIT_AUTOMAKE([1.8])
 
+if test -d "${top_srcdir}/3rdparty/quesoglc" ; then
+	AC_CONFIG_SUBDIRS([3rdparty/quesoglc])
+fi
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([lib/framework/frame.c])
 
