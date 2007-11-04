@@ -176,10 +176,17 @@ bool PlayList_Read(const char* path)
 			if (playlist[current_track].nb_songs == playlist[current_track].list_size)
 			{
 				char** songs;
-				playlist[current_track].list_size *= 2;
+				unsigned int new_list_size = playlist[current_track].list_size * 2;
+				unsigned int i;
+
+				// Make sure that we always allocate _some_ memory.
+				if (new_list_size == 0)
+				{
+					new_list_size = 1;
+				}
 
 				songs = (char**)realloc(playlist[current_track].songs,
-				                        playlist[current_track].list_size * sizeof(char*));
+				                        new_list_size * sizeof(char*));
 				if (songs == NULL)
 				{
 					debug(LOG_ERROR, "PlayList_Read: Out of memory!");
@@ -189,7 +196,15 @@ bool PlayList_Read(const char* path)
 					return false;
 				}
 
+				// Initialize the new set of pointers to NULL. Since they don't point to
+				// allocated memory yet.
+				for (i = playlist[current_track].list_size; i < new_list_size; ++i)
+				{
+					songs[i] = NULL;
+				}
+
 				playlist[current_track].songs = songs;
+				playlist[current_track].list_size = new_list_size;
 			}
 
 			playlist[current_track].songs[playlist[current_track].nb_songs++] = filepath;
