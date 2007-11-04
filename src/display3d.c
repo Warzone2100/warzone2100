@@ -809,6 +809,7 @@ static void drawTiles(iView *camera, iView *player)
 	}
 
 	// Draw all the normal tiles
+	pie_SetColourKeyedBlack(TRUE);
 	pie_SetFogStatus(TRUE);
 	pie_SetBilinear(TRUE);
 	for (i = 0; i < MIN(visibleTiles.y, mapHeight); i++)
