@@ -60,9 +60,13 @@ const char* version_getVersionString()
 		{
 			version_string = (SVN_URI " branch " SVN_FULL_REV_STR) + strlen("branches/");
 		}
-		else
+		else if (SVN_REV != 0)
 		{
 			version_string = SVN_URI " " SVN_FULL_REV_STR;
+		}
+		else
+		{
+			version_string = SVN_FULL_REV_STR;
 		}
 	}
 
@@ -99,6 +103,9 @@ const char* version_getBuildTime()
 
 const char* version_getSvnDate()
 {
+#if (SVN_REV == 0)
+	return "";
+#else
 	static char svn_date[sizeof(svn_date_cstr) - 9] = { '\0' };
 
 	if (svn_date[0] == '\0')
@@ -107,11 +114,16 @@ const char* version_getSvnDate()
 	}
 
 	return svn_date;
+#endif
 }
 
 const char* version_getSvnTime()
 {
+#if (SVN_REV == 0)
+	return "";
+#else
 	return SVN_DATE + sizeof(SVN_DATE) - 8 - 1;
+#endif
 }
 
 const char* version_getFormattedVersionString()

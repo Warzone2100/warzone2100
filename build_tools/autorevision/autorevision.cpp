@@ -34,6 +34,42 @@ using namespace std;
     inline void set_env(const char* k, const char* v) { setenv(k, v, 1); };
 #endif
 
+template <typename T>
+class assign_once : public T
+{
+    public:
+        assign_once() :
+            _assigned(false)
+        {}
+
+        assign_once(const T& data) :
+            T(data),
+            _assigned(false)
+        {}
+
+        const assign_once<T>& operator=(const T& data)
+        {
+            if (!_assigned)
+            {
+                T::operator=(data);
+                _assigned = true;
+            }
+
+            return *this;
+        }
+
+        const assign_once<T&> set_default(const T& data)
+        {
+            if (!_assigned)
+                T::operator=(data);
+
+            return *this;
+        }
+
+    private:
+        bool _assigned;
+};
+
 struct RevisionInformation
 {
     RevisionInformation() :
@@ -41,13 +77,13 @@ struct RevisionInformation
         wc_switched(false)
     {}
 
-    std::string low_revision;
-    std::string revision;
+    assign_once<std::string> low_revision;
+    assign_once<std::string> revision;
 
-    std::string date;
+    assign_once<std::string> date;
 
     /// working copy root, e.g. trunk, branches/2.0, etc.
-    std::string wc_uri;
+    assign_once<std::string> wc_uri;
 
     bool wc_modified;
     bool wc_switched;
@@ -212,12 +248,12 @@ int main(int argc, char** argv)
     if(outputFile.empty())
         outputFile = "autorevision.h";
 
-    RevFileParse revRetr4(workingDir + "/_svn/entries");
-    RevFileParse revRetr3(workingDir + "/.svn/entries", &revRetr4);
-    RevSVNQuery  revRetr2(workingDir, &revRetr3);
-    RevSVNVersionQuery revRetr1(workingDir, &revRetr2);
+    RevConfigFile revRetr4(workingDir + "/autorevision.conf");
+    RevFileParse revRetr3(workingDir + "/_svn/entries", &revRetr4);
+    RevFileParse revRetr2(workingDir + "/.svn/entries", &revRetr3);
+    RevSVNQuery  revRetr1(workingDir, &revRetr2);
 
-    RevConfigFile revRetr(workingDir + "/autorevision.conf", &revRetr1);
+    RevSVNVersionQuery revRetr(workingDir, &revRetr1);
 
     // Strings to extract Subversion information we want into
     RevisionInformation rev_info;
@@ -270,6 +306,12 @@ bool RevSVNVersionQuery::extractRevision(RevisionInformation& rev_info)
         {
             rev_info.low_revision = line.substr(0, char_pos);
             line.erase(0, char_pos + 1);
+        }
+
+        if (line.find("exported") != string::npos)
+        {
+            pclose(svn_version);
+            return RevisionExtractor::extractRevision(rev_info);
         }
 
         char_pos = line.find('M');
