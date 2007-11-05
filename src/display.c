@@ -1760,8 +1760,7 @@ void dealWithDroidSelect(DROID *psDroid, BOOL bDragBox)
 	{
 //		psDroid->selected = FALSE;
 		DeSelectDroid(psDroid);
-		// was "=="
-		psDroid->group = UBYTE_MAX;
+
 //		if(OrderUp)
 		{
 			/* Fix this ALEX M!!! */
@@ -1779,11 +1778,6 @@ void dealWithDroidSelect(DROID *psDroid, BOOL bDragBox)
 				bGotGroup = TRUE;
 				groupNumber = psD->group;
 			}
-		}
-		if(bGotGroup && ( keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT)) )
-		{
-			psDroid->group = (UBYTE)groupNumber;
-			secondarySetAverageGroupState(selectedPlayer, (UDWORD)groupNumber);
 		}
 //		psDroid->selected = TRUE;
 		if(keyDown(KEY_LALT) || keyDown(KEY_RALT) )
