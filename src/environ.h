@@ -21,9 +21,7 @@
 #define _environ_h
 
 // -------------------------------------------------------------------------------
-extern BOOL	waterOnMap					( void );
 extern BOOL environInit					( void );
-extern void	environUpdate				( void );
 extern UDWORD	environGetValue			( UDWORD x, UDWORD y );
 extern UDWORD	environGetData			( UDWORD x, UDWORD y );
 extern void	environShutDown				( void );

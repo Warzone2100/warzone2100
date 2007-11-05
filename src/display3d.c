@@ -785,10 +785,6 @@ static void drawTiles(iView *camera, iView *player)
 	processEffects();
 	atmosUpdateSystem();
 
-	if(waterOnMap())
-	{
-//		environUpdate();
-	}
 	if(getRevealStatus())
 	{
 		avUpdateTiles();
