@@ -1596,7 +1596,6 @@ void setViewPos( UDWORD x, UDWORD y, WZ_DECL_UNUSED BOOL Pan )
 		camToggleStatus();
 	}
 
-	SetRadarStrobe(midX,midY);
 	scroll();
 }
 
@@ -1622,8 +1621,6 @@ void setPlayerPos(SDWORD x, SDWORD y)
 	player.p.x = midX*TILE_UNITS;
 	player.p.z = midY*TILE_UNITS;
 	player.r.z = 0;
-
-	SetRadarStrobe(midX,midY);
 }
 
 

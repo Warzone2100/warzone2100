@@ -32,7 +32,6 @@ extern BOOL ShutdownRadar(void);
 extern void	drawRadar(void);
 extern void CalcRadarPosition(UDWORD mX,UDWORD mY,UDWORD *PosX,UDWORD *PosY);
 extern void worldPosToRadarPos(UDWORD wX,UDWORD wY,SDWORD *rX, SDWORD *rY);
-extern void SetRadarStrobe(UDWORD x,UDWORD y);
 extern void SetRadarZoom(UWORD ZoomLevel);
 extern UDWORD GetRadarZoom(void);
 extern BOOL CoordInRadar(int x,int y);

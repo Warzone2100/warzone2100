@@ -53,15 +53,7 @@
 #define RADAR_3DFX_TU	0
 #define RADAR_3DFX_TV	0
 #define RADAR_DRAW_VIEW_BOX		// If defined then draw a box to show the viewing area.
-//#define	RADAR_TRIANGLE_TOPLEFT	// If defined then put direction triangle in top left
-								// otherwise put in view box and scale it by zoom level.
-#ifdef RADAR_TRIANGLE_TOPLEFT
-#define RADAR_TRIANGLE_SIZE		16
-#define RADAR_TRIANGLE_X	(RADTLX+2+RADAR_TRIANGLE_SIZE/2)
-#define RADAR_TRIANGLE_Y	(RADTLY+2+RADAR_TRIANGLE_SIZE/2)
-#else
 #define RADAR_TRIANGLE_SIZE		8
-#endif
 #define RADAR_TRIANGLE_HEIGHT	RADAR_TRIANGLE_SIZE
 #define RADAR_TRIANGLE_WIDTH	(RADAR_TRIANGLE_SIZE/2)
 
@@ -96,8 +88,6 @@ static UDWORD		flashColours[CAMPAIGNS][MAX_PLAYERS] =
 
 
 static UBYTE		tileColours[NUM_TILES];
-static BOOL			radarStrobe;
-static UDWORD		radarStrobeX,radarStrobeY,radarStrobeIndex,sweepStrobeIndex;
 static UBYTE		*radarBuffer;
 static UBYTE		heightMapColors[255];		//precalculated colors for heightmap mode
 
@@ -129,7 +119,6 @@ static void UpdateRadar(UWORD boxSizeH,UWORD boxSizeV);
 void radarInitVars(void)
 {
 	sweep = 0;
-	radarStrobe = TRUE;
 	RadarScrollX = 0;
 	RadarScrollY = 0;
 	RadarWidth = RADWIDTH;
@@ -145,8 +134,6 @@ void resetRadarRedraw(void)
 {
 	RadarRedraw = TRUE;
 }
-
-
 
 
 BOOL InitRadar(void)
@@ -201,7 +188,6 @@ BOOL InitRadar(void)
 
 BOOL ShutdownRadar(void)
 {
-
 	pie_ShutdownRadar();
 
 	free(radarBuffer);
@@ -215,19 +201,15 @@ void SetRadarZoom(UWORD ZoomLevel)
 {
 	ASSERT( ZoomLevel <= MAX_RADARZOOM,"SetRadarZoom: Max radar zoom exceeded" );
 
-
 	if(ZoomLevel != RadarZoom) {
 		RadarZoom = ZoomLevel;
 		RadarRedraw = TRUE;
 	}
-
 }
 
 UDWORD GetRadarZoom(void)
 {
-
 	return RadarZoom;
-
 }
 
 
@@ -242,10 +224,6 @@ void CalcRadarPosition(UDWORD mX,UDWORD mY,UDWORD *PosX,UDWORD *PosY)
 	CalcRadarPixelSize(&boxSizeH,&boxSizeV);
 	CalcRadarScroll(boxSizeH,boxSizeV);
 
-	//*PosX = ((mX-RADTLX-RadarOffsetX)/boxSizeH)+RadarScrollX+RadarMapOriginX;
-	//*PosY = ((mY-RADTLY-RadarOffsetY)/boxSizeV)+RadarScrollY+RadarMapOriginY;
-
-
 	// Calculate where on the radar we clicked
 	Xoffset=mX-RADTLX-RadarOffsetX;
 	// we need to check for negative values (previously this meant that sPosX/Y were becoming huge)
@@ -254,12 +232,8 @@ void CalcRadarPosition(UDWORD mX,UDWORD mY,UDWORD *PosX,UDWORD *PosY)
 	Yoffset=mY-RADTLY-RadarOffsetY;
 	if (Yoffset<0) Yoffset=0;
 
-
 	sPosX = ((Xoffset)/boxSizeH)+RadarScrollX+RadarMapOriginX;
 	sPosY = ((Yoffset)/boxSizeV)+RadarScrollY+RadarMapOriginY;
-
-
-
 
 	if (sPosX < scrollMinX)
 	{
@@ -298,48 +272,15 @@ void worldPosToRadarPos(UDWORD wX,UDWORD wY,SDWORD *rX, SDWORD *rY)
 	*rY = y;
 }
 
-// Kick of a new radar strobe.
-//
-void SetRadarStrobe(UDWORD x,UDWORD y)
-{
-	radarStrobe = TRUE;
-	radarStrobeX = x;
-	radarStrobeY = y;
-	radarStrobeIndex = 0;
-}
-
 
 // Calculate the radar pixel sizes.
 //
 static void CalcRadarPixelSize(UWORD *SizeH,UWORD *SizeV)
 {
-
 	UWORD Size = (UWORD)(1<<RadarZoom);
 
 	*SizeH = Size;
 	*SizeV = Size;
-
-//#ifdef FORCEPIXELSIZE
-//	*SizeH = 2;
-//	*SizeV = 2;
-//#else
-//	UWORD boxSizeH,boxSizeV;
-//
-//	boxSizeH = (UWORD)(RadarWidth/mapWidth);
-//	boxSizeV = (UWORD)(RadarHeight/mapHeight);
-//
-//// Ensure boxSizeH and V are always 1 or greater and equal to each other.
-//	if((boxSizeH == 0) || (boxSizeV ==0)) {
-//		boxSizeH = boxSizeV = 1;
-//	} else if(boxSizeH > boxSizeV) {
-//		boxSizeV = boxSizeH;
-//	} else {
-//		boxSizeH = boxSizeV;
-//	}
-//
-//	*SizeH = boxSizeH;
-//	*SizeV = boxSizeV;
-//#endif
 }
 
 
@@ -356,7 +297,6 @@ static void CalcRadarScroll(UWORD boxSizeH,UWORD boxSizeV)
 	SDWORD PrevRadarMapOriginY = RadarMapOriginY;
 	SDWORD PrevRadarMapWidth = RadarMapWidth;
 	SDWORD PrevRadarMapHeight = RadarMapHeight;
-
 	SDWORD BorderX;
 	SDWORD BorderY;
 
@@ -381,7 +321,6 @@ static void CalcRadarScroll(UWORD boxSizeH,UWORD boxSizeV)
 	} else {
 		RadarOffsetY = 0;
 	}
-
 
 	BorderX = (RadVisWidth - visibleTiles.x*boxSizeH) / 2;
 	BorderY = (RadVisHeight - visibleTiles.y*boxSizeV) / 2;
@@ -444,7 +383,6 @@ static void CalcRadarScroll(UWORD boxSizeH,UWORD boxSizeV)
 
 		RadarRedraw = TRUE;
 	}
-
 }
 
 
@@ -452,14 +390,6 @@ void drawRadar(void)
 {
 	UWORD	boxSizeH,boxSizeV;
 	static int frameSkip = 0;
-
-#ifdef TESTRADAR
-	godMode = TRUE;
-	scrollMinX = 0;
-	scrollMinY = 0;
-	scrollMaxX = scrollMinX+191;
-	scrollMaxY = scrollMinY+127;
-#endif
 
 	CalcRadarPixelSize(&boxSizeH,&boxSizeV);
 	CalcRadarScroll(boxSizeH,boxSizeV);
@@ -497,14 +427,6 @@ static void UpdateRadar(UWORD boxSizeH,UWORD boxSizeV)
 
  	if(sweep >= (UDWORD)RadarHeight) {
 		sweep = 0;
-	}
-
-	if(!gamePaused())
-	{
-		if(sweepStrobeIndex++>=BOX_PULSE_SIZE)
-		{
-			sweepStrobeIndex = 0;
-		}
 	}
 }
 
@@ -552,7 +474,6 @@ static void DrawRadarTiles(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD box
 	SDWORD OffsetY;
 	UBYTE ShadeDiv = 0;
 
-
 	SizeH = boxSizeH;
 	SizeV = boxSizeV;
 	VisWidth = RadVisWidth;
@@ -560,7 +481,6 @@ static void DrawRadarTiles(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD box
 	SweepPos = sweep - RadarOffsetY;
 	OffsetX = RadarOffsetX;
 	OffsetY = RadarOffsetY;
-
 
 	ASSERT( (SizeV!=0) && (SizeV!=0) ,"Zero pixel size" );
 
@@ -725,16 +645,12 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 	UBYTE				flashCol;
 	UBYTE				camNum;
 
-
-
 	SizeH = boxSizeH;
 	SizeV = boxSizeV;
 	VisWidth = RadVisWidth;
 	VisHeight = RadVisHeight;
-//	SweepPos = sweep - RadarOffsetY;
 	OffsetX = RadarOffsetX;
 	OffsetY = RadarOffsetY;
-
 
 	SweepPos = sweep - RadarOffsetY;
 
@@ -742,10 +658,7 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 		return;
 	}
 
-
-
 	camNum = getCampaignNumber()-1;
-
 
    	/* Show droids on map - go through all players */
    	for(clan = 0; clan < MAX_PLAYERS; clan++)
@@ -784,19 +697,9 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 
 					if((x < VisWidth) && (y < VisHeight) && (x >= 0) && (y >= 0)) {
    						Ptr = screen + x + y*Modulus + OffsetX + OffsetY*Modulus;
-	//
+
 						if((clan == selectedPlayer) && (gameTime-psDroid->timeLastHit < HIT_NOTIFICATION))
 						{
-						   	/*
-							if(gameTime%250<125)
-							{
-								col = playerCol;
-							}
-							else
-							{
-								col = 165;//COL_RED;
-							}
-							*/
 								col = flashCol;
 						}
 						else
@@ -824,8 +727,6 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 			}
    		}
    	}
-
-
 
    	/* Do the same for structures */
    	for(clan = 0; clan < MAX_PLAYERS; clan++)
@@ -869,13 +770,10 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 				x = x&(~(boxSizeH-1));
 				y = y&(~(boxSizeV-1));
 
-//				if( ((y >= sweep) && (y <= sweep+(bh*boxSizeV))) || (RadarRedraw) ) {
-
 					SSizeH = (SWORD)boxSizeH*bh;
 					SSizeV = (SWORD)boxSizeV*bw;
 
-
-// Clip the structure box.
+					// Clip the structure box.
 					if(x < 0) {
 						SSizeH += x;
 						x = 0;
@@ -893,21 +791,12 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 					if(y+SSizeV > VisHeight) {
 						SSizeV -= (y+SSizeV) - VisHeight;
 					}
-// And draw it.
+
+					// And draw it.
 					if((SSizeV > 0) && (SSizeH > 0)) {
    						Ptr = screen + x + y*Modulus + OffsetX + OffsetY*Modulus;
 											if((clan == selectedPlayer) && (gameTime - psStruct->timeLastHit < HIT_NOTIFICATION))
 						{
-							/*
-							if(gameTime%250<125)
-							{
-								col = playerCol;
-							}
-							else
-							{
-								col = 165;//COL_RED;
-						   	}
-							*/
 								col = flashCol;
 						}
 						else
@@ -933,7 +822,6 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 						psStruct->radarX = (UWORD)(x + OffsetX);
 						psStruct->radarY = (UWORD)(y + OffsetY);
 					}
-//				}
 			}
    		}
    	}
@@ -961,8 +849,6 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 		x *= boxSizeH;
 		y *= boxSizeV;
 
-		if(TRUE) {
-
 			psProxDisp->radarX = 0;
 			psProxDisp->radarY = 0;
 			if((x < VisWidth) && (y < VisHeight) && (x >= 0) && (y >= 0))
@@ -971,7 +857,6 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 				psProxDisp->radarX = x + OffsetX;
 				psProxDisp->radarY = y + OffsetY;
 			}
-		}
    	}
 }
 
@@ -1072,10 +957,6 @@ static void drawViewingWindow( UDWORD x, UDWORD y, UDWORD boxSizeH, UDWORD boxSi
 	centre.y = RADTLY+y+(visibleTiles.y*boxSizeV)/2;
 
 	RotateVector2D(v,tv,&centre,player.r.y,4);
-  //	iV_Line(tv[0].x,tv[0].y,tv[1].x,tv[1].y,colWhite);
-  //	iV_Line(tv[1].x,tv[1].y,tv[3].x,tv[3].y,colWhite);
-  //	iV_Line(tv[3].x,tv[3].y,tv[2].x,tv[2].y,colWhite);
-  //	iV_Line(tv[2].x,tv[2].y,tv[0].x,tv[0].y,colWhite);
 
 	camNumber = getCampaignNumber();
 	switch(camNumber)
@@ -1101,12 +982,8 @@ static void drawViewingWindow( UDWORD x, UDWORD y, UDWORD boxSizeH, UDWORD boxSi
 
 static void DrawRadarExtras(UWORD boxSizeH,UWORD boxSizeV)
 {
-//	UDWORD	viewX,viewY;
 	SDWORD	viewX,viewY;
-	SDWORD	offsetX,offsetY;
 
-	offsetX =
-	offsetY =
 	viewX = ((player.p.x/TILE_UNITS)-RadarScrollX-RadarMapOriginX)*boxSizeH;
 	viewY = ((player.p.z/TILE_UNITS)-RadarScrollY-RadarMapOriginY)*boxSizeV;
 	viewX += RadarOffsetX;
@@ -1115,30 +992,8 @@ static void DrawRadarExtras(UWORD boxSizeH,UWORD boxSizeV)
 	viewX = viewX&(~(boxSizeH-1));
 	viewY = viewY&(~(boxSizeV-1));
 
-	//don't update the strobe whilst the game is paused
-	if (!gameUpdatePaused())
-	{
-		/*
-		if(radarStrobe)
-		{
-			iV_Line(RADTLX+radarStrobeX,RADTLY,RADTLX+radarStrobeX,RADBRY,boxPulseColours[radarStrobeIndex]);
-			iV_Line(RADTLX,RADTLY+radarStrobeY,RADBRX,RADTLY+radarStrobeY,boxPulseColours[radarStrobeIndex++]);
-
-			sweep = viewY;
-			if(radarStrobeIndex >= BOX_PULSE_SIZE)
-			{
-				radarStrobe = FALSE;
-				radarStrobeIndex = 0;
-			}
-		}
-		*/
-
-	}
-
 	drawViewingWindow(viewX,viewY,boxSizeH,boxSizeV);
 	RenderWindowFrame(&FrameRadar,RADTLX-1,RADTLY-1,RADWIDTH+2,RADHEIGHT+2);
-
-	// Draw the radar border.
 }
 
 
