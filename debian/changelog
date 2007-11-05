@@ -1,11 +1,12 @@
-warzone2100 (2.1.0~0.svn2728-0) unstable; urgency=low
+warzone2100 (2.1.0~0.svn2730-0) unstable; urgency=low
 
   * Bump upstream version number for the development branch
     - This version is _not_ an official release, just a development
       snapshot.
   * Disable compilation of QuesoGLC while creating a Debian package
+  * Don't strip output binaries anymore
 
- -- Giel van Schijndel <muggenhor@gna.org>  Mon,  5 Nov 2007 18:04:07 +0100
+ -- Giel van Schijndel <muggenhor@gna.org>  Mon,  5 Nov 2007 18:30:12 +0100
 
 warzone2100 (2.0.8-rc1-0) unstable; urgency=low
 
