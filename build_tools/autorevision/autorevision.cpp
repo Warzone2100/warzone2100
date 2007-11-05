@@ -142,6 +142,20 @@ class RevFileParse : public RevisionExtractor
         const std::string _docFile;
 };
 
+class RevConfigFile : public RevisionExtractor
+{
+    public:
+        RevConfigFile(const std::string& configFile, RevisionExtractor* s = NULL) :
+            RevisionExtractor(s),
+            _configFile(configFile)
+        {}
+
+        virtual bool extractRevision(RevisionInformation& rev_info);
+
+    private:
+        const std::string _configFile;
+};
+
 bool WriteOutput(const string& outputFile, const RevisionInformation& rev_info);
 int main(int argc, char** argv);
 
@@ -198,11 +212,12 @@ int main(int argc, char** argv)
     if(outputFile.empty())
         outputFile = "autorevision.h";
 
-    RevFileParse revRetr3(workingDir + "/_svn/entries");
-    RevFileParse revRetr2(workingDir + "/.svn/entries", &revRetr3);
-    RevSVNQuery  revRetr1(workingDir, &revRetr2);
+    RevFileParse revRetr4(workingDir + "/_svn/entries");
+    RevFileParse revRetr3(workingDir + "/.svn/entries", &revRetr4);
+    RevSVNQuery  revRetr2(workingDir, &revRetr3);
+    RevSVNVersionQuery revRetr1(workingDir, &revRetr2);
 
-    RevSVNVersionQuery revRetr(workingDir, &revRetr1);
+    RevConfigFile revRetr(workingDir + "/autorevision.conf", &revRetr1);
 
     // Strings to extract Subversion information we want into
     RevisionInformation rev_info;
@@ -339,7 +354,7 @@ bool RevFileParse::extractRevision(RevisionInformation& rev_info)
     string token[6];
 
     ifstream inFile(_docFile.c_str());
-    if (!inFile)
+    if (!inFile || !inFile.is_open())
     {
         cerr << "Warning: could not open input file.\n"
              << "         This does not seem to be a revision controlled project.\n";
@@ -369,6 +384,73 @@ bool RevFileParse::extractRevision(RevisionInformation& rev_info)
     return true;
 }
 
+bool RevConfigFile::extractRevision(RevisionInformation& rev_info)
+{
+    ifstream inFile(_configFile.c_str());
+    if (!inFile || !inFile.is_open())
+        return RevisionExtractor::extractRevision(rev_info);
+
+    bool done_stuff = false;
+
+    while (!inFile.eof())
+    {
+        // Read a line from the file
+        std::string line;
+        inFile >> line;
+
+        removeAfterNewLine(line);
+
+        if (line.compare(0, strlen("low_revision="), "low_revision=") == 0)
+        {
+            rev_info.low_revision = line.substr(strlen("low_revision="));
+            done_stuff = true;
+        }
+        else if (line.compare(0, strlen("revision="), "revision=") == 0)
+        {
+            rev_info.revision = line.substr(strlen("revision="));
+            done_stuff = true;
+        }
+        else if (line.compare(0, strlen("date="), "date=") == 0)
+        {
+            rev_info.date = line.substr(strlen("date="));
+            done_stuff = true;
+        }
+        else if (line.compare(0, strlen("wc_uri="), "wc_uri=") == 0)
+        {
+            rev_info.wc_uri = line.substr(strlen("wc_uri="));
+            done_stuff = true;
+        }
+        else if (line.compare(0, strlen("wc_modified="), "wc_modified=") == 0)
+        {
+            std::string bool_val = line.substr(strlen("wc_modified="));
+
+            if (bool_val.find("true") != std::string::npos
+             || bool_val.find('1') != std::string::npos)
+                rev_info.wc_modified = true;
+            else
+                rev_info.wc_modified = false;
+
+            done_stuff = true;
+        }
+        else if (line.compare(0, strlen("wc_switched="), "wc_switched=") == 0)
+        {
+            std::string bool_val = line.substr(strlen("wc_switched="));
+
+            if (bool_val.find("true") != std::string::npos
+             || bool_val.find('1') != std::string::npos)
+                rev_info.wc_switched = true;
+            else
+                rev_info.wc_switched = false;
+
+            done_stuff = true;
+        }
+    }
+
+    if (done_stuff)
+        return true;
+    else
+        return RevisionExtractor::extractRevision(rev_info);
+}
 
 bool WriteOutput(const string& outputFile, const RevisionInformation& rev_info)
 {
