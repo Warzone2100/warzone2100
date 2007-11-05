@@ -747,6 +747,9 @@ int main(int argc, char *argv[])
 	debug_register_callback( debug_callback_win32debug, NULL, NULL, NULL );
 #endif // WZ_OS_WIN && DEBUG_INSANE
 
+	/*** Initialize PhysicsFS ***/
+	initialize_PhysicsFS(argv[0]);
+
 	/*** Initialize translations ***/
 	setlocale(LC_MESSAGES, "");
 	setlocale(LC_NUMERIC, "C");		// set radix character to the period (".")
@@ -772,9 +775,7 @@ int main(int argc, char *argv[])
 
 	debug(LOG_WZ, "Warzone 2100 - %s", version_getFormattedVersionString());
 
-	/*** Initialize PhysicsFS ***/
-	initialize_PhysicsFS(argv[0]);
-
+	/*** Initialize directory structure ***/
 	make_dir(ScreenDumpPath, "screendumps", NULL);
 	make_dir(SaveGamePath, "savegame", NULL);
 	make_dir(MultiPlayersPath, "multiplay", NULL);
