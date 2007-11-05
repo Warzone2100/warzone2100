@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-11-05 02:48+0100\n"
+"POT-Creation-Date: 2007-11-05 22:57+0100\n"
 "PO-Revision-Date: 2007-06-05 14:46+0200\n"
 "Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -48,16 +48,16 @@ msgstr "Roze"
 msgid "Cyan"
 msgstr "Cyaan"
 
-#: src/display.c:1858
+#: src/display.c:1852
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Kan niet bouwen. Oliebron brand."
 
-#: src/display.c:2010
+#: src/display.c:2004
 #, c-format
 msgid "%s - Damage %d%% - Kills %d, %s"
 msgstr "%s - Schade %d%% - Kills %d, %s"
 
-#: src/display.c:2257
+#: src/display.c:2251
 msgid "Truck ordered to build Oil Derrick"
 msgstr ""
 
@@ -121,27 +121,27 @@ msgstr "Sluiten"
 msgid "GAME SAVED!"
 msgstr "SPEL OPGESLAGEN!"
 
-#: src/hci.c:3714 src/keymap.c:289
+#: src/hci.c:3714 src/keymap.c:292
 msgid "Commanders"
 msgstr "Commandanten"
 
-#: src/hci.c:3730 src/keymap.c:288
+#: src/hci.c:3730 src/keymap.c:291
 msgid "Intelligence Display"
 msgstr ""
 
-#: src/hci.c:3746 src/keymap.c:284
+#: src/hci.c:3746 src/keymap.c:287
 msgid "Manufacture"
 msgstr "Produceren"
 
-#: src/hci.c:3762 src/keymap.c:287
+#: src/hci.c:3762 src/keymap.c:290
 msgid "Design"
 msgstr "Ontwerp"
 
-#: src/hci.c:3778 src/keymap.c:285
+#: src/hci.c:3778 src/keymap.c:288
 msgid "Research"
 msgstr "Onderzoek"
 
-#: src/hci.c:3794 src/keymap.c:286
+#: src/hci.c:3794 src/keymap.c:289
 msgid "Build"
 msgstr "Bouw"
 
@@ -443,65 +443,65 @@ msgstr ""
 msgid "Players"
 msgstr "Spelers"
 
-#: src/keybind.c:1175
+#: src/keybind.c:1176
 msgid "View Aligned to North"
 msgstr ""
 
-#: src/keybind.c:1199 src/intelmap.c:242
+#: src/keybind.c:1200 src/intelmap.c:242
 msgid "PAUSED"
 msgstr "GEPAUZEERD"
 
-#: src/keybind.c:1231
+#: src/keybind.c:1232
 msgid "Researched EVERYTHING for you!"
 msgstr ""
 
-#: src/keybind.c:1262 src/keybind.c:1269
+#: src/keybind.c:1263 src/keybind.c:1270
 msgid "Energy bars display toggled"
 msgstr ""
 
-#: src/keybind.c:1335
+#: src/keybind.c:1336
 msgid "Unable to locate any resource extractors!"
 msgstr ""
 
-#: src/keybind.c:1601
+#: src/keybind.c:1602
 msgid "Enemy destroyed by cheating!"
 msgstr ""
 
-#: src/keybind.c:2212
+#: src/keybind.c:2213
 msgid "Centered on player HQ, direction NORTH"
 msgstr ""
 
-#: src/keybind.c:2224
+#: src/keybind.c:2225
 msgid "Unable to locate HQ!"
 msgstr "Kan het Hoofdkwartier niet vinden"
 
-#: src/keybind.c:2240
+#: src/keybind.c:2241
 msgid "Formation speed limiting OFF"
 msgstr ""
 
-#: src/keybind.c:2244
+#: src/keybind.c:2245
 msgid "Formation speed limiting ON"
 msgstr ""
 
-#: src/keybind.c:2374 src/keybind.c:2401 src/keybind.c:2416
+#: src/keybind.c:2375 src/keybind.c:2402 src/keybind.c:2417
 msgid "Game Speed Reset"
 msgstr ""
 
-#: src/keybind.c:2376
+#: src/keybind.c:2377
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr ""
 
-#: src/keybind.c:2403
+#: src/keybind.c:2404
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr ""
 
-#: src/keybind.c:2429
+#: src/keybind.c:2430
 msgid "Build menu will reopen"
 msgstr "Bouwmenu zal opnieuw openen"
 
-#: src/keybind.c:2433
+#: src/keybind.c:2434
 msgid "Build menu will not reopen"
 msgstr "Bouwmenu zal niet opnieuw openen"
 
@@ -719,27 +719,27 @@ msgstr "Missie Tijd - %s"
 msgid "Total Game Time - %s"
 msgstr "Totale Speel Tijd - %s"
 
-#: src/intorder.c:178 src/keymap.c:377
+#: src/intorder.c:178 src/keymap.c:383
 msgid "Short Range"
 msgstr "Kort bereik"
 
-#: src/intorder.c:179 src/keymap.c:383
+#: src/intorder.c:179 src/keymap.c:389
 msgid "Long Range"
 msgstr "Groot bereik"
 
-#: src/intorder.c:180 src/keymap.c:376
+#: src/intorder.c:180 src/keymap.c:382
 msgid "Optimum Range"
 msgstr "Optimaal bereik"
 
-#: src/intorder.c:181 src/keymap.c:396
+#: src/intorder.c:181 src/keymap.c:402
 msgid "Retreat at Medium Damage"
 msgstr ""
 
-#: src/intorder.c:182 src/keymap.c:397
+#: src/intorder.c:182 src/keymap.c:403
 msgid "Retreat at Heavy Damage"
 msgstr ""
 
-#: src/intorder.c:183 src/keymap.c:398
+#: src/intorder.c:183 src/keymap.c:404
 msgid "Do or Die!"
 msgstr ""
 
@@ -747,19 +747,19 @@ msgstr ""
 msgid "Fire-At-Will"
 msgstr ""
 
-#: src/intorder.c:185 src/keymap.c:373
+#: src/intorder.c:185 src/keymap.c:379
 msgid "Return Fire"
 msgstr "Terug Schieten"
 
-#: src/intorder.c:186 src/keymap.c:371
+#: src/intorder.c:186 src/keymap.c:377
 msgid "Hold Fire"
 msgstr "Niet Schieten"
 
-#: src/intorder.c:187 src/keymap.c:379
+#: src/intorder.c:187 src/keymap.c:385
 msgid "Patrol"
 msgstr ""
 
-#: src/intorder.c:188 src/keymap.c:378
+#: src/intorder.c:188 src/keymap.c:384
 msgid "Pursue"
 msgstr "Achtervolgen"
 
@@ -767,11 +767,11 @@ msgstr "Achtervolgen"
 msgid "Guard Position"
 msgstr ""
 
-#: src/intorder.c:190 src/keymap.c:381
+#: src/intorder.c:190 src/keymap.c:387
 msgid "Hold Position"
 msgstr ""
 
-#: src/intorder.c:191 src/keymap.c:380
+#: src/intorder.c:191 src/keymap.c:386
 msgid "Return For Repair"
 msgstr ""
 
@@ -784,7 +784,7 @@ msgstr "Keer terug naar Hoofdkwartier"
 msgid "Go to Transport"
 msgstr ""
 
-#: src/intorder.c:194 src/keymap.c:407
+#: src/intorder.c:194 src/keymap.c:413
 msgid "Return for Recycling"
 msgstr ""
 
@@ -1107,358 +1107,370 @@ msgstr ""
 msgid "Current Objective"
 msgstr ""
 
-#: src/keymap.c:290
+#: src/keymap.c:293
 msgid "Toggle Radar"
 msgstr ""
 
-#: src/keymap.c:291
+#: src/keymap.c:294
 msgid "Toggle Console Display"
 msgstr ""
 
-#: src/keymap.c:292
+#: src/keymap.c:295
 msgid "Toggle Damage Bars On/Off"
 msgstr ""
 
-#: src/keymap.c:293
+#: src/keymap.c:296
 msgid "Take Screen Shot"
 msgstr ""
 
-#: src/keymap.c:294
+#: src/keymap.c:297
 msgid "Toggle Formation Speed Limiting"
 msgstr ""
 
-#: src/keymap.c:295
+#: src/keymap.c:298
 msgid "View Location of Previous Message"
 msgstr ""
 
-#: src/keymap.c:300
-msgid "Assign Group 1"
-msgstr ""
-
-#: src/keymap.c:301
-msgid "Assign Group 2"
-msgstr ""
-
-#: src/keymap.c:302
-msgid "Assign Group 3"
-msgstr ""
-
 #: src/keymap.c:303
-msgid "Assign Group 4"
+msgid "Assign Group 0"
 msgstr ""
 
 #: src/keymap.c:304
-msgid "Assign Group 5"
+msgid "Assign Group 1"
 msgstr ""
 
 #: src/keymap.c:305
-msgid "Assign Group 6"
+msgid "Assign Group 2"
 msgstr ""
 
 #: src/keymap.c:306
-msgid "Assign Group 7"
+msgid "Assign Group 3"
 msgstr ""
 
 #: src/keymap.c:307
-msgid "Assign Group 8"
+msgid "Assign Group 4"
 msgstr ""
 
 #: src/keymap.c:308
-msgid "Assign Group 9"
+msgid "Assign Group 5"
+msgstr ""
+
+#: src/keymap.c:309
+msgid "Assign Group 6"
+msgstr ""
+
+#: src/keymap.c:310
+msgid "Assign Group 7"
+msgstr ""
+
+#: src/keymap.c:311
+msgid "Assign Group 8"
 msgstr ""
 
 #: src/keymap.c:312
+msgid "Assign Group 9"
+msgstr ""
+
+#: src/keymap.c:316
+msgid "Select Group 0"
+msgstr "Selecteer Groep 0"
+
+#: src/keymap.c:317
 msgid "Select Group 1"
 msgstr "Selecteer Groep 1"
 
-#: src/keymap.c:313
+#: src/keymap.c:318
 msgid "Select Group 2"
 msgstr "Selecteer Groep 2"
 
-#: src/keymap.c:314
+#: src/keymap.c:319
 msgid "Select Group 3"
 msgstr "Selecteer Groep 3"
 
-#: src/keymap.c:315
+#: src/keymap.c:320
 msgid "Select Group 4"
 msgstr "Selecteer Groep 4"
 
-#: src/keymap.c:316
+#: src/keymap.c:321
 msgid "Select Group 5"
 msgstr "Selecteer Groep 5"
 
-#: src/keymap.c:317
+#: src/keymap.c:322
 msgid "Select Group 6"
 msgstr "Selecteer Groep 6"
 
-#: src/keymap.c:318
+#: src/keymap.c:323
 msgid "Select Group 7"
 msgstr "Selecteer Groep 7"
 
-#: src/keymap.c:319
+#: src/keymap.c:324
 msgid "Select Group 8"
 msgstr "Selecteer Groep 8"
 
-#: src/keymap.c:320
+#: src/keymap.c:325
 msgid "Select Group 9"
 msgstr "Selecteer Groep 9"
 
-#: src/keymap.c:324
+#: src/keymap.c:329
+msgid "Select Commander 0"
+msgstr "Selecteer Commandant 0"
+
+#: src/keymap.c:330
 msgid "Select Commander 1"
 msgstr "Selecteer Commandant 1"
 
-#: src/keymap.c:325
+#: src/keymap.c:331
 msgid "Select Commander 2"
 msgstr "Selecteer Commandant 2"
 
-#: src/keymap.c:326
+#: src/keymap.c:332
 msgid "Select Commander 3"
 msgstr "Selecteer Commandant 3"
 
-#: src/keymap.c:327
+#: src/keymap.c:333
 msgid "Select Commander 4"
 msgstr "Selecteer Commandant 4"
 
-#: src/keymap.c:328
+#: src/keymap.c:334
 msgid "Select Commander 5"
 msgstr "Selecteer Commandant 5"
 
-#: src/keymap.c:329
+#: src/keymap.c:335
 msgid "Select Commander 6"
 msgstr "Selecteer Commandant 6"
 
-#: src/keymap.c:330
+#: src/keymap.c:336
 msgid "Select Commander 7"
 msgstr "Selecteer Commandant 7"
 
-#: src/keymap.c:331
+#: src/keymap.c:337
 msgid "Select Commander 8"
 msgstr "Selecteer Commandant 8"
 
-#: src/keymap.c:332
+#: src/keymap.c:338
 msgid "Select Commander 9"
 msgstr "Selecteer Commandant 9"
 
-#: src/keymap.c:336
+#: src/keymap.c:342
 msgid "Multiplayer Options"
 msgstr ""
 
-#: src/keymap.c:337
+#: src/keymap.c:343
 msgid "Start Multiplayer Audio"
 msgstr ""
 
-#: src/keymap.c:338
+#: src/keymap.c:344
 msgid "Stop Multiplayer Audio"
 msgstr ""
 
-#: src/keymap.c:341
+#: src/keymap.c:347
 msgid "Snap View to North"
 msgstr ""
 
-#: src/keymap.c:342
+#: src/keymap.c:348
 msgid "Toggle Tracking Camera"
 msgstr ""
 
-#: src/keymap.c:343
+#: src/keymap.c:349
 msgid "Display In-Game Options"
 msgstr ""
 
-#: src/keymap.c:344
+#: src/keymap.c:350
 msgid "Zoom Radar Out"
 msgstr ""
 
-#: src/keymap.c:345
+#: src/keymap.c:351
 msgid "Zoom Radar In"
 msgstr ""
 
-#: src/keymap.c:346
+#: src/keymap.c:352
 msgid "Zoom In"
 msgstr ""
 
-#: src/keymap.c:347
+#: src/keymap.c:353
 msgid "Zoom Out"
 msgstr ""
 
-#: src/keymap.c:348
+#: src/keymap.c:354
 msgid "Pitch Forward"
 msgstr ""
 
-#: src/keymap.c:349
+#: src/keymap.c:355
 msgid "Rotate Left"
 msgstr ""
 
-#: src/keymap.c:350
+#: src/keymap.c:356
 msgid "Reset Pitch"
 msgstr ""
 
-#: src/keymap.c:351
+#: src/keymap.c:357
 msgid "Rotate Right"
 msgstr ""
 
-#: src/keymap.c:352
+#: src/keymap.c:358
 msgid "Pitch Back"
 msgstr ""
 
-#: src/keymap.c:353
+#: src/keymap.c:359
 msgid "Orders Menu"
 msgstr ""
 
-#: src/keymap.c:354
+#: src/keymap.c:360
 msgid "Decrease Game Speed"
 msgstr "Verlaag Speel Snelheid"
 
-#: src/keymap.c:355
+#: src/keymap.c:361
 msgid "Increase Game Speed"
 msgstr "Verhoog Speel Snelheid"
 
-#: src/keymap.c:356
+#: src/keymap.c:362
 msgid "Reset Game Speed"
 msgstr "Zet Speel Snelheid Terug"
 
-#: src/keymap.c:357
+#: src/keymap.c:363
 msgid "View North"
 msgstr ""
 
-#: src/keymap.c:358
+#: src/keymap.c:364
 msgid "View South"
 msgstr ""
 
-#: src/keymap.c:359
+#: src/keymap.c:365
 msgid "View East"
 msgstr ""
 
-#: src/keymap.c:360
+#: src/keymap.c:366
 msgid "View West"
 msgstr ""
 
-#: src/keymap.c:361
+#: src/keymap.c:367
 msgid "View next Oil Derrick"
 msgstr ""
 
-#: src/keymap.c:362
+#: src/keymap.c:368
 msgid "View next Repair Unit"
 msgstr ""
 
-#: src/keymap.c:363
+#: src/keymap.c:369
 msgid "View next Truck"
 msgstr ""
 
-#: src/keymap.c:364
+#: src/keymap.c:370
 msgid "View next Sensor Unit"
 msgstr ""
 
-#: src/keymap.c:365
+#: src/keymap.c:371
 msgid "View next Commander"
 msgstr "Ga naar volgende Commandant"
 
-#: src/keymap.c:366
+#: src/keymap.c:372
 msgid "Toggle Overlays"
 msgstr ""
 
-#: src/keymap.c:367
+#: src/keymap.c:373
 msgid "Console On/Off"
 msgstr "Console Aan/Uit"
 
-#: src/keymap.c:370
+#: src/keymap.c:376
 msgid "Center View on HQ"
 msgstr ""
 
-#: src/keymap.c:372
+#: src/keymap.c:378
 msgid "View Unassigned Units"
 msgstr ""
 
-#: src/keymap.c:374
+#: src/keymap.c:380
 msgid "Fire at Will"
 msgstr ""
 
-#: src/keymap.c:375
+#: src/keymap.c:381
 msgid "Return to HQ"
 msgstr "Keer terug naar Hoofdkwartier"
 
-#: src/keymap.c:382
+#: src/keymap.c:388
 msgid "Send Text Message"
 msgstr "Stuur Tekst Bericht"
 
-#: src/keymap.c:402
+#: src/keymap.c:408
 msgid "Select all Combat Units"
 msgstr ""
 
-#: src/keymap.c:403
+#: src/keymap.c:409
 msgid "Select all Heavily Damaged Units"
 msgstr ""
 
-#: src/keymap.c:405
+#: src/keymap.c:411
 msgid "Select all Half-tracks"
 msgstr ""
 
-#: src/keymap.c:406
+#: src/keymap.c:412
 msgid "Select all Hovers"
 msgstr ""
 
-#: src/keymap.c:408
+#: src/keymap.c:414
 msgid "Select all Units on Screen"
 msgstr ""
 
-#: src/keymap.c:409
+#: src/keymap.c:415
 msgid "Select all Tracks"
 msgstr ""
 
-#: src/keymap.c:410
+#: src/keymap.c:416
 msgid "Select EVERY unit"
 msgstr ""
 
-#: src/keymap.c:411
+#: src/keymap.c:417
 msgid "Select all VTOLs"
 msgstr ""
 
-#: src/keymap.c:412
+#: src/keymap.c:418
 msgid "Select all Wheels"
 msgstr ""
 
-#: src/keymap.c:414
+#: src/keymap.c:420
 msgid "Select all Similiar Units"
 msgstr ""
 
-#: src/keymap.c:418
+#: src/keymap.c:424
 msgid "Select next Factory"
 msgstr "Selecteer de volgende Fabriek"
 
-#: src/keymap.c:419
+#: src/keymap.c:425
 msgid "Select next Research Facility"
 msgstr "Selecteer het volgende Onderzoekscentrum"
 
-#: src/keymap.c:420
+#: src/keymap.c:426
 msgid "Select next Power Generator"
 msgstr ""
 
-#: src/keymap.c:421
+#: src/keymap.c:427
 msgid "Select next Cyborg Factory"
 msgstr ""
 
-#: src/keymap.c:422
+#: src/keymap.c:428
 msgid "Toggle reopening the build menu"
 msgstr ""
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state> - Built <DATE><BUILD TYPE>"
-#: src/version.c:125
+#: src/version.c:137
 #, c-format
 msgid "Version %s%s - Built %s%s"
 msgstr "Versie %s%s - Gemaakt %s%s"
 
-#: src/version.c:130
+#: src/version.c:142
 msgid " (modified and switched locally)"
 msgstr " (lokaal gewijzigd en gewisseld)"
 
-#: src/version.c:132
+#: src/version.c:144
 msgid " (modified locally)"
 msgstr " (lokaal gewijzigd)"
 
-#: src/version.c:134
+#: src/version.c:146
 msgid " (switched locally)"
 msgstr " (lokaal gewisseld)"
 
-#: src/version.c:141
+#: src/version.c:153
 msgid " - DEBUG"
 msgstr ""
 

@@ -109,6 +109,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_ToggleReloadBars,
 	kf_ScreenDump ,
 	kf_MoveToLastMessagePos,
+	kf_AssignGrouping_0,
 	kf_AssignGrouping_1,
 	kf_AssignGrouping_2,
 	kf_AssignGrouping_3,
@@ -118,6 +119,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_AssignGrouping_7,
 	kf_AssignGrouping_8,
 	kf_AssignGrouping_9,
+	kf_SelectGrouping_0,
 	kf_SelectGrouping_1,
 	kf_SelectGrouping_2,
 	kf_SelectGrouping_3,
@@ -185,6 +187,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_SelectNextPowerStation,
 	kf_SelectNextCyborgFactory,
 	kf_ToggleConsoleDrop,
+	kf_SelectCommander_0,
 	kf_SelectCommander_1,
 	kf_SelectCommander_2,
 	kf_SelectCommander_3,
@@ -297,6 +300,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	//                                **********************************
 	//                                **********************************
 	//										ASSIGN GROUPS
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_0,KEYMAP_PRESSED,kf_AssignGrouping_0,				_("Assign Group 0"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_1,KEYMAP_PRESSED,kf_AssignGrouping_1,				_("Assign Group 1"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_2,KEYMAP_PRESSED,kf_AssignGrouping_2,				_("Assign Group 2"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_3,KEYMAP_PRESSED,kf_AssignGrouping_3,				_("Assign Group 3"));
@@ -309,6 +313,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	//                                **********************************
 	//                                **********************************
 	//	SELECT GROUPS - Will jump to the group as well as select if group is ALREADY selected
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_0,KEYMAP_PRESSED,kf_SelectGrouping_0,				_("Select Group 0"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_1,KEYMAP_PRESSED,kf_SelectGrouping_1,				_("Select Group 1"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_2,KEYMAP_PRESSED,kf_SelectGrouping_2,				_("Select Group 2"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_3,KEYMAP_PRESSED,kf_SelectGrouping_3,				_("Select Group 3"));
@@ -321,6 +326,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	//                                **********************************
 	//                                **********************************
 	//	SELECT COMMANDER - Will jump to the group as well as select if group is ALREADY selected
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_0,KEYMAP_PRESSED,kf_SelectCommander_0,				_("Select Commander 0"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_1,KEYMAP_PRESSED,kf_SelectCommander_1,				_("Select Commander 1"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_2,KEYMAP_PRESSED,kf_SelectCommander_2,				_("Select Commander 2"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_3,KEYMAP_PRESSED,kf_SelectCommander_3,				_("Select Commander 3"));
