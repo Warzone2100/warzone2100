@@ -8,9 +8,18 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([lib/framework/frame.c])
 
 
-if test -d "${srcdir}/3rdparty/quesoglc" ; then
-	AC_CONFIG_SUBDIRS([3rdparty/quesoglc])
-	QUESOGLC_SUBDIR=3rdparty/quesoglc
+AC_ARG_ENABLE(quesoglc,
+	AS_HELP_STRING([--disable-quesoglc], [Compile QuesoGLC [yes]]),
+	[ enable_quesoglc=${enableval} ], [ enable_quesoglc=yes ])
+AC_MSG_CHECKING([whether to compile QuesoGLC])
+AC_MSG_RESULT([${enable_quesoglc}])
+if test "x$enable_quesoglc" = "xyes" ; then
+	if test -d "${srcdir}/3rdparty/quesoglc" ; then
+		AC_CONFIG_SUBDIRS([3rdparty/quesoglc])
+		QUESOGLC_SUBDIR=3rdparty/quesoglc
+	else
+		QUESOGLC_SUBDIR=
+	fi
 else
 	QUESOGLC_SUBDIR=
 fi
