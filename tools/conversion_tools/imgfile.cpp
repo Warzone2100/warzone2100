@@ -128,7 +128,7 @@ struct IMAGEFILE : private text_output_stream<IMAGEFILE>
     void write_text(std::ostream& file) const
     {
         file << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-             << "<image bitdepth=\"" << Header.BitDepth << "\">\n";
+             << "<image version=\"" << Header.Version << "\" bitdepth=\"" << Header.BitDepth << "\">\n";
 
         for (std::vector<iTexture>::const_iterator texPage = TexturePages.begin(); texPage != TexturePages.end(); ++texPage)
         {
