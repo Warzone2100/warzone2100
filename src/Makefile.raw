@@ -110,6 +110,7 @@ SRC=ai.c \
 	seqdisp.c \
 	structure.c \
 	target.c \
+	version.c \
 	warzoneconfig.c
 
 LIBS=../lib/libgamelib.a \

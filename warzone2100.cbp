@@ -2747,6 +2747,19 @@
 			<Option target="DBGWindows" />
 			<Option target="NDBGWindows" />
 		</Unit>
+		<Unit filename="src/version.c">
+			<Option compilerVar="CC" />
+			<Option target="DBGUnix" />
+			<Option target="NDBGUnix" />
+			<Option target="DBGWindows" />
+			<Option target="NDBGWindows" />
+		</Unit>
+		<Unit filename="src/version.h">
+			<Option target="DBGUnix" />
+			<Option target="NDBGUnix" />
+			<Option target="DBGWindows" />
+			<Option target="NDBGWindows" />
+		</Unit>
 		<Unit filename="src/visibility.c">
 			<Option compilerVar="CC" />
 			<Option target="DBGUnix" />

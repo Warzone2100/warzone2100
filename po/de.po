@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-11-03 23:44+0100\n"
+"POT-Creation-Date: 2007-11-05 02:48+0100\n"
 "PO-Revision-Date: 2007-08-12 16:30+0100\n"
 "Last-Translator: Thomas Rösner <translation-bugs@digital-trauma.de>\n"
 "Language-Team: Deutsch\n"
@@ -114,7 +114,7 @@ msgstr "%s bildet eine Allianz mit %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Sie haben Entwürfe für %s entdeckt"
 
-#: src/hci.c:1038 src/hci.c:3817 src/hci.c:3971 src/hci.c:4413 src/hci.c:5636
+#: src/hci.c:1038 src/hci.c:3812 src/hci.c:3966 src/hci.c:4408 src/hci.c:5631
 #: src/transporter.c:292 src/transporter.c:381 src/transporter.c:878
 #: src/intorder.c:660 src/loadsave.c:258 src/intelmap.c:525
 #: src/multimenu.c:450 src/multimenu.c:1288
@@ -125,73 +125,73 @@ msgstr "Schließen"
 msgid "GAME SAVED!"
 msgstr "SPIEL GESPEICHERT!"
 
-#: src/hci.c:3719 src/keymap.c:289
+#: src/hci.c:3714 src/keymap.c:289
 msgid "Commanders"
 msgstr "Kommandoeinheiten"
 
-#: src/hci.c:3735 src/keymap.c:288
+#: src/hci.c:3730 src/keymap.c:288
 msgid "Intelligence Display"
 msgstr "Nachrichtendienst"
 
-#: src/hci.c:3751 src/keymap.c:284
+#: src/hci.c:3746 src/keymap.c:284
 msgid "Manufacture"
 msgstr "Produzieren"
 
-#: src/hci.c:3767 src/keymap.c:287
+#: src/hci.c:3762 src/keymap.c:287
 msgid "Design"
 msgstr "Entwürfe"
 
-#: src/hci.c:3783 src/keymap.c:285
+#: src/hci.c:3778 src/keymap.c:285
 msgid "Research"
 msgstr "Forschung"
 
-#: src/hci.c:3799 src/keymap.c:286
+#: src/hci.c:3794 src/keymap.c:286
 msgid "Build"
 msgstr "Bauen"
 
-#: src/hci.c:3879 src/multiint.c:789 src/multiint.c:793
+#: src/hci.c:3874 src/multiint.c:789 src/multiint.c:793
 msgid "Power"
 msgstr "Energie"
 
-#: src/hci.c:4041 src/ingameop.c:278
+#: src/hci.c:4036 src/ingameop.c:278
 msgid "Load Game"
 msgstr "Spiel laden"
 
-#: src/hci.c:4049 src/mission.c:3387 src/mission.c:3534 src/ingameop.c:280
+#: src/hci.c:4044 src/mission.c:3387 src/mission.c:3534 src/ingameop.c:280
 #: src/ingameop.c:419
 msgid "Save Game"
 msgstr "Spiel speichern"
 
-#: src/hci.c:4100
+#: src/hci.c:4095
 msgid "Unit"
 msgstr ""
 
-#: src/hci.c:4109
+#: src/hci.c:4104
 msgid "Struct"
 msgstr ""
 
-#: src/hci.c:4118
+#: src/hci.c:4113
 msgid "Feat"
 msgstr ""
 
-#: src/hci.c:4132 src/ingameop.c:122 src/ingameop.c:261 src/ingameop.c:266
+#: src/hci.c:4127 src/ingameop.c:122 src/ingameop.c:261 src/ingameop.c:266
 msgid "Quit"
 msgstr "Beenden"
 
-#: src/hci.c:4133
+#: src/hci.c:4128
 msgid "Exit Game"
 msgstr "Spiel verlassen"
 
-#: src/hci.c:4489 src/intdisplay.c:274 src/intdisplay.c:317
+#: src/hci.c:4484 src/intdisplay.c:274 src/intdisplay.c:317
 #: src/intdisplay.c:364
 msgid "Progress Bar"
 msgstr "Fortschrittsbalken"
 
-#: src/hci.c:5550
+#: src/hci.c:5545
 msgid "Factory Delivery Point"
 msgstr "Fabrik-Auslieferungspunkt"
 
-#: src/hci.c:5569
+#: src/hci.c:5564
 msgid "Loop Production"
 msgstr "Produktion wiederholen"
 
@@ -223,7 +223,7 @@ msgstr "Zurück zum Hauptmenü"
 msgid "Continue Game"
 msgstr "Spiel fortsetzen"
 
-#: src/mission.c:3397 src/mission.c:3531 src/ingameop.c:415 src/frontend.c:418
+#: src/mission.c:3397 src/mission.c:3531 src/ingameop.c:415 src/frontend.c:419
 msgid "Load Saved Game"
 msgstr "Speicherstand laden"
 
@@ -231,72 +231,72 @@ msgstr "Speicherstand laden"
 msgid "Unit Lost!"
 msgstr "Einheit verloren!"
 
-#: src/droid.c:1971
+#: src/droid.c:1970
 msgid "Structure Restored"
 msgstr "Gebäude wiederhergestellt"
 
-#: src/droid.c:3876
+#: src/droid.c:3875
 #, fuzzy, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Gruppe %d ausgewählt - %d Einheit(en)"
 msgstr[1] "Gruppe %d ausgewählt - %d Einheit(en)"
 
-#: src/droid.c:3890
+#: src/droid.c:3889
 #, fuzzy, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%d Einheit(en) zu Gruppe %d hinzugefügt"
 msgstr[1] "%d Einheit(en) zu Gruppe %d hinzugefügt"
 
-#: src/droid.c:3903
+#: src/droid.c:3902
 #, fuzzy, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Auf Gruppe %d zentriert - %d Einheit(en)"
 msgstr[1] "Auf Gruppe %d zentriert - %d Einheit(en)"
 
-#: src/droid.c:3907
+#: src/droid.c:3906
 #, fuzzy, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "An Gruppe %d ausgerichtet - %d Einheit(en)"
 msgstr[1] "An Gruppe %d ausgerichtet - %d Einheit(en)"
 
-#: src/droid.c:4184
+#: src/droid.c:4183
 msgid "Rookie"
 msgstr "Neuling"
 
-#: src/droid.c:4185
+#: src/droid.c:4184
 msgctxt "rank"
 msgid "Green"
 msgstr "Unerfahren"
 
-#: src/droid.c:4186
+#: src/droid.c:4185
 msgid "Trained"
 msgstr "Geübt"
 
-#: src/droid.c:4187
+#: src/droid.c:4186
 msgid "Regular"
 msgstr "Soldat"
 
-#: src/droid.c:4188
+#: src/droid.c:4187
 msgid "Professional"
 msgstr "Profi"
 
-#: src/droid.c:4189
+#: src/droid.c:4188
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.c:4190
+#: src/droid.c:4189
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:4191
+#: src/droid.c:4190
 msgid "Special"
 msgstr "Spezialist"
 
-#: src/droid.c:4192
+#: src/droid.c:4191
 msgid "Hero"
 msgstr "Held"
 
@@ -365,11 +365,11 @@ msgstr "Geplänkel"
 msgid "Select Player Name"
 msgstr "Spielernamen auswählen"
 
-#: src/multiint.c:739 src/frontend.c:607
+#: src/multiint.c:739 src/frontend.c:608
 msgid "Fog"
 msgstr "Nebel"
 
-#: src/multiint.c:741 src/frontend.c:614 src/frontend.c:721
+#: src/multiint.c:741 src/frontend.c:615 src/frontend.c:722
 msgid "Fog Of War"
 msgstr "Nebel des Krieges"
 
@@ -445,65 +445,65 @@ msgstr "Gastgeber startet das Spiel"
 msgid "Players"
 msgstr "Spieler"
 
-#: src/keybind.c:1218
+#: src/keybind.c:1175
 msgid "View Aligned to North"
 msgstr "Sicht nach Norden ausgerichtet"
 
-#: src/keybind.c:1242 src/intelmap.c:242
+#: src/keybind.c:1199 src/intelmap.c:242
 msgid "PAUSED"
 msgstr "PAUSE"
 
-#: src/keybind.c:1274
+#: src/keybind.c:1231
 msgid "Researched EVERYTHING for you!"
 msgstr "ALLES für Sie erforscht!"
 
-#: src/keybind.c:1305 src/keybind.c:1312
+#: src/keybind.c:1262 src/keybind.c:1269
 msgid "Energy bars display toggled"
 msgstr "Anzeige der Energiebalken umgeschaltet"
 
-#: src/keybind.c:1378
+#: src/keybind.c:1335
 msgid "Unable to locate any resource extractors!"
 msgstr "Kann keine Resourcenextraktoren finden"
 
-#: src/keybind.c:1644
+#: src/keybind.c:1601
 msgid "Enemy destroyed by cheating!"
 msgstr "Feind via cheat zerstört!"
 
-#: src/keybind.c:2255
+#: src/keybind.c:2212
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Auf Spieler HQ zentriert, Blickrichtung Norden"
 
-#: src/keybind.c:2267
+#: src/keybind.c:2224
 msgid "Unable to locate HQ!"
 msgstr "Kann Hauptquartier nicht finden!"
 
-#: src/keybind.c:2283
+#: src/keybind.c:2240
 msgid "Formation speed limiting OFF"
 msgstr "Formationsgeschwindigkeitslimit AUS"
 
-#: src/keybind.c:2287
+#: src/keybind.c:2244
 msgid "Formation speed limiting ON"
 msgstr "Formationsgeschwindigkeitslimit AN"
 
-#: src/keybind.c:2417 src/keybind.c:2444 src/keybind.c:2459
+#: src/keybind.c:2374 src/keybind.c:2401 src/keybind.c:2416
 msgid "Game Speed Reset"
 msgstr "Spielgeschwindigkeit zurückgesetzt"
 
-#: src/keybind.c:2419
+#: src/keybind.c:2376
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Spielgeschwindigkeit auf %3.1f erhöht"
 
-#: src/keybind.c:2446
+#: src/keybind.c:2403
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Spielgeschwindigkeit auf %3.1f gesenkt"
 
-#: src/keybind.c:2472
+#: src/keybind.c:2429
 msgid "Build menu will reopen"
 msgstr "Baumenu wird sich wieder öffnen"
 
-#: src/keybind.c:2476
+#: src/keybind.c:2433
 msgid "Build menu will not reopen"
 msgstr "Baumenu wird sich nicht wieder öffnen"
 
@@ -813,19 +813,19 @@ msgstr "VTOL-Fabrikproduktion zuweisen"
 msgid "Resume Game"
 msgstr "Spiel fortsetzen"
 
-#: src/ingameop.c:156 src/frontend.c:807
+#: src/ingameop.c:156 src/frontend.c:808
 msgid "Voice Volume"
 msgstr "Sprachlautstärke"
 
-#: src/ingameop.c:161 src/frontend.c:811
+#: src/ingameop.c:161 src/frontend.c:812
 msgid "FX Volume"
 msgstr "Effektlautstärke"
 
-#: src/ingameop.c:166 src/frontend.c:815
+#: src/ingameop.c:166 src/frontend.c:816
 msgid "Music Volume"
 msgstr "Musiklautstärke"
 
-#: src/ingameop.c:273 src/frontend.c:226
+#: src/ingameop.c:273 src/frontend.c:227
 msgid "Options"
 msgstr "Optionen"
 
@@ -940,157 +940,157 @@ msgstr "Systeme"
 msgid "Command Turrets"
 msgstr "Kommandotürme"
 
-#: src/frontend.c:223
+#: src/frontend.c:224
 msgid "Single Player Campaign"
 msgstr "Einzelspielerkampagne"
 
-#: src/frontend.c:224
+#: src/frontend.c:225
 msgid "Multi Player Game"
 msgstr "Mehrspieler-Spiel"
 
-#: src/frontend.c:225 src/frontend.c:279
+#: src/frontend.c:226 src/frontend.c:280
 msgid "Tutorial"
 msgstr "Tutorial"
 
-#: src/frontend.c:228
+#: src/frontend.c:229
 msgid "Quit Game"
 msgstr "Spiel Beenden"
 
-#: src/frontend.c:230
+#: src/frontend.c:231
 msgid "MAIN MENU"
 msgstr "HAUPTMENÜ"
 
-#: src/frontend.c:280
+#: src/frontend.c:281
 msgid "Fast Play"
 msgstr "Schnelles Spiel"
 
-#: src/frontend.c:281
+#: src/frontend.c:282
 msgid "TUTORIALS"
 msgstr "TUTORIALS"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.c:283 src/frontend.c:339 src/frontend.c:465 src/frontend.c:515
-#: src/frontend.c:673 src/frontend.c:819 src/frontend.c:924
+#: src/frontend.c:284 src/frontend.c:340 src/frontend.c:466 src/frontend.c:516
+#: src/frontend.c:674 src/frontend.c:820 src/frontend.c:925
 msgctxt "menu"
 msgid "Return"
 msgstr "Zurück"
 
-#: src/frontend.c:335
+#: src/frontend.c:336
 msgid "Load Campaign"
 msgstr "Kampagne laden"
 
-#: src/frontend.c:336
+#: src/frontend.c:337
 msgid "New Campaign"
 msgstr "Neue Kampagne"
 
-#: src/frontend.c:338
+#: src/frontend.c:339
 msgid "SINGLE PLAYER"
 msgstr "Einzelspieler"
 
-#: src/frontend.c:458
+#: src/frontend.c:459
 msgid "MULTI PLAYER"
 msgstr "Mehrspieler"
 
-#: src/frontend.c:460
+#: src/frontend.c:461
 msgid "Host Game"
 msgstr "Spiel hosten"
 
-#: src/frontend.c:461
+#: src/frontend.c:462
 msgid "Join Game"
 msgstr "Spiel beitreten"
 
-#: src/frontend.c:463
+#: src/frontend.c:464
 msgid "One Player Skirmish"
 msgstr "Einzelspieler Geplänkel"
 
-#: src/frontend.c:510 src/frontend.c:822 src/frontend.c:927
+#: src/frontend.c:511 src/frontend.c:823 src/frontend.c:928
 msgid "GAME OPTIONS"
 msgstr "Spieloptionen"
 
-#: src/frontend.c:511
+#: src/frontend.c:512
 msgid "Game Options"
 msgstr "Spieloptionen"
 
-#: src/frontend.c:512
+#: src/frontend.c:513
 msgid "Graphics Options"
 msgstr "Grafikeinstellungen"
 
-#: src/frontend.c:513
+#: src/frontend.c:514
 msgid "Audio Options"
 msgstr "Audioeinstellungen"
 
-#: src/frontend.c:514
+#: src/frontend.c:515
 msgid "Key Mappings"
 msgstr "Tastenzuordnung"
 
-#: src/frontend.c:583
+#: src/frontend.c:584
 msgid "Reverse Mouse"
 msgstr "Maus umkehren"
 
-#: src/frontend.c:586 src/frontend.c:598 src/frontend.c:651 src/frontend.c:664
-#: src/frontend.c:696 src/frontend.c:710 src/frontend.c:746 src/frontend.c:755
+#: src/frontend.c:587 src/frontend.c:599 src/frontend.c:652 src/frontend.c:665
+#: src/frontend.c:697 src/frontend.c:711 src/frontend.c:747 src/frontend.c:756
 msgid "On"
 msgstr "An"
 
-#: src/frontend.c:590 src/frontend.c:602 src/frontend.c:647 src/frontend.c:656
-#: src/frontend.c:668 src/frontend.c:691 src/frontend.c:705 src/frontend.c:741
-#: src/frontend.c:759
+#: src/frontend.c:591 src/frontend.c:603 src/frontend.c:648 src/frontend.c:657
+#: src/frontend.c:669 src/frontend.c:692 src/frontend.c:706 src/frontend.c:742
+#: src/frontend.c:760
 msgid "Off"
 msgstr "Aus"
 
-#: src/frontend.c:595
+#: src/frontend.c:596
 msgid "Screen Shake"
 msgstr "Kameraerschütterungen"
 
-#: src/frontend.c:610 src/frontend.c:728
+#: src/frontend.c:611 src/frontend.c:729
 msgid "Mist"
 msgstr "Dunst"
 
-#: src/frontend.c:619
+#: src/frontend.c:620
 msgid "Video Playback"
 msgstr "Videowiedergabe"
 
-#: src/frontend.c:622 src/frontend.c:778
+#: src/frontend.c:623 src/frontend.c:779
 msgid "Full"
 msgstr "Vollbild"
 
-#: src/frontend.c:626 src/frontend.c:768
+#: src/frontend.c:627 src/frontend.c:769
 msgid "Windowed"
 msgstr "Fenster"
 
-#: src/frontend.c:629 src/frontend.c:773
+#: src/frontend.c:630 src/frontend.c:774
 msgid "Minimal"
 msgstr "Minimiert"
 
-#: src/frontend.c:636 src/frontend.c:640
+#: src/frontend.c:637 src/frontend.c:641
 msgid "Subtitles"
 msgstr "Untertitel"
 
-#: src/frontend.c:661
+#: src/frontend.c:662
 msgid "Shadows"
 msgstr ""
 
-#: src/frontend.c:889
+#: src/frontend.c:890
 msgid "Difficulty"
 msgstr "Schwierigkeit"
 
-#: src/frontend.c:893 src/frontend.c:975
+#: src/frontend.c:894 src/frontend.c:976
 msgid "Easy"
 msgstr "Einfach"
 
-#: src/frontend.c:896 src/frontend.c:967
+#: src/frontend.c:897 src/frontend.c:968
 msgid "Normal"
 msgstr "Normal"
 
-#: src/frontend.c:900 src/frontend.c:971
+#: src/frontend.c:901 src/frontend.c:972
 msgid "Hard"
 msgstr "Schwer"
 
-#: src/frontend.c:905
+#: src/frontend.c:906
 msgid "Scroll Speed"
 msgstr "Scrollgeschwindigkeit"
 
-#: src/frontend.c:921
+#: src/frontend.c:922
 msgid "Unit Colour"
 msgstr "Einheitenfarbe"
 
@@ -1437,6 +1437,29 @@ msgstr "Nächste Cyborgfabrik auswählen"
 #: src/keymap.c:422
 msgid "Toggle reopening the build menu"
 msgstr "Wiederöffnen des Baumenüs umschalten"
+
+#. TRANSLATORS: This string looks as follows when expanded.
+#. "Version <version name/number> <working copy state> - Built <DATE><BUILD TYPE>"
+#: src/version.c:125
+#, c-format
+msgid "Version %s%s - Built %s%s"
+msgstr ""
+
+#: src/version.c:130
+msgid " (modified and switched locally)"
+msgstr ""
+
+#: src/version.c:132
+msgid " (modified locally)"
+msgstr ""
+
+#: src/version.c:134
+msgid " (switched locally)"
+msgstr ""
+
+#: src/version.c:141
+msgid " - DEBUG"
+msgstr ""
 
 #: src/multijoin.c:120 src/multijoin.c:121
 msgid "Players Still Joining"

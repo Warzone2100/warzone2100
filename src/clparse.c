@@ -50,6 +50,7 @@
 #include "init.h"
  // To set the shadow config:
 #include "display.h"
+#include "version.h"
 
 extern BOOL NETsetupTCPIP(void ** addr, char * machine);
 
@@ -127,11 +128,7 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
 
 		if ( strcasecmp(tokenType, "--version") == 0 )
 		{
-#ifdef DEBUG
-			fprintf(stdout, "Warzone 2100 - Version " VERSION " - Built " __DATE__ " - DEBUG\n");
-#else
-			fprintf(stdout, "Warzone 2100 - Version " VERSION " - Built " __DATE__ "\n");
-#endif
+			printf("Warzone 2100 - %s\n", version_getFormattedVersionString());
 			return FALSE;
 		}
 		else if ( strcasecmp(tokenType, "--help" ) == 0 )

@@ -46,7 +46,7 @@ warzone2100_SOURCES = scriptvals_parser.tab.c scriptvals_lexer.lex.c \
 	bucket3d.c clparse.c configuration.c display3d.c drive.c function.c game.c \
 	ingameop.c keyedit.c loadsave.c mission.c multigifts.c multijoin.c multilimit.c \
 	multiplay.c multistruct.c oprint.c power.c projectile.c seqdisp.c structure.c \
-	target.c warzoneconfig.c
+	target.c version.c warzoneconfig.c
 
 warzone2100_LDADD = \
 	$(top_builddir)/lib/widget/libwidget.a \

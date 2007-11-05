@@ -4,6 +4,8 @@ lib/framework/configfile.c
 lib/framework/SDL_framerate.c
 lib/framework/frameresource.c
 lib/framework/frame.c
+lib/framework/strnlen1.c
+lib/framework/tagfile.c
 lib/framework/treap.c
 lib/framework/exceptionhandler.c
 lib/framework/trig.c
@@ -29,6 +31,7 @@ lib/gamelib/animobj.c
 lib/netplay/netplay.c
 lib/netplay/netjoin_stub.c
 lib/netplay/netlog.c
+lib/netplay/nettypes.c
 lib/ivis_opengl/piepalette.c
 lib/ivis_opengl/textdraw.c
 lib/ivis_opengl/ivi.c
@@ -164,6 +167,7 @@ src/cheat.c
 src/power.c
 src/keymap.c
 src/cdspan.c
+src/version.c
 src/warzoneconfig.c
 src/multijoin.c
 src/environ.c

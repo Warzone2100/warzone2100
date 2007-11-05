@@ -67,6 +67,7 @@
 #include "warzoneconfig.h"
 #include "main.h"
 #include "wrappers.h"
+#include "version.h"
 
 #ifndef DATADIR
 # define DATADIR "/usr/share/warzone2100/"
@@ -739,12 +740,6 @@ int main(int argc, char *argv[])
 	debug_init();
 	atexit( debug_exit );
 
-#ifdef DEBUG
-	debug( LOG_WZ, "Warzone 2100 - Version %s - Built %s - DEBUG", VERSION, __DATE__ );
-#else
-	debug( LOG_WZ, "Warzone 2100 - Version %s - Built %s", VERSION, __DATE__ );
-#endif
-
 	debug_register_callback( debug_callback_stderr, NULL, NULL, NULL );
 #if defined(WZ_OS_WIN) && defined(DEBUG_INSANE)
 	debug_register_callback( debug_callback_win32debug, NULL, NULL, NULL );
@@ -754,6 +749,8 @@ int main(int argc, char *argv[])
 	if ( !ParseCommandLineEarly(argc, argv) ) {
 		return -1;
 	}
+
+	debug(LOG_WZ, "Warzone 2100 - %s", version_getFormattedVersionString());
 
 	/*** Initialize PhysicsFS ***/
 	PHYSFS_init(argv[0]);

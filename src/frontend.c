@@ -59,6 +59,7 @@
 #include "warzoneconfig.h"
 #include "main.h"
 #include "wrappers.h"
+#include "version.h"
 
 static int StartWithGame = 1; // New game starts in Cam 1.
 
@@ -1281,16 +1282,10 @@ void addText(int FontID,UDWORD FormID,UDWORD id,  UDWORD PosX, UDWORD PosY, char
 // show a background piccy
 static void displayTitleBitmap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
-	static const char versionString[] = "Version " VERSION " - Built " __DATE__
-#ifdef DEBUG
-	                                                                            " - DEBUG"
-#endif
-	;
-
 	iV_SetFont(font_regular);
 	iV_SetTextColour(PIE_TEXT_WHITE);
 
-	iV_DrawTextRotated(versionString, pie_GetVideoBufferWidth() - 10, pie_GetVideoBufferHeight() - 15, 270.f);
+	iV_DrawTextRotated(version_getFormattedVersionString(), pie_GetVideoBufferWidth() - 10, pie_GetVideoBufferHeight() - 15, 270.f);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
