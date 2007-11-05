@@ -1,0 +1,26 @@
+MAKERULES=../../makerules
+include $(MAKERULES)/configure.mk
+include $(MAKERULES)/common.mk
+
+SRC=autorevision.cpp
+
+EXE=autorevision
+CXX=g++
+
+DEPS=$(patsubst %.c,%.o, $(SRC:%.cpp=%.o)) $(LIBS)
+
+all: all-local
+
+$(EXE)$(EXEEXT): $(DEPS)
+		$(CXX) -o $@ $<
+
+all-local: $(EXE)$(EXEEXT)
+	$(EXE)$(EXEEXT) +cstr -v ../.. ../../src/autorevision.h
+
+clean-local:
+	-$(RMF) ../../src/autorevision.h
+
+clean:
+	$(RMF) $(DEPS) $(EXE)$(EXEEXT)
+
+.PHONY: all all-local clean

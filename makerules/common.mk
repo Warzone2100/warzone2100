@@ -4,6 +4,9 @@
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o$@ $<
 
+%.o: %.cpp
+	$(CC) $(CFLAGS) -c -o$@ $<
+
 %.lex.c: %.l
 	$(FLEX) $(FLEXFLAGS) -o$@ $<
 

@@ -1,4 +1,4 @@
-SUBDIRS=po win32 lib src data nsis
+SUBDIRS=build_tools po win32 lib src data nsis
 
 all clean: $(SUBDIRS)
 
@@ -6,5 +6,5 @@ all clean: $(SUBDIRS)
 $(SUBDIRS):
 	$(MAKE) -f Makefile.raw -C $@ $(MAKECMDGOALS)
 
-src: win32 lib
+src: win32 lib build_tools
 nsis: data src po

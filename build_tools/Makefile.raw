@@ -1,0 +1,8 @@
+SUBDIRS=autorevision
+
+all clean: $(SUBDIRS)
+
+$(SUBDIRS):
+	$(MAKE) -f Makefile.raw -C $@ $(MAKECMDGOALS)
+
+.PHONY: all clean $(SUBDIRS)
