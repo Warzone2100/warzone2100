@@ -35,7 +35,7 @@ used for the mist and water effects. These are preprocessed.
 #define ENVIRON_WATER_INIT_VALUE	(10 + (rand()%10))
 #define ENVIRON_LAND_INIT_VALUE		(32 + (rand()%32))
 //#define ENVIRON_WATER_DATA_VALUE	(70 + (rand()%30))
-#define ENVIRON_WATER_DATA_VALUE	(155 + (100-rand()%200))
+#define ENVIRON_WATER_DATA_VALUE	(rand()%50)
 #define ENVIRON_LAND_DATA_VALUE		(0)
 #define ENVIRON_WATER_LOWEST		(0.0f)
 #define ENVIRON_WATER_HIGHEST		(20.0f)
