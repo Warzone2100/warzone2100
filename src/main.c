@@ -239,11 +239,13 @@ static void getPlatformUserDir(char * tmpstr)
 /***************************************************************************
 	Initialize the PhysicsFS library.
 ***************************************************************************/
-static void initialize_PhysicsFS(void)
+static void initialize_PhysicsFS(const char* argv_0)
 {
 	PHYSFS_Version compiled;
 	PHYSFS_Version linked;
 	char tmpstr[PATH_MAX] = { '\0' };
+
+	PHYSFS_init(argv_0);
 
 	PHYSFS_VERSION(&compiled);
 	PHYSFS_getLinkedVersion(&linked);
@@ -745,6 +747,24 @@ int main(int argc, char *argv[])
 	debug_register_callback( debug_callback_win32debug, NULL, NULL, NULL );
 #endif // WZ_OS_WIN && DEBUG_INSANE
 
+	/*** Initialize translations ***/
+	setlocale(LC_MESSAGES, "");
+	setlocale(LC_NUMERIC, "C");		// set radix character to the period (".")
+#if defined(WZ_OS_WIN)
+	{
+		// Retrieve an absolute path to the locale directory
+		char localeDir[PATH_MAX];
+		strlcpy(localeDir, PHYSFS_getBaseDir(), sizeof(localeDir));
+		strlcat(localeDir, "\\" LOCALEDIR, sizeof(localeDir));
+
+		// Set locale directory and translation domain name
+		(void)bindtextdomain(PACKAGE, localeDir);
+	}
+#else
+	(void)bindtextdomain(PACKAGE, LOCALEDIR);
+#endif
+	(void)textdomain(PACKAGE);
+
 	// find early boot info
 	if ( !ParseCommandLineEarly(argc, argv) ) {
 		return -1;
@@ -753,8 +773,7 @@ int main(int argc, char *argv[])
 	debug(LOG_WZ, "Warzone 2100 - %s", version_getFormattedVersionString());
 
 	/*** Initialize PhysicsFS ***/
-	PHYSFS_init(argv[0]);
-	initialize_PhysicsFS();
+	initialize_PhysicsFS(argv[0]);
 
 	make_dir(ScreenDumpPath, "screendumps", NULL);
 	make_dir(SaveGamePath, "savegame", NULL);
@@ -768,26 +787,7 @@ int main(int argc, char *argv[])
 	strlcpy(KeyMapPath, "keymap.map", sizeof(KeyMapPath));
 	strlcpy(UserMusicPath, "music", sizeof(UserMusicPath));
 
-	/*** Initialize translations ***/
-	setlocale(LC_MESSAGES, "");
-	setlocale(LC_NUMERIC, "C");		// set radix character to the period (".")
-#if defined(WZ_OS_WIN)
-	{
-		// Retrieve an absolute path to the locale directory
-		char localeDir[PATH_MAX];
-		snprintf(localeDir, PATH_MAX, "%s\\" LOCALEDIR, PHYSFS_getBaseDir());
-
-		// Guarantee to NUL-terminate
-		localeDir[sizeof(localeDir) - 1] = '\0';
-
-		// Set locale directory and translation domain name
-		(void)bindtextdomain(PACKAGE, localeDir);
-	}
-#else
-	(void)bindtextdomain(PACKAGE, LOCALEDIR);
-#endif
-	(void)textdomain(PACKAGE);
-
+	/* Initialize framerate handler */
 	SDL_initFramerate( &wzFPSmanager );
 
 	// initialise all the command line states
