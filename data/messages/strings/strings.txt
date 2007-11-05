@@ -394,6 +394,7 @@ BIND_SHOT		"Take Screen Shot"
 BIND_PAUSE		"Toggle Pause Mode"
 BIND_PREV		"View Location of Previous Message"
 
+BIND_AS0		"Assign Group 0"
 BIND_AS1		"Assign Group 1"
 BIND_AS2		"Assign Group 2"
 BIND_AS3		"Assign Group 3"
@@ -403,6 +404,7 @@ BIND_AS6		"Assign Group 6"
 BIND_AS7		"Assign Group 7"
 BIND_AS8		"Assign Group 8"
 BIND_AS9		"Assign Group 9"
+BIND_GR0		"Select Group 0"
 BIND_GR1		"Select Group 1"
 BIND_GR2		"Select Group 2"
 BIND_GR3		"Select Group 3"
@@ -498,6 +500,7 @@ GAM_COMNOTFOUND			"Unable to locate any Commanders!"
 
 
 // Added by john on 2.2.99
+BIND_CMD0		"Select Commander 0"
 BIND_CMD1		"Select Commander 1"
 BIND_CMD2		"Select Commander 2"
 BIND_CMD3		"Select Commander 3"

@@ -1016,6 +1016,7 @@ void	kf_SelectGrouping( UDWORD	groupNumber)
 		selCommander(x); \
 	}
 
+DEFINE_NUMED_KF(0)
 DEFINE_NUMED_KF(1)
 DEFINE_NUMED_KF(2)
 DEFINE_NUMED_KF(3)

@@ -391,6 +391,7 @@ enum _fixed_str_id
 	STR_BIND_SHOT,			
 	STR_BIND_PAUSE,			
 	STR_BIND_PREV,			
+	STR_BIND_AS0,			
 	STR_BIND_AS1,			
 	STR_BIND_AS2,			
 	STR_BIND_AS3,			
@@ -400,6 +401,7 @@ enum _fixed_str_id
 	STR_BIND_AS7,			
 	STR_BIND_AS8,			
 	STR_BIND_AS9,			
+	STR_BIND_GR0,			
 	STR_BIND_GR1,			
 	STR_BIND_GR2,			
 	STR_BIND_GR3,			
@@ -486,6 +488,7 @@ enum _fixed_str_id
 	STR_GAM_SENNOTFOUND,	
 	STR_GAM_COMNOTFOUND,	
 
+	STR_BIND_CMD0,
 	STR_BIND_CMD1,
 	STR_BIND_CMD2,
 	STR_BIND_CMD3,

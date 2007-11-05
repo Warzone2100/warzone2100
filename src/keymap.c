@@ -271,6 +271,9 @@ _keymapsave keyMapSaveTable[] =
 	kf_DownDroidScale,
 	kf_RaiseGamma,
 	kf_LowerGamma,
+	kf_AssignGrouping_0,
+	kf_SelectGrouping_0,
+	kf_SelectCommander_0,
 
 	NULL		// last function!
 };
@@ -326,6 +329,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	//                                **********************************
 	//                                **********************************
 	//										ASSIGN GROUPS
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_0,KEYMAP_PRESSED,kf_AssignGrouping_0,				strresGetString(psStringRes,STR_BIND_AS0));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_1,KEYMAP_PRESSED,kf_AssignGrouping_1,				strresGetString(psStringRes,STR_BIND_AS1));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_2,KEYMAP_PRESSED,kf_AssignGrouping_2,				strresGetString(psStringRes,STR_BIND_AS2));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LCTRL,KEY_3,KEYMAP_PRESSED,kf_AssignGrouping_3,				strresGetString(psStringRes,STR_BIND_AS3));
@@ -338,6 +342,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	//                                **********************************
 	//                                **********************************
 	//	SELECT GROUPS - Will jump to the group as well as select if group is ALREADY selected
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_0,KEYMAP_PRESSED,kf_SelectGrouping_0,				strresGetString(psStringRes,STR_BIND_GR0));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_1,KEYMAP_PRESSED,kf_SelectGrouping_1,				strresGetString(psStringRes,STR_BIND_GR1));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_2,KEYMAP_PRESSED,kf_SelectGrouping_2,				strresGetString(psStringRes,STR_BIND_GR2));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_IGNORE,KEY_3,KEYMAP_PRESSED,kf_SelectGrouping_3,				strresGetString(psStringRes,STR_BIND_GR3));
@@ -350,6 +355,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	//                                **********************************
 	//                                **********************************
 	//	SELECT COMMANDER - Will jump to the group as well as select if group is ALREADY selected
+	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_0,KEYMAP_PRESSED,kf_SelectCommander_0,				strresGetString(psStringRes,STR_BIND_CMD0));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_1,KEYMAP_PRESSED,kf_SelectCommander_1,				strresGetString(psStringRes,STR_BIND_CMD1));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_2,KEYMAP_PRESSED,kf_SelectCommander_2,				strresGetString(psStringRes,STR_BIND_CMD2));
 	keyAddMapping(KEYMAP_ASSIGNABLE,KEY_LALT,KEY_3,KEYMAP_PRESSED,kf_SelectCommander_3,				strresGetString(psStringRes,STR_BIND_CMD3));
