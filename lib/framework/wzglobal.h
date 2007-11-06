@@ -372,9 +372,12 @@
 #    define strncasecmp _strnicmp
 #    define inline __inline
 
+// Required for the below two inline functions
+#    include <stdio.h>
+
 static inline int vsnprintf(char* str, size_t size, const char* format, va_list ap)
 {
-	int count
+	int count;
 
 	// Find out how long the resulting string is
 	count = _vscprintf(format, ap);
