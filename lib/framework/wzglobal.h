@@ -370,6 +370,7 @@
 #  if defined(WZ_CC_MSVC)
 #    define strcasecmp _stricmp
 #    define strncasecmp _strnicmp
+#    define inline __inline
 
 static inline int vsnprintf(char* str, size_t size, const char* format, va_list ap)
 {
@@ -402,7 +403,6 @@ static inline int snprintf(char* str, size_t size, const char* format, ...)
 }
 
 #    define fileno _fileno
-#    define inline __inline
 #    define isfinite _finite
 #    define PATH_MAX MAX_PATH
 #  endif /* WZ_CC_MSVC */
