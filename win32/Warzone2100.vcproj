@@ -248,15 +248,15 @@
 					>
 				</File>
 				<File
-					RelativePath="..\lib\framework\tagfile.c"
-					>
-				</File>
-				<File
 					RelativePath=".\strres_lexer.lex.c"
 					>
 				</File>
 				<File
 					RelativePath=".\strres_parser.tab.c"
+					>
+				</File>
+				<File
+					RelativePath="..\lib\framework\tagfile.c"
 					>
 				</File>
 				<File
@@ -1041,10 +1041,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\framework\strlfuncs.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\arrow.h"
 				>
 			</File>
@@ -1290,14 +1286,6 @@
 			</File>
 			<File
 				RelativePath="..\lib\framework\frameresource.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\tagfile.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\strnlen1.h"
 				>
 			</File>
 			<File
@@ -1781,6 +1769,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\lib\framework\strlfuncs.h"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\framework\strnlen1.h"
+				>
+			</File>
+			<File
 				RelativePath="..\lib\framework\strres.h"
 				>
 			</File>
@@ -1798,6 +1794,10 @@
 			</File>
 			<File
 				RelativePath="..\src\structuredef.h"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\framework\tagfile.h"
 				>
 			</File>
 			<File
