@@ -29,6 +29,10 @@ using namespace std;
     #define NOGDI
     #include <windows.h>
     inline void set_env(const char* k, const char* v) { SetEnvironmentVariable(k, v); };
+    #ifdef _MSC_VER
+        #define popen  _popen
+        #define pclose _pclose
+    #endif
 #else
     #include <stdlib.h>
     inline void set_env(const char* k, const char* v) { setenv(k, v, 1); };
