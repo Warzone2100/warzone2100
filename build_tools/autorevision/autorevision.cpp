@@ -28,7 +28,7 @@ using namespace std;
     #define WIN32_LEAN_AND_MEAN 1
     #define NOGDI
     #include <windows.h>
-    inline void set_env(const char* k, const char* v) { SetEnvironmentVariable(k, v); };
+    inline void set_env(const char* k, const char* v) { SetEnvironmentVariableA(k, v); };
     #ifdef _MSC_VER
         #define popen  _popen
         #define pclose _pclose
