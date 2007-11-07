@@ -4781,7 +4781,7 @@ void	drawTerrainTile(UDWORD i, UDWORD j)
 	UDWORD tileNumber;
 	UDWORD renderFlag;
 	iPoint offset;
-	PIEVERTEX aVrts[4];
+	PIEVERTEX aVrts[3];
 	BYTE oldColours[4] = { 0, 0, 0, 0 };
 	UDWORD oldColoursWord[4] = { 0, 0, 0, 0 };
 #if defined(SHOW_ZONES) || defined(SHOW_GATEWAYS)
@@ -4968,21 +4968,37 @@ void	drawTerrainTile(UDWORD i, UDWORD j)
 	tileScreenInfo[i+1][j+0].tu = (UWORD)(psP4->x + offset.x);
 	tileScreenInfo[i+1][j+0].tv = (UWORD)(psP4->y + offset.y);
 
+	/* The first triangle */
 	if(TRI_FLIPPED(psTile))
 	{
-		memcpy(&aVrts[0], &tileScreenInfo[i + 1][j + 0], sizeof(PIEVERTEX));
-		memcpy(&aVrts[1], &tileScreenInfo[i + 0][j + 0], sizeof(PIEVERTEX));
-		memcpy(&aVrts[2], &tileScreenInfo[i + 0][j + 1], sizeof(PIEVERTEX));
-		memcpy(&aVrts[3], &tileScreenInfo[i + 1][j + 1], sizeof(PIEVERTEX));
+		memcpy(&aVrts[0], &tileScreenInfo[i + 0][j + 0], sizeof(PIEVERTEX));
+		memcpy(&aVrts[1], &tileScreenInfo[i + 0][j + 1], sizeof(PIEVERTEX));
+		memcpy(&aVrts[2], &tileScreenInfo[i + 1][j + 0], sizeof(PIEVERTEX));
+		pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
 	}
 	else
 	{
 		memcpy(&aVrts[0], &tileScreenInfo[i + 0][j + 0], sizeof(PIEVERTEX));
 		memcpy(&aVrts[1], &tileScreenInfo[i + 0][j + 1], sizeof(PIEVERTEX));
 		memcpy(&aVrts[2], &tileScreenInfo[i + 1][j + 1], sizeof(PIEVERTEX));
-		memcpy(&aVrts[3], &tileScreenInfo[i + 1][j + 0], sizeof(PIEVERTEX));
+		pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
 	}
-	pie_DrawPoly(4, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
+
+	/* The second triangle */
+	if(TRI_FLIPPED(psTile))
+	{
+		memcpy(&aVrts[0], &tileScreenInfo[i + 0][j + 1], sizeof(PIEVERTEX));
+		memcpy(&aVrts[1], &tileScreenInfo[i + 1][j + 1], sizeof(PIEVERTEX));
+		memcpy(&aVrts[2], &tileScreenInfo[i + 1][j + 0], sizeof(PIEVERTEX));
+		pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
+	}
+	else
+	{
+		memcpy(&aVrts[0], &tileScreenInfo[i + 0][j + 0], sizeof(PIEVERTEX));
+		memcpy(&aVrts[1], &tileScreenInfo[i + 1][j + 1], sizeof(PIEVERTEX));
+		memcpy(&aVrts[2], &tileScreenInfo[i + 1][j + 0], sizeof(PIEVERTEX));
+		pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
+	}
 
 	/* Outline the tile if necessary */
 	if(terrainOutline)
@@ -5155,7 +5171,7 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 	UDWORD	tileNumber;
 	//UDWORD	renderFlag;
 	iPoint	offset;
-	PIEVERTEX aVrts[4];
+	PIEVERTEX aVrts[3];
 
 	/* Get the correct tile index for the x coordinate */
 	actualX = playerXTile + j;
@@ -5219,14 +5235,18 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 		aVrts[2].light = tileScreenInfo[i+1][j+1].wlight;
 		aVrts[2].light.byte.a = WATER_ALPHA_LEVEL;
 
-		memcpy(&aVrts[3],&tileScreenInfo[i+1][j+0],sizeof(PIEVERTEX));
-		aVrts[3].sx = tileScreenInfo[i+1][j+0].x;
-		aVrts[3].sy = tileScreenInfo[i+1][j+0].water_height;
-		aVrts[3].sz = tileScreenInfo[i+1][j+0].z;
-		aVrts[3].light = tileScreenInfo[i+1][j+0].wlight;
-		aVrts[3].light.byte.a = WATER_ALPHA_LEVEL;
+		pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, &waterRealValue);//jps 15 apr99
 
-		pie_DrawPoly(4, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, &waterRealValue);//jps 15 apr99
+		memcpy(&aVrts[1],&aVrts[2],sizeof(PIEVERTEX));
+
+		memcpy(&aVrts[2],&tileScreenInfo[i+1][j+0],sizeof(PIEVERTEX));
+		aVrts[2].sx = tileScreenInfo[i+1][j+0].x;
+		aVrts[2].sy = tileScreenInfo[i+1][j+0].water_height;
+		aVrts[2].sz = tileScreenInfo[i+1][j+0].z;
+		aVrts[2].light = tileScreenInfo[i+1][j+0].wlight;
+		aVrts[2].light.byte.a = WATER_ALPHA_LEVEL;
+
+		pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, &waterRealValue);//jps 15 apr99
 
 		if( (psTile->texture & TILE_NUMMASK) != WaterTileID) {
 			drawTerrainWEdgeTile(i,j);
