@@ -1,12 +1,16 @@
 2007-10-20: Version 2.0.8 RC1
  * General:
    * New: Repeat keypresses if the key is hold long enough (e.g. one press of 'A' becomes 'AAAAAAAAAA' if just held long enough)
+   * New: Possibility to use the zero-key ('0') to assign groups to as well (patch #828)
+   * Change: Slightly faster terrain rendering (+ 5-10%) (patch #830)
+   * Change: Don't make droids exclusive to one group (you may add them to several groups now) (patch #829)
    * Change: Protocol-selection removed from "Host Game", since the only option was "Internet"
    * Change: In the "Join Game" menu you can now choose between "IP" (same as the old "Internet" option) and "Lobby" (directly proceed to the Lobbyserver)
    * Fix: Remove invalid references to software renderer textures (caused crashes between campaign 1-2 and 2-3) (bug #9497)
    * Fix: Improve POSIX exception handler reliability (GDB could have had trouble locating the executable)
    * Fix: Workaround a bug in OpenAL SI 0.0.8 GNU/Linux, which could lead to a crash
    * Fix: Dead objects could be targeted when structures used commanders and counterbatteries for targeting
+   * Fix: Crash on game exit (bug #9927)
    * Fix: Crash upon receiving invalid sound ID numbers (out of bounds array access) (bug #9694)
    * Fix: Prevent divide by zero errors caused by ordering a VTOL to attack a droid at the same X & Y coordinates (bug #9704)
    * Fix: Make progress bar white again
