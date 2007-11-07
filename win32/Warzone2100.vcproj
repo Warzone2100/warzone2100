@@ -27,6 +27,8 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				Description="Generates the autorevison.h file"
+				CommandLine="$(SolutionDir)..\autorevision  +cstr -v $(ProjectDir)..\  $(ProjectDir)..\src\autorevision.h&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="FlexGenerator"
@@ -1066,6 +1068,10 @@
 			</File>
 			<File
 				RelativePath=".\audp_parser.tab.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\autorevision.h"
 				>
 			</File>
 			<File
