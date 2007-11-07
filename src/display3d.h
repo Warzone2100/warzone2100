@@ -29,16 +29,16 @@
 #include "message.h"
 
 
-/*
- * Needed for initialisation of global variables,
- * which can't be initialised from other variables
+/*!
+ * Special tile types
  */
-#define _WATER_TILE_ID 17
-#define _NO_DRIVE_OVER_RUBBLE_TILE_ID 67
-static const unsigned int WATER_TILE_ID = _WATER_TILE_ID;
-static const unsigned int RIVERBED_TILE_ID = 5;
-static const unsigned int DRIVE_OVER_RUBBLE_TILE_ID = 54;
-static const unsigned int NO_DRIVE_OVER_RUBBLE_TILE_ID = _NO_DRIVE_OVER_RUBBLE_TILE_ID;
+typedef enum
+{
+	RIVERBED_TILE = 5, //! Underwater ground
+	WATER_TILE = 17, //! Water surface
+	RUBBLE_TILE = 54, //! You can drive over these
+	BLOCKING_RUBBLE_TILE = 67 //! You cannot drive over these
+} TILE_ID;
 
 
 extern void	setViewAngle(SDWORD angle);

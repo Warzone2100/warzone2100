@@ -714,14 +714,14 @@ void destroyFeature(FEATURE *psDel)
 							{
 						   		/* Clear feature bits */
 								psTile->psObject = NULL;
-								texture = TileNumber_texture(psTile->texture) | DRIVE_OVER_RUBBLE_TILE_ID;
+								texture = TileNumber_texture(psTile->texture) | RUBBLE_TILE;
 								psTile->texture = (UWORD)texture;
 							}
 							else
 							{
 							   /* This remains a blocking tile */
 								psTile->psObject = NULL;
-								texture = TileNumber_texture(psTile->texture) | NO_DRIVE_OVER_RUBBLE_TILE_ID;
+								texture = TileNumber_texture(psTile->texture) | BLOCKING_RUBBLE_TILE;
 								psTile->texture = (UWORD)texture;
 
 							}

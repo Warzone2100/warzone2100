@@ -235,9 +235,8 @@ UDWORD	terrainMidY;
 UDWORD	terrainMaxX;
 UDWORD	terrainMaxY;
 
-/* Initialise from macro instead of const variable */
-static unsigned int underwaterTile = _WATER_TILE_ID;
-static unsigned int rubbleTile = _NO_DRIVE_OVER_RUBBLE_TILE_ID;
+static unsigned int underwaterTile = WATER_TILE;
+static unsigned int rubbleTile = BLOCKING_RUBBLE_TILE;
 
 UDWORD geoOffset;
 static int averageCentreTerrainHeight;
@@ -712,7 +711,7 @@ static void drawTiles(iView *camera, iView *player)
 				}
 
 				// If it's the main water tile (has water texture) then..
-				if ( TileNumber_tile(psTile->texture) == WATER_TILE_ID && !bEdgeTile )
+				if ( TileNumber_tile(psTile->texture) == WATER_TILE && !bEdgeTile )
 				{
 					// Push the terrain down for the river bed.
 					PushedDown = TRUE;
@@ -815,7 +814,7 @@ static void drawTiles(iView *camera, iView *player)
 
 				// check if we need to draw a water edge
 				if (tileScreenInfo[i][j].bWater
-				    && TileNumber_tile(mapTile(playerXTile + j, playerZTile + i)->texture) != WATER_TILE_ID)
+				    && TileNumber_tile(mapTile(playerXTile + j, playerZTile + i)->texture) != WATER_TILE)
 				{
 					// the edge is in front of the water (which is drawn at z-index -1)
 					pie_SetDepthOffset(-2.0);
@@ -4130,7 +4129,7 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	else
 	{
 		// If it's a water tile then force it to be the river bed texture.
-		tileNumber = RIVERBED_TILE_ID;
+		tileNumber = RIVERBED_TILE;
 	}
 
 #if defined(SHOW_ZONES)
