@@ -392,8 +392,6 @@ void closeLoadingScreen(void)
 
 BOOL displayGameOver(BOOL bDidit)
 {
-
-
 // AlexL says take this out......
 //	setConsolePermanence(TRUE,TRUE);
 //	flushConsoleMessages( );
@@ -402,50 +400,27 @@ BOOL displayGameOver(BOOL bDidit)
 //	addConsoleMessage(_("Game Over"), CENTRE_JUSTIFY );
 //	addConsoleMessage(" ", CENTRE_JUSTIFY );
 
-    //set this for debug mode too - what gets displayed then depends on whether we
-    //have won or lost and if we are in debug mode
-
-	// this bit decides whether to auto quit to front end.
-	//if(!getDebugMappingStatus())
-	if(!bMultiPlayer)
+	if(bDidit)
 	{
-		if(bDidit)
-		{
-			setPlayerHasWon(TRUE);	// quit to frontend..
-		}
-		else
-		{
-			setPlayerHasLost(TRUE);
-		}
-	}
-
-	if(bMultiPlayer)
-	{
-		if(bDidit)
+		setPlayerHasWon(TRUE);
+		multiplayerWinSequence(TRUE);
+		if(bMultiPlayer)
 		{
 			updateMultiStatsWins();
-			multiplayerWinSequence(TRUE);
 		}
-		else
+	}
+	else
+	{
+		setPlayerHasLost(TRUE);
+		if(bMultiPlayer)
 		{
 			updateMultiStatsLoses();
-			clearMissionWidgets();
-			intAddMissionResult(bDidit, TRUE);
 		}
 	}
 
-//	if(getDebugMappingStatus())
-//	{
-//		intAddInGameOptions();
-//	}
-	else
-
-	{
-
-        //clear out any mission widgets - timers etc that may be on the screen
-        clearMissionWidgets();
-		intAddMissionResult(bDidit, TRUE);
-    }
+	//clear out any mission widgets - timers etc that may be on the screen
+	clearMissionWidgets();
+	intAddMissionResult(bDidit, TRUE);
 
 	return TRUE;
 }

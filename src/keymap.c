@@ -745,7 +745,7 @@ SDWORD		i;
 		}
 
 		if(keyToProcess->metaKeyCode==KEY_IGNORE && !bMetaKeyDown &&
-			!(keyToProcess->status==KEYMAP__DEBUG && bDoingDebugMappings == FALSE) )
+			!(keyToProcess->status==KEYMAP__DEBUG && !getDebugMappingStatus()) )
  		{
 			switch(keyToProcess->action)
  			{
@@ -790,7 +790,7 @@ SDWORD		i;
  		}
 		/* Process the combi ones */
  		if( (keyToProcess->metaKeyCode!=KEY_IGNORE && bMetaKeyDown) &&
-			!(keyToProcess->status==KEYMAP__DEBUG && bDoingDebugMappings == FALSE))
+			!(keyToProcess->status==KEYMAP__DEBUG && !getDebugMappingStatus()))
  		{
  			/* It's a combo keypress - one held down and the other pressed */
  			if (keyDown(keyToProcess->metaKeyCode) && keyPressed(keyToProcess->subKeyCode))
