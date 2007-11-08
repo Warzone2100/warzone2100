@@ -61,7 +61,7 @@ static	ANIMOBJDIEDTESTFUNC g_pDiedFunc = NULL;
 /***************************************************************************/
 /* local functions */
 
-static UDWORD		animObj_HashFunction(int64_t iKey1, int64_t iKey2);
+static UDWORD		animObj_HashFunction(intptr_t iKey1, intptr_t iKey2);
 static void		animObj_HashFreeElementFunc( void * psElement );
 
 /***************************************************************************/
@@ -119,7 +119,7 @@ animObj_SetDoneFunc( ANIM_OBJECT *psObj, ANIMOBJDONEFUNC pDoneFunc )
 /***************************************************************************/
 
 static UDWORD
-animObj_HashFunction(int64_t iKey1, int64_t iKey2)
+animObj_HashFunction(intptr_t iKey1, intptr_t iKey2)
 {
 	return (iKey1 + iKey2)%ANIM_HASH_TABLE_SIZE;
 }
@@ -179,7 +179,7 @@ animObj_Update( void )
 		if ( bRemove == TRUE )
 		{
 			if ( hashTable_RemoveElement( g_pAnimObjTable, psObj,
-				(int64_t) psObj->psParent, psObj->psAnim->uwID ) == FALSE )
+				(intptr_t) psObj->psParent, psObj->psAnim->uwID ) == FALSE )
 			{
 				debug( LOG_ERROR, "animObj_Update: couldn't remove anim obj\n" );
 				abort();
@@ -252,7 +252,7 @@ animObj_Add( void *pParentObj, int iAnimID,
 	}
 
 	/* insert object in table by parent */
-	hashTable_InsertElement(g_pAnimObjTable, psObj, (int64_t) pParentObj, iAnimID);
+	hashTable_InsertElement(g_pAnimObjTable, psObj, (intptr_t) pParentObj, iAnimID);
 
 	return psObj;
 }
@@ -283,7 +283,7 @@ animObj_GetNext( void )
 ANIM_OBJECT *
 animObj_Find( void *pParentObj, int iAnimID )
 {
-	return (ANIM_OBJECT*)hashTable_FindElement(g_pAnimObjTable, (int64_t) pParentObj, iAnimID);
+	return (ANIM_OBJECT*)hashTable_FindElement(g_pAnimObjTable, (intptr_t) pParentObj, iAnimID);
 }
 
 /***************************************************************************/
@@ -291,7 +291,7 @@ animObj_Find( void *pParentObj, int iAnimID )
 BOOL
 animObj_Remove( ANIM_OBJECT **ppsObj, int iAnimID )
 {
-	BOOL bRemOK = hashTable_RemoveElement(g_pAnimObjTable, *ppsObj, (int64_t)(*ppsObj)->psParent, iAnimID);
+	BOOL bRemOK = hashTable_RemoveElement(g_pAnimObjTable, *ppsObj, (intptr_t)(*ppsObj)->psParent, iAnimID);
     //init the animation
     *ppsObj = NULL;
 
