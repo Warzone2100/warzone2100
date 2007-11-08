@@ -90,6 +90,8 @@ UDWORD	numActiveMappings;
 static KEY_CODE	lastMetaKey,lastSubKey;
 static BOOL	bKeyProcessing = TRUE;
 
+static void kf_NOOP(void) {}
+
 // ----------------------------------------------------------------------------------
 // Adding a mapped function ? add a save pointer! Thank AlexL.
 // don't bugger around with the order either. new ones go at the end! DEBUG in debug section..
@@ -225,7 +227,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_AssignGrouping_0,
 	kf_SelectGrouping_0,
 	kf_SelectCommander_0,
-	NULL, // unused
+	kf_NOOP, // unused
 	kf_ToggleFogColour,
 	kf_AddMissionOffWorld,
 	kf_KillSelected,
@@ -442,7 +444,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP__DEBUG,KEY_IGNORE,KEY_K,KEYMAP_PRESSED,kf_TriFlip,					"Flip terrain triangle");
 
 	//These ones are necessary for debugging
-	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_A,KEYMAP_PRESSED,kf_AllAvailable,						"Make all items available");	
+	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_A,KEYMAP_PRESSED,kf_AllAvailable,						"Make all items available");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_K,KEYMAP_PRESSED,kf_KillSelected,						"Kill Selected Unit(s)");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_G,KEYMAP_PRESSED,kf_ToggleGodMode,				"Toggle god Mode Status");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_O,KEYMAP_PRESSED,kf_ChooseOptions,				"Display Options Screen");
@@ -841,7 +843,7 @@ SDWORD		i;
 			case KEY_LSHIFT:
 			case KEY_RSHIFT:
 				continue;
-			break;	
+			break;
 		}
 
 		/* Let scripts process this key if it's pressed */
