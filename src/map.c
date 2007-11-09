@@ -1205,6 +1205,7 @@ bool writeVisibilityData(const char* fileName)
 	}
 
 	// Everything is just fine!
+	PHYSFS_close(fileHandle);
 	return true;
 }
 
