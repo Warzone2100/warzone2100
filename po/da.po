@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: da\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-11-05 22:57+0100\n"
+"POT-Creation-Date: 2007-11-09 23:42+0100\n"
 "PO-Revision-Date: 2007-04-17 23:03+0200\n"
 "Last-Translator: Christian Vest Hansen <karmazilla@gmail.com>\n"
 "Language-Team: Dansk <en@li.org>\n"
@@ -111,10 +111,10 @@ msgstr "%s Danner aliance med %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Du opdager plantegninger for %s"
 
-#: src/hci.c:1038 src/hci.c:3812 src/hci.c:3966 src/hci.c:4408 src/hci.c:5631
+#: src/hci.c:1038 src/hci.c:3812 src/hci.c:3966 src/hci.c:4408 src/hci.c:5629
 #: src/transporter.c:292 src/transporter.c:381 src/transporter.c:878
 #: src/intorder.c:660 src/loadsave.c:258 src/intelmap.c:525
-#: src/multimenu.c:450 src/multimenu.c:1288
+#: src/multimenu.c:450 src/multimenu.c:1280
 msgid "Close"
 msgstr "Luk"
 
@@ -122,27 +122,27 @@ msgstr "Luk"
 msgid "GAME SAVED!"
 msgstr "SPIL GEMT!"
 
-#: src/hci.c:3714 src/keymap.c:292
+#: src/hci.c:3714 src/keymap.c:294
 msgid "Commanders"
 msgstr "Kommandører"
 
-#: src/hci.c:3730 src/keymap.c:291
+#: src/hci.c:3730 src/keymap.c:293
 msgid "Intelligence Display"
 msgstr "Kommando Pult"
 
-#: src/hci.c:3746 src/keymap.c:287
+#: src/hci.c:3746 src/keymap.c:289
 msgid "Manufacture"
 msgstr "Fabrikering"
 
-#: src/hci.c:3762 src/keymap.c:290
+#: src/hci.c:3762 src/keymap.c:292
 msgid "Design"
 msgstr "Design"
 
-#: src/hci.c:3778 src/keymap.c:288
+#: src/hci.c:3778 src/keymap.c:290
 msgid "Research"
 msgstr "Forskning"
 
-#: src/hci.c:3794 src/keymap.c:289
+#: src/hci.c:3794 src/keymap.c:291
 msgid "Build"
 msgstr "Konstruktion"
 
@@ -184,11 +184,11 @@ msgstr "Luk spillet"
 msgid "Progress Bar"
 msgstr "Proces bar"
 
-#: src/hci.c:5545
+#: src/hci.c:5544
 msgid "Factory Delivery Point"
 msgstr "Leveringspunkt"
 
-#: src/hci.c:5564
+#: src/hci.c:5563
 msgid "Loop Production"
 msgstr "Gentag produktion"
 
@@ -443,7 +443,7 @@ msgstr "BESKEDER"
 msgid "Host is Starting Game"
 msgstr "Værten starter spillet"
 
-#: src/multiint.c:2693
+#: src/multiint.c:2691
 msgid "Players"
 msgstr "Spillere"
 
@@ -723,27 +723,27 @@ msgstr "Anvendt tid: %s"
 msgid "Total Game Time - %s"
 msgstr "Total anvendt tid: %s"
 
-#: src/intorder.c:178 src/keymap.c:383
+#: src/intorder.c:178 src/keymap.c:385
 msgid "Short Range"
 msgstr "Kort rækkevide"
 
-#: src/intorder.c:179 src/keymap.c:389
+#: src/intorder.c:179 src/keymap.c:391
 msgid "Long Range"
 msgstr "Lang rækkevide"
 
-#: src/intorder.c:180 src/keymap.c:382
+#: src/intorder.c:180 src/keymap.c:384
 msgid "Optimum Range"
 msgstr "Optimal rækkevide"
 
-#: src/intorder.c:181 src/keymap.c:402
+#: src/intorder.c:181 src/keymap.c:404
 msgid "Retreat at Medium Damage"
 msgstr "Tilbagetræk ved mellem skade"
 
-#: src/intorder.c:182 src/keymap.c:403
+#: src/intorder.c:182 src/keymap.c:405
 msgid "Retreat at Heavy Damage"
 msgstr "Tilbagetræk ved sværd skade "
 
-#: src/intorder.c:183 src/keymap.c:404
+#: src/intorder.c:183 src/keymap.c:406
 msgid "Do or Die!"
 msgstr "Kæmp til døden!"
 
@@ -752,19 +752,19 @@ msgstr "Kæmp til døden!"
 msgid "Fire-At-Will"
 msgstr "Angrib alt"
 
-#: src/intorder.c:185 src/keymap.c:379
+#: src/intorder.c:185 src/keymap.c:381
 msgid "Return Fire"
 msgstr "Besvar ild"
 
-#: src/intorder.c:186 src/keymap.c:377
+#: src/intorder.c:186 src/keymap.c:379
 msgid "Hold Fire"
 msgstr "Indstil skydning"
 
-#: src/intorder.c:187 src/keymap.c:385
+#: src/intorder.c:187 src/keymap.c:387
 msgid "Patrol"
 msgstr "Patrolje"
 
-#: src/intorder.c:188 src/keymap.c:384
+#: src/intorder.c:188 src/keymap.c:386
 msgid "Pursue"
 msgstr "Forfølg"
 
@@ -773,11 +773,11 @@ msgstr "Forfølg"
 msgid "Guard Position"
 msgstr "Hold position"
 
-#: src/intorder.c:190 src/keymap.c:387
+#: src/intorder.c:190 src/keymap.c:389
 msgid "Hold Position"
 msgstr "Hold position"
 
-#: src/intorder.c:191 src/keymap.c:386
+#: src/intorder.c:191 src/keymap.c:388
 msgid "Return For Repair"
 msgstr "Tilbagetrækning for reperation"
 
@@ -791,7 +791,7 @@ msgstr "Tilbagetrækning til HQ"
 msgid "Go to Transport"
 msgstr "Fyld transportskib"
 
-#: src/intorder.c:194 src/keymap.c:413
+#: src/intorder.c:194 src/keymap.c:415
 msgid "Return for Recycling"
 msgstr "Send til skrotning"
 
@@ -1116,350 +1116,350 @@ msgstr "Målsætninger"
 msgid "Current Objective"
 msgstr "Denne mission"
 
-#: src/keymap.c:293
+#: src/keymap.c:295
 msgid "Toggle Radar"
 msgstr "Slå radar til/fra"
 
-#: src/keymap.c:294
+#: src/keymap.c:296
 msgid "Toggle Console Display"
 msgstr "Slå konsol display til/fra"
 
-#: src/keymap.c:295
+#: src/keymap.c:297
 msgid "Toggle Damage Bars On/Off"
 msgstr "Slå helbredsindikatorer til/fra"
 
-#: src/keymap.c:296
+#: src/keymap.c:298
 msgid "Take Screen Shot"
 msgstr "Tag skærmdump"
 
-#: src/keymap.c:297
+#: src/keymap.c:299
 msgid "Toggle Formation Speed Limiting"
 msgstr "Slå formation til/fra"
 
-#: src/keymap.c:298
+#: src/keymap.c:300
 msgid "View Location of Previous Message"
 msgstr "Find lokation for sidste besked"
 
-#: src/keymap.c:303
+#: src/keymap.c:305
 #, fuzzy
 msgid "Assign Group 0"
 msgstr "Tildel gruppe 1"
 
-#: src/keymap.c:304
+#: src/keymap.c:306
 msgid "Assign Group 1"
 msgstr "Tildel gruppe 1"
 
-#: src/keymap.c:305
+#: src/keymap.c:307
 msgid "Assign Group 2"
 msgstr "Tildel gruppe 2"
 
-#: src/keymap.c:306
+#: src/keymap.c:308
 msgid "Assign Group 3"
 msgstr "Tildel gruppe 3"
 
-#: src/keymap.c:307
+#: src/keymap.c:309
 msgid "Assign Group 4"
 msgstr "Tildel gruppe 4"
 
-#: src/keymap.c:308
+#: src/keymap.c:310
 msgid "Assign Group 5"
 msgstr "Tildel gruppe 5"
 
-#: src/keymap.c:309
+#: src/keymap.c:311
 msgid "Assign Group 6"
 msgstr "Tildel gruppe 6"
 
-#: src/keymap.c:310
+#: src/keymap.c:312
 msgid "Assign Group 7"
 msgstr "Tildel gruppe 7"
 
-#: src/keymap.c:311
+#: src/keymap.c:313
 msgid "Assign Group 8"
 msgstr "Tildel gruppe 8"
 
-#: src/keymap.c:312
+#: src/keymap.c:314
 msgid "Assign Group 9"
 msgstr "Tildel gruppe 9"
 
-#: src/keymap.c:316
+#: src/keymap.c:318
 #, fuzzy
 msgid "Select Group 0"
 msgstr "Vælg gruppe 1"
 
-#: src/keymap.c:317
+#: src/keymap.c:319
 msgid "Select Group 1"
 msgstr "Vælg gruppe 1"
 
-#: src/keymap.c:318
+#: src/keymap.c:320
 msgid "Select Group 2"
 msgstr "Vælg gruppe 2"
 
-#: src/keymap.c:319
+#: src/keymap.c:321
 msgid "Select Group 3"
 msgstr "Vælg gruppe 3"
 
-#: src/keymap.c:320
+#: src/keymap.c:322
 msgid "Select Group 4"
 msgstr "Vælg gruppe 4"
 
-#: src/keymap.c:321
+#: src/keymap.c:323
 msgid "Select Group 5"
 msgstr "Vælg gruppe 5"
 
-#: src/keymap.c:322
+#: src/keymap.c:324
 msgid "Select Group 6"
 msgstr "Vælg gruppe 6"
 
-#: src/keymap.c:323
+#: src/keymap.c:325
 msgid "Select Group 7"
 msgstr "Vælg gruppe 7"
 
-#: src/keymap.c:324
+#: src/keymap.c:326
 msgid "Select Group 8"
 msgstr "Vælg gruppe 8"
 
-#: src/keymap.c:325
+#: src/keymap.c:327
 msgid "Select Group 9"
 msgstr "Vælg gruppe 9"
 
-#: src/keymap.c:329
+#: src/keymap.c:331
 #, fuzzy
 msgid "Select Commander 0"
 msgstr "Vælg kommandør 1"
 
-#: src/keymap.c:330
+#: src/keymap.c:332
 msgid "Select Commander 1"
 msgstr "Vælg kommandør 1"
 
-#: src/keymap.c:331
+#: src/keymap.c:333
 msgid "Select Commander 2"
 msgstr "Vælg kommandør 2"
 
-#: src/keymap.c:332
+#: src/keymap.c:334
 msgid "Select Commander 3"
 msgstr "Vælg kommandør 3"
 
-#: src/keymap.c:333
+#: src/keymap.c:335
 msgid "Select Commander 4"
 msgstr "Vælg kommandør 4"
 
-#: src/keymap.c:334
+#: src/keymap.c:336
 msgid "Select Commander 5"
 msgstr "Vælg kommandør 5"
 
-#: src/keymap.c:335
+#: src/keymap.c:337
 msgid "Select Commander 6"
 msgstr "Vælg kommandør 6"
 
-#: src/keymap.c:336
+#: src/keymap.c:338
 msgid "Select Commander 7"
 msgstr "Vælg kommandør 7"
 
-#: src/keymap.c:337
+#: src/keymap.c:339
 msgid "Select Commander 8"
 msgstr "Vælg kommandør 8"
 
-#: src/keymap.c:338
+#: src/keymap.c:340
 msgid "Select Commander 9"
 msgstr "Vælg kommandør 9"
 
-#: src/keymap.c:342
+#: src/keymap.c:344
 msgid "Multiplayer Options"
 msgstr "Flerbruger indstillinger"
 
-#: src/keymap.c:343
+#: src/keymap.c:345
 msgid "Start Multiplayer Audio"
 msgstr "Start flerbruger lyd"
 
-#: src/keymap.c:344
+#: src/keymap.c:346
 msgid "Stop Multiplayer Audio"
 msgstr "Stop flerbruger lyd"
 
-#: src/keymap.c:347
+#: src/keymap.c:349
 msgid "Snap View to North"
 msgstr "Slå kameraet i nordlig retning"
 
-#: src/keymap.c:348
+#: src/keymap.c:350
 msgid "Toggle Tracking Camera"
 msgstr "Forfølgelseskamera"
 
-#: src/keymap.c:349
+#: src/keymap.c:351
 msgid "Display In-Game Options"
 msgstr "Vis spillemenu"
 
-#: src/keymap.c:350
+#: src/keymap.c:352
 msgid "Zoom Radar Out"
 msgstr "Zoom radaen ud"
 
-#: src/keymap.c:351
+#: src/keymap.c:353
 msgid "Zoom Radar In"
 msgstr "Zoom radaen ind "
 
-#: src/keymap.c:352
+#: src/keymap.c:354
 msgid "Zoom In"
 msgstr "Zoom ind"
 
-#: src/keymap.c:353
+#: src/keymap.c:355
 msgid "Zoom Out"
 msgstr "Zoom ud"
 
-#: src/keymap.c:354
+#: src/keymap.c:356
 msgid "Pitch Forward"
 msgstr "Hæld forover"
 
-#: src/keymap.c:355
+#: src/keymap.c:357
 msgid "Rotate Left"
 msgstr "Drej til venstre"
 
-#: src/keymap.c:356
+#: src/keymap.c:358
 msgid "Reset Pitch"
 msgstr "Nulstil hældning"
 
-#: src/keymap.c:357
+#: src/keymap.c:359
 msgid "Rotate Right"
 msgstr "Drej til højre"
 
-#: src/keymap.c:358
+#: src/keymap.c:360
 msgid "Pitch Back"
 msgstr "Hæld bagover"
 
-#: src/keymap.c:359
+#: src/keymap.c:361
 msgid "Orders Menu"
 msgstr "Ordre menu"
 
-#: src/keymap.c:360
+#: src/keymap.c:362
 msgid "Decrease Game Speed"
 msgstr "Reducér spillehastighed"
 
-#: src/keymap.c:361
+#: src/keymap.c:363
 msgid "Increase Game Speed"
 msgstr "Forøg spillehastighed"
 
-#: src/keymap.c:362
+#: src/keymap.c:364
 msgid "Reset Game Speed"
 msgstr "Nulstil spillehastighed"
 
-#: src/keymap.c:363
+#: src/keymap.c:365
 msgid "View North"
 msgstr "Kig mod nord"
 
-#: src/keymap.c:364
+#: src/keymap.c:366
 msgid "View South"
 msgstr "Kig mod syd"
 
-#: src/keymap.c:365
+#: src/keymap.c:367
 msgid "View East"
 msgstr "Kig mod øst"
 
-#: src/keymap.c:366
+#: src/keymap.c:368
 msgid "View West"
 msgstr "Kig mod vest"
 
-#: src/keymap.c:367
+#: src/keymap.c:369
 msgid "View next Oil Derrick"
 msgstr "Find næste oliebrøn"
 
-#: src/keymap.c:368
+#: src/keymap.c:370
 msgid "View next Repair Unit"
 msgstr "Find næste reperationsenhed"
 
-#: src/keymap.c:369
+#: src/keymap.c:371
 msgid "View next Truck"
 msgstr "Find næste truck"
 
-#: src/keymap.c:370
+#: src/keymap.c:372
 msgid "View next Sensor Unit"
 msgstr "Find næste rekonniseringsenhed"
 
-#: src/keymap.c:371
+#: src/keymap.c:373
 msgid "View next Commander"
 msgstr "Find næste kommandør"
 
-#: src/keymap.c:372
+#: src/keymap.c:374
 msgid "Toggle Overlays"
 msgstr "Slå interface til/fra"
 
-#: src/keymap.c:373
+#: src/keymap.c:375
 msgid "Console On/Off"
 msgstr "Slå konsol til/fra"
 
-#: src/keymap.c:376
+#: src/keymap.c:378
 msgid "Center View on HQ"
 msgstr "Centrer kamera på HQ"
 
-#: src/keymap.c:378
+#: src/keymap.c:380
 msgid "View Unassigned Units"
 msgstr "Find utildelte enheder"
 
-#: src/keymap.c:380
+#: src/keymap.c:382
 msgid "Fire at Will"
 msgstr "Angrib alt"
 
-#: src/keymap.c:381
+#: src/keymap.c:383
 msgid "Return to HQ"
 msgstr "Tilbagetrækning til HQ"
 
-#: src/keymap.c:388
+#: src/keymap.c:390
 msgid "Send Text Message"
 msgstr "Send tekst besked"
 
-#: src/keymap.c:408
+#: src/keymap.c:410
 msgid "Select all Combat Units"
 msgstr "Vælg alle kommando enheder"
 
-#: src/keymap.c:409
+#: src/keymap.c:411
 msgid "Select all Heavily Damaged Units"
 msgstr "Vælg alle svært skadet enheder"
 
-#: src/keymap.c:411
+#: src/keymap.c:413
 msgid "Select all Half-tracks"
 msgstr "Vælg alle halv-bælter"
 
-#: src/keymap.c:412
+#: src/keymap.c:414
 msgid "Select all Hovers"
 msgstr "Vælg alle amfibre"
 
-#: src/keymap.c:414
+#: src/keymap.c:416
 msgid "Select all Units on Screen"
 msgstr "Vælg alle enheder på skærmen"
 
-#: src/keymap.c:415
+#: src/keymap.c:417
 msgid "Select all Tracks"
 msgstr "Vælg alle bæltekøretøjer"
 
-#: src/keymap.c:416
+#: src/keymap.c:418
 msgid "Select EVERY unit"
 msgstr "Vælg alle enheder"
 
-#: src/keymap.c:417
+#: src/keymap.c:419
 msgid "Select all VTOLs"
 msgstr "Vælg alle VTOL"
 
-#: src/keymap.c:418
+#: src/keymap.c:420
 msgid "Select all Wheels"
 msgstr "Vælg alle hjulkøretøjer"
 
-#: src/keymap.c:420
+#: src/keymap.c:422
 msgid "Select all Similiar Units"
 msgstr "Vælg alle lignende enheder"
 
-#: src/keymap.c:424
+#: src/keymap.c:426
 msgid "Select next Factory"
 msgstr "Find næste fabrik"
 
-#: src/keymap.c:425
+#: src/keymap.c:427
 msgid "Select next Research Facility"
 msgstr "Find næste forskningscenter"
 
-#: src/keymap.c:426
+#: src/keymap.c:428
 msgid "Select next Power Generator"
 msgstr "Find næste kraftværk"
 
-#: src/keymap.c:427
+#: src/keymap.c:429
 msgid "Select next Cyborg Factory"
 msgstr "Find næste cyborg fabrik"
 
-#: src/keymap.c:428
+#: src/keymap.c:430
 msgid "Toggle reopening the build menu"
 msgstr "Slå genåbning af konstruktionsmenuen til/fra"
 
@@ -1547,23 +1547,23 @@ msgstr "Ping"
 msgid "Played"
 msgstr "Antal spil"
 
-#: src/multimenu.c:1060
+#: src/multimenu.c:1052
 msgid "Toggle Alliance State"
 msgstr "Slå aliance status til/fra"
 
-#: src/multimenu.c:1079
+#: src/multimenu.c:1071
 msgid "Give Visibility Report"
 msgstr "Send rekonniseringsrapport"
 
-#: src/multimenu.c:1085
+#: src/multimenu.c:1077
 msgid "Leak Technology Documents"
 msgstr "Send forskningsresultater"
 
-#: src/multimenu.c:1092
+#: src/multimenu.c:1084
 msgid "Hand Over Selected Units"
 msgstr "Forær enheder"
 
-#: src/multimenu.c:1098
+#: src/multimenu.c:1090
 msgid "Give Power To Player"
 msgstr "Forær energi"
 
