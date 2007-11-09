@@ -128,16 +128,6 @@ automake -a -c --foreign || {
 }
 
 
-# Setup QuesoGLC
-if test -d "${SRCDIR}/3rdparty/quesoglc" ; then
-	echo "+++ Recursing into QuesoGLC +++"
-	cd 3rdparty/quesoglc
-	./bootstrap
-	cd ../..
-	echo "+++ Finished QuesoGLC +++"
-fi
-
-
 # Chdir back to the builddir before the configure step.
 cd $BUILDDIR
 
