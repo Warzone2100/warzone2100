@@ -190,7 +190,7 @@ BOOL screenInitialise(
 	glOrtho(0, width, height, 0, 1, -1);
 
 	glMatrixMode(GL_TEXTURE);
-	glScalef(1.0f/256.0f, 1.0f/256.0f, 1.0f); // FIXME Scaling texture coords to 256x256!
+	glScalef(1.0f/OLD_TEXTURE_SIZE_FIX, 1.0f/OLD_TEXTURE_SIZE_FIX, 1.0f); // FIXME Scaling texture coords to 256x256!
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
