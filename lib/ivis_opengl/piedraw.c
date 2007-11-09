@@ -1152,33 +1152,13 @@ void pie_DrawTriangle(iVertex *pv, iTexture* texPage, UDWORD renderFlags, iPoint
 	glEnd();
 }
 
-void pie_DrawPoly(SDWORD numVrts, PIEVERTEX *aVrts, SDWORD texPage, void* psEffects)
+void pie_DrawTerrainPoly(SDWORD numVrts, PIEVERTEX *aVrts, SDWORD texPage, FRACT waterValue)
 {
-	FRACT		offset = 0;
-
-	/*	Since this is only used from within source for the terrain draw - we can backface cull the
-		polygons.
-
-
-	*/
 	tileCount++;
 	pie_SetTexturePage(texPage);
-	pie_SetFogStatus(TRUE);
-	if (psEffects == NULL)//jps 15apr99 translucent water code
-	{
-		pie_SetRendMode(REND_GOURAUD_TEX);//jps 15apr99 old solid water code
-		pie_SetColourKeyedBlack(TRUE);
-	}
-	else//jps 15apr99 translucent water code
-	{
-		pie_SetRendMode(REND_ALPHA_TEX);//jps 15apr99 old solid water code
-		pie_SetColourKeyedBlack(FALSE);
-		offset = *((float*)psEffects);
-	}
-	pie_SetBilinear(TRUE);
 
 	if (numVrts >= 3) {
-		pie_Polygon(numVrts, aVrts, offset, FALSE);
+		pie_Polygon(numVrts, aVrts, waterValue, FALSE);
 	}
 }
 

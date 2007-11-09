@@ -25,6 +25,7 @@
 	  -	Alex McLean & Jeremy Sallis, Pumpkin Studios, EIDOS INTERACTIVE -
 	  -------------------------------------------------------------------
 */
+#include <GL/gl.h>
 /* Generic includes */
 #include <stdio.h>
 #include <stdlib.h>
@@ -245,9 +246,6 @@ UDWORD		terrainOutline = FALSE;
 
 /* Stores the screen coordinates of the transformed terrain tiles */
 SVMESH tileScreenInfo[LAND_YGRD][LAND_XGRD];
-
-/* Stores the tilepointers for rendered tiles */
-TILE_BUCKET		tileIJ[LAND_YGRD][LAND_XGRD];
 
 /* File size - used for any loads. Move to another specific file handling module? */
 SDWORD		fileSize;
@@ -701,11 +699,23 @@ void	setProximityDraw(BOOL val)
 }
 /***************************************************************************/
 
+void pie_SetDepthOffset(int offset)
+{
+	if (offset)
+	{
+		glEnable(GL_POLYGON_OFFSET_FILL);
+		glPolygonOffset(offset, offset);
+	}
+	else
+	{
+		glDisable(GL_POLYGON_OFFSET_FILL);
+	}
+}
+
 
 void drawTiles(iView *camera, iView *player)
 {
 	SDWORD	i,j;
-	SDWORD	zMax;
 	iVector BSPCamera;
 	MAPTILE	*psTile;
 	UDWORD	specular;
@@ -960,44 +970,61 @@ void drawTiles(iView *camera, iView *player)
 	}
 
 //	doBuildingLights();
-	/* ---------------------------------------------------------------- */
-	/* Draw all the tiles or add them to bucket sort                     */
-	/* ---------------------------------------------------------------- */
-	tilesRejected = 0;
-	for (i= 0; i < (SDWORD)visibleYTiles; i++)
 
+	pie_SetColourKeyedBlack(TRUE);
+	pie_SetFogStatus(TRUE);
+	pie_SetBilinear(TRUE);
+
+	for (i = 0; i < visibleYTiles; i++)
 	{
-		for (j= 0; j < (SDWORD)visibleXTiles; j++)
+		for (j = 0; j < visibleXTiles; j++)
 		{
-#ifndef BUCKET
-//bucket?
-		drawTexturedTile(i,j);
-#else
-
-		if(tileScreenInfo[i][j].drawInfo == TRUE)
+			if (tileScreenInfo[i][j].drawInfo)
 			{
-
-				tileIJ[i][j].i = i;
-				tileIJ[i][j].j = j;
-				//get distance of furthest corner
-				zMax = pie_MAX(tileScreenInfo[i][j].sz, tileScreenInfo[i + 1][j].sz);
+				int zMax = pie_MAX(tileScreenInfo[i][j].sz, tileScreenInfo[i + 1][j].sz);
 				zMax = pie_MAX(zMax, tileScreenInfo[i + 1][j + 1].sz);
 				zMax = pie_MAX(zMax, tileScreenInfo[i][j + 1].sz);
-				tileIJ[i][j].depth = zMax;
-				if((UDWORD)i>mapHeight OR (UDWORD)j>mapWidth)
+
+				if (zMax < 0)
+					continue;
+
+				drawTerrainTile(i, j, FALSE);
+
+				if (tileScreenInfo[i][j].bWater && (mapTile(playerXTile + j, playerZTile + i)->texture & TILE_NUMMASK) != WATER_TILE)
 				{
-					ASSERT( FALSE,"Weirdy tile coords" );
+					pie_SetDepthOffset(-2);
+					drawTerrainTile(i, j, TRUE);
+					pie_SetDepthOffset(0);
 				}
-				bucketAddTypeToList(RENDER_TILE, &tileIJ[i][j]);
-				bucketAddTypeToList(RENDER_WATERTILE, &tileIJ[i][j]);
 			}
-			else
-			{
-				tilesRejected++;
-			}
-#endif //bucket
 		}
 	}
+
+	pie_SetRendMode(REND_ALPHA_TEX);
+	pie_SetColourKeyedBlack(FALSE);
+	pie_SetDepthOffset(-1);
+
+	for (i = 0; i < visibleYTiles; i++)
+	{
+		for (j = 0; j < visibleXTiles; j++)
+		{
+			if (tileScreenInfo[i][j].drawInfo && tileScreenInfo[i][j].bWater)
+			{
+				int zMax = pie_MAX(tileScreenInfo[i][j].sz, tileScreenInfo[i + 1][j].sz);
+				zMax = pie_MAX(zMax, tileScreenInfo[i + 1][j + 1].sz);
+				zMax = pie_MAX(zMax, tileScreenInfo[i][j + 1].sz);
+
+				if (zMax < 0)
+					continue;
+
+				drawTerrainWaterTile(i, j);
+			}
+		}
+	}
+
+	pie_SetDepthOffset(0);
+	pie_SetRendMode(REND_GOURAUD_TEX);
+	pie_SetColourKeyedBlack(TRUE);
 
 	targetOpenList((BASE_OBJECT*)driveGetDriven());
 
@@ -4773,7 +4800,7 @@ defaultColours.white = iV_PaletteNearestColour(255,255,255);
 // -------------------------------------------------------------------------------------
 /* New improved (and much faster) tile drawer */
 // -------------------------------------------------------------------------------------
-void	drawTerrainTile(UDWORD i, UDWORD j)
+void	drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 {
 	SDWORD actualX,actualY;
 	MAPTILE *psTile;
@@ -4833,13 +4860,11 @@ void	drawTerrainTile(UDWORD i, UDWORD j)
 		/* This tile isn't being drawn */
 		return;
 	}
-	/* what tile texture number is it? */
-	tileNumber = psTile->texture;
 
-	// If it's a water tile then force it to be the river bed texture.
-	if(TERRAIN_TYPE(psTile) == TER_WATER) {
+	if (TERRAIN_TYPE(psTile) != TER_WATER || onWaterEdge)
+		tileNumber = psTile->texture;
+	else
 		tileNumber = RiverBedTileID;
-	}
 
 #if defined(SHOW_ZONES)
 	if (zone != 0)
@@ -4855,7 +4880,7 @@ void	drawTerrainTile(UDWORD i, UDWORD j)
 
 	/* Is the tile highlighted? Perhaps because there's a building foundation on it */
 	bOutlined = FALSE;
-	if(TILE_HIGHLIGHT(psTile))
+	if(TILE_HIGHLIGHT(psTile) && !onWaterEdge)
 	{
 		/* Clear it for next time round */
 		CLEAR_TILE_HIGHLIGHT(psTile);
@@ -4974,6 +4999,13 @@ void	drawTerrainTile(UDWORD i, UDWORD j)
 		memcpy(&aVrts[1], &tileScreenInfo[i + 0][j + 0], sizeof(PIEVERTEX));
 		memcpy(&aVrts[2], &tileScreenInfo[i + 0][j + 1], sizeof(PIEVERTEX));
 		memcpy(&aVrts[3], &tileScreenInfo[i + 1][j + 1], sizeof(PIEVERTEX));
+		if (onWaterEdge)
+		{
+			aVrts[0].sy = tileScreenInfo[i + 1][j + 0].water_height;
+			aVrts[1].sy = tileScreenInfo[i + 0][j + 0].water_height;
+			aVrts[2].sy = tileScreenInfo[i + 0][j + 1].water_height;
+			aVrts[3].sy = tileScreenInfo[i + 1][j + 1].water_height;
+		}
 	}
 	else
 	{
@@ -4981,11 +5013,18 @@ void	drawTerrainTile(UDWORD i, UDWORD j)
 		memcpy(&aVrts[1], &tileScreenInfo[i + 0][j + 1], sizeof(PIEVERTEX));
 		memcpy(&aVrts[2], &tileScreenInfo[i + 1][j + 1], sizeof(PIEVERTEX));
 		memcpy(&aVrts[3], &tileScreenInfo[i + 1][j + 0], sizeof(PIEVERTEX));
+		if (onWaterEdge)
+		{
+			aVrts[0].sy = tileScreenInfo[i + 0][j + 0].water_height;
+			aVrts[1].sy = tileScreenInfo[i + 0][j + 1].water_height;
+			aVrts[2].sy = tileScreenInfo[i + 1][j + 1].water_height;
+			aVrts[3].sy = tileScreenInfo[i + 1][j + 0].water_height;
+		}
 	}
-	pie_DrawPoly(4, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
+	pie_DrawTerrainPoly(4, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, 0);
 
 	/* Outline the tile if necessary */
-	if(terrainOutline)
+	if(terrainOutline && !onWaterEdge)
 	{
 		iV_Line(tileScreenInfo[i+0][j+0].sx,tileScreenInfo[i+0][j+0].sy,
    			tileScreenInfo[i+0][j+1].sx,tileScreenInfo[i+0][j+1].sy,255);
@@ -4997,7 +5036,7 @@ void	drawTerrainTile(UDWORD i, UDWORD j)
    			tileScreenInfo[i+0][j+0].sx,tileScreenInfo[i+0][j+0].sy,255);
 	}
 
-	if(bOutlined)
+	if(bOutlined && !onWaterEdge)
 	{
 		if(outlineColour3D == outlineOK3D)
 		{
@@ -5013,134 +5052,6 @@ void	drawTerrainTile(UDWORD i, UDWORD j)
 			tileScreenInfo[i+1][j+1].light.byte.r = oldColours[2];
 			tileScreenInfo[i+1][j+0].light.byte.r = oldColours[3];
 		}
-	}
-}
-
-
-// Render a water edge tile
-//
-void	drawTerrainWEdgeTile(UDWORD i, UDWORD j)
-{
-	UDWORD	actualX,actualY;
-	MAPTILE	*psTile;
-	//BOOL	bOutlined;
-	UDWORD	tileNumber;
-	UDWORD	renderFlag;
-	iPoint	offset;
-	PIEVERTEX aVrts[3];
-
-	/* Get the correct tile index for the x coordinate */
-	actualX = playerXTile + j;
-	/* Get the correct tile index for the y coordinate */
-	actualY = playerZTile + i;
-
-	/* Let's just get out now if we're not supposed to draw it */
-	if( (actualX<0) OR
-		(actualY<0) OR
-		(actualX>mapWidth-1) OR
-		(actualY>mapHeight-1) )
-	{
-		psTile = &edgeTile;
-		CLEAR_TILE_HIGHLIGHT(psTile);
-	}
-	else
-	{
-		psTile = mapTile(actualX,actualY);
-	}
-
-	/* what tile texture number is it? */
-	tileNumber = psTile->texture;
-
-	/* 3dfx is pre stored and indexed */
-	pie_SetTexturePage(tileTexInfo[tileNumber & TILE_NUMMASK].texPage);
-
-
-	/* set up the texture size info */
-	renderFlag = 0;
-	offset.x = (tileTexInfo[tileNumber & TILE_NUMMASK].xOffset * 64);
-	offset.y = (tileTexInfo[tileNumber & TILE_NUMMASK].yOffset * 64);
-
-	/* Check for rotations and flips - this sets up the coordinates for texturing */
-	flipsAndRots(tileNumber & ~TILE_NUMMASK);
-
-	tileScreenInfo[i+0][j+0].tu = (UWORD)(psP1->x + offset.x);
-	tileScreenInfo[i+0][j+0].tv = (UWORD)(psP1->y + offset.y);
-
-	tileScreenInfo[i+0][j+1].tu = (UWORD)(psP2->x + offset.x);
-	tileScreenInfo[i+0][j+1].tv = (UWORD)(psP2->y + offset.y);
-
-	tileScreenInfo[i+1][j+1].tu = (UWORD)(psP3->x + offset.x);
-	tileScreenInfo[i+1][j+1].tv = (UWORD)(psP3->y + offset.y);
-
-	tileScreenInfo[i+1][j+0].tu = (UWORD)(psP4->x + offset.x);
-	tileScreenInfo[i+1][j+0].tv = (UWORD)(psP4->y + offset.y);
-
-	/* The first triangle */
-	if(TRI_FLIPPED(psTile))
-	{
-   		memcpy(&aVrts[0],&tileScreenInfo[i+0][j+0],sizeof(PIEVERTEX));
-   		aVrts[0].sx = tileScreenInfo[i+0][j+0].x;
-   		aVrts[0].sy = tileScreenInfo[i+0][j+0].water_height;
-   		aVrts[0].sz = tileScreenInfo[i+0][j+0].z;
-   		memcpy(&aVrts[1],&tileScreenInfo[i+0][j+1],sizeof(PIEVERTEX));
-   		aVrts[1].sx = tileScreenInfo[i+0][j+1].x;
-   		aVrts[1].sy = tileScreenInfo[i+0][j+1].water_height;
-   		aVrts[1].sz = tileScreenInfo[i+0][j+1].z;
-   		memcpy(&aVrts[2],&tileScreenInfo[i+1][j+0],sizeof(PIEVERTEX));
-   		aVrts[2].sx = tileScreenInfo[i+1][j+0].x;
-   		aVrts[2].sy = tileScreenInfo[i+1][j+0].water_height;
-   		aVrts[2].sz = tileScreenInfo[i+1][j+0].z;
-		pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
-	}
-	else
-	{
-   		memcpy(&aVrts[0],&tileScreenInfo[i+0][j+0],sizeof(PIEVERTEX));
-   		aVrts[0].sx = tileScreenInfo[i+0][j+0].x;
-   		aVrts[0].sy = tileScreenInfo[i+0][j+0].water_height;
-   		aVrts[0].sz = tileScreenInfo[i+0][j+0].z;
-   		memcpy(&aVrts[1],&tileScreenInfo[i+0][j+1],sizeof(PIEVERTEX));
-   		aVrts[1].sx = tileScreenInfo[i+0][j+1].x;
-   		aVrts[1].sy = tileScreenInfo[i+0][j+1].water_height;
-   		aVrts[1].sz = tileScreenInfo[i+0][j+1].z;
-   		memcpy(&aVrts[2],&tileScreenInfo[i+1][j+1],sizeof(PIEVERTEX));
-   		aVrts[2].sx = tileScreenInfo[i+1][j+1].x;
-   		aVrts[2].sy = tileScreenInfo[i+1][j+1].water_height;
-   		aVrts[2].sz = tileScreenInfo[i+1][j+1].z;
-		pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
-	}
-
-	/* The second triangle */
-	if(TRI_FLIPPED(psTile))
-	{
-   		memcpy(&aVrts[0],&tileScreenInfo[i+0][j+1],sizeof(PIEVERTEX));
-   		aVrts[0].sx = tileScreenInfo[i+0][j+1].x;
-   		aVrts[0].sy = tileScreenInfo[i+0][j+1].water_height;
-   		aVrts[0].sz = tileScreenInfo[i+0][j+1].z;
-   		memcpy(&aVrts[1],&tileScreenInfo[i+1][j+1],sizeof(PIEVERTEX));
-   		aVrts[1].sx = tileScreenInfo[i+1][j+1].x;
-   		aVrts[1].sy = tileScreenInfo[i+1][j+1].water_height;
-   		aVrts[1].sz = tileScreenInfo[i+1][j+1].z;
-   		memcpy(&aVrts[2],&tileScreenInfo[i+1][j+0],sizeof(PIEVERTEX));
-   		aVrts[2].sx = tileScreenInfo[i+1][j+0].x;
-   		aVrts[2].sy = tileScreenInfo[i+1][j+0].water_height;
-   		aVrts[2].sz = tileScreenInfo[i+1][j+0].z;
-		pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
-	}
-	else
-	{
-   		memcpy(&aVrts[0],&tileScreenInfo[i+0][j+0],sizeof(PIEVERTEX));
-   		aVrts[0].sx = tileScreenInfo[i+0][j+0].x;
-   		aVrts[0].sy = tileScreenInfo[i+0][j+0].water_height;
-   		aVrts[0].sz = tileScreenInfo[i+0][j+0].z;
-   		memcpy(&aVrts[1],&tileScreenInfo[i+1][j+1],sizeof(PIEVERTEX));
-   		aVrts[1].sx = tileScreenInfo[i+1][j+1].x;
-   		aVrts[1].sy = tileScreenInfo[i+1][j+1].water_height;
-   		aVrts[1].sz = tileScreenInfo[i+1][j+1].z;
-   		memcpy(&aVrts[2],&tileScreenInfo[i+1][j+0],sizeof(PIEVERTEX));
-   		aVrts[2].sx = tileScreenInfo[i+1][j+0].x;
-   		aVrts[2].sy = tileScreenInfo[i+1][j+0].water_height;
-   		aVrts[2].sz = tileScreenInfo[i+1][j+0].z;
-		pie_DrawPoly(3, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, NULL);
 	}
 }
 
@@ -5226,11 +5137,7 @@ void drawTerrainWaterTile(UDWORD i, UDWORD j)
 		aVrts[3].light = tileScreenInfo[i+1][j+0].wlight;
 		aVrts[3].light.byte.a = WATER_ALPHA_LEVEL;
 
-		pie_DrawPoly(4, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, &waterRealValue);//jps 15 apr99
-
-		if( (psTile->texture & TILE_NUMMASK) != WaterTileID) {
-			drawTerrainWEdgeTile(i,j);
-		}
+		pie_DrawTerrainPoly(4, aVrts, tileTexInfo[tileNumber & TILE_NUMMASK].texPage, waterRealValue);//jps 15 apr99
 	}
 }
 

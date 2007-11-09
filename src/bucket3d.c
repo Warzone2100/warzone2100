@@ -293,11 +293,11 @@ extern BOOL bucketRenderCurrentList(void)
 #endif
 				break;
 				case RENDER_TILE:
-					drawTerrainTile(((TILE_BUCKET*)thisTag->pObject)->i,((TILE_BUCKET*)thisTag->pObject)->j);
+					assert(!"Tried to render tile in the wrong place!");
 				break;
 
 				case RENDER_WATERTILE:
-					drawTerrainWaterTile(((TILE_BUCKET*)thisTag->pObject)->i,((TILE_BUCKET*)thisTag->pObject)->j);
+					assert(!"Tried to render water tile in the wrong place!");
 				break;
 
 				case RENDER_PROJECTILE:
