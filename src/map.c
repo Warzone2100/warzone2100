@@ -906,7 +906,7 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 		}
 	}
 
-	ASSERT( ( ((UDWORD)psLastZone) - ((UDWORD)*ppFileData) ) < *pFileSize,"Buffer overflow saving map" );
+	ASSERT( (intptr_t)psLastZone - (intptr_t)*ppFileData < (intptr_t)*pFileSize, "Buffer overflow saving map" );
 
 	return TRUE;
 }

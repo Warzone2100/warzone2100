@@ -421,7 +421,7 @@ BOOL startKeyMapEditor(BOOL first)
 	sFormInit.tabVertOffset		= (OBJ_TABHEIGHT/2);
 	sFormInit.tabMajorThickness 	= OBJ_TABHEIGHT;
 	sFormInit.pFormDisplay		= intDisplayObjectForm;
-	sFormInit.pUserData		= (void*)&StandardTab;
+	sFormInit.pUserData		= &StandardTab;
 	sFormInit.pTabDisplay		= intDisplayTab;
 	for (i=0; i< sFormInit.numMajor; i++)
 	{
@@ -442,7 +442,7 @@ BOOL startKeyMapEditor(BOOL first)
 
 
 	/* Add our first mapping to the form */
-	sButInit.pUserData= (void*)psPresent;
+	sButInit.pUserData= psPresent;
 	widgAddButton(psWScreen, &sButInit);
 	sButInit.id++;
 	sButInit.y +=  KM_ENTRYH +3;
@@ -475,7 +475,7 @@ BOOL startKeyMapEditor(BOOL first)
 		{
 			psPresent = psNext;
 			bubbleCount++;
-			sButInit.pUserData= (void*)psNext;
+			sButInit.pUserData= psNext;
 	 		widgAddButton(psWScreen, &sButInit);
 			 					// move on..
 	 		sButInit.id++;

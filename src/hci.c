@@ -3713,7 +3713,7 @@ BOOL intAddReticule(void)
 	//	sButInit.pText = "O";
 		sButInit.pTip = _("Commanders");
 		sButInit.pDisplay = intDisplayReticuleButton;
-		sButInit.pUserData = (void*)IMAGE_COMMANDDROID_UP;
+		sButInit.UserData = IMAGE_COMMANDDROID_UP;
 
 		if (!widgAddButton(psWScreen, &sButInit))
 		{
@@ -3729,7 +3729,7 @@ BOOL intAddReticule(void)
 	//	sButInit.pText = "S";
 		sButInit.pTip = _("Intelligence Display");
 		sButInit.pDisplay = intDisplayReticuleButton;
-		sButInit.pUserData = (void*)IMAGE_INTELMAP_UP;
+		sButInit.UserData = IMAGE_INTELMAP_UP;
 
 		if (!widgAddButton(psWScreen, &sButInit))
 		{
@@ -3745,7 +3745,7 @@ BOOL intAddReticule(void)
 	//	sButInit.pText = "M";
 		sButInit.pTip = _("Manufacture");
 		sButInit.pDisplay = intDisplayReticuleButton;
-		sButInit.pUserData = (void*)IMAGE_MANUFACTURE_UP;
+		sButInit.UserData = IMAGE_MANUFACTURE_UP;
 
 		if (!widgAddButton(psWScreen, &sButInit))
 		{
@@ -3761,7 +3761,7 @@ BOOL intAddReticule(void)
 	//	sButInit.pText = "D";
 		sButInit.pTip = _("Design");
 		sButInit.pDisplay = intDisplayReticuleButton;
-		sButInit.pUserData = (void*)IMAGE_DESIGN_UP;
+		sButInit.UserData = IMAGE_DESIGN_UP;
 
 		if (!widgAddButton(psWScreen, &sButInit))
 		{
@@ -3777,7 +3777,7 @@ BOOL intAddReticule(void)
 	//	sButInit.pText = "R";
 		sButInit.pTip = _("Research");
 		sButInit.pDisplay = intDisplayReticuleButton;
-		sButInit.pUserData = (void*)IMAGE_RESEARCH_UP;
+		sButInit.UserData = IMAGE_RESEARCH_UP;
 
 		if (!widgAddButton(psWScreen, &sButInit))
 		{
@@ -3793,7 +3793,7 @@ BOOL intAddReticule(void)
 	//	sButInit.pText = "B";
 		sButInit.pTip = _("Build");
 		sButInit.pDisplay = intDisplayReticuleButton;
-		sButInit.pUserData = (void*)IMAGE_BUILD_UP;
+		sButInit.UserData = IMAGE_BUILD_UP;
 
 		if (!widgAddButton(psWScreen, &sButInit))
 		{
@@ -3811,7 +3811,7 @@ BOOL intAddReticule(void)
 	//	sButInit.pText = "C";
 		sButInit.pTip = _("Close");
 		sButInit.pDisplay = intDisplayReticuleButton;
-		sButInit.pUserData = (void*)IMAGE_CANCEL_UP;
+		sButInit.UserData = IMAGE_CANCEL_UP;
 		if (!widgAddButton(psWScreen, &sButInit))
 		{
 			return FALSE;
@@ -4408,7 +4408,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sButInit.pTip = _("Close");
 	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
-	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
+	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return FALSE;
@@ -4434,7 +4434,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
 	sFormInit.tabMajorGap = OBJ_TABOFFSET;
 	sFormInit.pFormDisplay = intDisplayObjectForm;
-	sFormInit.pUserData = (void*)&StandardTab;
+	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
 
 	for (i=0; i< sFormInit.numMajor; i++)
@@ -4625,7 +4625,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 			ClearTopicButtonBuffer(BufferID);
 			RENDERBUTTON_INUSE(&TopicBuffers[BufferID]);
 			TopicBuffers[BufferID].Data = (void*)psObj;
-			sBFormInit.pUserData = (void*)&TopicBuffers[BufferID];
+			sBFormInit.pUserData = &TopicBuffers[BufferID];
 			sBFormInit.pDisplay = intDisplayObjectButton;
 
 
@@ -4640,7 +4640,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 				// Add a text label for the factory Inc.
 				sLabIntObjText.formID = sBFormInit.id;
 				sLabIntObjText.pCallback = intAddFactoryInc;
-				sLabIntObjText.pUserData = (void*)psObj;
+				sLabIntObjText.pUserData = psObj;
 				if (!widgAddLabel(psWScreen, &sLabIntObjText))
 				{
 					return FALSE;
@@ -4667,7 +4667,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 				// the group size label
 				sLabIntObjText.formID = sBFormInit.id;
 				sLabIntObjText.pCallback = intUpdateCommandSize;
-				sLabIntObjText.pUserData = (void*)psObj;
+				sLabIntObjText.pUserData = psObj;
 				if (!widgAddLabel(psWScreen, &sLabIntObjText))
 				{
 					return FALSE;
@@ -4678,7 +4678,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 				sLabInitCmdExp.formID = sBFormInit.id;
 				sLabInitCmdExp.pCallback = intUpdateCommandExp;
 	//			sLabInitCmdExp.pDisplay = intDisplayCommandExp;
-				sLabInitCmdExp.pUserData = (void*)psObj;
+				sLabInitCmdExp.pUserData = psObj;
 				if (!widgAddLabel(psWScreen, &sLabInitCmdExp))
 				{
 					return FALSE;
@@ -4710,7 +4710,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 				RENDERBUTTON_INUSE(&ObjectBuffers[BufferID]);
 				ObjectBuffers[BufferID].Data = (void*)psObj;
 				ObjectBuffers[BufferID].Data2 = (void*)psStats;
-				sBFormInit2.pUserData = (void*)&ObjectBuffers[BufferID];
+				sBFormInit2.pUserData = &ObjectBuffers[BufferID];
 			}
 			else if ( (psObj->type == OBJ_DROID) && ( ((DROID *)psObj)->droidType == DROID_COMMAND ) )
 			{
@@ -4722,7 +4722,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 				RENDERBUTTON_INUSE(&ObjectBuffers[BufferID]);
 				ObjectBuffers[BufferID].Data = (void*)psObj;
 				ObjectBuffers[BufferID].Data2 = NULL;
-				sBFormInit2.pUserData = (void*)&ObjectBuffers[BufferID];
+				sBFormInit2.pUserData = &ObjectBuffers[BufferID];
 			}
 			else
 			{
@@ -4732,7 +4732,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 				ASSERT( BufferID < NUM_OBJECTBUFFERS,"BufferID > NUM_OBJECTBUFFERS" );
 				ClearObjectButtonBuffer(BufferID);
 				RENDERBUTTON_INUSE(&ObjectBuffers[BufferID]);
-				sBFormInit2.pUserData = (void*)&ObjectBuffers[BufferID];
+				sBFormInit2.pUserData = &ObjectBuffers[BufferID];
 			}
 
 			sBFormInit2.pDisplay = intDisplayStatusButton;
@@ -4768,12 +4768,12 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 				// the assigned factories label
 				sLabInit.formID = sBFormInit2.id;
 				sLabInit.pCallback = intUpdateCommandFact;
-				sLabInit.pUserData = (void*)psObj;
+				sLabInit.pUserData = psObj;
 
 				// the assigned cyborg factories label
 				sLabInitCmdFac.formID = sBFormInit2.id;
 				sLabInitCmdFac.pCallback = intUpdateCommandFact;
-				sLabInitCmdFac.pUserData = (void*)psObj;
+				sLabInitCmdFac.pUserData = psObj;
 				if (!widgAddLabel(psWScreen, &sLabInitCmdFac))
 				{
 					return FALSE;
@@ -4781,7 +4781,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 				// the assigned VTOL factories label
 				sLabInitCmdFac2.formID = sBFormInit2.id;
 				sLabInitCmdFac2.pCallback = intUpdateCommandFact;
-				sLabInitCmdFac2.pUserData = (void*)psObj;
+				sLabInitCmdFac2.pUserData = psObj;
 				if (!widgAddLabel(psWScreen, &sLabInitCmdFac2))
 				{
 					return FALSE;
@@ -4792,7 +4792,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 				// Add a text label for the size of the production run.
 				sLabInit.formID = sBFormInit2.id;
 				sLabInit.pCallback = intUpdateQuantity;
-				sLabInit.pUserData = (void*)psObj;
+				sLabInit.pUserData = psObj;
 			}
 			if (!widgAddLabel(psWScreen, &sLabInit))
 			{
@@ -4803,7 +4803,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 			sBarInit.formID = sBFormInit2.id;
 			// Setup widget update callback and object pointer so we can update the progress bar.
 			sBarInit.pCallback = intUpdateProgressBar;
-			sBarInit.pUserData = (void*)psObj;
+			sBarInit.pUserData = psObj;
 			sBarInit.iRange = GAME_TICKS_PER_SEC;
 
 			if (!widgAddBarGraph(psWScreen, &sBarInit))
@@ -5283,7 +5283,7 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 	sBarInit.iRange = GAME_TICKS_PER_SEC;
 	// Setup widget update callback and object pointer so we can update the progress bar.
 	sBarInit.pCallback = intUpdateProgressBar;
-	sBarInit.pUserData = (void*)intGetObject(id);
+	sBarInit.pUserData = intGetObject(id);
 
 	memset(&sLabInit,0,sizeof(W_LABINIT));
 	sLabInit.formID = id;
@@ -5320,11 +5320,11 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 		RENDERBUTTON_INUSE(&ObjectBuffers[BufferID]);
 		ObjectBuffers[BufferID].Data = (void*)intGetObject(id);
 		ObjectBuffers[BufferID].Data2 = (void*)psStats;
-		sFormInit.pUserData = (void*)&ObjectBuffers[BufferID];
+		sFormInit.pUserData = &ObjectBuffers[BufferID];
 
 		// Add a text label for the size of the production run.
 		sLabInit.pCallback = intUpdateQuantity;
-		sLabInit.pUserData = (void*)sBarInit.pUserData;
+		sLabInit.pUserData = sBarInit.pUserData;
 //		sFormInit.pUserData = (void*)intGetObject(id);
 	}
 	else
@@ -5338,7 +5338,7 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 		ASSERT( BufferID < NUM_OBJECTBUFFERS,"BufferID > NUM_OBJECTBUFFERS" );
 		ClearObjectButtonBuffer(BufferID);
 		RENDERBUTTON_INUSE(&ObjectBuffers[BufferID]);
-		sFormInit.pUserData = (void*)&ObjectBuffers[BufferID];
+		sFormInit.pUserData = &ObjectBuffers[BufferID];
 
 //		sFormInit.pUserData = NULL;
 
@@ -5466,8 +5466,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		sButInit.pTip = "Infinite Production";
 		sButInit.FontID = font_regular;
 		sButInit.pDisplay = intDisplayButtonPressed;
-		sButInit.pUserData = (void*)PACKDWORD_TRI(IMAGE_INFINITE_DOWN,
-			IMAGE_INFINITE_HI, IMAGE_INFINITE_UP);
+		sButInit.UserData = PACKDWORD_TRI(IMAGE_INFINITE_DOWN, IMAGE_INFINITE_HI, IMAGE_INFINITE_UP);
 		if (!widgAddButton(psWScreen, &sButInit))
 		{
 			return FALSE;
@@ -5483,7 +5482,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		sLabInit.width = 16;
 		sLabInit.height = 16;
 		sLabInit.FontID = font_regular;
-		sLabInit.pUserData = (void*)psOwner;//1;
+		sLabInit.pUserData = psOwner;
 		//sLabInit.pCallback = intUpdateSlider;
 		sLabInit.pDisplay = intDisplayNumber;
 		if (!widgAddLabel(psWScreen, &sLabInit))
@@ -5545,7 +5544,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		sButInit.pTip = _("Factory Delivery Point");
 		sButInit.FontID = font_regular;
 		sButInit.pDisplay = intDisplayDPButton;
-		sButInit.pUserData = (void*)psOwner;
+		sButInit.pUserData = psOwner;
 
 		if (!widgAddButton(psWScreen, &sButInit))
 		{
@@ -5564,8 +5563,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		sButInit.pTip = _("Loop Production");
 		sButInit.FontID = font_regular;
 		sButInit.pDisplay = intDisplayButtonPressed;
-		sButInit.pUserData = (void*)PACKDWORD_TRI(IMAGE_LOOP_DOWN,
-			IMAGE_LOOP_HI, IMAGE_LOOP_UP);
+		sButInit.UserData = PACKDWORD_TRI(IMAGE_LOOP_DOWN, IMAGE_LOOP_HI, IMAGE_LOOP_UP);
 
 		if (!widgAddButton(psWScreen, &sButInit))
 		{
@@ -5591,7 +5589,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		sLabInit.width = 12;
 		sLabInit.height = 15;
 		sLabInit.FontID = font_regular;
-		sLabInit.pUserData = (void*)psOwner;
+		sLabInit.pUserData = psOwner;
 		sLabInit.pCallback = intAddLoopQuantity;
 		if (!widgAddLabel(psWScreen, &sLabInit))
 		{
@@ -5631,7 +5629,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	sButInit.pTip = _("Close");
 	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
-	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
+	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return FALSE;
@@ -5662,13 +5660,13 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
 	sFormInit.tabMajorGap = OBJ_TABOFFSET;
 	sFormInit.pFormDisplay = intDisplayObjectForm;
-	sFormInit.pUserData = (void*)&StandardTab;
+	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
     //Build menu can have up to 80 stats - so can research now 13/09/99 AB
 	if (((objMode == IOBJ_BUILD) || (objMode == IOBJ_RESEARCH)) &&
 		(sFormInit.numMajor > 4))
 	{
-		sFormInit.pUserData = (void*)&SmallTab;
+		sFormInit.pUserData = &SmallTab;
 		sFormInit.majorSize /= 2;
 	}
 	for (i=0; i< sFormInit.numMajor; i++)
@@ -5738,7 +5736,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 
 		RENDERBUTTON_INUSE(&StatBuffers[BufferID]);
 		StatBuffers[BufferID].Data = (void*)ppsStatsList[i];
-		sBFormInit.pUserData = (void*)&StatBuffers[BufferID];
+		sBFormInit.pUserData = &StatBuffers[BufferID];
 		sBFormInit.pDisplay = intDisplayStatsButton;
 
 
@@ -5783,7 +5781,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 
 			// Add a text label for the quantity to produce.
 			sLabInit.formID = sBFormInit.id;
-			sLabInit.pUserData = (void*)Stat;
+			sLabInit.pUserData = Stat;
 			if (!widgAddLabel(psWScreen, &sLabInit))
 			{
 				return FALSE;
@@ -5805,7 +5803,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 
 			sLabInit.width = 12;
 			sLabInit.height = 15;
-            sLabInit.pUserData = (void*)Stat;
+            sLabInit.pUserData = Stat;
 			sLabInit.pDisplay = intDisplayResSubGroup;
 			widgAddLabel(psWScreen, &sLabInit);
 
@@ -6789,7 +6787,7 @@ BOOL intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
 
 	sBFormInit.pDisplay = intDisplayProximityBlips;
 	//set the data for this button
-	sBFormInit.pUserData = (void*)psProxDisp;
+	sBFormInit.pUserData = psProxDisp;
 
 	if (!widgAddForm(psWScreen, &sBFormInit))
 	{

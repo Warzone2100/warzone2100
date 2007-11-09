@@ -292,7 +292,7 @@ static BOOL _intAddTransporter(DROID *psSelected, BOOL offWorld)
 	sButInit.pTip = _("Close");
 	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
-	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
+	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return FALSE;
@@ -381,7 +381,7 @@ BOOL intAddTransporterContents(void)
 	sButInit.pTip = _("Close");
 	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
-	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
+	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return FALSE;
@@ -433,7 +433,7 @@ BOOL intAddTransporterContents(void)
 //		sButFInit.FontID = font_regular;
 		sButFInit.pDisplay = intDisplayImageHilight;
 
-		sButFInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_LAUNCHDOWN,IMAGE_LAUNCHUP);
+		sButFInit.UserData = PACKDWORD_TRI(0,IMAGE_LAUNCHDOWN,IMAGE_LAUNCHUP);
 
 		if (!widgAddForm(psWScreen, &sButFInit))
 		{
@@ -484,7 +484,7 @@ BOOL intAddTransporterLaunch(DROID *psDroid)
 	sButInit.height = iV_GetImageHeight(IntImages,IMAGE_LAUNCHUP);
 	sButInit.pTip = _("Launch Transport");
 	sButInit.pDisplay = intDisplayImageHilight;
-	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_LAUNCHDOWN,IMAGE_LAUNCHUP);
+	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_LAUNCHDOWN,IMAGE_LAUNCHUP);
 	if (!widgAddForm(psWScreen, &sButInit))
 	{
 		return FALSE;
@@ -595,7 +595,7 @@ BOOL intAddTransButtonForm(void)
 	}
 
 	sFormInit.pFormDisplay = intDisplayObjectForm;
-	sFormInit.pUserData = (void*)&StandardTab;
+	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
 
 	if (!widgAddForm(psWScreen, &sFormInit))
@@ -641,7 +641,7 @@ BOOL intAddTransButtonForm(void)
 			ClearTopicButtonBuffer(BufferID);
 			RENDERBUTTON_INUSE(&TopicBuffers[BufferID]);
 			TopicBuffers[BufferID].Data = (void*)psDroid;
-			sBFormInit.pUserData = (void*)&TopicBuffers[BufferID];
+			sBFormInit.pUserData = &TopicBuffers[BufferID];
 			sBFormInit.pDisplay = intDisplayObjectButton;
 
 
@@ -666,7 +666,7 @@ BOOL intAddTransButtonForm(void)
 			ASSERT( BufferID < NUM_OBJECTBUFFERS,"BufferID > NUM_OBJECTBUFFERS" );
 			ClearObjectButtonBuffer(BufferID);
 			RENDERBUTTON_INUSE(&ObjectBuffers[BufferID]);
-			sBFormInit2.pUserData = (void*)&ObjectBuffers[BufferID];
+			sBFormInit2.pUserData = &ObjectBuffers[BufferID];
 			sBFormInit2.pDisplay = intDisplayStatusButton;
 
 
@@ -740,7 +740,7 @@ BOOL intAddTransContentsForm(void)
 	}
 
 	sFormInit.pFormDisplay = intDisplayObjectForm;
-	sFormInit.pUserData = (void*)&StandardTab;
+	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
 
 	if (!widgAddForm(psWScreen, &sFormInit))
@@ -779,7 +779,7 @@ BOOL intAddTransContentsForm(void)
 			ASSERT( BufferID >= 0,"Unable to acquire stat buffer." );
 			RENDERBUTTON_INUSE(&StatBuffers[BufferID]);
 			StatBuffers[BufferID].Data = (void*)psDroid;
-			sBFormInit.pUserData = (void*)&StatBuffers[BufferID];
+			sBFormInit.pUserData = &StatBuffers[BufferID];
 			sBFormInit.pDisplay = intDisplayTransportButton;
 
 			if (!widgAddForm(psWScreen, &sBFormInit))
@@ -878,7 +878,7 @@ BOOL intAddDroidsAvailForm(void)
 	sButInit.pTip = _("Close");
 	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
-	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
+	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return FALSE;
@@ -938,7 +938,7 @@ BOOL intAddDroidsAvailForm(void)
 
 	sFormInit.pFormDisplay = intDisplayObjectForm;
 
-	sFormInit.pUserData = (void*)&SmallTab;
+	sFormInit.pUserData = &SmallTab;
 
 	sFormInit.pTabDisplay = intDisplayTab;
 
@@ -1039,7 +1039,7 @@ BOOL intAddDroidsAvailForm(void)
 			ASSERT( BufferID >= 0,"Unable to acquire stat buffer." );
 			RENDERBUTTON_INUSE(&System0Buffers[BufferID]);
 			System0Buffers[BufferID].Data = (void*)psDroid;
-			sBFormInit.pUserData = (void*)&System0Buffers[BufferID];
+			sBFormInit.pUserData = &System0Buffers[BufferID];
 			sBFormInit.pDisplay = intDisplayTransportButton;
 
 			if (!widgAddForm(psWScreen, &sBFormInit))
@@ -1955,10 +1955,10 @@ void flashMissionButton(UDWORD buttonID)
         switch (buttonID)
         {
         case IDTRANS_LAUNCH:
-    		psForm->pUserData = (void*)PACKDWORD_TRI(1,IMAGE_LAUNCHDOWN,IMAGE_LAUNCHUP);
+    		psForm->UserData = PACKDWORD_TRI(1,IMAGE_LAUNCHDOWN,IMAGE_LAUNCHUP);
             break;
         case IDTIMER_FORM:
-    		psForm->pUserData = (void*)PACKDWORD_TRI(1,IMAGE_MISSION_CLOCK,IMAGE_MISSION_CLOCK_UP);
+    		psForm->UserData = PACKDWORD_TRI(1,IMAGE_MISSION_CLOCK,IMAGE_MISSION_CLOCK_UP);
             break;
         default:
             //do nothing other than in debug
@@ -1982,10 +1982,10 @@ void stopMissionButtonFlash(UDWORD buttonID)
         switch (buttonID)
         {
         case IDTRANS_LAUNCH:
-    		psForm->pUserData = (void*)PACKDWORD_TRI(0,IMAGE_LAUNCHDOWN,IMAGE_LAUNCHUP);
+    		psForm->UserData = PACKDWORD_TRI(0,IMAGE_LAUNCHDOWN,IMAGE_LAUNCHUP);
             break;
         case IDTIMER_FORM:
-    		psForm->pUserData = (void*)PACKDWORD_TRI(0,IMAGE_MISSION_CLOCK,IMAGE_MISSION_CLOCK_UP);
+    		psForm->UserData = PACKDWORD_TRI(0,IMAGE_MISSION_CLOCK,IMAGE_MISSION_CLOCK_UP);
             break;
         default:
             //do nothing other than in debug

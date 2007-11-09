@@ -534,7 +534,7 @@ static void addGames(void)
 
 			sButInit.pTip = NetPlay.games[i].name;
 
-			sButInit.pUserData = (void *)i;
+			sButInit.UserData = i;
 			widgAddButton(psWScreen, &sButInit);
 		}
 	}
@@ -1167,7 +1167,7 @@ static void addTeamChooser(UDWORD player)
 
 		sButInit.FontID = font_regular;
 		sButInit.pDisplay = displayMultiBut;
-		sButInit.pUserData = (void*)PACKDWORD_TRI(FALSE,IMAGE_TEAM0+i , IMAGE_TEAM0+i);
+		sButInit.UserData = PACKDWORD_TRI(FALSE,IMAGE_TEAM0+i , IMAGE_TEAM0+i);
 		sButInit.pText = "Team0";
 
 		if (!widgAddButton(psWScreen, &sButInit))
@@ -1258,7 +1258,7 @@ UDWORD addPlayerBox(BOOL players)
 				sButInit.pTip = "Choose team";	//Players[i].name;
 				sButInit.FontID = font_regular;
 				sButInit.pDisplay = displayTeamChooser;//intDisplayButtonHilight;
-				sButInit.pUserData = (void*) i;
+				sButInit.UserData = i;
 
 				if(bTeamChooserUp[i] && !bColourChooserUp )
 				{
@@ -1283,7 +1283,7 @@ UDWORD addPlayerBox(BOOL players)
 				sButInit.pTip = NULL;//Players[i].name;
 				sButInit.FontID = font_regular;
 				sButInit.pDisplay = displayPlayer;//intDisplayButtonHilight;
-				sButInit.pUserData = (void*) i;
+				sButInit.UserData = i;
 
 				if(bColourChooserUp && (teamChooserUp() < 0)
 					&& NetPlay.players[i].dpid == player2dpid[selectedPlayer])
@@ -1308,7 +1308,7 @@ UDWORD addPlayerBox(BOOL players)
 				sFormInit.height = MULTIOP_PLAYERHEIGHT;
 				sFormInit.pTip = NULL;//Players[i].name;
 				sFormInit.pDisplay = displayPlayer;//intDisplayButtonHilight;
-				sFormInit.pUserData = (void*) i;
+				sFormInit.UserData = i;
 				widgAddForm(psWScreen, &sFormInit);
 				addFESlider(MULTIOP_SKSLIDE+i,sFormInit.id, 43,9, DIFF_SLIDER_STOPS,
 					(game.skDiff[i] <= DIFF_SLIDER_STOPS ? game.skDiff[i] : DIFF_SLIDER_STOPS / 2), 0);	//set to 50% (value of UBYTE_MAX == human player)
@@ -2619,11 +2619,9 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD 
 	UDWORD y = yOffset+psWidget->y;
 	BOOL Hilight = FALSE;
 	BOOL Down = FALSE;
-	UDWORD	i;
+	UDWORD	i = psWidget->UserData;
 	char	tmp[8];
 	UDWORD png;
-
-	i = (int)psWidget->pUserData;
 
 	// collate info
 	if( ((W_BUTTON*)psWidget)->state & (WBUTS_HILITE))
@@ -2727,13 +2725,12 @@ void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD
 	UDWORD		x = xOffset+psWidget->x;
 	UDWORD		y = yOffset+psWidget->y;
 	BOOL		Hilight = FALSE;
-	UDWORD		i;
+	UDWORD		i = psWidget->UserData;
 
 	if( ((W_BUTTON*)psWidget)->state & (WBUTS_HILITE| WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
 	{
 		Hilight = TRUE;
 	}
-	i = (int)psWidget->pUserData;
 
 	ASSERT(playerTeamGUI[i] >= 0 && playerTeamGUI[i] < MAX_PLAYERS,
 		"displayTeamChooser: playerTeamGUI out of bounds" );
@@ -2751,14 +2748,13 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 	UDWORD		y = yOffset+psWidget->y;
 	BOOL		Hilight = FALSE;
 	UDWORD		j;
-	UDWORD		i,eval;
+	UDWORD		i = psWidget->UserData, eval;
 	PLAYERSTATS stat;
 
 	if( ((W_BUTTON*)psWidget)->state & (WBUTS_HILITE| WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
 	{
 		Hilight = TRUE;
 	}
-	i = (int)psWidget->pUserData;
 
 	//bluboxes.
 	drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
@@ -3001,7 +2997,7 @@ void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWOR
 {
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
-	UWORD	im = (UWORD)((UDWORD)psWidget->pUserData);
+	UWORD	im = psWidget->UserData;
 
 	drawBlueBox(x,y,psWidget->width,psWidget->height);
 	drawBlueBox(x+psWidget->width,y,psWidget->height,psWidget->height);	// box on end.
@@ -3025,10 +3021,9 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *p
 	UDWORD	Down = 0;
 	UWORD	hiToUse = 0;
 	UDWORD	Grey = 0;
-	UWORD	im = (UWORD)UNPACKDWORD_TRI_B((UDWORD)psWidget->pUserData);
-	UWORD	im2= (UWORD)(UNPACKDWORD_TRI_C((UDWORD)psWidget->pUserData));
-	BOOL	usehl = ((UWORD)(UNPACKDWORD_TRI_A((UDWORD)psWidget->pUserData)));
-//	BOOL	snap = 1;
+	UWORD	im = UNPACKDWORD_TRI_B((UDWORD)psWidget->UserData);
+	UWORD	im2= UNPACKDWORD_TRI_C((UDWORD)psWidget->UserData);
+	BOOL	usehl = UNPACKDWORD_TRI_A((UDWORD)psWidget->UserData);
 
 	//evaluate
 	if( (usehl==1) && ((W_BUTTON*)psWidget)->state & WBUTS_HILITE)
@@ -3136,7 +3131,7 @@ static BOOL addMultiEditBox(UDWORD formid,UDWORD id,UDWORD x, UDWORD y, const ch
 	sEdInit.height = MULTIOP_EDITBOXH;
 	sEdInit.pText = tipres;
 	sEdInit.FontID = font_regular;
-	sEdInit.pUserData = (void*)icon;
+	sEdInit.UserData = icon;
 	sEdInit.pBoxDisplay = displayMultiEditBox;
 	if (!widgAddEditBox(psWScreen, &sEdInit))
 	{
@@ -3168,7 +3163,7 @@ BOOL addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y,
 	sButInit.pTip = tipres;
 	sButInit.FontID = font_regular;
 	sButInit.pDisplay = displayMultiBut;
-	sButInit.pUserData = (void*)PACKDWORD_TRI(hiIt,norm , hi);
+	sButInit.UserData = PACKDWORD_TRI(hiIt,norm , hi);
 
 	return widgAddButton(screen, &sButInit);
 }

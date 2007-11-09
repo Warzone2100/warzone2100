@@ -345,7 +345,7 @@ static BOOL intAddMessageForm(BOOL playCurrent)
 	}
 
 	sFormInit.pFormDisplay = intDisplayObjectForm;
-	sFormInit.pUserData = (void*)&StandardTab;
+	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
 
 	if (!widgAddForm(psWScreen, &sFormInit))
@@ -413,7 +413,7 @@ static BOOL intAddMessageForm(BOOL playCurrent)
 		ASSERT( BufferID >= 0,"Unable to acquire object buffer." );
 		RENDERBUTTON_INUSE(&ObjectBuffers[BufferID]);
 		ObjectBuffers[BufferID].Data = (void*)psMessage;
-		sBFormInit.pUserData = (void*)&ObjectBuffers[BufferID];
+		sBFormInit.pUserData = &ObjectBuffers[BufferID];
 		sBFormInit.pDisplay = intDisplayMessageButton;
 
 		if (!widgAddForm(psWScreen, &sBFormInit))
@@ -524,7 +524,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	sButInit.height = CLOSE_SIZE;
 	sButInit.pTip = _("Close");
 	sButInit.pDisplay = intDisplayImageHilight;
-	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
+	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return FALSE;
@@ -569,7 +569,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 						  FALSE, &cur_seq, &cur_seqpage));
 
 		sFormInit.pFormDisplay = intDisplayObjectForm;
-		sFormInit.pUserData = (void*)&StandardTab;
+		sFormInit.pUserData = &StandardTab;
 		sFormInit.pTabDisplay = intDisplayTab;
 
 		if (!widgAddForm(psWScreen, &sFormInit))
@@ -640,7 +640,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	sFormInit.width = INTMAP_PIEWIDTH;
 	sFormInit.height = INTMAP_PIEHEIGHT;
 	sFormInit.pDisplay = intDisplayPIEView;
-	sFormInit.pUserData = (void *)psMessage;
+	sFormInit.pUserData = psMessage;
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
 		return FALSE;
@@ -657,7 +657,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	sFormInit.width = INTMAP_FLICWIDTH;
 	sFormInit.height = INTMAP_FLICHEIGHT;
 	sFormInit.pDisplay = intDisplayFLICView;
-	sFormInit.pUserData = (void *)psMessage;
+	sFormInit.pUserData = psMessage;
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
 		return FALSE;
@@ -676,7 +676,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	sFormInit.width = INTMAP_TEXTWIDTH;
 	sFormInit.height = INTMAP_TEXTHEIGHT;
 	sFormInit.pDisplay = intDisplayTEXTView;
-	sFormInit.pUserData = (void *)psMessage;
+	sFormInit.pUserData = psMessage;
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
 		return FALSE;

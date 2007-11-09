@@ -226,7 +226,7 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 	sFormInit.height = LOADSAVE_BANNER_DEPTH;
 	sFormInit.disableChildren = FALSE;
 	sFormInit.pDisplay = displayLoadBanner;
-	sFormInit.pUserData = (void *)bLoad;
+	sFormInit.UserData = bLoad;
 	widgAddForm(psRequestScreen, &sFormInit);
 
 
@@ -251,7 +251,7 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 	sButInit.y = 8;
 	sButInit.width		= iV_GetImageWidth(IntImages,IMAGE_NRUTER);
 	sButInit.height		= iV_GetImageHeight(IntImages,IMAGE_NRUTER);
-	sButInit.pUserData	= (void*)PACKDWORD_TRI(0,IMAGE_NRUTER , IMAGE_NRUTER);
+	sButInit.UserData	= PACKDWORD_TRI(0,IMAGE_NRUTER , IMAGE_NRUTER);
 
 	sButInit.id = LOADSAVE_CANCEL;
 	sButInit.style = WBUT_PLAIN;

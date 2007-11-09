@@ -1441,7 +1441,7 @@ void intOpenPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *
 	{
 		if (Form->pUserData != NULL)
 		{
-			Form->display = (WIDGET_DISPLAY)((SDWORD)Form->pUserData);
+			Form->display = (WIDGET_DISPLAY)Form->pUserData;
 		}
 		else
 		{
@@ -1546,7 +1546,7 @@ void intDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *p
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
 
-	iV_DrawImage(IntImages,(UWORD)(UDWORD)psWidget->pUserData,x,y);
+	iV_DrawImage(IntImages,psWidget->UserData,x,y);
 }
 
 
@@ -1558,12 +1558,12 @@ void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UD
     UDWORD  flash;
 
     //draw the background image
-    iV_DrawImage(IntImages,(UWORD)UNPACKDWORD_TRI_B((UDWORD)psWidget->pUserData),x,y);
+    iV_DrawImage(IntImages,UNPACKDWORD_TRI_B(psWidget->UserData),x,y);
 	//need to flash the timer when < 5 minutes remaining, but > 4 minutes
-    flash = UNPACKDWORD_TRI_A((UDWORD)psWidget->pUserData);
+    flash = UNPACKDWORD_TRI_A(psWidget->UserData);
 	if (flash && ((gameTime2/250) % 2) == 0)
     {
-    	iV_DrawImage(IntImages,(UWORD)UNPACKDWORD_TRI_C((UDWORD)psWidget->pUserData),x,y);
+    	iV_DrawImage(IntImages,UNPACKDWORD_TRI_C(psWidget->UserData),x,y);
 	}
 }
 
@@ -1609,16 +1609,16 @@ void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UD
 			Hilight = FALSE;
 	}
 
-	ImageID = (UWORD)UNPACKDWORD_TRI_C((UDWORD)psWidget->pUserData);
+	ImageID = UNPACKDWORD_TRI_C(psWidget->UserData);
 
 
 	//need to flash the button if Full Transporter
-    flash = UNPACKDWORD_TRI_A((UDWORD)psWidget->pUserData);
+    flash = UNPACKDWORD_TRI_A(psWidget->UserData);
 	if (flash && psWidget->id == IDTRANS_LAUNCH)
 	{
 		if (((gameTime2/250) % 2) == 0)
 		{
-    		iV_DrawImage(IntImages,(UWORD)UNPACKDWORD_TRI_B((UDWORD)psWidget->pUserData),x,y);
+    		iV_DrawImage(IntImages,UNPACKDWORD_TRI_B(psWidget->UserData),x,y);
 		}
 		else
 		{
@@ -1630,7 +1630,7 @@ void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UD
        	iV_DrawImage(IntImages,ImageID,x,y);
         if(Hilight)
         {
-	    	iV_DrawImage(IntImages,(UWORD)UNPACKDWORD_TRI_B((UDWORD)psWidget->pUserData),x,y);
+	    	iV_DrawImage(IntImages,UNPACKDWORD_TRI_B(psWidget->UserData),x,y);
 	    }
     }
 
@@ -1746,15 +1746,15 @@ void intDisplayButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, U
 
 
 	if(Grey) {
-		ImageID = (UWORD)(UNPACKDWORD_TRI_A((UDWORD)psWidget->pUserData));
+		ImageID = UNPACKDWORD_TRI_A(psWidget->UserData);
 		Hilight = FALSE;
 	} else {
-		ImageID = (UWORD)(UNPACKDWORD_TRI_C((UDWORD)psWidget->pUserData) + Down);
+		ImageID = UNPACKDWORD_TRI_C(psWidget->UserData) + Down;
 	}
 
 	iV_DrawImage(IntImages,ImageID,x,y);
 	if(Hilight) {
-		iV_DrawImage(IntImages,(UWORD)UNPACKDWORD_TRI_B((UDWORD)psWidget->pUserData),x,y);
+		iV_DrawImage(IntImages,UNPACKDWORD_TRI_B(psWidget->UserData),x,y);
 	}
 
 }
@@ -1775,15 +1775,15 @@ void intDisplayAltButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 
 
 	if(Grey) {
-		ImageID = (UWORD)(UNPACKDWORD_TRI_A((UDWORD)psWidget->pUserData));
+		ImageID = UNPACKDWORD_TRI_A(psWidget->UserData);
 		Hilight = FALSE;
 	} else {
-		ImageID = (UWORD)(UNPACKDWORD_TRI_C((UDWORD)psWidget->pUserData) + Down);
+		ImageID = UNPACKDWORD_TRI_C(psWidget->UserData) + Down;
 	}
 
 	iV_DrawImage(IntImages,ImageID,x,y);
 	if(Hilight) {
-		iV_DrawImage(IntImages,(UWORD)UNPACKDWORD_TRI_B((UDWORD)psWidget->pUserData),x,y);
+		iV_DrawImage(IntImages,UNPACKDWORD_TRI_B(psWidget->UserData),x,y);
 	}
 
 }
@@ -1814,11 +1814,11 @@ void intDisplayButtonFlash(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDW
 
 	if ( Down && ((gameTime2/250) % 2 == 0) )
 	{
-		ImageID = (UWORD)(UNPACKDWORD_TRI_B((UDWORD)psWidget->pUserData));
+		ImageID = UNPACKDWORD_TRI_B(psWidget->UserData);
 		Hilight = FALSE;
 	} else
 	{
-		ImageID = (UWORD)(UNPACKDWORD_TRI_C((UDWORD)psWidget->pUserData));
+		ImageID = UNPACKDWORD_TRI_C(psWidget->UserData);
 	}
 
 	iV_DrawImage(IntImages,ImageID,x,y);
@@ -1833,10 +1833,10 @@ void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 	UDWORD	y = yOffset+psWidget->y;
 	BOOL	Hilight = FALSE;
 	BOOL	Down = FALSE;
-	UBYTE	DownTime = (UBYTE)UNPACKDWORD_QUAD_C((UDWORD)psWidget->pUserData);
-	UBYTE	Index = (UBYTE)UNPACKDWORD_QUAD_D((UDWORD)psWidget->pUserData);
-	UBYTE	flashing = (UBYTE)UNPACKDWORD_QUAD_A((UDWORD)psWidget->pUserData);
-	UBYTE	flashTime = (UBYTE)UNPACKDWORD_QUAD_B((UDWORD)psWidget->pUserData);
+	UBYTE	DownTime = UNPACKDWORD_QUAD_C(psWidget->UserData);
+	UBYTE	Index = UNPACKDWORD_QUAD_D(psWidget->UserData);
+	UBYTE	flashing = UNPACKDWORD_QUAD_A(psWidget->UserData);
+	UBYTE	flashTime = UNPACKDWORD_QUAD_B(psWidget->UserData);
 	UWORD	ImageID;
 
 	ASSERT( psWidget->type == WIDG_BUTTON,"intDisplayReticuleButton : Not a button" );
@@ -1908,7 +1908,7 @@ void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 	}
 
 
-	psWidget->pUserData = (void*)(PACKDWORD_QUAD(flashTime,flashing,DownTime,Index));
+	psWidget->UserData = PACKDWORD_QUAD(flashTime,flashing,DownTime,Index);
 }
 
 
@@ -2006,11 +2006,11 @@ void intDisplayButtonPressed(WIDGET *psWidget, UDWORD xOffset,
 
 	if (psButton->state & (WBUTS_DOWN | WBUTS_LOCKED | WBUTS_CLICKLOCK))
 	{
-		ImageID = (UWORD)(UNPACKDWORD_TRI_A((UDWORD)psWidget->pUserData));
+		ImageID = UNPACKDWORD_TRI_A(psWidget->UserData);
 	}
 	else
 	{
-		ImageID = (UWORD)(UNPACKDWORD_TRI_C((UDWORD)psWidget->pUserData));
+		ImageID = UNPACKDWORD_TRI_C(psWidget->UserData);
 	}
 
 	Hilight = (UBYTE)buttonIsHilite(psButton);
@@ -2024,8 +2024,7 @@ void intDisplayButtonPressed(WIDGET *psWidget, UDWORD xOffset,
 	iV_DrawImage(IntImages,ImageID,x,y);
 	if (Hilight)
 	{
-		iV_DrawImage(IntImages,(UWORD)UNPACKDWORD_TRI_B((UDWORD)psWidget->
-			pUserData),x,y);
+		iV_DrawImage(IntImages,UNPACKDWORD_TRI_B(psWidget->UserData),x,y);
 	}
 
 

@@ -660,7 +660,7 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 	sButInit.pTip = _("Close");
 	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
-	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
+	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return FALSE;
@@ -795,9 +795,11 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 			sButInit.pTip = getDORDDescription(OrderButtons[OrdIndex].ButTips[i]);
 			sButInit.width = (UWORD)GetImageWidth(IntImages,OrderButtons[OrdIndex].ButImageID[i]);
 			sButInit.height = (UWORD)GetImageHeight(IntImages,OrderButtons[OrdIndex].ButImageID[i]);
-			sButInit.pUserData = (void*)PACKDWORD_TRI(OrderButtons[OrdIndex].ButGreyID[i],
-														OrderButtons[OrdIndex].ButHilightID[i],
-														OrderButtons[OrdIndex].ButImageID[i]);
+			sButInit.UserData = PACKDWORD_TRI(
+										OrderButtons[OrdIndex].ButGreyID[i],
+										OrderButtons[OrdIndex].ButHilightID[i],
+										OrderButtons[OrdIndex].ButImageID[i]
+											 );
 			if(!widgAddButton(psWScreen, &sButInit))
 			{
 				return FALSE;

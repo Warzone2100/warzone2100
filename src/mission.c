@@ -2792,7 +2792,7 @@ BOOL intAddMissionTimer(void)
 	sFormInit.height = iV_GetImageHeight(IntImages,IMAGE_MISSION_CLOCK);//TIMER_HEIGHT;
 	sFormInit.x = (SWORD)(RADTLX + RADWIDTH - sFormInit.width);
 	sFormInit.y = (SWORD)TIMER_Y;
-	sFormInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_MISSION_CLOCK,IMAGE_MISSION_CLOCK_UP);;
+	sFormInit.UserData = PACKDWORD_TRI(0,IMAGE_MISSION_CLOCK,IMAGE_MISSION_CLOCK_UP);;
 	sFormInit.pDisplay = intDisplayMissionClock;
 
 
@@ -2852,7 +2852,7 @@ BOOL intAddTransporterTimer(void)
 	sFormInit.height = iV_GetImageHeight(IntImages,IMAGE_TRANSETA_UP);
 	sFormInit.pTip = _("Load Transport");
 	sFormInit.pDisplay = intDisplayImageHilight;
-	sFormInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_TRANSETA_DOWN,
+	sFormInit.UserData = PACKDWORD_TRI(0,IMAGE_TRANSETA_DOWN,
 		IMAGE_TRANSETA_UP);
 
 	if (!widgAddForm(psWScreen, &sFormInit))
