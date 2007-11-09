@@ -1122,7 +1122,7 @@ void intRemoveOrder(void)
 	Form = (W_TABFORM*)widgGetFromID(psWScreen,IDORDER_FORM);
 	if(Form) {
 		Form->display = intClosePlainForm;
-		Form->pUserData = (void*)0;	// Used to signal when the close anim has finished.
+		Form->pUserData = NULL; // Used to signal when the close anim has finished.
 		Form->disableChildren = TRUE;
 		ClosingOrder = TRUE;
 		OrderUp = FALSE;

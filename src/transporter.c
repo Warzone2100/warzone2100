@@ -1367,7 +1367,7 @@ void intRemoveTrans(void)
 	Form = (W_TABFORM*)widgGetFromID(psWScreen,IDTRANS_FORM);
 	Form->display = intClosePlainForm;
 	Form->disableChildren = TRUE;
-	Form->pUserData = (void*)0;	// Used to signal when the close anim has finished.
+	Form->pUserData = NULL; // Used to signal when the close anim has finished.
 	ClosingTrans = TRUE;
 
 	intRemoveTransContent();
@@ -1398,7 +1398,7 @@ void intRemoveTransContent(void)
 	{
 		Form->display = intClosePlainForm;
 		Form->disableChildren = TRUE;
-		Form->pUserData = (void*)0;	// Used to signal when the close anim has finished.
+		Form->pUserData = NULL; // Used to signal when the close anim has finished.
 		ClosingTransCont = TRUE;
 	}
 
@@ -1423,7 +1423,7 @@ void intRemoveTransDroidsAvail(void)
 	{
 		Form->display = intClosePlainForm;
 		Form->disableChildren = TRUE;
-		Form->pUserData = (void*)0;	// Used to signal when the close anim has finished.
+		Form->pUserData = NULL; // Used to signal when the close anim has finished.
 		ClosingTransDroids = TRUE;
         //remember which tab we were on
         widgGetTabs(psWScreen, IDTRANS_DROIDTAB, &objMajor, &objMinor);

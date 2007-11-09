@@ -355,7 +355,7 @@ BOOL intCloseInGameOptions(BOOL bPutUpLoadSave, BOOL bResetMissionWidgets)
 		Form = (W_TABFORM*)widgGetFromID(psWScreen,INTINGAMEOP);
 		if(Form) {
 			Form->display		 = intClosePlainForm;
-			Form->pUserData		 = (void*)0;	// Used to signal when the close anim has finished.
+			Form->pUserData		 = NULL; // Used to signal when the close anim has finished.
 			Form->disableChildren= TRUE;
 			ClosingInGameOp		 = TRUE;		// like orderup/closingorder
 			InGameOpUp			 = FALSE;

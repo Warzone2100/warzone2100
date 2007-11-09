@@ -1039,7 +1039,7 @@ void intRemoveIntelMap(void)
 	{
 		Form->display = intClosePlainForm;
 		Form->disableChildren = TRUE;
-		Form->pUserData = (void*)0;	// Used to signal when the close anim has finished.
+		Form->pUserData = NULL; // Used to signal when the close anim has finished.
 	}
 	ClosingIntelMap = TRUE;
 	//remove the text label
@@ -1093,7 +1093,7 @@ void intRemoveMessageView(BOOL animated)
 			// Start the window close animation.
 			Form->display = intClosePlainForm;
 			Form->disableChildren = TRUE;
-			Form->pUserData = (void*)0;	// Used to signal when the close anim has finished.
+			Form->pUserData = NULL; // Used to signal when the close anim has finished.
 			ClosingMessageView = TRUE;
 		}
 		else

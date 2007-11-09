@@ -4958,7 +4958,7 @@ void intRemoveObject(void)
 	if(Form) {
 		Form->display = intClosePlainForm;
 		Form->disableChildren = TRUE;
-		Form->pUserData = (void*)0;	// Used to signal when the close anim has finished.
+		Form->pUserData = NULL; // Used to signal when the close anim has finished.
 		ClosingObject = TRUE;
 	}
 
@@ -5017,7 +5017,7 @@ void intRemoveStats(void)
 	Form = (W_TABFORM*)widgGetFromID(psWScreen,IDSTAT_FORM);
 	if(Form) {
 		Form->display = intClosePlainForm;
-		Form->pUserData = (void*)0;	// Used to signal when the close anim has finished.
+		Form->pUserData = NULL; // Used to signal when the close anim has finished.
 		Form->disableChildren = TRUE;
 		ClosingStats = TRUE;
 	}
@@ -5843,7 +5843,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 								sLabInit.y = STAT_BUTHEIGHT - 19;
 								sLabInit.width = 12;
 								sLabInit.height = 15;
-								sLabInit.pUserData = (void*)(int)ii;
+								sLabInit.UserData = ii;
 								sLabInit.pTip = getPlayerName(ii);
 								sLabInit.pDisplay = intDisplayAllyIcon;
 								widgAddLabel(psWScreen, &sLabInit);
@@ -6692,16 +6692,13 @@ void flashReticuleButton(UDWORD buttonID)
 {
 
 	W_TABFORM		*psButton;
-	UDWORD			flash;
-
 
 	//get the button for the id
 	psButton = (W_TABFORM*)widgGetFromID(psWScreen,buttonID);
 	if (psButton)
 	{
 		//set flashing byte to true
-		flash = ((UBYTE)TRUE & 0xff) << 24;
-		psButton->pUserData = (void *)(flash | (UDWORD)psButton->pUserData);
+		psButton->UserData = (1 << 24) | psButton->UserData;
 	}
 
 }
@@ -6710,25 +6707,18 @@ void flashReticuleButton(UDWORD buttonID)
 void stopReticuleButtonFlash(UDWORD buttonID)
 {
 
-	WIDGET	*psButton;
-	UBYTE	DownTime;
-	UBYTE	Index;
-	UBYTE	flashing;
-	UBYTE	flashTime;
-
-	psButton = widgGetFromID(psWScreen,buttonID);
+	WIDGET	*psButton = widgGetFromID(psWScreen,buttonID);
 	if (psButton)
 	{
-		// clear flashing byte
-		DownTime = (UBYTE)UNPACKDWORD_QUAD_C((UDWORD)psButton->pUserData);
-		Index = (UBYTE)UNPACKDWORD_QUAD_D((UDWORD)psButton->pUserData);
-		flashing = (UBYTE)UNPACKDWORD_QUAD_A((UDWORD)psButton->pUserData);
-		flashTime = (UBYTE)UNPACKDWORD_QUAD_B((UDWORD)psButton->pUserData);
+		UBYTE DownTime = UNPACKDWORD_QUAD_C(psButton->UserData);
+		UBYTE Index = UNPACKDWORD_QUAD_D(psButton->UserData);
+		UBYTE flashing = UNPACKDWORD_QUAD_A(psButton->UserData);
+		UBYTE flashTime = UNPACKDWORD_QUAD_B(psButton->UserData);
 
-		flashing = (UBYTE)FALSE;
+		// clear flashing byte
+		flashing = FALSE;
 		flashTime = 0;
-		psButton->pUserData = (void*)(PACKDWORD_QUAD(flashTime,flashing,DownTime,Index));
-		//psButton->pUserData = (void *)(((UDWORD)psButton->pUserData) & 0x00ffffff);
+		psButton->UserData = PACKDWORD_QUAD(flashTime,flashing,DownTime,Index);
 	}
 
 }

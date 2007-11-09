@@ -1184,7 +1184,6 @@ void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt,BOOL bA
 		sButInit.width = (short)(iV_GetTextWidth(txt)+10);//FRONTEND_BUTWIDTH;
 
 		sButInit.x+=35;
-
 	}
 	else
 	{
@@ -1192,8 +1191,7 @@ void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt,BOOL bA
 		sButInit.width = FRONTEND_BUTWIDTH;
 	}
 
-
-	sButInit.pUserData = (void*)bGrey;				// store disable state
+	sButInit.UserData = bGrey; // store disable state
 
 	sButInit.height = FRONTEND_BUTHEIGHT;
 	sButInit.pDisplay = displayTextOption;
@@ -1305,7 +1303,7 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD 
 	SDWORD			fx,fy, fw;
 	W_BUTTON		*psBut;
 	BOOL			hilight = FALSE;
-	BOOL			greyOut = (BOOL) psWidget->pUserData;			// if option is unavailable.
+	BOOL			greyOut = psWidget->UserData; // if option is unavailable.
 
 	psBut = (W_BUTTON *)psWidget;
 	iV_SetFont(psBut->FontID);
