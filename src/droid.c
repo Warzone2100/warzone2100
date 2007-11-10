@@ -152,7 +152,7 @@ BOOL droidInit(void)
  *
  * NOTE: This function will damage but _never_ destroy transports when in single player (campaign) mode
  */
-SDWORD droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass, DROID_HIT_SIDE impactSide)
+SDWORD droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide)
 {
 	// Do at least one point of damage
 	unsigned int actualDamage = 1, armour;
@@ -3243,7 +3243,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	UDWORD			inc;
 	UDWORD			numKills;
 	SDWORD			i, experienceLoc;
-	DROID_HIT_SIDE	impact_side;
+	HIT_SIDE		impact_side;
 
 	// Don't use this assertion in single player, since droids can finish building while on an away mission
 	ASSERT(!bMultiPlayer || worldOnMap(x,y), "the build locations are not on the map");
@@ -5508,7 +5508,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
     DROID               *psNewDroid, *psCurr;
     STRUCTURE           *psStruct;
     UDWORD              body, armourK[NUM_HIT_SIDES], armourH[NUM_HIT_SIDES];
-	DROID_HIT_SIDE		impact_side;
+	HIT_SIDE		impact_side;
 
 	CHECK_DROID(psD);
 

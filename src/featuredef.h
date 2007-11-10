@@ -80,7 +80,7 @@ typedef struct _feature_stats
 										   the start of the mission */
 	BOOL			damageable;			// Whether the feature can be blown up
 	UDWORD			body;				// Number of body points
-	UDWORD			armour;				// Feature armour
+	UDWORD			armourValue;			// Feature armour
 } FEATURE_STATS;
 
 typedef struct _feature

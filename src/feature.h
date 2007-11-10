@@ -71,7 +71,7 @@ extern SDWORD getFeatureStatFromName(const char *pName);
 wreckage to clear*/
 extern FEATURE	* checkForWreckage(DROID *psDroid);
 
-extern SDWORD featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponSubClass);
+extern SDWORD featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide);
 
 #endif
 

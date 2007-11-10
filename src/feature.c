@@ -187,7 +187,7 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 		//read the data into the storage - the data is delimeted using comma's
 		sscanf(pFeatureData,"%[^','],%d,%d,%d,%d,%d,%[^','],%[^','],%d,%d,%d",
 			featureName, &Width, &Breadth,
-			&psFeature->damageable, &psFeature->armour, &psFeature->body,
+			&psFeature->damageable, &psFeature->armourValue, &psFeature->body,
 			GfxFile, type, &psFeature->tileDraw, &psFeature->allowLOS,
 			&psFeature->visibleAtStart);
 
@@ -261,7 +261,7 @@ void featureStatsShutDown(void)
  * \param weaponSubClass the subclass of the weapon that deals the damage
  * \return TRUE when the dealt damage destroys the feature, FALSE when the feature survives
  */
-SDWORD featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponSubClass)
+SDWORD featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide)
 {
 	// Do at least one point of damage
 	unsigned int actualDamage = 1;
@@ -272,7 +272,7 @@ SDWORD featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponSubClass)
 		"featureDamage: Invalid feature pointer" );
 
 	debug( LOG_ATTACK, "featureDamage(%d): body %d armour %d damage: %d\n",
-		psFeature->id, psFeature->body, psFeature->psStats->armour, damage);
+		psFeature->id, psFeature->body, psFeature->armour[impactSide][weaponClass], damage);
 
 	// EMP cannons do not work on Features
 	if (weaponSubClass == WSC_EMP)
@@ -280,10 +280,10 @@ SDWORD featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponSubClass)
 		return 0;
 	}
 
-	if (damage > psFeature->psStats->armour)
+	if (damage > psFeature->armour[impactSide][weaponClass])
 	{
 		// Damage has penetrated - reduce body points
-		actualDamage = damage - psFeature->psStats->armour;
+		actualDamage = damage - psFeature->armour[impactSide][weaponClass];
 		debug( LOG_ATTACK, "        penetrated: %d\n", actualDamage);
 	}
 
@@ -426,6 +426,17 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 		else
 		{
 			vis = 0;
+		}
+	}
+
+	// note that the advanced armour system current unused for features
+	for (i = 0; i < NUM_HIT_SIDES; i++)
+	{
+		int j;
+
+		for (j = 0; j < NUM_WEAPON_CLASS; j++)
+		{
+			psFeature->armour[i][j] = psFeature->psStats->armourValue;
 		}
 	}
 

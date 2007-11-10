@@ -102,8 +102,8 @@ static void	proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj,
 									FIRE_BOX *pFireBox );
 static void	proj_Free(PROJECTILE *psObj);
 
-static SDWORD objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, DROID_HIT_SIDE impactSide);
-static DROID_HIT_SIDE getHitSide (PROJECTILE *psObj, DROID *psTarget);
+static SDWORD objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, HIT_SIDE impactSide);
+static HIT_SIDE getHitSide (PROJECTILE *psObj, BASE_OBJECT *psTarget);
 
 /***************************************************************************/
 BOOL gfxVisible(PROJECTILE *psObj)
@@ -1197,7 +1197,7 @@ proj_ImpactFunc( PROJECTILE *psObj )
 	// EvilGuru: Data about the effect to be shown
 	EFFECT_TYPE     facing;
 	iIMDShape       *imd;
-	DROID_HIT_SIDE  impactSide = HIT_SIDE_FRONT;
+	HIT_SIDE	impactSide = HIT_SIDE_FRONT;
 
 	CHECK_PROJECTILE(psObj);
 
@@ -1376,7 +1376,7 @@ proj_ImpactFunc( PROJECTILE *psObj )
 			if (psObj->psDest->type == OBJ_DROID)
 			{
 				// For indirect weapons (e.g. artillery) just assume the side as HIT_SIDE_TOP
-				impactSide = proj_Direct(psStats) ? getHitSide(psObj, (DROID*)psObj->psDest) : HIT_SIDE_TOP;
+				impactSide = proj_Direct(psStats) ? getHitSide(psObj, psObj->psDest) : HIT_SIDE_TOP;
 			}
 
 			// Damage the object
@@ -1469,7 +1469,7 @@ proj_ImpactFunc( PROJECTILE *psObj )
 
 								//Watermelon:uses a slightly different check for angle,
 								// since fragment of a project is from the explosion spot not from the projectile start position
-								impactSide = getHitSide(psObj, psCurrD);
+								impactSide = getHitSide(psObj, (BASE_OBJECT *)psCurrD);
 
 								percentDamage = droidDamage(psCurrD, damage, psStats->weaponClass, psStats->weaponSubClass, impactSide);
 
@@ -1531,7 +1531,7 @@ proj_ImpactFunc( PROJECTILE *psObj )
 
 								//Watermelon:uses a slightly different check for angle,
 								// since fragment of a project is from the explosion spot not from the projectile start position
-								impactSide = getHitSide(psObj, psCurrD);
+								impactSide = getHitSide(psObj, (BASE_OBJECT *)psCurrD);
 
 								percentDamage = droidDamage(psCurrD, damage, psStats->weaponClass,psStats->weaponSubClass, impactSide);
 
@@ -1574,10 +1574,14 @@ proj_ImpactFunc( PROJECTILE *psObj )
 									}
 								}
 
+								//Watermelon:uses a slightly different check for angle,
+								// since fragment of a project is from the explosion spot not from the projectile start position
+								impactSide = getHitSide(psObj, (BASE_OBJECT *)psCurrS);
+
 								percentDamage = structureDamage(psCurrS,
 								                                damage,
 								                                psStats->weaponClass,
-								                                psStats->weaponSubClass);
+								                                psStats->weaponSubClass, impactSide);
 
 								proj_UpdateKills(psObj, percentDamage);
 							}
@@ -1599,7 +1603,7 @@ proj_ImpactFunc( PROJECTILE *psObj )
 						percentDamage = structureDamage(psCurrS,
 						                                damage,
 						                                psStats->weaponClass,
-						                                psStats->weaponSubClass);
+						                                psStats->weaponSubClass, impactSide);
 
 						proj_UpdateKills(psObj, percentDamage);
 					}
@@ -1635,11 +1639,16 @@ proj_ImpactFunc( PROJECTILE *psObj )
 						debug(LOG_NEVER, "Damage to object %d, player %d\n",
 								psCurrF->id, psCurrF->player);
 
+						// Watermelon:uses a slightly different check for angle,
+						// since fragment of a project is from the explosion spot not from the projectile start position
+						impactSide = getHitSide(psObj, (BASE_OBJECT *)psCurrF);
+
 						percentDamage = featureDamage(psCurrF,
 						                              calcDamage(weaponRadDamage(psStats, psObj->player),
 						                                         psStats->weaponEffect,
 						                                         (BASE_OBJECT *)psCurrF),
-						                              psStats->weaponSubClass);
+						                              psStats->weaponClass,
+						                              psStats->weaponSubClass, impactSide);
 
 						proj_UpdateKills(psObj, percentDamage);
 					}
@@ -2067,7 +2076,7 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
  *  - Should sufficient damage be done to destroy/kill a unit then the value is
  *    multiplied by -1, resulting in a negative number.
  */
-SDWORD objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, DROID_HIT_SIDE impactSide)
+SDWORD objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, HIT_SIDE impactSide)
 {
 	switch (psObj->type)
 	{
@@ -2076,11 +2085,11 @@ SDWORD objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD
 			break;
 
 		case OBJ_STRUCTURE:
-			return structureDamage((STRUCTURE *)psObj, damage, weaponClass, weaponSubClass);
+			return structureDamage((STRUCTURE *)psObj, damage, weaponClass, weaponSubClass, impactSide);
 			break;
 
 		case OBJ_FEATURE:
-			return featureDamage((FEATURE *)psObj, damage, weaponSubClass);
+			return featureDamage((FEATURE *)psObj, damage, weaponClass, weaponSubClass, impactSide);
 			break;
 
 		case OBJ_PROJECTILE:
@@ -2104,7 +2113,7 @@ SDWORD objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD
  * only the `direct' target of the projectile. Since impact sides also apply for
  * any splash damage a projectile might do the exact target is needed.
  */
-static DROID_HIT_SIDE getHitSide (PROJECTILE *psObj, DROID *psTarget)
+static HIT_SIDE getHitSide(PROJECTILE *psObj, BASE_OBJECT *psTarget)
 {
 	int deltaX, deltaY;
 	int impactAngle;

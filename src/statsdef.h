@@ -192,7 +192,7 @@ typedef enum _weapon_effect
 
 
 //Sides used for droid impact
-typedef enum _droid_hit_sides
+typedef enum _hit_sides
 {
 	HIT_SIDE_FRONT,
 	HIT_SIDE_REAR,
@@ -201,7 +201,7 @@ typedef enum _droid_hit_sides
 	HIT_SIDE_TOP,
 	HIT_SIDE_BOTTOM,
 	NUM_HIT_SIDES		//should be last one
-}DROID_HIT_SIDE;
+} HIT_SIDE;
 
 //Special angles representing top or bottom hit
 #define HIT_ANGLE_TOP 361

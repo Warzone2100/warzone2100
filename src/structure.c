@@ -1309,7 +1309,7 @@ BOOL structureStatsShutDown(void)
  * \return TRUE when the dealt damage destroys the structure, FALSE when the structure survives
  */
 SDWORD structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
-					UDWORD weaponSubClass)
+                       UDWORD weaponSubClass, HIT_SIDE impactSide)
 {
 	// Do at least one point of damage
 	unsigned int actualDamage = 1;
@@ -1319,7 +1319,7 @@ SDWORD structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass
 	CHECK_STRUCTURE(psStructure);
 
 	debug( LOG_ATTACK, "structureDamage(%d): body %d armour %d damage: %d\n",
-		psStructure->id, psStructure->body, psStructure->armour, damage);
+	      psStructure->id, psStructure->body, psStructure->armour[impactSide][weaponClass], damage);
 
 	// EMP cannons do not work on Structures
 	if (weaponSubClass == WSC_EMP)
@@ -1345,10 +1345,10 @@ SDWORD structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass
 	// Tell the cluster system it has been attacked
 	clustObjectAttacked((BASE_OBJECT *)psStructure);
 
-	if (damage > psStructure->armour)
+	if (damage > psStructure->armour[impactSide][weaponClass])
 	{
 		// Damage has penetrated the armour
-		actualDamage = damage - psStructure->armour;
+		actualDamage = damage - psStructure->armour[impactSide][weaponClass];
 		debug( LOG_ATTACK, "        penetrated: %d\n", actualDamage);
 	}
 
@@ -1362,8 +1362,6 @@ SDWORD structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass
 
 	// Substract the dealt damage from the structure's remaining body points
 	psStructure->body -= actualDamage;
-
-	debug( LOG_ATTACK, "        body left: %d armour left: %d\n", psStructure->body, psStructure->armour);
 
 	return (SDWORD) ((float) actualDamage / originalBody * 100);
 }
@@ -1949,7 +1947,16 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			}
 		}
 
-		psBuilding->armour = (UWORD)structureArmour(pStructureType, (UBYTE)player);
+		// Structures currently do not have varied armour
+		for (i = 0; i < NUM_HIT_SIDES; i++)
+		{
+			int j;
+
+			for (j = 0; j < NUM_WEAPON_CLASS; j++)
+			{
+				psBuilding->armour[i][j] = (UWORD)structureArmour(pStructureType, (UBYTE)player);
+			}
+		}
 		psBuilding->resistance = (UWORD)structureResistance(pStructureType, (UBYTE)player);
 		psBuilding->lastResistance = ACTION_START_TIME;
 
@@ -6112,9 +6119,10 @@ void printStructureInfo(STRUCTURE *psStructure)
 #ifdef DEBUG
 		else if (getDebugMappingStatus())
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s - %d Units assigned - ID %d - sensor range %hu power %hu - ECM %u",
+			CONPRINTF(ConsoleString, (ConsoleString, "%s - %d Units assigned - ID %d - armour %d|%d - sensor range %hu power %hu - ECM %u",
 				getStatName(psStructure->pStructureType), countAssignedDroids(psStructure),
-				psStructure->id, psStructure->sensorRange, psStructure->sensorPower, psStructure->ecmPower));
+				psStructure->id, psStructure->armour[0][WC_KINETIC], psStructure->armour[0][WC_HEAT],
+			        psStructure->sensorRange, psStructure->sensorPower, psStructure->ecmPower));
 		}
 #endif
 		else

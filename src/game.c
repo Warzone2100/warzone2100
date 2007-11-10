@@ -8254,7 +8254,7 @@ BOOL writeStructFile(char *pFileName)
 			// no need to check power at max because it would be being built
 			psSaveStruct->currentPowerAccrued = psCurr->currentPowerAccrued;
 
-			psSaveStruct->armour = psCurr->armour;
+			psSaveStruct->armour = psCurr->armour[0][0]; // advanced armour not supported yet
 			psSaveStruct->resistance = psCurr->resistance;
 			psSaveStruct->subjectInc = UDWORD_MAX;
 			psSaveStruct->timeStarted = 0;

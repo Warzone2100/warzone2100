@@ -163,9 +163,6 @@ typedef struct _droid
 	UDWORD		ECMMod;
 	UDWORD		originalBody;		//the original body points
 	UDWORD		body;				// the current body points
-	//Watermleon:armour of all sides
-	UDWORD		armour[NUM_HIT_SIDES][NUM_WEAPON_CLASS];
-//tjc	UDWORD		imdNum;
 	UWORD		numKills;
 	UWORD		turretRotation[DROID_MAXWEAPS];		// Watermelon:turretRotation info for multiple turrents :)
 	UWORD		turretPitch[DROID_MAXWEAPS];	//* Watermelon:turrentPitch info for multiple turrents :)

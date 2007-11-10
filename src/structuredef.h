@@ -291,19 +291,9 @@ typedef struct _structure
 											   structure */
     SWORD       currentPowerAccrued;        /* the power accrued for building this structure*/
 	UWORD		body;						/* current body points */
-	//UDWORD		body;						/* current body points */
-	//UDWORD		baseBodyPoints;				/* undamaged body points */
-	UWORD		armour;						/* current armour points */
-	//UDWORD		armour;						/* current armour points */
-	//SDWORD		resistance;					/* current resistance points
 	SWORD		resistance;					/* current resistance points
 											   0 = cannot be attacked electrically*/
 	UDWORD		lastResistance;				/* time the resistance was last increased*/
-	//UDWORD		repair;						/* current repair points */
-
-// repair doesn't seem to be used anywhere ... I'll take it out for the mo. and remove it from the new savegame stuff
-// talk to me if you are having problems with this
-//	UWORD		repair;						/* current repair points */
 
 	/* The other structure data.  These are all derived from the functions
 	 * but stored here for easy access - will need to add more for variable stuff!

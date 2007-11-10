@@ -2061,7 +2061,6 @@ static inline void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE s
 	if(psStructure->player != selectedPlayer)
 	{
 		/* We've clicked on somebody else's building */
-//		addConsoleMessage("Clicked on another player's building",DEFAULT_JUSTIFY);
 		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT*)psStructure, ctrlShiftDown());
 		//lasSat structure can select a target - in multiPlayer only
 		if (bMultiPlayer && bLasSatStruct)

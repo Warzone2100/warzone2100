@@ -33,6 +33,7 @@
 
 #include "deliverance.h"
 #include "displaydef.h"
+#include "statsdef.h"
 
 //the died flag for a droid is set to this when it gets added to the non-current list
 #define     NOT_CURRENT_LIST        1
@@ -76,8 +77,9 @@ typedef enum _object_type
 	/* Data for fire damage */ \
 	BOOL				inFire;		/* TRUE if the object is in a fire */ \
 	UDWORD				burnStart;	/* When the object entered the fire */ \
-	UDWORD				burnDamage /* How much damage has been done since the object */ \
-									/* entered the fire */
+	UDWORD				burnDamage; /* How much damage has been done since the object */ \
+									/* entered the fire */ \
+	UDWORD				armour[NUM_HIT_SIDES][NUM_WEAPON_CLASS]
 
 #define NEXTOBJ(pointerType) \
 	pointerType			*psNext	/* Pointer to next object in list */
