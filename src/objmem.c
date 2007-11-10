@@ -503,12 +503,6 @@ void killStruct(STRUCTURE *psBuilding)
 		{
 			FACTORY *psFactory = (FACTORY *)psBuilding->pFunctionality;
 
-			// free up factory stuff
-			if (psFactory->psFormation)
-			{
-				formationReset(psFactory->psFormation);
-			}
-
 			// remove any assembly points
 			if (psFactory->psAssemblyPoint != NULL)
 			{

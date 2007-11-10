@@ -2303,8 +2303,6 @@ BOOL setFunctionality(STRUCTURE	*psBuilding, UDWORD functionType)
 					ASSERT(!"invalid factory type", "setFunctionality: Invalid factory type");
 			}
 
-			psFactory->psFormation = NULL;
-
 			// Take advantage of upgrades
 			structureProductionUpgrade(psBuilding);
 			break;
