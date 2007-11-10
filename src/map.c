@@ -44,6 +44,7 @@
 #include "environ.h"
 #include "advvis.h"
 #include "research.h"
+#include "mission.h"
 
 #include "gateway.h"
 #include "wrappers.h"
@@ -499,13 +500,165 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 	return TRUE;
 }
 
+// Object macro group
+static void objectSaveTagged(BASE_OBJECT *psObj)
+{
+	uint16_t v[MAX_PLAYERS], i;
+
+	// not written: sDisplay
+
+	tagWriteEnter(0x01, 1);
+	tagWrite(0x01, psObj->type);
+	tagWrite(0x02, psObj->id);
+	v[0] = psObj->x;
+	v[1] = psObj->y;
+	v[2] = psObj->z;
+	tagWrite16v(0x03, 3, v);
+	tagWritef(0x04, psObj->direction);
+	tagWrites(0x05, psObj->pitch);
+	tagWrites(0x06, psObj->roll);
+	tagWrite(0x07, psObj->player);
+	tagWrite(0x08, psObj->group);
+	tagWrite(0x09, psObj->selected);
+	tagWrite(0x0a, psObj->cluster);
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		v[i] = psObj->visible[i];
+	}
+	tagWrite16v(0x0b, MAX_PLAYERS, v);
+	tagWrite(0x0c, psObj->died);
+	tagWrite(0x0d, psObj->lastEmission);
+	tagWriteBool(0x0e, psObj->inFire);
+	tagWrite(0x0f, psObj->burnStart);
+	tagWrite(0x10, psObj->burnDamage);
+	tagWriteLeave(0x01);
+}
+
+static void objectSensorTagged(int sensorRange, int sensorPower, int ecmRange, int ecmPower)
+{
+	tagWriteEnter(0x02, 1);
+	tagWrite(0x01, sensorRange);
+	tagWrite(0x02, sensorPower);
+	tagWrite(0x03, ecmRange);
+	tagWrite(0x04, ecmPower);
+	tagWriteLeave(0x02);
+}
+
+static void objectStatTagged(BASE_OBJECT *psObj, int body, int resistance)
+{
+	int i;
+
+	tagWriteEnter(0x03, 1);
+	tagWrite(0x01, body);
+	tagWrite(0x02, NUM_WEAPON_CLASS);
+	tagWriteEnter(0x03, NUM_HIT_SIDES);
+	for (i = 0; i < NUM_HIT_SIDES; i++)
+	{
+		tagWrite(0x01, psObj->armour[i][WC_KINETIC]);
+		tagWrite(0x02, psObj->armour[i][WC_HEAT]);
+		tagWriteSeparator();
+	}
+	tagWriteLeave(0x03);
+	tagWrite(0x04, resistance);
+	tagWriteLeave(0x03);
+}
+
+static void objectWeaponTagged(int num, UWORD *rotation, UWORD *pitch, WEAPON *asWeaps)
+{
+	int i;
+
+	tagWriteEnter(0x04, num);
+	for (i = 0; i < num; i++)
+	{
+		tagWrite(0x01, asWeaps[i].nStat);
+		tagWrite(0x02, rotation[i]);
+		tagWrite(0x03, pitch[i]);
+		tagWrite(0x04, asWeaps[i].hitPoints);
+		tagWrite(0x04, asWeaps[i].ammo);
+		tagWrite(0x04, asWeaps[i].lastFired);
+		tagWrite(0x04, asWeaps[i].recoilValue);
+		tagWriteSeparator();
+	}
+	tagWriteLeave(0x04);
+}
+
+static void droidSaveTagged(DROID *psDroid)
+{
+	int plr = psDroid->player;
+	uint16_t v[DROID_MAXCOMP], i;
+
+	/* common groups */
+
+	objectSaveTagged((BASE_OBJECT *)psDroid); /* 0x01 */
+	objectSensorTagged(psDroid->sensorRange, psDroid->sensorPower, 0, psDroid->ECMMod); /* 0x02 */
+	objectStatTagged((BASE_OBJECT *)psDroid, psDroid->originalBody, psDroid->resistance); /* 0x03 */
+	objectWeaponTagged(psDroid->numWeaps, psDroid->turretRotation, psDroid->turretPitch, psDroid->asWeaps);
+
+	/* DROID GROUP */
+
+	tagWriteEnter(0x0a, 1);
+	tagWrite(0x01, psDroid->droidType);
+	for (i = 0; i < DROID_MAXCOMP; i++)
+	{
+		v[i] = psDroid->asBits[i].nStat;
+	}
+	tagWrite16v(0x02, DROID_MAXCOMP, v);
+	// transporter droid in the mission list
+	if (psDroid->droidType == DROID_TRANSPORTER && apsDroidLists[plr] == mission.apsDroidLists[plr])
+	{
+		tagWriteBool(0x03, true);
+	}
+	tagWrite(0x07, psDroid->weight);
+	tagWrite(0x08, psDroid->baseSpeed);
+	tagWriteString(0x09, psDroid->aName);
+	tagWrite(0x0a, psDroid->body);
+	tagWrite(0x0b, psDroid->numKills);
+	tagWrite(0x0c, psDroid->NameVersion);
+	tagWrite(0x0d, psDroid->currRayAng);
+	tagWriteLeave(0x0a);
+}
+
+static void structureSaveTagged(STRUCTURE *psStruct)
+{
+	/* common groups */
+
+	objectSaveTagged((BASE_OBJECT *)psStruct); /* 0x01 */
+	objectSensorTagged(psStruct->sensorRange, psStruct->sensorPower, 0, psStruct->ecmPower); /* 0x02 */
+	objectStatTagged((BASE_OBJECT *)psStruct, psStruct->pStructureType->bodyPoints, psStruct->resistance); /* 0x03 */
+	objectWeaponTagged(psStruct->numWeaps, psStruct->turretRotation, psStruct->turretPitch, psStruct->asWeaps);
+
+	/* STRUCTURE GROUP */
+
+	tagWriteEnter(0x0b, 1);
+	tagWrites(0x01, psStruct->currentBuildPts);
+	tagWrites(0x02, psStruct->currentPowerAccrued);
+	tagWriteLeave(0x0b);
+}
+
+static void featureSaveTagged(FEATURE *psFeat)
+{
+	/* common groups */
+
+	objectSaveTagged((BASE_OBJECT *)psFeat); /* 0x01 */
+	objectStatTagged((BASE_OBJECT *)psFeat, psFeat->psStats->body, 0); /* 0x03 */
+
+	/* FEATURE GROUP */
+
+	tagWriteEnter(0x0c, 1);
+	tagWrite(0x01, psFeat->startTime);
+	tagWriteLeave(0x0c);
+}
+
 BOOL mapSaveTagged(char *pFileName)
 {
 	MAPTILE *psTile;
 	GATEWAY *psCurrGate;
-	int numGateways = 0, i = 0, x = 0, y = 0, plr;
+	int numGateways = 0, i = 0, x = 0, y = 0, plr, droids, structures, features;
 	float cam[3];
 	const char *definition = "testdata/tagfile_map.def";
+	DROID *psDroid;
+	FEATURE *psFeat;
+	STRUCTURE *psStruct;
 
 	// find the number of non water gateways
 	for (psCurrGate = gwGetGateways(); psCurrGate; psCurrGate = psCurrGate->psNext)
@@ -608,7 +761,6 @@ BOOL mapSaveTagged(char *pFileName)
 		RESEARCH *psResearch = asResearch;
 		STRUCTURE_STATS *psStructStats = asStructureStats;
 		FLAG_POSITION *psFlag;
-		STRUCTURE *psStruct;
 		FLAG_POSITION *flagList[NUM_FLAG_TYPES * MAX_FACTORY];
 
 		tagWriteEnter(0x01, numResearch); // research group
@@ -718,6 +870,37 @@ BOOL mapSaveTagged(char *pFileName)
 		tagWriteSeparator();
 	}
 	tagWriteLeave(0x0e);
+
+	objCount(&droids, &structures, &features);
+	tagWriteEnter(0x0f, droids + structures + features); // object group
+	for (plr = 0; plr < MAX_PLAYERS; plr++)
+	{
+		for (psDroid = apsDroidLists[plr]; psDroid != NULL; psDroid = psDroid->psNext)
+		{
+			droidSaveTagged(psDroid);
+			tagWriteSeparator();
+			if (psDroid->droidType == DROID_TRANSPORTER)
+			{
+				DROID *psTrans = psDroid->psGroup->psList;
+				for(psTrans = psTrans->psGrpNext; psTrans != NULL; psTrans = psTrans->psGrpNext)
+				{
+					droidSaveTagged(psTrans);
+					tagWriteSeparator();
+				}
+			}
+		}
+		for (psStruct = apsStructLists[plr]; psStruct; psStruct = psStruct->psNext)
+		{
+			structureSaveTagged(psStruct);
+			tagWriteSeparator();
+		}
+	}
+	for (psFeat = apsFeatureLists[0]; psFeat; psFeat = psFeat->psNext)
+	{
+		featureSaveTagged(psFeat);
+		tagWriteSeparator();
+	}
+	tagWriteLeave(0x0f);
 
 	tagClose();
 	return TRUE;
