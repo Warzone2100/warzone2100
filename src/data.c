@@ -909,7 +909,7 @@ BOOL bufferTexPageLoad(char *pBuffer, UDWORD size, void **ppData)
 		// replace the old texture page with the new one
 		debug(LOG_TEXTURE, "bufferTexPageLoad: replacing old");
 		id = pie_ReloadTexPage(texfile, pBuffer);
-		ASSERT( id >=0, "pie_ReloadTexPage failed" );
+		ASSERT( id >=0, "pie_ReloadTexPage(%s) failed", texfile );
 		*ppData = NULL;
 	}
 	else
