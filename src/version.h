@@ -91,13 +91,13 @@ extern const char* version_getSvnTime(void);
  *  It is formatted as follows:
  *  "Version <version string> <working copy state> - Built <DATE><BUILD TYPE>"
  *
- *  "<version string>" is the return value from version_getVersionString()
- *  "<working copy state>" represents the modification and switch state
- *                         of the working copy from which this build was made.
- *  "<DATE>" the date of building as returned by version_getBuildDate() or
- *           version_getSvnDate(); the latter is only used when the working
- *           copy has no local modifications.
- *  "<BUILD TYPE>" the type of build produced (i.e. DEBUG or not)
+ *  - "<version string>" is the return value from version_getVersionString()
+ *  - "<working copy state>" represents the modification and switch state
+ *                           of the working copy from which this build was made.
+ *  - "<DATE>" the date of building as returned by version_getBuildDate() or
+ *             version_getSvnDate(); the latter is only used when the working
+ *             copy has no local modifications.
+ *  - "<BUILD TYPE>" the type of build produced (i.e. DEBUG or not)
  */
 extern const char* version_getFormattedVersionString(void);
 
