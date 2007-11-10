@@ -44,7 +44,6 @@
    The operating system, must be one of: (WZ_OS_x)
 
      DARWIN   - Darwin OS (synonym for WZ_OS_MAC)
-     MSDOS    - MS-DOS and Windows
      OS2      - OS/2
      OS2EMX   - XFree86 on OS/2 (not PM)
      WIN32    - Win32 (Windows 95/98/ME and Windows NT/2000/XP)
@@ -83,8 +82,6 @@
 #  endif
 #elif defined(__CYGWIN__)
 #  define WZ_OS_CYGWIN
-#elif defined(MSDOS) || defined(_MSDOS)
-#  define WZ_OS_MSDOS
 #elif defined(__OS2__)
 #  if defined(__EMX__)
 #    define WZ_OS_OS2EMX
@@ -178,6 +175,7 @@
      MSVC     - Microsoft Visual C/C++, Intel C++ for Windows
      GNU      - GNU C++
      INTEL    - Intel C++ for Linux, Intel C++ for Windows
+     TINYCC   - Fabrice Bellard's Tiny C Compiler
 
    Should be sorted most to least authoritative.
 */
@@ -210,9 +208,54 @@
 #    define WZ_CC_INTEL
 #  endif
 
+#elif defined(__TINYCC__)
+#  define WZ_CC_TINYCC
+
 #else
 #  error "Warzone has not been tested on this compiler. Please contact warzone-dev@gna.org"
 #endif /* WZ_CC_x */
+
+
+/*
+   The window system, must be one of: (WZ_WS_x)
+
+     MACX     - Mac OS X
+     WIN32    - Windows
+     X11      - X Window System
+     QNX      - QNX
+*/
+
+#if defined(_WIN32_X11_)
+#  define WZ_WS_X11
+
+#elif defined(WZ_OS_WIN32)
+#  define WZ_WS_WIN32
+#  if defined(WZ_OS_WIN64)
+#    define WZ_WS_WIN64
+#  endif
+
+#elif defined(WZ_OS_MAC)
+#  define WZ_WS_MAC
+#  define WZ_WS_MACX
+#  if defined(WZ_OS_MAC64)
+#    define WZ_WS_MAC64
+#  elif defined(WZ_OS_MAC32)
+#    define WZ_WS_MAC32
+#  endif
+
+#elif defined(WZ_OS_QNX)
+#  define WZ_WS_QNX
+
+#elif defined(WZ_OS_UNIX)
+#  define WZ_WS_X11
+
+#else
+#  error "Warzone has not been tested on this window system. Please contact warzone-dev@gna.org"
+#endif /* WZ_WS_x */
+
+#if defined(WZ_WS_WIN16) || defined(WZ_WS_WIN32)
+#  define WZ_WS_WIN
+#endif
 
 
 /*
