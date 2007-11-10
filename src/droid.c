@@ -1287,7 +1287,7 @@ BOOL droidStartBuild(DROID *psDroid)
 		 psDroid->order == DORDER_LINEBUILD))
 	{
 		//need to check structLimits have not been exceeded
-		psStructStat = (STRUCTURE_STATS *)psDroid->psTarStats[0];
+		psStructStat = (STRUCTURE_STATS *)psDroid->psTarStats;
 		if (asStructLimits[psDroid->player][psStructStat - asStructureStats].
 			currentQuantity >= asStructLimits[psDroid->player][psStructStat -
 			asStructureStats].limit)
@@ -1750,7 +1750,7 @@ BOOL droidUpdateDemolishing( DROID *psDroid )
 		removeStruct( psStruct, TRUE );
 
 		/* reset target stats*/
-	    psDroid->psTarStats[0] = NULL;
+	    psDroid->psTarStats = NULL;
 
 		return FALSE;
 	}
@@ -1825,7 +1825,7 @@ BOOL droidUpdateClearing( DROID *psDroid )
 		removeFeature(psFeature);
 
 		/* reset target stats */
-		psDroid->psTarStats[0] = NULL;
+		psDroid->psTarStats = NULL;
 
 		CHECK_DROID(psDroid);
 
@@ -3301,10 +3301,10 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	psDroid->action = DACTION_NONE;
 	psDroid->actionX = 0;
 	psDroid->actionY = 0;
+	psDroid->psTarStats = NULL;
 
 	for(i = 0;i < DROID_MAXWEAPS;i++)
 	{
-		psDroid->psTarStats[i] = NULL;
 		psDroid->psTarget[i] = NULL;
 		psDroid->psActionTarget[i] = NULL;
 		psDroid->asWeaps[i].lastFired = 0;

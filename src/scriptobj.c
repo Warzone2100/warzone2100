@@ -274,7 +274,7 @@ BOOL scrBaseObjGet(UDWORD index)
 		else if (psObj->type == OBJ_DROID)
 		{
 			type = (INTERP_TYPE)ST_STRUCTURESTAT;
-			scrFunctionResult.v.ival = (SDWORD)((STRUCTURE_STATS *)(((DROID *)psObj)->psTarStats[0]) - asStructureStats);
+			scrFunctionResult.v.ival = (SDWORD)((STRUCTURE_STATS *)(((DROID *)psObj)->psTarStats) - asStructureStats);
 		}
 		else		//Nothing else supported
 		{

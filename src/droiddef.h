@@ -196,7 +196,7 @@ typedef struct _droid
 	BOOL				bTargetted;
 
 	BASE_OBJECT			*psTarget[DROID_MAXWEAPS];	// Who to shoot at etc
-	BASE_STATS			*psTarStats[DROID_MAXWEAPS];	// What to build etc; only first value ever used
+	BASE_STATS			*psTarStats;	// What to build etc
 #ifdef DEBUG
 	// these are to help tracking down dangling pointers
 	char				targetFunc[DROID_MAXWEAPS][MAX_EVENT_NAME_LEN];

@@ -327,7 +327,7 @@ void orderUpdateDroid(DROID *psDroid)
 		// if you are in a command group, default to guarding the commander
 		else if (psDroid->droidType != DROID_COMMAND && psDroid->psGroup != NULL &&
 				 psDroid->psGroup->type == GT_COMMAND &&
-				 (psDroid->psTarStats[0] != (BASE_STATS *) structGetDemolishStat()))  // stop the constructor auto repairing when it is about to demolish
+				 (psDroid->psTarStats != (BASE_STATS *) structGetDemolishStat()))  // stop the constructor auto repairing when it is about to demolish
 		{
 			oaInfo.objects[0] = (BASE_OBJECT *)psDroid->psGroup->psCommander;
 			orderDroidObj(psDroid, DORDER_GUARD, &oaInfo);
@@ -349,7 +349,7 @@ void orderUpdateDroid(DROID *psDroid)
 		// default to guarding if the correct secondary order is set
 		// only do this for the human player in single player mode
 		else if ((psDroid->player == selectedPlayer) &&
-			(psDroid->psTarStats[0] != (BASE_STATS *) structGetDemolishStat()) && // stop the constructor auto repairing when it is about to demolish
+			(psDroid->psTarStats != (BASE_STATS *) structGetDemolishStat()) && // stop the constructor auto repairing when it is about to demolish
 			secondaryGetState(psDroid, DSO_HALTTYPE, &state) &&
 			!vtolDroid(psDroid) &&
 			state == DSS_HALT_GUARD)
@@ -378,7 +378,7 @@ void orderUpdateDroid(DROID *psDroid)
         else if ((psDroid->droidType == DROID_CONSTRUCT ||
             psDroid->droidType == DROID_CYBORG_CONSTRUCT) &&
 				 !orderState(psDroid, DORDER_GUARD) &&
-				 (psDroid->psTarStats[0] != (BASE_STATS *) structGetDemolishStat()))
+				 (psDroid->psTarStats != (BASE_STATS *) structGetDemolishStat()))
 		{
 			psObj = checkForDamagedStruct(psDroid,NULL);
 			if (psObj && (!bMultiPlayer || myResponsibility(psDroid->player)))
@@ -397,7 +397,7 @@ void orderUpdateDroid(DROID *psDroid)
 			/* clear order */
 			psDroid->order = DORDER_NONE;
 			clearDroidTargets(psDroid);
-			psDroid->psTarStats[0] = NULL;
+			psDroid->psTarStats = NULL;
 		}
 		break;
 	case DORDER_TRANSPORTOUT:
@@ -429,7 +429,7 @@ void orderUpdateDroid(DROID *psDroid)
 			    /* clear order */
 			    psDroid->order = DORDER_NONE;
 				clearDroidTargets(psDroid);
-			    psDroid->psTarStats[0] = NULL;
+			    psDroid->psTarStats = NULL;
             }
 		}
 		break;
@@ -440,7 +440,7 @@ void orderUpdateDroid(DROID *psDroid)
 			/* clear order */
 			psDroid->order = DORDER_NONE;
 			clearDroidTargets(psDroid);
-			psDroid->psTarStats[0] = NULL;
+			psDroid->psTarStats = NULL;
 
 //FFS! You only wan't to do this if the droid being tracked IS the transporter! Not all the time!
 // What about if your happily playing the game and tracking a droid, and re-enforcements come in!
@@ -480,7 +480,7 @@ void orderUpdateDroid(DROID *psDroid)
 		{
 			psDroid->order = DORDER_NONE;
 			clearDroidTargets(psDroid);
-			psDroid->psTarStats[0] = NULL;
+			psDroid->psTarStats = NULL;
 		}
 		break;
 	case DORDER_RECOVER:
@@ -910,7 +910,7 @@ void orderUpdateDroid(DROID *psDroid)
                     //order the droid to stop so moveUpdateDroid does not process this unit
                     orderDroid(psDroid, DORDER_STOP);
 			clearDroidTargets(psDroid);
-	    		    psDroid->psTarStats[0] = NULL;
+	    		    psDroid->psTarStats = NULL;
 		    	    secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
                 }
 		    }
@@ -1034,7 +1034,7 @@ void orderUpdateDroid(DROID *psDroid)
 				// finished all the structures - done
 				psDroid->order = DORDER_NONE;
 				setDroidTarget(psDroid, NULL, 0);
-				psDroid->psTarStats[0] = NULL;
+				psDroid->psTarStats = NULL;
 				break;
 			}
 
@@ -1664,7 +1664,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		actionDroid(psDroid, DACTION_NONE);
 		psDroid->order = DORDER_NONE;
 		clearDroidTargets(psDroid);
-		psDroid->psTarStats[0] = NULL;
+		psDroid->psTarStats = NULL;
 		psDroid->orderX = 0;
 		psDroid->orderY = 0;
 		psDroid->orderX2 = 0;
@@ -1913,7 +1913,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			psDroid->orderX = psOrder->x;
 			psDroid->orderY = psOrder->y;
 			setDroidTarget(psDroid, NULL, 0);
-			psDroid->psTarStats[0] = psOrder->psStats;
+			psDroid->psTarStats = psOrder->psStats;
 
 			actionDroidLoc(psDroid, DACTION_BUILD, psOrder->x,psOrder->y);
 
@@ -1937,8 +1937,8 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			psDroid->orderX = psOrder->psObj[0]->x;
 			psDroid->orderY = psOrder->psObj[0]->y;
 			setDroidTarget(psDroid, NULL, 0);
-			psDroid->psTarStats[0] = (BASE_STATS *)getModuleStat((STRUCTURE *)psOrder->psObj[0]);
-			ASSERT( psDroid->psTarStats[0] != NULL,
+			psDroid->psTarStats = (BASE_STATS *)getModuleStat((STRUCTURE *)psOrder->psObj[0]);
+			ASSERT( psDroid->psTarStats != NULL,
 				"orderUnitBase: should have found a module stats" );
 			actionDroidLoc(psDroid, DACTION_BUILD, psOrder->psObj[0]->x,psOrder->psObj[0]->y);
 		}
@@ -1960,7 +1960,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		psDroid->orderX2 = psOrder->x2;
 		psDroid->orderY2 = psOrder->y2;
 		setDroidTarget(psDroid, NULL, 0);
-		psDroid->psTarStats[0] = psOrder->psStats;
+		psDroid->psTarStats = psOrder->psStats;
 		actionDroidLoc(psDroid, DACTION_BUILD, psOrder->x,psOrder->y);
 		break;
 	case DORDER_HELPBUILD:
@@ -1974,7 +1974,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		psDroid->orderX = psOrder->psObj[0]->x;
 		psDroid->orderY = psOrder->psObj[0]->y;
 		setDroidTarget(psDroid, psOrder->psObj[0], 0);
-		psDroid->psTarStats[0]= (BASE_STATS *)((STRUCTURE *)psOrder->psObj[0])->pStructureType;
+		psDroid->psTarStats= (BASE_STATS *)((STRUCTURE *)psOrder->psObj[0])->pStructureType;
 		actionDroidLoc(psDroid, DACTION_BUILD, psDroid->orderX,psDroid->orderY);
 		break;
 	case DORDER_DEMOLISH:
@@ -2768,7 +2768,7 @@ BOOL orderStateStatsLoc(DROID *psDroid, DROID_ORDER order,
 			psDroid->action == DACTION_BUILD_FOUNDATION ||
 			psDroid->action == DACTION_FOUNDATION_WANDER)
 		{
-			*ppsStats = psDroid->psTarStats[0];
+			*ppsStats = psDroid->psTarStats;
 			*pX = psDroid->orderX;
 			*pY = psDroid->orderY;
 			return TRUE;
@@ -3321,7 +3321,7 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj)
 					checkDroidsBuilding(psStruct))
 				{
 					order = DORDER_NONE;
-					psDroid->psTarStats[0] = NULL;
+					psDroid->psTarStats = NULL;
 				}
 				else
 				{
@@ -3334,7 +3334,7 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj)
 				//if something else is demolishing, then help demolish
 				if (checkDroidsDemolishing(psStruct))
 				{
-					psDroid->psTarStats[0] = (BASE_STATS *) structGetDemolishStat();
+					psDroid->psTarStats = (BASE_STATS *) structGetDemolishStat();
 					order = DORDER_DEMOLISH;
 				}
 				//else help build

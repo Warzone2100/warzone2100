@@ -231,7 +231,7 @@ BOOL recvDroidEmbark(NETMSG *pMsg)
 		// Init the order for when disembark
 		psDroid->order = DORDER_NONE;
 		clearDroidTargets(psDroid);
-		psDroid->psTarStats[0] = NULL;
+		psDroid->psTarStats = NULL;
 	}
 
 	return TRUE;
@@ -939,9 +939,9 @@ BOOL sendWholeDroid(DROID *pD, UDWORD dest)
 		NetAdd(m,sizecount,noTarget);				sizecount+=sizeof(noTarget);
 	}
 
-	if (pD->psTarStats[0])
+	if (pD->psTarStats)
 	{
-		NetAdd(m,sizecount,pD->psTarStats[0]->ref);	sizecount+=sizeof(pD->psTarStats[0]->ref);
+		NetAdd(m,sizecount,pD->psTarStats->ref);	sizecount+=sizeof(pD->psTarStats->ref);
 	}
 	else
 	{
@@ -1032,7 +1032,7 @@ BOOL receiveWholeDroid(NETMSG *m)
 		NetGet(m, sizecount, id);			sizecount += sizeof(id);
 		pD->psTarget[i] = IdToPointer(id, ANYPLAYER);
 	}
-	pD->psTarStats[0] = NULL;
+	pD->psTarStats = NULL;
 
 	addDroid(pD, apsDroidLists);
 

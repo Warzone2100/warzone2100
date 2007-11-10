@@ -6011,7 +6011,7 @@ static BASE_STATS *getConstructionStats(BASE_OBJECT *psObj)
 		return Stats;
 	} else if( orderStateObj(psDroid, DORDER_BUILD,(BASE_OBJECT**)&Structure) &&
 				 psDroid->order == DORDER_BUILD ) { // Is building
-		return psDroid->psTarStats[0];
+		return psDroid->psTarStats;
 	} else if( orderStateObj(psDroid, DORDER_HELPBUILD,(BASE_OBJECT**)&Structure) &&
 		 (psDroid->order == DORDER_HELPBUILD || psDroid->order == DORDER_LINEBUILD)) { //Is helping
 		return (BASE_STATS*)Structure->pStructureType;

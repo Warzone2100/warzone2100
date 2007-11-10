@@ -5596,19 +5596,19 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 		psSaveDroidV14 = (SAVE_DROID_V14*)psSaveDroid;
 		if (psSaveDroidV14->tarStatName[0] == 0)
 		{
-			psDroid->psTarStats[0] = NULL;
+			psDroid->psTarStats = NULL;
 		}
 		else
 	 	{
 			id = getStructStatFromName(psSaveDroidV14->tarStatName);
 			if (id != (UDWORD)-1)
 			{
-				psDroid->psTarStats[0] = (BASE_STATS*)&asStructureStats[id];
+				psDroid->psTarStats = (BASE_STATS*)&asStructureStats[id];
 			}
 			else
 			{
 				ASSERT( FALSE,"loadUnit TargetStat not found" );
-				psDroid->psTarStats[0] = NULL;
+				psDroid->psTarStats = NULL;
                 orderDroid(psDroid, DORDER_STOP);
 			}
 		}
@@ -5632,19 +5632,19 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 
 		if (psSaveDroid->tarStatName[0] == 0)
 		{
-			psDroid->psTarStats[0] = NULL;
+			psDroid->psTarStats = NULL;
 		}
 		else
 		{
 			id = getStructStatFromName(psSaveDroid->tarStatName);
 			if (id != (UDWORD)-1)
 			{
-				psDroid->psTarStats[0] = (BASE_STATS*)&asStructureStats[id];
+				psDroid->psTarStats = (BASE_STATS*)&asStructureStats[id];
 			}
 			else
 			{
 				ASSERT( FALSE,"loadUnit TargetStat not found" );
-				psDroid->psTarStats[0] = NULL;
+				psDroid->psTarStats = NULL;
 			}
 		}
 		//rebuild the object pointer from the ID
@@ -5848,19 +5848,19 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	//version 18
 	if (psSaveDroid->tarStatName[0] == 0)
 	{
-		psDroid->psTarStats[0] = NULL;
+		psDroid->psTarStats = NULL;
 	}
 	else
 	{
 		id = getStructStatFromName(psSaveDroid->tarStatName);
 		if (id != (UDWORD)-1)
 		{
-			psDroid->psTarStats[0] = (BASE_STATS*)&asStructureStats[id];
+			psDroid->psTarStats = (BASE_STATS*)&asStructureStats[id];
 		}
 		else
 		{
 			ASSERT( FALSE,"loadUnit TargetStat not found" );
-			psDroid->psTarStats[0] = NULL;
+			psDroid->psTarStats = NULL;
 		}
 	}
 	//rebuild the object pointer from the ID
@@ -6637,10 +6637,10 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			psSaveDroid->actionHeight	= psCurr->powerAccrued;
 
 			//version 14
-			if (psCurr->psTarStats[0] != NULL)
+			if (psCurr->psTarStats != NULL)
 			{
-				ASSERT( strlen(psCurr->psTarStats[0]->pName) < MAX_NAME_SIZE,"writeUnitFile; psTarStat pName Error" );
-				strcpy(psSaveDroid->tarStatName,psCurr->psTarStats[0]->pName);
+				ASSERT( strlen(psCurr->psTarStats->pName) < MAX_NAME_SIZE,"writeUnitFile; psTarStat pName Error" );
+				strcpy(psSaveDroid->tarStatName,psCurr->psTarStats->pName);
 			}
 			else
 			{

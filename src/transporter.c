@@ -1829,7 +1829,7 @@ BOOL updateTransporter(DROID *psTransporter)
 			// clear order
 			psTransporter->order = DORDER_NONE;
 			setDroidTarget(psTransporter, NULL, 0);
-			psTransporter->psTarStats[0] = NULL;
+			psTransporter->psTarStats = NULL;
 
     		return TRUE;
         }

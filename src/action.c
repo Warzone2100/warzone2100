@@ -1933,15 +1933,15 @@ void actionUpdateDroid(DROID *psDroid)
 
 		// moving to a location to build a structure
 		if (actionReachedBuildPos(psDroid,
-						(SDWORD)psDroid->orderX,(SDWORD)psDroid->orderY, psDroid->psTarStats[0]) &&
+						(SDWORD)psDroid->orderX,(SDWORD)psDroid->orderY, psDroid->psTarStats) &&
 			!actionDroidOnBuildPos(psDroid,
-						(SDWORD)psDroid->orderX,(SDWORD)psDroid->orderY, psDroid->psTarStats[0]))
+						(SDWORD)psDroid->orderX,(SDWORD)psDroid->orderY, psDroid->psTarStats))
 		{
 			moveStopDroid(psDroid);
 			bDoHelpBuild = FALSE;
 
 			// Got to destination - start building
-			psStructStats = (STRUCTURE_STATS*)psDroid->psTarStats[0];
+			psStructStats = (STRUCTURE_STATS*)psDroid->psTarStats;
 			if (psDroid->order == DORDER_BUILD && psDroid->psTarget[0] == NULL)
 			{
 				// Starting a new structure
@@ -1960,7 +1960,7 @@ void actionUpdateDroid(DROID *psDroid)
 				{
 					// structure on the build location - see if it is the same type
 					psStruct = getTileStructure(map_coord(psDroid->orderX), map_coord(psDroid->orderY));
-					if (psStruct->pStructureType == (STRUCTURE_STATS *)psDroid->psTarStats[0])
+					if (psStruct->pStructureType == (STRUCTURE_STATS *)psDroid->psTarStats)
 					{
 						// same type - do a help build
 						setDroidTarget(psDroid, (BASE_OBJECT *)psStruct, 0);
@@ -1968,7 +1968,7 @@ void actionUpdateDroid(DROID *psDroid)
 					}
 					else if ((psStruct->pStructureType->type == REF_WALL ||
 					psStruct->pStructureType->type == REF_WALLCORNER) &&
-						((STRUCTURE_STATS *)psDroid->psTarStats[0])->type == REF_DEFENSE)
+						((STRUCTURE_STATS *)psDroid->psTarStats)->type == REF_DEFENSE)
 					{
 							// building a gun tower over a wall - OK
 							if (droidStartBuild(psDroid))
@@ -1986,7 +1986,7 @@ void actionUpdateDroid(DROID *psDroid)
 						psDroid->action = DACTION_NONE;
 					}
 				}
-				else if (!validLocation((BASE_STATS*)psDroid->psTarStats[0],
+				else if (!validLocation((BASE_STATS*)psDroid->psTarStats,
 				                        map_coord(tlx),
 				                        map_coord(tly),
 				                        psDroid->player,
@@ -2016,14 +2016,14 @@ void actionUpdateDroid(DROID *psDroid)
 					{
 						// structure on the build location - see if it is the same type
 						psStruct = getTileStructure(map_coord(psDroid->orderX), map_coord(psDroid->orderY));
-						if (psStruct->pStructureType == (STRUCTURE_STATS *)psDroid->psTarStats[0])
+						if (psStruct->pStructureType == (STRUCTURE_STATS *)psDroid->psTarStats)
 						{
 							// same type - do a help build
 							setDroidTarget(psDroid, (BASE_OBJECT *)psStruct, 0);
 							bDoHelpBuild = TRUE;
 						}
 						else if ((psStruct->pStructureType->type == REF_WALL || psStruct->pStructureType->type == REF_WALLCORNER) &&
-								((STRUCTURE_STATS *)psDroid->psTarStats[0])->type == REF_DEFENSE)
+								((STRUCTURE_STATS *)psDroid->psTarStats)->type == REF_DEFENSE)
 						{
 							// building a gun tower over a wall - OK
 							if (droidStartBuild(psDroid))
@@ -2080,7 +2080,7 @@ void actionUpdateDroid(DROID *psDroid)
 		else if (DROID_STOPPED(psDroid))
 		{
 			if (actionDroidOnBuildPos(psDroid,
-						(SDWORD)psDroid->orderX,(SDWORD)psDroid->orderY, psDroid->psTarStats[0]))
+						(SDWORD)psDroid->orderX,(SDWORD)psDroid->orderY, psDroid->psTarStats))
 			{
 				actionHomeBasePos(psDroid->player, &pbx,&pby);
 				moveDroidToNoFormation(psDroid, (UDWORD)pbx,(UDWORD)pby);
@@ -2101,7 +2101,7 @@ void actionUpdateDroid(DROID *psDroid)
 
 		if (DROID_STOPPED(psDroid) &&
 			!actionReachedBuildPos(psDroid,
-						(SDWORD)psDroid->orderX,(SDWORD)psDroid->orderY, psDroid->psTarStats[0]))
+						(SDWORD)psDroid->orderX,(SDWORD)psDroid->orderY, psDroid->psTarStats))
 		{
 //			psDroid->action = DACTION_MOVETOBUILD;
 			moveDroidToNoFormation(psDroid, psDroid->actionX,psDroid->actionY);
@@ -2110,7 +2110,7 @@ void actionUpdateDroid(DROID *psDroid)
 				psDroid->sMove.Status != MOVETURNTOTARGET &&
 				psDroid->sMove.Status != MOVESHUFFLE &&
 				actionReachedBuildPos(psDroid,
-						(SDWORD)psDroid->orderX,(SDWORD)psDroid->orderY, psDroid->psTarStats[0]))
+						(SDWORD)psDroid->orderX,(SDWORD)psDroid->orderY, psDroid->psTarStats))
 		{
 			moveStopDroid(psDroid);
 		}
@@ -2141,9 +2141,9 @@ void actionUpdateDroid(DROID *psDroid)
 
 		// see if the droid is at the edge of what it is moving to
 		if (actionReachedBuildPos(psDroid,
-						(SDWORD)psDroid->actionX,(SDWORD)psDroid->actionY, psDroid->psTarStats[0]) &&
+						(SDWORD)psDroid->actionX,(SDWORD)psDroid->actionY, psDroid->psTarStats) &&
 			!actionDroidOnBuildPos(psDroid,
-						(SDWORD)psDroid->actionX,(SDWORD)psDroid->actionY, psDroid->psTarStats[0]))
+						(SDWORD)psDroid->actionX,(SDWORD)psDroid->actionY, psDroid->psTarStats))
 		{
 			moveStopDroid(psDroid);
 
@@ -2169,7 +2169,7 @@ void actionUpdateDroid(DROID *psDroid)
 		else if (DROID_STOPPED(psDroid))
 		{
 			if (actionDroidOnBuildPos(psDroid,
-						(SDWORD)psDroid->actionX,(SDWORD)psDroid->actionY, psDroid->psTarStats[0]))
+						(SDWORD)psDroid->actionX,(SDWORD)psDroid->actionY, psDroid->psTarStats))
 			{
 				actionHomeBasePos(psDroid->player, &pbx,&pby);
 				moveDroidToNoFormation(psDroid, (UDWORD)pbx,(UDWORD)pby);
@@ -2211,7 +2211,7 @@ void actionUpdateDroid(DROID *psDroid)
 		// now do the action update
 		if (DROID_STOPPED(psDroid) &&
 			!actionReachedBuildPos(psDroid,
-						(SDWORD)psDroid->actionX,(SDWORD)psDroid->actionY, psDroid->psTarStats[0]))
+						(SDWORD)psDroid->actionX,(SDWORD)psDroid->actionY, psDroid->psTarStats))
 		{
 			moveDroidToNoFormation(psDroid, psDroid->actionX,psDroid->actionY);
 		}
@@ -2219,7 +2219,7 @@ void actionUpdateDroid(DROID *psDroid)
 				psDroid->sMove.Status != MOVETURNTOTARGET &&
 				psDroid->sMove.Status != MOVESHUFFLE &&
 				actionReachedBuildPos(psDroid,
-						(SDWORD)psDroid->actionX,(SDWORD)psDroid->actionY, psDroid->psTarStats[0]))
+						(SDWORD)psDroid->actionX,(SDWORD)psDroid->actionY, psDroid->psTarStats))
 		{
 			moveStopDroid(psDroid);
 		}
@@ -2281,7 +2281,7 @@ void actionUpdateDroid(DROID *psDroid)
 		//building a structure's foundation - flattening the ground for now
 		{
 			psTile = mapTile(map_coord(psDroid->orderX), map_coord(psDroid->orderY));
-			psStructStats = (STRUCTURE_STATS*)psDroid->psTarStats[0];
+			psStructStats = (STRUCTURE_STATS*)psDroid->psTarStats;
 			tlx = (SDWORD)psDroid->orderX - (SDWORD)(psStructStats->baseWidth * TILE_UNITS)/2;
 			tly = (SDWORD)psDroid->orderY - (SDWORD)(psStructStats->baseBreadth * TILE_UNITS)/2;
 			if ((psDroid->psTarget[0] == NULL) &&
@@ -2292,7 +2292,7 @@ void actionUpdateDroid(DROID *psDroid)
 				{
 					// structure on the build location - see if it is the same type
 					psStruct = getTileStructure(map_coord(psDroid->orderX), map_coord(psDroid->orderY));
-					if (psStruct->pStructureType == (STRUCTURE_STATS *)psDroid->psTarStats[0])
+					if (psStruct->pStructureType == (STRUCTURE_STATS *)psDroid->psTarStats)
 					{
 						// same type - do a help build
 						setDroidTarget(psDroid, (BASE_OBJECT *)psStruct, 0);
@@ -2302,7 +2302,7 @@ void actionUpdateDroid(DROID *psDroid)
 						psDroid->action = DACTION_NONE;
 					}
 				}
-				else if (!validLocation((BASE_STATS*)psDroid->psTarStats[0],
+				else if (!validLocation((BASE_STATS*)psDroid->psTarStats,
 				                        map_coord(tlx),
 				                        map_coord(tly),
 				                        psDroid->player,
@@ -2855,7 +2855,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		psDroid->actionX = psAction->x;
 		psDroid->actionY = psAction->y;
 		if (actionDroidOnBuildPos(psDroid,
-					(SDWORD)psDroid->orderX,(SDWORD)psDroid->orderY, psDroid->psTarStats[0]))
+					(SDWORD)psDroid->orderX,(SDWORD)psDroid->orderY, psDroid->psTarStats))
 		{
 			actionHomeBasePos(psDroid->player, &pbx,&pby);
 			moveDroidToNoFormation(psDroid, (UDWORD)pbx,(UDWORD)pby);
@@ -2873,7 +2873,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		psDroid->actionY = psAction->y;
 		ASSERT( (psDroid->psTarget[0] != NULL) && (psDroid->psTarget[0]->type == OBJ_STRUCTURE),
 			"actionUnitBase: invalid target for demolish order" );
-		psDroid->psTarStats[0] = (BASE_STATS *)((STRUCTURE *)psDroid->psTarget[0])->pStructureType;
+		psDroid->psTarStats = (BASE_STATS *)((STRUCTURE *)psDroid->psTarget[0])->pStructureType;
 		setDroidActionTarget(psDroid, psAction->psObj[0], 0);
 		moveDroidTo(psDroid, psAction->x, psAction->y);
 		break;
@@ -2887,7 +2887,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		setDroidActionTarget(psDroid, psAction->psObj[0], 0);
 		ASSERT( (psDroid->psActionTarget[0] != NULL) && (psDroid->psActionTarget[0]->type == OBJ_STRUCTURE),
 			"actionUnitBase: invalid target for demolish order" );
-		psDroid->psTarStats[0] = (BASE_STATS *)((STRUCTURE *)psDroid->psActionTarget[0])->pStructureType;
+		psDroid->psTarStats = (BASE_STATS *)((STRUCTURE *)psDroid->psActionTarget[0])->pStructureType;
 		moveDroidTo(psDroid, psAction->x, psAction->y);
 		break;
 	case DACTION_OBSERVE:
@@ -2973,7 +2973,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		psDroid->actionY = psAction->y;
 		ASSERT( (psDroid->psTarget[0] != NULL) && (psDroid->psTarget[0]->type == OBJ_STRUCTURE),
 			"actionUnitBase: invalid target for restore order" );
-		psDroid->psTarStats[0] = (BASE_STATS *)((STRUCTURE *)psDroid->psTarget[0])->pStructureType;
+		psDroid->psTarStats = (BASE_STATS *)((STRUCTURE *)psDroid->psTarget[0])->pStructureType;
 		setDroidActionTarget(psDroid, psAction->psObj[0], 0);
 		moveDroidTo(psDroid, psAction->x, psAction->y);
 		break;
@@ -2985,7 +2985,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		psDroid->actionY = psAction->y;
 		ASSERT( (psDroid->psTarget[0] != NULL) && (psDroid->psTarget[0]->type == OBJ_FEATURE),
 			"actionUnitBase: invalid target for demolish order" );
-		psDroid->psTarStats[0] = (BASE_STATS *)((FEATURE *)psDroid->psTarget[0])->psStats;
+		psDroid->psTarStats = (BASE_STATS *)((FEATURE *)psDroid->psTarget[0])->psStats;
 		setDroidActionTarget(psDroid, psDroid->psTarget[0], 0);
 		moveDroidTo(psDroid, psAction->x, psAction->y);
 		break;
