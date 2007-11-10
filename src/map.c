@@ -620,6 +620,13 @@ static void droidSaveTagged(DROID *psDroid)
 
 static void structureSaveTagged(STRUCTURE *psStruct)
 {
+	int stype = NUM_DIFF_BUILDINGS;
+
+	if (psStruct->pFunctionality)
+	{
+		stype = psStruct->pStructureType->type;
+	}
+
 	/* common groups */
 
 	objectSaveTagged((BASE_OBJECT *)psStruct); /* 0x01 */
@@ -630,9 +637,138 @@ static void structureSaveTagged(STRUCTURE *psStruct)
 	/* STRUCTURE GROUP */
 
 	tagWriteEnter(0x0b, 1);
-	tagWrites(0x01, psStruct->currentBuildPts);
+	tagWrite(0x01, psStruct->pStructureType->type);
 	tagWrites(0x02, psStruct->currentPowerAccrued);
+	tagWrite(0x03, psStruct->lastResistance);
+	tagWrite(0x04, psStruct->targetted);
+	tagWrite(0x05, psStruct->timeLastHit);
+	tagWrite(0x06, psStruct->lastHitWeapon);
+	tagWrite(0x07, psStruct->status);
+	tagWrites(0x08, psStruct->currentBuildPts);
 	tagWriteLeave(0x0b);
+
+	/* Functionality groups */
+
+	switch (psStruct->pStructureType->type)
+	{
+		case REF_FACTORY:
+		case REF_CYBORG_FACTORY:
+		case REF_VTOL_FACTORY:
+		{
+			FACTORY *psFactory = (FACTORY *)psStruct->pFunctionality;
+
+			tagWriteEnter(0x0d, 1); // FACTORY GROUP
+			tagWrite(0x01, psFactory->capacity);
+			tagWrite(0x02, psFactory->quantity);
+			tagWrite(0x03, psFactory->loopsPerformed);
+			//tagWrite(0x04, psFactory->productionOutput); // not used in original code, recalculated instead
+			tagWrite(0x05, psFactory->powerAccrued);
+			if (psFactory->psSubject)
+			{
+				tagWrites(0x06, ((DROID_TEMPLATE *)psFactory->psSubject)->multiPlayerID);
+			}
+			tagWrite(0x07, psFactory->timeStarted);
+			tagWrite(0x08, psFactory->timeToBuild);
+			tagWrite(0x09, psFactory->timeStartHold);
+			tagWrite(0x0a, psFactory->secondaryOrder);
+			if (psFactory->psAssemblyPoint)
+			{
+				// since we save our type, the combination of type and number is enough
+				// to find our flag back on load
+				tagWrites(0x0b, psFactory->psAssemblyPoint->factoryInc);
+			}
+			if (psFactory->psCommander)
+			{
+				tagWrites(0x0c, psFactory->psCommander->id);
+			}
+			tagWriteLeave(0x0d);
+		} break;
+		case REF_RESEARCH:
+		{
+			RESEARCH_FACILITY *psResearch = (RESEARCH_FACILITY *)psStruct->pFunctionality;
+
+			tagWriteEnter(0x0e, 1);
+			tagWrite(0x01, psResearch->capacity); // number of upgrades it has
+			tagWrite(0x02, psResearch->powerAccrued);
+			tagWrite(0x03, psResearch->timeStartHold);
+			if (psResearch->psSubject)
+			{
+				tagWrite(0x04, psResearch->psSubject->ref - REF_RESEARCH_START);
+				tagWrite(0x05, psResearch->timeStarted);
+			}
+			tagWriteLeave(0x0e);
+		} break;
+		case REF_RESOURCE_EXTRACTOR:
+		{
+			RES_EXTRACTOR *psExtractor = (RES_EXTRACTOR *)psStruct->pFunctionality;
+
+			tagWriteEnter(0x0f, 1);
+			tagWrite(0x01, psExtractor->power);
+			if (psExtractor->psPowerGen)
+			{
+				tagWrites(0x02, psExtractor->psPowerGen->id);
+			}
+			tagWriteLeave(0x0f);
+		} break;
+		case REF_POWER_GEN:
+		{
+			POWER_GEN *psPower = (POWER_GEN *)psStruct->pFunctionality;
+
+			tagWriteEnter(0x10, 1);
+			tagWrite(0x01, psPower->capacity); // number of upgrades
+			tagWriteLeave(0x10);
+		} break;
+		case REF_REPAIR_FACILITY:
+		{
+			REPAIR_FACILITY *psRepair = (REPAIR_FACILITY *)psStruct->pFunctionality;
+			FLAG_POSITION *psFlag = psRepair->psDeliveryPoint;
+
+			tagWriteEnter(0x11, 1);
+			tagWrite(0x01, psRepair->timeStarted);
+			tagWrite(0x02, psRepair->powerAccrued);
+			if (psRepair->psObj)
+			{
+				tagWrites(0x03, psRepair->psObj->id);
+			}
+			if (psFlag)
+			{
+				tagWrites(0x04, psFlag->factoryInc);
+			}
+			tagWriteLeave(0x11);
+		} break;
+		case REF_REARM_PAD:
+		{
+			REARM_PAD *psRearm = (REARM_PAD *)psStruct->pFunctionality;
+
+			tagWriteEnter(0x12, 1);
+			tagWrite(0x01, psRearm->reArmPoints);
+			tagWrite(0x02, psRearm->timeStarted);
+			tagWrite(0x03, psRearm->currentPtsAdded);
+			if (psRearm->psObj)
+			{
+				tagWrites(0x04, psRearm->psObj->id);
+			}
+			tagWriteLeave(0x12);
+		} break;
+		case REF_HQ:
+		case REF_FACTORY_MODULE:
+		case REF_POWER_MODULE:
+		case REF_DEFENSE:
+		case REF_WALL:
+		case REF_WALLCORNER:
+		case REF_BLASTDOOR:
+		case REF_RESEARCH_MODULE:
+		case REF_COMMAND_CONTROL:
+		case REF_BRIDGE:
+		case REF_DEMOLISH:
+		case REF_LAB:
+		case REF_MISSILE_SILO:
+		case REF_SAT_UPLINK:
+		case NUM_DIFF_BUILDINGS:
+		{
+			// nothing
+		} break;
+	}
 }
 
 static void featureSaveTagged(FEATURE *psFeat)

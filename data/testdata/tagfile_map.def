@@ -120,11 +120,57 @@
     0c US 01 -		# Name version (EXPLAIN ME)
     0d US 01 -		# currRayAng (EXPLAIN ME)
     FF EN 00 -
- 0b GR 00 -		# STRUCTURE GROUP
-   01 SI 01 0		# currentBuildPts
-   02 SI 01 0		# currentPowerAccrued
-   FF EN 00 -
- 0c GR 00 -		# FEATURE GROUP
-   01 US 01 0		# Time frame it was created
-   FF EN 00 -
- FF EN 00 -
+  0b GR 00 -		# STRUCTURE GROUP (EXPLAIN ME)
+    01 US 01 -		# Structure type
+    02 SI 01 0		# currentPowerAccrued
+    03 US 01 0		# lastResistance
+    04 US 01 0		# targetted
+    05 US 01 0		# timeLastHit
+    06 US 01 0		# lastHitWeapon
+    07 US 01 1		# status (0 = being built, 1 = built, 2 = being demolished)
+    08 SI 01 0		# currentBuildPts
+    FF EN 00 -
+  0c GR 00 -		# FEATURE GROUP
+    01 US 01 0		# Time frame it was created
+    FF EN 00 -
+  0d GR 00 -		# FACTORY GROUP
+    01 US 01 0		# Capacity (the max size of body the factory can produce)
+    02 US 01 0		# Quantity (the number of droids to produce OR for selectedPlayer, how many loops to perform)
+    03 US 01 0		# Loops performed
+    04 US 01 0		# Production output (droid build points produced per build cycle)
+    05 US 01 0		# powerAccrued (used to keep track of power before building a droid)
+    06 SI 01 -1		# ID of template used, -1 for none
+    07 US 01 0		# timeStarted
+    08 US 01 0		# timeToBuild
+    09 US 01 0		# timeStartHold
+    0a US 01 0		# secondaryOrder
+    0b SI 01 -1		# Factory number, also used to find right flag after game load, oddly enough; -1 for none
+    0c SI 01 -1		# Commander ID, if any, -1 if none
+    FF EN 00 -
+  0e GR 00 -		# RESEARCH GROUP
+    01 US 01 0		# Number of upgrades it has
+    02 US 01 0		# powerAccrued
+    03 US 01 0		# timeStartHold
+    04 US 01 0		# ID of research target
+    05 US 01 0		# Time frame research started
+    FF EN 00 -
+  0f GR 00 -		# RESOURCE EXTRACTOR GROUP
+    01 US 01 0		# Maximum amount of power that can be extracted from this resource
+    02 SI 01 -1		# ID of power plant that owns this resource, if any, -1 if none
+    FF EN 00 -
+  10 GR 00 -		# POWER PLANT GROUP
+    01 US 01 0		# Number of upgrades it has
+    FF EN 00 -
+  11 GR 00 -		# REPAIR FACILITY GROUP
+    01 US 01 0		# timeStarted
+    02 US 01 0		# powerAccrued
+    03 SI 01 -1		# Object being repaired, if any, -1 if none
+    04 SI 01 -1		# Research facility number, also used to find right flag after game load, -1 for none
+    FF EN 00 -
+  12 GR 00 -		# REARM PAD GROUP
+    01 US 01 0		# reArmPoints
+    02 US 01 0		# timeStarted
+    03 US 01 0		# currentPtsAdded
+    04 SI 01 -1		# Object being rearmed, if any, -1 if none
+    FF EN 00 -
+  FF EN 00 -
