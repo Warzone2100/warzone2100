@@ -105,7 +105,6 @@ static	UDWORD		chosenSlotId;
 BOOL				bLoadSaveUp = FALSE;						// true when interface is up and should be run.
 char				saveGameName[256];			//the name of the save game to load from the front end
 char				sRequestResult[255];						// filename returned;
-char				sDelete[MAX_STR_LENGTH];
 BOOL				bRequestLoad = FALSE;
 LOADSAVE_MODE		bLoadSaveMode;
 
@@ -396,7 +395,7 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 {
 	UDWORD		id=0;
 	W_EDBINIT	sEdInit;
-	char		sTemp[MAX_STR_LENGTH];
+	char            sDelete[MAX_STR_LENGTH];
 	UDWORD		i;
 	W_CONTEXT		context;
 
@@ -450,16 +449,13 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 				sEdInit.pBoxDisplay = displayLoadSaveEdit;
 				widgAddEditBox(psRequestScreen, &sEdInit);
 
-				sprintf(sTemp,"%s%s.%s",
-						sPath,
-						((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText ,
-						sExt);
+				snprintf(sDelete, sizeof(sDelete), "%s%s.%s",
+				         sPath,
+				         ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText ,
+				         sExt);
 
 				widgHide(psRequestScreen,id);		// hide the old button
 				chosenSlotId = id;
-
-				strlcpy(sDelete, sTemp, sizeof(sDelete));  // prepare the savegame name.
-				sTemp[strlen(sTemp)-4] = '\0';		// strip extension
 
 				// auto click in the edit box we just made.
 				context.psScreen	= psRequestScreen;
@@ -480,6 +476,8 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 	// finished entering a name.
 	if( id == SAVEENTRY_EDIT)
 	{
+		char sTemp[MAX_STR_LENGTH];
+
 		if(!keyPressed(KEY_RETURN))						// enter was not pushed, so not a vaild entry.
 		{
 			widgDelete(psRequestScreen,SAVEENTRY_EDIT);	//unselect this box, and go back ..
