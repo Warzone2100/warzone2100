@@ -25,7 +25,7 @@
 	  -	Alex McLean & Jeremy Sallis, Pumpkin Studios, EIDOS INTERACTIVE -
 	  -------------------------------------------------------------------
 */
-#include <GL/gl.h>
+
 /* Generic includes */
 #include <stdio.h>
 #include <stdlib.h>
@@ -698,20 +698,6 @@ void	setProximityDraw(BOOL val)
 	bDrawProximitys = val;
 }
 /***************************************************************************/
-
-void pie_SetDepthOffset(int offset)
-{
-	if (offset)
-	{
-		glEnable(GL_POLYGON_OFFSET_FILL);
-		glPolygonOffset(offset, offset);
-	}
-	else
-	{
-		glDisable(GL_POLYGON_OFFSET_FILL);
-	}
-}
-
 
 void drawTiles(iView *camera, iView *player)
 {

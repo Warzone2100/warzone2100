@@ -187,6 +187,7 @@ typedef struct {
  *	Global ProtoTypes
  */
 /***************************************************************************/
+extern void pie_SetDepthOffset(int offset);
 extern void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD colour, UDWORD specular, int pieFlag, int pieData);
 extern void pie_DrawImage(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style);
 extern void pie_DrawImage270(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style);

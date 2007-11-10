@@ -89,14 +89,14 @@ typedef void (APIENTRY * PFNGLACTIVESTENCILFACEEXTPROC) (GLenum face);
 PFNGLACTIVESTENCILFACEEXTPROC glActiveStencilFaceEXT;
 
 /// Check if we can use one-pass stencil in the shadow draw code
-static BOOL stencil_one_pass(void) 
+static BOOL stencil_one_pass(void)
 {
 	// tribool, -1: uninitialized, 0: FALSE, 1: TRUE
 	static int can_do_stencil_one_pass = -1;
 
 	if (can_do_stencil_one_pass < 0) {
 		can_do_stencil_one_pass = 0; // can't use it until we decide otherwise
-		
+
 		// let's check if we have the needed extensions
 		if( check_extension("GL_EXT_stencil_two_side")
 		 && check_extension("GL_EXT_stencil_wrap"))
@@ -195,6 +195,21 @@ UDWORD ShapeFrame;
 	// This is a BSP routine that draws a linked list of polygon
 	// .. Its in here becuase it uses in inline function "DrawPoly"
 	#define IMD_POLYGON(poly) (	&BSPimd->polys[(poly)])
+
+
+void pie_SetDepthOffset(int offset)
+{
+	if (offset)
+	{
+		glEnable(GL_POLYGON_OFFSET_FILL);
+		glPolygonOffset(offset, offset);
+	}
+	else
+	{
+		glDisable(GL_POLYGON_OFFSET_FILL);
+	}
+}
+
 
 void DrawTriangleList(BSPPOLYID PolygonNumber) {
 	iIMDPoly *pPolys;
