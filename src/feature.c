@@ -64,7 +64,6 @@ FEATURE_STATS	*asFeatureStats;
 UDWORD			numFeatureStats;
 
 //Value is stored for easy access to this feature in destroyDroid()/destroyStruct()
-//UDWORD			droidFeature;
 UDWORD			structFeature;
 UDWORD			oilResFeature;
 
@@ -82,7 +81,6 @@ void featureInitVars(void)
 {
 	asFeatureStats = NULL;
 	numFeatureStats = 0;
-	//droidFeature = 0;
 	structFeature = 0;
 	oilResFeature = 0;
 }
@@ -387,17 +385,14 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	if(psStats->subType == FEAT_BUILD_WRECK)
 	{
 		psFeature->direction = rand() % 360;
-		psFeature->gfxScaling = (UWORD)(80 + (10 - rand()%20)); // put into define
 	}
 	else if(psStats->subType == FEAT_TREE)
 	{
 		psFeature->direction = rand() % 360;
-		psFeature->gfxScaling = (UWORD) (100 + (14-rand()%28));
 	}
 	else
 	{
 		psFeature->direction = 0;
-   		psFeature->gfxScaling = 100;	// but irrelevant anyway, cos it's not scaled
 	}
 	//psFeature->damage = featureDamage;
 	psFeature->selected = FALSE;

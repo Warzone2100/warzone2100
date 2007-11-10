@@ -91,11 +91,8 @@ typedef struct _feature
 	UDWORD			startTime;		/*time the feature was created - valid for 
 									  wrecked droids and structures */
 	UDWORD			body;			/* current body points */
-	UWORD			gfxScaling;			// how much to scale the graphic by - for variation - spice of life 'n all that
-
 	UDWORD			timeLastHit;
 	BOOL			bTargetted;
-
 } FEATURE;
 
 #endif
