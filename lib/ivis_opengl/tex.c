@@ -140,6 +140,7 @@ int pie_AddBMPtoTexPages(iSprite* s, STRING* filename, int type, iBool bColourKe
 	return i;
 }
 
+
 void pie_ChangeTexPage(int tex_index, iSprite* s, int type, iBool bColourKeyed, iBool bResource)
 {
 	assert(s != NULL);

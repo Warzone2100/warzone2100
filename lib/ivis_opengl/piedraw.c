@@ -197,6 +197,12 @@ UDWORD ShapeFrame;
 	#define IMD_POLYGON(poly) (	&BSPimd->polys[(poly)])
 
 
+void pie_FlushErrors(void)
+{
+	while (glGetError() != GL_NO_ERROR);
+}
+
+
 void pie_SetDepthOffset(int offset)
 {
 	if (offset)
