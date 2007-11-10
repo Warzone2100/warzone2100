@@ -133,8 +133,8 @@ const char* version_getFormattedVersionString()
 	if (versionString == NULL)
 	{
 		// TRANSLATORS: This string looks as follows when expanded.
-		// "Version <version name/number> <working copy state> - Built <DATE><BUILD TYPE>"
-		const char* format_string = _("Version %s%s - Built %s%s");
+		// "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
+		const char* format_string = _("Version %s%s%s%s");
 
 
 		// Compose the working copy state string
@@ -152,26 +152,60 @@ const char* version_getFormattedVersionString()
 #ifdef DEBUG
 		const char* build_type = _(" - DEBUG");
 #else
-		const char* build_type = "";
+		static const char build_type[] = "";
 #endif
 
 		int str_len;
 
+		char* build_date = NULL;
+
+		if (strncmp(svn_uri_cstr, "tags/", strlen("tags/")) != 0)
+		{
+			const char* date_format_string = _(" - Built %s");
+
+			// Find out how much memory we're going to need for the build-date string
+			str_len = snprintf(build_date, 0, date_format_string, version_getBuildDate());
+
+			if (str_len > 0)
+			{
+				build_date = malloc(str_len + 1);
+				if (build_date == NULL)
+				{
+					debug(LOG_ERROR, "version_getVersionString: Out of memory!");
+					abort();
+					return NULL;
+				}
+
+				snprintf(build_date, str_len + 1, date_format_string, version_getBuildDate());
+			}
+			else
+			{
+				build_date = strdup("");
+			}
+		}
+		else
+		{
+			build_date = strdup("");
+		}
+
 		// Find out how much memory we're going to need for the version string
-		str_len = snprintf((char*)versionString, 0, format_string, version_getVersionString(), wc_state, version_getBuildDate(), build_type);
+		str_len = snprintf((char*)versionString, 0, format_string, version_getVersionString(), wc_state, build_date, build_type);
 
 		if (str_len > 0)
 		{
 			versionString = malloc(str_len + 1);
 			if (versionString == NULL)
 			{
+				free(build_date);
 				debug(LOG_ERROR, "version_getVersionString: Out of memory!");
 				abort();
 				return NULL;
 			}
 
-			snprintf((char*)versionString, str_len + 1, format_string, version_getVersionString(), wc_state, version_getBuildDate(), build_type);
+			snprintf((char*)versionString, str_len + 1, format_string, version_getVersionString(), wc_state, build_date, build_type);
 		}
+
+		free(build_date);
 	}
 
 	return versionString;

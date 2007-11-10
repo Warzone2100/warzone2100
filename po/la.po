@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-11-09 23:42+0100\n"
+"POT-Creation-Date: 2007-11-10 19:40+0100\n"
 "PO-Revision-Date: 2007-04-13 14:34+0200\n"
 "Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
 "Language-Team: Latin\n"
@@ -106,14 +106,14 @@ msgstr ""
 msgid "%s Forms An Alliance With %s"
 msgstr ""
 
-#: src/multigifts.c:828
+#: src/multigifts.c:826
 #, c-format
 msgid "You Discover Blueprints For %s"
 msgstr ""
 
 #: src/hci.c:1038 src/hci.c:3812 src/hci.c:3966 src/hci.c:4408 src/hci.c:5629
 #: src/transporter.c:292 src/transporter.c:381 src/transporter.c:878
-#: src/intorder.c:660 src/loadsave.c:258 src/intelmap.c:525
+#: src/intorder.c:660 src/loadsave.c:257 src/intelmap.c:525
 #: src/multimenu.c:450 src/multimenu.c:1280
 msgid "Close"
 msgstr ""
@@ -448,65 +448,65 @@ msgstr ""
 msgid "Players"
 msgstr ""
 
-#: src/keybind.c:1176
+#: src/keybind.c:1154
 msgid "View Aligned to North"
 msgstr ""
 
-#: src/keybind.c:1200 src/intelmap.c:242
+#: src/keybind.c:1178 src/intelmap.c:242
 msgid "PAUSED"
 msgstr ""
 
-#: src/keybind.c:1232
+#: src/keybind.c:1210
 msgid "Researched EVERYTHING for you!"
 msgstr ""
 
-#: src/keybind.c:1263 src/keybind.c:1270
+#: src/keybind.c:1241 src/keybind.c:1248
 msgid "Energy bars display toggled"
 msgstr ""
 
-#: src/keybind.c:1336
+#: src/keybind.c:1314
 msgid "Unable to locate any resource extractors!"
 msgstr ""
 
-#: src/keybind.c:1602
+#: src/keybind.c:1580
 msgid "Enemy destroyed by cheating!"
 msgstr ""
 
-#: src/keybind.c:2213
+#: src/keybind.c:2191
 msgid "Centered on player HQ, direction NORTH"
 msgstr ""
 
-#: src/keybind.c:2225
+#: src/keybind.c:2203
 msgid "Unable to locate HQ!"
 msgstr ""
 
-#: src/keybind.c:2241
+#: src/keybind.c:2219
 msgid "Formation speed limiting OFF"
 msgstr ""
 
-#: src/keybind.c:2245
+#: src/keybind.c:2223
 msgid "Formation speed limiting ON"
 msgstr ""
 
-#: src/keybind.c:2375 src/keybind.c:2402 src/keybind.c:2417
+#: src/keybind.c:2353 src/keybind.c:2380 src/keybind.c:2395
 msgid "Game Speed Reset"
 msgstr ""
 
-#: src/keybind.c:2377
+#: src/keybind.c:2355
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr ""
 
-#: src/keybind.c:2404
+#: src/keybind.c:2382
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr ""
 
-#: src/keybind.c:2430
+#: src/keybind.c:2408
 msgid "Build menu will reopen"
 msgstr ""
 
-#: src/keybind.c:2434
+#: src/keybind.c:2412
 msgid "Build menu will not reopen"
 msgstr ""
 
@@ -1455,10 +1455,10 @@ msgid "Toggle reopening the build menu"
 msgstr ""
 
 #. TRANSLATORS: This string looks as follows when expanded.
-#. "Version <version name/number> <working copy state> - Built <DATE><BUILD TYPE>"
+#. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
 #: src/version.c:137
 #, c-format
-msgid "Version %s%s - Built %s%s"
+msgid "Version %s%s%s%s"
 msgstr ""
 
 #: src/version.c:142
@@ -1475,6 +1475,11 @@ msgstr ""
 
 #: src/version.c:153
 msgid " - DEBUG"
+msgstr ""
+
+#: src/version.c:164
+#, c-format
+msgid " - Built %s"
 msgstr ""
 
 #: src/multijoin.c:120 src/multijoin.c:121
