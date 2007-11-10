@@ -75,9 +75,7 @@ typedef enum _droid_order
 	DORDER_RECOVER,				// pick up an artifact
 	DORDER_LEAVEMAP,			// 36 - vtol flying off the map
 	DORDER_RTR_SPECIFIED,		// return to repair at a specified repair center
-	DORDER_ATTACK_M,			// 38 - attack with multiple weapons
-	DORDER_ATTACKTARGET_M,		// 39 - attack multiple targets
-	DORDER_CIRCLE,				// circles target location and engage
+	DORDER_CIRCLE = 40,				// circles target location and engage
 } DROID_ORDER;
 
 // secondary orders for droids

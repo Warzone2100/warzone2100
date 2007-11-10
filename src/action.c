@@ -110,10 +110,9 @@ BOOL actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 
 	psStats = asWeaponStats + psDroid->asWeaps[weapon_slot].nStat;
 
-	if ((psDroid->order == DORDER_ATTACKTARGET ||
-		psDroid->order == DORDER_ATTACKTARGET_M) &&
-		secondaryGetState(psDroid, DSO_HALTTYPE, &state) &&
-		(state == DSS_HALT_HOLD))
+	if (psDroid->order == DORDER_ATTACKTARGET
+	    && secondaryGetState(psDroid, DSO_HALTTYPE, &state)
+	    && state == DSS_HALT_HOLD)
 	{
 		longRange = proj_GetLongRange(psStats);
 		rangeSq = longRange * longRange;
@@ -1639,7 +1638,7 @@ void actionUpdateDroid(DROID *psDroid)
 
 		if (!bHasTarget)
 		{
-			if ( ( (psDroid->order == DORDER_ATTACKTARGET || psDroid->order == DORDER_ATTACKTARGET_M || psDroid->order == DORDER_FIRESUPPORT) &&
+			if (((psDroid->order == DORDER_ATTACKTARGET || psDroid->order == DORDER_FIRESUPPORT) &&
 				secondaryGetState(psDroid, DSO_HALTTYPE, &state) && (state == DSS_HALT_HOLD) ) ||
 				( !vtolDroid(psDroid) &&
 				orderStateObj(psDroid, DORDER_FIRESUPPORT, &psTarget) && (psTarget->type == OBJ_STRUCTURE) ) )
@@ -1867,7 +1866,7 @@ void actionUpdateDroid(DROID *psDroid)
 			{
 				/* Stopped moving but haven't reached the target - possibly move again */
 
-				if ((psDroid->order == DORDER_ATTACKTARGET || psDroid->order == DORDER_ATTACKTARGET_M) && secondaryGetState(psDroid, DSO_HALTTYPE, &state) && (state == DSS_HALT_HOLD))
+				if (psDroid->order == DORDER_ATTACKTARGET && secondaryGetState(psDroid, DSO_HALTTYPE, &state) && (state == DSS_HALT_HOLD))
 				{
 					psDroid->action = DACTION_NONE;			// on hold, give up.
 				}

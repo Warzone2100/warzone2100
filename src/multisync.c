@@ -282,7 +282,7 @@ static void packageCheck(UDWORD i, NETMSG *pMsg, DROID *pD)
 	NetAdd2( pMsg,		i+10,		pD->body);				// damage points
 	NetAdd2( pMsg,		i+14,		direction);			// direction
 
-	if(  pD->order == DORDER_ATTACK || pD->order == DORDER_ATTACK_M || pD->order == DORDER_MOVE || pD->order == DORDER_RTB    || pD->order == DORDER_RTR)
+	if (pD->order == DORDER_ATTACK || pD->order == DORDER_MOVE || pD->order == DORDER_RTB || pD->order == DORDER_RTR)
 	{
 		NetAdd2(pMsg,	i+16,		pD->sMove.fx);			//fraction move pos
 		NetAdd2(pMsg,	i+20,		pD->sMove.fy);
@@ -293,7 +293,7 @@ static void packageCheck(UDWORD i, NETMSG *pMsg, DROID *pD)
 		NetAdd2(pMsg,	i+20,		pD->y);
 	}
 
-	if(pD->order == DORDER_ATTACK || pD->order == DORDER_ATTACK_M)
+	if (pD->order == DORDER_ATTACK)
 	{
 		NetAdd2(pMsg,	i+24,		pD->psTarget[0]->id);		// target id
 	}
@@ -335,9 +335,7 @@ BOOL recvDroidCheck(NETMSG *m)
 		NetGet(m,					i+10,bod);							// Damage update.
 		NetGet(m,					i+14,dir);
 
-		if(   ord == DORDER_ATTACK || ord == DORDER_MOVE
-		   || ord == DORDER_RTB    || ord == DORDER_RTR ||
-			  ord == DORDER_ATTACK_M	)	// detailed position info mode
+		if (ord == DORDER_ATTACK || ord == DORDER_MOVE || ord == DORDER_RTB    || ord == DORDER_RTR)	// detailed position info mode
 		{
 			NetGet(m,				i+16,fx);
 			NetGet(m,				i+20,fy);
@@ -348,7 +346,7 @@ BOOL recvDroidCheck(NETMSG *m)
 			NetGet(m,				i+20,y);
 		}
 
-		if(ord == DORDER_ATTACK || ord == DORDER_ATTACK_M)
+		if (ord == DORDER_ATTACK)
 		{
 			NetGet(m,				i+24,target);
 		}
@@ -539,7 +537,6 @@ static void offscreenUpdate(DROID *psDroid,
 
 	// stage one, update the droids position & info, LOW LEVEL STUFF.
 	if(	   order == DORDER_ATTACK
-		|| order == DORDER_ATTACK_M
 		|| order == DORDER_MOVE
 		|| order ==	DORDER_RTB
 		|| order == DORDER_RTR)	// move order

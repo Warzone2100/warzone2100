@@ -939,8 +939,7 @@ void aiUpdateDroid(DROID *psDroid)
 
 	/* Don't update target if we are sent to attack and reached
 		attack destination (attacking our target) */
-	if((orderState(psDroid, DORDER_ATTACK) || orderState(psDroid, DORDER_ATTACK_M))
-		&& (psDroid->psActionTarget[0] == psDroid->psTarget[0]))
+	if (orderState(psDroid, DORDER_ATTACK) && psDroid->psActionTarget[0] == psDroid->psTarget[0])
 	{
 		updateTarget = FALSE;
 	}
@@ -1063,15 +1062,7 @@ void aiUpdateDroid(DROID *psDroid)
 			//This is a must,because the first target cannot be NULL
 			if (targetResult & 2)
 			{
-				//The droid has at least 2 targets.
-				if (targetResult > 3)
-				{
-					orderDroidObj(psDroid, DORDER_ATTACKTARGET_M, &oaInfo);
-				}
-				else
-				{
-					orderDroidObj(psDroid, DORDER_ATTACKTARGET, &oaInfo);
-				}
+				orderDroidObj(psDroid, DORDER_ATTACKTARGET, &oaInfo);
 			}
 		}
 		turnOffMultiMsg(FALSE);
