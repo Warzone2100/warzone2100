@@ -143,6 +143,8 @@ int pie_AddBMPtoTexPages(iSprite* s, STRING* filename, int type, iBool bColourKe
 void pie_ChangeTexPage(int tex_index, iSprite* s, int type, iBool bColourKeyed, iBool bResource)
 {
 	assert(s != NULL);
+	ASSERT( (s->width & (s->width-1)) == 0 && (s->height & (s->height-1)) == 0,
+		"pie_ChangeTexPage: non POT texture %i", tex_index );
 
 	/* DID come from a resource */
 	_TEX_PAGE[tex_index].bResource = bResource;
@@ -154,16 +156,9 @@ void pie_ChangeTexPage(int tex_index, iSprite* s, int type, iBool bColourKeyed, 
 	_TEX_PAGE[tex_index].tex.bColourKeyed = bColourKeyed;
 	_TEX_PAGE[tex_index].type = type;
 
-
 	glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[tex_index].textPage3dfx);
-
-	if (   (s->width & (s->width-1)) == 0
-	    && (s->height & (s->height-1)) == 0) {
-		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, s->width, s->height,
-			     GL_RGBA, GL_UNSIGNED_BYTE, s->bmp);
-	} else {
-		debug(LOG_TEXTURE, "pie_ChangeTexPage: non POT texture %i", tex_index);
-	}
+	gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, s->width, s->height,
+		GL_RGBA, GL_UNSIGNED_BYTE, s->bmp);
 
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
