@@ -984,3 +984,42 @@ static void objListIntegCheck(void)
 	}
 }
 #endif
+
+void objCount(int *droids, int *structures, int *features)
+{
+	int 		i;
+	DROID		*psDroid;
+	STRUCTURE	*psStruct;
+	FEATURE		*psFeat;
+
+	*droids = 0;
+	*structures = 0;
+	*features = 0;
+
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
+		{
+			(*droids)++;
+			if (psDroid->droidType == DROID_TRANSPORTER)
+			{
+				DROID *psTrans = psDroid->psGroup->psList;
+
+				for(psTrans = psTrans->psGrpNext; psTrans != NULL; psTrans = psTrans->psGrpNext)
+				{
+					(*droids)++;
+				}
+			}
+		}
+
+		for (psStruct = apsStructLists[i]; psStruct; psStruct = psStruct->psNext)
+		{
+			(*structures)++;
+		}
+	}
+
+	for (psFeat = apsFeatureLists[0]; psFeat; psFeat = psFeat->psNext)
+	{
+		(*features)++;
+	}
+}

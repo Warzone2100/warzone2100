@@ -327,31 +327,9 @@ void	kf_FrameRate( void )
 // display the total number of objects in the world
 void kf_ShowNumObjects( void )
 {
-	SDWORD		i, droids, structures, features;
-	DROID		*psDroid;
-	STRUCTURE	*psStruct;
-	FEATURE		*psFeat;
+	int droids, structures, features;
 
-	droids = 0;
-	structures = 0;
-	features = 0;
-	for (i=0; i<MAX_PLAYERS; i++)
-	{
-		for(psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
-		{
-			droids += 1;
-		}
-
-		for(psStruct = apsStructLists[i]; psStruct; psStruct = psStruct->psNext)
-		{
-			structures += 1;
-		}
-	}
-
-	for(psFeat=apsFeatureLists[0]; psFeat; psFeat = psFeat->psNext)
-	{
-		features += 1;
-	}
+	objCount(&droids, &structures, &features);
 
 	CONPRINTF(ConsoleString,(ConsoleString, "Num Droids: %d  Num Structures: %d  Num Features: %d",
 				droids, structures, features));

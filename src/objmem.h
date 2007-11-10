@@ -111,8 +111,9 @@ extern BOOL checkValidId(UDWORD id);
 
 extern UDWORD getRepairIdFromFlag(FLAG_POSITION *psFlag);
 
+void objCount(int *droids, int *structures, int *features);
+
 #ifdef DEBUG
 extern void checkFactoryFlags(void);
 #endif
 #endif
-
