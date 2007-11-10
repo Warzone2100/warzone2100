@@ -818,9 +818,6 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
    							}
 							Ptr += Modulus;
    						}
-						//store the radar coords
-						psStruct->radarX = (UWORD)(x + OffsetX);
-						psStruct->radarY = (UWORD)(y + OffsetY);
 					}
 			}
    		}

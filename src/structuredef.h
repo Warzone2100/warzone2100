@@ -281,12 +281,10 @@ typedef struct _structure
 	/* The common structure elements for all objects */
 	BASE_ELEMENTS(struct _structure);
 
-//	UDWORD		ref;
 	STRUCTURE_STATS*	pStructureType;		/* pointer to the structure stats for this
 											   type of building */
 	UBYTE		status;						/* defines whether the structure is being
 											   built, doing nothing or performing a function*/
-	//SDWORD		currentBuildPts;			/* the build points currently assigned to this
     SWORD		currentBuildPts;			/* the build points currently assigned to this
 											   structure */
     SWORD       currentPowerAccrued;        /* the power accrued for building this structure*/
@@ -302,27 +300,21 @@ typedef struct _structure
 	UWORD		sensorRange;
 	UWORD		sensorPower;
 	UWORD		turretRotation[STRUCT_MAXWEAPS];				// weapon, ECM and sensor direction and pitch
-	//UWORD		turretRotRate;				// weapon, ECM and sensor direction and pitch - THIS IS A CONSTANT
 	UWORD		turretPitch[STRUCT_MAXWEAPS];				// weapon, ECM and sensor direction and pitch
 
 	UDWORD		timeLastHit;				//the time the structure was last attacked
 
 	UDWORD		lastHitWeapon;
 
-	UWORD		radarX;
-	UWORD		radarY;
 	//the ecm power needs to be stored since the actual ecm stat can change with research
 	UWORD		ecmPower;
-	//FRACT		heightScale;
 
 	FUNCTIONALITY	*pFunctionality;		/* pointer to structure that contains fields
 											   necessary for functionality */
 	/* The weapons on the structure */
-	//Watermelon:re-enabled again...
 	UWORD		numWeaps;
 	UBYTE		targetted;
 	WEAPON		asWeaps[STRUCT_MAXWEAPS];
-	//Watermelon:more targets
 	BASE_OBJECT	*psTarget[STRUCT_MAXWEAPS];
 
 #ifdef DEBUG
