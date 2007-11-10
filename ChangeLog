@@ -5,6 +5,7 @@
    * Change: Slightly faster terrain rendering (+ 5-10%) (patch #830)
    * Change: Protocol-selection removed from "Host Game", since the only option was "Internet"
    * Change: In the "Join Game" menu you can now choose between "IP" (same as the old "Internet" option) and "Lobby" (directly proceed to the Lobbyserver)
+   * Fix: Slight visual improvement: Reduced flickering of ground and water tiles
    * Fix: Remove invalid references to software renderer textures (caused crashes between campaign 1-2 and 2-3) (bug #9497)
    * Fix: Improve POSIX exception handler reliability (GDB could have had trouble locating the executable)
    * Fix: Workaround a bug in OpenAL SI 0.0.8 GNU/Linux, which could lead to a crash

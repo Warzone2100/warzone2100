@@ -2449,7 +2449,9 @@ REPAIR_FACILITY		*psRepairFac = NULL;
 
 		if(baseImd!=NULL)
 		{
+			pie_SetDepthOffset(-3);
 			pie_Draw3DShape(baseImd, 0, 0, buildingBrightness, specular, 0,0);
+			pie_SetDepthOffset(0);
 		}
 
 		// override
