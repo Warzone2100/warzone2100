@@ -175,7 +175,7 @@
      MSVC     - Microsoft Visual C/C++, Intel C++ for Windows
      GNU      - GNU C++
      INTEL    - Intel C++ for Linux, Intel C++ for Windows
-     TINYCC   - Fabrice Bellard's Tiny C Compiler
+     TINYC    - Fabrice Bellard's Tiny C Compiler
 
    Should be sorted most to least authoritative.
 */
@@ -208,8 +208,8 @@
 #    define WZ_CC_INTEL
 #  endif
 
-#elif defined(__TINYCC__)
-#  define WZ_CC_TINYCC
+#elif defined(__TINYC__)
+#  define WZ_CC_TINYC
 
 #else
 #  error "Warzone has not been tested on this compiler. Please contact warzone-dev@gna.org"
