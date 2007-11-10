@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 1999-2004  Eidos Interactive
+	Copyright (C) 1992-2007  Trolltech ASA.
 	Copyright (C) 2005-2007  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
