@@ -898,6 +898,7 @@ BOOL mapSaveTagged(char *pFileName)
 		STRUCTURE_STATS *psStructStats = asStructureStats;
 		FLAG_POSITION *psFlag;
 		FLAG_POSITION *flagList[NUM_FLAG_TYPES * MAX_FACTORY];
+		MESSAGE *psMessage;
 
 		tagWriteEnter(0x01, numResearch); // research group
 		for (i = 0; i < numResearch; i++, psResearch++)
@@ -973,6 +974,45 @@ BOOL mapSaveTagged(char *pFileName)
 		}
 		tagWriteLeave(0x03);
 
+		// FIXME: Structured after old savegame logic, but surely it must be possible
+		// to simplify the mess below. It refers to non-saved file containing messages.
+		for (psMessage = apsMessages[plr], i = 0; psMessage != NULL; psMessage = psMessage->psNext, i++);
+		tagWriteEnter(0x04, i); // message group
+		for (psMessage = apsMessages[plr]; psMessage != NULL; psMessage = psMessage->psNext)
+		{
+			if (psMessage->type == MSG_PROXIMITY)
+			{
+				PROXIMITY_DISPLAY *psProx = apsProxDisp[plr];
+
+				// find the matching proximity message
+				for (; psProx != NULL && psProx->psMessage != psMessage; psProx = psProx->psNext);
+
+				ASSERT(psProx != NULL, "Save message; proximity display not found for message");
+				if (psProx->type == POS_PROXDATA)
+				{
+					// message has viewdata so store the name
+					VIEWDATA *pViewData = (VIEWDATA*)psMessage->pViewData;
+
+					tagWriteString(0x02, pViewData->pName);
+				}
+				else
+				{
+					BASE_OBJECT *psObj = (BASE_OBJECT*)psMessage->pViewData;
+
+					tagWrites(0x01, psObj->id);
+				}
+			}
+			else
+			{
+				VIEWDATA *pViewData = (VIEWDATA*)psMessage->pViewData;
+
+				tagWriteString(0x2, pViewData->pName);
+			}
+			tagWriteBool(0x3, psMessage->read);
+			tagWriteSeparator();
+		}
+		tagWriteLeave(0x04);
+
 		tagWriteSeparator();
 	}
 	debug(LOG_MAP, " * Writing info about %d players", (int)MAX_PLAYERS);
@@ -1037,6 +1077,13 @@ BOOL mapSaveTagged(char *pFileName)
 		tagWriteSeparator();
 	}
 	tagWriteLeave(0x0f);
+
+	// REMAINS TO BE DONE?
+	// * writeCompListFile
+	// * writeStructTypeListFile
+	// * writeProductionFile
+	// * writeCommandLists
+	// * writeScriptState
 
 	tagClose();
 	return TRUE;

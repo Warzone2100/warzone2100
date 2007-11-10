@@ -55,6 +55,11 @@
     09 US 01 -		# Repair ID - only set if factory type is REPAIR_FLAG
     0a BO 01 0		# Do not register flag in flag list (commanders)
     FF EN 00 -
+  04 GR 00 -		# MESSAGE GROUP
+    01 SI 01 -1		# Object ID, if set, use it rather than name below; -1 means unset
+    02 ST 80 -		# Name
+    03 BO 01 0		# Is message read?
+    FF EN 00 -
   FF EN 00 -
 0e GR 00 -		# PRODUCTION RUNS GROUP (factory types)
   01 GR 00 -		# Number of factories
