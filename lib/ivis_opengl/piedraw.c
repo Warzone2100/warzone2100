@@ -225,7 +225,11 @@ static inline void pie_Polygon(const SDWORD numVerts, const TERRAIN_VERTEXF* pVr
 
 	glEnd();
 
-	glDisable(GL_LIGHTING);
+	if (light)
+	{
+		glDisable(GL_LIGHTING);
+		glDisable(GL_NORMALIZE);
+	}
 }
 
 
