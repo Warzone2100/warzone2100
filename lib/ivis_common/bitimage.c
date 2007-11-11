@@ -82,7 +82,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 	fileHandle = PHYSFS_openRead(fileName);
 	if (!fileHandle)
 	{
-		debug(LOG_ERROR, "iV_LoadImageFromFile: PHYSFS_openRead failed (opening %s) with error: %s", fileName, PHYSFS_getLastError());
+		debug(LOG_ERROR, "iV_LoadImageFile: PHYSFS_openRead failed (opening %s) with error: %s", fileName, PHYSFS_getLastError());
 		return NULL;
 	}
 

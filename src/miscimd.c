@@ -96,8 +96,8 @@ char	name[15];	// hopefully!
 	/* Go thru' the list */
 	while(bMoreToProcess)
 	{
-		sprintf(name,miscImds[i].pName);
-		strcat(name,".pie");
+		snprintf(name, sizeof(name), "%s.pie", miscImds[i].pName);
+
 		/* see if the resource loader can find it */
 		miscImds[i].pImd = (iIMDShape*)resGetData("IMD",name);
 		/* If it didn't get it then... */
@@ -173,7 +173,8 @@ BOOL	initMiscImds( void )
 	/* Now load the multi array stuff */
 	for (i=0; i < MAX_FACTORY; i++)
 	{
-		sprintf(pieNum, "%d", i+1);
+		snprintf(pieNum, sizeof(pieNum), "%u", i + 1);
+
 		facName[5] = *pieNum;
 		pAssemblyPointIMDs[FACTORY_FLAG][i] = (iIMDShape*)resGetData("IMD", facName);
 		if (!pAssemblyPointIMDs[FACTORY_FLAG][i])

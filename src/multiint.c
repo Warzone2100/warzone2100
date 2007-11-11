@@ -94,7 +94,7 @@ extern BOOL				bSendingMap;
 
 extern void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 
-extern BOOL NETsetupTCPIP(void ** addr, char * machine);
+extern BOOL NETsetupTCPIP(void ** addr, const char * machine);
 
 BOOL						bHosted			= FALSE;				//we have set up a game
 char						sPlayer[128];							// player name (to be used)

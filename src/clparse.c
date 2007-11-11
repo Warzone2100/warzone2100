@@ -25,9 +25,6 @@
  */
 
 #include <string.h>
-#ifndef _MSC_VER
-#include <unistd.h>
-#endif	// not for .net I should say..  --Qamly
 #include "lib/framework/frame.h"
 #include "lib/widget/widget.h"
 
@@ -51,8 +48,6 @@
  // To set the shadow config:
 #include "display.h"
 #include "version.h"
-
-extern BOOL NETsetupTCPIP(void ** addr, char * machine);
 
 extern char	datadir[PATH_MAX];
 extern char * global_mods[MAX_MODS];
