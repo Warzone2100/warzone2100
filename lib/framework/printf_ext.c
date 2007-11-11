@@ -28,7 +28,7 @@ int vasprintf(char** strp, const char* format, va_list ap)
 	int count;
 
 	// Find out how long the resulting string is
-	count = _vscprintf(format, ap);
+	count = snprintf(NULL, 0, format, ap);
 
 	if (count == 0)
 	{
