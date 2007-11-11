@@ -23,9 +23,14 @@
 
 #include "frame.h"
 
+#if defined(WZ_OS_WIN)
+// These functions are GNU extensions; so make sure they are available on Windows also
+extern int vasprintf(char** strp, const char* format, va_list ap);
+extern int asprintf(char** strp, const char* format, ...);
+#endif
+
 #if defined(WZ_CC_MSVC)
 // Make sure that these functions are available, and work according to the C99 spec on MSVC also
-
 extern int vsnprintf(char* str, size_t size, const char* format, va_list ap);
 extern int snprintf(char* str, size_t size, const char* format, ...);
 #endif
