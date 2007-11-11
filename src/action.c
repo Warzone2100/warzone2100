@@ -789,13 +789,6 @@ static void actionUpdateVtolAttack( DROID *psDroid )
 
 static void actionUpdateTransporter( DROID *psDroid )
 {
-	//Watermelon:weapon_slot to store which turrent is InAttackRange
-	//num_weapons = 0 calculate number of weapons
-	UBYTE	weapon_slot = DROID_MAXWEAPS + 1;
-	UBYTE	i;
-	//this is a bit field
-	UBYTE	num_weapons = 0;
-
 	CHECK_DROID(psDroid);
 
 	//check if transporter has arrived
@@ -805,79 +798,6 @@ static void actionUpdateTransporter( DROID *psDroid )
 		psDroid->action = DACTION_NONE;
 		return;
 	}
-
-
-	// check that the target has not become on the same side as psDroid,
-	// eg through Electronic Warfare
-	if (psDroid->psActionTarget[0] != NULL
-	    && psDroid->player == psDroid->psActionTarget[0]->player)
-	{
-		setDroidActionTarget(psDroid, NULL, 0);
-	}
-
-	/* Watermelon:if I am a multi-turret droid */
-	if (psDroid->numWeaps > 1)
-	{
-		for(i = 0;i < psDroid->numWeaps;i++)
-		{
-			if (psDroid->asWeaps[i].nStat > 0)
-			{
-				weapon_slot = i;
-				num_weapons |= (1 << (i+1));
-				break;
-			}
-		}
-
-		if (weapon_slot == (DROID_MAXWEAPS + 1))
-		{
-			return;
-		}
-
-	}
-	else
-	{
-		if (psDroid->asWeaps[0].nStat > 0)
-		{
-			weapon_slot = 0;
-		}
-	}
-
-	/* check for weapon */
-	for(i = 0;i < psDroid->numWeaps;i++)
-	{
-		if ( (num_weapons & (1 << (i+1))) )
-		{
-			if (psDroid->psActionTarget[i] == NULL && CAN_UPDATE_NAYBORS(psDroid))
-			{
-				BASE_OBJECT *psTemp;
-
-				(void)aiBestNearestTarget(psDroid, &psTemp, i);
-				setDroidActionTarget(psDroid, psTemp, i);
-			}
-
-			if ( psDroid->psActionTarget[i] != NULL )
-			{
-				if ( visibleObject((BASE_OBJECT*)psDroid, psDroid->psActionTarget[i]) )
-				{
-					if (actionTargetTurret((BASE_OBJECT*)psDroid, psDroid->psActionTarget[i],
-							&(psDroid->turretRotation[i]), &(psDroid->turretPitch[i]),
-							&asWeaponStats[psDroid->asWeaps[i].nStat],
-							TRUE,i))
-					{
-						// In range - fire !!!
-						combFire(&psDroid->asWeaps[i], (BASE_OBJECT *)psDroid,
-								 psDroid->psActionTarget[i], i);
-					}
-				}
-				else
-				{
-					// lost the target
-					setDroidActionTarget(psDroid, NULL, i);
-				}
-			}
-		}
-	}
-	CHECK_DROID(psDroid);
 }
 
 
