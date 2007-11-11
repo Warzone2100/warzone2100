@@ -295,7 +295,7 @@ static void packageCheck(UDWORD i, NETMSG *pMsg, DROID *pD)
 
 	if (pD->order == DORDER_ATTACK)
 	{
-		NetAdd2(pMsg,	i+24,		pD->psTarget[0]->id);		// target id
+		NetAdd2(pMsg,	i+24,		pD->psTarget->id);		// target id
 	}
 	else if(pD->order == DORDER_MOVE)
 	{
@@ -455,10 +455,8 @@ static void highLevelDroidUpdate(DROID *psDroid,UDWORD x, UDWORD y,
 	// remote droid is attacking, not here tho!
 	if(order == DORDER_ATTACK && psDroid->order != DORDER_ATTACK && psTarget)
 	{
-		DROID_OACTION_INFO oaInfo = {{psTarget}};
-
 		turnOffMultiMsg(TRUE);
-		orderDroidObj(psDroid, DORDER_ATTACK, &oaInfo);
+		orderDroidObj(psDroid, DORDER_ATTACK, psTarget);
 		turnOffMultiMsg(FALSE);
 	}
 

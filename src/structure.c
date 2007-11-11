@@ -2771,8 +2771,7 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 			if (idfDroid(psNewDroid) ||
 				vtolDroid(psNewDroid))
 			{
-				DROID_OACTION_INFO oaInfo = {{(BASE_OBJECT *)psFact->psCommander}};
-				orderDroidObj(psNewDroid, DORDER_FIRESUPPORT, &oaInfo);
+				orderDroidObj(psNewDroid, DORDER_FIRESUPPORT, (BASE_OBJECT *)psFact->psCommander);
 				moveToRearm(psNewDroid);
 			}
 			else
@@ -3176,9 +3175,9 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 			psDroid = (DROID *)psChosenObj;
 
 			// skip droids that are doing anything else
-			if (	(psDroid != NULL)
-				&&	(!orderState(psDroid, DORDER_RTR)
-				||   psDroid->psTarget[0] != (BASE_OBJECT *)psStructure) )
+			if (psDroid != NULL
+			    && (!orderState(psDroid, DORDER_RTR)
+			        || psDroid->psTarget != (BASE_OBJECT *)psStructure))
 			{
 				psChosenObj = NULL;
 				psDroid = NULL;
@@ -3233,8 +3232,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 		}
 		case REF_REARM_PAD:
 		{
-			DROID_OACTION_INFO oaInfo = {{(BASE_OBJECT *)psStructure}};
-
 			psReArmPad = &psStructure->pFunctionality->rearmPad;
 			psChosenObj = psReArmPad->psObj;
 			structureMode = REF_REARM_PAD;
@@ -3256,8 +3253,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				psDroid = (DROID *)psChosenObj;
 				if (psDroid != NULL)
 				{
-					actionDroidObj( psDroid, DACTION_MOVETOREARMPOINT,
-									&oaInfo);
+					actionDroidObj( psDroid, DACTION_MOVETOREARMPOINT, (BASE_OBJECT *)psStructure);
 				}
 			}
 			else
@@ -3267,8 +3263,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 					psDroid->sMove.Status == MOVEHOVER       ) &&
 					psDroid->action == DACTION_WAITFORREARM        )
 				{
-					actionDroidObj( psDroid, DACTION_MOVETOREARMPOINT,
-									&oaInfo);
+					actionDroidObj( psDroid, DACTION_MOVETOREARMPOINT, (BASE_OBJECT *)psStructure);
 				}
 			}
 
@@ -3638,8 +3633,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 						// return a droid to it's command group
 						DROID	*psCommander = psDroid->psGroup->psCommander;
 
-						DROID_OACTION_INFO oaInfo = {{(BASE_OBJECT *)psCommander}};
-						orderDroidObj(psDroid, DORDER_GUARD, &oaInfo);
+						orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander);
 					}
 					else if (psRepairFac->psDeliveryPoint != NULL)
 					{
@@ -6067,15 +6061,20 @@ unsigned int countAssignedDroids(STRUCTURE *psStructure)
 
 	for (num = 0, psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
 	{
-		if(psCurr->psTarget[0] && psCurr->player == psStructure->player)
+		if (psCurr->psTarget && psCurr->player == psStructure->player)
 		{
 			hasindirect = 0;
 			weapontype = asWeaponStats[psCurr->asWeaps[0].nStat].movementModel;
-			if(weapontype == MM_INDIRECT || weapontype == MM_HOMINGINDIRECT)
-				hasindirect = 1;
 
-			if(psCurr->psTarget[0]->id == psStructure->id && hasindirect)
+			if(weapontype == MM_INDIRECT || weapontype == MM_HOMINGINDIRECT)
+			{
+				hasindirect = 1;
+			}
+
+			if (psCurr->psTarget->id == psStructure->id && hasindirect)
+			{
 				num++;
+			}
 		}
 	}
 
@@ -7620,8 +7619,7 @@ void ensureRearmPadClear(STRUCTURE *psStruct, DROID *psDroid)
 		 && map_coord(psCurr->y) == ty
 		 && vtolDroid(psCurr))
 		{
-			DROID_OACTION_INFO oaInfo = {{(BASE_OBJECT *)psStruct}};
-			actionDroidObj(psCurr, DACTION_CLEARREARMPAD, &oaInfo);
+			actionDroidObj(psCurr, DACTION_CLEARREARMPAD, (BASE_OBJECT *)psStruct);
 		}
 	}
 }
@@ -7725,10 +7723,14 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, BOOL
 			//check through the 'attackPlayer' players list of droids to see if any are targetting it
 			for (psCurr = apsDroidLists[attackPlayer]; psCurr != NULL; psCurr = psCurr->psNext)
 			{
+				if (psCurr->psTarget == (BASE_OBJECT *)psStructure)
+				{
+					orderDroid(psCurr, DORDER_STOP);
+					break;
+				}
 				for (i = 0;i < psCurr->numWeaps;i++)
 				{
-					if (psCurr->psTarget[i] == (BASE_OBJECT *)psStructure ||
-						psCurr->psActionTarget[i] == (BASE_OBJECT *)psStructure)
+					if (psCurr->psActionTarget[i] == (BASE_OBJECT *)psStructure)
 					{
 						orderDroid(psCurr, DORDER_STOP);
 						break;
@@ -8145,16 +8147,16 @@ BOOL structureCheckReferences(STRUCTURE *psVictimStruct)
 		}
 		for (psDroid = apsDroidLists[plr]; psDroid != NULL; psDroid = psDroid->psNext)
 		{
+			if ((STRUCTURE *)psDroid->psTarget == psVictimStruct)
+			{
+#ifdef DEBUG
+				ASSERT(!"Illegal reference to structure", "Illegal reference to structure from %s line %d",
+				       psDroid->targetFunc, psDroid->targetLine);
+#endif
+				return FALSE;
+			}
 			for (i = 0; i < psDroid->numWeaps; i++)
 			{
-				if ((STRUCTURE *)psDroid->psTarget[i] == psVictimStruct)
-				{
-#ifdef DEBUG
-					ASSERT(!"Illegal reference to structure", "Illegal reference to structure from %s line %d",
-					       psDroid->targetFunc[i], psDroid->targetLine[i]);
-#endif
-					return FALSE;
-				}
 				if ((STRUCTURE *)psDroid->psActionTarget[i] == psVictimStruct)
 				{
 #ifdef DEBUG

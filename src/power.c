@@ -502,24 +502,24 @@ BOOL accruePower(BASE_OBJECT *psObject)
         case DROID_CONSTRUCT:
         case DROID_CYBORG_CONSTRUCT:
             //check trying to build something (and that hasn't been blown up)
-            if (DroidIsBuilding(psDroid) && psDroid->psTarget[0] && !psDroid->psTarget[0]->died)
+            if (DroidIsBuilding(psDroid) && psDroid->psTarget && !psDroid->psTarget->died)
             {
-                powerDiff = structPowerToBuild((STRUCTURE *)psDroid->psTarget[0]) -
-                    ((STRUCTURE *)psDroid->psTarget[0])->currentPowerAccrued;
+                powerDiff = structPowerToBuild((STRUCTURE *)psDroid->psTarget) -
+                    ((STRUCTURE *)psDroid->psTarget)->currentPowerAccrued;
 			    //if equal then don't need power
 			    if (powerDiff)
 			    {
 				    if (POWER_PER_CYCLE >= powerDiff)
 				    {
 					    usePower(psDroid->player, powerDiff);
-					    ((STRUCTURE *)psDroid->psTarget[0])->currentPowerAccrued +=
+					    ((STRUCTURE *)psDroid->psTarget)->currentPowerAccrued +=
                             powerDiff;
 					    bPowerUsed = TRUE;
 				    }
 				    else if (powerDiff > POWER_PER_CYCLE)
 				    {
 					    usePower(psDroid->player, POWER_PER_CYCLE);
-					    ((STRUCTURE *)psDroid->psTarget[0])->currentPowerAccrued +=
+					    ((STRUCTURE *)psDroid->psTarget)->currentPowerAccrued +=
                             POWER_PER_CYCLE;
 					    bPowerUsed = TRUE;
 				    }
@@ -532,7 +532,7 @@ BOOL accruePower(BASE_OBJECT *psObject)
             psTarget = NULL;
             if (DroidIsRepairing(psDroid))
             {
-                psTarget = (DROID *)psDroid->psTarget[0];
+                psTarget = (DROID *)psDroid->psTarget;
             }
             else
             {
@@ -546,7 +546,7 @@ BOOL accruePower(BASE_OBJECT *psObject)
             //check the droid hasn't died in the meantime
             if (psTarget && psTarget->died)
             {
-		setDroidTarget(psDroid, NULL, 0);
+		setDroidTarget(psDroid, NULL);
                 psTarget = NULL;
             }
             if (psTarget)

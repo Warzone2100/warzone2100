@@ -311,16 +311,16 @@ BOOL droidCheckReferences(DROID *psVictimDroid)
 		}
 		for (psDroid = apsDroidLists[plr]; psDroid != NULL; psDroid = psDroid->psNext)
 		{
+			if ((DROID *)psDroid->psTarget == psVictimDroid && psVictimDroid != psDroid)
+			{
+#ifdef DEBUG
+				ASSERT(!"Illegal reference to droid", "Illegal reference to droid from %s line %d",
+				       psDroid->targetFunc, psDroid->targetLine);
+#endif
+				return FALSE;
+			}
 			for (i = 0; i < psDroid->numWeaps; i++)
 			{
-				if ((DROID *)psDroid->psTarget[i] == psVictimDroid && psVictimDroid != psDroid)
-				{
-#ifdef DEBUG
-					ASSERT(!"Illegal reference to droid", "Illegal reference to droid from %s line %d",
-					       psDroid->targetFunc[i], psDroid->targetLine[i]);
-#endif
-					return FALSE;
-				}
 				if ((DROID *)psDroid->psActionTarget[i] == psVictimDroid && psVictimDroid != psDroid)
 				{
 #ifdef DEBUG
@@ -1282,7 +1282,7 @@ BOOL droidStartBuild(DROID *psDroid)
 	CHECK_DROID(psDroid);
 
 	/* See if we are starting a new structure */
-	if ((psDroid->psTarget[0] == NULL) &&
+	if ((psDroid->psTarget == NULL) &&
 		(psDroid->order == DORDER_BUILD ||
 		 psDroid->order == DORDER_LINEBUILD))
 	{
@@ -1324,7 +1324,7 @@ BOOL droidStartBuild(DROID *psDroid)
 	else
 	{
 		/* Check the structure is still there to build (joining a partially built struct) */
-		psStruct = (STRUCTURE *)psDroid->psTarget[0];
+		psStruct = (STRUCTURE *)psDroid->psTarget;
 		if (!droidNextToStruct(psDroid,  (BASE_OBJECT *)psStruct))
 		{
 			/* Nope - stop building */
@@ -1337,7 +1337,7 @@ BOOL droidStartBuild(DROID *psDroid)
 	{
 		psDroid->actionStarted = gameTime;
 		psDroid->actionPoints = 0;
-		setDroidTarget(psDroid, (BASE_OBJECT *)psStruct, 0);
+		setDroidTarget(psDroid, (BASE_OBJECT *)psStruct);
 		setDroidActionTarget(psDroid, (BASE_OBJECT *)psStruct, 0);
 	}
 
@@ -1399,7 +1399,7 @@ BOOL droidUpdateBuild(DROID *psDroid)
 
 	ASSERT( psDroid->action == DACTION_BUILD,
 		"unitUpdateBuild: unit is not building" );
-	psStruct = (STRUCTURE *)psDroid->psTarget[0];
+	psStruct = (STRUCTURE *)psDroid->psTarget;
 	ASSERT( psStruct->type == OBJ_STRUCTURE,
 		"unitUpdateBuild: target is not a structure" );
 	ASSERT( psDroid->asBits[COMP_CONSTRUCT].nStat < numConstructStats,
@@ -1614,7 +1614,7 @@ BOOL droidStartDemolishing( DROID *psDroid )
 
 	ASSERT( psDroid->order == DORDER_DEMOLISH,
 		"unitStartDemolishing: unit is not demolishing" );
-	psStruct = (STRUCTURE *)psDroid->psTarget[0];
+	psStruct = (STRUCTURE *)psDroid->psTarget;
 	ASSERT( psStruct->type == OBJ_STRUCTURE,
 		"unitStartDemolishing: target is not a structure" );
 
@@ -1649,7 +1649,7 @@ BOOL droidUpdateDemolishing( DROID *psDroid )
 
 	ASSERT( psDroid->action == DACTION_DEMOLISH,
 		"unitUpdateDemolishing: unit is not demolishing" );
-	psStruct = (STRUCTURE *)psDroid->psTarget[0];
+	psStruct = (STRUCTURE *)psDroid->psTarget;
 	ASSERT( psStruct->type == OBJ_STRUCTURE,
 		"unitUpdateDemolishing: target is not a structure" );
 
@@ -1773,7 +1773,7 @@ BOOL droidStartClearing( DROID *psDroid )
 
 	ASSERT( psDroid->order == DORDER_CLEARWRECK,
 		"unitStartClearing: unit is not clearing wreckage" );
-	psFeature = (FEATURE *)psDroid->psTarget[0];
+	psFeature = (FEATURE *)psDroid->psTarget;
 	ASSERT( psFeature->type == OBJ_FEATURE,
 		"unitStartClearing: target is not a feature" );
 	ASSERT( psFeature->psStats->subType == FEAT_BUILD_WRECK,
@@ -1798,7 +1798,7 @@ BOOL droidUpdateClearing( DROID *psDroid )
 
 	ASSERT( psDroid->action == DACTION_CLEARWRECK,
 		"unitUpdateClearing: unit is not clearing wreckage" );
-	psFeature = (FEATURE *)psDroid->psTarget[0];
+	psFeature = (FEATURE *)psDroid->psTarget;
 	ASSERT( psFeature->type == OBJ_FEATURE,
 		"unitStartClearing: target is not a feature" );
 	ASSERT( psFeature->psStats->subType == FEAT_BUILD_WRECK,
@@ -1907,7 +1907,7 @@ BOOL droidStartRestore( DROID *psDroid )
 
 	ASSERT( psDroid->order == DORDER_RESTORE,
 		"unitStartRestore: unit is not restoring" );
-	psStruct = (STRUCTURE *)psDroid->psTarget[0];
+	psStruct = (STRUCTURE *)psDroid->psTarget;
 	ASSERT( psStruct->type == OBJ_STRUCTURE,
 		"unitStartRestore: target is not a structure" );
 
@@ -1930,7 +1930,7 @@ BOOL droidUpdateRestore( DROID *psDroid )
 
 	ASSERT( psDroid->action == DACTION_RESTORE,
 		"unitUpdateRestore: unit is not restoring" );
-	psStruct = (STRUCTURE *)psDroid->psTarget[0];
+	psStruct = (STRUCTURE *)psDroid->psTarget;
 	ASSERT( psStruct->type == OBJ_STRUCTURE,
 		"unitUpdateRestore: target is not a structure" );
 	ASSERT( psStruct->pStructureType->resistance != 0,
@@ -3302,10 +3302,10 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	psDroid->actionX = 0;
 	psDroid->actionY = 0;
 	psDroid->psTarStats = NULL;
+	psDroid->psTarget = NULL;
 
 	for(i = 0;i < DROID_MAXWEAPS;i++)
 	{
-		psDroid->psTarget[i] = NULL;
 		psDroid->psActionTarget[i] = NULL;
 		psDroid->asWeaps[i].lastFired = 0;
 		psDroid->asWeaps[i].nStat = 0;
@@ -4901,7 +4901,7 @@ void setUpBuildModule(DROID *psDroid)
 		{
 			//set up the help build scenario
 			psDroid->order = DORDER_HELPBUILD;
-			setDroidTarget(psDroid, (BASE_OBJECT *)psStruct, 0);
+			setDroidTarget(psDroid, (BASE_OBJECT *)psStruct);
 			if (droidStartBuild(psDroid))
 			{
 				psDroid->action = DACTION_BUILD;
@@ -5065,7 +5065,7 @@ BOOL droidUnderRepair(DROID *psDroid)
 			//if (psCurr->droidType == DROID_REPAIR && psCurr->action ==
             if ((psCurr->droidType == DROID_REPAIR || psCurr->droidType ==
                 DROID_CYBORG_REPAIR) && psCurr->action ==
-				DACTION_DROIDREPAIR && psCurr->psTarget[0] == (BASE_OBJECT *)psDroid)
+				DACTION_DROIDREPAIR && psCurr->psTarget == (BASE_OBJECT *)psDroid)
 			{
 				return TRUE;
 			}
@@ -5254,7 +5254,7 @@ BOOL allVtolsRearmed(DROID *psDroid)
 	{
 		if (vtolRearming(psCurr) &&
 			psCurr->order == psDroid->order &&
-			psCurr->psTarget[0] == psDroid->psTarget[0])
+			psCurr->psTarget == psDroid->psTarget)
 		{
 			stillRearming = TRUE;
 			break;
@@ -5568,7 +5568,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
         //check through the 'to' players list of droids to see if any are targetting it
         for (psCurr = apsDroidLists[to]; psCurr != NULL; psCurr = psCurr->psNext)
         {
-            if (psCurr->psTarget[0] == (BASE_OBJECT *)psD ||
+            if (psCurr->psTarget == (BASE_OBJECT *)psD ||
                 psCurr->psActionTarget[0] == (BASE_OBJECT *)psD)
             {
                 orderDroid(psCurr, DORDER_STOP);

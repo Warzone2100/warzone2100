@@ -400,14 +400,14 @@ BOOL droidCheckReferences(DROID *psVictimDroid);
 
 /** helper functions for future refcount patch **/
 
-#define setDroidTarget(_psDroid, _psNewTarget, _idx) _setDroidTarget(_psDroid, _psNewTarget, _idx, __LINE__, __FUNCTION__)
-static inline void _setDroidTarget(DROID *psDroid, BASE_OBJECT *psNewTarget, UWORD idx, int line, const char *func)
+#define setDroidTarget(_psDroid, _psNewTarget) _setDroidTarget(_psDroid, _psNewTarget, __LINE__, __FUNCTION__)
+static inline void _setDroidTarget(DROID *psDroid, BASE_OBJECT *psNewTarget, int line, const char *func)
 {
-	psDroid->psTarget[idx] = psNewTarget;
+	psDroid->psTarget = psNewTarget;
 	ASSERT(psNewTarget == NULL || !psNewTarget->died, "setDroidTarget: Set dead target");
 #ifdef DEBUG
-	psDroid->targetLine[idx] = line;
-	strlcpy(psDroid->targetFunc[idx], func, MAX_EVENT_NAME_LEN);
+	psDroid->targetLine = line;
+	strlcpy(psDroid->targetFunc, func, MAX_EVENT_NAME_LEN);
 #endif
 }
 
@@ -433,12 +433,12 @@ static inline void _setDroidBase(DROID *psDroid, STRUCTURE *psNewBase, int line,
 #endif
 }
 
-static inline void setSaveDroidTarget(DROID *psSaveDroid, BASE_OBJECT *psNewTarget, UWORD idx)
+static inline void setSaveDroidTarget(DROID *psSaveDroid, BASE_OBJECT *psNewTarget)
 {
-	psSaveDroid->psTarget[idx] = psNewTarget;
+	psSaveDroid->psTarget = psNewTarget;
 #ifdef DEBUG
-	psSaveDroid->targetLine[idx] = 0;
-	strlcpy(psSaveDroid->targetFunc[idx], "savegame", MAX_EVENT_NAME_LEN);
+	psSaveDroid->targetLine = 0;
+	strlcpy(psSaveDroid->targetFunc, "savegame", MAX_EVENT_NAME_LEN);
 #endif
 }
 

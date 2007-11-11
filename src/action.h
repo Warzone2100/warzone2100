@@ -81,11 +81,6 @@ typedef enum _droid_action
 	DACTION_CIRCLE = 41,				// (41) circling while engaging
 } DROID_ACTION;
 
-//Watermelon:a simple struct to avoid passing struct array pointer to functions
-typedef struct _droid_oaction_info {
-	BASE_OBJECT *objects[STRUCT_MAXWEAPS];
-} DROID_OACTION_INFO;
-
 // after failing a route ... this is the amount of time that the droid goes all defensive untill it can start going aggressive
 #define MIN_SULK_TIME (1500)		// 1.5 sec
 #define MAX_SULK_TIME (4000)		// 4 secs
@@ -103,7 +98,7 @@ extern void actionDroid(DROID *psDroid, DROID_ACTION action);
 extern void actionDroidLoc(DROID *psDroid, DROID_ACTION action, UDWORD x, UDWORD y);
 
 /* Give a droid an action with an object target */
-extern void actionDroidObj(DROID *psDroid, DROID_ACTION action, DROID_OACTION_INFO *psObj);
+extern void actionDroidObj(DROID *psDroid, DROID_ACTION action, BASE_OBJECT *psObj);
 
 /* Give a droid an action with an object target and a location */
 void actionDroidObjLoc(DROID *psDroid, DROID_ACTION action,

@@ -230,7 +230,7 @@ BOOL recvDroidEmbark(NETMSG *pMsg)
 
 		// Init the order for when disembark
 		psDroid->order = DORDER_NONE;
-		clearDroidTargets(psDroid);
+		setDroidTarget(psDroid, NULL);
 		psDroid->psTarStats = NULL;
 	}
 
@@ -777,7 +777,6 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, uint32_t x, uin
 	// Target is an object
 	else
 	{
-		DROID_OACTION_INFO oaInfo = {{NULL}};
 		BASE_OBJECT *psObj = NULL;
 		DROID		*pD;
 
@@ -816,8 +815,7 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, uint32_t x, uin
 		}
 
 		turnOffMultiMsg(TRUE);
-		oaInfo.objects[0] = psObj;
-		orderDroidObj(psDroid, order, &oaInfo);
+		orderDroidObj(psDroid, order, psObj);
 		turnOffMultiMsg(FALSE);
 	}
 }
@@ -927,9 +925,9 @@ BOOL sendWholeDroid(DROID *pD, UDWORD dest)
 
 	for (i = 0; i < pD->numWeaps; i++)
 	{
-		if (pD->psTarget[i])
+		if (pD->psActionTarget[i])
 		{
-			NetAdd(m,sizecount,pD->psTarget[i]->id);		sizecount+=sizeof(pD->psTarget[i]->id);
+			NetAdd(m,sizecount,pD->psActionTarget[i]->id);		sizecount+=sizeof(pD->psActionTarget[i]->id);
 			bNoTarget = FALSE;
 		}
 	}
@@ -1030,7 +1028,7 @@ BOOL receiveWholeDroid(NETMSG *m)
 	for (i = 0;i < dt.numWeaps;i++)
 	{
 		NetGet(m, sizecount, id);			sizecount += sizeof(id);
-		pD->psTarget[i] = IdToPointer(id, ANYPLAYER);
+		pD->psActionTarget[i] = IdToPointer(id, ANYPLAYER);
 	}
 	pD->psTarStats = NULL;
 

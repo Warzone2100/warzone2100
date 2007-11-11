@@ -436,8 +436,8 @@ void formAlliance(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio,BOOL allowNotific
 	for(psDroid= apsDroidLists[p1];psDroid;psDroid=psDroid->psNext)	// from -> to
 	{
 		if (psDroid->order == DORDER_ATTACK
-			&& psDroid->psTarget[0]
-			&& psDroid->psTarget[0]->player == p2)
+			&& psDroid->psTarget
+			&& psDroid->psTarget->player == p2)
 		{
 			orderDroid(psDroid,DORDER_STOP);
 		}
@@ -445,14 +445,13 @@ void formAlliance(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio,BOOL allowNotific
 	for(psDroid= apsDroidLists[p2];psDroid;psDroid=psDroid->psNext)	// to -> from
 	{
 		if (psDroid->order == DORDER_ATTACK
-			&& psDroid->psTarget[0]
- 			&& psDroid->psTarget[0]->player == p1)
+			&& psDroid->psTarget
+ 			&& psDroid->psTarget->player == p1)
 		{
 			orderDroid(psDroid,DORDER_STOP);
 		}
 	}
 	turnOffMultiMsg(FALSE);
-
 }
 
 

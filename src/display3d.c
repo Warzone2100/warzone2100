@@ -4957,11 +4957,11 @@ UDWORD	i;
 				{
 					if(psDroid->action == DACTION_BUILD)
 					{
-						if(psDroid->psTarget[0])
+						if (psDroid->psTarget)
 						{
-							if(psDroid->psTarget[0]->type == OBJ_STRUCTURE)
+							if (psDroid->psTarget->type == OBJ_STRUCTURE)
 							{
-								addConstructionLine(psDroid, (STRUCTURE*)psDroid->psTarget[0]);
+								addConstructionLine(psDroid, (STRUCTURE*)psDroid->psTarget);
 							}
 						}
 					}

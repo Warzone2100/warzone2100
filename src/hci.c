@@ -3381,7 +3381,7 @@ void intBuildStarted(DROID *psDroid)
 				if (psCurr == psDroid)
 				{
 					intSetStats(droidID + IDOBJ_STATSTART, ((BASE_STATS *)(
-						(STRUCTURE *)psCurr->psTarget[0])->pStructureType));
+						(STRUCTURE *)psCurr->psTarget)->pStructureType));
 					break;
 				}
 				droidID++;

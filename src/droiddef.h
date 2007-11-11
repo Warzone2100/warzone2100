@@ -192,12 +192,12 @@ typedef struct _droid
 	UDWORD				timeLastHit;
 	BOOL				bTargetted;
 
-	BASE_OBJECT			*psTarget[DROID_MAXWEAPS];	// Who to shoot at etc
+	BASE_OBJECT			*psTarget;	// Order target
 	BASE_STATS			*psTarStats;	// What to build etc
 #ifdef DEBUG
 	// these are to help tracking down dangling pointers
-	char				targetFunc[DROID_MAXWEAPS][MAX_EVENT_NAME_LEN];
-	int				targetLine[DROID_MAXWEAPS];
+	char				targetFunc[MAX_EVENT_NAME_LEN];
+	int				targetLine;
 	char				actionTargetFunc[DROID_MAXWEAPS][MAX_EVENT_NAME_LEN];
 	int				actionTargetLine[DROID_MAXWEAPS];
 	char				baseFunc[MAX_EVENT_NAME_LEN];

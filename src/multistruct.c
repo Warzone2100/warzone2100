@@ -67,9 +67,9 @@ BOOL sendBuildStarted(STRUCTURE *psStruct,DROID *psDroid)
 	NetAdd(msg,15,psStruct->id);					// building id to create
 	NetAdd(msg,19,order);			// building id to create
 
-	if(psDroid->psTarget[0] && (psDroid->psTarget[0]->type == OBJ_STRUCTURE))
+	if (psDroid->psTarget && psDroid->psTarget->type == OBJ_STRUCTURE)
 	{
-		NetAdd(msg,20,((STRUCTURE*)psDroid->psTarget[0])->id);
+		NetAdd(msg,20,((STRUCTURE*)psDroid->psTarget)->id);
 	}
 	else
 	{
@@ -122,11 +122,11 @@ BOOL recvBuildStarted(NETMSG *pMsg)
 			psDroid->psTarStats = (BASE_STATS *) psStats;
 			if(targetId)
 			{
-				setDroidTarget(psDroid, IdToPointer(targetId, ANYPLAYER), 0);
+				setDroidTarget(psDroid, IdToPointer(targetId, ANYPLAYER));
 			}
 			else
 			{
-				setDroidTarget(psDroid, NULL, 0);
+				setDroidTarget(psDroid, NULL);
 			}
 
 			if (IsStatExpansionModule(psStats))
@@ -141,9 +141,9 @@ BOOL recvBuildStarted(NETMSG *pMsg)
 
 		}
 
-		if (psDroid->psTarget[0])									//sync id's
+		if (psDroid->psTarget)									//sync id's
 		{
-			((STRUCTURE*)psDroid->psTarget[0])->id = structId;
+			((STRUCTURE*)psDroid->psTarget)->id = structId;
 		}
 	}
 

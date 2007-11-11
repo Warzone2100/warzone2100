@@ -1914,28 +1914,23 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 			if ((psCurr != psDroid) && // can't attack yourself
 				(psCurr->selected))
 			{
-				DROID_OACTION_INFO  oaInfo = {{NULL}};
-
 				if ((psCurr->droidType == DROID_WEAPON) ||
 					(psCurr->droidType == DROID_CYBORG) ||
 					(psCurr->droidType == DROID_CYBORG_SUPER) ||
 					(psCurr->droidType == DROID_COMMAND))
 				{
-					oaInfo.objects[0] = (BASE_OBJECT*)psDroid;
-					orderDroidObj(psCurr, DORDER_ATTACK, &oaInfo);
+					orderDroidObj(psCurr, DORDER_ATTACK, (BASE_OBJECT*)psDroid);
 					FeedbackOrderGiven();
 				}
 				else if (psCurr->droidType == DROID_SENSOR)
 				{
-					oaInfo.objects[0] = (BASE_OBJECT*)psDroid;
-					orderDroidObj(psCurr, DORDER_OBSERVE, &oaInfo);
+					orderDroidObj(psCurr, DORDER_OBSERVE, (BASE_OBJECT*)psDroid);
 					FeedbackOrderGiven();
 				}
 				else if (psCurr->droidType == DROID_REPAIR ||
 					psCurr->droidType == DROID_CYBORG_REPAIR)
 				{
-					oaInfo.objects[0] = (BASE_OBJECT*)psDroid;
-					orderDroidObj(psCurr, DORDER_DROIDREPAIR, &oaInfo);
+					orderDroidObj(psCurr, DORDER_DROIDREPAIR, (BASE_OBJECT*)psDroid);
 					FeedbackOrderGiven();
 				}
 			}
@@ -2025,12 +2020,8 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 					vtolDroid(psCurr)) &&
 					droidSensorDroidWeapon((BASE_OBJECT *)psDroid, psCurr))
 				{
-					DROID_OACTION_INFO  oaInfo = {{NULL}};
-
-					//bWeapDroidSelected = TRUE;
 					bSensorAssigned = TRUE;
-					oaInfo.objects[0] = (BASE_OBJECT *)psDroid;
-					orderDroidObj(psCurr, DORDER_FIRESUPPORT, &oaInfo);
+					orderDroidObj(psCurr, DORDER_FIRESUPPORT, (BASE_OBJECT *)psDroid);
 					FeedbackOrderGiven();
 				}
 			}
@@ -2148,20 +2139,15 @@ static inline void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE s
 		{
 			if (psCurr->selected)
 			{
-				DROID_OACTION_INFO  oaInfo = {{NULL}};
-
-				//if ((psCurr->droidType == DROID_WEAPON) || (psCurr->droidType == DROID_CYBORG) ||
 				if ((psCurr->droidType == DROID_WEAPON) || cyborgDroid(psCurr) ||
 					(psCurr->droidType == DROID_COMMAND))
 				{
-					oaInfo.objects[0] = (BASE_OBJECT*)psStructure;
-					orderDroidObj(psCurr, DORDER_ATTACK, &oaInfo);
+					orderDroidObj(psCurr, DORDER_ATTACK, (BASE_OBJECT*)psStructure);
 					FeedbackOrderGiven();
 				}
 				else if (psCurr->droidType == DROID_SENSOR)
 				{
-					oaInfo.objects[0] = (BASE_OBJECT*)psStructure;
-					orderDroidObj(psCurr, DORDER_OBSERVE, &oaInfo);
+					orderDroidObj(psCurr, DORDER_OBSERVE, (BASE_OBJECT*)psStructure);
 					FeedbackOrderGiven();
 				}
 			}
@@ -2263,20 +2249,16 @@ static inline void dealWithLMBFeature(FEATURE* psFeature)
 			case FEAT_GEN_ARTE:
 			case FEAT_OIL_DRUM:
 			{
-				DROID_OACTION_INFO  oaInfo = {{NULL}};
 				DROID* psNearestUnit = getNearestDroid(mouseTileX*TILE_UNITS+TILE_UNITS/2,
 											mouseTileY*TILE_UNITS+TILE_UNITS/2,TRUE);
 				/* If so then find the nearest unit! */
 				if(psNearestUnit)	// bloody well should be!!!
 				{
-					oaInfo.objects[0] = (BASE_OBJECT *)psFeature;
-//					orderDroidLoc(psNearestUnit,DORDER_MOVE, mouseTileX*TILE_UNITS+TILE_UNITS/2,mouseTileY*TILE_UNITS+TILE_UNITS/2);
-					orderDroidObj(psNearestUnit, DORDER_RECOVER, &oaInfo);
+					orderDroidObj(psNearestUnit, DORDER_RECOVER, (BASE_OBJECT *)psFeature);
 					FeedbackOrderGiven();
 				}
 				else
 				{
-//					orderSelectedLoc(selectedPlayer, psFeature->x,psFeature->y);	// recover it.
 					orderSelectedObj(selectedPlayer, (BASE_OBJECT*)psFeature);
 					FeedbackOrderGiven();
 				}

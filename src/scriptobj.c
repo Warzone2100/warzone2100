@@ -113,7 +113,7 @@ BOOL scrBaseObjGet(UDWORD index)
 		}
 		type = VAL_INT;
 		scrFunctionResult.v.ival = (SDWORD)((DROID *)psObj)->order;
-		if ((scrFunctionResult.v.ival == DORDER_GUARD) && (((DROID *)psObj)->psTarget[0] == NULL))
+		if (scrFunctionResult.v.ival == DORDER_GUARD && ((DROID *)psObj)->psTarget == NULL)
 		{
 			scrFunctionResult.v.ival = DORDER_NONE;
 		}
@@ -294,7 +294,7 @@ BOOL scrBaseObjGet(UDWORD index)
 		else if (psObj->type == OBJ_DROID)
 		{
 			type = (INTERP_TYPE)ST_BASEOBJECT;
-			scrFunctionResult.v.oval = (((DROID *)psObj)->psTarget[0]);
+			scrFunctionResult.v.oval = ((DROID *)psObj)->psTarget;
 		}
 		else		//Nothing else supported
 		{

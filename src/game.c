@@ -5948,19 +5948,19 @@ static BOOL loadDroidSetPointers(void)
 			while (psDroid)
 			{
 				//Target rebuild the object pointer from the ID
-				id = (UDWORD)(psDroid->psTarget[0]);
+				id = (UDWORD)psDroid->psTarget;
 				if (id != UDWORD_MAX)
 				{
-					setSaveDroidTarget(psDroid, getBaseObjFromId(id), 0);
-					ASSERT( psDroid->psTarget[0] != NULL,"Saved Droid psTarget getBaseObjFromId() failed" );
-					if (psDroid->psTarget[0] == NULL)
+					setSaveDroidTarget(psDroid, getBaseObjFromId(id));
+					ASSERT(psDroid->psTarget != NULL, "Saved Droid psTarget getBaseObjFromId() failed");
+					if (psDroid->psTarget == NULL)
 					{
 						psDroid->order = DORDER_NONE;
 					}
 				}
 				else
 				{
-					setSaveDroidTarget(psDroid, NULL, 0);
+					setSaveDroidTarget(psDroid, NULL);
 				}
 				//ActionTarget rebuild the object pointer from the ID
 				id = (UDWORD)(psDroid->psActionTarget[0]);
@@ -6033,9 +6033,9 @@ static BOOL loadDroidSetPointers(void)
 						UDWORD i;
 
 						psTemp = psCargo->psGrpNext;
+						setSaveDroidTarget(psCargo, NULL);
 						for (i = 0; i < DROID_MAXWEAPS; i++)
 						{
-							setSaveDroidTarget(psCargo, NULL, i);
 							setSaveDroidActionTarget(psCargo, NULL, i);
 						}
 						setSaveDroidBase(psCargo, NULL);
@@ -6132,9 +6132,9 @@ BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 		else if (psSaveDroid->saveType == DROID_ON_TRANSPORT)
 		{
    			//add the droid to the list
+			setSaveDroidTarget(psDroid, NULL);
 			for (i = 0; i < DROID_MAXWEAPS; i++)
 			{
-				setSaveDroidTarget(psDroid, NULL, i);
 				setSaveDroidActionTarget(psDroid, NULL, i);
 			}
 			setSaveDroidBase(psDroid, NULL);
@@ -6286,9 +6286,9 @@ BOOL loadSaveDroidV19(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
   			//add the droid to the list
 			psDroid->order = DORDER_NONE;
 			psDroid->action = DACTION_NONE;
+			setSaveDroidTarget(psDroid, NULL);
 			for (i = 0; i < DROID_MAXWEAPS; i++)
 			{
-				setSaveDroidTarget(psDroid, NULL, i);
 				setSaveDroidActionTarget(psDroid, NULL, i);
 			}
 			setSaveDroidBase(psDroid, NULL);
@@ -6481,9 +6481,9 @@ BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
   			//add the droid to the list
 			psDroid->order = DORDER_NONE;
 			psDroid->action = DACTION_NONE;
+			setSaveDroidTarget(psDroid, NULL);
 			for (i = 0; i < DROID_MAXWEAPS; i++)
 			{
-				setSaveDroidTarget(psDroid, NULL, i);
 				setSaveDroidActionTarget(psDroid, NULL, i);
 			}
 			setSaveDroidBase(psDroid, NULL);
@@ -6589,11 +6589,11 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			psSaveDroid->orderX2		= psCurr->orderX2;
 			psSaveDroid->orderY2		= psCurr->orderY2;
 			psSaveDroid->timeLastHit	= psCurr->timeLastHit;
-			if (psCurr->psTarget[0] != NULL)
+			if (psCurr->psTarget != NULL)
 			{
-				if (psCurr->psTarget[0]->died <= 1)
+				if (psCurr->psTarget->died <= 1)
 				{
-					psSaveDroid->targetID		= psCurr->psTarget[0]->id;
+					psSaveDroid->targetID		= psCurr->psTarget->id;
 					if	(!checkValidId(psSaveDroid->targetID))
 					{
 						psSaveDroid->targetID		= UDWORD_MAX;

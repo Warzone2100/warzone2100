@@ -96,8 +96,6 @@ void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 
 	if (grpNumMembers(psCommander->psGroup) < cmdDroidMaxGroup(psCommander))
 	{
-		DROID_OACTION_INFO oaInfo = {{(BASE_OBJECT*)psCommander}};
-
 		grpJoin(psCommander->psGroup, psDroid);
 		psDroid->group = UBYTE_MAX;
 
@@ -107,13 +105,8 @@ void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 		secondarySetState(psDroid, DSO_ATTACK_LEVEL, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_ALEV_MASK));
 		secondarySetState(psDroid, DSO_HALTTYPE, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_HALT_MASK));
 
-		orderDroidObj(psDroid, DORDER_GUARD, &oaInfo);
+		orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander);
 	}
-
-//	if(bMultiPlayer && myResponsibility(psDroid->player) )
-//	{
-//		sendCommandDroid(psCommander,psDroid);
-//	}
 }
 
 // return the current target designator for a player

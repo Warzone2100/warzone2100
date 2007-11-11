@@ -369,7 +369,6 @@ void orderGroupLoc(DROID_GROUP *psGroup, DROID_ORDER order, UDWORD x, UDWORD y)
 void orderGroupObj(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj)
 {
 	DROID	*psCurr;
-	DROID_OACTION_INFO oaInfo = {{(BASE_OBJECT *)psObj}};
 
 	ASSERT( psGroup != NULL,
 		"orderGroupObj: invalid droid group" );
@@ -381,7 +380,7 @@ void orderGroupObj(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj)
 
 		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
-			orderDroidObj(psCurr, order, &oaInfo);
+			orderDroidObj(psCurr, order, (BASE_OBJECT *)psObj);
 		}
 
 		bMultiPlayer = TRUE;
@@ -390,7 +389,7 @@ void orderGroupObj(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj)
 	{
 		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
-			orderDroidObj(psCurr, order, &oaInfo);
+			orderDroidObj(psCurr, order, (BASE_OBJECT *)psObj);
 		}
 	}
 }

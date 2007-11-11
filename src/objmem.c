@@ -422,9 +422,9 @@ void killDroid(DROID *psDel)
 	ASSERT( psDel->player < MAX_PLAYERS,
 		"killUnit: invalid player for unit" );
 
+	setDroidTarget(psDel, NULL);
 	for (i = 0; i < DROID_MAXWEAPS; i++)
 	{
-		setDroidTarget(psDel, NULL, i);
 		setDroidActionTarget(psDel, NULL, i);
 	}
 	setDroidBase(psDel, NULL);
