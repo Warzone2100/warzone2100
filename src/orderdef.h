@@ -39,8 +39,7 @@ typedef struct _droid_order_data
 	SDWORD			order;
 	UWORD			x,y;
 	UWORD			x2,y2;
-	//Watermelon:multiple target info;
-	BASE_OBJECT		*psObj[DROID_MAXWEAPS];
+	BASE_OBJECT		*psObj;
 	BASE_STATS		*psStats;
 } DROID_ORDER_DATA;
 
