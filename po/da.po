@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: da\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-11-10 19:40+0100\n"
+"POT-Creation-Date: 2007-11-11 18:27+0100\n"
 "PO-Revision-Date: 2007-04-17 23:03+0200\n"
 "Last-Translator: Christian Vest Hansen <karmazilla@gmail.com>\n"
 "Language-Team: Dansk <en@li.org>\n"
@@ -57,7 +57,7 @@ msgstr "Kan ikke bygge på brændende oilebrøn."
 msgid "%s - Damage %d%% - Kills %d, %s"
 msgstr "%s - Skade %d%% - Drab %d, %s"
 
-#: src/display.c:2251
+#: src/display.c:2250
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Truck beordret til at bygge oliebrøn."
 
@@ -513,57 +513,57 @@ msgstr "Konstruktionsmenuen vil ikke genåbne"
 msgid "Power Accrued"
 msgstr "Indsalmet energi"
 
-#: src/structure.c:2940
+#: src/structure.c:2945
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Kommandobegrænsning nået - indstiller produktion"
 
-#: src/structure.c:6103 src/structure.c:6124
+#: src/structure.c:6108 src/structure.c:6130
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%d Enheder tildelt gruppe %d"
 msgstr[1] "%d Enheder tildelt gruppe %d"
 
-#: src/structure.c:6161
+#: src/structure.c:6167
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Forbundet %d af %d"
 
-#: src/structure.c:6176
+#: src/structure.c:6182
 #, fuzzy, c-format
 msgid "%s - Damage %u%%"
 msgstr "%s - Skade %d%% - Drab %d, %s"
 
-#: src/structure.c:6296 src/structure.c:6347
+#: src/structure.c:6302 src/structure.c:6353
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronisk beskadiget"
 
-#: src/structure.c:6572
+#: src/structure.c:6578
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronisk gevinst - Rekonniseringsrapport"
 
-#: src/structure.c:6612
+#: src/structure.c:6618
 msgid "Factory Reward - Propulsion"
 msgstr "Fabriksgevinst - Fremdrift"
 
-#: src/structure.c:6636
+#: src/structure.c:6642
 msgid "Factory Reward - Body"
 msgstr "Fabriksgevinst - Skrog"
 
-#: src/structure.c:6660
+#: src/structure.c:6666
 msgid "Factory Reward - Weapon"
 msgstr "Frabriskgevinst - Våben"
 
-#: src/structure.c:6669
+#: src/structure.c:6675
 msgid "Factory Reward - Nothing"
 msgstr "Fabriksgevinst - Ingen"
 
-#: src/structure.c:6697
+#: src/structure.c:6703
 msgid "Repair Facility Award - Repair"
 msgstr "Reperationsgevinst - Reperation"
 
-#: src/structure.c:6704
+#: src/structure.c:6710
 msgid "Repair Facility Award - Nothing"
 msgstr "Reperationsgevinst - Ingen"
 
@@ -836,6 +836,114 @@ msgstr "Musik volume"
 #: src/ingameop.c:273 src/frontend.c:227
 msgid "Options"
 msgstr "Indstillinger"
+
+#: src/clparse.c:92
+msgid "Run in cheat mode"
+msgstr ""
+
+#: src/clparse.c:93
+msgid "Set default data directory"
+msgstr ""
+
+#: src/clparse.c:93
+msgid "data directory"
+msgstr ""
+
+#: src/clparse.c:94
+msgid "Show debug for given level"
+msgstr ""
+
+#: src/clparse.c:94
+msgid "debug level"
+msgstr ""
+
+#: src/clparse.c:95
+msgid "Log debug output to file"
+msgstr ""
+
+#: src/clparse.c:95
+msgid "file"
+msgstr ""
+
+#: src/clparse.c:96
+msgid "Play in fullscreen mode"
+msgstr ""
+
+#: src/clparse.c:97
+#, fuzzy
+msgid "Disable fog"
+msgstr "Afstandståge"
+
+#: src/clparse.c:100
+#, fuzzy
+msgid "Load a specific game"
+msgstr "Indlæs gemt spil"
+
+#: src/clparse.c:100
+msgid "game-name"
+msgstr ""
+
+#: src/clparse.c:101
+msgid "Show this help message and exit"
+msgstr ""
+
+#: src/clparse.c:102
+msgid "Enable a global mod"
+msgstr ""
+
+#: src/clparse.c:102 src/clparse.c:103 src/clparse.c:104
+msgid "mod"
+msgstr ""
+
+#: src/clparse.c:103
+msgid "Enable a campaign only mod"
+msgstr ""
+
+#: src/clparse.c:104
+msgid "Enable a multiplay only mod"
+msgstr ""
+
+#: src/clparse.c:105
+#, fuzzy
+msgid "Load a saved game"
+msgstr "Indlæs gemt spil"
+
+#: src/clparse.c:105
+#, fuzzy
+msgid "savegame"
+msgstr "Gem spil"
+
+#: src/clparse.c:108
+msgid "Play in windowed mode"
+msgstr ""
+
+#: src/clparse.c:109
+msgid "Show version information and exit"
+msgstr ""
+
+#: src/clparse.c:110
+msgid "Set the resolution to use"
+msgstr ""
+
+#: src/clparse.c:110
+msgid "WIDTHxHEIGHT"
+msgstr ""
+
+#: src/clparse.c:111
+msgid "Enable shadows"
+msgstr ""
+
+#: src/clparse.c:112
+msgid "Disable shadows"
+msgstr ""
+
+#: src/clparse.c:113
+msgid "Enable sound"
+msgstr ""
+
+#: src/clparse.c:114
+msgid "Disable sound"
+msgstr ""
 
 #: src/design.c:468 src/design.c:490 src/design.c:3657
 msgid "New Vehicle"

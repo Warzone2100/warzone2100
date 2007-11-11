@@ -162,6 +162,10 @@ PKG_CHECK_MODULES([OGGVORBIS], [ogg >= 1.1 vorbis >= 1.1 vorbisfile >= 1.1])
 
 # Checks for libraries:
 
+# Look for Popt
+AC_CHECK_HEADER(popt.h, , AC_MSG_ERROR([Popt header not found.]))
+AC_CHECK_LIB(popt, poptGetContext, AC_SUBST([POPT_LIBS], [-lpopt]), AC_MSG_ERROR([Popt not found.]))
+
 # Look for PhysicsFS
 AC_CHECK_HEADER(physfs.h, , AC_MSG_ERROR([PhysicsFS header not found.]))
 AC_CHECK_LIB(physfs, PHYSFS_init, AC_SUBST([PHYSFS_LIBS], [-lphysfs]), AC_MSG_ERROR([PhysicsFS not found.]))

@@ -28,6 +28,8 @@
 #include "lib/framework/frame.h"
 #include "lib/widget/widget.h"
 
+#include <popt.h>
+
 #include "main.h"
 #include "frontend.h"
 
@@ -57,43 +59,88 @@ extern char * multiplay_mods[MAX_MODS];
 //! Let the end user into debug mode....
 BOOL	bAllowDebugMode = FALSE;
 
-//! Print usage info
-static void printUsage(void)
+typedef enum
 {
-	fprintf( stdout,
-		"Usage:\n"
-		"   warzone2100 [OPTIONS]\n"
-		"Try --help for additional info.\n"
-		   );
+	// We don't want to use zero, so start at one (1)
+	CLI_CHEAT = 1,
+	CLI_DATADIR,
+	CLI_DEBUG,
+	CLI_DEBUGFILE,
+	CLI_FULLSCREEN,
+	CLI_NOFOG,
+	CLI_GREY_FOG,
+	CLI_GAME,
+	CLI_HELP,
+	CLI_MOD_GLOB,
+	CLI_MOD_CA,
+	CLI_MOD_MP,
+	CLI_SAVEGAME,
+	CLI_USAGE,
+	CLI_WINDOW,
+	CLI_VERSION,
+	CLI_RESOLUTION,
+	CLI_SHADOWS,
+	CLI_NOSHADOWS,
+	CLI_SOUND,
+	CLI_NOSOUND,
+} CLI_OPTIONS;
 
-}
-
-//! Print help and usage info
-static void printHelp(void)
+static const struct poptOption* getOptionsTable()
 {
-	// Show help
-	fprintf( stdout,
-		"Warzone 2100:\n"
-		"   An OpenGL based 3D real time strategy game, scened in post-nuclear warfare\n"
-		"Usage:\n"
-		"   warzone2100 [OPTIONS]\n"
-		"Options:\n"
-		"   --cheat                    Run in cheat mode\n"
-		"   --datadir DIR              Set default datadir to DIR\n"
-		"   --debug FLAGS              Show debug for FLAGS\n"
-		"   --debugfile FILE           Log debug output in FILE\n"
-		"   --fullscreen               Play in fullscreen mode\n"
-		"   --help                     Show this help and exit\n"
-		"   --mod MOD                  Enable global mod MOD\n"
-		"   --mod_ca MOD               Enable campaign only mod MOD\n"
-		"   --mod_mp MOD               Enable multiplay only mod MOD\n"
-		"   --savegame NAME            Load a saved game NAME\n"
-		"   --window                   Play in windowed mode\n"
-		"   --version                  Output version info and exit\n"
-		"   --resolution WIDTHxHEIGHT  Set the resolution (screen or window)\n"
-		"   --(no)shadows              Toggles the shadows\n"
-		"   --(no)sound                Toggles the sound\n"
-		   );
+	static const struct poptOption optionsTable[] =
+	{
+		{ "cheat",      '\0', POPT_ARG_NONE,   NULL, CLI_CHEAT,      N_("Run in cheat mode"),                 NULL },
+		{ "datadir",    '\0', POPT_ARG_STRING, NULL, CLI_DATADIR,    N_("Set default data directory"),        N_("data directory") },
+		{ "debug",      '\0', POPT_ARG_STRING, NULL, CLI_DEBUG,      N_("Show debug for given level"),        N_("debug level") },
+		{ "debugfile",  '\0', POPT_ARG_STRING, NULL, CLI_DEBUGFILE,  N_("Log debug output to file"),          N_("file") },
+		{ "fullscreen", '\0', POPT_ARG_NONE,   NULL, CLI_FULLSCREEN, N_("Play in fullscreen mode"),           NULL },
+		{ "nofog",      '\0', POPT_ARG_NONE,   NULL, CLI_NOFOG,      N_("Disable fog"),                       NULL },
+		{ "grey-fog",   '\0', POPT_ARG_NONE
+		          | POPT_ARGFLAG_DOC_HIDDEN,   NULL, CLI_GREY_FOG,   NULL,                                    NULL },
+		{ "game",       '\0', POPT_ARG_STRING, NULL, CLI_GAME,       N_("Load a specific game"),              N_("game-name") },
+		{ "help",       'h',  POPT_ARG_NONE,   NULL, CLI_HELP,       N_("Show this help message and exit"),   NULL },
+		{ "mod",        '\0', POPT_ARG_STRING, NULL, CLI_MOD_GLOB,   N_("Enable a global mod"),               N_("mod") },
+		{ "mod_ca",     '\0', POPT_ARG_STRING, NULL, CLI_MOD_CA,     N_("Enable a campaign only mod"),        N_("mod") },
+		{ "mod_mp",     '\0', POPT_ARG_STRING, NULL, CLI_MOD_MP,     N_("Enable a multiplay only mod"),       N_("mod") },
+		{ "savegame",   '\0', POPT_ARG_STRING, NULL, CLI_SAVEGAME,   N_("Load a saved game"),                 N_("savegame") },
+		{ "usage",      '\0', POPT_ARG_NONE
+		          | POPT_ARGFLAG_DOC_HIDDEN,   NULL, CLI_USAGE,      NULL,                                    NULL, },
+		{ "window",     '\0', POPT_ARG_NONE,   NULL, CLI_WINDOW,     N_("Play in windowed mode"),             NULL },
+		{ "version",    '\0', POPT_ARG_NONE,   NULL, CLI_VERSION,    N_("Show version information and exit"), NULL },
+		{ "resolution", '\0', POPT_ARG_STRING, NULL, CLI_RESOLUTION, N_("Set the resolution to use"),         N_("WIDTHxHEIGHT") },
+		{ "shadows",    '\0', POPT_ARG_NONE,   NULL, CLI_SHADOWS,    N_("Enable shadows"),                    NULL },
+		{ "noshadows",  '\0', POPT_ARG_NONE,   NULL, CLI_NOSHADOWS,  N_("Disable shadows"),                   NULL },
+		{ "sound",      '\0', POPT_ARG_NONE,   NULL, CLI_SOUND,      N_("Enable sound"),                      NULL },
+		{ "nosound",    '\0', POPT_ARG_NONE,   NULL, CLI_NOSOUND,    N_("Disable sound"),                     NULL },
+
+		// Terminating entry
+		{ NULL,         '\0', 0,               NULL,          0,              NULL,                                    NULL },
+	};
+
+	static struct poptOption TranslatedOptionsTable[sizeof(optionsTable) / sizeof(struct poptOption)];
+	static bool translated = false;
+
+	if (translated == false)
+	{
+		unsigned int table_size = sizeof(optionsTable) / sizeof(struct poptOption) - 1;
+		unsigned int i;
+
+		for (i = 0; i < table_size; ++i)
+		{
+			TranslatedOptionsTable[i] = optionsTable[i];
+
+			// If there is a description, make sure to translate it with gettext
+			if (TranslatedOptionsTable[i].descrip != NULL)
+				TranslatedOptionsTable[i].descrip = gettext(TranslatedOptionsTable[i].descrip);
+
+			if (TranslatedOptionsTable[i].argDescrip != NULL)
+				TranslatedOptionsTable[i].argDescrip = gettext(TranslatedOptionsTable[i].argDescrip);
+		}
+
+		translated = true;
+	}
+
+	return TranslatedOptionsTable;
 }
 
 //! Early parsing of the commandline
@@ -105,63 +152,80 @@ static void printHelp(void)
  * \param argc number of arguments given
  * \param argv string array of the arguments
  * \return Returns TRUE on success, FALSE on error */
-BOOL ParseCommandLineEarly(int argc, char** argv)
+bool ParseCommandLineEarly(int argc, const char** argv)
 {
-	char			*tokenType;
-	char			*token;
-	int i;
-
-	// TODO Don't forget to add new options to ParseCommandLine also!
+	poptContext poptCon = poptGetContext(NULL, argc, argv, getOptionsTable(), 0);
+	int iOption;
 
 #if defined(WZ_OS_MAC) && defined(DEBUG)
 	debug_enable_switch( "all" );
 #endif /* WZ_OS_MAC && DEBUG */
 
 	/* loop through command line */
-	for (i = 1; i < argc; ++i) {
-		tokenType = argv[i];
+	while ((iOption = poptGetNextOpt(poptCon)) > 0)
+	{
+		CLI_OPTIONS option = iOption;
+		const char* token;
 
-		if ( strcasecmp(tokenType, "--version") == 0 )
+		switch (option)
 		{
-			printf("Warzone 2100 - %s\n", version_getFormattedVersionString());
-			return FALSE;
-		}
-		else if ( strcasecmp(tokenType, "--help" ) == 0 )
-		{
-			printHelp();
-			return FALSE;
-		}
-		else if ( strcasecmp(tokenType, "--debug") == 0 )
-		{
-			// find the part name
-			token = argv[++i];
-			if (token == NULL) {
-				debug( LOG_ERROR, "Usage: --debug <flag>" );
-				return FALSE;
-			}
-			if (!debug_enable_switch(token)) {
-				debug(LOG_ERROR, "Debug flag \"%s\" not found!", token);
-				return FALSE;
-			}
-		}
-		else if ( strcasecmp(tokenType, "--debugfile") == 0 )
-		{
-			// find the file name
-			token = argv[++i];
-			if (token == NULL) {
-				debug( LOG_ERROR, "Missing filename?\n" );
-				abort();
-				return FALSE;
-			}
-			debug_register_callback( debug_callback_file, debug_callback_file_init, debug_callback_file_exit, (void*)token );
-		}
+			case CLI_DEBUG:
+				// retrieve the debug section name
+				token = poptGetOptArg(poptCon);
+				if (token == NULL)
+				{
+					debug(LOG_ERROR, "Usage: --debug <flag>");
+					poptFreeContext(poptCon);
+					return false;
+				}
+
+				// Attempt to enable the given debug section
+				if (!debug_enable_switch(token))
+				{
+					debug(LOG_ERROR, "Debug flag \"%s\" not found!", token);
+					poptFreeContext(poptCon);
+					return false;
+				}
+				break;
+
+			case CLI_DEBUGFILE:
+				// find the file name
+				token = poptGetOptArg(poptCon);
+				if (token == NULL)
+				{
+					debug(LOG_ERROR, "Missing filename?");
+					poptFreeContext(poptCon);
+					abort();
+					return false;
+				}
+				debug_register_callback( debug_callback_file, debug_callback_file_init, debug_callback_file_exit, (void*)token );
+				break;
+
+			case CLI_HELP:
+				poptPrintHelp(poptCon, stdout, 0);
+				poptFreeContext(poptCon);
+				return false;
+
+			case CLI_USAGE:
+				poptPrintUsage(poptCon, stdout, 0);
+				poptFreeContext(poptCon);
+				return false;
+
+			case CLI_VERSION:
+				printf("Warzone 2100 - %s\n", version_getFormattedVersionString());
+				poptFreeContext(poptCon);
+				return false;
+
+			default:
+				break;
+		};
 	}
-	return TRUE;
+
+	poptFreeContext(poptCon);
+
+	return true;
 }
 
-/**************************************************************************
-
-**************************************************************************/
 //! second half of parsing the commandline
 /**
  * Second half of command line parsing. See ParseCommandLineEarly() for
@@ -169,151 +233,192 @@ BOOL ParseCommandLineEarly(int argc, char** argv)
  * \param argc number of arguments given
  * \param argv string array of the arguments
  * \return Returns TRUE on success, FALSE on error */
-BOOL ParseCommandLine(int argc, char** argv)
+bool ParseCommandLine(int argc, const char** argv)
 {
-	char *tokenType=NULL, *token=NULL;
-	unsigned int width=0, height=0;
-	int i = 0, j = 0;
+	poptContext poptCon = poptGetContext(NULL, argc, argv, getOptionsTable(), 0);
+	int iOption;
 
 	/* loop through command line */
-	for( i = 1; i < argc; ++i) {
-		tokenType = argv[i];
+	while ((iOption = poptGetNextOpt(poptCon)) > 0)
+	{
+		const char* token;
+		CLI_OPTIONS option = iOption;
 
-		if ( strcasecmp(tokenType, "--help") == 0 );
-		else if ( strcasecmp(tokenType, "--debug") == 0 || strcasecmp(tokenType, "--debugfile") == 0 )
-			i++; // Skip 1 argument to --debug and --debugfile
-		else if ( strcasecmp(tokenType, "--datadir") == 0 )
+		switch (option)
 		{
-			// find the quoted path name
-			token = argv[++i];
-			if (token == NULL)
-			{
-				debug( LOG_ERROR, "Unrecognised datadir\n" );
-				return FALSE;
-			}
-			strlcpy(datadir, token, sizeof(datadir));
-		}
-		else if ( strcasecmp(tokenType, "--cheat") == 0 )
-		{
-			fprintf(stdout, "  ** DEBUG MODE UNLOCKED! **\n");
-			bAllowDebugMode = TRUE;
-		}
-		else if ( strcasecmp( tokenType, "--fullscreen" ) == 0 )
-		{
-			war_setFullscreen(TRUE);
-		}
-		else if ( strcasecmp( tokenType, "--game" ) == 0 )
-		{
-			// find the game name
-			token = argv[++i];
-			if (token == NULL)
-			{
-				debug( LOG_ERROR, "Unrecognised game name\n" );
-				abort();
-				return FALSE;
-			}
-			strlcpy(aLevelName, token, sizeof(aLevelName));
-			SetGameMode(GS_NORMAL);
-		}
-		else if ( strcasecmp(tokenType, "--mod") == 0 )
-		{
-			// find the file name
-			token = argv[++i];
-			if (token == NULL) {
-				debug( LOG_ERROR, "Missing mod name?\n" );
-				return FALSE;
-			}
+			case CLI_DEBUG:
+			case CLI_DEBUGFILE:
+			case CLI_HELP:
+			case CLI_USAGE:
+			case CLI_VERSION:
+				// These options are parsed in ParseCommandLineEarly() already, so ignore them
+				break;
 
-			for( j = 0; global_mods[j] != NULL && j < 100; j++ );
-			if( global_mods[j] != NULL )
-				debug( LOG_ERROR, "Too many mods registered! Aborting!" );
-			global_mods[j] = token;
-		}
-		else if ( strcasecmp(tokenType, "--mod_ca") == 0 )
-		{
-			// find the file name
-			token = argv[++i];
-			if (token == NULL)
-			{
-				debug( LOG_ERROR, "Missing mod name?\n" );
-				return FALSE;
-			}
+			case CLI_CHEAT:
+				printf("  ** DEBUG MODE UNLOCKED! **\n");
+				bAllowDebugMode = TRUE;
+				break;
 
-			for( j = 0; campaign_mods[j] != NULL && j < 100; j++ );
-			if( campaign_mods[j] != NULL )
-				debug( LOG_ERROR, "Too many mods registered! Aborting!" );
-			campaign_mods[j] = token;
-		}
-		else if ( strcasecmp(tokenType, "--mod_mp") == 0 )
-		{
-			// find the file name
-			token = argv[++i];
-			if (token == NULL)
-			{
-				debug( LOG_ERROR, "Missing mod name?\n" );
-				return FALSE;
-			}
+			case CLI_DATADIR:
+				// retrieve the quoted path name
+				token = poptGetOptArg(poptCon);
+				if (token == NULL)
+				{
+					debug(LOG_ERROR, "Unrecognised datadir");
+					poptFreeContext(poptCon);
+					return false;
+				}
+				strlcpy(datadir, token, sizeof(datadir));
+				break;
 
-			for( j = 0; multiplay_mods[j] != NULL && j < 100; j++ );
-			if( multiplay_mods[j] != NULL )
-				debug( LOG_ERROR, "Too many mods registered! Aborting!" );
-			multiplay_mods[j] = token;
-		}
-		else if ( strcasecmp( tokenType, "--savegame" ) == 0 )
-		{
-			// find the game name
-			token = argv[++i];
-			if (token == NULL)
+			case CLI_FULLSCREEN:
+				war_setFullscreen(TRUE);
+				break;
+
+			case CLI_NOFOG:
+				pie_SetFogCap(FOG_CAP_NO);
+				break;
+
+			case CLI_GREY_FOG:
+				pie_SetFogCap(FOG_CAP_GREY);
+				break;
+
+			case CLI_GAME:
+				// retrieve the game name
+				token = poptGetOptArg(poptCon);
+				if (token == NULL)
+				{
+					debug(LOG_ERROR, "No game name");
+					poptFreeContext(poptCon);
+					abort();
+					return false;
+				}
+				strlcpy(aLevelName, token, sizeof(aLevelName));
+				SetGameMode(GS_NORMAL);
+				break;
+
+			case CLI_MOD_GLOB:
 			{
-				debug( LOG_ERROR, "Unrecognised savegame name\n" );
-				abort();
-				return FALSE;
+				unsigned int i;
+
+				// retrieve the file name
+				token = poptGetOptArg(poptCon);
+				if (token == NULL)
+				{
+					debug(LOG_ERROR, "Missing mod name?");
+					poptFreeContext(poptCon);
+					return false;
+				}
+
+				// Find an empty place in the global_mods list
+				for (i = 0; i < 100 && global_mods[i] != NULL; ++i);
+				if (i >= 100 || global_mods[i] != NULL)
+				{
+					debug(LOG_ERROR, "Too many mods registered! Aborting!");
+					poptFreeContext(poptCon);
+					return false;
+				}
+				global_mods[i] = strdup(token);
+				break;
 			}
-			strlcpy(saveGameName, SaveGamePath, sizeof(saveGameName));
-			strlcat(saveGameName, "/", sizeof(saveGameName));
-			strlcat(saveGameName, token, sizeof(saveGameName));
-			SetGameMode(GS_SAVEGAMELOAD);
-		}
-		else if ( strcasecmp( tokenType, "--shadows" ) == 0 )
-		{
-			setDrawShadows( TRUE );
-		}
-		else if ( strcasecmp( tokenType, "--noshadows" ) == 0 )
-		{
-			setDrawShadows( FALSE );
-		}
-		else if ( strcasecmp( tokenType, "--sound" ) == 0 )
-		{
-			war_setSoundEnabled( TRUE );
-		}
-		else if ( strcasecmp( tokenType, "--nosound" ) == 0 )
-		{
-			war_setSoundEnabled( FALSE );
-		}
-		else if ( strcasecmp( tokenType, "--resolution" ) == 0 )
-		{
-			token = argv[++i];
-			if ( sscanf( token, "%ix%i", &width, &height ) != 2 )
+			case CLI_MOD_CA:
 			{
-				debug( LOG_ERROR, "Invalid resolution\n" );
-				abort();
-				return FALSE;
+				unsigned int i;
+
+				// retrieve the file name
+				token = poptGetOptArg(poptCon);
+				if (token == NULL)
+				{
+					debug(LOG_ERROR, "Missing mod name?");
+					poptFreeContext(poptCon);
+					return false;
+				}
+
+				// Find an empty place in the campaign_mods list
+				for (i = 0; i < 100 && campaign_mods[i] != NULL; ++i);
+				if (i >= 100 || campaign_mods[i] != NULL)
+				{
+					debug(LOG_ERROR, "Too many mods registered! Aborting!");
+					poptFreeContext(poptCon);
+					return false;
+				}
+				campaign_mods[i] = strdup(token);
+				break;
 			}
-			pie_SetVideoBufferWidth( width );
-			pie_SetVideoBufferHeight( height );
-		}
-		else if ( strcasecmp( tokenType, "--window" ) == 0 )
-		{
-			war_setFullscreen(FALSE);
-		}
-		else if ( strcasecmp( tokenType,"--noFog") == 0 )
-		{
-			pie_SetFogCap(FOG_CAP_NO);
-		}
-		else if ( strcasecmp( tokenType,"--greyFog") == 0 )
-		{
-			pie_SetFogCap(FOG_CAP_GREY);
-		}
+			case CLI_MOD_MP:
+			{
+				unsigned int i;
+
+				// retrieve the file name
+				token = poptGetOptArg(poptCon);
+				if (token == NULL)
+				{
+					debug(LOG_ERROR, "Missing mod name?");
+					poptFreeContext(poptCon);
+					return false;
+				}
+
+				for (i = 0; i < 100 && multiplay_mods[i] != NULL; ++i);
+				if (i >= 100 || multiplay_mods[i] != NULL)
+				{
+					debug(LOG_ERROR, "Too many mods registered! Aborting!");
+					poptFreeContext(poptCon);
+					return false;
+				}
+				multiplay_mods[i] = strdup(token);
+				break;
+			}
+			case CLI_RESOLUTION:
+			{
+				unsigned int width, height;
+
+				token = poptGetOptArg(poptCon);
+				if (sscanf(token, "%ix%i", &width, &height ) != 2 )
+				{
+					debug(LOG_ERROR, "Invalid resolution");
+					abort();
+					return FALSE;
+				}
+				pie_SetVideoBufferWidth(width);
+				pie_SetVideoBufferHeight(height);
+				break;
+			}
+			case CLI_SAVEGAME:
+				// retrieve the game name
+				token = poptGetOptArg(poptCon);
+				if (token == NULL)
+				{
+					debug(LOG_ERROR, "Unrecognised savegame name");
+					poptFreeContext(poptCon);
+					abort();
+					return false;
+				}
+				snprintf(saveGameName, sizeof(saveGameName), "%s/%s", SaveGamePath, token);
+				SetGameMode(GS_SAVEGAMELOAD);
+				break;
+
+			case CLI_WINDOW:
+				war_setFullscreen(FALSE);
+				break;
+
+			case CLI_SHADOWS:
+				setDrawShadows(TRUE);
+				break;
+
+			case CLI_NOSHADOWS:
+				setDrawShadows(FALSE);
+				break;
+
+			case CLI_SOUND:
+				war_setSoundEnabled(TRUE);
+				break;
+
+			case CLI_NOSOUND:
+				war_setSoundEnabled(FALSE);
+				break;
+
+// Undocumented command line options...
+#if 0
 		else if ( strcasecmp(tokenType, "--CDA") == 0 )
 		{
 			war_SetPlayAudioCDs(TRUE);
@@ -336,11 +441,16 @@ BOOL ParseCommandLine(int argc, char** argv)
 		}
 		else
 		{
-			debug( LOG_ERROR, "Unrecognised command-line option: %s\n", tokenType );
-			printUsage();
-			return FALSE;
+			debug(LOG_ERROR, "Unrecognised command-line option: %s", tokenType);
+			poptPrintUsage(poptCon, stdout, 0);
+			poptFreeContext(poptCon);
+			return false;
 		}
+#endif
+		};
 	}
-	return TRUE;
-}
 
+	poptFreeContext(poptCon);
+
+	return true;
+}

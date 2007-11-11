@@ -26,11 +26,14 @@
 #ifndef _clparse_h
 #define _clparse_h
 
+#include "lib/framework/frame.h"
+#include "lib/framework/types.h"
+
 #define MAX_MODS 100
 
 // parse the commandline
-extern BOOL ParseCommandLine( int argc, char** argv );
-extern BOOL ParseCommandLineEarly(int argc, char** argv);
+extern bool ParseCommandLine(int argc, const char** argv);
+extern bool ParseCommandLineEarly(int argc, const char** argv);
 
 extern BOOL bAllowDebugMode;
 

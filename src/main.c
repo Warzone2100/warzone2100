@@ -769,7 +769,7 @@ int main(int argc, char *argv[])
 	(void)textdomain(PACKAGE);
 
 	// find early boot info
-	if ( !ParseCommandLineEarly(argc, argv) ) {
+	if ( !ParseCommandLineEarly(argc, (const char**)argv) ) {
 		return -1;
 	}
 
@@ -801,7 +801,7 @@ int main(int argc, char *argv[])
 	loadRenderMode(); //get the registry entry for clRendMode
 
 	// parse the command line
-	if (!ParseCommandLine(argc, argv)) {
+	if (!ParseCommandLine(argc, (const char**)argv)) {
 		return -1;
 	}
 

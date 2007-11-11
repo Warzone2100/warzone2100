@@ -64,7 +64,6 @@ endif
 
 ifeq ($(strip $(USE_GETTEXT)),yes)
 CFLAGS+=-DENABLE_NLS=1
-LDFLAGS+=-lintl
 endif
 
 ifeq ($(strip $(PLATFORM)),windows)
@@ -98,7 +97,7 @@ endif
 
 # Generic libs
 
-LDFLAGS+=-lSDL -lSDL_net -lpng -lphysfs -lz -lvorbisfile -lvorbis -logg
+LDFLAGS+=-lSDL -lSDL_net -lpng -lphysfs -lz -lvorbisfile -lvorbis -logg -lpopt -lintl
 
 # Additional platform-dependend libs
 
