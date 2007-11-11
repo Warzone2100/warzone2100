@@ -45,10 +45,8 @@ altered since it loops through the components from 1->MAX_COMP
 typedef enum _component_type
 {
 	COMP_UNKNOWN,
-	//COMP_ARMOUR,
 	COMP_BODY,
 	COMP_BRAIN,
-	//COMP_POWERPLANT,
 	COMP_PROPULSION,
 	COMP_REPAIRUNIT,
 	COMP_ECM,
@@ -214,16 +212,10 @@ typedef struct _body_stats
 	 */
 	COMPONENT_STATS;
 
-	//UDWORD		configuration;		// Body shape
-	//UDWORD		armourMult;			// How configuration affects body shape
-									// Actually could be a fractional value
-									// store x 10
 	UBYTE		size;				// How big the body is - affects how hit
-	//UDWORD		bodyPoints;			// How much damage the body can take before destruction
 	UDWORD		weaponSlots;		// The number of weapon slots on the body
 	UDWORD		armourValue[NUM_HIT_SIDES][NUM_WEAPON_CLASS];	// A measure of how much protection the armour provides
 												// cross-ref with the weapon types
-	// Watermelon:you just got trolled,sir...
 	// A measure of how much energy the power plant outputs
 	UDWORD		powerOutput;		// this is the engine output of the body
 	struct	iIMDShape	**ppIMDList;			//list of IMDs to use for propulsion unit - up to numPropulsionStats
@@ -311,22 +303,6 @@ typedef struct _ecm_stats
 	struct	iIMDShape	*pMountGraphic;		// The turret mount to use
 } ECM_STATS;
 
-#if (0)
-typedef struct _armour_stats
-{
-	// Common stats
-	COMPONENT_STATS;
-
-	UDWORD		strength;			// How much protection the armour provides
-} ARMOUR_STATS;
-
-#endif
-
-/* Adjustment to armour damage for non-penetrating hit */
-#define ARMOUR_DAMAGE_FACTOR 50
-/* Adjustment to armour damage for penetrating hit */
-#define PEN_ARMOUR_DAMAGE_FACTOR 10
-
 typedef struct _repair_stats
 {
 	/* Common stats */
@@ -356,8 +332,6 @@ typedef struct _weapon_stats
 	UDWORD			shortRange;			// Max distance to target for short range shot
 	UDWORD			longRange;			// Max distance to target for long range shot
 	UDWORD			minRange;			// Min distance to target for shot
-	//Use Movement Model now for projectile type - AB 15/6/98
-	//BOOL			direct;				// Whether the weapon fires directly or indirectly
 	UDWORD			shortHit;			// Chance to hit at short range
 	UDWORD			longHit;			// Chance to hit at long range
 	UDWORD			firePause;			// Time between each weapon fire
@@ -379,8 +353,6 @@ typedef struct _weapon_stats
 										// enum WEAPON_SUBCLASS
 	MOVEMENT_MODEL	movementModel;		// which projectile model to use for the bullet
 	WEAPON_EFFECT	weaponEffect;		// which type of warhead is associated with the weapon
-	//Use Movement Model now for projectile type - AB 15/6/98
-	//BOOL			homingRound;		// flag to indicate whether homing or not
 	UDWORD			recoilValue;		// used to compare with weight to see if recoils or not
 	UBYTE			rotate;				// amount the weapon(turret) can rotate 0 = none
 	UBYTE			maxElevation;		// max amount the turret can be elevated up

@@ -39,19 +39,15 @@
 #define WEAPON_TIME		100
 
 
-
-
 /* The stores for the different stats */
 BODY_STATS			*asBodyStats;
 BRAIN_STATS			*asBrainStats;
 PROPULSION_STATS	*asPropulsionStats;
 SENSOR_STATS		*asSensorStats;
 ECM_STATS			*asECMStats;
-//ARMOUR_STATS		*asArmourStats;
 REPAIR_STATS		*asRepairStats;
 WEAPON_STATS		*asWeaponStats;
 CONSTRUCT_STATS		*asConstructStats;
-
 PROPULSION_TYPES	*asPropulsionTypes;
 TERRAIN_TABLE		*asTerrainTable;
 SPECIAL_ABILITY		*asSpecialAbility;
@@ -67,37 +63,16 @@ REPAIR_UPGRADE		asRepairUpgrade[MAX_PLAYERS];
 CONSTRUCTOR_UPGRADE	asConstUpgrade[MAX_PLAYERS];
 BODY_UPGRADE		asBodyUpgrade[MAX_PLAYERS][BODY_TYPE];
 
-#if(0)
-/* The number of different stats stored */
-UDWORD		numBodyStats = 0;
-UDWORD		numBrainStats = 0;
-//UDWORD		numPowerStats = 0;
-UDWORD		numPropulsionStats = 0;
-UDWORD		numSensorStats = 0;
-UDWORD		numECMStats = 0;
-//UDWORD		numArmourStats = 0;
-UDWORD		numRepairStats = 0;
-UDWORD		numWeaponStats = 0;
-UDWORD		numConstructStats = 0;
-
-//UDWORD		numPropulsionTypes = 0;
-UDWORD		numSpecialAbility = 0;
-#else
 /* The number of different stats stored */
 UDWORD		numBodyStats;
 UDWORD		numBrainStats;
-//UDWORD		numPowerStats;
 UDWORD		numPropulsionStats;
 UDWORD		numSensorStats;
 UDWORD		numECMStats;
-//UDWORD		numArmourStats;
 UDWORD		numRepairStats;
 UDWORD		numWeaponStats;
 UDWORD		numConstructStats;
-
-//UDWORD		numPropulsionTypes;
 UDWORD		numSpecialAbility;
-#endif
 
 //the max values of the stats used in the design screen
 UDWORD      maxComponentWeight;
@@ -113,7 +88,6 @@ UDWORD      maxWeaponRange;
 UDWORD      maxWeaponDamage;
 UDWORD      maxWeaponROF;
 UDWORD      maxPropulsionSpeed;
-
 
 //stores for each players component states - can be either UNAVAILABLE, FOUND or AVAILABLE
 UBYTE		*apCompLists[MAX_PLAYERS][COMP_NUMCOMPONENTS];
@@ -146,11 +120,6 @@ static void updateMaxRepairStats(UWORD maxValue);
 static void updateMaxECMStats(UWORD maxValue);
 static void updateMaxBodyStats(UWORD maxBody, UWORD maxPower, UWORD maxArmour);
 static void updateMaxConstStats(UWORD maxValue);
-
-
-#if (MAX_PLAYERS != 8)
-static	char NotUsedString[50];	// Dummy area for scanf
-#endif
 
 /*******************************************************************************
 *		Generic stats macros/functions
@@ -192,7 +161,7 @@ void statsInitVars(void)
 	asTerrainTable = NULL;
 	asSpecialAbility = NULL;
 
-/* The number of different stats stored */
+	/* The number of different stats stored */
 	numBodyStats = 0;
 	numBrainStats = 0;
 	numPropulsionStats = 0;
@@ -201,17 +170,16 @@ void statsInitVars(void)
 	numRepairStats = 0;
 	numWeaponStats = 0;
 	numConstructStats = 0;
-//	numPropulsionTypes = 0;
 	numSpecialAbility = 0;
 
-//stores for each players component states - can be either UNAVAILABLE, FOUND or AVAILABLE
+	//stores for each players component states - can be either UNAVAILABLE, FOUND or AVAILABLE
 	for(i=0; i<MAX_PLAYERS; i++) {
 		for(j=0; j<COMP_NUMCOMPONENTS; j++) {
 			apCompLists[i][j] = NULL;
 		}
 	}
 
-//store for each players Structure states
+	//store for each players Structure states
 	for(i=0; i<MAX_PLAYERS; i++) {
 		apStructTypeLists[i] = NULL;
 	}
@@ -223,13 +191,12 @@ void statsInitVars(void)
 	memset(asRepairUpgrade, 0, MAX_PLAYERS * sizeof(REPAIR_UPGRADE));
 	memset(asBodyUpgrade, 0, MAX_PLAYERS * sizeof(BODY_UPGRADE) * BODY_TYPE);
 
-    //init the max values
-    maxComponentWeight = maxBodyArmour = maxBodyPower =
+	// init the max values
+	maxComponentWeight = maxBodyArmour = maxBodyPower =
         maxBodyPoints = maxSensorRange = maxSensorPower = maxECMPower =
         maxConstPoints = maxRepairPoints = maxWeaponRange = maxWeaponDamage =
         maxPropulsionSpeed = 0;
 }
-
 
 
 /*Deallocate all the stats assigned from input data*/
@@ -251,7 +218,6 @@ void statsDealloc(COMP_BASE_STATS* pStats, UDWORD listSize, UDWORD structureSize
 
 	free(pStats);
 }
-
 
 
 static BOOL allocateStatName(BASE_STATS* pStat, const char *Name)
@@ -284,9 +250,7 @@ static void deallocBodyStats(void)
 /*Deallocate all the stats assigned from input data*/
 BOOL statsShutDown(void)
 {
-	//statsDeallocWeapons();
 	STATS_DEALLOC(asWeaponStats, numWeaponStats, WEAPON_STATS);
-	//STATS_DEALLOC(asArmourStats, numArmourStats, ARMOUR_STATS);
 	//STATS_DEALLOC(asBodyStats, numBodyStats, BODY_STATS);
 	deallocBodyStats();
 	STATS_DEALLOC(asBrainStats, numBrainStats, BRAIN_STATS);
@@ -337,11 +301,6 @@ BOOL statsAllocWeapons(UDWORD	numStats)
 {
 	ALLOC_STATS(numStats, asWeaponStats, numWeaponStats, WEAPON_STATS);
 }
-/* Allocate Armour Stats */
-/*BOOL statsAllocArmour(UDWORD	numStats)
-{
-	ALLOC_STATS(numStats, asArmourStats, numArmourStats, ARMOUR_STATS);
-}*/
 /* Allocate Body Stats */
 BOOL statsAllocBody(UDWORD	numStats)
 {
@@ -661,17 +620,6 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 
 		StatsName=psStats->pName;
 
-		//covered by the movement model now - AB 15/06/98
-		//set the homing round
-		/*if (compareYes(homingRound, StatsName))
-		{
-			psStats->homingRound = TRUE;
-		}
-		else
-		{
-			psStats->homingRound = FALSE;
-		}*/
-
 		//set the face Player value
 		if (compareYes(facePlayer, StatsName))
 		{
@@ -825,94 +773,9 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 		//increment the pointer to the start of the next record
 		pWeaponData = strchr(pWeaponData,'\n') + 1;
 	}
-//	free(pData);
-//	free(psStats);
 
 	return TRUE;
 }
-
-/*Load the Armour stats from the file exported from Access*/
-/*BOOL loadArmourStats(void)
-{
-	char *pArmourData, *pStartArmourData;
-	UDWORD fileSize;
-	ARMOUR_STATS	*psStats, *psStartStats;
-	UDWORD	NumArmour = 0,i;
-	char  ArmourName[50];
-	BOOL EndOfFile;
-
-
-	if (!loadFile("Armour.txt", &pArmourData, &fileSize))
-	{
-		return FALSE;
-	}
-	pStartArmourData = pArmourData;
-
-	psStats = (ARMOUR_STATS *)malloc(sizeof(ARMOUR_STATS));
-	if (psStats == NULL)
-	{
-		DBERROR(("Armour Stats - Out of memory"));
-		return FALSE;
-	}
-	//reserve the start of the data
-	psStartStats = psStats;
-
-	EndOfFile = FALSE;
-	//determine the number of records to add by counting the number of '\n'
-	while (!EndOfFile)
-	{
-		pArmourData = strchr(pArmourData,'\n');
-		if (pArmourData == NULL)
-		{
-			EndOfFile = TRUE;
-		}
-		else
-		{
-			pArmourData++;
-			NumArmour++;
-		}
-	}
-	//return to the start of the data
-	pArmourData = pStartArmourData;
-
-	if (!statsAllocArmour(NumArmour))
-	{
-		return FALSE;
-	}
-
-	for (i=0; i < NumArmour; i++)
-	{
-		memset(psStats, 0, sizeof(ARMOUR_STATS));
-
-		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pArmourData,"%[^','],%d,%d,%d,%d,%d,%d",
-			&ArmourName, &psStats->buildPower,&psStats->buildPoints,
-			&psStats->weight, &psStats->hitPoints, &psStats->systemPoints,
-			&psStats->strength);
-
-		//allocate storage for the name
-		psStats->pName = (char *)malloc((strlen(ArmourName))+1);
-		if (psStats->pName == NULL)
-		{
-			DBERROR(("Armour Stats Name - Out of memory"));
-			return FALSE;
-		}
-		strcpy(psStats->pName,ArmourName);
-
-		psStats->ref = REF_ARMOUR_START + i;
-
-		//save the stats
-		statsSetArmour(psStats, i);
-
-		psStats = psStartStats;
-		//increment the pointer to the start of the next record
-		pArmourData = strchr(pArmourData,'\n') + 1;
-	}
-	free(pStartArmourData);
-	free(psStats);
-	return TRUE;
-}
-*/
 
 /*Load the Body stats from the file exported from Access*/
 BOOL loadBodyStats(const char *pBodyData, UDWORD bufferSize)
@@ -955,10 +818,6 @@ BOOL loadBodyStats(const char *pBodyData, UDWORD bufferSize)
 			(int*)&psStats->armourValue[HIT_SIDE_TOP][WC_HEAT],(int*)&psStats->armourValue[HIT_SIDE_BOTTOM][WC_KINETIC],
 			(int*)&psStats->armourValue[HIT_SIDE_BOTTOM][WC_HEAT], (char*)&flameIMD, &designable);//, &psStats->armourValue[WC_EXPLOSIVE],
 			//&psStats->armourValue[WC_MISC]);
-
-#if (MAX_PLAYERS != 4 && MAX_PLAYERS != 8)
-# error Invalid number of players
-#endif
 
 		//allocate storage for the name
 		if (!allocateStatName((BASE_STATS *)psStats, BodyName))
@@ -1199,10 +1058,6 @@ BOOL loadPropulsionStats(const char *pPropulsionData, UDWORD bufferSize)
 			&psStats->weight, &psStats->hitPoints, &psStats->systemPoints,
 			&psStats->body,	(char*)&imdName, (char*)&type, &psStats->maxSpeed, &designable);
 
-#if (MAX_PLAYERS!=4 && MAX_PLAYERS!=8)
-#error Invalid number of players
-#endif
-
 		if (!allocateStatName((BASE_STATS *)psStats, PropulsionName))
 		{
 			return FALSE;
@@ -1319,10 +1174,6 @@ BOOL loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 			&psStats->weight, &psStats->hitPoints, &psStats->systemPoints,
 			&psStats->body,	(char*)&GfxFile,(char*)&mountGfx,
 			&psStats->range, (char*)&location, (char*)&type, &psStats->time, &psStats->power, &designable);
-
-#if (MAX_PLAYERS!=4 && MAX_PLAYERS!=8)
-#error Invalid number of players
-#endif
 
 		if (!allocateStatName((BASE_STATS *)psStats, SensorName))
 		{
@@ -1465,10 +1316,6 @@ BOOL loadECMStats(const char *pECMData, UDWORD bufferSize)
 		// set a default ECM range for now
 		psStats->range = TILE_UNITS * 8;
 
-#if (MAX_PLAYERS!=4 && MAX_PLAYERS!=8)
-#error Invalid number of players
-#endif
-
 		if (!allocateStatName((BASE_STATS *)psStats, ECMName))
 		{
 			return FALSE;
@@ -1544,8 +1391,7 @@ BOOL loadECMStats(const char *pECMData, UDWORD bufferSize)
 		//increment the pointer to the start of the next record
 		pECMData = strchr(pECMData,'\n') + 1;
 	}
-//	free(pData);
-//	free(psStats);
+
 	return TRUE;
 }
 
@@ -1705,10 +1551,6 @@ BOOL loadConstructStats(const char *pConstructData, UDWORD bufferSize)
 			&psStats->body, (char*)&GfxFile, (char*)&mountGfx,
 			&psStats->constructPoints,&designable);
 
-#if (MAX_PLAYERS!=4 && MAX_PLAYERS!=8)
-#error Invalid number of players
-#endif
-
 		if (!allocateStatName((BASE_STATS *)psStats, ConstructName))
 		{
 			return FALSE;
@@ -1778,8 +1620,7 @@ BOOL loadConstructStats(const char *pConstructData, UDWORD bufferSize)
 		//increment the pointer to the start of the next record
 		pConstructData = strchr(pConstructData,'\n') + 1;
 	}
-//	free(pData);
-//	free(psStats);
+
 	return TRUE;
 }
 
@@ -1967,7 +1808,6 @@ BOOL loadSpecialAbility(const char *pSAbilityData, UDWORD bufferSize)
 		pSAbilityData = strchr(pSAbilityData,'\n') + 1;
 		asSpecialAbility++;
 	}
-//	free(pData);
 
 	//reset the pointer to the start of the special ability stats
 	asSpecialAbility = pSAbility;
@@ -2107,9 +1947,8 @@ BOOL loadBodyPropulsionIMDs(const char *pData, UDWORD bufferSize)
 		//increment the pointer to the start of the next record
 		pData = strchr(pData,'\n') + 1;
 	}
-//	free(pStartData);
-	return(TRUE);
 
+	return(TRUE);
 }
 
 
@@ -2200,7 +2039,6 @@ BOOL loadWeaponSounds(const char *pSoundData, UDWORD bufferSize)
 		pSoundData = strchr(pSoundData,'\n') + 1;
 	}
 
-//	return Ok;
 	return TRUE;
 }
 
@@ -2346,11 +2184,6 @@ void statsSetWeapon(WEAPON_STATS	*psStats, UDWORD index)
 {
 	SET_STATS(psStats, asWeaponStats, index, WEAPON_STATS, REF_WEAPON_START);
 }
-/* Set the stats for a particular armour type */
-/*void statsSetArmour(ARMOUR_STATS	*psStats, UDWORD index)
-{
-	SET_STATS(psStats, asArmourStats, index, ARMOUR_STATS, REF_ARMOUR_START);
-}*/
 /* Set the stats for a particular body type */
 void statsSetBody(BODY_STATS	*psStats, UDWORD index)
 {
@@ -2407,22 +2240,6 @@ WEAPON_STATS *statsGetWeapon(UDWORD ref)
 	ASSERT( FALSE, "statsGetWeapon: Reference number not found in list: %x", ref );
 	return NULL;	// should never get here, but this stops the compiler complaining.
 }
-
-/*ARMOUR_STATS *statsGetArmour(UDWORD ref)
-{
-	UDWORD index;
-	ASSERT( (ref >= REF_ARMOUR_START) && (ref < REF_ARMOUR_START + REF_RANGE),
-		"statsGetArmour: Invalid reference number: %x", ref );
-
-	for (index = 0; index < numArmourStats; index++)
-	{
-		if (asArmourStats[index].ref == ref)
-		{
-			return &asArmourStats[index];
-		}
-	}
-	ASSERT( FALSE, "statsGetArmour: Reference number not found in list: %x", ref );
-}*/
 
 BODY_STATS *statsGetBody(UDWORD ref)
 {
@@ -2550,15 +2367,6 @@ CONSTRUCT_STATS *statsGetConstruct(UDWORD ref)
 //Deallocate the storage assigned for the Propulsion Types table
 void deallocPropulsionTypes(void)
 {
-	//UBYTE inc;
-//	PROPULSION_TYPES* pList = asPropulsionTypes;
-
-/*
-	for (inc=0; inc < numPropulsionTypes; inc++, pList++)
-	{
-		free(pList->pName);
-	}
-*/
 	free(asPropulsionTypes);
 	asPropulsionTypes = NULL;
 }
@@ -2589,11 +2397,9 @@ void storeSpeedFactor(UDWORD terrainType, UDWORD propulsionType, UDWORD speedFac
 {
 	TERRAIN_TABLE *pTerrainTable = asTerrainTable;
 
-	//ASSERT( propulsionType < numPropulsionTypes,
 	ASSERT( propulsionType < NUM_PROP_TYPES,
 		"The propulsion type is too large" );
 
-	//pTerrainTable += terrainType*numPropulsionTypes + propulsionType;
 	pTerrainTable += (terrainType * NUM_PROP_TYPES + propulsionType);
 	pTerrainTable->speedFactor = speedFactor;
 }
@@ -2601,46 +2407,12 @@ void storeSpeedFactor(UDWORD terrainType, UDWORD propulsionType, UDWORD speedFac
 //get the speed factor for a given terrain type and propulsion type
 UDWORD getSpeedFactor(UDWORD type, UDWORD propulsionType)
 {
-//	UBYTE	type;
 	TERRAIN_TABLE *pTerrainTable = asTerrainTable;
 
-	//ASSERT( propulsionType < numPropulsionTypes,
 	ASSERT( propulsionType < NUM_PROP_TYPES,
 		"The propulsion type is too large" );
 
-/*	switch (terrainType)
-	{
-		case TER_GRASS:
-		{
-			type = 0;
-			break;
-		}
-		case TER_STONE:
-		{
-			type = 1;
-			break;
-		}
-		case TER_SAND:
-		{
-			type = 2;
-			break;
-		}
-		case TER_WATER:
-		{
-			type = 3;
-			break;
-		}
-		default:
-		{
-			ASSERT( FALSE, "The terrain type is unknown" );
-			return 0;
-		}
-	 }*/
-	//pTerrainTable += type*numPropulsionTypes + propulsionType;
-
 	pTerrainTable += (type * NUM_PROP_TYPES + propulsionType);
-
-
 
 	return pTerrainTable->speedFactor;
 }
@@ -2658,11 +2430,6 @@ UDWORD statType(UDWORD ref)
 	{
 		return COMP_BRAIN;
 	}
-	/*if (ref >REF_POWER_START && ref < REF_POWER_START +
-		REF_RANGE)
-	{
-		return COMP_POWERPLANT;
-	}*/
 	if (ref >=REF_PROPULSION_START && ref <
 		REF_PROPULSION_START + REF_RANGE)
 	{
@@ -2678,11 +2445,6 @@ UDWORD statType(UDWORD ref)
 	{
 		return COMP_ECM;
 	}
-	/*if (ref >REF_ARMOUR_START && ref < REF_ARMOUR_START +
-		REF_RANGE)
-	{
-		return COMP_ARMOUR;
-	}*/
 	if (ref >=REF_REPAIR_START && ref < REF_REPAIR_START +
 		REF_RANGE)
 	{
@@ -2720,11 +2482,6 @@ UDWORD statRefStart(UDWORD stat)
 			start = REF_BRAIN_START;
 			break;
 		}
-		/*case COMP_POWERPLANT:
-		{
-			start = REF_POWER_START;
-			break;
-		}*/
 		case COMP_PROPULSION:
 		{
 			start = REF_PROPULSION_START;
@@ -2740,11 +2497,6 @@ UDWORD statRefStart(UDWORD stat)
 			start = REF_ECM_START;
 			break;
 		}
-		/*case COMP_ARMOUR:
-		{
-			start = REF_ARMOUR_START;
-			break;
-		}*/
 		case COMP_REPAIRUNIT:
 		{
 			start = REF_REPAIR_START;

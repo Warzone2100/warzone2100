@@ -2975,11 +2975,9 @@ UDWORD calcDroidWeight(DROID_TEMPLATE *psTemplate)
 	weight =
 		(asBodyStats + psTemplate->asParts[COMP_BODY])->weight +
 		(asBrainStats + psTemplate->asParts[COMP_BRAIN])->weight +
-		//(asPowerStats + psTemplate->asParts[COMP_POWERPLANT])->weight +
 		//(asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->weight +
 		(asSensorStats + psTemplate->asParts[COMP_SENSOR])->weight +
 		(asECMStats + psTemplate->asParts[COMP_ECM])->weight +
-		//(asArmourStats + psTemplate->asParts[COMP_ARMOUR])->weight +
 		(asRepairStats + psTemplate->asParts[COMP_REPAIRUNIT])->weight +
 		(asConstructStats + psTemplate->asParts[COMP_CONSTRUCT])->weight;
 
@@ -3553,9 +3551,6 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 //	psDroid->asBits[COMP_BRAIN].hitPoints =
 //		(asBrainStats + pTemplate->asParts[COMP_BRAIN])->hitPoints;
 
-	/*psDroid->asBits[COMP_POWERPLANT].hitPoints =
-		(asPowerStats + pTemplate->asParts[COMP_POWERPLANT])->hitPoints;*/
-
 	psDroid->asBits[COMP_PROPULSION].nStat = (UBYTE)pTemplate->asParts[COMP_PROPULSION];
 	//psDroid->asBits[COMP_PROPULSION].hitPoints =
 	//	(asPropulsionStats + pTemplate->asParts[COMP_PROPULSION])->hitPoints;
@@ -3567,9 +3562,6 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 	psDroid->asBits[COMP_ECM].nStat = (UBYTE)pTemplate->asParts[COMP_ECM];
 	//psDroid->asBits[COMP_ECM].hitPoints =
 	//	(asECMStats + pTemplate->asParts[COMP_ECM])->hitPoints;
-
-	/*psDroid->asBits[COMP_ARMOUR].hitPoints =
-		(asArmourStats + pTemplate->asParts[COMP_ARMOUR])->hitPoints; */
 
 	psDroid->asBits[COMP_REPAIRUNIT].nStat = (UBYTE)pTemplate->asParts[COMP_REPAIRUNIT];
 	//psDroid->asBits[COMP_REPAIRUNIT].hitPoints =
