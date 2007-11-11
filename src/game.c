@@ -5832,7 +5832,7 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	psDroid->orderY2				= psSaveDroid->orderY2;
 	psDroid->timeLastHit			= psSaveDroid->timeLastHit;
 	//rebuild the object pointer from the ID
-	FIXME_CAST_ASSIGN(UDWORD, psDroid->psTarget[0], psSaveDroid->targetID);
+	FIXME_CAST_ASSIGN(UDWORD, psDroid->psTarget, psSaveDroid->targetID);
 	psDroid->secondaryOrder		= psSaveDroid->secondaryOrder;
 	psDroid->action				= psSaveDroid->action;
 	psDroid->actionX				= psSaveDroid->actionX;
