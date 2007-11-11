@@ -56,6 +56,7 @@
 #include "debug.h"
 
 #include "treap.h"
+#include "printf_ext.h"
 
 #include "fractions.h"
 #include "trig.h"

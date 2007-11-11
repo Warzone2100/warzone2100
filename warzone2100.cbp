@@ -315,6 +315,19 @@
 			<Option target="DBGWindows" />
 			<Option target="NDBGWindows" />
 		</Unit>
+		<Unit filename="lib/framework/printf_ext.c">
+			<Option compilerVar="CC" />
+			<Option target="DBGUnix" />
+			<Option target="NDBGUnix" />
+			<Option target="DBGWindows" />
+			<Option target="NDBGWindows" />
+		</Unit>
+		<Unit filename="lib/framework/printf_ext.h">
+			<Option target="DBGUnix" />
+			<Option target="NDBGUnix" />
+			<Option target="DBGWindows" />
+			<Option target="NDBGWindows" />
+		</Unit>
 		<Unit filename="lib/framework/resly.h">
 			<Option target="DBGUnix" />
 			<Option target="NDBGUnix" />

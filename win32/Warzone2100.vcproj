@@ -246,6 +246,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\lib\framework\printf_ext.c"
+					>
+				</File>
+				<File
 					RelativePath="..\lib\framework\strres.c"
 					>
 				</File>
@@ -1292,6 +1296,10 @@
 			</File>
 			<File
 				RelativePath="..\lib\framework\frameresource.h"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\framework\printf_ext.h"
 				>
 			</File>
 			<File

@@ -417,40 +417,6 @@
 #    define strncasecmp _strnicmp
 #    define inline __inline
 #    define alloca _alloca
-
-// Required for the below two inline functions
-#    include <stdio.h>
-
-static inline int vsnprintf(char* str, size_t size, const char* format, va_list ap)
-{
-	int count;
-
-	// Find out how long the resulting string is
-	count = _vscprintf(format, ap);
-
-	if (count > 0
-	 && str != NULL)
-	{
-		// Perfrom the actual string formatting
-		_vsnprintf_s(str, size, _TRUNCATE, format, ap);
-	}
-
-	// Return the amount of characters that would be written if _no_ truncation occurred
-	return count;
-}
-
-static inline int snprintf(char* str, size_t size, const char* format, ...)
-{
-	va_list ap;
-	int count;
-
-	va_start(ap, format);
-		count = vsnprintf(str, size, format, ap);
-	va_end(ap);
-
-	return count;
-}
-
 #    define fileno _fileno
 #    define isfinite _finite
 #    define PATH_MAX MAX_PATH
