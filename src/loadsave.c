@@ -102,9 +102,9 @@ static	W_SCREEN	*psRequestScreen;					// Widget screen for requester
 static	BOOL		mode;
 static	UDWORD		chosenSlotId;
 
-BOOL				bLoadSaveUp = FALSE;						// true when interface is up and should be run.
-char				saveGameName[256];			//the name of the save game to load from the front end
-char				sRequestResult[255];						// filename returned;
+BOOL				bLoadSaveUp = FALSE;        // true when interface is up and should be run.
+char				saveGameName[256];          //the name of the save game to load from the front end
+char				sRequestResult[PATH_MAX];   // filename returned;
 BOOL				bRequestLoad = FALSE;
 LOADSAVE_MODE		bLoadSaveMode;
 
@@ -377,12 +377,29 @@ void deleteSaveGame(char* saveGameName)
 
 	// check for a directory and remove that too.
 	files = PHYSFS_enumerateFiles(saveGameName);
-	for (i = files; *i != NULL; i++) {
-		debug(LOG_WZ, "Deleting [%s].", *i);
-		PHYSFS_delete(*i);
+	for (i = files; *i != NULL; ++i)
+	{
+		char del_file[PATH_MAX];
+
+		// Construct the full path to the file by appending the
+		// filename to the directory it is in.
+		snprintf(del_file, sizeof(del_file), "%s/%s", saveGameName, *i);
+
+		debug(LOG_WZ, "Deleting [%s].", del_file);
+
+		// Delete the file
+		if (!PHYSFS_delete(del_file))
+		{
+			debug(LOG_ERROR, "Warning [%s] could not be deleted due to PhysicsFS error: %s", del_file, PHYSFS_getLastError());
+		}
 	}
 	PHYSFS_freeList(files);
-	PHYSFS_delete(saveGameName);	// now empty directory
+
+	if (!PHYSFS_delete(saveGameName))		// now (should be)empty directory
+	{
+		debug(LOG_ERROR, "Warning directory[%s] could not be deleted because %s", saveGameName,PHYSFS_getLastError());
+	}
+	
 	return;
 }
 
@@ -395,7 +412,7 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 {
 	UDWORD		id=0;
 	W_EDBINIT	sEdInit;
-	char            sDelete[MAX_STR_LENGTH];
+	static char     sDelete[PATH_MAX];
 	UDWORD		i;
 	W_CONTEXT		context;
 
@@ -449,10 +466,17 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 				sEdInit.pBoxDisplay = displayLoadSaveEdit;
 				widgAddEditBox(psRequestScreen, &sEdInit);
 
-				snprintf(sDelete, sizeof(sDelete), "%s%s.%s",
-				         sPath,
-				         ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText ,
-				         sExt);
+				if (((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText != NULL)
+				{
+					snprintf(sDelete, sizeof(sDelete), "%s%s.%s",
+					         sPath,
+					         ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText ,
+					         sExt);
+				}
+				else
+				{
+					strlcpy(sDelete, "", sizeof(sDelete));
+				}
 
 				widgHide(psRequestScreen,id);		// hide the old button
 				chosenSlotId = id;
@@ -514,11 +538,11 @@ static BOOL _runLoadSave(BOOL bResetMissionWidgets)
 		{
 			strlcpy(sTemp, ((W_EDITBOX *)widgGetFromID(psRequestScreen,id))->aText, sizeof(sTemp));
 			removeWildcards(sTemp);
-			sprintf(sRequestResult,"%s%s.%s",
-					sPath,
-	  				sTemp,
-					sExt);
-			deleteSaveGame(sDelete);	//only delete game if a new game fills the slot
+			snprintf(sRequestResult, sizeof(sRequestResult), "%s%s.%s", sPath, sTemp, sExt);
+			if (strlen(sDelete) != 0)
+			{
+				deleteSaveGame(sDelete);	//only delete game if a new game fills the slot
+			}
 		}
 		else
 		{
