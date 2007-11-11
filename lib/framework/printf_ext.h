@@ -36,11 +36,20 @@ extern int snprintf(char* str, size_t size, const char* format, ...);
 #endif
 
 // A stack-allocating variant of sprintf
-#define sasprintf(var, fmt, ...) \
+#define sasprintf(strp, format, ...) \
 do { \
+	/* Make sure to evaluate "format" just once */ \
+	const char* fmt = format; \
+	/* Determine the size of the string we're going to produce */ \
 	size_t size = snprintf(NULL, 0, fmt, __VA_ARGS__); \
-	var = alloca(size + 1); \
-	sprintf(var, fmt,  __VA_ARGS__); \
-} while(0);
+	\
+	/* Let the compiler perform some static type-checking */ \
+	char** var = strp; \
+	\
+	/* Allocate a buffer large enough to hold our string on the stack*/ \
+	*var = (char*)alloca(size + 1); \
+	/* Print into our newly created string-buffer */ \
+	sprintf(*var, fmt,  __VA_ARGS__); \
+} while(0)
 
 #endif // __INCLUDE_LIB_FRAMEWORK_PRINTF_EXT_H__

@@ -132,11 +132,6 @@ const char* version_getFormattedVersionString()
 
 	if (versionString == NULL)
 	{
-		// TRANSLATORS: This string looks as follows when expanded.
-		// "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
-		const char* format_string = _("Version %s%s%s%s");
-
-
 		// Compose the working copy state string
 #if (SVN_WC_MODIFIED && SVN_WC_SWITCHED)
 		const char* wc_state = _(" (modified and switched locally)");
@@ -155,57 +150,21 @@ const char* version_getFormattedVersionString()
 		static const char build_type[] = "";
 #endif
 
-		int str_len;
-
-		char* build_date = NULL;
+		const char* build_date = NULL;
 
 		if (strncmp(svn_uri_cstr, "tags/", strlen("tags/")) != 0)
 		{
-			const char* date_format_string = _(" - Built %s");
-
-			// Find out how much memory we're going to need for the build-date string
-			str_len = snprintf(build_date, 0, date_format_string, version_getBuildDate());
-
-			if (str_len > 0)
-			{
-				build_date = malloc(str_len + 1);
-				if (build_date == NULL)
-				{
-					debug(LOG_ERROR, "version_getVersionString: Out of memory!");
-					abort();
-					return NULL;
-				}
-
-				snprintf(build_date, str_len + 1, date_format_string, version_getBuildDate());
-			}
-			else
-			{
-				build_date = strdup("");
-			}
+			sasprintf((char**)&build_date, _(" - Built %s"), version_getBuildDate());
 		}
 		else
 		{
-			build_date = strdup("");
+			build_date = "";
 		}
 
-		// Find out how much memory we're going to need for the version string
-		str_len = snprintf((char*)versionString, 0, format_string, version_getVersionString(), wc_state, build_date, build_type);
-
-		if (str_len > 0)
-		{
-			versionString = malloc(str_len + 1);
-			if (versionString == NULL)
-			{
-				free(build_date);
-				debug(LOG_ERROR, "version_getVersionString: Out of memory!");
-				abort();
-				return NULL;
-			}
-
-			snprintf((char*)versionString, str_len + 1, format_string, version_getVersionString(), wc_state, build_date, build_type);
-		}
-
-		free(build_date);
+		// Construct the version string
+		// TRANSLATORS: This string looks as follows when expanded.
+		// "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
+		asprintf((char**)&versionString, _("Version %s%s%s%s"), version_getVersionString(), wc_state, build_date, build_type);
 	}
 
 	return versionString;
