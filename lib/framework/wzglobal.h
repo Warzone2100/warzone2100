@@ -396,6 +396,8 @@
 #    include <sys/param.h>
 #    include <w32api.h>
 #    define _WIN32_IE IE5
+// Required for alloca
+#    include <malloc.h>
 
 #  elif defined(WZ_CC_MSVC)
 #    if defined(_DEBUG)
@@ -414,6 +416,7 @@
 #    define strcasecmp _stricmp
 #    define strncasecmp _strnicmp
 #    define inline __inline
+#    define alloca _alloca
 
 // Required for the below two inline functions
 #    include <stdio.h>
@@ -455,6 +458,7 @@ static inline int snprintf(char* str, size_t size, const char* format, ...)
 
 #elif defined(WZ_OS_UNIX)
 #  include <unistd.h>
+#  include <alloca.h>
 #endif /* WZ_OS_* */
 
 
