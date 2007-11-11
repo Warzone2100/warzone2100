@@ -1473,7 +1473,6 @@ void actionUpdateDroid(DROID *psDroid)
 		break;
 
 	case DACTION_ATTACK:
-	case DACTION_ATTACK_M:
 		ASSERT( psDroid->psActionTarget[0] != NULL,
 			"actionUpdateUnit: target is NULL while attacking" );
 
@@ -2634,7 +2633,6 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		break;
 
 	case DACTION_ATTACK:
-	case DACTION_ATTACK_M:
 		// can't attack without a weapon
 		// or yourself
 		if ((psDroid->asWeaps[0].nStat == 0) ||

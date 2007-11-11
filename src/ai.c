@@ -929,7 +929,6 @@ void aiUpdateDroid(DROID *psDroid)
 
 	/* Only try to update target if already have some target */
 	if (psDroid->action != DACTION_ATTACK &&
-		psDroid->action != DACTION_ATTACK_M &&
 		psDroid->action != DACTION_MOVEFIRE &&
 		psDroid->action != DACTION_MOVETOATTACK &&
 		psDroid->action != DACTION_ROTATETOATTACK)

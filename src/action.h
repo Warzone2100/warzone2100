@@ -78,8 +78,7 @@ typedef enum _droid_action
 	DACTION_CLEARREARMPAD,			// (37) a VTOL droid being told to get off a rearm pad
 	DACTION_RETURNTOPOS,			// (38) used by scout/patrol order when returning to route
 	DACTION_FIRESUPPORT_RETREAT,	// (39) used by firesupport order when sensor retreats
-	DACTION_ATTACK_M,				// (40) attack with multiple weapons
-	DACTION_CIRCLE,					// (41) circling while engaging
+	DACTION_CIRCLE = 41,				// (41) circling while engaging
 } DROID_ACTION;
 
 //Watermelon:a simple struct to avoid passing struct array pointer to functions
