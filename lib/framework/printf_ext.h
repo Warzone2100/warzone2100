@@ -35,4 +35,12 @@ extern int vsnprintf(char* str, size_t size, const char* format, va_list ap);
 extern int snprintf(char* str, size_t size, const char* format, ...);
 #endif
 
+// A stack-allocating variant of sprintf
+#define sasprintf(var, fmt, ...) \
+do { \
+	size_t size = snprintf(NULL, 0, fmt, __VA_ARGS__); \
+	var = alloca(size + 1); \
+	sprintf(var, fmt,  __VA_ARGS__); \
+} while(0);
+
 #endif // __INCLUDE_LIB_FRAMEWORK_PRINTF_EXT_H__
