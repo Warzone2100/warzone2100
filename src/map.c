@@ -574,9 +574,9 @@ static void objectWeaponTagged(int num, UWORD *rotation, UWORD *pitch, WEAPON *a
 		tagWrite(0x02, rotation[i]);
 		tagWrite(0x03, pitch[i]);
 		tagWrite(0x04, asWeaps[i].hitPoints);
-		tagWrite(0x04, asWeaps[i].ammo);
-		tagWrite(0x04, asWeaps[i].lastFired);
-		tagWrite(0x04, asWeaps[i].recoilValue);
+		tagWrite(0x05, asWeaps[i].ammo);
+		tagWrite(0x06, asWeaps[i].lastFired);
+		tagWrite(0x07, asWeaps[i].recoilValue);
 		tagWriteSeparator();
 	}
 	tagWriteLeave(0x04);
