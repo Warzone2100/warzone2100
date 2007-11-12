@@ -11,6 +11,6 @@ CREATE TABLE Body (component_id integer,              -- Unique number to determ
                    heat_armour_value integer,         -- A measure of how much protection the armour provides against heat weapons
                    misc_armour_value integer,         -- A measure of how much protection the armour provides against misc weapons
                    design integer,                    -- boolean flag to indicate whether this weapon  can be used in the design screen
-                   flame_id text,                     -- Which graphic to use for the bullet trail
+                   flame_imd text,                    -- Which graphic to use for the bullet trail
                    UNIQUE(component_id)
 );
