@@ -724,9 +724,6 @@ static void actionAddVtolAttackRun( DROID *psDroid )
 	{
 		moveDroidToDirect( psDroid, iX, iY );
 	}
-
-	/* update attack run count - done in projectile.c now every time a bullet is fired*/
-	//psDroid->sMove.iAttackRuns++;
 }
 
 static void actionUpdateVtolAttack( DROID *psDroid )
@@ -742,7 +739,6 @@ static void actionUpdateVtolAttack( DROID *psDroid )
 		return;
 	}
 
-	//if (psDroid->numWeaps == 0)
 	/* Watermelon:if I am a multi-turret droid */
 	if (psDroid->numWeaps > 1)
 	{
@@ -1226,54 +1222,7 @@ void actionUpdateDroid(DROID *psDroid)
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_REACH_LOCATION);
 			psScrCBOrderDroid = NULL;
 			psScrCBOrder = DORDER_NONE;
-
-			//if vtol and offworld and empty - 'magic' it back home!
-/*			alternatively - lets not - John.
-			if (vtolEmpty(psDroid) && missionIsOffworld())
-			{
-				//check has reached LZ
-				xdiff = (SDWORD)psDroid->x - (SDWORD)psDroid->actionX;
-				ydiff = (SDWORD)psDroid->y - (SDWORD)psDroid->actionY;
-				if (xdiff*xdiff + ydiff*ydiff <= TILE_UNITS*TILE_UNITS)
-				{
-					//magic! - take droid out of list and add to one back at home base
-					if (droidRemove(psDroid, apsDroidLists))
-					{
-						//only add to mission lists if successfully removed from current droid lists
-						addDroid(psDroid, mission.apsDroidLists);
-						//make sure fully armed etc by time back at home
-						mendVtol(psDroid);
-						addConsoleMessage("VTOL MAGIC!",DEFAULT_JUSTIFY);
-					}
-					//else the droid should be dead!
-				}
-				else
-				{
-					//re-order the droid back to the LZ
-					orderDroidLoc(psDroid, DORDER_MOVE, getLandingX(psDroid->player),
-						getLandingY(psDroid->player));
-				}
-			}*/
 		}
-
-/*		else if(secondaryGetState(psDroid, DSO_HALTTYPE, &state) && (state == DSS_HALT_HOLD))
-		{
-			psDroid->action = DACTION_NONE;		// hold is set, stop moving.
-			moveStopDroid(psDroid);
-		}*/
-
-/*		else if ((psDroid->order == DORDER_SCOUT) &&
-				aiBestNearestTarget(psDroid, &psObj))
-		{
-			if (psDroid->numWeaps > 0)
-			{
-				orderDroidObj(psDroid, DORDER_ATTACK, psObj);
-			}
-			else
-			{
-				orderDroid(psDroid, DORDER_STOP);
-			}
-		}*/
 
 		//Watermelon:added multiple weapon check
 		else if (psDroid->numWeaps > 0)
@@ -1317,11 +1266,6 @@ void actionUpdateDroid(DROID *psDroid)
 			// Got to destination
 			psDroid->action = DACTION_NONE;
 		}
-/*		else if(secondaryGetState(psDroid, DSO_HALTTYPE, &state) && (state == DSS_HALT_HOLD))
-		{
-			psDroid->action = DACTION_NONE;		// hold is set, stop moving.
-			moveStopDroid(psDroid);
-		}*/
 		break;
 	case DACTION_TRANSPORTIN:
 	case DACTION_TRANSPORTOUT:
@@ -1461,7 +1405,6 @@ void actionUpdateDroid(DROID *psDroid)
 
 		//check its a VTOL unit since adding Transporter's into multiPlayer
 		/* check vtol attack runs */
-		//if ( psPropStats->propulsionType == LIFT )
 		if (vtolDroid(psDroid))
 		{
 			actionUpdateVtolAttack( psDroid );
@@ -1672,7 +1615,6 @@ void actionUpdateDroid(DROID *psDroid)
 		break;
 
 	case DACTION_MOVETOATTACK:
-		debug( LOG_NEVER, "MOVETOATTACK - %p\n",psDroid);
 
 		// don't wan't formations for this one
 		if (psDroid->sMove.psFormation)
@@ -1691,8 +1633,7 @@ void actionUpdateDroid(DROID *psDroid)
 
 		//check the target hasn't become one the same player ID - Electronic Warfare
 		if ((electronicDroid(psDroid) && (psDroid->player == psDroid->psActionTarget[0]->player)) ||
-			!validTarget((BASE_OBJECT *)psDroid, psDroid->psActionTarget[0], 0) )// ||
-//			(secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state) && (state != DSS_ALEV_ALWAYS)))
+			!validTarget((BASE_OBJECT *)psDroid, psDroid->psActionTarget[0], 0) )
 		{
 			for (i = 0;i < psDroid->numWeaps;i++)
 			{
@@ -2594,7 +2535,6 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 	{
 	case DACTION_NONE:
 		// Clear up what ever the droid was doing before if necessary
-//		if(!driveModeActive() || !psDroid->selected) {
 			if (!DROID_STOPPED(psDroid))
 			{
 				moveStopDroid(psDroid);
@@ -2616,12 +2556,6 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 			{
 				setDroidActionTarget(psDroid, NULL, 0);
 			}
-//		} //else {
-//			if(psDroid->player == 0)
-//			{
-//				DBPRINTF(("DACTION_NONE %p\n",psDroid);
-//			}
-//		}
 		break;
 
 	case DACTION_TRANSPORTWAITTOFLYIN:
@@ -2680,14 +2614,13 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 			if ( !proj_Direct( psWeapStats ) )
 			{
 				if (psWeapStats->rotate)
-		    	{
+				{
 					psDroid->action = DACTION_ATTACK;
-			    }
+				}
 				else
 				{
 					psDroid->action = DACTION_ROTATETOATTACK;
-    				moveTurnDroid( psDroid, psDroid->psActionTarget[0]->x,
-											psDroid->psActionTarget[0]->y);
+					moveTurnDroid(psDroid, psDroid->psActionTarget[0]->x, psDroid->psActionTarget[0]->y);
 				}
 			}
 			else
