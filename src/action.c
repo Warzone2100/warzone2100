@@ -2704,11 +2704,10 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		else
 		{
 			psDroid->action = DACTION_MOVETOATTACK;
-
+			setDroidActionTarget(psDroid, psAction->psObj, 0);
 			turnOffMultiMsg(TRUE);
 			moveDroidTo(psDroid, psAction->psObj->x, psAction->psObj->y);
 			turnOffMultiMsg(FALSE);
-
 		}
 		break;
 
