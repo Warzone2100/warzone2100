@@ -43,5 +43,6 @@ CREATE TABLE Weapons (component_id integer,              --
                       target_hit_graphic text,           -- Which graphic to use when hitting target
                       target_miss_graphic text,          -- Which graphic to use when missing target
                       water_hit_graphic text,            -- Which graphic to use when hitting water
-                      trail_graphic text                 -- Which graphic to use for the bullet trail
+                      trail_graphic text,                -- Which graphic to use for the bullet trail
+                      UNIQUE(component_id)
 );
