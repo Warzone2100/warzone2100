@@ -53,6 +53,7 @@
 #include "scripttabs.h"
 
 #include "seqdisp.h"
+#include "mission.h"
 
 #include "multiplay.h"
 #include "lib/sound/cdaudio.h"
@@ -1435,6 +1436,8 @@ void setIntelligencePauseState(void)
 {
 	if (!bMultiPlayer)
 	{
+		//need to clear mission widgets from being shown on intel screen
+		clearMissionWidgets();
 		gameTimeStop();
 		setGameUpdatePause(TRUE);
 		if(!bInTutorial)
@@ -1450,9 +1453,12 @@ void setIntelligencePauseState(void)
 void resetIntelligencePauseState(void)
 {
 	if (!bMultiPlayer)
-	{
+	{	
+		//put any widgets back on for the missions
+		resetMissionWidgets();
 		setGameUpdatePause(FALSE);
-		if(!bInTutorial) {
+		if(!bInTutorial)
+		{
 			setScriptPause(FALSE);
 		}
 		setScrollPause(FALSE);

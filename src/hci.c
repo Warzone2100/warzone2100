@@ -3221,24 +3221,18 @@ static BOOL intGetStructPosition(UDWORD *pX, UDWORD *pY)
 /* Display the widgets for the in game interface */
 void intDisplayWidgets(void)
 {
-	//STRUCTURE	*psStructure;
 	BOOL bPlayerHasHQ;
-//	int	i;
-
-	/* Including the edit mode here is pretty nasty - but it will get
-	 * ripped out for the final version.
-	 */
 
 	// God only knows...
-	if(ReticuleUp && !bInTutorial) {
+	if (ReticuleUp && !bInTutorial)
+	{
 		intCheckReticuleButtons();
 	}
-
 
 	/*draw the background for the design screen and the Intelligence screen*/
 	if (intMode == INT_DESIGN || intMode == INT_INTELMAP)
 	{
- // When will they ever learn!!!!
+		// When will they ever learn!!!!
 		if (!bMultiPlayer)
 		{
 			screen_RestartBackDrop();
@@ -3246,10 +3240,9 @@ void intDisplayWidgets(void)
 			/*Add the radar to the design screen - only if player has HQ*/
 			bPlayerHasHQ = getHQExists(selectedPlayer);
 
-
-			if(bPlayerHasHQ)
+			if (bPlayerHasHQ)	//NOTE: This flickers badly, so turn it off for now.
 			{
-				drawRadar();
+				// drawRadar();
 			}
 
 			// We need to add the console messages to the intelmap for the tutorial so that it can display messages
@@ -3257,12 +3250,8 @@ void intDisplayWidgets(void)
 			{
 				displayConsoleMessages();
 			}
-
 		}
 	}
-
-	//draw the proximity blips onto the world - done as buttons on the interface now
-	//drawProximityBlips();
 
 	widgDisplayScreen(psWScreen);
 
@@ -3270,7 +3259,6 @@ void intDisplayWidgets(void)
 	{
 		displayLoadSave();
 	}
-
 }
 
 
