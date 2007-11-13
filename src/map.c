@@ -45,6 +45,7 @@
 #include "advvis.h"
 #include "research.h"
 #include "mission.h"
+#include "formationdef.h"
 
 #include "gateway.h"
 #include "wrappers.h"
@@ -563,7 +564,7 @@ static void objectStatTagged(BASE_OBJECT *psObj, int body, int resistance)
 	tagWriteLeave(0x03);
 }
 
-static void objectWeaponTagged(int num, UWORD *rotation, UWORD *pitch, WEAPON *asWeaps)
+static void objectWeaponTagged(int num, UWORD *rotation, UWORD *pitch, WEAPON *asWeaps, BASE_OBJECT **psTargets)
 {
 	int i;
 
@@ -577,6 +578,10 @@ static void objectWeaponTagged(int num, UWORD *rotation, UWORD *pitch, WEAPON *a
 		tagWrite(0x05, asWeaps[i].ammo);
 		tagWrite(0x06, asWeaps[i].lastFired);
 		tagWrite(0x07, asWeaps[i].recoilValue);
+		if (psTargets[i] != NULL)
+		{
+			tagWrites(0x08, psTargets[i]->id); // else default -1
+		}
 		tagWriteSeparator();
 	}
 	tagWriteLeave(0x04);
@@ -585,14 +590,14 @@ static void objectWeaponTagged(int num, UWORD *rotation, UWORD *pitch, WEAPON *a
 static void droidSaveTagged(DROID *psDroid)
 {
 	int plr = psDroid->player;
-	uint16_t v[DROID_MAXCOMP], i;
+	uint16_t v[DROID_MAXCOMP], i, order[4];
 
 	/* common groups */
 
 	objectSaveTagged((BASE_OBJECT *)psDroid); /* 0x01 */
 	objectSensorTagged(psDroid->sensorRange, psDroid->sensorPower, 0, psDroid->ECMMod); /* 0x02 */
 	objectStatTagged((BASE_OBJECT *)psDroid, psDroid->originalBody, psDroid->resistance); /* 0x03 */
-	objectWeaponTagged(psDroid->numWeaps, psDroid->turretRotation, psDroid->turretPitch, psDroid->asWeaps);
+	objectWeaponTagged(psDroid->numWeaps, psDroid->turretRotation, psDroid->turretPitch, psDroid->asWeaps, psDroid->psActionTarget);
 
 	/* DROID GROUP */
 
@@ -615,6 +620,44 @@ static void droidSaveTagged(DROID *psDroid)
 	tagWrite(0x0b, psDroid->numKills);
 	tagWrite(0x0c, psDroid->NameVersion);
 	tagWrite(0x0d, psDroid->currRayAng);
+	if (psDroid->psTarget)
+	{
+		tagWrites(0x0e, psDroid->psTarget->id); // else -1
+	}
+	if (psDroid->psTarStats)
+	{
+		tagWrites(0x0f, psDroid->psTarStats->ref); // else -1
+	}
+	if (psDroid->psBaseStruct)
+	{
+		tagWrites(0x10, psDroid->psBaseStruct->id); // else -1
+	}
+	// current order
+	tagWrite(0x11, psDroid->order);
+	order[0] = psDroid->orderX;
+	order[1] = psDroid->orderY;
+	order[2] = psDroid->orderX2;
+	order[3] = psDroid->orderX2;
+	tagWrite16v(0x12, 4, order);
+	// queued orders
+	tagWriteEnter(0x13, psDroid->listSize);
+	for (i = 0; i < psDroid->listSize; i++)
+	{
+		tagWrite(0x01, psDroid->asOrderList[i].order);
+		order[0] = psDroid->asOrderList[i].x;
+		order[1] = psDroid->asOrderList[i].y;
+		order[2] = psDroid->asOrderList[i].x2;
+		order[3] = psDroid->asOrderList[i].y2;
+		tagWrite16v(0x02, 4, order);
+		tagWriteSeparator();
+	}
+	tagWriteLeave(0x13);
+	if (psDroid->sMove.psFormation != NULL)
+	{
+		tagWrites(0x14, psDroid->sMove.psFormation->dir);
+		tagWrites(0x15, psDroid->sMove.psFormation->x);
+		tagWrites(0x16, psDroid->sMove.psFormation->y);
+	} // else these are zero as by default
 	tagWriteLeave(0x0a);
 }
 
@@ -632,7 +675,7 @@ static void structureSaveTagged(STRUCTURE *psStruct)
 	objectSaveTagged((BASE_OBJECT *)psStruct); /* 0x01 */
 	objectSensorTagged(psStruct->sensorRange, psStruct->sensorPower, 0, psStruct->ecmPower); /* 0x02 */
 	objectStatTagged((BASE_OBJECT *)psStruct, psStruct->pStructureType->bodyPoints, psStruct->resistance); /* 0x03 */
-	objectWeaponTagged(psStruct->numWeaps, psStruct->turretRotation, psStruct->turretPitch, psStruct->asWeaps);
+	objectWeaponTagged(psStruct->numWeaps, psStruct->turretRotation, psStruct->turretPitch, psStruct->asWeaps, psStruct->psTarget);
 
 	/* STRUCTURE GROUP */
 
@@ -1035,7 +1078,7 @@ BOOL mapSaveTagged(char *pFileName)
 				tagWrite(0x02, psCurrentProd->built);
 				if (psCurrentProd->psTemplate != NULL)
                                 {
-					tagWrite(0x03, psCurrentProd->psTemplate->multiPlayerID);
+					tagWrites(0x03, psCurrentProd->psTemplate->multiPlayerID); // -1 if none
                                 }
 				tagWriteSeparator();
 			}

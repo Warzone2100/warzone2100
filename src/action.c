@@ -766,8 +766,7 @@ static void actionUpdateVtolAttack( DROID *psDroid )
 	/* order back to base after fixed number of attack runs */
 	if ( psWeapStats[0] != NULL )
 	{
-		//if ( psDroid->sMove.iAttackRuns >= psWeapStats->vtolAttackRuns )
-        if (vtolEmpty(psDroid))
+		if (vtolEmpty(psDroid))
 		{
 			moveToRearm(psDroid);
 			return;
@@ -775,9 +774,7 @@ static void actionUpdateVtolAttack( DROID *psDroid )
 	}
 
 	/* circle around target if hovering and not cyborg */
-	if ( psDroid->sMove.Status == MOVEHOVER &&
-		 //psDroid->droidType != DROID_CYBORG    )
-         !cyborgDroid(psDroid))
+	if (psDroid->sMove.Status == MOVEHOVER && !cyborgDroid(psDroid))
 	{
 		actionAddVtolAttackRun( psDroid );
 	}

@@ -66,7 +66,7 @@
     01 GR 00 -		# Production runs for each factory
       01 US 01 0	# Quantity
       02 US 01 0	# Built
-      03 US 01 4294967295	# Template multiplayerID (UDWORD_MAX default)
+      03 SI 01 -1	# Template multiplayerID, -1 if none
       FF EN 00 -
     FF EN 00 -
   FF EN 00 -
@@ -112,6 +112,7 @@
     05 US 01 0		# Ammo
     06 US 01 0		# Time frame it was last fired
     07 US 01 0		# recoilValue (EXPLAIN ME)
+    08 SI 01 -1		# ID of weapon target, -1 if none
     FF EN 00 -
   0a GR 00 -		# DROID GROUP
     01 US 01 -		# Droid type
@@ -124,6 +125,18 @@
     0b US 01 -		# Number of kills
     0c US 01 -		# Name version (EXPLAIN ME)
     0d US 01 -		# currRayAng (EXPLAIN ME)
+    0e SI 01 -1		# Current job target ID (repairing stuff etc)
+    0f SI 01 -1		# Current stats target ID (building stuff etc)
+    10 SI 01 -1		# Current base target ID (rearm pad etc)
+    11 US 01 0		# Current order
+    12 US 04 -		# Current order parameters
+    13 GR 00 -		# DROID ORDER GROUP (queued orders)
+      01 US 01 -	# Order
+      02 US 04 -	# Order parameters
+      FF EN 00 -
+    14 SI 01 0		# Formation direction
+    15 SI 01 0		# Formation X
+    16 SI 01 0		# Formation Y
     FF EN 00 -
   0b GR 00 -		# STRUCTURE GROUP (EXPLAIN ME)
     01 US 01 -		# Structure type
