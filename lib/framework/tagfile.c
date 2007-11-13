@@ -34,6 +34,9 @@ struct define
 		int32_t int32_tval;
 		float floatval;
 	} val;
+	// debugging temp variables below
+	int countItems; // check group items against number of separators given
+	int expectedItems; // group items expected in current group
 };
 
 static bool tag_error = false;
@@ -43,15 +46,25 @@ static int line = 0; // report in error message
 static bool readmode = true;
 static char *bufptr = NULL;
 static PHYSFS_file *handle = NULL;
-#define ERR_BUF_SIZE 200
+#define ERR_BUF_SIZE 255
 static char errbuf[ERR_BUF_SIZE];
 static int lastAccess = -1; // track last accessed tag to detect user errors
 static int countGroups = 0; // check group recursion count while reading definition
+static char saveDefine[ERR_BUF_SIZE];
+static char saveTarget[ERR_BUF_SIZE];
 
+// TODO: Make into a readable function...
 #define TF_ERROR(...) \
 do { \
 	tag_error = true; \
 	snprintf(errbuf, sizeof(errbuf), __VA_ARGS__); \
+	print_nested_groups(current); \
+	if (readmode) strlcat(errbuf, "While reading ", sizeof(errbuf)); \
+	else strlcat(errbuf, "While writing ", sizeof(errbuf)); \
+	strlcat(errbuf, saveTarget, sizeof(errbuf)); \
+	strlcat(errbuf, " using definition file ", sizeof(errbuf)); \
+	strlcat(errbuf, saveDefine, sizeof(errbuf)); \
+	strlcat(errbuf, "\n", sizeof(errbuf)); \
 	errbuf[sizeof(errbuf) - 1] = '\0'; /* Guarantee to nul-terminate */ \
 	ASSERT(!"tagfile error", errbuf); \
 } while(0)
@@ -99,6 +112,9 @@ static bool scan_defines(struct define *node, struct define *group)
 		node->vm = 0;
 		node->next = NULL;
 		node->element = 0xFF;
+		node->expectedItems = 0;
+		node->countItems = 0;
+		current = node; // for accurate error reporting
 
 		// check line endings
 		while (*bufptr == '\n' || *bufptr == '\r')
@@ -206,6 +222,8 @@ static bool init(const char *definition, const char *datafile, bool write)
 	tag_error = false;
 	line = 1;
 	fp = PHYSFS_openRead(definition);
+	strlcpy(saveDefine, definition, sizeof(saveDefine));
+	strlcpy(saveTarget, datafile, sizeof(saveTarget));
 	if (!fp)
 	{
 		TF_ERROR("Error opening definition file %s: %s", definition, PHYSFS_getLastError());
@@ -467,6 +485,7 @@ bool tagReadNext()
 	{
 		current = current->parent->group; // reset to start of group tag index
 	}
+	current->parent->group->countItems++; // sanity checking
 	return true;
 }
 
@@ -503,6 +522,8 @@ uint16_t tagReadEnter(element_t tag)
 	}
 	assert(current->group->parent != NULL);
 	assert(current->element == tag);
+	current->group->expectedItems = elements;	// for debugging and consistency checking
+	current->group->countItems = 0;			// ditto
 	current->group->parent->current = current; // save where we are. ok, this is very contrived code.
 	current = current->group;
 	return elements;
@@ -523,6 +544,11 @@ void tagReadLeave(element_t tag)
 	{
 		TF_ERROR("Cannot leave group, at highest level already!");
 		return;
+	}
+	if (current->parent->group->expectedItems > current->parent->group->countItems + 1)
+	{
+		TF_ERROR("Expected to read %d items in group, found %d",
+		         current->parent->group->expectedItems, current->parent->group->countItems);
 	}
 	current = current->parent->current; // resume iteration
 	if (current->element != tag)
@@ -850,6 +876,7 @@ bool tagWriteSeparator()
 		current = current->parent->group; // reset to start of group tag index
 	}
 	lastAccess = -1; // reset sanity counter
+	current->parent->group->countItems++; // sanity checking
 	// it has no payload
 	return true;
 }
@@ -867,6 +894,8 @@ bool tagWriteEnter(element_t tag, uint16_t elements)
 	assert(current->group->parent != NULL);
 	(void) PHYSFS_writeUBE8(handle, TF_INT_GROUP);
 	(void) PHYSFS_writeUBE16(handle, elements);
+	current->group->expectedItems = elements;	// for debugging and consistency checking
+	current->group->countItems = 0;			// ditto
 	current->group->parent->current = current; // save where we are. ok, this is very contrived code.
 	current = current->group;
 	lastAccess = -1; // reset sanity counter, since we are in a new group
@@ -885,6 +914,11 @@ bool tagWriteLeave(element_t tag)
 	{
 		TF_ERROR("Cannot leave group, at highest level already!");
 		return false;
+	}
+	if (current->parent->group->expectedItems > current->parent->group->countItems + 1) // may omit last separator
+	{
+		TF_ERROR("Expected %d items in group when writing, found %d",
+		         current->parent->group->expectedItems, current->parent->group->countItems);
 	}
 	current = current->parent->current; // resume at next tag
 	assert(current != NULL);
