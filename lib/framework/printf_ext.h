@@ -32,13 +32,13 @@
  *            string
  *  \return the amount of characters appended to the string
  */
-int vslcatprintf(char* str, size_t size, const char* format, va_list ap)
+extern int vslcatprintf(char* str, size_t size, const char* format, va_list ap);
 
 /** A variant on snprintf which appends its output string to the given string
  *  The function's interface is similar to vslcatprintf(), so look at that
  *  function's description.
  */
-extern int slcatprintf(char* str, size_t size, const char* format, ...)
+extern int slcatprintf(char* str, size_t size, const char* format, ...);
 
 #if defined(WZ_OS_WIN)
 // These functions are GNU extensions; so make sure they are available on Windows also
