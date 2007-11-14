@@ -32,9 +32,9 @@
 #include <limits.h>
 /* Includes direct access to render library */
 #include "lib/ivis_common/piedef.h"
+#include "lib/ivis_common/tex.h"
 #include "lib/ivis_common/piestate.h"
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_opengl/pietexture.h"
 #include "lib/ivis_common/pieclip.h"
 #include "lib/ivis_common/piepalette.h"
 // FIXME Direct iVis implementation include!

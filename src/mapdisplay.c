@@ -36,15 +36,11 @@
 #include "lib/ivis_common/ivisdef.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piestate.h"
-
+#include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piemode.h"
-// FIXME Direct iVis implementation include!
-#include "lib/ivis_opengl/pietexture.h"
 
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/piematrix.h"
-// FIXME Direct iVis implementation include!
-#include "lib/ivis_common/rendmode.h"
 
 #include "map.h"
 #include "mapdisplay.h"

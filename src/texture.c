@@ -27,7 +27,6 @@
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/tex.h"
 #include "lib/ivis_common/piepalette.h"
-#include "lib/ivis_opengl/pietexture.h"
 #include "lib/ivis_opengl/screen.h"
 #include "display3ddef.h"
 #include "texture.h"

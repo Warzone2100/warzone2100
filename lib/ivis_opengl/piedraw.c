@@ -40,7 +40,6 @@
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/pieclip.h"
 #include "piematrix.h"
-#include "pietexture.h"
 
 extern BOOL drawing_interface;
 

@@ -36,7 +36,6 @@
 #include "lib/ivis_common/piefunc.h"
 #include "lib/ivis_common/piestate.h"
 #include "piematrix.h"
-#include "pietexture.h"
 #include "lib/ivis_common/piemode.h"
 #include "lib/ivis_common/pieclip.h"
 
