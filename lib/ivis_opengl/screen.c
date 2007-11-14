@@ -210,12 +210,6 @@ void screenShutDown(void)
 	}
 }
 
-/* Return a pointer to the back buffer surface */
-void *screenGetSurface(void)
-{
-	return NULL;
-}
-
 
 void screen_SetBackDropFromFile(const char* filename)
 {

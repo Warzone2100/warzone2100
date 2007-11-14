@@ -40,8 +40,6 @@
 /* Legacy stuff
  * - only used in the sequence video code we have not yet decided whether to port or to junk */
 
-extern void *screenGetSurface(void); /* Return a pointer to the back buffer surface */
-
 /* Set the colour for text */
 extern void screenSetTextColour(UBYTE red, UBYTE green, UBYTE blue);
 
