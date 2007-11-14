@@ -43,23 +43,14 @@ UDWORD		screenWidth = 0;
 UDWORD		screenHeight = 0;
 UDWORD		screenDepth = 0;
 
-SDL_Surface     *screen;
-
 /* global used to indicate preferred internal OpenGL format */
 int wz_texture_compression;
 
-//backDrop
-UWORD*  pBackDropData = NULL;
-BOOL    bBackDrop = FALSE;
-BOOL    bUpload = FALSE;
-
-//fog
-SDWORD	fogColour = 0;
-
-static char screendump_filename[PATH_MAX];
-static BOOL screendump_required = FALSE;
-
-static GLuint backDropTexture = ~0;
+static SDL_Surface	*screen = NULL;
+static BOOL		bBackDrop = FALSE;
+static char		screendump_filename[PATH_MAX];
+static BOOL		screendump_required = FALSE;
+static GLuint		backDropTexture = ~0;
 
 /* Initialise the double buffered display */
 BOOL screenInitialise(
@@ -207,6 +198,7 @@ void screenShutDown(void)
 	if (screen != NULL)
 	{
 		SDL_FreeSurface(screen);
+		screen = NULL;
 	}
 }
 
@@ -267,6 +259,7 @@ BOOL screen_GetBackDrop(void)
 {
 	return bBackDrop;
 }
+
 //******************************************************************
 //slight hack to display maps (or whatever) in background.
 //bitmap MUST be (BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT) for now.
