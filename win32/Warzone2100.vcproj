@@ -73,7 +73,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net.lib png.lib zlib.lib ogg.lib vorbis.lib vorbisfile.lib physfs.lib OpenAL32.lib glc32.lib OpenGL32.lib GLU32.lib shfolder.lib winmm.lib wsock32.lib dbghelp.lib"
+				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net.lib png.lib zlib.lib ogg.lib vorbis.lib vorbisfile.lib physfs.lib OpenAL32.lib glc32.lib OpenGL32.lib GLU32.lib shfolder.lib winmm.lib wsock32.lib dbghelp.lib libpopt.lib"
 				OutputFile="$(OutDir)\$(ProjectName)-Dbg.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;__DEVPKG__\lib&quot;"
@@ -230,6 +230,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\lib\framework\printf_ext.c"
+					>
+				</File>
+				<File
 					RelativePath=".\resource_lexer.lex.c"
 					>
 				</File>
@@ -243,10 +247,6 @@
 				</File>
 				<File
 					RelativePath="..\lib\framework\strnlen1.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\framework\printf_ext.c"
 					>
 				</File>
 				<File
@@ -382,10 +382,6 @@
 							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
 						/>
 					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\lib\ivis_opengl\pietexture.c"
-					>
 				</File>
 				<File
 					RelativePath="..\lib\ivis_opengl\rendmode.c"
@@ -1299,10 +1295,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\framework\printf_ext.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\frend.h"
 				>
 			</File>
@@ -1623,10 +1615,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\ivis_opengl\pietexture.h"
-				>
-			</File>
-			<File
 				RelativePath="..\lib\ivis_common\pietypes.h"
 				>
 			</File>
@@ -1652,6 +1640,10 @@
 			</File>
 			<File
 				RelativePath="..\src\power.h"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\framework\printf_ext.h"
 				>
 			</File>
 			<File
