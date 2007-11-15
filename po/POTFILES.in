@@ -39,7 +39,6 @@ lib/ivis_opengl/tex.c
 lib/ivis_opengl/rendmode.c
 lib/ivis_opengl/screen.c
 lib/ivis_opengl/piematrix.c
-lib/ivis_opengl/pietexture.c
 lib/ivis_opengl/piedraw.c
 lib/ivis_opengl/piefunc.c
 lib/ivis_opengl/pieblitfunc.c
