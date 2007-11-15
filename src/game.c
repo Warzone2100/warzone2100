@@ -105,7 +105,7 @@ static bool serializeSaveGameHeader(PHYSFS_file* fileHandle, const GAME_SAVEHEAD
 	// Write version numbers below version 35 as little-endian, and those above as big-endian
 	if (serializeHeader->version < VERSION_35)
 		return PHYSFS_writeULE32(fileHandle, serializeHeader->version);
-    else
+	else
 		return PHYSFS_writeUBE32(fileHandle, serializeHeader->version);
 }
 
@@ -119,30 +119,33 @@ static bool deserializeSaveGameHeader(PHYSFS_file* fileHandle, GAME_SAVEHEADER* 
 	// All save game file versions below version 35 (i.e. _not_ version 35 itself)
 	// have their version numbers stored as little endian. Versions from 35 and
 	// onward use big-endian. This basically means that, because of endian
-	// swapping, numbers from 35 and onward will be rediculously high if a
+	// swapping, numbers from 35 and onward will be ridiculously high if a
 	// little-endian byte-order is assumed.
 
 	// Convert from little endian to native byte-order and check if we get a
-	// rediculously high number
+	// ridiculously high number
 	endian_udword(&serializeHeader->version);
 
 	if (serializeHeader->version <= VERSION_34)
 	{
-		// Apparently we don't get a rediculously high number if we assume
+		// Apparently we don't get a ridiculously high number if we assume
 		// little-endian, so lets assume our version number is 34 at max and return
+		debug(LOG_SAVEGAME, "deserializeSaveGameHeader: Version = %u (little-endian)", serializeHeader->version);
+
 		return true;
 	}
 	else
 	{
 		// Apparently we get a larger number than expected if using little-endian.
 		// So assume we have a version of 35 and onward
-
+		
 		// Reverse the little-endian decoding
 		endian_udword(&serializeHeader->version);
 	}
 
 	// Considering that little-endian didn't work we now use big-endian instead
 	serializeHeader->version = PHYSFS_swapUBE32(serializeHeader->version);
+	debug(LOG_SAVEGAME, "deserializeSaveGameHeader: Version %u = (big-endian)", serializeHeader->version);
 
 	return true;
 }
@@ -3661,6 +3664,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	/* Write the data to the file */
 	if (!writeMapFile(aFileName))
 	{
+		debug(LOG_ERROR, "saveGame: writeMapFile(\"%s\") failed", aFileName);
 		goto error;
 	}
 
@@ -3671,6 +3675,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	//ppsCurrentDroidLists = apsDroidLists;
 	if (!writeDroidFile(aFileName,apsDroidLists))
 	{
+		debug(LOG_ERROR, "saveGame: writeDroidFile(\"%s\") failed", aFileName);
 		goto error;
 	}
 
@@ -3680,6 +3685,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	/*Write the data to the file*/
 	if (!writeStructFile(aFileName))
 	{
+		debug(LOG_ERROR, "saveGame: writeStructFile(\"%s\") failed", aFileName);
 		goto error;
 	}
 
@@ -3689,6 +3695,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	/*Write the data to the file*/
 	if (!writeTemplateFile(aFileName))
 	{
+		debug(LOG_ERROR, "saveGame: writeTemplateFile(\"%s\") failed", aFileName);
 		goto error;
 	}
 
@@ -3698,6 +3705,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	/*Write the data to the file*/
 	if (!writeFeatureFile(aFileName))
 	{
+		debug(LOG_ERROR, "saveGame: writeFeatureFile(\"%s\") failed", aFileName);
 		goto error;
 	}
 
@@ -3707,6 +3715,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	/*Write the data to the file*/
 	if (!writeTerrainTypeMapFile(aFileName))
 	{
+		debug(LOG_ERROR, "saveGame: writeTerrainTypeMapFile(\"%s\") failed", aFileName);
 		goto error;
 	}
 
@@ -3716,6 +3725,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	/*Write the data to the file*/
 	if (!writeStructLimitsFile(aFileName))
 	{
+		debug(LOG_ERROR, "saveGame: writeStructLimitsFile(\"%s\") failed", aFileName);
 		goto error;
 	}
 
@@ -3725,6 +3735,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	/*Write the data to the file*/
 	if (!writeCompListFile(aFileName))
 	{
+		debug(LOG_ERROR, "saveGame: writeCompListFile(\"%s\") failed", aFileName);
 		goto error;
 	}
 	//create the structure type lists filename
@@ -3733,6 +3744,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	/*Write the data to the file*/
 	if (!writeStructTypeListFile(aFileName))
 	{
+		debug(LOG_ERROR, "saveGame: writeStructTypeListFile(\"%s\") failed", aFileName);
 		goto error;
 	}
 
@@ -3742,6 +3754,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	/*Write the data to the file*/
 	if (!writeResearchFile(aFileName))
 	{
+		debug(LOG_ERROR, "saveGame: writeResearchFile(\"%s\") failed", aFileName);
 		goto error;
 	}
 
@@ -3751,6 +3764,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	/*Write the data to the file*/
 	if (!writeMessageFile(aFileName))
 	{
+		debug(LOG_ERROR, "saveGame: writeMessageFile(\"%s\") failed", aFileName);
 		goto error;
 	}
 
@@ -3760,6 +3774,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	/*Write the data to the file*/
 	if (!writeMessageFile(aFileName))
 	{
+		debug(LOG_ERROR, "saveGame: writeMessageFile(\"%s\") failed", aFileName);
 		goto error;
 	}
 
@@ -3769,6 +3784,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	/*Write the data to the file*/
 	if (!writeVisibilityData(aFileName))
 	{
+		debug(LOG_ERROR, "saveGame: writeVisibilityData(\"%s\") failed", aFileName);
 		goto error;
 	}
 
@@ -3778,6 +3794,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	/*Write the data to the file*/
 	if (!writeProductionFile(aFileName))
 	{
+		debug(LOG_ERROR, "saveGame: writeProductionFile(\"%s\") failed", aFileName);
 		goto error;
 	}
 
@@ -3788,6 +3805,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	/*Write the data to the file*/
 	if (!writeFXData(aFileName))
 	{
+		debug(LOG_ERROR, "saveGame: writeFXData(\"%s\") failed", aFileName);
 		goto error;
 	}
 
@@ -3798,6 +3816,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	/*Write the data to the file*/
 	if (!writeScoreData(aFileName))
 	{
+		debug(LOG_ERROR, "saveGame: writeScoreData(\"%s\") failed", aFileName);
 		goto error;
 	}
 
@@ -3807,6 +3826,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	/*Write the data to the file*/
 	if (!writeFlagFile(aFileName))
 	{
+		debug(LOG_ERROR, "saveGame: writeFlagFile(\"%s\") failed", aFileName);
 		goto error;
 	}
 
@@ -3816,6 +3836,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	/*Write the data to the file*/
 	if (!writeCommandLists(aFileName))
 	{
+		debug(LOG_ERROR, "saveGame: writeCommandLists(\"%s\") failed", aFileName);
 		goto error;
 	}
 
@@ -3827,6 +3848,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 		/*Write the data to the file*/
 		if (!writeScriptState(aFileName))
 		{
+			debug(LOG_ERROR, "saveGame: writeScriptState(\"%s\") failed", aFileName);
 			goto error;
 		}
 	}
@@ -3838,6 +3860,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	//ppsCurrentDroidLists = mission.apsDroidLists;
 	if (!writeDroidFile(aFileName, mission.apsDroidLists))
 	{
+		debug(LOG_ERROR, "saveGame: writeDroidFile(\"%s\") failed", aFileName);
 		goto error;
 	}
 
@@ -3865,6 +3888,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	//ppsCurrentDroidLists = apsLimboDroids;
 	if (!writeDroidFile(aFileName, apsLimboDroids))
 	{
+		debug(LOG_ERROR, "saveGame: writeDroidFile(\"%s\") failed", aFileName);
 		goto error;
 	}
 
@@ -3881,6 +3905,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 		/* Write the data to the file */
 		if (!writeMapFile(aFileName))
 		{
+			debug(LOG_ERROR, "saveGame: writeMapFile(\"%s\") failed", aFileName);
 			goto error;
 		}
 
@@ -3890,6 +3915,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 		/* Write the data to the file */
 		if (!writeVisibilityData(aFileName))
 		{
+			debug(LOG_ERROR, "saveGame: writeVisibilityData(\"%s\") failed", aFileName);
 			goto error;
 		}
 
@@ -3899,6 +3925,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 		/*Write the data to the file*/
 		if (!writeStructFile(aFileName))
 		{
+			debug(LOG_ERROR, "saveGame: writeStructFile(\"%s\") failed", aFileName);
 			goto error;
 		}
 
@@ -3908,6 +3935,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 		/*Write the data to the file*/
 		if (!writeFeatureFile(aFileName))
 		{
+			debug(LOG_ERROR, "saveGame: writeFeatureFile(\"%s\") failed", aFileName);
 			goto error;
 		}
 
@@ -3917,6 +3945,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 		/*Write the data to the file*/
 		if (!writeFlagFile(aFileName))
 		{
+			debug(LOG_ERROR, "saveGame: writeFlagFile(\"%s\") failed", aFileName);
 			goto error;
 		}
 
@@ -4015,7 +4044,6 @@ bool gameLoad(const char* fileName)
 
 	//set main version Id from game file
 	saveGameVersion = fileHeader.version;
-
 
 	/* Check the file version */
 	if (fileHeader.version < VERSION_7)
