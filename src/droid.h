@@ -28,6 +28,7 @@
 
 #include "objectdef.h"
 #include "lib/gamelib/gtime.h"
+#include "stats.h"
 
 #define OFF_SCREEN 9999		// world->screen check - alex
 
@@ -397,6 +398,44 @@ extern BOOL cyborgDroid(DROID *psDroid);
 
 // check for illegal references to droid we want to release
 BOOL droidCheckReferences(DROID *psVictimDroid);
+
+/*
+ * Component stat helper functions
+ */
+static inline BODY_STATS *getBodyStats(DROID *psDroid)
+{
+	return asBodyStats + psDroid->asBits[COMP_BODY].nStat;
+}
+
+static inline BRAIN_STATS *getBrainStats(DROID *psDroid)
+{
+	return asBrainStats + psDroid->asBits[COMP_BRAIN].nStat;
+}
+
+static inline PROPULSION_STATS *getPropulsionStats(DROID *psDroid)
+{
+	return asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+}
+
+static inline SENSOR_STATS *getSensorStats(DROID *psDroid)
+{
+	return asSensorStats + psDroid->asBits[COMP_SENSOR].nStat;
+}
+
+static inline ECM_STATS *getECMStats(DROID *psDroid)
+{
+	return asECMStats + psDroid->asBits[COMP_SENSOR].nStat;
+}
+
+static inline REPAIR_STATS *getRepairStats(DROID *psDroid)
+{
+	return asRepairStats + psDroid->asBits[COMP_REPAIRUNIT].nStat;
+}
+
+static inline CONSTRUCT_STATS *getConstructStats(DROID *psDroid)
+{
+	return asConstructStats + psDroid->asBits[COMP_CONSTRUCT].nStat;
+}
 
 /** helper functions for future refcount patch **/
 
