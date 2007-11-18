@@ -39,7 +39,6 @@ typedef struct _path_point
 typedef struct _move_control
 {
 	UBYTE	Status;						// Inactive, Navigating or moving point to point status
-	UBYTE	Mask;						// Mask used for the creation of this path
 	UBYTE	Position;	   				// Position in asPath
 	UBYTE	numPoints;					// number of points in asPath
 	PATH_POINT	asPath[TRAVELSIZE];		// Pointer to list of block X,Y coordinates.

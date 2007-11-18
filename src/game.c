@@ -1473,37 +1473,24 @@ static bool deserializeSaveGameData(PHYSFS_file* fileHandle, SAVE_GAME* serializ
 typedef struct _save_move_control
 {
 	UBYTE	Status;						// Inactive, Navigating or moving point to point status
-	UBYTE	Mask;						// Mask used for the creation of this path
 	UBYTE	Position;	   				// Position in asPath
 	UBYTE	numPoints;					// number of points in asPath
 	PATH_POINT	asPath[TRAVELSIZE];		// Pointer to list of block X,Y coordinates.
-										// When initialised list is terminated by (0xffff,0xffff)
-										// Values prefixed by 0x8000 are pixel coordinates instead of
-										// block coordinates
 	SDWORD	DestinationX;				// DestinationX,Y should match objects current X,Y
 	SDWORD	DestinationY;				//		location for this movement to be complete.
 	SDWORD	srcX,srcY,targetX,targetY;
-
-	/* Stuff for John's movement update */
 	float	fx,fy;						// droid location as a fract
-	// NOTE: this is supposed to replace Speed
 	float	speed;						// Speed of motion
 	SWORD	boundX,boundY;				// Vector for the end of path boundary
 	SWORD	dir;						// direction of motion (not the direction the droid is facing)
-
 	SWORD	bumpDir;					// direction at last bump
 	UDWORD	bumpTime;					// time of first bump with something
 	UWORD	lastBump;					// time of last bump with a droid - relative to bumpTime
 	UWORD	pauseTime;					// when MOVEPAUSE started - relative to bumpTime
 	UWORD	bumpX,bumpY;				// position of last bump
-
 	UDWORD	shuffleStart;				// when a shuffle started
-
 	struct _formation	*psFormation;			// formation the droid is currently a member of
-
-	/* vtol movement - GJ */
 	SWORD	iVertSpeed;
-	/* Watermelon:I need num of DROID_MAXWEAPS of iAttackRuns */
 	UWORD	iAttackRuns[DROID_MAXWEAPS];
 } SAVE_MOVE_CONTROL;
 
