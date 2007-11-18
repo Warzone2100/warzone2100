@@ -619,7 +619,6 @@ static void droidSaveTagged(DROID *psDroid)
 	tagWrite(0x0a, psDroid->body);
 	tagWrite(0x0b, psDroid->numKills);
 	tagWrite(0x0c, psDroid->NameVersion);
-	tagWrite(0x0d, psDroid->currRayAng);
 	if (psDroid->psTarget)
 	{
 		tagWrites(0x0e, psDroid->psTarget->id); // else -1

@@ -1121,7 +1121,6 @@ void droidUpdate(DROID *psDroid)
 		}
 	}
 	// -----------------
-//	visTilesUpdate((BASE_OBJECT *)psDroid);
 
 	/* Update the fire damage data */
 	if (psDroid->inFire & IN_FIRE)
@@ -3442,7 +3441,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 		{
 			updateDroidOrientation(psDroid);
 		}
-		visTilesUpdate((BASE_OBJECT *)psDroid,FALSE);
+		visTilesUpdate((BASE_OBJECT *)psDroid);
 		gridAddObject((BASE_OBJECT *)psDroid);
  		clustNewDroid(psDroid);
 	}

@@ -32,7 +32,7 @@ extern BOOL visInitialise(void);
 extern BOOL visTilesPending(BASE_OBJECT *psObj);
 
 /* Check which tiles can be seen by an object */
-extern void visTilesUpdate(BASE_OBJECT *psObj,BOOL SpreadLoad);
+extern void visTilesUpdate(BASE_OBJECT *psObj);
 
 /* Check whether psViewer can see psTarget
  * psViewer should be an object that has some form of sensor,

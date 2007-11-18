@@ -3796,7 +3796,7 @@ void moveUpdateDroid(DROID *psDroid)
 	if (map_coord(oldx) != map_coord(psDroid->x)
 	 || map_coord(oldy) != map_coord(psDroid->y))
 	{
-		visTilesUpdate((BASE_OBJECT *)psDroid,FALSE);
+		visTilesUpdate((BASE_OBJECT *)psDroid);
 		gridMoveObject((BASE_OBJECT *)psDroid, (SDWORD)oldx,(SDWORD)oldy);
 
 		// object moved from one tile to next, check to see if droid is near stuff.(oil)

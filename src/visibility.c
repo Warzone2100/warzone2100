@@ -262,7 +262,7 @@ BOOL visTilesPending(BASE_OBJECT *psObj)
 }
 
 /* Check which tiles can be seen by an object */
-void visTilesUpdate(BASE_OBJECT *psObj,BOOL SpreadLoad)
+void visTilesUpdate(BASE_OBJECT *psObj)
 {
 	SDWORD	range;
 	SDWORD	ray;
@@ -274,7 +274,6 @@ void visTilesUpdate(BASE_OBJECT *psObj,BOOL SpreadLoad)
 		range = ((DROID *)psObj)->sensorRange;
 		break;
 	case OBJ_STRUCTURE:	// Only done when structure initialy built.
-		ASSERT( SpreadLoad == FALSE,"visTilesUpdate : Can only spread load for droids" );	// can't spread load for structures.
 		range = ((STRUCTURE *)psObj)->sensorRange;
 		break;
 	default:
@@ -286,42 +285,6 @@ void visTilesUpdate(BASE_OBJECT *psObj,BOOL SpreadLoad)
 
 	rayPlayer = psObj->player;
 
-	if(SpreadLoad) {
-		// Just do 4 rays at right angles.
-
-		DROID *psDroid = (DROID*)psObj;
-		SDWORD currRayAng;
-
-		if((psDroid->updateFlags & DUPF_SCANTERRAIN) == 0) {
-			psDroid->currRayAng = 0;
-			psDroid->updateFlags |= DUPF_SCANTERRAIN;
-		}
-
-		currRayAng = (SDWORD)psDroid->currRayAng;
-
-		// Cast the rays from the viewer
-		startH = psObj->z + visObjHeight(psObj);
-		currG = -UBYTE_MAX * GRAD_MUL;
-		rayCast(psObj->x,psObj->y,currRayAng, range, rayTerrainCallback);
-
-		startH = psObj->z + visObjHeight(psObj);
-		currG = -UBYTE_MAX * GRAD_MUL;
-		rayCast(psObj->x,psObj->y,(currRayAng+(NUM_RAYS/4))%360, range, rayTerrainCallback);
-
-		startH = psObj->z + visObjHeight(psObj);
-		currG = -UBYTE_MAX * GRAD_MUL;
-		rayCast(psObj->x,psObj->y,(currRayAng+(NUM_RAYS/2))%360, range, rayTerrainCallback);
-
-		startH = psObj->z + visObjHeight(psObj);
-		currG = -UBYTE_MAX * GRAD_MUL;
-		rayCast(psObj->x,psObj->y,(currRayAng+(NUM_RAYS/2)+(NUM_RAYS/4))%360, range, rayTerrainCallback);
-
-		psDroid->currRayAng += VTRAYSTEP;
-		if(psDroid->currRayAng >= (NUM_RAYS/4)) {
-			psDroid->currRayAng = 0;
-			psDroid->updateFlags &= ~DUPF_SCANTERRAIN;
-		}
-	} else {
 		// Do the whole circle.
 		for(ray=0; ray < NUM_RAYS; ray += NUM_RAYS/80)
 		{
@@ -332,7 +295,6 @@ void visTilesUpdate(BASE_OBJECT *psObj,BOOL SpreadLoad)
 			// Cast the rays from the viewer
 			rayCast(psObj->x,psObj->y,ray, range, rayTerrainCallback);
 		}
-	}
 }
 
 /* Check whether psViewer can see psTarget.
@@ -862,7 +824,7 @@ void startSensorDisplay(void)
 //		{
 //			startH = psDroid->z + visObjHeight((BASE_OBJECT*)psDroid);// initialise the callback variables //rayTerrainCallback
 //			currG = -UBYTE_MAX * GRAD_MUL;	// Cast the rays from the viewer
-			visTilesUpdate((BASE_OBJECT*)psDroid,FALSE);
+			visTilesUpdate((BASE_OBJECT*)psDroid);
 //			rayCast(psDroid->x,psDroid->y,ray, range, rayTerrainCallback);
 //		}
 
@@ -873,7 +835,7 @@ void startSensorDisplay(void)
 		if(  psStruct->pStructureType->type != REF_WALL
  		  && psStruct->pStructureType->type != REF_WALLCORNER)
 		{
-			visTilesUpdate((BASE_OBJECT*)psStruct,FALSE);
+			visTilesUpdate((BASE_OBJECT*)psStruct);
 		}
 	}
 

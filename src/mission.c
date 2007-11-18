@@ -2549,7 +2549,7 @@ void missionResetDroids(void)
 				    {
 					    updateDroidOrientation(psDroid);
 				    }
-				    visTilesUpdate((BASE_OBJECT *)psDroid,FALSE);
+				    visTilesUpdate((BASE_OBJECT *)psDroid);
 				    //reset the selected flag
 				    psDroid->selected = FALSE;
                 //}
