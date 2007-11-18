@@ -644,10 +644,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\findpath.c"
-					>
-				</File>
-				<File
 					RelativePath="..\src\formation.c"
 					>
 				</File>
@@ -1256,10 +1252,6 @@
 			</File>
 			<File
 				RelativePath="..\src\featuredef.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\findpath.h"
 				>
 			</File>
 			<File
