@@ -52,7 +52,6 @@
 #include "map.h"
 #include "move.h"
 #include "visibility.h"
-#include "findpath.h"
 #include "geometry.h"
 #include "lib/gamelib/gtime.h"
 #include "resource.h"

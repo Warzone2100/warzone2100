@@ -39,7 +39,6 @@
 
 #include "objects.h"
 #include "move.h"
-#include "findpath.h"
 #include "visibility.h"
 #include "map.h"
 #include "fpath.h"
@@ -256,6 +255,41 @@ extern UDWORD	selectedPlayer;
 
 static BOOL	g_bFormationSpeedLimitingOn = TRUE;
 
+/* Return the difference in directions */
+static UDWORD dirDiff(SDWORD start, SDWORD end)
+{
+	SDWORD retval, diff;
+
+	diff = end - start;
+
+	if (diff > 0)
+	{
+		if (diff < 180)
+		{
+			retval = diff;
+		}
+		else
+		{
+			retval = 360 - diff;
+		}
+	}
+	else
+	{
+		if (diff > -180)
+		{
+			retval = - diff;
+		}
+		else
+		{
+			retval = 360 + diff;
+		}
+	}
+
+	ASSERT( retval >=0 && retval <=180,
+		"dirDiff: result out of range" );
+
+	return retval;
+}
 
 /* Initialise the movement system */
 BOOL moveInitialise(void)

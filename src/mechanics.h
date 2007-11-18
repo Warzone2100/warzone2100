@@ -28,7 +28,6 @@
 
 #include "lib/framework/frame.h"
 #include "combat.h"
-#include "findpath.h"
 #include "lib/gamelib/gtime.h"
 #include "map.h"
 #include "mechanics.h"

@@ -43,9 +43,6 @@ typedef struct _move_control
 	UBYTE	Position;	   				// Position in asPath
 	UBYTE	numPoints;					// number of points in asPath
 	PATH_POINT	asPath[TRAVELSIZE];		// Pointer to list of block X,Y coordinates.
-										// When initialised list is terminated by (0xffff,0xffff)
-										// Values prefixed by 0x8000 are pixel coordinates instead of
-										// block coordinates
 	SDWORD	DestinationX;				// DestinationX,Y should match objects current X,Y
 	SDWORD	DestinationY;				//		location for this movement to be complete.
 	SDWORD	srcX,srcY,targetX,targetY;
@@ -68,7 +65,8 @@ typedef struct _move_control
 
 	/* vtol movement - GJ */
 	SWORD	iVertSpeed;
-	/* Watermelon:I need num of DROID_MAXWEAPS of iAttackRuns */
+
+	// iAttackRuns tracks the amount of ammunition a VTOL has remaining for each weapon
 	UDWORD	iAttackRuns[VTOL_MAXWEAPS];
 
 	// added for vtol movement

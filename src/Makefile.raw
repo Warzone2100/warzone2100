@@ -26,7 +26,6 @@ SRC=ai.c \
 	environ.c \
 	fpath.c \
 	feature.c \
-	findpath.c \
 	formation.c \
 	frontend.c \
 	gateway.c \

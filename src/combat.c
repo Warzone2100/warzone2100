@@ -33,7 +33,6 @@
 #include "lib/gamelib/gtime.h"
 #include "map.h"
 #include "move.h"
-#include "findpath.h"
 #include "messagedef.h"
 #include "miscimd.h"
 #include "projectile.h"

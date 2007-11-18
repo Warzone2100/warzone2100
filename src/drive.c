@@ -32,7 +32,6 @@
 #include "lib/ivis_common/rendmode.h"
 #include "objects.h"
 #include "move.h"
-#include "findpath.h"
 #include "visibility.h"
 #include "map.h"
 #include "fpath.h"
