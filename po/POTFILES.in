@@ -120,7 +120,6 @@ src/intimage.c
 src/lighting.c
 src/warcam.c
 src/init.c
-src/findpath.c
 src/main.c
 src/loop.c
 src/move.c
