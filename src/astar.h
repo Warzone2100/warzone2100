@@ -35,10 +35,9 @@ typedef struct _astar_route
 
 // Sizes for the node heap
 #define FPATH_NODEINIT		600
-#define FPATH_NODEEXT		0
 
 // counters for a-star
-extern SDWORD astarInner,astarOuter, astarRemove;
+extern SDWORD astarInner;
 
 // reset the astar counters
 extern void astarResetCounters(void);

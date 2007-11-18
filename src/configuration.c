@@ -588,8 +588,6 @@ BOOL saveConfig(void)
 	setWarzoneKeyNumeric("sequences",(SDWORD)(war_GetSeqMode()));		// sequences
 	setWarzoneKeyNumeric("subtitles",(SDWORD)(seq_GetSubtitles()));		// subtitles
 	setWarzoneKeyNumeric("reopenBuild",(SDWORD)(intGetReopenBuild()));	// build menu
-//	setWarzoneKeyNumeric("maxRoute",(SDWORD)(fpathGetMaxRoute()));			// maximum routing
-
 	setWarzoneKeyNumeric("radarObjectMode",(SDWORD)bEnemyAllyRadarColor);    // enemy/allies radar view
 	setWarzoneKeyNumeric("radarTerrainMode",(SDWORD)radarDrawMode);
 

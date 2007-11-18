@@ -33,7 +33,6 @@
 
 typedef struct _path_point
 {
-//	SDWORD		XCoordinate,YCoordinate;
 	UBYTE		x,y;
 } PATH_POINT;
 
