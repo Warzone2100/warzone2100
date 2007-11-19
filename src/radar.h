@@ -23,7 +23,7 @@
 void radarColour(UDWORD tileNumber, uint8_t r, uint8_t g, uint8_t b);
 
 #define RGB_ENTRIES	3
-#define MAX_RADARZOOM 2
+#define MAX_RADARZOOM	1
 
 /* Radar.h */
 extern void resetRadarRedraw(void);

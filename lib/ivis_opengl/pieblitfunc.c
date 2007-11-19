@@ -48,9 +48,12 @@
  */
 /***************************************************************************/
 
+#define RADARX 128
+#define RADARY 128
+
 static PIESTYLE rendStyle;
 static UDWORD radarTexture;
-static unsigned char radarBitmap[128 * 128 * 4];
+static unsigned char radarBitmap[RADARX * RADARY * 4];
 
 /***************************************************************************/
 /*
@@ -352,7 +355,8 @@ void pie_DownLoadRadar( unsigned char *buffer )
 	unsigned int i, j;
 	iColour* psPalette = pie_GetGamePal();
 
-	for (i = 0, j = 0; i < 128*128; ++i) {
+	for (i = 0, j = 0; i < RADARX * RADARY; ++i)
+	{
 		radarBitmap[j++] = psPalette[buffer[i]].r;
 		radarBitmap[j++] = psPalette[buffer[i]].g;
 		radarBitmap[j++] = psPalette[buffer[i]].b;
@@ -363,7 +367,7 @@ void pie_DownLoadRadar( unsigned char *buffer )
 		}
 	}
 	pie_SetTexturePage(radarTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, wz_texture_compression, 128, 128, 0,
+	glTexImage2D(GL_TEXTURE_2D, 0, wz_texture_compression, RADARX, RADARY, 0,
 		     GL_RGBA, GL_UNSIGNED_BYTE, radarBitmap);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -389,8 +393,8 @@ void pie_RenderRadar( int x, int y )
 	pieImage.th = 256;
 	dest.x = x;
 	dest.y = y;
-	dest.w = 128;
-	dest.h = 128;
+	dest.w = RADARX;
+	dest.h = RADARY;
 	pie_DrawImage(&pieImage, &dest, &rendStyle);
 }
 

@@ -486,14 +486,6 @@ void ProcessRadarInput(void)
 				setViewPos(PosX,PosY,TRUE);
 				CheckScrollLimits();
 #endif
-				/*
-				RadarZoomLevel++;
-				if(RadarZoomLevel > MAX_RADARZOOM) {
-					RadarZoomLevel = 0;
-				}
-				SetRadarZoom(RadarZoomLevel);
-				audio_PlayTrack( ID_SOUND_BUTTON_CLICK_5 );
-				*/
 				CalcRadarPosition(x,y,(UDWORD*)&PosX,(UDWORD*)&PosY);
 
 				if(bInstantRadarJump)
