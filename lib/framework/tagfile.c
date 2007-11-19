@@ -1,6 +1,8 @@
 // Written by Per I Mathisen, 2007
 // Released into the public domain, no rights reserved.
 // ANSI C + stdint.h
+//
+// See header file for documentation.
 
 #include <assert.h>
 #include <stdlib.h>
@@ -10,15 +12,21 @@
 
 #include "tagfile.h"
 
+// Tags of values 0x0 and 0xFF are reserved as instance separators and group end
+// tags, respectively. You cannot use a separator in your definition file, but
+// you must use the group end tag whenever you use a group tag.
 #define TAG_SEPARATOR 0
 #define TAG_GROUP_END 255
 
+// This value is saved in the binary file and is used for fast and safe skipping
+// ahead through the file, even though we may not know every tag definition in it.
 enum internal_types
 {
 	TF_INT_U8, TF_INT_U16, TF_INT_U32, TF_INT_S8, TF_INT_S16, TF_INT_S32, TF_INT_FLOAT, 
 	TF_INT_U16_ARRAY, TF_INT_FLOAT_ARRAY, TF_INT_U8_ARRAY, TF_INT_GROUP, TF_INT_BOOL
 };
 
+// A definition group
 struct define
 {
 	int16_t vm;
@@ -39,19 +47,19 @@ struct define
 	int expectedItems; // group items expected in current group
 };
 
-static bool tag_error = false;
-static struct define *first = NULL;
-static struct define *current = NULL;
-static int line = 0; // report in error message
-static bool readmode = true;
-static char *bufptr = NULL;
+static bool tag_error = false;		// are we in an error condition?
+static struct define *first = NULL;	// keep track of first group
+static struct define *current = NULL;	// currently iterated group
+static int line = 0;			// current definition line, report in error message
+static bool readmode = true;		// are we in read or write mode?
+static char *bufptr = NULL;		// pointer to definition file buffer
 static PHYSFS_file *handle = NULL;
 #define ERR_BUF_SIZE 255
-static char errbuf[ERR_BUF_SIZE];
-static int lastAccess = -1; // track last accessed tag to detect user errors
-static int countGroups = 0; // check group recursion count while reading definition
-static char saveDefine[ERR_BUF_SIZE];
-static char saveTarget[ERR_BUF_SIZE];
+static char errbuf[ERR_BUF_SIZE];	// buffer where we compose error messages
+static int lastAccess = -1;		// track last accessed tag to detect user errors
+static int countGroups = 0;		// check group recursion count while reading definition
+static char saveDefine[ERR_BUF_SIZE];	// save define file for error messages
+static char saveTarget[ERR_BUF_SIZE];	// save binary file for error messages
 
 // TODO: Make into a readable function...
 #define TF_ERROR(...) \
@@ -84,7 +92,7 @@ static void print_nested_groups(struct define *group)
 
 	if (parent != NULL)
 	{
-		snprintf(groupdesc, PRNG_LEN, "\nNested inside element %d", (int)parent->element);
+		snprintf(groupdesc, PRNG_LEN, "\nNested inside element %x", (unsigned int)parent->element);
 		strlcat(errbuf, groupdesc, sizeof(errbuf));
 		print_nested_groups(parent);
 	}
@@ -94,7 +102,7 @@ static void print_nested_groups(struct define *group)
 	}
 }
 
-// returns true on success
+// scan one definition group from definition file; returns true on success
 static bool scan_defines(struct define *node, struct define *group)
 {
 	bool group_end = false;
@@ -331,6 +339,7 @@ const char *tagGetErrorString()
 	return errbuf;
 }
 
+// skip ahead to given element
 static bool scan_to(element_t tag)
 {
 	if (tag == TAG_SEPARATOR)
@@ -339,7 +348,7 @@ static bool scan_to(element_t tag)
 	}
 	if (lastAccess >= tag)
 	{
-		TF_ERROR("Trying to read tag %d that is not larger than previous tag.", (int)tag);
+		TF_ERROR("Trying to read tag %x that is not larger than previous tag.", (unsigned int)tag);
 		return false;
 	}
 	lastAccess = tag;
@@ -347,7 +356,7 @@ static bool scan_to(element_t tag)
 	for (; current->next && current->element < tag; current = current->next);
 	if (current->element != tag)
 	{
-		TF_ERROR("Unknown element %d sought", (int)tag);
+		TF_ERROR("Unknown element %x sought", (unsigned int)tag);
 		return false;
 	}
 	return true;
@@ -461,7 +470,7 @@ static bool scanforward(element_t tag)
 
 		if (!current->defaultval)
 		{
-			TF_ERROR("Tag not found and no default: %d", (int)tag);
+			TF_ERROR("Tag not found and no default: %x", (unsigned int)tag);
 			return false;
 		}
 	}
@@ -507,7 +516,7 @@ uint16_t tagReadEnter(element_t tag)
 	}
 	if (tagtype != TF_INT_GROUP)
 	{
-		TF_ERROR("Error in group VR, tag %d", tag);
+		TF_ERROR("Error in group VR, tag %x", (unsigned int)tag);
 		return 0;
 	}
 	if (!PHYSFS_readUBE16(handle, &elements))
@@ -517,7 +526,7 @@ uint16_t tagReadEnter(element_t tag)
 	}
 	if (!current->group)
 	{
-		TF_ERROR("Cannot enter group, none defined for element %d!", (int)current->element);
+		TF_ERROR("Cannot enter group, none defined for element %x!", (unsigned int)current->element);
 		return 0;
 	}
 	assert(current->group->parent != NULL);
@@ -553,8 +562,8 @@ void tagReadLeave(element_t tag)
 	current = current->parent->current; // resume iteration
 	if (current->element != tag)
 	{
-		TF_ERROR("Trying to leave the wrong group! We are in %d, leaving %d",
-		         current->parent != NULL ? (int)current->parent->element : 0, (int)tag);
+		TF_ERROR("Trying to leave the wrong group! We are in %x, leaving %x",
+		         current->parent != NULL ? (unsigned int)current->parent->element : 0, (unsigned int)tag);
 		return;
 	}
 	lastAccess = current->element; // restart iteration requirement
@@ -576,7 +585,7 @@ uint32_t tagRead(element_t tag)
 
 	if (!PHYSFS_readUBE8(handle, &tagtype))
 	{
-		TF_ERROR("tagread: Tag type not found: %d", (int)tag);
+		TF_ERROR("tagread: Tag type not found: %x", (unsigned int)tag);
 		tag_error = true;
 		return 0;
 	}
@@ -600,7 +609,7 @@ uint32_t tagRead(element_t tag)
 	}
 	else
 	{
-		TF_ERROR("readtag: Error reading tag %d, bad type", (int)tag);
+		TF_ERROR("readtag: Error reading tag %x, bad type", (unsigned int)tag);
 		return 0;
 	}
 }
@@ -620,7 +629,7 @@ int32_t tagReads(element_t tag)
 
 	if (!PHYSFS_readUBE8(handle, &tagtype))
 	{
-		TF_ERROR("tagreads: Tag type not found: %d", (int)tag);
+		TF_ERROR("tagreads: Tag type not found: %x", (unsigned int)tag);
 		return 0;
 	}
 	if (tagtype == TF_INT_S32)
@@ -643,7 +652,7 @@ int32_t tagReads(element_t tag)
 	}
 	else
 	{
-		TF_ERROR("readtags: Error reading tag %d, bad type", (int)tag);
+		TF_ERROR("readtags: Error reading tag %x, bad type", (unsigned int)tag);
 		return 0;
 	}
 }
@@ -663,7 +672,7 @@ float tagReadf(element_t tag)
 
 	if (!PHYSFS_readUBE8(handle, &tagtype))
 	{
-		TF_ERROR("tagreadf: Tag type not found: %d", (int)tag);
+		TF_ERROR("tagreadf: Tag type not found: %x", (unsigned int)tag);
 		return 0;
 	}
 	if (tagtype == TF_INT_FLOAT)
@@ -674,7 +683,7 @@ float tagReadf(element_t tag)
 	}
 	else
 	{
-		TF_ERROR("readtagf: Error reading tag %d, bad type", (int)tag);
+		TF_ERROR("readtagf: Error reading tag %x, bad type", (unsigned int)tag);
 		return 0;
 	}
 }
@@ -694,7 +703,7 @@ bool tagReadBool(element_t tag)
 
 	if (!PHYSFS_readUBE8(handle, &tagtype))
 	{
-		TF_ERROR("tagReadBool: Tag type not found: %d", (int)tag);
+		TF_ERROR("tagReadBool: Tag type not found: %x", (unsigned int)tag);
 		return 0;
 	}
 	if (tagtype == TF_INT_BOOL || tagtype == TF_INT_U8)
@@ -705,7 +714,7 @@ bool tagReadBool(element_t tag)
 	}
 	else
 	{
-		TF_ERROR("readTagBool: Error reading tag %d, bad type", (int)tag);
+		TF_ERROR("readTagBool: Error reading tag %x, bad type", (unsigned int)tag);
 		return 0;
 	}
 }
@@ -722,19 +731,19 @@ bool tagReadfv(element_t tag, uint16_t size, float *vals)
 	}
 	if (!PHYSFS_readUBE8(handle, &tagtype) || tagtype != TF_INT_FLOAT_ARRAY)
 	{
-		TF_ERROR("tagreadfv: Tag type not found: %d", (int)tag);
+		TF_ERROR("tagreadfv: Tag type not found: %x", (unsigned int)tag);
 		return false;
 	}
 	if (!PHYSFS_readUBE16(handle, &count) || count != size)
 	{
-		TF_ERROR("tagreadfv: Bad size: %d", (int)tag);
+		TF_ERROR("tagreadfv: Bad size: %x", (unsigned int)tag);
 		return false;
 	}
 	for (i = 0; i < size; i++)
 	{
 		if (!PHYSFS_readBEFloat(handle, &vals[i]))
 		{
-			TF_ERROR("tagreadfv: Error reading idx %d, tag %d", i, (int)tag);
+			TF_ERROR("tagreadfv: Error reading idx %d, tag %x", i, (unsigned int)tag);
 			return false;
 		}
 	}
@@ -753,19 +762,19 @@ bool tagRead16v(element_t tag, uint16_t size, uint16_t *vals)
 	}
 	if (!PHYSFS_readUBE8(handle, &tagtype) || tagtype != TF_INT_U16_ARRAY)
 	{
-		TF_ERROR("tagread16v: Tag type not found: %d", (int)tag);
+		TF_ERROR("tagread16v: Tag type not found: %x", (unsigned int)tag);
 		return false;
 	}
 	if (!PHYSFS_readUBE16(handle, &count) || count != size)
 	{
-		TF_ERROR("tagread16v: Bad size: %d", (int)tag);
+		TF_ERROR("tagread16v: Bad size: %x", (unsigned int)tag);
 		return false;
 	}
 	for (i = 0; i < size; i++)
 	{
 		if (!PHYSFS_readUBE16(handle, &vals[i]))
 		{
-			TF_ERROR("tagread16v: Error reading idx %d, tag %d", i, (int)tag);
+			TF_ERROR("tagread16v: Error reading idx %d, tag %x", i, (unsigned int)tag);
 			return false;
 		}
 	}
@@ -801,7 +810,7 @@ bool tagReadString(element_t tag, uint16_t size, char *buffer)
 	// Return string MUST be zero terminated!
 	if (*(buffer + actualsize - 1) != '\0')
 	{
-		TF_ERROR("Element %d is a string that is not zero terminated", (int)tag);
+		TF_ERROR("Element %x is a string that is not zero terminated", (unsigned int)tag);
 		return false;
 	}
 	return true;
@@ -924,8 +933,8 @@ bool tagWriteLeave(element_t tag)
 	assert(current != NULL);
 	if (current->element != tag)
 	{
-		TF_ERROR("Trying to leave the wrong group! We are in %d, leaving %d",
-		         current->parent != NULL ? (int)current->parent->element : 0, (int)tag);
+		TF_ERROR("Trying to leave the wrong group! We are in %x, leaving %x",
+		         current->parent != NULL ? (unsigned int)current->parent->element : 0, (unsigned int)tag);
 		return false;
 	}
 	lastAccess = current->element; // restart iteration requirement
@@ -1109,6 +1118,7 @@ bool tagWriteString(element_t tag, const char *buffer)
 /*********  TAGFILE UNIT TEST *********/
 
 
+// unit test function
 void tagTest()
 {
 	const char *writename = "test.wzs";

@@ -1,31 +1,32 @@
 // Written by Per I Mathisen, 2007
 // Released into the public domain, no rights reserved.
-
+//
 // The tagfile format is portable, nested, tagged binary format that should be
 // useful for storing information that needs to be accessible several years
 // into the future. That is, it is an easily extensible binary format, a feature
 // usually reserved for text based formats. It also uses default values to 
 // reduce space, and despite its tagged nature, it consumes only a minimal overhead
 // through the use a well-defined protocol file that is loaded separately.
-
+//
 // Each user of this code should define a protocol that is henceforth called
 // the defined format. This consists of a series of tags that may contain either
 // information or new tag groups. The tag groups can be nested until you run out
 // of memory. Each tag group has its own namespace of tags. Each tag has a defined
-// value representation (VR), and a defined value multiplicity (VM).
-
+// value representation (VR), a defined value multiplicity (VM), and an optional 
+// default value.
+//
 // Tags that have the default value may be omitted, and the read code will simply
 // insert the default value when the tag is read. A group must be present in order
 // for the read code to enter it even if all tags inside have default values.
-
+//
 // Each group can contain multiple instances of the same tag set. These are
 // separated by separator tags. You can have any number of instances in a group,
-// but you must know the number beforehand.
-
+// but you must know the number of instances beforehand.
+//
 // When reading and writing tags, remember to ALWAYS do so with successively 
-// increasing tag value. So do not write tag number 3 before tag number 1.
-
-// See the included defined format file for more information on how to write them.
+// increasing tag value. Do not write tag number 3 before tag number 1.
+//
+// See the included defined format files for more information on how to write them.
 
 #ifndef _tagfile_h
 #define _tagfile_h
