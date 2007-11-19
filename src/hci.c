@@ -513,8 +513,6 @@ static void intCheckReticuleButtons(void);
 // count the number of selected droids of a type
 static SDWORD intNumSelectedDroids(UDWORD droidType);
 
-extern UWORD AsciiLookup[256];
-
 
 /***************************GAME CODE ****************************/
 /* Initialise the in game interface */
