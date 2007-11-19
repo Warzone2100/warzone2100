@@ -26,11 +26,11 @@
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_common/piepalette.h"
 #include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/piefunc.h"
+#include "lib/gamelib/gtime.h"
 #include "objects.h"
 #include "display3d.h"
 #include "map.h"
-// FIXME Direct iVis implementation include!
-#include "lib/ivis_opengl/screen.h"
 #include "component.h"
 #include "radar.h"
 #include "mapdisplay.h"
@@ -40,18 +40,13 @@
 #include "loop.h"
 #include "warcam.h"
 #include "display.h"
-#include "lib/gamelib/gtime.h"
 #include "mission.h"
 #include "multiplay.h"
-#include "lib/ivis_common/piefunc.h"
 
 #define HIT_NOTIFICATION	(GAME_TICKS_PER_SEC*2)
 
 //#define CHECKBUFFER		// Do assertions for buffer overun\underun
 
-#define RADAR_3DFX_TPAGEID	31
-#define RADAR_3DFX_TU	0
-#define RADAR_3DFX_TV	0
 #define RADAR_DRAW_VIEW_BOX		// If defined then draw a box to show the viewing area.
 #define RADAR_TRIANGLE_SIZE		8
 #define RADAR_TRIANGLE_HEIGHT	RADAR_TRIANGLE_SIZE
@@ -60,7 +55,7 @@
 #define RADAR_FRAME_SKIP 10
 
 static UDWORD	sweep;
-static UBYTE	colBlack,colWhite,colRadarBorder,colGrey;
+static UBYTE	colBlack;
 static UBYTE	colRadarAlly[NUM_RADAR_MODES-1],colRadarMe[NUM_RADAR_MODES-1],
 				colRadarEnemy[NUM_RADAR_MODES-1];
 
@@ -86,7 +81,6 @@ static UDWORD		flashColours[CAMPAIGNS][MAX_PLAYERS] =
 {165,165,165,165,255,165,165,165},
 };
 
-
 static UBYTE		tileColours[NUM_TILES];
 static UBYTE		*radarBuffer;
 static UBYTE		heightMapColors[255];		//precalculated colors for heightmap mode
@@ -101,7 +95,6 @@ static SDWORD RadarOffsetX;
 static SDWORD RadarOffsetY;
 static BOOL RadarRedraw;
 static UWORD RadarZoom;
-static IMAGEDEF RadarImage;
 static SDWORD RadarMapOriginX;
 static SDWORD RadarMapOriginY;
 static SDWORD RadarMapWidth;
@@ -135,7 +128,6 @@ void resetRadarRedraw(void)
 	RadarRedraw = TRUE;
 }
 
-
 BOOL InitRadar(void)
 {
 	UBYTE color;
@@ -144,18 +136,7 @@ BOOL InitRadar(void)
 	if(radarBuffer==NULL) return FALSE;
 	memset(radarBuffer,0,RADWIDTH*RADHEIGHT);
 
-	RadarImage.TPageID = RADAR_3DFX_TPAGEID;	// 3dfx only,radar is hard coded to texture page 31 - sort this out?
-	RadarImage.Tu = 0;
-	RadarImage.Tv = 0;
-	RadarImage.Width = (UWORD)RadarWidth;
-	RadarImage.Height = (UWORD)RadarHeight;
-	RadarImage.XOffset = 0;
-	RadarImage.YOffset = 0;
-
-	colRadarBorder	= COL_GREY;
 	colBlack = 0;
-	colGrey = COL_DARKGREY;
-	colWhite = COL_WHITE;
 
 	//Ally/enemy colors for Objects-Only minimap mode
 	colRadarAlly[RADAR_MODE_NO_TERRAIN] = COL_YELLOW;
@@ -607,7 +588,7 @@ static void DrawRadarTiles(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD box
 							ASSERT( ((UDWORD)WPtr) >= (UDWORD)radarBuffer , "WPtr Onderflow" );
 							ASSERT( ((UDWORD)WPtr) < ((UDWORD)radarBuffer)+RADWIDTH*RADHEIGHT , "WPtr Overrun" );
 #endif
-   							*WPtr = colBlack;//colGrey;
+   							*WPtr = colBlack;
    							WPtr++;
    						}
    						Ptr += Modulus;

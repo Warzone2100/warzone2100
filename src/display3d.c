@@ -2923,7 +2923,6 @@ float		mulH;
 				mulH = MAKEFRACT(health)/100;
 				mulH*=MAKEFRACT(width);
 				health = MAKEINT(mulH);
-//				health = (((width*10000)/100)*health)/10000;
 				if(health>width) health = width;
 				health*=2;
 				pie_BoxFill(scrX-scrR - 1, scrY - 1, scrX + scrR + 1, scrY + 2, 0x00020202);
@@ -2939,7 +2938,6 @@ float		mulH;
 					scrX = psStruct->sDisplay.screenX;
 					scrY = psStruct->sDisplay.screenY + (scale*10);
 					scrR = width;
-	//				health = PERCENT(psStruct->body, psStruct->baseBodyPoints);
 					health =  PERCENT(psStruct->currentBuildPts ,
 						psStruct->pStructureType->buildPoints);
 					if(health>=100) health = 100;	// belt and braces
@@ -2947,16 +2945,12 @@ float		mulH;
 						mulH = MAKEFRACT(health)/100;
 						mulH*=MAKEFRACT(width);
 						health = MAKEINT(mulH);
-//						health = (((width*10000)/100)*health)/10000;
 						if(health>width) health = width;
 						health*=2;
-//						pie_BoxFillIndex(scrX - scrR-1,scrY + scrR+2,scrX + scrR+1,scrY+scrR+6,1);
-//						pie_BoxFillIndex(scrX - scrR,scrY + scrR+3,scrX - scrR+health,scrY+scrR+5,powerCol);
 						pie_BoxFillIndex(scrX - scrR-1,scrY-1,scrX + scrR+1,scrY+2,1);
 						pie_BoxFillIndex(scrX - scrR,scrY ,scrX - scrR+health,scrY+1,powerCol);
 					}
 				}
-					//----
 			}
 	}
 
@@ -2975,22 +2969,10 @@ float		mulH;
 						if(psStruct->sDisplay.frameNumber == currentGameFrame)
 
 						{
-							//health = PERCENT(psStruct->body, psStruct->baseBodyPoints);
-	//						health = PERCENT(psStruct->body, structureBody(psStruct));
 							psStruct->targetted = 0;
 							scrX = psStruct->sDisplay.screenX;
 							scrY = psStruct->sDisplay.screenY - (psStruct->sDisplay.imd->ymax/4);
 							iV_DrawImage(IntImages,getTargettingGfx(),scrX,scrY);
-
-							/*
-							scrR = (gameTime%1000)/50;
-							if(health>REPAIRLEV_HIGH) powerCol = COL_GREEN;
-							else if(health>REPAIRLEV_LOW) powerCol = COL_YELLOW;
-							else powerCol = COL_RED;
-
-							iV_Line(scrX-scrR,scrY,scrX+scrR,scrY,255);//powerCol);
-							iV_Line(scrX,scrY-scrR,scrX,scrY+scrR,255);//powerCol);
-							*/
 						}
 					}
 				}
@@ -3046,13 +3028,10 @@ float		mulH;
 				scrX = psStruct->sDisplay.screenX;
 				scrY = psStruct->sDisplay.screenY + (scale*10);
 				scrR = width;
-//				health = PERCENT(psStruct->body, psStruct->baseBodyPoints);
 				health =  PERCENT(psStruct->currentBuildPts , psStruct->pStructureType->buildPoints);
 				powerCol = COL_GREEN;
 				health = (((width*10000)/100)*health)/10000;
 				health*=2;
-//				pie_BoxFillIndex(scrX - scrR-1,scrY + scrR+2,scrX + scrR+1,scrY+scrR+6,1);
-//				pie_BoxFillIndex(scrX - scrR,scrY + scrR+3,scrX - scrR+health,scrY+scrR+5,powerCol);
 				pie_BoxFillIndex(scrX - scrR-1,scrY-1,scrX + scrR+1,scrY+2,1);
 				pie_BoxFillIndex(scrX - scrR-1,scrY,scrX - scrR+health,scrY+1,powerCol);
 			}
@@ -4491,7 +4470,6 @@ static void	processSensorTarget( void )
 				x1 = (SWORD)(x+offset);
 				y1 = (SWORD)(y+offset);
 
-
 				iV_Line(x0,y0,x0+8,y0,COL_WHITE);
 				iV_Line(x0,y0,x0,y0+8,COL_WHITE);
 
@@ -4516,6 +4494,7 @@ static void	processSensorTarget( void )
 	}
 
 }
+
 // -------------------------------------------------------------------------------------
 static void	processDestinationTarget( void )
 {
@@ -4539,16 +4518,9 @@ static void	processDestinationTarget( void )
 				y1 = (SWORD)(y+offset);
 
 				iV_BoxFill(x0,y0,x0+2,y0+2,COL_WHITE);
-		//		iV_Line(x0,y0,x0,y0+2,COL_WHITE);
-
 				iV_BoxFill(x1-2,y0-2,x1,y0,COL_WHITE);
-		//		iV_Line(x1,y0,x1,y0+2,COL_WHITE);
-
 				iV_BoxFill(x1-2,y1-2,x1,y1,COL_WHITE);
-		//		iV_Line(x1,y1,x1,y1-2,COL_WHITE);
-
 				iV_BoxFill(x0,y1,x0+2,y1+2,COL_WHITE);
-		//		iV_Line(x0,y1,x0,y1-2,COL_WHITE);
 		}
 		else
 		{
@@ -4556,6 +4528,7 @@ static void	processDestinationTarget( void )
 		}
 	}
 }
+
 // -------------------------------------------------------------------------------------
 void	setEnergyBarDisplay( BOOL val)
 {

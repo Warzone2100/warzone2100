@@ -298,7 +298,6 @@ void loadingScreenCallback(void)
 	topY = 450+D_H-1;
 	botX = 630+D_W;
 	botY = 470+D_H+1;
-//	pie_BoxFillIndex(10+D_W,450+D_H-1,630+D_W,470+D_H+1,COL_BLACK);
 	pie_UniTransBoxFill(topX,topY,botX,botY,0x00010101, 24);
 
 	for(i=1; i<19; i++)
