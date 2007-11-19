@@ -655,7 +655,7 @@ static wzSearchPath * searchPathRegistry = NULL;
 // any globals and statics to there default values each time the game
 // or frontend restarts.
 //
-BOOL InitialiseGlobals(void)
+static BOOL InitialiseGlobals(void)
 {
 	frontendInitVars();	// Initialise frontend globals and statics.
 	statsInitVars();
@@ -665,9 +665,9 @@ BOOL InitialiseGlobals(void)
 		return FALSE;
 	}
 	if (!researchInitVars())
-    {
-        return FALSE;
-    }
+	{
+		return FALSE;
+	}
 	featureInitVars();
 	radarInitVars();
 	Edit3DInitVars();
@@ -678,7 +678,8 @@ BOOL InitialiseGlobals(void)
 }
 
 
-static BOOL loadLevFile(const char* filename, searchPathMode datadir) {
+static BOOL loadLevFile(const char* filename, searchPathMode datadir)
+{
 	char *pBuffer;
 	UDWORD size;
 
@@ -1418,7 +1419,16 @@ BOOL stageOneShutDown(void)
 
 BOOL stageTwoInitialise(void)
 {
+	int i;
+
 	debug(LOG_WZ, "== stageTwoInitalise ==");
+
+	// make sure we clear on loading; this a bad hack to fix a bug when
+	// loading a savegame where we are building a lassat
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		setLasSatExists(FALSE, i);
+	}
 
 	if(bMultiPlayer)
 	{
@@ -1550,9 +1560,6 @@ BOOL stageTwoShutDown(void)
 
 BOOL stageThreeInitialise(void)
 {
-//MAPTILE	*psTile;
-//UDWORD	i,j;
-
 	STRUCTURE *psStr;
 	UDWORD i;
 	DROID		*psDroid;

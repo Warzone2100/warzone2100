@@ -271,7 +271,6 @@ GAMECODE gameLoop(void)
 				powerCheck(TRUE, (UBYTE)i);
 
 				//set the flag for each player
-				//setPowerGenExists(FALSE, i);
 				setHQExists(FALSE, i);
 				setSatUplinkExists(FALSE, i);
 
