@@ -44,22 +44,6 @@
 
 /***************************************************************************/
 /*
- *	Local Definitions
- */
-/***************************************************************************/
-#define DIVIDE_TABLE_SIZE		1024
-
-/***************************************************************************/
-/*
- *	Local Variables
- */
-/***************************************************************************/
-
-Sint32		_iVPRIM_DIVTABLE[DIVIDE_TABLE_SIZE];
-
-
-/***************************************************************************/
-/*
  *	Local ProtoTypes
  */
 /***************************************************************************/
@@ -73,21 +57,11 @@ extern void screenDoDumpToDiskIfRequired(void);
 
 BOOL pie_Initialise(void)
 {
-	int i;
-
 	pie_TexInit();
 
 	rendSurface.flags = REND_SURFACE_UNDEFINED;
 	rendSurface.buffer = NULL;
 	rendSurface.size = 0;
-
-	// divtable: first entry == unity to (ie n/0 == 1 !)
-	_iVPRIM_DIVTABLE[0] = iV_DIVMULTP;
-
-	for (i=1; i<DIVIDE_TABLE_SIZE; i++)
-	{
-		_iVPRIM_DIVTABLE[i-0] = MAKEINT ( FRACTdiv(MAKEFRACT(1),MAKEFRACT(i)) *  iV_DIVMULTP);
-	}
 
 	/* Find texture compression extension */
 	if (check_extension("GL_ARB_texture_compression"))
@@ -164,9 +138,8 @@ void pie_ScreenFlip(int clearMode) {
 }
 
 /***************************************************************************/
-UDWORD	pie_GetResScalingFactor( void ) {
-//	UDWORD	resWidth;	//n.b. resolution width implies resolution height...!
-
+UDWORD	pie_GetResScalingFactor(void)
+{
 	if (pie_GetVideoBufferWidth() * 4 > pie_GetVideoBufferHeight() * 5) {
 		return pie_GetVideoBufferHeight()*5/4/6;
 	} else {
