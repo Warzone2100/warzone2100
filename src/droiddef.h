@@ -167,7 +167,6 @@ typedef struct _droid
 	UWORD		turretRotation[DROID_MAXWEAPS];		// Watermelon:turretRotation info for multiple turrents :)
 	UWORD		turretPitch[DROID_MAXWEAPS];	//* Watermelon:turrentPitch info for multiple turrents :)
 	UBYTE 		NameVersion;			// Version number used for generating on-the-fly names (e.g. Viper Mk "I" would be stored as 1 - Viper Mk "X" as 10)  - copied from droid template
-	UBYTE		currRayAng;
 
 	SWORD       resistance;             //used in Electronic Warfare
 
