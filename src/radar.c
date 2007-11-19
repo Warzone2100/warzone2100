@@ -54,8 +54,7 @@
 
 #define RADAR_FRAME_SKIP 10
 
-static UDWORD	sweep;
-static UBYTE	colBlack;
+static const UBYTE	colBlack = 0;
 static UBYTE	colRadarAlly[NUM_RADAR_MODES-1],colRadarMe[NUM_RADAR_MODES-1],
 				colRadarEnemy[NUM_RADAR_MODES-1];
 
@@ -93,7 +92,6 @@ static SDWORD RadVisWidth;
 static SDWORD RadVisHeight;
 static SDWORD RadarOffsetX;
 static SDWORD RadarOffsetY;
-static BOOL RadarRedraw;
 static UWORD RadarZoom;
 static SDWORD RadarMapOriginX;
 static SDWORD RadarMapOriginY;
@@ -111,12 +109,10 @@ static void UpdateRadar(UWORD boxSizeH,UWORD boxSizeV);
 
 void radarInitVars(void)
 {
-	sweep = 0;
 	RadarScrollX = 0;
 	RadarScrollY = 0;
 	RadarWidth = RADWIDTH;
 	RadarHeight = RADHEIGHT;
-	RadarRedraw = TRUE;
 	RadarOffsetX = 0;
 	RadarOffsetY = 0;
 	RadarZoom = 0;
@@ -125,18 +121,19 @@ void radarInitVars(void)
 //called for when a new mission is started
 void resetRadarRedraw(void)
 {
-	RadarRedraw = TRUE;
+	// nothing here now
 }
 
 BOOL InitRadar(void)
 {
 	UBYTE color;
 
-	radarBuffer = (UBYTE*)malloc(RADWIDTH*RADHEIGHT);
-	if(radarBuffer==NULL) return FALSE;
+	radarBuffer = malloc(RADWIDTH * RADHEIGHT);
+	if (radarBuffer == NULL)
+	{
+		return FALSE;
+	}
 	memset(radarBuffer,0,RADWIDTH*RADHEIGHT);
-
-	colBlack = 0;
 
 	//Ally/enemy colors for Objects-Only minimap mode
 	colRadarAlly[RADAR_MODE_NO_TERRAIN] = COL_YELLOW;
@@ -182,9 +179,9 @@ void SetRadarZoom(UWORD ZoomLevel)
 {
 	ASSERT( ZoomLevel <= MAX_RADARZOOM,"SetRadarZoom: Max radar zoom exceeded" );
 
-	if(ZoomLevel != RadarZoom) {
+	if (ZoomLevel != RadarZoom)
+	{
 		RadarZoom = ZoomLevel;
-		RadarRedraw = TRUE;
 	}
 }
 
@@ -237,7 +234,6 @@ void CalcRadarPosition(UDWORD mX,UDWORD mY,UDWORD *PosX,UDWORD *PosY)
 }
 
 //given a world pos, return a radar pos..
-// ajl did this, so don't blame paul when it barfs...
 void worldPosToRadarPos(UDWORD wX,UDWORD wY,SDWORD *rX, SDWORD *rY)
 {
 	SDWORD x,y;
@@ -270,14 +266,6 @@ static void CalcRadarPixelSize(UWORD *SizeH,UWORD *SizeV)
 static void CalcRadarScroll(UWORD boxSizeH,UWORD boxSizeV)
 {
 	SDWORD viewX,viewY;
-	SDWORD PrevRadarOffsetX = RadarOffsetX;
-	SDWORD PrevRadarOffsetY = RadarOffsetY;
-	SDWORD PrevRadarScrollX = RadarScrollX;
-	SDWORD PrevRadarScrollY = RadarScrollY;
-	SDWORD PrevRadarMapOriginX = RadarMapOriginX;
-	SDWORD PrevRadarMapOriginY = RadarMapOriginY;
-	SDWORD PrevRadarMapWidth = RadarMapWidth;
-	SDWORD PrevRadarMapHeight = RadarMapHeight;
 	SDWORD BorderX;
 	SDWORD BorderY;
 
@@ -352,18 +340,6 @@ static void CalcRadarScroll(UWORD boxSizeH,UWORD boxSizeV)
 	} else if(RadarScrollY > RadarMapHeight-(RadVisHeight/boxSizeV)) {
 		RadarScrollY = RadarMapHeight-(RadVisHeight/boxSizeV);
 	}
-
-	if( (PrevRadarOffsetX != RadarOffsetX) ||
-		(PrevRadarOffsetY != RadarOffsetY) ||
-		(PrevRadarScrollX != RadarScrollX) ||
-		(PrevRadarScrollY != RadarScrollY) ||
-		(PrevRadarMapOriginX != RadarMapOriginX) ||
-		(PrevRadarMapOriginY != RadarMapOriginY) ||
-		(PrevRadarMapWidth != RadarMapWidth) ||
-		(PrevRadarMapHeight != RadarMapHeight) ) {
-
-		RadarRedraw = TRUE;
-	}
 }
 
 
@@ -375,10 +351,9 @@ void drawRadar(void)
 	CalcRadarPixelSize(&boxSizeH,&boxSizeV);
 	CalcRadarScroll(boxSizeH,boxSizeV);
 
-	if(RadarRedraw) {
-		if((RadVisWidth != RadarWidth) || (RadVisHeight != RadarHeight)) {
-			ClearRadar(radarBuffer,RADWIDTH,boxSizeH,boxSizeV);
-		}
+	if (RadVisWidth != RadarWidth || RadVisHeight != RadarHeight)
+	{
+		ClearRadar(radarBuffer, RADWIDTH, boxSizeH, boxSizeV);
 	}
 	DrawRadarTiles(radarBuffer,RADWIDTH,boxSizeH,boxSizeV);
 	DrawRadarObjects(radarBuffer,RADWIDTH,boxSizeH,boxSizeV);
@@ -395,22 +370,12 @@ void drawRadar(void)
 	pie_RenderRadar( RADTLX, RADTLY );
 	DrawRadarExtras(boxSizeH,boxSizeV);
 	UpdateRadar(boxSizeH,boxSizeV);
-
-	RadarRedraw = FALSE;
 }
 
 static void UpdateRadar(UWORD boxSizeH,UWORD boxSizeV)
 {
-	if(!gamePaused())
-	{
-		sweep += boxSizeV;
-	}
-
- 	if(sweep >= (UDWORD)RadarHeight) {
-		sweep = 0;
-	}
+	// nothing now
 }
-
 
 // Clear the radar buffer.
 //
@@ -422,7 +387,6 @@ static void ClearRadar(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSize
 
 	RadWidth = RadarWidth;
 	RadHeight = RadarHeight;
-
 
 	Scr = screen;
 	for(i=0; i<RadWidth; i++) {
@@ -448,7 +412,6 @@ static void DrawRadarTiles(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD box
 	UDWORD	c,d;
 	UBYTE *Ptr,*WPtr;
 	UWORD SizeH,SizeV;
-	SDWORD SweepPos;
 	SDWORD VisWidth;
 	SDWORD VisHeight;
 	SDWORD OffsetX;
@@ -459,13 +422,10 @@ static void DrawRadarTiles(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD box
 	SizeV = boxSizeV;
 	VisWidth = RadVisWidth;
 	VisHeight = RadVisHeight;
-	SweepPos = sweep - RadarOffsetY;
 	OffsetX = RadarOffsetX;
 	OffsetY = RadarOffsetY;
 
 	ASSERT( (SizeV!=0) && (SizeV!=0) ,"Zero pixel size" );
-
-	SweepPos = SweepPos&(~(SizeV-1));
 
 	/* Get pointer to very first tile */
 	psTile = psMapTiles + RadarScrollX + RadarScrollY*mapWidth;
@@ -475,17 +435,7 @@ static void DrawRadarTiles(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD box
 
 	ShadeDiv = 4;
 
-	if(RadarRedraw) {
-		EndY = VisHeight;
-	} else {
-		if( (SweepPos < 0) || (SweepPos >= VisHeight) ){
-			return;
-		}
-
-		EndY = 1;
-		Scr +=SweepPos*Modulus;
-		psTile += (SweepPos/SizeV)*mapWidth;
-	}
+	EndY = VisHeight;
 
 	if(SizeH==1)
 	{
@@ -617,7 +567,6 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 	SDWORD				SizeH,SizeV;
 	SDWORD				bw,bh;
 	SDWORD				SSizeH,SSizeV;
-	SDWORD				SweepPos;
 	SDWORD				VisWidth;
 	SDWORD				VisHeight;
 	SDWORD				OffsetX;
@@ -632,12 +581,6 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 	VisHeight = RadVisHeight;
 	OffsetX = RadarOffsetX;
 	OffsetY = RadarOffsetY;
-
-	SweepPos = sweep - RadarOffsetY;
-
-	if( (SweepPos < 0) || (SweepPos >= RadVisHeight) ){
-		return;
-	}
 
 	camNum = getCampaignNumber()-1;
 
@@ -674,7 +617,7 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 				x *= boxSizeH;
 				y *= boxSizeV;
 
-				if(TRUE || (RadarRedraw)) {
+				{
 
 					if((x < VisWidth) && (y < VisHeight) && (x >= 0) && (y >= 0)) {
    						Ptr = screen + x + y*Modulus + OffsetX + OffsetY*Modulus;
