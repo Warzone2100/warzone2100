@@ -37,7 +37,6 @@
 #include "game.h"
 #include "research.h"
 #include "power.h"
-#include "player.h"
 #include "projectile.h"
 #include "loadsave.h"
 #include "text.h"
@@ -3466,9 +3465,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			reverseObjectList((BASE_OBJECT**)&mission.apsFeatureLists[pl]);
 		}
 	}
-
-	/* Reset the player AI */
-	playerReset();
 
 	//turn power on for rest of game
 	powerCalculated = TRUE;

@@ -34,7 +34,6 @@
 #include "map.h"
 #include "mapgrid.h"
 #include "multiplay.h"
-#include "player.h"
 #include "projectile.h"
 #include "visibility.h"
 
@@ -74,19 +73,12 @@ BOOL aiInitialise(void)
 		}
 	}
 
-	if (!playerInitialise())
-	{
-		return FALSE;
-	}
-
 	return TRUE;
 }
 
 /* Shutdown the AI system */
 BOOL aiShutdown(void)
 {
-	playerShutDown();
-
 	return TRUE;
 }
 

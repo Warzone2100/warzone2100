@@ -62,7 +62,6 @@ SRC=ai.c \
 	objects.c \
 	optimisepath.c \
 	order.c \
-	player.c \
 	radar.c \
 	raycast.c \
 	research.c \

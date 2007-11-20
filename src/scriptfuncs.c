@@ -40,7 +40,6 @@
 #include "message.h"
 #include "intelmap.h"
 #include "map.h"
-#include "player.h"
 #include "structure.h"
 #include "display3d.h"
 #include "research.h"
@@ -1596,7 +1595,7 @@ BOOL	scrAttackLocation(void)
 		return FALSE;
 	}
 
-	attackLocation(x, y, player);
+	debug(LOG_ERROR, "UNUSED FUNCTION attackLocation called - do not use!");
 
 	return TRUE;
 }

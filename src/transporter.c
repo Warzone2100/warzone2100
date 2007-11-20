@@ -132,12 +132,10 @@
 
 #define MAX_DROIDS					80
 
-
 /* the widget screen */
 extern W_SCREEN		*psWScreen;
 
 /* Static variables */
-//static	UDWORD			transID;
 static	DROID			*psCurrTransporter;
 static	DROID			*g_psCurScriptTransporter = NULL;
 static	BOOL			onMission;
@@ -147,16 +145,10 @@ static  BOOL            bFirstTransporter;
 //the tab positions of the DroidsAvail window
 static  UWORD           objMajor = 0, objMinor = 0;
 
-
-/**********TEST************/
-//static  UDWORD      addCount = 0;
-//static  UDWORD      removeCount = 0;
-
 /*functions */
 static BOOL intAddTransporterContents(void);
 static void transporterRemoveDroid(UDWORD id);
 static void setCurrentTransporter(UDWORD id);
-//static void intUpdateTransCapacity(struct _widget *psWidget, W_CONTEXT *psContext);
 static void intRemoveTransContentNoAnim(void);
 static BOOL intAddTransButtonForm(void);
 static BOOL intAddTransContentsForm(void);
@@ -167,7 +159,6 @@ static DROID* transInterfaceDroidList(void);
 static void intTransporterAddDroid(UDWORD id);
 static void intRemoveTransDroidsAvail(void);
 static void intRemoveTransDroidsAvailNoAnim(void);
-
 static BOOL _intRefreshTransporter(void);
 static BOOL _intAddTransporter(DROID *psSelected, BOOL offWorld);
 static void _intProcessTransporter(UDWORD id);
@@ -625,7 +616,6 @@ BOOL intAddTransButtonForm(void)
 	ClearTopicBuffers();
 
 	//add each button
-	//transID = 0;
 	for(psDroid = transInterfaceDroidList(); psDroid; psDroid = psDroid->psNext)
 	{
 		if ( psDroid->droidType == DROID_TRANSPORTER &&
@@ -653,8 +643,6 @@ BOOL intAddTransButtonForm(void)
 			/* if the current droid matches psCurrTransporter lock the button */
 			if (psDroid == psCurrTransporter)
 			{
-				//transID = sBFormInit.id;
-				//widgSetButtonState(psWScreen, transID, WBUT_LOCK);
 				widgSetButtonState(psWScreen, sBFormInit.id, WBUT_LOCK);
 				widgSetTabs(psWScreen, IDTRANS_TABFORM, sBFormInit.majorID, 0);
 			}
@@ -765,7 +753,6 @@ BOOL intAddTransContentsForm(void)
 	ClearStatBuffers();
 
 	//add each button
-	//transID = 0;
 	if (psCurrTransporter != NULL)
 	{
 		for (psDroid = psCurrTransporter->psGroup->psList; psDroid != NULL && psDroid !=

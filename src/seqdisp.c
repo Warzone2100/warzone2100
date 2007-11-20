@@ -97,37 +97,32 @@ typedef struct {
  */
 /***************************************************************************/
 
-static BOOL	bBackDropWasAlreadyUp;
-
-BOOL bSeqInit = FALSE;
-BOOL bSeqPlaying = FALSE;
-BOOL bAudioPlaying = FALSE;
-BOOL bHoldSeqForAudio = FALSE;
-BOOL bSeq8Bit = TRUE;
-BOOL bCDPath = FALSE;
-BOOL bHardPath = FALSE;
-BOOL bSeqSubtitles = TRUE;
-char aCDPath[MAX_STR_LENGTH];
-char aHardPath[MAX_STR_LENGTH];
-char aVideoName[MAX_STR_LENGTH];
-char aAudioName[MAX_STR_LENGTH];
-char aTextName[MAX_STR_LENGTH];
-char aSubtitleName[MAX_STR_LENGTH];
-char* pVideoBuffer = NULL;
-UWORD *p3DFXVideoBuffer = NULL;
-char* pVideoPalette = NULL;
-VIDEO_MODE videoMode;
-PERF_MODE perfMode = VIDEO_PERF_FULLSCREEN;
+static BOOL bBackDropWasAlreadyUp;
+static BOOL bSeqInit = FALSE;
+static BOOL bSeqPlaying = FALSE;
+static BOOL bAudioPlaying = FALSE;
+static BOOL bHoldSeqForAudio = FALSE;
+static BOOL bCDPath = FALSE;
+static BOOL bHardPath = FALSE;
+static BOOL bSeqSubtitles = TRUE;
+static char aCDPath[MAX_STR_LENGTH];
+static char aHardPath[MAX_STR_LENGTH];
+static char aVideoName[MAX_STR_LENGTH];
+static char aAudioName[MAX_STR_LENGTH];
+static char aTextName[MAX_STR_LENGTH];
+static char aSubtitleName[MAX_STR_LENGTH];
+static char* pVideoBuffer = NULL;
+static char* pVideoPalette = NULL;
+static VIDEO_MODE videoMode;
+static PERF_MODE perfMode = VIDEO_PERF_FULLSCREEN;
 static SDWORD frameSkip = 1;
-SEQLIST aSeqList[MAX_SEQ_LIST];
+static SEQLIST aSeqList[MAX_SEQ_LIST];
 static SDWORD currentSeq = -1;
 static SDWORD currentPlaySeq = -1;
 static SDWORD frameDuration = 40;
-
-static BOOL			g_bResumeInGame = FALSE;
-
+static BOOL g_bResumeInGame = FALSE;
 static int videoFrameTime = 0;
-static	SDWORD frame = 0;
+static SDWORD frame = 0;
 
 /***************************************************************************/
 /*
@@ -135,8 +130,7 @@ static	SDWORD frame = 0;
  */
 /***************************************************************************/
 
-void	clearVideoBuffer(iSurface *surface);
-void	seq_SetVideoPath(void);
+static void	seq_SetVideoPath(void);
 
 /***************************************************************************/
 /*
@@ -306,18 +300,6 @@ BOOL	seq_BlitBufferToScreen(char* screen, SDWORD screenStride, SDWORD xOffset, S
 }
 
 
-void	clearVideoBuffer(iSurface *surface)
-{
-UDWORD	i;
-UDWORD	*toClear;
-
-	toClear = (UDWORD *)surface->buffer;
-	for (i=0; i<(UDWORD)(surface->size/4); i++)
-	{
-		*toClear++ = (UDWORD)0xFCFCFCFC;
-	}
-}
-
 BOOL seq_ReleaseVideoBuffers(void)
 {
 	free(pVideoBuffer);
@@ -363,7 +345,7 @@ BOOL seq_SetupVideoBuffers(void)
 	return TRUE;
 }
 
-void seq_SetVideoPath(void)
+static void seq_SetVideoPath(void)
 {
 	// now set up the hard disc path /
 

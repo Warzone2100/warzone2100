@@ -29,18 +29,12 @@
 #include "lib/framework/frameresource.h"
 #include "lib/framework/strres.h"
 
-#include "lib/ivis_common/ivisdef.h" //ivis palette code
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/textdraw.h" //ivis text code
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/screen.h"
-
-
 #include "lib/ivis_common/piemode.h"
-// FIXME Direct iVis implementation include!
-#include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_common/piefunc.h"
-
 
 #include "hci.h"		// access to widget screen.
 #include "lib/widget/widget.h"
@@ -59,9 +53,6 @@
 #include "ingameop.h"
 #include "keymap.h"
 #include "mission.h"
-
-
-
 #include "keyedit.h"
 #include "seqdisp.h"
 // FIXME Direct iVis implementation include!
@@ -79,17 +70,7 @@ typedef struct _star
 	SDWORD	speed;
 } STAR;
 
-
-STAR	stars[30];	// quick hack for loading stuff
-
-
-
-#define LOADBARY	460		// position of load bar.
-#define LOADBARY2	470
-#define LOAD_BOX_SHADES	6
-
-
-extern BOOL bLoadSaveUp;
+static STAR	stars[30];	// quick hack for loading stuff
 
 static BOOL		firstcall = FALSE;
 static UDWORD	loadScreenCallNo=0;
@@ -97,11 +78,11 @@ static BOOL		bPlayerHasLost = FALSE;
 static BOOL		bPlayerHasWon = FALSE;
 static UBYTE    scriptWinLoseVideo = PLAY_NONE;
 
-
 void	startCreditsScreen	( void );
 void	runCreditsScreen	( void );
-UDWORD	lastTick=0;
 
+static	UDWORD	lastTick = 0;
+static	UDWORD	lastChange = 0;
 
 
 void	initStars( void )
@@ -345,7 +326,6 @@ void initLoadingScreen( BOOL drawbdrop )
 	screen_StopBackDrop();
 }
 
-UDWORD lastChange = 0;
 
 // fill buffers with the static screen
 void startCreditsScreen(void)

@@ -60,8 +60,6 @@
 
 #define MIN_TRACK_HEIGHT 16
 
-extern BOOL bTrackingTransporter;
-
 /* Holds all the details of our camera */
 static	WARCAM	trackingCamera;
 

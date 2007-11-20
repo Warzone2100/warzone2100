@@ -37,7 +37,6 @@
 #include "message.h"
 #include "research.h"
 #include "hci.h"
-#include "player.h"
 #include "order.h"
 #include "action.h"
 #include "display3d.h"
@@ -2253,7 +2252,6 @@ void aiUpdateMissionStructure(STRUCTURE *psStructure)
 						{
 							// Manufacture another.
 							structSetManufacture(psStructure, (DROID_TEMPLATE*)pSubject,Quantity);
-							//playerNewDroid(psNewDroid);
 							return;
 						}
 						else

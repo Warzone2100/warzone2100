@@ -37,7 +37,6 @@
 #include "structure.h"
 #include "research.h"
 #include "hci.h"
-#include "player.h"
 #include "power.h"
 #include "miscimd.h"
 #include "effects.h"
@@ -3479,7 +3478,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 					{
 						// Manufacture another.
 						structSetManufacture(psStructure, (DROID_TEMPLATE*)pSubject,Quantity);
-						//playerNewDroid(psDroid);
 						return;
 					}
 					else

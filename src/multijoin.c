@@ -42,7 +42,6 @@
 #include "map.h"
 #include "power.h"
 #include "game.h"					// for loading maps
-#include "player.h"
 #include "message.h"				// for clearing game messages
 #include "order.h"
 #include "console.h"

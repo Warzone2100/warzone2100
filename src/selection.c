@@ -43,13 +43,6 @@
 #include "display.h"
 
 // ---------------------------------------------------------------------
-// EXTERNALLY REFERENCED FUNCTIONS
-UDWORD	selDroidSelection		( UDWORD	player, SELECTION_CLASS droidClass,
-									SELECTIONTYPE droidType, BOOL bOnScreen );
-UDWORD	selDroidDeselect		( UDWORD player );
-UDWORD	selNumSelected			( UDWORD player );
-
-// ---------------------------------------------------------------------
 // STATIC SUPPORT FUNCTIONS
 UDWORD	selSelectAllUnits		( UDWORD player, BOOL bOnScreen );
 UDWORD	selSelectAllSameProp	( UDWORD player, PROPULSION_TYPE propType,
@@ -64,9 +57,9 @@ UDWORD	selNameSelect			( char *droidName, UDWORD player, BOOL bOnScreen );
 	It is also possible to request whether the units be onscreen or not.
 */
 
-DROID	*psOldRD = NULL;	// pointer to last selected repair unit
-DROID	*psOldNS = NULL;
-STRUCTURE	*psOldStruct = NULL;
+static DROID	*psOldRD = NULL;	// pointer to last selected repair unit
+static DROID	*psOldNS = NULL;
+static STRUCTURE *psOldStruct = NULL;
 
 UDWORD	selDroidSelection( UDWORD	player, SELECTION_CLASS droidClass,
 						  SELECTIONTYPE droidType, BOOL bOnScreen )
@@ -741,10 +734,3 @@ void selCommander(SDWORD n)
 		}
 	}
 }
-
-// ---------------------------------------------------------------------
-
-
-
-
-

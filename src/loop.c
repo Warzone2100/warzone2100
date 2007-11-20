@@ -44,7 +44,6 @@
 #include "hci.h"
 #include "lib/sound/audio.h"
 #include "ingameop.h"
-#include "player.h"
 #include "lib/gamelib/gtime.h"
 #include "miscimd.h"
 #include "effects.h"
@@ -242,12 +241,6 @@ GAMECODE gameLoop(void)
 
 			// update the command droids
 			cmdDroidUpdate();
-
-			/* Update the AI for a player */
-			for(i = 0; i < MAX_PLAYERS; i++)
-			{
-				playerUpdate(i);
-			}
 
 			if(getDrivingStatus())
 			{
