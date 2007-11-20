@@ -22,6 +22,7 @@
 #define __INCLUDE_LIB_FRAMEWORK_PRINTF_EXT_H__
 
 #include "frame.h"
+#include <stdio.h>
 
 /** A variant on snprintf which appends its output string to the given string
  *  buffer, rather than to replace it.
