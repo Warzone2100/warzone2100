@@ -43,7 +43,6 @@
 #include "console.h"
 #include "atmos.h"
 
-
 #define NUM_BUCKETS		1000
 #define NUM_OBJECTS		1000
 #define BUCKET_OFFSET	0
@@ -59,6 +58,14 @@
 // someone needs to take a good look at the radius calculation
 #define SCALE_DEPTH (FP12_MULTIPLIER*7)
 
+typedef struct _tile_bucket
+{
+	UDWORD	i;
+	UDWORD	j;
+	SDWORD	depth;
+}
+TILE_BUCKET;
+
 typedef struct _bucket_tag
 {
 	struct _bucket_tag* psNextTag;
@@ -67,13 +74,12 @@ typedef struct _bucket_tag
 	SDWORD				actualZ;
 } BUCKET_TAG;
 
-
-BUCKET_TAG tagResource[NUM_OBJECTS];
-BUCKET_TAG* bucketArray[NUM_BUCKETS];
-UDWORD resourceCounter;
-SDWORD zMax;
-SDWORD zMin;
-SDWORD worldMax,worldMin;
+static BUCKET_TAG tagResource[NUM_OBJECTS];
+static BUCKET_TAG* bucketArray[NUM_BUCKETS];
+static UDWORD resourceCounter;
+static SDWORD zMax;
+static SDWORD zMin;
+static SDWORD worldMax,worldMin;
 
 /* function prototypes */
 static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject);

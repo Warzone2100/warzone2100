@@ -45,14 +45,6 @@ typedef enum _render_type
 	RENDER_PARTICLE
 } RENDER_TYPE;
 
-typedef struct _tile_bucket
-{
-	UDWORD	i;
-	UDWORD	j;
-	SDWORD	depth;
-}
-TILE_BUCKET;
-
 //function prototypes
 
 /* reset object list */
@@ -63,7 +55,5 @@ extern BOOL bucketAddTypeToList(RENDER_TYPE objectType, void* object);
 
 /* render Objects in list */
 extern BOOL bucketRenderCurrentList(void);
-extern SDWORD	worldMax,worldMin;
-
 
 #endif
