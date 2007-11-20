@@ -29,9 +29,8 @@
 #define GREEN_CHROMATICITY	1
 #define BLUE_CHROMATICITY	1
 
+static void pie_SetColourDefines(void);
 
-Uint8 pal_GetNearestColour(Uint8 r, Uint8 g, Uint8 b);
-void pie_SetColourDefines(void);
 /*
 	This is how far from the end you want the drawn as the artist intended shades
 	to appear
@@ -39,9 +38,10 @@ void pie_SetColourDefines(void);
 
 #define COLOUR_BALANCE	6		// 3 from the end. (two brighter shades!)
 
-iColour*			psGamePal = NULL;
+static iColour	*psGamePal = NULL;
+static BOOL	bPaletteInitialised = FALSE;
+
 Uint8	palShades[PALETTE_SIZE * PALETTE_SHADE_LEVEL];
-BOOL	bPaletteInitialised = FALSE;
 Uint8	colours[16];
 
 
