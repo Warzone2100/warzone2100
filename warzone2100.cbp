@@ -29,6 +29,7 @@
 					<Add option='-DVERSION=\\&quot;TRUNK\\&quot;' />
 					<Add option='-DLOCALEDIR=\\&quot;\\&quot;' />
 					<Add option='-DPACKAGE=\\&quot;warzone2100\\&quot;' />
+					<Add option='-D_GNU_SOURCE=1' />
 				</Compiler>
 				<Linker>
 					<Add library="m" />
@@ -55,6 +56,7 @@
 					<Add option='-DVERSION=\\&quot;TRUNK\\&quot;' />
 					<Add option='-DLOCALEDIR=\\&quot;\\&quot;' />
 					<Add option='-DPACKAGE=\\&quot;warzone2100\\&quot;' />
+					<Add option='-D_GNU_SOURCE=1' />
 				</Compiler>
 				<Linker>
 					<Add library="m" />
