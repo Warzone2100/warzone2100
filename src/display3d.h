@@ -99,7 +99,6 @@ extern Sint32 playerXTile, playerZTile, // -> lighting.c
  rx, rz; // -> atmos.c
 
 extern SDWORD scrollSpeed;
-extern UDWORD worldAngle;
 //extern void	assignSensorTarget( DROID *psDroid );
 extern void assignSensorTarget( BASE_OBJECT *psObj );
 extern void assignDestTarget( void );

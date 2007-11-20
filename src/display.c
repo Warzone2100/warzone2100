@@ -25,7 +25,6 @@
  */
 
 
-
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/framework/strres.h"
@@ -33,15 +32,6 @@
 #include "display.h"
 #include "map.h"
 #include "loop.h"
-#include "atmos.h"	// temporary only for here
-/* Includes direct access to render library */
-#include "lib/ivis_common/piedef.h"
-#include "lib/ivis_common/piestate.h"
-
-// FIXME Direct iVis implementation include!
-#include "lib/ivis_common/rendmode.h"
-
-#include "lib/ivis_common/tex.h"//make a call for this
 #include "component.h"
 #include "display3d.h"
 #include "resource.h"
@@ -83,16 +73,9 @@
 #include "selection.h"
 #include "transporter.h"
 #include "intorder.h"
-
-
-#include "lib/ivis_common/pieclip.h"		// ffs am
 #include "multiplay.h"
 
 #define	SHAKE_TIME	(1500)
-
-#define TD_SCROLL_DIV 2
-
-//#define TEST_EFFECT	// Kick off an effect when left mouse button pressed.
 
 struct	_dragBox dragBox3D,wallDrag;
 
@@ -171,115 +154,67 @@ UDWORD	arnMPointers[POSSIBLE_TARGETS][POSSIBLE_SELECTIONS] =
 // construction droid
 {IDC_SELECT,IDC_GUARD,IDC_SELECT,IDC_SELECT,IDC_SELECT,IDC_SELECT,IDC_SELECT,
 	IDC_SELECT,IDC_SELECT,IDC_NOTPOSSIBLE,IDC_NOTPOSSIBLE,IDC_NOTPOSSIBLE,IDC_FIX},
-
-
-
 // sensor structure
 {IDC_BUILD,IDC_GUARD,IDC_LOCKON,IDC_GUARD,IDC_GUARD,IDC_GUARD,IDC_MOVE,IDC_MOVE,
 	IDC_GUARD,IDC_NOTPOSSIBLE,IDC_NOTPOSSIBLE,IDC_DEST,IDC_MOVE},
-
 // damaged sensor structure.
 {IDC_FIX,IDC_GUARD,IDC_LOCKON,IDC_GUARD,IDC_GUARD,IDC_GUARD,IDC_MOVE,IDC_MOVE,
 	IDC_GUARD,IDC_NOTPOSSIBLE,IDC_NOTPOSSIBLE,IDC_DEST,IDC_MOVE},
-
 };
-
-
-UWORD MPointerImageIDs[]={
-	IMAGE_CURSOR_DEST,		// IDC_DEST
-	IMAGE_CURSOR_DEFAULT,	// IDC_SIGHT
-	IMAGE_CURSOR_DEFAULT,	// IDC_TARGET
-	IMAGE_CURSOR_DEFAULT,	// IDC_LARROW
-	IMAGE_CURSOR_DEFAULT,	// IDC_RARROW
-	IMAGE_CURSOR_DEFAULT,	// IDC_DARROW
-	IMAGE_CURSOR_DEFAULT,	// IDC_UARROW
-	IMAGE_CURSOR_DEFAULT,	// IDC_DEFAULT
-	IMAGE_CURSOR_DEFAULT,	// IDC_EDGEOFMAP
-	IMAGE_CURSOR_ATTACH,	// IDC_ATTACH
-	IMAGE_CURSOR_ATTACK,	// IDC_ATTACK
-	IMAGE_CURSOR_DEFAULT,	// IDC_BOMB
-	IMAGE_CURSOR_BRIDGE,	// IDC_BRIDGE
-	IMAGE_CURSOR_BUILD,		// IDC_BUILD
-	IMAGE_CURSOR_EMBARK,	// IDC_EMBARK
-	IMAGE_CURSOR_FIX,		// IDC_FIX
-	IMAGE_CURSOR_GUARD,		// IDC_GUARD
-	IMAGE_CURSOR_ECM,		// IDC_JAM
-	IMAGE_CURSOR_LOCKON,	// IDC_LOCKON
-	IMAGE_CURSOR_DEFAULT,	// IDC_MENU
-	IMAGE_CURSOR_MOVE,		// IDC_MOVE
-	IMAGE_CURSOR_NOTPOS,	// IDC_NOTPOSSIBLE
-	IMAGE_CURSOR_PICKUP,	// IDC_PICKUP
-	IMAGE_CURSOR_REPAIR,	// IDC_SEEKREPAIR
-	IMAGE_CURSOR_SELECT,	// IDC_SELECT
-};
-
 
 UDWORD	scroll_speed_accel=800;		// acceleration on scrolling. Game Option.
 
-BOOL	buildingDamaged(STRUCTURE *psStructure);
+static BOOL	buildingDamaged(STRUCTURE *psStructure);
 static BOOL	repairDroidSelected(UDWORD player);
-//static DROID *constructorDroidSelected(UDWORD player);
+static DROID *constructorDroidSelected(UDWORD player);
 static BOOL vtolDroidSelected(UDWORD player);
 static BOOL	anyDroidSelected(UDWORD player);
 static BOOL cyborgDroidSelected(UDWORD player);
-//static BOOL ctrlShiftDown(void);
 static BOOL bInvertMouse = TRUE;
 static BOOL bDrawShadows = TRUE;
-//BOOL	widgetsOn=TRUE;	//FALSE;
-//BOOL	forceWidgetsOn = FALSE;
-SELECTION_TYPE	establishSelection(UDWORD selectedPlayer);
-void	dealWithLMB( void );
-void	dealWithLMBDClick( void );
-void	dealWithRMB( void );
-BOOL	mouseInBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1);
-BASE_OBJECT	*mouseTarget( void );
-OBJECT_POSITION *	checkMouseLoc(void);
+static SELECTION_TYPE	establishSelection(UDWORD selectedPlayer);
+static void	dealWithLMB( void );
+static void	dealWithLMBDClick( void );
+static void	dealWithRMB( void );
+static BOOL	mouseInBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1);
+static OBJECT_POSITION *checkMouseLoc(void);
+
+static BOOL	bInstantRadarJump = FALSE;
+static SDWORD	desiredPitch = 340;
+static UDWORD	currentFrame;
+static UDWORD StartOfLastFrame;
+static SDWORD	rotX;
+static SDWORD	rotY;
+static UDWORD	worldAngle;
+static UDWORD	rotInitial;
+static UDWORD	rotInitialUp;
+static UDWORD	xMoved, yMoved;
+static STRUCTURE	*psBuilding;
+static SDWORD	direction = 0;
+static BOOL	edgeOfMap = FALSE;
+static UDWORD	scrollRefTime;
+static float	scrollAccel;
+static float	scrollSpeedLeftRight; //use two directions and add them because its simple
+static float	scrollStepLeftRight;
+static float	scrollSpeedUpDown;
+static float	scrollStepUpDown;
+static BOOL	mouseOverRadar = FALSE;
+static BOOL	mouseOverConsole = FALSE;
+static BOOL	ignoreOrder = FALSE;
+static BOOL	ignoreRMBC	= TRUE;
+static DROID	*psSelectedVtol;
+static DROID	*psDominantSelected;
+static BOOL bRadarDragging = FALSE;
+
+UWORD	RadarZoomLevel = 0;
+int gammaValue = 20;
+BOOL	rotActive = FALSE;
+BOOL	gameStats = FALSE;
 
 /* Mouse x and y - no point checking them more than once per frame */
 Uint16 mouseXPos = OFF_SCREEN, mouseYPos = OFF_SCREEN;
 
-BOOL	bInstantRadarJump = FALSE;
-
-BOOL	rotActive = FALSE;
-SDWORD	desiredPitch = 340;
-UDWORD	currentFrame;
-static UDWORD StartOfLastFrame;
-SDWORD	rotX;
-SDWORD	rotY;
-UDWORD	worldAngle;
-UDWORD	rotInitial;
-UDWORD	rotInitialUp;
-UDWORD	xMoved,yMoved;
-//DROID	*psSelected3D = NULL;
-BOOL	gameStats = FALSE;
-STRUCTURE	*psBuilding;
-SDWORD	direction = 0;
-BOOL	edgeOfMap	= FALSE;
-UDWORD	scrollRefTime;
-float	scrollAccel;
-float	scrollSpeedLeftRight; //use two directions and add them because its simple
-float	scrollStepLeftRight;
-float	scrollSpeedUpDown;
-float	scrollStepUpDown;
-BOOL	noDrag3D;
-BOOL	mouseOverRadar = FALSE;
-BOOL	mouseOverConsole = FALSE;
-BOOL	ignoreOrder = FALSE;
-BOOL	ignoreRMBC	= TRUE;
 /* Hackety hack hack hack */
-/* Has the big blue droid been added to the world? */
-BOOL	bigBlueInWorld = FALSE;
-BOOL	missionComplete = FALSE;
-UWORD	RadarZoomLevel = 0;
-int gammaValue = 20;
-DROID	*psSelectedVtol;
-DROID	*psDominantSelected;
-
-BOOL CheckScrollLimits(void);
-
-
-/* Hackety hack hack hack */
-
 SDWORD	screenShakeTable[100] =
 {
 -2,-2,-3,-4,-3,-3,-5,-4,-4,-4,
@@ -294,10 +229,6 @@ SDWORD	screenShakeTable[100] =
 1,0,-1,-1,-2,-1,1,0,1,0
 };
 
-#define TESTLEVEL_ID (0)
-
-#define	METAKEY_DOWN	(keyDown(KEY_LALT) || keyDown(KEY_RALT) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT) )
-
 static BOOL	bScreenShakeActive = FALSE;
 static UDWORD screenShakeStarted;
 static UDWORD screenShakeLength;
@@ -308,7 +239,8 @@ static BOOL bLasSatStruct;
 
 // Local prototypes
 static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjUnderCursor);
-BOOL	bShakingPermitted = TRUE;
+static BOOL	bShakingPermitted = TRUE;
+
 
 void	setRadarJump(BOOL	val)
 {
@@ -405,25 +337,14 @@ static void shakeUpdate(void)
 }
 
 
-BOOL LoadLevelGraphics(UBYTE LevelNumber)
-{
-
-	(void)LevelNumber;
-
-	return TRUE;
-}
-
-
 /* Initialise the display system */
 BOOL dispInitialise(void)
 {
-	noDrag3D = FALSE;
 	RadarZoomLevel = 0;
 
 	return TRUE;
 }
 
-BOOL bRadarDragging = FALSE;
 
 void ProcessRadarInput(void)
 {
@@ -835,7 +756,7 @@ void processMouseClickInput(void)
 	HandleDrag();
 
 	CheckFinishedDrag();
-//
+
 	if ((mouseReleased(MOUSE_LMB) /*|| keyPressed(KEY_RCTRL)*/) && !OverRadar &&
 		dragBox3D.status!=DRAG_RELEASED && !ignoreOrder && !mouseOverConsole && !bDisplayMultiJoiningStatus)
 	{
@@ -854,11 +775,9 @@ void processMouseClickInput(void)
 			if(mouseReleased(MOUSE_RMB) && !rotActive && !ignoreRMBC)
 			{
 		//		clearSelection();
-		//		psSelected3D = NULL;
 				dragBox3D.status = DRAG_INACTIVE;
 				// Pretty sure we wan't set walldrag status here aswell.
 				wallDrag.status = DRAG_INACTIVE;
-	//			printf("Cancel Wall Drag\n");
 				bRadarDragging = FALSE;
 				dealWithRMB();
 				// Why?
@@ -1458,7 +1377,7 @@ void displayWorld(void)
 	draw3DScene();
 }
 
-BOOL mouseInBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1)
+static BOOL mouseInBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1)
 {
 	if(mouseXPos > x0 && mouseXPos < x1 && mouseYPos > y0 && mouseYPos < y1)
 	{
@@ -1624,44 +1543,6 @@ void FinishDeliveryPosition(UDWORD xPos,UDWORD yPos,void *UserData)
 
 	CancelDeliveryRepos();
 }
-
-
-
-// Cancel repositioning of the delivery point without moveing it.
-//
-/*void CancelDeliveryRepos(void)
-{
-	if((ReposValid) && (ReposFlag!=NULL))
-	{
-		if(driveModeActive())
-		{
-			DROID *Driven = driveGetDriven();
-			if(Driven != NULL) {
-				Driven->selected = TRUE;
-				camAllignWithTarget(Driven);
-			}
-			driveEnableControl();
-		}
-		ReposValid = FALSE;
-		ReposFlag = NULL;
-		buildState = BUILD3D_NONE;
-	}
-}*/
-
-
-// Get the current screen position of the delivery point.
-//
-/*BOOL GetDeliveryRepos(UDWORD *xPos,UDWORD *yPos)
-{
-	if((ReposValid) && (ReposFlag!=NULL))
-	{
-		*xPos = scoord_PC2PSXx(ReposFlag->screenX);
-		*yPos = scoord_PC2PSXy(ReposFlag->screenY);
-		return TRUE;
-	}
-
-	return FALSE;
-}*/
 
 
 // Is there a valid delivery point repositioning going on.
@@ -2351,20 +2232,6 @@ void	dealWithLMB( void )
 	psLocation = checkMouseLoc();
 	if (psLocation == NULL || driveModeActive() || selNumSelected(selectedPlayer))
 	{
-#ifdef TEST_EFFECT
-// Code to test an effect when left mouse button pressed
-		Vector3i Pos;
-		Pos.x = mouseTileX*TILE_UNITS+TILE_UNITS/2;
-		Pos.z = mouseTileY*TILE_UNITS+TILE_UNITS/2;
-		Pos.y = 100;
-#if 0
-		addEffect(&Pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,resGetData("IMD","fxlswave.pie"));
-		debug(LOG_NEVER, "Added test effect %p : %d,%d,%d\n",resGetData("IMD","fxlswave.pie"),Pos.x,Pos.y,Pos.z);
-		addEffect(&Pos,EFFECT_GRAVITON,GRAVITON_TYPE_EMITTING_DR,TRUE,debrisImds[rand()%MAX_DEBRIS]);
-#endif
-		addEffect(&Pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_MEDIUM,FALSE,NULL,0);
-#endif
-
 		// now changed to use the multiple order stuff
 		if(ctrlShiftDown())		// shift clicked a destination, add an order
 		{
@@ -2376,7 +2243,6 @@ void	dealWithLMB( void )
 		{
 			/* Otherwise send them all */
 			orderSelectedLoc(selectedPlayer, mouseTileX*TILE_UNITS+TILE_UNITS/2,mouseTileY*TILE_UNITS+TILE_UNITS/2);
-//DBPRINTF(("orderSelectedLoc(%d,%d,%d)\n",selectedPlayer, mouseTileX*TILE_UNITS+TILE_UNITS/2,mouseTileY*TILE_UNITS+TILE_UNITS/2));
 			if(getNumDroidsSelected())
 			{
 				assignDestTarget();
@@ -2453,7 +2319,7 @@ void	setDesiredPitch(SDWORD pitch)
 }
 
 // process LMB double clicks
-void dealWithLMBDClick(void)
+static void dealWithLMBDClick(void)
 {
 	BASE_OBJECT		*psClickedOn;
 	DROID			*psDroid;
@@ -2499,7 +2365,7 @@ void dealWithLMBDClick(void)
 
 /*This checks to see if the mouse was over a delivery point or a proximity message
 when the mouse button was pressed */
-OBJECT_POSITION *	checkMouseLoc(void)
+static OBJECT_POSITION *	checkMouseLoc(void)
 {
 	OBJECT_POSITION		*psReturn;
 	FLAG_POSITION		*psPoint;
@@ -2530,32 +2396,6 @@ OBJECT_POSITION *	checkMouseLoc(void)
 				}
 			}
 		}
-// old way, only one point allowed.
-//
-//		//look throught the list of structures to see if there is a factory
-//		//and therefore a DP
-//		for (psStructure = apsStructLists[i]; psStructure; psStructure = psStructure->psNext)
-//		{
-//			if (psStructure->pStructureType->type == REF_FACTORY)
-//			{
-//				psPoint = ((FACTORY *)psStructure->pFunctionality)->psAssemblyPoint;
-//				dispX = psPoint->screenX;
-//				dispY = psPoint->screenY;
-//				dispR = psPoint->screenR;
-//				// Only check DP's that are on screen
-//				if (DrawnInLastFrame(psPoint->frameNumber)==TRUE)
-//				{
-//					if (mouseInBox(dispX-dispR, dispY-dispR, dispX+dispR, dispY+dispR))
-//					{
-//						// We HAVE clicked on DP!
-//						psReturn = psPoint;
-//						//There's no point in checking other object types
-//						return(psReturn);
-//					}
-//				}
-//			}
-//		} // end of checking for droids
-
 	}
 	//now check for Proximity Message
 	/*for(psProxDisp = apsProxDisp[selectedPlayer]; psProxDisp; psProxDisp =
@@ -2580,14 +2420,12 @@ OBJECT_POSITION *	checkMouseLoc(void)
 }
 
 
-void dealWithRMB( void )
+static void dealWithRMB( void )
 {
 	BASE_OBJECT			*psClickedOn;
 	DROID				*psDroid;
 	STRUCTURE			*psStructure;
 	STRUCTURE			*psSLoop;
-
-//printf("dealWithRMB %d\n",mouseOverRadar);
 
 	if(driveModeActive()) {
 		return;
@@ -2830,7 +2668,6 @@ STRUCTURE	*psStructure;
 					}
 					else if (psDroid->droidType == DROID_TRANSPORTER)
 					{
-//	DBPRINTF(("MT_TRANDROID\n");
 						//check the transporter is not full
 						if (calcRemainingCapacity(psDroid))
 						{
@@ -2848,14 +2685,12 @@ STRUCTURE	*psStructure;
 					}
 					else if (psDroid->droidType == DROID_COMMAND)
 					{
-//	DBPRINTF(("MT_COMMAND\n");
 						return MT_COMMAND;
 					}
 					else
 					{
 						if (droidIsDamaged(psDroid))
 						{
-//	DBPRINTF(("MT_OWNDROIDDAM\n");
 							return MT_OWNDROIDDAM;
 						}
 						else
@@ -2866,7 +2701,6 @@ STRUCTURE	*psStructure;
 				}
 				else
 				{
-//	DBPRINTF(("MT_ENEMYDROID\n");
 					return MT_ENEMYDROID;
 				}
 			}
@@ -2936,7 +2770,6 @@ STRUCTURE	*psStructure;
 						else
 						{
 							*ppObjectUnderMouse=(BASE_OBJECT *)psDroid;
-	//printf("Enemy Droid %d %d %d\n",dispX,dispY,dispR);
 							retVal = MT_ENEMYDROID;
 						}
 						/* There's no point in checking other object types */
@@ -2968,7 +2801,6 @@ STRUCTURE	*psStructure;
 			}
 			else if(((FEATURE *)psNotDroid)->psStats->damageable)	//make damageable features return 'target' mouse pointer
 			{
-//printf("Damagable Feature %d %d\n",mouseTileX,mouseTileY);
 				retVal = MT_DAMFEATURE;
 			}
 			else if(((FEATURE *)psNotDroid)->psStats->subType == FEAT_OIL_RESOURCE)
@@ -3097,7 +2929,7 @@ UBYTE DroidSelectionWeights[NUM_DROID_WEIGHTS] = {
 /* Only deals with one type of droid being selected!!!! */
 /*	We'll have to make it assesss which selection is to be dominant in the case
 	of multiple selections */
-SELECTION_TYPE	establishSelection(UDWORD selectedPlayer)
+static SELECTION_TYPE	establishSelection(UDWORD selectedPlayer)
 {
 DROID			*psDroid,*psDominant=NULL;
 	UBYTE	CurrWeight;
@@ -3221,7 +3053,7 @@ SELECTION_TYPE	selectionClass;
 }
 
 /* Just returns true if the building's present body points aren't 100 percent */
-BOOL	buildingDamaged(STRUCTURE *psStructure)
+static BOOL	buildingDamaged(STRUCTURE *psStructure)
 {
 	//if( PERCENT(psStructure->body , psStructure->baseBodyPoints ) < 100)
 	if( PERCENT(psStructure->body , structureBody(psStructure)) < 100)
@@ -3256,7 +3088,7 @@ BOOL	repairDroidSelected(UDWORD player)
 }
 
 /*Looks through the list of selected players droids to see if one is a constructor droid*/
-DROID *constructorDroidSelected(UDWORD player)
+static DROID *constructorDroidSelected(UDWORD player)
 {
 	DROID	*psCurr;
 

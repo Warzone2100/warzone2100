@@ -24,15 +24,11 @@
  *
  */
 
-
-
 #ifndef _display_h
 #define _display_h
 
 #include "basedef.h"
 #include "structure.h"
-
-
 
 /* Initialise the display system */
 extern BOOL dispInitialise(void);
@@ -51,8 +47,6 @@ extern void	scroll(void);
 
 extern BOOL DrawnInLastFrame(SDWORD Frame);
 
-BOOL LoadLevelGraphics(UBYTE LevelNumber);
-
 // Clear all selections.
 extern void clearSel(void);
 // Clear all selections and stop driver mode.
@@ -60,7 +54,6 @@ extern void clearSelection(void);
 // deal with selecting a droid
 extern void dealWithDroidSelect(DROID *psDroid, BOOL bDragBox);
 
-extern BOOL	buildingDamaged(STRUCTURE *psStructure);
 extern	void	setInvertMouseStatus( BOOL val );
 extern BOOL	getInvertMouseStatus( void );
 
@@ -68,7 +61,6 @@ extern	void	setDrawShadows( BOOL val );
 extern BOOL	getDrawShadows( void );
 
 extern	BOOL	getRadarJumpStatus( void );
-
 extern	void	setRadarJump(BOOL	val);
 
 
@@ -76,13 +68,6 @@ extern	void	setRadarJump(BOOL	val);
 extern void displayWorld(void);
 
 // Illumination value for standard light level "as the artist drew it" ... not darker, not lighter
-
-#define ILLUMINATION_NONE (13)
-
-
-
-//#define MAX_SCROLL_SPEED	1600
-//#define SCROLL_SPEED_ACCEL	800
 
 #define MAX_SCROLL_SPEED (800+scroll_speed_accel)	// make max speed dependant on accel chosen.
 
@@ -176,15 +161,9 @@ MT_SENSORSTRUCTDAM,
 MT_NOTARGET		//leave as last one
 } MOUSE_TARGET;
 
-
-extern BOOL		edgeOfMap;
 extern BOOL		gameStats;
-extern BOOL		bigBlueInWorld;
-extern BOOL		missionComplete;
 extern BOOL		godMode;
 extern UWORD	RadarZoomLevel;
-
-
 
 // reset the input state
 void resetInput(void);
@@ -192,10 +171,8 @@ void resetInput(void);
 BOOL CheckObjInScrollLimits(UWORD *xPos,UWORD *zPos);
 BOOL CheckInScrollLimits(SDWORD *xPos,SDWORD *zPos);
 extern BOOL CheckScrollLimits(void);
-//extern BOOL	widgetsOn;
 extern BOOL	rotActive;
 extern int gammaValue;
-//extern BOOL	forceWidgetsOn;
 
 BASE_OBJECT	*mouseTarget( void );
 
@@ -205,7 +182,6 @@ void CancelObjectOrbit(void);
 extern void FinishDeliveryPosition(UDWORD xPos,UDWORD yPos,void *UserData);
 extern void CancelDeliveryRepos(void);
 extern void StartDeliveryPosition( OBJECT_POSITION *psLocation );
-extern BOOL GetDeliveryRepos(UDWORD *xPos,UDWORD *yPos);
 extern BOOL DeliveryReposValid(void);
 
 extern void StartTacticalScroll(BOOL driveActive);
@@ -228,8 +204,6 @@ extern void	setShakeStatus( BOOL val );
 extern BOOL	getShakeStatus( void );
 
 extern void	displayInitVars(void);
-
-extern DROID *constructorDroidSelected(UDWORD player);
 
 void BeepMessage(UDWORD StringID);
 void AddDerrickBurningMessage(void);

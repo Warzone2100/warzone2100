@@ -570,7 +570,6 @@ void	kf_ToggleFog( void )
 /* Toggles fog on/off */
 void	kf_ToggleWidgets( void )
 {
-//	 	widgetsOn = !widgetsOn;
 	if(getWidgetsStatus())
 	{
 		setWidgetsStatus(FALSE);
@@ -1275,7 +1274,6 @@ void	kf_ToggleDemoMode( void )
 // --------------------------------------------------------------------------
 void	kf_ChooseOptions( void )
 {
-//	if(!widgetsOn) widgetsOn = TRUE;
 	intResetScreen(TRUE);
 	setWidgetsStatus(TRUE);
 	intAddOptions();
@@ -1351,7 +1349,6 @@ void	kf_JumpToUnassignedUnits( void )
 void	kf_ToggleOverlays( void )
 {
 		/* Make sure they're both the same */
-//		radarOnScreen = widgetsOn;
 		/* Flip their states */
 //		radarOnScreen = !radarOnScreen;
 

@@ -1561,11 +1561,6 @@ INT_RETVAL intRunWidgets(void)
 
 	intDoScreenRefresh();
 
-	// If the widgets are turned off then why bother to process them?
-//	if(!widgetsOn) {
-//		return INT_NONE;
-//	}
-
 	/* Update the object list if necessary */
 	if (intMode == INT_OBJECT || intMode == INT_STAT || intMode == INT_CMDORDER)
 	{
@@ -3032,16 +3027,10 @@ void intSetMapPos(UDWORD x, UDWORD y)
 //
 void intObjectSelected(BASE_OBJECT *psObj)
 {
-//STRUCTURE	*psStruct;
 	/* Remove whatever is up */
 //	intResetScreen(FALSE);
 
-//DBPRINTF(("intObjectSelected\n"));
 	if(psObj) {
-//		if(!widgetsOn)
-//		{
-//			forceWidgetsOn = TRUE;
-//		}
 //		intResetScreen(TRUE);
 		setWidgetsStatus(TRUE);
 		switch(psObj->type)
@@ -3131,10 +3120,6 @@ void intObjectSelected(BASE_OBJECT *psObj)
 // add the construction interface if a constructor droid is selected
 void intConstructorSelected(DROID *psDroid)
 {
-//	if(!widgetsOn)
-//	{
-//		forceWidgetsOn = TRUE;
-//	}
 //	intResetScreen(FALSE);
 	setWidgetsStatus(TRUE);
 	intAddBuild(psDroid);

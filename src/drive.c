@@ -48,7 +48,7 @@
 #include "astar.h"
 #include "combat.h"
 #include "mapgrid.h"
-#include "display.h"	// needed for widgetsOn flag.
+#include "display.h"
 #include "effects.h"
 #include "lib/framework/fractions.h"
 #include "hci.h"

@@ -495,11 +495,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 			if( (!psStats->tileDraw) && (FromSave == FALSE) )
 			{
 				psTile->height = (UBYTE)(height / ELEVATION_SCALE);
-				// This sets the gourad shading to give 'as the artist drew it' levels
-
-//				psTile->illumination = ILLUMINATION_NONE;		// set the tile so that there is no illumination connecting to feature ...
 			}
-
 		}
 	}
 	psFeature->z = map_TileHeight(mapX,mapY);//jps 18july97
