@@ -115,16 +115,6 @@ anim_file_list:			anim_file_list anim_file |
 						/* NULL */
 						;
 
-/*
-anim_file:				ANIM3DFILE QTEXT INTEGER
-						{
-							g_iCurAnimID = $3;
-							IncludeFile( $2 );
-						}
-						anim_trans | anim_frames
-						;
-*/
-
 anim_file:				anim_trans | anim_frames
 						;
 
