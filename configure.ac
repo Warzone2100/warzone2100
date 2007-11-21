@@ -136,8 +136,8 @@ fi
 # -Wno-unused-label is necessary because flex produces unused labels that we cannot fix
 # Add later for stricter checking: -Wextra -Wmissing-declarations -Wstrict-prototypes
 AC_ARG_ENABLE(debug,
-	AS_HELP_STRING([--enable-debug[=yes/relaxed/no]],[Compile debug version [no]]),
-	[ enable_debug=${enableval} ], [ enable_debug=no ])
+	AS_HELP_STRING([--disable-debug[=yes/relaxed/no]],[Compile debug version [yes]]),
+	[ enable_debug=${enableval} ], [ enable_debug=yes ])
 AC_MSG_CHECKING([whether to compile in debug mode])
 AC_MSG_RESULT([${enable_debug}])
 if test "x$enable_debug" = "xyes" ; then
