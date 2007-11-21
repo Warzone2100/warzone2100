@@ -2400,19 +2400,6 @@
 			<Option target="DBGWindows" />
 			<Option target="NDBGWindows" />
 		</Unit>
-		<Unit filename="src/player.c">
-			<Option compilerVar="CC" />
-			<Option target="DBGUnix" />
-			<Option target="NDBGUnix" />
-			<Option target="DBGWindows" />
-			<Option target="NDBGWindows" />
-		</Unit>
-		<Unit filename="src/player.h">
-			<Option target="DBGUnix" />
-			<Option target="NDBGUnix" />
-			<Option target="DBGWindows" />
-			<Option target="NDBGWindows" />
-		</Unit>
 		<Unit filename="src/power.c">
 			<Option compilerVar="CC" />
 			<Option target="DBGUnix" />

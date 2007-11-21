@@ -142,7 +142,6 @@ src/scriptcb.c
 src/objmem.c
 src/loadsave.c
 src/target.c
-src/player.c
 src/bucket3d.c
 src/e3demo.c
 src/arrow.c
