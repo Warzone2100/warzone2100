@@ -2605,7 +2605,7 @@ void displayChatEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *p
 {
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y -4;			// 4 is the magic number.
-	iV_Line(x, y, x+psWidget->width , y, iV_PaletteNearestColour(100,100,160) );
+	iV_Line(x, y, x + psWidget->width, y, 0x6464a0); // iV_PaletteNearestColour(100,100,160) );
 
 	return;
 }
