@@ -350,6 +350,14 @@ TRACK* sound_LoadTrackFromFile(const char *fileName)
 	pTrack->fileName = (const char*)pTrack + sizeof(TRACK);
 #endif
 
+	if (GetLastResourceFilename() == NULL)
+	{
+		// This is a non fatal error.  We just can't find filename for some reason.
+		debug(LOG_ERROR, "sound_LoadTrackFromFile: missing resource filename?");
+		PHYSFS_close(fileHandle);
+		return NULL;
+	}
+
 	// Copy the filename into the struct
 	strcpy((char*)pTrack->fileName, GetLastResourceFilename());
 

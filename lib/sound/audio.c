@@ -558,7 +558,9 @@ unsigned int audio_SetTrackVals(const char* fileName, BOOL loop, unsigned int vo
 {
 	// if audio not enabled return a random non-zero value to carry on game without audio
 	if ( g_bAudioEnabled == FALSE )
+	{
 		return 1;
+	}
 
 	return sound_SetTrackVals(fileName, loop, volume, audibleRadius);
 }
@@ -969,6 +971,12 @@ SDWORD audio_GetTrackID( const char *fileName )
 	// return if audio not enabled
 	if ( g_bAudioEnabled == FALSE )
 	{
+		return SAMPLE_NOT_FOUND;
+	}
+
+	if (strlen(fileName) == 0)
+	{
+		debug(LOG_ERROR," audio_GetTrackID() fileName was empty");
 		return SAMPLE_NOT_FOUND;
 	}
 

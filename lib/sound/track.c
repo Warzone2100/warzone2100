@@ -102,7 +102,15 @@ BOOL sound_GetSystemActive( void )
 unsigned int sound_SetTrackVals(const char* fileName, BOOL loop, unsigned int volume, unsigned int audibleRadius)
 {
 	unsigned int trackID;
-	TRACK* psTrack = resGetData( "WAV", fileName );
+	TRACK* psTrack;
+
+	if (strlen(fileName) == 0) // check for empty filename.  This is a non fatal error.
+	{
+		debug(LOG_ERROR, "sound_SetTrackVals: filename empty");
+		return 0;
+	}
+
+	psTrack	= resGetData( "WAV", fileName );
 	if (psTrack == NULL)
 	{
 		debug(LOG_ERROR, "sound_SetTrackVals: track %s resource not found", fileName);
