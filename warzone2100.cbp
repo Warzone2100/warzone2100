@@ -546,12 +546,6 @@
 			<Option target="DBGWindows" />
 			<Option target="NDBGWindows" />
 		</Unit>
-		<Unit filename="lib/gamelib/maxpidef.h">
-			<Option target="DBGUnix" />
-			<Option target="NDBGUnix" />
-			<Option target="DBGWindows" />
-			<Option target="NDBGWindows" />
-		</Unit>
 		<Unit filename="lib/gamelib/parser.h">
 			<Option target="DBGUnix" />
 			<Option target="NDBGUnix" />

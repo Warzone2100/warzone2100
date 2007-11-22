@@ -1443,10 +1443,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\gamelib\maxpidef.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\mechanics.h"
 				>
 			</File>
