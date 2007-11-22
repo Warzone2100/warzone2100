@@ -66,8 +66,6 @@ extern BOOL formationGetPos(FORMATION *psFormation, BASE_OBJECT *psObj,
 // See if a unit is a member of a formation (i.e. it has a position assigned)
 extern BOOL formationMember(FORMATION *psFormation, BASE_OBJECT *psObj);
 
-extern SDWORD formationObjRadius(BASE_OBJECT *psObj);
-
 extern SDWORD formationGetSpeed( FORMATION *psFormation );
 
 #endif

@@ -28,35 +28,17 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifdef EDITORWORLD
-
-#include "typedefs.h"
-
-#define MAP_MAXWIDTH	256
-#define MAP_MAXHEIGHT	256
-
-#include "gateinterface.h"
-#include "debugprint.h"
-
-#else
-
-// gateway linking printf's
-//#define DEBUG_GROUP0
-// water gate printf's
-//#define DEBUG_GROUP1
 #include "lib/framework/frame.h"
 #include "map.h"
 #include "astar.h"
 #include "fpath.h"
 #include "wrappers.h"
-#endif
 
 #include "gateway.h"
 #include "lib/framework/listmacs.h"
 
 // the list of gateways on the current map
 GATEWAY		*psGateways;
-
 
 // the RLE map zones for each tile
 UBYTE		**apRLEZones;
@@ -72,40 +54,13 @@ UBYTE		**apEquivZones;
 // note which zones have a gateway to them and can therefore be reached
 UBYTE		*aZoneReachable;
 
-// link all the gateways together
-BOOL gwLinkGateways(void);
-
 
 // Initialise the gateway system
 BOOL gwInitialise(void)
 {
-#ifdef EDITORWORLD
-	int i;
-#endif
-
 	ASSERT( psGateways == NULL, "gwInitialise: gateway list has not been reset" );
 
 	psGateways = NULL;
-
-#ifdef EDITORWORLD
-	for(i=0; i<giGetNumGateways(); i++) {
-		SDWORD x0,y0,x1,y1;
-
-		if(!giGetGateway(i,&x0,&y0,&x1,&y1)) {
-			return FALSE;
-		}
-
-		if(!gwNewGateway(x0,y0,x1,y1)) {
-			return FALSE;
-		}
-	}
-
-	// need to handle FALSE.
-	if(!gwProcessMap()) {
-		return FALSE;
-	}
-#endif
-//	if (!gwLinkGateways()) return FALSE;
 
 	return TRUE;
 }
@@ -248,7 +203,6 @@ BOOL gwNewLinkGateway(SDWORD x, SDWORD y)
 }
 
 
-#ifndef EDITORWORLD
 static BOOL gwBlockingTile(SDWORD x,SDWORD y)
 {
 	MAPTILE	*psTile;
@@ -267,7 +221,7 @@ static BOOL gwBlockingTile(SDWORD x,SDWORD y)
 
 	return FALSE;
 }
-#endif
+
 
 // scan for a particular zone on the map
 // given a start point
@@ -340,6 +294,7 @@ static BOOL gwFindZone(SDWORD zone, SDWORD cx, SDWORD cy,
 	return FALSE;
 }
 
+
 // find a rough center position for a zone
 static void gwCalcZoneCenter(SDWORD zone, SDWORD *px, SDWORD *py)
 {
@@ -373,8 +328,8 @@ static void gwCalcZoneCenter(SDWORD zone, SDWORD *px, SDWORD *py)
 	}
 }
 
-// check all the zones are of reasonable sizes
 
+// check all the zones are of reasonable sizes
 void gwCheckZoneSizes(void)
 {
 	SDWORD		zone, xsum,ysum, numtiles, inzone;
@@ -435,9 +390,8 @@ BOOL gwGenerateLinkGates(void)
 
 		if (aNumEquiv[zone] > 0)
 		{
-#ifndef		EDITORWORLD
 			LOADBARCALLBACK();	//			loadingScreenCallback();
-#endif
+
 			// got a water zone that borders on land
 			// find it's center
 			gwCalcZoneCenter(zone, &cx,&cy);
@@ -554,8 +508,6 @@ BOOL gwZoneInEquiv(SDWORD mainZone, SDWORD checkZone)
 	{
 		return FALSE;
 	}
-//	ASSERT( apEquivZones != NULL,
-//		"gwZoneInEquiv: no zone equivalence table" );
 
 	for(i=0; i<aNumEquiv[mainZone]; i+= 1)
 	{
@@ -572,7 +524,6 @@ BOOL gwZoneInEquiv(SDWORD mainZone, SDWORD checkZone)
 // its length
 static SDWORD gwRouteLength(GATEWAY *psStart, GATEWAY *psEnd)
 {
-#ifndef EDITORWORLD
 	SDWORD			ret, sx,sy, ex,ey, xdiff,ydiff, i;
 	ASTAR_ROUTE		sRoute;
 	SDWORD			routeMode, dist;
@@ -633,9 +584,6 @@ static SDWORD gwRouteLength(GATEWAY *psStart, GATEWAY *psEnd)
 	fpathBlockingTile = fpathGroundBlockingTile;
 
 	return dist;
-#else
-	return 0;
-#endif
 }
 
 
@@ -684,6 +632,7 @@ static BOOL gwCheckFloodTiles(GATEWAY *psGate)
 
 	return TRUE;
 }
+
 
 // link all the gateways together
 BOOL gwLinkGateways(void)
@@ -742,9 +691,7 @@ BOOL gwLinkGateways(void)
 	// now link all the gateways together
 	for(psCurr = psGateways; psCurr; psCurr = psCurr->psNext)
 	{
-#ifndef	EDITORWORLD
 		LOADBARCALLBACK();	//		loadingScreenCallback();
-#endif
 
 		gwX = (psCurr->x1 + psCurr->x2)/2;
 		gwY = (psCurr->y1 + psCurr->y2)/2;
@@ -1107,69 +1054,34 @@ BOOL gwSetZoneEquiv(SDWORD zone, SDWORD numEquiv, UBYTE *pEquiv)
 /******************************************************************************************************/
 /*                   Gateway data access functions                                                    */
 
-#ifdef EDITORWORLD
-
-// get the size of the map
-SDWORD gwMapWidth(void)
-{
-	return giGetMapWidth();
-}
-
-SDWORD gwMapHeight(void)
-{
-	return giGetMapHeight();
-}
-
-
-// set the gateway flag on a tile
-void gwSetGatewayFlag(SDWORD x, SDWORD y)
-{
-	giSetGatewayFlag(x,y,TRUE);
-}
-
-// clear the gateway flag on a tile
-void gwClearGatewayFlag(SDWORD x, SDWORD y)
-{
-	giSetGatewayFlag(x,y,FALSE);
-}
-
-// check whether a gateway is on water
-BOOL gwTileIsWater(UDWORD x, UDWORD y)
-{
-	return giIsWater(x, y);
-}
-
-#else
-
 // get the size of the map
 SDWORD gwMapWidth(void)
 {
 	return (SDWORD)mapWidth;
 }
+
 SDWORD gwMapHeight(void)
 {
 	return (SDWORD)mapHeight;
 }
-
 
 // set the gateway flag on a tile
 void gwSetGatewayFlag(SDWORD x, SDWORD y)
 {
 	mapTile((UDWORD)x,(UDWORD)y)->tileInfoBits |= BITS_GATEWAY;
 }
+
 // clear the gateway flag on a tile
 void gwClearGatewayFlag(SDWORD x, SDWORD y)
 {
 	mapTile((UDWORD)x,(UDWORD)y)->tileInfoBits &= ~BITS_GATEWAY;
 }
 
-
 // check whether a tile is water
 BOOL gwTileIsWater(UDWORD x, UDWORD y)
 {
 	return terrainType(mapTile(x ,y)) == TER_WATER;
 }
-
 
 // see if a zone is reachable
 BOOL gwZoneReachable(SDWORD zone)
@@ -1179,22 +1091,3 @@ BOOL gwZoneReachable(SDWORD zone)
 
 	return aZoneReachable[zone];
 }
-
-// check if the gateway flag is set on a tile
-/*BOOL gwTileIsGateway(SDWORD x, SDWORD y)
-{
-	return (mapTile((UDWORD)x,(UDWORD)y)->tileInfoBits & BITS_GATEWAY) != 0;
-}*/
-
-
-// get the terrain type of a map tile
-/*SDWORD gwTileTerrainType(SDWORD x, SDWORD y)
-{
-	return TERRAIN_TYPE(mapTile((UDWORD)x,(UDWORD)y));
-}*/
-
-#endif
-
-
-
-

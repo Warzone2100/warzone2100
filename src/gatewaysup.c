@@ -23,34 +23,8 @@
  *
  */
 
-// segment printf's
-//#define DEBUG_GROUP1
-// stack printf's
-//#define DEBUG_GROUP2
-// gwProcessMap printf's
-//#define DEBUG_GROUP3
-// RLE zone map size
-//#define DEBUG_GROUP4
-// equivalence printf's
-//#define DEBUG_GROUP5
-#ifdef EDITORWORLD
-
-#include <string.h>
-
-#include "typedefs.h"
-
-#define MAP_MAXWIDTH	256
-#define MAP_MAXHEIGHT	256
-
-#include "gateinterface.h"
-#include "debugprint.h"
-
-#else
-
 #include "lib/framework/frame.h"
 #include "map.h"
-
-#endif
 
 #include <assert.h>
 #include <string.h>
@@ -84,21 +58,14 @@ struct Segment {
 
 
 // whether the flood fill is running over water
-BOOL bGwWaterFlood = FALSE;;
+static BOOL bGwWaterFlood = FALSE;;
 
 // check for a blocking tile for the flood fill
-BOOL gwFloodBlock(SDWORD x, SDWORD y);
+static BOOL gwFloodBlock(SDWORD x, SDWORD y);
 
 // generate the zone equivalence tables
-BOOL gwGenerateZoneEquiv(SDWORD numZones);
+static BOOL gwGenerateZoneEquiv(SDWORD numZones);
 
-
-#define ENABLEFILL		// disable this on the psx
-
-
-#ifdef ENABLEFILL
-struct Segment stack[MAX_STACK], *sp = stack;	/* stack of filled segments */
-#endif
 
 // Flood fill a map zone from a given point
 // stopping at blocking tiles
@@ -109,7 +76,6 @@ struct Segment stack[MAX_STACK], *sp = stack;	/* stack of filled segments */
  */
 static void gwSeedFill(SDWORD x, SDWORD y, SDWORD nv)
 {
-#ifdef ENABLEFILL
     int l, x1, x2, dy;
     Pixel ov;							/* old pixel value */
 
@@ -165,11 +131,6 @@ skip:
 			l = x;
 		} while (x<=x2);
     }
-#else
-	//	GODDAM *#!! LOWERCASE assert IS ABSOLUTELY NO %^$## USE ON THE PC
-//	assert(2+2==5);
-	ASSERT( FALSE, "gwSeedFill disabled" );
-#endif
 }
 
 
@@ -460,7 +421,7 @@ static void gwCheckNeighbourEquiv(SDWORD zone, SDWORD x, SDWORD y)
 
 
 // generate the zone equivalence tables
-BOOL gwGenerateZoneEquiv(SDWORD numZones)
+static BOOL gwGenerateZoneEquiv(SDWORD numZones)
 {
 	SDWORD		x,y, i;
 	UBYTE		aEquiv[UBYTE_MAX];
@@ -623,36 +584,8 @@ void gwSetZone(SDWORD x, SDWORD y, SDWORD zone)
 /******************************************************************************************************/
 /*                   Gateway data access functions                                                    */
 
-#ifdef EDITORWORLD
-
-BOOL gwFloodBlock(SDWORD x, SDWORD y)
-{
-//	MAPTILE		*psTile;
-//	SDWORD		type;
-//	BOOL		gateway;
-
-	if ((x < 0) || (x >= gwMapWidth()) ||
-		(y < 0) || (y >= gwMapHeight()))
-	{
-		return TRUE;
-	}
-
-//	psTile = mapTile(x,y);
-//	type = TERRAIN_TYPE(psTile);
-//	gateway = (psTile->tileInfoBits & BITS_GATEWAY) != 0;
-
-//	return (type == TER_CLIFFFACE) || (type == TER_WATER) || gateway;
-
-	return giIsGateway(x,y) ||
-		   ( !bGwWaterFlood && (giIsClifface(x,y) || giIsWater(x,y))) ||
-		   ( bGwWaterFlood && !giIsWater(x,y) );
-//	return giIsClifface(x,y) || giIsWater(x,y) || giIsGateway(x,y);
-}
-
-#else
-
 // check for a blocking tile for the flood fill
-BOOL gwFloodBlock(SDWORD x, SDWORD y)
+static BOOL gwFloodBlock(SDWORD x, SDWORD y)
 {
 	MAPTILE		*psTile;
 	SDWORD		type;
@@ -672,11 +605,3 @@ BOOL gwFloodBlock(SDWORD x, SDWORD y)
 		   ( !bGwWaterFlood && ((type == TER_CLIFFFACE) || (type == TER_WATER))) ||
 		   ( bGwWaterFlood && (type != TER_WATER) );
 }
-
-#endif
-
-
-
-
-
-

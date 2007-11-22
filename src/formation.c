@@ -37,10 +37,8 @@
 #include "formationdef.h"
 #include "formation.h"
 
-
 // radius for the different body sizes
 static SDWORD	fmLtRad = 80, fmMedRad = 100, fmHvyRad = 110;
-
 
 // heap sizes
 #define F_HEAPINIT		10
@@ -66,9 +64,9 @@ static SDWORD	fmLtRad = 80, fmMedRad = 100, fmHvyRad = 110;
 #define FORMATION_SPEED_INIT	100000L
 
 // The list of allocated formations
-FORMATION	*psFormationList;
+static FORMATION	*psFormationList;
 
-SDWORD formationObjRadius(BASE_OBJECT *psObj);
+static SDWORD formationObjRadius(BASE_OBJECT *psObj);
 
 // Initialise the formation system
 BOOL formationInitialise(void)
@@ -91,31 +89,6 @@ void formationShutDown(void)
 		psFormationList = psNext;
 	}
 }
-
-#ifdef TEST_BED
-UDWORD	adjustDirection(SDWORD present, SDWORD difference)
-{
-SDWORD	sum;
-
-	sum = present+difference;
-	if(sum>=0 && sum<=360)
-	{
-		return(UDWORD)(sum);
-	}
-
-	if (sum<0)
-	{
-		return(UDWORD)(360+sum);
-	}
-
-	if (sum>360)
-	{
-		return(UDWORD)(sum-360);
-	}
-}
-
-#endif
-
 
 // Create a new formation
 BOOL formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
@@ -607,150 +580,6 @@ void formationReorder(FORMATION *psFormation)
 	}
 }
 
-
-// re-insert all the units in the formation
-/*void formationReorder(FORMATION *psFormation)
-{
-	SDWORD		numObj, i,j, rank;
-	F_MEMBER	*asMembers;
-	F_LINE		*asLines;
-	BASE_OBJECT *apsObjects[F_MAXMEMBERS];
-	SDWORD		aDist[F_MAXLINES][F_MAXMEMBERS];
-	struct
-	{
-		SDWORD	rank, dist, prev, x,y;
-	}			aFreePos[F_MAXLINES];
-	SDWORD		xdiff,ydiff, line,dist,obj, unit;
-
-	// first find all the units to insert
-	asMembers = psFormation->asMembers;
-	asLines = psFormation->asLines;
-	numObj = 0;
-	memset(apsObjects, 0, sizeof(apsObjects));
-	for(i=0; i<F_MAXMEMBERS; i++)
-	{
-		if (asMembers[i].psObj != NULL)
-		{
-			apsObjects[numObj] = asMembers[i].psObj;
-			numObj += 1;
-		}
-	}
-
-	// reset the free list
-	psFormation->free = 0;
-	memset(psFormation->asMembers, 0, sizeof(psFormation->asMembers));
-	for(i=0; i<F_MAXMEMBERS; i++)
-	{
-		psFormation->asMembers[i].next = (SBYTE)(i+1);
-	}
-	psFormation->asMembers[F_MAXMEMBERS - 1].next = -1;
-	for(i=0; i<psFormation->numLines; i++)
-	{
-		psFormation->asLines[i].member = -1;
-	}
-	psFormation->maxRank = 0;
-
-	// initialise the free positions in the formation
-	for(i=0; i< psFormation->numLines; i++)
-	{
-		aFreePos[i].rank = 1;
-		aFreePos[i].dist = 0;
-		aFreePos[i].prev = -1;
-		formationCalcPos(psFormation, i, 0,
-			&aFreePos[i].x, &aFreePos[i].y);
-	}
-
-	// now insert all the objects into the formation
-	while (numObj > 0)
-	{
-		// decide which rank to use
-		rank = SDWORD_MAX;
-		for(i=0; i< psFormation->numLines; i++)
-		{
-			if (aFreePos[i].rank < rank)
-			{
-				rank = aFreePos[i].rank;
-			}
-		}
-		if (psFormation->maxRank < rank)
-		{
-			psFormation->maxRank = (UBYTE)rank;
-		}
-
-		// now calculate the distance between each object and the free positions
-		for(i=0; i<psFormation->numLines; i++)
-		{
-			for(j=0; j<F_MAXMEMBERS; j++)
-			{
-				if ((apsObjects[j] == NULL) || (aFreePos[i].rank != rank) )
-				{
-					aDist[i][j] = SDWORD_MAX;
-				}
-				else
-				{
-					xdiff = aFreePos[i].x - (SDWORD)apsObjects[j]->x;
-					ydiff = aFreePos[i].y - (SDWORD)apsObjects[j]->y;
-					aDist[i][j] = xdiff*xdiff + ydiff*ydiff;
-				}
-			}
-		}
-
-		// find the object nearest to a free position
-		dist = SDWORD_MAX;
-		for(i=0; i<psFormation->numLines; i++)
-		{
-			for(j=0; j<F_MAXMEMBERS; j++)
-			{
-				if (aDist[i][j] < dist)
-				{
-					dist = aDist[i][j];
-					line = i;
-					obj = j;
-				}
-			}
-		}
-
-		// put the object into the formation
-		unit = psFormation->free;
-		psFormation->free = asMembers[unit].next;
-		asMembers[unit].line = (SBYTE)line;
-		asMembers[unit].dist = (SWORD)(aFreePos[line].dist + formationObjRadius(apsObjects[obj]));
-		if (asMembers[unit].dist >= psFormation->size * aFreePos[line].rank)
-		{
-			asMembers[unit].dist = (SWORD)(psFormation->size * aFreePos[line].rank +
-						formationObjRadius(apsObjects[obj]));
-		}
-		asMembers[unit].psObj = apsObjects[obj];
-
-		// insert the unit into the list
-		if (aFreePos[line].prev == -1)
-		{
-			asMembers[unit].next = asLines[line].member;
-			asLines[line].member = (SBYTE)unit;
-		}
-		else
-		{
-			asMembers[unit].next = asMembers[aFreePos[line].prev].next;
-			asMembers[aFreePos[line].prev].next = (SBYTE)unit;
-		}
-
-		// update the free position
-		aFreePos[line].dist = asMembers[unit].dist + formationObjRadius(apsObjects[obj]);
-		aFreePos[line].prev = unit;
-		if (aFreePos[line].dist >= psFormation->size * aFreePos[line].rank)
-		{
-			aFreePos[line].dist = psFormation->size * aFreePos[line].rank;
-//				+ formationObjRadius(apsObjects[obj]);
-			aFreePos[line].rank += 1;
-		}
-		formationCalcPos(psFormation, line, aFreePos[line].dist,
-			&aFreePos[line].x, &aFreePos[line].y);
-
-		apsObjects[obj] = NULL;
-		numObj -= 1;
-	}
-}*/
-
 // get a target position to move into a formation
 BOOL formationGetPos( FORMATION *psFormation, BASE_OBJECT *psObj,
 						SDWORD *pX, SDWORD *pY, BOOL bCheckLOS )
@@ -860,10 +689,6 @@ BOOL formationMember(FORMATION *psFormation, BASE_OBJECT *psObj)
 
 SDWORD formationObjRadius(BASE_OBJECT *psObj)
 {
-#ifdef TEST_BED
-	return 70;
-#else
-
 	SDWORD		radius;
 	BODY_STATS	*psBdyStats;
 
@@ -904,9 +729,4 @@ SDWORD formationObjRadius(BASE_OBJECT *psObj)
 	}
 
 	return radius;
-#endif
 }
-
-
-
-
