@@ -286,16 +286,9 @@ void inputHandleKeyEvent(SDL_KeyboardEvent * keyEvent)
 				 aKeyState[code].state == KEY_PRESSRELEASE )
 			{
 				//whether double key press or not
-				if ( gameTime - aKeyState[code].lastdown < DOUBLE_CLICK_INTERVAL )
-				{
-					aKeyState[code].state = KEY_DOUBLECLICK;
-					aKeyState[code].lastdown = 0;
-				}
-				else
-				{
 					aKeyState[code].state = KEY_PRESSED;
-					aKeyState[code].lastdown = gameTime;
-				}
+					aKeyState[code].lastdown = 0;
+				
 			}
 			break;
 		case SDL_KEYUP:
@@ -304,8 +297,7 @@ void inputHandleKeyEvent(SDL_KeyboardEvent * keyEvent)
 			{
 				aKeyState[code].state = KEY_PRESSRELEASE;
 			}
-			else if (aKeyState[code].state == KEY_DOWN ||
-					aKeyState[code].state == KEY_DOUBLECLICK)
+			else if (aKeyState[code].state == KEY_DOWN )
 			{
 				aKeyState[code].state = KEY_RELEASED;
 			}
@@ -328,16 +320,26 @@ void inputHandleMouseButtonEvent(SDL_MouseButtonEvent * buttonEvent)
 				|| aMouseState[buttonEvent->button].state == KEY_RELEASED
 				|| aMouseState[buttonEvent->button].state == KEY_PRESSRELEASE )
 			{
-				//whether double click or not
-				if ( gameTime - aMouseState[buttonEvent->button].lastdown < DOUBLE_CLICK_INTERVAL )
+				if ( (buttonEvent->button != SDL_BUTTON_WHEELUP		//skip doubleclick check for wheel
+					&& buttonEvent->button != SDL_BUTTON_WHEELDOWN))
 				{
-					aMouseState[buttonEvent->button].state = KEY_DOUBLECLICK;
-					aMouseState[buttonEvent->button].lastdown = 0;
+				//whether double click or not
+					if ( gameTime - aMouseState[buttonEvent->button].lastdown < DOUBLE_CLICK_INTERVAL )
+					{
+						aMouseState[buttonEvent->button].state = KEY_DOUBLECLICK;
+						aMouseState[buttonEvent->button].lastdown = 0;
+					}
+					else
+					{
+						aMouseState[buttonEvent->button].state = KEY_PRESSED;
+						aMouseState[buttonEvent->button].lastdown = gameTime;
+					}
+
 				}
-				else
+				else	//mouse wheel up/down was used, so notify.
 				{
 					aMouseState[buttonEvent->button].state = KEY_PRESSED;
-					aMouseState[buttonEvent->button].lastdown = gameTime;
+					aMouseState[buttonEvent->button].lastdown = 0;
 				}
 
 				if (buttonEvent->button < 4) // Not the mousewheel
