@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 1007  Giel van Schijndel
+	Copyright (C) 2007  Giel van Schijndel
 	Copyright (C) 2007  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
