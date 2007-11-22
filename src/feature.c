@@ -64,7 +64,6 @@ FEATURE_STATS	*asFeatureStats;
 UDWORD			numFeatureStats;
 
 //Value is stored for easy access to this feature in destroyDroid()/destroyStruct()
-UDWORD			structFeature;
 UDWORD			oilResFeature;
 
 /* other house droid to add */
@@ -81,7 +80,6 @@ void featureInitVars(void)
 {
 	asFeatureStats = NULL;
 	numFeatureStats = 0;
-	structFeature = 0;
 	oilResFeature = 0;
 }
 
@@ -201,14 +199,8 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 		//determine the feature type
 		featureType(psFeature, type);
 
-		//need to know which is the wrecked droid and wrecked structure for later use
-		//the last stat of each type is used
-		if (psFeature->subType == FEAT_BUILD_WRECK)
-		{
-			structFeature = i;
-		}
 		//and the oil resource - assumes only one!
-		else if (psFeature->subType == FEAT_OIL_RESOURCE)
+		if (psFeature->subType == FEAT_OIL_RESOURCE)
 		{
 			oilResFeature = i;
 		}
@@ -623,27 +615,6 @@ void removeFeature(FEATURE *psDel)
 	gridRemoveObject((BASE_OBJECT *)psDel);
 
 	killFeature(psDel);
-
-
-	//once a feature of type FEAT_BUILDING is destroyed - it leaves a wrecked
-	//struct FEATURE in its place - ?!
-	if (psDel->psStats->subType == FEAT_BUILDING)
-	{
-		mapX = map_coord(psDel->x - psDel->psStats->baseWidth * TILE_UNITS / 2);
-		mapY = map_coord(psDel->y - psDel->psStats->baseBreadth * TILE_UNITS / 2);
-		/*for (width = 0; width < psDel->psStats->baseWidth; width++)
-		{
-			for (breadth = 0; breadth < psDel->psStats->baseBreadth; breadth++)
-			{
-				buildFeature((asFeatureStats + structFeature),
-						world_coord(mapX + width), world_coord(mapY + breadth), FALSE);
-			}
-		}*/
-
-//		buildFeature((asFeatureStats + structFeature), world_coord(mapX),
-//			world_coord(mapY), FALSE);
-	}
-
 }
 
 /* Remove a Feature and free it's memory */

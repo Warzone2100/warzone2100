@@ -524,36 +524,17 @@ void	removeDroidBase(DROID *psDel)
 		psDel->psGroup = NULL;
 	}
 
-    //PUT THIS IN removeDroidFX()
-	//once a droid is destroyed - it leaves a wrecked droid FEATURE in its place
-//	buildFeature((asFeatureStats + droidFeature), psDel->x, psDel->y);
-	//if( (psDel->droidType == DROID_PERSON || psDel->droidType == DROID_CYBORG) &&
-	//	(psDel->order != DORDER_RUNBURN) )
-	//{
-	//	/* blow person up into blood and guts */
-	//	compPersonToBits(psDel);
-	//}
-
 	/* Put Deliv. Pts back into world when a command droid dies */
 	if(psDel->droidType == DROID_COMMAND)
 	{
-
 		for (psStruct = apsStructLists[psDel->player]; psStruct; psStruct=psStruct->psNext)
 		{
-/* Replace the delivery points for the factories assigned to this command droid */
-//			if ( psStruct->pStructureType->type == REF_FACTORY )	/* Is it a factory? */
-//			{
-//				assignFactoryCommandDroid(psStruct, NULL);	/* Return d. pt. */
-//			}
-
 			// alexl's stab at a right answer.
 			if (StructIsFactory(psStruct)
 			 && psStruct->pFunctionality->factory.psCommander == psDel)
 			{
 				assignFactoryCommandDroid(psStruct, NULL);
 			}
-
-
 		}
 	}
 

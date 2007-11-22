@@ -71,8 +71,8 @@
 #define PROJ_NAYBOR_RANGE		(TILE_UNITS*4)
 
 // Watermelon:neighbour global info ripped from droid.c
-PROJ_NAYBOR_INFO	asProjNaybors[MAX_NAYBORS];
-UDWORD				numProjNaybors=0;
+static PROJ_NAYBOR_INFO	asProjNaybors[MAX_NAYBORS];
+static UDWORD		numProjNaybors = 0;
 
 static BASE_OBJECT	*CurrentProjNaybors = NULL;
 static UDWORD	projnayborTime = 0;

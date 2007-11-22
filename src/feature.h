@@ -36,8 +36,6 @@ extern FEATURE_STATS	*asFeatureStats;
 extern UDWORD			numFeatureStats;
 
 //Value is stored for easy access to this feature in destroyDroid()/destroyStruct()
-//extern UDWORD			droidFeature;
-extern UDWORD			structFeature;
 extern UDWORD			oilResFeature;
 
 /* Load the feature stats */
