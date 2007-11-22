@@ -43,7 +43,7 @@
 #define WEDB_CURSORSIZE		8
 
 /* Whether the cursor blinks or not */
-#define CURSOR_BLINK		0
+#define CURSOR_BLINK		1
 
 /* The time the cursor blinks for */
 #define WEDB_BLINKRATE		800
@@ -740,9 +740,10 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pC
 		ch = *pInsPoint;
 		*pInsPoint = '\0';
 		cx = x0 + WEDB_XGAP + iV_GetTextWidth(psEdBox->aText + psEdBox->printStart);
+		cx += iV_GetTextWidth("-");
 		*pInsPoint = ch;
 		cy = fy;
-		iV_Line(cx,cy+iV_GetTextAboveBase(), cx,cy+iV_GetTextBelowBase(),*(pColours + WCOL_CURSOR));
+		iV_Line(cx, cy + iV_GetTextAboveBase(), cx, cy - iV_GetTextBelowBase(), 0xffffff); //*(pColours + WCOL_CURSOR));
 	}
 #if CURSOR_BLINK
 	else if ((psEdBox->state & WEDBS_MASK) == WEDBS_OVER && blink)
@@ -756,7 +757,7 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pC
 		cx = x0 + WEDB_XGAP + iV_GetTextWidth(psEdBox->aText + psEdBox->printStart);
 		*pInsPoint = ch;
 	  	cy = fy;
-		iV_Line(cx,cy, cx + WEDB_CURSORSIZE,cy,*(pColours + WCOL_CURSOR));
+		iV_Line(cx, cy, cx + WEDB_CURSORSIZE, cy, 0xffffff); //*(pColours + WCOL_CURSOR));
 	}
 
 
