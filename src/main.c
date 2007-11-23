@@ -44,6 +44,7 @@
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/piepalette.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/netplay/netplay.h"
 #include "lib/script/script.h"
@@ -720,7 +721,7 @@ static void mainLoop(void)
 
 int main(int argc, char *argv[])
 {
-	iColour* psPaletteBuffer = NULL;
+	PIELIGHT *psPaletteBuffer = NULL;
 	UDWORD pSize = 0;
 
 	/*** Initialize the debug subsystem ***/
@@ -833,13 +834,13 @@ int main(int argc, char *argv[])
 	pie_ScreenFlip(CLEAR_BLACK);
 
 	//load palette
-	psPaletteBuffer = (iColour*)malloc(256 * sizeof(iColour)+1);
+	psPaletteBuffer = malloc(256 * sizeof(PIELIGHT) + 1);
 	if (psPaletteBuffer == NULL)
 	{
 		debug( LOG_ERROR, "Out of memory" );
 		return -1;
 	}
-	if ( !loadFileToBuffer("palette.bin", (char*)psPaletteBuffer, ( 256 * sizeof(iColour) + 1 ), &pSize) )
+	if ( !loadFileToBuffer("palette.bin", (char*)psPaletteBuffer, ( 256 * sizeof(PIELIGHT) + 1 ), &pSize) )
 	{
 		debug( LOG_ERROR, "Couldn't load palette data" );
 		return -1;

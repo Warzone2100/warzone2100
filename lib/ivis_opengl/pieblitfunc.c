@@ -38,6 +38,7 @@
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/pieclip.h"
 #include "lib/ivis_common/piefunc.h"
+#include "lib/ivis_common/piepalette.h"
 #include "piematrix.h"
 #include "screen.h"
 
@@ -109,8 +110,7 @@ void pie_Box(int x0,int y0, int x1, int y1, Uint32 colour)
 
 void pie_BoxFillIndex(int x0,int y0, int x1, int y1, UBYTE colour)
 {
-	PIELIGHT light;
-	iColour* psPalette;
+	PIELIGHT light, *psPalette;
 
 	pie_SetRendMode(REND_FLAT);
 	pie_SetTexturePage(-1);
@@ -131,9 +131,7 @@ void pie_BoxFillIndex(int x0,int y0, int x1, int y1, UBYTE colour)
 		y1 = psRendSurface->clip.bottom;
 
 	psPalette = pie_GetGamePal();
-	light.byte.r = psPalette[colour].r;
-	light.byte.g = psPalette[colour].g;
-	light.byte.b = psPalette[colour].b;
+	light.argb = psPalette[colour].argb;
 	light.byte.a = MAX_UB_LIGHT;
 	pie_DrawRect( x0, y0, x1, y1, light.argb );
 }
@@ -353,13 +351,13 @@ BOOL pie_ShutdownRadar(void)
 void pie_DownLoadRadar( unsigned char *buffer )
 {
 	unsigned int i, j;
-	iColour* psPalette = pie_GetGamePal();
+	PIELIGHT *psPalette = pie_GetGamePal();
 
 	for (i = 0, j = 0; i < RADARX * RADARY; ++i)
 	{
-		radarBitmap[j++] = psPalette[buffer[i]].r;
-		radarBitmap[j++] = psPalette[buffer[i]].g;
-		radarBitmap[j++] = psPalette[buffer[i]].b;
+		radarBitmap[j++] = psPalette[buffer[i]].byte.r;
+		radarBitmap[j++] = psPalette[buffer[i]].byte.g;
+		radarBitmap[j++] = psPalette[buffer[i]].byte.b;
 		if (buffer[i] == 0) {
 			radarBitmap[j++] = 0;
 		} else {

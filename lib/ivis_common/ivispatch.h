@@ -48,7 +48,6 @@
 #define iV_PaletteShadeTableCreate	pal_BuildAdjustedShadeTable
 #define iV_PaletteNearestColour		pal_GetNearestColour
 #define	iV_PaletteAdd				pal_AddNewPalette
-#include "piepalette.h"
 
 //matrixstuff
 #define iV_setGeometricOffset		pie_setGeometricOffset

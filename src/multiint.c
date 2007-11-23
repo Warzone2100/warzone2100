@@ -44,6 +44,7 @@
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/pieclip.h"
+#include "lib/ivis_common/piepalette.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_common/rendmode.h"
 #include "objmem.h"

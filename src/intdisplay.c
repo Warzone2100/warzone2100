@@ -36,6 +36,7 @@
 /* Includes direct access to render library */
 #include "lib/ivis_common/ivisdef.h"
 #include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/piepalette.h"
 
 #include "lib/ivis_common/piemode.h"			// ffs
 #include "lib/ivis_common/pieclip.h"			// ffs

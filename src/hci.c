@@ -30,6 +30,7 @@
 #include "lib/framework/strres.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/piepalette.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/screen.h"
 #include "lib/script/script.h"

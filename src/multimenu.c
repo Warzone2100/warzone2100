@@ -31,6 +31,7 @@
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piedef.h"
+#include "lib/ivis_common/piepalette.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include "levels.h"

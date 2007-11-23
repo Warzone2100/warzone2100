@@ -38,7 +38,7 @@ static void pie_SetColourDefines(void);
 
 #define COLOUR_BALANCE	6		// 3 from the end. (two brighter shades!)
 
-static iColour	*psGamePal = NULL;
+static PIELIGHT	*psGamePal = NULL;
 static BOOL	bPaletteInitialised = FALSE;
 
 Uint8	palShades[PALETTE_SIZE * PALETTE_SHADE_LEVEL];
@@ -54,15 +54,15 @@ Uint8	colours[16];
 //*
 //******
 
-int pal_AddNewPalette(iColour *pal)
+int pal_AddNewPalette(PIELIGHT *pal)
 {
 	int i;
-	iColour *p;
+	PIELIGHT *p;
 
 	bPaletteInitialised = TRUE;
 	if (psGamePal == NULL)
 	{
-		psGamePal = (iColour*) malloc(PALETTE_SIZE * sizeof(iColour));
+		psGamePal = malloc(PALETTE_SIZE * sizeof(PIELIGHT));
 		if (psGamePal == NULL)
 		{
 			debug( LOG_ERROR, "pal_AddNewPalette - Out of memory" );
@@ -76,9 +76,7 @@ int pal_AddNewPalette(iColour *pal)
 	for (i=0; i<PALETTE_SIZE; i++)
 	{
 		//set pie palette
-		p[i].r = pal[i].r;
-		p[i].g = pal[i].g;
-		p[i].b = pal[i].b;
+		p[i].argb = pal[i].argb;
 	}
 	pie_SetColourDefines();
 
@@ -134,9 +132,9 @@ Uint8 pal_GetNearestColour(Uint8 r, Uint8 g, Uint8 b)
 
 	for (c = 0; c < PALETTE_SIZE; c++) {
 
-		distance_r = r -  psGamePal[c].r;
-		distance_g = g -  psGamePal[c].g;
-		distance_b = b -  psGamePal[c].b;
+		distance_r = r -  psGamePal[c].byte.r;
+		distance_g = g -  psGamePal[c].byte.g;
+		distance_b = b -  psGamePal[c].byte.b;
 
 		squared_distance =  distance_r * distance_r + distance_g * distance_g + distance_b * distance_b;
 
@@ -164,9 +162,9 @@ int		numShades;
 
 	for(numColours = 0; numColours<255; numColours++)
 	{
-			redFraction =	(float)psGamePal[numColours].r /	(float) 16;
-			greenFraction = (float)psGamePal[numColours].g /	(float) 16;
-			blueFraction =	(float)psGamePal[numColours].b /	(float) 16;
+		redFraction =	(float)psGamePal[numColours].byte.r / (float) 16;
+		greenFraction = (float)psGamePal[numColours].byte.g / (float) 16;
+		blueFraction =	(float)psGamePal[numColours].byte.b / (float) 16;
 
 		for(numShades = COLOUR_BALANCE; numShades < 16+COLOUR_BALANCE; numShades++)
 		{
@@ -184,7 +182,7 @@ int		numShades;
 	}
 }
 
-iColour*	pie_GetGamePal(void)
+PIELIGHT *pie_GetGamePal(void)
 {
 	ASSERT( bPaletteInitialised,"pie_GetGamePal, palette not initialised" );
 	return 	psGamePal;

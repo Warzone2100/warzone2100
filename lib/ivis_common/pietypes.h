@@ -40,8 +40,6 @@
 //*************************************************************************
 typedef struct { Vector3i p, r; } iView;
 
-typedef struct { unsigned char r, g, b; } iColour;
-
 typedef unsigned char iBitmap;
 typedef struct { unsigned int width, height, depth; unsigned char *bmp; } iV_Image;
 typedef iV_Image iTexture;

@@ -36,6 +36,7 @@
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piefunc.h"
 #include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/piepalette.h"
 #include "hci.h"//for font
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"

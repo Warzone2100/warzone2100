@@ -38,6 +38,7 @@
 #include "frontend.h"
 #include "frend.h"
 #include "lib/ivis_common/textdraw.h"
+#include "lib/ivis_common/piepalette.h"
 #include "hci.h"
 #include "init.h"
 #include "loadsave.h"

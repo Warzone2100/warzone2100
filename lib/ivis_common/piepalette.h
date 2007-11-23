@@ -20,7 +20,7 @@
 #ifndef _piePalette_
 #define _piePalette_
 
-#include "piedef.h"
+#include "lib/ivis_common/piedef.h"
 //*************************************************************************
 
 #define PALETTE_MAX	8
@@ -57,8 +57,8 @@ extern void		pal_Init(void);
 extern void		pal_ShutDown(void);
 extern void		pal_BuildAdjustedShadeTable( void );
 extern Uint8	pal_GetNearestColour(Uint8 r, Uint8 g, Uint8 b);
-extern int		pal_AddNewPalette(iColour *pal);
+extern int		pal_AddNewPalette(PIELIGHT *pal);
 extern void		pal_PaletteSet(void);
-extern iColour*	pie_GetGamePal(void);
+extern PIELIGHT		*pie_GetGamePal(void);
 
 #endif
