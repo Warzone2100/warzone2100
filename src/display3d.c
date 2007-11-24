@@ -231,8 +231,6 @@ const Vector2i visibleTiles = { VISIBLE_XTILES, VISIBLE_YTILES };
 
 UDWORD	terrainMidX;
 UDWORD	terrainMidY;
-UDWORD	terrainMaxX;
-UDWORD	terrainMaxY;
 
 static unsigned int underwaterTile = WATER_TILE;
 static unsigned int rubbleTile = BLOCKING_RUBBLE_TILE;
@@ -918,22 +916,12 @@ BOOL init3DView(void)
 
 	/* Make sure and change these to comply with map.c */
 	imdRot.x = -35;
-	/* Maximum map size */
-	terrainMaxX = 128;
-	terrainMaxY = 128;
-//	terrainSizeX = distance/100;
-//	terrainSizeY = distance/100;
-//	terrainMidX = (terrainSizeX>>1);
-//	terrainMidY = terrainSizeY>>1;
 
 	/* Get all the init stuff out of here? */
 	initWarCam();
 
 	/* Init the game messaging system */
 	initConsoleMessages();
-
-	/* Initialise the effects system */
-//	initEffectsSystem();
 
 	atmosInitSystem();
 
@@ -2645,29 +2633,9 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 /* Draw the droids */
 void renderDroid( DROID *psDroid )
 {
-//PROPULSION_STATS	*psPropStats;
-//	ASSERT( psDroid->x != 0 && psDroid->y != 0,
-//		"moveUpdateUnit: unit at (0,0)" );
-
-
-//	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-//	ASSERT( psPropStats != NULL,
-	//		"moveUpdateDroid: invalid propulsion stats pointer" );
-
-	/*
-	if ( psPropStats->propulsionType == LIFT )
-	{
-		if ( psDroid->droidType != DROID_TRANSPORTER )
-		{
-			renderShadow( psDroid, getImdFromIndex(MI_SHADOW) );
-		}
-
-	}
-	*/
 	displayComponentObject( (BASE_OBJECT *) psDroid);
 	targetAdd((BASE_OBJECT*)psDroid);
-	return;
-} // end Fn
+}
 
 
 /* Draws the strobing 3D drag box that is used for multiple selection */
@@ -3420,6 +3388,7 @@ static void	drawDroidSelections( void )
 
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 }
+
 /* ---------------------------------------------------------------------------- */
 static void	drawBuildingLines( void )
 {
@@ -3442,6 +3411,7 @@ static void	drawBuildingLines( void )
 		pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 	}
 }
+
 /* ---------------------------------------------------------------------------- */
 #define GN_X_OFFSET	(28)
 #define GN_Y_OFFSET (17)
@@ -3514,6 +3484,7 @@ SDWORD	xShift,yShift;
 		}
 	}
 }
+
 /* ---------------------------------------------------------------------------- */
 static void	drawDroidCmndNo(DROID *psDroid)
 {
@@ -4411,6 +4382,7 @@ void	toggleEnergyBars( void )
 	}
 //	bEnergyBars = !bEnergyBars;
 }
+
 // -------------------------------------------------------------------------------------
 void	toggleReloadBarDisplay( void )
 {
@@ -4435,6 +4407,7 @@ void	assignDestTarget( void )
 	destTileX = mouseTileX;
 	destTileY = mouseTileY;
 }
+
 // -------------------------------------------------------------------------------------
 static void	processSensorTarget( void )
 {
@@ -4882,10 +4855,7 @@ UDWORD  getDroidRankGraphic(DROID *psDroid)
 */
 static void	drawDroidRank(DROID *psDroid)
 {
-//UDWORD	droidLevel;
-UDWORD	gfxId;
-
-	gfxId = getDroidRankGraphic(psDroid);
+	UDWORD	gfxId = getDroidRankGraphic(psDroid);
 
 	/* Did we get one? - We should have... */
 	if(gfxId!=UDWORD_MAX)
