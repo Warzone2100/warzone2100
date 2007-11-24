@@ -19,7 +19,7 @@
 */
 #include "lib/framework/frame.h"
 
-#include <SDL/SDL_opengl.h>
+#include <SDL_opengl.h>
 #ifdef __APPLE__
 #include <opengl/glu.h>
 #else

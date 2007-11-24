@@ -24,7 +24,7 @@
  *
  */
 #include <string.h>
-#include <SDL/SDL_timer.h>
+#include <SDL_timer.h>
 #include <physfs.h>
 
 #include "lib/framework/frame.h"

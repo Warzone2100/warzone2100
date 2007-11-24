@@ -25,7 +25,7 @@
 // Get platform defines before checking for them!
 #include "lib/framework/frame.h"
 
-#include <SDL/SDL.h>
+#include <SDL.h>
 #include <physfs.h>
 
 /* For SHGetFolderPath */

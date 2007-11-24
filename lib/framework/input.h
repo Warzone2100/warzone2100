@@ -30,7 +30,7 @@
 #error Framework header files MUST be included from Frame.h ONLY.
 #endif
 
-#include <SDL/SDL.h>
+#include <SDL.h>
 #include "types.h"
 
 /* The defines for all the key codes */

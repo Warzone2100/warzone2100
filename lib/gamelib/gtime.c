@@ -24,7 +24,7 @@
  *
  */
 
-#include "SDL/SDL_timer.h"
+#include <SDL_timer.h>
 
 #include <time.h>
 

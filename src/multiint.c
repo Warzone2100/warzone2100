@@ -27,7 +27,7 @@
 
 #include "lib/framework/frame.h"
 
-#include <SDL/SDL_opengl.h>
+#include <SDL_opengl.h>
 
 #include "lib/framework/frameresource.h"
 #include "lib/framework/frameint.h"

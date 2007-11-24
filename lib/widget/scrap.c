@@ -25,8 +25,8 @@
 #include <limits.h>
 #include <string.h>
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_syswm.h>
+#include <SDL.h>
+#include <SDL_syswm.h>
 
 #include "lib/framework/frame.h"
 #include "scrap.h"

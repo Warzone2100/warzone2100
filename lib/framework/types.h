@@ -35,7 +35,7 @@
 #include "wzglobal.h"
 
 // Defines C99 types for C99 incompatible compilers (e.g. MSVC)
-#include <SDL/SDL_types.h>
+#include <SDL_types.h>
 
 #include <limits.h>
 

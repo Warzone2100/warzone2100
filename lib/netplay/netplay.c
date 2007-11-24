@@ -28,11 +28,11 @@
 #include "lib/framework/frame.h"
 
 #include <time.h>			// for stats
-#include <SDL/SDL_thread.h>
+#include <SDL_thread.h>
 #ifdef WZ_OS_MAC
 #include <SDL_net/SDL_net.h>
 #else
-#include <SDL/SDL_net.h>
+#include <SDL_net.h>
 #endif
 #include <physfs.h>
 #include <string.h>

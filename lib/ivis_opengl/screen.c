@@ -26,8 +26,8 @@
 
 #include "lib/framework/frame.h"
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_opengl.h>
+#include <SDL.h>
+#include <SDL_opengl.h>
 #include <physfs.h>
 #include <png.h>
 #include "lib/ivis_common/png_util.h"
