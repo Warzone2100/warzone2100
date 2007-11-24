@@ -136,6 +136,25 @@
     14 SI 01 0		# Formation direction
     15 SI 01 0		# Formation X
     16 SI 01 0		# Formation Y
+    17 US 03 -		# VTOL ammo (for each weapon)
+    18 SI 02 -		# Droid movement final destination (x, y)
+    19 SI 02 -		# Droid movement origin (x, y)
+    1a SI 02 -		# Droid movement immediate target (x, y)
+    1b FP 03 -		# Fractions of x,y,z
+    1c FP 01 -		# Droid speed
+    1d SI 02 -		# Vector for the end of path boundary (x, y)
+    1e US 02 -		# Position of last bump (x, y)
+    1f SI 01 -		# Direction of motion (not the direction the droid is facing)
+    20 SI 01 -		# Direction at last bump
+    21 US 01 -		# Time of first bump with something
+    22 US 01 -		# Time of last bump with a droid - relative to bumpTime
+    23 US 01 -		# When MOVEPAUSE started - relative to bumpTime
+    24 US 01 -		# VTOL movement speed
+    25 GR 00 -		# PATH GROUP (each item is a position in a path)
+      01 US 01 -	# (x, y) position node
+      FF EN 00 -
+    26 US 01 0		# Path status
+    27 US 01 0		# Current position in path
     FF EN 00 -
   0b GR 00 -		# STRUCTURE GROUP (EXPLAIN ME)
     01 US 01 -		# Structure type

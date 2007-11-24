@@ -590,7 +590,9 @@ static void objectWeaponTagged(int num, UWORD *rotation, UWORD *pitch, WEAPON *a
 static void droidSaveTagged(DROID *psDroid)
 {
 	int plr = psDroid->player;
-	uint16_t v[DROID_MAXCOMP], i, order[4];
+	uint16_t v[DROID_MAXCOMP], i, order[4], ammo[VTOL_MAXWEAPS];
+	int32_t sv[2];
+	float fv[3];
 
 	/* common groups */
 
@@ -657,6 +659,51 @@ static void droidSaveTagged(DROID *psDroid)
 		tagWrites(0x15, psDroid->sMove.psFormation->x);
 		tagWrites(0x16, psDroid->sMove.psFormation->y);
 	} // else these are zero as by default
+	// vtol ammo
+	for (i = 0; i < VTOL_MAXWEAPS; i++)
+	{
+		ammo[i] = psDroid->sMove.iAttackRuns[i];
+	}
+	tagWrite16v(0x17, VTOL_MAXWEAPS, ammo);
+	// other movement related stuff
+	sv[0] = psDroid->sMove.DestinationX;
+	sv[1] = psDroid->sMove.DestinationY;
+	tagWrites32v(0x18, 2, sv);
+	sv[0] = psDroid->sMove.srcX;
+	sv[1] = psDroid->sMove.srcY;
+	tagWrites32v(0x19, 2, sv);
+	sv[0] = psDroid->sMove.targetX;
+	sv[1] = psDroid->sMove.targetY;
+	tagWrites32v(0x1a, 2, sv);
+	fv[0] = psDroid->sMove.fx;
+	fv[1] = psDroid->sMove.fy;
+	fv[2] = psDroid->sMove.fz;
+	tagWritefv(0x1b, 3, fv);
+	tagWritef(0x1c, psDroid->sMove.speed);
+	sv[0] = psDroid->sMove.boundX;
+	sv[1] = psDroid->sMove.boundY;
+	tagWrites32v(0x1d, 2, sv);
+	v[0] = psDroid->sMove.bumpX;
+	v[1] = psDroid->sMove.bumpY;
+	tagWrite16v(0x1e, 2, v);
+	tagWrites(0x1f, psDroid->sMove.moveDir);
+	tagWrites(0x20, psDroid->sMove.bumpDir);
+	tagWrite(0x21, psDroid->sMove.bumpTime);
+	tagWrite(0x22, psDroid->sMove.lastBump);
+	tagWrite(0x23, psDroid->sMove.pauseTime);
+	tagWrite(0x24, psDroid->sMove.iVertSpeed);
+	tagWriteEnter(0x25, psDroid->sMove.numPoints);
+	for (i = 0; i < psDroid->sMove.numPoints; i++)
+	{
+		v[0] = psDroid->sMove.asPath[i].x;
+		v[1] = psDroid->sMove.asPath[i].y;
+		tagWrite16v(0x01, 2, v);
+		tagWriteSeparator();
+	}
+	tagWriteLeave(0x25);
+	tagWrite(0x26, psDroid->sMove.Status);
+	tagWrite(0x27, psDroid->sMove.Position);
+	
 	tagWriteLeave(0x0a);
 }
 

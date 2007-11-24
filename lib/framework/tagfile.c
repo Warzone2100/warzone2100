@@ -349,7 +349,7 @@ static bool scan_to(element_t tag)
 	}
 	if (lastAccess >= tag)
 	{
-		TF_ERROR("Trying to read tag %x that is not larger than previous tag.", (unsigned int)tag);
+		TF_ERROR("Trying to access tag %x that is not larger than previous tag.", (unsigned int)tag);
 		return false;
 	}
 	lastAccess = tag;
@@ -932,8 +932,8 @@ bool tagWriteEnter(element_t tag, uint16_t elements)
 		return false;
 	}
 	assert(current->element == tag);
-	ASSERT(current->vr[0] == 'G' && current->vr[1] == 'R', "Wrong type in writing %d", (int)tag);
-	ASSERT(current->group != NULL, "Cannot write group, none defined for element %d!", tag);
+	ASSERT(current->vr[0] == 'G' && current->vr[1] == 'R', "Wrong type in writing %x", (unsigned int)tag);
+	ASSERT(current->group != NULL, "Cannot write group, none defined for element %x!", (unsigned int)tag);
 	assert(current->group->parent != NULL);
 	(void) PHYSFS_writeUBE8(handle, TF_INT_GROUP);
 	(void) PHYSFS_writeUBE16(handle, elements);
@@ -983,7 +983,7 @@ bool tagWrite(element_t tag, uint32_t val)
 	{
 		return false;
 	}
-	ASSERT(current->vr[0] == 'U' && current->vr[1] == 'S', "Wrong type in writing %d", (int)tag);
+	ASSERT(current->vr[0] == 'U' && current->vr[1] == 'S', "Wrong type in writing %x", (unsigned int)tag);
 	if (current->defaultval && current->val.uint32_tval == val)
 	{
 		return true; // using default value to save disk space
@@ -1017,7 +1017,7 @@ bool tagWrites(element_t tag, int32_t val)
 	{
 		return false;
 	}
-	ASSERT(current->vr[0] == 'S' && current->vr[1] == 'I', "Wrong type in writing %d", (int)tag);
+	ASSERT(current->vr[0] == 'S' && current->vr[1] == 'I', "Wrong type in writing %x", (unsigned int)tag);
 	if (current->defaultval && current->val.int32_tval == val)
 	{
 		return true; // using default value to save disk space
@@ -1051,7 +1051,7 @@ bool tagWritef(element_t tag, float val)
 	{
 		return false;
 	}
-	ASSERT(current->vr[0] == 'F' && current->vr[1] == 'P', "Wrong type in writing %d", (int)tag);
+	ASSERT(current->vr[0] == 'F' && current->vr[1] == 'P', "Wrong type in writing %x", (unsigned int)tag);
 	if (current->defaultval && current->val.floatval == val)
 	{
 		return true; // using default value to save disk space
@@ -1072,7 +1072,7 @@ bool tagWriteBool(element_t tag, bool val)
 	{
 		return false;
 	}
-	ASSERT(current->vr[0] == 'B' && current->vr[1] == 'O', "Wrong type in writing %d", (int)tag);
+	ASSERT(current->vr[0] == 'B' && current->vr[1] == 'O', "Wrong type in writing %x", (unsigned int)tag);
 	if (current->defaultval && current->val.uint32_tval == val)
 	{
 		return true; // using default value to save disk space
@@ -1095,7 +1095,7 @@ bool tagWritefv(element_t tag, uint16_t count, float *vals)
 	{
 		return false;
 	}
-	ASSERT(current->vr[0] == 'F' && current->vr[1] == 'P', "Wrong type in writing %d", (int)tag);
+	ASSERT(current->vr[0] == 'F' && current->vr[1] == 'P', "Wrong type in writing %x", (unsigned int)tag);
 	(void) PHYSFS_writeUBE8(handle, TF_INT_FLOAT_ARRAY);
 	(void) PHYSFS_writeUBE16(handle, count);
 	for (i = 0; i < count; i++)
@@ -1114,7 +1114,7 @@ bool tagWrite16v(element_t tag, uint16_t count, uint16_t *vals)
 	{
 		return false;
 	}
-	ASSERT(current->vr[0] == 'U' && current->vr[1] == 'S', "Wrong type in writing %d", (int)tag);
+	ASSERT(current->vr[0] == 'U' && current->vr[1] == 'S', "Wrong type in writing %x", (unsigned int)tag);
 	(void) PHYSFS_writeUBE8(handle, TF_INT_U16_ARRAY);
 	(void) PHYSFS_writeUBE16(handle, count);
 	for (i = 0; i < count; i++)
@@ -1133,7 +1133,7 @@ bool tagWrites32v(element_t tag, uint16_t count, int32_t *vals)
 	{
 		return false;
 	}
-	ASSERT(current->vr[0] == 'S' && current->vr[1] == 'I', "Wrong type in writing %d", (int)tag);
+	ASSERT(current->vr[0] == 'S' && current->vr[1] == 'I', "Wrong type in writing %x", (unsigned int)tag);
 	(void) PHYSFS_writeUBE8(handle, TF_INT_S32_ARRAY);
 	(void) PHYSFS_writeUBE16(handle, count);
 	for (i = 0; i < count; i++)
@@ -1152,7 +1152,7 @@ bool tagWriteString(element_t tag, const char *buffer)
 	{
 		return false;
 	}
-	ASSERT(current->vr[0] == 'S' && current->vr[1] == 'T', "Wrong type in writing %d", (int)tag);
+	ASSERT(current->vr[0] == 'S' && current->vr[1] == 'T', "Wrong type in writing %x", (unsigned int)tag);
 
 	// find size of string
 	size = strlen(buffer) + 1;

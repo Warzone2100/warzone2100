@@ -68,7 +68,7 @@ bool tagWrites(element_t tag, int32_t val);
 bool tagWritef(element_t tag, float val);
 bool tagWritefv(element_t tag, uint16_t count, float *vals);
 bool tagWrite16v(element_t tag, uint16_t count, uint16_t *vals);
-bool tagWrites16v(element_t tag, uint16_t count, int16_t *vals);
+bool tagWrites32v(element_t tag, uint16_t count, int32_t *vals);
 bool tagWriteString(element_t tag, const char *string);
 bool tagWriteBool(element_t tag, bool val);
 
