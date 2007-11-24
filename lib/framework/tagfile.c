@@ -23,7 +23,8 @@
 enum internal_types
 {
 	TF_INT_U8, TF_INT_U16, TF_INT_U32, TF_INT_S8, TF_INT_S16, TF_INT_S32, TF_INT_FLOAT, 
-	TF_INT_U16_ARRAY, TF_INT_FLOAT_ARRAY, TF_INT_U8_ARRAY, TF_INT_GROUP, TF_INT_BOOL
+	TF_INT_U16_ARRAY, TF_INT_FLOAT_ARRAY, TF_INT_U8_ARRAY, TF_INT_GROUP, TF_INT_BOOL,
+	TF_INT_S32_ARRAY
 };
 
 // A definition group
@@ -418,6 +419,7 @@ static bool scanforward(element_t tag)
 		case TF_INT_U16_ARRAY:
 		case TF_INT_FLOAT_ARRAY:
 		case TF_INT_U8_ARRAY:
+		case TF_INT_S32_ARRAY:
 			readsize = PHYSFS_read(handle, &array_size, 1, 1);
 			if (readsize != 1)
 			{
@@ -437,10 +439,11 @@ static bool scanforward(element_t tag)
 		case TF_INT_S8: fpos += 1 * array_size; break;
 		case TF_INT_FLOAT:
 		case TF_INT_U16_ARRAY:
-		case TF_INT_FLOAT_ARRAY:
 		case TF_INT_U16:
 		case TF_INT_S16: fpos += 2 * array_size; break;
+		case TF_INT_FLOAT_ARRAY:
 		case TF_INT_U32:
+		case TF_INT_S32_ARRAY:
 		case TF_INT_S32: fpos += 4 * array_size; break;
 		case TF_INT_GROUP: fpos += 2; break;
 		default:
@@ -781,6 +784,37 @@ bool tagRead16v(element_t tag, uint16_t size, uint16_t *vals)
 	return true;
 }
 
+bool tagReads32v(element_t tag, uint16_t size, int32_t *vals)
+{
+	uint8_t tagtype;
+	uint16_t count;
+	int i;
+
+	if (!scanforward(tag))
+	{
+		return false;
+	}
+	if (!PHYSFS_readUBE8(handle, &tagtype) || tagtype != TF_INT_S32_ARRAY)
+	{
+		TF_ERROR("tagreads32v: Tag type not found: %d", (int)tag);
+		return false;
+	}
+	if (!PHYSFS_readUBE16(handle, &count) || count != size)
+	{
+		TF_ERROR("tagreads32v: Bad size: %d", (int)tag);
+		return false;
+	}
+	for (i = 0; i < size; i++)
+	{
+		if (!PHYSFS_readSBE32(handle, &vals[i]))
+		{
+			TF_ERROR("tagreads32v: Error reading idx %d, tag %d", i, (int)tag);
+			return false;
+		}
+	}
+	return true;
+}
+
 bool tagReadString(element_t tag, uint16_t size, char *buffer)
 {
 	uint8_t tagtype = 255;
@@ -1090,6 +1124,25 @@ bool tagWrite16v(element_t tag, uint16_t count, uint16_t *vals)
 	return true;
 }
 
+bool tagWrites32v(element_t tag, uint16_t count, int32_t *vals)
+{
+	int i;
+
+	assert(tag != TAG_SEPARATOR && tag != TAG_GROUP_END);
+	if (!scan_to(tag) || !write_tag(tag))
+	{
+		return false;
+	}
+	ASSERT(current->vr[0] == 'S' && current->vr[1] == 'I', "Wrong type in writing %d", (int)tag);
+	(void) PHYSFS_writeUBE8(handle, TF_INT_S32_ARRAY);
+	(void) PHYSFS_writeUBE16(handle, count);
+	for (i = 0; i < count; i++)
+	{
+		(void) PHYSFS_writeSBE32(handle, vals[i]);
+	}
+	return true;
+}
+
 bool tagWriteString(element_t tag, const char *buffer)
 {
 	size_t size;
@@ -1160,7 +1213,12 @@ void tagTest()
 		fv[2] = -1.3f;
 		tagWritefv(0x03, 3, fv);
 		tagWriteEnter(0x09, 1);
+		{
+			int32_t v[3] = { -1, 0, 1 };
+
 			tagWrite(0x01, 1);
+			tagWrites32v(0x05, 3, v);
+		}
 		tagWriteLeave(0x09);
 	tagWriteLeave(0x02);
 	tagClose();
@@ -1171,6 +1229,9 @@ void tagTest()
 	tagReadString(0x01, 200, format);
 	assert(strncmp(format, cformat, 9) == 0);
 	tagReadEnter(0x02);
+	{
+		int32_t v[3];
+
 		assert(tagRead(0x01) == 101);
 		tagRead16v(0x02, 3, droidpos);
 		assert(droidpos[0] == 11);
@@ -1180,6 +1241,13 @@ void tagTest()
 		assert(fv[0] - 0.1f < 0.001);
 		assert(fv[1] - 1.1f < 0.001);
 		assert(fv[2] + 1.3f < 0.001);
+		tagReadEnter(0x09);
+			tagReads32v(0x05, 3, v);
+			assert(v[0] == -1);
+			assert(v[1] == 0);
+			assert(v[2] == 1);
+		tagReadLeave(0x09);
+	}
 	tagReadLeave(0x02);
 	assert(tagRead(0x04) == 9);
 	ASSERT(!tagGetError(), "Error 4: %s", tagGetErrorString());

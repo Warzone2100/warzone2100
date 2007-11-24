@@ -68,6 +68,7 @@ bool tagWrites(element_t tag, int32_t val);
 bool tagWritef(element_t tag, float val);
 bool tagWritefv(element_t tag, uint16_t count, float *vals);
 bool tagWrite16v(element_t tag, uint16_t count, uint16_t *vals);
+bool tagWrites16v(element_t tag, uint16_t count, int16_t *vals);
 bool tagWriteString(element_t tag, const char *string);
 bool tagWriteBool(element_t tag, bool val);
 
@@ -85,6 +86,7 @@ bool tagReadBool(element_t tag);
 float tagReadf(element_t tag);
 bool tagReadfv(element_t tag, uint16_t size, float *vals);
 bool tagRead16v(element_t tag, uint16_t size, uint16_t *vals);
+bool tagReads16v(element_t tag, uint16_t size, int16_t *vals);
 bool tagReadString(element_t tag, uint16_t size, char *buffer);
 char *tagReadStringDup(element_t tag);
 

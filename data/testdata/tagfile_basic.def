@@ -15,7 +15,8 @@
     02 US 01 10 	# Ammo left
     03 US 01  0 	# Time last fired
     04 US 01  0 	# Recoil value
-    FF EN 00  -
+    05 SI 03 -		# Array of signed int
+    FF EN 00 -
   FF EN 00  -
 03 GR 00  - 		# STRUCTURE GROUP
   01 US 01  - 		# Structure ID
