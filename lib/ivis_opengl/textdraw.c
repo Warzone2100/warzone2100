@@ -30,7 +30,7 @@
 #include "lib/ivis_common/textdraw.h"
 #include "lib/ivis_common/bitimage.h"
 
-#include <GL/gl.h>
+#include <SDL_opengl.h>
 #include <GL/glc.h>
 
 static const char font_family[] = "DejaVu Sans Mono";
