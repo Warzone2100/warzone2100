@@ -74,41 +74,40 @@ extern void	draw3dLine(Vector3i *src, Vector3i *dest, UBYTE col);
 //we can re-do over the area that hasn't been seen
 void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
 {
-    UDWORD       i, j;
-    MAPTILE	    *psTile;
+	UDWORD       i, j;
+	MAPTILE	    *psTile;
 
-    //quick check not trying to go off the map - don't need to check for < 0 since UWORD's!!
-    if (x1 > mapWidth || x2 > mapWidth || y1 > mapHeight || y2 > mapHeight)
-    {
-        ASSERT( FALSE, "initLighting: coords off edge of map" );
-        return;
-    }
+	// quick check not trying to go off the map - don't need to check for < 0 since UWORD's!!
+	if (x1 > mapWidth || x2 > mapWidth || y1 > mapHeight || y2 > mapHeight)
+	{
+		ASSERT( FALSE, "initLighting: coords off edge of map" );
+		return;
+	}
 
-    for(i = x1; i < x2; i++)
+	for (i = x1; i < x2; i++)
 	{
 		for(j = y1; j < y2; j++)
 		{
-            psTile = mapTile(i, j);
-            //always make the edge tiles dark
-            if (i==0 || j==0 || i >= mapWidth-1 || j >= mapHeight-1)
-            {
-			    psTile->illumination = 16;
+			psTile = mapTile(i, j);
+			// always make the edge tiles dark
+			if (i==0 || j==0 || i >= mapWidth-1 || j >= mapHeight-1)
+			{
+				psTile->illumination = 16;
 
-                //give water tiles at edge of map a border
+				// give water tiles at edge of map a border
 				if (terrainType(psTile) == TER_WATER)
 				{
 					psTile->texture = 0;
 				}
-            }
-            else
-            {
-			    calcTileIllum(i,j);
-            }
-        	// Cheers to paul for this idea - works on PC too
-    	    //	Basically darkens down the tiles that are outside the scroll
-	        //	limits - thereby emphasising the cannot-go-there-ness of them
-			if((SDWORD)i < (scrollMinX+4) || (SDWORD)i > (scrollMaxX-4) ||
-                (SDWORD)j < (scrollMinY+4) || (SDWORD)j > (scrollMaxY-4))
+			}
+			else
+			{
+				calcTileIllum(i,j);
+			}
+			// Basically darkens down the tiles that are outside the scroll
+			// limits - thereby emphasising the cannot-go-there-ness of them
+			if ((SDWORD)i < scrollMinX + 4 || (SDWORD)i > scrollMaxX - 4
+			    || (SDWORD)j < scrollMinY + 4 || (SDWORD)j > scrollMaxY - 4)
 			{
 				psTile->illumination/=3;
 			}
@@ -370,39 +369,39 @@ UDWORD	percent;
 
 	/* Clip to grid limits */
 	if(startX < 0)
-    {
-        startX = 0;
-    }
+	{
+		startX = 0;
+	}
 	else if(startX > (SDWORD)(mapWidth-1))
-    {
-        startX = mapWidth-1;
-    }
-	if(endX < 0)
-    {
-        endX = 0;
-    }
+	{
+		startX = mapWidth-1;
+	}
+	if (endX < 0)
+	{
+		endX = 0;
+	}
 	else if(endX > (SDWORD)(mapWidth-1))
-    {
-        endX = mapWidth-1;
-    }
+	{
+		endX = mapWidth-1;
+	}
 
 	/* Clip to grid limits */
 	if(startY < 0)
-    {
-        startY = 0;
-    }
-    else if(startY > (SDWORD)(mapHeight-1))
-    {
-        startY = mapHeight-1;
-    }
+	{
+		startY = 0;
+	}
+	else if(startY > (SDWORD)(mapHeight-1))
+	{
+		startY = mapHeight-1;
+	}
 	if(endY < 0)
-    {
-        endY = 0;
-    }
+	{
+		endY = 0;
+	}
 	else if(endY > (SDWORD)(mapHeight-1))
-    {
-        endY = mapHeight-1;
-    }
+	{
+		endY = mapHeight-1;
+	}
 
 	for(i=startX;i<=endX; i++)
 	{
@@ -560,7 +559,6 @@ UDWORD	presVal;
 UDWORD	tileX,tileY;
 UDWORD	retVal;
 float	fraction,adjust;
-
 
  /* Establish how long the last game frame took */
 	fraction = MAKEFRACT(frameTime)/GAME_TICKS_PER_SEC;
