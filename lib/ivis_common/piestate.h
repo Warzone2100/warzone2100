@@ -83,15 +83,6 @@ typedef	enum	FOG_CAP
 				}
 				FOG_CAP;
 
-typedef	enum	TEX_CAP
-				{
-					TEX_CAP_2M,
-					TEX_CAP_8BIT,
-					TEX_CAP_FULL,
-					TEX_CAP_UNDEFINED
-				}
-				TEX_CAP;
-
 typedef	enum	COLOUR_MODE
 				{
 					COLOUR_FLAT_CONSTANT,
@@ -100,13 +91,6 @@ typedef	enum	COLOUR_MODE
 					COLOUR_TEX_CONSTANT
 				}
 				COLOUR_MODE;
-
-typedef	enum	TEX_MODE
-				{
-					TEX_LOCAL,
-					TEX_NONE
-				}
-				TEX_MODE;
 
 typedef	enum	ALPHA_MODE
 				{
@@ -126,7 +110,6 @@ typedef struct	RENDER_STATE
 					REND_MODE			rendMode;
 					BOOL				keyingOn;
 					COLOUR_MODE			colourCombine;
-					TEX_MODE			texCombine;
 					ALPHA_MODE			alphaCombine;
 					TRANSLUCENCY_MODE	transMode;
 					UDWORD				colour;
@@ -155,8 +138,6 @@ extern void pie_SetGammaValue(float val);
 //renderer capability
 extern void pie_SetFogCap(FOG_CAP val);
 extern FOG_CAP pie_GetFogCap(void);
-extern void pie_SetTexCap(TEX_CAP val);
-extern TEX_CAP pie_GetTexCap(void);
 //fog available
 extern void pie_EnableFog(BOOL val);
 extern BOOL pie_GetFogEnabled(void);

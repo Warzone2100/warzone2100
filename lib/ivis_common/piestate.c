@@ -24,7 +24,6 @@ RENDER_STATE rendStates;
 
 void pie_SetColourCombine(COLOUR_MODE colCombMode);
 void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode);
-static void pie_SetTexCombine(TEX_MODE texCombMode);
 static void pie_SetAlphaCombine(ALPHA_MODE alphaCombMode);
 
 void pie_SetDefaultStates(void)//Sets all states
@@ -39,9 +38,6 @@ void pie_SetDefaultStates(void)//Sets all states
 	//depth Buffer on
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 
-	//basic gouraud textured rendering
-	rendStates.texCombine = TEX_NONE;//to force reset to GOURAUD_TEX
-	pie_SetTexCombine(TEX_LOCAL);
 	rendStates.colourCombine = COLOUR_FLAT_CONSTANT;//to force reset to GOURAUD_TEX
 	pie_SetColourCombine(COLOUR_TEX_ITERATED);
 	rendStates.alphaCombine = ALPHA_ITERATED;//to force reset to GOURAUD_TEX
@@ -163,61 +159,51 @@ void pie_SetRendMode(REND_MODE rendMode)
 		{
 			case REND_GOURAUD_TEX:
 				pie_SetColourCombine(COLOUR_TEX_ITERATED);
-				pie_SetTexCombine(TEX_LOCAL);
 				pie_SetAlphaCombine(ALPHA_CONSTANT);
 				pie_SetTranslucencyMode(TRANS_DECAL);
 				break;
 			case REND_ALPHA_TEX:
 				pie_SetColourCombine(COLOUR_TEX_ITERATED);
-				pie_SetTexCombine(TEX_LOCAL);
 				pie_SetAlphaCombine(ALPHA_ITERATED);
 				pie_SetTranslucencyMode(TRANS_ALPHA);
 				break;
 			case REND_ADDITIVE_TEX:
 				pie_SetColourCombine(COLOUR_TEX_ITERATED);
-				pie_SetTexCombine(TEX_LOCAL);
 				pie_SetAlphaCombine(ALPHA_ITERATED);
 				pie_SetTranslucencyMode(TRANS_ADDITIVE);
 				break;
 			case REND_TEXT:
 				pie_SetColourCombine(COLOUR_TEX_CONSTANT);
-				pie_SetTexCombine(TEX_LOCAL);
 				pie_SetAlphaCombine(ALPHA_CONSTANT);
 				pie_SetTranslucencyMode(TRANS_DECAL);
 				break;
 			case REND_ALPHA_TEXT:
 				pie_SetColourCombine(COLOUR_TEX_CONSTANT);
-				pie_SetTexCombine(TEX_LOCAL);
 				pie_SetAlphaCombine(ALPHA_CONSTANT);
 				pie_SetTranslucencyMode(TRANS_ALPHA);
 				break;
 			case REND_ALPHA_FLAT:
 				pie_SetColourCombine(COLOUR_FLAT_CONSTANT);
-				pie_SetTexCombine(TEX_LOCAL);
 				pie_SetAlphaCombine(ALPHA_CONSTANT);
 				pie_SetTranslucencyMode(TRANS_ALPHA);
 				break;
 			case REND_ALPHA_ITERATED:
 				pie_SetColourCombine(COLOUR_FLAT_ITERATED);
-				pie_SetTexCombine(TEX_LOCAL);
 				pie_SetAlphaCombine(ALPHA_ITERATED);
 				pie_SetTranslucencyMode(TRANS_ADDITIVE);
 				break;
 			case REND_FILTER_FLAT:
 				pie_SetColourCombine(COLOUR_FLAT_CONSTANT);
-				pie_SetTexCombine(TEX_LOCAL);
 				pie_SetAlphaCombine(ALPHA_CONSTANT);
 				pie_SetTranslucencyMode(TRANS_FILTER);
 				break;
 			case REND_FILTER_ITERATED:
 				pie_SetColourCombine(COLOUR_FLAT_CONSTANT);
-				pie_SetTexCombine(TEX_LOCAL);
 				pie_SetAlphaCombine(ALPHA_ITERATED);
 				pie_SetTranslucencyMode(TRANS_ALPHA);
 				break;
 			case REND_FLAT:
 				pie_SetColourCombine(COLOUR_FLAT_CONSTANT);
-				pie_SetTexCombine(TEX_LOCAL);
 				pie_SetAlphaCombine(ALPHA_CONSTANT);
 				pie_SetTranslucencyMode(TRANS_DECAL);
 			default:
@@ -225,15 +211,6 @@ void pie_SetRendMode(REND_MODE rendMode)
 		}
 	}
 	return;
-}
-
-static void pie_SetTexCombine(TEX_MODE texCombMode)
-{
-	if (texCombMode != rendStates.texCombine)
-	{
-		rendStates.texCombine = texCombMode;
-		pieStateCount++;
-	}
 }
 
 static void pie_SetAlphaCombine(ALPHA_MODE alphaCombMode)
