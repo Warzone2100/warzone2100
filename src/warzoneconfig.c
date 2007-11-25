@@ -53,6 +53,7 @@ typedef struct _warzoneGlobals
 	BOOL		playAudioCDs;
 	BOOL		Fullscreen;
 	BOOL		soundEnabled;
+	BOOL		trapCursor;
 } WARZONE_GLOBALS;
 
 /***************************************************************************/
@@ -105,6 +106,16 @@ void war_setFullscreen(BOOL b) {
 
 BOOL war_getFullscreen(void) {
 	return warGlobs.Fullscreen;
+}
+
+void war_SetTrapCursor(BOOL b)
+{
+	warGlobs.trapCursor = b;
+}
+
+BOOL war_GetTrapCursor(void)
+{
+	return warGlobs.trapCursor;
 }
 
 /***************************************************************************/

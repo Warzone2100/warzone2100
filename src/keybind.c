@@ -1172,6 +1172,13 @@ void	kf_TogglePauseMode( void )
 		setConsolePause(TRUE);
 		setScriptPause(TRUE);
 		setAudioPause(TRUE);
+		
+		// If cursor trapping is enabled allow the cursor to leave the window
+		if (war_GetTrapCursor())
+		{
+			SDL_WM_GrabInput(SDL_GRAB_OFF);
+		}
+		
 		/* And stop the clock */
 		gameTimeStop();
 		addConsoleMessage(_("PAUSED"),CENTRE_JUSTIFY);
@@ -1184,6 +1191,13 @@ void	kf_TogglePauseMode( void )
 		setConsolePause(FALSE);
 		setScriptPause(FALSE);
 		setAudioPause(FALSE);
+		
+		// Re-enable cursor trapping if it is enabled
+		if (war_GetTrapCursor())
+		{
+			SDL_WM_GrabInput(SDL_GRAB_ON);
+		}
+				
 		/* And start the clock again */
 		gameTimeStart();
 	}

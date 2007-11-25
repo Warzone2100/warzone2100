@@ -487,6 +487,12 @@ static void startGameLoop(void)
 
 	screen_StopBackDrop();
 
+	// Trap the cursor if cursor snapping is enabled
+	if (war_GetTrapCursor())
+	{
+		SDL_WM_GrabInput(SDL_GRAB_ON);
+	}
+
 	// set a flag for the trigger/event system to indicate initialisation is complete
 	gameInitialised = TRUE;
 }
@@ -508,6 +514,13 @@ static void stopGameLoop(void)
 			levReleaseAll();
 		}
 	}
+	
+	// Disable cursor trapping
+	if (war_GetTrapCursor())
+	{
+		SDL_WM_GrabInput(SDL_GRAB_OFF);
+	}
+	
 	gameInitialised = FALSE;
 }
 

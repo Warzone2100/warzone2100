@@ -60,6 +60,8 @@ extern void war_SetAllowSubtitles(BOOL);
 extern BOOL war_GetAllowSubtitles(void);
 extern void war_setFullscreen(BOOL);
 extern BOOL war_getFullscreen(void);
+extern void war_SetTrapCursor(BOOL b);
+extern BOOL war_GetTrapCursor(void);
 
 /**
  * Enable or disable sound initialization

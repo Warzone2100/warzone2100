@@ -534,6 +534,15 @@ BOOL loadRenderMode(void)
 		war_setFullscreen(TRUE);
 	}
 
+	if (getWarzoneKeyNumeric("trapCursor", &val))
+	{
+		war_SetTrapCursor(val);
+	}
+	else
+	{
+		war_SetTrapCursor(FALSE);
+	}
+
 	// now load the desired res..
 	// note that we only do this if we havent changed renderer..
 	if ( getWarzoneKeyNumeric("width", &val) )
