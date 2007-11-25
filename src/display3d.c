@@ -2646,6 +2646,8 @@ static void	drawDragBox( void )
 
 	if(dragBox3D.status == DRAG_DRAGGING && buildState == BUILD3D_NONE)
 	{
+		PIELIGHT colour;
+
 		if(gameTime - dragBox3D.lastTime > BOX_PULSE_SPEED)
 		{
 			dragBox3D.boxColourIndex++;
@@ -2672,7 +2674,11 @@ static void	drawDragBox( void )
 		iV_Box(minX, minY,
 				maxX, maxY,
 				boxPulseColours[dragBox3D.boxColourIndex]);
-		pie_UniTransBoxFill(minX + 1, minY + 1, maxX - 1, maxY - 1, 0x00ffffff, 16);
+		colour.byte.a = 16;
+		colour.byte.r = 255;
+		colour.byte.g = 255;
+		colour.byte.b = 255;
+		pie_UniTransBoxFill(minX + 1, minY + 1, maxX - 1, maxY - 1, colour);
 		pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 	}
 }

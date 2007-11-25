@@ -956,15 +956,13 @@ void pie_DrawImage(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style)
  *
  ***************************************************************************/
 
-void pie_DrawRect( SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, UDWORD colour )
+void pie_DrawRect(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, PIELIGHT colour)
 {
-	PIELIGHT c;
 	polyCount++;
 
-	c.argb = colour;
 	pie_SetColourKeyedBlack(FALSE);
 
-	glColor4ub(c.byte.r, c.byte.g, c.byte.b, c.byte.a);
+	glColor4ub(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a);
 	glBegin(GL_TRIANGLE_STRIP);
 		glVertex2i(x0, y0);
 		glVertex2i(x1, y0);

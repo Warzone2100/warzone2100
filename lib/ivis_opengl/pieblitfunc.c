@@ -133,11 +133,15 @@ void pie_BoxFillIndex(int x0,int y0, int x1, int y1, UBYTE colour)
 	psPalette = pie_GetGamePal();
 	light.argb = psPalette[colour].argb;
 	light.byte.a = MAX_UB_LIGHT;
-	pie_DrawRect( x0, y0, x1, y1, light.argb );
+	pie_DrawRect( x0, y0, x1, y1, light );
 }
 
 void pie_BoxFill(int x0,int y0, int x1, int y1, Uint32 colour)
 {
+	PIELIGHT plc;
+
+	plc.argb = colour;
+
 	pie_SetRendMode(REND_FLAT);
 	pie_SetTexturePage(-1);
 
@@ -156,26 +160,25 @@ void pie_BoxFill(int x0,int y0, int x1, int y1, Uint32 colour)
 	if (y1>psRendSurface->clip.bottom)
 		y1 = psRendSurface->clip.bottom;
 
-	pie_DrawRect( x0, y0, x1, y1, colour );
+	pie_DrawRect(x0, y0, x1, y1, plc);
 
 }
 /***************************************************************************/
 
 void pie_TransBoxFill(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1)
 {
-	UDWORD rgb;
-	UDWORD transparency;
+	PIELIGHT light;
 
-	rgb = (pie_FILLRED<<16) | (pie_FILLGREEN<<8) | pie_FILLBLUE;//blue
-	transparency = pie_FILLTRANS;
-	pie_UniTransBoxFill(x0, y0, x1, y1, rgb, transparency);
+	light.byte.r = pie_FILLRED;
+	light.byte.g = pie_FILLGREEN;
+	light.byte.b = pie_FILLBLUE;
+	light.byte.a = pie_FILLTRANS;
+	pie_UniTransBoxFill(x0, y0, x1, y1, light);
 }
 
 /***************************************************************************/
-void pie_UniTransBoxFill(SDWORD x0,SDWORD y0, SDWORD x1, SDWORD y1, UDWORD rgb, UDWORD transparency)
+void pie_UniTransBoxFill(SDWORD x0,SDWORD y0, SDWORD x1, SDWORD y1, PIELIGHT light)
 {
-	UDWORD light;
-
 	if (x0>psRendSurface->clip.right || x1<psRendSurface->clip.left ||
 		y0>psRendSurface->clip.bottom || y1<psRendSurface->clip.top)
 	{
@@ -191,13 +194,9 @@ void pie_UniTransBoxFill(SDWORD x0,SDWORD y0, SDWORD x1, SDWORD y1, UDWORD rgb, 
 	if (y1>psRendSurface->clip.bottom)
 		y1 = psRendSurface->clip.bottom;
 
-	if (transparency == 0 ) {
-		transparency = 127;
-	}
 	pie_SetTexturePage(-1);
 	pie_SetRendMode(REND_ALPHA_FLAT);
-	light = (rgb & 0x00ffffff) + (transparency << 24);
-	pie_DrawRect( x0, y0, x1, y1, light );
+	pie_DrawRect(x0, y0, x1, y1, light);
 }
 
 /***************************************************************************/

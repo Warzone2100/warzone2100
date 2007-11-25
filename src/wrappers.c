@@ -260,7 +260,7 @@ void loadingScreenCallback(void)
 	UDWORD			i;
 	UDWORD			topX,topY,botX,botY;
 	UDWORD			currTick;
-
+	PIELIGHT		colour;
 
 	if(SDL_GetTicks()-lastTick < 16) {
 		return;
@@ -272,14 +272,19 @@ void loadingScreenCallback(void)
 		debug( LOG_NEVER, "loadingScreenCallback: pause %d\n", currTick );
 	}
 	lastTick = SDL_GetTicks();
-	pie_UniTransBoxFill(1, 1, 2, 2, 0x00010101, 32);
+	colour.byte.r = 1;
+	colour.byte.g = 1;
+	colour.byte.b = 1;
+	colour.byte.a = 32;
+	pie_UniTransBoxFill(1, 1, 2, 2, colour);
 	/* Draw the black rectangle at the bottom */
 
 	topX = 10+D_W;
 	topY = 450+D_H-1;
 	botX = 630+D_W;
 	botY = 470+D_H+1;
-	pie_UniTransBoxFill(topX,topY,botX,botY,0x00010101, 24);
+	colour.byte.a = 24;
+	pie_UniTransBoxFill(topX, topY, botX, botY, colour);
 
 	for(i=1; i<19; i++)
 	{
@@ -291,7 +296,11 @@ void loadingScreenCallback(void)
 		{
 			stars[i].xPos = (UWORD)(stars[i].xPos + stars[i].speed);
 		}
-		pie_UniTransBoxFill(10+stars[i].xPos+D_W,450+i+D_H,10+stars[i].xPos+(2*stars[i].speed)+D_W,450+i+2+D_H,0x00ffffff, 255);
+		colour.byte.r = 0;
+		colour.byte.g = 255;
+		colour.byte.b = 255;
+		colour.byte.a = 255;
+		pie_UniTransBoxFill(10 + stars[i].xPos+D_W, 450 + i + D_H, 10 + stars[i].xPos + (2 * stars[i].speed) + D_W, 450 + i + 2 + D_H, colour);
 
    	}
 

@@ -144,7 +144,7 @@ void		displayWhiteBoard			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDW
 void		intDisplayFeBox				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 void		displayRemoteGame			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 void		displayPlayer				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void		displayTeamChooser				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void		displayTeamChooser			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 void		displayMultiEditBox			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 void		setLockedTeamsMode			(void);
 
@@ -3008,9 +3008,14 @@ void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWOR
 
 	if( ((W_EDITBOX*)psWidget)->state & WEDBS_DISABLE)					// disabled
 	{
-		pie_UniTransBoxFill(x,y, x+psWidget->width+psWidget->height ,y+psWidget->height,(FILLRED<<16) | (FILLGREEN<<8) | FILLBLUE, FILLTRANS);
-	}
+		PIELIGHT colour;
 
+		colour.byte.r = FILLRED;
+		colour.byte.b = FILLBLUE;
+		colour.byte.g = FILLGREEN;
+		colour.byte.a = FILLTRANS;
+		pie_UniTransBoxFill(x, y, x + psWidget->width + psWidget->height, y+psWidget->height, colour);
+	}
 }
 
 // ////////////////////////////////////////////////////////////////////////////

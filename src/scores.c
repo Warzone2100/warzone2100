@@ -303,6 +303,7 @@ UDWORD	width,height;
 float	length;
 float	mul;
 UDWORD	div;
+	PIELIGHT colour;
 
 	if(!bDispStarted)
 	{
@@ -313,13 +314,16 @@ UDWORD	div;
 
 	fillUpStats();
 
-	pie_UniTransBoxFill( 16 + D_W, MT_Y_POS - 16, pie_GetVideoBufferWidth() - D_W - 16, MT_Y_POS + 256, 0x00000088, 128 );
+	colour.byte.r = 0;
+	colour.byte.b = 0;
+	colour.byte.b = 88;
+	colour.byte.a = 128;
+	pie_UniTransBoxFill( 16 + D_W, MT_Y_POS - 16, pie_GetVideoBufferWidth() - D_W - 16, MT_Y_POS + 256, colour );
 	iV_Box( 16 + D_W, MT_Y_POS - 16, pie_GetVideoBufferWidth() - D_W - 16, MT_Y_POS + 256, 1);
 
 	iV_DrawText( _("Unit Losses"), LC_X + D_W, 80 + 16 + D_H );
 	iV_DrawText( _("Structure Losses"), LC_X + D_W, 140 + 16 + D_H );
 	iV_DrawText( _("Force Information"), LC_X + D_W, 200 + 16 + D_H );
-
 
 	index = 0;
 	bMoreBars = TRUE;
@@ -345,11 +349,9 @@ UDWORD	div;
 			iV_Box(x,y,x+width,y+height,0);
 
 			/* Draw the background border box */
-		 //	pie_UniTransBoxFill(x-1,y-1,x+width+1,y+height+1,0x00010101,255);
 			iV_BoxFill(x-1,y-1,x+width+1,y+height+1,1);
 
 			/* Draw the interior grey */
-		  //	pie_UniTransBoxFill(x,y,x+width,y+height,0x00888888,96);
 			iV_BoxFill(x,y,x+width,y+height,222);
 
 			if( ((gameTime2 - dispST) > infoBars[index].queTime) )
@@ -365,10 +367,8 @@ UDWORD	div;
 				{
 
 					/* Black shadow */
-	//				pie_UniTransBoxFill(x+1,y+3,x+MAKEINT(length)-1,y+height-1,0x00010101,255);
 					iV_BoxFill(x+1,y+3,x+MAKEINT(length)-1,y+height-1,1);
 					/* Solid coloured bit */
-	//				pie_UniTransBoxFill(x+1,y+2,x+MAKEINT(length)-3,y+height-3,0x00ffff00,255);
 					iV_BoxFill(x+1,y+2,x+MAKEINT(length)-4,y+height-4,(UBYTE)infoBars[index].colour);
 				}
 			}
