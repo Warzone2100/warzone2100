@@ -92,14 +92,6 @@ typedef	enum	COLOUR_MODE
 				}
 				COLOUR_MODE;
 
-typedef	enum	ALPHA_MODE
-				{
-					ALPHA_ITERATED,
-					ALPHA_CONSTANT
-				}
-				ALPHA_MODE;
-
-
 typedef struct	RENDER_STATE
 				{
 					FOG_CAP				fogCap;
@@ -110,7 +102,6 @@ typedef struct	RENDER_STATE
 					REND_MODE			rendMode;
 					BOOL				keyingOn;
 					COLOUR_MODE			colourCombine;
-					ALPHA_MODE			alphaCombine;
 					TRANSLUCENCY_MODE	transMode;
 					UDWORD				colour;
 				}
