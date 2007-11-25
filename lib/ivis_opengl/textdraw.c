@@ -18,8 +18,10 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+#include "lib/framework/frame.h"
 #include <stdlib.h>
 #include <string.h>
+#include "lib/framework/strnlen1.h"
 #include "lib/ivis_common/ivisdef.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/rendmode.h"
@@ -453,8 +455,6 @@ UDWORD iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width
 	curChar = String;
 	while (*curChar != 0)
 	{
-		char* curSpaceChar;
-
 		bool GotSpace = false;
 		bool NewLine = false;
 
@@ -540,10 +540,21 @@ UDWORD iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width
 
 
 		// Remove trailing spaces, useful when doing center alignment.
-		curSpaceChar = &FString[strlen(FString) - 1];
-		while (curSpaceChar != &FString[-1] && *curSpaceChar == ASCII_SPACE)
 		{
-			*(curSpaceChar--) = 0;
+			// Find the string length (the "minus one" part
+			// guarantees that we get the length of the string, not
+			// the buffer size required to contain it).
+			size_t len = strnlen1(FString, sizeof(FString)) - 1;
+
+			for (; len != 0; --len)
+			{
+				// As soon as we encounter a non-space character, break out
+				if (FString[len] != ASCII_SPACE)
+					break;
+
+				// Cut off the current space character from the string
+				FString[len] = '\0';
+			}
 		}
 
 		TWidth = iV_GetTextWidth(FString);
