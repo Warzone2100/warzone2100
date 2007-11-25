@@ -155,9 +155,13 @@ GAMECODE gameLoop(void)
 	clearMode = CLEAR_FOG;
 	if (!war_GetFog())
 	{
+		PIELIGHT black;
+
 		// set the fog color to black (RGB)
 		// the fogbox will get this color
-		pie_SetFogColour(0x000000);
+		black.argb = 0;
+		black.byte.a = 255;
+		pie_SetFogColour(black);
 	}
 	if(getDrawShadows())
 	{

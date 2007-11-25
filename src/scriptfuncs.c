@@ -3927,22 +3927,19 @@ BOOL scrSetDepthFog(void)
 BOOL scrSetFogColour(void)
 {
 	SDWORD	red,green,blue;
-	SDWORD	scrFogColour;
+	PIELIGHT scrFogColour;
 
 	if (!stackPopParams(3, VAL_INT, &red, VAL_INT, &green, VAL_INT, &blue))
 	{
 		return FALSE;
 	}
 
+	scrFogColour.byte.r = red;
+	scrFogColour.byte.g = green;
+	scrFogColour.byte.b = blue;
+	scrFogColour.byte.a = 255;
 
-//	if (pie_GetRenderEngine() == ENGINE_GLIDE)
-//	{
-		red &= 0xff;
-		green &= 0xff;
-		blue &= 0xff;
-		scrFogColour = ((red << 16) + (green << 8) + blue);
-		pie_SetFogColour(scrFogColour);
-//	}
+	pie_SetFogColour(scrFogColour);
 
 	return TRUE;
 }

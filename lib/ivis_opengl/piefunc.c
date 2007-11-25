@@ -183,9 +183,8 @@ void pie_DrawSkybox(float scale, int u, int v, int w, int h)
 /// Draws a fog colored box which is wider at the top
 void pie_DrawFogBox(float left, float right, float front, float back, float height, float wider)
 {
-	PIELIGHT fog_colour;
+	PIELIGHT fog_colour = pie_GetFogColour();
 
-	fog_colour.argb = pie_GetFogColour();
 	glColor4ub(fog_colour.byte.r,fog_colour.byte.g,fog_colour.byte.b,0xFF);
 
 	pie_SetRendMode(REND_FLAT);

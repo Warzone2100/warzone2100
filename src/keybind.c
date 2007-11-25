@@ -515,38 +515,8 @@ extern void	kf_ToggleDistanceFog( void )
 
 }
 
-void	kf_ToggleFogColour( void )
-{
-
-	fogCol++;
-	if (fogCol>4)
-		fogCol = 0;
-	switch(fogCol)
-	{
-	case 1:
-			pie_SetFogColour(0x00c9920f);//nicks colour Urban
-			break;
-	case 2:
-			pie_SetFogColour(0x00b6e1ec);//nicks colour Rockies 182,225,236
-			  break;
-	case 3:
-			pie_SetFogColour(0x00101040);//haze
-			  break;
-	case 4:
-			pie_SetFogColour(0x00000000);//black
-			  break;
-	case 0:
-	default:
-			pie_SetFogColour(0x00B08f5f);//nicks colour Arizona
-			//pie_SetFogColour(0x0078684f);//(nicks colour + 404040)/2
-		break;
-	}
-
-}
-
 void	kf_ToggleFog( void )
 {
-
 	static BOOL fogEnabled = FALSE;
 
 		if (fogEnabled)
@@ -554,15 +524,14 @@ void	kf_ToggleFog( void )
 			fogEnabled = FALSE;
 			pie_SetFogStatus(FALSE);
 			pie_EnableFog(fogEnabled);
-//			addConsoleMessage("Fog Off",DEFAULT_JUSTIFY);
+			addConsoleMessage("Fog Off", DEFAULT_JUSTIFY);
 		}
 		else
 		{
 			fogEnabled = TRUE;
 			pie_EnableFog(fogEnabled);
-//			addConsoleMessage("Fog On",DEFAULT_JUSTIFY);
+			addConsoleMessage("Fog On", DEFAULT_JUSTIFY);
 		}
-
 }
 
 // --------------------------------------------------------------------------

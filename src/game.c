@@ -2477,7 +2477,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 				fogStatus = saveGameData.fogState;
 				fogStatus &= FOG_FLAGS;
 			}
-			pie_SetFogColour(saveGameData.fogColour);
+			pie_SetFogColour((PIELIGHT)saveGameData.fogColour);
 		}
 		if (saveGameVersion >= VERSION_19)//V21
 		{
@@ -4681,7 +4681,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 			fogStatus = saveGameData.fogState;
 			fogStatus &= FOG_FLAGS;
 		}
-		pie_SetFogColour(saveGameData.fogColour);
+		pie_SetFogColour((PIELIGHT)saveGameData.fogColour);
 	}
 
 	if (version >= VERSION_17)
@@ -5004,7 +5004,7 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 	saveGame.offWorldKeepLists = offWorldKeepLists;
 	saveGame.RubbleTile	= getRubbleTileNum();
 	saveGame.WaterTile	= getWaterTileNum();
-	saveGame.fogColour	= pie_GetFogColour();
+	saveGame.fogColour	= pie_GetFogColour().argb;
 	saveGame.fogState	= fogStatus;
 	if(pie_GetFogEnabled())
 	{

@@ -624,7 +624,7 @@ static void drawTiles(iView *camera, iView *player)
 				if (pie_GetFogEnabled())
 				{
 					tileScreenInfo[i][j].light.argb = 0xff030303;
-					tileScreenInfo[i][j].specular.argb = pie_GetFogColour();
+					tileScreenInfo[i][j].specular = pie_GetFogColour();
 				}
 				else
 				{

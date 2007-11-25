@@ -27,11 +27,15 @@ void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode);
 
 void pie_SetDefaultStates(void)//Sets all states
 {
+	PIELIGHT black;
+
 	//fog off
 	rendStates.fogEnabled = FALSE;// enable fog before renderer
 	rendStates.fog = FALSE;//to force reset to false
 	pie_SetFogStatus(FALSE);
-	pie_SetFogColour(0x00000000);//nicks colour
+	black.argb = 0;
+	black.byte.a = 255;
+	pie_SetFogColour(black);//nicks colour
 
 	//depth Buffer on
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
@@ -87,13 +91,22 @@ void pie_EnableFog(BOOL val)
 		rendStates.fogEnabled = val;
 		if (val == TRUE)
 		{
-			pie_SetFogColour(0x00B08f5f);//nicks colour
+			PIELIGHT nickscolour;
+
+			nickscolour.byte.r = 0xB0;
+			nickscolour.byte.g = 0x08;
+			nickscolour.byte.b = 0x5f;
+			nickscolour.byte.a = 0xff;
+			pie_SetFogColour(nickscolour); // nicks colour
 		}
 		else
 		{
-			pie_SetFogColour(0x00000000);//clear background to black
-		}
+			PIELIGHT black;
 
+			black.argb = 0;
+			black.byte.a = 255;
+			pie_SetFogColour(black); // clear background to black
+		}
 	}
 }
 
@@ -115,24 +128,21 @@ BOOL pie_GetFogStatus(void)
 	return rendStates.fog;
 }
 
-void pie_SetFogColour(UDWORD colour)
+void pie_SetFogColour(PIELIGHT colour)
 {
-	UDWORD grey;
+	PIELIGHT grey;
+
 	if (rendStates.fogCap == FOG_CAP_GREY)
 	{
-		grey = colour & 0xff;
-		colour >>= 8;
-		grey += (colour & 0xff);
-		colour >>= 8;
-		grey += (colour & 0xff);
-		grey /= 3;
-		grey &= 0xff;//check only
-		colour = grey + (grey<<8) + (grey<<16);
+		grey.byte.r = (colour.byte.r + colour.byte.b + colour.byte.g) / 3;
+		grey.byte.g = grey.byte.r;
+		grey.byte.b = grey.byte.r;
+		grey.byte.a = 255;
 		rendStates.fogColour = colour;
 	}
 	else if (rendStates.fogCap == FOG_CAP_NO)
 	{
-		rendStates.fogColour = 0;
+		rendStates.fogColour.argb = 0;
 	}
 	else
 	{
@@ -140,7 +150,7 @@ void pie_SetFogColour(UDWORD colour)
 	}
 }
 
-UDWORD pie_GetFogColour(void)
+PIELIGHT pie_GetFogColour(void)
 {
 	return rendStates.fogColour;
 }

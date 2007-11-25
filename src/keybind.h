@@ -39,7 +39,6 @@ extern void	kf_ToggleWidgets( void );
 extern void	kf_ToggleBackgroundFog( void );
 extern void	kf_ToggleDistanceFog( void );
 extern void	kf_ToggleMistFog( void );
-extern void	kf_ToggleFogColour( void );
 extern void	kf_ToggleFog( void );
 extern void	kf_ToggleShadows( void );
 extern void	kf_ToggleCamera( void );

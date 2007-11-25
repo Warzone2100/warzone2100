@@ -97,7 +97,7 @@ typedef struct	RENDER_STATE
 					FOG_CAP				fogCap;
 					BOOL				fogEnabled;
 					BOOL				fog;
-					UDWORD				fogColour;
+					PIELIGHT			fogColour;
 					SDWORD				texPage;
 					REND_MODE			rendMode;
 					BOOL				keyingOn;
@@ -134,8 +134,8 @@ extern BOOL pie_GetFogEnabled(void);
 //fog currently on
 extern void pie_SetFogStatus(BOOL val);
 extern BOOL pie_GetFogStatus(void);
-extern void pie_SetFogColour(UDWORD colour);
-extern UDWORD pie_GetFogColour(void) WZ_DECL_PURE;
+extern void pie_SetFogColour(PIELIGHT colour);
+extern PIELIGHT pie_GetFogColour(void) WZ_DECL_PURE;
 extern void pie_UpdateFogDistance(float begin, float end);
 //render states
 extern void pie_SetTexturePage(SDWORD num);

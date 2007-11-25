@@ -704,7 +704,7 @@ UDWORD	lightDoFogAndIllumination(UBYTE brightness, SDWORD dx, SDWORD dz, UDWORD*
 	{
 		if (pSpecular != NULL)
 		{
-			fogColour.argb = pie_GetFogColour();
+			fogColour = pie_GetFogColour();
 			specular.byte.a = (UBYTE)fog;
 			specular.byte.r = pie_ByteScale((UBYTE)fog, fogColour.byte.r);
 			specular.byte.g = pie_ByteScale((UBYTE)fog, fogColour.byte.g);

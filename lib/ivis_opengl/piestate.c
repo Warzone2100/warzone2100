@@ -105,7 +105,6 @@ void pie_UpdateFogDistance(float begin, float end)
 
 void pie_SetFogStatus(BOOL val)
 {
-	PIELIGHT fog;
 	float fog_colour[4];
 
 	if (rendStates.fogEnabled)
@@ -115,7 +114,8 @@ void pie_SetFogStatus(BOOL val)
 		{
 			rendStates.fog = val;
 			if (rendStates.fog) {
-				fog.argb = pie_GetFogColour();
+				PIELIGHT fog = pie_GetFogColour();
+
 				fog_colour[0] = fog.byte.r/255.0f;
 				fog_colour[1] = fog.byte.g/255.0f;
 				fog_colour[2] = fog.byte.b/255.0f;
