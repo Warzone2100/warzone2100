@@ -103,7 +103,6 @@ typedef struct	RENDER_STATE
 					BOOL				keyingOn;
 					COLOUR_MODE			colourCombine;
 					TRANSLUCENCY_MODE	transMode;
-					UDWORD				colour;
 				}
 				RENDER_STATE;
 
@@ -142,7 +141,5 @@ extern void pie_UpdateFogDistance(float begin, float end);
 extern void pie_SetTexturePage(SDWORD num);
 extern void pie_SetColourKeyedBlack(BOOL keyingOn);
 extern void pie_SetRendMode(REND_MODE rendMode);
-extern void pie_SetColour(UDWORD val);
-extern UDWORD pie_GetColour(void);
 
 #endif // _pieState_h

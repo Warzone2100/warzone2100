@@ -915,7 +915,7 @@ void pie_DrawImage(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style)
 
 	pie_SetTexturePage(image->texPage);
 
-	style->colour.argb = pie_GetColour();
+	style->colour.argb = 0xffffffff; // draw solid
 	style->specular.argb = 0x00000000;
 
 	glColor4ub(style->colour.byte.r, style->colour.byte.g, style->colour.byte.b, style->colour.byte.a);

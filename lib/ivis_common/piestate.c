@@ -27,7 +27,6 @@ void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode);
 
 void pie_SetDefaultStates(void)//Sets all states
 {
-//		pie_SetFogColour(0x00B08f5f);//nicks colour
 	//fog off
 	rendStates.fogEnabled = FALSE;// enable fog before renderer
 	rendStates.fog = FALSE;//to force reset to false
@@ -88,7 +87,6 @@ void pie_EnableFog(BOOL val)
 		rendStates.fogEnabled = val;
 		if (val == TRUE)
 		{
-//			pie_SetFogColour(0x0078684f);//(nicks colour + 404040)/2
 			pie_SetFogColour(0x00B08f5f);//nicks colour
 		}
 		else
@@ -198,12 +196,4 @@ void pie_SetRendMode(REND_MODE rendMode)
 		}
 	}
 	return;
-}
-
-/***************************************************************************/
-// get the constant colour used in text and flat render modes
-/***************************************************************************/
-UDWORD pie_GetColour(void)
-{
-	return	rendStates.colour;
 }

@@ -34,6 +34,7 @@
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/tex.h"
+#include "lib/ivis_common/piepalette.h"
 
 /***************************************************************************/
 /*
@@ -214,22 +215,6 @@ void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode)
 				glDisable(GL_BLEND);
 				break;
 		}
-	}
-}
-
-/***************************************************************************/
-// set the constant colour used in text and flat render modes
-/***************************************************************************/
-void pie_SetColour(UDWORD colour)
-{
-	if (colour != rendStates.colour) {
-		PIELIGHT c;
-
-		rendStates.colour = colour;
-		pieStateCount++;
-
-		c.argb = colour;
-		glColor4ub(c.byte.r, c.byte.g, c.byte.b, c.byte.a);
 	}
 }
 

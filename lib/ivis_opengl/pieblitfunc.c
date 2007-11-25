@@ -61,13 +61,16 @@ static unsigned char radarBitmap[RADARX * RADARY * 4];
  *	Source
  */
 /***************************************************************************/
-void pie_Line(int x0, int y0, int x1, int y1, Uint32 colour)
+void pie_Line(int x0, int y0, int x1, int y1, Uint32 col)
 {
+	PIELIGHT colour;
+
+	colour.argb = col;
 	pie_SetRendMode(REND_FLAT);
-	pie_SetColour(colour);
 	pie_SetTexturePage(-1);
 	pie_SetColourKeyedBlack(FALSE);
 
+	glColor4ub(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a);
 	glBegin(GL_LINE_STRIP);
 	glVertex2f(x0, y0);
 	glVertex2f(x1, y1);
@@ -75,10 +78,12 @@ void pie_Line(int x0, int y0, int x1, int y1, Uint32 colour)
 }
 /***************************************************************************/
 
-void pie_Box(int x0,int y0, int x1, int y1, Uint32 colour)
+void pie_Box(int x0,int y0, int x1, int y1, Uint32 col)
 {
+	PIELIGHT colour;
+
+	colour.argb = col;
 	pie_SetRendMode(REND_FLAT);
-	pie_SetColour(colour);
 	pie_SetTexturePage(-1);
 	pie_SetColourKeyedBlack(FALSE);
 
@@ -97,6 +102,7 @@ void pie_Box(int x0,int y0, int x1, int y1, Uint32 colour)
 	if (y1>psRendSurface->clip.bottom)
 		y1 = psRendSurface->clip.bottom;
 
+	glColor4ub(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a);
 	glBegin(GL_LINE_STRIP);
 	glVertex2f(x0, y0);
 	glVertex2f(x1, y0);
@@ -232,7 +238,6 @@ void pie_ImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 	Image = &ImageFile->ImageDefs[ID];
 
 	pie_SetRendMode(REND_GOURAUD_TEX);
-	pie_SetColour(COLOURINTENSITY);
 	pie_SetColourKeyedBlack(TRUE);
 
 	pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
@@ -259,7 +264,6 @@ void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 	Image = &ImageFile->ImageDefs[ID];
 
 	pie_SetRendMode(REND_GOURAUD_TEX);
-	pie_SetColour(COLOURINTENSITY);
 	pie_SetColourKeyedBlack(TRUE);
 
 	pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
@@ -377,7 +381,6 @@ void pie_RenderRadar( int x, int y )
 	PIERECT dest;
 
 	pie_SetRendMode(REND_GOURAUD_TEX);
-	pie_SetColour(COLOURINTENSITY);
 	pie_SetColourKeyedBlack(TRUE);
 	//special case function because texture is held outside of texture list
 	pieImage.texPage = radarTexture;
