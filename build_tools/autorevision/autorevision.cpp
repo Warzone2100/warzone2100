@@ -288,6 +288,7 @@ bool RevSVNVersionQuery::extractRevision(RevisionInformation& rev_info)
 {
     string svncmd("svnversion " + _workingDir);
     set_env("LANG", "C");
+    set_env("LC_ALL", "C");
     FILE* svn_version = popen(svncmd.c_str(), "r");
 
     if (!svn_version)
@@ -347,6 +348,7 @@ bool RevSVNQuery::extractRevision(RevisionInformation& rev_info)
 {
     string svncmd("svn info " + _workingDir);
     set_env("LANG", "C");
+    set_env("LC_ALL", "C");
     FILE *svn = popen(svncmd.c_str(), "r");
 
     if(!svn)
