@@ -231,7 +231,6 @@ void pie_ImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 	assert(ID < ImageFile->Header.NumImages);
 	Image = &ImageFile->ImageDefs[ID];
 
-	pie_SetBilinear(FALSE);
 	pie_SetRendMode(REND_GOURAUD_TEX);
 	pie_SetColour(COLOURINTENSITY);
 	pie_SetColourKeyedBlack(TRUE);
@@ -259,7 +258,6 @@ void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 
 	Image = &ImageFile->ImageDefs[ID];
 
-	pie_SetBilinear(FALSE);
 	pie_SetRendMode(REND_GOURAUD_TEX);
 	pie_SetColour(COLOURINTENSITY);
 	pie_SetColourKeyedBlack(TRUE);
@@ -378,7 +376,6 @@ void pie_RenderRadar( int x, int y )
 	PIEIMAGE pieImage;
 	PIERECT dest;
 
-	pie_SetBilinear(TRUE);
 	pie_SetRendMode(REND_GOURAUD_TEX);
 	pie_SetColour(COLOURINTENSITY);
 	pie_SetColourKeyedBlack(TRUE);

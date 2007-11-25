@@ -789,7 +789,6 @@ static void drawTiles(iView *camera, iView *player)
 	// Draw all the normal tiles
 	pie_SetColourKeyedBlack(TRUE);
 	pie_SetFogStatus(TRUE);
-	pie_SetBilinear(TRUE);
 	for (i = 0; i < MIN(visibleTiles.y, mapHeight); i++)
 	{
 		for (j = 0; j < MIN(visibleTiles.x, mapWidth); j++)
@@ -1208,8 +1207,6 @@ void	renderProjectile(PROJECTILE *psCurr)
 		psStats->weaponSubClass == WSC_SLOWROCKET || psStats->weaponSubClass == WSC_SLOWMISSILE)
 		{
 			pie_Draw3DShape(pIMD, 0, 0, brightness, 0, pie_ADDITIVE, 164);
-
-//			pie_Draw3DShape(pIMD, 0, 0, brightness, specular, pie_NO_BILINEAR, 0);
 		}
 		else
 		{

@@ -52,10 +52,6 @@ void pie_SetDefaultStates(void)//Sets all states
 	//chroma keying on black
 	rendStates.keyingOn = FALSE;//to force reset to true
 	pie_SetColourKeyedBlack(TRUE);
-
-	//bilinear filtering
-	rendStates.bilinearOn = FALSE;//to force reset to true
-	pie_SetBilinear(TRUE);
 }
 
 
@@ -229,20 +225,6 @@ void pie_SetRendMode(REND_MODE rendMode)
 		}
 	}
 	return;
-}
-
-void pie_SetBilinear(BOOL bilinearOn)
-{
-	if (bilinearOn != rendStates.bilinearOn)
-	{
-		rendStates.bilinearOn = bilinearOn;
-		pieStateCount++;
-	}
-}
-
-BOOL pie_GetBilinear(void)
-{
-	return rendStates.bilinearOn;
 }
 
 static void pie_SetTexCombine(TEX_MODE texCombMode)

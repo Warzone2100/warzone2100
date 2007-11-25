@@ -124,17 +124,12 @@ typedef struct	RENDER_STATE
 					UDWORD				fogColour;
 					SDWORD				texPage;
 					REND_MODE			rendMode;
-					BOOL				bilinearOn;
 					BOOL				keyingOn;
 					COLOUR_MODE			colourCombine;
 					TEX_MODE			texCombine;
 					ALPHA_MODE			alphaCombine;
 					TRANSLUCENCY_MODE	transMode;
 					UDWORD				colour;
-#ifdef STATES
-					BOOL				textured;
-					UBYTE				lightLevel;
-#endif
 				}
 				RENDER_STATE;
 
@@ -173,8 +168,6 @@ extern UDWORD pie_GetFogColour(void) WZ_DECL_PURE;
 extern void pie_UpdateFogDistance(float begin, float end);
 //render states
 extern void pie_SetTexturePage(SDWORD num);
-extern void pie_SetBilinear(BOOL bilinearOn);
-extern BOOL pie_GetBilinear(void);
 extern void pie_SetColourKeyedBlack(BOOL keyingOn);
 extern void pie_SetRendMode(REND_MODE rendMode);
 extern void pie_SetColour(UDWORD val);

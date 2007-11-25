@@ -346,7 +346,6 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 		pie_SetFogStatus(FALSE);
 		pie_SetRendMode(REND_ADDITIVE_TEX);
 		colour.byte.a = (UBYTE)pieFlagData;
-		pie_SetBilinear(TRUE);
 		light = FALSE;
 	}
 	else if (pieFlag & pie_TRANSLUCENT)
@@ -354,7 +353,6 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 		pie_SetFogStatus(FALSE);
 		pie_SetRendMode(REND_ALPHA_TEX);
 		colour.byte.a = (UBYTE)pieFlagData;
-		pie_SetBilinear(FALSE);//never bilinear with constant alpha, gives black edges
 		light = FALSE;
 	}
 	else
@@ -369,15 +367,6 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 			pie_SetFogStatus(TRUE);
 		}
 		pie_SetRendMode(REND_GOURAUD_TEX);
-		//if hardware fog then alpha is set else unused in decal mode
-		if (pieFlag & pie_NO_BILINEAR)
-		{
-			pie_SetBilinear(FALSE);
-		}
-		else
-		{
-			pie_SetBilinear(TRUE);
-		}
 	}
 
 	if (pieFlag & pie_RAISE)
