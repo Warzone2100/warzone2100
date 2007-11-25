@@ -148,24 +148,10 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 // ////////////////////////////////////////////////////////////////////////////
 // defines
 
-// permissable bitrates for connection types. NOTE MUST DIFFER!
-#define DEFAULTBYTESPERSEC		1000		// 1   Ks-1
-#define DEFAULTPACKETS			5
+// Max bit-rate/packet count, set for a 14.4KB modem (we have hardcore fans!)
 
-#define MODEMBYTESPERSEC		1200
-#define MODEMPACKETS			8
-
-#define INETBYTESPERSEC			1201
-#define INETPACKETS				5
-
-#define IPXBYTESPERSEC			2000
-#define IPXPACKETS				10
-
-#define CABLEBYTESPERSEC		1202
-#define CABLEPACKETS			8
-
-
-#define S_WARZONEGUID "{48AB0B01-FEC0-11d1-980C-00A0243870A8}"
+#define MAX_BYTESPERSEC			1200
+#define MAX_PACKETSPERSEC		6
 
 #define ANYPLAYER				99
 #define ONEPLAYER				98
@@ -208,25 +194,6 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 
 #define DIFF_SLIDER_STOPS		20			//max number of stops for the multiplayer difficulty slider
 
-// ////////////////////////////////////////////////////////////////////////////
-// macros For handling net messages, just copy things in & out of the msg buffer
-/*
-#define NetAdd(m,pos,thing) \
-	memcpy(&(m.body[pos]),&(thing),sizeof(thing))
-
-#define NetAdd2(m,pos,thing) \
-	memcpy( &((*m).body[pos]), &(thing), sizeof(thing))
-
-#define NetAddSt(m,pos,stri) \
-	strcpy(&(m.body[pos]),stri)
-
-#define NetGet(m,pos,thing) \
-	memcpy(&(thing),&(m->body[pos]),sizeof(thing))
-
-#define NetGetSt(m,pos,stri) \
-	strcpy(stri,&(m->body[pos]))
-*/
-// ////////////////////////////////////////////////////////////////////////////
 // functions
 
 extern BASE_OBJECT		*IdToPointer(UDWORD id,UDWORD player);

@@ -465,8 +465,8 @@ void runConnectionScreen(void )
 				SettingsUp = FALSE;
 			}
 
-			game.bytesPerSec = INETBYTESPERSEC;
-			game.packetsPerSec = INETPACKETS;
+			game.bytesPerSec = MAX_BYTESPERSEC;
+			game.packetsPerSec = MAX_PACKETSPERSEC;
 			NETsetupTCPIP(&finalconnection, addr); //inet
 
 			changeTitleMode(GAMEFIND);
@@ -2377,10 +2377,11 @@ BOOL startMultiOptions(BOOL bReenter)
 			ingame.pStructureLimits = NULL;
 		}
 
-		if(NetPlay.bLobbyLaunched)
+		if (NetPlay.bLobbyLaunched)
 		{
-			game.bytesPerSec	= INETBYTESPERSEC;					// maximum bitrate achieved before dropping checks.
-			game.packetsPerSec	= INETPACKETS;
+			// Maximum bitrate achieved before dropping checks
+			game.bytesPerSec	= MAX_BYTESPERSEC;
+			game.packetsPerSec	= MAX_PACKETSPERSEC;
 		}
 
 		loadMultiStats((char*)sPlayer,&nullStats);

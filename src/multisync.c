@@ -222,7 +222,7 @@ static BOOL sendDroidCheck(void)
 	NETMSG			msg;
 	UDWORD			i=0,count=0;
 	static UDWORD	lastSent=0;					// last time a struct was sent.
-	UDWORD			toSend =4;
+	UDWORD			toSend = 6;
 	if(lastSent > gameTime)lastSent= 0;
 	if((gameTime-lastSent) < DROID_FREQUENCY)	// only send a struct send if not done recently.
 	{
@@ -231,21 +231,6 @@ static BOOL sendDroidCheck(void)
 
 	lastSent = gameTime;
 	msg.size = 0;
-
-	switch(game.bytesPerSec)
-	{
-	case IPXBYTESPERSEC:
-		toSend = 6;
-		break;
-
-	case INETBYTESPERSEC:
-	case CABLEBYTESPERSEC:
-	case DEFAULTBYTESPERSEC:
-	case MODEMBYTESPERSEC:
-	default:
-		toSend = 4;
-		break;
-	}
 
 	while(count < toSend)	// send x droids.
 	{
