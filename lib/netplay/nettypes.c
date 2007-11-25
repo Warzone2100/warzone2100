@@ -41,29 +41,24 @@
  * Begin & End functions
  */
 
-/*
- * Initialises the packet and sets the type of the packet to type
- * FIXME: Use an enum for the packet type.
- */
-void NETbegin(uint8_t type, PACKETDIR dir)
+void NETbeginEncode(uint8_t type, uint8_t player)
 {
-	NETsetPacketDir(dir);
-	NetMsg.type		= type;
-	NetMsg.size		= 0;
-	NetMsg.status	= TRUE;
-
-	// If encoding zero the message body and size
-	if (dir == PACKET_ENCODE)
-	{
-		memset(&NetMsg.body, '\0', MaxMsgSize);
-	}
+	NETsetPacketDir(PACKET_ENCODE);
+	NetMsg.type = type;
+	NetMsg.size = 0;
+	NetMsg.status = TRUE;
+	NetMsg.destination = player;
+	memset(&NetMsg.body, '\0', MaxMsgSize);
 }
 
-/*
- * Sends the packet, sending it to the player specified. If player is equal to
- * NET_ALL_PLAYERS then the packet is, as expected, sent to everyone.
- */
-BOOL NETend(uint8_t player)
+void NETbeginDecode(void)
+{
+	NETsetPacketDir(PACKET_DECODE);
+	NetMsg.size = 0;
+	NetMsg.status = TRUE;
+}
+
+BOOL NETend(void)
 {
 	assert(NETgetPacketDir() != PACKET_INVALID);
 
@@ -77,13 +72,13 @@ BOOL NETend(uint8_t player)
 	NETsetPacketDir(PACKET_INVALID);
 
 	// Send the packet, updating the send functions is on my todo list!
-	if (player == NET_ALL_PLAYERS)
+	if (NetMsg.destination == NET_ALL_PLAYERS)
 	{
 		return NETbcast(&NetMsg, TRUE);
 	}
 	else
 	{
-		return NETsend(&NetMsg, player, TRUE);
+		return NETsend(&NetMsg, NetMsg.destination, TRUE);
 	}
 }
 
@@ -291,7 +286,7 @@ BOOL NETbool(BOOL *bp)
  * NETnull should be used to either add 4 bytes of padding to a message, or to
  * discard 4 bytes of data from a message.
  */
-BOOL NETnull ()
+BOOL NETnull()
 {
 	uint32_t zero = 0;
 	return NETuint32_t(&zero);
@@ -349,7 +344,10 @@ static void NETcoder(PACKETDIR dir)
 
 	strlcpy(str, original, sizeof(str));
 
-	NETbegin(0, dir);
+	if (dir == PACKET_ENCODE)
+		NETbeginEncode(0, 0);
+	else
+		NETbeginDecode();
 	NETbool(&b);			assert(b == TRUE);
 	NETuint32_t(&u32);  assert(u32 == 32);
 	NETuint16_t(&u16);  assert(u16 == 16);
@@ -358,7 +356,7 @@ static void NETcoder(PACKETDIR dir)
 	NETint16_t(&i16);   assert(i16 == -16);
 	NETint8_t(&i8);     assert(i8 == -8);
 	NETstring(str, 99); assert(strncmp(str, original, 99) == 0);
-	NETend(0);
+	NETend();
 }
 
 void NETtest()
