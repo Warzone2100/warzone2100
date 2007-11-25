@@ -152,14 +152,12 @@ BOOL loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 BOOL saveMultiStats(const char *sFileName, const char *sPlayerName, const PLAYERSTATS *st)
 {
 	char buffer[MAX_STA_SIZE];
-	char fileName[255]="";
+	char fileName[255] = "";
 
 	snprintf(buffer, MAX_STA_SIZE, "WZ.STA.v2\n%s %u %u %u %u",
 	         sPlayerName, st->wins, st->losses, st->totalKills, st->totalScore);
 
-	strcpy(fileName,MultiPlayersPath);
-	strcat(fileName,sFileName);
-	strcat(fileName,".sta");
+	snprintf(fileName, sizeof(fileName), "%s%s.sta", MultiPlayersPath, sFileName);
 
 	saveFile(fileName, buffer, strlen(buffer));
 
