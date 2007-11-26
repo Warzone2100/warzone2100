@@ -323,6 +323,7 @@ TRACK* sound_LoadTrackFromFile(const char *fileName)
 {
 	TRACK* pTrack;
 	PHYSFS_file* fileHandle;
+	size_t filename_size;
 
 	// Use PhysicsFS to open the file
 	fileHandle = PHYSFS_openRead(fileName);
@@ -332,9 +333,20 @@ TRACK* sound_LoadTrackFromFile(const char *fileName)
 		return NULL;
 	}
 
+	if (GetLastResourceFilename() == NULL)
+	{
+		// This is a non fatal error.  We just can't find filename for some reason.
+		debug(LOG_WARNING, "sound_LoadTrackFromFile: missing resource filename?");
+		filename_size = 0;
+	}
+	else
+	{
+		filename_size = strlen(GetLastResourceFilename()) + 1;
+	}
+
 	// allocate track, plus the memory required to contain the filename
 	// one malloc call ensures only one free call is required
-	pTrack = (TRACK*)malloc(sizeof(TRACK) + strlen(GetLastResourceFilename()) + 1);
+	pTrack = (TRACK*)malloc(sizeof(TRACK) + filename_size);
 	if (pTrack == NULL)
 	{
 		debug( LOG_ERROR, "sound_ConstructTrack: couldn't allocate memory\n" );
@@ -345,21 +357,16 @@ TRACK* sound_LoadTrackFromFile(const char *fileName)
 	// Initialize everyting (except for the filename) to zero
 	memset(pTrack, 0, sizeof(TRACK));
 
-#if !defined(WZ_C99)
-	// Set filename pointer
-	pTrack->fileName = (const char*)pTrack + sizeof(TRACK);
-#endif
+	// Set filename pointer; if the filename (as returned by
+	// GetLastResourceFilename()) is a NULL pointer, then this will be a
+	// NULL pointer as well.
+	pTrack->fileName = filename_size ? (const char*)pTrack + sizeof(TRACK) : NULL;
 
-	if (GetLastResourceFilename() == NULL)
+	// Copy the filename into the struct, if we don't have a NULL pointer
+	if (filename_size != 0)
 	{
-		// This is a non fatal error.  We just can't find filename for some reason.
-		debug(LOG_ERROR, "sound_LoadTrackFromFile: missing resource filename?");
-		PHYSFS_close(fileHandle);
-		return NULL;
+		strcpy((char*)pTrack->fileName, GetLastResourceFilename());
 	}
-
-	// Copy the filename into the struct
-	strcpy((char*)pTrack->fileName, GetLastResourceFilename());
 
 	// Now use sound_ReadTrackFromBuffer to decode the file's contents
 	pTrack = sound_DecodeOggVorbisTrack(pTrack, fileHandle);
