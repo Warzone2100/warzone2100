@@ -111,7 +111,7 @@ void labelDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCol
 	FontID = psLabel->FontID;
 
 	iV_SetFont(FontID);
-	iV_SetTextColour((UWORD)*(pColours + WCOL_TEXT));
+	iV_SetTextColour((UWORD)pColours[WCOL_TEXT]);
 	if (psLabel->style & WLAB_ALIGNCENTRE)
 	{
   		fw = iV_GetTextWidth(psLabel->aText);

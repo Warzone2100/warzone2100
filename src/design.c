@@ -3378,8 +3378,7 @@ static void intSetPropulsionStats(PROPULSION_STATS *psStats)
     /* propulsion weight is a percentage of the body weight */
     if (sCurrDesign.asParts[COMP_BODY] != 0)
     {
-       	weight = psStats->weight * (asBodyStats + sCurrDesign.asParts[COMP_BODY])->
-            weight / 100;
+       	weight = psStats->weight * asBodyStats[sCurrDesign.asParts[COMP_BODY]].weight / 100;
     }
     else
     {
@@ -3459,8 +3458,7 @@ static void intSetPropulsionShadowStats(PROPULSION_STATS *psStats)
         /* propulsion weight is a percentage of the body weight */
         if (sCurrDesign.asParts[COMP_BODY] != 0)
         {
-       	    weight = psStats->weight * (asBodyStats + sCurrDesign.asParts[COMP_BODY])->
-                weight / 100;
+       	    weight = psStats->weight * asBodyStats[sCurrDesign.asParts[COMP_BODY]].weight / 100;
         }
         else
         {

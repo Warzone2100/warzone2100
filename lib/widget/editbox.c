@@ -699,16 +699,16 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pC
 	} else {
 		pie_BoxFillIndex(x0,y0,x1,y1,WCOL_BKGRND);
 
-		iV_Line(x0,y0, x1,y0,*(pColours + WCOL_DARK));
-		iV_Line(x0,y0, x0,y1,*(pColours + WCOL_DARK));
-		iV_Line(x0,y1, x1,y1,*(pColours + WCOL_LIGHT));
-		iV_Line(x1,y1, x1,y0,*(pColours + WCOL_LIGHT));
+		iV_Line(x0,y0, x1,y0, pColours[WCOL_DARK]);
+		iV_Line(x0,y0, x0,y1, pColours[WCOL_DARK]);
+		iV_Line(x0,y1, x1,y1, pColours[WCOL_LIGHT]);
+		iV_Line(x1,y1, x1,y0, pColours[WCOL_LIGHT]);
 	}
 
 	fx = x0 + WEDB_XGAP;// + (psEdBox->width - fw) / 2;
 
 	iV_SetFont(CurrFontID);
-	iV_SetTextColour((UBYTE)*(pColours + WCOL_TEXT));
+	iV_SetTextColour((UBYTE)pColours[WCOL_TEXT]);
 
   	fy = y0 + (psEdBox->height - iV_GetTextLineSize())/2 - iV_GetTextAboveBase();
 
@@ -743,7 +743,7 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pC
 		cx += iV_GetTextWidth("-");
 		*pInsPoint = ch;
 		cy = fy;
-		iV_Line(cx, cy + iV_GetTextAboveBase(), cx, cy - iV_GetTextBelowBase(), 0xffffff); //*(pColours + WCOL_CURSOR));
+		iV_Line(cx, cy + iV_GetTextAboveBase(), cx, cy - iV_GetTextBelowBase(), 0xffffff); //pColours[WCOL_CURSOR]);
 	}
 #if CURSOR_BLINK
 	else if ((psEdBox->state & WEDBS_MASK) == WEDBS_OVER && blink)
@@ -757,7 +757,7 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pC
 		cx = x0 + WEDB_XGAP + iV_GetTextWidth(psEdBox->aText + psEdBox->printStart);
 		*pInsPoint = ch;
 	  	cy = fy;
-		iV_Line(cx, cy, cx + WEDB_CURSORSIZE, cy, 0xffffff); //*(pColours + WCOL_CURSOR));
+		iV_Line(cx, cy, cx + WEDB_CURSORSIZE, cy, 0xffffff); //pColours[WCOL_CURSOR]);
 	}
 
 
@@ -765,10 +765,10 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pC
 		if (psEdBox->state & WEDBS_HILITE)
 		{
 			/* Display the button hilite */
-			iV_Line(x0-2,y0-2, x1+2,y0-2,*(pColours + WCOL_HILITE));
-			iV_Line(x0-2,y0-2, x0-2,y1+2,*(pColours + WCOL_HILITE));
-			iV_Line(x0-2,y1+2, x1+2,y1+2,*(pColours + WCOL_HILITE));
-			iV_Line(x1+2,y1+2, x1+2,y0-2,*(pColours + WCOL_HILITE));
+			iV_Line(x0-2,y0-2, x1+2,y0-2, pColours[WCOL_HILITE]);
+			iV_Line(x0-2,y0-2, x0-2,y1+2, pColours[WCOL_HILITE]);
+			iV_Line(x0-2,y1+2, x1+2,y1+2, pColours[WCOL_HILITE]);
+			iV_Line(x1+2,y1+2, x1+2,y0-2, pColours[WCOL_HILITE]);
 		}
 	}
 }

@@ -315,15 +315,15 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 	{
 		/* Display the button down */
 		pie_BoxFillIndex(x0,y0,x1,y1,WCOL_BKGRND);
-		iV_Line(x0,y0, x1,y0,*(pColours + WCOL_DARK));
-		iV_Line(x0,y0, x0,y1,*(pColours + WCOL_DARK));
-		iV_Line(x0,y1, x1,y1,*(pColours + WCOL_LIGHT));
-		iV_Line(x1,y1, x1,y0,*(pColours + WCOL_LIGHT));
+		iV_Line(x0,y0, x1,y0, pColours[WCOL_DARK]);
+		iV_Line(x0,y0, x0,y1, pColours[WCOL_DARK]);
+		iV_Line(x0,y1, x1,y1, pColours[WCOL_LIGHT]);
+		iV_Line(x1,y1, x1,y0, pColours[WCOL_LIGHT]);
 
 		if (psButton->pText)
 		{
 			iV_SetFont(psButton->FontID);
-			iV_SetTextColour((UWORD)*(pColours + WCOL_TEXT));
+			iV_SetTextColour((UWORD)pColours[WCOL_TEXT]);
 			fw = iV_GetTextWidth(psButton->pText);
 			if(psButton->style & WBUT_NOCLICKMOVE) {
 				fx = x0 + (psButton->width - fw) / 2 + 1;
@@ -338,20 +338,20 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 		if (psButton->state & WBUTS_HILITE)
 		{
 			/* Display the button hilite */
-			iV_Line(x0+3,y0+3, x1-2,y0+3,*(pColours + WCOL_HILITE));
-			iV_Line(x0+3,y0+3, x0+3,y1-2,*(pColours + WCOL_HILITE));
-			iV_Line(x0+3,y1-2, x1-2,y1-2,*(pColours + WCOL_HILITE));
-			iV_Line(x1-2,y1-2, x1-2,y0+3,*(pColours + WCOL_HILITE));
+			iV_Line(x0+3,y0+3, x1-2,y0+3, pColours[WCOL_HILITE]);
+			iV_Line(x0+3,y0+3, x0+3,y1-2, pColours[WCOL_HILITE]);
+			iV_Line(x0+3,y1-2, x1-2,y1-2, pColours[WCOL_HILITE]);
+			iV_Line(x1-2,y1-2, x1-2,y0+3, pColours[WCOL_HILITE]);
 		}
 	}
 	else if (psButton->state & WBUTS_GREY)
 	{
 		/* Display the disabled button */
 		pie_BoxFillIndex(x0,y0,x1,y1,WCOL_BKGRND);
-		iV_Line(x0,y0, x1,y0,*(pColours + WCOL_LIGHT));
-		iV_Line(x0,y0, x0,y1,*(pColours + WCOL_LIGHT));
-		iV_Line(x0,y1, x1,y1,*(pColours + WCOL_DARK));
-		iV_Line(x1,y1, x1,y0,*(pColours + WCOL_DARK));
+		iV_Line(x0,y0, x1,y0, pColours[WCOL_LIGHT]);
+		iV_Line(x0,y0, x0,y1, pColours[WCOL_LIGHT]);
+		iV_Line(x0,y1, x1,y1, pColours[WCOL_DARK]);
+		iV_Line(x1,y1, x1,y0, pColours[WCOL_DARK]);
 
 		if (psButton->pText)
 		{
@@ -359,35 +359,35 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 			fw = iV_GetTextWidth(psButton->pText);
 			fx = x0 + (psButton->width - fw) / 2;
 			fy = y0 + (psButton->height - iV_GetTextLineSize())/2 - iV_GetTextAboveBase();
-			iV_SetTextColour((UWORD)*(pColours + WCOL_LIGHT));
+			iV_SetTextColour((UWORD)pColours[WCOL_LIGHT]);
 			iV_DrawText(psButton->pText, fx+1, fy+1);
-			iV_SetTextColour((UWORD)*(pColours + WCOL_DISABLE));
+			iV_SetTextColour((UWORD)pColours[WCOL_DISABLE]);
 			iV_DrawText(psButton->pText, fx, fy);
 		}
 
 		if (psButton->state & WBUTS_HILITE)
 		{
 			/* Display the button hilite */
-			iV_Line(x0+2,y0+2, x1-3,y0+2,*(pColours + WCOL_HILITE));
-			iV_Line(x0+2,y0+2, x0+2,y1-3,*(pColours + WCOL_HILITE));
-			iV_Line(x0+2,y1-3, x1-3,y1-3,*(pColours + WCOL_HILITE));
-			iV_Line(x1-3,y1-3, x1-3,y0+2,*(pColours + WCOL_HILITE));
+			iV_Line(x0+2,y0+2, x1-3,y0+2, pColours[WCOL_HILITE]);
+			iV_Line(x0+2,y0+2, x0+2,y1-3, pColours[WCOL_HILITE]);
+			iV_Line(x0+2,y1-3, x1-3,y1-3, pColours[WCOL_HILITE]);
+			iV_Line(x1-3,y1-3, x1-3,y0+2, pColours[WCOL_HILITE]);
 		}
 	}
 	else
 	{
 		/* Display the button up */
 		pie_BoxFillIndex(x0,y0,x1,y1,WCOL_BKGRND);
-		iV_Line(x0,y0, x1,y0,*(pColours + WCOL_LIGHT));
-		iV_Line(x0,y0, x0,y1,*(pColours + WCOL_LIGHT));
-		iV_Line(x0,y1, x1,y1,*(pColours + WCOL_DARK));
-		iV_Line(x1,y1, x1,y0,*(pColours + WCOL_DARK));
+		iV_Line(x0,y0, x1,y0, pColours[WCOL_LIGHT]);
+		iV_Line(x0,y0, x0,y1, pColours[WCOL_LIGHT]);
+		iV_Line(x0,y1, x1,y1, pColours[WCOL_DARK]);
+		iV_Line(x1,y1, x1,y0, pColours[WCOL_DARK]);
 
 		//if (0)
 		if (psButton->pText)
 		{
 			iV_SetFont(psButton->FontID);
-			iV_SetTextColour((UWORD)*(pColours + WCOL_TEXT));
+			iV_SetTextColour((UWORD)pColours[WCOL_TEXT]);
 			fw = iV_GetTextWidth(psButton->pText);
 			fx = x0 + (psButton->width - fw) / 2;
 			fy = y0 + (psButton->height - iV_GetTextLineSize())/2 - iV_GetTextAboveBase();
@@ -397,14 +397,10 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 		if (psButton->state & WBUTS_HILITE)
 		{
 			/* Display the button hilite */
-			iV_Line(x0+2,y0+2, x1-3,y0+2,*(pColours + WCOL_HILITE));
-			iV_Line(x0+2,y0+2, x0+2,y1-3,*(pColours + WCOL_HILITE));
-			iV_Line(x0+2,y1-3, x1-3,y1-3,*(pColours + WCOL_HILITE));
-			iV_Line(x1-3,y1-3, x1-3,y0+2,*(pColours + WCOL_HILITE));
+			iV_Line(x0+2,y0+2, x1-3,y0+2, pColours[WCOL_HILITE]);
+			iV_Line(x0+2,y0+2, x0+2,y1-3, pColours[WCOL_HILITE]);
+			iV_Line(x0+2,y1-3, x1-3,y1-3, pColours[WCOL_HILITE]);
+			iV_Line(x1-3,y1-3, x1-3,y0+2, pColours[WCOL_HILITE]);
 		}
 	}
 }
-
-
-
-

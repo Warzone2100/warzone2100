@@ -214,16 +214,16 @@ void tipDisplay(void)
 
 
 		/* Draw the tool tip */
-		pie_BoxFillIndex(tx,ty, tx+tw, ty+th,(UBYTE)*(pColours + WCOL_TIPBKGRND));
-		iV_Box(tx,ty, tx+tw-1, ty+th-1,*(pColours + WCOL_LIGHT));
-		iV_Line(tx+1, ty+th-2, tx+1,    ty+1,  *(pColours + WCOL_DARK));
-		iV_Line(tx+2, ty+1,    tx+tw-2, ty+1,  *(pColours + WCOL_DARK));
-		iV_Line(tx,	  ty+th,   tx+tw,   ty+th, *(pColours + WCOL_DARK));
-		iV_Line(tx+tw,ty+th-1, tx+tw,   ty,    *(pColours + WCOL_DARK));
+		pie_BoxFillIndex(tx,ty, tx+tw, ty+th, (UBYTE)pColours[WCOL_TIPBKGRND]);
+		iV_Box(tx,ty, tx+tw-1, ty+th-1, pColours[WCOL_LIGHT]);
+		iV_Line(tx+1, ty+th-2, tx+1,    ty+1, pColours[WCOL_DARK]);
+		iV_Line(tx+2, ty+1,    tx+tw-2, ty+1, pColours[WCOL_DARK]);
+		iV_Line(tx,	  ty+th,   tx+tw,   ty+th, pColours[WCOL_DARK]);
+		iV_Line(tx+tw,ty+th-1, tx+tw,   ty, pColours[WCOL_DARK]);
 
 
 		iV_SetFont(FontID);
-//		iV_SetTextColour((UWORD)*(pColours + WCOL_TEXT));
+//		iV_SetTextColour((UWORD)pColours[WCOL_TEXT]);
 		iV_SetTextColour((UWORD)TipColour);
 		iV_DrawText(pTip,fx,fy);
 
@@ -232,6 +232,3 @@ void tipDisplay(void)
 		break;
 	}
 }
-
-
-

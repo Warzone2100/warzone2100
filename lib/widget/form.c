@@ -1232,10 +1232,10 @@ void formDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColo
 		y1 = y0 + psWidget->height;
 
 		pie_BoxFillIndex(x0+1,y0+1, x1-1,y1-1,WCOL_BKGRND);
-		iV_Line(x0,y1,x0,y0,*(pColours + WCOL_LIGHT));
-		iV_Line(x0,y0,x1,y0,*(pColours + WCOL_LIGHT));
-		iV_Line(x1,y0,x1,y1,*(pColours + WCOL_DARK));
-		iV_Line(x1,y1,x0,y1,*(pColours + WCOL_DARK));
+		iV_Line(x0,y1,x0,y0, pColours[WCOL_LIGHT]);
+		iV_Line(x0,y0,x1,y0, pColours[WCOL_LIGHT]);
+		iV_Line(x1,y0,x1,y1, pColours[WCOL_DARK]);
+		iV_Line(x1,y1,x0,y1, pColours[WCOL_DARK]);
 	}
 }
 
@@ -1259,18 +1259,18 @@ void formDisplayClickable(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWO
 	if (psForm->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
 	{
 		/* Form down */
-		iV_Line(x0,y1,x0,y0,*(pColours + WCOL_DARK));
-		iV_Line(x0,y0,x1,y0,*(pColours + WCOL_DARK));
-		iV_Line(x1,y0,x1,y1,*(pColours + WCOL_LIGHT));
-		iV_Line(x1,y1,x0,y1,*(pColours + WCOL_LIGHT));
+		iV_Line(x0,y1,x0,y0, pColours[WCOL_DARK]);
+		iV_Line(x0,y0,x1,y0, pColours[WCOL_DARK]);
+		iV_Line(x1,y0,x1,y1, pColours[WCOL_LIGHT]);
+		iV_Line(x1,y1,x0,y1, pColours[WCOL_LIGHT]);
 	}
 	else
 	{
 		/* Form up */
-		iV_Line(x0,y1,x0,y0,*(pColours + WCOL_LIGHT));
-		iV_Line(x0,y0,x1,y0,*(pColours + WCOL_LIGHT));
-		iV_Line(x1,y0,x1,y1,*(pColours + WCOL_DARK));
-		iV_Line(x1,y1,x0,y1,*(pColours + WCOL_DARK));
+		iV_Line(x0,y1,x0,y0, pColours[WCOL_LIGHT]);
+		iV_Line(x0,y0,x1,y0, pColours[WCOL_LIGHT]);
+		iV_Line(x1,y0,x1,y1, pColours[WCOL_DARK]);
+		iV_Line(x1,y1,x0,y1, pColours[WCOL_DARK]);
 	}
 }
 
@@ -1305,25 +1305,25 @@ static void formDisplayTTabs(W_TABFORM *psForm,SDWORD x0, SDWORD y0,
 				/* Fill in the tab */
 				pie_BoxFillIndex(x+1,y0+1, x1-1,y1,WCOL_BKGRND);
 				/* Draw the outline */
-				iV_Line(x,y0+2, x,y1-1,*(pColours + WCOL_LIGHT));
-				iV_Line(x,y0+2, x+2,y0,*(pColours + WCOL_LIGHT));
-				iV_Line(x+2,y0, x1-1,y0,*(pColours + WCOL_LIGHT));
-				iV_Line(x1,y0+1, x1,y1,*(pColours + WCOL_DARK));
+				iV_Line(x,y0+2, x,y1-1, pColours[WCOL_LIGHT]);
+				iV_Line(x,y0+2, x+2,y0, pColours[WCOL_LIGHT]);
+				iV_Line(x+2,y0, x1-1,y0, pColours[WCOL_LIGHT]);
+				iV_Line(x1,y0+1, x1,y1, pColours[WCOL_DARK]);
 			}
 			else
 			{
 				/* Fill in the tab */
 				pie_BoxFillIndex(x+1,y0+2, x1-1,y1-1,WCOL_BKGRND);
 				/* Draw the outline */
-				iV_Line(x,y0+3, x,y1-1,*(pColours + WCOL_LIGHT));
-				iV_Line(x,y0+3, x+2,y0+1,*(pColours + WCOL_LIGHT));
-				iV_Line(x+2,y0+1, x1-1,y0+1,*(pColours + WCOL_LIGHT));
-				iV_Line(x1,y0+2, x1,y1-1,*(pColours + WCOL_DARK));
+				iV_Line(x,y0+3, x,y1-1, pColours[WCOL_LIGHT]);
+				iV_Line(x,y0+3, x+2,y0+1, pColours[WCOL_LIGHT]);
+				iV_Line(x+2,y0+1, x1-1,y0+1, pColours[WCOL_LIGHT]);
+				iV_Line(x1,y0+2, x1,y1-1, pColours[WCOL_DARK]);
 			}
 			if (i == hilite)
 			{
 				/* Draw the hilite box */
-				iV_Box(x+2,y0+4, x1-3, y1-3,*(pColours + WCOL_HILITE));
+				iV_Box(x+2,y0+4, x1-3, y1-3, pColours[WCOL_HILITE]);
 			}
 		}
 		x += width + TabGap;
@@ -1362,25 +1362,25 @@ static void formDisplayBTabs(W_TABFORM *psForm,SDWORD x0, SDWORD y0,
 				/* Fill in the tab */
 				pie_BoxFillIndex(x+1,y0, x1-1,y1-1,WCOL_BKGRND);
 				/* Draw the outline */
-				iV_Line(x,y0, x,y1-1,*(pColours + WCOL_LIGHT));
-				iV_Line(x,y1, x1-3,y1,*(pColours + WCOL_DARK));
-				iV_Line(x1-2,y1, x1,y1-2,*(pColours + WCOL_DARK));
-				iV_Line(x1,y1-3, x1,y0+1,*(pColours + WCOL_DARK));
+				iV_Line(x,y0, x,y1-1, pColours[WCOL_LIGHT]);
+				iV_Line(x,y1, x1-3,y1, pColours[WCOL_DARK]);
+				iV_Line(x1-2,y1, x1,y1-2, pColours[WCOL_DARK]);
+				iV_Line(x1,y1-3, x1,y0+1, pColours[WCOL_DARK]);
 			}
 			else
 			{
 				/* Fill in the tab */
 				pie_BoxFillIndex(x+1,y0+1, x1-1,y1-2,WCOL_BKGRND);
 				/* Draw the outline */
-				iV_Line(x,y0+1, x,y1-1,*(pColours + WCOL_LIGHT));
-				iV_Line(x+1,y1-1, x1-3,y1-1,*(pColours + WCOL_DARK));
-				iV_Line(x1-2,y1-1, x1,y1-3,*(pColours + WCOL_DARK));
-				iV_Line(x1,y1-4, x1,y0+1,*(pColours + WCOL_DARK));
+				iV_Line(x,y0+1, x,y1-1, pColours[WCOL_LIGHT]);
+				iV_Line(x+1,y1-1, x1-3,y1-1, pColours[WCOL_DARK]);
+				iV_Line(x1-2,y1-1, x1,y1-3, pColours[WCOL_DARK]);
+				iV_Line(x1,y1-4, x1,y0+1, pColours[WCOL_DARK]);
 			}
 			if (i == hilite)
 			{
 				/* Draw the hilite box */
-				iV_Box(x+2,y0+3, x1-3, y1-4,*(pColours + WCOL_HILITE));
+				iV_Box(x+2,y0+3, x1-3, y1-4, pColours[WCOL_HILITE]);
 			}
 		}
 		x += width + TabGap;
@@ -1419,24 +1419,24 @@ static void formDisplayLTabs(W_TABFORM *psForm,SDWORD x0, SDWORD y0,
 				/* Fill in the tab */
 				pie_BoxFillIndex(x0+1,y+1, x1,y1-1,WCOL_BKGRND);
 				/* Draw the outline */
-				iV_Line(x0,y, x1-1,y,*(pColours + WCOL_LIGHT));
-				iV_Line(x0,y+1, x0,y1-2,*(pColours + WCOL_LIGHT));
-				iV_Line(x0+1,y1-1, x0+2,y1,*(pColours + WCOL_DARK));
-				iV_Line(x0+3,y1, x1,y1,*(pColours + WCOL_DARK));
+				iV_Line(x0,y, x1-1,y, pColours[WCOL_LIGHT]);
+				iV_Line(x0,y+1, x0,y1-2, pColours[WCOL_LIGHT]);
+				iV_Line(x0+1,y1-1, x0+2,y1, pColours[WCOL_DARK]);
+				iV_Line(x0+3,y1, x1,y1, pColours[WCOL_DARK]);
 			}
 			else
 			{
 				/* Fill in the tab */
 				pie_BoxFillIndex(x0+2,y+1, x1-1,y1-1,WCOL_BKGRND);
 				/* Draw the outline */
-				iV_Line(x0+1,y, x1-1,y,*(pColours + WCOL_LIGHT));
-				iV_Line(x0+1,y+1, x0+1,y1-2,*(pColours + WCOL_LIGHT));
-				iV_Line(x0+2,y1-1, x0+3,y1,*(pColours + WCOL_DARK));
-				iV_Line(x0+4,y1, x1-1,y1,*(pColours + WCOL_DARK));
+				iV_Line(x0+1,y, x1-1,y, pColours[WCOL_LIGHT]);
+				iV_Line(x0+1,y+1, x0+1,y1-2, pColours[WCOL_LIGHT]);
+				iV_Line(x0+2,y1-1, x0+3,y1, pColours[WCOL_DARK]);
+				iV_Line(x0+4,y1, x1-1,y1, pColours[WCOL_DARK]);
 			}
 			if (i == hilite)
 			{
-				iV_Box(x0+4,y+2, x1-2, y1-3,*(pColours + WCOL_HILITE));
+				iV_Box(x0+4,y+2, x1-2, y1-3, pColours[WCOL_HILITE]);
 			}
 		}
 		y += height + TabGap;
@@ -1473,26 +1473,26 @@ static void formDisplayRTabs(W_TABFORM *psForm,SDWORD x0, SDWORD y0,
 			if (i == selected)
 			{
 				/* Fill in the tab */
-				pie_BoxFillIndex(x0,y+1, x1-1,y1-1,(UBYTE)*(pColours + WCOL_BKGRND));
+				pie_BoxFillIndex(x0,y+1, x1-1,y1-1, (UBYTE)pColours[WCOL_BKGRND]);
 				/* Draw the outline */
-				iV_Line(x0,y, x1-1,y,*(pColours + WCOL_LIGHT));
-				iV_Line(x1,y, x1,y1-2,*(pColours + WCOL_DARK));
-				iV_Line(x1-1,y1-1, x1-2,y1,*(pColours + WCOL_DARK));
-				iV_Line(x1-3,y1, x0,y1,*(pColours + WCOL_DARK));
+				iV_Line(x0,y, x1-1,y, pColours[WCOL_LIGHT]);
+				iV_Line(x1,y, x1,y1-2, pColours[WCOL_DARK]);
+				iV_Line(x1-1,y1-1, x1-2,y1, pColours[WCOL_DARK]);
+				iV_Line(x1-3,y1, x0,y1, pColours[WCOL_DARK]);
 			}
 			else
 			{
 				/* Fill in the tab */
-				pie_BoxFillIndex(x0+1,y+1, x1-2,y1-1,(UBYTE)*(pColours + WCOL_BKGRND));
+				pie_BoxFillIndex(x0+1,y+1, x1-2,y1-1, (UBYTE)pColours[WCOL_BKGRND]);
 				/* Draw the outline */
-				iV_Line(x0+1,y, x1-1,y,*(pColours + WCOL_LIGHT));
-				iV_Line(x1-1,y, x1-1,y1-2,*(pColours + WCOL_DARK));
-				iV_Line(x1-2,y1-1, x1-3,y1,*(pColours + WCOL_DARK));
-				iV_Line(x1-4,y1, x0+1,y1,*(pColours + WCOL_DARK));
+				iV_Line(x0+1,y, x1-1,y, pColours[WCOL_LIGHT]);
+				iV_Line(x1-1,y, x1-1,y1-2, pColours[WCOL_DARK]);
+				iV_Line(x1-2,y1-1, x1-3,y1, pColours[WCOL_DARK]);
+				iV_Line(x1-4,y1, x0+1,y1, pColours[WCOL_DARK]);
 			}
 			if (i == hilite)
 			{
-				iV_Box(x0+2,y+2, x1-4, y1-3,*(pColours + WCOL_HILITE));
+				iV_Box(x0+2,y+2, x1-4, y1-3, pColours[WCOL_HILITE]);
 			}
 		}
 		y += height + TabGap;
@@ -1563,10 +1563,10 @@ void formDisplayTabbed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD 
 		if (!(psForm->style & WFORM_INVISIBLE))
 		{
 			pie_BoxFillIndex(x0,y0,x1,y1,WCOL_BKGRND);
-			iV_Line(x0,y1,x0,y0,*(pColours + WCOL_LIGHT));
-			iV_Line(x0,y0,x1,y0,*(pColours + WCOL_LIGHT));
-			iV_Line(x1,y0,x1,y1,*(pColours + WCOL_DARK));
-			iV_Line(x1,y1,x0,y1,*(pColours + WCOL_DARK));
+			iV_Line(x0,y1,x0,y0, pColours[WCOL_LIGHT]);
+			iV_Line(x0,y0,x1,y0, pColours[WCOL_LIGHT]);
+			iV_Line(x1,y0,x1,y1, pColours[WCOL_DARK]);
+			iV_Line(x1,y1,x0,y1, pColours[WCOL_DARK]);
 		}
 	}
 
