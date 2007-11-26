@@ -56,7 +56,10 @@
 #define WZCOL_GREEN			psPalette[7]
 #define WZCOL_RED			psPalette[8]
 #define WZCOL_YELLOW			psPalette[9]
-#define WZCOL_MAX			10
+#define WZCOL_MENU_BACKGROUND		psPalette[10]
+#define WZCOL_MENU_BORDER		psPalette[11]
+#define WZCOL_MENU_LOAD_BORDER		psPalette[12]
+#define WZCOL_MAX			13
 
 //*************************************************************************
 

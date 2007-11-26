@@ -635,33 +635,29 @@ void removeWildcards(char *pStr)
 
 static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
-	//UDWORD col;
-    UBYTE   col;
+	PIELIGHT col;
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
 
 	if(psWidget->pUserData)
 	{
-		col = COL_GREEN;
+		col = WZCOL_GREEN;
 	}
 	else
 	{
-		col = COL_RED;
+		col = WZCOL_MENU_LOAD_BORDER;
 	}
 
-	iV_BoxFill(x,y,x+psWidget->width,y+psWidget->height,col);
-	iV_BoxFill(x+2,y+2,x+psWidget->width-2,y+psWidget->height-2,COL_BLUE);
-
-
+	pie_BoxFill(x, y, x + psWidget->width, y + psWidget->height, col);
+	pie_BoxFill(x + 2,y + 2, x + psWidget->width - 2, y + psWidget->height - 2, WZCOL_MENU_BACKGROUND);
 }
+
 // ////////////////////////////////////////////////////////////////////////////
 static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
 
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
-//	UWORD	im = (UWORD)UNPACKDWORD_TRI_B((UDWORD)psWidget->pUserData);
-//	UWORD	im2= (UWORD)(UNPACKDWORD_TRI_C((UDWORD)psWidget->pUserData));
 	char  butString[64];
 
 	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
@@ -680,11 +676,9 @@ static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UD
 
 		//draw text
 		iV_DrawText( butString, x+4, y+17);
-
-
 	}
-
 }
+
 // ////////////////////////////////////////////////////////////////////////////
 static void displayLoadSaveEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
 {
@@ -693,21 +687,13 @@ static void displayLoadSaveEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	UDWORD	w = psWidget->width;
 	UDWORD  h = psWidget->height;
 
-	iV_BoxFill(x,y,x+w,y+h,COL_RED);
-	iV_BoxFill(x+1,y+1,x+w-1,y+h-1,COL_BLUE);
+	pie_BoxFill(x, y, x + w, y + h, WZCOL_MENU_LOAD_BORDER);
+	pie_BoxFill(x + 1, y + 1, x + w - 1, y + h - 1, WZCOL_MENU_BACKGROUND);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 void drawBlueBox(UDWORD x,UDWORD y, UDWORD w, UDWORD h)
 {
-    UBYTE       dark = COL_BLUE;
-    UBYTE       light = COL_LIGHTBLUE;
-
-	// box
-	pie_BoxFillIndex(x-1,y-1,x+w+1,y+h+1,light);
-	pie_BoxFillIndex(x,y,x+w,y+h,dark);
+	pie_BoxFill(x - 1, y - 1, x + w + 1, y + h + 1, WZCOL_MENU_BORDER);
+	pie_BoxFill(x, y , x + w, y + h, WZCOL_MENU_BACKGROUND);
 }
-
-
-
-
