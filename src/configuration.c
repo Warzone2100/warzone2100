@@ -599,6 +599,7 @@ BOOL saveConfig(void)
 	setWarzoneKeyNumeric("reopenBuild",(SDWORD)(intGetReopenBuild()));	// build menu
 	setWarzoneKeyNumeric("radarObjectMode",(SDWORD)bEnemyAllyRadarColor);    // enemy/allies radar view
 	setWarzoneKeyNumeric("radarTerrainMode",(SDWORD)radarDrawMode);
+	setWarzoneKeyNumeric("trapCursor", war_GetTrapCursor());
 
 	if(!bMultiPlayer)
 	{
