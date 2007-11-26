@@ -287,7 +287,8 @@ static void displayMultiChat(void)
 
 	if((gameTime2 % 500) < 250)
 	{
-		iV_BoxFill( RET_X + pixelLength + 3, 474 + E_H - (pixelHeight/4), RET_X + pixelLength + 10, 473 + E_H, 255 );
+		// implement blinking cursor in multiplayer chat
+		pie_BoxFill(RET_X + pixelLength + 3, 474 + E_H - (pixelHeight/4), RET_X + pixelLength + 10, 473 + E_H, WZCOL_CURSOR);
 	}
 
 	/* FIXME: GET RID OF THE MAGIC NUMBERS BELOW */
@@ -4487,10 +4488,10 @@ static void	processDestinationTarget( void )
 				x1 = (SWORD)(x+offset);
 				y1 = (SWORD)(y+offset);
 
-				iV_BoxFill(x0,y0,x0+2,y0+2,COL_WHITE);
-				iV_BoxFill(x1-2,y0-2,x1,y0,COL_WHITE);
-				iV_BoxFill(x1-2,y1-2,x1,y1,COL_WHITE);
-				iV_BoxFill(x0,y1,x0+2,y1+2,COL_WHITE);
+				pie_BoxFill(x0, y0, x0 + 2, y0 + 2, WZCOL_WHITE);
+				pie_BoxFill(x1 - 2, y0 - 2, x1, y0, WZCOL_WHITE);
+				pie_BoxFill(x1 - 2, y1 - 2, x1, y1, WZCOL_WHITE);
+				pie_BoxFill(x0, y1, x0 + 2, y1 + 2, WZCOL_WHITE);
 		}
 		else
 		{

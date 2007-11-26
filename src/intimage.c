@@ -319,9 +319,7 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 									x+Rect->BRXOffset,
 									y+Height-INCEND+Rect->BRYOffset);
 				} else {
-					iV_BoxFill( x+Rect->TLXOffset,
-								y+Rect->TLYOffset,
-								x+Rect->BRXOffset,
+					pie_BoxFillIndex(x + Rect->TLXOffset, y + Rect->TLYOffset, x + Rect->BRXOffset,
 								y+Height-INCEND+Rect->BRYOffset,Rect->ColourIndex);
 				}
 				break;
@@ -337,8 +335,7 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 									x+Width-INCEND+Rect->BRXOffset,
 									y+Height-INCEND+Rect->BRYOffset);
 				} else {
-					iV_BoxFill( x+Width-INCEND+Rect->TLXOffset,
-								y+Rect->TLYOffset,
+					pie_BoxFillIndex(x + Width-INCEND + Rect->TLXOffset, y + Rect->TLYOffset,
 								x+Width-INCEND+Rect->BRXOffset,
 								y+Height-INCEND+Rect->BRYOffset,Rect->ColourIndex);
 				}
@@ -355,9 +352,7 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 									x+Width-INCEND+Rect->BRXOffset,
 									y+Rect->BRYOffset);
 				} else {
-					iV_BoxFill( x+Rect->TLXOffset,
-								y+Rect->TLYOffset,
-								x+Width-INCEND+Rect->BRXOffset,
+					pie_BoxFillIndex(x + Rect->TLXOffset, y + Rect->TLYOffset, x + Width-INCEND+Rect->BRXOffset,
 								y+Rect->BRYOffset,Rect->ColourIndex);
 				}
 				break;
@@ -375,8 +370,7 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 									x+Width-INCEND+Rect->BRXOffset,
 									y+Height-INCEND+Rect->BRYOffset);
 				} else {
-					iV_BoxFill( x+Rect->TLXOffset,
-						   		y+Height-INCEND+Rect->TLYOffset,
+					pie_BoxFillIndex(x + Rect->TLXOffset, y + Height-INCEND+Rect->TLYOffset,
 						   		x+Width-INCEND+Rect->BRXOffset,
 						   		y+Height-INCEND+Rect->BRYOffset,Rect->ColourIndex);
 				}

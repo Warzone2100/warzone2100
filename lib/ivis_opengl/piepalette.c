@@ -110,6 +110,9 @@ void pie_SetColourDefines(void)
 	COL_YELLOW	  	= pal_GetNearestColour( 255, 255,  0);
 	COL_WHITE 		= pal_GetNearestColour( 255, 255, 255);
 
+// used to print out values from the old palette; remove with the old palette
+// #define PRINTCOL(x) debug(LOG_ERROR, "(%hhu, %hhu, %hhu)", psGamePal[x].byte.r, psGamePal[x].byte.g, psGamePal[x].byte.b);
+
 	// TODO: Read these from file so that mod-makers can change them
 	WZCOL_WHITE.byte.a = 255;
 	WZCOL_WHITE.byte.r = 255;
@@ -141,6 +144,7 @@ void pie_SetColourDefines(void)
 	WZCOL_HEALTH_HIGH	= WZCOL_GREEN;
 	WZCOL_HEALTH_MEDIUM	= WZCOL_YELLOW;
 	WZCOL_HEALTH_LOW	= WZCOL_RED;
+	WZCOL_CURSOR		= WZCOL_WHITE;
 
 	WZCOL_MENU_BACKGROUND.byte.a	= 255;
 	WZCOL_MENU_BACKGROUND.byte.r	= 0;
@@ -154,6 +158,9 @@ void pie_SetColourDefines(void)
 
 	WZCOL_MENU_LOAD_BORDER		= WZCOL_BLACK;
 	WZCOL_MENU_LOAD_BORDER.byte.r	= 133;
+
+	WZCOL_MENU_SCORES_INTERIOR	= WZCOL_BLACK;
+	WZCOL_MENU_SCORES_INTERIOR.byte.b = 33;
 }
 
 void pal_ShutDown(void)

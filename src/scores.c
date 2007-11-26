@@ -36,6 +36,7 @@
 #include "lib/ivis_common/piemode.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/piepalette.h"
 #include "objects.h"
 #include "droiddef.h"
 #include "basedef.h"
@@ -349,10 +350,10 @@ UDWORD	div;
 			iV_Box(x,y,x+width,y+height,0);
 
 			/* Draw the background border box */
-			iV_BoxFill(x-1,y-1,x+width+1,y+height+1,1);
+			pie_BoxFill(x - 1, y - 1, x + width + 1, y + height + 1, WZCOL_MENU_BACKGROUND);
 
 			/* Draw the interior grey */
-			iV_BoxFill(x,y,x+width,y+height,222);
+			pie_BoxFill(x, y, x + width, y + height, WZCOL_MENU_SCORES_INTERIOR);
 
 			if( ((gameTime2 - dispST) > infoBars[index].queTime) )
 			{
@@ -367,9 +368,9 @@ UDWORD	div;
 				{
 
 					/* Black shadow */
-					iV_BoxFill(x+1,y+3,x+MAKEINT(length)-1,y+height-1,1);
+					pie_BoxFill(x + 1, y + 3, x + MAKEINT(length) - 1, y + height - 1, WZCOL_MENU_BACKGROUND);
 					/* Solid coloured bit */
-					iV_BoxFill(x+1,y+2,x+MAKEINT(length)-4,y+height-4,(UBYTE)infoBars[index].colour);
+					pie_BoxFillIndex(x + 1, y + 2, x + MAKEINT(length) - 4, y + height - 4, (UBYTE)infoBars[index].colour);
 				}
 			}
 			/* Now render the text by the bar */
