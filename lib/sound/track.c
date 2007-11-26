@@ -104,9 +104,9 @@ unsigned int sound_SetTrackVals(const char* fileName, BOOL loop, unsigned int vo
 	unsigned int trackID;
 	TRACK* psTrack;
 
-	if (strlen(fileName) == 0) // check for empty filename.  This is a non fatal error.
+	if (fileName == NULL || strlen(fileName) == 0) // check for empty filename.  This is a non fatal error.
 	{
-		debug(LOG_ERROR, "sound_SetTrackVals: filename empty");
+		debug(LOG_ERROR, "sound_SetTrackVals: fileName is %s", (fileName == NULL) ? "a NULL pointer" : "empty");
 		return 0;
 	}
 

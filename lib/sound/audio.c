@@ -974,9 +974,9 @@ SDWORD audio_GetTrackID( const char *fileName )
 		return SAMPLE_NOT_FOUND;
 	}
 
-	if (strlen(fileName) == 0)
+	if (fileName == NULL || strlen(fileName) == 0)
 	{
-		debug(LOG_ERROR," audio_GetTrackID() fileName was empty");
+		debug(LOG_ERROR, "audio_GetTrackID: fileName is %s", (fileName == NULL) ? "a NULL pointer" : "empty");
 		return SAMPLE_NOT_FOUND;
 	}
 
