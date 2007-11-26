@@ -2719,8 +2719,8 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 		{
 			firingStage = (2*scrR) - 1;
 		}
-		pie_BoxFill(scrX - scrR-1, 6+scrY + 0 + (weapon_slot * 5), scrX - scrR +(2*scrR),    6+scrY+3 + (weapon_slot * 5), 0x00020202);
-		pie_BoxFill(scrX - scrR,   6+scrY + 1 + (weapon_slot * 5), scrX - scrR +firingStage, 6+scrY+2 + (weapon_slot * 5), 0x00ffffff);
+		pie_BoxFill(scrX - scrR-1, 6+scrY + 0 + (weapon_slot * 5), scrX - scrR +(2*scrR),    6+scrY+3 + (weapon_slot * 5), WZCOL_RELOAD_BACKGROUND);
+		pie_BoxFill(scrX - scrR,   6+scrY + 1 + (weapon_slot * 5), scrX - scrR +firingStage, 6+scrY+2 + (weapon_slot * 5), WZCOL_RELOAD_BAR);
 		return;
 	}
 	/* ******** ********/
@@ -2812,8 +2812,8 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 				firingStage = (2*scrR) - 1;
 			}
 			/* Power bars */
-			pie_BoxFill(scrX - scrR-1, 6+scrY + 0 + (weapon_slot * 5), scrX - scrR +(2*scrR),    6+scrY+3 + (weapon_slot * 5), 0x00020202);
-			pie_BoxFill(scrX - scrR,   6+scrY + 1 + (weapon_slot * 5), scrX - scrR +firingStage, 6+scrY+2 + (weapon_slot * 5), 0x00ffffff);
+			pie_BoxFill(scrX - scrR-1, 6+scrY + 0 + (weapon_slot * 5), scrX - scrR +(2*scrR),    6+scrY+3 + (weapon_slot * 5), WZCOL_RELOAD_BACKGROUND);
+			pie_BoxFill(scrX - scrR,   6+scrY + 1 + (weapon_slot * 5), scrX - scrR +firingStage, 6+scrY+2 + (weapon_slot * 5), WZCOL_RELOAD_BAR);
 		}
 	}
 }
@@ -2823,8 +2823,7 @@ static void	drawStructureSelections( void )
 {
 STRUCTURE	*psStruct;
 SDWORD		scrX,scrY,scrR;
-UDWORD		longPowerCol = 0;
-UBYTE		powerCol;
+	PIELIGHT	powerCol = WZCOL_BLACK;
 UDWORD		health,width;
 UDWORD		scale;
 UDWORD		i;
@@ -2885,19 +2884,19 @@ float		mulH;
 				if(health>100) health =100;
 
 				if (health > REPAIRLEV_HIGH) {
-					longPowerCol = 0x0000ff00; //green
+					powerCol = WZCOL_HEALTH_HIGH;
 				} else if (health >= REPAIRLEV_LOW) {
-					longPowerCol = 0x00ffff00; //yellow
+					powerCol = WZCOL_HEALTH_MEDIUM;
 				} else {
-					longPowerCol = 0x00ff0000; //red
+					powerCol = WZCOL_HEALTH_LOW;
 				}
 				mulH = MAKEFRACT(health)/100;
 				mulH*=MAKEFRACT(width);
 				health = MAKEINT(mulH);
 				if(health>width) health = width;
 				health*=2;
-				pie_BoxFill(scrX-scrR - 1, scrY - 1, scrX + scrR + 1, scrY + 2, 0x00020202);
-				pie_BoxFill(scrX-scrR, scrY, scrX - scrR + health, scrY + 1, longPowerCol);
+				pie_BoxFill(scrX-scrR - 1, scrY - 1, scrX + scrR + 1, scrY + 2, WZCOL_RELOAD_BACKGROUND);
+				pie_BoxFill(scrX-scrR, scrY, scrX - scrR + health, scrY + 1, powerCol);
 				drawWeaponReloadBar((BASE_OBJECT *)psStruct, psStruct->asWeaps, 0);
 			}
 			else
@@ -2910,19 +2909,25 @@ float		mulH;
 					scrY = psStruct->sDisplay.screenY + (scale*10);
 					scrR = width;
 					health =  PERCENT(psStruct->currentBuildPts ,
-						psStruct->pStructureType->buildPoints);
-					if(health>=100) health = 100;	// belt and braces
-						powerCol = COL_YELLOW;
-						mulH = MAKEFRACT(health)/100;
-						mulH*=MAKEFRACT(width);
-						health = MAKEINT(mulH);
-						if(health>width) health = width;
-						health*=2;
-						pie_BoxFillIndex(scrX - scrR-1,scrY-1,scrX + scrR+1,scrY+2,1);
-						pie_BoxFillIndex(scrX - scrR,scrY ,scrX - scrR+health,scrY+1,powerCol);
+					psStruct->pStructureType->buildPoints);
+					if (health >= 100)
+					{
+						health = 100;	// belt and braces
 					}
+					powerCol = WZCOL_YELLOW;
+					mulH = MAKEFRACT(health) / 100;
+					mulH *= MAKEFRACT(width);
+					health = MAKEINT(mulH);
+					if (health > width)
+					{
+						health = width;
+					}
+					health *= 2;
+					pie_BoxFill(scrX - scrR - 1, scrY - 1, scrX + scrR + 1, scrY + 2, WZCOL_RELOAD_BACKGROUND);
+					pie_BoxFill(scrX - scrR, scrY, scrX - scrR + health, scrY + 1, powerCol);
 				}
 			}
+		}
 	}
 
 	for(i=0; i<MAX_PLAYERS; i++)
@@ -2984,13 +2989,22 @@ float		mulH;
 					//show body points
 					health = PERCENT(psStruct->body, structureBody(psStruct));
 				}
-				if (health > REPAIRLEV_HIGH) longPowerCol = 0x0000ff00; //green
-				else if (health > REPAIRLEV_LOW) longPowerCol = 0x00ffff00; //yellow
-				else longPowerCol = 0x00ff0000; //red
+				if (health > REPAIRLEV_HIGH)
+				{
+					powerCol = WZCOL_HEALTH_HIGH;
+				}
+				else if (health > REPAIRLEV_LOW)
+				{
+					powerCol = WZCOL_HEALTH_MEDIUM;
+				}
+				else
+				{
+					powerCol = WZCOL_HEALTH_LOW;
+				}
 				health = (((width*10000)/100)*health)/10000;
 				health*=2;
-				pie_BoxFill(scrX-scrR-1, scrY-1, scrX+scrR+1, scrY+2, 0x00020202);
-				pie_BoxFill(scrX-scrR, scrY, scrX-scrR+health, scrY+1, longPowerCol);
+				pie_BoxFill(scrX-scrR-1, scrY-1, scrX+scrR+1, scrY+2, WZCOL_RELOAD_BACKGROUND);
+				pie_BoxFill(scrX-scrR, scrY, scrX-scrR+health, scrY+1, powerCol);
 			}
 			else if(psStruct->status == SS_BEING_BUILT)
 			{
@@ -3000,13 +3014,12 @@ float		mulH;
 				scrY = psStruct->sDisplay.screenY + (scale*10);
 				scrR = width;
 				health =  PERCENT(psStruct->currentBuildPts , psStruct->pStructureType->buildPoints);
-				powerCol = COL_GREEN;
+				powerCol = WZCOL_GREEN;
 				health = (((width*10000)/100)*health)/10000;
 				health*=2;
-				pie_BoxFillIndex(scrX - scrR-1,scrY-1,scrX + scrR+1,scrY+2,1);
-				pie_BoxFillIndex(scrX - scrR-1,scrY,scrX - scrR+health,scrY+1,powerCol);
+				pie_BoxFill(scrX - scrR - 1, scrY - 1, scrX + scrR + 1, scrY + 2, WZCOL_RELOAD_BACKGROUND);
+				pie_BoxFill(scrX - scrR - 1, scrY, scrX - scrR + health, scrY + 1, powerCol);
 			}
-			//----
 		}
 	}
 
@@ -3099,9 +3112,8 @@ static void	drawDroidSelections( void )
 	UDWORD			scrX,scrY,scrR;
 	DROID			*psDroid;
 	UDWORD			damage;
-	UDWORD			longPowerCol = 0;
-	UBYTE			boxCol;
-	UDWORD			longBoxCol;
+	PIELIGHT		powerCol = WZCOL_BLACK;
+	PIELIGHT		boxCol;
 	BASE_OBJECT		*psClickedOn;
 	BOOL			bMouseOverDroid = FALSE;
 	BOOL			bMouseOverOwnDroid = FALSE;
@@ -3152,42 +3164,21 @@ static void	drawDroidSelections( void )
 			( bMouseOverOwnDroid && (psDroid == (DROID*)psClickedOn)) ||
 			( droidUnderRepair(psDroid) && psDroid->sDisplay.frameNumber == currentGameFrame) )
 		{
-//show resistance values if CTRL/SHIFT depressed (now done in reload bar)
-//            if (ctrlShiftDown())
-//          {
-//                if (psDroid->resistance)
-//                {
-//                    damage = PERCENT(psDroid->resistance, droidResistance(psDroid));
-//                }
-//                else
-//                {
-//                    damage = 100;
-//                }
-//            }
-//            else
-//            {
-				damage = PERCENT(psDroid->body,psDroid->originalBody);
-//            }
+			damage = PERCENT(psDroid->body, psDroid->originalBody);
 
-			if (damage > REPAIRLEV_HIGH) longPowerCol = 0x0000ff00; //green
-			else if (damage > REPAIRLEV_LOW) longPowerCol = 0x00ffff00; //yellow
-			else longPowerCol = 0x00ff0000; //red
-//show resistance values if CTRL/SHIFT depressed(now done in reload bar)
-//            if (ctrlShiftDown())
-//          {
-//                if (psDroid->resistance)
-//                {
-//                    mulH = MAKEFRACT(psDroid->resistance) / MAKEFRACT(droidResistance(psDroid));
-//                }
-//                else
-//                {
-//                    mulH = 100;
-//                }
-//            }
-//            else
-//            {
-				mulH = MAKEFRACT(psDroid->body) / MAKEFRACT(psDroid->originalBody);
-//            }
+			if (damage > REPAIRLEV_HIGH)
+			{
+				powerCol = WZCOL_HEALTH_HIGH;
+			}
+			else if (damage > REPAIRLEV_LOW)
+			{
+				powerCol = WZCOL_HEALTH_MEDIUM;
+			}
+			else
+			{
+				powerCol = WZCOL_HEALTH_LOW;
+			}
+			mulH = MAKEFRACT(psDroid->body) / MAKEFRACT(psDroid->originalBody);
 			damage = MAKEINT(mulH*MAKEFRACT(psDroid->sDisplay.screenR));// (((psDroid->sDisplay.screenR*10000)/100)*damage)/10000;
 			if(damage>psDroid->sDisplay.screenR) damage = psDroid->sDisplay.screenR;
 
@@ -3202,11 +3193,9 @@ static void	drawDroidSelections( void )
 //				&& (scrY-scrR)<DISP_HEIGHT)
 			{
 				if(!driveModeActive() || driveIsDriven(psDroid)) {
-					boxCol = defaultColours.white;
-					longBoxCol = 0x00ffffff;
+					boxCol = WZCOL_WHITE;
 				} else {
-					boxCol = defaultColours.green;
-					longBoxCol = 0x0000ff00;
+					boxCol = WZCOL_GREEN;
 				}
 
 				if(psDroid->selected)
@@ -3216,24 +3205,24 @@ static void	drawDroidSelections( void )
 					{
 						if(bEnergyBars)
 						{
-							pie_BoxFill(scrX-scrR, scrY+scrR-7, scrX-scrR+1, scrY+scrR, longBoxCol);
-							pie_BoxFill(scrX-scrR, scrY+scrR, scrX-scrR+7, scrY+scrR+1,longBoxCol);
-							pie_BoxFill(scrX+scrR-7, scrY+scrR, scrX+scrR, scrY+scrR+1,longBoxCol);
-							pie_BoxFill(scrX+scrR, scrY+scrR-7, scrX+scrR+1, scrY+scrR+1,longBoxCol);
+							pie_BoxFill(scrX-scrR, scrY+scrR-7, scrX-scrR+1, scrY+scrR, boxCol);
+							pie_BoxFill(scrX-scrR, scrY+scrR, scrX-scrR+7, scrY+scrR+1, boxCol);
+							pie_BoxFill(scrX+scrR-7, scrY+scrR, scrX+scrR, scrY+scrR+1, boxCol);
+							pie_BoxFill(scrX+scrR, scrY+scrR-7, scrX+scrR+1, scrY+scrR+1, boxCol);
 						}
 						else
 						{
 							if(bTinyBars)
 							{
-								pie_BoxFill(scrX-scrR-3, scrY-3, scrX-scrR+3, scrY+3, 0x00010101);
-								pie_BoxFill(scrX-scrR-2, scrY-2, scrX-scrR+2, scrY+2, longPowerCol);
+								pie_BoxFill(scrX-scrR-3, scrY-3, scrX-scrR+3, scrY+3, WZCOL_RELOAD_BACKGROUND);
+								pie_BoxFill(scrX-scrR-2, scrY-2, scrX-scrR+2, scrY+2, powerCol);
 							}
 							else
 							{
-								pie_BoxFill(scrX-scrR, scrY+scrR-7, scrX-scrR+1, scrY+scrR, longPowerCol);
-								pie_BoxFill(scrX-scrR, scrY+scrR, scrX-scrR+7, scrY+scrR+1,longPowerCol);
-								pie_BoxFill(scrX+scrR-7, scrY+scrR, scrX+scrR, scrY+scrR+1,longPowerCol);
-								pie_BoxFill(scrX+scrR, scrY+scrR-7, scrX+scrR+1, scrY+scrR+1,longPowerCol);
+								pie_BoxFill(scrX-scrR, scrY+scrR-7, scrX-scrR+1, scrY+scrR, powerCol);
+								pie_BoxFill(scrX-scrR, scrY+scrR, scrX-scrR+7, scrY+scrR+1, powerCol);
+								pie_BoxFill(scrX+scrR-7, scrY+scrR, scrX+scrR, scrY+scrR+1, powerCol);
+								pie_BoxFill(scrX+scrR, scrY+scrR-7, scrX+scrR+1, scrY+scrR+1, powerCol);
 							}
 						}
 					}
@@ -3241,8 +3230,8 @@ static void	drawDroidSelections( void )
 				if(bEnergyBars)
 				{
 					/* Power bars */
-					pie_BoxFill(scrX - scrR - 1, scrY + scrR+2, scrX + scrR + 1, scrY + scrR + 5, 0x00020202);
-					pie_BoxFill(scrX - scrR, scrY + scrR+3, scrX - scrR + damage, scrY + scrR + 4, longPowerCol);
+					pie_BoxFill(scrX - scrR - 1, scrY + scrR+2, scrX + scrR + 1, scrY + scrR + 5, WZCOL_RELOAD_BACKGROUND);
+					pie_BoxFill(scrX - scrR, scrY + scrR+3, scrX - scrR + damage, scrY + scrR + 4, powerCol);
 				}
 
 				/* Write the droid rank out */
@@ -3301,9 +3290,18 @@ static void	drawDroidSelections( void )
 					damage = PERCENT(psDroid->body,psDroid->originalBody);
 				}
 
-				if (damage > REPAIRLEV_HIGH) longPowerCol = 0x0000ff00; //green
-				else if(damage > REPAIRLEV_LOW) longPowerCol = 0x00ffff00; //yellow
-				else longPowerCol = 0x00ff0000; //red
+				if (damage > REPAIRLEV_HIGH)
+				{
+					powerCol = WZCOL_HEALTH_HIGH;
+				}
+				else if (damage > REPAIRLEV_LOW)
+				{
+					powerCol = WZCOL_HEALTH_MEDIUM;
+				}
+				else
+				{
+					powerCol = WZCOL_HEALTH_LOW;
+				}
 
 				//show resistance values if CTRL/SHIFT depressed
 				if (ctrlShiftDown())
@@ -3322,8 +3320,6 @@ static void	drawDroidSelections( void )
 					mulH = MAKEFRACT(psDroid->body) / MAKEFRACT(psDroid->originalBody);
 				}
 				damage = MAKEINT(mulH*MAKEFRACT(psDroid->sDisplay.screenR));// (((psDroid->sDisplay.screenR*10000)/100)*damage)/10000;
-//			    damage = MAKEINT(MAKEFRACT(psDroid->body) / MAKEFRACT(psDroid->originalBody));// (((psDroid->sDisplay.screenR*10000)/100)*damage)/10000;
-//				damage = (((psDroid->sDisplay.screenR*10000)/100)*damage)/10000;
 				if(damage>psDroid->sDisplay.screenR) damage = psDroid->sDisplay.screenR;
 				damage *=2;
 				scrX = psDroid->sDisplay.screenX;
@@ -3335,19 +3331,17 @@ static void	drawDroidSelections( void )
 				if((scrX+scrR)>0 && (scrY+scrR)>0 && (scrX-scrR) < pie_GetVideoBufferWidth() && (scrY-scrR) < pie_GetVideoBufferHeight())
 				{
 					if(!driveModeActive() || driveIsDriven(psDroid)) {
-						boxCol = defaultColours.white;
-						longBoxCol = 0x00ffffff;
+						boxCol = WZCOL_WHITE;
 					} else {
-						boxCol = defaultColours.green;
-						longBoxCol = 0x0000ff00;
+						boxCol = WZCOL_GREEN;
 					}
 
 					//we always want to show the enemy health/resistance as energyBar - AB 18/06/99
 					//if(bEnergyBars)
 					{
 						/* Power bars */
-						pie_BoxFill(scrX - scrR - 1, scrY + scrR + 2, scrX + scrR + 1, scrY + scrR + 5, 0x00020202);
-						pie_BoxFill(scrX - scrR, scrY + scrR+3, scrX - scrR + damage, scrY + scrR + 4, longPowerCol);
+						pie_BoxFill(scrX - scrR - 1, scrY + scrR + 2, scrX + scrR + 1, scrY + scrR + 5, WZCOL_RELOAD_BACKGROUND);
+						pie_BoxFill(scrX - scrR, scrY + scrR+3, scrX - scrR + damage, scrY + scrR + 4, powerCol);
 					}
 				}
 			}

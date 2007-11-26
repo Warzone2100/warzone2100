@@ -42,7 +42,6 @@
 #include "piematrix.h"
 #include "screen.h"
 
-#define COLOURINTENSITY 0xffffffff
 /***************************************************************************/
 /*
  *	Local Variables
@@ -142,12 +141,8 @@ void pie_BoxFillIndex(int x0,int y0, int x1, int y1, UBYTE colour)
 	pie_DrawRect( x0, y0, x1, y1, light );
 }
 
-void pie_BoxFill(int x0,int y0, int x1, int y1, Uint32 colour)
+void pie_BoxFill(int x0,int y0, int x1, int y1, PIELIGHT colour)
 {
-	PIELIGHT plc;
-
-	plc.argb = colour;
-
 	pie_SetRendMode(REND_FLAT);
 	pie_SetTexturePage(-1);
 
@@ -166,7 +161,7 @@ void pie_BoxFill(int x0,int y0, int x1, int y1, Uint32 colour)
 	if (y1>psRendSurface->clip.bottom)
 		y1 = psRendSurface->clip.bottom;
 
-	pie_DrawRect(x0, y0, x1, y1, plc);
+	pie_DrawRect(x0, y0, x1, y1, colour);
 
 }
 /***************************************************************************/

@@ -46,11 +46,23 @@
 #define COL_YELLOW			colours[14]
 #define COL_WHITE			colours[15]
 
+#define WZCOL_BLACK			psPalette[0]
+#define WZCOL_WHITE			psPalette[1]
+#define WZCOL_RELOAD_BACKGROUND		psPalette[2]
+#define WZCOL_RELOAD_BAR		psPalette[3]
+#define WZCOL_HEALTH_HIGH		psPalette[4]
+#define WZCOL_HEALTH_MEDIUM		psPalette[5]
+#define WZCOL_HEALTH_LOW		psPalette[6]
+#define WZCOL_GREEN			psPalette[7]
+#define WZCOL_RED			psPalette[8]
+#define WZCOL_YELLOW			psPalette[9]
+#define WZCOL_MAX			10
+
 //*************************************************************************
 
 extern Uint8		colours[];
 extern Uint8		palShades[PALETTE_SIZE * PALETTE_SHADE_LEVEL];
-
+extern PIELIGHT		psPalette[];
 
 //*************************************************************************
 extern void		pal_Init(void);

@@ -43,6 +43,7 @@ static BOOL	bPaletteInitialised = FALSE;
 
 Uint8	palShades[PALETTE_SIZE * PALETTE_SHADE_LEVEL];
 Uint8	colours[16];
+PIELIGHT psPalette[WZCOL_MAX];
 
 
 //*************************************************************************
@@ -108,6 +109,38 @@ void pie_SetColourDefines(void)
 	COL_LIGHTMAGENTA	= pal_GetNearestColour( 255,  0, 255);
 	COL_YELLOW	  	= pal_GetNearestColour( 255, 255,  0);
 	COL_WHITE 		= pal_GetNearestColour( 255, 255, 255);
+
+	// TODO: Read these from file so that mod-makers can change them
+	WZCOL_WHITE.byte.a = 255;
+	WZCOL_WHITE.byte.r = 255;
+	WZCOL_WHITE.byte.g = 255;
+	WZCOL_WHITE.byte.b = 255;
+
+	WZCOL_BLACK.byte.a = 255;
+	WZCOL_BLACK.byte.r = 1;
+	WZCOL_BLACK.byte.g = 1;
+	WZCOL_BLACK.byte.b = 1;
+
+	WZCOL_GREEN.byte.a = 255;
+	WZCOL_GREEN.byte.r = 0;
+	WZCOL_GREEN.byte.g = 255;
+	WZCOL_GREEN.byte.b = 0;
+
+	WZCOL_RED.byte.a = 255;
+	WZCOL_RED.byte.r = 255;
+	WZCOL_RED.byte.g = 0;
+	WZCOL_RED.byte.b = 0;
+
+	WZCOL_YELLOW.byte.a = 255;
+	WZCOL_YELLOW.byte.r = 255;
+	WZCOL_YELLOW.byte.g = 255;
+	WZCOL_YELLOW.byte.b = 0;
+
+	WZCOL_RELOAD_BAR	= WZCOL_WHITE;
+	WZCOL_RELOAD_BACKGROUND	= WZCOL_BLACK;
+	WZCOL_HEALTH_HIGH	= WZCOL_GREEN;
+	WZCOL_HEALTH_MEDIUM	= WZCOL_YELLOW;
+	WZCOL_HEALTH_LOW	= WZCOL_RED;
 }
 
 void pal_ShutDown(void)
