@@ -2687,16 +2687,13 @@ static void	drawDragBox( void )
 // this should fix the overlapped reloadbar problem
 static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_slot)
 {
-	WEAPON_STATS	*psStats;
+	WEAPON_STATS		*psStats;
 	BOOL			bSalvo;
 	UDWORD			firingStage, interval, damLevel;
 	SDWORD			scrX,scrY, scrR, scale;
 	STRUCTURE		*psStruct;
-
-	/* ****************/
-	// display unit resistance instead of reload!
-	float mulH;
-	DROID *psDroid;
+	float			mulH;	// display unit resistance instead of reload!
+	DROID			*psDroid;
 
 	if (ctrlShiftDown() && (psObj->type == OBJ_DROID))
 	{
@@ -2724,8 +2721,6 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 		pie_BoxFill(scrX - scrR,   6+scrY + 1 + (weapon_slot * 5), scrX - scrR +firingStage, 6+scrY+2 + (weapon_slot * 5), WZCOL_RELOAD_BAR);
 		return;
 	}
-	/* ******** ********/
-
 
 	if (psWeap->nStat == 0)
 	{
@@ -2735,8 +2730,7 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 
 	psStats = asWeaponStats + psWeap->nStat;
 
-	/* Justifiable only when greater than a one second reload
-		or intra salvo time  */
+	/* Justifiable only when greater than a one second reload or intra salvo time  */
 	bSalvo = FALSE;
 	if(psStats->numRounds > 1)
 	{
@@ -2746,11 +2740,11 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 		(psStats->firePause > GAME_TICKS_PER_SEC) ||
 		((psObj->type == OBJ_DROID) && vtolDroid((DROID *)psObj)) )
 	{
-		if ((psObj->type == OBJ_DROID) &&
-			vtolDroid((DROID *)psObj))
+		if (psObj->type == OBJ_DROID && vtolDroid((DROID *)psObj))
 		{
 			//deal with VTOLs
 			firingStage = getNumAttackRuns((DROID *)psObj, weapon_slot) - ((DROID *)psObj)->sMove.iAttackRuns[weapon_slot];
+
 			//compare with max value
 			interval = getNumAttackRuns((DROID *)psObj, weapon_slot);
 		}
@@ -2765,12 +2759,6 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 			{
 				interval = weaponFirePause(psStats, psObj->player);
 			}
-
-			//we haven't calculated the damLevel yet! DOH!
-			/*if (damLevel < HEAVY_DAMAGE_LEVEL)
-			{
-				interval += interval;
-			}*/
 		}
 
 		scrX = psObj->sDisplay.screenX;
@@ -2822,16 +2810,16 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 
 static void	drawStructureSelections( void )
 {
-STRUCTURE	*psStruct;
-SDWORD		scrX,scrY,scrR;
+	STRUCTURE	*psStruct;
+	SDWORD		scrX,scrY,scrR;
 	PIELIGHT	powerCol = WZCOL_BLACK;
-UDWORD		health,width;
-UDWORD		scale;
-UDWORD		i;
-BASE_OBJECT	*psClickedOn;
-BOOL		bMouseOverStructure = FALSE;
-BOOL		bMouseOverOwnStructure = FALSE;
-float		mulH;
+	UDWORD		health,width;
+	UDWORD		scale;
+	UDWORD		i;
+	BASE_OBJECT	*psClickedOn;
+	BOOL		bMouseOverStructure = FALSE;
+	BOOL		bMouseOverOwnStructure = FALSE;
+	float		mulH;
 
 	psClickedOn = mouseTarget();
 	if(psClickedOn!=NULL && psClickedOn->type == OBJ_STRUCTURE)
@@ -2844,6 +2832,7 @@ float		mulH;
 	}
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 	pie_SetFogStatus(FALSE);
+
 	/* Go thru' all the buildings */
 	for(psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
 	{
@@ -2856,7 +2845,6 @@ float		mulH;
 										/* If it was clipped - reject it */
 										&& psStruct->sDisplay.frameNumber == currentGameFrame))
 			{
-			//----
 				scale = MAX(psStruct->pStructureType->baseWidth, psStruct->pStructureType->baseBreadth);
 				width = scale*20;
 				scrX = psStruct->sDisplay.screenX;
@@ -2866,8 +2854,8 @@ float		mulH;
 				if (ctrlShiftDown())
 				{
 					//show resistance values if CTRL/SHIFT depressed
-					UDWORD  resistance = structureResistance(
-						psStruct->pStructureType, psStruct->player);
+					UDWORD  resistance = structureResistance(psStruct->pStructureType, psStruct->player);
+
 					if (resistance)
 					{
 						health = PERCENT(psStruct->resistance, resistance);
@@ -2970,7 +2958,6 @@ float		mulH;
 			psStruct = (STRUCTURE*)psClickedOn;
 			if(psStruct->status==SS_BUILT)
 			{
-			//----
 				scale = MAX(psStruct->pStructureType->baseWidth, psStruct->pStructureType->baseBreadth);
 				width = scale*20;
 				scrX = psStruct->sDisplay.screenX;
@@ -3261,7 +3248,6 @@ static void	drawDroidSelections( void )
 
 			if (bReloadBars)
 			{
-				//Watermelon:1 reloadbar for each weapon
 				for(i = 0;i < psDroid->numWeaps;i++)
 				{
 					drawWeaponReloadBar((BASE_OBJECT *)psDroid, &psDroid->asWeaps[i], i);
