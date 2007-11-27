@@ -208,7 +208,7 @@ void pie_DrawSkybox(iView player, iView camera, float rotation, int texpage, int
 
 	// the texture wraps over at the edges (repeat)
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 	// fog should not affect the sky
 	glDisable(GL_FOG);
