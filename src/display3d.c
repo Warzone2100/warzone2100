@@ -2898,7 +2898,13 @@ float		mulH;
 				health*=2;
 				pie_BoxFill(scrX-scrR - 1, scrY - 1, scrX + scrR + 1, scrY + 2, WZCOL_RELOAD_BACKGROUND);
 				pie_BoxFill(scrX-scrR, scrY, scrX - scrR + health, scrY + 1, powerCol);
-				drawWeaponReloadBar((BASE_OBJECT *)psStruct, psStruct->asWeaps, 0);
+				if (bReloadBars)
+				{
+					for (i = 0; i < psStruct->numWeaps; i++)
+					{
+						drawWeaponReloadBar((BASE_OBJECT *)psStruct, &psStruct->asWeaps[i], i);
+					}
+				}
 			}
 			else
 			{
