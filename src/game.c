@@ -2444,6 +2444,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 
 		if (saveGameVersion >= VERSION_15)//V21
 		{
+			PIELIGHT colour;
+
 			offWorldKeepLists	= saveGameData.offWorldKeepLists;
 			setRubbleTile(saveGameData.RubbleTile);
 			setUnderwaterTile(saveGameData.WaterTile);
@@ -2477,7 +2479,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 				fogStatus = saveGameData.fogState;
 				fogStatus &= FOG_FLAGS;
 			}
-			pie_SetFogColour((PIELIGHT)saveGameData.fogColour);
+			colour.argb = saveGameData.fogColour;
+			pie_SetFogColour(colour);
 		}
 		if (saveGameVersion >= VERSION_19)//V21
 		{
@@ -4648,6 +4651,8 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 
 	if (version >= VERSION_15)
 	{
+		PIELIGHT colour;
+
 		offWorldKeepLists	= saveGameData.offWorldKeepLists;
 		setRubbleTile(saveGameData.RubbleTile);
 		setUnderwaterTile(saveGameData.WaterTile);
@@ -4681,7 +4686,8 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 			fogStatus = saveGameData.fogState;
 			fogStatus &= FOG_FLAGS;
 		}
-		pie_SetFogColour((PIELIGHT)saveGameData.fogColour);
+		colour.argb = saveGameData.fogColour;
+		pie_SetFogColour(colour);
 	}
 
 	if (version >= VERSION_17)
