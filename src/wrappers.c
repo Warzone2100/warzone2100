@@ -70,7 +70,8 @@ typedef struct _star
 	SDWORD	speed;
 } STAR;
 
-static STAR	stars[30];	// quick hack for loading stuff
+#define MAX_STARS 20
+static STAR	stars[MAX_STARS];	// quick hack for loading stuff
 
 static BOOL		firstcall = FALSE;
 static UDWORD	loadScreenCallNo=0;
@@ -85,10 +86,11 @@ static	UDWORD	lastTick = 0;
 static	UDWORD	lastChange = 0;
 
 
-void	initStars( void )
+static void initStars(void)
 {
-UDWORD	i;
-	for(i=0; i<20; i++)
+	unsigned int i;
+
+	for(i = 0; i < MAX_STARS; ++i)
 	{
 		stars[i].xPos = (UWORD)(rand()%598);		// scatter them
 		stars[i].speed = rand()%10+2;	// always move
@@ -257,7 +259,7 @@ TITLECODE titleLoop(void)
 //loadbar update
 void loadingScreenCallback(void)
 {
-	UDWORD			i;
+	unsigned int i;
 	UDWORD			topX,topY,botX,botY;
 	UDWORD			currTick;
 	PIELIGHT		colour;
@@ -286,7 +288,7 @@ void loadingScreenCallback(void)
 	colour.byte.a = 24;
 	pie_UniTransBoxFill(topX, topY, botX, botY, colour);
 
-	for(i=1; i<19; i++)
+	for(i = 1; i < MAX_STARS; ++i)
 	{
 	   	if(stars[i].xPos + stars[i].speed >=598)
 		{
@@ -296,12 +298,12 @@ void loadingScreenCallback(void)
 		{
 			stars[i].xPos = (UWORD)(stars[i].xPos + stars[i].speed);
 		}
-		colour.byte.r = 0;
-		colour.byte.g = 255;
-		colour.byte.b = 255;
+
+		colour.byte.r = 200;
+		colour.byte.g = 200;
+		colour.byte.b = 200;
 		colour.byte.a = 255;
 		pie_UniTransBoxFill(10 + stars[i].xPos+D_W, 450 + i + D_H, 10 + stars[i].xPos + (2 * stars[i].speed) + D_W, 450 + i + 2 + D_H, colour);
-
    	}
 
 	pie_ScreenFlip(CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD);//loading callback		// dont clear.
