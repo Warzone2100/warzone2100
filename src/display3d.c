@@ -1118,7 +1118,7 @@ static void display3DProjectiles( void )
 						psObj->psWStats->weaponSubClass == WSC_ENERGY ||
 						psObj->psWStats->weaponSubClass == WSC_EMP)
 					{
-						bucketAddTypeToList(RENDER_PROJECTILE_TRANSPARENT, psObj);
+						bucketAddTypeToList(RENDER_PROJECTILE, psObj);
 					}
 					else
 					{

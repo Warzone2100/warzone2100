@@ -48,7 +48,6 @@
 #define BUCKET_OFFSET	0
 #define BUCKET_RANGE	32000
 
-#define BUCKET_CLIP
 #define CLIP_LEFT	((SDWORD)0)
 #define CLIP_RIGHT	((SDWORD)pie_GetVideoBufferWidth())
 #define CLIP_TOP	((SDWORD)0)
@@ -108,33 +107,7 @@ BOOL bucketSetupList(void)
 extern BOOL bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
 {
 	BUCKET_TAG* newTag;
-	DROID	*psDroid;
-	STRUCTURE	*psStructure;
 	SDWORD z;
-
-/*	switch (objectType)
-	{
-	case RENDER_STRUCTURE:
-	case RENDER_DROID:
-		return TRUE;
-		break;
-	case RENDER_EFFECT:
-	case RENDER_EXPLOSION:
-	case RENDER_GRAVITON:
-	case RENDER_SMOKE:
-	case RENDER_PROJECTILE:
-	case RENDER_PROJECTILE_TRANSPARENT:
-	case RENDER_PARTICLE:
-	case RENDER_FEATURE:
-	case RENDER_PROXMSG:
-	case RENDER_SHADOW:
-	case RENDER_ANIMATION:
-	case RENDER_WATERTILE:
-	case RENDER_MIST:
-	case RENDER_DELIVPOINT:
-	case RENDER_TILE:
-		break;
-	}*/
 
 	//get next Tag
 	newTag = &tagResource[resourceCounter];
@@ -163,7 +136,7 @@ extern BOOL bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
 		{
 			z = bucketCalculateZ(objectType, pObject);
 		}
-		else if(objectType == RENDER_PROJECTILE_TRANSPARENT)
+		else if(objectType == RENDER_PROJECTILE)
 		{
 			z = bucketCalculateZ(objectType, pObject);
 		}
@@ -171,20 +144,7 @@ extern BOOL bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
 		{
 			z = bucketCalculateZ(objectType, pObject);
 		}
-
-//		else if(objectType == RENDER_PARTICLE)
-//		{
-//			z = bucketCalculateZ(objectType, pObject);
-//		}
-		else if(objectType == RENDER_WATERTILE)
-		{
-			z = bucketCalculateZ(objectType, pObject);
-		}
-/*		else if(objectType == RENDER_PROJECTILE)//rendered solid so sort by state
-		{
-			z = bucketCalculateZ(objectType, pObject);
-		}
-*/		else
+		else
 		{
 			z = bucketCalculateState(objectType, pObject);
 		}
@@ -196,13 +156,15 @@ extern BOOL bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
 		if(objectType == RENDER_DROID)
 		{
 			/* Won't draw selection boxes */
-			psDroid = (DROID*)pObject;
+			DROID *psDroid = (DROID*)pObject;
+			
 			psDroid->sDisplay.frameNumber = 0;
 		}
 		else if(objectType == RENDER_STRUCTURE)
 		{
 			/* Won't draw selection boxes */
-			psStructure = (STRUCTURE*)pObject;
+			STRUCTURE *psStructure = (STRUCTURE*)pObject;
+			
 			psStructure->sDisplay.frameNumber = 0;
 		}
 
@@ -240,6 +202,7 @@ extern BOOL bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
 	newTag->psNextTag = bucketArray[z];
 	newTag->actualZ = z;
 	bucketArray[z] = newTag;
+	
 	return TRUE;
 }
 
@@ -268,7 +231,7 @@ extern BOOL bucketRenderCurrentList(void)
 				break;
 				case RENDER_SHADOW:
 					renderShadow((DROID*)thisTag->pObject,getImdFromIndex(MI_SHADOW));
-					break;
+				break;
 				case RENDER_STRUCTURE:
 					renderStructure((STRUCTURE*)thisTag->pObject);
 				break;
@@ -278,38 +241,14 @@ extern BOOL bucketRenderCurrentList(void)
 				case RENDER_PROXMSG:
 					renderProximityMsg((PROXIMITY_DISPLAY*)thisTag->pObject);
 				break;
-				case RENDER_MIST:
-#ifdef MIST
-					drawTerrainMist(((TILE_BUCKET*)thisTag->pObject)->i,((TILE_BUCKET*)thisTag->pObject)->j);
-#endif
-				break;
-				case RENDER_TILE:
-					//drawTerrainTile(((TILE_BUCKET*)thisTag->pObject)->i,((TILE_BUCKET*)thisTag->pObject)->j, FALSE);
-					assert(false);
-				break;
-
-				case RENDER_WATERTILE:
-					//drawTerrainWaterTile(((TILE_BUCKET*)thisTag->pObject)->i,((TILE_BUCKET*)thisTag->pObject)->j);
-					assert(false);
-				break;
-
 				case RENDER_PROJECTILE:
-				case RENDER_PROJECTILE_TRANSPARENT:
 					renderProjectile((PROJECTILE*)thisTag->pObject);
 				break;
 				case RENDER_ANIMATION:
 					renderAnimComponent((COMPONENT_OBJECT*)thisTag->pObject);
 				break;
-//				case RENDER_GRAVITON:
-//					renderGraviton((GRAVITON*)thisTag->pObject);
-//				break;
-//				case RENDER_SMOKE:
-//					renderSmoke((PARTICLE*)thisTag->pObject);
-//				break;
 				case RENDER_DELIVPOINT:
 					renderDeliveryPoint((FLAG_POSITION*)thisTag->pObject);
-				break;
-				default:
 				break;
 			}
 			thisTag = thisTag->psNextTag;
@@ -361,7 +300,6 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 
 			/* 16 below is HACK!!! */
 			z = pie_RotateProject(&position,&pixel) - 16;
-#ifdef BUCKET_CLIP
 			if (z > 0)
 			{
 				//particle use the image radius
@@ -374,12 +312,8 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 					z = -1;
 				}
 			}
-#endif
 			break;
-		case RENDER_PROJECTILE://not depth sorted
-		case RENDER_PROJECTILE_TRANSPARENT:
-//			((PROJECTILE*)pObject)->psWStats;
-			/* these guys should never be added to the list anyway */
+		case RENDER_PROJECTILE:
 			if(((PROJECTILE*)pObject)->psWStats->weaponSubClass == WSC_FLAME ||
                 ((PROJECTILE*)pObject)->psWStats->weaponSubClass == WSC_COMMAND ||
                 ((PROJECTILE*)pObject)->psWStats->weaponSubClass == WSC_EMP)
@@ -406,7 +340,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 				position.y = psSimpObj->z;
 
 				z = pie_RotateProject(&position,&pixel);
-	#ifdef BUCKET_CLIP
+
 				if (z > 0)
 				{
 					//particle use the image radius
@@ -419,7 +353,6 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 						z = -1;
 					}
 				}
-	#endif
 			}
 			break;
 		case RENDER_STRUCTURE://not depth sorted
@@ -442,20 +375,16 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 				 (((STRUCTURE*)pObject)->pStructureType->type == REF_WALLCORNER)))
 			{
 				position.y = psSimpObj->z + 64;
-#ifdef BUCKET_CLIP
 				radius = ((STRUCTURE*)pObject)->sDisplay.imd->radius;//walls guntowers and tank traps clip tightly
-#endif
 			}
 			else
 			{
 				position.y = psSimpObj->z;
-#ifdef BUCKET_CLIP
 				radius = (((STRUCTURE*)pObject)->sDisplay.imd->radius);
-#endif
 			}
 
 			z = pie_RotateProject(&position,&pixel);
-#ifdef BUCKET_CLIP
+			
 			if (z > 0)
 			{
 				//particle use the image radius
@@ -467,7 +396,6 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 					z = -1;
 				}
 			}
-#endif
 			break;
 		case RENDER_FEATURE://not depth sorted
 	   		px = player.p.x & (TILE_UNITS-1);
@@ -483,7 +411,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			position.y = psSimpObj->z+2;
 
 			z = pie_RotateProject(&position,&pixel);
-#ifdef BUCKET_CLIP
+
 			if (z > 0)
 			{
 				//particle use the image radius
@@ -496,7 +424,6 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 					z = -1;
 				}
 			}
-#endif
 			break;
 		case RENDER_ANIMATION://not depth sorted
 	   		px = player.p.x & (TILE_UNITS-1);
@@ -526,22 +453,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			iV_MatrixRotateX( -psCompObj->orientation.x );
 
 			z = pie_RotateProject(&position,&pixel);
-#ifdef BUCKET_CLIP
-			/*	Don't do this for animations
-			if (z > 0)
-			{
-				//particle use the image radius
-				radius = psCompObj->psShape->radius;
-				radius *= SCALE_DEPTH;
-				radius /= z;
-				if ((pixel.x + radius < CLIP_LEFT) || (pixel.x - radius > CLIP_RIGHT)
-					|| (pixel.y + radius < CLIP_TOP) || (pixel.y - radius > CLIP_BOTTOM))
-				{
-					z = -1;
-				}
-			}
-			*/
-#endif
+
 			break;
 		case RENDER_DROID:
 		case RENDER_SHADOW:
@@ -564,7 +476,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			psBStats = asBodyStats + psDroid->asBits[COMP_BODY].nStat;
 			droidSize = psBStats->pIMD->radius;
 			z = pie_RotateProject(&position,&pixel) - (droidSize*2);
-#ifdef BUCKET_CLIP
+
 			if (z > 0)
 			{
 				//particle use the image radius
@@ -577,7 +489,6 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 					z = -1;
 				}
 			}
-#endif
 			break;
 		case RENDER_PROXMSG:
 	   		px = player.p.x & (TILE_UNITS-1);
@@ -608,7 +519,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 					psMessage->pViewData)->z;
 			}
 			z = pie_RotateProject(&position,&pixel);
-#ifdef BUCKET_CLIP
+
 			if (z > 0)
 			{
 				//particle use the image radius
@@ -622,16 +533,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 					z = -1;
 				}
 			}
-#endif
 			break;
-		case RENDER_TILE:
-			z = ((TILE_BUCKET*)pObject)->depth;
-			break;
-
-		case RENDER_WATERTILE:
-			z = ((TILE_BUCKET*)pObject)->depth;
-			break;
-
 		case RENDER_EFFECT:
 	   		px = player.p.x & (TILE_UNITS-1);
 	   		pz = player.p.z & (TILE_UNITS-1);
@@ -645,7 +547,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 
 			/* 16 below is HACK!!! */
 			z = pie_RotateProject(&position,&pixel) - 16;
-#ifdef BUCKET_CLIP
+
 			if (z > 0)
 			{
 				//particle use the image radius
@@ -662,7 +564,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 					}
 				}
 			}
-#endif
+
 			break;
 
 		case RENDER_DELIVPOINT:
@@ -678,7 +580,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
  			position.y = ((FLAG_POSITION*)pObject)->coords.z;
 
 			z = pie_RotateProject(&position,&pixel);
-#ifdef BUCKET_CLIP
+
 			if (z > 0)
 			{
 				//particle use the image radius
@@ -691,7 +593,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 					z = -1;
 				}
 			}
-#endif
+
 			break;
 
 		default:
@@ -708,12 +610,10 @@ static SDWORD bucketCalculateState(RENDER_TYPE objectType, void* pObject)
 	SDWORD				z = 0;
 	iIMDShape*			pie;
 
-#ifdef BUCKET_CLIP
 	if (bucketCalculateZ(objectType,pObject) < 0)
 	{
 		return -1;
 	}
-#endif
 
 	switch(objectType)
 	{
@@ -728,11 +628,8 @@ static SDWORD bucketCalculateState(RENDER_TYPE objectType, void* pObject)
 				break;
 
 				case EFFECT_SMOKE:
-//				renderSmokeEffect(psEffect);
 				case EFFECT_GRAVITON:
-//				renderGravitonEffect(psEffect);
 				case EFFECT_BLOOD:
-//				renderBloodEffect(psEffect);
 				case EFFECT_STRUCTURE:
 				case EFFECT_DESTRUCTION:
 				default:
@@ -755,14 +652,6 @@ static SDWORD bucketCalculateState(RENDER_TYPE objectType, void* pObject)
 		case RENDER_PROXMSG:
 			z = NUM_BUCKETS - 40;
 		break;
-		case RENDER_TILE:
-			z = NUM_BUCKETS - 1;
-		break;
-
-		case RENDER_WATERTILE:
-			z = NUM_BUCKETS - 1;
-			break;
-
 		case RENDER_PROJECTILE:
 			pie = ((PROJECTILE*)pObject)->psWStats->pInFlightGraphic;
 			z = NUM_BUCKETS - pie->texpage;
