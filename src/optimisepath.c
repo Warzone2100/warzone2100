@@ -73,8 +73,8 @@ float	angle;
 UDWORD	retVal;
 
 	/* Get the component vectors */
-	xVec = trigSin(angleA) + trigSin(angleB);
-	yVec = trigCos(angleA) + trigCos(angleB);
+	xVec = sin(angleA) + sin(angleB);
+	yVec = cos(angleA) + cos(angleB);
 
 	/* Get the angle between them */
 	angle = RAD_TO_DEG(atan2(xVec,yVec));

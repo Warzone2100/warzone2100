@@ -18,4 +18,4 @@ noinst_HEADERS = configfile.h cursors.h cursors16.h debug.h fractions.h frame.h 
 libframework_a_SOURCES = SDL_framerate.c configfile.c debug.c exceptionhandler.c \
 	frame.c frameresource.c input.c printf_ext.c resource_lexer.lex.c \
 	resource_parser.tab.c strnlen1.c strres.c strres_lexer.lex.c \
-	strres_parser.tab.c treap.c trig.c tagfile.c
+	strres_parser.tab.c treap.c tagfile.c

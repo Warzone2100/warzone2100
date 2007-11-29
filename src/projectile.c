@@ -460,7 +460,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 
 	/* get target distance */
 	iRadSq = dx*dx + dy*dy + dz*dz;
-	fR = trigIntSqrt( iRadSq );
+	fR = sqrt( iRadSq );
 	iMinSq = (SDWORD)(psWeapStats->minRange * psWeapStats->minRange);
 
 	if ( proj_Direct(psObj->psWStats) ||
@@ -489,15 +489,15 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 			/* set optimal pitch */
 			psObj->pitch = PROJ_MAX_PITCH;
 
-			fS = (FRACT_D)trigSin(PROJ_MAX_PITCH);
-			fC = (FRACT_D)trigCos(PROJ_MAX_PITCH);
+			fS = (FRACT_D)sin(PROJ_MAX_PITCH);
+			fC = (FRACT_D)cos(PROJ_MAX_PITCH);
 			fT = FRACTdiv_D( fS, fC );
 			fS = ACC_GRAVITY*(MAKEFRACT_D(1)+FRACTmul_D(fT,fT));
 			fS = FRACTdiv_D(fS,(2 * (FRACTmul_D(fR,fT) - MAKEFRACT_D(dz))));
 			{
 				FRACT_D Tmp;
 				Tmp = FRACTmul_D(fR,fR);
-				iVel = MAKEINT_D( trigIntSqrt(MAKEINT_D(FRACTmul_D(fS,Tmp))) );
+				iVel = MAKEINT_D( sqrt(MAKEINT_D(FRACTmul_D(fS,Tmp))) );
 			}
 		}
 		else
@@ -506,7 +506,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 			iVel = psObj->psWStats->flightSpeed;
 
 			/* get floating point square root */
-			fS = trigIntSqrt( MAKEINT_D(fS) );
+			fS = sqrt( MAKEINT_D(fS) );
 
 			fT = (FRACT_D) atan2(fR+fS, 2*fA);
 
@@ -558,8 +558,8 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 			}
 		}
 
-		psObj->vXY = MAKEINT_D(iVel * trigCos(psObj->pitch));
-		psObj->vZ  = MAKEINT_D(iVel * trigSin(psObj->pitch));
+		psObj->vXY = MAKEINT_D(iVel * cos(psObj->pitch));
+		psObj->vZ  = MAKEINT_D(iVel * sin(psObj->pitch));
 
 		/* set function pointer */
 		psObj->pInFlightFunc = proj_InFlightIndirectFunc;

@@ -552,8 +552,8 @@ static SDWORD getAverageTrackAngle( BOOL bCheckOnScreen )
 			{
 					droidCount++;
 					averageAngle += psDroid->direction;
-					xShift = trigSin(psDroid->direction);
-					yShift = trigCos(psDroid->direction);
+					xShift = sin(psDroid->direction);
+					yShift = cos(psDroid->direction);
 					xTotal += xShift;
 					yTotal += yShift;
 			}
@@ -594,8 +594,8 @@ static SDWORD getGroupAverageTrackAngle(UDWORD groupNumber, BOOL bCheckOnScreen)
 			{
 					droidCount++;
 					averageAngle += psDroid->direction;
-					xShift = trigSin(psDroid->direction);
-					yShift = trigCos(psDroid->direction);
+					xShift = sin(psDroid->direction);
+					yShift = cos(psDroid->direction);
 					xTotal += xShift;
 					yTotal += yShift;
 			}
