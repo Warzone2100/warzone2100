@@ -2294,7 +2294,7 @@ static float moveCalcPerpSpeed( DROID *psDroid, float iDroidDir, SDWORD iSkidDec
 	float		perpSpeed;
 
 	adiff = fabsf(iDroidDir - psDroid->sMove.moveDir);
-	perpSpeed = psDroid->sMove.speed * sin(adiff);
+	perpSpeed = psDroid->sMove.speed * trigSin(adiff);
 
 	// decelerate the perpendicular speed
 	perpSpeed -= (iSkidDecel * baseSpeed);
@@ -2327,7 +2327,7 @@ static void moveCombineNormalAndPerpSpeeds( DROID *psDroid, float fNormalSpeed,
 	finalSpeed = sqrtf(Fmul(fNormalSpeed,fNormalSpeed) + Fmul(fPerpSpeed,fPerpSpeed));
 
 	// calculate the angle between the droid facing and movement direction
-	finalDir = acos(fNormalSpeed / finalSpeed);
+	finalDir = trigInvCos(fNormalSpeed / finalSpeed);
 
 	// choose the finalDir on the same side as the old movement direction
 	adiff = fabsf(iDroidDir - psDroid->sMove.moveDir);
@@ -2375,7 +2375,7 @@ static float moveCalcNormalSpeed( DROID *psDroid, float fSpeed, float iDroidDir,
 	float		normalSpeed;
 
 	adiff = fabsf(iDroidDir - psDroid->sMove.moveDir);
-	normalSpeed = psDroid->sMove.speed * cos(adiff);
+	normalSpeed = psDroid->sMove.speed * trigCos(adiff);
 
 	if (normalSpeed < fSpeed)
 	{
@@ -2406,8 +2406,8 @@ static void moveGetDroidPosDiffs( DROID *psDroid, float *pDX, float *pDY )
 
 	move = Fmul(psDroid->sMove.speed, baseSpeed);
 
-	*pDX = move * sin(psDroid->sMove.moveDir);
-	*pDY = move * cos(psDroid->sMove.moveDir);
+	*pDX = move * trigSin(psDroid->sMove.moveDir);
+	*pDY = move * trigCos(psDroid->sMove.moveDir);
 }
 
 // see if the droid is close to the final way point
@@ -3010,7 +3010,7 @@ moveUpdateCyborgModel( DROID *psDroid, SDWORD moveSpeed, SDWORD moveDir, UBYTE o
 	iDx = (SDWORD) psDroid->sMove.DestinationX - (SDWORD) psDroid->x;
 	iDy = (SDWORD) psDroid->sMove.DestinationY - (SDWORD) psDroid->y;
 	iDz = (SDWORD) psDroid->z - (SDWORD) iMapZ;
-	iDist = MAKEINT( sqrt( iDx*iDx + iDy*iDy ) );
+	iDist = MAKEINT( trigIntSqrt( iDx*iDx + iDy*iDy ) );
 
 	/* set jumping cyborg walking short distances */
 	if ( (psPropStats->propulsionType != JUMP) ||

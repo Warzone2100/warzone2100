@@ -524,7 +524,7 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *p
 		dz = psTarget->z - psAttacker->z;//muzzle.z;
 
 		/* get target distance */
-		fR = sqrt( dx*dx + dy*dy );
+		fR = trigIntSqrt( dx*dx + dy*dy );
 
 		targetPitch = (SDWORD)( RAD_TO_DEG(atan2(dz, fR)));
 		//tPitch = tPitch;
@@ -678,7 +678,7 @@ static void actionAddVtolAttackRun( DROID *psDroid )
 	deltaY = psTarget->y - psDroid->y;
 
 	/* get magnitude of normal vector (Pythagorean theorem) */
-	fA = sqrt( deltaX*deltaX + deltaY*deltaY );
+	fA = trigIntSqrt( deltaX*deltaX + deltaY*deltaY );
 	iA = MAKEINT(fA);
 
 #if 0

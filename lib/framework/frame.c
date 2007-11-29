@@ -209,6 +209,12 @@ BOOL frameInitialise(
 
 	SDL_WM_SetCaption(pWindowName, NULL);
 
+	/* Initialise the trig stuff */
+	if (!trigInitialise())
+	{
+		return FALSE;
+	}
+
 		/* initialise all cursors */
 		initCursors();
 
@@ -258,6 +264,9 @@ void frameShutDown(void)
 
 	/* Destroy the Application window */
 	SDL_Quit();
+
+	/* shutdown the trig stuff */
+	trigShutDown();
 
 	// Shutdown the resource stuff
 	resShutDown();

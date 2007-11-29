@@ -30,4 +30,21 @@
 #define DEG_TO_RAD(x)	(x * M_PI / 180.0)
 #define RAD_TO_DEG(x)	(x * 180.0 / M_PI)
 
+/* Initialise the Trig tables */
+extern BOOL trigInitialise(void);
+
+/* Shutdown the trig tables */
+extern void trigShutDown(void);
+
+/* Lookup trig functions */
+// These can be assumed const, since they only rely on memory setup on startup
+extern float trigSin(int angle) WZ_DECL_CONST;
+extern float trigCos(int angle) WZ_DECL_CONST;
+extern float trigInvSin(float val) WZ_DECL_CONST;
+extern float trigInvCos(float val) WZ_DECL_CONST;
+
+/* Supposedly fast lookup sqrt - unfortunately it's probably slower than the FPU sqrt :-( */
+extern float trigIntSqrt(unsigned int val);
+
 #endif
+

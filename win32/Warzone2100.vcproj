@@ -269,6 +269,10 @@
 					RelativePath="..\lib\framework\treap.c"
 					>
 				</File>
+				<File
+					RelativePath="..\lib\framework\trig.c"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="gamelib"
