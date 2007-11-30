@@ -87,6 +87,7 @@
 					<Add option="-DWIN32" />
 					<Add option="-DYY_STATIC" />
 					<Add directory="$(#warzone_devpkg.include)" />
+					<Add directory="$(#warzone_devpkg.include)/SDL" />
 				</Compiler>
 				<Linker>
 					<Add library="mingw32" />
@@ -122,6 +123,7 @@
 					<Add option="-DWIN32" />
 					<Add option="-DYY_STATIC" />
 					<Add directory="$(#warzone_devpkg.include)" />
+					<Add directory="$(#warzone_devpkg.include)/SDL" />
 				</Compiler>
 				<Linker>
 					<Add library="mingw32" />
