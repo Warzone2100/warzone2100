@@ -1307,18 +1307,21 @@ SDWORD audio_GetTrackIDFromHash( UDWORD hash )
 	{
 		return SAMPLE_NOT_FOUND;
 	}
+
+	if (hash == 0)
+	{
+		return SAMPLE_NOT_FOUND;
+	}
+
+	psTrack = resGetDataFromHash( "WAV", hash );
+	if ( psTrack == NULL )
+	{
+		return SAMPLE_NOT_FOUND;
+	}
 	else
 	{
-		psTrack = resGetDataFromHash( "WAV", hash );
-		if ( psTrack == NULL )
-		{
-			return SAMPLE_NOT_FOUND;
-		}
-		else
-		{
-			iID = sound_GetTrackID( psTrack );
-			return iID;
-		}
+		iID = sound_GetTrackID( psTrack );
+		return iID;
 	}
 }
 

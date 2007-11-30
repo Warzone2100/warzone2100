@@ -1126,8 +1126,8 @@ BOOL scrValDefLoad(SDWORD version, INTERP_TYPE type, char *pBuffer, UDWORD size,
 			index = audio_GetAvailableID();
 			if (index == SAMPLE_NOT_ALLOCATED)
 			{
+				// We can't find filename of the sound for some reason.
 				debug( LOG_ERROR, "Sound ID not available %s not found", pBuffer );
-				abort();
 				break;
 			}
 			// set track vals
