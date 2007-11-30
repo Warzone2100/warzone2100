@@ -35,7 +35,6 @@
 
 /* Includes direct access to render library */
 #include "lib/ivis_common/ivisdef.h"
-// FIXME Direct iVis implementation include!
 #include "lib/ivis_common/rendmode.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/piematrix.h"//matrix code
@@ -128,7 +127,6 @@ DES_SYSMODE desSysMode;
 //Watermelon:added IDES_TURRET_A,IDES_TURRET_B,changing the name of IDES_TURRET might break exist codes
 typedef enum _des_compmode
 {
-	IDES_BRAIN,			// The brain for the droid
 	IDES_SYSTEM,		// The main system for the droid (sensor, ECM, constructor)
 	IDES_TURRET,		// The weapon for the droid
 	IDES_BODY,			// The droid body
@@ -226,11 +224,6 @@ char StringBuffer[STRING_BUFFER_SIZE];
 /* The central boxes on the design screen */
 #define DES_COMPBUTWIDTH	150
 #define DES_COMPBUTHEIGHT	85
-#define DES_BRAINX			165
-#define DES_BRAINY			50
-#define DES_BRAINVIEWX		(DES_BRAINX + 10)
-#define DES_BRAINVIEWY		(DES_BRAINY + DES_COMPBUTHEIGHT + 10)
-#define DES_BRAINVIEWWIDTH	80
 
 #define DES_MAINBUTWIDTH	36
 #define DES_MAINBUTHEIGHT	24
@@ -453,11 +446,6 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 		return FALSE;
 	}
 
-//	widgSetColour(psWScreen, 0, WCOL_TEXT,
-//				255,255,255);
-//	widgSetColour(psWScreen, 0, WCOL_CURSOR,
-//				255,255,0);
-
 	/* add the edit name box */
 	sEdInit.formID = IDDES_FORM;
 	sEdInit.id = IDDES_NAMEBOX;
@@ -475,8 +463,6 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	}
 
 	CurrentStatsTemplate = NULL;
-//	CurrentStatsShape = NULL;
-//	CurrentStatsIndex = -1;
 
 	/* Initialise the current design */
 	if (psCurrTemplate != NULL)
@@ -754,11 +740,10 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	sLabInit.y = DES_CLICKBARY - DES_CLICKBARHEIGHT/3;
 	sLabInit.width = DES_CLICKBARNAMEWIDTH;
 	sLabInit.height = DES_CLICKBARHEIGHT;
-//	sLabInit.pText = "Armour against Kinetic weapons";
 	sLabInit.pTip = _("Kinetic Armour");
 	sLabInit.FontID = font_regular;
 	sLabInit.pDisplay = intDisplayImage;
-    //just to confuse things even more - the graphics were named incorrectly!
+	//just to confuse things even more - the graphics were named incorrectly!
 	sLabInit.UserData = IMAGE_DES_ARMOUR_EXPLOSIVE;//IMAGE_DES_ARMOUR_KINETIC;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
@@ -766,7 +751,6 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	}
 	sLabInit.id = IDDES_BODYARMOURHLAB;
 	sLabInit.y += DES_CLICKBARHEIGHT + DES_CLICKGAP;
-//	sLabInit.pText = "Armour against Heat weapons";
 	sLabInit.pTip = _("Thermal Armour");
 	sLabInit.pDisplay = intDisplayImage;
 	sLabInit.UserData = IMAGE_DES_ARMOUR_KINETIC;//IMAGE_DES_ARMOUR_EXPLOSIVE;
@@ -787,7 +771,6 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	//}
 	sLabInit.id = IDDES_BODYPOWERLAB;
 	sLabInit.y += DES_CLICKBARHEIGHT + DES_CLICKGAP;
-//	sLabInit.pText = "Power";
 	sLabInit.pTip = _("Engine Output");
 	sLabInit.pDisplay = intDisplayImage;
 	sLabInit.UserData = IMAGE_DES_POWER;
@@ -797,7 +780,6 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	}
 	sLabInit.id = IDDES_BODYWEIGHTLAB;
 	sLabInit.y += DES_CLICKBARHEIGHT + DES_CLICKGAP;
-//	sLabInit.pText = "Weight";
 	sLabInit.pTip = _("Weight");
 	sLabInit.pDisplay = intDisplayImage;
 	sLabInit.UserData = IMAGE_DES_WEIGHT;
@@ -931,7 +913,6 @@ void desSetupDesignTemplates( void )
 			 psTempl->droidType != DROID_CYBORG_SUPER       &&
              psTempl->droidType != DROID_CYBORG_CONSTRUCT   &&
              psTempl->droidType != DROID_CYBORG_REPAIR      &&
-//			 psTempl->droidType != DROID_COMMAND     &&
 			 psTempl->droidType != DROID_PERSON	)
 		{
 			apsTemplateList[i] = psTempl;
@@ -1150,17 +1131,6 @@ BOOL intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight,
 }
 
 
-/*static UDWORD MaxComponents(UDWORD NumStats)
-{
-	if(NumStats > MAX_DESIGN_COMPONENTS) {
-		return MAX_DESIGN_COMPONENTS;
-	}
-
-	return NumStats;
-}*/
-
-
-
 /* Set the current mode of the design screen, and display the appropriate
  * component lists
  * Watermelon:added case IDES_TURRET_A,IDES_TURRET_B
@@ -1177,12 +1147,6 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 		case IDES_NOCOMPONENT:
 			/* Nothing displayed so nothing to remove */
 			break;
-		case IDES_BRAIN:
-/*
-			widgDelete(psWScreen, IDDES_COMPFORM);
-			widgDelete(psWScreen, IDDES_RIGHTBASE);
-			widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, 0);
-*/
 		case IDES_SYSTEM:
 			widgDelete(psWScreen, IDDES_COMPFORM);
 			widgDelete(psWScreen, IDDES_RIGHTBASE);
@@ -1222,27 +1186,6 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 		case IDES_NOCOMPONENT:
 			/* Nothing to display */
 			break;
-		case IDES_BRAIN:
-			// initialise the available array
-/*			aCmdAvailable[0] = 0;
-			for(i=1; i<MAX_CMDDROIDS; i++)
-			{
-				if (i<=numCommandDroids[selectedPlayer])
-				{
-					aCmdAvailable[i] = AVAILABLE;
-				}
-				else
-				{
-					aCmdAvailable[i] = 0;
-				}
-			}
-			intAddComponentForm(numCommandDroids[selectedPlayer]);
-			intAddComponentButtons((COMP_BASE_STATS *)asCommandDroids[selectedPlayer],
-								   sizeof(COMMAND_DROID),
-								   aCmdAvailable,MAX_CMDDROIDS,
-								   sCurrDesign.asParts[COMP_BRAIN],TAB_USEMAJOR);
-			intAddSystemButtons(IDES_BRAIN);
-			widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, WBUT_LOCK);*/
 		case IDES_SYSTEM:
 			intAddComponentForm(
 				intNumAvailable(apCompLists[selectedPlayer][COMP_SENSOR], numSensorStats,
@@ -1286,10 +1229,6 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 			widgSetButtonState(psWScreen, IDDES_BODYFORM, WBUT_LOCK);
 			break;
 		case IDES_PROPULSION:
-			/*NumComponents = numPropulsionStats;
-			if(NumComponents > MAX_DESIGN_COMPONENTS) {
-				NumComponents = MAX_DESIGN_COMPONENTS;
-			}*/
 			intAddComponentForm(
 				intNumAvailable(apCompLists[selectedPlayer][COMP_PROPULSION], numPropulsionStats,
 								(COMP_BASE_STATS *)asPropulsionStats, sizeof(PROPULSION_STATS)));
@@ -1333,13 +1272,6 @@ static COMP_BASE_STATS *
 intChooseSystemStats( DROID_TEMPLATE *psTemplate )
 {
 	COMP_BASE_STATS		*psStats = NULL;
-
-	// Check for a command droid
-/*	if (psTemplate->asParts[COMP_BRAIN] != 0)
-	{
-		return (COMP_BASE_STATS *)(asCommandDroids[selectedPlayer] +
-								psTemplate->asParts[COMP_BRAIN]);
-	}*/
 
 	// Choose correct system stats
 	switch (droidTemplateType(psTemplate))
@@ -1457,8 +1389,6 @@ static const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 
 	return aCurrName;
 }
-
-
 
 
 static void intSetEditBoxTextFromTemplate( DROID_TEMPLATE *psTemplate )
@@ -1865,9 +1795,6 @@ static BOOL _intSetSystemForm(COMP_BASE_STATS *psStats)
 	// Add the correct component form
 	switch (desSysMode)
 	{
-//	case IDES_COMMAND:
-//		intSetDesignMode(IDES_BRAIN);
-//		break;
 	case IDES_SENSOR:
 	case IDES_CONSTRUCT:
 	case IDES_ECM:
@@ -2235,25 +2162,6 @@ static BOOL intAddSystemButtons(SDWORD mode)
 	    }
     }
 
-#if 0	// command turrets now in systems
-	// add the command droid button
-	sButInit.formID = IDDES_RIGHTBASE;
-	sButInit.id = IDDES_COMMAND;
-	sButInit.style = WBUT_PLAIN;
-	sButInit.x = 86;
-	sButInit.y = 10;
-	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_COMMAND);
-	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_COMMAND);
-	sButInit.pTip = _("Command Turrets");
-	sButInit.FontID = font_regular;
-	sButInit.pDisplay = intDisplayButtonHilight;
-	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_DES_EXTRAHI , IMAGE_DES_COMMAND);
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return FALSE;
-	}
-#endif
-
 	// lock down the correct button
 	switch (mode)
 	{
@@ -2262,11 +2170,6 @@ static BOOL intAddSystemButtons(SDWORD mode)
 		case IDES_TURRET_B:
 			widgSetButtonState(psWScreen, IDDES_WEAPONS, WBUT_LOCK);
 			break;
-		case IDES_BRAIN:
-#if 0
-			widgSetButtonState(psWScreen, IDDES_COMMAND, WBUT_LOCK);
-			break;
-#endif
 		case IDES_SYSTEM:
 			widgSetButtonState(psWScreen, IDDES_SYSTEMS, WBUT_LOCK);
 			break;
@@ -2532,7 +2435,6 @@ static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 			psCurrStats = (COMP_BASE_STATS *)asSensorStats;
 			size = sizeof(SENSOR_STATS);
 			aAvailable = apCompLists[selectedPlayer][COMP_SENSOR];
-			//numStats = MaxComponents(numSensorStats);
 			numStats = numSensorStats;
 			compIndex = sensorIndex;
 			break;
@@ -2541,7 +2443,6 @@ static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 			psCurrStats = (COMP_BASE_STATS *)asECMStats;
 			size = sizeof(ECM_STATS);
 			aAvailable = apCompLists[selectedPlayer][COMP_ECM];
-			//numStats = MaxComponents(numECMStats);
 			numStats = numECMStats;
 			compIndex = ecmIndex;
 			break;
@@ -2550,7 +2451,6 @@ static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 			psCurrStats = (COMP_BASE_STATS *)asConstructStats;
 			size = sizeof(CONSTRUCT_STATS);
 			aAvailable = apCompLists[selectedPlayer][COMP_CONSTRUCT];
-			//numStats = MaxComponents(numConstructStats);
 			numStats = numConstructStats;
 			compIndex = constIndex;
 			break;
@@ -2559,7 +2459,6 @@ static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 			psCurrStats = (COMP_BASE_STATS *)asRepairStats;
 			size = sizeof(REPAIR_STATS);
 			aAvailable = apCompLists[selectedPlayer][COMP_REPAIRUNIT];
-			//numStats = MaxComponents(numECMStats);
 			numStats = numRepairStats;
 			compIndex = repairIndex;
 			break;
@@ -2568,7 +2467,6 @@ static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 			psCurrStats = (COMP_BASE_STATS *)asBrainStats;
 			size = sizeof(BRAIN_STATS);
 			aAvailable = apCompLists[selectedPlayer][COMP_BRAIN];
-			//numStats = MaxComponents(numECMStats);
 			numStats = numBrainStats;
 			compIndex = brainIndex;
 			break;
@@ -2599,23 +2497,7 @@ static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 
 			BufferID = sButInit.id-IDDES_EXTRASYSSTART;
 			ASSERT( BufferID < NUM_OBJECTBUFFERS,"BufferID > NUM_OBJECTBUFFERS" );
-			/*switch(buttonType) {
-				case 0:
-					RENDERBUTTON_INUSE(&System0Buffers[BufferID]);
-					System0Buffers[BufferID].Data = psCurrStats;
-					sButInit.pUserData = (void*)&System0Buffers[BufferID];
-					break;
-				case 1:
-					RENDERBUTTON_INUSE(&System1Buffers[BufferID]);
-					System1Buffers[BufferID].Data = psCurrStats;
-					sButInit.pUserData = (void*)&System1Buffers[BufferID];
-					break;
-				case 2:
-					RENDERBUTTON_INUSE(&System2Buffers[BufferID]);
-					System2Buffers[BufferID].Data = psCurrStats;
-					sButInit.pUserData = (void*)&System2Buffers[BufferID];
-					break;
-			}*/
+
 			//just use one set of buffers for mixed system form
 			RENDERBUTTON_INUSE(&System0Buffers[BufferID]);
 			if (statType(psCurrStats->ref) == COMP_BRAIN)
@@ -2668,8 +2550,6 @@ static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 
 	return TRUE;
 }
-
-
 
 
 /* Set the bar graphs for the system clickable */
@@ -3641,7 +3521,6 @@ void intProcessDesign(UDWORD id)
 	DROID_TEMPLATE	*psTempl = NULL, *psCurr, *psPrev;
 	//DROID_TEMPLATE	*psTempPrev;
 	UDWORD			currID;
-//	DES_COMPMODE	currCompMode;
 	UDWORD			i;
 	BOOL			bTemplateNameCustomised;
 
@@ -3658,7 +3537,6 @@ void intProcessDesign(UDWORD id)
 
 			/* hide body and system component buttons */
 			widgHide( psWScreen, IDDES_SYSTEMBUTTON );
-//			widgHide( psWScreen, IDDES_BODYBUTTON );
 			widgHide( psWScreen, IDDES_PROPBUTTON );
 			//Watermelon:hide WeaponA and WeaponB button
 			widgHide( psWScreen, IDDES_WPABUTTON );
@@ -3773,7 +3651,6 @@ void intProcessDesign(UDWORD id)
 		droidTemplID = id;
 
 		/* Update the component form */
-//		currCompMode = desCompMode;
 		widgDelete(psWScreen, IDDES_COMPFORM);
 		widgDelete(psWScreen, IDDES_RIGHTBASE);
 		desCompMode = IDES_NOCOMPONENT;
@@ -3793,28 +3670,6 @@ void intProcessDesign(UDWORD id)
 		/* Set the stats in the template */
 		switch (desCompMode)
 		{
-		case IDES_BRAIN:
-			/* // Calculate the index of the brain
-			sCurrDesign.asParts[COMP_BRAIN] =
-				((COMMAND_DROID *)apsComponentList[id - IDDES_COMPSTART]) -
-					asCommandDroids[selectedPlayer];
-			// Reset the sensor, ECM and constructor and repair
-			//	- defaults will be set when OK is hit
-			sCurrDesign.asParts[COMP_SENSOR] = 0;
-			sCurrDesign.asParts[COMP_ECM] = 0;
-			sCurrDesign.asParts[COMP_CONSTRUCT] = 0;
-			sCurrDesign.asParts[COMP_REPAIRUNIT] = 0;
-			sCurrDesign.numWeaps = 0;
-			// Set the new stats on the display
-			intSetSystemForm(apsComponentList[id - IDDES_COMPSTART]);
-			// do the callback if in the tutorial
-			if (bInTutorial)
-			{
-				eventFireCallbackTrigger(CALL_DESIGN_COMMAND);
-			}*/
-			//Watermelon:0 weapon for utility droid
-			sCurrDesign.numWeaps = 0;
-			break;
 		case IDES_SYSTEM:
 			//Watermelon:0 weapon for utility droid
 			sCurrDesign.numWeaps = 0;
@@ -3935,17 +3790,6 @@ void intProcessDesign(UDWORD id)
 			/* Set the new stats on the display */
 			intSetPropulsionStats((PROPULSION_STATS *)apsComponentList[id - IDDES_COMPSTART]);
 
-			//Watermelon:no need to do this now
-			/*
-			if(checkTemplateIsVtol(&sCurrDesign))
-			{
-				//Watermelon:hide WeaponA and WeaponB button,or it will problematic
-				//if VTOL can choose 2nd and 3rd weapons
-				widgHide( psWScreen, IDDES_WPABUTTON );
-				widgHide( psWScreen, IDDES_WPBBUTTON );
-			}
-			*/
-
 			//check that the weapon (if any) is valid for this propulsion
 			if (sCurrDesign.numWeaps
 			 && !intCheckValidWeaponForProp())
@@ -3961,15 +3805,6 @@ void intProcessDesign(UDWORD id)
 					//Reset slot 2,3 weapons so it wont cause more than one weapon on VTOL problem
 					sCurrDesign.asWeaps[1] = 0;
 					sCurrDesign.asWeaps[2] = 0;
-					/*
-					if(checkTemplateIsVtol(&sCurrDesign))
-					{
-						//Watermelon:hide WeaponA and WeaponB button,or it will problematic
-						//if VTOL can choose 2nd and 3rd weapons
-						widgHide( psWScreen, IDDES_WPABUTTON );
-						widgHide( psWScreen, IDDES_WPBBUTTON );
-					}
-					*/
 				}
 				//not valid weapon so initialise the weapon stat
 				sCurrDesign.asWeaps[0] = 0;
@@ -4033,7 +3868,6 @@ void intProcessDesign(UDWORD id)
 				case IDES_PROPULSION:
 					widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON,   WBUT_CLICKLOCK);
 					break;
-				case IDES_BRAIN:
 				case IDES_SYSTEM:
 				case IDES_TURRET:
 					//Watermelon:if weaponSlots > 1,+ 1 turret else fall back to body button
@@ -4219,7 +4053,6 @@ void intProcessDesign(UDWORD id)
 			break;
 		case IDDES_COMMAND:
 			desCompID = 0;
-			intSetDesignMode(IDES_BRAIN);
 			break;
 		case IDDES_SYSTEMS:
 			desCompID = 0;
@@ -4255,18 +4088,6 @@ void intProcessDesign(UDWORD id)
 				{
 					SendDestroyTemplate(psTempl);
 				}
-
-				/*CAN'T ASSUME THIS - there are some templates that don't get passed
-				into the design screen*/
-				/* update player template list.
-				if( psTempPrev )
-				{
-					psTempPrev->psNext = psTempl->psNext;
-				}
-				else
-				{
-					apsDroidTemplates[selectedPlayer] = psTempl->psNext;
-				}*/
 
 				//update player template list.
 				{
@@ -4340,10 +4161,6 @@ void intProcessDesign(UDWORD id)
 			switch (droidTemplateType(&sCurrDesign))
 			{
 			case DROID_COMMAND:
-/*
-				intSetDesignMode(IDES_BRAIN);
-				break;
-*/
 			case DROID_SENSOR:
 			case DROID_CONSTRUCT:
 			case DROID_ECM:
@@ -4383,10 +4200,6 @@ void intProcessDesign(UDWORD id)
 			switch (droidTemplateType(&sCurrDesign))
 			{
 			case DROID_COMMAND:
-/*
-				intSetDesignMode(IDES_BRAIN);
-				break;
-*/
 			case DROID_SENSOR:
 			case DROID_CONSTRUCT:
 			case DROID_ECM:
@@ -4426,10 +4239,6 @@ void intProcessDesign(UDWORD id)
 			switch (droidTemplateType(&sCurrDesign))
 			{
 			case DROID_COMMAND:
-/*
-				intSetDesignMode(IDES_BRAIN);
-				break;
-*/
 			case DROID_SENSOR:
 			case DROID_CONSTRUCT:
 			case DROID_ECM:
@@ -4534,7 +4343,6 @@ void intProcessDesign(UDWORD id)
 				widgHide(   psWScreen, IDDES_SYSTEMFORM );
 				break;
 
-			case IDES_BRAIN:
 			case IDES_SYSTEM:
 			case IDES_TURRET:
 			//Watermelon: reveals SYSTEMFORM
@@ -4568,10 +4376,8 @@ void intProcessDesign(UDWORD id)
 					widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, WBUT_CLICKLOCK);
 					break;
 
-				case IDES_BRAIN:
 				case IDES_SYSTEM:
 				case IDES_TURRET:
-					//Watermelon:uses weaponSlots now
 					if ( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots > 1 )
 					{
 						debug(LOG_GUI, "intProcessDesign: First weapon selected, doing next.");
@@ -4586,7 +4392,6 @@ void intProcessDesign(UDWORD id)
 					}
 					break;
 				case IDES_TURRET_A:
-					//Watermelon:uses weaponSlots now
 					if ( (asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots > 2 )
 					{
 						debug(LOG_GUI, "intProcessDesign: Second weapon selected, doing next.");
@@ -4662,8 +4467,6 @@ void intRunDesign(void)
 	{
 		switch (desCompMode)
 		{
-		case IDES_BRAIN:
-			break;
 		case IDES_SYSTEM:
 		case IDES_TURRET:
 			intSetSystemShadowStats(psStats);
