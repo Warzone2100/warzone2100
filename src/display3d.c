@@ -798,6 +798,7 @@ static void drawTiles(iView *camera, iView *player)
 			{
 				//get distance of furthest corner
 				int zMax = MAX(tileScreenInfo[i][j].screen.z, tileScreenInfo[i+1][j].screen.z);
+
 				zMax = MAX(zMax, tileScreenInfo[i + 1][j + 1].screen.z);
 				zMax = MAX(zMax, tileScreenInfo[i][j + 1].screen.z);
 
@@ -808,16 +809,21 @@ static void drawTiles(iView *camera, iView *player)
 				}
 
 				drawTerrainTile(i, j, FALSE);
-
-				// check if we need to draw a water edge
-				if (tileScreenInfo[i][j].bWater
-				    && TileNumber_tile(mapTile(playerXTile + j, playerZTile + i)->texture) != WATER_TILE)
-				{
-					// the edge is in front of the water (which is drawn at z-index -1)
-					pie_SetDepthOffset(-2.0);
-					drawTerrainTile(i, j, TRUE);
-					pie_SetDepthOffset(0.0);
-				}
+			}
+		}
+	}
+	pie_SetDepthOffset(-2.0);
+	for (i = 0; i < MIN(visibleTiles.y, mapHeight); i++)
+	{
+		for (j = 0; j < MIN(visibleTiles.x, mapWidth); j++)
+		{
+			// check if we need to draw a water edge
+			if (tileScreenInfo[i][j].drawInfo == TRUE
+			    && tileScreenInfo[i][j].bWater
+			    && TileNumber_tile(mapTile(playerXTile + j, playerZTile + i)->texture) != WATER_TILE)
+			{
+				// the edge is in front of the water (which is drawn at z-index -1)
+				drawTerrainTile(i, j, TRUE);
 			}
 		}
 	}
