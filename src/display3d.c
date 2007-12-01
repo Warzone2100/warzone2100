@@ -35,7 +35,6 @@
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/tex.h"
 #include "lib/ivis_common/piestate.h"
-// FIXME Direct iVis implementation include!
 #include "lib/ivis_common/pieclip.h"
 #include "lib/ivis_common/piepalette.h"
 // FIXME Direct iVis implementation include!
@@ -43,12 +42,11 @@
 #include "lib/ivis_common/piemode.h"
 #include "lib/ivis_common/piefunc.h"
 #include "lib/ivis_common/rendmode.h"
-#include "e3demo.h"	// on the psx?
+#include "e3demo.h"
 #include "loop.h"
 #include "atmos.h"
 #include "raycast.h"
 #include "levels.h"
-/* Includes from PUMPKIN stuff */
 #include "lib/framework/frame.h"
 #include "map.h"
 #include "move.h"
@@ -94,21 +92,15 @@
 #include "keybind.h"
 #include "combat.h"
 #include "order.h"
-
 #include "scores.h"
 #ifdef ARROWS
 #include "arrow.h"
 #endif
-
 #include "multiplay.h"
-
 #include "environ.h"
 #include "advvis.h"
-
 #include "texture.h"
-
 #include "anim_id.h"
-
 #include "cmddroid.h"
 
 // HACK to be able to use static shadows for walls
@@ -126,7 +118,6 @@ static BOOL directionSet[3] = {FALSE, FALSE, FALSE};
 static UDWORD	getTargettingGfx(void);
 static void	drawDroidGroupNumber(DROID *psDroid);
 static void	trackHeight(float desiredHeight);
-static void	getDefaultColours(void);
 static void	renderSurroundings(void);
 static void	locateMouse(void);
 static void preprocessTiles(void);
@@ -138,22 +129,18 @@ static void	displayTerrain(void);
 static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDWORD direction);
 static void	drawTiles(iView *camera, iView *player);
 static void	display3DProjectiles(void);
-
 static void	drawDroidSelections(void);
 static void	drawStructureSelections(void);
-WZ_DECL_UNUSED static void	drawBuildingLines(void);
-
 static void	displayAnimation(ANIM_OBJECT * psAnimObj, BOOL bHoldOnFirstFrame);
 static void	processSensorTarget(void);
 static void	processDestinationTarget(void);
 static BOOL	eitherSelected(DROID *psDroid);
-static void	testEffect(void);
+static void	structureEffects(void);
 static void	showDroidSensorRanges(void);
 static void	showSensorRange2(BASE_OBJECT *psObj);
 static void	drawRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius);
 static void	addConstructionLine(DROID *psDroid, STRUCTURE *psStructure);
 static void	doConstructionLines(void);
-WZ_DECL_UNUSED static void	drawDeliveryPointSelection(void);
 static void	drawDroidCmndNo(DROID *psDroid);
 static void	drawDroidRank(DROID *psDroid);
 static void	drawDroidSensorLock(DROID *psDroid);
@@ -175,8 +162,7 @@ static BOOL	bDrawProximitys=TRUE;
 BOOL	godMode;
 
 static float waterRealValue = 0.0f;
-#define WAVE_SPEED 4.0f
-#define MAX_FIRE_STAGE 32
+#define WAVE_SPEED 2.0f
 
 UDWORD	barMode = BAR_FULL; // configured in configuration.c
 
@@ -256,23 +242,9 @@ static UDWORD	destTileX=0,destTileY=0;
 #define STRUCTURE_ANIM_RATE 4
 #define ELEC_DAMAGE_DURATION	(GAME_TICKS_PER_SEC/5)
 
-//this is used to 'highlight' the tiles when selecting a location for a structure
-#define FOUNDATION_TEXTURE		22
-#define EFFECT_DELIVERY_POINT_TRANSPARENCY		128
-
-#ifdef DEBUG
-static char buildInfo[255];
-#endif
-
-typedef struct	_defaultColours
-{
-	UBYTE red, green, blue, yellow, purple, white, black, cyan;
-} DEF_COLOURS;
-
 /* Colour strobe values for the strobing drag selection box */
-UBYTE	boxPulseColours[BOX_PULSE_SIZE] = {233,232,231,230,229,228,227,226,225,224};
-//UDWORD	tCon,tIgn,tCal;
-static DEF_COLOURS	defaultColours;
+#define BOX_PULSE_SIZE  10
+static UBYTE	boxPulseColours[BOX_PULSE_SIZE] = {233,232,231,230,229,228,227,226,225,224};
 
 
 /********************  Functions  ********************/
@@ -313,6 +285,8 @@ SDWORD	getCentreZ( void )
 /* Render the 3D world */
 void draw3DScene( void )
 {
+	char buildInfo[255];
+
 	BOOL bPlayerHasHQ = FALSE;
 
 	// the world centre - used for decaying lighting etc
@@ -448,7 +422,7 @@ void draw3DScene( void )
 	processSensorTarget();
 	processDestinationTarget();
 
-	testEffect(); //this does squat, but leave it for now I guess -Q
+	structureEffects(); // add fancy effects to structures
 
 	if(bSensorDisplay)
 	{
@@ -923,7 +897,6 @@ BOOL init3DView(void)
 
 	/* Build our shade table for gouraud shading - 256*16 values with best match from 256 colour table */
 	iV_PaletteShadeTableCreate();
-	getDefaultColours();
 
 	/* No initial rotations */
 	imdRot2.x = 0;
@@ -2227,8 +2200,8 @@ void	renderStructure(STRUCTURE *psStructure)
 						iV_MatrixEnd();
 					}
 				}
-				// if there is an unused connector, add a light to it
-				else if (psStructure->sDisplay.imd->nconnectors >= i)
+				// if there is an unused connector, but not the first connector, add a light to it
+				else if (psStructure->sDisplay.imd->nconnectors > 1)
 				{
 					for (i = 0; i < psStructure->sDisplay.imd->nconnectors; i++)
 					{
@@ -2983,29 +2956,6 @@ BASE_OBJECT		*psObj;
 	return(retVal);
 }
 
-static void	drawDeliveryPointSelection(void)
-{
-	FLAG_POSITION	*psDelivPoint;
-	UDWORD			scrX,scrY,scrR;
-
-	//draw the selected Delivery Point if any
-	for(psDelivPoint = apsFlagPosLists[selectedPlayer]; psDelivPoint; psDelivPoint =
-		psDelivPoint->psNext)
-	{
-		if(psDelivPoint->selected && psDelivPoint->frameNumber == currentGameFrame)
-		{
-			scrX = psDelivPoint->screenX;
-			scrY = psDelivPoint->screenY;
-			scrR = psDelivPoint->screenR;
-			/* Three DFX clips properly right now - not sure if software does */
-			if ((scrX + scrR) > 0 && (scrY + scrR) > 0 && (scrX - scrR) < pie_GetVideoBufferWidth() && (scrY - scrR) < pie_GetVideoBufferHeight())
-			{
-				iV_Box(scrX - scrR, scrY - scrR, scrX + scrR, scrY + scrR, 110);
-			}
-		}
-	}
-}
-
 static void	drawDroidSelections( void )
 {
 	UDWORD			scrX,scrY,scrR;
@@ -3282,29 +3232,6 @@ static void	drawDroidSelections( void )
 
 
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
-}
-
-/* ---------------------------------------------------------------------------- */
-static void	drawBuildingLines( void )
-{
-	Vector3i first, second;
-
-	if(buildState == BUILD3D_VALID || buildState == BUILD3D_POS)
-	{
-		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
-		pie_SetFogStatus(FALSE);
-		first.x = 1000;//buildSite.xTL * 128;
-		first.y = 116;
-		first.z = 1000;//buildSite.yTL * 128;
-
-		second.x = 3000;//world_coord(mouseTileX);//buildSite.xBR * 128;
-		second.y = 116;
-		second.z = 3000;//world_coord(mouseTileY);//buildSite.yBR * 128;
-
-		draw3dLine(&first,&second,rand()%255);
-
-		pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
-	}
 }
 
 /* ---------------------------------------------------------------------------- */
@@ -3901,18 +3828,6 @@ static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDW
 	return imd;
 }
 
-static void getDefaultColours( void )
-{
-	defaultColours.red = iV_PaletteNearestColour(255, 0, 0);
-	defaultColours.green = iV_PaletteNearestColour(0, 255, 0);
-	defaultColours.blue = iV_PaletteNearestColour(0, 0, 255);
-	defaultColours.yellow = iV_PaletteNearestColour(255, 255, 0);
-	defaultColours.purple = iV_PaletteNearestColour(255, 0, 255);
-	defaultColours.cyan = iV_PaletteNearestColour(0, 255, 255);
-	defaultColours.black = iV_PaletteNearestColour(0, 0, 0);
-	defaultColours.white = iV_PaletteNearestColour(255, 255, 255);
-}
-
 //#define SHOW_ZONES
 //#define SHOW_GATEWAYS
 
@@ -4422,7 +4337,7 @@ UDWORD	getRubbleTileNum( void )
 
 static UDWORD	lastSpinVal;
 
-static void testEffect2( UDWORD player )
+static void structureEffectsPlayer( UDWORD player )
 {
 	SDWORD	val;
 	SDWORD	radius;
@@ -4436,7 +4351,6 @@ static void testEffect2( UDWORD player )
 	UDWORD	i;
 	BASE_OBJECT			*psChosenObj = NULL;
 	UWORD	bFXSize;
-
 
 	for(psStructure = apsStructLists[player]; psStructure; psStructure = psStructure->psNext)
 	{
@@ -4456,7 +4370,6 @@ static void testEffect2( UDWORD player )
 				/* No effect if nothing connected */
 				if(!numConnected)
 				{
-					//return;
 					//keep looking for another!
 					continue;
 				}
@@ -4475,7 +4388,6 @@ static void testEffect2( UDWORD player )
 					val = 3;	  // really fast!!!
 					break;
 				}
-
 
 				angle = gameTime2%gameDiv;
 				val = angle/val;
@@ -4552,8 +4464,7 @@ static void testEffect2( UDWORD player )
 	}
 }
 
-
-static void testEffect( void )
+static void structureEffects()
 {
 	UDWORD	i;
 
@@ -4565,14 +4476,14 @@ static void testEffect( void )
 			{
 				if(isHumanPlayer(i) && apsStructLists[i] )
 				{
-					testEffect2(i);
+					structureEffectsPlayer(i);
 				}
 
 			}
 		}
 		else if(apsStructLists[0])
 		{
-			testEffect2(0);
+			structureEffectsPlayer(0);
 		}
 }
 
@@ -4775,9 +4686,6 @@ static	void	doConstructionLines( void )
 DROID	*psDroid;
 UDWORD	i;
 
-//	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
-//	pie_SetFogStatus(FALSE);
-
 	for(i=0; i<MAX_PLAYERS; i++)
 	{
 		for(psDroid= apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
@@ -4818,7 +4726,6 @@ UDWORD	i;
 		}
 	}
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
-
 }
 
 static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)

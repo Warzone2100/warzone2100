@@ -42,6 +42,7 @@
 #include "display.h"
 #include "mission.h"
 #include "multiplay.h"
+#include "texture.h"
 
 #define HIT_NOTIFICATION	(GAME_TICKS_PER_SEC*2)
 
@@ -80,7 +81,7 @@ static UDWORD		flashColours[CAMPAIGNS][MAX_PLAYERS] =
 {165,165,165,165,255,165,165,165},
 };
 
-static UBYTE		tileColours[NUM_TILES];
+static UBYTE		tileColours[MAX_TILES];
 static UBYTE		*radarBuffer;
 static UBYTE		heightMapColors[255];		//precalculated colors for heightmap mode
 
