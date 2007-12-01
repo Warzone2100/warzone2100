@@ -38,7 +38,7 @@ endif
 	pngtopnm $< | pnmscale -xysize 32 32 | ppmtoxpm -alphamask $@.alpha > $@
 	$(RM) $@.alpha
 
-configure:
+configure: configure.ac autogen.sh
 	sh autogen.sh
 
 config.status: configure
