@@ -1,4 +1,4 @@
-0000-00-00: Version 2.0.8 RC2
+2007-12-01: Version 2.0.8
  * General:
    * New: Possibility to use the zero-key ('0') to assign groups to as well (patch #828)
    * Change: Slightly faster terrain rendering (+ 5-10%) (patch #830, patch #833)
@@ -8,6 +8,7 @@
    * Fix: Crash when loading sounds without filenames (patch #855, bugs #9927 and #10142)
    * Fix: Crash on game exit (bug #9927)
    * Fix: Don't add/remove droids to/from groups upon selecting/deselecting them (patch #829)
+   * Fix: Crash where rearming VTOL would try to set a dead target (r2651)
 
 2007-10-20: Version 2.0.8 RC1
  * General:
