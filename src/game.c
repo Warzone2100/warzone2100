@@ -7461,11 +7461,6 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 			for (i=0; i < MAX_PLAYERS; i++)
 			{
 				psStructure->visible[i] = psSaveStructure->visible[i];
-                //set the Tile flag if visible for the selectedPlayer
-                if ((i == selectedPlayer) && (psStructure->visible[i] == UBYTE_MAX))
-                {
-                    setStructTileDraw(psStructure);
-                }
 			}
 		}
 		psStructure->status = psSaveStructure->status;
@@ -7907,11 +7902,6 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 		for (i=0; i < MAX_PLAYERS; i++)
 		{
 			psStructure->visible[i] = psSaveStructure->visible[i];
-            //set the Tile flag if visible for the selectedPlayer
-            if ((i == selectedPlayer) && (psStructure->visible[i] == UBYTE_MAX))
-            {
-                setStructTileDraw(psStructure);
-            }
 		}
 
 		psStructure->status = psSaveStructure->status;
@@ -8704,7 +8694,6 @@ BOOL loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UD
 			ASSERT( FALSE, "loadSaveFeature:Unable to create feature" );
 			return FALSE;
 		}
-//DBPRINTF(("Loaded feature - id = %d @ %p\n",psSaveFeature->id,pFeature);
 		//restore values
 		pFeature->id = psSaveFeature->id;
 		pFeature->direction = psSaveFeature->direction;
@@ -8715,11 +8704,6 @@ BOOL loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UD
 			for (i=0; i < MAX_PLAYERS; i++)
 			{
 				pFeature->visible[i] = psSaveFeature->visible[i];
-                //set the Tile flag if visible for the selectedPlayer
-                if ((i == selectedPlayer) && (pFeature->visible[i] == UBYTE_MAX))
-                {
-                    setFeatTileDraw(pFeature);
-                }
 			}
 		}
 
@@ -8814,7 +8798,6 @@ BOOL loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWO
 			ASSERT( FALSE, "loadSaveFeature:Unable to create feature" );
 			return FALSE;
 		}
-//DBPRINTF(("Loaded feature - id = %d @ %p\n",psSaveFeature->id,pFeature);
 		//restore values
 		pFeature->id = psSaveFeature->id;
 		pFeature->direction = psSaveFeature->direction;
@@ -8823,11 +8806,6 @@ BOOL loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWO
 		for (i=0; i < MAX_PLAYERS; i++)
 		{
 			pFeature->visible[i] = psSaveFeature->visible[i]	;
-            //set the Tile flag if visible for the selectedPlayer
-            if ((i == selectedPlayer) && (pFeature->visible[i] == UBYTE_MAX))
-            {
-                setFeatTileDraw(pFeature);
-            }
 		}
 	}
 	return TRUE;

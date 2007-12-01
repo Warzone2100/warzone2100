@@ -691,12 +691,6 @@ void processVisibility(BASE_OBJECT *psObj)
 		}
 	}
 
-	// if a structure has just become visible set the tile flags
-	if (psObj->type == OBJ_STRUCTURE && !prevVis[selectedPlayer] && psObj->visible[selectedPlayer])
-	{
-		setStructTileDraw((STRUCTURE *)psObj);
-	}
-
 	/* Make sure all tiles under a feature/structure become visible when you see it */
 	for(i=0; i<MAX_PLAYERS; i++)
 	{
@@ -710,7 +704,6 @@ void processVisibility(BASE_OBJECT *psObj)
 	// if a feature has just become visible set the tile flags
 	if (psObj->type == OBJ_FEATURE && !prevVis[selectedPlayer] && psObj->visible[selectedPlayer])
 	{
-		setFeatTileDraw((FEATURE *)psObj);
 		/*if this is an oil resource we want to add a proximity message for
 		the selected Player - if there isn't an Resource Extractor on it*/
 		if (((FEATURE *)psObj)->psStats->subType == FEAT_OIL_RESOURCE)

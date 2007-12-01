@@ -1602,29 +1602,6 @@ static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 }
 
 
-// Set the tile no draw flags for a structure
-void setStructTileDraw(STRUCTURE *psStruct)
-{
-	STRUCTURE_STATS		*pStructureType = psStruct->pStructureType;
-	UDWORD	width, breadth, mapX,mapY;
-
-	CHECK_STRUCTURE(psStruct);
-
-	mapX = map_coord(psStruct->x) - (pStructureType->baseWidth/2);
-	mapY = map_coord(psStruct->y) - (pStructureType->baseBreadth/2);
-	for (width = 0; width < pStructureType->baseWidth; width++)
-	{
-		for (breadth = 0; breadth < pStructureType->baseBreadth; breadth++)
-		{
-			if (pStructureType->pBaseIMD)
-			{
-				SET_TILE_NODRAW(mapTile(mapX+width,mapY+breadth));
-			}
-		}
-	}
-}
-
-
 void buildFlatten(STRUCTURE_STATS *pStructureType, UDWORD atx, UDWORD aty,UDWORD h )
 {
 	UDWORD				x = map_coord(atx);
@@ -1964,11 +1941,6 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 
 		/* Structure is trivially visible to the builder (owner) */
 		psBuilding->visible[player] = UBYTE_MAX;
-
-		if (player == selectedPlayer)
-		{
-			setStructTileDraw(psBuilding);
-		}
 
 		// Reveal any tiles that can be seen by the structure
 		visTilesUpdate((BASE_OBJECT *)psBuilding);
@@ -4881,7 +4853,6 @@ static void removeStructFromMap(STRUCTURE *psStruct)
 		{
 			psTile = mapTile(mapX+i, mapY+j);
 			psTile->psObject = NULL;
-			CLEAR_TILE_NODRAW(psTile);
 			CLEAR_TILE_NOTBLOCKING(psTile);
 		}
 	}
@@ -4917,8 +4888,6 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 		{
 			if (psDel->pFunctionality->resourceExtractor.power)
 			{
-				//clear the tile nodraw attribute so that will get set up when building the feature
-				CLEAR_TILE_NODRAW(mapTile(map_coord(psDel->x), map_coord(psDel->y)));
 				buildFeature(&asFeatureStats[oilResFeature], psDel->x, psDel->y, FALSE);
 				resourceFound = TRUE;
 			}
@@ -6748,11 +6717,6 @@ void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 			if( psStruct->visible[losingPlayer] && !psStruct->died)
 			{
 				psStruct->visible[rewardPlayer] = psStruct->visible[losingPlayer];
-
-				if(rewardPlayer == selectedPlayer)
-				{
-					setStructTileDraw(psStruct);
-				}
 			}
 		}
 
@@ -6762,10 +6726,6 @@ void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 			if(psFeat->visible[losingPlayer] )
 			{
 				psFeat->visible[rewardPlayer] = psFeat->visible[losingPlayer];
-				if(rewardPlayer == selectedPlayer)
-				{
-					setFeatTileDraw(psFeat);
-				}
 			}
 		}
 
@@ -7777,8 +7737,6 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, BOOL
 			{
 				//make sure this structure is visible to selectedPlayer
 				psStructure->visible[selectedPlayer] = UBYTE_MAX;
-				//make sure the tiles don't get drawn
-				setStructTileDraw(psStructure);
 			}
 		}
 
@@ -7887,8 +7845,6 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, BOOL
 				}
 				//make sure this structure is visible to selectedPlayer if the structure used to be selectedPlayers'
 				psNewStruct->visible[selectedPlayer] = UBYTE_MAX;
-				//make sure the tiles don't get drawn
-				setStructTileDraw(psNewStruct);
 			}
 		}
 	}

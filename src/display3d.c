@@ -4073,12 +4073,6 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 #endif
 	}
 
-	if (!TILE_DRAW(psTile))
-	{
-		/* This tile isn't being drawn */
-		return;
-	}
-
 	if ( terrainType(psTile) != TER_WATER || onWaterEdge )
 	{
 		// what tile texture number is it?

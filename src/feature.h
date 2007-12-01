@@ -44,9 +44,6 @@ extern BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize);
 /* Release the feature stats memory */
 extern void featureStatsShutDown(void);
 
-// Set the tile no draw flags for a structure
-extern void setFeatTileDraw(FEATURE *psFeat);
-
 /* Create a feature on the map */
 extern FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave);
 

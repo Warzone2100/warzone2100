@@ -56,8 +56,6 @@ void	processDemoCam		( void );
 void	toggleDemoStatus	( void );
 BOOL	getDemoStatus		( void );
 void	findSomethingInteresting( void );
-void	demoProcessTilesIn	( void );
-void	demoProcessTilesOut	( void );
 void	setFindNewTarget	( void );
 
 // -------------------------------------------------------------------------
@@ -191,13 +189,11 @@ void	toggleDemoStatus( void )
 	{
 		presentStatus = DC_INACTIVE;
 		selectedPlayer = lastSelectedPlayer;
-		demoProcessTilesOut();
 	}
 	else if(presentStatus == DC_INACTIVE)
 	{
 		presentStatus = DC_ISACTIVE;
 		lastSelectedPlayer = selectedPlayer;
-		demoProcessTilesIn();
 	}
 }
 
@@ -360,75 +356,6 @@ PROPULSION_STATS	*psPropStats;
 			break;
 		}
 //	}
-}
-
-// -------------------------------------------------------------------------
-void	demoProcessTilesIn( void )
-{
-UWORD	i,j;
-MAPTILE	*psTile;
-STRUCTURE	*psStructure;
-STRUCTURE_STATS	*pStructureType;
-
-	for(i=0; i<mapWidth; i++)
-	{
-		for(j=0; j<mapHeight; j++)
-		{
-			psTile = mapTile(i,j);
-			if(TILE_HAS_STRUCTURE(psTile))
-			{
-				psStructure = getTileStructure(i,j);
-				ASSERT( psStructure != NULL,
-					"demoProcessTilesIn: no structure at tile %i %i\n", i, j );
-				if(psStructure)
-				{
-					pStructureType = psStructure->pStructureType;
-					if(pStructureType->pBaseIMD)
-					{
-						SET_TILE_NODRAW(psTile);
-					}
-				}
-			}
-		}
-	}
-}
-
-// -------------------------------------------------------------------------
-/*	The next two functions solve the flickering base plate problem - probably
-	won't be needed on the PSX. they're used both in demo mode and indirectly
-	when godMode is toggled ON/OFF
-*/
-void	demoProcessTilesOut( void )
-{
-UWORD	i,j;
-MAPTILE	*psTile;
-STRUCTURE	*psStructure;
-STRUCTURE_STATS		*pStructureType;
-
-	for(i=0; i<mapWidth; i++)
-	{
-		for(j=0; j<mapHeight; j++)
-		{
-			psTile = mapTile(i,j);
-			if(TILE_HAS_STRUCTURE(psTile))
-			{
-				psStructure = getTileStructure(i,j);
-				if(psStructure)
-				{
-					pStructureType = psStructure->pStructureType;
-					if(psStructure->player == selectedPlayer && pStructureType->pBaseIMD)
-					{
-						SET_TILE_NODRAW(psTile);
-					}
-					else
-					{
-						CLEAR_TILE_NODRAW(psTile);
-					}
-				}
-			}
-		}
-	}
-
 }
 
 // -------------------------------------------------------------------------

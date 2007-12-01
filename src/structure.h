@@ -118,9 +118,6 @@ extern BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl,
 //temp test function for creating structures at the start of the game
 extern void createTestStructures(void);
 
-// Set the tile no draw flags for a structure
-extern void setStructTileDraw(STRUCTURE *psStruct);
-
 //builds a specified structure at a given location
 extern STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y,
 						  UDWORD player,BOOL FromSave);

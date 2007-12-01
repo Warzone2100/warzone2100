@@ -1099,14 +1099,12 @@ if(bMultiPlayer && (NetPlay.bComms != 0) )
 		godMode = FALSE;
 //		setDifficultyLevel(getDifficultyLevel());
 		CONPRINTF(ConsoleString,(ConsoleString,"God Mode OFF"));
-		demoProcessTilesOut();
 	}
 	else
 	{
 		godMode = TRUE;
 //		setModifiers(FRACTCONST(1000,100),FRACTCONST(100,1000));
 		CONPRINTF(ConsoleString,(ConsoleString,"God Mode ON"));
-		demoProcessTilesIn();
 	}
 
 }

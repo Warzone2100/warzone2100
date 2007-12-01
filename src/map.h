@@ -81,7 +81,6 @@ static inline unsigned short TileNumber_texture(unsigned short tilenumber)
 }
 
 
-#define BITS_NODRAWTILE	0x4
 #define BITS_FPATHBLOCK	0x10		// bit set temporarily by find path to mark a blocking tile
 #define BITS_GATEWAY	0x40		// bit set to show a gateway on the tile
 
@@ -93,7 +92,6 @@ static inline unsigned short TileNumber_texture(unsigned short tilenumber)
 #define TILE_HAS_WALL(x)		(TILE_HAS_STRUCTURE(x) \
 					&& (((STRUCTURE*)x->psObject)->pStructureType->type == REF_WALL \
 					    || ((STRUCTURE*)x->psObject)->pStructureType->type == REF_WALLCORNER))
-#define TILE_DRAW(x)			(!((x)->tileInfoBits & BITS_NODRAWTILE))
 #define TILE_HIGHLIGHT(x)		(x->texture & TILE_HILIGHT)
 #define TILE_HAS_TALLSTRUCTURE(x)	((TILE_HAS_STRUCTURE(x) && ((STRUCTURE*)x->psObject)->sDisplay.imd->ymax > TALLOBJECT_YMAX) \
                                          || (TILE_HAS_FEATURE(x) && ((FEATURE*)x->psObject)->sDisplay.imd->ymax > TALLOBJECT_YMAX))
@@ -102,8 +100,6 @@ static inline unsigned short TileNumber_texture(unsigned short tilenumber)
 #define SET_TILE_NOTBLOCKING(x)	(x->texture |= TILE_NOTBLOCKING)
 #define CLEAR_TILE_NOTBLOCKING(x)	(x->texture &= ~TILE_NOTBLOCKING)
 
-#define SET_TILE_NODRAW(x)		(x->tileInfoBits = (UBYTE)((x)->tileInfoBits | BITS_NODRAWTILE))
-#define CLEAR_TILE_NODRAW(x)	(x->tileInfoBits = (UBYTE)((x)->tileInfoBits & (~BITS_NODRAWTILE)))
 #define SET_TILE_HIGHLIGHT(x)	(x->texture = (UWORD)((x)->texture | TILE_HILIGHT))
 #define CLEAR_TILE_HIGHLIGHT(x)	(x->texture = (UWORD)((x)->texture & (~TILE_HILIGHT)))
 

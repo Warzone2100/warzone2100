@@ -294,26 +294,6 @@ SDWORD featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass, UDWO
 }
 
 
-// Set the tile no draw flags for a structure
-void setFeatTileDraw(FEATURE *psFeat)
-{
-	FEATURE_STATS	*psStats = psFeat->psStats;
-	UDWORD			width,breadth, mapX,mapY;
-
-	mapX = map_coord(psFeat->x) - psStats->baseWidth / 2;
-	mapY = map_coord(psFeat->y) - psStats->baseBreadth / 2;
-	if (!psStats->tileDraw)
-	{
-		for (width = 0; width < psStats->baseWidth; width++)
-		{
-			for (breadth = 0; breadth < psStats->baseBreadth; breadth++)
-			{
-				SET_TILE_NODRAW(mapTile(mapX+width,mapY+breadth));
-			}
-		}
-	}
-}
-
 /* Create a feature on the map */
 FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 {
@@ -408,7 +388,6 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 		if(psStats->visibleAtStart)
 		{
   			vis = UBYTE_MAX;
-  			setFeatTileDraw(psFeature);
 		}
 		else
 		{
@@ -580,7 +559,6 @@ void removeFeature(FEATURE *psDel)
 
 			psTile->psObject = NULL;
 
-			CLEAR_TILE_NODRAW(psTile);
 			CLEAR_TILE_NOTBLOCKING(psTile);
 		}
 	}

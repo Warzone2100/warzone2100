@@ -939,7 +939,6 @@ BOOL mapSaveTagged(char *pFileName)
 		tagWrite(0x04, psTile->texture & TILE_XFLIP);
 		tagWrite(0x05, psTile->texture & TILE_YFLIP);
 		tagWrite(0x06, TILE_IS_NOTBLOCKING(psTile));
-		tagWrite(0x07, !TILE_DRAW(psTile));
 		tagWrite(0x08, psTile->height); // should multiply by ELEVATION_SCALE? If so, use map_TileHeight()
 
 		psTile++;

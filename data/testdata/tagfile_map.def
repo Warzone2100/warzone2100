@@ -24,7 +24,7 @@
   04 US 01 0		# Texture x flip
   05 US 01 0		# Texture y flip
   06 US 01 0		# Not blocking (even if structure or feature on it)
-  07 US 01 0		# Do not draw flag
+  07 US 01 0		# *RETIRED* Do not draw flag
   08 US 01 0		# Height of first corner
   FF EN 00 -
 0b GR 00 -		# GATEWAY GROUP
