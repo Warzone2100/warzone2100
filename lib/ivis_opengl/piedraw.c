@@ -966,7 +966,7 @@ void pie_DrawRect(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, PIELIGHT colour)
  *
  ***************************************************************************/
 
-void pie_DrawTerrainTriangle(const TERRAIN_VERTEX *aVrts, float offset)
+void pie_DrawTerrainTriangle(const TERRAIN_VERTEX *aVrts)
 {
 	unsigned int i = 0;
 
@@ -977,7 +977,7 @@ void pie_DrawTerrainTriangle(const TERRAIN_VERTEX *aVrts, float offset)
 		for ( i = 0; i < 3; i++ )
 		{
 			glColor4ub( aVrts[i].light.byte.r, aVrts[i].light.byte.g, aVrts[i].light.byte.b, aVrts[i].light.byte.a );
-			glTexCoord2f( aVrts[i].u, aVrts[i].v + offset );
+			glTexCoord2f( aVrts[i].u, aVrts[i].v );
 			glVertex3f( aVrts[i].pos.x, aVrts[i].pos.y, aVrts[i].pos.z );
 		}
 	glEnd();

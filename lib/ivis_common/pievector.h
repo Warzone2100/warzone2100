@@ -132,6 +132,18 @@ static inline WZ_DECL_CONST BOOL Vector2i_InCircle(const Vector2i v, const Vecto
 
 
 /*!
+ * Create a Vector from x and y
+ * \param x,y Coordinates
+ * \return New Vector
+ */
+static inline WZ_DECL_CONST Vector2f Vector2f_New(const float x, const float y)
+{
+	Vector2f dest = { x, y };
+	return dest;
+}
+
+
+/*!
  * Add op2 to op1.
  * \param op1,op2 Operands
  * \return Result

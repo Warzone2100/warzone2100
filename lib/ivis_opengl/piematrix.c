@@ -438,6 +438,23 @@ void pie_PerspectiveEnd(void) {
 	glMatrixMode(GL_MODELVIEW);
 }
 
+
+void pie_TranslateTextureBegin(const Vector2f offset)
+{
+	glMatrixMode(GL_TEXTURE);
+	glPushMatrix();
+	glTranslatef(offset.x, offset.y, 0.0f);
+	glMatrixMode(GL_MODELVIEW);
+}
+
+void pie_TranslateTextureEnd(void)
+{
+	glMatrixMode(GL_TEXTURE);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+}
+
+
 void pie_Begin3DScene(void) {
 	glDepthRange(0.1, 1);
 	drawing_interface = FALSE;

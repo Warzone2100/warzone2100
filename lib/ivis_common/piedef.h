@@ -154,7 +154,7 @@ typedef struct {
 extern void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD colour, UDWORD specular, int pieFlag, int pieData);
 extern void pie_DrawImage(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style);
 
-void pie_DrawTerrainTriangle(const TERRAIN_VERTEX *aVrts, float offset);
+void pie_DrawTerrainTriangle(const TERRAIN_VERTEX *aVrts);
 
 extern void pie_GetResetCounts(unsigned int* pPieCount, unsigned int* pTileCount, unsigned int* pPolyCount, unsigned int* pStateCount);
 

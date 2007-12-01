@@ -31,8 +31,6 @@
 #include <string.h>
 #include <limits.h>
 
-#include <SDL_opengl.h>
-
 /* Includes direct access to render library */
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/tex.h"
@@ -804,15 +802,11 @@ static void drawTiles(iView *camera, iView *player)
 		}
 	}
 
-	glMatrixMode(GL_TEXTURE);
-	glPushMatrix();
-	glTranslatef(0.0f, waterRealValue, 0.0f);
-	glMatrixMode(GL_MODELVIEW);
-
 	// Now draw the water tiles in a second pass to get alpha sort order correct
+	pie_TranslateTextureBegin(Vector2f_New(0.0f, waterRealValue));
 	pie_SetRendMode(REND_ALPHA_TEX);
 	pie_SetColourKeyedBlack(FALSE);
-	pie_SetDepthOffset(-1.0);
+	pie_SetDepthOffset(-1.0f);
 	for (i = 0; i < MIN(visibleTiles.y, mapHeight); i++)
 	{
 		for (j = 0; j < MIN(visibleTiles.x, mapWidth); j++)
@@ -834,13 +828,10 @@ static void drawTiles(iView *camera, iView *player)
 			}
 		}
 	}
-	pie_SetDepthOffset(0.0);
+	pie_SetDepthOffset(0.0f);
 	pie_SetRendMode(REND_GOURAUD_TEX);
 	pie_SetColourKeyedBlack(TRUE);
-
-	glMatrixMode(GL_TEXTURE);
-	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);
+	pie_TranslateTextureEnd();
 
 
 	targetOpenList((BASE_OBJECT*)driveGetDriven());
@@ -4147,7 +4138,7 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		}
 	}
 
-	pie_DrawTerrainTriangle(vertices, 0);
+	pie_DrawTerrainTriangle(vertices);
 
 	/* The second triangle */
 	if (psTile && TRI_FLIPPED(psTile))
@@ -4175,7 +4166,7 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		vertices[2].pos.y = tileScreenInfo[i + 1][j + 0].water_height;
 	}
 
-	pie_DrawTerrainTriangle(vertices, 0);
+	pie_DrawTerrainTriangle(vertices);
 
 	/* Outline the tile if necessary */
 	if(!onWaterEdge && terrainOutline)
@@ -4263,7 +4254,7 @@ static void drawTerrainWaterTile(UDWORD i, UDWORD j)
 		vertices[2].light = tileScreenInfo[i+1][j+1].wlight;
 		vertices[2].light.byte.a = WATER_ALPHA_LEVEL;
 
-		pie_DrawTerrainTriangle(vertices, 0.0f);
+		pie_DrawTerrainTriangle(vertices);
 
 		vertices[1] = vertices[2];
 		vertices[2] = tileScreenInfo[i + 1][j + 0];
@@ -4271,7 +4262,7 @@ static void drawTerrainWaterTile(UDWORD i, UDWORD j)
 		vertices[2].light = tileScreenInfo[i+1][j+0].wlight;
 		vertices[2].light.byte.a = WATER_ALPHA_LEVEL;
 
-		pie_DrawTerrainTriangle(vertices, 0.0f);
+		pie_DrawTerrainTriangle(vertices);
 	}
 }
 
