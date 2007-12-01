@@ -7,12 +7,16 @@
 
   !include "MUI.nsh"
 
+;Include VPatch
+
+  !include "VPatchLib.nsh"
+
 ;--------------------------------
 ;General
 
   ;Name and file
   Name "Warzone 2100"
-  OutFile "warzone2100-${VERSION}.exe"
+  OutFile "warzone2100-2.0.7-${VERSION}.update.exe"
 
   ;Default installation folder
   InstallDir "$PROGRAMFILES\Warzone 2100"
@@ -27,11 +31,11 @@
 
 VIProductVersion "${VERSIONNUM}"
 VIAddVersionKey "CompanyName"		"Warzone Resurrection Project"
-VIAddVersionKey "FileDescription"	"Warzone 2100 Installer"
+VIAddVersionKey "FileDescription"	"Warzone 2100 Updater"
 VIAddVersionKey "FileVersion"		"${VERSION}"
 VIAddVersionKey "InternalName"		"Warzone 2100"
 VIAddVersionKey "LegalCopyright"	"Copyright © 2006 Warzone Resurrection Project"
-VIAddVersionKey "OriginalFilename"	"warzone2100-${VERSION}.exe"
+VIAddVersionKey "OriginalFilename"	"warzone2100-${VERSION}.update.exe"
 VIAddVersionKey "ProductName"		"Warzone 2100"
 VIAddVersionKey "ProductVersion"	"${VERSION}"
 
@@ -114,15 +118,20 @@ Section $(TEXT_SecBase) SecBase
   ;ADD YOUR OWN FILES HERE...
 
   ; Main executable
-  File "..\src\warzone2100.exe"
+;  File "..\src\warzone2100.exe"
+  !insertmacro VPatchFile "warzone2100.exe.vpatch" "$INSTDIR\warzone2100.exe" "$INSTDIR\warzone2100.exe.tmp"
 
   ; Windows dbghelp library
   File "${EXTDIR}\dbghelp.dll.license.txt"
   File "${EXTDIR}\dbghelp.dll"
+;  !insertmacro VPatchFile "dbghelp.dll.license.txt.vpatch" "$INSTDIR\dbghelp.dll.license.txt" "$INSTDIR\dbghelp.dll.license.txt.tmp"
+;  !insertmacro VPatchFile "dbghelp.dll.vpatch" "$INSTDIR\dbghelp.dll" "$INSTDIR\dbghelp.dll.tmp"
 
   ; Data files
-  File "..\data\mp.wz"
-  File "..\data\warzone.wz"
+;  File "..\data\mp.wz"
+;  File "..\data\warzone.wz"
+  !insertmacro VPatchFile "mp.wz.vpatch" "$INSTDIR\mp.wz" "$INSTDIR\mp.wz.tmp"
+  !insertmacro VPatchFile "warzone.wz.vpatch" "$INSTDIR\warzone.wz" "$INSTDIR\warzone.wz.tmp"
 
   ; Information/documentation files
   File "/oname=ChangeLog.txt" "..\ChangeLog"
@@ -133,6 +142,7 @@ Section $(TEXT_SecBase) SecBase
   File "/oname=Readme.en.html" "..\doc\Readme.en.xhtml"
   File "/oname=Readme.de.html" "..\doc\Readme.de.xhtml"
 
+  Delete "$INSTDIR\Readme.txt" ; This file exists in 2.0.7 but not in 2.0.8
 
   ;Store installation folder
   WriteRegStr HKLM "Software\Warzone 2100" "" $INSTDIR
@@ -180,6 +190,7 @@ Section $(TEXT_SecGrimMod) SecGrimMod
   SetOutPath "$INSTDIR\mods\global"
 
   File "..\data\grim.wz"
+;  !insertmacro VPatchFile "grim.wz.vpatch" "$INSTDIR\grim.wz" "$INSTDIR\grim.wz.tmp"
 
   SetOutPath "$INSTDIR"
 
