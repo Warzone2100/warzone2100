@@ -534,7 +534,7 @@ static void drawTiles(iView *camera, iView *player)
 	if(!gamePaused())
 	{
 		waterRealValue += (WAVE_SPEED * frameTime2) / GAME_TICKS_PER_SEC;
-		if(waterRealValue >= 64/2)
+		if (waterRealValue >= (256 / TILES_IN_PAGE_ROW) / 2)
 		{
 			waterRealValue = 0.0f;
 		}
