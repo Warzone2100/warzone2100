@@ -61,7 +61,8 @@ int vasprintf(char** strp, const char* format, va_list ap)
 
 	if (count == 0)
 	{
-		return strdup("");
+		*strp = strdup("");
+		return 0;
 	}
 	else if (count < 0)
 	{
