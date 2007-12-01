@@ -179,9 +179,6 @@ static Vector3i	imdRot,imdRot2;
 /* How far away are we from the terrain */
 UDWORD		distance = START_DISTANCE;//(DISTANCE - (DISTANCE/6));
 
-/* Are we outlining the terrain tile triangles */
-UDWORD		terrainOutline = FALSE;
-
 /* Stores the screen coordinates of the transformed terrain tiles */
 TERRAIN_VERTEX tileScreenInfo[LAND_YGRD][LAND_XGRD];
 
@@ -4013,19 +4010,6 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	else
 	{
 		pie_DrawTerrainTriangle(i * 2 + j * VISIBLE_XTILES * 2 + 1, vertices);
-	}
-
-	/* Outline the tile if necessary */
-	if(!onWaterEdge && terrainOutline)
-	{
-		iV_Line(tileScreenInfo[i+0][j+0].screen.x, tileScreenInfo[i+0][j+0].screen.y,
-			tileScreenInfo[i+0][j+1].screen.x, tileScreenInfo[i+0][j+1].screen.y, 255);
-		iV_Line(tileScreenInfo[i+0][j+1].screen.x, tileScreenInfo[i+0][j+1].screen.y,
-			tileScreenInfo[i+1][j+1].screen.x, tileScreenInfo[i+1][j+1].screen.y, 255);
-		iV_Line(tileScreenInfo[i+1][j+1].screen.x, tileScreenInfo[i+1][j+1].screen.y,
-			tileScreenInfo[i+1][j+0].screen.x, tileScreenInfo[i+1][j+0].screen.y, 255);
-		iV_Line(tileScreenInfo[i+1][j+0].screen.x, tileScreenInfo[i+1][j+0].screen.y,
-			tileScreenInfo[i+0][j+0].screen.x, tileScreenInfo[i+0][j+0].screen.y, 255);
 	}
 
 	if(!onWaterEdge && bOutlined)

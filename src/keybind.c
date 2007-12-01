@@ -346,22 +346,6 @@ void	kf_ToggleRadar( void )
 
 // --------------------------------------------------------------------------
 
-/* Toggles the outline around the map tiles */
-void	kf_ToggleOutline( void )
-{
-		if(terrainOutline)
-		{
-			terrainOutline = FALSE;
-		}
-		else
-		{
-			terrainOutline = TRUE;
-		}
-		addConsoleMessage("Tile outline display toggled",DEFAULT_JUSTIFY);
-}
-
-// --------------------------------------------------------------------------
-
 /* Toggles infinite power on/off */
 void	kf_TogglePower( void )
 {

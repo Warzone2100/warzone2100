@@ -87,7 +87,6 @@ extern BOOL init3DView(void);
 extern void initViewPosition(void);
 extern iView player;
 extern UDWORD distance;
-extern UDWORD terrainOutline;
 extern UDWORD xOffset,yOffset;
 extern BOOL selectAttempt;
 extern BOOL draggingTile;

@@ -27,7 +27,6 @@ extern void	kf_BuildInfo( void );
 extern void	kf_FrameRate( void );
 extern void	kf_ShowNumObjects( void );
 extern void	kf_ToggleRadar( void );
-extern void	kf_ToggleOutline( void );
 extern void	kf_TogglePower( void );
 extern void	kf_RecalcLighting( void );
 extern void	kf_RaiseGamma( void );

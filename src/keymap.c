@@ -242,7 +242,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_SystemClose,
 	kf_ToggleShadows,
 	kf_RaiseTile,
-	kf_ToggleOutline,
+	kf_NOOP, // unused
 	kf_TriFlip,
 	kf_RaiseGamma,
 	kf_LowerGamma,
@@ -483,16 +483,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F6,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  5");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F7,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  6");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LALT,KEY_F8,KEYMAP_PRESSED,kf_SelectPlayer,					"Select player  7");
-
-	// would be nice, but does not currently work - Per
-	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_P,KEYMAP_PRESSED,kf_ToggleOutline,				"Tile Outline");
 	*/
-
-//  ------------------------ OLD STUFF - Store here!
-
-
-
-
 }
 
 // ----------------------------------------------------------------------------------
