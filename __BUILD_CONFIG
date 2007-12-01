@@ -2,7 +2,7 @@ PREFIX="${HOME}/Documents/Projects/Warzone/devpkg/devpkg"
 PKG_CONFIG_PATH="${PREFIX}/lib/pkgconfig"
 PATH="${PREFIX}/bin:${PATH}"
 
-CFLAGS="-pipe -m32 -march=i686 -O2"
+CFLAGS="-pipe -m32 -march=i686 -O2 -g"
 CXXFLAGS="${CFLAGS}"
 CPPFLAGS="-I${PREFIX}/include"
 LDFLAGS="-L${PREFIX}/lib"

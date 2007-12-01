@@ -26,7 +26,7 @@ fi
 # Check for Windows.
 AC_CANONICAL_HOST
 case $host_os in
-	mingw32)
+	*mingw32*)
 		host_os_mingw32=yes
 		AC_CHECK_TOOL([WINDRES], [windres], AC_MSG_ERROR([windres not found]))
 		WIN32_LIBS="-lshfolder -lwinmm -lwsock32 -L\$(srcdir) -ldbghelp"
