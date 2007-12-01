@@ -30,6 +30,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
+
+#include <SDL_opengl.h>
+
 /* Includes direct access to render library */
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/tex.h"
@@ -839,6 +842,11 @@ static void drawTiles(iView *camera, iView *player)
 		}
 	}
 
+	glMatrixMode(GL_TEXTURE);
+	glPushMatrix();
+	glTranslatef(0.0f, waterRealValue, 0.0f);
+	glMatrixMode(GL_MODELVIEW);
+
 	// Now draw the water tiles in a second pass to get alpha sort order correct
 	pie_SetRendMode(REND_ALPHA_TEX);
 	pie_SetColourKeyedBlack(FALSE);
@@ -867,6 +875,11 @@ static void drawTiles(iView *camera, iView *player)
 	pie_SetDepthOffset(0.0);
 	pie_SetRendMode(REND_GOURAUD_TEX);
 	pie_SetColourKeyedBlack(TRUE);
+
+	glMatrixMode(GL_TEXTURE);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+
 
 	targetOpenList((BASE_OBJECT*)driveGetDriven());
 
@@ -4291,7 +4304,7 @@ static void drawTerrainWaterTile(UDWORD i, UDWORD j)
 		vertices[2].light = tileScreenInfo[i+1][j+1].wlight;
 		vertices[2].light.byte.a = WATER_ALPHA_LEVEL;
 
-		pie_DrawTerrainTriangle(vertices, waterRealValue);
+		pie_DrawTerrainTriangle(vertices, 0.0f);
 
 		vertices[1] = vertices[2];
 		vertices[2] = tileScreenInfo[i + 1][j + 0];
@@ -4299,7 +4312,7 @@ static void drawTerrainWaterTile(UDWORD i, UDWORD j)
 		vertices[2].light = tileScreenInfo[i+1][j+0].wlight;
 		vertices[2].light.byte.a = WATER_ALPHA_LEVEL;
 
-		pie_DrawTerrainTriangle(vertices, waterRealValue);
+		pie_DrawTerrainTriangle(vertices, 0.0f);
 	}
 }
 
