@@ -55,10 +55,19 @@
      * reload time: increased from 5 mins to 8 mins
      * chance to hit in the blast radius: reduced from 99% to 90%
 
-0000-00-00: Version 2.0.8
-   * Fix: bug #9694: crash upon receiving invalid sound ID numbers (out of bounds array access)
-   * Fix: bug #9704: prevent divide by zero errors caused by ordering a VTOL to attack a droid at the same X & Y coordinates
+2007-10-20: Version 2.0.8 RC1
+ * General:
    * New: Repeat keypresses if the key is hold long enough (e.g. one press of 'A' becomes 'AAAAAAAAAA' if just held long enough)
+   * Change: In the "Join Game" menu you can now choose between "IP" (same as the old "Internet" option) and "Lobby" (directly proceed to the Lobbyserver)
+   * Fix: Remove invalid references to software renderer textures (caused crashes between campaign 1-2 and 2-3) (bug #9497)
+   * Fix: Improve POSIX exception handler reliability (GDB could have had trouble locating the executable)
+   * Fix: Workaround a bug in OpenAL SI 0.0.8 GNU/Linux, which could lead to a crash
+   * Fix: Dead objects could be targeted when structures used commanders and counterbatteries for targeting
+   * Fix: Crash upon receiving invalid sound ID numbers (out of bounds array access) (bug #9694)
+   * Fix: Prevent divide by zero errors caused by ordering a VTOL to attack a droid at the same X & Y coordinates (bug #9704)
+   * Fix: Make progress bar white again
+   * Fix: Workaround mysterious crash when updating beacons (bug #9455)
+   * Fix: Textures where not properly reloaded when finishing a campaign and continueing with the next (bug #9923)
 
 2007-06-22: Version 2.0.7
  * General:
