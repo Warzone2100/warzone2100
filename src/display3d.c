@@ -1136,7 +1136,6 @@ void	renderProjectile(PROJECTILE *psCurr)
 	Vector3i			dv;
 	iIMDShape		*pIMD;
 	UDWORD			brightness, specular;
-//	SDWORD		centreX, centreZ;
 
 	psStats = psCurr->psWStats;
 	/* Reject flame or command since they have interim drawn fx */
@@ -1145,7 +1144,6 @@ void	renderProjectile(PROJECTILE *psCurr)
 		psStats->weaponSubClass == WSC_ELECTRONIC ||
 		psStats->weaponSubClass == WSC_EMP ||
 		(bMultiPlayer && psStats->weaponSubClass == WSC_LAS_SAT))
-//		|| psStats->weaponSubClass == WSC_ROCKET)
 	{
 		/* We don't do projectiles from these guys, cos there's an effect instead */
 		return;
@@ -1186,10 +1184,6 @@ void	renderProjectile(PROJECTILE *psCurr)
 		/* pitch it */
 		imdRot2.x = DEG(psCurr->pitch);
 		iV_MatrixRotateX(imdRot2.x);
-
-		/* Spin the bullet around - remove later */
-//		centreX = player.p.x + world_coord(visibleTiles.x / 2);
-//		centreZ = player.p.z + world_coord(visibleTiles.y / 2);
 
 		brightness = (UDWORD)lightDoFogAndIllumination(pie_MAX_BRIGHT_LEVEL,getCentreX()-psCurr->x,getCentreZ()-psCurr->y, &specular);
 		if(psStats->weaponSubClass == WSC_ROCKET || psStats->weaponSubClass == WSC_MISSILE ||
@@ -1940,6 +1934,7 @@ void	renderStructure(STRUCTURE *psStructure)
 		/* Translate the building  - N.B. We can also do rotations here should we require
 		buildings to face different ways - Don't know if this is necessary - should be IMO */
 		iV_TRANSLATE(dv.x,dv.y,dv.z);
+
 		/* Get the x,z translation components */
 		rx = player.p.x & (TILE_UNITS-1);
 		rz = player.p.z & (TILE_UNITS-1);
@@ -2110,9 +2105,7 @@ void	renderStructure(STRUCTURE *psStructure)
 				//draw Weapon/ECM/Sensor for structure
 				if(weaponImd[0] != NULL)
 				{
-					if (psStructure->numWeaps > 0)
-					{
-						for (i = 0;i < psStructure->numWeaps;i++)
+						for (i = 0; i < psStructure->numWeaps || i == 0; i++)
 						{
 							iV_MatrixBegin();
 							iV_TRANSLATE(strImd->connectors[i].x,strImd->connectors[i].z,strImd->connectors[i].y);
@@ -2186,81 +2179,6 @@ void	renderStructure(STRUCTURE *psStructure)
 							}
 							iV_MatrixEnd();
 						}
-					}
-					else
-					{
-						iV_MatrixBegin();
-						iV_TRANSLATE(strImd->connectors->x,strImd->connectors->z,strImd->connectors->y);
-						pie_MatRotY(DEG(-((SDWORD)psStructure->turretRotation[0])));
-						if (mountImd[0] != NULL)
-						{
-							pie_TRANSLATE(0,0,psStructure->asWeaps[0].recoilValue/3);
-
-							pie_Draw3DShape(mountImd[0], animFrame, 0, buildingBrightness, specular, pie_SHADOW,0);
-							if(mountImd[0]->nconnectors)
-							{
-								iV_TRANSLATE(mountImd[0]->connectors->x,mountImd[0]->connectors->z,mountImd[0]->connectors->y);
-							}
-						}
-						iV_MatrixRotateX(DEG(psStructure->turretPitch[0]));
-						pie_TRANSLATE(0,0,psStructure->asWeaps[0].recoilValue);
-
-						pie_Draw3DShape(weaponImd[0], playerFrame, 0, buildingBrightness, specular, pie_SHADOW,0);
-						if(psStructure->pStructureType->type == REF_REPAIR_FACILITY)
-						{
-							REPAIR_FACILITY* psRepairFac = &psStructure->pFunctionality->repairFacility;
-							//draw repair flash if the Repair Facility has a target which it has started work on
-							if(weaponImd[0]->nconnectors && psRepairFac->psObj!=NULL
-								&& psRepairFac->psObj->type == OBJ_DROID &&
-								((DROID *)psRepairFac->psObj)->action == DACTION_WAITDURINGREPAIR )
-							{
-								iV_TRANSLATE(weaponImd[0]->connectors->x,weaponImd[0]->connectors->z-12,weaponImd[0]->connectors->y);
-								pRepImd = getImdFromIndex(MI_FLAME);
-
-								pie_MatRotY(DEG((SDWORD)psStructure->turretRotation[0]));
-
-								iV_MatrixRotateY(-player.r.y);
-								iV_MatrixRotateX(-player.r.x);
-								pie_Draw3DShape(pRepImd, getStaticTimeValueRange(100,pRepImd->numFrames), 0, buildingBrightness, 0, pie_ADDITIVE, 192);
-
-								iV_MatrixRotateX(player.r.x);
-								iV_MatrixRotateY(player.r.y);
-								pie_MatRotY(DEG((SDWORD)psStructure->turretRotation[0]));
-							}
-						}
-						//we have a droid weapon so do we draw a muzzle flash
-						else if( weaponImd[0]->nconnectors && psStructure->visible[selectedPlayer]>(UBYTE_MAX/2))
-						{
-							/* Now we need to move to the end fo the barrel */
-							pie_TRANSLATE( weaponImd[0]->connectors[0].x,
-										weaponImd[0]->connectors[0].z,
-										weaponImd[0]->connectors[0].y  );
-							//and draw the muzzle flash
-							//animate for the duration of the flash only
-							if(flashImd[0])
-							{
-								//assume no clan colours formuzzle effects
-								if ((flashImd[0]->numFrames == 0) || (flashImd[0]->animInterval <= 0))//no anim so display one frame for a fixed time
-								{
-									if (gameTime < (psStructure->asWeaps[0].lastFired + BASE_MUZZLE_FLASH_DURATION))
-									{
-										pie_Draw3DShape(flashImd[0], 0, 0, buildingBrightness, specular, pie_ADDITIVE, 128);//muzzle flash
-									}
-								}
-
-								else
-								{
-									frame = (gameTime - psStructure->asWeaps[0].lastFired)/flashImd[0]->animInterval;
-									if (frame < flashImd[0]->numFrames)
-									{
-										pie_Draw3DShape(flashImd[0], frame, 0, buildingBrightness, specular, pie_ADDITIVE, 20);//muzzle flash
-									}
-								}
-
-							}
-						}
-						iV_MatrixEnd();
-					}
 				}
 			}
 			else if(psStructure->sDisplay.imd->nconnectors > 1 && psStructure->numWeaps < psStructure->sDisplay.imd->nconnectors)// add some lights if we have the connectors for it
