@@ -65,7 +65,10 @@ VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
   !define MUI_ABORTWARNING
 
   ; Settings for MUI_PAGE_LICENSE
-  !define MUI_LICENSEPAGE_RADIOBUTTONS
+  ; Purposefully commented out, as we do _not_ want to trouble users with an
+  ; additional mouse click (while otherwise pressing "return" continuously
+  ; would satisfy)
+;  !define MUI_LICENSEPAGE_RADIOBUTTONS
 
   ;Start Menu Folder Page Configuration (for MUI_PAGE_STARTMENU)
   !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM"
@@ -148,7 +151,10 @@ Section $(TEXT_SecBase) SecBase
   File "/oname=ChangeLog.txt" "..\ChangeLog"
   File "/oname=Authors.txt" "..\AUTHORS"
   File "/oname=License.txt" "..\COPYING"
-  File "/oname=Readme.txt" "..\README"
+  File "/oname=Readme.en.txt" "..\doc\Readme.en"
+  File "/oname=Readme.de.txt" "..\doc\Readme.de"
+  File "/oname=Readme.en.html" "..\doc\Readme.en.xhtml"
+  File "/oname=Readme.de.html" "..\doc\Readme.de.xhtml"
 
 
   ;Store installation folder
@@ -358,7 +364,11 @@ Section "Uninstall"
   Delete "$INSTDIR\warzone.wz"
   Delete "$INSTDIR\mp.wz"
 
-  Delete "$INSTDIR\Readme.txt"
+  Delete "$INSTDIR\Readme.en.txt"
+  Delete "$INSTDIR\Readme.de.txt"
+  Delete "$INSTDIR\Readme.en.html"
+  Delete "$INSTDIR\Readme.de.html"
+
   Delete "$INSTDIR\License.txt"
   Delete "$INSTDIR\Authors.txt"
   Delete "$INSTDIR\ChangeLog.txt"
