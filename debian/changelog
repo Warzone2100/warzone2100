@@ -1,4 +1,4 @@
-warzone2100 (2.1.0~0.svn2912-0) unstable; urgency=low
+warzone2100 (2.1.0~0.svn2922-0) unstable; urgency=low
 
   * Bump upstream version number for the development branch
     - This version is _not_ an official release, just a development
@@ -6,7 +6,28 @@ warzone2100 (2.1.0~0.svn2912-0) unstable; urgency=low
   * Don't strip output binaries anymore
   * Depend on libpopt-dev while building
 
- -- Giel van Schijndel <muggenhor@gna.org>  Fri, 30 Nov 2007 22:40:08 +0100
+ -- Giel van Schijndel <muggenhor@gna.org>  Sat, 01 Dec 2007 13:47:17 +0100
+
+warzone2100 (2.0.8-0) unstable; urgency=low
+
+  * Bump upstream version number
+    * New: Possibility to use the zero-key ('0') to assign groups as well
+      (patch #828)
+    * Change: Slightly faster terrain rendering (+ 5-10%) (patch #830, patch
+      #833)
+    * Change: Protocol-selection removed from "Host Game", since the only
+      option was "Internet"
+    * Fix: Reduce the dark borders around the terrain tiles (patch #845)
+    * Fix: Slight visual improvement: Reduced flickering of ground and water
+      tiles (patch #841)
+    * Fix: Crash when loading sounds without filenames (patch #855, bugs #9927
+      and #10142)
+    * Fix: Crash on game exit (bug #9927)
+    * Fix: Don't add/remove droids to/from groups upon selecting/deselecting
+      them (patch #829)
+    * Fix: Crash where rearming VTOL would try to set a dead target (r2651)
+
+ -- Giel van Schijndel <muggenhor@gna.org>  Sat, 01 Dec 2007 13:30:49 +0100
 
 warzone2100 (2.0.8-rc1-0) unstable; urgency=low
 
