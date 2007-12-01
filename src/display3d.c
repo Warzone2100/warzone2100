@@ -243,7 +243,6 @@ static int averageCentreTerrainHeight;
 static	BOOL	bReloadBars = TRUE;
 static	BOOL	bEnergyBars = TRUE;
 static	BOOL	bTinyBars	= FALSE;
-static	MAPTILE	edgeTile;
 
 static UDWORD	lastTargetAssignation = 0;
 static UDWORD	lastDestAssignation = 0;
@@ -524,13 +523,11 @@ static void drawTiles(iView *camera, iView *player)
 {
 	UDWORD i, j;
 	MAPTILE *psTile;
-	UDWORD edgeX, edgeY;
 	BOOL bWaterTile = FALSE;
 	BOOL PushedDown = FALSE;
 	UBYTE TileIllum;
 	int shiftVal = 0;
 	int numTilesAveraged = 0;
-	BOOL bEdgeTile;
 	static float angle = 0.0f;
 
 	// Animate the water texture, just cycles the V coordinate through half the tiles height.
@@ -603,54 +600,23 @@ static void drawTiles(iView *camera, iView *player)
 
 			tileScreenInfo[i][j].pos.x = world_coord(j - terrainMidX);
 			tileScreenInfo[i][j].pos.z = world_coord(terrainMidY - i);
+			tileScreenInfo[i][j].pos.y = 0;
 
 			if( playerXTile+j < 0 ||
 				playerZTile+i < 0 ||
 				playerXTile+j > (SDWORD)(mapWidth-1) ||
 				playerZTile+i > (SDWORD)(mapHeight-1) )
 			{
-				// Tiles on the border of the map are never water tiles.
+				// Special past-edge-of-map tiles
 				tileScreenInfo[i][j].bWater = FALSE;
-
-				edgeX = playerXTile+j;
-				edgeY = playerZTile+i;
-				if (playerXTile+j < 0 )
-					edgeX = 0;
-				else if (playerXTile+j > (SDWORD)(mapWidth-1) )
-					edgeX = mapWidth-1;
-				if (playerZTile+i < 0 )
-					edgeY = 0;
-				else if (playerZTile+i > (SDWORD)(mapHeight-1) )
-					edgeY = mapHeight-1;
-
-				tileScreenInfo[i][j].pos.y = 0; // map_TileHeight(edgeX, edgeY);
-
-				if (pie_GetFogEnabled())
-				{
-					tileScreenInfo[i][j].light.argb = 0xff030303;
-					tileScreenInfo[i][j].specular = pie_GetFogColour();
-				}
-				else
-				{
-					TileIllum = mapTile(edgeX, edgeY)->illumination;
-					tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination( TileIllum, rx - tileScreenInfo[i][j].pos.x, rz - world_coord(i-terrainMidY), &tileScreenInfo[i][j].specular.argb );
-				}
-
-				if( playerXTile+j < -1 ||
-					playerZTile+i < -1 ||
-					playerXTile+j > (SDWORD)(mapWidth-1) ||
-					playerZTile+i > (SDWORD)(mapHeight-1) )
-				{
-					tileScreenInfo[i][j].drawInfo = FALSE;
-				}
-				else
-				{
-					tileScreenInfo[i][j].drawInfo = TRUE;
-				}
+				tileScreenInfo[i][j].u = 0;
+				tileScreenInfo[i][j].v = 0;
+				tileScreenInfo[i][j].light.argb = 0;
+				tileScreenInfo[i][j].specular.argb = 0;
 			}
 			else
 			{
-				tileScreenInfo[i][j].drawInfo = TRUE;
+				BOOL bEdgeTile;
 
 				/* Get a pointer to the tile at this location */
 				psTile = mapTile(playerXTile + j, playerZTile + i);
@@ -797,22 +763,19 @@ static void drawTiles(iView *camera, iView *player)
 	{
 		for (j = 0; j < MIN(visibleTiles.x, mapWidth); j++)
 		{
-			if (tileScreenInfo[i][j].drawInfo == TRUE)
+			//get distance of furthest corner
+			int zMax = MAX(tileScreenInfo[i][j].screen.z, tileScreenInfo[i+1][j].screen.z);
+
+			zMax = MAX(zMax, tileScreenInfo[i + 1][j + 1].screen.z);
+			zMax = MAX(zMax, tileScreenInfo[i][j + 1].screen.z);
+
+			if (zMax < 0)
 			{
-				//get distance of furthest corner
-				int zMax = MAX(tileScreenInfo[i][j].screen.z, tileScreenInfo[i+1][j].screen.z);
-
-				zMax = MAX(zMax, tileScreenInfo[i + 1][j + 1].screen.z);
-				zMax = MAX(zMax, tileScreenInfo[i][j + 1].screen.z);
-
-				if (zMax < 0)
-				{
-					// clipped
-					continue;
-				}
-
-				drawTerrainTile(i, j, FALSE);
+				// clipped
+				continue;
 			}
+
+			drawTerrainTile(i, j, FALSE);
 		}
 	}
 	pie_SetDepthOffset(-2.0);
@@ -821,8 +784,7 @@ static void drawTiles(iView *camera, iView *player)
 		for (j = 0; j < MIN(visibleTiles.x, mapWidth); j++)
 		{
 			// check if we need to draw a water edge
-			if (tileScreenInfo[i][j].drawInfo == TRUE
-			    && tileScreenInfo[i][j].bWater
+			if (tileScreenInfo[i][j].bWater
 			    && TileNumber_tile(mapTile(playerXTile + j, playerZTile + i)->texture) != WATER_TILE)
 			{
 				//get distance of furthest corner
@@ -855,7 +817,7 @@ static void drawTiles(iView *camera, iView *player)
 	{
 		for (j = 0; j < MIN(visibleTiles.x, mapWidth); j++)
 		{
-			if (tileScreenInfo[i][j].drawInfo == TRUE && tileScreenInfo[i][j].bWater)
+			if (tileScreenInfo[i][j].bWater)
 			{
 				//get distance of furthest corner
 				int zMax = MAX(tileScreenInfo[i][j].screen.z, tileScreenInfo[i + 1][j].screen.z);
@@ -930,8 +892,6 @@ BOOL init3DView(void)
 	// the world centre - used for decaying lighting etc
 	gridCentreX = player.p.x + world_coord(visibleTiles.x / 2);
 	gridCentreZ = player.p.z + world_coord(visibleTiles.y / 2);
-
-	edgeTile.texture = 0;
 
 	bEnergyBars = TRUE;
 
@@ -4066,12 +4026,12 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		(actualX > mapWidth-1) ||
 		(actualY > mapHeight-1) )
 	{
-		psTile = &edgeTile;
-		CLEAR_TILE_HIGHLIGHT(psTile);
+		tileNumber = 0;
 	}
 	else
 	{
 		psTile = mapTile(actualX, actualY);
+
 #if defined(SHOW_ZONES)
 		if (!fpathBlockingTile(actualX, actualY) ||
 			terrainType(psTile) == TER_WATER)
@@ -4084,17 +4044,16 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 			zone = gwGetZone(actualX, actualY);
 		}
 #endif
-	}
-
-	if ( terrainType(psTile) != TER_WATER || onWaterEdge )
-	{
-		// what tile texture number is it?
-		tileNumber = psTile->texture;
-	}
-	else
-	{
-		// If it's a water tile then force it to be the river bed texture.
-		tileNumber = RIVERBED_TILE;
+		if ( terrainType(psTile) != TER_WATER || onWaterEdge )
+		{
+			// what tile texture number is it?
+			tileNumber = psTile->texture;
+		}
+		else
+		{
+			// If it's a water tile then force it to be the river bed texture.
+			tileNumber = RIVERBED_TILE;
+		}
 	}
 
 #if defined(SHOW_ZONES)
@@ -4103,14 +4062,14 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		tileNumber = zone;
 	}
 #elif defined(SHOW_GATEWAYS)
-	if (psTile->tileInfoBits & BITS_GATEWAY)
+	if (psTile && psTile->tileInfoBits & BITS_GATEWAY)
 	{
 		tileNumber = 55;//zone;
 	}
 #endif
 
 	/* Is the tile highlighted? Perhaps because there's a building foundation on it */
-	if(!onWaterEdge && TILE_HIGHLIGHT(psTile))
+	if (psTile && !onWaterEdge && TILE_HIGHLIGHT(psTile))
 	{
 		/* Clear it for next time round */
 		CLEAR_TILE_HIGHLIGHT(psTile);
@@ -4171,7 +4130,7 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		vertices[1].pos.y = tileScreenInfo[i + 0][j + 1].water_height;
 	}
 
-	if (TRI_FLIPPED(psTile))
+	if (psTile && TRI_FLIPPED(psTile))
 	{
 		vertices[2] = tileScreenInfo[i + 1][j + 0];
 		if (onWaterEdge)
@@ -4191,7 +4150,7 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	pie_DrawTerrainTriangle(vertices, 0);
 
 	/* The second triangle */
-	if (TRI_FLIPPED(psTile))
+	if (psTile && TRI_FLIPPED(psTile))
 	{
 		vertices[0] = tileScreenInfo[i + 0][j + 1];
 		if (onWaterEdge)
