@@ -12,7 +12,7 @@
    * Fix: Workaround a bug in OpenAL SI 0.0.8 GNU/Linux, which could lead to a crash
    * Fix: Dead objects could be targeted when structures used commanders and counterbatteries for targeting
    * Fix: Crash upon receiving invalid sound ID numbers (out of bounds array access) (bug #9694)
-   * Fix: Crash when loading sounds without filenames (patch #855)
+   * Fix: Crash when loading sounds without filenames (patch #855, bugs #9927 and #10142)
    * Fix: Prevent divide by zero errors caused by ordering a VTOL to attack a droid at the same X & Y coordinates (bug #9704)
    * Fix: Make progress bar white again
    * Fix: Workaround mysterious crash when updating beacons (bug #9455)
