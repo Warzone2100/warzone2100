@@ -975,13 +975,27 @@ void drawTiles(iView *camera, iView *player)
 					continue;
 
 				drawTerrainTile(i, j, FALSE);
+			}
+		}
+	}
 
-				if (tileScreenInfo[i][j].bWater && (mapTile(playerXTile + j, playerZTile + i)->texture & TILE_NUMMASK) != WATER_TILE)
-				{
-					pie_SetDepthOffset(-2);
-					drawTerrainTile(i, j, TRUE);
-					pie_SetDepthOffset(0);
-				}
+	pie_SetDepthOffset(-2);
+
+	for (i = 0; i < visibleYTiles; i++)
+	{
+		for (j = 0; j < visibleXTiles; j++)
+		{
+			if (tileScreenInfo[i][j].drawInfo && tileScreenInfo[i][j].bWater
+			    && (mapTile(playerXTile + j, playerZTile + i)->texture & TILE_NUMMASK) != WATER_TILE)
+			{
+				int zMax = pie_MAX(tileScreenInfo[i][j].sz, tileScreenInfo[i + 1][j].sz);
+				zMax = pie_MAX(zMax, tileScreenInfo[i + 1][j + 1].sz);
+				zMax = pie_MAX(zMax, tileScreenInfo[i][j + 1].sz);
+
+				if (zMax < 0)
+					continue;
+
+				drawTerrainTile(i, j, TRUE);
 			}
 		}
 	}
