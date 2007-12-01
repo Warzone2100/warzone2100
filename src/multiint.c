@@ -450,6 +450,9 @@ void runConnectionScreen(void )
 			addConnections(InitialProto);
 			break;
 		case CON_TYPESID_START+0: // Lobby button
+			game.bytesPerSec = INETBYTESPERSEC;
+			game.packetsPerSec = INETPACKETS;
+			NETsetupTCPIP(&finalconnection, ""); //inet
 			changeTitleMode(GAMEFIND);
 			break;
 		case CON_TYPESID_START+1: // IP button
