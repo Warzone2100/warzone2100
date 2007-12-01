@@ -1,6 +1,6 @@
 SUBDIRS = build_tools win32 lib src data po doc icons nsis
 
-dist_doc_DATA = AUTHORS ChangeLog README COPYING COPYING.README
+dist_doc_DATA = AUTHORS ChangeLog COPYING COPYING.README
 
 # Remove this line when Automake 1.10 becomes standard
 MKDIR_P=$(mkdir_p)
