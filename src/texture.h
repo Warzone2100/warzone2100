@@ -20,6 +20,8 @@
 #ifndef _texture_h
 #define _texture_h
 
+#include "display3ddef.h"
+
 void texLoad(const char *fileName);
 
 typedef struct _tileTexInfo
@@ -29,13 +31,14 @@ typedef struct _tileTexInfo
 	unsigned int texPage; // Which textpage is the tile in? TileNumber/16 basically;
 } TILE_TEX_INFO;
 
-#define PAGE_WIDTH              512
-#define PAGE_HEIGHT             512
+#define PAGE_WIDTH              2048
+#define PAGE_HEIGHT             2048
 #define TILES_IN_PAGE_COLUMN (PAGE_WIDTH / TILE_WIDTH)
 #define TILES_IN_PAGE_ROW (PAGE_HEIGHT / TILE_HEIGHT)
 #define TILES_IN_PAGE (TILES_IN_PAGE_COLUMN * TILES_IN_PAGE_ROW)
 
-#define MAX_TILES 100
+#define MAX_TILES TILES_IN_PAGE
 extern TILE_TEX_INFO	tileTexInfo[MAX_TILES];
+extern int terrainPage;
 
 #endif

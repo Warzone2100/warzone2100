@@ -757,6 +757,8 @@ static void drawTiles(iView *camera, iView *player)
 	// Draw all the normal tiles
 	pie_SetColourKeyedBlack(TRUE);
 	pie_SetFogStatus(TRUE);
+	pie_DrawTerrainInit();
+	pie_SetTexturePage(terrainPage);
 	for (i = 0; i < MIN(visibleTiles.y, mapHeight); i++)
 	{
 		for (j = 0; j < MIN(visibleTiles.x, mapWidth); j++)
@@ -776,6 +778,9 @@ static void drawTiles(iView *camera, iView *player)
 			drawTerrainTile(i, j, FALSE);
 		}
 	}
+	pie_DrawTerrainDone(MIN(visibleTiles.x, mapWidth),  MIN(visibleTiles.y, mapHeight));
+
+	// Draw water edges
 	pie_SetDepthOffset(-2.0);
 	for (i = 0; i < MIN(visibleTiles.y, mapHeight); i++)
 	{
@@ -4105,10 +4110,6 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		}
 	}
 
-	/* Get the right texture page; it is pre stored and indexed on
-	* the graphics card */
-	pie_SetTexturePage(tileTexInfo[TileNumber_tile(tileNumber)].texPage);
-
 	/* Check for rotations and flips - this sets up the coordinates for texturing */
 	flipsAndRots(tileNumber, i, j);
 
@@ -4138,7 +4139,14 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		}
 	}
 
-	pie_DrawTerrainTriangle(vertices);
+	if (onWaterEdge)
+	{
+		pie_DrawWaterTriangle(vertices);
+	}
+	else
+	{
+		pie_DrawTerrainTriangle(i * 2 + j * VISIBLE_XTILES * 2, vertices);
+	}
 
 	/* The second triangle */
 	if (psTile && TRI_FLIPPED(psTile))
@@ -4166,7 +4174,14 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		vertices[2].pos.y = tileScreenInfo[i + 1][j + 0].water_height;
 	}
 
-	pie_DrawTerrainTriangle(vertices);
+	if (onWaterEdge)
+	{
+		pie_DrawWaterTriangle(vertices);
+	}
+	else
+	{
+		pie_DrawTerrainTriangle(i * 2 + j * VISIBLE_XTILES * 2 + 1, vertices);
+	}
 
 	/* Outline the tile if necessary */
 	if(!onWaterEdge && terrainOutline)
@@ -4224,9 +4239,6 @@ static void drawTerrainWaterTile(UDWORD i, UDWORD j)
 		const unsigned int tileNumber = getWaterTileNum();
 		TERRAIN_VERTEX vertices[3];
 
-		// Draw the main water tile.
-		pie_SetTexturePage(tileTexInfo[TileNumber_tile(tileNumber)].texPage);
-
 		tileScreenInfo[i+0][j+0].u = tileTexInfo[TileNumber_tile(tileNumber)].uOffset + 1;
 		tileScreenInfo[i+0][j+0].v = tileTexInfo[TileNumber_tile(tileNumber)].vOffset;
 
@@ -4254,7 +4266,7 @@ static void drawTerrainWaterTile(UDWORD i, UDWORD j)
 		vertices[2].light = tileScreenInfo[i+1][j+1].wlight;
 		vertices[2].light.byte.a = WATER_ALPHA_LEVEL;
 
-		pie_DrawTerrainTriangle(vertices);
+		pie_DrawWaterTriangle(vertices);
 
 		vertices[1] = vertices[2];
 		vertices[2] = tileScreenInfo[i + 1][j + 0];
@@ -4262,7 +4274,7 @@ static void drawTerrainWaterTile(UDWORD i, UDWORD j)
 		vertices[2].light = tileScreenInfo[i+1][j+0].wlight;
 		vertices[2].light.byte.a = WATER_ALPHA_LEVEL;
 
-		pie_DrawTerrainTriangle(vertices);
+		pie_DrawWaterTriangle(vertices);
 	}
 }
 

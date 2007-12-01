@@ -48,6 +48,7 @@
 TILE_TEX_INFO tileTexInfo[MAX_TILES];
 
 static int firstPage; // the last used page before we start adding terrain textures
+int terrainPage; // texture ID of the terrain page
 
 // Generate a new texture page both in the texture page table, and on the graphics card
 static int newPage(const char *name, int level, int width, int height, int count)
@@ -62,6 +63,7 @@ static int newPage(const char *name, int level, int width, int height, int count
 		glGenTextures(1, (GLuint *) &_TEX_PAGE[texPage].id);
 		_TEX_INDEX++;
 	}
+	terrainPage = texPage;
 
 	ASSERT(_TEX_INDEX > texPage, "newPage: Index too low (%d > %d)", _TEX_INDEX, texPage);
 	ASSERT(_TEX_INDEX < iV_TEX_MAX, "Too many texture pages used");

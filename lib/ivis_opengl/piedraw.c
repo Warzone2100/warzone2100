@@ -41,6 +41,17 @@
 #include "lib/ivis_common/pieclip.h"
 #include "piematrix.h"
 
+#define VERTICES_PER_TRIANGLE 3
+#define COLOUR_COMPONENTS 4
+#define TEXCOORD_COMPONENTS 2
+#define VERTEX_COMPONENTS 3
+#define MAP_TRIANGLES (64 * 64 * 2) // two triangles per tile
+#define MAP_VERTICES (VERTICES_PER_TRIANGLE * MAP_TRIANGLES)
+
+static GLubyte aColour[COLOUR_COMPONENTS * MAP_VERTICES];
+static GLfloat aTexCoord[TEXCOORD_COMPONENTS * MAP_VERTICES];
+static GLfloat aVertex[VERTEX_COMPONENTS * MAP_VERTICES];
+
 extern BOOL drawing_interface;
 
 /***************************************************************************/
@@ -966,7 +977,49 @@ void pie_DrawRect(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, PIELIGHT colour)
  *
  ***************************************************************************/
 
-void pie_DrawTerrainTriangle(const TERRAIN_VERTEX *aVrts)
+void pie_DrawTerrainInit()
+{
+	glEnableClientState(GL_COLOR_ARRAY);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glColorPointer(COLOUR_COMPONENTS, GL_UNSIGNED_BYTE, 0, aColour);
+	glTexCoordPointer(TEXCOORD_COMPONENTS, GL_FLOAT, 0, aTexCoord);
+	glVertexPointer(VERTEX_COMPONENTS, GL_FLOAT, 0, aVertex);
+}
+
+void pie_DrawTerrainDone(int mapx, int mapy)
+{
+	glDrawArrays(GL_TRIANGLES, 0, VERTICES_PER_TRIANGLE * mapx * mapy * 2);
+	glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+}
+
+// index gives us the triangle
+void pie_DrawTerrainTriangle(int index, const TERRAIN_VERTEX *aVrts)
+{
+	unsigned int i = 0, j = index * VERTICES_PER_TRIANGLE;
+
+	assert(index < MAP_TRIANGLES);
+	assert(j < MAP_VERTICES);
+	tileCount++;
+
+	for ( i = 0; i < 3; i++ )
+	{
+		aColour[j * COLOUR_COMPONENTS + 0] = aVrts[i].light.byte.r;
+		aColour[j * COLOUR_COMPONENTS + 1] = aVrts[i].light.byte.g;
+		aColour[j * COLOUR_COMPONENTS + 2] = aVrts[i].light.byte.b;
+		aColour[j * COLOUR_COMPONENTS + 3] = aVrts[i].light.byte.a;
+		aTexCoord[j * TEXCOORD_COMPONENTS + 0] = aVrts[i].u;
+		aTexCoord[j * TEXCOORD_COMPONENTS + 1] = aVrts[i].v;
+		aVertex[j * VERTEX_COMPONENTS + 0] = aVrts[i].pos.x;
+		aVertex[j * VERTEX_COMPONENTS + 1] = aVrts[i].pos.y;
+		aVertex[j * VERTEX_COMPONENTS + 2] = aVrts[i].pos.z;
+		j++;
+	}
+}
+
+void pie_DrawWaterTriangle(const TERRAIN_VERTEX *aVrts)
 {
 	unsigned int i = 0;
 
@@ -977,7 +1030,7 @@ void pie_DrawTerrainTriangle(const TERRAIN_VERTEX *aVrts)
 		for ( i = 0; i < 3; i++ )
 		{
 			glColor4ub( aVrts[i].light.byte.r, aVrts[i].light.byte.g, aVrts[i].light.byte.b, aVrts[i].light.byte.a );
-			glTexCoord2f( aVrts[i].u, aVrts[i].v );
+			glTexCoord2f(aVrts[i].u, aVrts[i].v);
 			glVertex3f( aVrts[i].pos.x, aVrts[i].pos.y, aVrts[i].pos.z );
 		}
 	glEnd();
