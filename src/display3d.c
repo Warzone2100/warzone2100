@@ -825,6 +825,7 @@ static void drawTiles(iView *camera, iView *player)
 	// Now draw the water tiles in a second pass to get alpha sort order correct
 	pie_SetRendMode(REND_ALPHA_TEX);
 	pie_SetColourKeyedBlack(FALSE);
+	pie_SetDepthOffset(-1.0);
 	for (i = 0; i < MIN(visibleTiles.y, mapHeight); i++)
 	{
 		for (j = 0; j < MIN(visibleTiles.x, mapWidth); j++)
@@ -846,6 +847,7 @@ static void drawTiles(iView *camera, iView *player)
 			}
 		}
 	}
+	pie_SetDepthOffset(0.0);
 	pie_SetRendMode(REND_GOURAUD_TEX);
 	pie_SetColourKeyedBlack(TRUE);
 
@@ -4278,8 +4280,6 @@ static void drawTerrainWaterTile(UDWORD i, UDWORD j)
 		vertices[2].light = tileScreenInfo[i+1][j+1].wlight;
 		vertices[2].light.byte.a = WATER_ALPHA_LEVEL;
 
-		pie_SetDepthOffset(-1.0);
-
 		pie_DrawTerrainTriangle(vertices, waterRealValue);
 
 		vertices[1] = vertices[2];
@@ -4289,8 +4289,6 @@ static void drawTerrainWaterTile(UDWORD i, UDWORD j)
 		vertices[2].light.byte.a = WATER_ALPHA_LEVEL;
 
 		pie_DrawTerrainTriangle(vertices, waterRealValue);
-
-		pie_SetDepthOffset(0.0);
 	}
 }
 
