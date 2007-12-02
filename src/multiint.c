@@ -2610,11 +2610,13 @@ void displayChatEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *p
 {
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y -4;			// 4 is the magic number.
-	iV_Line(x, y, x + psWidget->width, y, 0x6464a0); // iV_PaletteNearestColour(100,100,160) );
+
+	// draws the line at the bottom of the multiplayer join dialog separating the chat 
+	// box from the input box
+	iV_Line(x, y, x + psWidget->width, y, WZCOL_MENU_SEPARATOR.argb);
 
 	return;
 }
-
 
 
 // ////////////////////////////////////////////////////////////////////////////

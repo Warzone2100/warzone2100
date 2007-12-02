@@ -161,6 +161,11 @@ void pie_SetColourDefines(void)
 
 	WZCOL_MENU_SCORES_INTERIOR	= WZCOL_BLACK;
 	WZCOL_MENU_SCORES_INTERIOR.byte.b = 33;
+
+	WZCOL_MENU_SEPARATOR.byte.a = UBYTE_MAX;
+	WZCOL_MENU_SEPARATOR.byte.r = 0x64;
+	WZCOL_MENU_SEPARATOR.byte.g = 0x64;
+	WZCOL_MENU_SEPARATOR.byte.b = 0xa0;
 }
 
 void pal_ShutDown(void)

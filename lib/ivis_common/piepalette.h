@@ -61,7 +61,8 @@
 #define WZCOL_MENU_LOAD_BORDER		psPalette[12]
 #define WZCOL_CURSOR			psPalette[13]
 #define WZCOL_MENU_SCORES_INTERIOR	psPalette[14]
-#define WZCOL_MAX			15
+#define WZCOL_MENU_SEPARATOR		psPalette[15]
+#define WZCOL_MAX			16
 
 //*************************************************************************
 

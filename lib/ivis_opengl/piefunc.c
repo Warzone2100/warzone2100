@@ -47,7 +47,7 @@
 
 /* ---------------------------------------------------------------------------------- */
 
-void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, UDWORD colour)
+void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, PIELIGHT colour)
 {
 	TERRAIN_VERTEX pieVrts[pie_MAX_VERTICES_PER_POLYGON];
 	TERRAIN_VERTEX clippedVrts[pie_MAX_VERTICES_PER_POLYGON + 2]; // no idea why + 2 but fixes crash - Per
@@ -63,7 +63,7 @@ void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD 
 
 	pieVrts[0].u = 0;
 	pieVrts[0].v = 0;
-	pieVrts[0].light.argb = colour;//0x7fffffff;
+	pieVrts[0].light = colour;
 	pieVrts[0].specular.argb = 0;
 
 	pieVrts[1] = pieVrts[0];
@@ -85,12 +85,9 @@ void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD 
 	ASSERT(clip <= pie_MAX_VERTICES_PER_POLYGON + 2, "clip index exceeds clippedVrts array"); // see above
 	pie_Set2DClip(CLIP_BORDER,CLIP_BORDER,psRendSurface->width-CLIP_BORDER,psRendSurface->height-CLIP_BORDER);
 
-	if (clip >= 3) {
-		PIELIGHT c;
-
-		c.argb = colour;
-
-		glColor4ub(c.byte.r, c.byte.g, c.byte.b, c.byte.a >> 1);
+	if (clip >= 3)
+	{
+		glColor4ub(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a >> 1);
 
 		glBegin(GL_TRIANGLE_FAN);
 			for (i = 0; i < clip; i++)
@@ -99,7 +96,7 @@ void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD 
 			}
 		glEnd();
 
-		glColor4ub(c.byte.r, c.byte.g, c.byte.b, c.byte.a);
+		glColor4ub(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a);
 
 		glBegin(GL_LINE_STRIP);
 			for (i = 0; i < clip; i++)
