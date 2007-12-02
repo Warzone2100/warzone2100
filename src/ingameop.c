@@ -51,8 +51,6 @@
 #include "transporter.h"
 #include "main.h"
 
-extern void addText(int FontID,UDWORD FormID,UDWORD id,  UDWORD PosX, UDWORD PosY, char *txt, UDWORD attachID,BOOL *State);
-
 //status bools.(for hci.h)
 BOOL	ClosingInGameOp	= FALSE;
 BOOL	InGameOpUp		= FALSE;
