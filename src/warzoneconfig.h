@@ -62,6 +62,10 @@ extern void war_setFullscreen(BOOL);
 extern BOOL war_getFullscreen(void);
 extern void war_SetTrapCursor(BOOL b);
 extern BOOL war_GetTrapCursor(void);
+extern void war_SetWidth(UDWORD width);
+extern UDWORD war_GetWidth(void);
+extern void war_SetHeight(UDWORD height);
+extern UDWORD war_GetHeight(void);
 
 /**
  * Enable or disable sound initialization

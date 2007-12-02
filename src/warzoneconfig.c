@@ -54,6 +54,8 @@ typedef struct _warzoneGlobals
 	BOOL		Fullscreen;
 	BOOL		soundEnabled;
 	BOOL		trapCursor;
+	UDWORD		width;
+	UDWORD		height;
 } WARZONE_GLOBALS;
 
 /***************************************************************************/
@@ -116,6 +118,26 @@ void war_SetTrapCursor(BOOL b)
 BOOL war_GetTrapCursor(void)
 {
 	return warGlobs.trapCursor;
+}
+
+void war_SetWidth(UDWORD width)
+{
+	warGlobs.width = width;
+}
+
+UDWORD war_GetWidth(void)
+{
+	return warGlobs.width;
+}
+
+void war_SetHeight(UDWORD height)
+{
+	warGlobs.height = height;
+}
+
+UDWORD war_GetHeight(void)
+{
+	return warGlobs.height;
 }
 
 /***************************************************************************/

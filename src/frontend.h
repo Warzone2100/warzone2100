@@ -46,6 +46,7 @@ typedef enum _title_mode {
 	KEYMAP,			// 16 keymap editor
 	GAME2,			// 17 second options menu.
 	GAME3,			// 18 third options menu.
+	GAME4,			// 19 fourth options menu.
 //	GRAPHICS,
 //	VIDEO,
 //	DEMOMODE,		// demo mode. remove for release?
@@ -98,6 +99,7 @@ extern BOOL CancelPressed			(void);
 
 BOOL		runGameOptions2Menu		(void);
 BOOL		runGameOptions3Menu		(void);
+BOOL		runGameOptions4Menu		(void);
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines.
@@ -276,6 +278,15 @@ BOOL		runGameOptions3Menu		(void);
 #define FRONTEND_MFLIP_R		20096
 
 #define FRONTEND_GAMEOPTIONS3 	20099
+
+#define FRONTEND_GAMEOPTIONS4	31415
+#define FRONTEND_WINDOWMODE		31416
+#define FRONTEND_WINDOWMODE_R	31417
+#define FRONTEND_RESOLUTION		31418
+#define FRONTEND_RESOLUTION_R	31419
+#define FRONTEND_TRAP			31420
+#define FRONTEND_TRAP_R			31421
+#define FRONTEND_TAKESEFFECT	31422
 
 #define FRONTEND_SEQUENCE		20097
 #define FRONTEND_SEQUENCE_R		20098

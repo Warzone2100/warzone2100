@@ -545,12 +545,22 @@ BOOL loadRenderMode(void)
 
 	// now load the desired res..
 	// note that we only do this if we havent changed renderer..
-	if ( getWarzoneKeyNumeric("width", &val) )
+	if (getWarzoneKeyNumeric("width", &val))
+	{
 		pie_SetVideoBufferWidth(val);
-	if ( getWarzoneKeyNumeric("height", &val) )
+		war_SetWidth(val);
+	}
+	
+	if (getWarzoneKeyNumeric("height", &val))
+	{
 		pie_SetVideoBufferHeight(val);
-	if ( getWarzoneKeyNumeric("bpp", &val) )
+		war_SetHeight(val);
+	}
+	
+	if (getWarzoneKeyNumeric("bpp", &val))
+	{
 		pie_SetVideoBufferDepth(val);
+	}
 
 	return closeWarzoneKey();
 }
@@ -572,8 +582,8 @@ BOOL saveConfig(void)
 	setWarzoneKeyNumeric("cdvol", (int)(sound_GetMusicVolume() * 100.0));
 	setWarzoneKeyNumeric("playaudiocds", war_GetPlayAudioCDs());
 
-	setWarzoneKeyNumeric("width", pie_GetVideoBufferWidth());
-	setWarzoneKeyNumeric("height", pie_GetVideoBufferHeight());
+	setWarzoneKeyNumeric("width", war_GetWidth());
+	setWarzoneKeyNumeric("height", war_GetHeight());
 	setWarzoneKeyNumeric("bpp", pie_GetVideoBufferDepth());
 	setWarzoneKeyNumeric("fullscreen", war_getFullscreen());
 

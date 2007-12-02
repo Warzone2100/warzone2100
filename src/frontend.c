@@ -63,6 +63,9 @@
 
 static int StartWithGame = 1; // New game starts in Cam 1.
 
+// Widget code and non-constant strings do not get along
+static char resolution[WIDG_MAXSTR];
+
 tMode titleMode; // the global case
 char			aLevelName[MAX_LEVEL_NAME_SIZE+1];	//256];			// vital! the wrf file to use.
 
@@ -81,6 +84,7 @@ BOOL		startOptionsMenu		(void);
 BOOL		startGameOptionsMenu	(void);
 BOOL		startGameOptions2Menu	(void);
 BOOL		startGameOptions3Menu	(void);
+BOOL		startGameOptions4Menu	(void);
 
 void		removeTopForm			(void);
 void		removeBottomForm		(void);
@@ -143,6 +147,10 @@ void changeTitleMode(tMode mode)
 
 	case GAME3:
 		startGameOptions3Menu();
+		break;
+	
+	case GAME4:
+		startGameOptions4Menu();
 		break;
 
 	case TUTORIAL:
@@ -511,8 +519,9 @@ BOOL startOptionsMenu(void)
 	addSideText	 (FRONTEND_SIDETEXT ,	FRONTEND_SIDEX,FRONTEND_SIDEY, _("GAME OPTIONS"));
 	addTextButton(FRONTEND_GAMEOPTIONS,	FRONTEND_POS2X,FRONTEND_POS2Y, _("Game Options"),FALSE,FALSE);
 	addTextButton(FRONTEND_GAMEOPTIONS2,FRONTEND_POS3X,FRONTEND_POS3Y, _("Graphics Options"),FALSE,FALSE);
-	addTextButton(FRONTEND_GAMEOPTIONS3,	FRONTEND_POS4X,FRONTEND_POS4Y, _("Audio Options"),FALSE,FALSE);
-	addTextButton(FRONTEND_KEYMAP,		FRONTEND_POS5X,FRONTEND_POS5Y, _("Key Mappings"),FALSE,FALSE);
+	addTextButton(FRONTEND_GAMEOPTIONS4, FRONTEND_POS4X,FRONTEND_POS4Y, "Video Options", FALSE, FALSE);
+	addTextButton(FRONTEND_GAMEOPTIONS3,	FRONTEND_POS5X,FRONTEND_POS5Y, _("Audio Options"),FALSE,FALSE);
+	addTextButton(FRONTEND_KEYMAP,		FRONTEND_POS6X,FRONTEND_POS6Y, _("Key Mappings"),FALSE,FALSE);
 	addMultiBut(psWScreen,FRONTEND_BOTFORM,FRONTEND_QUIT,10,10,30,29, P_("menu", "Return"),IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);
 
 	return TRUE;
@@ -535,6 +544,9 @@ BOOL runOptionsMenu(void)
 		break;
 	case FRONTEND_GAMEOPTIONS3:
 		changeTitleMode(GAME3);
+		break;
+	case FRONTEND_GAMEOPTIONS4:
+		changeTitleMode(GAME4);
 		break;
 //	case FRONTEND_VIDEO:
 //		changeTitleMode(VIDEO);
@@ -870,6 +882,140 @@ BOOL runGameOptions3Menu(void)
 	return TRUE;
 }
 
+// Additional graphics game options menu
+BOOL startGameOptions4Menu(void)
+{
+	// Generate the resolution string
+	snprintf(resolution, WIDG_MAXSTR, "%d x %d",
+	         war_GetWidth(), war_GetHeight());
+	
+	addBackdrop();
+	addTopForm();
+	addBottomForm();
+	
+	// Fullscreen/windowed
+	addTextButton(FRONTEND_WINDOWMODE, FRONTEND_POS2X-35, FRONTEND_POS2Y, _("Graphics Mode*"), TRUE, FALSE);
+	
+	if (war_getFullscreen())
+	{
+		addTextButton(FRONTEND_WINDOWMODE_R, FRONTEND_POS2M-55, FRONTEND_POS2Y, _("Fullscreen"), TRUE, FALSE);
+	}
+	else
+	{
+		addTextButton(FRONTEND_WINDOWMODE_R, FRONTEND_POS2M-55, FRONTEND_POS2Y, _("Windowed"), TRUE, FALSE);
+	}
+	
+	// Resolution
+	addTextButton(FRONTEND_RESOLUTION, FRONTEND_POS3X-35, FRONTEND_POS3Y, _("Resolution*"), TRUE, FALSE);
+	addTextButton(FRONTEND_RESOLUTION_R, FRONTEND_POS3M-55, FRONTEND_POS3Y, resolution, TRUE, FALSE);
+	widgSetString(psWScreen, FRONTEND_RESOLUTION_R, resolution);
+	
+	// Cursor trapping
+	addTextButton(FRONTEND_TRAP, FRONTEND_POS4X-35, FRONTEND_POS4Y, _("Trap Cursor"), TRUE, FALSE);
+	
+	if (war_GetTrapCursor())
+	{
+		addTextButton(FRONTEND_TRAP_R, FRONTEND_POS4M-55, FRONTEND_POS4Y, _("On"), TRUE, FALSE);
+	}
+	else
+	{
+		addTextButton(FRONTEND_TRAP_R, FRONTEND_POS4M-55, FRONTEND_POS4Y, _("Off"), TRUE, FALSE);
+	}
+
+	// Add a note about changes taking effect on restart for certain options
+	addTextButton(FRONTEND_TAKESEFFECT, FRONTEND_POS5X-35, FRONTEND_POS5Y, _("* Takes effect on game restart"), TRUE, TRUE);
+
+	// Quit/return
+	addMultiBut(psWScreen,FRONTEND_BOTFORM,FRONTEND_QUIT,10,10,30,29, P_("menu", "Return"),IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);
+
+	return TRUE;
+}
+
+BOOL runGameOptions4Menu(void)
+{
+	SDL_Rect **modes = SDL_ListModes(NULL, SDL_FULLSCREEN | SDL_HWSURFACE);
+	UDWORD id = widgRunScreen(psWScreen);
+	
+	switch (id)
+	{
+		case FRONTEND_WINDOWMODE:
+		case FRONTEND_WINDOWMODE_R:
+			if (war_getFullscreen())
+			{
+				war_setFullscreen(FALSE);
+				widgSetString(psWScreen, FRONTEND_WINDOWMODE_R, _("Windowed"));
+			}
+			else
+			{
+				war_setFullscreen(TRUE);
+				widgSetString(psWScreen, FRONTEND_WINDOWMODE_R, _("Fullscreen"));
+			}
+			break;
+		
+		case FRONTEND_RESOLUTION:
+		case FRONTEND_RESOLUTION_R:
+		{
+			int current, count;
+			
+			// Get the current mode offset
+			for (count = 0; modes[count]; count++)
+			{
+				if (war_GetWidth() == modes[count]->w
+				 && war_GetHeight() == modes[count]->h)
+				{
+					current = count;
+				}
+			}
+			
+			// Increment and clip if required
+			if (++current == count)
+				current = 0;
+			
+			// Set the new width and height (takes effect on restart)
+			war_SetWidth(modes[current]->w);
+			war_SetHeight(modes[current]->h);
+			
+			// Generate the textual representation of the new width and height
+			snprintf(resolution, WIDG_MAXSTR, "%d x %d", modes[current]->w,
+			         modes[current]->h);
+			
+			// Update the widget
+			widgSetString(psWScreen, FRONTEND_RESOLUTION_R, resolution);
+			
+			break;
+		}
+		
+		case FRONTEND_TRAP:
+		case FRONTEND_TRAP_R:
+			if (war_GetTrapCursor())
+			{
+				war_SetTrapCursor(FALSE);
+				widgSetString(psWScreen, FRONTEND_TRAP_R, _("Off"));
+			}
+			else
+			{
+				war_SetTrapCursor(TRUE);
+				widgSetString(psWScreen, FRONTEND_TRAP_R, _("On"));
+			}
+			break;
+		
+		case FRONTEND_QUIT:
+			changeTitleMode(OPTIONS);
+			break;
+		
+		default:
+			break;
+	}
+	
+	if (CancelPressed())
+	{
+		changeTitleMode(OPTIONS);
+	}
+	
+	widgDisplayScreen(psWScreen);
+	
+	return TRUE;
+}
 
 
 // ////////////////////////////////////////////////////////////////////////////
