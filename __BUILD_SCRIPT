@@ -1,0 +1,19 @@
+#!/bin/sh
+
+source __BUILD_CONFIG
+
+if [[ "x$1" = "xdebug" ]] ; then
+	CONF_EXTRA_FLAGS="--enable-debug"
+elif [[ "x$1" = "xinstaller" ]] ; then
+	CONF_EXTRA_FLAGS="--enable-data --enable-installer
+		--with-installer-extdir=\"${PREFIX}/bin\" --with-installer-version=${INSTALLER_VERSION}"
+fi
+
+./autogen.sh
+./configure --target=mingw32 --host=mingw32 --enable-static --disable-shared \
+    --prefix="${PREFIX}" \
+	${CONF_EXTRA_FLAGS} \
+    CFLAGS="${CFLAGS}" \
+    CPPFLAGS="${CPPFLAGS}" \
+    LDFLAGS="${LDFLAGS}"
+make -j3
