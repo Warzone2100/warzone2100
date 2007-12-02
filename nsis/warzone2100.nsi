@@ -82,7 +82,7 @@ VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
   !define MUI_FINISHPAGE_RUN_TEXT $(TEXT_RunWarzone)
   !define MUI_FINISHPAGE_RUN_FUNCTION "LaunchLink"
   !define MUI_FINISHPAGE_SHOWREADME_NOTCHECKED
-  !define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\Readme.txt"
+  !define MUI_FINISHPAGE_SHOWREADME $(TEXT_Readme)
 
 ;--------------------------------
 ;Pages
@@ -153,8 +153,10 @@ Section $(TEXT_SecBase) SecBase
   File "/oname=License.txt" "..\COPYING"
   File "/oname=Readme.en.txt" "..\doc\Readme.en"
   File "/oname=Readme.de.txt" "..\doc\Readme.de"
+;  File "/oname=Readme.nl.txt" "..\doc\Readme.nl"
   File "/oname=Readme.en.html" "..\doc\Readme.en.xhtml"
   File "/oname=Readme.de.html" "..\doc\Readme.de.xhtml"
+;  File "/oname=Readme.nl.html" "..\doc\Readme.nl.xhtml"
 
 
   ;Store installation folder
@@ -331,6 +333,10 @@ FunctionEnd
   LangString TEXT_RunWarzone ${LANG_GERMAN} "Starte ${PACKAGE_NAME}"
 
 
+  LangString TEXT_Readme ${LANG_ENGLISH} "$INSTDIR\Readme.en.html"
+  ;LangString TEXT_Readme ${LANG_DUTCH}   "$INSTDIR\Readme.nl.html"
+  LangString TEXT_Readme ${LANG_GERMAN}  "$INSTDIR\Readme.de.html"
+
 
   ;Assign language strings to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
@@ -366,8 +372,10 @@ Section "Uninstall"
 
   Delete "$INSTDIR\Readme.en.txt"
   Delete "$INSTDIR\Readme.de.txt"
+  Delete "$INSTDIR\Readme.nl.txt"
   Delete "$INSTDIR\Readme.en.html"
   Delete "$INSTDIR\Readme.de.html"
+  Delete "$INSTDIR\Readme.nl.html"
 
   Delete "$INSTDIR\License.txt"
   Delete "$INSTDIR\Authors.txt"

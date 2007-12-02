@@ -69,7 +69,10 @@ VIAddVersionKey "ProductVersion"	"${VERSION}"
   !define MUI_ABORTWARNING
 
   ; Settings for MUI_PAGE_LICENSE
-  !define MUI_LICENSEPAGE_RADIOBUTTONS
+  ; Purposefully commented out, as we do _not_ want to trouble users with an
+  ; additional mouse click (while otherwise pressing "return" continuously
+  ; would satisfy)
+;  !define MUI_LICENSEPAGE_RADIOBUTTONS
 
   ;Start Menu Folder Page Configuration (for MUI_PAGE_STARTMENU)
   !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM"
