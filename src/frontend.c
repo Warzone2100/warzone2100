@@ -1396,30 +1396,6 @@ void addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt)
 	widgAddLabel(psWScreen, &sLabInit);
 }
 
-
-void addText(int FontID,UDWORD FormID,UDWORD id,  UDWORD PosX, UDWORD PosY, char *txt, UDWORD attachID,BOOL *State)
-{
-	W_LABINIT	sLabInit;
-
-	debug( LOG_NEVER, "addText : %s\n", txt );
-	memset(&sLabInit, 0, sizeof(W_LABINIT));
-
-	sLabInit.formID = FormID;
-	sLabInit.id = id;
-	sLabInit.style = WLAB_PLAIN;
-	sLabInit.x = (short) PosX;
-	sLabInit.y = (short) (PosY+4);
-	sLabInit.width = 16;
-	sLabInit.height = FRONTEND_BUTHEIGHT;
-	sLabInit.FontID = FontID;
-	sLabInit.pText = txt;
-	sLabInit.UserData	= attachID;
-	sLabInit.pUserData	= State;
-	sLabInit.pCallback  = intUpdateOptionText;
-	widgAddLabel(psWScreen, &sLabInit);
-}
-
-
 // ////////////////////////////////////////////////////////////////////////////
 // drawing functions
 
