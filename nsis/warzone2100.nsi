@@ -47,7 +47,10 @@ VIAddVersionKey "ProductVersion"	"${VERSION}"
   !define MUI_ABORTWARNING
 
   ; Settings for MUI_PAGE_LICENSE
-  !define MUI_LICENSEPAGE_RADIOBUTTONS
+  ; Purposefully commented out, as we do _not_ want to trouble users with an
+  ; additional mouse click (while otherwise pressing "return" continuously
+  ; would satisfy)
+;  !define MUI_LICENSEPAGE_RADIOBUTTONS
 
   ;Start Menu Folder Page Configuration (for MUI_PAGE_STARTMENU)
   !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM"
@@ -130,8 +133,8 @@ Section $(TEXT_SecBase) SecBase
   File "/oname=License.txt" "..\COPYING"
   File "/oname=Readme.en.txt" "..\doc\Readme.en"
   File "/oname=Readme.de.txt" "..\doc\Readme.de"
-  File "/oname=Readme.en.xhtml" "..\doc\Readme.en.xhtml"
-  File "/oname=Readme.de.xhtml" "..\doc\Readme.de.xhtml"
+  File "/oname=Readme.en.html" "..\doc\Readme.en.xhtml"
+  File "/oname=Readme.de.html" "..\doc\Readme.de.xhtml"
 
 
   ;Store installation folder
@@ -242,8 +245,8 @@ FunctionEnd
   LangString TEXT_RunWarzone ${LANG_GERMAN} "Starte Warzone 2100"
 
 
-  LangString TEXT_Readme ${LANG_ENGLISH} "$INSTDIR\Readme.en.xhtml"
-  LangString TEXT_Readme ${LANG_GERMAN} "$INSTDIR\Readme.de.xhtml"
+  LangString TEXT_Readme ${LANG_ENGLISH} "$INSTDIR\Readme.en.html"
+  LangString TEXT_Readme ${LANG_GERMAN} "$INSTDIR\Readme.de.html"
 
 
   ;Assign language strings to sections
@@ -277,8 +280,8 @@ Section "Uninstall"
 
   Delete "$INSTDIR\Readme.en.txt"
   Delete "$INSTDIR\Readme.de.txt"
-  Delete "$INSTDIR\Readme.en.xhtml"
-  Delete "$INSTDIR\Readme.de.xhtml"
+  Delete "$INSTDIR\Readme.en.html"
+  Delete "$INSTDIR\Readme.de.html"
 
   Delete "$INSTDIR\License.txt"
   Delete "$INSTDIR\Authors.txt"
