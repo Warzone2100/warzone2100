@@ -1,9 +1,9 @@
-noinst_PROGRAMS = auto_revision
-auto_revision_SOURCES = autorevision.cpp
+noinst_PROGRAMS = autorevision
+autorevision_SOURCES = autorevision.cpp
 
 # Add Autorevision header to source directory
-all-local: auto_revision
-	./auto_revision +cstr -v $(top_srcdir) $(top_srcdir)/src/autorevision.h
+all-local: autorevision
+	./autorevision +cstr -v $(top_srcdir) $(top_srcdir)/src/autorevision.h
 
 # Remove Autorevision header from source directory
 clean-local:
