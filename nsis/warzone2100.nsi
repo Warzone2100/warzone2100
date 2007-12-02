@@ -242,8 +242,8 @@ FunctionEnd
   LangString TEXT_RunWarzone ${LANG_GERMAN} "Starte Warzone 2100"
 
 
-  LangString TEXT_Readme ${LANG_ENGLISH} "$INSTDIR\Readme.en.xhtml"
-  LangString TEXT_Readme ${LANG_GERMAN} "$INSTDIR\Readme.de.xhtml"
+  LangString TEXT_Readme ${LANG_ENGLISH} "$INSTDIR\Readme.en.html"
+  LangString TEXT_Readme ${LANG_GERMAN} "$INSTDIR\Readme.de.html"
 
 
   ;Assign language strings to sections

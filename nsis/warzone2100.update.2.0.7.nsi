@@ -16,7 +16,7 @@
 
   ;Name and file
   Name "Warzone 2100"
-  OutFile "warzone2100-2.0.7-${VERSION}.update.exe"
+  OutFile "warzone2100-${VERSION}.update-2.0.7.exe"
 
   ;Default installation folder
   InstallDir "$PROGRAMFILES\Warzone 2100"
@@ -253,8 +253,8 @@ FunctionEnd
   LangString TEXT_RunWarzone ${LANG_GERMAN} "Starte Warzone 2100"
 
 
-  LangString TEXT_Readme ${LANG_ENGLISH} "$INSTDIR\Readme.en.xhtml"
-  LangString TEXT_Readme ${LANG_GERMAN} "$INSTDIR\Readme.de.xhtml"
+  LangString TEXT_Readme ${LANG_ENGLISH} "$INSTDIR\Readme.en.html"
+  LangString TEXT_Readme ${LANG_GERMAN} "$INSTDIR\Readme.de.html"
 
 
   ;Assign language strings to sections
