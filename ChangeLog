@@ -1,5 +1,7 @@
 0000-00-00: SVN
  * General:
+   * New: Video options menu to allow for things such as resolution to be
+          changed without needing to manually edit the config file.
    * New: 'Locked Teams' alliance mode: human players and AIs can play in a team against other teams.
    * New: Allies now have shared vision in 'Teamplay' and 'Locked Teams' modes.
    * New: Height-map mini-map mode (Default key combination to cycle through mini-map modes: Ctrl+Tab).
