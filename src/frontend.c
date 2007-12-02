@@ -90,8 +90,6 @@ void		removeTopForm			(void);
 void		removeBottomForm		(void);
 void		removeBackdrop			(void);
 
-void 		addText					(int FontID,UDWORD FormID,UDWORD id,  UDWORD PosX, UDWORD PosY, char *txt, UDWORD attachID,BOOL *State);
-
 static void	displayTitleBitmap		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 void		displayTextAt270		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
 static void	displayBigSlider		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
