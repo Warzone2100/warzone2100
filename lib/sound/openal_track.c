@@ -288,6 +288,11 @@ static size_t ovbuf_read(void *ptr, size_t size, size_t nmemb, void *datasource)
 	return read_size;
 }
 
+/* 
+ * See http://xiph.org/vorbis/doc/vorbisfile/callbacks.html for what these
+ * functions have to do.
+ */
+
 static int ovbuf_seek(void *datasource, ogg_int64_t offset, int whence) {
 	ov_buffer_t* ovbuf = (ov_buffer_t*)datasource;
 	int new_pos = 0;
@@ -297,19 +302,18 @@ static int ovbuf_seek(void *datasource, ogg_int64_t offset, int whence) {
 			new_pos = offset;
 			break;
 		case SEEK_CUR:
-			new_pos = ovbuf->pos+offset;
+			new_pos = ovbuf->pos + offset;
 			break;
 		case SEEK_END:
-			new_pos = ovbuf->size-offset-1;
+			new_pos = ovbuf->size - offset;
 			break;
 	}
 
-	if (new_pos >= 0 && new_pos < ovbuf->size) {
-		ovbuf->pos = new_pos;
-		return new_pos;
-	} else {
-		return -1;
-	}
+	if (new_pos < 0)
+		new_pos = 0;
+	else if (new_pos > ovbuf->size)
+		new_pos = ovbuf->size;
+	return ovbuf->pos = new_pos;
 }
 
 static int ovbuf_close(void *datasource) {
@@ -325,7 +329,7 @@ static long ovbuf_tell(void *datasource) {
 static ov_callbacks ovbuf_callbacks = {
 	ovbuf_read,
 	ovbuf_seek,
-	ovbuf_close,
+	NULL, // close
 	ovbuf_tell
 };
 
@@ -346,11 +350,12 @@ static long ovPHYSFS_tell(void *datasource) {
     return -1;
 }
 
+// seek/tell/close don't do anything right now, so tell physfs not to bother.
 static ov_callbacks ovPHYSFS_callbacks = {
 	ovPHYSFS_read,
-	ovPHYSFS_seek,
-	ovPHYSFS_close,
-	ovPHYSFS_tell
+	NULL, // seek
+	NULL, // close
+	NULL  // tell
 };
 
 static BOOL sound_ReadTrack( TRACK *psTrack, ov_callbacks callbackFuncs, void* datasource )
