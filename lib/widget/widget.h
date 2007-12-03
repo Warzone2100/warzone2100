@@ -140,11 +140,16 @@ typedef struct _w_init
  * management MUCH simpler.
  */
 
-
-#define WFORM_MAXMAJOR		9	   //15		// Maximum number of major tabs on a tab form
-
+// The below define is max # of tabs we can have.
+// It is set to 20  Look @  #define	MAXSTRUCTURES	200 in hci.h  Keep them in check!
+// New routines really have no max limit. I am not sure what max # a legal user can have.
+#define WFORM_MAXMAJOR		20	   // Maximum number of major tabs on a tab form
+// we do NOT use MAX MINOR now, it is another way to draw the widgets.
 #define WFORM_MAXMINOR		5	   //15		// Maximum number of minor tabs off a major
 
+#define MAXTABSSHOWN 8		//# of tabs we can show before we use tab scroll buttons.
+#define TAB_SEVEN    7		//*with* tab scroll buttons, we can only (currently) show 7 max!
+// NOTE: enable TAB_MINOR at your own risk.  Have NOT testest new rotuines with that.
 #define TAB_MINOR 0	// Tab types passed into tab display callbacks.
 #define TAB_MAJOR 1
 
@@ -168,8 +173,11 @@ typedef struct _w_forminit
 	UWORD			tabMinorThickness;				// The thickness of the tabs
 	UWORD			tabMajorGap;						// The space between tabs
 	UWORD			tabMinorGap;						// The space between tabs
+	UWORD			numStats;					// Number of "stats" (items) in list
+	UWORD			numButtons;					//Number of buttons per form
 	UWORD			numMajor;					// Number of major tabs
 	UWORD			aNumMinors[WFORM_MAXMAJOR];	// Number of minor tabs for each major
+	SWORD			TabMultiplier;			//used to tell system we got lots of (virtual) tabs to display
 	const char		*pTip;						// Tool tip for the form itself
 	char			*apMajorTips[WFORM_MAXMAJOR];	// Tool tips for the major tabs
 	char			*apMinorTips[WFORM_MAXMAJOR][WFORM_MAXMINOR];

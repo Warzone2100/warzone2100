@@ -44,6 +44,7 @@ typedef struct _tab_pos
 	SDWORD		index;
 	SDWORD		x,y;
 	UDWORD		width,height;
+	SDWORD		TabMultiplier;			//Added to keep track of tab scroll
 } TAB_POS;
 
 /* Set default colours for a form */
@@ -309,7 +310,10 @@ static BOOL formCreateTabbed(W_TABFORM **ppsWidget, W_FORMINIT *psInit)
 	(*ppsWidget)->minorPos = psInit->minorPos;
 	(*ppsWidget)->pTabDisplay = psInit->pTabDisplay;
 	(*ppsWidget)->pFormDisplay = psInit->pFormDisplay;
-
+	(*ppsWidget)->TabMultiplier = psInit->TabMultiplier;
+	(*ppsWidget)->numButtons = psInit->numButtons;
+	(*ppsWidget)->numStats = psInit->numStats;
+	
 	formSetDefaultColours((W_FORM *)(*ppsWidget));
 
 	/* Set up the tab data.
@@ -755,34 +759,48 @@ void formInitialise(W_FORM *psWidget)
 }
 
 
-/* Choose a horizontal tab from a coordinate */
+// Currently in game, I can only find that warzone uses horizontal tabs.
+// So ONLY this routine was modified.  Will have to modify the vert. tab
+// routine if we ever use it.
+// Choose a horizontal tab from a coordinate 
 static BOOL formPickHTab(TAB_POS *psTabPos,
 						 SDWORD x0, SDWORD y0,
 						 UDWORD width, UDWORD height, UDWORD gap,
 						 UDWORD number, SDWORD fx, SDWORD fy)
-{
+{	
 	SDWORD	x, y1;
 	UDWORD	i;
 
 #if NO_DISPLAY_SINGLE_TABS
 	if (number == 1)
 	{
-		/* Don't have single tabs */
+		// Don't have single tabs 
 		return FALSE;
 	}
 #endif
 
 	x = x0;
 	y1 = y0 + height;
+	// We need to filter out some tabs, since we can only display 7 at a time.
+	number=  (number - (( psTabPos->TabMultiplier -1) * TAB_SEVEN));
+	if (number > TAB_SEVEN) number = TAB_SEVEN;	//7 = max tabs we can display.
+
 	for (i=0; i < number; i++)
 	{
 //		if (fx >= x && fx <= x + (SDWORD)(width - gap) &&
 		if (fx >= x && fx <= x + (SDWORD)(width) &&
 			fy >= y0 && fy <= y1)
 		{
-			/* found a tab under the coordinate */
-			psTabPos->index = i;
-			psTabPos->x = x;
+			// found a tab under the coordinate 
+			if (psTabPos->TabMultiplier)	//Checks to see we need the extra tab scroll buttons
+			{	// holds the VIRTUAL tab #, since obviously, we can't display more than 7
+				psTabPos->index = (i % TAB_SEVEN)+ ((psTabPos->TabMultiplier -1)*TAB_SEVEN);		
+			}
+			else
+			{	// This is a normal request.
+				psTabPos->index = i;
+			}
+			psTabPos->x = x ;
 			psTabPos->y = y0;
 			psTabPos->width = width;
 			psTabPos->height = height;
@@ -796,8 +814,8 @@ static BOOL formPickHTab(TAB_POS *psTabPos,
 	return FALSE;
 }
 
-
-/* Choose a vertical tab from a coordinate */
+// NOTE: This routine is NOT modified to use the tab scroll buttons.
+// Choose a vertical tab from a coordinate 
 static BOOL formPickVTab(TAB_POS *psTabPos,
 						 SDWORD x0, SDWORD y0,
 						 UDWORD width, UDWORD height, UDWORD gap,
@@ -916,6 +934,7 @@ static BOOL formPickTab(W_TABFORM *psForm, UDWORD fx, UDWORD fy,
 	}
 
 	xOffset2 = yOffset2 = 0;
+	psTabPos->TabMultiplier = psForm->TabMultiplier;
 	/* Check the major tabs */
 	switch (psForm->majorPos)
 	{
@@ -1014,6 +1033,7 @@ void formRun(W_FORM *psWidget, W_CONTEXT *psContext)
 	char		*pTip;
 	W_TABFORM	*psTabForm;
 
+	memset(&sTabPos, 0x0, sizeof(TAB_POS));
 	if(psWidget->style & WFORM_CLICKABLE) {
 		if(((W_CLICKFORM *)psWidget)->state & WCLICK_FLASH) {
 			if (((gameTime2/250) % 2) == 0) {
@@ -1149,8 +1169,8 @@ void formReleased(W_FORM *psWidget, UDWORD key, W_CONTEXT *psContext)
 			else
 			{
 				/* Clicked on a major tab */
-				psTabForm->majorT = (UWORD)sTabPos.index;
-				psTabForm->minorT = psTabForm->asMajor[sTabPos.index].lastMinor;
+				psTabForm->majorT = (UWORD)sTabPos.index; 
+				psTabForm->minorT = psTabForm->asMajor[sTabPos.index].lastMinor;	
 				widgSetReturn((WIDGET *)psWidget);
 			}
 		}
@@ -1282,7 +1302,7 @@ static void formDisplayTTabs(W_TABFORM *psForm,SDWORD x0, SDWORD y0,
 							 UDWORD *pColours,UDWORD TabType,UDWORD TabGap)
 {
 	SDWORD	x,x1, y1;
-	UDWORD	i;
+	UDWORD	i, drawnumber;
 
 #if NO_DISPLAY_SINGLE_TABS
 	if (number == 1)
@@ -1295,7 +1315,24 @@ static void formDisplayTTabs(W_TABFORM *psForm,SDWORD x0, SDWORD y0,
 	x = x0 + 2;
 	x1 = x + width - 2;
 	y1 = y0 + height;
-	for (i=0; i < number; i++)
+	if (number > MAXTABSSHOWN)	//we can display 7 (currently) tabs fine.
+	{	// We do NOT want to draw all the tabs once we have drawn 7 tabs
+		// Both selected & hilite are converted from virtual tab range, to a range
+		// that is seen on the form itself.  This would be 0-6 (7 tabs)
+		// We also fix drawnumber, so we don't display too many tabs since the pages
+		// will be empty.
+		drawnumber =  (number - (( psForm->TabMultiplier -1) * TAB_SEVEN));
+		if (drawnumber > TAB_SEVEN) drawnumber = TAB_SEVEN ;	
+		selected = (selected % TAB_SEVEN);	//Go from Virtual range, to our range
+
+		if(hilite != 65535)			//sigh.  Don't blame me for this!It is THEIR 'hack'.
+		hilite = hilite % TAB_SEVEN; //we want to hilite tab 0 - 6.
+	}
+	else
+	{	// normal draw
+		drawnumber = number;
+	}
+	for (i=0; i < drawnumber; i++)
 	{
 		if(psForm->pTabDisplay) {
 			psForm->pTabDisplay((WIDGET*)psForm,TabType,WFORM_TABTOP,i,i==selected,i==hilite,x,y0,width,height);

@@ -90,6 +90,9 @@ typedef struct _w_tabform
 	/*       beers at lunch-time :-)                                                      */
 
 	UWORD		numMajor;				// The number of major tabs
+	SWORD		TabMultiplier;				//used to tell system we got lots of tabs to display
+	UWORD		numStats;				//# of 'stats' (items) in list
+	UWORD		numButtons;				//# of buttons per form
 	W_MAJORTAB	asMajor[WFORM_MAXMAJOR];	// The major tab information
 	TAB_DISPLAY pTabDisplay;			// Optional callback for display tabs.
 	WIDGET_DISPLAY pFormDisplay;		// Optional callback to display the form.

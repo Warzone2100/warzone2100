@@ -83,13 +83,15 @@
 #define IDOBJ_CMDVTOLFACEND		3849	// The last ID for VTOL factory number labels
 
 
-#define IDSTAT_FORM				4000		// The stats form for structure/droid/research type
-#define IDSTAT_TITLEFORM		4001		// The form for the close box
-#define IDSTAT_LABEL			4002		// Unused
-#define IDSTAT_CLOSE			4003		// The stats close box
-#define IDSTAT_TABFORM			4004		// The tab form with the stats buttons
-#define IDSTAT_START			4100		// The first stats ID
-#define IDSTAT_END				4179		// The last stats ID
+#define IDSTAT_FORM				14000		// The stats form for structure/droid/research type
+#define IDSTAT_TITLEFORM		14001		// The form for the close box
+#define IDSTAT_LABEL			14002		// Unused
+#define IDSTAT_CLOSE			14003		// The stats close box
+#define IDSTAT_TABFORM			14004		// The tab form with the stats buttons
+#define IDSTAT_START			14100		// The first stats ID
+#define IDSTAT_END				14999		// The last stats ID enough for 899 things
+#define IDSTAT_TABSCRL_LEFT		15000		// Our left Tab scroll button
+#define IDSTAT_TABSCRL_RIGHT	15002		// Our right Tab scroll button
 //#define IDSTAT_BARSTART		4200
 #define IDSTAT_BAREND			4299
 #define IDSTAT_TIMEBARSTART		4300
@@ -158,6 +160,9 @@
 #define OBJ_TABWIDTH	26
 #define OBJ_TABHEIGHT	11
 #define	OBJ_TABOFFSET	2
+//tab scroll buttons details
+#define TABSCRL_HEIGHT	10
+#define TABSCRL_WIDTH	7
 
 /* close button data */
 #define CLOSE_WIDTH		15
@@ -236,12 +241,12 @@
 #define STAT_TEXTBLUE	0
 
 /* maximum array sizes */
-#define	MAXSTRUCTURES	80
-#define	MAXRESEARCH		80 //40 can have 80 topic displayed at one now AB 13/09/99
-#define	MAXTEMPLATES	40 //20
-#define	MAXFEATURES		40
-#define	MAXCOMPONENT	40
-#define	MAXEXTRASYS		40
+#define	MAXSTRUCTURES	200	//bumped up from 80.  NOTE: was used for max # in build menus.
+#define	MAXRESEARCH		200 //was 80 topic displayed   "           "
+#define	MAXTEMPLATES	80	//was 20                           
+#define	MAXFEATURES		80
+#define	MAXCOMPONENT	80
+#define	MAXEXTRASYS		80
 
 typedef enum {
 	INT_NORMAL,		// Standard mode (just the reticule)

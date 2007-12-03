@@ -69,6 +69,7 @@
 #include "main.h"
 #include "wrappers.h"
 
+//#define DEBUG_SCROLLTABS 	//enable to see tab scroll button info for buttons
 
 #define RETXOFFSET (0)// Reticule button offset
 #define RETYOFFSET (0)
@@ -1522,6 +1523,59 @@ static void intProcessEditStats(UDWORD id)
 		intMode = INT_NORMAL;
 		objMode = IOBJ_NONE;
 	}
+	else if (id == IDSTAT_TABSCRL_LEFT)	//user hit left scroll tab from DEBUG menu.
+	{
+		W_TABFORM	*psTForm;
+		int temp;
+#ifdef  DEBUG_SCROLLTABS
+		char buf[200];		//only used for debugging
+#endif	
+		psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDSTAT_TABFORM);	//get our form
+		psTForm->TabMultiplier -=1;				// -1 since user hit left button
+		if (psTForm->TabMultiplier < 1 )
+		{
+			psTForm->TabMultiplier = 1;			//Must be at least 1.
+		}
+		// add routine to update tab widgets now...
+		temp = psTForm->majorT;					//set tab # to previous "page"
+		temp -=TAB_SEVEN;						//7 = 1 "page" of tabs						
+		if ( temp < 0)
+			psTForm->majorT = 0;
+		else
+			psTForm->majorT = temp;
+#ifdef  DEBUG_SCROLLTABS
+		sprintf(buf,"[debug menu]Clicked LT %d tab #=%d",psTForm->TabMultiplier,psTForm->majorT);
+		addConsoleMessage(buf,DEFAULT_JUSTIFY);
+#endif
+	}
+	else if (id == IDSTAT_TABSCRL_RIGHT) // user hit right scroll tab from DEBUG menu 
+	{
+	W_TABFORM	*psTForm;
+	UWORD numTabs;
+#ifdef  DEBUG_SCROLLTABS
+	char buf[200];					// only used for debugging.
+#endif
+		psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDSTAT_TABFORM);
+		numTabs = numForms(psTForm->numStats,psTForm->numButtons);
+		numTabs = ((numTabs /TAB_SEVEN) + 1);	// (Total tabs needed / 7(max tabs that fit))+1
+		psTForm->TabMultiplier += 1;
+		if (psTForm->TabMultiplier > numTabs)			// add 'Bzzt' sound effect?
+		{
+			psTForm->TabMultiplier -= 1;					// to signify past max?
+		}
+	//add routine to update tab widgets now...
+		psTForm->majorT += TAB_SEVEN;					// set tab # to next "page"
+		if (psTForm->majorT >= psTForm->numMajor) 
+		{
+			psTForm->majorT = psTForm->numMajor - 1;		//set it back to max -1
+		}	
+#ifdef  DEBUG_SCROLLTABS		//for debuging
+		sprintf(buf, "[debug menu]Clicked RT %d numtabs %d tab # %d", psTForm->TabMultiplier, numTabs, psTForm->majorT);
+		addConsoleMessage(buf, DEFAULT_JUSTIFY);
+#endif
+	}
+//	else		//Do we add this or does it not matter?
+//		ASSERT(FALSE,"unexpected id [%d] found!",id);
 }
 
 
@@ -2347,6 +2401,9 @@ static void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 	// note the object for the screen
 	apsPreviousObj[objMode] = psObj;
 
+
+	// NOTE! The below functions populate our list (building/units...)
+	// up to MAX____.  We have unlimited potential, but it is capped at 200 now.
 	//determine the Structures that can be built
 	if (objMode == IOBJ_BUILD)
 	{
@@ -2378,7 +2435,10 @@ static void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 		numStatsListEntries = fillResearchList(pList,selectedPlayer, (UWORD)index, MAXRESEARCH);
 
 		//	-- Alex's reordering of the list
-
+		// NOTE!  Do we even want this anymore, since we can have basically
+		// unlimted tabs? Future enhancement assign T1/2/3 button on form
+		// so we can pick what level of tech we want to build instead of
+		// Alex picking for us?
 		count = 0;
 		for(i=0; i<RID_MAXRID; i++)
 		{
@@ -2393,8 +2453,8 @@ static void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 
 			}
 		}
-
-		/* Tag on the ones at the end that have no BASTARD icon IDs - why is this?!!?!?!?*/
+		// Tag on the ones at the end that have no BASTARD icon IDs - why is this?!!?!?!?
+		// NOTE! more pruning [future ref]
 		for(j=0; j<numStatsListEntries; j++)
 		{
 			//this can't be assumed cos we've added some more icons and they have higher #define values than QUESTIONMARK!
@@ -3002,10 +3062,63 @@ static void intProcessStats(UDWORD id)
 			}
 		}
 	}
+	else if (id == IDSTAT_TABSCRL_LEFT)	//user hit left scroll tab from BUILD menu
+	{
+		W_TABFORM	*psTForm;
+		int temp;
+#ifdef  DEBUG_SCROLLTABS
+		char buf[200];		//only used for debugging
+#endif	
+		psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDSTAT_TABFORM);	//get our form
+		psTForm->TabMultiplier -= 1;				// -1 since user hit left button
+		if (psTForm->TabMultiplier < 1)
+		{
+			psTForm->TabMultiplier = 1;			// Must be at least 1.
+		}
+		//add routine to update tab widgets now...
+		temp = psTForm->majorT;					// set tab # to previous "page"
+		temp -= TAB_SEVEN;						// 7 = 1 "page" of tabs						
+		if ( temp < 0)
+			psTForm->majorT = 0;
+		else
+			psTForm->majorT = temp;
+#ifdef  DEBUG_SCROLLTABS
+		sprintf(buf, "[build menu]Clicked LT %d tab #=%d", psTForm->TabMultiplier, psTForm->majorT);
+		addConsoleMessage(buf, DEFAULT_JUSTIFY);
+#endif
+	}
+	else if (id == IDSTAT_TABSCRL_RIGHT)	// user hit right scroll tab from BUILD menu
+	{
+	W_TABFORM	*psTForm;
+	UWORD numTabs;
+#ifdef  DEBUG_SCROLLTABS
+	char buf[200];					// only used for debugging.
+#endif
+		psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDSTAT_TABFORM);
+		numTabs = numForms(psTForm->numStats, psTForm->numButtons);
+		numTabs = ((numTabs / TAB_SEVEN) + 1);	// (Total tabs needed / 7(max tabs that fit))+1
+		psTForm->TabMultiplier += 1;
+		if (psTForm->TabMultiplier > numTabs)		//add 'Bzzt' sound effect?
+		{
+			psTForm->TabMultiplier -= 1;				//to signify past max?
+		}
+	//add routine to update tab widgets now...
+		psTForm->majorT += TAB_SEVEN;				// set tab # to next "page"
+		if (psTForm->majorT >= psTForm->numMajor)	// check if too many
+		{
+			psTForm->majorT = psTForm->numMajor - 1;	// set it back to max -1
+		}	
+#ifdef  DEBUG_SCROLLTABS		//for debuging
+		sprintf(buf, "[build menu]Clicked RT %d numtabs %d tab # %d", psTForm->TabMultiplier, numTabs, psTForm->majorT);
+		addConsoleMessage(buf, DEFAULT_JUSTIFY);
+#endif
+
+	}
 	else
 	{
 		ASSERT( id == IDSTAT_FORM || id == IDSTAT_TITLEFORM ||
-				id == IDSTAT_LABEL || id == IDSTAT_TABFORM,
+				id == IDSTAT_LABEL || id == IDSTAT_TABFORM  ||
+				id == IDSTAT_TABSCRL_RIGHT || id ==IDSTAT_TABSCRL_LEFT,
 			"intProcessStructure: Unknown widget ID" );
 	}
 }
@@ -5606,15 +5719,51 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	{
 		return FALSE;
 	}
-
-
 	/* Calculate how many buttons will go on a form */
 	butPerForm = ((STAT_WIDTH - STAT_GAP) /
 						(STAT_BUTWIDTH + STAT_GAP)) *
 				 ((STAT_HEIGHT - STAT_GAP) /
 						(STAT_BUTHEIGHT + STAT_GAP));
-
-	/* Add the tabbed form */
+//================== adds L/R Scroll buttons ===================================
+if (numForms(numStats, butPerForm)>8)	//only want these buttons when tab count >8
+	{
+		// Add the left tab scroll button 
+		memset(&sButInit, 0, sizeof(W_BUTINIT));
+		sButInit.formID = IDSTAT_FORM;
+		sButInit.id = IDSTAT_TABSCRL_LEFT;
+		sButInit.style = WBUT_PLAIN;
+		sButInit.x = STAT_TABFORMX + 4;
+		sButInit.y = STAT_TABFORMY;
+		sButInit.width = TABSCRL_WIDTH;
+		sButInit.height = TABSCRL_HEIGHT;
+		sButInit.pTip = _("Tab Scroll left");
+		sButInit.FontID = font_regular;
+		sButInit.pDisplay = intDisplayImageHilight;
+		sButInit.UserData = PACKDWORD_TRI(0, IMAGE_LFTTABD, IMAGE_LFTTAB);
+		if (!widgAddButton(psWScreen, &sButInit))
+		{
+		return FALSE;
+		}
+		// Add the right tab scroll button 
+		memset(&sButInit, 0, sizeof(W_BUTINIT));
+		sButInit.formID = IDSTAT_FORM;
+		sButInit.id = IDSTAT_TABSCRL_RIGHT;
+		sButInit.style = WBUT_PLAIN;
+		sButInit.x = STAT_WIDTH - 14;
+		sButInit.y = STAT_TABFORMY;
+		sButInit.width = TABSCRL_WIDTH;
+		sButInit.height = TABSCRL_HEIGHT;
+		sButInit.pTip = _("Tab Scroll right");
+		sButInit.FontID = font_regular;
+		sButInit.pDisplay = intDisplayImageHilight;
+		sButInit.UserData = PACKDWORD_TRI(0, IMAGE_RGTTABD, IMAGE_RGTTAB);
+		if (!widgAddButton(psWScreen, &sButInit))
+		{
+			return FALSE;
+		}
+	}
+//==============buttons before tabbed form!==========================
+	// Add the tabbed form 
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
 	sFormInit.formID = IDSTAT_FORM;
 	sFormInit.id = IDSTAT_TABFORM;
@@ -5623,7 +5772,9 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	sFormInit.y = STAT_TABFORMY;
 	sFormInit.width = STAT_WIDTH;
 	sFormInit.height = STAT_HEIGHT;
-	sFormInit.numMajor = numForms(numStats, butPerForm);
+	sFormInit.numButtons = butPerForm;		// store # of buttons per form
+	sFormInit.numStats = numStats;			// store # of 'stats' (items) in form
+	sFormInit.numMajor = numForms(numStats, butPerForm);	// STUPID name for # of tabs!
 	sFormInit.majorPos = WFORM_TABTOP;
 	sFormInit.minorPos = WFORM_TABNONE;
 	sFormInit.majorSize = OBJ_TABWIDTH;
@@ -5635,13 +5786,21 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
     //Build menu can have up to 80 stats - so can research now 13/09/99 AB
+	// NOTE, there is really no limit now to the # of menu items we can have,
+	// It is #defined in hci.h to be 200 now. [#define	MAXSTRUCTURES	200]
+	//Same goes for research. [#define	MAXRESEARCH		200]
 	if (((objMode == IOBJ_BUILD) || (objMode == IOBJ_RESEARCH)) &&
 		(sFormInit.numMajor > 4))
-	{
+	{	//Just switching from normal sized tabs to smaller ones to fit more in form.
 		sFormInit.pUserData = &SmallTab;
 		sFormInit.majorSize /= 2;
 	}
-	for (i=0; i< sFormInit.numMajor; i++)
+	if (sFormInit.numMajor > MAXTABSSHOWN)		// 7 tabs is all we can fit with current form size.
+	{	//make room for new tab item (tab scroll buttons)
+		sFormInit.majorOffset = OBJ_TABOFFSET + 10;
+		sFormInit.TabMultiplier = 1;		// Enable our tabMultiplier buttons.
+	}
+	for (i = 0; i< sFormInit.numMajor; i++)	// Sets # of tab's minors 
 	{
 		sFormInit.aNumMinors[i] = 1;
 	}
@@ -5649,7 +5808,6 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	{
 		return FALSE;
 	}
-
 
 	/* Add the stat buttons */
 	memset(&sBFormInit, 0, sizeof(W_FORMINIT));
