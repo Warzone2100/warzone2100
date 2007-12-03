@@ -1,4 +1,4 @@
-warzone2100 (2.0.8-p1-0) unstable; urgency=low
+warzone2100 (2.0.9-0) unstable; urgency=low
 
   * Bump upstream version number
     * Fix: Sound works with libvorbis 1.2.0 (no more hangups) (bug #10153)
