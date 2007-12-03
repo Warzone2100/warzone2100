@@ -57,6 +57,10 @@
      * reload time: increased from 5 mins to 8 mins
      * chance to hit in the blast radius: reduced from 99% to 90%
 
+2007-12-03: Version 2.0.8 patch 1
+ * General:
+   * Fix: Sound works with libvorbis 1.2.0 (no more hangups) (bug #10153)
+
 2007-12-01: Version 2.0.8
  * General:
    * New: Possibility to use the zero-key ('0') to assign groups to as well (patch #828)
