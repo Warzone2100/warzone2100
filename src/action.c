@@ -1299,12 +1299,10 @@ void actionUpdateDroid(DROID *psDroid)
 
 		for (j = 0;j < psDroid->numWeaps;j++)
 		{
-
 			//Watermelon:vtResult uses psActionTarget[0] for now since it's the first target
 			if (psDroid->psActionTarget[j] != NULL &&
 				validTarget((BASE_OBJECT *)psDroid, psDroid->psActionTarget[j], j))
 			{
-
 				// firing on something while moving
 				if (DROID_STOPPED(psDroid))
 				{
@@ -1627,6 +1625,8 @@ void actionUpdateDroid(DROID *psDroid)
 			moveToRearm(psDroid);
 			break;
 		}
+
+		ASSERT(psDroid->psActionTarget[0] != NULL, "action update move to attack target is NULL");
 
 		//check the target hasn't become one the same player ID - Electronic Warfare
 		if ((electronicDroid(psDroid) && (psDroid->player == psDroid->psActionTarget[0]->player)) ||
@@ -2596,6 +2596,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		// slightly strange place to store this I know, but I didn't want to add any more to the droid
 		psDroid->actionX = psDroid->x;
 		psDroid->actionY = psDroid->y;
+		setDroidActionTarget(psDroid, psAction->psObj, 0);
 
 		if ( ( (psDroid->order == DORDER_ATTACKTARGET || psDroid->order == DORDER_FIRESUPPORT) &&
 			   secondaryGetState(psDroid, DSO_HALTTYPE, &state) && (state == DSS_HALT_HOLD)) ||
@@ -2603,7 +2604,6 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 			   orderStateObj(psDroid, DORDER_FIRESUPPORT, &psTarget) && (psTarget->type == OBJ_STRUCTURE) ) )
 		{
 			psDroid->action = DACTION_ATTACK;		// holding, try attack straightaway
-			setDroidActionTarget(psDroid, psAction->psObj, 0);
 		}
 		else if (actionInsideMinRange(psDroid, psAction->psObj, 0))
 		{
@@ -2634,7 +2634,6 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		else
 		{
 			psDroid->action = DACTION_MOVETOATTACK;
-			setDroidActionTarget(psDroid, psAction->psObj, 0);
 			turnOffMultiMsg(TRUE);
 			moveDroidTo(psDroid, psAction->psObj->x, psAction->psObj->y);
 			turnOffMultiMsg(FALSE);
