@@ -150,7 +150,7 @@ BOOL screenInitialise(
 	}
 	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &glval);
 	debug( LOG_TEXTURE, "Maximum texture size: %dx%d", (int)glval, (int)glval );
-	if (glval < 512) // PAGE_WIDTH and PAGE_HEIGHT from src/texture.h
+	if (glval < 2048) // PAGE_WIDTH and PAGE_HEIGHT from src/texture.h
 	{
 		debug( LOG_ERROR, "OpenGL reports a texture size (%d) that is less than required!", (int)glval );
 		debug( LOG_ERROR, "This is either a bug in OpenGL or your graphics card is really old!" );
