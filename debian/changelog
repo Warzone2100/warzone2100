@@ -8,7 +8,7 @@ warzone2100 (2.1.0~0.svn2922-0) unstable; urgency=low
 
  -- Giel van Schijndel <muggenhor@gna.org>  Sat, 01 Dec 2007 13:47:17 +0100
 
-warzone2100 (2.0.8-p1-0) unstable; urgency=low
+warzone2100 (2.0.9-0) unstable; urgency=low
 
   * Bump upstream version number
     * Fix: Sound works with libvorbis 1.2.0 (no more hangups) (bug #10153)
