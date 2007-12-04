@@ -58,31 +58,34 @@
      * chance to hit in the blast radius: reduced from 99% to 90%
 
 2007-12-03: Version 2.0.9
- * General:
+ * Sound:
    * Fix: Sound works with libvorbis 1.2.0 (no more hangups) (bug #10153)
 
 2007-12-01: Version 2.0.8
  * General:
    * New: Possibility to use the zero-key ('0') to assign groups to as well (patch #828)
    * New: Repeat keypresses if the key is hold long enough (e.g. one press of 'A' becomes 'AAAAAAAAAA' if just held long enough)
-   * Change: In the "Join Game" menu you can now choose between "IP" (same as the old "Internet" option) and "Lobby" (directly proceed to the Lobbyserver)
-   * Change: Slightly faster terrain rendering (+ 5-10%) (patch #830, patch #833)
-   * Change: Protocol-selection removed from "Host Game", since the only option was "Internet"
    * Fix: Remove invalid references to software renderer textures (caused crashes between campaign 1-2 and 2-3) (bug #9497)
    * Fix: Improve POSIX exception handler reliability (GDB could have had trouble locating the executable)
-   * Fix: Workaround a bug in OpenAL SI 0.0.8 GNU/Linux, which could lead to a crash
    * Fix: Dead objects could be targeted when structures used commanders and counterbatteries for targeting
-   * Fix: Crash upon receiving invalid sound ID numbers (out of bounds array access) (bug #9694)
    * Fix: Prevent divide by zero errors caused by ordering a VTOL to attack a droid at the same X & Y coordinates (bug #9704)
-   * Fix: Make progress bar white again
    * Fix: Workaround mysterious crash when updating beacons (bug #9455)
-   * Fix: Textures where not properly reloaded when finishing a campaign and continueing with the next (bug #9923)
-   * Fix: Reduce the dark borders around the terrain tiles (patch #845)
-   * Fix: Slight visual improvement: Reduced flickering of ground and water tiles (patch #841)
-   * Fix: Crash when loading sounds without filenames (patch #855, bugs #9927 and #10142)
    * Fix: Crash on game exit (bug #9927)
    * Fix: Don't add/remove droids to/from groups upon selecting/deselecting them (patch #829)
    * Fix: Crash where rearming VTOL would try to set a dead target (r2651)
+ * Multiplayer:
+   * Change: In the "Join Game" menu you can now choose between "IP" (same as the old "Internet" option) and "Lobby" (directly proceed to the Lobbyserver)
+   * Change: Protocol-selection removed from "Host Game", since the only option was "Internet"
+ * Sound:
+   * Fix: Workaround a bug in OpenAL SI 0.0.8 GNU/Linux, which could lead to a crash
+   * Fix: Crash upon receiving invalid sound ID numbers (out of bounds array access) (bug #9694)
+   * Fix: Crash when loading sounds without filenames (patch #855, bugs #9927 and #10142)
+ * Graphics:
+   * Change: Slightly faster terrain rendering (+ 5-10%) (patch #830, patch #833)
+   * Fix: Make progress bar white again
+   * Fix: Textures where not properly reloaded when finishing a campaign and continueing with the next (bug #9923)
+   * Fix: Reduce the dark borders around the terrain tiles (patch #845)
+   * Fix: Slight visual improvement: Reduced flickering of ground and water tiles (patch #841)
 
 2007-06-22: Version 2.0.7
  * General:
