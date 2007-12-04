@@ -4714,7 +4714,7 @@ UDWORD	i;
 
 static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 {
-	TERRAIN_VERTEX pts[3];
+	CLIP_VERTEX pts[3];
 	Vector3i each;
 	Vector3f *point;
 	UDWORD	pointIndex;
@@ -4796,15 +4796,12 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 
 	pts[0].u = 0;
 	pts[0].v = 0;
-	pts[0].specular.argb = colour;
 
 	pts[1].u = 0;
 	pts[1].v = 0;
-	pts[1].specular.argb = 0;
 
 	pts[2].u = 0;
 	pts[2].v = 0;
-	pts[2].specular.argb = 0;
 
 	pie_TransColouredTriangle(pts, colour);
 }
