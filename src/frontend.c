@@ -56,6 +56,7 @@
 #include "multilimit.h"
 #include "multiplay.h"
 #include "seqdisp.h"
+#include "texture.h"
 #include "warzoneconfig.h"
 #include "main.h"
 #include "wrappers.h"
@@ -65,6 +66,7 @@ static int StartWithGame = 1; // New game starts in Cam 1.
 
 // Widget code and non-constant strings do not get along
 static char resolution[WIDG_MAXSTR];
+static char textureSize[WIDG_MAXSTR];
 
 tMode titleMode; // the global case
 char			aLevelName[MAX_LEVEL_NAME_SIZE+1];	//256];			// vital! the wrf file to use.
@@ -886,6 +888,8 @@ BOOL startGameOptions4Menu(void)
 	// Generate the resolution string
 	snprintf(resolution, WIDG_MAXSTR, "%d x %d",
 	         war_GetWidth(), war_GetHeight());
+	// Generate texture size string
+	snprintf(textureSize, WIDG_MAXSTR, "%d", getTextureSize());
 	
 	addBackdrop();
 	addTopForm();
@@ -920,8 +924,12 @@ BOOL startGameOptions4Menu(void)
 		addTextButton(FRONTEND_TRAP_R, FRONTEND_POS4M-55, FRONTEND_POS4Y, _("Off"), TRUE, FALSE);
 	}
 
+	// Texture size
+	addTextButton(FRONTEND_TEXTURESZ, FRONTEND_POS5X-35, FRONTEND_POS5Y, _("Texture size"), TRUE, FALSE);
+	addTextButton(FRONTEND_TEXTURESZ_R, FRONTEND_POS5M-55, FRONTEND_POS5Y, textureSize, TRUE, FALSE);
+
 	// Add a note about changes taking effect on restart for certain options
-	addTextButton(FRONTEND_TAKESEFFECT, FRONTEND_POS5X-35, FRONTEND_POS5Y, _("* Takes effect on game restart"), TRUE, TRUE);
+	addTextButton(FRONTEND_TAKESEFFECT, FRONTEND_POS6X-35, FRONTEND_POS6Y, _("* Takes effect on game restart"), TRUE, TRUE);
 
 	// Quit/return
 	addMultiBut(psWScreen,FRONTEND_BOTFORM,FRONTEND_QUIT,10,10,30,29, P_("menu", "Return"),IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);
@@ -996,6 +1004,29 @@ BOOL runGameOptions4Menu(void)
 				widgSetString(psWScreen, FRONTEND_TRAP_R, _("On"));
 			}
 			break;
+		
+		case FRONTEND_TEXTURESZ:
+		case FRONTEND_TEXTURESZ_R:
+		{
+			int newTexSize = getTextureSize() * 2;
+			
+			// Clip such that 32 <= size <= 128
+			if (newTexSize > 128)
+			{
+				newTexSize = 32;
+			}
+			
+			// Set the new size
+			setTextureSize(newTexSize);
+			
+			// Generate the string representation of the new size
+			snprintf(textureSize, WIDG_MAXSTR, "%d", newTexSize);
+			
+			// Update the widget
+			widgSetString(psWScreen, FRONTEND_TEXTURESZ_R, textureSize);
+			
+			break;
+		}
 		
 		case FRONTEND_QUIT:
 			changeTitleMode(OPTIONS);

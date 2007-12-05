@@ -49,6 +49,23 @@ TILE_TEX_INFO tileTexInfo[MAX_TILES];
 
 static int firstPage; // the last used page before we start adding terrain textures
 int terrainPage; // texture ID of the terrain page
+static int mipmap_max = MIPMAP_MAX, mipmap_levels = MIPMAP_LEVELS;
+static int mipmap_user_requested = MIPMAP_MAX;
+
+void setTextureSize(int texSize)
+{
+	if (texSize < 16 || texSize % 16 != 0)
+	{
+		debug(LOG_ERROR, "Attempted to set bad texture size %d! Ignored.", texSize);
+		return;
+	}
+	mipmap_user_requested = texSize;
+}
+
+int getTextureSize()
+{
+	return mipmap_user_requested;
+}
 
 // Generate a new texture page both in the texture page table, and on the graphics card
 static int newPage(const char *name, int level, int width, int height, int count)
@@ -71,8 +88,11 @@ static int newPage(const char *name, int level, int width, int height, int count
 	strlcpy(_TEX_PAGE[texPage].name, name, sizeof(_TEX_PAGE[texPage].name));
 
 	pie_SetTexturePage(texPage);
+
+	// Specify first and last mipmap level to be used
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, MIPMAP_LEVELS - 1);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, mipmap_levels - 1);
+
 	// debug(LOG_TEXTURE, "newPage: glTexImage2D(page=%d, level=%d) opengl id=%u", texPage, level, _TEX_PAGE[texPage].id);
 	glTexImage2D(GL_TEXTURE_2D, level, wz_texture_compression, width, height, 0,
 	             GL_RGBA, GL_UNSIGNED_BYTE, NULL);
@@ -99,11 +119,34 @@ void texLoad(const char *fileName)
 	char fullPath[PATH_MAX], partialPath[PATH_MAX], *buffer;
 	unsigned int i, j, k, size;
 	int texPage;
+	GLint glval;
 
 	firstPage = _TEX_INDEX;
 
 	ASSERT(_TEX_INDEX < iV_TEX_MAX, "Too many texture pages used");
 	ASSERT(MIPMAP_MAX == TILE_WIDTH && MIPMAP_MAX == TILE_HEIGHT, "Bad tile sizes");
+
+	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &glval);
+	
+	while (glval < mipmap_max * TILES_IN_PAGE_COLUMN)
+	{
+		mipmap_max /= 2;
+		mipmap_levels--;
+		debug(LOG_ERROR, "Max supported texture size %dx%d is too low - reducing texture detail to %dx%d.",
+		      (int)glval, (int)glval, mipmap_max, mipmap_max);
+		ASSERT(mipmap_levels > 0, "Supported texture size %d is too low to load any mipmap levels!",
+		       (int)glval);
+		if (mipmap_levels == 0)
+		{
+			exit(1);
+		}
+	}
+	while (mipmap_user_requested < mipmap_max)
+	{
+		mipmap_max /= 2;
+		mipmap_levels--;
+	}
+	mipmap_user_requested = mipmap_max; // reduce to lowest possible
 
 	/* Get and set radar colours */
 
@@ -132,8 +175,8 @@ void texLoad(const char *fileName)
 
 	/* Now load the actual tiles */
 
-	i = MIPMAP_MAX; // i is used to keep track of the tile dimensions
-	for (j = 0; j < MIPMAP_LEVELS; j++)
+	i = mipmap_max; // i is used to keep track of the tile dimensions
+	for (j = 0; j < mipmap_levels; j++)
 	{
 		int xOffset = 0, yOffset = 0; // offsets into the texture atlas
 		int xSize = 1;
@@ -171,7 +214,7 @@ void texLoad(const char *fileName)
 			glTexSubImage2D(GL_TEXTURE_2D, j, xOffset, yOffset, tile.width, tile.height,
 			                GL_RGBA, GL_UNSIGNED_BYTE, tile.bmp);
 			free(tile.bmp);
-			if (i == TILE_WIDTH) // dealing with main texture page; so register coordinates
+			if (i == mipmap_max) // dealing with main texture page; so register coordinates
 			{
 				tileTexInfo[k].uOffset = (float)xOffset / (float)xSize;
 				tileTexInfo[k].vOffset = (float)yOffset / (float)ySize;

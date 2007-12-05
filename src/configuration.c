@@ -49,6 +49,7 @@
 // HACK bAllowDebugMode shouldn't be in clparse
 #include "clparse.h"
 #include "multiint.h"
+#include "texture.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -515,6 +516,14 @@ BOOL loadConfig(void)
 		setWarzoneKeyNumeric("radarTerrainMode", radarDrawMode);
 	}
 
+	// texture size
+	if (getWarzoneKeyNumeric("textureSize", &val))
+	{
+		setTextureSize(val);
+	} else {
+		setWarzoneKeyNumeric("textureSize", getTextureSize());
+	}
+
 	return closeWarzoneKey();
 }
 
@@ -610,6 +619,7 @@ BOOL saveConfig(void)
 	setWarzoneKeyNumeric("radarObjectMode",(SDWORD)bEnemyAllyRadarColor);    // enemy/allies radar view
 	setWarzoneKeyNumeric("radarTerrainMode",(SDWORD)radarDrawMode);
 	setWarzoneKeyNumeric("trapCursor", war_GetTrapCursor());
+	setWarzoneKeyNumeric("textureSize", getTextureSize());
 
 	if(!bMultiPlayer)
 	{

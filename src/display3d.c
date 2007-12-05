@@ -938,9 +938,9 @@ static void flipsAndRots(unsigned int tileNumber, unsigned int i, unsigned int j
 	const unsigned short tile = TileNumber_tile(tileNumber);
 
 	/* Used to calculate texture coordinates, which are 0-255 in value */
-	const float xMult = (1.0f / (PAGE_WIDTH / TILE_WIDTH));
-	const float yMult = (1.0f / (PAGE_HEIGHT / TILE_HEIGHT));
-	const float one = 1.0f / PAGE_WIDTH;
+	const float xMult = 1.0f / TILES_IN_PAGE_COLUMN;
+	const float yMult = 1.0f / TILES_IN_PAGE_ROW;
+	const float one = 1.0f / (TILES_IN_PAGE_COLUMN * getTextureSize());
 
 	/*
 	 * Points for flipping the texture around if the tile is flipped or rotated
@@ -4051,7 +4051,7 @@ static void drawTerrainWaterTile(UDWORD i, UDWORD j)
 		/* Used to calculate texture coordinates, which are 0-255 in value */
 		const float xMult = 1.0f / TILES_IN_PAGE_COLUMN;
 		const float yMult = 1.0f / (2.0f * TILES_IN_PAGE_ROW);
-		const float one = 1.0f / PAGE_WIDTH;
+		const float one = 1.0f / (TILES_IN_PAGE_COLUMN * getTextureSize());
 		const unsigned int tileNumber = getWaterTileNum();
 		TERRAIN_VERTEX vertices[3];
 

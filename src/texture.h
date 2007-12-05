@@ -31,14 +31,17 @@ typedef struct _tileTexInfo
 	unsigned int texPage; // Which textpage is the tile in? TileNumber/16 basically;
 } TILE_TEX_INFO;
 
-#define PAGE_WIDTH              2048
-#define PAGE_HEIGHT             2048
-#define TILES_IN_PAGE_COLUMN (PAGE_WIDTH / TILE_WIDTH)
-#define TILES_IN_PAGE_ROW (PAGE_HEIGHT / TILE_HEIGHT)
-#define TILES_IN_PAGE (TILES_IN_PAGE_COLUMN * TILES_IN_PAGE_ROW)
+// these constants are adapted for fitting 256 textures of size 128x128 into a 2048x2048
+// texture page; if such large texture pages are not available, just scaled everything down
+#define TILES_IN_PAGE_COLUMN	16
+#define TILES_IN_PAGE_ROW	16
+#define TILES_IN_PAGE		(TILES_IN_PAGE_COLUMN * TILES_IN_PAGE_ROW)
+#define MAX_TILES		TILES_IN_PAGE
 
-#define MAX_TILES TILES_IN_PAGE
 extern TILE_TEX_INFO	tileTexInfo[MAX_TILES];
 extern int terrainPage;
+
+void setTextureSize(int texSize);
+int getTextureSize(void);
 
 #endif

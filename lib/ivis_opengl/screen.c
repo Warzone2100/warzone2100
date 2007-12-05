@@ -63,7 +63,6 @@ BOOL screenInitialise(
 {
 	static int video_flags = 0;
 	int bpp = 0, value;
-	GLint glval;
 
 	/* Store the screen information */
 	screenWidth = width;
@@ -147,14 +146,6 @@ BOOL screenInitialise(
 	if ( SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER, &value) == -1)
 	{
 		debug( LOG_ERROR, "OpenGL initialization did not give double buffering!" );
-	}
-	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &glval);
-	debug( LOG_TEXTURE, "Maximum texture size: %dx%d", (int)glval, (int)glval );
-	if (glval < 2048) // PAGE_WIDTH and PAGE_HEIGHT from src/texture.h
-	{
-		debug( LOG_ERROR, "OpenGL reports a texture size (%d) that is less than required!", (int)glval );
-		debug( LOG_ERROR, "This is either a bug in OpenGL or your graphics card is really old!" );
-		debug( LOG_ERROR, "Trying to run the game anyway..." );
 	}
 	debug(LOG_3D, "OpenGL extensions supported:");
 	if (check_extension("GL_ARB_texture_compression"))
