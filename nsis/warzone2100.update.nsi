@@ -144,6 +144,8 @@ Section $(TEXT_SecBase) SecBase
   File "/oname=Readme.de.txt" "..\doc\Readme.de"
   File "/oname=Readme.en.html" "..\doc\Readme.en.xhtml"
   File "/oname=Readme.de.html" "..\doc\Readme.de.xhtml"
+  File "/oname=styles\readme.print.css" "..\styles\readme.print.css"
+  File "/oname=styles\readme.screen.css" "..\styles\readme.screen.css"
 
 
   ;Store installation folder
