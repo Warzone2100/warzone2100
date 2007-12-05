@@ -985,6 +985,8 @@ void pie_DrawTerrainInit()
 	glColorPointer(COLOUR_COMPONENTS, GL_UNSIGNED_BYTE, 0, aColour);
 	glTexCoordPointer(TEXCOORD_COMPONENTS, GL_FLOAT, 0, aTexCoord);
 	glVertexPointer(VERTEX_COMPONENTS, GL_FLOAT, 0, aVertex);
+	glMatrixMode(GL_TEXTURE);
+	glLoadIdentity();
 }
 
 void pie_DrawTerrainDone(int mapx, int mapy)

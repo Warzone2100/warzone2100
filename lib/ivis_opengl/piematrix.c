@@ -441,7 +441,6 @@ void pie_PerspectiveEnd(void)
 void pie_TranslateTextureBegin(const Vector2f offset)
 {
 	glMatrixMode(GL_TEXTURE);
-	glPushMatrix();
 	glTranslatef(offset.x, offset.y, 0.0f);
 	glMatrixMode(GL_MODELVIEW);
 }
@@ -449,7 +448,8 @@ void pie_TranslateTextureBegin(const Vector2f offset)
 void pie_TranslateTextureEnd(void)
 {
 	glMatrixMode(GL_TEXTURE);
-	glPopMatrix();
+	glLoadIdentity();
+	glScalef(1.0f/OLD_TEXTURE_SIZE_FIX, 1.0f/OLD_TEXTURE_SIZE_FIX, 1.0f); // FIXME Scaling texture coords to 256x256!
 	glMatrixMode(GL_MODELVIEW);
 }
 

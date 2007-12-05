@@ -162,7 +162,7 @@ static BOOL	bDrawProximitys=TRUE;
 BOOL	godMode;
 
 static float waterRealValue = 0.0f;
-#define WAVE_SPEED 2.0f
+#define WAVE_SPEED 0.015f
 
 UDWORD	barMode = BAR_FULL; // configured in configuration.c
 
@@ -503,7 +503,7 @@ static void drawTiles(iView *camera, iView *player)
 	if(!gamePaused())
 	{
 		waterRealValue += (WAVE_SPEED * frameTime2) / GAME_TICKS_PER_SEC;
-		if (waterRealValue >= (256 / TILES_IN_PAGE_ROW) / 2)
+		if (waterRealValue >= (1.0f / TILES_IN_PAGE_ROW) / 2)
 		{
 			waterRealValue = 0.0f;
 		}
@@ -809,7 +809,6 @@ static void drawTiles(iView *camera, iView *player)
 	pie_SetColourKeyedBlack(TRUE);
 	pie_TranslateTextureEnd();
 
-
 	targetOpenList((BASE_OBJECT*)driveGetDriven());
 
 	/* ---------------------------------------------------------------- */
@@ -939,18 +938,19 @@ static void flipsAndRots(unsigned int tileNumber, unsigned int i, unsigned int j
 	const unsigned short tile = TileNumber_tile(tileNumber);
 
 	/* Used to calculate texture coordinates, which are 0-255 in value */
-	const unsigned int xMult = (256 / (PAGE_WIDTH / TILE_WIDTH));
-	const unsigned int yMult = (256 / (PAGE_HEIGHT / TILE_HEIGHT));
+	const float xMult = (1.0f / (PAGE_WIDTH / TILE_WIDTH));
+	const float yMult = (1.0f / (PAGE_HEIGHT / TILE_HEIGHT));
+	const float one = 1.0f / PAGE_WIDTH;
 
 	/*
 	 * Points for flipping the texture around if the tile is flipped or rotated
 	 * Store the source rect as four points
 	 */
-	Vector2i
-		sP1 = {1, 1},
-		sP2 = {xMult - 1, 1},
-		sP3 = {xMult - 1, yMult - 1},
-		sP4 = {1, yMult - 1},
+	Vector2f
+		sP1 = { one, one },
+		sP2 = { xMult - one, one },
+		sP3 = { xMult - one, yMult - one },
+		sP4 = { one, yMult - one },
 		sPTemp;
 
 	if (texture & TILE_XFLIP)
@@ -4049,23 +4049,23 @@ static void drawTerrainWaterTile(UDWORD i, UDWORD j)
 	if (terrainType( mapTile(actualX, actualY) ) == TER_WATER)
 	{
 		/* Used to calculate texture coordinates, which are 0-255 in value */
-		const unsigned int
-				xMult = 256 / TILES_IN_PAGE_COLUMN,
-				yMult = 256 / (2 * TILES_IN_PAGE_ROW);
+		const float xMult = 1.0f / TILES_IN_PAGE_COLUMN;
+		const float yMult = 1.0f / (2.0f * TILES_IN_PAGE_ROW);
+		const float one = 1.0f / PAGE_WIDTH;
 		const unsigned int tileNumber = getWaterTileNum();
 		TERRAIN_VERTEX vertices[3];
 
-		tileScreenInfo[i+0][j+0].u = tileTexInfo[TileNumber_tile(tileNumber)].uOffset + 1;
+		tileScreenInfo[i+0][j+0].u = tileTexInfo[TileNumber_tile(tileNumber)].uOffset + one;
 		tileScreenInfo[i+0][j+0].v = tileTexInfo[TileNumber_tile(tileNumber)].vOffset;
 
-		tileScreenInfo[i+0][j+1].u = tileTexInfo[TileNumber_tile(tileNumber)].uOffset + (xMult - 1);
+		tileScreenInfo[i+0][j+1].u = tileTexInfo[TileNumber_tile(tileNumber)].uOffset + (xMult - one);
 		tileScreenInfo[i+0][j+1].v = tileTexInfo[TileNumber_tile(tileNumber)].vOffset;
 
-		tileScreenInfo[i+1][j+1].u = tileTexInfo[TileNumber_tile(tileNumber)].uOffset + (xMult - 1);
-		tileScreenInfo[i+1][j+1].v = tileTexInfo[TileNumber_tile(tileNumber)].vOffset + (yMult - 1);
+		tileScreenInfo[i+1][j+1].u = tileTexInfo[TileNumber_tile(tileNumber)].uOffset + (xMult - one);
+		tileScreenInfo[i+1][j+1].v = tileTexInfo[TileNumber_tile(tileNumber)].vOffset + (yMult - one);
 
-		tileScreenInfo[i+1][j+0].u = tileTexInfo[TileNumber_tile(tileNumber)].uOffset + 1;
-		tileScreenInfo[i+1][j+0].v = tileTexInfo[TileNumber_tile(tileNumber)].vOffset + (yMult - 1);
+		tileScreenInfo[i+1][j+0].u = tileTexInfo[TileNumber_tile(tileNumber)].uOffset + one;
+		tileScreenInfo[i+1][j+0].v = tileTexInfo[TileNumber_tile(tileNumber)].vOffset + (yMult - one);
 
 		vertices[0] = tileScreenInfo[i + 0][j + 0];
 		vertices[0].pos.y = tileScreenInfo[i + 0][j + 0].water_height;

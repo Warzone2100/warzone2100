@@ -173,9 +173,8 @@ void texLoad(const char *fileName)
 			free(tile.bmp);
 			if (i == TILE_WIDTH) // dealing with main texture page; so register coordinates
 			{
-				// 256 is an integer hack for GLfloat texture coordinates
-				tileTexInfo[k].uOffset = xOffset / (xSize / 256);
-				tileTexInfo[k].vOffset = yOffset / (ySize / 256);
+				tileTexInfo[k].uOffset = (float)xOffset / (float)xSize;
+				tileTexInfo[k].vOffset = (float)yOffset / (float)ySize;
 				tileTexInfo[k].texPage = texPage;
 				debug(LOG_TEXTURE, "  texLoad: Registering k=%d i=%d u=%f v=%f xoff=%d yoff=%d xsize=%d ysize=%d tex=%d (%s)",
 				     k, i, tileTexInfo[k].uOffset, tileTexInfo[k].vOffset, xOffset, yOffset, xSize, ySize, texPage, fullPath);
