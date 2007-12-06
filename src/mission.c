@@ -4053,13 +4053,14 @@ void missionDestroyObjects(void)
 {
 	DROID *psDroid;
 	STRUCTURE *psStruct;
-	UBYTE Player;
+	UBYTE Player, i;
 
 	debug(LOG_NEVER, "missionDestroyObjects");
 	proj_FreeAllProjectiles();
 	for(Player = 0; Player < MAX_PLAYERS; Player++) {
 		if (Player != selectedPlayer)
 		{
+			// AI player, clear out old data
 
 			psDroid = apsDroidLists[Player];
 
@@ -4095,10 +4096,49 @@ void missionDestroyObjects(void)
 			}
 		}
 	}
+	
+	// human player, check that we do not reference the cleared out data
+	Player = selectedPlayer;
 
-	gameTime++;	// Wonderfull hack to ensure objects destroyed above get free'ed up by objmemUpdate.
+	psDroid = apsDroidLists[Player];
+	while (psDroid != NULL)
+	{
 
-	objmemUpdate();	// Not sure why but we need to call this after freeing up the droids. List house keeping?
+		if (psDroid->psBaseStruct && psDroid->psBaseStruct->died)
+		{
+			setDroidBase(psDroid, NULL);
+		}
+		for (i = 0; i < DROID_MAXWEAPS; i++)
+		{
+			if (psDroid->psActionTarget[i] && psDroid->psActionTarget[i]->died)
+			{
+				setDroidActionTarget(psDroid, NULL, i);
+			}
+		}
+		if (psDroid->psTarget && psDroid->psTarget->died)
+		{
+			setDroidTarget(psDroid, NULL);
+		}
+		psDroid = psDroid->psNext;
+	}
+
+	psStruct = apsStructLists[Player];
+	while (psStruct != NULL)
+	{
+		for (i = 0; i < STRUCT_MAXWEAPS; i++)
+		{
+			if (psStruct->psTarget[i] && psStruct->psTarget[i]->died)
+			{
+				setStructureTarget(psStruct, NULL, i);
+			}
+		}
+		psStruct = psStruct->psNext;
+	}
+
+	// FIXME: check that orders do not reference anything bad?
+
+	gameTime++;	// Wonderful hack to ensure objects destroyed above get free'ed up by objmemUpdate.
+	objmemUpdate();	// Actually free objects removed above
 }
 
 void processPreviousCampDroids(void)
