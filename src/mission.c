@@ -4113,6 +4113,14 @@ void missionDestroyObjects(void)
 			if (psDroid->psActionTarget[i] && psDroid->psActionTarget[i]->died)
 			{
 				setDroidActionTarget(psDroid, NULL, i);
+				// Clear action too if this requires a valid first action target
+				if (i == 0
+				    && psDroid->action != DACTION_MOVEFIRE
+				    && psDroid->action != DACTION_TRANSPORTIN
+				    && psDroid->action != DACTION_TRANSPORTOUT)
+				{
+					psDroid->action = DACTION_NONE;
+				}
 			}
 		}
 		if (psDroid->psTarget && psDroid->psTarget->died)
