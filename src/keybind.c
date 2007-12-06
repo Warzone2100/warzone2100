@@ -2216,20 +2216,7 @@ BOOL	bFound;
 		intObjectSelected((BASE_OBJECT*)psGotOne);
 	}
 }
-// --------------------------------------------------------------------------
-void kf_ScriptTest( void )
-{
-	char	*pBuffer;
-	UDWORD	size;
 
-	eventSaveState(1,&pBuffer, &size);
-
-	eventReset();
-
-	eventLoadState(pBuffer, size, TRUE);
-
-	free(pBuffer);
-}
 // --------------------------------------------------------------------------
 void kf_TriggerShockWave( void )
 {
