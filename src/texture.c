@@ -49,8 +49,7 @@ TILE_TEX_INFO tileTexInfo[MAX_TILES];
 
 static int firstPage; // the last used page before we start adding terrain textures
 int terrainPage; // texture ID of the terrain page
-static int mipmap_max = MIPMAP_MAX, mipmap_levels = MIPMAP_LEVELS;
-static int mipmap_user_requested = MIPMAP_MAX;
+static int mipmap_max, mipmap_levels, mipmap_user_requested = MIPMAP_MAX;
 
 void setTextureSize(int texSize)
 {
@@ -60,6 +59,7 @@ void setTextureSize(int texSize)
 		return;
 	}
 	mipmap_user_requested = texSize;
+	debug(LOG_3D, "texture size set to %d", texSize);
 }
 
 int getTextureSize()
@@ -126,6 +126,10 @@ void texLoad(const char *fileName)
 	ASSERT(_TEX_INDEX < iV_TEX_MAX, "Too many texture pages used");
 	ASSERT(MIPMAP_MAX == TILE_WIDTH && MIPMAP_MAX == TILE_HEIGHT, "Bad tile sizes");
 
+	// reset defaults
+	mipmap_max = MIPMAP_MAX;
+	mipmap_levels = MIPMAP_LEVELS;
+
 	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &glval);
 	
 	while (glval < mipmap_max * TILES_IN_PAGE_COLUMN)
@@ -145,6 +149,7 @@ void texLoad(const char *fileName)
 	{
 		mipmap_max /= 2;
 		mipmap_levels--;
+		debug(LOG_3D, "Downgrading texture quality to %d due to user setting %d", mipmap_max, mipmap_user_requested);
 	}
 	mipmap_user_requested = mipmap_max; // reduce to lowest possible
 
