@@ -320,7 +320,6 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 {
 	UDWORD				width,height;
 	MAP_SAVEHEADER		*psHeader;
-	BOOL				mapAlloc;
 
 	/* Check the file type */
 	psHeader = (MAP_SAVEHEADER *)pFileData;
@@ -364,42 +363,14 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 	}
 
 	/* See if this is the first time a map has been loaded */
-	mapAlloc = TRUE;
-	if (psMapTiles != NULL)
-	{
-		if (mapWidth == width && mapHeight == height)
-		{
-			mapAlloc = FALSE;
-		}
-		else
-		{
-			/* Clear all the objects off the map and free up the map memory */
-			freeAllDroids();
-			freeAllStructs();
-			freeAllFeatures();
-			proj_FreeAllProjectiles();
-//			free(psMapTiles);
-			free(aMapLinePoints);
-			psMapTiles = NULL;
-			aMapLinePoints = NULL;
-		}
-	}
+	ASSERT(psMapTiles == NULL, "Map has not been cleared before calling mapLoad()!");
 
 	/* Allocate the memory for the map */
-	if (mapAlloc)
-	{
-		psMapTiles = (MAPTILE *)malloc(sizeof(MAPTILE) * width*height);
-		if (psMapTiles == NULL)
-		{
-			debug( LOG_ERROR, "mapLoad: Out of memory" );
-			abort();
-			return FALSE;
-		}
-		memset(psMapTiles, 0, sizeof(MAPTILE) * width*height);
+	psMapTiles = calloc(width * height, sizeof(MAPTILE));
+	ASSERT(psMapTiles != NULL, "mapLoad: Out of memory" );
 
-		mapWidth = width;
-		mapHeight = height;
-	}
+	mapWidth = width;
+	mapHeight = height;
 
 	//load in the map data itself
 	mapLoadV3(pFileData, fileSize);
