@@ -168,7 +168,6 @@ extern UWORD	RadarZoomLevel;
 // reset the input state
 void resetInput(void);
 
-BOOL CheckObjInScrollLimits(UWORD *xPos,UWORD *zPos);
 BOOL CheckInScrollLimits(SDWORD *xPos,SDWORD *zPos);
 extern BOOL CheckScrollLimits(void);
 extern BOOL	rotActive;

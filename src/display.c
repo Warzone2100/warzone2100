@@ -1203,22 +1203,6 @@ void scroll(void)
 }
 
 
-// Check a coordinate is within the scroll limits, uses object type coords ie UWORDs.
-// Returns TRUE if edge hit.
-//
-BOOL CheckObjInScrollLimits(UWORD *xPos,UWORD *zPos)
-{
-	SDWORD xp = ((SWORD)(*xPos)) - VISIBLE_XTILES*TILE_UNITS/2;
-	SDWORD zp = ((SWORD)(*zPos)) - VISIBLE_YTILES*TILE_UNITS/2;
-	BOOL ret = CheckInScrollLimits(&xp,&zp);
-
-	*xPos = (UWORD)(xp + VISIBLE_XTILES*TILE_UNITS/2);
-	*zPos = (UWORD)(zp + VISIBLE_YTILES*TILE_UNITS/2);
-
-	return ret;
-}
-
-
 // Check a coordinate is within the scroll limits, SDWORD version.
 // Returns TRUE if edge hit.
 //

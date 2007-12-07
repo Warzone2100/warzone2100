@@ -1155,8 +1155,8 @@ BOOL	retVal = FALSE;
 SDWORD	xPos;
 SDWORD	yPos;
 
-	xPos = player.p.x +(VISIBLE_XTILES*TILE_UNITS)/2;
-	yPos = player.p.z +(VISIBLE_YTILES*TILE_UNITS)/2;
+	xPos = player.p.x + (mapWidth * TILE_UNITS) / 2;
+	yPos = player.p.z + (mapHeight * TILE_UNITS) / 2;
 
 	if( (abs(xPos-trackingCamera.target->x) <= 256) &&
 		(abs(yPos-trackingCamera.target->y) <= 256) )

@@ -44,7 +44,7 @@
 // Shift all this gubbins into a .h file if it makes it into game
 // -----------------------------------------------------------------------------
 /* Roughly one per tile */
-#define	MAX_ATMOS_PARTICLES		((VISIBLE_XTILES * VISIBLE_YTILES))
+#define	MAX_ATMOS_PARTICLES		(MAP_MAXWIDTH * MAP_MAXHEIGHT)
 #define	SNOW_SPEED_DRIFT		(40 - rand()%80)
 #define SNOW_SPEED_FALL			(0-(rand()%40 + 80))
 #define	RAIN_SPEED_DRIFT		(rand()%50)
