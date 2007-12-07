@@ -11,9 +11,6 @@ PATCHARCHIVE=mp.wz
 
 CLEANFILES=$(BASEARCHIVE) $(PATCHARCHIVE)
 
-# Remove this line when Automake 1.10 becomes standard
-MKDIR_P=$(mkdir_p)
-
 data: $(BASEARCHIVE) $(PATCHARCHIVE)
 	$(MAKE) $(AM_MAKEFLAGS) -C mods data
 

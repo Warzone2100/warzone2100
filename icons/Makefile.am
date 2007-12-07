@@ -1,6 +1,3 @@
-# Remove this line when Automake 1.10 becomes standard
-MKDIR_P=$(mkdir_p)
-
 install-data-local:
 	$(MKDIR_P) $(DESTDIR)$(icondir)
 	$(MKDIR_P) $(DESTDIR)$(applicationdir)

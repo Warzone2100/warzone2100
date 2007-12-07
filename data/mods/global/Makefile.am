@@ -8,9 +8,6 @@ GRIMARCHIVE=grim.wz
 
 CLEANFILES=$(AIVOLUTIONARCHIVE) $(GRIMARCHIVE)
 
-# Remove this line when Automake 1.10 becomes standard
-MKDIR_P=$(mkdir_p)
-
 data: $(AIVOLUTIONARCHIVE) $(GRIMARCHIVE)
 
 $(AIVOLUTIONARCHIVE): $(AIVOLUTIONLIST:%=aivolution/%)
