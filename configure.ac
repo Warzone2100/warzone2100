@@ -61,6 +61,16 @@ case ${host_os} in
 esac
 AM_CONDITIONAL([MINGW32], test "x$host_os_mingw32" = "xyes")
 
+# Set compilers to use when building for the build system in a cross compile build
+if test "x$CXX_FOR_BUILD" = "x" ; then
+    CXX_FOR_BUILD=${CXX}
+fi
+AC_SUBST(CXX_FOR_BUILD)
+
+if test "x$CC_FOR_BUILD" = "x" ; then
+    CC_FOR_BUILD=${CC}
+fi
+AC_SUBST(CC_FOR_BUILD)
 
 # Installation directories
 
