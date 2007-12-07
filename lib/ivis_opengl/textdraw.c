@@ -110,38 +110,38 @@ static void iV_initializeGLC()
 
 	if (!glcNewFontFromFamily(GLC_Font_Regular, font_family))
 	{
-		debug(LOG_ERROR, "glcNewFontFromFamily(GLC_Font_Regular (%d), \"%s\") failed", GLC_Font_Regular, font_family);
+		debug(LOG_ERROR, "iV_initializeGLC: Failed to select font family %s as regular font", font_family);
 	}
 	else
 	{
-		debug(LOG_NEVER, "glcNewFontFromFamily(GLC_Font_Regular (%d), \"%s\") succesful", GLC_Font_Regular, font_family);
+		debug(LOG_NEVER, "iV_initializeGLC: Successfully selected font family %s as regular font", font_family);
 	}
 
 	if (!glcFontFace(GLC_Font_Regular, font_face_regular))
 	{
-		debug(LOG_ERROR, "glcFontFace(GLC_Font_Regular (%d), \"%s\") failed", GLC_Font_Regular, font_face_regular);
+		debug(LOG_WARNING, "iV_initializeGLC: Failed to select the \"%s\" font face of font family %s", font_face_regular, font_family);
 	}
 	else
 	{
-		debug(LOG_NEVER, "glcFontFace(GLC_Font_Regular (%d), \"%s\") succesful", GLC_Font_Regular, font_face_regular);
+		debug(LOG_NEVER, "iV_initializeGLC: Successfully selected the \"%s\" font face of font family %s", font_face_regular, font_family);
 	}
 
 	if (!glcNewFontFromFamily(GLC_Font_Bold, font_family))
 	{
-		debug(LOG_ERROR, "glcNewFontFromFamily(GLC_Font_Bold (%d), \"%s\") failed", GLC_Font_Bold, font_family);
+		debug(LOG_ERROR, "iV_initializeGLC: Failed to select font family %s for the bold font", font_family);
 	}
 	else
 	{
-		debug(LOG_NEVER, "glcNewFontFromFamily(GLC_Font_Bold (%d), \"%s\") succesful", GLC_Font_Bold, font_family);
+		debug(LOG_NEVER, "iV_initializeGLC: Successfully selected font family %s for the bold font", font_family);
 	}
 
 	if (!glcFontFace(GLC_Font_Bold, font_face_bold))
 	{
-		debug(LOG_ERROR, "glcFontFace(GLC_Font_Bold (%d), \"%s\") failed", GLC_Font_Bold, font_face_bold);
+		debug(LOG_WARNING, "iV_initializeGLC: Failed to select the \"%s\" font face of font family %s", font_face_bold, font_family);
 	}
 	else
 	{
-		debug(LOG_NEVER, "glcFontFace(GLC_Font_Bold (%d), \"%s\") succesful", GLC_Font_Bold, font_face_bold);
+		debug(LOG_NEVER, "iV_initializeGLC: Successfully selected the \"%s\" font face of font family %s", font_face_bold, font_family);
 	}
 
 	debug(LOG_NEVER, "finished initializing GLC");
