@@ -144,6 +144,7 @@ static void	doConstructionLines(void);
 static void	drawDroidCmndNo(DROID *psDroid);
 static void	drawDroidRank(DROID *psDroid);
 static void	drawDroidSensorLock(DROID *psDroid);
+static void	calcAverageTerrainHeight(iView *player);
 BOOL	doWeDrawRadarBlips(void);
 BOOL	doWeDrawProximitys(void);
 
@@ -395,6 +396,7 @@ void draw3DScene( void )
 	if(!getWarCamStatus())
 	{
 		/* Move the autonomous camera if necessary */
+		calcAverageTerrainHeight(&player);
 		trackHeight(2 * averageCentreTerrainHeight);
 	}
 	else
@@ -492,16 +494,53 @@ void	setProximityDraw(BOOL val)
 }
 /***************************************************************************/
 
+static void calcAverageTerrainHeight(iView *player)
+{
+	int numTilesAveraged = 0, i, j;
+
+	/*	We track the height here - so make sure we get the average heights
+		of the tiles directly underneath us
+	*/
+	averageCentreTerrainHeight = 0;
+	for (i = VISIBLE_YTILES / 2 - 4; i < VISIBLE_YTILES / 2 + 4; i++)
+	{
+		for (j = VISIBLE_XTILES / 2 - 4; j < VISIBLE_XTILES / 2 + 4; j++)
+		{
+			if (tileOnMap(playerXTile + j, playerZTile + i))
+			{
+				/* Get a pointer to the tile at this location */
+				MAPTILE *psTile = mapTile(playerXTile + j, playerZTile + i);
+
+				averageCentreTerrainHeight += psTile->height * ELEVATION_SCALE;
+				numTilesAveraged++;
+			}
+		}
+	}
+	/* Work out the average height. We use this information to keep the player camera
+	 * above the terrain. */
+	if (numTilesAveraged) // might not be if off map
+	{
+		MAPTILE *psTile = mapTile(playerXTile + VISIBLE_XTILES / 2, playerZTile + VISIBLE_YTILES / 2);
+
+		averageCentreTerrainHeight /= numTilesAveraged;
+		if (averageCentreTerrainHeight < psTile->height * ELEVATION_SCALE)
+		{
+			averageCentreTerrainHeight = psTile->height * ELEVATION_SCALE;
+		}
+	}
+	else
+	{
+		averageCentreTerrainHeight = ELEVATION_SCALE * TILE_UNITS;
+	}
+}
 
 static void drawTiles(iView *camera, iView *player)
 {
 	UDWORD i, j;
-	MAPTILE *psTile;
 	BOOL bWaterTile = FALSE;
 	BOOL PushedDown = FALSE;
 	UBYTE TileIllum;
 	int shiftVal = 0;
-	int numTilesAveraged = 0;
 	static float angle = 0.0f;
 
 	// Animate the water texture, just cycles the V coordinate through half the tiles height.
@@ -561,10 +600,6 @@ static void drawTiles(iView *camera, iView *player)
 	/* ---------------------------------------------------------------- */
 	/* Rotate and project all the tiles within the grid                 */
 	/* ---------------------------------------------------------------- */
-	/*	We track the height here - so make sure we get the average heights
-		of the tiles in the grid
-	*/
-	averageCentreTerrainHeight = 0;
 	for (i = 0; i < visibleTiles.y+1; i++)
 	{
 		/* Go through the x's */
@@ -593,7 +628,7 @@ static void drawTiles(iView *camera, iView *player)
 				BOOL bEdgeTile;
 
 				/* Get a pointer to the tile at this location */
-				psTile = mapTile(playerXTile + j, playerZTile + i);
+				MAPTILE *psTile = mapTile(playerXTile + j, playerZTile + i);
 				if (terrainType(psTile) == TER_WATER)
 				{
 					tileScreenInfo[i][j].bWater = TRUE;
@@ -606,16 +641,6 @@ static void drawTiles(iView *camera, iView *player)
 				}
 
 				tileScreenInfo[i][j].pos.y = map_TileHeight(playerXTile + j, playerZTile + i);
-
-				/* Is it in the centre and therefore worth averaging height over? */
-				if ( i > MIN_TILE_Y &&
-					 i < MAX_TILE_Y &&
-					 j > MIN_TILE_X &&
-					 j < MAX_TILE_X )
-				{
-					averageCentreTerrainHeight += tileScreenInfo[i][j].pos.y;
-					numTilesAveraged++;
-				}
 
 				if(getRevealStatus())
 				{
@@ -709,16 +734,6 @@ static void drawTiles(iView *camera, iView *player)
 			tileScreenInfo[i][j].screen.x = screen.x;
 			tileScreenInfo[i][j].screen.y = screen.y;
 		}
-	}
-
-	/* Work out the average height */
-	if(numTilesAveraged) // might not be if off map
-	{
-		averageCentreTerrainHeight /= numTilesAveraged;
-	}
-	else
-	{
-		averageCentreTerrainHeight = ELEVATION_SCALE * TILE_UNITS;
 	}
 
 	/* This is done here as effects can light the terrain - pause mode problems though */
