@@ -68,6 +68,7 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"work harder", kf_FinishResearch},
 	{"no faults", kf_NoFaults},//carol vorderman
 	{"tileinfo", kf_TileInfo}, // output debug info about a tile
+	{"showfps", kf_ToggleFPS},	//displays your average FPS
 	{"end of list",NULL}
 };
 

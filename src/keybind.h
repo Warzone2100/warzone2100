@@ -24,6 +24,7 @@
 extern void	kf_HalveHeights( void );
 extern void	kf_DebugDroidInfo( void );
 extern void	kf_BuildInfo( void );
+extern void	kf_ToggleFPS(void);		//FPS counter NOT same as kf_Framerate! -Q
 extern void	kf_FrameRate( void );
 extern void	kf_ShowNumObjects( void );
 extern void	kf_ToggleRadar( void );

@@ -302,7 +302,11 @@ void	kf_SetToughUnitsLevel( void )
 	}
 }
 // --------------------------------------------------------------------------
-
+void kf_ToggleFPS(void) //This shows *just FPS* and is always visable (when active) -Q.
+{
+	showFPS ^= 1;
+	CONPRINTF(ConsoleString, (ConsoleString, "FPS display is %s", showFPS ? "Enabled" : "Disabled"));
+}
 /* Writes out the frame rate */
 void	kf_FrameRate( void )
 {

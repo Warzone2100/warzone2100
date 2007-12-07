@@ -219,7 +219,9 @@ UDWORD	terrainMidY;
 static unsigned int underwaterTile = WATER_TILE;
 static unsigned int rubbleTile = BLOCKING_RUBBLE_TILE;
 
+int showFPS = 0;	// default OFF, turn ON via console command 'showfps'
 UDWORD geoOffset;
+
 static int averageCentreTerrainHeight;
 static	BOOL	bReloadBars = TRUE;
 static	BOOL	bEnergyBars = TRUE;
@@ -227,7 +229,6 @@ static	BOOL	bTinyBars	= FALSE;
 
 static UDWORD	lastTargetAssignation = 0;
 static UDWORD	lastDestAssignation = 0;
-
 static BOOL	bSensorTargetting = FALSE;
 static BOOL	bDestTargetting = FALSE;
 static BASE_OBJECT *psSensorObj = NULL;
@@ -283,7 +284,7 @@ SDWORD	getCentreZ( void )
 void draw3DScene( void )
 {
 	char buildInfo[255];
-
+	char	buf[10];	//holds FPS info, should be more than enough space. -Q
 	BOOL bPlayerHasHQ = FALSE;
 
 	// the world centre - used for decaying lighting etc
@@ -364,7 +365,11 @@ void draw3DScene( void )
 	{
 		displayMultiChat();
 	}
-
+	if (showFPS)
+	{
+		sprintf(buf, "FPS: %02u", frameGetAverageRate());
+		iV_DrawText(buf, RET_X,478 + E_H);
+	}
 	if(getDebugMappingStatus() && !demoGetStatus() && !gamePaused())
 	{
 		iV_DrawText( "DEBUG ", RET_X + 134, 440 + E_H );
