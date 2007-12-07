@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-11-11 18:27+0100\n"
+"POT-Creation-Date: 2007-12-07 20:25+0100\n"
 "PO-Revision-Date: 2007-04-13 14:34+0200\n"
 "Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
 "Language-Team: Latin\n"
@@ -49,20 +49,20 @@ msgstr ""
 msgid "Cyan"
 msgstr ""
 
-#: src/display.c:1852
+#: src/display.c:1725
 msgid "Cannot Build. Oil Resource Burning."
 msgstr ""
 
-#: src/display.c:2004
+#: src/display.c:1872
 #, c-format
 msgid "%s - Damage %d%% - Kills %d, %s"
 msgstr ""
 
-#: src/display.c:2250
+#: src/display.c:2109
 msgid "Truck ordered to build Oil Derrick"
 msgstr ""
 
-#: src/multistat.c:103 src/configuration.c:372 src/configuration.c:373
+#: src/multistat.c:103 src/configuration.c:373 src/configuration.c:374
 msgid "Player"
 msgstr ""
 
@@ -106,124 +106,132 @@ msgstr ""
 msgid "%s Forms An Alliance With %s"
 msgstr ""
 
-#: src/multigifts.c:826
+#: src/multigifts.c:825
 #, c-format
 msgid "You Discover Blueprints For %s"
 msgstr ""
 
-#: src/hci.c:1038 src/hci.c:3812 src/hci.c:3966 src/hci.c:4408 src/hci.c:5629
-#: src/transporter.c:292 src/transporter.c:381 src/transporter.c:878
-#: src/intorder.c:660 src/loadsave.c:257 src/intelmap.c:525
-#: src/multimenu.c:450 src/multimenu.c:1280
+#: src/hci.c:1038 src/hci.c:3897 src/hci.c:4051 src/hci.c:4493 src/hci.c:5714
+#: src/transporter.c:283 src/transporter.c:372 src/transporter.c:865
+#: src/intorder.c:660 src/loadsave.c:257 src/intelmap.c:527
+#: src/multimenu.c:451 src/multimenu.c:1281
 msgid "Close"
 msgstr ""
 
-#: src/hci.c:1670 src/mission.c:3481 src/loop.c:479 src/loop.c:491
+#: src/hci.c:1718 src/mission.c:3479 src/loop.c:475 src/loop.c:487
 msgid "GAME SAVED!"
 msgstr ""
 
-#: src/hci.c:3714 src/keymap.c:294
+#: src/hci.c:3799 src/keymap.c:294
 msgid "Commanders"
 msgstr ""
 
-#: src/hci.c:3730 src/keymap.c:293
+#: src/hci.c:3815 src/keymap.c:293
 msgid "Intelligence Display"
 msgstr ""
 
-#: src/hci.c:3746 src/keymap.c:289
+#: src/hci.c:3831 src/keymap.c:289
 msgid "Manufacture"
 msgstr ""
 
-#: src/hci.c:3762 src/keymap.c:292
+#: src/hci.c:3847 src/keymap.c:292
 msgid "Design"
 msgstr ""
 
-#: src/hci.c:3778 src/keymap.c:290
+#: src/hci.c:3863 src/keymap.c:290
 #, fuzzy
 msgid "Research"
 msgstr "Invenio"
 
-#: src/hci.c:3794 src/keymap.c:291
+#: src/hci.c:3879 src/keymap.c:291
 #, fuzzy
 msgid "Build"
 msgstr "Construo"
 
-#: src/hci.c:3874 src/multiint.c:789 src/multiint.c:793
+#: src/hci.c:3959 src/multiint.c:793 src/multiint.c:797
 #, fuzzy
 msgid "Power"
 msgstr "Vigor"
 
-#: src/hci.c:4036 src/ingameop.c:278
+#: src/hci.c:4121 src/ingameop.c:276
 msgid "Load Game"
 msgstr ""
 
-#: src/hci.c:4044 src/mission.c:3387 src/mission.c:3534 src/ingameop.c:280
-#: src/ingameop.c:419
+#: src/hci.c:4129 src/mission.c:3385 src/mission.c:3532 src/ingameop.c:278
+#: src/ingameop.c:417
 msgid "Save Game"
 msgstr ""
 
-#: src/hci.c:4095
+#: src/hci.c:4180
 msgid "Unit"
 msgstr ""
 
-#: src/hci.c:4104
+#: src/hci.c:4189
 msgid "Struct"
 msgstr ""
 
-#: src/hci.c:4113
+#: src/hci.c:4198
 msgid "Feat"
 msgstr ""
 
-#: src/hci.c:4127 src/ingameop.c:122 src/ingameop.c:261 src/ingameop.c:266
+#: src/hci.c:4212 src/ingameop.c:120 src/ingameop.c:259 src/ingameop.c:264
 msgid "Quit"
 msgstr ""
 
-#: src/hci.c:4128
+#: src/hci.c:4213
 msgid "Exit Game"
 msgstr ""
 
-#: src/hci.c:4484 src/intdisplay.c:274 src/intdisplay.c:317
-#: src/intdisplay.c:364
+#: src/hci.c:4569 src/intdisplay.c:275 src/intdisplay.c:318
+#: src/intdisplay.c:365
 msgid "Progress Bar"
 msgstr ""
 
-#: src/hci.c:5544
+#: src/hci.c:5629
 msgid "Factory Delivery Point"
 msgstr ""
 
-#: src/hci.c:5563
+#: src/hci.c:5648
 msgid "Loop Production"
 msgstr ""
 
-#: src/transporter.c:431 src/transporter.c:485
+#: src/hci.c:5739
+msgid "Tab Scroll left"
+msgstr ""
+
+#: src/hci.c:5756
+msgid "Tab Scroll right"
+msgstr ""
+
+#: src/transporter.c:422 src/transporter.c:476
 msgid "Launch Transport"
 msgstr ""
 
-#: src/transporter.c:1866
+#: src/transporter.c:1851
 msgid "Reinforcements landing"
 msgstr ""
 
-#: src/mission.c:2853
+#: src/mission.c:2851
 msgid "Load Transport"
 msgstr ""
 
-#: src/mission.c:3334
+#: src/mission.c:3332
 msgid "OBJECTIVE ACHIEVED"
 msgstr ""
 
-#: src/mission.c:3340
+#: src/mission.c:3338
 msgid "OBJECTIVE FAILED"
 msgstr ""
 
-#: src/mission.c:3366 src/mission.c:3403 src/mission.c:3550
+#: src/mission.c:3364 src/mission.c:3401 src/mission.c:3548
 msgid "Quit To Main Menu"
 msgstr ""
 
-#: src/mission.c:3374
+#: src/mission.c:3372
 msgid "Continue Game"
 msgstr ""
 
-#: src/mission.c:3397 src/mission.c:3531 src/ingameop.c:415 src/frontend.c:419
+#: src/mission.c:3395 src/mission.c:3529 src/ingameop.c:413 src/frontend.c:427
 msgid "Load Saved Game"
 msgstr ""
 
@@ -231,372 +239,372 @@ msgstr ""
 msgid "Unit Lost!"
 msgstr ""
 
-#: src/droid.c:1970
+#: src/droid.c:1950
 msgid "Structure Restored"
 msgstr ""
 
-#: src/droid.c:3875
+#: src/droid.c:3847
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3889
+#: src/droid.c:3861
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3902
+#: src/droid.c:3874
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3906
+#: src/droid.c:3878
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:4183
+#: src/droid.c:4155
 msgid "Rookie"
 msgstr ""
 
-#: src/droid.c:4184
+#: src/droid.c:4156
 msgctxt "rank"
 msgid "Green"
 msgstr ""
 
-#: src/droid.c:4185
+#: src/droid.c:4157
 #, fuzzy
 msgid "Trained"
 msgstr "Exercitum"
 
-#: src/droid.c:4186
+#: src/droid.c:4158
 msgid "Regular"
 msgstr ""
 
-#: src/droid.c:4187
+#: src/droid.c:4159
 msgid "Professional"
 msgstr ""
 
-#: src/droid.c:4188
+#: src/droid.c:4160
 #, fuzzy
 msgid "Veteran"
 msgstr "Veteranum"
 
-#: src/droid.c:4189
+#: src/droid.c:4161
 msgid "Elite"
 msgstr ""
 
-#: src/droid.c:4190
+#: src/droid.c:4162
 msgid "Special"
 msgstr ""
 
-#: src/droid.c:4191
+#: src/droid.c:4163
 #, fuzzy
 msgid "Hero"
 msgstr "Heros"
 
-#: src/multiint.c:349 src/multiint.c:1360 src/multilimit.c:173
+#: src/multiint.c:350 src/multiint.c:1364 src/multilimit.c:173
 msgid "Accept Settings"
 msgstr ""
 
-#: src/multiint.c:360
+#: src/multiint.c:361
 msgid "IP Address or Machine Name"
 msgstr ""
 
-#: src/multiint.c:401
+#: src/multiint.c:402
 msgid "CONNECTION"
 msgstr ""
 
-#: src/multiint.c:404 src/multiint.c:447 src/multiint.c:621 src/multiint.c:854
-#: src/keyedit.c:379 src/multilimit.c:165
+#: src/multiint.c:405 src/multiint.c:448 src/multiint.c:625 src/multiint.c:858
+#: src/keyedit.c:380 src/multilimit.c:165
 msgid "Return To Previous Screen"
 msgstr ""
 
-#: src/multiint.c:414
+#: src/multiint.c:415
 msgid "Lobby"
 msgstr ""
 
-#: src/multiint.c:415
+#: src/multiint.c:416
 msgid "IP"
 msgstr ""
 
-#: src/multiint.c:607
+#: src/multiint.c:611
 msgid "Searching"
 msgstr ""
 
-#: src/multiint.c:618
+#: src/multiint.c:622
 msgid "GAMES"
 msgstr ""
 
-#: src/multiint.c:628
+#: src/multiint.c:632
 msgid "Refresh Games List"
 msgstr ""
 
-#: src/multiint.c:703
+#: src/multiint.c:707
 msgid "OPTIONS"
 msgstr ""
 
-#: src/multiint.c:705
+#: src/multiint.c:709
 msgid "Select Game Name"
 msgstr ""
 
-#: src/multiint.c:706
+#: src/multiint.c:710
 msgid "Select Map"
 msgstr ""
 
-#: src/multiint.c:711
+#: src/multiint.c:715
 msgid "Game"
 msgstr ""
 
-#: src/multiint.c:713
+#: src/multiint.c:717
 msgid "Mayhem"
 msgstr ""
 
-#: src/multiint.c:715
+#: src/multiint.c:719
 msgid "Skirmish"
 msgstr ""
 
-#: src/multiint.c:736
+#: src/multiint.c:740
 msgid "Select Player Name"
 msgstr ""
 
-#: src/multiint.c:739 src/frontend.c:608
+#: src/multiint.c:743 src/frontend.c:620
 msgid "Fog"
 msgstr ""
 
-#: src/multiint.c:741 src/frontend.c:615 src/frontend.c:722
+#: src/multiint.c:745 src/frontend.c:627 src/frontend.c:734
 msgid "Fog Of War"
 msgstr ""
 
-#: src/multiint.c:742
+#: src/multiint.c:746
 msgid "Distance Fog"
 msgstr ""
 
-#: src/multiint.c:755 src/multimenu.c:736
+#: src/multiint.c:759 src/multimenu.c:737
 msgid "Alliances"
 msgstr ""
 
-#: src/multiint.c:758
+#: src/multiint.c:762
 msgid "No Alliances"
 msgstr ""
 
-#: src/multiint.c:760
+#: src/multiint.c:764
 msgid "Allow Alliances"
 msgstr ""
 
-#: src/multiint.c:764 src/multiint.c:1985
+#: src/multiint.c:768 src/multiint.c:1989
 msgid "Locked Teams"
 msgstr ""
 
-#: src/multiint.c:796
+#: src/multiint.c:800
 msgid "Low Power Levels"
 msgstr ""
 
-#: src/multiint.c:798
+#: src/multiint.c:802
 msgid "Medium Power Levels"
 msgstr ""
 
-#: src/multiint.c:800
+#: src/multiint.c:804
 msgid "High Power Levels"
 msgstr ""
 
-#: src/multiint.c:820 src/multiint.c:824
+#: src/multiint.c:824 src/multiint.c:828
 msgid "Base"
 msgstr ""
 
-#: src/multiint.c:827
+#: src/multiint.c:831
 msgid "Start with No Bases"
 msgstr ""
 
-#: src/multiint.c:829
+#: src/multiint.c:833
 msgid "Start with Bases"
 msgstr ""
 
-#: src/multiint.c:831
+#: src/multiint.c:835
 msgid "Start with Advanced Bases"
 msgstr ""
 
-#: src/multiint.c:861
+#: src/multiint.c:865
 msgid "Start Hosting Game"
 msgstr ""
 
-#: src/multiint.c:869
+#: src/multiint.c:873
 msgid "Set Structure Limits"
 msgstr ""
 
-#: src/multiint.c:1241
+#: src/multiint.c:1245
 msgid "PLAYERS"
 msgstr ""
 
-#: src/multiint.c:1391
+#: src/multiint.c:1395
 msgid "CHAT"
 msgstr ""
 
-#: src/multiint.c:1926
+#: src/multiint.c:1930
 msgid "Host is Starting Game"
 msgstr ""
 
-#: src/multiint.c:2691
+#: src/multiint.c:2698
 msgid "Players"
 msgstr ""
 
-#: src/keybind.c:1154
+#: src/keybind.c:1104
 msgid "View Aligned to North"
 msgstr ""
 
-#: src/keybind.c:1178 src/intelmap.c:242
+#: src/keybind.c:1135 src/intelmap.c:244
 msgid "PAUSED"
 msgstr ""
 
-#: src/keybind.c:1210
+#: src/keybind.c:1174
 msgid "Researched EVERYTHING for you!"
 msgstr ""
 
-#: src/keybind.c:1241 src/keybind.c:1248
+#: src/keybind.c:1205 src/keybind.c:1212
 msgid "Energy bars display toggled"
 msgstr ""
 
-#: src/keybind.c:1314
+#: src/keybind.c:1277
 msgid "Unable to locate any resource extractors!"
 msgstr ""
 
-#: src/keybind.c:1580
+#: src/keybind.c:1542
 msgid "Enemy destroyed by cheating!"
 msgstr ""
 
-#: src/keybind.c:2191
+#: src/keybind.c:2153
 msgid "Centered on player HQ, direction NORTH"
 msgstr ""
 
-#: src/keybind.c:2203
+#: src/keybind.c:2165
 msgid "Unable to locate HQ!"
 msgstr ""
 
-#: src/keybind.c:2219
+#: src/keybind.c:2181
 msgid "Formation speed limiting OFF"
 msgstr ""
 
-#: src/keybind.c:2223
+#: src/keybind.c:2185
 msgid "Formation speed limiting ON"
 msgstr ""
 
-#: src/keybind.c:2353 src/keybind.c:2380 src/keybind.c:2395
+#: src/keybind.c:2302 src/keybind.c:2329 src/keybind.c:2344
 msgid "Game Speed Reset"
 msgstr ""
 
-#: src/keybind.c:2355
+#: src/keybind.c:2304
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr ""
 
-#: src/keybind.c:2382
+#: src/keybind.c:2331
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr ""
 
-#: src/keybind.c:2408
+#: src/keybind.c:2357
 msgid "Build menu will reopen"
 msgstr ""
 
-#: src/keybind.c:2412
+#: src/keybind.c:2361
 msgid "Build menu will not reopen"
 msgstr ""
 
-#: src/intdisplay.c:264 src/intdisplay.c:309 src/intdisplay.c:357
+#: src/intdisplay.c:265 src/intdisplay.c:310 src/intdisplay.c:358
 #, fuzzy
 msgid "Power Accrued"
 msgstr "Vigor Adquirāvi"
 
-#: src/structure.c:2945
+#: src/structure.c:2915
 msgid "Command Control Limit Reached - Production Halted"
 msgstr ""
 
-#: src/structure.c:6108 src/structure.c:6130
+#: src/structure.c:6074 src/structure.c:6096
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/structure.c:6167
+#: src/structure.c:6133
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr ""
 
-#: src/structure.c:6182
+#: src/structure.c:6148
 #, c-format
 msgid "%s - Damage %u%%"
 msgstr ""
 
-#: src/structure.c:6302 src/structure.c:6353
+#: src/structure.c:6268 src/structure.c:6319
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr ""
 
-#: src/structure.c:6578
+#: src/structure.c:6544
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.c:6618
+#: src/structure.c:6584
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.c:6642
+#: src/structure.c:6608
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.c:6666
+#: src/structure.c:6632
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.c:6675
+#: src/structure.c:6641
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.c:6703
+#: src/structure.c:6669
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.c:6710
+#: src/structure.c:6676
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 
-#: src/keyedit.c:357
+#: src/keyedit.c:358
 msgid "KEY MAPPING"
 msgstr ""
 
-#: src/keyedit.c:384
+#: src/keyedit.c:385
 msgid "Select Default"
 msgstr ""
 
-#: src/selection.c:123
+#: src/selection.c:116
 #, c-format
 msgid "%u unit selected"
 msgid_plural "%u units selected"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/selection.c:440 src/selection.c:529 src/selection.c:607
+#: src/selection.c:433 src/selection.c:522 src/selection.c:600
 msgid "Unable to locate any repair units!"
 msgstr ""
 
-#: src/selection.c:443
+#: src/selection.c:436
 msgid "Unable to locate any Trucks!"
 msgstr ""
 
-#: src/selection.c:446
+#: src/selection.c:439
 msgid "Unable to locate any Sensor Units!"
 msgstr ""
 
-#: src/selection.c:449
+#: src/selection.c:442
 msgid "Unable to locate any Commanders!"
 msgstr ""
 
@@ -613,114 +621,114 @@ msgstr ""
 msgid "Research Award"
 msgstr ""
 
-#: src/scores.c:95
+#: src/scores.c:96
 #, c-format
 msgid "Own Units: %u"
 msgstr ""
 
-#: src/scores.c:96
+#: src/scores.c:97
 #, c-format
 msgid "Enemy Units: %u"
 msgstr ""
 
-#: src/scores.c:97
+#: src/scores.c:98
 #, c-format
 msgid "Own Structures: %u"
 msgstr ""
 
-#: src/scores.c:98
+#: src/scores.c:99
 #, c-format
 msgid "Enemy Structures: %u"
 msgstr ""
 
-#: src/scores.c:99
+#: src/scores.c:100
 #, c-format
 msgid "Units Manufactured: %u"
 msgstr ""
 
-#: src/scores.c:100
+#: src/scores.c:101
 #, c-format
 msgid "Total Units: %u"
 msgstr ""
 
-#: src/scores.c:101
+#: src/scores.c:102
 #, c-format
 msgid "Structures Built: %u"
 msgstr ""
 
-#: src/scores.c:102
+#: src/scores.c:103
 #, c-format
 msgid "Total Structures: %u"
 msgstr ""
 
-#: src/scores.c:104
+#: src/scores.c:105
 #, c-format
 msgid "Rookie: %u"
 msgstr ""
 
-#: src/scores.c:105
+#: src/scores.c:106
 #, fuzzy, c-format
 msgid "Green: %u"
 msgstr "Viridum"
 
-#: src/scores.c:106
+#: src/scores.c:107
 #, fuzzy, c-format
 msgid "Trained: %u"
 msgstr "Exercitum"
 
-#: src/scores.c:107
+#: src/scores.c:108
 #, c-format
 msgid "Regular: %u"
 msgstr ""
 
-#: src/scores.c:108
+#: src/scores.c:109
 #, c-format
 msgid "Professional: %u"
 msgstr ""
 
-#: src/scores.c:109
+#: src/scores.c:110
 #, fuzzy, c-format
 msgid "Veteran: %u"
 msgstr "Veteranum"
 
-#: src/scores.c:110
+#: src/scores.c:111
 #, c-format
 msgid "Elite: %u"
 msgstr ""
 
-#: src/scores.c:111
+#: src/scores.c:112
 #, c-format
 msgid "Special: %u"
 msgstr ""
 
-#: src/scores.c:112
+#: src/scores.c:113
 #, fuzzy, c-format
 msgid "Hero: %u"
 msgstr "Heros"
 
-#: src/scores.c:319
+#: src/scores.c:325
 msgid "Unit Losses"
 msgstr ""
 
-#: src/scores.c:320
+#: src/scores.c:326
 msgid "Structure Losses"
 msgstr ""
 
-#: src/scores.c:321
+#: src/scores.c:327
 msgid "Force Information"
 msgstr ""
 
-#: src/scores.c:405
+#: src/scores.c:406
 #, c-format
 msgid "ARTIFACTS RECOVERED: %d"
 msgstr ""
 
-#: src/scores.c:410
+#: src/scores.c:411
 #, c-format
 msgid "Mission Time - %s"
 msgstr ""
 
-#: src/scores.c:415
+#: src/scores.c:416
 #, c-format
 msgid "Total Game Time - %s"
 msgstr ""
@@ -813,23 +821,23 @@ msgstr ""
 msgid "Assign VTOL Factory Production"
 msgstr ""
 
-#: src/ingameop.c:119 src/ingameop.c:153 src/ingameop.c:270
+#: src/ingameop.c:117 src/ingameop.c:151 src/ingameop.c:268
 msgid "Resume Game"
 msgstr ""
 
-#: src/ingameop.c:156 src/frontend.c:808
+#: src/ingameop.c:154 src/frontend.c:820
 msgid "Voice Volume"
 msgstr ""
 
-#: src/ingameop.c:161 src/frontend.c:812
+#: src/ingameop.c:159 src/frontend.c:824
 msgid "FX Volume"
 msgstr ""
 
-#: src/ingameop.c:166 src/frontend.c:816
+#: src/ingameop.c:164 src/frontend.c:828
 msgid "Music Volume"
 msgstr ""
 
-#: src/ingameop.c:273 src/frontend.c:227
+#: src/ingameop.c:271 src/frontend.c:235
 msgid "Options"
 msgstr ""
 
@@ -937,280 +945,302 @@ msgstr ""
 msgid "Disable sound"
 msgstr ""
 
-#: src/design.c:468 src/design.c:490 src/design.c:3657
+#: src/design.c:457 src/design.c:477 src/design.c:3535
 msgid "New Vehicle"
 msgstr ""
 
-#: src/design.c:537
+#: src/design.c:524
 msgid "Vehicle Body"
 msgstr ""
 
-#: src/design.c:559
+#: src/design.c:546
 msgid "Vehicle Propulsion"
 msgstr ""
 
-#: src/design.c:582 src/design.c:607 src/design.c:633
+#: src/design.c:569 src/design.c:594 src/design.c:620
 msgid "Vehicle Turret"
 msgstr ""
 
-#: src/design.c:654
+#: src/design.c:641
 msgid "Delete Design"
 msgstr ""
 
-#: src/design.c:708 src/design.c:757
+#: src/design.c:695 src/design.c:743
 msgid "Kinetic Armour"
 msgstr ""
 
-#: src/design.c:717 src/design.c:769
+#: src/design.c:704 src/design.c:754
 msgid "Thermal Armour"
 msgstr ""
 
-#: src/design.c:733 src/design.c:790
+#: src/design.c:720 src/design.c:774
 msgid "Engine Output"
 msgstr ""
 
-#: src/design.c:741 src/design.c:800 src/design.c:1651 src/design.c:1692
-#: src/design.c:1717 src/design.c:1735 src/design.c:1760 src/design.c:1778
-#: src/design.c:1820 src/design.c:1855 src/design.c:1994 src/design.c:2011
-#: src/design.c:2046 src/design.c:2082
+#: src/design.c:728 src/design.c:783 src/design.c:1582 src/design.c:1623
+#: src/design.c:1648 src/design.c:1666 src/design.c:1691 src/design.c:1709
+#: src/design.c:1751 src/design.c:1786 src/design.c:1922 src/design.c:1939
+#: src/design.c:1974 src/design.c:2010
 msgid "Weight"
 msgstr ""
 
-#: src/design.c:831 src/design.c:851
+#: src/design.c:814 src/design.c:834
 msgid "Total Power Required"
 msgstr ""
 
-#: src/design.c:864 src/design.c:885
+#: src/design.c:847 src/design.c:868
 msgid "Total Body Points"
 msgstr ""
 
-#: src/design.c:1070 src/design.c:1102
+#: src/design.c:1052 src/design.c:1084
 msgid "Power Usage"
 msgstr ""
 
-#: src/design.c:1403
+#: src/design.c:1336
 msgid "Transporter"
 msgstr ""
 
-#: src/design.c:1633
+#: src/design.c:1564
 msgid "Sensor Range"
 msgstr ""
 
-#: src/design.c:1642
+#: src/design.c:1573
 msgid "Sensor Power"
 msgstr ""
 
-#: src/design.c:1683
+#: src/design.c:1614
 msgid "ECM Power"
 msgstr ""
 
-#: src/design.c:1709 src/design.c:1726 src/design.c:1752 src/design.c:1769
+#: src/design.c:1640 src/design.c:1657 src/design.c:1683 src/design.c:1700
 msgid "Build Points"
 msgstr ""
 
-#: src/design.c:1796 src/design.c:1828
+#: src/design.c:1727 src/design.c:1759
 msgid "Range"
 msgstr ""
 
-#: src/design.c:1804 src/design.c:1837
+#: src/design.c:1735 src/design.c:1768
 msgid "Damage"
 msgstr ""
 
-#: src/design.c:1812 src/design.c:1846
+#: src/design.c:1743 src/design.c:1777
 msgid "Rate-of-Fire"
 msgstr ""
 
-#: src/design.c:1986 src/design.c:2002
+#: src/design.c:1914 src/design.c:1930
 msgid "Air Speed"
 msgstr ""
 
-#: src/design.c:2022 src/design.c:2055
+#: src/design.c:1950 src/design.c:1983
 msgid "Road Speed"
 msgstr ""
 
-#: src/design.c:2030 src/design.c:2064
+#: src/design.c:1958 src/design.c:1992
 msgid "Off-Road Speed"
 msgstr ""
 
-#: src/design.c:2038 src/design.c:2073
+#: src/design.c:1966 src/design.c:2001
 msgid "Water Speed"
 msgstr ""
 
-#: src/design.c:2203
+#: src/design.c:2131
 msgid "Weapons"
 msgstr "Armorum"
 
-#: src/design.c:2227
+#: src/design.c:2155
 msgid "Systems"
 msgstr ""
 
-#: src/design.c:2246
-msgid "Command Turrets"
-msgstr ""
-
-#: src/frontend.c:224
+#: src/frontend.c:232
 msgid "Single Player Campaign"
 msgstr ""
 
-#: src/frontend.c:225
+#: src/frontend.c:233
 msgid "Multi Player Game"
 msgstr ""
 
-#: src/frontend.c:226 src/frontend.c:280
+#: src/frontend.c:234 src/frontend.c:288
 msgid "Tutorial"
 msgstr ""
 
-#: src/frontend.c:229
+#: src/frontend.c:237
 msgid "Quit Game"
 msgstr ""
 
-#: src/frontend.c:231
+#: src/frontend.c:239
 msgid "MAIN MENU"
 msgstr ""
 
-#: src/frontend.c:281
+#: src/frontend.c:289
 msgid "Fast Play"
 msgstr ""
 
-#: src/frontend.c:282
+#: src/frontend.c:290
 msgid "TUTORIALS"
 msgstr ""
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.c:284 src/frontend.c:340 src/frontend.c:466 src/frontend.c:516
-#: src/frontend.c:674 src/frontend.c:820 src/frontend.c:925
+#: src/frontend.c:292 src/frontend.c:348 src/frontend.c:474 src/frontend.c:525
+#: src/frontend.c:686 src/frontend.c:832 src/frontend.c:935
+#: src/frontend.c:1100
 msgctxt "menu"
 msgid "Return"
 msgstr ""
 
-#: src/frontend.c:336
+#: src/frontend.c:344
 msgid "Load Campaign"
 msgstr ""
 
-#: src/frontend.c:337
+#: src/frontend.c:345
 msgid "New Campaign"
 msgstr ""
 
-#: src/frontend.c:339
+#: src/frontend.c:347
 msgid "SINGLE PLAYER"
 msgstr ""
 
-#: src/frontend.c:459
+#: src/frontend.c:467
 msgid "MULTI PLAYER"
 msgstr ""
 
-#: src/frontend.c:461
+#: src/frontend.c:469
 msgid "Host Game"
 msgstr ""
 
-#: src/frontend.c:462
+#: src/frontend.c:470
 msgid "Join Game"
 msgstr ""
 
-#: src/frontend.c:464
+#: src/frontend.c:472
 msgid "One Player Skirmish"
 msgstr ""
 
-#: src/frontend.c:511 src/frontend.c:823 src/frontend.c:928
+#: src/frontend.c:519 src/frontend.c:835 src/frontend.c:1103
 msgid "GAME OPTIONS"
 msgstr ""
 
-#: src/frontend.c:512
+#: src/frontend.c:520
 msgid "Game Options"
 msgstr ""
 
-#: src/frontend.c:513
+#: src/frontend.c:521
 msgid "Graphics Options"
 msgstr ""
 
-#: src/frontend.c:514
+#: src/frontend.c:523
 msgid "Audio Options"
 msgstr ""
 
-#: src/frontend.c:515
+#: src/frontend.c:524
 msgid "Key Mappings"
 msgstr ""
 
-#: src/frontend.c:584
+#: src/frontend.c:596
 msgid "Reverse Mouse"
 msgstr ""
 
-#: src/frontend.c:587 src/frontend.c:599 src/frontend.c:652 src/frontend.c:665
-#: src/frontend.c:697 src/frontend.c:711 src/frontend.c:747 src/frontend.c:756
+#: src/frontend.c:599 src/frontend.c:611 src/frontend.c:664 src/frontend.c:677
+#: src/frontend.c:709 src/frontend.c:723 src/frontend.c:759 src/frontend.c:768
+#: src/frontend.c:920 src/frontend.c:1004
 msgid "On"
 msgstr ""
 
-#: src/frontend.c:591 src/frontend.c:603 src/frontend.c:648 src/frontend.c:657
-#: src/frontend.c:669 src/frontend.c:692 src/frontend.c:706 src/frontend.c:742
-#: src/frontend.c:760
+#: src/frontend.c:603 src/frontend.c:615 src/frontend.c:660 src/frontend.c:669
+#: src/frontend.c:681 src/frontend.c:704 src/frontend.c:718 src/frontend.c:754
+#: src/frontend.c:772 src/frontend.c:924 src/frontend.c:999
 msgid "Off"
 msgstr ""
 
-#: src/frontend.c:596
+#: src/frontend.c:608
 msgid "Screen Shake"
 msgstr ""
 
-#: src/frontend.c:611 src/frontend.c:729
+#: src/frontend.c:623 src/frontend.c:741
 msgid "Mist"
 msgstr ""
 
-#: src/frontend.c:620
+#: src/frontend.c:632
 msgid "Video Playback"
 msgstr ""
 
-#: src/frontend.c:623 src/frontend.c:779
+#: src/frontend.c:635 src/frontend.c:791
 msgid "Full"
 msgstr ""
 
-#: src/frontend.c:627 src/frontend.c:769
+#: src/frontend.c:639 src/frontend.c:781 src/frontend.c:907 src/frontend.c:952
 msgid "Windowed"
 msgstr ""
 
-#: src/frontend.c:630 src/frontend.c:774
+#: src/frontend.c:642 src/frontend.c:786
 msgid "Minimal"
 msgstr ""
 
-#: src/frontend.c:637 src/frontend.c:641
+#: src/frontend.c:649 src/frontend.c:653
 msgid "Subtitles"
 msgstr ""
 
-#: src/frontend.c:662
+#: src/frontend.c:674
 msgid "Shadows"
 msgstr ""
 
-#: src/frontend.c:890
+#: src/frontend.c:899
+msgid "Graphics Mode*"
+msgstr ""
+
+#: src/frontend.c:903 src/frontend.c:957
+msgid "Fullscreen"
+msgstr ""
+
+#: src/frontend.c:911
+msgid "Resolution*"
+msgstr ""
+
+#: src/frontend.c:916
+msgid "Trap Cursor"
+msgstr ""
+
+#: src/frontend.c:928
+msgid "Texture size"
+msgstr ""
+
+#: src/frontend.c:932
+msgid "* Takes effect on game restart"
+msgstr ""
+
+#: src/frontend.c:1065
 msgid "Difficulty"
 msgstr ""
 
-#: src/frontend.c:894 src/frontend.c:976
+#: src/frontend.c:1069 src/frontend.c:1151
 msgid "Easy"
 msgstr ""
 
-#: src/frontend.c:897 src/frontend.c:968
+#: src/frontend.c:1072 src/frontend.c:1143
 msgid "Normal"
 msgstr ""
 
-#: src/frontend.c:901 src/frontend.c:972
+#: src/frontend.c:1076 src/frontend.c:1147
 msgid "Hard"
 msgstr ""
 
-#: src/frontend.c:906
+#: src/frontend.c:1081
 msgid "Scroll Speed"
 msgstr ""
 
-#: src/frontend.c:922
+#: src/frontend.c:1097
 msgid "Unit Colour"
 msgstr ""
 
-#: src/intelmap.c:399
+#: src/intelmap.c:401
 msgid "Research Update"
 msgstr ""
 
-#: src/intelmap.c:403
+#: src/intelmap.c:405
 msgid "Project Goals"
 msgstr ""
 
-#: src/intelmap.c:406
+#: src/intelmap.c:408
 msgid "Current Objective"
 msgstr ""
 
@@ -1558,109 +1588,109 @@ msgstr ""
 msgid "Toggle reopening the build menu"
 msgstr ""
 
-#. TRANSLATORS: This string looks as follows when expanded.
-#. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
 #: src/version.c:137
-#, c-format
-msgid "Version %s%s%s%s"
-msgstr ""
-
-#: src/version.c:142
 msgid " (modified and switched locally)"
 msgstr ""
 
-#: src/version.c:144
+#: src/version.c:139
 msgid " (modified locally)"
 msgstr ""
 
-#: src/version.c:146
+#: src/version.c:141
 msgid " (switched locally)"
 msgstr ""
 
-#: src/version.c:153
+#: src/version.c:148
 msgid " - DEBUG"
 msgstr ""
 
-#: src/version.c:164
+#: src/version.c:157
 #, c-format
 msgid " - Built %s"
 msgstr ""
 
-#: src/multijoin.c:120 src/multijoin.c:121
+#. TRANSLATORS: This string looks as follows when expanded.
+#. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
+#: src/version.c:167
+#, c-format
+msgid "Version %s%s%s%s"
+msgstr ""
+
+#: src/multijoin.c:119 src/multijoin.c:120
 msgid "Players Still Joining"
 msgstr ""
 
-#: src/multijoin.c:241
+#: src/multijoin.c:240
 #, c-format
 msgid "%s has Left the Game"
 msgstr ""
 
-#: src/multijoin.c:353
+#: src/multijoin.c:352
 #, c-format
 msgid "%s is Joining the Game"
 msgstr ""
 
-#: src/multimenu.c:578
+#: src/multimenu.c:579
 msgid "Technology level 1"
 msgstr ""
 
-#: src/multimenu.c:586
+#: src/multimenu.c:587
 msgid "Technology level 2"
 msgstr ""
 
-#: src/multimenu.c:592
+#: src/multimenu.c:593
 msgid "Technology level 3"
 msgstr ""
 
-#: src/multimenu.c:598
+#: src/multimenu.c:599
 msgid "Any number of players"
 msgstr ""
 
-#: src/multimenu.c:605
+#: src/multimenu.c:606
 msgid "2 players"
 msgstr ""
 
-#: src/multimenu.c:611
+#: src/multimenu.c:612
 msgid "4 players"
 msgstr ""
 
-#: src/multimenu.c:617
+#: src/multimenu.c:618
 msgid "8 players"
 msgstr ""
 
-#: src/multimenu.c:737
+#: src/multimenu.c:738
 msgid "Score"
 msgstr ""
 
-#: src/multimenu.c:738
+#: src/multimenu.c:739
 msgid "Kills"
 msgstr ""
 
-#: src/multimenu.c:747
+#: src/multimenu.c:748
 msgid "Ping"
 msgstr ""
 
-#: src/multimenu.c:748
+#: src/multimenu.c:749
 msgid "Played"
 msgstr ""
 
-#: src/multimenu.c:1052
+#: src/multimenu.c:1053
 msgid "Toggle Alliance State"
 msgstr ""
 
-#: src/multimenu.c:1071
+#: src/multimenu.c:1072
 msgid "Give Visibility Report"
 msgstr ""
 
-#: src/multimenu.c:1077
+#: src/multimenu.c:1078
 msgid "Leak Technology Documents"
 msgstr ""
 
-#: src/multimenu.c:1084
+#: src/multimenu.c:1085
 msgid "Hand Over Selected Units"
 msgstr ""
 
-#: src/multimenu.c:1090
+#: src/multimenu.c:1091
 msgid "Give Power To Player"
 msgstr ""
 
