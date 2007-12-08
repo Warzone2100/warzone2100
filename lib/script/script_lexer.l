@@ -756,8 +756,7 @@ NOT						return _NOT;
 	/* Strip macros */
 "#"							{ BEGIN (_MACRO); }
 <_MACRO>\n					{ BEGIN (INITIAL); }
-<_MACRO>. |
-<_MACRO>\n					;
+<_MACRO>.					;
 
 	/* Match quoted text */
 \"							{ BEGIN (QUOTE); }

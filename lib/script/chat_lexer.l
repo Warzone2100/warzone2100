@@ -145,11 +145,6 @@ static SDWORD playerIndex;
 
 	/* <<EOF>>					{ return _T_EOF; } */
 
--?[0-9]+					{
-								chat_lval.ival = atol(chat_text);
-								return R_INTEGER;
-							}
-
 [0-9_a-zA-Z_]*			{
 								playerIndex = getPlayerFromString(chat_text);
 
