@@ -329,7 +329,7 @@ static long ovbuf_tell(void *datasource) {
 static ov_callbacks ovbuf_callbacks = {
 	ovbuf_read,
 	ovbuf_seek,
-	NULL, // close
+	ovbuf_close,
 	ovbuf_tell
 };
 
