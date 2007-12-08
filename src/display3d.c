@@ -155,7 +155,6 @@ static void drawTerrainWaterTile(UDWORD i, UDWORD j);
 // Should be cleaned up properly and be put in structures.
 
 BOOL	bRender3DOnly;
-static BOOL	bSensorDisplay = TRUE;
 static BOOL	bRangeDisplay = FALSE;
 static SDWORD	rangeCenterX,rangeCenterY,rangeRadius;
 static BOOL	bDrawBlips=TRUE;
@@ -428,10 +427,7 @@ void draw3DScene( void )
 
 	structureEffects(); // add fancy effects to structures
 
-	if(bSensorDisplay)
-	{
-		showDroidSensorRanges(); //shows sensor data for units/droids/whatever...-Q 5-10-05
-	}
+	showDroidSensorRanges(); //shows sensor data for units/droids/whatever...-Q 5-10-05
 
 	//visualize radius if needed
 	if(bRangeDisplay)
@@ -543,6 +539,11 @@ static void drawTiles(iView *camera, iView *player)
 	int shiftVal = 0;
 	static float angle = 0.0f;
 
+	if (bDisplaySensorRange)
+	{
+		updateSensorDisplay();
+	}
+
 	// Animate the water texture, just cycles the V coordinate through half the tiles height.
 	if(!gamePaused())
 	{
@@ -625,10 +626,9 @@ static void drawTiles(iView *camera, iView *player)
 			}
 			else
 			{
-				BOOL bEdgeTile;
-
-				/* Get a pointer to the tile at this location */
+				BOOL bEdgeTile;				
 				MAPTILE *psTile = mapTile(playerXTile + j, playerZTile + i);
+
 				if (terrainType(psTile) == TER_WATER)
 				{
 					tileScreenInfo[i][j].bWater = TRUE;
@@ -653,16 +653,31 @@ static void drawTiles(iView *camera, iView *player)
 						TileIllum = (psTile->level == UBYTE_MAX ? 1 : psTile->level); // avGetTileLevel(realX,realY);
 					}
 				}
-				else if(bDisplaySensorRange)
-				{
-					TileIllum = psTile->inRange;
-				}
 				else
 				{
 					TileIllum = psTile->illumination;
 				}
 
 				tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination(TileIllum, rx - tileScreenInfo[i][j].pos.x, rz - world_coord(i - terrainMidY), &tileScreenInfo[i][j].specular.argb);
+
+				// Real fog of war - darken where we cannot see enemy units moving around
+				if (bDisplaySensorRange && psTile && !psTile->activeSensor)
+				{
+					const int f = 2;
+
+					tileScreenInfo[i+0][j+0].light.byte.r = tileScreenInfo[i+0][j+0].light.byte.r / f;
+					tileScreenInfo[i+0][j+1].light.byte.r = tileScreenInfo[i+0][j+1].light.byte.r / f;
+					tileScreenInfo[i+1][j+1].light.byte.r = tileScreenInfo[i+1][j+1].light.byte.r / f;
+					tileScreenInfo[i+1][j+0].light.byte.r = tileScreenInfo[i+1][j+0].light.byte.r / f;
+					tileScreenInfo[i+0][j+0].light.byte.g = tileScreenInfo[i+0][j+0].light.byte.g / f;
+					tileScreenInfo[i+0][j+1].light.byte.g = tileScreenInfo[i+0][j+1].light.byte.g / f;
+					tileScreenInfo[i+1][j+1].light.byte.g = tileScreenInfo[i+1][j+1].light.byte.g / f;
+					tileScreenInfo[i+1][j+0].light.byte.g = tileScreenInfo[i+1][j+0].light.byte.g / f;
+					tileScreenInfo[i+0][j+0].light.byte.b = tileScreenInfo[i+0][j+0].light.byte.b / f;
+					tileScreenInfo[i+0][j+1].light.byte.b = tileScreenInfo[i+0][j+1].light.byte.b / f;
+					tileScreenInfo[i+1][j+1].light.byte.b = tileScreenInfo[i+1][j+1].light.byte.b / f;
+					tileScreenInfo[i+1][j+0].light.byte.b = tileScreenInfo[i+1][j+0].light.byte.b / f;
+				}
 
 				if ( playerXTile+j <= 1 ||
 					 playerZTile+i <= 1 ||
@@ -4605,18 +4620,6 @@ static void	drawRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius)
 		effectGiveAuxVar(80);	// half normal plasma size...
 
 		addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,FALSE,NULL,0);
-	}
-}
-
-void debugToggleSensorDisplay( void )
-{
-	if(bSensorDisplay)
-	{
-		bSensorDisplay = FALSE;
-	}
-	else
-	{
-		bSensorDisplay = TRUE;
 	}
 }
 

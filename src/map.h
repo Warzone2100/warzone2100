@@ -128,9 +128,9 @@ typedef struct _maptile
 	UBYTE			height;			// The height at the top left of the tile
 	UBYTE			illumination;	// How bright is this tile?
 	UWORD			texture;		// Which graphics texture is on this tile
-	UBYTE			bMaxed;
+	bool			bMaxed;
+	bool			activeSensor;	// selected player can see through fog of war here
 	UBYTE			level;
-	UBYTE			inRange;		// sensor range display.
 	BASE_OBJECT		*psObject;		// Any object sitting on the location (e.g. building)
 	PIELIGHT		colour;
 

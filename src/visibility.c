@@ -153,10 +153,6 @@ static BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 		currG = newG;
 
 		SET_TILE_VISIBLE(rayPlayer, psTile);
-		if(rayPlayer == selectedPlayer && !bDisplaySensorRange)
-		{
-			psTile->inRange = UBYTE_MAX;
-		}
 
 		if (selectedPlayer != rayPlayer && bMultiPlayer && game.alliance == ALLIANCES_TEAMS
 		    && aiCheckAlliances(selectedPlayer, rayPlayer))
@@ -174,9 +170,9 @@ static BOOL rayTerrainCallback(SDWORD x, SDWORD y, SDWORD dist)
 			{
 				// can see opponent moving
 				avInformOfChange(map_coord(x), map_coord(y));		//reveal map
+				psTile->activeSensor = TRUE;
 			}
 		}
-
 	}
 
 	return TRUE;
@@ -790,21 +786,18 @@ MAPTILE		*psTile;
 	}
 }
 
-void startSensorDisplay(void)
+void updateSensorDisplay()
 {
-	MAPTILE		*psTile;
-	UDWORD		x;
+	MAPTILE		*psTile = psMapTiles;
+	int		x;
 	DROID		*psDroid;
 	STRUCTURE	*psStruct;
-//	SDWORD		range;
-//	SDWORD		ray;
 
-	// clear each sensor bit.
-	psTile = psMapTiles;
-	for(x=0; x<(SDWORD)(mapWidth*mapHeight); x+= 1)
+	// clear sensor info
+	for (x = 0; x < mapWidth * mapHeight; x++)
 	{
-		psTile->inRange = 0;
-		psTile += 1;
+		psTile->activeSensor = FALSE;
+		psTile++;
 	}
 
 	// process the sensor range of all droids/structs.
@@ -812,32 +805,16 @@ void startSensorDisplay(void)
 	// units.
 	for(psDroid = apsDroidLists[selectedPlayer];psDroid;psDroid=psDroid->psNext)
 	{
-//		range = psDroid->sensorRange;
-//		for(ray=0; ray < NUM_RAYS; ray += NUM_RAYS/80)
-//		{
-//			startH = psDroid->z + visObjHeight((BASE_OBJECT*)psDroid);// initialise the callback variables //rayTerrainCallback
-//			currG = -UBYTE_MAX * GRAD_MUL;	// Cast the rays from the viewer
-			visTilesUpdate((BASE_OBJECT*)psDroid);
-//			rayCast(psDroid->x,psDroid->y,ray, range, rayTerrainCallback);
-//		}
-
+		visTilesUpdate((BASE_OBJECT*)psDroid);
 	}
+
 	// structs.
 	for(psStruct = apsStructLists[selectedPlayer];psStruct;psStruct=psStruct->psNext)
 	{
-		if(  psStruct->pStructureType->type != REF_WALL
- 		  && psStruct->pStructureType->type != REF_WALLCORNER)
+		if (psStruct->pStructureType->type != REF_WALL
+ 		    && psStruct->pStructureType->type != REF_WALLCORNER)
 		{
 			visTilesUpdate((BASE_OBJECT*)psStruct);
 		}
 	}
-
-	// set the display flag for the tiledraw er.
-	bDisplaySensorRange = TRUE;
-}
-
-void stopSensorDisplay(void)
-{
-	// set the display flag off.
-	bDisplaySensorRange = FALSE;
 }

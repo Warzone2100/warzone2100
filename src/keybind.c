@@ -1334,13 +1334,12 @@ void	kf_ToggleOverlays( void )
 
 void	kf_SensorDisplayOn( void )
 {
-//	debugToggleSensorDisplay();
-	startSensorDisplay();
+	bDisplaySensorRange = TRUE;
 }
 
 void	kf_SensorDisplayOff( void )
 {
-	stopSensorDisplay();
+	bDisplaySensorRange = FALSE;
 }
 
 
