@@ -94,9 +94,6 @@ extern BOOL draggingTile;
 extern struct iIMDShape *g_imd;
 extern BOOL	droidSelected;
 extern UDWORD terrainMidX,terrainMidY;
- // FIXME This only used in one location outside of display3d.c, maybe create a wrapper function instead? ->
-extern Sint32 playerXTile, playerZTile, // -> lighting.c
- rx, rz; // -> atmos.c
 
 extern SDWORD scrollSpeed;
 //extern void	assignSensorTarget( DROID *psDroid );

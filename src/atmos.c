@@ -330,7 +330,7 @@ void	renderParticle( ATPART *psPart )
 	Vector3i dv;
 	UDWORD brightness, specular;
 	SDWORD centreX, centreZ;
-	SDWORD x, y, z;
+	SDWORD x, y, z, rx, rz;
 
 	x = MAKEINT(psPart->position.x);
 	y = MAKEINT(psPart->position.y);

@@ -195,7 +195,7 @@ BOOL	radarOnScreen=FALSE;
 BOOL  rangeOnScreen = FALSE;  // For now, most likely will change later!  -Q 5-10-05   A very nice effect - Per
 
 /* Temporary values for the terrain render - top left corner of grid to be rendered */
-Sint32 playerXTile, playerZTile, rx, rz;
+static int playerXTile, playerZTile;
 
 /* Have we located the mouse? */
 static BOOL	mouseLocated = TRUE;
@@ -430,8 +430,10 @@ void draw3DScene( void )
 	showDroidSensorRanges(); //shows sensor data for units/droids/whatever...-Q 5-10-05
 
 	//visualize radius if needed
-	if(bRangeDisplay)
+	if (bRangeDisplay)
+	{
 		drawRangeAtPos(rangeCenterX,rangeCenterY,rangeRadius);
+	}
 }
 
 
@@ -538,6 +540,7 @@ static void drawTiles(iView *camera, iView *player)
 	UBYTE TileIllum;
 	int shiftVal = 0;
 	static float angle = 0.0f;
+	SDWORD rx, rz;
 
 	if (bDisplaySensorRange)
 	{
@@ -1165,6 +1168,7 @@ void	renderProjectile(PROJECTILE *psCurr)
 	Vector3i			dv;
 	iIMDShape		*pIMD;
 	UDWORD			brightness, specular;
+	SDWORD			rx, rz;
 
 	psStats = psCurr->psWStats;
 	/* Reject flame or command since they have interim drawn fx */
@@ -1236,6 +1240,7 @@ renderAnimComponent( const COMPONENT_OBJECT *psObj )
 	BASE_OBJECT *psParentObj = (BASE_OBJECT*)psObj->psParent;
 	const SDWORD posX = psParentObj->x + psObj->position.x,
 		posY = psParentObj->y + psObj->position.y;
+	SWORD rx, rz;
 
 	ASSERT( psParentObj != NULL, "renderAnimComponent: invalid parent object pointer" );
 
@@ -1635,7 +1640,7 @@ void	setViewDistance(UDWORD dist)
 void	renderFeature(FEATURE *psFeature)
 {
 	UDWORD		featX,featY;
-	SDWORD		rotation;
+	SDWORD		rotation, rx, rz;
 	UDWORD		brightness, specular;
 	Vector3i dv;
 	Vector3f *vecTemp;
@@ -1732,7 +1737,7 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 	UDWORD			msgX = 0, msgY = 0;
 	Vector3i			dv = { 0, 0, 0 };
 	VIEW_PROXIMITY	*pViewProximity = NULL;
-	SDWORD			x, y, r;
+	SDWORD			x, y, r, rx, rz;
 	iIMDShape		*proxImd = NULL;
 	UDWORD		brightness, specular;
 
@@ -1850,7 +1855,7 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 // Draw the structures
 void	renderStructure(STRUCTURE *psStructure)
 {
-	SDWORD			structX,structY;
+	SDWORD			structX, structY, rx, rz;
 	iIMDShape		*baseImd, *strImd;
 	SDWORD			rotation;
 	SDWORD			frame;
@@ -2291,7 +2296,7 @@ void	renderStructure(STRUCTURE *psStructure)
 void	renderDeliveryPoint(FLAG_POSITION *psPosition)
 {
 	Vector3i dv;
-	SDWORD			x, y, r;
+	SDWORD			x, y, r, rx, rz;
 	Vector3f *temp = NULL;
 	SDWORD			buildingBrightness, specular;
 	//store the frame number for when deciding what has been clicked on
@@ -2346,7 +2351,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition)
 
 static BOOL	renderWallSection(STRUCTURE *psStructure)
 {
-	SDWORD			structX,structY;
+	SDWORD			structX, structY, rx, rz;
 	UDWORD			brightness;
 	iIMDShape		*imd;
 	SDWORD			rotation;
@@ -2512,7 +2517,7 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 {
 	Vector3i			dv;
 	Vector3f			*pVecTemp;
-	SDWORD			shadowScale;
+	SDWORD			shadowScale, rx, rz;
 	UDWORD brightness, specular;
 
 	dv.x = (psDroid->x - player.p.x) - terrainMidX*TILE_UNITS;
@@ -3437,6 +3442,7 @@ void	draw3dLine(Vector3i *src, Vector3i *dest, UBYTE col)
 {
 	Vector3i zero = {0, 0, 0}, vec;
 	Vector2i srcS, destS;
+	SDWORD rx, rz;
 
 	vec.x = (src->x - player.p.x) - terrainMidX*TILE_UNITS;
 	vec.z = terrainMidY*TILE_UNITS - (src->z - player.p.z);
@@ -3741,7 +3747,7 @@ static void renderSurroundings(void)
 	const float skybox_scale = 10000.0f;
 	const float height = 10.0f * TILE_UNITS;
 	const float wider  = 2.0f * (visibleTiles.x * TILE_UNITS);
-	int left, right, front, back;
+	int left, right, front, back, rx, rz;
 
 	// set up matrices and textures
 	pie_PerspectiveBegin();
