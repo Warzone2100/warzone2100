@@ -347,7 +347,6 @@ SDWORD	startY,endY;
 SDWORD	rangeSkip;
 SDWORD	i,j;
 SDWORD	distToCorner;
-SDWORD	xIndex,yIndex;
 UDWORD	percent;
 
  	/* Firstly - there's no point processing lights that are off the grid */
@@ -368,60 +367,27 @@ UDWORD	percent;
 	endY = tileY + rangeSkip;
 
 	/* Clip to grid limits */
-	if(startX < 0)
-	{
-		startX = 0;
-	}
-	else if(startX > (SDWORD)(mapWidth-1))
-	{
-		startX = mapWidth-1;
-	}
-	if (endX < 0)
-	{
-		endX = 0;
-	}
-	else if(endX > (SDWORD)(mapWidth-1))
-	{
-		endX = mapWidth-1;
-	}
-
-	/* Clip to grid limits */
-	if(startY < 0)
-	{
-		startY = 0;
-	}
-	else if(startY > (SDWORD)(mapHeight-1))
-	{
-		startY = mapHeight-1;
-	}
-	if(endY < 0)
-	{
-		endY = 0;
-	}
-	else if(endY > (SDWORD)(mapHeight-1))
-	{
-		endY = mapHeight-1;
-	}
+	startX = MAX(startX, 0);
+	endX = MAX(endX, 0);
+	endX = MIN(endX, mapWidth - 1);
+	startX = MIN(startX, endX);
+	startY = MAX(startY, 0);
+	endY = MAX(endY, 0);
+	endY = MIN(endY, mapHeight - 1);
+	startY = MIN(startY, endY);
 
 	for(i=startX;i<=endX; i++)
 	{
 		for(j=startY; j<=endY; j++)
 		{
 			distToCorner = calcDistToTile(i,j,&psLight->position);
+
 			/* If we're inside the range of the light */
 			if (distToCorner<(SDWORD)psLight->range)
 			{
 				/* Find how close we are to it */
 				percent = 100 - PERCENT(distToCorner,psLight->range);
-				xIndex = i - playerXTile;
-				yIndex = j - playerZTile;
-				// Might go off the grid for light ranges > one tile
-				if ( xIndex >= 0 && yIndex >= 0 &&
-					xIndex < (SDWORD)visibleTiles.x &&
-					yIndex < (SDWORD)visibleTiles.y )
-				{
-					colourTile(xIndex, yIndex, psLight->colour, (UBYTE)(2*percent));
-				}
+				colourTile(i, j, psLight->colour, 2 * percent);
 			}
 		}
 	}
@@ -453,78 +419,35 @@ static UDWORD calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos)
 	return (UDWORD)sqrtf(total);
 }
 
-
+// FIXME: Is the percent variable misnamed here, or is the code wrong? Because we do
+// not use it as a percentage!
 static void colourTile(SDWORD xIndex, SDWORD yIndex, LIGHT_COLOUR colour, UBYTE percent)
 {
-
-	ASSERT( xIndex<LAND_XGRD,"X Colour Value out of range (above) for lighting" );
-	ASSERT( yIndex<LAND_YGRD,"Y Colour Value out of range (above)for lighting" );
-	ASSERT( xIndex>=0,"X Colour Value out of range (below) for lighting" );
-	ASSERT( yIndex>=0,"Y Colour Value out of range (below )for lighting" );
-
+	MAPTILE *psTile = mapTile(xIndex, yIndex);
 
 	switch(colour)
 	{
  		case LIGHT_RED:
 			/* And add that to the lighting value */
- 			if(tileScreenInfo[yIndex][xIndex].light.byte.r + percent <= 255)
- 			{
- 			   tileScreenInfo[yIndex][xIndex].light.byte.r += percent;
- 			}
- 			else
- 			{
- 			   tileScreenInfo[yIndex][xIndex].light.byte.r = 255;
- 			}
+			psTile->colour.byte.r = MIN(255, psTile->colour.byte.r + percent);
 		break;
  		case LIGHT_GREEN:
 			/* And add that to the lighting value */
- 			if(tileScreenInfo[yIndex][xIndex].light.byte.g + percent <= 255)
- 			{
- 			   tileScreenInfo[yIndex][xIndex].light.byte.g += percent;
- 			}
- 			else
- 			{
- 			   tileScreenInfo[yIndex][xIndex].light.byte.g = 255;
- 			}
+			psTile->colour.byte.g = MIN(255, psTile->colour.byte.g + percent);
 		break;
  		case LIGHT_BLUE:
 			/* And add that to the lighting value */
- 			if(tileScreenInfo[yIndex][xIndex].light.byte.b + percent <= 255)
- 			{
- 			   tileScreenInfo[yIndex][xIndex].light.byte.b += percent;
- 			}
- 			else
- 			{
- 			   tileScreenInfo[yIndex][xIndex].light.byte.b = 255;
- 			}
+			psTile->colour.byte.b = MIN(255, psTile->colour.byte.b + percent);
 		break;
 		case LIGHT_YELLOW:
 			/* And add that to the lighting value */
- 			if(tileScreenInfo[yIndex][xIndex].light.byte.r + percent <= 255)
- 			{
- 			   tileScreenInfo[yIndex][xIndex].light.byte.r += percent;
- 			   tileScreenInfo[yIndex][xIndex].light.byte.g += percent;
- 			}
- 			else
- 			{
- 			   tileScreenInfo[yIndex][xIndex].light.byte.r = 255;
- 			   tileScreenInfo[yIndex][xIndex].light.byte.g = 255;
- 			}
+			psTile->colour.byte.r = MIN(255, psTile->colour.byte.r + percent);
+			psTile->colour.byte.g = MIN(255, psTile->colour.byte.g + percent);
 		break;
 		case LIGHT_WHITE:
-			/* And add that to the lighting value */
- 			if(tileScreenInfo[yIndex][xIndex].light.byte.r + percent <= 255)
- 			{
- 			   tileScreenInfo[yIndex][xIndex].light.byte.r += percent;
- 			   tileScreenInfo[yIndex][xIndex].light.byte.g += percent;
- 			   tileScreenInfo[yIndex][xIndex].light.byte.b += percent;
- 			}
- 			else
- 			{
- 			   tileScreenInfo[yIndex][xIndex].light.byte.r = 255;
- 			   tileScreenInfo[yIndex][xIndex].light.byte.g = 255;
- 			   tileScreenInfo[yIndex][xIndex].light.byte.b = 255;
- 			}
+			psTile->colour.byte.r = MIN(255, psTile->colour.byte.r + percent);
+			psTile->colour.byte.g = MIN(255, psTile->colour.byte.g + percent);
+			psTile->colour.byte.b = MIN(255, psTile->colour.byte.b + percent);
 		break;
 		default:
 			ASSERT( FALSE,"Weirdy colour of light attempted" );

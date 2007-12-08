@@ -121,8 +121,6 @@ extern BOOL bRender3DOnly;
 
 extern const Vector2i visibleTiles;
 
-extern TERRAIN_VERTEX tileScreenInfo[LAND_YGRD][LAND_XGRD];
-
 /*returns the graphic ID for a droid rank*/
 extern UDWORD  getDroidRankGraphic(DROID *psDroid);
 

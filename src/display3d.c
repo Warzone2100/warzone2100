@@ -181,7 +181,7 @@ static Vector3i	imdRot,imdRot2;
 UDWORD		distance = START_DISTANCE;//(DISTANCE - (DISTANCE/6));
 
 /* Stores the screen coordinates of the transformed terrain tiles */
-TERRAIN_VERTEX tileScreenInfo[LAND_YGRD][LAND_XGRD];
+static TERRAIN_VERTEX tileScreenInfo[LAND_YGRD][LAND_XGRD];
 
 /* Records the present X and Y values for the current mouse tile (in tiles */
 SDWORD mouseTileX, mouseTileY;
@@ -726,6 +726,7 @@ static void drawTiles(iView *camera, iView *player)
 					tileScreenInfo[i][j].water = tileScreenInfo[i][j].screen;
 					tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].pos.y;
 				}
+				psTile->colour = tileScreenInfo[i][j].light;
 			}
 			// hack since tileScreenInfo[i][j].screen is Vector3i and pie_RotateProject takes Vector2i as 2nd param
 			screen.x = tileScreenInfo[i][j].screen.x;
@@ -743,6 +744,29 @@ static void drawTiles(iView *camera, iView *player)
 	if(getRevealStatus())
 	{
 		avUpdateTiles();
+	}
+
+	// Process lighting contributions from the above functions
+	for (i = 0; i < visibleTiles.y+1; i++)
+	{
+		/* Go through the x's */
+		for (j = 0; j < (SDWORD)visibleTiles.x+1; j++)
+		{
+			if( playerXTile+j < 0 ||
+				playerZTile+i < 0 ||
+				playerXTile+j > (SDWORD)(mapWidth-1) ||
+				playerZTile+i > (SDWORD)(mapHeight-1) )
+			{
+				// nothing
+			}
+			else
+			{
+				/* Get a pointer to the tile at this location */
+				MAPTILE *psTile = mapTile(playerXTile + j, playerZTile + i);
+
+				tileScreenInfo[i][j].light = psTile->colour;
+			}
+		}
 	}
 
 	// Draw all the normal tiles

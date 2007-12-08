@@ -132,6 +132,7 @@ typedef struct _maptile
 	UBYTE			level;
 	UBYTE			inRange;		// sensor range display.
 	BASE_OBJECT		*psObject;		// Any object sitting on the location (e.g. building)
+	PIELIGHT		colour;
 
 //	TYPE_OF_TERRAIN	type;			// The terrain type for the tile
 } MAPTILE;
