@@ -161,7 +161,8 @@ BOOL	godMode;
 static float waterRealValue = 0.0f;
 #define WAVE_SPEED 0.015f
 
-UDWORD	barMode = BAR_FULL; // configured in configuration.c
+// When to display HP bars
+UWORD barMode;
 
 /* Have we made a selection by clicking the mouse - used for dragging etc */
 BOOL	selectAttempt = FALSE;
@@ -220,9 +221,6 @@ int showFPS = 0;	// default OFF, turn ON via console command 'showfps'
 UDWORD geoOffset;
 
 static int averageCentreTerrainHeight;
-static	BOOL	bReloadBars = TRUE;
-static	BOOL	bEnergyBars = TRUE;
-static	BOOL	bTinyBars	= FALSE;
 
 static UDWORD	lastTargetAssignation = 0;
 static UDWORD	lastDestAssignation = 0;
@@ -893,8 +891,6 @@ BOOL init3DView(void)
 	// the world centre - used for decaying lighting etc
 	gridCentreX = player.p.x + world_coord(visibleTiles.x / 2);
 	gridCentreZ = player.p.z + world_coord(visibleTiles.y / 2);
-
-	bEnergyBars = TRUE;
 
 	/* Base Level */
 	geoOffset = 192;
@@ -2749,11 +2745,13 @@ static void	drawStructureSelections( void )
 		if(clipXY(psStruct->x,psStruct->y))
 		{
 			/* If it's selected */
-			if( (psStruct->selected)
-				|| (bMouseOverOwnStructure && (psStruct==(STRUCTURE*)psClickedOn)
-										&& (((STRUCTURE*)psClickedOn)->status==SS_BUILT)
-										/* If it was clipped - reject it */
-										&& psStruct->sDisplay.frameNumber == currentGameFrame))
+			if (psStruct->selected
+			    || (barMode == BAR_DROIDS_AND_STRUCTURES
+			        && (psStruct->pStructureType->type != REF_WALL && psStruct->pStructureType->type != REF_WALLCORNER))
+			    || (bMouseOverOwnStructure
+			        && psStruct == (STRUCTURE *) psClickedOn
+			        && ((STRUCTURE * )psClickedOn)->status == SS_BUILT
+			            && psStruct->sDisplay.frameNumber == currentGameFrame))
 			{
 				scale = MAX(psStruct->pStructureType->baseWidth, psStruct->pStructureType->baseBreadth);
 				width = scale*20;
@@ -2796,12 +2794,10 @@ static void	drawStructureSelections( void )
 				health*=2;
 				pie_BoxFill(scrX-scrR - 1, scrY - 1, scrX + scrR + 1, scrY + 2, WZCOL_RELOAD_BACKGROUND);
 				pie_BoxFill(scrX-scrR, scrY, scrX - scrR + health, scrY + 1, powerCol);
-				if (bReloadBars)
+				
+				for (i = 0; i < psStruct->numWeaps; i++)
 				{
-					for (i = 0; i < psStruct->numWeaps; i++)
-					{
-						drawWeaponReloadBar((BASE_OBJECT *)psStruct, &psStruct->asWeaps[i], i);
-					}
+					drawWeaponReloadBar((BASE_OBJECT *)psStruct, &psStruct->asWeaps[i], i);
 				}
 			}
 			else
@@ -3013,27 +3009,6 @@ static void	drawDroidSelections( void )
 		}
 	}
 
-	switch(barMode)
-	{
-	case BAR_FULL:
-		bEnergyBars = TRUE;
-		bTinyBars = FALSE;
-		break;
-	case BAR_BASIC:
-		bEnergyBars = FALSE;
-		bTinyBars = FALSE;
-		break;
-	case BAR_DOT:
-		bEnergyBars = FALSE;
-		bTinyBars = TRUE;
-		break;
-	case BAR_NONE:
-		return;
-	default:
-		ASSERT(!"invalid energy bar display value", "Invalid energy bar display value");
-		break;
-	}
-
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 	pie_SetFogStatus(FALSE);
 	for(psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
@@ -3041,9 +3016,10 @@ static void	drawDroidSelections( void )
 		bBeingTracked = FALSE;
 		/* If it's selected and on screen or it's the one the mouse is over ||*/
 		// ABSOLUTELY MAD LOGICAL EXPRESSION!!! :-)
-		if( ( eitherSelected(psDroid) && psDroid->sDisplay.frameNumber == currentGameFrame) ||
-			( bMouseOverOwnDroid && (psDroid == (DROID*)psClickedOn)) ||
-			( droidUnderRepair(psDroid) && psDroid->sDisplay.frameNumber == currentGameFrame) )
+		if ((eitherSelected(psDroid) && psDroid->sDisplay.frameNumber == currentGameFrame)
+		 || (bMouseOverOwnDroid && psDroid == (DROID *) psClickedOn)
+		 || (droidUnderRepair(psDroid) && psDroid->sDisplay.frameNumber == currentGameFrame)
+		 ||  (barMode == BAR_DROIDS || barMode == BAR_DROIDS_AND_STRUCTURES))
 		{
 			damage = PERCENT(psDroid->body, psDroid->originalBody);
 
@@ -3079,41 +3055,17 @@ static void	drawDroidSelections( void )
 					boxCol = WZCOL_GREEN;
 				}
 
-				if(psDroid->selected)
+				if (psDroid->selected)
 				{
-
-					/* Selection Lines */
-					{
-						if(bEnergyBars)
-						{
-							pie_BoxFill(scrX-scrR, scrY+scrR-7, scrX-scrR+1, scrY+scrR, boxCol);
-							pie_BoxFill(scrX-scrR, scrY+scrR, scrX-scrR+7, scrY+scrR+1, boxCol);
-							pie_BoxFill(scrX+scrR-7, scrY+scrR, scrX+scrR, scrY+scrR+1, boxCol);
-							pie_BoxFill(scrX+scrR, scrY+scrR-7, scrX+scrR+1, scrY+scrR+1, boxCol);
-						}
-						else
-						{
-							if(bTinyBars)
-							{
-								pie_BoxFill(scrX-scrR-3, scrY-3, scrX-scrR+3, scrY+3, WZCOL_RELOAD_BACKGROUND);
-								pie_BoxFill(scrX-scrR-2, scrY-2, scrX-scrR+2, scrY+2, powerCol);
-							}
-							else
-							{
-								pie_BoxFill(scrX-scrR, scrY+scrR-7, scrX-scrR+1, scrY+scrR, powerCol);
-								pie_BoxFill(scrX-scrR, scrY+scrR, scrX-scrR+7, scrY+scrR+1, powerCol);
-								pie_BoxFill(scrX+scrR-7, scrY+scrR, scrX+scrR, scrY+scrR+1, powerCol);
-								pie_BoxFill(scrX+scrR, scrY+scrR-7, scrX+scrR+1, scrY+scrR+1, powerCol);
-							}
-						}
-					}
+					pie_BoxFill(scrX - scrR, scrY + scrR - 7, scrX - scrR+1, scrY + scrR, boxCol);
+					pie_BoxFill(scrX - scrR, scrY + scrR, scrX - scrR + 7, scrY + scrR + 1, boxCol);
+					pie_BoxFill(scrX + scrR - 7, scrY + scrR, scrX + scrR, scrY + scrR + 1, boxCol);
+					pie_BoxFill(scrX + scrR, scrY + scrR - 7, scrX + scrR + 1, scrY + scrR + 1, boxCol);
 				}
-				if(bEnergyBars)
-				{
-					/* Power bars */
-					pie_BoxFill(scrX - scrR - 1, scrY + scrR+2, scrX + scrR + 1, scrY + scrR + 5, WZCOL_RELOAD_BACKGROUND);
-					pie_BoxFill(scrX - scrR, scrY + scrR+3, scrX - scrR + damage, scrY + scrR + 4, powerCol);
-				}
+				
+				/* Power bars */
+				pie_BoxFill(scrX - scrR - 1, scrY + scrR+2, scrX + scrR + 1, scrY + scrR + 5, WZCOL_RELOAD_BACKGROUND);
+				pie_BoxFill(scrX - scrR, scrY + scrR+3, scrX - scrR + damage, scrY + scrR + 4, powerCol);
 
 				/* Write the droid rank out */
 				if((scrX+scrR)>0 && (scrY+scrR)>0 && (scrX-scrR) < pie_GetVideoBufferWidth() && (scrY-scrR) < pie_GetVideoBufferHeight())
@@ -3133,12 +3085,9 @@ static void	drawDroidSelections( void )
 				}
 			}
 
-			if (bReloadBars)
+			for (i = 0;i < psDroid->numWeaps;i++)
 			{
-				for(i = 0;i < psDroid->numWeaps;i++)
-				{
-					drawWeaponReloadBar((BASE_OBJECT *)psDroid, &psDroid->asWeaps[i], i);
-				}
+				drawWeaponReloadBar((BASE_OBJECT *)psDroid, &psDroid->asWeaps[i], i);
 			}
 		}
 	}
@@ -4154,19 +4103,12 @@ static void trackHeight( float desiredHeight )
 
 
 // -------------------------------------------------------------------------------------
-void	toggleEnergyBars( void )
+void toggleEnergyBars(void)
 {
-	if(++barMode>BAR_NONE)
+	if (++barMode == BAR_LAST)
 	{
-		barMode = BAR_FULL;
+		barMode = BAR_SELECTED;
 	}
-//	bEnergyBars = !bEnergyBars;
-}
-
-// -------------------------------------------------------------------------------------
-void	toggleReloadBarDisplay( void )
-{
-	bReloadBars = !bReloadBars;
 }
 
 // -------------------------------------------------------------------------------------
@@ -4282,11 +4224,6 @@ static void	processDestinationTarget( void )
 	}
 }
 
-// -------------------------------------------------------------------------------------
-void	setEnergyBarDisplay( BOOL val)
-{
-	bEnergyBars = val;
-}
 // -------------------------------------------------------------------------------------
 void	setUnderwaterTile(UDWORD num)
 {

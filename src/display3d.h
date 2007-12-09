@@ -70,7 +70,6 @@ extern void displayDynamicObjects( void );
 extern void displayProximityMsgs( void );
 extern void displayDelivPoints(void);
 extern void calcScreenCoords(DROID *psDroid);
-extern void toggleReloadBarDisplay( void );
 extern void toggleEnergyBars( void );
 
 extern BOOL doWeDrawRadarBlips( void );
@@ -99,7 +98,6 @@ extern SDWORD scrollSpeed;
 //extern void	assignSensorTarget( DROID *psDroid );
 extern void assignSensorTarget( BASE_OBJECT *psObj );
 extern void assignDestTarget( void );
-extern void setEnergyBarDisplay( BOOL val );
 extern UDWORD getWaterTileNum( void);
 extern void setUnderwaterTile(UDWORD num);
 extern UDWORD getRubbleTileNum( void );
@@ -132,7 +130,15 @@ extern void showRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius);
 #define BAR_DOT		2
 #define BAR_NONE	3
 
-extern UDWORD barMode;
+extern UWORD barMode;
 extern UDWORD geoOffset;
+  
+enum
+{
+	BAR_SELECTED,
+	BAR_DROIDS,
+	BAR_DROIDS_AND_STRUCTURES,
+	BAR_LAST
+};
 
 #endif

@@ -268,19 +268,6 @@ BOOL loadConfig(void)
 		setWarzoneKeyNumeric("difficulty", DL_NORMAL);
 	}
 
-
-	if(getWarzoneKeyNumeric("barmode", &val)&&(val<3)&&(val>=0))
-	{
-		barMode = val;
-	}
-	else
-	{
-		barMode = BAR_FULL;
-//		setDifficultyLevel(DL_NORMAL);
-		setWarzoneKeyNumeric("barmode", BAR_FULL);
-	}
-
-
 	// //////////////////////////
 	// use vis fog
 	if(getWarzoneKeyNumeric("visfog", &val))
@@ -607,7 +594,6 @@ BOOL saveConfig(void)
 	setWarzoneKeyNumeric("gamma", (SDWORD)gammaValue);
 	setWarzoneKeyNumeric("scroll",(SDWORD)scroll_speed_accel);		// scroll
 	setWarzoneKeyNumeric("difficulty", getDifficultyLevel());		// level
-	setWarzoneKeyNumeric("barmode",(SDWORD)barMode);			//energybars
 	setWarzoneKeyNumeric("visfog",(SDWORD)(!war_GetFog()));			// fogtype
 	setWarzoneKeyNumeric("shake",(SDWORD)(getShakeStatus()));		// screenshake
 	setWarzoneKeyNumeric("mouseflip",(SDWORD)(getInvertMouseStatus()));	// flipmouse

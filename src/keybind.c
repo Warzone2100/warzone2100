@@ -1210,13 +1210,6 @@ void	kf_ToggleEnergyBars( void )
 }
 
 // --------------------------------------------------------------------------
-void	kf_ToggleReloadBars( void )
-{
-	toggleReloadBarDisplay();
-	CONPRINTF(ConsoleString,(ConsoleString, _("Energy bars display toggled") ));
-}
-
-// --------------------------------------------------------------------------
 void	kf_ToggleDemoMode( void )
 {
 	if(demoGetStatus() == FALSE)

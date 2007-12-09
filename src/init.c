@@ -1244,8 +1244,6 @@ void	initMiscVars( void )
 	radarOnScreen = TRUE;
 	enableConsoleDisplay(TRUE);
 
-	setEnergyBarDisplay(TRUE);
-
 	setSelectedGroup(UBYTE_MAX);
 	processDebugMappings(FALSE);
 }

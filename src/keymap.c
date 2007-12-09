@@ -108,7 +108,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_ToggleRadar,
 	kf_ToggleConsole,
 	kf_ToggleEnergyBars,
-	kf_ToggleReloadBars,
+	kf_NOOP,
 	kf_ScreenDump ,
 	kf_MoveToLastMessagePos,
 	kf_AssignGrouping_1,

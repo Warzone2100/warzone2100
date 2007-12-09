@@ -100,7 +100,6 @@ extern void	kf_ToggleDemoMode( void );
 extern void	kf_ToggleRadarAllign( void );
 
 extern void	kf_ToggleEnergyBars( void );
-extern void	kf_ToggleReloadBars( void );
 extern void	kf_FinishAllResearch( void );
 extern void	kf_FinishResearch( void );
 extern void	kf_ToggleOverlays( void );
