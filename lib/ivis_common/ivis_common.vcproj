@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="autorevision"
-	ProjectGUID="{32FC4941-5ADF-483F-BD90-CDEBC50BA4AE}"
-	RootNamespace="autorevision"
+	Name="ivis_common"
+	ProjectGUID="{F580F567-CE2A-4C58-A036-C1B71664BF2D}"
+	RootNamespace="ivis_common"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -19,7 +19,7 @@
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="4"
 			CharacterSet="1"
 			>
 			<Tool
@@ -40,7 +40,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				AdditionalIncludeDirectories="..\lib\framework;..\lib\gamelib;..\lib\ivis_common;..\.."
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -59,17 +60,10 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				LinkIncremental="2"
-				GenerateDebugInformation="true"
-				SubSystem="1"
-				TargetMachine="1"
+				Name="VCLibrarianTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -81,22 +75,14 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
-				Description="* Updating &amp; copying $(TargetFileName) into correct directory. *"
-				CommandLine="del $(SolutionDir)\..\$(TargetFileName)&#x0D;&#x0A;copy /Y $(OutDir)\$(TargetFileName) $(SolutionDir)..\$(TargetFileName)"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="4"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -117,7 +103,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				AdditionalIncludeDirectories="..\lib\framework;..\lib\gamelib;..\lib\ivis_common;..\.."
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -134,19 +121,10 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				LinkIncremental="1"
-				GenerateDebugInformation="true"
-				SubSystem="1"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				TargetMachine="1"
+				Name="VCLibrarianTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -158,15 +136,7 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
-				Description="* Updating &amp; copying $(TargetFileName) into correct directory. *"
-				CommandLine="del $(SolutionDir)\..\$(TargetFileName)&#x0D;&#x0A;copy /Y $(OutDir)\$(TargetFileName) $(SolutionDir)..\$(TargetFileName)"
 			/>
 		</Configuration>
 	</Configurations>
@@ -179,7 +149,27 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\autorevision.cpp"
+				RelativePath=".\bitimage.c"
+				>
+			</File>
+			<File
+				RelativePath=".\imd.c"
+				>
+			</File>
+			<File
+				RelativePath=".\imdload.c"
+				>
+			</File>
+			<File
+				RelativePath=".\pieclip.c"
+				>
+			</File>
+			<File
+				RelativePath=".\piestate.c"
+				>
+			</File>
+			<File
+				RelativePath=".\png_util.c"
 				>
 			</File>
 		</Filter>
@@ -188,12 +178,78 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-		</Filter>
-		<Filter
-			Name="Resource Files"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
-			>
+			<File
+				RelativePath=".\bitimage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\imd.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ivi.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ivisdef.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ivispatch.h"
+				>
+			</File>
+			<File
+				RelativePath=".\pieblitfunc.h"
+				>
+			</File>
+			<File
+				RelativePath=".\pieclip.h"
+				>
+			</File>
+			<File
+				RelativePath=".\piedef.h"
+				>
+			</File>
+			<File
+				RelativePath=".\piefunc.h"
+				>
+			</File>
+			<File
+				RelativePath=".\piemode.h"
+				>
+			</File>
+			<File
+				RelativePath=".\piepalette.h"
+				>
+			</File>
+			<File
+				RelativePath=".\piestate.h"
+				>
+			</File>
+			<File
+				RelativePath=".\pietypes.h"
+				>
+			</File>
+			<File
+				RelativePath=".\pievector.h"
+				>
+			</File>
+			<File
+				RelativePath=".\png_util.h"
+				>
+			</File>
+			<File
+				RelativePath=".\rendmode.h"
+				>
+			</File>
+			<File
+				RelativePath=".\tex.h"
+				>
+			</File>
+			<File
+				RelativePath=".\textdraw.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

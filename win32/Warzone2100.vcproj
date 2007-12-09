@@ -27,21 +27,25 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				Description="Generates the autorevison.h file"
-				CommandLine="$(SolutionDir)..\autorevision  +cstr -v $(ProjectDir)..\  $(ProjectDir)..\src\autorevision.h&#x0D;&#x0A;"
-			/>
-			<Tool
-				Name="FlexGenerator"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
+				Description="Generating the autorevison.h file..."
+				CommandLine="$(ProjectDir)..\autorevision  +cstr -v $(ProjectDir)..\  $(ProjectDir)..\src\autorevision.h"
 			/>
 			<Tool
 				Name="BisonParser"
+				ExecutionBucket="2"
 				Defines="true"
+				OutputFile="$(SolutionDir)..\src\$(InputName).tab.c"
+			/>
+			<Tool
+				Name="FlexGenerator"
+				OutputFile="$(ProjectDir)..\src\$(InputName).lex.c"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+				ExecutionBucket="4"
 			/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"
@@ -53,7 +57,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)&quot;;&quot;$(SolutionDir)\..&quot;;&quot;__DEVPKG__\include&quot;;&quot;__DEVPKG__\include\SDL&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;YY_NO_UNISTD_H;VERSION=\&quot;TRUNK\&quot;;PACKAGE=\&quot;warzone2100\&quot;;LOCALEDIR=\&quot;\&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;YY_NO_UNISTD_H;VERSION=\&quot;TRUNK\&quot;;PACKAGE=\&quot;warzone2100\&quot;;LOCALEDIR=\&quot;\&quot;;YY_STATIC"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -73,6 +77,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				ExecutionBucket="11"
 				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net.lib png.lib zlib.lib ogg.lib vorbis.lib vorbisfile.lib physfs.lib OpenAL32.lib glc32.lib OpenGL32.lib GLU32.lib shfolder.lib winmm.lib wsock32.lib dbghelp.lib libpopt.lib"
 				OutputFile="$(OutDir)\$(ProjectName)-Dbg.exe"
 				LinkIncremental="2"
@@ -84,27 +89,36 @@
 			/>
 			<Tool
 				Name="VCALinkTool"
+				ExecutionBucket="12"
 			/>
 			<Tool
 				Name="VCManifestTool"
+				ExecutionBucket="13"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
+				ExecutionBucket="14"
 			/>
 			<Tool
 				Name="VCBscMakeTool"
+				ExecutionBucket="15"
 			/>
 			<Tool
 				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
+				ExecutionBucket="16"
 			/>
 			<Tool
 				Name="VCWebDeploymentTool"
+				ExecutionBucket="17"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				Description="***  Copying $(TargetPath) to $(SolutionDir)..\data\$(TargetFileName)  ***"
+				CommandLine="copy /Y /B $(TargetPath) $(ProjectDir)..\data\"
+				ExecutionBucket="18"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 		</Configuration>
 		<Configuration
@@ -117,19 +131,25 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="FlexGenerator"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
+				Description="Generating the autorevison.h file..."
+				CommandLine="$(ProjectDir)..\autorevision  +cstr -v $(ProjectDir)..\  $(ProjectDir)..\src\autorevision.h"
 			/>
 			<Tool
 				Name="BisonParser"
+				ExecutionBucket="2"
 				Defines="true"
+				OutputFile="$(SolutionDir)..\src\$(InputName).tab.c"
+			/>
+			<Tool
+				Name="FlexGenerator"
+				OutputFile="$(ProjectDir)..\src\$(InputName).lex.c"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+				ExecutionBucket="4"
 			/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"
@@ -140,7 +160,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)&quot;;&quot;$(SolutionDir)\..&quot;;&quot;__DEVPKG__\include&quot;;&quot;__DEVPKG__\include\SDL&quot;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;YY_NO_UNISTD_H;VERSION=\&quot;TRUNK\&quot;;PACKAGE=\&quot;warzone2100\&quot;;LOCALEDIR=\&quot;\&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;YY_NO_UNISTD_H;VERSION=\&quot;TRUNK\&quot;;PACKAGE=\&quot;warzone2100\&quot;;LOCALEDIR=\&quot;\&quot;;YY_STATIC"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -158,7 +178,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net.lib png.lib zlib.lib ogg.lib vorbis.lib vorbisfile.lib physfs.lib OpenAL32.lib glc32.lib OpenGL32.lib GLU32.lib shfolder.lib winmm.lib wsock32.lib dbghelp.lib"
+				ExecutionBucket="11"
+				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net.lib png.lib zlib.lib ogg.lib vorbis.lib vorbisfile.lib physfs.lib OpenAL32.lib glc32.lib OpenGL32.lib GLU32.lib shfolder.lib winmm.lib wsock32.lib dbghelp.lib libpopt.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;__DEVPKG__\lib&quot;"
 				IgnoreDefaultLibraryNames="libcmt.lib"
@@ -170,27 +191,36 @@
 			/>
 			<Tool
 				Name="VCALinkTool"
+				ExecutionBucket="12"
 			/>
 			<Tool
 				Name="VCManifestTool"
+				ExecutionBucket="13"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
+				ExecutionBucket="14"
 			/>
 			<Tool
 				Name="VCBscMakeTool"
+				ExecutionBucket="15"
 			/>
 			<Tool
 				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
+				ExecutionBucket="16"
 			/>
 			<Tool
 				Name="VCWebDeploymentTool"
+				ExecutionBucket="17"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				Description="***  Copying $(TargetPath) to $(SolutionDir)..\data\$(TargetFileName)  ***"
+				CommandLine="copy /Y /B $(TargetPath) $(ProjectDir)..\data\"
+				ExecutionBucket="18"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 		</Configuration>
 	</Configurations>
@@ -202,320 +232,6 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
-			<Filter
-				Name="framework"
-				>
-				<File
-					RelativePath="..\lib\framework\configfile.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\framework\debug.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\framework\exceptionhandler.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\framework\frame.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\framework\frameresource.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\framework\input.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\framework\printf_ext.c"
-					>
-				</File>
-				<File
-					RelativePath=".\resource_lexer.lex.c"
-					>
-				</File>
-				<File
-					RelativePath=".\resource_parser.tab.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\framework\SDL_framerate.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\framework\strnlen1.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\framework\strres.c"
-					>
-				</File>
-				<File
-					RelativePath=".\strres_lexer.lex.c"
-					>
-				</File>
-				<File
-					RelativePath=".\strres_parser.tab.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\framework\tagfile.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\framework\treap.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\framework\trig.c"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="gamelib"
-				>
-				<File
-					RelativePath="..\lib\gamelib\anim.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\gamelib\animobj.c"
-					>
-				</File>
-				<File
-					RelativePath=".\audp_lexer.lex.c"
-					>
-				</File>
-				<File
-					RelativePath=".\audp_parser.tab.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\gamelib\gtime.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\gamelib\hashtabl.c"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="ivis_common"
-				>
-				<File
-					RelativePath="..\lib\ivis_common\bitimage.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\ivis_common\imd.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\ivis_common\imdload.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\ivis_common\pieclip.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\ivis_common\piestate.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\ivis_common\png_util.c"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="ivis_opengl"
-				>
-				<File
-					RelativePath="..\lib\ivis_opengl\ivi.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\ivis_opengl\pieblitfunc.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\ivis_opengl\piedraw.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\ivis_opengl\piefunc.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\ivis_opengl\piematrix.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\ivis_opengl\piemode.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\ivis_opengl\piepalette.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\ivis_opengl\piestate.c"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\$(InputName)1.obj"
-							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\$(InputName)1.obj"
-							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\lib\ivis_opengl\rendmode.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\ivis_opengl\screen.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\ivis_opengl\tex.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\ivis_opengl\textdraw.c"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="netplay"
-				>
-				<File
-					RelativePath="..\lib\netplay\netjoin_stub.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\netplay\netlog.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\netplay\netplay.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\netplay\nettypes.c"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="script"
-				>
-				<File
-					RelativePath=".\chat_lexer.lex.c"
-					>
-				</File>
-				<File
-					RelativePath=".\chat_parser.tab.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\script\codeprint.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\script\event.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\script\evntsave.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\script\interp.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\script\script.c"
-					>
-				</File>
-				<File
-					RelativePath=".\script_lexer.lex.c"
-					>
-				</File>
-				<File
-					RelativePath=".\script_parser.tab.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\script\stack.c"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="sequence"
-				>
-				<File
-					RelativePath="..\lib\sequence\adpcm.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\sequence\dec130.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\sequence\rpl_reader.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\sequence\sequence_stub.c"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="sound"
-				>
-				<File
-					RelativePath="..\lib\sound\audio.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\sound\audio_id.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\sound\cdaudio.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\sound\oggvorbis.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\sound\openal_track.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\sound\playlist.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\sound\track.c"
-					>
-				</File>
-			</Filter>
 			<Filter
 				Name="src"
 				>
@@ -720,7 +436,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\level_lexer.lex.c"
+					RelativePath="..\src\level_lexer.lex.c"
 					>
 				</File>
 				<File
@@ -892,11 +608,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\scriptvals_lexer.lex.c"
+					RelativePath="..\src\scriptvals_lexer.lex.c"
 					>
 				</File>
 				<File
-					RelativePath=".\scriptvals_parser.tab.c"
+					RelativePath="..\src\scriptvals_parser.tab.c"
 					>
 				</File>
 				<File
@@ -952,46 +668,6 @@
 					>
 				</File>
 			</Filter>
-			<Filter
-				Name="widget"
-				>
-				<File
-					RelativePath="..\lib\widget\bar.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\widget\button.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\widget\editbox.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\widget\form.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\widget\label.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\widget\scrap.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\widget\slider.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\widget\tip.c"
-					>
-				</File>
-				<File
-					RelativePath="..\lib\widget\widget.c"
-					>
-				</File>
-			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -1000,10 +676,6 @@
 			>
 			<File
 				RelativePath="..\src\action.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\sequence\adpcm.h"
 				>
 			</File>
 			<File
@@ -1019,15 +691,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\gamelib\anim.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\anim_id.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\gamelib\animobj.h"
 				>
 			</File>
 			<File
@@ -1039,18 +703,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\sound\aud.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\sound\audio.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\sound\audio_id.h"
-				>
-			</File>
-			<File
 				RelativePath=".\audp_parser.tab.h"
 				>
 			</File>
@@ -1059,15 +711,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\widget\bar.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\base.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\ivis_common\bitimage.h"
 				>
 			</File>
 			<File
@@ -1087,23 +731,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\widget\button.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\sound\cdaudio.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\cdspan.h"
 				>
 			</File>
 			<File
 				RelativePath=".\chat_parser.tab.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\script\chat_processing.h"
 				>
 			</File>
 			<File
@@ -1127,19 +759,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\script\codeprint.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\combat.h"
 				>
 			</File>
 			<File
 				RelativePath="..\src\component.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\configfile.h"
 				>
 			</File>
 			<File
@@ -1151,19 +775,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\framework\cursors.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\cursors16.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\data.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\debug.h"
 				>
 			</File>
 			<File
@@ -1215,10 +827,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\widget\editbox.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\effects.h"
 				>
 			</File>
@@ -1227,23 +835,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\script\event.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\script\evntsave.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\feature.h"
 				>
 			</File>
 			<File
 				RelativePath="..\src\featuredef.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\widget\form.h"
 				>
 			</File>
 			<File
@@ -1256,22 +852,6 @@
 			</File>
 			<File
 				RelativePath="..\src\fpath.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\fractions.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\frame.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\frameint.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\frameresource.h"
 				>
 			</File>
 			<File
@@ -1315,19 +895,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\gamelib\gtime.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\gamelib\hashtabl.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\hci.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\ivis_common\imd.h"
 				>
 			</File>
 			<File
@@ -1339,19 +907,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\framework\input.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\intdisplay.h"
 				>
 			</File>
 			<File
 				RelativePath="..\src\intelmap.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\script\interp.h"
 				>
 			</File>
 			<File
@@ -1367,18 +927,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\ivis_common\ivi.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\ivis_common\ivisdef.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\ivis_common\ivispatch.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\keybind.h"
 				>
 			</File>
@@ -1388,10 +936,6 @@
 			</File>
 			<File
 				RelativePath="..\src\keymap.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\widget\label.h"
 				>
 			</File>
 			<File
@@ -1407,19 +951,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\framework\listmacs.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\loadsave.h"
 				>
 			</File>
 			<File
 				RelativePath="..\src\loop.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\macros.h"
 				>
 			</File>
 			<File
@@ -1456,10 +992,6 @@
 			</File>
 			<File
 				RelativePath="..\src\missiondef.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\sound\mixer.h"
 				>
 			</File>
 			<File
@@ -1507,18 +1039,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\netplay\netlog.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\netplay\netplay.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\netplay\nettypes.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\objectdef.h"
 				>
 			</File>
@@ -1528,10 +1048,6 @@
 			</File>
 			<File
 				RelativePath="..\src\objmem.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\sound\oggvorbis.h"
 				>
 			</File>
 			<File
@@ -1551,71 +1067,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\script\parse.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\gamelib\parser.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\ivis_common\pieblitfunc.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\ivis_common\pieclip.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\ivis_common\piedef.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\ivis_common\piefunc.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\ivis_opengl\piematrix.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\ivis_common\piemode.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\ivis_common\piepalette.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\ivis_common\piestate.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\ivis_common\pietypes.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\ivis_common\pievector.h"
-				>
-			</File>
-			<File
 				RelativePath="..\lib\framework\platform.h"
 				>
 			</File>
 			<File
-				RelativePath="..\lib\sound\playlist.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\ivis_common\png_util.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\power.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\printf_ext.h"
 				>
 			</File>
 			<File
@@ -1631,19 +1087,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\ivis_common\rendmode.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\research.h"
 				>
 			</File>
 			<File
 				RelativePath="..\src\researchdef.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\resly.h"
 				>
 			</File>
 			<File
@@ -1655,23 +1103,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\sequence\rpl_reader.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\scores.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\widget\scrap.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\ivis_opengl\screen.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\script\script.h"
 				>
 			</File>
 			<File
@@ -1711,27 +1143,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\framework\SDL_framerate.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\selection.h"
 				>
 			</File>
 			<File
 				RelativePath="..\src\seqdisp.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\sequence\sequence.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\widget\slider.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\script\stack.h"
 				>
 			</File>
 			<File
@@ -1747,23 +1163,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\framework\strlfuncs.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\strnlen1.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\strres.h"
-				>
-			</File>
-			<File
 				RelativePath=".\strres_parser.tab.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\strresly.h"
 				>
 			</File>
 			<File
@@ -1775,15 +1175,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\framework\tagfile.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\target.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\ivis_common\tex.h"
 				>
 			</File>
 			<File
@@ -1791,43 +1183,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\ivis_common\textdraw.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\texture.h"
 				>
 			</File>
 			<File
-				RelativePath="..\lib\widget\tip.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\sound\track.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\sound\tracklib.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\transporter.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\treap.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\treapint.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\trig.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\types.h"
 				>
 			</File>
 			<File
@@ -1851,27 +1211,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\lib\widget\widgbase.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\widget\widget.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\widget\widgint.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\winmain.h"
 				>
 			</File>
 			<File
 				RelativePath="..\src\wrappers.h"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\wzglobal.h"
 				>
 			</File>
 		</Filter>
@@ -1889,39 +1233,7 @@
 			Name="FlexBison"
 			>
 			<File
-				RelativePath="..\lib\gamelib\audp_lexer.l"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\gamelib\audp_parser.y"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\script\chat_lexer.l"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\script\chat_parser.y"
-				>
-			</File>
-			<File
 				RelativePath="..\src\level_lexer.l"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\resource_lexer.l"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\resource_parser.y"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\script\script_lexer.l"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\script\script_parser.y"
 				>
 			</File>
 			<File
@@ -1930,14 +1242,6 @@
 			</File>
 			<File
 				RelativePath="..\src\scriptvals_parser.y"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\strres_lexer.l"
-				>
-			</File>
-			<File
-				RelativePath="..\lib\framework\strres_parser.y"
 				>
 			</File>
 		</Filter>

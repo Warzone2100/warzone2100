@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="autorevision"
-	ProjectGUID="{32FC4941-5ADF-483F-BD90-CDEBC50BA4AE}"
-	RootNamespace="autorevision"
+	Name="gamelib"
+	ProjectGUID="{EFE011B6-4C0B-40AA-9F18-5AD599E70D28}"
+	RootNamespace="gamelib"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -13,20 +13,30 @@
 		/>
 	</Platforms>
 	<ToolFiles>
+		<ToolFile
+			RelativePath="..\..\win32\FlexBison.rules"
+		/>
 	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="4"
 			CharacterSet="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
 			/>
 			<Tool
+				Name="FlexGenerator"
+			/>
+			<Tool
 				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="BisonParser"
+				Defines="true"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -40,7 +50,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				AdditionalIncludeDirectories="..\framework;..\sound;..\ivis_opengl;..\ivis_common;..\.."
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;YY_STATIC;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -59,17 +70,10 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				LinkIncremental="2"
-				GenerateDebugInformation="true"
-				SubSystem="1"
-				TargetMachine="1"
+				Name="VCLibrarianTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -81,22 +85,14 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
-				Description="* Updating &amp; copying $(TargetFileName) into correct directory. *"
-				CommandLine="del $(SolutionDir)\..\$(TargetFileName)&#x0D;&#x0A;copy /Y $(OutDir)\$(TargetFileName) $(SolutionDir)..\$(TargetFileName)"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="4"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -104,7 +100,14 @@
 				Name="VCPreBuildEventTool"
 			/>
 			<Tool
+				Name="FlexGenerator"
+			/>
+			<Tool
 				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="BisonParser"
+				Defines="true"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -117,7 +120,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				AdditionalIncludeDirectories="..\framework;..\sound;..\ivis_opengl;..\ivis_common;..\.."
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;YY_STATIC;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -134,19 +138,10 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				LinkIncremental="1"
-				GenerateDebugInformation="true"
-				SubSystem="1"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				TargetMachine="1"
+				Name="VCLibrarianTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -158,15 +153,7 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
-				Description="* Updating &amp; copying $(TargetFileName) into correct directory. *"
-				CommandLine="del $(SolutionDir)\..\$(TargetFileName)&#x0D;&#x0A;copy /Y $(OutDir)\$(TargetFileName) $(SolutionDir)..\$(TargetFileName)"
 			/>
 		</Configuration>
 	</Configurations>
@@ -179,7 +166,27 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\autorevision.cpp"
+				RelativePath=".\anim.c"
+				>
+			</File>
+			<File
+				RelativePath=".\animobj.c"
+				>
+			</File>
+			<File
+				RelativePath=".\audp_lexer.lex.c"
+				>
+			</File>
+			<File
+				RelativePath=".\audp_parser.tab.c"
+				>
+			</File>
+			<File
+				RelativePath=".\gtime.c"
+				>
+			</File>
+			<File
+				RelativePath=".\hashtabl.c"
 				>
 			</File>
 		</Filter>
@@ -188,12 +195,42 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\anim.h"
+				>
+			</File>
+			<File
+				RelativePath=".\animobj.h"
+				>
+			</File>
+			<File
+				RelativePath=".\audp_parser.tab.h"
+				>
+			</File>
+			<File
+				RelativePath=".\gtime.h"
+				>
+			</File>
+			<File
+				RelativePath=".\hashtabl.h"
+				>
+			</File>
+			<File
+				RelativePath=".\parser.h"
+				>
+			</File>
 		</Filter>
 		<Filter
-			Name="Resource Files"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
+			Name="FlexBison"
 			>
+			<File
+				RelativePath=".\audp_lexer.l"
+				>
+			</File>
+			<File
+				RelativePath=".\audp_parser.y"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
