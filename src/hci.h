@@ -298,16 +298,11 @@ extern DROID_TEMPLATE	*psCurrTemplate;
 extern DROID_TEMPLATE	**apsTemplateList;
 
 //two colours used for drawing the footprint outline for objects in 2D
-extern UDWORD	outlineOK;
-extern UDWORD	outlineNotOK;
-
-//two colours used for drawing the footprint outline for objects in 3D
-#define			outlineOK3D		255
-#define			outlineNotOK3D	 14		//arbitary value!
+extern PIELIGHT	outlineOK;
+extern PIELIGHT	outlineNotOK;
 
 //value gets set to colour used for drawing
-extern UDWORD	outlineColour;
-extern UDWORD	outlineColour3D;
+extern BOOL	outlineTile;
 
 /*Message View Buffer width and height - MAXIMUM Sizes! - only need to be
 as big as Pie View in Research Msg now*/

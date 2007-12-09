@@ -4618,20 +4618,18 @@ failed:
 	if (!valid)
 	{
 		// Only set the hilight colour if it's the selected player.
-		if(player == selectedPlayer) {
-
-			outlineColour = outlineNotOK;
-			outlineColour3D = outlineNotOK3D;
-
+		if(player == selectedPlayer)
+		{
+			outlineTile = FALSE;
 		}
 
 		return FALSE;
 	}
 
 	// Only set the hilight colour if it's the selected player.
-	if(player == selectedPlayer) {
-		outlineColour = outlineOK;
-		outlineColour3D = outlineOK3D;
+	if (player == selectedPlayer)
+	{
+		outlineTile = TRUE;
 	}
 
 	return TRUE;

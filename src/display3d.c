@@ -3832,7 +3832,7 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		//set tilenumber
 		if ( i < (LAND_XGRD-1) && j < (LAND_YGRD-1) ) // FIXME
 		{
-			if (outlineColour3D == outlineOK3D)
+			if (outlineTile)
 			{
 				oldColoursWord[0] = tileScreenInfo[i+0][j+0].light.argb;
 				oldColoursWord[1] = tileScreenInfo[i+0][j+1].light.argb;
@@ -3944,7 +3944,7 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 
 	if(!onWaterEdge && bOutlined)
 	{
-		if(outlineColour3D == outlineOK3D)
+		if (outlineTile)
 		{
 			tileScreenInfo[i+0][j+0].light.argb = oldColoursWord[0];
 			tileScreenInfo[i+0][j+1].light.argb = oldColoursWord[1];

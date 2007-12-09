@@ -282,11 +282,9 @@ UDWORD				selectedPlayer=0;
 //BOOL				intelMapUp = FALSE;
 
 //two colours used for drawing the footprint outline for objects in 2D
-UDWORD				outlineOK;
-UDWORD				outlineNotOK;
-//value gets set to colour used for drawing
-UDWORD				outlineColour;
-UDWORD				outlineColour3D;
+PIELIGHT			outlineOK;
+PIELIGHT			outlineNotOK;
+BOOL				outlineTile = FALSE;
 
 // The last widget ID from widgRunScreen
 UDWORD				intLastWidget;
@@ -680,22 +678,17 @@ BOOL intInitialise(void)
 	/* Initialise the screen to be run */
 	widgStartScreen(psWScreen);
 
-
-
 	/* Note the current screen state */
 	intMode = INT_NORMAL;
 
 	objectsChanged = FALSE;
 
 	//set the default colours to be used for drawing outlines in 2D
-	outlineOK = iV_PaletteNearestColour(0xff,0xff,0xff);
-	outlineNotOK = iV_PaletteNearestColour(0xff,0x00,0x00);
-
-
-	LOADBARCALLBACK();	//	loadingScreenCallback();
+	outlineOK = WZCOL_MAP_OUTLINE_OK;
+	outlineNotOK = WZCOL_MAP_OUTLINE_BAD;
 
 	LOADBARCALLBACK();	//	loadingScreenCallback();
-
+	LOADBARCALLBACK();	//	loadingScreenCallback();
 
 	/*Initialise the video playback buffer*/
 	if (!seq_SetupVideoBuffers())
@@ -704,7 +697,6 @@ BOOL intInitialise(void)
 		abort();
 		return FALSE;
 	}
-
 
 	LOADBARCALLBACK();	//	loadingScreenCallback();
 
