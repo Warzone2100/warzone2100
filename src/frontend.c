@@ -964,7 +964,7 @@ BOOL runGameOptions4Menu(void)
 			int current, count;
 			
 			// Get the current mode offset
-			for (count = 0; modes[count]; count++)
+			for (count = 0, current = 0; modes[count]; count++)
 			{
 				if (war_GetWidth() == modes[count]->w
 				 && war_GetHeight() == modes[count]->h)
