@@ -26,6 +26,7 @@
 #include "lib/framework/frame.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_opengl/piematrix.h"
+#include "lib/ivis_common/piepalette.h"
 #include "lib/ivis_common/piestate.h"
 #include "display3d.h"
 #include "display3ddef.h"
@@ -328,7 +329,7 @@ UDWORD	i;
 void	renderParticle( ATPART *psPart )
 {
 	Vector3i dv;
-	UDWORD brightness, specular;
+	PIELIGHT brightness;
 	SDWORD centreX, centreZ;
 	SDWORD x, y, z, rx, rz;
 
@@ -352,10 +353,11 @@ void	renderParticle( ATPART *psPart )
 	/* Draw it... */
 	centreX = player.p.x + world_coord(visibleTiles.x / 2);
 	centreZ = player.p.z + world_coord(visibleTiles.y / 2);
-	brightness = lightDoFogAndIllumination(pie_MAX_BRIGHT_LEVEL,centreX - x,centreZ - z, &specular);
-   	pie_Draw3DShape(psPart->imd, 0, 0, brightness, 0, pie_NO_BILINEAR, 0);
+	brightness = lightDoFogAndIllumination(WZCOL_WHITE, centreX - x, centreZ - z, NULL);
+   	pie_Draw3DShape(psPart->imd, 0, 0, brightness, WZCOL_BLACK, pie_NO_BILINEAR, 0);
 	iV_MatrixEnd();
 }
+
 // -----------------------------------------------------------------------------
 /*	Makes a particle wrap around - if it goes off the grid, then it returns
 	on the other side - provided it's still on world... Which it should be */

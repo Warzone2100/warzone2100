@@ -78,5 +78,6 @@ extern Uint8	pal_GetNearestColour(Uint8 r, Uint8 g, Uint8 b);
 extern int		pal_AddNewPalette(PIELIGHT *pal);
 extern void		pal_PaletteSet(void);
 extern PIELIGHT		*pie_GetGamePal(void);
+extern PIELIGHT		pal_SetBrightness(UBYTE brightness);
 
 #endif

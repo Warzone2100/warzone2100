@@ -48,6 +48,11 @@
  */
 /***************************************************************************/
 
+#define pie_FILLRED	 16
+#define pie_FILLGREEN	 16
+#define pie_FILLBLUE	128
+#define pie_FILLTRANS	128
+
 #define RADARX 128
 #define RADARY 128
 

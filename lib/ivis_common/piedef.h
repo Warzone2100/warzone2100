@@ -58,14 +58,7 @@
 
 #define OLD_TEXTURE_SIZE_FIX 256.0f
 
-
 #define pie_MAX_POLY_SIZE	16
-
-//Effects
-#define pie_MAX_BRIGHT_LEVEL 255
-#define pie_BRIGHT_LEVEL_200 200
-#define pie_BRIGHT_LEVEL_180 180
-#define pie_DROID_BRIGHT_LEVEL 192
 
 //Render style flags for all pie draw functions
 #define pie_TRANSLUCENT         0x2
@@ -83,14 +76,8 @@
 #define pie_MAX_POLYGONS		512
 #define pie_MAX_VERTICES_PER_POLYGON	6
 
-#define pie_FILLRED			16
-#define pie_FILLGREEN			16
-#define pie_FILLBLUE			128
-#define pie_FILLTRANS			128
-
 #define MAX_UB_LIGHT			((UBYTE)255)
 #define MIN_UB_LIGHT			((UBYTE)0)
-#define MAX_LIGHT			0xffffffff
 
 /***************************************************************************/
 /*
@@ -151,7 +138,7 @@ typedef struct {
  *	Global ProtoTypes
  */
 /***************************************************************************/
-extern void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD colour, UDWORD specular, int pieFlag, int pieData);
+extern void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, PIELIGHT specular, int pieFlag, int pieData);
 extern void pie_DrawImage(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style);
 
 void pie_DrawTerrainInit(void);

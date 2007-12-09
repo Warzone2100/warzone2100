@@ -28,6 +28,7 @@
 #include "lib/ivis_common/piestate.h" //ivis matrix code
 #include "lib/ivis_common/piefunc.h" //ivis matrix code
 #include "lib/ivis_opengl/piematrix.h"
+#include "lib/ivis_common/piepalette.h"
 #include "map.h"
 #include "lighting.h"
 #include "display3d.h"
@@ -517,8 +518,7 @@ float	fraction,adjust;
 }
 
 
-
-UDWORD	lightDoFogAndIllumination(UBYTE brightness, SDWORD dx, SDWORD dz, UDWORD* pSpecular)
+PIELIGHT lightDoFogAndIllumination(PIELIGHT brightness, SDWORD dx, SDWORD dz, PIELIGHT *pSpecular)
 {
 	SDWORD	umbraRadius;	// Distance to start of light falloff
 	SDWORD	penumbraRadius; // radius of area of obscurity
@@ -609,42 +609,36 @@ UDWORD	lightDoFogAndIllumination(UBYTE brightness, SDWORD dx, SDWORD dz, UDWORD*
 	}
 	else
 	{
-		brightness = (UBYTE)pie_ByteScale((UBYTE)brightness, (UBYTE)umbra);
+		brightness = pal_SetBrightness(pie_ByteScale(brightness.byte.r, (UBYTE)umbra));
 	}
 
 	if (fog == 0)
 	{
 		if (pSpecular != NULL)
 		{
-			*pSpecular = 0;
+			*pSpecular = WZCOL_BLACK;
 		}
-		lighting.byte.a = UBYTE_MAX;
-		lighting.byte.r = brightness;
-		lighting.byte.g = brightness;
-		lighting.byte.b = brightness;
+		lighting = brightness;
 	}
 	else
 	{
 		if (pSpecular != NULL)
 		{
 			fogColour = pie_GetFogColour();
-			specular.byte.a = (UBYTE)fog;
-			specular.byte.r = pie_ByteScale((UBYTE)fog, fogColour.byte.r);
-			specular.byte.g = pie_ByteScale((UBYTE)fog, fogColour.byte.g);
-			specular.byte.b = pie_ByteScale((UBYTE)fog, fogColour.byte.b);
-			*pSpecular = specular.argb;
+			specular.byte.a = fog;
+			specular.byte.r = pie_ByteScale(fog, fogColour.byte.r);
+			specular.byte.g = pie_ByteScale(fog, fogColour.byte.g);
+			specular.byte.b = pie_ByteScale(fog, fogColour.byte.b);
+			*pSpecular = specular;
 		}
 
 		//calculate new brightness
 		colour = 256 - fog;
-		brightness = (UBYTE)pie_ByteScale((UBYTE)colour, (UBYTE)brightness);
-		lighting.byte.a = UBYTE_MAX;
-		lighting.byte.r = brightness;
-		lighting.byte.g = brightness;
-		lighting.byte.b = brightness;
+		brightness = pal_SetBrightness(pie_ByteScale(colour, brightness.byte.r));
+		lighting = brightness;
 	}
 
-	return lighting.argb;
+	return lighting;
 }
 
 void	doBuildingLights( void )

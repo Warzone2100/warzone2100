@@ -674,10 +674,8 @@ void pie_CleanUp( void )
 	scshapes = NULL;
 }
 
-void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD spec, int pieFlag, int pieFlagData)
+void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, PIELIGHT specular, int pieFlag, int pieFlagData)
 {
-	PIELIGHT colour, specular;
-
 	pieCount++;
 
 	// Fix for transparent buildings and features!!
@@ -687,20 +685,6 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, UDWORD col, UDWORD s
 		pieFlag = pieFlag & ~pie_TRANSLUCENT;
 		pieFlagData = 0;
 	}
-
-// WARZONE light as byte passed in colour so expand
-	if (col <= MAX_UB_LIGHT)
-	{
-		colour.byte.a = 255;//no fog
-		colour.byte.r = (UBYTE)col;
-		colour.byte.g = (UBYTE)col;
-		colour.byte.b = (UBYTE)col;
-	}
-	else
-	{
-		colour.argb = col;
-	}
-	specular.argb = spec;
 
 	if (frame == 0)
 	{

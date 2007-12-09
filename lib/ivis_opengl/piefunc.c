@@ -108,12 +108,9 @@ void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD 
 }
 
 /* ---------------------------------------------------------------------------------- */
-void pie_TransColouredTriangle(CLIP_VERTEX *vrt, UDWORD rgb)
+void pie_TransColouredTriangle(CLIP_VERTEX *vrt, PIELIGHT c)
 {
-	PIELIGHT c;
 	UDWORD i;
-
-	c.argb = rgb;
 
 	pie_SetTexturePage(-1);
 	pie_SetRendMode(REND_ALPHA_ITERATED);
@@ -125,7 +122,8 @@ void pie_TransColouredTriangle(CLIP_VERTEX *vrt, UDWORD rgb)
 		{
 			glVertex3f(vrt[i].pos.x, vrt[i].pos.y, vrt[i].pos.z);
 		}
-	glEnd();}
+	glEnd();
+}
 
 /* ---------------------------------------------------------------------------------- */
 

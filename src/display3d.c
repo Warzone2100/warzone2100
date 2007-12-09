@@ -535,10 +535,6 @@ static void calcAverageTerrainHeight(iView *player)
 static void drawTiles(iView *camera, iView *player)
 {
 	UDWORD i, j;
-	BOOL bWaterTile = FALSE;
-	BOOL PushedDown = FALSE;
-	UBYTE TileIllum;
-	int shiftVal = 0;
 	static float angle = 0.0f;
 	SDWORD rx, rz;
 
@@ -610,10 +606,13 @@ static void drawTiles(iView *camera, iView *player)
 		for (j = 0; j < (SDWORD)visibleTiles.x+1; j++)
 		{
 			Vector2i screen;
+			PIELIGHT TileIllum;
+			int shiftVal = 0;
 
 			tileScreenInfo[i][j].pos.x = world_coord(j - terrainMidX);
 			tileScreenInfo[i][j].pos.z = world_coord(terrainMidY - i);
 			tileScreenInfo[i][j].pos.y = 0;
+			tileScreenInfo[i][j].bWater = FALSE;
 
 			if( playerXTile+j < 0 ||
 				playerZTile+i < 0 ||
@@ -629,39 +628,22 @@ static void drawTiles(iView *camera, iView *player)
 			}
 			else
 			{
-				BOOL bEdgeTile;				
+				BOOL bEdgeTile = FALSE;
 				MAPTILE *psTile = mapTile(playerXTile + j, playerZTile + i);
-
-				if (terrainType(psTile) == TER_WATER)
-				{
-					tileScreenInfo[i][j].bWater = TRUE;
-					bWaterTile = TRUE;
-				}
-				else
-				{
-					tileScreenInfo[i][j].bWater = FALSE;
-					bWaterTile = FALSE;
-				}
+				BOOL pushedDown = FALSE;
 
 				tileScreenInfo[i][j].pos.y = map_TileHeight(playerXTile + j, playerZTile + i);
 
-				if(getRevealStatus())
+				if (getRevealStatus() && !godMode)
 				{
-					if(godMode)
-					{
-						TileIllum = psTile->illumination;
-					}
-					else
-					{
-						TileIllum = (psTile->level == UBYTE_MAX ? 1 : psTile->level); // avGetTileLevel(realX,realY);
-					}
+					TileIllum = pal_SetBrightness(psTile->level == UBYTE_MAX ? 1 : psTile->level);
 				}
 				else
 				{
-					TileIllum = psTile->illumination;
+					TileIllum = pal_SetBrightness(psTile->illumination);
 				}
 
-				tileScreenInfo[i][j].light.argb = lightDoFogAndIllumination(TileIllum, rx - tileScreenInfo[i][j].pos.x, rz - world_coord(i - terrainMidY), &tileScreenInfo[i][j].specular.argb);
+				tileScreenInfo[i][j].light = lightDoFogAndIllumination(TileIllum, rx - tileScreenInfo[i][j].pos.x, rz - world_coord(i - terrainMidY), &tileScreenInfo[i][j].specular);
 
 				// Real fog of war - darken where we cannot see enemy units moving around
 				if (bDisplaySensorRange && psTile && !psTile->activeSensor)
@@ -689,37 +671,31 @@ static void drawTiles(iView *camera, iView *player)
 				{
 					bEdgeTile = TRUE;
 				}
-				else
-				{
-					bEdgeTile = FALSE;
-				}
 
 				// If it's the main water tile (has water texture) then..
-				if ( TileNumber_tile(psTile->texture) == WATER_TILE && !bEdgeTile )
+				if (TileNumber_tile(psTile->texture) == WATER_TILE && !bEdgeTile)
 				{
 					// Push the terrain down for the river bed.
-					PushedDown = TRUE;
 					shiftVal = WATER_DEPTH + environGetData(playerXTile+j, playerZTile+i) * 1.5f;
 					tileScreenInfo[i][j].pos.y -= shiftVal;
 					// And darken it.
-					TileIllum = (UBYTE)(TileIllum * 0.75f);
-				}
-				else
-				{
-					PushedDown = FALSE;
+					TileIllum = pal_SetBrightness(TileIllum.byte.r * 0.75f);
+					pushedDown = TRUE;
 				}
 
 				// If it's any water tile..
-				if (bWaterTile)
+				if (terrainType(psTile) == TER_WATER)
 				{
 					// If it's the main water tile then bring it back up because it was pushed down for the river bed calc.
 					int tmp_y = tileScreenInfo[i][j].pos.y;
 					Vector2i water;
 
-					if (PushedDown)
+					if (pushedDown)
 					{
 						tileScreenInfo[i][j].pos.y += shiftVal;
 					}
+
+					tileScreenInfo[i][j].bWater = TRUE;
 
 					// Transform it into the wx,wy mesh members.
 
@@ -733,7 +709,7 @@ static void drawTiles(iView *camera, iView *player)
 					tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].pos.y;
 
 					// Calc the light for modified y coord and ignore the specular component
-					tileScreenInfo[i][j].wlight.argb = lightDoFogAndIllumination(TileIllum, rx - tileScreenInfo[i][j].pos.x, rz - world_coord(i - terrainMidY), NULL);
+					tileScreenInfo[i][j].wlight = lightDoFogAndIllumination(TileIllum, rx - tileScreenInfo[i][j].pos.x, rz - world_coord(i - terrainMidY), NULL);
 
 					tileScreenInfo[i][j].pos.y = tmp_y;
 				}
@@ -1167,7 +1143,7 @@ void	renderProjectile(PROJECTILE *psCurr)
 	WEAPON_STATS	*psStats;
 	Vector3i			dv;
 	iIMDShape		*pIMD;
-	UDWORD			brightness, specular;
+	PIELIGHT		brightness, specular;
 	SDWORD			rx, rz;
 
 	psStats = psCurr->psWStats;
@@ -1218,11 +1194,11 @@ void	renderProjectile(PROJECTILE *psCurr)
 		imdRot2.x = DEG(psCurr->pitch);
 		iV_MatrixRotateX(imdRot2.x);
 
-		brightness = (UDWORD)lightDoFogAndIllumination(pie_MAX_BRIGHT_LEVEL,getCentreX()-psCurr->x,getCentreZ()-psCurr->y, &specular);
+		brightness = lightDoFogAndIllumination(WZCOL_WHITE, getCentreX() - psCurr->x, getCentreZ() - psCurr->y, &specular);
 		if(psStats->weaponSubClass == WSC_ROCKET || psStats->weaponSubClass == WSC_MISSILE ||
 		psStats->weaponSubClass == WSC_SLOWROCKET || psStats->weaponSubClass == WSC_SLOWMISSILE)
 		{
-			pie_Draw3DShape(pIMD, 0, 0, brightness, 0, pie_ADDITIVE, 164);
+			pie_Draw3DShape(pIMD, 0, 0, brightness, WZCOL_BLACK, pie_ADDITIVE, 164);
 		}
 		else
 		{
@@ -1261,7 +1237,7 @@ renderAnimComponent( const COMPONENT_OBJECT *psObj )
 			terrainMidY * TILE_UNITS - (psParentObj->y - player.p.z)
 		};
 		SDWORD iPlayer;
-		UDWORD brightness, specular;
+		PIELIGHT brightness, specular;
 
 		psParentObj->sDisplay.frameNumber = currentGameFrame;
 
@@ -1322,7 +1298,7 @@ renderAnimComponent( const COMPONENT_OBJECT *psObj )
 			Vector2i s = {0, 0};
 			STRUCTURE *psStructure = (STRUCTURE*)psParentObj;
 
-			brightness = 200 - (100 - PERCENT(psStructure->body, structureBody(psStructure)));
+			brightness = pal_SetBrightness(200 - (100 - PERCENT(psStructure->body, structureBody(psStructure))));
 
 			pie_RotateProject( &zero, &s );
 			psStructure->sDisplay.screenX = s.x;
@@ -1332,15 +1308,15 @@ renderAnimComponent( const COMPONENT_OBJECT *psObj )
 		}
 		else
 		{
-			brightness = pie_MAX_BRIGHT_LEVEL;
+			brightness = pal_SetBrightness(UBYTE_MAX);
 		}
 
 		if(getRevealStatus() && !godMode)
 		{
-			brightness = avGetObjLightLevel((BASE_OBJECT*)psParentObj,brightness);
+			brightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT*)psParentObj, brightness.byte.r));
 		}
 
-		brightness = (UDWORD)lightDoFogAndIllumination((UBYTE)brightness, getCentreX()-posX, getCentreZ()-posY, &specular);
+		brightness = lightDoFogAndIllumination(brightness, getCentreX() - posX, getCentreZ() - posY, &specular);
 
 		pie_Draw3DShape(psObj->psShape, 0, iPlayer, brightness, specular, pie_NO_BILINEAR|pie_STATIC_SHADOW, 0);
 
@@ -1641,7 +1617,7 @@ void	renderFeature(FEATURE *psFeature)
 {
 	UDWORD		featX,featY;
 	SDWORD		rotation, rx, rz;
-	UDWORD		brightness, specular;
+	PIELIGHT	brightness, specular;
 	Vector3i dv;
 	Vector3f *vecTemp;
 	BOOL bForceDraw = ( !getRevealStatus() && psFeature->psStats->visibleAtStart);
@@ -1680,7 +1656,7 @@ void	renderFeature(FEATURE *psFeature)
 
 		iV_MatrixRotateY(-rotation);
 
-		brightness = 200; //? HUH?
+		brightness = pal_SetBrightness(200); //? HUH?
 
 		if(psFeature->psStats->subType == FEAT_SKYSCRAPER)
 		{
@@ -1689,11 +1665,11 @@ void	renderFeature(FEATURE *psFeature)
 
 		if(godMode || demoGetStatus() || bForceDraw)
 		{
-			brightness = 200;
+			brightness = pal_SetBrightness(200);
 		}
 		else if(getRevealStatus())
 		{
-			brightness = avGetObjLightLevel((BASE_OBJECT*)psFeature,brightness);
+			brightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT*)psFeature, brightness.byte.r));
 		}
 
 		brightness = lightDoFogAndIllumination(brightness, getCentreX() - featX, getCentreZ() - featY, &specular);
@@ -1739,7 +1715,7 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 	VIEW_PROXIMITY	*pViewProximity = NULL;
 	SDWORD			x, y, r, rx, rz;
 	iIMDShape		*proxImd = NULL;
-	UDWORD		brightness, specular;
+	PIELIGHT		brightness, specular;
 
 	//store the frame number for when deciding what has been clicked on
 	psProxDisp->frameNumber = currentGameFrame;
@@ -1776,7 +1752,7 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 	{
 		ASSERT(!"unknown proximity display message type", "Buggered proximity message type");
 	}
-	brightness = lightDoFogAndIllumination(pie_MAX_BRIGHT_LEVEL,getCentreX()-msgX,getCentreZ()-msgY, &specular);
+	brightness = lightDoFogAndIllumination(WZCOL_WHITE, getCentreX() - msgX, getCentreZ() - msgY, &specular);
 
 	dv.x = (msgX - player.p.x) - terrainMidX*TILE_UNITS;
 	dv.z = terrainMidY*TILE_UNITS - (msgY - player.p.z);
@@ -1862,7 +1838,7 @@ void	renderStructure(STRUCTURE *psStructure)
 	SDWORD			playerFrame;
 	SDWORD			animFrame;
 	UDWORD			nWeaponStat;
-	UDWORD			buildingBrightness, specular;
+	PIELIGHT		buildingBrightness, specular;
 	Vector3i dv;
 	SDWORD			i;
 	iIMDShape *lImd = NULL, *imd = NULL;
@@ -1983,7 +1959,7 @@ void	renderStructure(STRUCTURE *psStructure)
 		bHitByElectronic = TRUE;
 	}
 
-	buildingBrightness = 200 - (100 - PERCENT(psStructure->body, structureBody(psStructure)));
+	buildingBrightness = pal_SetBrightness(200 - (100 - PERCENT(psStructure->body, structureBody(psStructure))));
 
 	/* If it's selected, then it's brighter */
 	if (psStructure->selected)
@@ -2002,11 +1978,11 @@ void	renderStructure(STRUCTURE *psStructure)
 		{
 			brightVar = 55;
 		}
-		buildingBrightness = 200 + brightVar;
+		buildingBrightness = pal_SetBrightness(200 + brightVar);
 	}
 	if (!godMode && !demoGetStatus() && getRevealStatus())
 	{
-		buildingBrightness = avGetObjLightLevel((BASE_OBJECT*)psStructure, buildingBrightness);
+		buildingBrightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT*)psStructure, buildingBrightness.byte.r));
 	}
 	buildingBrightness = lightDoFogAndIllumination(buildingBrightness, getCentreX() - psStructure->x, getCentreZ() - psStructure->y, &specular);
 
@@ -2023,7 +1999,7 @@ void	renderStructure(STRUCTURE *psStructure)
 		// override
 		if(bHitByElectronic)
 		{
-			buildingBrightness = 150;
+			buildingBrightness = pal_SetBrightness(150);
 		}
 
 		imd = psStructure->sDisplay.imd;
@@ -2175,7 +2151,7 @@ void	renderStructure(STRUCTURE *psStructure)
 
 							iV_MatrixRotateY(-player.r.y);
 							iV_MatrixRotateX(-player.r.x);
-							pie_Draw3DShape(pRepImd, getStaticTimeValueRange(100,pRepImd->numFrames), 0, buildingBrightness, 0, pie_ADDITIVE, 192);
+							pie_Draw3DShape(pRepImd, getStaticTimeValueRange(100,pRepImd->numFrames), 0, buildingBrightness, WZCOL_BLACK, pie_ADDITIVE, 192);
 
 							iV_MatrixRotateX(player.r.x);
 							iV_MatrixRotateY(player.r.y);
@@ -2298,7 +2274,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition)
 	Vector3i dv;
 	SDWORD			x, y, r, rx, rz;
 	Vector3f *temp = NULL;
-	SDWORD			buildingBrightness, specular;
+	PIELIGHT		buildingBrightness, specular;
 	//store the frame number for when deciding what has been clicked on
 	psPosition->frameNumber = currentGameFrame;
 
@@ -2330,8 +2306,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition)
 
 	pie_MatScale(50); // they are all big now so make this one smaller too
 
-	buildingBrightness = lightDoFogAndIllumination(pie_MAX_BRIGHT_LEVEL,
-		getCentreX() - psPosition->coords.x, getCentreZ() - psPosition->coords.y, (UDWORD*)&specular);
+	buildingBrightness = lightDoFogAndIllumination(WZCOL_WHITE, getCentreX() - psPosition->coords.x, getCentreZ() - psPosition->coords.y, &specular);
 
 	pie_Draw3DShape(pAssemblyPointIMDs[psPosition->factoryType][psPosition->factoryInc], 0, 0, buildingBrightness, specular, pie_NO_BILINEAR, 0);
 
@@ -2352,13 +2327,12 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition)
 static BOOL	renderWallSection(STRUCTURE *psStructure)
 {
 	SDWORD			structX, structY, rx, rz;
-	UDWORD			brightness;
+	PIELIGHT		brightness, specular, buildingBrightness;
 	iIMDShape		*imd;
 	SDWORD			rotation;
 	Vector3i			dv;
 	UDWORD			i;
 	Vector3f			*temp;
-	UDWORD			buildingBrightness, specular;
 	iIMDShape *originalDirection = NULL;
 
 	if(psStructure->visible[selectedPlayer] || godMode || demoGetStatus())
@@ -2369,7 +2343,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 		structY = psStructure->y;
 //		centreX = ( player.p.x + world_coord(visibleTiles.x / 2) );
 //		centreZ = ( player.p.z + world_coord(visibleTiles.y / 2) );
-		buildingBrightness = 200 - (100-PERCENT( psStructure->body , structureBody(psStructure)));
+		buildingBrightness = pal_SetBrightness(200 - (100 - PERCENT(psStructure->body, structureBody(psStructure))));
 
 		if(psStructure->selected)
 		{
@@ -2386,7 +2360,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 			}
 
 
-			buildingBrightness = 200 + brightVar;
+			buildingBrightness = pal_SetBrightness(200 + brightVar);
 		}
 
 		if(godMode || demoGetStatus())
@@ -2395,10 +2369,10 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 		}
 		else if(getRevealStatus())
 		{
-			buildingBrightness = avGetObjLightLevel((BASE_OBJECT*)psStructure,buildingBrightness);
+			buildingBrightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT*)psStructure, buildingBrightness.byte.r));
 		}
 
-		brightness = lightDoFogAndIllumination((UBYTE)buildingBrightness,getCentreX()-structX,getCentreZ()-structY, &specular);
+		brightness = lightDoFogAndIllumination(buildingBrightness, getCentreX() - structX, getCentreZ() - structY, &specular);
 
 		/*
 		Right, now the tricky bit, we need to bugger about with the coordinates of the imd to make it
@@ -2480,7 +2454,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 			(psStructure->status == SS_BEING_DEMOLISHED ) ||
 			(psStructure->status == SS_BEING_BUILT && psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR) )
 		{
-			pie_Draw3DShape( psStructure->sDisplay.imd, 0, getPlayerColour(psStructure->player),
+			pie_Draw3DShape(psStructure->sDisplay.imd, 0, getPlayerColour(psStructure->player),
 							brightness, specular, pie_HEIGHT_SCALED|pie_SHADOW,
 							(SDWORD)(structHeightScale(psStructure) * pie_RAISE_SCALE) );
 		}
@@ -2518,7 +2492,7 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 	Vector3i			dv;
 	Vector3f			*pVecTemp;
 	SDWORD			shadowScale, rx, rz;
-	UDWORD brightness, specular;
+	PIELIGHT		brightness, specular;
 
 	dv.x = (psDroid->x - player.p.x) - terrainMidX*TILE_UNITS;
 	if(psDroid->droidType == DROID_TRANSPORTER)
@@ -2559,9 +2533,9 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 		pie_MatRotZ( DEG( psDroid->roll ) );
 	}
 
-	brightness = (UDWORD)lightDoFogAndIllumination(pie_MAX_BRIGHT_LEVEL,getCentreX()-psDroid->x,getCentreZ()-psDroid->y, &specular);
+	brightness = lightDoFogAndIllumination(WZCOL_WHITE, getCentreX() - psDroid->x, getCentreZ() - psDroid->y, &specular);
 
-	pie_Draw3DShape( psShadowIMD, 0, 0, brightness, specular, pie_TRANSLUCENT, 128);
+	pie_Draw3DShape(psShadowIMD, 0, 0, brightness, specular, pie_TRANSLUCENT, 128);
 	psShadowIMD->points = pVecTemp;
 
 	iV_MatrixEnd();
@@ -4774,8 +4748,7 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 	SDWORD	realY;
 	Vector3i null, vec;
 	SDWORD	rx,rz;
-	UDWORD	colour;
-	UDWORD	specular;
+	PIELIGHT colour, specular;
 
 	null.x = null.y = null.z = 0;
 	each.x = psDroid->x;
@@ -4835,14 +4808,17 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 	pts[2].pos.z = vec.z - rz;
 
 	// set the colour
-	colour = UBYTE_MAX;
-	colour = lightDoFogAndIllumination(colour,getCentreX() - psDroid->x, getCentreZ() - psDroid->y,&specular);
+	colour = pal_SetBrightness(UBYTE_MAX);
+	colour = lightDoFogAndIllumination(colour, getCentreX() - psDroid->x, getCentreZ() - psDroid->y, &specular);
 
-	colour &= 0xff;
-	if ((psDroid->action == DACTION_DEMOLISH) ||
-		(psDroid->action == DACTION_CLEARWRECK) ) {
-			colour <<= 16;//red
-		}
+	if (psDroid->action == DACTION_DEMOLISH || psDroid->action == DACTION_CLEARWRECK)
+	{
+		colour.byte.g = 0;
+		colour.byte.b = 0;
+	} else {
+		colour.byte.r = 0;
+		colour.byte.g = 0;
+	}
 	pts[0].light.argb = 0xff000000;
 	pts[1].light.argb = 0xff000000;
 	pts[2].light.argb = 0xff000000;

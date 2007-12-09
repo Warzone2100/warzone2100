@@ -168,6 +168,16 @@ void pie_SetColourDefines(void)
 	WZCOL_MENU_SEPARATOR.byte.b = 0xa0;
 }
 
+PIELIGHT pal_SetBrightness(UBYTE brightness)
+{
+	PIELIGHT c;
+	c.byte.r = brightness;
+	c.byte.g = brightness;
+	c.byte.b = brightness;
+	c.byte.a = UBYTE_MAX;
+	return c;
+}
+
 void pal_ShutDown(void)
 {
 	if (bPaletteInitialised)

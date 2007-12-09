@@ -53,7 +53,7 @@ extern void	lightValueForTile(UDWORD tileX, UDWORD tileY);
 extern void	calcTileIllum(UDWORD tileX, UDWORD tileY);
 extern void	doBuildingLights( void );
 extern void UpdateFogDistance(float distance);
-extern UDWORD	lightDoFogAndIllumination(UBYTE brightness, SDWORD dx, SDWORD dz, UDWORD* pSpecular);
+extern PIELIGHT	lightDoFogAndIllumination(PIELIGHT brightness, SDWORD dx, SDWORD dz, PIELIGHT *pSpecular);
 extern void	calcDroidIllumination(DROID *psDroid);
 //darkens down the tiles that are outside the scroll limits
 extern void setScrollLimitLighting(void);
