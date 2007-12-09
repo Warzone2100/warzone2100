@@ -254,7 +254,8 @@ static float QualityFactor(DROID *psAttacker, DROID *psVictim)
 {
 	float quality = calcDroidPower(psVictim) / calcDroidPower(psAttacker)
 	              + calcDroidPoints(psVictim) / calcDroidPoints(psAttacker)
-	              + psVictim->numKills / psAttacker->numKills;
+	              // Make sure psAttacker has some kills to prevent div by 0
+	              + (psAttacker->numKills) ? psVictim->numKills / psAttacker->numKills : 1;
 	
 	return quality / 3;
 }
@@ -288,7 +289,10 @@ static void proj_UpdateKills(PROJECTILE *psObj, SDWORD percentDamage)
 		psDroid = (DROID *) psObj->psSource;
 		
 		// If it is 'droid-on-droid' then modify the experience by the Quality factor
-		if (psObj->psDest != NULL && psObj->psDest->type == OBJ_DROID)
+		// Only do this in MP so to not un-balance the campaign
+		if (psObj->psDest != NULL
+		 && psObj->psDest->type == OBJ_DROID
+		 && bMultiPlayer)
 		{
 			// Modify the experience gained by the 'quality factor' of the units
 			percentDamage *= QualityFactor(psDroid, (DROID *) psObj->psDest);
