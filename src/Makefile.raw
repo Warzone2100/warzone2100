@@ -83,7 +83,6 @@ SRC=ai.c \
 	visibility.c \
 	warcam.c \
 	wrappers.c \
-	arrow.c \
 	aud.c \
 	bucket3d.c \
 	clparse.c \
