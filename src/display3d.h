@@ -135,6 +135,4 @@ extern void showRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius);
 extern UDWORD barMode;
 extern UDWORD geoOffset;
 
-extern void draw3dLine(Vector3i *src, Vector3i *dest, UBYTE col);
-
 #endif

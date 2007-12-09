@@ -3408,52 +3408,6 @@ SDWORD	xShift,yShift, index;
 /* ---------------------------------------------------------------------------- */
 
 
-/* ---------------------------------------------------------------------------- */
-void	draw3dLine(Vector3i *src, Vector3i *dest, UBYTE col)
-{
-	Vector3i zero = {0, 0, 0}, vec;
-	Vector2i srcS, destS;
-	SDWORD rx, rz;
-
-	vec.x = (src->x - player.p.x) - terrainMidX*TILE_UNITS;
-	vec.z = terrainMidY*TILE_UNITS - (src->z - player.p.z);
-	vec.y = src->y;
-
-	pie_MatBegin();
-
-	/* Translate */
-	pie_TRANSLATE(vec.x,vec.y,vec.z);
-	rx = player.p.x & (TILE_UNITS-1);
-	rz = player.p.z & (TILE_UNITS-1);
-
-	/* Translate */
-	pie_TRANSLATE(rx,0,-rz);
-
-	/* Project - no rotation being done */
-	pie_RotateProject(&zero, &srcS);
-	pie_MatEnd();
-
-	vec.x = (dest->x - player.p.x) - terrainMidX*TILE_UNITS;
-	vec.z = terrainMidY*TILE_UNITS - (dest->z - player.p.z);
-	vec.y = dest->y;
-
-	iV_MatrixBegin();
-
-	/* Translate */
-	pie_TRANSLATE(vec.x, vec.y, vec.z);
-	rx = player.p.x & (TILE_UNITS-1);
-	rz = player.p.z & (TILE_UNITS-1);
-
-	/* Translate */
-	pie_TRANSLATE(rx, 0, -rz);
-
-	/* Project - no rotation being done */
-	pie_RotateProject(&zero, &destS);
-	pie_MatEnd();
-
-	iV_Line(srcS.x,srcS.y,destS.x,destS.y,col);
-}
-
 /*	Get the onscreen corrdinates of a droid - so we can draw a bounding box - this need to be severely
 	speeded up and the accuracy increased to allow variable size bouding boxes */
 void calcScreenCoords(DROID *psDroid)

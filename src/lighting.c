@@ -61,9 +61,6 @@ static UDWORD calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos);
 static UDWORD	numNormals;		// How many normals have we got?
 static Vector3i normals[8];		// Maximum 8 possible normals
 
-extern void	draw3dLine(Vector3i *src, Vector3i *dest, UBYTE col);
-
-
 /*****************************************************************************/
 /*
  * SOURCE
