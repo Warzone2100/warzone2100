@@ -1314,19 +1314,6 @@
 			<Option target="DBGWindows" />
 			<Option target="NDBGWindows" />
 		</Unit>
-		<Unit filename="src/arrow.c">
-			<Option compilerVar="CC" />
-			<Option target="DBGUnix" />
-			<Option target="NDBGUnix" />
-			<Option target="DBGWindows" />
-			<Option target="NDBGWindows" />
-		</Unit>
-		<Unit filename="src/arrow.h">
-			<Option target="DBGUnix" />
-			<Option target="NDBGUnix" />
-			<Option target="DBGWindows" />
-			<Option target="NDBGWindows" />
-		</Unit>
 		<Unit filename="src/astar.c">
 			<Option compilerVar="CC" />
 			<Option target="DBGUnix" />

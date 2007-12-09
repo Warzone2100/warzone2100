@@ -536,10 +536,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\arrow.c"
-					>
-				</File>
-				<File
 					RelativePath="..\src\astar.c"
 					>
 				</File>
@@ -1032,10 +1028,6 @@
 			</File>
 			<File
 				RelativePath="..\lib\gamelib\animobj.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\arrow.h"
 				>
 			</File>
 			<File
