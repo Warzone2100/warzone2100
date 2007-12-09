@@ -93,9 +93,6 @@
 #include "combat.h"
 #include "order.h"
 #include "scores.h"
-#ifdef ARROWS
-#include "arrow.h"
-#endif
 #include "multiplay.h"
 #include "environ.h"
 #include "advvis.h"

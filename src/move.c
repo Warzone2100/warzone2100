@@ -63,10 +63,6 @@
 
 #include "drive.h"
 
-#ifdef ARROWS
-#include "arrow.h"
-#endif
-
 //#define DEBUG_DRIVE_SPEED
 
 /* system definitions */
@@ -1745,12 +1741,6 @@ static void moveCalcDroidSlide(DROID *psDroid, float *pmx, float *pmy)
 	}
 }
 
-/* arrow colours */
-#define	YELLOWARROW		117
-#define	GREENARROW		253
-#define	WHITEARROW		255
-#define REDARROW		179
-
 // get an obstacle avoidance vector
 static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
 {
@@ -1858,10 +1848,6 @@ static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
 
 	if (numObst > 0)
 	{
-#ifdef ARROWS
-		static BOOL bTest = TRUE;
-#endif
-
 		distTot /= numObst;
 
 		// Create the avoid vector
@@ -1899,38 +1885,6 @@ static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
 
 		*pX = Fmul((*pX), ratio) + Fmul(avoidX, (1 - ratio));
 		*pY = Fmul((*pY), ratio) + Fmul(avoidY, (1 - ratio));
-
-#ifdef ARROWS
-		if ( bTest && psDroid->selected)
-		{
-			SDWORD	iHeadX, iHeadY, iHeadZ;
-
-			// target direction - yellow
-			iHeadX = psDroid->sMove.targetX;
-			iHeadY = psDroid->sMove.targetY;
-			iHeadZ = map_Height( iHeadX, iHeadY );
-			arrowAdd( psDroid->x, psDroid->y, psDroid->z,
-						iHeadX, iHeadY, iHeadZ, YELLOWARROW );
-
-			// average obstacle vector - green
-			iHeadX = MAKEINT(FRACTmul(ox, 200)) + psDroid->x;
-			iHeadY = MAKEINT(FRACTmul(oy, 200)) + psDroid->y;
-			arrowAdd( psDroid->x, psDroid->y, psDroid->z,
-						iHeadX, iHeadY, iHeadZ, GREENARROW );
-
-			// normal - green
-			iHeadX = MAKEINT(FRACTmul(avoidX, 100)) + psDroid->x;
-			iHeadY = MAKEINT(FRACTmul(avoidY, 100)) + psDroid->y;
-			arrowAdd( psDroid->x, psDroid->y, psDroid->z,
-						iHeadX, iHeadY, iHeadZ, GREENARROW );
-
-			// resultant - white
-			iHeadX = MAKEINT(FRACTmul((*pX), 200)) + psDroid->x;
-			iHeadY = MAKEINT(FRACTmul((*pY), 200)) + psDroid->y;
-			arrowAdd( psDroid->x, psDroid->y, psDroid->z,
-						iHeadX, iHeadY, iHeadZ, WHITEARROW );
-		}
-#endif
 	}
 	ASSERT(isfinite(*pX) && isfinite(*pY), "moveGetObstacleVector: bad float");
 }
@@ -3555,39 +3509,6 @@ void moveUpdateDroid(DROID *psDroid)
 	case MOVEPOINTTOPOINT:
 	case MOVEPAUSE:
 		// moving between two way points
-
-#ifdef ARROWS
-		// display the route
-		if (psDroid->selected)
-		{
-			SDWORD	pos, x,y,z, px,py,pz;
-
-			// display the boundary vector
-			x = psDroid->sMove.targetX;
-			y = psDroid->sMove.targetY;
-			z = map_Height( x,y );
-			px = x - psDroid->sMove.boundY;
-			py = y + psDroid->sMove.boundX;
-			pz = map_Height( px,py );
-			arrowAdd( x,y,z, px,py,pz, REDARROW );
-
-			// display the route
-			px = (SDWORD)psDroid->x;
-			py = (SDWORD)psDroid->y;
-			pz = map_Height( px, py );
-			pos = psDroid->sMove.Position;
-			pos = ((pos - 1) <= 0) ? 0 : (pos - 1);
-			for(; pos < psDroid->sMove.numPoints; pos += 1)
-			{
-				x = world_coord(psDroid->sMove.asPath[pos].x) + TILE_UNITS/2;
-				y = world_coord(psDroid->sMove.asPath[pos].y) + TILE_UNITS/2;
-				z = map_Height( x,y );
-				arrowAdd( px,py,pz, x,y,z, REDARROW );
-
-				px = x; py = y; pz = z;
-			}
-		}
-#endif
 
 		// See if the target point has been reached
 		if (moveReachedWayPoint(psDroid))

@@ -91,10 +91,6 @@
 #include "main.h"
 #include "wrappers.h"
 
-#ifdef ARROWS
-#include "arrow.h"
-#endif
-
 extern char UserMusicPath[];
 
 extern void statsInitVars(void);

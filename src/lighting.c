@@ -37,7 +37,6 @@
 #include "environ.h"
 #include "lib/gamelib/gtime.h"
 #include "console.h"
-#include "arrow.h"
 
 // These values determine the fog when fully zoomed in
 // Determine these when fully zoomed in
