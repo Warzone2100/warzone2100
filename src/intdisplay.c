@@ -260,7 +260,7 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 						Range = BuildPower;
 						BuildPoints = Structure->currentPowerAccrued;
 						//set the colour of the bar to green
-						BarGraph->majorCol = COL_LIGHTGREEN;
+						BarGraph->majorCol = WZCOL_GREEN;
 						//and change the tool tip
 						widgSetTipText((WIDGET*)BarGraph, _("Power Accrued"));
 					}
@@ -270,7 +270,7 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 						Range =  Structure->pStructureType->buildPoints;	// And how long it takes to build.
 						BuildPoints = Structure->currentBuildPts;			// How near to completion.
 						//set the colour of the bar to yellow
-						BarGraph->majorCol = COL_YELLOW;
+						BarGraph->majorCol = WZCOL_YELLOW;
 						//and change the tool tip
 						widgSetTipText((WIDGET*)BarGraph, _("Progress Bar"));
 					}
@@ -305,7 +305,7 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 					Range = ((DROID_TEMPLATE *)Manufacture->psSubject)->powerPoints;
 					BuildPoints = Manufacture->powerAccrued;
 					//set the colour of the bar to green
-					BarGraph->majorCol = COL_LIGHTGREEN;
+					BarGraph->majorCol = WZCOL_GREEN;
 					//and change the tool tip
 					widgSetTipText((WIDGET*)BarGraph, _("Power Accrued"));
 				}
@@ -313,7 +313,7 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 				{
 					Range = Manufacture->timeToBuild;
 					//set the colour of the bar to yellow
-					BarGraph->majorCol = COL_YELLOW;
+					BarGraph->majorCol = WZCOL_YELLOW;
 					//and change the tool tip
 					widgSetTipText((WIDGET*)BarGraph, _("Progress Bar"));
 					//if on hold need to take it into account
@@ -353,14 +353,14 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 					Range = ((RESEARCH *)Research->psSubject)->researchPower;
 					BuildPoints = Research->powerAccrued;
 					//set the colour of the bar to green
-					BarGraph->majorCol = COL_LIGHTGREEN;
+					BarGraph->majorCol = WZCOL_GREEN;
 					//and change the tool tip
 					widgSetTipText((WIDGET*)BarGraph, _("Power Accrued"));
 				}
 				else
 				{
 					//set the colour of the bar to yellow
-					BarGraph->majorCol = COL_YELLOW;
+					BarGraph->majorCol = WZCOL_YELLOW;
 					//and change the tool tip
 					widgSetTipText((WIDGET*)BarGraph, _("Progress Bar"));
 					//if on hold need to take it into account

@@ -697,7 +697,7 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *
 	if(psEdBox->pBoxDisplay) {
 		psEdBox->pBoxDisplay((WIDGET *)psEdBox, xOffset, yOffset, pColours);
 	} else {
-		pie_BoxFillIndex(x0,y0,x1,y1,WCOL_BKGRND);
+		pie_BoxFill(x0, y0, x1, y1, pColours[WCOL_BKGRND]);
 
 		iV_Line(x0,y0, x1,y0, pColours[WCOL_DARK]);
 		iV_Line(x0,y0, x0,y1, pColours[WCOL_DARK]);

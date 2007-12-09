@@ -35,8 +35,8 @@ typedef struct _w_bargraph
 	UWORD		minorSize;			// Percentage of the minor bar if there is one
 	UWORD		iRange;				// Maximum range
 	UWORD		iValue;				// Current value
-	UBYTE		majorCol;			// Colour for the major bar
-	UBYTE		minorCol;			// Colour for the minor bar
+	PIELIGHT	majorCol;			// Colour for the major bar
+	PIELIGHT	minorCol;			// Colour for the minor bar
 	const char	*pTip;				// The tool tip for the graph
 } W_BARGRAPH;
 

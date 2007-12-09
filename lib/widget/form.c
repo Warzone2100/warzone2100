@@ -665,7 +665,7 @@ void widgSetColour(W_SCREEN *psScreen, UDWORD id, UDWORD colour,
 		ASSERT( FALSE, "widgSetColour: Colour id out of range" );
 		return;
 	}
-	psForm->aColours[colour] = psPalette[pal_GetNearestColour(red,green,blue)];
+	psForm->aColours[colour] = pal_Colour(red,green,blue);
 }
 
 
@@ -1250,7 +1250,7 @@ void formDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pCo
 		x1 = x0 + psWidget->width;
 		y1 = y0 + psWidget->height;
 
-		pie_BoxFillIndex(x0+1,y0+1, x1-1,y1-1,WCOL_BKGRND);
+		pie_BoxFill(x0 + 1, y0 + 1, x1 - 1, y1 - 1, pColours[WCOL_BKGRND]);
 		iV_Line(x0,y1,x0,y0, pColours[WCOL_LIGHT]);
 		iV_Line(x0,y0,x1,y0, pColours[WCOL_LIGHT]);
 		iV_Line(x1,y0,x1,y1, pColours[WCOL_DARK]);
@@ -1272,7 +1272,7 @@ void formDisplayClickable(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 	y1 = y0 + psWidget->height;
 
 	/* Fill the background */
-	pie_BoxFillIndex(x0+1,y0+1, x1-1,y1-1,WCOL_BKGRND);
+	pie_BoxFill(x0 + 1, y0 + 1, x1 - 1, y1 - 1, pColours[WCOL_BKGRND]);
 
 	/* Display the border */
 	if (psForm->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
@@ -1339,7 +1339,7 @@ static void formDisplayTTabs(W_TABFORM *psForm,SDWORD x0, SDWORD y0,
 			if (i == selected)
 			{
 				/* Fill in the tab */
-				pie_BoxFillIndex(x+1,y0+1, x1-1,y1,WCOL_BKGRND);
+				pie_BoxFill(x + 1, y0 + 1, x1 - 1, y1, pColours[WCOL_BKGRND]);
 				/* Draw the outline */
 				iV_Line(x,y0+2, x,y1-1, pColours[WCOL_LIGHT]);
 				iV_Line(x,y0+2, x+2,y0, pColours[WCOL_LIGHT]);
@@ -1349,7 +1349,7 @@ static void formDisplayTTabs(W_TABFORM *psForm,SDWORD x0, SDWORD y0,
 			else
 			{
 				/* Fill in the tab */
-				pie_BoxFillIndex(x+1,y0+2, x1-1,y1-1,WCOL_BKGRND);
+				pie_BoxFill(x + 1, y0 + 2, x1 - 1, y1 - 1, pColours[WCOL_BKGRND]);
 				/* Draw the outline */
 				iV_Line(x,y0+3, x,y1-1, pColours[WCOL_LIGHT]);
 				iV_Line(x,y0+3, x+2,y0+1, pColours[WCOL_LIGHT]);
@@ -1396,7 +1396,7 @@ static void formDisplayBTabs(W_TABFORM *psForm,SDWORD x0, SDWORD y0,
 			if (i == selected)
 			{
 				/* Fill in the tab */
-				pie_BoxFillIndex(x+1,y0, x1-1,y1-1,WCOL_BKGRND);
+				pie_BoxFill(x + 1, y0, x1 - 1, y1 - 1, pColours[WCOL_BKGRND]);
 				/* Draw the outline */
 				iV_Line(x,y0, x,y1-1, pColours[WCOL_LIGHT]);
 				iV_Line(x,y1, x1-3,y1, pColours[WCOL_DARK]);
@@ -1406,7 +1406,7 @@ static void formDisplayBTabs(W_TABFORM *psForm,SDWORD x0, SDWORD y0,
 			else
 			{
 				/* Fill in the tab */
-				pie_BoxFillIndex(x+1,y0+1, x1-1,y1-2,WCOL_BKGRND);
+				pie_BoxFill(x + 1, y0 + 1, x1 - 1, y1 - 2, pColours[WCOL_BKGRND]);
 				/* Draw the outline */
 				iV_Line(x,y0+1, x,y1-1, pColours[WCOL_LIGHT]);
 				iV_Line(x+1,y1-1, x1-3,y1-1, pColours[WCOL_DARK]);
@@ -1453,7 +1453,7 @@ static void formDisplayLTabs(W_TABFORM *psForm,SDWORD x0, SDWORD y0,
 			if (i == selected)
 			{
 				/* Fill in the tab */
-				pie_BoxFillIndex(x0+1,y+1, x1,y1-1,WCOL_BKGRND);
+				pie_BoxFill(x0 + 1, y + 1, x1, y1 - 1, pColours[WCOL_BKGRND]);
 				/* Draw the outline */
 				iV_Line(x0,y, x1-1,y, pColours[WCOL_LIGHT]);
 				iV_Line(x0,y+1, x0,y1-2, pColours[WCOL_LIGHT]);
@@ -1463,7 +1463,7 @@ static void formDisplayLTabs(W_TABFORM *psForm,SDWORD x0, SDWORD y0,
 			else
 			{
 				/* Fill in the tab */
-				pie_BoxFillIndex(x0+2,y+1, x1-1,y1-1,WCOL_BKGRND);
+				pie_BoxFill(x0 + 2, y + 1, x1 - 1, y1 - 1, pColours[WCOL_BKGRND]);
 				/* Draw the outline */
 				iV_Line(x0+1,y, x1-1,y, pColours[WCOL_LIGHT]);
 				iV_Line(x0+1,y+1, x0+1,y1-2, pColours[WCOL_LIGHT]);
@@ -1598,7 +1598,7 @@ void formDisplayTabbed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 		/* Draw the form outline */
 		if (!(psForm->style & WFORM_INVISIBLE))
 		{
-			pie_BoxFillIndex(x0,y0,x1,y1,WCOL_BKGRND);
+			pie_BoxFill(x0, y0, x1, y1, pColours[WCOL_BKGRND]);
 			iV_Line(x0,y1,x0,y0, pColours[WCOL_LIGHT]);
 			iV_Line(x0,y0,x1,y0, pColours[WCOL_LIGHT]);
 			iV_Line(x1,y0,x1,y1, pColours[WCOL_DARK]);

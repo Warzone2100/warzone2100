@@ -314,7 +314,7 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	if (psButton->state & (WBUTS_DOWN | WBUTS_LOCKED | WBUTS_CLICKLOCK))
 	{
 		/* Display the button down */
-		pie_BoxFillIndex(x0,y0,x1,y1,WCOL_BKGRND);
+		pie_BoxFill(x0, y0, x1, y1, pColours[WCOL_BKGRND]);
 		iV_Line(x0,y0, x1,y0, pColours[WCOL_DARK]);
 		iV_Line(x0,y0, x0,y1, pColours[WCOL_DARK]);
 		iV_Line(x0,y1, x1,y1, pColours[WCOL_LIGHT]);
@@ -347,7 +347,7 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	else if (psButton->state & WBUTS_GREY)
 	{
 		/* Display the disabled button */
-		pie_BoxFillIndex(x0,y0,x1,y1,WCOL_BKGRND);
+		pie_BoxFill(x0, y0, x1, y1, pColours[WCOL_BKGRND]);
 		iV_Line(x0,y0, x1,y0, pColours[WCOL_LIGHT]);
 		iV_Line(x0,y0, x0,y1, pColours[WCOL_LIGHT]);
 		iV_Line(x0,y1, x1,y1, pColours[WCOL_DARK]);
@@ -377,7 +377,7 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	else
 	{
 		/* Display the button up */
-		pie_BoxFillIndex(x0,y0,x1,y1,WCOL_BKGRND);
+		pie_BoxFill(x0, y0, x1, y1, pColours[WCOL_BKGRND]);
 		iV_Line(x0,y0, x1,y0, pColours[WCOL_LIGHT]);
 		iV_Line(x0,y0, x0,y1, pColours[WCOL_LIGHT]);
 		iV_Line(x0,y1, x1,y1, pColours[WCOL_DARK]);
