@@ -144,7 +144,6 @@ src/loadsave.c
 src/target.c
 src/bucket3d.c
 src/e3demo.c
-src/arrow.c
 src/effects.c
 src/advvis.c
 src/astar.c
