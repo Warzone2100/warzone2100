@@ -102,12 +102,8 @@
  */
 /***************************************************************************/
 
-#ifdef __BIG_ENDIAN__
-typedef struct {UBYTE a, r, g, b;} PIELIGHTBYTES; //for byte fields in a DWORD
-#else
-typedef struct {UBYTE b, g, r, a;} PIELIGHTBYTES; //for byte fields in a DWORD
-#endif
-typedef union  {PIELIGHTBYTES byte; UDWORD argb;} PIELIGHT;
+typedef struct { UBYTE r, g, b, a; } PIELIGHTBYTES; // for byte fields in a DWORD
+typedef union  { PIELIGHTBYTES byte; UDWORD argb; UBYTE vector[4]; } PIELIGHT;
 typedef struct
 {
 	Vector3i pos;

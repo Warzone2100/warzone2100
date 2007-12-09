@@ -228,7 +228,7 @@ static inline void pie_Polygon(const SDWORD numVerts, const TERRAIN_VERTEXF* pVr
 
 	for (i = 0; i < numVerts; i++)
 	{
-		glColor4ub(pVrts[i].light.byte.r, pVrts[i].light.byte.g, pVrts[i].light.byte.b, pVrts[i].light.byte.a);
+		glColor4ubv(pVrts[i].light.vector);
 		glTexCoord2f(pVrts[i].u, pVrts[i].v);
 		glVertex3f(pVrts[i].x, pVrts[i].y, pVrts[i].z);
 	}
@@ -913,7 +913,7 @@ void pie_DrawImage(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style)
 	style->colour.argb = 0xffffffff; // draw solid
 	style->specular.argb = 0x00000000;
 
-	glColor4ub(style->colour.byte.r, style->colour.byte.g, style->colour.byte.b, style->colour.byte.a);
+	glColor4ubv(style->colour.vector);
 
 	glBegin(GL_TRIANGLE_STRIP);
 		//set up 4 pie verts
@@ -946,7 +946,7 @@ void pie_DrawRect(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, PIELIGHT colour)
 
 	pie_SetColourKeyedBlack(FALSE);
 
-	glColor4ub(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a);
+	glColor4ubv(colour.vector);
 	glBegin(GL_TRIANGLE_STRIP);
 		glVertex2i(x0, y0);
 		glVertex2i(x1, y0);
@@ -1015,7 +1015,7 @@ void pie_DrawWaterTriangle(const TERRAIN_VERTEX *aVrts)
 	glBegin(GL_TRIANGLE_FAN);
 		for ( i = 0; i < 3; i++ )
 		{
-			glColor4ub( aVrts[i].light.byte.r, aVrts[i].light.byte.g, aVrts[i].light.byte.b, aVrts[i].light.byte.a );
+			glColor4ubv(aVrts[i].light.vector);
 			glTexCoord2f(aVrts[i].u, aVrts[i].v);
 			glVertex3f( aVrts[i].pos.x, aVrts[i].pos.y, aVrts[i].pos.z );
 		}

@@ -70,7 +70,7 @@ void pie_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
 	pie_SetTexturePage(-1);
 	pie_SetColourKeyedBlack(FALSE);
 
-	glColor4ub(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a);
+	glColor4ubv(colour.vector);
 	glBegin(GL_LINE_STRIP);
 	glVertex2f(x0, y0);
 	glVertex2f(x1, y1);
@@ -99,7 +99,7 @@ void pie_Box(int x0,int y0, int x1, int y1, PIELIGHT colour)
 	if (y1>psRendSurface->clip.bottom)
 		y1 = psRendSurface->clip.bottom;
 
-	glColor4ub(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a);
+	glColor4ubv(colour.vector);
 	glBegin(GL_LINE_STRIP);
 	glVertex2f(x0, y0);
 	glVertex2f(x1, y0);
@@ -346,7 +346,7 @@ void pie_DownLoadRadar(UDWORD *buffer)
 {
 	pie_SetTexturePage(radarTexture);
 	glTexImage2D(GL_TEXTURE_2D, 0, wz_texture_compression, RADARX, RADARY, 0,
-		     GL_BGRA, GL_UNSIGNED_BYTE, buffer);
+		     GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
