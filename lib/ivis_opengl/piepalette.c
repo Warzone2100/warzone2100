@@ -114,30 +114,12 @@ void pie_SetColourDefines(void)
 // #define PRINTCOL(x) debug(LOG_ERROR, "(%hhu, %hhu, %hhu)", psGamePal[x].byte.r, psGamePal[x].byte.g, psGamePal[x].byte.b);
 
 	// TODO: Read these from file so that mod-makers can change them
-	WZCOL_WHITE.byte.a = 255;
-	WZCOL_WHITE.byte.r = 255;
-	WZCOL_WHITE.byte.g = 255;
-	WZCOL_WHITE.byte.b = 255;
 
-	WZCOL_BLACK.byte.a = 255;
-	WZCOL_BLACK.byte.r = 1;
-	WZCOL_BLACK.byte.g = 1;
-	WZCOL_BLACK.byte.b = 1;
-
-	WZCOL_GREEN.byte.a = 255;
-	WZCOL_GREEN.byte.r = 0;
-	WZCOL_GREEN.byte.g = 255;
-	WZCOL_GREEN.byte.b = 0;
-
-	WZCOL_RED.byte.a = 255;
-	WZCOL_RED.byte.r = 255;
-	WZCOL_RED.byte.g = 0;
-	WZCOL_RED.byte.b = 0;
-
-	WZCOL_YELLOW.byte.a = 255;
-	WZCOL_YELLOW.byte.r = 255;
-	WZCOL_YELLOW.byte.g = 255;
-	WZCOL_YELLOW.byte.b = 0;
+	WZCOL_WHITE = pal_Colour(UBYTE_MAX, UBYTE_MAX, UBYTE_MAX);
+	WZCOL_BLACK = pal_Colour(1, 1, 1);
+	WZCOL_GREEN = pal_Colour(0, UBYTE_MAX, 0);
+	WZCOL_RED = pal_Colour(UBYTE_MAX, 0, 0);
+	WZCOL_YELLOW = pal_Colour(UBYTE_MAX, UBYTE_MAX, 0);
 
 	WZCOL_RELOAD_BAR	= WZCOL_WHITE;
 	WZCOL_RELOAD_BACKGROUND	= WZCOL_BLACK;
@@ -146,15 +128,8 @@ void pie_SetColourDefines(void)
 	WZCOL_HEALTH_LOW	= WZCOL_RED;
 	WZCOL_CURSOR		= WZCOL_WHITE;
 
-	WZCOL_MENU_BACKGROUND.byte.a	= 255;
-	WZCOL_MENU_BACKGROUND.byte.r	= 0;
-	WZCOL_MENU_BACKGROUND.byte.g	= 1;
-	WZCOL_MENU_BACKGROUND.byte.b	= 97;
-
-	WZCOL_MENU_BORDER.byte.a	= 255;
-	WZCOL_MENU_BORDER.byte.r	= 0;
-	WZCOL_MENU_BORDER.byte.g	= 21;
-	WZCOL_MENU_BORDER.byte.b	= 240;
+	WZCOL_MENU_BACKGROUND = pal_Colour(0, 1, 97);
+	WZCOL_MENU_BORDER = pal_Colour(0, 21, 240);
 
 	WZCOL_MENU_LOAD_BORDER		= WZCOL_BLACK;
 	WZCOL_MENU_LOAD_BORDER.byte.r	= 133;
@@ -162,10 +137,21 @@ void pie_SetColourDefines(void)
 	WZCOL_MENU_SCORES_INTERIOR	= WZCOL_BLACK;
 	WZCOL_MENU_SCORES_INTERIOR.byte.b = 33;
 
-	WZCOL_MENU_SEPARATOR.byte.a = UBYTE_MAX;
-	WZCOL_MENU_SEPARATOR.byte.r = 0x64;
-	WZCOL_MENU_SEPARATOR.byte.g = 0x64;
-	WZCOL_MENU_SEPARATOR.byte.b = 0xa0;
+	WZCOL_MENU_SEPARATOR = pal_Colour(0x64, 0x64, 0xa0);
+
+	WZCOL_TEXT_BRIGHT = WZCOL_WHITE;
+	WZCOL_TEXT_MEDIUM.byte.r = 0.627451f * UBYTE_MAX;
+	WZCOL_TEXT_MEDIUM.byte.g = 0.627451f * UBYTE_MAX;
+	WZCOL_TEXT_MEDIUM.byte.b = UBYTE_MAX;
+	WZCOL_TEXT_MEDIUM.byte.a = UBYTE_MAX;
+	WZCOL_TEXT_DARK.byte.r = 0.376471f * UBYTE_MAX;
+	WZCOL_TEXT_DARK.byte.g = 0.376471f * UBYTE_MAX;
+	WZCOL_TEXT_DARK.byte.b = UBYTE_MAX;
+	WZCOL_TEXT_DARK.byte.a = UBYTE_MAX;
+
+	WZCOL_SCORE_BOX_BORDER = pal_Colour(128, 0, 0);
+	WZCOL_SCORE_BOX = pal_Colour(0, 0, 88);
+	WZCOL_SCORE_BOX.byte.a = 128;
 }
 
 PIELIGHT pal_SetBrightness(UBYTE brightness)

@@ -62,7 +62,12 @@
 #define WZCOL_CURSOR			psPalette[13]
 #define WZCOL_MENU_SCORES_INTERIOR	psPalette[14]
 #define WZCOL_MENU_SEPARATOR		psPalette[15]
-#define WZCOL_MAX			16
+#define WZCOL_TEXT_BRIGHT		psPalette[16]
+#define WZCOL_TEXT_MEDIUM		psPalette[17]
+#define WZCOL_TEXT_DARK			psPalette[18]
+#define WZCOL_SCORE_BOX_BORDER		psPalette[19]
+#define WZCOL_SCORE_BOX			psPalette[20]
+#define WZCOL_MAX			21
 
 //*************************************************************************
 
@@ -79,5 +84,17 @@ extern int		pal_AddNewPalette(PIELIGHT *pal);
 extern void		pal_PaletteSet(void);
 extern PIELIGHT		*pie_GetGamePal(void);
 extern PIELIGHT		pal_SetBrightness(UBYTE brightness);
+
+static inline PIELIGHT pal_Colour(UBYTE r, UBYTE g, UBYTE b)
+{
+	PIELIGHT c;
+
+	c.byte.r = r;
+	c.byte.g = g;
+	c.byte.b = b;
+	c.byte.a = UBYTE_MAX;
+
+	return c;
+}
 
 #endif
