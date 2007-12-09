@@ -1014,7 +1014,7 @@ void audio_RemoveObj(const void* psObj)
 
 			// Perform the actual task of destroying this sample
 			audio_RemoveSample(&g_psSampleQueue, toRemove);
-			free(psSample);
+			free(toRemove);
 
 			// Increment the deletion count
 			++count;
@@ -1050,7 +1050,7 @@ void audio_RemoveObj(const void* psObj)
 
 			// Perform the actual task of destroying this sample
 			audio_RemoveSample(&g_psSampleList, toRemove);
-			free(psSample);
+			free(toRemove);
 
 			// Increment the deletion count
 			++count;
