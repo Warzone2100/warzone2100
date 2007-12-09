@@ -73,7 +73,7 @@ extern void pie_DrawRect(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, PIELIGHT co
 
 extern BOOL pie_InitRadar(void);
 extern BOOL pie_ShutdownRadar(void);
-extern void pie_DownLoadRadar( unsigned char *buffer );
+extern void pie_DownLoadRadar(UDWORD *buffer);
 extern void pie_RenderRadar( int x, int y );
 
 extern void pie_UploadDisplayBuffer(void);

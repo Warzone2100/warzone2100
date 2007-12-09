@@ -158,6 +158,8 @@ void pie_SetColourDefines(void)
 	WZCOL_UNIT_SELECT_BORDER = pal_Colour(0, 0, 128);
 	WZCOL_UNIT_SELECT_BOX = WZCOL_WHITE;
 	WZCOL_UNIT_SELECT_BOX.byte.a = 16;
+
+	WZCOL_RADAR_BACKGROUND = WZCOL_MENU_BACKGROUND;
 }
 
 PIELIGHT pal_SetBrightness(UBYTE brightness)

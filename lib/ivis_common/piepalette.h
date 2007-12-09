@@ -70,7 +70,8 @@
 #define WZCOL_TOOLTIP_TEXT		psPalette[21]
 #define WZCOL_UNIT_SELECT_BORDER	psPalette[22]
 #define WZCOL_UNIT_SELECT_BOX		psPalette[23]
-#define WZCOL_MAX			24
+#define WZCOL_RADAR_BACKGROUND		psPalette[24]
+#define WZCOL_MAX			25
 
 //*************************************************************************
 

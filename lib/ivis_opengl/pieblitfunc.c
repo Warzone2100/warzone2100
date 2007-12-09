@@ -58,7 +58,6 @@
 
 static PIESTYLE rendStyle;
 static UDWORD radarTexture;
-static unsigned char radarBitmap[RADARX * RADARY * 4];
 
 /***************************************************************************/
 /*
@@ -343,25 +342,11 @@ BOOL pie_ShutdownRadar(void)
 	return TRUE;
 }
 
-void pie_DownLoadRadar( unsigned char *buffer )
+void pie_DownLoadRadar(UDWORD *buffer)
 {
-	unsigned int i, j;
-	PIELIGHT *psPalette = pie_GetGamePal();
-
-	for (i = 0, j = 0; i < RADARX * RADARY; ++i)
-	{
-		radarBitmap[j++] = psPalette[buffer[i]].byte.r;
-		radarBitmap[j++] = psPalette[buffer[i]].byte.g;
-		radarBitmap[j++] = psPalette[buffer[i]].byte.b;
-		if (buffer[i] == 0) {
-			radarBitmap[j++] = 0;
-		} else {
-			radarBitmap[j++] = 255;
-		}
-	}
 	pie_SetTexturePage(radarTexture);
 	glTexImage2D(GL_TEXTURE_2D, 0, wz_texture_compression, RADARX, RADARY, 0,
-		     GL_RGBA, GL_UNSIGNED_BYTE, radarBitmap);
+		     GL_BGRA, GL_UNSIGNED_BYTE, buffer);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

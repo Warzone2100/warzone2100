@@ -43,7 +43,8 @@ typedef enum _radar_draw_mode
 	RADAR_MODE_TERRAIN,						//draw texture map
 	RADAR_MODE_DEFAULT = RADAR_MODE_TERRAIN,
 	RADAR_MODE_HEIGHT_MAP,					//draw height map
-	RADAR_MODE_NO_TERRAIN,					//draw only objects
+	RADAR_MODE_COMBINED,
+	RADAR_MODE_NO_TERRAIN,
 	NUM_RADAR_MODES
 }RADAR_DRAW_MODE;
 

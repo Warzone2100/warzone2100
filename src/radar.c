@@ -55,9 +55,7 @@
 
 #define RADAR_FRAME_SKIP 10
 
-static const UBYTE	colBlack = 0;
-static UBYTE	colRadarAlly[NUM_RADAR_MODES-1],colRadarMe[NUM_RADAR_MODES-1],
-				colRadarEnemy[NUM_RADAR_MODES-1];
+static PIELIGHT	colRadarAlly, colRadarMe, colRadarEnemy;
 
 BOOL bEnemyAllyRadarColor = FALSE;     //enemy/ally radar color
 
@@ -66,24 +64,10 @@ RADAR_DRAW_MODE	radarDrawMode = RADAR_MODE_DEFAULT;
 
 // colours for each clan on the radar map.
 
-#define CAMPAIGNS	3
-static UDWORD		clanColours[CAMPAIGNS][MAX_PLAYERS] =
-{
-{81,243,231,1,182,187,207,195},
-{81,243,231,1,182,187,207,195},
-{81,243,231,1,182,187,207,195},
-};
-
-static UDWORD		flashColours[CAMPAIGNS][MAX_PLAYERS] =
-{
-{165,165,165,165,255,165,165,165}, // everything flashes red when attacked except red - it goes white!
-{165,165,165,165,255,165,165,165},
-{165,165,165,165,255,165,165,165},
-};
-
-static UBYTE		tileColours[MAX_TILES];
-static UBYTE		*radarBuffer;
-static UBYTE		heightMapColors[255];		//precalculated colors for heightmap mode
+static UDWORD		clanColours[MAX_PLAYERS] = { 81,243,231,1,182,187,207,195 };
+static UDWORD		flashColours[MAX_PLAYERS] = { 165,165,165,165,255,165,165,165 }; // everything flashes red when attacked except red - it goes white!
+static PIELIGHT		tileColours[MAX_TILES];
+static UDWORD		*radarBuffer;
 
 static SDWORD RadarScrollX;
 static SDWORD RadarScrollY;
@@ -101,9 +85,9 @@ static SDWORD RadarMapHeight;
 
 static void CalcRadarPixelSize(UWORD *SizeH,UWORD *SizeV);
 static void CalcRadarScroll(UWORD boxSizeH,UWORD boxSizeV);
-static void ClearRadar(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSizeV);
-static void DrawRadarTiles(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSizeV);
-static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSizeV);
+static void ClearRadar(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSizeV);
+static void DrawRadarTiles(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSizeV);
+static void DrawRadarObjects(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSizeV);
 static void DrawRadarExtras(UWORD boxSizeH,UWORD boxSizeV);
 static void UpdateRadar(UWORD boxSizeH,UWORD boxSizeV);
 
@@ -127,37 +111,17 @@ void resetRadarRedraw(void)
 
 BOOL InitRadar(void)
 {
-	UBYTE color;
-
-	radarBuffer = malloc(RADWIDTH * RADHEIGHT);
+	radarBuffer = malloc(RADWIDTH * RADHEIGHT * sizeof(UDWORD));
 	if (radarBuffer == NULL)
 	{
 		return FALSE;
 	}
-	memset(radarBuffer,0,RADWIDTH*RADHEIGHT);
+	memset(radarBuffer, 0, RADWIDTH * RADHEIGHT * sizeof(UDWORD));
 
-	//Ally/enemy colors for Objects-Only minimap mode
-	colRadarAlly[RADAR_MODE_NO_TERRAIN] = COL_YELLOW;
-	colRadarEnemy[RADAR_MODE_NO_TERRAIN] = COL_LIGHTRED;
-	colRadarMe[RADAR_MODE_NO_TERRAIN] = COL_WHITE;
-
-	//Ally/enemy colors for texture minimap mode
-	colRadarAlly[RADAR_MODE_TERRAIN] = colRadarAlly[RADAR_MODE_NO_TERRAIN];
-	colRadarEnemy[RADAR_MODE_TERRAIN] = colRadarEnemy[RADAR_MODE_NO_TERRAIN];
-	colRadarMe[RADAR_MODE_TERRAIN] = colRadarMe[RADAR_MODE_NO_TERRAIN];
-
-	//Ally/enemy colors for heightmap minimap mode
-	colRadarAlly[RADAR_MODE_HEIGHT_MAP] = COL_LIGHTBLUE;
-	colRadarEnemy[RADAR_MODE_HEIGHT_MAP] = COL_LIGHTRED;
-	colRadarMe[RADAR_MODE_HEIGHT_MAP] = COL_YELLOW;			//should stand out from the grey background
-
-	//Pre-calculate paletted colors for heightmap minimap mode
-	color = 0;
-	do{
-		heightMapColors[color] = (UBYTE)iV_PaletteNearestColour(color,color,color);
-		color++;
-	}
-	while(color != 0);
+	// Ally/enemy/me colors
+	colRadarAlly = WZCOL_YELLOW;
+	colRadarEnemy = WZCOL_RED;
+	colRadarMe = WZCOL_WHITE;
 
 	pie_InitRadar();
 
@@ -380,10 +344,10 @@ static void UpdateRadar(UWORD boxSizeH,UWORD boxSizeV)
 
 // Clear the radar buffer.
 //
-static void ClearRadar(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSizeV)
+static void ClearRadar(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSizeV)
 {
 	SDWORD i,j;
-	UBYTE *Scr,*WScr;
+	UDWORD *Scr, *WScr;
 	SDWORD RadWidth,RadHeight;
 
 	RadWidth = RadarWidth;
@@ -393,38 +357,79 @@ static void ClearRadar(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSize
 	for(i=0; i<RadWidth; i++) {
 		WScr = Scr;
 		for(j=0; j<RadHeight; j++) {
-			*WScr = colBlack;
+			*WScr = WZCOL_RADAR_BACKGROUND.argb;
 			WScr++;
 		}
 		Scr += Modulus;
 	}
 }
 
+static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile)
+{
+	PIELIGHT WScr;
+
+	switch(radarDrawMode)
+	{
+		case RADAR_MODE_TERRAIN:
+		{
+			// draw radar terrain on/off feature
+			PIELIGHT col = tileColours[TileNumber_tile(WTile->texture)];
+
+			col.byte.r = sqrt(col.byte.r * WTile->illumination);
+			col.byte.b = sqrt(col.byte.b * WTile->illumination);
+			col.byte.g = sqrt(col.byte.g * WTile->illumination);
+			WScr = col;
+		}
+		break;
+		case RADAR_MODE_COMBINED:
+		{
+			// draw radar terrain on/off feature
+			PIELIGHT col = tileColours[TileNumber_tile(WTile->texture)];
+
+			col.byte.r = sqrt(col.byte.r * (WTile->illumination + WTile->height) / 2);
+			col.byte.b = sqrt(col.byte.b * (WTile->illumination + WTile->height) / 2);
+			col.byte.g = sqrt(col.byte.g * (WTile->illumination + WTile->height) / 2);
+			WScr = col;
+		}
+		break;
+		case RADAR_MODE_HEIGHT_MAP:
+		{
+			// draw radar terrain on/off feature
+			PIELIGHT col = tileColours[TileNumber_tile(WTile->texture)];
+
+			col.byte.r = (col.byte.r * 3 + WTile->height) / 4;
+			col.byte.b = (col.byte.b * 3 + WTile->height) / 4;
+			col.byte.g = (col.byte.g * 3 + WTile->height) / 4;
+			WScr = col;
+		}
+		break;
+		case RADAR_MODE_NO_TERRAIN:
+		{
+			WScr = WZCOL_RADAR_BACKGROUND;
+		}
+		break;
+		case NUM_RADAR_MODES:
+		{
+			assert(false);
+		}
+		break;
+	}
+	return WScr;
+}
 
 // Draw the map tiles on the radar.
 //
-static void DrawRadarTiles(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSizeV)
+static void DrawRadarTiles(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSizeV)
 {
-	SDWORD	i,j,EndY;
 	MAPTILE	*psTile;
-	MAPTILE	*WTile;
-	UBYTE	*Scr;
-	UBYTE	*WScr;
-	UDWORD	c,d;
-	UBYTE *Ptr,*WPtr;
-	UWORD SizeH,SizeV;
-	SDWORD VisWidth;
-	SDWORD VisHeight;
-	SDWORD OffsetX;
-	SDWORD OffsetY;
-	UBYTE ShadeDiv = 0;
-
-	SizeH = boxSizeH;
-	SizeV = boxSizeV;
-	VisWidth = RadVisWidth;
-	VisHeight = RadVisHeight;
-	OffsetX = RadarOffsetX;
-	OffsetY = RadarOffsetY;
+	UWORD	SizeH = boxSizeH;
+	UWORD	SizeV = boxSizeV;
+	SDWORD	VisWidth = RadVisWidth;
+	SDWORD	VisHeight = RadVisHeight;
+	SDWORD	i, j, EndY = VisHeight;
+	SDWORD	OffsetX = RadarOffsetX;
+	SDWORD	OffsetY = RadarOffsetY;
+	UDWORD	*Scr = screen + OffsetX + OffsetY * Modulus;
 
 	ASSERT( (SizeV!=0) && (SizeV!=0) ,"Zero pixel size" );
 
@@ -432,47 +437,24 @@ static void DrawRadarTiles(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD box
 	psTile = psMapTiles + RadarScrollX + RadarScrollY*mapWidth;
 	psTile += RadarMapOriginX + RadarMapOriginY*mapWidth;
 
-	Scr = screen + OffsetX + OffsetY*Modulus;
-
-	ShadeDiv = 4;
-
-	EndY = VisHeight;
-
 	if(SizeH==1)
 	{
 		for (i=0; i<EndY; i+=SizeH)
 		{
-			WScr = Scr;
-			WTile = psTile;
+			MAPTILE *WTile = psTile;
+			UDWORD *WScr = Scr;
+
 			for (j=0; j<VisWidth; j+=SizeV)
 			{
 #ifdef CHECKBUFFER
 				ASSERT( ((UDWORD)WScr) >= radarBuffer , "WScr Onderflow" );
 				ASSERT( ((UDWORD)WScr) < ((UDWORD)radarBuffer)+RADWIDTH*RADHEIGHT , "WScr Overrun" );
 #endif
-				if ( TEST_TILE_VISIBLE(selectedPlayer,WTile) || godMode) {
-					switch(radarDrawMode)
-					{
-						case RADAR_MODE_TERRAIN:
-							{
-								//draw radar terrain on/off feature
-								int i = tileColours[TileNumber_tile(WTile->texture)] * iV_PALETTE_SHADE_LEVEL;
-								int j = WTile->illumination >> ShadeDiv;
-								*WScr = iV_SHADE_TABLE[i + j];
-							}
-							break;
-						case RADAR_MODE_NO_TERRAIN:
-							*WScr = colBlack;
-							break;
-						case RADAR_MODE_HEIGHT_MAP:
-							*WScr = heightMapColors[WTile->height];
-							break;
-						default:
-							ASSERT(FALSE,"RadarDrawTiles: unknown mini-map draw mode: %d", radarDrawMode);
-							break;
-					}
+				if ( TEST_TILE_VISIBLE(selectedPlayer,WTile) || godMode)
+				{
+					*WScr = appliedRadarColour(radarDrawMode, WTile).argb;
 				} else {
-					*WScr = colBlack;
+					*WScr = WZCOL_RADAR_BACKGROUND.argb;
 				}
 				/* Next pixel, next tile */
 				WScr++;
@@ -486,42 +468,33 @@ static void DrawRadarTiles(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD box
 	{
 		for (i=0; i<EndY; i+=SizeV)
 		{
-			WTile = psTile;
+			MAPTILE *WTile = psTile;
 
 			for (j=0; j<VisWidth; j+=SizeH)
 			{
 				/* Only draw if discovered or in GOD mode */
 				if ( TEST_TILE_VISIBLE(selectedPlayer,WTile) || godMode)
 				{
-					UBYTE Val = tileColours[TileNumber_tile(WTile->texture)];
-					Val = iV_SHADE_TABLE[(Val * iV_PALETTE_SHADE_LEVEL+
-											(WTile->illumination >> ShadeDiv))];
+					PIELIGHT col = tileColours[TileNumber_tile(WTile->texture)];
+					UDWORD Val, c, d;
+					UDWORD *Ptr = Scr + j + i * Modulus;
 
-					Ptr = Scr + j + i*Modulus;
+					col.byte.r = sqrt(col.byte.r * WTile->illumination);
+					col.byte.b = sqrt(col.byte.b * WTile->illumination);
+					col.byte.g = sqrt(col.byte.g * WTile->illumination);
+					Val = col.argb;
+
    					for(c=0; c<SizeV; c++)
    					{
-   						WPtr = Ptr;
+   						UDWORD *WPtr = Ptr;
+
    						for(d=0; d<SizeH; d++)
    						{
 #ifdef CHECKBUFFER
 							ASSERT( ((UDWORD)WPtr) >= (UDWORD)radarBuffer , "WPtr Onderflow" );
 							ASSERT( ((UDWORD)WPtr) < ((UDWORD)radarBuffer)+RADWIDTH*RADHEIGHT , "WPtr Overrun" );
 #endif
-							switch(radarDrawMode)
-							{
-								case RADAR_MODE_TERRAIN:
-									*WPtr = Val;
-									break;
-								case RADAR_MODE_NO_TERRAIN:
-									*WPtr = colBlack;
-									break;
-								case RADAR_MODE_HEIGHT_MAP:
-									*WPtr = heightMapColors[WTile->height];
-									break;
-								default:
-									ASSERT(FALSE,"RadarDrawTiles: unknown mini-map draw mode: %d", radarDrawMode);
-									break;
-							}
+							*WPtr = appliedRadarColour(radarDrawMode, WTile).argb;
    							WPtr++;
    						}
    						Ptr += Modulus;
@@ -529,17 +502,20 @@ static void DrawRadarTiles(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD box
 				}
 				else
 				{
-   					Ptr = Scr + j + i*Modulus;
+					UDWORD c, d;
+   					UDWORD *Ptr = Scr + j + i * Modulus;
+
    					for(c=0; c<SizeV; c++)
    					{
-   						WPtr = Ptr;
+   						UDWORD *WPtr = Ptr;
+
    						for(d=0; d<SizeH; d++)
    						{
 #ifdef CHECKBUFFER
 							ASSERT( ((UDWORD)WPtr) >= (UDWORD)radarBuffer , "WPtr Onderflow" );
 							ASSERT( ((UDWORD)WPtr) < ((UDWORD)radarBuffer)+RADWIDTH*RADHEIGHT , "WPtr Overrun" );
 #endif
-   							*WPtr = colBlack;
+   							*WPtr = WZCOL_RADAR_BACKGROUND.argb;
    							WPtr++;
    						}
    						Ptr += Modulus;
@@ -555,7 +531,7 @@ static void DrawRadarTiles(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD box
 
 // Draw the droids and structure positions on the radar.
 //
-static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSizeV)
+static void DrawRadarObjects(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSizeV)
 {
 	SDWORD				c,d;
 	UBYTE				clan;
@@ -564,7 +540,7 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 	STRUCTURE			*psStruct;
 	PROXIMITY_DISPLAY	*psProxDisp;
 	VIEW_PROXIMITY		*psViewProx;
-	UBYTE				*Ptr,*WPtr;
+	UDWORD				*Ptr,*WPtr;
 	SDWORD				SizeH,SizeV;
 	SDWORD				bw,bh;
 	SDWORD				SSizeH,SSizeV;
@@ -572,9 +548,9 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 	SDWORD				VisHeight;
 	SDWORD				OffsetX;
 	SDWORD				OffsetY;
-	UBYTE				playerCol,col;
-	UBYTE				flashCol;
-	UBYTE				camNum;
+	PIELIGHT			playerCol, col;
+	PIELIGHT			flashCol;
+	PIELIGHT			*palette = pie_GetGamePal();
 
 	SizeH = boxSizeH;
 	SizeV = boxSizeV;
@@ -583,24 +559,21 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 	OffsetX = RadarOffsetX;
 	OffsetY = RadarOffsetY;
 
-	camNum = getCampaignNumber()-1;
-
    	/* Show droids on map - go through all players */
    	for(clan = 0; clan < MAX_PLAYERS; clan++)
    	{
 		//see if have to draw enemy/ally color
 		if (bEnemyAllyRadarColor) {
 			if (clan == selectedPlayer) {
-				playerCol = colRadarMe[radarDrawMode];
+				playerCol = colRadarMe;
 			} else {
-				playerCol = (aiCheckAlliances(selectedPlayer, clan) ?
-							colRadarAlly[radarDrawMode] : colRadarEnemy[radarDrawMode]);
+				playerCol = (aiCheckAlliances(selectedPlayer, clan) ? colRadarAlly : colRadarEnemy);
 			}
 		} else {
 			//original 8-color mode
-			playerCol = clanColours[camNum][getPlayerColour(clan)];
+			playerCol = palette[clanColours[getPlayerColour(clan)]];
 		}
-		flashCol = flashColours[camNum][getPlayerColour(clan)];
+		flashCol = palette[flashColours[getPlayerColour(clan)]];
 
    		/* Go through all droids */
    		for(psDroid = apsDroidLists[clan]; psDroid != NULL;
@@ -628,7 +601,6 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 								col = flashCol;
 						}
 						else
-
 						{
 								col = playerCol;
 						}
@@ -642,7 +614,7 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 								ASSERT( ((UDWORD)WPtr) >= (UDWORD)radarBuffer , "WPtr Onderflow" );
 								ASSERT( ((UDWORD)WPtr) < ((UDWORD)radarBuffer)+RADWIDTH*RADHEIGHT , "WPtr Overrun" );
 #endif
-								*WPtr = col;
+								*WPtr = col.argb;
    								WPtr++;
    							}
 							Ptr += Modulus;
@@ -659,16 +631,15 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 		//see if have to draw enemy/ally color
 		if (bEnemyAllyRadarColor) {
 			if (clan == selectedPlayer) {
-				playerCol = colRadarMe[radarDrawMode];
+				playerCol = colRadarMe;
 			} else {
-				playerCol = (aiCheckAlliances(selectedPlayer,clan) ?
-							colRadarAlly[radarDrawMode]: colRadarEnemy[radarDrawMode]);
+				playerCol = (aiCheckAlliances(selectedPlayer,clan) ? colRadarAlly: colRadarEnemy);
 			}
 		} else {
 			//original 8-color mode
-			playerCol = clanColours[camNum][getPlayerColour(clan)];
+			playerCol = palette[clanColours[getPlayerColour(clan)]];
 		}
-		flashCol = flashColours[camNum][getPlayerColour(clan)];
+		flashCol = palette[flashColours[getPlayerColour(clan)]];
    		/* Go through all structures */
    		for(psStruct = apsStructLists[clan]; psStruct != NULL;
    			psStruct = psStruct->psNext)
@@ -738,7 +709,7 @@ static void DrawRadarObjects(UBYTE *screen,UDWORD Modulus,UWORD boxSizeH,UWORD b
 								ASSERT( ((UDWORD)WPtr) >= (UDWORD)radarBuffer , "WPtr Onderflow" );
 								ASSERT( ((UDWORD)WPtr) < ((UDWORD)radarBuffer)+RADWIDTH*RADHEIGHT , "WPtr Overrun" );
 #endif
-   								*WPtr = (UBYTE)col;
+   								*WPtr = col.argb;
    								WPtr++;
    							}
 							Ptr += Modulus;
@@ -856,7 +827,6 @@ static void drawViewingWindow( UDWORD x, UDWORD y, UDWORD boxSizeH, UDWORD boxSi
 	SDWORD	dif = getDistanceAdjust();
 	SDWORD	dif2 = getLengthAdjust();
 	PIELIGHT colour;
-	UDWORD	camNumber;
 
 	shortX = ((visibleTiles.x/4)-(dif/6)) * boxSizeH;
 	longX = ((visibleTiles.x/2)-(dif/4)) * boxSizeH;
@@ -880,8 +850,7 @@ static void drawViewingWindow( UDWORD x, UDWORD y, UDWORD boxSizeH, UDWORD boxSi
 
 	RotateVector2D(v,tv,&centre,player.r.y,4);
 
-	camNumber = getCampaignNumber();
-	switch(camNumber)
+	switch (getCampaignNumber())
 	{
 	case 1:
 	case 2:
@@ -909,8 +878,6 @@ static void drawViewingWindow( UDWORD x, UDWORD y, UDWORD boxSizeH, UDWORD boxSi
 	pie_DrawViewingWindow(tv,RADTLX,RADTLY,RADTLX+RADWIDTH,RADTLY+RADHEIGHT,colour);
 }
 
-
-
 static void DrawRadarExtras(UWORD boxSizeH,UWORD boxSizeV)
 {
 	SDWORD	viewX,viewY;
@@ -927,7 +894,6 @@ static void DrawRadarExtras(UWORD boxSizeH,UWORD boxSizeV)
 	RenderWindowFrame(&FrameRadar,RADTLX-1,RADTLY-1,RADWIDTH+2,RADHEIGHT+2);
 }
 
-
 // Does a screen coordinate lie within the radar area?
 //
 BOOL CoordInRadar(int x,int y)
@@ -943,8 +909,10 @@ BOOL CoordInRadar(int x,int y)
 	return FALSE;
 }
 
-
 void radarColour(UDWORD tileNumber, uint8_t r, uint8_t g, uint8_t b)
 {
-	tileColours[tileNumber] = (UBYTE)iV_PaletteNearestColour(r, g, b);
+	tileColours[tileNumber].byte.r = r;
+	tileColours[tileNumber].byte.g = g;
+	tileColours[tileNumber].byte.b = b;
+	tileColours[tileNumber].byte.a = 255;
 }

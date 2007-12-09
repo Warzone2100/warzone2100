@@ -2370,8 +2370,28 @@ void kf_ToggleRadarTerrain(void)
 {
 	radarDrawMode = radarDrawMode + 1;
 
-	if(radarDrawMode >= NUM_RADAR_MODES)
+	if (radarDrawMode >= NUM_RADAR_MODES)
+	{
 		radarDrawMode = 0;
+	}
+	switch (radarDrawMode)
+	{
+		case RADAR_MODE_NO_TERRAIN:
+		 	CONPRINTF(ConsoleString, (ConsoleString, "Radar showing only objects"));
+			break;
+		case RADAR_MODE_COMBINED:
+		 	CONPRINTF(ConsoleString, (ConsoleString, "Radar blending terrain and height"));
+			break;
+		case RADAR_MODE_TERRAIN:
+		 	CONPRINTF(ConsoleString, (ConsoleString, "Radar showing terrain"));
+			break;
+		case RADAR_MODE_HEIGHT_MAP:
+		 	CONPRINTF(ConsoleString, (ConsoleString, "Radar showing height"));
+			break;
+		case NUM_RADAR_MODES:
+			assert(false);
+			break;
+	}
 
 	resetRadarRedraw();
 }
