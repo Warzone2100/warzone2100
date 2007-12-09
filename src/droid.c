@@ -3212,6 +3212,26 @@ UDWORD	calcDroidPower(DROID *psDroid)
 	return power;
 }
 
+UDWORD calcDroidPoints(DROID *psDroid)
+{
+	int points, i;
+	
+	points  = getBodyStats(psDroid)->buildPoints;
+	points += getBrainStats(psDroid)->buildPoints;
+	points += getPropulsionStats(psDroid)->buildPoints;
+	points += getSensorStats(psDroid)->buildPoints;
+	points += getECMStats(psDroid)->buildPoints;
+	points += getRepairStats(psDroid)->buildPoints;
+	points += getConstructStats(psDroid)->buildPoints;
+	
+	for (i = 0; i < psDroid->numWeaps; i++)
+	{
+		points += (asWeaponStats + psDroid->asWeaps[i].nStat)->buildPoints;
+	}
+	
+	return points;
+}
+
 //Builds an instance of a Droid - the x/y passed in are in world coords.
 DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 				  BOOL onMission)

@@ -126,6 +126,9 @@ extern UDWORD calcDroidWeight(DROID_TEMPLATE *psTemplate);
 /* Calculate the power points required to build/maintain a droid */
 extern UDWORD calcDroidPower(DROID *psDroid);
 
+// Calculate the number of points required to build a droid
+extern UDWORD calcDroidPoints(DROID *psDroid);
+
 /* Calculate the body points of a droid from it's template */
 extern UDWORD calcTemplateBody(DROID_TEMPLATE *psTemplate, UBYTE player);
 

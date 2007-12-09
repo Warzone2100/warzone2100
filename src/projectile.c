@@ -244,6 +244,21 @@ proj_GetNext( void )
 
 /***************************************************************************/
 
+/*
+ * Relates the quality of the attacker to the quality of the victim.
+ * Returns 1.0 if both the attacker and victim are of equal value,
+ * else if Q > 1.0 then the victim is worth more than the attacker
+ * else if Q < 1.0 then the attacker is worth less than the attacker.
+ */
+static float QualityFactor(DROID *psAttacker, DROID *psVictim)
+{
+	float quality = calcDroidPower(psVictim) / calcDroidPower(psAttacker)
+	              + calcDroidPoints(psVictim) / calcDroidPoints(psAttacker)
+	              + psVictim->numKills / psAttacker->numKills;
+	
+	return quality / 3;
+}
+
 // update the kills after a target is damaged/destroyed
 static void proj_UpdateKills(PROJECTILE *psObj, SDWORD percentDamage)
 {
@@ -259,7 +274,7 @@ static void proj_UpdateKills(PROJECTILE *psObj, SDWORD percentDamage)
 	}
 
 	// If percentDamage is negative then the target was killed
-	if(bMultiPlayer && percentDamage < 0)
+	if (bMultiPlayer && percentDamage < 0)
 	{
 		sendDestroyExtra(psObj->psDest,psObj->psSource);
 		updateMultiStatsKills(psObj->psDest,psObj->psSource->player);
@@ -268,30 +283,36 @@ static void proj_UpdateKills(PROJECTILE *psObj, SDWORD percentDamage)
 	// Since we are no longer interested if it was killed or not, abs it
 	percentDamage = abs(percentDamage);
 
-	if(psObj->psSource->type == OBJ_DROID)			/* update droid kills */
+	if (psObj->psSource->type == OBJ_DROID)			/* update droid kills */
 	{
-		psDroid = (DROID*)psObj->psSource;
-		psDroid->numKills += percentDamage;
-		cmdDroidUpdateKills(psDroid, percentDamage);
-		if (orderStateObj(psDroid, DORDER_FIRESUPPORT, &psSensor))
+		psDroid = (DROID *) psObj->psSource;
+		
+		// If it is 'droid-on-droid' then modify the experience by the Quality factor
+		if (psObj->psDest != NULL && psObj->psDest->type == OBJ_DROID)
 		{
-            if (psSensor->type == OBJ_DROID)
-            {
-			    ((DROID *)psSensor)->numKills += percentDamage;
-            }
+			// Modify the experience gained by the 'quality factor' of the units
+			percentDamage *= QualityFactor(psDroid, (DROID *) psObj->psDest);
+		}
+
+		psDroid->numKills += percentDamage;		
+		cmdDroidUpdateKills(psDroid, percentDamage);
+		
+		if (orderStateObj(psDroid, DORDER_FIRESUPPORT, &psSensor)
+		 && psSensor->type == OBJ_DROID)
+		{
+		    ((DROID *) psSensor)->numKills += percentDamage;
 		}
 	}
 	else if (psObj->psSource->type == OBJ_STRUCTURE)
 	{
-		// see if there was a command droid designating this target
+		// See if there was a command droid designating this target
 		psDroid = cmdDroidGetDesignator(psObj->psSource->player);
-		if (psDroid != NULL)
+		
+		if (psDroid != NULL
+		 && psDroid->action == DACTION_ATTACK
+		 && psDroid->psActionTarget[0] == psObj->psDest)
 		{
-			if ((psDroid->action == DACTION_ATTACK) &&
-				(psDroid->psActionTarget[0] == psObj->psDest))
-			{
-				psDroid->numKills += percentDamage;
-			}
+			psDroid->numKills += percentDamage;
 		}
 	}
 }
