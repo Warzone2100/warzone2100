@@ -26,6 +26,7 @@
 #include <string.h>
 
 #include "lib/framework/frame.h"
+#include "lib/sound/audio.h"
 #include "objects.h"
 #include "deliverance.h"
 #include "lib/gamelib/gtime.h"
@@ -119,7 +120,11 @@ static void objmemDestroy(BASE_OBJECT *psObj)
 		default:
 			ASSERT(!"unknown object type", "objmemDestroy: unknown object type in destroyed list at 0x%p", psObj);
 	}
+	// Make sure to get rid of some final references in the sound code to this object first
+	audio_RemoveObj(psObj);
+
 	free(psObj);
+	debug(LOG_MEMORY, "objmemDestroy: BASE_OBJECT* 0x%p is freed.", psObj);
 }
 
 /* General housekeeping for the object system */

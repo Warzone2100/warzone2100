@@ -988,3 +988,79 @@ SDWORD audio_GetTrackID( const char *fileName )
 
 	return sound_GetTrackID( psTrack );
 }
+
+/** Loop through the list of playing and queued audio samples, and destroy any
+ *  of them that refer to the given object.
+ *  \param psObj pointer to the object for which we must destroy all of its
+ *               outstanding audio samples.
+ */
+void audio_RemoveObj(const void* psObj)
+{
+	unsigned int count = 0;
+
+	// loop through queued sounds and check if a sample needs to be removed
+	AUDIO_SAMPLE *psSample = g_psSampleQueue;
+	while (psSample != NULL)
+	{
+		if (psSample->psObj == psObj)
+		{
+			// The current audio sample seems to refer to an object
+			// that is about to be destroyed. So destroy this
+			// sample as well.
+			AUDIO_SAMPLE* toRemove = psSample;
+
+			// Make sure to keep our linked list iterator valid
+			psSample = psSample->psNext;
+
+			// Perform the actual task of destroying this sample
+			audio_RemoveSample(&g_psSampleQueue, toRemove);
+			free(psSample);
+
+			// Increment the deletion count
+			++count;
+		}
+		else
+		{
+			psSample = psSample->psNext;
+		}
+	}
+
+	if (count)
+		debug(LOG_MEMORY, "audio_RemoveObj: BASE_OBJECT* 0x%p was found %u times in the audio sample queue", psObj, count);
+
+	// Reset the deletion count
+	count = 0;
+
+	// loop through list of currently playing sounds and check if a sample needs to be removed
+	psSample = g_psSampleList;
+	while (psSample != NULL)
+	{
+		if (psSample->psObj == psObj)
+		{
+			// The current audio sample seems to refer to an object
+			// that is about to be destroyed. So destroy this
+			// sample as well.
+			AUDIO_SAMPLE* toRemove = psSample;
+
+			// Make sure to keep our linked list iterator valid
+			psSample = psSample->psNext;
+
+			// Stop this sound sample
+			sound_StopTrack(psSample);
+
+			// Perform the actual task of destroying this sample
+			audio_RemoveSample(&g_psSampleList, toRemove);
+			free(psSample);
+
+			// Increment the deletion count
+			++count;
+		}
+		else
+		{
+			psSample = psSample->psNext;
+		}
+	}
+
+	if (count)
+		debug(LOG_MEMORY, "audio_RemoveObj: ***Warning! psOBJ %p was found %u times in the list of playing audio samples", psObj, count);
+}

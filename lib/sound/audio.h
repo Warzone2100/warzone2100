@@ -68,6 +68,7 @@ extern void		audio_ResumeAll( void );
 extern void		audio_StopAll( void );
 
 extern SDWORD	audio_GetTrackID( const char *fileName );
+extern void audio_RemoveObj(const void* psObj);
 
 /***************************************************************************/
 
