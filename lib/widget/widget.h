@@ -26,6 +26,7 @@
 #define _widget_h
 
 #include "lib/framework/frame.h"
+#include "lib/ivis_common/piepalette.h"
 #include "widgbase.h"
 
 /***********************************************************************************
@@ -94,16 +95,6 @@
 #define WSLD_PLAIN		0			// Plain slider
 
 /***********************************************************************************/
-
-/* Generic widget colour */
-typedef struct _w_colourdef
-{
-	UBYTE	red;
-	UBYTE	green;
-	UBYTE	blue;
-	UBYTE	alpha;
-} W_COLOURDEF;
-
 
 /* Basic initialisation entries common to all widgets */
 #define WINIT_BASE \
@@ -236,8 +227,8 @@ typedef struct _w_barinit
 	UWORD		size;			// Initial percentage of the graph that is filled
 	UWORD		minorSize;		// Percentage of second bar graph if there is one
 	UWORD		iRange;			// Maximum range
-	W_COLOURDEF	sCol;			// Bar colour
-	W_COLOURDEF	sMinorCol;		// Minor bar colour
+	PIELIGHT	sCol;			// Bar colour
+	PIELIGHT	sMinorCol;		// Minor bar colour
 	const char	*pTip;			// Tool tip text
 } W_BARINIT;
 
@@ -403,7 +394,7 @@ extern void widgSetColour(W_SCREEN *psScreen, UDWORD id, UDWORD colour,
 						  UBYTE red, UBYTE green, UBYTE blue);
 
 // Set the global toop tip text colour.
-extern void	widgSetTipColour(W_SCREEN *psScreen, UBYTE red, UBYTE green, UBYTE blue);
+extern void	widgSetTipColour(W_SCREEN *psScreen, PIELIGHT colour);
 
 /* Possible states for a button */
 #define WBUT_DISABLE	0x0001		// Disable (grey out) a button

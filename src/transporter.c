@@ -960,12 +960,12 @@ BOOL intAddDroidsAvailForm(void)
 	sBarInit.width = STAT_PROGBARWIDTH;
 	sBarInit.height = STAT_PROGBARHEIGHT;
 	sBarInit.size = 50;
-	sBarInit.sCol.red = STAT_PROGBARMAJORRED;
-	sBarInit.sCol.green = STAT_PROGBARMAJORGREEN;
-	sBarInit.sCol.blue = STAT_PROGBARMAJORBLUE;
-	sBarInit.sMinorCol.red = STAT_PROGBARMINORRED;
-	sBarInit.sMinorCol.green = STAT_PROGBARMINORGREEN;
-	sBarInit.sMinorCol.blue = STAT_PROGBARMINORBLUE;
+	sBarInit.sCol.byte.r = STAT_PROGBARMAJORRED;
+	sBarInit.sCol.byte.g = STAT_PROGBARMAJORGREEN;
+	sBarInit.sCol.byte.b = STAT_PROGBARMAJORBLUE;
+	sBarInit.sMinorCol.byte.r = STAT_PROGBARMINORRED;
+	sBarInit.sMinorCol.byte.g = STAT_PROGBARMINORGREEN;
+	sBarInit.sMinorCol.byte.b = STAT_PROGBARMINORBLUE;
 
     //add each button
 	//add droids built whilst on the mission

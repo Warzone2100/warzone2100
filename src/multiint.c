@@ -93,7 +93,7 @@ extern char	MultiPlayersPath[PATH_MAX];
 
 extern BOOL				bSendingMap;
 
-extern void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+extern void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 extern BOOL NETsetupTCPIP(void ** addr, const char * machine);
 
@@ -138,14 +138,14 @@ static BOOL addMultiEditBox(UDWORD formid,UDWORD id,UDWORD x, UDWORD y, const ch
 static void addBlueForm					(UDWORD parent,UDWORD id, const char *txt,UDWORD x,UDWORD y,UDWORD w,UDWORD h);
 
 // Drawing Functions
-void		displayChatEdit				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void		displayMultiBut				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void		displayWhiteBoard			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void		intDisplayFeBox				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void		displayRemoteGame			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void		displayPlayer				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void		displayTeamChooser			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void		displayMultiEditBox			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void		displayChatEdit				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+void		displayMultiBut				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+void		displayWhiteBoard			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+void		intDisplayFeBox				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+void		displayRemoteGame			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+void		displayPlayer				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+void		displayTeamChooser			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+void		displayMultiEditBox			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 void		setLockedTeamsMode			(void);
 
 // find games
@@ -2504,7 +2504,7 @@ static BOOL runWhiteBoard(void)
 	return TRUE;
 }
 
-void displayWhiteBoard(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayWhiteBoard(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	UDWORD	x = D_W+xOffset+psWidget->x;
 	UDWORD	y = D_H+yOffset+psWidget->y;
@@ -2566,7 +2566,7 @@ void displayWhiteBoard(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD 
 				newx = (UWORD)d.rem;
 				if( newPoint>1 && oldPoint>1 )
 				{
-					iV_Line(x+oldx,y+oldy,x+newx,y+newy,col);	// draw line!
+					iV_Line(x+oldx,y+oldy,x+newx,y+newy,WZCOL_WHITE);	// draw line! // hack
 				}
 				oldPoint = newPoint;
 				oldx = newx;
@@ -2606,21 +2606,21 @@ static BOOL addWhiteBoard(void)
 /////////////////////////////////////////////////////////////////////////////////////////
 // Drawing functions
 
-void displayChatEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayChatEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y -4;			// 4 is the magic number.
 
 	// draws the line at the bottom of the multiplayer join dialog separating the chat 
 	// box from the input box
-	iV_Line(x, y, x + psWidget->width, y, WZCOL_MENU_SEPARATOR.argb);
+	iV_Line(x, y, x + psWidget->width, y, WZCOL_MENU_SEPARATOR);
 
 	return;
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////
-void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
@@ -2647,7 +2647,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD 
 
 	//draw game info
 	iV_SetFont(font_regular);													// font
-	iV_SetTextColour(-1);												//colour
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
 	//draw type overlay.
 	if( NETgetGameFlagsUnjoined(i,1) == CAMPAIGN)
@@ -2727,7 +2727,7 @@ static UDWORD bestPlayer(UDWORD player)
 	return count;
 }
 
-void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	UDWORD		x = xOffset+psWidget->x;
 	UDWORD		y = yOffset+psWidget->y;
@@ -2749,7 +2749,7 @@ void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	UDWORD		x = xOffset+psWidget->x;
 	UDWORD		y = yOffset+psWidget->y;
@@ -2776,7 +2776,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 		for(j=0; player2dpid[j] != NetPlay.players[i].dpid && j<MAX_PLAYERS; j++);// get the in game playernumber.
 
 		iV_SetFont(font_regular);														// font
-		iV_SetTextColour(-1);													// colour
+		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
 		// name
 		while(iV_GetTextWidth(NetPlay.players[i].name) > psWidget->width -68)	// clip name.
@@ -2987,7 +2987,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 
 // ////////////////////////////////////////////////////////////////////////////
 // Display blue box
-void intDisplayFeBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayFeBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
@@ -3000,7 +3000,7 @@ void intDisplayFeBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *p
 
 // ////////////////////////////////////////////////////////////////////////////
 // Display edit box
-void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
@@ -3025,7 +3025,7 @@ void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWOR
 
 // ////////////////////////////////////////////////////////////////////////////
 // Display one of two images depending on if the widget is hilighted by the mouse.
-void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;

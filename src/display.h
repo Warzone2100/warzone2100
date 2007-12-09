@@ -89,7 +89,7 @@ UDWORD	x2;
 UDWORD	y2;
 UDWORD	status;
 UDWORD	lastTime;
-UDWORD	boxColourIndex;
+UDWORD	pulse;
 };
 
 extern struct	_dragBox dragBox3D,wallDrag;

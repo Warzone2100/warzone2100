@@ -237,8 +237,6 @@ static UDWORD	destTileX=0,destTileY=0;
 
 /* Colour strobe values for the strobing drag selection box */
 #define BOX_PULSE_SIZE  10
-static UBYTE	boxPulseColours[BOX_PULSE_SIZE] = {233,232,231,230,229,228,227,226,225,224};
-
 
 /********************  Functions  ********************/
 
@@ -353,7 +351,7 @@ void draw3DScene( void )
 	}
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_OFF);
 	pie_SetFogStatus(FALSE);
-	iV_SetTextColour(-1);
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
 	/* Dont remove this folks!!!! */
 	if(!bAllowOtherKeyPresses)
@@ -1666,13 +1664,14 @@ void	renderFeature(FEATURE *psFeature)
 		}
 
 		brightness = lightDoFogAndIllumination(brightness, getCentreX() - featX, getCentreZ() - featY, &specular);
-		if(psFeature->psStats->subType == FEAT_BUILDING ||
-		psFeature->psStats->subType == FEAT_SKYSCRAPER ||
-		psFeature->psStats->subType == FEAT_OIL_DRUM)
+
+		if (psFeature->psStats->subType == FEAT_BUILDING || psFeature->psStats->subType == FEAT_SKYSCRAPER
+		    || psFeature->psStats->subType == FEAT_OIL_DRUM)
 		{
 			// these cast a shadow
 			shadowFlags = pie_STATIC_SHADOW;
 		}
+
 		if(psFeature->psStats->subType == FEAT_OIL_RESOURCE)
 		{
 			vecTemp = psFeature->sDisplay.imd->points;
@@ -2550,14 +2549,12 @@ static void	drawDragBox( void )
 
 	if(dragBox3D.status == DRAG_DRAGGING && buildState == BUILD3D_NONE)
 	{
-		PIELIGHT colour;
-
 		if(gameTime - dragBox3D.lastTime > BOX_PULSE_SPEED)
 		{
-			dragBox3D.boxColourIndex++;
-			if(dragBox3D.boxColourIndex>=BOX_PULSE_SIZE)
+			dragBox3D.pulse++;
+			if (dragBox3D.pulse >= BOX_PULSE_SIZE)
 			{
-				dragBox3D.boxColourIndex = 0;
+				dragBox3D.pulse = 0;
 			}
 			dragBox3D.lastTime = gameTime;
 		}
@@ -2569,20 +2566,14 @@ static void	drawDragBox( void )
 		maxY = MAX(dragBox3D.y1, mouseYPos);
 
 		// SHURCOOL: Reduce the box in size to produce a (consistent) pulsing inward effect
-		minX += dragBox3D.boxColourIndex/2;
-		maxX -= dragBox3D.boxColourIndex/2;
-		minY += dragBox3D.boxColourIndex/2;
-		maxY -= dragBox3D.boxColourIndex/2;
+		minX += dragBox3D.pulse / 2;
+		maxX -= dragBox3D.pulse / 2;
+		minY += dragBox3D.pulse / 2;
+		maxY -= dragBox3D.pulse / 2;
 
 		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_OFF);
-		iV_Box(minX, minY,
-				maxX, maxY,
-				boxPulseColours[dragBox3D.boxColourIndex]);
-		colour.byte.a = 16;
-		colour.byte.r = 255;
-		colour.byte.g = 255;
-		colour.byte.b = 255;
-		pie_UniTransBoxFill(minX + 1, minY + 1, maxX - 1, maxY - 1, colour);
+		iV_Box(minX, minY, maxX, maxY, WZCOL_UNIT_SELECT_BORDER);
+		pie_UniTransBoxFill(minX + 1, minY + 1, maxX - 1, maxY - 1, WZCOL_UNIT_SELECT_BOX);
 		pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 	}
 }
@@ -4165,17 +4156,17 @@ static void	processSensorTarget( void )
 				x1 = (SWORD)(x+offset);
 				y1 = (SWORD)(y+offset);
 
-				iV_Line(x0,y0,x0+8,y0,COL_WHITE);
-				iV_Line(x0,y0,x0,y0+8,COL_WHITE);
+				iV_Line(x0, y0, x0 + 8, y0, WZCOL_WHITE);
+				iV_Line(x0, y0, x0, y0 + 8, WZCOL_WHITE);
 
-				iV_Line(x1,y0,x1-8,y0,COL_WHITE);
-				iV_Line(x1,y0,x1,y0+8,COL_WHITE);
+				iV_Line(x1, y0, x1 - 8, y0, WZCOL_WHITE);
+				iV_Line(x1, y0, x1, y0 + 8, WZCOL_WHITE);
 
-				iV_Line(x1,y1,x1-8,y1,COL_WHITE);
-				iV_Line(x1,y1,x1,y1-8,COL_WHITE);
+				iV_Line(x1, y1,x1 - 8, y1, WZCOL_WHITE);
+				iV_Line(x1, y1,x1, y1 - 8, WZCOL_WHITE);
 
-				iV_Line(x0,y1,x0+8,y1,COL_WHITE);
-				iV_Line(x0,y1,x0,y1-8,COL_WHITE);
+				iV_Line(x0, y1, x0 + 8, y1, WZCOL_WHITE);
+				iV_Line(x0, y1, x0, y1 - 8, WZCOL_WHITE);
 			}
 			else
 			{

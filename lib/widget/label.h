@@ -46,7 +46,7 @@ extern BOOL labelCreate(W_LABEL **ppsWidget, W_LABINIT *psInit);
 extern void labelFree(W_LABEL *psWidget);
 
 /* label display function */
-extern void labelDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+extern void labelDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 /* Respond to a mouse moving over a label */
 extern void labelHiLite(W_LABEL *psWidget, W_CONTEXT *psContext);

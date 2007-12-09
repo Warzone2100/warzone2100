@@ -83,7 +83,7 @@ extern void editBoxHiLite(W_EDITBOX *psWidget);
 extern void editBoxHiLiteLost(W_EDITBOX *psWidget);
 
 /* The edit box display function */
-extern void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+extern void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 /* set state of edit box */
 extern void editBoxSetState(W_EDITBOX *psEditBox, UDWORD state);

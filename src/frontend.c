@@ -92,9 +92,9 @@ void		removeTopForm			(void);
 void		removeBottomForm		(void);
 void		removeBackdrop			(void);
 
-static void	displayTitleBitmap		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void		displayTextAt270		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-static void	displayBigSlider		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+static void	displayTitleBitmap		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+void		displayTextAt270		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void	displayBigSlider		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 
 
@@ -1429,17 +1429,17 @@ void addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt)
 // drawing functions
 
 // show a background piccy
-static void displayTitleBitmap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+static void displayTitleBitmap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	iV_SetFont(font_regular);
-	iV_SetTextColour(PIE_TEXT_WHITE);
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
 	iV_DrawTextRotated(version_getFormattedVersionString(), pie_GetVideoBufferWidth() - 10, pie_GetVideoBufferHeight() - 15, 270.f);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // show warzone logo
-void displayLogo(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayLogo(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	iV_DrawImage(FrontImages,IMAGE_FE_LOGO,xOffset+psWidget->x,yOffset+psWidget->y);
 }
@@ -1449,7 +1449,7 @@ void displayLogo(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColo
 
 // ////////////////////////////////////////////////////////////////////////////
 // show a text option.
-void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	SDWORD			fx,fy, fw;
 	W_BUTTON		*psBut;
@@ -1478,17 +1478,17 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD 
 
 	if(greyOut)														// unavailable
 	{
-		iV_SetTextColour(PIE_TEXT_DARKBLUE);
+		iV_SetTextColour(WZCOL_TEXT_DARK);
 	}
 	else															// available
 	{
 		if(hilight)													// hilight
 		{
-			iV_SetTextColour(PIE_TEXT_WHITE);
+			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 		}
 		else														// dont highlight
 		{
-			iV_SetTextColour(PIE_TEXT_LIGHTBLUE);//(unsigned short)iV_PaletteNearestColour(129,142,184)
+			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
 		}
 	}
 
@@ -1500,7 +1500,7 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD 
 
 // ////////////////////////////////////////////////////////////////////////////
 // show text written on its side.
-void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	SDWORD		fx,fy;
 	W_LABEL		*psLab;
@@ -1508,14 +1508,10 @@ void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *
 	psLab = (W_LABEL *)psWidget;
 
 	iV_SetFont(font_large);
-
-
-	iV_SetTextColour(PIE_TEXT_WHITE);
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
 	fx = xOffset + psWidget->x;
-
 	fy = yOffset + psWidget->y + iV_GetTextWidth(psLab->aText) ;
-
 
 	iV_DrawTextRotated(psLab->aText, fx, fy, 270.f);
 }
@@ -1523,18 +1519,15 @@ void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *
 
 // ////////////////////////////////////////////////////////////////////////////
 // show, well have a guess..
-static void displayBigSlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+static void displayBigSlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	W_SLIDER *Slider = (W_SLIDER*)psWidget;
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
 	SWORD sx;
 
-
 	iV_DrawImage(IntImages,IMAGE_SLIDER_BIG,x+STAT_SLD_OX,y+STAT_SLD_OY);			// draw bdrop
 
 	sx = (SWORD)((Slider->width-3 - Slider->barSize) * Slider->pos / Slider->numStops);	// determine pos.
 	iV_DrawImage(IntImages,IMAGE_SLIDER_BIGBUT,x+3+sx,y+3);								//draw amount
-
-
 }

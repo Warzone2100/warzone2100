@@ -444,7 +444,7 @@ UDWORD	exceed;
 
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 	pie_SetFogStatus(FALSE);
-	iV_SetTextColour(-1);
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
 	drop = 0;
 	if(bConsoleDropped)

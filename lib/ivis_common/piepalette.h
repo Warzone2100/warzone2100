@@ -67,7 +67,10 @@
 #define WZCOL_TEXT_DARK			psPalette[18]
 #define WZCOL_SCORE_BOX_BORDER		psPalette[19]
 #define WZCOL_SCORE_BOX			psPalette[20]
-#define WZCOL_MAX			21
+#define WZCOL_TOOLTIP_TEXT		psPalette[21]
+#define WZCOL_UNIT_SELECT_BORDER	psPalette[22]
+#define WZCOL_UNIT_SELECT_BOX		psPalette[23]
+#define WZCOL_MAX			24
 
 //*************************************************************************
 

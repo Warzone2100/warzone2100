@@ -676,7 +676,7 @@ void editBoxHiLiteLost(W_EDITBOX *psWidget)
 
 
 /* The edit box display function */
-void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	W_EDITBOX	*psEdBox;
 	SDWORD		x0,y0,x1,y1, fx,fy, cx,cy;
@@ -708,7 +708,7 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pC
 	fx = x0 + WEDB_XGAP;// + (psEdBox->width - fw) / 2;
 
 	iV_SetFont(CurrFontID);
-	iV_SetTextColour((UBYTE)pColours[WCOL_TEXT]);
+	iV_SetTextColour(pColours[WCOL_TEXT]);
 
   	fy = y0 + (psEdBox->height - iV_GetTextLineSize())/2 - iV_GetTextAboveBase();
 
@@ -743,7 +743,7 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pC
 		cx += iV_GetTextWidth("-");
 		*pInsPoint = ch;
 		cy = fy;
-		iV_Line(cx, cy + iV_GetTextAboveBase(), cx, cy - iV_GetTextBelowBase(), 0xffffff); //pColours[WCOL_CURSOR]);
+		iV_Line(cx, cy + iV_GetTextAboveBase(), cx, cy - iV_GetTextBelowBase(), pColours[WCOL_CURSOR]);
 	}
 #if CURSOR_BLINK
 	else if ((psEdBox->state & WEDBS_MASK) == WEDBS_OVER && blink)
@@ -757,7 +757,7 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pC
 		cx = x0 + WEDB_XGAP + iV_GetTextWidth(psEdBox->aText + psEdBox->printStart);
 		*pInsPoint = ch;
 	  	cy = fy;
-		iV_Line(cx, cy, cx + WEDB_CURSORSIZE, cy, 0xffffff); //pColours[WCOL_CURSOR]);
+		iV_Line(cx, cy, cx + WEDB_CURSORSIZE, cy, pColours[WCOL_CURSOR]);
 	}
 
 

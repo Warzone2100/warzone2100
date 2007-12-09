@@ -362,8 +362,7 @@ void sliderHiLiteLost(W_SLIDER *psWidget)
 }
 
 /* The slider display function */
-void sliderDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
-						  UDWORD *pColours)
+void sliderDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	W_SLIDER	*psSlider;
 	SWORD		x0,y0, x1,y1;

@@ -34,7 +34,7 @@
 	UWORD		Ax0,Ay0,Ax1,Ay1; 	/* Working coords for animations. */ \
 	UDWORD		animCount; 			/* Animation counter. */ \
 	UDWORD		startTime;			/* Animation start time */ \
-	UDWORD		aColours[WCOL_MAX];		/* Colours for the form and its widgets. signed since aColours -1 means use bitmap. */ \
+	PIELIGHT	aColours[WCOL_MAX];		/* Colours for the form and its widgets. signed since aColours -1 means use bitmap. */ \
 	WIDGET		*psLastHiLite;	/* The last widget to be hilited */ \
 								/* This is used to track when the mouse moves */ \
 								/* off something */ \
@@ -184,9 +184,9 @@ extern void formHiLite(W_FORM *psWidget, W_CONTEXT *psContext);
 extern void formHiLiteLost(W_FORM *psWidget, W_CONTEXT *psContext);
 
 /* Display function prototypes */
-extern void formDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-extern void formDisplayClickable(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-extern void formDisplayTabbed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+extern void formDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+extern void formDisplayClickable(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+extern void formDisplayTabbed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 #endif
 

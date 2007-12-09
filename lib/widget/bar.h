@@ -67,16 +67,13 @@ extern void barGraphHiLite(W_BARGRAPH *psWidget, W_CONTEXT *psContext);
 extern void barGraphHiLiteLost(W_BARGRAPH *psWidget);
 
 /* The bar graph display function */
-extern void barGraphDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
-							UDWORD *pColours);
+extern void barGraphDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 /* The double bar graph display function */
-extern void barGraphDisplayDouble(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
-								  UDWORD *pColours);
+extern void barGraphDisplayDouble(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 /* The trough bar graph display function */
-extern void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
-							UDWORD *pColours);
+extern void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 #endif
 

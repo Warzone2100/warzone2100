@@ -277,7 +277,7 @@ extern	UDWORD				objID;					// unique ID creation thing..
 /* default droid design template */
 DROID_TEMPLATE	sDefaultDesignTemplate;
 
-extern void intDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+extern void intDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 void desSetupDesignTemplates( void );
 
 /* Set the current mode of the design screen, and display the appropriate component lists */
@@ -340,8 +340,7 @@ static void intSetPropulsionShadowStats(PROPULSION_STATS *psStats);
 /* Check whether a droid template is valid */
 static BOOL intValidTemplate(DROID_TEMPLATE *psTempl);
 /* General display window for the design form */
-void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset,
-								 UDWORD yOffset, UDWORD *pColours);
+void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 /* Sets the Design Power Bar for a given Template */
 static void intSetDesignPower(DROID_TEMPLATE *psTemplate);
 /* Sets the Power shadow Bar for the current Template with new stat*/
@@ -385,10 +384,10 @@ DROID_TEMPLATE			sCurrDesign;
 /* Flag to indictate whether a 'spare' template button is required */
 static BOOL				newTemplate = FALSE;
 
-static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-static void intDisplayComponentButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void intDisplayComponentButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 extern BOOL bRender3DOnly;
 
@@ -685,12 +684,12 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	sBarInit.width = DES_CLICKBARWIDTH;
 	sBarInit.height = DES_CLICKBARHEIGHT;
 	sBarInit.size = 50;
-	sBarInit.sCol.red = DES_CLICKBARMAJORRED;
-	sBarInit.sCol.green = DES_CLICKBARMAJORGREEN;
-	sBarInit.sCol.blue = DES_CLICKBARMAJORBLUE;
-	sBarInit.sMinorCol.red = DES_CLICKBARMINORRED;
-	sBarInit.sMinorCol.green = DES_CLICKBARMINORGREEN;
-	sBarInit.sMinorCol.blue = DES_CLICKBARMINORBLUE;
+	sBarInit.sCol.byte.r = DES_CLICKBARMAJORRED;
+	sBarInit.sCol.byte.g = DES_CLICKBARMAJORGREEN;
+	sBarInit.sCol.byte.b = DES_CLICKBARMAJORBLUE;
+	sBarInit.sMinorCol.byte.r = DES_CLICKBARMINORRED;
+	sBarInit.sMinorCol.byte.g = DES_CLICKBARMINORGREEN;
+	sBarInit.sMinorCol.byte.b = DES_CLICKBARMINORBLUE;
 	sBarInit.pDisplay = intDisplayStatsBar;
 	sBarInit.pTip = _("Kinetic Armour");
 	sBarInit.iRange = (UWORD)getMaxBodyArmour();//DBAR_BODYMAXARMOUR;
@@ -811,7 +810,7 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	sLabInit.id = IDDES_TEMPPOWERLAB;
 	sLabInit.x = DES_POWERX;
 	sLabInit.y = DES_POWERY;
-	sLabInit.pTip = _("Total Power Required");
+	sLabInit.pTip = _("Total Power Requibyte.r");
 	sLabInit.pDisplay = intDisplayImage;
 	sLabInit.UserData = IMAGE_DES_POWER;
 	if (!widgAddLabel(psWScreen, &sLabInit))
@@ -831,7 +830,7 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 					iV_GetImageWidth(IntImages,IMAGE_DES_BODYPOINTS));
 	sBarInit.height = iV_GetImageHeight(IntImages,IMAGE_DES_POWERBACK);
 	sBarInit.pDisplay = intDisplayDesignPowerBar;//intDisplayStatsBar;
-	sBarInit.pTip = _("Total Power Required");
+	sBarInit.pTip = _("Total Power Requibyte.r");
 	sBarInit.iRange = DBAR_TEMPLATEMAXPOWER;//WBAR_SCALE;
 	if (!widgAddBarGraph(psWScreen, &sBarInit))
 	{
@@ -1043,12 +1042,12 @@ BOOL intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight,
 	sBarInit.width = STAT_PROGBARWIDTH;
 	sBarInit.height = STAT_PROGBARHEIGHT;
 	sBarInit.size = 50;
-	sBarInit.sCol.red = STAT_PROGBARMAJORRED;
-	sBarInit.sCol.green = STAT_PROGBARMAJORGREEN;
-	sBarInit.sCol.blue = STAT_PROGBARMAJORBLUE;
-	sBarInit.sMinorCol.red = STAT_PROGBARMINORRED;
-	sBarInit.sMinorCol.green = STAT_PROGBARMINORGREEN;
-	sBarInit.sMinorCol.blue = STAT_PROGBARMINORBLUE;
+	sBarInit.sCol.byte.r = STAT_PROGBARMAJORRED;
+	sBarInit.sCol.byte.g = STAT_PROGBARMAJORGREEN;
+	sBarInit.sCol.byte.b = STAT_PROGBARMAJORBLUE;
+	sBarInit.sMinorCol.byte.r = STAT_PROGBARMINORRED;
+	sBarInit.sMinorCol.byte.g = STAT_PROGBARMINORGREEN;
+	sBarInit.sMinorCol.byte.b = STAT_PROGBARMINORBLUE;
 	sBarInit.pTip = _("Power Usage");
 
 	droidTemplID = 0;
@@ -1512,12 +1511,12 @@ static BOOL _intSetSystemForm(COMP_BASE_STATS *psStats)
 	sBarInit.y = DES_STATBAR_Y1;	//DES_CLICKBARY;
 	sBarInit.width = DES_CLICKBARWIDTH;
 	sBarInit.height = DES_CLICKBARHEIGHT;
-	sBarInit.sCol.red = DES_CLICKBARMAJORRED;
-	sBarInit.sCol.green = DES_CLICKBARMAJORGREEN;
-	sBarInit.sCol.blue = DES_CLICKBARMAJORBLUE;
-	sBarInit.sMinorCol.red = DES_CLICKBARMINORRED;
-	sBarInit.sMinorCol.green = DES_CLICKBARMINORGREEN;
-	sBarInit.sMinorCol.blue = DES_CLICKBARMINORBLUE;
+	sBarInit.sCol.byte.r = DES_CLICKBARMAJORRED;
+	sBarInit.sCol.byte.g = DES_CLICKBARMAJORGREEN;
+	sBarInit.sCol.byte.b = DES_CLICKBARMAJORBLUE;
+	sBarInit.sMinorCol.byte.r = DES_CLICKBARMINORRED;
+	sBarInit.sMinorCol.byte.g = DES_CLICKBARMINORGREEN;
+	sBarInit.sMinorCol.byte.b = DES_CLICKBARMINORBLUE;
 	sBarInit.pDisplay = intDisplayStatsBar;
 
 	/* Initialise the label struct */
@@ -1887,12 +1886,12 @@ static BOOL intSetPropulsionForm(PROPULSION_STATS *psStats)
 	sBarInit.y = DES_STATBAR_Y1;	//DES_CLICKBARY;
 	sBarInit.width = DES_CLICKBARWIDTH;
 	sBarInit.height = DES_CLICKBARHEIGHT;
-	sBarInit.sCol.red = DES_CLICKBARMAJORRED;
-	sBarInit.sCol.green = DES_CLICKBARMAJORGREEN;
-	sBarInit.sCol.blue = DES_CLICKBARMAJORBLUE;
-	sBarInit.sMinorCol.red = DES_CLICKBARMINORRED;
-	sBarInit.sMinorCol.green = DES_CLICKBARMINORGREEN;
-	sBarInit.sMinorCol.blue = DES_CLICKBARMINORBLUE;
+	sBarInit.sCol.byte.r = DES_CLICKBARMAJORRED;
+	sBarInit.sCol.byte.g = DES_CLICKBARMAJORGREEN;
+	sBarInit.sCol.byte.b = DES_CLICKBARMAJORBLUE;
+	sBarInit.sMinorCol.byte.r = DES_CLICKBARMINORRED;
+	sBarInit.sMinorCol.byte.g = DES_CLICKBARMINORGREEN;
+	sBarInit.sMinorCol.byte.b = DES_CLICKBARMINORBLUE;
 	sBarInit.pDisplay = intDisplayStatsBar;
 
 	/* Initialise the label struct */
@@ -4493,7 +4492,7 @@ void intRunDesign(void)
 	}
 }
 
-static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	W_CLICKFORM		*Form = (W_CLICKFORM*)psWidget;
 	UWORD			x0, y0;
@@ -4548,7 +4547,7 @@ static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 }
 
 /* Displays the 3D view of the droid in a window on the design form */
-static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	W_FORM			*Form = (W_FORM*)psWidget;
 	UDWORD			x0,y0,x1,y1;
@@ -4594,13 +4593,13 @@ static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 }
 
 
-void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	intDisplayStatsButton(psWidget, xOffset, yOffset, pColours);
 }
 
 
-static void intDisplayComponentButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+static void intDisplayComponentButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 //	iIMDShape *OldCurShape = CurrentStatsShape;
 //	SWORD OldCurIndex = CurrentStatsIndex;
@@ -4614,7 +4613,7 @@ static void intDisplayComponentButton(WIDGET *psWidget, UDWORD xOffset, UDWORD y
 }
 
 /* General display window for the design form  SOLID BACKGROUND - NOT TRANSPARENT*/
-void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	W_TABFORM *Form = (W_TABFORM*)psWidget;
 	UDWORD x0,y0,x1,y1;

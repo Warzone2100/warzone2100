@@ -67,8 +67,7 @@ extern void sliderHiLite(W_SLIDER *psWidget);
 extern void sliderHiLiteLost(W_SLIDER *psWidget);
 
 /* The slider display function */
-extern void sliderDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
-						  UDWORD *pColours);
+extern void sliderDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 
 #endif

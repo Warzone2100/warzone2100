@@ -93,9 +93,9 @@ BOOL runLoadSave				(BOOL bResetMissionWidgets);
 BOOL displayLoadSave			(void);
 static BOOL _addLoadSave		(BOOL bLoad, const char *sSearchPath, const char *sExtension, const char *title);
 static BOOL _runLoadSave		(BOOL bResetMissionWidgets);
-static void displayLoadBanner	(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-static void displayLoadSlot		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-static void displayLoadSaveEdit	(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+static void displayLoadBanner	(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayLoadSlot		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayLoadSaveEdit	(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 void		removeWildcards		(char *pStr);
 
 static	W_SCREEN	*psRequestScreen;					// Widget screen for requester
@@ -633,7 +633,7 @@ void removeWildcards(char *pStr)
 // ////////////////////////////////////////////////////////////////////////////
 // DISPLAY FUNCTIONS
 
-static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	PIELIGHT col;
 	UDWORD	x = xOffset+psWidget->x;
@@ -653,7 +653,7 @@ static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 
 	UDWORD	x = xOffset+psWidget->x;
@@ -667,7 +667,7 @@ static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UD
 		strlcpy(butString, ((W_BUTTON *)psWidget)->pTip, sizeof(butString));
 
 		iV_SetFont(font_regular);									// font
-		iV_SetTextColour(-1);								//colour
+		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
 		while(iV_GetTextWidth(butString) > psWidget->width)
 		{
@@ -680,7 +680,7 @@ static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UD
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-static void displayLoadSaveEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+static void displayLoadSaveEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;

@@ -86,7 +86,7 @@ extern void buttonSetFlash(W_BUTTON *psButton);
 extern void buttonClearFlash(W_BUTTON *psButton);
 
 /* The button display function */
-extern void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+extern void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 #endif
 

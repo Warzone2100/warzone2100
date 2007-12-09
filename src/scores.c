@@ -304,7 +304,6 @@ UDWORD	width,height;
 float	length;
 float	mul;
 UDWORD	div;
-	PIELIGHT colour;
 
 	if(!bDispStarted)
 	{
@@ -315,12 +314,8 @@ UDWORD	div;
 
 	fillUpStats();
 
-	colour.byte.r = 0;
-	colour.byte.b = 0;
-	colour.byte.b = 88;
-	colour.byte.a = 128;
-	pie_UniTransBoxFill( 16 + D_W, MT_Y_POS - 16, pie_GetVideoBufferWidth() - D_W - 16, MT_Y_POS + 256, colour );
-	iV_Box( 16 + D_W, MT_Y_POS - 16, pie_GetVideoBufferWidth() - D_W - 16, MT_Y_POS + 256, 1);
+	pie_UniTransBoxFill(16 + D_W, MT_Y_POS - 16, pie_GetVideoBufferWidth() - D_W - 16, MT_Y_POS + 256, WZCOL_SCORE_BOX);
+	iV_Box(16 + D_W, MT_Y_POS - 16, pie_GetVideoBufferWidth() - D_W - 16, MT_Y_POS + 256, WZCOL_SCORE_BOX_BORDER);
 
 	iV_DrawText( _("Unit Losses"), LC_X + D_W, 80 + 16 + D_H );
 	iV_DrawText( _("Structure Losses"), LC_X + D_W, 140 + 16 + D_H );
@@ -347,7 +342,7 @@ UDWORD	div;
 			width = infoBars[index].width;
 			height = infoBars[index].height;
 
-			iV_Box(x,y,x+width,y+height,0);
+			iV_Box(x, y, x + width, y + height, WZCOL_BLACK);
 
 			/* Draw the background border box */
 			pie_BoxFill(x - 1, y - 1, x + width + 1, y + height + 1, WZCOL_MENU_BACKGROUND);

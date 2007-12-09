@@ -63,7 +63,7 @@
 W_SCREEN  *psRScreen;			// requester stuff.
 
 extern char	MultiCustomMapsPath[PATH_MAX];
-extern void	displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+extern void	displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 BOOL	MultiMenuUp			= FALSE;
 BOOL	ClosingMultiMenu	= FALSE;
@@ -242,7 +242,7 @@ static BOOL enumerateMultiMaps(char *found, UDWORD *players,BOOL first, UBYTE ca
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
-void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 
 	UDWORD	x = xOffset+psWidget->x;
@@ -257,7 +257,7 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWO
 	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
 
 	iV_SetFont(font_regular);					// font
-	iV_SetTextColour(-1);					//colour
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
 	while(iV_GetTextWidth(butString) > psWidget->width -10 )
 	{
@@ -277,7 +277,7 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWO
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 
-void displayCamTypeBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayCamTypeBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
@@ -286,15 +286,14 @@ void displayCamTypeBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD 
 	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
 	sprintf(buffer, "T%i", (int)(psWidget->UserData));
 	if ((unsigned int)(psWidget->UserData) == current_tech) {
-		iV_SetTextColour(PIE_TEXT_WHITE);
+		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 	} else {
-		iV_SetTextColour(PIE_TEXT_LIGHTBLUE);
+		iV_SetTextColour(WZCOL_TEXT_MEDIUM);
 	}
 	iV_DrawText(buffer, x+2, y+12);
-
 }
 
-void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
@@ -302,9 +301,9 @@ void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWO
 
 	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
 	if ((unsigned int)(psWidget->UserData) == current_numplayers) {
-		iV_SetTextColour(PIE_TEXT_WHITE);
+		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 	} else {
-		iV_SetTextColour(PIE_TEXT_LIGHTBLUE);
+		iV_SetTextColour(WZCOL_TEXT_MEDIUM);
 	}
 	if ((unsigned int)(psWidget->UserData) == 0) {
 		sprintf(buffer, " *");
@@ -713,26 +712,26 @@ void displayExtraGubbins(UDWORD height)
 
 	//draw grid
 	iV_Line(MULTIMENU_FORM_X+MULTIMENU_C0 -6 , MULTIMENU_FORM_Y,
-			MULTIMENU_FORM_X+MULTIMENU_C0 -6 , MULTIMENU_FORM_Y+height, COL_BLACK);
+			MULTIMENU_FORM_X+MULTIMENU_C0 -6 , MULTIMENU_FORM_Y+height, WZCOL_BLACK);
 
 	iV_Line(MULTIMENU_FORM_X+MULTIMENU_C8 -6 , MULTIMENU_FORM_Y,
-			MULTIMENU_FORM_X+MULTIMENU_C8 -6 , MULTIMENU_FORM_Y+height, COL_BLACK);
+			MULTIMENU_FORM_X+MULTIMENU_C8 -6 , MULTIMENU_FORM_Y+height, WZCOL_BLACK);
 
 	iV_Line(MULTIMENU_FORM_X+MULTIMENU_C9 -6 , MULTIMENU_FORM_Y,
-			MULTIMENU_FORM_X+MULTIMENU_C9 -6 , MULTIMENU_FORM_Y+height, COL_BLACK);
+			MULTIMENU_FORM_X+MULTIMENU_C9 -6 , MULTIMENU_FORM_Y+height, WZCOL_BLACK);
 
 	iV_Line(MULTIMENU_FORM_X+MULTIMENU_C10 -6 , MULTIMENU_FORM_Y,
-			MULTIMENU_FORM_X+MULTIMENU_C10 -6 , MULTIMENU_FORM_Y+height, COL_BLACK);
+			MULTIMENU_FORM_X+MULTIMENU_C10 -6 , MULTIMENU_FORM_Y+height, WZCOL_BLACK);
 
 	iV_Line(MULTIMENU_FORM_X+MULTIMENU_C11 -6 , MULTIMENU_FORM_Y,
-			MULTIMENU_FORM_X+MULTIMENU_C11 -6 , MULTIMENU_FORM_Y+height, COL_BLACK);
+			MULTIMENU_FORM_X+MULTIMENU_C11 -6 , MULTIMENU_FORM_Y+height, WZCOL_BLACK);
 
 	iV_Line(MULTIMENU_FORM_X				, MULTIMENU_FORM_Y+MULTIMENU_PLAYER_H,
-			MULTIMENU_FORM_X+MULTIMENU_FORM_W, MULTIMENU_FORM_Y+MULTIMENU_PLAYER_H, COL_BLACK);
+			MULTIMENU_FORM_X+MULTIMENU_FORM_W, MULTIMENU_FORM_Y+MULTIMENU_PLAYER_H, WZCOL_BLACK);
 
 	//draw titles.
 	iV_SetFont(font_regular);											// font
-	iV_SetTextColour(-1);										//colour
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
 	iV_DrawText(_("Alliances"), MULTIMENU_FORM_X+MULTIMENU_C0, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
 	iV_DrawText(_("Score"), MULTIMENU_FORM_X+MULTIMENU_C8, MULTIMENU_FORM_Y+MULTIMENU_FONT_OSET);
@@ -760,7 +759,7 @@ void displayExtraGubbins(UDWORD height)
 }
 
 
-void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	char			str[128];
 	UDWORD			x					= xOffset+psWidget->x;
@@ -774,7 +773,7 @@ void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD
 	}
 
 	iV_SetFont(font_regular);											// font
-	iV_SetTextColour(-1);										//colour
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
 	if(isHumanPlayer(player) || (game.type == SKIRMISH && player<game.maxPlayers) )
 	{
@@ -914,7 +913,7 @@ void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD
 	}
 }
 
-void displayDebugMenu(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayDebugMenu(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	char			str[128];
 	UDWORD			x					= xOffset+psWidget->x;
@@ -922,7 +921,7 @@ void displayDebugMenu(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *
 	UDWORD			index = psWidget->UserData;
 
 	iV_SetFont(font_regular);											// font
-	iV_SetTextColour(-1);										//colour
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
 	if(strcmp(debugMenuEntry[index],""))
 	{
@@ -935,7 +934,7 @@ void displayDebugMenu(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *
 // ////////////////////////////////////////////////////////////////////////////
 // alliance display funcs
 
-void displayAllianceState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayAllianceState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	UDWORD a, b, c, player = psWidget->UserData;
 	switch(alliances[selectedPlayer][player])
@@ -970,7 +969,7 @@ void displayAllianceState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWO
 }
 
 
-void displayChannelState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayChannelState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	UDWORD a, b, c, player = psWidget->UserData;
 	switch(openchannels[player])

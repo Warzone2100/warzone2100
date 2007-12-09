@@ -54,7 +54,7 @@
 // ////////////////////////////////////////////////////////////////////////////
 // externs
 extern void			intDisplayPlainForm	(WIDGET *psWidget, UDWORD xOffset,
-										 UDWORD yOffset, UDWORD *pColours);
+										 UDWORD yOffset, PIELIGHT *pColours);
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines
@@ -79,7 +79,7 @@ extern void			intDisplayPlainForm	(WIDGET *psWidget, UDWORD xOffset,
 // ////////////////////////////////////////////////////////////////////////////
 // protos.
 
-static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -408,7 +408,7 @@ void applyLimitSet(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 
-static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
@@ -446,7 +446,7 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 
 	// draw name
 	iV_SetFont(font_regular);											// font
-	iV_SetTextColour(-1);										//colour
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 	iV_DrawText(getName(stat->pName), x+80, y+(psWidget->height/2)+3);
 
 	// draw limit

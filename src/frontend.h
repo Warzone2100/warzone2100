@@ -91,8 +91,8 @@ extern void	addTextButton			(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *t
 extern void	addSideText				(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt);
 extern void addFESlider				(UDWORD id, UDWORD parent, UDWORD x,UDWORD y,UDWORD stops,UDWORD pos,UDWORD attachID );
 
-extern void	displayLogo				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
-extern void	displayTextOption		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+extern void	displayLogo				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+extern void	displayTextOption		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 extern void loadOK					(void);
 extern BOOL CancelPressed			(void);

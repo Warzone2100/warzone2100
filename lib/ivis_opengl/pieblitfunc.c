@@ -65,11 +65,8 @@ static unsigned char radarBitmap[RADARX * RADARY * 4];
  *	Source
  */
 /***************************************************************************/
-void pie_Line(int x0, int y0, int x1, int y1, Uint32 col)
+void pie_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
 {
-	PIELIGHT colour;
-
-	colour.argb = col;
 	pie_SetRendMode(REND_FLAT);
 	pie_SetTexturePage(-1);
 	pie_SetColourKeyedBlack(FALSE);
@@ -82,11 +79,8 @@ void pie_Line(int x0, int y0, int x1, int y1, Uint32 col)
 }
 /***************************************************************************/
 
-void pie_Box(int x0,int y0, int x1, int y1, Uint32 col)
+void pie_Box(int x0,int y0, int x1, int y1, PIELIGHT colour)
 {
-	PIELIGHT colour;
-
-	colour.argb = col;
 	pie_SetRendMode(REND_FLAT);
 	pie_SetTexturePage(-1);
 	pie_SetColourKeyedBlack(FALSE);

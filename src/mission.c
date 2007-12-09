@@ -3226,7 +3226,7 @@ void intRemoveTransporterTimer(void)
 
 
 
-void intDisplayMissionBackDrop(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void intDisplayMissionBackDrop(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	scoreDataToScreen();
 }

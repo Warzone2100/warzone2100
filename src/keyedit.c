@@ -84,7 +84,7 @@ static KEY_MAPPING	*selectedKeyMap;
 
 BOOL		runKeyMapEditor		(void);
 static BOOL keyMapToString		(char *pStr, KEY_MAPPING *psMapping);
-void		displayKeyMap		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+void		displayKeyMap		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 BOOL		startKeyMapEditor	(BOOL first);
 BOOL		saveKeyMap		(void);
 BOOL		loadKeyMap		(void);
@@ -308,7 +308,7 @@ static BOOL keyMapToString(char *pStr, KEY_MAPPING *psMapping)
 
 // ////////////////////////////////////////////////////////////////////////////
 // display a keymap on the interface.
-void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours)
+void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	UDWORD		x = xOffset+psWidget->x;
 	UDWORD		y = yOffset+psWidget->y;
@@ -332,7 +332,7 @@ void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pCo
 
 	// draw name
 	iV_SetFont(font_regular);											// font
-	iV_SetTextColour(-1);										//colour
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
 	iV_DrawText(psMapping->pName, x + 2, y + (psWidget->height / 2) + 3);
 

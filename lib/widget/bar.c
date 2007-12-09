@@ -112,14 +112,12 @@ BOOL barGraphCreate(W_BARGRAPH **ppsWidget, W_BARINIT *psInit)
 		(*ppsWidget)->display = barGraphDisplay;
 	}
 	/* Set the major colour */
-	(*ppsWidget)->majorCol = (UBYTE)pal_GetNearestColour(psInit->sCol.red,
-															psInit->sCol.green, psInit->sCol.blue);
+	(*ppsWidget)->majorCol = (UBYTE)pal_GetNearestColour(psInit->sCol.byte.r, psInit->sCol.byte.g, psInit->sCol.byte.b);
 
 	/* Set the minor colour if necessary */
 	if (psInit->style & WBAR_DOUBLE)
 	{
-		(*ppsWidget)->majorCol = (UBYTE)pal_GetNearestColour(psInit->sMinorCol.red,
-												psInit->sMinorCol.green, psInit->sMinorCol.blue);
+		(*ppsWidget)->majorCol = (UBYTE)pal_GetNearestColour(psInit->sMinorCol.byte.r, psInit->sMinorCol.byte.g, psInit->sMinorCol.byte.b);
 	}
 
 	barGraphInitialise(*ppsWidget);
@@ -242,8 +240,7 @@ void barGraphHiLiteLost(W_BARGRAPH *psWidget)
 
 
 /* The simple bar graph display function */
-void barGraphDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
-							UDWORD *pColours)
+void barGraphDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	SDWORD		x0 = 0, y0 = 0, x1 = 0, y1 = 0;
 	W_BARGRAPH	*psBGraph;
@@ -289,8 +286,7 @@ void barGraphDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 
 
 /* The double bar graph display function */
-void barGraphDisplayDouble(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
-								  UDWORD *pColours)
+void barGraphDisplayDouble(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	SDWORD		x0 = 0, y0 = 0, x1 = 0, y1 = 0, x2 = 0, y2 = 0, x3 = 0, y3 = 0;
 	W_BARGRAPH	*psBGraph;
@@ -374,8 +370,7 @@ void barGraphDisplayDouble(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 
 
 /* The trough bar graph display function */
-void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
-							UDWORD *pColours)
+void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	SDWORD		x0 = 0, y0 = 0, x1 = 0, y1 = 0;		// Position of the bar
 	SDWORD		tx0 = 0, ty0 = 0, tx1 = 0, ty1 = 0;	// Position of the trough

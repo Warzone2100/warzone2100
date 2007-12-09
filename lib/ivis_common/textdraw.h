@@ -22,6 +22,7 @@
 #define _INCLUDED_TEXTDRAW_
 
 #include "ivisdef.h"
+#include "piepalette.h"
 
 enum iV_fonts
 {
@@ -45,7 +46,7 @@ extern unsigned int iV_GetCountedTextWidth(const char* string, size_t string_len
 extern unsigned int iV_GetCharWidth(uint32_t charCode);
 
 extern unsigned int iV_GetTextHeight(const char* string);
-extern void iV_SetTextColour(SWORD Index);
+extern void iV_SetTextColour(PIELIGHT colour);
 
 #define ASCII_SPACE			(32)
 #define ASCII_NEWLINE		('@')

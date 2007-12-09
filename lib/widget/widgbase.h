@@ -40,7 +40,7 @@ struct _widget;
 struct _w_context;
 
 /* The display function prototype */
-typedef void (*WIDGET_DISPLAY)(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+typedef void (*WIDGET_DISPLAY)(struct _widget *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 /* The optional user callback function */
 typedef void (*WIDGET_CALLBACK)(struct _widget *psWidget, struct _w_context *psContext);
@@ -102,4 +102,3 @@ typedef struct _w_context
 } W_CONTEXT;
 
 #endif
-

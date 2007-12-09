@@ -58,23 +58,22 @@ static SDWORD		wx,wy,ww,wh;		// Position and size of button to place tip by
 static SDWORD		tx,ty,tw,th;		// Position and size of the tip box
 static SDWORD		fx,fy;				// Position of the text
 static const char *pTip;				// Tip text
-static UDWORD		*pColours;			// The colours for the tool tip
+static PIELIGHT		*pColours;			// The colours for the tool tip
 static WIDGET		*psWidget;			// The button the tip is for
 static int FontID = 0;	// ID for the Ivis Font.
-static int TipColour;
+static PIELIGHT TipColour;
 
 /* Initialise the tool tip module */
 void tipInitialise(void)
 {
 	tipState = TIP_NONE;
+	TipColour = WZCOL_WHITE;
 }
 
 // Set the global toop tip text colour.
-void widgSetTipColour(W_SCREEN *psScreen, UBYTE red, UBYTE green, UBYTE blue)
+void widgSetTipColour(W_SCREEN *psScreen, PIELIGHT colour)
 {
-
-	TipColour = -1;					// use bitmap colourings.
-
+	TipColour = colour;
 }
 
 /*
@@ -89,7 +88,7 @@ void widgSetTipColour(W_SCREEN *psScreen, UBYTE red, UBYTE green, UBYTE blue)
  * tip by.
  */
 void tipStart(WIDGET *psSource, const char *pNewTip, int NewFontID,
-					 UDWORD *pNewColours, SDWORD x, SDWORD y, UDWORD width, UDWORD height)
+					 PIELIGHT *pNewColours, SDWORD x, SDWORD y, UDWORD width, UDWORD height)
 {
 	ASSERT( psSource != NULL,
 		"tipStart: Invalid widget pointer" );
@@ -214,17 +213,15 @@ void tipDisplay(void)
 
 
 		/* Draw the tool tip */
-		pie_BoxFillIndex(tx,ty, tx+tw, ty+th, (UBYTE)pColours[WCOL_TIPBKGRND]);
+		pie_BoxFill(tx,ty, tx+tw, ty+th, pColours[WCOL_TIPBKGRND]);
 		iV_Box(tx,ty, tx+tw-1, ty+th-1, pColours[WCOL_LIGHT]);
 		iV_Line(tx+1, ty+th-2, tx+1,    ty+1, pColours[WCOL_DARK]);
 		iV_Line(tx+2, ty+1,    tx+tw-2, ty+1, pColours[WCOL_DARK]);
 		iV_Line(tx,	  ty+th,   tx+tw,   ty+th, pColours[WCOL_DARK]);
 		iV_Line(tx+tw,ty+th-1, tx+tw,   ty, pColours[WCOL_DARK]);
 
-
 		iV_SetFont(FontID);
-//		iV_SetTextColour((UWORD)pColours[WCOL_TEXT]);
-		iV_SetTextColour((UWORD)TipColour);
+		iV_SetTextColour(TipColour);
 		iV_DrawText(pTip,fx,fy);
 
 		break;

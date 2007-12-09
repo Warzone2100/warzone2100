@@ -31,7 +31,7 @@ extern void		addMultiRequest(const char* searchDir, const char* fileExtension, U
 extern BOOL		multiRequestUp;
 extern W_SCREEN *psRScreen;			// requester stuff.
 extern BOOL		runMultiRequester(UDWORD id,UDWORD *contextmode, char *chosen,UDWORD *chosenValue);
-extern void		displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, UDWORD *pColours);
+extern void		displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 // multimenu
 extern void		intProcessMultiMenu		(UDWORD id);

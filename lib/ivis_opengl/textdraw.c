@@ -380,31 +380,12 @@ int iV_GetTextBelowBase(void)
 	return (int)pixel_height;
 }
 
-void iV_SetTextColour(SWORD Index)
+void iV_SetTextColour(PIELIGHT colour)
 {
-	switch (Index)
-	{
-		case PIE_TEXT_WHITE:
-			font_colour[0] = 1.f;
-			font_colour[1] = 1.f;
-			font_colour[2] = 1.f;
-			font_colour[3] = 1.f;
-			break;
-
-		case PIE_TEXT_LIGHTBLUE:
-			font_colour[0] = 0.627451f;
-			font_colour[1] = 0.627451f;
-			font_colour[2] = 1.f;
-			font_colour[3] = 1.f;
-			break;
-
-		case PIE_TEXT_DARKBLUE:
-			font_colour[0] = 0.376471f;
-			font_colour[1] = 0.376471f;
-			font_colour[2] = 0.752941f;
-			font_colour[3] = 1.f;
-			break;
-	};
+	font_colour[0] = colour.byte.r / 255.0f;
+	font_colour[1] = colour.byte.g / 255.0f;
+	font_colour[2] = colour.byte.b / 255.0f;
+	font_colour[3] = colour.byte.a / 255.0f;
 }
 
 // --------------------------------------------------------------------------

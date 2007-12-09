@@ -197,10 +197,8 @@ BOOL	seq_RenderVideoToBuffer( iSurface *pSurface, char *sequenceName, int time, 
 			return FALSE;
 		}
 
-
 		iV_SetFont(font_regular);
-		iV_SetTextColour(-1);
-
+		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
 		videoMode = VIDEO_D3D_WINDOW;
 
@@ -453,7 +451,7 @@ static BOOL seq_StartFullScreenVideo(const char* videoName, const char* audioNam
 		cdAudio_Pause();
 		loop_SetVideoPlaybackMode();
 		iV_SetFont(font_regular);
-		iV_SetTextColour(-1);
+		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 	}
 
 	if (audioName != NULL)

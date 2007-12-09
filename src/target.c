@@ -171,15 +171,15 @@ void targetMarkCurrent(void)
 	x1 = (SWORD)(x+Offset);
 	y1 = (SWORD)(y+Offset);
 
-	iV_Line(x0,y0,x0+8,y0,COL_YELLOW);
-	iV_Line(x0,y0,x0,y0+8,COL_YELLOW);
+	iV_Line(x0, y0, x0 + 8, y0, WZCOL_YELLOW);
+	iV_Line(x0, y0, x0, y0 + 8, WZCOL_YELLOW);
 
-	iV_Line(x1,y0,x1-8,y0,COL_YELLOW);
-	iV_Line(x1,y0,x1,y0+8,COL_YELLOW);
+	iV_Line(x1, y0, x1 - 8, y0, WZCOL_YELLOW);
+	iV_Line(x1, y0, x1, y0 + 8, WZCOL_YELLOW);
 
-	iV_Line(x1,y1,x1-8,y1,COL_YELLOW);
-	iV_Line(x1,y1,x1,y1-8,COL_YELLOW);
+	iV_Line(x1, y1, x1 - 8, y1, WZCOL_YELLOW);
+	iV_Line(x1, y1, x1, y1 - 8, WZCOL_YELLOW);
 
-	iV_Line(x0,y1,x0+8,y1,COL_YELLOW);
-	iV_Line(x0,y1,x0,y1-8,COL_YELLOW);
+	iV_Line(x0, y1, x0 + 8, y1, WZCOL_YELLOW);
+	iV_Line(x0, y1, x0, y1 - 8, WZCOL_YELLOW);
 }
