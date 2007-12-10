@@ -246,18 +246,17 @@ proj_GetNext( void )
 
 /*
  * Relates the quality of the attacker to the quality of the victim.
- * Returns 1.0 if both the attacker and victim are of equal value,
- * else if Q > 1.0 then the victim is worth more than the attacker
- * else if Q < 1.0 then the attacker is worth less than the attacker.
+ * The value returned satisfies the following inequality: 0.5 <= ret <= 2.0
  */
 static float QualityFactor(DROID *psAttacker, DROID *psVictim)
 {
-	float quality = calcDroidPower(psVictim) / calcDroidPower(psAttacker)
-	              + calcDroidPoints(psVictim) / calcDroidPoints(psAttacker)
-	              // Make sure psAttacker has some kills to prevent div by 0
-	              + (psAttacker->numKills) ? psVictim->numKills / psAttacker->numKills : 1;
+	float powerRatio = calcDroidPower(psVictim) / calcDroidPower(psAttacker);
+	float pointsRatio = calcDroidPoints(psVictim) / calcDroidPoints(psAttacker);
 	
-	return quality / 3;
+	CLIP(powerRatio, 0.5, 2.0);
+	CLIP(pointsRatio, 0.5, 2.0);
+	
+	return (powerRatio + pointsRatio) / 2;
 }
 
 // update the kills after a target is damaged/destroyed
