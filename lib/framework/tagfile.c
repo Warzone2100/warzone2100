@@ -753,6 +753,37 @@ bool tagReadfv(element_t tag, uint16_t size, float *vals)
 	return true;
 }
 
+bool tagRead8v(element_t tag, uint16_t size, uint8_t *vals)
+{
+	uint8_t tagtype;
+	uint16_t count;
+	int i;
+
+	if (!scanforward(tag))
+	{
+		return false;
+	}
+	if (!PHYSFS_readUBE8(handle, &tagtype) || tagtype != TF_INT_U8_ARRAY)
+	{
+		TF_ERROR("tagread8v: Tag type not found: %x", (unsigned int)tag);
+		return false;
+	}
+	if (!PHYSFS_readUBE16(handle, &count) || count != size)
+	{
+		TF_ERROR("tagread8v: Bad size: %x", (unsigned int)tag);
+		return false;
+	}
+	for (i = 0; i < size; i++)
+	{
+		if (!PHYSFS_readUBE8(handle, &vals[i]))
+		{
+			TF_ERROR("tagread8v: Error reading idx %d, tag %x", i, (unsigned int)tag);
+			return false;
+		}
+	}
+	return true;
+}
+
 bool tagRead16v(element_t tag, uint16_t size, uint16_t *vals)
 {
 	uint8_t tagtype;
@@ -1105,6 +1136,25 @@ bool tagWritefv(element_t tag, uint16_t count, float *vals)
 	return true;
 }
 
+bool tagWrite8v(element_t tag, uint16_t count, uint8_t *vals)
+{
+	int i;
+
+	assert(tag != TAG_SEPARATOR && tag != TAG_GROUP_END);
+	if (!scan_to(tag) || !write_tag(tag))
+	{
+		return false;
+	}
+	ASSERT(current->vr[0] == 'U' && current->vr[1] == 'S', "Wrong type in writing %x", (unsigned int)tag);
+	(void) PHYSFS_writeUBE8(handle, TF_INT_U8_ARRAY);
+	(void) PHYSFS_writeUBE16(handle, count);
+	for (i = 0; i < count; i++)
+	{
+		(void) PHYSFS_writeUBE8(handle, vals[i]);
+	}
+	return true;
+}
+
 bool tagWrite16v(element_t tag, uint16_t count, uint16_t *vals)
 {
 	int i;
@@ -1171,6 +1221,7 @@ bool tagWriteString(element_t tag, const char *buffer)
 /*********  TAGFILE UNIT TEST *********/
 
 
+#define BLOB_SIZE 11
 // unit test function
 void tagTest()
 {
@@ -1178,7 +1229,10 @@ void tagTest()
 	const char *cformat = "WZTAGFILE1";
 	char format[300], *formatdup;
 	uint16_t droidpos[3];
+	uint8_t blob[BLOB_SIZE];
 	float fv[3];
+
+	memset(blob, 1, BLOB_SIZE); // 1111111...
 
 	tagOpenWrite("testdata/tagfile_virtual.def", writename);
 	tagWrites(0x05, 11);
@@ -1212,6 +1266,7 @@ void tagTest()
 		fv[1] = 1.1f;
 		fv[2] = -1.3f;
 		tagWritefv(0x03, 3, fv);
+		tagWrite8v(0x05, BLOB_SIZE, blob);
 		tagWriteEnter(0x09, 1);
 		{
 			int32_t v[3] = { -1, 0, 1 };
@@ -1225,6 +1280,7 @@ void tagTest()
 
 	memset(droidpos, 0, 6);
 	memset(fv, 0, 6);
+	memset(blob, 0, BLOB_SIZE);
 	tagOpenRead("testdata/tagfile_basic.def", writename);
 	tagReadString(0x01, 200, format);
 	assert(strncmp(format, cformat, 9) == 0);
@@ -1241,6 +1297,8 @@ void tagTest()
 		assert(fv[0] - 0.1f < 0.001);
 		assert(fv[1] - 1.1f < 0.001);
 		assert(fv[2] + 1.3f < 0.001);
+		tagRead8v(0x05, BLOB_SIZE, blob);
+		assert(blob[BLOB_SIZE / 2] == 1);
 		tagReadEnter(0x09);
 			tagReads32v(0x05, 3, v);
 			assert(v[0] == -1);

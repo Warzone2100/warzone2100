@@ -10,6 +10,7 @@
   02 US 03  -		# Droid position in (x,y,z) coordinates
   03 FP 01  - 		# RETIRED (had unknown usage)
   04 FP 03  - 		# RETIRED (had unknown usage)
+  05 US 500 -		# Long unsigned byte array
   09 GR 00  - 		# Droid weapon group
     01 US 01  - 	# Weapon type
     02 US 01 10 	# Ammo left
