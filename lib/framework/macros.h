@@ -29,6 +29,11 @@
 
 #define ABSDIF(a,b) ((a)>(b) ? (a)-(b) : (b)-(a))
 
+#define CLIP(val, min, max) do                                                \
+{                                                                             \
+    if ((val) < (min)) (val) = (min);                                         \
+    else if ((val) > (max)) (val) = (max);                                    \
+} while(0)
 
 /*
    defines for ONEINX
