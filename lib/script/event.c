@@ -95,7 +95,7 @@ void eventTimeReset(UDWORD initTime)
 }
 
 /* Initialise the event system */
-BOOL eventInitialise(EVENT_INIT *psInit)
+BOOL eventInitialise()
 {
 	psTrigList = NULL;
 	psCallbackList = NULL;

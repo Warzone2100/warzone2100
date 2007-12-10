@@ -122,8 +122,8 @@ typedef struct {SDWORD texPage; SWORD tu, tv, tw, th;} PIEIMAGE; //an area of te
 typedef struct {UDWORD pieFlag; PIELIGHT colour, specular; UBYTE light, trans, scale, height;} PIESTYLE; //render style for pie draw functions
 
 typedef struct {
-	UDWORD flags;
-	SDWORD nVrts;
+	unsigned int flags;
+	unsigned int nVrts;
 	TERRAIN_VERTEXF *pVrts;
 	iTexAnim *pTexAnim;
 } PIEPOLY;

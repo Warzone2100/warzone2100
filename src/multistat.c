@@ -55,18 +55,17 @@ extern char	MultiPlayersPath[PATH_MAX];
 PLAYERSTATS getMultiStats(UDWORD player,BOOL bLocal)
 {
 	static PLAYERSTATS stat;
-	SDWORD		statSize = sizeof(PLAYERSTATS);
 	UDWORD		playerDPID;
 
 	playerDPID = player2dpid[player];
 
 	if(bLocal)
 	{
-		NETgetLocalPlayerData(playerDPID,&stat,&statSize);
+		NETgetLocalPlayerData(playerDPID, &stat);
 	}
 	else
 	{
-		NETgetGlobalPlayerData(playerDPID,&stat,&statSize);
+		NETgetGlobalPlayerData(playerDPID, &stat);
 	}
 
 	return stat;

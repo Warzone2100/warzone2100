@@ -111,7 +111,7 @@ extern void treapSetCallPos(const char *pFileName, SDWORD lineNumber);
  * \param	ext			number of additional nodes to allocate when extending
  * \return true, if the treap creation was successfull
  */
-extern BOOL treapCreate(TREAP **ppsTreap, TREAP_CMP cmp, UDWORD init, UDWORD ext);
+extern BOOL treapCreate(TREAP **ppsTreap, TREAP_CMP cmp);
 
 /* Add an object to a treap
  */
@@ -150,9 +150,9 @@ extern SDWORD treapStringCmp(void *key1, void *key2);
 #ifdef DEBUG_TREAP
 
 // debugging versions of the TREAP calls
-#define TREAP_CREATE(ppsTreap, cmp, init, ext) \
+#define TREAP_CREATE(ppsTreap, cmp) \
 	(treapSetCallPos(__FILE__, __LINE__), \
-	 treapCreate(ppsTreap, cmp, init, ext))
+	 treapCreate(ppsTreap, cmp))
 
 #define TREAP_ADD(psTreap, key, pObject) \
 	(treapSetCallPos(__FILE__, __LINE__), \
@@ -179,8 +179,8 @@ extern SDWORD treapStringCmp(void *key1, void *key2);
 #else
 
 // release versions of the TREAP calls
-#define TREAP_CREATE(ppsTreap, cmp, init, ext) \
-	 treapCreate(ppsTreap, cmp, init, ext)
+#define TREAP_CREATE(ppsTreap, cmp) \
+	 treapCreate(ppsTreap, cmp)
 
 #define TREAP_ADD(psTreap, key, pObject) \
 	 treapAdd(psTreap, key, pObject)

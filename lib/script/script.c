@@ -39,7 +39,7 @@
 
 
 // Initialise the script library
-BOOL scriptInitialise(EVENT_INIT *psInit)
+BOOL scriptInitialise()
 {
 	if (!stackInitialise())
 	{
@@ -49,7 +49,7 @@ BOOL scriptInitialise(EVENT_INIT *psInit)
 	{
 		return FALSE;
 	}
-	if (!eventInitialise(psInit))
+	if (!eventInitialise())
 	{
 		return FALSE;
 	}

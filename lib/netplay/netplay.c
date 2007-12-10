@@ -393,14 +393,14 @@ static void resize_global_player_data(unsigned int i, unsigned int size)
 }
 
 // ////////////////////////////////////////////////////////////////////////
-BOOL NETgetLocalPlayerData(UDWORD dpid, void *pData, SDWORD *pSize)
+BOOL NETgetLocalPlayerData(UDWORD dpid, void *pData)
 {
 	memcpy(pData, local_player_data[dpid].data, local_player_data[dpid].size);
 	return TRUE;
 }
 
 // ////////////////////////////////////////////////////////////////////////
-BOOL NETgetGlobalPlayerData(UDWORD dpid, void *pData, SDWORD *pSize)
+BOOL NETgetGlobalPlayerData(UDWORD dpid, void *pData)
 {
 	if(!NetPlay.bComms)
 	{

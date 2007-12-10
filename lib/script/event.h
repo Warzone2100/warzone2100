@@ -68,14 +68,6 @@ typedef struct _script_context
 	struct _script_context *psNext;
 } SCRIPT_CONTEXT;
 
-// The Event initialisation data
-typedef struct _event_init
-{
-	UWORD		valInit, valExt;	// value chunk init values
-	UWORD		trigInit, trigExt;	// trigger chunk init values
-	UWORD		contInit, contExt;	// context chunk init values
-} EVENT_INIT;
-
 /*
  * A currently active trigger.
  * If the type of the triggger == TR_PAUSE, the trigger number stored is the
@@ -144,7 +136,7 @@ extern SCRIPT_CONTEXT	*psContList;
 
 
 /* Initialise the event system */
-extern BOOL eventInitialise(EVENT_INIT *psInit);
+extern BOOL eventInitialise(void);
 
 // Shutdown the event system
 extern void eventShutDown(void);

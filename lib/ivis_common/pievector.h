@@ -127,7 +127,11 @@ static inline WZ_DECL_CONST int Vector2i_Length(const Vector2i v)
 static inline WZ_DECL_CONST BOOL Vector2i_InCircle(const Vector2i v, const Vector2i c, const unsigned int r)
 {
 	Vector2i delta = Vector2i_Sub(v, c);
-	return (delta.x * delta.x) + (delta.y * delta.y) < (r * r);
+	// Explictily cast to "unsigned int" because this number never can be
+	// negative, due to the fact that these numbers are squared. Still GCC
+	// warns about a comparison of a comparison between an unsigned and a
+	// signed integer.
+	return (unsigned int)((delta.x * delta.x) + (delta.y * delta.y)) < (r * r);
 }
 
 
@@ -332,7 +336,11 @@ static inline WZ_DECL_CONST Vector3i Vector3i_Sub(const Vector3i op1, const Vect
 static inline WZ_DECL_CONST BOOL Vector3i_InSphere (const Vector3i v, const Vector3i c, const unsigned int r)
 {
 	Vector3i delta = Vector3i_Sub(v, c);
-	return (delta.x * delta.x) + (delta.y * delta.y) + (delta.z * delta.z) < (r * r);
+	// Explictily cast to "unsigned int" because this number never can be
+	// negative, due to the fact that these numbers are squared. Still GCC
+	// warns about a comparison of a comparison between an unsigned and a
+	// signed integer.
+	return (unsigned int)((delta.x * delta.x) + (delta.y * delta.y) + (delta.z * delta.z)) < (r * r);
 }
 
 #endif // __INCLUDED_LIB_IVIS_PIEVECTOR_H__

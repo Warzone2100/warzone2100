@@ -90,8 +90,7 @@ extern void resShutDown(void);
 extern void resSetBaseDir(const char* pResDir);
 
 /* Parse the res file */
-BOOL resLoad(const char *pResFile, SDWORD blockID,
-             char *pLoadBuffer, SDWORD bufferSize);
+BOOL resLoad(const char *pResFile, SDWORD blockID);
 
 /* Release all the resources currently loaded and the resource load functions */
 extern void resReleaseAll(void);

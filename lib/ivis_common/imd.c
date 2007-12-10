@@ -112,7 +112,7 @@ BOOL iV_IMDSave(char *filename, iIMDShape *s, BOOL PieIMD)
 		{
 			fprintf(fp,"POLYGONS %d\n",sp->npolys);
 			for (poly = sp->polys, j=0; j<sp->npolys; j++, poly++) {
-				fprintf(fp,"\t%8x %d",poly->flags,poly->npnts);
+				fprintf(fp,"\t%8x %u",poly->flags,poly->npnts);
 				for (d=0; d<poly->npnts; d++) {
 					fprintf(fp," %d",poly->pindex[d]);
 				}
@@ -160,7 +160,7 @@ BOOL iV_IMDSave(char *filename, iIMDShape *s, BOOL PieIMD)
 //******
 void iV_IMDRelease(iIMDShape *s)
 {
-   int i;
+   unsigned int i;
    iIMDShape *d;
 
    if (s) {

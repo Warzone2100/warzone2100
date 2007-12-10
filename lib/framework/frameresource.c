@@ -97,8 +97,7 @@ void resSetBaseDir(const char* pResDir)
 }
 
 /* Parse the res file */
-BOOL resLoad(const char *pResFile, SDWORD blockID,
-             char *pLoadBuffer, SDWORD bufferSize)
+BOOL resLoad(const char *pResFile, SDWORD blockID)
 {
 	char *pBuffer;
 	UDWORD	size;

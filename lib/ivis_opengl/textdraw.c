@@ -56,7 +56,7 @@ static GLint GLC_Font_Bold = 0;
 static inline void iV_printFontList()
 {
 	unsigned int i;
-	GLint font_count = glcGeti(GLC_CURRENT_FONT_COUNT);
+	unsigned int font_count = glcGeti(GLC_CURRENT_FONT_COUNT);
 	debug(LOG_NEVER, "GLC_CURRENT_FONT_COUNT = %d", font_count);
 
 	if (font_count == 0)

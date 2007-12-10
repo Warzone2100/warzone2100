@@ -313,7 +313,12 @@ void screenDoDumpToDiskIfRequired(void)
 	debug( LOG_3D, "Saving screenshot %s\n", fileName );
 
 	// Dump the currently displayed screen in a buffer
-	if (image.width != screen->w || image.height != screen->h)
+	// Casting to unsigned int here to prevent GCC from warning about a
+	// comparison between unsigned and signed integers. Why does SDL use
+	// a signed integer anyway? When will your screen ever have a negative
+	// width or height for your screen? Assert it to be sure though. -- Giel
+	ASSERT(screen->w >= 0 && screen->h >= 0, "screenDoDumpToDiskIfRequired: Somehow our screen has negative dimensions! Width = %d; Height = %d", screen->w, screen->h);
+	if (image.width != (unsigned int)screen->w || image.height != (unsigned int)screen->h)
 	{
 		if (image.bmp != NULL)
 		{

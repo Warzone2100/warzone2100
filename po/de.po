@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-12-10 00:39+0100\n"
+"POT-Creation-Date: 2007-12-11 00:08+0100\n"
 "PO-Revision-Date: 2007-08-12 16:30+0100\n"
 "Last-Translator: Thomas Rösner <translation-bugs@digital-trauma.de>\n"
 "Language-Team: Deutsch\n"
@@ -65,7 +65,7 @@ msgstr "%s - Schaden %d%% - Abschüsse %d, %s"
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Baufahrzeug wurde beauftragt, einen Ölbohrturm zu bauen"
 
-#: src/multistat.c:103 src/configuration.c:360 src/configuration.c:361
+#: src/multistat.c:102 src/configuration.c:360 src/configuration.c:361
 msgid "Player"
 msgstr "Spieler"
 

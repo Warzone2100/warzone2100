@@ -174,7 +174,7 @@ void pie_EndLighting(void)
 }
 
 
-static inline void pie_Polygon(const SDWORD numVerts, const TERRAIN_VERTEXF* pVrts, const BOOL light)
+static inline void pie_Polygon(const unsigned int numVerts, const TERRAIN_VERTEXF* pVrts, const BOOL light)
 {
 	unsigned int i = 0;
 
@@ -484,10 +484,10 @@ static int compare_edge (EDGE *A, EDGE *B, const Vector3f *pVertices )
 
 /// Add an edge to an edgelist
 /// Makes sure only silhouette edges are present
-static void addToEdgeList(int a, int b, EDGE *edgelist, int *edge_count, Vector3f *pVertices)
+static void addToEdgeList(int a, int b, EDGE *edgelist, unsigned int* edge_count, Vector3f *pVertices)
 {
 	EDGE newEdge = {a, b};
-	int i;
+	unsigned int i;
 	BOOL foundMatching = FALSE;
 
 	for(i = 0; i < *edge_count; i++)
@@ -531,12 +531,12 @@ static inline float scale_y(float y, int flag, int flag_data)
 /// Draw the shadow for a shape
 static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* light)
 {
-	int i, j, n;
+	unsigned int i, j, n;
 	Vector3f *pVertices;
 	iIMDPoly *pPolys;
-	int edge_count = 0;
+	unsigned int edge_count = 0;
 	static EDGE *edgelist = NULL;
-	static int edgelistsize = 256;
+	static unsigned int edgelistsize = 256;
 	EDGE *drawlist = NULL;
 
 	if(!edgelist)
@@ -574,12 +574,19 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 					if(edge_count >= edgelistsize-1)
 					{
 						// enlarge
-						EDGE *newstack = (EDGE*)malloc(sizeof(EDGE)*edgelistsize*2);
-						memcpy(newstack, edgelist, sizeof(EDGE)*edgelistsize);
-						free(edgelist);
-						edgelistsize*=2;
+						EDGE* newstack;
+						edgelistsize *= 2;
+						newstack = realloc(edgelist, sizeof(EDGE) * edgelistsize);
+						if (newstack == NULL)
+						{
+							debug(LOG_ERROR, "pie_DrawShadow: Out of memory!");
+							abort();
+							return;
+						}
+
 						edgelist = newstack;
-						debug(LOG_WARNING, "new edge list size: %i", edgelistsize);
+
+						debug(LOG_WARNING, "new edge list size: %u", edgelistsize);
 					}
 				}
 				// back to the first

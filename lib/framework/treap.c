@@ -83,7 +83,7 @@ SDWORD treapStringCmp(void *key1, void *key2)
 }
 
 
-BOOL treapCreate(TREAP **ppsTreap, TREAP_CMP cmp, UDWORD init, UDWORD ext)
+BOOL treapCreate(TREAP **ppsTreap, TREAP_CMP cmp)
 {
 	*ppsTreap = (TREAP*)malloc(sizeof(TREAP));
 	if (!(*ppsTreap))

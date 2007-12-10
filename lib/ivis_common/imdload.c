@@ -81,7 +81,7 @@ static BOOL AtEndOfFile(const char *CurPos, const char *EndOfFile)
 static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 {
 	const char *pFileData = *ppFileData;
-	int i, j, cnt;
+	unsigned int i, j;
 	iIMDPoly *poly;
 
 	s->numFrames = 0;
@@ -96,11 +96,12 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 
 	for (i = 0, poly = s->polys; i < s->npolys; i++, poly++)
 	{
-		UDWORD flags, npnts;
+		unsigned int flags, npnts;
+		int cnt;
 
-		if (sscanf(pFileData, "%x %d%n", &flags, &npnts, &cnt) != 2)
+		if (sscanf(pFileData, "%x %u%n", &flags, &npnts, &cnt) != 2)
 		{
-			debug(LOG_ERROR, "(_load_polys) [poly %d] error loading flags and npoints", i);
+			debug(LOG_ERROR, "(_load_polys) [poly %u] error loading flags and npoints", i);
 		}
 		pFileData += cnt;
 
@@ -110,7 +111,7 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 		poly->pindex = (VERTEXID*)malloc(sizeof(VERTEXID) * poly->npnts);
 		if (poly->pindex == NULL)
 		{
-			debug(LOG_ERROR, "(_load_polys) [poly %d] memory alloc fail (poly indices)", i);
+			debug(LOG_ERROR, "(_load_polys) [poly %u] memory alloc fail (poly indices)", i);
 			return FALSE;
 		}
 
@@ -120,7 +121,7 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 
 			if (sscanf(pFileData, "%d%n", &newID, &cnt) != 1)
 			{
-				debug(LOG_ERROR, "failed poly %d. point %d", i, j);
+				debug(LOG_ERROR, "failed poly %u. point %d", i, j);
 				return FALSE;
 			}
 			pFileData += cnt;
@@ -159,14 +160,14 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 			poly->pTexAnim = (iTexAnim*)malloc(sizeof(iTexAnim));
 			if (poly->pTexAnim == NULL)
 			{
-				debug(LOG_ERROR, "(_load_polys) [poly %d] memory alloc fail (iTexAnim struct)", i);
+				debug(LOG_ERROR, "(_load_polys) [poly %u] memory alloc fail (iTexAnim struct)", i);
 				return FALSE;
 			}
 
 			// even the psx needs to skip the data
 			if (sscanf(pFileData, "%d %d %d %d%n", &nFrames, &pbRate, &tWidth, &tHeight, &cnt) != 4)
 			{
-				debug(LOG_ERROR, "(_load_polys) [poly %d] error reading texanim data", i);
+				debug(LOG_ERROR, "(_load_polys) [poly %u] error reading texanim data", i);
 				return FALSE;
 			}
 			pFileData += cnt;
@@ -195,7 +196,7 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 			poly->texCoord = malloc(sizeof(Vector2f) * poly->npnts);
 			if (poly->texCoord == NULL)
 			{
-				debug(LOG_ERROR, "(_load_polys) [poly %d] memory alloc fail (vertex struct)", i);
+				debug(LOG_ERROR, "(_load_polys) [poly %u] memory alloc fail (vertex struct)", i);
 				return FALSE;
 			}
 
@@ -204,7 +205,7 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 				float VertexU, VertexV;
 				if (sscanf(pFileData, "%f %f%n", &VertexU, &VertexV, &cnt) != 2)
 				{
-					debug(LOG_ERROR, "(_load_polys) [poly %d] error reading tex outline", i);
+					debug(LOG_ERROR, "(_load_polys) [poly %u] error reading tex outline", i);
 					return FALSE;
 				}
 				pFileData += cnt;
@@ -228,7 +229,8 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 static BOOL ReadPoints( const char **ppFileData, iIMDShape *s )
 {
 	const char *pFileData = *ppFileData;
-	int cnt, i, j, lastPoint = 0, match = -1;
+	unsigned int i;
+	int cnt, j, lastPoint = 0, match = -1;
 	Vector3f newVector = {0.0f, 0.0f, 0.0f};
 
 	for (i = 0; i < s->npoints; i++)
