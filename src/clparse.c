@@ -379,8 +379,12 @@ bool ParseCommandLine(int argc, const char** argv)
 					abort();
 					return FALSE;
 				}
+				// tell the display system of the desired resolution
 				pie_SetVideoBufferWidth(width);
 				pie_SetVideoBufferHeight(height);
+				// and update the configuration
+				war_SetWidth(width);
+				war_SetHeight(height);
 				break;
 			}
 			case CLI_SAVEGAME:
