@@ -145,8 +145,7 @@ fi
 
 
 # -O0 turns off all optimizations; this is necessary for accurate debugging
-# -Wno-unused-label and -Wno-unused-function are necessary because
-# flex produces unused labels and functions that we cannot fix
+# -Wno-unused-label is necessary because flex produces unused labels that we cannot fix
 # Add later for stricter checking: -Wextra -Wmissing-declarations -Wstrict-prototypes
 AC_ARG_ENABLE(debug,
 	AS_HELP_STRING([--disable-debug[=yes/relaxed/no]],[Compile debug version [yes]]),
@@ -157,7 +156,7 @@ if test "x$enable_debug" = "xyes" ; then
 	if test "x$cc_icc" = "xyes" ; then
 		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -DDEBUG -Wcheck -Werror"
 	else
-		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -DDEBUG -Wall -Werror -Wno-unused-label -Wno-unused-function -Wno-int-to-pointer-cast -Wno-pointer-to-int-cast"
+		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -DDEBUG -Wall -Werror -Wno-unused-label -Wno-int-to-pointer-cast -Wno-pointer-to-int-cast"
 	fi
 elif test "x$enable_debug" = "xrelaxed" ; then
 	WZ_CFLAGS="${WZ_CFLAGS} -g -DDEBUG -Wall -Wextra"
