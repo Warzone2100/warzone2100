@@ -88,7 +88,7 @@ version_check 1 "msgfmt" "ftp://ftp.gnu.org/pub/gnu/gettext/" 0 15 || DIE=1
 version_check 1 "autoconf" "ftp://ftp.gnu.org/pub/gnu/autoconf/" 2 56 || DIE=1
 version_check 1 "automake" "ftp://ftp.gnu.org/pub/gnu/automake/" 1 10 || DIE=1
 version_check 1 "bison" "ftp://ftp.gnu.org/pub/gnu/bison/" 1 31 || DIE=1
-version_check 1 "flex" "ftp://ftp.gnu.org/pub/non-gnu/flex" 2 4 2 || DIE=1
+version_check 1 "flex" "ftp://ftp.gnu.org/pub/non-gnu/flex" 2 5 33 || DIE=1
 if [ "$DIE" -eq 1 ]; then
   exit 1
 fi
