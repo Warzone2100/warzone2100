@@ -17,6 +17,11 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
+
+/** \file
+	Functions for the in-game console.
+*/
+
 #include <string.h>
 
 #include "lib/framework/frame.h"
@@ -34,26 +39,26 @@
 
 /* Alex McLean, Pumpkin Studios, EIDOS Interactive */
 
-/* Is the console history on or off */
+/** Is the console history on or off? */
 static BOOL	bConsoleDropped = FALSE;
 
-/* Stores the console dimensions and states */
+/** Stores the console dimensions and states */
 static CONSOLE mainConsole;
 
-/* Static storage for the maximum possible number of console messages */
+/** Static storage for the maximum possible number of console messages */
 static CONSOLE_MESSAGE	consoleStorage[MAX_CONSOLE_MESSAGES];
 
-/* Maximum drop */
+/** Maximum drop */
 #define	MAX_DROP	32
 static UDWORD	history[MAX_DROP];
 
-/* Pointer to linked list of active messages - points to elements of the array above */
+/** Pointer to linked list of active messages - points to elements of the array history */
 static CONSOLE_MESSAGE	*consoleMessages;
 
-/* Where in the array are we - it's cyclic */
+/** Where in the array are we - it's cyclic */
 static UDWORD	messageIndex;
 
-/* How many lines in the console history */
+/** How many lines in the console history */
 static UDWORD	consoleDrop = MAX_DROP;
 
 static	UDWORD	maxDrop;
@@ -64,35 +69,35 @@ static	UDWORD	maxDrop;
 #define DROP_CLOSED		4
 #define DROP_STEP_INTERVAL	(15)
 
-/* Console history state */
+/** Console history state */
 static UDWORD	dropState;
 
-/* How many messages are presently active */
+/** How many messages are presently active? */
 static UDWORD	numActiveMessages;
 
-/* How long do messages last for? */
+/** How long do messages last for? */
 static UDWORD	messageDuration;
 
 static UDWORD	lastDropChange = 0;
 
-/* Is there a box under the console text? */
+/** Is there a box under the console text? */
 static BOOL		bTextBoxActive;
 
-/* Is the console being displayed? */
+/** Is the console being displayed? */
 static BOOL		bConsoleDisplayEnabled;
 
-/* How many lines are displayed */
+/** How many lines are displayed? */
 static UDWORD	consoleVisibleLines;
 
-/* Whether new messages are allowed to be added */
+/** Whether new messages are allowed to be added */
 static int allowNewMessages;
 
-/* What's the default justification */
+/** What's the default justification? */
 static CONSOLE_TEXT_JUSTIFICATION	defJustification;
 
 static UDWORD	messageId;	// unique ID
 
-// Global string for new console messages.
+/// Global string for new console messages.
 char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];
 
 
@@ -115,9 +120,9 @@ BOOL	mouseOverConsoleBox			( void );
 void	setConsoleLineInfo			( UDWORD vis );
 UDWORD	getConsoleLineInfo			( void );
 void	permitNewConsoleMessages		( BOOL allow);
-UDWORD	displayOldMessages			( void );
+int		displayOldMessages			( void );
 
-/* Sets the system up */
+/** Sets the system up */
 void	initConsoleMessages( void )
 {
 	messageIndex = 0;
@@ -166,6 +171,7 @@ void	initConsoleMessages( void )
 	permitNewConsoleMessages(TRUE);
 }
 
+/** Open the console when it's closed and close it when it's open. */
 void	toggleConsoleDrop( void )
 {
 	/* If it's closed ... */
@@ -183,42 +189,24 @@ void	toggleConsoleDrop( void )
 		dropState = DROP_CLOSING;
 		audio_PlayTrack(ID_SOUND_WINDOWCLOSE);
 	}
-
-	return;
-	if(!bConsoleDropped)
-	{
-
-		bConsoleDropped = !bConsoleDropped;
-	}
-	/* Are they opening it? */
-
-	if(bConsoleDropped)
-	{
-		dropState = DROP_DROPPING;
-	}
-	else
-	{
-		dropState = DROP_CLOSING;
-	}
 }
 
-
-/* Adds a string to the console. */
+/** Add a string to the console. */
 static BOOL _addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType)
 {
-UDWORD			textLength;
-CONSOLE_MESSAGE	*psMessage;
+	int textLength;
+	CONSOLE_MESSAGE	*psMessage;
 
 	/* Just don't add it if there's too many already */
 	if(numActiveMessages>=MAX_CONSOLE_MESSAGES-1)
 	{
-		return(FALSE);
+		return FALSE;
 	}
 
 	/* Don't allow it to be added if we've disabled adding of new messages */
 	if(!allowNewMessages)
 	{
-		return(FALSE);
+		return FALSE ;
 	}
 
 	/* Is the string too long? */
@@ -294,21 +282,24 @@ CONSOLE_MESSAGE	*psMessage;
 
 	/* There's one more active console message */
 	numActiveMessages++;
-	return(TRUE);
+	return TRUE;
 }
 
-
+/// Wrapper for _addConsoleMessage
 BOOL addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType)
 {
 	return _addConsoleMessage(messageText,jusType);
 }
 
-
+/// \return The number of console messages currently active
 UDWORD	getNumberConsoleMessages( void )
 {
 	return(numActiveMessages);
 }
 
+/** Update the console messages.
+	This function will remove messages that are overdue.
+*/
 void	updateConsoleMessages( void )
 {
 	if(dropState == DROP_DROPPING)
@@ -316,9 +307,9 @@ void	updateConsoleMessages( void )
 	 	if(gameTime - lastDropChange > DROP_STEP_INTERVAL)
 		{
 			lastDropChange = gameTime;
-			if(++consoleDrop > maxDrop)//MAX_DROP)
+			if(++consoleDrop > maxDrop)
 			{
-				consoleDrop = maxDrop;//MAX_DROP;
+				consoleDrop = maxDrop;
 				dropState = DROP_STATIC;
 			}
 		}
@@ -368,17 +359,17 @@ void	updateConsoleMessages( void )
 	}
 }
 
-/*
-	Allows us to specify how long messages will stay on screen for.
+/**
+	Specify how long messages will stay on screen.
 */
 void	setConsoleMessageDuration(UDWORD time)
 {
 	messageDuration = time;
 }
 
-/*
-	Allows us to remove the top message on screen.
-	This and the function above should be sufficient to allow
+/**
+	Remove the top message on screen.
+	This and setConsoleMessageDuration should be sufficient to allow
 	us to put up messages that stay there until we remove them
 	ourselves - be sure and reset message duration afterwards
 */
@@ -403,7 +394,7 @@ void	removeTopConsoleMessage( void )
 	}
 }
 
-/* Clears all console messages */
+/** Clears all console messages */
 void	flushConsoleMessages( void )
 {
 	consoleMessages = NULL;
@@ -411,23 +402,23 @@ void	flushConsoleMessages( void )
 	messageId = 0;
 }
 
-/* Displays all the console messages */
+/** Displays all the console messages */
 void	displayConsoleMessages( void )
 {
-CONSOLE_MESSAGE	*psMessage;
-UDWORD	numProcessed;
-UDWORD	linePitch;
-UDWORD	boxDepth;
-UDWORD	drop;
-UDWORD	MesY;
-UDWORD	clipDepth;
-UDWORD	exceed;
+	CONSOLE_MESSAGE *psMessage;
+	int numProcessed;
+	int linePitch;
+	int boxDepth;
+	int drop;
+	int MesY;
+	int clipDepth;
+	int exceed;
 
 	/* Are there any to display? */
 	if(consoleMessages == NULL && !bConsoleDropped)
 	{
 		/* No point - so get out */
- 	return;
+ 		return;
 	}
 
 	/* Return if it's disabled */
@@ -503,19 +494,18 @@ UDWORD	exceed;
 	}
 }
 
-/* Do up to the last 8 messages.... Returns how many it did... */
-UDWORD	displayOldMessages( void )
+/** Display up to the last 8 messages.
+	\return The number of messages actually shown */
+int displayOldMessages()
 {
-UDWORD	thisIndex;
-UDWORD	i;
-UDWORD	count;
-BOOL	bGotIt;
-BOOL	bQuit;
-UDWORD	marker = 0;
-UDWORD	linePitch;
-UDWORD	MesY;
-//UDWORD	buildWidth;
-//char	buildData[255];
+	int thisIndex;
+	int i;
+	int count;
+	BOOL bGotIt;
+	BOOL bQuit;
+	int marker = 0;
+	int linePitch;
+	int MesY;
 
 	/* Check there actually are any messages */
 	thisIndex = messageId;
@@ -614,45 +604,16 @@ UDWORD	MesY;
 	{
 		return(0);
 	}
-	if(messageId)
-	{
-		for(i=0,bGotIt = FALSE; i<MAX_CONSOLE_MESSAGES && !bGotIt; i++)
-		{
-			if(consoleStorage[i].id == messageId-1)
-			{
-				bGotIt = TRUE;
-				thisIndex = i;
-			}
-		}
-		if(bGotIt)
-		{
-			bQuit = FALSE;
-			count = 0;
-			while(!bQuit && consoleStorage[thisIndex].id && count<8)
-			{
- 				/* Draw the text string */
-				MesY = iV_DrawFormattedText(consoleStorage[thisIndex].text,
-				                            mainConsole.topX,
-				                            MesY,
-				                            mainConsole.width,
-				                            consoleStorage[thisIndex].JustifyType);
-				count++;
-				if(thisIndex) thisIndex--;
-				else thisIndex = MAX_CONSOLE_MESSAGES-1;
-			}
-		}
-	}
-	return(count);
 }
 
 
-/* Allows toggling of the box under the console text */
+/** Allows toggling of the box under the console text */
 void	setConsoleBackdropStatus(BOOL state)
 {
 	bTextBoxActive = state;
 }
 
-/*
+/**
 	Turns on and off display of console. It's worth
 	noting that this is just the display so if you want
 	to make sure that when it's turned back on again, there
@@ -663,7 +624,7 @@ void	enableConsoleDisplay(BOOL state)
 	bConsoleDisplayEnabled = state;
 }
 
-/* Sets the default justification for text */
+/** Sets the default justification for text */
 void	setDefaultConsoleJust(CONSOLE_TEXT_JUSTIFICATION defJ)
 {
 	switch(defJ)
@@ -680,7 +641,7 @@ void	setDefaultConsoleJust(CONSOLE_TEXT_JUSTIFICATION defJ)
 	}
 }
 
-/* Allows positioning of the console on screen */
+/** Allows positioning of the console on screen */
 void	setConsoleSizePos(UDWORD x, UDWORD y, UDWORD width)
 {
 	mainConsole.topX = x;
@@ -692,7 +653,7 @@ void	setConsoleSizePos(UDWORD x, UDWORD y, UDWORD width)
 	flushConsoleMessages();
 }
 
-/*	Establishes whether the console messages stay there */
+/**	Establishes whether the console messages stay there */
 void	setConsolePermanence(BOOL state, BOOL bClearOld)
 {
  	if(mainConsole.permanent == TRUE && state == FALSE)
@@ -713,7 +674,7 @@ void	setConsolePermanence(BOOL state, BOOL bClearOld)
 	}
 }
 
-/* TRUE or FALSE as to whether the mouse is presently over the console window */
+/** TRUE or FALSE as to whether the mouse is presently over the console window */
 BOOL	mouseOverConsoleBox( void )
 {
 	if	(
@@ -731,19 +692,20 @@ BOOL	mouseOverConsoleBox( void )
 	}
 }
 
-/* Sets up how many lines are allowed and how many are visible */
+/** Sets up how many lines are allowed and how many are visible */
 void	setConsoleLineInfo(UDWORD vis)
 {
 	ASSERT( vis<=MAX_CONSOLE_MESSAGES,"Request for more visible lines in the console than exist" );
 	consoleVisibleLines = vis;
 }
 
-/* get how many lines are allowed and how many are visible */
+/** get how many lines are allowed and how many are visible */
 UDWORD getConsoleLineInfo(void)
 {
 	return consoleVisibleLines;
 }
 
+/// Function with printf arguments to print to the console
 void	consolePrintf(char *layout, ...)
 {
 char	consoleString[MAX_CONSOLE_STRING_LENGTH];
@@ -764,17 +726,19 @@ va_list	arguments;		// Formatting info
 	va_end(arguments);
 }
 
+/// Set if new messages may be added to the console
 void	permitNewConsoleMessages(BOOL allow)
 {
 	allowNewMessages = allow;
 }
 
+/// \return the visibility of the console
 BOOL	getConsoleDisplayStatus( void )
 {
 	return(bConsoleDisplayEnabled);
 }
 
-/* output warnings directly to the in-game console */
+/** output warnings directly to the in-game console */
 void printf_console(const char *pFormat, ...)
 {
 #ifdef DEBUG
@@ -795,7 +759,7 @@ void printf_console(const char *pFormat, ...)
 #endif
 }
 
-/* like printf_console, bu for release */
+/** like printf_console, but for release */
 void console(const char *pFormat, ...)
 {
 	char		aBuffer[500];   // Output string buffer
@@ -810,7 +774,6 @@ void console(const char *pFormat, ...)
 	aBuffer[sizeof(aBuffer) - 1] = '\0';
 
 	/* Output it */
-
 	addConsoleMessage(aBuffer,DEFAULT_JUSTIFY);
 
 }
