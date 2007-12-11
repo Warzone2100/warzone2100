@@ -38,7 +38,7 @@ PROJECT_NUMBER         =
 # If a relative path is entered, it will be relative to the location 
 # where doxygen was started. If left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = ./docs/
+OUTPUT_DIRECTORY       = ./doc/code/
 
 # If the CREATE_SUBDIRS tag is set to YES, then doxygen will create 
 # 4096 sub-directories (in 2 levels) under the output directory of each output 
@@ -146,7 +146,7 @@ SHORT_NAMES            = NO
 # comments will behave just like the Qt-style comments (thus requiring an 
 # explicit @brief command for a brief description.
 
-JAVADOC_AUTOBRIEF      = NO
+JAVADOC_AUTOBRIEF      = YES
 
 # The MULTILINE_CPP_IS_BRIEF tag can be set to YES to make Doxygen 
 # treat a multi-line C++ special comment block (i.e. a block of //! or /// 
