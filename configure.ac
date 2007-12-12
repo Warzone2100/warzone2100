@@ -104,6 +104,15 @@ AC_MSG_CHECKING([whether to build NSIS installer])
 AC_MSG_RESULT([${enable_installer}])
 
 
+AC_ARG_WITH(maintainer,
+	AS_HELP_STRING([--with-maintainer],[Name of maintainer compiling this package]))
+if test "x$with_maintainer" = "x" ; then
+	AC_DEFINE([PACKAGE_MAINTAINER], "UNKNOWN", [Name of maintainer compiling this package])
+else
+	AC_DEFINE_UNQUOTED([PACKAGE_MAINTAINER], ["${with_maintainer}"], [Name of maintainer compiling this package])
+fi
+
+
 AC_ARG_WITH(makensis,
 	AS_HELP_STRING([--with-makensis],[Path to makensis]))
 
@@ -261,7 +270,12 @@ AC_CONFIG_FILES([Makefile
 AC_OUTPUT
 
 if test "x$enable_debug" = "xyes" ; then
-	echo ""
-	echo " *** Running in debug mode! ***"
-	echo ""
+	AC_MSG_NOTICE()
+	AC_MSG_NOTICE([*** Running in debug mode! ***])
+fi
+
+if test "x$with_maintainer" = "x" ; then
+	AC_MSG_NOTICE()
+	AC_MSG_WARN([Maintainer unknown!])
+	AC_MSG_NOTICE([Use --with-maintainer when compiling package for distribution])
 fi

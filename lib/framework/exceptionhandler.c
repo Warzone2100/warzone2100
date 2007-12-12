@@ -61,7 +61,7 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 
 		if (miniDumpFile != INVALID_HANDLE_VALUE)
 		{
-			MINIDUMP_USER_STREAM uStream = { LastReservedStream+1, strlen(VERSION), VERSION };
+			MINIDUMP_USER_STREAM uStream = { LastReservedStream+1, strlen(PACKAGE_VERSION), PACKAGE_VERSION };
 			MINIDUMP_USER_STREAM_INFORMATION uInfo = { 1, &uStream };
 			MINIDUMP_EXCEPTION_INFORMATION eInfo = { GetCurrentThreadId(), pExceptionInfo, FALSE };
 
@@ -412,7 +412,11 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 	write(dumpFile, "\n", 1);
 
 	write(dumpFile, "Version: ", strlen("Version: "));
-	write(dumpFile, VERSION, strlen(VERSION));
+	write(dumpFile, PACKAGE_VERSION, strlen(PACKAGE_VERSION));
+	write(dumpFile, "\n", 1);
+
+	write(dumpFile, "Maintainer: ", strlen("Maintainer: "));
+	write(dumpFile, PACKAGE_MAINTAINER, strlen(PACKAGE_MAINTAINER));
 	write(dumpFile, "\n", 1);
 
 # if defined(DEBUG)
