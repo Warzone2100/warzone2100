@@ -317,12 +317,6 @@
 /* Define if the Win32 multithreading API can be used. */
 /* #undef USE_WIN32_THREADS */
 
-/* Version number of package */
-#define VERSION "TRUNK"
-
-/* Disable mp3 support */
-/* #undef WZ_NOMP3 */
-
 /* Disable ogg/vorbis support */
 /* #undef WZ_NOOGG */
 
