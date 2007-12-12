@@ -528,7 +528,6 @@ static void calcAverageTerrainHeight(iView *player)
 static void drawTiles(iView *camera, iView *player)
 {
 	UDWORD i, j;
-	static float angle = 0.0f;
 	SDWORD rx, rz;
 
 	if (bDisplaySensorRange)
@@ -582,7 +581,6 @@ static void drawTiles(iView *camera, iView *player)
 
 	/* Translate */
 	pie_TRANSLATE(-rx, -player->p.y, rz);
-	angle += 0.01f;
 
 	if (getDrawShadows())
 	{
