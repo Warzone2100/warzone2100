@@ -49,5 +49,9 @@
 #define ONEINNINE				(rand()%9==0)
 #define ONEINTEN				(rand()%10==0)
 
+#define MACROS_H_STRINGIFY(x) #x
+#define TOSTRING(x) MACROS_H_STRINGIFY(x)
+
+#define AT_MACRO __FILE__ ":" TOSTRING(__LINE__)
 
 #endif // MACROS_H

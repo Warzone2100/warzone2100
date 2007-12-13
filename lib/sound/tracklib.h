@@ -49,7 +49,7 @@ void	sound_FreeTrack( TRACK * psTrack );
 BOOL	sound_Play2DSample( TRACK * psTrack, AUDIO_SAMPLE * psSample,
 							BOOL bQueued );
 BOOL	sound_Play3DSample( TRACK * psTrack, AUDIO_SAMPLE * psSample );
-void	sound_StopSample( UDWORD iSample );
+void	sound_StopSample(AUDIO_SAMPLE* psSample);
 void	sound_PauseSample( AUDIO_SAMPLE * psSample );
 void	sound_ResumeSample( AUDIO_SAMPLE * psSample );
 

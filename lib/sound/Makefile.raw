@@ -6,6 +6,7 @@ SRC=audio.c \
 	cdaudio.c \
 	oggvorbis.c \
 	openal_track.c \
+	openal_error.c \
 	playlist.c \
 	track.c
 

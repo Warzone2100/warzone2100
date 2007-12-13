@@ -329,14 +329,7 @@ void sound_StopTrack( AUDIO_SAMPLE *psSample )
 	ASSERT( psSample != NULL, "sound_StopTrack: sample pointer invalid\n" );
 
 #ifndef WZ_NOSOUND
-	if ( psSample->iSample != (ALuint)SAMPLE_NOT_ALLOCATED )
-	{
-		sound_StopSample( psSample->iSample );
-	}
-	else
-	{
-		debug( LOG_SOUND, "sound_StopTrack: sample %u out of range, we probably have run out of available OpenAL sources\n", psSample->iSample );
-	}
+	sound_StopSample(psSample);
 #endif
 
 	// do stopped callback
@@ -353,10 +346,7 @@ void sound_StopTrack( AUDIO_SAMPLE *psSample )
 void sound_PauseTrack( AUDIO_SAMPLE *psSample )
 {
 #ifndef WZ_NOSOUND
-	if ( psSample->iSample != (ALuint)SAMPLE_NOT_ALLOCATED )
-	{
-		sound_StopSample( psSample->iSample );
-	}
+	sound_StopSample(psSample);
 #endif
 }
 

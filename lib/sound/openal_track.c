@@ -44,6 +44,7 @@
 #include "audio.h"
 #include "cdaudio.h"
 #include "oggvorbis.h"
+#include "openal_error.h"
 
 #define ATTENUATION_FACTOR	0.0003f
 
@@ -69,15 +70,38 @@ static ALCcontext* context = 0;
 
 BOOL openal_initialized = FALSE;
 
-#ifndef WZ_NOSOUND
-static void PrintOpenALVersion(void)
+/** Removes the given sample from the "active_samples" linked list
+ *  \param previous either NULL (if \c to_remove is the first item in the
+ *                  list) or the item occurring just before \c to_remove in
+ *                  the list
+ *  \param to_remove the item to actually remove from the list
+ */
+static void sound_RemoveSample(SAMPLE_LIST* previous, SAMPLE_LIST* to_remove)
 {
-	debug(LOG_ERROR, "OpenAL Vendor: %s\n"
-		   "OpenAL Version: %s\n"
-		   "OpenAL Renderer: %s\n"
-		   "OpenAL Extensions: %s\n",
-		   alGetString(AL_VENDOR), alGetString(AL_VERSION),
-		   alGetString(AL_RENDERER), alGetString(AL_EXTENSIONS));
+	if (previous != NULL && previous != to_remove)
+	{
+		// Verify that the given two samples actually follow eachother in the list
+		ASSERT(previous->next == to_remove, "Sound samples don't follow eachother in the list, we're probably removing the wrong item.");
+
+		// Remove the item to remove from the linked list by skipping
+		// it in the pointer sequence.
+		previous->next = to_remove->next;
+	}
+	else
+	{
+		// Apparently we're removing the first item from the list. So
+		// make the next one the list's head.
+		active_samples = to_remove->next;
+	}
+}
+
+#ifndef WZ_NOSOUND
+static void PrintOpenALVersion(code_part part)
+{
+	debug(part, "OpenAL Vendor: %s", alGetString(AL_VENDOR));
+	debug(part, "OpenAL Version: %s", alGetString(AL_VERSION));
+	debug(part, "OpenAL Renderer: %s", alGetString(AL_RENDERER));
+	debug(part, "OpenAL Extensions: %s", alGetString(AL_EXTENSIONS));
 }
 #endif
 
@@ -88,16 +112,14 @@ static void PrintOpenALVersion(void)
 BOOL sound_InitLibrary( void )
 {
 #ifndef WZ_NOSOUND
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	int err=0;
+	int err;
 	ALfloat listenerVel[3] = { 0.0, 0.0, 0.0 };
 	ALfloat listenerOri[6] = { 0.0, 0.0, 1.0, 0.0, 1.0, 0.0 };
-//	int contextAttributes[] = { 0 };
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	device = alcOpenDevice(0);
-	if(device == 0) {
-		PrintOpenALVersion();
+	if(device == 0)
+	{
+		PrintOpenALVersion(LOG_ERROR);
 		debug(LOG_ERROR, "Couldn't open audio device.");
 		return FALSE;
 	}
@@ -105,11 +127,11 @@ BOOL sound_InitLibrary( void )
 	context = alcCreateContext(device, NULL);		//NULL was contextAttributes
 	alcMakeContextCurrent(context);
 
-	err = alcGetError(device);
-	if (err != ALC_NO_ERROR) {
-		PrintOpenALVersion();
-		debug(LOG_ERROR, "Couldn't initialize audio context: %s",
-				alcGetString(device, err));
+	err = sound_GetDeviceError(device);
+	if (err != ALC_NO_ERROR)
+	{
+		PrintOpenALVersion(LOG_ERROR);
+		debug(LOG_ERROR, "Couldn't initialize audio context: %s", alcGetString(device, err));
 		return FALSE;
 	}
 #endif
@@ -122,12 +144,10 @@ BOOL sound_InitLibrary( void )
 	alcGetError(device);
 
 	// Check what version of Open AL we are using
-	debug(LOG_SOUND, "OpenAL Version : %s",alGetString(AL_VERSION));
-	debug(LOG_SOUND, "OpenAL Renderer : %s",alGetString(AL_RENDERER));
-	debug(LOG_SOUND, "OpenAL Extensions : %s",alGetString(AL_EXTENSIONS));
+	PrintOpenALVersion(LOG_SOUND);
 
 
-	alListener3f( AL_POSITION, 0, 0, 0 );
+	alListener3f(AL_POSITION, 0.f, 0.f, 0.f);
 	alListenerfv( AL_VELOCITY, listenerVel );
 	alListenerfv( AL_ORIENTATION, listenerOri );
 	alDistanceModel( AL_NONE );
@@ -169,6 +189,7 @@ void sound_ShutdownLibrary( void )
 		free( aSample );
 		aSample = tmpSample;
 	}
+	active_samples = NULL;
 }
 
 //*
@@ -178,49 +199,64 @@ void sound_ShutdownLibrary( void )
 void sound_Update( void )
 {
 #ifndef WZ_NOSOUND
-	int err=0;
+	int err;
 #endif
-//	{			//  <=== whats up with this ??
-		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		SAMPLE_LIST **tmp = &active_samples;
-		SAMPLE_LIST *i;
-		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	SAMPLE_LIST* node = active_samples;
+	SAMPLE_LIST* previous = NULL;
 
-		for ( tmp = &active_samples, i = *tmp; i != NULL; i = *tmp )
-		{
-			//~~~~~~~~~~
+	while (node != NULL)
+	{
 #ifndef WZ_NOSOUND
-			ALenum	state = AL_STOPPED;
-			//~~~~~~~~~~
+		ALenum state;
 
-			alGetSourcei( i->curr->iSample, AL_SOURCE_STATE, &state );
-			switch ( state )
-			{
+		alGetSourcei(node->curr->iSample, AL_SOURCE_STATE, &state);
+
+		// Check whether an error occurred while retrieving the state.
+		// If one did, the state returned is useless. So instead of
+		// using it continue with the next sample.
+		err = sound_GetError();
+		if (err != AL_NO_ERROR)
+			continue;
+
+		switch (state)
+		{
 			case AL_PLAYING:
 			case AL_PAUSED:
-				//
-				// * sound_SetObjectPosition(i->curr->iSample, i->curr->x, i->curr->y, i->curr->z);
-				//
-				tmp = &( i->next );
+				// If we haven't finished playing yet, just
+				// continue with the next item in the list.
+
+				// sound_SetObjectPosition(i->curr->iSample, i->curr->x, i->curr->y, i->curr->z);
+
+				// Move to the next object
+				previous = node;
+				node = node->next;
 				break;
 
-			default:
+			case AL_STOPPED:
 #endif
-				sound_FinishedCallback( i->curr );
+				sound_FinishedCallback(node->curr);
 #ifndef WZ_NOSOUND
-				if (i->curr->iSample != (ALuint)AL_INVALID) {
-					alDeleteSources( 1, &(i->curr->iSample) );
-					i->curr->iSample = AL_INVALID;
+
+			default:
+				// If an OpenAL source is associated with this sample, release it
+				if (node->curr->iSample != (ALuint)AL_INVALID)
+				{
+					alDeleteSources(1, &node->curr->iSample);
+					sound_GetError();
 				}
 #endif
-				*tmp = i->next;
-				free( i );
+				// Remove the sample from the list
+				sound_RemoveSample(previous, node);
+				// Free it
+				free(node);
+				
+				// Get a pointer to the next node, the previous pointer doesn't change
+				node = previous->next;
 #ifndef WZ_NOSOUND
 				break;
-			}
-#endif
 		}
-//	}//  <=== whats up with this You trying to make those local only ??
+#endif
+	}
 
 	cdAudio_Update();
 
@@ -230,14 +266,14 @@ void sound_Update( void )
 
 	alcProcessContext(context);
 
-	err = alcGetError(device);
+	err = sound_GetDeviceError(device);
 	if (err != ALC_NO_ERROR)
 	{
 		debug(LOG_ERROR, "Error while processing audio context: %s",
 		      alGetString(err));
 	}
 #endif
-}
+	}
 
 //*
 // =======================================================================================================================
@@ -250,30 +286,30 @@ BOOL sound_QueueSamplePlaying( void )
 	{
 		return FALSE;
 	}
-	else
-	{
-		//~~~~~~~~~~
-		ALenum	state;
-		//~~~~~~~~~~
+		
+	ALenum	state;
 
-		alGetSourcei( current_queue_sample, AL_SOURCE_STATE, &state );
-		if ( state == AL_PLAYING )
-		{
-			return TRUE;
-		}
-		else
-		{
-			if (current_queue_sample != (ALuint)AL_INVALID) {
-				alDeleteSources( 1, &current_queue_sample );
-				current_queue_sample = AL_INVALID;
-			}
-			current_queue_sample = -1;
-			return FALSE;
-		}
+	alGetSourcei(current_queue_sample, AL_SOURCE_STATE, &state);
+
+	// Check whether an error occurred while retrieving the state.
+	// If one did, the state returned is useless. So instead of
+	// using it return false.
+	if (sound_GetError() != AL_NO_ERROR)
+		return FALSE;
+
+	if (state == AL_PLAYING)
+	{
+		return TRUE;
 	}
-#else
-	return FALSE;
+
+	if (current_queue_sample != (ALuint)AL_INVALID)
+	{
+		alDeleteSources(1, &current_queue_sample);
+		sound_GetError();
+		current_queue_sample = AL_INVALID;
+	}
 #endif
+	return FALSE;
 }
 
 /** Decodes an opened OggVorbis file into an OpenAL buffer
@@ -304,7 +340,9 @@ static inline TRACK* sound_DecodeOggVorbisTrack(TRACK *psTrack, PHYSFS_file* PHY
 
 	// Create an OpenAL buffer and fill it with the decoded data
 	alGenBuffers(1, &buffer);
+	sound_GetError();
 	alBufferData(buffer, format, soundBuffer->data, soundBuffer->size, soundBuffer->frequency);
+	sound_GetError();
 
 	free(soundBuffer);
 
@@ -375,28 +413,20 @@ TRACK* sound_LoadTrackFromFile(const char *fileName)
 	return pTrack;
 }
 
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
 void sound_FreeTrack( TRACK *psTrack )
 {
 #ifndef WZ_NOSOUND
-	alDeleteBuffers( 1, &psTrack->iBufferName );
+	alDeleteBuffers(1, &psTrack->iBufferName);
+	sound_GetError();
 #endif
 }
 
 #ifndef WZ_NOSOUND
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
 static void sound_AddActiveSample( AUDIO_SAMPLE *psSample )
 {
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	SAMPLE_LIST *tmp = (SAMPLE_LIST *) malloc( sizeof(SAMPLE_LIST) );
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+	// Prepend the given sample to our list of active samples
 	tmp->curr = psSample;
 	tmp->next = active_samples;
 	active_samples = tmp;
@@ -406,18 +436,11 @@ static void sound_AddActiveSample( AUDIO_SAMPLE *psSample )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-static BOOL sound_SetupChannel( AUDIO_SAMPLE *psSample )
+static bool sound_SetupChannel( AUDIO_SAMPLE *psSample )
 {
 	sound_AddActiveSample( psSample );
 
-	if (sound_TrackLooped(psSample->iTrack))
-	{
-		return TRUE;
-	}
-	else
-	{
-		return FALSE;
-	}
+	return sound_TrackLooped(psSample->iTrack);
 }
 #endif
 
@@ -439,6 +462,7 @@ BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
 	psSample->fVol = volume;                        // save computed volume
 	volume *= sfx_volume;                           // and now take into account the Users sound Prefs.
 	alGenSources( 1, &(psSample->iSample) );
+	sound_GetError();
 	alSourcef( psSample->iSample, AL_PITCH, 1.0f );
 	alSourcef( psSample->iSample, AL_GAIN,volume );
 	alSourcefv( psSample->iSample, AL_POSITION, zero );
@@ -446,7 +470,9 @@ BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
 	alSourcei( psSample->iSample, AL_BUFFER, psTrack->iBufferName );
 	alSourcei( psSample->iSample, AL_SOURCE_RELATIVE, AL_TRUE );
 	alSourcei( psSample->iSample, AL_LOOPING, (sound_SetupChannel(psSample)) ? AL_TRUE : AL_FALSE );
+	sound_GetError();
 	alSourcePlay( psSample->iSample );
+	sound_GetError();
 	if ( bQueued )
 	{
 		current_queue_sample = psSample->iSample;
@@ -478,6 +504,7 @@ BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
 	volume = ((float)psTrack->iVol / 100.0);        // max range is 0-100
 	psSample->fVol = volume;                        // store results for later
 	alGenSources( 1, &(psSample->iSample) );
+	sound_GetError();
 	// HACK: this is a workaround for a bug in the 64bit implementation of OpenAL on GNU/Linux
 	// The AL_PITCH value really should be 1.0.
 	alSourcef( psSample->iSample, AL_PITCH, 1.001 );
@@ -486,7 +513,9 @@ BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
 	alSourcefv( psSample->iSample, AL_VELOCITY, zero );
 	alSourcei( psSample->iSample, AL_BUFFER, psTrack->iBufferName );
 	alSourcei( psSample->iSample, AL_LOOPING, (sound_SetupChannel(psSample)) ? AL_TRUE : AL_FALSE );
+	sound_GetError();
 	alSourcePlay( psSample->iSample );
+	sound_GetError();
 #endif
 	return TRUE;
 }
@@ -504,10 +533,18 @@ BOOL sound_PlayStream( AUDIO_SAMPLE *psSample, const char szFileName[], SDWORD i
 // =======================================================================================================================
 // =======================================================================================================================
 //
-void sound_StopSample( UDWORD iSample )
+void sound_StopSample(AUDIO_SAMPLE* psSample)
 {
 #ifndef WZ_NOSOUND
-	alSourceStop( iSample );
+	if (psSample->iSample == (ALuint)SAMPLE_NOT_ALLOCATED)
+	{
+		debug(LOG_SOUND, "sound_StopSample: sample number (%u) out of range, we probably have run out of available OpenAL sources", psSample->iSample);
+		return;
+	}
+
+	// Tell OpenAL to stop playing the given sample
+	alSourceStop(psSample->iSample);
+	sound_GetError();
 #endif
 }
 
@@ -519,6 +556,7 @@ void sound_SetPlayerPos( SDWORD iX, SDWORD iY, SDWORD iZ )
 {
 #ifndef WZ_NOSOUND
 	alListener3f( AL_POSITION, iX, iY, iZ );
+	sound_GetError();
 #endif
 }
 
@@ -550,6 +588,7 @@ void sound_SetPlayerOrientation( SDWORD iX, SDWORD iY, SDWORD iZ )
 	ori[4] = 0;
 	ori[5] = 1;
 	alListenerfv( AL_ORIENTATION, ori );
+	sound_GetError();
 #endif
 }
 
@@ -570,6 +609,7 @@ void sound_SetObjectPosition(AUDIO_SAMPLE *psSample)
 
 	// compute distance
 	alGetListener3f( AL_POSITION, &listenerX, &listenerY, &listenerZ );
+	sound_GetError();
 	dX = psSample->x  - listenerX; // distances on all axis
 	dY = psSample->y - listenerY;
 	dZ = psSample->z - listenerZ;
@@ -589,6 +629,7 @@ void sound_SetObjectPosition(AUDIO_SAMPLE *psSample)
 
 	// the alSource3i variant would be better, if it wouldn't provide linker errors however
 	alSource3f( psSample->iSample, AL_POSITION, (float)psSample->x,(float)psSample->x,(float)psSample->x );
+	sound_GetError();
 #endif
 }
 
@@ -600,6 +641,7 @@ void sound_PauseSample( AUDIO_SAMPLE *psSample )
 {
 #ifndef WZ_NOSOUND
 	alSourcePause( psSample->iSample );
+	sound_GetError();
 #endif
 }
 
@@ -611,6 +653,7 @@ void sound_ResumeSample( AUDIO_SAMPLE *psSample )
 {
 #ifndef WZ_NOSOUND
 	alSourcePlay( psSample->iSample );
+	sound_GetError();
 #endif
 }
 
@@ -650,22 +693,20 @@ BOOL sound_SampleIsFinished( AUDIO_SAMPLE *psSample )
 	//~~~~~~~~~~
 
 	alGetSourcei( psSample->iSample, AL_SOURCE_STATE, &state );
-	if ( state == AL_PLAYING )
+	sound_GetError(); // check for an error and clear the error state for later on in this function
+	if (state == AL_PLAYING || state == AL_PAUSED)
 	{
 		return FALSE;
 	}
-	else
+	
+	if (psSample->iSample != (ALuint)AL_INVALID)
 	{
-		if (psSample->iSample != (ALuint)AL_INVALID)
-		{
-			alDeleteSources( 1, &(psSample->iSample) );
-			psSample->iSample = AL_INVALID;
-		}
-		return TRUE;
+		alDeleteSources(1, &(psSample->iSample));
+		sound_GetError();
+		psSample->iSample = AL_INVALID;
 	}
-#else
-	return TRUE;
 #endif
+	return TRUE;
 }
 
 //*
