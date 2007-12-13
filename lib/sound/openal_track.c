@@ -215,8 +215,13 @@ void sound_Update( void )
 		// If one did, the state returned is useless. So instead of
 		// using it continue with the next sample.
 		err = sound_GetError();
-		if (err != AL_NO_ERROR)
+		if (err == AL_NO_ERROR)
+		{
+			// Move to the next object
+			previous = node;
+			node = node->next;
 			continue;
+		}
 
 		switch (state)
 		{
