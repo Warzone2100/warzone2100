@@ -418,38 +418,39 @@ static UDWORD calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos)
 
 // FIXME: Is the percent variable misnamed here, or is the code wrong? Because we do
 // not use it as a percentage!
-static void colourTile(SDWORD xIndex, SDWORD yIndex, LIGHT_COLOUR colour, UBYTE percent)
+static void colourTile(SDWORD xIndex, SDWORD yIndex, LIGHT_COLOUR colouridx, UBYTE percent)
 {
-	MAPTILE *psTile = mapTile(xIndex, yIndex);
+	PIELIGHT colour = getTileColour(xIndex, yIndex);
 
-	switch(colour)
+	switch(colouridx)
 	{
  		case LIGHT_RED:
 			/* And add that to the lighting value */
-			psTile->colour.byte.r = MIN(255, psTile->colour.byte.r + percent);
+			colour.byte.r = MIN(255, colour.byte.r + percent);
 		break;
  		case LIGHT_GREEN:
 			/* And add that to the lighting value */
-			psTile->colour.byte.g = MIN(255, psTile->colour.byte.g + percent);
+			colour.byte.g = MIN(255, colour.byte.g + percent);
 		break;
  		case LIGHT_BLUE:
 			/* And add that to the lighting value */
-			psTile->colour.byte.b = MIN(255, psTile->colour.byte.b + percent);
+			colour.byte.b = MIN(255, colour.byte.b + percent);
 		break;
 		case LIGHT_YELLOW:
 			/* And add that to the lighting value */
-			psTile->colour.byte.r = MIN(255, psTile->colour.byte.r + percent);
-			psTile->colour.byte.g = MIN(255, psTile->colour.byte.g + percent);
+			colour.byte.r = MIN(255, colour.byte.r + percent);
+			colour.byte.g = MIN(255, colour.byte.g + percent);
 		break;
 		case LIGHT_WHITE:
-			psTile->colour.byte.r = MIN(255, psTile->colour.byte.r + percent);
-			psTile->colour.byte.g = MIN(255, psTile->colour.byte.g + percent);
-			psTile->colour.byte.b = MIN(255, psTile->colour.byte.b + percent);
+			colour.byte.r = MIN(255, colour.byte.r + percent);
+			colour.byte.g = MIN(255, colour.byte.g + percent);
+			colour.byte.b = MIN(255, colour.byte.b + percent);
 		break;
 		default:
 			ASSERT( FALSE,"Weirdy colour of light attempted" );
 			break;
 	}
+	setTileColour(xIndex, yIndex, colour);
 }
 
 /// Sets the begin and end distance for the distance fog (mist)

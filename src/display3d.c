@@ -525,6 +525,18 @@ static void calcAverageTerrainHeight(iView *player)
 	}
 }
 
+PIELIGHT getTileColour(int x, int y)
+{
+	return mapTile(x, y)->colour;
+}
+
+void setTileColour(int x, int y, PIELIGHT colour)
+{
+	MAPTILE *psTile = mapTile(x, y);
+
+	psTile->colour = colour;
+}
+
 static void drawTiles(iView *camera, iView *player)
 {
 	UDWORD i, j;
@@ -604,6 +616,7 @@ static void drawTiles(iView *camera, iView *player)
 			tileScreenInfo[i][j].pos.z = world_coord(terrainMidY - i);
 			tileScreenInfo[i][j].pos.y = 0;
 			tileScreenInfo[i][j].bWater = FALSE;
+			tileScreenInfo[i][j].specular = WZCOL_BLACK;
 
 			if( playerXTile+j < 0 ||
 				playerZTile+i < 0 ||
@@ -614,8 +627,7 @@ static void drawTiles(iView *camera, iView *player)
 				tileScreenInfo[i][j].bWater = FALSE;
 				tileScreenInfo[i][j].u = 0;
 				tileScreenInfo[i][j].v = 0;
-				tileScreenInfo[i][j].light.argb = 0;
-				tileScreenInfo[i][j].specular.argb = 0;
+				tileScreenInfo[i][j].light = WZCOL_BLACK;
 			}
 			else
 			{
@@ -635,25 +647,13 @@ static void drawTiles(iView *camera, iView *player)
 				}
 
 				tileScreenInfo[i][j].light = TileIllum;
-				tileScreenInfo[i][j].specular = WZCOL_BLACK;
 
 				// Real fog of war - darken where we cannot see enemy units moving around
 				if (bDisplaySensorRange && psTile && !psTile->activeSensor)
 				{
-					const int f = 2;
-
-					tileScreenInfo[i+0][j+0].light.byte.r = tileScreenInfo[i+0][j+0].light.byte.r / f;
-					tileScreenInfo[i+0][j+1].light.byte.r = tileScreenInfo[i+0][j+1].light.byte.r / f;
-					tileScreenInfo[i+1][j+1].light.byte.r = tileScreenInfo[i+1][j+1].light.byte.r / f;
-					tileScreenInfo[i+1][j+0].light.byte.r = tileScreenInfo[i+1][j+0].light.byte.r / f;
-					tileScreenInfo[i+0][j+0].light.byte.g = tileScreenInfo[i+0][j+0].light.byte.g / f;
-					tileScreenInfo[i+0][j+1].light.byte.g = tileScreenInfo[i+0][j+1].light.byte.g / f;
-					tileScreenInfo[i+1][j+1].light.byte.g = tileScreenInfo[i+1][j+1].light.byte.g / f;
-					tileScreenInfo[i+1][j+0].light.byte.g = tileScreenInfo[i+1][j+0].light.byte.g / f;
-					tileScreenInfo[i+0][j+0].light.byte.b = tileScreenInfo[i+0][j+0].light.byte.b / f;
-					tileScreenInfo[i+0][j+1].light.byte.b = tileScreenInfo[i+0][j+1].light.byte.b / f;
-					tileScreenInfo[i+1][j+1].light.byte.b = tileScreenInfo[i+1][j+1].light.byte.b / f;
-					tileScreenInfo[i+1][j+0].light.byte.b = tileScreenInfo[i+1][j+0].light.byte.b / f;
+					tileScreenInfo[i][j].light.byte.r = tileScreenInfo[i][j].light.byte.r / 2;
+					tileScreenInfo[i][j].light.byte.g = tileScreenInfo[i][j].light.byte.g / 2;
+					tileScreenInfo[i][j].light.byte.b = tileScreenInfo[i][j].light.byte.b / 2;
 				}
 
 				if ( playerXTile+j <= 1 ||
