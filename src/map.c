@@ -1430,15 +1430,16 @@ extern SWORD map_Height(UDWORD x, UDWORD y)
 /* returns TRUE if object is above ground */
 extern BOOL mapObjIsAboveGround( BASE_OBJECT *psObj )
 {
+	// min is used to make sure we don't go over array bounds!
 	SDWORD	iZ,
 			tileX = map_coord(psObj->x),
 			tileY = map_coord(psObj->y),
 			tileYOffset1 = (tileY * mapWidth),
 			tileYOffset2 = ((tileY+1) * mapWidth),
-			h1 = psMapTiles[tileYOffset1 + tileX    ].height,
-			h2 = psMapTiles[tileYOffset1 + tileX + 1].height,
-			h3 = psMapTiles[tileYOffset2 + tileX    ].height,
-			h4 = psMapTiles[tileYOffset2 + tileX + 1].height;
+			h1 = psMapTiles[MIN(mapWidth * mapHeight, tileYOffset1 + tileX)    ].height,
+			h2 = psMapTiles[MIN(mapWidth * mapHeight, tileYOffset1 + tileX + 1)].height,
+			h3 = psMapTiles[MIN(mapWidth * mapHeight, tileYOffset2 + tileX)    ].height,
+			h4 = psMapTiles[MIN(mapWidth * mapHeight, tileYOffset2 + tileX + 1)].height;
 
 	/* trivial test above */
 	if ( (psObj->z > h1) && (psObj->z > h2) &&
