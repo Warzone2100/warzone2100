@@ -184,7 +184,7 @@ void sound_ShutdownLibrary( void )
 #endif
 
 	while( aSample )
-	{
+	{ 
 		tmpSample = aSample->next;
 		free( aSample );
 		aSample = tmpSample;
@@ -251,7 +251,7 @@ void sound_Update( void )
 				free(node);
 				
 				// Get a pointer to the next node, the previous pointer doesn't change
-				node = previous->next;
+				node = (previous != NULL) ? previous->next : active_samples;
 #ifndef WZ_NOSOUND
 				break;
 		}
@@ -432,6 +432,48 @@ static void sound_AddActiveSample( AUDIO_SAMPLE *psSample )
 	active_samples = tmp;
 }
 
+/** Routine gets rid of the psObj's sound sample and reference in active_samples.
+ */
+void sound_RemoveActiveSample( AUDIO_SAMPLE *psSample )
+{
+	SAMPLE_LIST* node = active_samples;
+	SAMPLE_LIST* previous = NULL;
+
+	while (node != NULL)
+	{
+ 		if (node->curr->psObj == psSample->psObj)
+		{
+			debug(LOG_MEMORY, "Removing object 0x%p from active_samples list 0x%p\n", psSample->psObj, node);
+
+			// Buginator: should we wait for it to finish, or just stop it?
+			sound_StopSample(node->curr);
+
+			sound_FinishedCallback(node->curr);	//tell the callback it is finished.
+
+			if ( node->curr->iSample != (ALuint)AL_INVALID )
+			{
+				alDeleteSources(1, &node->curr->iSample);
+				sound_GetError();
+			}
+
+			// Remove it from the linked list
+			sound_RemoveSample(previous, node);
+
+			// free the memory associated with the sample
+			free(node); 
+
+			// Get a pointer to the next node, the previous pointer doesn't change
+			node = (previous != NULL) ? previous->next : active_samples;
+		}
+		else
+		{
+			// Move to the next sample object
+			previous = node;
+			node = node->next;
+		}
+	}
+
+}
 //*
 // =======================================================================================================================
 // =======================================================================================================================

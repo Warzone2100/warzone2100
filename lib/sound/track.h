@@ -108,7 +108,7 @@ void	sound_StopTrack( AUDIO_SAMPLE *psSample );
 void	sound_PauseTrack( AUDIO_SAMPLE *psSample );
 void	sound_UpdateSample( AUDIO_SAMPLE *psSample );
 void	sound_CheckAllUnloaded( void );
-
+void sound_RemoveActiveSample( AUDIO_SAMPLE *psSample );
 BOOL	sound_CheckTrack( SDWORD iTrack );
 
 SDWORD	sound_GetTrackTime( SDWORD iTrack );

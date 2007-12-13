@@ -1012,6 +1012,10 @@ void audio_RemoveObj(const void* psObj)
 			// Make sure to keep our linked list iterator valid
 			psSample = psSample->psNext;
 
+			debug(LOG_MEMORY, "audio_RemoveObj: callback %p sample %d\n",toRemove->pCallback,toRemove->iTrack);
+			// Remove sound from global active list
+			sound_RemoveActiveSample( toRemove ); //remove from global active list.
+
 			// Perform the actual task of destroying this sample
 			audio_RemoveSample(&g_psSampleQueue, toRemove);
 			free(toRemove);
@@ -1045,9 +1049,10 @@ void audio_RemoveObj(const void* psObj)
 			// Make sure to keep our linked list iterator valid
 			psSample = psSample->psNext;
 
+			debug(LOG_MEMORY, "audio_RemoveObj: callback %p sample %d\n",toRemove->pCallback,toRemove->iTrack);
 			// Stop this sound sample
-			sound_StopTrack(psSample);
-
+			sound_RemoveActiveSample( toRemove ); //remove from global active list.
+			
 			// Perform the actual task of destroying this sample
 			audio_RemoveSample(&g_psSampleList, toRemove);
 			free(toRemove);
