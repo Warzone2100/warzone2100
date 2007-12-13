@@ -1600,22 +1600,15 @@ void	renderEffect(EFFECT *psEffect)
 /* drawing func for wapypoints . AJL. */
 void	renderWaypointEffect(EFFECT *psEffect)
 {
-	PIELIGHT brightness, specular;
-
 	positionEffect(psEffect);
 
-	// set up lighting
-	brightness = lightDoFogAndIllumination(WZCOL_WHITE, getCentreX() - MAKEINT(psEffect->position.x), getCentreZ() - MAKEINT(psEffect->position.z), &specular);
-
-	pie_Draw3DShape(psEffect->imd, 0, 0, brightness, specular, 0, 0);
+	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, WZCOL_BLACK, 0, 0);
 	iV_MatrixEnd();
 }
 
 // ----------------------------------------------------------------------------------------
 void	renderFirework(EFFECT *psEffect)
 {
-	PIELIGHT brightness, specular;
-
 	/* these don't get rendered */
 	if(psEffect->type == FIREWORK_TYPE_LAUNCHER)
 	{
@@ -1627,10 +1620,8 @@ void	renderFirework(EFFECT *psEffect)
 	iV_MatrixRotateY(-player.r.y);
 	iV_MatrixRotateX(-player.r.x);
 
-	brightness = lightDoFogAndIllumination(WZCOL_WHITE, getCentreX() - MAKEINT(psEffect->position.x), getCentreZ() - MAKEINT(psEffect->position.z), &specular);
-
 	pie_MatScale(psEffect->size);
- 	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, WZCOL_BLACK, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE);
+ 	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, WZCOL_BLACK, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE);
  	iV_MatrixEnd();
 }
 
@@ -1638,18 +1629,13 @@ void	renderFirework(EFFECT *psEffect)
 /* drawing func for blood. */
 void	renderBloodEffect(EFFECT *psEffect)
 {
-	PIELIGHT brightness, specular;
-
 	positionEffect(psEffect);
 
 	iV_MatrixRotateY(-player.r.y);
 	iV_MatrixRotateX(-player.r.x);
 	pie_MatScale(psEffect->size);
 
-	// set up lighting
-	brightness = lightDoFogAndIllumination(WZCOL_WHITE, getCentreX() - MAKEINT(psEffect->position.x), getCentreZ() - MAKEINT(psEffect->position.z), &specular);
-
-	pie_Draw3DShape(getImdFromIndex(MI_BLOOD), psEffect->frameNumber, 0, brightness, specular, pie_TRANSLUCENT, EFFECT_BLOOD_TRANSPARENCY);
+	pie_Draw3DShape(getImdFromIndex(MI_BLOOD), psEffect->frameNumber, 0, WZCOL_WHITE, WZCOL_BLACK, pie_TRANSLUCENT, EFFECT_BLOOD_TRANSPARENCY);
 	iV_MatrixEnd();
 }
 
@@ -1658,7 +1644,6 @@ void	renderDestructionEffect(EFFECT *psEffect)
 {
 	float	div;
 	SDWORD	percent;
-	PIELIGHT brightness,specular;
 
 	if(psEffect->type!=DESTRUCTION_TYPE_SKYSCRAPER)
 	{
@@ -1674,16 +1659,13 @@ void	renderDestructionEffect(EFFECT *psEffect)
 		percent = (SDWORD)(div*pie_RAISE_SCALE);
 	}
 
-	//get fog value
-	brightness = lightDoFogAndIllumination(WZCOL_WHITE, getCentreX() - MAKEINT(psEffect->position.x), getCentreZ() - MAKEINT(psEffect->position.z), &specular);
-
 	if(!gamePaused())
 	{
  		iV_MatrixRotateX(SKY_SHIMMY);
  		iV_MatrixRotateY(SKY_SHIMMY);
  		iV_MatrixRotateZ(SKY_SHIMMY);
 	}
- 	pie_Draw3DShape(psEffect->imd, 0, 0, brightness, WZCOL_BLACK, pie_RAISE, percent);
+ 	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, WZCOL_BLACK, pie_RAISE, percent);
 
 	iV_MatrixEnd();
 }
@@ -1721,7 +1703,7 @@ UDWORD	timeSlice;
 void	renderExplosionEffect(EFFECT *psEffect)
 {
 	SDWORD	percent;
-	PIELIGHT brightness, specular;
+	const PIELIGHT brightness = WZCOL_WHITE;
 
 	if(psEffect->type == EXPLOSION_TYPE_LAND_LIGHT)
 	{
@@ -1758,8 +1740,6 @@ void	renderExplosionEffect(EFFECT *psEffect)
 	{
 		pie_MatScale(psEffect->size);
 	}
-	//get fog value
-	brightness = lightDoFogAndIllumination(WZCOL_WHITE, getCentreX() - MAKEINT(psEffect->position.x), getCentreZ() - MAKEINT(psEffect->position.z), &specular);
 
 	if(psEffect->type == EXPLOSION_TYPE_PLASMA)
 	{
@@ -1780,7 +1760,6 @@ void	renderExplosionEffect(EFFECT *psEffect)
 // ----------------------------------------------------------------------------------------
 void	renderGravitonEffect(EFFECT *psEffect)
 {
-	PIELIGHT  brightness, specular;
 
 	positionEffect(psEffect);
 
@@ -1798,10 +1777,8 @@ void	renderGravitonEffect(EFFECT *psEffect)
 	{
 		pie_MatScale(100);
 	}
-	brightness = lightDoFogAndIllumination(WZCOL_WHITE, getCentreX() - MAKEINT(psEffect->position.x),
-		getCentreZ() - MAKEINT(psEffect->position.z), &specular);
 
-	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, specular, 0, 0);
+	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, WZCOL_BLACK, 0, 0);
 
 	/* Pop the matrix */
 	iV_MatrixEnd();
@@ -1817,7 +1794,6 @@ void	renderConstructionEffect(EFFECT *psEffect)
 	SDWORD	percent;
 	UDWORD	translucency;
 	UDWORD	size;
-	PIELIGHT brightness, specular;
 
 	/* No rotation about arbitrary axis */
 	null.x = null.y = null.z = 0;
@@ -1850,10 +1826,7 @@ void	renderConstructionEffect(EFFECT *psEffect)
 	if(size>90) size = 90;
 	pie_MatScale(size);
 
-	// set up lighting
-	brightness = lightDoFogAndIllumination(WZCOL_WHITE, getCentreX() - MAKEINT(psEffect->position.x), getCentreZ() - MAKEINT(psEffect->position.z), &specular);
-
-	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, specular, pie_TRANSLUCENT, (UBYTE)(translucency));
+	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, WZCOL_BLACK, pie_TRANSLUCENT, (UBYTE)(translucency));
 
 	/* Pop the matrix */
 	iV_MatrixEnd();
@@ -1868,7 +1841,8 @@ void	renderSmokeEffect(EFFECT *psEffect)
 {
 	UDWORD	percent;
 	UDWORD	transparency = 0;
-	PIELIGHT brightness, specular;
+	const PIELIGHT brightness = WZCOL_WHITE;
+	const PIELIGHT specular = WZCOL_BLACK;
 
 	positionEffect(psEffect);
 
@@ -1903,9 +1877,6 @@ void	renderSmokeEffect(EFFECT *psEffect)
 			transparency = (EFFECT_SMOKE_TRANSPARENCY * (100 - percent))/100;
 #endif
 	}
-
-   	// set up lighting
-	brightness = lightDoFogAndIllumination(WZCOL_WHITE, getCentreX() - MAKEINT(psEffect->position.x), getCentreZ() - MAKEINT(psEffect->position.z), &specular);
 
 	transparency = (transparency * 3) / 2;  //JPS smoke strength increased for d3d 12 may 99
 

@@ -329,7 +329,6 @@ UDWORD	i;
 void	renderParticle( ATPART *psPart )
 {
 	Vector3i dv;
-	PIELIGHT brightness;
 	SDWORD centreX, centreZ;
 	SDWORD x, y, z, rx, rz;
 
@@ -353,8 +352,7 @@ void	renderParticle( ATPART *psPart )
 	/* Draw it... */
 	centreX = player.p.x + world_coord(visibleTiles.x / 2);
 	centreZ = player.p.z + world_coord(visibleTiles.y / 2);
-	brightness = lightDoFogAndIllumination(WZCOL_WHITE, centreX - x, centreZ - z, NULL);
-   	pie_Draw3DShape(psPart->imd, 0, 0, brightness, WZCOL_BLACK, pie_NO_BILINEAR, 0);
+   	pie_Draw3DShape(psPart->imd, 0, 0, WZCOL_WHITE, WZCOL_BLACK, pie_NO_BILINEAR, 0);
 	iV_MatrixEnd();
 }
 

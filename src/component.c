@@ -839,7 +839,8 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 	PROPULSION_STATS	*psPropStats;
 	SDWORD				frame;
 	SDWORD				pieFlag, iPieData;
-	PIELIGHT			brightness, specular;
+	PIELIGHT			brightness;
+	const PIELIGHT			specular = WZCOL_BLACK;
 	UDWORD				colour;
 	UDWORD				bDarkSide = FALSE;
 	UBYTE	i;
@@ -868,13 +869,12 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 
 	if(!bButton)
 	{
-		brightness = lightDoFogAndIllumination(pal_SetBrightness(psDroid->illumination), getCentreX() - psDroid->x,getCentreZ() - psDroid->y, &specular);
+		brightness = pal_SetBrightness(psDroid->illumination);
 		pieFlag = pie_SHADOW;
 	}
 	else
 	{
 		brightness = WZCOL_WHITE;
-		specular = WZCOL_BLACK;
 	}
 
 	/* We've got a z value here _and_ screen coords of origin */

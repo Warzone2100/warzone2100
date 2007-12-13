@@ -634,7 +634,8 @@ static void drawTiles(iView *camera, iView *player)
 					TileIllum = pal_SetBrightness(psTile->illumination);
 				}
 
-				tileScreenInfo[i][j].light = lightDoFogAndIllumination(TileIllum, rx - tileScreenInfo[i][j].pos.x, rz - world_coord(i - terrainMidY), &tileScreenInfo[i][j].specular);
+				tileScreenInfo[i][j].light = TileIllum;
+				tileScreenInfo[i][j].specular = WZCOL_BLACK;
 
 				// Real fog of war - darken where we cannot see enemy units moving around
 				if (bDisplaySensorRange && psTile && !psTile->activeSensor)
@@ -700,8 +701,7 @@ static void drawTiles(iView *camera, iView *player)
 					tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].pos.y;
 
 					// Calc the light for modified y coord and ignore the specular component
-					tileScreenInfo[i][j].wlight = lightDoFogAndIllumination(TileIllum, rx - tileScreenInfo[i][j].pos.x, rz - world_coord(i - terrainMidY), NULL);
-
+					tileScreenInfo[i][j].wlight = TileIllum;
 					tileScreenInfo[i][j].pos.y = tmp_y;
 				}
 				else
@@ -1132,7 +1132,6 @@ void	renderProjectile(PROJECTILE *psCurr)
 	WEAPON_STATS	*psStats;
 	Vector3i			dv;
 	iIMDShape		*pIMD;
-	PIELIGHT		brightness, specular;
 	SDWORD			rx, rz;
 
 	psStats = psCurr->psWStats;
@@ -1183,15 +1182,14 @@ void	renderProjectile(PROJECTILE *psCurr)
 		imdRot2.x = DEG(psCurr->pitch);
 		iV_MatrixRotateX(imdRot2.x);
 
-		brightness = lightDoFogAndIllumination(WZCOL_WHITE, getCentreX() - psCurr->x, getCentreZ() - psCurr->y, &specular);
-		if(psStats->weaponSubClass == WSC_ROCKET || psStats->weaponSubClass == WSC_MISSILE ||
-		psStats->weaponSubClass == WSC_SLOWROCKET || psStats->weaponSubClass == WSC_SLOWMISSILE)
+		if (psStats->weaponSubClass == WSC_ROCKET || psStats->weaponSubClass == WSC_MISSILE
+		    || psStats->weaponSubClass == WSC_SLOWROCKET || psStats->weaponSubClass == WSC_SLOWMISSILE)
 		{
-			pie_Draw3DShape(pIMD, 0, 0, brightness, WZCOL_BLACK, pie_ADDITIVE, 164);
+			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, WZCOL_BLACK, pie_ADDITIVE, 164);
 		}
 		else
 		{
-			pie_Draw3DShape(pIMD, 0, 0, brightness, specular, pie_NO_BILINEAR, 0);
+			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, WZCOL_BLACK, pie_NO_BILINEAR, 0);
 		}
 
 		iV_MatrixEnd();
@@ -1226,7 +1224,7 @@ renderAnimComponent( const COMPONENT_OBJECT *psObj )
 			terrainMidY * TILE_UNITS - (psParentObj->y - player.p.z)
 		};
 		SDWORD iPlayer;
-		PIELIGHT brightness, specular;
+		PIELIGHT brightness;
 
 		psParentObj->sDisplay.frameNumber = currentGameFrame;
 
@@ -1305,9 +1303,7 @@ renderAnimComponent( const COMPONENT_OBJECT *psObj )
 			brightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT*)psParentObj, brightness.byte.r));
 		}
 
-		brightness = lightDoFogAndIllumination(brightness, getCentreX() - posX, getCentreZ() - posY, &specular);
-
-		pie_Draw3DShape(psObj->psShape, 0, iPlayer, brightness, specular, pie_NO_BILINEAR|pie_STATIC_SHADOW, 0);
+		pie_Draw3DShape(psObj->psShape, 0, iPlayer, brightness, WZCOL_BLACK, pie_NO_BILINEAR|pie_STATIC_SHADOW, 0);
 
 		/* clear stack */
 		iV_MatrixEnd();
@@ -1606,7 +1602,7 @@ void	renderFeature(FEATURE *psFeature)
 {
 	UDWORD		featX,featY;
 	SDWORD		rotation, rx, rz;
-	PIELIGHT	brightness, specular;
+	PIELIGHT	brightness;
 	Vector3i dv;
 	Vector3f *vecTemp;
 	BOOL bForceDraw = ( !getRevealStatus() && psFeature->psStats->visibleAtStart);
@@ -1661,8 +1657,6 @@ void	renderFeature(FEATURE *psFeature)
 			brightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT*)psFeature, brightness.byte.r));
 		}
 
-		brightness = lightDoFogAndIllumination(brightness, getCentreX() - featX, getCentreZ() - featY, &specular);
-
 		if (psFeature->psStats->subType == FEAT_BUILDING || psFeature->psStats->subType == FEAT_SKYSCRAPER
 		    || psFeature->psStats->subType == FEAT_OIL_DRUM)
 		{
@@ -1675,12 +1669,12 @@ void	renderFeature(FEATURE *psFeature)
 			vecTemp = psFeature->sDisplay.imd->points;
 			flattenImd(psFeature->sDisplay.imd, psFeature->x, psFeature->y, 0);
 			/* currentGameFrame/2 set anim running - GJ hack */
-			pie_Draw3DShape(psFeature->sDisplay.imd, currentGameFrame/2, 0, brightness, specular, 0, 0);
+			pie_Draw3DShape(psFeature->sDisplay.imd, currentGameFrame/2, 0, brightness, WZCOL_BLACK, 0, 0);
 			psFeature->sDisplay.imd->points = vecTemp;
 		}
 		else
 		{
-			pie_Draw3DShape(psFeature->sDisplay.imd, 0, 0, brightness, specular, shadowFlags,0);
+			pie_Draw3DShape(psFeature->sDisplay.imd, 0, 0, brightness, WZCOL_BLACK, shadowFlags,0);
 		}
 
 		{
@@ -1705,7 +1699,6 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 	VIEW_PROXIMITY	*pViewProximity = NULL;
 	SDWORD			x, y, r, rx, rz;
 	iIMDShape		*proxImd = NULL;
-	PIELIGHT		brightness, specular;
 
 	//store the frame number for when deciding what has been clicked on
 	psProxDisp->frameNumber = currentGameFrame;
@@ -1742,7 +1735,6 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 	{
 		ASSERT(!"unknown proximity display message type", "Buggered proximity message type");
 	}
-	brightness = lightDoFogAndIllumination(WZCOL_WHITE, getCentreX() - msgX, getCentreZ() - msgY, &specular);
 
 	dv.x = (msgX - player.p.x) - terrainMidX*TILE_UNITS;
 	dv.z = terrainMidY*TILE_UNITS - (msgY - player.p.z);
@@ -1801,11 +1793,11 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 
 	if(!gamePaused())
 	{
-		pie_Draw3DShape(proxImd, getTimeValueRange(1000,4), 0, brightness, specular, pie_ADDITIVE, 192);
+		pie_Draw3DShape(proxImd, getTimeValueRange(1000,4), 0, WZCOL_WHITE, WZCOL_BLACK, pie_ADDITIVE, 192);
 	}
 	else
 	{
-		pie_Draw3DShape(proxImd, 0, 0, brightness, specular, pie_ADDITIVE, 192);
+		pie_Draw3DShape(proxImd, 0, 0, WZCOL_WHITE, WZCOL_BLACK, pie_ADDITIVE, 192);
 	}
 
 	//get the screen coords for determining when clicked on
@@ -1828,7 +1820,7 @@ void	renderStructure(STRUCTURE *psStructure)
 	SDWORD			playerFrame;
 	SDWORD			animFrame;
 	UDWORD			nWeaponStat;
-	PIELIGHT		buildingBrightness, specular;
+	PIELIGHT		buildingBrightness, specular = WZCOL_BLACK;
 	Vector3i dv;
 	SDWORD			i;
 	iIMDShape *lImd = NULL, *imd = NULL;
@@ -1974,7 +1966,6 @@ void	renderStructure(STRUCTURE *psStructure)
 	{
 		buildingBrightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT*)psStructure, buildingBrightness.byte.r));
 	}
-	buildingBrightness = lightDoFogAndIllumination(buildingBrightness, getCentreX() - psStructure->x, getCentreZ() - psStructure->y, &specular);
 
 	if (!defensive)
 	{
@@ -1983,7 +1974,7 @@ void	renderStructure(STRUCTURE *psStructure)
 
 		if (baseImd != NULL)
 		{
-			pie_Draw3DShape(baseImd, 0, 0, buildingBrightness, specular, 0,0);
+			pie_Draw3DShape(baseImd, 0, 0, buildingBrightness, WZCOL_BLACK, 0,0);
 		}
 
 		// override
@@ -2264,7 +2255,6 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition)
 	Vector3i dv;
 	SDWORD			x, y, r, rx, rz;
 	Vector3f *temp = NULL;
-	PIELIGHT		buildingBrightness, specular;
 	//store the frame number for when deciding what has been clicked on
 	psPosition->frameNumber = currentGameFrame;
 
@@ -2296,9 +2286,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition)
 
 	pie_MatScale(50); // they are all big now so make this one smaller too
 
-	buildingBrightness = lightDoFogAndIllumination(WZCOL_WHITE, getCentreX() - psPosition->coords.x, getCentreZ() - psPosition->coords.y, &specular);
-
-	pie_Draw3DShape(pAssemblyPointIMDs[psPosition->factoryType][psPosition->factoryInc], 0, 0, buildingBrightness, specular, pie_NO_BILINEAR, 0);
+	pie_Draw3DShape(pAssemblyPointIMDs[psPosition->factoryType][psPosition->factoryInc], 0, 0, WZCOL_WHITE, WZCOL_BLACK, pie_NO_BILINEAR, 0);
 
 	if(!psPosition->selected)
 	{
@@ -2317,7 +2305,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition)
 static BOOL	renderWallSection(STRUCTURE *psStructure)
 {
 	SDWORD			structX, structY, rx, rz;
-	PIELIGHT		brightness, specular, buildingBrightness;
+	PIELIGHT		brightness, specular = WZCOL_BLACK, buildingBrightness;
 	iIMDShape		*imd;
 	SDWORD			rotation;
 	Vector3i			dv;
@@ -2331,8 +2319,6 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 		/* Get it's x and y coordinates so we don't have to deref. struct later */
 		structX = psStructure->x;
 		structY = psStructure->y;
-//		centreX = ( player.p.x + world_coord(visibleTiles.x / 2) );
-//		centreZ = ( player.p.z + world_coord(visibleTiles.y / 2) );
 		buildingBrightness = pal_SetBrightness(200 - (100 - PERCENT(psStructure->body, structureBody(psStructure))));
 
 		if(psStructure->selected)
@@ -2362,7 +2348,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 			buildingBrightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT*)psStructure, buildingBrightness.byte.r));
 		}
 
-		brightness = lightDoFogAndIllumination(buildingBrightness, getCentreX() - structX, getCentreZ() - structY, &specular);
+		brightness = buildingBrightness;
 
 		/*
 		Right, now the tricky bit, we need to bugger about with the coordinates of the imd to make it
@@ -2482,7 +2468,6 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 	Vector3i			dv;
 	Vector3f			*pVecTemp;
 	SDWORD			shadowScale, rx, rz;
-	PIELIGHT		brightness, specular;
 
 	dv.x = (psDroid->x - player.p.x) - terrainMidX*TILE_UNITS;
 	if(psDroid->droidType == DROID_TRANSPORTER)
@@ -2523,9 +2508,7 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 		pie_MatRotZ( DEG( psDroid->roll ) );
 	}
 
-	brightness = lightDoFogAndIllumination(WZCOL_WHITE, getCentreX() - psDroid->x, getCentreZ() - psDroid->y, &specular);
-
-	pie_Draw3DShape(psShadowIMD, 0, 0, brightness, specular, pie_TRANSLUCENT, 128);
+	pie_Draw3DShape(psShadowIMD, 0, 0, WZCOL_WHITE, WZCOL_BLACK, pie_TRANSLUCENT, 128);
 	psShadowIMD->points = pVecTemp;
 
 	iV_MatrixEnd();
@@ -4625,7 +4608,7 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 	SDWORD	realY;
 	Vector3i null, vec;
 	SDWORD	rx,rz;
-	PIELIGHT colour, specular;
+	PIELIGHT colour;
 
 	null.x = null.y = null.z = 0;
 	each.x = psDroid->x;
@@ -4686,7 +4669,6 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 
 	// set the colour
 	colour = pal_SetBrightness(UBYTE_MAX);
-	colour = lightDoFogAndIllumination(colour, getCentreX() - psDroid->x, getCentreZ() - psDroid->y, &specular);
 
 	if (psDroid->action == DACTION_DEMOLISH || psDroid->action == DACTION_CLEARWRECK)
 	{
