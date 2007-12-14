@@ -436,6 +436,7 @@ static void sound_AddActiveSample( AUDIO_SAMPLE *psSample )
 	tmp->next = active_samples;
 	active_samples = tmp;
 }
+#endif
 
 /** Routine gets rid of the psObj's sound sample and reference in active_samples.
  */
@@ -455,11 +456,13 @@ void sound_RemoveActiveSample( AUDIO_SAMPLE *psSample )
 
 			sound_FinishedCallback(node->curr);	//tell the callback it is finished.
 
+#ifndef WZ_NOSOUND
 			if ( node->curr->iSample != (ALuint)AL_INVALID )
 			{
 				alDeleteSources(1, &node->curr->iSample);
 				sound_GetError();
 			}
+#endif
 
 			// Remove it from the linked list
 			sound_RemoveSample(previous, node);
@@ -477,12 +480,9 @@ void sound_RemoveActiveSample( AUDIO_SAMPLE *psSample )
 			node = node->next;
 		}
 	}
-
 }
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
+
+#ifndef WZ_NOSOUND
 static bool sound_SetupChannel( AUDIO_SAMPLE *psSample )
 {
 	sound_AddActiveSample( psSample );
