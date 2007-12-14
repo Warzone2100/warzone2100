@@ -196,18 +196,16 @@ void sound_ShutdownLibrary( void )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-void sound_Update( void )
+void sound_Update()
 {
 #ifndef WZ_NOSOUND
-	int err;
-#endif
 	SAMPLE_LIST* node = active_samples;
 	SAMPLE_LIST* previous = NULL;
+	ALCenum err;
 
 	while (node != NULL)
 	{
-#ifndef WZ_NOSOUND
-		ALenum state;
+		ALenum state, err;
 
 		alGetSourcei(node->curr->iSample, AL_SOURCE_STATE, &state);
 
@@ -238,9 +236,7 @@ void sound_Update( void )
 				break;
 
 			case AL_STOPPED:
-#endif
 				sound_FinishedCallback(node->curr);
-#ifndef WZ_NOSOUND
 
 			default:
 				// If an OpenAL source is associated with this sample, release it
@@ -249,7 +245,7 @@ void sound_Update( void )
 					alDeleteSources(1, &node->curr->iSample);
 					sound_GetError();
 				}
-#endif
+
 				// Remove the sample from the list
 				sound_RemoveSample(previous, node);
 				// Free it
@@ -257,15 +253,12 @@ void sound_Update( void )
 				
 				// Get a pointer to the next node, the previous pointer doesn't change
 				node = (previous != NULL) ? previous->next : active_samples;
-#ifndef WZ_NOSOUND
 				break;
 		}
-#endif
 	}
 
 	cdAudio_Update();
 
-#ifndef WZ_NOSOUND
 	// Reset the current error state
 	alcGetError(device);
 
@@ -278,7 +271,7 @@ void sound_Update( void )
 		      alGetString(err));
 	}
 #endif
-	}
+}
 
 //*
 // =======================================================================================================================

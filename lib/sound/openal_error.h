@@ -51,8 +51,8 @@ extern ALenum __sound_GetDeviceError(ALCdevice* device, const char* location_des
 	__sound_GetDeviceError(device, AT_MACRO)
 
 #else // !defined(WZ_NOSOUND)
-# define sound_GetError(err_code)
-# define sound_GetDeviceError(err_code)
+# define sound_GetError(err_code)       AL_NO_ERROR
+# define sound_GetDeviceError(err_code) ALC_NO_ERROR
 #endif // !defined(WZ_NOSOUND)
 
 #endif // __INCLUDED_LIB_SOUND_OPENAL_ERROR_H__
