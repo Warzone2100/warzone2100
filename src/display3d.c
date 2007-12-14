@@ -697,11 +697,7 @@ static void drawTiles(iView *camera, iView *player)
 					tileScreenInfo[i][j].water.z = pie_RotateProject(&tileScreenInfo[i][j].pos, &water);
 					tileScreenInfo[i][j].water.x = water.x;
 					tileScreenInfo[i][j].water.y = water.y;
-
 					tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].pos.y;
-
-					// Calc the light for modified y coord and ignore the specular component
-					tileScreenInfo[i][j].wlight = TileIllum;
 					tileScreenInfo[i][j].pos.y = tmp_y;
 				}
 				else
@@ -3980,17 +3976,14 @@ static void drawTerrainWaterTile(UDWORD i, UDWORD j)
 
 		vertices[0] = tileScreenInfo[i + 0][j + 0];
 		vertices[0].pos.y = tileScreenInfo[i + 0][j + 0].water_height;
-		vertices[0].light = tileScreenInfo[i+0][j+0].wlight;
 		vertices[0].light.byte.a = WATER_ALPHA_LEVEL;
 
 		vertices[1] = tileScreenInfo[i + 0][j + 1];
 		vertices[1].pos.y = tileScreenInfo[i + 0][j + 1].water_height;
-		vertices[1].light = tileScreenInfo[i+0][j+1].wlight;
 		vertices[1].light.byte.a = WATER_ALPHA_LEVEL;
 
 		vertices[2] = tileScreenInfo[i + 1][j + 1];
 		vertices[2].pos.y = tileScreenInfo[i + 1][j + 1].water_height;
-		vertices[2].light = tileScreenInfo[i+1][j+1].wlight;
 		vertices[2].light.byte.a = WATER_ALPHA_LEVEL;
 
 		pie_DrawWaterTriangle(vertices);
@@ -3998,7 +3991,6 @@ static void drawTerrainWaterTile(UDWORD i, UDWORD j)
 		vertices[1] = vertices[2];
 		vertices[2] = tileScreenInfo[i + 1][j + 0];
 		vertices[2].pos.y = tileScreenInfo[i + 1][j + 0].water_height;
-		vertices[2].light = tileScreenInfo[i+1][j+0].wlight;
 		vertices[2].light.byte.a = WATER_ALPHA_LEVEL;
 
 		pie_DrawWaterTriangle(vertices);
