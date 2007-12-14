@@ -165,6 +165,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\openal_error.c"
+				>
+			</File>
+			<File
 				RelativePath=".\openal_track.c"
 				>
 			</File>
@@ -204,6 +208,10 @@
 			</File>
 			<File
 				RelativePath=".\oggvorbis.h"
+				>
+			</File>
+			<File
+				RelativePath=".\openal_error.h"
 				>
 			</File>
 			<File
