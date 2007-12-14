@@ -609,7 +609,7 @@ static void drawTiles(iView *camera, iView *player)
 		for (j = 0; j < (SDWORD)visibleTiles.x+1; j++)
 		{
 			Vector2i screen;
-			PIELIGHT TileIllum;
+			PIELIGHT TileIllum = WZCOL_BLACK;
 			int shiftVal = 0;
 
 			tileScreenInfo[i][j].pos.x = world_coord(j - terrainMidX);
@@ -627,7 +627,6 @@ static void drawTiles(iView *camera, iView *player)
 				tileScreenInfo[i][j].bWater = FALSE;
 				tileScreenInfo[i][j].u = 0;
 				tileScreenInfo[i][j].v = 0;
-				tileScreenInfo[i][j].light = WZCOL_BLACK;
 			}
 			else
 			{
@@ -646,14 +645,12 @@ static void drawTiles(iView *camera, iView *player)
 					TileIllum = pal_SetBrightness(psTile->illumination);
 				}
 
-				tileScreenInfo[i][j].light = TileIllum;
-
 				// Real fog of war - darken where we cannot see enemy units moving around
 				if (bDisplaySensorRange && psTile && !psTile->activeSensor)
 				{
-					tileScreenInfo[i][j].light.byte.r = tileScreenInfo[i][j].light.byte.r / 2;
-					tileScreenInfo[i][j].light.byte.g = tileScreenInfo[i][j].light.byte.g / 2;
-					tileScreenInfo[i][j].light.byte.b = tileScreenInfo[i][j].light.byte.b / 2;
+					TileIllum.byte.r = TileIllum.byte.r / 2;
+					TileIllum.byte.g = TileIllum.byte.g / 2;
+					TileIllum.byte.b = TileIllum.byte.b / 2;
 				}
 
 				if ( playerXTile+j <= 1 ||
@@ -671,7 +668,9 @@ static void drawTiles(iView *camera, iView *player)
 					shiftVal = WATER_DEPTH + environGetData(playerXTile+j, playerZTile+i) * 1.5f;
 					tileScreenInfo[i][j].pos.y -= shiftVal;
 					// And darken it.
-					TileIllum = pal_SetBrightness(TileIllum.byte.r * 0.75f);
+					TileIllum.byte.r = (TileIllum.byte.r * 2) / 3;
+					TileIllum.byte.g = (TileIllum.byte.g * 2) / 3;
+					TileIllum.byte.b = (TileIllum.byte.b * 2) / 3;
 					pushedDown = TRUE;
 				}
 
@@ -707,7 +706,7 @@ static void drawTiles(iView *camera, iView *player)
 					tileScreenInfo[i][j].water = tileScreenInfo[i][j].screen;
 					tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].pos.y;
 				}
-				psTile->colour = tileScreenInfo[i][j].light;
+				setTileColour(playerXTile + j, playerZTile + i, TileIllum);
 			}
 			// hack since tileScreenInfo[i][j].screen is Vector3i and pie_RotateProject takes Vector2i as 2nd param
 			screen.x = tileScreenInfo[i][j].screen.x;
@@ -727,7 +726,7 @@ static void drawTiles(iView *camera, iView *player)
 		avUpdateTiles();
 	}
 
-	// Process lighting contributions from the above functions
+	// Process lighting contributions
 	for (i = 0; i < visibleTiles.y+1; i++)
 	{
 		/* Go through the x's */
