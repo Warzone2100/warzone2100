@@ -215,7 +215,7 @@ void sound_Update( void )
 		// If one did, the state returned is useless. So instead of
 		// using it continue with the next sample.
 		err = sound_GetError();
-		if (err == AL_NO_ERROR)
+		if (err != AL_NO_ERROR)
 		{
 			// Move to the next object
 			previous = node;
@@ -287,13 +287,13 @@ void sound_Update( void )
 BOOL sound_QueueSamplePlaying( void )
 {
 #ifndef WZ_NOSOUND
+	ALenum	state;
+
 	if ( current_queue_sample == (ALuint)AL_INVALID )
 	{
 		return FALSE;
 	}
 		
-	ALenum	state;
-
 	alGetSourcei(current_queue_sample, AL_SOURCE_STATE, &state);
 
 	// Check whether an error occurred while retrieving the state.
