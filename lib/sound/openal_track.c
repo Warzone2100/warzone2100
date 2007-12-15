@@ -192,10 +192,30 @@ void sound_ShutdownLibrary( void )
 	active_samples = NULL;
 }
 
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
+/** Deletes the given sample and updates the \c previous and \c current iterators
+ *  \param previous iterator to the previous sample in the list
+ *  \param sample iterator to the current sample in the list which you want to delete
+ */
+static void sound_DestroyIteratedSample(SAMPLE_LIST** previous, SAMPLE_LIST** sample)
+{
+#ifndef WZ_NOSOUND
+	// If an OpenAL source is associated with this sample, release it
+	if ((*sample)->curr->iSample != (ALuint)AL_INVALID)
+	{
+		alDeleteSources(1, &(*sample)->curr->iSample);
+		sound_GetError();
+	}
+#endif
+
+	// Remove the sample from the list
+	sound_RemoveSample(*previous, *sample);
+	// Free it
+	free(*sample);
+				
+	// Get a pointer to the next node, the previous pointer doesn't change
+	*sample = (*previous != NULL) ? (*previous)->next : active_samples;
+}
+
 void sound_Update()
 {
 #ifndef WZ_NOSOUND
@@ -215,9 +235,8 @@ void sound_Update()
 		err = sound_GetError();
 		if (err != AL_NO_ERROR)
 		{
-			// Move to the next object
-			previous = node;
-			node = node->next;
+			// Destroy this object and move to the next object
+			sound_DestroyIteratedSample(&previous, &node);
 			continue;
 		}
 
@@ -239,20 +258,7 @@ void sound_Update()
 				sound_FinishedCallback(node->curr);
 
 			default:
-				// If an OpenAL source is associated with this sample, release it
-				if (node->curr->iSample != (ALuint)AL_INVALID)
-				{
-					alDeleteSources(1, &node->curr->iSample);
-					sound_GetError();
-				}
-
-				// Remove the sample from the list
-				sound_RemoveSample(previous, node);
-				// Free it
-				free(node);
-				
-				// Get a pointer to the next node, the previous pointer doesn't change
-				node = (previous != NULL) ? previous->next : active_samples;
+				sound_DestroyIteratedSample(&previous, &node);
 				break;
 		}
 	}
@@ -449,22 +455,7 @@ void sound_RemoveActiveSample( AUDIO_SAMPLE *psSample )
 
 			sound_FinishedCallback(node->curr);	//tell the callback it is finished.
 
-#ifndef WZ_NOSOUND
-			if ( node->curr->iSample != (ALuint)AL_INVALID )
-			{
-				alDeleteSources(1, &node->curr->iSample);
-				sound_GetError();
-			}
-#endif
-
-			// Remove it from the linked list
-			sound_RemoveSample(previous, node);
-
-			// free the memory associated with the sample
-			free(node); 
-
-			// Get a pointer to the next node, the previous pointer doesn't change
-			node = (previous != NULL) ? previous->next : active_samples;
+			sound_DestroyIteratedSample(&previous, &node);
 		}
 		else
 		{
