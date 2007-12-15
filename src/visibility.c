@@ -107,7 +107,7 @@ static SDWORD visObjHeight(BASE_OBJECT *psObject)
 	{
 	case OBJ_DROID:
 		height = 80;
-//		height = psObject->sDisplay.imd->ymax;
+//		height = psObject->sDisplay.imd->pos.ymax;
 		break;
 	case OBJ_STRUCTURE:
 		height = psObject->sDisplay.imd->ymax;
@@ -285,11 +285,11 @@ void visTilesUpdate(BASE_OBJECT *psObj)
 		for(ray=0; ray < NUM_RAYS; ray += NUM_RAYS/80)
 		{
 			// initialise the callback variables
-			startH = psObj->z + visObjHeight(psObj);
+			startH = psObj->pos.z + visObjHeight(psObj);
 			currG = -UBYTE_MAX * GRAD_MUL;
 
 			// Cast the rays from the viewer
-			rayCast(psObj->x,psObj->y,ray, range, rayTerrainCallback);
+			rayCast(psObj->pos.x,psObj->pos.y,ray, range, rayTerrainCallback);
 		}
 }
 
@@ -389,8 +389,8 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 	}
 
 	/* First see if the target is in sensor range */
-	x = (SDWORD)psViewer->x;
-	xdiff = x - (SDWORD)psTarget->x;
+	x = (SDWORD)psViewer->pos.x;
+	xdiff = x - (SDWORD)psTarget->pos.x;
 	if (xdiff < 0)
 	{
 		xdiff = -xdiff;
@@ -401,8 +401,8 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 		return FALSE;
 	}
 
-	y = (SDWORD)psViewer->y;
-	ydiff = y - (SDWORD)psTarget->y;
+	y = (SDWORD)psViewer->pos.y;
+	ydiff = y - (SDWORD)psTarget->pos.y;
 	if (ydiff < 0)
 	{
 		ydiff = -ydiff;
@@ -427,21 +427,21 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 	}
 
 	// initialise the callback variables
-	startH = psViewer->z;
+	startH = psViewer->pos.z;
 	startH += visObjHeight(psViewer);
 	currG = -UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE;
 	tarDist = rangeSquared;
 	rayStart = TRUE;
 	currObj = 0;
-	ray = NUM_RAYS-1 - calcDirection(psViewer->x,psViewer->y, psTarget->x,psTarget->y);
-	finalX = map_coord(psTarget->x);
-	finalY = map_coord(psTarget->y);
+	ray = NUM_RAYS-1 - calcDirection(psViewer->pos.x,psViewer->pos.y, psTarget->pos.x,psTarget->pos.y);
+	finalX = map_coord(psTarget->pos.x);
+	finalY = map_coord(psTarget->pos.y);
 
 	// Cast a ray from the viewer to the target
 	rayCast(x,y, ray, range, rayLOSCallback);
 
 	// See if the target can be seen
-	top = ((SDWORD)psTarget->z + visObjHeight(psTarget) - startH);
+	top = ((SDWORD)psTarget->pos.z + visObjHeight(psTarget) - startH);
 	tarG = top * GRAD_MUL / lastD;
 
 	return tarG >= currG;
@@ -480,8 +480,8 @@ BOOL visGetBlockingWall(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget, STRUCTURE 
 		{
 			for(psCurr = apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
 			{
-				if (map_coord(psCurr->x) == tileX
-				 && map_coord(psCurr->y) == tileY)
+				if (map_coord(psCurr->pos.x) == tileX
+				 && map_coord(psCurr->pos.y) == tileY)
 				{
 					psWall = psCurr;
 					goto found;
@@ -572,7 +572,7 @@ void processVisibility(BASE_OBJECT *psObj)
 	}
 
 	// get all the objects from the grid the droid is in
-	gridStartIterate((SDWORD)psObj->x, (SDWORD)psObj->y);
+	gridStartIterate((SDWORD)psObj->pos.x, (SDWORD)psObj->pos.y);
 
 	// Make sure allies can see us
 	if (bMultiPlayer && game.alliance == ALLIANCES_TEAMS)
@@ -704,8 +704,8 @@ void processVisibility(BASE_OBJECT *psObj)
 		the selected Player - if there isn't an Resource Extractor on it*/
 		if (((FEATURE *)psObj)->psStats->subType == FEAT_OIL_RESOURCE)
 		{
-			if(!TILE_HAS_STRUCTURE(mapTile(map_coord(psObj->x),
-			                               map_coord(psObj->y))))
+			if(!TILE_HAS_STRUCTURE(mapTile(map_coord(psObj->pos.x),
+			                               map_coord(psObj->pos.y))))
 			{
 				psMessage = addMessage(MSG_PROXIMITY, TRUE, selectedPlayer);
 				if (psMessage)
@@ -716,7 +716,7 @@ void processVisibility(BASE_OBJECT *psObj)
 				{
 					//play message to indicate been seen
 					audio_QueueTrackPos( ID_SOUND_RESOURCE_HERE,
-										psObj->x, psObj->y, psObj->z );
+										psObj->pos.x, psObj->pos.y, psObj->pos.z );
 				}
 			}
 		}
@@ -732,7 +732,7 @@ void processVisibility(BASE_OBJECT *psObj)
 				{
 					//play message to indicate been seen
 					audio_QueueTrackPos( ID_SOUND_ARTEFACT_DISC,
-									psObj->x, psObj->y, psObj->z );
+									psObj->pos.x, psObj->pos.y, psObj->pos.z );
 				}
 			}
 	}
@@ -753,8 +753,8 @@ MAPTILE		*psTile;
 		psStats = psFeature->psStats;
 		width = psStats->baseWidth;
 		breadth = psStats->baseBreadth;
-	 	mapX = map_coord(psFeature->x - width * TILE_UNITS / 2);
-		mapY = map_coord(psFeature->y - breadth * TILE_UNITS / 2);
+	 	mapX = map_coord(psFeature->pos.x - width * TILE_UNITS / 2);
+		mapY = map_coord(psFeature->pos.y - breadth * TILE_UNITS / 2);
 	}
 	else
 	{
@@ -762,8 +762,8 @@ MAPTILE		*psTile;
 		psStructure = (STRUCTURE*)psObj;
 		width = psStructure->pStructureType->baseWidth;
 		breadth = psStructure->pStructureType->baseBreadth;
-		mapX = map_coord(psStructure->x - width * TILE_UNITS / 2);
-		mapY = map_coord(psStructure->y - breadth * TILE_UNITS / 2);
+		mapX = map_coord(psStructure->pos.x - width * TILE_UNITS / 2);
+		mapY = map_coord(psStructure->pos.y - breadth * TILE_UNITS / 2);
 	}
 
 	for (i = 0; i < width; i++)

@@ -150,7 +150,7 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 								//(WEAPON_STATS *)(asWeaponStats + ((DROID *)friendlyObj)->asWeaps[0].nStat)->;
 
 								// make sure target is near enough
-								if(dirtySqrt(psDroid->x,psDroid->y,tempTarget->x,tempTarget->y)
+								if(dirtySqrt(psDroid->pos.x,psDroid->pos.y,tempTarget->pos.x,tempTarget->pos.y)
 									< (psDroid->sensorRange))
 								{
 									targetInQuestion = tempTarget;		//consider this target
@@ -407,7 +407,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 
 		/* Now calculate the overall weight */
 		attackWeight = asWeaponModifier[weaponEffect][(asPropulsionStats + targetDroid->asBits[COMP_PROPULSION].nStat)->propulsionType] // Our weapon's effect against target
-				- WEIGHT_DIST_TILE_DROID * map_coord(dirtySqrt(psAttacker->x, psAttacker->y, targetDroid->x, targetDroid->y)) // farer droids are less attractive
+				- WEIGHT_DIST_TILE_DROID * map_coord(dirtySqrt(psAttacker->pos.x, psAttacker->pos.y, targetDroid->pos.x, targetDroid->pos.y)) // farer droids are less attractive
 				+ WEIGHT_HEALTH_DROID * damageRatio // we prefer damaged droids
 				+ targetTypeBonus; // some droid types have higher priority
 
@@ -448,7 +448,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 
 		/* Now calculate the overall weight */
 		attackWeight = asStructStrengthModifier[weaponEffect][targetStructure->pStructureType->strength] // Our weapon's effect against target
-				- WEIGHT_DIST_TILE_STRUCT * map_coord(dirtySqrt(psAttacker->x, psAttacker->y, targetStructure->x, targetStructure->y)) // farer structs are less attractive
+				- WEIGHT_DIST_TILE_STRUCT * map_coord(dirtySqrt(psAttacker->pos.x, psAttacker->pos.y, targetStructure->pos.x, targetStructure->pos.y)) // farer structs are less attractive
 				+ WEIGHT_HEALTH_STRUCT * damageRatio // we prefer damaged structures
 				+ targetTypeBonus; // some structure types have higher priority
 
@@ -522,8 +522,8 @@ static BOOL aiStructHasRange(STRUCTURE *psStruct, BASE_OBJECT *psTarget, int wea
 
 	psWStats = psStruct->asWeaps[weapon_slot].nStat + asWeaponStats;
 
-	xdiff = (SDWORD)psStruct->x - (SDWORD)psTarget->x;
-	ydiff = (SDWORD)psStruct->y - (SDWORD)psTarget->y;
+	xdiff = (SDWORD)psStruct->pos.x - (SDWORD)psTarget->pos.x;
+	ydiff = (SDWORD)psStruct->pos.y - (SDWORD)psTarget->pos.y;
 	longRange = proj_GetLongRange(psWStats);
 	if (xdiff*xdiff + ydiff*ydiff < longRange*longRange)
 	{
@@ -634,8 +634,8 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 			if (validTarget(psObj, psTarget, weapon_slot))
 			{
     			/* See if in sensor range */
-			    xdiff = psTarget->x - psObj->x;
-			    ydiff = psTarget->y - psObj->y;
+			    xdiff = psTarget->pos.x - psObj->pos.x;
+			    ydiff = psTarget->pos.y - psObj->pos.y;
 			    if ((xdiff*xdiff + ydiff*ydiff < (SDWORD)radSquared) ||			//target is within our sensor range
 					(secondaryGetState((DROID *)psObj, DSO_HALTTYPE, &state) &&	//in case we got this target from a friendly unit see if can pursue it
 					(state != DSS_HALT_HOLD)))									//make sure it's guard or pursue
@@ -711,8 +711,8 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 					if ( validTarget(psObj, psCStruct->psTarget[0], 0) &&
 						aiStructHasRange((STRUCTURE *)psObj, psCStruct->psTarget[0], weapon_slot))
 					{
-					    xdiff = (SDWORD)psCStruct->psTarget[0]->x - (SDWORD)psObj->x;
-					    ydiff = (SDWORD)psCStruct->psTarget[0]->y - (SDWORD)psObj->y;
+					    xdiff = (SDWORD)psCStruct->psTarget[0]->pos.x - (SDWORD)psObj->pos.x;
+					    ydiff = (SDWORD)psCStruct->psTarget[0]->pos.y - (SDWORD)psObj->pos.y;
 					    distSq = xdiff*xdiff + ydiff*ydiff;
 					    if ((distSq < tarDist) &&
 						    (distSq > minDist))
@@ -730,8 +730,8 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 					if ( validTarget(psObj, psCStruct->psTarget[0], 0) &&
 						aiStructHasRange((STRUCTURE *)psObj, psCStruct->psTarget[0], weapon_slot))
 					{
-						xdiff = (SDWORD)psCStruct->psTarget[0]->x - (SDWORD)psObj->x;
-						ydiff = (SDWORD)psCStruct->psTarget[0]->y - (SDWORD)psObj->y;
+						xdiff = (SDWORD)psCStruct->psTarget[0]->pos.x - (SDWORD)psObj->pos.x;
+						ydiff = (SDWORD)psCStruct->psTarget[0]->pos.y - (SDWORD)psObj->pos.y;
 						distSq = xdiff*xdiff + ydiff*ydiff;
 					    if ((!bCBTower || (distSq < tarDist)) &&
 						    (distSq > minDist))
@@ -750,7 +750,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 		{
 			BASE_OBJECT *psCurr;
 
-			gridStartIterate((SDWORD)psObj->x, (SDWORD)psObj->y);
+			gridStartIterate((SDWORD)psObj->pos.x, (SDWORD)psObj->pos.y);
 			psCurr = gridIterate();
 			while (psCurr != NULL)
 			{
@@ -766,8 +766,8 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 							!aiObjIsWall(psCurr))
 						{
 						    // See if in sensor range and visible
-						    xdiff = psCurr->x - psObj->x;
-						    ydiff = psCurr->y - psObj->y;
+						    xdiff = psCurr->pos.x - psObj->pos.x;
+						    ydiff = psCurr->pos.y - psObj->pos.y;
 						    distSq = xdiff*xdiff + ydiff*ydiff;
 						    if (distSq < (SDWORD)radSquared &&
 							    psCurr->visible[psObj->player] &&
@@ -837,8 +837,8 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 		if (aiBestNearestTarget((DROID *)psObj, &psTarget, 0) >= 0)
 		{
 			/* See if in sensor range */
-			xdiff = psTarget->x - psObj->x;
-			ydiff = psTarget->y - psObj->y;
+			xdiff = psTarget->pos.x - psObj->pos.x;
+			ydiff = psTarget->pos.y - psObj->pos.y;
 			if (xdiff*xdiff + ydiff*ydiff < (SDWORD)radSquared)
 			{
 				*ppsTarget = psTarget;
@@ -849,7 +849,7 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 	else
 	{
 		tarDist = SDWORD_MAX;
-		gridStartIterate((SDWORD)psObj->x, (SDWORD)psObj->y);
+		gridStartIterate((SDWORD)psObj->pos.x, (SDWORD)psObj->pos.y);
 		psCurr = gridIterate();
 		while (psCurr != NULL)
 		{
@@ -861,8 +861,8 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 					    !aiObjIsWall(psCurr))
 				    {
 					    // See if in sensor range and visible
-					    xdiff = psCurr->x - psObj->x;
-					    ydiff = psCurr->y - psObj->y;
+					    xdiff = psCurr->pos.x - psObj->pos.x;
+					    ydiff = psCurr->pos.y - psObj->pos.y;
 					    distSq = xdiff*xdiff + ydiff*ydiff;
 					    if (distSq < (SDWORD)radSquared &&
 						    psCurr->visible[psObj->player] &&

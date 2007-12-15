@@ -69,7 +69,7 @@ static inline BOOL visObjInRange(BASE_OBJECT *psObj1, BASE_OBJECT *psObj2, SDWOR
 {
 	SDWORD	xdiff,ydiff, distSq, rangeSq;
 
-	xdiff = (SDWORD)psObj1->x - (SDWORD)psObj2->x;
+	xdiff = (SDWORD)psObj1->pos.x - (SDWORD)psObj2->pos.x;
 	if (xdiff < 0)
 	{
 		xdiff = -xdiff;
@@ -80,7 +80,7 @@ static inline BOOL visObjInRange(BASE_OBJECT *psObj1, BASE_OBJECT *psObj2, SDWOR
 		return FALSE;
 	}
 
-	ydiff = (SDWORD)psObj1->y - (SDWORD)psObj2->y;
+	ydiff = (SDWORD)psObj1->pos.y - (SDWORD)psObj2->pos.y;
 	if (ydiff < 0)
 	{
 		ydiff = -ydiff;

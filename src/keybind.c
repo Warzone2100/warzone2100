@@ -1261,12 +1261,12 @@ SDWORD	xJump,yJump;
 	psStruct = getRExtractor(psOldRE);
 	if(psStruct)
 	{
-		xJump = (psStruct->x - ((visibleTiles.x/2)*TILE_UNITS));
-		yJump = (psStruct->y - ((visibleTiles.y/2)*TILE_UNITS));
+		xJump = (psStruct->pos.x - ((visibleTiles.x/2)*TILE_UNITS));
+		yJump = (psStruct->pos.y - ((visibleTiles.y/2)*TILE_UNITS));
 		player.p.x = xJump;
 		player.p.z = yJump;
 		player.r.y = 0; // face north
-		setViewPos(map_coord(psStruct->x), map_coord(psStruct->y), TRUE);
+		setViewPos(map_coord(psStruct->pos.x), map_coord(psStruct->pos.y), TRUE);
 		psOldRE = psStruct;
 	}
 	else
@@ -2112,7 +2112,7 @@ DROID	*psOther;
 	if(found)
 	{
 //		 getBlockHeightDirToEdgeOfGrid(UDWORD x, UDWORD y, UBYTE direction, UDWORD *height, UDWORD *dist)
-   //		getBlockHeightDirToEdgeOfGrid(psOther->x,psOther->y,psOther->direction,&height,&dist);
+   //		getBlockHeightDirToEdgeOfGrid(psOther->pos.x,psOther->pos.y,psOther->direction,&height,&dist);
 //		getBlockHeightDirToEdgeOfGrid(mouseTileX*TILE_UNITS,mouseTileY*TILE_UNITS,getTestAngle(),&height,&dist);
 	}
 }
@@ -2138,8 +2138,8 @@ UDWORD		xJump = 0, yJump = 0;
 		if(psStruct->pStructureType->type == REF_HQ)
 		{
 			bGotHQ = TRUE;
-			xJump = (psStruct->x - ((visibleTiles.x/2)*TILE_UNITS));
-			yJump = (psStruct->y - ((visibleTiles.y/2)*TILE_UNITS));
+			xJump = (psStruct->pos.x - ((visibleTiles.x/2)*TILE_UNITS));
+			yJump = (psStruct->pos.y - ((visibleTiles.y/2)*TILE_UNITS));
 		}
 	}
 

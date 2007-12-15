@@ -76,7 +76,7 @@ BOOL sendBuildStarted(STRUCTURE *psStruct,DROID *psDroid)
 		NetAdd(msg,20,zero);
 	}
 
-	NetAdd(msg,24,psStruct->z);
+	NetAdd(msg,24,psStruct->pos.z);
 
 	msg.size =28;
 	msg.type = NET_BUILD;
@@ -160,9 +160,9 @@ BOOL SendBuildFinished(STRUCTURE *psStruct)
 	NetAdd(m,0,psStruct->id);							//id of finished struct
 	// also enough info to build it if we don't already know about it.
 	NetAdd(m,4,psStruct->pStructureType->ref);			// kind of building.
-	NetAdd(m,8,psStruct->x);							// x pos
-	NetAdd(m,10,psStruct->y);							// y pos
-	NetAdd(m,12,psStruct->z);							// y pos
+	NetAdd(m,8,psStruct->pos.x);							// x pos
+	NetAdd(m,10,psStruct->pos.y);							// y pos
+	NetAdd(m,12,psStruct->pos.z);							// y pos
 	m.body[14] =(char) psStruct->player;				// player
 
 	m.size =15;
@@ -361,11 +361,11 @@ BOOL recvLasSat(NETMSG *pMsg)
 
 	if(psStruct && psObj)
 	{
-		proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, psObj->x,
-            psObj->y, psObj->z, psObj, TRUE, FALSE, 0);
+		proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, psObj->pos.x,
+            psObj->pos.y, psObj->pos.z, psObj, TRUE, FALSE, 0);
         //play 5 second countdown message
-		audio_QueueTrackPos( ID_SOUND_LAS_SAT_COUNTDOWN, psObj->x, psObj->y,
-            psObj->z );
+		audio_QueueTrackPos( ID_SOUND_LAS_SAT_COUNTDOWN, psObj->pos.x, psObj->pos.y,
+            psObj->pos.z );
 	}
 
 	return TRUE;

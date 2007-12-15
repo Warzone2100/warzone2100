@@ -334,10 +334,10 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
    				iV_TRANSLATE(px,0,-pz);
 
 				psSimpObj = (SIMPLE_OBJECT*) pObject;
-   				position.x = (psSimpObj->x - player.p.x) - terrainMidX*TILE_UNITS;
-   				position.z = terrainMidY*TILE_UNITS - (psSimpObj->y - player.p.z);
+   				position.x = (psSimpObj->pos.x - player.p.x) - terrainMidX*TILE_UNITS;
+   				position.z = terrainMidY*TILE_UNITS - (psSimpObj->pos.y - player.p.z);
 
-				position.y = psSimpObj->z;
+				position.y = psSimpObj->pos.z;
 
 				z = pie_RotateProject(&position,&pixel);
 
@@ -363,8 +363,8 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
    			iV_TRANSLATE(px,0,-pz);
 
 			psSimpObj = (SIMPLE_OBJECT*) pObject;
-   			position.x = (psSimpObj->x - player.p.x) - terrainMidX*TILE_UNITS;
-   			position.z = terrainMidY*TILE_UNITS - (psSimpObj->y - player.p.z);
+   			position.x = (psSimpObj->pos.x - player.p.x) - terrainMidX*TILE_UNITS;
+   			position.z = terrainMidY*TILE_UNITS - (psSimpObj->pos.y - player.p.z);
 
 			//if((objectType == RENDER_STRUCTURE) && (((STRUCTURE*)pObject)->
 			//	pStructureType->type >= REF_DEFENSE) &&
@@ -374,12 +374,12 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 				 (((STRUCTURE*)pObject)->pStructureType->type == REF_WALL) ||
 				 (((STRUCTURE*)pObject)->pStructureType->type == REF_WALLCORNER)))
 			{
-				position.y = psSimpObj->z + 64;
+				position.y = psSimpObj->pos.z + 64;
 				radius = ((STRUCTURE*)pObject)->sDisplay.imd->radius;//walls guntowers and tank traps clip tightly
 			}
 			else
 			{
-				position.y = psSimpObj->z;
+				position.y = psSimpObj->pos.z;
 				radius = (((STRUCTURE*)pObject)->sDisplay.imd->radius);
 			}
 
@@ -405,10 +405,10 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
    			iV_TRANSLATE(px,0,-pz);
 
 			psSimpObj = (SIMPLE_OBJECT*) pObject;
-   			position.x = (psSimpObj->x - player.p.x) - terrainMidX*TILE_UNITS;
-   			position.z = terrainMidY*TILE_UNITS - (psSimpObj->y - player.p.z);
+   			position.x = (psSimpObj->pos.x - player.p.x) - terrainMidX*TILE_UNITS;
+   			position.z = terrainMidY*TILE_UNITS - (psSimpObj->pos.y - player.p.z);
 
-			position.y = psSimpObj->z+2;
+			position.y = psSimpObj->pos.z+2;
 
 			z = pie_RotateProject(&position,&pixel);
 
@@ -434,9 +434,9 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 
 			psCompObj = (COMPONENT_OBJECT *) pObject;
 			psSimpObj = (SIMPLE_OBJECT *) psCompObj->psParent;
-			position.x = (psSimpObj->x - player.p.x) - terrainMidX*TILE_UNITS;
-			position.z = terrainMidY*TILE_UNITS - (psSimpObj->y - player.p.z);
-			position.y = psSimpObj->z;
+			position.x = (psSimpObj->pos.x - player.p.x) - terrainMidX*TILE_UNITS;
+			position.z = terrainMidY*TILE_UNITS - (psSimpObj->pos.y - player.p.z);
+			position.y = psSimpObj->pos.z;
 
 			/* object offset translation */
 			position.x += psCompObj->psShape->ocen.x;
@@ -465,9 +465,9 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
    			iV_TRANSLATE(px,0,-pz);
 
 			psSimpObj = (SIMPLE_OBJECT*) pObject;
-   			position.x = (psSimpObj->x - player.p.x) - terrainMidX*TILE_UNITS;
-   			position.z = terrainMidY*TILE_UNITS - (psSimpObj->y - player.p.z);
- 			position.y = psSimpObj->z;
+   			position.x = (psSimpObj->pos.x - player.p.x) - terrainMidX*TILE_UNITS;
+   			position.z = terrainMidY*TILE_UNITS - (psSimpObj->pos.y - player.p.z);
+ 			position.y = psSimpObj->pos.z;
 			if(objectType == RENDER_SHADOW)
 			{
 				position.y+=4;
@@ -510,13 +510,13 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			else if (((PROXIMITY_DISPLAY *)pObject)->type == POS_PROXOBJ)
 			{
 				position.x = (((BASE_OBJECT *)((PROXIMITY_DISPLAY *)pObject)->
-					psMessage->pViewData)->x - player.p.x) - terrainMidX *
+					psMessage->pViewData)->pos.x - player.p.x) - terrainMidX *
 					TILE_UNITS;
    				position.z = terrainMidY * TILE_UNITS - (((BASE_OBJECT *)((
-					PROXIMITY_DISPLAY *)pObject)->psMessage->pViewData)->y -
+					PROXIMITY_DISPLAY *)pObject)->psMessage->pViewData)->pos.y -
 					player.p.z);
  				position.y = ((BASE_OBJECT *)((PROXIMITY_DISPLAY *)pObject)->
-					psMessage->pViewData)->z;
+					psMessage->pViewData)->pos.z;
 			}
 			z = pie_RotateProject(&position,&pixel);
 

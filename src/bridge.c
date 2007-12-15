@@ -126,9 +126,9 @@ BOOL	renderBridgeSection(STRUCTURE *psStructure)
 			}
 
 			/* Get it's x and y coordinates so we don't have to deref. struct later */
-			structX = psStructure->x;
-			structY = psStructure->y;
-			structZ = psStructure->z;
+			structX = psStructure->pos.x;
+			structY = psStructure->pos.y;
+			structZ = psStructure->pos.z;
 
 			/* Establish where it is in the world */
 			dv.x = (structX - player.p.x) - terrainMidX*TILE_UNITS;

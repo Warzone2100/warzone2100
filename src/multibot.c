@@ -242,8 +242,8 @@ BOOL sendDroidDisEmbark(DROID *psDroid)
 	NETMSG	m;
 
 	NetAdd(m,0,psDroid->id);
-	NetAdd(m,4,psDroid->x);
-	NetAdd(m,6,psDroid->y);
+	NetAdd(m,4,psDroid->pos.x);
+	NetAdd(m,6,psDroid->pos.y);
 	m.body[8] = (char) psDroid->player;
 
 	m.size = 9;
@@ -272,8 +272,8 @@ BOOL recvDroidDisEmbark(NETMSG *pMsg)
 	if(psDroid)
 	{
 		// Add it back into the world at the x/y
-		psDroid->x = x;
-		psDroid->y = y;
+		psDroid->pos.x = x;
+		psDroid->pos.y = y;
 
 		if (!worldOnMap(x, y))
 		{
@@ -758,8 +758,8 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, uint32_t x, uin
 	if (destid == 0 && desttype == 0)
 	{
 		// Don't bother if it is close
-		if (abs(psDroid->x - x) < (TILE_UNITS/2)
-		 && abs(psDroid->y - y) < (TILE_UNITS/2))
+		if (abs(psDroid->pos.x - x) < (TILE_UNITS/2)
+		 && abs(psDroid->pos.y - y) < (TILE_UNITS/2))
 		{
 			return;
 		}
@@ -895,9 +895,9 @@ BOOL sendWholeDroid(DROID *pD, UDWORD dest)
 	NetAdd(m,sizecount,pD->numWeaps);				sizecount+=sizeof(pD->numWeaps);
 	NetAdd(m,sizecount,pD->asWeaps);				sizecount+=sizeof(pD->asWeaps);			// to build a template.
 
-	NetAdd(m,sizecount,pD->x);						sizecount+=sizeof(pD->x);
-	NetAdd(m,sizecount,pD->y);						sizecount+=sizeof(pD->y);
-	NetAdd(m,sizecount,pD->z);						sizecount+=sizeof(pD->z);
+	NetAdd(m,sizecount,pD->pos.x);						sizecount+=sizeof(pD->pos.x);
+	NetAdd(m,sizecount,pD->pos.y);						sizecount+=sizeof(pD->pos.y);
+	NetAdd(m,sizecount,pD->pos.z);						sizecount+=sizeof(pD->pos.z);
 	NetAdd(m,sizecount,pD->player);					sizecount+=sizeof(pD->player);
 
 	NetAddSt(m,sizecount,pD->aName);				sizecount+=strlen(pD->aName)+1;
@@ -1005,9 +1005,9 @@ BOOL receiveWholeDroid(NETMSG *m)
 
 	// now the instance specific stuff.
 	pD->id = id;
-	pD->x = x;									//correct builddroid to use exact pos, not tile center
-	pD->y = y;
-	pD->z = z;
+	pD->pos.x = x;									//correct builddroid to use exact pos, not tile center
+	pD->pos.y = y;
+	pD->pos.z = z;
 
 	NetGet(m,sizecount,pD->NameVersion);		sizecount+=sizeof(pD->NameVersion);
 	NetGet(m,sizecount,pD->droidType);			sizecount+=sizeof(pD->droidType);

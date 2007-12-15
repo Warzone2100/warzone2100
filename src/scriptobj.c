@@ -83,15 +83,15 @@ BOOL scrBaseObjGet(UDWORD index)
 	{
 	case OBJID_POSX:
 		type = VAL_INT;
-		scrFunctionResult.v.ival = (SDWORD)psObj->x;
+		scrFunctionResult.v.ival = (SDWORD)psObj->pos.x;
 		break;
 	case OBJID_POSY:
 		type = VAL_INT;
-		scrFunctionResult.v.ival = (SDWORD)psObj->y;
+		scrFunctionResult.v.ival = (SDWORD)psObj->pos.y;
 		break;
 	case OBJID_POSZ:
 		type = VAL_INT;
-		scrFunctionResult.v.ival = (SDWORD)psObj->z;
+		scrFunctionResult.v.ival = (SDWORD)psObj->pos.z;
 		break;
 	case OBJID_ID:
 		type = VAL_INT;
@@ -438,8 +438,8 @@ BOOL scrGroupObjGet(UDWORD index)
 		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
 			lgMembers += 1;
-			lgX += (SDWORD)psCurr->x;
-			lgY += (SDWORD)psCurr->y;
+			lgX += (SDWORD)psCurr->pos.x;
+			lgY += (SDWORD)psCurr->pos.y;
 			lgHealth += (SDWORD)((100 * psCurr->body)/psCurr->originalBody);
 		}
 		if (lgMembers > 0)
@@ -458,7 +458,7 @@ BOOL scrGroupObjGet(UDWORD index)
 		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
 			lgMembers += 1;
-			lgX += (SDWORD)psCurr->x;
+			lgX += (SDWORD)psCurr->pos.x;
 		}
 
 		if (lgMembers > 0)
@@ -474,7 +474,7 @@ BOOL scrGroupObjGet(UDWORD index)
 		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
 			lgMembers += 1;
-			lgY += (SDWORD)psCurr->y;
+			lgY += (SDWORD)psCurr->pos.y;
 		}
 
 		if (lgMembers > 0)

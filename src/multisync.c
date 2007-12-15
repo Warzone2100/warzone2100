@@ -274,8 +274,8 @@ static void packageCheck(UDWORD i, NETMSG *pMsg, DROID *pD)
 	}
 	else
 	{
-		NetAdd2(pMsg,	i+16,		pD->x);					//non fractional move pos
-		NetAdd2(pMsg,	i+20,		pD->y);
+		NetAdd2(pMsg,	i+16,		pD->pos.x);					//non fractional move pos
+		NetAdd2(pMsg,	i+20,		pD->pos.y);
 	}
 
 	if (pD->order == DORDER_ATTACK)
@@ -404,8 +404,8 @@ BOOL recvDroidCheck(NETMSG *m)
 
 		//////////////////////////////////////
 		// now make note of how accurate the world model is for this droid.	// if droid is close then remember.
-		if(    abs(x-pD->x)<(TILE_UNITS*2)
-			|| abs(y- pD->y)<(TILE_UNITS*2))
+		if(    abs(x-pD->pos.x)<(TILE_UNITS*2)
+			|| abs(y- pD->pos.y)<(TILE_UNITS*2))
 		{
 			pD->lastSync	= gameTime;								// note we did a reasonable job.
 		}
@@ -455,8 +455,8 @@ static void highLevelDroidUpdate(DROID *psDroid,UDWORD x, UDWORD y,
 	// offscreen updates will make this ok each time.
 	if(psDroid->order == DORDER_NONE && order == DORDER_NONE)
 	{
-		if(  (abs(x- psDroid->x)>(TILE_UNITS*2))		// if more than 2 tiles wrong.
-		   ||(abs(y- psDroid->y)>(TILE_UNITS*2)) )
+		if(  (abs(x- psDroid->pos.x)>(TILE_UNITS*2))		// if more than 2 tiles wrong.
+		   ||(abs(y- psDroid->pos.y)>(TILE_UNITS*2)) )
 		{
 			turnOffMultiMsg(TRUE);
 			orderDroidLoc(psDroid, DORDER_MOVE,x,y);
@@ -526,8 +526,8 @@ static void offscreenUpdate(DROID *psDroid,
 	{
 
 		// calculate difference between remote and local
-		xdiff = psDroid->x - (UWORD)fx;
-	    ydiff = psDroid->y - (UWORD)fy;
+		xdiff = psDroid->pos.x - (UWORD)fx;
+	    ydiff = psDroid->pos.y - (UWORD)fy;
 	    distSq = (xdiff*xdiff) + (ydiff*ydiff);
 
 		// if more than  2 squares, jump it.
@@ -535,14 +535,14 @@ static void offscreenUpdate(DROID *psDroid,
 		{
 			if( ((UDWORD)fx != 0) && ((UDWORD)fy != 0) )
 			{
-				oldx = psDroid->x;
-				oldy = psDroid->y;
+				oldx = psDroid->pos.x;
+				oldy = psDroid->pos.y;
 
 				psDroid->sMove.fx = fx;							//update x
 				psDroid->sMove.fy = fy;							//update y
 
-				psDroid->x		 = (UWORD) fx;					//update move progress
-				psDroid->y		 = (UWORD) fy;
+				psDroid->pos.x		 = (UWORD) fx;					//update move progress
+				psDroid->pos.y		 = (UWORD) fy;
 				gridMoveObject((BASE_OBJECT *)psDroid, (SDWORD)oldx,(SDWORD)oldy);
 
 				psDroid->direction = dir % 360;		// update rotation
@@ -557,10 +557,10 @@ static void offscreenUpdate(DROID *psDroid,
 	}
 	else
 	{
-		oldx = psDroid->x;
-		oldy = psDroid->y;
-		psDroid->x		 = (UWORD)x;						//update x
-		psDroid->y		 = (UWORD)y;						//update y
+		oldx = psDroid->pos.x;
+		oldy = psDroid->pos.y;
+		psDroid->pos.x		 = (UWORD)x;						//update x
+		psDroid->pos.y		 = (UWORD)y;						//update y
 		gridMoveObject((BASE_OBJECT *)psDroid, (SDWORD)oldx,(SDWORD)oldy);
 		psDroid->direction = dir % 360;				// update rotation
 	}
@@ -583,7 +583,7 @@ static void offscreenUpdate(DROID *psDroid,
 	ASSERT( psPropStats != NULL, "offscreenUpdate: invalid propulsion stats pointer" );
 	if(	psPropStats->propulsionType != LIFT )		// if not airborne.
 	{
-		psDroid->z = map_Height(psDroid->x, psDroid->y);
+		psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
 	}
 	return;
 }
@@ -679,9 +679,9 @@ static BOOL sendStructureCheck(void)
 
 		NetAdd(m,5,pS->body);					// damage
 		NetAdd(m,7,pS->pStructureType->ref);	// building type.
-		NetAdd(m,11,pS->x);						//position
-		NetAdd(m,13,pS->y);
-		NetAdd(m,15,pS->z);
+		NetAdd(m,11,pS->pos.x);						//position
+		NetAdd(m,13,pS->pos.y);
+		NetAdd(m,15,pS->pos.z);
 		NetAdd(m, 17, direction);
 
 	    m.type = NET_CHECK_STRUCT;
@@ -880,7 +880,7 @@ BOOL recvStructureCheck( NETMSG *m)
 				i = (UBYTE)(i - cap);
 				while(i>0)
 				{
-					buildStructure(&asStructureStats[j],pS->x,pS->y,pS->player,FALSE);
+					buildStructure(&asStructureStats[j],pS->pos.x,pS->pos.y,pS->player,FALSE);
 					if(pS && pS->status != SS_BUILT)					// check its finished again.
 					{
 						pS->id = ref;

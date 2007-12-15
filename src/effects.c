@@ -366,7 +366,7 @@ void	addEffect(Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type,BOOL specifie
 	}
 
 	/* Quick optimsation to reject every second non-essential effect if it's off grid */
-//	if(clipXY((UDWORD)MAKEINT(pos->x),(UDWORD)MAKEINT(pos->z)) == FALSE)
+//	if(clipXY((UDWORD)MAKEINT(pos->pos.x),(UDWORD)MAKEINT(pos->pos.z)) == FALSE)
 	if(clipXY((UDWORD)pos->x,(UDWORD)pos->z) == FALSE)
 	{
 		/* 	If effect is essentail - then let it through */
@@ -2480,8 +2480,8 @@ static void effectDroidUpdates(void)
 				   		/* Present direction is important */
 						xBehind = ( ( 50 * iV_SIN( DEG( (int)psDroid->direction) ) ) >> FP12_SHIFT );
 						yBehind = ( ( 50 * iV_COS( DEG( (int)psDroid->direction) ) ) >> FP12_SHIFT );
-						pos.x = psDroid->x - xBehind;
-						pos.z = psDroid->y - yBehind;
+						pos.x = psDroid->pos.x - xBehind;
+						pos.z = psDroid->pos.y - yBehind;
 						pos.y = map_Height(pos.x, pos.z);
 //						addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,FALSE,NULL);
 					}
@@ -2536,9 +2536,9 @@ static void effectStructureUpdates(void)
 						{
 							if (psStructure->sDisplay.imd->nconnectors == 1)
 							{
-								eventPos.x = psStructure->x+psStructure->sDisplay.imd->connectors->x;
-								eventPos.z = psStructure->y-psStructure->sDisplay.imd->connectors->y;
-								eventPos.y = psStructure->z+psStructure->sDisplay.imd->connectors->z;
+								eventPos.x = psStructure->pos.x+psStructure->sDisplay.imd->connectors->x;
+								eventPos.z = psStructure->pos.y-psStructure->sDisplay.imd->connectors->y;
+								eventPos.y = psStructure->pos.z+psStructure->sDisplay.imd->connectors->z;
 								addEffect(&eventPos,EFFECT_SMOKE,SMOKE_TYPE_STEAM,FALSE,NULL,0);
 
 
@@ -2552,20 +2552,20 @@ static void effectStructureUpdates(void)
 						else if(psStructure->pStructureType->type == REF_POWER_GEN)
 						{
 							psPowerGen = &psStructure->pFunctionality->powerGenerator;
-							eventPos.x = psStructure->x;
-							eventPos.z = psStructure->y;
+							eventPos.x = psStructure->pos.x;
+							eventPos.z = psStructure->pos.y;
 							if (psStructure->sDisplay.imd->nconnectors > 0)
 							{
-								eventPos.y = psStructure->z+psStructure->sDisplay.imd->connectors->z;
+								eventPos.y = psStructure->pos.z+psStructure->sDisplay.imd->connectors->z;
 							}
 							else
 							{
-								eventPos.y = psStructure->z;
+								eventPos.y = psStructure->pos.z;
 							}
 							capacity = psPowerGen->capacity;
 							/*if(capacity)
 							{
-								eventPos.y = psStructure->z + 48;
+								eventPos.y = psStructure->pos.z + 48;
 							}*/
 							/* Add an effect over the central spire - if
 							connected to Res Extractor and it is active*/
@@ -2588,7 +2588,7 @@ static void effectStructureUpdates(void)
 							*/
 							//if (active)
 							{
-								eventPos.y = psStructure->z + 48;
+								eventPos.y = psStructure->pos.z + 48;
 								addEffect(&eventPos,EFFECT_EXPLOSION,
 										EXPLOSION_TYPE_TESLA,FALSE,NULL,0);
 

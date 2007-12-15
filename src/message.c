@@ -1085,14 +1085,14 @@ void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp)
 		if (psFeature->psStats->subType == FEAT_OIL_RESOURCE)
 		{
 			//play default audio message for oil resource
-			audio_QueueTrackPos( ID_SOUND_RESOURCE_HERE, psFeature->x,
-								 psFeature->y, psFeature->z );
+			audio_QueueTrackPos( ID_SOUND_RESOURCE_HERE, psFeature->pos.x,
+								 psFeature->pos.y, psFeature->pos.z );
 		}
 		else if (psFeature->psStats->subType == FEAT_GEN_ARTE)
 		{
 			//play default audio message for artefact
-			audio_QueueTrackPos( ID_SOUND_ARTIFACT, psFeature->x,
-								 psFeature->y, psFeature->z );
+			audio_QueueTrackPos( ID_SOUND_ARTIFACT, psFeature->pos.x,
+								 psFeature->pos.y, psFeature->pos.z );
 		}
 	}
 
@@ -1173,8 +1173,8 @@ void addOilResourceProximities(void)
             if (psFeat->visible[selectedPlayer])
             {
                 //if there isn't an oil derrick built on it
-				if (!TILE_HAS_STRUCTURE(mapTile(map_coord(psFeat->x),
-					map_coord(psFeat->y))))
+				if (!TILE_HAS_STRUCTURE(mapTile(map_coord(psFeat->pos.x),
+					map_coord(psFeat->pos.y))))
 				{
                     //add a proximity message
 					psMessage = addMessage(MSG_PROXIMITY, TRUE, selectedPlayer);

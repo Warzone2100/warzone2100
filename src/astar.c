@@ -564,17 +564,17 @@ static 	FP_NODE		*psNearest, *psRoute;
 //			"fpathAStarRoute: Invalid open tree" );
 
 		// add the current point to the closed nodes
-//		fpathHashRemove(apsOpen, psCurr->x, psCurr->y);
+//		fpathHashRemove(apsOpen, psCurr->pos.x, psCurr->pos.y);
 //		fpathHashAdd(apsClosed, psCurr);
 		psCurr->type = NT_CLOSED;
-// 		debug( LOG_NEVER, "HashAdd - closed : %3d,%3d (%d,%d) = %d\n", psCurr->x, psCurr->y, psCurr->dist, psCurr->est, psCurr->dist+psCurr->est );
+// 		debug( LOG_NEVER, "HashAdd - closed : %3d,%3d (%d,%d) = %d\n", psCurr->pos.x, psCurr->pos.y, psCurr->dist, psCurr->est, psCurr->dist+psCurr->est );
 	}
 
 	retval = ASR_OK;
 
 	// return the nearest route if no actual route was found
 	if (!psRoute && psNearest)
-//		!((psNearest->x == tileSX) && (psNearest->y == tileSY)))
+//		!((psNearest->pos.x == tileSX) && (psNearest->pos.y == tileSY)))
 	{
 		psRoute = psNearest;
 		fx = world_coord(psNearest->x) + TILE_UNITS / 2;

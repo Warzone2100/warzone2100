@@ -679,7 +679,7 @@ void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, Vector3i *Rotati
 	droidSetBits(psTemplate,&Droid);
 	Droid.player = (UBYTE)selectedPlayer;
 
-	Droid.x = Droid.y = Droid.z = 0;
+	Droid.pos.x = Droid.pos.y = Droid.pos.z = 0;
 
 	//draw multi component object as a button object
 	displayCompObj((BASE_OBJECT*)&Droid, TRUE);
@@ -758,9 +758,9 @@ void displayComponentObject(BASE_OBJECT *psObj)
 	pie_TRANSLATE(xShift,0,-zShift);
 
 	/* Get the real position */
-	position.x = (psDroid->x - player.p.x) - terrainMidX*TILE_UNITS;
-	position.z = terrainMidY*TILE_UNITS - (psDroid->y - player.p.z);
-	position.y = psDroid->z;
+	position.x = (psDroid->pos.x - player.p.x) - terrainMidX*TILE_UNITS;
+	position.z = terrainMidY*TILE_UNITS - (psDroid->pos.y - player.p.z);
+	position.y = psDroid->pos.z;
 
 	if(psDroid->droidType == DROID_TRANSPORTER)
 	{
@@ -791,9 +791,9 @@ void displayComponentObject(BASE_OBJECT *psObj)
 		Vector3i position;
 
 		//add an effect on the droid
-		position.x = psDroid->x + DROID_EMP_SPREAD;
-		position.y = psDroid->z + rand()%8;;
-		position.z = psDroid->y + DROID_EMP_SPREAD;
+		position.x = psDroid->pos.x + DROID_EMP_SPREAD;
+		position.y = psDroid->pos.z + rand()%8;;
+		position.z = psDroid->pos.y + DROID_EMP_SPREAD;
 		effectGiveAuxVar(90+rand()%20);
 		addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_PLASMA,FALSE,NULL,0);
 	}
@@ -808,8 +808,8 @@ void displayComponentObject(BASE_OBJECT *psObj)
 	{
 
 		// make sure it's not over water.
-		tileX = psDroid->x/TILE_UNITS;
-		tileY = psDroid->y/TILE_UNITS;
+		tileX = psDroid->pos.x/TILE_UNITS;
+		tileY = psDroid->pos.y/TILE_UNITS;
 		// double check it's on map
 		if ( tileX < mapWidth && tileY < mapHeight )
 		{
@@ -1390,9 +1390,9 @@ void destroyFXDroid(DROID	*psDroid)
 	heightScatter = TILE_UNITS/5;
 	for(i=0; i<5; i++)
 	{
-		pos.x = psDroid->x + widthScatter - rand()%(2*widthScatter);
-		pos.z = psDroid->y + breadthScatter - rand()%(2*breadthScatter);
-		pos.y = psDroid->z + 16 +heightScatter;
+		pos.x = psDroid->pos.x + widthScatter - rand()%(2*widthScatter);
+		pos.z = psDroid->pos.y + breadthScatter - rand()%(2*breadthScatter);
+		pos.y = psDroid->pos.z + 16 +heightScatter;
 		switch(i)
 		{
 		case 0:
@@ -1493,10 +1493,10 @@ void	compPersonToBits(DROID *psDroid)
 	}
 
 	/* Get where he's at */
-	position.x = psDroid->x;
-	position.y = psDroid->z+1;
-	groundHeight = psDroid->z;
-	position.z = psDroid->y;
+	position.x = psDroid->pos.x;
+	position.y = psDroid->pos.z+1;
+	groundHeight = psDroid->pos.z;
+	position.z = psDroid->pos.y;
 
 
 	/* Tell about player colour */

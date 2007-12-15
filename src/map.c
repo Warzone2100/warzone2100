@@ -395,9 +395,9 @@ static void objectSaveTagged(BASE_OBJECT *psObj)
 	tagWriteEnter(0x01, 1);
 	tagWrite(0x01, psObj->type);
 	tagWrite(0x02, psObj->id);
-	v[0] = psObj->x;
-	v[1] = psObj->y;
-	v[2] = psObj->z;
+	v[0] = psObj->pos.x;
+	v[1] = psObj->pos.y;
+	v[2] = psObj->pos.z;
 	tagWrite16v(0x03, 3, v);
 	tagWritef(0x04, psObj->direction);
 	tagWrites(0x05, psObj->pitch);
@@ -1432,8 +1432,8 @@ extern BOOL mapObjIsAboveGround( BASE_OBJECT *psObj )
 {
 	// min is used to make sure we don't go over array bounds!
 	SDWORD	iZ,
-			tileX = map_coord(psObj->x),
-			tileY = map_coord(psObj->y),
+			tileX = map_coord(psObj->pos.x),
+			tileY = map_coord(psObj->pos.y),
 			tileYOffset1 = (tileY * mapWidth),
 			tileYOffset2 = ((tileY+1) * mapWidth),
 			h1 = psMapTiles[MIN(mapWidth * mapHeight, tileYOffset1 + tileX)    ].height,
@@ -1442,22 +1442,22 @@ extern BOOL mapObjIsAboveGround( BASE_OBJECT *psObj )
 			h4 = psMapTiles[MIN(mapWidth * mapHeight, tileYOffset2 + tileX + 1)].height;
 
 	/* trivial test above */
-	if ( (psObj->z > h1) && (psObj->z > h2) &&
-		 (psObj->z > h3) && (psObj->z > h4)    )
+	if ( (psObj->pos.z > h1) && (psObj->pos.z > h2) &&
+		 (psObj->pos.z > h3) && (psObj->pos.z > h4)    )
 	{
 		return TRUE;
 	}
 
 	/* trivial test below */
-	if ( (psObj->z <= h1) && (psObj->z <= h2) &&
-		 (psObj->z <= h3) && (psObj->z <= h4)    )
+	if ( (psObj->pos.z <= h1) && (psObj->pos.z <= h2) &&
+		 (psObj->pos.z <= h3) && (psObj->pos.z <= h4)    )
 	{
 		return FALSE;
 	}
 
 	/* exhaustive test */
-	iZ = map_Height( psObj->x, psObj->y );
-	if ( psObj->z > iZ )
+	iZ = map_Height( psObj->pos.x, psObj->pos.y );
+	if ( psObj->pos.z > iZ )
 	{
 		return TRUE;
 	}

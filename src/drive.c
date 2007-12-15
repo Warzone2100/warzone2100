@@ -439,8 +439,8 @@ static BOOL driveControl(DROID *psDroid)
 
 static BOOL driveInDriverRange(DROID *psDroid)
 {
-	if( (abs(psDroid->x-psDrivenDroid->x) < FOLLOW_STOP_RANGE) &&
-		(abs(psDroid->y-psDrivenDroid->y) < FOLLOW_STOP_RANGE) ) {
+	if( (abs(psDroid->pos.x-psDrivenDroid->pos.x) < FOLLOW_STOP_RANGE) &&
+		(abs(psDroid->pos.y-psDrivenDroid->pos.y) < FOLLOW_STOP_RANGE) ) {
 		return TRUE;
 	}
 
@@ -459,12 +459,12 @@ static void driveMoveFollower(DROID *psDroid)
 			// if the droid is currently guarding we need to change the order to a move
 			if (psDroid->order==DORDER_GUARD)
 			{
-				orderDroidLoc(psDroid,DORDER_MOVE, psDrivenDroid->x,psDrivenDroid->y);
+				orderDroidLoc(psDroid,DORDER_MOVE, psDrivenDroid->pos.x,psDrivenDroid->pos.y);
 			}
 			else
 			{
 				// otherwise we just adjust its move-to location
-				moveDroidTo(psDroid,psDrivenDroid->x,psDrivenDroid->y);
+				moveDroidTo(psDroid,psDrivenDroid->pos.x,psDrivenDroid->pos.y);
 			}
 
 		}
@@ -506,7 +506,7 @@ void driveUpdate(void)
 		if(psDrivenDroid != NULL) {
 			if(bMultiPlayer && (driveBumpTime < gameTime))	// send latest info about driven droid.
 			{
-				SendDroidInfo(psDrivenDroid,DORDER_MOVE,psDrivenDroid->x,psDrivenDroid->y, NULL);
+				SendDroidInfo(psDrivenDroid,DORDER_MOVE,psDrivenDroid->pos.x,psDrivenDroid->pos.y, NULL);
 			}
 
 	//TO BE DONE:

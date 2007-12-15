@@ -230,7 +230,7 @@ BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y)
 
 		/* approaching cliff face; block if below it */
 		iLiftHeight = (SDWORD) map_Height(world_coord(x), world_coord(y)) -
-					  (SDWORD) map_Height( g_psObjRoute->x, g_psObjRoute->y );
+					  (SDWORD) map_Height( g_psObjRoute->pos.x, g_psObjRoute->pos.y );
 		if ( iLiftHeight > iBlockingHeight )
 		{
 			return TRUE;
@@ -1026,8 +1026,8 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 	{
 		targetX = tX;
 		targetY = tY;
-		startX = (SDWORD)psObj->x;
-		startY = (SDWORD)psObj->y;
+		startX = (SDWORD)psObj->pos.x;
+		startY = (SDWORD)psObj->pos.y;
 	}
 	else if (psObj->type == OBJ_DROID &&
 			 ((DROID *)psObj)->sMove.Status == MOVEWAITROUTE &&
@@ -1037,8 +1037,8 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 		psPartialRouteObj = NULL;
 		targetX = tX;
 		targetY = tY;
-		startX = (SDWORD)psObj->x;
-		startY = (SDWORD)psObj->y;
+		startX = (SDWORD)psObj->pos.x;
+		startY = (SDWORD)psObj->pos.y;
 	}
 	else
 	{
@@ -1312,7 +1312,7 @@ static BOOL fpathFindRoute(DROID *psDroid, SDWORD sX,SDWORD sY, SDWORD tX,SDWORD
 			(psCurr->sMove.numPoints > 0))
 		{
 			// find the first route point
-			if (!fpathFindFirstRoutePoint(&psCurr->sMove, &index, sX,sY, (SDWORD)psCurr->x, (SDWORD)psCurr->y))
+			if (!fpathFindFirstRoutePoint(&psCurr->sMove, &index, sX,sY, (SDWORD)psCurr->pos.x, (SDWORD)psCurr->pos.y))
 			{
 				continue;
 			}

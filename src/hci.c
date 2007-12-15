@@ -2654,12 +2654,12 @@ static void intProcessObject(UDWORD id)
 								    getPlayerPos((SDWORD*)&asJumpPos[butIndex].x, (SDWORD*)&asJumpPos[butIndex].y);
 
 
-    								setPlayerPos(psObj->x, psObj->y);
+    								setPlayerPos(psObj->pos.x, psObj->pos.y);
 	    							if(getWarCamStatus())
 		    						{
 			    						camToggleStatus();
 				    				}
-	//							intSetMapPos(psObj->x, psObj->y);
+	//							intSetMapPos(psObj->pos.x, psObj->pos.y);
 
 			    				}
 				    			else
@@ -7265,7 +7265,7 @@ STRUCTURE* intGotoNextStructureType(UDWORD structType,BOOL JumpTo,BOOL CancelDri
 
 	// Center it on screen.
 	if((CurrentStruct) && (JumpTo)) {
-		intSetMapPos(CurrentStruct->x, CurrentStruct->y);
+		intSetMapPos(CurrentStruct->pos.x, CurrentStruct->pos.y);
 	}
 
 	return CurrentStruct;
@@ -7342,7 +7342,7 @@ DROID *intGotoNextDroidType(DROID *CurrDroid,UDWORD droidType,BOOL AllowGroup)
 
 		// Center it on screen.
 		if(CurrentDroid) {
-			intSetMapPos(CurrentDroid->x, CurrentDroid->y);
+			intSetMapPos(CurrentDroid->pos.x, CurrentDroid->pos.y);
 		}
 
 		return CurrentDroid;

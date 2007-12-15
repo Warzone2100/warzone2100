@@ -1488,16 +1488,16 @@ void transporterRemoveDroid(UDWORD id)
         pointers - can't be bothered so just do this...*/
         if (onMission)
         {
-            psDroid->x = INVALID_XY;
-            psDroid->y = INVALID_XY;
+            psDroid->pos.x = INVALID_XY;
+            psDroid->pos.y = INVALID_XY;
         }
         else
         {
             if (bMultiPlayer)
             {
                 //set the units next to the transporter's current location
-                droidX = map_coord(psCurrTransporter->x);
-                droidY = map_coord(psCurrTransporter->y);
+                droidX = map_coord(psCurrTransporter->pos.x);
+                droidY = map_coord(psCurrTransporter->pos.y);
             }
             else
             {
@@ -1509,9 +1509,9 @@ void transporterRemoveDroid(UDWORD id)
 	    	{
 		    	ASSERT( FALSE, "transporterRemoveUnit: Unable to find a valid location" );
     		}
-	    	psDroid->x = (UWORD)world_coord(droidX);
-		    psDroid->y = (UWORD)world_coord(droidY);
-    		psDroid->z = map_Height(psDroid->x, psDroid->y);
+	    	psDroid->pos.x = (UWORD)world_coord(droidX);
+		    psDroid->pos.y = (UWORD)world_coord(droidY);
+    		psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
 	    	updateDroidOrientation(psDroid);
 		    //initialise the movement data
     		initDroidMovement(psDroid);
@@ -1759,9 +1759,9 @@ BOOL launchTransporter(DROID *psTransporter)
 		//removeDroid(psTransporter, mission.apsDroidLists);
 		//addDroid(psTransporter, apsDroidLists);
 		//need to put the Transporter down at a specified location
-		//psTransporter->x = getLandingX(psTransporter->player);
-		//psTransporter->y = getLandingY(psTransporter->player);
-		//unloadTransporter(psTransporter, psTransporter->x, psTransporter->y, FALSE);
+		//psTransporter->pos.x = getLandingX(psTransporter->player);
+		//psTransporter->pos.y = getLandingY(psTransporter->player);
+		//unloadTransporter(psTransporter, psTransporter->pos.x, psTransporter->pos.y, FALSE);
 
 		orderDroid( psTransporter, DORDER_TRANSPORTIN );
 		/* set action transporter waits for timer */
@@ -1847,7 +1847,7 @@ BOOL updateTransporter(DROID *psTransporter)
 		{
             //play reinforcements have arrived message
 			audio_QueueTrackPos( ID_SOUND_TRANSPORT_LANDING,
-					psTransporter->x, psTransporter->y, psTransporter->z );
+					psTransporter->pos.x, psTransporter->pos.y, psTransporter->pos.z );
 			addConsoleMessage(_("Reinforcements landing"),LEFT_JUSTIFY);
 			//reset the data for the transporter timer
 			widgSetUserData(psWScreen, IDTRANTIMER_DISPLAY, (void*)NULL);

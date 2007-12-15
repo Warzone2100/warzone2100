@@ -235,7 +235,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	// if the turret doesn't turn, check if the attacker is in alignment with the target
 	if (psAttacker->type == OBJ_DROID && !psStats->rotate)
 	{
-		targetDir = calcDirection(psAttacker->x, psAttacker->y, psTarget->x, psTarget->y);
+		targetDir = calcDirection(psAttacker->pos.x, psAttacker->pos.y, psTarget->pos.x, psTarget->pos.y);
 		dirDiff = labs(targetDir - (SDWORD)psAttacker->direction);
 		if (dirDiff > FIXED_TURRET_DIR)
 		{
@@ -248,8 +248,8 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	baseHitChance = 0;
 
 	/* Now see if the target is in range  - also check not too near */
-	xDiff = abs(psAttacker->x - psTarget->x);
-	yDiff = abs(psAttacker->y - psTarget->y);
+	xDiff = abs(psAttacker->pos.x - psTarget->pos.x);
+	yDiff = abs(psAttacker->pos.y - psTarget->pos.y);
 	distSquared = xDiff*xDiff + yDiff*yDiff;
 	dist = sqrtf(distSquared);
 	longRange = proj_GetLongRange(psStats);
@@ -354,9 +354,9 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		if(psTarget->type == OBJ_DROID)
 		{
 			predictX = (SDWORD)(trigSin( ((DROID *)psTarget)->sMove.moveDir ) * ((DROID *)psTarget)->sMove.speed * dist / psStats->flightSpeed );
-			predictX += psTarget->x;
+			predictX += psTarget->pos.x;
 			predictY = (SDWORD)(trigCos( ((DROID *)psTarget)->sMove.moveDir ) * ((DROID *)psTarget)->sMove.speed * dist / psStats->flightSpeed );
-			predictY += psTarget->y;
+			predictY += psTarget->pos.y;
 
 			// Make sure we don't pass any negative or out of bounds numbers to proj_SendProjectile
 			predictX = MAX(predictX, 0);
@@ -366,12 +366,12 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		}
 		else
 		{
-			predictX = psTarget->x;
-			predictY = psTarget->y;
+			predictX = psTarget->pos.x;
+			predictY = psTarget->pos.y;
 		}
 		debug(LOG_SENSOR, "combFire: Accurate prediction range (%d)", dice);
 		if (!proj_SendProjectile(psWeap, psAttacker, psAttacker->player,
-							predictX, predictY, psTarget->z, psTarget, FALSE, FALSE, weapon_slot))
+							predictX, predictY, psTarget->pos.z, psTarget, FALSE, FALSE, weapon_slot))
 		{
 			/* Out of memory - we can safely ignore this */
 			debug(LOG_ERROR, "Out of memory");
@@ -393,14 +393,14 @@ missed:
 
 	missDist = 2 * (100 - resultHitChance);
 	missDir = rand() % BUL_MAXSCATTERDIR;
-	missX = aScatterDir[missDir].x * missDist + psTarget->x + minOffset;
-	missY = aScatterDir[missDir].y * missDist + psTarget->y + minOffset;
+	missX = aScatterDir[missDir].x * missDist + psTarget->pos.x + minOffset;
+	missY = aScatterDir[missDir].y * missDist + psTarget->pos.y + minOffset;
 
 	debug(LOG_NEVER, "combFire: Missed shot (%d) ended up at (%4d,%4d)", dice, missX, missY);
 
 	/* Fire off the bullet to the miss location. The miss is only visible if the player owns
 	 * the target. (Why? - Per) */
-	proj_SendProjectile(psWeap, psAttacker, psAttacker->player, missX,missY, psTarget->z, NULL,
+	proj_SendProjectile(psWeap, psAttacker, psAttacker->player, missX,missY, psTarget->pos.z, NULL,
 	                    psTarget->player == selectedPlayer, FALSE, weapon_slot);
 
 	return;
@@ -427,7 +427,7 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 
 	CHECK_OBJECT(psTarget);
 
-	gridStartIterate((SDWORD)psTarget->x, (SDWORD)psTarget->y);
+	gridStartIterate((SDWORD)psTarget->pos.x, (SDWORD)psTarget->pos.y);
 	for (psViewer = gridIterate(); psViewer != NULL; psViewer = gridIterate())
 	{
 		if (psViewer->player != psTarget->player)
@@ -461,8 +461,8 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 		//check sensor distance from target
 		if (sensorRange)
 		{
-			xDiff = (SDWORD)psViewer->x - (SDWORD)psTarget->x;
-			yDiff = (SDWORD)psViewer->y - (SDWORD)psTarget->y;
+			xDiff = (SDWORD)psViewer->pos.x - (SDWORD)psTarget->pos.x;
+			yDiff = (SDWORD)psViewer->pos.y - (SDWORD)psTarget->pos.y;
 			if (xDiff*xDiff + yDiff*yDiff < sensorRange * sensorRange)
 			{
 				//inform viewer of target

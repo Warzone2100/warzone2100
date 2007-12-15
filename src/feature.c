@@ -346,11 +346,11 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	}
 
 	if(FromSave == TRUE) {
-		psFeature->x = (UWORD)x;
-		psFeature->y = (UWORD)y;
+		psFeature->pos.x = (UWORD)x;
+		psFeature->pos.y = (UWORD)y;
 	} else {
-		psFeature->x = (UWORD)((x & (~TILE_MASK)) + psStats->baseWidth * TILE_UNITS / 2);
-		psFeature->y = (UWORD)((y & (~TILE_MASK)) + psStats->baseBreadth * TILE_UNITS / 2);
+		psFeature->pos.x = (UWORD)((x & (~TILE_MASK)) + psStats->baseWidth * TILE_UNITS / 2);
+		psFeature->pos.y = (UWORD)((y & (~TILE_MASK)) + psStats->baseBreadth * TILE_UNITS / 2);
 	}
 
 	/* Dump down the building wrecks at random angles - still looks shit though */
@@ -469,7 +469,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 			}
 		}
 	}
-	psFeature->z = map_TileHeight(mapX,mapY);//jps 18july97
+	psFeature->pos.z = map_TileHeight(mapX,mapY);//jps 18july97
 
 	//store the time it was built for removing wrecked droids/structures
 	psFeature->startTime = gameTime;
@@ -549,8 +549,8 @@ void removeFeature(FEATURE *psDel)
 
 
 	//remove from the map data
-	mapX = map_coord(psDel->x - psDel->psStats->baseWidth * TILE_UNITS / 2);
-	mapY = map_coord(psDel->y - psDel->psStats->baseBreadth * TILE_UNITS / 2);
+	mapX = map_coord(psDel->pos.x - psDel->psStats->baseWidth * TILE_UNITS / 2);
+	mapY = map_coord(psDel->pos.y - psDel->psStats->baseBreadth * TILE_UNITS / 2);
 	for (width = 0; width < psDel->psStats->baseWidth; width++)
 	{
 		for (breadth = 0; breadth < psDel->psStats->baseBreadth; breadth++)
@@ -565,8 +565,8 @@ void removeFeature(FEATURE *psDel)
 
 	if(psDel->psStats->subType == FEAT_GEN_ARTE)
 	{
-		pos.x = psDel->x;
-		pos.z = psDel->y;
+		pos.x = psDel->pos.x;
+		pos.z = psDel->pos.y;
 		pos.y = map_Height(pos.x,pos.z);
 		addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_DISCOVERY,FALSE,NULL,0);
 		scoreUpdateVar(WD_ARTEFACTS_FOUND);
@@ -631,26 +631,26 @@ void destroyFeature(FEATURE *psDel)
 		}
 		for(i=0; i<4; i++)
 		{
-			pos.x = psDel->x + widthScatter - rand()%(2*widthScatter);
-			pos.z = psDel->y + breadthScatter - rand()%(2*breadthScatter);
-			pos.y = psDel->z + 32 + rand()%heightScatter;
+			pos.x = psDel->pos.x + widthScatter - rand()%(2*widthScatter);
+			pos.z = psDel->pos.y + breadthScatter - rand()%(2*breadthScatter);
+			pos.y = psDel->pos.z + 32 + rand()%heightScatter;
 			addEffect(&pos,EFFECT_EXPLOSION,explosionSize,FALSE,NULL,0);
 		}
 
-//	  	if(psDel->sDisplay.imd->ymax>300)	// WARNING - STATS CHANGE NEEDED!!!!!!!!!!!
+//	  	if(psDel->sDisplay.imd->pos.ymax>300)	// WARNING - STATS CHANGE NEEDED!!!!!!!!!!!
 		if(psDel->psStats->subType == FEAT_SKYSCRAPER)
 		{
-			pos.x = psDel->x;
-			pos.z = psDel->y;
-			pos.y = psDel->z;
+			pos.x = psDel->pos.x;
+			pos.z = psDel->pos.y;
+			pos.y = psDel->pos.z;
 			addEffect(&pos,EFFECT_DESTRUCTION,DESTRUCTION_TYPE_SKYSCRAPER,TRUE,psDel->sDisplay.imd,0);
 			initPerimeterSmoke(psDel->sDisplay.imd,pos.x,pos.y,pos.z);
 
 			// ----- Flip all the tiles under the skyscraper to a rubble tile
 			// smoke effect should disguise this happening
-			mapX = map_coord(psDel->x - psDel->psStats->baseWidth * TILE_UNITS / 2);
-			mapY = map_coord(psDel->y - psDel->psStats->baseBreadth * TILE_UNITS / 2);
-//			if(psDel->sDisplay.imd->ymax>300)
+			mapX = map_coord(psDel->pos.x - psDel->psStats->baseWidth * TILE_UNITS / 2);
+			mapY = map_coord(psDel->pos.y - psDel->psStats->baseBreadth * TILE_UNITS / 2);
+//			if(psDel->sDisplay.imd->pos.ymax>300)
 			if (psDel->psStats->subType == FEAT_SKYSCRAPER)
 			{
 				for (width = 0; width < psDel->psStats->baseWidth; width++)
@@ -685,8 +685,8 @@ void destroyFeature(FEATURE *psDel)
 		}
 
 		/* Then a sequence of effects */
-		pos.x = psDel->x;
-		pos.z = psDel->y;
+		pos.x = psDel->pos.x;
+		pos.z = psDel->pos.y;
 		pos.y = map_Height(pos.x,pos.z);
 		addEffect(&pos,EFFECT_DESTRUCTION,DESTRUCTION_TYPE_FEATURE,FALSE,NULL,0);
 
@@ -694,12 +694,12 @@ void destroyFeature(FEATURE *psDel)
 		// ffs gj
 		if(psDel->psStats->subType == FEAT_SKYSCRAPER)
 		{
-			audio_PlayStaticTrack( psDel->x, psDel->y, ID_SOUND_BUILDING_FALL );
+			audio_PlayStaticTrack( psDel->pos.x, psDel->pos.y, ID_SOUND_BUILDING_FALL );
 		}
 		else
 
 		{
-			audio_PlayStaticTrack( psDel->x, psDel->y, ID_SOUND_EXPLOSION );
+			audio_PlayStaticTrack( psDel->pos.x, psDel->pos.y, ID_SOUND_EXPLOSION );
 		}
 	}
 //---------------------------------------------------------------------------------------
@@ -740,8 +740,8 @@ FEATURE	* checkForWreckage(DROID *psDroid)
 	UDWORD		startX, startY, incX, incY;
 	SDWORD		x=0, y=0;
 
-	startX = map_coord(psDroid->x);
-	startY = map_coord(psDroid->y);
+	startX = map_coord(psDroid->pos.x);
+	startY = map_coord(psDroid->pos.y);
 
 	//look around the droid - max 2 tiles distance
 	for (incX = 1, incY = 1; incX < WRECK_SEARCH; incX++, incY++)

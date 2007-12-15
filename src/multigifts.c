@@ -529,8 +529,8 @@ void  technologyGiveAway(STRUCTURE *pS)
 	if(pS->pStructureType->type == REF_FACTORY  &&  myResponsibility(pS->player))
 	{
 
-		x = map_coord(pS->x);
-		y = map_coord(pS->y);
+		x = map_coord(pS->pos.x);
+		y = map_coord(pS->pos.y);
 		if (!pickATileGen(&x,&y,LOOK_FOR_EMPTY_TILE,zonedPAT))
 		{
 			ASSERT( FALSE, "technologyGiveAway: Unable to find a free location" );
@@ -625,8 +625,8 @@ void addLoserGifts(void)
 
 		for(count = 0;count<quantity;count++)
 		{
-			x = map_coord(apsStructLists[selectedPlayer]->x);
-			y = map_coord(apsStructLists[selectedPlayer]->y);
+			x = map_coord(apsStructLists[selectedPlayer]->pos.x);
+			y = map_coord(apsStructLists[selectedPlayer]->pos.y);
 			if (!pickATileGen(&x,&y,LOOK_FOR_EMPTY_TILE,zonedPAT))
 			{
 				ASSERT( FALSE, "addlosergifts: Unable to find a free location" );
@@ -669,9 +669,9 @@ void addLoserGifts(void)
 			// give player a construction Droid.right now!
 			if(apsStructLists[selectedPlayer])
 			{
-				x = map_coord(apsStructLists[selectedPlayer]->x);
-				y = map_coord(apsStructLists[selectedPlayer]->y);
-				z = map_coord(apsStructLists[selectedPlayer]->z);
+				x = map_coord(apsStructLists[selectedPlayer]->pos.x);
+				y = map_coord(apsStructLists[selectedPlayer]->pos.y);
+				z = map_coord(apsStructLists[selectedPlayer]->pos.z);
 
 				pickATileGen(&x,&y,LOOK_FOR_EMPTY_TILE,normalPAT);
 
@@ -855,16 +855,16 @@ void processMultiPlayerArtifacts(void)
 		// artifacts
 		if(pF->psStats->subType == FEAT_GEN_ARTE)
 		{
-			found = objectInRange((BASE_OBJECT *)apsDroidLists[selectedPlayer], pF->x,pF->y,(TILE_UNITS+(TILE_UNITS/3))  );
+			found = objectInRange((BASE_OBJECT *)apsDroidLists[selectedPlayer], pF->pos.x,pF->pos.y,(TILE_UNITS+(TILE_UNITS/3))  );
 			if(found)
 			{
-				position.x = pF->x;				// Add an effect
-				position.z = pF->y;
-				position.y = pF->z;
+				position.x = pF->pos.x;				// Add an effect
+				position.z = pF->pos.y;
+				position.y = pF->pos.z;
 				addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_DISCOVERY,FALSE,NULL,FALSE);
 
-					x = pF->x;
-					y = pF->y;
+					x = pF->pos.x;
+					y = pF->pos.y;
 					pl= pF->player;
 					removeFeature(pF);			// remove artifact+ send info.
 					giftArtifact(pl,x,y);		// reward player.
@@ -877,7 +877,7 @@ void processMultiPlayerArtifacts(void)
 		// oil drums
 //		if(pF->psStats->subType == FEAT_OIL_DRUM)
 //		{
-//			found = objectInRange((BASE_OBJECT *)apsDroidLists[selectedPlayer], pF->x,pF->y,(TILE_UNITS+(TILE_UNITS/3))  );
+//			found = objectInRange((BASE_OBJECT *)apsDroidLists[selectedPlayer], pF->pos.x,pF->pos.y,(TILE_UNITS+(TILE_UNITS/3))  );
 //			if(found)
 //			{
 //				giftPower(ANYPLAYER,selectedPlayer,TRUE);		// give power and tell everyone.

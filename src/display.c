@@ -2071,7 +2071,7 @@ static inline void dealWithLMBFeature(FEATURE* psFeature)
 				if ((droidType(psCurr) == DROID_CONSTRUCT ||
 					droidType(psCurr) == DROID_CYBORG_CONSTRUCT) && (psCurr->selected))
 				{
-					if(fireOnLocation(psFeature->x,psFeature->y))
+					if(fireOnLocation(psFeature->pos.x,psFeature->pos.y))
 					{
 						// Can't build because it's burning
 						AddDerrickBurningMessage();
@@ -2082,13 +2082,13 @@ static inline void dealWithLMBFeature(FEATURE* psFeature)
 					{
 						orderDroidStatsLocAdd(psCurr, DORDER_BUILD,
 							(BASE_STATS*) &asStructureStats[i],
-							psFeature->x, psFeature->y);
+							psFeature->pos.x, psFeature->pos.y);
 					}
 					else
 					{
 						orderDroidStatsLoc(psCurr, DORDER_BUILD,
 							(BASE_STATS*) &asStructureStats[i],
-							psFeature->x, psFeature->y);
+							psFeature->pos.x, psFeature->pos.y);
 					}
 					addConsoleMessage(_("Truck ordered to build Oil Derrick"),DEFAULT_JUSTIFY);
 		//				"Construction vehicle ordered to build a Derrick.",DEFAULT_JUSTIFY);
@@ -2132,7 +2132,7 @@ static inline void dealWithLMBFeature(FEATURE* psFeature)
 				}
 				else
 				{
-					orderSelectedLoc(selectedPlayer, psFeature->x,psFeature->y);	// recover it.
+					orderSelectedLoc(selectedPlayer, psFeature->pos.x,psFeature->pos.y);	// recover it.
 				}
 				break;*/
 			case FEAT_BOULDER:
@@ -2555,8 +2555,8 @@ static void dealWithRMB( void )
 						psStructure = findDeliveryFactory((FLAG_POSITION *)psLocation);
 						if (psStructure)
 						{
-							setViewPos(map_coord(psStructure->x),
-							           map_coord(psStructure->y),
+							setViewPos(map_coord(psStructure->pos.x),
+							           map_coord(psStructure->pos.y),
 							           TRUE);
 						}
 					}

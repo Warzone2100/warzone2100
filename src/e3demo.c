@@ -169,7 +169,7 @@ UDWORD	i,numWith;
 					{
 						/* Make the droid attack the building - it'll indirectly route there too */
 						orderDroidLoc(psDroid,DORDER_SCOUT,
-						apsStructLists[otherPlayer]->x, apsStructLists[otherPlayer]->y);
+						apsStructLists[otherPlayer]->pos.x, apsStructLists[otherPlayer]->pos.y);
 					}
 				}
 			}
@@ -321,7 +321,7 @@ PROPULSION_STATS	*psPropStats;
 			  //	if(orderState(psDroid,DORDER_ATTACK) == FALSE)
 			  //	{
 		 	 		orderDroidLoc(psDroid,DORDER_MOVE,
-					apsStructLists[otherPlayer]->x, apsStructLists[otherPlayer]->y);
+					apsStructLists[otherPlayer]->pos.x, apsStructLists[otherPlayer]->pos.y);
 			  //	}
 
 				if(!getWarCamStatus())

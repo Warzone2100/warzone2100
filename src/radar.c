@@ -584,8 +584,8 @@ static void DrawRadarObjects(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD 
 			    || (bMultiPlayer && game.alliance == ALLIANCES_TEAMS
 			        && aiCheckAlliances(selectedPlayer,psDroid->player)))
 			{
-   				x=(psDroid->x/TILE_UNITS)-RadarScrollX;
-   				y=(psDroid->y/TILE_UNITS)-RadarScrollY;
+   				x=(psDroid->pos.x/TILE_UNITS)-RadarScrollX;
+   				y=(psDroid->pos.y/TILE_UNITS)-RadarScrollY;
 				x -= RadarMapOriginX;
 				y -= RadarMapOriginY;
 				x *= boxSizeH;
@@ -649,8 +649,8 @@ static void DrawRadarObjects(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD 
 			    || (bMultiPlayer && game.alliance == ALLIANCES_TEAMS
 			        && aiCheckAlliances(selectedPlayer,psStruct->player)))
 			{
-   				x=(psStruct->x/TILE_UNITS)-RadarScrollX;
-   				y=(psStruct->y/TILE_UNITS)-RadarScrollY;
+   				x=(psStruct->pos.x/TILE_UNITS)-RadarScrollX;
+   				y=(psStruct->pos.y/TILE_UNITS)-RadarScrollY;
 				x -= RadarMapOriginX;
 				y -= RadarMapOriginY;
 				x *= boxSizeH;
@@ -732,9 +732,9 @@ static void DrawRadarObjects(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD 
 		}
 		else if (psProxDisp->type == POS_PROXOBJ)
 		{
-			x = (((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->x /
+			x = (((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->pos.x /
 				TILE_UNITS) - RadarScrollX;
-			y = (((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->y /
+			y = (((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->pos.y /
 				TILE_UNITS) - RadarScrollY;
 		}
 		x -= RadarMapOriginX;

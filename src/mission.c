@@ -833,9 +833,9 @@ void missionFlyTransportersIn( SDWORD iPlayer, BOOL bTrackTransporter )
                 }
 
 			    /* set start position */
-			    psTransporter->x = iX;
-			    psTransporter->y = iY;
-			    psTransporter->z = iZ;
+			    psTransporter->pos.x = iX;
+			    psTransporter->pos.y = iY;
+			    psTransporter->pos.z = iZ;
 
 			    /* set start direction */
 			    iDx = iLandX - iX;
@@ -1196,17 +1196,17 @@ void saveMissionLimboData(void)
 		{
 			ASSERT( FALSE, "saveMissionLimboData: Unable to find a free location" );
 		}
-		psDroid->x = (UWORD)world_coord(droidX);
-		psDroid->y = (UWORD)world_coord(droidY);
+		psDroid->pos.x = (UWORD)world_coord(droidX);
+		psDroid->pos.y = (UWORD)world_coord(droidY);
 		if (pickRes == HALF_FREE_TILE )
 		{
-			psDroid->x += TILE_UNITS;
-			psDroid->y += TILE_UNITS;
+			psDroid->pos.x += TILE_UNITS;
+			psDroid->pos.y += TILE_UNITS;
 		}
-		psDroid->z = map_Height(psDroid->x, psDroid->y);
+		psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
 		updateDroidOrientation(psDroid);
-		//psDroid->lastTile = mapTile(map_coord(psDroid->x),
-		//	map_coord(psDroid->y));
+		//psDroid->lastTile = mapTile(map_coord(psDroid->pos.x),
+		//	map_coord(psDroid->pos.y));
 		psDroid->selected = FALSE;
         //this is mainly for VTOLs
         psDroid->psBaseStruct = NULL;
@@ -1264,18 +1264,18 @@ void placeLimboDroids(void)
 		    {
 			    ASSERT( FALSE, "placeLimboUnits: Unable to find a free location" );
 		    }
-		    psDroid->x = (UWORD)world_coord(droidX);
-		    psDroid->y = (UWORD)world_coord(droidY);
+		    psDroid->pos.x = (UWORD)world_coord(droidX);
+		    psDroid->pos.y = (UWORD)world_coord(droidY);
 		    if (pickRes == HALF_FREE_TILE )
 		    {
-			    psDroid->x += TILE_UNITS;
-			    psDroid->y += TILE_UNITS;
+			    psDroid->pos.x += TILE_UNITS;
+			    psDroid->pos.y += TILE_UNITS;
 		    }
-		    ASSERT(worldOnMap(psDroid->x,psDroid->y), "limbo droid is not on the map");
-		    psDroid->z = map_Height(psDroid->x, psDroid->y);
+		    ASSERT(worldOnMap(psDroid->pos.x,psDroid->pos.y), "limbo droid is not on the map");
+		    psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
 		    updateDroidOrientation(psDroid);
-		    //psDroid->lastTile = mapTile(map_coord(psDroid->x),
-		    //	map_coord(psDroid->y));
+		    //psDroid->lastTile = mapTile(map_coord(psDroid->pos.x),
+		    //	map_coord(psDroid->pos.y));
 		    psDroid->selected = FALSE;
             //this is mainly for VTOLs
 			setDroidBase(psDroid, NULL);
@@ -1374,8 +1374,8 @@ void saveCampaignData(void)
                     //remove it from the transporter group
                     grpLeave( psDroid->psGroup, psCurr);
  					//cam change add droid
-					psCurr->x = INVALID_XY;
-					psCurr->y = INVALID_XY;
+					psCurr->pos.x = INVALID_XY;
+					psCurr->pos.y = INVALID_XY;
                    //add it back into current droid lists
 			        addDroid(psCurr, mission.apsDroidLists);
                 }
@@ -1383,8 +1383,8 @@ void saveCampaignData(void)
 			    if (droidRemove(psDroid, apsDroidLists))
                 {
 					//cam change add droid
-					psDroid->x = INVALID_XY;
-					psDroid->y = INVALID_XY;
+					psDroid->pos.x = INVALID_XY;
+					psDroid->pos.y = INVALID_XY;
 			        addDroid(psDroid, mission.apsDroidLists);
                 }
             }
@@ -1400,8 +1400,8 @@ void saveCampaignData(void)
 		while(psDroid != NULL)
 		{
 			//cam change add droid
-			psDroid->x = INVALID_XY;
-			psDroid->y = INVALID_XY;
+			psDroid->pos.x = INVALID_XY;
+			psDroid->pos.y = INVALID_XY;
             psDroid = psDroid->psNext;
 		}
 	}
@@ -1645,8 +1645,8 @@ static void processMission(void)
     		//   campaign map
 		    //gridRemoveObject((BASE_OBJECT *)psDroid); - happens in droidRemove()
 		    //set the x/y for now
-	    	//psDroid->x = getHomeLandingX() + 256;
-    		//psDroid->y = getHomeLandingY() + 256;
+	    	//psDroid->pos.x = getHomeLandingX() + 256;
+    		//psDroid->pos.y = getHomeLandingY() + 256;
 		    //droidX = map_coord(getLandingX(psDroid->player)); //map_coord(getHomeLandingX());
 	    	//droidY = map_coord(getLandingY(psDroid->player)); //map_coord(getHomeLandingY());
             droidX = getHomeLandingX();
@@ -1659,18 +1659,18 @@ static void processMission(void)
 		    {
 			    ASSERT( FALSE, "processMission: Unable to find a free location" );
     		}
-	    	psDroid->x = (UWORD)world_coord(droidX);
-		    psDroid->y = (UWORD)world_coord(droidY);
+	    	psDroid->pos.x = (UWORD)world_coord(droidX);
+		    psDroid->pos.y = (UWORD)world_coord(droidY);
     		if (pickRes == HALF_FREE_TILE )
 	    	{
-		    	psDroid->x += TILE_UNITS;
-			    psDroid->y += TILE_UNITS;
+		    	psDroid->pos.x += TILE_UNITS;
+			    psDroid->pos.y += TILE_UNITS;
 		    }
-		    ASSERT(worldOnMap(psDroid->x,psDroid->y), "the droid is not on the map");
-		    psDroid->z = map_Height(psDroid->x, psDroid->y);
+		    ASSERT(worldOnMap(psDroid->pos.x,psDroid->pos.y), "the droid is not on the map");
+		    psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
 		    updateDroidOrientation(psDroid);
-/*		    psDroid->lastTile = mapTile(map_coord(psDroid->x),
-			map_coord(psDroid->y));
+/*		    psDroid->lastTile = mapTile(map_coord(psDroid->pos.x),
+			map_coord(psDroid->pos.y));
 */
 	    	//swap the droid and map pointers back again
     		swapMissionPointers();
@@ -1681,8 +1681,8 @@ static void processMission(void)
 		    //initialise the movement data
     		initDroidMovement(psDroid);
 
-	    	//orderSelectedLoc(psDroid->player, psDroid->x + 3 * TILE_UNITS,
-		    //	psDroid->y + 3 * TILE_UNITS);
+	    	//orderSelectedLoc(psDroid->player, psDroid->pos.x + 3 * TILE_UNITS,
+		    //	psDroid->pos.y + 3 * TILE_UNITS);
         }
 	}
 }
@@ -1721,8 +1721,8 @@ void processMissionLimbo(void)
 		    	if (droidRemove(psDroid, apsDroidLists))
 	            {
 				    //limbo list invalidate XY
-				    psDroid->x = INVALID_XY;
-				    psDroid->y = INVALID_XY;
+				    psDroid->pos.x = INVALID_XY;
+				    psDroid->pos.y = INVALID_XY;
 			        addDroid(psDroid, apsLimboDroids);
 	                //this is mainly for VTOLs
 					setDroidBase(psDroid, NULL);
@@ -2197,7 +2197,7 @@ void aiUpdateMissionStructure(STRUCTURE *psStructure)
 			{
 				//build droid - store in mission list
 				psNewDroid = buildMissionDroid((DROID_TEMPLATE *)pSubject,
-					psStructure->x, psStructure->y, psStructure->player);
+					psStructure->pos.x, psStructure->pos.y, psStructure->player);
 
 				if (!psNewDroid)
 				{
@@ -2301,8 +2301,8 @@ void missionDroidUpdate(DROID *psDroid)
     for endCam2 where there isn't a valid map!*/
     if (psDroid->droidType == DROID_TRANSPORTER)
     {
-	    psDroid->x = INVALID_XY;
-	    psDroid->y = INVALID_XY;
+	    psDroid->pos.x = INVALID_XY;
+	    psDroid->pos.y = INVALID_XY;
     }
 
 	//ignore all droids except Transporters
@@ -2375,7 +2375,7 @@ void missionResetDroids(void)
 	{
 		psNext = psDroid->psNext;
 		//for all droids that have never left home base
-		if (psDroid->x == INVALID_XY && psDroid->y == INVALID_XY)
+		if (psDroid->pos.x == INVALID_XY && psDroid->pos.y == INVALID_XY)
 		{
 			if (droidRemove(psDroid, apsDroidLists))
             {
@@ -2391,7 +2391,7 @@ void missionResetDroids(void)
 	{
 		psNext = psDroid->psNext;
 		//for all droids that have never left home base
-		if (psDroid->x == INVALID_XY && psDroid->y == INVALID_XY)
+		if (psDroid->pos.x == INVALID_XY && psDroid->pos.y == INVALID_XY)
 		{
             //this is now stored as the baseStruct when the droid is built...
 			//find which factory produced the droid
@@ -2422,8 +2422,8 @@ void missionResetDroids(void)
 				/*placed = placeDroid(psStruct, &x, &y);
 				if (placed)
 				{
-					psDroid->x = (UWORD)world_coord(x);
-					psDroid->y = (UWORD)world_coord(y);
+					psDroid->pos.x = (UWORD)world_coord(x);
+					psDroid->pos.y = (UWORD)world_coord(y);
 				}
 				else
 				{
@@ -2438,8 +2438,8 @@ void missionResetDroids(void)
                 }
                 else
                 {
-                    x = (UWORD)map_coord(psStruct->x);
-                    y = (UWORD)map_coord(psStruct->y);
+                    x = (UWORD)map_coord(psStruct->pos.x);
+                    y = (UWORD)map_coord(psStruct->pos.y);
                 }
 		        pickRes = pickHalfATile(&x, &y,LOOK_FOR_EMPTY_TILE);
 		        if (pickRes == NO_FREE_TILE )
@@ -2449,12 +2449,12 @@ void missionResetDroids(void)
 		        }
                 else
                 {
-    		        psDroid->x = (UWORD)world_coord(x);
-	    	        psDroid->y = (UWORD)world_coord(y);
+    		        psDroid->pos.x = (UWORD)world_coord(x);
+	    	        psDroid->pos.y = (UWORD)world_coord(y);
 		            if (pickRes == HALF_FREE_TILE )
 		            {
-			            psDroid->x += TILE_UNITS;
-			            psDroid->y += TILE_UNITS;
+			            psDroid->pos.x += TILE_UNITS;
+			            psDroid->pos.y += TILE_UNITS;
 		            }
                     placed = TRUE;
                 }
@@ -2468,13 +2468,13 @@ void missionResetDroids(void)
 				{
 					if (psStruct->pStructureType->type == REF_HQ)
 					{
-						/*psDroid->x = (UWORD)(psStruct->x + 128);
-						psDroid->y = (UWORD)(psStruct->y + 128);
+						/*psDroid->pos.x = (UWORD)(psStruct->pos.x + 128);
+						psDroid->pos.y = (UWORD)(psStruct->pos.y + 128);
 						placed = TRUE;
 						break;*/
                         //use pickATile again...
-                        x = (UWORD)map_coord(psStruct->x);
-                        y = (UWORD)map_coord(psStruct->y);
+                        x = (UWORD)map_coord(psStruct->pos.x);
+                        y = (UWORD)map_coord(psStruct->pos.y);
 		                pickRes = pickHalfATile(&x, &y,LOOK_FOR_EMPTY_TILE);
 		                if (pickRes == NO_FREE_TILE )
 		                {
@@ -2483,12 +2483,12 @@ void missionResetDroids(void)
 		                }
                         else
                         {
-    		                psDroid->x = (UWORD)world_coord(x);
-	    	                psDroid->y = (UWORD)world_coord(y);
+    		                psDroid->pos.x = (UWORD)world_coord(x);
+	    	                psDroid->pos.y = (UWORD)world_coord(y);
 		                    if (pickRes == HALF_FREE_TILE )
 		                    {
-			                    psDroid->x += TILE_UNITS;
-			                    psDroid->y += TILE_UNITS;
+			                    psDroid->pos.x += TILE_UNITS;
+			                    psDroid->pos.y += TILE_UNITS;
 		                    }
                             placed = TRUE;
                         }
@@ -2513,14 +2513,14 @@ void missionResetDroids(void)
 	    			else
 		    		{
 			    		//order them to move to an arbitary new location!
-				    	orderSelectedLoc(psDroid->player, psDroid->x + 3 * TILE_UNITS,
-					    	psDroid->y + 3 * TILE_UNITS);
+				    	orderSelectedLoc(psDroid->player, psDroid->pos.x + 3 * TILE_UNITS,
+					    	psDroid->pos.y + 3 * TILE_UNITS);
 				    }*/
 				    //do all the things in build droid that never did when it was built!
 				    // check the droid is a reasonable distance from the edge of the map
-				    if (psDroid->x <= TILE_UNITS || psDroid->x >= (mapWidth *
-					    TILE_UNITS) - TILE_UNITS ||	psDroid->y <= TILE_UNITS ||
-					    psDroid->y >= (mapHeight * TILE_UNITS) - TILE_UNITS)
+				    if (psDroid->pos.x <= TILE_UNITS || psDroid->pos.x >= (mapWidth *
+					    TILE_UNITS) - TILE_UNITS ||	psDroid->pos.y <= TILE_UNITS ||
+					    psDroid->pos.y >= (mapHeight * TILE_UNITS) - TILE_UNITS)
 				    {
 					    debug( LOG_NEVER, "missionResetUnits: unit too close to edge of map - removing" );
 						vanishDroid(psDroid);
@@ -2534,12 +2534,12 @@ void missionResetDroids(void)
 					    droidRelease(psDroid);
 					    free(psDroid);
 				    }*/
-/*				    mapX = map_coord(psDroid->x);
-				    mapY = map_coord(psDroid->y);
+/*				    mapX = map_coord(psDroid->pos.x);
+				    mapY = map_coord(psDroid->pos.y);
 				    psDroid->lastTile = mapTile(mapX,mapY);
 */
 				    //set droid height
-				    psDroid->z = map_Height(psDroid->x, psDroid->y);
+				    psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
 
 				    // People always stand upright
 				    //if(psDroid->droidType != DROID_PERSON && psDroid->type != DROID_CYBORG)
@@ -2593,8 +2593,8 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 			removeDroid(psTransporter, ppStoredList);
 			addDroid(psTransporter, ppCurrentList);
 			//need to put the Transporter down at a specified location
-			psTransporter->x = x;
-			psTransporter->y = y;
+			psTransporter->pos.x = x;
+			psTransporter->pos.y = y;
 		}
 	}*/
 
@@ -2617,8 +2617,8 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 			//add it back into current droid lists
 			addDroid(psDroid, ppCurrentList);
 			//hack in the starting point!
-			/*psDroid->x = x;
-			psDroid->y = y;
+			/*psDroid->pos.x = x;
+			psDroid->pos.y = y;
 			if (!goingHome)
 			{
 				//send the droids off to a starting location
@@ -2636,9 +2636,9 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 			{
 				ASSERT( FALSE, "unloadTransporter: Unable to find a valid location" );
 			}
-			psDroid->x = (UWORD)world_coord(droidX);
-			psDroid->y = (UWORD)world_coord(droidY);
-			psDroid->z = map_Height(psDroid->x, psDroid->y);
+			psDroid->pos.x = (UWORD)world_coord(droidX);
+			psDroid->pos.y = (UWORD)world_coord(droidY);
+			psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
 			updateDroidOrientation(psDroid);
 			// a commander needs to get it's group back
 			if (psDroid->droidType == DROID_COMMAND)
@@ -3591,8 +3591,8 @@ DROID * buildMissionDroid(DROID_TEMPLATE *psTempl, UDWORD x, UDWORD y,
 	//addDroid(psNewDroid, mission.apsBuiltDroids);
 	addDroid(psNewDroid, mission.apsDroidLists);
 	//set its x/y to impossible values so can detect when return from mission
-	psNewDroid->x = INVALID_XY;
-	psNewDroid->y = INVALID_XY;
+	psNewDroid->pos.x = INVALID_XY;
+	psNewDroid->pos.y = INVALID_XY;
 
 	//set all the droids to selected from when return
 	psNewDroid->selected = TRUE;
@@ -4190,12 +4190,12 @@ void processPreviousCampDroids(void)
 		            }
                     else
                     {
-    		            psDroid->x = (UWORD)world_coord(droidX);
-	    	            psDroid->y = (UWORD)world_coord(droidY);
-		                psDroid->z = map_Height(psDroid->x, psDroid->y);
+    		            psDroid->pos.x = (UWORD)world_coord(droidX);
+	    	            psDroid->pos.y = (UWORD)world_coord(droidY);
+		                psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
 		                updateDroidOrientation(psDroid);
-		                //psDroid->lastTile = mapTile(map_coord(psDroid->x),
-			            //    map_coord(psDroid->y));
+		                //psDroid->lastTile = mapTile(map_coord(psDroid->pos.x),
+			            //    map_coord(psDroid->pos.y));
 
 					    psDroid->selected = FALSE;
 		                psDroid->cluster = 0;
@@ -4266,16 +4266,16 @@ void moveDroidsToSafety(DROID *psTransporter)
 		psNext = psDroid->psGrpNext;
 		grpLeave(psTransporter->psGroup, psDroid);
 		//cam change add droid
-		psDroid->x = INVALID_XY;
-		psDroid->y = INVALID_XY;
+		psDroid->pos.x = INVALID_XY;
+		psDroid->pos.y = INVALID_XY;
 		addDroid(psDroid, mission.apsDroidLists);
     }
     //move the transporter into the mission list also
     if (droidRemove(psTransporter, apsDroidLists))
     {
 		//cam change add droid - done in missionDroidUpdate()
-		//psDroid->x = INVALID_XY;
-		//psDroid->y = INVALID_XY;
+		//psDroid->pos.x = INVALID_XY;
+		//psDroid->pos.y = INVALID_XY;
         addDroid(psTransporter, mission.apsDroidLists);
     }
 }

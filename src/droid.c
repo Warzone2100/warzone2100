@@ -248,7 +248,7 @@ SDWORD droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD wea
 			CONPRINTF(ConsoleString,(ConsoleString, _("Unit Lost!")));
 			scoreUpdateVar(WD_UNITS_LOST);
 			audio_QueueTrackMinDelayPos(ID_SOUND_UNIT_DESTROYED,UNIT_LOST_DELAY,
-										psDroid->x, psDroid->y, psDroid->z );
+										psDroid->pos.x, psDroid->pos.y, psDroid->pos.z );
 		}
 		else
 		{
@@ -425,9 +425,9 @@ void recycleDroid(DROID *psDroid)
 		grpLeave(psDroid->psGroup, psDroid);
 	}
 
-	position.x = psDroid->x;				// Add an effect
-	position.z = psDroid->y;
-	position.y = psDroid->z;
+	position.x = psDroid->pos.x;				// Add an effect
+	position.z = psDroid->pos.y;
+	position.y = psDroid->pos.z;
 
 //	destroyDroid(psDroid);
 	vanishDroid(psDroid);
@@ -622,18 +622,18 @@ static void removeDroidFX(DROID *psDel)
 			if(psDel->visible[selectedPlayer])
 			{
 // The babarian has been run over ...
-				audio_PlayStaticTrack( psDel->x, psDel->y, ID_SOUND_BARB_SQUISH );
+				audio_PlayStaticTrack( psDel->pos.x, psDel->pos.y, ID_SOUND_BARB_SQUISH );
 			}
 		}
 	}
 	else if(psDel->visible[selectedPlayer])
 	{
 		destroyFXDroid(psDel);
-		pos.x = psDel->x;
-		pos.z = psDel->y;
-		pos.y = psDel->z;
+		pos.x = psDel->pos.x;
+		pos.z = psDel->pos.y;
+		pos.y = psDel->pos.z;
 		addEffect(&pos,EFFECT_DESTRUCTION,DESTRUCTION_TYPE_DROID,FALSE,NULL,0);
-		audio_PlayStaticTrack( psDel->x, psDel->y, ID_SOUND_EXPLOSION );
+		audio_PlayStaticTrack( psDel->pos.x, psDel->pos.y, ID_SOUND_EXPLOSION );
 	}
 }
 
@@ -644,8 +644,8 @@ void destroyDroid(DROID *psDel)
 		UDWORD width, breadth, mapX, mapY;
 		MAPTILE	*psTile;
 
-		mapX = map_coord(psDel->x);
-		mapY = map_coord(psDel->y);
+		mapX = map_coord(psDel->pos.x);
+		mapY = map_coord(psDel->pos.y);
 		for (width = mapX-1; width <= mapX+1; width++)
 		{
 			for (breadth = mapY-1; breadth <= mapY+1; breadth++)
@@ -878,7 +878,7 @@ static UDWORD	nayborTime = 0;
 // macro to see if an object is in NAYBOR_RANGE
 // used by droidGetNayb
 #define IN_NAYBOR_RANGE(psObj) \
-	xdiff = dx - (SDWORD)psObj->x; \
+	xdiff = dx - (SDWORD)psObj->pos.x; \
 	if (xdiff < 0) \
 	{ \
 		xdiff = -xdiff; \
@@ -888,7 +888,7 @@ static UDWORD	nayborTime = 0;
 		continue; \
 	} \
 \
-	ydiff = dy - (SDWORD)psObj->y; \
+	ydiff = dy - (SDWORD)psObj->pos.y; \
 	if (ydiff < 0) \
 	{ \
 		ydiff = -ydiff; \
@@ -932,8 +932,8 @@ void droidGetNaybors(DROID *psDroid)
 #endif
 
 	// search for naybor objects
-	dx = psDroid->x;
-	dy = psDroid->y;
+	dx = psDroid->pos.x;
+	dy = psDroid->pos.y;
 /*	for(player = 0; player < MAX_PLAYERS; player++)
 	{
 		for (psCurrD = apsDroidLists[player]; psCurrD; psCurrD = psCurrD->psNext)
@@ -1044,9 +1044,9 @@ void droidUpdate(DROID *psDroid)
 			//if(gameTime > (psDroid->lastEmission+psDroid->emissionInterval))
 			if(gameTime > (psDroid->lastEmission + emissionInterval))
 			{
-   				dv.x = psDroid->x + DROID_DAMAGE_SPREAD;
-   				dv.z = psDroid->y + DROID_DAMAGE_SPREAD;
-				dv.y = psDroid->z;
+   				dv.x = psDroid->pos.x + DROID_DAMAGE_SPREAD;
+   				dv.z = psDroid->pos.y + DROID_DAMAGE_SPREAD;
+				dv.y = psDroid->pos.z;
 
 				dv.y += (psDroid->sDisplay.imd->ymax*2);
 				addEffect(&dv,EFFECT_SMOKE,SMOKE_TYPE_DRIFTING_SMALL,FALSE,NULL,0);
@@ -1172,8 +1172,8 @@ static BOOL droidNextToStruct(DROID *psDroid, BASE_OBJECT *psStruct)
 
 	CHECK_DROID(psDroid);
 
-	minX = map_coord(psDroid->x) - 1;
-	y = map_coord(psDroid->y) - 1;
+	minX = map_coord(psDroid->pos.x) - 1;
+	y = map_coord(psDroid->pos.y) - 1;
 	maxX = minX + 2;
 	maxY = y + 2;
 	if (minX < 0)
@@ -1352,10 +1352,10 @@ static void addConstructorEffect(STRUCTURE *psStruct)
 		/* This needs fixing - it's an arse effect! */
 		widthRange = (psStruct->pStructureType->baseWidth*TILE_UNITS)/4;
 		breadthRange = (psStruct->pStructureType->baseBreadth*TILE_UNITS)/4;
-		temp.x = psStruct->x+((rand()%(2*widthRange)) - widthRange);
-		temp.y = map_TileHeight(map_coord(psStruct->x), map_coord(psStruct->y))+
+		temp.x = psStruct->pos.x+((rand()%(2*widthRange)) - widthRange);
+		temp.y = map_TileHeight(map_coord(psStruct->pos.x), map_coord(psStruct->pos.y))+
 						((psStruct->sDisplay.imd->ymax)/6);
-		temp.z = psStruct->y+((rand()%(2*breadthRange)) - breadthRange);
+		temp.z = psStruct->pos.y+((rand()%(2*breadthRange)) - breadthRange);
 //FIXFX				addExplosion(&temp,TYPE_EXPLOSION_SMOKE_CLOUD,NULL);
 		if(rand()%2)
 		{
@@ -1468,9 +1468,9 @@ BOOL droidUpdateBuild(DROID *psDroid)
 	{
 		//set the illumination of the tiles back to original value as building is completed
 
-		mapX = map_coord(psStruct->x - psStruct->pStructureType->baseWidth *
+		mapX = map_coord(psStruct->pos.x - psStruct->pStructureType->baseWidth *
 			TILE_UNITS / 2);
-		mapY = map_coord(psStruct->y - psStruct->pStructureType->baseBreadth *
+		mapY = map_coord(psStruct->pos.y - psStruct->pStructureType->baseBreadth *
 			TILE_UNITS / 2);
 
 		for (i = 0; i < psStruct->pStructureType->baseWidth+1; i++)
@@ -1538,7 +1538,7 @@ BOOL droidUpdateBuild(DROID *psDroid)
 		   && map_coord(psDroid->orderY) == map_coord(psDroid->orderY2))))
 		{
 			audio_QueueTrackPos( ID_SOUND_STRUCTURE_COMPLETED,
-					psStruct->x, psStruct->y, psStruct->z );
+					psStruct->pos.x, psStruct->pos.y, psStruct->pos.z );
 			intRefreshScreen();		// update any open interface bars.
 		}
 
@@ -1568,10 +1568,10 @@ BOOL droidUpdateBuild(DROID *psDroid)
 //				/* This needs fixing - it's an arse effect! */
 //				widthRange = (psStruct->pStructureType->baseWidth*TILE_UNITS)/3;
 //				breadthRange = (psStruct->pStructureType->baseBreadth*TILE_UNITS)/3;
-//				temp.x = psStruct->x+((rand()%(2*widthRange)) - widthRange);
-//				temp.y = map_TileHeight(map_coord(psStruct->x), map_coord(psStruct->y))+
-//								((psStruct->sDisplay.imd->ymax)/2);
-//				temp.z = psStruct->y+((rand()%(2*breadthRange)) - breadthRange);
+//				temp.x = psStruct->pos.x+((rand()%(2*widthRange)) - widthRange);
+//				temp.y = map_TileHeight(map_coord(psStruct->pos.x), map_coord(psStruct->pos.y))+
+//								((psStruct->sDisplay.imd->pos.ymax)/2);
+//				temp.z = psStruct->pos.y+((rand()%(2*breadthRange)) - breadthRange);
 ////FIXFX				addExplosion(&temp,TYPE_EXPLOSION_SMOKE_CLOUD,NULL);
 //				if(rand()%2)
 //				{
@@ -2199,9 +2199,9 @@ BOOL droidUpdateDroidRepair(DROID *psRepairDroid)
 	/* add plasma repair effect whilst being repaired */
 	if ((ONEINFIVE) && (psDroidToRepair->visible[selectedPlayer]))
 	{
-		iVecEffect.x = psDroidToRepair->x + DROID_REPAIR_SPREAD;
-		iVecEffect.y = psDroidToRepair->z + rand()%8;;
-		iVecEffect.z = psDroidToRepair->y + DROID_REPAIR_SPREAD;
+		iVecEffect.x = psDroidToRepair->pos.x + DROID_REPAIR_SPREAD;
+		iVecEffect.y = psDroidToRepair->pos.z + rand()%8;;
+		iVecEffect.z = psDroidToRepair->pos.y + DROID_REPAIR_SPREAD;
 		effectGiveAuxVar(90+rand()%20);
 		addEffect(&iVecEffect,EFFECT_EXPLOSION,EXPLOSION_TYPE_LASER,FALSE,NULL,0);
 		droidAddWeldSound( iVecEffect );
@@ -3263,15 +3263,15 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	// Set the droids type
 	psDroid->droidType = droidTemplateType(pTemplate);
 
-	psDroid->x = (UWORD)x;
-	psDroid->y = (UWORD)y;
+	psDroid->pos.x = (UWORD)x;
+	psDroid->pos.y = (UWORD)y;
 
 	//don't worry if not on homebase cos not being drawn yet
 	if (!onMission)
 	{
 //		psDroid->lastTile = mapTile(mapX,mapY);
 		//set droid height
-		psDroid->z = map_Height(psDroid->x, psDroid->y);
+		psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
 	}
 
 	psDroid->cluster = 0;
@@ -3466,7 +3466,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 		}
 
 		//set droid height to be above the terrain
-		psDroid->z += TRANSPORTER_HOVER_HEIGHT;
+		psDroid->pos.z += TRANSPORTER_HOVER_HEIGHT;
 
 		/* reset halt secondary order from guard to hold */
 		secondarySetState( psDroid, DSO_HALTTYPE, DSS_HALT_HOLD );
@@ -3485,10 +3485,10 @@ void initDroidMovement(DROID *psDroid)
 {
 	memset(&psDroid->sMove, 0, sizeof(MOVE_CONTROL));
 
-	psDroid->sMove.fx = MAKEFRACT(psDroid->x);
-	psDroid->sMove.fy = MAKEFRACT(psDroid->y);
+	psDroid->sMove.fx = MAKEFRACT(psDroid->pos.x);
+	psDroid->sMove.fy = MAKEFRACT(psDroid->pos.y);
 
-	psDroid->sMove.fz = MAKEFRACT(psDroid->z);
+	psDroid->sMove.fz = MAKEFRACT(psDroid->pos.z);
 
 }
 
@@ -3779,7 +3779,7 @@ FLAG_POSITION	*psFlagPos;
 				if(getWarCamStatus())
 				{
 					camToggleStatus();			 // messy - fix this
-			//		setViewPos(map_coord(psCentreDroid->x), map_coord(psCentreDroid->y));
+			//		setViewPos(map_coord(psCentreDroid->pos.x), map_coord(psCentreDroid->pos.y));
 					processWarCam(); //odd, but necessary
 					camToggleStatus();				// messy - FIXME
 				}
@@ -3788,7 +3788,7 @@ FLAG_POSITION	*psFlagPos;
 				{
 	//				camToggleStatus();
 					/* Centre display on him if warcam isn't active */
-					setViewPos(map_coord(psCentreDroid->x), map_coord(psCentreDroid->y), TRUE);
+					setViewPos(map_coord(psCentreDroid->pos.x), map_coord(psCentreDroid->pos.y), TRUE);
 				}
 
 			}
@@ -3950,7 +3950,7 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 		{
 			pie_MatBegin();
 
-			pie_TRANSLATE(psDroid->x,-(SDWORD)psDroid->z,psDroid->y);
+			pie_TRANSLATE(psDroid->pos.x,-(SDWORD)psDroid->pos.z,psDroid->pos.y);
 			//matrix = the center of droid
 			pie_MatRotY( DEG( (SDWORD)psDroid->direction ) );
 			pie_MatRotX( DEG( psDroid->pitch ) );
@@ -3984,9 +3984,9 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 		}
 		else
 		{
-			muzzle->x = psDroid->x;
-			muzzle->y = psDroid->y;
-			muzzle->z = psDroid->z+32;
+			muzzle->x = psDroid->pos.x;
+			muzzle->y = psDroid->pos.y;
+			muzzle->z = psDroid->pos.z+32;
 		}
 	}
 	else
@@ -3998,7 +3998,7 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 			// This code has not been translated to the PSX Yet !!!!                                     (sorry)
 			pie_MatBegin();
 
-			pie_TRANSLATE(psDroid->x,-(SDWORD)psDroid->z,psDroid->y);
+			pie_TRANSLATE(psDroid->pos.x,-(SDWORD)psDroid->pos.z,psDroid->pos.y);
 			//matrix = the center of droid
 			pie_MatRotY( DEG( (SDWORD)psDroid->direction ) );
 			pie_MatRotX( DEG( psDroid->pitch ) );
@@ -4033,9 +4033,9 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 		}
 		else
 		{
-			muzzle->x = psDroid->x;
-			muzzle->y = psDroid->y;
-			muzzle->z = psDroid->z+32;
+			muzzle->x = psDroid->pos.x;
+			muzzle->y = psDroid->pos.y;
+			muzzle->z = psDroid->pos.z+32;
 		}
 	}
 
@@ -4340,9 +4340,9 @@ BOOL noDroid(UDWORD x, UDWORD y)
 	{
 		for(pD = apsDroidLists[i]; pD ; pD= pD->psNext)
 		{
-			if (map_coord(pD->x) == x)
+			if (map_coord(pD->pos.x) == x)
 			{
-				if (map_coord(pD->y) == y)
+				if (map_coord(pD->pos.y) == y)
 				{
 					return FALSE;
 				}
@@ -4364,9 +4364,9 @@ static BOOL oneDroid(UDWORD x, UDWORD y)
 	{
 		for(pD = apsDroidLists[i]; pD ; pD= pD->psNext)
 		{
-			if (map_coord(pD->x) == x)
+			if (map_coord(pD->pos.x) == x)
 			{
-				if (map_coord(pD->y) == y)
+				if (map_coord(pD->pos.y) == y)
 				{
 					if (bFound)
 					{
@@ -5609,8 +5609,8 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
         //copy the name across
         strlcpy(sTemplate.aName, psD->aName, sizeof(sTemplate.aName));
 
-        x = psD->x;
-        y = psD->y;
+        x = psD->pos.x;
+        y = psD->pos.y;
         body = psD->body;
 	for (impact_side = 0;impact_side < NUM_HIT_SIDES;impact_side=impact_side+1)
 	{
@@ -5626,7 +5626,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
         {
             scoreUpdateVar(WD_UNITS_LOST);
 
-	        audio_QueueTrackPos( ID_SOUND_NEXUS_UNIT_ABSORBED, x, y, psD->z );
+	        audio_QueueTrackPos( ID_SOUND_NEXUS_UNIT_ABSORBED, x, y, psD->pos.z );
 
         }
         //make the old droid vanish

@@ -575,18 +575,18 @@ Vector3i cameraToHome(UDWORD player,BOOL scroll)
 
 	if(psBuilding)
 	{
-		x= map_coord(psBuilding->x);
-		y= map_coord(psBuilding->y);
+		x= map_coord(psBuilding->pos.x);
+		y= map_coord(psBuilding->pos.y);
 	}
 	else if (apsDroidLists[player])				// or first droid
 	{
-		 x= map_coord(apsDroidLists[player]->x);
-		 y=	map_coord(apsDroidLists[player]->y);
+		 x= map_coord(apsDroidLists[player]->pos.x);
+		 y=	map_coord(apsDroidLists[player]->pos.y);
 	}
 	else if (apsStructLists[player])							// center on first struct
 	{
-		x= map_coord(apsStructLists[player]->x);
-		y= map_coord(apsStructLists[player]->y);
+		x= map_coord(apsStructLists[player]->pos.x);
+		y= map_coord(apsStructLists[player]->pos.y);
 	}
 	else														//or map center.
 	{

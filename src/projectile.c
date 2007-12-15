@@ -359,18 +359,18 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	}
 	else // incase anything wants a projectile
 	{
-		muzzle.x = psAttacker->x;
-		muzzle.y = psAttacker->y;
-		muzzle.z = psAttacker->z;
+		muzzle.x = psAttacker->pos.x;
+		muzzle.y = psAttacker->pos.y;
+		muzzle.z = psAttacker->pos.z;
 	}
 
 	/* Initialise the structure */
 	psObj->type		    = OBJ_PROJECTILE;
 	psObj->state		= PROJ_INFLIGHT;
 	psObj->psWStats		= asWeaponStats + psWeap->nStat;
-	psObj->x			= (UWORD)muzzle.x;
-	psObj->y			= (UWORD)muzzle.y;
-	psObj->z			= (UWORD)muzzle.z;
+	psObj->pos.x			= (UWORD)muzzle.x;
+	psObj->pos.y			= (UWORD)muzzle.y;
+	psObj->pos.z			= (UWORD)muzzle.z;
 	psObj->startX		= muzzle.x;
 	psObj->startY		= muzzle.y;
 	psObj->tarX			= tarX;
@@ -453,7 +453,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 				ASSERT(!"unknown object type", "proj_SendProjectile: unknown object type");
 				break;
 		}
-		tarHeight = psTarget->z + heightVariance;
+		tarHeight = psTarget->pos.z + heightVariance;
 	}
 	else
 	{
@@ -679,9 +679,9 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 	/* If it's homing and it has a target (not a miss)... */
 	if ( psStats->movementModel == MM_HOMINGDIRECT && psObj->psDest )
 	{
-		dx = (SDWORD)psObj->psDest->x - (SDWORD)psObj->startX;
-		dy = (SDWORD)psObj->psDest->y - (SDWORD)psObj->startY;
-		dz = (SDWORD)psObj->psDest->z - (SDWORD)psObj->srcHeight;
+		dx = (SDWORD)psObj->psDest->pos.x - (SDWORD)psObj->startX;
+		dy = (SDWORD)psObj->psDest->pos.y - (SDWORD)psObj->startY;
+		dz = (SDWORD)psObj->psDest->pos.z - (SDWORD)psObj->srcHeight;
 	}
 	else
 	{
@@ -714,19 +714,19 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 	}
 	else
 	{
-		psObj->x = (UWORD)iX;
-		psObj->y = (UWORD)iY;
+		psObj->pos.x = (UWORD)iX;
+		psObj->pos.y = (UWORD)iY;
 	}
-	psObj->z = (UWORD)(psObj->srcHeight) + (UWORD)(dist * dz / rad);
+	psObj->pos.z = (UWORD)(psObj->srcHeight) + (UWORD)(dist * dz / rad);
 
 	if ( gfxVisible(psObj) )
 	{
 		if ( psStats->weaponSubClass == WSC_FLAME )
 		{
 			effectGiveAuxVar(PERCENT(dist,rad));
-			pos.x = psObj->x;
-			pos.y = psObj->z-8;
-			pos.z = psObj->y;
+			pos.x = psObj->pos.x;
+			pos.y = psObj->pos.z-8;
+			pos.z = psObj->pos.y;
 			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLAMETHROWER,FALSE,NULL,0);
 		}
 		else if ( psStats->weaponSubClass == WSC_COMMAND ||
@@ -734,9 +734,9 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 			psStats->weaponSubClass == WSC_EMP )
 		{
 			effectGiveAuxVar((PERCENT(dist,rad)/2));
-			pos.x = psObj->x;
-			pos.y = psObj->z-8;
-			pos.z = psObj->y;
+			pos.x = psObj->pos.x;
+			pos.y = psObj->pos.z-8;
+			pos.z = psObj->pos.y;
   			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LASER,FALSE,NULL,0);
 			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLARE,FALSE,NULL,0);
 		}
@@ -745,9 +745,9 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 			psStats->weaponSubClass == WSC_SLOWROCKET ||
 			psStats->weaponSubClass == WSC_SLOWMISSILE )
 		{
-			pos.x = psObj->x;
-			pos.y = psObj->z+8;
-			pos.z = psObj->y;
+			pos.x = psObj->pos.x;
+			pos.y = psObj->pos.z+8;
+			pos.z = psObj->pos.y;
 			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,FALSE,NULL,0);
 			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLARE,FALSE,NULL,0);
 		}
@@ -828,9 +828,9 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 					continue;
 				}
 
-				xdiff = (SDWORD)psObj->x - (SDWORD)psTempObj->x;
-				ydiff = (SDWORD)psObj->y - (SDWORD)psTempObj->y;
-				zdiff = abs((UDWORD)psObj->z - (UDWORD)psTempObj->z);
+				xdiff = (SDWORD)psObj->pos.x - (SDWORD)psTempObj->pos.x;
+				ydiff = (SDWORD)psObj->pos.y - (SDWORD)psTempObj->pos.y;
+				zdiff = abs((UDWORD)psObj->pos.z - (UDWORD)psTempObj->pos.z);
 
 				if ( zdiff < establishTargetHeight(psTempObj) &&
 					(xdiff*xdiff + ydiff*ydiff) < ( (SDWORD)establishTargetRadius(psTempObj) * (SDWORD)establishTargetRadius(psTempObj) ) )
@@ -849,9 +849,9 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 					continue;
 				}
 
-				xdiff = (SDWORD)psObj->x - (SDWORD)psTempObj->x;
-				ydiff = (SDWORD)psObj->y - (SDWORD)psTempObj->y;
-				zdiff = abs((UDWORD)psObj->z - (UDWORD)psTempObj->z);
+				xdiff = (SDWORD)psObj->pos.x - (SDWORD)psTempObj->pos.x;
+				ydiff = (SDWORD)psObj->pos.y - (SDWORD)psTempObj->pos.y;
+				zdiff = abs((UDWORD)psObj->pos.z - (UDWORD)psTempObj->pos.z);
 
 				if ( zdiff < establishTargetHeight(psTempObj) &&
 					(xdiff*xdiff + ydiff*ydiff) < (SDWORD)( establishTargetRadius(psTempObj) * establishTargetRadius(psTempObj) ) )
@@ -874,7 +874,7 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 						TargetX = MIN(TargetX, world_coord(mapWidth - 1));
 						TargetY = MAX(psObj->startY + extendRad * dy / rad, 0);
 						TargetY = MIN(TargetY, world_coord(mapHeight - 1));
-						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, TargetX, TargetY, psObj->z, NULL, TRUE, bPenetrate, -1 );
+						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, TargetX, TargetY, psObj->pos.z, NULL, TRUE, bPenetrate, -1 );
 					}
 					else
 					{
@@ -889,9 +889,9 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 	/* See if effect has finished */
 	if ( psStats->movementModel == MM_HOMINGDIRECT && psObj->psDest )
 	{
-		xdiff = (SDWORD)psObj->x - (SDWORD)psObj->psDest->x;
-		ydiff = (SDWORD)psObj->y - (SDWORD)psObj->psDest->y;
-		zdiff = abs((UDWORD)psObj->z - (UDWORD)psObj->psDest->z);
+		xdiff = (SDWORD)psObj->pos.x - (SDWORD)psObj->psDest->pos.x;
+		ydiff = (SDWORD)psObj->pos.y - (SDWORD)psObj->psDest->pos.y;
+		zdiff = abs((UDWORD)psObj->pos.z - (UDWORD)psObj->psDest->pos.z);
 
 		if ( zdiff < establishTargetHeight(psObj->psDest ) &&
 			(xdiff*xdiff + ydiff*ydiff) < ((SDWORD)psObj->targetRadius * (SDWORD)psObj->targetRadius) )
@@ -906,9 +906,9 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 		/* It's damage time */
 		if (psObj->psDest)
 		{
-			xdiff = (SDWORD)psObj->x - (SDWORD)psObj->psDest->x;
-			ydiff = (SDWORD)psObj->y - (SDWORD)psObj->psDest->y;
-			zdiff = abs((UDWORD)psObj->z - (UDWORD)psObj->psDest->z);
+			xdiff = (SDWORD)psObj->pos.x - (SDWORD)psObj->psDest->pos.x;
+			ydiff = (SDWORD)psObj->pos.y - (SDWORD)psObj->psDest->pos.y;
+			zdiff = abs((UDWORD)psObj->pos.z - (UDWORD)psObj->psDest->pos.z);
 
 			//Watermelon:'real' hit check even if the projectile is about to 'timeout'
 			if ( zdiff < establishTargetHeight(psObj->psDest) &&
@@ -937,9 +937,9 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 	/* add smoke trail to indirect weapons firing directly */
 	if( !proj_Direct( psStats ) && gfxVisible(psObj))
 	{
-		pos.x = psObj->x;
-		pos.y = psObj->z+8;
-		pos.z = psObj->y;
+		pos.x = psObj->pos.x;
+		pos.y = psObj->pos.z+8;
+		pos.z = psObj->pos.y;
 		addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,FALSE,NULL,0);
 	}
 }
@@ -990,13 +990,13 @@ proj_InFlightIndirectFunc( PROJECTILE *psObj )
 	}
 	else
 	{
-		psObj->x = (UWORD)iX;
-		psObj->y = (UWORD)iY;
+		psObj->pos.x = (UWORD)iX;
+		psObj->pos.y = (UWORD)iY;
 	}
 
 	dz = (psObj->vZ - (iTime*ACC_GRAVITY/GAME_TICKS_PER_SEC/2)) *
 				iTime / GAME_TICKS_PER_SEC;
-	psObj->z = (UWORD)(psObj->srcHeight + dz);
+	psObj->pos.z = (UWORD)(psObj->srcHeight + dz);
 
 	fVVert = MAKEFRACT(psObj->vZ - (iTime*ACC_GRAVITY/GAME_TICKS_PER_SEC));
 	psObj->pitch = (SWORD)( RAD_TO_DEG(atan2(fVVert, psObj->vXY)) );
@@ -1023,18 +1023,18 @@ proj_InFlightIndirectFunc( PROJECTILE *psObj )
 				break;
 			case WSC_FLAME:
 				effectGiveAuxVar(PERCENT(iDist,iRad));
-				pos.x = psObj->x;
-				pos.y = psObj->z-8;
-				pos.z = psObj->y;
+				pos.x = psObj->pos.x;
+				pos.y = psObj->pos.z-8;
+				pos.z = psObj->pos.y;
 				addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLAMETHROWER,FALSE,NULL,0);
 				break;
 			case WSC_COMMAND:
 			case WSC_ELECTRONIC:
 			case WSC_EMP:
 				effectGiveAuxVar((PERCENT(iDist,iRad)/2));
-				pos.x = psObj->x;
-				pos.y = psObj->z-8;
-				pos.z = psObj->y;
+				pos.x = psObj->pos.x;
+				pos.y = psObj->pos.z-8;
+				pos.z = psObj->pos.y;
 				addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LASER,FALSE,NULL,0);
 				addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLARE,FALSE,NULL,0);
 				break;
@@ -1042,9 +1042,9 @@ proj_InFlightIndirectFunc( PROJECTILE *psObj )
 			case WSC_MISSILE:
 			case WSC_SLOWROCKET:
 			case WSC_SLOWMISSILE:
-				pos.x = psObj->x;
-				pos.y = psObj->z+8;
-				pos.z = psObj->y;
+				pos.x = psObj->pos.x;
+				pos.y = psObj->pos.z+8;
+				pos.z = psObj->pos.y;
 				addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,FALSE,NULL,0);
 				addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLARE,FALSE,NULL,0);
 				break;
@@ -1085,9 +1085,9 @@ proj_InFlightIndirectFunc( PROJECTILE *psObj )
 		{
 			if ( psTempObj->type == OBJ_STRUCTURE || psTempObj->type == OBJ_FEATURE )
 			{
-				xdiff = (SDWORD)psObj->x - (SDWORD)psTempObj->x;
-				ydiff = (SDWORD)psObj->y - (SDWORD)psTempObj->y;
-				zdiff = abs((UDWORD)psObj->z - (UDWORD)psTempObj->z);
+				xdiff = (SDWORD)psObj->pos.x - (SDWORD)psTempObj->pos.x;
+				ydiff = (SDWORD)psObj->pos.y - (SDWORD)psTempObj->pos.y;
+				zdiff = abs((UDWORD)psObj->pos.z - (UDWORD)psTempObj->pos.z);
 
 				if ( zdiff < establishTargetHeight(psTempObj) &&
 					(xdiff*xdiff + ydiff*ydiff) < ( (SDWORD)establishTargetRadius(psTempObj) * (SDWORD)establishTargetRadius(psTempObj) ) )
@@ -1100,9 +1100,9 @@ proj_InFlightIndirectFunc( PROJECTILE *psObj )
 			}
 			else
 			{
-				xdiff = (SDWORD)psObj->x - (SDWORD)psTempObj->x;
-				ydiff = (SDWORD)psObj->y - (SDWORD)psTempObj->y;
-				zdiff = abs((UDWORD)psObj->z - (UDWORD)psTempObj->z);
+				xdiff = (SDWORD)psObj->pos.x - (SDWORD)psTempObj->pos.x;
+				ydiff = (SDWORD)psObj->pos.y - (SDWORD)psTempObj->pos.y;
+				zdiff = abs((UDWORD)psObj->pos.z - (UDWORD)psTempObj->pos.z);
 
 				if ( zdiff < establishTargetHeight(psTempObj) &&
 					(UDWORD)(xdiff*xdiff + ydiff*ydiff) < ( (SDWORD)establishTargetRadius(psTempObj) * (SDWORD)establishTargetRadius(psTempObj) ) )
@@ -1125,7 +1125,7 @@ proj_InFlightIndirectFunc( PROJECTILE *psObj )
 						TargetX = MIN(TargetX, world_coord(mapWidth - 1));
 						TargetY = MAX(psObj->startY + extendRad * dy / iRad, 0);
 						TargetY = MIN(TargetY, world_coord(mapHeight - 1));
-						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, TargetX, TargetY, psObj->z, NULL, TRUE, bPenetrate, -1 );
+						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, TargetX, TargetY, psObj->pos.z, NULL, TRUE, bPenetrate, -1 );
 					}
 					else
 					{
@@ -1142,19 +1142,19 @@ proj_InFlightIndirectFunc( PROJECTILE *psObj )
 	{
 		psObj->state = PROJ_IMPACT;
 
-		pos.x = psObj->x;
-		pos.z = psObj->y;
+		pos.x = psObj->pos.x;
+		pos.z = psObj->pos.y;
 		pos.y = map_Height(pos.x,pos.z) + 8;
 
 		/* It's damage time */
 		//Watermelon:'real' check
 		if ( psObj->psDest )
 		{
-			psObj->z = (UWORD)(pos.y + 8); // bring up the impact explosion
+			psObj->pos.z = (UWORD)(pos.y + 8); // bring up the impact explosion
 
-			xdiff = (SDWORD)psObj->x - (SDWORD)psObj->psDest->x;
-			ydiff = (SDWORD)psObj->y - (SDWORD)psObj->psDest->y;
-			zdiff = abs((UDWORD)psObj->z - (UDWORD)psObj->psDest->z);
+			xdiff = (SDWORD)psObj->pos.x - (SDWORD)psObj->psDest->pos.x;
+			ydiff = (SDWORD)psObj->pos.y - (SDWORD)psObj->psDest->pos.y;
+			zdiff = abs((UDWORD)psObj->pos.z - (UDWORD)psObj->psDest->pos.z);
 
 			if ( zdiff < establishTargetHeight(psObj->psDest) &&
 				(xdiff*xdiff + ydiff*ydiff) < (SDWORD)( establishTargetRadius(psObj->psDest) * establishTargetRadius(psObj->psDest) ) )
@@ -1192,9 +1192,9 @@ proj_InFlightIndirectFunc( PROJECTILE *psObj )
 	{
 		if(gfxVisible(psObj))
 		{
-			pos.x = psObj->x;
-			pos.y = psObj->z+4;
-			pos.z = psObj->y;
+			pos.x = psObj->pos.x;
+			pos.y = psObj->pos.z+4;
+			pos.z = psObj->pos.y;
 			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,FALSE,NULL,0);
 		}
 	}
@@ -1245,7 +1245,7 @@ proj_ImpactFunc( PROJECTILE *psObj )
 			 && ONEINTHREE)
 			{
 				iAudioImpactID = ID_SOUND_RICOCHET_1 + (rand() % 3);
-				audio_PlayStaticTrack(psObj->psDest->x, psObj->psDest->y, iAudioImpactID);
+				audio_PlayStaticTrack(psObj->psDest->pos.x, psObj->psDest->pos.y, iAudioImpactID);
 			}
 		}
 		else
@@ -1256,7 +1256,7 @@ proj_ImpactFunc( PROJECTILE *psObj )
 			}
 			else
 			{
-				audio_PlayStaticTrack(psObj->psDest->x, psObj->psDest->y, psStats->iAudioImpactID);
+				audio_PlayStaticTrack(psObj->psDest->pos.x, psObj->psDest->pos.y, psStats->iAudioImpactID);
 			}
 		}
 
@@ -1286,9 +1286,9 @@ proj_ImpactFunc( PROJECTILE *psObj )
 	}
 
 	// Set the effects position and radius
-	position.x = psObj->x;
-	position.z = psObj->y;
-	position.y = psObj->z;//map_Height(psObj->x, psObj->y) + 24;
+	position.x = psObj->pos.x;
+	position.z = psObj->pos.y;
+	position.y = psObj->pos.z;//map_Height(psObj->pos.x, psObj->pos.y) + 24;
 	scatter.x = psStats->radius;
 	scatter.y = 0;
 	scatter.z = psStats->radius;
@@ -1299,7 +1299,7 @@ proj_ImpactFunc( PROJECTILE *psObj )
 		if (gfxVisible(psObj))
 		{
 			// The graphic to show depends on if we hit water or not
-			if (terrainType(mapTile(map_coord(psObj->x), map_coord(psObj->y))) == TER_WATER)
+			if (terrainType(mapTile(map_coord(psObj->pos.x), map_coord(psObj->pos.y))) == TER_WATER)
 			{
 				imd = psStats->pWaterHitGraphic;
 			}
@@ -1431,13 +1431,13 @@ proj_ImpactFunc( PROJECTILE *psObj )
 		psObj->born = gameTime;
 
 		/* Work out the bounding box for the blast radius */
-		tarX0 = (SDWORD)psObj->x - (SDWORD)psStats->radius;
-		tarY0 = (SDWORD)psObj->y - (SDWORD)psStats->radius;
-		tarX1 = (SDWORD)psObj->x + (SDWORD)psStats->radius;
-		tarY1 = (SDWORD)psObj->y + (SDWORD)psStats->radius;
+		tarX0 = (SDWORD)psObj->pos.x - (SDWORD)psStats->radius;
+		tarY0 = (SDWORD)psObj->pos.y - (SDWORD)psStats->radius;
+		tarX1 = (SDWORD)psObj->pos.x + (SDWORD)psStats->radius;
+		tarY1 = (SDWORD)psObj->pos.y + (SDWORD)psStats->radius;
 		/* Watermelon:height bounding box  for airborne units*/
-		tarZ0 = (SDWORD)psObj->z - (SDWORD)psStats->radius;
-		tarZ1 = (SDWORD)psObj->z + (SDWORD)psStats->radius;
+		tarZ0 = (SDWORD)psObj->pos.z - (SDWORD)psStats->radius;
+		tarZ1 = (SDWORD)psObj->pos.z + (SDWORD)psStats->radius;
 
 		/* Store the radius cubed */
 		radCubed = psStats->radius * psStats->radius * psStats->radius;
@@ -1461,17 +1461,17 @@ proj_ImpactFunc( PROJECTILE *psObj )
 
 					/* see if psCurrD is hit (don't hit main target twice) */
 					if (((BASE_OBJECT *)psCurrD != psObj->psDest) &&
-						((SDWORD)psCurrD->x >= tarX0) &&
-						((SDWORD)psCurrD->x <= tarX1) &&
-						((SDWORD)psCurrD->y >= tarY0) &&
-						((SDWORD)psCurrD->y <= tarY1) &&
-						((SDWORD)psCurrD->z >= tarZ0) &&
-						((SDWORD)psCurrD->z <= tarZ1))
+						((SDWORD)psCurrD->pos.x >= tarX0) &&
+						((SDWORD)psCurrD->pos.x <= tarX1) &&
+						((SDWORD)psCurrD->pos.y >= tarY0) &&
+						((SDWORD)psCurrD->pos.y <= tarY1) &&
+						((SDWORD)psCurrD->pos.z >= tarZ0) &&
+						((SDWORD)psCurrD->pos.z <= tarZ1))
 					{
 						/* Within the bounding box, now check the radius */
-						xDiff = psCurrD->x - psObj->x;
-						yDiff = psCurrD->y - psObj->y;
-						zDiff = psCurrD->z - psObj->z;
+						xDiff = psCurrD->pos.x - psObj->pos.x;
+						yDiff = psCurrD->pos.y - psObj->pos.y;
+						zDiff = psCurrD->pos.z - psObj->pos.z;
 						if ((xDiff*xDiff + yDiff*yDiff + zDiff*zDiff) <= radCubed)
 						{
 							HIT_ROLL(dice);
@@ -1525,14 +1525,14 @@ proj_ImpactFunc( PROJECTILE *psObj )
 
 					/* see if psCurrD is hit (don't hit main target twice) */
 					if (((BASE_OBJECT *)psCurrD != psObj->psDest) &&
-						((SDWORD)psCurrD->x >= tarX0) &&
-						((SDWORD)psCurrD->x <= tarX1) &&
-						((SDWORD)psCurrD->y >= tarY0) &&
-						((SDWORD)psCurrD->y <= tarY1))
+						((SDWORD)psCurrD->pos.x >= tarX0) &&
+						((SDWORD)psCurrD->pos.x <= tarX1) &&
+						((SDWORD)psCurrD->pos.y >= tarY0) &&
+						((SDWORD)psCurrD->pos.y <= tarY1))
 					{
 						/* Within the bounding box, now check the radius */
-						xDiff = psCurrD->x - psObj->x;
-						yDiff = psCurrD->y - psObj->y;
+						xDiff = psCurrD->pos.x - psObj->pos.x;
+						yDiff = psCurrD->pos.y - psObj->pos.y;
 						if ((xDiff*xDiff + yDiff*yDiff) <= radCubed)
 						{
 							HIT_ROLL(dice);
@@ -1573,14 +1573,14 @@ proj_ImpactFunc( PROJECTILE *psObj )
 
 					/* see if psCurrS is hit (don't hit main target twice) */
 					if (((BASE_OBJECT *)psCurrS != psObj->psDest) &&
-						((SDWORD)psCurrS->x >= tarX0) &&
-						((SDWORD)psCurrS->x <= tarX1) &&
-						((SDWORD)psCurrS->y >= tarY0) &&
-						((SDWORD)psCurrS->y <= tarY1))
+						((SDWORD)psCurrS->pos.x >= tarX0) &&
+						((SDWORD)psCurrS->pos.x <= tarX1) &&
+						((SDWORD)psCurrS->pos.y >= tarY0) &&
+						((SDWORD)psCurrS->pos.y <= tarY1))
 					{
 						/* Within the bounding box, now check the radius */
-						xDiff = psCurrS->x - psObj->x;
-						yDiff = psCurrS->y - psObj->y;
+						xDiff = psCurrS->pos.x - psObj->pos.x;
+						yDiff = psCurrS->pos.y - psObj->pos.y;
 						if ((xDiff*xDiff + yDiff*yDiff) <= radCubed)
 						{
 							HIT_ROLL(dice);
@@ -1612,7 +1612,7 @@ proj_ImpactFunc( PROJECTILE *psObj )
 						}
 					}
 					// Missed by old method, but maybe in landed within the building's footprint(baseplate)
-					else if(ptInStructure(psCurrS,psObj->x, psObj->y) && (BASE_OBJECT*)psCurrS != psObj->psDest)
+					else if(ptInStructure(psCurrS,psObj->pos.x, psObj->pos.y) && (BASE_OBJECT*)psCurrS != psObj->psDest)
 					{
 						damage = NOMINAL_DAMAGE;
 
@@ -1647,14 +1647,14 @@ proj_ImpactFunc( PROJECTILE *psObj )
 			}
 			/* see if psCurrS is hit (don't hit main target twice) */
 			if (((BASE_OBJECT *)psCurrF != psObj->psDest) &&
-				((SDWORD)psCurrF->x >= tarX0) &&
-				((SDWORD)psCurrF->x <= tarX1) &&
-				((SDWORD)psCurrF->y >= tarY0) &&
-				((SDWORD)psCurrF->y <= tarY1))
+				((SDWORD)psCurrF->pos.x >= tarX0) &&
+				((SDWORD)psCurrF->pos.x <= tarX1) &&
+				((SDWORD)psCurrF->pos.y >= tarY0) &&
+				((SDWORD)psCurrF->pos.y <= tarY1))
 			{
 				/* Within the bounding box, now check the radius */
-				xDiff = psCurrF->x - psObj->x;
-				yDiff = psCurrF->y - psObj->y;
+				xDiff = psCurrF->pos.x - psObj->pos.x;
+				yDiff = psCurrF->pos.y - psObj->pos.y;
 				if ((xDiff*xDiff + yDiff*yDiff) <= radCubed)
 				{
 					HIT_ROLL(dice);
@@ -1722,10 +1722,10 @@ proj_PostImpactFunc( PROJECTILE *psObj )
 		/* See if anything is in the fire and burn it */
 
 		/* Calculate the fire's bounding box */
-		flame.x1 = (SWORD)(psObj->x - psStats->incenRadius);
-		flame.y1 = (SWORD)(psObj->y - psStats->incenRadius);
-		flame.x2 = (SWORD)(psObj->x + psStats->incenRadius);
-		flame.y2 = (SWORD)(psObj->y + psStats->incenRadius);
+		flame.x1 = (SWORD)(psObj->pos.x - psStats->incenRadius);
+		flame.y1 = (SWORD)(psObj->pos.y - psStats->incenRadius);
+		flame.x2 = (SWORD)(psObj->pos.x + psStats->incenRadius);
+		flame.y2 = (SWORD)(psObj->pos.y + psStats->incenRadius);
 		flame.rad = (SWORD)(psStats->incenRadius*psStats->incenRadius);
 
 		for (i=0; i<MAX_PLAYERS; i++)
@@ -1764,7 +1764,7 @@ proj_Update( PROJECTILE *psObj )
 	}
 
 	// This extra check fixes a crash in cam2, mission1
-	if (worldOnMap(psObj->x, psObj->y) == FALSE)
+	if (worldOnMap(psObj->pos.x, psObj->pos.y) == FALSE)
 	{
 		psObj->died = TRUE;
 		return;
@@ -1863,14 +1863,14 @@ proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj,
 		}
 
 		/* see if psCurr is hit (don't hit main target twice) */
-		if (((SDWORD)psCurr->x >= pFireBox->x1) &&
-			((SDWORD)psCurr->x <= pFireBox->x2) &&
-			((SDWORD)psCurr->y >= pFireBox->y1) &&
-			((SDWORD)psCurr->y <= pFireBox->y2))
+		if (((SDWORD)psCurr->pos.x >= pFireBox->x1) &&
+			((SDWORD)psCurr->pos.x <= pFireBox->x2) &&
+			((SDWORD)psCurr->pos.y >= pFireBox->y1) &&
+			((SDWORD)psCurr->pos.y <= pFireBox->y2))
 		{
 			/* Within the bounding box, now check the radius */
-			xDiff = psCurr->x - psProj->x;
-			yDiff = psCurr->y - psProj->y;
+			xDiff = psCurr->pos.x - psProj->pos.x;
+			yDiff = psCurr->pos.y - psProj->pos.y;
 			if ((xDiff*xDiff + yDiff*yDiff) <= pFireBox->rad)
 			{
 				/* The object is in the fire */
@@ -2148,15 +2148,15 @@ static HIT_SIDE getHitSide(PROJECTILE *psObj, BASE_OBJECT *psTarget)
 		return HIT_SIDE_TOP;
 	}
 	// If the height difference between us and the target is > 50
-	else if (psObj->z < (psTarget->z - 50))
+	else if (psObj->pos.z < (psTarget->pos.z - 50))
 	{
 		return HIT_SIDE_BOTTOM;
 	}
 	// We hit an actual `side'
 	else
 	{
-		deltaX = psObj->startX - psTarget->x;
-		deltaY = psObj->startY - psTarget->y;
+		deltaX = psObj->startX - psTarget->pos.x;
+		deltaY = psObj->startY - psTarget->pos.y;
 
 		/*
 		 * Work out the impact angle. It is easiest to understand if you
@@ -2322,8 +2322,8 @@ void projGetNaybors(PROJECTILE *psObj)
 #endif
 
 	// search for naybor objects
-	dx = ((BASE_OBJECT *)psObj)->x;
-	dy = ((BASE_OBJECT *)psObj)->y;
+	dx = ((BASE_OBJECT *)psObj)->pos.x;
+	dy = ((BASE_OBJECT *)psObj)->pos.y;
 
 	gridStartIterate((SDWORD)dx, (SDWORD)dy);
 	for (psTempObj = gridIterate(); psTempObj != NULL; psTempObj = gridIterate())
@@ -2331,7 +2331,7 @@ void projGetNaybors(PROJECTILE *psObj)
 		if (psTempObj != (BASE_OBJECT *)psObj && !psTempObj->died)
 		{
 			// see if an object is in NAYBOR_RANGE
-			xdiff = dx - (SDWORD)psTempObj->x;
+			xdiff = dx - (SDWORD)psTempObj->pos.x;
 			if (xdiff < 0)
 			{
 				xdiff = -xdiff;
@@ -2341,7 +2341,7 @@ void projGetNaybors(PROJECTILE *psObj)
 				continue;
 			}
 
-			ydiff = dy - (SDWORD)psTempObj->y;
+			ydiff = dy - (SDWORD)psTempObj->pos.y;
 			if (ydiff < 0)
 			{
 				ydiff = -ydiff;

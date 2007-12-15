@@ -1048,8 +1048,8 @@ static void display3DProjectiles( void )
 				/* don't display first frame of trajectory (projectile on firing object) */
 				if ( gameTime != psObj->born )
 				{
-					/* Draw a bullet at psObj->x for X coord
-										psObj->y for Z coord
+					/* Draw a bullet at psObj->pos.x for X coord
+										psObj->pos.y for Z coord
 										whatever for Y (height) coord - arcing ?
 					*/
 					/* these guys get drawn last */
@@ -1110,16 +1110,16 @@ void	renderProjectile(PROJECTILE *psCurr)
 	missing target, in flight etc - JUST DO IN FLIGHT FOR NOW! */
 	pIMD = psStats->pInFlightGraphic;
 
-	if (clipXY(psCurr->x,psCurr->y))
+	if (clipXY(psCurr->pos.x,psCurr->pos.y))
 	{
 		/* Get bullet's x coord */
-		dv.x = (psCurr->x - player.p.x) - terrainMidX*TILE_UNITS;
+		dv.x = (psCurr->pos.x - player.p.x) - terrainMidX*TILE_UNITS;
 
 		/* Get it's y coord (z coord in the 3d world */
-		dv.z = terrainMidY*TILE_UNITS - (psCurr->y - player.p.z);
+		dv.z = terrainMidY*TILE_UNITS - (psCurr->pos.y - player.p.z);
 
 		/* What's the present height of the bullet? */
-		dv.y = psCurr->z;
+		dv.y = psCurr->pos.z;
 		/* Set up the matrix */
 		iV_MatrixBegin();
 
@@ -1159,8 +1159,8 @@ void
 renderAnimComponent( const COMPONENT_OBJECT *psObj )
 {
 	BASE_OBJECT *psParentObj = (BASE_OBJECT*)psObj->psParent;
-	const SDWORD posX = psParentObj->x + psObj->position.x,
-		posY = psParentObj->y + psObj->position.y;
+	const SDWORD posX = psParentObj->pos.x + psObj->position.x,
+		posY = psParentObj->pos.y + psObj->position.y;
 	SWORD rx, rz;
 
 	ASSERT( psParentObj != NULL, "renderAnimComponent: invalid parent object pointer" );
@@ -1177,9 +1177,9 @@ renderAnimComponent( const COMPONENT_OBJECT *psObj )
 	{
 		/* get parent object translation */
 		const Vector3i dv = {
-			(psParentObj->x - player.p.x) - terrainMidX * TILE_UNITS,
-			psParentObj->z,
-			terrainMidY * TILE_UNITS - (psParentObj->y - player.p.z)
+			(psParentObj->pos.x - player.p.x) - terrainMidX * TILE_UNITS,
+			psParentObj->pos.z,
+			terrainMidY * TILE_UNITS - (psParentObj->pos.y - player.p.z)
 		};
 		SDWORD iPlayer;
 		PIELIGHT brightness;
@@ -1289,7 +1289,7 @@ void displayStaticObjects( void )
 		{
 			test++;
 			/* Worth rendering the structure? */
-			if(clipXY(psStructure->x,psStructure->y))
+			if(clipXY(psStructure->pos.x,psStructure->pos.y))
 			{
 				if ( psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR &&
 					psStructure->psCurAnim == NULL &&
@@ -1372,7 +1372,7 @@ UDWORD		clan;
 			psFeature = psFeature->psNext)
 		{
 			/* Is the feature worth rendering? */
-			if(clipXY(psFeature->x,psFeature->y))
+			if(clipXY(psFeature->pos.x,psFeature->pos.y))
 			{
 				renderFeature(psFeature);
 			}
@@ -1401,11 +1401,11 @@ void displayProximityMsgs( void )
 			}
 			else
 			{
-				x = ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->x;
-				y = ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->y;
+				x = ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->pos.x;
+				y = ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->pos.y;
 			}
 			/* Is the Message worth rendering? */
-			//if(clipXY(pViewProximity->x,pViewProximity->y))
+			//if(clipXY(pViewProximity->pos.x,pViewProximity->pos.y))
 			if(clipXY(x,y))
 			{
 				renderProximityMsg(psProxDisp);
@@ -1472,7 +1472,7 @@ void displayDynamicObjects( void )
 			psDroid = psDroid->psNext)
 		{
 			/* Find out whether the droid is worth rendering */
-				if(clipXY(psDroid->x,psDroid->y))
+				if(clipXY(psDroid->pos.x,psDroid->pos.y))
 				{
 					/* No point in adding it if you can't see it? */
 					if(psDroid->visible[selectedPlayer] || godMode || demoGetStatus())
@@ -1570,8 +1570,8 @@ void	renderFeature(FEATURE *psFeature)
 	{
 		psFeature->sDisplay.frameNumber = currentGameFrame;
 		/* Get it's x and y coordinates so we don't have to deref. struct later */
-		featX = psFeature->x;
-		featY = psFeature->y;
+		featX = psFeature->pos.x;
+		featY = psFeature->pos.y;
 		/* Daft hack to get around the oild derrick issue */
 		if (!TILE_HAS_FEATURE(mapTile(map_coord(featX), map_coord(featY))))
 		{
@@ -1581,7 +1581,7 @@ void	renderFeature(FEATURE *psFeature)
 		dv.z = terrainMidY*TILE_UNITS - (featY - player.p.z);
 
 		/* features sits at the height of the tile it's centre is on */
-		dv.y = psFeature->z;
+		dv.y = psFeature->pos.z;
 
 		/* Push the indentity matrix */
 		iV_MatrixBegin();
@@ -1625,7 +1625,7 @@ void	renderFeature(FEATURE *psFeature)
 		if(psFeature->psStats->subType == FEAT_OIL_RESOURCE)
 		{
 			vecTemp = psFeature->sDisplay.imd->points;
-			flattenImd(psFeature->sDisplay.imd, psFeature->x, psFeature->y, 0);
+			flattenImd(psFeature->sDisplay.imd, psFeature->pos.x, psFeature->pos.y, 0);
 			/* currentGameFrame/2 set anim running - GJ hack */
 			pie_Draw3DShape(psFeature->sDisplay.imd, currentGameFrame/2, 0, brightness, WZCOL_BLACK, 0, 0);
 			psFeature->sDisplay.imd->points = vecTemp;
@@ -1684,10 +1684,10 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 	}
 	else if (psProxDisp->type == POS_PROXOBJ)
 	{
-		msgX = ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->x;
-		msgY = ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->y;
+		msgX = ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->pos.x;
+		msgY = ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->pos.y;
 		/* message sits at the height specified at input*/
-		dv.y = ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->z + 64;
+		dv.y = ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->pos.z + 64;
 	}
 	else
 	{
@@ -1833,8 +1833,8 @@ void	renderStructure(STRUCTURE *psStructure)
 	psStructure->sDisplay.frameNumber = currentGameFrame;
 
 	/* Get it's x and y coordinates so we don't have to deref. struct later */
-	structX = psStructure->x;
-	structY = psStructure->y;
+	structX = psStructure->pos.x;
+	structY = psStructure->pos.y;
 
 	if (defensive)
 	{
@@ -1848,7 +1848,7 @@ void	renderStructure(STRUCTURE *psStructure)
 			memcpy( alteredPoints, imd->points, imd->npoints * sizeof(Vector3f) );
 
 			// Get the height of the centre point for reference
-			strHeight = psStructure->z;//map_Height(structX,structY) + 64;
+			strHeight = psStructure->pos.z;//map_Height(structX,structY) + 64;
 
 			// Now we got through the shape looking for vertices on the edge
 			for (i = 0; i < imd->npoints; i++)
@@ -1869,7 +1869,7 @@ void	renderStructure(STRUCTURE *psStructure)
 	dv.z = terrainMidY * TILE_UNITS - (structY - player.p.z);
 	if (defensive)
 	{
-		dv.y = psStructure->z;
+		dv.y = psStructure->pos.z;
 	} else {
 		dv.y = map_TileHeight(map_coord(structX), map_coord(structY));
 	}
@@ -2275,8 +2275,8 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 	{
 		psStructure->sDisplay.frameNumber = currentGameFrame;
 		/* Get it's x and y coordinates so we don't have to deref. struct later */
-		structX = psStructure->x;
-		structY = psStructure->y;
+		structX = psStructure->pos.x;
+		structY = psStructure->pos.y;
 		buildingBrightness = pal_SetBrightness(200 - (100 - PERCENT(psStructure->body, structureBody(psStructure))));
 
 		if(psStructure->selected)
@@ -2427,13 +2427,13 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 	Vector3f			*pVecTemp;
 	SDWORD			shadowScale, rx, rz;
 
-	dv.x = (psDroid->x - player.p.x) - terrainMidX*TILE_UNITS;
+	dv.x = (psDroid->pos.x - player.p.x) - terrainMidX*TILE_UNITS;
 	if(psDroid->droidType == DROID_TRANSPORTER)
 	{
 		dv.x -= bobTransporterHeight()/2;
 	}
-	dv.z = terrainMidY*TILE_UNITS - (psDroid->y - player.p.z);
-	dv.y = map_Height(psDroid->x, psDroid->y);
+	dv.z = terrainMidY*TILE_UNITS - (psDroid->pos.y - player.p.z);
+	dv.y = map_Height(psDroid->pos.x, psDroid->pos.y);
 
 	/* Push the indentity matrix */
 	iV_MatrixBegin();
@@ -2455,8 +2455,8 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 	pVecTemp = psShadowIMD->points;
 	if(psDroid->droidType == DROID_TRANSPORTER)
 	{
-		flattenImd( psShadowIMD, psDroid->x, psDroid->y, 0);
-		shadowScale = 100-(psDroid->z/100);
+		flattenImd( psShadowIMD, psDroid->pos.x, psDroid->pos.y, 0);
+		shadowScale = 100-(psDroid->pos.z/100);
 		if(shadowScale < 50) shadowScale = 50;
 	}
 	else
@@ -2672,7 +2672,7 @@ static void	drawStructureSelections( void )
 	/* Go thru' all the buildings */
 	for(psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
 	{
-		if(clipXY(psStruct->x,psStruct->y))
+		if(clipXY(psStruct->pos.x,psStruct->pos.y))
 		{
 			/* If it's selected */
 			if (psStruct->selected
@@ -2768,7 +2768,7 @@ static void	drawStructureSelections( void )
 		{
 			if(i!=selectedPlayer)		// only see enemy buildings being targetted, not yours!
 			{
-				if(clipXY(psStruct->x,psStruct->y))
+				if(clipXY(psStruct->pos.x,psStruct->pos.y))
 				{
 					/* If it's targetted and on-screen */
 					if(psStruct->targetted)
@@ -4251,14 +4251,14 @@ static void structureEffectsPlayer( UDWORD player )
 					xDif = xDif/4096;	 // cos it's fixed point
 					yDif = yDif/4096;
 
-					pos.x = psStructure->x + xDif;
-					pos.z = psStructure->y + yDif;
+					pos.x = psStructure->pos.x + xDif;
+					pos.z = psStructure->pos.y + yDif;
 					pos.y = map_Height(pos.x,pos.z) + 64 + (i*20);	// 64 up to get to base of spire
 					effectGiveAuxVar(50);	// half normal plasma size...
 					addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LASER,FALSE,NULL,0);
 
-					pos.x = psStructure->x - xDif;
-					pos.z = psStructure->y - yDif;
+					pos.x = psStructure->pos.x - xDif;
+					pos.z = psStructure->pos.y - yDif;
 //					pos.y = map_Height(pos.x,pos.z) + 64 + (i*20);	// 64 up to get to base of spire
 					effectGiveAuxVar(50);	// half normal plasma size...
 
@@ -4296,14 +4296,14 @@ static void structureEffectsPlayer( UDWORD player )
 						yDif = radius * (COS(DEG(val)));
 						xDif = xDif/4096;	 // cos it's fixed point
 						yDif = yDif/4096;
-						pos.x = psStructure->x + xDif;
-						pos.z = psStructure->y + yDif;
+						pos.x = psStructure->pos.x + xDif;
+						pos.z = psStructure->pos.y + yDif;
 						pos.y = map_Height(pos.x,pos.z) + psStructure->sDisplay.imd->ymax;
 						effectGiveAuxVar(30+bFXSize);	// half normal plasma size...
 						addEffect(&pos,EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER,FALSE,NULL,0);
-						pos.x = psStructure->x - xDif;
-						pos.z = psStructure->y - yDif;	// buildings are level!
-		//				pos.y = map_Height(pos.x,pos.z) + psStructure->sDisplay->ymax;
+						pos.x = psStructure->pos.x - xDif;
+						pos.z = psStructure->pos.y - yDif;	// buildings are level!
+		//				pos.y = map_Height(pos.x,pos.z) + psStructure->sDisplay->pos.ymax;
 						effectGiveAuxVar(30+bFXSize);	// half normal plasma size...
 						addEffect(&pos,EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER,FALSE,NULL,0);
 					}
@@ -4392,8 +4392,8 @@ static void	showSensorRange2(BASE_OBJECT *psObj)
 
 		xDif = xDif/4096;	 // cos it's fixed point
 		yDif = yDif/4096;
-		pos.x = psObj->x - xDif;
-		pos.z = psObj->y - yDif;
+		pos.x = psObj->pos.x - xDif;
+		pos.z = psObj->pos.y - yDif;
 		pos.y = map_Height(pos.x,pos.z)+ 16;	// 64 up to get to base of spire
 		effectGiveAuxVar(80);	// half normal plasma size...
 		if(bBuilding)
@@ -4527,7 +4527,7 @@ UDWORD	i;
 	{
 		for(psDroid= apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
 		{
-			if(clipXY(psDroid->x,psDroid->y))
+			if(clipXY(psDroid->pos.x,psDroid->pos.y))
 			{
 
 				if( (psDroid->visible[selectedPlayer]==UBYTE_MAX) &&
@@ -4577,9 +4577,9 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 	PIELIGHT colour;
 
 	null.x = null.y = null.z = 0;
-	each.x = psDroid->x;
-	each.z = psDroid->y;
-	each.y = psDroid->z + 24;
+	each.x = psDroid->pos.x;
+	each.z = psDroid->pos.y;
+	each.y = psDroid->pos.z + 24;
 
 	vec.x = (each.x - player.p.x) - terrainMidX*TILE_UNITS;
 	vec.z = terrainMidY*TILE_UNITS - (each.z - player.p.z);
@@ -4594,10 +4594,10 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 	pointIndex = rand()%(psStructure->sDisplay.imd->npoints-1);
 	point = &(psStructure->sDisplay.imd->points[pointIndex]);
 
-	each.x = psStructure->x + point->x;
+	each.x = psStructure->pos.x + point->x;
 	realY = MAKEINT((structHeightScale(psStructure) * point->y));
-	each.y = psStructure->z + realY;
-	each.z = psStructure->y - point->z;
+	each.y = psStructure->pos.z + realY;
+	each.z = psStructure->pos.y - point->z;
 
 	if(ONEINEIGHT)
 	{
@@ -4618,10 +4618,10 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 	pointIndex = rand()%(psStructure->sDisplay.imd->npoints-1);
 	point = &(psStructure->sDisplay.imd->points[pointIndex]);
 
-	each.x = psStructure->x + point->x;
+	each.x = psStructure->pos.x + point->x;
 	realY = MAKEINT((structHeightScale(psStructure) * point->y));
-	each.y = psStructure->z + realY;
-	each.z = psStructure->y - point->z;
+	each.y = psStructure->pos.z + realY;
+	each.z = psStructure->pos.y - point->z;
 
 	vec.x = (each.x - player.p.x) - terrainMidX*TILE_UNITS;
 	vec.z = terrainMidY*TILE_UNITS - (each.z - player.p.z);

@@ -109,8 +109,8 @@ BOOL scrGroupAddArea(void)
 
 	for(psDroid=apsDroidLists[player]; psDroid; psDroid=psDroid->psNext)
 	{
-		if (((SDWORD)psDroid->x >= x1) && ((SDWORD)psDroid->x <= x2) &&
-			((SDWORD)psDroid->y >= y1) && ((SDWORD)psDroid->y <= y2) &&
+		if (((SDWORD)psDroid->pos.x >= x1) && ((SDWORD)psDroid->pos.x <= x2) &&
+			((SDWORD)psDroid->pos.y >= y1) && ((SDWORD)psDroid->pos.y <= y2) &&
 			psDroid->droidType != DROID_COMMAND &&
 			psDroid->droidType != DROID_TRANSPORTER )
 
@@ -147,8 +147,8 @@ BOOL scrGroupAddAreaNoGroup(void)
 
 	for(psDroid=apsDroidLists[player]; psDroid; psDroid=psDroid->psNext)
 	{
-		if (((SDWORD)psDroid->x >= x1) && ((SDWORD)psDroid->x <= x2) &&
-			((SDWORD)psDroid->y >= y1) && ((SDWORD)psDroid->y <= y2) &&
+		if (((SDWORD)psDroid->pos.x >= x1) && ((SDWORD)psDroid->pos.x <= x2) &&
+			((SDWORD)psDroid->pos.y >= y1) && ((SDWORD)psDroid->pos.y <= y2) &&
 			psDroid->droidType != DROID_COMMAND &&
 			psDroid->droidType != DROID_TRANSPORTER &&
 			psDroid->psGroup   == NULL)
@@ -1223,10 +1223,10 @@ static BASE_OBJECT *scrTargetInArea(SDWORD tarPlayer, SDWORD visPlayer, SDWORD t
 	{
 		if ((!bVisCheck || psCurr->visible[visPlayer]) &&
 			(cluster == 0 || psCurr->cluster == cluster) &&
-			((SDWORD)psCurr->x >= x1) &&
-			((SDWORD)psCurr->x <= x2) &&
-			((SDWORD)psCurr->y >= y1) &&
-			((SDWORD)psCurr->y <= y2))
+			((SDWORD)psCurr->pos.x >= x1) &&
+			((SDWORD)psCurr->pos.x <= x2) &&
+			((SDWORD)psCurr->pos.y >= y1) &&
+			((SDWORD)psCurr->pos.y <= y2))
 		{
 			tarMask = getTargetMask(psCurr);
 			if (tarMask & ignore)

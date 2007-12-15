@@ -3752,8 +3752,8 @@ void intDisplayProximityBlips(WIDGET *psWidget, UDWORD xOffset,
 	}
 	else if (psProxDisp->type == POS_PROXOBJ)
 	{
-		x = ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->x;
-		y = ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->y;
+		x = ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->pos.x;
+		y = ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->pos.y;
 	}
 
 	//if not within view ignore message

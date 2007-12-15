@@ -154,11 +154,11 @@ void audio_GetObjectPos(void *psObj, SDWORD *piX, SDWORD *piY, SDWORD *piZ)
 	ASSERT( psBaseObj != NULL,
 			"audio_GetObjectPos: game object pointer invalid\n" );
 
-	*piX = psBaseObj->x;
-	*piZ = map_TileHeight(map_coord(psBaseObj->x), map_coord(psBaseObj->y));
+	*piX = psBaseObj->pos.x;
+	*piZ = map_TileHeight(map_coord(psBaseObj->pos.x), map_coord(psBaseObj->pos.y));
 
 	/* invert y to match QSOUND axes */
-	*piY = world_coord(GetHeightOfMap()) - psBaseObj->y;
+	*piY = world_coord(GetHeightOfMap()) - psBaseObj->pos.y;
 }
 
 /***************************************************************************/

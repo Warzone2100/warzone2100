@@ -96,8 +96,8 @@ UDWORD	bestSoFar;
 		    if( (bSelected ? psDroid->selected : TRUE ) )
 		    {
 			    /* Get the differences */
-			    xDif = abs(psDroid->x - x);
-			    yDif = abs(psDroid->y - y);
+			    xDif = abs(psDroid->pos.x - x);
+			    yDif = abs(psDroid->pos.y - y);
 			    /* Approximates the distance away - using a sqrt approximation */
 			    dist = MAX(xDif,yDif) + MIN(xDif,yDif)/2;	// approximates, but never more than 11% out...
 			    /* Is this the nearest one we got so far? */

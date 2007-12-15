@@ -55,7 +55,7 @@ typedef enum _object_type
 #define BASE_ELEMENTS1(pointerType) \
 	OBJECT_TYPE			type;		/* The type of object */ \
 	UDWORD				id;			/* ID number of the object */ \
-	UWORD				x,y,z;		/* Object's location */ \
+	Vector3i			pos;		/* Position of the object */ \
 	float				direction;	/* Object's direction +ve rotation about y axis*/ \
 	SWORD				pitch;		/* Object's pitch +ve nose up*/ \
 	SWORD				roll		/* Object's roll +ve left up, right down */

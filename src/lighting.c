@@ -485,8 +485,8 @@ float	fraction,adjust;
 	fraction = MAKEFRACT(frameTime)/GAME_TICKS_PER_SEC;
 
 	/* See if the droid's at the edge of the map */
-	tileX = psDroid->x/TILE_UNITS;
-	tileY = psDroid->y/TILE_UNITS;
+	tileX = psDroid->pos.x/TILE_UNITS;
+	tileY = psDroid->pos.y/TILE_UNITS;
 	/* Are we at the edge */
 	if(tileX<=1 || tileX>=mapWidth-2 || tileY<=1 || tileY>=mapHeight-2)
 	{
@@ -525,8 +525,8 @@ void	doBuildingLights( void )
 		for(psStructure = apsStructLists[i]; psStructure; psStructure = psStructure->psNext)
 		{
 			light.range = psStructure->pStructureType->baseWidth * TILE_UNITS;
-			light.position.x = psStructure->x;
-			light.position.z = psStructure->y;
+			light.position.x = psStructure->pos.x;
+			light.position.z = psStructure->pos.y;
 			light.position.y = map_Height(light.position.x,light.position.z);
 			light.range = psStructure->pStructureType->baseWidth * TILE_UNITS;
 			light.colour = LIGHT_WHITE;

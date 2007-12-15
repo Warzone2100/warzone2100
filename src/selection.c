@@ -412,7 +412,7 @@ BOOL	bLaterInList, bMatch;
 		if(getWarCamStatus())
 		{
 			camToggleStatus();			 // messy - fix this
-	//		setViewPos(map_coord(psCentreDroid->x), map_coord(psCentreDroid->y));
+	//		setViewPos(map_coord(psCentreDroid->pos.x), map_coord(psCentreDroid->pos.y));
 			processWarCam(); //odd, but necessary
 			camToggleStatus();				// messy - FIXME
 		}
@@ -421,7 +421,7 @@ BOOL	bLaterInList, bMatch;
 			{
 //				camToggleStatus();
 				/* Centre display on him if warcam isn't active */
-				setViewPos(map_coord(psResult->x), map_coord(psResult->y), TRUE);
+				setViewPos(map_coord(psResult->pos.x), map_coord(psResult->pos.y), TRUE);
 			}
 		psOldRD = psResult;
 	}
@@ -504,7 +504,7 @@ BOOL	bLaterInList;
 		if(getWarCamStatus())
 		{
 			camToggleStatus();			 // messy - fix this
-	//		setViewPos(map_coord(psCentreDroid->x), map_coord(psCentreDroid->y));
+	//		setViewPos(map_coord(psCentreDroid->pos.x), map_coord(psCentreDroid->pos.y));
 			processWarCam(); //odd, but necessary
 			camToggleStatus();				// messy - FIXME
 		}
@@ -513,7 +513,7 @@ BOOL	bLaterInList;
 			{
 //				camToggleStatus();
 				/* Centre display on him if warcam isn't active */
-				setViewPos(map_coord(psResult->x), map_coord(psResult->y), TRUE);
+				setViewPos(map_coord(psResult->pos.x), map_coord(psResult->pos.y), TRUE);
 			}
 		psOldRD = psResult;
 	}
@@ -582,7 +582,7 @@ BOOL	bLaterInList;
 		if(getWarCamStatus())
 		{
 			camToggleStatus();			 // messy - fix this
-	//		setViewPos(map_coord(psCentreDroid->x), map_coord(psCentreDroid->y));
+	//		setViewPos(map_coord(psCentreDroid->pos.x), map_coord(psCentreDroid->pos.y));
 			processWarCam(); //odd, but necessary
 			camToggleStatus();				// messy - FIXME
 		}
@@ -591,7 +591,7 @@ BOOL	bLaterInList;
 			{
 //				camToggleStatus();
 				/* Centre display on him if warcam isn't active */
-				setViewPos(map_coord(psResult->x), map_coord(psResult->y), TRUE);
+				setViewPos(map_coord(psResult->pos.x), map_coord(psResult->pos.y), TRUE);
 			}
 		psOldNS = psResult;
 	}
@@ -650,7 +650,7 @@ BOOL		bLaterInList;
 			{
 				camToggleStatus();
 			}
-			setViewPos(map_coord(psResult->x), map_coord(psResult->y), FALSE);
+			setViewPos(map_coord(psResult->pos.x), map_coord(psResult->pos.y), FALSE);
 			psOldStruct = psResult;
 		}
 		else
@@ -725,7 +725,7 @@ void selCommander(SDWORD n)
 				if(!getWarCamStatus())
 				{
 					/* Centre display on him if warcam isn't active */
-					setViewPos(map_coord(psCurr->x), map_coord(psCurr->y), TRUE);
+					setViewPos(map_coord(psCurr->pos.x), map_coord(psCurr->pos.y), TRUE);
 				}
 
 			}

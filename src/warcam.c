@@ -293,17 +293,17 @@ static void processLeaderSelection( void )
 /* Sets up the dummy target for the camera */
 static void setUpRadarTarget(SDWORD x, SDWORD y)
 {
-	radarTarget.x = x;
-	radarTarget.y = y;
+	radarTarget.pos.x = x;
+	radarTarget.pos.y = y;
 
 	if ((x < 0) || (y < 0) || (x > (SDWORD)((mapWidth - 1) * TILE_UNITS))
 	    || (y > (SDWORD)((mapHeight - 1) * TILE_UNITS)))
 	{
-		radarTarget.z = 128 * ELEVATION_SCALE;
+		radarTarget.pos.z = 128 * ELEVATION_SCALE;
 	}
 	else
 	{
-		radarTarget.z = map_Height(x,y);
+		radarTarget.pos.z = map_Height(x,y);
 	}
 	radarTarget.direction = calcDirection(player.p.x, player.p.z, x, y);
 	radarTarget.pitch = 0;
@@ -630,9 +630,9 @@ static void getTrackingConcerns(SDWORD *x, SDWORD *y, SDWORD *z)
 				if (droidOnScreen(psDroid, pie_GetVideoBufferWidth() / 4))
 				{
 					count++;
-					xTotals += psDroid->x;
-					yTotals += psDroid->z;	// note the flip
-					zTotals += psDroid->y;
+					xTotals += psDroid->pos.x;
+					yTotals += psDroid->pos.z;	// note the flip
+					zTotals += psDroid->pos.y;
 				}
 			}
 		}
@@ -660,9 +660,9 @@ static void getGroupTrackingConcerns(SDWORD *x, SDWORD *y, SDWORD *z, UDWORD gro
 				if (bOnScreen ? droidOnScreen(psDroid, pie_GetVideoBufferWidth() / 4) : TRUE)
 				{
 				 		count++;
-						xTotals += psDroid->x;
-						yTotals += psDroid->z;	// note the flip
-						zTotals += psDroid->y;
+						xTotals += psDroid->pos.x;
+						yTotals += psDroid->pos.z;	// note the flip
+						zTotals += psDroid->pos.y;
 				}
 			}
 		}
@@ -782,9 +782,9 @@ SDWORD	angle;
 	/*	Get these new coordinates */
 	if(getNumDroidsSelected()>2 && trackingCamera.target->type == OBJ_DROID)
 	{
-	 	xConcern = trackingCamera.target->x;		  // nb - still NEED to be set
-		yConcern = trackingCamera.target->z;
-		zConcern = trackingCamera.target->y;
+	 	xConcern = trackingCamera.target->pos.x;		  // nb - still NEED to be set
+		yConcern = trackingCamera.target->pos.z;
+		zConcern = trackingCamera.target->pos.y;
 		if(trackingCamera.target->selected)
 		{
 			getTrackingConcerns(&xConcern,&yConcern,&zConcern);
@@ -799,14 +799,14 @@ SDWORD	angle;
 	}
 	else
 	{
-		xConcern = trackingCamera.target->x;
-		yConcern = trackingCamera.target->z;
-		zConcern = trackingCamera.target->y;
+		xConcern = trackingCamera.target->pos.x;
+		yConcern = trackingCamera.target->pos.z;
+		zConcern = trackingCamera.target->pos.y;
 	}
 
 	if(trackingCamera.target->type == OBJ_DROID && getNumDroidsSelected()<=2)
 	{
-//		getBestPitchToEdgeOfGrid(trackingCamera.target->x,trackingCamera.target->z,
+//		getBestPitchToEdgeOfGrid(trackingCamera.target->pos.x,trackingCamera.target->pos.z,
 //			360-((trackingCamera.target->direction+180)%360),&pitch);
 		yConcern+=angle*5;
 
@@ -966,8 +966,8 @@ static void updateCameraRotationAcceleration( UBYTE update )
 			UDWORD	droidHeight, difHeight, droidMapHeight;
 
 			bGotFlying = TRUE;
-			droidHeight = psDroid->z;
-			droidMapHeight = map_Height(psDroid->x, psDroid->y);
+			droidHeight = psDroid->pos.z;
+			droidMapHeight = map_Height(psDroid->pos.x, psDroid->pos.y);
 			difHeight = abs(droidHeight - droidMapHeight);
 			if(difHeight < MIN_TRACK_HEIGHT)
 			{
@@ -1158,8 +1158,8 @@ SDWORD	yPos;
 	xPos = player.p.x + (mapWidth * TILE_UNITS) / 2;
 	yPos = player.p.z + (mapHeight * TILE_UNITS) / 2;
 
-	if( (abs(xPos-trackingCamera.target->x) <= 256) &&
-		(abs(yPos-trackingCamera.target->y) <= 256) )
+	if( (abs(xPos-trackingCamera.target->pos.x) <= 256) &&
+		(abs(yPos-trackingCamera.target->pos.y) <= 256) )
 		{
 			retVal = TRUE;
 		}

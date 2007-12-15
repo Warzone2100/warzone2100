@@ -240,7 +240,7 @@ return TRUE;
 		if(psFeature->psStats->subType == FEAT_OIL_RESOURCE)
 		{
 
-			printf_console("Enabling feature at x: %d y: %d",psFeature->x/128,psFeature->y/128);
+			printf_console("Enabling feature at x: %d y: %d",psFeature->pos.x/128,psFeature->pos.y/128);
 
 			psFeature->visible[nPlayer] = TRUE;
 		}
@@ -395,13 +395,13 @@ BOOL WriteAISaveData(SDWORD nPlayer)
 			{
 				if (psFeature->visible[nPlayer])	//|| godMode)
 				{
-					if(!canRecallOilAt(nPlayer, psFeature->x, psFeature->y))	//already stored?
+					if(!canRecallOilAt(nPlayer, psFeature->pos.x, psFeature->pos.y))	//already stored?
 					{
 						/* Save X */
-						PosXY[NumEntries * 2] = psFeature->x;
+						PosXY[NumEntries * 2] = psFeature->pos.x;
 
 						/* Save Y */
-						PosXY[NumEntries * 2 + 1] = psFeature->y;
+						PosXY[NumEntries * 2 + 1] = psFeature->pos.y;
 
 						//printf_console("New oil visible x: %d y: %d. Storing.", PosXY[NumEntries * 2]/128,PosXY[NumEntries * 2 + 1]/128);
 
@@ -420,20 +420,20 @@ BOOL WriteAISaveData(SDWORD nPlayer)
 				{
 					if(psCurr->visible[nPlayer])	//if can see it
 					{
-						if(!canRecallOilAt(nPlayer, psCurr->x, psCurr->y))	//already stored?
+						if(!canRecallOilAt(nPlayer, psCurr->pos.x, psCurr->pos.y))	//already stored?
 						{
 							//psResExtractor = (RES_EXTRACTOR *)psCurr->pFunctionality;
 
-							x = psCurr->x;
-							y = psCurr->y;
+							x = psCurr->pos.x;
+							y = psCurr->pos.y;
 
-							//printf_console("Found derrick at x: %d, y: %d,, width: %d",psCurr->x/128,psCurr->y/128,mapWidth);
+							//printf_console("Found derrick at x: %d, y: %d,, width: %d",psCurr->pos.x/128,psCurr->pos.y/128,mapWidth);
 
 							// Save X //
-							PosXY[NumEntries * 2] = psCurr->x;
+							PosXY[NumEntries * 2] = psCurr->pos.x;
 
 							// Save Y //
-							PosXY[NumEntries * 2 + 1] = psCurr->y;
+							PosXY[NumEntries * 2 + 1] = psCurr->pos.y;
 
 							//printf_console("New derrick visible x: %d y: %d. Storing.", PosXY[NumEntries * 2]/128,PosXY[NumEntries * 2 + 1]/128);
 
@@ -687,7 +687,7 @@ BOOL ReadAISaveData(SDWORD nPlayer)
 					{
 						if (!(psFeature->visible[nPlayer]))		//Not visible yet
 						{
-							if((PosXY[i * 2] == psFeature->x) && (PosXY[i * 2 + 1] == psFeature->y))	/* Found it */
+							if((PosXY[i * 2] == psFeature->pos.x) && (PosXY[i * 2 + 1] == psFeature->pos.y))	/* Found it */
 							{
 								//printf_console("Matched oil resource at x: %d y: %d", PosXY[i * 2]/128,PosXY[i * 2 + 1]/128);
 
@@ -747,7 +747,7 @@ BOOL OilResourceAt(UDWORD OilX,UDWORD OilY, SDWORD VisibleToPlayer)
 		{
 			if ((VisibleToPlayer < 0) || (!(psFeature->visible[VisibleToPlayer])))		//Not visible yet
 			{
-				if((OilX == psFeature->x) && (OilY == psFeature->y))	/* Found it */
+				if((OilX == psFeature->pos.x) && (OilY == psFeature->pos.y))	/* Found it */
 				{
 					printf_console("Matched oil resource at x: %d y: %d", OilX/128,OilY/128);
 

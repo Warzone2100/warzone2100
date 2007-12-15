@@ -457,8 +457,8 @@ static void formationFindFree(FORMATION *psFormation, BASE_OBJECT *psObj,
 		}
 
 		// see if this gap is closer to the unit than the previous one
-		xdiff = x - (SDWORD)psObj->x;
-		ydiff = y - (SDWORD)psObj->y;
+		xdiff = x - (SDWORD)psObj->pos.x;
+		ydiff = y - (SDWORD)psObj->pos.y;
 		dist = xdiff*xdiff + ydiff*ydiff;
 //		dist += psFormation->rankDist*psFormation->rankDist * rank*rank;
 		if (((dist < objDist) && (rank == chosenRank)) ||
@@ -517,8 +517,8 @@ void formationReorder(FORMATION *psFormation)
 		if (psObj != NULL)
 		{
 			asObjects[numObj].psObj = psObj;
-			xdiff = (SDWORD)psObj->x - psFormation->x;
-			ydiff = (SDWORD)psObj->y - psFormation->y;
+			xdiff = (SDWORD)psObj->pos.x - psFormation->x;
+			ydiff = (SDWORD)psObj->pos.y - psFormation->y;
 			aDist[numObj] =  xdiff*xdiff + ydiff*ydiff;
 			numObj += 1;
 		}
@@ -598,8 +598,8 @@ BOOL formationGetPos( FORMATION *psFormation, BASE_OBJECT *psObj,
 	}*/
 
 	// see if the unit is close enough to join the formation
-	xdiff = (SDWORD)psFormation->x - (SDWORD)psObj->x;
-	ydiff = (SDWORD)psFormation->y - (SDWORD)psObj->y;
+	xdiff = (SDWORD)psFormation->x - (SDWORD)psObj->pos.x;
+	ydiff = (SDWORD)psFormation->y - (SDWORD)psObj->pos.y;
 	distSq = xdiff*xdiff + ydiff*ydiff;
 //	rangeSq = 3*psFormation->size/2;
 //	rangeSq = rangeSq*rangeSq;
@@ -654,7 +654,7 @@ BOOL formationGetPos( FORMATION *psFormation, BASE_OBJECT *psObj,
 	}
 
 	// check the unit can get to the formation position
-	if ( bCheckLOS && !fpathTileLOS(map_coord(psObj->x), map_coord(psObj->y),
+	if ( bCheckLOS && !fpathTileLOS(map_coord(psObj->pos.x), map_coord(psObj->pos.y),
 									map_coord(x), map_coord(y)))
 	{
 		return FALSE;

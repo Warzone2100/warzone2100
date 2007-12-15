@@ -206,29 +206,29 @@ static void gridCalcCoverage(BASE_OBJECT *psObj, SDWORD objx, SDWORD objy, COVER
 void gridAddObject(BASE_OBJECT *psObj)
 {
 	ASSERT(!isDead(psObj), "Added a dead object to the map grid!");
-    gridCalcCoverage(psObj, (SDWORD)psObj->x, (SDWORD)psObj->y, GRID_ADDOBJECT);
+    gridCalcCoverage(psObj, (SDWORD)psObj->pos.x, (SDWORD)psObj->pos.y, GRID_ADDOBJECT);
 }
 
 // move an object within the grid
 // oldX,oldY are the old position of the object in world coords
 void gridMoveObject(BASE_OBJECT *psObj, SDWORD oldX, SDWORD oldY)
 {
-	if (map_coord(psObj->x) == map_coord(oldX)
-	 && map_coord(psObj->y) == map_coord(oldY))
+	if (map_coord(psObj->pos.x) == map_coord(oldX)
+	 && map_coord(psObj->pos.y) == map_coord(oldY))
 	{
 		// havn't changed the tile the object is on, don't bother updating
 		return;
 	}
 
 	gridCalcCoverage(psObj, oldX,oldY, GRID_REMOVEOBJECT);
-	gridCalcCoverage(psObj, (SDWORD)psObj->x, (SDWORD)psObj->y, GRID_ADDOBJECT);
+	gridCalcCoverage(psObj, (SDWORD)psObj->pos.x, (SDWORD)psObj->pos.y, GRID_ADDOBJECT);
 }
 
 
 // remove an object from the grid system
 void gridRemoveObject(BASE_OBJECT *psObj)
 {
-    gridCalcCoverage(psObj, (SDWORD)psObj->x, (SDWORD)psObj->y, GRID_REMOVEOBJECT);
+    gridCalcCoverage(psObj, (SDWORD)psObj->pos.x, (SDWORD)psObj->pos.y, GRID_REMOVEOBJECT);
 
 #if defined(DEBUG)
 	{
@@ -523,7 +523,7 @@ void gridDisplayCoverage(BASE_OBJECT *psObj)
 		unsigned int	x, y, i;
 		GRID_ARRAY	*psCurr;
 
-		debug( LOG_NEVER, "Grid coverage for object %d (%d,%d) - range %d\n", psObj->id, psObj->x, psObj->y, gridObjRange(psObj) );
+		debug( LOG_NEVER, "Grid coverage for object %d (%d,%d) - range %d\n", psObj->id, psObj->pos.x, psObj->pos.y, gridObjRange(psObj) );
 		for (x = 0; x < gridWidth; x++)
 		{
 			for(y = 0; y < gridHeight; y++)

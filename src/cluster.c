@@ -210,8 +210,8 @@ static void _clustAddDroid(DROID *psDroid, SDWORD cluster)
 			continue;
 		}
 
-		xdiff = (SDWORD)psDroid->x - (SDWORD)psCurr->x;
-		ydiff = (SDWORD)psDroid->y - (SDWORD)psCurr->y;
+		xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psCurr->pos.x;
+		ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psCurr->pos.y;
 		if (xdiff*xdiff + ydiff*ydiff < CLUSTER_DIST*CLUSTER_DIST)
 		{
 			_clustAddDroid(psCurr, cluster);
@@ -238,8 +238,8 @@ void clustNewDroid(DROID *psDroid)
 	{
 		if (psCurr->cluster != 0)
 		{
-			xdiff = (SDWORD)psDroid->x - (SDWORD)psCurr->x;
-			ydiff = (SDWORD)psDroid->y - (SDWORD)psCurr->y;
+			xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psCurr->pos.x;
+			ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psCurr->pos.y;
 			if (xdiff*xdiff + ydiff*ydiff < CLUSTER_DIST*CLUSTER_DIST)
 			{
 				clustAddDroid(psDroid, psCurr->cluster);
@@ -276,8 +276,8 @@ static void _clustAddStruct(STRUCTURE *psStruct, SDWORD cluster)
 			continue;
 		}
 
-		xdiff = (SDWORD)psStruct->x - (SDWORD)psCurr->x;
-		ydiff = (SDWORD)psStruct->y - (SDWORD)psCurr->y;
+		xdiff = (SDWORD)psStruct->pos.x - (SDWORD)psCurr->pos.x;
+		ydiff = (SDWORD)psStruct->pos.y - (SDWORD)psCurr->pos.y;
 		if (xdiff*xdiff + ydiff*ydiff < CLUSTER_DIST*CLUSTER_DIST)
 		{
 			_clustAddStruct(psCurr, cluster);
@@ -301,8 +301,8 @@ void clustNewStruct(STRUCTURE *psStruct)
 	{
 		if (psCurr->cluster != 0)
 		{
-			xdiff = (SDWORD)psStruct->x - (SDWORD)psCurr->x;
-			ydiff = (SDWORD)psStruct->y - (SDWORD)psCurr->y;
+			xdiff = (SDWORD)psStruct->pos.x - (SDWORD)psCurr->pos.x;
+			ydiff = (SDWORD)psStruct->pos.y - (SDWORD)psCurr->pos.y;
 			if (xdiff*xdiff + ydiff*ydiff < CLUSTER_DIST*CLUSTER_DIST)
 			{
 				psStruct->cluster = psCurr->cluster;
@@ -603,8 +603,8 @@ void clustGetCenter(BASE_OBJECT *psObj, SDWORD *px, SDWORD *py)
 	{
 		if (psCurr->cluster == psObj->cluster)
 		{
-			averagex += (SDWORD)psCurr->x;
-			averagey += (SDWORD)psCurr->y;
+			averagex += (SDWORD)psCurr->pos.x;
+			averagey += (SDWORD)psCurr->pos.y;
 			num += 1;
 		}
 	}
@@ -616,8 +616,8 @@ void clustGetCenter(BASE_OBJECT *psObj, SDWORD *px, SDWORD *py)
 	}
 	else
 	{
-		*px = (SDWORD)psObj->x;
-		*py = (SDWORD)psObj->y;
+		*px = (SDWORD)psObj->pos.x;
+		*py = (SDWORD)psObj->pos.y;
 	}
 }
 
