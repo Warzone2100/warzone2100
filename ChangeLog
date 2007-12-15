@@ -1,3 +1,9 @@
+0000-00-00: Version 2.0.10
+ * Sound:
+   * Fix: Make sure that sound still works with libvorbis 1.1 (this got broken in 2.0.9)
+ * Graphics:
+   * Fix: Prevent OpenGL from falling back into (slow) software rendering for selection of the lowest mipmap level
+
 2007-12-03: Version 2.0.9
  * Sound:
    * Fix: Sound works with libvorbis 1.2.0 (no more hangups) (bug #10153)
