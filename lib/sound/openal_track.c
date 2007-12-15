@@ -353,9 +353,9 @@ static long ovPHYSFS_tell(void *datasource) {
 // seek/tell/close don't do anything right now, so tell physfs not to bother.
 static ov_callbacks ovPHYSFS_callbacks = {
 	ovPHYSFS_read,
-	NULL, // seek
-	NULL, // close
-	NULL  // tell
+	ovPHYSFS_seek,
+	ovPHYSFS_close,
+	ovPHYSFS_tell
 };
 
 static BOOL sound_ReadTrack( TRACK *psTrack, ov_callbacks callbackFuncs, void* datasource )
