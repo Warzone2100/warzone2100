@@ -33,7 +33,11 @@
 #include "lib/ivis_common/bitimage.h"
 
 #include <SDL_opengl.h>
-#include <GL/glc.h>
+#ifdef WZ_OS_MAC
+# include <QuesoGLC/glc.h>
+#else
+ #include <GL/glc.h>
+#endif
 
 static const char font_family[] = "DejaVu Sans Mono";
 static const char font_face_regular[] = "Book";
