@@ -4,7 +4,7 @@ warzone2100 (2.0.10-0) unstable; urgency=medium
   * Fix: Prevent crashes when using libvorbis 1.1 from occuring due to the fix
     for libvorbis 1.2 in 2.0.9
   * Fix: Prevent OpenGL from falling back into (slow) software rendering for
-    selection of the lowest mipmap level
+    selection of the lowest mipmap level  
 
  -- Giel van Schijndel <me@mortis.eu>  Sat, 15 Dec 2007 12:48:47 +0100
 
