@@ -2,7 +2,7 @@
  * Sound:
    * Fix: Make sure that sound still works with libvorbis 1.1 (this got broken in 2.0.9)
  * Graphics:
-   * Fix: Prevent OpenGL from falling back into (slow) software rendering for selection of the lowest mipmap level
+   * Fix: Prevent AMD OpenGL driver (slow) software rendering fallback, introduced in 2.0.8 (bug #10486)
 
 2007-12-03: Version 2.0.9
  * Sound:
