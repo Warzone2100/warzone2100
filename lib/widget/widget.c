@@ -126,6 +126,13 @@ void widgReleaseWidgetList(WIDGET *psWidgets)
 	for(psCurr = psWidgets; psCurr; psCurr = psNext)
 	{
 		psNext = psCurr->psNext;
+		
+		// the mouse can't be over it anymore
+		if (psMouseOverWidget && psMouseOverWidget->id == psCurr->id)
+		{
+			psMouseOverWidget = NULL;
+		}
+		
 		switch(psCurr->type)
 		{
 		case WIDG_FORM:
@@ -666,6 +673,11 @@ void widgDelete(W_SCREEN *psScreen, UDWORD id)
 	if ((psScreen->psFocus != NULL) && (psScreen->psFocus->id == id))
 	{
 		screenClearFocus(psScreen);
+	}
+	// the mouse can't be over it anymore
+	if (psMouseOverWidget && psMouseOverWidget->id == id)
+	{
+		psMouseOverWidget = NULL;
 	}
 
 	/* Set up the initial context */
