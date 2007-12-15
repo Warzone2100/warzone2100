@@ -36,8 +36,5 @@
 
 #define LAND_XGRD	(VISIBLE_XTILES + 1)
 #define LAND_YGRD	(VISIBLE_YTILES + 1)
-#define MAXDISTANCE	(4500)
-#define MINDISTANCE	(1500)
-#define START_DISTANCE	(2500)
 
 #endif

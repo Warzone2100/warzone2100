@@ -389,7 +389,7 @@ void draw3DScene( void )
 	{
 		/* Move the autonomous camera if necessary */
 		calcAverageTerrainHeight(&player);
-		trackHeight(2 * averageCentreTerrainHeight);
+		trackHeight(averageCentreTerrainHeight+CAMERA_PIVOT_HEIGHT);
 	}
 	else
 	{
@@ -4012,6 +4012,7 @@ static void trackHeight( float desiredHeight )
 	/* Adjust the height accordingly */
 	player.p.y += heightSpeed * fraction;
 
+#if 0
 	/* Now do auto pitch as well, but only if we're not using mouselook and not tracking */
 	if(!getWarCamStatus() && !getRotActive())
 	{
@@ -4037,6 +4038,7 @@ static void trackHeight( float desiredHeight )
 			player.r.x += aSpeed * fraction;
 		}
 	}
+#endif
 }
 
 
