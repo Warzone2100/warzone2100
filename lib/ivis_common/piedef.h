@@ -76,26 +76,6 @@
 #define pie_MAX_POLYGONS		512
 #define pie_MAX_VERTICES_PER_POLYGON	6
 
-#define MAX_UB_LIGHT			((UBYTE)255)
-#define MIN_UB_LIGHT			((UBYTE)0)
-
-/***************************************************************************/
-/*
- *	Global Definitions (MACROS)
- */
-/***************************************************************************/
-
-#define pie_ADDLIGHT(l,x)						\
-(((l)->byte.r > (MAX_UB_LIGHT - (x))) ? ((l)->byte.r = MAX_UB_LIGHT) : ((l)->byte.r +=(x)));		\
-(((l)->byte.g > (MAX_UB_LIGHT - (x))) ? ((l)->byte.g = MAX_UB_LIGHT) : ((l)->byte.g +=(x)));		\
-(((l)->byte.b > (MAX_UB_LIGHT - (x))) ? ((l)->byte.b = MAX_UB_LIGHT) : ((l)->byte.b +=(x)));
-
-#define pie_SUBTRACTLIGHT(l,x)						\
-(((l->byte.r) < (x)) ? ((l->byte.r) = MIN_UB_LIGHT) : ((l->byte.r) -=(x)));		\
-(((l->byte.g) < (x)) ? ((l->byte.g) = MIN_UB_LIGHT) : ((l->byte.g) -=(x)));		\
-(((l->byte.b) < (x)) ? ((l->byte.b) = MIN_UB_LIGHT) : ((l->byte.b) -=(x)));
-
-
 /***************************************************************************/
 /*
  *	Global Definitions (STRUCTURES)
@@ -108,7 +88,7 @@ typedef struct
 {
 	Vector3i pos;
 	float u, v;
-	PIELIGHT light, specular;
+	PIELIGHT light;
 	Vector3i screen; //! Screenspace tile coordinates
 	Vector3i water; //! Screenspace water coordinates
 	int water_height; //! Worldspace water height

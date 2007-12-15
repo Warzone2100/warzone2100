@@ -135,7 +135,7 @@ void pie_BoxFillIndex(int x0,int y0, int x1, int y1, UBYTE colour)
 
 	psPalette = pie_GetGamePal();
 	light.argb = psPalette[colour].argb;
-	light.byte.a = MAX_UB_LIGHT;
+	light.byte.a = UBYTE_MAX;
 	pie_DrawRect( x0, y0, x1, y1, light );
 }
 

@@ -616,7 +616,6 @@ static void drawTiles(iView *camera, iView *player)
 			tileScreenInfo[i][j].pos.z = world_coord(terrainMidY - i);
 			tileScreenInfo[i][j].pos.y = 0;
 			tileScreenInfo[i][j].bWater = FALSE;
-			tileScreenInfo[i][j].specular = WZCOL_BLACK;
 
 			if( playerXTile+j < 0 ||
 				playerZTile+i < 0 ||
@@ -724,29 +723,6 @@ static void drawTiles(iView *camera, iView *player)
 	if(getRevealStatus())
 	{
 		avUpdateTiles();
-	}
-
-	// Process lighting contributions
-	for (i = 0; i < visibleTiles.y+1; i++)
-	{
-		/* Go through the x's */
-		for (j = 0; j < (SDWORD)visibleTiles.x+1; j++)
-		{
-			if( playerXTile+j < 0 ||
-				playerZTile+i < 0 ||
-				playerXTile+j > (SDWORD)(mapWidth-1) ||
-				playerZTile+i > (SDWORD)(mapHeight-1) )
-			{
-				// nothing
-			}
-			else
-			{
-				/* Get a pointer to the tile at this location */
-				MAPTILE *psTile = mapTile(playerXTile + j, playerZTile + i);
-
-				tileScreenInfo[i][j].light = psTile->colour;
-			}
-		}
 	}
 
 	// Draw all the normal tiles
@@ -3745,11 +3721,15 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	BOOL bOutlined = FALSE;
 	UDWORD tileNumber = 0;
 	TERRAIN_VERTEX vertices[3];
-	UBYTE oldColours[4] = { 0, 0, 0, 0 };
-	UDWORD oldColoursWord[4] = { 0, 0, 0, 0 };
 #if defined(SHOW_ZONES) || defined(SHOW_GATEWAYS)
 	SDWORD zone = 0;
 #endif
+	PIELIGHT colour[2][2];
+
+	colour[0][0] = WZCOL_BLACK;
+	colour[1][0] = WZCOL_BLACK;
+	colour[0][1] = WZCOL_BLACK;
+	colour[1][1] = WZCOL_BLACK;
 
 	/* Let's just get out now if we're not supposed to draw it */
 	if( (actualX < 0) ||
@@ -3763,6 +3743,19 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	{
 		psTile = mapTile(actualX, actualY);
 
+		colour[0][0] = psTile->colour;
+		if (actualY + 1 < mapHeight - 1)
+		{
+			colour[1][0] = mapTile(actualX, actualY + 1)->colour;
+		}
+		if (actualX + 1 < mapWidth - 1)
+		{
+			colour[0][1] = mapTile(actualX + 1, actualY)->colour;
+		}
+		if (actualX + 1 < mapWidth - 1 && actualY + 1 < mapHeight - 1)
+		{
+			colour[1][1] = mapTile(actualX + 1, actualY + 1)->colour;
+		}
 #if defined(SHOW_ZONES)
 		if (!fpathBlockingTile(actualX, actualY) ||
 			terrainType(psTile) == TER_WATER)
@@ -3810,37 +3803,17 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		{
 			if (outlineTile)
 			{
-				oldColoursWord[0] = tileScreenInfo[i+0][j+0].light.argb;
-				oldColoursWord[1] = tileScreenInfo[i+0][j+1].light.argb;
-				oldColoursWord[2] = tileScreenInfo[i+1][j+1].light.argb;
-				oldColoursWord[3] = tileScreenInfo[i+1][j+0].light.argb;
-
-				tileScreenInfo[i+0][j+0].light.byte.b = 255;
-				tileScreenInfo[i+0][j+1].light.byte.b = 255;
-				tileScreenInfo[i+1][j+1].light.byte.b = 255;
-				tileScreenInfo[i+1][j+0].light.byte.b = 255;
-
-				tileScreenInfo[i+0][j+0].light.byte.g = 255;
-				tileScreenInfo[i+0][j+1].light.byte.g = 255;
-				tileScreenInfo[i+1][j+1].light.byte.g = 255;
-				tileScreenInfo[i+1][j+0].light.byte.g = 255;
-
-				tileScreenInfo[i+0][j+0].light.byte.r = 255;
-				tileScreenInfo[i+0][j+1].light.byte.r = 255;
-				tileScreenInfo[i+1][j+1].light.byte.r = 255;
-				tileScreenInfo[i+1][j+0].light.byte.r = 255;
+				colour[0][0] = pal_SetBrightness(255);
+				colour[1][0] = pal_SetBrightness(255);
+				colour[0][1] = pal_SetBrightness(255);
+				colour[1][1] = pal_SetBrightness(255);
 			}
 			else
 			{
-				oldColours[0] = tileScreenInfo[i+0][j+0].light.byte.r;
-				oldColours[1] = tileScreenInfo[i+0][j+1].light.byte.r;
-				oldColours[2] = tileScreenInfo[i+1][j+1].light.byte.r;
-				oldColours[3] = tileScreenInfo[i+1][j+0].light.byte.r;
-
-				tileScreenInfo[i+0][j+0].light.byte.r = 255;
-				tileScreenInfo[i+0][j+1].light.byte.r = 255;
-				tileScreenInfo[i+1][j+1].light.byte.r = 255;
-				tileScreenInfo[i+1][j+0].light.byte.r = 255;
+				colour[0][0].byte.r = 255;
+				colour[1][0].byte.r = 255;
+				colour[0][1].byte.r = 255;
+				colour[1][1].byte.r = 255;
 			}
 		}
 	}
@@ -3851,6 +3824,8 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	/* The first triangle */
 	vertices[0] = tileScreenInfo[i + 0][j + 0];
 	vertices[1] = tileScreenInfo[i + 0][j + 1];
+	vertices[0].light = colour[0][0];
+	vertices[1].light = colour[0][1];
 	if (onWaterEdge)
 	{
 		vertices[0].pos.y = tileScreenInfo[i + 0][j + 0].water_height;
@@ -3860,6 +3835,7 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	if (psTile && TRI_FLIPPED(psTile))
 	{
 		vertices[2] = tileScreenInfo[i + 1][j + 0];
+		vertices[2].light = colour[1][0];
 		if (onWaterEdge)
 		{
 			vertices[2].pos.y = tileScreenInfo[i + 1][j + 0].water_height;
@@ -3868,6 +3844,7 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	else
 	{
 		vertices[2] = tileScreenInfo[i + 1][j + 1];
+		vertices[2].light = colour[1][1];
 		if (onWaterEdge)
 		{
 			vertices[2].pos.y = tileScreenInfo[i + 1][j + 1].water_height;
@@ -3887,6 +3864,7 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	if (psTile && TRI_FLIPPED(psTile))
 	{
 		vertices[0] = tileScreenInfo[i + 0][j + 1];
+		vertices[0].light = colour[0][1];
 		if (onWaterEdge)
 		{
 			vertices[0].pos.y = tileScreenInfo[i + 0][j + 1].water_height;
@@ -3895,6 +3873,7 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	else
 	{
 		vertices[0] = tileScreenInfo[i + 0][j + 0];
+		vertices[0].light = colour[0][0];
 		if (onWaterEdge)
 		{
 			vertices[0].pos.y = tileScreenInfo[i + 0][j + 0].water_height;
@@ -3903,6 +3882,8 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 
 	vertices[1] = tileScreenInfo[i + 1][j + 1];
 	vertices[2] = tileScreenInfo[i + 1][j + 0];
+	vertices[1].light = colour[1][1];
+	vertices[2].light = colour[1][0];
 	if ( onWaterEdge )
 	{
 		vertices[1].pos.y = tileScreenInfo[i + 1][j + 1].water_height;
@@ -3917,24 +3898,6 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	{
 		pie_DrawTerrainTriangle(i * 2 + j * VISIBLE_XTILES * 2 + 1, vertices);
 	}
-
-	if(!onWaterEdge && bOutlined)
-	{
-		if (outlineTile)
-		{
-			tileScreenInfo[i+0][j+0].light.argb = oldColoursWord[0];
-			tileScreenInfo[i+0][j+1].light.argb = oldColoursWord[1];
-			tileScreenInfo[i+1][j+1].light.argb = oldColoursWord[2];
-			tileScreenInfo[i+1][j+0].light.argb = oldColoursWord[3];
-		}
-		else
-		{
-			tileScreenInfo[i+0][j+0].light.byte.r = oldColours[0];
-			tileScreenInfo[i+0][j+1].light.byte.r = oldColours[1];
-			tileScreenInfo[i+1][j+1].light.byte.r = oldColours[2];
-			tileScreenInfo[i+1][j+0].light.byte.r = oldColours[3];
-		}
-	}
 }
 
 
@@ -3944,6 +3907,8 @@ static void drawTerrainWaterTile(UDWORD i, UDWORD j)
 {
 	/* Get the correct tile index for the x/y coordinates */
 	const unsigned int actualX = playerXTile + j, actualY = playerZTile + i;
+	PIELIGHT colour[2][2];
+	MAPTILE *psTile;
 
 	/* Let's just get out now if we're not supposed to draw it */
 	if ( actualX > mapWidth - 1 || actualY > mapHeight - 1 )
@@ -3951,8 +3916,27 @@ static void drawTerrainWaterTile(UDWORD i, UDWORD j)
 		return;
 	}
 
+	psTile = mapTile(actualX, actualY);
+	colour[0][0] = psTile->colour;
+	colour[1][0] = WZCOL_BLACK;
+	colour[0][1] = WZCOL_BLACK;
+	colour[1][1] = WZCOL_BLACK;
+
+	if (actualY + 1 < mapHeight - 1)
+	{
+		colour[1][0] = mapTile(actualX, actualY + 1)->colour;
+	}
+	if (actualX + 1 < mapWidth - 1)
+	{
+		colour[0][1] = mapTile(actualX + 1, actualY)->colour;
+	}
+	if (actualX + 1 < mapWidth - 1 && actualY + 1 < mapHeight - 1)
+	{
+		colour[1][1] = mapTile(actualX + 1, actualY + 1)->colour;
+	}
+
 	// If it's a water tile then draw the water
-	if (terrainType( mapTile(actualX, actualY) ) == TER_WATER)
+	if (terrainType(psTile) == TER_WATER)
 	{
 		/* Used to calculate texture coordinates, which are 0-255 in value */
 		const float xMult = 1.0f / TILES_IN_PAGE_COLUMN;
@@ -3975,14 +3959,17 @@ static void drawTerrainWaterTile(UDWORD i, UDWORD j)
 
 		vertices[0] = tileScreenInfo[i + 0][j + 0];
 		vertices[0].pos.y = tileScreenInfo[i + 0][j + 0].water_height;
+		vertices[0].light = colour[0][0];
 		vertices[0].light.byte.a = WATER_ALPHA_LEVEL;
 
 		vertices[1] = tileScreenInfo[i + 0][j + 1];
 		vertices[1].pos.y = tileScreenInfo[i + 0][j + 1].water_height;
+		vertices[1].light = colour[0][1];
 		vertices[1].light.byte.a = WATER_ALPHA_LEVEL;
 
 		vertices[2] = tileScreenInfo[i + 1][j + 1];
 		vertices[2].pos.y = tileScreenInfo[i + 1][j + 1].water_height;
+		vertices[2].light = colour[1][1];
 		vertices[2].light.byte.a = WATER_ALPHA_LEVEL;
 
 		pie_DrawWaterTriangle(vertices);
@@ -3990,6 +3977,7 @@ static void drawTerrainWaterTile(UDWORD i, UDWORD j)
 		vertices[1] = vertices[2];
 		vertices[2] = tileScreenInfo[i + 1][j + 0];
 		vertices[2].pos.y = tileScreenInfo[i + 1][j + 0].water_height;
+		vertices[2].light = colour[1][0];
 		vertices[2].light.byte.a = WATER_ALPHA_LEVEL;
 
 		pie_DrawWaterTriangle(vertices);
