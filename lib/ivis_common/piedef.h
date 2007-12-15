@@ -116,7 +116,6 @@ typedef struct {
 extern void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, PIELIGHT specular, int pieFlag, int pieData);
 extern void pie_DrawImage(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style);
 
-void pie_DrawTerrainInit(void);
 void pie_DrawTerrainDone(int mapx, int mapy);
 void pie_DrawTerrainTriangle(int index, const TERRAIN_VERTEX *aVrts);
 void pie_DrawWaterTriangle(const TERRAIN_VERTEX *aVrts);

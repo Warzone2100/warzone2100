@@ -43,9 +43,6 @@
 #define iV_PALETTE_SIZE				PALETTE_SIZE
 #define iV_PALETTE_SHADE_LEVEL		PALETTE_SHADE_LEVEL
 
-#define iV_SHADE_TABLE				palShades
-
-#define iV_PaletteShadeTableCreate	pal_BuildAdjustedShadeTable
 #define iV_PaletteNearestColour		pal_GetNearestColour
 #define	iV_PaletteAdd				pal_AddNewPalette
 

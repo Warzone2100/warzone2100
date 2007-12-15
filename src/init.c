@@ -1058,7 +1058,6 @@ BOOL stageThreeInitialise(void)
 	}
 
 	preProcessVisibility();
-	atmosInitSystem();
 	closeLoadingScreen();			// reset the loading screen.
 
 	if (!fpathInitialise())

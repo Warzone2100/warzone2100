@@ -623,7 +623,6 @@ static void drawTiles(iView *camera, iView *player)
 				playerZTile+i > (SDWORD)(mapHeight-1) )
 			{
 				// Special past-edge-of-map tiles
-				tileScreenInfo[i][j].bWater = FALSE;
 				tileScreenInfo[i][j].u = 0;
 				tileScreenInfo[i][j].v = 0;
 			}
@@ -645,7 +644,7 @@ static void drawTiles(iView *camera, iView *player)
 				}
 
 				// Real fog of war - darken where we cannot see enemy units moving around
-				if (bDisplaySensorRange && psTile && !psTile->activeSensor)
+				if (bDisplaySensorRange && !psTile->activeSensor)
 				{
 					TileIllum.byte.r = TileIllum.byte.r / 2;
 					TileIllum.byte.g = TileIllum.byte.g / 2;
@@ -728,7 +727,6 @@ static void drawTiles(iView *camera, iView *player)
 	// Draw all the normal tiles
 	pie_SetColourKeyedBlack(TRUE);
 	pie_SetFogStatus(TRUE);
-	pie_DrawTerrainInit();
 	pie_SetTexturePage(terrainPage);
 	for (i = 0; i < MIN(visibleTiles.y, mapHeight); i++)
 	{
@@ -889,21 +887,10 @@ BOOL init3DView(void)
 	/* Set up the sine table for the bullets */
 	initBulletTable();
 
-	/* Build our shade table for gouraud shading - 256*16 values with best match from 256 colour table */
-	iV_PaletteShadeTableCreate();
-
 	/* No initial rotations */
 	imdRot2.x = 0;
 	imdRot.y = 0;
 	imdRot2.z = 0;
-
-	/* Set up the player */
-/*	player.p.y = 0;
-	player.p.x = mapWidth/2*TILE_UNITS;
-	player.p.z = mapHeight/2*TILE_UNITS;
-
-	setViewAngle(-30);
-	player.r.y = DEG(-45); */
 
 	bRender3DOnly = FALSE;
 

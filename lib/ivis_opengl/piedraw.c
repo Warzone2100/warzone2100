@@ -968,7 +968,7 @@ void pie_DrawRect(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, PIELIGHT colour)
  *
  ***************************************************************************/
 
-void pie_DrawTerrainInit()
+void pie_DrawTerrainDone(int mapx, int mapy)
 {
 	glEnableClientState(GL_COLOR_ARRAY);
 	glEnableClientState(GL_VERTEX_ARRAY);
@@ -978,10 +978,6 @@ void pie_DrawTerrainInit()
 	glVertexPointer(VERTEX_COMPONENTS, GL_FLOAT, 0, aVertex);
 	glMatrixMode(GL_TEXTURE);
 	glLoadIdentity();
-}
-
-void pie_DrawTerrainDone(int mapx, int mapy)
-{
 	glDrawArrays(GL_TRIANGLES, 0, VERTICES_PER_TRIANGLE * mapx * mapy * 2);
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);

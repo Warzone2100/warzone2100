@@ -26,7 +26,6 @@
 #define PALETTE_MAX	8
 
 #define PALETTE_SIZE	256
-#define PALETTE_SHADE_LEVEL 16
 
 #define COL_TRANS			0
 #define COL_BLACK			colours[0]
@@ -78,13 +77,11 @@
 //*************************************************************************
 
 extern Uint8		colours[];
-extern Uint8		palShades[PALETTE_SIZE * PALETTE_SHADE_LEVEL];
 extern PIELIGHT		psPalette[];
 
 //*************************************************************************
 extern void		pal_Init(void);
 extern void		pal_ShutDown(void);
-extern void		pal_BuildAdjustedShadeTable( void );
 extern Uint8	pal_GetNearestColour(Uint8 r, Uint8 g, Uint8 b);
 extern int		pal_AddNewPalette(PIELIGHT *pal);
 extern void		pal_PaletteSet(void);

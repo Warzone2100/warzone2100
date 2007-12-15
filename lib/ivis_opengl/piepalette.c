@@ -25,23 +25,11 @@
 #include "lib/framework/fractions.h"
 #include "screen.h"
 
-#define RED_CHROMATICITY	1
-#define GREEN_CHROMATICITY	1
-#define BLUE_CHROMATICITY	1
-
 static void pie_SetColourDefines(void);
-
-/*
-	This is how far from the end you want the drawn as the artist intended shades
-	to appear
-*/
-
-#define COLOUR_BALANCE	6		// 3 from the end. (two brighter shades!)
 
 static PIELIGHT	*psGamePal = NULL;
 static BOOL	bPaletteInitialised = FALSE;
 
-Uint8	palShades[PALETTE_SIZE * PALETTE_SHADE_LEVEL];
 Uint8	colours[16];
 PIELIGHT psPalette[WZCOL_MAX];
 
@@ -214,37 +202,6 @@ Uint8 pal_GetNearestColour(Uint8 r, Uint8 g, Uint8 b)
 		best_colour = 1;
 	}
 	return ((Uint8) best_colour);
-}
-
-void pal_BuildAdjustedShadeTable( void )
-{
-float	redFraction, greenFraction, blueFraction;
-int		seekRed, seekGreen,seekBlue;
-int		numColours;
-int		numShades;
-
-	ASSERT( bPaletteInitialised,"pal_BuildAdjustedShadeTable, palette not initialised." );
-
-	for(numColours = 0; numColours<255; numColours++)
-	{
-		redFraction =	(float)psGamePal[numColours].byte.r / (float) 16;
-		greenFraction = (float)psGamePal[numColours].byte.g / (float) 16;
-		blueFraction =	(float)psGamePal[numColours].byte.b / (float) 16;
-
-		for(numShades = COLOUR_BALANCE; numShades < 16+COLOUR_BALANCE; numShades++)
-		{
-			seekRed =	(int)((float)numShades * redFraction);
-			seekGreen = (int)((float)numShades * greenFraction);
-			seekBlue =	(int)((float)numShades * blueFraction);
-
-			if(seekRed >255) seekRed = 255;
-			if(seekGreen >255) seekGreen = 255;
-			if(seekBlue >255) seekBlue = 255;
-
-			palShades[(numColours * PALETTE_SHADE_LEVEL) + (numShades-COLOUR_BALANCE)] =
-				pal_GetNearestColour((Uint8) seekRed, (Uint8) seekGreen, (Uint8) seekBlue);
-		}
-	}
 }
 
 PIELIGHT *pie_GetGamePal(void)
