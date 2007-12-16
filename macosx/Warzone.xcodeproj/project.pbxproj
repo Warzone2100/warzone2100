@@ -533,6 +533,8 @@
 		0246AA0B0BD3DF40004D1C70 /* SDL_dlcompat.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A5340BD3D2F0004D1C70 /* SDL_dlcompat.c */; };
 		0246AA170BD3DFEE004D1C70 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */; };
 		0246AA1B0BD3DFFC004D1C70 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */; };
+		02548E070D159F4000B4B3B9 /* Popt.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02F5CC6D0D1494AA0000A2D0 /* Popt.framework */; };
+		02548E0A0D159F4400B4B3B9 /* QuesoGLC.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 0223BBD10CFE3D5C0056EF85 /* QuesoGLC.framework */; };
 		02581B6F0BD5A30900957CBC /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */; };
 		02581C600BD5A95C00957CBC /* SDLMain.h in Headers */ = {isa = PBXBuildFile; fileRef = 0246A5A60BD3D482004D1C70 /* SDLMain.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02581C610BD5A95C00957CBC /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 0246A5A70BD3D482004D1C70 /* SDLMain.m */; };
@@ -763,7 +765,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 02CDDCF30D159BC300722688 /* Autorevision */;
+			remoteGlobalIDString = 02CDDCF30D159BC300722688;
 			remoteInfo = Autorevision;
 		};
 		02DDA8680BD3C21E0049AB60 /* PBXContainerItemProxy */ = {
@@ -803,6 +805,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				02548E0A0D159F4400B4B3B9 /* QuesoGLC.framework in Copy frameworks */,
+				02548E070D159F4000B4B3B9 /* Popt.framework in Copy frameworks */,
 				02581C810BD5AD1100957CBC /* Gettext.framework in Copy frameworks */,
 				02581C820BD5AD1100957CBC /* Ogg.framework in Copy frameworks */,
 				02581C830BD5AD1100957CBC /* PhysFS.framework in Copy frameworks */,
@@ -1563,7 +1567,7 @@
 		02C8AEFB0BE68A6800E9D8A7 /* oggvorbis.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = oggvorbis.h; path = ../lib/sound/oggvorbis.h; sourceTree = SOURCE_ROOT; };
 		02CBED8A0C5B8BEB00316CE2 /* nettypes.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = nettypes.c; path = ../lib/netplay/nettypes.c; sourceTree = SOURCE_ROOT; };
 		02CBED8B0C5B8BEB00316CE2 /* nettypes.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = nettypes.h; path = ../lib/netplay/nettypes.h; sourceTree = SOURCE_ROOT; };
-		02CDDCF40D159BC300722688 /* Autorevision */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "compiled.mach-o.executable"; name = Autorevision; path = build/Debug/Autorevision; sourceTree = "<group>"; };
+		02CDDCF40D159BC300722688 /* Autorevision */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Autorevision; sourceTree = BUILT_PRODUCTS_DIR; };
 		02CDDCF80D159BE000722688 /* autorevision.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = autorevision.cpp; path = ../build_tools/autorevision/autorevision.cpp; sourceTree = SOURCE_ROOT; };
 		02CDDD080D159D5900722688 /* autorevision.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = autorevision.h; path = ../src/autorevision.h; sourceTree = SOURCE_ROOT; };
 		02CDDD1A0D159E2F00722688 /* openal_error.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = openal_error.c; path = ../lib/sound/openal_error.c; sourceTree = SOURCE_ROOT; };
@@ -4991,7 +4995,7 @@
 				);
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = "PACKAGE=\\\"popt\\\"";
 				INFOPLIST_FILE = "Resources/Popt-Info.plist";
-				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+				INSTALL_PATH = "@executable_path/../Frameworks";
 				OTHER_LDFLAGS = (
 					"-framework",
 					Carbon,
