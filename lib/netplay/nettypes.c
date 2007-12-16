@@ -31,6 +31,10 @@
 # include <winsock.h>
 #else
 # include <arpa/inet.h>
+#ifdef WZ_OS_MAC
+# undef MIN
+# undef MAX
+#endif
 #endif
 
 #include "../framework/frame.h"
