@@ -42,7 +42,7 @@ static BOOL bRevealActive = FALSE;
 // ------------------------------------------------------------------------------------
 void	avSetStatus(BOOL var)
 {
-	debug(LOG_FOG, "avSetStatus: Setting visual fog %s", var ? "ON" : "OFF");
+	debug(LOG_FOG, "avSetStatus: Setting fog of war %s", var ? "ON" : "OFF");
 	bRevealActive = var;
 }
 

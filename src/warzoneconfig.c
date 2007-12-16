@@ -144,7 +144,8 @@ UDWORD war_GetHeight(void)
 /***************************************************************************/
 void war_SetFog(BOOL val)
 {
-	debug(LOG_FOG, "Fog of war turned %s", val ? "ON" : "OFF");
+	debug(LOG_FOG, "Visual fog turned %s", val ? "ON" : "OFF");
+
 	if (warGlobs.bFog != val)
 	{
 		warGlobs.bFog = val;
