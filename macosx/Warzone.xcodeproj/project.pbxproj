@@ -775,6 +775,13 @@
 			remoteGlobalIDString = 02F5CC6C0D1494AA0000A2D0;
 			remoteInfo = Popt;
 		};
+		97B1D6670D1541C000737638 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0223BBD00CFE3D5C0056EF85 /* QuesoGLC */;
+			remoteInfo = QuesoGLC;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -3124,6 +3131,7 @@
 				0246A3050BD3CCF6004D1C70 /* PBXTargetDependency */,
 				0246A3070BD3CCF9004D1C70 /* PBXTargetDependency */,
 				02F5CCC40D1498BB0000A2D0 /* PBXTargetDependency */,
+				97B1D6680D1541C000737638 /* PBXTargetDependency */,
 			);
 			name = Warzone;
 			productName = Warzone;
@@ -3426,7 +3434,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "OUTDIR=quesoglc\nSVNURL=https://quesoglc.svn.sourceforge.net/svnroot/quesoglc/trunk/quesoglc\nSVNREV=675\n\ncd external\n\nif [ -d \"$OUTDIR\" ]; then\n  echo \"$OUTDIR exists, skipping\"\n  exit 0\nfi\n\nif [ ! -z \"$SVNREV\" ]; then\n  SVNARGS=\"$SVNARGS -r $SVNREV\"\nfi\n\nsvn co $SVARGS https://quesoglc.svn.sourceforge.net/svnroot/quesoglc/trunk/quesoglc\n";
+			shellScript = "OUTDIR=quesoglc\nSVNURL=https://quesoglc.svn.sourceforge.net/svnroot/quesoglc/trunk/quesoglc\nSVNREV=675\n\nPATH=\"/usr/local/bin:${PATH}\"\nexport PATH\n\ncd external\n\nif [ -d \"$OUTDIR\" ]; then\n  echo \"$OUTDIR exists, skipping\"\n  exit 0\nfi\n\nif [ ! -z \"$SVNREV\" ]; then\n  SVNARGS=\"$SVNARGS -r $SVNREV\"\nfi\n\nsvn co $SVARGS https://quesoglc.svn.sourceforge.net/svnroot/quesoglc/trunk/quesoglc\n";
 		};
 		022B2F290BD55840002E64E3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4148,6 +4156,11 @@
 			target = 02F5CC6C0D1494AA0000A2D0 /* Popt */;
 			targetProxy = 02F5CCC30D1498BB0000A2D0 /* PBXContainerItemProxy */;
 		};
+		97B1D6680D1541C000737638 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0223BBD00CFE3D5C0056EF85 /* QuesoGLC */;
+			targetProxy = 97B1D6670D1541C000737638 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -4222,7 +4235,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
-				INFOPLIST_FILE = "QuesoGLC-Info.plist";
+				INFOPLIST_FILE = "Resources/QuesoGLC-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4860,7 +4873,7 @@
 					"$(inherited)",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = "PACKAGE=\\\"popt\\\"";
-				INFOPLIST_FILE = "Popt-Info.plist";
+				INFOPLIST_FILE = "Resources/Popt-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Frameworks";
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -4884,7 +4897,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
-				INFOPLIST_FILE = "Popt-Info.plist";
+				INFOPLIST_FILE = "Resources/Popt-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Frameworks";
 				OTHER_LDFLAGS = (
 					"-framework",
