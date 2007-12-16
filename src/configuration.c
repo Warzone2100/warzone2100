@@ -125,6 +125,11 @@ BOOL loadConfig(void)
 		setWarzoneKeyNumeric("framerate", 60);
 	}
 
+	if (getWarzoneKeyNumeric("showFPS", &val))
+	{
+		showFPS = val;
+	}
+
 	// //////////////////////////
 	// gamma
 	if (getWarzoneKeyNumeric("gamma", &val))
@@ -591,6 +596,7 @@ BOOL saveConfig(void)
 	setWarzoneKeyNumeric("allowSubtitles", war_GetAllowSubtitles());
 	setWarzoneKeyNumeric("debugmode", bAllowDebugMode);
 	setWarzoneKeyNumeric("framerate", (SDWORD)getFramerateLimit());
+	setWarzoneKeyNumeric("showFPS", (SDWORD)showFPS);
 	setWarzoneKeyNumeric("gamma", (SDWORD)gammaValue);
 	setWarzoneKeyNumeric("scroll",(SDWORD)scroll_speed_accel);		// scroll
 	setWarzoneKeyNumeric("difficulty", getDifficultyLevel());		// level
