@@ -358,7 +358,7 @@ void draw3DScene( void )
 	}
 	if (showFPS)
 	{
-		iV_DrawTextF(8, 472 + E_H, "FPS: %02u", frameGetAverageRate());
+		iV_DrawTextF(pie_GetVideoBufferWidth() - 114, 472 + E_H, "FPS: %u", frameGetAverageRate());
 	}
 	if(getDebugMappingStatus() && !demoGetStatus() && !gamePaused())
 	{
