@@ -554,6 +554,11 @@
 		02C8AEFC0BE68A6800E9D8A7 /* oggvorbis.c in Sources */ = {isa = PBXBuildFile; fileRef = 02C8AEFA0BE68A6800E9D8A7 /* oggvorbis.c */; };
 		02CBED8C0C5B8BEB00316CE2 /* nettypes.c in Sources */ = {isa = PBXBuildFile; fileRef = 02CBED8A0C5B8BEB00316CE2 /* nettypes.c */; };
 		02CBED8D0C5B8BEB00316CE2 /* nettypes.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02CBED8B0C5B8BEB00316CE2 /* nettypes.h */; };
+		02CDDCF90D159BE000722688 /* autorevision.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02CDDCF80D159BE000722688 /* autorevision.cpp */; };
+		02CDDD090D159D5900722688 /* autorevision.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02CDDD080D159D5900722688 /* autorevision.h */; };
+		02CDDD130D159DF600722688 /* QuesoGLC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0223BBD10CFE3D5C0056EF85 /* QuesoGLC.framework */; };
+		02CDDD1C0D159E2F00722688 /* openal_error.c in Sources */ = {isa = PBXBuildFile; fileRef = 02CDDD1A0D159E2F00722688 /* openal_error.c */; };
+		02CDDD1D0D159E2F00722688 /* openal_error.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02CDDD1B0D159E2F00722688 /* openal_error.h */; };
 		02DDA81C0BD3C1420049AB60 /* analysis.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA7F50BD3C1420049AB60 /* analysis.c */; };
 		02DDA81D0BD3C1420049AB60 /* backends.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DDA7F60BD3C1420049AB60 /* backends.h */; };
 		02DDA81E0BD3C1420049AB60 /* bitrate.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA7F70BD3C1420049AB60 /* bitrate.c */; };
@@ -754,6 +759,13 @@
 			remoteGlobalIDString = 0246A3E00BD3CD81004D1C70;
 			remoteInfo = SDL;
 		};
+		02CDDCFE0D159C0000722688 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 02CDDCF30D159BC300722688 /* Autorevision */;
+			remoteInfo = Autorevision;
+		};
 		02DDA8680BD3C21E0049AB60 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
@@ -779,7 +791,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 0223BBD00CFE3D5C0056EF85 /* QuesoGLC */;
+			remoteGlobalIDString = 0223BBD00CFE3D5C0056EF85;
 			remoteInfo = QuesoGLC;
 		};
 /* End PBXContainerItemProxy section */
@@ -808,6 +820,8 @@
 				0223BBBD0CFE3CD60056EF85 /* strlfuncs.h in Copy frameworks */,
 				0223BBBF0CFE3CD60056EF85 /* strnlen1.h in Copy frameworks */,
 				0223BBC10CFE3CD60056EF85 /* tagfile.h in Copy frameworks */,
+				02CDDD090D159D5900722688 /* autorevision.h in Copy frameworks */,
+				02CDDD1D0D159E2F00722688 /* openal_error.h in Copy frameworks */,
 			);
 			name = "Copy frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1549,6 +1563,11 @@
 		02C8AEFB0BE68A6800E9D8A7 /* oggvorbis.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = oggvorbis.h; path = ../lib/sound/oggvorbis.h; sourceTree = SOURCE_ROOT; };
 		02CBED8A0C5B8BEB00316CE2 /* nettypes.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = nettypes.c; path = ../lib/netplay/nettypes.c; sourceTree = SOURCE_ROOT; };
 		02CBED8B0C5B8BEB00316CE2 /* nettypes.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = nettypes.h; path = ../lib/netplay/nettypes.h; sourceTree = SOURCE_ROOT; };
+		02CDDCF40D159BC300722688 /* Autorevision */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "compiled.mach-o.executable"; name = Autorevision; path = build/Debug/Autorevision; sourceTree = "<group>"; };
+		02CDDCF80D159BE000722688 /* autorevision.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = autorevision.cpp; path = ../build_tools/autorevision/autorevision.cpp; sourceTree = SOURCE_ROOT; };
+		02CDDD080D159D5900722688 /* autorevision.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = autorevision.h; path = ../src/autorevision.h; sourceTree = SOURCE_ROOT; };
+		02CDDD1A0D159E2F00722688 /* openal_error.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = openal_error.c; path = ../lib/sound/openal_error.c; sourceTree = SOURCE_ROOT; };
+		02CDDD1B0D159E2F00722688 /* openal_error.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = openal_error.h; path = ../lib/sound/openal_error.h; sourceTree = SOURCE_ROOT; };
 		02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Vorbis.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		02DDA7EF0BD3C03F0049AB60 /* Vorbis-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "Vorbis-Info.plist"; path = "Resources/Vorbis-Info.plist"; sourceTree = "<group>"; };
 		02DDA7F50BD3C1420049AB60 /* analysis.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = analysis.c; path = external/libvorbis/lib/analysis.c; sourceTree = "<group>"; };
@@ -1667,6 +1686,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02CDDD130D159DF600722688 /* QuesoGLC.framework in Frameworks */,
 				02F5CCC00D1498A30000A2D0 /* Popt.framework in Frameworks */,
 				02581C770BD5AC5200957CBC /* Cocoa.framework in Frameworks */,
 				02581C740BD5ABF700957CBC /* Carbon.framework in Frameworks */,
@@ -1738,6 +1758,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		02581C5B0BD5A94A00957CBC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		02CDDCF20D159BC300722688 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1883,6 +1910,7 @@
 		02356D640BD3BB2600E9A019 = {
 			isa = PBXGroup;
 			children = (
+				02CDDCFD0D159BE700722688 /* Autorevision sources */,
 				02F5CC7F0D1495EB0000A2D0 /* Popt sources */,
 				0223BBE50CFE3F4B0056EF85 /* QuesoGLC sources */,
 				022B2F460BD55940002E64E3 /* Gettext sources */,
@@ -1926,6 +1954,7 @@
 				02581C5D0BD5A94A00957CBC /* libSDLmain.a */,
 				0223BBD10CFE3D5C0056EF85 /* QuesoGLC.framework */,
 				02F5CC6D0D1494AA0000A2D0 /* Popt.framework */,
+				02CDDCF40D159BC300722688 /* Autorevision */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2125,6 +2154,8 @@
 		0246A1640BD3CC90004D1C70 /* Sound */ = {
 			isa = PBXGroup;
 			children = (
+				02CDDD1A0D159E2F00722688 /* openal_error.c */,
+				02CDDD1B0D159E2F00722688 /* openal_error.h */,
 				02C8AEFA0BE68A6800E9D8A7 /* oggvorbis.c */,
 				02C8AEFB0BE68A6800E9D8A7 /* oggvorbis.h */,
 				0246A1650BD3CCA6004D1C70 /* aud.h */,
@@ -2175,6 +2206,7 @@
 		0246A1970BD3CCC3004D1C70 /* Warzone */ = {
 			isa = PBXGroup;
 			children = (
+				02CDDD080D159D5900722688 /* autorevision.h */,
 				0223BBAC0CFE3C380056EF85 /* main.h */,
 				0223BBAD0CFE3C380056EF85 /* version.c */,
 				0223BBAE0CFE3C380056EF85 /* version.h */,
@@ -2599,6 +2631,14 @@
 				0246A4050BD3CDFC004D1C70 /* SDLnetUDP.c */,
 			);
 			name = "SDL_net sources";
+			sourceTree = "<group>";
+		};
+		02CDDCFD0D159BE700722688 /* Autorevision sources */ = {
+			isa = PBXGroup;
+			children = (
+				02CDDCF80D159BE000722688 /* autorevision.cpp */,
+			);
+			name = "Autorevision sources";
 			sourceTree = "<group>";
 		};
 		02DDA85F0BD3C1A60049AB60 /* Zlib sources */ = {
@@ -3110,6 +3150,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02356D790BD3BB3600E9A019 /* Build configuration list for PBXNativeTarget "Warzone" */;
 			buildPhases = (
+				02CDDD010D159CA700722688 /* Run autorevision */,
 				02356D710BD3BB3400E9A019 /* Resources */,
 				02356D720BD3BB3400E9A019 /* Sources */,
 				02356D730BD3BB3400E9A019 /* Frameworks */,
@@ -3121,6 +3162,7 @@
 				0246AA4D0BD3E067004D1C70 /* PBXBuildRule */,
 			);
 			dependencies = (
+				02CDDCFF0D159C0000722688 /* PBXTargetDependency */,
 				02581C630BD5A97400957CBC /* PBXTargetDependency */,
 				022B313F0BD56915002E64E3 /* PBXTargetDependency */,
 				0246A3FF0BD3CDB1004D1C70 /* PBXTargetDependency */,
@@ -3253,6 +3295,22 @@
 			productReference = 02581C5D0BD5A94A00957CBC /* libSDLmain.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		02CDDCF30D159BC300722688 /* Autorevision */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 02CDDCFA0D159BE000722688 /* Build configuration list for PBXNativeTarget "Autorevision" */;
+			buildPhases = (
+				02CDDCF10D159BC300722688 /* Sources */,
+				02CDDCF20D159BC300722688 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Autorevision;
+			productName = Autorevision;
+			productReference = 02CDDCF40D159BC300722688 /* Autorevision */;
+			productType = "com.apple.product-type.tool";
+		};
 		02DDA7ED0BD3C03F0049AB60 /* Vorbis */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02DDA7F00BD3C03F0049AB60 /* Build configuration list for PBXNativeTarget "Vorbis" */;
@@ -3335,6 +3393,7 @@
 				022B2F210BD55814002E64E3 /* Gettext */,
 				02581C5C0BD5A94A00957CBC /* SDLmain */,
 				02F5CC6C0D1494AA0000A2D0 /* Popt */,
+				02CDDCF30D159BC300722688 /* Autorevision */,
 			);
 		};
 /* End PBXProject section */
@@ -3481,6 +3540,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "mkdir -p ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources\nrm -rf ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data\ntar -cC .. --exclude .svn --exclude 'Makefile*' data | tar -xC ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources\n";
+		};
+		02CDDD010D159CA700722688 /* Run autorevision */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run autorevision";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd ..\n./macosx/build/${CONFIGURATION}/Autorevision +cstr . src/autorevision.h\n";
 		};
 		02F5CC4F0D148FC30000A2D0 /* Create database.c */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3867,6 +3940,7 @@
 				0223BBBB0CFE3CD60056EF85 /* printf_ext.c in Sources */,
 				0223BBBE0CFE3CD60056EF85 /* strnlen1.c in Sources */,
 				0223BBC00CFE3CD60056EF85 /* tagfile.c in Sources */,
+				02CDDD1C0D159E2F00722688 /* openal_error.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4019,6 +4093,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		02CDDCF10D159BC300722688 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				02CDDCF90D159BE000722688 /* autorevision.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		02DDA7EB0BD3C03F0049AB60 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4140,6 +4222,11 @@
 			isa = PBXTargetDependency;
 			target = 0246A3E00BD3CD81004D1C70 /* SDL */;
 			targetProxy = 02581D310BD5B5FB00957CBC /* PBXContainerItemProxy */;
+		};
+		02CDDCFF0D159C0000722688 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 02CDDCF30D159BC300722688 /* Autorevision */;
+			targetProxy = 02CDDCFE0D159C0000722688 /* PBXContainerItemProxy */;
 		};
 		02DDA8690BD3C21E0049AB60 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -4746,6 +4833,36 @@
 			};
 			name = Release;
 		};
+		02CDDCFB0D159BE000722688 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = "$(HOME)/bin";
+				PREBINDING = NO;
+				PRODUCT_NAME = Autorevision;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		02CDDCFC0D159BE000722688 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = "$(HOME)/bin";
+				PREBINDING = NO;
+				PRODUCT_NAME = Autorevision;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 		02DDA7F10BD3C03F0049AB60 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4998,6 +5115,15 @@
 			buildConfigurations = (
 				02581C6C0BD5A9A200957CBC /* Debug */,
 				02581C6D0BD5A9A200957CBC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		02CDDCFA0D159BE000722688 /* Build configuration list for PBXNativeTarget "Autorevision" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				02CDDCFB0D159BE000722688 /* Debug */,
+				02CDDCFC0D159BE000722688 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

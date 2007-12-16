@@ -5183,9 +5183,9 @@ BOOL loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity)
 		/* SAVE_DROIDINIT is OBJECT_SAVE_V19 */
 		/* OBJECT_SAVE_V19 */
 		endian_udword(&pDroidInit->id);
-		endian_udword(&pDroidInit->pos.x);
-		endian_udword(&pDroidInit->pos.y);
-		endian_udword(&pDroidInit->pos.z);
+		endian_udword(&pDroidInit->x);
+		endian_udword(&pDroidInit->y);
+		endian_udword(&pDroidInit->z);
 		endian_udword(&pDroidInit->direction);
 		endian_udword(&pDroidInit->player);
 		endian_udword(&pDroidInit->burnStart);
@@ -6118,9 +6118,9 @@ BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 		endian_uword(&psSaveDroid->turretPitch);
 		/* OBJECT_SAVE_V19 */
 		endian_udword(&psSaveDroid->id);
-		endian_udword(&psSaveDroid->pos.x);
-		endian_udword(&psSaveDroid->pos.y);
-		endian_udword(&psSaveDroid->pos.z);
+		endian_udword(&psSaveDroid->x);
+		endian_udword(&psSaveDroid->y);
+		endian_udword(&psSaveDroid->z);
 		endian_udword(&psSaveDroid->direction);
 		endian_udword(&psSaveDroid->player);
 		endian_udword(&psSaveDroid->burnStart);
@@ -6271,9 +6271,9 @@ BOOL loadSaveDroidV19(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 		endian_udword(&psSaveDroid->numKills);
 		/* OBJECT_SAVE_V19 */
 		endian_udword(&psSaveDroid->id);
-		endian_udword(&psSaveDroid->pos.x);
-		endian_udword(&psSaveDroid->pos.y);
-		endian_udword(&psSaveDroid->pos.z);
+		endian_udword(&psSaveDroid->x);
+		endian_udword(&psSaveDroid->y);
+		endian_udword(&psSaveDroid->z);
 		endian_udword(&psSaveDroid->direction);
 		endian_udword(&psSaveDroid->player);
 		endian_udword(&psSaveDroid->burnStart);
@@ -6436,9 +6436,9 @@ BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
 		endian_udword(&psSaveDroid->lastEmission);
 		/* OBJECT_SAVE_V20 */
 		endian_udword(&psSaveDroid->id);
-		endian_udword(&psSaveDroid->pos.x);
-		endian_udword(&psSaveDroid->pos.y);
-		endian_udword(&psSaveDroid->pos.z);
+		endian_udword(&psSaveDroid->x);
+		endian_udword(&psSaveDroid->y);
+		endian_udword(&psSaveDroid->z);
 		endian_udword(&psSaveDroid->direction);
 		endian_udword(&psSaveDroid->player);
 		endian_udword(&psSaveDroid->burnStart);
@@ -6836,9 +6836,9 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			endian_udword(&psSaveDroid->lastEmission);
 			/* OBJECT_SAVE_V20 */
 			endian_udword(&psSaveDroid->id);
-			endian_udword(&psSaveDroid->pos.x);
-			endian_udword(&psSaveDroid->pos.y);
-			endian_udword(&psSaveDroid->pos.z);
+			endian_udword(&psSaveDroid->x);
+			endian_udword(&psSaveDroid->y);
+			endian_udword(&psSaveDroid->z);
 			endian_udword(&psSaveDroid->direction);
 			endian_udword(&psSaveDroid->player);
 			endian_udword(&psSaveDroid->burnStart);
@@ -7057,9 +7057,9 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 		endian_udword(&psSaveStructure->quantity);
 		/* OBJECT_SAVE_V19 */
 		endian_udword(&psSaveStructure->id);
-		endian_udword(&psSaveStructure->pos.x);
-		endian_udword(&psSaveStructure->pos.y);
-		endian_udword(&psSaveStructure->pos.z);
+		endian_udword(&psSaveStructure->x);
+		endian_udword(&psSaveStructure->y);
+		endian_udword(&psSaveStructure->z);
 		endian_udword(&psSaveStructure->direction);
 		endian_udword(&psSaveStructure->player);
 		endian_udword(&psSaveStructure->burnStart);
@@ -7352,9 +7352,9 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 		endian_udword(&psSaveStructure->capacity);
 		/* STRUCTURE_SAVE_V2 includes OBJECT_SAVE_V19 */
 		endian_udword(&psSaveStructure->id);
-		endian_udword(&psSaveStructure->pos.x);
-		endian_udword(&psSaveStructure->pos.y);
-		endian_udword(&psSaveStructure->pos.z);
+		endian_udword(&psSaveStructure->x);
+		endian_udword(&psSaveStructure->y);
+		endian_udword(&psSaveStructure->z);
 		endian_udword(&psSaveStructure->direction);
 		endian_udword(&psSaveStructure->player);
 		endian_udword(&psSaveStructure->burnStart);
@@ -7795,9 +7795,9 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 		endian_sword(&psSaveStructure->currentPowerAccrued);
 		/* OBJECT_SAVE_V20 */
 		endian_udword(&psSaveStructure->id);
-		endian_udword(&psSaveStructure->pos.x);
-		endian_udword(&psSaveStructure->pos.y);
-		endian_udword(&psSaveStructure->pos.z);
+		endian_udword(&psSaveStructure->x);
+		endian_udword(&psSaveStructure->y);
+		endian_udword(&psSaveStructure->z);
 		endian_udword(&psSaveStructure->direction);
 		endian_udword(&psSaveStructure->player);
 		endian_udword(&psSaveStructure->burnStart);
@@ -8422,9 +8422,9 @@ BOOL writeStructFile(char *pFileName)
 			endian_sword(&psSaveStruct->currentPowerAccrued);
 			/* OBJECT_SAVE_V20 */
 			endian_udword(&psSaveStruct->id);
-			endian_udword(&psSaveStruct->pos.x);
-			endian_udword(&psSaveStruct->pos.y);
-			endian_udword(&psSaveStruct->pos.z);
+			endian_udword(&psSaveStruct->x);
+			endian_udword(&psSaveStruct->y);
+			endian_udword(&psSaveStruct->z);
 			endian_udword(&psSaveStruct->direction);
 			endian_udword(&psSaveStruct->player);
 			endian_udword(&psSaveStruct->burnStart);
@@ -8641,9 +8641,9 @@ BOOL loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UD
 		/* FEATURE_SAVE_V2 is OBJECT_SAVE_V19 */
 		/* OBJECT_SAVE_V19 */
 		endian_udword(&psSaveFeature->id);
-		endian_udword(&psSaveFeature->pos.x);
-		endian_udword(&psSaveFeature->pos.y);
-		endian_udword(&psSaveFeature->pos.z);
+		endian_udword(&psSaveFeature->x);
+		endian_udword(&psSaveFeature->y);
+		endian_udword(&psSaveFeature->z);
 		endian_udword(&psSaveFeature->direction);
 		endian_udword(&psSaveFeature->player);
 		endian_udword(&psSaveFeature->burnStart);
@@ -8745,9 +8745,9 @@ BOOL loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWO
 		/* FEATURE_SAVE_V20 is OBJECT_SAVE_V20 */
 		/* OBJECT_SAVE_V20 */
 		endian_udword(&psSaveFeature->id);
-		endian_udword(&psSaveFeature->pos.x);
-		endian_udword(&psSaveFeature->pos.y);
-		endian_udword(&psSaveFeature->pos.z);
+		endian_udword(&psSaveFeature->x);
+		endian_udword(&psSaveFeature->y);
+		endian_udword(&psSaveFeature->z);
 		endian_udword(&psSaveFeature->direction);
 		endian_udword(&psSaveFeature->player);
 		endian_udword(&psSaveFeature->burnStart);
@@ -8881,9 +8881,9 @@ BOOL writeFeatureFile(char *pFileName)
 		/* FEATURE_SAVE_V20 includes OBJECT_SAVE_V20 */
 		/* OBJECT_SAVE_V20 */
 		endian_udword(&psSaveFeature->id);
-		endian_udword(&psSaveFeature->pos.x);
-		endian_udword(&psSaveFeature->pos.y);
-		endian_udword(&psSaveFeature->pos.z);
+		endian_udword(&psSaveFeature->x);
+		endian_udword(&psSaveFeature->y);
+		endian_udword(&psSaveFeature->z);
 		endian_udword(&psSaveFeature->direction);
 		endian_udword(&psSaveFeature->player);
 		endian_udword(&psSaveFeature->burnStart);
@@ -12034,9 +12034,9 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 			endian_udword(&psSaveStructure2->quantity);
 			/* OBJECT_SAVE_V19 */
 			endian_udword(&psSaveStructure2->id);
-			endian_udword(&psSaveStructure2->pos.x);
-			endian_udword(&psSaveStructure2->pos.y);
-			endian_udword(&psSaveStructure2->pos.z);
+			endian_udword(&psSaveStructure2->x);
+			endian_udword(&psSaveStructure2->y);
+			endian_udword(&psSaveStructure2->z);
 			endian_udword(&psSaveStructure2->direction);
 			endian_udword(&psSaveStructure2->player);
 			endian_udword(&psSaveStructure2->burnStart);
@@ -12068,9 +12068,9 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 			endian_udword(&psSaveStructure12->quantity);
 			/* OBJECT_SAVE_V19 */
 			endian_udword(&psSaveStructure12->id);
-			endian_udword(&psSaveStructure12->pos.x);
-			endian_udword(&psSaveStructure12->pos.y);
-			endian_udword(&psSaveStructure12->pos.z);
+			endian_udword(&psSaveStructure12->x);
+			endian_udword(&psSaveStructure12->y);
+			endian_udword(&psSaveStructure12->z);
 			endian_udword(&psSaveStructure12->direction);
 			endian_udword(&psSaveStructure12->player);
 			endian_udword(&psSaveStructure12->burnStart);
@@ -12103,9 +12103,9 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 			endian_udword(&psSaveStructure14->quantity);
 			/* OBJECT_SAVE_V19 */
 			endian_udword(&psSaveStructure14->id);
-			endian_udword(&psSaveStructure14->pos.x);
-			endian_udword(&psSaveStructure14->pos.y);
-			endian_udword(&psSaveStructure14->pos.z);
+			endian_udword(&psSaveStructure14->x);
+			endian_udword(&psSaveStructure14->y);
+			endian_udword(&psSaveStructure14->z);
 			endian_udword(&psSaveStructure14->direction);
 			endian_udword(&psSaveStructure14->player);
 			endian_udword(&psSaveStructure14->burnStart);
@@ -12139,9 +12139,9 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 			endian_udword(&psSaveStructure15->quantity);
 			/* OBJECT_SAVE_V19 */
 			endian_udword(&psSaveStructure15->id);
-			endian_udword(&psSaveStructure15->pos.x);
-			endian_udword(&psSaveStructure15->pos.y);
-			endian_udword(&psSaveStructure15->pos.z);
+			endian_udword(&psSaveStructure15->x);
+			endian_udword(&psSaveStructure15->y);
+			endian_udword(&psSaveStructure15->z);
 			endian_udword(&psSaveStructure15->direction);
 			endian_udword(&psSaveStructure15->player);
 			endian_udword(&psSaveStructure15->burnStart);
@@ -12177,9 +12177,9 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 			endian_udword(&psSaveStructure17->quantity);
 			/* OBJECT_SAVE_V19 */
 			endian_udword(&psSaveStructure17->id);
-			endian_udword(&psSaveStructure17->pos.x);
-			endian_udword(&psSaveStructure17->pos.y);
-			endian_udword(&psSaveStructure17->pos.z);
+			endian_udword(&psSaveStructure17->x);
+			endian_udword(&psSaveStructure17->y);
+			endian_udword(&psSaveStructure17->z);
 			endian_udword(&psSaveStructure17->direction);
 			endian_udword(&psSaveStructure17->player);
 			endian_udword(&psSaveStructure17->burnStart);
@@ -12212,9 +12212,9 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 			endian_sword(&psSaveStructure20->currentPowerAccrued);
 			/* OBJECT_SAVE_V20 */
 			endian_udword(&psSaveStructure20->id);
-			endian_udword(&psSaveStructure20->pos.x);
-			endian_udword(&psSaveStructure20->pos.y);
-			endian_udword(&psSaveStructure20->pos.z);
+			endian_udword(&psSaveStructure20->x);
+			endian_udword(&psSaveStructure20->y);
+			endian_udword(&psSaveStructure20->z);
 			endian_udword(&psSaveStructure20->direction);
 			endian_udword(&psSaveStructure20->player);
 			endian_udword(&psSaveStructure20->burnStart);
@@ -12250,9 +12250,9 @@ BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWO
 			endian_sword(&psSaveStructure->currentPowerAccrued);
 			/* OBJECT_SAVE_V20 */
 			endian_udword(&psSaveStructure->id);
-			endian_udword(&psSaveStructure->pos.x);
-			endian_udword(&psSaveStructure->pos.y);
-			endian_udword(&psSaveStructure->pos.z);
+			endian_udword(&psSaveStructure->x);
+			endian_udword(&psSaveStructure->y);
+			endian_udword(&psSaveStructure->z);
 			endian_udword(&psSaveStructure->direction);
 			endian_udword(&psSaveStructure->player);
 			endian_udword(&psSaveStructure->burnStart);
