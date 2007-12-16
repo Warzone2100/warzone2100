@@ -325,3 +325,222 @@
  * Proprietary technologies replaced by SDL, OpenGL and OpenAL.
  * Network implemented using SDL-net.
  * Zoom enhancements (increased range and control using the mouse wheel).
+
+
+Pre-GPL releases:
+
+0000-00-00: Version 1.10
+ * Improved Command Turrets. Heavier armours to improve the battlefield survival of commanders.
+ * Twin Assault Gun. Faster firing assault guns with increased fire power.
+ * EMP Mortar. Launch Electro-magnetic pulses into advancing enemies, then blast them and/or fry them with more conventional artillery.
+ * Plasmite Bomb.Incendiary bombing hots up with the arrival of the plasmite bomb bay.
+ * EMP Missile Launcher. Halt enemy attacks before they even start with the EMP missile.
+ * HEAT Armour Upgrades. The answer to surviving the plasmite bombers.
+ * AA Laser Battery. Improved AA defence using laser technologies
+
+0000-00-00: Version 1.09
+ * Two New Super-Heavy Bodies including the heaviest armours yet. They’re slow, but they’re almost impossible to stop!
+ * Plasmite Flamer Upgrades. Three new upgrades to turn up the head on the flamers to really high levels.
+ * Improved Tech 3 Factory Production. Build new units even faster to get those NEXUS bodies and super-Cyborgs into action faster.
+ * AA-Gun Hardpoints. New building techniques allow Anti Aircraft defences to be built on Hardpoint structures.
+ * Sam Site Hardpoints. New building techniques allow Surface to Air missile defences to be built on Hardpoint structures.
+ * Fixed crash on having more than 40 maps.
+
+0000-00-00: Version 1.08
+ * It’s balance time. Not many new technologies this time, we’ve addressed the stability and balance issues before adding new features.
+ * Cyborg balancing:
+   * Improved Cyborg Alloys.
+   * New Cyborg production techniques improve basic Cyborg armours.
+   * A slight tweak to improve Cyborg resistance damage using existing upgrades.
+ * New Building Techniques. New hardcrete formula improves defence and structure upgrades to make buildings more damage resistant.
+ * NEXUS link harder to research. Moved down the tech tree to make it appear later in the game.
+ * Fortresses: OK we lied about not adding anything new. Huge heavily armoured structures that pack weapons that are too large to ever fit on a vehicle.
+   * Super Cannon Fortress - a 2x2 structure with a huge cannon
+   * Heavy Rocket Bastion  - a 2x2 structure with a heavy rocket
+   * Mass Driver           - a 2x2 structure with a super-railgun 
+   * Missile Fortress      - a 2x2 structure with a heavy AT missile.
+ * EMP Turret. The EMP turret is the mobile answer to stopping enemy units dead in their tracks
+ * Wide Spectrum Sensor Turret. Design and build mobile WSS turrets to target enemy bases.
+ * Can’t use NEXUS link to build huge armies anymore.
+ * Select Research screen can now hold twice as many topics, to allow for latest updates.
+ * Skirmish player has a few new tricks up it’s sleeve.
+ * Skirmish scripts are now no longer stored in the wdg. End users can now modify and create their own skirmish scripts.
+ * A number of bug/feature fixes:
+   * Can’t demolish & rebuild the Lassat to cheat anymore.
+   * Crash when self repairing truck started building fixed (this is the bug many people reported after 1.07).
+   * Minor memory issue addressed.
+   * Numerous ‘play it safe’ code changes.
+   * Loading a save game multiple times(8) now works.
+
+0000-00-00: Version 1.07
+ * Satellite Up-Link Structure - Research and build the satellite up-link structure to reveal the entire map
+ * Wide Spectrum Sensors -  Operates as sensor, VTOL strike, and counter-battery sensor.
+ * LasSats - Gain control of the LasSats and use them to blast your enemies. The ultimate in WZ weaponry has arrived!
+ * New Weapons:
+   * Plasma Cannon - Long range heavy hitting fire power
+   * EMP Cannon - Fires an electro-magnetic pulse to disable enemy units. 
+   * Super-Cyborg Reinforcements
+   * Anti-Tank Missile Super-cyborg - A cyborg gunner with a heavier punch!
+   * Pulse Laser Cyborg - A heavier laser to take out enemy cyborgs
+   * Rail Super-gunner - Rail guns step up a notch to kill enemy tanks
+ * New Maps:
+   * Beggar’s Kanyon - A claustrophobic, 8 player desert map.
+     Oil is plentiful, but you'll have to balance research with good defences if you want to win.
+   * Gridlock City - The remains of a huge city. This is an 8 player map with lots of oil resources.
+     The space between bases and lack of bottlenecks make this an ideal map for trying out new technology. Try using the LasSat on an enemy Command Center to cause confusion before a tank rush.
+ * Map preview in multiplayer setup.
+ * Skirmish:
+   * Fixed power generator upgrade bug, player no longer builds lots of sensors in his base!
+   * Skirmish support for artillery emplacements, air defences modified slightly.
+   * Slightly harder on the highest setting.
+ * Bug fix to structure limit screen.
+ * Single Player:
+   * Fixed the case where the transport did not land directly on the landing pad.
+
+0000-00-00: Version 1.06
+ * New NEXUS Technologies:
+   NEXUS technologies can now be researched! New electronic warfare weapons let you disable enemy factories and steal their technologies. Also the NEXUS link has been analysed and reproduced - capture enemy forces and take over defensive structures
+   * NEXUS Link - Temporarily disables enemy structures and steals technology. Capture enemy units and take over defensive structures.
+   * Unit Auto-Repair - Automatically repairs damaged units. You’ve seen NEXUS do it, now you can too!
+ * New Super-Cyborgs:
+   * They’re here and they’re mean. Super-cyborgs pack big weapons and are heavily armoured.
+   * Medium Cannon Cyborg - Cyborg gunner with a heavier punch!
+   * HPV Cyborg - Adds hyper-velocity cannons to cyborgs
+   * Assault Cannon - The ultimate in Cyborg cannon firepower
+   * Tank Killa - Fires tank killer rockets (No kidding!)
+ * New Weapons:
+   * Twin Assault Cannon - Twice the firepower of the assault cannon!
+   * Heavy Laser - Disintegrates enemy cyborgs.
+ * New Maps:
+   * Basingstoke - 4 player desert map. Work your way in slowly from the corners of this huge environment, taking the oil first and then the enemy's territory.
+     In an area as large as this it is impossible to rush your opponents. Be patient, research carefully, and surprise them late in the game with something they're not expecting.
+   * Little Egypt - 4 player desert map. In a claustrophobic map the enemy are never far away.
+     If you're losing the battle then use politics to turn the tables. Choosing the right alliances in Little Egypt might well win you the war.
+     One more thing: don't be lulled into a false sense of security by the water surrounding your base - hover units and VTOL's are easily manufactured!
+   * Sand Castle - 8 player urban map.  Capture the remains of this once great city block by block, securing the bridges with defences as you progress. 
+     Howitzers, mortars and VTOL's will help you reach enemies across the water when they're least expecting it.
+ * To help see how resistive your units are to electronic warfare we’ve added a new ‘power bar’. Hold ctrl with a unit/structure selected to display it's resistance. This feature was also in 1.04 , but we’ve moved it from overlaying the unit’s power bar to overlaying the reload bar.
+ * Choose your own base.
+   You can now be any player and any color in a skirmish / multiplayer game. Choose your base on the flag-requester in the multiplayer setup menu. Each number corresponds to a particular base on the map. To find your favourite base play a skirmish game, press keypad-enter to list the players. The number of each players base is next to the players' name. (eg on 'rush' the top left is base 0, top right 1,  bottom right 2, bottom left 3)
+ * Bug fixes:
+   * Fixed crash in skirmish when turning off most skirmish players crashed the game on startup.
+   * Factory upgrades in multiplayer were sometimes displaying incorrectly (medium looked like large). 
+   * Slight Cyborg fix.
+   * Fixed the awkward cd swap on loading a saved skirmish game.
+   * Large repair turret is now correctly named.
+   * Fixed a crash that occurs when a player is typing in a chat message when the game starts up.
+   * Forming an alliance now stops any battles currently happening between allied players. Previously they would continue for a while.
+   * We found a work around using research which could give you some free power. fixed.
+   * Skirmish players are now reassigned when a human leaves. no more 'dead' skirmish players.
+ * Skirmish changes and improvements.
+   You can ally with the computer players. More templates, super cyborgs, doesn't build in water, NEXUS technology support,  provisional counter battery support. Research is now shared between allies in Skirmish games. When you complete a topic, it is also given to your allies (as in teamplay).
+ * You can now build next to walls, and build walls next to structures. You asked for it! Don’t come moaning when you wall yourself in!
+ * Routing change. Modified the routing code to be a bit smarter.
+ * Extra cheat modes and debug screens. Warzone-mod fans stay tuned!
+ * Direct Modem Play options.
+   You can select a different modem to play with other than the windows ‘default modem’. This will help those people with 2 or more modem devices (e.g. windows CE service users). To use a different modem open the ‘direct modem’ directory in the Warzone 2100 program directory and double click on the desired modem. 0 is the default setting.
+ * Map Editor support.
+   Provisional support for map downloading has been added. If a remote player does not have the map it will be automatically downloaded from the host. THIS HAS NOT BEEN TESTED IN THE INTERNET ENVIRONMENT and is very heavy on communications. If the connection between machines is non reliable the transfer may fail. If this happens you will need to delete the map file from the root of your Warzone installation directory. WE RECOMMEND THAT YOU DOWNLOAD THE MAP FROM A WEB SITE PRIOR TO STARTING WARZONE. A message will be added to the chat once the player has the map. Send feedback on this feature to multiplay@pumpkin.co.uk. We intend to address this feature further in the next update.
+
+0000-00-00: Version 1.06b - Extra fixes
+ * Units no longer return to base when they're auto-repairing.
+ * Fixed auto-repair when assigned to commander problem.
+ * Fixed player colours problem on radar map after skirmish re-load.
+ * Fixed problem where viewing window over radar map was lost following skirmish re-load.
+ * Fixed problem with number of units assignable to commander following re-load.
+ * Annoying CD-Swap requests for skirmish re-load finally fixed.
+ * Fixed the problem where the new Heavy Laser wasn't firing correctly (or often enough).
+ * Units no longer fire on recently assimilated enemy units (ie - taken over by a Nexus turret).
+ * Fixed crash that happened when scrapping a commander that had units assigned to him.
+ * "Transforming" structures removed - we're looking at revisiting this in future.
+
+0000-00-00: Version 1.05
+ * New Incendiary weapons:
+   * Incendiary Mortar - Heat up those entrenched defenders
+   * Incendiary Howitzer - Fire long range incendiaries into enemy bases
+   * Plasmite Flamer Emplacement - Short range flamer defense with devastating burn damage. Excellent for igniting base rushers!
+ * New Cyborgs.
+   Cyborg reinforcements are on their way! First to arrive are the thermite flamer, grenadier cyborgs, mechanics and combat engineers. Next month watch out for the first of the super-cyborgs! These are a new class of heavily armored Cyborg warriors. They cost more and take longer to build, but they pack weapons that are too heavy for regular cyborgs. (known issue: Grenadier cyborgs attached to a commander may not fire. Will be fixed in 1.06).
+ * Cyborg Transports.
+   Use transports to move cyborgs across the map. To unload individual units right click the transport to open the cargo window. To order all cyborgs out of the transport, hold ALT and left click the destination.
+ * New Technologies:
+   * Improved Cyborg and Vehicle HEAT armors - Your best defense against flamers.
+   * Improved mobile repair units - Increase repair rate.
+ * New Maps:
+   * Rolling Hills - 4 Player desert map.
+     Push forward over the rolling hills of the title and retreat to the narrower canyons around your base when the going gets tough. Those who reach the central desert quickly will be rewarded with oil barrels (easily taken from the weak scavenger settlements). More permanent oil resources can be found along the banks of the three rivers - we suggest hit and run hover groups for surprising the enemy.
+   * Hide and Sneak  - 8 player urban map.
+     In this strange, Tron-like environment you can hide but you can't run. Winding your way around the maze will quickly reveal nearby oil resources, but remember to go carefully and lock down areas as you progress. Later you may wish to build derricks in the oil - rich central area, but be warned: reveal your position and attacks will come from all sides.
+   * Yin-Yang - 8 player mountain map.
+     The glacial conditions here have created steep cliffs between the vast swirls of high and low ground. Navigate carefully and keep an eye out so as not to be outflanked by enemy tank groups. You may find the Cyborg Transport useful in setting up surprise attacks and remote structures.
+ * Sensor Range Display.
+   Press and hold Z to see a snapshot of your sensor range. Perfect for finding those spots you’ve missed.
+ * Skirmish Improvements:
+   * Each skirmish player can now be assigned a difficulty. Drag the slider to the right to increase the difficulty.  Drag all the way to the left to turn off the player (the last player can’t be turned off).
+   * Skirmish players now build walls, and don’t build on burning oil pools. Most cheats now work in one player skirmish.  Computer players don’t cheat as much. Bug fixes to skirmish save-game. No more ‘mystery units’ in the middle of the map! 
+   * In one player Skirmish mode, computer players now have a score and are ranked on the multiplayer score screen, as a human player would be.
+ * Multiplayer Research Info.
+   A small heart appears by any research topic your allies are working on. Now you can see what they are researching! Move the mouse over the heart to see which player is researching that topic. (note that in TeamPlay, research is automatically shared: you don’t have to give a research gift)
+
+0000-00-00: Version 1.04
+ * Build List Queuing.
+   Allows queuing of structures to be built by trucks. Select a structure, choose a site, then repeat this sequence while holding shift or ctrl for each additional structure you wish to build.
+ * Demolition Queuing.
+   Demolish a series of structures by first selecting the demolish icon, followed by the first structure you wish to demolish, repeat this sequence while holding shift or ctrl for each additional demolish order. Demolish and build queues can be mixed, as can building lines of defensive structures.
+ * Campaign 3 Technology Trees.
+   Research and Develop Campaign 3 Technologies - adds rail guns, lasers and missiles!
+ * One-Player Skirmish Save Games.
+   Now you can save in one player skirmish games. Ideal for those long battles against the computer. 
+ * Improved Skirmish AI.
+   This skirmish update improves on enemy detection and how the enemy chooses research and units. It’s much more realistic and a lot tougher. If you find it too hard, try turning off alliances, or remove a few skirmish players on big maps. (click the computer icon where the flags usually appear in the host game screen)
+ * Commanders and Repair.
+   Commanders can now be repaired by holding down Alt and selecting a commander with a repair unit. Also units returning from repair centers now always return to the commander’s current position.
+ * Multiple Map download problems are now fixed
+ * Better support for 3dfx cards. Voodoo3 issues resolved.
+ * Internal code changes should make cheating more difficult
+
+0000-00-00: Version 1.03b
+ * Two Great New Maps:
+   * Great Rift A massive 192x192 sized 4 player map set in the Arizona Desert. Four high Plateaus surrounding a great chasm. Take control of the oil resources and wreak havoc with Howitzers and Ripple Rockets.
+   * The Pit A great crater surrounded by high plateaus. Defend your plateau or take and hold the center. The choice is yours.
+
+0000-00-00: Version 1.03
+ * Technology Level 2 changes: Selecting a multiplayer Campaign level now sets the starting levels of the technologies in that game.
+   * Campaign 1 - Enables the entire tech tree from the start of campaign 1 to the end of campaign 2
+   * Campaign 2 - Starts with campaign 1 technology already researched and enables campaign 2 tech.
+ * Factory Settings Feature.
+   Attack Ranges, Retreat Levels, Fire Options and Movement Options can have their factory settings altered. To access the factory settings, right click the factory in the 3d view, then select the settings you want to change. All future units produced by the factory will have the new settings.
+ * Thicker D3D smoke!
+ * Modification to video playback in single player.
+ * Minor Changes to Skirmish code in preparation for a future update.(eg players don’t build themselves in anymore)
+ 
+0000-00-00: Version 1.02
+ * Two New Maps:
+   * Concrete Playground - A massive 250 x 250 sized 8 player map. Our biggest yet!
+     Set in an urban wasteland with huge concrete plateaux that with a little careful planning can be defended from enemy attack. With plenty of oil resources and vast expanses of water. Get researching them Hovers! Be sure to let us know what you think of this monster map.
+   * Fishnet - A big 96 x 96 sized 4 player map.
+     Set in a huge valley with plenty of lakes surrounded by snowy ridges. Control the ridges or take the center. Choose wisely!
+ * DirectPlay setup tweak.
+
+0000-00-00: Version 1.01
+ * New:
+   * Support for WZ add-on packs - WZ now has the functionality to support additional maps, units and research technology.
+   * New maps - Zigurrat, Wheel Of Fortune and The Valley Of Death.
+   * Unit limit increased to 100 per side in Multiplayer.
+   * Maps can be played at 2 different technology levels.
+     This feature is not yet available in skirmish so to ensure that you can access the campaign two technology maps, make sure that skirmish is not toggled to be ON since the maps won’t be available in this mode.  To access the campaign two technology maps, ensure that you have no computer players enabled and then select a new map. When the map select form comes up, click on the tab with the number 2 on it. You will then be presented with the new maps - they all have ‘-T2’ after their name. For the present, you will still have to progress through the campaign 1 research topics in order to access the new campaign 2 items. We are looking at the possibility of having these (campaign 1) topics already researched at the start of the game as an option. This will most likely be introduced into Warzone 2100 in update 1.03.
+   * Players in a team share radar information and research - this is updated in real time.
+   * Can see visibility and units/structures for allies in teamplay in realtime.
+   * New audio system with EAX support - this should lessen the chances of the audio system causing hangs on certain system specifications.
+   * Critical audio crash bug resolved.
+   * F12 support added for ‘unit lost’ audio message and others.
+ * Fixes/Improvements:
+   * Revised skirmish code with improved AI. This will continue to be worked on. For future updates we are looking to add a facility to save the game in skirmish mode.
+   * Key bind hack fixed - some players were cheating in multiplayer by altering the keymap file - this is now not possible.
+   * Mplayer fix - Europeans (including UK) can play on Mplayer.
+   * Interface change to allow more structures and unit designs - the interface forms will automatically expand to allow sufficient pages to display ALL available options rather than being limited.
+   * Partially built wall bug fixed - it was possible to trick the interface into completing walls for you - not any more!
+   * Multiplayer communication tweaks. [end of message]
+   * Flashing cursor added to text entry code - this provides the player with a more obvious indication that they have entered chat mode.
+   * Transparent water in d3d - originally only in Glide and now added to D3D. This works best in the Fog Of War setting.
+   * Construction lines working on TNT cards - when the constructors are building structures they emit a blue light from their bonnet. This was previously not visible to TNT owners.
