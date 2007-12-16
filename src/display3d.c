@@ -358,7 +358,14 @@ void draw3DScene( void )
 	}
 	if (showFPS)
 	{
-		iV_DrawTextF(pie_GetVideoBufferWidth() - 114, 472 + E_H, "FPS: %u", frameGetAverageRate());
+		unsigned int width, height;
+		const char* fps;
+		sasprintf((char**)&fps, "FPS: %02u", frameGetAverageRate());
+
+		width = iV_GetTextWidth(fps) + 10;
+		height = iV_GetTextHeight(fps);
+
+		iV_DrawText(fps, pie_GetVideoBufferWidth() - width, pie_GetVideoBufferHeight() - height);
 	}
 	if(getDebugMappingStatus() && !demoGetStatus() && !gamePaused())
 	{
