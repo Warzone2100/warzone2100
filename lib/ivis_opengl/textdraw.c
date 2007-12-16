@@ -639,7 +639,7 @@ void iV_DrawTextRotatedFv(float x, float y, float rotation, const char* format, 
 	char* str = alloca(size + 1);
 
 	// Print into our newly created string buffer
-	sprintf(str, format, ap);
+	vsprintf(str, format, ap);
 
 	// Draw the produced string to the screen at the given position and rotation
 	iV_DrawTextRotated(str, x, y, rotation);
