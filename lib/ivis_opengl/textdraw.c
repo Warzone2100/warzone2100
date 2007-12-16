@@ -630,6 +630,39 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 	glLoadIdentity();
 }
 
+void iV_DrawTextRotatedFv(float x, float y, float rotation, const char* format, va_list ap)
+{
+	// Determine the size of the string we'll be going to draw on screen
+	size_t size = vsnprintf(NULL, 0, format, ap);
+
+	// Allocate a buffer large enough to hold our string on the stack
+	char* str = alloca(size + 1);
+
+	// Print into our newly created string buffer
+	sprintf(str, format, ap);
+
+	// Draw the produced string to the screen at the given position and rotation
+	iV_DrawTextRotated(str, x, y, rotation);
+}
+
+void iV_DrawTextRotatedF(float x, float y, float rotation, const char* format, ...)
+{
+	va_list ap;
+
+	va_start(ap, format);
+		iV_DrawTextRotatedFv(x, y, rotation, format, ap);
+	va_end(ap);
+}
+
+void iV_DrawTextF(float x, float y, const char* format, ...)
+{
+	va_list ap;
+	
+	va_start(ap, format);
+		iV_DrawTextFv(x, y, format, ap);
+	va_end(ap);
+}
+
 void iV_SetTextSize(float size)
 {
 	font_size = size;

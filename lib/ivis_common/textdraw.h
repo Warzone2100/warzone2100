@@ -69,12 +69,25 @@ enum {
 
 extern UDWORD iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify);
 
-extern void iV_DrawTextRotated(const char* string, float x, float y, float rotation);
 extern void iV_SetTextSize(float size);
+
+extern void iV_DrawTextRotated(const char* string, float x, float y, float rotation);
+
+/** Draws text with a printf syntax to the screen.
+ */
+extern void iV_DrawTextRotatedFv(float x, float y, float rotation, const char* format, va_list ap);
+extern void iV_DrawTextRotatedF(float x, float y, float rotation, const char* format, ...);
 
 static inline void iV_DrawText(const char* string, float x, float y)
 {
 	iV_DrawTextRotated(string, x, y, 0.f);
 }
+
+static inline void iV_DrawTextFv(float x, float y, const char* format, va_list ap)
+{
+	iV_DrawTextRotatedFv(x, y, 0.f, format, ap);
+}
+
+extern void iV_DrawTextF(float x, float y, const char* format, ...);
 
 #endif // _INCLUDED_TEXTDRAW_
