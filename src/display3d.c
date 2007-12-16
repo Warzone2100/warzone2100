@@ -276,8 +276,6 @@ SDWORD	getCentreZ( void )
 /* Render the 3D world */
 void draw3DScene( void )
 {
-	char buildInfo[255];
-	char	buf[10];	//holds FPS info, should be more than enough space. -Q
 	BOOL bPlayerHasHQ = FALSE;
 
 	// the world centre - used for decaying lighting etc
@@ -360,8 +358,7 @@ void draw3DScene( void )
 	}
 	if (showFPS)
 	{
-		sprintf(buf, "FPS: %02u", frameGetAverageRate());
-		iV_DrawText(buf, RET_X,478 + E_H);
+		iV_DrawTextF(RET_X, 478 + E_H, "FPS: %02u", frameGetAverageRate());
 	}
 	if(getDebugMappingStatus() && !demoGetStatus() && !gamePaused())
 	{
@@ -372,6 +369,7 @@ void draw3DScene( void )
 #ifdef DEBUG
 		if(!gamePaused())
 		{
+			char buildInfo[255];
 			iV_DrawText( getLevelName(), RET_X + 134, 420 + E_H );
 			getAsciiTime(buildInfo,gameTime);
 			iV_DrawText( buildInfo, RET_X + 134, 434 + E_H );
@@ -406,12 +404,9 @@ void draw3DScene( void )
 	}
 
 #ifdef ALEXM
-	sprintf(buildInfo, "Skipped effects : %d", getNumSkippedEffects());
-	iV_DrawText(buildInfo, 100, 200);
-	sprintf(buildInfo, "Miss Count : %d", getMissCount());
-	iV_DrawText(buildInfo, 100, 220);
-	sprintf(buildInfo, "Even effects : %d", getNumEvenEffects());
-	iV_DrawText(buildInfo, 100, 240);
+	iV_DrawTextF(100, 200, "Skipped effects : %d", getNumSkippedEffects());
+	iV_DrawTextF(100, 220, "Miss Count : %d", getMissCount());
+	iV_DrawTextF(100, 240, "Even effects : %d", getNumEvenEffects());
 #endif
 
 	processDemoCam();
