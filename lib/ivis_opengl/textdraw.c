@@ -36,7 +36,7 @@
 #ifdef WZ_OS_MAC
 # include <QuesoGLC/glc.h>
 #else
- #include <GL/glc.h>
+# include <GL/glc.h>
 #endif
 
 static const char font_family[] = "DejaVu Sans Mono";
