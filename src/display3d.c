@@ -4003,7 +4003,7 @@ static void trackHeight( float desiredHeight )
 	static float heightSpeed = 0.0f;
 	/* What fraction of a second did last game loop take */
 	float fraction = frameTime2 / (float)GAME_TICKS_PER_SEC;
-	/* How far are we from desired hieght? */
+	/* How far are we from desired height? */
 	float separation = desiredHeight - player.p.y;
 	/* Work out accelertion... */
 	float acceleration = ACCEL_CONSTANT * separation - VELOCITY_CONSTANT * heightSpeed;
@@ -4013,34 +4013,6 @@ static void trackHeight( float desiredHeight )
 
 	/* Adjust the height accordingly */
 	player.p.y += heightSpeed * fraction;
-
-#if 0
-	/* Now do auto pitch as well, but only if we're not using mouselook and not tracking */
-	if(!getWarCamStatus() && !getRotActive())
-	{
-		/* Get the suggested pitch */
-		UDWORD pitch = getSuggestedPitch();
-
-		/* What's the desired pitch from the player */
-		UDWORD desPitch = 360 - getDesiredPitch();
-
-		/* Make sure this isn't negative or too much */
-		player.r.x %= DEG(360);
-
-		/* Only do something if we're not within 2 degrees of optimum */
-		if ( abs(pitch - desPitch) > 2 )
-		{
-			static float aSpeed = 0.0f;
-			/* Force adjust if too low - stops near z clip */
-			/* Else, move towards player's last selected pitch */
-			const SDWORD aSep = DEG(360 - MAX(pitch, desPitch)) - player.r.x;
-			const float aAccel = ROT_ACCEL_CONSTANT * aSep - ROT_VELOCITY_CONSTANT * aSpeed;
-
-			aSpeed += aAccel * fraction;
-			player.r.x += aSpeed * fraction;
-		}
-	}
-#endif
 }
 
 

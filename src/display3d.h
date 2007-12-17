@@ -111,10 +111,6 @@ extern SDWORD	getCentreZ( void );
 
 extern SDWORD mouseTileX, mouseTileY;
 
-#define INITIAL_DESIRED_PITCH (325)
-#define INITIAL_STARTING_PITCH (-75)
-#define INITIAL_DESIRED_ROTATION (-45)
-
 extern BOOL bRender3DOnly;
 
 extern const Vector2i visibleTiles;
