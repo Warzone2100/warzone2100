@@ -162,7 +162,8 @@ UDWORD	arnMPointers[POSSIBLE_TARGETS][POSSIBLE_SELECTIONS] =
 	IDC_GUARD,IDC_NOTPOSSIBLE,IDC_NOTPOSSIBLE,IDC_DEST,IDC_MOVE},
 };
 
-UDWORD	scroll_speed_accel=800;		// acceleration on scrolling. Game Option.
+/// acceleration on scrolling. Game Option.
+UDWORD	scroll_speed_accel;
 
 static BOOL	buildingDamaged(STRUCTURE *psStructure);
 static BOOL	repairDroidSelected(UDWORD player);
@@ -193,7 +194,6 @@ static STRUCTURE	*psBuilding;
 static SDWORD	direction = 0;
 static BOOL	edgeOfMap = FALSE;
 static UDWORD	scrollRefTime;
-static float	scrollAccel;
 static float	scrollSpeedLeftRight; //use two directions and add them because its simple
 static float	scrollStepLeftRight;
 static float	scrollSpeedUpDown;
@@ -994,6 +994,9 @@ void scroll(void)
 	BOOL	bRetardScroll = FALSE;
 	BOOL mouseAtLeft = FALSE, mouseAtRight = FALSE,
 		mouseAtTop = FALSE, mouseAtBottom = FALSE;
+	float scroll_zoom_factor = 1+2*((getViewDistance()-MINDISTANCE)/((float)(MAXDISTANCE-MINDISTANCE)));
+	float scaled_max_scroll_speed = scroll_zoom_factor * MAX_SCROLL_SPEED;
+	float scaled_accel;
 
 	if(InGameOpUp || bDisplayMultiJoiningStatus )		// cant scroll when menu up. or when over radar
 	{
@@ -1103,36 +1106,36 @@ void scroll(void)
 	{
 		timeDiff = GTIME_MAXFRAME;
 	}
-	scrollAccel = (float)scroll_speed_accel * (float)(timeDiff) / (float)GAME_TICKS_PER_SEC;
+	scaled_accel = scroll_zoom_factor * (float)scroll_speed_accel * (float)(timeDiff) / (float)GAME_TICKS_PER_SEC;
 	if(mouseAtLeft)
 	{
 		if(scrollSpeedLeftRight > 0)
 			scrollSpeedLeftRight = 0.0f;
-		scrollSpeedLeftRight -= scrollAccel;
-		if(scrollSpeedLeftRight < -(float)MAX_SCROLL_SPEED)
+		scrollSpeedLeftRight -= scaled_accel;
+		if(scrollSpeedLeftRight < -scaled_max_scroll_speed)
 		{
-			scrollSpeedLeftRight = -(float)MAX_SCROLL_SPEED;
+			scrollSpeedLeftRight = -scaled_max_scroll_speed;
 		}
 	}
 	else if(mouseAtRight)
 	{
 		if(scrollSpeedLeftRight < 0)
 			scrollSpeedLeftRight = 0.0f;
-		scrollSpeedLeftRight += scrollAccel;
-		if(scrollSpeedLeftRight > (float)MAX_SCROLL_SPEED)
+		scrollSpeedLeftRight += scaled_accel;
+		if(scrollSpeedLeftRight > scaled_max_scroll_speed)
 		{
-			scrollSpeedLeftRight = (float)MAX_SCROLL_SPEED;
+			scrollSpeedLeftRight = scaled_max_scroll_speed;
 		}
 	}
 	else // not at left or right so retard the scroll
 	{
-		if(scrollSpeedLeftRight > 2*scrollAccel)
+		if(scrollSpeedLeftRight > 2*scaled_accel)
 		{
-			scrollSpeedLeftRight -= 2*scrollAccel;
+			scrollSpeedLeftRight -= 2*scaled_accel;
 		}
-		else if(scrollSpeedLeftRight < -2*scrollAccel)
+		else if(scrollSpeedLeftRight < -2*scaled_accel)
 		{
-			scrollSpeedLeftRight += 2*scrollAccel;
+			scrollSpeedLeftRight += 2*scaled_accel;
 		}
 		else
 		{
@@ -1143,31 +1146,31 @@ void scroll(void)
 	{
 		if(scrollSpeedUpDown < 0)
 			scrollSpeedUpDown = 0.0f;
-		scrollSpeedUpDown += scrollAccel;
-		if(scrollSpeedUpDown > (float)MAX_SCROLL_SPEED)
+		scrollSpeedUpDown += scaled_accel;
+		if(scrollSpeedUpDown > scaled_max_scroll_speed)
 		{
-			scrollSpeedUpDown = (float)MAX_SCROLL_SPEED;
+			scrollSpeedUpDown = scaled_max_scroll_speed;
 		}
 	}
 	else if(mouseAtTop)//its at the bottom??
 	{
 		if(scrollSpeedUpDown > 0)
 			scrollSpeedUpDown = 0.0f;
-		scrollSpeedUpDown -= scrollAccel;
-		if(scrollSpeedUpDown < -(float)MAX_SCROLL_SPEED)
+		scrollSpeedUpDown -= scaled_accel;
+		if(scrollSpeedUpDown < -scaled_max_scroll_speed)
 		{
-			scrollSpeedUpDown = -(float)MAX_SCROLL_SPEED;
+			scrollSpeedUpDown = -scaled_max_scroll_speed;
 		}
 	}
 	else // not at top or bottom so retard the scroll
 	{
-		if(scrollSpeedUpDown > scrollAccel)
+		if(scrollSpeedUpDown > scaled_accel)
 		{
-			scrollSpeedUpDown -= 2*scrollAccel;
+			scrollSpeedUpDown -= 2*scaled_accel;
 		}
-		else if(scrollSpeedUpDown < -scrollAccel)
+		else if(scrollSpeedUpDown < -scaled_accel)
 		{
-			scrollSpeedUpDown += 2*scrollAccel;
+			scrollSpeedUpDown += 2*scaled_accel;
 		}
 		else
 		{

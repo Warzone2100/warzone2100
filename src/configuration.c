@@ -56,7 +56,7 @@
 #define DEFAULTFXVOL	80
 #define DEFAULTCDVOL	60
 #define DEFAULTGAMMA	20
-#define DEFAULTSCROLL	800
+#define DEFAULTSCROLL	1000
 #define DEFAULTMAPNAME	"Rush"
 
 extern void registry_clear(void); // from configfile.c
