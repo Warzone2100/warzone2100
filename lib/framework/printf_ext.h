@@ -38,12 +38,12 @@ extern int vslcatprintf(char* str, size_t size, const char* format, va_list ap);
  *  The function's interface is similar to vslcatprintf(), so look at that
  *  function's description.
  */
-extern int slcatprintf(char* str, size_t size, const char* format, ...);
+extern int slcatprintf(char* str, size_t size, const char* format, ...) WZ_DECL_FORMAT(printf, 3, 4);
 
 #if defined(WZ_OS_WIN)
 // These functions are GNU extensions; so make sure they are available on Windows also
 extern int vasprintf(char** strp, const char* format, va_list ap);
-extern int asprintf(char** strp, const char* format, ...);
+extern int asprintf(char** strp, const char* format, ...) WZ_DECL_FORMAT(printf, 2, 3);
 #endif
 
 #if defined(WZ_CC_MSVC)

@@ -76,7 +76,7 @@ extern void iV_DrawTextRotated(const char* string, float x, float y, float rotat
 /** Draws text with a printf syntax to the screen.
  */
 extern void iV_DrawTextRotatedFv(float x, float y, float rotation, const char* format, va_list ap);
-extern void iV_DrawTextRotatedF(float x, float y, float rotation, const char* format, ...);
+extern void iV_DrawTextRotatedF(float x, float y, float rotation, const char* format, ...) WZ_DECL_FORMAT(printf, 4, 5);
 
 static inline void iV_DrawText(const char* string, float x, float y)
 {
@@ -88,6 +88,6 @@ static inline void iV_DrawTextFv(float x, float y, const char* format, va_list a
 	iV_DrawTextRotatedFv(x, y, 0.f, format, ap);
 }
 
-extern void iV_DrawTextF(float x, float y, const char* format, ...);
+extern void iV_DrawTextF(float x, float y, const char* format, ...) WZ_DECL_FORMAT(printf, 3, 4);
 
 #endif // _INCLUDED_TEXTDRAW_
