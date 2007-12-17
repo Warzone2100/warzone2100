@@ -3551,7 +3551,7 @@ static void renderSurroundings(void)
 {
 	static float wind = 0.0f;
 	const float skybox_scale = 10000.0f;
-	const float height = 10.0f * TILE_UNITS;
+	const float height = 20.0f * TILE_UNITS;
 	const float wider  = 2.0f * (visibleTiles.x * TILE_UNITS);
 	int left, right, front, back, rx, rz;
 
