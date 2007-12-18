@@ -235,6 +235,9 @@ void sound_Update()
 		err = sound_GetError();
 		if (err != AL_NO_ERROR)
 		{
+			// Make sure to invoke the "finished" callback
+			sound_FinishedCallback(node->curr);
+
 			// Destroy this object and move to the next object
 			sound_DestroyIteratedSample(&previous, &node);
 			continue;
