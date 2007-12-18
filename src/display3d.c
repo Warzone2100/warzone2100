@@ -360,7 +360,7 @@ void draw3DScene( void )
 	{
 		unsigned int width, height;
 		const char* fps;
-		sasprintf((char**)&fps, "FPS: %02u", frameGetAverageRate());
+		sasprintf((char**)&fps, "FPS: %u", frameGetAverageRate());
 
 		width = iV_GetTextWidth(fps) + 10;
 		height = iV_GetTextHeight(fps);
