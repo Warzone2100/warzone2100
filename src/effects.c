@@ -1839,7 +1839,6 @@ Renders the standard smoke effect - it is now scaled in real-time as well
 */
 void	renderSmokeEffect(EFFECT *psEffect)
 {
-	UDWORD	percent;
 	UDWORD	transparency = 0;
 	const PIELIGHT brightness = WZCOL_WHITE;
 	const PIELIGHT specular = WZCOL_BLACK;
@@ -1859,9 +1858,27 @@ void	renderSmokeEffect(EFFECT *psEffect)
 
 	if(TEST_SCALED(psEffect))
 	{
-			percent = (MAKEINT(PERCENT((gameTime - psEffect->birthTime),psEffect->lifeSpan)));
-			pie_MatScale(percent + psEffect->baseScale);
-			transparency = (EFFECT_SMOKE_TRANSPARENCY * (100 - percent))/100;
+		const unsigned int lifetime = gameTime - psEffect->birthTime;
+		unsigned int percent;
+
+		// Since psEffect->birthTime will be set to gameTime on
+		// creation, and gameTime only increments, birthTime should be
+		// smaller than or equal to gameTime. As a great man once said
+		// though (hehe, I just love exaggarating ;-) -- Giel):
+		// "Always assert your assumptions!". So here it goes:
+		assert(psEffect->birthTime <= gameTime);
+
+		ASSERT(psEffect->lifeSpan != 0, "Effect lifespan is zero (seconds); it really should be non-zero!");
+
+		// HACK: Work around a bug that bit me causing a "integer divide by zero" at this location -- Giel
+		if (psEffect->lifeSpan != 0)
+			percent = (lifetime * 100) / psEffect->lifeSpan;
+		else
+			percent = 100;
+
+
+		pie_MatScale(percent + psEffect->baseScale);
+		transparency = (EFFECT_SMOKE_TRANSPARENCY * (100 - percent))/100;
 	}
 
 	transparency = (transparency * 3) / 2;  //JPS smoke strength increased for d3d 12 may 99
