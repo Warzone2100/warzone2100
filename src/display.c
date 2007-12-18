@@ -667,42 +667,17 @@ static void HandleDrag(void)
 {
 	UDWORD dragX, dragY;
 
-	if(driveModeActive()) {
-		if(mouseDown(MOUSE_LMB)) {
-			if(buildState == BUILD3D_VALID)
-			{
-				if ((((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_WALL
-				     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE)
-				    && !isLasSat((STRUCTURE_STATS *)sBuildDetails.psStats))
-				{
-					int dx,dy;
-
-					wallDrag.x2 = mouseTileX;
-					wallDrag.y2 = mouseTileY;
-
-					dx = abs(mouseTileX - wallDrag.x1);
-					dy = abs(mouseTileY - wallDrag.y1);
-
-					if(dx >= dy) {
-						wallDrag.y2 = wallDrag.y1;
-					} else if(dx < dy) {
-						wallDrag.x2 = wallDrag.x1;
-					}
-
-					wallDrag.status = DRAG_DRAGGING;
-				}
-			}
-		}
-
-		return;
-	}
-
-	if(mouseDrag(MOUSE_LMB, &dragX, &dragY) && !mouseOverRadar && !mouseDown(MOUSE_RMB))
+	if ( (driveModeActive() && mouseDown(MOUSE_LMB))
+		|| (mouseDrag(MOUSE_LMB, &dragX, &dragY) && !mouseOverRadar && !mouseDown(MOUSE_RMB)) )
 	{
-		dragBox3D.x1 = dragX;
-		dragBox3D.x2 = mouseXPos;
-		dragBox3D.y1 = dragY;
-		dragBox3D.y2 = mouseYPos;
+		if(!driveModeActive()) {
+			dragBox3D.x1 = dragX;
+			dragBox3D.x2 = mouseXPos;
+			dragBox3D.y1 = dragY;
+			dragBox3D.y2 = mouseYPos;
+			
+			dragBox3D.status = DRAG_DRAGGING;
+		}
 
 		if(buildState == BUILD3D_VALID)
 		{
@@ -727,7 +702,6 @@ static void HandleDrag(void)
 				wallDrag.status = DRAG_DRAGGING;
 			}
 		}
-		dragBox3D.status = DRAG_DRAGGING;
 	}
 }
 

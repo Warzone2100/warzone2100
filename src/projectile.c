@@ -1442,130 +1442,61 @@ proj_ImpactFunc( PROJECTILE *psObj )
 		/* Store the radius cubed */
 		radCubed = psStats->radius * psStats->radius * psStats->radius;
 
-		/* Watermelon:air suppression */
-		if (psObj->airTarget)
+		for (i = 0; i < MAX_PLAYERS; i++)
 		{
-			for (i = 0; i < MAX_PLAYERS; i++)
+			for (psCurrD = apsDroidLists[i]; psCurrD; psCurrD = psNextD)
 			{
-				for (psCurrD = apsDroidLists[i]; psCurrD; psCurrD = psNextD)
+				/* have to store the next pointer as psCurrD could be destroyed */
+				psNextD = psCurrD->psNext;
+
+				/* see if psCurrD is hit (don't hit main target twice) */
+				if (((BASE_OBJECT *)psCurrD != psObj->psDest) &&
+					((SDWORD)psCurrD->pos.x >= tarX0) &&
+					((SDWORD)psCurrD->pos.x <= tarX1) &&
+					((SDWORD)psCurrD->pos.y >= tarY0) &&
+					((SDWORD)psCurrD->pos.y <= tarY1) &&
+					((SDWORD)psCurrD->pos.z >= tarZ0) &&
+					((SDWORD)psCurrD->pos.z <= tarZ1))
 				{
-					/* have to store the next pointer as psCurrD could be destroyed */
-					psNextD = psCurrD->psNext;
-
-					/* Watermelon:skip no vtol droids and landed votl's */
-					if (!vtolDroid(psCurrD) ||
-						(vtolDroid(psCurrD) && psCurrD->sMove.Status == MOVEINACTIVE))
+					/* Within the bounding box, now check the radius */
+					xDiff = psCurrD->pos.x - psObj->pos.x;
+					yDiff = psCurrD->pos.y - psObj->pos.y;
+					zDiff = psCurrD->pos.z - psObj->pos.z;
+					if ((xDiff*xDiff + yDiff*yDiff + zDiff*zDiff) <= radCubed)
 					{
-						continue;
-					}
-
-					/* see if psCurrD is hit (don't hit main target twice) */
-					if (((BASE_OBJECT *)psCurrD != psObj->psDest) &&
-						((SDWORD)psCurrD->pos.x >= tarX0) &&
-						((SDWORD)psCurrD->pos.x <= tarX1) &&
-						((SDWORD)psCurrD->pos.y >= tarY0) &&
-						((SDWORD)psCurrD->pos.y <= tarY1) &&
-						((SDWORD)psCurrD->pos.z >= tarZ0) &&
-						((SDWORD)psCurrD->pos.z <= tarZ1))
-					{
-						/* Within the bounding box, now check the radius */
-						xDiff = psCurrD->pos.x - psObj->pos.x;
-						yDiff = psCurrD->pos.y - psObj->pos.y;
-						zDiff = psCurrD->pos.z - psObj->pos.z;
-						if ((xDiff*xDiff + yDiff*yDiff + zDiff*zDiff) <= radCubed)
+						HIT_ROLL(dice);
+						if (dice < weaponRadiusHit(psStats, psObj->player))
 						{
-							HIT_ROLL(dice);
-							if (dice < weaponRadiusHit(psStats, psObj->player))
+							debug(LOG_NEVER, "Damage to object %d, player %d\n",
+									psCurrD->id, psCurrD->player);
+
+							damage = calcDamage(
+										weaponRadDamage(psStats, psObj->player),
+										psStats->weaponEffect, (BASE_OBJECT *)psCurrD);
+							if (bMultiPlayer)
 							{
-								debug(LOG_NEVER, "Damage to object %d, player %d\n",
-										psCurrD->id, psCurrD->player);
-
-								damage = calcDamage(weaponRadDamage(psStats, psObj->player), psStats->weaponEffect, (BASE_OBJECT *) psCurrD);
-
-								if (bMultiPlayer)
+								if (psObj->psSource && myResponsibility(psObj->psSource->player))
 								{
-									if (psObj->psSource && myResponsibility(psObj->psSource->player))
-									{
-										updateMultiStatsDamage(psObj->psSource->player, psCurrD->player, damage);
-									}
-									turnOffMultiMsg(TRUE);
+									updateMultiStatsDamage(psObj->psSource->player, psCurrD->player, damage);
 								}
-
-								//Watermelon:uses a slightly different check for angle,
-								// since fragment of a project is from the explosion spot not from the projectile start position
-								impactSide = getHitSide(psObj, (BASE_OBJECT *)psCurrD);
-
-								percentDamage = droidDamage(psCurrD, damage, psStats->weaponClass, psStats->weaponSubClass, impactSide);
-
-								turnOffMultiMsg(FALSE);	// multiplay msgs back on.
-
-								proj_UpdateKills(psObj, percentDamage);
+								turnOffMultiMsg(TRUE);
 							}
+
+							//Watermelon:uses a slightly different check for angle,
+							// since fragment of a project is from the explosion spot not from the projectile start position
+							impactSide = getHitSide(psObj, (BASE_OBJECT *)psCurrD);
+
+							percentDamage = droidDamage(psCurrD, damage, psStats->weaponClass, psStats->weaponSubClass, impactSide);
+
+							turnOffMultiMsg(FALSE);	// multiplay msgs back on.
+
+							proj_UpdateKills(psObj, percentDamage);
 						}
 					}
 				}
 			}
-		}
-		else
-		{
-			/* Do damage to everything in range */
-			for (i = 0; i < MAX_PLAYERS; i++)
+			if (!psObj->airTarget)
 			{
-				for (psCurrD = apsDroidLists[i]; psCurrD; psCurrD = psNextD)
-				{
-					/* have to store the next pointer as psCurrD could be destroyed */
-					psNextD = psCurrD->psNext;
-
-					if (vtolDroid(psCurrD) &&
-						(psCurrD->sMove.Status != MOVEINACTIVE))
-					{
-						// skip VTOLs in the air
-						continue;
-					}
-
-					/* see if psCurrD is hit (don't hit main target twice) */
-					if (((BASE_OBJECT *)psCurrD != psObj->psDest) &&
-						((SDWORD)psCurrD->pos.x >= tarX0) &&
-						((SDWORD)psCurrD->pos.x <= tarX1) &&
-						((SDWORD)psCurrD->pos.y >= tarY0) &&
-						((SDWORD)psCurrD->pos.y <= tarY1))
-					{
-						/* Within the bounding box, now check the radius */
-						xDiff = psCurrD->pos.x - psObj->pos.x;
-						yDiff = psCurrD->pos.y - psObj->pos.y;
-						if ((xDiff*xDiff + yDiff*yDiff) <= radCubed)
-						{
-							HIT_ROLL(dice);
-							if (dice < weaponRadiusHit(psStats, psObj->player))
-							{
-								debug(LOG_NEVER, "Damage to object %d, player %d\n",
-										psCurrD->id, psCurrD->player);
-
-								damage = calcDamage(
-											weaponRadDamage(psStats, psObj->player),
-											psStats->weaponEffect, (BASE_OBJECT *)psCurrD);
-								if (bMultiPlayer)
-								{
-									if (psObj->psSource && myResponsibility(psObj->psSource->player))
-									{
-										updateMultiStatsDamage(psObj->psSource->player, psCurrD->player, damage);
-									}
-									turnOffMultiMsg(TRUE);
-								}
-
-								//Watermelon:uses a slightly different check for angle,
-								// since fragment of a project is from the explosion spot not from the projectile start position
-								impactSide = getHitSide(psObj, (BASE_OBJECT *)psCurrD);
-
-								percentDamage = droidDamage(psCurrD, damage, psStats->weaponClass,psStats->weaponSubClass, impactSide);
-
-								turnOffMultiMsg(FALSE);	// multiplay msgs back on.
-
-								proj_UpdateKills(psObj, percentDamage);
-							}
-						}
-					}
-				}
 				for (psCurrS = apsStructLists[i]; psCurrS; psCurrS = psNextS)
 				{
 					/* have to store the next pointer as psCurrD could be destroyed */

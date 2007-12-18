@@ -671,7 +671,7 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 	sButInit.formID = IDORDER_FORM;
 	sButInit.id = IDORDER_CLOSE+1;
 	sButInit.style = WBUT_PLAIN;
-	sButInit.pDisplay = intDisplayAltButtonHilight;
+	sButInit.pDisplay = intDisplayButtonHilight;
 	sButInit.FontID = font_regular;
 	sButInit.y = ORDER_BUTY;
 

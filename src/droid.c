@@ -3925,125 +3925,65 @@ void	setSelectedCommander(UDWORD commander)
 	selectedCommander = commander;
 }
 
-/* calculate muzzle tip location in 3d world
- * Watermelon:note:only the 1st muzzleLocation is calculated,since WEAPON_IMD and WEAPON_MOUNT_IMD
- * are #define pointing to asWeaps[0]...
-*/
+/**
+ * calculate muzzle tip location in 3d world
+ */
 BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 {
-//	UDWORD turretType;
-//	UDWORD bodyType;
 	Vector3i barrel;
  	iIMDShape *psShape, *psWeapon, *psWeaponMount;
 
 	CHECK_DROID(psDroid);
 
 	psShape = BODY_IMD(psDroid,psDroid->player);
-	//Watermelon:got rid of the macros...
-	//psWeapon      = WEAPON_IMD(psDroid,psDroid->player);
-	//psWeaponMount = WEAPON_MOUNT_IMD(psDroid,psDroid->player);
-	if (weapon_slot >= 0)
+	
+	psWeapon	  = (asWeaponStats[psDroid->asWeaps[weapon_slot].nStat]).pIMD;
+	psWeaponMount = (asWeaponStats[psDroid->asWeaps[weapon_slot].nStat]).pMountGraphic;
+	if(psShape && psShape->nconnectors)
 	{
-		psWeapon	  = (asWeaponStats[psDroid->asWeaps[weapon_slot].nStat]).pIMD;
-		psWeaponMount = (asWeaponStats[psDroid->asWeaps[weapon_slot].nStat]).pMountGraphic;
-		if(psShape && psShape->nconnectors)
+		pie_MatBegin();
+
+		pie_TRANSLATE(psDroid->pos.x,-(SDWORD)psDroid->pos.z,psDroid->pos.y);
+		//matrix = the center of droid
+		pie_MatRotY( DEG( (SDWORD)psDroid->direction ) );
+		pie_MatRotX( DEG( psDroid->pitch ) );
+		pie_MatRotZ( DEG( -(SDWORD)psDroid->roll ) );
+		pie_TRANSLATE( psShape->connectors[weapon_slot].x, -psShape->connectors[weapon_slot].z,
+					  -psShape->connectors[weapon_slot].y);//note y and z flipped
+
+		//matrix = the gun and turret mount on the body
+		pie_MatRotY(DEG((SDWORD)psDroid->turretRotation[weapon_slot]));//+ve anticlockwise
+		pie_MatRotX(DEG(psDroid->turretPitch[weapon_slot]));//+ve up
+		pie_MatRotZ(DEG(0));
+		//matrix = the muzzle mount on turret
+		if( psWeapon && psWeapon->nconnectors )
 		{
-			pie_MatBegin();
-
-			pie_TRANSLATE(psDroid->pos.x,-(SDWORD)psDroid->pos.z,psDroid->pos.y);
-			//matrix = the center of droid
-			pie_MatRotY( DEG( (SDWORD)psDroid->direction ) );
-			pie_MatRotX( DEG( psDroid->pitch ) );
-			pie_MatRotZ( DEG( -(SDWORD)psDroid->roll ) );
-		//	pie_TRANSLATE(100,0,0);			//	(left,-height,forward)
-			pie_TRANSLATE( psShape->connectors[weapon_slot].x, -psShape->connectors[weapon_slot].z,
-						  -psShape->connectors[weapon_slot].y);//note y and z flipped
-
-			//matrix = the gun and turret mount on the body
-			pie_MatRotY(DEG((SDWORD)psDroid->turretRotation[weapon_slot]));//+ve anticlockwise
-			pie_MatRotX(DEG(psDroid->turretPitch[weapon_slot]));//+ve up
-   			pie_MatRotZ(DEG(0));
-			//matrix = the muzzle mount on turret
-			if( psWeapon && psWeapon->nconnectors )
-			{
-				barrel.x = psWeapon->connectors->x;
-				barrel.y = -psWeapon->connectors->y;
-				barrel.z = -psWeapon->connectors->z;
-			}
-			else
-			{
-				barrel.x = 0;
-				barrel.y = 0;
-				barrel.z = 0;
-			}
-
-			pie_RotateTranslate3iv(&barrel, muzzle);
-			muzzle->z = -muzzle->z;
-
-			pie_MatEnd();
+			barrel.x = psWeapon->connectors->x;
+			barrel.y = -psWeapon->connectors->y;
+			barrel.z = -psWeapon->connectors->z;
 		}
 		else
 		{
-			muzzle->x = psDroid->pos.x;
-			muzzle->y = psDroid->pos.y;
-			muzzle->z = psDroid->pos.z+32;
+			barrel.x = 0;
+			barrel.y = 0;
+			barrel.z = 0;
 		}
+
+		pie_RotateTranslate3iv(&barrel, muzzle);
+		muzzle->z = -muzzle->z;
+
+		pie_MatEnd();
 	}
 	else
 	{
-		psWeapon	  = (asWeaponStats[psDroid->asWeaps[0].nStat]).pIMD;
-		psWeaponMount = (asWeaponStats[psDroid->asWeaps[0].nStat]).pMountGraphic;
-		if(psShape && psShape->nconnectors)
-		{
-			// This code has not been translated to the PSX Yet !!!!                                     (sorry)
-			pie_MatBegin();
-
-			pie_TRANSLATE(psDroid->pos.x,-(SDWORD)psDroid->pos.z,psDroid->pos.y);
-			//matrix = the center of droid
-			pie_MatRotY( DEG( (SDWORD)psDroid->direction ) );
-			pie_MatRotX( DEG( psDroid->pitch ) );
-			pie_MatRotZ( DEG( -(SDWORD)psDroid->roll ) );
-	//		pie_TRANSLATE(100,0,0);			//	(left,-height,forward)
-			pie_TRANSLATE( psShape->connectors->x, -psShape->connectors->z,
-						  -psShape->connectors->y);//note y and z flipped
-
-			//matrix = the gun and turret mount on the body
-			//Watermelon:force it to use 0 thanks to the define weirdness...
-			pie_MatRotY(DEG((SDWORD)psDroid->turretRotation[0]));//+ve anticlockwise
-			pie_MatRotX(DEG(psDroid->turretPitch[0]));//+ve up
-   			pie_MatRotZ(DEG(0));
-			//matrix = the muzzle mount on turret
-			if( psWeapon && psWeapon->nconnectors )
-			{
-				barrel.x = psWeapon->connectors->x;
-				barrel.y = -psWeapon->connectors->y;
-				barrel.z = -psWeapon->connectors->z;
-			}
-			else
-			{
-				barrel.x = 0;
-				barrel.y = 0;
-				barrel.z = 0;
-			}
-
-			pie_RotateTranslate3iv(&barrel, muzzle);
-			muzzle->z = -muzzle->z;
-
-			pie_MatEnd();
-		}
-		else
-		{
-			muzzle->x = psDroid->pos.x;
-			muzzle->y = psDroid->pos.y;
-			muzzle->z = psDroid->pos.z+32;
-		}
+		muzzle->x = psDroid->pos.x;
+		muzzle->y = psDroid->pos.y;
+		muzzle->z = psDroid->pos.z+32;
 	}
 
 	CHECK_DROID(psDroid);
   return TRUE;
 }
-
-
 
 /* IF YOU USE THIS FUNCTION - NOTE THAT selectedPlayer's TEMPLATES ARE NOT USED!!!!
    gets a template from its name - relies on the name being unique (or it will

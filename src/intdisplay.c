@@ -1700,52 +1700,6 @@ void intDisplayButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, P
 	UWORD ImageID;
 
 	GetButtonState(psWidget,&Hilight,&Down,&Grey);
-
-//	switch(psWidget->type) {
-//		case WIDG_FORM:
-//			if( ((W_CLICKFORM*)psWidget)->state & WCLICK_HILITE) {
-//				Hilight = TRUE;
-//			}
-//			if( ((W_CLICKFORM*)psWidget)->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK)) {
-//				Down = 1;
-//			}
-//			if( ((W_CLICKFORM*)psWidget)->state & WCLICK_GREY) {
-//				Grey = 1;
-//			}
-//			break;
-//
-//		case WIDG_BUTTON:
-//			if( ((W_BUTTON*)psWidget)->state & WBUTS_HILITE) {
-//				Hilight = TRUE;
-//			}
-//			if( ((W_BUTTON*)psWidget)->state & (WBUTS_DOWN | WBUTS_LOCKED | WBUTS_CLICKLOCK)) {
-//				Down = 1;
-//			}
-//			if( ((W_BUTTON*)psWidget)->state & WBUTS_GREY) {
-//				Grey = 1;
-//			}
-//			break;
-//
-//		case WIDG_EDITBOX:
-//			if( ((W_EDITBOX*)psWidget)->state & WEDBS_HILITE) {
-//				Hilight = TRUE;
-//			}
-//			break;
-//
-//		case WIDG_SLIDER:
-//			if( ((W_SLIDER*)psWidget)->state & SLD_HILITE) {
-//				Hilight = TRUE;
-//			}
-//			if( ((W_SLIDER*)psWidget)->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK)) {
-//				Down = 1;
-//			}
-//			break;
-//
-//		default:
-//			Hilight = FALSE;
-//	}
-
-
 	if(Grey) {
 		ImageID = UNPACKDWORD_TRI_A(psWidget->UserData);
 		Hilight = FALSE;
@@ -1759,36 +1713,6 @@ void intDisplayButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, P
 	}
 
 }
-
-
-// Display one of two images depending on if the widget is hilighted by the mouse.
-//
-void intDisplayAltButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
-{
-	UDWORD x = xOffset+psWidget->x;
-	UDWORD y = yOffset+psWidget->y;
-	BOOL Hilight = FALSE;
-	BOOL Grey = FALSE;
-	UDWORD Down = 0;
-	UWORD ImageID;
-
-	GetButtonState(psWidget,&Hilight,&Down,&Grey);
-
-
-	if(Grey) {
-		ImageID = UNPACKDWORD_TRI_A(psWidget->UserData);
-		Hilight = FALSE;
-	} else {
-		ImageID = UNPACKDWORD_TRI_C(psWidget->UserData) + Down;
-	}
-
-	iV_DrawImage(IntImages,ImageID,x,y);
-	if(Hilight) {
-		iV_DrawImage(IntImages,UNPACKDWORD_TRI_B(psWidget->UserData),x,y);
-	}
-
-}
-
 
 // Flash one of two images depending on if the widget is hilighted by the mouse.
 //

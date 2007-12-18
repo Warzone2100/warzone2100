@@ -5628,157 +5628,17 @@ static BOOL structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD max
 
 }
 
-// pick a structure location(only used in skirmish game at 27Aug) ajl.
-BOOL scrPickStructLocation(void)
+static BOOL pickStructLocation(int index, int *pX, int *pY, int player, int maxBlockingTiles)
 {
-	SDWORD			*pX,*pY;
-	SDWORD			index;
 	STRUCTURE_STATS	*psStat;
 	UDWORD			numIterations = 30;
 	BOOL			found = FALSE;
 	UDWORD			startX, startY, incX, incY;
 	SDWORD			x=0, y=0;
-	UDWORD			player;
-
-	if (!stackPopParams(4, ST_STRUCTURESTAT, &index, VAL_REF|VAL_INT, &pX ,
-        VAL_REF|VAL_INT, &pY, VAL_INT, &player))
-	{
-		return FALSE;
-	}
 
 	if (player >= MAX_PLAYERS)
 	{
-		ASSERT( FALSE, "scrPickStructLocation:player number is too high" );
-		return FALSE;
-	}
-
-    // check for wacky coords.
-	if(		*pX < 0
-		||	*pX > world_coord(mapWidth)
-		||	*pY < 0
-		||	*pY > world_coord(mapHeight)
-	  )
-	{
-		goto failedstructloc;
-	}
-
-	psStat = &asStructureStats[index];			// get stat.
-	startX = map_coord(*pX);					// change to tile coords.
-	startY = map_coord(*pY);
-
-	x = startX;
-	y = startY;
-
-	// first try the original location
-	if ( validLocation((BASE_STATS*)psStat, startX, startY, player, FALSE) )
-	{
-		if(structDoubleCheck((BASE_STATS*)psStat,startX,startY,MAX_BLOCKING_TILES))
-		{
-			found = TRUE;
-		}
-	}
-
-	// try some locations nearby
-	if(!found)
-	{
-		for (incX = 1, incY = 1; incX < numIterations; incX++, incY++)
-		{
-			if (!found){			//top
-				y = startY - incY;
-				for(x = startX - incX; x < (SDWORD)(startX + incX); x++){
-					if ( validLocation((BASE_STATS*)psStat, x, y, player, FALSE)
-						 && structDoubleCheck((BASE_STATS*)psStat,x,y,MAX_BLOCKING_TILES)
-						){
-						found = TRUE;
-						break;
-					}}}
-
-			if (!found)	{			//right
-				x = startX + incX;
-				for(y = startY - incY; y < (SDWORD)(startY + incY); y++){
-					if(validLocation((BASE_STATS*)psStat, x, y, player, FALSE)
-						 && structDoubleCheck((BASE_STATS*)psStat,x,y,MAX_BLOCKING_TILES)
-						){
-						found = TRUE;
-						break;
-					}}}
-
-			if (!found){			//bot
-				y = startY + incY;
-				for(x = startX + incX; x > (SDWORD)(startX - incX); x--){
-					if(validLocation((BASE_STATS*)psStat, x, y, player, FALSE)
-						 && structDoubleCheck((BASE_STATS*)psStat,x,y,MAX_BLOCKING_TILES)
-						 ){
-						found = TRUE;
-						break;
-					}}}
-
-			if (!found){			//left
-				x = startX - incX;
-				for(y = startY + incY; y > (SDWORD)(startY - incY); y--){
-					if(validLocation((BASE_STATS*)psStat, x, y, player, FALSE)
-						 && structDoubleCheck((BASE_STATS*)psStat,x,y,MAX_BLOCKING_TILES)
-						 ){
-						found = TRUE;
-						break;
-					}}}
-
-			if (found)
-			{
-				break;
-			}
-		}
-	}
-
-	if(found)	// did It!
-	{
-		// back to world coords.
-		*pX = world_coord(x) + (psStat->baseWidth * (TILE_UNITS / 2));
-		*pY = world_coord(y) + (psStat->baseBreadth * (TILE_UNITS / 2));
-
-		scrFunctionResult.v.bval = TRUE;
-		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// success!
-		{
-			return FALSE;
-		}
-
-		return TRUE;
-	}
-	else
-	{
-failedstructloc:
-		scrFunctionResult.v.bval = FALSE;
-		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// failed!
-		{
-			return FALSE;
-		}
-	}
-	return TRUE;
-}
-
-// pick a structure location(only used in skirmish game at 27Aug) ajl.
-// Max number of blocking tiles is passed as parameter for this one
-BOOL scrPickStructLocationB(void)
-{
-	SDWORD			*pX,*pY;
-	SDWORD			index;
-	STRUCTURE_STATS	*psStat;
-	UDWORD			numIterations = 30;
-	BOOL			found = FALSE;
-	UDWORD			startX, startY, incX, incY;
-	SDWORD			x=0, y=0;
-	UDWORD			player;
-	SDWORD			maxBlockingTiles;
-
-	if (!stackPopParams(5, ST_STRUCTURESTAT, &index, VAL_REF|VAL_INT, &pX ,
-        VAL_REF|VAL_INT, &pY, VAL_INT, &player, VAL_INT, &maxBlockingTiles))
-	{
-		return FALSE;
-	}
-
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( FALSE, "scrPickStructLocationB:player number is too high" );
+		ASSERT( FALSE, "pickStructLocation:player number is too high" );
 		return FALSE;
 	}
 
@@ -5884,6 +5744,38 @@ failedstructloc:
 		}
 	}
 	return TRUE;
+}
+
+// pick a structure location(only used in skirmish game at 27Aug) ajl.
+BOOL scrPickStructLocation(void)
+{
+	SDWORD			*pX,*pY;
+	SDWORD			index;
+	UDWORD			player;
+
+	if (!stackPopParams(4, ST_STRUCTURESTAT, &index, VAL_REF|VAL_INT, &pX ,
+        VAL_REF|VAL_INT, &pY, VAL_INT, &player))
+	{
+		return FALSE;
+	}
+	return pickStructLocation(index, pX, pY, player, MAX_BLOCKING_TILES);
+}
+
+// pick a structure location(only used in skirmish game at 27Aug) ajl.
+// Max number of blocking tiles is passed as parameter for this one
+BOOL scrPickStructLocationB(void)
+{
+	SDWORD			*pX,*pY;
+	SDWORD			index;
+	UDWORD			player;
+	SDWORD			maxBlockingTiles;
+
+	if (!stackPopParams(5, ST_STRUCTURESTAT, &index, VAL_REF|VAL_INT, &pX ,
+        VAL_REF|VAL_INT, &pY, VAL_INT, &player, VAL_INT, &maxBlockingTiles))
+	{
+		return FALSE;
+	}
+	return pickStructLocation(index, pX, pY, player, maxBlockingTiles);
 }
 
 // -----------------------------------------------------------------------------------------
@@ -7955,44 +7847,12 @@ BOOL scrFriendlyWeapObjCostInRange(void)
 	return TRUE;
 }
 
-UDWORD numPlayerWeapDroidsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range, SDWORD rangeX, SDWORD rangeY, BOOL bVTOLs)
-{
-	UDWORD				numEnemies;
-	DROID				*psDroid;
-
-	numEnemies = 0;
-
-	//check droids
-	for(psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
-	{
-		if(psDroid->visible[lookingPlayer])		//can see this droid?
-		{
-			if (psDroid->droidType != DROID_WEAPON &&
-				psDroid->droidType != DROID_PERSON &&
-				psDroid->droidType != DROID_CYBORG &&
-				psDroid->droidType != DROID_CYBORG_SUPER)
-			{
-				continue;
-			}
-
-			//if VTOLs are excluded, skip them
-			if(!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == LIFT) || (psDroid->droidType == DROID_TRANSPORTER)))
-			{
-				continue;
-			}
-
-			if((range < 0) || (dirtySqrt(rangeX, rangeY , psDroid->pos.x, psDroid->pos.y) < range))	//enemy in range
-			{
-				numEnemies++;
-			}
-		}
-	}
-
-	return numEnemies;
-}
-
-UDWORD playerWeapDroidsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range,
-								   SDWORD rangeX, SDWORD rangeY, BOOL bVTOLs)
+/**
+ * Helper function for numPlayerWeapDroidsInRange and playerWeapDroidsCostInRange.
+ * Will either count the number of droids or calculate the total costs.
+ */
+static UDWORD costOrAmountInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range,
+								   SDWORD rangeX, SDWORD rangeY, BOOL bVTOLs, BOOL justCount)
 {
 	UDWORD				droidCost;
 	DROID				*psDroid;
@@ -8020,12 +7880,30 @@ UDWORD playerWeapDroidsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD r
 
 			if((range < 0) || (dirtySqrt(rangeX, rangeY , psDroid->pos.x, psDroid->pos.y) < range))	//enemy in range
 			{
-				droidCost += calcDroidPower(psDroid);
+				if (justCount)
+				{
+					droidCost++;
+				}
+				else
+				{
+					droidCost += calcDroidPower(psDroid);
+				}
 			}
 		}
 	}
 
 	return droidCost;
+}
+
+UDWORD numPlayerWeapDroidsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range, SDWORD rangeX, SDWORD rangeY, BOOL bVTOLs)
+{
+	return costOrAmountInRange(player, lookingPlayer, range, rangeX, rangeY, bVTOLs, TRUE /*only count*/);
+}
+
+UDWORD playerWeapDroidsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range,
+								   SDWORD rangeX, SDWORD rangeY, BOOL bVTOLs)
+{
+	return costOrAmountInRange(player, lookingPlayer, range, rangeX, rangeY, bVTOLs, FALSE /*total cost*/);
 }
 
 

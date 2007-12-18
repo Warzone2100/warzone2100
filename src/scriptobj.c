@@ -1087,7 +1087,7 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 			members = size / sizeof(UDWORD);
 			pPos = pBuffer;
 		}
-		else if (version == 2)
+		if (version >= 2)
 		{
 			members = (size - sizeof(SDWORD)*4) / sizeof(UDWORD);
 			pPos = pBuffer;
@@ -1107,28 +1107,11 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 			psGroup->sRunData.leadership = (UBYTE)(*((SDWORD *)pPos));
 			pPos += sizeof(SDWORD);
 		}
-		else
+		if (version >= 3)
 		{
-			members = (size - sizeof(SDWORD)*5) / sizeof(UDWORD);
-			pPos = pBuffer;
-
-			// load the retreat data
-			psGroup = (DROID_GROUP*)(psVal->v.oval);
 			endian_sdword((SDWORD*)pPos);
-			psGroup->sRunData.sPos.x = *((SDWORD *)pPos);
+			psGroup->sRunData.healthLevel = (UBYTE)(*((SDWORD *)pPos));
 			pPos += sizeof(SDWORD);
-			endian_sdword((SDWORD*)pPos);
-			psGroup->sRunData.sPos.y = *((SDWORD *)pPos);
-			pPos += sizeof(SDWORD);
-			endian_sdword((SDWORD*)pPos);
-			psGroup->sRunData.forceLevel = (UBYTE)(*((SDWORD *)pPos));
-			pPos += sizeof(SDWORD);
-			endian_sdword((SDWORD*)pPos);
-			psGroup->sRunData.leadership = (UBYTE)(*((SDWORD *)pPos));
-			pPos += sizeof(SDWORD);
-			endian_sdword((SDWORD*)pPos);
-   			psGroup->sRunData.healthLevel = (UBYTE)(*((SDWORD *)pPos));
-    		pPos += sizeof(SDWORD);
 		}
 
 		// load the droids

@@ -5583,113 +5583,57 @@ BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int w
 
 	CHECK_STRUCTURE(psStructure);
 
-	if (weapon_slot >= 0)
+	if (psStructure->asWeaps[weapon_slot].nStat > 0)
 	{
-		//if (psStructure->numWeaps > 0)
-		if (psStructure->asWeaps[weapon_slot].nStat > 0)
-		{
-			psWeaponImd =  asWeaponStats[psStructure->asWeaps[weapon_slot].nStat].pIMD;
-		}
-		else
-		{
-			psWeaponImd =  NULL;
-		}
-
-		if(psShape && psShape->nconnectors)
-		{
-			pie_MatBegin();
-
-			pie_TRANSLATE(psStructure->pos.x,-(SDWORD)psStructure->pos.z,psStructure->pos.y);
-			//matrix = the center of droid
-			pie_MatRotY( DEG( (SDWORD)psStructure->direction ) );
-			pie_MatRotX( DEG( psStructure->pitch ) );
-			pie_MatRotZ( DEG( -(SDWORD)psStructure->roll ) );
-			pie_TRANSLATE( psShape->connectors[weapon_slot].x, -psShape->connectors[weapon_slot].z,
-						-psShape->connectors[weapon_slot].y);//note y and z flipped
-
-			//matrix = the gun and turret mount on the body
-			pie_MatRotY(DEG((SDWORD)psStructure->turretRotation[weapon_slot]));//+ve anticlockwise
-			pie_MatRotX(DEG(psStructure->turretPitch[weapon_slot]));//+ve up
-			pie_MatRotZ(DEG(0));
-			//matrix = the muzzle mount on turret
-			if( psWeaponImd && psWeaponImd->nconnectors )
-			{
-				barrel.x = psWeaponImd->connectors->x;
-				barrel.y = -psWeaponImd->connectors->y;
-				barrel.z = -psWeaponImd->connectors->z;
-			}
-			else
-			{
-				barrel.x = 0;
-				barrel.y = 0;
-				barrel.z = 0;
-			}
-
-			pie_RotateTranslate3iv(&barrel, muzzle);
-			muzzle->z = -muzzle->z;
-
-			pie_MatEnd();
-		}
-		else
-		{
-			muzzle->x = psStructure->pos.x;
-			muzzle->y = psStructure->pos.y;
-			muzzle->z = psStructure->pos.z + psStructure->sDisplay.imd->ymax;;
-		}
+		psWeaponImd =  asWeaponStats[psStructure->asWeaps[weapon_slot].nStat].pIMD;
 	}
 	else
 	{
-		if (psStructure->asWeaps[weapon_slot].nStat > 0)
-		{
-			psWeaponImd =  asWeaponStats[psStructure->asWeaps[weapon_slot].nStat].pIMD;
-		}
-		else
-		{
-			psWeaponImd =  NULL;
-		}
-
-		if(psShape && psShape->nconnectors)
-		{
-			pie_MatBegin();
-
-			pie_TRANSLATE(psStructure->pos.x,-(SDWORD)psStructure->pos.z,psStructure->pos.y);
-			//matrix = the center of droid
-			pie_MatRotY( DEG( (SDWORD)psStructure->direction ) );
-			pie_MatRotX( DEG( psStructure->pitch ) );
-			pie_MatRotZ( DEG( -(SDWORD)psStructure->roll ) );
-			pie_TRANSLATE( psShape->connectors->x, -psShape->connectors->z,
-						-psShape->connectors->y);//note y and z flipped
-
-			//matrix = the gun and turret mount on the body
-			pie_MatRotY(DEG((SDWORD)psStructure->turretRotation[0]));//+ve anticlockwise
-			pie_MatRotX(DEG(psStructure->turretPitch[0]));//+ve up
-			pie_MatRotZ(DEG(0));
-			//matrix = the muzzle mount on turret
-			if( psWeaponImd && psWeaponImd->nconnectors )
-			{
-				barrel.x = psWeaponImd->connectors->x;
-				barrel.y = -psWeaponImd->connectors->y;
-				barrel.z = -psWeaponImd->connectors->z;
-			}
-			else
-			{
-				barrel.x = 0;
-				barrel.y = 0;
-				barrel.z = 0;
-			}
-
-			pie_RotateTranslate3iv(&barrel, muzzle);
-			muzzle->z = -muzzle->z;
-
-			pie_MatEnd();
-		}
-		else
-		{
-			muzzle->x = psStructure->pos.x;
-			muzzle->y = psStructure->pos.y;
-			muzzle->z = psStructure->pos.z + psStructure->sDisplay.imd->ymax;;
-		}
+		psWeaponImd =  NULL;
 	}
+
+	if(psShape && psShape->nconnectors)
+	{
+		pie_MatBegin();
+
+		pie_TRANSLATE(psStructure->pos.x,-(SDWORD)psStructure->pos.z,psStructure->pos.y);
+		//matrix = the center of droid
+		pie_MatRotY( DEG( (SDWORD)psStructure->direction ) );
+		pie_MatRotX( DEG( psStructure->pitch ) );
+		pie_MatRotZ( DEG( -(SDWORD)psStructure->roll ) );
+		pie_TRANSLATE( psShape->connectors[weapon_slot].x, -psShape->connectors[weapon_slot].z,
+					-psShape->connectors[weapon_slot].y);//note y and z flipped
+
+		//matrix = the gun and turret mount on the body
+		pie_MatRotY(DEG((SDWORD)psStructure->turretRotation[weapon_slot]));//+ve anticlockwise
+		pie_MatRotX(DEG(psStructure->turretPitch[weapon_slot]));//+ve up
+		pie_MatRotZ(DEG(0));
+		//matrix = the muzzle mount on turret
+		if( psWeaponImd && psWeaponImd->nconnectors )
+		{
+			barrel.x = psWeaponImd->connectors->x;
+			barrel.y = -psWeaponImd->connectors->y;
+			barrel.z = -psWeaponImd->connectors->z;
+		}
+		else
+		{
+			barrel.x = 0;
+			barrel.y = 0;
+			barrel.z = 0;
+		}
+
+		pie_RotateTranslate3iv(&barrel, muzzle);
+		muzzle->z = -muzzle->z;
+
+		pie_MatEnd();
+	}
+	else
+	{
+		muzzle->x = psStructure->pos.x;
+		muzzle->y = psStructure->pos.y;
+		muzzle->z = psStructure->pos.z + psStructure->sDisplay.imd->ymax;;
+	}
+	
 	return TRUE;
 }
 
