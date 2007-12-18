@@ -1859,23 +1859,9 @@ void	renderSmokeEffect(EFFECT *psEffect)
 
 	if(TEST_SCALED(psEffect))
 	{
-#ifdef HARDWARE_TEST//test additive
-			percent = (MAKEINT(PERCENT((gameTime - psEffect->birthTime),psEffect->lifeSpan)));
-			if(percent<10 && psEffect->type == SMOKE_TYPE_TRAIL)
-			{
-				pie_MatScale((3 * percent/10 * psEffect->baseScale)/100);
-				transparency = (EFFECT_SMOKE_ADDITIVE * (100 - 10))/100;
-			}
-			else
-			{
-				pie_MatScale((4 * percent * psEffect->baseScale)/100);
-				transparency = (EFFECT_SMOKE_ADDITIVE * (100 - percent))/100;
-			}
-#else//Constant alpha
 			percent = (MAKEINT(PERCENT((gameTime - psEffect->birthTime),psEffect->lifeSpan)));
 			pie_MatScale(percent + psEffect->baseScale);
 			transparency = (EFFECT_SMOKE_TRANSPARENCY * (100 - percent))/100;
-#endif
 	}
 
 	transparency = (transparency * 3) / 2;  //JPS smoke strength increased for d3d 12 may 99
