@@ -217,7 +217,7 @@ UDWORD	terrainMidY;
 static unsigned int underwaterTile = WATER_TILE;
 static unsigned int rubbleTile = BLOCKING_RUBBLE_TILE;
 
-int showFPS = 0;	// default OFF, turn ON via console command 'showfps'
+bool showFPS = false;       // default OFF, turn ON via console command 'showfps'
 UDWORD geoOffset;
 
 static int averageCentreTerrainHeight;
