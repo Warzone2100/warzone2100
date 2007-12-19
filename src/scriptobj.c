@@ -856,7 +856,7 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 	return TRUE;
 }
 
-// default value load routine
+/// default value load routine
 BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size)
 {
 	char			*pPos;
@@ -1082,16 +1082,23 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 			grpJoin((DROID_GROUP*)(psVal->v.oval), NULL);
 		}
 
-		if (version == 1)
+		switch (version)
 		{
-			members = size / sizeof(UDWORD);
-			pPos = pBuffer;
+			case 1:
+				members = size / sizeof(UDWORD);
+				break;
+			case 2:
+				members = (size - sizeof(SDWORD)*4) / sizeof(UDWORD);
+				break;
+			case 3:
+				members = (size - sizeof(SDWORD)*5) / sizeof(UDWORD);
+				break;
+			default:
+				debug( LOG_ERROR, "scrValDefLoad: unsupported version %i", version);
 		}
+		pPos = pBuffer;
 		if (version >= 2)
 		{
-			members = (size - sizeof(SDWORD)*4) / sizeof(UDWORD);
-			pPos = pBuffer;
-
 			// load the retreat data
 			psGroup = (DROID_GROUP*)(psVal->v.oval);
 			endian_sdword((SDWORD*)pPos);
