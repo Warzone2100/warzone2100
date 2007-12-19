@@ -69,6 +69,7 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"no faults", kf_NoFaults},//carol vorderman
 	{"tileinfo", kf_TileInfo}, // output debug info about a tile
 	{"showfps", kf_ToggleFPS},	//displays your average FPS
+	{"showsamples", kf_ToggleSamples}, //displays the # of Sound samples in Queue & List
 	{"end of list",NULL}
 };
 

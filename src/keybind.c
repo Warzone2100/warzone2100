@@ -309,6 +309,13 @@ void kf_ToggleFPS(void) //This shows *just FPS* and is always visable (when acti
 
 	CONPRINTF(ConsoleString, (ConsoleString, "FPS display is %s", showFPS ? "Enabled" : "Disabled"));
 }
+void kf_ToggleSamples(void) //Displays number of sound sample in the sound queues & lists.
+{
+	// Toggle the boolean value of showFPS
+	showSAMPLES = !showSAMPLES;
+
+	CONPRINTF(ConsoleString, (ConsoleString, "Sound Samples displayed is %s", showSAMPLES ? "Enabled" : "Disabled"));
+}
 /* Writes out the frame rate */
 void	kf_FrameRate( void )
 {

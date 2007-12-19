@@ -77,6 +77,7 @@ void	sound_PauseAll( void );
 void	sound_ResumeAll( void );
 void	sound_StopAll( void );
 void	sound_Update( void );
+unsigned int sound_GetActiveSamplesCount(void);
 
 UDWORD	sound_GetGameTime( void );
 

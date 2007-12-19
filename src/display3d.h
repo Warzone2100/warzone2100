@@ -42,6 +42,7 @@ typedef enum
 } TILE_ID;
 
 extern bool showFPS;
+extern bool showSAMPLES;
 
 extern void	setViewAngle(SDWORD angle);
 extern UDWORD getViewDistance(void);

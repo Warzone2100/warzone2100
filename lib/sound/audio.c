@@ -41,6 +41,47 @@ static BOOL			g_bAudioEnabled = FALSE;
 static BOOL			g_bAudioPaused = FALSE;
 static AUDIO_SAMPLE g_sPreviousSample;
 
+/** Counts the number of samples in the SampleQueue
+ *  \return the number of samples in the SampleQueue
+ */
+unsigned int audio_GetSampleQueueCount()
+{
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	AUDIO_SAMPLE	*psSample = NULL;
+	unsigned int	count=0;
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	// loop through SampleQueue to count how many we have.
+	psSample = g_psSampleQueue;
+	while ( psSample != NULL )
+	{
+		count++;
+		psSample = psSample->psNext;
+	}
+
+	return count;
+}
+
+/** Counts the number of samples in the SampleList
+ *  \return the number of samples in the SampleList
+ */
+unsigned int audio_GetSampleListCount()
+{
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	AUDIO_SAMPLE *psSample = NULL;
+	unsigned int count = 0;
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	// loop through SampleList to count how many we have.
+	psSample = g_psSampleList;
+	while (psSample != NULL)
+	{
+		++count;
+		psSample = psSample->psNext;
+	}									
+
+	return count;
+}
 //*
 // =======================================================================================================================
 // =======================================================================================================================

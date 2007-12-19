@@ -216,6 +216,21 @@ static void sound_DestroyIteratedSample(SAMPLE_LIST** previous, SAMPLE_LIST** sa
 	*sample = (*previous != NULL) ? (*previous)->next : active_samples;
 }
 
+/** Counts the number of samples in active_samples
+ *  \return the number of actively playing sound samples
+ */
+unsigned int sound_GetActiveSamplesCount()
+{
+	unsigned int  num = 0;
+	SAMPLE_LIST* node = active_samples;
+
+	while(node)
+	{
+		num++;
+		node = node->next;
+	}
+	return num;
+}
 void sound_Update()
 {
 #ifndef WZ_NOSOUND

@@ -218,6 +218,7 @@ static unsigned int underwaterTile = WATER_TILE;
 static unsigned int rubbleTile = BLOCKING_RUBBLE_TILE;
 
 bool showFPS = false;       // default OFF, turn ON via console command 'showfps'
+bool showSAMPLES = false;   // default OFF, turn ON via console command 'showsamples'
 UDWORD geoOffset;
 
 static int averageCentreTerrainHeight;
@@ -356,12 +357,26 @@ void draw3DScene( void )
 	{
 		displayMultiChat();
 	}
+	if (showSAMPLES)		//Displays the number of sound samples we currently have
+	{
+		unsigned int width, height;
+		const char *Qbuf, *Lbuf, *Abuf;
+		
+		sasprintf((char**)&Qbuf,"Que: %04u",audio_GetSampleQueueCount());
+		sasprintf((char**)&Lbuf,"Lst: %04u",audio_GetSampleListCount());
+		sasprintf((char**)&Abuf,"Act: %04u",sound_GetActiveSamplesCount());
+		width = iV_GetTextWidth(Qbuf) + 11;
+		height = iV_GetTextHeight(Qbuf);
+
+		iV_DrawText(Qbuf, pie_GetVideoBufferWidth() - width, height + 2);
+		iV_DrawText(Lbuf, pie_GetVideoBufferWidth() - width, height + 48);
+		iV_DrawText(Abuf, pie_GetVideoBufferWidth() - width, height + 59);
+	}
 	if (showFPS)
 	{
 		unsigned int width, height;
 		const char* fps;
 		sasprintf((char**)&fps, "FPS: %u", frameGetAverageRate());
-
 		width = iV_GetTextWidth(fps) + 10;
 		height = iV_GetTextHeight(fps);
 

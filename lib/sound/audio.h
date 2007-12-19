@@ -69,7 +69,9 @@ extern void		audio_StopAll( void );
 
 extern SDWORD	audio_GetTrackID( const char *fileName );
 extern void audio_RemoveObj(const void* psObj);
-
+extern unsigned int audio_GetSampleQueueCount(void);
+extern unsigned int audio_GetSampleListCount(void);
+extern unsigned int sound_GetActiveSamplesCount(void);
 /***************************************************************************/
 
 #endif	// _AUDIO_H_
