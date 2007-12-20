@@ -541,6 +541,12 @@ static void initSaveGameLoad(void)
 		exit(EXIT_FAILURE);
 	}
 	screen_StopBackDrop();
+	
+	// Trap the cursor if cursor snapping is enabled
+	if (war_GetTrapCursor())
+	{
+		SDL_WM_GrabInput(SDL_GRAB_ON);
+	}
 }
 
 
