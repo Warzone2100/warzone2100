@@ -107,13 +107,13 @@ static SDWORD visObjHeight(BASE_OBJECT *psObject)
 	{
 	case OBJ_DROID:
 		height = 80;
-//		height = psObject->sDisplay.imd->pos.ymax;
+//		height = psObject->sDisplay.imd->pos.max.y;
 		break;
 	case OBJ_STRUCTURE:
-		height = psObject->sDisplay.imd->ymax;
+		height = psObject->sDisplay.imd->max.y;
 		break;
 	case OBJ_FEATURE:
-		height = psObject->sDisplay.imd->ymax;
+		height = psObject->sDisplay.imd->max.y;
 		break;
 	default:
 		ASSERT( FALSE,"visObjHeight: unknown object type" );

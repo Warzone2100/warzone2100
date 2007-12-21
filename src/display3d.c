@@ -2148,7 +2148,7 @@ void	renderStructure(STRUCTURE *psStructure)
 					{
 						iV_MatrixBegin();
 						// horrendous hack
-						if (strImd->ymax > 80) // babatower
+						if (strImd->max.y > 80) // babatower
 						{
 							iV_TRANSLATE(0, 80, 0);
 							pie_MatRotY(DEG(-((SDWORD)psStructure->turretRotation[i])));
@@ -2787,7 +2787,7 @@ static void	drawStructureSelections( void )
 						{
 							psStruct->targetted = 0;
 							scrX = psStruct->sDisplay.screenX;
-							scrY = psStruct->sDisplay.screenY - (psStruct->sDisplay.imd->ymax/4);
+							scrY = psStruct->sDisplay.screenY - (psStruct->sDisplay.imd->max.y / 4);
 							iV_DrawImage(IntImages,getTargettingGfx(),scrX,scrY);
 						}
 					}
@@ -3144,7 +3144,7 @@ static void	drawDroidSelections( void )
 			{
 				psFeature->bTargetted = FALSE;
 				scrX = psFeature->sDisplay.screenX;
-				scrY = psFeature->sDisplay.screenY - (psFeature->sDisplay.imd->ymax/4);
+				scrY = psFeature->sDisplay.screenY - (psFeature->sDisplay.imd->max.y / 4);
 				iV_DrawImage(IntImages,getTargettingGfx(),scrX,scrY);
 			}
 		}
@@ -4281,12 +4281,12 @@ static void structureEffectsPlayer( UDWORD player )
 						yDif = yDif/4096;
 						pos.x = psStructure->pos.x + xDif;
 						pos.z = psStructure->pos.y + yDif;
-						pos.y = map_Height(pos.x,pos.z) + psStructure->sDisplay.imd->ymax;
+						pos.y = map_Height(pos.x,pos.z) + psStructure->sDisplay.imd->max.y;
 						effectGiveAuxVar(30+bFXSize);	// half normal plasma size...
 						addEffect(&pos,EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER,FALSE,NULL,0);
 						pos.x = psStructure->pos.x - xDif;
 						pos.z = psStructure->pos.y - yDif;	// buildings are level!
-		//				pos.y = map_Height(pos.x,pos.z) + psStructure->sDisplay->pos.ymax;
+		//				pos.y = map_Height(pos.x,pos.z) + psStructure->sDisplay->pos.max.y;
 						effectGiveAuxVar(30+bFXSize);	// half normal plasma size...
 						addEffect(&pos,EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER,FALSE,NULL,0);
 					}

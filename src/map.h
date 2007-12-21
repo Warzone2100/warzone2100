@@ -93,8 +93,8 @@ static inline unsigned short TileNumber_texture(unsigned short tilenumber)
 					&& (((STRUCTURE*)x->psObject)->pStructureType->type == REF_WALL \
 					    || ((STRUCTURE*)x->psObject)->pStructureType->type == REF_WALLCORNER))
 #define TILE_HIGHLIGHT(x)		(x->texture & TILE_HILIGHT)
-#define TILE_HAS_TALLSTRUCTURE(x)	((TILE_HAS_STRUCTURE(x) && ((STRUCTURE*)x->psObject)->sDisplay.imd->ymax > TALLOBJECT_YMAX) \
-                                         || (TILE_HAS_FEATURE(x) && ((FEATURE*)x->psObject)->sDisplay.imd->ymax > TALLOBJECT_YMAX))
+#define TILE_HAS_TALLSTRUCTURE(x)	((TILE_HAS_STRUCTURE(x) && ((STRUCTURE*)x->psObject)->sDisplay.imd->max.y > TALLOBJECT_YMAX) \
+                                         || (TILE_HAS_FEATURE(x) && ((FEATURE*)x->psObject)->sDisplay.imd->max.y > TALLOBJECT_YMAX))
 #define TILE_HAS_SMALLSTRUCTURE(x)	(TILE_HAS_STRUCTURE(x) && ((STRUCTURE*)x->psObject)->pStructureType->height == 1)
 
 #define SET_TILE_NOTBLOCKING(x)	(x->texture |= TILE_NOTBLOCKING)

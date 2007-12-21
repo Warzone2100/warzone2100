@@ -3796,7 +3796,7 @@ void structureUpdate(STRUCTURE *psBuilding)
 				dv.x = psBuilding->pos.x + widthScatter - rand()%(2*widthScatter);
 				dv.z = psBuilding->pos.y + breadthScatter - rand()%(2*breadthScatter);
 				dv.y = psBuilding->pos.z;
-				dv.y += ((psBuilding->sDisplay.imd->ymax)*3)/4;
+				dv.y += (psBuilding->sDisplay.imd->max.y * 3) / 4;
 				addEffect(&dv,EFFECT_SMOKE,SMOKE_TYPE_DRIFTING_HIGH,FALSE,NULL,0);
 				psBuilding->lastEmission = gameTime;
 			}
@@ -5631,7 +5631,7 @@ BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int w
 	{
 		muzzle->x = psStructure->pos.x;
 		muzzle->y = psStructure->pos.y;
-		muzzle->z = psStructure->pos.z + psStructure->sDisplay.imd->ymax;;
+		muzzle->z = psStructure->pos.z + psStructure->sDisplay.imd->max.y;
 	}
 	
 	return TRUE;

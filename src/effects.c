@@ -1299,7 +1299,7 @@ static void updateDestruction(EFFECT *psEffect)
 		div = MAKEFRACT(gameTime - psEffect->birthTime)/psEffect->lifeSpan;
 		if(div>MAKEFRACT(1)) div=MAKEFRACT(1);
 		div = MAKEFRACT(1)-div;
-		height = MAKEINT(div*psEffect->imd->ymax);
+		height = MAKEINT(div * psEffect->imd->max.y);
 	}
 	else
 	{
@@ -2335,12 +2335,12 @@ void	initPerimeterSmoke(iIMDShape *pImd, UDWORD x, UDWORD y, UDWORD z)
 	base.y = y;
 	base.z = z;
 
-	varStart = pImd->xmin -16;
-	varEnd = pImd->xmax + 16;
+	varStart = pImd->min.x -16;
+	varEnd = pImd->max.x + 16;
 	varStride = 24;//(varEnd-varStart)/FX_PER_EDGE;
 
-	inStart = pImd->zmin - 16;
-	inEnd = pImd->zmax + 16;
+	inStart = pImd->min.z - 16;
+	inEnd = pImd->max.z + 16;
 
 	for(i=varStart; i<varEnd; i+=varStride)
 	{
@@ -2372,12 +2372,12 @@ void	initPerimeterSmoke(iIMDShape *pImd, UDWORD x, UDWORD y, UDWORD z)
 	}
 
 
-	varStart = pImd->zmin - 16;
-	varEnd = pImd->zmax + 16;
+	varStart = pImd->min.z - 16;
+	varEnd = pImd->max.z + 16;
 	varStride = 24;//(varEnd-varStart)/FX_PER_EDGE;
 
-	inStart = pImd->xmin - 16;
-	inEnd = pImd->xmax + 16;
+	inStart = pImd->min.x - 16;
+	inEnd = pImd->max.x + 16;
 
 
 	for(i=varStart; i<varEnd; i+=varStride)

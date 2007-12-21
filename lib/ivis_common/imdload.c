@@ -309,8 +309,8 @@ static BOOL _imd_load_points( const char **ppFileData, iIMDShape *s )
 		return FALSE;
 	}
 
-	s->xmax = s->ymax = s->zmax = tempXMax = tempZMax = -FP12_MULTIPLIER;
-	s->xmin = s->ymin = s->zmin = tempXMin = tempZMin = FP12_MULTIPLIER;
+	s->max.x = s->max.y = s->max.z = tempXMax = tempZMax = -FP12_MULTIPLIER;
+	s->min.x = s->min.y = s->min.z = tempXMin = tempZMin = FP12_MULTIPLIER;
 
 	vxmax.x = vymax.y = vzmax.z = -FP12_MULTIPLIER;
 	vxmin.x = vymin.y = vzmin.z = FP12_MULTIPLIER;
@@ -318,10 +318,14 @@ static BOOL _imd_load_points( const char **ppFileData, iIMDShape *s )
 	// set up bounding data for minimum number of vertices
 	for (p = s->points; p < s->points + s->npoints; p++)
 	{
-		if (p->x > s->xmax)
-			s->xmax = p->x;
-		if (p->x < s->xmin)
-			s->xmin = p->x;
+		if (p->x > s->max.x)
+		{
+			s->max.x = p->x;
+		}
+		if (p->x < s->min.x)
+		{
+			s->min.x = p->x;
+		}
 
 		/* Biggest x coord so far within our height window? */
 		if( p->x > tempXMax && p->y > DROID_VIS_LOWER && p->y < DROID_VIS_UPPER )
@@ -335,15 +339,23 @@ static BOOL _imd_load_points( const char **ppFileData, iIMDShape *s )
 			tempXMin = p->x;
 		}
 
-		if (p->y > s->ymax)
-			s->ymax = p->y;
-		if (p->y < s->ymin)
-			s->ymin = p->y;
+		if (p->y > s->max.y)
+		{
+			s->max.y = p->y;
+		}
+		if (p->y < s->min.y)
+		{
+			s->min.y = p->y;
+		}
 
-		if (p->z > s->zmax)
-			s->zmax = p->z;
-		if (p->z < s->zmin)
-			s->zmin = p->z;
+		if (p->z > s->max.z)
+		{
+			s->max.z = p->z;
+		}
+		if (p->z < s->min.z)
+		{
+			s->min.z = p->z;
+		}
 
 		/* Biggest z coord so far within our height window? */
 		if( p->z > tempZMax && p->y > DROID_VIS_LOWER && p->y < DROID_VIS_UPPER )
@@ -402,9 +414,9 @@ static BOOL _imd_load_points( const char **ppFileData, iIMDShape *s )
 	}
 
 	// no need to scale an IMD shape (only FSD)
-	xmax = MAX(s->xmax, -s->xmin);
-	ymax = MAX(s->ymax, -s->ymin);
-	zmax = MAX(s->zmax, -s->zmin);
+	xmax = MAX(s->max.x, -s->min.x);
+	ymax = MAX(s->max.y, -s->min.y);
+	zmax = MAX(s->max.z, -s->min.z);
 
 	s->radius = MAX(xmax, (MAX(ymax, zmax)));
 	s->sradius = sqrtf(xmax*xmax + ymax*ymax + zmax*zmax);

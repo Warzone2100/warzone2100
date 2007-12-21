@@ -1048,7 +1048,7 @@ void droidUpdate(DROID *psDroid)
    				dv.z = psDroid->pos.y + DROID_DAMAGE_SPREAD;
 				dv.y = psDroid->pos.z;
 
-				dv.y += (psDroid->sDisplay.imd->ymax*2);
+				dv.y += (psDroid->sDisplay.imd->max.y * 2);
 				addEffect(&dv,EFFECT_SMOKE,SMOKE_TYPE_DRIFTING_SMALL,FALSE,NULL,0);
 		// FIXFX		addExplosion(&dv,TYPE_EXPLOSION_SMOKE_CLOUD,NULL);
 				psDroid->lastEmission = gameTime;
@@ -1354,7 +1354,7 @@ static void addConstructorEffect(STRUCTURE *psStruct)
 		breadthRange = (psStruct->pStructureType->baseBreadth*TILE_UNITS)/4;
 		temp.x = psStruct->pos.x+((rand()%(2*widthRange)) - widthRange);
 		temp.y = map_TileHeight(map_coord(psStruct->pos.x), map_coord(psStruct->pos.y))+
-						((psStruct->sDisplay.imd->ymax)/6);
+						(psStruct->sDisplay.imd->max.y / 6);
 		temp.z = psStruct->pos.y+((rand()%(2*breadthRange)) - breadthRange);
 //FIXFX				addExplosion(&temp,TYPE_EXPLOSION_SMOKE_CLOUD,NULL);
 		if(rand()%2)
@@ -1570,7 +1570,7 @@ BOOL droidUpdateBuild(DROID *psDroid)
 //				breadthRange = (psStruct->pStructureType->baseBreadth*TILE_UNITS)/3;
 //				temp.x = psStruct->pos.x+((rand()%(2*widthRange)) - widthRange);
 //				temp.y = map_TileHeight(map_coord(psStruct->pos.x), map_coord(psStruct->pos.y))+
-//								((psStruct->sDisplay.imd->pos.ymax)/2);
+//								(psStruct->sDisplay.imd->pos.max.y / 2);
 //				temp.z = psStruct->pos.y+((rand()%(2*breadthRange)) - breadthRange);
 ////FIXFX				addExplosion(&temp,TYPE_EXPLOSION_SMOKE_CLOUD,NULL);
 //				if(rand()%2)

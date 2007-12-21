@@ -243,7 +243,7 @@ UDWORD getStructureStatHeight(STRUCTURE_STATS *psStat)
 {
 	if (psStat->pIMD)
 	{
-		return (psStat->pIMD->ymax - psStat->pIMD->ymin);
+		return (psStat->pIMD->max.y - psStat->pIMD->min.y);
 	}
 
 	return 0;

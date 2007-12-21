@@ -3761,8 +3761,8 @@ void moveUpdateDroid(DROID *psDroid)
 	{
 		pos.x = psDroid->pos.x + (18-rand()%36);
 		pos.z = psDroid->pos.y + (18-rand()%36);
-//		pos.y = map_Height(pos.x,pos.z) + (psDroid->sDisplay.imd->pos.ymax/3);
-		pos.y = psDroid->pos.z + (psDroid->sDisplay.imd->ymax/3);
+//		pos.y = map_Height(pos.x,pos.z) + (psDroid->sDisplay.imd->pos.max.y / 3);
+		pos.y = psDroid->pos.z + (psDroid->sDisplay.imd->max.y / 3);
 		addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,FALSE,NULL,0);
 	}
 

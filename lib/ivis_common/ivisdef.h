@@ -116,7 +116,8 @@ typedef struct {
 
 typedef struct iIMDShape {
 	int texpage;
-	int sradius, radius, xmin, xmax, ymin, ymax, zmin, zmax;
+	int sradius, radius;
+	Vector3i min, max;
 
 	Vector3f ocen;
 	unsigned short numFrames;

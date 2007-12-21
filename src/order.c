@@ -2510,7 +2510,7 @@ void orderDroidAdd(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		if ((psOrder->psObj != NULL) &&
 			(psOrder->psObj->sDisplay.imd != NULL))
 		{
-			position.y += psOrder->psObj->sDisplay.imd->ymax;
+			position.y += psOrder->psObj->sDisplay.imd->max.y;
 		}
 		addEffect(&position,EFFECT_WAYPOINT,WAYPOINT_TYPE,FALSE,NULL,0);
 		bOrderEffectDisplayed = TRUE;
