@@ -1789,20 +1789,18 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 void	renderStructure(STRUCTURE *psStructure)
 {
 	SDWORD			structX, structY, rx, rz;
-	iIMDShape		*baseImd, *strImd;
 	SDWORD			rotation;
 	SDWORD			frame;
 	SDWORD			playerFrame;
 	SDWORD			animFrame;
 	UDWORD			nWeaponStat;
-	PIELIGHT		buildingBrightness, specular = WZCOL_BLACK;
-	Vector3i dv;
+	PIELIGHT		buildingBrightness;
+	Vector3i		dv;
 	SDWORD			i;
-	iIMDShape *lImd = NULL, *imd = NULL;
-	Vector3f *temp = NULL;
+	Vector3f		*temp = NULL;
 	BOOL			bHitByElectronic = FALSE;
-	iIMDShape		*pRepImd;
-	BOOL            defensive = FALSE;
+	BOOL			defensive = FALSE;
+	iIMDShape		*strImd = psStructure->sDisplay.imd;
 
 	if (psStructure->pStructureType->type == REF_WALL || psStructure->pStructureType->type == REF_WALLCORNER)
 	{
@@ -1853,31 +1851,27 @@ void	renderStructure(STRUCTURE *psStructure)
 	structX = psStructure->pos.x;
 	structY = psStructure->pos.y;
 
-	if (defensive)
+	if (defensive && strImd != NULL)
 	{
 		// Play with the imd so its flattened
-		imd = psStructure->sDisplay.imd;
-		if (imd != NULL)
+		SDWORD strHeight;
+
+		// Get a copy of the points
+		memcpy(alteredPoints, strImd->points, strImd->npoints * sizeof(Vector3f));
+
+		// Get the height of the centre point for reference
+		strHeight = psStructure->pos.z;
+
+		// Now we got through the shape looking for vertices on the edge
+		for (i = 0; i < strImd->npoints; i++)
 		{
-			SDWORD strHeight;
-
-			// Get a copy of the points
-			memcpy( alteredPoints, imd->points, imd->npoints * sizeof(Vector3f) );
-
-			// Get the height of the centre point for reference
-			strHeight = psStructure->pos.z;//map_Height(structX,structY) + 64;
-
-			// Now we got through the shape looking for vertices on the edge
-			for (i = 0; i < imd->npoints; i++)
+			if (alteredPoints[i].y <= 0)
 			{
-				if (alteredPoints[i].y <= 0)
-				{
-					SDWORD pointHeight, shift;
+				SDWORD pointHeight, shift;
 
-					pointHeight = map_Height(structX + alteredPoints[i].x, structY - alteredPoints[i].z);
-					shift = strHeight - pointHeight;
-					alteredPoints[i].y -= shift;
-				}
+				pointHeight = map_Height(structX + alteredPoints[i].x, structY - alteredPoints[i].z);
+				shift = strHeight - pointHeight;
+				alteredPoints[i].y -= shift;
 			}
 		}
 	}
@@ -1945,11 +1939,9 @@ void	renderStructure(STRUCTURE *psStructure)
 	if (!defensive)
 	{
 		/* Draw the building's base first */
-		baseImd = psStructure->pStructureType->pBaseIMD;
-
-		if (baseImd != NULL)
+		if (psStructure->pStructureType->pBaseIMD != NULL)
 		{
-			pie_Draw3DShape(baseImd, 0, 0, buildingBrightness, WZCOL_BLACK, 0,0);
+			pie_Draw3DShape(psStructure->pStructureType->pBaseIMD, 0, 0, buildingBrightness, WZCOL_BLACK, 0,0);
 		}
 
 		// override
@@ -1958,21 +1950,19 @@ void	renderStructure(STRUCTURE *psStructure)
 			buildingBrightness = pal_SetBrightness(150);
 		}
 
-		imd = psStructure->sDisplay.imd;
-
-		if (imd != NULL && bHitByElectronic)
+		if (strImd != NULL && bHitByElectronic)
 		{
 			// Get a copy of the points
-			memcpy(alteredPoints, imd->points, imd->npoints * sizeof(Vector3i));
-			for (i = 0; i < imd->npoints; i++)
+			memcpy(alteredPoints, strImd->points, strImd->npoints * sizeof(Vector3i));
+			for (i = 0; i < strImd->npoints; i++)
 			{
 				SDWORD yVar = (10 - rand() % 20);
 
 				alteredPoints[i].x += yVar - (rand() % 2 * yVar);
 				alteredPoints[i].z += yVar - (rand() % 2 * yVar);
 			}
-			temp = imd->points;
-			imd->points = alteredPoints;
+			temp = strImd->points;
+			strImd->points = alteredPoints;
 		}
 	}
 
@@ -1983,27 +1973,27 @@ void	renderStructure(STRUCTURE *psStructure)
 	{
 		if (defensive)
 		{
-			temp = imd->points;
-			imd->points = alteredPoints;
+			temp = strImd->points;
+			strImd->points = alteredPoints;
 		}
-		pie_Draw3DShape(imd, 0, playerFrame, buildingBrightness, specular, pie_HEIGHT_SCALED | pie_SHADOW,
+		pie_Draw3DShape(strImd, 0, playerFrame, buildingBrightness, WZCOL_BLACK, pie_HEIGHT_SCALED | pie_SHADOW,
 		                (SDWORD)(structHeightScale(psStructure) * pie_RAISE_SCALE));
 		if (bHitByElectronic || defensive)
 		{
-			imd->points = temp;
+			strImd->points = temp;
 		}
 	}
 	else if (psStructure->status == SS_BUILT)
 	{
 		if (defensive)
 		{
-			temp = imd->points;
-			imd->points = alteredPoints;
+			temp = strImd->points;
+			strImd->points = alteredPoints;
 		}
-		pie_Draw3DShape(imd, animFrame, 0, buildingBrightness, specular, pie_STATIC_SHADOW, 0);
+		pie_Draw3DShape(strImd, animFrame, 0, buildingBrightness, WZCOL_BLACK, pie_STATIC_SHADOW, 0);
 		if (bHitByElectronic || defensive)
 		{
-			imd->points = temp;
+			strImd->points = temp;
 		}
 
 		// It might have weapons on it
@@ -2019,7 +2009,6 @@ void	renderStructure(STRUCTURE *psStructure)
 				mountImd[i] = NULL;
 				flashImd[i] = NULL;
 			}
-			strImd = psStructure->sDisplay.imd;
 			//get an imd to draw on the connector priority is weapon, ECM, sensor
 			//check for weapon
 			if (psStructure->numWeaps > 0)
@@ -2082,7 +2071,7 @@ void	renderStructure(STRUCTURE *psStructure)
 					{
 						pie_TRANSLATE(0, 0, psStructure->asWeaps[i].recoilValue / 3);
 
-						pie_Draw3DShape(mountImd[i], animFrame, 0, buildingBrightness, specular, pie_SHADOW, 0);
+						pie_Draw3DShape(mountImd[i], animFrame, 0, buildingBrightness, WZCOL_BLACK, pie_SHADOW, 0);
 						if(mountImd[i]->nconnectors)
 						{
 							iV_TRANSLATE(mountImd[i]->connectors->x, mountImd[i]->connectors->z, mountImd[i]->connectors->y);
@@ -2091,7 +2080,7 @@ void	renderStructure(STRUCTURE *psStructure)
 					iV_MatrixRotateX(DEG(psStructure->turretPitch[i]));
 					pie_TRANSLATE(0, 0, psStructure->asWeaps[i].recoilValue);
 
-					pie_Draw3DShape(weaponImd[i], playerFrame, 0, buildingBrightness, specular, pie_SHADOW,0);
+					pie_Draw3DShape(weaponImd[i], playerFrame, 0, buildingBrightness, WZCOL_BLACK, pie_SHADOW,0);
 					if (psStructure->pStructureType->type == REF_REPAIR_FACILITY)
 					{
 						REPAIR_FACILITY* psRepairFac = &psStructure->pFunctionality->repairFacility;
@@ -2100,6 +2089,8 @@ void	renderStructure(STRUCTURE *psStructure)
 						    && psRepairFac->psObj->type == OBJ_DROID
 						    && ((DROID *)psRepairFac->psObj)->action == DACTION_WAITDURINGREPAIR )
 						{
+							iIMDShape	*pRepImd;
+
 							iV_TRANSLATE(weaponImd[i]->connectors->x,weaponImd[i]->connectors->z-12,weaponImd[i]->connectors->y);
 							pRepImd = getImdFromIndex(MI_FLAME);
 
@@ -2129,7 +2120,7 @@ void	renderStructure(STRUCTURE *psStructure)
 								// no anim so display one frame for a fixed time
 								if (gameTime < (psStructure->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION))
 								{
-									pie_Draw3DShape(flashImd[i], 0, 0, buildingBrightness, specular, pie_ADDITIVE, 128);//muzzle flash
+									pie_Draw3DShape(flashImd[i], 0, 0, buildingBrightness, WZCOL_BLACK, pie_ADDITIVE, 128);//muzzle flash
 								}
 							}
 							else
@@ -2137,7 +2128,7 @@ void	renderStructure(STRUCTURE *psStructure)
 								frame = (gameTime - psStructure->asWeaps[i].lastFired)/flashImd[i]->animInterval;
 								if (frame < flashImd[i]->numFrames)
 								{
-									pie_Draw3DShape(flashImd[i], frame, 0, buildingBrightness, specular, pie_ADDITIVE, 20);//muzzle flash
+									pie_Draw3DShape(flashImd[i], frame, 0, buildingBrightness, WZCOL_BLACK, pie_ADDITIVE, 20);//muzzle flash
 								}
 							}
 						}
@@ -2148,7 +2139,6 @@ void	renderStructure(STRUCTURE *psStructure)
 				else if (psStructure->asWeaps[i].nStat > 0)
 				{
 					flashImd[i] = NULL;
-					strImd = psStructure->sDisplay.imd;
 					// get an imd to draw on the connector priority is weapon, ECM, sensor
 					// check for weapon
 					nWeaponStat = psStructure->asWeaps[i].nStat;
@@ -2179,7 +2169,7 @@ void	renderStructure(STRUCTURE *psStructure)
 							// no anim so display one frame for a fixed time
 							if (gameTime < psStructure->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION)
 							{
-								pie_Draw3DShape(flashImd[i], 0, 0, buildingBrightness, specular, 0, 0); //muzzle flash
+								pie_Draw3DShape(flashImd[i], 0, 0, buildingBrightness, WZCOL_BLACK, 0, 0); //muzzle flash
 							}
 						}
 						else
@@ -2187,7 +2177,7 @@ void	renderStructure(STRUCTURE *psStructure)
 							frame = (gameTime - psStructure->asWeaps[i].lastFired) / flashImd[i]->animInterval;
 							if (frame < flashImd[i]->numFrames)
 							{
-								pie_Draw3DShape(flashImd[i], 0, 0, buildingBrightness, specular, 0, 0); //muzzle flash
+								pie_Draw3DShape(flashImd[i], 0, 0, buildingBrightness, WZCOL_BLACK, 0, 0); //muzzle flash
 							}
 						}
 						iV_MatrixEnd();
@@ -2198,11 +2188,13 @@ void	renderStructure(STRUCTURE *psStructure)
 				{
 					for (i = 0; i < psStructure->sDisplay.imd->nconnectors; i++)
 					{
+						iIMDShape *lImd;
+
 						iV_MatrixBegin();
 						iV_TRANSLATE(psStructure->sDisplay.imd->connectors->x, psStructure->sDisplay.imd->connectors->z, 
 						             psStructure->sDisplay.imd->connectors->y);
 						lImd = getImdFromIndex(MI_LANDING);
-						pie_Draw3DShape(lImd, getStaticTimeValueRange(1024, lImd->numFrames), 0, buildingBrightness, specular, 0, 0);
+						pie_Draw3DShape(lImd, getStaticTimeValueRange(1024, lImd->numFrames), 0, buildingBrightness, WZCOL_BLACK, 0, 0);
 						iV_MatrixEnd();
 					}
 				}
