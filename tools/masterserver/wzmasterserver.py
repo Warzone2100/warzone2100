@@ -20,6 +20,7 @@ import SocketServer
 import thread
 import struct
 import socket
+import time
 
 #
 ################################################################################
@@ -30,7 +31,7 @@ lobbyPort = 9998         # Lobby port.
 lobbyDbg  = True         # Enable debugging.
 gsSize    = 112          # Size of GAMESTRUCT in byte.
 ipOffset  = 64+4+4       # 64 byte StringSize + SDWORD + SDWORD
-gameList  = set()        # Holds the list.
+gameList  = {}           # Holds the list.
 listLock  = thread.allocate_lock()
 
 #
@@ -39,7 +40,8 @@ listLock  = thread.allocate_lock()
 
 class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHandler):
     def handle(self):
-    	# Read the incoming command.
+        global gameList
+        # Read the incoming command.
         netCommand = self.rfile.read(4)
 
         # Skip the trailing NULL.
@@ -96,7 +98,8 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
                     try:
                         if lobbyDbg:
                             print "Removing game from", self.client_address[0]
-                        gameList.remove(currentGameData)
+                        if currentGameData in gameList:
+                            del gameList[currentGameData]
                     finally:
                         listLock.release()
 
@@ -112,7 +115,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
                 try:
                     if lobbyDbg:
                         print "  \- Adding game from", self.client_address[0]
-                    gameList.add(currentGameData)
+                    gameList[currentGameData] = time.time()
                 finally:
                     listLock.release()
 
@@ -126,13 +129,26 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 
             # Lock the gamelist to prevent new games while output.
             listLock.acquire()
+            
+            # Expire old games by removing them from the list
+            # Note: The thread is still alive and running
+            now = time.time()
+            newGameList = {}
+            for game, lastUpdate in gameList.iteritems():
+                # time out in 1 hour
+                if lastUpdate > now - 3600:
+                    newGameList[game] = lastUpdate
+                else:
+                    if lobbyDbg:
+                        print "Game expired"
+            gameList = newGameList
 
             # Transmit the length of the following list as unsigned integer (in network byte-order: big-endian).
             count = struct.pack('!I', len(gameList))
             self.wfile.write(count)
 
             # Transmit the single games.
-            for game in gameList:
+            for game in gameList.iterkeys():
                 self.wfile.write(game)
 
             # Remove the lock.
