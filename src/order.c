@@ -1163,7 +1163,8 @@ void orderUpdateDroid(DROID *psDroid)
 			(psDroid->numWeaps > 0) )
 		{
 			if ((psDroid->psGroup->psCommander->action == DACTION_ATTACK) &&
-				(psDroid->psGroup->psCommander->psActionTarget[0] != NULL))
+				(psDroid->psGroup->psCommander->psActionTarget[0] != NULL) &&
+				(!psDroid->psGroup->psCommander->psActionTarget[0]->died))
 			{
 				psObj = psDroid->psGroup->psCommander->psActionTarget[0];
 				if (psDroid->action == DACTION_ATTACK ||
