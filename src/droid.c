@@ -127,7 +127,6 @@ void	groupConsoleInformOfSelection( UDWORD groupNumber );
 void	groupConsoleInformOfCreation( UDWORD groupNumber );
 void	groupConsoleInformOfCentering( UDWORD groupNumber );
 void	droidUpdateRecoil( DROID *psDroid );
-UDWORD	getBound(UDWORD level);
 
 
 // initialise droid module
@@ -4173,26 +4172,12 @@ const char *getDroidLevelName(DROID *psDroid)
 
 UDWORD	getNumDroidsForLevel(UDWORD	level)
 {
-//UDWORD	lower,upper;
 DROID	*psDroid;
 UDWORD	count;
-//UDWORD	numKills;
-
-/*	if(level)
-	{
-		lower = getBound(level-1);
-		upper = getBound(level);
-	}
-	else
-	{
-		lower = upper = 0;
-	}*/
 
 	for(psDroid = apsDroidLists[selectedPlayer],count = 0;
 		psDroid; psDroid = psDroid->psNext)
 	{
-/*		numKills = psDroid->numKills;
-		if(level ? (numKills > lower && numKills <=upper) : (numKills ==0) )*/
 		if (getDroidLevel(psDroid) == level)
 		{
 			count++;
@@ -4203,50 +4188,6 @@ UDWORD	count;
 }
 
 
-
-UDWORD	getBound(UDWORD level)
-{
-	if(level ==0)
-	{
-		return(0);
-	}
-	else if(level<8)
-	{
-		return(1<<(level+2));
-	}
-	else return(UDWORD_MAX);
-
-	switch(level)
-	{
-	case 0:
-		return(0);
-		break;
-	case 1:
-		return(4);
-		break;
-	case 2:
-		return(8);
-		break;
-	case 3:
-		return(16);
-		break;
-	case 4:
-		return(32);
-		break;
-	case 5:
-		return(64);
-		break;
-	case 6:
-		return(128);
-		break;
-	case 7:
-		return(512);
-		break;
-	default:
-		return(UDWORD_MAX);
-			break;
-	}
-}
 
 // Get the name of a droid from it's DROID structure.
 //
