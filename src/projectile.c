@@ -998,7 +998,7 @@ proj_InFlightIndirectFunc( PROJECTILE *psObj )
 				iTime / GAME_TICKS_PER_SEC;
 	psObj->pos.z = (UWORD)(psObj->srcHeight + dz);
 
-	fVVert = MAKEFRACT(psObj->vZ - (iTime*ACC_GRAVITY/GAME_TICKS_PER_SEC));
+	fVVert = psObj->vZ - (iTime * ACC_GRAVITY / GAME_TICKS_PER_SEC);
 	psObj->pitch = (SWORD)( RAD_TO_DEG(atan2(fVVert, psObj->vXY)) );
 
 	//Watermelon:extended life span for artillery projectile

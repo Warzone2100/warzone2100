@@ -2550,7 +2550,7 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 
 		if (psDroid->resistance)
 		{
-			mulH = MAKEFRACT(psDroid->resistance) / MAKEFRACT(droidResistance(psDroid));
+			mulH = (float)psDroid->resistance / (float)droidResistance(psDroid);
 		}
 		else
 		{
@@ -2726,8 +2726,8 @@ static void	drawStructureSelections( void )
 				} else {
 					powerCol = WZCOL_HEALTH_LOW;
 				}
-				mulH = MAKEFRACT(health)/100;
-				mulH*=MAKEFRACT(width);
+				mulH = (float)health / 100.f;
+				mulH *= (float)width;
 				health = MAKEINT(mulH);
 				if(health>width) health = width;
 				health*=2;
@@ -2755,8 +2755,8 @@ static void	drawStructureSelections( void )
 						health = 100;	// belt and braces
 					}
 					powerCol = WZCOL_YELLOW;
-					mulH = MAKEFRACT(health) / 100;
-					mulH *= MAKEFRACT(width);
+					mulH = (float)health / 100.f;
+					mulH *= (float)width;
 					health = MAKEINT(mulH);
 					if (health > width)
 					{
@@ -2974,8 +2974,8 @@ static void	drawDroidSelections( void )
 			{
 				powerCol = WZCOL_HEALTH_LOW;
 			}
-			mulH = MAKEFRACT(psDroid->body) / MAKEFRACT(psDroid->originalBody);
-			damage = MAKEINT(mulH*MAKEFRACT(psDroid->sDisplay.screenR));// (((psDroid->sDisplay.screenR*10000)/100)*damage)/10000;
+			mulH = (float)psDroid->body / (float)psDroid->originalBody;
+			damage = MAKEINT(mulH * (float)psDroid->sDisplay.screenR);// (((psDroid->sDisplay.screenR*10000)/100)*damage)/10000;
 			if(damage>psDroid->sDisplay.screenR) damage = psDroid->sDisplay.screenR;
 
 			damage *=2;
@@ -3076,18 +3076,18 @@ static void	drawDroidSelections( void )
 				{
 					if (psDroid->resistance)
 					{
-						mulH = MAKEFRACT(psDroid->resistance) / MAKEFRACT(droidResistance(psDroid));
+						mulH = (float)psDroid->resistance / (float)droidResistance(psDroid);
 					}
 					else
 					{
-						mulH = 100;
+						mulH = 100.f;
 					}
 				}
 				else
 				{
-					mulH = MAKEFRACT(psDroid->body) / MAKEFRACT(psDroid->originalBody);
+					mulH = (float)psDroid->body / (float)psDroid->originalBody;
 				}
-				damage = MAKEINT(mulH*MAKEFRACT(psDroid->sDisplay.screenR));// (((psDroid->sDisplay.screenR*10000)/100)*damage)/10000;
+				damage = MAKEINT(mulH * (float)psDroid->sDisplay.screenR);// (((psDroid->sDisplay.screenR*10000)/100)*damage)/10000;
 				if(damage>psDroid->sDisplay.screenR) damage = psDroid->sDisplay.screenR;
 				damage *=2;
 				scrX = psDroid->sDisplay.screenX;

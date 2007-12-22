@@ -342,7 +342,7 @@ BOOL Status = TRUE;
 	}
 
 	/* Calculate fraction of a second for last game frame */
-	fraction = (MAKEFRACT(frameTime2) / MAKEFRACT(GAME_TICKS_PER_SEC));
+	fraction = (float)frameTime2 / (float)GAME_TICKS_PER_SEC;
 
 	/* Ensure that the camera only ever flips state within this routine! */
 	switch(trackingCamera.status)
@@ -498,24 +498,24 @@ void	camAllignWithTarget(BASE_OBJECT *psTarget)
 	trackingCamera.target = psTarget;
 
 	/* Save away all the view angles */
-	trackingCamera.oldView.r.x = trackingCamera.rotation.x = MAKEFRACT(player.r.x);
-	trackingCamera.oldView.r.y = trackingCamera.rotation.y = MAKEFRACT(player.r.y);
-	trackingCamera.oldView.r.z = trackingCamera.rotation.z = MAKEFRACT(player.r.z);
+	trackingCamera.oldView.r.x = trackingCamera.rotation.x = (float)player.r.x;
+	trackingCamera.oldView.r.y = trackingCamera.rotation.y = (float)player.r.y;
+	trackingCamera.oldView.r.z = trackingCamera.rotation.z = (float)player.r.z;
 
 	/* Store away the old positions and set the start position too */
-	trackingCamera.oldView.p.x = trackingCamera.position.x = MAKEFRACT(player.p.x);
-	trackingCamera.oldView.p.y = trackingCamera.position.y = MAKEFRACT(player.p.y);
-	trackingCamera.oldView.p.z = trackingCamera.position.z = MAKEFRACT(player.p.z);
+	trackingCamera.oldView.p.x = trackingCamera.position.x = (float)player.p.x;
+	trackingCamera.oldView.p.y = trackingCamera.position.y = (float)player.p.y;
+	trackingCamera.oldView.p.z = trackingCamera.position.z = (float)player.p.z;
 
    //	trackingCamera.rotation.x = player.r.x = DEG(-90);
 	/* No initial velocity for moving */
-	trackingCamera.velocity.x = trackingCamera.velocity.y = trackingCamera.velocity.z = MAKEFRACT(0);
+	trackingCamera.velocity.x = trackingCamera.velocity.y = trackingCamera.velocity.z = 0.f;
 	/* Nor for rotation */
-	trackingCamera.rotVel.x = trackingCamera.rotVel.y = trackingCamera.rotVel.z = MAKEFRACT(0);
+	trackingCamera.rotVel.x = trackingCamera.rotVel.y = trackingCamera.rotVel.z = 0.f;
 	/* No initial acceleration for moving */
-	trackingCamera.acceleration.x = trackingCamera.acceleration.y = trackingCamera.acceleration.z =MAKEFRACT(0);
+	trackingCamera.acceleration.x = trackingCamera.acceleration.y = trackingCamera.acceleration.z = 0.f;
 	/* Nor for rotation */
-	trackingCamera.rotAccel.x = trackingCamera.rotAccel.y = trackingCamera.rotAccel.z = MAKEFRACT(0);
+	trackingCamera.rotAccel.x = trackingCamera.rotAccel.y = trackingCamera.rotAccel.z = 0.f;
 
 	/* Sote the old distance */
 	trackingCamera.oldDistance = getViewDistance();	//distance;
@@ -871,16 +871,14 @@ SDWORD	angle;
 
 //-----------------------------------------------------------------------------------
 
-static void updateCameraVelocity( UBYTE update )
+static void updateCameraVelocity(UBYTE update)
 {
-float	fraction;
-
 	/*	Get the time fraction of a second - the next two lines are present in 4
 		of the next six functions. All 4 of these functions are called every frame, so
 		it may be an idea to calculate these higher up and store them in a static but
 		I've left them in for clarity for now */
 
-	fraction = (MAKEFRACT(frameTime2) / (float)GAME_TICKS_PER_SEC);
+	float fraction = (float)frameTime2 / (float)GAME_TICKS_PER_SEC;
 
 	if(update & X_UPDATE)
 	{
@@ -918,7 +916,7 @@ PROPULSION_STATS	*psPropStats;
 		}
 	}
 	/* See above */
-	fraction = (MAKEFRACT(frameTime2) / (float)GAME_TICKS_PER_SEC);
+	fraction = (float)frameTime2 / (float)GAME_TICKS_PER_SEC;
 
 	if(update & X_UPDATE)
 	{
@@ -1000,12 +998,11 @@ static void updateCameraRotationAcceleration( UBYTE update )
 
 		/* Which way are we facing? */
 		worldAngle =  trackingCamera.rotation.y;
-		separation = yConcern - worldAngle;
-		if(separation < DEG(-180))
-		{
-			separation += DEG(360);
-		}
-		else if(separation > DEG(180))
+		separation = fmodf(yConcern - worldAngle, DEG(360));
+
+		// Make sure that rotations larger than 180 degrees are noted
+		// in the range of -180 - 0 degrees.
+		if (separation > DEG(180))
 		{
 			separation -= DEG(360);
 		}
@@ -1100,9 +1097,7 @@ static void updateCameraRotationAcceleration( UBYTE update )
 	calculated acceleration */
 static void updateCameraRotationVelocity( UBYTE update )
 {
-float	fraction;
-
-	fraction = (MAKEFRACT(frameTime2) / (float)GAME_TICKS_PER_SEC);
+	float fraction = (float)frameTime2 / (float)GAME_TICKS_PER_SEC;
 
 	if(update & Y_UPDATE)
 	{
@@ -1123,39 +1118,29 @@ float	fraction;
 /* Move the camera around by adding the velocity */
 static void updateCameraRotationPosition( UBYTE update )
 {
-float	fraction;
+	float fraction = (float)frameTime2 / (float)GAME_TICKS_PER_SEC;
 
-	fraction = (MAKEFRACT(frameTime2) / (float)GAME_TICKS_PER_SEC);
-
- 	if(update & Y_UPDATE)
+ 	if (update & Y_UPDATE)
 	{
 		trackingCamera.rotation.y += (trackingCamera.rotVel.y * fraction);
 	}
-	if(update & X_UPDATE)
+	if (update & X_UPDATE)
 	{
 		trackingCamera.rotation.x += (trackingCamera.rotVel.x * fraction);
 	}
-	if(update & Z_UPDATE)
+	if (update & Z_UPDATE)
 	{
 		trackingCamera.rotation.z += (trackingCamera.rotVel.z * fraction);
 	}
 }
 
-static BOOL nearEnough(void)
+static bool nearEnough(void)
 {
-BOOL	retVal = FALSE;
-SDWORD	xPos;
-SDWORD	yPos;
+	const int xPos = player.p.x + world_coord(mapWidth) / 2;
+	const int yPos = player.p.z + world_coord(mapHeight) / 2;
 
-	xPos = player.p.x + (mapWidth * TILE_UNITS) / 2;
-	yPos = player.p.z + (mapHeight * TILE_UNITS) / 2;
-
-	if( (abs(xPos-trackingCamera.target->pos.x) <= 256) &&
-		(abs(yPos-trackingCamera.target->pos.y) <= 256) )
-		{
-			retVal = TRUE;
-		}
-	return(retVal);
+	return (abs(xPos - trackingCamera.target->pos.x) <= 256
+	     && abs(yPos - trackingCamera.target->pos.y) <= 256);
 }
 
 

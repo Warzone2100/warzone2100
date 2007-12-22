@@ -1444,7 +1444,7 @@ BOOL droidUpdateBuild(DROID *psDroid)
 
 	//these two lines needs to be removed if illumination is put pack in
 	psStruct->currentBuildPts = (SWORD)(psStruct->currentBuildPts + pointsToAdd - psDroid->actionPoints);
-	//psStruct->heightScale = (MAKEFRACT(psStruct->currentBuildPts))/(psStruct->pStructureType->buildPoints);
+	//psStruct->heightScale = (float)psStruct->currentBuildPts / psStruct->pStructureType->buildPoints;
 	//ILLUMINATION ISN'T BEING DONE ANYMORE
 	/*
 	//reserve the previous value
@@ -1452,7 +1452,7 @@ BOOL droidUpdateBuild(DROID *psDroid)
 	prev = (UBYTE)(prevScale / (UBYTE)10);
 
 	psStruct->currentBuildPts += (pointsToAdd - psDroid->actionPoints);
-	psStruct->heightScale = (MAKEFRACT(psStruct->currentBuildPts))/(psStruct->pStructureType->buildPoints);
+	psStruct->heightScale = (float)psStruct->currentBuildPts / psStruct->pStructureType->buildPoints;
 
 	currScale = (UBYTE) MAKEINT(psStruct->heightScale * 100);
 	current = (UBYTE)(currScale / (UBYTE)10);
@@ -1605,8 +1605,8 @@ BOOL droidStartDemolishing( DROID *psDroid )
 	psStruct->status = SS_BEING_DEMOLISHED;
 
 	// Set height scale for demolishing
-	//psStruct->heightScale = (MAKEFRACT(psStruct->currentBuildPts))/(
-	//	psStruct->pStructureType->buildPoints);
+	//psStruct->heightScale = (float)psStruct->currentBuildPts /
+	//	psStruct->pStructureType->buildPoints;
 
 	//if start to demolish a power gen need to inform the derricks
 	if (psStruct->pStructureType->type == REF_POWER_GEN)
@@ -1642,7 +1642,7 @@ BOOL droidUpdateDemolishing( DROID *psDroid )
 
 	psStruct->currentBuildPts = (SWORD)(psStruct->currentBuildPts - pointsToAdd - psDroid->actionPoints);
 
-	//psStruct->heightScale = (MAKEFRACT(psStruct->currentBuildPts))/(psStruct->pStructureType->buildPoints);
+	//psStruct->heightScale = (float)psStruct->currentBuildPts / psStruct->pStructureType->buildPoints;
 
 	//store the amount just subtracted
 	psDroid->actionPoints = pointsToAdd;
@@ -2019,10 +2019,9 @@ UBYTE	num_weapons = 0;
 			}
 
 			fraction =
-				MAKEFRACT(asWeaponStats[psDroid->asWeaps[i].nStat].recoilValue)/
-				(MAKEFRACT(100));
+				(float)asWeaponStats[psDroid->asWeaps[i].nStat].recoilValue / 100.f;
 
-			recoil = MAKEINT( MAKEFRACT(recoil) * fraction);
+			recoil = MAKEINT((float)recoil * fraction);
 
 			/* Put it into the weapon data */
 			psDroid->asWeaps[i].recoilValue = recoil;
@@ -3484,11 +3483,9 @@ void initDroidMovement(DROID *psDroid)
 {
 	memset(&psDroid->sMove, 0, sizeof(MOVE_CONTROL));
 
-	psDroid->sMove.fx = MAKEFRACT(psDroid->pos.x);
-	psDroid->sMove.fy = MAKEFRACT(psDroid->pos.y);
-
-	psDroid->sMove.fz = MAKEFRACT(psDroid->pos.z);
-
+	psDroid->sMove.fx = (float)psDroid->pos.x;
+	psDroid->sMove.fy = (float)psDroid->pos.y;
+	psDroid->sMove.fz = (float)psDroid->pos.z;
 }
 
 // Set the asBits in a DROID structure given it's template.

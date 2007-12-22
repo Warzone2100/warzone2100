@@ -178,8 +178,8 @@ BOOL multiplayerWinSequence(BOOL firstCall)
 	// rotate world
 	if(!getWarCamStatus())
 	{
-		fraction = MAKEFRACT(frameTime)/GAME_TICKS_PER_SEC;
-		rotAmount = fraction * MAP_SPIN_RATE/12;
+		fraction = (float)frameTime / (float)GAME_TICKS_PER_SEC;
+		rotAmount = fraction * MAP_SPIN_RATE / 12;
 		player.r.y += MAKEINT(rotAmount);
 	}
 

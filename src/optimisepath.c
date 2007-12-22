@@ -99,7 +99,7 @@ UDWORD	getStepIndexFromAngle(UDWORD angle)
 float	accA;
 UDWORD	retVal = 0;
 
-	accA = MAKEFRACT(angle);
+	accA = (float)angle;
 
 	ASSERT( angle<360,"Angle's too big!!!" );
 

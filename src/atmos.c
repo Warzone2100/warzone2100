@@ -103,7 +103,7 @@ void	atmosUpdateSystem( void )
 	Vector3i pos;
 
 	/* Establish how long the last game frame took */
-	fraction = MAKEFRACT(frameTime)/GAME_TICKS_PER_SEC;
+	fraction = (float)frameTime / GAME_TICKS_PER_SEC;
 
  //	if(weather==WT_NONE)
  //	{
@@ -219,11 +219,11 @@ void	processParticle( ATPART *psPart )
 		{
 			if(rand()%30 == 1)
 			{
-				psPart->velocity.z = MAKEFRACT(SNOW_SPEED_DRIFT);
+				psPart->velocity.z = (float)SNOW_SPEED_DRIFT;
 			}
 			if(rand()%30 == 1)
 			{
-				psPart->velocity.x = MAKEFRACT(SNOW_SPEED_DRIFT);
+				psPart->velocity.x = (float)SNOW_SPEED_DRIFT;
 			}
 		}
 	}
@@ -282,22 +282,22 @@ void atmosAddParticle( Vector3i *pos, AP_TYPE type )
 	}
 
 	/* Setup position */
-	asAtmosParts[freeParticle].position.x = MAKEFRACT(pos->x);
-	asAtmosParts[freeParticle].position.y = MAKEFRACT(pos->y);
-	asAtmosParts[freeParticle].position.z = MAKEFRACT(pos->z);
+	asAtmosParts[freeParticle].position.x = (float)pos->x;
+	asAtmosParts[freeParticle].position.y = (float)pos->y;
+	asAtmosParts[freeParticle].position.z = (float)pos->z;
 
 	/* Setup its velocity */
 	if(type == AP_RAIN)
 	{
-		asAtmosParts[freeParticle].velocity.x = MAKEFRACT(RAIN_SPEED_DRIFT);
-		asAtmosParts[freeParticle].velocity.y = MAKEFRACT(RAIN_SPEED_FALL);
-		asAtmosParts[freeParticle].velocity.z = MAKEFRACT(RAIN_SPEED_DRIFT);
+		asAtmosParts[freeParticle].velocity.x = (float)RAIN_SPEED_DRIFT;
+		asAtmosParts[freeParticle].velocity.y = (float)RAIN_SPEED_FALL;
+		asAtmosParts[freeParticle].velocity.z = (float)RAIN_SPEED_DRIFT;
 	}
 	else
 	{
-		asAtmosParts[freeParticle].velocity.x = MAKEFRACT(SNOW_SPEED_DRIFT);
-		asAtmosParts[freeParticle].velocity.y = MAKEFRACT(SNOW_SPEED_FALL);
-		asAtmosParts[freeParticle].velocity.z = MAKEFRACT(SNOW_SPEED_DRIFT);
+		asAtmosParts[freeParticle].velocity.x = (float)SNOW_SPEED_DRIFT;
+		asAtmosParts[freeParticle].velocity.y = (float)SNOW_SPEED_FALL;
+		asAtmosParts[freeParticle].velocity.z = (float)SNOW_SPEED_DRIFT;
 	}
 }
 // -----------------------------------------------------------------------------

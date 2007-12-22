@@ -7300,12 +7300,12 @@ void checkResExtractorsActive(void)
 /*Used for determining how much of the structure to draw as being built or demolished*/
 float structHeightScale(STRUCTURE *psStruct)
 {
-	float	retVal = (MAKEFRACT(psStruct->currentBuildPts)/psStruct->pStructureType->buildPoints);
-	if(retVal<0.05f)
-	{
+	float retVal = (float)psStruct->currentBuildPts / (float)psStruct->pStructureType->buildPoints;
+
+	if(retVal < 0.05f)
 		retVal = 0.05f;
-	}
-	return(retVal);
+
+	return retVal;
 
 }
 
@@ -7830,11 +7830,9 @@ void	structUpdateRecoil( STRUCTURE *psStruct )
 		recoil = percent/5;
 	}
 
-	fraction =
-		MAKEFRACT(asWeaponStats[psStruct->asWeaps[0].nStat].recoilValue)/
-		(MAKEFRACT(100));
+	fraction = (float)asWeaponStats[psStruct->asWeaps[0].nStat].recoilValue / 100.f;
 
-	recoil = MAKEINT( MAKEFRACT(recoil) * fraction);
+	recoil = MAKEINT((float)recoil * fraction);
 
 	/* Put it into the weapon data */
 	psStruct->asWeaps[0].recoilValue = recoil;

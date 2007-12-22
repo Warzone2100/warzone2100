@@ -482,7 +482,7 @@ UDWORD	retVal;
 float	fraction,adjust;
 
  /* Establish how long the last game frame took */
-	fraction = MAKEFRACT(frameTime)/GAME_TICKS_PER_SEC;
+	fraction = (float)frameTime / (float)GAME_TICKS_PER_SEC;
 
 	/* See if the droid's at the edge of the map */
 	tileX = psDroid->pos.x/TILE_UNITS;
@@ -507,7 +507,7 @@ float	fraction,adjust;
 	/* Saturation */
 	if(lightVal>255) lightVal = 255;
 	presVal = psDroid->illumination;
-	adjust = MAKEFRACT(lightVal) - MAKEFRACT(presVal);
+	adjust = (float)lightVal - (float)presVal;
 	adjust *= (fraction*DROID_SEEK_LIGHT_SPEED) ;
 	retVal = presVal + MAKEINT(adjust);
 	if(retVal > 255) retVal = 255;

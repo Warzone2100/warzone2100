@@ -596,11 +596,8 @@ void	kf_SystemClose( void )
 /* Zooms out from display */
 void	kf_ZoomOut( void )
 {
-float	fraction;
-float	zoomInterval;
-
-	fraction = MAKEFRACT(frameTime2)/GAME_TICKS_PER_SEC;
-	zoomInterval = fraction * MAP_ZOOM_RATE;
+	float fraction = (float)frameTime2 / (float)GAME_TICKS_PER_SEC;
+	float zoomInterval = fraction * (float)MAP_ZOOM_RATE;
 	distance += MAKEINT(zoomInterval);
 	if(distance>MAXDISTANCE)
 	{
@@ -643,11 +640,8 @@ void	kf_RadarZoomOut( void )
 /* Zooms in the map */
 void	kf_ZoomIn( void )
 {
-float	fraction;
-float	zoomInterval;
-
-	fraction = MAKEFRACT(frameTime2)/GAME_TICKS_PER_SEC;
-	zoomInterval = fraction * MAP_ZOOM_RATE;
+	float fraction = (float)frameTime2 / (float)GAME_TICKS_PER_SEC;
+	float zoomInterval = fraction * (float)MAP_ZOOM_RATE;
 	distance -= MAKEINT(zoomInterval);
 
 	if( distance< MINDISTANCE)
@@ -706,11 +700,8 @@ void	kf_ExpandScreen( void )
 /* Spins the world round left */
 void	kf_RotateLeft( void )
 {
-float	fraction;
-float	rotAmount;
-
-	fraction = MAKEFRACT(frameTime2)/GAME_TICKS_PER_SEC;
-	rotAmount = fraction * MAP_SPIN_RATE;
+	float fraction = (float)frameTime2 / (float)GAME_TICKS_PER_SEC;
+	float rotAmount = fraction * (float)MAP_SPIN_RATE;
 	player.r.y += MAKEINT(rotAmount);
 }
 
@@ -718,15 +709,12 @@ float	rotAmount;
 /* Spins the world right */
 void	kf_RotateRight( void )
 {
-float	fraction;
-float	rotAmount;
-
-	fraction = MAKEFRACT(frameTime2)/GAME_TICKS_PER_SEC;
-	rotAmount = fraction * MAP_SPIN_RATE;
+	float fraction = (float)frameTime2 / (float)GAME_TICKS_PER_SEC;
+	float rotAmount = fraction * (float)MAP_SPIN_RATE;
 	player.r.y -= MAKEINT(rotAmount);
-	if(player.r.y<0)
+	if(player.r.y < 0)
 	{
-		player.r.y+= DEG(360);
+		player.r.y += DEG(360);
 	}
 }
 
@@ -734,16 +722,13 @@ float	rotAmount;
 /* Pitches camera back */
 void	kf_PitchBack( void )
 {
-float	fraction;
-float	pitchAmount;
-
 //#ifdef ALEXM
 //SDWORD	pitch;
 //SDWORD	angConcern;
 //#endif
 
-	fraction = MAKEFRACT(frameTime2)/GAME_TICKS_PER_SEC;
-	pitchAmount = fraction * MAP_PITCH_RATE;
+	float fraction = (float)frameTime2 / (float)GAME_TICKS_PER_SEC;
+	float pitchAmount = fraction * (float)MAP_PITCH_RATE;
 
 //#ifdef ALEXM
 //	pitch = getSuggestedPitch();
@@ -775,12 +760,9 @@ float	pitchAmount;
 /* Pitches camera foward */
 void	kf_PitchForward( void )
 {
-float	fraction;
-float	pitchAmount;
-
-	fraction = MAKEFRACT(frameTime2)/GAME_TICKS_PER_SEC;
-	pitchAmount = fraction * MAP_PITCH_RATE;
-	player.r.x-= MAKEINT(pitchAmount);
+	float fraction = (float)frameTime2 / (float)GAME_TICKS_PER_SEC;
+	float pitchAmount = fraction * (float)MAP_PITCH_RATE;
+	player.r.x -= MAKEINT(pitchAmount);
 //#ifdef ALEXM
 //	if(getDebugMappingStatus() == FALSE)
 //#endif

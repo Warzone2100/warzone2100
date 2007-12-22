@@ -424,9 +424,9 @@ void	addEffect(Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type,BOOL specifie
 	}
 
 	/* Store away it's position - into FRACTS */
-	asEffectsList[freeEffect].position.x = MAKEFRACT(pos->x);
-	asEffectsList[freeEffect].position.y = MAKEFRACT(pos->y);
-	asEffectsList[freeEffect].position.z = MAKEFRACT(pos->z);
+	asEffectsList[freeEffect].position.x = (float)pos->x;
+	asEffectsList[freeEffect].position.y = (float)pos->y;
+	asEffectsList[freeEffect].position.z = (float)pos->z;
 
 
 
@@ -567,17 +567,17 @@ static BOOL validatePie( EFFECT_GROUP group, iIMDShape *pie )
 /* Calls all the update functions for each different currently active effect */
 void	processEffects(void)
 {
-	UDWORD	i;
+	unsigned int i;
 
 	/* Establish how long the last game frame took */
-	fraction = MAKEFRACT(frameTime)/GAME_TICKS_PER_SEC;
+	fraction = (float)frameTime / (float)GAME_TICKS_PER_SEC;
 	missCount = 0;
 
 	/* Reset counter */
 	numEffects = 0;
 
 	/* Traverse the list */
-	for(i=0; i<MAX_EFFECTS; i++)
+	for (i = 0; i < MAX_EFFECTS; i++)
 	{
 		/* Don't bother unless it's active */
 		if(effectStatus[i] == ES_ACTIVE)
@@ -949,7 +949,7 @@ static void updateExplosion(EFFECT *psEffect)
 	if(psEffect->type == EXPLOSION_TYPE_SHOCKWAVE)
 	{
 		psEffect->size += MAKEINT((fraction*SHOCKWAVE_SPEED));
-		scaling = MAKEFRACT(psEffect->size)/MAX_SHOCKWAVE_SIZE;
+		scaling = (float)psEffect->size / (float)MAX_SHOCKWAVE_SIZE;
 		psEffect->frameNumber = MAKEINT(scaling*EffectGetNumFrames(psEffect));
 
 		light.position.x = MAKEINT(psEffect->position.x);
@@ -1048,9 +1048,9 @@ static void updatePolySmoke(EFFECT *psEffect)
 				if(psEffect->type == SMOKE_TYPE_DRIFTING)
 				{
 					/* Make it change direction */
-					psEffect->velocity.x = MAKEFRACT((rand()%20));
-					psEffect->velocity.z = MAKEFRACT((10-rand()%20));
-					psEffect->velocity.y = MAKEFRACT((10+rand()%20));
+					psEffect->velocity.x = (float)(rand() % 20);
+					psEffect->velocity.z = (float)(10 - rand() % 20);
+					psEffect->velocity.y = (float)(10 + rand() % 20);
 				}
 				/* Reset the frame */
 				psEffect->frameNumber = 0;
@@ -1210,7 +1210,7 @@ static void updateGraviton(EFFECT *psEffect)
 				psEffect->velocity.y/=(float)(-2); // only y gets flipped
 
 				/* Set it at ground level - may have gone through */
-				psEffect->position.y = MAKEFRACT(groundHeight);
+				psEffect->position.y = (float)groundHeight;
 			}
 			else
 			{
@@ -1296,9 +1296,9 @@ static void updateDestruction(EFFECT *psEffect)
 			return;
 		}
 
-		div = MAKEFRACT(gameTime - psEffect->birthTime)/psEffect->lifeSpan;
-		if(div>MAKEFRACT(1)) div=MAKEFRACT(1);
-		div = MAKEFRACT(1)-div;
+		div = 1.f - (float)(gameTime - psEffect->birthTime) / psEffect->lifeSpan;
+		if(div < 0.f)
+			div = 0.f;
 		height = MAKEINT(div * psEffect->imd->max.y);
 	}
 	else
@@ -1652,7 +1652,7 @@ void	renderDestructionEffect(EFFECT *psEffect)
 
 	positionEffect(psEffect);
 
-	div = MAKEFRACT(gameTime - psEffect->birthTime)/psEffect->lifeSpan;
+	div = (float)(gameTime - psEffect->birthTime) / psEffect->lifeSpan;
 	if(div>1.0)	div = 1.0;	//temporary!
 	{
 		div = 1.0 - div;
@@ -1967,19 +1967,19 @@ void	effectSetupSmoke(EFFECT *psEffect)
 	if(psEffect->type==SMOKE_TYPE_STEAM)
 	{
    		/* Only upwards */
-		psEffect->velocity.x = MAKEFRACT(0);
-   		psEffect->velocity.z = MAKEFRACT(0);
+		psEffect->velocity.x = 0.f;
+   		psEffect->velocity.z = 0.f;
 	}
 	else if (psEffect->type == SMOKE_TYPE_BILLOW)
 	{
 
-		psEffect->velocity.x = MAKEFRACT((10-rand()%20));
-   		psEffect->velocity.z = MAKEFRACT((10-rand()%20));
+		psEffect->velocity.x = (float)(10 - rand() % 20);
+   		psEffect->velocity.z = (float)(10 - rand() % 20);
 	}
 	else
 	{
-   	  	psEffect->velocity.x = MAKEFRACT((rand()%20));
-   		psEffect->velocity.z = MAKEFRACT((10-rand()%20));
+   	  	psEffect->velocity.x = (float)(rand() % 20);
+   		psEffect->velocity.z = (float)(10 - rand() % 20);
 	}
 
 	/* Steam isn't cyclic  - it doesn't grow with time either */
@@ -1994,35 +1994,35 @@ void	effectSetupSmoke(EFFECT *psEffect)
   	case SMOKE_TYPE_DRIFTING:
   		psEffect->imd = getImdFromIndex(MI_SMALL_SMOKE);
 		psEffect->lifeSpan = (UWORD)NORMAL_SMOKE_LIFESPAN;
-   		psEffect->velocity.y = MAKEFRACT((35+rand()%30));
+   		psEffect->velocity.y = (float)(35 + rand() % 30);
 		psEffect->baseScale = 40;
   		break;
   	case SMOKE_TYPE_DRIFTING_HIGH:
   		psEffect->imd = getImdFromIndex(MI_SMALL_SMOKE);
 		psEffect->lifeSpan = (UWORD)NORMAL_SMOKE_LIFESPAN;
-   		psEffect->velocity.y = MAKEFRACT((40+rand()%45));
+   		psEffect->velocity.y = (float)(40 + rand() % 45);
 		psEffect->baseScale = 25;
   		break;
   	case SMOKE_TYPE_DRIFTING_SMALL:
   		psEffect->imd = getImdFromIndex(MI_SMALL_SMOKE);
 		psEffect->lifeSpan = (UWORD)SMALL_SMOKE_LIFESPAN;
-   		psEffect->velocity.y = MAKEFRACT((25+rand()%35));
+   		psEffect->velocity.y = (float)(25 + rand() % 35);
 		psEffect->baseScale = 17;
   		break;
   	case SMOKE_TYPE_BILLOW:
   		psEffect->imd = getImdFromIndex(MI_SMALL_SMOKE);
 		psEffect->lifeSpan = (UWORD)SMALL_SMOKE_LIFESPAN;
-   		psEffect->velocity.y = MAKEFRACT((10+rand()%20));
+   		psEffect->velocity.y = (float)(10 + rand() % 20);
 		psEffect->baseScale = 80;
   		break;
   	case SMOKE_TYPE_STEAM:
   		psEffect->imd = getImdFromIndex(MI_SMALL_STEAM);
-   		psEffect->velocity.y = MAKEFRACT((rand()%5));
+   		psEffect->velocity.y = (float)(rand() % 5);
   		break;
 	case SMOKE_TYPE_TRAIL:
 		psEffect->imd = getImdFromIndex(MI_TRAIL);
 		psEffect->lifeSpan = TRAIL_SMOKE_LIFESPAN;
-   		psEffect->velocity.y = MAKEFRACT((5+rand()%10));
+   		psEffect->velocity.y = (float)(5 + rand() % 10);
 		psEffect->baseScale = 25;
 		break;
 	default:
@@ -2144,7 +2144,7 @@ void effectSetupExplosion(EFFECT *psEffect)
 		case EXPLOSION_TYPE_TESLA:
 			psEffect->imd = getImdFromIndex(MI_TESLA);
 			psEffect->size = TESLA_SIZE;
-			psEffect->velocity.y = MAKEFRACT(TESLA_SPEED);
+			psEffect->velocity.y = (float)TESLA_SPEED;
 			break;
 
 		case EXPLOSION_TYPE_KICKUP:
@@ -2232,9 +2232,9 @@ void effectSetupExplosion(EFFECT *psEffect)
 // ----------------------------------------------------------------------------------------
 void	effectSetupConstruction(EFFECT *psEffect)
 {
-	psEffect->velocity.x = MAKEFRACT(0);//(1-rand()%3);
-	psEffect->velocity.z = MAKEFRACT(0);//(1-rand()%3);
-	psEffect->velocity.y = MAKEFRACT((0-rand()%3));
+	psEffect->velocity.x = 0.f;//(1-rand()%3);
+	psEffect->velocity.z = 0.f;//(1-rand()%3);
+	psEffect->velocity.y = (float)(0 - rand() % 3);
 	psEffect->frameDelay = (UWORD)CONSTRUCTION_FRAME_DELAY;
 	psEffect->imd = getImdFromIndex(MI_CONSTRUCTION);
 	psEffect->lifeSpan = CONSTRUCTION_LIFESPAN;
@@ -2280,7 +2280,7 @@ void	effectSetupWayPoint(EFFECT *psEffect)
 void	effectSetupBlood(EFFECT *psEffect)
 {
 	psEffect->frameDelay = BLOOD_FRAME_DELAY;
-	psEffect->velocity.y = MAKEFRACT(BLOOD_FALL_SPEED);
+	psEffect->velocity.y = (float)BLOOD_FALL_SPEED;
 	psEffect->imd = getImdFromIndex(MI_BLOOD);
 	psEffect->size = (UBYTE)BLOOD_SIZE;
 }

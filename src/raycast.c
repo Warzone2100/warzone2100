@@ -70,13 +70,13 @@ static SDWORD	rayFPInvCos[NUM_RAYS], rayFPInvSin[NUM_RAYS];
 BOOL rayInitialise(void)
 {
 	SDWORD	i;
-	float	angle = MAKEFRACT(0);
+	float	angle = 0.f;
 	float	val;
 
 	for(i=0; i<NUM_RAYS; i++)
 	{
 		// Set up the fixed offset tables for calculating the intersection points
-		val = (float)tan(angle);
+		val = tanf(angle);
 
 		rayDX[i] = (SDWORD)(TILE_UNITS * RAY_ACCMUL * val);
 
@@ -97,36 +97,36 @@ BOOL rayInitialise(void)
 		}
 
 		// These are used to calculate the initial intersection
-		rayFPTan[i] = MAKEINT(FRACTmul(val, MAKEFRACT(RAY_ACCMUL)));
-		rayFPInvTan[i] = MAKEINT(FRACTdiv(MAKEFRACT(RAY_ACCMUL), val));
+		rayFPTan[i] = MAKEINT(FRACTmul(val, (float)RAY_ACCMUL));
+		rayFPInvTan[i] = MAKEINT(FRACTdiv((float)RAY_ACCMUL, val));
 
 		// Set up the trig tables for calculating the offset distances
 		val = (float)sin(angle);
 		if(val == 0) {
 			val = (float)1;
 		}
-		rayFPInvSin[i] = MAKEINT(FRACTdiv(MAKEFRACT(RAY_ACCMUL), val));
+		rayFPInvSin[i] = MAKEINT(FRACTdiv((float)RAY_ACCMUL, val));
 		if (i >= NUM_RAYS/2)
 		{
-			rayVDist[i] = MAKEINT(FRACTdiv(MAKEFRACT(-TILE_UNITS), val));
+			rayVDist[i] = MAKEINT(FRACTdiv((float)-TILE_UNITS, val));
 		}
 		else
 		{
-			rayVDist[i] = MAKEINT(FRACTdiv(MAKEFRACT(TILE_UNITS), val));
+			rayVDist[i] = MAKEINT(FRACTdiv((float)TILE_UNITS, val));
 		}
 
 		val = (float)cos(angle);
 		if(val == 0) {
 			val = (float)1;
 		}
-		rayFPInvCos[i] = MAKEINT(FRACTdiv(MAKEFRACT(RAY_ACCMUL), val));
+		rayFPInvCos[i] = MAKEINT(FRACTdiv((float)RAY_ACCMUL, val));
 		if (i < NUM_RAYS/4 || i > 3*NUM_RAYS/4)
 		{
-			rayHDist[i] = MAKEINT(FRACTdiv(MAKEFRACT(TILE_UNITS), val));
+			rayHDist[i] = MAKEINT(FRACTdiv((float)TILE_UNITS, val));
 		}
 		else
 		{
-			rayHDist[i] = MAKEINT(FRACTdiv(MAKEFRACT(-TILE_UNITS), val));
+			rayHDist[i] = MAKEINT(FRACTdiv((float)-TILE_UNITS, val));
 		}
 
 		angle += RAY_ANGLE;
@@ -480,8 +480,8 @@ static BOOL	getTileHighestCallback(SDWORD x, SDWORD y, SDWORD dist)
 		if( (height > gHighestHeight) && (dist >= gHMinDist) )
 		{
 			heightDif = height - gHOrigHeight;
-			gHPitch = RAD_TO_DEG(atan2(MAKEFRACT(heightDif),
-				MAKEFRACT(6*TILE_UNITS)));//MAKEFRACT(dist-(TILE_UNITS*3))));
+			gHPitch = RAD_TO_DEG(atan2((float)heightDif,
+			                           (float)world_coord(6)));// (float)(dist - world_coord(3))));
 			gHighestHeight = height;
   		}
 //		pos.x = x;
@@ -538,7 +538,7 @@ static BOOL	getTileHeightCallback(SDWORD x, SDWORD y, SDWORD dist)
 
 			/* Work out the angle to this point from start point */
 
-			newPitch = RAD_TO_DEG(atan2(MAKEFRACT(heightDif),MAKEFRACT(dist)));
+			newPitch = RAD_TO_DEG(atan2((float)heightDif, (float)dist));
 
 
 			/* Is this the steepest we've found? */
@@ -576,7 +576,7 @@ static BOOL	getTileHeightCallback(SDWORD x, SDWORD y, SDWORD dist)
 void	getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, UDWORD direction, SDWORD *pitch)
 {
 	/* Set global var to clear */
-	gPitch = MAKEFRACT(0);
+	gPitch = 0.f;
 	gHeight = map_Height(x,y);
 	gStartTileX = map_coord(x);
 	gStartTileY = map_coord(y);
@@ -587,15 +587,13 @@ void	getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, UDWORD direction, SDWORD *pitc
 	*pitch = MAKEINT(gPitch);
 }
 
-//-----------------------------------------------------------------------------------
 void	getPitchToHighestPoint( UDWORD x, UDWORD y, UDWORD direction,
 							   UDWORD thresholdDistance, SDWORD *pitch)
 {
-	gHPitch = MAKEFRACT(0);
+	gHPitch = 0.f;
 	gHOrigHeight = map_Height(x,y);
 	gHighestHeight = map_Height(x,y);
 	gHMinDist = thresholdDistance;
 	rayCast(x,y,direction%360,3000,getTileHighestCallback);
 	*pitch = MAKEINT(gHPitch);
 }
-//-----------------------------------------------------------------------------------

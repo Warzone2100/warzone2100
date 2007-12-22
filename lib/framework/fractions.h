@@ -25,7 +25,6 @@
 //  - This is defined as a float on PC and a 20.12 fixed point number on PSX
 //
 //  Use:-
-//		MAKEFRACT(int);  to convert from a SDWORD to a FRACT
 //		MAKEINT(fract);	to convert the other way
 //		FRACTmul(fract,fract); to multiply two fract numbers
 //		FRACTdiv(fract,fract); to divide two numbers
@@ -67,7 +66,6 @@ typedef float FRACT_D;  /* But isn't this is supposed to be double? - Per */
 
 #define ROUND(x) ((x)>=0 ? (SDWORD)((x) + 0.5) : (SDWORD)((x) - 0.5))
 
-#define MAKEFRACT(x) ((float)(x))
 #define FRACTmul(x,y) ((float)(x)*(float)(y))
 #define FRACTdiv(x,y) ((float)(x)/(float)(y))
 

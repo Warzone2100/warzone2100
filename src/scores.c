@@ -301,9 +301,6 @@ UDWORD	index;
 BOOL	bMoreBars;
 UDWORD	x,y;
 UDWORD	width,height;
-float	length;
-float	mul;
-UDWORD	div;
 
 	if(!bDispStarted)
 	{
@@ -352,14 +349,14 @@ UDWORD	div;
 
 			if( ((gameTime2 - dispST) > infoBars[index].queTime) )
 			{
-			   					/* Now draw amount filled */
-				length = MAKEFRACT(infoBars[index].percent)/MAKEFRACT(100);
-				length = length*MAKEFRACT(infoBars[index].width);
-				div = PERCENT(gameTime2-dispST,BAR_CRAWL_TIME);
-				if(div>100) div = 100;
-				mul = MAKEFRACT(div)/100;
-				length = length * mul;
-		   	   	if(MAKEINT(length)>4)
+				/* Now draw amount filled */
+				const float mul = (gameTime2 - dispST < BAR_CRAWL_TIME) ?
+				                   (float)(gameTime2 - dispST) / (float)BAR_CRAWL_TIME
+				                  : 1.f;
+
+				const float length = (float)infoBars[index].percent / 100.f * (float)infoBars[index].width * mul;
+
+				if(MAKEINT(length) > 4)
 				{
 
 					/* Black shadow */
@@ -435,11 +432,11 @@ void	fillUpStats( void )
 	/* Make sure we got something */
 	if(maxi == 0)
 	{
-		scaleFactor = MAKEFRACT(0);
+		scaleFactor = 0.f;
 	}
 	else
 	{
-		scaleFactor = (MAKEFRACT(RANK_BAR_WIDTH)/maxi);
+		scaleFactor = (float)RANK_BAR_WIDTH / maxi;
 	}
 
 	/* Scale for percent */
@@ -455,11 +452,11 @@ void	fillUpStats( void )
 	maxi = MAX(missionData.unitsLost, missionData.unitsKilled);
 	if (maxi == 0)
 	{
-		scaleFactor = 0;
+		scaleFactor = 0.f;
 	}
 	else
 	{
-		scaleFactor = (MAKEFRACT(STAT_BAR_WIDTH)/maxi);
+		scaleFactor = (float)STAT_BAR_WIDTH / maxi;
 	}
 
 	length = MAKEINT(scaleFactor*missionData.unitsLost);
@@ -471,11 +468,11 @@ void	fillUpStats( void )
 	maxi = MAX(missionData.strLost, missionData.strKilled);
 	if (maxi == 0)
 	{
-		scaleFactor = 0;
+		scaleFactor = 0.f;
 	}
 	else
 	{
-		scaleFactor = (MAKEFRACT(STAT_BAR_WIDTH)/maxi);
+		scaleFactor = (float)STAT_BAR_WIDTH / maxi;
 	}
 
 	length = MAKEINT(scaleFactor*missionData.strLost);
@@ -496,11 +493,11 @@ void	fillUpStats( void )
 
 	if (maxi == 0)
 	{
-		scaleFactor = 0;
+		scaleFactor = 0.f;
 	}
 	else
 	{
-		scaleFactor = (MAKEFRACT(STAT_BAR_WIDTH)/maxi);
+		scaleFactor = (float)STAT_BAR_WIDTH / maxi;
 	}
 
 	length = MAKEINT(scaleFactor*missionData.unitsBuilt);

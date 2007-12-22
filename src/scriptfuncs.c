@@ -5369,7 +5369,7 @@ UDWORD		newVal;
 	}
 
 	/* Get percentage in range [0.1] */
-	divisor =  MAKEFRACT(damagePercent) / 100;
+	divisor =  (float)damagePercent / 100.f;
 
 	/* See what we're dealing with */
 	switch(psObj->type)

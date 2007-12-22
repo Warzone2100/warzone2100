@@ -177,13 +177,13 @@ typedef enum
 #define	BLOOD_SIZE					(100+(30-rand()%60))
 #define	BLOOD_FALL_SPEED			(-(20+rand()%20))
 
-#define GRAVITON_INIT_VEL_X			MAKEFRACT(200-rand()%300)
-#define GRAVITON_INIT_VEL_Z			MAKEFRACT(200-rand()%300)
-#define GRAVITON_INIT_VEL_Y			MAKEFRACT(300+rand()%100)
+#define GRAVITON_INIT_VEL_X			(float)(200 - rand() % 300)
+#define GRAVITON_INIT_VEL_Z			(float)(200 - rand() % 300)
+#define GRAVITON_INIT_VEL_Y			(float)(300 + rand() % 100)
 
-#define GIBLET_INIT_VEL_X			MAKEFRACT(50-rand()%100)
-#define GIBLET_INIT_VEL_Z			MAKEFRACT(50-rand()%100)
-#define GIBLET_INIT_VEL_Y			MAKEFRACT(12)
+#define GIBLET_INIT_VEL_X			(float)(50 - rand() % 100)
+#define GIBLET_INIT_VEL_Z			(float)(50 - rand() % 100)
+#define GIBLET_INIT_VEL_Y			12.f
 
 #define	DROID_DESTRUCTION_DURATION		(3*GAME_TICKS_PER_SEC/2) // 1.5 seconds
 #define	STRUCTURE_DESTRUCTION_DURATION	((7*GAME_TICKS_PER_SEC)/2)	 // 3.5 seconds
