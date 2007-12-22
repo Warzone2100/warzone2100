@@ -357,17 +357,17 @@ static void formationCalcPos(FORMATION *psFormation, SDWORD line, SDWORD dist,
 
 	// calculate the offset of the line based on the rank
 	dir = (SDWORD)adjustDirection(psFormation->dir, 180);
-	xoffset = MAKEINT(FRACTmul(trigSin(dir), (float)(psFormation->rankDist * rank)))
+	xoffset = MAKEINT(trigSin(dir) * (float)(psFormation->rankDist * rank))
 			+ psFormation->asLines[line].xoffset;
-	yoffset = MAKEINT(FRACTmul(trigCos(dir), (float)(psFormation->rankDist * rank)))
+	yoffset = MAKEINT(trigCos(dir) * (float)(psFormation->rankDist * rank))
 			+ psFormation->asLines[line].yoffset;
 
 	// calculate the position of the gap
 	dir = psFormation->asLines[line].dir;
 	dist -= psFormation->size * rank;
-	*pX = MAKEINT(FRACTmul(trigSin(dir), (float)dist))
+	*pX = MAKEINT(trigSin(dir) * (float)dist)
 			+ xoffset + psFormation->x;
-	*pY = MAKEINT(FRACTmul(trigCos(dir), (float)dist))
+	*pY = MAKEINT(trigCos(dir) * (float)dist)
 			+ yoffset + psFormation->y;
 }
 

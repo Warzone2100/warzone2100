@@ -244,7 +244,6 @@ static void	moveCalcBoundary(DROID *psDroid);
 static float vectorToAngle(float vx, float vy);
 
 // Abbreviate some of the float defines
-#define Fmul(x,y)	FRACTmul(x,y)
 #define Fdiv(x,y)	FRACTdiv(x,y)
 
 extern UDWORD	selectedPlayer;
@@ -1176,8 +1175,8 @@ static void moveCalcSlideVector(DROID *psDroid,SDWORD objX, SDWORD objY, float *
 	my = *pMy;
 
 	// Calculate the vector to the obstruction
-	obstX = (SDWORD)psDroid->pos.x - objX;
-	obstY = (SDWORD)psDroid->pos.y - objY;
+	obstX = psDroid->pos.x - objX;
+	obstY = psDroid->pos.y - objY;
 
 	// if the target dir is the same, don't need to slide
 	if (obstX*mx + obstY*my >= 0)
@@ -1186,7 +1185,7 @@ static void moveCalcSlideVector(DROID *psDroid,SDWORD objX, SDWORD objY, float *
 	}
 
 	// Choose the tangent vector to this on the same side as the target
-	dotRes = FRACTmul(obstY, mx) - FRACTmul(obstX, my);
+	dotRes = (float)obstY * mx - (float)obstX * my;
 	if (dotRes >= 0)
 	{
 		dirX = obstY;
@@ -1196,7 +1195,7 @@ static void moveCalcSlideVector(DROID *psDroid,SDWORD objX, SDWORD objY, float *
 	{
 		dirX = -obstY;
 		dirY = obstX;
-		dotRes = FRACTmul(dirX, *pMx) + FRACTmul(dirY, *pMy);
+		dotRes = (float)dirX * *pMx + (float)dirY * *pMy;
 	}
 	absX = labs(dirX); absY = labs(dirY);
 	dirMag = absX > absY ? absX + absY/2 : absY + absX/2;
@@ -1205,8 +1204,8 @@ static void moveCalcSlideVector(DROID *psDroid,SDWORD objX, SDWORD objY, float *
 	unitX = FRACTdiv(dirX, dirMag);
 	unitY = FRACTdiv(dirY, dirMag);
 	dotRes = FRACTdiv(dotRes, dirMag);
-	*pMx = FRACTmul(unitX, dotRes);
-	*pMy = FRACTmul(unitY, dotRes);
+	*pMx = unitX * dotRes;
+	*pMy = unitY * dotRes;
 }
 
 
@@ -1670,7 +1669,7 @@ static void moveCalcDroidSlide(DROID *psDroid, float *pmx, float *pmy)
 		xdiff = MAKEINT(psDroid->sMove.fx + *pmx) - (SDWORD)psInfo->psObj->pos.x;
 		ydiff = MAKEINT(psDroid->sMove.fy + *pmy) - (SDWORD)psInfo->psObj->pos.y;
 		distSq = xdiff*xdiff + ydiff*ydiff;
-		if (Fmul(xdiff,(*pmx)) + Fmul(ydiff,(*pmy)) >= 0)
+		if ((float)xdiff * *pmx + (float)ydiff * *pmy >= 0)
 		{
 			// object behind
 			continue;
@@ -1786,7 +1785,7 @@ static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
 		}
 		xdiff = (SDWORD)psObj->pos.x - (SDWORD)psDroid->pos.x;
 		ydiff = (SDWORD)psObj->pos.y - (SDWORD)psDroid->pos.y;
-		if (Fmul(xdiff,(*pX)) + Fmul(ydiff,(*pY)) < 0)
+		if ((float)xdiff * *pX + (float)ydiff * *pY < 0)
 		{
 			// object behind
 			continue;
@@ -1818,7 +1817,7 @@ static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
 	{
 		for(xdiff=-2; xdiff<=2; xdiff++)
 		{
-			if (Fmul(xdiff, (*pX)) + Fmul(ydiff, (*pY)) <= 0)
+			if ((float)xdiff * *pX + (float)ydiff * *pY <= 0)
 			{
 				// object behind
 				continue;
@@ -1862,7 +1861,7 @@ static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
 			omag = sqrtf(dirX*dirX + dirY*dirY);
 			ox = dirX / omag;
 			oy = dirY / omag;
-			if (FRACTmul((*pX), oy) + FRACTmul((*pY),-ox) < 0)
+			if (*pX * oy + *pY * -ox < 0)
 			{
 // 				debug( LOG_NEVER, "First perp\n");
 				avoidX = -oy;
@@ -1883,8 +1882,8 @@ static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
 			ratio = 1;
 		}
 
-		*pX = Fmul((*pX), ratio) + Fmul(avoidX, (1 - ratio));
-		*pY = Fmul((*pY), ratio) + Fmul(avoidY, (1 - ratio));
+		*pX = *pX * ratio + avoidX * (1.f - ratio);
+		*pY = *pY * ratio + avoidY * (1.f - ratio);
 	}
 	ASSERT(isfinite(*pX) && isfinite(*pY), "moveGetObstacleVector: bad float");
 }
@@ -2278,7 +2277,7 @@ static void moveCombineNormalAndPerpSpeeds( DROID *psDroid, float fNormalSpeed,
 		return;
 	}
 
-	finalSpeed = sqrtf(Fmul(fNormalSpeed,fNormalSpeed) + Fmul(fPerpSpeed,fPerpSpeed));
+	finalSpeed = sqrtf(fNormalSpeed * fNormalSpeed + fPerpSpeed * fPerpSpeed);
 
 	// calculate the angle between the droid facing and movement direction
 	finalDir = trigInvCos(fNormalSpeed / finalSpeed);
@@ -2358,7 +2357,7 @@ static void moveGetDroidPosDiffs( DROID *psDroid, float *pDX, float *pDY )
 {
 	float	move;
 
-	move = Fmul(psDroid->sMove.speed, baseSpeed);
+	move = (float)psDroid->sMove.speed * (float)baseSpeed;
 
 	*pDX = move * trigSin(psDroid->sMove.moveDir);
 	*pDY = move * trigCos(psDroid->sMove.moveDir);

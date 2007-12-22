@@ -97,7 +97,7 @@ BOOL rayInitialise(void)
 		}
 
 		// These are used to calculate the initial intersection
-		rayFPTan[i] = MAKEINT(FRACTmul(val, (float)RAY_ACCMUL));
+		rayFPTan[i] = MAKEINT(val * (float)RAY_ACCMUL);
 		rayFPInvTan[i] = MAKEINT(FRACTdiv((float)RAY_ACCMUL, val));
 
 		// Set up the trig tables for calculating the offset distances
