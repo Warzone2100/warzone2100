@@ -33,21 +33,12 @@
 #include "pietypes.h"
 
 /***************************************************************************/
-/***************************************************************************/
 /*
  *	Global Definitions
  */
 /***************************************************************************/
 
-//palette definitions
-#define iV_PALETTE_SIZE				PALETTE_SIZE
-#define iV_PALETTE_SHADE_LEVEL		PALETTE_SHADE_LEVEL
-
-#define iV_PaletteNearestColour		pal_GetNearestColour
-#define	iV_PaletteAdd				pal_AddNewPalette
-
 //matrixstuff
-#define iV_setGeometricOffset		pie_setGeometricOffset
 #define iV_MatrixBegin				pie_MatBegin
 #define iV_MatrixEnd				pie_MatEnd
 #define iV_MatrixRotateX			pie_MatRotX

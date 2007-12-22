@@ -23,8 +23,6 @@
 #include "lib/ivis_common/piedef.h"
 //*************************************************************************
 
-#define PALETTE_MAX	8
-
 #define PALETTE_SIZE	256
 
 #define COL_TRANS			0
