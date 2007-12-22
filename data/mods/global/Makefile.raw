@@ -3,13 +3,15 @@ include $(MAKERULES)/configure.mk
 
 AIVOLUTIONLIST = multiplay commands.txt installation.txt
 GRIMLIST = components structs texpages wrf COPYING
+NEWST_TILESLIST = texpages COPYING readme.txt
 
 AIVOLUTIONARCHIVE=aivolution.wz
 GRIMARCHIVE=grim.wz
+NEWST_TILESARCHIVE=newst_tiles.wz
 
 all:
 ifdef DATA
-all: $(AIVOLUTIONARCHIVE) $(GRIMARCHIVE)
+all: $(AIVOLUTIONARCHIVE) $(GRIMARCHIVE) $(NEWST_TILESARCHIVE)
 endif
 
 $(AIVOLUTIONARCHIVE): $(AIVOLUTIONLIST:%=aivolution/%)
@@ -20,8 +22,13 @@ $(GRIMARCHIVE): $(GRIMLIST:%=grim/%)
 	cd grim && zip -ru0 ../$@ $(GRIMLIST) -x *svn*
 	zip -T $@
 
+$(NEWST_TILESARCHIVE): $(NEWST_TILESLIST:%=newst_tiles/%)
+	cd newst_tiles && zip -ru0 ../$@ $(NEWST_TILESLIST) -x *svn*
+	zip -T $@
+
 clean:
 	$(RMF) $(GRIMARCHIVE)
 	$(RMF) $(AIVOLUTIONARCHIVE)
+	$(RMF) $(NEWST_TILESARCHIVE)
 
 .PHONY: all clean $(AIVOLUTIONARCHIVE) $(GRIMARCHIVE)
