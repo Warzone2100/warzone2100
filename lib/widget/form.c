@@ -606,16 +606,16 @@ void widgSetTabs(W_SCREEN *psScreen, UDWORD id, UWORD major, UWORD minor)
 		return; /* make us work fine in no assert compiles */
 	}
 
-	if (major >= psForm->numMajor)
+	ASSERT(major < psForm->numMajor, "widgSetTabs id=%u: invalid major id %u >= max %u", id,
+	       major, psForm->numMajor);
+
+	ASSERT(minor < psForm->asMajor[major].numMinor, "widgSetTabs id=%u: invalid minor id %u >= max %u", id,
+	       minor, psForm->asMajor[major].numMinor);
+
+	// Make sure to bail out when we've been passed out-of-bounds major or minor numbers
+	if (major >= psForm->numMajor
+	 || minor >= psForm->asMajor[major].numMinor)
 	{
-		ASSERT(FALSE, "widgSetTabs id=%u: invalid major id %u >= max %u", id,
-		       major, psForm->numMajor);
-		return;
-	}
-	if (minor >= psForm->asMajor[major].numMinor)
-	{
-		ASSERT(FALSE, "widgSetTabs id=%u: invalid minor id %u >= max %u", id,
-		       minor, psForm->asMajor[major].numMinor);
 		return;
 	}
 
