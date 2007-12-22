@@ -243,9 +243,6 @@ static void	moveCalcBoundary(DROID *psDroid);
 /* Turn a vector into an angle - returns a float (!) */
 static float vectorToAngle(float vx, float vy);
 
-// Abbreviate some of the float defines
-#define Fdiv(x,y)	FRACTdiv(x,y)
-
 extern UDWORD	selectedPlayer;
 
 static BOOL	g_bFormationSpeedLimitingOn = TRUE;
@@ -1201,9 +1198,9 @@ static void moveCalcSlideVector(DROID *psDroid,SDWORD objX, SDWORD objY, float *
 	dirMag = absX > absY ? absX + absY/2 : absY + absX/2;
 
 	// Calculate the component of the movement in the direction of the tangent vector
-	unitX = FRACTdiv(dirX, dirMag);
-	unitY = FRACTdiv(dirY, dirMag);
-	dotRes = FRACTdiv(dotRes, dirMag);
+	unitX = (float)dirX / (float)dirMag;
+	unitY = (float)dirY / (float)dirMag;
+	dotRes = dotRes / (float)dirMag;
 	*pMx = unitX * dotRes;
 	*pMy = unitY * dotRes;
 }
@@ -1797,8 +1794,8 @@ static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
 
 		if (dist != 0)
 		{
-			dirX += Fdiv(xdiff, dist * dist);
-			dirY += Fdiv(ydiff, dist * dist);
+			dirX += (float)xdiff / (float)(dist * dist);
+			dirY += (float)ydiff / (float)(dist * dist);
 			distTot += dist*dist;
 			numObst += 1;
 		}
@@ -1835,8 +1832,8 @@ static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
 
 					if (dist != 0)
 					{
-						dirX += Fdiv(tx, dist * dist);
-						dirY += Fdiv(ty, dist * dist);
+						dirX += (float)tx / (float)(dist * dist);
+						dirY += (float)ty / (float)(dist * dist);
 						distTot += dist*dist;
 						numObst += 1;
 					}
@@ -1876,7 +1873,7 @@ static void moveGetObstacleVector(DROID *psDroid, float *pX, float *pY)
 		}
 
 		// combine the avoid vector and the target vector
-		ratio = Fdiv(distTot, AVOID_DIST * AVOID_DIST);
+		ratio = (float)distTot / (float)(AVOID_DIST * AVOID_DIST);
 		if (ratio > 1)
 		{
 			ratio = 1;

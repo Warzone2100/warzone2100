@@ -26,7 +26,6 @@
 //
 //  Use:-
 //		MAKEINT(fract);	to convert the other way
-//		FRACTdiv(fract,fract); to divide two numbers
 //		SQRT(fract);		to get square root of a fract (returns a fract)
 //      sqrtf(int);			to get a square root of an integer (returns an UDWORD) (no, it does not! - Per)
 //      FRACTCONST(constA,constB);	; Generates a constant of (constA/constB)
@@ -64,8 +63,6 @@
 typedef float FRACT_D;  /* But isn't this is supposed to be double? - Per */
 
 #define ROUND(x) ((x)>=0 ? (SDWORD)((x) + 0.5) : (SDWORD)((x) - 0.5))
-
-#define FRACTdiv(x,y) ((float)(x)/(float)(y))
 
 #define FRACTCONST(a,b) (((float)(a)) / ((float)(b)))
 #define MAKEFRACT_D(x) ((FRACT_D)(x))

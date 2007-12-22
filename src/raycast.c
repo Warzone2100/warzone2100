@@ -98,35 +98,35 @@ BOOL rayInitialise(void)
 
 		// These are used to calculate the initial intersection
 		rayFPTan[i] = MAKEINT(val * (float)RAY_ACCMUL);
-		rayFPInvTan[i] = MAKEINT(FRACTdiv((float)RAY_ACCMUL, val));
+		rayFPInvTan[i] = MAKEINT((float)RAY_ACCMUL / val);
 
 		// Set up the trig tables for calculating the offset distances
 		val = (float)sin(angle);
 		if(val == 0) {
 			val = (float)1;
 		}
-		rayFPInvSin[i] = MAKEINT(FRACTdiv((float)RAY_ACCMUL, val));
+		rayFPInvSin[i] = MAKEINT((float)RAY_ACCMUL / val);
 		if (i >= NUM_RAYS/2)
 		{
-			rayVDist[i] = MAKEINT(FRACTdiv((float)-TILE_UNITS, val));
+			rayVDist[i] = MAKEINT((float)-TILE_UNITS / val);
 		}
 		else
 		{
-			rayVDist[i] = MAKEINT(FRACTdiv((float)TILE_UNITS, val));
+			rayVDist[i] = MAKEINT((float)TILE_UNITS / val);
 		}
 
 		val = (float)cos(angle);
 		if(val == 0) {
 			val = (float)1;
 		}
-		rayFPInvCos[i] = MAKEINT(FRACTdiv((float)RAY_ACCMUL, val));
+		rayFPInvCos[i] = MAKEINT((float)RAY_ACCMUL / val);
 		if (i < NUM_RAYS/4 || i > 3*NUM_RAYS/4)
 		{
-			rayHDist[i] = MAKEINT(FRACTdiv((float)TILE_UNITS, val));
+			rayHDist[i] = MAKEINT((float)TILE_UNITS / val);
 		}
 		else
 		{
-			rayHDist[i] = MAKEINT(FRACTdiv((float)-TILE_UNITS, val));
+			rayHDist[i] = MAKEINT((float)-TILE_UNITS / val);
 		}
 
 		angle += RAY_ANGLE;
