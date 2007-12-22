@@ -377,7 +377,7 @@ void breakAlliance(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio)
 	char	tm1[128];
 	if(alliances[p1][p2] == ALLIANCE_FORMED)
 	{
-		strcpy(tm1,getPlayerName(p1));
+		strlcpy(tm1, getPlayerName(p1), sizeof(tm1));
 		CONPRINTF(ConsoleString,(ConsoleString,_("%s Breaks The Alliance With %s"),tm1,getPlayerName(p2) ));
 		if(allowAudio && (p1 == selectedPlayer || p2 == selectedPlayer))
 		{
@@ -402,7 +402,7 @@ void formAlliance(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio,BOOL allowNotific
 	// dont add message if already allied,
 	if(bMultiPlayer && !(alliances[p1][p2] == ALLIANCE_FORMED) && allowNotification )
 	{
-		strcpy(tm1,getPlayerName(p1));
+		strlcpy(tm1, getPlayerName(p1), sizeof(tm1));
 		CONPRINTF(ConsoleString,(ConsoleString,_("%s Forms An Alliance With %s"),tm1,getPlayerName(p2) ));
 	}
 
