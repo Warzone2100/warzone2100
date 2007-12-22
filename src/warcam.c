@@ -54,10 +54,6 @@
 #include "display3d.h"
 #include "selection.h"
 
-#define MODFRACT(value,mod) \
-	while((value) < 0)	{ (value) += (mod); } \
-	while((value) > (mod)) { (value) -= (mod); }
-
 #define MIN_TRACK_HEIGHT 16
 
 /* Holds all the details of our camera */
@@ -1004,7 +1000,7 @@ static void updateCameraRotationAcceleration( UBYTE update )
 
 		/* Which way are we facing? */
 		worldAngle =  trackingCamera.rotation.y;
-		separation = (float) ((yConcern - worldAngle));
+		separation = yConcern - worldAngle;
 		if(separation < DEG(-180))
 		{
 			separation += DEG(360);
@@ -1050,17 +1046,13 @@ static void updateCameraRotationAcceleration( UBYTE update )
 				trackingCamera.rotation.x+=DEG(360);
 			}
 		worldAngle =  trackingCamera.rotation.x;
-		separation = (float) ((xConcern - worldAngle));
+		separation = fmodf(xConcern - worldAngle, DEG(360));
 
-		MODFRACT(separation,DEG(360));
-
-		if(separation<DEG(-180))
+		// Make sure that rotations larger than 180 degrees are noted
+		// in the range of -180 - 0 degrees.
+		if (separation > DEG(180))
 		{
-			separation+=DEG(360);
-		}
-		else if(separation>DEG(180))
-		{
-			separation-=DEG(360);
+			separation -= DEG(360);
 		}
 
 		/* Make new acceleration */
