@@ -287,7 +287,7 @@ static void packageCheck(UDWORD i, NETMSG *pMsg, DROID *pD)
 		NetAdd2(pMsg,	i+24,		pD->orderX);
 		NetAdd2(pMsg,	i+26,		pD->orderY);
 	}
-	numkills = pD->numKills;
+	numkills = pD->experience;
 	NetAdd2(pMsg,		i+28,		numkills);	// droid kills
 
 	pMsg->size =(UWORD)( pMsg->size + 30);
@@ -435,7 +435,7 @@ static void highLevelDroidUpdate(DROID *psDroid,UDWORD x, UDWORD y,
 								 BASE_OBJECT *psTarget,UDWORD numKills)
 {
 	// update kill rating.
-	psDroid->numKills = (UWORD)numKills;
+	psDroid->experience = (UWORD)numKills;
 
 	// remote droid is attacking, not here tho!
 	if(order == DORDER_ATTACK && psDroid->order != DORDER_ATTACK && psTarget)

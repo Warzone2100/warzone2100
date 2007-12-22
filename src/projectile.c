@@ -102,7 +102,7 @@ static void	proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj,
 									FIRE_BOX *pFireBox );
 static void	proj_Free(PROJECTILE *psObj);
 
-static SDWORD objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, HIT_SIDE impactSide);
+static float objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, HIT_SIDE impactSide);
 static HIT_SIDE getHitSide (PROJECTILE *psObj, BASE_OBJECT *psTarget);
 
 /***************************************************************************/
@@ -260,7 +260,7 @@ static float QualityFactor(DROID *psAttacker, DROID *psVictim)
 }
 
 // update the kills after a target is damaged/destroyed
-static void proj_UpdateKills(PROJECTILE *psObj, SDWORD percentDamage)
+static void proj_UpdateKills(PROJECTILE *psObj, float experienceInc)
 {
 	DROID	        *psDroid;
 	BASE_OBJECT     *psSensor;
@@ -274,14 +274,14 @@ static void proj_UpdateKills(PROJECTILE *psObj, SDWORD percentDamage)
 	}
 
 	// If percentDamage is negative then the target was killed
-	if (bMultiPlayer && percentDamage < 0)
+	if (bMultiPlayer && experienceInc < 0.0f)
 	{
 		sendDestroyExtra(psObj->psDest,psObj->psSource);
 		updateMultiStatsKills(psObj->psDest,psObj->psSource->player);
 	}
 
 	// Since we are no longer interested if it was killed or not, abs it
-	percentDamage = abs(percentDamage);
+	experienceInc = fabs(experienceInc);
 
 	if (psObj->psSource->type == OBJ_DROID)			/* update droid kills */
 	{
@@ -294,16 +294,16 @@ static void proj_UpdateKills(PROJECTILE *psObj, SDWORD percentDamage)
 		 && bMultiPlayer)
 		{
 			// Modify the experience gained by the 'quality factor' of the units
-			percentDamage *= QualityFactor(psDroid, (DROID *) psObj->psDest);
+			experienceInc *= QualityFactor(psDroid, (DROID *) psObj->psDest);
 		}
 
-		psDroid->numKills += percentDamage;		
-		cmdDroidUpdateKills(psDroid, percentDamage);
+		psDroid->experience += experienceInc;		
+		cmdDroidUpdateKills(psDroid, experienceInc);
 		
 		if (orderStateObj(psDroid, DORDER_FIRESUPPORT, &psSensor)
 		 && psSensor->type == OBJ_DROID)
 		{
-		    ((DROID *) psSensor)->numKills += percentDamage;
+		    ((DROID *) psSensor)->experience += experienceInc;
 		}
 	}
 	else if (psObj->psSource->type == OBJ_STRUCTURE)
@@ -315,7 +315,7 @@ static void proj_UpdateKills(PROJECTILE *psObj, SDWORD percentDamage)
 		 && psDroid->action == DACTION_ATTACK
 		 && psDroid->psActionTarget[0] == psObj->psDest)
 		{
-			psDroid->numKills += percentDamage;
+			psDroid->experience += experienceInc;
 		}
 	}
 }
@@ -1213,7 +1213,7 @@ proj_ImpactFunc( PROJECTILE *psObj )
 	UDWORD			dice;
 	SDWORD			tarX0,tarY0, tarX1,tarY1;
 	SDWORD			radCubed, xDiff,yDiff;
-	SDWORD			percentDamage;
+	float			relativeDamage;
 	Vector3i position,scatter;
 	UDWORD			damage;	//optimisation - were all being calculated twice on PC
 	//Watermelon: tarZ0,tarZ1,zDiff for AA AOE weapons;
@@ -1404,11 +1404,11 @@ proj_ImpactFunc( PROJECTILE *psObj )
 			}
 
 			// Damage the object
-			percentDamage = objectDamage(psObj->psDest,damage , psStats->weaponClass,psStats->weaponSubClass, impactSide);
+			relativeDamage = objectDamage(psObj->psDest,damage , psStats->weaponClass,psStats->weaponSubClass, impactSide);
 
-			proj_UpdateKills(psObj, percentDamage);
+			proj_UpdateKills(psObj, relativeDamage);
 
-			if (percentDamage >= 0)	// So long as the target wasn't killed
+			if (relativeDamage >= 0)	// So long as the target wasn't killed
 			{
 				setProjectileDamaged(psObj, psObj->psDest);
 			}
@@ -1486,11 +1486,11 @@ proj_ImpactFunc( PROJECTILE *psObj )
 							// since fragment of a project is from the explosion spot not from the projectile start position
 							impactSide = getHitSide(psObj, (BASE_OBJECT *)psCurrD);
 
-							percentDamage = droidDamage(psCurrD, damage, psStats->weaponClass, psStats->weaponSubClass, impactSide);
+							relativeDamage = droidDamage(psCurrD, damage, psStats->weaponClass, psStats->weaponSubClass, impactSide);
 
 							turnOffMultiMsg(FALSE);	// multiplay msgs back on.
 
-							proj_UpdateKills(psObj, percentDamage);
+							proj_UpdateKills(psObj, relativeDamage);
 						}
 					}
 				}
@@ -1533,12 +1533,12 @@ proj_ImpactFunc( PROJECTILE *psObj )
 								// since fragment of a project is from the explosion spot not from the projectile start position
 								impactSide = getHitSide(psObj, (BASE_OBJECT *)psCurrS);
 
-								percentDamage = structureDamage(psCurrS,
+								relativeDamage = structureDamage(psCurrS,
 								                                damage,
 								                                psStats->weaponClass,
 								                                psStats->weaponSubClass, impactSide);
 
-								proj_UpdateKills(psObj, percentDamage);
+								proj_UpdateKills(psObj, relativeDamage);
 							}
 						}
 					}
@@ -1555,12 +1555,12 @@ proj_ImpactFunc( PROJECTILE *psObj )
 							}
 						}
 
-						percentDamage = structureDamage(psCurrS,
+						relativeDamage = structureDamage(psCurrS,
 						                                damage,
 						                                psStats->weaponClass,
 						                                psStats->weaponSubClass, impactSide);
 
-						proj_UpdateKills(psObj, percentDamage);
+						proj_UpdateKills(psObj, relativeDamage);
 					}
 				}
 			}
@@ -1598,14 +1598,14 @@ proj_ImpactFunc( PROJECTILE *psObj )
 						// since fragment of a project is from the explosion spot not from the projectile start position
 						impactSide = getHitSide(psObj, (BASE_OBJECT *)psCurrF);
 
-						percentDamage = featureDamage(psCurrF,
+						relativeDamage = featureDamage(psCurrF,
 						                              calcDamage(weaponRadDamage(psStats, psObj->player),
 						                                         psStats->weaponEffect,
 						                                         (BASE_OBJECT *)psCurrF),
 						                              psStats->weaponClass,
 						                              psStats->weaponSubClass, impactSide);
 
-						proj_UpdateKills(psObj, percentDamage);
+						proj_UpdateKills(psObj, relativeDamage);
 					}
 				}
 			}
@@ -2023,7 +2023,7 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
  *  - this represents the amount of damage inflicted on the droid by the weapon
  *    in relation to its original health.
  *  - e.g. If 100 points of (*actual*) damage were done to a unit who started
- *    off (when first produced) with 400 points then 25 would be returned.
+ *    off (when first produced) with 400 points then .25 would be returned.
  *  - If the actual damage done to a unit is greater than its remaining points
  *    then the actual damage is clipped: so if we did 200 actual points of
  *    damage to a cyborg with 150 points left the actual damage would be taken
@@ -2031,7 +2031,7 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
  *  - Should sufficient damage be done to destroy/kill a unit then the value is
  *    multiplied by -1, resulting in a negative number.
  */
-SDWORD objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, HIT_SIDE impactSide)
+float objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, HIT_SIDE impactSide)
 {
 	switch (psObj->type)
 	{

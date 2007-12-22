@@ -249,9 +249,9 @@ void featureStatsShutDown(void)
  * \param psFeature feature to deal damage to
  * \param damage amount of damage to deal
  * \param weaponSubClass the subclass of the weapon that deals the damage
- * \return TRUE when the dealt damage destroys the feature, FALSE when the feature survives
+ * \return < 0 when the dealt damage destroys the feature, > 0 when the feature survives
  */
-SDWORD featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide)
+float featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide)
 {
 	// Do at least one point of damage
 	unsigned int actualDamage = 1;
@@ -281,7 +281,7 @@ SDWORD featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass, UDWO
 	if (actualDamage >= psFeature->body)
 	{
 		destroyFeature(psFeature);
-		return (SDWORD) (body / originalBody * -100);
+		return body / originalBody * -1.0f;
 	}
 
 	// Substract the dealt damage from the feature's remaining body points
@@ -290,7 +290,7 @@ SDWORD featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass, UDWO
 	// Set last hit-time to <now>
 	psFeature->timeLastHit = gameTime;
 
-	return (SDWORD) ((float) actualDamage / originalBody * 100);
+	return (float) actualDamage / originalBody;
 }
 
 

@@ -503,7 +503,7 @@ static void droidSaveTagged(DROID *psDroid)
 	tagWrite(0x08, psDroid->baseSpeed);
 	tagWriteString(0x09, psDroid->aName);
 	tagWrite(0x0a, psDroid->body);
-	tagWrite(0x0b, psDroid->numKills);
+	tagWrite(0x0b, psDroid->experience);
 	tagWrite(0x0c, psDroid->NameVersion);
 	if (psDroid->psTarget)
 	{

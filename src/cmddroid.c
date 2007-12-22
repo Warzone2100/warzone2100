@@ -174,7 +174,7 @@ unsigned int cmdDroidMaxGroup(DROID *psCommander)
 }
 
 // update the kills of a command droid if psKiller is in a command group
-void cmdDroidUpdateKills(DROID *psKiller, UDWORD percentDamage)
+void cmdDroidUpdateKills(DROID *psKiller, float experienceInc)
 {
 	DROID	*psCommander;
 
@@ -185,7 +185,7 @@ void cmdDroidUpdateKills(DROID *psKiller, UDWORD percentDamage)
 		 (psKiller->psGroup->type == GT_COMMAND) )
 	{
 		psCommander = psKiller->psGroup->psCommander;
-		psCommander->numKills += percentDamage;
+		psCommander->experience += experienceInc;
 	}
 }
 

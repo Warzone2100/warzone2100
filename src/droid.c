@@ -147,11 +147,11 @@ BOOL droidInit(void)
  * \param weaponClass the class of the weapon that deals the damage
  * \param weaponSubClass the subclass of the weapon that deals the damage
  * \param angle angle of impact (from the damage dealing projectile in relation to this droid)
- * \return TRUE when the dealt damage destroys the droid, FALSE when the droid survives
+ * \return > 0 when the dealt damage destroys the droid, < 0 when the droid survives
  *
  * NOTE: This function will damage but _never_ destroy transports when in single player (campaign) mode
  */
-SDWORD droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide)
+float droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide)
 {
 	// Do at least one point of damage
 	unsigned int actualDamage = 1, armour;
@@ -266,7 +266,7 @@ SDWORD droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD wea
 			destroyDroid(psDroid);
 		}
 
-		return (SDWORD) (body / originalBody * -100);
+		return body / originalBody * -1.0f;
 	}
 
 	// Substract the dealt damage from the droid's remaining body points
@@ -280,8 +280,8 @@ SDWORD droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD wea
 
 	CHECK_DROID(psDroid);
 
-	// Return the amount of damage done as an SDWORD between 0 and 99
-	return (SDWORD) ((float) actualDamage / originalBody * 100);
+	// Return the amount of damage done as an SDWORD between 0 and 999
+	return (float) actualDamage / originalBody;
 }
 
 // Check that psVictimDroid is not referred to by any other object in the game
@@ -394,7 +394,7 @@ void recycleDroid(DROID *psDroid)
 	CHECK_DROID(psDroid);
 
 	// store the droids kills
-	numKills = psDroid->numKills;
+	numKills = psDroid->experience;
 	if (numKills > UWORD_MAX)
 	{
 		numKills = UWORD_MAX;
@@ -3340,11 +3340,11 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 			}
 		}
 		aDroidExperience[player][experienceLoc] = 0;
-		psDroid->numKills = (UWORD)numKills;
+		psDroid->experience = (UWORD)numKills;
 	}
 	else
 	{
-		psDroid->numKills = 0;
+		psDroid->experience = 0;
 	}
 
 	droidSetBits(pTemplate,psDroid);
@@ -4127,10 +4127,7 @@ UDWORD	getDroidLevel(DROID *psDroid)
 	static const unsigned int lastRank = sizeof(arrRank) / sizeof(struct rankMap);
 	bool isCommander = (psDroid->droidType == DROID_COMMAND ||
 	                    psDroid->droidType == DROID_SENSOR) ? true : false;
-	// We need to divide by 100 to get the actual number since we're using
-	// fixed point arithmatic here, and psDroid->numKills actually is the
-	// percentage of damage dealt to other objects
-	unsigned int numKills = psDroid->numKills / 100;
+	unsigned int numKills = psDroid->experience;
 	unsigned int i;
 
 	// Commanders don't need as much kills for ranks in multiplayer
@@ -5498,7 +5495,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 		armourK[impact_side] = psD->armour[impact_side][WC_KINETIC];
 		armourH[impact_side] = psD->armour[impact_side][WC_HEAT];
 	}
-        numKills = psD->numKills;
+        numKills = psD->experience;
         direction = psD->direction;
         //only play the sound if unit being taken over is selectedPlayer's but not going to the selectedPlayer
         //if ((psD->player == selectedPlayer) &&
@@ -5523,7 +5520,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 				psNewDroid->armour[impact_side][WC_KINETIC] = armourK[impact_side];
 				psNewDroid->armour[impact_side][WC_HEAT] = armourH[impact_side];
 			}
-            psNewDroid->numKills = numKills;
+            psNewDroid->experience = numKills;
             psNewDroid->direction = direction;
     		if(!(psNewDroid->droidType == DROID_PERSON ||
                 //psNewDroid->droidType == DROID_CYBORG ||
@@ -5548,7 +5545,7 @@ SWORD   droidResistance(DROID *psDroid)
 
 	CHECK_DROID(psDroid);
 
-    resistance = (SWORD)(psDroid->numKills * DROID_RESISTANCE_FACTOR);
+    resistance = (SWORD)(psDroid->experience * DROID_RESISTANCE_FACTOR);
 
     //ensure base minimum in MP before the upgrade effect
     if (bMultiPlayer)

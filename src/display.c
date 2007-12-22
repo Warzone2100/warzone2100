@@ -1808,9 +1808,9 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 		if (getDebugMappingStatus()) // cheating on, so output debug info
 		{
 			CONPRINTF(ConsoleString, (ConsoleString,
-			          "%s - Damage %d%% - ID %d - kills %d, %s - order %d - action %d - sensor range %hu power %hu - ECM %u",
+			          "%s - Damage %d%% - ID %d - kills %f, %s - order %d - action %d - sensor range %hu power %hu - ECM %u",
 			          droidGetName(psDroid), 100 - PERCENT(psDroid->body, psDroid->originalBody), psDroid->id,
-			          psDroid->numKills / 100, getDroidLevelName(psDroid), psDroid->order, psDroid->action, psDroid->sensorRange,
+			          psDroid->experience, getDroidLevelName(psDroid), psDroid->order, psDroid->action, psDroid->sensorRange,
 			          psDroid->sensorPower, psDroid->ECMMod));
 			FeedbackClickedOn();
 		}
@@ -1819,9 +1819,9 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 		if(godMode)
 		{
 			CONPRINTF(ConsoleString, (ConsoleString,
-			          "%s - Damage %d%% - Serial ID %d - Kills %d order %d action %d, %s",
+			          "%s - Damage %d%% - Serial ID %d - Kills %f order %d action %d, %s",
 			droidGetName(psDroid), 100 - PERCENT(psDroid->body,
-			psDroid->originalBody),psDroid->id, psDroid->numKills / 100,
+			psDroid->originalBody),psDroid->id, psDroid->experience,
 			psDroid->order, psDroid->action, getDroidLevelName(psDroid)));
 			FeedbackClickedOn();
 		}
@@ -1832,7 +1832,7 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 				CONPRINTF(ConsoleString, (ConsoleString,
 					_("%s - Damage %d%% - Kills %d, %s"),
 				droidGetName(psDroid), 100 - PERCENT(psDroid->body,
-				psDroid->originalBody), psDroid->numKills / 100,
+				psDroid->originalBody), (SDWORD) psDroid->experience,
 				getDroidLevelName(psDroid)));
 				FeedbackClickedOn();
 			}

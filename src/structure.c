@@ -1305,9 +1305,9 @@ BOOL structureStatsShutDown(void)
  * \param damage amount of damage to deal
  * \param weaponClass the class of the weapon that deals the damage
  * \param weaponSubClass the subclass of the weapon that deals the damage
- * \return TRUE when the dealt damage destroys the structure, FALSE when the structure survives
+ * \return < 0 when the dealt damage destroys the structure, > 0 when the structure survives
  */
-SDWORD structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
+float structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
                        UDWORD weaponSubClass, HIT_SIDE impactSide)
 {
 	// Do at least one point of damage
@@ -1356,13 +1356,13 @@ SDWORD structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass
 	{
 		debug( LOG_ATTACK, "        DESTROYED\n");
 		destroyStruct(psStructure);
-		return (SDWORD) (body / originalBody * -100);
+		return body / originalBody * -1.0f;
 	}
 
 	// Substract the dealt damage from the structure's remaining body points
 	psStructure->body -= actualDamage;
 
-	return (SDWORD) ((float) actualDamage / originalBody * 100);
+	return (float) actualDamage / originalBody;
 }
 
 
