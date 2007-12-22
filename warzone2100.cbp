@@ -26,7 +26,7 @@
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-DDEBUG" />
-					<Add option='-DVERSION=\\&quot;TRUNK\\&quot;' />
+					<Add option='-DPACKAGE_VERSION=\\&quot;TRUNK\\&quot;' />
 					<Add option='-DLOCALEDIR=\\&quot;\\&quot;' />
 					<Add option='-DPACKAGE=\\&quot;warzone2100\\&quot;' />
 					<Add option='-D_GNU_SOURCE=1' />
@@ -53,7 +53,7 @@
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="-DNDEBUG" />
-					<Add option='-DVERSION=\\&quot;TRUNK\\&quot;' />
+					<Add option='-DPACKAGE_VERSION=\\&quot;TRUNK\\&quot;' />
 					<Add option='-DLOCALEDIR=\\&quot;\\&quot;' />
 					<Add option='-DPACKAGE=\\&quot;warzone2100\\&quot;' />
 					<Add option='-D_GNU_SOURCE=1' />
@@ -81,7 +81,7 @@
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-DDEBUG" />
-					<Add option='-DVERSION=\&quot;TRUNK\&quot;' />
+					<Add option='-DPACKAGE_VERSION=\&quot;TRUNK\&quot;' />
 					<Add option='-DLOCALEDIR=\&quot;\&quot;' />
 					<Add option='-DPACKAGE=\&quot;warzone2100\&quot;' />
 					<Add option="-DWIN32" />
@@ -117,7 +117,7 @@
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="-DNDEBUG" />
-					<Add option='-DVERSION=\&quot;TRUNK\&quot;' />
+					<Add option='-DPACKAGE_VERSION=\&quot;TRUNK\&quot;' />
 					<Add option='-DLOCALEDIR=\&quot;\&quot;' />
 					<Add option='-DPACKAGE=\&quot;warzone2100\&quot;' />
 					<Add option="-DWIN32" />
