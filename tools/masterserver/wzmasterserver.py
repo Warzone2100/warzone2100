@@ -12,6 +12,21 @@
 # along with Warzone 2100; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 #
+# --------------------------------------------------------------------------
+# MasterServer v0.1 by Gerard Krol (gerard_) and Tim Perrei (Kamaze)
+#              v1.0 by Freddie Witherden (EvilGuru)
+# --------------------------------------------------------------------------
+#
+################################################################################
+#
+
+__author__ = "Gerhard Krol, Tim Perrei, Freddie Witherden"
+__version__ = "1.0"
+__bpydoc__ = """\
+This script runs a Warzone 2100 2.x masterserver
+"""
+
+#
 ################################################################################
 # Get the things we need.
 
