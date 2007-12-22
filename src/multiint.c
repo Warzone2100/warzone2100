@@ -2070,6 +2070,9 @@ void frontendMultiMessages(void)
 
 	while(NETrecv(&msg))
 	{
+		// Copy the message to the global one used by the new NET API
+		NetMsg = msg;
+		
 		switch(msg.type)
 		{
 		case AUDIOMSG:
@@ -2106,7 +2109,7 @@ void frontendMultiMessages(void)
 			break;
 
 		case NET_ALLIANCE:
-			recvAlliance(&msg,FALSE);
+			recvAlliance(FALSE);
 			break;
 
 		case NET_COLOURREQUEST:

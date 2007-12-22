@@ -23,28 +23,28 @@
  * multiplayer game, gifts and deathmatch relevant funcs.
  */
 
-extern void requestAlliance		(UBYTE from ,UBYTE to,BOOL prop,BOOL allowAudio);
-extern void breakAlliance		(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio);
-extern void formAlliance		(UBYTE p1, UBYTE p2,BOOL prop,BOOL allowAudio,BOOL allowNotification);
-extern void sendAlliance		(UBYTE from, UBYTE to, UBYTE state,SDWORD value);
-extern BOOL recvAlliance		(NETMSG *pMsg,BOOL allowAudio);
+extern void requestAlliance		(uint8_t from, uint8_t to, BOOL prop, BOOL allowAudio);
+extern void breakAlliance		(uint8_t p1, uint8_t p2, BOOL prop, BOOL allowAudio);
+extern void formAlliance		(uint8_t p1, uint8_t p2, BOOL prop, BOOL allowAudio, BOOL allowNotification);
+extern void sendAlliance		(uint8_t from, uint8_t to, uint8_t state, int32_t value);
+extern BOOL recvAlliance		(BOOL allowAudio);
 extern void	createTeamAlliances	(void);
 
-extern BOOL sendGift			(UDWORD type,UDWORD to);
-extern BOOL recvGift			(NETMSG *pMsg);
+extern BOOL sendGift			(uint8_t type, uint8_t to);
+extern BOOL recvGift			();
 
 extern void technologyGiveAway				(STRUCTURE *pS);
-extern void recvMultiPlayerRandomArtifacts	(NETMSG *pMsg);
-extern void addMultiPlayerRandomArtifacts	(UDWORD quantity,SDWORD type);
+extern void recvMultiPlayerRandomArtifacts	();
+extern void addMultiPlayerRandomArtifacts	(uint8_t quantity, FEATURE_TYPE type);
 extern void processMultiPlayerArtifacts		(void);
 
 extern void	giftArtifact					(UDWORD owner,UDWORD x,UDWORD y);
-extern BOOL	addOilDrum						(UDWORD count);
-extern void	giftPower						(UDWORD from,UDWORD to,BOOL send);
-extern void giftRadar							(UDWORD from, UDWORD to,BOOL send);
+extern BOOL	addOilDrum						(uint8_t count);
+extern void	giftPower						(uint8_t from, uint8_t to, BOOL send);
+extern void giftRadar						(uint8_t from, uint8_t to, BOOL send);
 
 #define RADAR_GIFT		1
 #define DROID_GIFT		2
 #define RESEARCH_GIFT	3
 #define POWER_GIFT		4
-#define STRUCTURE_GIFT		5
+#define STRUCTURE_GIFT	5	// Unused

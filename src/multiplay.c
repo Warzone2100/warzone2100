@@ -622,6 +622,9 @@ BOOL recvMessage(void)
 
 	while(NETrecv(&msg) == TRUE)			// for all incoming messages.
 	{
+		// Cocpy the message to the global one used by the new NET API
+		NetMsg = msg;
+		
 		// messages only in game.
 		if(!ingame.localJoiningInProgress)
 		{
@@ -755,10 +758,10 @@ BOOL recvMessage(void)
 			recvTeamRequest(&msg);
 			break;
 		case NET_ARTIFACTS:
-			recvMultiPlayerRandomArtifacts(&msg);
+			recvMultiPlayerRandomArtifacts();
 			break;
 		case NET_ALLIANCE:
-			recvAlliance(&msg,TRUE);
+			recvAlliance(TRUE);
 			break;
 		case NET_KICK:
 			NetGet((&msg),0,dp);
