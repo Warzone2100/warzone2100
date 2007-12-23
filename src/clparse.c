@@ -52,6 +52,7 @@
 #include "version.h"
 
 extern char	datadir[PATH_MAX];
+extern char	configdir[PATH_MAX];
 extern char * global_mods[MAX_MODS];
 extern char * campaign_mods[MAX_MODS];
 extern char * multiplay_mods[MAX_MODS];
@@ -63,6 +64,7 @@ typedef enum
 {
 	// We don't want to use zero, so start at one (1)
 	CLI_CHEAT = 1,
+	CLI_CONFIGDIR,
 	CLI_DATADIR,
 	CLI_DEBUG,
 	CLI_DEBUGFILE,
@@ -91,6 +93,7 @@ static const struct poptOption* getOptionsTable()
 	{
 		{ "cheat",      '\0', POPT_ARG_NONE,   NULL, CLI_CHEAT,      N_("Run in cheat mode"),                 NULL },
 		{ "datadir",    '\0', POPT_ARG_STRING, NULL, CLI_DATADIR,    N_("Set default data directory"),        N_("data directory") },
+		{ "configdir",  '\0', POPT_ARG_STRING, NULL, CLI_CONFIGDIR,  N_("Set configuration directory"),       N_("configuration directory") },
 		{ "debug",      '\0', POPT_ARG_STRING, NULL, CLI_DEBUG,      N_("Show debug for given level"),        N_("debug level") },
 		{ "debugfile",  '\0', POPT_ARG_STRING, NULL, CLI_DEBUGFILE,  N_("Log debug output to file"),          N_("file") },
 		{ "fullscreen", '\0', POPT_ARG_NONE,   NULL, CLI_FULLSCREEN, N_("Play in fullscreen mode"),           NULL },
@@ -199,6 +202,18 @@ bool ParseCommandLineEarly(int argc, const char** argv)
 					return false;
 				}
 				debug_register_callback( debug_callback_file, debug_callback_file_init, debug_callback_file_exit, (void*)token );
+				break;
+
+			case CLI_CONFIGDIR:
+				// retrieve the configuration directory
+				token = poptGetOptArg(poptCon);
+				if (token == NULL)
+				{
+					debug(LOG_ERROR, "Unrecognised configuration directory");
+					poptFreeContext(poptCon);
+					return false;
+				}
+				strlcpy(configdir, token, sizeof(configdir));
 				break;
 
 			case CLI_HELP:

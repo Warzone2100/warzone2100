@@ -85,6 +85,7 @@
 #endif
 
 char datadir[PATH_MAX] = "\0"; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be \0 on startup for ParseCommandLine to work!
+char configdir[PATH_MAX] = "\0"; // specifies custom USER directory.  Same rules apply as datadir above.
 
 char * global_mods[MAX_MODS] = { NULL };
 char * campaign_mods[MAX_MODS] = { NULL };
@@ -231,6 +232,65 @@ static void getPlatformUserDir(char * const tmpstr, size_t const size)
 		strlcpy(tmpstr, PHYSFS_getUserDir(), size); // Use PhysFS supplied UserDir (As fallback on Windows / Mac, default on Linux)
 }
 
+static void initialize_ConfigDir(void)
+{
+	char tmpstr[PATH_MAX] = { '\0' };
+
+	if (strlen(configdir) == 0)
+	{
+		getPlatformUserDir(tmpstr, sizeof(tmpstr));
+
+		if (!PHYSFS_setWriteDir(tmpstr)) // Workaround for PhysFS not creating the writedir as expected.
+		{
+			debug(LOG_ERROR, "Error setting write directory to \"%s\": %s",
+			      tmpstr, PHYSFS_getLastError());
+			exit(1);
+		}
+
+		if (!PHYSFS_mkdir(WZ_WRITEDIR)) // s.a.
+		{
+			debug(LOG_ERROR, "Error creating directory \"%s\": %s",
+			      WZ_WRITEDIR, PHYSFS_getLastError());
+			exit(1);
+		}
+
+		// Append the Warzone subdir
+		strlcat(tmpstr, WZ_WRITEDIR, sizeof(tmpstr));
+		strlcat(tmpstr, PHYSFS_getDirSeparator(), sizeof(tmpstr));
+
+		if (!PHYSFS_setWriteDir(tmpstr))
+		{
+			debug( LOG_ERROR, "Error setting write directory to \"%s\": %s",
+			tmpstr, PHYSFS_getLastError() );
+			exit(1);
+		}
+	}
+	else
+	{
+		strlcpy(tmpstr, configdir, sizeof(tmpstr));
+
+		// Make sure that we have a directory separator at the end of the string
+		if (tmpstr[strlen(tmpstr) - 1] != PHYSFS_getDirSeparator()[0])
+			strlcat(tmpstr, PHYSFS_getDirSeparator(), sizeof(tmpstr));
+
+		debug(LOG_WZ, "Using custom configuration directory: %s", tmpstr);
+
+		if (!PHYSFS_setWriteDir(tmpstr)) // Workaround for PhysFS not creating the writedir as expected.
+		{
+			debug(LOG_ERROR, "Error setting write directory to \"%s\": %s",
+			      tmpstr, PHYSFS_getLastError());
+			exit(1);
+		}
+	}
+
+	// User's home dir first so we allways see what we write
+	PHYSFS_addToSearchPath( PHYSFS_getWriteDir(), PHYSFS_PREPEND );
+
+	PHYSFS_permitSymbolicLinks(1);
+
+	debug(LOG_WZ, "Write dir: %s", PHYSFS_getWriteDir());
+	debug(LOG_WZ, "Base dir: %s", PHYSFS_getBaseDir());
+}
 
 /***************************************************************************
 	Initialize the PhysicsFS library.
@@ -239,7 +299,6 @@ static void initialize_PhysicsFS(const char* argv_0)
 {
 	PHYSFS_Version compiled;
 	PHYSFS_Version linked;
-	char tmpstr[PATH_MAX] = { '\0' };
 
 	PHYSFS_init(argv_0);
 
@@ -250,40 +309,6 @@ static void initialize_PhysicsFS(const char* argv_0)
 	      compiled.major, compiled.minor, compiled.patch);
 	debug(LOG_WZ, "Linked against PhysFS version: %d.%d.%d",
 	      linked.major, linked.minor, linked.patch);
-
-	getPlatformUserDir(tmpstr, sizeof(tmpstr));
-
-	if ( !PHYSFS_setWriteDir( tmpstr ) ) // Workaround for PhysFS not creating the writedir as expected.
-	{
-		debug( LOG_ERROR, "Error setting write directory to \"%s\": %s",
-			PHYSFS_getUserDir(), PHYSFS_getLastError() );
-		exit(1);
-	}
-
-	if ( !PHYSFS_mkdir( WZ_WRITEDIR ) ) // s.a.
-	{
-		debug( LOG_ERROR, "Error creating directory \"%s\": %s",
-			WZ_WRITEDIR, PHYSFS_getLastError() );
-		exit(1);
-	}
-
-	// Append the Warzone subdir
-	strlcat(tmpstr, WZ_WRITEDIR, sizeof(tmpstr));
-	strlcat(tmpstr, PHYSFS_getDirSeparator(), sizeof(tmpstr));
-
-	if ( !PHYSFS_setWriteDir( tmpstr ) ) {
-		debug( LOG_ERROR, "Error setting write directory to \"%s\": %s",
-			tmpstr, PHYSFS_getLastError() );
-		exit(1);
-	}
-
-	// User's home dir first so we allways see what we write
-	PHYSFS_addToSearchPath( PHYSFS_getWriteDir(), PHYSFS_PREPEND );
-
-	PHYSFS_permitSymbolicLinks(1);
-
-	debug( LOG_WZ, "Write dir: %s", PHYSFS_getWriteDir() );
-	debug( LOG_WZ, "Base dir: %s", PHYSFS_getBaseDir() );
 }
 
 /*
@@ -509,13 +534,13 @@ static void stopGameLoop(void)
 			levReleaseAll();
 		}
 	}
-	
+
 	// Disable cursor trapping
 	if (war_GetTrapCursor())
 	{
 		SDL_WM_GrabInput(SDL_GRAB_OFF);
 	}
-	
+
 	gameInitialised = FALSE;
 }
 
@@ -536,7 +561,7 @@ static void initSaveGameLoad(void)
 		exit(EXIT_FAILURE);
 	}
 	screen_StopBackDrop();
-	
+
 	// Trap the cursor if cursor snapping is enabled
 	if (war_GetTrapCursor())
 	{
@@ -787,6 +812,13 @@ int main(int argc, char *argv[])
 	if ( !ParseCommandLineEarly(argc, (const char**)argv) ) {
 		return -1;
 	}
+
+	/* Initialize the write/config directory for PhysicsFS.
+	 * This needs to be done __after__ the early commandline parsing,
+	 * because the user might tell us to use an alternative configuration
+	 * directory.
+	 */
+	initialize_ConfigDir();
 
 	debug(LOG_WZ, "Warzone 2100 - %s", version_getFormattedVersionString());
 
