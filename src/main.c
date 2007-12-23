@@ -158,10 +158,7 @@ void addSubdirs( const char * basedir, const char * subdir, const BOOL appendToP
 #endif // DEBUG
 		if( !checkList || inList( checkList, *i ) )
 		{
-			strlcpy(tmpstr, basedir, sizeof(tmpstr));
-			strlcat(tmpstr, subdir, sizeof(tmpstr));
-			strlcat(tmpstr, PHYSFS_getDirSeparator(), sizeof(tmpstr));
-			strlcat(tmpstr, *i, sizeof(tmpstr));
+			snprintf(tmpstr, sizeof(tmpstr), "%s%s%s%s", basedir, subdir, PHYSFS_getDirSeparator(), *i);
 #ifdef DEBUG
 			debug( LOG_NEVER, "addSubdirs: Adding [%s] to search path", tmpstr );
 #endif // DEBUG
@@ -184,10 +181,7 @@ void removeSubdirs( const char * basedir, const char * subdir, char * checkList[
 #endif // DEBUG
 		if( !checkList || inList( checkList, *i ) )
 		{
-			strlcpy(tmpstr, basedir, sizeof(tmpstr));
-			strlcat(tmpstr, subdir, sizeof(tmpstr));
-			strlcat(tmpstr, PHYSFS_getDirSeparator(), sizeof(tmpstr));
-			strlcat(tmpstr, *i, sizeof(tmpstr));
+			snprintf(tmpstr, sizeof(tmpstr), "%s%s%s%s", basedir, subdir, PHYSFS_getDirSeparator(), *i);
 #ifdef DEBUG
 			debug( LOG_NEVER, "removeSubdirs: Removing [%s] from search path", tmpstr );
 #endif // DEBUG
@@ -211,11 +205,12 @@ void printSearchPath( void )
 }
 
 
-static void getPlatformUserDir(char * tmpstr)
+static void getPlatformUserDir(char * const tmpstr, size_t const size)
 {
 #if defined(WZ_OS_WIN)
+	assert(size >= MAX_PATH);
 	if ( SUCCEEDED( SHGetFolderPathA( NULL, CSIDL_PERSONAL|CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, tmpstr ) ) )
-		strcat( tmpstr, PHYSFS_getDirSeparator() );
+		strlcat(tmpstr, PHYSFS_getDirSeparator(), size);
 	else
 #elif defined(WZ_OS_MAC)
 	short vol_ref;
@@ -228,12 +223,12 @@ static void getPlatformUserDir(char * tmpstr)
 	if (!error)
 		error = FSpMakeFSRef(&fsspec, &fsref);
 	if (!error)
-		error = FSRefMakePath(&fsref, (UInt8 *) tmpstr, PATH_MAX);
+		error = FSRefMakePath(&fsref, (UInt8 *) tmpstr, size);
 	if (!error)
-		strcat( tmpstr, PHYSFS_getDirSeparator() );
+		strlcat(tmpstr, PHYSFS_getDirSeparator(), size);
 	else
 #endif
-		strcpy( tmpstr, PHYSFS_getUserDir() ); // Use PhysFS supplied UserDir (As fallback on Windows / Mac, default on Linux)
+		strlcpy(tmpstr, PHYSFS_getUserDir(), size); // Use PhysFS supplied UserDir (As fallback on Windows / Mac, default on Linux)
 }
 
 
@@ -256,7 +251,7 @@ static void initialize_PhysicsFS(const char* argv_0)
 	debug(LOG_WZ, "Linked against PhysFS version: %d.%d.%d",
 	      linked.major, linked.minor, linked.patch);
 
-	getPlatformUserDir(tmpstr);
+	getPlatformUserDir(tmpstr, sizeof(tmpstr));
 
 	if ( !PHYSFS_setWriteDir( tmpstr ) ) // Workaround for PhysFS not creating the writedir as expected.
 	{
