@@ -21,7 +21,7 @@
 ################################################################################
 #
 
-__author__ = "Gerhard Krol, Tim Perrei, Freddie Witherden, Gerhard Schaden"
+__author__ = "Gerard Krol, Tim Perrei, Freddie Witherden, Gerhard Schaden"
 __version__ = "2.0"
 __bpydoc__ = """\
 This script runs a Warzone 2100 2.x masterserver
