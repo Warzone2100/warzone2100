@@ -104,12 +104,12 @@ AC_MSG_CHECKING([whether to build NSIS installer])
 AC_MSG_RESULT([${enable_installer}])
 
 
-AC_ARG_WITH(maintainer,
-	AS_HELP_STRING([--with-maintainer],[Name of maintainer compiling this package]))
-if test "x$with_maintainer" = "x" ; then
-	AC_DEFINE([PACKAGE_MAINTAINER], "UNKNOWN", [Name of maintainer compiling this package])
+AC_ARG_WITH(distributor,
+	AS_HELP_STRING([--with-distributor],[Name of distributor compiling this package]))
+if test "x$with_distributor" = "x" ; then
+	AC_DEFINE([PACKAGE_DISTRIBUTOR], "UNKNOWN", [Name of distributor compiling this package])
 else
-	AC_DEFINE_UNQUOTED([PACKAGE_MAINTAINER], ["${with_maintainer}"], [Name of maintainer compiling this package])
+	AC_DEFINE_UNQUOTED([PACKAGE_DISTRIBUTOR], ["${with_distributor}"], [Name of distributor compiling this package])
 fi
 
 
@@ -274,8 +274,8 @@ if test "x$enable_debug" = "xyes" ; then
 	AC_MSG_NOTICE([*** Running in debug mode! ***])
 fi
 
-if test "x$with_maintainer" = "x" ; then
+if test "x$with_distributor" = "x" ; then
 	AC_MSG_NOTICE()
-	AC_MSG_WARN([Maintainer unknown!])
-	AC_MSG_NOTICE([Use --with-maintainer when compiling package for distribution])
+	AC_MSG_WARN([Distributor unknown!])
+	AC_MSG_NOTICE([Use --with-distributor when compiling package for distribution])
 fi
