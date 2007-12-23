@@ -263,6 +263,7 @@ bool ParseCommandLine(int argc, const char** argv)
 		{
 			case CLI_DEBUG:
 			case CLI_DEBUGFILE:
+			case CLI_CONFIGDIR:
 			case CLI_HELP:
 			case CLI_USAGE:
 			case CLI_VERSION:
