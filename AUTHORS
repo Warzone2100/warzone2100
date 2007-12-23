@@ -2,33 +2,33 @@ Original game developed by Pumpkin Studios, and published by EIDOS Interactive.
 
 The Warzone Resurrection Project team and former contributors to the GPL version, in alphabetical order:
 
-Scott Balneaves <sbalneav>
--- <Buginator>
-Roman C. <troman>
-Denis Dupeyron
-Mike Gilmore
-Carl Hee <Watermelon>
+Scott Balneaves <sbalneav> : Coder
+-- <Buginator> : Coder
+Roman C. <troman> : Coder and Scripting + Scripting engine rewrite and AI
+Denis Dupeyron <charun> : Coder
+Mike Gilmore <Chojun> : Coder
+Carl Hee <Watermelon> : Coder + Multiturrets
 Adam Holland
-Stefan Huehner
-Ari Johnson <iamtheari>
-Martin Koller
-Gerard Krol <gerard>
-Angus Lees <gus>
-Kevin Malec
-Per I. Mathisen <per>
-Dion Mendel
-Kim Metcalfe <lav-coyote25>
-Christian Ohm <cybersphinx>
-Tim P. <kamaze>
-Phil Procario <GrimMoroe>
-Marcus Rast <charon>
--- <Pseudonym404>
-Victor Qamly <vqamly>
-Ben Russon <grizzly>
-Hylke van der Schaaf <TheNoid>
-Giel van Schijndel <Giel>
-Dennis Schridde <devurandom>
-Dmitri Shuralyov <shurcool>
-Rodolphe Suescun <rodzilla>
-Freddie Witherden <EvilGuru>
--- <vs2k5>
+Stefan Huehner <shuehner> : Coder + original 64bit support
+Ari Johnson <iamtheari> : Coder and MacOSX Packaging + original MacOSX port
+Martin Koller <mkoller> : Coder
+Gerard Krol <gerard_> : Coder
+Angus Lees <gus> : Debian Packaging
+Kevin Malec <Kevin`> : Websupport
+Per I. Mathisen <per> : Coder
+Dion Mendel <noid> : Coder, original Linux port
+Kim Metcalfe <lav-coyote25> : Documentation, Maps and Support
+Christian Ohm <cybersphinx> : Coder
+Tim P. <kamaze> : Webmaster
+Phil Procario <GrimMoroe, grimandmandy> : Graphics artist
+Marcus Rast <charon> : Coder
+-- <Pseudonym404> : Coder + original 64bit support
+Victor Qamly <vqamly> : Coder
+Ben Russon <grizzly> : Support
+Hylke van der Schaaf <TheNoid> : Coder
+Giel van Schijndel <Giel> : Coder and Debian Linux and Windows Packaging
+Dennis Schridde <devurandom> : Coder and general Linux and Windows Packaging
+Dmitri Shuralyov <shurcool> : Coder
+Rodolphe Suescun <rodzilla> : Coder
+Freddie Witherden <EvilGuru> : Coder and MacOSX Packaging
+-- <vs2k5> : Coder
