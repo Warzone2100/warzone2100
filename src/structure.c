@@ -1634,7 +1634,6 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 	UDWORD		mapX, mapY, mapH;
 	UDWORD		width, breadth, weapon, capacity, bodyDiff = 0;
 	SDWORD		wallType = 0, preScrollMinX = 0, preScrollMinY = 0, preScrollMaxX = 0, preScrollMaxY = 0;
-	UDWORD		min,max;
 	int			i;
 	STRUCTURE	*psBuilding = NULL;
 
@@ -1644,7 +1643,8 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 	if (IsStatExpansionModule(pStructureType)==FALSE)
 	{
 		//some prelim tests...
-		max = pStructureType - asStructureStats;
+		UDWORD	max = pStructureType - asStructureStats;
+
 		if (max > numStructureStats)
 		{
 			ASSERT(!"invalid structure type", "buildStructure: Invalid structure type");
@@ -1811,9 +1811,19 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		}
 		else
 		{
+			psBuilding->pos.z = TILE_MIN_HEIGHT;
+
 			/* Set it at the higher coord */
-			getTileMaxMin(mapX,mapY,&max,&min);
-			psBuilding->pos.z = (UWORD)max;	// Got to be - don't change!!!! ALEXM
+			for (width = 0; width < pStructureType->baseWidth; width++)
+			{
+				for (breadth = 0; breadth < pStructureType->baseBreadth; breadth++)
+				{
+					UDWORD tmpMax, tmpMin;
+
+					getTileMaxMin(mapX + width, mapY + breadth, &tmpMax, &tmpMin);
+					psBuilding->pos.z = MAX(tmpMax, psBuilding->pos.z);
+				}
+			}
 		}
 
 		//set up the rest of the data
