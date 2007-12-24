@@ -134,11 +134,11 @@ static bool runningMultiplayer(void)
 {
 	// NOTE: may want to only allow this for DEBUG builds?? -- Buginator
 	if (!bMultiPlayer || !NetPlay.bComms)
-		return true;
+		return false;
 
 	addConsoleMessage(_("Sorry, that cheat is disabled in multiplayer games."), DEFAULT_JUSTIFY);
 
-	return false;
+	return true;
 }
 // --------------------------------------------------------------------------
 void	kf_ToggleMissionTimer( void )
