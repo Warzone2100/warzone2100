@@ -56,6 +56,7 @@
 //----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS (wxHyperLink, wxControl)
+IMPLEMENT_DYNAMIC_CLASS (wxHyperLink::XmlHandler, wxXmlResourceHandler)
 
 BEGIN_EVENT_TABLE    (wxHyperLink, wxControl)
     EVT_LEFT_DCLICK  (wxHyperLink::OnLinkActivate)
@@ -222,3 +223,25 @@ void wxHyperLink::ExecuteLink (const wxString &link) {
     }
 }
 
+wxObject* wxHyperLink::XmlHandler::DoCreateResource()
+{
+	XRC_MAKE_INSTANCE(hyperlink, wxHyperLink)
+
+	hyperlink->Create(m_parentAsWindow,
+                      GetID(),
+                      GetText(wxT("label")),
+                      GetPosition(), GetSize(),
+                      GetStyle(),
+                      GetName());
+
+	SetupWindow(hyperlink);
+
+	hyperlink->SetURL(GetText(wxT("url")));
+
+	return hyperlink;
+}
+
+bool wxHyperLink::XmlHandler::CanHandle(wxXmlNode* node)
+{
+	return IsOfClass(node, wxT("wxHyperLink"));
+}

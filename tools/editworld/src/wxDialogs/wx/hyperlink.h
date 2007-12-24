@@ -11,102 +11,98 @@
 #ifndef _MY_HYPERLINK_H_
 #define _MY_HYPERLINK_H_
 
+#include <wx/control.h>
+#include <wx/xrc/xmlres.h>
+
 #ifdef __GNUG__
     #pragma implementation "hyperlink.h"
 #endif
 
-//----------------------------------------------------------------------------
-// information
-//----------------------------------------------------------------------------
+class wxHyperLink: public wxControl
+{
+    DECLARE_DYNAMIC_CLASS (wxHyperLink)
 
+    public:
+        //! default constructor
+        wxHyperLink () {}
 
-//----------------------------------------------------------------------------
-// headers
-//----------------------------------------------------------------------------
-//! wxWidgets headers
+        //! create constructor
+        wxHyperLink(wxWindow *parent,
+                    wxWindowID id,
+                    const wxString &label,
+                    const wxPoint &pos = wxDefaultPosition,
+                    const wxSize &size = wxDefaultSize,
+                    long style = 0,
+                    const wxString &name = _T("wxHyperLink"))
+        {
+            Create(parent, id, label, pos, size, style, name);
+        }
 
+        // function create
+        bool Create(wxWindow *parent,
+                    wxWindowID id,
+                    const wxString &label,
+                    const wxPoint &pos = wxDefaultPosition,
+                    const wxSize &size = wxDefaultSize,
+                    long style = 0,
+                    const wxString &name = _T("wxHyperLink"));
 
-//============================================================================
-// declarations
-//============================================================================
+        // event handlers
+        void OnLinkActivate (wxMouseEvent &event);
+        void OnPaint (wxPaintEvent &event);
+        void OnWindowEnter (wxMouseEvent &event);
+        void OnWindowLeave (wxMouseEvent &event);
 
-//----------------------------------------------------------------------------
-//!
+        // size functions
+        wxSize DoGetBestSize() const;
 
+        // get/set settings
+        wxCursor GetHoverCursor ();
+        void SetHoverCursor (wxCursor cursor);
+        wxColour GetHoverColour ();
+        void SetHoverColour (wxColour colour);
+        wxColour GetNormalColour ();
+        void SetNormalColour (wxColour colour);
+        wxColour GetVisitedColour ();
+        void SetVisitedColour (wxColour colour);
+        wxString GetURL ();
+        void SetURL (const wxString &url);
 
-//----------------------------------------------------------------------------
-//! wxHyperLink
-class wxHyperLink: public wxControl {
+    /** wxWidgets XML Resource Handler
+     *  Use `wxXmlResource::Get()->AddHandler(new wxHyperLink::XmlHandler)` to
+     *  be able to use this class in XRC resource files.
+     */
+    public:
+        class XmlHandler : public wxXmlResourceHandler
+        {
+                DECLARE_DYNAMIC_CLASS(XmlHandler);
 
-DECLARE_DYNAMIC_CLASS (wxHyperLink)
+            public:
+                virtual wxObject* DoCreateResource();
+                virtual bool CanHandle(wxXmlNode* node);
+        };
 
-public:
+    private:
 
-    //! default constructor
-    wxHyperLink () {}
+        //! hypertext variables
+        wxString m_URL;
+        bool m_Visited;
 
-    //! create constructor
-    wxHyperLink (wxWindow *parent,
-                 wxWindowID id,
-                 const wxString &label,
-                 const wxPoint &pos = wxDefaultPosition,
-                 const wxSize &size = wxDefaultSize,
-                 long style = 0,
-                 const wxString &name = _T("wxHyperLink")) {
-        Create (parent, id, label, pos, size, style, name);
-    }
+        //! style settings
+        wxCursor m_HoverCursor;
+        wxColour m_HoverColour;
+        wxColour m_NormalColour;
+        wxColour m_VisitedColour;
+        wxColour m_BackgroundColour;
 
-    // function create
-    bool Create (wxWindow *parent,
-                 wxWindowID id,
-                 const wxString &label,
-                 const wxPoint &pos = wxDefaultPosition,
-                 const wxSize &size = wxDefaultSize,
-                 long style = 0,
-                 const wxString &name = _T("wxHyperLink"));
+        // size variables
+        wxCoord m_width;
+        wxCoord m_height;
 
-    // event handlers
-    void OnLinkActivate (wxMouseEvent &event);
-    void OnPaint (wxPaintEvent &event);
-    void OnWindowEnter (wxMouseEvent &event);
-    void OnWindowLeave (wxMouseEvent &event);
+        //! execute according to mimetype
+        void ExecuteLink (const wxString &link);
 
-    // size functions
-    wxSize DoGetBestSize() const;
-
-    // get/set settings
-    wxCursor GetHoverCursor ();
-    void SetHoverCursor (wxCursor cursor);
-    wxColour GetHoverColour ();
-    void SetHoverColour (wxColour colour);
-    wxColour GetNormalColour ();
-    void SetNormalColour (wxColour colour);
-    wxColour GetVisitedColour ();
-    void SetVisitedColour (wxColour colour);
-    wxString GetURL ();
-    void SetURL (const wxString &url);
-
-private:
-
-    //! hypertext variables
-    wxString m_URL;
-    bool m_Visited;
-
-    //! style settings
-    wxCursor m_HoverCursor;
-    wxColour m_HoverColour;
-    wxColour m_NormalColour;
-    wxColour m_VisitedColour;
-    wxColour m_BackgroundColour;
-
-    // size variables
-    wxCoord m_width;
-    wxCoord m_height;
-
-    //! execute according to mimetype
-    void ExecuteLink (const wxString &link);
-
-    DECLARE_EVENT_TABLE()
+        DECLARE_EVENT_TABLE()
 };
 
 #endif // _MY_HYPERLINK_H_
