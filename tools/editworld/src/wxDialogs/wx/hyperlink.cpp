@@ -236,7 +236,7 @@ wxObject* wxHyperLink::XmlHandler::DoCreateResource()
 
 	SetupWindow(hyperlink);
 
-	hyperlink->SetURL(GetText(wxT("url")));
+	hyperlink->SetURL(GetText(wxT("href")));
 
 	return hyperlink;
 }
