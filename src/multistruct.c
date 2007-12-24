@@ -175,94 +175,100 @@ BOOL recvBuildStarted()
 
 // ////////////////////////////////////////////////////////////////////////////
 // INFORM others that a building has been completed.
-BOOL SendBuildFinished(const STRUCTURE* psStruct)
+BOOL SendBuildFinished(STRUCTURE *psStruct)
 {
-	NETMSG m;
-
-	NetAdd(m,0,psStruct->id);							//id of finished struct
-	// also enough info to build it if we don't already know about it.
-	NetAdd(m,4,psStruct->pStructureType->ref);			// kind of building.
-	NetAdd(m,8,psStruct->pos.x);							// x pos
-	NetAdd(m,10,psStruct->pos.y);							// y pos
-	NetAdd(m,12,psStruct->pos.z);							// y pos
-	m.body[14] =(char) psStruct->player;				// player
-
-	m.size =15;
-	m.type =NET_BUILDFINISHED;
-	return (NETbcast(&m,FALSE));
+	DBCONPRINTF(ConsoleString,(ConsoleString,"SendBuildFinished() called"));
+	
+	NETbeginEncode(NET_BUILDFINISHED, NET_ALL_PLAYERS);
+		// ID of building
+		NETuint32_t(&psStruct->id);
+		
+		// Along with enough info to build it (if needed)
+		NETuint32_t(&psStruct->pStructureType->ref);
+		NETuint16_t(&psStruct->pos.x);
+		NETuint16_t(&psStruct->pos.y);
+		NETuint16_t(&psStruct->pos.z);
+		NETuint8_t(&psStruct->player);
+	return NETend();
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-BOOL recvBuildFinished(NETMSG *m)
+BOOL recvBuildFinished()
 {
-	UDWORD strId;//,i;
-	STRUCTURE *psStr;
+	UDWORD structId;
+	STRUCTURE *psStruct;
 	UWORD	x,y,z;
 	UDWORD	type,typeindex;
 	UBYTE	player;
 
-	NetGet(m,0,strId);									// get the struct id.
-	psStr = IdToStruct(strId,ANYPLAYER);
 
-	if(psStr)
+	DBCONPRINTF(ConsoleString,(ConsoleString,"recvBuildFinished() called"));
+	NETbeginDecode();
+	NETuint32_t(&structId);			// get the struct id.
+	psStruct = IdToStruct(structId,ANYPLAYER);
+
+	if (psStruct)
 	{												// make it complete.
-		psStr->currentBuildPts = psStr->pStructureType->buildPoints+1;
+		psStruct->currentBuildPts = psStruct->pStructureType->buildPoints+1;
 
-		if(psStr->status != SS_BUILT)
+		if (psStruct->status != SS_BUILT)
 		{
-			psStr->status = SS_BUILT;
-			buildingComplete(psStr);
+			psStruct->status = SS_BUILT;
+			buildingComplete(psStruct);
 		}
 		NETlogEntry("building finished ok." ,0,0);
+		NETend();
 		return TRUE;
 	}
 
-	// the building wasn't started, so we'll have to just plonk it down in the map.
-	NetGet(m,4,type);									// kind of building.
-	NetGet(m,8,x);										// x pos
-	NetGet(m,10,y);										// y pos
-	NetGet(m,12,z);										// z pos
+	// The building wasn't started, so we'll have to just plonk it down in the map.
+	NETuint32_t(&type); 	// Kind of building.
+	NETuint16_t(&x);    	// x pos
+	NETuint16_t(&y);    	// y pos
+	NETuint16_t(&z);    	// z pos
+    NETuint8_t(&player);
 
-	player = m->body[14];								// player
-
-	for(typeindex=0;														// find structure target
+	// Find the structures stats
+	for (typeindex=0;						// Find structure target
 		(typeindex<numStructureStats ) && (asStructureStats[typeindex].ref != type);
 		typeindex++);
-	psStr = 0;
 
-	// check for similar buildings, to avoid overlaps
+	// Check for similar buildings, to avoid overlaps
 	if (TILE_HAS_STRUCTURE(mapTile(map_coord(x), map_coord(y))))
 	{
-		// get structure;
-		psStr = getTileStructure(map_coord(x), map_coord(y));
-		if(asStructureStats[typeindex].type == psStr->pStructureType->type)
+		// Get the current structure
+		psStruct = getTileStructure(map_coord(x), map_coord(y));
+		if (asStructureStats[typeindex].type == psStruct->pStructureType->type)
 		{
-			// correct type, correct location, just rename the id's to sync it.. (urgh)
-			psStr->id = strId;
-			psStr->status = SS_BUILT;
-			buildingComplete(psStr);
-			NETlogEntry("structure id modified" ,0,player);
+			// Correct type, correct location, just rename the id's to sync it.. (urgh)
+			psStruct->id = structId;
+			psStruct->status = SS_BUILT;
+			buildingComplete(psStruct);
+			NETlogEntry("structure id modified", 0, player);
+			NETend();
 			return TRUE;
 		}
 	}
-
-	psStr = buildStructure(&(asStructureStats[typeindex]),					// build the structure.
-					x,y,
-					player,TRUE);
-	if (psStr)
+	// Build the structure
+	psStruct = buildStructure(&(asStructureStats[typeindex]),	// Build the structure.
+	                          x, y, player,TRUE);
+	
+	if (psStruct)
 	{
-		psStr->id		= strId;
-		psStr->status	= SS_BUILT;
-		buildingComplete(psStr);
+		psStruct->id		= structId;
+		psStruct->status	= SS_BUILT;
+		buildingComplete(psStruct);
 
-		DBCONPRINTF(ConsoleString,(ConsoleString,"MultiPlayer: Struct not found on recvbuildcomplete :%d",strId ));
+		DBCONPRINTF(ConsoleString,(ConsoleString,"MultiPlayer: Struct not found on recvbuildcomplete :%d",structId ));
 		NETlogEntry("had to plonk down a building" ,0,player);
 	}
 	else
 	{
-		DBCONPRINTF(ConsoleString,(ConsoleString,"MultiPlayer: Struct not found on recvbuildcomplete BUILDIT FAILED TOO!:%d",strId ));
+		DBCONPRINTF(ConsoleString,(ConsoleString,"MultiPlayer: Struct not found on recvbuildcomplete BUILDIT FAILED TOO!:%d",structId ));
 		NETlogEntry("had to plonk down a building, BUT FAILED OH S**T." ,0,player);
 	}
+	
+	NETend();
 	return FALSE;
 }
 

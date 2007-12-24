@@ -673,7 +673,7 @@ BOOL recvMessage(void)
 				recvBuildStarted();
 				break;
 			case NET_BUILDFINISHED:				// a building is complete
-				recvBuildFinished(&msg);
+				recvBuildFinished();
 				break;
 			case NET_STRUCTDEST:				// structure destroy
 				recvDestroyStructure(&msg);

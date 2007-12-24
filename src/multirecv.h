@@ -35,7 +35,7 @@ extern BOOL receiveWholeDroid		(NETMSG *pMsg);
 extern BOOL recvDestroyStructure	(NETMSG *pMsg);
 //extern BOOL RecvBuild				(NETMSG *pMsg);
 extern BOOL recvBuildStarted		();
-extern BOOL recvBuildFinished		(NETMSG	*pMsg);
+extern BOOL recvBuildFinished		();
 //extern BOOL receiveWholeStructure	(NETMSG *pMsg);
 extern BOOL recvTemplate			(NETMSG *pMsg);
 extern BOOL recvDestroyFeature		(NETMSG *pMsg);
