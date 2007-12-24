@@ -729,7 +729,7 @@ BOOL recvMessage(void)
 			recvPing(&msg);
 			break;
 		case NET_DEMOLISH:					// structure demolished.
-			recvDemolishFinished(&msg);
+			recvDemolishFinished();
 			break;
 		case NET_RESEARCH:					// some research has been done.
 			recvResearch(&msg);

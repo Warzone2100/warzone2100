@@ -275,41 +275,47 @@ BOOL recvBuildFinished()
 
 // ////////////////////////////////////////////////////////////////////////////
 // demolish message.
-BOOL SendDemolishFinished( STRUCTURE *psStruct,DROID *psDroid)
+BOOL SendDemolishFinished(STRUCTURE *psStruct, DROID *psDroid)
 {
-	NETMSG m;
+	DBCONPRINTF(ConsoleString,(ConsoleString,"SendDemolishFinished() called"));
+	NETbeginEncode(NET_DEMOLISH, NET_ALL_PLAYERS);             
+                                                         
+		// Send what is being demolish and who is doing it
+		NETuint32_t(&psStruct->id);
+		NETuint32_t(&psDroid->id);
 
-	NetAdd(m,0,psStruct->id);
-	NetAdd(m,4,psDroid->id);
-
-	m.size = 2*sizeof(UDWORD);
-	m.type = NET_DEMOLISH;
-	return( NETbcast(&m,FALSE));
+	return NETend();
 }
 
-BOOL recvDemolishFinished(NETMSG *m)
+BOOL recvDemolishFinished()
 {
 	STRUCTURE	*psStruct;
-	UDWORD		s,d;
 	DROID		*psDroid;
+	uint32_t structID,droidID;
 
-	NetGet(m,0,s);
-	NetGet(m,4,d);
+	DBCONPRINTF(ConsoleString,(ConsoleString,"recvDemolishFinished() called"));
+	NETbeginDecode();
 
-	psStruct = IdToStruct(s,ANYPLAYER);
-	IdToDroid(d,ANYPLAYER,&psDroid);
+	NETuint32_t(&structID);			
+	NETuint32_t(&droidID);
 
-	if(psStruct)
+	psStruct = IdToStruct(structID, ANYPLAYER);
+	IdToDroid(droidID, ANYPLAYER, &psDroid);
+
+	if (psStruct)
 	{
-		removeStruct( psStruct, TRUE );				// demolish it.
-		if(psDroid && psDroid->psTarStats)
+		// Demolish it
+		removeStruct(psStruct, TRUE);
+		if (psDroid && psDroid->psTarStats)
 		{
-			psDroid->psTarStats = NULL;		// update droid if reqd.
+			// Update droid if reqd
+			psDroid->psTarStats = NULL;
 		}
 	}
+	
+	NETend();
 	return TRUE;
 }
-
 
 
 // ////////////////////////////////////////////////////////////////////////////
