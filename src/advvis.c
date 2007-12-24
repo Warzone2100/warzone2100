@@ -94,7 +94,7 @@ static void processAVTile(UDWORD x, UDWORD y)
 	}
 
 	time = (float)frameTime / (float)GAME_TICKS_PER_SEC;
-	newLevel = MAKEINT(psTile->level + (time * FADE_IN_TIME));
+	newLevel = (int)(psTile->level + (time * FADE_IN_TIME));
 	if (newLevel >= psTile->illumination)
 	{
 		psTile->level = psTile->illumination;

@@ -97,36 +97,36 @@ BOOL rayInitialise(void)
 		}
 
 		// These are used to calculate the initial intersection
-		rayFPTan[i] = MAKEINT(val * (float)RAY_ACCMUL);
-		rayFPInvTan[i] = MAKEINT((float)RAY_ACCMUL / val);
+		rayFPTan[i] = val * (float)RAY_ACCMUL;
+		rayFPInvTan[i] = (float)RAY_ACCMUL / val;
 
 		// Set up the trig tables for calculating the offset distances
 		val = (float)sin(angle);
 		if(val == 0) {
 			val = (float)1;
 		}
-		rayFPInvSin[i] = MAKEINT((float)RAY_ACCMUL / val);
+		rayFPInvSin[i] = (float)RAY_ACCMUL / val;
 		if (i >= NUM_RAYS/2)
 		{
-			rayVDist[i] = MAKEINT((float)-TILE_UNITS / val);
+			rayVDist[i] = (float) - TILE_UNITS / val;
 		}
 		else
 		{
-			rayVDist[i] = MAKEINT((float)TILE_UNITS / val);
+			rayVDist[i] = (float)TILE_UNITS / val;
 		}
 
 		val = (float)cos(angle);
 		if(val == 0) {
 			val = (float)1;
 		}
-		rayFPInvCos[i] = MAKEINT((float)RAY_ACCMUL / val);
+		rayFPInvCos[i] = (float)RAY_ACCMUL / val;
 		if (i < NUM_RAYS/4 || i > 3*NUM_RAYS/4)
 		{
-			rayHDist[i] = MAKEINT((float)TILE_UNITS / val);
+			rayHDist[i] = (float)TILE_UNITS / val;
 		}
 		else
 		{
-			rayHDist[i] = MAKEINT((float)-TILE_UNITS / val);
+			rayHDist[i] = (float)-TILE_UNITS / val;
 		}
 
 		angle += RAY_ANGLE;
@@ -584,7 +584,7 @@ void	getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, UDWORD direction, SDWORD *pitc
 //DBPRINTF(("%d\n",direction);
 //#endif
 	rayCast(x,y, direction%360,5430,getTileHeightCallback);
-	*pitch = MAKEINT(gPitch);
+	*pitch = gPitch;
 }
 
 void	getPitchToHighestPoint( UDWORD x, UDWORD y, UDWORD direction,
@@ -595,5 +595,5 @@ void	getPitchToHighestPoint( UDWORD x, UDWORD y, UDWORD direction,
 	gHighestHeight = map_Height(x,y);
 	gHMinDist = thresholdDistance;
 	rayCast(x,y,direction%360,3000,getTileHighestCallback);
-	*pitch = MAKEINT(gHPitch);
+	*pitch = gHPitch;
 }

@@ -118,14 +118,13 @@ MAPTILE	*psTile;
 }
 
 // -------------------------------------------------------------------------------
-UDWORD	environGetValue( UDWORD x, UDWORD y )
+unsigned int environGetValue(unsigned int x, unsigned int y)
 {
-SDWORD	retVal;
+	int retVal = pEnvironData[(y * mapWidth) + x].val;
+	if (retVal < 0)
+		retVal = 0;
 
-	retVal = MAKEINT(pEnvironData[(y*mapWidth) + x].val);
-	if(retVal<0) retVal = 0;
-	return(retVal);
-
+	return retVal;
 }
 
 // -------------------------------------------------------------------------------

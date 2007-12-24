@@ -651,7 +651,7 @@ BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 
 static void actionAddVtolAttackRun( DROID *psDroid )
 {
-	FRACT_D		fA;
+	double      fA;
 	SDWORD		deltaX, deltaY, iA, iX, iY;
 	BASE_OBJECT	*psTarget;
 #if 0
@@ -679,7 +679,7 @@ static void actionAddVtolAttackRun( DROID *psDroid )
 
 	/* get magnitude of normal vector (Pythagorean theorem) */
 	fA = trigIntSqrt( deltaX*deltaX + deltaY*deltaY );
-	iA = MAKEINT(fA);
+	iA = fA;
 
 #if 0
 	/* get left perpendicular to normal vector:

@@ -3891,7 +3891,7 @@ void structureUpdate(STRUCTURE *psBuilding)
 				pointIndex = rand()%(psBuilding->sDisplay.imd->npoints-1);
 				point = &(psBuilding->sDisplay.imd->points[pointIndex]);
 				position.x = psBuilding->pos.x + point->x;
-				realY = MAKEINT((structHeightScale(psBuilding) * point->y));
+				realY = structHeightScale(psBuilding) * point->y;
 				position.y = psBuilding->pos.z + realY;
 				position.z = psBuilding->pos.y - point->z;
 
@@ -5643,7 +5643,7 @@ BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int w
 		muzzle->y = psStructure->pos.y;
 		muzzle->z = psStructure->pos.z + psStructure->sDisplay.imd->max.y;
 	}
-	
+
 	return TRUE;
 }
 
@@ -7842,7 +7842,7 @@ void	structUpdateRecoil( STRUCTURE *psStruct )
 
 	fraction = (float)asWeaponStats[psStruct->asWeaps[0].nStat].recoilValue / 100.f;
 
-	recoil = MAKEINT((float)recoil * fraction);
+	recoil = (float)recoil * fraction;
 
 	/* Put it into the weapon data */
 	psStruct->asWeaps[0].recoilValue = recoil;

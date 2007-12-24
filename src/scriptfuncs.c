@@ -5376,12 +5376,12 @@ UDWORD		newVal;
 	{
 	case OBJ_DROID:
 		psDroid = (DROID *) psObj;
-		newVal = MAKEINT((divisor*psDroid->originalBody));
+		newVal = divisor * psDroid->originalBody;
 		psDroid->body = newVal;
 		break;
 	case OBJ_STRUCTURE:
 		psStructure = (STRUCTURE *) psObj;
-		newVal = MAKEINT((divisor*structureBody(psStructure)));
+		newVal = divisor * structureBody(psStructure);
 		psStructure->body = (UWORD)newVal;
 		break;
 	case OBJ_FEATURE:
@@ -5389,7 +5389,7 @@ UDWORD		newVal;
 		/* Some features cannot be damaged */
 		if(psFeature->psStats->damageable)
 		{
-			newVal = MAKEINT((divisor*psFeature->psStats->body));
+			newVal = divisor * psFeature->psStats->body;
 			psFeature->body = newVal;
 		}
 		break;

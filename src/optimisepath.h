@@ -20,6 +20,6 @@
 #ifndef _optimisepath_h
 #define _optimisepath_h
 
-extern UDWORD	getBisectingDirectionAway	( UDWORD angleA,UDWORD angleB );
-											  
+extern unsigned int getBisectingDirectionAway(unsigned int angleA, unsigned int angleB);
+
 #endif

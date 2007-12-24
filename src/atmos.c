@@ -191,10 +191,11 @@ void	processParticle( ATPART *psPart )
 		if(psPart->position.y < 255*ELEVATION_SCALE)
 		{
 			/* Get ground height */
-			groundHeight = map_Height((UDWORD)MAKEINT(psPart->position.x),(UDWORD)MAKEINT(psPart->position.z));
+			groundHeight = map_Height(psPart->position.x, psPart->position.z);
 
 			/* Are we below ground? */
-			if( (MAKEINT(psPart->position.y) < groundHeight) || (psPart->position.y<0.0f) )
+			if ((int)psPart->position.y < groundHeight
+			 || psPart->position.y < 0.f)
 			{
 				/* Kill it and return */
 				psPart->status = APS_INACTIVE;
@@ -205,8 +206,8 @@ void	processParticle( ATPART *psPart )
 					psTile = mapTile(x,y);
 					if (terrainType(psTile) == TER_WATER && TEST_TILE_VISIBLE(selectedPlayer,psTile))
 					{
-						pos.x = MAKEINT(psPart->position.x);
-						pos.z = MAKEINT(psPart->position.z);
+						pos.x = psPart->position.x;
+						pos.z = psPart->position.z;
 						pos.y = groundHeight;
 						effectSetSize(60);
 						addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SPECIFIED,TRUE,getImdFromIndex(MI_SPLASH),0);
@@ -317,7 +318,7 @@ UDWORD	i;
 		if(asAtmosParts[i].status == APS_ACTIVE)
 		{
 			/* Is it on the grid */
-			if(clipXY((UDWORD)MAKEINT(asAtmosParts[i].position.x),(UDWORD)MAKEINT(asAtmosParts[i].position.z)))
+			if (clipXY(asAtmosParts[i].position.x, asAtmosParts[i].position.z))
 			{
 				renderParticle(&asAtmosParts[i]);
 			}
@@ -332,9 +333,9 @@ void	renderParticle( ATPART *psPart )
 	SDWORD centreX, centreZ;
 	SDWORD x, y, z, rx, rz;
 
-	x = MAKEINT(psPart->position.x);
-	y = MAKEINT(psPart->position.y);
-	z = MAKEINT(psPart->position.z);
+	x = psPart->position.x;
+	y = psPart->position.y;
+	z = psPart->position.z;
 	/* Transform it */
 	dv.x = ((UDWORD)x - player.p.x) - terrainMidX * TILE_UNITS;
 	dv.y = (UDWORD)y;

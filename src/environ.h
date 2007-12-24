@@ -22,7 +22,7 @@
 
 // -------------------------------------------------------------------------------
 extern BOOL environInit					( void );
-extern UDWORD	environGetValue			( UDWORD x, UDWORD y );
+extern unsigned int environGetValue		(unsigned int x, unsigned int y);
 extern UDWORD	environGetData			( UDWORD x, UDWORD y );
 extern void	environShutDown				( void );
 //this function is called whenever the map changes - load new level or return from an offWorld map

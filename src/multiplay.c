@@ -180,7 +180,7 @@ BOOL multiplayerWinSequence(BOOL firstCall)
 	{
 		fraction = (float)frameTime / (float)GAME_TICKS_PER_SEC;
 		rotAmount = fraction * MAP_SPIN_RATE / 12;
-		player.r.y += MAKEINT(rotAmount);
+		player.r.y += rotAmount;
 	}
 
 	if(last > gameTime)last= 0;
@@ -624,7 +624,7 @@ BOOL recvMessage(void)
 	{
 		// Cocpy the message to the global one used by the new NET API
 		NetMsg = msg;
-		
+
 		// messages only in game.
 		if(!ingame.localJoiningInProgress)
 		{

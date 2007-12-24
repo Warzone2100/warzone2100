@@ -25,12 +25,8 @@
 //  - This is defined as a float on PC and a 20.12 fixed point number on PSX
 //
 //  Use:-
-//		MAKEINT(fract);	to convert the other way
 //		SQRT(fract);		to get square root of a fract (returns a fract)
 //      sqrtf(int);			to get a square root of an integer (returns an UDWORD) (no, it does not! - Per)
-//      FRACTCONST(constA,constB);	; Generates a constant of (constA/constB)
-//                         e.g. to define 0.5 use FRACTCONST(1,2)
-//                              to define 0.114 use FRACTCONT(114,1000)
 //
 // Also PERCENT(int,int);	// returns a int value 0->100 of the percentage of the first param over the second
 //
@@ -60,16 +56,13 @@
 # define M_PI 3.14159265358979323846
 #endif
 
-typedef float FRACT_D;  /* But isn't this is supposed to be double? - Per */
-
-#define ROUND(x) ((x)>=0 ? (SDWORD)((x) + 0.5) : (SDWORD)((x) - 0.5))
-
-#define FRACTCONST(a,b) (((float)(a)) / ((float)(b)))
-#define MAKEFRACT_D(x) ((FRACT_D)(x))
-#define FRACTmul_D(x,y) ((double)(x)*(double)(y))
-#define FRACTdiv_D(x,y) ((double)(x)/(double)(y))
-
-#define MAKEINT_D(x) ((SDWORD)(x))
-#define MAKEINT(x) ((SDWORD)(x))
+static inline int math_round(float x)
+{
+	// Ensure that float truncation results in a proper rounding
+	if (x < 0.f)
+		return x - 0.5f;
+	else
+		return x + 0.5f;
+}
 
 #endif

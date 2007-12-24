@@ -361,7 +361,7 @@ void draw3DScene( void )
 	{
 		unsigned int width, height;
 		const char *Qbuf, *Lbuf, *Abuf;
-		
+
 		sasprintf((char**)&Qbuf,"Que: %04u",audio_GetSampleQueueCount());
 		sasprintf((char**)&Lbuf,"Lst: %04u",audio_GetSampleListCount());
 		sasprintf((char**)&Abuf,"Act: %04u",sound_GetActiveSamplesCount());
@@ -2191,7 +2191,7 @@ void	renderStructure(STRUCTURE *psStructure)
 						iIMDShape *lImd;
 
 						iV_MatrixBegin();
-						iV_TRANSLATE(psStructure->sDisplay.imd->connectors->x, psStructure->sDisplay.imd->connectors->z, 
+						iV_TRANSLATE(psStructure->sDisplay.imd->connectors->x, psStructure->sDisplay.imd->connectors->z,
 						             psStructure->sDisplay.imd->connectors->y);
 						lImd = getImdFromIndex(MI_LANDING);
 						pie_Draw3DShape(lImd, getStaticTimeValueRange(1024, lImd->numFrames), 0, buildingBrightness, WZCOL_BLACK, 0, 0);
@@ -2554,9 +2554,9 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 		}
 		else
 		{
-			mulH = 100;
+			mulH = 100.f;
 		}
-		firingStage = MAKEINT(mulH);
+		firingStage = mulH;
 		firingStage = ((((2*scrR)*10000)/100)*firingStage)/10000;
 		if(firingStage >= (UDWORD)(2*scrR))
 		{
@@ -2728,12 +2728,12 @@ static void	drawStructureSelections( void )
 				}
 				mulH = (float)health / 100.f;
 				mulH *= (float)width;
-				health = MAKEINT(mulH);
+				health = mulH;
 				if(health>width) health = width;
 				health*=2;
 				pie_BoxFill(scrX-scrR - 1, scrY - 1, scrX + scrR + 1, scrY + 2, WZCOL_RELOAD_BACKGROUND);
 				pie_BoxFill(scrX-scrR, scrY, scrX - scrR + health, scrY + 1, powerCol);
-				
+
 				for (i = 0; i < psStruct->numWeaps; i++)
 				{
 					drawWeaponReloadBar((BASE_OBJECT *)psStruct, &psStruct->asWeaps[i], i);
@@ -2757,7 +2757,7 @@ static void	drawStructureSelections( void )
 					powerCol = WZCOL_YELLOW;
 					mulH = (float)health / 100.f;
 					mulH *= (float)width;
-					health = MAKEINT(mulH);
+					health = mulH;
 					if (health > width)
 					{
 						health = width;
@@ -2975,7 +2975,7 @@ static void	drawDroidSelections( void )
 				powerCol = WZCOL_HEALTH_LOW;
 			}
 			mulH = (float)psDroid->body / (float)psDroid->originalBody;
-			damage = MAKEINT(mulH * (float)psDroid->sDisplay.screenR);// (((psDroid->sDisplay.screenR*10000)/100)*damage)/10000;
+			damage = mulH * (float)psDroid->sDisplay.screenR;// (((psDroid->sDisplay.screenR*10000)/100)*damage)/10000;
 			if(damage>psDroid->sDisplay.screenR) damage = psDroid->sDisplay.screenR;
 
 			damage *=2;
@@ -3001,7 +3001,7 @@ static void	drawDroidSelections( void )
 					pie_BoxFill(scrX + scrR - 7, scrY + scrR, scrX + scrR, scrY + scrR + 1, boxCol);
 					pie_BoxFill(scrX + scrR, scrY + scrR - 7, scrX + scrR + 1, scrY + scrR + 1, boxCol);
 				}
-				
+
 				/* Power bars */
 				pie_BoxFill(scrX - scrR - 1, scrY + scrR+2, scrX + scrR + 1, scrY + scrR + 5, WZCOL_RELOAD_BACKGROUND);
 				pie_BoxFill(scrX - scrR, scrY + scrR+3, scrX - scrR + damage, scrY + scrR + 4, powerCol);
@@ -3087,7 +3087,7 @@ static void	drawDroidSelections( void )
 				{
 					mulH = (float)psDroid->body / (float)psDroid->originalBody;
 				}
-				damage = MAKEINT(mulH * (float)psDroid->sDisplay.screenR);// (((psDroid->sDisplay.screenR*10000)/100)*damage)/10000;
+				damage = mulH * (float)psDroid->sDisplay.screenR;// (((psDroid->sDisplay.screenR*10000)/100)*damage)/10000;
 				if(damage>psDroid->sDisplay.screenR) damage = psDroid->sDisplay.screenR;
 				damage *=2;
 				scrX = psDroid->sDisplay.screenX;
@@ -4578,7 +4578,7 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 	point = &(psStructure->sDisplay.imd->points[pointIndex]);
 
 	each.x = psStructure->pos.x + point->x;
-	realY = MAKEINT((structHeightScale(psStructure) * point->y));
+	realY = structHeightScale(psStructure) * point->y;
 	each.y = psStructure->pos.z + realY;
 	each.z = psStructure->pos.y - point->z;
 
@@ -4602,7 +4602,7 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 	point = &(psStructure->sDisplay.imd->points[pointIndex]);
 
 	each.x = psStructure->pos.x + point->x;
-	realY = MAKEINT((structHeightScale(psStructure) * point->y));
+	realY = structHeightScale(psStructure) * point->y;
 	each.y = psStructure->pos.z + realY;
 	each.z = psStructure->pos.y - point->z;
 

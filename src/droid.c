@@ -1448,14 +1448,14 @@ BOOL droidUpdateBuild(DROID *psDroid)
 	//ILLUMINATION ISN'T BEING DONE ANYMORE
 	/*
 	//reserve the previous value
-	prevScale= (UBYTE) MAKEINT(psStruct->heightScale*100);
-	prev = (UBYTE)(prevScale / (UBYTE)10);
+	prevScale = psStruct->heightScale * 100.f;
+	prev = prevScale / 10;
 
 	psStruct->currentBuildPts += (pointsToAdd - psDroid->actionPoints);
 	psStruct->heightScale = (float)psStruct->currentBuildPts / psStruct->pStructureType->buildPoints;
 
-	currScale = (UBYTE) MAKEINT(psStruct->heightScale * 100);
-	current = (UBYTE)(currScale / (UBYTE)10);
+	currScale = psStruct->heightScale * 100.f;
+	current = currScale / 10;
 
 	if (current != prev)
 	{
@@ -2021,7 +2021,7 @@ UBYTE	num_weapons = 0;
 			fraction =
 				(float)asWeaponStats[psDroid->asWeaps[i].nStat].recoilValue / 100.f;
 
-			recoil = MAKEINT((float)recoil * fraction);
+			recoil = (float)recoil * fraction;
 
 			/* Put it into the weapon data */
 			psDroid->asWeaps[i].recoilValue = recoil;
@@ -3213,7 +3213,7 @@ UDWORD	calcDroidPower(DROID *psDroid)
 UDWORD calcDroidPoints(DROID *psDroid)
 {
 	int points, i;
-	
+
 	points  = getBodyStats(psDroid)->buildPoints;
 	points += getBrainStats(psDroid)->buildPoints;
 	points += getPropulsionStats(psDroid)->buildPoints;
@@ -3221,12 +3221,12 @@ UDWORD calcDroidPoints(DROID *psDroid)
 	points += getECMStats(psDroid)->buildPoints;
 	points += getRepairStats(psDroid)->buildPoints;
 	points += getConstructStats(psDroid)->buildPoints;
-	
+
 	for (i = 0; i < psDroid->numWeaps; i++)
 	{
 		points += (asWeaponStats + psDroid->asWeaps[i].nStat)->buildPoints;
 	}
-	
+
 	return points;
 }
 
@@ -3932,7 +3932,7 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 	CHECK_DROID(psDroid);
 
 	psShape = BODY_IMD(psDroid,psDroid->player);
-	
+
 	psWeapon	  = (asWeaponStats[psDroid->asWeaps[weapon_slot].nStat]).pIMD;
 	psWeaponMount = (asWeaponStats[psDroid->asWeaps[weapon_slot].nStat]).pMountGraphic;
 	if(psShape && psShape->nconnectors)

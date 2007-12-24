@@ -805,7 +805,7 @@ void missionFlyTransportersIn( SDWORD iPlayer, BOOL bTrackTransporter )
 	DROID	*psTransporter, *psNext;
 	UWORD	iX, iY, iZ;
 	SDWORD	iLandX, iLandY, iDx, iDy;
-	FRACT_D	fR;
+	double  fR;
 
 	bTrackingTransporter = bTrackTransporter;
 
@@ -842,10 +842,10 @@ void missionFlyTransportersIn( SDWORD iPlayer, BOOL bTrackTransporter )
 			    iDy = iLandY - iY;
 
 
-			    fR = (FRACT_D) atan2(iDx, iDy);
+			    fR = (double) atan2(iDx, iDy);
 			    if ( fR < 0.0 )
 			    {
-			    	fR += (FRACT_D) (2 * M_PI);
+			    	fR += (double) (2 * M_PI);
 			    }
 			    psTransporter->direction = RAD_TO_DEG(fR);
 
@@ -4096,7 +4096,7 @@ void missionDestroyObjects(void)
 			}
 		}
 	}
-	
+
 	// human player, check that we do not reference the cleared out data
 	Player = selectedPlayer;
 

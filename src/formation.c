@@ -351,23 +351,21 @@ void formationReset(FORMATION *psFormation)
 static void formationCalcPos(FORMATION *psFormation, SDWORD line, SDWORD dist,
 					  SDWORD *pX, SDWORD *pY)
 {
-	SDWORD	dir, xoffset,yoffset, rank;
-
-	rank = dist / psFormation->size;
+	const int rank = dist / psFormation->size;
 
 	// calculate the offset of the line based on the rank
-	dir = (SDWORD)adjustDirection(psFormation->dir, 180);
-	xoffset = MAKEINT(trigSin(dir) * (float)(psFormation->rankDist * rank))
+	int dir = adjustDirection(psFormation->dir, 180);
+	const int xoffset = (int)(trigSin(dir) * (float)(psFormation->rankDist * rank))
 			+ psFormation->asLines[line].xoffset;
-	yoffset = MAKEINT(trigCos(dir) * (float)(psFormation->rankDist * rank))
+	const int yoffset = (int)(trigCos(dir) * (float)(psFormation->rankDist * rank))
 			+ psFormation->asLines[line].yoffset;
 
 	// calculate the position of the gap
 	dir = psFormation->asLines[line].dir;
 	dist -= psFormation->size * rank;
-	*pX = MAKEINT(trigSin(dir) * (float)dist)
+	*pX = (int)(trigSin(dir) * (float)dist)
 			+ xoffset + psFormation->x;
-	*pY = MAKEINT(trigCos(dir) * (float)dist)
+	*pY = (int)(trigCos(dir) * (float)dist)
 			+ yoffset + psFormation->y;
 }
 

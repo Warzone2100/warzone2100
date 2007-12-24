@@ -52,24 +52,24 @@ void	setDifficultyLevel(DIFFICULTY_LEVEL lev)
 	switch(lev)
 	{
 	case	DL_EASY:
-		fDifPlayerModifier = FRACTCONST(120,100);
-		fDifEnemyModifier = FRACTCONST(100,100);
+		fDifPlayerModifier = 120.f / 100.f;
+		fDifEnemyModifier = 100.f / 100.f;
 		break;
 	case	DL_NORMAL:
-		fDifPlayerModifier = FRACTCONST(100,100);
-		fDifEnemyModifier = FRACTCONST(100,100);
+		fDifPlayerModifier = 100.f / 100.f;
+		fDifEnemyModifier = 100.f / 100.f;
 		break;
 	case	DL_HARD:
-		fDifPlayerModifier = FRACTCONST(80,100);
-		fDifEnemyModifier = FRACTCONST(100,100);
+		fDifPlayerModifier = 80.f / 100.f;
+		fDifEnemyModifier = 100.f / 100.f;
 		break;
 	case	DL_KILLER:
-		fDifPlayerModifier = FRACTCONST(999,100);	// 10 times
-		fDifEnemyModifier = FRACTCONST(1,100);		// almost nothing
+		fDifPlayerModifier = 999.f / 100.f;	// 10 times
+		fDifEnemyModifier = 1.f / 100.f;		// almost nothing
 		break;
 	case	DL_TOUGH:
-		fDifPlayerModifier = FRACTCONST(100,100);
-		fDifEnemyModifier = FRACTCONST(50,100);	// they do less damage!
+		fDifPlayerModifier = 100.f / 100.f;
+		fDifEnemyModifier = 50.f / 100.f;	// they do less damage!
 		break;
 	default:
 		debug( LOG_ERROR, "Invalid difficulty level selected - forcing NORMAL" );
@@ -88,16 +88,11 @@ DIFFICULTY_LEVEL	getDifficultyLevel( void )
 }
 
 // ------------------------------------------------------------------------------------
-SDWORD	modifyForDifficultyLevel(SDWORD basicVal,BOOL IsPlayer)
+int modifyForDifficultyLevel(int basicVal, bool IsPlayer)
 {
-	SDWORD	retVal;
-
-	if(IsPlayer) {
-		retVal = (SDWORD)ROUND(basicVal*fDifPlayerModifier);
-	} else {
-		retVal = (SDWORD)ROUND(basicVal*fDifEnemyModifier);
-	}
-
-	return retVal;
+	if (IsPlayer)
+		return math_round(basicVal * fDifPlayerModifier);
+	else
+		return math_round(basicVal * fDifEnemyModifier);
 }
 // ------------------------------------------------------------------------------------

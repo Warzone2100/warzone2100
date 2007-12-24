@@ -675,7 +675,7 @@ static void HandleDrag(void)
 			dragBox3D.x2 = mouseXPos;
 			dragBox3D.y1 = dragY;
 			dragBox3D.y2 = mouseYPos;
-			
+
 			dragBox3D.status = DRAG_DRAGGING;
 		}
 
@@ -1168,9 +1168,9 @@ void scroll(void)
 	sine = sinf(radians);
 
 	/* Get x component of movement */
-	xDif = ROUND(cosine * scrollStepLeftRight + sine * scrollStepUpDown);
+	xDif = math_round(cosine * scrollStepLeftRight + sine * scrollStepUpDown);
 	/* Get y component of movement */
-	yDif = ROUND(sine * scrollStepLeftRight - cosine * scrollStepUpDown);
+	yDif = math_round(sine * scrollStepLeftRight - cosine * scrollStepUpDown);
 
 	/* Adjust player's position by these components */
 	player.p.x += xDif;

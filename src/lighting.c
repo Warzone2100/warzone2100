@@ -509,7 +509,7 @@ float	fraction,adjust;
 	presVal = psDroid->illumination;
 	adjust = (float)lightVal - (float)presVal;
 	adjust *= (fraction*DROID_SEEK_LIGHT_SPEED) ;
-	retVal = presVal + MAKEINT(adjust);
+	retVal = presVal + adjust;
 	if(retVal > 255) retVal = 255;
 	psDroid->illumination = (UBYTE)retVal;
 }

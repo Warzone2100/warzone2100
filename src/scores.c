@@ -356,13 +356,13 @@ UDWORD	width,height;
 
 				const float length = (float)infoBars[index].percent / 100.f * (float)infoBars[index].width * mul;
 
-				if(MAKEINT(length) > 4)
+				if((int)length > 4)
 				{
 
 					/* Black shadow */
-					pie_BoxFill(x + 1, y + 3, x + MAKEINT(length) - 1, y + height - 1, WZCOL_MENU_BACKGROUND);
+					pie_BoxFill(x + 1, y + 3, x + length - 1, y + height - 1, WZCOL_MENU_BACKGROUND);
 					/* Solid coloured bit */
-					pie_BoxFillIndex(x + 1, y + 2, x + MAKEINT(length) - 4, y + height - 4, (UBYTE)infoBars[index].colour);
+					pie_BoxFillIndex(x + 1, y + 2, x + length - 4, y + height - 4, infoBars[index].colour);
 				}
 			}
 			/* Now render the text by the bar */
@@ -442,7 +442,7 @@ void	fillUpStats( void )
 	/* Scale for percent */
 	for(i=0; i<DROID_LEVELS; i++)
 	{
-		length = MAKEINT((scaleFactor*getNumDroidsForLevel(i)));
+		length = scaleFactor * getNumDroidsForLevel(i);
 		infoBars[STAT_ROOKIE+i].percent = PERCENT(length,RANK_BAR_WIDTH);
 		infoBars[STAT_ROOKIE+i].number = getNumDroidsForLevel(i);
 	}
@@ -459,9 +459,9 @@ void	fillUpStats( void )
 		scaleFactor = (float)STAT_BAR_WIDTH / maxi;
 	}
 
-	length = MAKEINT(scaleFactor*missionData.unitsLost);
+	length = scaleFactor * missionData.unitsLost;
 	infoBars[STAT_UNIT_LOST].percent = PERCENT(length,STAT_BAR_WIDTH);
-	length = MAKEINT(scaleFactor*missionData.unitsKilled);
+	length = scaleFactor * missionData.unitsKilled;
 	infoBars[STAT_UNIT_KILLED].percent = PERCENT(length,STAT_BAR_WIDTH);
 
 	/* Now do the structure losses */
@@ -475,9 +475,9 @@ void	fillUpStats( void )
 		scaleFactor = (float)STAT_BAR_WIDTH / maxi;
 	}
 
-	length = MAKEINT(scaleFactor*missionData.strLost);
+	length = scaleFactor * missionData.strLost;
 	infoBars[STAT_STR_LOST].percent = PERCENT(length,STAT_BAR_WIDTH);
-	length = MAKEINT(scaleFactor*missionData.strKilled);
+	length = scaleFactor * missionData.strKilled;
 	infoBars[STAT_STR_BLOWN_UP].percent = PERCENT(length,STAT_BAR_WIDTH);
 
 	/* Finally the force information - need amount of droids as well*/
@@ -500,11 +500,11 @@ void	fillUpStats( void )
 		scaleFactor = (float)STAT_BAR_WIDTH / maxi;
 	}
 
-	length = MAKEINT(scaleFactor*missionData.unitsBuilt);
+	length = scaleFactor * missionData.unitsBuilt;
 	infoBars[STAT_UNITS_BUILT].percent = PERCENT(length,STAT_BAR_WIDTH);
-	length = MAKEINT(scaleFactor*numUnits);
+	length = scaleFactor * numUnits;
 	infoBars[STAT_UNITS_NOW].percent = PERCENT(length,STAT_BAR_WIDTH);
-	length = MAKEINT(scaleFactor*missionData.strBuilt);
+	length = scaleFactor * missionData.strBuilt;
 	infoBars[STAT_STR_BUILT].percent = PERCENT(length,STAT_BAR_WIDTH);
 
 	/* Finally the numbers themselves */

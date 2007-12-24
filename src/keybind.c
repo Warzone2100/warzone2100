@@ -598,8 +598,8 @@ void	kf_ZoomOut( void )
 {
 	float fraction = (float)frameTime2 / (float)GAME_TICKS_PER_SEC;
 	float zoomInterval = fraction * (float)MAP_ZOOM_RATE;
-	distance += MAKEINT(zoomInterval);
-	if(distance>MAXDISTANCE)
+	distance += zoomInterval;
+	if(distance > MAXDISTANCE)
 	{
 		distance = MAXDISTANCE;
 	}
@@ -642,9 +642,9 @@ void	kf_ZoomIn( void )
 {
 	float fraction = (float)frameTime2 / (float)GAME_TICKS_PER_SEC;
 	float zoomInterval = fraction * (float)MAP_ZOOM_RATE;
-	distance -= MAKEINT(zoomInterval);
+	distance -= zoomInterval;
 
-	if( distance< MINDISTANCE)
+	if (distance < MINDISTANCE)
 	{
 		distance = MINDISTANCE;
 	}
@@ -702,7 +702,7 @@ void	kf_RotateLeft( void )
 {
 	float fraction = (float)frameTime2 / (float)GAME_TICKS_PER_SEC;
 	float rotAmount = fraction * (float)MAP_SPIN_RATE;
-	player.r.y += MAKEINT(rotAmount);
+	player.r.y += rotAmount;
 }
 
 // --------------------------------------------------------------------------
@@ -711,8 +711,8 @@ void	kf_RotateRight( void )
 {
 	float fraction = (float)frameTime2 / (float)GAME_TICKS_PER_SEC;
 	float rotAmount = fraction * (float)MAP_SPIN_RATE;
-	player.r.y -= MAKEINT(rotAmount);
-	if(player.r.y < 0)
+	player.r.y -= rotAmount;
+	if (player.r.y < 0)
 	{
 		player.r.y += DEG(360);
 	}
@@ -738,7 +738,7 @@ void	kf_PitchBack( void )
 //	{
 //#endif
 
-	player.r.x+= MAKEINT(pitchAmount);
+	player.r.x += pitchAmount;
 
 //#ifdef ALEXM
 //	}
@@ -762,17 +762,17 @@ void	kf_PitchForward( void )
 {
 	float fraction = (float)frameTime2 / (float)GAME_TICKS_PER_SEC;
 	float pitchAmount = fraction * (float)MAP_PITCH_RATE;
-	player.r.x -= MAKEINT(pitchAmount);
+	player.r.x -= pitchAmount;
 //#ifdef ALEXM
 //	if(getDebugMappingStatus() == FALSE)
 //#endif
 //	{
-	if(player.r.x <DEG(360+MIN_PLAYER_X_ANGLE))
+	if (player.r.x < DEG(360 + MIN_PLAYER_X_ANGLE))
 	{
-		player.r.x = DEG(360+MIN_PLAYER_X_ANGLE);
+		player.r.x = DEG(360 + MIN_PLAYER_X_ANGLE);
 	}
 //	}
-	setDesiredPitch(player.r.x/DEG_1);
+	setDesiredPitch(player.r.x / DEG_1);
 }
 
 // --------------------------------------------------------------------------
@@ -1082,7 +1082,7 @@ if(bMultiPlayer && (NetPlay.bComms != 0) )
 	else
 	{
 		godMode = TRUE;
-//		setModifiers(FRACTCONST(1000,100),FRACTCONST(100,1000));
+//		setModifiers(1000.f / 100.f,100.f / 1000.f);
 		CONPRINTF(ConsoleString,(ConsoleString,"God Mode ON"));
 	}
 
@@ -1118,13 +1118,13 @@ void	kf_TogglePauseMode( void )
 		setConsolePause(TRUE);
 		setScriptPause(TRUE);
 		setAudioPause(TRUE);
-		
+
 		// If cursor trapping is enabled allow the cursor to leave the window
 		if (war_GetTrapCursor())
 		{
 			SDL_WM_GrabInput(SDL_GRAB_OFF);
 		}
-		
+
 		/* And stop the clock */
 		gameTimeStop();
 		addConsoleMessage(_("PAUSED"),CENTRE_JUSTIFY);
@@ -1137,13 +1137,13 @@ void	kf_TogglePauseMode( void )
 		setConsolePause(FALSE);
 		setScriptPause(FALSE);
 		setAudioPause(FALSE);
-		
+
 		// Re-enable cursor trapping if it is enabled
 		if (war_GetTrapCursor())
 		{
 			SDL_WM_GrabInput(SDL_GRAB_ON);
 		}
-				
+
 		/* And start the clock again */
 		gameTimeStart();
 	}
@@ -2256,17 +2256,17 @@ void	kf_ToggleShadows( void )
 // --------------------------------------------------------------------------
 
 float available_speed[] = {
-	FRACTCONST(1, 8),
-	FRACTCONST(1, 4),
-	FRACTCONST(1, 2),
-	FRACTCONST(3, 4),
-	FRACTCONST(1, 1),
-	FRACTCONST(3, 2),
-	FRACTCONST(2, 1),
-	FRACTCONST(5, 2),
-	FRACTCONST(3, 1),
-	FRACTCONST(10, 1),
-	FRACTCONST(20, 1)
+	1.f / 8.f,
+	1.f / 4.f,
+	1.f / 2.f,
+	3.f / 4.f,
+	1.f / 1.f,
+	3.f / 2.f,
+	2.f / 1.f,
+	5.f / 2.f,
+	3.f / 1.f,
+	10.f / 1.f,
+	20.f / 1.f
 };
 unsigned int nb_available_speeds = 11;
 
@@ -2285,7 +2285,7 @@ void kf_SpeedUp( void )
 			if (mod < available_speed[i]) {
 				mod = available_speed[i];
 
-				if (mod == FRACTCONST(1, 1)) {
+				if (mod == 1.f / 1.f) {
 					CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Reset")));
 				} else {
 					CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Increased to %3.1f"),mod));
@@ -2312,7 +2312,7 @@ void kf_SlowDown( void )
 			if (mod > available_speed[i]) {
 				mod = available_speed[i];
 
-				if (mod == FRACTCONST(1, 1)) {
+				if (mod == 1.f / 1.f) {
 					CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Reset")));
 				} else {
 					CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Reduced to %3.1f"),mod));

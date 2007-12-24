@@ -157,14 +157,14 @@ extern BOOL bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
 		{
 			/* Won't draw selection boxes */
 			DROID *psDroid = (DROID*)pObject;
-			
+
 			psDroid->sDisplay.frameNumber = 0;
 		}
 		else if(objectType == RENDER_STRUCTURE)
 		{
 			/* Won't draw selection boxes */
 			STRUCTURE *psStructure = (STRUCTURE*)pObject;
-			
+
 			psStructure->sDisplay.frameNumber = 0;
 		}
 
@@ -202,7 +202,7 @@ extern BOOL bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
 	newTag->psNextTag = bucketArray[z];
 	newTag->actualZ = z;
 	bucketArray[z] = newTag;
-	
+
 	return TRUE;
 }
 
@@ -290,9 +290,9 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 	   		/* Translate */
    			iV_TRANSLATE(px,0,-pz);
 
-			position.x = (UDWORD)MAKEINT(((ATPART*)pObject)->position.x);
-			position.y = (UDWORD)MAKEINT(((ATPART*)pObject)->position.y);
-			position.z = (UDWORD)MAKEINT(((ATPART*)pObject)->position.z);
+			position.x = ((ATPART*)pObject)->position.x;
+			position.y = ((ATPART*)pObject)->position.y;
+			position.z = ((ATPART*)pObject)->position.z;
 
    			position.x = (SDWORD)(position.x - player.p.x) - terrainMidX*TILE_UNITS;
    			position.z = (SDWORD)(terrainMidY*TILE_UNITS - (position.z - player.p.z));
@@ -384,7 +384,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			}
 
 			z = pie_RotateProject(&position,&pixel);
-			
+
 			if (z > 0)
 			{
 				//particle use the image radius

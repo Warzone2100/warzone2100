@@ -235,7 +235,7 @@ extern UDWORD	getMissCount( void );
 extern	UDWORD	getNumSkippedEffects(void);
 extern	UDWORD	getNumEvenEffects(void);
 
-extern	BOOL	fireOnLocation(UDWORD x, UDWORD y);
+extern	bool fireOnLocation(unsigned int x, unsigned int y);
 
 extern UDWORD EffectGetNumFrames(EFFECT *psEffect);
 extern UDWORD IMDGetNumFrames(iIMDShape *Shape);

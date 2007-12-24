@@ -20,18 +20,21 @@
 #ifndef _difficulty_h
 #define _difficulty_h
 
+// required to ensure "types.h" is included the proper way (we need the "bool" type)
+#include "lib/framework/frame.h"
+
 typedef enum _difficulty_level
 {
-DL_EASY,
-DL_NORMAL,
-DL_HARD,
-DL_TOUGH,
-DL_KILLER
+	DL_EASY,
+	DL_NORMAL,
+	DL_HARD,
+	DL_TOUGH,
+	DL_KILLER
 } DIFFICULTY_LEVEL;
 
 extern void	setDifficultyLevel( DIFFICULTY_LEVEL lev);
 extern DIFFICULTY_LEVEL	getDifficultyLevel( void );
-extern SDWORD	modifyForDifficultyLevel(SDWORD basicVal,BOOL IsPlayer);
+extern int modifyForDifficultyLevel(int basicVal, bool IsPlayer);
 extern void setModifiers(float Player,float Enemy);
 
 

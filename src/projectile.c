@@ -252,10 +252,10 @@ static float QualityFactor(DROID *psAttacker, DROID *psVictim)
 {
 	float powerRatio = calcDroidPower(psVictim) / calcDroidPower(psAttacker);
 	float pointsRatio = calcDroidPoints(psVictim) / calcDroidPoints(psAttacker);
-	
+
 	CLIP(powerRatio, 0.5, 2.0);
 	CLIP(pointsRatio, 0.5, 2.0);
-	
+
 	return (powerRatio + pointsRatio) / 2;
 }
 
@@ -286,7 +286,7 @@ static void proj_UpdateKills(PROJECTILE *psObj, float experienceInc)
 	if (psObj->psSource->type == OBJ_DROID)			/* update droid kills */
 	{
 		psDroid = (DROID *) psObj->psSource;
-		
+
 		// If it is 'droid-on-droid' then modify the experience by the Quality factor
 		// Only do this in MP so to not un-balance the campaign
 		if (psObj->psDest != NULL
@@ -297,9 +297,9 @@ static void proj_UpdateKills(PROJECTILE *psObj, float experienceInc)
 			experienceInc *= QualityFactor(psDroid, (DROID *) psObj->psDest);
 		}
 
-		psDroid->experience += experienceInc;		
+		psDroid->experience += experienceInc;
 		cmdDroidUpdateKills(psDroid, experienceInc);
-		
+
 		if (orderStateObj(psDroid, DORDER_FIRESUPPORT, &psSensor)
 		 && psSensor->type == OBJ_DROID)
 		{
@@ -310,7 +310,7 @@ static void proj_UpdateKills(PROJECTILE *psObj, float experienceInc)
 	{
 		// See if there was a command droid designating this target
 		psDroid = cmdDroidGetDesignator(psObj->psSource->player);
-		
+
 		if (psDroid != NULL
 		 && psDroid->action == DACTION_ATTACK
 		 && psDroid->psActionTarget[0] == psObj->psDest)
@@ -329,7 +329,7 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	PROJECTILE		*psObj = malloc(sizeof(PROJECTILE));
 	SDWORD			tarHeight, srcHeight, iMinSq;
 	SDWORD			altChange, dx, dy, dz, iVelSq, iVel;
-	FRACT_D			fR, fA, fS, fT, fC;
+	double          fR, fA, fS, fT, fC;
 	Vector3i muzzle;
 	SDWORD			iRadSq, iPitchLow, iPitchHigh, iTemp;
 	UDWORD			heightVariance;
@@ -474,10 +474,10 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	/* roll never set */
 	psObj->roll = 0;
 
-	fR = (FRACT_D) atan2(dx, dy);
+	fR = (double) atan2(dx, dy);
 	if ( fR < 0.0 )
 	{
-		fR += (FRACT_D) (2 * M_PI);
+		fR += (double) (2 * M_PI);
 	}
 	psObj->direction = RAD_TO_DEG(fR);
 
@@ -490,10 +490,10 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 	if ( proj_Direct(psObj->psWStats) ||
 		 ( !proj_Direct(psWeapStats) && (iRadSq <= iMinSq) ) )
 	{
-		fR = (FRACT_D) atan2(dz, fR);
+		fR = (double) atan2(dz, fR);
 		if ( fR < 0.0 )
 		{
-			fR += (FRACT_D) (2 * M_PI);
+			fR += (double) (2 * M_PI);
 		}
 		psObj->pitch = (SWORD)( RAD_TO_DEG(fR) );
 		psObj->pInFlightFunc = proj_InFlightDirectFunc;
@@ -503,25 +503,24 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 		/* indirect */
 		iVelSq = psObj->psWStats->flightSpeed * psObj->psWStats->flightSpeed;
 
- 		fA = ACC_GRAVITY*MAKEFRACT_D(iRadSq) / (2*iVelSq);
-		fC = 4 * fA * (MAKEFRACT_D(dz) + fA);
-		fS = MAKEFRACT_D(iRadSq) - fC;
+ 		fA = ACC_GRAVITY * (double)iRadSq / (2 * iVelSq);
+		fC = 4 * fA * ((double)dz + fA);
+		fS = (double)iRadSq - fC;
 
 		/* target out of range - increase velocity to hit target */
-		if ( fS < MAKEFRACT_D(0) )
+		if ( fS < 0. )
 		{
 			/* set optimal pitch */
 			psObj->pitch = PROJ_MAX_PITCH;
 
-			fS = (FRACT_D)trigSin(PROJ_MAX_PITCH);
-			fC = (FRACT_D)trigCos(PROJ_MAX_PITCH);
-			fT = FRACTdiv_D( fS, fC );
-			fS = ACC_GRAVITY*(MAKEFRACT_D(1)+FRACTmul_D(fT,fT));
-			fS = FRACTdiv_D(fS,(2 * (FRACTmul_D(fR,fT) - MAKEFRACT_D(dz))));
+			fS = (double)trigSin(PROJ_MAX_PITCH);
+			fC = (double)trigCos(PROJ_MAX_PITCH);
+			fT = fS / fC;
+			fS = ACC_GRAVITY * (1. + fT * fT);
+			fS = fS / (2 * (fR * fT - (double)dz));
 			{
-				FRACT_D Tmp;
-				Tmp = FRACTmul_D(fR,fR);
-				iVel = MAKEINT_D( trigIntSqrt(MAKEINT_D(FRACTmul_D(fS,Tmp))) );
+				double Tmp = fR * fR;
+				iVel = trigIntSqrt(fS * Tmp);
 			}
 		}
 		else
@@ -530,24 +529,24 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 			iVel = psObj->psWStats->flightSpeed;
 
 			/* get floating point square root */
-			fS = trigIntSqrt( MAKEINT_D(fS) );
+			fS = trigIntSqrt(fS);
 
-			fT = (FRACT_D) atan2(fR+fS, 2*fA);
+			fT = (double) atan2(fR + fS, 2 * fA);
 
 			/* make sure angle positive */
 			if ( fT < 0 )
 			{
-				fT += (FRACT_D) (2 * M_PI);
+				fT += (double) (2 * M_PI);
 			}
-			iPitchLow = MAKEINT_D(RAD_TO_DEG(fT));
+			iPitchLow = RAD_TO_DEG(fT);
 
-			fT = (FRACT_D) atan2(fR-fS, 2*fA);
+			fT = (double) atan2(fR-fS, 2*fA);
 			/* make sure angle positive */
 			if ( fT < 0 )
 			{
-				fT += (FRACT_D) (2 * M_PI);
+				fT += (double) (2 * M_PI);
 			}
-			iPitchHigh = MAKEINT_D(RAD_TO_DEG(fT));
+			iPitchHigh = RAD_TO_DEG(fT);
 
 			/* swap pitches if wrong way round */
 			if ( iPitchLow > iPitchHigh )
@@ -582,8 +581,8 @@ proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
 			}
 		}
 
-		psObj->vXY = MAKEINT_D(iVel * trigCos(psObj->pitch));
-		psObj->vZ  = MAKEINT_D(iVel * trigSin(psObj->pitch));
+		psObj->vXY = iVel * trigCos(psObj->pitch);
+		psObj->vZ  = iVel * trigSin(psObj->pitch);
 
 		/* set function pointer */
 		psObj->pInFlightFunc = proj_InFlightIndirectFunc;

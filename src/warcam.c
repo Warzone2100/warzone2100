@@ -565,7 +565,7 @@ static SDWORD getAverageTrackAngle( BOOL bCheckOnScreen )
 		retVal = 0;
 	}
 	// FIXME: Should we return 0 when retVal is 0?
-	presAvAngle = MAKEINT(averageAngleFloat);//retVal;
+	presAvAngle = averageAngleFloat;//retVal;
 	return presAvAngle;
 }
 
@@ -607,7 +607,7 @@ static SDWORD getGroupAverageTrackAngle(UDWORD groupNumber, BOOL bCheckOnScreen)
 		retVal = 0;
 	}
 	// FIXME: Return 0 when retVal is 0?
-	presAvAngle = MAKEINT(averageAngleFloat);//retVal;
+	presAvAngle = averageAngleFloat;//retVal;
 	return presAvAngle;
 }
 

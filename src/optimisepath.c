@@ -66,27 +66,22 @@ UDWORD	getStepIndexFromAngle(UDWORD angle);
 	of course ambiguous in the case where the two given angles
 	are 180 degrees apart
 */
-UDWORD	getBisectingDirectionAway(UDWORD angleA,UDWORD angleB)
+unsigned int getBisectingDirectionAway(unsigned int angleA, unsigned int angleB)
 {
-float	xVec,yVec;
-float	angle;
-UDWORD	retVal;
-
 	/* Get the component vectors */
-	xVec = trigSin(angleA) + trigSin(angleB);
-	yVec = trigCos(angleA) + trigCos(angleB);
+	const float xVec = trigSin(angleA) + trigSin(angleB);
+	const float yVec = trigCos(angleA) + trigCos(angleB);
 
 	/* Get the angle between them */
-	angle = RAD_TO_DEG(atan2(xVec,yVec));
-	angle+=360;
+	const float angle = RAD_TO_DEG(atan2(xVec, yVec)) + 360.f;
 	/* Get it as an integer */
-	retVal = (MAKEINT(angle))%360;
+	unsigned int retVal = fmodf(angle, 360.f);
 
 	/* And make it point the other way - into larger arc */
-	retVal = (retVal + 180)%360;
-	ASSERT( retVal<360,"Weird angle found" );
+	retVal = (retVal + 180) % 360;
+	ASSERT(retVal < 360, "Out of bounds angle found: %u", retVal);
 
-	return(retVal);
+	return retVal;
 }
 
 // -------------------------------------------------------------------------
