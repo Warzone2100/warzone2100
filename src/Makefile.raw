@@ -60,7 +60,6 @@ SRC=ai.c \
 	multistat.c \
 	objmem.c \
 	objects.c \
-	optimisepath.c \
 	order.c \
 	radar.c \
 	raycast.c \

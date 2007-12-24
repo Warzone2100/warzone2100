@@ -548,10 +548,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\optimisepath.c"
-					>
-				</File>
-				<File
 					RelativePath="..\src\order.c"
 					>
 				</File>
