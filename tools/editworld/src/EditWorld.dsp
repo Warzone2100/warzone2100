@@ -150,7 +150,7 @@ SOURCE=.\expandlimitsdlg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\exportinfo.cpp
+SOURCE=.\infodialog.cpp
 # End Source File
 # Begin Source File
 
@@ -314,7 +314,7 @@ SOURCE=.\expandlimitsdlg.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\exportinfo.hpp
+SOURCE=.\infodialog.hpp
 # End Source File
 # Begin Source File
 

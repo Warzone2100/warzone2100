@@ -23,18 +23,18 @@
 */
 
 #include "stdafx.h"
-#include "exportinfo.hpp"
+#include "infodialog.hpp"
 
 /////////////////////////////////////////////////////////////////////////////
-// ExportInfo dialog
+// InfoDialog dialog
 
-ExportInfo::ExportInfo(const CString& text, CWnd* parent) :
-    CDialog(ExportInfo::IDD, parent),
+InfoDialog::InfoDialog(const CString& text, CWnd* parent) :
+    CDialog(InfoDialog::IDD, parent),
 	_text(text)
 {
 }
 
-BOOL ExportInfo::OnInitDialog()
+BOOL InfoDialog::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 

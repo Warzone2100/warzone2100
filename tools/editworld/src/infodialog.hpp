@@ -22,22 +22,22 @@
 	$HeadURL$
 */
 
-#ifndef __INCLUDE__EXPORTINFO_HPP__
-#define __INCLUDE__EXPORTINFO_HPP__
+#ifndef __INCLUDE__INFODIALOG_HPP__
+#define __INCLUDE__INFODIALOG_HPP__
 
 #include "resource.h"
 
 /////////////////////////////////////////////////////////////////////////////
-// ExportInfo dialog
+// InfoDialog dialog
 
-class ExportInfo : public CDialog
+class InfoDialog : public CDialog
 {
 	// Construction
 	public:
-		ExportInfo(const CString& text = _T(""), CWnd* parent = NULL);
+		InfoDialog(const CString& text = _T(""), CWnd* parent = NULL);
 
 	// Dialog Data
-		//{{AFX_DATA(ExportInfo)
+		//{{AFX_DATA(InfoDialog)
 		enum { IDD = IDD_INFO };
 		//}}AFX_DATA
 
@@ -49,4 +49,4 @@ class ExportInfo : public CDialog
 		const CString _text;
 };
 
-#endif // __INCLUDE__EXPORTINFO_HPP__
+#endif // __INCLUDE__INFODIALOG_HPP__

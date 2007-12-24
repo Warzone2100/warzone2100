@@ -40,7 +40,7 @@
 #include "limitsdialog.hpp"
 #include "initiallimitsdlg.hpp"
 #include "expandlimitsdlg.h"
-#include "exportinfo.hpp"
+#include "infodialog.hpp"
 #include "playermap.h"
 #include "gateway.hpp"
 #include "pasteprefs.h"
@@ -1617,7 +1617,7 @@ void CBTEditDoc::DisplayExportSummary(void)
 	sprintf(Tmp,"\r\nFeatures %d\r\n",Info->NumFeatures);
 	Tmp += strlen(Tmp);
 
-	ExportInfo(String).DoModal();
+	InfoDialog(String).DoModal();
 }
 
 // Proxy class that serves as InputIterator (as defined by the C++ standard in
