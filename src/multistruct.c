@@ -52,7 +52,7 @@
 
 // ////////////////////////////////////////////////////////////////////////////
 // INFORM others that a building has been started, and base plate should be put down.
-BOOL sendBuildStarted(STRUCTURE *psStruct,DROID *psDroid)
+BOOL sendBuildStarted(const STRUCTURE* psStruct, const DROID* psDroid)
 {
 	NETMSG	msg;
 	UDWORD zero=0;
@@ -153,7 +153,7 @@ BOOL recvBuildStarted(NETMSG *pMsg)
 
 // ////////////////////////////////////////////////////////////////////////////
 // INFORM others that a building has been completed.
-BOOL SendBuildFinished(STRUCTURE *psStruct)
+BOOL SendBuildFinished(const STRUCTURE* psStruct)
 {
 	NETMSG m;
 
@@ -286,7 +286,7 @@ BOOL recvDemolishFinished(NETMSG *m)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Inform others that a structure has been destroyed
-BOOL SendDestroyStructure(STRUCTURE *s)
+BOOL SendDestroyStructure(const STRUCTURE* s)
 {
 	NETMSG m;
 
@@ -325,7 +325,7 @@ BOOL recvDestroyStructure(NETMSG * m)
 // ////////////////////////////////////////////////////////////////////////////
 //lassat is firing
 
-BOOL sendLasSat(UBYTE player,STRUCTURE *psStruct, BASE_OBJECT *psObj)
+BOOL sendLasSat(UBYTE player, const STRUCTURE* psStruct, const BASE_OBJECT* psObj)
 {
 	NETMSG msg;
 	UBYTE p;

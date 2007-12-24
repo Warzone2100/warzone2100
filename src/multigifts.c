@@ -66,12 +66,12 @@ BOOL recvGift(void)
 {
 	uint8_t	type, from, to;
 	int		audioTrack;
-	
+
 	NETbeginDecode();
 		NETuint8_t(&type);
 		NETuint8_t(&from);
 		NETuint8_t(&to);
-	
+
 		// Handle the gift depending on what it is
 		switch (type)
 		{
@@ -96,13 +96,13 @@ BOOL recvGift(void)
 				return FALSE;
 				break;
 		}
-	
+
 		// If we are on the recieving end play an audio alert
 		if (to == selectedPlayer)
 		{
 			audio_QueueTrack(audioTrack);
 		}
-	
+
 	NETend();
 	return TRUE;
 }
@@ -110,7 +110,7 @@ BOOL recvGift(void)
 BOOL sendGift(uint8_t type, uint8_t to)
 {
 	int audioTrack;
-	
+
 	switch (type)
 	{
 		case RADAR_GIFT:
@@ -135,10 +135,10 @@ BOOL sendGift(uint8_t type, uint8_t to)
 			return FALSE;
 			break;
 	}
-	
+
 	// Play the appropriate audio track
 	audio_QueueTrack(audioTrack);
-	
+
 	return TRUE;
 }
 
@@ -147,11 +147,11 @@ BOOL sendGift(uint8_t type, uint8_t to)
 void giftRadar(uint8_t from, uint8_t to, BOOL send)
 {
 	hqReward(from, to);
-	
+
 	if (send)
 	{
 		uint8_t subType = RADAR_GIFT;
-		
+
 		NETbeginEncode(NET_GIFT, NET_ALL_PLAYERS);
 			NETuint8_t(&subType);
 			NETuint8_t(&from);
@@ -170,9 +170,9 @@ void giftRadar(uint8_t from, uint8_t to, BOOL send)
 static void recvGiftDroids(uint8_t from, uint8_t to)
 {
 	uint8_t droidCount, i;
-	
+
 	// NB: The packet is already set-up for decoding
-	
+
 	// Fetch the droid count
 	NETuint8_t(&droidCount);
 
@@ -180,9 +180,9 @@ static void recvGiftDroids(uint8_t from, uint8_t to)
 	{
 		uint32_t	droidID;
 		DROID		*psDroid;
-		
+
 		NETuint32_t(&droidID);
-		
+
 		if (IdToDroid(droidID, from, &psDroid))
 		{
 			giftSingleDroid(psDroid, to);
@@ -203,7 +203,7 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 	{
 		return;
 	}
-	
+
 	NETbeginEncode(NET_GIFT, NET_ALL_PLAYERS);
 	{
 		DROID        *next, *psD;
@@ -213,7 +213,7 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 		NETuint8_t(&giftType);
 		NETuint8_t(&from);
 		NETuint8_t(&to);
-		
+
 		/*
 		 * Work out the number of droids to send. As well as making sure they are
 		 * selected we also need to make sure they will put the receiving player
@@ -226,7 +226,7 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 			if (psD->selected)
 				++totalToSend;
 		}
-		
+
 		NETuint8_t(&totalToSend);
 
 		for (psD = apsDroidLists[from];
@@ -235,15 +235,15 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 		{
 			// Store the next droid in the list as the list may change
 			next = psD->psNext;
-			
+
 			if (psD->selected)
 			{
 				// Hand over the droid on our sidde
 				giftSingleDroid(psD, to);
-				
+
 				// Add the droid to the packet
 				NETuint32_t(&psD->id);
-				
+
 				// Decrement the number of droids left to send
 				--totalToSend;
 			}
@@ -278,7 +278,7 @@ static void giftResearch(uint8_t from, uint8_t to, BOOL send)
 	if (send)
 	{
 		uint8_t giftType = RESEARCH_GIFT;
-		
+
 		NETbeginEncode(NET_GIFT, NET_ALL_PLAYERS);
 			NETuint8_t(&giftType);
 			NETuint8_t(&from);
@@ -314,7 +314,7 @@ void giftPower(uint8_t from, uint8_t to, BOOL send)
 	if (send)
 	{
 		uint8_t giftType = POWER_GIFT;
-		
+
 		NETbeginEncode(NET_GIFT, NET_ALL_PLAYERS);
 			NETuint8_t(&giftType);
 			NETuint8_t(&from);
@@ -344,7 +344,7 @@ void requestAlliance(uint8_t from, uint8_t to, BOOL prop, BOOL allowAudio)
 	if (to == selectedPlayer)
 	{
 		CONPRINTF(ConsoleString,(ConsoleString,_("%s Requests An Alliance With You"),getPlayerName(from)));
-		
+
 		if (allowAudio)
 		{
 			audio_QueueTrack(ID_ALLIANCE_OFF);
@@ -368,12 +368,12 @@ void requestAlliance(uint8_t from, uint8_t to, BOOL prop, BOOL allowAudio)
 void breakAlliance(uint8_t p1, uint8_t p2, BOOL prop, BOOL allowAudio)
 {
 	char	tm1[128];
-	
+
 	if (alliances[p1][p2] == ALLIANCE_FORMED)
 	{
 		strlcpy(tm1, getPlayerName(p1), sizeof(tm1));
 		CONPRINTF(ConsoleString,(ConsoleString,_("%s Breaks The Alliance With %s"),tm1,getPlayerName(p2) ));
-		
+
 		if (allowAudio && (p1 == selectedPlayer || p2 == selectedPlayer))
 		{
 			audio_QueueTrack(ID_ALLIANCE_BRO);
@@ -424,7 +424,7 @@ void formAlliance(uint8_t p1, uint8_t p2, BOOL prop, BOOL allowAudio, BOOL allow
 
 	// Clear out any attacking orders
 	turnOffMultiMsg(TRUE);
-	
+
 	for (psDroid = apsDroidLists[p1]; psDroid; psDroid = psDroid->psNext)	// from -> to
 	{
 		if (psDroid->order == DORDER_ATTACK
@@ -443,7 +443,7 @@ void formAlliance(uint8_t p1, uint8_t p2, BOOL prop, BOOL allowAudio, BOOL allow
 			orderDroid(psDroid,DORDER_STOP);
 		}
 	}
-	
+
 	turnOffMultiMsg(FALSE);
 }
 
@@ -496,7 +496,7 @@ BOOL recvAlliance(BOOL allowAudio)
 
 // ////////////////////////////////////////////////////////////////////////////
 // add an artifact on destruction if required.
-void  technologyGiveAway(STRUCTURE *pS)
+void  technologyGiveAway(const STRUCTURE *pS)
 {
 	int				i;
 	uint8_t			count = 1;
@@ -510,7 +510,7 @@ void  technologyGiveAway(STRUCTURE *pS)
 	{
 		x = map_coord(pS->pos.x);
 		y = map_coord(pS->pos.y);
-		
+
 		// Pick a tile to place the artifact
 		if (!pickATileGen(&x, &y, LOOK_FOR_EMPTY_TILE, zonedPAT))
 		{
@@ -519,7 +519,7 @@ void  technologyGiveAway(STRUCTURE *pS)
 
 		// Get the feature offset
 		for(i = 0; i < numFeatureStats && asFeatureStats[i].subType != FEAT_GEN_ARTE; i++);
-		
+
 		// 'Build' the artifact
 		pF = buildFeature((asFeatureStats + i), world_coord(x), world_coord(y), FALSE);
 		if (pF)
@@ -528,15 +528,22 @@ void  technologyGiveAway(STRUCTURE *pS)
 		}
 
 		NETbeginEncode(NET_ARTIFACTS, NET_ALL_PLAYERS);
+		{
+			/* Make sure that we don't have to violate the constness of pS.
+			 * Since the nettype functions aren't const correct when sending
+			 */
+			uint8_t player = pS->player;
+
 			NETuint8_t(&count);
 			NETenum(&type);
 			NETuint32_t(&x);
 			NETuint32_t(&y);
 			NETuint32_t(&pF->id);
-			NETuint8_t(&pS->player);
+			NETuint8_t(&player);
+		}
 		NETend();
 	}
-	
+
 	return;
 }
 
@@ -586,7 +593,7 @@ void addLoserGifts(void)
 		for (i = 0;
 			 i < numFeatureStats && asFeatureStats[i].subType != FEAT_OIL_DRUM;
 			 i++);
-		
+
 		quantity = rand() % 5 + 1;
 
 		NETbeginEncode(NET_ARTIFACTS, NET_ALL_PLAYERS);
@@ -597,28 +604,28 @@ void addLoserGifts(void)
 			{
 				x = map_coord(apsStructLists[selectedPlayer]->pos.x);
 				y = map_coord(apsStructLists[selectedPlayer]->pos.y);
-				
+
 				if (!pickATileGen(&x, &y, LOOK_FOR_EMPTY_TILE, zonedPAT))
 				{
 					ASSERT(FALSE, "addlosergifts: Unable to find a free location");
 				}
-	
+
 				NETlogEntry("gift", 0, 0);
-	
+
 				pF = buildFeature((asFeatureStats + i), world_coord(x), world_coord(y), FALSE);
-	
+
 				NETuint32_t(&x);
 				NETuint32_t(&y);
 				NETuint32_t(&pF->id);
 				NETuint8_t(&player);
-	
+
 				if (pF)
 				{
 					// Flag for multiplayer artifacts
 					pF->player = player;
 				}
 			}
-	
+
 		NETend();
 		audio_QueueTrack(ID_GIFT);
 	}
@@ -642,25 +649,25 @@ void  addMultiPlayerRandomArtifacts(uint8_t quantity, FEATURE_TYPE type)
 
 		ASSERT(mapWidth > 20, "map not big enough");
 		ASSERT(mapHeight > 20, "map not big enough");
-	
+
 		for (count = 0; count < quantity; count++)
 		{
 			// Between 10 and mapwidth - 10
 			x = (rand() % (mapWidth - 20)) + 10;
 			y = (rand() % (mapHeight - 20)) + 10;
-			
+
 			if (!pickATileGen(&x, &y, LOOK_FOR_EMPTY_TILE, zonedPAT))
 			{
 				ASSERT(FALSE, "addMultiPlayerRandomArtifacts: Unable to find a free location");
 			}
-	
+
 			pF = buildFeature(asFeatureStats + i, world_coord(x), world_coord(y), FALSE);
-	
+
 			NETuint32_t(&x);
 			NETuint32_t(&y);
 			NETuint32_t(&pF->id);
 			NETuint8_t(&player);
-	
+
 			if (pF)
 			{
 				pF->player = player;
@@ -700,7 +707,7 @@ void recvMultiPlayerRandomArtifacts()
 		NETuint32_t(&ty);
 		NETuint32_t(&ref);
 		NETuint8_t(&player);
-		
+
 		pF = buildFeature((asFeatureStats + i), world_coord(tx), world_coord(ty), FALSE);
 		if (pF)
 		{
