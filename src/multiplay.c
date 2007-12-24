@@ -670,7 +670,7 @@ BOOL recvMessage(void)
 				recvBeacon(&msg);
 				break;
 			case NET_BUILD:						// a build order has been sent.
-				recvBuildStarted(&msg);
+				recvBuildStarted();
 				break;
 			case NET_BUILDFINISHED:				// a building is complete
 				recvBuildFinished(&msg);

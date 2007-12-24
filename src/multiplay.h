@@ -234,7 +234,7 @@ extern BOOL multiplayerWinSequence(BOOL firstCall);
 // definitions of functions in multiplay's other c files.
 
 // Buildings . multistruct
-extern BOOL	sendBuildStarted	(const STRUCTURE* psStruct, const DROID* psDroid);
+extern BOOL	sendBuildStarted	(STRUCTURE *psStruct, DROID *psDroid);
 extern BOOL SendDestroyStructure(const STRUCTURE* s);
 extern BOOL	SendBuildFinished	(const STRUCTURE* psStruct);
 extern BOOL sendLasSat			(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj);

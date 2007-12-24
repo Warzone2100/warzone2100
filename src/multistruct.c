@@ -52,75 +52,97 @@
 
 // ////////////////////////////////////////////////////////////////////////////
 // INFORM others that a building has been started, and base plate should be put down.
-BOOL sendBuildStarted(const STRUCTURE* psStruct, const DROID* psDroid)
+BOOL sendBuildStarted(STRUCTURE *psStruct, DROID *psDroid)
 {
-	NETMSG	msg;
-	UDWORD zero=0;
-	UWORD player,order;
-	player = (UBYTE)psDroid->player;
-	order = (UBYTE)psDroid->order;
-	NetAdd(msg,0,player);			//player
-	NetAdd(msg,1,psDroid->psTarStats->ref);	//id of thing to build
-	NetAdd(msg,5,psDroid->orderX);					// x
-	NetAdd(msg,7,psDroid->orderY);					// y
-	NetAdd(msg,11,psDroid->id);						// droid to order to build it
-	NetAdd(msg,15,psStruct->id);					// building id to create
-	NetAdd(msg,19,order);			// building id to create
+	DBCONPRINTF(ConsoleString,(ConsoleString,"sendBuildStarted() called"));
+	NETbeginEncode(NET_BUILD, NET_ALL_PLAYERS);
+	
+		// Who is building it
+		NETuint8_t(&psDroid->player);
+		
+		// What they are building
+		NETuint32_t(&psDroid->psTarStats->ref);
+		
+		// Where it is being built
+		NETuint16_t(&psDroid->orderX);
+		NETuint16_t(&psDroid->orderY);
+		
+		// The droid building it
+		NETuint32_t(&psDroid->id);
+		
+		// The ID assigned to the structure being built
+		NETuint32_t(&psStruct->id);
+		
+		// The droids order
+		NETint32_t(&psDroid->order);
+	
+		if (psDroid->psTarget
+		 && psDroid->psTarget->type == OBJ_STRUCTURE)
+		{
+			// The ID of the droids target (== psStruct->id ?)
+			NETuint32_t(&psDroid->psTarget->id);
+		}
+		else
+		{
+			NETnull();
+		}
+	
+		// Z coord
+		NETuint16_t(&psStruct->pos.z);
 
-	if (psDroid->psTarget && psDroid->psTarget->type == OBJ_STRUCTURE)
-	{
-		NetAdd(msg,20,((STRUCTURE*)psDroid->psTarget)->id);
-	}
-	else
-	{
-		NetAdd(msg,20,zero);
-	}
-
-	NetAdd(msg,24,psStruct->pos.z);
-
-	msg.size =28;
-	msg.type = NET_BUILD;
-	return (NETbcast(&msg,FALSE));
+	return NETend();
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // put down a base plate and start droid building it!
-BOOL recvBuildStarted(NETMSG *pMsg)
+BOOL recvBuildStarted()
 {
-	UDWORD			targetId,order,droidId,structId,structStat;
-	UWORD			x,z,y,player;
 	STRUCTURE_STATS *psStats;
 	DROID			*psDroid;
-	UDWORD			typeindex,actionX,actionY;
+	UDWORD			actionX,actionY;
+	int				typeIndex;
+	uint8_t			player;
+	uint16_t		x, y, z;
+	int32_t			order;
+	uint32_t		structRef, structId, targetId,droidID;
 
-	player = pMsg->body[0];					// decode message.
-	NetGet(pMsg,1,structStat);
-	NetGet(pMsg,5,x);
-	NetGet(pMsg,7,y);
-	NetGet(pMsg,11,droidId);
-	NetGet(pMsg,15,structId);
-	order = pMsg->body[19];
-	NetGet(pMsg,20,targetId);
-	NetGet(pMsg,24,z);
-	for(typeindex=0;										// find structure target
-	(typeindex<numStructureStats ) && (asStructureStats[typeindex].ref != structStat);
-	typeindex++);
+	DBCONPRINTF(ConsoleString,(ConsoleString,"recvBuildStarted() called"));
+	NETbeginDecode();
 
-	psStats = &asStructureStats[typeindex];
+	NETuint8_t(&player);
+	NETuint32_t(&structRef);
+	NETuint16_t(&x);
+	NETuint16_t(&y);
+	NETuint32_t(&droidID);
+	NETuint32_t(&structId);
+	NETint32_t(&order);
+	NETuint32_t(&targetId);
+	NETuint16_t(&z);
 
-	if(IdToDroid(droidId,player, &psDroid))
+	// Find structure target
+	for (typeIndex = 0;
+	     typeIndex < numStructureStats && asStructureStats[typeIndex].ref != structRef;
+	     typeIndex++);
+
+	psStats = &asStructureStats[typeIndex];
+
+	if (IdToDroid(droidID, player, &psDroid))
 	{
-		if (getDroidDestination( (BASE_STATS *)psStats ,x,y, &actionX,&actionY))
+		// Tell the droid to go to where it needs to in order to build the struct
+		if (getDroidDestination((BASE_STATS *) psStats, x, y, &actionX, &actionY))
 		{
 			psDroid->order = order;
-			if(psDroid->order == DORDER_LINEBUILD)
+			
+			if (psDroid->order == DORDER_LINEBUILD)
 			{
 				psDroid->order = DORDER_BUILD;
 			}
+			
 			psDroid->orderX = x;
 			psDroid->orderY = y;
 			psDroid->psTarStats = (BASE_STATS *) psStats;
-			if(targetId)
+			
+			if (targetId)
 			{
 				setDroidTarget(psDroid, IdToPointer(targetId, ANYPLAYER));
 			}
@@ -138,16 +160,16 @@ BOOL recvBuildStarted(NETMSG *pMsg)
 				droidStartBuild(psDroid);
 				psDroid->action = DACTION_BUILD;
 			}
-
 		}
 
-		if (psDroid->psTarget)									//sync id's
+		// Sync IDs
+		if (psDroid->psTarget)
 		{
-			((STRUCTURE*)psDroid->psTarget)->id = structId;
+			((STRUCTURE *) psDroid->psTarget)->id = structId;
 		}
 	}
-
-	// order droid to start building it.
+	
+	NETend();
 	return TRUE;
 }
 
