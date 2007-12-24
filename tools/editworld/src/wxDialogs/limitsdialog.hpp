@@ -104,7 +104,7 @@ class LimitsDialog : public wxDialog
 
 				class XmlHandler : public wxListCtrlXmlHandler
 				{
-						DECLARE_DYNAMIC_CLASS(ListCtrl);
+						DECLARE_DYNAMIC_CLASS(XmlHandler);
 
 					public:
 						virtual wxObject* DoCreateResource();
