@@ -5,7 +5,6 @@
  * bteditdoc.cpp
  * bteditview.cpp
  * expandlimitsdlg.cpp
- * infodialog.cpp
  * mainfrm.cpp
  * mapprefs.cpp
  * objectproperties.cpp
@@ -20,7 +19,6 @@
 
  * IDD_EDGEBRUSH         (brushprop.cpp)
  * IDD_EXPANSIONLIMITS   (expandlimitsdlg.cpp)
- * IDD_INFO              (infodialog.cpp)
  * IDD_MAPPREFS          (mapprefs.cpp)
  * IDD_OBJECTPROPERTIES  (objectproperties.cpp)
  * IDD_PASTEPREFS        (pasteprefs.cpp)
