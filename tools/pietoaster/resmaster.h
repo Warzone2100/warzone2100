@@ -38,7 +38,7 @@
 
 #include "AntTweakBar.h"
 
-extern uint16_t shiftChar(uint16_t key);
+extern Uint16 shiftChar(Uint16 key);
 
 typedef struct _ogl_extension_string {
 	char	string[255];
@@ -54,19 +54,19 @@ public:
 		FLAT = 1
 	};
 
-	static const uint32_t MAX_GL_EXTENSIONS = 500;
+	static const Uint32 MAX_GL_EXTENSIONS = 500;
 
 	OGL_EXTENSION_STRING	m_oglExtensions[MAX_GL_EXTENSIONS];
-	uint32_t	m_numExtensions;
+	Uint32	m_numExtensions;
 
-	uint32_t	m_textureToProcess;
-	uint32_t	m_pieCount;
-	uint32_t	m_numNewPies;
+	Uint32	m_textureToProcess;
+	Uint32	m_pieCount;
+	Uint32	m_numNewPies;
 
 	float	m_rotateX;	///<rotation of models X
 	float	m_rotateY;	///<rotation of models X
 	float	m_scale;	///<scale of models
-	uint32_t	m_polygonMode;	///<polygon mode to render polygons
+	Uint32	m_polygonMode;	///<polygon mode to render polygons
 	bool	m_highLightVertices;	///<highlight vertice or not
 	bool	m_highLightConnectors;	///<highlight connector or not
 	bool	m_highLightSelected;
@@ -75,9 +75,9 @@ public:
 	bool	m_drawTexture;	///<whether to draw textures or not
 	bool	m_drawNewVertice;	///<whether to draw new vertice position or not
 	bool	m_drawTexts;	///<whether to draw selected vertice/poly/connector id text or not
-	uint32_t	m_shadeMode;	///<shade mode of polygons
+	Uint32	m_shadeMode;	///<shade mode of polygons
 	float	m_gamma;	///<gamma correction of renderer
-	int32_t	m_newPieTextureId;	///<new pie textureId
+	Sint32	m_newPieTextureId;	///<new pie textureId
 	bool	m_oldFormat;	///old integer format
 
 	CResMaster();
@@ -93,8 +93,8 @@ public:
 	void	enableTexture(bool value);
 
 	bool	addPie(iIMDShape *imd, const char *name);
-	bool	removePieAt(uint16_t i);
-	CPieInternal *getPieAt(uint16_t i);
+	bool	removePieAt(Uint16 i);
+	CPieInternal *getPieAt(Uint16 i);
 
 	bool	addGUI(void);
 
@@ -110,9 +110,9 @@ public:
 	TTF_Font		*m_Font;
 
 	bool	initFont(void);
-	bool	loadFont(const char *name, uint8_t size);
+	bool	loadFont(const char *name, Uint8 size);
 #endif
-	void	drawText(const char *text, float objX, float objY, float ObjZ, SDL_Color color, uint8_t style);
+	void	drawText(const char *text, float objX, float objY, float ObjZ, SDL_Color color, Uint8 style);
 
 	void	unprojectMouseXY(double *newX1, double *newY1, double *newZ1,
 								double *newX2, double *newY2, double *newZ2);
@@ -138,7 +138,7 @@ private:
 	SDL_Surface		*m_TexSurfaces[MAX_TEX_PAGES];
 
 	Vector3f		m_GridCacheVertices[65536];
-	uint32_t			m_GridCacheCount;
+	Uint32			m_GridCacheCount;
 	GLuint			m_GridVBOId;
 
 	TwBar			*m_utilBar;

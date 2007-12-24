@@ -43,10 +43,10 @@ public:
 	PFNGLMAPBUFFERARBPROC glMapBufferARB;
 	PFNGLUNMAPBUFFERARBPROC glUnmapBufferARB;
 
-	uint16_t	m_width;	///<width of window
-	uint16_t	m_height;	///<height of window
-	int32_t	m_bpp;	///<bit per pixel
-	uint32_t	m_flags;	///<SDL surface flags
+	Uint16	m_width;	///<width of window
+	Uint16	m_height;	///<height of window
+	Sint32	m_bpp;	///<bit per pixel
+	Uint32	m_flags;	///<SDL surface flags
 	bool	m_useVBO;	///uses VBO or not
 
 	int		initialize(void);

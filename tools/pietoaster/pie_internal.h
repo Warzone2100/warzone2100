@@ -34,45 +34,45 @@ enum {
 	PIE_CONNECTOR,
 };
 
-static const uint32_t MAX_TEX_PAGES = 128;
-static const uint32_t MAX_FILE_NAME_LENGTH = 128;
-static const uint32_t MAX_PIES = 64;
-static const uint32_t MAX_ANIM_FRAMES = 128;
+static const Uint32 MAX_TEX_PAGES = 128;
+static const Uint32 MAX_FILE_NAME_LENGTH = 128;
+static const Uint32 MAX_PIES = 64;
+static const Uint32 MAX_ANIM_FRAMES = 128;
 
-static const uint32_t MAX_SHARED_VERTICES = 64;
+static const Uint32 MAX_SHARED_VERTICES = 64;
 
 static const float VERTICE_SELECT_RADIUS = 0.0003f;
 
 ///Callback struct
 typedef struct _pie_internal_cb {
 	void	*pInstance;
-	uint32_t	Id;
+	Uint32	Id;
 } PIE_INTERNAL_CB;
 
 typedef struct _vertice_list {
-	uint16_t	id;
+	Uint16	id;
 	bool	selected;
 	Vector3f vertice;
 	struct _pie_internal_cb callback;
 } VERTICE_LIST;
 
 typedef struct _imd_poly_list {
-	uint16_t	id;
+	Uint16	id;
 	bool	selected;
-	uint16_t	frame;
+	Uint16	frame;
 	bool	hasVBO;
-	uint32_t	VBOId;
+	Uint32	VBOId;
 	struct iIMDPoly polygon;
 	struct _pie_internal_cb callback;
 } IMD_POLY_LIST;
 
 typedef struct _shared_vertice {
-	uint16_t	numShared;
-	uint16_t	shared[MAX_SHARED_VERTICES];
+	Uint16	numShared;
+	Uint16	shared[MAX_SHARED_VERTICES];
 } SHARED_VERTICE;
 
 typedef struct _connector_list {
-	uint16_t	id;
+	Uint16	id;
 	bool	selected;
 	Vector3f connector;
 	struct _pie_internal_cb callback;
@@ -81,7 +81,7 @@ typedef struct _connector_list {
 typedef struct _pie_frame_info {
 	bool	died;
 	bool	visible;
-	uint32_t	frameId;
+	Uint32	frameId;
 	float	offsetX;
 	float	offsetY;
 	float	offsetZ;
@@ -117,7 +117,7 @@ public:
 
 	char	m_Name[255];
 
-	uint16_t	uid;
+	Uint16	uid;
 
 	float	m_newVerticeX;
 	float	m_newVerticeY;
@@ -129,13 +129,13 @@ public:
 	float	m_duplicateY;
 	float	m_duplicateZ;
 
-	int32_t	m_TexpageId;
+	Sint32	m_TexpageId;
 
 	///Constructed from a imd
-	CPieInternal(uint16_t uid, iIMDShape *imd, const char *name, bool isSub = false, CPieInternal *parent = NULL);
+	CPieInternal(Uint16 uid, iIMDShape *imd, const char *name, bool isSub = false, CPieInternal *parent = NULL);
 
 	///Newly generated CPieInteral
-	CPieInternal(uint16_t uid, const char *name, int32_t textureId, bool isSub = false, CPieInternal *parent = NULL);
+	CPieInternal(Uint16 uid, const char *name, Sint32 textureId, bool isSub = false, CPieInternal *parent = NULL);
 
 	~CPieInternal(void);
 
@@ -147,18 +147,18 @@ public:
 
 	bool			ToFile(const char *filename, bool isOld = false);
 
-	uint16_t			findFreeSlot(uint8_t type);
+	Uint16			findFreeSlot(Uint8 type);
 	bool			isVerticeDuplicated(Vector3f v);
 
 	PIE_INTERNAL_CB	m_InstanceCallback;
 	PIE_INTERNAL_CB	m_AddVerticeCB;
 	PIE_INTERNAL_CB	m_AddConnectorCB;
 
-	bool			addVertice(uint8_t type);
+	bool			addVertice(Uint8 type);
 
-	bool			removeVerticeAt(uint16_t position);
+	bool			removeVerticeAt(Uint16 position);
 
-	bool			removeConnectorAt(uint16_t position);
+	bool			removeConnectorAt(Uint16 position);
 
 
 	void			selectAll(void);
@@ -166,10 +166,10 @@ public:
 
 	void			moveSelected(void);
 	void			removeSelected(void);
-	void			symmetricSelected(uint8_t	Axis);
+	void			symmetricSelected(Uint8	Axis);
 
 	bool			duplicateSelected(void);
-	bool			duplicatePoly(uint16_t index);
+	bool			duplicatePoly(Uint16 index);
 
 	void			checkSelection(float x1, float y1, float z1,
 									float x2, float y2, float z2);
@@ -187,13 +187,13 @@ public:
 	void			buildHLCache(void);
 	void			constructSharedVerticeList(void);
 
-	void			bindTexture(int32_t num);
+	void			bindTexture(Sint32 num);
 
 	void			logic(void);
 
-	void			drawInterleaved(INTERLEAVED_T2F_V3F *a_array, uint32_t count);
-	void			cacheVBOPoly(uint32_t count, uint32_t polyId);
-	void			drawVBOPoly(uint32_t polyId);
+	void			drawInterleaved(INTERLEAVED_T2F_V3F *a_array, Uint32 count);
+	void			cacheVBOPoly(Uint32 count, Uint32 polyId);
+	void			drawVBOPoly(Uint32 polyId);
 	void			flushVBOPolys(void);
 
 	void			draw(void);
@@ -206,12 +206,12 @@ public:
 	bool			addSub(const char *name);
 	bool			addSubFromFile(const char *filename);
 	bool			addFrame(void);
-	bool			removeFrame(uint16_t id);
-	bool			duplicateFrame(uint16_t id);
+	bool			removeFrame(Uint16 id);
+	bool			duplicateFrame(Uint16 id);
 
-	uint16_t			getVertCount(void) {return(m_vertCount);};
-	uint16_t			getConnCount(void) {return(m_connCount);};
-	uint16_t			getPolyCount(void) {return(m_polyCount);};
+	Uint16			getVertCount(void) {return(m_vertCount);};
+	Uint16			getConnCount(void) {return(m_connCount);};
+	Uint16			getPolyCount(void) {return(m_polyCount);};
 
 	bool			readAnimFile(const char *filename);
 	bool			writeAnimFileTrans(const char *filename);
@@ -225,37 +225,37 @@ public:
 		ANIM3DTRANS = 1
 	};
 
-	uint32_t			m_animMode;
-	uint32_t			m_currAnimFrame;
-	uint32_t			m_animStartTime;
-	uint32_t			m_numAnimFrames;
-	uint32_t			m_frameInterval;
-	uint16_t			m_levels;	///<Levels of submodel
+	Uint32			m_animMode;
+	Uint32			m_currAnimFrame;
+	Uint32			m_animStartTime;
+	Uint32			m_numAnimFrames;
+	Uint32			m_frameInterval;
+	Uint16			m_levels;	///<Levels of submodel
 	CPieInternal	*m_nextSub;
 	
 	CPieInternal	*m_parent;	///<Parent of submodel NULL if non-sub
 private:
 	CPieInternal	*m_instance;
-	uint32_t			m_numInstances;
+	Uint32			m_numInstances;
 
 	VERTICE_LIST	*m_Vertices[pie_MAX_VERTICES];
 	IMD_POLY_LIST	*m_Polygons[pie_MAX_POLYGONS];
 	CONNECTOR_LIST	*m_Connectors[pie_MAX_VERTICES];
 	SHARED_VERTICE	m_SharedVertices[pie_MAX_VERTICES];
 
-	uint16_t			m_vertCount;
-	uint16_t			m_polyCount;
-	uint16_t			m_connCount;
-	uint16_t			m_sharedCount;
+	Uint16			m_vertCount;
+	Uint16			m_polyCount;
+	Uint16			m_connCount;
+	Uint16			m_sharedCount;
 	Vector3f		m_position;
 
 	Vector3f		m_VerticesHLCache[pie_MAX_VERTICES * 4];
 	Vector3f		m_ConnectorsHLCache[pie_MAX_VERTICES * 4];
-	uint32_t			m_VerticesHLVBOId;
-	uint32_t			m_ConnectorsHLVBOId;
+	Uint32			m_VerticesHLVBOId;
+	Uint32			m_ConnectorsHLVBOId;
 
-	uint16_t			m_vertHLCount;
-	uint16_t			m_connHLCount;
+	Uint16			m_vertHLCount;
+	Uint16			m_connHLCount;
 
 	PIE_FRAME_INFO	m_frames[MAX_ANIM_FRAMES];
 
@@ -280,21 +280,21 @@ public:
 
 	void	flush(void);
 
-	void	setTarget(int32_t target);
-	uint16_t	getTarget(void);
+	void	setTarget(Sint32 target);
+	Uint16	getTarget(void);
 
 	bool	isUp(void);
-	bool	isDuplicated(uint16_t vertId);
-	bool	canLink(uint16_t vertId);
-	bool	Link(uint16_t vertId);
+	bool	isDuplicated(Uint16 vertId);
+	bool	canLink(Uint16 vertId);
+	bool	Link(Uint16 vertId);
 
 	void	draw(CPieInternal *target);
 
 	void	makePolygon(CPieInternal *target);
 private:
-	int32_t	m_Target;
-	uint8_t	m_LinkedIndex;
-	uint16_t	m_LinkedVertices[pie_MAX_VERTICES_PER_POLYGON];
+	Sint32	m_Target;
+	Uint8	m_LinkedIndex;
+	Uint16	m_LinkedVertices[pie_MAX_VERTICES_PER_POLYGON];
 
 	friend class CResMaster;
 };

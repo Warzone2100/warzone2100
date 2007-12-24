@@ -35,7 +35,7 @@
 static INTERLEAVED_T2F_V3F vaCache[pie_MAX_VERTICES];
 
 //default submodel id for GUI
-static uint32_t g_SubModelIndex = 8000;
+static Uint32 g_SubModelIndex = 8000;
 
 // this is a joke actually the result of 65536.0f / 360.f * 22.5f / 4096.0f is ~1
 static inline float WTFScale(float x)
@@ -126,7 +126,7 @@ void TW_CALL getVarCB(void *value, void *clientData) {
 void TW_CALL addVerticeCB(void *clientData) {
 	PIE_INTERNAL_CB	*pie_internal_cb = (PIE_INTERNAL_CB*)clientData;
 	CPieInternal	*instance = reinterpret_cast<CPieInternal*>(pie_internal_cb->pInstance);
-	uint8_t	i = pie_internal_cb->Id;
+	Uint8	i = pie_internal_cb->Id;
 
 	//fprintf(stderr, "address of instance:%d", instance);
 	//fprintf(stderr, "type of id:%c", i);
@@ -151,7 +151,7 @@ void TW_CALL removeSelectedCB(void *clientData) {
 void TW_CALL removeVerticeAtCB(void *clientData) {
 	PIE_INTERNAL_CB	*pie_internal_cb = (PIE_INTERNAL_CB*)clientData;
 	CPieInternal	*instance = reinterpret_cast<CPieInternal*>(pie_internal_cb->pInstance);
-	uint16_t	i = pie_internal_cb->Id;
+	Uint16	i = pie_internal_cb->Id;
 
 	if (!instance->removeVerticeAt(i))
 	{
@@ -163,7 +163,7 @@ void TW_CALL removeVerticeAtCB(void *clientData) {
 void TW_CALL removeConnectorAtCB(void *clientData) {
 	PIE_INTERNAL_CB	*pie_internal_cb = (PIE_INTERNAL_CB*)clientData;
 	CPieInternal	*instance = reinterpret_cast<CPieInternal*>(pie_internal_cb->pInstance);
-	uint16_t	i = pie_internal_cb->Id;
+	Uint16	i = pie_internal_cb->Id;
 
 	if (!instance->removeConnectorAt(i))
 	{
@@ -209,7 +209,7 @@ void TW_CALL removeSelectedVertices(void *clientData) {
 void TW_CALL symmetricSelectedVertices(void *clientData) {
 	PIE_INTERNAL_CB	*pie_internal_cb = (PIE_INTERNAL_CB*)clientData;
 	CPieInternal	*instance = reinterpret_cast<CPieInternal*>(pie_internal_cb->pInstance);
-	uint8_t	axis = pie_internal_cb->Id;
+	Uint8	axis = pie_internal_cb->Id;
 
 	instance->symmetricSelected(axis);
 	instance->updateGUI();
@@ -231,7 +231,7 @@ void TW_CALL duplicateSelectedVertices(void *clientData) {
 void TW_CALL duplicatePolyCB(void *clientData) {
 	PIE_INTERNAL_CB	*pie_internal_cb = (PIE_INTERNAL_CB*)clientData;
 	CPieInternal	*instance = reinterpret_cast<CPieInternal*>(pie_internal_cb->pInstance);
-	uint16_t			id = pie_internal_cb->Id;
+	Uint16			id = pie_internal_cb->Id;
 
 	if (!instance->duplicatePoly(id))
 	{
@@ -316,7 +316,7 @@ void TW_CALL removeFrameCB(void *clientData) {
 void TW_CALL duplicateFrameCB(void *clientData) {
 	PIE_INTERNAL_CB	*pie_internal_cb = (PIE_INTERNAL_CB*)clientData;
 	CPieInternal	*instance = reinterpret_cast<CPieInternal*>(pie_internal_cb->pInstance);
-	uint16_t			id = pie_internal_cb->Id;
+	Uint16			id = pie_internal_cb->Id;
 
 	instance->duplicateFrame(id);
 }
@@ -335,11 +335,11 @@ void	CPolygonLinker::flush(void) {
 	m_MakePolygon = false;
 }
 
-void	CPolygonLinker::setTarget(int32_t target) {
+void	CPolygonLinker::setTarget(Sint32 target) {
 	m_Target = target;
 }
 
-uint16_t	CPolygonLinker::getTarget(void) {
+Uint16	CPolygonLinker::getTarget(void) {
 	return m_Target;
 }
 
@@ -347,8 +347,8 @@ bool	CPolygonLinker::isUp(void) {
 	return (m_Up);
 }
 
-bool	CPolygonLinker::isDuplicated(uint16_t vertId) {
-	uint8_t i = 0;
+bool	CPolygonLinker::isDuplicated(Uint16 vertId) {
+	Uint8 i = 0;
 
 	if (!m_LinkedIndex)
 	{
@@ -366,7 +366,7 @@ bool	CPolygonLinker::isDuplicated(uint16_t vertId) {
 	return false;
 }
 
-bool	CPolygonLinker::canLink(uint16_t vertId) {
+bool	CPolygonLinker::canLink(Uint16 vertId) {
 	//Skips self-link(dot) and line link(2 points line)
 	if (isDuplicated(vertId) && m_LinkedIndex < 3)
 	{
@@ -376,7 +376,7 @@ bool	CPolygonLinker::canLink(uint16_t vertId) {
 	return true;
 }
 
-bool	CPolygonLinker::Link(uint16_t vertId) {
+bool	CPolygonLinker::Link(Uint16 vertId) {
 	if(!canLink(vertId))
 	{
 		return false;
@@ -396,8 +396,8 @@ bool	CPolygonLinker::Link(uint16_t vertId) {
 }
 
 void	CPolygonLinker::draw(CPieInternal *target) {
-	uint16_t		i;
-	uint8_t		color[4] = {0, 0, 64, 255};
+	Uint16		i;
+	Uint8		color[4] = {0, 0, 64, 255};
 	bool		bTextured = false;
 
 	glDisable(GL_DEPTH_TEST);
@@ -436,8 +436,8 @@ void	CPolygonLinker::draw(CPieInternal *target) {
 }
 
 void	CPolygonLinker::makePolygon(CPieInternal *target) {
-	uint8_t		i;
-	uint16_t		polyIndex;
+	Uint8		i;
+	Uint16		polyIndex;
 
 	polyIndex = target->findFreeSlot(1);
 
@@ -488,14 +488,14 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	if (pieFlag & pie_ADDITIVE)
 	{ //Assume also translucent
 		//pie_SetRendMode(REND_ADDITIVE_TEX);
-		colour.byte.a = (UBYTE)pieFlagData;
+		colour.byte.a = (Uint8)pieFlagData;
 		//pie_SetBilinear(true);
 		light = false;
 	}
 	else if (pieFlag & pie_TRANSLUCENT)
 	{
 		//pie_SetRendMode(REND_ALPHA_TEX);
-		colour.byte.a = (UBYTE)pieFlagData;
+		colour.byte.a = (Uint8)pieFlagData;
 		//pie_SetBilinear(false);//never bilinear with constant alpha, gives black edges
 		light = false;
 	}
@@ -576,8 +576,8 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 
 
 ///Constructed from a imd
-CPieInternal::CPieInternal(uint16_t uid, iIMDShape *imd, const char *name, bool isSub, CPieInternal *parent) {
-	uint32_t i, j, vertIndex = 0;
+CPieInternal::CPieInternal(Uint16 uid, iIMDShape *imd, const char *name, bool isSub, CPieInternal *parent) {
+	Uint32 i, j, vertIndex = 0;
 
 	memset(this->m_Polygons, 0, sizeof(IMD_POLY_LIST) * pie_MAX_POLYGONS);
 	memset(this->m_Vertices, 0, sizeof(VERTICE_LIST) * pie_MAX_VERTICES);
@@ -725,7 +725,7 @@ CPieInternal::CPieInternal(uint16_t uid, iIMDShape *imd, const char *name, bool 
 }
 
 ///Newly generated CPieInternal
-CPieInternal::CPieInternal(uint16_t uid, const char *name, int32_t textureId, bool isSub, CPieInternal *parent) {
+CPieInternal::CPieInternal(Uint16 uid, const char *name, Sint32 textureId, bool isSub, CPieInternal *parent) {
 	memset(this->m_Polygons, 0, sizeof(IMD_POLY_LIST) * pie_MAX_POLYGONS);
 	memset(this->m_Vertices, 0, sizeof(VERTICE_LIST) * pie_MAX_VERTICES);
 	memset(this->m_Connectors, 0, sizeof(CONNECTOR_LIST) * pie_MAX_VERTICES);
@@ -777,7 +777,7 @@ CPieInternal::CPieInternal(uint16_t uid, const char *name, int32_t textureId, bo
 
 ///Constructed from a imd
 CPieInternal::~CPieInternal() {
-	uint32_t i;
+	Uint32 i;
 
 	for (i = 0;i < m_polyCount;i++)
 	{
@@ -909,7 +909,7 @@ void	CPieInternal::setInstance(void) {
 ///Convert to iIMDShape
 iIMDShape* CPieInternal::ToIMD(void) {
 	iIMDShape *newIMD = NULL;
-	uint32_t i, j, vertIndex = 0, newPolyIndex, newVertIndex, newConnIndex;
+	Uint32 i, j, vertIndex = 0, newPolyIndex, newVertIndex, newConnIndex;
 
 	newIMD = (iIMDShape*)malloc(sizeof(iIMDShape));
 
@@ -1109,7 +1109,7 @@ bool	CPieInternal::ToFile(const char *filename, bool isOld) {
 }
 
 bool	CPieInternal::isVerticeDuplicated(Vector3f v) {
-	uint16_t	i;
+	Uint16	i;
 
 	for (i = 0;i < m_vertCount;i++)
 	{
@@ -1123,8 +1123,8 @@ bool	CPieInternal::isVerticeDuplicated(Vector3f v) {
 	return false;
 }
 
-uint16_t	CPieInternal::findFreeSlot(uint8_t type) {
-	uint16_t i;
+Uint16	CPieInternal::findFreeSlot(Uint8 type) {
+	Uint16 i;
 
 	switch(type)
 	{
@@ -1161,8 +1161,8 @@ uint16_t	CPieInternal::findFreeSlot(uint8_t type) {
 	}
 }
 
-bool	CPieInternal::addVertice(uint8_t type) {
-	uint16_t	slot;
+bool	CPieInternal::addVertice(Uint8 type) {
+	Uint16	slot;
 
 	slot = this->findFreeSlot(type);
 
@@ -1223,8 +1223,8 @@ bool	CPieInternal::addVertice(uint8_t type) {
 	}
 }
 
-bool	CPieInternal::removeVerticeAt(uint16_t position) {
-	uint16_t		i, j;
+bool	CPieInternal::removeVerticeAt(Uint16 position) {
+	Uint16		i, j;
 	VERTEXID	*vertexId;
 
 	// Traverse and remove all polygons using this vertice
@@ -1281,7 +1281,7 @@ bool	CPieInternal::removeVerticeAt(uint16_t position) {
 	return false;
 }
 
-bool	CPieInternal::removeConnectorAt(uint16_t position) {
+bool	CPieInternal::removeConnectorAt(Uint16 position) {
 	if (m_Connectors[position])
 	{
 		free(m_Connectors[position]);
@@ -1295,7 +1295,7 @@ bool	CPieInternal::removeConnectorAt(uint16_t position) {
 }
 
 void	CPieInternal::selectAll(void) {
-	uint16_t	i;
+	Uint16	i;
 
 	for (i = 0;i < m_vertCount;i++)
 	{
@@ -1315,7 +1315,7 @@ void	CPieInternal::selectAll(void) {
 }
 
 void	CPieInternal::unselectAll(void) {
-	uint16_t	i;
+	Uint16	i;
 
 	for (i = 0;i < m_vertCount;i++)
 	{
@@ -1335,7 +1335,7 @@ void	CPieInternal::unselectAll(void) {
 }
 
 void	CPieInternal::moveSelected(void) {
-	uint16_t	i;
+	Uint16	i;
 
 	for (i = 0;i < m_vertCount;i++)
 	{
@@ -1351,7 +1351,7 @@ void	CPieInternal::moveSelected(void) {
 
 ///Remove selected vertices and connectors
 void	CPieInternal::removeSelected(void) {
-	uint16_t	i;
+	Uint16	i;
 	for (i = 0;i < m_vertCount;i++)
 	{
 		if (m_Vertices[i] && m_Vertices[i]->selected)
@@ -1370,19 +1370,19 @@ void	CPieInternal::removeSelected(void) {
 }
 
 //TODO:finish this
-void	CPieInternal::symmetricSelected(uint8_t	Axis) {
+void	CPieInternal::symmetricSelected(Uint8	Axis) {
 
 }
 
 bool	CPieInternal::duplicateSelected(void) {
-	uint16_t	i, count;
+	Uint16	i, count;
 
 	count = 0;
 	for (i = 0;i < m_vertCount;i++)
 	{
 		if (m_Vertices[i] && m_Vertices[i]->selected)
 		{
-			uint16_t	slot;
+			Uint16	slot;
 
 			slot = this->findFreeSlot(PIE_VERTICE);
 
@@ -1414,9 +1414,9 @@ bool	CPieInternal::duplicateSelected(void) {
 	return true;
 }
 
-bool	CPieInternal::duplicatePoly(uint16_t index) {
-	uint16_t	i;
-	uint16_t	newPolyIndex;
+bool	CPieInternal::duplicatePoly(Uint16 index) {
+	Uint16	i;
+	Uint16	newPolyIndex;
 
 	newPolyIndex = this->findFreeSlot(PIE_POLYGON);
 
@@ -1447,7 +1447,7 @@ bool	CPieInternal::duplicatePoly(uint16_t index) {
 
 	for (i = 0;i < m_Polygons[index]->polygon.npnts;i++)
 	{
-		uint16_t	slot;
+		Uint16	slot;
 
 		slot = findFreeSlot(PIE_VERTICE);
 
@@ -1486,7 +1486,7 @@ bool	CPieInternal::duplicatePoly(uint16_t index) {
 
 void	CPieInternal::checkSelection(float x1, float y1, float z1,
 									 float x2, float y2, float z2) {
-	uint16_t	i, chosen;
+	Uint16	i, chosen;
 	float	mag, minDist;
 	float	xdiff = x2 - x1, ydiff = y2 - y1, zdiff = z2 - z1;
 	Vector3f	slope = {xdiff, ydiff, zdiff};
@@ -1533,7 +1533,7 @@ void	CPieInternal::checkSelection(float x1, float y1, float z1,
 				{
 					if (m_SharedVertices[i].numShared)
 					{
-						uint16_t	index, newIndex;
+						Uint16	index, newIndex;
 
 						for (index = 0;index < m_SharedVertices[i].numShared;index++)
 						{
@@ -1683,7 +1683,7 @@ void	CPieInternal::setPosition(float x, float y, float z) {
 }
 
 void	CPieInternal::buildHLCache(void) {
-	int32_t	i, index;
+	Sint32	i, index;
 
 	index = - 1;
 	m_vertHLCount = 0;
@@ -1742,7 +1742,7 @@ void	CPieInternal::buildHLCache(void) {
 #if 0
 	if (g_Screen.m_useVBO)
 	{
-		int32_t test;
+		Sint32 test;
 
 		if (!bRebuild)
 		{
@@ -1794,7 +1794,7 @@ void	CPieInternal::buildHLCache(void) {
 
 
 void	CPieInternal::constructSharedVerticeList(void) {
-	uint16_t	i, count, count2;
+	Uint16	i, count, count2;
 
 	count = count2 = 0;
 	for (i = 0;i < m_vertCount;i++)
@@ -1901,7 +1901,7 @@ void	CPieInternal::highLightVertices(void) {
 	glDisableClientState(GL_VERTEX_ARRAY);
 
 	/*
-    uint16_t	i;
+    Uint16	i;
 
 	for (i = 0;i < m_vertCount;i++)
 	{
@@ -1958,7 +1958,7 @@ void	CPieInternal::highLightConnectors(void) {
 	glDisableClientState(GL_VERTEX_ARRAY);
 
 /*
-	uint16_t	i;
+	Uint16	i;
 
 	for (i = 0;i < m_connCount;i++)
 	{
@@ -1989,7 +1989,7 @@ NextSubHighLightConnectors:
 }
 
 void	CPieInternal::highLightSelected(void) {
-	uint16_t	i;
+	Uint16	i;
     bool	bTextured = false;
 
 	if (!this->m_Visible) {
@@ -2046,7 +2046,7 @@ NextSubHighLightSelected:
 	}
 }
 
-void	CPieInternal::bindTexture(int32_t num)
+void	CPieInternal::bindTexture(Sint32 num)
 {
 	glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[num].id);
 }
@@ -2055,7 +2055,7 @@ void	CPieInternal::logic(void) {
 	this->constructSharedVerticeList();
 	this->buildHLCache();
 
-	uint16_t	i;
+	Uint16	i;
 	for (i = 0;i < m_numAnimFrames;i++)
 	{
 		if (m_frames[i].died)
@@ -2071,12 +2071,12 @@ void	CPieInternal::logic(void) {
 	}
 }
 
-void	CPieInternal::drawInterleaved(INTERLEAVED_T2F_V3F *a_array, uint32_t count) {
+void	CPieInternal::drawInterleaved(INTERLEAVED_T2F_V3F *a_array, Uint32 count) {
 	glInterleavedArrays(GL_T2F_V3F, 0, a_array);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, count);
 }
 
-void	CPieInternal::cacheVBOPoly(uint32_t count, uint32_t polyId) {
+void	CPieInternal::cacheVBOPoly(Uint32 count, Uint32 polyId) {
 	if (m_Polygons[polyId]->hasVBO)
 	{
 		g_Screen.glDeleteBuffersARB(1, &m_Polygons[polyId]->VBOId);
@@ -2095,7 +2095,7 @@ void	CPieInternal::cacheVBOPoly(uint32_t count, uint32_t polyId) {
 	m_Polygons[polyId]->hasVBO = true;
 }
 
-void	CPieInternal::drawVBOPoly(uint32_t polyId) {
+void	CPieInternal::drawVBOPoly(Uint32 polyId) {
 	g_Screen.glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_Polygons[polyId]->VBOId);
 	glTexCoordPointer(2, GL_FLOAT, sizeof(INTERLEAVED_T2F_V3F), (char*)0);
 	glVertexPointer(3, GL_FLOAT, sizeof(INTERLEAVED_T2F_V3F), (char*)(0 + sizeof(Vector2f)));
@@ -2104,7 +2104,7 @@ void	CPieInternal::drawVBOPoly(uint32_t polyId) {
 }
 
 void	CPieInternal::flushVBOPolys(void) {
-	uint32_t	i;
+	Uint32	i;
 	for (i = 0;i < m_polyCount;i++)
 	{
 		if (m_Polygons[i])
@@ -2158,7 +2158,7 @@ void	CPieInternal::draw(void) {
 
 	if (m_framesVisible)
 	{
-		uint32_t	frame;
+		Uint32	frame;
 		for (frame = 0;frame < this->m_numAnimFrames;frame++)
 		{
 			if (m_frames[frame].visible)
@@ -2322,7 +2322,7 @@ void	CPieInternal::draw(void) {
 
 	if (m_animMode == ANIM3DFRAMES && m_drawAnim && !m_IsSub)
 	{
-		uint32_t	targetFrame = 0;
+		Uint32	targetFrame = 0;
 		CPieInternal	*temp = this;
 
 		if (m_currAnimFrame)
@@ -2546,7 +2546,7 @@ void	CPieInternal::draw(void) {
 }
 
 bool CPieInternal::addGUI(void) {
-	uint16_t		i, n, totalVertices = 0;
+	Uint16		i, n, totalVertices = 0;
 	VERTEXID	*index;
 
 	char	toolBarName[255] = "toolbar";
@@ -2883,7 +2883,7 @@ bool CPieInternal::addGUI(void) {
 }
 
 void	CPieInternal::updateGUI(void) {
-	uint16_t		i, n, totalVertices = 0;
+	Uint16		i, n, totalVertices = 0;
 	VERTEXID	*index;
 
 	//Utility bar
@@ -3191,7 +3191,7 @@ void	CPieInternal::updateGUI(void) {
 }
 
 void	CPieInternal::hideGUI(void) {
-	uint16_t		i;
+	Uint16		i;
 
 	//Utility bar
 	char	toolBarName[255] = "toolbar";
@@ -3355,7 +3355,7 @@ void	CPieInternal::hideGUI(void) {
 }
 
 void	CPieInternal::showGUI(void) {
-	uint16_t		i;
+	Uint16		i;
 
 	//Utility bar
 	char	toolBarName[255] = "toolbar";
@@ -3590,7 +3590,7 @@ bool	CPieInternal::addFrame(void) {
 	return true;
 }
 
-bool	CPieInternal::removeFrame(uint16_t id) {
+bool	CPieInternal::removeFrame(Uint16 id) {
 
 	//assert(id < MAX_ANIM_FRAMES);
 	//assert(m_numAnimFrames > 0);
@@ -3604,7 +3604,7 @@ bool	CPieInternal::removeFrame(uint16_t id) {
 	m_frames[id].Bar = NULL;
 	m_frames[id].died = false;
 
-	uint16_t	i;
+	Uint16	i;
 	for (i = m_numAnimFrames - 1;i > id;i--)
 	{
 		m_frames[i - 1].visible = m_frames[i].visible;
@@ -3630,7 +3630,7 @@ bool	CPieInternal::removeFrame(uint16_t id) {
 	return true;
 }
 
-bool	CPieInternal::duplicateFrame(uint16_t id) {
+bool	CPieInternal::duplicateFrame(Uint16 id) {
 	//assert(id < MAX_ANIM_FRAMES);
 	m_frames[m_numAnimFrames].died = false;
 	m_frames[m_numAnimFrames].visible = true;
@@ -3681,8 +3681,8 @@ bool	CPieInternal::readAnimFile(const char *filename)
 
 	char	*buffer = (char*)malloc(sizeof(char) * 1024 * 1024); //1MB
 	char	*temp = buffer;
-	uint32_t	count, quantity = fread(buffer, 1, 1024*1024, file);
-	uint32_t	objIndex;
+	Uint32	count, quantity = fread(buffer, 1, 1024*1024, file);
+	Uint32	objIndex;
 	CPieInternal	*target = this;
 
 	fclose(file);
@@ -3716,7 +3716,7 @@ bool	CPieInternal::readAnimFile(const char *filename)
 		}
 
 		char Line[512];
-		uint32_t	LineLength;
+		Uint32	LineLength;
 		sscanf(buffer, "%[^'\n']%n", Line, &LineLength);
 		count += LineLength + 1;
 		buffer += LineLength + 1;
@@ -3733,7 +3733,7 @@ bool	CPieInternal::readAnimFile(const char *filename)
 
 			if (!strcmp(tag, "ANIM3DFRAMES"))
 			{
-				uint32_t	count, total = 0;
+				Uint32	count, total = 0;
 				sscanf(Line, "%s%n", dummy, &count);
 				total += count;
 				sscanf(&Line[total], " \"%[^'\"']%n", dummy2, &count);
@@ -3753,7 +3753,7 @@ bool	CPieInternal::readAnimFile(const char *filename)
 			}
 			else if (!strcmp(tag, "ANIM3DTRANS"))
 			{
-				uint32_t	dummyInt, count, total = 0;
+				Uint32	dummyInt, count, total = 0;
 				sscanf(Line, "%s%n", dummy, &count);
 				total += count;
 				sscanf(&Line[total], " \"%[^'\"']%n", dummy2, &count);
@@ -3776,7 +3776,7 @@ bool	CPieInternal::readAnimFile(const char *filename)
 				sscanf(Line, "%s %d %s", dummy, &objIndex, dummy2);
 
 				CPieInternal	*temp = this;
-				uint32_t			i = 0;
+				Uint32			i = 0;
 
 				while(i < objIndex)
 				{
@@ -3792,7 +3792,7 @@ bool	CPieInternal::readAnimFile(const char *filename)
 			}
 			else
 			{
-				uint32_t	frameId;
+				Uint32	frameId;
 				float x, y, z, rotx, roty, rotz, scalex, scaley, scalez;
 
 				sscanf(Line, "%d %f %f %f %f %f %f %f %f %f",
@@ -3828,7 +3828,7 @@ void	CPieInternal::startAnim() {
 	}
 	else
 	{
-		uint32_t	currTime = SDL_GetTicks();
+		Uint32	currTime = SDL_GetTicks();
 
 		if (currTime - m_animStartTime > m_frameInterval)
 		{
@@ -3857,20 +3857,20 @@ bool	CPieInternal::writeAnimFileTrans(const char *filename) {
 	}
 
 	CPieInternal	*temp = this;
-	uint32_t			index = 0;
+	Uint32			index = 0;
 	fprintf(file, "ANIM3DTRANS \"%s\" %d %d %d\n", temp->m_Name, temp->m_numAnimFrames, temp->m_frameInterval, temp->m_levels + 1);
 	fprintf(file, "{\n");
 	while (temp)
 	{
 		fprintf(file, "\tANIMOBJECT %d \"SubModel%d\"\n", index, index);
 		fprintf(file, "\t{\n");
-		uint32_t	i;
+		Uint32	i;
 		for (i = 0;i < temp->m_numAnimFrames;i++)
 		{
 			fprintf(file, "\t\t%d %d %d %d %d %d %d %d %d %d\n",
-				i, (int32_t)temp->m_frames[i].offsetX, (int32_t)temp->m_frames[i].offsetY, (int32_t)temp->m_frames[i].offsetZ,
-				(int32_t)temp->m_frames[i].rotateX, (int32_t)temp->m_frames[i].rotateY, (int32_t)temp->m_frames[i].rotateZ,
-				(int32_t)temp->m_frames[i].scaleX, (int32_t)temp->m_frames[i].scaleY, (int32_t)temp->m_frames[i].scaleZ);
+				i, (Sint32)temp->m_frames[i].offsetX, (Sint32)temp->m_frames[i].offsetY, (Sint32)temp->m_frames[i].offsetZ,
+				(Sint32)temp->m_frames[i].rotateX, (Sint32)temp->m_frames[i].rotateY, (Sint32)temp->m_frames[i].rotateZ,
+				(Sint32)temp->m_frames[i].scaleX, (Sint32)temp->m_frames[i].scaleY, (Sint32)temp->m_frames[i].scaleZ);
 		}
 		fprintf(file, "\t}\n\n");
 		temp = temp->m_nextSub;
@@ -3891,15 +3891,15 @@ bool	CPieInternal::writeAnimFileFrames(const char *filename) {
 	}
 
 	CPieInternal	*temp = this;
-	uint32_t			i;
+	Uint32			i;
 	fprintf(file, "ANIM3DFRAMES \"%s\" %d %d\n", temp->m_Name, temp->m_numAnimFrames, temp->m_frameInterval);
 	fprintf(file, "{\n");
 	for (i = 0;i < temp->m_numAnimFrames;i++)
 	{
 		fprintf(file, "\t%d %d %d %d %d %d %d %d %d %d\n",
-			i, (int32_t)temp->m_frames[i].offsetX, (int32_t)temp->m_frames[i].offsetY, (int32_t)temp->m_frames[i].offsetZ,
-			(int32_t)temp->m_frames[i].rotateX, (int32_t)temp->m_frames[i].rotateY, (int32_t)temp->m_frames[i].rotateZ,
-			(int32_t)temp->m_frames[i].scaleX, (int32_t)temp->m_frames[i].scaleY, (int32_t)temp->m_frames[i].scaleZ);
+			i, (Sint32)temp->m_frames[i].offsetX, (Sint32)temp->m_frames[i].offsetY, (Sint32)temp->m_frames[i].offsetZ,
+			(Sint32)temp->m_frames[i].rotateX, (Sint32)temp->m_frames[i].rotateY, (Sint32)temp->m_frames[i].rotateZ,
+			(Sint32)temp->m_frames[i].scaleX, (Sint32)temp->m_frames[i].scaleY, (Sint32)temp->m_frames[i].scaleZ);
 	}
 	fprintf(file, "}\n");
 	fclose(file);

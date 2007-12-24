@@ -37,7 +37,7 @@ public:
 
 	virtual void doFunction();
 
-	void	incrementChar(uint16_t key);
+	void	incrementChar(Uint16 key);
 	void	decrementChar(void);
 
 	void	addTextBox(const char * name);
@@ -52,7 +52,7 @@ public:
 protected:
 	char	m_name[255]; //name
 	char	m_text[255]; //temp char
-	int32_t	m_textIndex; //temp char current index
+	Sint32	m_textIndex; //temp char current index
 	TwBar	*m_textBar; //text box bar
 	void	*m_userInfo;	//pointer to user object
 	//char	*m_textPointer = NULL;
@@ -62,9 +62,9 @@ protected:
 
 class CToasterButton {
 public:
-	static const uint32_t MAX_STR_LENGTH = 128;
+	static const Uint32 MAX_STR_LENGTH = 128;
 
-	CToasterButton(const char *name, const char *text, uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t alignment, bool isImage, void *image);
+	CToasterButton(const char *name, const char *text, Uint16 x, Uint16 y, Uint16 w, Uint16 h, Uint16 alignment, bool isImage, void *image);
 
 	enum {
 		ALIGN_LEFT = 1,
@@ -77,11 +77,11 @@ public:
 	virtual void OnDBClick(void);
 private:
 	bool	m_IsImageButton;	///whether image button or not
-	uint16_t	m_Alignment;		///Alignment of text/image
-	uint16_t	m_X;	///offset to GUI x(0)
-	uint16_t	m_Y;	///offset to GUI y(0)
-	uint16_t	m_Width;	///Width of button
-	uint16_t	m_Height;	///Height of button
+	Uint16	m_Alignment;		///Alignment of text/image
+	Uint16	m_X;	///offset to GUI x(0)
+	Uint16	m_Y;	///offset to GUI y(0)
+	Uint16	m_Width;	///Width of button
+	Uint16	m_Height;	///Height of button
 
 	char	m_Name[MAX_STR_LENGTH];		///Name
 	char	m_Text[MAX_STR_LENGTH];		///Text
@@ -90,19 +90,19 @@ private:
 
 class CToasterWidget {
 public:
-	CToasterWidget(uint16_t x, uint16_t y, uint16_t w, uint16_t h);
+	CToasterWidget(Uint16 x, Uint16 y, Uint16 w, Uint16 h);
 	~CToasterWidget();
 
-	void	addButton(const char *name, const char *text,uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t alignment, bool isImage, void *image);
+	void	addButton(const char *name, const char *text,Uint16 x, Uint16 y, Uint16 w, Uint16 h, Uint16 alignment, bool isImage, void *image);
 
 	void	draw(void);
 private:
-	uint16_t	m_ScreenX;	///offset to screen x(0)
-	uint16_t	m_ScreenY;	///offset to screen y(0)
-	uint16_t	m_Width;	///Width of widget
-	uint16_t	m_Height;	///Height of widget
+	Uint16	m_ScreenX;	///offset to screen x(0)
+	Uint16	m_ScreenY;	///offset to screen y(0)
+	Uint16	m_Width;	///Width of widget
+	Uint16	m_Height;	///Height of widget
 	CToasterButton	m_Buttons[10];	///buttons
-	uint16_t	m_numButtons;	///number of buttons
+	Uint16	m_numButtons;	///number of buttons
 };
 
 

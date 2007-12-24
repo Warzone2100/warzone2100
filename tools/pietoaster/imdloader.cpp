@@ -33,6 +33,8 @@
  *   - ...
  */
 
+#include "wzglobal.h"
+#include "macros.h"
 #include "pie_types.h"
 #include "imdloader.h" // for imd structures
 #include "texture.h"
@@ -77,7 +79,7 @@ static inline void Vector3f_Set(Vector3f* v, const float x, const float y, const
 
 static void pie_VectorNormalise3iv(Vector3i *v)
 {
-	int32_t size;
+	Sint32 size;
 	Vector3i av = {abs(v->x), abs(v->y), abs(v->z)};
 
 	if (av.x >= av.y)
@@ -105,8 +107,8 @@ static void pie_VectorNormalise3iv(Vector3i *v)
 
 static void pie_VectorNormalise3fv(Vector3f *v)
 {
-	int32_t size;
-	Vector3f av = {abs(v->x), abs(v->y), abs(v->z)};
+	float size;
+	Vector3f av = {fabs(v->x), fabs(v->y), fabs(v->z)};
 
 	if (av.x >= av.y) {
 		if (av.x > av.z)
@@ -202,7 +204,7 @@ static bool _imd_load_polys( const char **ppFileData, iIMDShape *s )
 
 	for (i = 0, poly = s->polys; i < s->npolys; i++, poly++)
 	{
-		UDWORD flags, npnts;
+		Uint32 flags, npnts;
 
 		if (sscanf(pFileData, "%x %d%n", &flags, &npnts, &cnt) != 2)
 		{
@@ -394,8 +396,8 @@ static bool ReadPoints( const char **ppFileData, iIMDShape *s )
 static bool _imd_load_points( const char **ppFileData, iIMDShape *s )
 {
 	Vector3f *p = NULL;
-	int32_t tempXMax, tempXMin, tempZMax, tempZMin;
-	int32_t xmax, ymax, zmax;
+	float tempXMax, tempXMin, tempZMax, tempZMin;
+	float xmax, ymax, zmax;
 	double dx, dy, dz, rad_sq, rad, old_to_p_sq, old_to_p, old_to_new;
 	double xspan, yspan, zspan, maxspan;
 	Vector3f dia1, dia2, cen;
@@ -773,9 +775,9 @@ iIMDShape *iV_ProcessIMD( const char *filename )
 	char buffer[MAX_PATH] = "-_-", texfile[MAX_PATH];
 	int cnt, nlevels, filelength;
 	iIMDShape *shape, *psShape;
-	UDWORD level;
-	int32_t imd_version;
-	uint32_t imd_flags; // FIXME UNUSED
+	Uint32 level;
+	Sint32 imd_version;
+	Uint32 imd_flags; // FIXME UNUSED
 	bool bTextured = false;
 	FILE *FileToOpen = NULL;
 

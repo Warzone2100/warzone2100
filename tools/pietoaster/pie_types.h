@@ -89,8 +89,8 @@ typedef iV_Image iTexture;
 #define pie_FILLBLUE			128
 #define pie_FILLTRANS			128
 
-#define MAX_UB_LIGHT			((UBYTE)255)
-#define MIN_UB_LIGHT			((UBYTE)0)
+#define MAX_UB_LIGHT			((Uint8)255)
+#define MIN_UB_LIGHT			((Uint8)0)
 #define MAX_LIGHT			0xffffffff
 
 #define iV_SCANTABLE_MAX	1024
@@ -148,8 +148,8 @@ typedef struct edge_
 typedef int VERTEXID;	// Size of the entry for vertex id in the imd polygon structure
 
 typedef struct iIMDPoly {
-	uint32_t flags;
-	int32_t zcentre;
+	Uint32 flags;
+	Sint32 zcentre;
 	int npnts;
 	Vector3f normal;
 	VERTEXID *pindex;
@@ -187,22 +187,22 @@ typedef struct iIMDShape {
 /***************************************************************************/
 
 #ifdef __BIG_ENDIAN__
-typedef struct {UBYTE a, r, g, b;} PIELIGHTBYTES; //for byte fields in a DWORD
+typedef struct {Uint8 a, r, g, b;} PIELIGHTBYTES; //for byte fields in a DWORD
 #else
-typedef struct {UBYTE b, g, r, a;} PIELIGHTBYTES; //for byte fields in a DWORD
+typedef struct {Uint8 b, g, r, a;} PIELIGHTBYTES; //for byte fields in a DWORD
 #endif
-typedef union  {PIELIGHTBYTES byte; UDWORD argb;} PIELIGHT;
-typedef struct {UBYTE r, g, b, a;} PIEVERTLIGHT;
+typedef union  {PIELIGHTBYTES byte; Uint32 argb;} PIELIGHT;
+typedef struct {Uint8 r, g, b, a;} PIEVERTLIGHT;
 typedef struct {int x, y, z; unsigned int u, v; PIELIGHT light, specular;} PIEVERTEX;
 typedef struct _pievertexf {float x, y, z, u, v; PIELIGHT light, specular;} PIEVERTEXF;
 
-typedef struct {SWORD x, y, w, h;} PIERECT; //screen rectangle
-typedef struct {SDWORD texPage; SWORD tu, tv, tw, th;} PIEIMAGE; //an area of texture
-typedef struct {UDWORD pieFlag; PIELIGHT colour, specular; UBYTE light, trans, scale, height;} PIESTYLE; //render style for pie draw functions
+typedef struct {Sint16 x, y, w, h;} PIERECT; //screen rectangle
+typedef struct {Sint32 texPage; Sint16 tu, tv, tw, th;} PIEIMAGE; //an area of texture
+typedef struct {Uint32 pieFlag; PIELIGHT colour, specular; Uint8 light, trans, scale, height;} PIESTYLE; //render style for pie draw functions
 
 typedef struct _piepoly {
-	UDWORD flags;
-	SDWORD nVrts;
+	Uint32 flags;
+	Sint32 nVrts;
 	PIEVERTEXF *pVrts;
 	iTexAnim *pTexAnim;
 } PIEPOLY;

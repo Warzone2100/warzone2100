@@ -21,13 +21,13 @@
 
 //sets the MouseX,MouseY to invalid 0xFFFF
 ///mouse x coord on screen
-uint16_t MouseX = 0xFFFF;
+Uint16 MouseX = 0xFFFF;
 ///mouse y coord on screen
-uint16_t MouseY = 0xFFFF;
+Uint16 MouseY = 0xFFFF;
 ///mouse x move last frame
-int16_t MouseMoveX = 0;
+Sint16 MouseMoveX = 0;
 ///mouse y move last frame
-int16_t MouseMoveY = 0;
+Sint16 MouseMoveY = 0;
 
 INPUT_ELEM KeyStates[MAX_KEYS];
 INPUT_ELEM MouseStates[MAX_MOUSE_BUTTONS];
@@ -39,8 +39,8 @@ void inputInitialize(void) {
 }
 
 ///handles  mouse input
-void inputButtonMouseEvent(SDL_MouseButtonEvent button, uint8_t newState) {
-	const uint16_t buttonId = button.button;
+void inputButtonMouseEvent(SDL_MouseButtonEvent button, Uint8 newState) {
+	const Uint16 buttonId = button.button;
 
 	if (newState == SDL_MOUSEBUTTONUP) {
 		MouseStates[buttonId].data |= OH_KEY_UP;
@@ -53,15 +53,15 @@ void inputButtonMouseEvent(SDL_MouseButtonEvent button, uint8_t newState) {
 
 //update the mouse screen x,y
 void inputMotionMouseEvent(SDL_MouseMotionEvent motion) {
-	MouseMoveX = (int16_t)MouseX - (int16_t)motion.x;
-	MouseMoveY = (int16_t)MouseY - (int16_t)motion.y;
+	MouseMoveX = (Sint16)MouseX - (Sint16)motion.x;
+	MouseMoveY = (Sint16)MouseY - (Sint16)motion.y;
 	MouseX = motion.x;
 	MouseY = motion.y;
 }
 
 ///handles key input
-void inputKeyEvent(SDL_KeyboardEvent key, uint8_t newState) {
-	const uint16_t eventKey = key.keysym.sym;
+void inputKeyEvent(SDL_KeyboardEvent key, Uint8 newState) {
+	const Uint16 eventKey = key.keysym.sym;
 
 	if (newState == SDL_KEYUP) {
 		KeyStates[eventKey].data |= OH_KEY_UP;
@@ -84,22 +84,22 @@ bool isKeyHold(SDLKey key) {
 	return (KeyStates[key].duration);
 }
 
-bool isMouseButtonDown(uint8_t button) {
+bool isMouseButtonDown(Uint8 button) {
 	return (MouseStates[button].data & OH_KEY_RELEASE);
 }
 
-bool isMouseButtonDoubleDown(uint8_t button) {
+bool isMouseButtonDoubleDown(Uint8 button) {
 	return (MouseStates[button].data & OH_KEY_DDOWN && MouseStates[button].data & OH_KEY_RELEASE);
 }
 
-bool isMouseButtonHold(uint8_t button) {
+bool isMouseButtonHold(Uint8 button) {
 	return (MouseStates[button].duration);
 }
 
 ///per-frame input update
 void inputUpdate(void) {
-	uint32_t	timeDiff, i;
-	const uint32_t currTicks = SDL_GetTicks();
+	Uint32	timeDiff, i;
+	const Uint32 currTicks = SDL_GetTicks();
 
 	for (i = 0;i < MAX_KEYS;i++) {
 		if (KeyStates[i].data) {

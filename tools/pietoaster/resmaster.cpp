@@ -55,7 +55,7 @@ CResMaster ResMaster;
 COpenFileDialog	OpenFileDialog;
 
 // the dumbest shift kmod char handling function on planet earth :)
-uint16_t shiftChar(uint16_t key)
+Uint16 shiftChar(Uint16 key)
 {
 	switch (key)
 	{
@@ -131,7 +131,7 @@ void TW_CALL openPieCB(void *clientData) {
 
 void TW_CALL newPieCB(void *clientData) {
 	CPieInternal	*tmpPieInternal;
-	uint16_t			i;
+	Uint16			i;
 	char			name[255];
 
 	for (i = 0;i < ResMaster.m_pieCount;i++)
@@ -162,7 +162,7 @@ void TW_CALL deactiveLinkerCB(void *clientData) {
 //discards clientData
 void TW_CALL savePiesCB(void *clientData) {
 	CPieInternal	*tmpPieInternal;
-	uint16_t			i;
+	Uint16			i;
 
 	for (i = 0;i < ResMaster.m_pieCount;i++)
 	{
@@ -231,7 +231,7 @@ CResMaster::CResMaster() {
 }
 
 CResMaster::~CResMaster() {
-	uint16_t	i;
+	Uint16	i;
 
 	for (i = 0;i < m_pieCount;i++)
 	{
@@ -277,7 +277,7 @@ void	CResMaster::deactiveLinker(void) {
 bool	CResMaster::readTextureList(const char *filename) {
 	FILE *file;
 	char *buffer, *bufferTmp;
-	uint32_t cnt, size;
+	Uint32 cnt, size;
 
 	file = fopen(filename, "rb");
 
@@ -316,7 +316,7 @@ bool	CResMaster::readTextureList(const char *filename) {
 ///Load texture from files and upload the loaded bmp to opengl
 bool	CResMaster::loadTexPages(void) {
 	iV_Image	*tmpImage;
-	uint32_t		i;
+	Uint32		i;
 	static bool bReload = false;
 
 	tmpImage = (iV_Image*)malloc(sizeof(iV_Image));
@@ -381,7 +381,7 @@ bool	CResMaster::loadTexPages(void) {
 }
 
 bool	CResMaster::freeTexPages(void) {
-	uint32_t	i;
+	Uint32	i;
 
 	for (i = 0;i < m_textureToProcess;i++)
 	{
@@ -421,7 +421,7 @@ bool	CResMaster::addPie(iIMDShape *imd, const char *name) {
 	return false;
 }
 
-bool	CResMaster::removePieAt(uint16_t i) {
+bool	CResMaster::removePieAt(Uint16 i) {
 	if (m_Pies[i])
 	{
 		delete m_Pies[i];
@@ -431,7 +431,7 @@ bool	CResMaster::removePieAt(uint16_t i) {
 	return false;
 }
 
-CPieInternal* CResMaster::getPieAt(uint16_t i) {
+CPieInternal* CResMaster::getPieAt(Uint16 i) {
 	return m_Pies[i];
 }
 
@@ -481,7 +481,7 @@ bool	CResMaster::addGUI(void) {
 
 	TwDefine(defineString2);
 
-	uint32_t	i;
+	Uint32	i;
 	for (i = 0;i < m_textureToProcess;i++)
 	{
 		char	tmpName[255];
@@ -495,7 +495,7 @@ bool	CResMaster::addGUI(void) {
 }
 
 void	CResMaster::logic(void) {
-	uint32_t	i;
+	Uint32	i;
 
 	if (this->m_pieCount)
 	{
@@ -536,7 +536,7 @@ void	CResMaster::logic(void) {
 }
 
 void	CResMaster::draw(void) {
-	uint32_t	i;
+	Uint32	i;
 
 	if (this->m_TextureMapper.m_Up)
 	{
@@ -728,7 +728,7 @@ void	CResMaster::drawAxis(void) {
 ///Caches (1920/32)^2 grid quads into array
 void	CResMaster::cacheGridsVertices(void) {
 	float	x, z;
-	int32_t	index = -1;
+	Sint32	index = -1;
 	static const float xMax = 1920.0f, zMax = 1920.0f;
 	static const float xMin = -1920.0f, zMin = -1920.0f;
 	static bool bRecache = false;
@@ -770,7 +770,7 @@ void	CResMaster::cacheGridsVertices(void) {
 		g_Screen.glGenBuffersARB(1, &m_GridVBOId);
 		g_Screen.glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_GridVBOId);
 		g_Screen.glBufferDataARB(GL_ARRAY_BUFFER_ARB, m_GridCacheCount * 4 * sizeof(Vector3f), m_GridCacheVertices, GL_STATIC_DRAW_ARB);
-		int32_t	allocated;
+		Sint32	allocated;
 		g_Screen.glGetBufferParameterivARB( GL_ARRAY_BUFFER_ARB, GL_BUFFER_SIZE_ARB, &allocated );
 		if (allocated)
 		{
@@ -898,7 +898,7 @@ void	CResMaster::drawGrids(void) {
 }
 
 void	CResMaster::drawTexts(void) {
-	uint16_t	i, j;
+	Uint16	i, j;
 
 	for (i = 0;i < m_pieCount;i++)
 	{
@@ -910,7 +910,7 @@ void	CResMaster::drawTexts(void) {
 				{
 					char	text[255];
 					SDL_Color	color;
-					uint8_t	style = 1;
+					Uint8	style = 1;
 
 					color.r = 0;
 					color.g = 0;
@@ -931,7 +931,7 @@ void	CResMaster::drawTexts(void) {
 				{
 					char	text[255];
 					SDL_Color	color;
-					uint8_t	style = 1;
+					Uint8	style = 1;
 
 					color.r = 0;
 					color.g = 128;
@@ -952,7 +952,7 @@ void	CResMaster::drawTexts(void) {
 				{
 					char	text[255];
 					SDL_Color	color;
-					uint8_t	style = 1;
+					Uint8	style = 1;
 
 					color.r = 0;
 					color.g = 128;
@@ -980,7 +980,7 @@ bool	CResMaster::initFont(void) {
 	return false;
 }
 
-bool	CResMaster::loadFont(const char *name, uint8_t size) {
+bool	CResMaster::loadFont(const char *name, Uint8 size) {
 	if (m_Font = TTF_OpenFont(name, size))
 	{
 		return true;
@@ -990,7 +990,7 @@ bool	CResMaster::loadFont(const char *name, uint8_t size) {
 }
 #endif
 
-void	CResMaster::drawText(const char *text, float objX, float objY, float objZ, SDL_Color color, uint8_t style) {
+void	CResMaster::drawText(const char *text, float objX, float objY, float objZ, SDL_Color color, Uint8 style) {
 	GLdouble	screenX, screenY, screenZ;
 	GLint		viewport[4];
 	GLdouble	modelview[16];
@@ -1029,8 +1029,8 @@ void	CResMaster::drawText(const char *text, float objX, float objY, float objZ, 
 	srcrect.w = textSurface->w;
 	srcrect.h = textSurface->h;
 
-	dstrect.x = (int16_t)screenX;
-	dstrect.y = (int16_t)screenY;
+	dstrect.x = (Sint16)screenX;
+	dstrect.y = (Sint16)screenY;
 	dstrect.w = textSurface->w;
 	dstrect.h = textSurface->h;
 
@@ -1156,7 +1156,7 @@ void	CResMaster::updateInput(void) {
 	if (isMouseButtonDown(1))
 	{
 		double x1, y1, z1, x2, y2, z2;
-		uint32_t	i, j;
+		Uint32	i, j;
 
 		this->unprojectMouseXY(&x1, &y1, &z1, &x2, &y2, &z2);
 
@@ -1209,7 +1209,7 @@ void	CResMaster::updateInput(void) {
 }
 
 void	CResMaster::startMapTexture(void) {
-	uint16_t	i, j;
+	Uint16	i, j;
 
 	for (i = 0;i < this->m_pieCount;i++)
 	{
@@ -1236,7 +1236,7 @@ void	CResMaster::startMapTexture(void) {
 }
 
 void	CResMaster::stopMapTexture(void) {
-	uint16_t	i;
+	Uint16	i;
 
 	this->m_TextureMapper.removeTargets();
 
@@ -1255,8 +1255,8 @@ void	CResMaster::stopMapTexture(void) {
 }
 
 void	CResMaster::mergePies(void) {
-	uint16_t	i, j, k;
-	uint32_t	totalVertices = 0, totalConnectors = 0, totalPolygons = 0;
+	Uint16	i, j, k;
+	Uint32	totalVertices = 0, totalConnectors = 0, totalPolygons = 0;
 
 	//Always use page 0 texture name
 	this->m_MergedPie = new CPieInternal(0xFFFF, "merged.pie", 0) ;
@@ -1364,7 +1364,7 @@ void	CResMaster::mergePies(void) {
 }
 
 void	CResMaster::getOGLExtensionString(void) {
-	uint32_t	num = 0, read = 0, extLength, length;
+	Uint32	num = 0, read = 0, extLength, length;
 
 	const char *extensions = (const char*)glGetString(GL_EXTENSIONS);
 
@@ -1393,7 +1393,7 @@ void	CResMaster::getOGLExtensionString(void) {
 }
 
 bool	CResMaster::isOGLExtensionAvailable(const char* extension) {
-	uint32_t	i;
+	Uint32	i;
 
 	for (i = 0;i < m_numExtensions;i++)
 	{

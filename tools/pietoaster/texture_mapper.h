@@ -40,19 +40,19 @@ public:
 	bool	m_Up;
 
 	///the radius of each point's selection circle
-	static const uint16_t m_selectionRadius = 5;
+	static const Uint16 m_selectionRadius = 5;
 
 	CTextureMapper() : m_Up(false) {};
 
-	void	addTargets(uint16_t width, uint16_t height, uint16_t textureId, iIMDPoly *target, uint16_t quantity);
+	void	addTargets(Uint16 width, Uint16 height, Uint16 textureId, iIMDPoly *target, Uint16 quantity);
 	void	removeTargets(void);
 	void	draw(void);
 
 	void	addGUI(void);
 	void	updateGUI(void);
 private:
-	int32_t	translateX(float texCoord);
-	int32_t	translateY(float texCoord);
+	Sint32	translateX(float texCoord);
+	Sint32	translateY(float texCoord);
 
 	/*
 	 (X0,Y0)-------------(X1,Y1)
@@ -62,22 +62,22 @@ private:
 	 (X3,Y3)-------------(X2,Y2)
 	*/
 	//Texture page rasterization positions
-	int16_t	m_rasterX0;
-	int16_t	m_rasterY0;
-	int16_t	m_rasterX1;
-	int16_t	m_rasterY1;
-	int16_t	m_rasterX2;
-	int16_t	m_rasterY2;
-	int16_t	m_rasterX3;
-	int16_t	m_rasterY3;
+	Sint16	m_rasterX0;
+	Sint16	m_rasterY0;
+	Sint16	m_rasterX1;
+	Sint16	m_rasterY1;
+	Sint16	m_rasterX2;
+	Sint16	m_rasterY2;
+	Sint16	m_rasterX3;
+	Sint16	m_rasterY3;
 
-	uint16_t	m_width;
-	uint16_t	m_height;
-	uint16_t	m_textureId;
+	Uint16	m_width;
+	Uint16	m_height;
+	Uint16	m_textureId;
 	///Pointer to the polys
 	iIMDPoly	*m_targets[pie_MAX_POLYGONS];
 	///Quantity of polys
-	uint16_t	m_quantity;
+	Uint16	m_quantity;
 	///selected or not
 	bool	m_Selected[pie_MAX_POLYGONS][pie_MAX_VERTICES_PER_POLYGON];
 

@@ -45,8 +45,8 @@ void	CAntTweakBarTextField::addTextBox(const char *name)
 	snprintf(barAttr, 255, "%s color = '%d %d %d %d' size = '200 100'", name, guiMajorAlpha, guiMajorRed, guiMajorGreen, guiMajorBlue);
 	TwDefine(barAttr);
 
-	uint16_t	positionX = g_Screen.m_width / 2 - 100;
-	uint16_t	positionY = g_Screen.m_height / 2 - 50;
+	Uint16	positionX = g_Screen.m_width / 2 - 100;
+	Uint16	positionY = g_Screen.m_height / 2 - 50;
 	snprintf(barAttr, 255, "%s position = '%d %d'", name, positionX, positionY);
 	TwDefine(barAttr);
 
@@ -58,11 +58,11 @@ void	CAntTweakBarTextField::addTextBox(const char *name)
 	TwAddVarRO(m_textBar, name, TW_TYPE_INT32, &m_textIndex, def);
 }
 
-void	CAntTweakBarTextField::incrementChar(uint16_t key)
+void	CAntTweakBarTextField::incrementChar(Uint16 key)
 {
 	if (m_textIndex < 255 - 1)
 	{
-		char str = (uint8_t)key;
+		char str = (Uint8)key;
 
 		strncpy(&m_text[m_textIndex], &str, 1);
 		m_textIndex++;

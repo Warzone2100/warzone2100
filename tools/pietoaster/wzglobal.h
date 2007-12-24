@@ -400,6 +400,7 @@
 #    include <malloc.h>
 
 #  elif defined(WZ_CC_MSVC)
+#    define _CRT_SECURE_NO_DEPRECATE
 #    if defined(_DEBUG)
 #      define DEBUG
 #      define _CRTDBG_MAP_ALLOC
@@ -413,26 +414,20 @@
 #  include <windows.h>
 
 #  if defined(WZ_CC_MSVC)
+#    define snprintf _snprintf
 #    define strcasecmp _stricmp
 #    define strncasecmp _strnicmp
 #    define inline __inline
 #    define alloca _alloca
 #    define fileno _fileno
 #    define isfinite _finite
-#    define PATH_MAX MAX_PATH
 #  endif /* WZ_CC_MSVC */
-
-/* Make sure that PATH_MAX is large enough to use as the size for return
- * buffers for Windows API calls
- */
-#  if (PATH_MAX < MAX_PATH)
-#    undef PATH_MAX
-#    define PATH_MAX MAX_PATH
-#  endif
 
 #elif defined(WZ_OS_UNIX)
 #  include <unistd.h>
+#  include <limits.h>
 #  include <alloca.h>
+#  define MAX_PATH PATH_MAX
 #endif /* WZ_OS_* */
 
 

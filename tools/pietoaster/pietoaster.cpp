@@ -208,7 +208,7 @@ int main(int argc, char *argv[])
 			{
 				if (event.type == SDL_KEYDOWN)
 				{
-					uint16_t key = event.key.keysym.sym;
+					Uint16 key = event.key.keysym.sym;
 					SDLMod modifier = event.key.keysym.mod;
 
 					if (key == SDLK_BACKSPACE)
@@ -255,7 +255,7 @@ int main(int argc, char *argv[])
 			{
 				if (event.type == SDL_KEYDOWN)
 				{
-					uint16_t key = event.key.keysym.sym;
+					Uint16 key = event.key.keysym.sym;
 					SDLMod modifier = event.key.keysym.mod;
 
 					if (key == SDLK_BACKSPACE)
@@ -302,7 +302,7 @@ int main(int argc, char *argv[])
 			{
 				if (event.type == SDL_KEYDOWN)
 				{
-					uint16_t key = event.key.keysym.sym;
+					Uint16 key = event.key.keysym.sym;
 					SDLMod modifier = event.key.keysym.mod;
 
 					if (key == SDLK_BACKSPACE)
@@ -349,7 +349,7 @@ int main(int argc, char *argv[])
 			{
 				if (event.type == SDL_KEYDOWN)
 				{
-					uint16_t key = event.key.keysym.sym;
+					Uint16 key = event.key.keysym.sym;
 					SDLMod modifier = event.key.keysym.mod;
 
 					if (key == SDLK_BACKSPACE)
@@ -396,7 +396,7 @@ int main(int argc, char *argv[])
 			{
 				if (event.type == SDL_KEYDOWN)
 				{
-					uint16_t key = event.key.keysym.sym;
+					Uint16 key = event.key.keysym.sym;
 					SDLMod modifier = event.key.keysym.mod;
 
 					if (key == SDLK_BACKSPACE)
@@ -442,7 +442,7 @@ int main(int argc, char *argv[])
 
 			if (event.type == SDL_KEYDOWN)
 			{
-				uint16_t key = event.key.keysym.sym;
+				Uint16 key = event.key.keysym.sym;
 				SDLMod modifier = event.key.keysym.mod;
 
 				if ((key == SDLK_KP_ENTER || key == SDLK_RETURN) && modifier & KMOD_LALT)
@@ -483,7 +483,7 @@ int main(int argc, char *argv[])
 					ResMaster.cacheGridsVertices();
 
 					// Flush vbo id's
-					uint32_t	index;
+					Uint32	index;
 					for (index = 0;index < ResMaster.m_pieCount;index++)
 					{
 						ResMaster.getPieAt(index)->flushVBOPolys();
@@ -557,7 +557,7 @@ int main(int argc, char *argv[])
 					ResMaster.cacheGridsVertices();
 
 					// Flush vbo id's
-					uint32_t	index;
+					Uint32	index;
 					for (index = 0;index < ResMaster.m_pieCount;index++)
 					{
 						ResMaster.getPieAt(index)->flushVBOPolys();
@@ -580,7 +580,7 @@ int main(int argc, char *argv[])
 					case SDL_MOUSEBUTTONUP:
 					case SDL_MOUSEBUTTONDOWN:
 						// Flush vbo id's
-						uint32_t	index;
+						Uint32	index;
 						for (index = 0;index < ResMaster.m_pieCount;index++)
 						{
 							CPieInternal	*temp = ResMaster.getPieAt(index);

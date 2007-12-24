@@ -61,7 +61,7 @@ void _imd_save_connectorsOld(FILE *fp, iIMDShape *s)
 		fprintf(fp,"CONNECTORS %d\n",s->nconnectors);
 		Vector3f *p = s->connectors;
 		for (i=0; i<s->nconnectors; i++, p++) {
-			fprintf(fp,"\t%d %d %d\n", (int32_t)p->x,(int32_t)p->y,(int32_t)p->z);
+			fprintf(fp,"\t%d %d %d\n", (Sint32)p->x,(Sint32)p->y,(Sint32)p->z);
 		}
 	}
 }
@@ -83,7 +83,7 @@ bool iV_IMDSave(const char *filename, iIMDShape *s, bool PieIMD)
 	iIMDShape *sp;
 	iIMDPoly *poly;
 	int nlevel, i, j, d;
-	const uint32_t dummyFlags = 0xDEADBEEF;
+	const Uint32 dummyFlags = 0xDEADBEEF;
 
 	if ((fp = fopen(filename,"w")) == NULL) {
 		return false;
@@ -179,7 +179,7 @@ bool iV_IMDSaveOld(const char *filename, iIMDShape *s, bool PieIMD)
 	iIMDShape *sp;
 	iIMDPoly *poly;
 	int nlevel, i, j, d;
-	const uint32_t dummyFlags = 0xDEADBEEF;
+	const Uint32 dummyFlags = 0xDEADBEEF;
 
 	if ((fp = fopen(filename,"w")) == NULL) {
 		return false;
@@ -213,8 +213,8 @@ bool iV_IMDSaveOld(const char *filename, iIMDShape *s, bool PieIMD)
 
 		// write shape points
 		for (j = 0; j < sp->npoints; j++) {
-			fprintf(fp,"\t%d %d %d\n",(int32_t)sp->points[j].x,(int32_t)sp->points[j].y,
-					(int32_t)sp->points[j].z);
+			fprintf(fp,"\t%d %d %d\n",(Sint32)sp->points[j].x,(Sint32)sp->points[j].y,
+					(Sint32)sp->points[j].z);
 		}
 
 		// write shape polys
@@ -243,7 +243,7 @@ bool iV_IMDSaveOld(const char *filename, iIMDShape *s, bool PieIMD)
 				if (poly->flags & iV_IMD_TEX)
 				{
 					for (d=0; d<poly->npnts; d++) {
-						fprintf(fp," %d %d",(int32_t)poly->texCoord[d].x,(int32_t)poly->texCoord[d].y);
+						fprintf(fp," %d %d",(Sint32)poly->texCoord[d].x,(Sint32)poly->texCoord[d].y);
 					}
 				}
 				fprintf(fp,"\n");
