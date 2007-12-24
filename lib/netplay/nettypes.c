@@ -334,6 +334,13 @@ BOOL NETstring(char *str, uint16_t maxlen)
 	return TRUE;
 }
 
+BOOL NETVector3uw(Vector3uw* vp)
+{
+	return (NETuint16_t(&vp->x)
+	     && NETuint16_t(&vp->y)
+	     && NETuint16_t(&vp->z));
+}
+
 static void NETcoder(PACKETDIR dir)
 {
 	char str[100];

@@ -24,7 +24,9 @@
 #ifndef __INCLUDE_LIB_NETPLAY_NETTYPES_H__
 #define __INCLUDE_LIB_NETPLAY_NETTYPES_H__
 
+#include "lib/framework/frame.h"
 #include "netplay.h"
+#include "lib/ivis_common/pievector.h"
 
 typedef enum packetDirectionEnum
 {
@@ -55,6 +57,8 @@ BOOL NETstring(char *str, uint16_t maxlen);
 \
 	*(enumPtr) = _val; \
 }
+
+BOOL NETVector3uw(Vector3uw* vp);
 
 void NETtest(void);
 

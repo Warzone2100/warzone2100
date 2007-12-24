@@ -32,7 +32,7 @@ typedef struct { int x, y; } Vector2i;
 typedef struct { float x, y; } Vector2f;
 typedef struct { int x, y, z; } Vector3i;
 typedef struct { float x, y, z; } Vector3f;
-typedef struct { UWORD x, y, z; } Vector3uw;	//Only used for basedef.h BASE_ELEMENTS1.
+typedef struct { uint16_t x, y, z; } Vector3uw; //Only used for basedef.h BASE_ELEMENTS1.
 
 
 /*!
