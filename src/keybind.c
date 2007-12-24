@@ -146,9 +146,12 @@ void	kf_NoFaults( void )
 //===================================================
 void kf_ToggleSensorDisplay( void )
 {
-	if(rangeOnScreen) addConsoleMessage("Fine, sensor display is OFF!",LEFT_JUSTIFY);	//added this message... Yeah, its lame. :)
-	else	addConsoleMessage("Lets us see what you see!",LEFT_JUSTIFY);			//added this message... Yeah, its lame. :)
-	rangeOnScreen =~rangeOnScreen;							//toggle...  HMm  -Q 5-10-05
+	rangeOnScreen = !rangeOnScreen;
+
+	if (rangeOnScreen)
+		addConsoleMessage(_("Lets us see what you see!"), LEFT_JUSTIFY);        //added this message... Yeah, its lame. :)
+	else
+		addConsoleMessage(_("Fine, sensor display is off!"), LEFT_JUSTIFY);     //added this message... Yeah, its lame. :)
 }
 //===================================================
 /* Halves all the heights of the map tiles */
@@ -241,7 +244,7 @@ void	kf_SetKillerLevel( void )
 	if(!bMultiPlayer || (NetPlay.bComms == 0))
 	{
 		setDifficultyLevel(DL_KILLER);
-		addConsoleMessage("Hard as nails!!!",LEFT_JUSTIFY);
+		addConsoleMessage(_("Hard as nails!!!"), LEFT_JUSTIFY);
 	}
 }
 // --------------------------------------------------------------------------
@@ -250,7 +253,7 @@ void	kf_SetEasyLevel( void )
 	if(!bMultiPlayer|| (NetPlay.bComms == 0))
 	{
 		setDifficultyLevel(DL_EASY);
-		addConsoleMessage("Takings thing easy!",LEFT_JUSTIFY);
+		addConsoleMessage(_("Takings thing easy!"), LEFT_JUSTIFY);
 	}
 }
 
@@ -260,7 +263,7 @@ void	kf_UpThePower( void )
 	if(!bMultiPlayer|| (NetPlay.bComms == 0))
 	{
 		asPower[selectedPlayer]->currentPower+=1000;
-		addConsoleMessage("1000 big ones!!!",LEFT_JUSTIFY);
+		addConsoleMessage(_("1000 big ones!!!"), LEFT_JUSTIFY);
 	}
 }
 
@@ -270,7 +273,7 @@ void	kf_MaxPower( void )
 	if(!bMultiPlayer|| (NetPlay.bComms == 0))
 	{
 		asPower[selectedPlayer]->currentPower = SDWORD_MAX / 2;
-		addConsoleMessage("Power overwhelming",LEFT_JUSTIFY);
+		addConsoleMessage(_("Power overwhelming"), LEFT_JUSTIFY);
 	}
 }
 
@@ -280,7 +283,7 @@ void	kf_SetNormalLevel( void )
 	if(!bMultiPlayer|| (NetPlay.bComms == 0))
 	{
 		setDifficultyLevel(DL_NORMAL);
-		addConsoleMessage("Back to normality!",LEFT_JUSTIFY);
+		addConsoleMessage(_("Back to normality!"), LEFT_JUSTIFY);
 	}
 }
 // --------------------------------------------------------------------------
@@ -289,7 +292,7 @@ void	kf_SetHardLevel( void )
 	if(!bMultiPlayer|| (NetPlay.bComms == 0))
 	{
 		setDifficultyLevel(DL_HARD);
-		addConsoleMessage("Getting tricky!",LEFT_JUSTIFY);
+		addConsoleMessage(_("Getting tricky!"), LEFT_JUSTIFY);
 	}
 }
 // --------------------------------------------------------------------------
@@ -298,7 +301,7 @@ void	kf_SetToughUnitsLevel( void )
 	if(!bMultiPlayer|| (NetPlay.bComms == 0))
 	{
 		setDifficultyLevel(DL_TOUGH);
-		addConsoleMessage("Twice as nice!",LEFT_JUSTIFY);
+		addConsoleMessage(_("Twice as nice!"), LEFT_JUSTIFY);
 	}
 }
 // --------------------------------------------------------------------------
@@ -373,12 +376,12 @@ if(bMultiPlayer)
 		powerCalculated = !powerCalculated;
 		if (powerCalculated)
 		{
-			addConsoleMessage("Infinite power disabled",DEFAULT_JUSTIFY);
+			addConsoleMessage(_("Infinite power disabled"), DEFAULT_JUSTIFY);
 			powerCalc(TRUE);
 		}
 		else
 		{
-			addConsoleMessage("Infinite power enabled",DEFAULT_JUSTIFY);
+			addConsoleMessage(_("Infinite power enabled"), DEFAULT_JUSTIFY);
 		}
 }
 
@@ -429,7 +432,7 @@ if(bMultiPlayer && (NetPlay.bComms != 0) )
 	return;
 }
 #endif
-		addConsoleMessage("All items made available",DEFAULT_JUSTIFY);
+		addConsoleMessage(_("All items made available"), DEFAULT_JUSTIFY);
 		makeAllAvailable();
 }
 
@@ -521,13 +524,13 @@ void	kf_ToggleFog( void )
 			fogEnabled = FALSE;
 			pie_SetFogStatus(FALSE);
 			pie_EnableFog(fogEnabled);
-			addConsoleMessage("Fog Off", DEFAULT_JUSTIFY);
+			addConsoleMessage(_("Fog off"), DEFAULT_JUSTIFY);
 		}
 		else
 		{
 			fogEnabled = TRUE;
 			pie_EnableFog(fogEnabled);
-			addConsoleMessage("Fog On", DEFAULT_JUSTIFY);
+			addConsoleMessage(_("Fog on"), DEFAULT_JUSTIFY);
 		}
 }
 
@@ -1197,7 +1200,7 @@ void	kf_FinishResearch( void )
 void	kf_ToggleEnergyBars( void )
 {
 	toggleEnergyBars();
-	CONPRINTF(ConsoleString,(ConsoleString, _("Energy bars display toggled") ));
+	addConsoleMessage(_("Energy bars display toggled"), LEFT_JUSTIFY);
 }
 
 // --------------------------------------------------------------------------
@@ -1215,7 +1218,7 @@ void	kf_ToggleDemoMode( void )
 		flushConsoleMessages();
 		setConsolePermanence(FALSE,TRUE);
 		permitNewConsoleMessages(TRUE);
-		addConsoleMessage("Demo Mode OFF - Returning to normal game mode",LEFT_JUSTIFY);
+		addConsoleMessage(_("Demo mode off - Returning to normal game mode"), LEFT_JUSTIFY);
 		if(getWarCamStatus())
 		{
 			camToggleStatus();
@@ -1481,19 +1484,19 @@ void	kf_ToggleWeather( void )
 	if(atmosGetWeatherType() == WT_NONE)
 	{
 		atmosSetWeatherType(WT_SNOWING);
-		addConsoleMessage("Oh, the weather outside is frightful... SNOW",LEFT_JUSTIFY);
+		addConsoleMessage(_("Oh, the weather outside is frightful... SNOW"), LEFT_JUSTIFY);
 
 	}
 	else if(atmosGetWeatherType() == WT_SNOWING)
 	{
 		atmosSetWeatherType(WT_RAINING);
-		addConsoleMessage("Singing in the rain, I'm singing in the rain... RAIN",LEFT_JUSTIFY);
+		addConsoleMessage(_("Singing in the rain, I'm singing in the rain... RAIN"), LEFT_JUSTIFY);
 	}
 	else
 	{
 		atmosInitSystem();
 		atmosSetWeatherType(WT_NONE);
-		addConsoleMessage("Forecast : Clear skies for all areas... NO WEATHER",LEFT_JUSTIFY);
+		addConsoleMessage(_("Forecast : Clear skies for all areas... NO WEATHER"), LEFT_JUSTIFY);
 	}
 }
 

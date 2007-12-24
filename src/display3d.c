@@ -190,7 +190,7 @@ UDWORD xOffset = CLIP_BORDER, yOffset = CLIP_BORDER;
 BOOL	radarOnScreen=FALSE;
 
 /* Show unit/building gun/sensor range*/
-BOOL  rangeOnScreen = FALSE;  // For now, most likely will change later!  -Q 5-10-05   A very nice effect - Per
+bool rangeOnScreen = false;  // For now, most likely will change later!  -Q 5-10-05   A very nice effect - Per
 
 /* Temporary values for the terrain render - top left corner of grid to be rendered */
 static int playerXTile, playerZTile;

@@ -48,7 +48,7 @@ extern void	setViewAngle(SDWORD angle);
 extern UDWORD getViewDistance(void);
 extern void	setViewDistance(UDWORD dist);
 extern BOOL	radarOnScreen;
-extern BOOL   rangeOnScreen;	// Added to get sensor/gun range on screen.  -Q 5-10-05
+extern bool rangeOnScreen; // Added to get sensor/gun range on screen.  -Q 5-10-05
 extern void	scaleMatrix( UDWORD percent );
 extern void setViewPos( UDWORD x, UDWORD y, BOOL Pan);
 extern void getPlayerPos(SDWORD *px, SDWORD *py);
@@ -132,7 +132,7 @@ extern void showRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius);
 
 extern UWORD barMode;
 extern UDWORD geoOffset;
-  
+
 enum
 {
 	BAR_SELECTED,
