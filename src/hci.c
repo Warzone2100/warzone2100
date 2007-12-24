@@ -2098,7 +2098,10 @@ INT_RETVAL intRunWidgets(void)
 							removeFeature(psFeature);
 						}
 						psStructure = NULL;
-					} else {
+					}
+					else
+					{
+						const char* msg;
 						psStructure = buildStructure(psBuilding, structX, structY,
 						                             selectedPlayer, FALSE);
 						/* NOTE: if this was a regular buildprocess we would
@@ -2111,8 +2114,8 @@ INT_RETVAL intRunWidgets(void)
 						// Send a text message to all players, notifying them of
 						// the fact that we're cheating ourselves a new
 						// structure.
-						DBCONPRINTF(ConsoleString,(ConsoleString, _("Player %u is cheating (debug menu) him/herself a new structure: %s."), selectedPlayer, psStructure->pStructureType->pName));
-						sendTextMessage(ConsoleString, TRUE);
+						sasprintf((char**)&msg, _("Player %u is cheating (debug menu) him/herself a new structure: %s."), selectedPlayer, psStructure->pStructureType->pName);
+						sendTextMessage(msg, TRUE);
 					}
 					if (psStructure)
 					{
