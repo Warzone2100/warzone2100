@@ -1,10 +1,7 @@
 MAKERULES=../../makerules
 include $(MAKERULES)/configure.mk
 
-SRC=adpcm.c \
-	dec130.c \
-	rpl_reader.c \
-	sequence_stub.c
+SRC=sequence.c
 
 LIB=sequence
 

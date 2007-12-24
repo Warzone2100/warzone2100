@@ -690,16 +690,6 @@ BOOL intInitialise(void)
 	LOADBARCALLBACK();	//	loadingScreenCallback();
 	LOADBARCALLBACK();	//	loadingScreenCallback();
 
-	/*Initialise the video playback buffer*/
-	if (!seq_SetupVideoBuffers())
-	{
-		debug( LOG_ERROR, "intInitialise: Unable to initialise video playback buffer" );
-		abort();
-		return FALSE;
-	}
-
-	LOADBARCALLBACK();	//	loadingScreenCallback();
-
 	// reset the previous objects
 	//memset(apsPreviousObj, 0, sizeof(apsPreviousObj));
 	intResetPreviousObj();
@@ -775,9 +765,6 @@ void intShutDown(void)
 	apsExtraSysList = NULL;
 	apsObjectList = NULL;
 	apsListToOrder = NULL;
-
-	//release the video buffers
-	seq_ReleaseVideoBuffers();
 
 	intDeleteGraphics();
 

@@ -1,6 +1,5 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 1999-2004  Eidos Interactive
 	Copyright (C) 2005-2007  Warzone Resurrection Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
@@ -17,12 +16,27 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-// FIXME Stubfile!
 
-#include "dec130.h"
+#include "lib/framework/frame.h"
 
-// Replace this with a function that actually decodes the video.
-unsigned int dec130_decode(RPL* rpl, char* _in, unsigned int in_size, char* out) // FIXME Remove if unused
+#include "sequence.h"
+
+BOOL seq_Play(char *filename)
 {
-	return 0;
+	debug( LOG_WARNING, "Sequence display is currently disabled (%s)", filename);
+	return FALSE;
+}
+
+BOOL seq_Playing()
+{
+	return FALSE;
+}
+
+BOOL seq_Update()
+{
+	return FALSE;
+}
+
+void seq_Shutdown()
+{
 }

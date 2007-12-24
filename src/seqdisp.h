@@ -58,17 +58,11 @@
 /***************************************************************************/
 //buffer render
 extern BOOL	seq_RenderVideoToBuffer(iSurface *pSurface, char* sequenceName, int time, int seqCommand);
-extern BOOL	seq_BlitBufferToScreen(char* screen, SDWORD screenStride, SDWORD xOffset, SDWORD yOffset);
-
-//full screen render
-//extern BOOL seq_PlayVideo(char* pSeq, char* pAudio);
 
 extern BOOL seq_UpdateFullScreenVideo(int *bClear);
 
 extern BOOL seq_StopFullScreenVideo(void);
 //control
-extern BOOL	seq_SetupVideoBuffers(void);
-extern BOOL	seq_ReleaseVideoBuffers(void);
 extern BOOL seq_GetVideoSize(SDWORD* pWidth, SDWORD* pHeight);
 //text
 extern BOOL seq_AddTextForVideo(char* pText, SDWORD xOffset, SDWORD yOffset, SDWORD startTime, SDWORD endTime, SDWORD bJustify);
