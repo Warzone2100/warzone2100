@@ -57,7 +57,6 @@
 #include "effects.h"
 #include "power.h"
 #include "scores.h"
-#include "optimisepath.h"
 #include "multiplay.h"
 #include "multigifts.h"
 
