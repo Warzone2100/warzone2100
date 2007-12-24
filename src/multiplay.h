@@ -237,7 +237,7 @@ extern BOOL multiplayerWinSequence(BOOL firstCall);
 extern BOOL	sendBuildStarted	(const STRUCTURE* psStruct, const DROID* psDroid);
 extern BOOL SendDestroyStructure(const STRUCTURE* s);
 extern BOOL	SendBuildFinished	(const STRUCTURE* psStruct);
-extern BOOL sendLasSat			(UBYTE player, const STRUCTURE* psStruct, const BASE_OBJECT* psObj);
+extern BOOL sendLasSat			(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj);
 
 
 // droids . multibot

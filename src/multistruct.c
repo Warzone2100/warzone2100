@@ -325,48 +325,48 @@ BOOL recvDestroyStructure(NETMSG * m)
 // ////////////////////////////////////////////////////////////////////////////
 //lassat is firing
 
-BOOL sendLasSat(UBYTE player, const STRUCTURE* psStruct, const BASE_OBJECT* psObj)
+BOOL sendLasSat(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj)
 {
-	NETMSG msg;
-	UBYTE p;
+	DBCONPRINTF(ConsoleString,(ConsoleString,"sendLasSat() called"));
+	NETbeginEncode(NET_LASSAT, NET_ALL_PLAYERS);
 
-	NetAdd(msg,0,player);
-	NetAdd(msg,1,psStruct->id);
-	NetAdd(msg,5,psObj->id);
-	p = psObj->player;
-	NetAdd(msg,9,p);
+		NETuint8_t(&player);
+		NETuint32_t(&psStruct->id);
+		NETuint32_t(&psObj->id);	// Target
+		NETuint8_t(&psObj->player);	// Target player
 
-	msg.size = 10;
-	msg.type = NET_LASSAT;
-
-	return  (NETbcast(&msg,FALSE) );
-
+	return NETend();
 }
 
 // recv lassat info on the receiving end.
-BOOL recvLasSat(NETMSG *pMsg)
+BOOL recvLasSat()
 {
 	BASE_OBJECT	*psObj;
 	UBYTE		player,targetplayer;
 	STRUCTURE	*psStruct;
-	UDWORD		id,tid;
+	uint32_t	id,targetid;
+	DBCONPRINTF(ConsoleString,(ConsoleString,"recvLasSat() called"));
+	
+	NETbeginDecode();
 
-	NetGet(pMsg,0,player);
-	NetGet(pMsg,1,id);
-	NetGet(pMsg,5,tid);
-	NetGet(pMsg,9,targetplayer);
+		NETuint8_t(&player);
+		NETuint32_t(&id);
+		NETuint32_t(&targetid);
+		NETuint8_t(&targetplayer);
+	
+		psStruct = IdToStruct (id, player);
+		psObj	 = IdToPointer(targetid, targetplayer);
+	
+		if( psStruct && psObj)
+		{
+			// Give enemy no quarter, unleash the lasat
+			proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, psObj->pos.x,
+	            psObj->pos.y, psObj->pos.z, psObj, TRUE, FALSE, 0);
+	      	// Play 5 second countdown message
+			audio_QueueTrackPos( ID_SOUND_LAS_SAT_COUNTDOWN, psObj->pos.x, psObj->pos.y,
+	            psObj->pos.z);
+		}
 
-	psStruct = IdToStruct (id ,player);
-	psObj	 = IdToPointer(tid,targetplayer);
-
-	if(psStruct && psObj)
-	{
-		proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, psObj->pos.x,
-            psObj->pos.y, psObj->pos.z, psObj, TRUE, FALSE, 0);
-        //play 5 second countdown message
-		audio_QueueTrackPos( ID_SOUND_LAS_SAT_COUNTDOWN, psObj->pos.x, psObj->pos.y,
-            psObj->pos.z );
-	}
-
+	NETend();
 	return TRUE;
 }

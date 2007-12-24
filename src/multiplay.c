@@ -706,7 +706,7 @@ BOOL recvMessage(void)
 				recvHappyVtol(&msg);
 				break;
 			case NET_LASSAT:
-				recvLasSat(&msg);
+				recvLasSat();
 				break;
 			default:
 				break;
