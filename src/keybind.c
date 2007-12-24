@@ -125,6 +125,21 @@ void	kfsf_SetSelectedDroidsState( SECONDARY_ORDER sec, SECONDARY_STATE State );
 	Alex McLean, Pumpkin Studios, EIDOS Interactive.
 */
 
+/** A function to determine wether we're running a multiplayer game, not just a
+ *  single player campaign or a skirmish game.
+ *  \return false if this is a skirmish or single player game, true if it is a
+ *          multiplayer game.
+ */
+static bool runningMultiplayer(void)
+{
+	// NOTE: may want to only allow this for DEBUG builds?? -- Buginator
+	if (!bMultiPlayer || !NetPlay.bComms)
+		return true;
+
+	addConsoleMessage(_("Sorry, that cheat is disabled in multiplayer games."), DEFAULT_JUSTIFY);
+
+	return false;
+}
 // --------------------------------------------------------------------------
 void	kf_ToggleMissionTimer( void )
 {
@@ -241,68 +256,75 @@ void	kf_ToggleConsoleDrop( void )
 // --------------------------------------------------------------------------
 void	kf_SetKillerLevel( void )
 {
-	if(!bMultiPlayer || (NetPlay.bComms == 0))
-	{
-		setDifficultyLevel(DL_KILLER);
-		addConsoleMessage(_("Hard as nails!!!"), LEFT_JUSTIFY);
-	}
+	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
+	if (runningMultiplayer())
+		return;
+
+	setDifficultyLevel(DL_KILLER);
+	addConsoleMessage(_("Hard as nails!!!"), LEFT_JUSTIFY);
 }
 // --------------------------------------------------------------------------
 void	kf_SetEasyLevel( void )
 {
-	if(!bMultiPlayer|| (NetPlay.bComms == 0))
-	{
-		setDifficultyLevel(DL_EASY);
-		addConsoleMessage(_("Takings thing easy!"), LEFT_JUSTIFY);
-	}
+	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
+	if (runningMultiplayer())
+		return;
+
+	setDifficultyLevel(DL_EASY);
+	addConsoleMessage(_("Takings thing easy!"), LEFT_JUSTIFY);
 }
 
 // --------------------------------------------------------------------------
 void	kf_UpThePower( void )
 {
-	if(!bMultiPlayer|| (NetPlay.bComms == 0))
-	{
-		asPower[selectedPlayer]->currentPower+=1000;
-		addConsoleMessage(_("1000 big ones!!!"), LEFT_JUSTIFY);
-	}
+	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
+	if (runningMultiplayer())
+		return;
+
+	asPower[selectedPlayer]->currentPower+=1000;
+	addConsoleMessage(_("1000 big ones!!!"), LEFT_JUSTIFY);
 }
 
 // --------------------------------------------------------------------------
 void	kf_MaxPower( void )
 {
-	if(!bMultiPlayer|| (NetPlay.bComms == 0))
-	{
+	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
+	if (runningMultiplayer())
+		return;
+
 		asPower[selectedPlayer]->currentPower = SDWORD_MAX / 2;
 		addConsoleMessage(_("Power overwhelming"), LEFT_JUSTIFY);
-	}
 }
 
 // --------------------------------------------------------------------------
 void	kf_SetNormalLevel( void )
 {
-	if(!bMultiPlayer|| (NetPlay.bComms == 0))
-	{
-		setDifficultyLevel(DL_NORMAL);
-		addConsoleMessage(_("Back to normality!"), LEFT_JUSTIFY);
-	}
+	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
+	if (runningMultiplayer())
+		return;
+
+	setDifficultyLevel(DL_NORMAL);
+	addConsoleMessage(_("Back to normality!"), LEFT_JUSTIFY);
 }
 // --------------------------------------------------------------------------
 void	kf_SetHardLevel( void )
 {
-	if(!bMultiPlayer|| (NetPlay.bComms == 0))
-	{
-		setDifficultyLevel(DL_HARD);
-		addConsoleMessage(_("Getting tricky!"), LEFT_JUSTIFY);
-	}
+	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
+	if (runningMultiplayer())
+		return;
+
+	setDifficultyLevel(DL_HARD);
+	addConsoleMessage(_("Getting tricky!"), LEFT_JUSTIFY);
 }
 // --------------------------------------------------------------------------
 void	kf_SetToughUnitsLevel( void )
 {
-	if(!bMultiPlayer|| (NetPlay.bComms == 0))
-	{
-		setDifficultyLevel(DL_TOUGH);
-		addConsoleMessage(_("Twice as nice!"), LEFT_JUSTIFY);
-	}
+	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
+	if (runningMultiplayer())
+		return;
+
+	setDifficultyLevel(DL_TOUGH);
+	addConsoleMessage(_("Twice as nice!"), LEFT_JUSTIFY);
 }
 // --------------------------------------------------------------------------
 void kf_ToggleFPS(void) //This shows *just FPS* and is always visable (when active) -Q.
@@ -323,7 +345,7 @@ void kf_ToggleSamples(void) //Displays number of sound sample in the sound queue
 void	kf_FrameRate( void )
 {
 	CONPRINTF(ConsoleString,(ConsoleString,"FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d", frameGetAverageRate(), getFramerateLimit(), loopPieCount, loopPolyCount, loopTileCount, loopStateChanges));
-	if (bMultiPlayer) {
+	if (runningMultiplayer()) {
 			CONPRINTF(ConsoleString,(ConsoleString,
 						"NETWORK:  Bytes: s-%d r-%d  Packets: s-%d r-%d",
 						NETgetBytesSent(),
@@ -365,24 +387,22 @@ void	kf_ToggleRadar( void )
 /* Toggles infinite power on/off */
 void	kf_TogglePower( void )
 {
-
 #ifndef DEBUG
-if(bMultiPlayer)
-{
-	return;
-}
+	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
+	if (runningMultiplayer())
+		return;
 #endif
 
-		powerCalculated = !powerCalculated;
-		if (powerCalculated)
-		{
-			addConsoleMessage(_("Infinite power disabled"), DEFAULT_JUSTIFY);
-			powerCalc(TRUE);
-		}
-		else
-		{
-			addConsoleMessage(_("Infinite power enabled"), DEFAULT_JUSTIFY);
-		}
+	powerCalculated = !powerCalculated;
+	if (powerCalculated)
+	{
+		addConsoleMessage(_("Infinite power disabled"), DEFAULT_JUSTIFY);
+		powerCalc(TRUE);
+	}
+	else
+	{
+		addConsoleMessage(_("Infinite power enabled"), DEFAULT_JUSTIFY);
+	}
 }
 
 // --------------------------------------------------------------------------
@@ -427,13 +447,12 @@ void	kf_ScreenDump( void )
 void	kf_AllAvailable( void )
 {
 #ifndef DEBUG
-if(bMultiPlayer && (NetPlay.bComms != 0) )
-{
-	return;
-}
+	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
+	if (runningMultiplayer())
+		return;
 #endif
-		addConsoleMessage(_("All items made available"), DEFAULT_JUSTIFY);
-		makeAllAvailable();
+	addConsoleMessage(_("All items made available"), DEFAULT_JUSTIFY);
+	makeAllAvailable();
 }
 
 // --------------------------------------------------------------------------
@@ -800,10 +819,10 @@ void	kf_SelectPlayer( void )
     UDWORD	playerNumber, prevPlayer;
 
 #ifndef DEBUG
-if(bMultiPlayer && (NetPlay.bComms != 0) )
-{
-	return;
-}
+	// Bail out if we're running a _true_ multiplayer game (to prevent MP
+	// cheating which could even result in undefined behaviour)
+	if (runningMultiplayer())
+		return;
 #endif
 
     //store the current player
@@ -824,7 +843,6 @@ if(bMultiPlayer && (NetPlay.bComms != 0) )
     {
         changeProductionPlayer((UBYTE)selectedPlayer);
     }
-
 }
 // --------------------------------------------------------------------------
 
@@ -921,12 +939,10 @@ void	kf_addInGameOptions( void )
 /* Tell the scripts to start a mission*/
 void	kf_AddMissionOffWorld( void )
 {
-
 #ifndef DEBUG
-if(bMultiPlayer)
-{
-	return;
-}
+	// Bail out if we're running a _true_ multiplayer game
+	if (runningMultiplayer())
+		return;
 #endif
 
 	game_SetValidityKey(VALIDITYKEY_CTRL_M);
@@ -936,12 +952,10 @@ if(bMultiPlayer)
 /* Tell the scripts to end a mission*/
 void	kf_EndMissionOffWorld( void )
 {
-
 #ifndef DEBUG
-if(bMultiPlayer)
-{
-	return;
-}
+	// Bail out if we're running a _true_ multiplayer game
+	if (runningMultiplayer())
+		return;
 #endif
 
 	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_MISSION_END);
@@ -950,12 +964,10 @@ if(bMultiPlayer)
 /* Initialise the player power levels*/
 void	kf_NewPlayerPower( void )
 {
-
 #ifndef DEBUG
-if(bMultiPlayer)
-{
-	return;
-}
+	// Bail out if we're running a _true_ multiplayer game
+	if (runningMultiplayer())
+		return;
 #endif
 
 	newGameInitPower();
@@ -965,12 +977,10 @@ if(bMultiPlayer)
 // Display multiplayer guff.
 void	kf_addMultiMenu(void)
 {
-
-	if(bMultiPlayer)
+	if (bMultiPlayer)
 	{
 		intAddMultiMenu();
 	}
-
 }
 
 // --------------------------------------------------------------------------
@@ -1035,11 +1045,10 @@ void	kf_TogglePowerBar( void )
 void	kf_ToggleDebugMappings( void )
 {
 #ifndef DEBUG
-	// Prevent cheating in multiplayer when not compiled in debug mode
-	if (bMultiPlayer && (NetPlay.bComms != 0))
-	{
+	// Prevent cheating in multiplayer when not compiled in debug mode by
+	// bailing out if we're running a _true_ multiplayer game
+	if (runningMultiplayer())
 		return;
-	}
 #endif
 
 	if (bAllowDebugMode)
@@ -1067,14 +1076,11 @@ void	kf_ToggleDebugMappings( void )
 
 void	kf_ToggleGodMode( void )
 {
-
 #ifndef DEBUG
-if(bMultiPlayer && (NetPlay.bComms != 0) )
-{
-	return;
-}
+	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
+	if (runningMultiplayer())
+		return;
 #endif
-
 
 	if(godMode)
 	{
@@ -1088,7 +1094,6 @@ if(bMultiPlayer && (NetPlay.bComms != 0) )
 //		setModifiers(1000.f / 100.f,100.f / 1000.f);
 		CONPRINTF(ConsoleString,(ConsoleString,"God Mode ON"));
 	}
-
 }
 // --------------------------------------------------------------------------
 /* Aligns the view to north - some people can't handle the world spinning */
@@ -1105,13 +1110,9 @@ void	kf_SeekNorth( void )
 // --------------------------------------------------------------------------
 void	kf_TogglePauseMode( void )
 {
-
-
-	if(bMultiPlayer && (NetPlay.bComms != 0) )
-	{
+	// Bail out if we're running a _true_ multiplayer game (which cannot be paused)
+	if (runningMultiplayer())
 		return;
-	}
-
 
 	/* Is the game running? */
 	if(gamePaused() == FALSE)
@@ -1661,9 +1662,13 @@ void kf_SendTextMessage(void)
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_CONSOLE);
 
 
-			if(bMultiPlayer && NetPlay.bComms)
+			if (runningMultiplayer())
 			{
 				sendTextMessage(sTextToSend,FALSE);
+				if (getDebugMappingStatus())
+				{
+					attemptCheatCode(sTextToSend);
+				}
 			}
 			else
 			{
@@ -2160,11 +2165,9 @@ UDWORD		xJump = 0, yJump = 0;
 
 void kf_ToggleFormationSpeedLimiting( void )
 {
-
-	if(bMultiPlayer)
-	{
+	// Bail out if we're running a _true_ multiplayer game
+	if (runningMultiplayer())
 		return;
-	}
 
 	if ( moveFormationSpeedLimitingOn() )
 	{
@@ -2275,65 +2278,76 @@ unsigned int nb_available_speeds = 11;
 
 void kf_SpeedUp( void )
 {
-	float	mod;
+	float           mod;
+	unsigned int    i;
 
-	if ( (!bMultiPlayer || (NetPlay.bComms==0) )  && !bInTutorial)
+	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial
+	if (runningMultiplayer() || bInTutorial)
+		return;
+
+	// get the current modifier
+	gameTimeGetMod(&mod);
+
+	for (i = 1; i < nb_available_speeds; ++i)
 	{
-		unsigned int i;
+		if (mod < available_speed[i])
+		{
+			mod = available_speed[i];
 
-		// get the current modifier
-		gameTimeGetMod(&mod);
-
-		for (i = 1; i < nb_available_speeds; ++i) {
-			if (mod < available_speed[i]) {
-				mod = available_speed[i];
-
-				if (mod == 1.f / 1.f) {
-					CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Reset")));
-				} else {
-					CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Increased to %3.1f"),mod));
-				}
-				gameTimeSetMod(mod);
-				break;
+			if (mod == 1.f / 1.f)
+			{
+				CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Reset")));
 			}
+			else
+			{
+				CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Increased to %3.1f"), mod));
+			}
+			gameTimeSetMod(mod);
+			break;
 		}
 	}
 }
 
 void kf_SlowDown( void )
 {
-	float	mod;
+	float   mod;
+	int     i;
 
-	if ( (!bMultiPlayer || (NetPlay.bComms==0) )  && !bInTutorial)
+	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial
+	if (runningMultiplayer() || bInTutorial)
+		return;
+
+	// get the current modifier
+	gameTimeGetMod(&mod);
+
+	for (i = nb_available_speeds - 2; i >= 0; --i)
 	{
-		int i;
+		if (mod > available_speed[i])
+		{
+			mod = available_speed[i];
 
-		// get the current modifier
-		gameTimeGetMod(&mod);
-
-		for (i = nb_available_speeds-2; i >= 0; --i) {
-			if (mod > available_speed[i]) {
-				mod = available_speed[i];
-
-				if (mod == 1.f / 1.f) {
-					CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Reset")));
-				} else {
-					CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Reduced to %3.1f"),mod));
-				}
-				gameTimeSetMod(mod);
-				break;
+			if (mod == 1.f / 1.f)
+			{
+				CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Reset")));
 			}
+			else
+			{
+				CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Reduced to %3.1f"),mod));
+			}
+			gameTimeSetMod(mod);
+			break;
 		}
 	}
 }
 
 void kf_NormalSpeed( void )
 {
-	if ( (!bMultiPlayer || (NetPlay.bComms == 0)) && !bInTutorial)
-	{
-		CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Reset")));
-		gameTimeResetMod();
-	}
+	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial
+	if (runningMultiplayer() || bInTutorial)
+		return;
+
+	CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Reset")));
+	gameTimeResetMod();
 }
 
 // --------------------------------------------------------------------------
