@@ -1520,7 +1520,7 @@ static void intProcessEditStats(UDWORD id)
 		int temp;
 #ifdef  DEBUG_SCROLLTABS
 		char buf[200];		//only used for debugging
-#endif	
+#endif
 		psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDSTAT_TABFORM);	//get our form
 		psTForm->TabMultiplier -=1;				// -1 since user hit left button
 		if (psTForm->TabMultiplier < 1 )
@@ -1529,7 +1529,7 @@ static void intProcessEditStats(UDWORD id)
 		}
 		// add routine to update tab widgets now...
 		temp = psTForm->majorT;					//set tab # to previous "page"
-		temp -=TAB_SEVEN;						//7 = 1 "page" of tabs						
+		temp -=TAB_SEVEN;						//7 = 1 "page" of tabs
 		if ( temp < 0)
 			psTForm->majorT = 0;
 		else
@@ -1539,7 +1539,7 @@ static void intProcessEditStats(UDWORD id)
 		addConsoleMessage(buf,DEFAULT_JUSTIFY);
 #endif
 	}
-	else if (id == IDSTAT_TABSCRL_RIGHT) // user hit right scroll tab from DEBUG menu 
+	else if (id == IDSTAT_TABSCRL_RIGHT) // user hit right scroll tab from DEBUG menu
 	{
 	W_TABFORM	*psTForm;
 	UWORD numTabs;
@@ -1556,10 +1556,10 @@ static void intProcessEditStats(UDWORD id)
 		}
 	//add routine to update tab widgets now...
 		psTForm->majorT += TAB_SEVEN;					// set tab # to next "page"
-		if (psTForm->majorT >= psTForm->numMajor) 
+		if (psTForm->majorT >= psTForm->numMajor)
 		{
 			psTForm->majorT = psTForm->numMajor - 1;		//set it back to max -1
-		}	
+		}
 #ifdef  DEBUG_SCROLLTABS		//for debuging
 		sprintf(buf, "[debug menu]Clicked RT %d numtabs %d tab # %d", psTForm->TabMultiplier, numTabs, psTForm->majorT);
 		addConsoleMessage(buf, DEFAULT_JUSTIFY);
@@ -2114,11 +2114,28 @@ INT_RETVAL intRunWidgets(void)
 					} else {
 						psStructure = buildStructure(psBuilding, structX, structY,
 						                             selectedPlayer, FALSE);
+						/* NOTE: if this was a regular buildprocess we would
+						 * have to call sendBuildStarted(psStructure, <droid>);
+						 * In this case there is no droid working on the
+						 * building though. So we cannot fill out the <droid>
+						 * part.
+						 */
+
+						// Send a text message to all players, notifying them of
+						// the fact that we're cheating ourselves a new
+						// structure.
+						DBCONPRINTF(ConsoleString,(ConsoleString, _("Player %u is cheating (debug menu) him/herself a new structure: %s."), selectedPlayer, psStructure->pStructureType->pName));
+						sendTextMessage(ConsoleString, TRUE);
 					}
 					if (psStructure)
 					{
 						psStructure->status = SS_BUILT;
 						buildingComplete(psStructure);
+
+						// In multiplayer games be sure to send a message to the
+						// other players, telling them a new structure has been
+						// placed.
+						SendBuildFinished(psStructure);
 					}
 				}
 				else if (psPositionStats->ref >= REF_FEATURE_START &&
@@ -3059,7 +3076,7 @@ static void intProcessStats(UDWORD id)
 		int temp;
 #ifdef  DEBUG_SCROLLTABS
 		char buf[200];		//only used for debugging
-#endif	
+#endif
 		psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDSTAT_TABFORM);	//get our form
 		psTForm->TabMultiplier -= 1;				// -1 since user hit left button
 		if (psTForm->TabMultiplier < 1)
@@ -3068,7 +3085,7 @@ static void intProcessStats(UDWORD id)
 		}
 		//add routine to update tab widgets now...
 		temp = psTForm->majorT;					// set tab # to previous "page"
-		temp -= TAB_SEVEN;						// 7 = 1 "page" of tabs						
+		temp -= TAB_SEVEN;						// 7 = 1 "page" of tabs
 		if ( temp < 0)
 			psTForm->majorT = 0;
 		else
@@ -3098,7 +3115,7 @@ static void intProcessStats(UDWORD id)
 		if (psTForm->majorT >= psTForm->numMajor)	// check if too many
 		{
 			psTForm->majorT = psTForm->numMajor - 1;	// set it back to max -1
-		}	
+		}
 #ifdef  DEBUG_SCROLLTABS		//for debuging
 		sprintf(buf, "[build menu]Clicked RT %d numtabs %d tab # %d", psTForm->TabMultiplier, numTabs, psTForm->majorT);
 		addConsoleMessage(buf, DEFAULT_JUSTIFY);
@@ -5718,7 +5735,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 //================== adds L/R Scroll buttons ===================================
 if (numForms(numStats, butPerForm)>8)	//only want these buttons when tab count >8
 	{
-		// Add the left tab scroll button 
+		// Add the left tab scroll button
 		memset(&sButInit, 0, sizeof(W_BUTINIT));
 		sButInit.formID = IDSTAT_FORM;
 		sButInit.id = IDSTAT_TABSCRL_LEFT;
@@ -5735,7 +5752,7 @@ if (numForms(numStats, butPerForm)>8)	//only want these buttons when tab count >
 		{
 		return FALSE;
 		}
-		// Add the right tab scroll button 
+		// Add the right tab scroll button
 		memset(&sButInit, 0, sizeof(W_BUTINIT));
 		sButInit.formID = IDSTAT_FORM;
 		sButInit.id = IDSTAT_TABSCRL_RIGHT;
@@ -5754,7 +5771,7 @@ if (numForms(numStats, butPerForm)>8)	//only want these buttons when tab count >
 		}
 	}
 //==============buttons before tabbed form!==========================
-	// Add the tabbed form 
+	// Add the tabbed form
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
 	sFormInit.formID = IDSTAT_FORM;
 	sFormInit.id = IDSTAT_TABFORM;
@@ -5791,7 +5808,7 @@ if (numForms(numStats, butPerForm)>8)	//only want these buttons when tab count >
 		sFormInit.majorOffset = OBJ_TABOFFSET + 10;
 		sFormInit.TabMultiplier = 1;		// Enable our tabMultiplier buttons.
 	}
-	for (i = 0; i< sFormInit.numMajor; i++)	// Sets # of tab's minors 
+	for (i = 0; i< sFormInit.numMajor; i++)	// Sets # of tab's minors
 	{
 		sFormInit.aNumMinors[i] = 1;
 	}
