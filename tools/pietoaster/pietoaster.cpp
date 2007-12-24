@@ -1,4 +1,4 @@
-/* 
+/*
  *  PieToaster is an OpenGL application to edit 3D models in
  *  Warzone 2100's (an RTS game) PIE 3D model format, which is heavily
  *  inspired by PieSlicer created by stratadrake.
@@ -16,18 +16,13 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *  $Revision$
- *  $Id$
- *  $HeadURL$
  */
-
 #include "stdlib.h"
 #include "stdio.h"
 #include "string.h"
 
-#include <SDL/SDL.h>
-#include <AntTweakBar.h>
+#include "SDL.h"
+#include "AntTweakBar.h"
 
 #ifdef _WIN32
 	#include <windows.h>	// required by gl.h
@@ -38,181 +33,16 @@
 #include "pie_types.h"
 #include "imdloader.h"
 #include "resmaster.h"
-#include "physfs.h"
+#include "gui.h"
 
 #include "screen.h"
 #include "game_io.h"
 
-static char mychars[255]; //temp char
-static int mychars_index = 0; //temp char current index
-static TwBar *textBar; //text box bar
-static bool textboxUp = false; //whether textbox is up or not
-
-static char *text_pointer = NULL;
-
-// the dumbest shift kmod char handling function on planet earth :)
-static uint16_t shiftChar(uint16_t key)
-{
-	switch (key)
-	{
-	case '`':
-		key = '~';
-		break;
-	case '1':
-		key = '!';
-		break;
-	case '2':
-		key = '@';
-		break;
-	case '3':
-		key = '!';
-		break;
-	case '4':
-		key = '$';
-		break;
-	case '5':
-		key = '%';
-		break;
-	case '6':
-		key = '^';
-		break;
-	case '7':
-		key = '&';
-		break;
-	case '8':
-		key = '*';
-		break;
-	case '9':
-		key = '(';
-		break;
-	case '0':
-		key = ')';
-		break;
-	case '-':
-		key = '_';
-		break;
-	case '[':
-		key = '{';
-		break;
-	case ']':
-		key = '}';
-		break;
-	case ';':
-		key = ';';
-		break;
-	case '\'':
-		key = '\"';
-		break;
-	case ',':
-		key = '<';
-		break;
-	case '.':
-		key = '>';
-		break;
-	case '/':
-		key = '?';
-		break;
-	default:
-		break;
-	}
-	return key;
-}
-
-static void mychars_incr(uint16_t key)
-{
-	if (mychars_index < 255 - 1)
-	{
-		char str = (uint8_t)key;
-
-		strncpy(&mychars[mychars_index], &str, 1);
-		mychars_index++;
-	}
-}
-
-static void mychars_decr()
-{
-	if (mychars_index > 0)
-	{
-		mychars[mychars_index] = '\0';
-		mychars_index--;
-	}
-}
-
-static void TW_CALL addTextBox(void *clientData)
-{
-	char test[255] = " label='";
-	//char test2[255] = "TextBox label='";
-	char *string = (char*)clientData;
-	int size = strlen(string);
-
-	if (textboxUp)
-	{
-		return;
-	}
-
-	// Sets the pointer
-	text_pointer = string;
-
-	textBar = TwNewBar("TextBox");
-	//snprintf(&test2[15], size, "%s", string);
-	//snprintf(&test2[15 + size], 1, "\'");
-
-	//TwDefine(&test2);
-	TwDefine("TextBox position = '200 400'");
-	TwDefine("TextBox size = '400 50'");
-
-	snprintf(&test[8], size, "%s", string);
-	snprintf(&test[8 + size], 1, "\'");
-	//strcat(&test[0], attr);
-
-	textboxUp = true;
-
-	strncpy(&mychars[0], string, size);
-	mychars_index = size;
-
-	TwAddVarRO(textBar, "textbox", TW_TYPE_INT32, &mychars_index, &test[0]);
-}
-
-static void deleteTextBox()
-{
-	/*copies chars from mychars to text_pointer location if both
-	values are not null */
-	if (text_pointer && mychars_index)
-	{
-		int size = mychars_index;
-		strncpy(text_pointer, mychars, size);
-		text_pointer = NULL;
-	}
-
-	TwDeleteBar(textBar);
-	textboxUp = false;
-}
-
-static void updateTextBox(void)
-{
-	char test[255] = " label='";
-
-	TwRemoveVar(textBar, "textbox");
-
-	snprintf(&test[8], mychars_index, "%s", &mychars[0]);
-	snprintf(&test[8 + mychars_index], 1, "\'");
-
-	TwAddVarRO(textBar, "textbox", TW_TYPE_INT32, &mychars_index, test);
-}
 
 int main(int argc, char *argv[])
 {
 	const SDL_VideoInfo* video = NULL;
 	bool bQuit = false;
-	const char path[] = "./";
-
-	PHYSFS_init(argv[0]);
-
-	PHYSFS_setWriteDir(path);
-	if (!PHYSFS_addToSearchPath( PHYSFS_getWriteDir(), 0 ))
-	{
-		fprintf(stderr, "unable to add path %s to physfs %s\n", PHYSFS_getLastError());
-	}
 
 	if( g_Screen.initialize() < 0 )
 	{
@@ -237,10 +67,17 @@ int main(int argc, char *argv[])
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
 	g_Screen.m_bpp = video->vfmt->BitsPerPixel;
+
+	fprintf(stderr, "BPP %d\n", video->vfmt->BitsPerPixel);
+	if (g_Screen.m_bpp == 16)
+	{
+	    fprintf(stderr, "WARNING:Running at 16bit expecting decreased performance\nChanging Desktop depth to 32bit may correct this problem\n");
+	}
+
 	g_Screen.m_flags = SDL_OPENGL | SDL_HWSURFACE | SDL_RESIZABLE;
 	g_Screen.m_width = 800;
 	g_Screen.m_height = 600;
-
+	g_Screen.m_useVBO = false;
 
 	//flags |= SDL_FULLSCREEN;
 	if( !g_Screen.setVideoMode() )
@@ -279,7 +116,7 @@ int main(int argc, char *argv[])
 		{ "Selected", TW_TYPE_BOOLCPP,	offsetof(_vertice_list, selected), "" },
 	};
 
-	g_pieVertexType = TwDefineStruct("VerticePie", vertice3fMembers, 4, sizeof(_vertice_list), NULL, NULL);
+	g_tw_pieVertexType = TwDefineStruct("VerticePie", vertice3fMembers, 4, sizeof(_vertice_list), NULL, NULL);
 
 	TwStructMember vector2fMembers[] =
 	{
@@ -287,47 +124,71 @@ int main(int argc, char *argv[])
 		{ "Y",	   TW_TYPE_FLOAT,	offsetof(Vector2f, y), "min=0 max=4096 step=1" },
 	};
 
-	g_pieVector2fType = TwDefineStruct("Vector2fPie", vector2fMembers, 2, sizeof(Vector2f), NULL, NULL);
+	g_tw_pieVector2fType = TwDefineStruct("Vector2fPie", vector2fMembers, 2, sizeof(Vector2f), NULL, NULL);
 
 	// Tell the window size to AntTweakBar
 	TwWindowSize(g_Screen.m_width, g_Screen.m_height);
 
 	iIMDShape *testIMD = NULL;
 
-	ResMaster = new CResMaster();
+	//ResMaster = new CResMaster;
 
-	ResMaster->readTextureList("pages.txt");
+	ResMaster.getOGLExtensionString();
 
-	ResMaster->loadTexPages();
 
-	ResMaster->addGUI();
+	if (ResMaster.isOGLExtensionAvailable("GL_ARB_vertex_buffer_object"))
+	{
+		g_Screen.initializeVBOExtension();
+	}
+
+	ResMaster.cacheGridsVertices();
+
+	ResMaster.readTextureList("pages.txt");
+
+	ResMaster.loadTexPages();
+
+	ResMaster.addGUI();
+
+#ifdef SDL_TTF_TEST
+	if (!(ResMaster.initFont() && ResMaster.loadFont("FreeMono.ttf", 12)))
+	{
+		return 1;
+	}
+#endif
 
 	//argc = 2;
-	//argv[1] = "drmbod08.pie";
+	//argv[1] = "building1b.pie";
 
 	if (argc < 2)
 	{
-		fprintf(stderr, "no file specified\n");
-		return 0;
+		fprintf(stderr, "NOTE:no file specified\n");
+		//ResMaster.addPie(testIMD, "newpie"); //No need to add new pie for now
 	}
-
-	testIMD = iV_ProcessIMD(argv[1]);
-	if (testIMD == NULL)
+	else
 	{
-		fprintf(stderr, "file %s doesn't exist\n", argv[1]);
-		return 0;
+		testIMD = iV_ProcessIMD(argv[1]);
+
+		if (testIMD == NULL)
+		{
+			fprintf(stderr, "no file specified\n creating new one...\n");
+			ResMaster.addPie(testIMD, "newpie");
+		}
+		else
+		{
+			ResMaster.addPie(testIMD, argv[1]);
+		}
 	}
-	ResMaster->addPie(testIMD, argv[1]);
 
-	ResMaster->getPies()->ToFile("test13.pie");
 
+	//ResMaster.getPieAt(0)->ToFile("test13.pie");
+
+	OpenFileDialog.m_Up = false;
 
 	while( !bQuit )
 	{
 		SDL_Event event;
 		int handled;
 
-		//glClearColor(0.6f, 0.95f, 1.0f, 1);
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
 		// Set OpenGL camera
@@ -343,7 +204,7 @@ int main(int argc, char *argv[])
         // Process incoming events
 		while( SDL_PollEvent(&event) )
 		{
-			if (textboxUp)
+			if (OpenFileDialog.m_Up)
 			{
 				if (event.type == SDL_KEYDOWN)
 				{
@@ -352,21 +213,20 @@ int main(int argc, char *argv[])
 
 					if (key == SDLK_BACKSPACE)
 					{
-						mychars_decr();
+						OpenFileDialog.decrementChar();
 					}
-					else if (key == SDLK_KP_ENTER)
+					else if (key == SDLK_KP_ENTER || key == SDLK_RETURN)
 					{
-						//finish and save changes to csv data
-						deleteTextBox();
+						OpenFileDialog.doFunction();
+						OpenFileDialog.deleteTextBox();
 						continue;
 					}
 					else if (key == SDLK_PAUSE ||
-							key == SDLK_ESCAPE ||
-							key == SDLK_SPACE)
+							key == SDLK_ESCAPE)
 					{
 						//cancels current action and closes text box
-						text_pointer = NULL;
-						deleteTextBox();
+						//OpenFileDialog.text_pointer = NULL;
+						OpenFileDialog.deleteTextBox();
 						continue;
 					}
 					else if (key > 12 && key < 128)
@@ -384,11 +244,256 @@ int main(int argc, char *argv[])
 								key = shiftChar(key);
 							}
 						}
-						mychars_incr(key);
+						OpenFileDialog.incrementChar(key);
 					}
-					updateTextBox();
+					OpenFileDialog.updateTextBox();
 					//interrupts input when text box is up
 					continue;
+				}
+			}
+			else if (AddSubModelDialog.m_Up)
+			{
+				if (event.type == SDL_KEYDOWN)
+				{
+					uint16_t key = event.key.keysym.sym;
+					SDLMod modifier = event.key.keysym.mod;
+
+					if (key == SDLK_BACKSPACE)
+					{
+						AddSubModelDialog.decrementChar();
+					}
+					else if (key == SDLK_KP_ENTER || key == SDLK_RETURN)
+					{
+						AddSubModelDialog.doFunction();
+						AddSubModelDialog.deleteTextBox();
+						continue;
+					}
+					else if (key == SDLK_PAUSE ||
+							key == SDLK_ESCAPE)
+					{
+						//cancels current action and closes text box
+						//OpenFileDialog.text_pointer = NULL;
+						AddSubModelDialog.deleteTextBox();
+						continue;
+					}
+					else if (key > 12 && key < 128)
+					{
+						if (modifier & KMOD_CAPS ||
+							modifier & KMOD_LSHIFT ||
+							modifier & KMOD_RSHIFT)
+						{
+							if (key >= 'a' && key <= 'z')
+							{
+								key = toupper(key);
+							}
+							else
+							{
+								key = shiftChar(key);
+							}
+						}
+						AddSubModelDialog.incrementChar(key);
+					}
+					AddSubModelDialog.updateTextBox();
+					//interrupts input when text box is up
+					continue;
+				}
+			}
+			else if (AddSubModelFileDialog.m_Up)
+			{
+				if (event.type == SDL_KEYDOWN)
+				{
+					uint16_t key = event.key.keysym.sym;
+					SDLMod modifier = event.key.keysym.mod;
+
+					if (key == SDLK_BACKSPACE)
+					{
+						AddSubModelFileDialog.decrementChar();
+					}
+					else if (key == SDLK_KP_ENTER || key == SDLK_RETURN)
+					{
+						AddSubModelFileDialog.doFunction();
+						AddSubModelFileDialog.deleteTextBox();
+						continue;
+					}
+					else if (key == SDLK_PAUSE ||
+							key == SDLK_ESCAPE)
+					{
+						//cancels current action and closes text box
+						//OpenFileDialog.text_pointer = NULL;
+						AddSubModelFileDialog.deleteTextBox();
+						continue;
+					}
+					else if (key > 12 && key < 128)
+					{
+						if (modifier & KMOD_CAPS ||
+							modifier & KMOD_LSHIFT ||
+							modifier & KMOD_RSHIFT)
+						{
+							if (key >= 'a' && key <= 'z')
+							{
+								key = toupper(key);
+							}
+							else
+							{
+								key = shiftChar(key);
+							}
+						}
+						AddSubModelFileDialog.incrementChar(key);
+					}
+					AddSubModelFileDialog.updateTextBox();
+					//interrupts input when text box is up
+					continue;
+				}
+			}
+			else if (ReadAnimFileDialog.m_Up)
+			{
+				if (event.type == SDL_KEYDOWN)
+				{
+					uint16_t key = event.key.keysym.sym;
+					SDLMod modifier = event.key.keysym.mod;
+
+					if (key == SDLK_BACKSPACE)
+					{
+						ReadAnimFileDialog.decrementChar();
+					}
+					else if (key == SDLK_KP_ENTER || key == SDLK_RETURN)
+					{
+						ReadAnimFileDialog.doFunction();
+						ReadAnimFileDialog.deleteTextBox();
+						continue;
+					}
+					else if (key == SDLK_PAUSE ||
+							key == SDLK_ESCAPE)
+					{
+						//cancels current action and closes text box
+						//OpenFileDialog.text_pointer = NULL;
+						ReadAnimFileDialog.deleteTextBox();
+						continue;
+					}
+					else if (key > 12 && key < 128)
+					{
+						if (modifier & KMOD_CAPS ||
+							modifier & KMOD_LSHIFT ||
+							modifier & KMOD_RSHIFT)
+						{
+							if (key >= 'a' && key <= 'z')
+							{
+								key = toupper(key);
+							}
+							else
+							{
+								key = shiftChar(key);
+							}
+						}
+						ReadAnimFileDialog.incrementChar(key);
+					}
+					ReadAnimFileDialog.updateTextBox();
+					//interrupts input when text box is up
+					continue;
+				}
+			}
+			else if (WriteAnimFileDialog.m_Up)
+			{
+				if (event.type == SDL_KEYDOWN)
+				{
+					uint16_t key = event.key.keysym.sym;
+					SDLMod modifier = event.key.keysym.mod;
+
+					if (key == SDLK_BACKSPACE)
+					{
+						WriteAnimFileDialog.decrementChar();
+					}
+					else if (key == SDLK_KP_ENTER || key == SDLK_RETURN)
+					{
+						WriteAnimFileDialog.doFunction();
+						WriteAnimFileDialog.deleteTextBox();
+						continue;
+					}
+					else if (key == SDLK_PAUSE ||
+							key == SDLK_ESCAPE)
+					{
+						//cancels current action and closes text box
+						//OpenFileDialog.text_pointer = NULL;
+						WriteAnimFileDialog.deleteTextBox();
+						continue;
+					}
+					else if (key > 12 && key < 128)
+					{
+						if (modifier & KMOD_CAPS ||
+							modifier & KMOD_LSHIFT ||
+							modifier & KMOD_RSHIFT)
+						{
+							if (key >= 'a' && key <= 'z')
+							{
+								key = toupper(key);
+							}
+							else
+							{
+								key = shiftChar(key);
+							}
+						}
+						WriteAnimFileDialog.incrementChar(key);
+					}
+					WriteAnimFileDialog.updateTextBox();
+					//interrupts input when text box is up
+					continue;
+				}
+			}
+
+			if (event.type == SDL_KEYDOWN)
+			{
+				uint16_t key = event.key.keysym.sym;
+				SDLMod modifier = event.key.keysym.mod;
+
+				if ((key == SDLK_KP_ENTER || key == SDLK_RETURN) && modifier & KMOD_LALT)
+				{
+					// Resize SDL video mode
+ 					g_Screen.m_flags ^= SDL_FULLSCREEN;
+					if( !g_Screen.setVideoMode() )
+						fprintf(stderr, "WARNING: Video mode set failed: %s", SDL_GetError());
+
+					// Resize OpenGL viewport
+					glViewport(0, 0, g_Screen.m_width, g_Screen.m_height);
+					if (ResMaster.isTextureMapperUp())
+					{
+						glMatrixMode(GL_PROJECTION);
+						glLoadIdentity();
+						glOrtho(0, g_Screen.m_width, 0, g_Screen.m_height, -1, 1);
+						glMatrixMode(GL_MODELVIEW);
+						glLoadIdentity();
+					}
+					else
+					{
+						// Restore OpenGL states (SDL seems to lost them)
+						glEnable(GL_DEPTH_TEST);
+						glEnable(GL_TEXTURE_2D);
+						gluPerspective(30, (double)g_Screen.m_width/g_Screen.m_height, 1, 1000);
+						gluLookAt(0,0,250, 0,0,0, 0,1,0);
+						//glEnable(GL_LIGHTING);
+						//glEnable(GL_LIGHT0);
+						//glEnable(GL_NORMALIZE);
+						//glEnable(GL_COLOR_MATERIAL);
+					}
+					glDisable(GL_CULL_FACE);
+					//glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
+
+					// Reloads texture and bind
+					ResMaster.freeTexPages();
+					ResMaster.loadTexPages();
+					ResMaster.cacheGridsVertices();
+
+					// Flush vbo id's
+					uint32_t	index;
+					for (index = 0;index < ResMaster.m_pieCount;index++)
+					{
+						ResMaster.getPieAt(index)->flushVBOPolys();
+					}
+
+					SDL_Event newEvent;
+					newEvent.type = SDL_VIDEORESIZE;
+					newEvent.resize.w = g_Screen.m_width;
+					newEvent.resize.h = g_Screen.m_height;
+					SDL_PushEvent(&newEvent);
 				}
 			}
 
@@ -423,7 +528,7 @@ int main(int argc, char *argv[])
 
 					// Resize OpenGL viewport
 					glViewport(0, 0, g_Screen.m_width, g_Screen.m_height);
-					if (ResMaster->isTextureMapperUp())
+					if (ResMaster.isTextureMapperUp())
 					{
 						glMatrixMode(GL_PROJECTION);
 						glLoadIdentity();
@@ -444,13 +549,49 @@ int main(int argc, char *argv[])
 						//glEnable(GL_COLOR_MATERIAL);
 					}
 					glDisable(GL_CULL_FACE);
-					glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
+					//glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
 
 					// Reloads texture and bind
-					ResMaster->freeTexPages();
-					ResMaster->loadTexPages();
+					ResMaster.freeTexPages();
+					ResMaster.loadTexPages();
+					ResMaster.cacheGridsVertices();
+
+					// Flush vbo id's
+					uint32_t	index;
+					for (index = 0;index < ResMaster.m_pieCount;index++)
+					{
+						ResMaster.getPieAt(index)->flushVBOPolys();
+					}
+
 					// TwWindowSize has been called by TwEventSDL, so it is not necessary to call it again here.
 					break;
+				}
+			}
+			else
+			{
+				// Resets all keys and buttons
+				inputInitialize();
+				// Input in TwBars rebuilds vbo's
+				switch( event.type )
+				{
+					case SDL_KEYUP:
+					case SDL_KEYDOWN:
+					case SDL_MOUSEMOTION:
+					case SDL_MOUSEBUTTONUP:
+					case SDL_MOUSEBUTTONDOWN:
+						// Flush vbo id's
+						uint32_t	index;
+						for (index = 0;index < ResMaster.m_pieCount;index++)
+						{
+							CPieInternal	*temp = ResMaster.getPieAt(index);
+							if (temp)
+							{
+								temp->flushVBOPolys();
+							}
+						}
+						break;
+					default:
+						break;
 				}
 			}
 		}
@@ -462,8 +603,9 @@ int main(int argc, char *argv[])
 
 		glColor4ub(255, 255, 255, 255);
 
-		ResMaster->draw();
-		ResMaster->updateInput();
+		ResMaster.logic();
+		ResMaster.draw();
+		ResMaster.updateInput();
 
 		// Draw tweak bars
 		TwDraw();
@@ -483,7 +625,7 @@ int main(int argc, char *argv[])
 	// Terminate SDL
 	SDL_Quit();
 
-	delete ResMaster;
+	ResMaster.~CResMaster();
 
 	return 1;
 }

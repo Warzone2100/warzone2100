@@ -20,6 +20,7 @@
 #ifndef _imd_loader_h
 #define _imd_loader_h
 
+#include "wzglobal.h"
 #include "pie_types.h"
 
 #define IMD_NAME				"IMD"
@@ -45,6 +46,7 @@
 extern iIMDShape *iV_ProcessIMD( const char *filename );
 
 extern bool iV_IMDSave(const char *filename, iIMDShape *s, bool PieIMD);
+extern bool iV_IMDSaveOld(const char *filename, iIMDShape *s, bool PieIMD);
 extern void iV_IMDRelease(iIMDShape *s);
 
 // How high up do we want to stop looking

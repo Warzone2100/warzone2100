@@ -52,6 +52,19 @@ void _imd_save_connectors(FILE *fp, iIMDShape *s)
 	}
 }
 
+// new code the write out the connectors ! Old version (Integer)
+void _imd_save_connectorsOld(FILE *fp, iIMDShape *s)
+{
+	int i;
+
+	if (s->nconnectors != 0) {
+		fprintf(fp,"CONNECTORS %d\n",s->nconnectors);
+		Vector3f *p = s->connectors;
+		for (i=0; i<s->nconnectors; i++, p++) {
+			fprintf(fp,"\t%d %d %d\n", (int32_t)p->x,(int32_t)p->y,(int32_t)p->z);
+		}
+	}
+}
 
 //*************************************************************************
 //*** save IMD file
@@ -61,7 +74,7 @@ void _imd_save_connectors(FILE *fp, iIMDShape *s)
 //* params	filename = name of file to save to including .IMD extention
 //*			s 			= pointer to IMD shape
 //*
-//* returns true -> ok, FLASE -> error
+//* returns TRUE -> ok, FLASE -> error
 //*
 //******
 bool iV_IMDSave(const char *filename, iIMDShape *s, bool PieIMD)
@@ -143,6 +156,102 @@ bool iV_IMDSave(const char *filename, iIMDShape *s, bool PieIMD)
 	}
 
 	_imd_save_connectors(fp,s);	// Write out the connectors if they exist
+
+	fclose(fp);
+
+	return true;
+}
+
+//*************************************************************************
+//*** save IMD file (Old Integer version) WARNING:float mantissa will be discarded
+//*
+//* pre		shape successfully loaded
+//*
+//* params	filename = name of file to save to including .IMD extention
+//*			s 			= pointer to IMD shape
+//*
+//* returns TRUE -> ok, FLASE -> error
+//*
+//******
+bool iV_IMDSaveOld(const char *filename, iIMDShape *s, bool PieIMD)
+{
+	FILE *fp;
+	iIMDShape *sp;
+	iIMDPoly *poly;
+	int nlevel, i, j, d;
+	const uint32_t dummyFlags = 0xDEADBEEF;
+
+	if ((fp = fopen(filename,"w")) == NULL) {
+		return false;
+	}
+
+	if (PieIMD == true) {
+		fprintf(fp,"%s %d\n",PIE_NAME,PIE_VER);
+	} else {
+		fprintf(fp,"%s %d\n",IMD_NAME,IMD_VER);
+	}
+	fprintf(fp,"TYPE %x\n", dummyFlags);
+
+	// if textured write tex page file info
+	if (s->texpage != iV_TEX_INVALID)
+	{
+		//512W 512H for now...
+		fprintf(fp,"TEXTURE %s %s %d %d\n", (const char*)"0",
+				iV_TEXNAME(s->texpage), _TEX_PAGE[s->texpage].w,
+				_TEX_PAGE[s->texpage].h);
+	}
+
+	// find number of levels in shape
+	for (nlevel=0, sp = s; sp != NULL; sp = sp->next, nlevel++)
+		;
+
+	fprintf(fp,"LEVELS %d\n",nlevel);
+
+	for (sp = s, i=0; i<nlevel; sp = sp->next, i++) {
+		fprintf(fp,"LEVEL %d\n",(i+1));
+		fprintf(fp,"POINTS %d\n",sp->npoints);
+
+		// write shape points
+		for (j = 0; j < sp->npoints; j++) {
+			fprintf(fp,"\t%d %d %d\n",(int32_t)sp->points[j].x,(int32_t)sp->points[j].y,
+					(int32_t)sp->points[j].z);
+		}
+
+		// write shape polys
+		{
+			fprintf(fp,"POLYGONS %d\n",sp->npolys);
+			for (poly = sp->polys, j=0; j<sp->npolys; j++, poly++) {
+				fprintf(fp,"\t%8x %d",poly->flags,poly->npnts);
+				for (d=0; d<poly->npnts; d++) {
+					fprintf(fp," %d",poly->pindex[d]);
+				}
+
+				if (poly->flags & iV_IMD_TEXANIM) {
+
+					if (poly->pTexAnim == NULL) {
+						fprintf( stderr, "No TexAnim pointer!\n" );
+					} else {
+						fprintf(fp," %d %d %d %d",
+							poly->pTexAnim->nFrames,
+							poly->pTexAnim->playbackRate,
+							poly->pTexAnim->textureWidth,
+							poly->pTexAnim->textureHeight);
+					}
+				}
+
+				// if textured write texture uv's
+				if (poly->flags & iV_IMD_TEX)
+				{
+					for (d=0; d<poly->npnts; d++) {
+						fprintf(fp," %d %d",(int32_t)poly->texCoord[d].x,(int32_t)poly->texCoord[d].y);
+					}
+				}
+				fprintf(fp,"\n");
+			}
+		}
+	}
+
+	_imd_save_connectorsOld(fp,s);	// Write out the connectors if they exist
 
 	fclose(fp);
 

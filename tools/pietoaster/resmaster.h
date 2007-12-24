@@ -1,4 +1,4 @@
-/* 
+/*
  *  PieToaster is an OpenGL application to edit 3D models in
  *  Warzone 2100's (an RTS game) PIE 3D model format, which is heavily
  *  inspired by PieSlicer created by stratadrake.
@@ -16,12 +16,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *  $Revision$
- *  $Id$
- *  $HeadURL$
  */
-
 #ifndef _resmaster_h
 #define _resmaster_h
 
@@ -31,6 +26,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
+#include "wzglobal.h"
 #include "pie_types.h"
 
 #include "imdloader.h"
@@ -40,8 +36,13 @@
 
 #include "texture_mapper.h"
 
-#include <AntTweakBar.h>
+#include "AntTweakBar.h"
 
+extern uint16_t shiftChar(uint16_t key);
+
+typedef struct _ogl_extension_string {
+	char	string[255];
+} OGL_EXTENSION_STRING;
 
 class CResMaster {
 public:
@@ -52,6 +53,11 @@ public:
 		SMOOTH = 0,
 		FLAT = 1
 	};
+
+	static const uint32_t MAX_GL_EXTENSIONS = 500;
+
+	OGL_EXTENSION_STRING	m_oglExtensions[MAX_GL_EXTENSIONS];
+	uint32_t	m_numExtensions;
 
 	uint32_t	m_textureToProcess;
 	uint32_t	m_pieCount;
@@ -65,17 +71,16 @@ public:
 	bool	m_highLightConnectors;	///<highlight connector or not
 	bool	m_highLightSelected;
 	bool	m_drawAxis;	///<whether to draw X,Y,Z axis or not
+	bool	m_drawGrids;
 	bool	m_drawTexture;	///<whether to draw textures or not
 	bool	m_drawNewVertice;	///<whether to draw new vertice position or not
+	bool	m_drawTexts;	///<whether to draw selected vertice/poly/connector id text or not
 	uint32_t	m_shadeMode;	///<shade mode of polygons
 	float	m_gamma;	///<gamma correction of renderer
 	int32_t	m_newPieTextureId;	///<new pie textureId
+	bool	m_oldFormat;	///old integer format
 
-	CResMaster() :  m_textureToProcess(0), m_pieCount(0), m_numNewPies(0), m_rotateX(0.0f), m_rotateY(0.0f),
-					m_scale(1.0f), m_polygonMode(0), m_highLightVertices(true), m_highLightConnectors(true),
-					m_highLightSelected(true), m_drawAxis(true), m_drawTexture(true), m_drawNewVertice(true),
-					m_shadeMode(0), m_gamma(1.0f), m_newPieTextureId(0)
-					{m_PolyLinker.m_Up = false;m_TextureMapper.m_Up = false;}
+	CResMaster();
 
 	~CResMaster();
 	bool	isLinkerUp(void) {return m_PolyLinker.m_Up;};
@@ -88,13 +93,26 @@ public:
 	void	enableTexture(bool value);
 
 	bool	addPie(iIMDShape *imd, const char *name);
-	CPieInternal *getPies(void);
+	bool	removePieAt(uint16_t i);
+	CPieInternal *getPieAt(uint16_t i);
 
 	bool	addGUI(void);
+
+	void	logic(void);
 
 	void	draw(void);
 
 	void	drawAxis(void);
+	void	drawGrids(void);
+	void	drawTexts(void);
+
+#ifdef	SDL_TTF_TEST
+	TTF_Font		*m_Font;
+
+	bool	initFont(void);
+	bool	loadFont(const char *name, uint8_t size);
+#endif
+	void	drawText(const char *text, float objX, float objY, float ObjZ, SDL_Color color, uint8_t style);
 
 	void	unprojectMouseXY(double *newX1, double *newY1, double *newZ1,
 								double *newX2, double *newY2, double *newZ2);
@@ -104,16 +122,29 @@ public:
 	bool	isTextureMapperUp(void) {return m_TextureMapper.m_Up;};
 	void	startMapTexture(void);
 	void	stopMapTexture(void);
+
+	void	cacheGridsVertices(void);
+
+	void	mergePies(void);
+
+	void	getOGLExtensionString(void);
+	bool	isOGLExtensionAvailable(const char *extension);
 private:
 	CPieInternal	*m_Pies[MAX_PIES];
+	CPieInternal	*m_MergedPie;
 	CPolygonLinker	m_PolyLinker;
 	CTextureMapper	m_TextureMapper;
 	char			m_TexPageNames[MAX_TEX_PAGES][MAX_FILE_NAME_LENGTH];
+	SDL_Surface		*m_TexSurfaces[MAX_TEX_PAGES];
+
+	Vector3f		m_GridCacheVertices[65536];
+	uint32_t			m_GridCacheCount;
+	GLuint			m_GridVBOId;
 
 	TwBar			*m_utilBar;
 	TwBar			*m_textureBar;
 };
 
-extern CResMaster *ResMaster;
+extern CResMaster ResMaster;
 
 #endif

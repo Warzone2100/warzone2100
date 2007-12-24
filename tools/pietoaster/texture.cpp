@@ -18,7 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#include <SDL/SDL_opengl.h>
+#include <SDL_opengl.h>
 #ifdef __APPLE__
 #include <opengl/glu.h>
 #else
@@ -27,7 +27,6 @@
 
 #include "texture.h"
 #include "pie_types.h"
-#include "png_util.h"
 
 //*************************************************************************
 
@@ -128,24 +127,38 @@ int pie_AddTexPage(iV_Image *s, const char* filename, int slot)
 	if (check_extension("GL_ARB_texture_compression"))
 	{
 		fprintf(stderr, "Texture compression: Yes\n");
-		wz_texture_compression = GL_COMPRESSED_RGBA_ARB;
+		if (s->depth == 4)
+		{
+			wz_texture_compression = GL_COMPRESSED_RGBA_ARB;
+		}
+		else if (s->depth == 3)
+		{
+			wz_texture_compression = GL_COMPRESSED_RGB_ARB;
+		}
 	} else {
 		fprintf(stderr, "Texture compression: No\n");
-		wz_texture_compression = GL_RGBA;
+		if (s->depth == 4)
+		{
+			wz_texture_compression = GL_RGBA;
+		}
+		else if (s->depth == 3)
+		{
+			wz_texture_compression = GL_RGB;
+		}
 	}
 
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
 	// Use anisotropic filtering, if available, but only max 4.0 to reduce processor burden
-	if (check_extension("GL_EXT_texture_filter_anisotropic"))
-	{
-		GLfloat max;
+	//if (check_extension("GL_EXT_texture_filter_anisotropic"))
+	//{
+		//GLfloat max;
 
-		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, MIN(4.0f, max));
-	}
+		//glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max);
+		//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, MIN(4.0f, max));
+	//}
 
 	if( strncmp( filename, SKY_TEXPAGE, iV_TEXNAME_MAX ) == 0 )
 	{
@@ -159,9 +172,9 @@ int pie_AddTexPage(iV_Image *s, const char* filename, int slot)
 
 	if ((s->width & (s->width-1)) == 0 && (s->height & (s->height-1)) == 0)
 	{
-		glTexImage2D(GL_TEXTURE_2D, 0, wz_texture_compression, s->width, s->height, 0, iV_getPixelFormat(s), GL_UNSIGNED_BYTE, s->bmp);
+		//glTexImage2D(GL_TEXTURE_2D, 0, wz_texture_compression, s->width, s->height, 0, iV_getPixelFormat(s), GL_UNSIGNED_BYTE, s->bmp);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, wz_texture_compression, s->width, s->height, iV_getPixelFormat(s), GL_UNSIGNED_BYTE, s->bmp);
 		glErrors = glGetError();
-		//gluBuild2DMipmaps(GL_TEXTURE_2D, wz_texture_compression, s->width, s->height, iV_getPixelFormat(s), GL_UNSIGNED_BYTE, s->bmp);
 	} else {
 		fprintf(stderr, "pie_AddTexPage: non POT texture %s", filename);
 	}
@@ -305,7 +318,9 @@ unsigned int iV_getPixelFormat(const iV_Image *image)
 	switch (image->depth)
 	{
 		case 3:
-			return GL_RGB;
+			//return GL_RGB;
+			//HACK:use BGR for 3...
+			return GL_BGR;
 		case 4:
 			return GL_RGBA;
 		default:

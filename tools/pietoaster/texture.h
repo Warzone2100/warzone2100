@@ -20,7 +20,8 @@
 #ifndef _tex_h
 #define _tex_h
 
-#include "png_util.h"
+#include "wzglobal.h"
+#include "pie_types.h"
 
 //*************************************************************************
 

@@ -779,7 +779,10 @@ iIMDShape *iV_ProcessIMD( const char *filename )
 	bool bTextured = false;
 	FILE *FileToOpen = NULL;
 
-	FileToOpen = fopen(filename, "rb+");
+	fprintf(stderr, "filename: %s", filename);
+	printf("filename: %s", filename);
+
+	FileToOpen = fopen(filename, "rb");
 	if (FileToOpen == NULL)
 	{
 		fprintf(stderr, "iV_ProcessIMD %s file doesn't exist: (%s)\n", filename);
@@ -852,12 +855,33 @@ iIMDShape *iV_ProcessIMD( const char *filename )
 		}
 		pFileData += cnt;
 
-		if (strcmp(texType, "png") != 0)
+		//more texture types using SDL_Image
+		if (!strcmp(texType, "png"))
 		{
-			fprintf(stderr, "iV_ProcessIMD %s: only png textures supported\n", filename);
+			strcat(texfile, ".png");
+		}
+		else if (!strcmp(texType, "bmp"))
+		{
+			strcat(texfile, ".bmp");
+		}
+		else if (!strcmp(texType, "pcx"))
+		{
+			strcat(texfile, ".pcx");
+		}
+		else if (!strcmp(texType, "jpg"))
+		{
+			strcat(texfile, ".jpg");
+		}
+		else if (!strcmp(texType, "gif"))
+		{
+			strcat(texfile, ".gif");
+		}
+		else
+		{
+			fprintf(stderr, "iV_ProcessIMD %s: only png bmp pcx jpg gif textures supported\n", filename);
 			return NULL;
 		}
-		strcat(texfile, ".png");
+
 		//pie_MakeTexPageName(texfile);
 
 		if (sscanf(pFileData, "%d %d%n", &pwidth, &pheight, &cnt) != 2)

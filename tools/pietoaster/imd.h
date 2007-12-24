@@ -21,6 +21,7 @@
 #define _imd_
 
 
+#include "wzglobal.h"
 #include "pie_types.h"
 
 #define IMD_NAME				"IMD"

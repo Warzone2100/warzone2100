@@ -1,4 +1,4 @@
-/* 
+/*
  *  PieToaster is an OpenGL application to edit 3D models in
  *  Warzone 2100's (an RTS game) PIE 3D model format, which is heavily
  *  inspired by PieSlicer created by stratadrake.
@@ -16,10 +16,6 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *  $Revision$
- *  $Id$
- *  $HeadURL$
  */
 
 #ifndef _texture_mapper_h
@@ -31,6 +27,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
+#include "wzglobal.h"
 #include "pie_types.h"
 
 #include "imdloader.h"
@@ -44,6 +41,8 @@ public:
 
 	///the radius of each point's selection circle
 	static const uint16_t m_selectionRadius = 5;
+
+	CTextureMapper() : m_Up(false) {};
 
 	void	addTargets(uint16_t width, uint16_t height, uint16_t textureId, iIMDPoly *target, uint16_t quantity);
 	void	removeTargets(void);

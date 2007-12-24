@@ -17,45 +17,15 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _screen_h
-#define _screen_h
-
-#ifdef _WIN32
-	#include <windows.h>	// required by gl.h
-#endif
-#include <GL/gl.h>
-#include <GL/glu.h>
-
-#include <SDL_opengl.h>
+#ifndef _pie_anim_h
+#define _pie_anim_h
 
 #include "wzglobal.h"
 #include "pie_types.h"
 
+#include "imdloader.h"
+#include "texture.h"
 
-class CScreen {
-public:
-	PFNGLGENBUFFERSARBPROC glGenBuffersARB;
-	PFNGLBINDBUFFERARBPROC glBindBufferARB;
-	PFNGLBUFFERDATAARBPROC glBufferDataARB;
-	PFNGLBUFFERSUBDATAARBPROC glBufferSubDataARB;
-	PFNGLDELETEBUFFERSARBPROC glDeleteBuffersARB;
-	PFNGLGETBUFFERPARAMETERIVARBPROC glGetBufferParameterivARB;
-	PFNGLMAPBUFFERARBPROC glMapBufferARB;
-	PFNGLUNMAPBUFFERARBPROC glUnmapBufferARB;
-
-	uint16_t	m_width;	///<width of window
-	uint16_t	m_height;	///<height of window
-	int32_t	m_bpp;	///<bit per pixel
-	uint32_t	m_flags;	///<SDL surface flags
-	bool	m_useVBO;	///uses VBO or not
-
-	int		initialize(void);
-	void	initializeVBOExtension(void);
-	bool	setVideoMode(void);
-	SDL_Surface	*m_Surface;
-
-};
-
-extern CScreen g_Screen;
+#include "gui.h"
 
 #endif

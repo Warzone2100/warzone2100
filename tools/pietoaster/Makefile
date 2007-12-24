@@ -1,14 +1,16 @@
 CXX=g++
-CFLAGS=-g
-CXXFLAGS=
-CPPFLAGS=
+CXXFLAGS=-g
+CPPFLAGS=-I/usr/include/SDL
+LDFLAGS=
+LIBS=-lSDL_image -lSDL -lGLU -lGL -lAntTweakBar
 
-SOURCES=game_io.cpp \
+SOURCES= \
+	game_io.cpp \
+	gui.cpp \
 	imd.cpp \
 	imdloader.cpp \
 	pie_internal.cpp \
 	pietoaster.cpp \
-	png_util.cpp \
 	resmaster.cpp \
 	screen.cpp \
 	texture.cpp \
@@ -22,9 +24,9 @@ clean:
 	-rm -f $(OBJECTFILES) pietoaster
 
 pietoaster: $(OBJECTFILES)
-	$(CXX) -o $@ $^ -lSDL_image -lSDL -lpng -lphysfs -lGLU -lGL -lAntTweakBar
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 %.o: %.cpp
-	$(CXX) $(CFLAGS) $(CXXFLAGS) $(CPPFLAGS) -c -o $@ $<
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c -o $@ $<
 
 .PHONY: all clean

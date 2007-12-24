@@ -1,4 +1,4 @@
-/* 
+/*
  *  PieToaster is an OpenGL application to edit 3D models in
  *  Warzone 2100's (an RTS game) PIE 3D model format, which is heavily
  *  inspired by PieSlicer created by stratadrake.
@@ -16,17 +16,12 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *  $Revision$
- *  $Id$
- *  $HeadURL$
  */
-
 #ifndef __game_io_h
 #define __game_io_h
+#include <SDL.h>
 
-#include <SDL/SDL.h>
-#include <stdint.h>
+#include "wzglobal.h"
 
 /* Simple implementation of singleclick doubleclick holdbutton via SDL */
 
