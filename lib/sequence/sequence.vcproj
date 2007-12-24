@@ -149,19 +149,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\adpcm.c"
-				>
-			</File>
-			<File
-				RelativePath=".\dec130.c"
-				>
-			</File>
-			<File
-				RelativePath=".\rpl_reader.c"
-				>
-			</File>
-			<File
-				RelativePath=".\sequence_stub.c"
+				RelativePath=".\sequence.c"
 				>
 			</File>
 		</Filter>
@@ -170,18 +158,6 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath=".\adpcm.h"
-				>
-			</File>
-			<File
-				RelativePath=".\dec130.h"
-				>
-			</File>
-			<File
-				RelativePath=".\rpl_reader.h"
-				>
-			</File>
 			<File
 				RelativePath=".\sequence.h"
 				>
