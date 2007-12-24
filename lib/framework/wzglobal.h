@@ -33,7 +33,7 @@
 #endif
 
 #ifdef __MACOSX__
-#include "config-macosx.h"
+#  include "config-macosx.h"
 #endif
 
 
