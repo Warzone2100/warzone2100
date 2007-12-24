@@ -320,41 +320,46 @@ BOOL recvDemolishFinished()
 
 // ////////////////////////////////////////////////////////////////////////////
 // Inform others that a structure has been destroyed
-BOOL SendDestroyStructure(const STRUCTURE* s)
+BOOL SendDestroyStructure(STRUCTURE *s)
 {
-	NETMSG m;
-
+	DBCONPRINTF(ConsoleString,(ConsoleString,"SendDestroyStructure() called"));
 	technologyGiveAway(s);
+	NETbeginEncode(NET_STRUCTDEST, NET_ALL_PLAYERS);
 
-	NetAdd(m,0,s->id);									// struct to destroy
-	m.size =sizeof(UDWORD);
-	m.type=NET_STRUCTDEST;
-	return( NETbcast(&m,FALSE));
+	// Struct to destroy
+	NETuint32_t(&s->id);
+
+	return NETend();
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // acknowledge the destruction of a structure, from another player.
-BOOL recvDestroyStructure(NETMSG * m)
+BOOL recvDestroyStructure()
 {
-	UDWORD s;
-	STRUCTURE *psStr;
+	uint32_t structID;
+	STRUCTURE *psStruct;
 
-	NetGet(m,0,s);								// struct to destory
+	DBCONPRINTF(ConsoleString,(ConsoleString,"recvDestroyStructure() called"));
+	NETbeginDecode();
 
-	psStr = IdToStruct(s,ANYPLAYER);
-	if (psStr)
-	{
-		turnOffMultiMsg(TRUE);
-		destroyStruct(psStr);				// remove the struct from remote players machine.
-		turnOffMultiMsg(FALSE);
-
-		technologyGiveAway(psStr);
-
-		return (TRUE);
-	}
-	return (TRUE);
+		NETuint32_t(&structID);
+								
+		// Struct to destory
+		psStruct = IdToStruct(structID,ANYPLAYER);
+	
+		if (psStruct)
+		{
+			turnOffMultiMsg(TRUE);
+			// Remove the struct from remote players machine
+			destroyStruct(psStruct);
+			turnOffMultiMsg(FALSE);
+			// NOTE: I do not think this should be here!
+			technologyGiveAway(psStruct);
+		}
+	
+	NETend();
+	return TRUE;
 }
-
 
 // ////////////////////////////////////////////////////////////////////////////
 //lassat is firing

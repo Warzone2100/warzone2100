@@ -676,7 +676,7 @@ BOOL recvMessage(void)
 				recvBuildFinished();
 				break;
 			case NET_STRUCTDEST:				// structure destroy
-				recvDestroyStructure(&msg);
+				recvDestroyStructure();
 				break;
 			case NET_SECONDARY:					// set a droids secondary order level.
 				recvDroidSecondary(&msg);
