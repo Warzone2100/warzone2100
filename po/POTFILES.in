@@ -59,10 +59,7 @@ lib/widget/form.c
 lib/widget/widget.c
 lib/widget/slider.c
 lib/widget/button.c
-lib/sequence/rpl_reader.c
-lib/sequence/dec130.c
-lib/sequence/adpcm.c
-lib/sequence/sequence_stub.c
+lib/sequence/sequence.c
 src/ai.c
 src/miscimd.c
 src/gateway.c
@@ -134,7 +131,6 @@ src/scriptvals.c
 src/clparse.c
 src/objects.c
 src/gatewayroute.c
-src/optimisepath.c
 src/scriptobj.c
 src/design.c
 src/scriptai.c
