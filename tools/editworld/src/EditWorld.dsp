@@ -314,7 +314,7 @@ SOURCE=.\expandlimitsdlg.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\exportinfo.h
+SOURCE=.\exportinfo.hpp
 # End Source File
 # Begin Source File
 

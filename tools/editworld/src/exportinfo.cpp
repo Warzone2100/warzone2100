@@ -21,41 +21,26 @@
 	$Id$
 	$HeadURL$
 */
-// ExportInfo.cpp : implementation file
-//
 
 #include "stdafx.h"
-#include "btedit.h"
-#include "exportinfo.h"
+#include "exportinfo.hpp"
 
 /////////////////////////////////////////////////////////////////////////////
-// CExportInfo dialog
+// ExportInfo dialog
 
-
-CExportInfo::CExportInfo(CWnd* pParent /*=NULL*/)
-	: CDialog(CExportInfo::IDD, pParent)
+ExportInfo::ExportInfo(const CString& text, CWnd* parent) :
+    CDialog(ExportInfo::IDD, parent),
+	_text(text)
 {
-	//{{AFX_DATA_INIT(CExportInfo)
-	m_Text = _T("");
-	//}}AFX_DATA_INIT
 }
 
-
-void CExportInfo::DoDataExchange(CDataExchange* pDX)
+BOOL ExportInfo::OnInitDialog()
 {
-	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CExportInfo)
-	DDX_Text(pDX, IDC_INFOTEXT, m_Text);
-	DDV_MaxChars(pDX, m_Text, 65536);
-	//}}AFX_DATA_MAP
+	CDialog::OnInitDialog();
+
+	CEdit* InfoText = (CEdit*)GetDlgItem(IDC_INFOTEXT);
+	InfoText->SetWindowText(_text);
+
+	return TRUE;  // return TRUE unless you set the focus to a control
+	              // EXCEPTION: OCX Property Pages should return FALSE
 }
-
-
-BEGIN_MESSAGE_MAP(CExportInfo, CDialog)
-	//{{AFX_MSG_MAP(CExportInfo)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-/////////////////////////////////////////////////////////////////////////////
-// CExportInfo message handlers

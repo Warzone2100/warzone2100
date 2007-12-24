@@ -40,7 +40,7 @@
 #include "limitsdialog.hpp"
 #include "initiallimitsdlg.hpp"
 #include "expandlimitsdlg.h"
-#include "exportinfo.h"
+#include "exportinfo.hpp"
 #include "playermap.h"
 #include "gateway.hpp"
 #include "pasteprefs.h"
@@ -1584,7 +1584,7 @@ BOOL CBTEditDoc::WriteProject(char *FileName)
 void CBTEditDoc::DisplayExportSummary(void)
 {
 	CWorldInfo *Info = m_HeightMap->GetWorldInfo();
-	char *String = new char[1024];
+	char String[1024];
 	char *Tmp = String;
 	DWORD TotalStructures = 0;
 	DWORD TotalWalls = 0;
@@ -1617,11 +1617,7 @@ void CBTEditDoc::DisplayExportSummary(void)
 	sprintf(Tmp,"\r\nFeatures %d\r\n",Info->NumFeatures);
 	Tmp += strlen(Tmp);
 
-	CExportInfo ResDlg;
-	ResDlg.m_Text = String;
-	ResDlg.DoModal();
-
-	delete String;
+	ExportInfo(String).DoModal();
 }
 
 // Proxy class that serves as InputIterator (as defined by the C++ standard in

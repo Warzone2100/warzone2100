@@ -21,38 +21,32 @@
 	$Id$
 	$HeadURL$
 */
-// ExportInfo.h : header file
-//
+
+#ifndef __INCLUDE__EXPORTINFO_HPP__
+#define __INCLUDE__EXPORTINFO_HPP__
+
+#include "resource.h"
 
 /////////////////////////////////////////////////////////////////////////////
-// CExportInfo dialog
+// ExportInfo dialog
 
-class CExportInfo : public CDialog
+class ExportInfo : public CDialog
 {
-// Construction
-public:
-	CExportInfo(CWnd* pParent = NULL);   // standard constructor
+	// Construction
+	public:
+		ExportInfo(const CString& text = _T(""), CWnd* parent = NULL);
 
-// Dialog Data
-	//{{AFX_DATA(CExportInfo)
-	enum { IDD = IDD_INFO };
-	CString	m_Text;
-	//}}AFX_DATA
+	// Dialog Data
+		//{{AFX_DATA(ExportInfo)
+		enum { IDD = IDD_INFO };
+		//}}AFX_DATA
 
+	// Implementation
+	private:
+		virtual BOOL OnInitDialog();
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CExportInfo)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
-
-// Implementation
-protected:
-
-	// Generated message map functions
-	//{{AFX_MSG(CExportInfo)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+	private:
+		const CString _text;
 };
+
+#endif // __INCLUDE__EXPORTINFO_HPP__
