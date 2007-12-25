@@ -20,11 +20,7 @@
 #ifndef _resmaster_h
 #define _resmaster_h
 
-#ifdef _WIN32
-	#include <windows.h>	// required by gl.h
-#endif
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include <SDL_opengl.h>
 
 #include "wzglobal.h"
 #include "pie_types.h"

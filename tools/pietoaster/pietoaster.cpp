@@ -24,11 +24,7 @@
 #include "SDL.h"
 #include "AntTweakBar.h"
 
-#ifdef _WIN32
-	#include <windows.h>	// required by gl.h
-#endif
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include <SDL_opengl.h>
 
 #include "pie_types.h"
 #include "imdloader.h"

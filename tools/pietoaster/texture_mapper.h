@@ -21,12 +21,6 @@
 #ifndef _texture_mapper_h
 #define _texture_mapper_h
 
-#ifdef _WIN32
-	#include <windows.h>	// required by gl.h
-#endif
-#include <GL/gl.h>
-#include <GL/glu.h>
-
 #include "wzglobal.h"
 #include "pie_types.h"
 
