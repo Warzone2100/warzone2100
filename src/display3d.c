@@ -694,7 +694,6 @@ static void drawTiles(iView *camera, iView *player)
 				{
 					// If it's the main water tile then bring it back up because it was pushed down for the river bed calc.
 					int tmp_y = tileScreenInfo[i][j].pos.y;
-					Vector2i water;
 
 					if (pushedDown)
 					{
@@ -702,15 +701,6 @@ static void drawTiles(iView *camera, iView *player)
 					}
 
 					tileScreenInfo[i][j].bWater = TRUE;
-
-					// Transform it into the wx,wy mesh members.
-
-					// hack since tileScreenInfo[i][j].water is Vector3i and pie_RotateProject takes Vector2i as 2nd param
-					water.x = tileScreenInfo[i][j].water.x;
-					water.y = tileScreenInfo[i][j].water.y;
-					tileScreenInfo[i][j].water.z = pie_RotateProject(&tileScreenInfo[i][j].pos, &water);
-					tileScreenInfo[i][j].water.x = water.x;
-					tileScreenInfo[i][j].water.y = water.y;
 					tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].pos.y;
 					tileScreenInfo[i][j].pos.y = tmp_y;
 				}
@@ -718,7 +708,6 @@ static void drawTiles(iView *camera, iView *player)
 				{
 					// If it wasnt a water tile then need to ensure water.xyz are valid because
 					// a water tile might be sharing verticies with it.
-					tileScreenInfo[i][j].water = tileScreenInfo[i][j].screen;
 					tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].pos.y;
 				}
 				setTileColour(playerXTile + j, playerZTile + i, TileIllum);
@@ -939,7 +928,7 @@ static void flipsAndRots(unsigned int tileNumber, unsigned int i, unsigned int j
 	const unsigned short texture = TileNumber_texture(tileNumber);
 	const unsigned short tile = TileNumber_tile(tileNumber);
 
-	/* Used to calculate texture coordinates, which are 0-255 in value */
+	/* Used to calculate texture coordinates */
 	const float xMult = 1.0f / TILES_IN_PAGE_COLUMN;
 	const float yMult = 1.0f / TILES_IN_PAGE_ROW;
 	const float one = 1.0f / (TILES_IN_PAGE_COLUMN * (float)getTextureSize());
@@ -3511,24 +3500,23 @@ static void locateMouse(void)
 		unsigned int j;
 		for(j = 0; j < visibleTiles.y; ++j)
 		{
-			BOOL bWaterTile = tileScreenInfo[i][j].bWater;
-			int tileZ = (bWaterTile ? tileScreenInfo[i][j].water.z : tileScreenInfo[i][j].screen.z);
+			int tileZ = tileScreenInfo[i][j].screen.z;
 
 			if(tileZ <= nearestZ)
 			{
 				QUAD quad;
 
-				quad.coords[0].x = (bWaterTile ? tileScreenInfo[i+0][j+0].water.x : tileScreenInfo[i+0][j+0].screen.x);
-				quad.coords[0].y = (bWaterTile ? tileScreenInfo[i+0][j+0].water.y : tileScreenInfo[i+0][j+0].screen.y);
+				quad.coords[0].x = tileScreenInfo[i+0][j+0].screen.x;
+				quad.coords[0].y = tileScreenInfo[i+0][j+0].screen.y;
 
-				quad.coords[1].x = (bWaterTile ? tileScreenInfo[i+0][j+1].water.x : tileScreenInfo[i+0][j+1].screen.x);
-				quad.coords[1].y = (bWaterTile ? tileScreenInfo[i+0][j+1].water.y : tileScreenInfo[i+0][j+1].screen.y);
+				quad.coords[1].x = tileScreenInfo[i+0][j+1].screen.x;
+				quad.coords[1].y = tileScreenInfo[i+0][j+1].screen.y;
 
-				quad.coords[2].x = (bWaterTile ? tileScreenInfo[i+1][j+1].water.x : tileScreenInfo[i+1][j+1].screen.x);
-				quad.coords[2].y = (bWaterTile ? tileScreenInfo[i+1][j+1].water.y : tileScreenInfo[i+1][j+1].screen.y);
+				quad.coords[2].x = tileScreenInfo[i+1][j+1].screen.x;
+				quad.coords[2].y = tileScreenInfo[i+1][j+1].screen.y;
 
-				quad.coords[3].x = (bWaterTile ? tileScreenInfo[i+1][j+0].water.x : tileScreenInfo[i+1][j+0].screen.x);
-				quad.coords[3].y = (bWaterTile ? tileScreenInfo[i+1][j+0].water.y : tileScreenInfo[i+1][j+0].screen.y);
+				quad.coords[3].x = tileScreenInfo[i+1][j+0].screen.x;
+				quad.coords[3].y = tileScreenInfo[i+1][j+0].screen.y;
 
 				/* We've got a match for our mouse coords */
 				if (inQuad(&pt, &quad))
@@ -3794,7 +3782,6 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		/* Clear it for next time round */
 		CLEAR_TILE_HIGHLIGHT(psTile);
 		bOutlined = TRUE;
-		//set tilenumber
 		if ( i < (LAND_XGRD-1) && j < (LAND_YGRD-1) ) // FIXME
 		{
 			if (outlineTile)
@@ -3934,7 +3921,7 @@ static void drawTerrainWaterTile(UDWORD i, UDWORD j)
 	// If it's a water tile then draw the water
 	if (terrainType(psTile) == TER_WATER)
 	{
-		/* Used to calculate texture coordinates, which are 0-255 in value */
+		/* Used to calculate texture coordinates */
 		const float xMult = 1.0f / TILES_IN_PAGE_COLUMN;
 		const float yMult = 1.0f / (2.0f * TILES_IN_PAGE_ROW);
 		const float one = 1.0f / (TILES_IN_PAGE_COLUMN * (float)getTextureSize());
