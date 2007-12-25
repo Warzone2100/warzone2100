@@ -293,7 +293,7 @@ BOOL recvDroidDisEmbark(NETMSG *pMsg)
 
 		addDroid(psDroid, apsDroidLists);
 	}
-	
+
 	return TRUE;
 }
 
@@ -506,9 +506,9 @@ BOOL SendGroupOrderSelected(uint8_t player, uint32_t x, uint32_t y, BASE_OBJECT 
 			assert(!"Unexpected droid-order-targettype!");
 			break;
 	}
-	
+
 	m.body[8] = subType;
-	
+
 	m.body[10] = cmdOrder;		// not a cmd order.
 
 	m.body[12] = order;	// set the order.
@@ -573,7 +573,7 @@ BOOL SendGroupOrderGroup(DROID_GROUP *psGroup, DROID_ORDER order, uint32_t x, ui
 	}
 
 	m.body[8] = subType;
-	
+
 	m.body[10] = cmdOrder;		// not a cmd order.
 
 	m.body[12] = order;	// set the order.
@@ -846,14 +846,14 @@ BOOL recvDestroyDroid(NETMSG *pMsg)
 	{
 		return FALSE;
 	}
-		
+
 	if(!pD->died)
 	{
 		turnOffMultiMsg(TRUE);
 		destroyDroid(pD);						// remove the droid recvd from the remote players machine.
 		turnOffMultiMsg(FALSE);
 	}
-	
+
 	return TRUE;
 }
 
