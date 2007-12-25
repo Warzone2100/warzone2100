@@ -216,11 +216,7 @@ float droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weap
 		actualDamage = damage - armour;
 
 		// Retrieve highest, applicable, experience level
-		level = getDroidLevel(psDroid);
-		{
-			unsigned int cmdLevel = cmdGetCommanderLevel(psDroid);
-			level = MAX(level, cmdLevel);
-		}
+		level = getDroidEffectiveLevel(psDroid);
 
 		// Reduce damage taken by EXP_REDUCE_DAMAGE % for each experience level
 		actualDamage = (actualDamage * (100 - EXP_REDUCE_DAMAGE * level)) / 100;
@@ -4149,6 +4145,13 @@ UDWORD	getDroidLevel(DROID *psDroid)
 	return lastRank - 1;
 }
 
+UDWORD getDroidEffectiveLevel(DROID *psDroid)
+{
+	UDWORD level = getDroidLevel(psDroid);
+	UDWORD cmdLevel = cmdGetCommanderLevel(psDroid);
+	
+	return MAX(level, cmdLevel);
+}
 
 
 const char *getDroidNameForRank(UDWORD rank)

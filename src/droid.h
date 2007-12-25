@@ -248,6 +248,7 @@ extern BOOL selectDroidByID(UDWORD id, UDWORD player);
 
 /* Droid experience stuff */
 extern UDWORD	getDroidLevel(DROID *psDroid);
+extern UDWORD	getDroidEffectiveLevel(DROID *psDroid);
 extern const char *getDroidLevelName(DROID *psDroid);
 
 // Get a droid's name.
