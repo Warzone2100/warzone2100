@@ -178,7 +178,7 @@ SOURCE=.\infodialog.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\initiallimitsdlg.cpp
+SOURCE=.\initiallimitsdialog.cpp
 # End Source File
 # Begin Source File
 
@@ -346,7 +346,7 @@ SOURCE=.\infodialog.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\initiallimitsdlg.hpp
+SOURCE=.\initiallimitsdialog.hpp
 # End Source File
 # Begin Source File
 

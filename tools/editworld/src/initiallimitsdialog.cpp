@@ -25,7 +25,7 @@
 //
 
 #include "stdafx.h"
-#include "initiallimitsdlg.hpp"
+#include "initiallimitsdialog.hpp"
 
 /////////////////////////////////////////////////////////////////////////////
 // InitialLimitsDlg dialog

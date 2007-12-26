@@ -38,7 +38,7 @@
 #include "bteditview.h"
 #include "savesegmentdialog.hpp"
 #include "limitsdialog.hpp"
-#include "initiallimitsdlg.hpp"
+#include "initiallimitsdialog.hpp"
 #include "expandlimitsdlg.h"
 #include "infodialog.hpp"
 #include "playermap.h"
