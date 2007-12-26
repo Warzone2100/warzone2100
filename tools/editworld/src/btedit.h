@@ -29,6 +29,9 @@
 #endif
 
 #include "resource.h"       // main symbols
+#include <string>
+
+#define snprintf _snprintf
 
 class CBTEditCommandLineInfo : public CCommandLineInfo
 {
@@ -53,3 +56,5 @@ public:
 };
 
 extern CBTEditCommandLineInfo g_cmdInfo;
+
+extern std::string getCurrentDirectory();

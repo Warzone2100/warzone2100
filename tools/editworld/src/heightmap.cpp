@@ -45,6 +45,8 @@
 #include <string>
 #include <algorithm>
 
+using std::string;
+
 //#define MIPMAP_TILES
 
 /*
@@ -152,8 +154,8 @@ extern CUndoRedo *g_UndoRedo;
 
 //#define TESTFLAGS	// If defined then write random flags when doing flood fill.
 
-extern char g_HomeDirectory[1024];
-extern char g_WorkDirectory[1024];
+extern string g_HomeDirectory;
+extern string g_WorkDirectory;
 extern FILE *OpenEditorFile(const char *FileName);
 extern std::string EditorDataFileName(const std::string& fileName);
 
@@ -1396,13 +1398,9 @@ Pixel CHeightMap::PixelRead(int x,int y)
 
 BOOL CHeightMap::PixelCompare(int x,int y,DWORD Tid,DWORD Type,DWORD Flags)
 {
-	if( (m_MapTiles[(y*m_MapWidth)+x].TMapID == Tid) &&
-//		(m_MapTiles[(y*m_MapWidth)+x].Flags & TF_TYPEMASK == Type) &&
-		(m_MapTiles[(y*m_MapWidth)+x].Flags & TF_TEXTUREMASK == Flags) ) {
-		return TRUE;
-	}
-
-	return FALSE;
+	return (m_MapTiles[y * m_MapWidth + x].TMapID == Tid
+//	     && (m_MapTiles[y * m_MapWidth + x].Flags & TF_TYPEMASK) == Type)
+	     && (m_MapTiles[y * m_MapWidth + x].Flags & TF_TEXTUREMASK) == Flags);
 }
 
 
@@ -3507,7 +3505,7 @@ _inline float SafeDivide(float a, float b)
 }
 
 
-BOOL CHeightMap::ReadFeatureStats(char *ScriptFile,char *IMDDir,char *TextDir)
+BOOL CHeightMap::ReadFeatureStats(const char *ScriptFile, const char* IMDDir, const char* TextDir)
 {
 	BOOL Flanged = TRUE;
    	BOOL TileSnap = TRUE;
@@ -3550,9 +3548,8 @@ BOOL CHeightMap::ReadFeatureStats(char *ScriptFile,char *IMDDir,char *TextDir)
 
 //			DebugPrint("%s\n",m_Features[j].featureName);
 
-			char Name[256];
-			sprintf(Name,"%s\\%s%s",g_WorkDirectory,IMDDir,m_Features[j].IMDName);
-			if(!ReadIMD(Name,m_Features[j].featureName,TextDir,IMD_FEATURE,Flanged,TileSnap,ColourIndex,ShadeMode,j)) {
+			const string Name = g_WorkDirectory + "\\" + string(IMDDir) + string(m_Features[j].IMDName);
+			if(!ReadIMD(Name.c_str(), m_Features[j].featureName, TextDir, IMD_FEATURE, Flanged, TileSnap, ColourIndex, ShadeMode, j)) {
 				char String[256];
 				sprintf(String,"Feature : %s\nObject : %s",m_Features[j].featureName,Name);
 				MessageBox(NULL,String,"Error reading file",MB_OK);
@@ -3565,7 +3562,7 @@ BOOL CHeightMap::ReadFeatureStats(char *ScriptFile,char *IMDDir,char *TextDir)
 }
 
 		
-BOOL CHeightMap::ReadStructureStats(char *ScriptFile,char *IMDDir,char *TextDir)
+BOOL CHeightMap::ReadStructureStats(const char* ScriptFile,char *IMDDir,char *TextDir)
 {
 	BOOL Flanged = TRUE;
    	BOOL TileSnap = TRUE;
@@ -3661,9 +3658,9 @@ BOOL CHeightMap::ReadStructureStats(char *ScriptFile,char *IMDDir,char *TextDir)
 				Parser.Parse(m_Structures[j].IMDName[i],sizeof(m_Structures[j].IMDName[i]));
 //				DebugPrint("%s\n",m_Structures[j].IMDName[i]);
 
-				char Name[256];
-				sprintf(Name,"%s\\%s%s",g_WorkDirectory,IMDDir,m_Structures[j].IMDName[i]);
-				if(!ReadIMD(Name,m_Structures[j].StructureName,TextDir,IMD_STRUCTURE,Flanged,TileSnap,ColourIndex,ShadeMode,j,i)) {
+				const string Name = g_WorkDirectory + "\\" + string(IMDDir) + string(m_Structures[j].IMDName[i]);
+				if(!ReadIMD(Name.c_str(), m_Structures[j].StructureName, TextDir, IMD_STRUCTURE, Flanged, TileSnap, ColourIndex, ShadeMode, j, i))
+				{
 					char String[256];
 					sprintf(String,"Structure : %s\nObject : %s",m_Structures[j].StructureName,Name);
 					MessageBox(NULL,String,"Error reading file",MB_OK);
@@ -3676,11 +3673,12 @@ BOOL CHeightMap::ReadStructureStats(char *ScriptFile,char *IMDDir,char *TextDir)
 			Parser.Parse(m_Structures[j].BaseIMD,sizeof(m_Structures[j].BaseIMD));
 //			DebugPrint("%s\n",m_Structures[j].BaseIMD);
 
-			if(strlen(m_Structures[j].BaseIMD) > 1) {
-				char Name[256];
-				sprintf(Name,"%s\\%s%s",g_WorkDirectory,IMDDir,m_Structures[j].BaseIMD);
-				if(!ReadIMD(Name,m_Structures[j].StructureName,TextDir,IMD_STRUCTURE,
-							Flanged,TileSnap,ColourIndex,ShadeMode,j,0,&BasePlate)) {
+			if(strlen(m_Structures[j].BaseIMD) > 1)
+			{
+				const string Name = g_WorkDirectory + "\\" + string(IMDDir) + string(m_Structures[j].BaseIMD);
+				if (!ReadIMD(Name.c_str(), m_Structures[j].StructureName, TextDir, IMD_STRUCTURE,
+				             Flanged, TileSnap, ColourIndex, ShadeMode, j, 0, &BasePlate))
+				{
 					char String[256];
 					sprintf(String,"Structure : %s\nObject : %s",m_Structures[j].StructureName,Name);
 					MessageBox(NULL,String,"Error reading file",MB_OK);
@@ -3748,7 +3746,7 @@ TECH_LEVEL CHeightMap::SetTechLevel(char *pLevel)
 
 
 
-BOOL CHeightMap::ReadTemplateStats(char *ScriptFile,char *IMDDir,char *TextDir)
+BOOL CHeightMap::ReadTemplateStats(const char* ScriptFile, char* IMDDir, char* TextDir)
 {
 	char String[256];
 	BOOL Ok = TRUE;
@@ -3787,9 +3785,9 @@ BOOL CHeightMap::ReadTemplateStats(char *ScriptFile,char *IMDDir,char *TextDir)
 //			DebugPrint("Bang\n");
 //		}
 
-		char Name[256];
-		sprintf(Name,"%s\\%s%s",g_HomeDirectory,"Data\\","Icon.PIE");
-		if(!ReadIMD(Name,m_Templates[i].Name,TextDir,IMD_DROID,FALSE,FALSE,0,NT_SMOOTHNORMALS,i)) {
+		string Name = g_HomeDirectory + "\\Data\\Icon.PIE";
+		if(!ReadIMD(Name.c_str(), m_Templates[i].Name, TextDir, IMD_DROID, FALSE, FALSE, 0, NT_SMOOTHNORMALS, i))
+		{
 			char String[256];
 			sprintf(String,"Template : %s\nObject : %s",Name,"Icon.PIE");
 			MessageBox(NULL,String,"Error reading file",MB_OK);
@@ -3985,7 +3983,6 @@ BOOL CHeightMap::ReadMisc(fileParser& Parser,char *Begin,char *End)
 BOOL CHeightMap::ReadFeatures(fileParser& Parser,char *Begin,char *End)
 {
 	char String[256];
-	char Name[256];
 	char StatsDir[256];
 	char IMDDir[256];
 	char TextDir[256];
@@ -4017,14 +4014,16 @@ BOOL CHeightMap::ReadFeatures(fileParser& Parser,char *Begin,char *End)
 		return FALSE;
 	}
 
-	while(1) {
+	while(1)
+	{
 		Parser.Parse(String,sizeof(String));
 		if(strcmp(String,End) == 0) break;
 
-		sprintf(Name,"%s\\%s%s",g_WorkDirectory,StatsDir,String);
-		if(!ReadFeatureStats(Name,IMDDir,TextDir)) {
-			DebugPrint("Error loading IMD %s\n",Name);
-			MessageBox(NULL,"Error reading IMD",Name,MB_OK);
+		const string Name = g_WorkDirectory + "\\" + string(StatsDir) + string(String);
+		if (!ReadFeatureStats(Name.c_str(), IMDDir, TextDir))
+		{
+			DebugPrint("Error loading IMD %s\n", Name.c_str());
+			MessageBox(NULL, "Error reading IMD", Name.c_str(), MB_OK);
 			return FALSE;
 		}
 	}
@@ -4036,7 +4035,6 @@ BOOL CHeightMap::ReadFeatures(fileParser& Parser,char *Begin,char *End)
 BOOL CHeightMap::ReadStructures(fileParser& Parser,char *Begin,char *End)
 {
 	char String[256];
-	char Name[256];
 	char StatsDir[256];
 	char IMDDir[256];
 	char TextDir[256];
@@ -4072,10 +4070,11 @@ BOOL CHeightMap::ReadStructures(fileParser& Parser,char *Begin,char *End)
 		Parser.Parse(String,sizeof(String));
 		if(strcmp(String,End) == 0) break;
 
-		sprintf(Name,"%s\\%s%s",g_WorkDirectory,StatsDir,String);
-		if(!ReadStructureStats(Name,IMDDir,TextDir)) {
-			DebugPrint("Error loading IMD %s\n",Name);
-			MessageBox(NULL,"Error reading IMD",Name,MB_OK);
+		const string Name = g_WorkDirectory + "\\" + string(StatsDir) + string(String);
+		if (!ReadStructureStats(Name.c_str(), IMDDir, TextDir))
+		{
+			DebugPrint("Error loading IMD %s\n", Name.c_str());
+			MessageBox(NULL,"Error reading IMD", Name.c_str(), MB_OK);
 			return FALSE;
 		}
 	}
@@ -4087,7 +4086,6 @@ BOOL CHeightMap::ReadStructures(fileParser& Parser,char *Begin,char *End)
 BOOL CHeightMap::ReadTemplates(fileParser& Parser,char *Begin,char *End)
 {
 	char String[256];
-	char Name[256];
 	char StatsDir[256];
 	char IMDDir[256];
 	char TextDir[256];
@@ -4123,10 +4121,11 @@ BOOL CHeightMap::ReadTemplates(fileParser& Parser,char *Begin,char *End)
 		Parser.Parse(String,sizeof(String));
 		if(strcmp(String,End) == 0) break;
 
-		sprintf(Name,"%s\\%s%s",g_WorkDirectory,StatsDir,String);
-		if(!ReadTemplateStats(Name,IMDDir,TextDir)) {
-			DebugPrint("Error loading IMD %s\n",Name);
-			MessageBox(NULL,"Error reading IMD",Name,MB_OK);
+		const string Name = g_WorkDirectory + "\\" + string(StatsDir) + string(String);
+		if(!ReadTemplateStats(Name.c_str(), IMDDir, TextDir))
+		{
+			DebugPrint("Error loading IMD %s\n", Name.c_str());
+			MessageBox(NULL,"Error reading IMD", Name.c_str(), MB_OK);
 			return FALSE;
 		}
 	}
@@ -4139,7 +4138,6 @@ BOOL CHeightMap::ReadTemplates(fileParser& Parser,char *Begin,char *End)
 BOOL CHeightMap::ReadObjects(fileParser& Parser,char *Begin,char *End,int TypeID)
 {
 	char String[256];
-	char Name[256];
 	char Description[256];
 	char Type[256];
 	char StatsDir[256];
@@ -4231,18 +4229,17 @@ BOOL CHeightMap::ReadObjects(fileParser& Parser,char *Begin,char *End,int TypeID
 			return FALSE;
 		}
 
-//		char Name[256];
-		sprintf(Name,"%s\\%s%s",g_WorkDirectory,IMDDir,String);
-//		strcpy(Name,g_HomeDirectory);
-//		strcat(Name,"\\Data\\");
-//		strcat(Name,String);
 		char *Desc = NULL;
 		if(_stricmp(Description,"NONAME")) {
 			Desc = Description;
 		}
-		if(!ReadIMD(Name,Desc,TextDir,TypeID,Flanged,TileSnap,ColourIndex,ShadeMode)) {
-			DebugPrint("Error loading IMD %s\n",Name);
-			MessageBox(NULL,"Error reading IMD",Name,MB_OK);
+
+		const string Name = g_WorkDirectory + "\\" + string(IMDDir) + string(String);
+
+		if(!ReadIMD(Name.c_str(), Desc, TextDir, TypeID, Flanged, TileSnap, ColourIndex, ShadeMode))
+		{
+			DebugPrint("Error loading IMD %s\n", Name.c_str());
+			MessageBox(NULL,"Error reading IMD", Name.c_str(), MB_OK);
 			return FALSE;
 		}
 		NumObjects++;
@@ -4258,7 +4255,7 @@ BOOL CHeightMap::ReadObjects(fileParser& Parser,char *Begin,char *End,int TypeID
 //
 // Returns TRUE if succesfull.
 //
-BOOL CHeightMap::ReadIMD(char *FileName,char *Description,char *TextDir,int TypeID,BOOL Flanged,BOOL Snap,int ColourKeyIndex,NORMALTYPE NType,
+BOOL CHeightMap::ReadIMD(const char* FileName,char *Description, const char* TextDir,int TypeID,BOOL Flanged,BOOL Snap,int ColourKeyIndex,NORMALTYPE NType,
 						 int StructureIndex,int PlayerIndex,C3DObject *Object)
 {
 	char Buffer[80];
@@ -4359,16 +4356,16 @@ BOOL CHeightMap::ReadIMD(char *FileName,char *Description,char *TextDir,int Type
 
 			DebugPrint("## %s ## \n",texfile);
 
-			std::string TName;
+			string TName;
 
 			if((TextDir) && (TextDir[0] != 0))
 			{
-				TName = std::string(g_WorkDirectory) + "\\" + std::string(TextDir) + std::string(texfile);
+				TName = g_WorkDirectory + "\\" + string(TextDir) + string(texfile);
 			}
 			else
 			{
 	// set the path for the texture to the path used for the .IMD
-				TName = std::string(Drive) + std::string(Dir) + std::string(texfile);
+				TName = string(Drive) + string(Dir) + string(texfile);
 			}
   
 	// Read the specified bitmap.
@@ -4379,7 +4376,7 @@ BOOL CHeightMap::ReadIMD(char *FileName,char *Description,char *TextDir,int Type
 			std::ifstream* PCXFile = new std::ifstream(TName.c_str(), std::ios_base::binary);
 			if (!PCXFile->is_open())
 			{
-				TName = std::string(Drive) + std::string(Dir) + std::string(texfile);
+				TName = string(Drive) + string(Dir) + string(texfile);
 
 				// Reconstruct std::ifstream object;
 				// A simple PCXFile->close() followed by PCXFile->open(...) should work, but doesn't
@@ -6890,8 +6887,8 @@ BOOL CHeightMap::ReadObjectList(FILE *Stream)
 
 /* 12/4/99
 	if(strcmp(FeatureSet,"(null)")) {
-		sprintf(FullPath,"%s\\%s",g_WorkDirectory,FeatureSet);
-//		strcpy(FullPath,g_WorkDirectory);
+		sprintf(FullPath,"%s\\%s",g_WorkDirectory.c_str(),FeatureSet);
+//		strcpy(FullPath,g_WorkDirectory.c_str());
 //		strcat(FullPath,"\\Data\\");
 //		strcat(FullPath,FeatureSet);
 		if(!ReadIMDObjects(FullPath)) {

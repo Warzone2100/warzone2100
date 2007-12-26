@@ -850,10 +850,10 @@ class CHeightMap : public CChnkIO
 		void UpdateLargest(D3DVECTOR &v,D3DVECTOR &Largest);
 
 		// Public functions related to objects.
-		BOOL ReadFeatureStats(char *ScriptFile,char *IMDDir,char *TextDir);
-		BOOL ReadStructureStats(char *ScriptFile,char *IMDDir,char *TextDir);
+		BOOL ReadFeatureStats(const char* ScriptFile, const char* IMDDir, const char* TextDir);
+		BOOL ReadStructureStats(const char* ScriptFile, char *IMDDir,char *TextDir);
 		TECH_LEVEL CHeightMap::SetTechLevel(char *pLevel);
-		BOOL ReadTemplateStats(char *ScriptFile,char *IMDDir,char *TextDir);
+		BOOL ReadTemplateStats(const char* ScriptFile, char* IMDDir, char* TextDir);
 		BOOL ReadObjectNames(char *FileName);
 		int MatchObjName(char *IDString);
 
@@ -872,7 +872,7 @@ class CHeightMap : public CChnkIO
 			return m_Num3DObjects;
 		}
 
-		BOOL ReadIMD(char *FileName,char *Description,char *TextDir,int TypeID,BOOL Flanged = FALSE,BOOL Snap = FALSE,int ColourKeyIndex = FALSE,NORMALTYPE NType = NT_DEFAULTNORMALS,
+		BOOL ReadIMD(const char* FileName, char *Description, const char* TextDir,int TypeID,BOOL Flanged = FALSE,BOOL Snap = FALSE,int ColourKeyIndex = FALSE,NORMALTYPE NType = NT_DEFAULTNORMALS,
 					 int StructureIndex = 0,int PlayerIndex = 0,C3DObject *Object=NULL);
 		void RenderIMD(C3DObject *Object);
 		void RenderFlatIMD(C3DObject *Object);

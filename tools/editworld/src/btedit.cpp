@@ -33,6 +33,12 @@
 #include "bteditview.h"
 //#include "debugwin.h"
 
+#include <string>
+#include <boost/scoped_array.hpp>
+
+using std::string;
+using boost::scoped_array;
+
 CBTEditCommandLineInfo g_cmdInfo;
 
 void CBTEditCommandLineInfo::ParseParam(const char* pszParam,BOOL bFlag,BOOL bLast)
@@ -82,8 +88,7 @@ void CBTEditCommandLineInfo::ParseParam(const char* pszParam,BOOL bFlag,BOOL bLa
 /////////////////////////////////////////////////////////////////////////////
 // CBTEditApp initialization
 
-char g_HomeDirectory[1024];
-char g_WorkDirectory[1024];
+string g_HomeDirectory, g_WorkDirectory;
 
 HCURSOR g_Wait;
 HCURSOR g_Pointer;
@@ -142,7 +147,7 @@ class CBTEditApp : public CWinApp
 				RUNTIME_CLASS(CBTEditView));
 			AddDocTemplate(pDocTemplate);
 
-			GetCurrentDirectory(sizeof(g_HomeDirectory),g_HomeDirectory);
+			g_HomeDirectory = getCurrentDirectory();
 
 			g_Wait = ::LoadCursor(NULL,IDC_WAIT);
 			g_Pointer = LoadCursor(IDC_POINTER);
@@ -196,3 +201,18 @@ BEGIN_MESSAGE_MAP(CBTEditApp, CWinApp)
 END_MESSAGE_MAP()
 
 CBTEditApp theApp;
+
+std::string getCurrentDirectory()
+{
+	// Determine the required buffer size to contain the current directory
+	const DWORD curDirSize = GetCurrentDirectory(0, NULL);
+	scoped_array<char> curDir(new char[curDirSize]);
+
+	// Retrieve the current directory
+	GetCurrentDirectory(curDirSize, curDir.get());
+
+	MessageBox(0, curDir.get(), "curDir.get()", MB_OK);
+
+	// Return the current directory as a STL string
+	return std::string(curDir.get());
+}

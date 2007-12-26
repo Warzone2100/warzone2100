@@ -33,7 +33,9 @@
 #include <fstream>
 #include <string>
 
-extern char g_HomeDirectory[1024];
+using std::string;
+
+extern string g_HomeDirectory;
 
 /////////////////////////////////////////////////////////////////////////////
 // CTextureSelector
@@ -129,7 +131,7 @@ BOOL CTextureSelector::Read(DWORD NumTextures,char **TextureList,DWORD TextureWi
 				{
 					char tmpCharArr[1024];
 					GetCurrentDirectory(sizeof(tmpCharArr), tmpCharArr);
-					std::string CurDir(tmpCharArr);
+					string CurDir(tmpCharArr);
 					CurDir += "\\";
 					CurDir += FileName;
 					MessageBox(NULL, "Error reading PCX", CurDir.c_str(), MB_OK);
@@ -170,8 +172,7 @@ BOOL CTextureSelector::Read(DWORD NumTextures,char **TextureList,DWORD TextureWi
 		m_Height = (SpriteNum / (m_Width / m_TextureWidth)) * m_TextureHeight;
 	}
 
-	std::string Name(g_HomeDirectory);
-	Name += "\\Data\\Buttons.PCX";
+	string Name = g_HomeDirectory + "\\Data\\Buttons.PCX";
 
 	std::ifstream PCXFile(Name.c_str(), std::ios_base::binary);
 	if (!PCXFile.is_open())
