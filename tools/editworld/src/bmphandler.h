@@ -22,8 +22,8 @@
 	$HeadURL$
 */
 
-#ifndef __BMPHANDLER_INCLUDED__
-#define	__BMPHANDLER_INCLUDED__
+#ifndef __INCLUDED_BMPHANDLER_H__
+#define __INCLUDED_BMPHANDLER_H__
 
 class BMPHandler
 {
@@ -44,4 +44,4 @@ class BMPHandler
 		void*         _DIBBits;
 };
 
-#endif // __BMPHANDLER_INCLUDED__
+#endif // __INCLUDED_BMPHANDLER_H__

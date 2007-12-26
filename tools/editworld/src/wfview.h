@@ -21,8 +21,9 @@
 	$Id$
 	$HeadURL$
 */
-// WFView.h : header file
-//
+
+#ifndef __INCLUDED_WFVIEW_H__
+#define __INCLUDED_WFVIEW_H__
 
 /////////////////////////////////////////////////////////////////////////////
 // CWFView view
@@ -153,4 +154,4 @@ inline CBTEditDoc* CWFView::GetDocument()
    { return (CBTEditDoc*)m_pDocument; }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+#endif // __INCLUDED_WFVIEW_H__

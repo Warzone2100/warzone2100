@@ -22,6 +22,9 @@
 	$HeadURL$
 */
 
+#ifndef __INCLUDED_STDAFX_H__
+#define __INCLUDED_STDAFX_H__
+
 // stdafx.h : include file for standard system include files,
 //  or project specific include files that are used frequently, but
 //      are changed infrequently
@@ -38,3 +41,5 @@
 #endif // _AFX_NO_AFXCMN_SUPPORT
 
 #include "typedefs.h"
+
+#endif // __INCLUDED_STDAFX_H__

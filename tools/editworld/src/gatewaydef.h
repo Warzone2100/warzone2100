@@ -27,8 +27,9 @@
  * Structure definitions for routing gateways.
  *
  */
-#ifndef _gatewaydef_h
-#define _gatewaydef_h
+
+#ifndef __INCLUDED_GATEWAYDEF_H__
+#define __INCLUDED_GATEWAYDEF_H__
 
 typedef struct _gateway_link
 {
@@ -80,5 +81,4 @@ enum _gw_node_flags
 
 
 
-#endif
-
+#endif // __INCLUDED_GATEWAYDEF_H__

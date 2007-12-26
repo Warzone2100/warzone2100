@@ -21,6 +21,10 @@
 	$Id$
 	$HeadURL$
 */
+
+#ifndef __INCLUDED_BTEDITDOC_H__
+#define __INCLUDED_BTEDITDOC_H__
+
 // BTEditDoc.h : interface of the CBTEditDoc class
 //
 /////////////////////////////////////////////////////////////////////////////
@@ -707,4 +711,4 @@ protected:
 
 extern CBTEditDoc *BTEditDoc;
 
-/////////////////////////////////////////////////////////////////////////////
+#endif // __INCLUDED_BTEDITDOC_H__

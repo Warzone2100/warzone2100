@@ -24,8 +24,8 @@
 // BrushProp.h : header file
 //
 
-#ifndef __INCLUDED_BRUSHPROP__
-#define __INCLUDED_BRUSHPROP__
+#ifndef __INCLUDED_BRUSHPROP_H__
+#define __INCLUDED_BRUSHPROP_H__
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -104,4 +104,4 @@ protected:
 	DECLARE_MESSAGE_MAP()
 };
 
-#endif
+#endif // __INCLUDED_BRUSHPROP_H__

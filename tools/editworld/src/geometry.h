@@ -22,8 +22,8 @@
 	$HeadURL$
 */
 
-#ifndef _INCLUDED_GEOMETRY_
-#define _INCLUDED_GEOMETRY_
+#ifndef __INCLUDED_GEOMETRY_H__
+#define __INCLUDED_GEOMETRY_H__
 
 #include <ddraw.h>
 #include <d3d.h>
@@ -132,4 +132,4 @@ class CGeometry {
 		D3DMATRIX m_MatrixStack[MAXMATRIXSTACKSIZE];
 };
 
-#endif
+#endif // __INCLUDED_GEOMETRY_H__

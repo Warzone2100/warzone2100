@@ -21,8 +21,9 @@
 	$Id$
 	$HeadURL$
 */
-// PlayerMap.h : header file
-//
+
+#ifndef __INCLUDED_PLAYERMAP_H__
+#define __INCLUDED_PLAYERMAP_H__
 
 #include "directx.h"
 #include "geometry.h"
@@ -62,3 +63,5 @@ protected:
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };
+
+#endif // __INCLUDED_PLAYERMAP_H__

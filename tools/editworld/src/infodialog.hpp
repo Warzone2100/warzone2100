@@ -22,8 +22,8 @@
 	$HeadURL$
 */
 
-#ifndef __INCLUDE__INFODIALOG_HPP__
-#define __INCLUDE__INFODIALOG_HPP__
+#ifndef __INCLUDED_INFODIALOG_HPP__
+#define __INCLUDED_INFODIALOG_HPP__
 
 #include "resource.h"
 
@@ -49,4 +49,4 @@ class InfoDialog : public CDialog
 		const CString _text;
 };
 
-#endif // __INCLUDE__INFODIALOG_HPP__
+#endif // __INCLUDED_INFODIALOG_HPP__

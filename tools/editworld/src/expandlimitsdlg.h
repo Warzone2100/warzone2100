@@ -21,6 +21,10 @@
 	$Id$
 	$HeadURL$
 */
+
+#ifndef __INCLUDED_EXPANDLIMITS_H__
+#define __INCLUDED_EXPANDLIMITS_H__
+
 // ExpandLimitsDlg.h : header file
 //
 
@@ -68,3 +72,5 @@ protected:
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };
+
+#endif // __INCLUDED_EXPANDLIMITS_H__

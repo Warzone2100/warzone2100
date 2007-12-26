@@ -21,6 +21,10 @@
 	$Id$
 	$HeadURL$
 */
+
+#ifndef __INCLUDED_BTEDITVIEW_H__
+#define __INCLUDED_BTEDITVIEW_H__
+
 // BTEditView.h : interface of the CBTEditView class
 //
 /////////////////////////////////////////////////////////////////////////////
@@ -154,4 +158,4 @@ inline CBTEditDoc* CBTEditView::GetDocument()
    { return (CBTEditDoc*)m_pDocument; }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+#endif // __INCLUDED_BTEDITVIEW_H__

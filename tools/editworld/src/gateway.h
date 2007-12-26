@@ -27,8 +27,9 @@
  * Interface to routing gateway code.
  *
  */
-#ifndef _gateway_h
-#define _gateway_h
+
+#ifndef __INCLUDED_GATEWAY_H__
+#define __INCLUDED_GATEWAY_H__
 
 #include "gatewaydef.h"
 
@@ -129,4 +130,4 @@ void gwFreeEquivTable(void);
 // set the zone equivalence for a zone
 BOOL gwSetZoneEquiv(SDWORD zone, SDWORD numEquiv, UBYTE *pEquiv);
 
-#endif
+#endif // __INCLUDED_GATEWAY_H__

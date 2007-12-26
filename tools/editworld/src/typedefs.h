@@ -22,8 +22,8 @@
 	$HeadURL$
 */
 
-#ifndef __TYPEDEFS_INCLUDED__
-#define	__TYPEDEFS_INCLUDED__
+#ifndef __INCLUDED_TYPEDEFS_H__
+#define __INCLUDED_TYPEDEFS_H__
 
 typedef signed long SLONG;
 typedef signed short SWORD;
@@ -59,4 +59,4 @@ typedef int BOOL;
 #define	setRectWH(rct,x,y,width,height) (rct)->top=y; (rct)->left=x; \
 											(rct)->bottom=y+height; (rct)->right=x+width
 
-#endif
+#endif // __INCLUDED_TYPEDEFS_H__

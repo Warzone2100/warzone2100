@@ -22,8 +22,8 @@
 	$HeadURL$
 */
 
-#ifndef __INCLUDED_FILEPARSER__
-#define __INCLUDED_FILEPARSER__
+#ifndef __INCLUDED_FILEPARSE_H__
+#define __INCLUDED_FILEPARSE_H__
 
 // Valid values for Flags.
 
@@ -89,4 +89,4 @@ class fileParser
 		long m_BufferSize;
 };
 
-#endif // __INCLUDED_FILEPARSER__
+#endif // __INCLUDED_FILEPARSE_H__

@@ -22,8 +22,8 @@
 	$HeadURL$
 */
 
-#ifndef __TILETYPES_INCLUDED__
-#define __TILETYPES_INCLUDED__
+#ifndef __INCLUDED_TILETYPES_H__
+#define __INCLUDED_TILETYPES_H__
 
 //#include "ddbiew.h"
 //#include "ddimage.h"
@@ -97,4 +97,4 @@
 
 void DisplayTerrainType(CDIBDraw *DIBDraw,int XPos,int YPos,int Width,int Height,DWORD Flags);
 
-#endif
+#endif // __INCLUDED_TILETYPES_H__

@@ -22,8 +22,8 @@
 	$HeadURL$
 */
 
-#ifndef _INCLUDE_UNDOREDO_
-#define _INCLUDE_UNDOREDO_
+#ifndef __INCLUDED_UNDOREDO_H__
+#define __INCLUDED_UNDOREDO_H__
 
 #define UNDO_STACKSIZE 8192
 #include "heightmap.h"
@@ -80,4 +80,4 @@ class CUndoRedo
 		SWORD       _GroupCounter;
 };
 
-#endif
+#endif // __INCLUDED_UNDOREDO_H__

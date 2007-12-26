@@ -22,8 +22,8 @@
 	$HeadURL$
 */
 
-#ifndef __INCLUDE_KEYHANDLER_HPP__
-#define __INCLUDE_KEYHANDLER_HPP__
+#ifndef __INCLUDED_KEYHANDLER_HPP__
+#define __INCLUDED_KEYHANDLER_HPP__
 
 #define KEYTABSIZE	256
 #include <bitset>
@@ -45,4 +45,4 @@ class KeyHandler
 		std::bitset<256> _KeyTable;
 };
 
-#endif // __INCLUDE_KEYHANDLER_HPP__
+#endif // __INCLUDED_KEYHANDLER_HPP__

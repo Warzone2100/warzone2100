@@ -22,8 +22,8 @@
 	$HeadURL$
 */
 
-#ifndef __DDIMAGE_INCLUDED__
-#define	__DDIMAGE_INCLUDED__
+#ifndef __INCLUDED_DDIMAGE_H__
+#define __INCLUDED_DDIMAGE_H__
 
 #include "dibdraw.h"
 
@@ -110,4 +110,4 @@ protected:
 	SWORD m_CenterY;
 };
 
-#endif
+#endif // __INCLUDED_DDIMAGE_H__

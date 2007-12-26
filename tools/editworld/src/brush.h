@@ -22,8 +22,8 @@
 	$HeadURL$
 */
 
-#ifndef __EDGEBRUSH_INCLUDED__
-#define	__EDGEBRUSH_INCLUDED__
+#ifndef __INCLUDED_BRUSH_H__
+#define __INCLUDED_BRUSH_H__
 
 #include "dibdraw.h"
 #include "chnkio.h"
@@ -148,4 +148,4 @@ class CEdgeBrush : public CChnkIO
 		void ConvertTileCodeToID(DWORD Code,DWORD &Tid,DWORD &TFlags);
 };
 
-#endif
+#endif // __INCLUDED_BRUSH_H__

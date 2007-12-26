@@ -22,8 +22,8 @@
 	$HeadURL$
 */
 
-#ifndef __CHNKIO_INCLUDED__
-#define __CHNKIO_INCLUDED__
+#ifndef __INCLUDED_CHNKIO_H__
+#define __INCLUDED_CHNKIO_H__
 
 #define	CHECKTRUE(func) if((func)==FALSE) { DebugPrint("Check Failed %s %d\n",__FILE__,__LINE__); return FALSE; }
 #define	CHECKZERO(func) if((func)!=0) { DebugPrint("Check Failed %s %d\n",__FILE__,__LINE__); return FALSE; }
@@ -44,4 +44,4 @@ public:
 	BOOL ReadQuotedStringAlloc(FILE *Stream,char *Name,char **String);
 };
 
-#endif
+#endif // __INCLUDED_CHNKIO_H__

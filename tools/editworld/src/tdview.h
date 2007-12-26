@@ -21,8 +21,9 @@
 	$Id$
 	$HeadURL$
 */
-// TDView.h : header file
-//
+
+#ifndef __INCLUDED_TDVIEW_H__
+#define __INCLUDED_TDVIEW_H__
 
 /////////////////////////////////////////////////////////////////////////////
 // CTDView view
@@ -68,4 +69,4 @@ inline CBTEditDoc* CTDView::GetDocument()
    { return (CBTEditDoc*)m_pDocument; }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+#endif // __INCLUDED_TDVIEW_H__

@@ -21,8 +21,9 @@
 	$Id$
 	$HeadURL$
 */
-// ObjectProperties.h : header file
-//
+
+#ifndef __INCLUDED_OBJECTPROPERTIES_H__
+#define __INCLUDED_OBJECTPROPERTIES_H__
 
 /////////////////////////////////////////////////////////////////////////////
 // CObjectProperties dialog
@@ -68,3 +69,5 @@ protected:
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };
+
+#endif // __INCLUDED_OBJECTPROPERTIES_H__

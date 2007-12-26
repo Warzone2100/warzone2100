@@ -21,8 +21,9 @@
 	$Id$
 	$HeadURL$
 */
-// TextureView.h : header file
-//
+
+#ifndef __INCLUDED_TEXTUREVIEW_H__
+#define __INCLUDED_TEXTUREVIEW_H__
 
 /////////////////////////////////////////////////////////////////////////////
 // CTextureView view
@@ -132,4 +133,4 @@ inline CBTEditDoc* CTextureView::GetDocument()
    { return (CBTEditDoc*)m_pDocument; }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+#endif // __INCLUDED_TEXTUREVIEW_H__

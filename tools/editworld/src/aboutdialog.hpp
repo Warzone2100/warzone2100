@@ -22,6 +22,9 @@
 	$HeadURL$
 */
 
+#ifndef __INCLUDED_ABOUTDIALOG_HPP__
+#define __INCLUDED_ABOUTDIALOG_HPP__
+
 /////////////////////////////////////////////////////////////////////////////
 // AboutDialog dialog used for App About
 
@@ -37,3 +40,5 @@ class AboutDialog : public CDialog
 		enum { IDD = IDD_ABOUTBOX };
 		//}}AFX_DATA
 };
+
+#endif // __INCLUDED_ABOUTDIALOG_HPP__

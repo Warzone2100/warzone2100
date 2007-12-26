@@ -22,8 +22,8 @@
 	$HeadURL$
 */
 
-#ifndef __INCLUDE_SAVESEGMENTDIALOG_HPP__
-#define __INCLUDE_SAVESEGMENTDIALOG_HPP__
+#ifndef __INCLUDED_SAVESEGMENTDIALOG_HPP__
+#define __INCLUDED_SAVESEGMENTDIALOG_HPP__
 
 #include "resource.h"
 
@@ -78,4 +78,4 @@ class SaveSegmentDialog : public CDialog
 		//}}AFX_DATA
 };
 
-#endif // __INCLUDE_SAVESEGMENTDIALOG_HPP__
+#endif // __INCLUDED_SAVESEGMENTDIALOG_HPP__

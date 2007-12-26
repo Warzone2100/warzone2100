@@ -22,8 +22,8 @@
 	$HeadURL$
 */
 
-#ifndef __DEVMAP_INCLUDED__
-#define __DEVMAP_INCLUDED__
+#ifndef __INCLUDED_DEVMAP_H__
+#define __INCLUDED_DEVMAP_H__
 
 //
 // Map file structures and definitions extracted from Deliverance Map.h and Map.c
@@ -182,4 +182,4 @@ typedef enum _terrain_type
 #define MAP_MAXWIDTH	256
 #define MAP_MAXHEIGHT	256
 
-#endif
+#endif // __INCLUDED_DEVMAP_H__

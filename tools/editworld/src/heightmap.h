@@ -22,8 +22,8 @@
 	$HeadURL$
 */
 
-#ifndef __HEIGHTMAP_INCLUDED__
-#define	__HEIGHTMAP_INCLUDED__
+#ifndef __INCLUDED_HEIGHTMAP_H__
+#define __INCLUDED_HEIGHTMAP_H__
 
 #include "pcxhandler.h"
 #include "bmphandler.h"
@@ -1177,5 +1177,4 @@ class CHeightMap : public CChnkIO
 		DroidTemplate *m_Templates;
 };
 
-#endif
-
+#endif // __INCLUDED_HEIGHTMAP_H__

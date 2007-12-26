@@ -22,8 +22,8 @@
 	$HeadURL$
 */
 
-#ifndef __GRDLAND_INCLUDED__
-#define __GRDLAND_INCLUDED__
+#ifndef __INCLUDED_GRDLAND_H__
+#define __INCLUDED_GRDLAND_H__
 
 #include "chnkio.h"
 #include "typedefs.h"
@@ -116,4 +116,4 @@ protected:
 	CGrdTileIO **m_Tiles;
 };
 
-#endif
+#endif // __INCLUDED_GRDLAND_H__

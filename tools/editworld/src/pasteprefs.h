@@ -21,8 +21,9 @@
 	$Id$
 	$HeadURL$
 */
-// PastePrefs.h : header file
-//
+
+#ifndef __INCLUDED_PASTEPREFS_H__
+#define __INCLUDED_PASTEPREFS_H__
 
 /////////////////////////////////////////////////////////////////////////////
 // CPastePrefs dialog
@@ -58,3 +59,5 @@ protected:
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };
+
+#endif // __INCLUDED_PASTEPREFS_H__

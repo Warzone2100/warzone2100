@@ -21,8 +21,9 @@
 	$Id$
 	$HeadURL$
 */
-// TexturePrefs.h : header file
-//
+
+#ifndef __INCLUDED_TEXTUREPREFS_H__
+#define __INCLUDED_TEXTUREPREFS_H__
 
 /////////////////////////////////////////////////////////////////////////////
 // CTexturePrefs dialog
@@ -59,3 +60,5 @@ protected:
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };
+
+#endif // __INCLUDED_TEXTUREPREFS_H__

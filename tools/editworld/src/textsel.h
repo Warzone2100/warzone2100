@@ -22,8 +22,8 @@
 	$HeadURL$
 */
 
-#ifndef __TEXTSEL_INCLUDED__
-#define __TEXTSEL_INCLUDED__
+#ifndef __INCLUDED_TEXTSEL_H__
+#define __INCLUDED_TEXTSEL_H__
 
 #include "directx.h"
 #include "geometry.h"
@@ -118,4 +118,4 @@ protected:
 	DWORD m_SelectedID;
 };
 
-#endif
+#endif // __INCLUDED_TEXTSEL_H__

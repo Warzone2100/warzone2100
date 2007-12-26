@@ -22,8 +22,8 @@
 	$HeadURL$
 */
 
-#ifndef _INCLUDED_DIRECTX_
-#define _INCLUDED_DIRECTX_
+#ifndef __INCLUDED_DIRECTX_H__
+#define __INCLUDED_DIRECTX_H__
 
 // Define DX6 in the project properties to use new interfaces in DirectX 6,
 // otherwise defaults to using old Direct X 5 interfaces.
@@ -719,4 +719,4 @@ class CMatManager {
 extern BOOL g_WindowsIs555;
 
 
-#endif
+#endif // __INCLUDED_DIRECTX_H__

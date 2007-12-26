@@ -22,8 +22,8 @@
 	$HeadURL$
 */
 
-#ifndef __DIBDRAW_INCLUDED__
-#define __DIBDRAW_INCLUDED__
+#ifndef __INCLUDED_DIBDRAW_H__
+#define __INCLUDED_DIBDRAW_H__
 
 #define MAGIC 29121967	// For debuging.
 
@@ -60,4 +60,4 @@ protected:
 	DWORD m_Height;
 };
 
-#endif
+#endif // __INCLUDED_DIBDRAW_H__

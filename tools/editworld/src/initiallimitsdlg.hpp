@@ -22,8 +22,8 @@
 	$HeadURL$
 */
 
-#ifndef __INCLUDE__INITIALLIMITSDIALOG_HPP__
-#define __INCLUDE__INITIALLIMITSDIALOG_HPP__
+#ifndef __INCLUDED_INITIALLIMITSDIALOG_HPP__
+#define __INCLUDED_INITIALLIMITSDIALOG_HPP__
 
 #include "resource.h"
 
@@ -88,4 +88,4 @@ class InitialLimitsDlg : public CDialog
 };
 
 
-#endif // __INCLUDE__INITIALLIMITSDIALOG_HPP__
+#endif // __INCLUDED_INITIALLIMITSDIALOG_HPP__

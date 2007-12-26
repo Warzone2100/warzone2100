@@ -22,8 +22,8 @@
 	$HeadURL$
 */
 
-#ifndef _INCLUDED_MACROS_
-#define _INCLUDED_MACROS_
+#ifndef __INCLUDED_MACROS_H__
+#define __INCLUDED_MACROS_H__
 
 #define DXCALL(func) if( (ddrval = func) != DD_OK) { DisplayError(ddrval,__FILE__,__LINE__,0); DebugClose(); return FALSE; }
 #define DXCALL_INT(func) if( (ddrval = func) != DD_OK) { DisplayError(ddrval,__FILE__,__LINE__,0); DebugClose(); return -1; }
@@ -44,4 +44,4 @@
 
 #define DELOBJ(x) if (x) { delete x; x = NULL; }
 
-#endif
+#endif // __INCLUDED_MACROS_H__

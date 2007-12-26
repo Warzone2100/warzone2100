@@ -22,8 +22,8 @@
 	$HeadURL$
 */
 
-#ifndef __INCLUDE__LIMITSDIALOG_HPP__
-#define __INCLUDE__LIMITSDIALOG_HPP__
+#ifndef __INCLUDED_LIMITSDIALOG_HPP__
+#define __INCLUDED_LIMITSDIALOG_HPP__
 
 #include "heightmap.h"
 #include "resource.h"
@@ -109,4 +109,4 @@ class LimitsDialog : public CDialog
 		std::deque<CScrollLimits> _limitsList;
 };
 
-#endif // __INCLUDE__LIMITSDIALOG_HPP__
+#endif // __INCLUDED_LIMITSDIALOG_HPP__

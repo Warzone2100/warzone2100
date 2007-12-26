@@ -21,8 +21,9 @@
 	$Id$
 	$HeadURL$
 */
-// MapPrefs.h : header file
-//
+
+#ifndef __INCLUDED_MAPPREFS_H__
+#define __INCLUDED_MAPPREFS_H__
 
 /////////////////////////////////////////////////////////////////////////////
 // CMapPrefs dialog
@@ -75,3 +76,5 @@ protected:
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };
+
+#endif // __INCLUDED_MAPPREFS_H__

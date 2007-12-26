@@ -22,8 +22,8 @@
 	$HeadURL$
 */
 
-#ifndef __PSXHANDLER_INCLUDED__
-#define	__PSXHANDLER_INCLUDED__
+#ifndef __INCLUDED_PCXHANDLER_H__
+#define __INCLUDED_PCXHANDLER_H__
 
 #include <windows.h>
 #include <istream>
@@ -109,4 +109,4 @@ class PCXHandler {
  		PALETTEENTRY* _Palette;
 };
 
-#endif
+#endif // __INCLUDED_PCXHANDLER_H__

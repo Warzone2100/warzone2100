@@ -22,6 +22,9 @@
 	$HeadURL$
 */
 
+#ifndef __INCLUDED_RESOURCE_H__
+#define __INCLUDED_RESOURCE_H__
+
 //{{NO_DEPENDENCIES}}
 // Microsoft Developer Studio generated include file.
 // Used by EditWorld.rc
@@ -328,3 +331,5 @@
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
+
+#endif // __INCLUDED_RESOURCE_H__
