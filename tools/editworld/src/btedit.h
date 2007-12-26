@@ -30,11 +30,6 @@
 
 #include "resource.h"       // main symbols
 
-/////////////////////////////////////////////////////////////////////////////
-// CBTEditApp:
-// See BTEdit.cpp for the implementation of this class
-//
-
 class CBTEditCommandLineInfo : public CCommandLineInfo
 {
 public:
@@ -58,28 +53,3 @@ public:
 };
 
 extern CBTEditCommandLineInfo g_cmdInfo;
-
-class CBTEditApp : public CWinApp
-{
-public:
-	CBTEditApp();
-
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CBTEditApp)
-	public:
-	virtual BOOL InitInstance();
-	//}}AFX_VIRTUAL
-
-// Implementation
-
-	//{{AFX_MSG(CBTEditApp)
-	afx_msg void OnAppAbout();
-		// NOTE - the ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
-};
-
-
-/////////////////////////////////////////////////////////////////////////////

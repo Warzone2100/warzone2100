@@ -33,21 +33,6 @@
 #include "bteditview.h"
 //#include "debugwin.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CBTEditApp
-
-
-BEGIN_MESSAGE_MAP(CBTEditApp, CWinApp)
-	//{{AFX_MSG_MAP(CBTEditApp)
-	ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG_MAP
-	// Standard file based document commands
-	ON_COMMAND(ID_FILE_NEW, CWinApp::OnFileNew)
-	ON_COMMAND(ID_FILE_OPEN, CWinApp::OnFileOpen)
-END_MESSAGE_MAP()
-
 CBTEditCommandLineInfo g_cmdInfo;
 
 void CBTEditCommandLineInfo::ParseParam(const char* pszParam,BOOL bFlag,BOOL bLast)
@@ -95,20 +80,6 @@ void CBTEditCommandLineInfo::ParseParam(const char* pszParam,BOOL bFlag,BOOL bLa
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// CBTEditApp construction
-
-CBTEditApp::CBTEditApp()
-{
-	// TODO: add construction code here,
-	// Place all significant initialization in InitInstance
-}
-
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CBTEditApp object
-
-CBTEditApp theApp;
-
-/////////////////////////////////////////////////////////////////////////////
 // CBTEditApp initialization
 
 char g_HomeDirectory[1024];
@@ -131,68 +102,97 @@ HICON g_IconSmallBrush2;
 HICON g_IconLargeBrush;
 HICON g_IconLargeBrush2;
 
-BOOL CBTEditApp::InitInstance()
+/////////////////////////////////////////////////////////////////////////////
+// The one and only CBTEditApp object
+
+/////////////////////////////////////////////////////////////////////////////
+// CBTEditApp
+
+class CBTEditApp : public CWinApp
 {
-	// Standard initialization
-	// If you are not using these features and wish to reduce the size
-	//  of your final executable, you should remove from the following
-	//  the specific initialization routines you do not need.
+	// Overrides
+	public:
+		virtual BOOL InitInstance()
+		{
+			// Standard initialization
+			// If you are not using these features and wish to reduce the size
+			//  of your final executable, you should remove from the following
+			//  the specific initialization routines you do not need.
 
-//	pDebugThread = AfxBeginThread(RUNTIME_CLASS(DebugThread));
+		//	pDebugThread = AfxBeginThread(RUNTIME_CLASS(DebugThread));
 
 
-#ifdef _AFXDLL
-	Enable3dControls();			// Call this when using MFC in a shared DLL
-#else
-	Enable3dControlsStatic();	// Call this when linking to MFC statically
-#endif
+		#ifdef _AFXDLL
+			Enable3dControls();			// Call this when using MFC in a shared DLL
+		#else
+			Enable3dControlsStatic();	// Call this when linking to MFC statically
+		#endif
 
-    SetRegistryKey("Pumpkin Studios");
-	LoadStdProfileSettings();  // Load standard INI file options (including MRU)
+			SetRegistryKey("Pumpkin Studios");
+			LoadStdProfileSettings();  // Load standard INI file options (including MRU)
 
-	// Register the application's document templates.  Document templates
-	//  serve as the connection between documents, frame windows and views.
+			// Register the application's document templates.  Document templates
+			//  serve as the connection between documents, frame windows and views.
 
-	CSingleDocTemplate* pDocTemplate;
-	pDocTemplate = new CSingleDocTemplate(
-		IDR_MAINFRAME,
-		RUNTIME_CLASS(CBTEditDoc),
-		RUNTIME_CLASS(CMainFrame),       // main SDI frame window
-		RUNTIME_CLASS(CBTEditView));
-	AddDocTemplate(pDocTemplate);
+			CSingleDocTemplate* pDocTemplate;
+			pDocTemplate = new CSingleDocTemplate(
+				IDR_MAINFRAME,
+				RUNTIME_CLASS(CBTEditDoc),
+				RUNTIME_CLASS(CMainFrame),       // main SDI frame window
+				RUNTIME_CLASS(CBTEditView));
+			AddDocTemplate(pDocTemplate);
 
-	GetCurrentDirectory(sizeof(g_HomeDirectory),g_HomeDirectory);
+			GetCurrentDirectory(sizeof(g_HomeDirectory),g_HomeDirectory);
 
-	g_Wait = ::LoadCursor(NULL,IDC_WAIT);
-	g_Pointer = LoadCursor(IDC_POINTER);
-	g_PointerPaint = LoadCursor(IDC_POINTER_PAINT);
-	g_PointerFill = LoadCursor(IDC_POINTER_FILL);
-	g_PointerDrag = LoadCursor(IDC_POINTER_HGTDRAG);
-	g_PointerSelRect = LoadCursor(IDC_POINTER_SELRECT);
-	g_PointerSelPoint = LoadCursor(IDC_POINTER);
-	g_PointerPipet = LoadCursor(IDC_PIPET);
-	g_PointerPliers = LoadCursor(IDC_PLIERS);
+			g_Wait = ::LoadCursor(NULL,IDC_WAIT);
+			g_Pointer = LoadCursor(IDC_POINTER);
+			g_PointerPaint = LoadCursor(IDC_POINTER_PAINT);
+			g_PointerFill = LoadCursor(IDC_POINTER_FILL);
+			g_PointerDrag = LoadCursor(IDC_POINTER_HGTDRAG);
+			g_PointerSelRect = LoadCursor(IDC_POINTER_SELRECT);
+			g_PointerSelPoint = LoadCursor(IDC_POINTER);
+			g_PointerPipet = LoadCursor(IDC_PIPET);
+			g_PointerPliers = LoadCursor(IDC_PLIERS);
 
-	g_IconIncrement = LoadIcon(IDI_INCREMENT);
-	g_IconDecrement = LoadIcon(IDI_DECREMENT);
-	g_IconSmallBrush = LoadIcon(IDI_SMALLBRUSH);
-	g_IconSmallBrush2 = LoadIcon(IDI_SMALLBRUSH2);
-	g_IconLargeBrush = LoadIcon(IDI_LARGEBRUSH);
-	g_IconLargeBrush2 = LoadIcon(IDI_LARGEBRUSH2);
+			g_IconIncrement = LoadIcon(IDI_INCREMENT);
+			g_IconDecrement = LoadIcon(IDI_DECREMENT);
+			g_IconSmallBrush = LoadIcon(IDI_SMALLBRUSH);
+			g_IconSmallBrush2 = LoadIcon(IDI_SMALLBRUSH2);
+			g_IconLargeBrush = LoadIcon(IDI_LARGEBRUSH);
+			g_IconLargeBrush2 = LoadIcon(IDI_LARGEBRUSH2);
 
-	// Parse command line for standard shell commands, DDE, file open
-//	CCommandLineInfo cmdInfo;
-	ParseCommandLine(g_cmdInfo);
+			// Parse command line for standard shell commands, DDE, file open
+		//	CCommandLineInfo cmdInfo;
+			ParseCommandLine(g_cmdInfo);
 
-	// Dispatch commands specified on the command line
-	if (!ProcessShellCommand(g_cmdInfo))
-		return FALSE;
+			// Dispatch commands specified on the command line
+			if (!ProcessShellCommand(g_cmdInfo))
+				return FALSE;
 
-	return TRUE;
-}
+			return TRUE;
+		}
 
-// App command to run the dialog
-void CBTEditApp::OnAppAbout()
-{
-	AboutDialog().DoModal();
-}
+	// Implementation
+	private:
+		void OnAppAbout()
+		{
+			AboutDialog().DoModal();
+		}
+
+	private:
+		DECLARE_MESSAGE_MAP()
+};
+
+
+BEGIN_MESSAGE_MAP(CBTEditApp, CWinApp)
+	//{{AFX_MSG_MAP(CBTEditApp)
+	ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
+		// NOTE - the ClassWizard will add and remove mapping macros here.
+		//    DO NOT EDIT what you see in these blocks of generated code!
+	//}}AFX_MSG_MAP
+	// Standard file based document commands
+	ON_COMMAND(ID_FILE_NEW, CWinApp::OnFileNew)
+	ON_COMMAND(ID_FILE_OPEN, CWinApp::OnFileOpen)
+END_MESSAGE_MAP()
+
+CBTEditApp theApp;
