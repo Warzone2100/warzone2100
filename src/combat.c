@@ -296,21 +296,19 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	// add the attacker's experience
 	if (psAttacker->type == OBJ_DROID)
 	{
-		SDWORD	level = getDroidLevel((DROID *)psAttacker);
-		SDWORD	cmdLevel = cmdGetCommanderLevel((DROID *)psAttacker);
+		SDWORD	level = getDroidEffectiveLevel((DROID *) psAttacker);
 
 		// increase total accuracy by EXP_ACCURACY_BONUS % for each experience level
-		resultHitChance += EXP_ACCURACY_BONUS * MAX(level, cmdLevel) * baseHitChance / 100;
+		resultHitChance += EXP_ACCURACY_BONUS * level * baseHitChance / 100;
 	}
 
 	// subtract the defender's experience
 	if (psTarget->type == OBJ_DROID)
 	{
-		SDWORD	level = getDroidLevel((DROID *)psTarget);
-		SDWORD	cmdLevel = cmdGetCommanderLevel((DROID *)psTarget);
+		SDWORD	level = getDroidEffectiveLevel((DROID *) psTarget);
 
 		// decrease weapon accuracy by EXP_ACCURACY_BONUS % for each experience level
-		resultHitChance -= EXP_ACCURACY_BONUS * MAX(level, cmdLevel) * baseHitChance / 100;
+		resultHitChance -= EXP_ACCURACY_BONUS * level * baseHitChance / 100;
 
 	}
 
