@@ -150,10 +150,6 @@ SOURCE=.\expandlimitsdlg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\infodialog.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\fileparse.cpp
 # End Source File
 # Begin Source File
@@ -175,6 +171,10 @@ SOURCE=.\grdland.cpp
 # Begin Source File
 
 SOURCE=.\heightmap.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\infodialog.cpp
 # End Source File
 # Begin Source File
 
@@ -314,10 +314,6 @@ SOURCE=.\expandlimitsdlg.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\infodialog.hpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\fileparse.h
 # End Source File
 # Begin Source File
@@ -343,6 +339,10 @@ SOURCE=.\grdland.h
 # Begin Source File
 
 SOURCE=.\heightmap.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\infodialog.hpp
 # End Source File
 # Begin Source File
 
