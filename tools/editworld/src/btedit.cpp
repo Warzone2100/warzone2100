@@ -211,8 +211,6 @@ std::string getCurrentDirectory()
 	// Retrieve the current directory
 	GetCurrentDirectory(curDirSize, curDir.get());
 
-	MessageBox(0, curDir.get(), "curDir.get()", MB_OK);
-
 	// Return the current directory as a STL string
 	return std::string(curDir.get());
 }
