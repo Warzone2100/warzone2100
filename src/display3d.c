@@ -731,7 +731,7 @@ static void drawTiles(iView *camera, iView *player)
 	}
 
 	// Draw all the normal tiles
-	pie_SetColourKeyedBlack(TRUE);
+	pie_SetAlphaTest(FALSE);
 	pie_SetFogStatus(TRUE);
 	pie_SetTexturePage(terrainPage);
 	for (i = 0; i < MIN(visibleTiles.y, mapHeight); i++)
@@ -757,6 +757,7 @@ static void drawTiles(iView *camera, iView *player)
 
 	// Draw water edges
 	pie_SetDepthOffset(-2.0);
+	pie_SetAlphaTest(TRUE);
 	for (i = 0; i < MIN(visibleTiles.y, mapHeight); i++)
 	{
 		for (j = 0; j < MIN(visibleTiles.x, mapWidth); j++)
@@ -785,7 +786,7 @@ static void drawTiles(iView *camera, iView *player)
 	// Now draw the water tiles in a second pass to get alpha sort order correct
 	pie_TranslateTextureBegin(Vector2f_New(0.0f, waterRealValue));
 	pie_SetRendMode(REND_ALPHA_TEX);
-	pie_SetColourKeyedBlack(FALSE);
+	pie_SetAlphaTest(FALSE);
 	pie_SetDepthOffset(-1.0f);
 	for (i = 0; i < MIN(visibleTiles.y, mapHeight); i++)
 	{
@@ -810,7 +811,7 @@ static void drawTiles(iView *camera, iView *player)
 	}
 	pie_SetDepthOffset(0.0f);
 	pie_SetRendMode(REND_GOURAUD_TEX);
-	pie_SetColourKeyedBlack(TRUE);
+	pie_SetAlphaTest(TRUE);
 	pie_TranslateTextureEnd();
 
 	targetOpenList((BASE_OBJECT*)driveGetDriven());

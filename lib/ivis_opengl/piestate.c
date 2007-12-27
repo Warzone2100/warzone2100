@@ -157,7 +157,7 @@ void pie_SetTexturePage(SDWORD num)
 
 /***************************************************************************/
 
-void pie_SetColourKeyedBlack(BOOL keyingOn)
+void pie_SetAlphaTest(BOOL keyingOn)
 {
 	if (keyingOn != rendStates.keyingOn)
 	{

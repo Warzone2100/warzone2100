@@ -68,7 +68,7 @@ void pie_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
 {
 	pie_SetRendMode(REND_FLAT);
 	pie_SetTexturePage(-1);
-	pie_SetColourKeyedBlack(FALSE);
+	pie_SetAlphaTest(FALSE);
 
 	glColor4ubv(colour.vector);
 	glBegin(GL_LINE_STRIP);
@@ -82,7 +82,7 @@ void pie_Box(int x0,int y0, int x1, int y1, PIELIGHT colour)
 {
 	pie_SetRendMode(REND_FLAT);
 	pie_SetTexturePage(-1);
-	pie_SetColourKeyedBlack(FALSE);
+	pie_SetAlphaTest(FALSE);
 
 	if (x0>psRendSurface->clip.right || x1<psRendSurface->clip.left ||
 		y0>psRendSurface->clip.bottom || y1<psRendSurface->clip.top)
@@ -200,27 +200,6 @@ void pie_UniTransBoxFill(SDWORD x0,SDWORD y0, SDWORD x1, SDWORD y1, PIELIGHT lig
 
 /***************************************************************************/
 
-void pie_DrawImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
-{
-	IMAGEDEF *Image;
-	PIEIMAGE pieImage;
-	PIERECT dest;
-
-	assert(ID < ImageFile->Header.NumImages);
-	Image = &ImageFile->ImageDefs[ID];
-
-	pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
-	pieImage.tu = Image->Tu;
-	pieImage.tv = Image->Tv;
-	pieImage.tw = Image->Width;
-	pieImage.th = Image->Height;
-	dest.x = x + Image->XOffset;
-	dest.y = y + Image->YOffset;
-	dest.w = Image->Width;
-	dest.h = Image->Height;
-	pie_DrawImage(&pieImage, &dest, &rendStyle);
-}
-
 void pie_ImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 {
 	IMAGEDEF *Image;
@@ -231,7 +210,7 @@ void pie_ImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 	Image = &ImageFile->ImageDefs[ID];
 
 	pie_SetRendMode(REND_GOURAUD_TEX);
-	pie_SetColourKeyedBlack(TRUE);
+	pie_SetAlphaTest(TRUE);
 
 	pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
 	pieImage.tu = Image->Tu;
@@ -257,7 +236,7 @@ void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 	Image = &ImageFile->ImageDefs[ID];
 
 	pie_SetRendMode(REND_GOURAUD_TEX);
-	pie_SetColourKeyedBlack(TRUE);
+	pie_SetAlphaTest(TRUE);
 
 	pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
 	pieImage.tu = Image->Tu;
@@ -360,7 +339,6 @@ void pie_RenderRadar( int x, int y )
 	PIERECT dest;
 
 	pie_SetRendMode(REND_GOURAUD_TEX);
-	pie_SetColourKeyedBlack(TRUE);
 	//special case function because texture is held outside of texture list
 	pieImage.texPage = radarTexture;
 	pieImage.tu = 0;

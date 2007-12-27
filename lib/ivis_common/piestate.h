@@ -139,7 +139,7 @@ extern PIELIGHT pie_GetFogColour(void) WZ_DECL_PURE;
 extern void pie_UpdateFogDistance(float begin, float end);
 //render states
 extern void pie_SetTexturePage(SDWORD num);
-extern void pie_SetColourKeyedBlack(BOOL keyingOn);
+extern void pie_SetAlphaTest(BOOL keyingOn);
 extern void pie_SetRendMode(REND_MODE rendMode);
 
 #endif // _pieState_h

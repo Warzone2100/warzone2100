@@ -259,13 +259,13 @@ static inline void pie_PiePoly(const PIEPOLY *poly, const BOOL light)
 	{
 		if (poly->flags & PIE_COLOURKEYED)
 		{
-			pie_SetColourKeyedBlack(TRUE);
+			pie_SetAlphaTest(TRUE);
 		}
 		else
 		{
-			pie_SetColourKeyedBlack(FALSE);
+			pie_SetAlphaTest(FALSE);
 		}
-		pie_SetColourKeyedBlack(TRUE);
+		pie_SetAlphaTest(TRUE);
 		if (poly->flags & PIE_NO_CULL)
 		{
 			glDisable(GL_CULL_FACE);
@@ -437,8 +437,8 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 			pieVrts[n].z = scrPoints[*index].z;
 			pieVrts[n].u = pPolys->texCoord[n].x;
 			pieVrts[n].v = pPolys->texCoord[n].y;
-			pieVrts[n].light.argb = colour.argb;
-			pieVrts[n].specular.argb = specular.argb;
+			pieVrts[n].light = colour;
+			pieVrts[n].specular = specular;
 		}
 		piePoly.nVrts = pPolys->npnts;
 		piePoly.pVrts = pieVrts;
@@ -807,7 +807,7 @@ static void pie_DrawShadows(void)
 
 	glPushMatrix();
 
-	pie_SetColourKeyedBlack(FALSE);
+	pie_SetAlphaTest(FALSE);
 	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 	glDepthFunc(GL_LESS);
 	glDepthMask(GL_FALSE);
@@ -917,8 +917,8 @@ void pie_DrawImage(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style)
 
 	pie_SetTexturePage(image->texPage);
 
-	style->colour.argb = 0xffffffff; // draw solid
-	style->specular.argb = 0x00000000;
+	style->colour = WZCOL_WHITE; // draw solid
+	style->specular = WZCOL_BLACK;
 
 	glColor4ubv(style->colour.vector);
 
@@ -951,7 +951,7 @@ void pie_DrawRect(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, PIELIGHT colour)
 {
 	polyCount++;
 
-	pie_SetColourKeyedBlack(FALSE);
+	pie_SetAlphaTest(FALSE);
 
 	glColor4ubv(colour.vector);
 	glBegin(GL_TRIANGLE_STRIP);

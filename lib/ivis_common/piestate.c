@@ -47,7 +47,7 @@ void pie_SetDefaultStates(void)//Sets all states
 
 	//chroma keying on black
 	rendStates.keyingOn = FALSE;//to force reset to true
-	pie_SetColourKeyedBlack(TRUE);
+	pie_SetAlphaTest(TRUE);
 }
 
 
