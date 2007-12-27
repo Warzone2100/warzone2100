@@ -25,15 +25,6 @@
 #include "autoflagdialog.hpp"
 
 //(*InternalHeaders(AutoFlagDialog)
-#include <wx/bitmap.h>
-#include <wx/button.h>
-#include <wx/font.h>
-#include <wx/fontenum.h>
-#include <wx/fontmap.h>
-#include <wx/image.h>
-#include <wx/intl.h>
-#include <wx/settings.h>
-#include <wx/string.h>
 #include <wx/xrc/xmlres.h>
 //*)
 
@@ -76,6 +67,7 @@ AutoFlagDialog::AutoFlagDialog(wxWindow* parent,
 	RandRotate_CheckBox = dynamic_cast<wxCheckBox*>(FindWindow(XRCID("ID_CHK_RANDROTATE")));
 	RandXFlip_CheckBox = dynamic_cast<wxCheckBox*>(FindWindow(XRCID("ID_CHK_RANDXFLIP")));
 	RandYFlip_CheckBox = dynamic_cast<wxCheckBox*>(FindWindow(XRCID("ID_CHK_RANDYFLIP")));
+	
 	Connect(XRCID("ID_RADIO_0DEGREE"),wxEVT_COMMAND_RADIOBUTTON_SELECTED,(wxObjectEventFunction)&AutoFlagDialog::OnRotate);
 	Connect(XRCID("ID_RADIO_90DEGREE"),wxEVT_COMMAND_RADIOBUTTON_SELECTED,(wxObjectEventFunction)&AutoFlagDialog::OnRotate);
 	Connect(XRCID("ID_RADIO_180DEGREE"),wxEVT_COMMAND_RADIOBUTTON_SELECTED,(wxObjectEventFunction)&AutoFlagDialog::OnRotate);

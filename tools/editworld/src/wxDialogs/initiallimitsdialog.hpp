@@ -28,10 +28,9 @@
 #include <wx/wxprec.h>
 
 //(*Headers(InitialLimitsDialog)
+#include <wx/stattext.h>
 #include <wx/choice.h>
 #include <wx/dialog.h>
-#include <wx/sizer.h>
-#include <wx/stattext.h>
 //*)
 
 #include <deque>

@@ -28,10 +28,8 @@
 #include <wx/wxprec.h>
 
 //(*Headers(SaveSegmentDialog)
-#include <wx/dialog.h>
-#include <wx/sizer.h>
-#include <wx/stattext.h>
 #include <wx/textctrl.h>
+#include <wx/dialog.h>
 //*)
 
 /////////////////////////////////////////////////////////////////////////////

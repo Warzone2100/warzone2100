@@ -30,9 +30,8 @@
 
 #ifndef WX_PRECOMP
 //(*Headers(InfoDialog)
-#include <wx/dialog.h>
-#include <wx/sizer.h>
 #include <wx/textctrl.h>
+#include <wx/dialog.h>
 //*)
 #endif
 

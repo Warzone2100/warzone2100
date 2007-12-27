@@ -29,9 +29,8 @@
 
 //(*Headers(AutoFlagDialog)
 #include <wx/checkbox.h>
-#include <wx/dialog.h>
 #include <wx/radiobut.h>
-#include <wx/sizer.h>
+#include <wx/dialog.h>
 //*)
 
 /////////////////////////////////////////////////////////////////////////////

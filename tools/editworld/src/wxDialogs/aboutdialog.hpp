@@ -28,11 +28,7 @@
 #include <wx/wxprec.h>
 
 //(*Headers(AboutDialog)
-#include <wx/button.h>
 #include <wx/dialog.h>
-#include <wx/sizer.h>
-#include <wx/statbmp.h>
-#include <wx/stattext.h>
 //*)
 
 class AboutDialog: public wxDialog

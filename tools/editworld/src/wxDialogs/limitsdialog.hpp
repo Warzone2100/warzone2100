@@ -30,11 +30,8 @@
 
 #ifndef WX_PRECOMP
 //(*Headers(LimitsDialog)
-#include <wx/button.h>
-#include <wx/dialog.h>
-#include <wx/sizer.h>
-#include <wx/stattext.h>
 #include <wx/textctrl.h>
+#include <wx/dialog.h>
 //*)
   #include <wx/xrc/xmlres.h>
   #include <wx/xrc/xh_listc.h>
