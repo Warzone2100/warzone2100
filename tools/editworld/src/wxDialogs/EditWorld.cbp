@@ -157,6 +157,7 @@
 		<Unit filename="limitsdialog.hpp" />
 		<Unit filename="limitsdialog.xrc" />
 		<Unit filename="macros.h" />
+		<Unit filename="main.cpp" />
 		<Unit filename="mainfrm.cpp" />
 		<Unit filename="mainfrm.h" />
 		<Unit filename="mapprefs.cpp" />
