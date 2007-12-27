@@ -54,7 +54,6 @@
 // INFORM others that a building has been started, and base plate should be put down.
 BOOL sendBuildStarted(STRUCTURE *psStruct, DROID *psDroid)
 {
-	DBCONPRINTF(ConsoleString,(ConsoleString,"sendBuildStarted() called"));
 	NETbeginEncode(NET_BUILD, NET_ALL_PLAYERS);
 	
 		// Who is building it
@@ -106,7 +105,6 @@ BOOL recvBuildStarted()
 	int32_t			order;
 	uint32_t		structRef, structId, targetId,droidID;
 
-	DBCONPRINTF(ConsoleString,(ConsoleString,"recvBuildStarted() called"));
 	NETbeginDecode();
 
 	NETuint8_t(&player);
@@ -176,9 +174,7 @@ BOOL recvBuildStarted()
 // ////////////////////////////////////////////////////////////////////////////
 // INFORM others that a building has been completed.
 BOOL SendBuildFinished(STRUCTURE *psStruct)
-{
-	DBCONPRINTF(ConsoleString,(ConsoleString,"SendBuildFinished() called"));
-	
+{	
 	NETbeginEncode(NET_BUILDFINISHED, NET_ALL_PLAYERS);
 		// ID of building
 		NETuint32_t(&psStruct->id);
@@ -202,7 +198,6 @@ BOOL recvBuildFinished()
 	UBYTE	player;
 
 
-	DBCONPRINTF(ConsoleString,(ConsoleString,"recvBuildFinished() called"));
 	NETbeginDecode();
 	NETuint32_t(&structId);			// get the struct id.
 	psStruct = IdToStruct(structId,ANYPLAYER);
@@ -259,12 +254,10 @@ BOOL recvBuildFinished()
 		psStruct->status	= SS_BUILT;
 		buildingComplete(psStruct);
 
-		DBCONPRINTF(ConsoleString,(ConsoleString,"MultiPlayer: Struct not found on recvbuildcomplete :%d",structId ));
 		NETlogEntry("had to plonk down a building" ,0,player);
 	}
 	else
 	{
-		DBCONPRINTF(ConsoleString,(ConsoleString,"MultiPlayer: Struct not found on recvbuildcomplete BUILDIT FAILED TOO!:%d",structId ));
 		NETlogEntry("had to plonk down a building, BUT FAILED OH S**T." ,0,player);
 	}
 	
@@ -277,7 +270,6 @@ BOOL recvBuildFinished()
 // demolish message.
 BOOL SendDemolishFinished(STRUCTURE *psStruct, DROID *psDroid)
 {
-	DBCONPRINTF(ConsoleString,(ConsoleString,"SendDemolishFinished() called"));
 	NETbeginEncode(NET_DEMOLISH, NET_ALL_PLAYERS);             
                                                          
 		// Send what is being demolish and who is doing it
@@ -293,7 +285,6 @@ BOOL recvDemolishFinished()
 	DROID		*psDroid;
 	uint32_t structID,droidID;
 
-	DBCONPRINTF(ConsoleString,(ConsoleString,"recvDemolishFinished() called"));
 	NETbeginDecode();
 
 	NETuint32_t(&structID);			
@@ -322,7 +313,6 @@ BOOL recvDemolishFinished()
 // Inform others that a structure has been destroyed
 BOOL SendDestroyStructure(STRUCTURE *s)
 {
-	DBCONPRINTF(ConsoleString,(ConsoleString,"SendDestroyStructure() called"));
 	technologyGiveAway(s);
 	NETbeginEncode(NET_STRUCTDEST, NET_ALL_PLAYERS);
 
@@ -339,7 +329,6 @@ BOOL recvDestroyStructure()
 	uint32_t structID;
 	STRUCTURE *psStruct;
 
-	DBCONPRINTF(ConsoleString,(ConsoleString,"recvDestroyStructure() called"));
 	NETbeginDecode();
 
 		NETuint32_t(&structID);
@@ -366,7 +355,6 @@ BOOL recvDestroyStructure()
 
 BOOL sendLasSat(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj)
 {
-	DBCONPRINTF(ConsoleString,(ConsoleString,"sendLasSat() called"));
 	NETbeginEncode(NET_LASSAT, NET_ALL_PLAYERS);
 
 		NETuint8_t(&player);
@@ -384,7 +372,6 @@ BOOL recvLasSat()
 	UBYTE		player,targetplayer;
 	STRUCTURE	*psStruct;
 	uint32_t	id,targetid;
-	DBCONPRINTF(ConsoleString,(ConsoleString,"recvLasSat() called"));
 	
 	NETbeginDecode();
 
