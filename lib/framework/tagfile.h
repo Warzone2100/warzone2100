@@ -86,6 +86,7 @@ int32_t tagReads(element_t tag);
 bool tagReadBool(element_t tag);
 float tagReadf(element_t tag);
 bool tagReadfv(element_t tag, uint16_t size, float *vals);
+uint8_t *tagRead8vDup(element_t tag, int *size);
 bool tagRead8v(element_t tag, uint16_t size, uint8_t *vals);
 bool tagRead16v(element_t tag, uint16_t size, uint16_t *vals);
 bool tagReads16v(element_t tag, uint16_t size, int16_t *vals);

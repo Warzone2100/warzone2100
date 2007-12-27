@@ -753,6 +753,42 @@ bool tagReadfv(element_t tag, uint16_t size, float *vals)
 	return true;
 }
 
+uint8_t *tagRead8vDup(element_t tag, int *size)
+{
+	uint8_t tagtype, *values;
+	uint16_t count;
+	int i;
+
+	if (!scanforward(tag))
+	{
+		*size = 0;
+		return NULL;
+	}
+	if (!PHYSFS_readUBE8(handle, &tagtype) || tagtype != TF_INT_U8_ARRAY)
+	{
+		TF_ERROR("tagread8vDup: Tag type not found: %x", (unsigned int)tag);
+		*size = -1;
+		return NULL;
+	}
+	if (!PHYSFS_readUBE16(handle, &count))
+	{
+		TF_ERROR("tagread8vDup: Read error (end of file?): %s", PHYSFS_getLastError());
+		*size = -1;
+		return NULL;
+	}
+	values = malloc(count);
+	*size = count;
+	for (i = 0; i < count; i++)
+	{
+		if (!PHYSFS_readUBE8(handle, &values[i]))
+		{
+			TF_ERROR("tagread8vDup: Error reading idx %d, tag %x", i, (unsigned int)tag);
+			return NULL;
+		}
+	}
+	return values;
+}
+
 bool tagRead8v(element_t tag, uint16_t size, uint8_t *vals)
 {
 	uint8_t tagtype;
@@ -1267,6 +1303,7 @@ void tagTest()
 		fv[2] = -1.3f;
 		tagWritefv(0x03, 3, fv);
 		tagWrite8v(0x05, BLOB_SIZE, blob);
+		tagWrite8v(0x06, BLOB_SIZE, blob);
 		tagWriteEnter(0x09, 1);
 		{
 			int32_t v[3] = { -1, 0, 1 };
@@ -1287,6 +1324,8 @@ void tagTest()
 	tagReadEnter(0x02);
 	{
 		int32_t v[3];
+		int size;
+		uint8_t *blobptr;
 
 		assert(tagRead(0x01) == 101);
 		tagRead16v(0x02, 3, droidpos);
@@ -1298,13 +1337,17 @@ void tagTest()
 		assert(fv[1] - 1.1f < 0.001);
 		assert(fv[2] + 1.3f < 0.001);
 		tagRead8v(0x05, BLOB_SIZE, blob);
+		blobptr = tagRead8vDup(0x06, &size);
+		assert(size == BLOB_SIZE);
 		assert(blob[BLOB_SIZE / 2] == 1);
+		assert(blobptr[BLOB_SIZE / 2] == 1);
 		tagReadEnter(0x09);
 			tagReads32v(0x05, 3, v);
 			assert(v[0] == -1);
 			assert(v[1] == 0);
 			assert(v[2] == 1);
 		tagReadLeave(0x09);
+		free(blobptr);
 	}
 	tagReadLeave(0x02);
 	assert(tagRead(0x04) == 9);
