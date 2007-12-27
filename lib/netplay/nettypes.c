@@ -27,15 +27,7 @@
 #include "lib/framework/strnlen1.h"
 #include <string.h>
 
-#ifdef WZ_OS_WIN
-# include <winsock.h>
-#else
-# include <arpa/inet.h>
-#ifdef WZ_OS_MAC
-# undef MIN
-# undef MAX
-#endif
-#endif
+#include <SDL_endian.h>
 
 #include "../framework/frame.h"
 #include "netplay.h"
@@ -156,11 +148,11 @@ BOOL NETint16_t(int16_t *ip)
 	// Convert the integer into the network byte order (big endian)
 	if (NETgetPacketDir() == PACKET_ENCODE)
 	{
-		*store = htons(*ip);
+		*store = SDL_SwapBE16(*ip);
 	}
 	else if (NETgetPacketDir() == PACKET_DECODE)
 	{
-		*ip = ntohs(*store);
+		*ip = SDL_SwapBE16(*store);
 	}
 
 	// Increment the size of the message
@@ -182,11 +174,11 @@ BOOL NETuint16_t(uint16_t *ip)
 	// Convert the integer into the network byte order (big endian)
 	if (NETgetPacketDir() == PACKET_ENCODE)
 	{
-		*store = htons(*ip);
+		*store = SDL_SwapBE16(*ip);
 	}
 	else if (NETgetPacketDir() == PACKET_DECODE)
 	{
-		*ip = ntohs(*store);
+		*ip = SDL_SwapBE16(*store);
 	}
 
 	// Increment the size of the message
@@ -208,11 +200,11 @@ BOOL NETint32_t(int32_t *ip)
 	// Convert the integer into the network byte order (big endian)
 	if (NETgetPacketDir() == PACKET_ENCODE)
 	{
-		*store = htonl(*ip);
+		*store = SDL_SwapBE32(*ip);
 	}
 	else if (NETgetPacketDir() == PACKET_DECODE)
 	{
-		*ip = ntohl(*store);
+		*ip = SDL_SwapBE32(*store);
 	}
 
 	// Increment the size of the message
@@ -234,11 +226,11 @@ BOOL NETuint32_t(uint32_t *ip)
 	// Convert the integer into the network byte order (big endian)
 	if (NETgetPacketDir() == PACKET_ENCODE)
 	{
-		*store = htonl(*ip);
+		*store = SDL_SwapBE32(*ip);
 	}
 	else if (NETgetPacketDir() == PACKET_DECODE)
 	{
-		*ip = ntohl(*store);
+		*ip = SDL_SwapBE32(*store);
 	}
 
 	// Increment the size of the message
