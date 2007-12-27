@@ -38,28 +38,37 @@
 
 typedef uint8_t element_t;
 
-/* Open definition file and data file; return true if successful. */
+/** Open definition file and data file; return true if successful. */
 bool tagOpenWrite(const char *definition, const char *datafile);
+
+/** Open definition file and data file; return true if successful. */
 bool tagOpenRead(const char *definition, const char *datafile);
 
-/* Clean up and close the tagfile system down. */
+/** Clean up and close the tagfile system down. */
 void tagClose();
 
-/* Report last error, then zeroes the internal error variable. If it
+/** Report last error, then zeroes the internal error variable. If it
  * returns false, there is no error. */
 bool tagGetError();
 
-/* Output a more verbose string about the last error, given by tag_errno. */
+/** 
+ *	Output a more verbose string about the last error, given by tagGetError. 
+ *	@see tagGetError 
+ */
 const char *tagGetErrorString();
 
-/* Built-in unit test */
+/** Built-in unit test. */
 void tagTest(void);
 
 /*** tagWrite ***/
 
-/* Enter, leave and jump to next instance of tags in a group. */
+/** Enter a group given by tag which contains the given number of elements. */
 bool tagWriteEnter(element_t tag, uint16_t elements);
-bool tagWriteLeave(element_t tag); // pass in group we are leaving for error checking
+
+/** Leave the given group. The group is given for consistency checking only. */
+bool tagWriteLeave(element_t tag);
+
+/** Start writing a new instance of a group. */
 bool tagWriteSeparator();
 
 /* Write methods */
@@ -75,10 +84,15 @@ bool tagWriteBool(element_t tag, bool val);
 
 /*** tagread ***/
 
-/* Enter, leave and jump to next instance of tags in a group. */
+/** Enter a group given by tag and return the number of elements in it. */
 uint16_t tagReadEnter(element_t tag);
-void tagReadLeave(element_t tag); // pass in group we are leaving for error checking
-bool tagReadNext(); // false if no more entities to read
+
+/**  Leave the given group. The group is given for consistency checking only. */
+void tagReadLeave(element_t tag);
+
+/** Start reading a new instance of a group. Returns false if no more entities
+ * to read, which can be used for iteration, if desired. */
+bool tagReadNext();
 
 /* Read methods */
 uint32_t tagRead(element_t tag);
