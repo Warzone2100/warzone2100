@@ -14,10 +14,6 @@
 #include <wx/control.h>
 #include <wx/xrc/xmlres.h>
 
-#ifdef __GNUG__
-    #pragma implementation "hyperlink.h"
-#endif
-
 class wxHyperLink: public wxControl
 {
     DECLARE_DYNAMIC_CLASS (wxHyperLink)
