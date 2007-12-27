@@ -89,9 +89,6 @@ static BOOL bHardPath = FALSE;
 static BOOL bSeqSubtitles = TRUE;
 static char aHardPath[MAX_STR_LENGTH];
 static char aVideoName[MAX_STR_LENGTH];
-static char aAudioName[MAX_STR_LENGTH];
-static char aTextName[MAX_STR_LENGTH];
-static char aSubtitleName[MAX_STR_LENGTH];
 static SEQLIST aSeqList[MAX_SEQ_LIST];
 static SDWORD currentSeq = -1;
 static SDWORD currentPlaySeq = -1;
@@ -142,6 +139,7 @@ static void seq_SetVideoPath(void)
 //full screenvideo functions
 static BOOL seq_StartFullScreenVideo(const char* videoName, const char* audioName)
 {
+	const char* aAudioName;
 	bHoldSeqForAudio = FALSE;
 
 	//set a valid video path if there is one
@@ -151,15 +149,13 @@ static BOOL seq_StartFullScreenVideo(const char* videoName, const char* audioNam
 	}
 
 	ASSERT( (strlen(videoName) + strlen(aHardPath))<MAX_STR_LENGTH,"sequence path+name greater than max string" );
-	strlcpy(aVideoName, aHardPath, MAX_STR_LENGTH);
-	strlcat(aVideoName, videoName, MAX_STR_LENGTH);
+	snprintf(aVideoName, sizeof(aVideoName), "%s%s", aHardPath, videoName);
 
 	//set audio path
 	if (audioName != NULL)
 	{
 		ASSERT( strlen(audioName) < MAX_STR_LENGTH, "sequence path+name greater than max string" );
-		strlcpy(aAudioName, "sequenceaudio/", MAX_STR_LENGTH);
-		strlcat(aAudioName, audioName, MAX_STR_LENGTH);
+		sasprintf((char**)&aAudioName, "sequenceaudio/%s", audioName);
 	}
 
 	//start video mode
@@ -169,13 +165,6 @@ static BOOL seq_StartFullScreenVideo(const char* videoName, const char* audioNam
 		loop_SetVideoPlaybackMode();
 		iV_SetFont(font_regular);
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	}
-
-	if (audioName != NULL)
-	{
-		ASSERT( strlen(audioName) < MAX_STR_LENGTH, "sequence path+name greater than max string" );
-		strlcpy(aAudioName, "sequenceaudio/", MAX_STR_LENGTH);
-		strlcat(aAudioName, audioName, MAX_STR_LENGTH);
 	}
 
 	if (!seq_Play(aVideoName))
@@ -193,7 +182,7 @@ static BOOL seq_StartFullScreenVideo(const char* videoName, const char* audioNam
 		bAudioPlaying = audio_PlayStream( aAudioName, AUDIO_VOL_MAX, NULL );
 		ASSERT( bAudioPlaying == TRUE,"seq_StartFullScreenVideo: unable to initialise sound %s",aAudioName );
 	}
-	
+
 	time_started = SDL_GetTicks();
 
 	return TRUE;
@@ -307,7 +296,7 @@ BOOL seq_UpdateFullScreenVideo(int *pbClear)
 
 		}
 	}
-	
+
 	if ((!seq_Playing() && !stillText) || (bHoldSeqForAudio))
 	{
 		if (bAudioPlaying)
@@ -481,13 +470,13 @@ BOOL seq_ClearTextForVideo(void)
 
 static BOOL seq_AddTextFromFile(const char *pTextName, BOOL bJustify)
 {
+	char aTextName[MAX_STR_LENGTH];
 	char *pTextBuffer, *pCurrentLine, *pText;
 	UDWORD fileSize;
 	SDWORD xOffset, yOffset, startFrame, endFrame;
 	const char *seps = "\n";
 
-	strlcpy(aTextName,"sequenceaudio/", MAX_STR_LENGTH);
-	strlcat(aTextName,pTextName, MAX_STR_LENGTH);
+	snprintf(aTextName, sizeof(aTextName), "sequenceaudio/%s", pTextName);
 
 	if (loadFileToBufferNoError(aTextName, fileLoadBuffer, FILE_LOAD_BUFFER_SIZE, &fileSize) == FALSE)  //Did I mention this is lame? -Q
 	{
@@ -561,12 +550,14 @@ void seq_AddSeqToList(const char *pSeqName, const char *pAudioName, const char *
 
 	if (bSeqSubtitles)
 	{
+		char aSubtitleName[MAX_STR_LENGTH];
+
 		//check for a subtitle file
 		strLen = strlen(pSeqName);
 		ASSERT( strLen < MAX_STR_LENGTH,"seq_AddSeqToList: sequence name error" );
-		strlcpy(aSubtitleName,pSeqName, MAX_STR_LENGTH);
+		strlcpy(aSubtitleName, pSeqName, sizeof(aSubtitleName));
 		aSubtitleName[strLen - 4] = 0;
-		strlcat(aSubtitleName,".txt", MAX_STR_LENGTH);
+		strlcat(aSubtitleName, ".txt", sizeof(aSubtitleName));
 		seq_AddTextFromFile(aSubtitleName, TRUE);//SEQ_TEXT_JUSTIFY);//subtitles centre justified
 	}
 }

@@ -870,7 +870,6 @@ void intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 {
 	MESSAGE			*psMessage;
 	UDWORD			currID;//, i;
-//	char aAudioName[MAX_STR_LENGTH];	// made static to reduce stack usage.
 	RESEARCH		*psResearch;
 
 	ASSERT( proxMsg != TRUE,
@@ -1448,7 +1447,7 @@ void setIntelligencePauseState(void)
 void resetIntelligencePauseState(void)
 {
 	if (!bMultiPlayer)
-	{	
+	{
 		//put any widgets back on for the missions
 		resetMissionWidgets();
 		setGameUpdatePause(FALSE);
