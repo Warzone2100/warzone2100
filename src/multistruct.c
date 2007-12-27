@@ -330,23 +330,22 @@ BOOL recvDestroyStructure()
 	STRUCTURE *psStruct;
 
 	NETbeginDecode();
-
 		NETuint32_t(&structID);
-								
-		// Struct to destory
-		psStruct = IdToStruct(structID,ANYPLAYER);
-	
-		if (psStruct)
-		{
-			turnOffMultiMsg(TRUE);
-			// Remove the struct from remote players machine
-			destroyStruct(psStruct);
-			turnOffMultiMsg(FALSE);
-			// NOTE: I do not think this should be here!
-			technologyGiveAway(psStruct);
-		}
-	
 	NETend();
+								
+	// Struct to destory
+	psStruct = IdToStruct(structID,ANYPLAYER);
+
+	if (psStruct)
+	{
+		turnOffMultiMsg(TRUE);
+		// Remove the struct from remote players machine
+		destroyStruct(psStruct);
+		turnOffMultiMsg(FALSE);
+		// NOTE: I do not think this should be here!
+		technologyGiveAway(psStruct);
+	}
+	
 	return TRUE;
 }
 
