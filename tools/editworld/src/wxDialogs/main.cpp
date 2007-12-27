@@ -55,4 +55,4 @@ class EditWorldApp : public wxApp
         }
 };
 
-IMPLEMENT_APP(wxApp);
+IMPLEMENT_APP(EditWorldApp);
