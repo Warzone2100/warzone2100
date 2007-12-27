@@ -156,12 +156,15 @@
 		<Unit filename="limitsdialog.cpp" />
 		<Unit filename="limitsdialog.hpp" />
 		<Unit filename="limitsdialog.xrc" />
+		<Unit filename="listctrlval.hpp" />
 		<Unit filename="macros.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="mainfrm.cpp" />
 		<Unit filename="mainfrm.h" />
 		<Unit filename="mapprefs.cpp" />
 		<Unit filename="mapprefs.h" />
+		<Unit filename="numtextval.cpp" />
+		<Unit filename="numtextval.hpp" />
 		<Unit filename="objectproperties.cpp" />
 		<Unit filename="objectproperties.h" />
 		<Unit filename="pasteprefs.cpp" />
@@ -193,6 +196,7 @@
 		<Unit filename="winstuff.h" />
 		<Unit filename="wx\hyperlink.cpp" />
 		<Unit filename="wx\hyperlink.h" />
+		<Unit filename="wxstringconv.hpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />
