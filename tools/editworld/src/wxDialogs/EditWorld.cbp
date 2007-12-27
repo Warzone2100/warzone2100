@@ -74,7 +74,7 @@
 			<Add option="-D_MBCS" />
 			<Add directory="$(#wx)\include" />
 			<Add directory="$(#wx)\contrib\include" />
-			<Add directory="C:\boost_1_33_1" />
+			<Add directory="$(#boost)" />
 		</Compiler>
 		<ResourceCompiler>
 			<Add directory="$(#wx)\include" />
