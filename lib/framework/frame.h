@@ -148,7 +148,7 @@ static inline void endian_uword(UWORD *uword) {
   ptr[1] = tmp;
 }
 #else
-# define endian_uword(x)
+# define endian_uword(x) ((void) (x))
 #endif
 
 #ifdef __BIG_ENDIAN__
@@ -161,7 +161,7 @@ static inline void endian_sword(SWORD *sword) {
   ptr[1] = tmp;
 }
 #else
-# define endian_sword(x)
+# define endian_sword(x) ((void) (x))
 #endif
 
 #ifdef __BIG_ENDIAN__
@@ -177,7 +177,7 @@ static inline void endian_udword(UDWORD *udword) {
   ptr[2] = tmp;
 }
 #else
-# define endian_udword(x)
+# define endian_udword(x) ((void) (x))
 #endif
 
 #ifdef __BIG_ENDIAN__
@@ -193,7 +193,7 @@ static inline void endian_sdword(SDWORD *sdword) {
   ptr[2] = tmp;
 }
 #else
-# define endian_sdword(x)
+# define endian_sdword(x) ((void) (x))
 #endif
 
 #ifdef __BIG_ENDIAN__
@@ -209,7 +209,7 @@ static inline void endian_fract(float *fract) {
   ptr[2] = ptr[1];
 }
 #else
-# define endian_fract(x)
+# define endian_fract(x) ((void) (x))
 #endif
 
 void setupExceptionHandler(const char * programCommand);

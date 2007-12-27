@@ -6113,7 +6113,7 @@ BOOL loadSaveDroidV11(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 		/* DROID_SAVE_V11 includes OBJECT_SAVE_V19, SAVE_WEAPON_V19 */
 		endian_udword(&psSaveDroid->body);
 		endian_udword(&psSaveDroid->numWeaps);
-		endian_udword(&psSaveDroid->experience);
+		endian_udword(&psSaveDroid->numKills);
 		endian_uword(&psSaveDroid->turretRotation);
 		endian_uword(&psSaveDroid->turretPitch);
 		/* OBJECT_SAVE_V19 */
@@ -6268,7 +6268,7 @@ BOOL loadSaveDroidV19(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 		endian_udword(&psSaveDroid->body);
 		endian_udword(&psSaveDroid->saveType);
 		endian_udword(&psSaveDroid->numWeaps);
-		endian_udword(&psSaveDroid->experience);
+		endian_udword(&psSaveDroid->numKills);
 		/* OBJECT_SAVE_V19 */
 		endian_udword(&psSaveDroid->id);
 		endian_udword(&psSaveDroid->x);
@@ -6401,7 +6401,7 @@ BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
 		endian_udword(&psSaveDroid->body);
 		endian_udword(&psSaveDroid->saveType);
 		endian_udword(&psSaveDroid->numWeaps);
-		endian_udword(&psSaveDroid->experience);
+		endian_udword(&psSaveDroid->numKills);
 		//Watermelon:'hack' to make it read turretRotation,Pitch table properly
 		if( version == CURRENT_VERSION_NUM )
 		{
@@ -6808,7 +6808,7 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 				endian_udword(&psSaveDroid->asWeaps[i].ammo);
 				endian_udword(&psSaveDroid->asWeaps[i].lastFired);
 			}
-			endian_udword(&psSaveDroid->experience);
+			endian_udword(&psSaveDroid->numKills);
 			//Watermelon:endian_udword for new save format
 			for(i = 0;i < psSaveDroid->numWeaps;i++)
 			{

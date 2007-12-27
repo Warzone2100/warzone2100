@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		020A7E670D246D2B009C29F5 /* sequence.c in Sources */ = {isa = PBXBuildFile; fileRef = 020A7E660D246D2B009C29F5 /* sequence.c */; };
 		0223BBAF0CFE3C380056EF85 /* main.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 0223BBAC0CFE3C380056EF85 /* main.h */; };
 		0223BBB00CFE3C380056EF85 /* version.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBAD0CFE3C380056EF85 /* version.c */; };
 		0223BBB10CFE3C380056EF85 /* version.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 0223BBAE0CFE3C380056EF85 /* version.h */; };
@@ -209,10 +210,6 @@
 		0246A1540BD3CC71004D1C70 /* script_parser.y in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1480BD3CC71004D1C70 /* script_parser.y */; };
 		0246A1550BD3CC71004D1C70 /* script.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1490BD3CC71004D1C70 /* script.c */; };
 		0246A1560BD3CC71004D1C70 /* stack.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A14B0BD3CC71004D1C70 /* stack.c */; };
-		0246A1600BD3CC8A004D1C70 /* adpcm.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1580BD3CC8A004D1C70 /* adpcm.c */; };
-		0246A1610BD3CC8A004D1C70 /* dec130.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A15A0BD3CC8A004D1C70 /* dec130.c */; };
-		0246A1620BD3CC8A004D1C70 /* rpl_reader.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A15B0BD3CC8A004D1C70 /* rpl_reader.c */; };
-		0246A1630BD3CC8A004D1C70 /* sequence_stub.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A15D0BD3CC8A004D1C70 /* sequence_stub.c */; };
 		0246A1730BD3CCA6004D1C70 /* audio_id.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1660BD3CCA6004D1C70 /* audio_id.c */; };
 		0246A1740BD3CCA6004D1C70 /* audio.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1680BD3CCA6004D1C70 /* audio.c */; };
 		0246A1750BD3CCA6004D1C70 /* cdaudio.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A16A0BD3CCA6004D1C70 /* cdaudio.c */; };
@@ -306,7 +303,6 @@
 		0246A2DD0BD3CCDC004D1C70 /* objects.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2460BD3CCDB004D1C70 /* objects.c */; };
 		0246A2DE0BD3CCDC004D1C70 /* objmem.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2480BD3CCDB004D1C70 /* objmem.c */; };
 		0246A2DF0BD3CCDC004D1C70 /* oprint.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A24A0BD3CCDB004D1C70 /* oprint.c */; };
-		0246A2E00BD3CCDC004D1C70 /* optimisepath.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A24C0BD3CCDB004D1C70 /* optimisepath.c */; };
 		0246A2E10BD3CCDC004D1C70 /* order.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A24E0BD3CCDB004D1C70 /* order.c */; };
 		0246A2E30BD3CCDC004D1C70 /* power.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2530BD3CCDB004D1C70 /* power.c */; };
 		0246A2E40BD3CCDC004D1C70 /* projectile.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2550BD3CCDB004D1C70 /* projectile.c */; };
@@ -638,7 +634,6 @@
 		02DDA8D10BD3C3600049AB60 /* unix.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8CF0BD3C3600049AB60 /* unix.c */; };
 		02DDA8D40BD3C3820049AB60 /* Zlib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02356D830BD3BB4100E9A019 /* Zlib.framework */; };
 		02DDA8E10BD3C3CC0049AB60 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA8E00BD3C3CC0049AB60 /* IOKit.framework */; };
-		02F1E2810C42007C007CE4B6 /* dec130.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02F1E2800C42007C007CE4B6 /* dec130.h */; };
 		02F5CC570D1490620000A2D0 /* database.c in Sources */ = {isa = PBXBuildFile; fileRef = 02F5CC560D1490620000A2D0 /* database.c */; };
 		02F5CC890D1496580000A2D0 /* findme.c in Sources */ = {isa = PBXBuildFile; fileRef = 02F5CC800D1496580000A2D0 /* findme.c */; };
 		02F5CC8A0D1496580000A2D0 /* findme.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F5CC810D1496580000A2D0 /* findme.h */; };
@@ -815,7 +810,6 @@
 				02581C860BD5AD1100957CBC /* SDL_net.framework in Copy frameworks */,
 				02581C870BD5AD1100957CBC /* Vorbis.framework in Copy frameworks */,
 				02581C880BD5AD1100957CBC /* Zlib.framework in Copy frameworks */,
-				02F1E2810C42007C007CE4B6 /* dec130.h in Copy frameworks */,
 				02CBED8D0C5B8BEB00316CE2 /* nettypes.h in Copy frameworks */,
 				0223BBAF0CFE3C380056EF85 /* main.h in Copy frameworks */,
 				0223BBB10CFE3C380056EF85 /* version.h in Copy frameworks */,
@@ -833,6 +827,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		020A7E660D246D2B009C29F5 /* sequence.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = sequence.c; path = ../lib/sequence/sequence.c; sourceTree = SOURCE_ROOT; };
 		0223BBAC0CFE3C380056EF85 /* main.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = main.h; path = ../src/main.h; sourceTree = SOURCE_ROOT; };
 		0223BBAD0CFE3C380056EF85 /* version.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = version.c; path = ../src/version.c; sourceTree = SOURCE_ROOT; };
 		0223BBAE0CFE3C380056EF85 /* version.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = version.h; path = ../src/version.h; sourceTree = SOURCE_ROOT; };
@@ -1100,12 +1095,6 @@
 		0246A14A0BD3CC71004D1C70 /* script.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = script.h; path = ../lib/script/script.h; sourceTree = SOURCE_ROOT; };
 		0246A14B0BD3CC71004D1C70 /* stack.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = stack.c; path = ../lib/script/stack.c; sourceTree = SOURCE_ROOT; };
 		0246A14C0BD3CC71004D1C70 /* stack.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = stack.h; path = ../lib/script/stack.h; sourceTree = SOURCE_ROOT; };
-		0246A1580BD3CC8A004D1C70 /* adpcm.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = adpcm.c; path = ../lib/sequence/adpcm.c; sourceTree = SOURCE_ROOT; };
-		0246A1590BD3CC8A004D1C70 /* adpcm.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = adpcm.h; path = ../lib/sequence/adpcm.h; sourceTree = SOURCE_ROOT; };
-		0246A15A0BD3CC8A004D1C70 /* dec130.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = dec130.c; path = ../lib/sequence/dec130.c; sourceTree = SOURCE_ROOT; };
-		0246A15B0BD3CC8A004D1C70 /* rpl_reader.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = rpl_reader.c; path = ../lib/sequence/rpl_reader.c; sourceTree = SOURCE_ROOT; };
-		0246A15C0BD3CC8A004D1C70 /* rpl_reader.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = rpl_reader.h; path = ../lib/sequence/rpl_reader.h; sourceTree = SOURCE_ROOT; };
-		0246A15D0BD3CC8A004D1C70 /* sequence_stub.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = sequence_stub.c; path = ../lib/sequence/sequence_stub.c; sourceTree = SOURCE_ROOT; };
 		0246A15E0BD3CC8A004D1C70 /* sequence.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = sequence.h; path = ../lib/sequence/sequence.h; sourceTree = SOURCE_ROOT; };
 		0246A1650BD3CCA6004D1C70 /* aud.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = aud.h; path = ../lib/sound/aud.h; sourceTree = SOURCE_ROOT; };
 		0246A1660BD3CCA6004D1C70 /* audio_id.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = audio_id.c; path = ../lib/sound/audio_id.c; sourceTree = SOURCE_ROOT; };
@@ -1310,8 +1299,6 @@
 		0246A2490BD3CCDB004D1C70 /* objmem.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = objmem.h; path = ../src/objmem.h; sourceTree = SOURCE_ROOT; };
 		0246A24A0BD3CCDB004D1C70 /* oprint.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = oprint.c; path = ../src/oprint.c; sourceTree = SOURCE_ROOT; };
 		0246A24B0BD3CCDB004D1C70 /* oprint.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = oprint.h; path = ../src/oprint.h; sourceTree = SOURCE_ROOT; };
-		0246A24C0BD3CCDB004D1C70 /* optimisepath.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = optimisepath.c; path = ../src/optimisepath.c; sourceTree = SOURCE_ROOT; };
-		0246A24D0BD3CCDB004D1C70 /* optimisepath.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = optimisepath.h; path = ../src/optimisepath.h; sourceTree = SOURCE_ROOT; };
 		0246A24E0BD3CCDB004D1C70 /* order.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = order.c; path = ../src/order.c; sourceTree = SOURCE_ROOT; };
 		0246A24F0BD3CCDB004D1C70 /* order.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = order.h; path = ../src/order.h; sourceTree = SOURCE_ROOT; };
 		0246A2500BD3CCDB004D1C70 /* orderdef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = orderdef.h; path = ../src/orderdef.h; sourceTree = SOURCE_ROOT; };
@@ -1652,7 +1639,6 @@
 		02DDA8CF0BD3C3600049AB60 /* unix.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = unix.c; path = external/physfs/platform/unix.c; sourceTree = "<group>"; };
 		02DDA8E00BD3C3CC0049AB60 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		02EA22450CFE494000EA65A0 /* libfontconfig.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; name = libfontconfig.dylib; path = /Developer/SDKs/MacOSX10.4u.sdk/usr/X11R6/lib/libfontconfig.dylib; sourceTree = "<absolute>"; };
-		02F1E2800C42007C007CE4B6 /* dec130.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = dec130.h; path = ../lib/sequence/dec130.h; sourceTree = SOURCE_ROOT; };
 		02F5CC560D1490620000A2D0 /* database.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = database.c; path = external/quesoglc/src/database.c; sourceTree = "<group>"; };
 		02F5CC6D0D1494AA0000A2D0 /* Popt.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Popt.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		02F5CC6E0D1494AA0000A2D0 /* Popt-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Popt-Info.plist"; sourceTree = "<group>"; };
@@ -2143,13 +2129,7 @@
 		0246A1570BD3CC78004D1C70 /* Sequence */ = {
 			isa = PBXGroup;
 			children = (
-				02F1E2800C42007C007CE4B6 /* dec130.h */,
-				0246A1580BD3CC8A004D1C70 /* adpcm.c */,
-				0246A1590BD3CC8A004D1C70 /* adpcm.h */,
-				0246A15A0BD3CC8A004D1C70 /* dec130.c */,
-				0246A15B0BD3CC8A004D1C70 /* rpl_reader.c */,
-				0246A15C0BD3CC8A004D1C70 /* rpl_reader.h */,
-				0246A15D0BD3CC8A004D1C70 /* sequence_stub.c */,
+				020A7E660D246D2B009C29F5 /* sequence.c */,
 				0246A15E0BD3CC8A004D1C70 /* sequence.h */,
 			);
 			name = Sequence;
@@ -2383,8 +2363,6 @@
 				0246A2490BD3CCDB004D1C70 /* objmem.h */,
 				0246A24A0BD3CCDB004D1C70 /* oprint.c */,
 				0246A24B0BD3CCDB004D1C70 /* oprint.h */,
-				0246A24C0BD3CCDB004D1C70 /* optimisepath.c */,
-				0246A24D0BD3CCDB004D1C70 /* optimisepath.h */,
 				0246A24E0BD3CCDB004D1C70 /* order.c */,
 				0246A24F0BD3CCDB004D1C70 /* order.h */,
 				0246A2500BD3CCDB004D1C70 /* orderdef.h */,
@@ -3811,10 +3789,6 @@
 				0246A1530BD3CC71004D1C70 /* script_lexer.l in Sources */,
 				0246A1550BD3CC71004D1C70 /* script.c in Sources */,
 				0246A1560BD3CC71004D1C70 /* stack.c in Sources */,
-				0246A1600BD3CC8A004D1C70 /* adpcm.c in Sources */,
-				0246A1610BD3CC8A004D1C70 /* dec130.c in Sources */,
-				0246A1620BD3CC8A004D1C70 /* rpl_reader.c in Sources */,
-				0246A1630BD3CC8A004D1C70 /* sequence_stub.c in Sources */,
 				0246A1730BD3CCA6004D1C70 /* audio_id.c in Sources */,
 				0246A1740BD3CCA6004D1C70 /* audio.c in Sources */,
 				0246A1750BD3CCA6004D1C70 /* cdaudio.c in Sources */,
@@ -3908,7 +3882,6 @@
 				0246A2DD0BD3CCDC004D1C70 /* objects.c in Sources */,
 				0246A2DE0BD3CCDC004D1C70 /* objmem.c in Sources */,
 				0246A2DF0BD3CCDC004D1C70 /* oprint.c in Sources */,
-				0246A2E00BD3CCDC004D1C70 /* optimisepath.c in Sources */,
 				0246A2E10BD3CCDC004D1C70 /* order.c in Sources */,
 				0246A2E30BD3CCDC004D1C70 /* power.c in Sources */,
 				0246A2E40BD3CCDC004D1C70 /* projectile.c in Sources */,
@@ -3945,6 +3918,7 @@
 				0223BBBE0CFE3CD60056EF85 /* strnlen1.c in Sources */,
 				0223BBC00CFE3CD60056EF85 /* tagfile.c in Sources */,
 				02CDDD1C0D159E2F00722688 /* openal_error.c in Sources */,
+				020A7E670D246D2B009C29F5 /* sequence.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

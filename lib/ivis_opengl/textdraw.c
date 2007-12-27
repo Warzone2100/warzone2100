@@ -107,7 +107,12 @@ static void iV_initializeGLC()
 	glcContext(GLC_Context);
 
 	glcDisable(GLC_AUTO_FONT);
+#ifdef WZ_OS_MAC
+#warning Mac version still uses GLC_TRIANGE instead of GLC_TEXTURE
+        glcRenderStyle(GLC_TRIANGLE);
+#else
 	glcRenderStyle(GLC_TEXTURE);
+#endif
 
 	GLC_Font_Regular = glcGenFontID();
 	GLC_Font_Bold = glcGenFontID();
