@@ -39,9 +39,7 @@
             <object class="sizeritem">
                 <object class="wxStdDialogButtonSizer">
                     <object class="button">
-                        <object class="wxButton" name="wxID_OK">
-                            <label></label>
-                        </object>
+                        <object class="wxButton" name="wxID_OK" />
                     </object>
                 </object>
                 <flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>

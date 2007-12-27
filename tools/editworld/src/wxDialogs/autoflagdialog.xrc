@@ -111,9 +111,7 @@
             <object class="sizeritem">
                 <object class="wxStdDialogButtonSizer">
                     <object class="button">
-                        <object class="wxButton" name="wxID_OK">
-                            <default>1</default>
-                        </object>
+                        <object class="wxButton" name="wxID_OK" />
                     </object>
                     <object class="button">
                         <object class="wxButton" name="wxID_CANCEL" />
