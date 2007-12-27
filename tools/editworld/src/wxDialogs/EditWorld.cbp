@@ -200,6 +200,16 @@
 		<Extensions>
 			<code_completion />
 			<debugger />
+			<wxsmith version="1">
+				<resources>
+					<wxDialog wxs="wxsmith/aboutdialog.wxs" src="aboutdialog.cpp" hdr="aboutdialog.hpp" xrc="aboutdialog.xrc" name="AboutDialog" language="CPP" />
+					<wxDialog wxs="wxsmith/autoflagdialog.wxs" src="autoflagdialog.cpp" hdr="autoflagdialog.hpp" xrc="autoflagdialog.xrc" name="AutoFlagDialog" language="CPP" />
+					<wxDialog wxs="wxsmith/infodialog.wxs" src="infodialog.cpp" hdr="infodialog.hpp" xrc="infodialog.xrc" name="InfoDialog" language="CPP" />
+					<wxDialog wxs="wxsmith/initiallimitsdialog.wxs" src="initiallimitsdialog.cpp" hdr="initiallimitsdialog.hpp" xrc="initiallimitsdialog.xrc" name="InitialLimitsDialog" language="CPP" />
+					<wxDialog wxs="wxsmith/limitsdialog.wxs" src="limitsdialog.cpp" hdr="limitsdialog.hpp" xrc="limitsdialog.xrc" name="LimitsDialog" language="CPP" />
+					<wxDialog wxs="wxsmith/savesegmentdialog.wxs" src="savesegmentdialog.cpp" hdr="savesegmentdialog.hpp" xrc="savesegmentdialog.xrc" name="SaveSegmentDialog" language="CPP" />
+				</resources>
+			</wxsmith>
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>
