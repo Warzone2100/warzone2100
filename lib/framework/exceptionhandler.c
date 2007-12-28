@@ -53,7 +53,7 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 
 		if (miniDumpFile != INVALID_HANDLE_VALUE)
 		{
-			MINIDUMP_USER_STREAM uStream = { LastReservedStream+1, strlen(VERSION), VERSION };
+			MINIDUMP_USER_STREAM uStream = { LastReservedStream+1, strlen(PACKAGE_VERSION), PACKAGE_VERSION };
 			MINIDUMP_USER_STREAM_INFORMATION uInfo = { 1, &uStream };
 			MINIDUMP_EXCEPTION_INFORMATION eInfo = { GetCurrentThreadId(), pExceptionInfo, FALSE };
 
@@ -74,13 +74,18 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 				sprintf( resultMessage, "Failed to save dump file to '%s' (error %d)", miniDumpPath, GetLastError() );
 				MessageBoxA( NULL, resultMessage, applicationName, MB_OK );
 			}
+
 			CloseHandle(miniDumpFile);
 		}
 		else
 		{
-			sprintf( resultMessage, "Failed to create dump file '%s' (error %d)", miniDumpPath, GetLastError() );
-			MessageBoxA( NULL, resultMessage, applicationName, MB_OK );
+			snprintf(resultMessage, sizeof(resultMessage), "Failed to create dump file '%s' (error %d)", miniDumpPath, (int)GetLastError());
 		}
+
+		// Guarantee to nul-terminate
+		resultMessage[sizeof(resultMessage) - 1] = '\0';
+
+		MessageBoxA( NULL, resultMessage, applicationName, MB_OK );
 	}
 
 	return EXCEPTION_CONTINUE_SEARCH;
@@ -401,7 +406,11 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, void * sigcon
 	write(dumpFile, "\n", 1);
 
 	write(dumpFile, "Version: ", strlen("Version: "));
-	write(dumpFile, VERSION, strlen(VERSION));
+	write(dumpFile, PACKAGE_VERSION, strlen(PACKAGE_VERSION));
+	write(dumpFile, "\n", 1);
+
+	write(dumpFile, "Distributor: ", strlen("Distributor:: "));
+	write(dumpFile, PACKAGE_DISTRIBUTOR, strlen(PACKAGE_DISTRIBUTOR));
 	write(dumpFile, "\n", 1);
 
 # if defined(DEBUG)
@@ -412,6 +421,17 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, void * sigcon
 
 	write(dumpFile, "Compiled on: ", strlen("Compiled on: "));
 	write(dumpFile, __DATE__, strlen(__DATE__));
+	write(dumpFile, "\n", 1);
+
+	write(dumpFile, "Compiled by: ", strlen("Compiled by: "));
+# if defined(__GNUC__) && !defined(__INTEL_COMPILER)
+	write(dumpFile, "GCC " __VERSION__, strlen("GCC " __VERSION__));
+# elif defined(__INTEL_COMPILER)
+	// Intel includes the compiler name within the version string
+	write(dumpFile, __VERSION__, strlen(__VERSION__));
+# else
+	write(dumpFile, "UNKNOWN", strlen("UNKNOWN"));
+# endif
 	write(dumpFile, "\n", 1);
 
 	write(dumpFile, "Executed on: ", strlen("Executed on: "));

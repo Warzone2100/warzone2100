@@ -76,6 +76,15 @@ AC_MSG_CHECKING([whether to build NSIS installer])
 AC_MSG_RESULT([$enable_installer])
 
 
+AC_ARG_WITH(distributor,
+	AS_HELP_STRING([--with-distributor],[Name of distributor compiling this package]))
+if test "x$with_distributor" = "x" ; then
+	AC_DEFINE([PACKAGE_DISTRIBUTOR], "UNKNOWN", [Name of distributor compiling this package])
+else
+	AC_DEFINE_UNQUOTED([PACKAGE_DISTRIBUTOR], ["${with_distributor}"], [Name of distributor compiling this package])
+fi
+
+
 AC_ARG_WITH(makensis,
 	AS_HELP_STRING([--with-makensis],[Path to makensis]))
 
@@ -329,16 +338,21 @@ AC_CONFIG_FILES([Makefile
 		src/Makefile])
 AC_OUTPUT
 
-echo ""
-echo "Warzone 2100 will compile with the following components:"
-echo ""
-echo " OpenGL acceleration:   $enable_opengl"
-echo " OpenAL sound system:   $enable_openal"
-echo " MP3 music support:     $enable_mp3"
-echo " OGG music support:     $enable_ogg"
-echo ""
+AC_MSG_NOTICE()
+AC_MSG_NOTICE([Warzone 2100 will compile with the following components:])
+AC_MSG_NOTICE()
+AC_MSG_NOTICE([  OpenGL acceleration:   $enable_opengl])
+AC_MSG_NOTICE([  OpenAL sound system:   $enable_openal])
+AC_MSG_NOTICE([  MP3 music support:     $enable_mp3])
+AC_MSG_NOTICE([  OGG music support:     $enable_ogg])
 
 if test "x$enable_debug" = xyes; then
-	echo " *** Running in debug mode! ***"
-	echo ""
+	AC_MSG_NOTICE()
+	AC_MSG_NOTICE([*** Running in debug mode! ***])
+fi
+
+if test "x$with_distributor" = "x" ; then
+	AC_MSG_NOTICE()
+	AC_MSG_WARN([Distributor unknown!])
+	AC_MSG_NOTICE([Use --with-distributor when compiling package for distribution])
 fi
