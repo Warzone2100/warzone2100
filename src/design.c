@@ -810,7 +810,7 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	sLabInit.id = IDDES_TEMPPOWERLAB;
 	sLabInit.x = DES_POWERX;
 	sLabInit.y = DES_POWERY;
-	sLabInit.pTip = _("Total Power Requibyte.r");
+	sLabInit.pTip = _("Total Power Required");
 	sLabInit.pDisplay = intDisplayImage;
 	sLabInit.UserData = IMAGE_DES_POWER;
 	if (!widgAddLabel(psWScreen, &sLabInit))
@@ -830,7 +830,7 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 					iV_GetImageWidth(IntImages,IMAGE_DES_BODYPOINTS));
 	sBarInit.height = iV_GetImageHeight(IntImages,IMAGE_DES_POWERBACK);
 	sBarInit.pDisplay = intDisplayDesignPowerBar;//intDisplayStatsBar;
-	sBarInit.pTip = _("Total Power Requibyte.r");
+	sBarInit.pTip = _("Total Power Required");
 	sBarInit.iRange = DBAR_TEMPLATEMAXPOWER;//WBAR_SCALE;
 	if (!widgAddBarGraph(psWScreen, &sBarInit))
 	{
