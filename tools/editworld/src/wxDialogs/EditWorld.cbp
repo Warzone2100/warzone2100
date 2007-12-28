@@ -209,7 +209,7 @@
 					<wxDialog wxs="wxsmith/infodialog.wxs" src="infodialog.cpp" hdr="infodialog.hpp" xrc="infodialog.xrc" name="InfoDialog" language="CPP" />
 					<wxDialog wxs="wxsmith/initiallimitsdialog.wxs" src="initiallimitsdialog.cpp" hdr="initiallimitsdialog.hpp" xrc="initiallimitsdialog.xrc" name="InitialLimitsDialog" language="CPP" />
 					<wxDialog wxs="wxsmith/limitsdialog.wxs" src="limitsdialog.cpp" hdr="limitsdialog.hpp" xrc="limitsdialog.xrc" name="LimitsDialog" language="CPP" />
-					<wxFrame wxs="wxsmith/mainframe.wxs" src="mainframe.cpp" hdr="mainframe.hpp" name="MainFrame" language="CPP" />
+					<wxFrame wxs="wxsmith/mainframe.wxs" src="mainframe.cpp" hdr="mainframe.hpp" xrc="mainframe.xrc" name="MainFrame" language="CPP" />
 					<wxDialog wxs="wxsmith/savesegmentdialog.wxs" src="savesegmentdialog.cpp" hdr="savesegmentdialog.hpp" xrc="savesegmentdialog.xrc" name="SaveSegmentDialog" language="CPP" />
 				</resources>
 			</wxsmith>
