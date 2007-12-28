@@ -25,7 +25,7 @@
 //
 
 #include "stdafx.h"
-#include "mainfrm.h"
+#include "mainframe.h"
 #include "btedit.h"
 
 #include "bteditdoc.h"

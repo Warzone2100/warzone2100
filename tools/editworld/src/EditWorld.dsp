@@ -190,7 +190,7 @@ SOURCE=.\limitsdialog.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\mainfrm.cpp
+SOURCE=.\mainframe.cpp
 # End Source File
 # Begin Source File
 
@@ -362,7 +362,7 @@ SOURCE=.\macros.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\mainfrm.h
+SOURCE=.\mainframe.h
 # End Source File
 # Begin Source File
 

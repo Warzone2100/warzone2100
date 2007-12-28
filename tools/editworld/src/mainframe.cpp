@@ -27,7 +27,7 @@
 #include "stdafx.h"
 #include "btedit.h"
 
-#include "mainfrm.h"
+#include "mainframe.h"
 #include "bteditdoc.h"
 #include "bteditview.h"
 //#include "dbview.h"

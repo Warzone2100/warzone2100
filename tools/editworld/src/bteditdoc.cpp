@@ -27,7 +27,7 @@
 #include "stdafx.h"
 #include "btedit.h"
 #include "grdland.h"
-#include "mainfrm.h"
+#include "mainframe.h"
 #include "bteditdoc.h"
 #include "mapprefs.h"
 #include "textureprefs.h"

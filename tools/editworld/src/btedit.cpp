@@ -28,7 +28,7 @@
 #include "btedit.h"
 #include "aboutdialog.hpp"
 
-#include "mainfrm.h"
+#include "mainframe.h"
 #include "bteditdoc.h"
 #include "bteditview.h"
 //#include "debugwin.h"

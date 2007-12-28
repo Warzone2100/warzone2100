@@ -161,8 +161,7 @@
 		<Unit filename="main.cpp" />
 		<Unit filename="mainframe.cpp" />
 		<Unit filename="mainframe.hpp" />
-		<Unit filename="mainfrm.cpp" />
-		<Unit filename="mainfrm.h" />
+		<Unit filename="mainframe.xrc" />
 		<Unit filename="mapprefs.cpp" />
 		<Unit filename="mapprefs.h" />
 		<Unit filename="numtextval.cpp" />
