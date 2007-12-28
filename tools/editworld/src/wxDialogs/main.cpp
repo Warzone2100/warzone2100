@@ -33,6 +33,7 @@
 #endif
 
 #include "wx/hyperlink.h"
+#include "mainframe.hpp"
 
 class EditWorldApp : public wxApp
 {
@@ -49,7 +50,13 @@ class EditWorldApp : public wxApp
 
             bool wxsOK = true;
 
-            /// @todo construct our main window/frame here and show it
+            if (wxsOK)
+            {
+                // Constructing and showing our main window/frame
+                MainFrame* frame = new MainFrame;
+                frame->Show();
+                SetTopWindow(frame);
+            }
 
             return wxsOK;
         }

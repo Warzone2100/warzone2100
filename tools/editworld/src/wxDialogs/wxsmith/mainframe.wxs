@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxFrame" name="MainFrame">
+		<size>716,488</size>
+		<id_arg>0</id_arg>
+		<object class="wxToolBar" name="ID_TOOLBAR_MAIN" variable="Main_ToolBar" member="no">
+			<object class="tool" name="ID_TOOLBARITEM_NEW" variable="ToolBarItem1" member="no">
+				<label>New file</label>
+				<bitmap stock_id="wxART_NEW" />
+			</object>
+			<object class="tool" name="ID_TOOLBARITEM_OPEN" variable="ToolBarItem2" member="no">
+				<label>Open file</label>
+				<bitmap stock_id="wxART_FILE_OPEN" />
+			</object>
+			<object class="tool" name="ID_TOOLBARITEM_SAVE" variable="ToolBarItem3" member="no">
+				<label>Save file</label>
+				<bitmap stock_id="wxART_FILE_SAVE" />
+			</object>
+			<object class="separator" />
+			<object class="tool" name="ID_TOOLBARITEM_UNDO" variable="ToolBarItem4" member="no">
+				<label>Undo</label>
+				<bitmap stock_id="wxART_UNDO" />
+			</object>
+			<object class="tool" name="ID_TOOLBARITEM_REDO" variable="ToolBarItem5" member="no">
+				<label>Redo</label>
+				<bitmap stock_id="wxART_REDO" />
+			</object>
+			<object class="separator" />
+			<object class="tool" name="ID_TOOLBARITEM_POINT" variable="ToolBarItem6" member="no">
+				<label>Point</label>
+			</object>
+			<object class="tool" name="ID_TOOLBARITEM_MOVE" variable="ToolBarItem7" member="no">
+				<label>Move</label>
+			</object>
+			<object class="tool" name="ID_TOOLBARITEM_OBJECTROTATE" variable="ToolBarItem8" member="no">
+				<label>Rotate Object</label>
+			</object>
+			<object class="separator" />
+			<object class="tool" name="ID_TOOLBARITEM_DRAW_GET" variable="ToolBarItem9" member="no">
+				<label>Get</label>
+			</object>
+			<object class="tool" name="ID_TOOLBARITEM_DRAW_PAINT" variable="ToolBarItem10" member="no">
+				<label>Paint</label>
+			</object>
+			<object class="tool" name="ID_TOOLBARITEM_DRAW_FILL" variable="ToolBarItem11" member="no">
+				<label>Fill</label>
+			</object>
+			<object class="tool" name="ID_TOOLBARITEM_DRAW_EDGEPAINT" variable="ToolBarItem12" member="no">
+				<label>Edge Paint</label>
+			</object>
+			<object class="tool" name="ID_TOOLBARITEM_DRAWBRUSHFILL" variable="ToolBarItem13" member="no">
+				<label>Brush Fill</label>
+			</object>
+			<object class="tool" name="ID_TOOLBARITEM_GATEWAY" variable="ToolBarItem14" member="no">
+				<label>Gateway</label>
+			</object>
+			<object class="separator" />
+			<object class="tool" name="ID_TOOLBARITEM_HEIGHT_TILEMODE" variable="ToolBarItem15" member="no">
+				<label>Tilemode</label>
+			</object>
+			<object class="tool" name="ID_TOOLBARITEM_HEIGHT_VERTEXMODE" variable="ToolBarItem16" member="no">
+				<label>Vertexmode</label>
+			</object>
+			<object class="tool" name="ID_TOOLBARITEM_HEIGHT_PICK" variable="ToolBarItem17" member="no">
+				<label>Pick</label>
+			</object>
+			<object class="tool" name="ID_TOOLBARITEM_HEIGHT_PAINT" variable="ToolBarItem18" member="no">
+				<label>Paint</label>
+			</object>
+			<object class="tool" name="ID_TOOLBARITEM_PAINTATSEALEVEL" variable="ToolBarItem19" member="no">
+				<label>Paint at sealevel</label>
+			</object>
+			<object class="tool" name="ID_TOOLBARITEM_HEIGHT_DRAG" variable="ToolBarItem20" member="no">
+				<label>Drag</label>
+			</object>
+			<object class="separator" />
+			<object class="tool" name="ID_TOOLBARITEM_MARKRECT" variable="ToolBarItem21" member="no">
+				<label>Mark rect</label>
+			</object>
+			<object class="tool" name="ID_TOOLBARITEM_XFLIPMARKED" variable="ToolBarItem22" member="no">
+				<label>X Flip Marked</label>
+			</object>
+			<object class="tool" name="ID_TOOLBARITEM_YFLIPMARKED" variable="ToolBarItem23" member="no">
+				<label>Y Flip Marked</label>
+			</object>
+			<object class="tool" name="ID_TOOLBARITEM_COPYMARKED" variable="ToolBarItem24" member="no">
+				<label>Copy Marked</label>
+				<bitmap stock_id="wxART_COPY" />
+			</object>
+			<object class="tool" name="ID_TOOLBARITEM_PASTE" variable="ToolBarItem25" member="no">
+				<label>Paste</label>
+				<bitmap stock_id="wxART_PASTE" />
+			</object>
+			<object class="tool" name="ID_TOOLBARITEM_PASTEPREFS" variable="ToolBarItem26" member="no">
+				<label>Paste Preferences</label>
+			</object>
+			<object class="tool" name="ID_TOOLBARITEM_FILE_EXPORTCLIPBOARD" variable="ToolBarItem27" member="no">
+				<label>Export Clipboard</label>
+			</object>
+			<object class="tool" name="ID_TOOLBARITEM_FILE_IMPORTCLIPBOARD" variable="ToolBarItem28" member="no">
+				<label>Import Clipboard</label>
+			</object>
+		</object>
+		<object class="wxMenuBar" variable="Main_MenuBar" member="no">
+			<object class="wxMenu" variable="Menu1" member="no">
+				<label>&amp;File</label>
+				<object class="wxMenuItem" name="ID_MENUITEM_FILE_NEW" variable="MenuItem8" member="no">
+					<label>&amp;New</label>
+					<bitmap stock_id="wxART_NEW" />
+				</object>
+				<object class="wxMenuItem" name="ID_MENUITEM_FILE_LOADFEATURESET" variable="MenuItem9" member="no">
+					<label>Load Data Set</label>
+				</object>
+				<object class="separator" />
+				<object class="wxMenuItem" name="ID_MENUITEM_FILE_OPEN" variable="MenuItem10" member="no">
+					<label>&amp;Open Project...</label>
+					<accel>CTRL+O</accel>
+					<bitmap stock_id="wxART_FILE_OPEN" />
+				</object>
+				<object class="wxMenuItem" name="ID_MENUITEM_FILE_SAVE" variable="MenuItem11" member="no">
+					<label>&amp;Save Project</label>
+					<accel>CTRL+S</accel>
+					<bitmap stock_id="wxART_FILE_SAVE" />
+				</object>
+				<object class="wxMenuItem" name="ID_MENUITEM_FILE_SAVE_AS" variable="MenuItem12" member="no">
+					<label>Save Project &amp;As...</label>
+					<bitmap stock_id="wxART_FILE_SAVE_AS" />
+				</object>
+				<object class="wxMenuItem" name="ID_MENUITEM_FILE_SAVEMAPSEGMENT" variable="MenuItem13" member="no">
+					<label>Save Map Segment</label>
+				</object>
+				<object class="separator" />
+				<object class="wxMenuItem" name="ID_MENUITEM_FILE_EXPORTCLIPBOARD" variable="MenuItem14" member="no">
+					<label>Export Clipboard</label>
+				</object>
+				<object class="wxMenuItem" name="ID_MENUITEM_FILE_IMPORTCLIPBOARD" variable="MenuItem15" member="no">
+					<label>Import Clipboard</label>
+				</object>
+				<object class="separator" />
+				<object class="wxMenuItem" name="ID_MENUITEM_FILE_EXPORTWARZONESCENARIO" variable="MenuItem16" member="no">
+					<label>Export Warzone Scenario Start</label>
+				</object>
+				<object class="wxMenuItem" name="ID_MENUITEM_FILE_EXPORTWARZONESCENARIOEXPANSION" variable="MenuItem17" member="no">
+					<label>Export Warzone Scenario Expansion</label>
+				</object>
+				<object class="wxMenuItem" name="ID_MENUITEM_FILE_EXPORTWARZONESCENARIOMISSION" variable="MenuItem18" member="no">
+					<label>Export Warzone Scenario Mission</label>
+				</object>
+				<object class="separator" />
+				<object class="wxMenuItem" name="ID_MENUITEM_FILE_SAVEEDGEBRUSHES" variable="MenuItem19" member="no">
+					<label>Export Edge Brushes</label>
+				</object>
+				<object class="wxMenuItem" name="ID_MENUITEM_FILE_LOADEDGEBRUSHES" variable="MenuItem20" member="no">
+					<label>Import Edge Brushes</label>
+				</object>
+				<object class="wxMenuItem" name="ID_MENUITEM_FILE_SAVETILETYPES" variable="MenuItem21" member="no">
+					<label>Export Tile Types</label>
+				</object>
+				<object class="wxMenuItem" name="ID_MENUITEM_FILE_LOADTILETYPES" variable="MenuItem22" member="no">
+					<label>Import Tile Types</label>
+				</object>
+				<object class="separator" />
+				<object class="wxMenuItem" name="ID_MENUITEM_FILE_MOSTRECENTFILES" variable="MenuItem23" member="no">
+					<label>Most Recent Files</label>
+					<enabled>0</enabled>
+				</object>
+				<object class="separator" />
+				<object class="wxMenuItem" name="ID_QUIT" variable="MenuItem24" member="no">
+					<label>E&amp;xit</label>
+					<bitmap stock_id="wxART_QUIT" />
+				</object>
+			</object>
+			<object class="wxMenu" variable="Menu2" member="no">
+				<label>&amp;Map</label>
+				<object class="wxMenuItem" name="ID_MENUITEM_MAP_PREFERENCES" variable="MenuItem25" member="no">
+					<label>Map Preferences</label>
+				</object>
+				<object class="separator" />
+				<object class="wxMenuItem" name="ID_MENUITEM_MAP_IMPORTHEIGHTMAP" variable="MenuItem26" member="no">
+					<label>Import Height Map</label>
+				</object>
+				<object class="wxMenuItem" name="ID_MENUITEM_MAP_EXPORTHEIGHTMAP" variable="MenuItem27" member="no">
+					<label>Export Height Map</label>
+				</object>
+				<object class="wxMenuItem" name="ID_MENUITEM_MAP_EXPORTASBITMAP" variable="MenuItem28" member="no">
+					<label>Export Map As Bitmap</label>
+				</object>
+				<object class="separator" />
+				<object class="wxMenuItem" name="ID_MENUITEM_MAP_IMPORTTILEMAP" variable="MenuItem29" member="no">
+					<label>Import Tile Map</label>
+				</object>
+				<object class="wxMenuItem" name="ID_MENUITEM_MAP_EXPORTTILEMAP" variable="MenuItem30" member="no">
+					<label>Export Tile Map</label>
+				</object>
+				<object class="separator" />
+				<object class="wxMenuItem" name="ID_MENUITEM_MAP_RESETTEXTUREFLAGS" variable="MenuItem31" member="no">
+					<label>Reset Texture Flags</label>
+				</object>
+				<object class="separator" />
+				<object class="wxMenuItem" name="ID_MENUITEM_MAP_EDITSCROLLLIMITS" variable="MenuItem32" member="no">
+					<label>Edit Scroll Limits</label>
+				</object>
+				<object class="separator" />
+				<object class="wxMenuItem" name="ID_MENUITEM_MAP_REFRESHZONES" variable="MenuItem33" member="no">
+					<label>Refresh Zones</label>
+				</object>
+			</object>
+			<object class="wxMenu" variable="Menu3" member="no">
+				<label>&amp;View</label>
+				<object class="wxMenuItem" name="ID_MENUITEM_VIEW_ZEROCAMERA" variable="MenuItem2" member="no">
+					<label>Look North</label>
+					<accel>F1</accel>
+				</object>
+				<object class="wxMenuItem" name="ID_MENUITEM_VIEW_ZEROCAMERAPOSITION" variable="MenuItem3" member="no">
+					<label>Zero Camera Position</label>
+				</object>
+				<object class="separator" />
+				<object class="wxMenuItem" name="ID_MENUITEM_VIEW_LOCKCAMERA" variable="MenuItem4" member="no">
+					<label>Lock Camera</label>
+					<check>1</check>
+				</object>
+				<object class="wxMenuItem" name="ID_MENUITEM_VIEW_FREECAMERA" variable="MenuItem5" member="no">
+					<label>Free Camera</label>
+					<check>1</check>
+				</object>
+				<object class="separator" />
+				<object class="wxMenuItem" name="ID_MENUITEM_VIEW_WORLD" variable="MenuItem6" member="no">
+					<label>World</label>
+					<accel>F2</accel>
+					<check>1</check>
+				</object>
+				<object class="wxMenuItem" name="ID_MENUITEM_VIEW_EDGEBRUSHES" variable="MenuItem7" member="no">
+					<label>Edge Brushes</label>
+					<accel>F3</accel>
+					<check>1</check>
+				</object>
+			</object>
+			<object class="wxMenu" variable="Menu4" member="no">
+				<label>&amp;Options</label>
+				<object class="wxMenuItem" name="ID_MENUITEM_OPTIONS_TEXTURED" variable="MenuItem34" member="no">
+					<label>Textured</label>
+					<check>1</check>
+				</object>
+				<object class="wxMenuItem" name="ID_MENUITEM_OPTIONS_WIREFRAME" variable="MenuItem35" member="no">
+					<label>Wire Frame</label>
+					<check>1</check>
+				</object>
+				<object class="wxMenuItem" name="ID_MENUITEM_OPTIONS_GOURADSHADING" variable="MenuItem36" member="no">
+					<label>Gouraud Shading</label>
+					<check>1</check>
+				</object>
+				<object class="separator" />
+				<object class="wxMenuItem" name="ID_MENUITEM_OPTIONS_AUTOHEIGHSET" variable="MenuItem37" member="no">
+					<label>Auto Height Set</label>
+					<check>1</check>
+				</object>
+				<object class="separator" />
+				<object class="wxMenuItem" name="ID_MENUITEM_OPTIONS_SEALEVEL" variable="MenuItem38" member="no">
+					<label>Sea Level</label>
+					<check>1</check>
+				</object>
+				<object class="wxMenuItem" name="ID_MENUITEM_OPTIONS_TERRAINTYPES" variable="MenuItem39" member="no">
+					<label>Terrain Types</label>
+					<check>1</check>
+				</object>
+				<object class="wxMenuItem" name="ID_MENUITEM_OPTIONS_OBJECTS" variable="MenuItem40" member="no">
+					<label>Objects</label>
+					<check>1</check>
+				</object>
+				<object class="wxMenuItem" name="ID_MENUITEM_OPTIONS_BOUNDINGSPHERES" variable="MenuItem41" member="no">
+					<label>Bounding spheres</label>
+					<check>1</check>
+				</object>
+				<object class="wxMenuItem" name="ID_MENUITEM_OPTIONS_ENABLEAUTOSNAP" variable="MenuItem42" member="no">
+					<label>Enable Auto Snap</label>
+					<check>1</check>
+				</object>
+				<object class="wxMenuItem" name="ID_MENUITEM_OPTIONS_USEINGAMENAMES" variable="MenuItem43" member="no">
+					<label>Use In Game Names</label>
+					<check>1</check>
+				</object>
+				<object class="separator" />
+				<object class="wxMenuItem" name="ID_MENUITEM_OPTIONS_LOCATERMAPS" variable="MenuItem44" member="no">
+					<label>Locator Maps</label>
+					<check>1</check>
+				</object>
+				<object class="wxMenuItem" name="ID_MENUITEM_OPTIONS_SHOWHEIGHTS" variable="MenuItem45" member="no">
+					<label>Show Heights</label>
+					<check>1</check>
+				</object>
+				<object class="wxMenuItem" name="ID_MENUITEM_OPTIONS_SHOWTEXTURES" variable="MenuItem46" member="no">
+					<label>Show Textures</label>
+					<check>1</check>
+				</object>
+				<object class="wxMenuItem" name="ID_MENUITEM_OPTIONS_LARGESCALE" variable="MenuItem47" member="no">
+					<label>Large Scale</label>
+					<check>1</check>
+				</object>
+			</object>
+			<object class="wxMenu" variable="Menu5" member="no">
+				<label>&amp;Help</label>
+				<object class="wxMenuItem" name="ID_APP_ABOUT" variable="MenuItem1" member="no">
+					<label>&amp;About</label>
+					<handler function="OnAbout" entry="EVT_MENU" />
+				</object>
+			</object>
+		</object>
+	</object>
+</wxsmith>
