@@ -136,10 +136,14 @@ static bool runningMultiplayer(void)
 	if (!bMultiPlayer || !NetPlay.bComms)
 		return false;
 
-	addConsoleMessage(_("Sorry, that cheat is disabled in multiplayer games."), DEFAULT_JUSTIFY);
-
 	return true;
 }
+
+static void noMPCheatMsg(void)
+{
+	addConsoleMessage(_("Sorry, that cheat is disabled in multiplayer games."), DEFAULT_JUSTIFY);
+}
+
 // --------------------------------------------------------------------------
 void	kf_ToggleMissionTimer( void )
 {
@@ -258,7 +262,10 @@ void	kf_SetKillerLevel( void )
 {
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
 		return;
+	}
 
 	setDifficultyLevel(DL_KILLER);
 	addConsoleMessage(_("Hard as nails!!!"), LEFT_JUSTIFY);
@@ -268,7 +275,10 @@ void	kf_SetEasyLevel( void )
 {
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
 		return;
+	}
 
 	setDifficultyLevel(DL_EASY);
 	addConsoleMessage(_("Takings thing easy!"), LEFT_JUSTIFY);
@@ -279,7 +289,10 @@ void	kf_UpThePower( void )
 {
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
 		return;
+	}
 
 	asPower[selectedPlayer]->currentPower+=1000;
 	addConsoleMessage(_("1000 big ones!!!"), LEFT_JUSTIFY);
@@ -290,10 +303,13 @@ void	kf_MaxPower( void )
 {
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
 		return;
+	}
 
-		asPower[selectedPlayer]->currentPower = SDWORD_MAX / 2;
-		addConsoleMessage(_("Power overwhelming"), LEFT_JUSTIFY);
+	asPower[selectedPlayer]->currentPower = SDWORD_MAX / 2;
+	addConsoleMessage(_("Power overwhelming"), LEFT_JUSTIFY);
 }
 
 // --------------------------------------------------------------------------
@@ -301,7 +317,10 @@ void	kf_SetNormalLevel( void )
 {
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
 		return;
+	}
 
 	setDifficultyLevel(DL_NORMAL);
 	addConsoleMessage(_("Back to normality!"), LEFT_JUSTIFY);
@@ -311,7 +330,10 @@ void	kf_SetHardLevel( void )
 {
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
 		return;
+	}
 
 	setDifficultyLevel(DL_HARD);
 	addConsoleMessage(_("Getting tricky!"), LEFT_JUSTIFY);
@@ -321,7 +343,10 @@ void	kf_SetToughUnitsLevel( void )
 {
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
 		return;
+	}
 
 	setDifficultyLevel(DL_TOUGH);
 	addConsoleMessage(_("Twice as nice!"), LEFT_JUSTIFY);
@@ -390,7 +415,10 @@ void	kf_TogglePower( void )
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
 		return;
+	}
 #endif
 
 	powerCalculated = !powerCalculated;
@@ -449,7 +477,10 @@ void	kf_AllAvailable( void )
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
 		return;
+	}
 #endif
 	addConsoleMessage(_("All items made available"), DEFAULT_JUSTIFY);
 	makeAllAvailable();
@@ -822,7 +853,10 @@ void	kf_SelectPlayer( void )
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP
 	// cheating which could even result in undefined behaviour)
 	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
 		return;
+	}
 #endif
 
     //store the current player
@@ -942,7 +976,10 @@ void	kf_AddMissionOffWorld( void )
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game
 	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
 		return;
+	}
 #endif
 
 	game_SetValidityKey(VALIDITYKEY_CTRL_M);
@@ -955,7 +992,10 @@ void	kf_EndMissionOffWorld( void )
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game
 	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
 		return;
+	}
 #endif
 
 	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_MISSION_END);
@@ -967,7 +1007,10 @@ void	kf_NewPlayerPower( void )
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game
 	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
 		return;
+	}
 #endif
 
 	newGameInitPower();
@@ -1048,7 +1091,10 @@ void	kf_ToggleDebugMappings( void )
 	// Prevent cheating in multiplayer when not compiled in debug mode by
 	// bailing out if we're running a _true_ multiplayer game
 	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
 		return;
+	}
 #endif
 
 	if (bAllowDebugMode)
@@ -1079,7 +1125,10 @@ void	kf_ToggleGodMode( void )
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
 		return;
+	}
 #endif
 
 	if(godMode)
@@ -1112,7 +1161,10 @@ void	kf_TogglePauseMode( void )
 {
 	// Bail out if we're running a _true_ multiplayer game (which cannot be paused)
 	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
 		return;
+	}
 
 	/* Is the game running? */
 	if(gamePaused() == FALSE)
@@ -2167,7 +2219,10 @@ void kf_ToggleFormationSpeedLimiting( void )
 {
 	// Bail out if we're running a _true_ multiplayer game
 	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
 		return;
+	}
 
 	if ( moveFormationSpeedLimitingOn() )
 	{
@@ -2283,7 +2338,11 @@ void kf_SpeedUp( void )
 
 	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial
 	if (runningMultiplayer() || bInTutorial)
+	{
+		if (!bInTutorial)
+			noMPCheatMsg();
 		return;
+	}
 
 	// get the current modifier
 	gameTimeGetMod(&mod);
@@ -2315,7 +2374,11 @@ void kf_SlowDown( void )
 
 	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial
 	if (runningMultiplayer() || bInTutorial)
+	{
+		if (!bInTutorial)
+			noMPCheatMsg();
 		return;
+	}
 
 	// get the current modifier
 	gameTimeGetMod(&mod);
@@ -2344,7 +2407,11 @@ void kf_NormalSpeed( void )
 {
 	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial
 	if (runningMultiplayer() || bInTutorial)
+	{
+		if (!bInTutorial)
+			noMPCheatMsg();
 		return;
+	}
 
 	CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Reset")));
 	gameTimeResetMod();
