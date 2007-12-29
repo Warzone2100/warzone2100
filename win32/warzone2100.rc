@@ -44,4 +44,4 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-2 ICON "warzone2100.ico"
+2 ICON "../icons/warzone2100.ico"

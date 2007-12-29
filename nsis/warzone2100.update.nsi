@@ -48,6 +48,9 @@ VIAddVersionKey "ProductVersion"	"${VERSION}"
 ;--------------------------------
 ;Interface Settings
 
+  !define MUI_ICON "..\icons\warzone2100.ico"
+  !define MUI_UNICON "..\icons\warzone2100.uninstall.ico"
+
   !define MUI_ABORTWARNING
 
   ; Settings for MUI_PAGE_LICENSE
@@ -144,8 +147,11 @@ Section $(TEXT_SecBase) SecBase
   File "/oname=Readme.de.txt" "..\doc\Readme.de"
   File "/oname=Readme.en.html" "..\doc\Readme.en.xhtml"
   File "/oname=Readme.de.html" "..\doc\Readme.de.xhtml"
-  File "/oname=styles\readme.print.css" "..\styles\readme.print.css"
-  File "/oname=styles\readme.screen.css" "..\styles\readme.screen.css"
+
+  SetOutPath "$INSTDIR\styles"
+
+  File "/oname=readme.print.css" "..\doc\styles\readme.print.css"
+  File "/oname=readme.screen.css" "..\doc\styles\readme.screen.css"
 
 
   ;Store installation folder
@@ -180,6 +186,8 @@ SectionEnd
 ; Installs OpenAL runtime libraries, using Creative's installer
 Section $(TEXT_SecOpenAL) SecOpenAL
 
+  SetOutPath "$INSTDIR"
+
   File "${EXTDIR}\oalinst.exe"
 
   ExecWait "$INSTDIR\oalinst.exe"
@@ -193,7 +201,7 @@ Section $(TEXT_SecGrimMod) SecGrimMod
 
   SetOutPath "$INSTDIR\mods\global"
 
-;  File "..\data\grim.wz"
+;  File "..\data\mods\global\grim.wz"
 ;  !insertmacro VPatchFile "grim.wz.vpatch" "$INSTDIR\grim.wz" "$INSTDIR\grim.wz.tmp"
 
   SetOutPath "$INSTDIR"
@@ -301,10 +309,14 @@ Section "Uninstall"
 
   Delete "$INSTDIR\uninstall.exe"
 
+  Delete "$INSTDIR\styles\readme.print.css"
+  Delete "$INSTDIR\styles\readme.screen.css"
+
   Delete "$INSTDIR\mods\global\grim.wz"
 
   RMDir "$INSTDIR\mods\global"
   RMDir "$INSTDIR\mods"
+  RMDir "$INSTDIR\styles"
   RMDir "$INSTDIR"
 
   Delete "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk"
