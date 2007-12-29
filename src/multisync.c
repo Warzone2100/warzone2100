@@ -55,7 +55,7 @@
 // function definitions
 
 static BOOL sendStructureCheck	(void);							//Structure
-static void packageCheck		(UDWORD i, NETMSG *pMsg, DROID *pD);
+static void packageCheck		(DROID *pD);
 static BOOL sendDroidCheck		(void);							//droids
 
 static void highLevelDroidUpdate(DROID *psDroid,
@@ -64,7 +64,7 @@ static void highLevelDroidUpdate(DROID *psDroid,
 								 UDWORD state,
 								 UDWORD order,
 								 BASE_OBJECT *psTarget,
-								 UDWORD	numKills);
+								 float experience);
 
 
 static void onscreenUpdate		(DROID *pDroid,UDWORD dam,		// the droid and its damage
@@ -218,210 +218,242 @@ static DROID* pickADroid(void)
 // send a droid info packet.
 static BOOL sendDroidCheck(void)
 {
-	DROID			*pD;
-	NETMSG			msg;
-	UDWORD			i=0,count=0;
-	static UDWORD	lastSent=0;					// last time a struct was sent.
+	DROID			*pD, **ppD;
+	uint8_t			i, count;
+	static UDWORD	lastSent = 0;		// Last time a struct was sent.
 	UDWORD			toSend = 6;
-	if(lastSent > gameTime)lastSent= 0;
-	if((gameTime-lastSent) < DROID_FREQUENCY)	// only send a struct send if not done recently.
+	
+	if (lastSent > gameTime)
+	{
+		lastSent= 0;
+	}
+	
+	// Only send a struct send if not done recently.
+	if (gameTime - lastSent < DROID_FREQUENCY)
 	{
 		return TRUE;
 	}
 
 	lastSent = gameTime;
-	msg.size = 0;
 
-	while(count < toSend)	// send x droids.
-	{
+	NETbeginEncode(NET_CHECK_DROID, NET_ALL_PLAYERS);
 
-		pD = pickADroid();
-
-		if(pD)
+		// Allocate space for the list of droids to send
+		ppD = alloca(sizeof(DROID *) * toSend);
+		
+		// Get the list of droids to sent
+		for (i = 0, count = 0; i < toSend; i++)
 		{
-			packageCheck(i,&msg,pD);
+			pD = pickADroid();
+			
+			// If the droid is valid add it to the list
+			if (pD)
+			{
+				ppD[count++] = pD;
+			}
 		}
-
-		i = msg.size;
-		count = count +1;
-	}
-
-	msg.type = NET_CHECK_DROID;
-	NETbcast(&msg,FALSE);
-
-	return TRUE;
+		
+		// Send the number of droids to expect
+		NETuint8_t(&count);
+		
+		// Add the droids to the packet
+		for (i = 0; i < count; i++)
+		{
+			packageCheck(ppD[i]);
+		}
+	
+	return NETend();
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // Send a Single Droid Check message
-static void packageCheck(UDWORD i, NETMSG *pMsg, DROID *pD)
+static void packageCheck(DROID *pD)
 {
-//	UDWORD packtemp;
-	UWORD numkills;		//
-	uint16_t direction = pD->direction * 32;	// preserve some precision
+	// Send the player to which the droid belongs
+	NETuint8_t(&pD->player);
+	
+	// Now the droids ID
+	NETuint32_t(&pD->id);
+	
+	// The droids order
+	NETint32_t(&pD->order);
+	
+	// The droids secondary order
+	NETuint32_t(&pD->secondaryOrder);
+	
+	// Droids current HP
+	NETuint32_t(&pD->body);
+	
+	// Direction it is going in
+	NETfloat(&pD->direction);
 
-	pMsg->body[			i+0] =		(char)pD->player;
-	pMsg->body[			i+1] =		(char)pD->order;		// order being executed
-	NetAdd2( pMsg,		i+2,		pD->id);				// droid id
-	NetAdd2( pMsg,		i+6,		pD->secondaryOrder );
-	NetAdd2( pMsg,		i+10,		pD->body);				// damage points
-	NetAdd2( pMsg,		i+14,		direction);			// direction
-
-	if (pD->order == DORDER_ATTACK || pD->order == DORDER_MOVE || pD->order == DORDER_RTB || pD->order == DORDER_RTR)
+	// Fractional move
+	if (pD->order == DORDER_ATTACK
+	 || pD->order == DORDER_MOVE
+	 || pD->order == DORDER_RTB
+	 || pD->order == DORDER_RTR)
 	{
-		NetAdd2(pMsg,	i+16,		pD->sMove.fx);			//fraction move pos
-		NetAdd2(pMsg,	i+20,		pD->sMove.fy);
+		NETfloat(&pD->sMove.fx);
+		NETfloat(&pD->sMove.fy);
 	}
+	// Non-fractional move, send regular coords
 	else
 	{
-		NetAdd2(pMsg,	i+16,		pD->pos.x);					//non fractional move pos
-		NetAdd2(pMsg,	i+20,		pD->pos.y);
+		NETuint16_t(&pD->pos.x);
+		NETuint16_t(&pD->pos.y);
 	}
+
 
 	if (pD->order == DORDER_ATTACK)
 	{
-		NetAdd2(pMsg,	i+24,		pD->psTarget->id);		// target id
+		NETuint32_t(&pD->psTarget->id);
 	}
-	else if(pD->order == DORDER_MOVE)
+	else if (pD->order == DORDER_MOVE)
 	{
-		NetAdd2(pMsg,	i+24,		pD->orderX);
-		NetAdd2(pMsg,	i+26,		pD->orderY);
+		NETuint16_t(&pD->orderX);
+		NETuint16_t(&pD->orderY);
 	}
-	numkills = pD->experience;
-	NetAdd2(pMsg,		i+28,		numkills);	// droid kills
-
-	pMsg->size =(UWORD)( pMsg->size + 30);
-
-	return ;
+	
+	// Last send the droids experience
+	NETfloat(&pD->experience);
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////
 // receive a check and update the local world state accordingly
-BOOL recvDroidCheck(NETMSG *m)
+BOOL recvDroidCheck()
 {
-	float			fx=0,fy=0;
-	UDWORD			ref,player,x = 0,y = 0,bod,target=0;//,dir;
-	UWORD			dir,numkills;
-	DROID_ORDER		ord;
+	float			fx = 0, fy = 0;
+	DROID_ORDER		order = 0;
 	BOOL			onscreen;
 	DROID			*pD;
-	BASE_OBJECT		*psTarget=NULL;
-	UDWORD			i,state, tx=0,ty=0;
+	BASE_OBJECT		*psTarget;
+	int				i;
+	uint8_t			count;
+	uint8_t			player;
+	float			direction, experience;
+	uint16_t		x = 0, y = 0, tx, ty;
+	uint32_t		ref, body, target = 0, secondaryOrder;
 
-	i = 0;
-	while(i < m->size)
-	{
-		// obtain information about remote droid.
-		player = m->body[i+0];
-		ord = (DROID_ORDER)m->body[i+1];								// droid id.
-		NetGet(m,					i+2,ref);
-		NetGet(m,					i+6,state);
-		NetGet(m,					i+10,bod);							// Damage update.
-		NetGet(m,					i+14,dir);
+	NETbeginDecode();
 
-		if (ord == DORDER_ATTACK || ord == DORDER_MOVE || ord == DORDER_RTB    || ord == DORDER_RTR)	// detailed position info mode
+		// Get the number of droids to expect
+		NETuint8_t(&count);
+		
+		for (i = 0; i < count; i++)
 		{
-			NetGet(m,				i+16,fx);
-			NetGet(m,				i+20,fy);
-		}
-		else
-		{
-			NetGet(m,				i+16,x);				// dont pack since could be sending fractional vals anyway.
-			NetGet(m,				i+20,y);
-		}
-
-		if (ord == DORDER_ATTACK)
-		{
-			NetGet(m,				i+24,target);
-		}
-		else if(ord == DORDER_MOVE)
-		{
-			NetGet(m,				i+24,tx);
-			NetGet(m,				i+26,ty);
-		}
-		NetGet(m,					i+28,numkills);
-
-		i = i + 30;
-
-		//////////////////////////////////////
-
-		if ( !(IdToDroid(ref,player,&pD)) )				// find the droid in question
-		{
-			NETlogEntry("Recvd Unknown droid info. val=player",0,player);
-			debug( LOG_NEVER, "Received Checking Info for an unknown (As yet) droid player:%d ref:%d\n", player, ref );
-			return TRUE;								//Recvd checking info for an unknown droid
-		}
-
-		if(target)
-		{
-			psTarget = IdToPointer(target,ANYPLAYER);	// get the target in question.
-		}
-
-		//////////////////////////////////////
-		// decide how to sync it.
-		if( DrawnInLastFrame(pD->sDisplay.frameNumber)
-			&& (pD->sDisplay.screenX < pie_GetVideoBufferWidth())
-			&& (pD->sDisplay.screenY < pie_GetVideoBufferHeight()) )  // check for onscreen
-		{
-			if(pD->visible[selectedPlayer])
+			// Fetch the player
+			NETuint8_t(&player);
+			
+			// Fetch the droid being checked
+			NETuint32_t(&ref);
+			
+			// The droids order
+			NETenum(&order);
+			
+			// Secondary order
+			NETuint32_t(&secondaryOrder);
+			
+			// HP
+			NETuint32_t(&body);
+			
+			// Direction
+			NETfloat(&direction);
+			
+			// Fractional move
+			if (order == DORDER_ATTACK
+			 || order == DORDER_MOVE
+			 || order == DORDER_RTB
+			 || order == DORDER_RTR)
 			{
-				onscreen = TRUE;						// onscreen and visible
+				NETfloat(&fx);
+				NETfloat(&fy);
+			}
+			// Regular move
+			else
+			{
+				NETuint16_t(&x);
+				NETuint16_t(&y);
+			}
+			
+			// Find out what the droid is aiming at
+			if (order == DORDER_ATTACK)
+			{
+				NETuint32_t(&target);
+			}
+			// Else if the droid is moving where to
+			else if (order == DORDER_MOVE)
+			{
+				NETuint16_t(&tx);
+				NETuint16_t(&ty);
+			}
+			
+			// Get the droids experience
+			NETfloat(&experience);
+			
+			/*
+			 * Post processing
+			 */
+			
+			// Find the droid in question
+			if (!IdToDroid(ref, player, &pD))
+			{
+				NETlogEntry("Recvd Unknown droid info. val=player",0,player);
+				debug( LOG_NEVER, "Received Checking Info for an unknown (As yet) droid player:%d ref:%d\n", player, ref);
+				continue;
+			}
+			
+			// If there is a target find it
+			if (target)
+			{
+				psTarget = IdToPointer(target, ANYPLAYER);
+			}
+			
+			/*
+			 * Decide how best to sync the droid. If it is onscreen and visible
+			 * and the player who owns the droid has a low ping then do an
+			 * onscreen update, otherwise do an offscreen one.
+			 */
+			if (DrawnInLastFrame(pD->sDisplay.frameNumber)
+			 && pD->sDisplay.screenX < pie_GetVideoBufferWidth()
+			 && pD->sDisplay.screenY < pie_GetVideoBufferHeight()
+			 && ingame.PingTimes[player] < PING_LIMIT)
+			{
+				onscreen = TRUE;
 			}
 			else
 			{
-				onscreen = FALSE;						// onscreen, but not visible.
+				onscreen = FALSE;
 			}
-		}else{
-			onscreen = FALSE;							// not onscreen.
+			
+			// Update the droid
+			if (onscreen || vtolDroid(pD))
+			{
+				onscreenUpdate(pD, body, x, y, fx, fy, direction, order);
+			}
+			else
+			{
+				offscreenUpdate(pD, body, x, y, fx, fy, direction, order);
+			}
+			
+			// If our version is similar to the actual one make a note of it
+			if (abs(x - pD->pos.x) < TILE_UNITS * 2
+			 || abs(y - pD->pos.y) < TILE_UNITS * 2)
+			{
+				pD->lastSync = gameTime;
+			}
+			
+			// Update the higher level stuff
+			if (!vtolDroid(pD))
+			{
+				highLevelDroidUpdate(pD, x, y, secondaryOrder, order, psTarget, experience);
+			}
+			
+			// ...and repeat!
 		}
-
-
-		if(ingame.PingTimes[player] > PING_LIMIT)		// if it's a big ping then don't do a smooth move.
-		{
-			onscreen = FALSE;
-		}
-
-//		if( pD->lastSync > gameTime)pD->lastSync =0;
-//		if(  (gameTime - pD->lastSync) > SYNC_PANIC )	// if it's been a while then jump it.
-//		{
-//			onscreen = FALSE;
-//		}
-
-
-		//////////////////////////////////////
-		/// now do the update.
-
-		if (   onscreen
-		    || vtolDroid(pD))
-		{
-			onscreenUpdate(pD,bod,x,y,fx,fy,dir,ord);
-		}
-		else
-		{
-			offscreenUpdate(pD,bod,x,y,fx,fy,dir,ord);
-		}
-
-		//////////////////////////////////////
-		// now make note of how accurate the world model is for this droid.	// if droid is close then remember.
-		if(    abs(x-pD->pos.x)<(TILE_UNITS*2)
-			|| abs(y- pD->pos.y)<(TILE_UNITS*2))
-		{
-			pD->lastSync	= gameTime;								// note we did a reasonable job.
-		}
-
-
-		//////////////////////////////////////
-		// now update the higher level stuff
-		if(!vtolDroid(pD))
-		{
-			highLevelDroidUpdate(pD,x,y,state,  ord, psTarget,numkills);
-		}
-
-		// done this droid, move on to next.
-
-	}
-
+	
+	NETend();
+	
 	return TRUE;
 }
 
@@ -432,10 +464,10 @@ BOOL recvDroidCheck(NETMSG *m)
 static void highLevelDroidUpdate(DROID *psDroid,UDWORD x, UDWORD y,
 								 //UDWORD state, UDWORD order,UDWORD orderX,UDWORD orderY,
 								 UDWORD state, UDWORD order,
-								 BASE_OBJECT *psTarget,UDWORD numKills)
+								 BASE_OBJECT *psTarget,float experience)
 {
 	// update kill rating.
-	psDroid->experience = (UWORD)numKills;
+	psDroid->experience = experience;
 
 	// remote droid is attacking, not here tho!
 	if(order == DORDER_ATTACK && psDroid->order != DORDER_ATTACK && psTarget)

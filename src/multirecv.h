@@ -48,7 +48,7 @@ extern BOOL recvDroidSecondaryAll	(NETMSG *pMsg);
 extern BOOL recvDroidEmbark         (NETMSG *pMsg);
 extern BOOL recvDroidDisEmbark      (NETMSG *pMsg);
 //extern BOOL recvCommandDroid		(NETMSG *pMsg);
-extern BOOL recvDroidCheck			(NETMSG *pMsg);
+extern BOOL recvDroidCheck			();
 extern BOOL recvStructureCheck		();
 extern BOOL recvPowerCheck			();
 extern BOOL recvAlliance			(BOOL allowAudio);

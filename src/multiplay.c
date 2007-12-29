@@ -652,7 +652,7 @@ BOOL recvMessage(void)
 				recvGroupOrder(&msg);
 				break;
 			case NET_CHECK_DROID:				// droid damage and position checks
-				recvDroidCheck(&msg);
+				recvDroidCheck();
 				break;
 			case NET_CHECK_STRUCT:				// structure damage checks.
 				recvStructureCheck();
