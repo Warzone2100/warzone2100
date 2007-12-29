@@ -66,6 +66,9 @@ VIAddVersionKey "ProductVersion"	"${VERSION}"
 ;--------------------------------
 ;Interface Settings
 
+  !define MUI_ICON "..\icons\warzone2100.ico"
+  !define MUI_UNICON "..\icons\warzone2100.uninstall.ico"
+
   !define MUI_ABORTWARNING
 
   ; Settings for MUI_PAGE_LICENSE
@@ -158,11 +161,15 @@ Section $(TEXT_SecBase) SecBase
   File "/oname=ChangeLog.txt" "..\ChangeLog"
   File "/oname=Authors.txt" "..\AUTHORS"
   File "/oname=License.txt" "..\COPYING"
-  File "/oname=Readme.txt" "..\README"
-;  !insertmacro VPatchFile "changelog.txt.vpatch" "$INSTDIR\ChangeLog.txt" "$INSTDIR\ChangeLog.txt.tmp"
-;  !insertmacro VPatchFile "authors.txt.vpatch" "$INSTDIR\Authors.txt" "$INSTDIR\Authors.txt.tmp"
-;  !insertmacro VPatchFile "license.txt.vpatch" "$INSTDIR\License.txt" "$INSTDIR\License.txt.tmp"
-;  !insertmacro VPatchFile "readme.txt.vpatch" "$INSTDIR\Readme.txt" "$INSTDIR\Readme.txt.tmp"
+  File "/oname=Readme.en.txt" "..\doc\Readme.en"
+  File "/oname=Readme.de.txt" "..\doc\Readme.de"
+  File "/oname=Readme.en.html" "..\doc\Readme.en.xhtml"
+  File "/oname=Readme.de.html" "..\doc\Readme.de.xhtml"
+
+  SetOutPath "$INSTDIR\styles"
+
+  File "/oname=readme.print.css" "..\doc\styles\readme.print.css"
+  File "/oname=readme.screen.css" "..\doc\styles\readme.screen.css"
 
 
   ;Store installation folder
@@ -196,6 +203,8 @@ SectionEnd
 
 ; Installs OpenAL runtime libraries, using Creative's installer
 Section $(TEXT_SecOpenAL) SecOpenAL
+
+  SetOutPath "$INSTDIR"
 
   File "${EXTDIR}\oalinst.exe"
 
@@ -322,10 +331,14 @@ Section "Uninstall"
 
   Delete "$INSTDIR\uninstall.exe"
 
+  Delete "$INSTDIR\styles\readme.print.css"
+  Delete "$INSTDIR\styles\readme.screen.css"
+
   Delete "$INSTDIR\mods\global\grim.wz"
 
   RMDir "$INSTDIR\mods\global"
   RMDir "$INSTDIR\mods"
+  RMDir "$INSTDIR\styles"
   RMDir "$INSTDIR"
 
   Delete "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk"

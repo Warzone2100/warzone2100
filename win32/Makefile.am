@@ -1,9 +1,7 @@
 .rc.o:
 	$(WINDRES) -DVERSION="\"$(VERSION)\"" -o$@ $<
 
-dist_noinst_DATA = \
-		warzone2100.rc \
-		warzone2100.ico
+dist_noinst_DATA = warzone2100.rc
 
 if MINGW32
 nodist_noinst_DATA = \
