@@ -655,7 +655,7 @@ BOOL recvMessage(void)
 				recvDroidCheck(&msg);
 				break;
 			case NET_CHECK_STRUCT:				// structure damage checks.
-				recvStructureCheck(&msg);
+				recvStructureCheck();
 				break;
 			case NET_CHECK_POWER:				// Power level syncing.
 				recvPowerCheck();
