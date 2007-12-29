@@ -1630,7 +1630,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			// attacking something while guarding, don't change the order
 			actionDroidObj(psDroid, DACTION_ATTACK, (BASE_OBJECT *)psOrder->psObj);
 		}
-		else
+		else if (!psOrder->psObj->died)
 		{
 			//cannot attack a Transporter with EW in multiPlayer
 			if (game.maxPlayers > 0 && electronicDroid(psDroid)
