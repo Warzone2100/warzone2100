@@ -272,16 +272,16 @@ static void packageCheck(DROID *pD)
 	// Send the player to which the droid belongs
 	NETuint8_t(&pD->player);
 	
-	// Now the droids ID
+	// Now the droid's ID
 	NETuint32_t(&pD->id);
 	
-	// The droids order
+	// The droid's order
 	NETint32_t(&pD->order);
 	
 	// The droids secondary order
 	NETuint32_t(&pD->secondaryOrder);
 	
-	// Droids current HP
+	// Droid's current HP
 	NETuint32_t(&pD->body);
 	
 	// Direction it is going in
@@ -314,7 +314,7 @@ static void packageCheck(DROID *pD)
 		NETuint16_t(&pD->orderY);
 	}
 	
-	// Last send the droids experience
+	// Last send the droid's experience
 	NETfloat(&pD->experience);
 }
 
@@ -348,7 +348,7 @@ BOOL recvDroidCheck()
 			// Fetch the droid being checked
 			NETuint32_t(&ref);
 			
-			// The droids order
+			// The droid's order
 			NETenum(&order);
 			
 			// Secondary order
@@ -388,7 +388,7 @@ BOOL recvDroidCheck()
 				NETuint16_t(&ty);
 			}
 			
-			// Get the droids experience
+			// Get the droid's experience
 			NETfloat(&experience);
 			
 			/*
@@ -399,7 +399,7 @@ BOOL recvDroidCheck()
 			if (!IdToDroid(ref, player, &pD))
 			{
 				NETlogEntry("Recvd Unknown droid info. val=player",0,player);
-				debug( LOG_NEVER, "Received Checking Info for an unknown (As yet) droid player:%d ref:%d\n", player, ref);
+				debug(LOG_MULTISYNC, "Received checking info for an unknown (as yet) droid. player:%d ref:%d", player, ref);
 				continue;
 			}
 			
@@ -462,7 +462,6 @@ BOOL recvDroidCheck()
 // ////////////////////////////////////////////////////////////////////////////
 // higher order droid updating. Works mainly at the order level. comes after the main sync.
 static void highLevelDroidUpdate(DROID *psDroid,UDWORD x, UDWORD y,
-								 //UDWORD state, UDWORD order,UDWORD orderX,UDWORD orderY,
 								 UDWORD state, UDWORD order,
 								 BASE_OBJECT *psTarget,float experience)
 {
@@ -495,7 +494,6 @@ static void highLevelDroidUpdate(DROID *psDroid,UDWORD x, UDWORD y,
 			turnOffMultiMsg(FALSE);
 		}
 	}
-
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -550,7 +548,7 @@ static void offscreenUpdate(DROID *psDroid,
 	PROPULSION_STATS	*psPropStats;
  	SDWORD			xdiff,ydiff, distSq;
 
-	// stage one, update the droids position & info, LOW LEVEL STUFF.
+	// stage one, update the droid's position & info, LOW LEVEL STUFF.
 	if(	   order == DORDER_ATTACK
 		|| order == DORDER_MOVE
 		|| order ==	DORDER_RTB
@@ -559,8 +557,8 @@ static void offscreenUpdate(DROID *psDroid,
 
 		// calculate difference between remote and local
 		xdiff = psDroid->pos.x - (UWORD)fx;
-	    ydiff = psDroid->pos.y - (UWORD)fy;
-	    distSq = (xdiff*xdiff) + (ydiff*ydiff);
+		ydiff = psDroid->pos.y - (UWORD)fy;
+		distSq = (xdiff*xdiff) + (ydiff*ydiff);
 
 		// if more than  2 squares, jump it.
 		if(distSq > (2*TILE_UNITS)*(2*TILE_UNITS) )
@@ -569,6 +567,7 @@ static void offscreenUpdate(DROID *psDroid,
 			{
 				oldx = psDroid->pos.x;
 				oldy = psDroid->pos.y;
+				debug(LOG_MULTISYNC, "Jumping droid %d from (%u,%u) to (%u,%u)", (int)psDroid->id, oldx, oldy, (UDWORD)fx, (UDWORD)fy);
 
 				psDroid->sMove.fx = fx;							//update x
 				psDroid->sMove.fy = fy;							//update y
@@ -583,7 +582,6 @@ static void offscreenUpdate(DROID *psDroid,
 				turnOffMultiMsg(TRUE);
 				moveDroidTo(psDroid, psDroid->sMove.DestinationX,psDroid->sMove.DestinationY);
 				turnOffMultiMsg(FALSE);
-
 			}
 		}
 	}
@@ -591,6 +589,7 @@ static void offscreenUpdate(DROID *psDroid,
 	{
 		oldx = psDroid->pos.x;
 		oldy = psDroid->pos.y;
+		debug(LOG_MULTISYNC, "Moving droid %d from (%u,%u) to (%u,%u)", (int)psDroid->id, oldx, oldy, (UDWORD)fx, (UDWORD)fy);
 		psDroid->pos.x		 = (UWORD)x;						//update x
 		psDroid->pos.y		 = (UWORD)y;						//update y
 		gridMoveObject((BASE_OBJECT *)psDroid, (SDWORD)oldx,(SDWORD)oldy);
@@ -600,15 +599,13 @@ static void offscreenUpdate(DROID *psDroid,
 	psDroid->body		= dam;								// update damage
 
 	// stop droid if remote droid has stopped.
-	if(		(order == DORDER_NONE		   || order == DORDER_GUARD)
-		&& !(psDroid->order == DORDER_NONE || psDroid->order == DORDER_GUARD )
-	   )
+	if ((order == DORDER_NONE || order == DORDER_GUARD)
+	    && !(psDroid->order == DORDER_NONE || psDroid->order == DORDER_GUARD))
 	{
 		turnOffMultiMsg(TRUE);
 		moveStopDroid(psDroid);
 		turnOffMultiMsg(FALSE);
 	}
-
 
 	// snap droid(if on ground)  to terrain level at x,y.
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
@@ -619,9 +616,6 @@ static void offscreenUpdate(DROID *psDroid,
 	}
 	return;
 }
-
-
-
 
 
 // ////////////////////////////////////////////////////////////////////////

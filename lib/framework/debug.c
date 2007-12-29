@@ -63,6 +63,7 @@ static const char *code_part_names[] = {
 	"gui",
 	"map",
 	"savegame",
+	"multisync",
 	"last"
 };
 
