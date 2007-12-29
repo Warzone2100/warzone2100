@@ -96,7 +96,7 @@ PFNGLACTIVESTENCILFACEEXTPROC glActiveStencilFaceEXT;
 #endif
 
 
-/// Check if we can use one-pass stencil in the shadow draw code
+/** Check if we can use one-pass stencil in the shadow draw code. */
 static BOOL stencil_one_pass(void)
 {
 	// tribool, -1: uninitialized, 0: FALSE, 1: TRUE

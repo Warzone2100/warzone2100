@@ -44,13 +44,12 @@
  *
  */
 
-/* stores name of the last function or event called by scripts */
 #define MAX_EVENT_NAME_LEN	100
+
+/** Stores name of the last function or event called by scripts. */
 extern char last_called_script_event[MAX_EVENT_NAME_LEN];
 
-/*
- *
- * ASSERT
+/**
  *
  * Rewritten version of assert that allows a printf format text string to be passed
  * to ASSERT along with the condition.
@@ -64,7 +63,7 @@ extern char last_called_script_event[MAX_EVENT_NAME_LEN];
 	assert( expr );
 
 
-/*!
+/**
  * Compile time assert
  * Not to be used in global context!
  * \param expr Expression to evaluate
@@ -80,7 +79,7 @@ extern char last_called_script_event[MAX_EVENT_NAME_LEN];
  ***
  ***/
 
-/* Must match code_part_names in debug.c */
+/** Debug enums. Must match code_part_names in debug.c */
 typedef enum {
   LOG_ALL, /* special: sets all to on */
   LOG_MAIN,
@@ -91,9 +90,9 @@ typedef enum {
   LOG_TEXTURE,
   LOG_NET,
   LOG_MEMORY,
-  LOG_WARNING, /* special; on in debug mode */
-  LOG_ERROR, /* special; on by default */
-  LOG_NEVER, /* if too verbose for anything but dedicated debugging... */
+  LOG_WARNING, /**< special; on in debug mode */
+  LOG_ERROR, /**< special; on by default */
+  LOG_NEVER, /**< if too verbose for anything but dedicated debugging... */
   LOG_SCRIPT,
   LOG_MOVEMENT,
   LOG_ATTACK,
@@ -103,7 +102,7 @@ typedef enum {
   LOG_MAP,
   LOG_SAVEGAME,
   LOG_MULTISYNC,
-  LOG_LAST /* _must_ be last! */
+  LOG_LAST /**< _must_ be last! */
 } code_part;
 
 extern BOOL enabled_debug[LOG_LAST];

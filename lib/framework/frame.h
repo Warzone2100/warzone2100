@@ -63,7 +63,7 @@
 #include <physfs.h>
 
 
-/* Initialise the frame work library */
+/** Initialise the frame work library */
 extern BOOL frameInitialise(
 					const char *pWindowName,// The text to appear in the window title bar
 					UDWORD width,			// The display width
@@ -72,7 +72,7 @@ extern BOOL frameInitialise(
 					BOOL fullScreen		// Whether to start full screen or windowed
 					);
 
-/* Shut down the framework library.
+/** Shut down the framework library.
  * This clears up all the Direct Draw stuff and ensures
  * that Windows gets restored properly after Full screen mode.
  */
@@ -86,32 +86,26 @@ typedef enum _focus_state
 } FOCUS_STATE;
 
 
-/* Call this each cycle to allow the framework to deal with
+/** Call this each cycle to allow the framework to deal with
  * windows messages, and do general house keeping.
- *
- * Returns FRAME_STATUS.
  */
 extern void frameUpdate(void);
 
-/* Set the current cursor from a Resource ID
+/** Set the current cursor from a Resource ID
  * This is the same as calling:
  *       frameSetCursor(LoadCursor(MAKEINTRESOURCE(resID)));
  * but with a bit of extra error checking.
  */
 extern void frameSetCursorFromRes(SWORD resID);
 
-/* Returns the current frame we're on - used to establish whats on screen */
+/** Returns the current frame we're on - used to establish whats on screen. */
 extern UDWORD frameGetFrameNumber(void);
 
-/**
- * Average framerate of the last seconds
- *
- * \return Average framerate
- */
+/** Return average framerate of the last seconds. */
 extern UDWORD frameGetAverageRate(void);
 
 
-/* Load the file with name pointed to by pFileName into a memory buffer. */
+/** Load the file with name pointed to by pFileName into a memory buffer. */
 extern BOOL loadFile(const char *pFileName,		// The filename
               char **ppFileData,	// A buffer containing the file contents
               UDWORD *pFileSize);	// The size of this buffer
@@ -119,13 +113,13 @@ extern BOOL loadFile(const char *pFileName,		// The filename
 extern PHYSFS_file* openLoadFile(const char* fileName, bool hard_fail);
 extern PHYSFS_file* openSaveFile(const char* fileName);
 
-/* Save the data in the buffer into the given file */
+/** Save the data in the buffer into the given file */
 extern BOOL saveFile(const char *pFileName, const char *pFileData, UDWORD fileSize);
 
-// load a file from disk into a fixed memory buffer
+/** Load a file from disk into a fixed memory buffer. */
 BOOL loadFileToBuffer(const char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize);
 
-// as above but returns quietly if no file found
+/** Load a file from disk, but returns quietly if no file found. */
 BOOL loadFileToBufferNoError(const char *pFileName, char *pFileBuffer, UDWORD bufferSize,
                              UDWORD *pSize);
 

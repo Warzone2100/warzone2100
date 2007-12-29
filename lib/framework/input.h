@@ -33,7 +33,7 @@
 #include <SDL.h>
 #include "types.h"
 
-/* The defines for all the key codes */
+/** Defines for all the key codes used. */
 typedef enum _key_code
 {
 	KEY_ESC			=SDLK_ESCAPE,
@@ -139,34 +139,33 @@ typedef enum _key_code
 	KEY_IGNORE		=5190
 } KEY_CODE;
 
-// The largest possible scan code
+/** The largest possible scan code. */
 #define KEY_MAXSCAN SDLK_LAST
 
-/* Tell the input system that we have lost the focus */
+/** Tell the input system that we have lost the focus. */
 extern void inputLooseFocus(void);
 
 extern void inputHandleKeyEvent(SDL_KeyboardEvent*);
 extern void inputHandleMouseMotionEvent(SDL_MouseMotionEvent*);
 extern void inputHandleMouseButtonEvent(SDL_MouseButtonEvent*);
 
-/* Converts the key code into an ascii string */
+/** Converts the key code into an ascii string. */
 extern void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize);
 
-/* Initialise the input module */
+/** Initialise the input module. */
 extern void inputInitialise(void);
 
-/* Add a key press to the key buffer */
+/** Add a key press to the key buffer. */
 extern void inputAddBuffer(UDWORD code, char char_code, UDWORD count);
 
-/* This returns true if the key is currently depressed */
+/** This returns true if the key is currently depressed. */
 extern BOOL keyDown(KEY_CODE code);
 
-/* This returns true if the key went from being up to being down this frame */
+/** This returns true if the key went from being up to being down this frame. */
 extern BOOL keyPressed(KEY_CODE code);
 
-/* This returns true if the key went from being down to being up this frame */
+/** This returns true if the key went from being down to being up this frame. */
 extern BOOL keyReleased(KEY_CODE code);
-
 
 typedef enum _mouse_key_code
 {
@@ -177,32 +176,34 @@ typedef enum _mouse_key_code
 	MOUSE_WDN = SDL_BUTTON_WHEELDOWN
 } MOUSE_KEY_CODE;
 
-/* These two functions return the current position of the mouse */
+/** Return the current X position of the mouse. */
 extern Uint16 mouseX(void) WZ_DECL_PURE;
+
+/** Return the current Y position of the mouse. */
 extern Uint16 mouseY(void) WZ_DECL_PURE;
 
-/* This returns true if the mouse key is currently depressed */
+/** This returns true if the mouse key is currently depressed. */
 extern BOOL mouseDown(MOUSE_KEY_CODE code);
 
-/* This returns true if the mouse key was double clicked */
+/** This returns true if the mouse key was double clicked. */
 extern BOOL mouseDClicked(MOUSE_KEY_CODE code);
 
-/* This returns true if the mouse key went from being up to being down this frame */
+/** This returns true if the mouse key went from being up to being down this frame. */
 extern BOOL mousePressed(MOUSE_KEY_CODE code);
 
-/* This returns true if the mouse key went from being down to being up this frame */
+/** This returns true if the mouse key went from being down to being up this frame. */
 extern BOOL mouseReleased(MOUSE_KEY_CODE code);
 
-/* Check for a mouse drag, return the drag start coords if dragging */
+/** Check for a mouse drag, return the drag start coords if dragging. */
 extern BOOL mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py);
 
-/* Warps the mouse to the given position */
+/** Warps the mouse to the given position. */
 extern void SetMousePos(Uint16 x, Uint16 y);
 
-/* Sets the state of the mouse key to down */
+/** Sets the state of the mouse key to down. */
 extern void setMouseDown(MOUSE_KEY_CODE code);
 
-/* Sets the state of the mouse key to up */
+/** Sets the state of the mouse key to up. */
 extern void setMouseUp(MOUSE_KEY_CODE code);
 
 /* The input buffer can contain normal character codes and these control codes */
@@ -223,7 +224,7 @@ extern void setMouseUp(MOUSE_KEY_CODE code);
 #define INPBUF_CR		0x00000D
 #define INPBUF_ESC		0x00001b
 
-/* Return the next key press or 0 if no key in the buffer.
+/** Return the next key press or 0 if no key in the buffer.
  * The key returned will have been remaped to the correct ascii code for the
  * windows key map.
  * All key presses are buffered up (including windows auto repeat).
@@ -232,7 +233,7 @@ extern UDWORD inputGetKey(void);
 
 extern char inputGetCharKey(void);
 
-/* Clear the input buffer */
+/** Clear the input buffer. */
 extern void inputClearBuffer(void);
 
 #endif

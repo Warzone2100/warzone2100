@@ -133,7 +133,7 @@ UDWORD	frameGetFrameNumber(void)
 }
 
 
-/* Set the current cursor from a Resource ID */
+/** Set the current cursor from a Resource ID */
 void frameSetCursorFromRes(SWORD resID)
 {
 	ASSERT( resID >= CURSOR_OFFSET, "frameSetCursorFromRes: bad resource ID" );
