@@ -1070,77 +1070,109 @@ UDWORD averagePing(void)
 
 BOOL sendPing(void)
 {
-	NETMSG	ping;
-	UDWORD	i;
-	static UDWORD	lastPing=0;						// last time we sent a ping.
-	static UDWORD	lastav=0;						// last time we updated average.
+	BOOL			new = TRUE;
+	uint8_t			player = selectedPlayer;
+	int				i;
+	static UDWORD	lastPing = 0;	// Last time we sent a ping
+	static UDWORD	lastav = 0;		// Last time we updated average
 
-	// only ping every so often.
-	if(lastPing > gameTime)lastPing= 0;
-	if((gameTime-lastPing) < PING_FREQUENCY)
+	// Only ping every so often
+	if (lastPing > gameTime)
+	{
+		lastPing = 0;
+	}
+	
+	if (gameTime - lastPing < PING_FREQUENCY)
 	{
 		return TRUE;
 	}
+	
 	lastPing = gameTime;
 
 
-	/// if host, also update the average ping stat for joiners.
-	if(NetPlay.bHost)
+	// If host, also update the average ping stat for joiners
+	if (NetPlay.bHost)
 	{
-		if(lastav > gameTime)lastav= 0;
-		if((gameTime-lastav) > AV_PING_FREQUENCY)
+		if (lastav > gameTime)
 		{
-			NETsetGameFlags(2,averagePing());
-			lastav=gameTime;
+			lastav = 0;
+		}
+		
+		if (gameTime - lastav > AV_PING_FREQUENCY)
+		{
+			NETsetGameFlags(2, averagePing());
+			lastav = gameTime;
 		}
 	}
 
-	// before we send the ping, if any player failed to respond to the last one
-	// we should re-enumerate the players.
+	/*
+	 * Before we send the ping, if any player failed to respond to the last one
+	 * we should re-enumerate the players.
+	 */
 
-	for (i=0; i<MAX_PLAYERS;i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		if( isHumanPlayer(i) && PingSend[i] && ingame.PingTimes[i] && (i!= selectedPlayer) )
+		if (isHumanPlayer(i)
+		 && PingSend[i]
+		 && ingame.PingTimes[i]
+		 && i != selectedPlayer)
 		{
-	//		CONPRINTF(ConsoleString,(ConsoleString,_("%s is Not Respoding"),getPlayerName(i) ));
 			ingame.PingTimes[i] = PING_LIMIT;
 		}
-		else if( !isHumanPlayer(i) && PingSend[i] && ingame.PingTimes[i] && (i!= selectedPlayer) )
+		else if (!isHumanPlayer(i)
+		      && PingSend[i]
+		      && ingame.PingTimes[i]
+		      && i != selectedPlayer)
 		{
 			ingame.PingTimes[i] = 0;
 		}
 	}
 
-	ping.body[0] = (char)selectedPlayer;
-	ping.body[1] = 1;
-	ping.size	 = 2;
-	ping.type	 = NET_PING;
+	NETbeginEncode(NET_PING, NET_ALL_PLAYERS);
+		NETuint8_t(&player);
+		NETbool(&new);
+	NETend();
 
-	for(i=0;i<MAX_PLAYERS;i++)
+	// Note when we sent the ping
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		PingSend[i] = gameTime2;//clock();
+		PingSend[i] = gameTime2;
 	}
-	return(NETbcast(&ping,FALSE));
+	
+	return TRUE;
 }
 
 // accept and process incoming ping messages.
-BOOL recvPing(NETMSG *ping)
+BOOL recvPing()
 {
-	NETMSG reply;
+	BOOL	new;
+	uint8_t	sender, us = selectedPlayer;
+	
+	NETbeginDecode();
+		NETuint8_t(&sender);
+		NETbool(&new);
+	NETend();
 
-	if (ping->body[1] ==1)									// if this is a new ping
+	// If this is a new ping, respond to it
+	if (new)
 	{
-		reply.body[0]	= (char) selectedPlayer;
-		reply.body[1]	= 0;
-		reply.size		= 2;
-		reply.type		= NET_PING;
-
-		NETsend(&reply, player2dpid[(int) ping->body[0]], FALSE);	// reply to it
+		NETbeginEncode(NET_PING, player2dpid[sender]);
+			// We are responding to a new ping
+			new = FALSE;
+			
+			NETuint8_t(&us);
+			NETbool(&new);
+		NETend();
 	}
-	else													// else it's returned, so store it.
+	// They are responding to one of our pings
+	else
 	{
-		ingame.PingTimes[(int) ping->body[0]]	= (gameTime2 - PingSend[(int) ping->body[0]] ) /2 ;
-		PingSend[(int) ping->body[0]]		= 0;					// note we've recvd it!
+		// Work out how long it took them to respond
+		ingame.PingTimes[sender] = (gameTime2 = PingSend[sender]) / 2;
+		
+		// Note that we have received it
+		PingSend[sender] = 0;
 	}
+	
 	return TRUE;
 }

@@ -40,7 +40,7 @@ extern BOOL recvBuildFinished		();
 extern BOOL recvTemplate			(NETMSG *pMsg);
 extern BOOL recvDestroyFeature		(NETMSG *pMsg);
 extern BOOL recvDemolishFinished	();
-extern BOOL recvPing				(NETMSG *pMsg);
+extern BOOL recvPing				();
 extern BOOL	recvRequestDroid		(NETMSG *pMsg);
 extern BOOL recvTextMessage			(NETMSG *pMsg);
 extern BOOL recvDroidSecondary		(NETMSG *pMsg);

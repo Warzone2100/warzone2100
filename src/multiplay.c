@@ -726,7 +726,7 @@ BOOL recvMessage(void)
 			recvDestroyFeature(&msg);
 			break;
 		case NET_PING:						// diagnostic ping msg.
-			recvPing(&msg);
+			recvPing();
 			break;
 		case NET_DEMOLISH:					// structure demolished.
 			recvDemolishFinished();
