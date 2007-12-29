@@ -124,7 +124,7 @@
     08 US 01 -		# Base speed
     09 ST 60 -		# Droid name (typically template name)
     0a US 01 -		# Current body points
-    0b US 01 -		# Number of kills
+    0b FP 01 -		# Experience
     0c US 01 -		# Name version (EXPLAIN ME)
     0e SI 01 -1		# Current job target ID (repairing stuff etc)
     0f SI 01 -1		# Current stats target ID (building stuff etc)
