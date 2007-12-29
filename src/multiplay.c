@@ -658,7 +658,7 @@ BOOL recvMessage(void)
 				recvStructureCheck(&msg);
 				break;
 			case NET_CHECK_POWER:				// Power level syncing.
-				recvPowerCheck(&msg);
+				recvPowerCheck();
 				break;
 			case NET_TEXTMSG:					// simple text message
 				recvTextMessage(&msg);

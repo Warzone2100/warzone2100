@@ -904,13 +904,19 @@ BOOL recvStructureCheck( NETMSG *m)
 // Power Checking. Send a power level check every now and again.
 BOOL sendPowerCheck(BOOL now)
 {
-	NETMSG	m;
-	static UDWORD lastsent = 0;
+	static UDWORD	lastsent = 0;
+	uint8_t			player = selectedPlayer;
+	uint32_t		power = asPower[player]->currentPower;
 
-	if(!now)
+	if (!now)
 	{
-		if(lastsent > gameTime)lastsent= 0;
-		if((gameTime-lastsent) < POWER_FREQUENCY )	// only send if not done recently.
+		if (lastsent > gameTime)
+		{
+			lastsent = 0;
+		}
+		
+		// Only send if not done recently
+		if (gameTime - lastsent < POWER_FREQUENCY)
 		{
 			return TRUE;
 		}
@@ -918,24 +924,23 @@ BOOL sendPowerCheck(BOOL now)
 
 	lastsent = gameTime;
 
-	// ok send a power check.
-	m.body[0] = (char)selectedPlayer;
-
-	NetAdd(m,1, asPower[selectedPlayer]->currentPower );
-
-	m.size = 5;
-	m.type = NET_CHECK_POWER;
-	return(NETbcast(&m,FALSE));
+	NETbeginEncode(NET_CHECK_POWER, NET_ALL_PLAYERS);
+		NETuint8_t(&player);
+		NETuint32_t(&power);
+	return NETend();
 }
 
-BOOL recvPowerCheck(NETMSG *pMsg)
+BOOL recvPowerCheck()
 {
-	UDWORD player,b;
+	uint8_t		player;
+	uint32_t	power;
 
-	player = pMsg->body[0];
-	NetGet(pMsg,1, b);
-	setPower(player,b);
-
+	NETbeginDecode();
+		NETuint8_t(&player);
+		NETuint32_t(&power);
+	NETend();
+	
+	setPower(player, power);
 	return TRUE;
 }
 

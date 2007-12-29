@@ -50,7 +50,7 @@ extern BOOL recvDroidDisEmbark      (NETMSG *pMsg);
 //extern BOOL recvCommandDroid		(NETMSG *pMsg);
 extern BOOL recvDroidCheck			(NETMSG *pMsg);
 extern BOOL recvStructureCheck		(NETMSG *pMsg);
-extern BOOL recvPowerCheck			(NETMSG *pMsg);
+extern BOOL recvPowerCheck			();
 extern BOOL recvAlliance			(BOOL allowAudio);
 //extern BOOL multiPlayerRequest		(NETMSG *pMsg);
 extern BOOL recvColourRequest		(NETMSG *pMsg);
