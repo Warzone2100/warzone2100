@@ -780,50 +780,46 @@ void orderUpdateDroid(DROID *psDroid)
 		}
 		break;
 	case DORDER_EMBARK:
-        //only place it can be trapped - in multiPlayer can only put cyborgs onto a Transporter
-        if (bMultiPlayer && !cyborgDroid(psDroid))
-        {
-            psDroid->order = DORDER_NONE;
+		// only place it can be trapped - in multiPlayer can only put cyborgs onto a Transporter
+		if (bMultiPlayer && !cyborgDroid(psDroid))
+		{
+			psDroid->order = DORDER_NONE;
 			actionDroid(psDroid, DACTION_NONE);
-        }
-        else
-        {
-		    // don't want the droids to go into a formation for this order
-		    if (psDroid->sMove.psFormation != NULL)
-		    {
-			    formationLeave(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid);
-			    psDroid->sMove.psFormation = NULL;
-		    }
+		}
+		else
+		{
+			// don't want the droids to go into a formation for this order
+			if (psDroid->sMove.psFormation != NULL)
+			{
+				formationLeave(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid);
+				psDroid->sMove.psFormation = NULL;
+			}
 
-		    // Wait for the action to finish then assign to Transporter (if not already flying)
-		    if ( (psDroid->psTarget == NULL) ||
-			     //(((DROID *)psDroid->psTarget)->order != DORDER_NONE &&
-                 //(((DROID *)psDroid->psTarget)->order != DORDER_GUARD)))
-                 transporterFlying((DROID *)psDroid->psTarget))
-		    {
-			    psDroid->order = DORDER_NONE;
-			    actionDroid(psDroid, DACTION_NONE);
-		    }
-		    else if ( (abs((SDWORD)psDroid->pos.x - (SDWORD)psDroid->psTarget->pos.x) < TILE_UNITS) &&
-				     (abs((SDWORD)psDroid->pos.y - (SDWORD)psDroid->psTarget->pos.y) < TILE_UNITS) )
-		    {
-                //if in multiPlayer, only want to process if this player's droid
-                if (!bMultiPlayer || psDroid->player == selectedPlayer)
-                {
-    			    //psDroid->order = DORDER_NONE;
-			        transporterAddDroid((DROID *)psDroid->psTarget, psDroid);
-                    //order the droid to stop so moveUpdateDroid does not process this unit
-                    orderDroid(psDroid, DORDER_STOP);
-			setDroidTarget(psDroid, NULL);
-	    		    psDroid->psTarStats = NULL;
-		    	    secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
-                }
-		    }
-		    else if(psDroid->action == DACTION_NONE)
-		    {
-			    actionDroidLoc(psDroid, DACTION_MOVE, psDroid->psTarget->pos.x,psDroid->psTarget->pos.y);
-		    }
-        }
+			// Wait for the action to finish then assign to Transporter (if not already flying)
+			if (psDroid->psTarget == NULL || transporterFlying((DROID *)psDroid->psTarget))
+			{
+				psDroid->order = DORDER_NONE;
+				actionDroid(psDroid, DACTION_NONE);
+			}
+			else if (abs((SDWORD)psDroid->pos.x - (SDWORD)psDroid->psTarget->pos.x) < TILE_UNITS
+			         && abs((SDWORD)psDroid->pos.y - (SDWORD)psDroid->psTarget->pos.y) < TILE_UNITS)
+			{
+				// if in multiPlayer, only want to process if this player's droid
+				if (!bMultiPlayer || psDroid->player == selectedPlayer)
+				{
+					transporterAddDroid((DROID *)psDroid->psTarget, psDroid);
+					// order the droid to stop so moveUpdateDroid does not process this unit
+					orderDroid(psDroid, DORDER_STOP);
+					setDroidTarget(psDroid, NULL);
+					psDroid->psTarStats = NULL;
+					secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
+				}
+			}
+			else if (psDroid->action == DACTION_NONE)
+			{
+				actionDroidLoc(psDroid, DACTION_MOVE, psDroid->psTarget->pos.x,psDroid->psTarget->pos.y);
+			}
+		}
 
 		// Do we need to clear the secondary order "DSO_EMBARK" here? (PD)
 		break;

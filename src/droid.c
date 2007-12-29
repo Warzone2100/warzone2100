@@ -676,9 +676,7 @@ BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 {
 	CHECK_DROID(psDroid);
 
-	if(!driveDroidKilled(psDroid)) {	// Tell the driver system it's gone.
-
-	}
+	driveDroidKilled(psDroid);	// Tell the driver system it's gone.
 
 	//tell the power system its gone
 	powerDestroyObject((BASE_OBJECT *)psDroid);
@@ -688,14 +686,6 @@ BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 		// droid has already been killed, quit
 		return FALSE;
 	}
-
-	/* remove animation if present  - do this when the droid is destroyed*/
-	/*if ( psDroid->psCurAnim != NULL )
-	{
-		bRet = animObj_Remove( psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID );
-		ASSERT( bRet == TRUE, "droidRemove: animObj_Remove failed" );
-		psDroid->psCurAnim = NULL;
-	}*/
 
 	// leave the current formation if any
 	if (psDroid->sMove.psFormation)
@@ -711,7 +701,7 @@ BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 		psDroid->psGroup = NULL;
 	}
 
-    //reset the baseStruct
+	// reset the baseStruct
 	setDroidBase(psDroid, NULL);
 
 	// remove the droid from the cluster systerm
@@ -722,7 +712,7 @@ BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 
 	removeDroid(psDroid, pList);
 
-    //tell the power system its gone
+	// tell the power system it is gone
 	powerDestroyObject((BASE_OBJECT *)psDroid);
 
 	if (psDroid->player == selectedPlayer)
@@ -730,7 +720,7 @@ BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 		intRefreshScreen();
 	}
 
-    return TRUE;
+	return TRUE;
 }
 
 static void droidFlameFallCallback( ANIM_OBJECT * psObj )
