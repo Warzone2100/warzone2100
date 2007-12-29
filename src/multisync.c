@@ -950,104 +950,112 @@ BOOL recvPowerCheck()
 BOOL sendScoreCheck(void)
 {
 	static UDWORD	lastsent = 0;
-	UDWORD			i;
+	uint8_t			i;
+	BOOL			isData = FALSE;
 	PLAYERSTATS		stats;
-	NETMSG			m;
 
-	if(lastsent > gameTime)lastsent= 0;
-	if((gameTime-lastsent) < SCORE_FREQUENCY )	// only send if not done recently.
+	if (lastsent > gameTime)
+	{
+		lastsent= 0;
+	}
+	
+	if (gameTime - lastsent < SCORE_FREQUENCY)
 	{
 		return TRUE;
 	}
+	
 	lastsent = gameTime;
 
-	// syncronise scores.
+	// Update local score
+	stats = getMultiStats(selectedPlayer, TRUE);
 
-	// update local score
-	stats = getMultiStats(selectedPlayer,TRUE);
-
-	stats.recentKills += stats.killsToAdd;		// add recently scored points.
+	// Add recently scored points
+	stats.recentKills += stats.killsToAdd;
 	stats.totalKills  += stats.killsToAdd;
 	stats.recentScore += stats.scoreToAdd;
 	stats.totalScore  += stats.scoreToAdd;
-	stats.killsToAdd =0;
-	stats.scoreToAdd =0;
+	
+	// Zero them now added
+	stats.killsToAdd = stats.scoreToAdd = 0;
 
-	setMultiStats(player2dpid[selectedPlayer],stats,TRUE);	// store local version.
-	setMultiStats(player2dpid[selectedPlayer],stats,FALSE);	// send score to the ether
+	// Store local version
+	setMultiStats(player2dpid[selectedPlayer], stats, TRUE);
+	
+	// Send score to the ether
+	setMultiStats(player2dpid[selectedPlayer], stats, FALSE);
 
-	// broadcast any changes in other players, but not in FRONTEND!!!
-	if(titleMode != MULTIOPTION && titleMode != MULTILIMIT)
+	// Broadcast any changes in other players, but not in FRONTEND!!!
+	if (titleMode != MULTIOPTION && titleMode != MULTILIMIT)
 	{
-		m.size =0;
-		for(i = 0; i<MAX_PLAYERS; i++)
+		NETbeginEncode(NET_SCORESUBMIT, NET_ALL_PLAYERS);
+		
+		for (i = 0; i < MAX_PLAYERS; i++)
 		{
-			if(isHumanPlayer(i) && (i!=selectedPlayer))
+			if (isHumanPlayer(i) && i != selectedPlayer)
 			{
-				stats=getMultiStats(i,TRUE);
-				if(stats.killsToAdd || stats.scoreToAdd  )
+				stats = getMultiStats(i, TRUE);
+				
+				if (stats.killsToAdd || stats.scoreToAdd  )
 				{
-					m.body[m.size] = (UBYTE)i;
-					m.size += 1;
-					NetAdd(m,m.size,stats.killsToAdd);
-					m.size += sizeof(stats.killsToAdd);
-					NetAdd(m,m.size,stats.scoreToAdd);
-					m.size += sizeof(stats.scoreToAdd);
+					NETuint8_t(&i);
+					
+					NETuint32_t(&stats.killsToAdd);
+					NETuint32_t(&stats.scoreToAdd);
+					
+					isData = TRUE;
 				}
 			}
 		}
-		if(m.size != 0)
+		
+		// If we added any data to the packet
+		if (isData)
 		{
-			m.body[m.size] = ANYPLAYER;	// terminate msg.
-			m.size += 1;
-			m.type = NET_SCORESUBMIT;
-			NETbcast(&m,FALSE);
+			// Terminate the message with ANYPLAYER
+			uint8_t player = ANYPLAYER;
+			NETuint8_t(&player);
+			
+			// Send the message
+			NETend();
 		}
 	}
 
-	// get global versions of scores.
-	for(i = 0; i<MAX_PLAYERS; i++)
+	// Get global versions of scores
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		if(isHumanPlayer(i) )
+		if (isHumanPlayer(i))
 		{
-			setMultiStats(player2dpid[i], getMultiStats(i,FALSE) ,TRUE);
+			setMultiStats(player2dpid[i], getMultiStats(i, FALSE), TRUE);
 		}
 	}
+	
 	return TRUE;
 }
 
 
 
-BOOL recvScoreSubmission(NETMSG *pMsg)
+BOOL recvScoreSubmission()
 {
-	UDWORD		player=0,kil,index;
-	SDWORD		sco;
-	PLAYERSTATS stats;
+	uint8_t		player;
+	uint32_t	kills, score;
+	PLAYERSTATS	stats;
 
-	// process msg, add to next score addition.
-	index = 0;
-	while(player != ANYPLAYER)
+	NETbeginDecode();
+	
+	for (NETuint8_t(&player); player != ANYPLAYER; NETuint8_t(&player))
 	{
-		player = pMsg->body[index];
-		index+=1;
-		if(player != ANYPLAYER)
+		if (player == selectedPlayer)
 		{
-			NetGet(pMsg,index,kil);
-			index+=sizeof(kil);
-			NetGet(pMsg,index,sco);
-			index+=sizeof(sco);
-
-			// do the update.
-			if(player == selectedPlayer)
-			{
-				stats = getMultiStats(player,TRUE);
-				stats.killsToAdd += kil;
-				stats.scoreToAdd += sco;
-				setMultiStats(player2dpid[player],stats,TRUE);	// store local version.
-			}
-
+			NETuint32_t(&kills);
+			NETuint32_t(&score);
+			
+			stats = getMultiStats(player, TRUE);
+			stats.killsToAdd += kills;
+			stats.scoreToAdd += score;
+			
+			break;
 		}
 	}
+	
 	return TRUE;
 }
 

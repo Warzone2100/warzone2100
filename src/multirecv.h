@@ -58,7 +58,7 @@ extern BOOL sendWholeDroid			(DROID	*pD, UDWORD dest);
 //extern BOOL sendWholeStructure		(STRUCTURE *pS, DPID dest);
 extern void recvOptions				(NETMSG *pMsg);
 extern void sendOptions				(UDWORD dest, UDWORD play);
-extern BOOL recvScoreSubmission		(NETMSG *pMsg);
+extern BOOL recvScoreSubmission		();
 extern BOOL recvDestroyExtra		(NETMSG *pMsg);
 extern BOOL	recvAudioMsg			(NETMSG *pMsg);
 extern BOOL recvHappyVtol			(NETMSG *pMsg);

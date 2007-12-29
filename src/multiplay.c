@@ -700,7 +700,7 @@ BOOL recvMessage(void)
 				recvGift(&msg);
 				break;
 			case NET_SCORESUBMIT:				//  a score update from another player
-				recvScoreSubmission(&msg);
+				recvScoreSubmission();
 				break;
 			case NET_VTOL:
 				recvHappyVtol(&msg);
