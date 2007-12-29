@@ -71,7 +71,7 @@ install: build
 	dh_installdirs
 
 	$(MAKE) install-exec DESTDIR=$(CURDIR)/debian/warzone2100
-	$(MAKE) install-data DESTDIR=$(CURDIR)/debian/warzone2100-data
+	$(MAKE) install-data DESTDIR=$(CURDIR)/debian/warzone2100
 
 
 # Build architecture-independent files here.
@@ -98,7 +98,7 @@ binary-arch: build install
 #	dh_installinfo
 	dh_installman
 	dh_link
-	dh_strip
+#	dh_strip
 	dh_compress
 	dh_fixperms
 #	dh_perl
