@@ -68,37 +68,44 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWOR
 // ////////////////////////////////////////////////////////////////////////////
 // vtol bits.
 // happy vtol = vtol ready to go back to attack.
-BOOL sendHappyVtol(DROID *psDroid)
+BOOL sendHappyVtol(const DROID* psDroid)
 {
-	NETMSG m;
-
 	if (!myResponsibility(psDroid->player))
 	{
 		return FALSE;
 	}
 
-	NetAdd(m,0,psDroid->player);
-	NetAdd(m,1,psDroid->id);
-	m.size =5;
-	m.type =NET_VTOL;
+	NETbeginEncode(NET_VTOL, NET_ALL_PLAYERS);
+	{
+		uint8_t player = psDroid->player;
+		uint32_t droid = psDroid->id;
 
-	return NETbcast(&m,FALSE);
+		NETuint8_t(&player);
+		NETuint32_t(&droid);
+	}
+	return NETend();
 }
 
-BOOL recvHappyVtol(NETMSG *pMsg)
+BOOL recvHappyVtol()
 {
-	DROID	*pD;
-	UBYTE	player;
-	UDWORD	id;
-	int		i;
+	DROID* pD;
+	unsigned int i;
 
-	NetGet(pMsg,0,player);
-	NetGet(pMsg,1,id);
-
-	if (!IdToDroid(id,player,&pD)) //find droid.
+	NETbeginDecode();
 	{
-		return FALSE;
+		uint8_t player;
+		uint32_t droid;
+
+		NETuint8_t(&player);
+		NETuint32_t(&droid);
+
+		if (!IdToDroid(droid, player, &pD))
+		{
+			NETend();
+			return FALSE;
+		}
 	}
+	NETend();
 
 	// Rearming also repairs VTOLs
 	pD->body = pD->originalBody;
@@ -112,7 +119,6 @@ BOOL recvHappyVtol(NETMSG *pMsg)
 
 	return TRUE;
 }
-
 
 // ////////////////////////////////////////////////////////////////////////////
 // Secondary Orders.

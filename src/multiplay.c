@@ -703,7 +703,7 @@ BOOL recvMessage(void)
 				recvScoreSubmission();
 				break;
 			case NET_VTOL:
-				recvHappyVtol(&msg);
+				recvHappyVtol();
 				break;
 			case NET_LASSAT:
 				recvLasSat();

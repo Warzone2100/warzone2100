@@ -257,7 +257,7 @@ extern BOOL sendDroidSecondaryAll(const DROID* psDroid);
 extern BOOL sendDroidEmbark     (const DROID* psDroid);
 extern BOOL sendDroidDisEmbark  (const DROID* psDroid);
 extern BOOL sendDestroyExtra	(BASE_OBJECT *psKilled,BASE_OBJECT *psKiller);
-extern BOOL sendHappyVtol		(DROID *psDroid);
+extern BOOL sendHappyVtol		(const DROID* psDroid);
 
 // Startup. mulitopt
 extern BOOL multiTemplateSetup	(void);

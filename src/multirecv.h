@@ -61,7 +61,7 @@ extern void sendOptions				(UDWORD dest, UDWORD play);
 extern BOOL recvScoreSubmission		();
 extern BOOL recvDestroyExtra		(NETMSG *pMsg);
 extern BOOL	recvAudioMsg			(NETMSG *pMsg);
-extern BOOL recvHappyVtol			(NETMSG *pMsg);
+extern BOOL recvHappyVtol			(void);
 extern BOOL recvResearchStatus		(NETMSG *pMsg);
 extern BOOL recvLasSat				();
 extern BOOL	recvMapFileData				(NETMSG *pMsg);
