@@ -371,10 +371,8 @@ BOOL recvDroidMove(NETMSG *m)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Send a new Droid to the other players
-BOOL SendDroid(DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id)
+BOOL SendDroid(const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id)
 {
-	NETMSG m;
-
 	// Dont send other droids during campaign setup
 	if (ingame.localJoiningInProgress)
 	{
@@ -388,42 +386,44 @@ BOOL SendDroid(DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player
 		return FALSE;
 	}
 
+	NETbeginEncode(NET_DROID, NET_ALL_PLAYERS);
+	{
+		Vector3uw pos = { x, y, 0 };
+		uint32_t templateID = pTemplate->multiPlayerID;
 
-	NetAdd(m,0,player);						//ok since <255  players!
-	NetAdd(m,1,x);									//x pos of new droid
-	NetAdd(m,5,y);									//y pos of new droid
-	NetAdd(m,9,id);									//id of droid to create
-
-	m.body[13] = powerCalculated;
-
-	// new version
-	NetAdd(m,14,pTemplate->multiPlayerID);
-	m.size = 14+sizeof(pTemplate->multiPlayerID);
-
-	m.type=NET_DROID;
-	NETbcast(&m,FALSE);						// send it.
-	return TRUE;
-
+		NETuint8_t(&player);
+		NETuint32_t(&id);
+		NETVector3uw(&pos);
+		NETuint32_t(&templateID);
+		NETbool(&powerCalculated);
+	}
+	return NETend();
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // receive droid creation information from other players
-BOOL recvDroid(NETMSG * m)
+BOOL recvDroid()
 {
-	DROID_TEMPLATE *pT;
-	UDWORD			x,y,id;
-	UDWORD			player;
-	UDWORD			targetRef;
-	DROID			*d;
+	DROID_TEMPLATE* pT;
+	DROID* psDroid;
+    uint8_t player;
+    uint32_t id;
+    Vector3uw pos;
+    BOOL power;
 
-	player=m->body[0];
-	NetGet(m,1,x);									// new droids x position
-	NetGet(m,5,y);									// new droids y position
-	NetGet(m,9,id);									// droid to build's id.
+	NETbeginDecode();
+	{
+		uint32_t templateID;
 
-	NetGet(m,14,targetRef);
+		NETuint8_t(&player);
+		NETuint32_t(&id);
+		NETVector3uw(&pos);
+		NETuint32_t(&templateID);
+		NETbool(&power);
 
-	pT = IdToTemplate(targetRef,player);
+		pT = IdToTemplate(templateID, player);
+	}
+	NETend();
 
 	// If we can not find the template ask for the entire droid instead
 	if (!pT)
@@ -434,26 +434,24 @@ BOOL recvDroid(NETMSG * m)
 	}
 
 	// If the power to build the droid has been calculated
-	if(m->body[13] != 0)
+	if (power
+	// Use the power required to build the droid
+	 && !usePower(player, pT->powerPoints))
 	{
-		// Use the power required to build the droid
-		if (!usePower(player,pT->powerPoints))
-		{
-			debug(LOG_NET, "Not enough power to build recvd droid, player=%u", player);
-			// Build anyway..
-		}
+		debug(LOG_NET, "Not enough power to build recvd droid, player = %hhu", player);
+		// Build anyway..
 	}
 
 	// Create that droid on this machine.
 	turnOffMultiMsg(TRUE);
-	d = buildDroid(pT, x, y, player, FALSE);
+	psDroid = buildDroid(pT, pos.x, pos.y, player, FALSE);
 	turnOffMultiMsg(FALSE);
 
 	// If we were able to build the droid set it up
-	if (d)
+	if (psDroid)
 	{
-		d->id = id;
-		addDroid(d, apsDroidLists);
+		psDroid->id = id;
+		addDroid(psDroid, apsDroidLists);
 	}
 	else
 	{

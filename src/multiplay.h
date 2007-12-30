@@ -241,7 +241,7 @@ extern BOOL sendLasSat			(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj)
 
 
 // droids . multibot
-extern BOOL SendDroid			(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UBYTE player, UDWORD id);
+extern BOOL SendDroid			(const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id);
 extern BOOL SendDestroyDroid	(const DROID* psDroid);
 extern BOOL SendDemolishFinished(STRUCTURE *psS,DROID *psD);
 extern BOOL SendDroidInfo		(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, BASE_OBJECT *psObj);

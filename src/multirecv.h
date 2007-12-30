@@ -26,7 +26,7 @@
  * to avoid a load of warnings
  */
 
-extern BOOL recvDroid				(NETMSG *pMsg);
+extern BOOL recvDroid				(void);
 extern BOOL recvDroidInfo			(NETMSG *pMsg);
 extern BOOL recvDestroyDroid		(void);
 extern BOOL recvGroupOrder			(NETMSG *pMsg);

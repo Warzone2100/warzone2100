@@ -634,7 +634,7 @@ BOOL recvMessage(void)
 				recvAudioMsg(&msg);
 				break;
 			case NET_DROID:						// new droid of known type
-				recvDroid(&msg);
+				recvDroid();
 				break;
 			case NET_DROIDINFO:					//droid update info
 				recvDroidInfo(&msg);
