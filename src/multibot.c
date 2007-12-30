@@ -167,38 +167,46 @@ BOOL recvDroidSecondary()
 	return TRUE;
 }
 
-BOOL sendDroidSecondaryAll(DROID *psDroid)
+BOOL sendDroidSecondaryAll(const DROID* psDroid)
 {
-	NETMSG	m;
+	NETbeginEncode(NET_SECONDARY_ALL, NET_ALL_PLAYERS);
+	{
+		uint8_t player = psDroid->player;
+		uint32_t droid = psDroid->id;
+		uint32_t secOrder = psDroid->secondaryOrder;
 
-	NetAdd(m,0,psDroid->id);
-	NetAdd(m,4,psDroid->secondaryOrder);
-	m.body[8] = (char) psDroid->player;
-
-	m.size = 9;
-	m.type = NET_SECONDARY_ALL;
-	return NETbcast(&m,FALSE);
-
+		NETuint8_t(&player);
+		NETuint32_t(&droid);
+		NETuint32_t(&secOrder);
+	}
+	return NETend();
 }
 
-BOOL recvDroidSecondaryAll(NETMSG *pMsg)
+BOOL recvDroidSecondaryAll()
 {
-    DROID			*psDroid;
-	UDWORD			id,player,sorder;
+	DROID* psDroid;
 
-	NetGet(pMsg,0,id);
-	NetGet(pMsg,4,sorder);
-	player = pMsg->body[8];
-
-	if(!IdToDroid(id,player,&psDroid))		//find droid.
+	NETbeginDecode();
 	{
-		return FALSE;
-	}
+		uint8_t player;
+		uint32_t droid, secOrder;
 
-	if(psDroid)
-	{
-		psDroid->secondaryOrder = sorder;
+		NETuint8_t(&player);
+		NETuint32_t(&droid);
+		NETuint32_t(&secOrder);
+
+		if (!IdToDroid(droid, player, &psDroid))
+		{
+			NETend();
+			return FALSE;
+		}
+
+		if (psDroid != NULL)
+		{
+			psDroid->secondaryOrder = secOrder;
+		}
 	}
+	NETend();
 
 	return TRUE;
 }

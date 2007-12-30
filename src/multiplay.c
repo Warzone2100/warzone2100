@@ -682,7 +682,7 @@ BOOL recvMessage(void)
 				recvDroidSecondary();
 				break;
 			case NET_SECONDARY_ALL:					// set a droids secondary order level.
-				recvDroidSecondaryAll(&msg);
+				recvDroidSecondaryAll();
 				break;
 			case NET_DROIDEMBARK:
 				recvDroidEmbark();              //droid has embarked on a Transporter
