@@ -640,7 +640,7 @@ BOOL recvMessage(void)
 				recvDroidInfo(&msg);
 				break;
 			case NET_DROIDDEST:					// droid destroy
-				recvDestroyDroid(&msg);
+				recvDestroyDroid();
 				break;
 			case NET_DESTROYXTRA:
 				recvDestroyExtra(&msg);			// a generic destroy, complete wiht killer info.

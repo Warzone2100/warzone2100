@@ -823,34 +823,42 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, uint32_t x, uin
 
 // ////////////////////////////////////////////////////////////////////////////
 // Inform other players that a droid has been destroyed
-
-BOOL SendDestroyDroid(DROID *pD)
+BOOL SendDestroyDroid(const DROID* psDroid)
 {
-	NETMSG m;
+	NETbeginEncode(NET_DROIDDEST, NET_ALL_PLAYERS);
+	{
+		uint32_t id = psDroid->id;
 
-	NetAdd(m,0,pD->id);								// id of the droid to be destroyed
-	m.size	= sizeof(UDWORD);
-	m.type	= NET_DROIDDEST;
-
-	return( NETbcast(&m,TRUE));						//guaranteed msg?????
+		// Send the droid's ID
+		NETuint32_t(&id);
+	}
+	return NETend();
 }
+
 // ////////////////////////////////////////////////////////////////////////////
 // Accept a droid which was destroyed on another machine
-BOOL recvDestroyDroid(NETMSG *pMsg)
+BOOL recvDestroyDroid()
 {
-	DROID *pD;
-	UDWORD r;
+	DROID* psDroid;
 
-	NetGet(pMsg,0,r);								// get the id of the droid.
-	if( !IdToDroid(r, ANYPLAYER, &pD) )
+	NETbeginDecode();
 	{
-		return FALSE;
-	}
+		uint32_t id;
 
-	if(!pD->died)
+		// Retrieve the droid
+		NETuint32_t(&id);
+		if (!IdToDroid(id, ANYPLAYER, &psDroid))
+		{
+			return FALSE;
+		}
+	}
+	NETend();
+
+	// If the droid has not died on our machine yet, destroy it
+	if(!psDroid->died)
 	{
 		turnOffMultiMsg(TRUE);
-		destroyDroid(pD);						// remove the droid recvd from the remote players machine.
+		destroyDroid(psDroid);
 		turnOffMultiMsg(FALSE);
 	}
 
