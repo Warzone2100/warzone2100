@@ -681,7 +681,7 @@ BOOL loadResearchPR(const char *pPRData, UDWORD bufferSize)
 						if ((pResearch[incR].storeCount + 1) >
 										(SDWORD)pResearch[incR].numPRRequired)
 						{
-							debug( LOG_ERROR, "Trying to allocate more pre-requisites than allowed for research %s", getResearchName(pResearch) );
+							debug( LOG_ERROR, "Trying to allocate more pre-requisites than allowed for research %s", ResearchName );
 							abort();
 							return FALSE;
 						}
