@@ -25,53 +25,46 @@
  */
 
 #include <SDL_timer.h>
-
 #include <time.h>
 
 #include "lib/framework/frame.h"
 #include "gtime.h"
 
-
 #define GTIME_MINFRAME	(GAME_TICKS_PER_SEC/80)
 
-/* The current time in the game world */
-UDWORD gameTime;
+/* See header file for documentation */
+UDWORD gameTime, frameTime, gameTime2, frameTime2;
 
-/* The time for the last frame */
-UDWORD frameTime;
-
-/* The current time in the game world ( never stops )*/
-UDWORD gameTime2;
-
-/* The time for the last frame (never stops)*/
-UDWORD frameTime2;
-
-
-// the current clock modifier
+/** The current clock modifier. Set to speed up the game. */
 static float modifier;
 
-
-// the amount of game time before the last time clock speed was set
+/** The amount of game time before the last time clock speed was set. */
 static UDWORD	timeOffset;
+
+/** The amount of game time before the last time clock speed was set. */
 static UDWORD	timeOffset2;
 
-// the tick count the last time the clock speed was set
+/** The tick count the last time the clock speed was set. */
 static UDWORD	baseTime;
+
+/** The tick count the last time the clock speed was set. */
 static UDWORD	baseTime2;
 
-/* When the game paused so that gameTime can be adjusted when the game restarts */
+/** When the game paused, so that gameTime can be adjusted when the game restarts. */
 static SDWORD	pauseStart;
 
-/* Count how many times gameTimeStop has been called without a game time start */
+/** 
+  * Count how many times gameTimeStop has been called without a game time start. 
+  * We use this to ensure that we can properly nest stop commands. 
+  **/
 static UDWORD	stopCount;
 
 /* Initialise the game clock */
 BOOL gameTimeInit(void)
 {
-	//gameTime = 0;
-    /*start the timer off at 2 so that when the scripts strip the map of objects
-    for multiPlayer they will be processed as if they died*/
-    gameTime = 2;
+    	/* Start the timer off at 2 so that when the scripts strip the map of objects
+	 * for multiPlayer they will be processed as if they died. */
+	gameTime = 2;
 	timeOffset = 0;
 	baseTime = SDL_GetTicks();
 
@@ -88,7 +81,7 @@ BOOL gameTimeInit(void)
 
 UDWORD	getTimeValueRange(UDWORD tickFrequency, UDWORD requiredRange)
 {
-UDWORD	div1,div2;
+	UDWORD	div1, div2;
 
 	div1 = gameTime2%tickFrequency;
 	div2 = tickFrequency/requiredRange;
@@ -97,13 +90,12 @@ UDWORD	div1,div2;
 
 UDWORD	getStaticTimeValueRange(UDWORD tickFrequency, UDWORD requiredRange)
 {
-UDWORD	div1,div2;
+	UDWORD	div1, div2;
 
 	div1 = gameTime%tickFrequency;
 	div2 = tickFrequency/requiredRange;
 	return(div1/div2);
 }
-
 
 /* Call this each loop to update the game timer */
 void gameTimeUpdate(void)
@@ -111,7 +103,7 @@ void gameTimeUpdate(void)
 	unsigned int currTime = SDL_GetTicks();
 	unsigned long long newTime;
 
-	//don't update the game time if gameTimeStop has been called
+	// Do not update the game time if gameTimeStop has been called
 	if (stopCount == 0)
 	{
 		// Calculate the new game time
@@ -150,7 +142,6 @@ void gameTimeUpdate(void)
 	gameTime2 = newTime;
 }
 
-
 // reset the game time modifiers
 void gameTimeResetMod(void)
 {
@@ -158,7 +149,7 @@ void gameTimeResetMod(void)
 	timeOffset2 = gameTime2;
 
 	baseTime = SDL_GetTicks();
-	baseTime2 = SDL_GetTicks();
+	baseTime2 = baseTime;
 
 	modifier = 1.0f;
 }
@@ -176,12 +167,10 @@ void gameTimeGetMod(float *pMod)
 	*pMod = modifier;
 }
 
-
 BOOL gameTimeIsStopped(void)
 {
 	return (stopCount != 0);
 }
-
 
 /* Call this to stop the game timer */
 void gameTimeStop(void)
@@ -210,7 +199,7 @@ void gameTimeStart(void)
 	}
 }
 
-/*Call this to reset the game timer*/
+/* Call this to reset the game timer */
 void gameTimeReset(UDWORD time)
 {
 	// reset the game timers
@@ -220,29 +209,26 @@ void gameTimeReset(UDWORD time)
 	gameTime2 = time;
 	timeOffset2 = time;
 
-	baseTime = SDL_GetTicks();//used from save game only so GetTickCount is as valid as anything
-	baseTime2 = SDL_GetTicks();
-
+	baseTime = SDL_GetTicks();
+	baseTime2 = baseTime;
 
 	modifier = 1.0f;
 }
 
 void	getTimeComponents(UDWORD time, UDWORD *hours, UDWORD *minutes, UDWORD *seconds)
 {
-UDWORD	h,m,s;
-UDWORD	tph,tpm;
+	UDWORD	h, m, s;
+	UDWORD	ticks_per_hour, ticks_per_minute;
 
 	/* Ticks in a minute */
-	tpm = GAME_TICKS_PER_SEC*60;
+	ticks_per_minute = GAME_TICKS_PER_SEC * 60;
 
 	/* Ticks in an hour */
-	tph = tpm*60;
+	ticks_per_hour = ticks_per_minute * 60;
 
-	h = time/tph;
-
-	m = (time - (h*tph))/tpm;
-
-	s = (time - ((h*tph) + (m*tpm)))/GAME_TICKS_PER_SEC;
+	h = time / ticks_per_hour;
+	m = (time - (h * ticks_per_hour)) / ticks_per_minute;
+	s = (time - ((h * ticks_per_hour) + (m * ticks_per_minute))) / GAME_TICKS_PER_SEC;
 
 	*hours = h;
 	*minutes = m;
