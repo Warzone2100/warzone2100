@@ -1845,19 +1845,19 @@ void droidSelfRepair(DROID *psDroid)
 {
 	CHECK_DROID(psDroid);
 
-    if (!vtolDroid(psDroid))
-    {
-	    if (psDroid->body < psDroid->originalBody)
-	    {
-		    if (psDroid->asBits[COMP_REPAIRUNIT].nStat != 0)
-		    {
-			    psDroid->action = DACTION_DROIDREPAIR;
+	if (!vtolDroid(psDroid))
+	{
+		if (psDroid->body < psDroid->originalBody)
+		{
+			if (psDroid->asBits[COMP_REPAIRUNIT].nStat != 0)
+			{
+				psDroid->action = DACTION_DROIDREPAIR;
 				setDroidActionTarget(psDroid, (BASE_OBJECT *)psDroid, 0);
-			    psDroid->actionStarted = gameTime;
-			    psDroid->actionPoints  = 0;
-		    }
-	    }
-    }
+				psDroid->actionStarted = gameTime;
+				psDroid->actionPoints  = 0;
+			}
+		}
+	}
 
 	CHECK_DROID(psDroid);
 }
