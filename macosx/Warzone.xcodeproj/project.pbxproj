@@ -3521,7 +3521,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "mkdir -p ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources\nrm -rf ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data\ntar -cC .. --exclude .svn --exclude 'Makefile*' data | tar -xC ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources\n";
+			shellScript = "if [ \"${CONFIGURATION}\" == \"Debug\" ]; then\n    mkdir -p ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources\n    rm -rf ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data\n    tar -cC .. --exclude .svn --exclude 'Makefile*' data | tar -xC ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources\nelse\n    mkdir -p ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources\n    rm -rf ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data\n    mkdir ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data\n    cd ../data\n    zip -ru0 ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data/warzone.wz anims audio components effects features testdata gamedesc.lev images messages misc multiplay novideo.rpl palette.bin script sequenceaudio stats structs texpages wrf -x *svn*\n    cd mp\n    zip -ru0 ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data/mp.wz addon.lev anims components effects messages multiplay stats structs wrf -x *svn*\nfi\n";
 		};
 		02CDDD010D159CA700722688 /* Run autorevision */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4300,6 +4300,21 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"SIZEOF_INT=4",
+					"SIZEOF_SHORT=2",
+					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1)",
+					GLEW_MX,
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = "QUESOGLC_VERSION=\"\\\"0.6.5\\\"\"";
+				HEADER_SEARCH_PATHS = (
+					external/quesoglc/src,
+					external/quesoglc/include,
+					/Developer/SDKs/MacOSX10.4u.sdk/usr/X11R6/include/freetype2,
+					/Developer/SDKs/MacOSX10.4u.sdk/usr/X11R6/include,
+					"$(inherited)",
+				);
 				INFOPLIST_FILE = "Resources/QuesoGLC-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -5001,6 +5016,13 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1)",
+					HAVE_UNISTD_H,
+					HAVE_STRERROR,
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = "PACKAGE=\\\"popt\\\"";
 				INFOPLIST_FILE = "Resources/Popt-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Frameworks";
 				OTHER_LDFLAGS = (
