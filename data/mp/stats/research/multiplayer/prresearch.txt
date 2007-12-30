@@ -616,8 +616,10 @@ R-Wpn-Rocket-ROF01,R-Struc-Factory-Upgrade02,474
 R-Wpn-Rocket-ROF02,R-Wpn-Rocket-ROF01,475
 R-Wpn-Rocket-ROF02,R-Wpn-Rocket-Damage03,475
 R-Wpn-Rocket-ROF03,R-Wpn-Rocket-ROF02,913
-R-Wpn-Rocket01-LtAT,R-Wpn-Rocket-Damage03,126
-R-Wpn-Rocket01-LtAT,R-Wpn-Rocket02-MRL,127
+R-Wpn-Rocket01-LtAT,R-Wpn-Rocket-Damage04,126
+R-Wpn-Rocket01-LtAT,R-Wpn-Rocket-ROF02,127
+R-Wpn-Rocket01-LtAT,R-Wpn-Rocket-Accuracy01,128
+R-Wpn-Rocket01-LtAT,R-Wpn-Rocket02-MRL,129
 R-Wpn-Rocket02-MRL,R-Wpn-Rocket-Damage02,208
 R-Wpn-Rocket03-HvAT,R-Wpn-Rocket01-LtAT,461
 R-Wpn-Rocket03-HvAT,R-Wpn-RocketSlow-Damage03,461
