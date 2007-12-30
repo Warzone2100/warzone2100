@@ -637,7 +637,7 @@ BOOL recvMessage(void)
 				recvDroid();
 				break;
 			case NET_DROIDINFO:					//droid update info
-				recvDroidInfo(&msg);
+				recvDroidInfo();
 				break;
 			case NET_DROIDDEST:					// droid destroy
 				recvDestroyDroid();

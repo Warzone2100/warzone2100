@@ -674,93 +674,91 @@ BOOL recvGroupOrder(NETMSG *pMsg)
 	return TRUE;
 }
 
-
 // ////////////////////////////////////////////////////////////////////////////
 // Droid update information
-BOOL SendDroidInfo(DROID *psDroid, DROID_ORDER order, uint32_t x, uint32_t y, BASE_OBJECT *psObj)
+BOOL SendDroidInfo(const DROID* psDroid, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT* psObj)
 {
-	NETMSG m;
-	NET_ORDER_SUBTYPE subType = psObj ? NET_ORDER_SUBTYPE_OBJECT :
-			( (x == 0 && y == 0) ? NET_ORDER_SUBTYPE_SPECIAL : NET_ORDER_SUBTYPE_POSITION );
-
 	if (!myResponsibility(psDroid->player))
 	{
 		return TRUE;
 	}
 
-	NetAdd(m,0,psDroid->id);
-	NetAdd(m,4,order);
-
-	switch (subType)
+	NETbeginEncode(NET_DROIDINFO, NET_ALL_PLAYERS);
 	{
-		// If they are being ordered to `goto' an object
-		case NET_ORDER_SUBTYPE_OBJECT:
-			NetAdd(m,8, psObj->id);
-			NetAdd(m,12,psObj->type);
-			break;
-		// If the droids are being ordered to `goto' a specific position or have special orders
-		case NET_ORDER_SUBTYPE_POSITION:
-		case NET_ORDER_SUBTYPE_SPECIAL:
-			NetAdd(m,8,x);
-			NetAdd(m,12,y);
-			break;
+		uint32_t droidId = psDroid->id;
+		BOOL subType = (psObj) ? TRUE : FALSE;
+
+		// Send the droid's ID
+		NETuint32_t(&droidId);
+
+		// Send the droid's order
+		NETenum(&order);
+		NETbool(&subType);
+
+		if (subType)
+		{
+			uint32_t destId = psObj->id;
+			uint32_t destType = psObj->type;
+
+			NETuint32_t(&destId);
+			NETenum(&destType);
+		}
+		else
+		{
+			NETuint32_t(&x);
+			NETuint32_t(&y);
+		}
 	}
-
-	m.body[16] = subType;
-
-	m.size= (4*(sizeof(UDWORD))) + 1;
-	m.type = NET_DROIDINFO;
-	return NETbcast(&m,FALSE);
+	return NETend();
 }
-
-
-
 
 // ////////////////////////////////////////////////////////////////////////////
 // receive droid information form other players.
-BOOL recvDroidInfo(NETMSG *pMsg)
+BOOL recvDroidInfo()
 {
-	uint32_t x = 0, y = 0, id = 0, destid = 0;
-	DROID_ORDER order;
-	NET_ORDER_SUBTYPE subType = pMsg->body[16];
-	DROID *psDroid = NULL;
-	OBJECT_TYPE desttype = OBJ_DROID;
-
-	NetGet(pMsg,0,id); //droid's id
-	NetGet(pMsg,4,order); //droid's order
-
-	// If we could not find the droid, request it
-	if(!IdToDroid(id, ANYPLAYER, &psDroid))
+	NETbeginDecode();
 	{
-		sendRequestDroid(id);
-		return (FALSE);
-	}
+		uint32_t    droidId;
+		DROID*      psDroid;
+		DROID_ORDER order;
+		BOOL        subType;
 
-	// Now process the actual order
-	switch (subType)
-	{
-		// If they are being ordered to `goto' an object
-		case NET_ORDER_SUBTYPE_OBJECT:
-			NetGet(pMsg,8,destid);
-			NetGet(pMsg,12,desttype);
-			ProcessDroidOrder(psDroid, order, 0, 0, desttype, destid);
-			break;
-		// If the droids are being ordered to `goto' a specific position
-		case NET_ORDER_SUBTYPE_POSITION:
-			NetGet(pMsg,8,x);
-			NetGet(pMsg,12,y);
+		// Get the droid
+		NETuint32_t(&droidId);
+
+		if (!IdToDroid(droidId, ANYPLAYER, &psDroid))
+		{
+			sendRequestDroid(droidId);
+			return FALSE;
+		}
+
+		// Get the droid's order
+		NETenum(&order);
+		NETbool(&subType);
+
+		if (subType)
+		{
+			uint32_t destId, destType;
+
+			NETuint32_t(&destId);
+			NETenum(&destType);
+
+			ProcessDroidOrder(psDroid, order, 0, 0, destType, destId);
+		}
+		else
+		{
+			uint32_t x, y;
+
+			NETuint32_t(&x);
+			NETuint32_t(&y);
+
 			ProcessDroidOrder(psDroid, order, x, y, 0, 0);
-			break;
-		case NET_ORDER_SUBTYPE_SPECIAL:
-			turnOffMultiMsg(TRUE);
-			orderDroid(psDroid, order);
-			turnOffMultiMsg(FALSE);
-			break;
+		}
 	}
+	NETend();
 
 	return TRUE;
 }
-
 
 // ////////////////////////////////////////////////////////////////////////////
 // process droid order
