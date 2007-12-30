@@ -245,7 +245,7 @@ extern BOOL SendDroid			(const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y
 extern BOOL SendDestroyDroid	(const DROID* psDroid);
 extern BOOL SendDemolishFinished(STRUCTURE *psS,DROID *psD);
 extern BOOL SendDroidInfo		(const DROID* psDroid, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT* psObj);
-extern BOOL SendDroidMove		(DROID *psDroid, UDWORD x, UDWORD y,BOOL bFormation);
+extern BOOL SendDroidMove		(const DROID* psDroid, uint32_t x, uint32_t y, BOOL formation);
 extern BOOL SendGroupOrderSelected	(UBYTE player, UDWORD x, UDWORD y, BASE_OBJECT *psObj);
 extern BOOL SendCmdGroup		(DROID_GROUP *psGroup, UWORD x, UWORD y, BASE_OBJECT *psObj);
 

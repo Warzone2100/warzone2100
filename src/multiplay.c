@@ -646,7 +646,7 @@ BOOL recvMessage(void)
 				recvDestroyExtra(&msg);			// a generic destroy, complete wiht killer info.
 				break;
 			case NET_DROIDMOVE:					// move a droid to x,y command.
-				recvDroidMove(&msg);
+				recvDroidMove();
 				break;
 			case NET_GROUPORDER:				// an order for more than 1 droid.
 				recvGroupOrder(&msg);

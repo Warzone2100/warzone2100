@@ -317,60 +317,67 @@ BOOL recvDroidDisEmbark()
 // Droids
 
 // posibly Send an updated droid movement order.
-BOOL SendDroidMove(DROID *pDroid, uint32_t x, uint32_t y, BOOL bFormation)
+BOOL SendDroidMove(const DROID* psDroid, uint32_t x, uint32_t y, BOOL formation)
 {
-	NETMSG m;
-
 	// Don't allow a move to happen at all if it is not our responsibility
-	if (!myResponsibility(pDroid->player))
+	if (!myResponsibility(psDroid->player))
 	{
 		return FALSE; // Do not allow move
 	}
 
 	// If the unit has no actions or orders, allow it to happen but do not send
-	if (pDroid->action == DACTION_NONE || pDroid->order == DORDER_MOVE)
+	if (psDroid->action == DACTION_NONE || psDroid->order == DORDER_MOVE)
 	{
 		return TRUE;
 	}
 
-	NetAdd(m,0,pDroid->id);						//droid to move
-	NetAdd(m,4,x);								//x pos
-	NetAdd(m,8,y);								//y pos
-	NetAdd(m,12,pDroid->player);			//owner of droid(for speed!)
-	NetAdd(m,13,bFormation);				//use a formation?
-	m.size = 14;
-	m.type = NET_DROIDMOVE;
-	NETbcast(&m,FALSE);
+	NETbeginEncode(NET_DROIDMOVE, NET_ALL_PLAYERS);
+	{
+		uint8_t player = psDroid->player;
+		uint32_t droid = psDroid->id;
 
-	return TRUE;
-
+		NETuint8_t(&player);
+		NETuint32_t(&droid);
+		NETuint32_t(&x);
+		NETuint32_t(&y);
+		NETbool(&formation);
+	}
+	return NETend();
 }
 
 // recv and updated droid position
-BOOL recvDroidMove(NETMSG *m)
+BOOL recvDroidMove()
 {
-	UDWORD player,id,x,y;
-	DROID *psDroid;
-	UBYTE	bFormation;
+	DROID* psDroid;
+	uint32_t x, y;
+	BOOL formation;
 
-	NetGet(m,0,id);
-	NetGet(m,4,x);
-	NetGet(m,8,y);
-	player = m->body[12];
-	NetGet(m,13,bFormation);
-
-	/*
-	 * If we could not find the droid, request it. We can safely return here
-	 * as when the droid is sent it will contain the updated movement position.
-	 */
-	if(!(IdToDroid(id,player,&psDroid)))
+	NETbeginDecode();
 	{
-		sendRequestDroid(id);
-		return TRUE;
+		uint8_t player;
+		uint32_t droid;
+
+		NETuint8_t(&player);
+		NETuint32_t(&droid);
+		NETuint32_t(&x);
+		NETuint32_t(&y);
+		NETbool(&formation);
+
+		NETend();
+
+		/*
+		 * If we could not find the droid, request it. We can safely return here
+		 * as when the droid is sent it will contain the updated movement position.
+		 */
+		if (!IdToDroid(droid, player, &psDroid))
+		{
+			sendRequestDroid(droid);
+			return TRUE;
+		}
 	}
 
 	turnOffMultiMsg(TRUE);
-	if (bFormation)
+	if (formation)
 	{
 		moveDroidTo(psDroid, x, y); // Do the move
 	}
