@@ -255,7 +255,7 @@ extern BOOL SendGroupOrderGroup(DROID_GROUP *psGroup, DROID_ORDER order,UDWORD x
 extern BOOL sendDroidSecondary	(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state);
 extern BOOL sendDroidSecondaryAll(DROID *psDroid);
 extern BOOL sendDroidEmbark     (DROID *psDroid);
-extern BOOL sendDroidDisEmbark  (DROID *psDroid);
+extern BOOL sendDroidDisEmbark  (const DROID* psDroid);
 extern BOOL sendDestroyExtra	(BASE_OBJECT *psKilled,BASE_OBJECT *psKiller);
 extern BOOL sendHappyVtol		(DROID *psDroid);
 

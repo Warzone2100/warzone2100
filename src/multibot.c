@@ -237,62 +237,68 @@ BOOL recvDroidEmbark(NETMSG *pMsg)
 	return TRUE;
 }
 
-BOOL sendDroidDisEmbark(DROID *psDroid)
+BOOL sendDroidDisEmbark(const DROID* psDroid)
 {
-	NETMSG	m;
+	NETbeginEncode(NET_DROIDDISEMBARK, NET_ALL_PLAYERS);
+	{
+		uint8_t player = psDroid->player;
+		uint32_t droid = psDroid->id;
+		Vector3uw pos = psDroid->pos;
 
-	NetAdd(m,0,psDroid->id);
-	NetAdd(m,4,psDroid->pos.x);
-	NetAdd(m,6,psDroid->pos.y);
-	m.body[8] = (char) psDroid->player;
-
-	m.size = 9;
-	m.type = NET_DROIDDISEMBARK;
-
-	return NETbcast(&m,FALSE);
-
+		NETuint8_t(&player);
+		NETuint32_t(&droid);
+		NETVector3uw(&pos);
+	}
+	return NETend();
 }
 
-BOOL recvDroidDisEmbark(NETMSG *pMsg)
+BOOL recvDroidDisEmbark()
 {
-	DROID *psDroid;
-	UDWORD id, player;
-	UWORD x, y;
+	DROID* psDroid;
 
-	NetGet(pMsg,0,id);
-	NetGet(pMsg,4,x);
-	NetGet(pMsg,6,y);
-	player = pMsg->body[8];
-
-	if(!IdToDroid(id,player,&psDroid)) //find droid.
+	NETbeginDecode();
 	{
-		return FALSE;
-	}
+		uint8_t player;
+		uint32_t droid;
+		Vector3uw pos;
 
-	if(psDroid)
-	{
-		// Add it back into the world at the x/y
-		psDroid->pos.x = x;
-		psDroid->pos.y = y;
+		NETuint8_t(&player);
+		NETuint32_t(&droid);
+		NETVector3uw(&pos);
 
-		if (!worldOnMap(x, y))
+		NETend();
+
+		if (!IdToDroid(droid, player, &psDroid))
 		{
-			debug(LOG_ERROR, "recvDroidDisEmbark: droid not disembarked on map");
 			return FALSE;
 		}
 
-		updateDroidOrientation(psDroid);
+		if (psDroid == NULL)
+		{
+			return TRUE;
+		}
 
-		// Initialise the movement data
-		initDroidMovement(psDroid);
-
-		// Reset droid orders
-		orderDroid(psDroid, DORDER_STOP);
-		gridAddObject((BASE_OBJECT *)psDroid);
-		psDroid->cluster = 0;
-
-		addDroid(psDroid, apsDroidLists);
+		// Add it back into the world at the x/y
+		psDroid->pos = pos;
 	}
+
+	if (!worldOnMap(psDroid->pos.x, psDroid->pos.y))
+	{
+		debug(LOG_ERROR, "recvDroidDisEmbark: droid not disembarked on map");
+		return FALSE;
+	}
+
+	updateDroidOrientation(psDroid);
+
+	// Initialise the movement data
+	initDroidMovement(psDroid);
+
+	// Reset droid orders
+	orderDroid(psDroid, DORDER_STOP);
+	gridAddObject((BASE_OBJECT *)psDroid);
+	psDroid->cluster = 0;
+
+	addDroid(psDroid, apsDroidLists);
 
 	return TRUE;
 }
