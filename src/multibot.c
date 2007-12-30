@@ -118,38 +118,46 @@ BOOL recvHappyVtol(NETMSG *pMsg)
 // Secondary Orders.
 
 // Send
-BOOL sendDroidSecondary(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state)
+BOOL sendDroidSecondary(const DROID* psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state)
 {
-	NETMSG	m;
+	NETbeginEncode(NET_SECONDARY, NET_ALL_PLAYERS);
+	{
+		uint8_t player = psDroid->player;
+		uint32_t droid = psDroid->id;
 
-	NetAdd(m,0,psDroid->id);
-	NetAdd(m,4,sec);
-	NetAdd(m,8,state);
-	m.body[12] = (char) psDroid->player;
-
-	m.size = 13;
-	m.type = NET_SECONDARY;
-	return NETbcast(&m,FALSE);
+		NETuint8_t(&player);
+		NETuint32_t(&droid);
+		NETenum(&sec);
+		NETenum(&state);
+	}
+	return NETend();
 }
 
 // recv
-BOOL recvDroidSecondary(NETMSG *pMsg)
+BOOL recvDroidSecondary()
 {
-	DROID			*psDroid;
+	DROID*          psDroid;
 	SECONDARY_ORDER sec;
 	SECONDARY_STATE	state;
-	UDWORD			id,player;
 
-	NetGet(pMsg,0,id);
-	NetGet(pMsg,4,sec);
-	NetGet(pMsg,8,state);
-	player = pMsg->body[12];
-
-	// If we can not find the droid should we not ask for it?
-	if(!IdToDroid(id,player,&psDroid)) //find droid.
+	NETbeginDecode();
 	{
-		return FALSE;
+		uint8_t player;
+		uint32_t droid;
+
+		NETuint8_t(&player);
+		NETuint32_t(&droid);
+		NETenum(&sec);
+		NETenum(&state);
+
+		// If we can not find the droid should we not ask for it?
+		if (!IdToDroid(droid, player, &psDroid))
+		{
+			NETend();
+			return FALSE;
+		}
 	}
+	NETend();
 
 	// Set the droids secondary order
 	turnOffMultiMsg(TRUE);
@@ -158,7 +166,6 @@ BOOL recvDroidSecondary(NETMSG *pMsg)
 
 	return TRUE;
 }
-
 
 BOOL sendDroidSecondaryAll(DROID *psDroid)
 {
