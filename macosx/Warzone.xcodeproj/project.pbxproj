@@ -3724,7 +3724,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "mkdir -p ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources\nrm -rf ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data\ntar -cC .. --exclude .svn --exclude 'Makefile*' data | tar -xC ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources\n";
+			shellScript = "if [ \"$CONFIGURATION\" == \"Debug\" ]; then\n    mkdir -p ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources\n    rm -rf ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data\n    tar -cC .. --exclude .svn --exclude 'Makefile*' data | tar -xC ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources\nelse\n    mkdir -p ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources\n    rm -rf ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data\n    mkdir ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data\n    cd ../data\n    zip -ru0 ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data/warzone.wz anims audio components effects features testdata gamedesc.lev images messages misc multiplay novideo.rpl palette.bin script sequenceaudio stats structs texpages wrf -x *svn*\n    cd mp\n    zip -ru0 ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data/mp.wz addon.lev anims components effects messages multiplay stats structs wrf -x *svn*\nfi\n";
 		};
 		02FD38210BD3FE9A00776FD3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -5098,6 +5098,15 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					PHYSFS_SUPPORTS_ZIP,
+					PHYSFS_SUPPORTS_GRP,
+					PHYSFS_SUPPORTS_HOG,
+					PHYSFS_SUPPORTS_MVL,
+					PHYSFS_SUPPORTS_QPAK,
+					PHYSFS_SUPPORTS_WAD,
+					"$(inherited)",
+				);
 				INFOPLIST_FILE = "Resources/PhysFS-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				OTHER_LDFLAGS = "";
@@ -5125,6 +5134,15 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					PHYSFS_SUPPORTS_ZIP,
+					PHYSFS_SUPPORTS_GRP,
+					PHYSFS_SUPPORTS_HOG,
+					PHYSFS_SUPPORTS_MVL,
+					PHYSFS_SUPPORTS_QPAK,
+					PHYSFS_SUPPORTS_WAD,
+					"$(inherited)",
+				);
 				INFOPLIST_FILE = "Resources/PhysFS-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				OTHER_LDFLAGS = "";
