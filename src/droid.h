@@ -448,6 +448,8 @@ static inline void _setDroidTarget(DROID *psDroid, BASE_OBJECT *psNewTarget, int
 {
 	psDroid->psTarget = psNewTarget;
 	ASSERT(psNewTarget == NULL || !psNewTarget->died, "setDroidTarget: Set dead target");
+	ASSERT(psNewTarget == NULL || !psNewTarget->died || (psNewTarget->died == NOT_CURRENT_LIST && psDroid->died == NOT_CURRENT_LIST),
+	       "setDroidTarget: Set dead target");
 #ifdef DEBUG
 	psDroid->targetLine = line;
 	strlcpy(psDroid->targetFunc, func, MAX_EVENT_NAME_LEN);
@@ -458,7 +460,8 @@ static inline void _setDroidTarget(DROID *psDroid, BASE_OBJECT *psNewTarget, int
 static inline void _setDroidActionTarget(DROID *psDroid, BASE_OBJECT *psNewTarget, UWORD idx, int line, const char *func)
 {
 	psDroid->psActionTarget[idx] = psNewTarget;
-	ASSERT(psNewTarget == NULL || !psNewTarget->died, "setDroidActionTarget: Set dead target");
+	ASSERT(psNewTarget == NULL || !psNewTarget->died || (psNewTarget->died == NOT_CURRENT_LIST && psDroid->died == NOT_CURRENT_LIST),
+	       "setDroidActionTarget: Set dead target");
 #ifdef DEBUG
 	psDroid->actionTargetLine[idx] = line;
 	strlcpy(psDroid->actionTargetFunc[idx], func, MAX_EVENT_NAME_LEN);
