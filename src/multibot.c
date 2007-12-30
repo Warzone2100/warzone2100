@@ -820,7 +820,19 @@ BOOL recvDroidInfo()
 			NETuint32_t(&x);
 			NETuint32_t(&y);
 
-			ProcessDroidOrder(psDroid, order, x, y, 0, 0);
+			// If both the X _and_ Y coordinate are zero we've been given a
+			// "special" order.
+			if (x == 0 && y == 0)
+			{
+				turnOffMultiMsg(TRUE);
+				orderDroid(psDroid, order);
+				turnOffMultiMsg(FALSE);
+			}
+			// Otherwise it is just a normal "goto location" order
+			else
+			{
+				ProcessDroidOrder(psDroid, order, x, y, 0, 0);
+			}
 		}
 	}
 	NETend();
