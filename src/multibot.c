@@ -695,14 +695,16 @@ BOOL recvGroupOrder()
 			if (!NETuint32_t(&id))
 			{
 				// If somehow we fail assume the message got truncated prematurely
-				debug(LOG_NET, "recvGroupOrder: error retrieving droid ID number; while there are (supposed to be) still %hhu droids left", droidCount);
-
+				debug(LOG_NET, "recvGroupOrder: error retrieving droid ID number; while there are (supposed to be) still %u droids left",
+				      (unsigned int)droidCount);
+				NETend();
 				return FALSE;
 			}
 
 			if (!IdToDroid(id, ANYPLAYER, &psDroid))
 			{
 				// If the droid's not found, request it
+				NETend();
 				sendRequestDroid(id);
 				return FALSE;
 			}
@@ -873,8 +875,10 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, uint32_t x, uin
 		switch (desttype)
 		{
 			case OBJ_DROID:
-				IdToDroid(destid,ANYPLAYER,&pD);
-				psObj = (BASE_OBJECT*)pD;
+				if (IdToDroid(destid, ANYPLAYER, &pD))
+				{
+					psObj = (BASE_OBJECT*)pD;
+				}
 				break;
 			case OBJ_STRUCTURE:
 				psObj = (BASE_OBJECT*)IdToStruct(destid,ANYPLAYER);
