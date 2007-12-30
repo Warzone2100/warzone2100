@@ -198,7 +198,7 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 
 extern BASE_OBJECT		*IdToPointer(UDWORD id,UDWORD player);
 extern STRUCTURE		*IdToStruct	(UDWORD id,UDWORD player);
-extern BOOL				IdToDroid	(UDWORD id, UDWORD player, DROID **psDroid);
+extern WZ_DECL_WARN_UNUSED_RESULT BOOL	IdToDroid	(UDWORD id, UDWORD player, DROID **psDroid);
 extern FEATURE			*IdToFeature(UDWORD id,UDWORD player);
 extern DROID_TEMPLATE	*IdToTemplate(UDWORD tempId,UDWORD player);
 extern DROID_TEMPLATE	*NameToTemplate(const char *sName,UDWORD player);

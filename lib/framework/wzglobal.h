@@ -355,6 +355,17 @@
 
 
 /*!
+ * \def WZ_DECL_WARN_UNUSED_RESULT
+ * Warn if return value is unused.
+ */
+#if defined(WZ_CC_GNU)
+#  define WZ_DECL_WARN_UNUSED_RESULT __attribute__ ((warn_unused_result))
+#else
+#  define WZ_DECL_WARN_UNUSED_RESULT
+#endif
+
+
+/*!
  * \def WZ_DECL_PURE
  * "Many functions have no effects except the return value and their return value depends only on the parameters and/or global variables. Such a function can be subject to common subexpression elimination and loop optimization just as an arithmetic operator would be."
  */

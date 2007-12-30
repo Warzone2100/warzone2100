@@ -283,15 +283,20 @@ BOOL recvDemolishFinished()
 {
 	STRUCTURE	*psStruct;
 	DROID		*psDroid;
-	uint32_t structID,droidID;
+	uint32_t	structID, droidID;
 
 	NETbeginDecode();
 
-	NETuint32_t(&structID);			
+	NETuint32_t(&structID);
 	NETuint32_t(&droidID);
 
 	psStruct = IdToStruct(structID, ANYPLAYER);
-	IdToDroid(droidID, ANYPLAYER, &psDroid);
+	if (!IdToDroid(droidID, ANYPLAYER, &psDroid))
+	{
+		debug(LOG_ERROR, "recvDemolishFinished: Packet with bad droid ID received. Discarding!");
+		NETend();
+		return FALSE;
+	}
 
 	if (psStruct)
 	{
