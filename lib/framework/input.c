@@ -59,7 +59,7 @@ typedef struct _input_state {
 } INPUT_STATE;
 
 /// constant for the interval between 2 singleclicks for doubleclick event in ms
-#define DOUBLE_CLICK_INTERVAL 500
+#define DOUBLE_CLICK_INTERVAL 250
 
 /* The current state of the keyboard */
 static INPUT_STATE aKeyState[KEY_MAXSCAN];
@@ -287,7 +287,6 @@ void inputHandleKeyEvent(SDL_KeyboardEvent * keyEvent)
 				//whether double key press or not
 					aKeyState[code].state = KEY_PRESSED;
 					aKeyState[code].lastdown = 0;
-				
 			}
 			break;
 		case SDL_KEYUP:
