@@ -691,7 +691,7 @@ BOOL recvMessage(void)
 				recvDroidDisEmbark();           //droid has disembarked from a Transporter
 				break;
 			case NET_REQUESTDROID:				// player requires a droid that they dont have.
-				recvRequestDroid(&msg);
+				recvRequestDroid();
 				break;
 //			case NET_REQUESTPLAYER:				// a new player requires information
 //				multiPlayerRequest(&msg);

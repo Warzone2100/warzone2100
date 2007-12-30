@@ -1100,46 +1100,48 @@ BOOL receiveWholeDroid(NETMSG *m)
 // find out about it.
 BOOL sendRequestDroid(uint32_t droidId)
 {
-	NETMSG msg;
-
 	if (ingame.localJoiningInProgress)		// Don't worry if still joining.
 	{
 		return FALSE;
 	}
 
-	NetAdd(msg,0,droidId);
-	NetAdd(msg,4,player2dpid[selectedPlayer] );
+	debug(LOG_NEVER, "multibot: unknown droid %u, requesting info", droidId);
 
-	debug( LOG_NEVER, "multibot: unknown droid %d, requesting info\n", droidId );
+	NETbeginEncode(NET_REQUESTDROID, NET_ALL_PLAYERS);
+	{
+		int32_t dpid = player2dpid[selectedPlayer];
 
-	msg.type = NET_REQUESTDROID;
-	msg.size = sizeof(UDWORD)+sizeof(UDWORD); // DPID + UDWORD
-
-	NETbcast(&msg,FALSE);
-	return TRUE;
+		NETuint32_t(&droidId);
+		NETint32_t(&dpid);
+	}
+	return NETend();
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-BOOL recvRequestDroid(NETMSG *pMsg)
+BOOL recvRequestDroid()
 {
-	DROID	*pDroid;
-	UDWORD	droidid,dpid;
+	DROID*      psDroid;
+	uint32_t    droidId;
+	int32_t     dpid;
 
-	NetGet(pMsg,0,droidid);									// get the droid's id
-	NetGet(pMsg,4,dpid);									// get the player who needs it.
-
+	NETbeginDecode();
+	{
+		NETuint32_t(&droidId);
+		NETint32_t(&dpid);
+	}
+	NETend();
 
 	// Get the droid
-	if (!(IdToDroid(droidid, ANYPLAYER, &pDroid)))
+	if (!(IdToDroid(droidId, ANYPLAYER, &psDroid)))
 	{
 		// Can't find it, so ignore
 		return TRUE;
 	}
 
 	// If we are responsible, send it
-	if (myResponsibility(pDroid->player))
+	if (myResponsibility(psDroid->player))
 	{
-		sendWholeDroid(pDroid,dpid);
+		sendWholeDroid(psDroid, dpid);
 	}
 
 	return TRUE;
