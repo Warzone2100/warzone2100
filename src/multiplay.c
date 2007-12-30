@@ -649,7 +649,7 @@ BOOL recvMessage(void)
 				recvDroidMove();
 				break;
 			case NET_GROUPORDER:				// an order for more than 1 droid.
-				recvGroupOrder(&msg);
+				recvGroupOrder();
 				break;
 			case NET_CHECK_DROID:				// droid damage and position checks
 				recvDroidCheck();

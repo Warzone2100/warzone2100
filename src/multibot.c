@@ -514,184 +514,194 @@ typedef enum {
  * Droid Group/selection orders.
  * Minimises comms by sending orders for whole groups, rather than each droid
  */
-BOOL SendGroupOrderSelected(uint8_t player, uint32_t x, uint32_t y, BASE_OBJECT *psObj)
+BOOL SendGroupOrderSelected(uint8_t player, uint32_t x, uint32_t y, const BASE_OBJECT* psObj)
 {
-	NETMSG m;
-	DROID *pDroid;
-	uint16_t droidCount = 0;
-	DROID_ORDER order = UNKNOWN;
-	NET_ORDER_SUBTYPE subType = (psObj) ? NET_ORDER_SUBTYPE_OBJECT : NET_ORDER_SUBTYPE_POSITION;
-	BOOL cmdOrder = FALSE;
-	unsigned int i;
-
-	switch (subType)
+	NETbeginEncode(NET_GROUPORDER, NET_ALL_PLAYERS);
 	{
+		DROID_ORDER order = UNKNOWN;
+		BOOL subType = (psObj) ? TRUE : FALSE, cmdOrder = FALSE;
+		DROID* psDroid;
+		uint8_t droidCount;
+
+		NETenum(&order);
+		NETbool(&cmdOrder);
+		NETbool(&subType);
+
 		// If they are being ordered to `goto' an object
-		case NET_ORDER_SUBTYPE_OBJECT:
-			NetAdd(m,0, psObj->id);
-			NetAdd(m,4, psObj->type);
-			break;
-		// If the droids are being ordered to `goto' a specific position
-		case NET_ORDER_SUBTYPE_POSITION:
-			NetAdd(m,0,x);
-			NetAdd(m,4,y);
-			break;
-		default:
-			assert(!"Unexpected droid-order-targettype!");
-			break;
-	}
-
-	m.body[8] = subType;
-
-	m.body[10] = cmdOrder;		// not a cmd order.
-
-	m.body[12] = order;	// set the order.
-
-	m.size = 13;
-
-	// Work out the number of droids to send
-	for (pDroid = apsDroidLists[player]; pDroid; pDroid = pDroid->psNext)
-	{
-		if (pDroid->selected)
-			droidCount++;
-	}
-
-	// If there are less than 2 droids don't bother (to allow individual orders)
-	if (droidCount < 2)
-	{
-		return FALSE;
-	}
-
-	// Add the droids to the message (break when reached droidCount, as the rest must be unselected droids)
-	for (i = 0, pDroid = apsDroidLists[player]; i < droidCount && pDroid; pDroid = pDroid->psNext)
-	{
-		if (pDroid->selected)
+		if (subType)
 		{
-			NetAdd(m,m.size,pDroid->id);
-			m.size += sizeof(UDWORD);
-			i++;
+			uint32_t id = psObj->id;
+			uint32_t type = psObj->type;
+
+			NETuint32_t(&id);
+			NETenum(&type);
+		}
+		// Else if the droids are being ordered to `goto' a specific position
+		else
+		{
+			NETuint32_t(&x);
+			NETuint32_t(&y);
+		}
+
+		// Work out the number of droids to send
+		for (psDroid = apsDroidLists[player], droidCount = 0; psDroid; psDroid = psDroid->psNext)
+		{
+			if (psDroid->selected)
+				++droidCount;
+		}
+
+		// If there are less than 2 droids don't bother (to allow individual orders)
+		if (droidCount < 2)
+		{
+			return FALSE;
+		}
+
+		// Add the number of droids to the message
+		NETuint8_t(&droidCount);
+
+		// Add the droids to the message
+		for (psDroid = apsDroidLists[player]; psDroid && droidCount; psDroid = psDroid->psNext)
+		{
+			if (psDroid->selected)
+			{
+				NETuint32_t(&psDroid->id);
+				--droidCount;
+			}
 		}
 	}
-
-	// Add the number of droids to the message
-	NetAdd(m,9,droidCount);
-	m.type = NET_GROUPORDER;
-	NETbcast(&m,FALSE);
-
-	return TRUE;
+	return NETend();
 }
 
-BOOL SendGroupOrderGroup(DROID_GROUP *psGroup, DROID_ORDER order, uint32_t x, uint32_t y, BASE_OBJECT *psObj)
+BOOL SendGroupOrderGroup(const DROID_GROUP* psGroup, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT* psObj)
 {
-	NETMSG m;
-	DROID *pDroid;
-	uint16_t droidCount = 0;
-	NET_ORDER_SUBTYPE subType = (psObj) ? NET_ORDER_SUBTYPE_OBJECT : NET_ORDER_SUBTYPE_POSITION;
-	BOOL cmdOrder = FALSE;
-
-	switch (subType)
+	NETbeginEncode(NET_GROUPORDER, NET_ALL_PLAYERS);
 	{
+		BOOL subType = (psObj) ? TRUE : FALSE, cmdOrder = FALSE;
+		DROID* psDroid;
+		uint8_t droidCount;
+
+		NETenum(&order);
+		NETbool(&cmdOrder);
+		NETbool(&subType);
+
 		// If they are being ordered to `goto' an object
-		case NET_ORDER_SUBTYPE_OBJECT:
-			NetAdd(m,0, psObj->id);
-			NetAdd(m,4, psObj->type);
-			break;
-		// If the droids are being ordered to `goto' a specific position
-		case NET_ORDER_SUBTYPE_POSITION:
-			NetAdd(m,0,x);
-			NetAdd(m,4,y);
-			break;
-		default:
-			assert(!"Unexpected droid-order-targettype!");
-			break;
+		if (subType)
+		{
+			uint32_t id = psObj->id;
+			uint32_t type = psObj->type;
+
+			NETuint32_t(&id);
+			NETenum(&type);
+		}
+		// Else if the droids are being ordered to `goto' a specific position
+		else
+		{
+			NETuint32_t(&x);
+			NETuint32_t(&y);
+		}
+
+		// Work out the number of droids to send
+		for (psDroid = psGroup->psList, droidCount = 0; psDroid; psDroid = psDroid->psGrpNext)
+		{
+			++droidCount;
+		}
+
+		// Add the number of droids to the message
+		NETuint8_t(&droidCount);
+
+		// Add the droids to the message
+		for (psDroid = psGroup->psList; psDroid; psDroid = psDroid->psGrpNext)
+		{
+			NETuint32_t(&psDroid->id);
+		}
 	}
-
-	m.body[8] = subType;
-
-	m.body[10] = cmdOrder;		// not a cmd order.
-
-	m.body[12] = order;	// set the order.
-
-	m.size = 13;
-
-	// Work out the number of droids to send
-	for (pDroid = psGroup->psList; pDroid; pDroid = pDroid->psGrpNext)
-	{
-		droidCount++;
-	}
-
-	// Add the droids to the message
-	for (pDroid = psGroup->psList; pDroid; pDroid = pDroid->psGrpNext)
-	{
-		NetAdd(m,m.size,pDroid->id);
-		m.size += sizeof(UDWORD);
-	}
-
-	// Add the number of droids to the message
-	NetAdd(m,9,droidCount);
-	m.type = NET_GROUPORDER;
-	NETbcast(&m,FALSE);
-	return TRUE;
-
+	return NETend();
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // receive a group order.
-BOOL recvGroupOrder(NETMSG *pMsg)
+BOOL recvGroupOrder()
 {
-	uint32_t x = 0, y = 0, id = 0, destid = 0;
-	DROID *psDroid = NULL;
-	OBJECT_TYPE desttype = OBJ_DROID;
-	DROID_ORDER order = pMsg->body[12];
-	NET_ORDER_SUBTYPE subType = pMsg->body[8];
-	BOOL cmdOrder = pMsg->body[10];
-	uint16_t droidCount;
-	unsigned int i;
-
-	// Get the droid count
-	NetGet(pMsg,9,droidCount);
-
-	switch (subType)
+	NETbeginDecode();
 	{
-		// It's target is an object
-		case NET_ORDER_SUBTYPE_OBJECT:
-			NetGet(pMsg,0,destid);
-			NetGet(pMsg,4,desttype);
-			break;
-		// It's target is a position
-		case NET_ORDER_SUBTYPE_POSITION:
-			NetGet(pMsg,0,x);
-			NetGet(pMsg,4,y);
-			break;
-		default:
-			assert(!"Unexpected droid-order-targettype!");
-			break;
-	}
+		DROID_ORDER order;
+		BOOL subType, cmdOrder;
 
-	// for each droid
-	for (i = 0; i < droidCount; i++)
-	{
-		NetGet(pMsg, 13 + i * sizeof(UDWORD), id);
-		IdToDroid(id, ANYPLAYER, &psDroid); // find the droid
-		if (psDroid == NULL)
+		uint32_t destId, x, y;
+		OBJECT_TYPE destType;
+
+		uint8_t droidCount;
+
+		NETenum(&order);
+		NETbool(&cmdOrder);
+		NETbool(&subType);
+
+		// If they are being ordered to `goto' an object
+		if (subType)
 		{
-			sendRequestDroid(id); //droid not found, request it.
-			return FALSE;
+			NETuint32_t(&destId);
+			NETenum(&destType);
+		}
+		// Else if the droids are being ordered to `goto' a specific position
+		else
+		{
+			NETuint32_t(&x);
+			NETuint32_t(&y);
 		}
 
-		/*
-		 * If the current order not is a command order and we are not a
-		 * commander yet are in the commander group remove us from it.
-		 */
-		if (!cmdOrder && psDroid->droidType != DROID_COMMAND
-		 && psDroid->psGroup != NULL && psDroid->psGroup->type == GT_COMMAND)
-		{
-			grpLeave(psDroid->psGroup, psDroid);
-		}
+		// Get the droid count
+		NETuint8_t(&droidCount);
 
-		// Process the droids order
-		ProcessDroidOrder(psDroid,order,x,y,desttype,destid);		// process the order.
+		// Retrieve the droids from the message
+		for (; droidCount; --droidCount)
+		{
+			uint32_t id;
+			DROID* psDroid;
+
+			// Retrieve the id number for the current droid
+			if (!NETuint32_t(&id))
+			{
+				// If somehow we fail assume the message got truncated prematurely
+				debug(LOG_NET, "recvGroupOrder: error retrieving droid ID number; while there are (supposed to be) still %hhu droids left", droidCount);
+
+				return FALSE;
+			}
+
+			if (!IdToDroid(id, ANYPLAYER, &psDroid))
+			{
+				// If the droid's not found, request it
+				sendRequestDroid(id);
+				return FALSE;
+			}
+
+			/*
+			 * If the current order not is a command order and we are not a
+			 * commander yet are in the commander group remove us from it.
+			 */
+			if (!cmdOrder && psDroid->droidType != DROID_COMMAND
+			 && psDroid->psGroup != NULL && psDroid->psGroup->type == GT_COMMAND)
+			{
+				grpLeave(psDroid->psGroup, psDroid);
+			}
+
+			// Process the droid's order
+			if (subType)
+			{
+				/* If they are being ordered to `goto' an object then we don't
+				 * have any X and Y coordinate.
+				 */
+				ProcessDroidOrder(psDroid, order, 0, 0, destType, destId);
+			}
+			else
+			{
+				/* Otherwise if the droids are being ordered to `goto' a
+				 * specific position. Then we don't have any destination info
+				 */
+				ProcessDroidOrder(psDroid, order, x, y, 0, 0);
+			}
+		}
 	}
+	NETend();
 
 	return TRUE;
 }

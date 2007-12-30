@@ -29,7 +29,7 @@
 extern BOOL recvDroid				(void);
 extern BOOL recvDroidInfo			(void);
 extern BOOL recvDestroyDroid		(void);
-extern BOOL recvGroupOrder			(NETMSG *pMsg);
+extern BOOL recvGroupOrder			(void);
 extern BOOL recvDroidMove			(void);
 extern BOOL receiveWholeDroid		(NETMSG *pMsg);
 extern BOOL recvDestroyStructure	();
