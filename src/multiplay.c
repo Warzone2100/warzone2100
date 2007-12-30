@@ -685,7 +685,7 @@ BOOL recvMessage(void)
 				recvDroidSecondaryAll(&msg);
 				break;
 			case NET_DROIDEMBARK:
-				recvDroidEmbark(&msg);              //droid has embarked on a Transporter
+				recvDroidEmbark();              //droid has embarked on a Transporter
 				break;
 			case NET_DROIDDISEMBARK:
 				recvDroidDisEmbark();           //droid has disembarked from a Transporter

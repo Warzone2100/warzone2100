@@ -196,43 +196,51 @@ BOOL recvDroidSecondaryAll(NETMSG *pMsg)
 	return TRUE;
 }
 
-BOOL sendDroidEmbark(DROID *psDroid)
+BOOL sendDroidEmbark(const DROID* psDroid)
 {
-	NETMSG	m;
+	NETbeginEncode(NET_DROIDEMBARK, NET_ALL_PLAYERS);
+	{
+		uint8_t player = psDroid->player;
+		uint32_t droid = psDroid->id;
 
-	NetAdd(m,0,psDroid->id);
-	m.body[4] = (char) psDroid->player;
-
-	m.size = 5;
-	m.type = NET_DROIDEMBARK;
-
-	return NETbcast(&m,FALSE);
-
+		NETuint8_t(&player);
+		NETuint32_t(&droid);
+	}
+	return NETend();
 }
 
-BOOL recvDroidEmbark(NETMSG *pMsg)
+BOOL recvDroidEmbark()
 {
-	DROID			*psDroid;
-	UDWORD			id,player;
+	DROID* psDroid;
 
-	NetGet(pMsg,0,id);
-	player = pMsg->body[4];
-
-	if(!IdToDroid(id,player,&psDroid))		//find droid.
+	NETbeginDecode();
 	{
-		return FALSE;
+		uint8_t player;
+		uint32_t droid;
+
+		NETuint8_t(&player);
+		NETuint32_t(&droid);
+
+		if (!IdToDroid(droid, player, &psDroid))
+		{
+			NETend();
+			return FALSE;
+		}
+	}
+	NETend();
+
+	if (psDroid == NULL)
+	{
+		return TRUE;
 	}
 
-	if(psDroid)
-	{
-		// Take it out of the world without destroying it
-		droidRemove(psDroid, apsDroidLists);
+	// Take it out of the world without destroying it
+	droidRemove(psDroid, apsDroidLists);
 
-		// Init the order for when disembark
-		psDroid->order = DORDER_NONE;
-		setDroidTarget(psDroid, NULL);
-		psDroid->psTarStats = NULL;
-	}
+	// Init the order for when disembark
+	psDroid->order = DORDER_NONE;
+	setDroidTarget(psDroid, NULL);
+	psDroid->psTarStats = NULL;
 
 	return TRUE;
 }
