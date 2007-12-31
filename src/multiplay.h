@@ -104,15 +104,10 @@ typedef struct {
 	char		name[128];					// game name   (to be used)
 	BOOL		fog;
 	uint32_t    power;						// power level for arena game
-//	uint32_t    techLevel;					// tech levels to use . 0= all levels.
 	uint8_t		base;						// clean/base/base&defence
 	uint8_t		alliance;					// no/yes/AIs vs Humans
 	uint8_t		limit;						// limit no/time/frag
-	uint16_t    bytesPerSec;				// maximum bitrate achieved before dropping checks.
-	uint8_t		encryptKey;					// key to use for encryption.
-//	uint8_t		skirmishPlayers[MAX_PLAYERS];// players to use in skirmish game.
 	uint8_t		skDiff[MAX_PLAYERS];			// skirmish game difficulty settings.
-
 } MULTIPLAYERGAME, *LPMULTIPLAYERGAME;
 
 // info used inside games.

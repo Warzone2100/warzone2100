@@ -100,7 +100,7 @@ static UDWORD				PingSend[MAX_PLAYERS];	//stores the time the ping was called.
 static BOOL okToSend(void)
 {
 	//update checks	& go no further if any exceeded.
-	if((NETgetRecentBytesSent() + NETgetRecentBytesRecvd()) >= game.bytesPerSec)
+	if (NETgetRecentBytesSent() + NETgetRecentBytesRecvd() >= MAX_BYTESPERSEC)
 	{
 		return FALSE;
 	}

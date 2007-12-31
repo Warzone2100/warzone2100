@@ -434,19 +434,13 @@ static bool serializeMultiplayerGame(PHYSFS_file* fileHandle, const MULTIPLAYERG
 	 || PHYSFS_write(fileHandle, serializeMulti->name, 1, 128) != 128
 	 || !PHYSFS_writeSBE32(fileHandle, serializeMulti->fog)
 	 || !PHYSFS_writeUBE32(fileHandle, serializeMulti->power)
-//	 || !PHYSFS_writeUBE8(fileHandle, serializeMulti->techLevel)
 	 || !PHYSFS_writeUBE8(fileHandle, serializeMulti->base)
 	 || !PHYSFS_writeUBE8(fileHandle, serializeMulti->alliance)
 	 || !PHYSFS_writeUBE8(fileHandle, serializeMulti->limit)
-	 || !PHYSFS_writeUBE16(fileHandle, serializeMulti->bytesPerSec)
-	 || !PHYSFS_writeUBE8(fileHandle, serializeMulti->encryptKey))
+	 || !PHYSFS_writeUBE16(fileHandle, 0)	// dummy, was bytesPerSec
+	 || !PHYSFS_writeUBE8(fileHandle, 0)	// dummy, was packetsPerSec
+	 || !PHYSFS_writeUBE8(fileHandle, 0))	// dummy, was encryptKey
 		return false;
-
-//	for (i = 0; i < MAX_PLAYERS; ++i)
-//	{
-//		if (!PHYSFS_writeUBE8(fileHandle, serializeMulti->skirmishPlayers[i]))
-//			return false;
-//	}
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
@@ -461,6 +455,8 @@ static bool deserializeMultiplayerGame(PHYSFS_file* fileHandle, MULTIPLAYERGAME*
 {
 	unsigned int i;
 	int32_t boolFog;
+	uint8_t dummy8;
+	uint16_t dummy16;
 
 	if (!PHYSFS_readUBE8(fileHandle, &serializeMulti->type)
 	 || PHYSFS_read(fileHandle, serializeMulti->map, 1, 128) != 128
@@ -469,21 +465,15 @@ static bool deserializeMultiplayerGame(PHYSFS_file* fileHandle, MULTIPLAYERGAME*
 	 || PHYSFS_read(fileHandle, serializeMulti->name, 1, 128) != 128
 	 || !PHYSFS_readSBE32(fileHandle, &boolFog)
 	 || !PHYSFS_readUBE32(fileHandle, &serializeMulti->power)
-//	 || !PHYSFS_readUBE8(fileHandle, &serializeMulti->techLevel)
 	 || !PHYSFS_readUBE8(fileHandle, &serializeMulti->base)
 	 || !PHYSFS_readUBE8(fileHandle, &serializeMulti->alliance)
 	 || !PHYSFS_readUBE8(fileHandle, &serializeMulti->limit)
-	 || !PHYSFS_readUBE16(fileHandle, &serializeMulti->bytesPerSec)
-	 || !PHYSFS_readUBE8(fileHandle, &serializeMulti->encryptKey))
+	 || !PHYSFS_readUBE16(fileHandle, &dummy16)	// dummy, was bytesPerSec
+	 || !PHYSFS_readUBE8(fileHandle, &dummy8)	// dummy, was packetsPerSec
+	 || !PHYSFS_readUBE8(fileHandle, &dummy8))	// dummy, was encryptKey
 		return false;
 
 	serializeMulti->fog = boolFog;
-
-//	for (i = 0; i < MAX_PLAYERS; ++i)
-//	{
-//		if (!PHYSFS_readUBE8(fileHandle, &serializeMulti->skirmishPlayers[i]))
-//			return false;
-//	}
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
@@ -4067,7 +4057,6 @@ static void endian_SaveGameV(SAVE_GAME* psSaveGame, UDWORD version)
 	if(version >= VERSION_33)
 	{
 		endian_udword(&psSaveGame->sGame.power);
-		endian_uword(&psSaveGame->sGame.bytesPerSec);
 		for(i = 0; i < MaxGames; i++) {
 			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwSize);
 			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwFlags);
