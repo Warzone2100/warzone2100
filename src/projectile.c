@@ -110,62 +110,66 @@ BOOL gfxVisible(PROJECTILE *psObj)
 {
 	BOOL bVisible = FALSE;
 
-	// already know it is visible
+	// Already know it is visible
 	if (psObj->bVisible)
 	{
 		return TRUE;
 	}
 
-	// you fired it
-	if(psObj->player == selectedPlayer)
+	// You fired it
+	if (psObj->player == selectedPlayer)
 	{
 		return TRUE;
 	}
 
-	// always see in this mode
-	if(godMode)
+	// Always see in this mode
+	if (godMode)
 	{
 		return TRUE;
 	}
 
-	// you can see the source
-	if( (psObj->psSource!=NULL) &&
-		(!psObj->psSource->died) &&
-		(psObj->psSource->visible[selectedPlayer]) )
+	// You can see the source
+	if (psObj->psSource != NULL
+	 && !psObj->psSource->died
+	 && psObj->psSource->visible[selectedPlayer])
 	{
 		bVisible = TRUE;
 	}
 
-	// you can see the destination
-	if( (psObj->psDest!=NULL) &&
-		(!psObj->psDest->died) &&
-		(psObj->psDest->visible[selectedPlayer]) )
+	// You can see the destination
+	if (psObj->psDest != NULL
+	 && !psObj->psDest->died
+	 && psObj->psDest->visible[selectedPlayer])
 	{
 		bVisible = TRUE;
 	}
 
-	// someone elses structure firing at something you can't see
-	if ( psObj->psSource != NULL &&
-		!psObj->psSource->died &&
-		psObj->psSource->type == OBJ_STRUCTURE &&
-		psObj->psSource->player!=selectedPlayer &&
-		( psObj->psDest == NULL || psObj->psDest->died || !psObj->psDest->visible[selectedPlayer] ) )
+	// Someone elses structure firing at something you can't see
+	if (psObj->psSource != NULL
+	 && !psObj->psSource->died
+	 && psObj->psSource->type == OBJ_STRUCTURE
+	 && psObj->psSource->player != selectedPlayer
+	 && (psObj->psDest == NULL
+	  || psObj->psDest->died
+	  || !psObj->psDest->visible[selectedPlayer]))
 	{
 		bVisible = FALSE;
 	}
 
-	// something you cannot see firing at a structure that isn't yours
-	if ( psObj->psDest != NULL &&
-		!psObj->psDest->died &&
-		psObj->psDest->type == OBJ_STRUCTURE &&
-		psObj->psDest->player != selectedPlayer &&
-		( psObj->psSource == NULL || !psObj->psSource->visible[selectedPlayer] ) )
+	// Something you cannot see firing at a structure that isn't yours
+	if (psObj->psDest != NULL
+	 && !psObj->psDest->died
+	 && psObj->psDest->type == OBJ_STRUCTURE
+	 && psObj->psDest->player != selectedPlayer
+	 && (psObj->psSource == NULL
+	  || !psObj->psSource->visible[selectedPlayer]))
 	{
 		bVisible = FALSE;
 	}
 
-	return(bVisible);
+	return bVisible;
 }
+
 /***************************************************************************/
 
 BOOL
