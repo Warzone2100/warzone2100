@@ -118,7 +118,7 @@ static void kfsf_SetSelectedDroidsState( SECONDARY_ORDER sec, SECONDARY_STATE St
  *  \return false if this is a skirmish or single player game, true if it is a
  *          multiplayer game.
  */
-static bool runningMultiplayer(void)
+bool runningMultiplayer(void)
 {
 	// NOTE: may want to only allow this for DEBUG builds?? -- Buginator
 	if (!bMultiPlayer || !NetPlay.bComms)

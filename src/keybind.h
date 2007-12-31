@@ -228,4 +228,6 @@ void kf_TileInfo(void);
 
 extern void	kf_ToggleWatchWindow( void );
 
+bool runningMultiplayer(void);
+
 #endif
