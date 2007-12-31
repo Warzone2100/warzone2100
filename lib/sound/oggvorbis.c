@@ -145,7 +145,8 @@ struct OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_f
 	struct OggVorbisDecoderState* decoder = malloc(sizeof(struct OggVorbisDecoderState));
 	if (decoder == NULL)
 	{
-		debug(LOG_ERROR, "sound_CreateOggVorbisDecoder: couldn't allocate memory\n");
+		debug(LOG_ERROR, "sound_CreateOggVorbisDecoder: Out of memory");
+		abort();
 		return NULL;
 	}
 
@@ -156,7 +157,7 @@ struct OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_f
 	error = ov_open_callbacks(decoder, &decoder->oggVorbis_stream, NULL, 0, wz_oggVorbis_callbacks);
 	if (error < 0)
 	{
-		debug(LOG_ERROR, "sound_CreateOggVorbisDecoder: ov_open_callbacks failed with errorcode %d\n", error);
+		debug(LOG_ERROR, "sound_CreateOggVorbisDecoder: ov_open_callbacks failed with errorcode %d", error);
 		free(decoder);
 		return NULL;
 	}
