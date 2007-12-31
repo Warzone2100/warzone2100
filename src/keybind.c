@@ -1162,7 +1162,6 @@ void	kf_TogglePauseMode( void )
 	// Bail out if we're running a _true_ multiplayer game (which cannot be paused)
 	if (runningMultiplayer())
 	{
-		noMPCheatMsg();
 		return;
 	}
 
