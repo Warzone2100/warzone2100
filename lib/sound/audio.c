@@ -78,7 +78,7 @@ unsigned int audio_GetSampleListCount()
 	{
 		++count;
 		psSample = psSample->psNext;
-	}									
+	}
 
 	return count;
 }
@@ -793,38 +793,45 @@ BOOL audio_PlayObjDynamicTrack( void *psObj, int iTrack, AUDIO_CALLBACK pUserCal
 	return audio_Play3DTrack( iX, iY, iZ, iTrack, psObj, pUserCallback );
 }
 
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
-BOOL audio_PlayStream( const char szFileName[], SDWORD iVol, AUDIO_CALLBACK pUserCallback )
+/** Plays the given audio file as a stream and reports back when it has finished
+ *  playing.
+ *  \param fileName the (OggVorbis) file to play from
+ *  \param volume the volume to use while playing this file (in the range of
+ *         0.0 - 1.0)
+ *  \param onFinished a callback function to invoke when playing of this stream
+ *         has been finished. You can use NULL to specifiy no callback function.
+ *  \param user_data a pointer to contain some user data to pass along to the
+ *         finished callback.
+ *  \return true when the stream is playing (and as such the callback will be
+ *          invoked some time in the future), false when the stream didn't start
+ *          playing (and the callback won't be invoked).
+ */
+bool audio_PlayStream(const char* fileName, float volume, void (*onFinished)(void*), void* user_data)
 {
-	//~~~~~~~~~~~~~~~~~~~~~~
-	AUDIO_SAMPLE	*psSample;
-	//~~~~~~~~~~~~~~~~~~~~~~
+	PHYSFS_file* fileHandle;
 
-	// if audio not enabled return TRUE to carry on game without audio
-	if ( g_bAudioEnabled == FALSE )
+	// If audio is not enabled return false to indicate that the given callback
+	// will not be invoked.
+	if (g_bAudioEnabled == FALSE)
 	{
-		return FALSE;
+		return false;
 	}
 
-	psSample = calloc(1, sizeof(AUDIO_SAMPLE));
-	if ( psSample == NULL )
+	// Open up the file
+	fileHandle = PHYSFS_openRead(fileName);
+	if (fileHandle == NULL)
 	{
-		debug(LOG_ERROR, "audio_PlayStream: Out of memory");
-		return FALSE;
+		debug(LOG_ERROR, "sound_LoadTrackFromFile: PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, PHYSFS_getLastError());
+		return NULL;
 	}
 
-	psSample->pCallback = pUserCallback;
-	psSample->bFinishedPlaying = FALSE;
-
-	if ( !sound_PlayStream(psSample, szFileName, iVol) )
+	if (!sound_PlayStream(fileHandle, volume, onFinished, user_data))
 	{
-		return FALSE;
+		PHYSFS_close(fileHandle);
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 //*
@@ -1093,7 +1100,7 @@ void audio_RemoveObj(const void* psObj)
 			debug(LOG_MEMORY, "audio_RemoveObj: callback %p sample %d\n",toRemove->pCallback,toRemove->iTrack);
 			// Stop this sound sample
 			sound_RemoveActiveSample( toRemove ); //remove from global active list.
-			
+
 			// Perform the actual task of destroying this sample
 			audio_RemoveSample(&g_psSampleList, toRemove);
 			free(toRemove);

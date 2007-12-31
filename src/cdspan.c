@@ -30,23 +30,24 @@
 #include "lib/sound/track.h"
 #include "cdspan.h"
 
-void
-cdspan_PlayInGameAudio(const char* fileName, SDWORD iVol)
+/** Plays the given audio file as a background sound at the given volume.
+ *  \param fileName the (OggVorbis) audio file to play from
+ *  \param volume the volume to play at in a range of 0.0 to 1.0
+ */
+void cdspan_PlayInGameAudio(const char* fileName, float volume)
 {
 	BOOL	bPlaying;
 
 	audio_StopAll();
 
-	bPlaying = audio_PlayStream(fileName, iVol, NULL);
+	bPlaying = audio_PlayStream(fileName, volume, NULL, NULL);
 
 	/* try playing from hard disk */
 	if (bPlaying == FALSE)
 	{
-        char streamFileName[MAX_STR];
-		snprintf(streamFileName, sizeof(streamFileName), "audio/%s", fileName);
-		// Mark end of string
-		streamFileName[sizeof(streamFileName) - 1] = '\0';
+		const char* streamFileName;
+		sasprintf((char**)&streamFileName, "audio/%s", fileName);
 
-		audio_PlayStream(streamFileName, iVol, NULL);
+		audio_PlayStream(streamFileName, volume, NULL, NULL);
 	}
 }

@@ -3390,7 +3390,7 @@ BOOL scrPlayBackgroundAudio(void)
 	}
 
 
-	cdspan_PlayInGameAudio(pText, iVol);
+	cdspan_PlayInGameAudio(pText, (float)iVol / 100.f);
 
 
 	return TRUE;

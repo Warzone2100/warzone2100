@@ -20,6 +20,6 @@
 #ifndef _cdspan_h
 #define _cdspan_h
 
-extern void cdspan_PlayInGameAudio(const char* fileName, SDWORD iVol);
+extern void cdspan_PlayInGameAudio(const char* fileName, float volume);
 
 #endif

@@ -53,8 +53,7 @@ void	sound_StopSample(AUDIO_SAMPLE* psSample);
 void	sound_PauseSample( AUDIO_SAMPLE * psSample );
 void	sound_ResumeSample( AUDIO_SAMPLE * psSample );
 
-BOOL	sound_PlayStream( AUDIO_SAMPLE *psSample, const char szFileName[],
-							SDWORD iVol );
+bool sound_PlayStream(PHYSFS_file* PHYSFS_fileHandle, float volume, void (*onFinished)(void*), void* user_data);
 
 void	sound_SetSampleFreq( AUDIO_SAMPLE * psSample, SDWORD iFreq );
 void	sound_SetSampleVol( AUDIO_SAMPLE * psSample, SDWORD iVol,
@@ -66,8 +65,8 @@ BOOL	sound_QueueSamplePlaying( void );
 
 void	sound_SetPlayerPos( SDWORD iX, SDWORD iY, SDWORD iZ );
 void	sound_SetPlayerOrientation( SDWORD iX, SDWORD iY, SDWORD iZ );
-void	sound_SetObjectPosition( AUDIO_SAMPLE *psSample ); 
-									
+void	sound_SetObjectPosition( AUDIO_SAMPLE *psSample );
+
 void *	sound_GetObject( SDWORD iSample );
 void	sound_SetObject( SDWORD iSample, void *pObj );
 

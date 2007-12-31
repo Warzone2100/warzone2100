@@ -179,8 +179,10 @@ static BOOL seq_StartFullScreenVideo(const char* videoName, const char* audioNam
 	}
 	else
 	{
-		bAudioPlaying = audio_PlayStream( aAudioName, AUDIO_VOL_MAX, NULL );
-		ASSERT( bAudioPlaying == TRUE,"seq_StartFullScreenVideo: unable to initialise sound %s",aAudioName );
+		static const float maxVolume = 1.f;
+
+		bAudioPlaying = audio_PlayStream(aAudioName, maxVolume, NULL, NULL);
+		ASSERT(bAudioPlaying == TRUE, "seq_StartFullScreenVideo: unable to initialise sound %s", aAudioName);
 	}
 
 	time_started = SDL_GetTicks();
