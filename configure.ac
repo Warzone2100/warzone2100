@@ -177,7 +177,6 @@ fi
 # Checks for modules:
 
 PKG_CHECK_MODULES([SDL], [sdl >= 1.2])
-PKG_CHECK_MODULES([OPENGL], [gl >= 6.0]) # This is the Mesa version, not GL version
 PKG_CHECK_MODULES([OPENAL], [openal >= 0.0.8])
 PKG_CHECK_MODULES([PNG], [libpng >= 1.2])
 PKG_CHECK_MODULES([OGGVORBIS], [ogg >= 1.1 vorbis >= 1.1 vorbisfile >= 1.1])
@@ -200,6 +199,17 @@ AC_CHECK_LIB(SDL_net, SDLNet_Init, AC_SUBST([SDL_NET_LIBS], [-lSDL_net]), AC_MSG
 # Look for OpenGL
 AC_CHECK_HEADER(SDL/SDL_opengl.h, ,
 	AC_MSG_ERROR([SDL OpenGL header not found. Please install SDL with OpenGL support.]))
+AC_CHECK_LIB(GL, main,
+	OPENGL_LIBS="-lGL",
+	AC_CHECK_LIB(opengl32, main,
+		OPENGL_LIBS="-lopengl32",
+		AC_MSG_ERROR([OpenGL library not found.])))
+AC_CHECK_LIB(GLU, main,
+	OPENGL_LIBS="${OPENGL_LIBS} -lGLU",
+	AC_CHECK_LIB(glu32, main,
+		OPENGL_LIBS="${OPENGL_LIBS} -lglu32",
+		AC_MSG_ERROR([GLU library not found.])))
+AC_SUBST([OPENGL_LIBS], [${OPENGL_LIBS}])
 
 # Look for OpenGLC
 AC_CHECK_HEADER(GL/glc.h, ,
@@ -210,10 +220,6 @@ AC_CHECK_LIB(GLC, main,
 		OPENGLC_LIBS="-lglc32",
 		AC_MSG_ERROR([OpenGLC library not found. Please install QuesoGLC: http://quesoglc.sourceforge.net/])))
 AC_SUBST([OPENGLC_LIBS], [${OPENGLC_LIBS}])
-
-# Look for OpenAL
-AC_CHECK_HEADER(AL/al.h, ,
-	AC_MSG_ERROR([OpenAL header not found.]))
 
 
 WZ_CFLAGS="${WZ_CFLAGS} -DDATADIR=\"\\\"\${datadir}/\${PACKAGE}\\\"\""
