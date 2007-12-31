@@ -7,6 +7,8 @@ Easy:
 
 - Fix memleaks in lexer files. Appears in functions like strres_ensure_buffer_stack or strres__create_buffer.
 
+- Add the ability to pause music (from the user playlists) with a keybind
+
 More difficult:
 
 - Display "backdrops" instead of novideo.rpl so a story can be told using subtitles and be illustrated with pictures.
