@@ -280,9 +280,7 @@ extern BOOL addTemplate			(UDWORD	player,DROID_TEMPLATE *psNew);
 // syncing.
 extern BOOL sendCheck			(void);							//send/recv  check info
 extern BOOL sendScoreCheck		(void);							//score check only(frontend)
-extern BOOL sendPowerCheck		(BOOL now);
 extern BOOL sendPing			(void);							// allow game to request pings.
-extern UDWORD averagePing		(void);
 
 // multijoin
 extern void modifyResources		(POWER_GEN_FUNCTION* psFunction);
