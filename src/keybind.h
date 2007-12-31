@@ -228,6 +228,4 @@ void kf_TileInfo(void);
 
 extern void	kf_ToggleWatchWindow( void );
 
-extern int fogCol;
-
 #endif
