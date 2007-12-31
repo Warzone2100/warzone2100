@@ -69,11 +69,7 @@
 #include "transporter.h"
 #include "mission.h"
 
-
-
 #include "multiplay.h"
-
-
 
 // Is a clickable form widget hilited, either because the cursor is over it or it is flashing.
 //
@@ -86,8 +82,6 @@
 //#define buttonIsHilite(p) ( (((W_BUTTON*)p)->state & WBUTS_HILITE) ||	(((W_BUTTON*)p)->state & WBUTS_FLASHON) )
 #define buttonIsHilite(p) 	(((W_BUTTON*)p)->state & WBUTS_HILITE)
 #define buttonIsFlashing(p)  (((W_BUTTON*)p)->state & WBUTS_FLASHON)
-
-
 
 #define FORM_OPEN_ANIM_DURATION		(GAME_TICKS_PER_SEC/6) // Time duration for form open/close anims.
 
@@ -109,62 +103,6 @@ BASE_STATS *CurrentStatsTemplate = NULL;
 #define BUT_TRANSPORTER_SCALE (20)
 #define BUT_TRANSPORTER_ALT (-50)
 
-
-
-// Token look up table for matching IMD's to droid components.
-//
-/*TOKENID CompIMDIDs[]={
-//COMP_BODY:
-	{"Viper Body",IMD_BD_VIPER},
-	{"Cobra Body",IMD_BD_COBRA},
-
-//COMP_WEAPON:
-	{"Single Rocket",IMD_TR_SINGROCK},
-	{"Rocket Pod",IMD_TR_ROCKPOD},
-	{"Light Machine Gun",IMD_TR_LGUN},
-	{"Light Cannon",IMD_TR_LCAN},
-	{"Heavy Cannon",IMD_TR_HCAN},
-
-//COMP_PROPULSION:
-	{"Wheeled Propulsion",IMD_PR_WHEELS},
-	{"Tracked Propulsion",IMD_PR_TRACKS},
-	{"Hover Propulsion",IMD_PR_HOVER},
-
-//COMP_CONSTRUCT:
-	{"Building Constructor",IMD_TR_BUILDER},
-
-//COMP_REPAIRUNIT:
-	{"Light Repair #1",IMD_TR_LGUN},
-
-//COMP_ECM:
-	{"Light ECM #1",IMD_TR_ECM},
-	{"Heavy ECM #1",IMD_TR_ECM},
-
-//COMP_SENSOR:
-	{"EM Sensor",IMD_TR_SENS},
-	{"Default Sensor",IMD_TR_SENS},
-
-	{NULL,-1},
-};*/
-
-
-// Token look up table for matching Images and IMD's to research projects.
-//
-/*RESEARCHICON ResearchIMAGEIDs[]={
-	{"Tracks",			IMAGE_RES_MINOR_TRACKS,		IMD_PR_TRACKS},
-	{"Hovercraft",		IMAGE_RES_MINOR_HOVER,		IMD_PR_HOVER},
-	{"Light Cannon",	IMAGE_RES_MINOR_HEAVYWEP,	IMD_TR_LCAN},
-	{"Heavy Cannon",	IMAGE_RES_MINOR_HEAVYWEP,	IMD_TR_HCAN},
-	{"Rocket Launcher",	IMAGE_RES_MINOR_ROCKET,		IMD_TR_SINGROCK},
-	{"ECM PickUp",		IMAGE_RES_MINOR_ELECTRONIC,	IMD_TR_ECM},
-	{"PlasCrete",		IMAGE_RES_MINOR_PLASCRETE,	IMD_PLASCRETE},
-	{"EM Sensor",		IMAGE_RES_MINOR_ELECTRONIC,	IMD_TR_SENS},
-	{" Rocket Pod",		IMAGE_RES_MINOR_ROCKET,		IMD_TR_ROCKPOD},
-
-	{NULL,-1},
-};*/
-
-
 UDWORD ManuPower = 0;	// Power required to manufacture the current item.
 
 
@@ -178,26 +116,17 @@ static BUTTON_SURFACE ObjectSurfaces[NUM_OBJECTSURFACES];
 static BUTTON_SURFACE StatSurfaces[NUM_STATSURFACES];
 static BUTTON_SURFACE System0Surfaces[NUM_SYSTEM0SURFACES];
 
-
 // Working buffers for rendered buttons.
 RENDERED_BUTTON System0Buffers[NUM_SYSTEM0BUFFERS];	// References ObjectSurfaces.
-//RENDERED_BUTTON System1Buffers[NUM_OBJECTBUFFERS];	// References ObjectSurfaces.
-//RENDERED_BUTTON System2Buffers[NUM_OBJECTBUFFERS];	// References ObjectSurfaces.
 RENDERED_BUTTON ObjectBuffers[NUM_OBJECTBUFFERS];	// References ObjectSurfaces.
 RENDERED_BUTTON TopicBuffers[NUM_TOPICBUFFERS];		// References TopicSurfaces.
 RENDERED_BUTTON StatBuffers[NUM_STATBUFFERS];		// References StatSurfaces.
-
-
-
 
 // Get the first factory assigned to a command droid
 STRUCTURE *droidGetCommandFactory(DROID *psDroid);
 
 static SDWORD ButtonDrawXOffset;
 static SDWORD ButtonDrawYOffset;
-
-
-//static SDWORD ActualQuantity = -1;
 
 
 // Set audio IDs for form opening/closing anims.
@@ -343,8 +272,7 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 				             ((RESEARCH *)Research->psSubject - asResearch);
 				//this is no good if you change which lab is researching the topic and one lab is faster
 				//Range = Research->timeToResearch;
-				Range = ((RESEARCH *)((RESEARCH_FACILITY*)Structure->
-				pFunctionality)->psSubject)->researchPoints;
+				Range = ((RESEARCH *)((RESEARCH_FACILITY*)Structure->pFunctionality)->psSubject)->researchPoints;
 				//check started to research
 				if (Research->timeStarted == ACTION_START_TIME)
 				{
@@ -459,24 +387,15 @@ void intAddFactoryInc(WIDGET *psWidget, W_CONTEXT *psContext)
 	BASE_OBJECT     *psObj = (BASE_OBJECT*)Label->pUserData;
 
 	// Get the object associated with this widget.
-	if (psObj != NULL)
+	if (psObj != NULL && !isDead(psObj))
 	{
-		STRUCTURE*  Structure;
-		FACTORY*    Factory;
-
-		ASSERT( psObj != NULL,
-			"intAddFactoryInc: invalid structure pointer" );
-
-		ASSERT(!isDead(psObj), "intAddFactoryInc: object is dead");
-
-		Structure = (STRUCTURE*)psObj;
+		STRUCTURE	*Structure = (STRUCTURE*)psObj;
+		FACTORY		*Factory = (FACTORY *)Structure->pFunctionality;
 
 		ASSERT( (Structure->pStructureType->type == REF_FACTORY ||
 			Structure->pStructureType->type == REF_CYBORG_FACTORY ||
 			Structure->pStructureType->type == REF_VTOL_FACTORY),
 			"intAddFactoryInc: structure is not a factory" );
-
-		Factory = (FACTORY *)Structure->pFunctionality;
 
 		snprintf(Label->aText, sizeof(Label->aText), "%u", Factory->psAssemblyPoint->factoryInc + 1);
 		Label->style &= ~WIDG_HIDDEN;
@@ -491,24 +410,18 @@ void intAddFactoryInc(WIDGET *psWidget, W_CONTEXT *psContext)
 //callback to display the production quantity number for a template
 void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 {
-	BASE_STATS			*psStat;
-	DROID_TEMPLATE		*psTemplate;
-	STRUCTURE			*psStructure = NULL;
-	BASE_OBJECT			*psObj = NULL;
 	W_LABEL				*Label = (W_LABEL*)psWidget;
-	UDWORD				quantity = 0;
+	BASE_STATS			*psStat = (BASE_STATS *)Label->pUserData;
 
 	// Get the object associated with this widget.
-	psStat = (BASE_STATS *)Label->pUserData;
 	if (psStat != NULL)
 	{
-		ASSERT( psStat != NULL,
-			"intAddProdQuantity: invalid template pointer" );
+		DROID_TEMPLATE	*psTemplate = (DROID_TEMPLATE *)psStat;
+		STRUCTURE	*psStructure = NULL;
+		BASE_OBJECT	*psObj = getCurrentSelected();
+		UDWORD		quantity = 0;
 
-		psTemplate = (DROID_TEMPLATE *)psStat;
-
-		psObj = getCurrentSelected();
-		if (psObj != NULL && psObj->type == OBJ_STRUCTURE)
+		if (psObj != NULL && psObj->type == OBJ_STRUCTURE && !isDead(psObj))
 		{
 			psStructure = (STRUCTURE *)psObj;
 		}
@@ -534,13 +447,13 @@ void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 //callback to display the production loop quantity number for a factory
 void intAddLoopQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 {
-	FACTORY				*psFactory = NULL;
-	W_LABEL				*Label = (W_LABEL*)psWidget;
+	W_LABEL		*Label = (W_LABEL*)psWidget;
+	STRUCTURE	*psStruct = (STRUCTURE *)Label->pUserData;
 
 	//loop depends on the factory
-	if (Label->pUserData != NULL)
+	if (psStruct && psStruct->pFunctionality && !psStruct->died)
 	{
-		psFactory = (FACTORY *)((STRUCTURE *)Label->pUserData)->pFunctionality;
+		FACTORY		*psFactory = (FACTORY *)psStruct->pFunctionality;
 
 		if (psFactory->quantity == INFINITE_PRODUCTION)
 		{
@@ -565,20 +478,13 @@ void intAddLoopQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 // callback to update the command droid size label
 void intUpdateCommandSize(WIDGET *psWidget, W_CONTEXT *psContext)
 {
-	BASE_OBJECT			*psObj;
-	DROID				*psDroid;
 	W_LABEL				*Label = (W_LABEL*)psWidget;
+	BASE_OBJECT			*psObj = (BASE_OBJECT*)Label->pUserData;
 
 	// Get the object associated with this widget.
-	psObj = (BASE_OBJECT*)Label->pUserData;
-	if (psObj != NULL)
+	if (psObj != NULL && !isDead(psObj))
 	{
-		ASSERT( psObj != NULL,
-			"intUpdateCommandSize: invalid droid pointer" );
-
-		ASSERT(!isDead(psObj), "intUpdateCommandSize: droid has died");
-
-		psDroid = (DROID *)psObj;
+		DROID	*psDroid = (DROID *)psObj;
 
 		ASSERT( psDroid->droidType == DROID_COMMAND,
 			"intUpdateCommandSize: droid is not a command droid" );
@@ -596,24 +502,17 @@ void intUpdateCommandSize(WIDGET *psWidget, W_CONTEXT *psContext)
 // callback to update the command droid experience
 void intUpdateCommandExp(WIDGET *psWidget, W_CONTEXT *psContext)
 {
-	BASE_OBJECT			*psObj;
-	DROID				*psDroid;
 	W_LABEL				*Label = (W_LABEL*)psWidget;
+	BASE_OBJECT			*psObj = (BASE_OBJECT*)Label->pUserData;
 	SDWORD				i, numStars;
 
 	// Get the object associated with this widget.
-	psObj = (BASE_OBJECT*)Label->pUserData;
-	if (psObj != NULL)
+	if (psObj != NULL && !isDead(psObj))
 	{
-		ASSERT( psObj != NULL && psObj->type == OBJ_DROID,
-			"intUpdateCommandSize: invalid droid pointer" );
+		DROID	*psDroid = (DROID *)psObj;
 
-		ASSERT(!isDead(psObj), "intUpdateCommandSize: droid has died");
-
-		psDroid = (DROID *)psObj;
-
-		ASSERT( psDroid->droidType == DROID_COMMAND,
-			"intUpdateCommandSize: droid is not a command droid" );
+		ASSERT(psObj->type == OBJ_DROID, "intUpdateCommandExp: invalid droid pointer");
+		ASSERT(psDroid->droidType == DROID_COMMAND, "intUpdateCommandExp: droid is not a command droid");
 
 		numStars = getDroidLevel(psDroid);
 		numStars = (numStars >= 1) ? (numStars - 1) : 0;
@@ -634,24 +533,17 @@ void intUpdateCommandExp(WIDGET *psWidget, W_CONTEXT *psContext)
 // callback to update the command droid factories
 void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext)
 {
-	BASE_OBJECT			*psObj;
-	DROID				*psDroid;
 	W_LABEL				*Label = (W_LABEL*)psWidget;
+	BASE_OBJECT			*psObj = (BASE_OBJECT*)Label->pUserData;
 	SDWORD				i,cIndex, start;
 
 	// Get the object associated with this widget.
-	psObj = (BASE_OBJECT*)Label->pUserData;
-	if (psObj != NULL)
+	if (psObj != NULL && !isDead(psObj))
 	{
-		ASSERT( psObj != NULL && psObj->type == OBJ_DROID,
-			"intUpdateCommandSize: invalid droid pointer" );
+		DROID		*psDroid = (DROID *)psObj;
 
-		ASSERT(!isDead(psObj), "intUpdateCommandSize: droid has died");
-
-		psDroid = (DROID *)psObj;
-
-		ASSERT( psDroid->droidType == DROID_COMMAND,
-			"intUpdateCommandSize: droid is not a command droid" );
+		ASSERT(psObj->type == OBJ_DROID, "intUpdateCommandFact: invalid droid pointer");
+		ASSERT(psDroid->droidType == DROID_COMMAND, "intUpdateCommandFact: droid is not a command droid");
 
 		// see which type of factory this is for
 		if (Label->id >= IDOBJ_COUNTSTART && Label->id < IDOBJ_COUNTEND)
@@ -1871,53 +1763,6 @@ void intDisplayTab(WIDGET *psWidget,UDWORD TabType, UDWORD Position,
 
 }
 
-//void intDisplaySystemTab(WIDGET *psWidget,UDWORD TabType, UDWORD Position,
-//				   UDWORD Number,BOOL Selected,BOOL Hilight,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height)
-//{
-//	TABDEF *Tab = (TABDEF*)psWidget->pUserData;
-//
-////	ASSERT( Number < 4,"intDisplaySystemTab : Too many tabs." );
-//
-//	Number = Number%4;	// Make sure number never gets bigger than 3.
-//
-//	if(TabType == TAB_MAJOR)
-//	{
-//		iV_DrawImage(IntImages,(UWORD)(Tab->MajorUp+Number),x,y);
-//
-//		if(Hilight)
-//		{
-//			iV_DrawImage(IntImages,Tab->MajorHilight,x,y);
-//		}
-//		else if(Selected)
-//		{
-//			iV_DrawImage(IntImages,(UWORD)(Tab->MajorSelected+Number),x,y);
-//		}
-//	}
-//	else
-//	{
-//		//ASSERT( FALSE,"intDisplaySystemTab : NOT CATERED FOR!!!" );
-//		iV_DrawImage(IntImages,(UWORD)(Tab->MinorUp),x,y);
-//
-//		if(Hilight)
-//		{
-//			iV_DrawImage(IntImages,Tab->MinorHilight,x,y);
-//		}
-//		else if(Selected)
-//		{
-//			iV_DrawImage(IntImages,Tab->MinorSelected,x,y);
-//		}
-//	}
-//}
-
-//static void intUpdateSliderCount(WIDGET *psWidget, W_CONTEXT *psContext)
-//{
-//	W_SLIDER *Slider = (W_SLIDER*)psWidget;
-//	UDWORD Quantity = Slider->pos + 1;
-//
-//	W_LABEL *Label = (W_LABEL*)widgGetFromID(psWScreen,IDSTAT_SLIDERCOUNT);
-//	Label->pUserData = (void*)Quantity;
-//}
-
 // Display one of three images depending on if the widget is currently depressed (ah!).
 //
 void intDisplayButtonPressed(WIDGET *psWidget, UDWORD xOffset,
@@ -1960,13 +1805,12 @@ void intDisplayDPButton(WIDGET *psWidget, UDWORD xOffset,
 						UDWORD yOffset, PIELIGHT *pColours)
 {
 	W_BUTTON	*psButton = (W_BUTTON*)psWidget;
-	STRUCTURE	*psStruct;
+	STRUCTURE	*psStruct = (STRUCTURE*)psButton->pUserData;
 	UDWORD		x = xOffset+psButton->x;
 	UDWORD		y = yOffset+psButton->y;
 	UBYTE		hilight = 0, down = 0;
 	UWORD		imageID;
 
-	psStruct = (STRUCTURE*)psButton->pUserData;
 	if (psStruct)
 	{
 		ASSERT( StructIsFactory(psStruct),
@@ -2021,7 +1865,6 @@ void intDisplaySlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
 	SWORD sx;
-	//SWORD x0,y0, x1;
 
 	iV_DrawImage(IntImages,IMAGE_SLIDER_BACK,x+STAT_SLD_OX,y+STAT_SLD_OY);
 
@@ -2072,10 +1915,7 @@ void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 
 	/* draw right side of bar */
 	iV_DrawImage( IntImages, iImageIDRight, iXRight, iY );
-
 }
-
-
 
 
 
@@ -2084,27 +1924,20 @@ void intDisplayNumber(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT
 	W_LABEL		*Label = (W_LABEL*)psWidget;
 	UDWORD		x = Label->x + xOffset;
 	UDWORD		y = Label->y + yOffset;
-	UDWORD		Quantity;// = (UDWORD)Label->pUserData;
-	STRUCTURE	*psStruct;
-	FACTORY		*psFactory;
+	UDWORD		Quantity = 1;
 
 	unsigned int i;
 
 	//Quantity depends on the factory
-	Quantity = 1;
 	if (Label->pUserData != NULL)
 	{
-		psStruct = (STRUCTURE *)Label->pUserData;
-		psFactory = (FACTORY *) psStruct->pFunctionality;
-		//psFactory = (FACTORY *)((STRUCTURE *)Label->pUserData)->pFunctionality;
-		//if (psFactory->psSubject)
+		STRUCTURE	*psStruct = (STRUCTURE *)Label->pUserData;
+		FACTORY		*psFactory = (FACTORY *)psStruct->pFunctionality;
+
+		if (psFactory && !psStruct->died)
 		{
 			Quantity = psFactory->quantity;
 		}
-		/*else
-		{
-			Quantity = 1;
-		}*/
 	}
 
 	if(Quantity >= STAT_SLDSTOPS)
@@ -2204,8 +2037,6 @@ void InitialiseButtonData(void)
 		StatBuffers[i].ButSurf = &StatSurfaces[i%NUM_STATSURFACES];
 	}
 }
-
-
 
 
 void RefreshObjectButtons(void)
@@ -2395,12 +2226,9 @@ void DeleteButtonData(void)
 }
 
 
-
-
-UWORD ButXPos = 0;
-UWORD ButYPos = 0;
-UWORD ButWidth,ButHeight;
-
+static UWORD ButXPos = 0;
+static UWORD ButYPos = 0;
+static UWORD ButWidth, ButHeight;
 
 void OpenButtonRender(UWORD XPos,UWORD YPos,UWORD Width,UWORD Height)
 {
@@ -2979,7 +2807,6 @@ RESEARCH_FACILITY *StructureGetResearch(STRUCTURE *Structure)
 
 iIMDShape *StructureGetIMD(STRUCTURE *Structure)
 {
-//	return buildingIMDs[aBuildingIMDs[Structure->player][Structure->pStructureType->type]];
 	return Structure->pStructureType->pIMD;
 }
 
@@ -3013,16 +2840,6 @@ BOOL StatIsTemplate(BASE_STATS *Stat)
 	return (Stat->ref >= REF_TEMPLATE_START &&
 				 Stat->ref < REF_TEMPLATE_START + REF_RANGE);
 }
-
-//iIMDShape *StatGetTemplateIMD(BASE_STATS *Stat,UDWORD Player)
-//{
-//	return TemplateGetIMD((DROID_TEMPLATE*)Stat,Player);
-//}
-//
-///*UDWORD StatGetTemplateIMDIndex(BASE_STATS *Stat,UDWORD Player)
-//{
-//	return TemplateGetIMDIndex((DROID_TEMPLATE*)Stat,Player);
-//}*/
 
 SDWORD StatIsComponent(BASE_STATS *Stat)
 {
@@ -3078,22 +2895,9 @@ SDWORD StatIsComponent(BASE_STATS *Stat)
 	return COMP_UNKNOWN;
 }
 
-//iIMDShape *StatGetComponentIMD(BASE_STATS *Stat)
-//iIMDShape *StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID)
 BOOL StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID,iIMDShape **CompIMD,iIMDShape **MountIMD)
 {
 	WEAPON_STATS		*psWStat;
-	/*SWORD ID;
-
-	ID = GetTokenID(CompIMDIDs,Stat->pName);
-	if(ID >= 0) {
-		return componentIMDs[ID];
-	}
-
-	ASSERT( 0,"StatGetComponent : Unknown component" );*/
-
-//	COMP_BASE_STATS *CompStat = (COMP_BASE_STATS *)Stat;
-//	DBPRINTF(("%s\n",Stat->pName));
 
 	*CompIMD = NULL;
 	*MountIMD = NULL;
@@ -3188,55 +2992,7 @@ void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape,
     }
 }
 
-// Find a token in the specified token list and return it's ID.
-//
-/*SWORD GetTokenID(TOKENID *Tok,char *Token)
-{
-	while(Tok->Token!=NULL) {
-		if(strcmp(Tok->Token,Token) == 0) {
-			return Tok->ID;
-		}
-		Tok++;
-	}
-
-	//test for all - AB
-//	return IMD_DEFAULT;
-	return -1;
-}*/
-
-// Find a token in the specified token list and return it's Index.
-//
-/*SWORD FindTokenID(TOKENID *Tok,char *Token)
-{
-	SWORD Index = 0;
-	while(Tok->Token!=NULL) {
-		if(strcmp(Tok->Token,Token) == 0) {
-			return Index;
-		}
-		Index++;
-		Tok++;
-	}
-
-	return -1;
-}*/
-
-//void intDisplayBorderForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
-//{
-//	W_TABFORM *Form = (W_TABFORM*)psWidget;
-//	UDWORD x0,y0,x1,y1;
-//
-//	x0 = xOffset+Form->x;
-//	y0 = yOffset+Form->y;
-//	x1 = x0 + Form->width;
-//	y1 = y0 + Form->height;
-//
-//	AdjustTabFormSize(Form,&x0,&y0,&x1,&y1);
-//
-//	RenderWindowFrame(&FrameNormal,x0,y0,x1-x0,y1-y0);
-//}
-
 #define	DRAW_BAR_TEXT	1
-
 
 /* Draws a stats bar for the design screen */
 void intDisplayStatsBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
@@ -3283,9 +3039,6 @@ void intDisplayStatsBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIG
 		iV_DrawImage(IntImages,IMAGE_DES_STATSCOMP,iX+BarGraph->minorSize ,y0);
 	}
 }
-
-
-
 
 
 
@@ -3358,7 +3111,6 @@ void intDisplayDesignPowerBar(WIDGET *psWidget, UDWORD xOffset,
 	}
 
 }
-
 
 
 

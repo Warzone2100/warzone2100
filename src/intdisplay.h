@@ -83,10 +83,6 @@ struct 	iSurface *Surface;	// Ivis surface definition.
 } BUTTON_SURFACE;
 
 
-
-
-// I tried to get the PC code working with the above PSX structure but it was having none of it
-//  ... sorry about that ... TC
 #define RENDERBUTTON_INUSE(x)  ((x)->InUse=TRUE)
 #define RENDERBUTTON_NOTINUSE(x)  ((x)->InUse=FALSE)
 
@@ -108,26 +104,13 @@ typedef struct {
 //	iSurface *Surface;	// Ivis surface definition.
 } RENDERED_BUTTON;
 
-
-
-
-
-
 extern RENDERED_BUTTON TopicBuffers[NUM_TOPICBUFFERS];
 extern RENDERED_BUTTON ObjectBuffers[NUM_OBJECTBUFFERS];
 extern RENDERED_BUTTON StatBuffers[NUM_STATBUFFERS];
 extern RENDERED_BUTTON System0Buffers[NUM_SYSTEM0BUFFERS];
-//extern RENDERED_BUTTON System1Buffers[NUM_OBJECTBUFFERS];
-//extern RENDERED_BUTTON System2Buffers[NUM_OBJECTBUFFERS];
-
 
 extern UDWORD ManuPower;		// Power required to manufacture the current item.
-extern UWORD ButXPos;
-extern UWORD ButYPos;
-extern UWORD ButWidth,ButHeight;
-
 extern BASE_STATS *CurrentStatsTemplate;
-
 
 // Set audio IDs for form opening/closing anims.
 void SetFormAudioIDs(int OpenID,int CloseID);
@@ -232,8 +215,6 @@ void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 
 void intDisplayTab(WIDGET *psWidget,UDWORD TabType, UDWORD Position,
 					UDWORD Number,BOOL Selected,BOOL Hilight,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height);
-void intDisplaySystemTab(WIDGET *psWidget,UDWORD TabType, UDWORD Position,
-					UDWORD Number,BOOL Selected,BOOL Hilight,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height);
 void intDisplaySlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 void intDisplayNumber(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
@@ -288,25 +269,13 @@ iIMDShape *StatGetStructureIMD(BASE_STATS *Stat,UDWORD Player);
 BOOL StatIsTemplate(BASE_STATS *Stat);
 BOOL StatIsFeature(BASE_STATS *Stat);
 
-//iIMDShape *StatGetTemplateIMD(BASE_STATS *Stat,UDWORD Player);
-//UDWORD StatGetTemplateIMDIndex(BASE_STATS *Stat,UDWORD Player);
-
 SDWORD StatIsComponent(BASE_STATS *Stat);
-//iIMDShape *StatGetComponentIMD(BASE_STATS *Stat);
-//iIMDShape *StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID);
 BOOL StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID,iIMDShape **CompIMD,iIMDShape **MountIMD);
 
 BOOL StatIsResearch(BASE_STATS *Stat);
 //void StatGetResearchImage(BASE_STATS *Stat,SDWORD *Image,iIMDShape **Shape, BOOL drawTechIcon);
 void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape,
                           BASE_STATS **ppGraphicData, BOOL drawTechIcon);
-
-//SWORD GetTokenID(TOKENID *Tok,char *Token);
-//SWORD FindTokenID(TOKENID *Tok,char *Token);
-
-//displays a border for a form
-extern void intDisplayBorderForm(WIDGET *psWidget, UDWORD xOffset,
-								 UDWORD yOffset, PIELIGHT *pColours);
 
 /* Draws a stats bar for the design screen */
 extern void intDisplayStatsBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
