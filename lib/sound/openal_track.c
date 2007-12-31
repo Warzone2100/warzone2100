@@ -607,10 +607,12 @@ BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
  */
 bool sound_PlayStream(PHYSFS_file* fileHandle, float volume, void (*onFinished)(void*), void* user_data)
 {
-	static const unsigned int buffer_count = 2;
+#define BUF_COUNT 2 // HACK: circumvents MSVC's freakingly bad C support
+	static const unsigned int buffer_count = BUF_COUNT;
 
 	AUDIO_STREAM* stream;
-	ALuint		buffers[buffer_count];
+	ALuint		buffers[BUF_COUNT];
+#undef BUF_COUNT
 
 	unsigned int i;
 
