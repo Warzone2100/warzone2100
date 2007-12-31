@@ -2864,7 +2864,7 @@ static void intSetWeaponStats(WEAPON_STATS *psStats)
 	/* range */
 	widgSetBarSize(psWScreen, IDDES_WEAPRANGE, proj_GetLongRange(psStats));
 	/* rate of fire */
-	widgSetBarSize(psWScreen, IDDES_WEAPROF, weaponROF(psStats));
+	widgSetBarSize(psWScreen, IDDES_WEAPROF, weaponROF(psStats, (SBYTE)selectedPlayer));
 	/* damage */
 	widgSetBarSize(psWScreen, IDDES_WEAPDAMAGE, (UWORD)weaponDamage(psStats,
 		(UBYTE)selectedPlayer));
@@ -2885,7 +2885,7 @@ static void intSetWeaponShadowStats(WEAPON_STATS *psStats)
 		/* range */
 		widgSetMinorBarSize(psWScreen, IDDES_WEAPRANGE, proj_GetLongRange(psStats));
 		/* rate of fire */
-		widgSetMinorBarSize(psWScreen, IDDES_WEAPROF, weaponROF(psStats));
+		widgSetMinorBarSize(psWScreen, IDDES_WEAPROF, weaponROF(psStats, (SBYTE)selectedPlayer));
 		/* damage */
 		widgSetMinorBarSize(psWScreen, IDDES_WEAPDAMAGE, (UWORD)weaponDamage(
 			psStats, (UBYTE)selectedPlayer));

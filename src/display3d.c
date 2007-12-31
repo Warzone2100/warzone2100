@@ -2588,7 +2588,7 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 			firingStage = gameTime - psWeap->lastFired;
 			if (bSalvo)
 			{
-				interval = psStats->reloadTime;
+				interval = weaponReloadTime(psStats, psObj->player);
 			}
 			else
 			{

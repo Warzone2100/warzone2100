@@ -765,7 +765,7 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
         {
             setMaxWeaponRange(psStats->longRange);
             setMaxWeaponDamage(psStats->damage);
-            setMaxWeaponROF(weaponROF(psStats));
+            setMaxWeaponROF(weaponROF(psStats, -1));
             setMaxComponentWeight(psStats->weight);
         }
 
@@ -3016,7 +3016,21 @@ BOOL allocateName(char **ppStore, const char *pName)
 /*Access functions for the upgradeable stats of a weapon*/
 UDWORD	weaponFirePause(WEAPON_STATS *psStats, UBYTE player)
 {
-	return (psStats->firePause - (psStats->firePause * asWeaponUpgrade[player][
+	if(psStats->reloadTime == 0)
+	{
+		return (psStats->firePause - (psStats->firePause * asWeaponUpgrade[player][
+			psStats->weaponSubClass].firePause)/100);
+	}
+	else
+	{
+		return psStats->firePause;	//fire pause is neglectable for weapons with reload time
+	}
+}
+
+/* Reload time is reduced for weapons with salvo fire */
+UDWORD	weaponReloadTime(WEAPON_STATS *psStats, UBYTE player)
+{
+	return (psStats->reloadTime - (psStats->reloadTime * asWeaponUpgrade[player][
 		psStats->weaponSubClass].firePause)/100);
 }
 
@@ -3122,7 +3136,7 @@ UDWORD	bodyArmour(BODY_STATS *psStats, UBYTE player, UBYTE bodyType,
 }
 
 //calculates the weapons ROF based on the fire pause and the salvos
-UWORD weaponROF(WEAPON_STATS *psStat)
+UWORD weaponROF(WEAPON_STATS *psStat, SBYTE player)
 {
 	UWORD rof = 0;
 
@@ -3132,7 +3146,8 @@ UWORD weaponROF(WEAPON_STATS *psStat)
 		if (psStat->reloadTime != 0)
 		{
 			// Rounds per salvo multiplied with the number of salvos per minute
-			rof = (UWORD)(psStat->numRounds * 60 * GAME_TICKS_PER_SEC  / psStat->reloadTime);
+			rof = (UWORD)(psStat->numRounds * 60 * GAME_TICKS_PER_SEC  /
+				(player >= 0 ? weaponReloadTime(psStat, player) : psStat->reloadTime) );
 		}
 	}
 	if (rof == 0)

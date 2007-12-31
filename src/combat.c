@@ -135,7 +135,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	/*see if reload-able weapon and out of ammo*/
 	if (psStats->reloadTime && !psWeap->ammo)
 	{
-		if (gameTime - psWeap->lastFired < psStats->reloadTime)
+		if (gameTime - psWeap->lastFired < weaponReloadTime(psStats, psAttacker->player))
 		{
 			return;
 		}
