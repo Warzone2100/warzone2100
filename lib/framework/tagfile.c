@@ -1249,7 +1249,7 @@ bool tagWriteString(element_t tag, const char *buffer)
 
 	// find size of string
 	size = strlen(buffer) + 1;
-	if (size > current->vm)
+	if (size > current->vm && current->vm != 0)
 	{
 		TF_ERROR("Given string is too long (size %d > limit %d)", (int)size, (int)current->vm);
 		return false;
