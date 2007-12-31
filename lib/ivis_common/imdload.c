@@ -496,13 +496,10 @@ static BOOL _imd_load_points( const char **ppFileData, iIMDShape *s )
 			cen.x = (rad*cen.x + old_to_new*p->x) / old_to_p;
 			cen.y = (rad*cen.y + old_to_new*p->y) / old_to_p;
 			cen.z = (rad*cen.z + old_to_new*p->z) / old_to_p;
-			debug(LOG_3D, "NEW SPHERE: cen,rad = %f %f %f, %f", cen.x, cen.y, cen.z, rad);
 		}
 	}
 
 	s->ocen = cen;
-	debug(LOG_3D, "radius, sradius, %d, %d", s->radius, s->sradius);
-	debug(LOG_3D, "SPHERE: cen,rad = %f %f %f", s->ocen.x, s->ocen.y, s->ocen.z);
 
 // END: tight bounding sphere
 

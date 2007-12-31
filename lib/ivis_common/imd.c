@@ -189,7 +189,6 @@ void iV_IMDRelease(iIMDShape *s)
 			free(s->shadowEdgeList);
 			s->shadowEdgeList = NULL;
 		}
-		debug(LOG_3D, "imd[IMDRelease] = release successful");
 		d = s->next;
 		free(s);
 		iV_IMDRelease(d);

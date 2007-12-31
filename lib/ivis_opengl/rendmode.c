@@ -41,13 +41,16 @@ iSurface	*psRendSurface;
 
 iSurface *iV_SurfaceCreate(Uint32 flags, int width, int height, int xp, int yp, UBYTE *buffer)
 {
-	iSurface *s;
+	iSurface *s = malloc(sizeof(iSurface));
 	int i;
 
 	assert(buffer!=NULL);	// on playstation this MUST be null
 
-	if ((s = (iSurface *) malloc(sizeof(iSurface))) == NULL)
+	if (!s)
+	{
+		debug(LOG_ERROR, "iV_SurfaceCreate: out of memory");
 		return NULL;
+	}
 
 	s->flags = flags;
 	s->xcentre = width>>1;
@@ -60,14 +63,14 @@ iSurface *iV_SurfaceCreate(Uint32 flags, int width, int height, int xp, int yp, 
 
 	s->buffer = buffer;
 	for (i=0; i<iV_SCANTABLE_MAX; i++)
+	{
 		s->scantable[i] = i * width;
+	}
 
 	s->clip.left = 0;
 	s->clip.right = width-1;
 	s->clip.top = 0;
 	s->clip.bottom = height-1;
-
-	debug(LOG_3D, "vid[SurfaceCreate] = created surface width %d, height %d", width, height);
 
 	return s;
 }
@@ -78,10 +81,14 @@ void iV_SurfaceDestroy(iSurface *s)
 {
 	// if renderer assigned to surface
 	if (psRendSurface == s)
+	{
 		psRendSurface = NULL;
+	}
 
 	if (s)
+	{
 		free(s);
+	}
 }
 
 
