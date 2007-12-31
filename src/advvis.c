@@ -83,7 +83,6 @@ SDWORD	lowerX,upperX,lowerY,upperY;
 // ------------------------------------------------------------------------------------
 static void processAVTile(UDWORD x, UDWORD y)
 {
-	float time;
 	MAPTILE *psTile;
 	UDWORD newLevel;
 
@@ -93,8 +92,7 @@ static void processAVTile(UDWORD x, UDWORD y)
 		return;
 	}
 
-	time = (float)frameTime / (float)GAME_TICKS_PER_SEC;
-	newLevel = (int)(psTile->level + (time * FADE_IN_TIME));
+	newLevel = psTile->level + timeAdjustedIncrement(FADE_IN_TIME, TRUE);
 	if (newLevel >= psTile->illumination)
 	{
 		psTile->level = psTile->illumination;

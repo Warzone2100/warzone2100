@@ -67,7 +67,6 @@ APS_INACTIVE,
 } AP_STATUS;
 
 static ATPART	asAtmosParts[MAX_ATMOS_PARTICLES];
-static	float	fraction;
 static	UDWORD	freeParticle;
 static	UDWORD	weather;
 
@@ -101,9 +100,6 @@ void	atmosUpdateSystem( void )
 	UDWORD	i;
 	UDWORD	numberToAdd;
 	Vector3i pos;
-
-	/* Establish how long the last game frame took */
-	fraction = (float)frameTime / GAME_TICKS_PER_SEC;
 
  //	if(weather==WT_NONE)
  //	{
@@ -170,9 +166,9 @@ void	processParticle( ATPART *psPart )
 	if(!gamePaused())
 	{
 		/* Move the particle - frame rate controlled */
- 		psPart->position.x += (psPart->velocity.x * fraction);
-		psPart->position.y += (psPart->velocity.y * fraction);
-		psPart->position.z += (psPart->velocity.z * fraction);
+ 		psPart->position.x += timeAdjustedIncrement(psPart->velocity.x, TRUE);
+		psPart->position.y += timeAdjustedIncrement(psPart->velocity.y, TRUE);
+		psPart->position.z += timeAdjustedIncrement(psPart->velocity.z, TRUE);
 
 		/* Wrap it around if it's gone off grid... */
 	   	testParticleWrap(psPart);

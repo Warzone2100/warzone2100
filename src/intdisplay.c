@@ -778,7 +778,7 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PI
 		Hilight = Form->state & WCLICK_HILITE;
 
 		if(Hilight) {
-			Buffer->ImdRotation += (UWORD) ((BUTTONOBJ_ROTSPEED*frameTime2) / GAME_TICKS_PER_SEC);
+			Buffer->ImdRotation += timeAdjustedIncrement(BUTTONOBJ_ROTSPEED, FALSE);
 		}
 
 		Hilight = formIsHilite(Form);	// Hilited or flashing.
@@ -985,7 +985,7 @@ void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PI
 		Hilight = Form->state & WCLICK_HILITE;
 
 		if(Hilight) {
-			Buffer->ImdRotation += (UWORD) ((BUTTONOBJ_ROTSPEED*frameTime2) / GAME_TICKS_PER_SEC);
+			Buffer->ImdRotation += timeAdjustedIncrement(BUTTONOBJ_ROTSPEED, FALSE);
 		}
 
 		Hilight = formIsHilite(Form);	// Hilited or flashing.
@@ -1069,7 +1069,7 @@ void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 		Hilight = Form->state & WCLICK_HILITE;
 
 		if(Hilight) {
-			Buffer->ImdRotation += (UWORD) ((BUTTONOBJ_ROTSPEED*frameTime2) / GAME_TICKS_PER_SEC);
+			Buffer->ImdRotation += timeAdjustedIncrement(BUTTONOBJ_ROTSPEED, FALSE);
 		}
 
 		Hilight = formIsHilite(Form);
@@ -3165,7 +3165,7 @@ void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
 
 		if(Hilight)
 		{
-			Buffer->ImdRotation += (UWORD) ((BUTTONOBJ_ROTSPEED*frameTime2) / GAME_TICKS_PER_SEC);
+			Buffer->ImdRotation += timeAdjustedIncrement(BUTTONOBJ_ROTSPEED, FALSE);
 		}
 
 		Hilight = formIsHilite(Form);

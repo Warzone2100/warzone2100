@@ -91,10 +91,10 @@ BOOL visInitialise(void)
 // update the visibility change levels
 void visUpdateLevel(void)
 {
-	visLevelIncAcc += (float)frameTime * (VIS_LEVEL_INC / GAME_TICKS_PER_SEC);
+	visLevelIncAcc += timeAdjustedIncrement(VIS_LEVEL_INC, TRUE);
 	visLevelInc = visLevelIncAcc;
 	visLevelIncAcc -= visLevelInc;
-	visLevelDecAcc += (float)frameTime * (VIS_LEVEL_DEC / GAME_TICKS_PER_SEC);
+	visLevelDecAcc += timeAdjustedIncrement(VIS_LEVEL_DEC, TRUE);
 	visLevelDec = visLevelDecAcc;
 	visLevelDecAcc -= visLevelDec;
 }

@@ -34,13 +34,23 @@
 /** The current time in the game world. */
 extern UDWORD gameTime;
 
-/** The time for the last frame. */
+extern float frameTimeFraction;		/**< Private performance calculation. Do not use. */
+extern float frameTimeFraction2;	/**< Private performance calculation. Do not use. */
+
+/** 
+ *	The time for the last frame. This tells you the amount of real world time
+ *	that is spent by the current slice, or in other words, the time difference
+ *	between the current frame and the previous frame. 
+ */
 extern UDWORD frameTime;
 
 /** The current time in the game world - never stops. */
 extern UDWORD gameTime2;
 
-/** The time for the last frame - never stops. */
+/** 
+ *	The time for the last frame - never stops. 
+ *	@see frameTime
+ */
 extern UDWORD frameTime2;
 
 /** Initialise the game clock. */
@@ -95,5 +105,24 @@ extern	UDWORD	getStaticTimeValueRange(UDWORD tickFrequency, UDWORD requiredRange
 
 /** Break down given time into its constituent components. */
 extern void	getTimeComponents(UDWORD time, UDWORD *hours, UDWORD *minutes, UDWORD *seconds);
+
+/** 
+ * Return an incremental value adjusted for the time we have available this frame. Basically
+ * multiplies the passed value by delta time.
+ * @param value Amount to change something in a second.
+ * @param pauseTime If true, adjust also for pause of game time. Generally use true in-game, false for GUI.
+ * @return Amount to change this frame.
+ */
+static inline float timeAdjustedIncrement(float value, BOOL pauseTime)
+{
+	if (pauseTime)
+	{
+		return (value * frameTimeFraction);
+	}
+	else
+	{
+		return (value * frameTimeFraction2);
+	}
+}
 
 #endif

@@ -34,6 +34,7 @@
 
 /* See header file for documentation */
 UDWORD gameTime, frameTime, gameTime2, frameTime2;
+float frameTimeFraction, frameTimeFraction2;
 
 /** The current clock modifier. Set to speed up the game. */
 static float modifier;
@@ -140,6 +141,10 @@ void gameTimeUpdate(void)
 
 	// Store the game time
 	gameTime2 = newTime;
+
+	// Pre-calculate fraction used in timeAdjustedIncrement
+	frameTimeFraction = (float)frameTime / (float)GAME_TICKS_PER_SEC;
+	frameTimeFraction2 = (float)frameTime / (float)GAME_TICKS_PER_SEC;
 }
 
 // reset the game time modifiers

@@ -56,22 +56,23 @@
 #define VTOL_TURRET_RLIMIT		315
 #define VTOL_TURRET_LLIMIT		45
 
-// time to pause before a droid blows up
+/** Time to pause before a droid blows up. */
 #define  ACTION_DESTRUCT_TIME	2000
-//#define PITCH_UPPER_LIMIT	60
-//#define PITCH_LOWER_LIMIT	-15
 
+/** Droids heavier than this rotate and pitch more slowly. */
+#define HEAVY_WEAPON_WEIGHT     50000
 
-#define ACTION_TURRET_ROTATION_RATE 180
+#define ACTION_TURRET_ROTATION_RATE	45
 #define REPAIR_PITCH_LOWER		30
 #define	REPAIR_PITCH_UPPER		-15
 
-//how long to follow a damaged droid around before giving up if don't get near
+/** How long to follow a damaged droid around before giving up if don't get near. */
 #define KEEP_TRYING_REPAIR	10000
-//how far away the repair droid can be from the damaged droid to function
+
+/** How far away the repair droid can be from the damaged droid to function. */
 #define REPAIR_RANGE		(TILE_UNITS * TILE_UNITS * 4)
 
-//how many tiles to pull back
+/* How many tiles to pull back. */
 #define PULL_BACK_DIST		10
 
 // data required for any action
@@ -242,7 +243,6 @@ BOOL actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot)
 {
 	UDWORD				rotation;
-	//Watermelon:multiple temp tRot, tPitch
 	UWORD				nearest = 0;
 	UWORD				tRot;
 	UWORD				tPitch;
@@ -251,8 +251,7 @@ void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot)
 	tRot = 0;
 
 	//get the maximum rotation this frame
-	//rotation = (psDroid->turretRotRate * frameTime) / (4 * GAME_TICKS_PER_SEC);
-    rotation = (ACTION_TURRET_ROTATION_RATE * frameTime) / (4 * GAME_TICKS_PER_SEC);
+	rotation = timeAdjustedIncrement(ACTION_TURRET_ROTATION_RATE, TRUE);
 	if (rotation == 0)
 	{
 		rotation = 1;
@@ -351,8 +350,6 @@ void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot)
 	}
 }
 
-#define HEAVY_WEAPON_WEIGHT     50000
-
 /* returns true if on target */
 BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *pRotation,
 		UWORD *pPitch, WEAPON_STATS *psWeapStats, BOOL bInvert, int weapon_slot)
@@ -417,7 +414,7 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *p
 	}
 
 	//get the maximum rotation this frame
-	rotRate = (SWORD)(rotRate * frameTime / GAME_TICKS_PER_SEC);
+	rotRate = timeAdjustedIncrement(rotRate, TRUE);
 	if (rotRate > 180)//crop to 180 degrees, no point in turning more than all the way round
 	{
 		rotRate = 180;
@@ -426,7 +423,7 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *p
 	{
 		rotRate = 1;
 	}
-	pitchRate = (SWORD)(pitchRate * frameTime / GAME_TICKS_PER_SEC);
+	pitchRate = timeAdjustedIncrement(pitchRate, TRUE);
 	if (pitchRate > 180)//crop to 180 degrees, no point in turning more than all the way round
 	{
 		pitchRate = 180;
@@ -2335,10 +2332,6 @@ void actionUpdateDroid(DROID *psDroid)
 		{
 			// Got to destination - start repair
 			//rotate turret to point at droid being repaired
-			/*if (actionTargetTurret((BASE_OBJECT*)psDroid,
-					psDroid->psActionTarget, &(psDroid->turretRotation),
-					&(psDroid->turretPitch), psDroid->turretRotRate,
-					(SWORD)(psDroid->turretRotRate/2), FALSE, FALSE))*/
 			//Watermelon:use 0 for repair droid
 			if (actionTargetTurret((BASE_OBJECT*)psDroid,
 					psDroid->psActionTarget[0], &(psDroid->turretRotation[0]),

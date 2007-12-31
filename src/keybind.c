@@ -631,8 +631,8 @@ void	kf_SystemClose( void )
 /* Zooms out from display */
 void	kf_ZoomOut( void )
 {
-	float fraction = (float)frameTime2 / (float)GAME_TICKS_PER_SEC;
-	float zoomInterval = fraction * (float)MAP_ZOOM_RATE;
+	float zoomInterval = timeAdjustedIncrement(MAP_ZOOM_RATE, FALSE);
+
 	distance += zoomInterval;
 	if(distance > MAXDISTANCE)
 	{
@@ -675,10 +675,9 @@ void	kf_RadarZoomOut( void )
 /* Zooms in the map */
 void	kf_ZoomIn( void )
 {
-	float fraction = (float)frameTime2 / (float)GAME_TICKS_PER_SEC;
-	float zoomInterval = fraction * (float)MAP_ZOOM_RATE;
-	distance -= zoomInterval;
+	float zoomInterval = timeAdjustedIncrement(MAP_ZOOM_RATE, FALSE);
 
+	distance -= zoomInterval;
 	if (distance < MINDISTANCE)
 	{
 		distance = MINDISTANCE;
@@ -735,8 +734,8 @@ void	kf_ExpandScreen( void )
 /* Spins the world round left */
 void	kf_RotateLeft( void )
 {
-	float fraction = (float)frameTime2 / (float)GAME_TICKS_PER_SEC;
-	float rotAmount = fraction * (float)MAP_SPIN_RATE;
+	float rotAmount = timeAdjustedIncrement(MAP_SPIN_RATE, FALSE);
+
 	player.r.y += rotAmount;
 }
 
@@ -744,8 +743,8 @@ void	kf_RotateLeft( void )
 /* Spins the world right */
 void	kf_RotateRight( void )
 {
-	float fraction = (float)frameTime2 / (float)GAME_TICKS_PER_SEC;
-	float rotAmount = fraction * (float)MAP_SPIN_RATE;
+	float rotAmount = timeAdjustedIncrement(MAP_SPIN_RATE, FALSE);
+
 	player.r.y -= rotAmount;
 	if (player.r.y < 0)
 	{
@@ -762,8 +761,7 @@ void	kf_PitchBack( void )
 //SDWORD	angConcern;
 //#endif
 
-	float fraction = (float)frameTime2 / (float)GAME_TICKS_PER_SEC;
-	float pitchAmount = fraction * (float)MAP_PITCH_RATE;
+	float pitchAmount = timeAdjustedIncrement(MAP_PITCH_RATE, FALSE);
 
 //#ifdef ALEXM
 //	pitch = getSuggestedPitch();
@@ -795,18 +793,13 @@ void	kf_PitchBack( void )
 /* Pitches camera foward */
 void	kf_PitchForward( void )
 {
-	float fraction = (float)frameTime2 / (float)GAME_TICKS_PER_SEC;
-	float pitchAmount = fraction * (float)MAP_PITCH_RATE;
+	float pitchAmount = timeAdjustedIncrement(MAP_PITCH_RATE, FALSE);
+
 	player.r.x -= pitchAmount;
-//#ifdef ALEXM
-//	if(getDebugMappingStatus() == FALSE)
-//#endif
-//	{
 	if (player.r.x < DEG(360 + MIN_PLAYER_X_ANGLE))
 	{
 		player.r.x = DEG(360 + MIN_PLAYER_X_ANGLE);
 	}
-//	}
 	setDesiredPitch(player.r.x / DEG_1);
 }
 

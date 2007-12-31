@@ -150,7 +150,6 @@ BOOL multiplayerWinSequence(BOOL firstCall)
 	static Vector3i pos;
 	Vector3i pos2;
 	static UDWORD last=0;
-	float		fraction;
 	float		rotAmount;
 	STRUCTURE	*psStruct;
 
@@ -178,8 +177,7 @@ BOOL multiplayerWinSequence(BOOL firstCall)
 	// rotate world
 	if(!getWarCamStatus())
 	{
-		fraction = (float)frameTime / (float)GAME_TICKS_PER_SEC;
-		rotAmount = fraction * MAP_SPIN_RATE / 12;
+		rotAmount = timeAdjustedIncrement(MAP_SPIN_RATE / 12, TRUE);
 		player.r.y += rotAmount;
 	}
 

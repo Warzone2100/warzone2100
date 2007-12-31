@@ -3345,7 +3345,6 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	psDroid->direction = 0;
 	psDroid->pitch =  0;
 	psDroid->roll = 0;
-	//psDroid->turretRotRate = 360;
 	//Watermelon:initialize all weapon turrent rotation pitch info
 	for(i = 0;i < DROID_MAXWEAPS; i++)
 	{
@@ -3485,7 +3484,6 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 	psDroid->direction = 0;
 	psDroid->pitch =  0;
 	psDroid->roll = 0;
-	//psDroid->turretRotRate = 360;
 	psDroid->numWeaps = pTemplate->numWeaps;
 	for (inc = 0;inc < psDroid->numWeaps;inc++)
 	{

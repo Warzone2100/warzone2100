@@ -810,7 +810,7 @@ void updateDroidOrientation(DROID *psDroid)
 	pitch = atan(pitch);
 	newPitch = (SDWORD)((pitch * 180) / M_PI);
 	//limit the rate the front comes down to simulate momentum
-	pitchLimit = PITCH_LIMIT * frameTime/GAME_TICKS_PER_SEC;
+	pitchLimit = timeAdjustedIncrement(PITCH_LIMIT, TRUE);
 	dPitch = newPitch - psDroid->pitch;
 	if (dPitch < 0)
 	{
@@ -2778,7 +2778,7 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 
 	/* do vertical movement */
 
-	fDZ = (float)(psDroid->sMove.iVertSpeed * (SDWORD)frameTime) / GAME_TICKS_PER_SEC;
+	fDZ = timeAdjustedIncrement(psDroid->sMove.iVertSpeed, TRUE);
 	fDroidZ = psDroid->sMove.fz;
 	fMapZ = (float) map_Height(psDroid->pos.x, psDroid->pos.y);
 	if ( fDroidZ+fDZ < 0 )
@@ -2931,7 +2931,7 @@ moveUpdateCyborgModel( DROID *psDroid, SDWORD moveSpeed, SDWORD moveDir, UBYTE o
 	/* do vertical movement */
 	if ( psPropStats->propulsionType == JUMP )
 	{
-		iDz = psDroid->sMove.iVertSpeed * (SDWORD)frameTime / GAME_TICKS_PER_SEC;
+		iDz = timeAdjustedIncrement(psDroid->sMove.iVertSpeed, TRUE);
 		iDroidZ = (SDWORD) psDroid->pos.z;
 
 		if ( iDroidZ+iDz < (SDWORD) iMapZ )
