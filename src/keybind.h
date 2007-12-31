@@ -192,7 +192,6 @@ extern void	kf_KillEnemy( void );
 extern void	kf_ToggleMissionTimer( void );
 
 extern void	kf_SetHardLevel( void );
-extern void	kf_NoFaults( void );
 extern void	kf_SelectCommander_0( void );
 extern void	kf_SelectCommander_1( void );
 extern void	kf_SelectCommander_2( void );
@@ -206,7 +205,7 @@ extern void	kf_SelectCommander_9( void );
 void kf_ToggleReopenBuildMenu( void );
 
 // dirty but necessary
-extern	char	sTextToSend[MAX_CONSOLE_STRING_LENGTH];	
+extern	char	sTextToSend[MAX_CONSOLE_STRING_LENGTH];
 extern	void	kf_FaceNorth(void);
 extern	void	kf_FaceSouth(void);
 extern	void	kf_FaceEast(void);
