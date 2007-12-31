@@ -105,11 +105,6 @@ static BOOL okToSend(void)
 		return FALSE;
 	}
 
-	if( NETgetRecentPacketsSent() >= game.packetsPerSec )
-	{
-		return FALSE;
-	}
-
 	return TRUE;
 }
 

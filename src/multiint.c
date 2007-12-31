@@ -451,7 +451,6 @@ void runConnectionScreen(void )
 			break;
 		case CON_TYPESID_START+0: // Lobby button
 			game.bytesPerSec = MAX_BYTESPERSEC;
-			game.packetsPerSec = MAX_PACKETSPERSEC;
 			NETsetupTCPIP(&finalconnection, ""); //inet
 			changeTitleMode(GAMEFIND);
 			break;
@@ -469,7 +468,6 @@ void runConnectionScreen(void )
 			}
 
 			game.bytesPerSec = MAX_BYTESPERSEC;
-			game.packetsPerSec = MAX_PACKETSPERSEC;
 			NETsetupTCPIP(&finalconnection, addr); //inet
 
 			changeTitleMode(GAMEFIND);
@@ -2387,7 +2385,6 @@ BOOL startMultiOptions(BOOL bReenter)
 		{
 			// Maximum bitrate achieved before dropping checks
 			game.bytesPerSec	= MAX_BYTESPERSEC;
-			game.packetsPerSec	= MAX_PACKETSPERSEC;
 		}
 
 		loadMultiStats((char*)sPlayer,&nullStats);

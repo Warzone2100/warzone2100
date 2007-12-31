@@ -439,7 +439,6 @@ static bool serializeMultiplayerGame(PHYSFS_file* fileHandle, const MULTIPLAYERG
 	 || !PHYSFS_writeUBE8(fileHandle, serializeMulti->alliance)
 	 || !PHYSFS_writeUBE8(fileHandle, serializeMulti->limit)
 	 || !PHYSFS_writeUBE16(fileHandle, serializeMulti->bytesPerSec)
-	 || !PHYSFS_writeUBE8(fileHandle, serializeMulti->packetsPerSec)
 	 || !PHYSFS_writeUBE8(fileHandle, serializeMulti->encryptKey))
 		return false;
 
@@ -474,9 +473,7 @@ static bool deserializeMultiplayerGame(PHYSFS_file* fileHandle, MULTIPLAYERGAME*
 	 || !PHYSFS_readUBE8(fileHandle, &serializeMulti->base)
 	 || !PHYSFS_readUBE8(fileHandle, &serializeMulti->alliance)
 	 || !PHYSFS_readUBE8(fileHandle, &serializeMulti->limit)
-
 	 || !PHYSFS_readUBE16(fileHandle, &serializeMulti->bytesPerSec)
-	 || !PHYSFS_readUBE8(fileHandle, &serializeMulti->packetsPerSec)
 	 || !PHYSFS_readUBE8(fileHandle, &serializeMulti->encryptKey))
 		return false;
 

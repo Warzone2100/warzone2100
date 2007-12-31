@@ -109,7 +109,6 @@ typedef struct {
 	uint8_t		alliance;					// no/yes/AIs vs Humans
 	uint8_t		limit;						// limit no/time/frag
 	uint16_t    bytesPerSec;				// maximum bitrate achieved before dropping checks.
-	uint8_t		packetsPerSec;				// maximum packets to send before dropping checks.
 	uint8_t		encryptKey;					// key to use for encryption.
 //	uint8_t		skirmishPlayers[MAX_PLAYERS];// players to use in skirmish game.
 	uint8_t		skDiff[MAX_PLAYERS];			// skirmish game difficulty settings.
@@ -148,10 +147,9 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 // ////////////////////////////////////////////////////////////////////////////
 // defines
 
-// Max bit-rate/packet count, set for a 14.4KB modem (we have hardcore fans!)
+// Max bit-rate, set for a 28.8KB/s modem (we have hardcore fans!)
 
-#define MAX_BYTESPERSEC			1200
-#define MAX_PACKETSPERSEC		6
+#define MAX_BYTESPERSEC			3400
 
 #define ANYPLAYER				99
 #define ONEPLAYER				98
