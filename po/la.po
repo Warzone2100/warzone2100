@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2007-12-28 22:37+0100\n"
+"POT-Creation-Date: 2008-01-01 15:13+0100\n"
 "PO-Revision-Date: 2007-04-13 14:34+0200\n"
 "Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
 "Language-Team: Latin\n"
@@ -15,37 +15,37 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/multiplay.c:1903
+#: src/multiplay.c:1901
 #, fuzzy
 msgid "Green"
 msgstr "Viridum"
 
-#: src/multiplay.c:1904
+#: src/multiplay.c:1902
 msgid "Orange"
 msgstr ""
 
-#: src/multiplay.c:1905
+#: src/multiplay.c:1903
 msgid "Grey"
 msgstr "Canum"
 
-#: src/multiplay.c:1906
+#: src/multiplay.c:1904
 msgid "Black"
 msgstr "Nĭgrum"
 
-#: src/multiplay.c:1907
+#: src/multiplay.c:1905
 #, fuzzy
 msgid "Red"
 msgstr "Rubrum"
 
-#: src/multiplay.c:1908
+#: src/multiplay.c:1906
 msgid "Blue"
 msgstr ""
 
-#: src/multiplay.c:1909
+#: src/multiplay.c:1907
 msgid "Pink"
 msgstr ""
 
-#: src/multiplay.c:1910
+#: src/multiplay.c:1908
 msgid "Cyan"
 msgstr ""
 
@@ -153,7 +153,7 @@ msgstr "Invenio"
 msgid "Build"
 msgstr "Construo"
 
-#: src/hci.c:3957 src/multiint.c:793 src/multiint.c:797
+#: src/hci.c:3957 src/multiint.c:789 src/multiint.c:793
 #, fuzzy
 msgid "Power"
 msgstr "Vigor"
@@ -187,8 +187,8 @@ msgstr ""
 msgid "Exit Game"
 msgstr ""
 
-#: src/hci.c:4567 src/intdisplay.c:275 src/intdisplay.c:318
-#: src/intdisplay.c:365
+#: src/hci.c:4567 src/intdisplay.c:204 src/intdisplay.c:247
+#: src/intdisplay.c:293
 msgid "Progress Bar"
 msgstr ""
 
@@ -244,79 +244,79 @@ msgstr ""
 msgid "Unit Lost!"
 msgstr ""
 
-#: src/droid.c:1945
+#: src/droid.c:1935
 msgid "Structure Restored"
 msgstr ""
 
-#: src/droid.c:3859
+#: src/droid.c:3847
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3873
+#: src/droid.c:3861
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3886
+#: src/droid.c:3874
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3890
+#: src/droid.c:3878
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:4107
+#: src/droid.c:4095
 msgid "Rookie"
 msgstr ""
 
-#: src/droid.c:4108
+#: src/droid.c:4096
 msgctxt "rank"
 msgid "Green"
 msgstr ""
 
-#: src/droid.c:4109
+#: src/droid.c:4097
 #, fuzzy
 msgid "Trained"
 msgstr "Exercitum"
 
-#: src/droid.c:4110
+#: src/droid.c:4098
 msgid "Regular"
 msgstr ""
 
-#: src/droid.c:4111
+#: src/droid.c:4099
 msgid "Professional"
 msgstr ""
 
-#: src/droid.c:4112
+#: src/droid.c:4100
 #, fuzzy
 msgid "Veteran"
 msgstr "Veteranum"
 
-#: src/droid.c:4113
+#: src/droid.c:4101
 msgid "Elite"
 msgstr ""
 
-#: src/droid.c:4114
+#: src/droid.c:4102
 msgid "Special"
 msgstr ""
 
-#: src/droid.c:4115
+#: src/droid.c:4103
 #, fuzzy
 msgid "Hero"
 msgstr "Heros"
 
-#: src/multiint.c:350 src/multiint.c:1364 src/multilimit.c:173
+#: src/multiint.c:350 src/multiint.c:1360 src/multilimit.c:173
 msgid "Accept Settings"
 msgstr ""
 
@@ -328,7 +328,7 @@ msgstr ""
 msgid "CONNECTION"
 msgstr ""
 
-#: src/multiint.c:405 src/multiint.c:448 src/multiint.c:625 src/multiint.c:858
+#: src/multiint.c:405 src/multiint.c:448 src/multiint.c:621 src/multiint.c:854
 #: src/keyedit.c:380 src/multilimit.c:165
 msgid "Return To Previous Screen"
 msgstr ""
@@ -341,265 +341,265 @@ msgstr ""
 msgid "IP"
 msgstr ""
 
-#: src/multiint.c:611
+#: src/multiint.c:607
 msgid "Searching"
 msgstr ""
 
-#: src/multiint.c:622
+#: src/multiint.c:618
 msgid "GAMES"
 msgstr ""
 
-#: src/multiint.c:632
+#: src/multiint.c:628
 msgid "Refresh Games List"
 msgstr ""
 
-#: src/multiint.c:707
+#: src/multiint.c:703
 msgid "OPTIONS"
 msgstr ""
 
-#: src/multiint.c:709
+#: src/multiint.c:705
 msgid "Select Game Name"
 msgstr ""
 
-#: src/multiint.c:710
+#: src/multiint.c:706
 msgid "Select Map"
 msgstr ""
 
-#: src/multiint.c:715
+#: src/multiint.c:711
 msgid "Game"
 msgstr ""
 
-#: src/multiint.c:717
+#: src/multiint.c:713
 msgid "Mayhem"
 msgstr ""
 
-#: src/multiint.c:719
+#: src/multiint.c:715
 msgid "Skirmish"
 msgstr ""
 
-#: src/multiint.c:740
+#: src/multiint.c:736
 msgid "Select Player Name"
 msgstr ""
 
-#: src/multiint.c:743 src/frontend.c:620
+#: src/multiint.c:739 src/frontend.c:620
 msgid "Fog"
 msgstr ""
 
-#: src/multiint.c:745 src/frontend.c:627 src/frontend.c:734
+#: src/multiint.c:741 src/frontend.c:627 src/frontend.c:734
 msgid "Fog Of War"
 msgstr ""
 
-#: src/multiint.c:746
+#: src/multiint.c:742
 msgid "Distance Fog"
 msgstr ""
 
-#: src/multiint.c:759 src/multimenu.c:736
+#: src/multiint.c:755 src/multimenu.c:736
 msgid "Alliances"
 msgstr ""
 
-#: src/multiint.c:762
+#: src/multiint.c:758
 msgid "No Alliances"
 msgstr ""
 
-#: src/multiint.c:764
+#: src/multiint.c:760
 msgid "Allow Alliances"
 msgstr ""
 
-#: src/multiint.c:768 src/multiint.c:1989
+#: src/multiint.c:764 src/multiint.c:1985
 msgid "Locked Teams"
 msgstr ""
 
-#: src/multiint.c:800
+#: src/multiint.c:796
 msgid "Low Power Levels"
 msgstr ""
 
-#: src/multiint.c:802
+#: src/multiint.c:798
 msgid "Medium Power Levels"
 msgstr ""
 
-#: src/multiint.c:804
+#: src/multiint.c:800
 msgid "High Power Levels"
 msgstr ""
 
-#: src/multiint.c:824 src/multiint.c:828
+#: src/multiint.c:820 src/multiint.c:824
 msgid "Base"
 msgstr ""
 
-#: src/multiint.c:831
+#: src/multiint.c:827
 msgid "Start with No Bases"
 msgstr ""
 
-#: src/multiint.c:833
+#: src/multiint.c:829
 msgid "Start with Bases"
 msgstr ""
 
-#: src/multiint.c:835
+#: src/multiint.c:831
 msgid "Start with Advanced Bases"
 msgstr ""
 
-#: src/multiint.c:865
+#: src/multiint.c:861
 msgid "Start Hosting Game"
 msgstr ""
 
-#: src/multiint.c:873
+#: src/multiint.c:869
 msgid "Set Structure Limits"
 msgstr ""
 
-#: src/multiint.c:1245
+#: src/multiint.c:1241
 msgid "PLAYERS"
 msgstr ""
 
-#: src/multiint.c:1395
+#: src/multiint.c:1391
 msgid "CHAT"
 msgstr ""
 
-#: src/multiint.c:1930
+#: src/multiint.c:1926
 msgid "Host is Starting Game"
 msgstr ""
 
-#: src/multiint.c:2701
+#: src/multiint.c:2689
 msgid "Players"
 msgstr ""
 
-#: src/keybind.c:144
+#: src/keybind.c:132
 msgid "Sorry, that cheat is disabled in multiplayer games."
 msgstr ""
 
-#: src/keybind.c:171
+#: src/keybind.c:153
 msgid "Lets us see what you see!"
 msgstr ""
 
-#: src/keybind.c:173
+#: src/keybind.c:155
 msgid "Fine, sensor display is off!"
 msgstr ""
 
-#: src/keybind.c:271
+#: src/keybind.c:253
 msgid "Hard as nails!!!"
 msgstr ""
 
-#: src/keybind.c:284
+#: src/keybind.c:266
 msgid "Takings thing easy!"
 msgstr ""
 
-#: src/keybind.c:298
+#: src/keybind.c:280
 msgid "1000 big ones!!!"
 msgstr ""
 
-#: src/keybind.c:312
+#: src/keybind.c:294
 msgid "Power overwhelming"
 msgstr ""
 
-#: src/keybind.c:326
+#: src/keybind.c:308
 msgid "Back to normality!"
 msgstr ""
 
-#: src/keybind.c:339
+#: src/keybind.c:321
 msgid "Getting tricky!"
 msgstr ""
 
-#: src/keybind.c:352
+#: src/keybind.c:334
 msgid "Twice as nice!"
 msgstr ""
 
-#: src/keybind.c:427
+#: src/keybind.c:409
 msgid "Infinite power disabled"
 msgstr ""
 
-#: src/keybind.c:432
+#: src/keybind.c:414
 msgid "Infinite power enabled"
 msgstr ""
 
-#: src/keybind.c:485
+#: src/keybind.c:467
 msgid "All items made available"
 msgstr ""
 
-#: src/keybind.c:577
+#: src/keybind.c:559
 msgid "Fog off"
 msgstr ""
 
-#: src/keybind.c:583
+#: src/keybind.c:565
 msgid "Fog on"
 msgstr ""
 
-#: src/keybind.c:1156
+#: src/keybind.c:1131
 msgid "View Aligned to North"
 msgstr ""
 
-#: src/keybind.c:1186 src/intelmap.c:241
+#: src/keybind.c:1160 src/intelmap.c:241
 msgid "PAUSED"
 msgstr ""
 
-#: src/keybind.c:1225
+#: src/keybind.c:1199
 msgid "Researched EVERYTHING for you!"
 msgstr ""
 
-#: src/keybind.c:1256
+#: src/keybind.c:1230
 msgid "Energy bars display toggled"
 msgstr ""
 
-#: src/keybind.c:1274
+#: src/keybind.c:1248
 msgid "Demo mode off - Returning to normal game mode"
 msgstr ""
 
-#: src/keybind.c:1321
+#: src/keybind.c:1295
 msgid "Unable to locate any resource extractors!"
 msgstr ""
 
-#: src/keybind.c:1540
+#: src/keybind.c:1514
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr ""
 
-#: src/keybind.c:1546
+#: src/keybind.c:1520
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr ""
 
-#: src/keybind.c:1552
+#: src/keybind.c:1526
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr ""
 
-#: src/keybind.c:1585
+#: src/keybind.c:1559
 msgid "Enemy destroyed by cheating!"
 msgstr ""
 
-#: src/keybind.c:2200
+#: src/keybind.c:2085
 msgid "Centered on player HQ, direction NORTH"
 msgstr ""
 
-#: src/keybind.c:2212
+#: src/keybind.c:2097
 msgid "Unable to locate HQ!"
 msgstr ""
 
-#: src/keybind.c:2229
+#: src/keybind.c:2113
 msgid "Formation speed limiting OFF"
 msgstr ""
 
-#: src/keybind.c:2233
+#: src/keybind.c:2117
 msgid "Formation speed limiting ON"
 msgstr ""
 
-#: src/keybind.c:2358 src/keybind.c:2394 src/keybind.c:2416
+#: src/keybind.c:2242 src/keybind.c:2278 src/keybind.c:2300
 msgid "Game Speed Reset"
 msgstr ""
 
-#: src/keybind.c:2362
+#: src/keybind.c:2246
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr ""
 
-#: src/keybind.c:2398
+#: src/keybind.c:2282
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr ""
 
-#: src/keybind.c:2428
+#: src/keybind.c:2312
 msgid "Build menu will reopen"
 msgstr ""
 
-#: src/keybind.c:2432
+#: src/keybind.c:2316
 msgid "Build menu will not reopen"
 msgstr ""
 
-#: src/intdisplay.c:265 src/intdisplay.c:310 src/intdisplay.c:358
+#: src/intdisplay.c:194 src/intdisplay.c:239 src/intdisplay.c:286
 #, fuzzy
 msgid "Power Accrued"
 msgstr "Vigor Adquirāvi"
