@@ -206,7 +206,7 @@ void pie_ImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 	PIEIMAGE pieImage;
 	PIERECT dest;
 
-	assert(ID < ImageFile->Header.NumImages);
+	assert(ID < ImageFile->NumImages);
 	Image = &ImageFile->ImageDefs[ID];
 
 	pie_SetRendMode(REND_GOURAUD_TEX);
@@ -231,7 +231,7 @@ void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 	PIEIMAGE pieImage;
 	PIERECT dest;
 
-	assert(ID < ImageFile->Header.NumImages);
+	assert(ID < ImageFile->NumImages);
 
 	Image = &ImageFile->ImageDefs[ID];
 
@@ -363,7 +363,7 @@ void pie_LoadBackDrop(SCREENTYPE screenType)
 	{
 	case SCREEN_RANDOMBDROP:
 		if ( rand()%2 == 0 )
-			snprintf(backd, sizeof(backd), "texpages/bdrops/0%i-bdrop.png", rand()%7); // Range: 0-6
+			snprintf(backd, sizeof(backd), "texpages/bdrops/0%i-bdrop.png", rand() % 8); // Range: 0-7
 		else
 			snprintf(backd, sizeof(backd), "texpages/bdrops/wzlogo_%i.png", rand()%5); // Range: 0-4
 		break;
