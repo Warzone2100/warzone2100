@@ -769,7 +769,7 @@ BOOL recvStructureCheck()
 		
 		// If the structure exists our job is easy
 		pS = IdToStruct(ref, player);
-		if (!pS)
+		if (pS)
 		{
 			pS->body = body;
 			pS->direction = direction;
