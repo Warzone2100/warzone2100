@@ -74,8 +74,8 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		numImages += (*ptr == '\n') ? 1 : 0;
 		ptr++;
 	}
-	ImageFile = malloc(sizeof(IMAGEFILE) + sizeof(IMAGEDEF) * numImages);
-	ImageFile->ImageDefs = (void *)ImageFile + sizeof(IMAGEFILE); // we allocated extra space for it
+	ImageFile = malloc(sizeof(IMAGEFILE));
+	ImageFile->ImageDefs = malloc(sizeof(IMAGEDEF) * numImages);
 	ptr = pFileData;
 	numImages = 0;
 	while (ptr < pFileData + pFileSize)
