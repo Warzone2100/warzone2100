@@ -864,7 +864,7 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 	SDWORD			index, members;
 	UDWORD			id;
 	LEVEL_DATASET	*psLevel;
-	DROID_GROUP		*psGroup;
+	DROID_GROUP		*psGroup = NULL;
 	const char              *pName;
 
 	switch (psVal->type)
@@ -1094,6 +1094,7 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 				members = (size - sizeof(SDWORD)*5) / sizeof(UDWORD);
 				break;
 			default:
+				members = 0;
 				debug( LOG_ERROR, "scrValDefLoad: unsupported version %i", version);
 		}
 		pPos = pBuffer;
@@ -1177,9 +1178,3 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 
 	return TRUE;
 }
-
-
-
-
-
-
