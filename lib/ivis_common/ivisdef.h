@@ -146,32 +146,19 @@ typedef struct iIMDShape {
 //*************************************************************************
 
 typedef struct {
-	uint16_t Version;
-	uint16_t NumImages;
-	uint16_t BitDepth;
-	uint16_t NumTPages;
-	char     TPageFiles[16][16];
-} IMAGEHEADER;
-
-
-typedef struct {
-	uint16_t TPageID;
-	uint16_t Tu;
-	uint16_t Tv;
-	uint16_t Width;
-	uint16_t Height;
-	int16_t XOffset;
-	int16_t YOffset;
+	int TPageID;	/**< Which associated file to read our info from */
+	int Tu;		/**< First vertex coordinate */
+	int Tv;		/**< Second vertex coordinate */
+	int Width;	/**< Width of image */
+	int Height;	/**< Height of image */
+	int XOffset;	/**< X offset into source position */
+	int YOffset;	/**< Y offset into source position */
 } IMAGEDEF;
 
-
 typedef struct {
-	IMAGEHEADER Header;
-	iTexture *TexturePages;
-	unsigned short NumCluts;
-	unsigned short TPageIDs[16];
-	unsigned short ClutIDs[48];
-	IMAGEDEF *ImageDefs;
+	int NumImages;		/**< Number of images contained here */
+	int TPageIDs[16];	/**< OpenGL Texture IDs */
+	IMAGEDEF *ImageDefs;	/**< Stored images */
 } IMAGEFILE;
 
 /***************************************************************************/

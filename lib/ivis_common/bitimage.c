@@ -21,114 +21,98 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "lib/framework/frame.h"
+#include "lib/framework/frameresource.h"
+
 #include "piepalette.h"
 #include "tex.h"
 #include "ivispatch.h"
 #include "bitimage.h"
-#include "lib/framework/frameresource.h"
 #include <physfs.h>
 
-
-static unsigned short LoadTextureFile(const char *FileName, iTexture *pSprite)
+static unsigned short LoadTextureFile(const char *FileName)
 {
+	iTexture *pSprite;
 	unsigned int i;
 
 	ASSERT(resPresent("IMGPAGE", FileName), "Texture file \"%s\" not preloaded.", FileName);
 
-	*pSprite = *(iTexture*)resGetData("IMGPAGE", FileName);
+	pSprite = (iTexture*)resGetData("IMGPAGE", FileName);
 	debug(LOG_TEXTURE, "Load texture from resource cache: %s (%d, %d)",
 	      FileName, pSprite->width, pSprite->height);
 
-	/* Have we already loaded this one? */
+	/* Have we already uploaded this one? */
 	for (i = 0; i < _TEX_INDEX; ++i)
 	{
 		if (strcasecmp(FileName, _TEX_PAGE[i].name) == 0)
 		{
-			debug(LOG_TEXTURE, "LoadTextureFile: already loaded");
+			debug(LOG_TEXTURE, "LoadTextureFile: already uploaded");
 			return _TEX_PAGE[i].id;
 		}
 	}
 
+	debug(LOG_TEXTURE, "LoadTextureFile: had to upload texture!");
 	return pie_AddTexPage(pSprite, FileName, 0);
-}
-
-static inline IMAGEFILE* iV_AllocImageFile(size_t NumTPages, size_t NumImages)
-{
-	const size_t totalSize = sizeof(IMAGEFILE) + sizeof(iTexture) * NumTPages + sizeof(IMAGEDEF) * NumImages;
-
-	IMAGEFILE* ImageFile = malloc(totalSize);
-	if (ImageFile == NULL)
-	{
-		debug(LOG_ERROR, "iV_AllocImageFile: Out of memory");
-		return NULL;
-	}
-
-	// Set member pointers to their respective areas in the allocated memory area
-	ImageFile->TexturePages = (iTexture*)(ImageFile + 1);
-	ImageFile->ImageDefs = (IMAGEDEF*)(ImageFile->TexturePages + NumTPages);
-
-	return ImageFile;
 }
 
 IMAGEFILE *iV_LoadImageFile(const char *fileName)
 {
+	char *pFileData, *ptr, *dot;
+	UDWORD pFileSize, numImages = 0, i, tPages = 0;
 	IMAGEFILE *ImageFile;
-	IMAGEDEF* ImageDef;
-	unsigned int i;
+	char texFileName[PATH_MAX];
 
-	IMAGEHEADER Header;
-	PHYSFS_file* fileHandle;
-
-	fileHandle = PHYSFS_openRead(fileName);
-	if (!fileHandle)
+	if (!loadFile(fileName, &pFileData, &pFileSize))
 	{
-		debug(LOG_ERROR, "iV_LoadImageFile: PHYSFS_openRead failed (opening %s) with error: %s", fileName, PHYSFS_getLastError());
+		debug(LOG_ERROR, "iV_LoadImageFile: failed to open %s", fileName);
 		return NULL;
 	}
-
-	// Read header from file
-	PHYSFS_readULE16 (fileHandle, &Header.Version);
-	PHYSFS_readULE16 (fileHandle, &Header.NumImages);
-	PHYSFS_readULE16 (fileHandle, &Header.BitDepth);
-	PHYSFS_readULE16 (fileHandle, &Header.NumTPages);
-	PHYSFS_read      (fileHandle, &Header.TPageFiles, sizeof(Header.TPageFiles), 1);
-
-	ImageFile = iV_AllocImageFile(Header.NumTPages, Header.NumImages);
-	if(ImageFile == NULL)
+	ptr = pFileData;
+	// count lines, which is identical to number of images
+	while (ptr < pFileData + pFileSize && *ptr != '\0')
 	{
-		PHYSFS_close(fileHandle);
-		return NULL;
+		numImages += (*ptr == '\n') ? 1 : 0;
+		ptr++;
 	}
-
-	ImageFile->Header = Header;
-
-	// Load the texture pages.
-	for (i = 0; i < Header.NumTPages; i++)
+	ImageFile = malloc(sizeof(IMAGEFILE) + sizeof(IMAGEDEF) * numImages);
+	ImageFile->ImageDefs = (void *)ImageFile + sizeof(IMAGEFILE); // we allocated extra space for it
+	ptr = pFileData;
+	numImages = 0;
+	while (ptr < pFileData + pFileSize)
 	{
-		ImageFile->TPageIDs[i] = LoadTextureFile((char *)Header.TPageFiles[i], &ImageFile->TexturePages[i]);
-	}
+		int temp, retval;
+		IMAGEDEF *ImageDef = &ImageFile->ImageDefs[numImages];
 
-	for(ImageDef = &ImageFile->ImageDefs[0]; ImageDef != &ImageFile->ImageDefs[Header.NumImages]; ++ImageDef)
-	{
-		// Read image definition from file
-		PHYSFS_readULE16(fileHandle, &ImageDef->TPageID);
-		PHYSFS_readULE16(fileHandle, &ImageDef->Tu);
-		PHYSFS_readULE16(fileHandle, &ImageDef->Tv);
-		PHYSFS_readULE16(fileHandle, &ImageDef->Width);
-		PHYSFS_readULE16(fileHandle, &ImageDef->Height);
-		PHYSFS_readSLE16(fileHandle, &ImageDef->XOffset);
-		PHYSFS_readSLE16(fileHandle, &ImageDef->YOffset);
-
-		if( (ImageDef->Width <= 0) || (ImageDef->Height <= 0) )
+		retval = sscanf(ptr, "%d,%d,%d,%d,%d,%d,%d%n", &ImageDef->TPageID, &ImageDef->Tu, &ImageDef->Tv, &ImageDef->Width, 
+		       &ImageDef->Height, &ImageDef->XOffset, &ImageDef->YOffset, &temp);
+		if (retval != 7)
 		{
-			debug( LOG_ERROR, "iV_LoadImageFromFile: Illegal image size" );
-			free(ImageFile);
-			PHYSFS_close(fileHandle);
-			return NULL;
+			break;
+		}
+		ptr += temp;
+		numImages++;
+		// Find number of texture pages to load (no gaps allowed in number series, eg use intfac0, intfac1, etc.!)
+		if (ImageDef->TPageID > tPages)
+		{
+			tPages = ImageDef->TPageID;
 		}
 	}
 
-	PHYSFS_close(fileHandle);
+	dot = strrchr(fileName, '/');	// go to last path character
+	dot++;				// skip it
+	strcpy(texFileName, dot);	// make a copy
+	dot = strchr(texFileName, '.');	// find extension
+	*dot = '\0';			// then discard it
+	// Load the texture pages.
+	for (i = 0; i <= tPages; i++)
+	{
+		char path[PATH_MAX];
+
+		snprintf(path, PATH_MAX, "%s%d.png", texFileName, i);
+		ImageFile->TPageIDs[i] = LoadTextureFile(path);
+	}
+	ImageFile->NumImages = numImages;
+	free(pFileData);
 
 	return ImageFile;
 }
