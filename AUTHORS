@@ -2,34 +2,35 @@ Original game developed by Pumpkin Studios, and published by EIDOS Interactive.
 
 The Warzone Resurrection Project team and former contributors to the GPL version, in alphabetical order:
 
-Scott Balneaves <sbalneav> : Coder
--- <Buginator> : Coder
-Roman C. <troman> : Coder and Scripting + Scripting engine rewrite and AI
-Denis Dupeyron <charun> : Coder
-Bruce V. Edwards <cathuria> : Graphics artist
-Mike Gilmore <Chojun> : Coder
-Carl Hee <Watermelon> : Coder + Multiturrets
+Scott Balneaves <sbalneav> : Programming
+-- <Buginator> : Programming
+Roman C. <troman> : Programming and Scripting + Scripting-engine rewrite and AI
+Denis Dupeyron <charun> : Programming
+Bruce V. Edwards <cathuria> : 2D/3D Graphics
+Mike Gilmore <Chojun> : Programming
+-- <Hatsjoe> : 2D Graphics
+Carl Hee <Watermelon> : Programming + Multiturrets
 Adam Holland
-Stefan Huehner <shuehner> : Coder + original 64bit support
-Ari Johnson <iamtheari> : Coder and MacOSX Packaging + original MacOSX port
-Martin Koller <mkoller> : Coder
-Gerard Krol <gerard_> : Coder
+Stefan Huehner <shuehner> : Programming + original 64bit support
+Ari Johnson <iamtheari> : Programming and MacOSX Packaging + original MacOSX port
+Martin Koller <mkoller> : Programming
+Gerard Krol <gerard_> : Programming
 Angus Lees <gus> : Debian Packaging
 Kevin Malec <Kevin`> : Websupport
-Per I. Mathisen <per> : Coder
-Dion Mendel <noid> : Coder, original Linux port
+Per I. Mathisen <per> : Programming
+Dion Mendel <noid> : Programming, original Linux port
 Kim Metcalfe <lav-coyote25> : Documentation, Maps and Support
-Christian Ohm <cybersphinx> : Coder
+Christian Ohm <cybersphinx> : Programming
 Tim P. <kamaze> : Webmaster
-Phil Procario <GrimMoroe, grimandmandy> : Graphics artist
-Marcus Rast <charon> : Coder
--- <Pseudonym404> : Coder + original 64bit support
-Victor Qamly <vqamly> : Coder
+Phil Procario <GrimMoroe, grimandmandy> : 3D Graphics
+Marcus Rast <charon> : Programming
+-- <Pseudonym404> : Programming + original 64bit support
+Victor Qamly <vqamly> : Programming
 Ben Russon <grizzly> : Support
-Hylke van der Schaaf <TheNoid> : Coder
-Giel van Schijndel <Giel> : Coder and Debian Linux and Windows Packaging
-Dennis Schridde <devurandom> : Coder and general Linux and Windows Packaging
-Dmitri Shuralyov <shurcool> : Coder
-Rodolphe Suescun <rodzilla> : Coder
-Freddie Witherden <EvilGuru> : Coder and MacOSX Packaging
--- <vs2k5> : Coder
+Hylke van der Schaaf <TheNoid> : Programming
+Giel van Schijndel <Giel> : Programming and Debian Linux and Windows Packaging
+Dennis Schridde <devurandom> : Programming and general Linux and Windows Packaging
+Dmitri Shuralyov <shurcool> : Programming
+Rodolphe Suescun <rodzilla> : Programming
+Freddie Witherden <EvilGuru> : Programming and MacOSX Packaging
+-- <vs2k5> : Programming
