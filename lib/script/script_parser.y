@@ -1721,6 +1721,7 @@ static CODE_ERROR scriptCodeEvent(EVENT_SYMBOL *psEvent, TRIGGER_SYMBOL *psTrig,
 }
 #endif
 
+#ifdef UNUSED
 /* Store the types of a list of variables into a code block.
  * The order of the list is reversed so that the type of the
  * first variable defined is stored first.
@@ -1736,6 +1737,7 @@ static void scriptStoreVarTypes(VAR_SYMBOL *psVar)
 		PUT_INDEX(ip, psVar->type);
 	}
 }
+#endif
 
 /* Change the error action for the ALLOC macro's to what it
  * should be inside a rule body.

@@ -227,8 +227,8 @@ WZ_CFLAGS="${WZ_CFLAGS} -DLOCALEDIR=\"\\\"\${localedir}\\\"\""
 
 
 # add some required C flags here
-# -DYY_STATIC is required by flex
-WZ_CFLAGS="${WZ_CFLAGS} -DYY_STATIC"
+#  YY_NO_INPUT to prevent Flex from defining input(): We use our own YY_INPUT instead.
+WZ_CFLAGS="${WZ_CFLAGS} -DYY_NO_INPUT"
 
 
 CPPFLAGS="${CPPFLAGS} -I\$(top_srcdir)"

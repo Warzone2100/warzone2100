@@ -6339,19 +6339,16 @@ BOOL loadSaveDroidV19(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD
 /* code for all versions after save name change v19*/
 BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists)
 {
-	SAVE_DROID				*psSaveDroid, sSaveDroid;
+	SAVE_DROID				sSaveDroid, *psSaveDroid = &sSaveDroid;
 //	DROID_TEMPLATE			*psTemplate, sTemplate;
 	DROID					*psDroid;
-	DROID_GROUP				*psCurrentTransGroup;
+	DROID_GROUP				*psCurrentTransGroup = NULL;
 	UDWORD					count;
 	UDWORD					NumberOfSkippedDroids=0;
 	UDWORD					sizeOfSaveDroid = 0;
 //	DROID_GROUP				*psGrp;
 	UBYTE	i;
 
-	psCurrentTransGroup = NULL;
-
-	psSaveDroid = &sSaveDroid;
 	if (version <= VERSION_20)
 	{
 		sizeOfSaveDroid = sizeof(SAVE_DROID_V20);
