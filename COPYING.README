@@ -11,3 +11,11 @@ license the released data could not be distributed, we find that
 interpreting the license for the data as being under the same license
 as the source to be the best interpretation to fit the intention
 behind the release.
+
+----------------------------------------------------------------------
+
+The following files are licensed other than under the GPL:
+
+data/texpages/bdrops/07-bdrop.png	- CC BY 3.0
+data/mods/global/newst_tiles		- CC BY SA 3.0
+lib/framework/tagfile.c|h		- public domain
