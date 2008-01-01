@@ -83,11 +83,12 @@
 #define MAX_BODY			SWORD_MAX
 #define SAVEKEY_ONMISSION	0x100
 
-/**
+/*!
+ * FIXME
  * The code is reusing some pointers as normal integer values apparently. This
  * should be fixed!
  */
-#define FIXME_CAST_ASSIGN(TYPE, lval, rval) { TYPE* __tmp = (TYPE*) &lval; *__tmp = rval; }
+#define FIXME_CAST_ASSIGN(TYPE, lval, rval) { TYPE* __tmp = (TYPE*) &lval; *__tmp = (TYPE)rval; }
 
 UDWORD RemapPlayerNumber(UDWORD OldNumber);
 
@@ -138,7 +139,7 @@ static bool deserializeSaveGameHeader(PHYSFS_file* fileHandle, GAME_SAVEHEADER* 
 	{
 		// Apparently we get a larger number than expected if using little-endian.
 		// So assume we have a version of 35 and onward
-		
+
 		// Reverse the little-endian decoding
 		endian_udword(&serializeHeader->version);
 	}
@@ -5935,7 +5936,6 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 static BOOL loadDroidSetPointers(void)
 {
 	UDWORD		player,list;
-	UDWORD		id;
 	DROID		*psDroid, *psCommander;
 	DROID		**ppsDroidLists[3], *psNext;
 
@@ -5951,8 +5951,9 @@ static BOOL loadDroidSetPointers(void)
 			psDroid=(DROID *)ppsDroidLists[list][player];
 			while (psDroid)
 			{
+				UDWORD id;
 				//Target rebuild the object pointer from the ID
-				id = (UDWORD)psDroid->psTarget;
+				FIXME_CAST_ASSIGN(UDWORD, id, psDroid->psTarget);
 				if (id != UDWORD_MAX)
 				{
 					setSaveDroidTarget(psDroid, getBaseObjFromId(id));
@@ -5967,7 +5968,7 @@ static BOOL loadDroidSetPointers(void)
 					setSaveDroidTarget(psDroid, NULL);
 				}
 				//ActionTarget rebuild the object pointer from the ID
-				id = (UDWORD)(psDroid->psActionTarget[0]);
+				FIXME_CAST_ASSIGN(UDWORD, id, psDroid->psActionTarget[0]);
 				if (id != UDWORD_MAX)
 				{
 					setSaveDroidActionTarget(psDroid, getBaseObjFromId(id), 0);
@@ -5982,7 +5983,7 @@ static BOOL loadDroidSetPointers(void)
 					setSaveDroidActionTarget(psDroid, NULL, 0);
 				}
 				//BaseStruct rebuild the object pointer from the ID
-				id = (UDWORD)(psDroid->psBaseStruct);
+				FIXME_CAST_ASSIGN(UDWORD, id, psDroid->psBaseStruct);
 				if (id != UDWORD_MAX)
 				{
 					setSaveDroidBase(psDroid, (STRUCTURE*)getBaseObjFromId(id));
@@ -5998,15 +5999,17 @@ static BOOL loadDroidSetPointers(void)
 				}
 				if (saveGameVersion > VERSION_20)
 				{
+					UDWORD _tmpid;
 					//rebuild group for droids in command group from the commander ID
-					if (((UDWORD)psDroid->psGrpNext) == UDWORD_MAX)
+					FIXME_CAST_ASSIGN(UDWORD, id, psDroid->psGrpNext);
+					if (id == UDWORD_MAX)
 					{
-						id = (UDWORD)(psDroid->psGroup);
+						FIXME_CAST_ASSIGN(UDWORD, _tmpid, psDroid->psGroup);
 						psDroid->psGroup = NULL;
 						psDroid->psGrpNext = NULL;
-						if (id != UDWORD_MAX)
+						if (_tmpid != UDWORD_MAX)
 						{
-							psCommander	= (DROID*)getBaseObjFromId(id);
+							psCommander	= (DROID*)getBaseObjFromId(_tmpid);
 							ASSERT( psCommander != NULL,"Saved Droid psCommander getBaseObjFromId() failed" );
 							if (psCommander != NULL)
 							{
@@ -6650,19 +6653,24 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			{
 				strcpy(psSaveDroid->tarStatName,"");
 			}
-			if ((psCurr->psBaseStruct != NULL) && ((UDWORD)(psCurr->psBaseStruct) != UDWORD_MAX))
+			if ((psCurr->psBaseStruct != NULL))
 			{
-				if (psCurr->psBaseStruct->died <= 1)
+				UDWORD _tmpid;
+				FIXME_CAST_ASSIGN(UDWORD, _tmpid, psCurr->psBaseStruct);
+				if (_tmpid != UDWORD_MAX)
 				{
-					psSaveDroid->baseStructID		= psCurr->psBaseStruct->id;
-					if (!checkValidId(psSaveDroid->baseStructID))
+					if (psCurr->psBaseStruct->died <= 1)
 					{
-						psSaveDroid->baseStructID		= UDWORD_MAX;
+						psSaveDroid->baseStructID = psCurr->psBaseStruct->id;
+						if (!checkValidId(psSaveDroid->baseStructID))
+						{
+							psSaveDroid->baseStructID = UDWORD_MAX;
+						}
 					}
-				}
-				else
-				{
-					psSaveDroid->baseStructID		= UDWORD_MAX;
+					else
+					{
+						psSaveDroid->baseStructID = UDWORD_MAX;
+					}
 				}
 			}
 			else
@@ -6857,7 +6865,8 @@ BOOL writeDroidFile(char *pFileName, DROID **ppsCurrentDroidLists)
 			if (psCurr->droidType == DROID_TRANSPORTER)
 			{
 				psTrans = psCurr->psGroup->psList;
-				if (((UDWORD)psTrans->psGrpNext) == 0xcdcdcdcd)
+#define MSVCRTD_UNITIALISED_MEMORY 0xcdcdcdcdcdcdcdcd
+				if (psTrans->psGrpNext == (void*)MSVCRTD_UNITIALISED_MEMORY)
 				{
 					debug( LOG_ERROR, "transporter ->psGrpNext not reset" );
 					abort();
@@ -8452,17 +8461,19 @@ BOOL loadStructSetPointers(void)
 			{
 				if (psStruct->pFunctionality)
 				{
+					UDWORD _tmpid;
 					switch (psStruct->pStructureType->type)
 					{
 					case REF_FACTORY:
 					case REF_CYBORG_FACTORY:
 					case REF_VTOL_FACTORY:
 						psFactory = ((FACTORY *)psStruct->pFunctionality);
+						FIXME_CAST_ASSIGN(UDWORD, _tmpid, psFactory->psCommander);
 						//there is a commander then has been temporarily removed
 						//so put it back
-						if ((UDWORD)psFactory->psCommander != UDWORD_MAX)
+						if (_tmpid != UDWORD_MAX)
 						{
-							psCommander = (DROID*)getBaseObjFromId((UDWORD)psFactory->psCommander);
+							psCommander = (DROID*)getBaseObjFromId(_tmpid);
 							psFactory->psCommander = NULL;
 							ASSERT( psCommander != NULL,"loadStructSetPointers psCommander getBaseObjFromId() failed" );
 							if (psCommander == NULL)
@@ -8490,13 +8501,14 @@ BOOL loadStructSetPointers(void)
 						break;
 					case REF_REPAIR_FACILITY:
 						psRepair = ((REPAIR_FACILITY *)psStruct->pFunctionality);
-						if ((UDWORD)psRepair->psObj == UDWORD_MAX)
+						FIXME_CAST_ASSIGN(UDWORD, _tmpid, psRepair->psObj);
+						if (_tmpid == UDWORD_MAX)
 						{
 							psRepair->psObj = NULL;
 						}
 						else
 						{
-							psRepair->psObj = getBaseObjFromId((UDWORD)psRepair->psObj);
+							psRepair->psObj = getBaseObjFromId(_tmpid);
 							//if the build has started set the powerAccrued =
 							//powerRequired to sync the interface
 							if (psRepair->timeStarted != ACTION_START_TIME &&
@@ -8510,13 +8522,14 @@ BOOL loadStructSetPointers(void)
 						psReArmPad = ((REARM_PAD *)psStruct->pFunctionality);
 						if (saveGameVersion >= VERSION_26)//version 26
 						{
-							if ((UDWORD)psReArmPad->psObj == UDWORD_MAX)
+							FIXME_CAST_ASSIGN(UDWORD, _tmpid, psReArmPad->psObj)
+							if (_tmpid == UDWORD_MAX)
 							{
 								psReArmPad->psObj = NULL;
 							}
 							else
 							{
-								psReArmPad->psObj = getBaseObjFromId((UDWORD)psReArmPad->psObj);
+								psReArmPad->psObj = getBaseObjFromId(_tmpid);
 							}
 						}
 						else
