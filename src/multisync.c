@@ -323,17 +323,8 @@ static void packageCheck(DROID *pD)
 // receive a check and update the local world state accordingly
 BOOL recvDroidCheck()
 {
-	float			fx = 0, fy = 0;
-	DROID_ORDER		order = 0;
-	BOOL			onscreen;
-	DROID			*pD;
-	BASE_OBJECT		*psTarget;
-	int				i;
-	uint8_t			count;
-	uint8_t			player;
-	float			direction, experience;
-	uint16_t		x = 0, y = 0, tx, ty;
-	uint32_t		ref, body, target = 0, secondaryOrder;
+	uint8_t		count;
+	int		i;
 
 	debug(LOG_MULTISYNC, "recvDroidCheck");
 
@@ -344,6 +335,16 @@ BOOL recvDroidCheck()
 		
 		for (i = 0; i < count; i++)
 		{
+			DROID		*pD;
+			BASE_OBJECT	*psTarget = NULL;
+			float		fx = 0, fy = 0;
+			DROID_ORDER	order = 0;
+			BOOL		onscreen;
+			uint8_t		player;
+			float		direction, experience;
+			uint16_t	x = 0, y = 0, tx, ty;
+			uint32_t	ref, body, target = 0, secondaryOrder;
+
 			// Fetch the player
 			NETuint8_t(&player);
 			
