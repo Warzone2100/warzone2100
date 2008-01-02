@@ -276,19 +276,6 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		return;
 	}
 
-	// if target was in range deal with weapon fire
-	if(baseHitChance > 0)
-	{
-		/* note when the weapon fired */
-		psWeap->lastFired = gameTime;
-
-		/* reduce ammo if salvo */
-		if (psStats->reloadTime)
-		{
-			psWeap->ammo--;
-		}
-	}
-
 	// apply experience accuracy modifiers to the base
 	//hit chance, not to the final hit chance
 	resultHitChance = baseHitChance;
@@ -328,6 +315,19 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		case FOM_YES:
 			// can fire while moving
 			break;
+		}
+	}
+
+	// if target was in range deal with weapon fire
+	if(baseHitChance > 0)
+	{
+		/* note when the weapon fired */
+		psWeap->lastFired = gameTime;
+
+		/* reduce ammo if salvo */
+		if (psStats->reloadTime)
+		{
+			psWeap->ammo--;
 		}
 	}
 
