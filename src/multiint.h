@@ -322,8 +322,6 @@ void loadMapPreview(void);
 #define	MULTIOP_FOG_ON			10310
 #define	MULTIOP_FOG_OFF			10311
 
-#define MULTIOP_WHITEBOARD		10312
-
 #define MULTIOP_SKSLIDE			10313
 #define MULTIOP_SKSLIDE_END		10320
 

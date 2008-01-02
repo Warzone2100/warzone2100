@@ -111,18 +111,6 @@ static SDWORD				dwSelectedGame	=0;						//player[] and games[] indexes
 static UDWORD				gameNumber;								// index to games icons
 static BOOL					safeSearch		= FALSE;				// allow auto game finding.
 
-//whiteboard stuff
-#define	NUMWHITE			150
-#define WHITEW				(MULTIOP_CHATBOXW-10)
-#define WHITEH				(MULTIOP_CHATBOXH-25)
-#define WHITEX				(MULTIOP_CHATBOXX+5+D_W)		//(639-WHITEW)
-#define WHITEY				(MULTIOP_CHATBOXY+5+D_H)		//(479-WHITEH)
-
-static	W_SCREEN			*psWhiteScreen;
-static	BOOL				bWhiteBoardUp;
-UWORD						whiteBoard[MAX_PLAYERS][NUMWHITE];
-static	UBYTE				curWhite = 0;
-
 static UDWORD hideTime=0;
 
 #define DEFAULTCAMPAIGNMAP	"Rush"
@@ -140,7 +128,6 @@ static void addBlueForm					(UDWORD parent,UDWORD id, const char *txt,UDWORD x,U
 // Drawing Functions
 void		displayChatEdit				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 void		displayMultiBut				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void		displayWhiteBoard			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 void		intDisplayFeBox				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 void		displayRemoteGame			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 void		displayPlayer				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
@@ -171,11 +158,6 @@ void	kickPlayer			(UDWORD dpid);
 void			runMultiOptions		(void);
 BOOL			startMultiOptions	(BOOL);
 void			frontendMultiMessages(void);
-
-// whiteboard funcs
-static	BOOL	removeWhiteBoard	(void);
-static	BOOL	addWhiteBoard		(void);
-static	BOOL	runWhiteBoard		(void);
 
 static	UDWORD	bestPlayer			(UDWORD);
 static	void	decideWRF			(void);
@@ -1454,11 +1436,6 @@ static void stopJoining(void)
 	dwSelectedGame	 = 0;
 	saveConfig();
 
-	if(bWhiteBoardUp)
-	{
-		removeWhiteBoard();
-	}
-
 	if(NetPlay.bLobbyLaunched)
 	{
 		changeTitleMode(QUIT);
@@ -1766,18 +1743,6 @@ static void processMultiopWidgets(UDWORD id)
 	// these work all the time.
 	switch(id)
 	{
-
-	case MULTIOP_WHITEBOARD:
-		if(bWhiteBoardUp)
-		{
-			removeWhiteBoard();
-		}
-		else
-		{
-			addWhiteBoard();
-		}
-		break;
-
 	case MULTIOP_STRUCTLIMITS:
 		changeTitleMode(MULTILIMIT);
 		break;
@@ -1901,11 +1866,6 @@ static void processMultiopWidgets(UDWORD id)
 		// set the fog correctly..
 		setRevealStatus(game.fog);
 		war_SetFog(!game.fog);
-
-	if(bWhiteBoardUp)
-	{
-		removeWhiteBoard();
-	}
 
 		changeTitleMode(STARTGAME);
 
@@ -2085,15 +2045,6 @@ void frontendMultiMessages(void)
 			}
 			break;
 
-		case NET_WHITEBOARD:
-			if(!bWhiteBoardUp)
-			{
-				addWhiteBoard();
-			}
-			memcpy(&whiteBoard[(int)msg.body[0]], &msg.body[1], NUMWHITE*2);
-
-			break;
-
 		case NET_ALLIANCE:
 			recvAlliance(FALSE);
 			break;
@@ -2135,10 +2086,6 @@ void frontendMultiMessages(void)
 				war_SetFog(!game.fog);
 
 				bMultiPlayer = TRUE;
-				if(bWhiteBoardUp)
-				{
-				removeWhiteBoard();
-				}
 				changeTitleMode(STARTGAME);
 				bHosted = FALSE;
 				break;
@@ -2328,8 +2275,6 @@ void runMultiOptions(void)
 		iV_SetFont(font_regular);											// switch to small font.
 		displayConsoleMessages();									// draw the chatbox
 	}
-
-	runWhiteBoard();
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -2387,12 +2332,6 @@ BOOL startMultiOptions(BOOL bReenter)
 
 	addChatBox();
 
-	addMultiBut(psWScreen,
-		FRONTEND_BACKDROP,
-		MULTIOP_WHITEBOARD,
-		MULTIOP_CHATBOXX-15,MULTIOP_CHATBOXY+MULTIOP_CHATBOXH-15 ,9,9,
-		"",IMAGE_PENCIL,IMAGE_PENCIL,TRUE);	//whiteboard icon
-
 	// going back to multiop after setting limits up..
 	if(bReenter && bHosted)
 	{
@@ -2404,185 +2343,6 @@ BOOL startMultiOptions(BOOL bReenter)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
-// whiteboard functions
-
-
-// removewhiteboard
-static BOOL removeWhiteBoard(void)
-{
-	bWhiteBoardUp = FALSE;
-	widgReleaseScreen(psWhiteScreen);
-	return TRUE;
-}
-
-
-// runwhiteboard
-static BOOL runWhiteBoard(void)
-{
-	NETMSG m;
-	static UDWORD lastSent=0;
-	UDWORD	x,y,mx,my;
-
-	if(!bWhiteBoardUp)
-	{
-		return TRUE;
-	}
-	mx = mouseX();
-	my = mouseY();
-
-	widgDisplayScreen(psWhiteScreen);
-
-	// if mouse over && mouse down.
-	if(	   mx	> WHITEX
-		&& mx < (WHITEX+WHITEW)
-		&& my > WHITEY
-		&& my < (WHITEY+WHITEH)
-		&& (mouseDown(MOUSE_LMB)||mouseReleased(MOUSE_LMB))
-	  )
-	{
-		if(mouseDown(MOUSE_LMB))
-		{
-			x = mx-WHITEX;			//add a point
-			y = my-WHITEY;
-
-			whiteBoard[selectedPlayer][curWhite] = (UWORD) (((y-1)*WHITEW) + x);
-		}
-
-		if(mouseReleased(MOUSE_LMB))
-		{
-			whiteBoard[selectedPlayer][curWhite] = 0;	//add a non-point
-		}
-
-		curWhite++;
-		if(curWhite == NUMWHITE)
-		{
-			curWhite = 0;
-		}
-
-		whiteBoard[selectedPlayer][curWhite] = 1;		//set wrap point
-	}
-
-	// possibly send our bit.
-
-	if(ingame.localOptionsReceived || bHosted)
-	if(lastSent>gameTime)
-	{
-		lastSent =0;
-	}
-	if((gameTime - lastSent) >2000)
-	{
-		lastSent = gameTime;
-
-		m.type = NET_WHITEBOARD;
-		m.body[0] = (UBYTE)selectedPlayer;
-		memcpy( &(m.body[1]), &whiteBoard[selectedPlayer],(NUMWHITE*2));
-		m.size = (2*NUMWHITE)+1;
-		NETbcast(&m,FALSE);
-	}
-
-	return TRUE;
-}
-
-void displayWhiteBoard(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
-{
-	UDWORD	x = D_W+xOffset+psWidget->x;
-	UDWORD	y = D_H+yOffset+psWidget->y;
-//	UDWORD	w = psWidget->width;
-//	UDWORD	h = psWidget->height;
-	UDWORD	i;
-	div_t	d;
-	UBYTE	j,col;
-	UWORD	oldPoint,newPoint,oldx,oldy,newx,newy;
-
-	// white poly
-//	pie_BoxFillIndex(x,y,x+w,y+h,COL_WHITE);
-
-	// each line.
-	for(i = 0;i<MAX_PLAYERS;i++)
-	{
-		if(isHumanPlayer(i))
-		{
-			switch(getPlayerColour(i))
-			{
-			case 0:
-				col = COL_GREEN;
-				break;
-			case 1:
-				col =COL_YELLOW;
-				break;
-			case 2:
-				col =COL_GREY;
-				break;
-			case 3:
-				col =COL_BLACK;
-				break;
-			case 4:
-				col =COL_LIGHTRED;
-				break;
-			case 5:
-				col =COL_LIGHTBLUE;
-				break;
-			case 6:
-				col =COL_LIGHTMAGENTA;
-				break;
-			default:
-			case 7:
-				col =COL_LIGHTCYAN;
-				break;
- 			}
-
-			oldPoint =whiteBoard[i][0];
-			d = div(oldPoint,WHITEW);
-			oldy = (UWORD)d.quot;
-			oldx = (UWORD)d.rem;
-
-			for(j=1;j<NUMWHITE;j++)
-			{
-				newPoint = whiteBoard[i][j];
-
-				d = div(newPoint,WHITEW);
-				newy = (UWORD)d.quot;
-				newx = (UWORD)d.rem;
-				if( newPoint>1 && oldPoint>1 )
-				{
-					iV_Line(x+oldx,y+oldy,x+newx,y+newy,WZCOL_WHITE);	// draw line! // hack
-				}
-				oldPoint = newPoint;
-				oldx = newx;
-				oldy = newy;
-			}
-		}
-	}
-
-	// overlay close widget.
-	iV_DrawImage(FrontImages,IMAGE_NOPENCIL,MULTIOP_CHATBOXX-15+D_W,MULTIOP_CHATBOXY+D_H+MULTIOP_CHATBOXH-15);
-}
-
-// add whiteboard
-static BOOL addWhiteBoard(void)
-{
-	W_FORMINIT		sFormInit;
-
-	// clear whiteboard
-	memset(&whiteBoard,0,sizeof(whiteBoard));
-	widgCreateScreen(&psWhiteScreen);
-	widgSetTipFont(psWhiteScreen,font_regular);
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));		//Connection Settings
-	sFormInit.formID = 0;
-	sFormInit.id = 999;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x =(SWORD)( WHITEX-D_W);
-	sFormInit.y =(SWORD)( WHITEY-D_H);
-	sFormInit.width = WHITEW;
-	sFormInit.height = WHITEH;
-	sFormInit.pDisplay = displayWhiteBoard;
-	widgAddForm(psWhiteScreen, &sFormInit);
-
-	bWhiteBoardUp = TRUE;
-	return TRUE;
-}
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 // Drawing functions
