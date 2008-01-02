@@ -384,6 +384,7 @@ R-Vehicle-Prop-Hover,R-Vehicle-Engine02,106
 R-Vehicle-Prop-Hover,R-Struc-Factory-Module,106
 R-Vehicle-Prop-Tracks,R-Sys-Engineering01,105
 R-Vehicle-Prop-Tracks,R-Vehicle-Prop-Halftracks,105
+R-Vehicle-Prop-Tracks,R-Vehicle-Body11,105
 R-Vehicle-Prop-VTOL,R-Struc-Factory-Upgrade01,518
 R-Vehicle-Prop-VTOL,R-Vehicle-Prop-Hover,518
 R-Vehicle-Prop-VTOL,R-Vehicle-Engine03,518
