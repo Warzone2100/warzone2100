@@ -96,6 +96,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		{
 			tPages = ImageDef->TPageID;
 		}
+		while (ptr < pFileData + pFileSize && *ptr++ != '\n'); // skip rest of line
 	}
 
 	dot = strrchr(fileName, '/');	// go to last path character
