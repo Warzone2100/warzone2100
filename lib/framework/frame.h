@@ -62,6 +62,7 @@
 #include "trig.h"
 #include <physfs.h>
 
+extern UDWORD selectedPlayer;
 
 /** Initialise the frame work library */
 extern BOOL frameInitialise(

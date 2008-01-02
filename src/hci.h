@@ -281,17 +281,11 @@ extern INTMODE intMode;
 /* The widget screen */
 extern W_SCREEN		*psWScreen;
 
-/* Which is the currently selected player */
-extern UDWORD			selectedPlayer;
-
 // The last widget ID from widgRunScreen
 extern UDWORD			intLastWidget;
 
 /* The button ID of the objects stat when the stat screen is displayed */
 extern UDWORD			objStatID;
-
-/* The flag to specify if the Intelligence screen is up */
-//extern BOOL				intelMapUp;
 
 /* The current template for the design screen to start with*/
 extern DROID_TEMPLATE	*psCurrTemplate;

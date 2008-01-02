@@ -204,7 +204,8 @@ static BOOL NET_recvMessage(NETBUFSOCKET* bs, NETMSG* pMsg)
 	const NETMSG* message = (NETMSG*)(bs->buffer + bs->buffer_start);
 	const unsigned int headersize =   sizeof(message->size)
 					+ sizeof(message->type)
-					+ sizeof(message->destination);
+					+ sizeof(message->destination)
+					+ sizeof(message->source);
 
 	if (headersize > bs->bytes)
 	{
@@ -701,8 +702,9 @@ BOOL NETsend(NETMSG *msg, UDWORD player, BOOL guarantee)
 
 	if (player >= MAX_CONNECTED_PLAYERS) return FALSE;
 	msg->destination = player;
+	msg->source = selectedPlayer;
 
-	size = msg->size + sizeof(msg->size) + sizeof(msg->type) + sizeof(msg->destination);
+	size = msg->size + sizeof(msg->size) + sizeof(msg->type) + sizeof(msg->destination) + sizeof(msg->source);
 
 	NETlogPacket(msg, FALSE);
 
@@ -743,8 +745,9 @@ BOOL NETbcast(NETMSG *msg, BOOL guarantee)
 	debug(LOG_NET, "NETbcast");
 
 	msg->destination = NET_ALL_PLAYERS;
+	msg->source = selectedPlayer;
 
-	size = msg->size + sizeof(msg->size) + sizeof(msg->type) + sizeof(msg->destination);
+	size = msg->size + sizeof(msg->size) + sizeof(msg->type) + sizeof(msg->destination) + sizeof(msg->source);
 
 	NETlogPacket(msg, FALSE);
 
@@ -960,7 +963,7 @@ receive_message:
 		else
 		{
 			size =	  pMsg->size + sizeof(pMsg->size) + sizeof(pMsg->type)
-				+ sizeof(pMsg->destination);
+				+ sizeof(pMsg->destination) + sizeof(pMsg->source);
 			if (is_server == FALSE)
 			{
 				// do nothing

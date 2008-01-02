@@ -1557,6 +1557,7 @@ void	kf_KillEnemy( void )
 	STRUCTURE	*psCStruct, *psNStruct;
 
 	CONPRINTF(ConsoleString, (ConsoleString, _("Enemy destroyed by cheating!")));
+	debug(LOG_DEATH, "kf_KillEnemy: Destroying enemy droids and structures");
 
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
@@ -1584,6 +1585,7 @@ void kf_KillSelected(void)
 	DROID		*psCDroid, *psNDroid;
 	STRUCTURE	*psCStruct, *psNStruct;
 
+	debug(LOG_DEATH, "kf_KillSelected: Destroying selected droids and structures");
 	for(psCDroid=apsDroidLists[selectedPlayer]; psCDroid; psCDroid=psNDroid)
 	{
 		psNDroid = psCDroid->psNext;

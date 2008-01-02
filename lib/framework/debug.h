@@ -102,6 +102,7 @@ typedef enum {
   LOG_MAP,
   LOG_SAVEGAME,
   LOG_MULTISYNC,
+  LOG_DEATH,
   LOG_LAST /**< _must_ be last! */
 } code_part;
 

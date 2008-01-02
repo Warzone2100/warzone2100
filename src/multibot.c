@@ -928,13 +928,16 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, uint32_t x, uin
 BOOL SendDestroyDroid(const DROID* psDroid)
 {
 	if (!bMultiPlayer)
+	{
 		return TRUE;
+	}
 
 	NETbeginEncode(NET_DROIDDEST, NET_ALL_PLAYERS);
 	{
 		uint32_t id = psDroid->id;
 
 		// Send the droid's ID
+		debug(LOG_DEATH, "Requested all players to destroy droid %u", (unsigned int)id);
 		NETuint32_t(&id);
 	}
 	return NETend();
@@ -963,6 +966,7 @@ BOOL recvDestroyDroid()
 	if(!psDroid->died)
 	{
 		turnOffMultiMsg(TRUE);
+		debug(LOG_DEATH, "Killing droid %d on request from player %d", psDroid->id, NETgetSource());
 		destroyDroid(psDroid);
 		turnOffMultiMsg(FALSE);
 	}

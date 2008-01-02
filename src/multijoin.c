@@ -144,6 +144,7 @@ void clearPlayer(UDWORD player,BOOL quietly,BOOL removeOil)
 		alliances[i][player]	= ALLIANCE_BROKEN;
 	}
 
+	debug(LOG_DEATH, "clearPlayer: killing off all droids");
 	while(apsDroidLists[player])				// delete all droids
 	{
 		if(quietly)

@@ -275,12 +275,6 @@ static const char	*apPlayerTip[] =
 /* The widget screen */
 W_SCREEN		*psWScreen;
 
-/* The current player */
-UDWORD				selectedPlayer=0;
-
-/* The flag to specify if the Intelligence screen is up */
-//BOOL				intelMapUp = FALSE;
-
 //two colours used for drawing the footprint outline for objects in 2D
 PIELIGHT			outlineOK;
 PIELIGHT			outlineNotOK;

@@ -373,3 +373,8 @@ void NETtest()
 	NETcoder(PACKET_DECODE);
 	ASSERT(memcmp(&cmp, &NetMsg, sizeof(cmp)) == 0, "nettypes unit test failed");
 }
+
+int NETgetSource()
+{
+	return NetMsg.source;
+}

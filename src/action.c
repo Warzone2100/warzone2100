@@ -2320,6 +2320,7 @@ void actionUpdateDroid(DROID *psDroid)
 			}
 			else
 			{
+				debug(LOG_DEATH, "actionUpdateDroid: Droid %d destructed", (int)psDroid->id);
 				destroyDroid(psDroid);
 			}
 		}

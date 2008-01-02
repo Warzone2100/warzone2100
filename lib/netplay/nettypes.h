@@ -60,6 +60,12 @@ BOOL NETstring(char *str, uint16_t maxlen);
 
 BOOL NETVector3uw(Vector3uw* vp);
 
+/**
+ *	Get player who is the source of the current packet.
+ *	@see selectedPlayer
+ */
+int NETgetSource(void);
+
 void NETtest(void);
 
 #endif

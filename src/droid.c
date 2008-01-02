@@ -259,6 +259,7 @@ float droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weap
 		// Otherwise use the default destruction animation
 		else
 		{
+			debug(LOG_DEATH, "droidDamage: Droid %d beyond repair", (int)psDroid->id);
 			destroyDroid(psDroid);
 		}
 
@@ -424,7 +425,6 @@ void recycleDroid(DROID *psDroid)
 	position.z = psDroid->pos.y;
 	position.y = psDroid->pos.z;
 
-//	destroyDroid(psDroid);
 	vanishDroid(psDroid);
 
 	addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_DISCOVERY,FALSE,NULL,FALSE);
@@ -454,7 +454,6 @@ void	removeDroidBase(DROID *psDel)
 		// droid has already been killed, quit
 		return;
 	}
-
 
 	//ajl, inform others of destruction.
 	if(bMultiPlayer)
@@ -735,6 +734,7 @@ static void droidFlameFallCallback( ANIM_OBJECT * psObj )
 
 	psDroid->psCurAnim = NULL;
 
+	debug(LOG_DEATH, "droidFlameFallCallback: Droid %d destroyed", (int)psDroid->id);
 	destroyDroid( psDroid );
 }
 
