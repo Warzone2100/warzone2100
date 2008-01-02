@@ -88,8 +88,6 @@
 #include "scores.h"
 #include "gateway.h"
 
-#define MODULE_PIES_ENABLED
-
 // Possible types of wall to build
 #define WALL_HORIZ		0
 #define WALL_VERT		1
@@ -482,9 +480,6 @@ static UBYTE getStructStrength(const char *pStrength)
 	return INVALID_STRENGTH;
 }
 
-
-#ifdef MODULE_PIES_ENABLED
-
 static void initModulePIEs(char *PIEName,UDWORD i,STRUCTURE_STATS *psStructure)
 {
 	char GfxFile[MAX_NAME_SIZE];
@@ -614,88 +609,6 @@ static void initModulePIEs(char *PIEName,UDWORD i,STRUCTURE_STATS *psStructure)
 #endif
 		}
 }
-
-#else
-
-void initModulePIEsNoMods(char *GfxFile,UDWORD i,STRUCTURE_STATS *psStructure)
-{
-	UDWORD length, module;
-
-		//need to work out the IMD's for the modules - HACK!
-		if (psStructure->type == REF_FACTORY_MODULE)
-		{
-			factoryModuleIMDs[0][0] = (iIMDShape*) resGetData("IMD", GfxFile);
-			if (factoryModuleIMDs[0][0] == NULL)
-			{
-				debug( LOG_ERROR, "Cannot find the PIE for factory module %d - %s",module, GfxFile );
-				abort();
-				return FALSE;
-			}
-			for (module = 1; module < NUM_FACTORY_MODULES; module++)
-			{
-				factoryModuleIMDs[module][0] = factoryModuleIMDs[0][0];
-			}
-			factoryModuleStat = i;
-		}
-
-		if (psStructure->type == REF_VTOL_FACTORY)
-		{
-			factoryModuleIMDs[0][1] = (iIMDShape*) resGetData("IMD", GfxFile);
-			if (factoryModuleIMDs[0][1] == NULL)
-			{
-				debug( LOG_ERROR, "Cannot find the PIE for vtol factory module %d - %s", module, GfxFile );
-				abort();
-				return FALSE;
-			}
-			for (module = 1; module < NUM_FACTORY_MODULES; module++)
-			{
-				factoryModuleIMDs[module][1] = factoryModuleIMDs[0][1];
-			}
-		}
-
-		// Setup the PIE's for the research modules.
-		if (psStructure->type == REF_RESEARCH_MODULE)
-		{
-			length = strlen(GfxFile) - 5;
-			GfxFile[length] = '0';
-			researchModuleIMDs[0] = (iIMDShape*) resGetData("IMD", GfxFile);
-			if (researchModuleIMDs[0] == NULL)
-			{
-				debug( LOG_ERROR, "Cannot find the PIE for research module %d - %s", module, GfxFile );
-				abort();
-				return FALSE;
-			}
-
-			researchModuleIMDs[1] = researchModuleIMDs[0];
-			researchModuleIMDs[2] = researchModuleIMDs[0];
-			researchModuleIMDs[3] = researchModuleIMDs[0];
-
-			//store the stat for easy access later on
-			researchModuleStat = i;
-		}
-
-		// Setup the PIE's for the power modules.
-		if (psStructure->type == REF_POWER_MODULE)
-		{
-			length = strlen(GfxFile) - 5;
-			GfxFile[length] = '0';
-			powerModuleIMDs[0] = (iIMDShape*) resGetData("IMD", GfxFile);
-			if (powerModuleIMDs[0] == NULL)
-			{
-				debug( LOG_ERROR, "Cannot find the PIE for power module %d - %s", module, GfxFile );
-				abort();
-				return FALSE;
-			}
-
-			powerModuleIMDs[1] = powerModuleIMDs[0];
-			powerModuleIMDs[2] = powerModuleIMDs[0];
-			powerModuleIMDs[3] = powerModuleIMDs[0];
-
-			//store the stat for easy access later on
-			powerModuleStat = i;
-		}
-}
-#endif
 
 /* load the Structure stats from the Access database */
 BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
@@ -887,11 +800,7 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 			psStructure->pBaseIMD = NULL;
 		}
 
-#ifdef MODULE_PIES_ENABLED
 		initModulePIEs(GfxFile,i,psStructure);
-#else
-		initModulePIEsNoMods(GfxFile,i,psStructure);
-#endif
 
 		//Only having one weapon per structure now...AB 24/01/99
 		if (weapSlots > STRUCT_MAXWEAPS || numWeaps > weapSlots)
