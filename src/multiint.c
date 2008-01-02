@@ -761,7 +761,7 @@ static void addGameOptions(BOOL bRedo)
 
 		//add 'Locked Teams' button
 		addMultiBut(psWScreen,MULTIOP_ALLIANCES,MULTIOP_ALLIANCE_TEAMS,MCOL3,2,MULTIOP_BUTW,MULTIOP_BUTH,
-			_("Locked Teams"),IMAGE_ALLI_TEAMS,IMAGE_ALLI_TEAMS_HI,TRUE);		//FIXME: fix hover image
+		            _("Locked Teams"), IMAGE_ALLI_TEAMS, IMAGE_ALLI_TEAMS_HI, TRUE);
 
 		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,0);				//hilight correct entry
 		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,0);
@@ -869,7 +869,6 @@ static void addGameOptions(BOOL bRedo)
 					35,28, _("Set Structure Limits"),IMAGE_SLIM,IMAGE_SLIM_HI,FALSE);
 	}
 
-
 	// disable buttons not available in lobby games
 	if(NetPlay.bLobbyLaunched)
 	{
@@ -881,16 +880,7 @@ static void addGameOptions(BOOL bRedo)
 
 	}
 
-	//disable demo options
-#ifdef MULTIDEMO
-//	widgSetButtonState(psWScreen, MULTIOP_MAP,WEDBS_DISABLE);
-//	widgSetButtonState(psWScreen, MULTIOP_MAP_ICON,WBUT_DISABLE);
-
-	widgSetButtonState(psWScreen, MULTIOP_DEFENCE,WBUT_DISABLE);
-	widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,WBUT_DISABLE);
-#endif
-
-		return;
+	return;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
