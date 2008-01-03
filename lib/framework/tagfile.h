@@ -104,6 +104,7 @@ uint8_t *tagRead8vDup(element_t tag, int *size);
 bool tagRead8v(element_t tag, uint16_t size, uint8_t *vals);
 bool tagRead16v(element_t tag, uint16_t size, uint16_t *vals);
 bool tagReads16v(element_t tag, uint16_t size, int16_t *vals);
+bool tagReads32v(element_t tag, uint16_t size, int32_t *vals);
 bool tagReadString(element_t tag, uint16_t size, char *buffer);
 char *tagReadStringDup(element_t tag);
 
