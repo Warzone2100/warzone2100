@@ -3267,9 +3267,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		{
 			//load in the message list file
 			aFileName[fileExten] = '\0';
-			strcat(aFileName, "fxstate.bjo");
-			// Load in the chosen file data
-			pFileData = fileLoadBuffer;
+			strcat(aFileName, "fxstate.tag");
 
 			// load the fx data from the file
 			if (!readFXData(aFileName))
@@ -3765,7 +3763,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 
 	//create the message filename
 	aFileName[fileExtension] = '\0';
-	strcat(aFileName, "fxstate.bjo");
+	strcat(aFileName, "fxstate.tag");
 	/*Write the data to the file*/
 	if (!writeFXData(aFileName))
 	{

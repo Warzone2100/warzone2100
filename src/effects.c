@@ -43,6 +43,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/input.h"
+#include "lib/framework/tagfile.h"
 
 #include "lib/ivis_common/ivisdef.h" //ivis matrix code
 #include "lib/ivis_common/piedef.h" //ivis matrix code
@@ -2657,151 +2658,34 @@ bool fireOnLocation(unsigned int x, unsigned int y)
 	return false;
 }
 
-/** Write the given EFFECT to the given file with endianness swapped correctly
- *  \param fileHandle a PhysicsFS file handle of the file to write to
- *  \param serializeEffect a pointer to the EFFECT to write serialized into the file
- *  \return true on success or false on the first encounterd error
- */
-static bool serializeFXData(PHYSFS_file* fileHandle, const EFFECT* serializeEffect)
-{
-	uint32_t imdHashedNumber;
-
-	// Retrieve the IMD hash number
-	if (serializeEffect->imd)
-	{
-		resGetHashfromData("IMD", serializeEffect->imd, &imdHashedNumber);
-	}
-	else
-	{
-		imdHashedNumber = 0;
-	}
-
-	return (PHYSFS_writeUBE8 (fileHandle, serializeEffect->  control)
-	     && PHYSFS_writeUBE8 (fileHandle, serializeEffect->  group)
-	     && PHYSFS_writeUBE8 (fileHandle, serializeEffect->  type)
-	     && PHYSFS_writeUBE8 (fileHandle, serializeEffect->  frameNumber)
-	     && PHYSFS_writeUBE16(fileHandle, serializeEffect->  size)
-	     && PHYSFS_writeUBE8 (fileHandle, serializeEffect->  baseScale)
-	     && PHYSFS_writeUBE8 (fileHandle, serializeEffect->  specific)
-
-	     // Write Vector3f types
-	     && PHYSFS_writeBEFloat(fileHandle, serializeEffect->position.x)
-	     && PHYSFS_writeBEFloat(fileHandle, serializeEffect->position.y)
-	     && PHYSFS_writeBEFloat(fileHandle, serializeEffect->position.z)
-	     && PHYSFS_writeBEFloat(fileHandle, serializeEffect->velocity.x)
-	     && PHYSFS_writeBEFloat(fileHandle, serializeEffect->velocity.y)
-	     && PHYSFS_writeBEFloat(fileHandle, serializeEffect->velocity.z)
-
-	     // Write Vector3i types
-	     && PHYSFS_writeSBE32(fileHandle, serializeEffect->  rotation.x)
-	     && PHYSFS_writeSBE32(fileHandle, serializeEffect->  rotation.y)
-	     && PHYSFS_writeSBE32(fileHandle, serializeEffect->  rotation.z)
-	     && PHYSFS_writeSBE32(fileHandle, serializeEffect->  spin.x)
-	     && PHYSFS_writeSBE32(fileHandle, serializeEffect->  spin.y)
-	     && PHYSFS_writeSBE32(fileHandle, serializeEffect->  spin.z)
-
-	     && PHYSFS_writeUBE32(fileHandle, serializeEffect->  birthTime)
-	     && PHYSFS_writeUBE32(fileHandle, serializeEffect->  lastFrame)
-	     && PHYSFS_writeUBE16(fileHandle, serializeEffect->  frameDelay)
-	     && PHYSFS_writeUBE16(fileHandle, serializeEffect->  lifeSpan)
-	     && PHYSFS_writeUBE16(fileHandle, serializeEffect->  radius)
-	     && PHYSFS_writeUBE32(fileHandle, imdHashedNumber));
-}
-
-/** Read an EFFECT from the given file with endianness swapped correctly
- *  \param fileHandle a PhysicsFS file handle of the file to read from
- *  \param serializeEffect a pointer to an EFFECT to write the deserialized data from the file into
- *  \return true on success or false on the first encounterd error
- */
-static bool deserializeFXData(PHYSFS_file* fileHandle, EFFECT* serializeEffect)
-{
-	uint32_t imdHashedNumber;
-
-	if (!PHYSFS_readUBE8 (fileHandle, &serializeEffect->  control)
-	 || !PHYSFS_readUBE8 (fileHandle, &serializeEffect->  group)
-	 || !PHYSFS_readUBE8 (fileHandle, &serializeEffect->  type)
-	 || !PHYSFS_readUBE8 (fileHandle, &serializeEffect->  frameNumber)
-	 || !PHYSFS_readUBE16(fileHandle, &serializeEffect->  size)
-	 || !PHYSFS_readUBE8 (fileHandle, &serializeEffect->  baseScale)
-	 || !PHYSFS_readUBE8 (fileHandle, &serializeEffect->  specific)
-
-	 // Write Vector3f types
-	 || !PHYSFS_readBEFloat(fileHandle, &serializeEffect->position.x)
-	 || !PHYSFS_readBEFloat(fileHandle, &serializeEffect->position.y)
-	 || !PHYSFS_readBEFloat(fileHandle, &serializeEffect->position.z)
-	 || !PHYSFS_readBEFloat(fileHandle, &serializeEffect->velocity.x)
-	 || !PHYSFS_readBEFloat(fileHandle, &serializeEffect->velocity.y)
-	 || !PHYSFS_readBEFloat(fileHandle, &serializeEffect->velocity.z)
-
-	 // Write Vector3i types
-	 || !PHYSFS_readSBE32(fileHandle, &serializeEffect->  rotation.x)
-	 || !PHYSFS_readSBE32(fileHandle, &serializeEffect->  rotation.y)
-	 || !PHYSFS_readSBE32(fileHandle, &serializeEffect->  rotation.z)
-	 || !PHYSFS_readSBE32(fileHandle, &serializeEffect->  spin.x)
-	 || !PHYSFS_readSBE32(fileHandle, &serializeEffect->  spin.y)
-	 || !PHYSFS_readSBE32(fileHandle, &serializeEffect->  spin.z)
-	 || !PHYSFS_readUBE32(fileHandle, &serializeEffect->  birthTime)
-	 || !PHYSFS_readUBE32(fileHandle, &serializeEffect->  lastFrame)
-	 || !PHYSFS_readUBE16(fileHandle, &serializeEffect->  frameDelay)
-	 || !PHYSFS_readUBE16(fileHandle, &serializeEffect->  lifeSpan)
-	 || !PHYSFS_readUBE16(fileHandle, &serializeEffect->  radius)
-	 || !PHYSFS_readUBE32(fileHandle, &imdHashedNumber))
-	{
-		return false;
-	}
-
-	if (imdHashedNumber)
-	{
-		// Restore the pointer from the hashed ID
-		serializeEffect->imd = (iIMDShape*)resGetDataFromHash("IMD", imdHashedNumber);
-	}
-	else
-	{
-		serializeEffect->imd = NULL;
-	}
-
-	return true;
-}
+static const char FXData_tag_definition[] = "testdata/tagfile_savegame_effects.def";
+static const char FXData_file_identifier[] = "FXData";
 
 // -----------------------------------------------------------------------------------
 /* This will save out the effects data */
 bool writeFXData(const char* fileName)
 {
-	unsigned int i;
+	unsigned int count, i;
 
-	FX_SAVEHEADER fileHeader;
-
-	PHYSFS_file* fileHandle = openSaveFile(fileName);
-	if (!fileHandle)
+	if (!tagOpenWrite(FXData_tag_definition, fileName))
 	{
+		debug(LOG_ERROR, "readFXData: error while opening file (%s)", fileName);
 		return false;
 	}
 
-	fileHeader.aFileType[0] = 'f';
-	fileHeader.aFileType[1] = 'x';
-	fileHeader.aFileType[2] = 'd';
-	fileHeader.aFileType[3] = 'a';
-
-	fileHeader.version = CURRENT_VERSION_NUM;
+	tagWriteString(0x01, FXData_file_identifier);
 
 	// Count all the active EFFECTs
-	for (i=0, fileHeader.entries = 0; i < MAX_EFFECTS; ++i)
+	for (i = 0, count = 0; i < MAX_EFFECTS; ++i)
 	{
 		if(effectStatus[i] == ES_ACTIVE)
 		{
-			++fileHeader.entries;
+			++count;
 		}
 	}
 
-	if (PHYSFS_write(fileHandle, fileHeader.aFileType, sizeof(fileHeader.aFileType), 1) != 1
-	 || !PHYSFS_writeUBE32(fileHandle, fileHeader.version)
-	 || !PHYSFS_writeUBE32(fileHandle, fileHeader.entries))
-	{
-		debug(LOG_ERROR, "writeFXData: could not write to %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
-		PHYSFS_close(fileHandle);
-		return false;
-	}
-
+	// Enter effects group and dump all EFFECTs
+	tagWriteEnter(0x02, count);
 	for (i = 0; i < MAX_EFFECTS; ++i)
 	{
 		const EFFECT* curEffect = &asEffectsList[i];
@@ -2810,18 +2694,35 @@ bool writeFXData(const char* fileName)
 		if (effectStatus[i] != ES_ACTIVE)
 			continue;
 
-		// Write the current EFFECT to the file with endianness swapped correctly
-		// And abort on the first encountered error
-		if (!serializeFXData(fileHandle, curEffect))
-		{
-			debug(LOG_ERROR, "writeFXData: could not write to %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
-			PHYSFS_close(fileHandle);
-			return false;
-		}
+		tagWrite(0x01, curEffect->control);
+		tagWrite(0x02, curEffect->group);
+		tagWrite(0x03, curEffect->type);
+		tagWrite(0x04, curEffect->frameNumber);
+		tagWrite(0x05, curEffect->size);
+		tagWrite(0x06, curEffect->baseScale);
+		tagWrite(0x07, curEffect->specific);
+
+		tagWritefv   (0x08, 3, &curEffect->position.x);
+		tagWritefv   (0x09, 3, &curEffect->velocity.x);
+		tagWrites32v (0x0A, 3, &curEffect->rotation.x);
+		tagWrites32v (0x0B, 3, &curEffect->spin.x);
+
+		tagWrite(0x0C, curEffect->birthTime);
+		tagWrite(0x0D, curEffect->lastFrame);
+		tagWrite(0x0E, curEffect->frameDelay);
+		tagWrite(0x0F, curEffect->lifeSpan);
+		tagWrite(0x10, curEffect->radius);
+
+		tagWriteString(0x11, resGetNamefromData("IMD", curEffect->imd));
+#define tagWriteNext tagWriteSeparator
+		// Move on to reading the next effect group
+		tagWriteNext();
 	}
+	// Leave the effects group again...
+	tagWriteLeave(0x02);
 
 	// Close the file
-	PHYSFS_close(fileHandle);
+	tagClose();
 
 	// Everything is just fine!
 	return true;
@@ -2831,81 +2732,77 @@ bool writeFXData(const char* fileName)
 /* This will read in the effects data */
 bool readFXData(const char* fileName)
 {
-	FX_SAVEHEADER fileHeader;
-	unsigned int expectedFileSize, fileSize;
-	unsigned int i;
+	unsigned int count, i;
+	char strbuffer[25];
 
-	PHYSFS_file* fileHandle = openLoadFile(fileName, false);
-	if (!fileHandle)
+	if (!tagOpenRead(FXData_tag_definition, fileName))
 	{
-		// Failure to open the file is no failure to read it
-		return true;
-	}
-
-	// Read the header from the file
-	if (PHYSFS_read(fileHandle, fileHeader.aFileType, sizeof(fileHeader.aFileType), 1) != 1
-	 || !PHYSFS_readUBE32(fileHandle, &fileHeader.version)
-	 || !PHYSFS_readUBE32(fileHandle, &fileHeader.entries))
-	{
-		debug(LOG_ERROR, "readFXData: error while reading file: %s", PHYSFS_getLastError());
-		PHYSFS_close(fileHandle);
+		debug(LOG_ERROR, "readFXData: error while opening file (%s)", fileName);
 		return false;
 	}
 
-	// Check the header to see if we've been given a file of the right type
-	if (fileHeader.aFileType[0] != 'f'
-	 || fileHeader.aFileType[1] != 'x'
-	 || fileHeader.aFileType[2] != 'd'
-	 || fileHeader.aFileType[3] != 'a')
+	// Read & verify the format header identifier
+	tagReadString(0x01, sizeof(strbuffer), strbuffer);
+	if (strncmp(strbuffer, FXData_file_identifier, sizeof(strbuffer)) != 0)
 	{
-		debug(LOG_ERROR, "readFXData: Weird file type found? Has header letters - '%c' '%c' '%c' '%c' (should be 'f' 'x' 'd' 'a')",
-		      fileHeader.aFileType[0],
-		      fileHeader.aFileType[1],
-		      fileHeader.aFileType[2],
-		      fileHeader.aFileType[3]);
-
-		PHYSFS_close(fileHandle);
-		return false;
-	}
-
-	// Validate the filesize
-	expectedFileSize = sizeof(fileHeader.aFileType) + sizeof(fileHeader.version) + sizeof(fileHeader.entries) + fileHeader.entries * 74; // 74 = sizeof(EFFECT) without the padding
-	fileSize = PHYSFS_fileLength(fileHandle);
-	if (fileSize != expectedFileSize)
-	{
-		PHYSFS_close(fileHandle);
-		ASSERT(!"readFXData: unexpected filesize", "readFXData: unexpected filesize; should be %u, but is %u", expectedFileSize, fileSize);
-		abort();
+		debug(LOG_ERROR, "readFXData: Weird file type found (in file %s)? Has header string: %s", fileName, strbuffer);
 		return false;
 	}
 
 	// Clear out anything that's there already!
 	initEffectsSystem();
 
-	// Load all EFFECTs
-	for(i = 0; i < fileHeader.entries; ++i)
+	// Enter effects group and load all EFFECTs
+	count = tagReadEnter(0x02);
+	for(i = 0; i < count; ++i)
 	{
 		EFFECT* curEffect = &asEffectsList[i];
+                char imd_name[PATH_MAX];
 
 		ASSERT(i < MAX_EFFECTS, "readFXData: more effects in this file than our array can contain");
 
-		// Read the current EFFECT from the file with endianness swapped correctly
-		// And abort on the first encountered error
-		if (!deserializeFXData(fileHandle, curEffect))
+		curEffect->control      = tagRead(0x01);
+		curEffect->group        = tagRead(0x02);
+		curEffect->type         = tagRead(0x03);
+		curEffect->frameNumber  = tagRead(0x04);
+		curEffect->size         = tagRead(0x05);
+		curEffect->baseScale    = tagRead(0x06);
+		curEffect->specific     = tagRead(0x07);
+
+		tagReadfv   (0x08, 3, &curEffect->position.x);
+		tagReadfv   (0x09, 3, &curEffect->velocity.x);
+		tagReads32v (0x0A, 3, &curEffect->rotation.x);
+		tagReads32v (0x0B, 3, &curEffect->spin.x);
+
+		curEffect->birthTime    = tagRead(0x0C);
+		curEffect->lastFrame    = tagRead(0x0D);
+		curEffect->frameDelay   = tagRead(0x0E);
+		curEffect->lifeSpan     = tagRead(0x0F);
+		curEffect->radius       = tagRead(0x10);
+		tagReadString(0x11, sizeof(imd_name), imd_name);
+
+		if (imd_name[0] != '\0')
 		{
-			debug(LOG_ERROR, "readFXData: error while reading file: %s", PHYSFS_getLastError());
-			PHYSFS_close(fileHandle);
-			return false;
+			curEffect->imd = (iIMDShape*)resGetData("IMD", imd_name);
+		}
+		else
+		{
+			curEffect->imd = NULL;
 		}
 
 		effectStatus[i] = ES_ACTIVE;
+
+		// Move on to reading the next effect group
+		tagReadNext();
 	}
+	// Leave the effects group again...
+	tagReadLeave(0x02);
 
 	/* Ensure free effects kept up to date */
 	freeEffect = i;
 
 	// Close the file
-	PHYSFS_close(fileHandle);
+	tagClose();
 
 	/* Hopefully everything's just fine by now */
 	return true;
