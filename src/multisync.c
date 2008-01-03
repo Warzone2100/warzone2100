@@ -1182,7 +1182,7 @@ BOOL recvPing()
 	else
 	{
 		// Work out how long it took them to respond
-		ingame.PingTimes[sender] = (gameTime2 = PingSend[sender]) / 2;
+		ingame.PingTimes[sender] = (gameTime2 - PingSend[sender]) / 2;
 		
 		// Note that we have received it
 		PingSend[sender] = 0;
