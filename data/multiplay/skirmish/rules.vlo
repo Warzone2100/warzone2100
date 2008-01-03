@@ -25,7 +25,7 @@ vtolfac			STRUCTURESTAT		"A0VTolFactory1"
 // Technologies
 numCleanTech	int					5	// do x for clean	
 numBaseTech		int					20	// do x for base
-numDefTech		int					41	// do x for defensive
+numDefTech		int					42	// do x for defensive
 
 defTech[0]		RESEARCHSTAT	"R-Vehicle-Prop-Wheels"
 defTech[1]		RESEARCHSTAT	"R-Sys-Spade1Mk1"
@@ -56,22 +56,21 @@ defTech[23]		RESEARCHSTAT	"R-Struc-Factory-Module"
 defTech[24]		RESEARCHSTAT	"R-Struc-RepairFacility"
 defTech[25]		RESEARCHSTAT	"R-Sys-MobileRepairTurret01"
 defTech[26]		RESEARCHSTAT	"R-Vehicle-Engine01"
-defTech[27]		RESEARCHSTAT	"R-Vehicle-Prop-Tracks"
-defTech[28]		RESEARCHSTAT	"R-Cyborg-Wpn-Cannon"
-defTech[29]		RESEARCHSTAT	"R-Cyborg-Wpn-Flamer"
-defTech[30]		RESEARCHSTAT	"R-Wpn-MG3Mk1"
-defTech[31]		RESEARCHSTAT	"R-Wpn-Cannon1Mk1"
-defTech[32]		RESEARCHSTAT	"R-Wpn-Mortar01Lt"
-defTech[33]		RESEARCHSTAT	"R-Defense-Pillbox05"
-defTech[34]		RESEARCHSTAT	"R-Defense-TankTrap01"
-defTech[35]		RESEARCHSTAT	"R-Defense-WallTower02"
-defTech[36]		RESEARCHSTAT	"R-Sys-Sensor-Tower01"
-defTech[37]		RESEARCHSTAT	"R-Defense-Pillbox04"
-defTech[38]		RESEARCHSTAT	"R-Wpn-MG2Mk1"
-defTech[39]		RESEARCHSTAT	"R-Wpn-Rocket05-MiniPod"
-defTech[40]		RESEARCHSTAT	"R-Wpn-MG-Damage01"
-defTech[41]		RESEARCHSTAT	"R-Wpn-Rocket-Damage01"
-defTech[42]		RESEARCHSTAT	"R-Defense-WallTower01"
+defTech[27]		RESEARCHSTAT	"R-Cyborg-Wpn-Cannon"
+defTech[28]		RESEARCHSTAT	"R-Cyborg-Wpn-Flamer"
+defTech[29]		RESEARCHSTAT	"R-Wpn-MG3Mk1"
+defTech[30]		RESEARCHSTAT	"R-Wpn-Cannon1Mk1"
+defTech[31]		RESEARCHSTAT	"R-Wpn-Mortar01Lt"
+defTech[32]		RESEARCHSTAT	"R-Defense-Pillbox05"
+defTech[33]		RESEARCHSTAT	"R-Defense-TankTrap01"
+defTech[34]		RESEARCHSTAT	"R-Defense-WallTower02"
+defTech[35]		RESEARCHSTAT	"R-Sys-Sensor-Tower01"
+defTech[36]		RESEARCHSTAT	"R-Defense-Pillbox04"
+defTech[37]		RESEARCHSTAT	"R-Wpn-MG2Mk1"
+defTech[38]		RESEARCHSTAT	"R-Wpn-Rocket05-MiniPod"
+defTech[39]		RESEARCHSTAT	"R-Wpn-MG-Damage01"
+defTech[40]		RESEARCHSTAT	"R-Wpn-Rocket-Damage01"
+defTech[41]		RESEARCHSTAT	"R-Defense-WallTower01"
 
 
 /////////////////////////////////////////////////////////////////////////
