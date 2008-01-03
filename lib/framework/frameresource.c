@@ -640,6 +640,52 @@ BOOL resGetHashfromData(const char *pType, const void *pData, UDWORD *pHash)
 	return TRUE;
 }
 
+const char* resGetNamefromData(const char* type, const void *data)
+{
+	RES_TYPE	*psT;
+	RES_DATA	*psRes;
+	UDWORD   HashedType;
+
+	if (type == NULL || data == NULL)
+	{
+		return "";
+	}
+
+	// Find the correct type
+	HashedType = HashString(type);
+
+	// Find the resource table for the given type
+	for (psT = psResTypes; psT != NULL; psT = psT->psNext)
+	{
+		if (psT->HashedType == HashedType)
+		{
+			break;
+		}
+	}
+
+	if (psT == NULL)
+	{
+		ASSERT( FALSE, "resGetHashfromData: Unknown type: %x", HashedType );
+		return "";
+	}
+
+	// Find the resource in the resource table
+	for(psRes = psT->psRes; psRes; psRes = psRes->psNext)
+	{
+		if (psRes->pData == data)
+		{
+			break;
+		}
+	}
+
+	if (psRes == NULL)
+	{
+		ASSERT( FALSE, "resGetHashfromData:: couldn't find data for type %x\n", HashedType );
+		return "";
+	}
+
+	return psRes->aID;
+}
 
 /* Simply returns true if a resource is present */
 BOOL resPresent(const char *pType, const char *pID)

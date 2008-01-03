@@ -124,6 +124,14 @@ void resToLower(char *pStr);
 /** Return the HashedID string for a piece of data. */
 extern BOOL resGetHashfromData(const char *pType, const void *pData, UDWORD *pHash);
 
+/** Retrieve the resource ID string
+ *  \param type the resource type string (e.g. "IMG", "IMD", "TEXPAGE", "WAV", etc.)
+ *  \param data the resource pointer to retrieve the ID string for
+ *  \return the from the ID string (usually its filename without directory)
+ *  \note passing a NULL pointer for either \c type or \c data is valid (the result will be an empty string though)
+ */
+extern const char* resGetNamefromData(const char* type, const void *data);
+
 /** Return last imd resource */
 const char *GetLastResourceFilename(void) WZ_DECL_PURE;
 
