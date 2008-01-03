@@ -3860,16 +3860,13 @@ BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 		case DSO_FIRE_DESIGNATOR:
 			// don't actually set any secondary flags - the cmdDroid array is
 			// always used to determine which commander is the designator
-			if ((State & DSS_FIREDES_SET) == 0)
-			{
-				if (cmdDroidGetDesignator(psDroid->player) == psDroid)
-				{
-					cmdDroidClearDesignator(psDroid->player);
-				}
-			}
-			else
+			if (State & DSS_FIREDES_SET)
 			{
 				cmdDroidSetDesignator(psDroid);
+			}
+			else if (cmdDroidGetDesignator(psDroid->player) == psDroid)
+			{
+				cmdDroidClearDesignator(psDroid->player);
 			}
 			break;
 
