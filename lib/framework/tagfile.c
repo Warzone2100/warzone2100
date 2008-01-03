@@ -1160,7 +1160,7 @@ bool tagWriteBool(element_t tag, bool val)
 	return true;
 }
 
-bool tagWritefv(element_t tag, uint16_t count, float *vals)
+bool tagWritefv(element_t tag, uint16_t count, const float *vals)
 {
 	int i;
 
@@ -1179,7 +1179,7 @@ bool tagWritefv(element_t tag, uint16_t count, float *vals)
 	return true;
 }
 
-bool tagWrite8v(element_t tag, uint16_t count, uint8_t *vals)
+bool tagWrite8v(element_t tag, uint16_t count, const uint8_t *vals)
 {
 	int i;
 
@@ -1198,7 +1198,7 @@ bool tagWrite8v(element_t tag, uint16_t count, uint8_t *vals)
 	return true;
 }
 
-bool tagWrite16v(element_t tag, uint16_t count, uint16_t *vals)
+bool tagWrite16v(element_t tag, uint16_t count, const uint16_t *vals)
 {
 	int i;
 
@@ -1217,7 +1217,7 @@ bool tagWrite16v(element_t tag, uint16_t count, uint16_t *vals)
 	return true;
 }
 
-bool tagWrites32v(element_t tag, uint16_t count, int32_t *vals)
+bool tagWrites32v(element_t tag, uint16_t count, const int32_t *vals)
 {
 	int i;
 

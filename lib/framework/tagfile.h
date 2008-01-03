@@ -75,10 +75,10 @@ bool tagWriteSeparator();
 bool tagWrite(element_t tag, uint32_t val);
 bool tagWrites(element_t tag, int32_t val);
 bool tagWritef(element_t tag, float val);
-bool tagWritefv(element_t tag, uint16_t count, float *vals);
-bool tagWrite8v(element_t tag, uint16_t count, uint8_t *vals);
-bool tagWrite16v(element_t tag, uint16_t count, uint16_t *vals);
-bool tagWrites32v(element_t tag, uint16_t count, int32_t *vals);
+bool tagWritefv(element_t tag, uint16_t count, const float *vals);
+bool tagWrite8v(element_t tag, uint16_t count, const uint8_t *vals);
+bool tagWrite16v(element_t tag, uint16_t count, const uint16_t *vals);
+bool tagWrites32v(element_t tag, uint16_t count, const int32_t *vals);
 bool tagWriteString(element_t tag, const char *string);
 bool tagWriteBool(element_t tag, bool val);
 
