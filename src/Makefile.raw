@@ -8,7 +8,6 @@ SRC=ai.c \
 	advvis.c \
 	atmos.c \
 	bridge.c \
-	cdspan.c \
 	cheat.c \
 	cluster.c \
 	cmddroid.c \

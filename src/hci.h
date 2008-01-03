@@ -28,7 +28,6 @@
 #include "lib/ivis_common/pieclip.h"
 #include "lib/widget/widget.h"
 
-#include "cdspan.h"
 #include "message.h"
 
 // store the objects that are being used for the object bar

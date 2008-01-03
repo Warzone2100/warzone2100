@@ -64,7 +64,6 @@
 #include "lighting.h"
 #include "atmos.h"
 #include "lib/sound/cdaudio.h"
-#include "cdspan.h"
 #include "lib/netplay/netplay.h"
 #include "multiplay.h"
 #include "multigifts.h"
@@ -3390,7 +3389,7 @@ BOOL scrPlayBackgroundAudio(void)
 	}
 
 
-	cdspan_PlayInGameAudio(pText, (float)iVol / 100.f);
+	audio_PlayStream(pText, (float)iVol / 100.f, NULL, NULL);
 
 
 	return TRUE;

@@ -12,7 +12,7 @@ CLEANFILES = level_lexer.lex.c scriptvals_lexer.lex.c scriptvals_parser.tab.c sc
 bin_PROGRAMS = warzone2100
 noinst_HEADERS = action.h advvis.h ai.h aiexperience.h anim_id.h \
 	astar.h atmos.h basedef.h bridge.h bucket3d.h \
-	projectiledef.h cdspan.h cheat.h clparse.h cluster.h cmddroid.h \
+	projectiledef.h cheat.h clparse.h cluster.h cmddroid.h \
 	cmddroiddef.h combat.h component.h configuration.h console.h data.h \
 	deliverance.h design.h difficulty.h display.h display3d.h display3ddef.h \
 	displaydef.h drive.h droid.h droiddef.h e3demo.h edit3d.h effects.h \
@@ -32,7 +32,7 @@ noinst_HEADERS = action.h advvis.h ai.h aiexperience.h anim_id.h \
 
 warzone2100_SOURCES = scriptvals_parser.tab.c scriptvals_lexer.lex.c \
 	level_lexer.lex.c ai.c aiexperience.c astar.c action.c advvis.c atmos.c bridge.c \
-	cdspan.c cheat.c cluster.c cmddroid.c combat.c component.c console.c \
+	cheat.c cluster.c cmddroid.c combat.c component.c console.c \
 	data.c design.c difficulty.c display.c droid.c e3demo.c \
 	edit3d.c effects.c environ.c fpath.c feature.c formation.c frontend.c \
 	gateway.c gatewayroute.c gatewaysup.c geometry.c group.c hci.c init.c \

@@ -272,10 +272,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\cdspan.c"
-					>
-				</File>
-				<File
 					RelativePath="..\src\cheat.c"
 					>
 				</File>
@@ -724,14 +720,6 @@
 			</File>
 			<File
 				RelativePath="..\src\bulletdef.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\cdspan.h"
-				>
-			</File>
-			<File
-				RelativePath=".\chat_parser.tab.h"
 				>
 			</File>
 			<File

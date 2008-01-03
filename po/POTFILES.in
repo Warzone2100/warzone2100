@@ -158,7 +158,6 @@ src/intelmap.c
 src/cheat.c
 src/power.c
 src/keymap.c
-src/cdspan.c
 src/version.c
 src/warzoneconfig.c
 src/multijoin.c
