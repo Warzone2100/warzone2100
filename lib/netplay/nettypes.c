@@ -58,7 +58,13 @@ BOOL NETend(void)
 {
 	assert(NETgetPacketDir() != PACKET_INVALID);
 
-	// If the packet is not being sent or failed to compile
+	// If we are decoding just return TRUE
+	if (NETgetPacketDir() == PACKET_DECODE)
+	{
+		return TRUE;
+	}
+
+	// If the packet is invalid or failed to compile
 	if (NETgetPacketDir() != PACKET_ENCODE || !NetMsg.status)
 	{
 		return FALSE;
