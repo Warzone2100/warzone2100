@@ -51,10 +51,6 @@ public:
 // Implementation
 protected:
 	virtual ~CTDView();
-#ifdef _DEBUG
-	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
-#endif
 
 	// Generated message map functions
 protected:
@@ -63,10 +59,5 @@ protected:
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };
-
-#ifndef _DEBUG  // debug version in BTEditView.cpp
-inline CBTEditDoc* CTDView::GetDocument()
-   { return (CBTEditDoc*)m_pDocument; }
-#endif
 
 #endif // __INCLUDED_TDVIEW_H__

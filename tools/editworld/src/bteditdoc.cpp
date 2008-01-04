@@ -416,21 +416,6 @@ void CBTEditDoc::Serialize(CArchive& ar)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// CBTEditDoc diagnostics
-
-#ifdef _DEBUG
-void CBTEditDoc::AssertValid() const
-{
-	CDocument::AssertValid();
-}
-
-void CBTEditDoc::Dump(CDumpContext& dc) const
-{
-	CDocument::Dump(dc);
-}
-#endif //_DEBUG
-
-/////////////////////////////////////////////////////////////////////////////
 // CBTEditDoc commands
 
 void CBTEditDoc::OnMapSetmapsize() 

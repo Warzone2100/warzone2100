@@ -260,10 +260,6 @@ public:
 // Implementation
 public:
 	virtual ~CBTEditDoc();
-#ifdef _DEBUG
-	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
-#endif
 	//	CForceList *GetDeploymentList(void) { return m_Deployments; }
 
 	BOOL GetAutoHeight(void) { return m_AutoHeight; }

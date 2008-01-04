@@ -92,10 +92,6 @@ public:
 // Implementation
 protected:
 	virtual ~CTextureView();
-#ifdef _DEBUG
-	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
-#endif
 	void UpdateView(CBTEditDoc* pDoc,CDC* pDC);
 	void OnELEditItem(void);
 	void OnELAppendItem(void);
@@ -127,10 +123,5 @@ protected:
 };
 
 extern CTextureView *TextureView;
-
-#ifndef _DEBUG  // debug version in BTEditView.cpp
-inline CBTEditDoc* CTextureView::GetDocument()
-   { return (CBTEditDoc*)m_pDocument; }
-#endif
 
 #endif // __INCLUDED_TEXTUREVIEW_H__

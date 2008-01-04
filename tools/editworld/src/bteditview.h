@@ -90,10 +90,6 @@ public:
 // Implementation
 public:
 	virtual ~CBTEditView();
-#ifdef _DEBUG
-	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
-#endif
 
 protected:
 	void InitialiseData(void);
@@ -152,10 +148,5 @@ protected:
 };
 
 extern CBTEditView *BTEditView;
-
-#ifndef _DEBUG  // debug version in BTEditView.cpp
-inline CBTEditDoc* CBTEditView::GetDocument()
-   { return (CBTEditDoc*)m_pDocument; }
-#endif
 
 #endif // __INCLUDED_BTEDITVIEW_H__

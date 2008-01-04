@@ -142,26 +142,12 @@ void CWFView::OnDraw(CDC* pDC)
 	UpdateView(pDoc);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWFView diagnostics
-
-#ifdef _DEBUG
-void CWFView::AssertValid() const
-{
-	CScrollView::AssertValid();
-}
-
-void CWFView::Dump(CDumpContext& dc) const
-{
-	CScrollView::Dump(dc);
-}
-
-CBTEditDoc* CWFView::GetDocument() // non-debug version is inline
+CBTEditDoc* CWFView::GetDocument()
 {
 	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CBTEditDoc)));
+
 	return (CBTEditDoc*)m_pDocument;
 }
-#endif //_DEBUG
 
 
 void CWFView::InitialiseData(void)

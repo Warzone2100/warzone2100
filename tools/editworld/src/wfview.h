@@ -80,10 +80,6 @@ public:
 // Implementation
 protected:
 	virtual ~CWFView();
-#ifdef _DEBUG
-	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
-#endif
 
 	void InitialiseData(void);
 	void DeleteData(void);
@@ -148,10 +144,5 @@ protected:
 };
 
 extern CWFView* WFView;
-
-#ifndef _DEBUG  // debug version in BTEditView.cpp
-inline CBTEditDoc* CWFView::GetDocument()
-   { return (CBTEditDoc*)m_pDocument; }
-#endif
 
 #endif // __INCLUDED_WFVIEW_H__

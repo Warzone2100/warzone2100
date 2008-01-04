@@ -169,26 +169,11 @@ void CTextureView::OnDraw(CDC* pDC)
 	UpdateView(pDoc,pDC);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTextureView diagnostics
-
-#ifdef _DEBUG
-void CTextureView::AssertValid() const
-{
-	CScrollView::AssertValid();
-}
-
-void CTextureView::Dump(CDumpContext& dc) const
-{
-	CScrollView::Dump(dc);
-}
-
 CBTEditDoc* CTextureView::GetDocument() // non-debug version is inline
 {
 	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CBTEditDoc)));
 	return (CBTEditDoc*)m_pDocument;
 }
-#endif //_DEBUG
 
 //#define STATSINFOHEIGHT	112
 //#define DEPSTATSINFOHEIGHT 16

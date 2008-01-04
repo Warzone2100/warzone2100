@@ -70,26 +70,8 @@ void CTDView::OnDraw(CDC* pDC)
 	List.Create(LVS_LIST,ClientRect,this,1);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTDView diagnostics
-
-#ifdef _DEBUG
-void CTDView::AssertValid() const
-{
-	CView::AssertValid();
-}
-
-void CTDView::Dump(CDumpContext& dc) const
-{
-	CView::Dump(dc);
-}
-
-CBTEditDoc* CTDView::GetDocument() // non-debug version is inline
+CBTEditDoc* CTDView::GetDocument()
 {
 	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CBTEditDoc)));
 	return (CBTEditDoc*)m_pDocument;
 }
-#endif //_DEBUG
-
-/////////////////////////////////////////////////////////////////////////////
-// CTDView message handlers

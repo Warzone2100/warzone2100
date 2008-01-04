@@ -172,27 +172,12 @@ void CBTEditView::OnInitialUpdate()
 	InitialiseData();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CBTEditView diagnostics
-
-#ifdef _DEBUG
-void CBTEditView::AssertValid() const
-{
-	CScrollView::AssertValid();
-}
-
-void CBTEditView::Dump(CDumpContext& dc) const
-{
-	CScrollView::Dump(dc);
-}
-
-
-CBTEditDoc* CBTEditView::GetDocument() // non-debug version is inline
+CBTEditDoc* CBTEditView::GetDocument()
 {
 	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CBTEditDoc)));
+
 	return (CBTEditDoc*)m_pDocument;
 }
-#endif //_DEBUG
 
 
 void CBTEditView::InitialiseData(void)
