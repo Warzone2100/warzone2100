@@ -28,6 +28,7 @@
 // --------------------------------------------------------------------
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/tagfile.h"
 #include "lib/gamelib/gtime.h"
 #include "console.h"
 #include "scores.h"
@@ -517,86 +518,36 @@ void	fillUpStats( void )
 	infoBars[STAT_STR_BUILT].number = missionData.strBuilt;
 }
 
-/** Write the given MISSION_DATA to the given file with endianness swapped correctly
- *  \param fileHandle a PhysicsFS file handle of the file to write to
- *  \param serializeScore a pointer to the MISSION_DATA to write serialized into the file
- *  \return true on success or false on the first encounterd error
- */
-static bool serializeScoreData(PHYSFS_file* fileHandle, const MISSION_DATA* serializeScore)
-{
-	return (PHYSFS_writeUBE32(fileHandle, serializeScore->unitsBuilt)
-	     && PHYSFS_writeUBE32(fileHandle, serializeScore->unitsKilled)
-	     && PHYSFS_writeUBE32(fileHandle, serializeScore->unitsLost)
-	     && PHYSFS_writeUBE32(fileHandle, serializeScore->strBuilt)
-	     && PHYSFS_writeUBE32(fileHandle, serializeScore->strKilled)
-	     && PHYSFS_writeUBE32(fileHandle, serializeScore->strLost)
-	     && PHYSFS_writeUBE32(fileHandle, serializeScore->artefactsFound)
-	     && PHYSFS_writeUBE32(fileHandle, serializeScore->missionStarted)
-	     && PHYSFS_writeUBE32(fileHandle, serializeScore->shotsOnTarget)
-	     && PHYSFS_writeUBE32(fileHandle, serializeScore->shotsOffTarget)
-	     && PHYSFS_writeUBE32(fileHandle, serializeScore->babasMowedDown));
-}
-
-/** Read a MISSION_DATA from the given file with endianness swapped correctly
- *  \param fileHandle a PhysicsFS file handle of the file to read from
- *  \param serializeScore a pointer to a MISSION_DATA to write the deserialized data from the file into
- *  \return true on success or false on the first encounterd error
- */
-static bool deserializeScoreData(PHYSFS_file* fileHandle, MISSION_DATA* serializeScore)
-{
-	return (PHYSFS_readUBE32(fileHandle, &serializeScore->unitsBuilt)
-	     && PHYSFS_readUBE32(fileHandle, &serializeScore->unitsKilled)
-	     && PHYSFS_readUBE32(fileHandle, &serializeScore->unitsLost)
-	     && PHYSFS_readUBE32(fileHandle, &serializeScore->strBuilt)
-	     && PHYSFS_readUBE32(fileHandle, &serializeScore->strKilled)
-	     && PHYSFS_readUBE32(fileHandle, &serializeScore->strLost)
-	     && PHYSFS_readUBE32(fileHandle, &serializeScore->artefactsFound)
-	     && PHYSFS_readUBE32(fileHandle, &serializeScore->missionStarted)
-	     && PHYSFS_readUBE32(fileHandle, &serializeScore->shotsOnTarget)
-	     && PHYSFS_readUBE32(fileHandle, &serializeScore->shotsOffTarget)
-	     && PHYSFS_readUBE32(fileHandle, &serializeScore->babasMowedDown));
-}
+static const char ScoreData_tag_definition[] = "testdata/tagfile_savegame_score.def";
+static const char ScoreData_file_identifier[] = "ScoreData";
 
 // -----------------------------------------------------------------------------------
 /* This will save out the score data */
 bool writeScoreData(const char* fileName)
 {
-	SCORE_SAVEHEADER fileHeader;
-
-	PHYSFS_file* fileHandle = openSaveFile(fileName);
-	if (!fileHandle)
+	if (!tagOpenWrite(ScoreData_tag_definition, fileName))
 	{
+		debug(LOG_ERROR, "readFXData: error while opening file (%s)", fileName);
 		return false;
 	}
 
-	fileHeader.aFileType[0] = 's';
-	fileHeader.aFileType[1] = 'c';
-	fileHeader.aFileType[2] = 'd';
-	fileHeader.aFileType[3] = 'a';
+	tagWriteString(0x01, ScoreData_file_identifier);
 
-	fileHeader.version = CURRENT_VERSION_NUM;
-	fileHeader.entries = 1; // always for score save?
-
-	// Write out the current file header
-	if (PHYSFS_write(fileHandle, fileHeader.aFileType, sizeof(fileHeader.aFileType), 1) != 1
-	 || !PHYSFS_writeUBE32(fileHandle, fileHeader.version)
-	 || !PHYSFS_writeUBE32(fileHandle, fileHeader.entries))
-	{
-		debug(LOG_ERROR, "writeScoreData: could not write header to %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
-		PHYSFS_close(fileHandle);
-		return false;
-	}
-
-	// Write out the score data
-	if (!serializeScoreData(fileHandle, &missionData))
-	{
-		debug(LOG_ERROR, "writeScoreData: could not write to %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
-		PHYSFS_close(fileHandle);
-		return false;
-	}
+	// Dump the scores for the current player
+	tagWrite(0x02, missionData.unitsBuilt);
+	tagWrite(0x03, missionData.unitsKilled);
+	tagWrite(0x04, missionData.unitsLost);
+	tagWrite(0x05, missionData.strBuilt);
+	tagWrite(0x06, missionData.strKilled);
+	tagWrite(0x07, missionData.strLost);
+	tagWrite(0x08, missionData.artefactsFound);
+	tagWrite(0x09, missionData.missionStarted);
+	tagWrite(0x0A, missionData.shotsOnTarget);
+	tagWrite(0x0B, missionData.shotsOffTarget);
+	tagWrite(0x0C, missionData.babasMowedDown);
 
 	// Close the file
-	PHYSFS_close(fileHandle);
+	tagClose();
 
 	// Everything is just fine!
 	return true;
@@ -606,68 +557,38 @@ bool writeScoreData(const char* fileName)
 /* This will read in the score data */
 bool readScoreData(const char* fileName)
 {
-	SCORE_SAVEHEADER fileHeader;
+	char strbuffer[25];
 
-	unsigned int expectedFileSize, fileSize;
-
-	PHYSFS_file* fileHandle = openLoadFile(fileName, false);
-	if (!fileHandle)
+	if (!tagOpenRead(ScoreData_tag_definition, fileName))
 	{
-		// Failure to open the file is no failure to read it
-		return true;
-	}
-
-	// Read the header from the file
-	if (PHYSFS_read(fileHandle, fileHeader.aFileType, sizeof(fileHeader.aFileType), 1) != 1
-	 || !PHYSFS_readUBE32(fileHandle, &fileHeader.version)
-	 || !PHYSFS_readUBE32(fileHandle, &fileHeader.entries))
-	{
-		debug(LOG_ERROR, "readScoreData: error while reading header from file: %s", PHYSFS_getLastError());
-		PHYSFS_close(fileHandle);
+		debug(LOG_ERROR, "readFXData: error while opening file (%s)", fileName);
 		return false;
 	}
 
-	// Check the header to see if we've been given a file of the right type
-	if (fileHeader.aFileType[0] != 's'
-	 || fileHeader.aFileType[1] != 'c'
-	 || fileHeader.aFileType[2] != 'd'
-	 || fileHeader.aFileType[3] != 'a')
+	// Read & verify the format header identifier
+	tagReadString(0x01, sizeof(strbuffer), strbuffer);
+	if (strncmp(strbuffer, ScoreData_file_identifier, sizeof(strbuffer)) != 0)
 	{
-		debug(LOG_ERROR, "readScoreData: Weird file type found? Has header letters - '%c' '%c' '%c' '%c' (should be 's' 'c' 'd' 'a')",
-		      fileHeader.aFileType[0],
-		      fileHeader.aFileType[1],
-		      fileHeader.aFileType[2],
-		      fileHeader.aFileType[3]);
-
-		PHYSFS_close(fileHandle);
+		debug(LOG_ERROR, "readScoreData: Weird file type found (in file %s)? Has header string: %s", fileName, strbuffer);
 		return false;
 	}
 
-	// Validate the filesize
-	expectedFileSize = sizeof(fileHeader.aFileType) + sizeof(fileHeader.version) + sizeof(fileHeader.entries) + fileHeader.entries * sizeof(MISSION_DATA);
-	fileSize = PHYSFS_fileLength(fileHandle);
-	if (fileSize != expectedFileSize)
-	{
-		PHYSFS_close(fileHandle);
-		ASSERT(!"readScoreData: unexpected filesize", "readScoreData: unexpected filesize; should be %u, but is %u", expectedFileSize, fileSize);
-		abort();
-		return false;
-	}
-
-	// Write out the score data
-	if (!deserializeScoreData(fileHandle, &missionData))
-	{
-		debug(LOG_ERROR, "readScoreData: could not read from %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
-		PHYSFS_close(fileHandle);
-		return false;
-	}
+	// Retrieve the score data for the current player
+	missionData.unitsBuilt = tagRead(0x02);
+	missionData.unitsKilled = tagRead(0x03);
+	missionData.unitsLost = tagRead(0x04);
+	missionData.strBuilt = tagRead(0x05);
+	missionData.strKilled = tagRead(0x06);
+	missionData.strLost = tagRead(0x07);
+	missionData.artefactsFound = tagRead(0x08);
+	missionData.missionStarted = tagRead(0x09);
+	missionData.shotsOnTarget = tagRead(0x0A);
+	missionData.shotsOffTarget = tagRead(0x0B);
+	missionData.babasMowedDown = tagRead(0x0C);
 
 	// Close the file
-	PHYSFS_close(fileHandle);
+	tagClose();
 
 	/* Hopefully everything's just fine by now */
 	return true;
 }
-// -----------------------------------------------------------------------------------
-
-
