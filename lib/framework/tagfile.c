@@ -1271,22 +1271,26 @@ bool tagWriteString(element_t tag, const char *buffer)
 // unit test function
 void tagTest()
 {
-	const char *writename = "test.wzs";
-	const char *cformat = "WZTAGFILE1";
+	static const char virtual_definition[] = "tagdefinitions/tagfile_virtual.def";
+	static const char basic_definition[]   = "tagdefinitions/tagfile_basic.def";
+	static const char writename[] = "test.wzs";
+	static const char cformat[] = "WZTAGFILE1";
 	char format[300], *formatdup;
 	uint16_t droidpos[3];
 	uint8_t blob[BLOB_SIZE];
 	float fv[3];
 
+	// Set our testing blob to a bunch of 0x01 bytes
 	memset(blob, 1, BLOB_SIZE); // 1111111...
 
-	tagOpenWrite("tagdefinitions/tagfile_virtual.def", writename);
+	
+	tagOpenWrite(virtual_definition, writename);
 	tagWrites(0x05, 11);
 	tagWriteString(0x06, cformat);
 	ASSERT(!tagGetError(), "Error 1: %s", tagGetErrorString());
 	tagClose();
 
-	tagOpenRead("tagdefinitions/tagfile_virtual.def", "test.wzs");
+	tagOpenRead(virtual_definition, writename);
 	assert(tagRead(0x01) == 1);
 	assert(tagReads(0x02) == 2);
 	assert(tagReadf(0x03) == 3);
@@ -1299,7 +1303,7 @@ void tagTest()
 	ASSERT(!tagGetError(), "Error 2: %s", tagGetErrorString());
 	tagClose();
 
-	tagOpenWrite("tagdefinitions/tagfile_basic.def", writename);
+	tagOpenWrite(basic_definition, writename);
 	ASSERT(!tagGetError(), "Error 3: %s", tagGetErrorString());
 	tagWriteString(0x01, cformat);
 	tagWriteEnter(0x02, 1);
@@ -1328,7 +1332,7 @@ void tagTest()
 	memset(droidpos, 0, 6);
 	memset(fv, 0, 6);
 	memset(blob, 0, BLOB_SIZE);
-	tagOpenRead("tagdefinitions/tagfile_basic.def", writename);
+	tagOpenRead(basic_definition, writename);
 	tagReadString(0x01, 200, format);
 	assert(strncmp(format, cformat, 9) == 0);
 	tagReadEnter(0x02);
