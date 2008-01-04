@@ -24,47 +24,43 @@
 #include <string.h>
 #include <stddef.h>
 
-/** \def STR_L_FUNC_TRUNCATION_DETECT
  *  The "original" strlcpy() and strlcat() functions will return the amount
  *  of characters the destination string would be long, if no truncation has
  *  occurred.
- *  
- *  When STR_L_FUNC_TRUNCATION_DETECT is defined this behaviour will be
- *  simulated.
- *
- *  Right now though this behaviour isn't required, and as such it isn't
- *  compiled in by leaving STR_L_FUNC_TRUNCATION_DETECT undefined.
- */
 
-#ifdef STR_L_FUNC_TRUNCATION_DETECT
+/** A safer variant of \c strncpy and its completely unsafe variant \c strcpy.
+ *  This function will guarantee that (as long as the destination buffer is at
+ *  least 1 byte large), the destination buffer will hold a valid C string
+ *  (with zero termination).
+ *  \param dest a pointer to the destination buffer
+ *  \param src the source string to copy into the \c dest buffer
+ *  \param size the buffer size (in bytes) of buffer \c dest
+ */
 static inline size_t strlcpy(char* dest, const char* src, size_t size)
-#else
-static inline void strlcpy(char* dest, const char* src, size_t size)
-#endif
 {
 	strncpy(dest, src, size - 1);
 
 	// Guarantee to nul-terminate
 	dest[size - 1] = '\0';
 
-#ifdef STR_L_FUNC_TRUNCATION_DETECT
 	return strlen(src);
-#endif
 }
 
-#ifdef STR_L_FUNC_TRUNCATION_DETECT
+/** A safer variant of \c strncpy and its completely unsafe variant \c strcpy.
+ *  This function will guarantee that (as long as the destination buffer is at
+ *  least 1 byte large), the destination buffer will hold a valid C string
+ *  (with zero termination).
+ *  \param dest a pointer to the destination buffer
+ *  \param src the source string to concatenate to the \c dest buffer
+ *  \param size the buffer size (in bytes) of buffer \c dest
+ */
 static inline size_t strlcat(char* dest, const char* src, size_t size)
-#else
-static inline void strlcat(char* dest, const char* src, size_t size)
-#endif
 {
 	size_t dest_len = strlen(dest);
 
 	strncat(dest, src, size - dest_len - 1);
 
-#ifdef STR_L_FUNC_TRUNCATION_DETECT
 	return strlen(src) + dest_len;
-#endif
 }
 
 #endif // __INCLUDED_FRAMEWORK_STRLFUNCS_H__
