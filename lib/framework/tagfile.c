@@ -88,15 +88,13 @@ do { \
 #define CHECK_VALID_TAG(_tag) \
 do { \
 	assert(tag != TAG_SEPARATOR && tag != TAG_GROUP_END); \
-} while(FALSE)
+} while(0)
 
 
 // function to printf into errbuf the calling strack for nested groups on error
-#define PRNG_LEN 40 // low value to avoid stack overflow
 static void print_nested_groups(struct define *group)
 {
 	struct define *parent;
-	char groupdesc[PRNG_LEN];
 
 	if (group == NULL)
 	{
@@ -106,11 +104,10 @@ static void print_nested_groups(struct define *group)
 
 	if (parent != NULL)
 	{
-		snprintf(groupdesc, PRNG_LEN, "\nNested inside element %x", (unsigned int)parent->element);
-		strlcat(errbuf, groupdesc, sizeof(errbuf));
+		slcatprintf(errbuf, sizeof(errbuf), "\nNested inside element %x", (unsigned int)parent->element);
 		print_nested_groups(parent);
 	}
-	if (parent == NULL)
+	else
 	{
 		strlcat(errbuf, "\n", sizeof(errbuf));
 	}
