@@ -234,7 +234,6 @@
 		0246A2940BD3CCDC004D1C70 /* aud.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1A70BD3CCDB004D1C70 /* aud.c */; };
 		0246A2950BD3CCDC004D1C70 /* bridge.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1A90BD3CCDB004D1C70 /* bridge.c */; };
 		0246A2960BD3CCDC004D1C70 /* bucket3d.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1AB0BD3CCDB004D1C70 /* bucket3d.c */; };
-		0246A2970BD3CCDC004D1C70 /* cdspan.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1AF0BD3CCDB004D1C70 /* cdspan.c */; };
 		0246A2980BD3CCDC004D1C70 /* cheat.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1B10BD3CCDB004D1C70 /* cheat.c */; };
 		0246A2990BD3CCDC004D1C70 /* clparse.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1B30BD3CCDB004D1C70 /* clparse.c */; };
 		0246A29A0BD3CCDC004D1C70 /* cluster.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1B50BD3CCDB004D1C70 /* cluster.c */; };
@@ -1150,8 +1149,6 @@
 		0246A1AB0BD3CCDB004D1C70 /* bucket3d.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = bucket3d.c; path = ../src/bucket3d.c; sourceTree = SOURCE_ROOT; };
 		0246A1AC0BD3CCDB004D1C70 /* bucket3d.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = bucket3d.h; path = ../src/bucket3d.h; sourceTree = SOURCE_ROOT; };
 		0246A1AE0BD3CCDB004D1C70 /* projectiledef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = projectiledef.h; path = ../src/projectiledef.h; sourceTree = SOURCE_ROOT; };
-		0246A1AF0BD3CCDB004D1C70 /* cdspan.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = cdspan.c; path = ../src/cdspan.c; sourceTree = SOURCE_ROOT; };
-		0246A1B00BD3CCDB004D1C70 /* cdspan.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = cdspan.h; path = ../src/cdspan.h; sourceTree = SOURCE_ROOT; };
 		0246A1B10BD3CCDB004D1C70 /* cheat.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = cheat.c; path = ../src/cheat.c; sourceTree = SOURCE_ROOT; };
 		0246A1B20BD3CCDB004D1C70 /* cheat.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = cheat.h; path = ../src/cheat.h; sourceTree = SOURCE_ROOT; };
 		0246A1B30BD3CCDB004D1C70 /* clparse.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = clparse.c; path = ../src/clparse.c; sourceTree = SOURCE_ROOT; };
@@ -1641,7 +1638,7 @@
 		02EA22450CFE494000EA65A0 /* libfontconfig.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; name = libfontconfig.dylib; path = /Developer/SDKs/MacOSX10.4u.sdk/usr/X11R6/lib/libfontconfig.dylib; sourceTree = "<absolute>"; };
 		02F5CC560D1490620000A2D0 /* database.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = database.c; path = external/quesoglc/src/database.c; sourceTree = "<group>"; };
 		02F5CC6D0D1494AA0000A2D0 /* Popt.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Popt.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		02F5CC6E0D1494AA0000A2D0 /* Popt-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Popt-Info.plist"; sourceTree = "<group>"; };
+		02F5CC6E0D1494AA0000A2D0 /* Popt-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "Popt-Info.plist"; path = "Resources/Popt-Info.plist"; sourceTree = "<group>"; };
 		02F5CC800D1496580000A2D0 /* findme.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = findme.c; path = external/popt/findme.c; sourceTree = SOURCE_ROOT; };
 		02F5CC810D1496580000A2D0 /* findme.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = findme.h; path = external/popt/findme.h; sourceTree = SOURCE_ROOT; };
 		02F5CC820D1496580000A2D0 /* popt.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = popt.c; path = external/popt/popt.c; sourceTree = SOURCE_ROOT; };
@@ -1900,6 +1897,7 @@
 		02356D640BD3BB2600E9A019 = {
 			isa = PBXGroup;
 			children = (
+				023A1D4F0D2DAEC900EFEB37 /* Resources */,
 				02CDDCFD0D159BE700722688 /* Autorevision sources */,
 				02F5CC7F0D1495EB0000A2D0 /* Popt sources */,
 				0223BBE50CFE3F4B0056EF85 /* QuesoGLC sources */,
@@ -1914,18 +1912,6 @@
 				02DDA8600BD3C1AF0049AB60 /* Png sources */,
 				02DDA85F0BD3C1A60049AB60 /* Zlib sources */,
 				02356D760BD3BB3400E9A019 /* Products */,
-				0246A05C0BD3C975004D1C70 /* Warzone.icns */,
-				02356D780BD3BB3500E9A019 /* Warzone-Info.plist */,
-				02356D840BD3BB4100E9A019 /* Zlib-Info.plist */,
-				02356DC30BD3BBFC00E9A019 /* Png-Info.plist */,
-				02356E0A0BD3BCFE00E9A019 /* Ogg-Info.plist */,
-				02DDA7EF0BD3C03F0049AB60 /* Vorbis-Info.plist */,
-				02DDA8B20BD3C2F20049AB60 /* PhysFS-Info.plist */,
-				0246A3E20BD3CD81004D1C70 /* SDL-Info.plist */,
-				0246A3EE0BD3CD8A004D1C70 /* SDL_net-Info.plist */,
-				022B2F230BD55815002E64E3 /* Gettext-Info.plist */,
-				0223BBD20CFE3D5C0056EF85 /* QuesoGLC-Info.plist */,
-				02F5CC6E0D1494AA0000A2D0 /* Popt-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1947,6 +1933,25 @@
 				02CDDCF40D159BC300722688 /* Autorevision */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		023A1D4F0D2DAEC900EFEB37 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				0246A05C0BD3C975004D1C70 /* Warzone.icns */,
+				02356D780BD3BB3500E9A019 /* Warzone-Info.plist */,
+				02356D840BD3BB4100E9A019 /* Zlib-Info.plist */,
+				02356DC30BD3BBFC00E9A019 /* Png-Info.plist */,
+				02356E0A0BD3BCFE00E9A019 /* Ogg-Info.plist */,
+				02DDA7EF0BD3C03F0049AB60 /* Vorbis-Info.plist */,
+				02DDA8B20BD3C2F20049AB60 /* PhysFS-Info.plist */,
+				0246A3E20BD3CD81004D1C70 /* SDL-Info.plist */,
+				0246A3EE0BD3CD8A004D1C70 /* SDL_net-Info.plist */,
+				022B2F230BD55815002E64E3 /* Gettext-Info.plist */,
+				0223BBD20CFE3D5C0056EF85 /* QuesoGLC-Info.plist */,
+				02F5CC6E0D1494AA0000A2D0 /* Popt-Info.plist */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		0246A0980BD3CB97004D1C70 /* Warzone sources */ = {
@@ -2214,8 +2219,6 @@
 				0246A1AB0BD3CCDB004D1C70 /* bucket3d.c */,
 				0246A1AC0BD3CCDB004D1C70 /* bucket3d.h */,
 				0246A1AE0BD3CCDB004D1C70 /* projectiledef.h */,
-				0246A1AF0BD3CCDB004D1C70 /* cdspan.c */,
-				0246A1B00BD3CCDB004D1C70 /* cdspan.h */,
 				0246A1B10BD3CCDB004D1C70 /* cheat.c */,
 				0246A1B20BD3CCDB004D1C70 /* cheat.h */,
 				0246A1B30BD3CCDB004D1C70 /* clparse.c */,
@@ -3813,7 +3816,6 @@
 				0246A2940BD3CCDC004D1C70 /* aud.c in Sources */,
 				0246A2950BD3CCDC004D1C70 /* bridge.c in Sources */,
 				0246A2960BD3CCDC004D1C70 /* bucket3d.c in Sources */,
-				0246A2970BD3CCDC004D1C70 /* cdspan.c in Sources */,
 				0246A2980BD3CCDC004D1C70 /* cheat.c in Sources */,
 				0246A2990BD3CCDC004D1C70 /* clparse.c in Sources */,
 				0246A29A0BD3CCDC004D1C70 /* cluster.c in Sources */,
