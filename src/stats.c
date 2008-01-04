@@ -810,13 +810,13 @@ BOOL loadBodyStats(const char *pBodyData, UDWORD bufferSize)
 			(char*)&BodyName, (char*)&techLevel, (char*)&size, &psStats->buildPower,&psStats->buildPoints,
 			&psStats->weight, &psStats->body, (char*)&GfxFile, &psStats->systemPoints,
 			&psStats->weaponSlots, &psStats->powerOutput,
-			(int*)&psStats->armourValue[HIT_SIDE_FRONT][WC_KINETIC],
-			(int*)&psStats->armourValue[HIT_SIDE_FRONT][WC_HEAT],(int*)&psStats->armourValue[HIT_SIDE_REAR][WC_KINETIC],
-			(int*)&psStats->armourValue[HIT_SIDE_REAR][WC_HEAT],(int*)&psStats->armourValue[HIT_SIDE_LEFT][WC_KINETIC],
-			(int*)&psStats->armourValue[HIT_SIDE_LEFT][WC_HEAT],(int*)&psStats->armourValue[HIT_SIDE_RIGHT][WC_KINETIC],
-			(int*)&psStats->armourValue[HIT_SIDE_RIGHT][WC_HEAT],(int*)&psStats->armourValue[HIT_SIDE_TOP][WC_KINETIC],
-			(int*)&psStats->armourValue[HIT_SIDE_TOP][WC_HEAT],(int*)&psStats->armourValue[HIT_SIDE_BOTTOM][WC_KINETIC],
-			(int*)&psStats->armourValue[HIT_SIDE_BOTTOM][WC_HEAT], (char*)&flameIMD, &designable);//, &psStats->armourValue[WC_EXPLOSIVE],
+			(int*)&psStats->armourValue[HIT_SIDE_FRONT][WC_KINETIC], (int*)&psStats->armourValue[HIT_SIDE_FRONT][WC_HEAT],
+			(int*)&psStats->armourValue[HIT_SIDE_REAR][WC_KINETIC],  (int*)&psStats->armourValue[HIT_SIDE_REAR][WC_HEAT],
+			(int*)&psStats->armourValue[HIT_SIDE_LEFT][WC_KINETIC],  (int*)&psStats->armourValue[HIT_SIDE_LEFT][WC_HEAT],
+			(int*)&psStats->armourValue[HIT_SIDE_RIGHT][WC_KINETIC], (int*)&psStats->armourValue[HIT_SIDE_RIGHT][WC_HEAT],
+			(int*)&psStats->armourValue[HIT_SIDE_TOP][WC_KINETIC],   (int*)&psStats->armourValue[HIT_SIDE_TOP][WC_HEAT],
+			(int*)&psStats->armourValue[HIT_SIDE_BOTTOM][WC_KINETIC],(int*)&psStats->armourValue[HIT_SIDE_BOTTOM][WC_HEAT],
+			(char*)&flameIMD, &designable);//, &psStats->armourValue[WC_EXPLOSIVE],
 			//&psStats->armourValue[WC_MISC]);
 
 		//allocate storage for the name
