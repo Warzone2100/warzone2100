@@ -85,6 +85,12 @@ do { \
 	         (unsigned int)tag, _name, current->vr[0], current->vr[1]); \
 } while(0)
 
+#define CHECK_VALID_TAG(_tag) \
+do { \
+	assert(tag != TAG_SEPARATOR && tag != TAG_GROUP_END); \
+} while(FALSE)
+
+
 // function to printf into errbuf the calling strack for nested groups on error
 #define PRNG_LEN 40 // low value to avoid stack overflow
 static void print_nested_groups(struct define *group)
@@ -1000,7 +1006,7 @@ bool tagWriteNext()
 
 bool tagWriteEnter(element_t tag, uint16_t elements)
 {
-	assert(tag != TAG_SEPARATOR && tag != TAG_GROUP_END);
+	CHECK_VALID_TAG(tag);
 	if (tag_error || !write_tag(tag) || !scan_to(tag))
 	{
 		return false;
@@ -1021,7 +1027,7 @@ bool tagWriteEnter(element_t tag, uint16_t elements)
 
 bool tagWriteLeave(element_t tag)
 {
-	assert(tag != TAG_SEPARATOR && tag != TAG_GROUP_END);
+	CHECK_VALID_TAG(tag);
 	if (tag_error || !write_tag(TAG_GROUP_END) || !scan_to(TAG_GROUP_END))
 	{
 		return false;
@@ -1052,7 +1058,7 @@ bool tagWriteLeave(element_t tag)
 
 bool tagWrite(element_t tag, uint32_t val)
 {
-	assert(tag != TAG_SEPARATOR && tag != TAG_GROUP_END);
+	CHECK_VALID_TAG(tag);
 	if (!scan_to(tag))
 	{
 		return false;
@@ -1086,7 +1092,7 @@ bool tagWrite(element_t tag, uint32_t val)
 
 bool tagWrites(element_t tag, int32_t val)
 {
-	assert(tag != TAG_SEPARATOR && tag != TAG_GROUP_END);
+	CHECK_VALID_TAG(tag);
 	if (!scan_to(tag))
 	{
 		return false;
@@ -1120,7 +1126,7 @@ bool tagWrites(element_t tag, int32_t val)
 
 bool tagWritef(element_t tag, float val)
 {
-	assert(tag != TAG_SEPARATOR && tag != TAG_GROUP_END);
+	CHECK_VALID_TAG(tag);
 	if (!scan_to(tag))
 	{
 		return false;
@@ -1141,7 +1147,7 @@ bool tagWritef(element_t tag, float val)
 
 bool tagWriteBool(element_t tag, bool val)
 {
-	assert(tag != TAG_SEPARATOR && tag != TAG_GROUP_END);
+	CHECK_VALID_TAG(tag);
 	if (!scan_to(tag))
 	{
 		return false;
@@ -1164,7 +1170,7 @@ bool tagWritefv(element_t tag, uint16_t count, const float *vals)
 {
 	int i;
 
-	assert(tag != TAG_SEPARATOR && tag != TAG_GROUP_END);
+	CHECK_VALID_TAG(tag);
 	if (!scan_to(tag) || !write_tag(tag))
 	{
 		return false;
@@ -1183,7 +1189,7 @@ bool tagWrite8v(element_t tag, uint16_t count, const uint8_t *vals)
 {
 	int i;
 
-	assert(tag != TAG_SEPARATOR && tag != TAG_GROUP_END);
+	CHECK_VALID_TAG(tag);
 	if (!scan_to(tag) || !write_tag(tag))
 	{
 		return false;
@@ -1202,7 +1208,7 @@ bool tagWrite16v(element_t tag, uint16_t count, const uint16_t *vals)
 {
 	int i;
 
-	assert(tag != TAG_SEPARATOR && tag != TAG_GROUP_END);
+	CHECK_VALID_TAG(tag);
 	if (!scan_to(tag) || !write_tag(tag))
 	{
 		return false;
@@ -1221,7 +1227,7 @@ bool tagWrites32v(element_t tag, uint16_t count, const int32_t *vals)
 {
 	int i;
 
-	assert(tag != TAG_SEPARATOR && tag != TAG_GROUP_END);
+	CHECK_VALID_TAG(tag);
 	if (!scan_to(tag) || !write_tag(tag))
 	{
 		return false;
@@ -1240,7 +1246,7 @@ bool tagWriteString(element_t tag, const char *buffer)
 {
 	size_t size;
 
-	assert(tag != TAG_SEPARATOR && tag != TAG_GROUP_END);
+	CHECK_VALID_TAG(tag);
 	if (!scan_to(tag) || !write_tag(tag))
 	{
 		return false;
