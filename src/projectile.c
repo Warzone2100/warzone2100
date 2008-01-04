@@ -280,7 +280,6 @@ static void proj_UpdateKills(PROJECTILE *psObj, float experienceInc)
 	// If percentDamage is negative then the target was killed
 	if (bMultiPlayer && experienceInc < 0.0f)
 	{
-		sendDestroyExtra(psObj->psDest,psObj->psSource);
 		updateMultiStatsKills(psObj->psDest,psObj->psSource->player);
 	}
 

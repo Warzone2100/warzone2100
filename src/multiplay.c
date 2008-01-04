@@ -637,9 +637,6 @@ BOOL recvMessage(void)
 			case NET_DROIDDEST:					// droid destroy
 				recvDestroyDroid();
 				break;
-			case NET_DESTROYXTRA:
-				recvDestroyExtra(&msg);			// a generic destroy, complete wiht killer info.
-				break;
 			case NET_DROIDMOVE:					// move a droid to x,y command.
 				recvDroidMove();
 				break;
@@ -1435,94 +1432,6 @@ BOOL recvDestroyFeature(NETMSG *pMsg)
 	bMultiPlayer = TRUE;
 
 	return TRUE;
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-// a generic destroy function, with killer info included.
-BOOL sendDestroyExtra(BASE_OBJECT *psKilled,BASE_OBJECT *psKiller)
-{
-	NETMSG		m;
-	UDWORD		n=0;
-
-/*	if(psKilled != NULL)
-	{
-		NetAdd(m,4,psKilled->id);	// id of thing killed
-	}
-	else
-	{
-		NetAdd(m,4,n);
-	}
-*/
-	if(psKiller != NULL)
-	{
-		NetAdd(m,0,psKiller->id);	// id of killer.
-	}
-	else
-	{
-		NetAdd(m,0,n);
-	}
-
-
-	m.type = NET_DESTROYXTRA;
-	m.size = 4;
-
-	return 	NETbcast(&m,FALSE);
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-BOOL recvDestroyExtra(NETMSG *pMsg)
-{
-//	BASE_OBJECT	*psKilled;
-//	UDWORD		 killedId;
-
-	BASE_OBJECT	*psSrc;
-	UDWORD		srcId;
-
-	DROID		*psKiller;
-/*
-	NetGet(pMsg,0,killedId);					// remove as normal
-	if(killedId !=0)
-	{
-		psKilled = IdToPointer(killedId,ANYPLAYER);
-		if(psKilled)
-		{
-			switch(psKilled->type)
-			{
-			case OBJ_DROID:
-				recvDestroyDroid(pMsg);
-				break;
-			case OBJ_STRUCTURE:
-				recvDestroyStructure(pMsg);
-				break;
-			case OBJ_FEATURE:
-				recvDestroyFeature(pMsg);
-				break;
-			}
-		}
-	}
-*/
-	NetGet(pMsg,0,srcId);
-	if(srcId != 0)
-	{
-		psSrc = IdToPointer(srcId,ANYPLAYER);
-
-		if(psSrc && (psSrc->type == OBJ_DROID) )		// process extra bits.
-		{
-			psKiller = 	(DROID*)psSrc;
-#if 0
-			// FIXME: this code *and* the code that sends this message needs to be modified
-			//        in such a way that they update psKiller->experience with the percentage
-			//        of damage dealt rather than just a kill count.
-			if(psKiller)
-			{
-				psKiller->experience++;
-			}
-			cmdDroidUpdateKills(psKiller);
-#endif
-			return TRUE;
-		}
-	}
-	return FALSE;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
