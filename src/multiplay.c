@@ -111,7 +111,7 @@ extern PLAYER_RESEARCH*		asPlayerResList[MAX_PLAYERS];
 
 static BOOL recvBeacon(NETMSG *pMsg);
 static BOOL recvDestroyTemplate();
-static BOOL recvResearch(NETMSG *pMsg);
+static BOOL recvResearch();
 
 // ////////////////////////////////////////////////////////////////////////////
 // temporarily disable multiplayer mode.
@@ -724,7 +724,7 @@ BOOL recvMessage(void)
 			recvDemolishFinished();
 			break;
 		case NET_RESEARCH:					// some research has been done.
-			recvResearch(&msg);
+			recvResearch();
 			break;
 		case NET_LEAVING:					// player leaving nicely
 			NetGet((&msg),0,dp);
@@ -778,75 +778,84 @@ BOOL recvMessage(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Research Stuff. Nat games only send the result of research procedures.
-BOOL SendResearch(UBYTE player,UDWORD index)
+BOOL SendResearch(uint8_t player, uint32_t index)
 {
-	NETMSG m;
 	UBYTE i;
 	PLAYER_RESEARCH *pPlayerRes;
 
+	// Send the player that is researching the topic and the topic itself
+	NETbeginEncode(NET_RESEARCH, NET_ALL_PLAYERS);
+		NETuint8_t(&player);
+		NETuint32_t(&index);
+	NETend();
 
-	NetAdd(m,0,player);						// player researching
-	NetAdd(m,1,index);								// reference into topic.
-
-	m.size =5;
-	m.type = NET_RESEARCH;
-
+	/*
+	 * Since we are called when the state of research changes (completed,
+	 * stopped &c) we also need to update our onw local copy of what our allies
+	 * are doing/have done.
+	 */
 	if (game.type == SKIRMISH)
-	{
-		pPlayerRes = asPlayerResList[player];
-		pPlayerRes += index;
-		for(i=0;i<MAX_PLAYERS;i++)
+	{		
+		for (i = 0; i < MAX_PLAYERS; i++)
 		{
-			if(alliances[i][player] == ALLIANCE_FORMED)
+			if (alliances[i][player] == ALLIANCE_FORMED)
 			{
-				pPlayerRes = asPlayerResList[i];
-				pPlayerRes += index;
-				if(IsResearchCompleted(pPlayerRes)==FALSE)
+				pPlayerRes = asPlayerResList[i] + index;
+				
+				// If we have it but they don't
+				if (!IsResearchCompleted(pPlayerRes))
 				{
-					MakeResearchCompleted(pPlayerRes);		// do the research for that player
-					researchResult(index, i,FALSE,NULL);
+					// Do the research for that player
+					MakeResearchCompleted(pPlayerRes);
+					researchResult(index, i, FALSE, NULL);
 				}
 			}
 		}
 	}
 
-	return( NETbcast(&m,FALSE) );
+	return TRUE;
 }
 
 // recv a research topic that is now complete.
-static BOOL recvResearch(NETMSG *m)
+static BOOL recvResearch()
 {
-	UBYTE			player,i;
-	UDWORD			index;
-	PLAYER_RESEARCH *pPlayerRes;
+	uint8_t			player;
+	uint32_t		index;
+	int				i;
+	PLAYER_RESEARCH	*pPlayerRes;
 	RESEARCH		*pResearch;
 
-	player = m->body[0];
-	NetGet(m,1,index);								// get the index
+	NETbeginDecode();
+		NETuint8_t(&player);
+		NETuint32_t(&index);
+	NETend();
 
-	pPlayerRes = asPlayerResList[player];
-	pPlayerRes += index;
-	if(IsResearchCompleted(pPlayerRes)==FALSE)
+	pPlayerRes = asPlayerResList[player] + index;
+	
+	// If they have completed the research
+	if (IsResearchCompleted(pPlayerRes))
 	{
 		MakeResearchCompleted(pPlayerRes);
 		researchResult(index, player, FALSE, NULL);
 
-		//take off the power if available.
+		// Take off the power if available
 		pResearch = asResearch + index;
 		usePower(player, pResearch->researchPower);
 	}
 
+	// Update allies research accordingly
 	if (game.type == SKIRMISH)
 	{
-		for(i=0;i<MAX_PLAYERS;i++)
+		for (i = 0; i < MAX_PLAYERS; i++)
 		{
-			if(alliances[i][player] == ALLIANCE_FORMED)
+			if (alliances[i][player] == ALLIANCE_FORMED)
 			{
-				pPlayerRes = asPlayerResList[i];
-				pPlayerRes += index;
-				if(IsResearchCompleted(pPlayerRes)==FALSE)
+				pPlayerRes = asPlayerResList[i] + index;
+				
+				if (!IsResearchCompleted(pPlayerRes))
 				{
-					MakeResearchCompleted(pPlayerRes);		// do the research for that player
+					// Do the research for that player
+					MakeResearchCompleted(pPlayerRes);
 					researchResult(index, i, FALSE, NULL);
 				}
 			}
