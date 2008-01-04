@@ -11406,25 +11406,26 @@ BOOL writeStructLimitsFile(char *pFileName)
 	return FALSE;
 }
 
+static const char FireSupport_tag_definition[] = "testdata/tagfile_savegame_firesupport.def";
+static const char FireSupport_file_identifier[] = "FIRESUPPORT";
 
 /*!
  * Load the current fire-support designated commanders (the one who has fire-support enabled)
  */
 BOOL readFiresupportDesignators(char *pFileName)
 {
-	const char *definition = "testdata/tagfile_savegame_firesupport.def";
 	unsigned int numPlayers, player;
 	char formatIdentifier[12] = "";
 
-	if (!tagOpenRead(definition, pFileName))
+	if (!tagOpenRead(FireSupport_tag_definition, pFileName))
 	{
 		debug(LOG_ERROR, "readFiresupportDesignators: Failed to open savegame %s", pFileName);
 		return FALSE;
 	}
-	debug(LOG_MAP, "Reading tagged savegame %s with definition %s:", pFileName, definition);
+	debug(LOG_MAP, "Reading tagged savegame %s with definition %s:", pFileName, FireSupport_tag_definition);
 	
 	tagReadString(0x01, 12, formatIdentifier);
-	if (strcmp(formatIdentifier, "FIRESUPPORT") != 0)
+	if (strcmp(formatIdentifier, FireSupport_file_identifier) != 0)
 	{
 		debug(LOG_ERROR, "readFiresupportDesignators: Incompatble %s, 'FIRESUPPORT' expected", pFileName);
 		return FALSE;
@@ -11453,17 +11454,16 @@ BOOL readFiresupportDesignators(char *pFileName)
  */
 BOOL writeFiresupportDesignators(char *pFileName)
 {
-	const char *definition = "testdata/tagfile_savegame_firesupport.def";
 	unsigned int player;
 
-	if (!tagOpenWrite(definition, pFileName))
+	if (!tagOpenWrite(FireSupport_tag_definition, pFileName))
 	{
 		debug(LOG_ERROR, "writeFiresupportDesignators: Failed to create savegame %s", pFileName);
 		return FALSE;
 	}
-	debug(LOG_MAP, "Creating tagged savegame %s with definition %s:", pFileName, definition);
+	debug(LOG_MAP, "Creating tagged savegame %s with definition %s:", pFileName, FireSupport_tag_definition);
 	
-	tagWriteString(0x01, "FIRESUPPORT");
+	tagWriteString(0x01, FireSupport_file_identifier);
 	tagWriteEnter(0x02, MAX_PLAYERS);
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
