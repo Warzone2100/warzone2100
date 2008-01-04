@@ -2021,10 +2021,6 @@ void frontendMultiMessages(void)
 		
 		switch(msg.type)
 		{
-		case AUDIOMSG:
-			recvAudioMsg(&msg);
-			break;
-
 		case NET_REQUESTMAP:
 			recvMapFileRequested(&msg);
 			break;
