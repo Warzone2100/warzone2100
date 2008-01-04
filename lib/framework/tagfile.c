@@ -30,19 +30,19 @@ enum internal_types
 // A definition group
 struct define
 {
-	int16_t vm;
-	uint8_t element;
-	char vr[2];
-	struct define *parent;	// parent group
-	struct define *group;	// child group
-	struct define *next;	// sibling group
-	struct define *current; // where in the sibling list we currently are
-	bool defaultval;
+	int16_t vm; //! value multiple
+	uint8_t element; //! tag number
+	char vr[2]; //! value representation (type)
+	struct define *parent;	//! parent group
+	struct define *group;	//! child group
+	struct define *next;	//! sibling group
+	struct define *current; //! where in the sibling list we currently are
+	bool defaultval; //! default value
 	union {
 		uint32_t uint32_tval;
 		int32_t int32_tval;
 		float floatval;
-	} val;
+	} val; //! actual data
 	// debugging temp variables below
 	int countItems; // check group items against number of separators given
 	int expectedItems; // group items expected in current group
@@ -326,7 +326,7 @@ static void remove_defines(struct define *df)
 	{
 		struct define *del = iter;
 
-		if (iter->group)
+		if (iter->group) // Also remove subgroups
 		{
 			remove_defines(iter->group);
 		}
@@ -395,13 +395,13 @@ static bool scanforward(element_t tag)
 		return false;
 	}
 
-	// Skip in this group until we have reached destination tag
+	// Skip in this group-definition until we have reached destination tag
 	if (!scan_to(tag) || PHYSFS_eof(handle))
 	{
 		return false; // error, or try default value
 	}
 	readsize = PHYSFS_read(handle, &read_tag, 1, 1);
-	while (readsize == 1)
+	while (readsize == 1) // Read from file till we've reached the destination
 	{
 		if (read_tag == tag)
 		{
