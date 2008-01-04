@@ -628,9 +628,6 @@ BOOL recvMessage(void)
 		{
 			switch(msg.type)
 			{
-			case AUDIOMSG:
-				recvAudioMsg(&msg);
-				break;
 			case NET_DROID:						// new droid of known type
 				recvDroid();
 				break;
@@ -1526,13 +1523,6 @@ BOOL recvDestroyExtra(NETMSG *pMsg)
 		}
 	}
 	return FALSE;
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-// Network Audio packet processor.
-BOOL recvAudioMsg(NETMSG *pMsg)
-{
-	return TRUE;
 }
 
 // ////////////////////////////////////////////////////////////////////////////

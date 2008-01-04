@@ -73,7 +73,6 @@ typedef struct {
 	BOOL		status;			// If the packet compiled or not (this is _not_ sent!)
 } NETMSG;
 
-#define		AUDIOMSG		255	// an audio packet (special message);
 #define		FILEMSG			254	// a file packet
 
 // ////////////////////////////////////////////////////////////////////////
