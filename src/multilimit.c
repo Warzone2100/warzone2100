@@ -317,88 +317,73 @@ void runLimitScreen(void)
 // ////////////////////////////////////////////////////////////////////////////
 void createLimitSet(void)
 {
-	UDWORD	i,numchanges;
-	UBYTE	*pChanges;
-	UBYTE	*pEntry;
+	UDWORD				i, numchanges = 0;
+	MULTISTRUCTLIMITS	*pEntry;
 
-	if(ingame.numStructureLimits)									// free the old set if required.
+	// Free the old set if required
+	if (ingame.numStructureLimits)
 	{
 		ingame.numStructureLimits = 0;
 		free(ingame.pStructureLimits);
 		ingame.pStructureLimits = NULL;
 	}
 
-	numchanges =0;													// count number of changes
-	for(i=0;i<numStructureStats;i++)
+	// Count the number of changes
+	for (i = 0; i < numStructureStats; i++)
 	{
-		if(asStructLimits[0][i].limit != LOTS_OF)
+		if (asStructLimits[0][i].limit != LOTS_OF)
 		{
 			numchanges++;
 		}
 	}
 
-	//close your eyes now
-	pChanges = (UBYTE*)malloc(numchanges*(sizeof(UDWORD)+sizeof(UBYTE)));			// allocate some mem for this.
-	pEntry = pChanges;
+	// Allocate some memory for the changes
+	pEntry = malloc(numchanges * sizeof(MULTISTRUCTLIMITS));
 
-	for(i=0;i<numStructureStats;i++)								// prepare chunk.
+	// Prepare chunk
+	for (i = 0; i < numStructureStats; i++)
 	{
-		if(asStructLimits[0][i].limit != LOTS_OF)
+		if (asStructLimits[0][i].limit != LOTS_OF)
 		{
-			memcpy(pEntry, &i,sizeof(UDWORD));
-			pEntry += sizeof(UDWORD);
-			memcpy(pEntry, &asStructLimits[0][i].limit,sizeof(UBYTE));
-			pEntry += sizeof(UBYTE);
+			pEntry[i].id	= i;
+			pEntry[i].limit	= asStructLimits[0][i].limit;
 		}
 	}
-	// you can open them again.
 
 	ingame.numStructureLimits	= numchanges;
-	ingame.pStructureLimits		= pChanges;
+	ingame.pStructureLimits		= pEntry;
 
 	sendOptions(0,0);
-
-	return;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 void applyLimitSet(void)
 {
-	UBYTE *pEntry;
-	UDWORD i;
-	UBYTE val;
-	UDWORD id;
+	MULTISTRUCTLIMITS *pEntry = ingame.pStructureLimits;
+	int i, j;
 
-	if(ingame.numStructureLimits == 0)
+	if (ingame.numStructureLimits == 0)
 	{
 		return;
 	}
 
-	// get the limits
-	// decode and apply
-	pEntry = ingame.pStructureLimits;
-	for(i=0;i<ingame.numStructureLimits;i++)								// prepare chunk.
+	// Get the limits and decode
+	for (i = 0;i < ingame.numStructureLimits; i++)
 	{
-		memcpy(&id,pEntry,sizeof(UDWORD));
-		pEntry += sizeof(UDWORD);
-		memcpy(&val,pEntry,sizeof(UBYTE));
-		pEntry += sizeof(UBYTE);
-
-		if(id <numStructureStats)
+		UBYTE id = pEntry[i].id;
+		
+		// So long as the ID is valid
+		if (id < numStructureStats)
 		{
-			asStructLimits[0][id].limit=val;
-			asStructLimits[1][id].limit=val;
-			asStructLimits[2][id].limit=val;
-			asStructLimits[3][id].limit=val;
-			asStructLimits[4][id].limit=val;
-			asStructLimits[5][id].limit=val;
-			asStructLimits[6][id].limit=val;
-			asStructLimits[7][id].limit=val;
+			for (j = 0; j < MAX_PLAYERS; j++)
+			{
+				asStructLimits[j][id].limit = pEntry[i].limit;
+			}
 		}
 	}
 
-	// free.
-	if(	ingame.numStructureLimits )
+	// Free
+	if (ingame.numStructureLimits)
 	{
 		free(ingame.pStructureLimits);
 		ingame.numStructureLimits = 0;

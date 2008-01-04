@@ -110,17 +110,23 @@ typedef struct {
 	uint8_t		skDiff[MAX_PLAYERS];			// skirmish game difficulty settings.
 } MULTIPLAYERGAME, *LPMULTIPLAYERGAME;
 
+typedef struct
+{
+	UBYTE		id;
+	UBYTE		limit;
+} MULTISTRUCTLIMITS;
+
 // info used inside games.
 typedef struct {
-	UDWORD		PingTimes[MAX_PLAYERS];				// store for pings.
-	BOOL		localOptionsReceived;				// used to show if we have game options yet..
-	BOOL		localJoiningInProgress;				// used before we know our player number.
-	BOOL		JoiningInProgress[MAX_PLAYERS];
-	BOOL		bHostSetup;
-	UDWORD		startTime;
-	UDWORD		modem;								// modem to use.
-	UDWORD		numStructureLimits;					// number of limits
-	UBYTE		*pStructureLimits;					// limits chunk.
+	UDWORD				PingTimes[MAX_PLAYERS];				// store for pings.
+	BOOL				localOptionsReceived;				// used to show if we have game options yet..
+	BOOL				localJoiningInProgress;				// used before we know our player number.
+	BOOL				JoiningInProgress[MAX_PLAYERS];
+	BOOL				bHostSetup;
+	UDWORD				startTime;
+	UDWORD				modem;								// modem to use.
+	UDWORD				numStructureLimits;					// number of limits
+	MULTISTRUCTLIMITS	*pStructureLimits;					// limits chunk.
 
 	UDWORD		skScores[MAX_PLAYERS][2];			// score+kills for local skirmish players.
 

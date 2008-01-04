@@ -63,49 +63,79 @@ extern char	buildTime[8];
 
 // send complete game info set!
 // dpid == 0 for no new players.
-void sendOptions(UDWORD dest, UDWORD play)
+void sendOptions(uint32_t dest, uint32_t play)
 {
-	NETMSG m;
-
-	NetAdd(m,0,game);
-	m.size = sizeof(game);
-
-	NetAdd(m,m.size,player2dpid);			//add dpid array
-	m.size += sizeof(player2dpid);
-
-	NetAdd(m,m.size,ingame.JoiningInProgress);
-	m.size += sizeof(ingame.JoiningInProgress);
-
-	NetAdd(m,m.size,dest);
-	m.size += sizeof(dest);
-
-	NetAdd(m,m.size,play);
-	m.size += sizeof(play);
-
-	NetAdd(m,m.size,PlayerColour);
-	m.size += sizeof(PlayerColour);
-
-	NetAdd(m,m.size,alliances);
-	m.size += sizeof(alliances);
-
-	NetAdd(m,m.size,playerTeamGUI);
-	m.size += sizeof(playerTeamGUI);
-
-	NetAdd(m,m.size,ingame.numStructureLimits);
-	m.size += sizeof(ingame.numStructureLimits);
-	if(ingame.numStructureLimits)
+	int i, j;
+	
+	NETbeginEncode(NET_OPTIONS, NET_ALL_PLAYERS);
+	
+	// First send information about the game
+	NETuint8_t(&game.type);
+	NETstring(game.map, 128);
+	NETstring(game.version, 8);
+	NETuint8_t(&game.maxPlayers);
+	NETstring(game.name, 128);
+	NETbool(&game.fog);
+	NETuint32_t(&game.power);
+	NETuint8_t(&game.base);
+	NETuint8_t(&game.alliance);
+	NETuint8_t(&game.limit);
+	
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		memcpy(&(m.body[m.size]),ingame.pStructureLimits, ingame.numStructureLimits * (sizeof(UBYTE)+sizeof(UDWORD)) );
-		m.size = (UWORD)(m.size + ingame.numStructureLimits * (sizeof(UBYTE)+sizeof(UDWORD)) );
+		NETuint8_t(&game.skDiff[i]);
+	}
+	
+	// Now the dpid array
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		// We should probably re-define player2dpid as a uint8_t
+		NETint32_t(&player2dpid[i]);
+	}
+	
+	// Send the list of who is still joining
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		NETbool(&ingame.JoiningInProgress[i]);
 	}
 
-	//
-	// now add the wdg files that are being used.
-	//
+	// Send dest and play
+	NETuint32_t(&dest);
+	NETuint32_t(&play);
 
-	m.type = NET_OPTIONS;				// send it.
-	NETbcast(&m,TRUE);
+	// Send over the list of player colours
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		NETuint8_t(&PlayerColour[i]);
+	}
 
+	// Same goes for the alliances
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		for (j = 0; j < MAX_PLAYERS; j++)
+		{
+			NETuint8_t(&alliances[i][j]);
+		}
+	}
+
+	// Send their team (this is apparently not related to alliances
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		// This should also be a uint8_t
+		NETint32_t(&playerTeamGUI[i]);
+	}
+
+	// Send the number of structure limits to expect
+	NETuint32_t(&ingame.numStructureLimits);
+	
+	// Send the structures changed
+	for (i = 0; i < ingame.numStructureLimits; i++)
+	{
+		NETuint8_t(&ingame.pStructureLimits[i].id);
+		NETuint8_t(&ingame.pStructureLimits[i].limit);
+	}
+
+	NETend();
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -129,14 +159,33 @@ static BOOL checkGameWdg(const char *nm)
 
 // ////////////////////////////////////////////////////////////////////////////
 // options for a game. (usually recvd in frontend)
-void recvOptions(NETMSG *pMsg)
+void recvOptions()
 {
-	UDWORD	pos=0,play,id;
+	int		i, j;
+	UDWORD	play;
 	UDWORD	newPl;
 
-	NetGet(pMsg,0,game);
-	pos += sizeof(game);
-	if(strncmp((char*)game.version,buildTime,8) != 0)
+	NETbeginDecode();
+
+	// Get general information about the game
+	NETuint8_t(&game.type);
+	NETstring(game.map, 128);
+	NETstring(game.version, 8);
+	NETuint8_t(&game.maxPlayers);
+	NETstring(game.name, 128);
+	NETbool(&game.fog);
+	NETuint32_t(&game.power);
+	NETuint8_t(&game.base);
+	NETuint8_t(&game.alliance);
+	NETuint8_t(&game.limit);
+	
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		NETuint8_t(&game.skDiff[i]);
+	}
+ 
+	// Check the version
+	if (strncmp(game.version, buildTime, 8) != 0)
 	{
 
 #ifndef DEBUG
@@ -144,68 +193,91 @@ void recvOptions(NETMSG *pMsg)
 		abort();
 #endif
 	}
-	if(ingame.numStructureLimits) // Free old limits
+
+	// Now the dpid array
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-			ingame.numStructureLimits = 0;
-			free(ingame.pStructureLimits);
-			ingame.pStructureLimits = NULL;
+		NETint32_t(&player2dpid[i]);
 	}
 
-	NetGet(pMsg,pos,player2dpid);
-	pos += sizeof(player2dpid);
-
-	NetGet(pMsg,pos,ingame.JoiningInProgress);
-	pos += sizeof(ingame.JoiningInProgress);
-
-	NetGet(pMsg,pos,newPl);
-	pos += sizeof(newPl);
-
-	NetGet(pMsg,pos,play);
-	pos += sizeof(play);
-
-	NetGet(pMsg,pos,PlayerColour);
-	pos += sizeof(PlayerColour);
-
-	NetGet(pMsg,pos,alliances);
-	pos += sizeof(alliances);
-
-	NetGet(pMsg,pos,playerTeamGUI);
-	pos += sizeof(playerTeamGUI);
-
-	NetGet(pMsg,pos,ingame.numStructureLimits);
-	pos += sizeof(ingame.numStructureLimits);
-	if(ingame.numStructureLimits)
+	// Send the list of who is still joining
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		ingame.pStructureLimits = (UBYTE*)malloc(ingame.numStructureLimits*(sizeof(UDWORD)+sizeof(UBYTE)));	// malloc some room
-		memcpy(ingame.pStructureLimits, &(pMsg->body[pos]) ,ingame.numStructureLimits*(sizeof(UDWORD)+sizeof(UBYTE)));
+		NETbool(&ingame.JoiningInProgress[i]);
 	}
+
+	NETuint32_t(&newPl);
+	NETuint32_t(&play);
+	
+	// Player colours
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		NETuint8_t(&PlayerColour[i]);
+	}
+
+	// Alliances
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		for (j = 0; j < MAX_PLAYERS; j++)
+		{
+			NETuint8_t(&alliances[i][j]);
+		}
+	}
+
+	// Teams
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		NETint32_t(&playerTeamGUI[i]);
+	}
+
+	// Free any structure limits we may have in-place
+	if (ingame.numStructureLimits)
+	{
+		ingame.numStructureLimits = 0;
+		free(ingame.pStructureLimits);
+		ingame.pStructureLimits = NULL;
+	}
+ 
+	// Get the number of structure limits to expect
+	NETuint32_t(&ingame.numStructureLimits);
+
+	// If there were any changes allocate memory for them
+	if (ingame.numStructureLimits)
+	{
+		ingame.pStructureLimits = malloc(ingame.numStructureLimits * sizeof(MULTISTRUCTLIMITS));
+	}
+
+	for (i = 0; i < ingame.numStructureLimits; i++)
+	{
+		NETuint8_t(&ingame.pStructureLimits[i].id);
+		NETuint8_t(&ingame.pStructureLimits[i].limit);
+	}
+	
+	NETend();
 
 	// Post process
 	if (newPl != 0)
 	{
 		// If we are the new player
 		if (newPl == NetPlay.dpidPlayer)
-		{
-			// it's us thats new
-			selectedPlayer = play; // select player
-			NETplayerInfo(); // get player info
-			powerCalculated = FALSE; // turn off any power requirements.
+ 		{
+			selectedPlayer = play;		// Select player
+			NETplayerInfo();			// Get player info
+			powerCalculated = FALSE;	// Turn off any power requirements
 		}
-		// Someone else is joining
+		// Someone else is joining.
 		else
 		{
-			// someone else is joining.
 			setupNewPlayer(newPl, play);
-		}
-	}
-
+ 		}
+ 	}
 
 	// Do the skirmish slider settings if they are up
-	for (id = 0; id < MAX_PLAYERS; id++)
-	{
-		if (widgGetFromID(psWScreen, MULTIOP_SKSLIDE + id))
+	for (i = 0; i < MAX_PLAYERS; i++)
+ 	{
+		if (widgGetFromID(psWScreen, MULTIOP_SKSLIDE + i))
 		{
-			widgSetSliderPos(psWScreen, MULTIOP_SKSLIDE + id, game.skDiff[id]);
+			widgSetSliderPos(psWScreen, MULTIOP_SKSLIDE + i, game.skDiff[i]);
 		}
 	}
 
@@ -213,20 +285,18 @@ void recvOptions(NETMSG *pMsg)
 	if (!checkGameWdg(game.map))
 	{
 		// Request the map from the host
-		{
-			NETMSG m;
-			NetAdd(m,0,NetPlay.dpidPlayer);
-			m.type = NET_REQUESTMAP;
-			m.size =4;
-			NETbcast(&m,TRUE);
-			addConsoleMessage("MAP REQUESTED!", DEFAULT_JUSTIFY);
-		}
+		NETbeginEncode(NET_REQUESTMAP, NET_ALL_PLAYERS);
+		
+		NETuint32_t(&NetPlay.dpidPlayer);
+		
+		NETend();
+		
+		addConsoleMessage("MAP REQUESTED!",DEFAULT_JUSTIFY);
 	}
 	else
 	{
 		loadMapPreview();
 	}
-
 }
 
 
