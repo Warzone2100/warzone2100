@@ -518,7 +518,7 @@ void	fillUpStats( void )
 	infoBars[STAT_STR_BUILT].number = missionData.strBuilt;
 }
 
-static const char ScoreData_tag_definition[] = "testdata/tagfile_savegame_score.def";
+static const char ScoreData_tag_definition[] = "tagdefinitions/savegame/score.def";
 static const char ScoreData_file_identifier[] = "ScoreData";
 
 // -----------------------------------------------------------------------------------

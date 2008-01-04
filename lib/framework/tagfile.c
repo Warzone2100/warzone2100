@@ -1283,13 +1283,13 @@ void tagTest()
 
 	memset(blob, 1, BLOB_SIZE); // 1111111...
 
-	tagOpenWrite("testdata/tagfile_virtual.def", writename);
+	tagOpenWrite("tagdefinitions/tagfile_virtual.def", writename);
 	tagWrites(0x05, 11);
 	tagWriteString(0x06, cformat);
 	ASSERT(!tagGetError(), "Error 1: %s", tagGetErrorString());
 	tagClose();
 
-	tagOpenRead("testdata/tagfile_virtual.def", "test.wzs");
+	tagOpenRead("tagdefinitions/tagfile_virtual.def", "test.wzs");
 	assert(tagRead(0x01) == 1);
 	assert(tagReads(0x02) == 2);
 	assert(tagReadf(0x03) == 3);
@@ -1302,7 +1302,7 @@ void tagTest()
 	ASSERT(!tagGetError(), "Error 2: %s", tagGetErrorString());
 	tagClose();
 
-	tagOpenWrite("testdata/tagfile_basic.def", writename);
+	tagOpenWrite("tagdefinitions/tagfile_basic.def", writename);
 	ASSERT(!tagGetError(), "Error 3: %s", tagGetErrorString());
 	tagWriteString(0x01, cformat);
 	tagWriteEnter(0x02, 1);
@@ -1331,7 +1331,7 @@ void tagTest()
 	memset(droidpos, 0, 6);
 	memset(fv, 0, 6);
 	memset(blob, 0, BLOB_SIZE);
-	tagOpenRead("testdata/tagfile_basic.def", writename);
+	tagOpenRead("tagdefinitions/tagfile_basic.def", writename);
 	tagReadString(0x01, 200, format);
 	assert(strncmp(format, cformat, 9) == 0);
 	tagReadEnter(0x02);

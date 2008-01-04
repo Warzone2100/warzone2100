@@ -2658,7 +2658,7 @@ bool fireOnLocation(unsigned int x, unsigned int y)
 	return false;
 }
 
-static const char FXData_tag_definition[] = "testdata/tagfile_savegame_effects.def";
+static const char FXData_tag_definition[] = "tagdefinitions/savegame/effects.def";
 static const char FXData_file_identifier[] = "FXData";
 
 // -----------------------------------------------------------------------------------

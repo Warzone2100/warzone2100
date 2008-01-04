@@ -11406,7 +11406,7 @@ BOOL writeStructLimitsFile(char *pFileName)
 	return FALSE;
 }
 
-static const char FireSupport_tag_definition[] = "testdata/tagfile_savegame_firesupport.def";
+static const char FireSupport_tag_definition[] = "tagdefinitions/savegame/firesupport.def";
 static const char FireSupport_file_identifier[] = "FIRESUPPORT";
 
 /*!

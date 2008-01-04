@@ -764,7 +764,7 @@ BOOL mapSaveTagged(char *pFileName)
 	GATEWAY *psCurrGate;
 	int numGateways = 0, i = 0, x = 0, y = 0, plr, droids, structures, features;
 	float cam[3];
-	const char *definition = "testdata/tagfile_map.def";
+	const char *definition = "tagdefinitions/savegame/map.def";
 	DROID *psDroid;
 	FEATURE *psFeat;
 	STRUCTURE *psStruct;
@@ -1067,7 +1067,7 @@ BOOL mapLoadTagged(char *pFileName)
 {
 	int count, i, mapx, mapy;
 	float cam[3];
-	const char *definition = "testdata/tagfile_map.def";
+	const char *definition = "tagdefinitions/savegame/map.def";
 
 	if (!tagOpenRead(definition, pFileName))
 	{
