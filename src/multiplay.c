@@ -110,7 +110,7 @@ extern PLAYER_RESEARCH*		asPlayerResList[MAX_PLAYERS];
 // Local Prototypes
 
 static BOOL recvBeacon(NETMSG *pMsg);
-static BOOL recvDestroyTemplate(NETMSG *pMsg);
+static BOOL recvDestroyTemplate();
 static BOOL recvResearch(NETMSG *pMsg);
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1346,50 +1346,57 @@ BOOL recvTemplate(NETMSG * m)
 
 BOOL SendDestroyTemplate(DROID_TEMPLATE *t)
 {
-	NETMSG m;
+	uint8_t player = selectedPlayer;
+	
+	NETbeginEncode(NET_TEMPLATEDEST, NET_ALL_PLAYERS);
+		NETuint8_t(&player);
+		NETuint32_t(&t->multiPlayerID);
+	NETend();
 
-	m.body[0] = (char) selectedPlayer;			// send player number
-
-	// send id of template to destroy
-	NetAdd(m,1,(t->multiPlayerID));
-	m.size = 5;
-
-	m.type=NET_TEMPLATEDEST;
-
-	return( NETbcast(&m,FALSE)	);
+	return TRUE;
 }
 
 // acknowledge another player no longer has a template
-static BOOL recvDestroyTemplate(NETMSG * m)
+static BOOL recvDestroyTemplate()
 {
-	UDWORD			player,targetref;
-	DROID_TEMPLATE	*psTempl, *psTempPrev;
-
-	player	= m->body[0];								// decode the message
-	NetGet(m,1,targetref);
-
-	psTempPrev = NULL;									// first find it.
-	for(psTempl = apsDroidTemplates[player]; psTempl;psTempl = psTempl->psNext)
+	uint8_t			player;
+	uint32_t		templateID;
+	DROID_TEMPLATE	*psTempl, *psTempPrev = NULL;
+	
+	NETbeginDecode();
+		NETuint8_t(&player);
+		NETuint32_t(&templateID);
+	NETend();
+	
+	// Find the template in the list
+	for (psTempl = apsDroidTemplates[player]; psTempl; psTempl = psTempl->psNext)
 	{
-		if( psTempl->multiPlayerID == targetref )
+		if (psTempl->multiPlayerID == templateID)
 		{
 			break;
 		}
+		
 		psTempPrev = psTempl;
 	}
 
-	if (psTempl)										// if we found itthen delete it.
+	// If we found it then delete it
+	if (psTempl)
 	{
-		if(psTempPrev)									// Update list pointers.
+		// Update the linked list
+		if (psTempPrev)
 		{
-			psTempPrev->psNext = psTempl->psNext;		// It's down the list somewhere ?
-		} else
-		{
-			apsDroidTemplates[player] = psTempl->psNext;// It's at the root ?
+			psTempPrev->psNext = psTempl->psNext;
 		}
-		free(psTempl);									// Delete the template.
+		else
+		{
+			apsDroidTemplates[player] = psTempl->psNext;
+		}
+		
+		// Delete the template
+		free(psTempl);
 	}
-	return (TRUE);
+	
+	return TRUE;
 }
 
 
