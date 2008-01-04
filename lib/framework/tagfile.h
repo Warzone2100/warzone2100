@@ -69,7 +69,7 @@ bool tagWriteEnter(element_t tag, uint16_t elements);
 bool tagWriteLeave(element_t tag);
 
 /** Start writing a new instance of a group. */
-bool tagWriteSeparator();
+bool tagWriteNext();
 
 /* Write methods */
 bool tagWrite(element_t tag, uint32_t val);

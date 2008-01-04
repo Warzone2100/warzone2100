@@ -978,7 +978,7 @@ static bool write_tag(element_t tag)
 	return true;
 }
 
-bool tagWriteSeparator()
+bool tagWriteNext()
 {
 	if (tag_error || !write_tag(TAG_SEPARATOR))
 	{

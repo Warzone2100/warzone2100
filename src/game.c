@@ -11476,7 +11476,7 @@ BOOL writeFiresupportDesignators(char *pFileName)
 		{
 			tagWrite(0x01, NULL_ID);
 		}
-		tagWriteSeparator();
+		tagWriteNext();
 	}
 	tagWriteLeave(0x02);
 	

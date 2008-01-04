@@ -441,7 +441,7 @@ static void objectStatTagged(BASE_OBJECT *psObj, int body, int resistance)
 	{
 		tagWrite(0x01, psObj->armour[i][WC_KINETIC]);
 		tagWrite(0x02, psObj->armour[i][WC_HEAT]);
-		tagWriteSeparator();
+		tagWriteNext();
 	}
 	tagWriteLeave(0x03);
 	tagWrite(0x04, resistance);
@@ -466,7 +466,7 @@ static void objectWeaponTagged(int num, UWORD *rotation, UWORD *pitch, WEAPON *a
 		{
 			tagWrites(0x08, psTargets[i]->id); // else default -1
 		}
-		tagWriteSeparator();
+		tagWriteNext();
 	}
 	tagWriteLeave(0x04);
 }
@@ -534,7 +534,7 @@ static void droidSaveTagged(DROID *psDroid)
 		order[2] = psDroid->asOrderList[i].x2;
 		order[3] = psDroid->asOrderList[i].y2;
 		tagWrite16v(0x02, 4, order);
-		tagWriteSeparator();
+		tagWriteNext();
 	}
 	tagWriteLeave(0x13);
 	if (psDroid->sMove.psFormation != NULL)
@@ -582,7 +582,7 @@ static void droidSaveTagged(DROID *psDroid)
 		v[0] = psDroid->sMove.asPath[i].x;
 		v[1] = psDroid->sMove.asPath[i].y;
 		tagWrite16v(0x01, 2, v);
-		tagWriteSeparator();
+		tagWriteNext();
 	}
 	tagWriteLeave(0x25);
 	tagWrite(0x26, psDroid->sMove.Status);
@@ -808,7 +808,7 @@ BOOL mapSaveTagged(char *pFileName)
 	for (i = 0; i < _TEX_INDEX - 1; i++)
 	{
 		tagWriteString(0x01, _TEX_PAGE[i].name);
-		tagWriteSeparator(); // add repeating group separator
+		tagWriteNext(); // add repeating group separator
 	}
 	debug(LOG_MAP, " * Writing info about %d texture pages", (int)_TEX_INDEX - 1);
 	tagWriteLeave(0x05);
@@ -833,7 +833,7 @@ BOOL mapSaveTagged(char *pFileName)
 		{
 			x = 0; y++;
 		}
-		tagWriteSeparator();
+		tagWriteNext();
 	}
 	debug(LOG_MAP, " * Writing info about %d tiles", (int)mapWidth * mapHeight);
 	tagWriteLeave(0x0a);
@@ -850,7 +850,7 @@ BOOL mapSaveTagged(char *pFileName)
 			p[2] = psCurrGate->x2;
 			p[3] = psCurrGate->y2;
 			tagWrite16v(0x01, 4, p);
-			tagWriteSeparator();
+			tagWriteNext();
 		}
 	}
 	debug(LOG_MAP, " * Writing info about %d gateways", (int)numGateways);
@@ -860,7 +860,7 @@ BOOL mapSaveTagged(char *pFileName)
 	for (i = 0; i < MAX_TILE_TEXTURES; i++)
         {
                 tagWrite(0x01, terrainTypes[i]);
-		tagWriteSeparator();
+		tagWriteNext();
         }
 	debug(LOG_MAP, " * Writing info about %d textures' type", (int)MAX_TILE_TEXTURES);
 	tagWriteLeave(0x0c);
@@ -880,7 +880,7 @@ BOOL mapSaveTagged(char *pFileName)
 			tagWrite(0x01, IsResearchPossible(&asPlayerResList[plr][i]));
 			tagWrite(0x02, asPlayerResList[plr][i].ResearchStatus & RESBITS);
 			tagWrite(0x03, asPlayerResList[plr][i].currentPoints);
-			tagWriteSeparator();
+			tagWriteNext();
 		}
 		tagWriteLeave(0x01);
 
@@ -889,7 +889,7 @@ BOOL mapSaveTagged(char *pFileName)
 		{
 			tagWriteString(0x01, psStructStats->pName);
 			tagWrite(0x02, asStructLimits[plr][i].limit);
-			tagWriteSeparator();
+			tagWriteNext();
 		}
 		tagWriteLeave(0x02);
 
@@ -944,7 +944,7 @@ BOOL mapSaveTagged(char *pFileName)
 			{
 				tagWriteBool(0x0a, 1); // do not register this flag in flag list
 			}
-			tagWriteSeparator();
+			tagWriteNext();
 		}
 		tagWriteLeave(0x03);
 
@@ -983,11 +983,11 @@ BOOL mapSaveTagged(char *pFileName)
 				tagWriteString(0x2, pViewData->pName);
 			}
 			tagWriteBool(0x3, psMessage->read);
-			tagWriteSeparator();
+			tagWriteNext();
 		}
 		tagWriteLeave(0x04);
 
-		tagWriteSeparator();
+		tagWriteNext();
 	}
 	debug(LOG_MAP, " * Writing info about %d players", (int)MAX_PLAYERS);
 	tagWriteLeave(0x0d);
@@ -1011,13 +1011,13 @@ BOOL mapSaveTagged(char *pFileName)
                                 {
 					tagWrites(0x03, psCurrentProd->psTemplate->multiPlayerID); // -1 if none
                                 }
-				tagWriteSeparator();
+				tagWriteNext();
 			}
 			tagWriteLeave(0x01);
-			tagWriteSeparator();
+			tagWriteNext();
 		}
 		tagWriteLeave(0x01);
-		tagWriteSeparator();
+		tagWriteNext();
 	}
 	tagWriteLeave(0x0e);
 
@@ -1028,27 +1028,27 @@ BOOL mapSaveTagged(char *pFileName)
 		for (psDroid = apsDroidLists[plr]; psDroid != NULL; psDroid = psDroid->psNext)
 		{
 			droidSaveTagged(psDroid);
-			tagWriteSeparator();
+			tagWriteNext();
 			if (psDroid->droidType == DROID_TRANSPORTER)
 			{
 				DROID *psTrans = psDroid->psGroup->psList;
 				for(psTrans = psTrans->psGrpNext; psTrans != NULL; psTrans = psTrans->psGrpNext)
 				{
 					droidSaveTagged(psTrans);
-					tagWriteSeparator();
+					tagWriteNext();
 				}
 			}
 		}
 		for (psStruct = apsStructLists[plr]; psStruct; psStruct = psStruct->psNext)
 		{
 			structureSaveTagged(psStruct);
-			tagWriteSeparator();
+			tagWriteNext();
 		}
 	}
 	for (psFeat = apsFeatureLists[0]; psFeat; psFeat = psFeat->psNext)
 	{
 		featureSaveTagged(psFeat);
-		tagWriteSeparator();
+		tagWriteNext();
 	}
 	tagWriteLeave(0x0f);
 

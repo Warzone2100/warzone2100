@@ -2714,7 +2714,7 @@ bool writeFXData(const char* fileName)
 		tagWrite(0x10, curEffect->radius);
 
 		tagWriteString(0x11, resGetNamefromData("IMD", curEffect->imd));
-#define tagWriteNext tagWriteSeparator
+
 		// Move on to reading the next effect group
 		tagWriteNext();
 	}
