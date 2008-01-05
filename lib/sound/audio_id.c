@@ -398,9 +398,9 @@ static AUDIO_ID_MAP asAudioID[] =
 {ID_SOUND_NEXUS_EXPLOSION,                     "nxsexpld.ogg"},
 
         /* Droid Engine Noises */
-{ID_SOUND_CONSTRUCTOR_MOVEOFF,                 "con-move off.ogg"},
+{ID_SOUND_CONSTRUCTOR_MOVEOFF,                 "con-move-off.ogg"},
 {ID_SOUND_CONSTRUCTOR_MOVE,                    "con-move.ogg"},
-{ID_SOUND_CONSTRUCTOR_SHUTDOWN,                "con-shut down.ogg"},
+{ID_SOUND_CONSTRUCTOR_SHUTDOWN,                "con-shut-down.ogg"},
 
         /* Transports */
 {ID_SOUND_BLIMP_FLIGHT,                        "tflight.ogg"},
