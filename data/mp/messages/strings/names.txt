@@ -1887,11 +1887,25 @@ H-Scorp-VTOL-BB				_("Scorpion BB VTOL")
 Viper-Trk-Com				_("Viper Command Turret Tracks")
 Cobra-Trk-Com				_("Cobra Command Turret Tracks")
 Scorp-Trk-Com				_("Scorpion Command Turret Tracks")
+Mantis-Trk-Com				_("mantis Command Turret Tracks")
 
 CobraTrkLancer				_("Cobra Lancer Tracks")
 MantisTrkHC				_("Mantis Heavy Cannon Tracks")
 MantisTKTracks				_("Mantis Tank Killer Tracks")
+MantisScourgeTracks			_("Mantis Scourge Tracks")
 ScorpTrkHMG				_("Scorpion Heavy Machinegun Tracks")
 
 ScorpRepairTrk				_("Scorpion Repair Tracks")
 ScorpHRepairHover			_("Scorpion Heavy Repair Hover")
+
+// Hover Truck Templates
+CobraHoverTruck				_("Cobra Hover Truck")
+ScorpHoverTruck				_("Scorpion Hover Truck")
+MantisHoverTruck			_("Mantis Hover Truck")
+
+// Bunker Buster Templates
+CobraBBTracks				_("Cobra Bunker Buster Tracks")
+ScorpBBTracks				_("Scorpion Bunker Buster Tracks")
+MantisBBTracks				_("Mantis Bunker Buster Tracks")
+
+ViperTrkLancer				_("Viper Tracks Lancer")
