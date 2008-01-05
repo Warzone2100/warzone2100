@@ -997,7 +997,6 @@ class CHeightMap : public CChnkIO
 
 		BOOL WriteDeliveranceGame(FILE *Stream,UDWORD GameType,int LimIndex);
 		BOOL WriteDeliveranceTileTypes(FILE *Stream);
-		BOOL WriteDeliveranceTagList(FILE *Stream);
 		BOOL WriteDeliveranceMap(FILE *Stream);
 		BOOL WriteDeliveranceFeatures(FILE *Stream,UDWORD GameType,int Exclude,int Include);
 		BOOL WriteDeliveranceStructures(FILE *Stream,UDWORD GameType,int Exclude,int Include);

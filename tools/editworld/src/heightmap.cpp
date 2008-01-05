@@ -62,7 +62,6 @@ using std::string;
   CampaignStart\feat.bjo
   CampaignStart\game.map
   CampaignStart\ttypes.ttp
-  CampaignStart\taglist.tag
 
  Campaign Expand.
   Saves droids,structures and features within the expansion area which is
@@ -72,7 +71,6 @@ using std::string;
   CampaignExpand\dinit.bjo
   CampaignExpand\struct.bjo
   CampaignExpand\feat.bjo
-  CampaignExpand\taglist.tag
 
  Mission.
   Much the same as a Campaign Start.
@@ -83,7 +81,6 @@ using std::string;
   Mission\feat.bjo
   Mission\game.map
   Mission\ttypes.ttp
-  Mission\taglist.tag
 */
 
 
@@ -7211,61 +7208,6 @@ BOOL CHeightMap::WriteDeliveranceTileTypes(FILE *Stream)
 
 	return TRUE;
 }
-
-
-BOOL CHeightMap::WriteDeliveranceTagList(FILE *Stream)
-{
-	TAGLIST_SAVEHEADER Header;
-	TAGLIST Tag;
-	int NumTags = 0;
-
-	Header.aFileType[0] = 't';
-	Header.aFileType[1] = 'a';
-	Header.aFileType[2] = 'g';
-	Header.aFileType[3] = 'l';
-	Header.version = CURRENT_GAME_VERSION_NUM;
-
-	std::list<C3DObjectInstance>::iterator curNode;
-	for (curNode = m_Objects.begin(); curNode != m_Objects.end(); ++curNode)
-	{
-		if (curNode->ScriptName[0])
-			++NumTags;
-	}
-
-	Header.quantity = NumTags + m_NumScrollLimits;
-
-	if (fwrite(&Header, sizeof(Header), 1, Stream) != 1)
-		return FALSE;
-
-// Write out the tags for world objects.
-	C3DObjectInstance* Data;
-	for (curNode = m_Objects.begin(); curNode != m_Objects.end(); ++curNode)
-	{
-		if(curNode->ScriptName[0])
-		{
-			strcpy((char*)Tag.TagName, curNode->ScriptName);
-			Tag.TagID = curNode->UniqueID;
-			fwrite(&Tag, sizeof(Tag), 1, Stream);
-		}
-
-		Data = &*curNode;
-	}
-
-// Write out the tags for scroll limits.
-	for (std::list<CScrollLimits>::iterator curNode2 = m_ScrollLimits.begin(); curNode2 != m_ScrollLimits.end(); ++curNode2)
-	{
-		// FIXME: possible bug (that we're using Data instead of curNode2 here);
-		// this was already so in the original source release, I'm not sure if it's intented -- Giel
-		strcpy((char*)Tag.TagName, Data->ScriptName);
-
-		Tag.TagID = curNode2->UniqueID;
-		fwrite(&Tag, sizeof(Tag), 1, Stream);
-	}
-
-	return TRUE;
-}
-
-
 
 // Write out the map and feature list in Deliverance format.
 //

@@ -55,17 +55,6 @@ typedef struct {
 	STRING		aFileType[4];
 	UDWORD		version;
 	UDWORD		quantity;
-} TAGLIST_SAVEHEADER;
-
-typedef struct {
-	STRING		TagName[32];
-	UDWORD		TagID;
-} TAGLIST;
-
-typedef struct {
-	STRING		aFileType[4];
-	UDWORD		version;
-	UDWORD		quantity;
 } LIMITS_SAVEHEADER;
 
 typedef struct {
@@ -125,7 +114,6 @@ typedef struct _map_save_tile
 */
 /* Sanity check definitions for the save struct file sizes */
 #define TILETYPE_SAVEHEADER_SIZE 12
-#define TAGLIST_SAVEHEADER_SIZE 12
 #define LIMITS_SAVEHEADER_SIZE 12
 #define SAVE_HEADER_SIZE	16
 #define SAVE_TILE_SIZE		3

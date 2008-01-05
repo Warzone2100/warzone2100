@@ -1673,16 +1673,6 @@ BOOL CBTEditDoc::WriteDeliveranceStart(char *FileName)
 	m_HeightMap->WriteDeliveranceTileTypes(Stream);
 	fclose(Stream);
 
-// Write our the tag list.
-	strcpy(SaveName,FName);
-	strcat(SaveName,"\\TagList.tag");
-	if( (Stream = fopen(SaveName,"wb")) == NULL) {
-		MessageBox(NULL,"Error opening file for write.\nThe disk may be full or write protected.","TagList.tag",MB_OK);
-		return FALSE;
-	}
-	m_HeightMap->WriteDeliveranceTagList(Stream);
-	fclose(Stream);
-
 // Write out the game data.
 	strcpy(SaveName,FName);
 	strcat(SaveName,"\\Game.map");
@@ -1801,17 +1791,6 @@ BOOL CBTEditDoc::WriteDeliveranceExpand(char *FileName)
 	m_HeightMap->WriteDeliveranceGame(Stream,GTYPE_SCENARIO_EXPAND,IncludeIndex);
 	fclose(Stream);
 
-// Write our the tag list.
-	strcpy(SaveName,FName);
-	strcat(SaveName,"\\TagList.tag");
-	if( (Stream = fopen(SaveName,"wb")) == NULL) {
-		MessageBox(NULL,"Error opening file for write.\nThe disk may be full or write protected.","TagList.tag",MB_OK);
-		return FALSE;
-	}
-	m_HeightMap->WriteDeliveranceTagList(Stream);
-	fclose(Stream);
-
-
 // Write out the feature file.
 	strcpy(SaveName,FName);
 	strcat(SaveName,"\\Feat.bjo");
@@ -1885,16 +1864,6 @@ BOOL CBTEditDoc::WriteDeliveranceMission(char *FileName)
 		return FALSE;
 	}
 	m_HeightMap->WriteDeliveranceTileTypes(Stream);
-	fclose(Stream);
-
-// Write out the tag list.
-	strcpy(SaveName,FName);
-	strcat(SaveName,"\\TagList.tag");
-	if( (Stream = fopen(SaveName,"wb")) == NULL) {
-		MessageBox(NULL,"Error opening file for write.\nThe disk may be full or write protected.","TagList.tag",MB_OK);
-		return FALSE;
-	}
-	m_HeightMap->WriteDeliveranceTagList(Stream);
 	fclose(Stream);
 
 // Write out the game data.
