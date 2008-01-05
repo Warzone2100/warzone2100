@@ -296,7 +296,7 @@ static bool init(const char *definition, const char *datafile, bool write)
 	}
 	if (!fp)
 	{
-		TF_ERROR("Error opening data file %s: %s", definition, PHYSFS_getLastError());
+		TF_ERROR("Error opening data file %s: %s", datafile, PHYSFS_getLastError());
 		return false;
 	}
 	readmode = !write;
