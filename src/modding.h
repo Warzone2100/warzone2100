@@ -17,8 +17,6 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#define PHYSFS_APPEND 1
-#define PHYSFS_PREPEND 0
 
 void addSubdirs( const char * basedir, const char * subdir, const BOOL appendToPath, char * checkList[] );
 void removeSubdirs( const char * basedir, const char * subdir, char * checkList[] );
