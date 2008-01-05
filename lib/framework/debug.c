@@ -186,6 +186,20 @@ void debug_init(void)
 {
 	int count = 0;
 
+	/*** Initialize the debug subsystem ***/
+#if defined(WZ_CC_MSVC) && defined(DEBUG)
+	int tmpDbgFlag;
+	_CrtSetReportMode( _CRT_WARN, _CRTDBG_MODE_DEBUG ); // Output CRT info to debugger
+
+	tmpDbgFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG ); // Grab current flags
+# if defined(DEBUG_MEMORY)
+	tmpDbgFlag |= _CRTDBG_CHECK_ALWAYS_DF; // Check every (de)allocation
+# endif // DEBUG_MEMORY
+	tmpDbgFlag |= _CRTDBG_ALLOC_MEM_DF; // Check allocations
+	tmpDbgFlag |= _CRTDBG_LEAK_CHECK_DF; // Check for memleaks
+	_CrtSetDbgFlag( tmpDbgFlag );
+#endif // WZ_CC_MSVC && DEBUG
+
 	while (strcmp(code_part_names[count], "last") != 0) {
 		count++;
 	}

@@ -38,7 +38,6 @@
 
 #include "lib/framework/configfile.h"
 #include "lib/framework/input.h"
-#include "lib/framework/SDL_framerate.h"
 #include "lib/framework/tagfile.h"
 
 #include "lib/gamelib/gtime.h"
@@ -105,8 +104,6 @@ char	MultiPlayersPath[PATH_MAX];
 char	KeyMapPath[PATH_MAX];
 char	UserMusicPath[PATH_MAX];
 
-static FPSmanager wzFPSmanager;
-
 // Start game in title mode:
 static GS_GAMEMODE gameStatus = GS_TITLE_SCREEN;
 // Status of the gameloop
@@ -115,19 +112,6 @@ extern FOCUS_STATE focusState;
 
 extern void debug_callback_stderr( void**, const char * );
 extern void debug_callback_win32debug( void**, const char * );
-
-
-void setFramerateLimit(int fpsLimit)
-{
-	SDL_setFramerate( &wzFPSmanager, fpsLimit );
-}
-
-
-int getFramerateLimit(void)
-{
-	return SDL_getFramerate( &wzFPSmanager );
-}
-
 
 static BOOL inList( char * list[], const char * item )
 {
@@ -752,8 +736,6 @@ static void mainLoop(void)
 
 			gameTimeUpdate(); // Update gametime. FIXME There is probably code duplicated with MaintainFrameStuff
 		}
-
-		SDL_framerateDelay(&wzFPSmanager);
 	}
 }
 
@@ -762,20 +744,6 @@ int main(int argc, char *argv[])
 {
 	PIELIGHT *psPaletteBuffer = NULL;
 	UDWORD pSize = 0;
-
-	/*** Initialize the debug subsystem ***/
-#if defined(WZ_CC_MSVC) && defined(DEBUG)
-	int tmpDbgFlag;
-	_CrtSetReportMode( _CRT_WARN, _CRTDBG_MODE_DEBUG ); // Output CRT info to debugger
-
-	tmpDbgFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG ); // Grab current flags
-# if defined(DEBUG_MEMORY)
-	tmpDbgFlag |= _CRTDBG_CHECK_ALWAYS_DF; // Check every (de)allocation
-# endif // DEBUG_MEMORY
-	tmpDbgFlag |= _CRTDBG_ALLOC_MEM_DF; // Check allocations
-	tmpDbgFlag |= _CRTDBG_LEAK_CHECK_DF; // Check for memleaks
-	_CrtSetDbgFlag( tmpDbgFlag );
-#endif // WZ_CC_MSVC && DEBUG
 
 	setupExceptionHandler(argv[0]);
 
@@ -834,9 +802,6 @@ int main(int argc, char *argv[])
 	setRegistryFilePath("config");
 	strlcpy(KeyMapPath, "keymap.map", sizeof(KeyMapPath));
 	strlcpy(UserMusicPath, "music", sizeof(UserMusicPath));
-
-	/* Initialize framerate handler */
-	SDL_initFramerate( &wzFPSmanager );
 
 	// initialise all the command line states
 	war_SetDefaultStates();

@@ -79,13 +79,25 @@ extern BOOL frameInitialise(
  */
 extern void frameShutDown(void);
 
-
 typedef enum _focus_state
 {
 	FOCUS_OUT,		// Window does not have the focus
 	FOCUS_IN,		// Window has got the focus
 } FOCUS_STATE;
 
+/*!
+ * Set the framerate limit
+ *
+ * \param fpsLimit Desired framerate
+ */
+extern void setFramerateLimit(int fpsLimit);
+
+/*!
+ * Get the framerate limit
+ *
+ * \return Desired framerate
+ */
+extern int getFramerateLimit(void);
 
 /** Call this each cycle to allow the framework to deal with
  * windows messages, and do general house keeping.

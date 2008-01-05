@@ -42,6 +42,7 @@
 #include "frameint.h"
 #include "frameresource.h"
 #include "input.h"
+#include "SDL_framerate.h"
 
 #include "fractions.h"
 #include <assert.h>
@@ -84,6 +85,18 @@ static Uint64	curFrames = 0; // Number of frames elapsed since start
 static Uint64	lastFrames = 0;
 static Uint32	curTicks = 0; // Number of ticks since execution started
 static Uint32	lastTicks = 0;
+static FPSmanager wzFPSmanager;
+
+void setFramerateLimit(int fpsLimit)
+{
+	SDL_setFramerate(&wzFPSmanager, fpsLimit);
+}
+
+
+int getFramerateLimit(void)
+{
+	return SDL_getFramerate(&wzFPSmanager);
+}
 
 /* InitFrameStuff - needs to be called once before frame loop commences */
 static void InitFrameStuff( void )
@@ -223,14 +236,17 @@ BOOL frameInitialise(
 		return FALSE;
 	}
 
-		/* initialise all cursors */
-		initCursors();
+	/* initialise all cursors */
+	initCursors();
 
-		/* Initialise the Direct Draw Buffers */
-		if (!screenInitialise(width, height, bitDepth, fullScreen))
-		{
-				return FALSE;
-		}
+	/* Initialise the Direct Draw Buffers */
+	if (!screenInitialise(width, height, bitDepth, fullScreen))
+	{
+		return FALSE;
+	}
+
+	/* Initialize framerate handler */
+	SDL_initFramerate( &wzFPSmanager );
 
 	/* Initialise the input system */
 	inputInitialise();
@@ -257,6 +273,8 @@ void frameUpdate(void)
 
 	/* Update the frame rate stuff */
 	MaintainFrameStuff();
+
+	SDL_framerateDelay(&wzFPSmanager);
 }
 
 
