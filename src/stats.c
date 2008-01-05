@@ -3491,3 +3491,26 @@ void adjustMaxDesignStats(void)
     updateMaxBodyStats(bodyPoints, bodyPower, bodyArmour);
     updateMaxConstStats(constPoints);
 }
+
+/* Check if an object has a weapon */
+BOOL objHasWeapon(BASE_OBJECT *psObj)
+{
+
+	//check if valid type
+	if(psObj->type == OBJ_DROID)
+	{
+		if ( ((DROID *)psObj)->numWeaps > 0 )
+		{
+			return TRUE;
+		}
+	}
+	else if(psObj->type == OBJ_STRUCTURE)
+	{
+		if ( ((STRUCTURE *)psObj)->numWeaps > 0 )
+		{
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}

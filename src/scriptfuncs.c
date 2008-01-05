@@ -5110,10 +5110,7 @@ BOOL	bVisible;
 
 	for(psDroid = apsDroidLists[playerTarget]; psDroid; psDroid = psDroid->psNext)
 	{
-		if (psDroid->droidType != DROID_WEAPON &&
-			psDroid->droidType != DROID_PERSON &&
-			psDroid->droidType != DROID_CYBORG &&
-			psDroid->droidType != DROID_CYBORG_SUPER)
+		if (!objHasWeapon((BASE_OBJECT *)psDroid))
 		{
 			continue;
 		}
@@ -7284,10 +7281,7 @@ BOOL ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, BO
 		{
 			if(psDroid->visible[player])		//can see this droid?
 			{
-				if (psDroid->droidType != DROID_WEAPON &&
-					psDroid->droidType != DROID_PERSON &&
-					psDroid->droidType != DROID_CYBORG &&
-					psDroid->droidType != DROID_CYBORG_SUPER)
+				if (!objHasWeapon((BASE_OBJECT *)psDroid))
 				{
 					continue;
 				}
@@ -7462,6 +7456,49 @@ BOOL scrMapRevealedInRange(void)
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/* Returns true if a certain map tile was revealed, ie fog of war was removed */
+BOOL scrMapTileVisible(void)
+{
+	SDWORD		tileX,tileY,wRange,player;
+
+	if (!stackPopParams(3, VAL_INT, &tileX, VAL_INT, &tileY, VAL_INT, &player))
+	{
+		debug(LOG_ERROR,  "scrMapTileVisible: failed to pop");
+		return FALSE;
+	}
+
+    //Check coords
+	if (tileX < 0
+	 || tileX > world_coord(mapWidth)
+	 || tileY < 0
+	 || tileY > world_coord(mapHeight))
+	{
+		debug(LOG_ERROR,  "scrMapTileVisible: coords off map");
+		return FALSE;
+	}
+
+	if(TEST_TILE_VISIBLE( player,mapTile(tileX,tileY) ))
+	{
+		scrFunctionResult.v.bval = TRUE;
+
+		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
+		{
+			return FALSE;
+		}
+	}
+	else
+	{
+		//not visible
+		scrFunctionResult.v.bval = FALSE;
+		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
+		{
+			return FALSE;
+		}
 	}
 
 	return TRUE;
@@ -7863,10 +7900,7 @@ static UDWORD costOrAmountInRange(SDWORD player, SDWORD lookingPlayer, SDWORD ra
 	{
 		if(psDroid->visible[lookingPlayer])		//can see this droid?
 		{
-			if (psDroid->droidType != DROID_WEAPON &&
-				psDroid->droidType != DROID_PERSON &&
-				psDroid->droidType != DROID_CYBORG &&
-				psDroid->droidType != DROID_CYBORG_SUPER)
+			if (!objHasWeapon((BASE_OBJECT *)psDroid))
 			{
 				continue;
 			}
@@ -7923,7 +7957,7 @@ UDWORD numPlayerWeapStructsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD r
 	{
 		if(psStruct->visible[lookingPlayer])	//if can see it
 		{
-			if(psStruct->pStructureType->type == REF_DEFENSE)
+			if(objHasWeapon((BASE_OBJECT *) psStruct))	//make sure structure is dangerous
 			{
 				if(!bFinished || psStruct->status == SS_BUILT)
 				{
@@ -7956,7 +7990,7 @@ UDWORD playerWeapStructsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD 
 	{
 		if(psStruct->visible[lookingPlayer])	//if can see it
 		{
-			if(psStruct->pStructureType->type == REF_DEFENSE)
+			if(objHasWeapon((BASE_OBJECT *) psStruct))
 			{
 				if(!bFinished || psStruct->status == SS_BUILT)
 				{
@@ -8783,11 +8817,7 @@ BOOL scrGetClosestEnemy(void)
 			if(psDroid->visible[player])		//can see this droid?
 			{
 				//if only weapon droids and don't have it, then skip
-				if (weaponOnly &&
-				(	psDroid->droidType != DROID_WEAPON &&
-					psDroid->droidType != DROID_PERSON &&
-					psDroid->droidType != DROID_CYBORG &&
-					psDroid->droidType != DROID_CYBORG_SUPER))
+				if (weaponOnly && !objHasWeapon((BASE_OBJECT *)psDroid))
 				{
 					continue;
 				}
@@ -8818,7 +8848,7 @@ BOOL scrGetClosestEnemy(void)
 			if(psStruct->visible[player])	//if can see it
 			{
 				//only need defenses?
-				if(weaponOnly && ((psStruct->pStructureType->type != REF_DEFENSE) || (psStruct->status != SS_BUILT) ))	//non-weapon-structures	or not finished
+				if(weaponOnly && (!objHasWeapon((BASE_OBJECT *) psStruct) || (psStruct->status != SS_BUILT) ))	//non-weapon-structures	or not finished
 				{
 					continue;
 				}
@@ -9047,8 +9077,6 @@ BOOL scrObjWeaponMaxRange(void)
 BOOL scrObjHasWeapon(void)
 {
 	BASE_OBJECT			*psObj;
-	DROID				*psDroid;
-	STRUCTURE			*psStruct;
 
 	if (!stackPopParams(1, ST_BASEOBJECT, &psObj))
 	{
@@ -9057,34 +9085,17 @@ BOOL scrObjHasWeapon(void)
 	}
 
 	//check if valid type
-	if(psObj->type == OBJ_DROID)
+	if(objHasWeapon(psObj))
 	{
-		psDroid = (DROID*)psObj;
-		if (psDroid->asWeaps[0].nStat != 0)
+		scrFunctionResult.v.bval = TRUE;
+		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 		{
-			scrFunctionResult.v.bval = TRUE;
-			if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-			{
-				return FALSE;
-			}
-
-			return TRUE;
+			return FALSE;
 		}
-	}
-	else if(psObj->type == OBJ_STRUCTURE)
-	{
-		psStruct = (STRUCTURE*)psObj;
-		if (psStruct->asWeaps[0].nStat != 0)
-		{
-			scrFunctionResult.v.bval = TRUE;
-			if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-			{
-				return FALSE;
-			}
 
-			return TRUE;
-		}
+		return TRUE;
 	}
+
 
 	scrFunctionResult.v.bval = FALSE;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -9455,7 +9466,7 @@ BOOL scrNumAAinRange(void)
 	{
 		if(psStruct->visible[lookingPlayer])	//if can see it
 		{
-			if((psStruct->pStructureType->type == REF_DEFENSE) &&
+			if(objHasWeapon((BASE_OBJECT *) psStruct) &&
 				(asWeaponStats[psStruct->asWeaps[0].nStat].surfaceToAir == SHOOT_IN_AIR) )
 			{
 				if (range < 0
@@ -10008,6 +10019,34 @@ BOOL scrRecallOilDefendLoc(void)
 	*y = oilDefendLocation[player][index][1];
 
 	*prior = oilDefendLocPrior[player][index];
+
+	scrFunctionResult.v.bval = TRUE;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/* Restores vilibility (fog of war) */
+BOOL scrRecallPlayerVisibility(void)
+{
+	SDWORD				player;
+
+	if (!stackPopParams(1, VAL_INT, &player))
+	{
+		debug(LOG_ERROR, "scrRecallPlayerVisibility(): stack failed");
+		return FALSE;
+	}
+
+	if(player >= MAX_PLAYERS)
+	{
+		debug(LOG_ERROR,"scrRecallPlayerVisibility: player index too high.");
+		return FALSE;
+	}
+
+
 
 	scrFunctionResult.v.bval = TRUE;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -10945,6 +10984,25 @@ BOOL scrSqrt(void)
 	}
 
 	scrFunctionResult.v.fval = sqrt(fArg);
+	if (!stackPushResult(VAL_FLOAT, &scrFunctionResult))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/* Natural logarithm */
+BOOL scrLog(void)
+{
+	float		fArg;
+
+	if (!stackPopParams(1, VAL_FLOAT, &fArg))
+	{
+		return FALSE;
+	}
+
+	scrFunctionResult.v.fval = log(fArg);
 	if (!stackPushResult(VAL_FLOAT, &scrFunctionResult))
 	{
 		return FALSE;

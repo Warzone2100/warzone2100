@@ -51,6 +51,16 @@ enum _objids
 	OBJID_SELECTED,		// if droid is selected (humans only)
 	OBJID_TARGET,		// added object->psTarget
 	OBJID_GROUP,		// group a droid belongs to
+	OBJID_WEAP_SHORT_RANGE,		// short range of a weapon
+	OBJID_WEAP_LONG_RANGE,		// short range of a weapon
+	OBJID_WEAP_SHORT_HIT,		// weapon's chance to hit in the short range
+	OBJID_WEAP_LONG_HIT,		// weapon's chance to hit in the long range
+	OBJID_WEAP_FIRE_PAUSE,		// weapon's fire pause
+	OBJID_WEAP_RELOAD_TIME,		// weapon's reload time
+	OBJID_WEAP_NUM_ROUNDS,		// num of weapon's rounds (salvo fire)
+	OBJID_WEAP_DAMAGE,			// weapon's damage
+	OBJID_HITPOINTS,			// doid's health left
+	OBJID_ORIG_HITPOINTS,		// original health of a droid (when not damaged)
 };
 
 // id's for group variables

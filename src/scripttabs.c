@@ -121,13 +121,6 @@ TYPE_SYMBOL asTypeTable[] =
  */
 FUNC_SYMBOL asFuncTable[] =
 {
-	{ "InitEnumDroids",		scrInitEnumDroids,		VAL_VOID,
-		2, { VAL_INT, VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-	{ "EnumDroid",			scrEnumDroid,			(INTERP_TYPE)ST_DROID,
-		0, { VAL_VOID },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
 	// These functions are part of the script library
 	{ "traceOn",			interpTraceOn,			VAL_VOID,
 		0, { VAL_VOID },
@@ -1022,6 +1015,7 @@ FUNC_SYMBOL asFuncTable[] =
 	{ "InitEnumDroids",		scrInitEnumDroids,			VAL_VOID,
 		2, { VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
+
 	{ "EnumDroid",			scrEnumDroid,				(INTERP_TYPE)ST_DROID,
 		0, { VAL_VOID },
 		0, 0, NULL, 0, 0, NULL, NULL },
@@ -1091,6 +1085,10 @@ FUNC_SYMBOL asFuncTable[] =
 
 	{ "mapRevealedInRange",	scrMapRevealedInRange,		VAL_BOOL,
 		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "mapTileVisible",		scrMapTileVisible,			VAL_BOOL,
+		3, { VAL_INT, VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "pursueResearch",		scrPursueResearch,			VAL_BOOL,
@@ -1285,6 +1283,10 @@ FUNC_SYMBOL asFuncTable[] =
 		5, { VAL_INT, VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
+	{ "recallPlayerVisibility",	scrRecallPlayerVisibility,	VAL_BOOL,
+		1, { VAL_INT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
 	{ "savePlayerAIExperience",	scrSavePlayerAIExperience,	VAL_BOOL,
 		2, { VAL_INT, VAL_BOOL },
 		0, 0, NULL, 0, 0, NULL, NULL },
@@ -1357,6 +1359,10 @@ FUNC_SYMBOL asFuncTable[] =
 		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "sqrt",				scrSqrt,						VAL_FLOAT,
+		1, { VAL_FLOAT },
+		0, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "log",				scrLog,						VAL_FLOAT,
 		1, { VAL_FLOAT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
@@ -1516,6 +1522,16 @@ VAR_SYMBOL asObjTable[] =
 		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_CLUSTERID,scrBaseObjGet,	NULL, 0, {0}, NULL },
 	{ "health",		VAL_INT,	ST_OBJECT,
 		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_HEALTH,	scrBaseObjGet,	NULL, 0, {0}, NULL },
+	{ "weapon",		(INTERP_TYPE)ST_WEAPON,	ST_OBJECT,
+		(INTERP_TYPE)ST_BASEOBJECT,		OBJID_WEAPON,	scrBaseObjGet,	NULL, 0, {0}, NULL },
+	
+	// object's hit points
+	{ "hitPoints",	VAL_INT,	ST_OBJECT,
+		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_HITPOINTS,	scrBaseObjGet,	NULL, 0, {0}, NULL },
+
+	// object's original hit points (when not damaged)
+	{ "origHitPoints",	VAL_INT,	ST_OBJECT,
+		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_ORIG_HITPOINTS,	scrBaseObjGet,	NULL, 0, {0}, NULL },
 
 	// droid variables
 	{ "order",		VAL_INT,	ST_OBJECT,
@@ -1526,8 +1542,6 @@ VAR_SYMBOL asObjTable[] =
 		(INTERP_TYPE)ST_DROID,		OBJID_BODY,		scrBaseObjGet,	NULL, 0, {0}, NULL },
 	{ "propulsion",	(INTERP_TYPE)ST_PROPULSION,	ST_OBJECT,
 		(INTERP_TYPE)ST_DROID,		OBJID_PROPULSION,scrBaseObjGet,	NULL, 0, {0}, NULL },
-	{ "weapon",		(INTERP_TYPE)ST_WEAPON,	ST_OBJECT,
-		(INTERP_TYPE)ST_DROID,		OBJID_WEAPON,	scrBaseObjGet,	NULL, 0, {0}, NULL },
 	{ "orderx",		VAL_INT,	ST_OBJECT,
 		(INTERP_TYPE)ST_DROID,		OBJID_ORDERX,	scrBaseObjGet,	NULL, 0, {0}, NULL },
 	{ "ordery",		VAL_INT,	ST_OBJECT,
@@ -1574,6 +1588,39 @@ VAR_SYMBOL asObjTable[] =
 	//returns if this unit is currently selected by a player (usually human)
 	{ "selected",	VAL_BOOL,	ST_OBJECT,
 		(INTERP_TYPE)ST_DROID,		OBJID_SELECTED,	scrBaseObjGet,	NULL, 0, {0}, NULL },
+
+
+	//weapon short range
+	{ "shortRange",	VAL_INT,	ST_OBJECT,
+		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_WEAP_SHORT_RANGE,	scrBaseObjGet,	NULL, 0, {0}, NULL },
+
+	//weapon long range
+	{ "longRange",	VAL_INT,	ST_OBJECT,
+		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_WEAP_LONG_RANGE,	scrBaseObjGet,	NULL, 0, {0}, NULL },
+
+	//weapon short hit chance
+	{ "shortHit",	VAL_INT,	ST_OBJECT,
+		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_WEAP_SHORT_HIT,	scrBaseObjGet,	NULL, 0, {0}, NULL },
+
+	//weapon long hit chance
+	{ "longHit",	VAL_INT,	ST_OBJECT,
+		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_WEAP_LONG_HIT,	scrBaseObjGet,	NULL, 0, {0}, NULL },
+
+	//weapon damage
+	{ "damage",	VAL_INT,	ST_OBJECT,
+		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_WEAP_DAMAGE,	scrBaseObjGet,	NULL, 0, {0}, NULL },
+
+	//weapon fire pause
+	{ "firePause",	VAL_INT,	ST_OBJECT,
+		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_WEAP_FIRE_PAUSE,	scrBaseObjGet,	NULL, 0, {0}, NULL },
+
+	//weapon reload time
+	{ "reloadTime",	VAL_INT,	ST_OBJECT,
+		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_WEAP_RELOAD_TIME,	scrBaseObjGet,	NULL, 0, {0}, NULL },
+
+	//num of weapon's rounds (salvo fire)
+	{ "numRounds",	VAL_INT,	ST_OBJECT,
+		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_WEAP_NUM_ROUNDS,	scrBaseObjGet,	NULL, 0, {0}, NULL },
 
 	/* This entry marks the end of the variable list */
 	{ NULL, VAL_VOID, (INTERP_TYPE)ST_OBJECT, VAL_VOID, 0, NULL, NULL, 0, {0}, NULL }

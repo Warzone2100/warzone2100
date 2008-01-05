@@ -341,6 +341,8 @@ extern UDWORD getMaxWeaponDamage(void);
 extern UDWORD getMaxWeaponROF(void);
 extern UDWORD getMaxPropulsionSpeed(void);
 
+extern BOOL objHasWeapon(BASE_OBJECT *psObj);
+
 #endif
 
 

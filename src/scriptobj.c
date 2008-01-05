@@ -58,6 +58,7 @@ BOOL scrBaseObjGet(UDWORD index)
 	DROID			*psDroid;
 	STRUCTURE		*psStruct;
 	FEATURE			*psFeature;
+	SDWORD			temp;
 
 	if (!stackPopParams(1, ST_BASEOBJECT, &psObj))
 	{
@@ -312,6 +313,278 @@ BOOL scrBaseObjGet(UDWORD index)
 
 		type = (INTERP_TYPE)ST_GROUP;
 		scrFunctionResult.v.oval = ((DROID *)psObj)->psGroup;
+		break;
+	case OBJID_WEAP_SHORT_RANGE:
+
+		type = VAL_INT;
+		temp = -1;		// in case object has no weapon return -1
+
+		if (psObj->type == OBJ_STRUCTURE)
+		{
+			if(((STRUCTURE *)psObj)->asWeaps[0].nStat > 0)
+			{
+				temp = asWeaponStats[((STRUCTURE *)psObj)->asWeaps[0].nStat].shortRange;
+			}
+		}
+		else if (psObj->type == OBJ_DROID)
+		{
+			if(((DROID *)psObj)->asWeaps[0].nStat > 0)
+			{
+				temp = asWeaponStats[((DROID *)psObj)->asWeaps[0].nStat].shortRange;
+			}
+		}
+		else
+		{
+			debug(LOG_ERROR, "scrBaseObjGet(): shortRange: features don't have weapons");
+			return FALSE;
+		}
+
+		scrFunctionResult.v.ival = temp;
+
+		break;
+	case OBJID_WEAP_LONG_RANGE:
+
+		type = VAL_INT;
+		temp = -1;		// in case object has no weapon return -1
+
+		if (psObj->type == OBJ_STRUCTURE)
+		{
+			if(((STRUCTURE *)psObj)->asWeaps[0].nStat > 0)
+			{
+				temp = asWeaponStats[((STRUCTURE *)psObj)->asWeaps[0].nStat].longRange;
+			}
+		}
+		else if (psObj->type == OBJ_DROID)
+		{
+			if(((DROID *)psObj)->asWeaps[0].nStat > 0)
+			{
+				temp = asWeaponStats[((DROID *)psObj)->asWeaps[0].nStat].longRange;
+			}
+		}
+		else
+		{
+			debug(LOG_ERROR, "scrBaseObjGet(): shortRange: features don't have weapons");
+			return FALSE;
+		}
+
+		scrFunctionResult.v.ival = temp;
+
+		break;
+	case OBJID_WEAP_SHORT_HIT:
+		type = VAL_INT;
+		temp = -1;		// in case object has no weapon return -1
+
+		if (psObj->type == OBJ_STRUCTURE)
+		{
+			if(((STRUCTURE *)psObj)->asWeaps[0].nStat > 0)
+			{
+				temp = weaponShortHit(&asWeaponStats[((STRUCTURE *)psObj)->asWeaps[0].nStat], psObj->player);
+			}
+		}
+		else if (psObj->type == OBJ_DROID)
+		{
+			if(((DROID *)psObj)->asWeaps[0].nStat > 0)
+			{
+				temp = weaponShortHit(&asWeaponStats[((DROID *)psObj)->asWeaps[0].nStat], psObj->player);
+			}
+		}
+		else
+		{
+			debug(LOG_ERROR, "scrBaseObjGet(): shortHit: features don't have weapons");
+			return FALSE;
+		}
+
+		scrFunctionResult.v.ival = temp;
+
+		break;
+	case OBJID_WEAP_LONG_HIT:
+
+		type = VAL_INT;
+		temp = -1;		// in case object has no weapon return -1
+
+		if (psObj->type == OBJ_STRUCTURE)
+		{
+			if(((STRUCTURE *)psObj)->asWeaps[0].nStat > 0)
+			{
+				temp = weaponLongHit(&asWeaponStats[((STRUCTURE *)psObj)->asWeaps[0].nStat], psObj->player);
+			}
+		}
+		else if (psObj->type == OBJ_DROID)
+		{
+			if(((DROID *)psObj)->asWeaps[0].nStat > 0)
+			{
+				temp = weaponLongHit(&asWeaponStats[((DROID *)psObj)->asWeaps[0].nStat], psObj->player);
+			}
+		}
+		else
+		{
+			debug(LOG_ERROR, "scrBaseObjGet(): shortHit: features don't have weapons");
+			return FALSE;
+		}
+
+		scrFunctionResult.v.ival = temp;
+
+		break;
+	case OBJID_WEAP_DAMAGE:
+
+		type = VAL_INT;
+		temp = -1;		// in case object has no weapon return -1
+
+		if (psObj->type == OBJ_STRUCTURE)
+		{
+			if(((STRUCTURE *)psObj)->asWeaps[0].nStat > 0)
+			{
+				temp = weaponDamage(&asWeaponStats[((STRUCTURE *)psObj)->asWeaps[0].nStat], psObj->player);
+			}
+		}
+		else if (psObj->type == OBJ_DROID)
+		{
+			if(((DROID *)psObj)->asWeaps[0].nStat > 0)
+			{
+				temp = weaponDamage(&asWeaponStats[((DROID *)psObj)->asWeaps[0].nStat], psObj->player);
+			}
+		}
+		else
+		{
+			debug(LOG_ERROR, "scrBaseObjGet(): shortHit: features don't have weapons");
+			return FALSE;
+		}
+
+		scrFunctionResult.v.ival = temp;
+
+		break;
+	case OBJID_WEAP_FIRE_PAUSE:
+
+		type = VAL_INT;
+		temp = -1;		// in case object has no weapon return -1
+
+		if (psObj->type == OBJ_STRUCTURE)
+		{
+			if(((STRUCTURE *)psObj)->asWeaps[0].nStat > 0)
+			{
+				temp = weaponFirePause(&asWeaponStats[((STRUCTURE *)psObj)->asWeaps[0].nStat], psObj->player);
+			}
+		}
+		else if (psObj->type == OBJ_DROID)
+		{
+			if(((DROID *)psObj)->asWeaps[0].nStat > 0)
+			{
+				temp = weaponFirePause(&asWeaponStats[((DROID *)psObj)->asWeaps[0].nStat], psObj->player);
+			}
+		}
+		else
+		{
+			debug(LOG_ERROR, "scrBaseObjGet(): shortHit: features don't have weapons");
+			return FALSE;
+		}
+
+		scrFunctionResult.v.ival = temp;
+
+		break;
+	case OBJID_WEAP_RELOAD_TIME:
+
+		type = VAL_INT;
+		temp = -1;		// in case object has no weapon return -1
+
+		if (psObj->type == OBJ_STRUCTURE)
+		{
+			if(((STRUCTURE *)psObj)->asWeaps[0].nStat > 0)
+			{
+				temp = asWeaponStats[((STRUCTURE *)psObj)->asWeaps[0].nStat].reloadTime;
+			}
+		}
+		else if (psObj->type == OBJ_DROID)
+		{
+			if(((DROID *)psObj)->asWeaps[0].nStat > 0)
+			{
+				temp = asWeaponStats[((DROID *)psObj)->asWeaps[0].nStat].reloadTime;
+			}
+		}
+		else
+		{
+			debug(LOG_ERROR, "scrBaseObjGet(): shortHit: features don't have weapons");
+			return FALSE;
+		}
+
+		scrFunctionResult.v.ival = temp;
+
+		break;
+	case OBJID_WEAP_NUM_ROUNDS:
+
+		type = VAL_INT;
+		temp = -1;		// in case object has no weapon return -1
+
+		if (psObj->type == OBJ_STRUCTURE)
+		{
+			if(((STRUCTURE *)psObj)->asWeaps[0].nStat > 0)
+			{
+				temp = asWeaponStats[((STRUCTURE *)psObj)->asWeaps[0].nStat].numRounds;
+			}
+		}
+		else if (psObj->type == OBJ_DROID)
+		{
+			if(((DROID *)psObj)->asWeaps[0].nStat > 0)
+			{
+				temp = asWeaponStats[((DROID *)psObj)->asWeaps[0].nStat].numRounds;
+			}
+		}
+		else
+		{
+			debug(LOG_ERROR, "scrBaseObjGet(): shortHit: features don't have weapons");
+			return FALSE;
+		}
+
+		scrFunctionResult.v.ival = temp;
+
+		break;
+	case OBJID_HITPOINTS:
+
+		type = VAL_INT;
+
+		switch (psObj->type)
+		{
+		case OBJ_DROID:
+			scrFunctionResult.v.ival = (SDWORD)((DROID *)psObj)->body;
+			break;
+
+		case OBJ_STRUCTURE:
+			scrFunctionResult.v.ival = (SDWORD)((STRUCTURE *)psObj)->body;
+			break;
+
+		case OBJ_FEATURE:
+			scrFunctionResult.v.ival = (SDWORD)((FEATURE *)psObj)->body;
+			break;
+
+		default:
+			debug(LOG_ERROR, "scrBaseObjGet: unknown object type");
+			return FALSE;
+			break;
+		}
+
+		break;
+	case OBJID_ORIG_HITPOINTS:
+		type = VAL_INT;
+
+		switch (psObj->type)
+		{
+		case OBJ_DROID:
+			scrFunctionResult.v.ival = (SDWORD)((DROID *)psObj)->originalBody;
+			break;
+
+		case OBJ_STRUCTURE:
+			scrFunctionResult.v.ival = (SDWORD)structureBody((STRUCTURE *)psObj);
+			break;
+
+		case OBJ_FEATURE:
+			scrFunctionResult.v.ival = ((FEATURE *)psObj)->psStats->body;
+			break;
+
+		default:
+			debug(LOG_ERROR, "scrBaseObjGet: unknown object type");
+			return FALSE;
+			break;
+		}
+
 		break;
 	default:
 		debug(LOG_ERROR, "scrBaseObjGet: unknown variable index");

@@ -555,6 +555,7 @@ extern BOOL scrFMin(void);
 extern BOOL scrFMax(void);
 extern BOOL scrFogTileInRange(void);
 extern BOOL scrMapRevealedInRange(void);
+extern BOOL scrMapTileVisible(void);
 extern BOOL scrPursueResearch(void);
 extern BOOL scrNumResearchLeft(void);
 extern BOOL scrResearchCompleted(void);
@@ -600,6 +601,7 @@ extern BOOL scrLoadPlayerAIExperience(void);
 extern BOOL scrGetBaseDefendLocIndex(void);
 extern BOOL scrGetOilDefendLocIndex(void);
 extern BOOL scrRecallPlayerBaseLoc(void);
+extern BOOL scrRecallPlayerVisibility(void);
 extern BOOL scrCanRememberPlayerBaseLoc(void);
 extern BOOL scrStructInRangeVis(void);
 extern BOOL scrRecallBaseDefendLoc(void);
@@ -662,6 +664,7 @@ extern BOOL objectInRangeVis(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD ran
 extern SDWORD getPlayerFromString(char *playerName);
 extern BOOL scrExp(void);
 extern BOOL scrSqrt(void);
+extern BOOL scrLog(void);
 #endif
 
 
