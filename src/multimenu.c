@@ -332,8 +332,8 @@ static unsigned int check_tip_index(unsigned int i) {
  *  \param fileExtension the extension files should end with, if the
  *         extension has a dot (.) then this dot _must_ be present as
  *         the first char in this parameter
- *  \param mode <purpose unknown>
- *  \param numPlayers <purpose unknown>
+ *  \param mode (purpose unknown)
+ *  \param numPlayers (purpose unknown)
  */
 void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mode, UBYTE mapCam, UBYTE numPlayers)
 {

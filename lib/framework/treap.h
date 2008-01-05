@@ -107,8 +107,6 @@ extern void treapSetCallPos(const char *pFileName, SDWORD lineNumber);
  *
  * \param	ppsTreap	out-parameter which holds the created treap
  * \param	cmp			comparison function to use
- * \param	init		initial number of nodes to allocate
- * \param	ext			number of additional nodes to allocate when extending
  * \return true, if the treap creation was successfull
  */
 extern BOOL treapCreate(TREAP **ppsTreap, TREAP_CMP cmp);

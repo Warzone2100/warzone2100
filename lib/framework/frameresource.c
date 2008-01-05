@@ -405,7 +405,7 @@ static WZ_DECL_CONST const char* getLanguage(void)
  * check if given file exists in a locale dependend subdir
  * if so, modify given fileName to hold the locale dep. file,
  * else do not change given fileName
- * \param fileName[out] must be at least MAX_PATH bytes large
+ * \param[out] fileName must be at least MAX_PATH bytes large
  */
 static void makeLocaleFile(char fileName[])  // given string must have MAX_PATH size
 {

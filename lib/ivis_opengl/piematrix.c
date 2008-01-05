@@ -113,8 +113,8 @@ void pie_VectorNormalise3fv(Vector3f *v)
 /*!
  * Calculate surface normal
  * Eg. if a polygon (with n points in clockwise order) normal is required,
- * p1 = point 0, p2 = point 1, p3 = point n-1
- * \param[in] p1,p1,p3 points for forming 2 vector for cross product
+ * \c p1 = point 0, \c p2 = point 1, \c p3 = point n - 1
+ * \param[in] p1,p2,p3 points for forming 2 vector for cross product
  * \param[out] v normal vector returned << FP12_SHIFT
  */
 void pie_SurfaceNormal3iv(Vector3i *p1, Vector3i *p2, Vector3i *p3, Vector3i *v)
@@ -141,8 +141,8 @@ void pie_SurfaceNormal3iv(Vector3i *p1, Vector3i *p2, Vector3i *p3, Vector3i *v)
 /*!
  * Calculate surface normal
  * Eg. if a polygon (with n points in clockwise order) normal is required,
- * p1 = point 0, p2 = point 1, p3 = point n-1
- * \param[in] p1,p1,p3 points for forming 2 vector for cross product
+ * \c p1 = point 0, \c p2 = point 1, \c p3 = point n-1
+ * \param[in] p1,p2,p3 points for forming 2 vector for cross product
  * \param[out] v normal vector returned << FP12_SHIFT
  */
 void pie_SurfaceNormal3fv(Vector3f *p1, Vector3f *p2, Vector3f *p3, Vector3f *v)

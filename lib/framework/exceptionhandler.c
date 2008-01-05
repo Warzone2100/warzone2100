@@ -577,7 +577,7 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 /**
  * Setup the exception handler responsible for target OS.
  *
- * \param programCommand_x Command used to launch this program. Only used for POSIX handler.
+ * \param programCommand Command used to launch this program. Only used for POSIX handler.
  */
 void setupExceptionHandler(const char * programCommand)
 {
