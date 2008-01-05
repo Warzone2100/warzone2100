@@ -50,9 +50,7 @@ case ${host_os} in
 	*mingw32*)
 		host_os_mingw32=yes
 		AC_CHECK_TOOL([WINDRES], [windres], AC_MSG_ERROR([windres not found]))
-		WIN32_PRE_LIBS='-lmingw32 -lSDLmain'
-		AC_SUBST([WIN32_PRE_LIBS], [${WIN32_PRE_LIBS}])
-		WIN32_LIBS='-lz -lintl -liconv -lfreetype -lfontconfig -lexpat -ldbghelp -lshfolder -lgdi32 -lwinmm -lwsock32'
+		WIN32_LIBS='-lintl -ldbghelp -lshfolder -lwinmm -lwsock32'
 		AC_SUBST([WIN32_LIBS], [${WIN32_LIBS}])
 		;;
 	*)
@@ -186,11 +184,11 @@ PKG_CHECK_MODULES([OGGVORBIS], [ogg >= 1.1 vorbis >= 1.1 vorbisfile >= 1.1])
 
 # Look for Popt
 AC_CHECK_HEADER(popt.h, , AC_MSG_ERROR([Popt header not found.]))
-AC_CHECK_LIB(popt, poptGetContext, AC_SUBST([POPT_LIBS], [-lpopt]), AC_MSG_ERROR([Popt not found.]), [${WIN32_LIBS}])
+AC_CHECK_LIB(popt, poptGetContext, AC_SUBST([POPT_LIBS], [-lpopt]), AC_MSG_ERROR([Popt not found.]))
 
 # Look for PhysicsFS
 AC_CHECK_HEADER(physfs.h, , AC_MSG_ERROR([PhysicsFS header not found.]))
-AC_CHECK_LIB(physfs, PHYSFS_init, AC_SUBST([PHYSFS_LIBS], [-lphysfs]), AC_MSG_ERROR([PhysicsFS not found.]), [${WIN32_LIBS}])
+AC_CHECK_LIB(physfs, PHYSFS_init, AC_SUBST([PHYSFS_LIBS], [-lphysfs]), AC_MSG_ERROR([PhysicsFS not found.]))
 
 # Look for SDL_net
 AC_CHECK_HEADER(SDL/SDL_net.h, , AC_MSG_ERROR([SDL_net header not found.]))
