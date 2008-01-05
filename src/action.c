@@ -362,23 +362,22 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, UWORD *p
 	float	fR;
 	SDWORD	pitchLowerLimit, pitchUpperLimit;
 	DROID	*psDroid = NULL;
-//	Vector3i	muzzle;
 
-    //these are constants now and can be set up at the start of the function
-    rotRate = ACTION_TURRET_ROTATION_RATE;
-    pitchRate = (SWORD)(ACTION_TURRET_ROTATION_RATE/2);
+	// these are constants now and can be set up at the start of the function
+	rotRate = ACTION_TURRET_ROTATION_RATE * 4;
+	pitchRate = ACTION_TURRET_ROTATION_RATE * 2;
 
-    //added for 22/07/99 upgrade - AB
-    if (psWeapStats)
-    {
-        //extra heavy weapons on some structures need to rotate and pitch more slowly
-        if (psWeapStats->weight > HEAVY_WEAPON_WEIGHT)
-        {
-            rotRate = (SWORD)(ACTION_TURRET_ROTATION_RATE/2 - (100 *
-                (psWeapStats->weight - HEAVY_WEAPON_WEIGHT) / psWeapStats->weight));
-            pitchRate = (SWORD) (rotRate / 2);
-        }
-    }
+	if (psWeapStats)
+	{
+		// extra heavy weapons on some structures need to rotate and pitch more slowly
+		if (psWeapStats->weight > HEAVY_WEAPON_WEIGHT)
+		{
+			UDWORD excess = 100 * (psWeapStats->weight - HEAVY_WEAPON_WEIGHT) / psWeapStats->weight;
+
+			rotRate = ACTION_TURRET_ROTATION_RATE * 2 - excess;
+			pitchRate = (SWORD) (rotRate / 2);
+		}
+	}
 
 	tRotation = *pRotation;
 	tPitch = *pPitch;
