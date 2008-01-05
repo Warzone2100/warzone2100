@@ -24,9 +24,11 @@
 #include <string.h>
 #include <stddef.h>
 
+/*
  *  The "original" strlcpy() and strlcat() functions will return the amount
  *  of characters the destination string would be long, if no truncation has
  *  occurred.
+ */
 
 /** A safer variant of \c strncpy and its completely unsafe variant \c strcpy.
  *  This function will guarantee that (as long as the destination buffer is at
