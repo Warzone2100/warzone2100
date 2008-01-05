@@ -736,6 +736,8 @@ void giftArtifact(UDWORD owner, UDWORD x, UDWORD y)
 				MakeResearchPossible(&pR[topic]);
 				CONPRINTF(ConsoleString,(ConsoleString,_("You Discover Blueprints For %s"),
 					getName(asResearch[topic].pName)));
+				
+				break;
 			}
 		}
 	}
