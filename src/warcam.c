@@ -291,11 +291,11 @@ static void setUpRadarTarget(SDWORD x, SDWORD y)
 	if ((x < 0) || (y < 0) || (x > (SDWORD)((mapWidth - 1) * TILE_UNITS))
 	    || (y > (SDWORD)((mapHeight - 1) * TILE_UNITS)))
 	{
-		radarTarget.pos.z = 128 * ELEVATION_SCALE;
+		radarTarget.pos.z = 128 * ELEVATION_SCALE + CAMERA_PIVOT_HEIGHT;
 	}
 	else
 	{
-		radarTarget.pos.z = map_Height(x,y);
+		radarTarget.pos.z = map_Height(x,y) + CAMERA_PIVOT_HEIGHT;
 	}
 	radarTarget.direction = calcDirection(player.p.x, player.p.z, x, y);
 	radarTarget.pitch = 0;
@@ -1117,16 +1117,6 @@ static void updateCameraRotationPosition( UBYTE update )
 	}
 }
 
-static bool nearEnough(void)
-{
-	const int xPos = player.p.x + world_coord(mapWidth) / 2;
-	const int yPos = player.p.z + world_coord(mapHeight) / 2;
-
-	return (abs(xPos - trackingCamera.target->pos.x) <= 256
-	     && abs(yPos - trackingCamera.target->pos.y) <= 256);
-}
-
-
 /* Returns how far away we are from our goal in a radar track */
 static UDWORD getPositionMagnitude( void )
 {
@@ -1297,9 +1287,9 @@ BOOL	bFlying;
 		*/
 		if(getRotationMagnitude()<10000)
 		{
-			if(nearEnough() && getPositionMagnitude() < 60)
+			if(getPositionMagnitude() < 60)
 			{
-				camToggleStatus();
+				setWarCamActive(FALSE);
 			}
 		}
 	}
