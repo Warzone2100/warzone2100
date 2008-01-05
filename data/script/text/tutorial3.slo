@@ -356,9 +356,6 @@ event	buildDerrick(inactive)
 	// Playsound "Oil resources are key to your success"
 	playSound(SND_TUT2,0);
 
-	// Allow the player to build derricks 
-	enableStructure(oilDerrick,0);
-
 	// PlaySound "To build an oil derrick, select one of your trucks"
 	playSound(SND_TUT3,0);
 
@@ -366,15 +363,20 @@ event	buildDerrick(inactive)
 
 	tagConsoleText(m_msg1,0);
 
+	setEventTrigger(truckSelected,droidSelTrig);
+
 	// Close this event down
 	setEventTrigger(buildDerrick,inactive);
 }
 
 // -------------------------------------------------------------
 // What to do when we get the truck selected
-event	truckSelected(CALL_DROID_SELECTED,ref selDroid)
+event	truckSelected(inactive)
 {
 	tutState = 2;
+
+	// Allow the player to build derricks 
+	enableStructure(oilDerrick,0);
 
 	// Wait..
 	pause(10);
@@ -408,9 +410,6 @@ event	derrickBuilt(CALL_RESEX_BUILT)
 	// wait...
 	pause(20);
 
-	// Allow power generators to be built
-	enableStructure(powerGen,0);
-
 	// PlaySound "Left click the flashing build icon"
 	playSound(SND_TUT7,0);
 
@@ -433,6 +432,9 @@ event	derrickBuilt(CALL_RESEX_BUILT)
 event	buildIconChosen(buildlistTrig)
 {
 	tutState = 4;
+
+	// Allow power generators to be built
+	enableStructure(powerGen,0);
 
 	// Stop the build icon flashing...
 	flashOff(IDRET_BUILD);
@@ -498,21 +500,18 @@ event	otherUnitSelected(inactive)
 // -------------------------------------------------------------
 event	correctUnit(inactive)
 {
-   if(tutState==7)
-   {
-   		tutState = 8;
+	tutState = 8;
 
-		// PlaySound "Now left click the power generator site
-		playSound(SND_TUT11,0);
+	// PlaySound "Now left click the power generator site
+	playSound(SND_TUT11,0);
 
-		addConsoleText(m_msge18,0);
+	addConsoleText(m_msge18,0);
 
-		// Setup the helped-to-build event
-		setEventTrigger(helpedToBuild,droidHelpTrig);
+	// Setup the helped-to-build event
+	setEventTrigger(helpedToBuild,droidHelpTrig);
 
-		// And close this one
-		setEventTrigger(correctUnit,inactive);
-	}
+	// And close this one
+	setEventTrigger(correctUnit,inactive);
 }
 // -------------------------------------------------------------
 event	helpedToBuild(inactive)
