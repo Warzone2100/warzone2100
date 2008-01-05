@@ -60,7 +60,7 @@ extern void recvOptions				();
 extern void sendOptions				(uint32_t dest, uint32_t play);
 extern BOOL recvScoreSubmission		();
 extern BOOL recvHappyVtol			(void);
-extern BOOL recvResearchStatus		(NETMSG *pMsg);
+extern BOOL recvResearchStatus		();
 extern BOOL recvLasSat				();
 extern BOOL	recvMapFileData				(NETMSG *pMsg);
 extern BOOL	recvMapFileRequested		(NETMSG *pMsg);

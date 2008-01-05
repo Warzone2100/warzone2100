@@ -869,79 +869,89 @@ static BOOL recvResearch()
 // ////////////////////////////////////////////////////////////////////////////
 // New research stuff, so you can see what others are up to!
 // inform others that I'm researching this.
-BOOL sendReseachStatus(STRUCTURE *psBuilding ,UDWORD index, UBYTE player, BOOL bStart)
-{
-	NETMSG m;
-	UDWORD nil =0;
-	UWORD start = (UBYTE)bStart;
-	if(!myResponsibility(player) || gameTime <5 )
+BOOL sendReseachStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, BOOL bStart)
+{	
+	if (!myResponsibility(player) || gameTime < 5)
 	{
 		return TRUE;
 	}
+	
+	NETbeginEncode(NET_RESEARCHSTATUS, NET_ALL_PLAYERS);
+		NETuint8_t(&player);
+		NETbool(&bStart);
+		
+		// If we know the building researching it then send its ID
+		if (psBuilding)
+		{
+			NETuint32_t(&psBuilding->id);
+		}
+		else
+		{
+			NETnull();
+		}
+		
+		// Finally the topic in question
+		NETuint32_t(&index);
+	NETend();
 
-	NetAdd(m,0,player);				// player researching
-	NetAdd(m,1,start);	// start stop..
-	if(psBuilding)
-	{
-		NetAdd(m,2,psBuilding->id);	// res lab.
-	}
-	else
-	{
-		NetAdd(m,2,nil);			// res lab.
-	}
-	NetAdd(m,6,index);				// topic.
-
-	m.size = 10;
-	m.type = NET_RESEARCHSTATUS;
-
-	return( NETbcast(&m,FALSE) );
+	return TRUE;
 }
 
-
-BOOL recvResearchStatus(NETMSG *pMsg)
+BOOL recvResearchStatus()
 {
 	STRUCTURE			*psBuilding;
 	PLAYER_RESEARCH		*pPlayerRes;
 	RESEARCH_FACILITY	*psResFacilty;
 	RESEARCH			*pResearch;
-	UBYTE				player,bStart;
-	UDWORD				index,buildingId;
+	uint8_t				player;
+	BOOL				bStart;
+	uint32_t			index, structRef;
 
-	NetGet(pMsg,0,player);				// player researching
-	NetGet(pMsg,1,bStart);				// start stop..
-	NetGet(pMsg,2,buildingId);			// res lab.
-	NetGet(pMsg,6,index);				// topic.
+	NETbeginDecode();
+		NETuint8_t(&player);
+		NETbool(&bStart);
+		NETuint32_t(&structRef);
+		NETuint32_t(&index);
+	NETend();
 
 	pPlayerRes = asPlayerResList[player] + index;
 
-	// psBuilding may be null if finishing.
-	if(bStart)							//starting research
+	// psBuilding may be null if finishing
+	if (bStart)							// Starting research
 	{
-		psBuilding = IdToStruct( buildingId, player);
-		if(psBuilding)					// set that facility to research
+		psBuilding = IdToStruct(structRef, player);
+		
+		// Set that facility to research
+		if (psBuilding)
 		{
-
-			psResFacilty =	(RESEARCH_FACILITY*)psBuilding->pFunctionality;
-			if(psResFacilty->psSubject != NULL)
+			psResFacilty = (RESEARCH_FACILITY *) psBuilding->pFunctionality;
+			
+			if (psResFacilty->psSubject)
 			{
 				cancelResearch(psBuilding);
 			}
-			pResearch				= (asResearch+index);
-			psResFacilty->psSubject = (BASE_STATS*)pResearch;		  //set the subject up
+			
+			// Set the subject up
+			pResearch				= asResearch + index;
+			psResFacilty->psSubject = (BASE_STATS *) pResearch;
 
+			// If they have previously started but cancelled there is no need to accure power
 			if (IsResearchCancelled(pPlayerRes))
 			{
-				psResFacilty->powerAccrued	= pResearch->researchPower;//set up as if all power available for cancelled topics
+				psResFacilty->powerAccrued	= pResearch->researchPower;
 			}
 			else
 			{
 				psResFacilty->powerAccrued	= 0;
 			}
 
+			// Start the research
 			MakeResearchStarted(pPlayerRes);
 			psResFacilty->timeStarted		= ACTION_START_TIME;
 			psResFacilty->timeStartHold		= 0;
-			psResFacilty->timeToResearch	= pResearch->researchPoints / 	psResFacilty->researchPoints;
+			psResFacilty->timeToResearch	= pResearch->researchPoints / psResFacilty->researchPoints;
+			
+			// A failsafe of some sort
 			if (psResFacilty->timeToResearch == 0)
 			{
 				psResFacilty->timeToResearch = 1;
@@ -949,41 +959,39 @@ BOOL recvResearchStatus(NETMSG *pMsg)
 		}
 
 	}
-	else								// finished/cancelled research
+	// Finished/cancelled research
+	else
 	{
-		if(buildingId == 0)				// find the centre doing this research.(set building
+		// If they completed the research, we're done
+		if (IsResearchCompleted(pPlayerRes))
 		{
-			// go through the structs to find the centre that's doing this topic)
-			for(psBuilding = apsStructLists[player];psBuilding;psBuilding = psBuilding->psNext)
+			return TRUE;
+		}
+		
+		// If they did not say what facility it was, look it up orselves
+		if (!psBuilding)
+		{
+			// Go through the structs to find the one doing this topic
+			for (psBuilding = apsStructLists[player]; psBuilding; psBuilding = psBuilding->psNext)
 			{
-				if(   psBuilding->pStructureType->type == REF_RESEARCH
-				   && psBuilding->status == SS_BUILT
-				   && ((RESEARCH_FACILITY *)psBuilding->pFunctionality)->psSubject
-				   && ((RESEARCH_FACILITY *)psBuilding->pFunctionality)->psSubject->ref - REF_RESEARCH_START == index
-				  )
+				if (psBuilding->pStructureType->type == REF_RESEARCH
+				 && psBuilding->status == SS_BUILT
+				 && ((RESEARCH_FACILITY *) psBuilding->pFunctionality)->psSubject
+				 && ((RESEARCH_FACILITY *) psBuilding->pFunctionality)->psSubject->ref - REF_RESEARCH_START == index)
 				{
 					break;
 				}
 			}
 		}
-		else
-		{
-			psBuilding = IdToStruct( buildingId, player);
-		}
-
-		if(IsResearchCompleted(pPlayerRes))
-		{
-			return TRUE;
-		}
-
-		// stop that facility doing any research.
-		if(psBuilding)
+		
+		// Stop the facility doing any research
+		if (psBuilding)
 		{
 			cancelResearch(psBuilding);
 		}
 	}
+	
 	return TRUE;
-
 }
 
 
