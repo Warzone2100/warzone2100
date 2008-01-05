@@ -59,10 +59,6 @@ warzone2100_LDADD = \
 	$(top_builddir)/lib/gamelib/libgamelib.a \
 	$(top_builddir)/lib/framework/libframework.a
 
-if MINGW32
-warzone2100_LDADD += $(WIN32_PRE_LIBS)
-endif
-
 warzone2100_LDADD += $(SDL_LIBS) $(SDL_NET_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(OGGVORBIS_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(POPT_LIBS)
 
 if MINGW32
