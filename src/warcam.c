@@ -1026,13 +1026,17 @@ static void updateCameraRotationAcceleration( UBYTE update )
 				trackingCamera.rotation.x+=DEG(360);
 			}
 		worldAngle =  trackingCamera.rotation.x;
-		separation = fmodf(xConcern - worldAngle, DEG(360));
+		separation = xConcern - worldAngle;
 
-		// Make sure that rotations larger than 180 degrees are noted
-		// in the range of -180 - 0 degrees.
-		if (separation > DEG(180))
+		// Make sure that rotations are noted
+		// in the range of -180 - 180 degrees.
+		while (separation > DEG(180))
 		{
 			separation -= DEG(360);
+		}
+		while (separation < -DEG(180))
+		{
+			separation += DEG(360);
 		}
 
 		/* Make new acceleration */

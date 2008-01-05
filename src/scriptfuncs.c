@@ -7464,7 +7464,7 @@ BOOL scrMapRevealedInRange(void)
 /* Returns true if a certain map tile was revealed, ie fog of war was removed */
 BOOL scrMapTileVisible(void)
 {
-	SDWORD		tileX,tileY,wRange,player;
+	SDWORD		tileX,tileY,player;
 
 	if (!stackPopParams(3, VAL_INT, &tileX, VAL_INT, &tileY, VAL_INT, &player))
 	{
