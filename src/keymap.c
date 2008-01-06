@@ -658,7 +658,7 @@ static BOOL checkQwertyKeys( void )
 		{
 			tableEntry = asciiKeyCodeToTable(qKey);
 			/* We're assigning something to the key */
-			debug(LOG_WARNING, "tableEntry: %i", tableEntry);
+			debug(LOG_NEVER, "Assigning keymapping to tableEntry: %i", tableEntry);
 			if (qwertyKeyMappings[tableEntry].psMapping)
 			{
 				/* Get rid of the old mapping on this key if there was one */
