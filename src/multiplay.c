@@ -969,7 +969,7 @@ BOOL recvResearchStatus()
 		}
 		
 		// If they did not say what facility it was, look it up orselves
-		if (!psBuilding)
+		if (!structRef)
 		{
 			// Go through the structs to find the one doing this topic
 			for (psBuilding = apsStructLists[player]; psBuilding; psBuilding = psBuilding->psNext)
