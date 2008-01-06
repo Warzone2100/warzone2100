@@ -2285,9 +2285,9 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 	UDWORD			fileExten, fileSize, pl;
 	char			*pFileData = NULL;
 	UDWORD			player, inc, i, j;
-    DROID           *psCurr;
-    UWORD           missionScrollMinX = 0, missionScrollMinY = 0,
-		    missionScrollMaxX = 0, missionScrollMaxY = 0;
+	DROID           *psCurr;
+	UWORD           missionScrollMinX = 0, missionScrollMinY = 0,
+	                missionScrollMaxX = 0, missionScrollMaxY = 0;
 
 	debug( LOG_NEVER, "loadGame\n" );
 
@@ -2298,8 +2298,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		(gameType == GTYPE_SAVE_MIDMISSION))
 	{
 		gameTimeReset(savedGameTime);//added 14 may 98 JPS to solve kev's problem with no firing droids
-        //need to reset the event timer too - AB 14/01/99
-        eventTimeReset(savedGameTime/SCR_TICKRATE);
+		//need to reset the event timer too - AB 14/01/99
+		eventTimeReset(savedGameTime/SCR_TICKRATE);
 	}
 
 	/* Clear all the objects off the map and free up the map memory */
@@ -2407,7 +2407,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		{
 			//mission data
 			mission.time		=	saveGameData.missionOffTime;
-           	mission.ETA			=	saveGameData.missionETA;
+			mission.ETA			=	saveGameData.missionETA;
 			mission.homeLZ_X	=	saveGameData.missionHomeLZ_X;
 			mission.homeLZ_Y	=	saveGameData.missionHomeLZ_Y;
 			mission.playerX		=	saveGameData.missionPlayerX;
@@ -2418,12 +2418,12 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 				aDefaultSensor[player]				= saveGameData.aDefaultSensor[player];
 				aDefaultECM[player]					= saveGameData.aDefaultECM[player];
 				aDefaultRepair[player]				= saveGameData.aDefaultRepair[player];
-                //check for self repair having been set
-                if (aDefaultRepair[player] != 0 &&
-                    asRepairStats[aDefaultRepair[player]].location == LOC_DEFAULT)
-                {
-                    enableSelfRepair((UBYTE)player);
-                }
+				//check for self repair having been set
+				if (aDefaultRepair[player] != 0
+				 && asRepairStats[aDefaultRepair[player]].location == LOC_DEFAULT)
+				{
+					enableSelfRepair((UBYTE)player);
+				}
 				mission.iTranspEntryTileX[player]	= saveGameData.iTranspEntryTileX[player];
 				mission.iTranspEntryTileY[player]	= saveGameData.iTranspEntryTileY[player];
 				mission.iTranspExitTileX[player]	= saveGameData.iTranspExitTileX[player];
@@ -2545,20 +2545,20 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 				}
 			}
 		}
-        if (saveGameVersion >= VERSION_30)
-        {
-            scrGameLevel = saveGameData.scrGameLevel;
-            bExtraVictoryFlag = saveGameData.bExtraVictoryFlag;
-            bExtraFailFlag = saveGameData.bExtraFailFlag;
-            bTrackTransporter = saveGameData.bTrackTransporter;
-        }
+		if (saveGameVersion >= VERSION_30)
+		{
+			scrGameLevel = saveGameData.scrGameLevel;
+			bExtraVictoryFlag = saveGameData.bExtraVictoryFlag;
+			bExtraFailFlag = saveGameData.bExtraFailFlag;
+			bTrackTransporter = saveGameData.bTrackTransporter;
+		}
 
-        //extra code added for the first patch (v1.1) to save out if mission time is not being counted
+		//extra code added for the first patch (v1.1) to save out if mission time is not being counted
 		if (saveGameVersion >= VERSION_31)
 		{
 			//mission data
 			mission.cheatTime = saveGameData.missionCheatTime;
-        }
+		}
 
 		// skirmish saves.
 		if (saveGameVersion >= VERSION_33)
@@ -2581,10 +2581,10 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 				setMultiStats(NetPlay.dpidPlayer,playerStats,FALSE);
 				setMultiStats(NetPlay.dpidPlayer,playerStats,TRUE);
 			}
-        }
+		}
 
 
-    }
+	}
 
 	/* Get human and AI players names */
 	if (saveGameVersion >= VERSION_34)
@@ -2630,8 +2630,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 
 	//the terrain type WILL only change with Campaign changes (well at the moment!)
 	//if (freeMem) - this now works for Cam Start and Cam Change
-    if ((gameType != GTYPE_SCENARIO_EXPAND) ||
-		UserSaveGame)
+	if (gameType != GTYPE_SCENARIO_EXPAND
+	 || UserSaveGame)
 	{
 		LOADBARCALLBACK();	//		loadingScreenCallback();
 		//load in the terrain type map
@@ -2657,8 +2657,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		}
 	}
 
-    //load up the Droid Templates BEFORE any structures are loaded
-    LOADBARCALLBACK();	//	loadingScreenCallback();
+	//load up the Droid Templates BEFORE any structures are loaded
+	LOADBARCALLBACK();	//	loadingScreenCallback();
 	if (IsScenario==FALSE)
 	{
 		//NOT ANY MORE - use multiPlayerID (unique template id) to prevent duplicate's being loaded
@@ -2721,14 +2721,14 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 	{
 		LOADBARCALLBACK();	//		loadingScreenCallback();
 
-        //the scroll limits for the mission map have already been written
-        if (saveGameVersion >= VERSION_29)
-        {
-            missionScrollMinX = (UWORD)mission.scrollMinX;
-            missionScrollMinY = (UWORD)mission.scrollMinY;
-            missionScrollMaxX = (UWORD)mission.scrollMaxX;
-            missionScrollMaxY = (UWORD)mission.scrollMaxY;
-        }
+		//the scroll limits for the mission map have already been written
+		if (saveGameVersion >= VERSION_29)
+		{
+			missionScrollMinX = (UWORD)mission.scrollMinX;
+			missionScrollMinY = (UWORD)mission.scrollMinY;
+			missionScrollMaxX = (UWORD)mission.scrollMaxX;
+			missionScrollMaxY = (UWORD)mission.scrollMaxY;
+		}
 
 		//load the map and the droids then swap pointers
 //		psMapTiles = NULL;
@@ -2807,7 +2807,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		{
 			for(pl=0;pl<MAX_PLAYERS;pl++)// ajl. must do for every player to stop multiplay/pc players going gaga.
 			{
-			   //reverse the structure lists so the Research Facilities are in the same order as when saved
+				//reverse the structure lists so the Research Facilities are in the same order as when saved
 				reverseObjectList((BASE_OBJECT**)&apsStructLists[pl]);
 			}
 		}
@@ -2837,25 +2837,24 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			}
 		}
 
-        /*after we've loaded in the units we need to redo the orientation because
-        the direction may have been saved - we need to do it outside of the loop
-        whilst the current map is valid for the units*/
-        for (player = 0; player < MAX_PLAYERS; player++)
-        {
-            for (psCurr = apsDroidLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
-            {
-            	if(!(psCurr->droidType == DROID_PERSON ||
-                    //psCurr->droidType == DROID_CYBORG ||
-                    cyborgDroid(psCurr) ||
-                    psCurr->droidType == DROID_TRANSPORTER))
-	            {
-					if(psCurr->pos.x != INVALID_XY)
-					{
-						updateDroidOrientation(psCurr);
-					}
-	            }
-            }
-        }
+		/* after we've loaded in the units we need to redo the orientation because
+		 * the direction may have been saved - we need to do it outside of the loop
+		 * whilst the current map is valid for the units
+		 */
+		for (player = 0; player < MAX_PLAYERS; ++player)
+		{
+			for (psCurr = apsDroidLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			{
+				if (psCurr->droidType != DROID_PERSON
+				// && psCurr->droidType != DROID_CYBORG
+				 && !cyborgDroid(psCurr)
+				 && psCurr->droidType != DROID_TRANSPORTER
+				 && psCurr->pos.x != INVALID_XY)
+				{
+					updateDroidOrientation(psCurr);
+				}
+			}
+		}
 
 		LOADBARCALLBACK();	//		loadingScreenCallback();
 		//load in the flag list file
@@ -2881,16 +2880,15 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		}
 		swapMissionPointers();
 
-        //once the mission map has been loaded reset the mission scroll limits
-        if (saveGameVersion >= VERSION_29)
-        {
-            mission.scrollMinX = missionScrollMinX;
-            mission.scrollMinY = missionScrollMinY;
-            mission.scrollMaxX = missionScrollMaxX;
-            mission.scrollMaxY = missionScrollMaxY;
-        }
-
-    }
+		//once the mission map has been loaded reset the mission scroll limits
+		if (saveGameVersion >= VERSION_29)
+		{
+			mission.scrollMinX = missionScrollMinX;
+			mission.scrollMinY = missionScrollMinY;
+			mission.scrollMaxX = missionScrollMaxX;
+			mission.scrollMaxY = missionScrollMaxY;
+		}
+	}
 
 
 	//if Campaign Expand then don't load in another map
@@ -3033,27 +3031,26 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			goto error;
 		}
 
-        /*after we've loaded in the units we need to redo the orientation because
-        the direction may have been saved - we need to do it outside of the loop
-        whilst the current map is valid for the units*/
-        for (player = 0; player < MAX_PLAYERS; player++)
-        {
-            for (psCurr = apsDroidLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
-            {
-            	if(!(psCurr->droidType == DROID_PERSON ||
-                    //psCurr->droidType == DROID_CYBORG ||
-                    cyborgDroid(psCurr) ||
-                    psCurr->droidType == DROID_TRANSPORTER))
-	            {
-					if(psCurr->pos.x != INVALID_XY)
-					{
-			            updateDroidOrientation(psCurr);
-					}
-	            }
-            }
-        }
+		/* after we've loaded in the units we need to redo the orientation because
+		 * the direction may have been saved - we need to do it outside of the loop
+		 * whilst the current map is valid for the units
+		 */
+		for (player = 0; player < MAX_PLAYERS; ++player)
+		{
+			for (psCurr = apsDroidLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			{
+				if (psCurr->droidType != DROID_PERSON
+				// && psCurr->droidType != DROID_CYBORG
+				 && !cyborgDroid(psCurr)
+				 && psCurr->droidType != DROID_TRANSPORTER
+				 && psCurr->pos.x != INVALID_XY)
+				{
+					updateDroidOrientation(psCurr);
+				}
+			}
+		}
 
-        LOADBARCALLBACK();	//		loadingScreenCallback();
+		LOADBARCALLBACK();	//		loadingScreenCallback();
 		if (saveGameVersion >= 12)
 		{
 			if (!saveGameOnMission)
@@ -3127,9 +3124,9 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		goto error;
 	}
 
-    //load droid templates moved from here to BEFORE any structures loaded in
+	//load droid templates moved from here to BEFORE any structures loaded in
 
-//load in the structures
+	//load in the structures
 	LOADBARCALLBACK();	//	loadingScreenCallback();
 	aFileName[fileExten] = '\0';
 	strcat(aFileName, "struct.bjo");
@@ -3241,7 +3238,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			aFileName[fileExten] = '\0';
 			strcat(aFileName, "prodstate.bjo");
 			// Load in the chosen file data
-    		pFileData = fileLoadBuffer;
+			pFileData = fileLoadBuffer;
 			if (loadFileToBufferNoError(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 			{
 				//load the visibility data
@@ -3489,8 +3486,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 	{
 		ASSERT( gameTime == savedGameTime,"loadGame; game time modified during load" );
 		gameTimeReset(savedGameTime);//added 14 may 98 JPS to solve kev's problem with no firing droids
-        //need to reset the event timer too - AB 14/01/99
-        eventTimeReset(savedGameTime/SCR_TICKRATE);
+		//need to reset the event timer too - AB 14/01/99
+		eventTimeReset(savedGameTime/SCR_TICKRATE);
 
 		//reset the objId for new objects
 		if (saveGameVersion >= VERSION_17)
@@ -3499,14 +3496,14 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		}
 	}
 
-    //check the research button isn't flashing unnecessarily
-    //cancel first
-     stopReticuleButtonFlash(IDRET_RESEARCH);
-    //then see if needs to be set
-    intCheckResearchButton();
+	//check the research button isn't flashing unnecessarily
+	//cancel first
+	stopReticuleButtonFlash(IDRET_RESEARCH);
+	//then see if needs to be set
+	intCheckResearchButton();
 
-    //set up the mission countdown flag
-    setMissionCountDown();
+	//set up the mission countdown flag
+	setMissionCountDown();
 
 	/* Start the game clock */
 	gameTimeStart();
@@ -3519,34 +3516,35 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 //		bMultiPlayer = TRUE;				// reenable multi player messages.
 //		multiPlayerInUse = FALSE;
 //	}
-   //	initViewPosition();
+//	initViewPosition();
 	setViewAngle(INITIAL_STARTING_PITCH);
 	setDesiredPitch(INITIAL_DESIRED_PITCH);
 
-    //check if limbo_expand mission has changed to an expand mission for user save game (mid-mission)
-    if (gameType == GTYPE_SAVE_MIDMISSION && missionLimboExpand())
-    {
-        /*when all the units have moved from the mission.apsDroidList then the
-        campaign has been reset to an EXPAND type - OK so there should have
-        been another flag to indicate this state has changed but its late in
-        the day excuses...excuses...excuses*/
-        if (mission.apsDroidLists[selectedPlayer] == NULL)
-        {
-            //set the mission type
-            startMissionSave(LDS_EXPAND);
-        }
-    }
+	//check if limbo_expand mission has changed to an expand mission for user save game (mid-mission)
+	if (gameType == GTYPE_SAVE_MIDMISSION && missionLimboExpand())
+	{
+		/* when all the units have moved from the mission.apsDroidList then the
+		 * campaign has been reset to an EXPAND type - OK so there should have
+		 * been another flag to indicate this state has changed but its late in
+		 * the day excuses...excuses...excuses
+		 */
+		if (mission.apsDroidLists[selectedPlayer] == NULL)
+		{
+			//set the mission type
+			startMissionSave(LDS_EXPAND);
+		}
+	}
 
-    //set this if come into a save game mid mission
-    if (gameType == GTYPE_SAVE_MIDMISSION)
-    {
-        setScriptWinLoseVideo(PLAY_NONE);
-    }
+	//set this if come into a save game mid mission
+	if (gameType == GTYPE_SAVE_MIDMISSION)
+	{
+		setScriptWinLoseVideo(PLAY_NONE);
+	}
 
-    //need to clear before setting up
-    clearMissionWidgets();
-    //put any widgets back on for the missions
-    resetMissionWidgets();
+	//need to clear before setting up
+	clearMissionWidgets();
+	//put any widgets back on for the missions
+	resetMissionWidgets();
 
 	debug( LOG_NEVER, "loadGame: done\n" );
 
@@ -3837,11 +3835,11 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 			//limbo list invalidate XY
 			psDroid->pos.x = INVALID_XY;
 			psDroid->pos.y = INVALID_XY;
-            //this is mainly for VTOLs
+			//this is mainly for VTOLs
 			setSaveDroidBase(psDroid, NULL);
-            psDroid->cluster = 0;
+			psDroid->cluster = 0;
 			orderDroid(psDroid, DORDER_STOP);
-        }
+		}
 	}
 
 	aFileName[fileExtension] = '\0';
