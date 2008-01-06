@@ -25,6 +25,7 @@
 #include <lib3ds/material.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 // Based on 3ds2m.c from lib3ds
 
@@ -44,6 +45,19 @@ static void parse_args(int argc, char **argv)
 	output = argv[2];
 }
 
+// Make a string lower case
+void resToLower(char *pStr)
+{
+	while (*pStr != 0)
+	{
+		if (isupper(*pStr))
+		{
+			*pStr = (char)(*pStr - (char)('A' - 'a'));
+		}
+		pStr += 1;
+	}
+}
+
 static void dump_pie_file(Lib3dsFile *f, FILE *o)
 {
 	Lib3dsMesh *m;
@@ -57,6 +71,7 @@ static void dump_pie_file(Lib3dsFile *f, FILE *o)
 	{
 		Lib3dsTextureMap *texture = &material->texture1_map;
 
+		resToLower(texture->name);
 		if (i > 0)
 		{
 			fprintf(stderr, "Texture %d %s: More than one texture currently not supported!\n", i, texture->name);
@@ -90,7 +105,7 @@ static void dump_pie_file(Lib3dsFile *f, FILE *o)
 			Lib3dsFace *f = &m->faceL[i];
 
 			fprintf(o, "\t200 3 %d %d %d", (int)f->points[0], (int)f->points[1], (int)f->points[2]);
-			fprintf(o, "%d %d %d %d %d %d\n", (int)(m->texelL[f->points[0]][0] * 256), (int)(m->texelL[f->points[0]][1] * 256),
+			fprintf(o, " %d %d %d %d %d %d\n", (int)(m->texelL[f->points[0]][0] * 256), (int)(m->texelL[f->points[0]][1] * 256),
 			                                  (int)(m->texelL[f->points[1]][0] * 256), (int)(m->texelL[f->points[1]][1] * 256),
 			                                  (int)(m->texelL[f->points[2]][0] * 256), (int)(m->texelL[f->points[2]][1] * 256));
 		}
