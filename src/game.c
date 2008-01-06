@@ -1479,7 +1479,7 @@ typedef struct _save_move_control
 	UWORD	pauseTime;					// when MOVEPAUSE started - relative to bumpTime
 	UWORD	bumpX,bumpY;				// position of last bump
 	UDWORD	shuffleStart;				// when a shuffle started
-	struct _formation	*psFormation;			// formation the droid is currently a member of
+	BOOL	isInFormation;                          // Indicates wether this droid is a member of a formation
 	SWORD	iVertSpeed;
 	UDWORD	iAttackRuns[DROID_MAXWEAPS];
 	float   fz;
@@ -5654,6 +5654,145 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 	return psDroid;
 }
 
+static void SaveDroidMoveControl(SAVE_DROID * const psSaveDroid, DROID const * const psDroid)
+{
+	unsigned int i;
+
+	// Copy over the endian neutral stuff (all UBYTE)
+	psSaveDroid->sMove.Status    = psDroid->sMove.Status;
+	psSaveDroid->sMove.Position  = psDroid->sMove.Position;
+	psSaveDroid->sMove.numPoints = psDroid->sMove.numPoints;
+	memcpy(&psSaveDroid->sMove.asPath, &psDroid->sMove.asPath, sizeof(psSaveDroid->sMove.asPath));
+
+	
+	// Little endian SDWORDs
+	psSaveDroid->sMove.DestinationX = PHYSFS_swapSLE32(psDroid->sMove.DestinationX);
+	psSaveDroid->sMove.DestinationY = PHYSFS_swapSLE32(psDroid->sMove.DestinationY);
+	psSaveDroid->sMove.srcX         = PHYSFS_swapSLE32(psDroid->sMove.srcX);
+	psSaveDroid->sMove.srcY         = PHYSFS_swapSLE32(psDroid->sMove.srcY);
+	psSaveDroid->sMove.targetX      = PHYSFS_swapSLE32(psDroid->sMove.targetX);
+	psSaveDroid->sMove.targetY      = PHYSFS_swapSLE32(psDroid->sMove.targetY);
+
+	// Little endian floats
+	psSaveDroid->sMove.fx           = PHYSFS_swapSLE32(*(uint32_t*)(void*)&psDroid->sMove.fx);
+	psSaveDroid->sMove.fy           = PHYSFS_swapSLE32(*(uint32_t*)(void*)&psDroid->sMove.fy);
+	psSaveDroid->sMove.speed        = PHYSFS_swapSLE32(*(uint32_t*)(void*)&psDroid->sMove.speed);
+	psSaveDroid->sMove.moveDir      = PHYSFS_swapSLE32(*(uint32_t*)(void*)&psDroid->sMove.moveDir);
+	psSaveDroid->sMove.fz           = PHYSFS_swapSLE32(*(uint32_t*)(void*)&psDroid->sMove.fz);
+
+	// Little endian SWORDs
+	psSaveDroid->sMove.boundX       = PHYSFS_swapSLE16(psDroid->sMove.boundX);
+	psSaveDroid->sMove.boundY       = PHYSFS_swapSLE16(psDroid->sMove.boundY);
+	psSaveDroid->sMove.bumpDir      = PHYSFS_swapSLE16(psDroid->sMove.bumpDir);
+	psSaveDroid->sMove.iVertSpeed   = PHYSFS_swapSLE16(psDroid->sMove.iVertSpeed);
+
+	// Little endian UDWORDs
+	psSaveDroid->sMove.bumpTime     = PHYSFS_swapULE32(psDroid->sMove.bumpTime);
+	psSaveDroid->sMove.shuffleStart = PHYSFS_swapULE32(psDroid->sMove.shuffleStart);
+
+	// Array of little endian UDWORDS
+	for (i = 0; i < sizeof(psDroid->sMove.iAttackRuns) / sizeof(psDroid->sMove.iAttackRuns[0]); ++i)
+	{
+		psSaveDroid->sMove.iAttackRuns[i] = PHYSFS_swapULE32(psDroid->sMove.iAttackRuns[i]);
+	}
+
+	// Little endian UWORDs
+	psSaveDroid->sMove.lastBump     = PHYSFS_swapULE16(psDroid->sMove.lastBump);
+	psSaveDroid->sMove.pauseTime    = PHYSFS_swapULE16(psDroid->sMove.pauseTime);
+	psSaveDroid->sMove.bumpX        = PHYSFS_swapULE16(psDroid->sMove.bumpX);
+	psSaveDroid->sMove.bumpY        = PHYSFS_swapULE16(psDroid->sMove.bumpY);
+
+	if (psDroid->sMove.psFormation != NULL)
+	{
+		psSaveDroid->sMove.isInFormation = TRUE;
+		psSaveDroid->formationDir = psDroid->sMove.psFormation->dir;
+		psSaveDroid->formationX   = psDroid->sMove.psFormation->x;
+		psSaveDroid->formationY   = psDroid->sMove.psFormation->y;
+	}
+	else
+	{
+		psSaveDroid->sMove.isInFormation = FALSE;
+		psSaveDroid->formationDir = 0;
+		psSaveDroid->formationX   = 0;
+		psSaveDroid->formationY   = 0;
+	}
+
+	endian_sword(&psSaveDroid->formationDir);
+	endian_sdword(&psSaveDroid->formationX);
+	endian_sdword(&psSaveDroid->formationY);
+}
+
+static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const psSaveDroid)
+{
+	unsigned int i;
+
+	// Copy over the endian neutral stuff (all UBYTE)
+	psDroid->sMove.Status      = psSaveDroid->sMove.Status;
+	psDroid->sMove.Position    = psSaveDroid->sMove.Position;
+	psDroid->sMove.numPoints   = psSaveDroid->sMove.numPoints;
+	memcpy(&psDroid->sMove.asPath, &psSaveDroid->sMove.asPath, sizeof(psSaveDroid->sMove.asPath));
+
+	
+	// Little endian SDWORDs
+	psDroid->sMove.DestinationX = PHYSFS_swapSLE32(psSaveDroid->sMove.DestinationX);
+	psDroid->sMove.DestinationY = PHYSFS_swapSLE32(psSaveDroid->sMove.DestinationY);
+	psDroid->sMove.srcX         = PHYSFS_swapSLE32(psSaveDroid->sMove.srcX);
+	psDroid->sMove.srcY         = PHYSFS_swapSLE32(psSaveDroid->sMove.srcY);
+	psDroid->sMove.targetX      = PHYSFS_swapSLE32(psSaveDroid->sMove.targetX);
+	psDroid->sMove.targetY      = PHYSFS_swapSLE32(psSaveDroid->sMove.targetY);
+
+	// Little endian floats
+	psDroid->sMove.fx           = PHYSFS_swapSLE32(*(uint32_t*)(void*)&psSaveDroid->sMove.fx);
+	psDroid->sMove.fy           = PHYSFS_swapSLE32(*(uint32_t*)(void*)&psSaveDroid->sMove.fy);
+	psDroid->sMove.speed        = PHYSFS_swapSLE32(*(uint32_t*)(void*)&psSaveDroid->sMove.speed);
+	psDroid->sMove.moveDir      = PHYSFS_swapSLE32(*(uint32_t*)(void*)&psSaveDroid->sMove.moveDir);
+	psDroid->sMove.fz           = PHYSFS_swapSLE32(*(uint32_t*)(void*)&psSaveDroid->sMove.fz);
+
+	// Little endian SWORDs
+	psDroid->sMove.boundX       = PHYSFS_swapSLE16(psSaveDroid->sMove.boundX);
+	psDroid->sMove.boundY       = PHYSFS_swapSLE16(psSaveDroid->sMove.boundY);
+	psDroid->sMove.bumpDir      = PHYSFS_swapSLE16(psSaveDroid->sMove.bumpDir);
+	psDroid->sMove.iVertSpeed   = PHYSFS_swapSLE16(psSaveDroid->sMove.iVertSpeed);
+
+	// Little endian UDWORDs
+	psDroid->sMove.bumpTime     = PHYSFS_swapULE32(psSaveDroid->sMove.bumpTime);
+	psDroid->sMove.shuffleStart = PHYSFS_swapULE32(psSaveDroid->sMove.shuffleStart);
+
+	// Array of little endian UDWORDS
+	for (i = 0; i < sizeof(psSaveDroid->sMove.iAttackRuns) / sizeof(psSaveDroid->sMove.iAttackRuns[0]); ++i)
+	{
+		psDroid->sMove.iAttackRuns[i] = PHYSFS_swapULE32(psSaveDroid->sMove.iAttackRuns[i]);
+	}
+
+	// Little endian UWORDs
+	psDroid->sMove.lastBump     = PHYSFS_swapULE16(psSaveDroid->sMove.lastBump);
+	psDroid->sMove.pauseTime    = PHYSFS_swapULE16(psSaveDroid->sMove.pauseTime);
+	psDroid->sMove.bumpX        = PHYSFS_swapULE16(psSaveDroid->sMove.bumpX);
+	psDroid->sMove.bumpY        = PHYSFS_swapULE16(psSaveDroid->sMove.bumpY);
+
+	if (psSaveDroid->sMove.isInFormation)
+	{
+		psDroid->sMove.psFormation = NULL;
+//		psSaveDroid->formationDir;
+//		psSaveDroid->formationX;
+//		psSaveDroid->formationY;
+		// join a formation if it exists at the destination
+		if (formationFind(&psDroid->sMove.psFormation, psSaveDroid->formationX, psSaveDroid->formationY))
+		{
+			formationJoin(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid);
+		}
+		else
+		{
+			// no formation so create a new one
+			if (formationNew(&psDroid->sMove.psFormation, FT_LINE, psSaveDroid->formationX, psSaveDroid->formationY,
+					(SDWORD)psSaveDroid->formationDir))
+			{
+				formationJoin(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid);
+			}
+		}
+	}
+}
+
 // -----------------------------------------------------------------------------------------
 //version 20 + after names change
 static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
@@ -5890,29 +6029,7 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	if (version >= VERSION_24)//version 24
 	{
 		psDroid->resistance = (SWORD)psSaveDroid->resistance;
-		memcpy(&psDroid->sMove, &psSaveDroid->sMove, sizeof(SAVE_MOVE_CONTROL));
-		psDroid->sMove.fz= (float)psDroid->pos.z;
-		if (psDroid->sMove.psFormation != NULL)
-		{
-			psDroid->sMove.psFormation = NULL;
-//			psSaveDroid->formationDir;
-//			psSaveDroid->formationX;
-//			psSaveDroid->formationY;
-			// join a formation if it exists at the destination
-			if (formationFind(&psDroid->sMove.psFormation, psSaveDroid->formationX, psSaveDroid->formationY))
-			{
-				formationJoin(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid);
-			}
-			else
-			{
-				// no formation so create a new one
-				if (formationNew(&psDroid->sMove.psFormation, FT_LINE, psSaveDroid->formationX, psSaveDroid->formationY,
-						(SDWORD)psSaveDroid->formationDir))
-				{
-					formationJoin(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid);
-				}
-			}
-		}
+		LoadDroidMoveControl(psDroid, psSaveDroid);
 	}
 	return psDroid;
 }
@@ -6424,7 +6541,7 @@ BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
 		endian_sdword(&psSaveDroid->sMove.targetY);
 		endian_sword(&psSaveDroid->sMove.boundX);
 		endian_sword(&psSaveDroid->sMove.boundY);
-		endian_sword(&psSaveDroid->sMove.dir);
+		endian_sword(&psSaveDroid->sMove.moveDir);
 		endian_sword(&psSaveDroid->sMove.bumpDir);
 		endian_udword(&psSaveDroid->sMove.bumpTime);
 		endian_uword(&psSaveDroid->sMove.lastBump);
@@ -6647,19 +6764,9 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 
 			//version 24
 			psSaveDroid->resistance = psCurr->resistance;
-			memcpy(&psSaveDroid->sMove, &psCurr->sMove, sizeof(SAVE_MOVE_CONTROL));
-			if (psCurr->sMove.psFormation != NULL)
-			{
-				psSaveDroid->formationDir	= psCurr->sMove.psFormation->dir;
-				psSaveDroid->formationX		= psCurr->sMove.psFormation->x;
-				psSaveDroid->formationY		= psCurr->sMove.psFormation->y;
-			}
-			else
-			{
-				psSaveDroid->formationDir	= 0;
-				psSaveDroid->formationX		= 0;
-				psSaveDroid->formationY		= 0;
-			}
+
+			// Save the move control
+			SaveDroidMoveControl(psSaveDroid, psCurr);
 
 			psSaveDroid->id = psCurr->id;
 			psSaveDroid->x = psCurr->pos.x;
@@ -6676,35 +6783,10 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			/* SAVE_DROID is DROID_SAVE_V24 */
 			/* DROID_SAVE_V24 includes DROID_SAVE_V21 */
 			endian_sdword(&psSaveDroid->resistance);
-			endian_sdword(&psSaveDroid->sMove.DestinationX);
-			endian_sdword(&psSaveDroid->sMove.DestinationY);
-			endian_sdword(&psSaveDroid->sMove.srcX);
-			endian_sdword(&psSaveDroid->sMove.srcY);
-			endian_sdword(&psSaveDroid->sMove.targetX);
-			endian_sdword(&psSaveDroid->sMove.targetY);
-			endian_fract(&psSaveDroid->sMove.fx);
-			endian_fract(&psSaveDroid->sMove.fy);
-			endian_fract(&psSaveDroid->sMove.speed);
-			endian_sword(&psSaveDroid->sMove.boundX);
-			endian_sword(&psSaveDroid->sMove.boundY);
-			endian_sword(&psSaveDroid->sMove.dir);
-			endian_sword(&psSaveDroid->sMove.bumpDir);
-			endian_udword(&psSaveDroid->sMove.bumpTime);
-			endian_uword(&psSaveDroid->sMove.lastBump);
-			endian_uword(&psSaveDroid->sMove.pauseTime);
-			endian_uword(&psSaveDroid->sMove.bumpX);
-			endian_uword(&psSaveDroid->sMove.bumpY);
-			endian_sword(&psSaveDroid->sMove.iVertSpeed);
 
-			for(i = 0;i < psSaveDroid->numWeaps;i++)
-			{
-				endian_uword(&psSaveDroid->sMove.iAttackRuns[i]);
-			}
-			//endian_uword(&psSaveDroid->sMove.iGuardRadius);
+			// psSaveDroid->formationDir, psSaveDroid->formationX and psSaveDroid->formationY are set by SaveDroidMoveControl
+			// already, which also performs endian swapping, so we can (and should!) safely ignore those here.
 
-			endian_sword(&psSaveDroid->formationDir);
-			endian_sdword(&psSaveDroid->formationX);
-			endian_sdword(&psSaveDroid->formationY);
 			/* DROID_SAVE_V21 includes DROID_SAVE_V20 */
 			endian_udword(&psSaveDroid->commandId);
 			/* DROID_SAVE_V20 includes OBJECT_SAVE_V20 */
