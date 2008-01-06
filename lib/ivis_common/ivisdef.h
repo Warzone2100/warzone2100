@@ -43,8 +43,6 @@
 #define iV_SCANTABLE_MAX	1024
 
 // texture animation defines
-#define iV_IMD_ANIM_LOOP	0
-#define iV_IMD_ANIM_RUN		1
 #define iV_IMD_ANIM_FRAMES	8
 
 
