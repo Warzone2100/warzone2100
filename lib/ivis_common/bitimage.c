@@ -58,7 +58,7 @@ static unsigned short LoadTextureFile(const char *FileName)
 IMAGEFILE *iV_LoadImageFile(const char *fileName)
 {
 	char *pFileData, *ptr, *dot;
-	UDWORD pFileSize, numImages = 0, i, tPages = 0;
+	unsigned int pFileSize, numImages = 0, i, tPages = 0;
 	IMAGEFILE *ImageFile;
 	char texFileName[PATH_MAX];
 
@@ -74,8 +74,8 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		numImages += (*ptr == '\n') ? 1 : 0;
 		ptr++;
 	}
-	ImageFile = malloc(sizeof(IMAGEFILE));
-	ImageFile->ImageDefs = malloc(sizeof(IMAGEDEF) * numImages);
+	ImageFile = malloc(sizeof(IMAGEFILE) + sizeof(IMAGEDEF) * numImages);
+	ImageFile->ImageDefs = (IMAGEDEF*)(ImageFile + 1); // we allocated extra space for it
 	ptr = pFileData;
 	numImages = 0;
 	while (ptr < pFileData + pFileSize)
@@ -83,7 +83,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		int temp, retval;
 		IMAGEDEF *ImageDef = &ImageFile->ImageDefs[numImages];
 
-		retval = sscanf(ptr, "%d,%d,%d,%d,%d,%d,%d%n", &ImageDef->TPageID, &ImageDef->Tu, &ImageDef->Tv, &ImageDef->Width, 
+		retval = sscanf(ptr, "%u,%u,%u,%u,%u,%d,%d%n", &ImageDef->TPageID, &ImageDef->Tu, &ImageDef->Tv, &ImageDef->Width, 
 		       &ImageDef->Height, &ImageDef->XOffset, &ImageDef->YOffset, &temp);
 		if (retval != 7)
 		{
@@ -109,7 +109,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 	{
 		char path[PATH_MAX];
 
-		snprintf(path, PATH_MAX, "%s%d.png", texFileName, i);
+		snprintf(path, PATH_MAX, "%s%u.png", texFileName, i);
 		ImageFile->TPageIDs[i] = LoadTextureFile(path);
 	}
 	ImageFile->NumImages = numImages;

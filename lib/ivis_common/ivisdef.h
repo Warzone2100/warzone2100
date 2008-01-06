@@ -144,25 +144,19 @@ typedef struct iIMDShape {
 //*************************************************************************
 
 typedef struct {
-	int TPageID;	/**< Which associated file to read our info from */
-	int Tu;		/**< First vertex coordinate */
-	int Tv;		/**< Second vertex coordinate */
-	int Width;	/**< Width of image */
-	int Height;	/**< Height of image */
-	int XOffset;	/**< X offset into source position */
-	int YOffset;	/**< Y offset into source position */
+	unsigned int TPageID;   /**< Which associated file to read our info from */
+	unsigned int Tu;        /**< First vertex coordinate */
+	unsigned int Tv;        /**< Second vertex coordinate */
+	unsigned int Width;     /**< Width of image */
+	unsigned int Height;    /**< Height of image */
+	int XOffset;            /**< X offset into source position */
+	int YOffset;            /**< Y offset into source position */
 } IMAGEDEF;
 
 typedef struct {
-	int NumImages;		/**< Number of images contained here */
-	int TPageIDs[16];	/**< OpenGL Texture IDs */
-	IMAGEDEF *ImageDefs;	/**< Stored images */
+	int NumImages;          /**< Number of images contained here */
+	int TPageIDs[16];       /**< OpenGL Texture IDs */
+	IMAGEDEF *ImageDefs;    /**< Stored images */
 } IMAGEFILE;
-
-/***************************************************************************/
-/*
- *	Global Variables
- */
-/***************************************************************************/
 
 #endif // _ivisdef_h
