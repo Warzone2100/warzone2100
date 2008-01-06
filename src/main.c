@@ -69,6 +69,13 @@
 #include "wrappers.h"
 #include "version.h"
 
+#if defined(WZ_OS_UNIX)
+# include <unistd.h>
+# include <errno.h>
+#elif defined(WZ_OS_WIN)
+# include <windows.h>
+#endif
+
 #ifndef DATADIR
 # define DATADIR "/usr/share/warzone2100/"
 #endif
@@ -189,6 +196,60 @@ void printSearchPath( void )
 	PHYSFS_freeList( searchPath );
 }
 
+/** Retrieves the current working directory and copies it into the provided output buffer
+ *  \param[out] dest the output buffer to put the current working directory in
+ *  \param size the size (in bytes) of \c dest
+ *  \return true on success, false if an error occurred (and dest doesn't contain a valid directory)
+ */
+static bool getCurrentDir(char * const dest, size_t const size)
+{
+#if defined(WZ_OS_UNIX)
+	if (getcwd(dest, size) == NULL)
+	{
+		if (errno == ERANGE)
+		{
+			debug(LOG_ERROR, "getPlatformUserDir: The buffer to contain our current directory is too small (%u bytes and more needed)", (unsigned int)size);
+		}
+		else
+		{
+			debug(LOG_ERROR, "getPlatformUserDir: getcwd failed: %s", strerror(errno));
+		}
+		
+		return false;
+	}
+#elif defined(WZ_OS_WIN)
+	const int len = GetCurrentDirectoryA(size, dest);
+
+	if (len == 0)
+	{
+		// Retrieve Windows' error number
+		const int err = GetLastError();
+		char* err_string;
+
+		// Retrieve a string describing the error number (uses LocalAlloc() to allocate memory for err_string)
+		FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER, FORMAT_MESSAGE_FROM_SYSTEM, NULL, err, 0, &err_string, 0, NULL);
+
+		// Print an error message with the above description
+		debug(LOG_ERROR, "getPlatformUserDir: GetCurrentDirectoryA failed (error code: %d): %s", err, err_string);
+
+		// Free our chunk of memory FormatMessageA gave us
+		LocalFree(err_string);
+			
+		return false;
+	}
+	else if (len > size)
+	{
+		debug(LOG_ERROR, "getPlatformUserDir: The buffer to contain our current directory is too small (%u bytes and %d needed)", (unsigned int)size, len);
+		
+		return false;
+	}
+#else
+# error "Provide an implementation here to copy the current working directory in 'dest', which is 'size' bytes large."
+#endif
+
+	// If we got here everything went well
+	return true;
+}
 
 static void getPlatformUserDir(char * const tmpstr, size_t const size)
 {
@@ -213,7 +274,13 @@ static void getPlatformUserDir(char * const tmpstr, size_t const size)
 		strlcat(tmpstr, PHYSFS_getDirSeparator(), size);
 	else
 #endif
+	if (PHYSFS_getUserDir())
 		strlcpy(tmpstr, PHYSFS_getUserDir(), size); // Use PhysFS supplied UserDir (As fallback on Windows / Mac, default on Linux)
+	// If PhysicsFS fails (might happen if environment variable HOME is unset or wrong) then use the current working directory
+	else if (getCurrentDir(tmpstr, size))
+		strlcat(tmpstr, PHYSFS_getDirSeparator(), size);
+	else
+		abort();
 }
 
 static void initialize_ConfigDir(void)
