@@ -1472,7 +1472,7 @@ typedef struct _save_move_control
 	float	fx,fy;						// droid location as a fract
 	float	speed;						// Speed of motion
 	SWORD	boundX,boundY;				// Vector for the end of path boundary
-	SWORD	dir;						// direction of motion (not the direction the droid is facing)
+	SWORD	moveDir;						// direction of motion (not the direction the droid is facing)
 	SWORD	bumpDir;					// direction at last bump
 	UDWORD	bumpTime;					// time of first bump with something
 	UWORD	lastBump;					// time of last bump with a droid - relative to bumpTime
@@ -1481,7 +1481,8 @@ typedef struct _save_move_control
 	UDWORD	shuffleStart;				// when a shuffle started
 	struct _formation	*psFormation;			// formation the droid is currently a member of
 	SWORD	iVertSpeed;
-	UWORD	iAttackRuns[DROID_MAXWEAPS];
+	UDWORD	iAttackRuns[DROID_MAXWEAPS];
+	float   fz;
 } SAVE_MOVE_CONTROL;
 
 
@@ -6693,25 +6694,6 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			endian_uword(&psSaveDroid->sMove.pauseTime);
 			endian_uword(&psSaveDroid->sMove.bumpX);
 			endian_uword(&psSaveDroid->sMove.bumpY);
-/* I don't think this is necessary.
-			if(psSaveDroid->sMove.psFormation) {
-				endian_sword(&psSaveDroid->sMove.psFormation->refCount);
-				endian_sword(&psSaveDroid->sMove.psFormation->size);
-				endian_sword(&psSaveDroid->sMove.psFormation->rankDist);
-				endian_sword(&psSaveDroid->sMove.psFormation->dir);
-				endian_sdword(&psSaveDroid->sMove.psFormation->pos.x);
-				endian_sdword(&psSaveDroid->sMove.psFormation->pos.y);
-				for(i = 0; i < F_MAXLINES; i++) {
-					endian_sword(&psSaveDroid->sMove.psFormation->asLines[i].xoffset);
-					endian_sword(&psSaveDroid->sMove.psFormation->asLines[i].yoffset);
-					endian_sword(&psSaveDroid->sMove.psFormation->asLines[i].dir);
-				}
-				endian_sword(&psSaveDroid->sMove.psFormation->numLines);
-				for(i = 0; i < F_MAXMEMBERS; i++)
-					endian_sword(&psSaveDroid->sMove.psFormation->asMembers[i].dist);
-				endian_udword(&psSaveDroid->sMove.psFormation->iSpeed);
-			}
-*/
 			endian_sword(&psSaveDroid->sMove.iVertSpeed);
 
 			for(i = 0;i < psSaveDroid->numWeaps;i++)
