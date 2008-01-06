@@ -983,6 +983,10 @@ BOOL recvResearchStatus()
 				}
 			}
 		}
+		else
+		{
+			psBuilding = IdToStruct(structRef, player);
+		}
 		
 		// Stop the facility doing any research
 		if (psBuilding)
