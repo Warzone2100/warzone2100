@@ -277,10 +277,10 @@ static void proj_UpdateKills(PROJECTILE *psObj, float experienceInc)
 		return;
 	}
 
-	// If percentDamage is negative then the target was killed
+	// If experienceInc is negative then the target was killed
 	if (bMultiPlayer && experienceInc < 0.0f)
 	{
-		updateMultiStatsKills(psObj->psDest,psObj->psSource->player);
+		updateMultiStatsKills(psObj->psDest, psObj->psSource->player);
 	}
 
 	// Since we are no longer interested if it was killed or not, abs it
@@ -1774,7 +1774,7 @@ proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj,
 	WEAPON_STATS	*psStats;
 	UDWORD			damageSoFar;
 	SDWORD			damageToDo;
-	SDWORD			percentDamage;
+	float			relativeDamage;
 
 	CHECK_PROJECTILE(psProj);
 
@@ -1832,11 +1832,11 @@ proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj,
 								damageToDo, psCurr->id, psCurr->player);
 
 						//Watermelon:just assume the burn damage is from FRONT
-	  					percentDamage = objectDamage(psCurr, damageToDo, psStats->weaponClass,psStats->weaponSubClass, 0);
+	  					relativeDamage = objectDamage(psCurr, damageToDo, psStats->weaponClass,psStats->weaponSubClass, 0);
 
 						psCurr->burnDamage += damageToDo;
 
-						proj_UpdateKills(psProj, percentDamage);
+						proj_UpdateKills(psProj, relativeDamage);
 					}
 					/* The damage could be negative if the object
 					   is being burn't by another fire
