@@ -110,8 +110,8 @@ extern PLAYER_RESEARCH*		asPlayerResList[MAX_PLAYERS];
 // Local Prototypes
 
 static BOOL recvBeacon(NETMSG *pMsg);
-static BOOL recvDestroyTemplate();
-static BOOL recvResearch();
+static BOOL recvDestroyTemplate(void);
+static BOOL recvResearch(void);
 
 // ////////////////////////////////////////////////////////////////////////////
 // temporarily disable multiplayer mode.
@@ -712,7 +712,7 @@ BOOL recvMessage(void)
 			recvTemplate(&msg);
 			break;
 		case NET_TEMPLATEDEST:				// template destroy
-			recvDestroyTemplate(&msg);
+			recvDestroyTemplate();
 			break;
 		case NET_FEATUREDEST:				// feature destroy
 			recvDestroyFeature();
@@ -734,7 +734,7 @@ BOOL recvMessage(void)
 			receiveWholeDroid(&msg);
 			break;
 		case NET_OPTIONS:
-			recvOptions(&msg);
+			recvOptions();
 			break;
 		case NET_VERSION:
 			recvVersionCheck(&msg);
@@ -765,7 +765,7 @@ BOOL recvMessage(void)
 		case NET_FIREUP:				// frontend only
 			break;
 		case NET_RESEARCHSTATUS:
-			recvResearchStatus(&msg);
+			recvResearchStatus();
 			break;
 		default:
 			break;

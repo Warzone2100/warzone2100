@@ -2030,7 +2030,7 @@ void frontendMultiMessages(void)
 
 
 		case NET_OPTIONS:					// incoming options file.
-			recvOptions(&msg);
+			recvOptions();
 			ingame.localOptionsReceived = TRUE;
 
 			if(titleMode == MULTIOPTION)
@@ -2054,7 +2054,7 @@ void frontendMultiMessages(void)
 			break;
 
 		case NET_PING:						// diagnostic ping msg.
-			recvPing(&msg);
+			recvPing();
 			break;
 
 		case NET_LEAVING:					// remote player leaving.
