@@ -631,7 +631,48 @@ void addLoserGifts(void)
 	}
 }
 
+/** Sends a build order for the given feature type to all players
+ *  \param type the type of feature to build
+ *  \param x,y the coordinates to place the feature at
+ */
+void sendMultiPlayerFeature(FEATURE_TYPE subType, uint32_t x, uint32_t y)
+{
+	NETbeginEncode(NET_FEATURES, NET_ALL_PLAYERS);
+	{
+		NETenum(&subType);
+		NETuint32_t(&x);
+		NETuint32_t(&y);
+	}
+	NETend();
+}
 
+void recvMultiPlayerFeature()
+{
+	FEATURE_TYPE subType;
+	uint32_t     x, y;
+	unsigned int i;
+
+	NETbeginDecode();
+	{
+		NETenum(&subType);
+		NETuint32_t(&x);
+		NETuint32_t(&y);
+	}
+	NETend();
+
+	// Find the feature stats list that contains the feature type we want to build
+	for (i = 0; i < numFeatureStats; ++i)
+	{
+		// If we found the correct feature type
+		if (asFeatureStats[i].subType != subType)
+		{
+			// Create a feature of the specified type at the given location
+			buildFeature(&asFeatureStats[i], x, y, FALSE);
+
+			break;
+		}
+	}
+}
 ///////////////////////////////////////////////////////////////////////////////
 // splatter artifact gifts randomly about.
 void  addMultiPlayerRandomArtifacts(uint8_t quantity, FEATURE_TYPE type)

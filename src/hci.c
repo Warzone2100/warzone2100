@@ -58,6 +58,7 @@
 #include "mission.h"
 #include "multimenu.h"
 #include "multiplay.h"
+#include "multigifts.h"
 #include "radar.h"
 #include "research.h"
 #include "scriptcb.h"
@@ -2125,8 +2126,17 @@ INT_RETVAL intRunWidgets(void)
 				else if (psPositionStats->ref >= REF_FEATURE_START &&
 					psPositionStats->ref < REF_FEATURE_START + REF_RANGE)
 				{
+					const char* msg;
 					buildFeature((FEATURE_STATS *)psPositionStats,
 								 world_coord(structX), world_coord(structY), FALSE);
+
+					// Send a text message to all players, notifying them of
+					// the fact that we're cheating ourselves a new feature.
+					sasprintf((char**)&msg, _("Player %u is cheating (debug menu) him/herself a new feature: %s."), selectedPlayer, psPositionStats->pName);
+					sendTextMessage(msg, TRUE);
+
+					// Notify the other hosts that we've just built ourselves a feature
+					sendMultiPlayerFeature(((FEATURE_STATS *)psPositionStats)->subType, world_coord(structX), world_coord(structY));
 				}
 				else if (psPositionStats->ref >= REF_TEMPLATE_START &&
 						 psPositionStats->ref < REF_TEMPLATE_START + REF_RANGE)
@@ -2136,7 +2146,13 @@ INT_RETVAL intRunWidgets(void)
 								 selectedPlayer, FALSE);
 					if (psDroid)
 					{
+						const char* msg;
 						addDroid(psDroid, apsDroidLists);
+
+						// Send a text message to all players, notifying them of
+						// the fact that we're cheating ourselves a new droid.
+						sasprintf((char**)&msg, _("Player %u is cheating (debug menu) him/herself a new droid: %s."), selectedPlayer, psDroid->aName);
+						sendTextMessage(msg, TRUE);
 					}
 				}
 				editPosMode = IED_NOPOS;

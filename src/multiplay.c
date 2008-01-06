@@ -752,6 +752,9 @@ BOOL recvMessage(void)
 		case NET_ARTIFACTS:
 			recvMultiPlayerRandomArtifacts();
 			break;
+		case NET_FEATURES:
+			recvMultiPlayerFeature();
+			break;
 		case NET_ALLIANCE:
 			recvAlliance(TRUE);
 			break;

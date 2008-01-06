@@ -37,6 +37,8 @@ extern void technologyGiveAway				(const STRUCTURE* pS);
 extern void recvMultiPlayerRandomArtifacts	();
 extern void addMultiPlayerRandomArtifacts	(uint8_t quantity, FEATURE_TYPE type);
 extern void processMultiPlayerArtifacts		(void);
+extern void recvMultiPlayerFeature(void);
+extern void sendMultiPlayerFeature(FEATURE_TYPE type, uint32_t x, uint32_t y);
 
 extern void	giftArtifact					(UDWORD owner,UDWORD x,UDWORD y);
 extern BOOL	addOilDrum						(uint8_t count);
