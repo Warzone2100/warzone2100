@@ -664,7 +664,7 @@ void recvMultiPlayerFeature()
 	for (i = 0; i < numFeatureStats; ++i)
 	{
 		// If we found the correct feature type
-		if (asFeatureStats[i].subType != subType)
+		if (asFeatureStats[i].subType == subType)
 		{
 			// Create a feature of the specified type at the given location
 			buildFeature(&asFeatureStats[i], x, y, FALSE);
