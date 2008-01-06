@@ -6796,18 +6796,28 @@ BOOL writeDroidFile(char *pFileName, DROID **ppsCurrentDroidLists)
 			if (psCurr->droidType == DROID_TRANSPORTER)
 			{
 				psTrans = psCurr->psGroup->psList;
-#define MSVCRTD_UNITIALISED_MEMORY 0xcdcdcdcdcdcdcdcd
-				if (psTrans->psGrpNext == (void*)MSVCRTD_UNITIALISED_MEMORY)
+// Some compiler/system specific debug code to check for dangling pointers
+#if defined(WZ_CC_MSVC)
 				{
-					debug( LOG_ERROR, "transporter ->psGrpNext not reset" );
-					abort();
-				}
-				else
-				{
-					for(psTrans = psTrans->psGrpNext; psTrans != NULL; psTrans = psTrans->psGrpNext)
+					void* dangling_ptr;
+
+# ifdef WC_CC_MSVC
+					// Fill the memory with 0xcd, which MSVC initialises freshly
+					// allocated memory with.
+					memset(&dangling_ptr, 0xcd, sizeof(dangling_ptr));
+# endif
+
+					if (psTrans->psGrpNext == dangling_ptr)
 					{
-						totalDroids++;
+						debug( LOG_ERROR, "transporter ->psGrpNext not reset" );
+						abort();
 					}
+				}
+#endif
+
+				for (psTrans = psTrans->psGrpNext; psTrans != NULL; psTrans = psTrans->psGrpNext)
+				{
+					totalDroids++;
 				}
 			}
 		}
