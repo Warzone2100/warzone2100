@@ -27,6 +27,7 @@
 /***************************************************************************/
 
 #include "lib/framework/frame.h"
+#include "lib/framework/frameint.h"
 
 #include <SDL_opengl.h>
 
@@ -50,8 +51,7 @@
 void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, PIELIGHT colour)
 {
 	CLIP_VERTEX pieVrts[pie_MAX_VERTICES_PER_POLYGON];
-	CLIP_VERTEX clippedVrts[pie_MAX_VERTICES_PER_POLYGON + 2]; // no idea why + 2 but fixes crash - Per
-	SDWORD clip, i;
+	SDWORD i;
 
 	pie_SetTexturePage(-1);
 	pie_SetRendMode(REND_ALPHA_FLAT);
@@ -79,32 +79,27 @@ void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD 
 	pieVrts[3].pos.x = v[3].x;
 	pieVrts[3].pos.y = v[3].y;
 
-	pie_Set2DClip(x1,y1,x2-1,y2-1);
-	clip = pie_ClipTextured(4, &pieVrts[0], &clippedVrts[0]);
-	ASSERT(clip <= pie_MAX_VERTICES_PER_POLYGON + 2, "clip index exceeds clippedVrts array"); // see above
-	pie_Set2DClip(CLIP_BORDER,CLIP_BORDER,psRendSurface->width-CLIP_BORDER,psRendSurface->height-CLIP_BORDER);
+	glEnable(GL_SCISSOR_TEST);
+	glScissor(x1, screenHeight - y2, x2 - x1, y2 - y1);
 
-	if (clip >= 3)
-	{
-		glColor4ub(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a >> 1);
+	glColor4ub(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a >> 1);
+	glBegin(GL_TRIANGLE_FAN);
+		for (i = 0; i < 5; i++)
+		{
+			glVertex2f(pieVrts[i].pos.x, pieVrts[i].pos.y);
+		}
+	glEnd();
 
-		glBegin(GL_TRIANGLE_FAN);
-			for (i = 0; i < clip; i++)
-			{
-				glVertex2f(clippedVrts[i].pos.x, clippedVrts[i].pos.y);
-			}
-		glEnd();
+	glColor4ub(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a);
+	glBegin(GL_LINE_STRIP);
+		for (i = 0; i < 5; i++)
+		{
+			glVertex2f(pieVrts[i].pos.x, pieVrts[i].pos.y);
+		}
+	glVertex2f(pieVrts[0].pos.x, pieVrts[0].pos.y);
+	glEnd();
 
-		glColor4ub(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a);
-
-		glBegin(GL_LINE_STRIP);
-			for (i = 0; i < clip; i++)
-			{
-				glVertex2f(clippedVrts[i].pos.x, clippedVrts[i].pos.y);
-			}
-		glVertex2f(clippedVrts[0].pos.x, clippedVrts[0].pos.y);
-		glEnd();
-	}
+	glDisable(GL_SCISSOR_TEST);
 }
 
 /* ---------------------------------------------------------------------------------- */

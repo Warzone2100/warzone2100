@@ -35,7 +35,6 @@
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/tex.h"
 #include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/pieclip.h"
 #include "lib/ivis_common/piepalette.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/piematrix.h"
@@ -182,9 +181,6 @@ static TERRAIN_VERTEX tileScreenInfo[LAND_YGRD][LAND_XGRD];
 
 /* Records the present X and Y values for the current mouse tile (in tiles */
 SDWORD mouseTileX, mouseTileY;
-
-/* Offsets for the screen being shrunk/expanded - how far in, how far down */
-UDWORD xOffset = CLIP_BORDER, yOffset = CLIP_BORDER;
 
 /* Do we want the radar to be rendered */
 BOOL	radarOnScreen=FALSE;
@@ -451,9 +447,6 @@ void draw3DScene( void )
 static void displayTerrain(void)
 {
 	tileZ = 8000;
-
-	/* SetUpClipping window - to below the backdrop */
-	pie_Set2DClip( xOffset, yOffset, psRendSurface->width-xOffset, psRendSurface->height-yOffset );
 
 	/* We haven't yet located which tile mouse is over */
 	mouseLocated = FALSE;
@@ -1412,7 +1405,6 @@ void displayProximityMsgs( void )
 				y = ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->pos.y;
 			}
 			/* Is the Message worth rendering? */
-			//if(clipXY(pViewProximity->pos.x,pViewProximity->pos.y))
 			if(clipXY(x,y))
 			{
 				renderProximityMsg(psProxDisp);

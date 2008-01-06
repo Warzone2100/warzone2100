@@ -41,8 +41,6 @@
  */
 /***************************************************************************/
 
-#define CLIP_BORDER	0
-
 typedef struct
 {
 	Vector3i pos;
@@ -55,8 +53,7 @@ typedef struct
  *	Global ProtoTypes
  */
 /***************************************************************************/
-extern void pie_Set2DClip(int x0, int y0, int x1, int y1);
-extern int pie_ClipTextured(int npoints, CLIP_VERTEX *points, CLIP_VERTEX *clip);
+
 extern BOOL pie_SetVideoBufferDepth(UDWORD depth);
 extern BOOL pie_SetVideoBufferWidth(UDWORD width);
 extern BOOL pie_SetVideoBufferHeight(UDWORD height);

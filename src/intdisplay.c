@@ -2236,12 +2236,10 @@ void OpenButtonRender(UWORD XPos,UWORD YPos,UWORD Width,UWORD Height)
 	ButYPos = YPos;
 	ButWidth = Width;
 	ButHeight = Height;
-	pie_Set2DClip(XPos,YPos,(UWORD)(XPos+Width),(UWORD)(YPos+Height));
 }
 
 void CloseButtonRender(void)
 {
-	pie_Set2DClip(CLIP_BORDER,CLIP_BORDER,psRendSurface->width-CLIP_BORDER,psRendSurface->height-CLIP_BORDER);
 }
 
 
@@ -2251,12 +2249,10 @@ void ClearButton(BOOL Down,UDWORD Size, UDWORD buttonType)
 {
 	if(Down)
 	{
-//		pie_ImageFileID(IntImages,(UWORD)(IMAGE_BUT0_DOWN+(Size*2)+(buttonType*6)),ButXPos,ButYPos);
 		pie_ImageFileID(IntImages,(UWORD)(IMAGE_BUT0_DOWN+(buttonType*2)),ButXPos,ButYPos);
 	}
 	else
 	{
-//		pie_ImageFileID(IntImages,(UWORD)(IMAGE_BUT0_UP+(Size*2)+(buttonType*6)),ButXPos,ButYPos);
 		pie_ImageFileID(IntImages,(UWORD)(IMAGE_BUT0_UP+(buttonType*2)),ButXPos,ButYPos);
 	}
 }
