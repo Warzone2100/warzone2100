@@ -715,7 +715,7 @@ BOOL recvMessage(void)
 			recvDestroyTemplate(&msg);
 			break;
 		case NET_FEATUREDEST:				// feature destroy
-			recvDestroyFeature(&msg);
+			recvDestroyFeature();
 			break;
 		case NET_PING:						// diagnostic ping msg.
 			recvPing();
@@ -1422,35 +1422,36 @@ static BOOL recvDestroyTemplate()
 // send a destruct feature message.
 BOOL SendDestroyFeature(FEATURE *pF)
 {
-	NETMSG m;
-
-	// only send the destruction if the feature is our responsibility
-	NetAdd(m,0,pF->id);
-	m.size = sizeof(pF->id);
-	m.type = NET_FEATUREDEST;
-
-	return( NETbcast(&m,TRUE) );
+	// Only send if it is our responsibility
+	if (myResponsibility(pF->player))
+		return TRUE;
+	
+	NETbeginEncode(NET_FEATUREDEST, NET_ALL_PLAYERS);
+		NETuint32_t(&pF->id);
+	return NETend();
 }
 
 // process a destroy feature msg.
-BOOL recvDestroyFeature(NETMSG *pMsg)
+BOOL recvDestroyFeature()
 {
-	FEATURE *pF;
-	UDWORD	id;
+	FEATURE		*pF;
+	uint32_t	id;
+	
+	NETbeginDecode();
+		NETuint32_t(&id);
+	NETend();
 
-	NetGet(pMsg,0,id);														// get feature id
-
-	//	for(pF = apsFeatureLists[0]; pF && (pF->id  != id);	pF = pF->psNext);	// find the feature
 	pF = IdToFeature(id,ANYPLAYER);
 
-	if(  (pF == NULL)  )													// if already a gonner.
+	if (pF == NULL)
 	{
-		return FALSE;														// feature wasnt found anyway.
+		return FALSE;
 	}
 
-	bMultiPlayer = FALSE;													// remove, don't broadcast.
-	removeFeature(pF);
-	bMultiPlayer = TRUE;
+	// Remove the feature locally
+	turnOffMultiMsg(TRUE);
+		removeFeature(pF);
+	turnOffMultiMsg(FALSE);
 
 	return TRUE;
 }
