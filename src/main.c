@@ -227,7 +227,7 @@ static bool getCurrentDir(char * const dest, size_t const size)
 		char* err_string;
 
 		// Retrieve a string describing the error number (uses LocalAlloc() to allocate memory for err_string)
-		FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER, FORMAT_MESSAGE_FROM_SYSTEM, NULL, err, 0, &err_string, 0, NULL);
+		FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, err, 0, (char*)&err_string, 0, NULL);
 
 		// Print an error message with the above description
 		debug(LOG_ERROR, "getPlatformUserDir: GetCurrentDirectoryA failed (error code: %d): %s", err, err_string);
