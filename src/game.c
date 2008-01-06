@@ -1659,13 +1659,19 @@ typedef struct _save_droid_v24
 	UDWORD	actionPoints;	\
 	UWORD	actionHeight;	\
 	char	tarStatName[MAX_SAVE_NAME_SIZE];\
-    UDWORD	baseStructID;	\
+	UDWORD	baseStructID;	\
 	UBYTE	group;			\
 	UBYTE	selected;		\
 	UBYTE	cluster_unused;		\
 	UBYTE	visible[MAX_PLAYERS];\
 	UDWORD	died;			\
-	UDWORD	lastEmission
+	UDWORD	lastEmission;         \
+	UDWORD	commandId;            \
+	SDWORD	resistance;           \
+	SAVE_MOVE_CONTROL	sMove; \
+	SWORD	formationDir;         \
+	SDWORD	formationX;           \
+	SDWORD	formationY
 
 typedef struct _save_droid_v99
 {
@@ -1676,12 +1682,6 @@ typedef struct _save_droid_v99
 typedef struct _save_droid
 {
 	DROID_SAVE_V99;
-	UDWORD	commandId;
-	SDWORD	resistance;
-	SAVE_MOVE_CONTROL	sMove;
-	SWORD		formationDir;
-	SDWORD		formationX;
-	SDWORD		formationY;
 } SAVE_DROID;
 
 
