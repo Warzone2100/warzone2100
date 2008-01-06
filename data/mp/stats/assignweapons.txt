@@ -281,4 +281,7 @@ ScorpBBTracks,Rocket-BB,NULL,NULL,6
 MantisBBTracks,Rocket-BB,NULL,NULL,6
 MantisScourgeTracks,Missile-A-T,NULL,NULL,6
 ViperTrkLancer,Rocket-LtA-T,NULL,NULL,6
+CobraPODHTracks,Rocket-Pod,NULL,NULL,6
+CobraPODTracks,Rocket-Pod,NULL,NULL,6
+CobraMRLTracks,Rocket-MRL,NULL,NULL,6
 ZNULLDESIGN,ZNULLWEAPON,ZNULLWEAPON,ZNULLWEAPON,0

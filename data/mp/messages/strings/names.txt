@@ -1909,3 +1909,7 @@ ScorpBBTracks				_("Scorpion Bunker Buster Tracks")
 MantisBBTracks				_("Mantis Bunker Buster Tracks")
 
 ViperTrkLancer				_("Viper Tracks Lancer")
+
+CobraPODHTracks				_("Cobra Half-Tracks Mini-Pod")
+CobraPODTracks				_("Cobra Tracks Mini-Pod")
+CobraMRLTracks				_("Cobra Tracks Mini-Rocket Artillery")
