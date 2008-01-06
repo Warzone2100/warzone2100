@@ -1,5 +1,7 @@
-warzone2100 (2.1.0~0.svn3309-0) unstable; urgency=low
+warzone2100 (2.1.0~0.svn3379-0) unstable; urgency=low
 
+  * Bump upstream version number for the development branch
+    - This version is _not_ an official release, just a development snapshot.
   * Depend on libglc-dev while building
 
  -- Giel van Schijndel <muggenhor@gna.org>  Wed, 02 Jan 2008 00:13:13 +0100
@@ -7,8 +9,7 @@ warzone2100 (2.1.0~0.svn3309-0) unstable; urgency=low
 warzone2100 (2.1.0~0.svn2922-0) unstable; urgency=low
 
   * Bump upstream version number for the development branch
-    - This version is _not_ an official release, just a development
-      snapshot.
+    - This version is _not_ an official release, just a development snapshot.
   * Don't strip output binaries anymore
   * Depend on libpopt-dev while building
 
