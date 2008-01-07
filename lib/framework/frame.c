@@ -86,9 +86,16 @@ static Uint64	lastFrames = 0;
 static Uint32	curTicks = 0; // Number of ticks since execution started
 static Uint32	lastTicks = 0;
 static FPSmanager wzFPSmanager;
+static BOOL	initFPSmanager = FALSE;
 
 void setFramerateLimit(int fpsLimit)
 {
+	if (!initFPSmanager)
+	{
+		/* Initialize framerate handler */
+		SDL_initFramerate(&wzFPSmanager);
+		initFPSmanager = TRUE;
+	}
 	SDL_setFramerate(&wzFPSmanager, fpsLimit);
 }
 
@@ -239,17 +246,14 @@ BOOL frameInitialise(
 	/* initialise all cursors */
 	initCursors();
 
-	/* Initialise the Direct Draw Buffers */
 	if (!screenInitialise(width, height, bitDepth, fullScreen))
 	{
 		return FALSE;
 	}
 
-	/* Initialize framerate handler */
-	SDL_initFramerate( &wzFPSmanager );
-
 	/* Initialise the input system */
 	inputInitialise();
+
 	/* Initialise the frame rate stuff */
 	InitFrameStuff();
 
