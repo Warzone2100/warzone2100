@@ -50,7 +50,7 @@ endif
 
 # Setup paths and static values
 
-CFLAGS+=-DPACKAGE_VERSION=\"$(VERSION)\" -DYY_STATIC -DLOCALEDIR=\"$(LOCALEDIR)\" -DPACKAGE=\"$(PACKAGE)\" -I.. -I../.. -I$(DEVDIR)/include -I$(DEVDIR)/include/SDL
+CFLAGS+=-DPACKAGE_VERSION=\"$(VERSION)\" -DYY_STATIC -DLOCALEDIR=\"$(LOCALEDIR)\" -DPACKAGE=\"$(PACKAGE)\" -I.. -I../.. -I$(DEVDIR)/include/SDL -I$(DEVDIR)/include/libpng12 -I$(DEVDIR)/include
 LDFLAGS+=-L$(DEVDIR)/lib
 
 
