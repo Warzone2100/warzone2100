@@ -38,44 +38,40 @@
 
 static CBTEditDoc *m_pDoc;
 
-CBrushProp::CBrushProp(CWnd* pParent /*=NULL*/)
-	: CDialog(CBrushProp::IDD, pParent)
+CBrushProp::CBrushProp(CWnd* parent) :
+	CDialog(CBrushProp::IDD, parent),
+	_View(NULL),
+	_Height(0),
+	_RandomRange(0),
+	_BrushID(0),
+	_BrushSize(-1),
+	_HeightSetting(-1)
 {
-	//{{AFX_DATA_INIT(CBrushProp)
-	m_Height = 0;
-	m_RandomRange = 0;
-	m_BrushID = 0;
-	m_BrushSize = -1;
-	m_HeightSetting = -1;
-	//}}AFX_DATA_INIT
-
-	m_pView = NULL;
 }
 
 
-CBrushProp::CBrushProp(CView *pView)
+CBrushProp::CBrushProp(CView* view) :
+	_View(view),
+	_OldHeight(255),
+	_Height(0),
+	_RandomRange(0),
+	_BrushID(0),
+	_BrushSize(1),
+	_HeightSetting(0),
 {
-	m_Height = 0;
-	m_RandomRange = 0;
-	m_BrushID = 0;
-	m_BrushSize = 1;
-	m_HeightSetting = 0;
 
-	m_OldHeight = (255-m_Height);
-
-	m_pView = pView;
-	m_pDoc = ((CWFView*)m_pView)->GetDocument();
+	m_pDoc = ((CWFView*)_View)->GetDocument();
 	ASSERT_VALID(m_pDoc);
 }
 
 
-BOOL CBrushProp::Create(void)
+BOOL CBrushProp::Create()
 {
 	BOOL Ok = CDialog::Create(CBrushProp::IDD);
 
 	if(Ok) {
-		m_HeightSlider.SetRange( 0, 255, TRUE );
-		m_HeightSlider.SetTicFreq( 16 );
+		_HeightSlider.SetRange( 0, 255, TRUE );
+		_HeightSlider.SetTicFreq( 16 );
 		m_RandomSlider.SetRange( 0, 64, TRUE );
 		m_RandomSlider.SetTicFreq( 8 );
 		GetBrushData();
@@ -90,15 +86,15 @@ void CBrushProp::DoDataExchange(CDataExchange* pDX)
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CBrushProp)
 	DDX_Control(pDX, IDC_RANDOMRANGE, m_RandomSlider);
-	DDX_Control(pDX, IDC_HEIGHTSLIDER, m_HeightSlider);
-	DDX_Text(pDX, IDC_HEIGHTEDIT, m_Height);
-	DDV_MinMaxInt(pDX, m_Height, 0, 255);
-	DDX_Text(pDX, IDC_RANDEDIT, m_RandomRange);
-	DDV_MinMaxInt(pDX, m_RandomRange, 0, 64);
-	DDX_Text(pDX, IDC_BRUSHID, m_BrushID);
-	DDV_MinMaxInt(pDX, m_BrushID, 0, 15);
-	DDX_Radio(pDX, IDC_BRUSHSIZE, m_BrushSize);
-	DDX_Radio(pDX, IDC_SETHEIGHT, m_HeightSetting);
+	DDX_Control(pDX, IDC_HEIGHTSLIDER, _HeightSlider);
+	DDX_Text(pDX, IDC_HEIGHTEDIT, _Height);
+	DDV_MinMaxInt(pDX, _Height, 0, 255);
+	DDX_Text(pDX, IDC_RANDEDIT, _RandomRange);
+	DDV_MinMaxInt(pDX, _RandomRange, 0, 64);
+	DDX_Text(pDX, IDC_BRUSHID, _BrushID);
+	DDV_MinMaxInt(pDX, _BrushID, 0, 15);
+	DDX_Radio(pDX, IDC_BRUSHSIZE, _BrushSize);
+	DDX_Radio(pDX, IDC_SETHEIGHT, _HeightSetting);
 	//}}AFX_DATA_MAP
 }
 
@@ -131,26 +127,26 @@ void CBrushProp::OnCancel()
 }
 
 
-void CBrushProp::GetBrushData(void)
+void CBrushProp::GetBrushData()
 {
 	CEdgeBrush *EdgeBrush = m_pDoc->GetEdgeBrush();
 
-	m_BrushID = m_pDoc->GetEdgeBrushID();
+	_BrushID = m_pDoc->GetEdgeBrushID();
 
-	m_Height = EdgeBrush->m_Height;
-	m_OldHeight = (255-m_Height);
-	m_HeightSlider.SetPos(m_OldHeight);
+	_Height = EdgeBrush->_Height;
+	_OldHeight = (255-_Height);
+	_HeightSlider.SetPos(_OldHeight);
 
-	m_RandomRange = EdgeBrush->m_RandomRange;
-	m_RandomSlider.SetPos(m_RandomRange);
+	_RandomRange = EdgeBrush->_RandomRange;
+	m_RandomSlider.SetPos(_RandomRange);
 
 	if(EdgeBrush->GetLargeBrush()) {
-		m_BrushSize = EBP_BS_LARGE;
+		_BrushSize = EBP_BS_LARGE;
 	} else {
-		m_BrushSize = EBP_BS_SMALL;
+		_BrushSize = EBP_BS_SMALL;
 	}
 
-	m_HeightSetting = EdgeBrush->m_HeightMode;
+	_HeightSetting = EdgeBrush->_HeightMode;
 
 	// Set dialog's controls from brush data.
 	UpdateData(FALSE);
@@ -159,23 +155,23 @@ void CBrushProp::GetBrushData(void)
 }
 
 
-void CBrushProp::SetBrushData(void)
+void CBrushProp::SetBrushData()
 {
 	// Get data from the dialog's controls.
 	UpdateData(TRUE);
 
 	CEdgeBrush *EdgeBrush = m_pDoc->GetEdgeBrush();
 
-	EdgeBrush->m_Height = m_Height;
-	EdgeBrush->m_RandomRange = m_RandomRange;
+	EdgeBrush->_Height = _Height;
+	EdgeBrush->_RandomRange = _RandomRange;
 
-	if(m_BrushSize == EBP_BS_SMALL) {
+	if(_BrushSize == EBP_BS_SMALL) {
 		EdgeBrush->SetLargeBrush(FALSE);
 	} else {
 		EdgeBrush->SetLargeBrush(TRUE);
 	}
 
-	EdgeBrush->m_HeightMode = m_HeightSetting;
+	EdgeBrush->_HeightMode = _HeightSetting;
 }
 
 
@@ -185,9 +181,9 @@ BOOL CBrushProp::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 
 	if(wParam == IDC_HEIGHTSLIDER) {
 //		DebugPrint("%d %d\n",Message->idFrom,Message->code);
-   		if(m_OldHeight != m_HeightSlider.GetPos()) {
-   			m_OldHeight = m_HeightSlider.GetPos();
-   			m_Height = 255-m_HeightSlider.GetPos();
+   		if(_OldHeight != _HeightSlider.GetPos()) {
+   			_OldHeight = _HeightSlider.GetPos();
+   			_Height = 255-_HeightSlider.GetPos();
    			UpdateData(FALSE);
    		}
 		if(Message->code != NM_CUSTOMDRAW) {
@@ -197,8 +193,8 @@ BOOL CBrushProp::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 
 	if(wParam == IDC_RANDOMRANGE) {
 //		DebugPrint("%d %d\n",Message->idFrom,Message->code);
-		if(m_RandomRange != m_RandomSlider.GetPos()) {
-			m_RandomRange = m_RandomSlider.GetPos();
+		if(_RandomRange != m_RandomSlider.GetPos()) {
+			_RandomRange = m_RandomSlider.GetPos();
 			UpdateData(FALSE);
 		}
 		if(Message->code != NM_CUSTOMDRAW) {
@@ -213,8 +209,8 @@ BOOL CBrushProp::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 void CBrushProp::OnChangeHeightedit() 
 {
 	UpdateData();
-	m_OldHeight = (255-m_Height);
-	m_HeightSlider.SetPos(255-m_Height);
+	_OldHeight = (255-_Height);
+	_HeightSlider.SetPos(255-_Height);
 	SetBrushData();
 }
 
@@ -223,7 +219,7 @@ void CBrushProp::OnChangeHeightedit()
 void CBrushProp::OnChangeRandedit() 
 {
 	UpdateData();
-	m_RandomSlider.SetPos(m_RandomRange);
+	m_RandomSlider.SetPos(_RandomRange);
 	SetBrushData();
 }
 
@@ -238,12 +234,12 @@ void CBrushProp::OnBrushidnext()
 {
 	SetBrushData();
 
-	m_BrushID ++;
-	if(m_BrushID > 15) {
-		m_BrushID = 0;
+	_BrushID ++;
+	if(_BrushID > 15) {
+		_BrushID = 0;
 	}
 
-	m_pDoc->SetEdgeBrush(m_BrushID);
+	m_pDoc->SetEdgeBrush(_BrushID);
 	GetBrushData();
 }
 
@@ -251,12 +247,12 @@ void CBrushProp::OnBrushidprev()
 {
 	SetBrushData();
 
-	m_BrushID --;
-	if(m_BrushID < 0) {
-		m_BrushID = 15;
+	_BrushID --;
+	if(_BrushID < 0) {
+		_BrushID = 15;
 	}
 
-	m_pDoc->SetEdgeBrush(m_BrushID);
+	m_pDoc->SetEdgeBrush(_BrushID);
 	GetBrushData();
 }
 
