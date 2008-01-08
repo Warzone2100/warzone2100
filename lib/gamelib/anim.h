@@ -44,7 +44,12 @@
 
 /***************************************************************************/
 
-enum{ ANIM_2D, ANIM_3D_FRAMES, ANIM_3D_TRANS };
+typedef enum
+{
+	ANIM_2D,
+	ANIM_3D_FRAMES,
+	ANIM_3D_TRANS
+} ANIM_MODE;
 
 /***************************************************************************/
 
@@ -59,7 +64,7 @@ struct BASEANIM;
 	UWORD				uwStates;				\
 	UWORD				uwObj;					\
 	UWORD				uwAnimTime;				\
-	UBYTE				ubType;					\
+	ANIM_MODE			ubType;					\
 	struct ANIM_STATE	*psStates;				\
 	struct BASEANIM		*psNext;
 
@@ -92,31 +97,16 @@ typedef struct ANIM3D
 }
 ANIM3D;
 
-
 /***************************************************************************/
 
-typedef iIMDShape * (* GETSHAPEFUNC) ( char *pStr );
-
-typedef struct ANIMGLOBALS
-{
-	BASEANIM		*psAnimList;
-	UWORD			uwCurObj, uwCurState;
-	GETSHAPEFUNC	pGetShapeFunc;
-}
-ANIMGLOBALS;
-
-
-
-/***************************************************************************/
-
-BOOL		anim_Init( GETSHAPEFUNC  );
+BOOL		anim_Init(void);
 BOOL		anim_Shutdown( void );
 BASEANIM *	anim_LoadFromBuffer(char *pBuffer, UDWORD size);
 BASEANIM *	anim_LoadFromFile(PHYSFS_file* fileHandle);
 void		anim_ReleaseAnim( BASEANIM *psAnim );
 BOOL		anim_Create3D( char szPieFileName[], UWORD uwFrames,
 							UWORD uwFrameRate, UWORD uwObj,
-							UBYTE ubType, UWORD uwID );
+							ANIM_MODE ubType, UWORD uwID );
 void		anim_BeginScript( void );
 BOOL		anim_EndScript( void );
 BOOL		anim_AddFrameToAnim( int iFrame, Vector3i vecPos, Vector3i vecRot, Vector3i vecScale );

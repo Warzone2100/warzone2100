@@ -47,7 +47,12 @@
 /***************************************************************************/
 /* global variables */
 
-static ANIMGLOBALS	g_animGlobals;
+struct
+{
+        BASEANIM                *psAnimList;
+        UWORD                   uwCurObj, uwCurState;
+}
+static g_animGlobals;
 
 /***************************************************************************/
 /*
@@ -55,14 +60,12 @@ static ANIMGLOBALS	g_animGlobals;
  */
 /***************************************************************************/
 
-BOOL
-anim_Init( GETSHAPEFUNC pGetShapeFunc )
+BOOL anim_Init()
 {
 	/* init globals */
 	g_animGlobals.psAnimList    = NULL;
 	g_animGlobals.uwCurObj      = 0;
 	g_animGlobals.uwCurState    = 0;
-	g_animGlobals.pGetShapeFunc = pGetShapeFunc;
 
 	return TRUE;
 }
@@ -119,7 +122,7 @@ anim_Shutdown( void )
 
 static void
 anim_InitBaseMembers( BASEANIM * psAnim, UWORD uwStates, UWORD uwFrameRate,
-						UWORD uwObj, UBYTE ubType, UWORD uwID )
+						UWORD uwObj, ANIM_MODE ubType, UWORD uwID )
 {
 	psAnim->uwStates    = uwStates;
 	psAnim->uwFrameRate = uwFrameRate;
@@ -136,7 +139,7 @@ anim_InitBaseMembers( BASEANIM * psAnim, UWORD uwStates, UWORD uwFrameRate,
 
 BOOL
 anim_Create3D( char szPieFileName[], UWORD uwStates,
-				UWORD uwFrameRate, UWORD uwObj, UBYTE ubType, UWORD uwID )
+				UWORD uwFrameRate, UWORD uwObj, ANIM_MODE ubType, UWORD uwID )
 {
 	ANIM3D		*psAnim3D;
 	iIMDShape	*psFrames;
@@ -149,7 +152,7 @@ anim_Create3D( char szPieFileName[], UWORD uwStates,
 	}
 
 	/* get local pointer to shape */
-	psAnim3D->psFrames = (g_animGlobals.pGetShapeFunc) (szPieFileName);
+	psAnim3D->psFrames = (iIMDShape*)resGetData("IMD", szPieFileName);
 
 	/* count frames in imd */
 	psFrames = psAnim3D->psFrames;

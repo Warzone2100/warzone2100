@@ -551,11 +551,6 @@ init_ObjectDead( void * psObj )
 	return psBaseObj->died;
 }
 
-static iIMDShape *anim_GetShapeFunc( char * pStr )
-{
-	return (iIMDShape*)resGetData( "IMD", pStr );
-}
-
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // Called At Frontend Startup.
@@ -586,7 +581,7 @@ BOOL frontendInitialise(const char *ResourceFile)
 		return FALSE;
 	}
 
-	if ( !anim_Init( anim_GetShapeFunc ) )
+	if (!anim_Init())
 	{
 		return FALSE;
 	}
@@ -741,7 +736,7 @@ BOOL stageOneInitialise(void)
 		return FALSE;
 	}
 
-	if ( !anim_Init( anim_GetShapeFunc ) )
+	if (!anim_Init())
 	{
 		return FALSE;
 	}

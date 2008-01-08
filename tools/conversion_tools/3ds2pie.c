@@ -118,7 +118,7 @@ static void dump_pie_file(Lib3dsFile *f, FILE *o)
 	{
 		if (i > 0)
 		{
-			fprintf(stderr, "Mesh %d %s: More than one texture currently not supported!\n", i, m->name);
+			fprintf(stderr, "Mesh %d %s: More than one frame currently not supported!\n", i, m->name);
 			continue;
 		}
 
@@ -127,7 +127,9 @@ static void dump_pie_file(Lib3dsFile *f, FILE *o)
 		for (i = 0; i < m->points; i++)
 		{
 			Lib3dsVector pos;
-				lib3ds_vector_copy(pos, m->pointL[i].pos);
+
+			lib3ds_vector_copy(pos, m->pointL[i].pos);
+
 			if (switchYZ)
 			{
 				fprintf(o, "\t%d %d %d\n", (int)pos[0], (int)pos[2], (int)pos[1]);
