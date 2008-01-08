@@ -13,22 +13,22 @@ CLEANFILES=$(AIVOLUTIONARCHIVE) $(GRIMARCHIVE) $(NEWST_TILESARCHIVE)
 data: $(AIVOLUTIONARCHIVE) $(GRIMARCHIVE) $(NEWST_TILESARCHIVE)
 
 $(AIVOLUTIONARCHIVE): $(AIVOLUTIONLIST:%=aivolution/%)
-	cd aivolution && zip -ru0 ../$@ $(AIVOLUTIONLIST) -x *svn*
+	(cd $(srcdir)/aivolution && zip -ru0 $(abs_builddir)/$@ $(AIVOLUTIONLIST) -x *svn*)
 	zip -T $@
 
 $(GRIMARCHIVE): $(GRIMLIST:%=grim/%)
-	cd grim && zip -ru0 ../$@ $(GRIMLIST) -x *svn*
+	(cd $(srcdir)/grim && zip -ru0 $(abs_builddir)/$@ $(GRIMLIST) -x *svn*)
 	zip -T $@
 
 $(NEWST_TILESARCHIVE): $(NEWST_TILESLIST:%=newst_tiles/%)
-	cd newst_tiles && zip -ru0 ../$@ $(NEWST_TILESLIST) -x *svn*
+	(cd $(srcdir)/newst_tiles && zip -ru0 $(abs_builddir)/$@ $(NEWST_TILESLIST) -x *svn*)
 	zip -T $@
 
 install-data-local: $(AIVOLUTIONARCHIVE) $(GRIMARCHIVE) $(NEWST_TILESARCHIVE)
 	$(MKDIR_P) $(DESTDIR)$(pkgdatadir)/mods/global
-	$(INSTALL_DATA) $(srcdir)/$(AIVOLUTIONARCHIVE) $(DESTDIR)$(pkgdatadir)/mods/global/$(AIVOLUTIONARCHIVE)
-	$(INSTALL_DATA) $(srcdir)/$(GRIMARCHIVE) $(DESTDIR)$(pkgdatadir)/mods/global/$(GRIMARCHIVE)
-	$(INSTALL_DATA) $(srcdir)/$(NEWST_TILESARCHIVE) $(DESTDIR)$(pkgdatadir)/mods/global/$(NEWST_TILESARCHIVE)
+	$(INSTALL_DATA) $(AIVOLUTIONARCHIVE) $(DESTDIR)$(pkgdatadir)/mods/global/$(AIVOLUTIONARCHIVE)
+	$(INSTALL_DATA) $(GRIMARCHIVE) $(DESTDIR)$(pkgdatadir)/mods/global/$(GRIMARCHIVE)
+	$(INSTALL_DATA) $(NEWST_TILESARCHIVE) $(DESTDIR)$(pkgdatadir)/mods/global/$(NEWST_TILESARCHIVE)
 
 uninstall-local:
 	rm -f $(DESTDIR)$(pkgdatadir)/mods/global/$(AIVOLUTIONARCHIVE)

@@ -15,17 +15,17 @@ data: $(BASEARCHIVE) $(PATCHARCHIVE)
 	$(MAKE) $(AM_MAKEFLAGS) -C mods data
 
 $(BASEARCHIVE): $(BASELIST)
-	zip -ru0 $@ $(BASELIST) -x *svn*
+	(cd $(srcdir) && zip -ru0 $(abs_builddir)/$@ $(BASELIST) -x *svn*)
 	zip -T $@
 
 $(PATCHARCHIVE): $(PATCHLIST:%=mp/%)
-	cd mp && zip -ru0 ../$@ $(PATCHLIST) -x *svn*
+	(cd $(srcdir)/mp && zip -ru0 $(abs_builddir)/$@ $(PATCHLIST) -x *svn*)
 	zip -T $@
 
 install-data-local: $(BASEARCHIVE) $(PATCHARCHIVE)
 	$(MKDIR_P) $(DESTDIR)$(pkgdatadir)
-	$(INSTALL_DATA) $(srcdir)/$(BASEARCHIVE) $(DESTDIR)$(pkgdatadir)/$(BASEARCHIVE)
-	$(INSTALL_DATA) $(srcdir)/$(PATCHARCHIVE) $(DESTDIR)$(pkgdatadir)/$(PATCHARCHIVE)
+	$(INSTALL_DATA) $(BASEARCHIVE) $(DESTDIR)$(pkgdatadir)/$(BASEARCHIVE)
+	$(INSTALL_DATA) $(PATCHARCHIVE) $(DESTDIR)$(pkgdatadir)/$(PATCHARCHIVE)
 
 uninstall-local:
 	rm -f $(DESTDIR)$(pkgdatadir)/$(BASEARCHIVE)
