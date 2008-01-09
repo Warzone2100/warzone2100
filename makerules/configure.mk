@@ -97,7 +97,7 @@ endif
 
 # Generic libs
 
-LDFLAGS+=-lSDL -lSDL_net -lpng -lphysfs -lz -lvorbisfile -lvorbis -logg -lpopt -lintl -liconv -lz -lfreetype -lfontconfig -lexpat
+LDFLAGS+=-lSDL -lSDL_net -lpng -lphysfs -lz -lvorbisfile -lvorbis -logg -lpopt -lintl
 
 # Additional platform-dependend libs
 
@@ -110,5 +110,9 @@ else
 LDFLAGS+=-lGLC -lGLU -lGL -lopenal
 endif
 endif
+
+# Additionaly link against the deps of our deps
+
+LDFLAGS+=-liconv -lz -lfreetype -lfontconfig -lexpat
 
 include $(MAKERULES)/common.mk
