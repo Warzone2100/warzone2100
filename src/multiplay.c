@@ -615,7 +615,6 @@ Vector3i cameraToHome(UDWORD player,BOOL scroll)
 BOOL recvMessage(void)
 {
 	NETMSG msg;
-	UDWORD a;
 
 	while(NETrecv(&msg) == TRUE)			// for all incoming messages.
 	{
@@ -753,9 +752,18 @@ BOOL recvMessage(void)
 			recvVersionCheck(&msg);
 			break;
 		case NET_PLAYERRESPONDING:			// remote player is now playing
-			NetGet((&msg),0,a);
-			ingame.JoiningInProgress[a] = FALSE;	// player is with us!
+		{
+			uint32_t player_id;
+
+			NETbeginDecode();
+				// the player that has just responded
+				NETuint32_t(&player_id);
+			NETend();
+
+			// This player is now with us!
+			ingame.JoiningInProgress[player_id] = FALSE;
 			break;
+		}
 		case NET_COLOURREQUEST:
 			recvColourRequest(&msg);
 			break;

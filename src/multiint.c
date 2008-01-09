@@ -2007,7 +2007,6 @@ static void processMultiopWidgets(UDWORD id)
 void frontendMultiMessages(void)
 {
 	NETMSG			msg;			// a blank msg.
-	UDWORD			i;
 
 	while(NETrecv(&msg))
 	{
@@ -2071,10 +2070,17 @@ void frontendMultiMessages(void)
 			break;
 		}
 		case NET_PLAYERRESPONDING:			// remote player is now playing.
-			NetGet((&msg),0,i);
-			ingame.JoiningInProgress[i] = FALSE;
-			break;
+		{
+			uint32_t player_id;
 
+			NETbeginDecode();
+				// the player that has just responded
+				NETuint32_t(&player_id);
+			NETend();
+
+			ingame.JoiningInProgress[player_id] = FALSE;
+			break;
+		}
 		case NET_FIREUP:					// campaign game started.. can fire the whole shebang up...
 			if(ingame.localOptionsReceived)
 			{

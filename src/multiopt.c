@@ -876,8 +876,6 @@ static BOOL campInit(void)
 // say hi to everyone else....
 void playerResponding(void)
 {
-	NETMSG	msg;
-
 	ingame.startTime = gameTime;
 	ingame.localJoiningInProgress = FALSE; // No longer joining.
 	ingame.JoiningInProgress[selectedPlayer] = FALSE;
@@ -886,11 +884,9 @@ void playerResponding(void)
 	cameraToHome(selectedPlayer, FALSE);
 
 	// Tell the world we're here
-	NetAdd(msg,0,selectedPlayer);
-
-	msg.size = sizeof(UDWORD);
-	msg.type = NET_PLAYERRESPONDING;
-	NETbcast(&msg,TRUE);
+	NETbeginEncode(NET_PLAYERRESPONDING, NET_ALL_PLAYERS);
+	NETuint32_t(&selectedPlayer);
+	NETend();
 }
 
 // ////////////////////////////////////////////////////////////////////////////
