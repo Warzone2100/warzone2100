@@ -331,6 +331,7 @@ void createLimitSet(void)
 	// Count the number of changes
 	for (i = 0; i < numStructureStats; i++)
 	{
+		// If the limit differs from the default
 		if (asStructLimits[0][i].limit != LOTS_OF)
 		{
 			numchanges++;
@@ -368,9 +369,9 @@ void applyLimitSet(void)
 	}
 
 	// Get the limits and decode
-	for (i = 0;i < ingame.numStructureLimits; i++)
-	{
-		UBYTE id = pEntry[i].id;
+	for (i = 0; i < ingame.numStructureLimits; i++)
+ 	{
+		unsigned int id = pEntry[i].id;
 		
 		// So long as the ID is valid
 		if (id < numStructureStats)
