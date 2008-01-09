@@ -46,7 +46,7 @@ extern	char	sPlayer[128];
 extern	SDWORD	playerTeamGUI[MAX_PLAYERS];
 extern	SDWORD	playerTeam[MAX_PLAYERS];
 
-void    kickPlayer                      (UDWORD dpid);
+void    kickPlayer                      (uint32_t dpid);
 UDWORD  addPlayerBox            (BOOL);                         // players (mid) box
 void loadMapPreview(void);
 

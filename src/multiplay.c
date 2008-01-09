@@ -615,7 +615,6 @@ Vector3i cameraToHome(UDWORD player,BOOL scroll)
 BOOL recvMessage(void)
 {
 	NETMSG msg;
-	UDWORD dp;
 	UDWORD a;
 
 	while(NETrecv(&msg) == TRUE)			// for all incoming messages.
@@ -727,9 +726,23 @@ BOOL recvMessage(void)
 			recvResearch();
 			break;
 		case NET_LEAVING:					// player leaving nicely
-			NetGet((&msg),0,dp);
-			MultiPlayerLeave(dp);
+		{
+			uint32_t player_id;
+			BOOL host;
+
+			NETbeginDecode();
+				NETuint32_t(&player_id);
+				NETbool(&host);                 // Added to check for host quit here -- Buggy
+			NETend();
+			MultiPlayerLeave(player_id);
+			if (host)                               // host has quit, need to quit too.
+			{
+				//stopJoining();		//NOT defined here, checking if we need it or not.
+				debug(LOG_NET, "***Need to call stopJoining()");
+				addConsoleMessage(_("The host has left the game!"), LEFT_JUSTIFY);
+			}
 			break;
+		}
 		case NET_WHOLEDROID:				// a complete droid description has arrived.
 			receiveWholeDroid(&msg);
 			break;
@@ -759,12 +772,19 @@ BOOL recvMessage(void)
 			recvAlliance(TRUE);
 			break;
 		case NET_KICK:
-			NetGet((&msg),0,dp);
-			if(NetPlay.dpidPlayer == dp)	// we've been told to leave.
+		{
+			uint32_t player_id;
+
+			NETbeginDecode();
+				NETuint32_t(&player_id);
+			NETend();
+
+			if (NetPlay.dpidPlayer == player_id)  // we've been told to leave.
 			{
 				setPlayerHasLost(TRUE);
 			}
 			break;
+		}
 		case NET_FIREUP:				// frontend only
 			break;
 		case NET_RESEARCHSTATUS:
@@ -1428,7 +1448,7 @@ BOOL SendDestroyFeature(FEATURE *pF)
 	// Only send if it is our responsibility
 	if (myResponsibility(pF->player))
 		return TRUE;
-	
+
 	NETbeginEncode(NET_FEATUREDEST, NET_ALL_PLAYERS);
 		NETuint32_t(&pF->id);
 	return NETend();
@@ -1437,7 +1457,7 @@ BOOL SendDestroyFeature(FEATURE *pF)
 // process a destroy feature msg.
 BOOL recvDestroyFeature()
 {
-	FEATURE		*pF;
+	FEATURE *pF;
 	uint32_t	id;
 	
 	NETbeginDecode();
@@ -1453,7 +1473,7 @@ BOOL recvDestroyFeature()
 
 	// Remove the feature locally
 	turnOffMultiMsg(TRUE);
-		removeFeature(pF);
+	removeFeature(pF);
 	turnOffMultiMsg(FALSE);
 
 	return TRUE;

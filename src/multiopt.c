@@ -453,18 +453,19 @@ BOOL multiInitialise(void)
 // say goodbye to everyone else
 BOOL sendLeavingMsg(void)
 {
-	NETMSG m;
-	UBYTE bHost = (UBYTE)NetPlay.bHost;
-	
 	/*
 	 * Send a leaving message, This resolves a problem with tcpip which
 	 * occasionally doesn't automatically notice a player leaving
 	 */
-	NetAdd(m,0,player2dpid[selectedPlayer]);
-	NetAdd(m,4,bHost);
-	m.size = 5;
-	m.type = NET_LEAVING ;
-	NETbcast(&m,TRUE);
+	NETbeginEncode(NET_LEAVING, NET_ALL_PLAYERS);
+	{
+		uint32_t player_id = player2dpid[selectedPlayer];
+		BOOL host = NetPlay.bHost;
+
+		NETuint32_t(&player_id);
+		NETbool(&host);
+	}
+	NETend();
 
 	return TRUE;
 }

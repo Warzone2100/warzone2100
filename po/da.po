@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: da\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-01-05 23:08+0100\n"
+"POT-Creation-Date: 2008-01-10 00:29+0100\n"
 "PO-Revision-Date: 2007-04-17 23:03+0200\n"
 "Last-Translator: Christian Vest Hansen <karmazilla@gmail.com>\n"
 "Language-Team: Dansk <en@li.org>\n"
@@ -16,35 +16,40 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: src/multiplay.c:1824
+#: src/multiplay.c:742
+#, fuzzy
+msgid "The host has left the game!"
+msgstr "%s har forladt spillet"
+
+#: src/multiplay.c:1852
 msgid "Green"
 msgstr "Grøn"
 
-#: src/multiplay.c:1825
+#: src/multiplay.c:1853
 msgid "Orange"
 msgstr "Orange"
 
-#: src/multiplay.c:1826
+#: src/multiplay.c:1854
 msgid "Grey"
 msgstr "Grå"
 
-#: src/multiplay.c:1827
+#: src/multiplay.c:1855
 msgid "Black"
 msgstr "Sort"
 
-#: src/multiplay.c:1828
+#: src/multiplay.c:1856
 msgid "Red"
 msgstr "Rød"
 
-#: src/multiplay.c:1829
+#: src/multiplay.c:1857
 msgid "Blue"
 msgstr "Blå"
 
-#: src/multiplay.c:1830
+#: src/multiplay.c:1858
 msgid "Pink"
 msgstr "Pink"
 
-#: src/multiplay.c:1831
+#: src/multiplay.c:1859
 msgid "Cyan"
 msgstr "Cyan"
 
@@ -106,102 +111,112 @@ msgstr "%s Bryder aliancen med %s"
 msgid "%s Forms An Alliance With %s"
 msgstr "%s Danner aliance med %s"
 
-#: src/multigifts.c:737
+#: src/multigifts.c:778
 #, c-format
 msgid "You Discover Blueprints For %s"
 msgstr "Du opdager plantegninger for %s"
 
-#: src/hci.c:1010 src/hci.c:3889 src/hci.c:4043 src/hci.c:4485 src/hci.c:5706
+#: src/hci.c:1011 src/hci.c:3905 src/hci.c:4059 src/hci.c:4501 src/hci.c:5722
 #: src/transporter.c:283 src/transporter.c:372 src/transporter.c:865
 #: src/intorder.c:660 src/loadsave.c:257 src/intelmap.c:524
 #: src/multimenu.c:450 src/multimenu.c:1280
 msgid "Close"
 msgstr "Luk"
 
-#: src/hci.c:1690 src/mission.c:3478 src/loop.c:475 src/loop.c:487
+#: src/hci.c:1691 src/mission.c:3478 src/loop.c:475 src/loop.c:487
 msgid "GAME SAVED!"
 msgstr "SPIL GEMT!"
 
-#: src/hci.c:2111
+#: src/hci.c:2112
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr ""
 
-#: src/hci.c:3791 src/keymap.c:294
+#: src/hci.c:2135
+#, c-format
+msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
+msgstr ""
+
+#: src/hci.c:2154
+#, c-format
+msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
+msgstr ""
+
+#: src/hci.c:3807 src/keymap.c:294
 msgid "Commanders"
 msgstr "Kommandører"
 
-#: src/hci.c:3807 src/keymap.c:293
+#: src/hci.c:3823 src/keymap.c:293
 msgid "Intelligence Display"
 msgstr "Kommando Pult"
 
-#: src/hci.c:3823 src/keymap.c:289
+#: src/hci.c:3839 src/keymap.c:289
 msgid "Manufacture"
 msgstr "Fabrikering"
 
-#: src/hci.c:3839 src/keymap.c:292
+#: src/hci.c:3855 src/keymap.c:292
 msgid "Design"
 msgstr "Design"
 
-#: src/hci.c:3855 src/keymap.c:290
+#: src/hci.c:3871 src/keymap.c:290
 msgid "Research"
 msgstr "Forskning"
 
-#: src/hci.c:3871 src/keymap.c:291
+#: src/hci.c:3887 src/keymap.c:291
 msgid "Build"
 msgstr "Konstruktion"
 
-#: src/hci.c:3951 src/multiint.c:771 src/multiint.c:775
+#: src/hci.c:3967 src/multiint.c:771 src/multiint.c:775
 msgid "Power"
 msgstr "Energi"
 
-#: src/hci.c:4113 src/ingameop.c:276
+#: src/hci.c:4129 src/ingameop.c:276
 msgid "Load Game"
 msgstr "Indlæs spil"
 
-#: src/hci.c:4121 src/mission.c:3384 src/mission.c:3531 src/ingameop.c:278
+#: src/hci.c:4137 src/mission.c:3384 src/mission.c:3531 src/ingameop.c:278
 #: src/ingameop.c:417
 msgid "Save Game"
 msgstr "Gem spil"
 
-#: src/hci.c:4172
+#: src/hci.c:4188
 msgid "Unit"
 msgstr ""
 
-#: src/hci.c:4181
+#: src/hci.c:4197
 msgid "Struct"
 msgstr ""
 
-#: src/hci.c:4190
+#: src/hci.c:4206
 msgid "Feat"
 msgstr ""
 
-#: src/hci.c:4204 src/ingameop.c:120 src/ingameop.c:259 src/ingameop.c:264
+#: src/hci.c:4220 src/ingameop.c:120 src/ingameop.c:259 src/ingameop.c:264
 msgid "Quit"
 msgstr "Afbryd"
 
-#: src/hci.c:4205
+#: src/hci.c:4221
 msgid "Exit Game"
 msgstr "Luk spillet"
 
-#: src/hci.c:4561 src/intdisplay.c:204 src/intdisplay.c:247
+#: src/hci.c:4577 src/intdisplay.c:204 src/intdisplay.c:247
 #: src/intdisplay.c:293
 msgid "Progress Bar"
 msgstr "Proces bar"
 
-#: src/hci.c:5621
+#: src/hci.c:5637
 msgid "Factory Delivery Point"
 msgstr "Leveringspunkt"
 
-#: src/hci.c:5640
+#: src/hci.c:5656
 msgid "Loop Production"
 msgstr "Gentag produktion"
 
-#: src/hci.c:5731
+#: src/hci.c:5747
 msgid "Tab Scroll left"
 msgstr ""
 
-#: src/hci.c:5748
+#: src/hci.c:5764
 msgid "Tab Scroll right"
 msgstr ""
 
@@ -311,7 +326,7 @@ msgstr "Oberst"
 msgid "Hero"
 msgstr "General"
 
-#: src/multiint.c:332 src/multiint.c:1332 src/multilimit.c:173
+#: src/multiint.c:332 src/multiint.c:1329 src/multilimit.c:173
 msgid "Accept Settings"
 msgstr "Acceptér Indstillinger"
 
@@ -402,7 +417,7 @@ msgstr "Uden alliancer"
 msgid "Allow Alliances"
 msgstr "Med alliancer"
 
-#: src/multiint.c:746 src/multiint.c:1935
+#: src/multiint.c:746 src/multiint.c:1932
 msgid "Locked Teams"
 msgstr "Låste hold"
 
@@ -448,15 +463,15 @@ msgstr "Tabte bygninger"
 msgid "PLAYERS"
 msgstr "SPILLERE"
 
-#: src/multiint.c:1363
+#: src/multiint.c:1360
 msgid "CHAT"
 msgstr "BESKEDER"
 
-#: src/multiint.c:1876
+#: src/multiint.c:1873
 msgid "Host is Starting Game"
 msgstr "Værten starter spillet"
 
-#: src/multiint.c:2435
+#: src/multiint.c:2444
 msgid "Players"
 msgstr "Spillere"
 
@@ -626,36 +641,36 @@ msgstr "%s - Forbundet %d af %d"
 msgid "%s - Damage %u%%"
 msgstr "%s - Skade %d%% - Drab %d, %s"
 
-#: src/structure.c:6129 src/structure.c:6180
+#: src/structure.c:6128 src/structure.c:6179
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronisk beskadiget"
 
-#: src/structure.c:6405
+#: src/structure.c:6414
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronisk gevinst - Rekonniseringsrapport"
 
-#: src/structure.c:6445
+#: src/structure.c:6454
 msgid "Factory Reward - Propulsion"
 msgstr "Fabriksgevinst - Fremdrift"
 
-#: src/structure.c:6469
+#: src/structure.c:6478
 msgid "Factory Reward - Body"
 msgstr "Fabriksgevinst - Skrog"
 
-#: src/structure.c:6493
+#: src/structure.c:6502
 msgid "Factory Reward - Weapon"
 msgstr "Frabriskgevinst - Våben"
 
-#: src/structure.c:6502
+#: src/structure.c:6511
 msgid "Factory Reward - Nothing"
 msgstr "Fabriksgevinst - Ingen"
 
-#: src/structure.c:6530
+#: src/structure.c:6539
 msgid "Repair Facility Award - Repair"
 msgstr "Reperationsgevinst - Reperation"
 
-#: src/structure.c:6537
+#: src/structure.c:6546
 msgid "Repair Facility Award - Nothing"
 msgstr "Reperationsgevinst - Ingen"
 
@@ -11448,6 +11463,20 @@ msgstr "Vælg alle halv-bælter"
 #, fuzzy
 msgid "Viper Tracks Lancer"
 msgstr "Søger"
+
+#: data/mp/messages/strings/names.txt:1913
+#, fuzzy
+msgid "Cobra Half-Tracks Mini-Pod"
+msgstr "Vælg alle halv-bælter"
+
+#: data/mp/messages/strings/names.txt:1914
+#, fuzzy
+msgid "Cobra Tracks Mini-Pod"
+msgstr "Vælg alle halv-bælter"
+
+#: data/mp/messages/strings/names.txt:1915
+msgid "Cobra Tracks Mini-Rocket Artillery"
+msgstr ""
 
 #: data/mp/messages/strings/resstrings.txt:67
 msgid "Cyborg Transport Available"
