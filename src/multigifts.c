@@ -632,7 +632,7 @@ void addLoserGifts(void)
 }
 
 /** Sends a build order for the given feature type to all players
- *  \param type the type of feature to build
+ *  \param subType the type of feature to build
  *  \param x,y the coordinates to place the feature at
  */
 void sendMultiPlayerFeature(FEATURE_TYPE subType, uint32_t x, uint32_t y)

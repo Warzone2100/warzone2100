@@ -248,7 +248,8 @@ void featureStatsShutDown(void)
 /** Deals with damage to a feature
  *  \param psFeature feature to deal damage to
  *  \param damage amount of damage to deal
- *  \param weaponSubClass the subclass of the weapon that deals the damage
+ *  \param weaponClass,weaponSubClass the class and subclass of the weapon that deals the damage
+ *  \param impactSide the side/directon on which the feature is hit
  *  \return < 0 when the dealt damage destroys the feature, > 0 when the feature survives
  */
 float featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide)
