@@ -6084,7 +6084,6 @@ BOOL electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 	DROID       *psDroid;
 	BOOL        bCompleted = TRUE;
 
-	NETMSG	m;
 	Vector3i pos;
 	UDWORD		i;
 
@@ -6200,16 +6199,26 @@ BOOL electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 				(void)giftSingleDroid(psDroid, attackPlayer);
 
 				// tell the world!
-				if(bMultiPlayer)
+				if (bMultiPlayer)
 				{
-					m.body[0] = DROID_GIFT;
-					m.body[1] = (UBYTE)psDroid->player;
-					m.body[2] = (UBYTE)attackPlayer;
-					m.type = NET_GIFT;
-					m.size = 3;
-					NetAdd(m,m.size,psDroid->id);
-					m.size += sizeof(psDroid->id);
-					NETbcast(&m,TRUE);	//send it
+					uint8_t giftType = DROID_GIFT, droid_count = 1;
+					
+					NETbeginEncode(NET_GIFT, NET_ALL_PLAYERS);
+					{
+						// We need to distinguish between gift types
+						NETuint8_t(&giftType);
+
+						// send the player originally owning this droid
+						// and the new owner
+						NETuint8_t(&psDroid->player);
+						NETuint8_t(&attackPlayer);
+
+						// the amount of droids (1 in this case)
+						// followed by the droid's ID
+						NETuint8_t(&droid_count);
+						NETuint32_t(&psDroid->id);
+					}
+					NETend();
 				}
 
 				//check to see if droid limit reached, if so recycle.
