@@ -97,15 +97,15 @@ endif
 
 # Generic libs
 
-LDFLAGS+=-lSDL -lSDL_net -lpng -lphysfs -lz -lvorbisfile -lvorbis -logg -lpopt -lintl
+LDFLAGS+=-lSDL -lSDL_net -lpng -lphysfs -lz -lvorbisfile -lvorbis -logg -lpopt -lintl -liconv -lz -lfreetype -lfontconfig -lexpat
 
 # Additional platform-dependend libs
 
 ifeq ($(strip $(PLATFORM)),windows)
-LDFLAGS+=-lintl -liconv -lz -lfreetype -lfontconfig -lexpat -lglc32 -lglu32 -lopengl32 -lopenal32 -ldbghelp -lshfolder -lwinmm -lwsock32
+LDFLAGS+=-lGLC -lglu32 -lopengl32 -lopenal32 -ldbghelp -lshfolder -lwinmm -lwsock32
 else
 ifeq ($(strip $(PLATFORM)),mingw32)
-LDFLAGS+=-ldbghelp -lshfolder -lwinmm -lwsock32 -lglc32 -lglu32 -lopengl32 -lopenal32
+LDFLAGS+=-lglc32 -lglu32 -lopengl32 -lopenal32 -ldbghelp -lshfolder -lwinmm -lwsock32
 else
 LDFLAGS+=-lGLC -lGLU -lGL -lopenal
 endif
