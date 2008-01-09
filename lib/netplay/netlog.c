@@ -200,13 +200,13 @@ BOOL NETlogEntry(const char *str,UDWORD a,UDWORD b)
 	// Guarantee to nul-terminate
 	buf[sizeof(buf) - 1] = '\0';
 
-	if (a == 28) // NET_LEAVING
+	if (a == 18) // NET_LEAVING
 		// Write a starry line above NET_LEAVING messages
 		PHYSFS_write(pFileHandle, star_line, strlen(star_line), 1);
 
 	PHYSFS_write(pFileHandle, buf, strlen( buf ), 1);
 
-	if (a == 28) // NET_LEAVING
+	if (a == 18) // NET_LEAVING
 		// Write a starry line below NET_LEAVING messages
 		PHYSFS_write(pFileHandle, star_line, strlen(star_line), 1);
 
