@@ -299,7 +299,7 @@ extern	SDWORD	msgStackGetCount(void);
 extern	void	msgStackReset(void);
 extern BOOL msgStackGetDroid(DROID **ppsDroid);
 
-extern BOOL	sendBeaconToPlayerNet(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char *pStr);
+extern BOOL sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, const char* pStr);
 extern BOOL msgStackFireTop(void);
 
 #endif

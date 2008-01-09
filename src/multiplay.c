@@ -109,7 +109,7 @@ extern PLAYER_RESEARCH*		asPlayerResList[MAX_PLAYERS];
 // ////////////////////////////////////////////////////////////////////////////
 // Local Prototypes
 
-static BOOL recvBeacon(NETMSG *pMsg);
+static BOOL recvBeacon();
 static BOOL recvDestroyTemplate(void);
 static BOOL recvResearch(void);
 
@@ -657,7 +657,7 @@ BOOL recvMessage(void)
 				recvTextMessageAI(&msg);
 				break;
 			case NET_BEACONMSG:					//beacon (blip) message
-				recvBeacon(&msg);
+				recvBeacon();
 				break;
 			case NET_BUILD:						// a build order has been sent.
 				recvBuildStarted();
@@ -1170,26 +1170,13 @@ BOOL sendAIMessage(char *pStr, SDWORD player, SDWORD to)
 	return TRUE;
 }
 
-BOOL sendBeaconToPlayerNet(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char *pStr)
+//
+// At this time, we do NOT support messages for beacons
+//
+BOOL sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, const char* pStr)
 {
-	NETMSG	m;
-	SDWORD	sendPlayer;
-
-	//debug(LOG_WZ, "sendBeaconToPlayerNet: '%s'",pStr);
-
-	NetAdd(m,0,sender);			//save the actual sender
-
-	//save the actual player that is to get this msg on the source machine (source can host many AIs)
-	NetAdd(m,4,forPlayer);			//save the actual receiver (might not be the same as the one we are actually sending to, in case of AIs)
-
-	//save location
-	NetAdd(m,8,locX);
-	NetAdd(m,12,locY);
-
-	memcpy(&(m.body[16]),&(pStr[0]), strlen( &(pStr[0]) )+1);		// copy message in.
-
-	m.size = (UWORD)( strlen( &(pStr[0]) )+17);						// package the message up and send it.
-	m.type = NET_BEACONMSG;		//new type
+	int sendPlayer;
+	//debug(LOG_WZ, "sendBeacon: '%s'",pStr);
 
 	//find machine that is hosting this human or AI
 	sendPlayer = whosResponsible(forPlayer);
@@ -1200,7 +1187,19 @@ BOOL sendBeaconToPlayerNet(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD se
 		return FALSE;
 	}
 
-	NETsend(&m,player2dpid[sendPlayer],FALSE);		//send to the player who is hosting 'to' player (might be himself if human and not AI)
+	// I assume this is correct, looks like it sends it to ONLY that person, and the routine
+	// kf_AddHelpBlip() itterates for each player it needs.
+	NETbeginEncode(NET_BEACONMSG, player2dpid[sendPlayer]);     // send to the player who is hosting 'to' player (might be himself if human and not AI)
+		NETint32_t(&sender);                                // save the actual sender
+
+		// save the actual player that is to get this msg on the source machine (source can host many AIs)
+		NETint32_t(&forPlayer);                             // save the actual receiver (might not be the same as the one we are actually sending to, in case of AIs)
+		NETint32_t(&locX);                                  // save location
+		NETint32_t(&locY);
+
+		// const_cast: need to cast away constness because of the const-incorrectness of NETstring (const-incorrect when sending/encoding a packet)
+		NETstring((char*)pStr, MAX_CONSOLE_STRING_LENGTH);  // copy message in.
+	NETend();
 
 	return TRUE;
 }
@@ -1834,25 +1833,25 @@ BOOL msgStackFireTop(void)
 	return TRUE;
 }
 
-static BOOL recvBeacon(NETMSG *pMsg)
+static BOOL recvBeacon()
 {
-	SDWORD	sender, receiver,locX, locY;
+	int32_t sender, receiver,locX, locY;
+	char    msg[MAX_CONSOLE_STRING_LENGTH];
 
-	char	msg[MAX_CONSOLE_STRING_LENGTH];
-
-	NetGet(pMsg,0,sender);
-	NetGet(pMsg,4,receiver);
-	NetGet(pMsg,8,locX);
-	NetGet(pMsg,12,locY);
+	NETbeginDecode();
+	    NETint32_t(&sender);            // the actual sender
+	    NETint32_t(&receiver);          // the actual receiver (might not be the same as the one we are actually sending to, in case of AIs)
+	    NETint32_t(&locX);
+	    NETint32_t(&locY);
+	    NETstring(msg, sizeof(msg));    // Receive the actual message
+	NETend();
 
 	debug(LOG_WZ, "Received beacon for player: %d, from: %d",receiver, sender);
 
-	strcpy(msg, &(pMsg->body[16]));
-	strcat(msg, NetPlay.players[sender].name);		// name
+	strlcat(msg, NetPlay.players[sender].name, sizeof(msg));    // name
+	strlcpy(beaconReceiveMsg[sender], msg, sizeof(beaconReceiveMsg));
 
-	strcpy(beaconReceiveMsg[sender], msg);
-
-	return addHelpBlip(locX,locY,receiver,sender,beaconReceiveMsg[sender]);
+	return addHelpBlip(locX, locY, receiver, sender, beaconReceiveMsg[sender]);
 }
 
 static const char* playerColors[] =

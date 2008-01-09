@@ -10179,7 +10179,7 @@ BOOL sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sende
 	else
 	{
 		debug(LOG_WZ,"sending beacon to player %d (remote player) from %d", forPlayer, sender);
-		return sendBeaconToPlayerNet(locX, locY, forPlayer, sender, beaconMsg);
+		return sendBeacon(locX, locY, forPlayer, sender, beaconMsg);
 	}
 }
 
