@@ -30,7 +30,7 @@
 
 // Based on 3ds2m.c from lib3ds
 
-// gcc -o 3ds2pie 3ds2pie.c -Wall -g -O0 `pkg-config --cflags --libs lib3ds`
+// gcc -o 3ds2pie 3ds2pie.c -Wall -g -O0 `pkg-config --cflags --libs lib3ds` -Wshadow
 
 static char *filename = "";
 static char *output = "";
@@ -95,34 +95,36 @@ static void dump_pie_file(Lib3dsFile *f, FILE *o)
 {
 	Lib3dsMesh *m;
 	Lib3dsMaterial *material;
-	int i;
+	int meshIdx, j;
 
 	fprintf(o, "PIE 2\n");
 	fprintf(o, "TYPE 200\n");
 
-	for (i = 0, material = f->materials; material; material = material->next, i++)
+	for (j = 0, material = f->materials; material; material = material->next, j++)
 	{
 		Lib3dsTextureMap *texture = &material->texture1_map;
 
 		resToLower(texture->name);
-		if (i > 0)
+		if (j > 0)
 		{
-			fprintf(stderr, "Texture %d %s-%s: More than one texture currently not supported!\n", i, page, texture->name);
+			fprintf(stderr, "Texture %d %s-%s: More than one texture currently not supported!\n", j, page, texture->name);
 			continue;
 		}
-		fprintf(o, "TEXTURE %d %s-%s 256 256\n", i, page, texture->name);
+		fprintf(o, "TEXTURE %d %s-%s 256 256\n", j, page, texture->name);
 	}
 
 	fprintf(o, "LEVELS %d\n", f->frames);
-	for (i = 0, m = f->meshes; m; m = m->next, i++)
+	for (meshIdx = 0, m = f->meshes; m; m = m->next, meshIdx++)
 	{
-		if (i > 0)
+		int i;
+
+		if (meshIdx > 0)
 		{
-			fprintf(stderr, "Mesh %d %s: More than one frame currently not supported!\n", i, m->name);
+			fprintf(stderr, "Mesh %d %s: More than one frame currently not supported!\n", meshIdx, m->name);
 			continue;
 		}
 
-		fprintf(o, "LEVEL %d\n", i); // I think this is correct? not sure how 3ds does animations
+		fprintf(o, "LEVEL %d\n", meshIdx); // I think this is correct? not sure how 3ds does animations
 		fprintf(o, "POINTS %d\n", m->points);
 		for (i = 0; i < m->points; i++)
 		{
@@ -143,36 +145,36 @@ static void dump_pie_file(Lib3dsFile *f, FILE *o)
 		fprintf(o, "POLYGONS %d\n", m->faces);
 		for (i = 0; i < m->faces; ++i)
 		{
-			Lib3dsFace *f = &m->faceL[i];
+			Lib3dsFace *face = &m->faceL[i];
 			int texel[3][2];
 
 			if (!inverseUV)
 			{
-				texel[0][0] = m->texelL[f->points[0]][0] * 256.0f;
-				texel[0][1] = m->texelL[f->points[0]][1] * 256.0f;
-				texel[1][0] = m->texelL[f->points[1]][0] * 256.0f;
-				texel[1][1] = m->texelL[f->points[1]][1] * 256.0f;
-				texel[2][0] = m->texelL[f->points[2]][0] * 256.0f;
-				texel[2][1] = m->texelL[f->points[2]][1] * 256.0f;
+				texel[0][0] = m->texelL[face->points[0]][0] * 256.0f;
+				texel[0][1] = m->texelL[face->points[0]][1] * 256.0f;
+				texel[1][0] = m->texelL[face->points[1]][0] * 256.0f;
+				texel[1][1] = m->texelL[face->points[1]][1] * 256.0f;
+				texel[2][0] = m->texelL[face->points[2]][0] * 256.0f;
+				texel[2][1] = m->texelL[face->points[2]][1] * 256.0f;
 			}
 			else
 			{
-				texel[0][0] = m->texelL[f->points[0]][0] * 256.0f;
-				texel[0][1] = (1.0f - m->texelL[f->points[0]][1]) * 256.0f;
-				texel[1][0] = m->texelL[f->points[1]][0] * 256.0f;
-				texel[1][1] = (1.0f - m->texelL[f->points[1]][1]) * 256.0f;
-				texel[2][0] = m->texelL[f->points[2]][0] * 256.0f;
-				texel[2][1] = (1.0f - m->texelL[f->points[2]][1]) * 256.0f;
+				texel[0][0] = m->texelL[face->points[0]][0] * 256.0f;
+				texel[0][1] = (1.0f - m->texelL[face->points[0]][1]) * 256.0f;
+				texel[1][0] = m->texelL[face->points[1]][0] * 256.0f;
+				texel[1][1] = (1.0f - m->texelL[face->points[1]][1]) * 256.0f;
+				texel[2][0] = m->texelL[face->points[2]][0] * 256.0f;
+				texel[2][1] = (1.0f - m->texelL[face->points[2]][1]) * 256.0f;
 			}
 
 			if (reversewinding)
 			{
-				fprintf(o, "\t%d 3 %d %d %d", baseTexFlags, (int)f->points[2], (int)f->points[1], (int)f->points[0]);
+				fprintf(o, "\t%d 3 %d %d %d", baseTexFlags, (int)face->points[2], (int)face->points[1], (int)face->points[0]);
 				fprintf(o, " %d %d %d %d %d %d\n", texel[2][0], texel[2][1], texel[1][0], texel[1][1], texel[0][0], texel[0][1]);
 			}
 			else
 			{
-				fprintf(o, "\t%d 3 %d %d %d", baseTexFlags, (int)f->points[0], (int)f->points[1], (int)f->points[2]);
+				fprintf(o, "\t%d 3 %d %d %d", baseTexFlags, (int)face->points[0], (int)face->points[1], (int)face->points[2]);
 				fprintf(o, " %d %d %d %d %d %d\n", texel[0][0], texel[0][1], texel[1][0], texel[1][1], texel[2][0], texel[2][1]);
 			}
 		}
