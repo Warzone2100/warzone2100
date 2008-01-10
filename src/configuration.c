@@ -526,6 +526,7 @@ BOOL loadConfig(void)
 BOOL loadRenderMode(void)
 {
 	SDWORD val;
+	bool bad_resolution = false;
 
 	if( !openWarzoneKey() ) {
 		return FALSE;
@@ -550,16 +551,34 @@ BOOL loadRenderMode(void)
 
 	// now load the desired res..
 	// note that we only do this if we havent changed renderer..
-	if (getWarzoneKeyNumeric("width", &val))
+	if (getWarzoneKeyNumeric("width", &val)
+	 && val > 0)
 	{
 		pie_SetVideoBufferWidth(val);
 		war_SetWidth(val);
 	}
+	else
+	{
+		bad_resolution = true;
+	}
 	
-	if (getWarzoneKeyNumeric("height", &val))
+	if (getWarzoneKeyNumeric("height", &val)
+	 && val > 0)
 	{
 		pie_SetVideoBufferHeight(val);
 		war_SetHeight(val);
+	}
+	else
+	{
+		bad_resolution = true;
+	}
+
+	if (bad_resolution)
+	{
+		// If we have an invalid or incomplete resolution specified
+		// fall back to the defaults.
+		war_SetWidth(640);
+		war_SetHeight(480);
 	}
 	
 	if (getWarzoneKeyNumeric("bpp", &val))
