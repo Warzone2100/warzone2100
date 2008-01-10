@@ -42,15 +42,20 @@
 extern	BASE_OBJECT		*g_pProjLastAttacker;
 extern UDWORD	selectedPlayer;
 
-// whether an object is in a fire
+/** Whether an object is in a fire. */
 #define IN_FIRE		0x01
-// whether an object has just left the fire, but is still burning
+
+/** Whether an object has just left the fire, but is still burning. */
 #define BURNING		0x02
 
-// how long an object burns for after leaving a fire
+/** How long an object burns for after leaving a fire. */
 #define BURN_TIME	10000
-// how much damaga a second an object takes when it is burning
+
+/** How much damaga a second an object takes when it is burning. */
 #define BURN_DAMAGE	15
+
+/** How long to display a single electronic warfare shimmmer. */
+#define ELEC_DAMAGE_DURATION    (GAME_TICKS_PER_SEC/5)
 
 BOOL	proj_InitSystem( void );
 void	proj_UpdateAll( void );

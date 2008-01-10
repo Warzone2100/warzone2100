@@ -58,8 +58,6 @@
 
 #define OLD_TEXTURE_SIZE_FIX 256.0f
 
-#define pie_MAX_POLY_SIZE	16
-
 //Render style flags for all pie draw functions
 #define pie_TRANSLUCENT         0x2
 #define pie_ADDITIVE            0x4

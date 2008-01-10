@@ -28,8 +28,6 @@
 #define iV_DIVSHIFT 15
 #define iV_DIVMULTP (1 << iV_DIVSHIFT)
 
-#define iV_POLY_MAX_POINTS pie_MAX_POLY_SIZE
-
 extern void iV_Reset(void);
 extern void iV_ShutDown(void);
 

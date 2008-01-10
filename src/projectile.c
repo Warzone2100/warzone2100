@@ -2118,7 +2118,6 @@ static HIT_SIDE getHitSide(PROJECTILE *psObj, BASE_OBJECT *psTarget)
 	}
 }
 
-#define HIT_THRESHOLD	(GAME_TICKS_PER_SEC/6)	// got to be over 5 frames per sec.
 /* Returns true if an object has just been hit by an electronic warfare weapon*/
 BOOL	justBeenHitByEW( BASE_OBJECT *psObj )
 {
@@ -2135,22 +2134,28 @@ STRUCTURE	*psStructure;
 	{
 		case OBJ_DROID:
 			psDroid = (DROID*)psObj;
-			if ((gameTime - psDroid->timeLastHit) < HIT_THRESHOLD
+			if ((gameTime - psDroid->timeLastHit) < ELEC_DAMAGE_DURATION
 			 && psDroid->lastHitWeapon == WSC_ELECTRONIC)
+			{
 				return(TRUE);
+			}
 			break;
 
 		case OBJ_FEATURE:
 			psFeature = (FEATURE*)psObj;
-			if ((gameTime - psFeature->timeLastHit) < HIT_THRESHOLD)
+			if ((gameTime - psFeature->timeLastHit) < ELEC_DAMAGE_DURATION)
+			{
 				return(TRUE);
+			}
 			break;
 
 		case OBJ_STRUCTURE:
 			psStructure = (STRUCTURE*)psObj;
-			if ((gameTime - psStructure->timeLastHit) < HIT_THRESHOLD
+			if ((gameTime - psStructure->timeLastHit) < ELEC_DAMAGE_DURATION
 			 && psStructure->lastHitWeapon == WSC_ELECTRONIC)
+			{
 				return TRUE;
+			}
 			break;
 
 		case OBJ_PROJECTILE:

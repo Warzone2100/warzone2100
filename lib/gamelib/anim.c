@@ -50,7 +50,8 @@
 struct
 {
         BASEANIM                *psAnimList;
-        UWORD                   uwCurObj, uwCurState;
+        UWORD                   uwCurObj;
+	UWORD			uwCurState;
 }
 static g_animGlobals;
 
@@ -60,6 +61,9 @@ static g_animGlobals;
  */
 /***************************************************************************/
 
+/**
+ *	Initialise animation subsystem.
+ */
 BOOL anim_Init()
 {
 	/* init globals */
@@ -72,11 +76,11 @@ BOOL anim_Init()
 
 /***************************************************************************/
 
-void
-anim_ReleaseAnim( BASEANIM *psAnim )
+/**
+ *	Stop and release given animation.
+ */
+void anim_ReleaseAnim(BASEANIM *psAnim)
 {
-	ANIM3D		*psAnim3D;
-
 	// remove the anim from the list
 	LIST_REMOVE(g_animGlobals.psAnimList, psAnim, BASEANIM);
 
@@ -84,26 +88,26 @@ anim_ReleaseAnim( BASEANIM *psAnim )
 	free( psAnim->psStates );
 
 	/* free anim shape */
-	if ( psAnim->animType == ANIM_3D_FRAMES ||
-		 psAnim->animType == ANIM_3D_TRANS     )
+	if (psAnim->animType == ANIM_3D_FRAMES || psAnim->animType == ANIM_3D_TRANS)
 	{
-		psAnim3D = (ANIM3D *) psAnim;
+		ANIM3D	*psAnim3D = (ANIM3D *)psAnim;
+
 		free( psAnim3D->apFrame );
 	}
 
 	free(psAnim);
 }
 
-/***************************************************************************/
-
-BOOL
-anim_Shutdown( void )
+/**
+ *	Shut down animation subsystem.
+ */
+BOOL anim_Shutdown()
 {
 	BASEANIM	*psAnim, *psAnimTmp;
 
 	if (g_animGlobals.psAnimList != NULL)
 	{
-		debug( LOG_NEVER, "anim_Shutdown: warning: anims still allocated" );
+		debug(LOG_ERROR, "anim_Shutdown: warning: anims still allocated");
 	}
 
 	/* empty anim list */
@@ -118,11 +122,8 @@ anim_Shutdown( void )
 	return TRUE;
 }
 
-/***************************************************************************/
-
-static void
-anim_InitBaseMembers( BASEANIM * psAnim, UWORD uwStates, UWORD uwFrameRate,
-						UWORD uwObj, ANIM_MODE ubType, UWORD uwID )
+static void anim_InitBaseMembers(BASEANIM * psAnim, UWORD uwStates, UWORD uwFrameRate,
+                                 UWORD uwObj, ANIM_MODE ubType, UWORD uwID)
 {
 	psAnim->uwStates    = uwStates;
 	psAnim->uwFrameRate = uwFrameRate;
@@ -135,11 +136,11 @@ anim_InitBaseMembers( BASEANIM * psAnim, UWORD uwStates, UWORD uwFrameRate,
 	psAnim->psStates = (ANIM_STATE*)malloc( uwObj*psAnim->uwStates*sizeof(ANIM_STATE) );
 }
 
-/***************************************************************************/
-
-BOOL
-anim_Create3D( char szPieFileName[], UWORD uwStates,
-				UWORD uwFrameRate, UWORD uwObj, ANIM_MODE ubType, UWORD uwID )
+/**
+ *	Create animation for a model. Called from animation script.
+ */
+BOOL anim_Create3D(char szPieFileName[], UWORD uwStates, UWORD uwFrameRate, UWORD uwObj, 
+                   ANIM_MODE ubType, UWORD uwID)
 {
 	ANIM3D		*psAnim3D;
 	iIMDShape	*psFrames;
@@ -159,13 +160,6 @@ anim_Create3D( char szPieFileName[], UWORD uwStates,
 	uwFrames = 0;
 	while ( psFrames != NULL )
 	{
-#ifdef DEBUG
-		/* Where does this constant come from, though? - Per */
-		if (psFrames==(void*)0xcdcdcdcd)
-		{
-			debug( LOG_ERROR, "bad pointer in Create 3D !!!!  -[%s]\n", szPieFileName );
-		}
-#endif
 		uwFrames++;
 		psFrames = psFrames->next;
 	}
@@ -205,8 +199,7 @@ anim_Create3D( char szPieFileName[], UWORD uwStates,
 
 /***************************************************************************/
 
-void
-anim_BeginScript( void )
+void anim_BeginScript()
 {
 	/* update globals */
 	g_animGlobals.uwCurState = 0;
@@ -214,8 +207,7 @@ anim_BeginScript( void )
 
 /***************************************************************************/
 
-BOOL
-anim_EndScript( void )
+BOOL anim_EndScript()
 {
 	BASEANIM	*psAnim;
 
@@ -237,8 +229,7 @@ anim_EndScript( void )
 
 /***************************************************************************/
 
-BOOL
-anim_AddFrameToAnim( int iFrame, Vector3i vecPos, Vector3i vecRot, Vector3i vecScale )
+BOOL anim_AddFrameToAnim(int iFrame, Vector3i vecPos, Vector3i vecRot, Vector3i vecScale)
 {
 	ANIM_STATE	*psState;
 	BASEANIM	*psAnim;
@@ -284,8 +275,7 @@ anim_AddFrameToAnim( int iFrame, Vector3i vecPos, Vector3i vecRot, Vector3i vecS
 
 /***************************************************************************/
 
-BASEANIM *
-anim_GetAnim( UWORD uwAnimID )
+BASEANIM *anim_GetAnim(UWORD uwAnimID)
 {
 	BASEANIM	*psAnim;
 
@@ -301,8 +291,7 @@ anim_GetAnim( UWORD uwAnimID )
 
 /***************************************************************************/
 
-void
-anim_SetVals( char szFileName[], UWORD uwAnimID )
+void anim_SetVals(char szFileName[], UWORD uwAnimID)
 {
 	/* get track pointer from resource */
 	BASEANIM	*psAnim = (BASEANIM*)resGetData( "ANI", szFileName );
@@ -321,7 +310,6 @@ anim_SetVals( char szFileName[], UWORD uwAnimID )
 
 /***************************************************************************/
 
-// the playstation version uses sscanf's ... see animload.c
 BASEANIM *anim_LoadFromFile(PHYSFS_file* fileHandle)
 {
 	if ( ParseResourceFile( fileHandle ) == FALSE )
@@ -337,8 +325,7 @@ BASEANIM *anim_LoadFromFile(PHYSFS_file* fileHandle)
 
 /***************************************************************************/
 
-UWORD
-anim_GetAnimID( char *szName )
+UWORD anim_GetAnimID(char *szName)
 {
 	BASEANIM	*psAnim;
 	char		*cPos = strstr( szName, ".ani" );
@@ -365,19 +352,15 @@ anim_GetAnimID( char *szName )
 	{
 		return NO_ANIM;
 	}
-
 }
 
 /***************************************************************************/
 
-iIMDShape *
-anim_GetShapeFromID( UWORD uwID )
+iIMDShape *anim_GetShapeFromID(UWORD uwID)
 {
-	BASEANIM	*psAnim;
-	ANIM3D		*psAnim3D;
+	BASEANIM	*psAnim = g_animGlobals.psAnimList;
 
 	/* find matching anim id in list */
-	psAnim = g_animGlobals.psAnimList;
 	while( psAnim != NULL && psAnim->uwID != uwID )
 	{
 		psAnim = psAnim->psNext;
@@ -389,10 +372,9 @@ anim_GetShapeFromID( UWORD uwID )
 	}
 	else
 	{
-		psAnim3D = (ANIM3D *) psAnim;
+		ANIM3D	*psAnim3D = (ANIM3D *)psAnim;
 
-		ASSERT( psAnim3D != NULL,
-				"anim_GetShapeFromID: invalid anim pointer\n" );
+		ASSERT(psAnim3D != NULL, "anim_GetShapeFromID: invalid anim pointer");
 
 		return psAnim3D->psFrames;
 	}
@@ -400,10 +382,8 @@ anim_GetShapeFromID( UWORD uwID )
 
 /***************************************************************************/
 
-UWORD
-anim_GetFrame3D( ANIM3D *psAnim, UWORD uwObj, UDWORD udwGameTime,
-			UDWORD udwStartTime, UDWORD udwStartDelay,
-			Vector3i *psVecPos, Vector3i *psVecRot, Vector3i *psVecScale )
+UWORD anim_GetFrame3D(ANIM3D *psAnim, UWORD uwObj, UDWORD udwGameTime, UDWORD udwStartTime, 
+                      UDWORD udwStartDelay, Vector3i *psVecPos, Vector3i *psVecRot, Vector3i *psVecScale)
 {
 	SDWORD		dwTime;
 	UWORD		uwState, uwFrame;
@@ -418,12 +398,10 @@ anim_GetFrame3D( ANIM3D *psAnim, UWORD uwObj, UDWORD udwGameTime,
 		return ANIM_DELAYED;
 	}
 
-	uwFrame = (UWORD) ((dwTime % psAnim->uwAnimTime) *
-							psAnim->uwFrameRate / 1000);
+	uwFrame = (dwTime % psAnim->uwAnimTime) * psAnim->uwFrameRate / 1000;
 
 	/* check in range */
-	ASSERT( uwFrame<psAnim->uwStates,
-			"anim_GetObjectFrame3D: error in animation calculation\n" );
+	ASSERT(uwFrame<psAnim->uwStates, "anim_GetObjectFrame3D: error in animation calculation");
 
 	/* find current state */
 	uwState = (uwObj * psAnim->uwStates) + uwFrame;
