@@ -221,7 +221,7 @@ extern BOOL SendDestroyTemplate (DROID_TEMPLATE *t);
 extern BOOL SendResearch		(UBYTE player,UDWORD index);
 extern BOOL SendDestroyFeature  (FEATURE *pF);					// send a destruct feature message.
 extern BOOL sendTextMessage		(const char *pStr,BOOL cast);		// send a text message
-extern BOOL sendAIMessage		(char *pStr, SDWORD player, SDWORD to);	//send AI message
+extern BOOL sendAIMessage		(char *pStr, UDWORD player, UDWORD to);	//send AI message
 
 extern BOOL turnOffMultiMsg		(BOOL bDoit);
 

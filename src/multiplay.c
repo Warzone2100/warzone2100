@@ -651,10 +651,10 @@ BOOL recvMessage(void)
 				recvPowerCheck();
 				break;
 			case NET_TEXTMSG:					// simple text message
-				recvTextMessage(&msg);
+				recvTextMessage();
 				break;
 			case NET_AITEXTMSG:					//multiplayer AI text message
-				recvTextMessageAI(&msg);
+				recvTextMessageAI();
 				break;
 			case NET_BEACONMSG:					//beacon (blip) message
 				recvBeacon();
@@ -1034,99 +1034,113 @@ BOOL recvResearchStatus()
 // ////////////////////////////////////////////////////////////////////////////
 // Text Messaging between players. proceed string with players to send to.
 // eg "123 hi there" sends "hi there" to players 1,2 and 3.
-BOOL sendTextMessage(const char *pStr,BOOL all)
+BOOL sendTextMessage(const char *pStr, BOOL all)
 {
-	NETMSG	m;
 	BOOL	normal = TRUE;
 	BOOL	sendto[MAX_PLAYERS];
 	UDWORD	i;
 	char	display[MAX_CONSOLE_STRING_LENGTH];
+	char	msg[MAX_CONSOLE_STRING_LENGTH];
+	uint8_t netplayer = 0;
 
-	if(!ingame.localOptionsReceived)
+	if (!ingame.localOptionsReceived)
 	{
 		return TRUE;
 	}
 
-	for(i=0;i<MAX_PLAYERS;i++)
-	{
-		sendto[i]=0;
-	}
-
-	for(i=0; ((pStr[i] >= '0' ) && (pStr[i] <= '8' )) ; i++ )		// for each numeric char encountered..
+	memset(display,0x0, sizeof(display));	//clear buffer
+	memset(msg,0x0, sizeof(display));		//clear buffer
+	memset(sendto,0x0, sizeof(sendto));		//clear private flag
+	strlcpy(msg, pStr, sizeof(msg));
+	for(i = 0; ((pStr[i] >= '0' ) && (pStr[i] <= '8' )  && (i < MAX_PLAYERS )); i++)		// for each numeric char encountered..
 	{
 		sendto[ pStr[i]-'0' ] = TRUE;
 		normal = FALSE;
 	}
 
-	NetAdd(m,0,NetPlay.dpidPlayer);
-	memcpy(&(m.body[4]),&(pStr[i]), strlen( &(pStr[i]) )+1);		// copy message in.
-	m.size = (UWORD)( strlen( &(pStr[i]) )+5);						// package the message up and send it.
-	m.type = NET_TEXTMSG;
-
-	if(all)
+	if (!all && !normal)	// lets user know it is a private message
 	{
-		NETbcast(&m,FALSE);
+		strlcpy(display,"(private)",sizeof(display));
+		strlcat(display,pStr,sizeof(display));
 	}
-	else if(normal)
+
+	if (all)	//broadcast
 	{
-		for(i=0;i<MAX_PLAYERS;i++)
+		NETbeginEncode(NET_TEXTMSG, NET_ALL_PLAYERS);
+			NETuint32_t(&NetPlay.dpidPlayer);		// who this msg is from
+			NETstring(msg,MAX_CONSOLE_STRING_LENGTH);	// the message to send
+		NETend();
+	}
+	else if (normal)
+	{
+		for (i = 0; i < MAX_PLAYERS; i++)
 		{
-			if(i != selectedPlayer && openchannels[i])
+			if (i != selectedPlayer && openchannels[i])
 			{
-				if(isHumanPlayer(i) )
+				if (isHumanPlayer(i))
 				{
-					NETsend(&m,player2dpid[i],FALSE);
+					netplayer = player2dpid[i];
+					NETbeginEncode(NET_TEXTMSG,netplayer);
+						NETuint32_t(&NetPlay.dpidPlayer);		// who this msg is from
+						NETstring(msg,MAX_CONSOLE_STRING_LENGTH);	// the message to send
+					NETend();
 				}
 				else	//also send to AIs now (non-humans), needed for AI
 				{
-					sendAIMessage(&(m.body[4]), selectedPlayer, i);
+					sendAIMessage(msg, selectedPlayer, i);
 				}
 			}
 		}
 	}
-	else
+	else	//private msg
 	{
-		for(i=0;i<MAX_PLAYERS;i++)
+		for (i = 0; i < MAX_PLAYERS; i++)
 		{
-			if(sendto[i])
+			if (sendto[i])
 			{
-				if(isHumanPlayer(i))
+				if (isHumanPlayer(i))
 				{
-					NETsend(&m,player2dpid[i],FALSE);
+					netplayer = player2dpid[i];
+						NETbeginEncode(NET_TEXTMSG, netplayer);
+						NETuint32_t(&NetPlay.dpidPlayer);				// who this msg is from
+						NETstring(display, MAX_CONSOLE_STRING_LENGTH);	// the message to send
+					NETend();
 				}
 				else	//also send to AIs now (non-humans), needed for AI
 				{
-					sendAIMessage(&(m.body[4]), selectedPlayer, i);
+					sendAIMessage(display, selectedPlayer, i);
 				}
 			}
 		}
+		sprintf(display,"(private)");		 
 	}
 
+	//This is for local display
 	for(i = 0; NetPlay.players[i].dpid != NetPlay.dpidPlayer; i++);	//findplayer
-	strcpy(display,NetPlay.players[i].name);						// name
-	strcat(display," : ");											// seperator
-	strcat(display,pStr);											// add message
-	addConsoleMessage(display,DEFAULT_JUSTIFY);						// display
+	strlcat(display, NetPlay.players[i].name, sizeof(display));		// name
+	strlcat(display, ": ", sizeof(display));						// seperator
+	strlcat(display, pStr, sizeof(display));						// add message
+	addConsoleMessage(display, DEFAULT_JUSTIFY);					// display
 
 	return TRUE;
 }
 
 //AI multiplayer message, send from a certain player index to another player index
-BOOL sendAIMessage(char *pStr, SDWORD player, SDWORD to)
+BOOL sendAIMessage(char *pStr, UDWORD player, UDWORD to)
 {
-	NETMSG	m;
-	SDWORD	sendPlayer;
+	UDWORD	sendPlayer;		//dpidPlayer is a uint32_t, not int32_t!
+	uint8_t netplayer=0;
 
 	//check if this is one of the local players, don't need net send then
-	if(to == selectedPlayer || myResponsibility(to))	//(the only) human on this machine or AI on this machine
+	if (to == selectedPlayer || myResponsibility(to))	//(the only) human on this machine or AI on this machine
 	{
-		//Just show him the message
+		//Just show "him" the message
 		displayAIMessage(pStr, player, to);
 
 		//Received a console message from a player callback
 		//store and call later
 		//-------------------------------------------------
-		if(!msgStackPush(CALL_AI_MSG,player,to,pStr,-1,-1,NULL))
+		if (!msgStackPush(CALL_AI_MSG,player,to,pStr,-1,-1,NULL))
 		{
 			debug(LOG_ERROR, "sendAIMessage() - msgStackPush - stack failed");
 			return FALSE;
@@ -1134,37 +1148,34 @@ BOOL sendAIMessage(char *pStr, SDWORD player, SDWORD to)
 	}
 	else		//not a local player (use multiplayer mode)
 	{
-		if(!ingame.localOptionsReceived)
+		if (!ingame.localOptionsReceived)
 		{
 			return TRUE;
 		}
 
-		NetAdd(m,0,player);			//save the actual sender
-
-		//save the actual player that is to get this msg on the source machine (source can host many AIs)
-		NetAdd(m,4,to);			//save the actual receiver (might not be the same as the one we are actually sending to, in case of AIs)
-
-		memcpy(&(m.body[8]),&(pStr[0]), strlen( &(pStr[0]) )+1);		// copy message in.
-
-		m.size = (UWORD)( strlen( &(pStr[0]) )+9);						// package the message up and send it.
-		m.type = NET_AITEXTMSG;		//new type
-
 		//find machine that is hosting this human or AI
 		sendPlayer = whosResponsible(to);
 
-		if(sendPlayer >= MAX_PLAYERS)
+		if (sendPlayer >= MAX_PLAYERS)
 		{
 			debug(LOG_ERROR, "sendAIMessage() - sendPlayer >= MAX_PLAYERS");
 			return FALSE;
 		}
 
-		if(!isHumanPlayer(sendPlayer))		//NETsend can't send to non-humans
+		if (!isHumanPlayer(sendPlayer))		//NETsend can't send to non-humans
 		{
 			debug(LOG_ERROR, "sendAIMessage() - player is not human.");
 			return FALSE;
 		}
-
-		NETsend(&m,player2dpid[sendPlayer],FALSE);		//send to the player who is hosting 'to' player (might be himself if human and not AI)
+		netplayer = player2dpid[sendPlayer];
+		
+		//send to the player who is hosting 'to' player (might be himself if human and not AI)
+		NETbeginEncode(NET_AITEXTMSG, netplayer);
+			NETuint32_t(&player);			//save the actual sender
+			//save the actual player that is to get this msg on the source machine (source can host many AIs)
+			NETuint32_t(&to);				//save the actual receiver (might not be the same as the one we are actually sending to, in case of AIs)
+			NETstring(pStr, MAX_CONSOLE_STRING_LENGTH);		// copy message in.
+		NETend();
 	}
 
 	return TRUE;
@@ -1208,32 +1219,41 @@ void displayAIMessage(char *pStr, SDWORD from, SDWORD to)
 {
 	char tmp[255];
 
-	if(isHumanPlayer(to))		//display text only if receiver is the (human) host machine itself
+	if (isHumanPlayer(to))		//display text only if receiver is the (human) host machine itself
 	{
-		//addConsoleMessage(pStr,DEFAULT_JUSTIFY);
-		//console("%d: %s", from, pStr);
-		strcpy(tmp,getPlayerName(from));
-		strcat(tmp," : ");											// seperator
-		strcat(tmp,pStr);											// add message
-		addConsoleMessage(tmp,DEFAULT_JUSTIFY);
+		strcpy(tmp, getPlayerName(from));
+		strcat(tmp, ": ");											// seperator
+		strcat(tmp, pStr);											// add message
+		addConsoleMessage(tmp, DEFAULT_JUSTIFY);
 	}
 }
 
 // Write a message to the console.
-BOOL recvTextMessage(NETMSG *pMsg)
+BOOL recvTextMessage()
 {
-	SDWORD	dpid;
+	UDWORD	dpid;		
 	UDWORD	i;
 	char	msg[MAX_CONSOLE_STRING_LENGTH];
+	char newmsg[MAX_CONSOLE_STRING_LENGTH];
 	UDWORD  player=MAX_PLAYERS,j;		//console callback - player who sent the message
 
-	NetGet(pMsg,0,dpid);
-	for(i = 0; NetPlay.players[i].dpid != dpid; i++);		//findplayer
+	memset(msg, 0x0, sizeof(msg));
+	memset(newmsg, 0x0, sizeof(newmsg));
+
+	NETbeginDecode();
+		// Who this msg is from
+		NETuint32_t(&dpid);
+		// The message to send
+		NETstring(newmsg, MAX_CONSOLE_STRING_LENGTH);
+	NETend();
+
+
+	for (i = 0; NetPlay.players[i].dpid != dpid; i++);		//findplayer
 
 	//console callback - find real number of the player
-	for(j = 0; i<MAX_PLAYERS;j++)
+	for (j = 0; i < MAX_PLAYERS; j++)
 	{
-		if(dpid == player2dpid[j])
+		if (dpid == player2dpid[j])
 		{
 			player = j;
 			break;
@@ -1242,28 +1262,28 @@ BOOL recvTextMessage(NETMSG *pMsg)
 
 	ASSERT(player != MAX_PLAYERS, "recvTextMessage: failed to find owner of dpid %d", dpid);
 
-	//sprintf(msg, "%d", i);
 	strlcpy(msg, NetPlay.players[i].name, sizeof(msg));
-	strlcat(msg, " : ", sizeof(msg));                    // seperator
-	//strlcat(msg, &(pMsg->body[4]), sizeof(msg));         // add message
-	strlcat(msg, &(pMsg->body[4]), sizeof(msg));         // add message
-	addConsoleMessage((char *)&msg,DEFAULT_JUSTIFY);
+	// Seperator
+	strlcat(msg, ": ", sizeof(msg));
+	// Add message
+	strlcat(msg, newmsg, sizeof(msg));
+	
+	addConsoleMessage(msg, DEFAULT_JUSTIFY);
 
-	//multiplayer message callback
-	//Received a console message from a player, save
-	//----------------------------------------------
+	// Multiplayer message callback
+	// Received a console message from a player, save
 	MultiMsgPlayerFrom = player;
 	MultiMsgPlayerTo = selectedPlayer;
 
-	strlcpy(MultiplayMsg, &(pMsg->body[4]), sizeof(MultiplayMsg));
+	strlcpy(MultiplayMsg, newmsg, sizeof(MultiplayMsg));
 	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_AI_MSG);
 
 	// make some noise!
-	if(titleMode == MULTIOPTION || titleMode == MULTILIMIT)
+	if (titleMode == MULTIOPTION || titleMode == MULTILIMIT)
 	{
 		audio_PlayTrack(FE_AUDIO_MESSAGEEND);
 	}
-	else if(!ingame.localJoiningInProgress)
+	else if (!ingame.localJoiningInProgress)
 	{
 		audio_PlayTrack(ID_SOUND_MESSAGEEND);
 	}
@@ -1272,18 +1292,21 @@ BOOL recvTextMessage(NETMSG *pMsg)
 }
 
 //AI multiplayer message - received message from AI (from scripts)
-BOOL recvTextMessageAI(NETMSG *pMsg)
+BOOL recvTextMessageAI()
 {
-	SDWORD	sender, receiver;
-
+	UDWORD	sender, receiver;
 	char	msg[MAX_CONSOLE_STRING_LENGTH];
+	char	newmsg[MAX_CONSOLE_STRING_LENGTH];
 
-	NetGet(pMsg,0,sender);			//in-game player index ('normal' one)
-	NetGet(pMsg,4,receiver);		//in-game player index
+	NETbeginDecode();
+		NETuint32_t(&sender);			//in-game player index ('normal' one)
+		NETuint32_t(&receiver);			//in-game player index
+		NETstring(newmsg,MAX_CONSOLE_STRING_LENGTH);		
+	NETend();
 
 	//strlcpy(msg, getPlayerName(sender), sizeof(msg));  // name
 	//strlcat(msg, " : ", sizeof(msg));                  // seperator
-	strlcpy(msg, &(pMsg->body[8]), sizeof(msg));
+	strlcpy(msg, newmsg, sizeof(msg));
 
 	//Display the message and make the script callback
 	displayAIMessage(msg, sender, receiver);

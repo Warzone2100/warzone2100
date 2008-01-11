@@ -2113,7 +2113,7 @@ void frontendMultiMessages(void)
 		case NET_TEXTMSG:					// Chat message
 			if(ingame.localOptionsReceived)
 			{
-				recvTextMessage(&msg);
+				recvTextMessage();
 			}
 			break;
 		}
