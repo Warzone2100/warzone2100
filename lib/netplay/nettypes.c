@@ -331,7 +331,43 @@ BOOL NETstring(char *str, uint16_t maxlen)
 
 	return TRUE;
 }
+BOOL NETbin(char *str, uint16_t maxlen)
+{
+	/*
+	 * Strings sent over the network are prefixed with their length, sent as an
+	 * unsigned 16-bit integer.
+	 */
 
+	// Work out the length of the string if we are encoding
+	uint16_t len = (NETgetPacketDir() == PACKET_ENCODE) ? maxlen : 0;
+	char *store;
+
+	// Add/fetch the length from the packet
+	NETuint16_t(&len);
+
+	// Map store to the message buffer
+	store = (char *) &NetMsg.body[NetMsg.size];
+
+	// Make sure there is enough data/space left in the packet
+	if (len + NetMsg.size > MaxMsgSize || !NetMsg.status)
+	{
+		return NetMsg.status = FALSE;
+	}
+
+	if (NETgetPacketDir() == PACKET_ENCODE)
+	{
+		memcpy(store, str, len);
+	}
+	else if (NETgetPacketDir() == PACKET_DECODE)
+	{
+		memcpy(str, store, len);
+	}
+
+	// Increment the size of the message
+	NetMsg.size += sizeof(len) + len;
+
+	return TRUE;
+}
 BOOL NETVector3uw(Vector3uw* vp)
 {
 	return (NETuint16_t(&vp->x)

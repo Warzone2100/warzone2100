@@ -2016,10 +2016,10 @@ void frontendMultiMessages(void)
 		switch(msg.type)
 		{
 		case NET_REQUESTMAP:
-			recvMapFileRequested(&msg);
+			recvMapFileRequested();
 			break;
 		case FILEMSG:
-			recvMapFileData(&msg);
+			recvMapFileData();
 			break;
 
 

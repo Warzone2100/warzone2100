@@ -62,8 +62,8 @@ extern BOOL recvScoreSubmission		(void);
 extern BOOL recvHappyVtol			(void);
 extern BOOL recvResearchStatus		(void);
 extern BOOL recvLasSat				(void);
-extern BOOL	recvMapFileData				(NETMSG *pMsg);
-extern BOOL	recvMapFileRequested		(NETMSG *pMsg);
+extern BOOL	recvMapFileData				(void);
+extern BOOL	recvMapFileRequested		(void);
 
 
 extern BOOL recvTextMessageAI		(void);		//AI multiplayer message

@@ -1038,17 +1038,18 @@ BOOL NETsetupTCPIP(void ** addr, const char * machine)
 
 // ////////////////////////////////////////////////////////////////////////
 // File Transfer programs.
-// uses guaranteed messages to send files between clients.
 // send file. it returns % of file sent. when 100 it's complete. call until it returns 100.
-UBYTE NETsendFile(BOOL newFile, const char *fileName, UDWORD player)
+#define MAX_FILE_TRANSFER_PACKET 256
+UBYTE NETsendFile(BOOL newFile, char *fileName, UDWORD player)
 {
-	static PHYSFS_sint64	fileSize,currPos;
+	static int32_t  	fileSize,currPos;
 	static PHYSFS_file	*pFileHandle;
-	PHYSFS_sint64		bytesRead;
-	UBYTE		inBuff[2048];
-	NETMSG		msg;
+	int32_t  		bytesRead;
+	char			inBuff[MAX_FILE_TRANSFER_PACKET];
+	uint8_t			sendto = 0;
 
-	if(newFile)		//force it true for now -Q
+	memset(inBuff, 0x0, sizeof(inBuff));
+	if (newFile)
 	{
 		// open the file.
 		pFileHandle = PHYSFS_openRead(fileName);			// check file exists
@@ -1059,37 +1060,39 @@ UBYTE NETsendFile(BOOL newFile, const char *fileName, UDWORD player)
 		}
 		// get the file's size.
 		fileSize = 0;
-		currPos =0;
+		currPos = 0;
 		do
 		{
-			bytesRead = PHYSFS_read( pFileHandle, &inBuff, 1, sizeof(inBuff) );
+			bytesRead = PHYSFS_read(pFileHandle, inBuff, 1, MAX_FILE_TRANSFER_PACKET);
 			fileSize += bytesRead;
 		} while(bytesRead != 0);
 
-		PHYSFS_seek(pFileHandle, 0 );
+		PHYSFS_seek(pFileHandle, 0);
 	}
 	// read some bytes.
-	bytesRead = PHYSFS_read(pFileHandle, &inBuff, sizeof(inBuff), 1 );
+	bytesRead = PHYSFS_read(pFileHandle, inBuff,1, MAX_FILE_TRANSFER_PACKET);
 
-	// form a message
-	NetAdd(msg,0,fileSize);		// total bytes in this file.
-	NetAdd(msg,4,bytesRead);	// bytes in this packet
-	NetAdd(msg,8,currPos);		// start byte
-	msg.body[12]=strlen(fileName);
-	msg.size	= 13;
-	NetAddSt(msg,msg.size,fileName);
-	msg.size	+= strlen(fileName);
-	memcpy(&(msg.body[msg.size]),&inBuff,bytesRead);
-	msg.size	+= bytesRead;
-	msg.type	=  FILEMSG;
-	if(player==0)
-	{
-		NETbcast(&msg,TRUE);		// send it.
+	if (player == 0)
+	{	// FIXME: why would you send (map) file to everyone ??
+		// even if they already have it? multiplay.c 1529 & 1550 are both
+		// NETsendFile(TRUE,mapStr,0); & NETsendFile(FALSE,game.map,0);
+		// so we ALWAYS send it, it seems?
+		NETbeginEncode(FILEMSG, NET_ALL_PLAYERS);	// send it.
 	}
 	else
 	{
-		NETsend(&msg,player,TRUE);
+		sendto = (uint8_t) player;
+		NETbeginEncode(FILEMSG,sendto);
 	}
+
+	// form a message
+	NETint32_t(&fileSize);		// total bytes in this file.
+	NETint32_t(&bytesRead);	// bytes in this packet
+	NETint32_t(&currPos);		// start byte
+
+	NETstring(fileName, 256);	//256 = max filename size
+	NETbin(inBuff, bytesRead);
+	NETend();
 
 	currPos += bytesRead;		// update position!
 	if(currPos == fileSize)
@@ -1097,45 +1100,49 @@ UBYTE NETsendFile(BOOL newFile, const char *fileName, UDWORD player)
 		PHYSFS_close(pFileHandle);
 	}
 
-	return (currPos*100)/fileSize;
+	return (currPos * 100) / fileSize;
 }
 
 
 // recv file. it returns % of the file so far recvd.
-UBYTE NETrecvFile(NETMSG *pMsg)
+UBYTE NETrecvFile(void)
 {
-	UDWORD			pos, fileSize, currPos, bytesRead;
-	char			fileName[256];
-	unsigned int		len;
+	int32_t		fileSize, currPos, bytesRead;
+	char		fileName[256];
+	char		outBuff[MAX_FILE_TRANSFER_PACKET];
 	static PHYSFS_file	*pFileHandle;
 
+	memset(fileName, 0x0, sizeof(fileName));
+	memset(outBuff, 0x0, sizeof(outBuff));
+
 	//read incoming bytes.
-	NetGet(pMsg,0,fileSize);
-	NetGet(pMsg,4,bytesRead);
-	NetGet(pMsg,8,currPos);
+	NETbeginDecode();
+	NETint32_t(&fileSize);		// total bytes in this file.
+	NETint32_t(&bytesRead);		// bytes in this packet
+	NETint32_t(&currPos);		// start byte
 
 	// read filename
-	len = (unsigned int)(pMsg->body[12]);
-	memcpy(fileName,&(pMsg->body[13]),len);
-	fileName[len] = '\0';	// terminate string.
-	pos = 13+len;
+	NETstring(fileName, 256);	// Ugh. 256 = max array size
 	debug(LOG_NET, "NETrecvFile: Creating new file %s", fileName);
 
-	if(currPos == 0)	// first packet!
+	if (currPos == 0)	// first packet!
 	{
 		pFileHandle = PHYSFS_openWrite(fileName);	// create a new file.
 	}
 
-	//write packet to the file.
-	PHYSFS_write( pFileHandle, &(pMsg->body[pos]), bytesRead, 1 );
+	NETbin(outBuff, bytesRead);
+	NETend();
 
-	if(currPos+bytesRead == fileSize)	// last packet
+	//write packet to the file.
+	PHYSFS_write(pFileHandle, outBuff, bytesRead, 1);
+
+	if (currPos+bytesRead == fileSize)	// last packet
 	{
 		PHYSFS_close(pFileHandle);
 	}
 
-	//return the percent count.
-	return ((currPos+bytesRead)*100) / fileSize;
+	//return the percentage count
+	return ((currPos + bytesRead) * 100) / fileSize;
 }
 
 void NETregisterServer(int state)

@@ -1511,7 +1511,7 @@ BOOL recvDestroyFeature()
 
 // ////////////////////////////////////////////////////////////////////////////
 // Network File packet processor.
-BOOL recvMapFileRequested(NETMSG *pMsg)
+BOOL recvMapFileRequested()
 {
 	char mapStr[256],mapName[256],fixedname[256];
 
@@ -1528,8 +1528,7 @@ BOOL recvMapFileRequested(NETMSG *pMsg)
 		memset(mapName,0,256);
 		memset(fixedname,0,256);
 		bSendingMap = TRUE;
-		addConsoleMessage("SENDING MAP!",DEFAULT_JUSTIFY);
-		addConsoleMessage("FIX FOR LINUX!",DEFAULT_JUSTIFY);
+		addConsoleMessage("Map was requested: SENDING MAP!",DEFAULT_JUSTIFY);
 
 		strlcpy(mapName, game.map, sizeof(mapName));
 		// chop off the -T1
@@ -1578,11 +1577,11 @@ UBYTE sendMap(void)
 }
 
 // another player is broadcasting a map, recv a chunk
-BOOL recvMapFileData(NETMSG *pMsg)
+BOOL recvMapFileData()
 {
 	UBYTE done;
 
-	done =  NETrecvFile(pMsg);
+	done =  NETrecvFile();
 	if(done == 100)
 	{
 		addConsoleMessage("MAP DOWNLOADED!",DEFAULT_JUSTIFY);
@@ -1591,7 +1590,9 @@ BOOL recvMapFileData(NETMSG *pMsg)
 		// clear out the old level list.
 		levShutDown();
 		levInitialise();
-		if (!buildMapList()) {
+		rebuildSearchPath(mod_multiplay, TRUE);	// MUST rebuild search path for the new maps we just got!
+		if (!buildMapList())
+		{
 			return FALSE;
 		}
 	}
