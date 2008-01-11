@@ -34,6 +34,7 @@
 #define MAX_LEN_LOG_LINE 512
 
 char last_called_script_event[MAX_EVENT_NAME_LEN];
+UDWORD traceID;
 
 static debug_callback * callbackRegistry = NULL;
 BOOL enabled_debug[LOG_LAST]; // global
@@ -65,6 +66,7 @@ static const char *code_part_names[] = {
 	"savegame",
 	"multisync",
 	"death",
+	"gateway",
 	"last"
 };
 

@@ -103,6 +103,7 @@ typedef enum {
   LOG_SAVEGAME,
   LOG_MULTISYNC,
   LOG_DEATH,
+  LOG_GATEWAY,
   LOG_LAST /**< _must_ be last! */
 } code_part;
 
@@ -166,5 +167,17 @@ BOOL debug_enable_switch(const char *str);
 #define debug(part, ...) do { if (enabled_debug[part]) _debug(part, __VA_ARGS__); } while(0)
 void _debug( code_part part, const char *str, ...)
 		WZ_DECL_FORMAT(printf, 2, 3);
+
+/** Global to keep track of which game object to trace. */
+extern UDWORD traceID;
+
+/**
+ * Output printf style format str for debugging a specific game object whose debug part
+ * has been enabled.
+ * @see debug
+ */
+#define objTrace(part, id, ...) do { if (enabled_debug[part] && id == traceID) _debug(part, __VA_ARGS__); } while(0)
+static inline void objTraceEnable(UDWORD id) { traceID = id; }
+static inline void objTraceDisable(void) { traceID = 0; }
 
 #endif

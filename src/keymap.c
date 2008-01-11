@@ -227,7 +227,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_AssignGrouping_0,
 	kf_SelectGrouping_0,
 	kf_SelectCommander_0,
-	kf_NOOP, // unused
+	kf_TraceObject,
 	kf_NOOP, // unused
 	kf_AddMissionOffWorld,
 	kf_KillSelected,
@@ -449,6 +449,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_O,KEYMAP_PRESSED,kf_ChooseOptions,				"Display Options Screen");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_X,KEYMAP_PRESSED,kf_FinishResearch,				"Complete current research");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LSHIFT,KEY_W,KEYMAP_PRESSED,kf_ToggleWatchWindow,			"Toggle watch window");
+	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_L,KEYMAP_PRESSED,kf_TraceObject,				"Trace a game object");
 
 	saveKeyMap();	// save out the default key mappings.
 

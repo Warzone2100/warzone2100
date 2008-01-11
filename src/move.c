@@ -335,7 +335,8 @@ void moveUpdateBaseSpeed(void)
 			((psNextRouteDroid->sMove.Status != MOVEROUTE) &&
 			 (psNextRouteDroid->sMove.Status != MOVEROUTESHUFFLE)))
 		{
-			debug( LOG_MOVEMENT, "Waiting droid %d (player %d) reset\n", psNextRouteDroid->id, psNextRouteDroid->player);
+			objTrace(LOG_MOVEMENT, psNextRouteDroid->id, "Waiting droid %d (player %d) reset", 
+			         (int)psNextRouteDroid->id, (int)psNextRouteDroid->player);
 			psNextRouteDroid = NULL;
 		}
 	}
@@ -391,8 +392,8 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 	/* check formations */
 	if ( retVal == FPR_OK )
 	{
-		debug( LOG_MOVEMENT, "unit(%u): base Speed %u, speed %f\n",
-			 psDroid->id, psDroid->baseSpeed, psDroid->sMove.speed);
+		objTrace(LOG_MOVEMENT, psDroid->id, "unit(%u): base Speed %u, speed %f", psDroid->id,
+		         psDroid->baseSpeed, psDroid->sMove.speed);
 
 		// bit of a hack this - john
 		// if astar doesn't have a complete route, it returns a route to the nearest clear tile.
@@ -410,7 +411,8 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 		// reset the next route droid
 		if (psDroid == psNextRouteDroid)
 		{
-			debug( LOG_MOVEMENT, "Waiting droid %d (player %d) got route\n", psDroid->id, psDroid->player);
+			objTrace(LOG_MOVEMENT, psDroid->id, "Waiting droid %d (player %d) got route", 
+			         (int)psDroid->id, (int)psDroid->player);
 			psNextRouteDroid = NULL;
 		}
 
@@ -465,7 +467,7 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 	}
 	else if (retVal == FPR_RESCHEDULE)
 	{
-		debug( LOG_MOVEMENT, "reroute: id %d\n", psDroid->id);
+		objTrace(LOG_MOVEMENT, psDroid->id, "moveDroidToBase: reroute: id %d", (int)psDroid->id);
 
 		// maxed out routing time this frame - do it next time
 		psDroid->sMove.DestinationX = x;
@@ -474,7 +476,8 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 		if ((psDroid->sMove.Status != MOVEROUTE) &&
 			(psDroid->sMove.Status != MOVEROUTESHUFFLE))
 		{
-			debug( LOG_MOVEMENT, "Unit %d (player %d) started waiting at %d\n", psDroid->id, psDroid->player, gameTime);
+			objTrace(LOG_MOVEMENT, psDroid->id, "moveDroidToBase: Unit %d (player %d) started waiting at %d", 
+			         (int)psDroid->id, (int)psDroid->player, (int)gameTime);
 
 			psDroid->sMove.Status = MOVEROUTE;
 
@@ -489,7 +492,8 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 		// reset the next route droid
 		if (psDroid == psNextRouteDroid)
 		{
-			debug( LOG_MOVEMENT, "Waiting droid %d (player %d) got route\n", psDroid->id, psDroid->player);
+			objTrace(LOG_MOVEMENT, psDroid->id, "Waiting droid %d (player %d) got route", (int)psDroid->id, 
+			         (int)psDroid->player);
 			psNextRouteDroid = NULL;
 		}
 
@@ -2068,9 +2072,8 @@ static BOOL moveReachedWayPoint(DROID *psDroid)
 		if ((psDroid->sMove.boundX * droidX + psDroid->sMove.boundY * droidY <= 0) &&
 			fpathTileLOS(map_coord(psDroid->pos.x), map_coord(psDroid->pos.y), map_coord(psDroid->sMove.targetX), map_coord(psDroid->sMove.targetY)))
 		{
-			debug( LOG_MOVEMENT, "Next waypoint: droid %d bound (%d,%d) target (%d,%d)\n",
-					psDroid->id, psDroid->sMove.boundX,psDroid->sMove.boundY,
-					droidX,droidY);
+			objTrace(LOG_MOVEMENT, psDroid->id, "Next waypoint: droid %d bound (%d,%d) target (%d,%d)",
+			         (int)psDroid->id, (int)psDroid->sMove.boundX, (int)psDroid->sMove.boundY, (int)droidX, (int)droidY);
 
 			return TRUE;
 		}
@@ -3329,15 +3332,6 @@ void moveUpdateDroid(DROID *psDroid)
 	/* save current motion status of droid */
 	bStopped = moveDroidStopped( psDroid, 0 );
 
-#ifdef DEBUG_GROUP4
-	if (psDroid->sMove.Status != MOVEINACTIVE &&
-		psDroid->sMove.Status != MOVETURN &&
-		psDroid->sMove.Status != MOVEPOINTTOPOINT)
-	{
-		debug( LOG_MOVEMENT, "status: id %d state %d\n", psDroid->id, psDroid->sMove.Status);
-	}
-#endif
-
 	fpathSetBlockingTile( psPropStats->propulsionType );
 	fpathSetCurrentObject( (BASE_OBJECT *) psDroid );
 
@@ -3372,16 +3366,16 @@ void moveUpdateDroid(DROID *psDroid)
 			// selectedPlayer always gets precidence in single player
 			if (psNextRouteDroid == NULL)
 			{
-				debug( LOG_MOVEMENT, "Waiting droid set to %d (player %d) started at %d now %d (none waiting)\n",
-					psDroid->id, psDroid->player, psDroid->sMove.bumpTime, gameTime);
+				objTrace(LOG_MOVEMENT, psDroid->id, "Waiting droid set to %d (player %d) started at %d now %d (none waiting)",
+				         (int)psDroid->id, (int)psDroid->player, (int)psDroid->sMove.bumpTime, (int)gameTime);
 				psNextRouteDroid = psDroid;
 			}
 
 			else if (bMultiPlayer &&
 					 (psNextRouteDroid->sMove.bumpTime > psDroid->sMove.bumpTime))
 			{
-				debug( LOG_MOVEMENT, "Waiting droid set to %d (player %d) started at %d now %d (mulitplayer)\n",
-					psDroid->id, psDroid->player, psDroid->sMove.bumpTime, gameTime);
+				objTrace(LOG_MOVEMENT, psDroid->id, "Waiting droid set to %d (player %d) started at %d now %d (mulitplayer)",
+				         (int)psDroid->id, (int)psDroid->player, (int)psDroid->sMove.bumpTime, (int)gameTime);
 				psNextRouteDroid = psDroid;
 			}
 
@@ -3389,16 +3383,16 @@ void moveUpdateDroid(DROID *psDroid)
 					  ( (psNextRouteDroid->player != selectedPlayer) ||
 						(psNextRouteDroid->sMove.bumpTime > psDroid->sMove.bumpTime) ) )
 			{
-				debug( LOG_MOVEMENT, "Waiting droid set to %d (player %d) started at %d now %d (selectedPlayer)\n",
-					psDroid->id, psDroid->player, psDroid->sMove.bumpTime, gameTime);
+				objTrace(LOG_MOVEMENT, psDroid->id, "Waiting droid set to %d (player %d) started at %d now %d (selectedPlayer)",
+				         (int)psDroid->id, (int)psDroid->player, (int)psDroid->sMove.bumpTime, (int)gameTime);
 				psNextRouteDroid = psDroid;
 			}
 			else if ( (psDroid->player != selectedPlayer) &&
 					  (psNextRouteDroid->player != selectedPlayer) &&
 					  (psNextRouteDroid->sMove.bumpTime > psDroid->sMove.bumpTime) )
 			{
-				debug( LOG_MOVEMENT, "Waiting droid set to %d (player %d) started at %d now %d (non selectedPlayer)\n",
-					psDroid->id, psDroid->player, psDroid->sMove.bumpTime, gameTime);
+				objTrace(LOG_MOVEMENT, psDroid->id, "Waiting droid set to %d (player %d) started at %d now %d (non selectedPlayer)",
+				         (int)psDroid->id, (int)psDroid->player, (int)psDroid->sMove.bumpTime, (int)gameTime);
 				psNextRouteDroid = psDroid;
 			}
 		}
@@ -3521,7 +3515,6 @@ void moveUpdateDroid(DROID *psDroid)
 				{
 					psDroid->sMove.Status = MOVETURN;
 				}
-				debug( LOG_MOVEMENT, "\n");
 				break;
 			}
 			moveCalcBoundary(psDroid);
@@ -3722,7 +3715,7 @@ void moveUpdateDroid(DROID *psDroid)
 	// See if it's got blocked
 	if ( (psPropStats->propulsionType != LIFT) && moveBlocked(psDroid) )
 	{
-		debug( LOG_MOVEMENT, "status: id %d blocked\n", psDroid->id);
+		objTrace(LOG_MOVEMENT, psDroid->id, "status: id %d blocked", (int)psDroid->id);
 		psDroid->sMove.Status = MOVETURN;
 	}
 

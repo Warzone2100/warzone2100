@@ -144,6 +144,36 @@ void	kf_ToggleRadarJump( void )
 }
 
 // --------------------------------------------------------------------------
+
+void	kf_TraceObject( void )
+{
+	DROID		*psCDroid, *psNDroid;
+	STRUCTURE	*psCStruct, *psNStruct;
+
+	for(psCDroid = apsDroidLists[selectedPlayer]; psCDroid; psCDroid = psNDroid)
+	{
+		psNDroid = psCDroid->psNext;
+		if (psCDroid->selected)
+		{
+			objTraceEnable(psCDroid->id);
+			CONPRINTF(ConsoleString, (ConsoleString, "Tracing droid %d", (int)psCDroid->id));
+			return;
+		}
+	}
+	for(psCStruct = apsStructLists[selectedPlayer]; psCStruct; psCStruct = psNStruct)
+	{
+		psNStruct = psCStruct->psNext;
+		if (psCStruct->selected)
+		{
+			objTraceEnable(psCStruct->id);
+			CONPRINTF(ConsoleString, (ConsoleString, "Tracing structure %d", (int)psCStruct->id));
+			return;
+		}
+	}
+	objTraceDisable();
+	CONPRINTF(ConsoleString, (ConsoleString, "No longer tracing anything."));
+}
+
 //===================================================
 void kf_ToggleSensorDisplay( void )
 {
