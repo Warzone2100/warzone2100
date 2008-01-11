@@ -26,9 +26,7 @@
 #ifndef _fpath_h
 #define _fpath_h
 
-// limit the number of iterations for astar
-#define FPATH_MAX_ROUTE_INIT	600
-#define FPATH_LOOP_LIMIT	FPATH_MAX_ROUTE_INIT
+#define FPATH_LOOP_LIMIT	600
 
 // return values for routing
 typedef enum _fpath_retval

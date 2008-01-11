@@ -1210,7 +1210,6 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 		goto exit;
 	}
 
-	objTrace(LOG_MOVEMENT, psObj->id, "fpathRoute droid %d: ", (int)psObj->id);
 	if (psPartialRouteObj == NULL)
 	{
 		retVal = fpathGatewayRoute(psObj, ASR_NEWROUTE, GWTerrain,

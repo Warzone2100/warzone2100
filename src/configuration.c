@@ -327,22 +327,6 @@ BOOL loadConfig(void)
 		setWarzoneKeyNumeric("reopenBuild", TRUE);
 	}
 
-	// the maximum route processing per frame
-/*	if(getWarzoneKeyNumeric("maxRoute", &val))
-	{
-		fpathSetMaxRoute(val);
-	}
-	else
-	{
-		fpathSetMaxRoute(FPATH_MAX_ROUTE_INIT);
-		setWarzoneKeyNumeric("maxRoute", FPATH_MAX_ROUTE_INIT);
-	}*/
-
-	// //////////////////////////
-	//	getWarzoneKey("mouse", &val, 0);		// mouse
-	//	multitype // alliance // power // base // limits // tech
-	// keymaps
-
 	// /////////////////////////
 	//  multiplayer stuff.
 	// /////////////////////////

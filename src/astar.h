@@ -33,9 +33,6 @@ typedef struct _astar_route
 	SDWORD finalX, finalY, numPoints;
 } ASTAR_ROUTE;
 
-// Sizes for the node heap
-#define FPATH_NODEINIT		600
-
 // counters for a-star
 extern SDWORD astarInner;
 
