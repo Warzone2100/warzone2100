@@ -28,8 +28,7 @@
 #ifndef _mapgrid_h
 #define _mapgrid_h
 
-
-// Number of Objects in each chunk of the grid array
+/** Number of objects in each chunk of the grid array. */
 #define MAX_GRID_ARRAY_CHUNK 32
 
 // Objects are stored in an extensible array for each grid
@@ -41,20 +40,10 @@ typedef struct _grid_array
 } GRID_ARRAY;
 
 
-// The number of tiles per grid
-
+/** The number of tiles per grid. */
 #define GRID_SIZE	8
 
-
 #define GRID_MAXAREA (MAP_MAXAREA/(GRID_SIZE*GRID_SIZE))
-
-// The size of the grid
-//#define GRID_WIDTH	(MAP_MAXWIDTH/GRID_SIZE)
-//#define GRID_HEIGHT	(MAP_MAXHEIGHT/GRID_SIZE)
-
-// The map grid 
-//extern GRID_ARRAY	*apsMapGrid[GRID_WIDTH][GRID_HEIGHT];
-
 
 // initialise the grid system
 extern BOOL gridInitialise(void);
@@ -93,4 +82,3 @@ extern void gridStartIterate(SDWORD x, SDWORD y);
 extern BASE_OBJECT *gridIterate(void);
 
 #endif
-

@@ -25,34 +25,27 @@
  * have some influence.
  *
  */
-#include <string.h>
-
 #include "lib/framework/frame.h"
 #include "objects.h"
 #include "map.h"
-#include "mapgrid.h"
 
+#include "mapgrid.h"
 
 // The number of world units per grid
 #define GRID_UNITS	(GRID_SIZE * TILE_UNITS)
 
-// Initial and extension sizes for the grid heap
-//#define GRID_HEAPINIT	(GRID_WIDTH*GRID_HEIGHT)
-#define GRID_HEAPINIT	(GRID_MAXAREA)
-#define GRID_HEAPEXT	4
-
-UDWORD	gridWidth, gridHeight;
+static UDWORD	gridWidth, gridHeight;
 
 // The map grid
-GRID_ARRAY	*apsMapGrid[GRID_MAXAREA];
+static GRID_ARRAY	*apsMapGrid[GRID_MAXAREA];
 #define GridIndex(a,b) (((b)*gridWidth) + (a))
 
 // which grid to garbage collect on next
-SDWORD		garbageX, garbageY;
+static SDWORD		garbageX, garbageY;
 
 // the current state of the iterator
-GRID_ARRAY	*psIterateGrid;
-SDWORD		iterateEntry;
+static GRID_ARRAY	*psIterateGrid;
+static SDWORD		iterateEntry;
 
 // what to do when calculating the coverage of an object
 typedef enum _coverage_mode
@@ -62,12 +55,12 @@ typedef enum _coverage_mode
 } COVERAGE_MODE;
 
 // Function prototypes
-BOOL	gridIntersect(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2,
+static BOOL	gridIntersect(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2,
 				   SDWORD cx,SDWORD cy, SDWORD Rad);
-void	gridAddArrayObject(SDWORD x, SDWORD y, BASE_OBJECT *psObj);
-void	gridRemoveArrayObject(SDWORD x, SDWORD y, BASE_OBJECT *psObj);
-void	gridCompactArray(SDWORD x, SDWORD y);
-SDWORD	gridObjRange(BASE_OBJECT *psObj);
+static void	gridAddArrayObject(SDWORD x, SDWORD y, BASE_OBJECT *psObj);
+static void	gridRemoveArrayObject(SDWORD x, SDWORD y, BASE_OBJECT *psObj);
+static void	gridCompactArray(SDWORD x, SDWORD y);
+static SDWORD	gridObjRange(BASE_OBJECT *psObj);
 
 // initialise the grid system
 BOOL gridInitialise(void)
@@ -143,7 +136,6 @@ void gridReset(void)
 // shutdown the grid system
 void gridShutDown(void)
 {
-	//gridReset();
 	gridClear();
 }
 
@@ -375,7 +367,7 @@ void gridGarbageCollect(void)
 
 
 // add an object to a grid array
-void gridAddArrayObject(SDWORD x, SDWORD y, BASE_OBJECT *psObj)
+static void gridAddArrayObject(SDWORD x, SDWORD y, BASE_OBJECT *psObj)
 {
 	GRID_ARRAY		*psPrev, *psCurr, *psNew;
 	SDWORD			i;
@@ -421,7 +413,7 @@ void gridAddArrayObject(SDWORD x, SDWORD y, BASE_OBJECT *psObj)
 
 
 // remove an object from a grid array
-void gridRemoveArrayObject(SDWORD x, SDWORD y, BASE_OBJECT *psObj)
+static void gridRemoveArrayObject(SDWORD x, SDWORD y, BASE_OBJECT *psObj)
 {
 	GRID_ARRAY		*psCurr;
 	SDWORD			i;
@@ -441,7 +433,7 @@ void gridRemoveArrayObject(SDWORD x, SDWORD y, BASE_OBJECT *psObj)
 
 
 // Compact a grid array to remove any NULL objects
-void gridCompactArray(SDWORD x, SDWORD y)
+static void gridCompactArray(SDWORD x, SDWORD y)
 {
 	GRID_ARRAY		*psDone, *psMove, *psPrev, *psNext;
 	SDWORD			done, move;
@@ -541,7 +533,7 @@ void gridDisplayCoverage(BASE_OBJECT *psObj)
 // by Clifford A Shaffer
 /* Return TRUE iff rectangle R intersects circle with centerpoint C and
    radius Rad. */
-BOOL gridIntersect(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2,
+static BOOL gridIntersect(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2,
 				   SDWORD cx,SDWORD cy, SDWORD Rad)
 {
 	SDWORD	Rad2;
@@ -601,7 +593,7 @@ BOOL gridIntersect(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2,
 
 
 // Get the range of effect of an object
-SDWORD gridObjRange(BASE_OBJECT *psObj)
+static SDWORD gridObjRange(BASE_OBJECT *psObj)
 {
 /*	SDWORD	range;
 
