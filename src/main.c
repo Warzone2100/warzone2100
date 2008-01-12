@@ -860,8 +860,8 @@ int main(int argc, char *argv[])
 	/*** Initialize directory structure ***/
 	make_dir(ScreenDumpPath, "screendumps", NULL);
 	make_dir(SaveGamePath, "savegame", NULL);
-	make_dir(SaveGamePath, "maps", NULL);		//MUST have this to prevent crashes when getting map
-	make_dir(SaveGamePath, "music", NULL);
+	PHYSFS_mkdir("maps");		// MUST have this to prevent crashes when getting map
+	PHYSFS_mkdir("music");
 	make_dir(MultiPlayersPath, "multiplay", NULL);
 	make_dir(MultiPlayersPath, "multiplay", "players");
 	make_dir(MultiForcesPath, "multiplay", "forces");
