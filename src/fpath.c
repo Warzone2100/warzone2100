@@ -79,6 +79,7 @@ static SDWORD partialSX,partialSY, partialTX,partialTY;
 static SDWORD	lastPartialFrame;
 
 static BOOL fpathFindRoute(DROID *psDroid, SDWORD sX,SDWORD sY, SDWORD tX,SDWORD tY);
+static BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y);
 
 // initialise the findpath module
 BOOL fpathInitialise(void)
@@ -160,7 +161,7 @@ BOOL fpathHoverBlockingTile(SDWORD x, SDWORD y)
 }
 
 // Check if the map tile at a location blocks a vtol
-BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y)
+static BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y)
 {
 	MAPTILE		*psTile;
 	SDWORD		iLiftHeight, iBlockingHeight;
@@ -364,8 +365,7 @@ void fpathSetDirectRoute( BASE_OBJECT *psObj, SDWORD targetX, SDWORD targetY )
 {
 	MOVE_CONTROL *psMoveCntl;
 
-	ASSERT( psObj != NULL,
-			"fpathSetDirectRoute: invalid object pointer\n" );
+	ASSERT(psObj != NULL, "fpathSetDirectRoute: invalid object pointer");
 
 	if ( psObj->type == OBJ_DROID )
 	{
@@ -376,10 +376,6 @@ void fpathSetDirectRoute( BASE_OBJECT *psObj, SDWORD targetX, SDWORD targetY )
 
 		psMoveCntl->DestinationX = targetX;
 		psMoveCntl->DestinationY = targetY;
-//		psMoveCntl->MovementList[0].XCoordinate = targetX;
-//		psMoveCntl->MovementList[0].YCoordinate = targetY;
-//		psMoveCntl->MovementList[1].XCoordinate = -1;
-//		psMoveCntl->MovementList[1].YCoordinate = -1;
 		psMoveCntl->numPoints = 1;
 		psMoveCntl->asPath[0].x = map_coord(targetX);
 		psMoveCntl->asPath[0].y = map_coord(targetY);
@@ -392,27 +388,17 @@ static void fpathAppendRoute( MOVE_CONTROL *psMoveCntl, ASTAR_ROUTE *psAStarRout
 {
 	SDWORD		mi, ai;
 
-	// find the end of the last route
-//	for(mi=0; psMoveCntl->MovementList[mi].XCoordinate != -1; mi += 1)
-//		;
-
 	mi = psMoveCntl->numPoints;
 	ai = 0;
 	while ((mi < TRAVELSIZE) && (ai < psAStarRoute->numPoints))
 	{
-//		psMoveCntl->MovementList[mi].XCoordinate =
 		psMoveCntl->asPath[mi].x = (UBYTE)(psAStarRoute->asPos[ai].x);
-//			map_coord(psAStarRoute->asPos[ai].x);
-//		psMoveCntl->MovementList[mi].YCoordinate =
 		psMoveCntl->asPath[mi].y = (UBYTE)(psAStarRoute->asPos[ai].y);
-//			map_coord(psAStarRoute->asPos[ai].y);
 
 		ai += 1;
 		mi += 1;
 	}
 
-//	psMoveCntl->MovementList[mi].XCoordinate = -1;
-//	psMoveCntl->MovementList[mi].YCoordinate = -1;
 	psMoveCntl->numPoints = (UBYTE)(psMoveCntl->numPoints + ai);
 	psMoveCntl->DestinationX = world_coord(psAStarRoute->finalX) + TILE_UNITS/2;
 	psMoveCntl->DestinationY = world_coord(psAStarRoute->finalY) + TILE_UNITS/2;
@@ -954,8 +940,7 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 	/* set global pointer for object being routed - GJ hack */
 	fpathSetCurrentObject( psObj );
 
-	if ((psPartialRouteObj == NULL) ||
-		(psPartialRouteObj != psObj))
+	if (psPartialRouteObj == NULL || psPartialRouteObj != psObj)
 	{
 		targetX = tX;
 		targetY = tY;

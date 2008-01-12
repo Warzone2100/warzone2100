@@ -66,8 +66,6 @@
 
 /* system definitions */
 
-#define	FORMATIONS_DISABLE		0
-
 /* max and min vtol heights above terrain */
 #define	VTOL_HEIGHT_MIN				250
 #define	VTOL_HEIGHT_LEVEL			300
@@ -350,9 +348,7 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 	FPATH_RETVAL		retVal = FPR_OK;
 	SDWORD				fmx1,fmy1, fmx2,fmy2;
 
-	ASSERT( psDroid != NULL,
-		"moveUnitTo: Invalid unit pointer" );
-
+	ASSERT(psDroid != NULL, "moveDroidToBase: Invalid unit pointer");
 
 	if(bMultiPlayer && (psDroid->sMove.Status != MOVEWAITROUTE))
 	{
@@ -362,11 +358,7 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 		}
 	}
 
-#if FORMATIONS_DISABLE
-	retVal = FPR_OK;
-	fpathSetDirectRoute(psDroid, (SDWORD)x, (SDWORD)y);
-#else
-    //in multiPlayer make Transporter move like the vtols
+	// in multiPlayer make Transporter move like the vtols
 	if ( psDroid->droidType == DROID_TRANSPORTER && game.maxPlayers == 0)
 	{
 		fpathSetDirectRoute((BASE_OBJECT *)psDroid, (SDWORD)x, (SDWORD)y);
@@ -375,8 +367,7 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 		psDroid->sMove.psFormation = NULL;
 		return TRUE;
 	}
-	else if (vtolDroid(psDroid) || (game.maxPlayers > 0 && psDroid->
-        droidType == DROID_TRANSPORTER))
+	else if (vtolDroid(psDroid) || (game.maxPlayers > 0 && psDroid->droidType == DROID_TRANSPORTER))
 	{
 		fpathSetDirectRoute((BASE_OBJECT *)psDroid, (SDWORD)x, (SDWORD)y);
 		retVal = FPR_OK;
@@ -385,9 +376,6 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 	{
 		retVal = fpathRoute((BASE_OBJECT *)psDroid, &(psDroid->sMove), (SDWORD)x,(SDWORD)y);
 	}
-#endif
-	// ----
-	// ----
 
 	/* check formations */
 	if ( retVal == FPR_OK )
@@ -425,7 +413,6 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 			psDroid->sMove.psFormation = NULL;
 		}
 
-#if !FORMATIONS_DISABLE
 		if (bFormation)
 		{
 			// join a formation if it exists at the destination
@@ -462,7 +449,6 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 			}
 		}
 //		DBPRINTF(("moveDroidTo: form %p id %d end\n",psDroid->sMove.psFormation, psDroid->id));
-#endif
 
 	}
 	else if (retVal == FPR_RESCHEDULE)
@@ -3520,7 +3506,6 @@ void moveUpdateDroid(DROID *psDroid)
 			moveCalcBoundary(psDroid);
 		}
 
-#if !FORMATIONS_DISABLE
 		if (psDroid->sMove.psFormation &&
 			psDroid->sMove.Position == psDroid->sMove.numPoints)
 		{
@@ -3536,14 +3521,7 @@ void moveUpdateDroid(DROID *psDroid)
 				psDroid->sMove.targetY = fy;
 				moveCalcBoundary(psDroid);
 			}
-
-			/*if (vtolDroid(psDroid))
-			{
-				// reset to the normal blocking tile
-				fpathBlockingTile = fpathLiftBlockingTile;
-			}*/
 		}
-#endif
 
 		// Calculate a target vector
 		target = moveGetDirection(psDroid);

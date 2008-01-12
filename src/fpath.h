@@ -28,7 +28,7 @@
 
 #define FPATH_LOOP_LIMIT	600
 
-// return values for routing
+/** Return values for routing */
 typedef enum _fpath_retval
 {
 	FPR_OK,				// found a route
@@ -39,35 +39,36 @@ typedef enum _fpath_retval
 						// spent routing this frame
 } FPATH_RETVAL;
 
-// initialise the findpath module
+/** Initialise the path-finding module. */
 extern BOOL fpathInitialise(void);
 
-// update the findpath system each frame
+/**
+ *	Update the findpath system each frame. It checks whether a game object has a
+ *	path-finding job that was not finished in the previous frame, and if this
+ *	game object is dead, remove it from the job queue.
+ */
 extern void fpathUpdate(void);
 
-// access functions for the loop limit
-extern void fpathSetMaxRoute(SDWORD max);
-
-// Find a route for an object to a location
-extern FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
-							   SDWORD targetX, SDWORD targetY);
+/** Find a route for an object to a location. */
+extern FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl, SDWORD targetX, SDWORD targetY);
 
 extern BOOL (*fpathBlockingTile)(SDWORD x, SDWORD y);
 
-// Check if the map tile at a location blocks a droid
+/** Check if the map tile at a location blocks a droid. */
 extern BOOL fpathGroundBlockingTile(SDWORD x, SDWORD y);
 extern BOOL fpathHoverBlockingTile(SDWORD x, SDWORD y);
-extern BOOL fpathLiftBlockingTile(SDWORD x, SDWORD y);
 extern BOOL fpathLiftSlideBlockingTile(SDWORD x, SDWORD y);
 
-/* set the correct blocking tile function */
+/** Set the correct blocking tile function. */
 extern void fpathSetBlockingTile( UBYTE ubPropulsionType );
 
-/* set pointer for current fpath object - GJ hack */
+/** Set pointer for current fpath object - hack. */
 extern void fpathSetCurrentObject( BASE_OBJECT *psDroid );
 
-/* set direct path to position */
-extern void fpathSetDirectRoute( BASE_OBJECT *psObj,
-							SDWORD targetX, SDWORD targetY );
+/**
+ *	Set direct path to position. Plan a path from psObj's current position to given position 
+ *	without taking obstructions into consideration. Used for instance by VTOLs.
+ */
+extern void fpathSetDirectRoute(BASE_OBJECT *psObj, SDWORD targetX, SDWORD targetY);
 
 #endif
