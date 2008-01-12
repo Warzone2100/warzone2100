@@ -687,7 +687,7 @@ BOOL recvMessage(void)
 //				multiPlayerRequest(&msg);
 //				break;
 			case NET_GIFT:						// an alliance gift from one player to another.
-				recvGift(&msg);
+				recvGift();
 				break;
 			case NET_SCORESUBMIT:				//  a score update from another player
 				recvScoreSubmission();

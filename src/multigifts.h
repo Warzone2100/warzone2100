@@ -31,7 +31,7 @@ extern BOOL recvAlliance		(BOOL allowAudio);
 extern void	createTeamAlliances	(void);
 
 extern BOOL sendGift			(uint8_t type, uint8_t to);
-extern BOOL recvGift			();
+extern BOOL recvGift			(void);
 
 extern void technologyGiveAway				(const STRUCTURE* pS);
 extern void recvMultiPlayerRandomArtifacts	();
