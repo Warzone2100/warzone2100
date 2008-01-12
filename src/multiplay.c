@@ -707,7 +707,7 @@ BOOL recvMessage(void)
 		switch(msg.type)
 		{
 		case NET_TEMPLATE:					// new template
-			recvTemplate(&msg);
+			recvTemplate();
 			break;
 		case NET_TEMPLATEDEST:				// template destroy
 			recvDestroyTemplate();
@@ -1329,73 +1329,82 @@ BOOL recvTextMessageAI()
 // send a newly created template to other players
 BOOL sendTemplate(DROID_TEMPLATE *pTempl)
 {
-	NETMSG m;
-	UDWORD count = 0, i;
+	int i;
+	uint8_t player = selectedPlayer;
 
 	ASSERT(pTempl != NULL, "sendTemplate: Old Pumpkin bug");
 	if (!pTempl) return TRUE; /* hack */
 
-	// I hate adding more of this hideous code, but it is necessary for now - Per
-	NetAddUint8(m, count, selectedPlayer);			count += sizeof(Uint8);
-	NetAddUint32(m, count, pTempl->ref);			count += sizeof(Uint32);
-	NetAdd(m, count, pTempl->aName);			count += DROID_MAXNAME;
-	NetAddUint8(m, count, pTempl->NameVersion);		count += sizeof(Uint8);
-	for (i = 0; i < DROID_MAXCOMP; i++)
-	{
-		// signed, but sent as a bunch of bits...
-		NetAddUint32(m, count, pTempl->asParts[i]);	count += sizeof(Uint32);
-	}
-	NetAddUint32(m, count, pTempl->buildPoints);		count += sizeof(Uint32);
-	NetAddUint32(m, count, pTempl->powerPoints);		count += sizeof(Uint32);
-	NetAddUint32(m, count, pTempl->storeCount);		count += sizeof(Uint32);
-	NetAddUint32(m, count, pTempl->numWeaps);		count += sizeof(Uint32);
-	for (i = 0; i < DROID_MAXWEAPS; i++)
-	{
-		NetAddUint32(m, count, pTempl->asWeaps[i]);	count += sizeof(Uint32);
-	}
-	NetAddUint32(m, count, pTempl->droidType);		count += sizeof(Uint32);
-	NetAddUint32(m, count, pTempl->multiPlayerID);		count += sizeof(Uint32);
+	NETbeginEncode(NET_TEMPLATE, NET_ALL_PLAYERS);
+		NETuint8_t(&player);
+		NETuint32_t(&pTempl->ref);
+		NETstring(pTempl->aName, DROID_MAXNAME);
+		NETuint8_t(&pTempl->NameVersion);
 
-	m.type = NET_TEMPLATE;
-	m.size = count;
-	return(  NETbcast(&m,FALSE)	);
+		for (i = 0; i < DROID_MAXCOMP; i++)
+		{
+			// signed, but sent as a bunch of bits...
+			NETint32_t(&pTempl->asParts[i]);
+		}
+		
+		NETuint32_t(&pTempl->buildPoints);
+		NETuint32_t(&pTempl->powerPoints);
+		NETuint32_t(&pTempl->storeCount);
+		NETuint32_t(&pTempl->numWeaps);
+
+		for (i = 0; i < DROID_MAXWEAPS; i++)
+		{
+			NETuint32_t(&pTempl->asWeaps[i]);
+		}
+		
+		NETuint32_t(&pTempl->droidType);
+		NETuint32_t(&pTempl->multiPlayerID);
+
+	return NETend();
 }
 
 // receive a template created by another player
-BOOL recvTemplate(NETMSG * m)
+BOOL recvTemplate()
 {
-	UBYTE			player;
+	uint8_t			player;
 	DROID_TEMPLATE	*psTempl;
 	DROID_TEMPLATE	t, *pT = &t;
-	unsigned int i;
-	unsigned int count = 0;
+	int				i;
 
-	NetGetUint8(m, count, player);				count += sizeof(Uint8);
-	ASSERT( player < MAX_PLAYERS, "recvtemplate: invalid player size: %d", player );
+	NETbeginDecode();
+		NETuint8_t(&player);
+		ASSERT(player < MAX_PLAYERS, "recvtemplate: invalid player size: %d", player);
 
-	NetGetUint32(m, count, pT->ref);			count += sizeof(Uint32);
-	NetGet(m, count, pT->aName);				count += DROID_MAXNAME;
-	NetGetUint8(m, count, pT->NameVersion);			count += sizeof(Uint8);
-	for (i = 0; i < DROID_MAXCOMP; i++)
-	{
-		// signed, but sent as a bunch of bits...
-		NetGetUint32(m, count, pT->asParts[i]);		count += sizeof(Uint32);
-	}
-	NetGetUint32(m, count, pT->buildPoints);		count += sizeof(Uint32);
-	NetGetUint32(m, count, pT->powerPoints);		count += sizeof(Uint32);
-	NetGetUint32(m, count, pT->storeCount);			count += sizeof(Uint32);
-	NetGetUint32(m, count, pT->numWeaps);			count += sizeof(Uint32);
-	for (i = 0; i < DROID_MAXWEAPS; i++)
-	{
-		NetGetUint32(m, count, pT->asWeaps[i]);		count += sizeof(Uint32);
-	}
-	NetGetUint32(m, count, pT->droidType);			count += sizeof(Uint32);
-	NetGetUint32(m, count, pT->multiPlayerID);		count += sizeof(Uint32);
-
+		NETuint32_t(&pT->ref);
+		NETstring(pT->aName, DROID_MAXNAME);
+		NETuint8_t(&pT->NameVersion);
+		
+		for (i = 0; i < DROID_MAXCOMP; i++)
+		{
+			// signed, but sent as a bunch of bits...
+			NETint32_t(&pT->asParts[i]);	
+		}
+		
+		NETuint32_t(&pT->buildPoints);
+		NETuint32_t(&pT->powerPoints);
+		NETuint32_t(&pT->storeCount);
+		NETuint32_t(&pT->numWeaps);
+				
+		for (i = 0; i < DROID_MAXWEAPS; i++)
+		{
+			NETuint32_t(&pT->asWeaps[i]);
+		}
+		
+		NETuint32_t(&pT->droidType);
+		NETuint32_t(&pT->multiPlayerID);
+	NETend();
+	
 	t.psNext = NULL;
 
 	psTempl = IdToTemplate(t.multiPlayerID,player);
-	if(psTempl)												// already exists.
+	
+	// Already exists
+	if (psTempl)
 	{
 		t.psNext = psTempl->psNext;
 		memcpy(psTempl, &t, sizeof(DROID_TEMPLATE));
@@ -1403,8 +1412,9 @@ BOOL recvTemplate(NETMSG * m)
 	else
 	{
 		addTemplate(player,&t);
-		apsDroidTemplates[player]->ref = REF_TEMPLATE_START;	// templates are the odd one out!
+		apsDroidTemplates[player]->ref = REF_TEMPLATE_START;
 	}
+	
 	return TRUE;
 }
 

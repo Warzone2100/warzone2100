@@ -37,7 +37,7 @@ extern BOOL recvDestroyStructure	(void);
 extern BOOL recvBuildStarted		(void);
 extern BOOL recvBuildFinished		(void);
 //extern BOOL receiveWholeStructure	(NETMSG *pMsg);
-extern BOOL recvTemplate			(NETMSG *pMsg);
+extern BOOL recvTemplate			(void);
 extern BOOL recvDestroyFeature		(void);
 extern BOOL recvDemolishFinished	(void);
 extern BOOL recvPing				(void);
