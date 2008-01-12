@@ -120,13 +120,13 @@ BOOL loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 
 		loadFile(fileName,&pFileData,&size);
 
-		if (strncmp(pFileData, "WZ.STA.v2", 9) != 0)
+		if (strncmp(pFileData, "WZ.STA.v3", 9) != 0)
 		{
 			return FALSE; // wrong version or not a stats file
 		}
 
-		num = sscanf(pFileData, "WZ.STA.v2\n%s %u %u %u %u %u",
-		             sPlayerName, &st->wins, &st->losses, &st->totalKills, &st->totalScore, &st->played);
+		num = sscanf(pFileData, "WZ.STA.v2\n%u %u %u %u %u",
+		             &st->wins, &st->losses, &st->totalKills, &st->totalScore, &st->played);
 		if (num < 6)
 		{
 			st->played = 0;	// must be old, buggy format still
