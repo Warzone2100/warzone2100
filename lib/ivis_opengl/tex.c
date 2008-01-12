@@ -114,14 +114,7 @@ int pie_AddTexPage(iV_Image *s, const char* filename, int slot)
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, MIN(4.0f, max));
 	}
 
-	if( strncmp( filename, SKY_TEXPAGE, iV_TEXNAME_MAX ) == 0 )
-	{
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	}
-	else
-	{
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	}
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
 	/* Send back the texpage number so we can store it in the IMD */
@@ -129,6 +122,12 @@ int pie_AddTexPage(iV_Image *s, const char* filename, int slot)
 	_TEX_INDEX++;
 
 	return i;
+}
+
+void pie_PrepareSkybox(const char *pageName)
+{
+	pie_SetTexturePage(iV_GetTexture(pageName));
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 }
 
 void pie_MakeTexPageName(char * filename)

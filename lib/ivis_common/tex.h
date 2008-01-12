@@ -28,8 +28,6 @@
 #define iV_TEX_INVALID -1
 #define iV_TEXNAME_MAX 64
 
-#define SKY_TEXPAGE "page-25"
-
 //*************************************************************************
 
 #define iV_TEXNAME(i)	((char *) (&_TEX_PAGE[(i)].name))
@@ -56,6 +54,8 @@ extern unsigned int iV_getPixelFormat(const iV_Image *image);
 extern int pie_ReplaceTexPage(iV_Image *s, const char *texPage);
 extern int pie_AddTexPage(iV_Image *s, const char *filename, int slot);
 extern void pie_TexInit(void);
+
+void pie_PrepareSkybox(const char *pageName);
 
 /*!
  * Turns filename into a pagename if possible

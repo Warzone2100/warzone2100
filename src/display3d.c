@@ -157,6 +157,8 @@ static BOOL	bDrawBlips=TRUE;
 static BOOL	bDrawProximitys=TRUE;
 BOOL	godMode;
 
+static char skyboxPageName[PATH_MAX] = "page-25";
+
 static float waterRealValue = 0.0f;
 #define WAVE_SPEED 0.015f
 
@@ -896,6 +898,8 @@ BOOL init3DView(void)
 	targetInitialise();
 
 	memset(directionSet, FALSE, sizeof(directionSet));
+
+	pie_PrepareSkybox(skyboxPageName);
 
 	return TRUE;
 }
@@ -3572,7 +3576,7 @@ static void renderSurroundings(void)
 	pie_TRANSLATE(0, -skybox_scale/8, 0);
 
 	// Set the texture page
-	pie_SetTexturePage( iV_GetTexture(SKY_TEXPAGE) );
+	pie_SetTexturePage(iV_GetTexture(skyboxPageName));
 
 	if(!gamePaused())
 	{
