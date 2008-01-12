@@ -53,25 +53,6 @@ void pie_SetDefaultStates(void)//Sets all states
 
 //***************************************************************************
 //
-// pie_SetCaps(BOOL val);
-//
-// HIGHEST LEVEL enable/disable modes
-//
-//***************************************************************************
-
-void pie_SetFogCap(FOG_CAP val)
-{
-	rendStates.fogCap = val;
-}
-
-FOG_CAP pie_GetFogCap(void)
-{
-	return rendStates.fogCap;
-}
-
-
-//***************************************************************************
-//
 // pie_EnableFog(BOOL val)
 //
 // Global enable/disable fog to allow fog to be turned of ingame
@@ -80,11 +61,6 @@ FOG_CAP pie_GetFogCap(void)
 
 void pie_EnableFog(BOOL val)
 {
-	if (rendStates.fogCap == FOG_CAP_NO)
-	{
-		debug(LOG_FOG, "pie_EnableFog: Trying to fog set fog to %s, but global fog disabled", val ? "ON" : "OFF");
-		val = FALSE;
-	}
 	if (rendStates.fogEnabled != val)
 	{
 		debug(LOG_FOG, "pie_EnableFog: Setting fog to %s", val ? "ON" : "OFF");
@@ -130,24 +106,7 @@ BOOL pie_GetFogStatus(void)
 
 void pie_SetFogColour(PIELIGHT colour)
 {
-	PIELIGHT grey;
-
-	if (rendStates.fogCap == FOG_CAP_GREY)
-	{
-		grey.byte.r = (colour.byte.r + colour.byte.b + colour.byte.g) / 3;
-		grey.byte.g = grey.byte.r;
-		grey.byte.b = grey.byte.r;
-		grey.byte.a = 255;
-		rendStates.fogColour = colour;
-	}
-	else if (rendStates.fogCap == FOG_CAP_NO)
-	{
-		rendStates.fogColour.argb = 0;
-	}
-	else
-	{
-		rendStates.fogColour = colour;
-	}
+	rendStates.fogColour = colour;
 }
 
 PIELIGHT pie_GetFogColour(void)

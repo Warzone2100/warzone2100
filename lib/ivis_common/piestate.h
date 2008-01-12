@@ -75,14 +75,6 @@ typedef	enum	TRANSLUCENCY_MODE
 				}
 				TRANSLUCENCY_MODE;
 
-typedef	enum	FOG_CAP
-				{
-					FOG_CAP_NO,
-					FOG_CAP_GREY,
-					FOG_CAP_UNDEFINED
-				}
-				FOG_CAP;
-
 typedef	enum	COLOUR_MODE
 				{
 					COLOUR_FLAT_CONSTANT,
@@ -94,7 +86,6 @@ typedef	enum	COLOUR_MODE
 
 typedef struct	RENDER_STATE
 				{
-					FOG_CAP				fogCap;
 					BOOL				fogEnabled;
 					BOOL				fog;
 					PIELIGHT			fogColour;
@@ -125,9 +116,6 @@ extern void pie_SetDefaultStates(void);//Sets all states
 extern void pie_SetDepthBufferStatus(DEPTH_MODE depthMode);
 extern void pie_SetDepthOffset(float offset);
 extern void pie_SetGammaValue(float val);
-//renderer capability
-extern void pie_SetFogCap(FOG_CAP val);
-extern FOG_CAP pie_GetFogCap(void);
 //fog available
 extern void pie_EnableFog(BOOL val);
 extern BOOL pie_GetFogEnabled(void);

@@ -80,7 +80,6 @@ static WARZONE_GLOBALS	warGlobs;//STATIC use or write an access function if you 
 void war_SetDefaultStates(void)//Sets all states
 {
 	//set those here and reset in clParse or loadConfig
-	pie_SetFogCap(FOG_CAP_UNDEFINED);
 	war_SetFog(FALSE);
 	war_SetPlayAudioCDs(TRUE);
 	war_setSoundEnabled( TRUE );

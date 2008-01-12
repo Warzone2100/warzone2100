@@ -26,24 +26,19 @@
 
 #include <string.h>
 #include "lib/framework/frame.h"
-#include "lib/widget/widget.h"
 
 #include <popt.h>
 
 #include "main.h"
-#include "frontend.h"
 
 #include "lib/ivis_common/pieclip.h"
 #include "warzoneconfig.h"
 
 #include "clparse.h"
-#include "lib/ivis_common/piestate.h"
 #include "loadsave.h"
 #include "objects.h"
 #include "advvis.h"
 #include "multiplay.h"
-#include "multiint.h"
-#include "lib/netplay/netplay.h"
 #include "wrappers.h"
 #include "cheat.h"
 #include "init.h"
@@ -69,9 +64,6 @@ typedef enum
 	CLI_DEBUG,
 	CLI_DEBUGFILE,
 	CLI_FULLSCREEN,
-	CLI_NOFOG,
-	CLI_GREY_FOG,
-	CLI_GAME,
 	CLI_HELP,
 	CLI_MOD_GLOB,
 	CLI_MOD_CA,
@@ -97,10 +89,6 @@ static const struct poptOption* getOptionsTable()
 		{ "debug",      '\0', POPT_ARG_STRING, NULL, CLI_DEBUG,      N_("Show debug for given level"),        N_("debug level") },
 		{ "debugfile",  '\0', POPT_ARG_STRING, NULL, CLI_DEBUGFILE,  N_("Log debug output to file"),          N_("file") },
 		{ "fullscreen", '\0', POPT_ARG_NONE,   NULL, CLI_FULLSCREEN, N_("Play in fullscreen mode"),           NULL },
-		{ "nofog",      '\0', POPT_ARG_NONE,   NULL, CLI_NOFOG,      N_("Disable fog"),                       NULL },
-		{ "grey-fog",   '\0', POPT_ARG_NONE
-		          | POPT_ARGFLAG_DOC_HIDDEN,   NULL, CLI_GREY_FOG,   NULL,                                    NULL },
-		{ "game",       '\0', POPT_ARG_STRING, NULL, CLI_GAME,       N_("Load a specific game"),              N_("game-name") },
 		{ "help",       'h',  POPT_ARG_NONE,   NULL, CLI_HELP,       N_("Show this help message and exit"),   NULL },
 		{ "mod",        '\0', POPT_ARG_STRING, NULL, CLI_MOD_GLOB,   N_("Enable a global mod"),               N_("mod") },
 		{ "mod_ca",     '\0', POPT_ARG_STRING, NULL, CLI_MOD_CA,     N_("Enable a campaign only mod"),        N_("mod") },
@@ -291,28 +279,6 @@ bool ParseCommandLine(int argc, const char** argv)
 				war_setFullscreen(TRUE);
 				break;
 
-			case CLI_NOFOG:
-				pie_SetFogCap(FOG_CAP_NO);
-				break;
-
-			case CLI_GREY_FOG:
-				pie_SetFogCap(FOG_CAP_GREY);
-				break;
-
-			case CLI_GAME:
-				// retrieve the game name
-				token = poptGetOptArg(poptCon);
-				if (token == NULL)
-				{
-					debug(LOG_ERROR, "No game name");
-					poptFreeContext(poptCon);
-					abort();
-					return false;
-				}
-				strlcpy(aLevelName, token, sizeof(aLevelName));
-				SetGameMode(GS_NORMAL);
-				break;
-
 			case CLI_MOD_GLOB:
 			{
 				unsigned int i;
@@ -436,37 +402,6 @@ bool ParseCommandLine(int argc, const char** argv)
 			case CLI_NOSOUND:
 				war_setSoundEnabled(FALSE);
 				break;
-
-// Undocumented command line options...
-#if 0
-		else if ( strcasecmp(tokenType, "--CDA") == 0 )
-		{
-			war_SetPlayAudioCDs(TRUE);
-		}
-		else if ( strcasecmp(tokenType, "--noCDA") == 0 )
-		{
-			war_SetPlayAudioCDs(FALSE);
-		}
-		else if ( strcasecmp( tokenType,"--seqSmall") == 0 )
-		{
-			war_SetSeqMode(SEQ_SMALL);
-		}
-		else if ( strcasecmp( tokenType,"--seqSkip") == 0 )
-		{
-			war_SetSeqMode(SEQ_SKIP);
-		}
-		else if ( strcasecmp( tokenType,"--disableLobby") == 0 )
-		{
-			bDisableLobby = TRUE;
-		}
-		else
-		{
-			debug(LOG_ERROR, "Unrecognised command-line option: %s", tokenType);
-			poptPrintUsage(poptCon, stdout, 0);
-			poptFreeContext(poptCon);
-			return false;
-		}
-#endif
 		};
 	}
 
