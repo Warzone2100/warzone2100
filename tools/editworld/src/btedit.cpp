@@ -31,8 +31,8 @@
 #include "mainframe.h"
 #include "bteditdoc.h"
 #include "bteditview.h"
-//#include "debugwin.h"
 
+#include <string.h>
 #include <string>
 #include <boost/scoped_array.hpp>
 
@@ -41,41 +41,41 @@ using boost::scoped_array;
 
 CBTEditCommandLineInfo g_cmdInfo;
 
-void CBTEditCommandLineInfo::ParseParam(const char* pszParam,BOOL bFlag,BOOL bLast)
+void CBTEditCommandLineInfo::ParseParam(const char* param, BOOL flag, BOOL bLast)
 {
-	if (bFlag)
+	if (flag)
 	{
-		if (lstrcmpA(pszParam, "emulation") == 0)
+		if (strcmp(param, "emulation") == 0)
 		{
 			m_bForceEmulation = TRUE;
 			return;
 		}
-		if (lstrcmpA(pszParam, "hardware") == 0)
+		if (strcmp(param, "hardware") == 0)
 		{
 			m_bForceHardware = TRUE;
 			return;
 		}
-		if (lstrcmpA(pszParam, "primary") == 0)
+		if (strcmp(param, "primary") == 0)
 		{
 			m_bForcePrimary = TRUE;
 			return;
 		}
-		if (lstrcmpA(pszParam, "secondary") == 0)
+		if (strcmp(param, "secondary") == 0)
 		{
 			m_bForceSecondary = TRUE;
 			return;
 		}
-		if (lstrcmpA(pszParam, "ramp") == 0)
+		if (strcmp(param, "ramp") == 0)
 		{
 			m_bForceRamp = TRUE;
 			return;
 		}
-		if (lstrcmpA(pszParam, "rgb") == 0)
+		if (strcmp(param, "rgb") == 0)
 		{
 			m_bForceRGB = TRUE;
 			return;
 		}
-//		if (lstrcmpA(pszParam, "nosizecheck") == 0)
+//		if (strcmp(param, "nosizecheck") == 0)
 //		{
 //			m_bMapSizePower2 = FALSE;
 //			return;
@@ -206,6 +206,8 @@ std::string getCurrentDirectory()
 {
 	// Determine the required buffer size to contain the current directory
 	const DWORD curDirSize = GetCurrentDirectory(0, NULL);
+	// NOTE: a variably sized array would do just fine here, but MSVC6
+	// doesn't support these, even when compiling as C++.
 	scoped_array<char> curDir(new char[curDirSize]);
 
 	// Retrieve the current directory
