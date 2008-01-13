@@ -99,14 +99,14 @@ int asprintf(char** strp, const char* format, ...)
 #endif
 
 #if defined(WZ_CC_MSVC)
-int vsnprintf(char* str, size_t size, const char* format, va_list ap)
+int wz_vsnprintf(char* str, size_t size, const char* format, va_list ap)
 {
 	int count;
 
 	// Find out how long the resulting string is
 	count = _vscprintf(format, ap);
 
-	if (count > 0
+	if (count >= 0
 	 && str != NULL)
 	{
 		// Perfrom the actual string formatting
@@ -117,7 +117,7 @@ int vsnprintf(char* str, size_t size, const char* format, va_list ap)
 	return count;
 }
 
-int snprintf(char* str, size_t size, const char* format, ...)
+int wz_snprintf(char* str, size_t size, const char* format, ...)
 {
 	va_list ap;
 	int count;
