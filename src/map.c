@@ -758,6 +758,9 @@ static void featureSaveTagged(FEATURE *psFeat)
 	tagWriteLeave(0x0c);
 }
 
+// the maximum number of flags: each factory type can have two, one for itself, and one for a commander
+#define MAX_FLAGS (NUM_FLAG_TYPES * MAX_FACTORY * 2)
+
 BOOL mapSaveTagged(char *pFileName)
 {
 	MAPTILE *psTile;
@@ -871,8 +874,10 @@ BOOL mapSaveTagged(char *pFileName)
 		RESEARCH *psResearch = asResearch;
 		STRUCTURE_STATS *psStructStats = asStructureStats;
 		FLAG_POSITION *psFlag;
-		FLAG_POSITION *flagList[NUM_FLAG_TYPES * MAX_FACTORY];
+		FLAG_POSITION *flagList[MAX_FLAGS];
 		MESSAGE *psMessage;
+
+		memset(flagList, 0, sizeof(flagList));
 
 		tagWriteEnter(0x01, numResearch); // research group
 		for (i = 0; i < numResearch; i++, psResearch++)
@@ -896,6 +901,7 @@ BOOL mapSaveTagged(char *pFileName)
 		// count and list flags in list
 		for (i = 0, psFlag = apsFlagPosLists[plr]; psFlag != NULL; psFlag = psFlag->psNext)
 		{
+			ASSERT(i < MAX_FLAGS, "More flags than we can handle (1)!");
 			flagList[i] = psFlag;
 			i++;
 		}
@@ -903,6 +909,7 @@ BOOL mapSaveTagged(char *pFileName)
 		// count flags not in list (commanders)
 		for (psStruct = apsStructLists[plr]; psStruct != NULL; psStruct = psStruct->psNext)
 		{
+			ASSERT(i < MAX_FLAGS, "More flags than we can handle (2)!");
 			if (psStruct->pFunctionality
 			    && (psStruct->pStructureType->type == REF_FACTORY
 			        || psStruct->pStructureType->type == REF_CYBORG_FACTORY
