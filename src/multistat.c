@@ -96,6 +96,8 @@ BOOL loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 	UDWORD				size;
 	char				*pFileData;
 
+	memset(st, 0, sizeof(PLAYERSTATS));	// clear in case we don't get to load
+
 	// Prevent an empty player name (where the first byte is a 0x0 terminating char already)
 	if (!*sPlayerName)
 	{
@@ -127,7 +129,7 @@ BOOL loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 
 		num = sscanf(pFileData, "WZ.STA.v3\n%u %u %u %u %u",
 		             &st->wins, &st->losses, &st->totalKills, &st->totalScore, &st->played);
-		if (num < 6)
+		if (num < 5)
 		{
 			st->played = 0;	// must be old, buggy format still
 		}
