@@ -41,6 +41,9 @@
 
 #include "fpath.h"
 
+/* Beware: Enabling this will cause significant slow-down. */
+#undef DEBUG_MAP
+
 /* minimum height difference for VTOL blocking tile */
 #define	LIFT_BLOCK_HEIGHT_LIGHTBODY		  30
 #define	LIFT_BLOCK_HEIGHT_MEDIUMBODY	 350
@@ -1172,7 +1175,7 @@ exit:
 	/* reset global pointer for object being routed */
 	fpathSetCurrentObject( NULL );
 
-#ifdef DEBUG
+#ifdef DEBUG_MAP
 	{
 		MAPTILE				*psTile;
 
