@@ -952,6 +952,7 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 			 (((DROID *)psObj)->sMove.DestinationX != tX ||
 			  ((DROID *)psObj)->sMove.DestinationX != tX))
 	{
+		// we have a partial route, but changed destination, so need to recalculate
 		psPartialRouteObj = NULL;
 		targetX = tX;
 		targetY = tY;
@@ -980,8 +981,7 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 		psDroid = (DROID *)psObj;
 
 		psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-		ASSERT( psPropStats != NULL,
-			"fpathRoute: invalid propulsion stats pointer" );
+		ASSERT(psPropStats != NULL, "fpathRoute: invalid propulsion stats pointer");
 
 		fpathSetBlockingTile( psPropStats->propulsionType );
 
@@ -1006,8 +1006,7 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 		GWTerrain = GWR_TER_LAND;
 	}
 
-	if ((psPartialRouteObj == NULL) ||
-		(psPartialRouteObj != psObj))
+	if (psPartialRouteObj == NULL || psPartialRouteObj != psObj)
 	{
 		// check whether the start point of the route
 		// is a blocking tile and find an alternative if it is
@@ -1080,17 +1079,24 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 		if (fpathBlockingTile(map_coord(targetX), map_coord(targetY)))
 		{
 			// route to the last clear tile found by the raycast
+			// Does this code work? - Per
 			targetX = clearX;
 			targetY = clearY;
+			objTrace(LOG_MOVEMENT, psObj->id, "Unit %d: end point is blocked, going to (%d, %d) instead", 
+			         (int)psObj->id, (int)clearX, (int)clearY);
 		}
 
 		// see if there is another unit with a usable route
 		if (fpathFindRoute((DROID *)psDroid, startX,startY, targetX,targetY))
 		{
- 			objTrace(LOG_MOVEMENT, psObj->id, "fpathRoute droid %d: found route", (int)psObj->id);
 			if (psPartialRouteObj != NULL)
 			{
-				objTrace(LOG_MOVEMENT, psObj->id, "fpathRoute droid %d: found route during multi-frame route", (int)psObj->id);
+				objTrace(LOG_MOVEMENT, psObj->id, "fpathRoute droid %d: found existing route during multi-frame path", 
+				         (int)psObj->id);
+			}
+			else
+			{
+ 				objTrace(LOG_MOVEMENT, psObj->id, "fpathRoute droid %d: found existing route", (int)psObj->id);
 			}
 			goto exit;
 		}
@@ -1109,6 +1115,7 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 
 	if (astarInner > FPATH_LOOP_LIMIT)
 	{
+		// Time out
 		if (psPartialRouteObj == psObj)
 		{
 			retVal = FPR_WAIT;
@@ -1121,16 +1128,15 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 			goto exit;
 		}
 	}
-	else if ( ((psPartialRouteObj != NULL) &&
-			   (psPartialRouteObj != psObj)) ||
-			  ((psPartialRouteObj != psObj) &&
-			   (psNextRouteDroid != NULL) &&
-			   (psNextRouteDroid != (DROID *)psObj)) )
+	else if ((psPartialRouteObj != NULL && psPartialRouteObj != psObj)
+	         || (psPartialRouteObj != psObj && psNextRouteDroid != NULL && psNextRouteDroid != (DROID *)psObj))
 	{
+		// Not our turn
 		retVal = FPR_RESCHEDULE;
 		goto exit;
 	}
 
+	// Now actually create a route
 	if (psPartialRouteObj == NULL)
 	{
 		retVal = fpathGatewayRoute(psObj, ASR_NEWROUTE, GWTerrain,
@@ -1152,8 +1158,7 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 		partialTX = targetX;
 		partialTY = targetY;
 	}
-	else if ((retVal == FPR_FAILED) &&
-			 (psObj->type == OBJ_DROID) && vtolDroid((DROID *)psObj))
+	else if (retVal == FPR_FAILED && psObj->type == OBJ_DROID && vtolDroid((DROID *)psObj))
 	{
 		fpathSetDirectRoute( psObj, targetX, targetY );
 		retVal = FPR_OK;

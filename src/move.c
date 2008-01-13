@@ -62,10 +62,6 @@
 
 #include "drive.h"
 
-//#define DEBUG_DRIVE_SPEED
-
-/* system definitions */
-
 /* max and min vtol heights above terrain */
 #define	VTOL_HEIGHT_MIN				250
 #define	VTOL_HEIGHT_LEVEL			300
@@ -142,10 +138,6 @@
 
 // distance from final way point to start slowing
 #define END_SPEED_RANGE		(3 * TILE_UNITS)
-
-// times for rerouting
-#define REROUTE_BASETIME	200
-#define REROUTE_RNDTIME		400
 
 // how long to pause after firing a FOM_NO weapon
 #define FOM_MOVEPAUSE		1500
@@ -239,8 +231,6 @@ static void	moveUpdatePersonModel(DROID *psDroid, SDWORD speed, SDWORD direction
 static void	moveCalcBoundary(DROID *psDroid);
 /* Turn a vector into an angle - returns a float (!) */
 static float vectorToAngle(float vx, float vy);
-
-extern UDWORD	selectedPlayer;
 
 static BOOL	g_bFormationSpeedLimitingOn = TRUE;
 
@@ -380,15 +370,15 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 	/* check formations */
 	if ( retVal == FPR_OK )
 	{
-		objTrace(LOG_MOVEMENT, psDroid->id, "unit(%u): base Speed %u, speed %f", psDroid->id,
-		         psDroid->baseSpeed, psDroid->sMove.speed);
-
 		// bit of a hack this - john
 		// if astar doesn't have a complete route, it returns a route to the nearest clear tile.
 		// the location of the clear tile is in DestinationX,DestinationY.
 		// reset x,y to this position so the formation gets set up correctly
 		x = psDroid->sMove.DestinationX;
 		y = psDroid->sMove.DestinationY;
+
+		objTrace(LOG_MOVEMENT, psDroid->id, "unit %d: path ok - base Speed %u, speed %f, target(%d, %d)", 
+		         (int)psDroid->id, psDroid->baseSpeed, psDroid->sMove.speed, (int)x, (int)y);
 
 		psDroid->sMove.Status = MOVENAVIGATE;
 		psDroid->sMove.Position=0;
@@ -403,8 +393,6 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 			         (int)psDroid->id, (int)psDroid->player);
 			psNextRouteDroid = NULL;
 		}
-
-//		DBPRINTF(("moveDroidTo: form %p id %d\n",psDroid->sMove.psFormation, psDroid->id));
 
 		// leave any old formation
 		if (psDroid->sMove.psFormation)
@@ -448,12 +436,10 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 				}
 			}
 		}
-//		DBPRINTF(("moveDroidTo: form %p id %d end\n",psDroid->sMove.psFormation, psDroid->id));
-
 	}
 	else if (retVal == FPR_RESCHEDULE)
 	{
-		objTrace(LOG_MOVEMENT, psDroid->id, "moveDroidToBase: reroute: id %d", (int)psDroid->id);
+		objTrace(LOG_MOVEMENT, psDroid->id, "moveDroidToBase(%d): out of time, not our turn; rescheduled", (int)psDroid->id);
 
 		// maxed out routing time this frame - do it next time
 		psDroid->sMove.DestinationX = x;
@@ -462,15 +448,13 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 		if ((psDroid->sMove.Status != MOVEROUTE) &&
 			(psDroid->sMove.Status != MOVEROUTESHUFFLE))
 		{
-			objTrace(LOG_MOVEMENT, psDroid->id, "moveDroidToBase: Unit %d (player %d) started waiting at %d", 
-			         (int)psDroid->id, (int)psDroid->player, (int)gameTime);
+			objTrace(LOG_MOVEMENT, psDroid->id, "moveDroidToBase(%d): started waiting at %d", 
+			         (int)psDroid->id, (int)gameTime);
 
 			psDroid->sMove.Status = MOVEROUTE;
 
 			// note when the unit first tried to route
 			psDroid->sMove.bumpTime = gameTime;
-
-//			psDroid->sMove.bumpTime = gameTime + REROUTE_BASETIME + REROUTE_RNDTIME - (rand()%REROUTE_RNDTIME);
 		}
 	}
 	else if (retVal == FPR_WAIT)
@@ -478,9 +462,14 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 		// reset the next route droid
 		if (psDroid == psNextRouteDroid)
 		{
-			objTrace(LOG_MOVEMENT, psDroid->id, "Waiting droid %d (player %d) got route", (int)psDroid->id, 
-			         (int)psDroid->player);
+			objTrace(LOG_MOVEMENT, psDroid->id, "moveDroidToBase(%d): out of time, waiting for next frame (we are next)", 
+			         (int)psDroid->id);
 			psNextRouteDroid = NULL;
+		}
+		else
+		{
+			objTrace(LOG_MOVEMENT, psDroid->id, "moveDroidToBase(%d): out of time, waiting for next frame (we are not next)", 
+			         (int)psDroid->id);
 		}
 
 		// the route will be calculated over a number of frames
@@ -490,6 +479,7 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 	}
 	else // if (retVal == FPR_FAILED)
 	{
+		objTrace(LOG_MOVEMENT, psDroid->id, "Path to (%d, %d) failed for droid %d", (int)x, (int)y, (int)psDroid->id);
 		psDroid->sMove.Status = MOVEINACTIVE;
 		actionDroid(psDroid, DACTION_SULK);
 		return(FALSE);
@@ -596,10 +586,6 @@ static void moveShuffleDroid(DROID *psDroid, UDWORD shuffleStart, SDWORD sx, SDW
 	}
 
 	shuffleMove = SHUFFLE_MOVE;
-/*	if (vtolDroid(psDroid))
-	{
-		shuffleMove /= 4;
-	}*/
 
 	// calculate the possible movement vectors
 	lvx = -sy * shuffleMove / shuffleMag;
@@ -690,20 +676,13 @@ static void moveShuffleDroid(DROID *psDroid, UDWORD shuffleStart, SDWORD sx, SDW
 	{
 		psDroid->sMove.Status = MOVESHUFFLE;
 	}
-//	psDroid->sMove.shuffleX = (SWORD)sx;
-//	psDroid->sMove.shuffleY = (SWORD)sy;
 	psDroid->sMove.shuffleStart = shuffleStart;
 	psDroid->sMove.srcX = (SDWORD)psDroid->pos.x;
 	psDroid->sMove.srcY = (SDWORD)psDroid->pos.y;
-//	psDroid->sMove.targetX = (SDWORD)psDroid->pos.x + mx;
-//	psDroid->sMove.targetY = (SDWORD)psDroid->pos.y + my;
 	psDroid->sMove.targetX = tarX;
 	psDroid->sMove.targetY = tarY;
 	// setting the Destination could overwrite a MOVEROUTE's destination
 	// it is not actually needed for a shuffle anyway
-//	psDroid->sMove.DestinationX = psDroid->sMove.targetX;
-//	psDroid->sMove.DestinationY = psDroid->sMove.targetY;
-//	psDroid->sMove.bumpTime = 0;
 	psDroid->sMove.numPoints = 0;
 	psDroid->sMove.Position = 0;
 	psDroid->sMove.fx = psDroid->pos.x;
@@ -817,16 +796,6 @@ void updateDroidOrientation(DROID *psDroid)
 	roll = cos(direction) * dx - sin(direction) * dy;
 	roll = atan(roll);
 	psDroid->roll = (UWORD)((roll * 180) / M_PI);
-	//turret
-/*	direction = (PI * psDroid->turretDirection) / 180.0;
-	pitch = sin(direction) * dx + cos(direction) * dy;
-	pitch = atan(pitch);
-	psDroid->turretPitch = (UDWORD)((pitch * 180) / M_PI);
-	roll = cos(direction) * dx - sin(direction) * dy;
-	roll = atan(roll);
-	psDroid->turretRoll = (UDWORD)((roll * 180) / M_PI);
-*/
-	return;
 }
 
 
@@ -2097,12 +2066,6 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	speed = (SDWORD) calcDroidSpeed(psDroid->baseSpeed, terrainType(mapTile(mapX,mapY)),
 							  psDroid->asBits[COMP_PROPULSION].nStat);
 
-/*	if ( vtolDroid(psDroid) &&
-		 ((asBodyStats + psDroid->asBits[COMP_BODY].nStat)->size == SIZE_HEAVY) )
-	{
-		speed /= 2;
-	}*/
-
 	pitch = psDroid->pitch;
 	if (pitch > MAX_SPEED_PITCH)
 	{
@@ -2123,8 +2086,6 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	}
 
 	// stop droids that have just fired a no fire while moving weapon
-	//if (psDroid->numWeaps > 0 && psDroid->asWeaps[0].lastFired + FOM_MOVEPAUSE > gameTime)
-	//Watermelon:I dont think droid with no weapon should do this check...
 	if (psDroid->numWeaps > 0)
 	{
 		if (psDroid->asWeaps[0].nStat > 0 && psDroid->asWeaps[0].lastFired + FOM_MOVEPAUSE > gameTime)
@@ -2156,20 +2117,6 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	{
 		speed = MIN_END_SPEED;
 	}
-
-//	/* adjust speed for formation */
-//	if ( moveFormationSpeedLimitingOn() &&
-//		 psDroid->sMove.psFormation &&
-//		 speed > (SDWORD)psDroid->sMove.psFormation->iSpeed )
-//	{
-//		speed = psDroid->sMove.psFormation->iSpeed;
-//	}
-
-//#if(1)
-//	if(psDroid->selected) {
-//		printf("%d : %d : %d\n",driveGetSpeed(),psDroid->baseSpeed,speed);
-//	}
-//#endif
 
 	return speed;
 }
@@ -2478,43 +2425,15 @@ static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, SDWORD direction
 	// update the naybors list
 	droidGetNaybors(psDroid);
 
-#ifdef DEBUG_DRIVE_SPEED
-if(psDroid == driveGetDriven())	debug( LOG_NEVER, "%d ", speed );
-#endif
-
 	moveCheckFinalWaypoint( psDroid, &speed );
 
-#ifdef DEBUG_DRIVE_SPEED
-if(psDroid == driveGetDriven())	debug( LOG_NEVER, "%d ", speed );
-#endif
-
-//	moveUpdateDroidDirection( psDroid, &speed, direction, TRACKED_SPIN_ANGLE,
-//				TRACKED_SPIN_SPEED, TRACKED_TURN_SPEED, &iDroidDir, &fSpeed );
 	moveUpdateDroidDirection( psDroid, &speed, direction, TRACKED_SPIN_ANGLE,
 				spinSpeed, turnSpeed, &iDroidDir, &fSpeed );
 
-#ifdef DEBUG_DRIVE_SPEED
-if(psDroid == driveGetDriven())	debug( LOG_NEVER, "%d ", speed );
-#endif
-
-	fNormalSpeed = moveCalcNormalSpeed( psDroid, fSpeed, iDroidDir,
-										TRACKED_ACCEL, TRACKED_DECEL );
+	fNormalSpeed = moveCalcNormalSpeed(psDroid, fSpeed, iDroidDir, TRACKED_ACCEL, TRACKED_DECEL);
 	fPerpSpeed   = moveCalcPerpSpeed( psDroid, iDroidDir, skidDecel );
 
-	moveCombineNormalAndPerpSpeeds( psDroid, fNormalSpeed,
-										fPerpSpeed, iDroidDir );
-
-#ifdef DEBUG_DRIVE_SPEED
-if(psDroid == driveGetDriven())	debug( LOG_NEVER, "%d\n", speed );
-#endif
-
-//	if (psDroid->direction != psDroid->sMove.dir)
-/*	if (fPerpSpeed > 0)
-	{
-		DBPRINTF(("droid %d direction %d total dir %d perpspeed %f\n",
-			psDroid->id, psDroid->direction, psDroid->sMove.dir, fPerpSpeed));
-	}*/
-
+	moveCombineNormalAndPerpSpeeds(psDroid, fNormalSpeed, fPerpSpeed, iDroidDir);
 	moveGetDroidPosDiffs( psDroid, &dx, &dy );
 
 	moveCheckSquished(psDroid, dx,dy);
@@ -2542,7 +2461,6 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, SDWORD direction
 	float			fPerpSpeed, fNormalSpeed, dx, dy, fSpeed;
 	float			iDroidDir;
 	SDWORD			slideDir;
-//	BASE_OBJECT		*psObst;
 	BOOL			bRet;
 
 	// nothing to do if the droid is stopped
@@ -2599,11 +2517,6 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, SDWORD direction
 
 	moveGetDroidPosDiffs( psDroid, &dx, &dy );
 
-/*	if (moveFindObstacle(psDroid, dx,dy, &psObst))
-	{
-		moveCalcSlideVector(psDroid, (SDWORD)psObst->pos.x, (SDWORD)psObst->pos.y, &dx, &dy);
-	}*/
-
 	moveCalcDroidSlide(psDroid, &dx,&dy);
 	moveCalcBlockingSlide(psDroid, &dx,&dy, direction, &slideDir);
 
@@ -2656,7 +2569,6 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, SDWORD direction
 	}
 }
 
-//#define	VTOL_VERTICAL_SPEED		((SDWORD)psDroid->baseSpeed / 4)
 #define	VTOL_VERTICAL_SPEED		((((SDWORD)psDroid->baseSpeed / 4) > 60) ? ((SDWORD)psDroid->baseSpeed / 4) : 60)
 
 /* primitive 'bang-bang' vtol height controller */
@@ -2788,49 +2700,6 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 	moveAdjustVtolHeight( psDroid, iMapZ );
 }
 
-#ifdef DEBUG
-
-WZ_DECL_UNUSED static void moveGetStatusStr( UBYTE status, char *szStr )
-{
-	switch ( status )
-	{
-		case MOVEINACTIVE:
-			strcpy( szStr, "MOVEINACTIVE" );
-			break;
-		case MOVENAVIGATE:
-			strcpy( szStr, "MOVENAVIGATE" );
-			break;
-		case MOVETURN:
-			strcpy( szStr, "MOVETURN" );
-			break;
-		case MOVEPAUSE:
-			strcpy( szStr, "MOVEPAUSE" );
-			break;
-		case MOVEPOINTTOPOINT:
-			strcpy( szStr, "MOVEPOINTTOPOINT" );
-			break;
-		case MOVETURNSTOP:
-			strcpy( szStr, "MOVETURNSTOP" );
-			break;
-		case MOVETURNTOTARGET:
-			strcpy( szStr, "MOVETURNTOTARGET" );
-			break;
-		case MOVEROUTE:
-			strcpy( szStr, "MOVEROUTE" );
-			break;
-		case MOVEHOVER:
-			strcpy( szStr, "MOVEHOVER" );
-			break;
-		case MOVEDRIVE:
-			strcpy( szStr, "MOVEDRIVE" );
-			break;
-		default:
-			strcpy( szStr, "" );
-			break;
-	}
-}
-#endif
-
 #define CYBORG_VERTICAL_SPEED	((SDWORD)psDroid->baseSpeed/2)
 
 static void
@@ -2960,28 +2829,19 @@ moveUpdateCyborgModel( DROID *psDroid, SDWORD moveSpeed, SDWORD moveDir, UBYTE o
 			// Only add the animation if the droid is on screen, saves memory and time.
 			if(clipXY(psDroid->pos.x,psDroid->pos.y))
 			{
-//DBPRINTF(("Added cyborg run anim\n"));
-                //What about my new cyborg droids?????!!!!!!!
-				/*if ( psDroid->droidType == DROID_CYBORG )
+				if ( psDroid->droidType == DROID_CYBORG_SUPER )
+				{
+					psDroid->psCurAnim = animObj_Add( psObj, ID_ANIM_SUPERCYBORG_RUN, 0, 0 );
+				}
+				else if (cyborgDroid(psDroid))
 				{
 					psDroid->psCurAnim = animObj_Add( psObj, ID_ANIM_CYBORG_RUN, 0, 0 );
 				}
-				else if ( psDroid->droidType == DROID_CYBORG_SUPER )
-				{
-					psDroid->psCurAnim = animObj_Add( psObj, ID_ANIM_SUPERCYBORG_RUN, 0, 0 );
-				}*/
-                if ( psDroid->droidType == DROID_CYBORG_SUPER )
-				{
-					psDroid->psCurAnim = animObj_Add( psObj, ID_ANIM_SUPERCYBORG_RUN, 0, 0 );
-				}
-                else if (cyborgDroid(psDroid))
-                {
-                    psDroid->psCurAnim = animObj_Add( psObj, ID_ANIM_CYBORG_RUN, 0, 0 );
-                }
 			}
 		} else {
 			// If the droid went off screen then remove the animation, saves memory and time.
-			if(!clipXY(psDroid->pos.x,psDroid->pos.y)) {
+			if(!clipXY(psDroid->pos.x,psDroid->pos.y))
+			{
 				bRet = animObj_Remove( &psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID );
 				ASSERT( bRet == TRUE, "moveUpdateCyborgModel : animObj_Remove failed" );
 				psDroid->psCurAnim = NULL;
@@ -3108,12 +2968,11 @@ static void movePlayDroidMoveAudio( DROID *psDroid )
 		{
 			iAudioID = ID_SOUND_TREAD;
 		}
-		else if ( psDroid->droidType == DROID_TRANSPORTER )
+		else if (psDroid->droidType == DROID_TRANSPORTER)
 		{
 			iAudioID = ID_SOUND_BLIMP_FLIGHT;
 		}
-		//else if ( iPropType == LEGGED && psDroid->droidType == DROID_CYBORG )
-        else if ( iPropType == LEGGED && cyborgDroid(psDroid))
+		else if (iPropType == LEGGED && cyborgDroid(psDroid))
 		{
 			iAudioID = ID_SOUND_CYBORG_MOVE;
 		}
@@ -3150,7 +3009,6 @@ static BOOL moveDroidStartCallback( void *psObj )
 }
 
 
-
 static void movePlayAudio( DROID *psDroid, BOOL bStarted, BOOL bStoppedBefore, SDWORD iMoveSpeed )
 {
 	UBYTE				propType;
@@ -3173,8 +3031,8 @@ static void movePlayAudio( DROID *psDroid, BOOL bStarted, BOOL bStoppedBefore, S
 	if ( bStarted )
 	{
 		/* play start audio */
-		if ( (propType == WHEELED && psDroid->droidType != DROID_CONSTRUCT) ||
-			 (psPropType->startID == NO_SOUND)                                 )
+		if ((propType == WHEELED && psDroid->droidType != DROID_CONSTRUCT)
+		    || psPropType->startID == NO_SOUND)
 		{
 			movePlayDroidMoveAudio( psDroid );
 			return;
@@ -3203,8 +3061,7 @@ static void movePlayAudio( DROID *psDroid, BOOL bStarted, BOOL bStoppedBefore, S
 			iAudioID = psPropType->shutDownID;
 		}
 	}
-	else if ( (!bStoppedBefore && !bStoppedNow) &&
-			  (psDroid->iAudioID == NO_SOUND)      )
+	else if (!bStoppedBefore && !bStoppedNow && psDroid->iAudioID == NO_SOUND)
 	{
 		/* play move audio */
 		movePlayDroidMoveAudio( psDroid );
@@ -3220,17 +3077,6 @@ static void movePlayAudio( DROID *psDroid, BOOL bStarted, BOOL bStoppedBefore, S
 			psDroid->iAudioID = iAudioID;
 		}
 	}
-
-#if 0
-if ( oldStatus != newStatus )
-{
-	char	szOldStatus[100], szNewStatus[100];
-	moveGetStatusStr( oldStatus, szOldStatus );
-	moveGetStatusStr( newStatus, szNewStatus );
-	debug( LOG_NEVER, "oldStatus = %s newStatus = %s\n", szOldStatus, szNewStatus );
-}
-#endif
-
 }
 
 

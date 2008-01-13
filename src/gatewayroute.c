@@ -22,14 +22,7 @@
  *
  */
 
-// print out the gateways examined while generating the route
-//#define DEBUG_GROUP0
-// print out the final route
-//#define DEBUG_GROUP1
-
 #include "lib/framework/frame.h"
-
-BOOL	gwrDoMessage;
 
 #include "map.h"
 #include "gateway.h"
@@ -412,8 +405,3 @@ SDWORD gwrAStarRoute(SDWORD player, UDWORD terrain,
 
 	return retval;
 }
-
-
-
-
-
