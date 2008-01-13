@@ -6860,16 +6860,14 @@ BOOL writeDroidFile(char *pFileName, DROID **ppsCurrentDroidLists)
 			if (psCurr->droidType == DROID_TRANSPORTER)
 			{
 				psTrans = psCurr->psGroup->psList;
-// Some compiler/system specific debug code to check for dangling pointers
+// Some MSVC specific debug code to check for dangling pointers
 #if defined(WZ_CC_MSVC)
 				{
 					void* dangling_ptr;
 
-# ifdef WZ_CC_MSVC
 					// Fill the memory with 0xcd, which MSVC initialises freshly
 					// allocated memory with.
 					memset(&dangling_ptr, 0xcd, sizeof(dangling_ptr));
-# endif
 
 					if (psTrans->psGrpNext == dangling_ptr)
 					{
