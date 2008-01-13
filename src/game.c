@@ -6865,7 +6865,7 @@ BOOL writeDroidFile(char *pFileName, DROID **ppsCurrentDroidLists)
 				{
 					void* dangling_ptr;
 
-# ifdef WC_CC_MSVC
+# ifdef WZ_CC_MSVC
 					// Fill the memory with 0xcd, which MSVC initialises freshly
 					// allocated memory with.
 					memset(&dangling_ptr, 0xcd, sizeof(dangling_ptr));
