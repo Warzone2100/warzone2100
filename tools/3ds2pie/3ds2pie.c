@@ -181,6 +181,8 @@ static void dump_pie_file(Lib3dsFile *f, FILE *o)
 	}
 }
 
+
+#if !defined(WZ_3DS2PIE_GUI)
 int main(int argc, char **argv)
 {
 	Lib3dsFile *f = NULL;
@@ -206,3 +208,4 @@ int main(int argc, char **argv)
 
 	return 0;
 }
+#endif
