@@ -134,10 +134,10 @@ bool BMPHandler::Create(unsigned int Width, unsigned int Height, unsigned int BP
 	return true;
 }
 
-void *BMPHandler::CreateDC(void* hWnd)
+HDC BMPHandler::CreateDC(HWND hWnd)
 {
 	HDC BmpHdc;
-	HDC hdc=GetDC((HWND)hWnd);
+	HDC hdc = GetDC(hWnd);
 	assert(hdc != NULL);
 
 	BmpHdc = CreateCompatibleDC(hdc);
@@ -145,15 +145,15 @@ void *BMPHandler::CreateDC(void* hWnd)
 
 	assert(Res != NULL);
 	assert((DWORD)Res != GDI_ERROR);
-	ReleaseDC((HWND)hWnd, hdc);
+	ReleaseDC(hWnd, hdc);
 
 	return BmpHdc;
 }
 
 
-void BMPHandler::DeleteDC(void *hdc)
+void BMPHandler::DeleteDC(HDC hdc)
 {
-	::DeleteDC((HDC)hdc);	
+	::DeleteDC(hdc);	
 }
 
 bool BMPHandler::WriteBMP(char *FilePath)

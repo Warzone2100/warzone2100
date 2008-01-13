@@ -5128,7 +5128,7 @@ void CBTEditDoc::OnMapExportmapasbitmap()
 		BMPHandler *Bmp = new BMPHandler;
 		Bmp->Create(BigWidth, BigHeight, 16);
 		// Create a device context for the BMP so we can blit into it.
-		HDC BmpHdc = (HDC)Bmp->CreateDC((void*)m_3DWnd);
+		HDC BmpHdc = Bmp->CreateDC(m_3DWnd);
 
 		// Now step through the map one screen at a time
 		for(int i=0; i<NumZ; i++) {
@@ -5157,7 +5157,7 @@ void CBTEditDoc::OnMapExportmapasbitmap()
 		}
 
 		// All done so delete the BMP's device context
-		Bmp->DeleteDC((void*)BmpHdc);				  
+		Bmp->DeleteDC(BmpHdc);				  
 		// save it to disk.
    		Bmp->WriteBMP(FullPath);
 		// and delete the BMP.

@@ -33,8 +33,8 @@ class BMPHandler
 
 		bool Create(unsigned int Width, unsigned int Height, unsigned int BPP = 8);
 
-		void DeleteDC(void* hdc);
-		void* CreateDC(void* hWnd);
+		HDC CreateDC(HWND hWnd);
+		void DeleteDC(HDC hdc);
 
 		bool WriteBMP(char* FilePath);
 		
