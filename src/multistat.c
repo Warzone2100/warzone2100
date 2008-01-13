@@ -125,7 +125,7 @@ BOOL loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 			return FALSE; // wrong version or not a stats file
 		}
 
-		num = sscanf(pFileData, "WZ.STA.v2\n%u %u %u %u %u",
+		num = sscanf(pFileData, "WZ.STA.v3\n%u %u %u %u %u",
 		             &st->wins, &st->losses, &st->totalKills, &st->totalScore, &st->played);
 		if (num < 6)
 		{
@@ -158,8 +158,8 @@ BOOL saveMultiStats(const char *sFileName, const char *sPlayerName, const PLAYER
 	char buffer[MAX_STA_SIZE];
 	char fileName[255] = "";
 
-	snprintf(buffer, MAX_STA_SIZE, "WZ.STA.v2\n%s %u %u %u %u %u",
-		sPlayerName, st->wins, st->losses, st->totalKills, st->totalScore, st->played);
+	snprintf(buffer, MAX_STA_SIZE, "WZ.STA.v3\n%u %u %u %u %u",
+	         st->wins, st->losses, st->totalKills, st->totalScore, st->played);
 
 	snprintf(fileName, sizeof(fileName), "%s%s.sta", MultiPlayersPath, sFileName);
 
