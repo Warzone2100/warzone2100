@@ -2354,8 +2354,9 @@ static void moveUpdateDroidPos( DROID *psDroid, float dx, float dy )
 		else
 		{
 			/* dreadful last-ditch crash-avoiding hack - sort this! - GJ */
-			debug( LOG_NEVER, "**** droid about to go off map - fixed ****\n" );
+			debug(LOG_ERROR, "**** droid about to go off map - destroying it ****");
 			destroyDroid( psDroid );
+			return;
 		}
 	}
 	else
