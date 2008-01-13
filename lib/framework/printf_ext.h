@@ -54,6 +54,8 @@ extern int wz_snprintf(char* str, size_t size, const char* format, ...);
 // Necessary to prevent conflicting symbols with MSVC's own (incorrect!) implementations of these functions
 # define vsnprintf wz_vsnprintf
 # define snprintf  wz_snprintf
+#elif !defined(WZ_C99)
+# error "This code depends on a C99-compliant implementation of snprintf and vsnprintf; please compile as C99 or provide a compliant implementation!"
 #endif
 
 // A stack-allocating variant of sprintf
