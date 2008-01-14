@@ -275,13 +275,12 @@ BASE_OBJECT * checkForDamagedStruct(DROID *psDroid, STRUCTURE *psTarget)
 /* Update a droids order state */
 void orderUpdateDroid(DROID *psDroid)
 {
-	BASE_OBJECT		*psFireTarget, *psObj;
+	BASE_OBJECT		*psObj;
 	STRUCTURE		*psStruct, *psWall;
 	REPAIR_FACILITY	*psRepairFac;
 	SDWORD			xdiff,ydiff, temp;
 	SECONDARY_STATE state;
 	BOOL			bAttack;
-	DROID			*psSpotter;
 	//Watermelon:int i
 	UBYTE i;
 	float			radToAction;
@@ -998,23 +997,27 @@ void orderUpdateDroid(DROID *psDroid)
 		//indirect weapon droid attached to (standard)sensor droid
 		else
 		{
-			psFireTarget = NULL;
+			BASE_OBJECT	*psFireTarget = NULL;
+
 			if (psDroid->psTarget->type == OBJ_DROID)
 			{
-				psSpotter = (DROID *)psDroid->psTarget;
+				DROID	*psSpotter = (DROID *)psDroid->psTarget;
+
 //				orderStateObj((DROID *)psDroid->psTarget, DORDER_OBSERVE, &psFireTarget);
-				if ((psSpotter->action == DACTION_OBSERVE) ||
-					(psSpotter->droidType == DROID_COMMAND && psSpotter->action == DACTION_ATTACK))
+				if (psSpotter->action == DACTION_OBSERVE
+				    || (psSpotter->droidType == DROID_COMMAND && psSpotter->action == DACTION_ATTACK))
 				{
-					psFireTarget = ((DROID *)psDroid->psTarget)->psActionTarget[0];
+					psFireTarget = psSpotter->psActionTarget[0];
 				}
 			}
 			else if (psDroid->psTarget->type == OBJ_STRUCTURE)
 			{
-				psFireTarget = ((STRUCTURE *)psDroid->psTarget)->psTarget[0];
+				STRUCTURE *psSpotter = (STRUCTURE *)psDroid->psTarget;
+
+				psFireTarget = psSpotter->psTarget[0];
 			}
 
-			if (psFireTarget)
+			if (psFireTarget && !psFireTarget->died)
 			{
 				bAttack = FALSE;
 				if (vtolDroid(psDroid))
