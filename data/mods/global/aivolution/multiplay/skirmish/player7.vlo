@@ -2,12 +2,13 @@ script "player7.slo"
 run
 {
 	player          INT					7
-	truck			TEMPLATE			"ConstructorDroid"
 
 	derrick			STRUCTURESTAT		"A0ResourceExtractor"
 
 	fac				STRUCTURESTAT		"A0LightFactory"
 	vtolfac			STRUCTURESTAT		"A0VTolFactory1"
+	cybfac			STRUCTURESTAT		"A0CyborgFactory"
+	
 	resFac			STRUCTURESTAT		"A0ResearchFacility"
 	powGen			STRUCTURESTAT		"A0PowerGenerator"
 
@@ -17,11 +18,13 @@ run
 	uplink			STRUCTURESTAT		"A0Sat-linkCentre"
 	lasSat			STRUCTURESTAT		"A0LasSatCommand"
 
+	cmdCenter		STRUCTURESTAT		"A0CommandCentre"
+
 	//Structures for the first phase: LEGO
-	numLego			INT			3
-	legoSt[0]		STRUCTURESTAT		"A0ResearchFacility"
-	legoSt[1]		STRUCTURESTAT		"A0LightFactory"
-	legoSt[2]		STRUCTURESTAT		"A0CommandCentre"
+	// numLego			INT			3
+	// legoSt[0]		STRUCTURESTAT		"A0ResearchFacility"
+	// legoSt[1]		STRUCTURESTAT		"A0LightFactory"
+	// legoSt[2]		STRUCTURESTAT		"A0CommandCentre"
 
 	maxDamageLevels		INT			3
 	damageLevel[0]		INT			75	//light damage
@@ -31,93 +34,143 @@ run
 
 	//resUnitTransporter	RESEARCHSTAT	"R-Cyborg-TransportU"
 
-	/****************************/
-	/*	Research            */
-	/****************************/
+	/*****************************/
+	/*	Research          			  */
+	/*****************************/
 
 	numBranches		INT					2
 
 	techTanks		INT					0
 	techAir			INT					1
 
-	numRes[0]		INT					41
-	research[0][0]	RESEARCHSTAT		"R-Wpn-MG3Mk1"			//heavy mg
-	research[0][1]	RESEARCHSTAT		"R-Wpn-MG-Damage03"
-	research[0][2]	RESEARCHSTAT		"R-Struc-PowerModuleMk1"	//pow mod
+	numRes[0]		INT					54
+	research[0][0]	RESEARCHSTAT		"R-Cyborg-Sys-ComEng"	//comes after "R-Cyborg-Wpn-MG"
+	research[0][1]	RESEARCHSTAT		"R-Wpn-MG3Mk1"		//"R-Wpn-EMPCannon"	//heavy mg
+	//research[0][2]	RESEARCHSTAT		"R-Wpn-MG-Damage03"	// need machinegun
+	//research[0][3]	RESEARCHSTAT		"R-Wpn-MG-ROF01"			//needs "Automated Factory Production" (needs fac mod), "APDSB MG Bullets Mk2" (cheap)
+	//research[0][2]	RESEARCHSTAT		"R-Wpn-Rocket-Damage05"
+	research[0][2]	RESEARCHSTAT		"R-Wpn-Rocket-ROF03"
+	research[0][3]	RESEARCHSTAT		"R-Defense-Tower06"		//mini-pod tower
 
-	research[0][3]	RESEARCHSTAT		"R-Vehicle-Prop-Tracks"		//tracks
+	research[0][4]	RESEARCHSTAT		"R-Struc-Materials02"		//needs 1st wall upgrade
+	
+	research[0][5]	RESEARCHSTAT		"R-Defense-Pillbox04"		//LC bunker
 
-	research[0][4]	RESEARCHSTAT		"R-Sys-MobileRepairTurret01"	//repair turret
+	//research[0][5]	RESEARCHSTAT		"R-Wpn-Rocket01-LtAT"		//lancer,  needs minipod and 2 rocket upgrades
+	research[0][6]	RESEARCHSTAT		"R-Defense-Pillbox06"		//lancer bunker, comes right after lancer
+	research[0][7]	RESEARCHSTAT		"R-Wpn-RocketSlow-Damage02"	//lancer upgrade, all come right after lancer
+	research[0][8]	RESEARCHSTAT		"R-Wpn-RocketSlow-Accuracy01"//lancer upgrade, need 1nd damage upgrade
+	//research[0][3]	RESEARCHSTAT		"R-Wpn-MG-ROF03"			//needs "Automated Factory Production" (needs fac mod), "APDSB MG Bullets Mk2" (cheap)
 
-	research[0][5]	RESEARCHSTAT		"R-Wpn-MG-ROF03"
-	research[0][6]	RESEARCHSTAT		"R-Defense-WallTower01"		//HMG HP
+	research[0][9]	RESEARCHSTAT		"R-Vehicle-Prop-Tracks"		//tracks, come after Half-Tracks (pre-researched), pre-researched in "bases" mode
 
-	research[0][7]	RESEARCHSTAT		"R-Struc-Research-Module"	//res mod
-
-	//lancer
-	research[0][8]	RESEARCHSTAT		"R-Defense-Pillbox06"		//lancer bunker
-	research[0][9]	RESEARCHSTAT		"R-Defense-WallTower06"		//lancer HP
-
-	research[0][10]	RESEARCHSTAT		"R-Defense-AASite-QuadMg1"		//hurricane site
-
+	research[0][10]	RESEARCHSTAT		"R-Sys-MobileRepairTurret01"	//repair turret, pre-researched
+	research[0][11]	RESEARCHSTAT		"R-Cyborg-Sys-Mechanic"		//cyborg mechanic, comes after "R-Sys-MobileRepairTurret01"
+ 
+ 
+	//Mods
+	research[0][12]	RESEARCHSTAT		"R-Struc-PowerModuleMk1"	//pow mod, comes pre-researched on "bases" mode, needs Fuel Injection Engine
+	research[0][13]	RESEARCHSTAT		"R-Struc-Factory-Module"	//fac mod, comes pre-researched on "bases" mode, needs pow mod, cyb fac
+	research[0][14]	RESEARCHSTAT		"R-Struc-Research-Module"	//res mod, comes pre-researched on "bases" mode
+ 
+ 
+	research[0][15]	RESEARCHSTAT		"R-Defense-AASite-QuadMg1"	//hurricane site, needs hurricane AA turret (needs TMG)
+ 
+	//scorpion
+	research[0][16]	RESEARCHSTAT		"R-Vehicle-Body08"			//scorpion, comes after cobra (needs fac mod, viper), "Composite Alloys Mk2" (needs MK1, fac mod, res mod) and Metals02
+ 
+	//power
+	research[0][17]	RESEARCHSTAT		"R-Struc-Power-Upgrade01c" 	//power upgrade, needs 3 (4th) research upgrades
+ 
+	research[0][18]	RESEARCHSTAT		"R-Cyborg-Metals02"			//cheap, to make cyborg mechanics more durable
+	research[0][19]	RESEARCHSTAT		"R-Vehicle-Metals03"		//Composite Alloys Mk3, needs fac mod and res mod
+	
 	//Bunker Buster
-	research[0][11]	RESEARCHSTAT		"R-Wpn-Rocket03-HvAT"
+	research[0][20]	RESEARCHSTAT		"R-Wpn-Rocket03-HvAT"		//BB, comes after lancer and HEAT Rocket Warhead Mk3 (which comes after lancer)
+	
+	
+	research[0][21]	RESEARCHSTAT		"R-Comp-CommandTurret01"	//commander, comes after command center, already available on "bases" mode
+	
+	research[0][22]	RESEARCHSTAT		"R-Vehicle-Prop-Hover"		//hover, used by trucks, needs fac mod, "Fuel Injection Engine Mk2"
+	
+	//HC
+	research[0][23]	RESEARCHSTAT		"R-Defense-WallTower04"		//HC HP, needs HC (needs cannon damage 3, Python, MC), lc and mc HPs
+	research[0][24]	RESEARCHSTAT		"R-Wpn-Cannon-Damage03"		// cheap cannon damage updates, need lc
+	research[0][25]	RESEARCHSTAT		"R-Wpn-Cannon-Accuracy02"	//HC upgrades, needs 3nd cannon damage, 4th res upgrade
+	research[0][26]	RESEARCHSTAT		"R-Struc-Materials06"		//needs 4th wall upgrade
+	
+	//research[0][18]	RESEARCHSTAT		"R-Defense-WallTower01"		//HMG HP, comes after HMG, MG Bunker and Hardcrete Wall
+	
+	
+	research[0][27]	RESEARCHSTAT		"R-Struc-Power-Upgrade03a"	//needs 4 pow upgrades, 7th research upgrade
+	research[0][28]	RESEARCHSTAT		"R-Vehicle-Metals06"		// Dense Composite Alloys Mk3, needs 4th res upgrade
 
-	//cobra
-	research[0][12]	RESEARCHSTAT		"R-Vehicle-Body05"		//cobra
+	research[0][29]	RESEARCHSTAT		"R-Wpn-Cannon-Damage09"
+	research[0][30]	RESEARCHSTAT		"R-Vehicle-Metals09"		//Superdense Composite Alloys Mk3, needs 7th research upgrade
+	research[0][31]	RESEARCHSTAT		"R-Struc-Materials09"		//needs 9th wall upgrade
+	
 
-	research[0][13]	RESEARCHSTAT		"R-Vehicle-Prop-Hover"		//hover
-	research[0][14]	RESEARCHSTAT		"R-Struc-Power-Upgrade03a"
+	
+	research[0][32]	RESEARCHSTAT		"R-Sys-MobileRepairTurretHvy"	//heavy repair, needs 8th research upgrades, sys engineering 2,3
+	
+	research[0][33]	RESEARCHSTAT		"R-Wpn-AAGun-Damage03"	//hurricane damage, needs hurricane
+	
+	// mantis
+	research[0][34]	RESEARCHSTAT		"R-Vehicle-Body12"		//mantis, needs python (needs cobra, metals02) and "Dense Composite Alloys Mk2" (costy, needs 2 (5th) vehicle metals upgrades and 4th research upgrade)
+	
+	research[0][35]	RESEARCHSTAT		"R-Wpn-Cannon-ROF06"
+	
+	research[0][36]	RESEARCHSTAT		"R-Sys-Autorepair-General"		//autorepair, needs 8th research upgrades
+	
+	//lancer HP
+	//research[0][20]	RESEARCHSTAT		"R-Defense-WallTower06"		//lancer HP
 
+
+	research[0][37]	RESEARCHSTAT		"R-Wpn-Missile2A-T"		//scourge, needs TK (2nd rocker accuracy, 4th damage), 7th res upgrade
+	
 	//lancer upgrades
-	research[0][15]	RESEARCHSTAT		"R-Wpn-RocketSlow-Damage06"	//lancer upgrade
-	research[0][16]	RESEARCHSTAT		"R-Wpn-RocketSlow-ROF02"	//lancer upgrade
-	research[0][17]	RESEARCHSTAT		"R-Wpn-RocketSlow-Accuracy03"	//lancer upgrade
+	research[0][38]	RESEARCHSTAT		"R-Wpn-RocketSlow-Damage06"	//lancer upgrade, all come right after lancer
+	
+	research[0][39]	RESEARCHSTAT		"R-Wpn-RocketSlow-ROF02"	//lancer upgrade, comes after 4th lancer damage upgrade
+	
+	research[0][40]	RESEARCHSTAT		"R-Wpn-RocketSlow-Accuracy03"	//lancer upgrade, need 4th research upgrade
+	
 
-	research[0][18]	RESEARCHSTAT		"R-Sys-Autorepair-General"
-
-	research[0][19]	RESEARCHSTAT		"R-Sys-MobileRepairTurretHvy"	//heavy repair
-
-	research[0][20]	RESEARCHSTAT		"R-Defense-WallTower03"		//MC HP
-
-	research[0][21]	RESEARCHSTAT		"R-Defense-WallTower04"		//heavy cannon hp
+	//research[0][27]	RESEARCHSTAT		"R-Defense-WallTower03"		//MC HP
+	
+	research[0][41]	RESEARCHSTAT		"R-Wpn-Missile-Damage03"		//scourge damage, needs Avenger Sam (needs scourge), Vtol Strike Tower
+	research[0][42]	RESEARCHSTAT		"R-Wpn-Missile-ROF03"			//scourge ROF
+	research[0][43]	RESEARCHSTAT		"R-Wpn-Missile-Accuracy02"	//scourge Accuracy
 
 	//HC upgrades
-	research[0][22]	RESEARCHSTAT		"R-Wpn-Cannon-ROF06"
-	research[0][23]	RESEARCHSTAT		"R-Wpn-Cannon-Damage09"
-	research[0][24]	RESEARCHSTAT		"R-Wpn-Cannon-Accuracy02"	//HC upgrades
 
-	//weapons
-	research[0][25]	RESEARCHSTAT		"R-Vehicle-Body12"		//mantis
-	research[0][26]	RESEARCHSTAT		"R-Wpn-Rocket07-Tank-Killer"	//Tank killer
-	research[0][27]	RESEARCHSTAT		"R-Vehicle-Body09"	//tiger
+	//research[0][32]	RESEARCHSTAT		"R-Wpn-Rocket07-Tank-Killer"	//Tank killer, comes after 2nd rocket accuracy, 4th rocket damage
+	
+	//research[0][29]	RESEARCHSTAT		"R-Vehicle-Body09"	//tiger
+	//research[0][30]	RESEARCHSTAT		"R-Wpn-MG3Mk1"	//"R-Cyborg-TransportU"		//Unit transport	//FIXME
 
-	research[0][28]	RESEARCHSTAT		"R-Wpn-MG3Mk1"	//"R-Cyborg-TransportU"		//Unit transport	//FIXME
+	research[0][44]	RESEARCHSTAT		"R-Defense-Emplacement-HPVcannon"	//HPV bunker
+	research[0][45]	RESEARCHSTAT		"R-Defense-WallTower-HPVcannon"		//HPV HP
 
-	research[0][29]	RESEARCHSTAT		"R-Defense-Emplacement-HPVcannon"	//HPV bunker
-	research[0][30]	RESEARCHSTAT		"R-Defense-WallTower-HPVcannon"		//HPV HP
+	//research[0][35]	RESEARCHSTAT		"R-Defense-AASite-QuadRotMg"	//Whirlwind site - worse than cyclone for stationary use
 
-	research[0][31]	RESEARCHSTAT		"R-Defense-AASite-QuadRotMg"	//Whirlwind site
+	research[0][46]	RESEARCHSTAT		"R-Vehicle-Body10"	//veng
+	research[0][47]	RESEARCHSTAT		"R-Wpn-Laser02"	//pulse
 
-	research[0][32]	RESEARCHSTAT		"R-Vehicle-Body10"	//veng
+	research[0][48]	RESEARCHSTAT		"R-Wpn-AAGun-Accuracy03"
+	research[0][49]	RESEARCHSTAT		"R-Wpn-AAGun-Damage06"	//needs 8th cannon damage
+	research[0][50]	RESEARCHSTAT		"R-Wpn-AAGun-ROF06"
 
-	research[0][33]	RESEARCHSTAT		"R-Wpn-Laser02"	//pulse
+	research[0][51]	RESEARCHSTAT		"R-Defense-Rail2"		//rail gun bunker
 
-	research[0][34]	RESEARCHSTAT		"R-Wpn-AAGun-Accuracy03"
-	research[0][35]	RESEARCHSTAT		"R-Wpn-AAGun-Damage06"
-	research[0][36]	RESEARCHSTAT		"R-Wpn-AAGun-ROF06"
+	research[0][52]	RESEARCHSTAT		"R-Defense-WallTower-Rail3"	//Gauss HP
 
-	research[0][37]	RESEARCHSTAT		"R-Defense-Rail2"		//rail gun bunker
-	research[0][38]	RESEARCHSTAT		"R-Wpn-Missile2A-T"		//scourge
-
-	research[0][39]	RESEARCHSTAT		"R-Defense-WallTower-Rail3"	//Gauss HP
-
-	research[0][40]	RESEARCHSTAT		"R-Wpn-LasSat"	//includes
+	research[0][53]	RESEARCHSTAT		"R-Wpn-LasSat"	//includes
 
 	/****************************/
 	/*	VTOL Stuff 	*/
 	/****************************/
-	numRes[1]	INT			39
+	numRes[1]	INT			38
 
 	research[1][0]	RESEARCHSTAT		"R-Wpn-MG3Mk1"			//heavy mg
 	research[1][1]	RESEARCHSTAT		"R-Wpn-MG-Damage03"
@@ -164,24 +217,25 @@ run
 
 	research[1][28]	RESEARCHSTAT		"R-Defense-Emplacement-HPVcannon"	//HPV bunker
 	research[1][29]	RESEARCHSTAT		"R-Defense-WallTower-HPVcannon"		//HPV HP
-	research[1][30]	RESEARCHSTAT		"R-Defense-AASite-QuadRotMg"	//Whirlwind site
-	research[1][31]	RESEARCHSTAT		"R-Wpn-Laser02"	//pulse
+	research[1][30]	RESEARCHSTAT		"R-Wpn-Laser02"	//pulse
 
-	research[1][32]	RESEARCHSTAT		"R-Wpn-AAGun-Accuracy03"
-	research[1][33]	RESEARCHSTAT		"R-Wpn-AAGun-Damage06"
-	research[1][34]	RESEARCHSTAT		"R-Wpn-AAGun-ROF06"
-	research[1][35]	RESEARCHSTAT		"R-Defense-Rail2"		//rail gun bunker
-	research[1][36]	RESEARCHSTAT		"R-Wpn-Missile2A-T"		//scourge
-	research[1][37]	RESEARCHSTAT		"R-Defense-WallTower-Rail3"	//Gauss HP
-	research[1][38]	RESEARCHSTAT		"R-Wpn-LasSat"	//includes "R-Sys-Sensor-UpLink"		//uplink
+	research[1][31]	RESEARCHSTAT		"R-Wpn-AAGun-Accuracy03"
+	research[1][32]	RESEARCHSTAT		"R-Wpn-AAGun-Damage06"
+	research[1][33]	RESEARCHSTAT		"R-Wpn-AAGun-ROF06"
+	research[1][34]	RESEARCHSTAT		"R-Defense-Rail2"		//rail gun bunker
+	research[1][35]	RESEARCHSTAT		"R-Wpn-Missile2A-T"		//scourge
+	research[1][36]	RESEARCHSTAT		"R-Defense-WallTower-Rail3"	//Gauss HP
+	research[1][37]	RESEARCHSTAT		"R-Wpn-LasSat"	//includes "R-Sys-Sensor-UpLink"		//uplink
 
 
 	//misc research
 	resBB	RESEARCHSTAT			"R-Wpn-Rocket03-HvAT"		//Bunker Buster
+	resCmd	RESEARCHSTAT			"R-Comp-CommandTurret01"	//commander turret includes command center
 
 	//COMPONENTS
 	viperBody		BODY			"Body1REC"
 	weaponBB		WEAPON			"Rocket-BB"	//bb
+	cmdTurret		BRAIN			"CommandBrain01"	//commander brain
 
 
 	//Base structures
@@ -197,21 +251,23 @@ run
 	baseStructs[8]		STRUCTURESTAT		"A0LasSatCommand"
 
 	//Minimal (vital) structures
-	numVitalStructs		INT					6
+	numVitalStructs		INT					7
 	minimalStruct[0]	STRUCTURESTAT		"A0LightFactory"
 	minimalStruct[1]	STRUCTURESTAT		"A0PowerGenerator"
 	minimalStruct[2]	STRUCTURESTAT		"A0ResourceExtractor"
 	minimalStruct[3]	STRUCTURESTAT		"A0ResearchFacility"
 	minimalStruct[4]	STRUCTURESTAT		"A0LightFactory"		//another fac
 	minimalStruct[5]	STRUCTURESTAT		"A0CommandCentre"
+	minimalStruct[6]	STRUCTURESTAT		"A0CyborgFactory"
 
 	//Number of vital structures required
-	numMinimalStruct[0]		INT				1
-	numMinimalStruct[1]		INT				1
-	numMinimalStruct[2]		INT				4
-	numMinimalStruct[3]		INT				1
-	numMinimalStruct[4]		INT				2
-	numMinimalStruct[5]		INT				1
+	numMinimalStruct[0]		INT				1	// fac
+	numMinimalStruct[1]		INT				1	// pow
+	numMinimalStruct[2]		INT				3	// derrick
+	numMinimalStruct[3]		INT				1	// res fac
+	numMinimalStruct[4]		INT				2	// fac
+	numMinimalStruct[5]		INT				1	// HQ
+	numMinimalStruct[6]		INT				1	// cyb factory
 
 	//Number of max trucks allowed to build a specific structure type
 	maxVitalBuilders[0]		INT				-1
@@ -220,6 +276,7 @@ run
 	maxVitalBuilders[3]		INT				1
 	maxVitalBuilders[4]		INT				2
 	maxVitalBuilders[5]		INT				1
+	maxVitalBuilders[6]		INT				1
 
 	numAA			INT			5
 	AA[0] 			STRUCTURESTAT		"AASite-QuadMg1"
@@ -233,11 +290,13 @@ run
 	//baseStructs[8]	STRUCTURESTAT		"X-Super-Rocket"
 	//baseStructs[9]	STRUCTURESTAT		"X-Super-Missile"
 
-	numDef			INT			4
+	numDef			INT			6
 	def[0]			STRUCTURESTAT		"PillBox1"
 	def[1]			STRUCTURESTAT		"PillBox2"
 	def[2]			STRUCTURESTAT		"PillBox3"
-	def[3]			STRUCTURESTAT		"PillBox6"	//lancer
+	def[3]			STRUCTURESTAT		"GuardTower6"	//mini-pod tower
+	def[4]			STRUCTURESTAT		"PillBox4"
+	def[5]			STRUCTURESTAT		"PillBox6"	//lancer
 	//def[5]			STRUCTURESTAT		"Emplacement-HPVcannon"
 
 	numGatewayDef		INT			6
@@ -266,41 +325,53 @@ run
 	facMod			STRUCTURESTAT		"A0FacMod1"
 	resMod			STRUCTURESTAT		"A0ResearchModule1"
 
+	/* Bunker Buster Templates */
+	numBBTempl		INT			3
+	tmplBB[0]		TEMPLATE	"ViperBBWheels"
+	tmplBB[1]		TEMPLATE	"CobraBBTracks"
+	tmplBB[2]		TEMPLATE	"ScorpBBTracks"
 
-	numTemplates	INT		24
-
-	tmplBB		TEMPLATE	"ViperBBWheels"
 	//tmplUnitransporter	TEMPLATE	"TransporterU"
 
-	/* light templates */
-	tmpl[0][0]	TEMPLATE	"ViperMG01Wheels"
-	tmpl[0][1]	TEMPLATE	"ViperMG02Wheels"
-	tmpl[0][2]	TEMPLATE	"ViperHMGWheels"
-	tmpl[0][3]	TEMPLATE	"ViperHMGWheels"
-	tmpl[0][4]	TEMPLATE	"ViperHMGTracks"		//HMG
-	tmpl[0][5]	TEMPLATE	"ViperLtA-Twheels"
-	tmpl[0][6]	TEMPLATE	"ViperHMGTracks"		//HMG
-	tmpl[0][7]	TEMPLATE	"ViperHMGTracks"		//HMG
-	tmpl[0][8]	TEMPLATE	"CobraHvyMortarHalftrack"
-	tmpl[0][9]	TEMPLATE	"SK-Cobra-Hover-Lancer"
-	tmpl[0][10]	TEMPLATE	"ViperLtA-Twheels"
-	tmpl[0][11]	TEMPLATE	"ViperHMGTracks"
-	tmpl[0][12]	TEMPLATE	"ViperHMGTracks"
-	tmpl[0][13]	TEMPLATE	"SK-Cobra-Hover-HMG"
-	tmpl[0][14]	TEMPLATE	"SK-Cobra-Hover-HMG"
-	tmpl[0][15]	TEMPLATE	"Cobra-Hover-HC"
+	/* Truck Templates */
+	numTruckTmpl	INT					3
+	truck[0]		TEMPLATE			"ConstructorDroid"
+	truck[1]		TEMPLATE			"CobraHoverTruck"
+	truck[2]		TEMPLATE			"ScorpHoverTruck"
+	
+	/* Cyborg Engineer */
+	cybEngineer		TEMPLATE			"Cyb-ComEng"
 
-	tmpl[0][16]	TEMPLATE	"SK-Cobra-Hover-Lancer"	//"SK-Python-Hover-Hcannon"
-	tmpl[0][17]	TEMPLATE	"Cobra-Hover-HC"		//"SK-Python-Hover-Hcannon"
+	/* Light Templates */
+	numTemplates[0]	INT		21
+
+	tmpl[0][0]	TEMPLATE	"ViperPODWheels"		//"ViperMG01Wheels"		//MG
+	tmpl[0][1]	TEMPLATE	"ViperMRLWheels"		//"ViperMG02Wheels"		//TMG
+	tmpl[0][2]	TEMPLATE	"ViperPODWheels"		//"ViperHMGWheels"		//HMG
+	tmpl[0][3]	TEMPLATE	"CobraPODHTracks"		//"ViperHMGWheels"
+	tmpl[0][4]	TEMPLATE	"CobraMRLHalftrack"		//"ViperHMGTracks"		//HMG Tracks
+	tmpl[0][5]	TEMPLATE	"CobraPODHTracks"		//Lancer Tracks
+	tmpl[0][6]	TEMPLATE	"CobraPODTracks"		//HMG
+	tmpl[0][7]	TEMPLATE	"CobraMRLTracks"		//HMG
+	tmpl[0][8]	TEMPLATE	"CobraPODTracks"		
+	tmpl[0][9]	TEMPLATE	"CobraLtA-Thalftrack"
+	tmpl[0][10]	TEMPLATE	"CobraLtA-Thalftrack"	//"ViperTrkLancer"
+	tmpl[0][11]	TEMPLATE	"CobraLtA-Thalftrack"
+	tmpl[0][12]	TEMPLATE	"ViperTrkLancer"
+
+	tmpl[0][13]	TEMPLATE	"H-Scorp-Trk-Lancer"
+	tmpl[0][14]	TEMPLATE	"H-Scorp-Trk-Lancer"
+	tmpl[0][15]	TEMPLATE	"H-Scorp-Trk-Lancer"	//"SK-Cobra-Hover-Lancer"
+	
+	tmpl[0][16]	TEMPLATE	"H-Scorp-Trk-HC"		//"Cobra-Hover-HC"
+	tmpl[0][17]	TEMPLATE	"H-Scorp-Trk-HC"		//"Cobra-Hover-HC"
 	//Campaign 2
-	tmpl[0][18]	TEMPLATE	"Scourge-Mantis-H"
-	tmpl[0][19]	TEMPLATE	"ViperLtA-Twheels"	//"SK-Mantis-Hover-Hcannon"
-	tmpl[0][20]	TEMPLATE	"SK-Mantis-Hover-Hcannon"	//"CobraHvyCnTrks"
-	tmpl[0][21]	TEMPLATE	"SK-Cobra-Hover-Lancer"	//"SK-Tiger-Hover-TK"
-	tmpl[0][22]	TEMPLATE	"SK-Mantis-Hover-Hcannon"
-	tmpl[0][23]	TEMPLATE	"TK-Mantis-H"
+	tmpl[0][18]	TEMPLATE	"MantisTrkHC"
+	tmpl[0][19]	TEMPLATE	"MantisTKTracks"
+	tmpl[0][20]	TEMPLATE	"MantisScourgeTracks"
 
 	/* heavy templates */
+	numTemplates[1]	INT		24
 	tmpl[1][0]	TEMPLATE	"ViperMG01Wheels"
 	tmpl[1][1]	TEMPLATE	"ViperMG02Wheels"
 	tmpl[1][2]	TEMPLATE	"ViperHMGWheels"
@@ -328,13 +399,24 @@ run
 	tmpl[1][22]	TEMPLATE	"SK-Veng-Track-PulseLsr"	//"SK-Mantis-Hover-Hcannon"
 	tmpl[1][23]	TEMPLATE	"SK-Veng-Track-Gauss"		//"Scourge-Mantis-H"
 
-	numRepairTmpl	INT		2
-	tmplRep[0]	TEMPLATE	"ViperRepairWheels"
-	tmplRep[1]	TEMPLATE	"CobraHRepairHover"
-	tmplRep[2]	TEMPLATE	"SK-Bug-Hover-Repair"
+	numRepairTmpl	INT		3
+	//tmplRep[0]	TEMPLATE	"ViperRepairWheels"
+	tmplRep[0]	TEMPLATE	"A-Rep-Cobra-Trk"
+	tmplRep[1]	TEMPLATE	"ScorpRepairTrk"
+	tmplRep[2]	TEMPLATE	"ScorpHRepairHover"
+	
+	// cyborg mechanic
+	cybMechanic	TEMPLATE	"Cyb-Mechanic"
 
 //VTOLs
 	numVtolTemplates	INT		0
 	vtoltmpl[0][0]	TEMPLATE	"SK-Bug-Hover-Repair"
+	
+	//Commander templates
+	numCmdTmpl		INT		3
+	//tmplCmd[0]		TEMPLATE	"Viper-Trk-Com"
+	tmplCmd[0]		TEMPLATE	"Cobra-Trk-Com"
+	tmplCmd[1]		TEMPLATE	"Scorp-Trk-Com"
+	tmplCmd[2]		TEMPLATE	"Mantis-Trk-Com"
 
 }
