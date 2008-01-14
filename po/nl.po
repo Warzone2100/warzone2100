@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-01-10 00:29+0100\n"
+"POT-Creation-Date: 2008-01-13 14:17+0100\n"
 "PO-Revision-Date: 2007-06-05 14:46+0200\n"
 "Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -16,40 +16,40 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/multiplay.c:742
+#: src/multiplay.c:741
 #, fuzzy
 msgid "The host has left the game!"
 msgstr "%s heeft het spel verlaten"
 
-#: src/multiplay.c:1852
+#: src/multiplay.c:1893
 msgid "Green"
 msgstr "Groen"
 
-#: src/multiplay.c:1853
+#: src/multiplay.c:1894
 msgid "Orange"
 msgstr "Oranje"
 
-#: src/multiplay.c:1854
+#: src/multiplay.c:1895
 msgid "Grey"
 msgstr "Grijs"
 
-#: src/multiplay.c:1855
+#: src/multiplay.c:1896
 msgid "Black"
 msgstr "Zwart"
 
-#: src/multiplay.c:1856
+#: src/multiplay.c:1897
 msgid "Red"
 msgstr "Rood"
 
-#: src/multiplay.c:1857
+#: src/multiplay.c:1898
 msgid "Blue"
 msgstr "Blauw"
 
-#: src/multiplay.c:1858
+#: src/multiplay.c:1899
 msgid "Pink"
 msgstr "Roze"
 
-#: src/multiplay.c:1859
+#: src/multiplay.c:1900
 msgid "Cyan"
 msgstr "Cyaan"
 
@@ -66,7 +66,7 @@ msgstr "%s - Schade %d%% - Kills %d, %s"
 msgid "Truck ordered to build Oil Derrick"
 msgstr ""
 
-#: src/multistat.c:102 src/configuration.c:369 src/configuration.c:370
+#: src/multistat.c:104 src/configuration.c:353 src/configuration.c:354
 msgid "Player"
 msgstr "Speler"
 
@@ -467,7 +467,7 @@ msgstr "CHAT"
 msgid "Host is Starting Game"
 msgstr ""
 
-#: src/multiint.c:2444
+#: src/multiint.c:2450
 msgid "Players"
 msgstr "Spelers"
 
@@ -475,139 +475,139 @@ msgstr "Spelers"
 msgid "Sorry, that cheat is disabled in multiplayer games."
 msgstr ""
 
-#: src/keybind.c:153
+#: src/keybind.c:183
 msgid "Lets us see what you see!"
 msgstr ""
 
-#: src/keybind.c:155
+#: src/keybind.c:185
 msgid "Fine, sensor display is off!"
 msgstr ""
 
-#: src/keybind.c:253
+#: src/keybind.c:283
 msgid "Hard as nails!!!"
 msgstr ""
 
-#: src/keybind.c:266
+#: src/keybind.c:296
 msgid "Takings thing easy!"
 msgstr ""
 
-#: src/keybind.c:280
+#: src/keybind.c:310
 msgid "1000 big ones!!!"
 msgstr ""
 
-#: src/keybind.c:294
+#: src/keybind.c:324
 msgid "Power overwhelming"
 msgstr ""
 
-#: src/keybind.c:308
+#: src/keybind.c:338
 msgid "Back to normality!"
 msgstr ""
 
-#: src/keybind.c:321
+#: src/keybind.c:351
 msgid "Getting tricky!"
 msgstr ""
 
-#: src/keybind.c:334
+#: src/keybind.c:364
 msgid "Twice as nice!"
 msgstr ""
 
-#: src/keybind.c:409
+#: src/keybind.c:439
 msgid "Infinite power disabled"
 msgstr ""
 
-#: src/keybind.c:414
+#: src/keybind.c:444
 msgid "Infinite power enabled"
 msgstr ""
 
-#: src/keybind.c:467
+#: src/keybind.c:497
 msgid "All items made available"
 msgstr ""
 
-#: src/keybind.c:559
+#: src/keybind.c:589
 #, fuzzy
 msgid "Fog off"
 msgstr "Mist"
 
-#: src/keybind.c:565
+#: src/keybind.c:595
 #, fuzzy
 msgid "Fog on"
 msgstr "Mist"
 
-#: src/keybind.c:1131
+#: src/keybind.c:1161
 msgid "View Aligned to North"
 msgstr ""
 
-#: src/keybind.c:1160 src/intelmap.c:241
+#: src/keybind.c:1190 src/intelmap.c:241
 msgid "PAUSED"
 msgstr "GEPAUZEERD"
 
-#: src/keybind.c:1199
+#: src/keybind.c:1229
 msgid "Researched EVERYTHING for you!"
 msgstr ""
 
-#: src/keybind.c:1230
+#: src/keybind.c:1260
 msgid "Energy bars display toggled"
 msgstr ""
 
-#: src/keybind.c:1248
+#: src/keybind.c:1278
 msgid "Demo mode off - Returning to normal game mode"
 msgstr ""
 
-#: src/keybind.c:1295
+#: src/keybind.c:1325
 msgid "Unable to locate any resource extractors!"
 msgstr ""
 
-#: src/keybind.c:1514
+#: src/keybind.c:1544
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr ""
 
-#: src/keybind.c:1520
+#: src/keybind.c:1550
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr ""
 
-#: src/keybind.c:1526
+#: src/keybind.c:1556
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr ""
 
-#: src/keybind.c:1559
+#: src/keybind.c:1589
 msgid "Enemy destroyed by cheating!"
 msgstr ""
 
-#: src/keybind.c:2087
+#: src/keybind.c:2117
 msgid "Centered on player HQ, direction NORTH"
 msgstr ""
 
-#: src/keybind.c:2099
+#: src/keybind.c:2129
 msgid "Unable to locate HQ!"
 msgstr "Kan het Hoofdkwartier niet vinden"
 
-#: src/keybind.c:2115
+#: src/keybind.c:2145
 msgid "Formation speed limiting OFF"
 msgstr ""
 
-#: src/keybind.c:2119
+#: src/keybind.c:2149
 msgid "Formation speed limiting ON"
 msgstr ""
 
-#: src/keybind.c:2244 src/keybind.c:2280 src/keybind.c:2302
+#: src/keybind.c:2274 src/keybind.c:2310 src/keybind.c:2332
 msgid "Game Speed Reset"
 msgstr ""
 
-#: src/keybind.c:2248
+#: src/keybind.c:2278
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr ""
 
-#: src/keybind.c:2284
+#: src/keybind.c:2314
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr ""
 
-#: src/keybind.c:2314
+#: src/keybind.c:2344
 msgid "Build menu will reopen"
 msgstr "Bouwmenu zal opnieuw openen"
 
-#: src/keybind.c:2318
+#: src/keybind.c:2348
 msgid "Build menu will not reopen"
 msgstr "Bouwmenu zal niet opnieuw openen"
 
@@ -934,115 +934,103 @@ msgstr "Muziek Volume"
 msgid "Options"
 msgstr "Instellingen"
 
-#: src/clparse.c:94
+#: src/clparse.c:86
 msgid "Run in cheat mode"
 msgstr ""
 
-#: src/clparse.c:95
+#: src/clparse.c:87
 msgid "Set default data directory"
 msgstr ""
 
-#: src/clparse.c:95
+#: src/clparse.c:87
 msgid "data directory"
 msgstr ""
 
-#: src/clparse.c:96
+#: src/clparse.c:88
 msgid "Set configuration directory"
 msgstr ""
 
-#: src/clparse.c:96
+#: src/clparse.c:88
 msgid "configuration directory"
 msgstr ""
 
-#: src/clparse.c:97
+#: src/clparse.c:89
 msgid "Show debug for given level"
 msgstr ""
 
-#: src/clparse.c:97
+#: src/clparse.c:89
 msgid "debug level"
 msgstr ""
 
-#: src/clparse.c:98
+#: src/clparse.c:90
 msgid "Log debug output to file"
 msgstr ""
 
-#: src/clparse.c:98
+#: src/clparse.c:90
 msgid "file"
 msgstr "bestand"
 
-#: src/clparse.c:99
+#: src/clparse.c:91
 msgid "Play in fullscreen mode"
 msgstr "Speel met volledig scherm"
 
-#: src/clparse.c:100
-msgid "Disable fog"
-msgstr "Schakel mist uit"
-
-#: src/clparse.c:103
-msgid "Load a specific game"
-msgstr "Laad een specifiek spel"
-
-#: src/clparse.c:103
-msgid "game-name"
-msgstr "spel-naam"
-
-#: src/clparse.c:104
+#: src/clparse.c:92
 msgid "Show this help message and exit"
 msgstr "Geef dit help bericht weer en stop"
 
-#: src/clparse.c:105
+#: src/clparse.c:93
 msgid "Enable a global mod"
 msgstr ""
 
-#: src/clparse.c:105 src/clparse.c:106 src/clparse.c:107
+#: src/clparse.c:93 src/clparse.c:94 src/clparse.c:95
 msgid "mod"
 msgstr ""
 
-#: src/clparse.c:106
+#: src/clparse.c:94
 msgid "Enable a campaign only mod"
 msgstr ""
 
-#: src/clparse.c:107
+#: src/clparse.c:95
 msgid "Enable a multiplay only mod"
 msgstr ""
 
-#: src/clparse.c:108
+#: src/clparse.c:96
 msgid "Load a saved game"
 msgstr "Laad een opgeslagen spel"
 
-#: src/clparse.c:108
+#: src/clparse.c:96
 msgid "savegame"
 msgstr "opgeslagen spel"
 
-#: src/clparse.c:111
+#: src/clparse.c:99
 msgid "Play in windowed mode"
 msgstr "Speel in een venster"
 
-#: src/clparse.c:112
+#: src/clparse.c:100
 msgid "Show version information and exit"
 msgstr ""
 
-#: src/clparse.c:113
+#: src/clparse.c:101
 msgid "Set the resolution to use"
 msgstr "Kies de resolutie om te gebruiken"
 
-#: src/clparse.c:113
+#: src/clparse.c:101
 msgid "WIDTHxHEIGHT"
 msgstr "BREEDTExHOOGTE"
 
-#: src/clparse.c:114
+#: src/clparse.c:102
 msgid "Enable shadows"
 msgstr "Schakel schaduwen in"
 
-#: src/clparse.c:115
+#: src/clparse.c:103
 msgid "Disable shadows"
 msgstr "Schakel schaduwen uit"
 
-#: src/clparse.c:116
+#: src/clparse.c:104
 msgid "Enable sound"
 msgstr "Scakel geluid in"
 
-#: src/clparse.c:117
+#: src/clparse.c:105
 msgid "Disable sound"
 msgstr "Schakel geluid uit"
 
@@ -11562,6 +11550,15 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:2149
 msgid "Upgraded battlefield computer system"
 msgstr ""
+
+#~ msgid "Disable fog"
+#~ msgstr "Schakel mist uit"
+
+#~ msgid "Load a specific game"
+#~ msgstr "Laad een specifiek spel"
+
+#~ msgid "game-name"
+#~ msgstr "spel-naam"
 
 #~ msgid "Internet"
 #~ msgstr "Internet"

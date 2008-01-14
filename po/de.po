@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-01-10 00:29+0100\n"
+"POT-Creation-Date: 2008-01-13 14:17+0100\n"
 "PO-Revision-Date: 2007-08-12 16:30+0100\n"
 "Last-Translator: Thomas Rösner <translation-bugs@digital-trauma.de>\n"
 "Language-Team: Deutsch\n"
@@ -20,40 +20,40 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Bookmarks: 458,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
-#: src/multiplay.c:742
+#: src/multiplay.c:741
 #, fuzzy
 msgid "The host has left the game!"
 msgstr "%s hat das Spiel verlassen"
 
-#: src/multiplay.c:1852
+#: src/multiplay.c:1893
 msgid "Green"
 msgstr "Grün"
 
-#: src/multiplay.c:1853
+#: src/multiplay.c:1894
 msgid "Orange"
 msgstr "Orange"
 
-#: src/multiplay.c:1854
+#: src/multiplay.c:1895
 msgid "Grey"
 msgstr "Grau"
 
-#: src/multiplay.c:1855
+#: src/multiplay.c:1896
 msgid "Black"
 msgstr "Schwarz"
 
-#: src/multiplay.c:1856
+#: src/multiplay.c:1897
 msgid "Red"
 msgstr "Rot"
 
-#: src/multiplay.c:1857
+#: src/multiplay.c:1898
 msgid "Blue"
 msgstr "Blau"
 
-#: src/multiplay.c:1858
+#: src/multiplay.c:1899
 msgid "Pink"
 msgstr "Pink"
 
-#: src/multiplay.c:1859
+#: src/multiplay.c:1900
 msgid "Cyan"
 msgstr "Cyan"
 
@@ -70,7 +70,7 @@ msgstr "%s - Schaden %d%% - Abschüsse %d, %s"
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Baufahrzeug wurde beauftragt, einen Ölbohrturm zu bauen"
 
-#: src/multistat.c:102 src/configuration.c:369 src/configuration.c:370
+#: src/multistat.c:104 src/configuration.c:353 src/configuration.c:354
 msgid "Player"
 msgstr "Spieler"
 
@@ -469,7 +469,7 @@ msgstr "CHAT"
 msgid "Host is Starting Game"
 msgstr "Gastgeber startet das Spiel"
 
-#: src/multiint.c:2444
+#: src/multiint.c:2450
 msgid "Players"
 msgstr "Spieler"
 
@@ -477,140 +477,140 @@ msgstr "Spieler"
 msgid "Sorry, that cheat is disabled in multiplayer games."
 msgstr ""
 
-#: src/keybind.c:153
+#: src/keybind.c:183
 msgid "Lets us see what you see!"
 msgstr ""
 
-#: src/keybind.c:155
+#: src/keybind.c:185
 msgid "Fine, sensor display is off!"
 msgstr ""
 
-#: src/keybind.c:253
+#: src/keybind.c:283
 msgid "Hard as nails!!!"
 msgstr ""
 
-#: src/keybind.c:266
+#: src/keybind.c:296
 msgid "Takings thing easy!"
 msgstr ""
 
-#: src/keybind.c:280
+#: src/keybind.c:310
 msgid "1000 big ones!!!"
 msgstr ""
 
-#: src/keybind.c:294
+#: src/keybind.c:324
 msgid "Power overwhelming"
 msgstr ""
 
-#: src/keybind.c:308
+#: src/keybind.c:338
 msgid "Back to normality!"
 msgstr ""
 
-#: src/keybind.c:321
+#: src/keybind.c:351
 msgid "Getting tricky!"
 msgstr ""
 
-#: src/keybind.c:334
+#: src/keybind.c:364
 msgid "Twice as nice!"
 msgstr ""
 
-#: src/keybind.c:409
+#: src/keybind.c:439
 msgid "Infinite power disabled"
 msgstr ""
 
-#: src/keybind.c:414
+#: src/keybind.c:444
 msgid "Infinite power enabled"
 msgstr ""
 
-#: src/keybind.c:467
+#: src/keybind.c:497
 #, fuzzy
 msgid "All items made available"
 msgstr "Verstärkungen sind verfügbar."
 
-#: src/keybind.c:559
+#: src/keybind.c:589
 #, fuzzy
 msgid "Fog off"
 msgstr "Nebel"
 
-#: src/keybind.c:565
+#: src/keybind.c:595
 #, fuzzy
 msgid "Fog on"
 msgstr "Nebel"
 
-#: src/keybind.c:1131
+#: src/keybind.c:1161
 msgid "View Aligned to North"
 msgstr "Sicht nach Norden ausgerichtet"
 
-#: src/keybind.c:1160 src/intelmap.c:241
+#: src/keybind.c:1190 src/intelmap.c:241
 msgid "PAUSED"
 msgstr "PAUSE"
 
-#: src/keybind.c:1199
+#: src/keybind.c:1229
 msgid "Researched EVERYTHING for you!"
 msgstr "ALLES für Sie erforscht!"
 
-#: src/keybind.c:1230
+#: src/keybind.c:1260
 msgid "Energy bars display toggled"
 msgstr "Anzeige der Energiebalken umgeschaltet"
 
-#: src/keybind.c:1248
+#: src/keybind.c:1278
 msgid "Demo mode off - Returning to normal game mode"
 msgstr ""
 
-#: src/keybind.c:1295
+#: src/keybind.c:1325
 msgid "Unable to locate any resource extractors!"
 msgstr "Kann keine Resourcenextraktoren finden"
 
-#: src/keybind.c:1514
+#: src/keybind.c:1544
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr ""
 
-#: src/keybind.c:1520
+#: src/keybind.c:1550
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr ""
 
-#: src/keybind.c:1526
+#: src/keybind.c:1556
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr ""
 
-#: src/keybind.c:1559
+#: src/keybind.c:1589
 msgid "Enemy destroyed by cheating!"
 msgstr "Feind via cheat zerstört!"
 
-#: src/keybind.c:2087
+#: src/keybind.c:2117
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Auf Spieler HQ zentriert, Blickrichtung Norden"
 
-#: src/keybind.c:2099
+#: src/keybind.c:2129
 msgid "Unable to locate HQ!"
 msgstr "Kann Hauptquartier nicht finden!"
 
-#: src/keybind.c:2115
+#: src/keybind.c:2145
 msgid "Formation speed limiting OFF"
 msgstr "Formationsgeschwindigkeitslimit AUS"
 
-#: src/keybind.c:2119
+#: src/keybind.c:2149
 msgid "Formation speed limiting ON"
 msgstr "Formationsgeschwindigkeitslimit AN"
 
-#: src/keybind.c:2244 src/keybind.c:2280 src/keybind.c:2302
+#: src/keybind.c:2274 src/keybind.c:2310 src/keybind.c:2332
 msgid "Game Speed Reset"
 msgstr "Spielgeschwindigkeit zurückgesetzt"
 
-#: src/keybind.c:2248
+#: src/keybind.c:2278
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Spielgeschwindigkeit auf %3.1f erhöht"
 
-#: src/keybind.c:2284
+#: src/keybind.c:2314
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Spielgeschwindigkeit auf %3.1f gesenkt"
 
-#: src/keybind.c:2314
+#: src/keybind.c:2344
 msgid "Build menu will reopen"
 msgstr "Baumenu wird sich wieder öffnen"
 
-#: src/keybind.c:2318
+#: src/keybind.c:2348
 msgid "Build menu will not reopen"
 msgstr "Baumenu wird sich nicht wieder öffnen"
 
@@ -936,120 +936,105 @@ msgstr "Musiklautstärke"
 msgid "Options"
 msgstr "Optionen"
 
-#: src/clparse.c:94
+#: src/clparse.c:86
 msgid "Run in cheat mode"
 msgstr ""
 
-#: src/clparse.c:95
+#: src/clparse.c:87
 msgid "Set default data directory"
 msgstr ""
 
-#: src/clparse.c:95
+#: src/clparse.c:87
 msgid "data directory"
 msgstr ""
 
-#: src/clparse.c:96
+#: src/clparse.c:88
 msgid "Set configuration directory"
 msgstr ""
 
-#: src/clparse.c:96
+#: src/clparse.c:88
 msgid "configuration directory"
 msgstr ""
 
-#: src/clparse.c:97
+#: src/clparse.c:89
 msgid "Show debug for given level"
 msgstr ""
 
-#: src/clparse.c:97
+#: src/clparse.c:89
 msgid "debug level"
 msgstr ""
 
-#: src/clparse.c:98
+#: src/clparse.c:90
 msgid "Log debug output to file"
 msgstr ""
 
-#: src/clparse.c:98
+#: src/clparse.c:90
 msgid "file"
 msgstr ""
 
-#: src/clparse.c:99
+#: src/clparse.c:91
 msgid "Play in fullscreen mode"
 msgstr ""
 
-#: src/clparse.c:100
-#, fuzzy
-msgid "Disable fog"
-msgstr "Entfernungsnebel"
-
-#: src/clparse.c:103
-#, fuzzy
-msgid "Load a specific game"
-msgstr "Speicherstand laden"
-
-#: src/clparse.c:103
-#, fuzzy
-msgid "game-name"
-msgstr "Spielname auswählen"
-
-#: src/clparse.c:104
+#: src/clparse.c:92
 msgid "Show this help message and exit"
 msgstr ""
 
-#: src/clparse.c:105
+#: src/clparse.c:93
 msgid "Enable a global mod"
 msgstr ""
 
-#: src/clparse.c:105 src/clparse.c:106 src/clparse.c:107
+#: src/clparse.c:93 src/clparse.c:94 src/clparse.c:95
 msgid "mod"
 msgstr ""
 
-#: src/clparse.c:106
+#: src/clparse.c:94
 msgid "Enable a campaign only mod"
 msgstr ""
 
-#: src/clparse.c:107
+#: src/clparse.c:95
 msgid "Enable a multiplay only mod"
 msgstr ""
 
-#: src/clparse.c:108
+#: src/clparse.c:96
 #, fuzzy
 msgid "Load a saved game"
 msgstr "Speicherstand laden"
 
-#: src/clparse.c:108
+#: src/clparse.c:96
 #, fuzzy
 msgid "savegame"
 msgstr "Spiel speichern"
 
-#: src/clparse.c:111
+#: src/clparse.c:99
 msgid "Play in windowed mode"
 msgstr ""
 
-#: src/clparse.c:112
+#: src/clparse.c:100
 msgid "Show version information and exit"
 msgstr ""
 
-#: src/clparse.c:113
+#: src/clparse.c:101
 msgid "Set the resolution to use"
 msgstr ""
 
-#: src/clparse.c:113
+#: src/clparse.c:101
 msgid "WIDTHxHEIGHT"
 msgstr ""
 
-#: src/clparse.c:114
+#: src/clparse.c:102
 msgid "Enable shadows"
 msgstr ""
 
-#: src/clparse.c:115
+#: src/clparse.c:103
 msgid "Disable shadows"
 msgstr ""
 
-#: src/clparse.c:116
+#: src/clparse.c:104
 msgid "Enable sound"
 msgstr ""
 
-#: src/clparse.c:117
+#: src/clparse.c:105
 msgid "Disable sound"
 msgstr ""
 
@@ -11753,6 +11738,18 @@ msgstr "Stärkerer Kommandoturm verfügbar"
 #: data/mp/messages/strings/resstrings.txt:2149
 msgid "Upgraded battlefield computer system"
 msgstr "Verbesserter taktischer Computer"
+
+#, fuzzy
+#~ msgid "Disable fog"
+#~ msgstr "Entfernungsnebel"
+
+#, fuzzy
+#~ msgid "Load a specific game"
+#~ msgstr "Speicherstand laden"
+
+#, fuzzy
+#~ msgid "game-name"
+#~ msgstr "Spielname auswählen"
 
 #~ msgid "Command Turrets"
 #~ msgstr "Kommandotürme"
