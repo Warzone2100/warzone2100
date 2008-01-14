@@ -212,6 +212,10 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\chat_parser.tab.h"
+				>
+			</File>
+			<File
 				RelativePath=".\chat_processing.h"
 				>
 			</File>
@@ -237,6 +241,10 @@
 			</File>
 			<File
 				RelativePath=".\script.h"
+				>
+			</File>
+			<File
+				RelativePath=".\script_parser.tab.h"
 				>
 			</File>
 			<File

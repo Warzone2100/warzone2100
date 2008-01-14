@@ -64,7 +64,7 @@
 				UsePrecompiledHeader="0"
 				WarningLevel="4"
 				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="4"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -78,7 +78,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				ExecutionBucket="11"
-				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net.lib png.lib zlib.lib ogg.lib vorbis.lib vorbisfile.lib physfs.lib OpenAL32.lib glc32.lib OpenGL32.lib GLU32.lib shfolder.lib winmm.lib wsock32.lib dbghelp.lib libpopt.lib"
+				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net-static.lib libpng-static.lib ogg_static.lib vorbis_static.lib vorbisfile_static.lib OpenAL32.lib glc32.lib OpenGL32.lib GLU32.lib shfolder.lib winmm.lib wsock32.lib dbghelp.lib libpopt.lib physfs.lib zlib.lib"
 				OutputFile="$(OutDir)\$(ProjectName)-Dbg.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;__DEVPKG__\lib&quot;"
@@ -179,7 +179,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				ExecutionBucket="11"
-				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net.lib png.lib zlib.lib ogg.lib vorbis.lib vorbisfile.lib physfs.lib OpenAL32.lib glc32.lib OpenGL32.lib GLU32.lib shfolder.lib winmm.lib wsock32.lib dbghelp.lib libpopt.lib"
+				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net-static.lib libpng-static.lib ogg_static.lib vorbis_static.lib vorbisfile_static.lib OpenAL32.lib glc32.lib OpenGL32.lib GLU32.lib shfolder.lib winmm.lib wsock32.lib dbghelp.lib libpopt.lib physfs.lib zlib.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;__DEVPKG__\lib&quot;"
 				IgnoreDefaultLibraryNames="libcmt.lib"
@@ -707,6 +707,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\basedef.h"
+				>
+			</File>
+			<File
 				RelativePath="..\src\bridge.h"
 				>
 			</File>
@@ -943,6 +947,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\main.h"
+				>
+			</File>
+			<File
 				RelativePath="..\src\map.h"
 				>
 			</File>
@@ -1063,6 +1071,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\projectiledef.h"
+				>
+			</File>
+			<File
 				RelativePath="..\src\radar.h"
 				>
 			</File>
@@ -1127,6 +1139,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\scriptvals_parser.tab.h"
+				>
+			</File>
+			<File
 				RelativePath="..\src\selection.h"
 				>
 			</File>
@@ -1188,6 +1204,10 @@
 			</File>
 			<File
 				RelativePath="..\src\warzoneconfig.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\weapondef.h"
 				>
 			</File>
 			<File

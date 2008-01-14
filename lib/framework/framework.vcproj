@@ -318,6 +318,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\resource_parser.tab.h"
+				>
+			</File>
+			<File
 				RelativePath=".\SDL_framerate.h"
 				>
 			</File>
@@ -331,6 +335,10 @@
 			</File>
 			<File
 				RelativePath=".\strres.h"
+				>
+			</File>
+			<File
+				RelativePath=".\strres_parser.tab.h"
 				>
 			</File>
 			<File
