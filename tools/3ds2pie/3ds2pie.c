@@ -16,8 +16,6 @@
  * You should  have received  a copy of the GNU Lesser General Public License
  * along with  this program;  if not, write to the  Free Software Foundation,
  * Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * $Id: 3ds2m.c,v 1.1 2001/07/18 12:17:49 jeh Exp $
  */
 #include <lib3ds/file.h>
 #include <lib3ds/mesh.h>
