@@ -1,0 +1,214 @@
+<ui version="4.0" >
+ <class>Gui3ds2pie</class>
+ <widget class="QDialog" name="Gui3ds2pie" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>200</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>3ds2pie</string>
+  </property>
+  <widget class="QDialogButtonBox" name="buttonBox" >
+   <property name="geometry" >
+    <rect>
+     <x>30</x>
+     <y>160</y>
+     <width>341</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="standardButtons" >
+    <set>QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="inputFile_browse" >
+   <property name="geometry" >
+    <rect>
+     <x>300</x>
+     <y>20</y>
+     <width>91</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Browse</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="outputFile_browse" >
+   <property name="geometry" >
+    <rect>
+     <x>300</x>
+     <y>50</y>
+     <width>91</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Browse</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="swapYZ" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>110</y>
+     <width>161</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Swap Y/Z</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="invertUV" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>130</y>
+     <width>161</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Invert U/V</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="reverseWinding" >
+   <property name="geometry" >
+    <rect>
+     <x>180</x>
+     <y>110</y>
+     <width>211</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Reverse polygon winding</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="twoSidedPolys" >
+   <property name="geometry" >
+    <rect>
+     <x>180</x>
+     <y>130</y>
+     <width>211</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Two sided polygons</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="inputFile_edit" >
+   <property name="geometry" >
+    <rect>
+     <x>120</x>
+     <y>20</y>
+     <width>171</width>
+     <height>23</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="outputFile_edit" >
+   <property name="geometry" >
+    <rect>
+     <x>120</x>
+     <y>50</y>
+     <width>171</width>
+     <height>23</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="texpageNr_edit" >
+   <property name="geometry" >
+    <rect>
+     <x>120</x>
+     <y>80</y>
+     <width>171</width>
+     <height>23</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="inputFile" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>20</y>
+     <width>101</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Input file</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="outputFile" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>50</y>
+     <width>101</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Output file</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="texpageNr" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>80</y>
+     <width>99</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Texture page Nr.</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>Gui3ds2pie</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>Gui3ds2pie</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
