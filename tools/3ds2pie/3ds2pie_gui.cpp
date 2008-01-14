@@ -19,6 +19,8 @@
 
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QDragEnterEvent>
+#include <QUrl>
 
 // For dump_pie_file
 #include <lib3ds/file.h>
@@ -31,6 +33,8 @@ Gui3ds2pie::Gui3ds2pie( QWidget *parent )
 		: QDialog(parent), Ui::Gui3ds2pie()
 {
 	setupUi(this);
+
+	setAcceptDrops(true);
 
 	connect(inputFile_browse, SIGNAL(clicked()), this, SLOT(browseInputFile()));
 	connect(outputFile_browse, SIGNAL(clicked()), this, SLOT(browseOutputFile()));
@@ -53,6 +57,31 @@ void Gui3ds2pie::browseOutputFile()
 {
 	QString path = QFileDialog::getSaveFileName(this, tr("Choose output file"), QString::null, QString::null);
 	outputFile_edit->setText(path);
+}
+
+
+void Gui3ds2pie::dragEnterEvent(QDragEnterEvent *event)
+{
+	if (event->mimeData()->hasUrls())
+		foreach(const QUrl &url, event->mimeData()->urls())
+			if(url.path().endsWith(".3ds", Qt::CaseInsensitive))
+			{
+				event->acceptProposedAction();
+				break;
+			}
+}
+
+
+void Gui3ds2pie::dropEvent(QDropEvent *event)
+{
+	foreach(const QUrl &url, event->mimeData()->urls())
+		if(url.path().endsWith(".3ds", Qt::CaseInsensitive))
+		{
+			QString path = url.path();
+			inputFile_edit->setText(path);
+			outputFile_edit->setText( path.replace( path.lastIndexOf(".3ds", -1, Qt::CaseInsensitive), 4, ".pie" ) );
+			break;
+		}
 }
 
 

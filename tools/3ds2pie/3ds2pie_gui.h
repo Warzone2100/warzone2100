@@ -37,6 +37,8 @@ class Gui3ds2pie : public QDialog, private Ui::Gui3ds2pie
 		void browseInputFile();
 		void browseOutputFile();
 
+		void dragEnterEvent(QDragEnterEvent *event);
+		void dropEvent(QDropEvent *event);
 };
 
 #endif
