@@ -28,7 +28,7 @@ extern "C" void dump_pie_file(Lib3dsFile *f, FILE *o, const char *page, bool swa
 
 
 Gui3ds2pie::Gui3ds2pie( QWidget *parent )
-		: QDialog(parent, Qt::WindowTitleHint), Ui_Gui3ds2pie()
+		: QDialog(parent), Ui::Gui3ds2pie()
 {
 	setupUi(this);
 
@@ -60,7 +60,7 @@ void Gui3ds2pie::accept()
 {
 	QString inputFile = inputFile_edit->text();
 	QString outputFile = outputFile_edit->text();
-	QString texpageNr = texpageNr_edit->text();
+	QString texturePage = texturePage_edit->text();
 	unsigned int baseTexFlags = (twoSidedPolys->isChecked() ? 2200 : 200 );
 
 	if (inputFile.isEmpty())
@@ -71,11 +71,6 @@ void Gui3ds2pie::accept()
 	if (outputFile.isEmpty())
 	{
 		QMessageBox::critical(this, tr("Error"), tr("Please specify an output file"));
-		return;
-	}
-	if (texpageNr.isEmpty())
-	{
-		QMessageBox::critical(this, tr("Error"), tr("Please specify a texture page number"));
 		return;
 	}
 
@@ -97,7 +92,7 @@ void Gui3ds2pie::accept()
 		return;
 	}
 
-	dump_pie_file(f, o, texpageNr.toAscii().data(), swapYZ->isChecked(), invertUV->isChecked(), reverseWinding->isChecked(), baseTexFlags);
+	dump_pie_file(f, o, texturePage.toAscii().data(), swapYZ->isChecked(), invertUV->isChecked(), reverseWinding->isChecked(), baseTexFlags);
 
 	fclose(o);
 	lib3ds_file_free(f);

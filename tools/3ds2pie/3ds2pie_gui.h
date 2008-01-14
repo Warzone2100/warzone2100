@@ -23,7 +23,7 @@
 /**
 	@author Dennis Schridde <devurandom@gna.org>
 */
-class Gui3ds2pie : public QDialog, private Ui_Gui3ds2pie
+class Gui3ds2pie : public QDialog, private Ui::Gui3ds2pie
 {
 		Q_OBJECT
 	public:

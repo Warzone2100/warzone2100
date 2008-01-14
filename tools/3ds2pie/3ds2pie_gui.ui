@@ -112,9 +112,9 @@
   <widget class="QLineEdit" name="inputFile_edit" >
    <property name="geometry" >
     <rect>
-     <x>120</x>
+     <x>100</x>
      <y>20</y>
-     <width>171</width>
+     <width>191</width>
      <height>23</height>
     </rect>
    </property>
@@ -122,19 +122,9 @@
   <widget class="QLineEdit" name="outputFile_edit" >
    <property name="geometry" >
     <rect>
-     <x>120</x>
+     <x>100</x>
      <y>50</y>
-     <width>171</width>
-     <height>23</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="texpageNr_edit" >
-   <property name="geometry" >
-    <rect>
-     <x>120</x>
-     <y>80</y>
-     <width>171</width>
+     <width>191</width>
      <height>23</height>
     </rect>
    </property>
@@ -144,7 +134,7 @@
     <rect>
      <x>10</x>
      <y>20</y>
-     <width>101</width>
+     <width>81</width>
      <height>18</height>
     </rect>
    </property>
@@ -157,7 +147,7 @@
     <rect>
      <x>10</x>
      <y>50</y>
-     <width>101</width>
+     <width>81</width>
      <height>18</height>
     </rect>
    </property>
@@ -165,17 +155,33 @@
     <string>Output file</string>
    </property>
   </widget>
-  <widget class="QLabel" name="texpageNr" >
+  <widget class="QLabel" name="texturePage" >
    <property name="geometry" >
     <rect>
      <x>10</x>
      <y>80</y>
-     <width>99</width>
+     <width>81</width>
      <height>18</height>
     </rect>
    </property>
    <property name="text" >
-    <string>Texture page Nr.</string>
+    <string>Texture page</string>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="texturePage_edit" >
+   <property name="geometry" >
+    <rect>
+     <x>100</x>
+     <y>80</y>
+     <width>91</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="prefix" >
+    <string>page-</string>
+   </property>
+   <property name="minimum" >
+    <number>1</number>
    </property>
   </widget>
  </widget>
