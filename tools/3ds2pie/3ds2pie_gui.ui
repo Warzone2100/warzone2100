@@ -63,6 +63,10 @@
      <height>22</height>
     </rect>
    </property>
+   <property name="toolTip" >
+    <string>Assume that 'Z' denotes "up" direction
+(Should be enabled for 3DS Max created files)</string>
+   </property>
    <property name="text" >
     <string>Swap Y/Z</string>
    </property>
@@ -79,6 +83,10 @@
      <height>22</height>
     </rect>
    </property>
+   <property name="toolTip" >
+    <string>Invert the vertical point of origin for UV coordinates
+(Should be enabled for 3DS Max created files)</string>
+   </property>
    <property name="text" >
     <string>Invert U/V</string>
    </property>
@@ -91,6 +99,10 @@
      <width>211</width>
      <height>22</height>
     </rect>
+   </property>
+   <property name="toolTip" >
+    <string>Reverse the winding of all polygon faces
+(Should be enabled for 3DS Max created files)</string>
    </property>
    <property name="text" >
     <string>Reverse polygon winding</string>
@@ -105,6 +117,10 @@
      <height>22</height>
     </rect>
    </property>
+   <property name="toolTip" >
+    <string>Use both sides of Polygons
+(Not used in Warzone 2100)</string>
+   </property>
    <property name="text" >
     <string>Two sided polygons</string>
    </property>
@@ -118,6 +134,9 @@
      <height>23</height>
     </rect>
    </property>
+   <property name="toolTip" >
+    <string>Path to the 3DS file</string>
+   </property>
   </widget>
   <widget class="QLineEdit" name="outputFile_edit" >
    <property name="geometry" >
@@ -127,6 +146,9 @@
      <width>191</width>
      <height>23</height>
     </rect>
+   </property>
+   <property name="toolTip" >
+    <string>Path to the PIE file</string>
    </property>
   </widget>
   <widget class="QLabel" name="inputFile" >
@@ -176,6 +198,9 @@
      <width>91</width>
      <height>23</height>
     </rect>
+   </property>
+   <property name="toolTip" >
+    <string>Texture page to use</string>
    </property>
    <property name="prefix" >
     <string>page-</string>
