@@ -2,10 +2,10 @@
 	$(WINDRES) -o$@ $<
 
 %.o: %.c
-	$(CC) $(CFLAGS) -std=gnu99 -Werror-implicit-function-declaration -c -o$@ $<
+	$(CC) $(CFLAGS) -c -o$@ $<
 
 %.o: %.cpp
-	$(CC) $(CFLAGS) -c -o$@ $<
+	$(CC) $(CXXFLAGS) -c -o$@ $<
 
 %.lex.c: %.l
 	$(FLEX) $(FLEXFLAGS) -o$@ $<

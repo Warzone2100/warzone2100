@@ -50,16 +50,19 @@ endif
 
 # Setup paths and static values
 
-CFLAGS+=-DPACKAGE_VERSION=\"$(VERSION)\" -DYY_STATIC -DLOCALEDIR=\"$(LOCALEDIR)\" -DPACKAGE=\"$(PACKAGE)\" -I.. -I../.. -I$(DEVDIR)/include/SDL -I$(DEVDIR)/include/libpng12 -I$(DEVDIR)/include
+CFLAGS+=-std=c99 -DPACKAGE_VERSION=\"$(VERSION)\" -DYY_STATIC -DLOCALEDIR=\"$(LOCALEDIR)\" -DPACKAGE=\"$(PACKAGE)\" -I.. -I../.. -I$(DEVDIR)/include/SDL -I$(DEVDIR)/include/libpng12 -I$(DEVDIR)/include
+CXXFLAGS+=$(CFLAGS)
 LDFLAGS+=-L$(DEVDIR)/lib
 
 
 # Setup build environment with config values
 
 ifeq ($(strip $(MODE)),debug)
-CFLAGS+=-g -O0 -DDEBUG -Wall
+CFLAGS+=-g -O0 -DDEBUG -Wall -Werror-implicit-function-declaration
+CXXFLAGS+=-g -O0 -DDEBUG -Wall
 else
 CFLAGS+=-DNDEBUG
+CXXFLAGS+=-DNDEBUG
 endif
 
 ifeq ($(strip $(USE_GETTEXT)),yes)
@@ -74,6 +77,7 @@ AR=ar
 CC=gcc
 WINDRES=windres
 CFLAGS+=-mwindows -DWIN32
+CXXFLAGS+=-mwindows -DWIN32
 LDFLAGS+=-lmingw32 -lSDLmain
 else
 ifeq ($(strip $(PLATFORM)),mingw32)
@@ -84,6 +88,7 @@ AR=mingw32-ar
 CC=mingw32-gcc
 WINDRES=mingw32-windres
 CFLAGS+=-mwindows -DWIN32
+CXXFLAGS+=-mwindows -DWIN32
 LDFLAGS+=-lmingw32 -lSDLmain
 else
 DIRSEP=/
