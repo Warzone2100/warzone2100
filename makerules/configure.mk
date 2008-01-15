@@ -50,10 +50,12 @@ endif
 
 # Setup paths and static values
 
-CFLAGS+=-std=c99 -DPACKAGE_VERSION=\"$(VERSION)\" -DYY_STATIC -DLOCALEDIR=\"$(LOCALEDIR)\" -DPACKAGE=\"$(PACKAGE)\" -I.. -I../.. -I$(DEVDIR)/include/SDL -I$(DEVDIR)/include/libpng12 -I$(DEVDIR)/include
+CFLAGS+=-DPACKAGE_VERSION=\"$(VERSION)\" -DYY_STATIC -DLOCALEDIR=\"$(LOCALEDIR)\" -DPACKAGE=\"$(PACKAGE)\" -I.. -I../.. -I$(DEVDIR)/include/SDL -I$(DEVDIR)/include/libpng12 -I$(DEVDIR)/include
 CXXFLAGS+=$(CFLAGS)
 LDFLAGS+=-L$(DEVDIR)/lib
 
+# Use C99
+CFLAGS+=-std=c99
 
 # Setup build environment with config values
 
