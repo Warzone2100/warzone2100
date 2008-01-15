@@ -2,7 +2,7 @@
 	$(WINDRES) -o$@ $<
 
 %.o: %.c
-	$(CC) $(CFLAGS) -std=gnu99 -c -o$@ $<
+	$(CC) $(CFLAGS) -std=gnu99 -Werror-implicit-function-declaration -c -o$@ $<
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) -c -o$@ $<
