@@ -47,7 +47,7 @@
 
 namespace Win
 {
-    /** A wrapping class for Windows API errors than can be thrown.
+    /** A wrapping class for Windows API errors that can be thrown.
      */
     class Error : public std::exception
     {
