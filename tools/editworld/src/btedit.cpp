@@ -147,7 +147,7 @@ class CBTEditApp : public CWinApp
 				RUNTIME_CLASS(CBTEditView));
 			AddDocTemplate(pDocTemplate);
 
-			g_HomeDirectory = getCurrentDirectory();
+			g_HomeDirectory = Win::GetCurrentDirectory();
 
 			g_Wait = ::LoadCursor(NULL,IDC_WAIT);
 			g_Pointer = LoadCursor(IDC_POINTER);
@@ -201,18 +201,3 @@ BEGIN_MESSAGE_MAP(CBTEditApp, CWinApp)
 END_MESSAGE_MAP()
 
 CBTEditApp theApp;
-
-std::string getCurrentDirectory()
-{
-	// Determine the required buffer size to contain the current directory
-	const DWORD curDirSize = GetCurrentDirectory(0, NULL);
-	// NOTE: a variably sized array would do just fine here, but MSVC6
-	// doesn't support these, even when compiling as C++.
-	scoped_array<char> curDir(new char[curDirSize]);
-
-	// Retrieve the current directory
-	GetCurrentDirectory(curDirSize, curDir.get());
-
-	// Return the current directory as a STL string
-	return std::string(curDir.get());
-}

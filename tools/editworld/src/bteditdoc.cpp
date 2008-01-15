@@ -625,7 +625,7 @@ void CBTEditDoc::InitialiseData(void)
 
 //	m_DirectDrawView->SetFilter(TRUE);
 	
-	g_WorkDirectory = getCurrentDirectory();
+	g_WorkDirectory = Win::GetCurrentDirectory();
 
 //	m_DirectDrawView = new CDirectDraw(NULL,NULL,FALSE,
 //				&DesiredProfile);
@@ -2388,7 +2388,7 @@ BOOL CBTEditDoc::GetFilePath(char *FilterList,char *ExtType,char *Filter,BOOL Op
 			strcpy(FullPath,Tmp.GetBuffer(0));
 		}
 
-		g_WorkDirectory = getCurrentDirectory();
+		g_WorkDirectory = Win::GetCurrentDirectory();
 		DebugPrint("New working directory %s\n", g_WorkDirectory.c_str());
 
 		SetButtonLapse();

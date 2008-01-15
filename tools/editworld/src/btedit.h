@@ -61,6 +61,4 @@ public:
 
 extern CBTEditCommandLineInfo g_cmdInfo;
 
-extern std::string getCurrentDirectory();
-
 #endif // __INCLUDED_BTEDIT_H__
