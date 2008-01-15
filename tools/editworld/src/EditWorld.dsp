@@ -248,6 +248,10 @@ SOURCE=.\undoredo.cpp
 
 SOURCE=.\wfview.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=.\winapi.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -427,6 +431,10 @@ SOURCE=.\undoredo.h
 # Begin Source File
 
 SOURCE=.\wfview.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\winapi.hpp
 # End Source File
 # Begin Source File
 
