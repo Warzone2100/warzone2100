@@ -2097,7 +2097,7 @@ static HIT_SIDE getHitSide(PROJECTILE *psObj, BASE_OBJECT *psTarget)
 		 */
 		impactAngle = abs(psTarget->direction - (180 * atan2f(deltaX, deltaY) / M_PI));
 
-		impactAngle range(impactAngle, 360);
+		impactAngle = wrap(impactAngle, 360);
 
 		// Use the impact angle to work out the side hit
 		// Right

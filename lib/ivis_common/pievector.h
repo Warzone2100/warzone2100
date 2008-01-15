@@ -24,7 +24,7 @@
 
 #if defined(WZ_CC_MSVC)
 // Prevent nasty "nonstandard extension used : non-constant aggregate initializer" warning when using MSVC
-#pragma warning(disable:4204)
+# pragma warning(disable:4204)
 #endif
 
 
@@ -40,7 +40,8 @@ typedef struct { uint16_t x, y, z; } Vector3uw; //Only used for basedef.h BASE_E
  * \param v Vector to convert
  * \return Float vector
  */
-static inline WZ_DECL_CONST Vector2f Vector2i_To2f(const Vector2i v)
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		Vector2f Vector2i_To2f(const Vector2i v)
 {
 	Vector2f dest = { (float)v.x, (float)v.y };
 	return dest;
@@ -52,7 +53,8 @@ static inline WZ_DECL_CONST Vector2f Vector2i_To2f(const Vector2i v)
  * \param[in] op1,op2 Operands
  * \return Result
  */
-static inline WZ_DECL_CONST Vector2i Vector2i_Add(const Vector2i op1, const Vector2i op2)
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		Vector2i Vector2i_Add(const Vector2i op1, const Vector2i op2)
 {
 	Vector2i dest = {
 		op1.x + op2.x,
@@ -67,7 +69,8 @@ static inline WZ_DECL_CONST Vector2i Vector2i_Add(const Vector2i op1, const Vect
  * \param op1,op2 Operands
  * \return Result
  */
-static inline WZ_DECL_CONST Vector2i Vector2i_Sub(const Vector2i op1, const Vector2i op2)
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		Vector2i Vector2i_Sub(const Vector2i op1, const Vector2i op2)
 {
 	Vector2i dest = {
 		op1.x - op2.x,
@@ -83,7 +86,8 @@ static inline WZ_DECL_CONST Vector2i Vector2i_Sub(const Vector2i op1, const Vect
  * \param s Scalar
  * \return Product
  */
-static inline WZ_DECL_CONST Vector2i Vector2i_Mult(const Vector2i v, const float s)
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		Vector2i Vector2i_Mult(const Vector2i v, const float s)
 {
 	Vector2i dest = { v.x * s, v.y * s };
 	return dest;
@@ -95,7 +99,8 @@ static inline WZ_DECL_CONST Vector2i Vector2i_Mult(const Vector2i v, const float
  * \param op1,op2 Operands
  * \return Scalarproduct of the 2 vectors
  */
-static inline WZ_DECL_CONST int Vector2i_ScalarP(const Vector2i op1, const Vector2i op2)
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		int Vector2i_ScalarP(const Vector2i op1, const Vector2i op2)
 {
 	return op1.x * op2.x + op1.y * op2.y;
 }
@@ -106,7 +111,8 @@ static inline WZ_DECL_CONST int Vector2i_ScalarP(const Vector2i op1, const Vecto
  * \param v Vector
  * \return Length
  */
-static inline WZ_DECL_CONST int Vector2i_Length(const Vector2i v)
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		int Vector2i_Length(const Vector2i v)
 {
 	return sqrtf( (float)Vector2i_ScalarP(v, v) );
 }
@@ -124,7 +130,8 @@ static inline WZ_DECL_CONST int Vector2i_Length(const Vector2i v)
  * \param r The radius of the circle
  * \return If v falls within the circle
  */
-static inline WZ_DECL_CONST BOOL Vector2i_InCircle(const Vector2i v, const Vector2i c, const unsigned int r)
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		BOOL Vector2i_InCircle(const Vector2i v, const Vector2i c, const unsigned int r)
 {
 	Vector2i delta = Vector2i_Sub(v, c);
 	// Explictily cast to "unsigned int" because this number never can be
@@ -140,7 +147,8 @@ static inline WZ_DECL_CONST BOOL Vector2i_InCircle(const Vector2i v, const Vecto
  * \param x,y Coordinates
  * \return New Vector
  */
-static inline WZ_DECL_CONST Vector2f Vector2f_New(const float x, const float y)
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		Vector2f Vector2f_New(const float x, const float y)
 {
 	Vector2f dest = { x, y };
 	return dest;
@@ -152,7 +160,8 @@ static inline WZ_DECL_CONST Vector2f Vector2f_New(const float x, const float y)
  * \param op1,op2 Operands
  * \return Result
  */
-static inline WZ_DECL_CONST Vector2f Vector2f_Add(const Vector2f op1, const Vector2f op2)
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		Vector2f Vector2f_Add(const Vector2f op1, const Vector2f op2)
 {
 	Vector2f dest = {
 		op1.x + op2.x,
@@ -167,7 +176,8 @@ static inline WZ_DECL_CONST Vector2f Vector2f_Add(const Vector2f op1, const Vect
  * \param op1,op2 Operands
  * \return Result
  */
-static inline WZ_DECL_CONST Vector2f Vector2f_Sub(const Vector2f op1, const Vector2f op2)
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		Vector2f Vector2f_Sub(const Vector2f op1, const Vector2f op2)
 {
 	Vector2f dest = {
 		op1.x - op2.x,
@@ -183,7 +193,8 @@ static inline WZ_DECL_CONST Vector2f Vector2f_Sub(const Vector2f op1, const Vect
  * \param s Scalar
  * \return Product
  */
-static inline WZ_DECL_CONST Vector2f Vector2f_Mult(const Vector2f v, const float s)
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		Vector2f Vector2f_Mult(const Vector2f v, const float s)
 {
 	Vector2f dest = { v.x * s, v.y * s };
 	return dest;
@@ -195,7 +206,8 @@ static inline WZ_DECL_CONST Vector2f Vector2f_Mult(const Vector2f v, const float
  * \param op1,op2 Operands
  * \return Scalarproduct of the 2 vectors
  */
-static inline WZ_DECL_CONST float Vector2f_ScalarP(const Vector2f op1, const Vector2f op2)
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		float Vector2f_ScalarP(const Vector2f op1, const Vector2f op2)
 {
 	return op1.x * op2.x + op1.y * op2.y;
 }
@@ -206,7 +218,8 @@ static inline WZ_DECL_CONST float Vector2f_ScalarP(const Vector2f op1, const Vec
  * \param v Vector
  * \return Length
  */
-static inline WZ_DECL_CONST float Vector2f_Length(const Vector2f v)
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		float Vector2f_Length(const Vector2f v)
 {
 	return sqrtf( Vector2f_ScalarP(v, v) );
 }
@@ -217,7 +230,8 @@ static inline WZ_DECL_CONST float Vector2f_Length(const Vector2f v)
  * \param v Vector
  * \return Normalised vector, nullvector when input was nullvector or very small
  */
-static inline WZ_DECL_CONST Vector2f Vector2f_Normalise(const Vector2f v)
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		Vector2f Vector2f_Normalise(const Vector2f v)
 {
 	float length = Vector2f_Length(v);
 
@@ -253,7 +267,8 @@ static inline void Vector3f_Set(Vector3f* v, const float x, const float y, const
  * \param op1,op2 Operands
  * \return Result
  */
-static inline WZ_DECL_CONST Vector3f Vector3f_Add(const Vector3f op1, const Vector3f op2)
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		Vector3f Vector3f_Add(const Vector3f op1, const Vector3f op2)
 {
 	Vector3f dest = {
 		op1.x + op2.x,
@@ -269,7 +284,8 @@ static inline WZ_DECL_CONST Vector3f Vector3f_Add(const Vector3f op1, const Vect
  * \param op1,op2 Operands
  * \return Result
  */
-static inline WZ_DECL_CONST Vector3f Vector3f_Sub(const Vector3f op1, const Vector3f op2)
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		Vector3f Vector3f_Sub(const Vector3f op1, const Vector3f op2)
 {
 	Vector3f dest = {
 		op1.x - op2.x,
@@ -285,7 +301,8 @@ static inline WZ_DECL_CONST Vector3f Vector3f_Sub(const Vector3f op1, const Vect
  * \param op1,op2 Operands
  * \return Scalarproduct of the 2 vectors
  */
-static inline WZ_DECL_CONST float Vector3f_ScalarP(const Vector3f op1, const Vector3f op2)
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		float Vector3f_ScalarP(const Vector3f op1, const Vector3f op2)
 {
 	return op1.x * op2.x + op1.y * op2.y + op1.z * op2.z;
 }
@@ -296,7 +313,8 @@ static inline WZ_DECL_CONST float Vector3f_ScalarP(const Vector3f op1, const Vec
  * \param op1,op2 Operands
  * \return Crossproduct
  */
-static inline WZ_DECL_CONST Vector3f Vector3f_CrossP(const Vector3f op1, const Vector3f op2)
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		Vector3f Vector3f_CrossP(const Vector3f op1, const Vector3f op2)
 {
 	Vector3f dest = {
 		op1.y * op2.z - op1.z * op2.y,
@@ -311,7 +329,8 @@ static inline WZ_DECL_CONST Vector3f Vector3f_CrossP(const Vector3f op1, const V
  * \param op1,op2 Operands
  * \return Result
  */
-static inline WZ_DECL_CONST Vector3i Vector3i_Sub(const Vector3i op1, const Vector3i op2)
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		Vector3i Vector3i_Sub(const Vector3i op1, const Vector3i op2)
 {
 	Vector3i dest = {
 		op1.x - op2.x,
@@ -333,7 +352,8 @@ static inline WZ_DECL_CONST Vector3i Vector3i_Sub(const Vector3i op1, const Vect
  * \param r The radius of the sphere
  * \return If v falls within the sphere
  */
-static inline WZ_DECL_CONST BOOL Vector3i_InSphere (const Vector3i v, const Vector3i c, const unsigned int r)
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		BOOL Vector3i_InSphere (const Vector3i v, const Vector3i c, const unsigned int r)
 {
 	Vector3i delta = Vector3i_Sub(v, c);
 	// Explictily cast to "unsigned int" because this number never can be

@@ -36,7 +36,7 @@
  * \param y Upper range
  * \return Value in the range 0 - y
  */
-static inline WZ_DECL_CONST int range(int x, int y)
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT int wrap(int x, int y)
 {
 	while(x < 0) x += y;
 	while(x >= y) x -= y;
@@ -49,7 +49,7 @@ static inline WZ_DECL_CONST int range(int x, int y)
  * \param y Upper range
  * \return Value in the range 0.0f - y
  */
-static inline WZ_DECL_CONST float rangef(float x, float y)
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT float wrapf(float x, float y)
 {
 	while(x < 0.0f) x += y;
 	while(x >= y) x -= y;

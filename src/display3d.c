@@ -3580,7 +3580,7 @@ static void renderSurroundings(void)
 
 	if(!gamePaused())
 	{
-		wind = rangef(wind + timeAdjustedIncrement(0.5f, FALSE), 360.0f);
+		wind = wrapf(wind + timeAdjustedIncrement(0.5f, FALSE), 360.0f);
 	}
 	pie_DrawSkybox(skybox_scale, 0, 128, 256, 128);
 

@@ -806,7 +806,7 @@ static float vectorToAngle(float vx, float vy)
 	float angle = 360.0f * atan2f(-vy,vx) / (M_PI * 2.0f);
 	angle += 360.0f / 4.0f;
 
-	return rangef(angle, 360.0f);
+	return wrapf(angle, 360.0f);
 }
 
 
@@ -861,7 +861,7 @@ static void moveCalcTurn(float *pCurr, float target, UDWORD rate)
 		}
 	}
 
-	retval = rangef(retval, 360.0f);
+	retval = wrapf(retval, 360.0f);
 
 	ASSERT(retval < 360.0f && retval >= 0.0f, "moveCalcTurn: bad angle %f from (%f, %f, %u)\n",
 	       retval, *pCurr, target, rate);
