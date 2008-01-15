@@ -1,28 +1,22 @@
-## Process this file with automake to produce Makefile.in
+%.wz: %
+	(cd $(srcdir)/$< && zip -ru0 $(abs_builddir)/$@ $(filter-out $<,$(?:$</%=%)) -x '*svn*')
+	zip -T $@
 
 AIVOLUTIONLIST = multiplay commands.txt installation.txt
 GRIMLIST = components structs texpages wrf COPYING
 NEWST_TILESLIST = texpages COPYING readme.txt
 
-AIVOLUTIONARCHIVE=aivolution.wz
-GRIMARCHIVE=grim.wz
-NEWST_TILESARCHIVE=newst_tiles.wz
+AIVOLUTIONARCHIVE = aivolution.wz
+GRIMARCHIVE = grim.wz
+NEWST_TILESARCHIVE = newst_tiles.wz
 
-CLEANFILES=$(AIVOLUTIONARCHIVE) $(GRIMARCHIVE) $(NEWST_TILESARCHIVE)
+CLEANFILES = $(AIVOLUTIONARCHIVE) $(GRIMARCHIVE) $(NEWST_TILESARCHIVE) $(OSMICARCHIVE)
 
-data: $(AIVOLUTIONARCHIVE) $(GRIMARCHIVE) $(NEWST_TILESARCHIVE)
+data: $(AIVOLUTIONARCHIVE) $(GRIMARCHIVE) $(NEWST_TILESARCHIVE) $(OSMICARCHIVE)
 
-$(AIVOLUTIONARCHIVE): $(AIVOLUTIONLIST:%=aivolution/%)
-	(cd $(srcdir)/aivolution && zip -ru0 $(abs_builddir)/$@ $(AIVOLUTIONLIST) -x *svn*)
-	zip -T $@
-
-$(GRIMARCHIVE): $(GRIMLIST:%=grim/%)
-	(cd $(srcdir)/grim && zip -ru0 $(abs_builddir)/$@ $(GRIMLIST) -x *svn*)
-	zip -T $@
-
-$(NEWST_TILESARCHIVE): $(NEWST_TILESLIST:%=newst_tiles/%)
-	(cd $(srcdir)/newst_tiles && zip -ru0 $(abs_builddir)/$@ $(NEWST_TILESLIST) -x *svn*)
-	zip -T $@
+$(AIVOLUTIONARCHIVE): $(AIVOLUTIONLIST:%=$(basename $(AIVOLUTIONARCHIVE))/%)
+$(GRIMARCHIVE): $(GRIMLIST:%=$(basename $(GRIMARCHIVE))/%)
+$(NEWST_TILESARCHIVE): $(NEWST_TILESLIST:%=$(basename $(NEWST_TILESARCHIVE))/%)
 
 install-data-local: $(AIVOLUTIONARCHIVE) $(GRIMARCHIVE) $(NEWST_TILESARCHIVE)
 	$(MKDIR_P) $(DESTDIR)$(pkgdatadir)/mods/global
