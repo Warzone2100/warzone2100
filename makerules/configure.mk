@@ -115,7 +115,7 @@ ifeq ($(strip $(PLATFORM)),windows)
 LDFLAGS+=-lGLC -lglu32 -lopengl32 -lopenal32 -ldbghelp -lshfolder -lwinmm -lwsock32
 else
 ifeq ($(strip $(PLATFORM)),mingw32)
-LDFLAGS+=-lglc32 -lglu32 -lopengl32 -lopenal32 -ldbghelp -lshfolder -lwinmm -lwsock32
+LDFLAGS+=-lGLC -lglu32 -lopengl32 -lopenal32 -ldbghelp -lshfolder -lwinmm -lwsock32
 else
 LDFLAGS+=-lGLC -lGLU -lGL -lopenal
 endif
