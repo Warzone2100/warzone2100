@@ -149,7 +149,7 @@ namespace Win
 
     /** An easier interface to the ShellExecute functions allowing to use std::string as parameters.
      */
-    template<typename charT, typename traits = std::char_traits<charT>, typename Allocator = std::allocator<charT> >
+    template<typename charT, typename traits, typename Allocator>
     Error ShellExecute(const std::basic_string<charT, traits, Allocator>& fileName   = std::basic_string<charT, traits, Allocator>(),
                        const std::basic_string<charT, traits, Allocator>& operation  = std::basic_string<charT, traits, Allocator>(),
                        const std::basic_string<charT, traits, Allocator>& parameters = std::basic_string<charT, traits, Allocator>(),

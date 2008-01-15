@@ -33,6 +33,7 @@ using boost::scoped_array;
 namespace Win
 {
     Error::Error() :
+        _errCode(-1),
         _isErr(false),
         _errMsg(NULL)
     {}
@@ -164,6 +165,10 @@ namespace Win
 
             case show_command_normal:
                 return SW_SHOWNORMAL;
+
+            case show_command_last__:
+                // Only here to prevent warnings about unused enumeration values
+                break;
         }
 
         // We shouldn't ever get here
