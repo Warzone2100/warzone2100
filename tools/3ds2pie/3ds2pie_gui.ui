@@ -90,6 +90,9 @@
    <property name="text" >
     <string>Invert U/V</string>
    </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QCheckBox" name="reverseWinding" >
    <property name="geometry" >
@@ -106,6 +109,9 @@
    </property>
    <property name="text" >
     <string>Reverse polygon winding</string>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QCheckBox" name="twoSidedPolys" >

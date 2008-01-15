@@ -137,8 +137,8 @@ static char *input_file = "";
 static char *output_file = "";
 static char *page = "";
 static bool swapYZ = true;
-static bool reverseWinding = false;
-static bool invertUV = false;
+static bool reverseWinding = true;
+static bool invertUV = true;
 static unsigned int baseTexFlags = 200;
 
 static void parse_args(int argc, char **argv)
@@ -153,7 +153,7 @@ static void parse_args(int argc, char **argv)
 		}
 		if (argv[i][1] == 'i')
 		{
-			invertUV = true;
+			invertUV = false;
 		}
 		if (argv[i][1] == 't')
 		{
@@ -161,16 +161,16 @@ static void parse_args(int argc, char **argv)
 		}
 		if (argv[i][1] == 'r')
 		{
-			reverseWinding = true;
+			reverseWinding = false;
 		}
 	}
 	if (argc < 3 + i)
 	{
-		fprintf(stderr, "Syntax: 3ds2m [-y|-r|-t] input_filename output_filename page_number\n");
-		fprintf(stderr, "  -y  Exporter uses Y-axis as \"up\", so do not switch Y and Z axis.\n");
-		fprintf(stderr, "  -r  Reverse winding of all polygons.\n");
+		fprintf(stderr, "Syntax: 3ds2m [-y] [-r] [-i] [-t] input_filename output_filename page_number\n");
+		fprintf(stderr, "  -y  Do not swap Y and Z axis. Exporter uses Y-axis as \"up\".\n");
+		fprintf(stderr, "  -r  Do not reverse winding of all polygons.\n");
+		fprintf(stderr, "  -i  Do not invert the vertical texture coordinates.\n");
 		fprintf(stderr, "  -t  Use two sided polygons (slower; unused in WRP).\n");
-		fprintf(stderr, "  -i  Invert the vertical texture coordinates (for 3DS MAX etc.).\n");
 		exit(1);
 	}
 	input_file = argv[i++];
