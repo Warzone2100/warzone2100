@@ -2,7 +2,7 @@
 	$(WINDRES) -o$@ $<
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c -o$@ $<
+	$(CC) $(CFLAGS) -std=gnu99 -c -o$@ $<
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) -c -o$@ $<
