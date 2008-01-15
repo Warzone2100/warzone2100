@@ -51,11 +51,11 @@ endif
 # Setup paths and static values
 
 CFLAGS+=-DPACKAGE_VERSION=\"$(VERSION)\" -DYY_STATIC -DLOCALEDIR=\"$(LOCALEDIR)\" -DPACKAGE=\"$(PACKAGE)\" -I.. -I../.. -I$(DEVDIR)/include/SDL -I$(DEVDIR)/include/libpng12 -I$(DEVDIR)/include
-CXXFLAGS+=$(CFLAGS)
+CXXFLAGS+=-DPACKAGE_VERSION=\"$(VERSION)\" -DYY_STATIC -DLOCALEDIR=\"$(LOCALEDIR)\" -DPACKAGE=\"$(PACKAGE)\" -I.. -I../.. -I$(DEVDIR)/include/SDL -I$(DEVDIR)/include/libpng12 -I$(DEVDIR)/include
 LDFLAGS+=-L$(DEVDIR)/lib
 
 # Use C99
-CFLAGS+=-std=c99
+CFLAGS+=-std=gnu99
 
 # Setup build environment with config values
 
@@ -77,6 +77,7 @@ RMF=del /F
 EXEEXT=.exe
 AR=ar
 CC=gcc
+CXX=g++
 WINDRES=windres
 CFLAGS+=-mwindows -DWIN32
 CXXFLAGS+=-mwindows -DWIN32
@@ -88,6 +89,7 @@ RMF=rm -f
 EXEEXT=.exe
 AR=mingw32-ar
 CC=mingw32-gcc
+CXX=mingw32-g++
 WINDRES=mingw32-windres
 CFLAGS+=-mwindows -DWIN32
 CXXFLAGS+=-mwindows -DWIN32
@@ -98,6 +100,7 @@ RMF=rm -f
 EXEEXT=
 AR=ar
 CC=gcc
+CXX=g++
 WINDRES=
 endif
 endif
