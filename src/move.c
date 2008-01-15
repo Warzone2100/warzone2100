@@ -323,7 +323,7 @@ void moveUpdateBaseSpeed(void)
 			((psNextRouteDroid->sMove.Status != MOVEROUTE) &&
 			 (psNextRouteDroid->sMove.Status != MOVEROUTESHUFFLE)))
 		{
-			objTrace(LOG_MOVEMENT, psNextRouteDroid->id, "Waiting droid %d (player %d) reset", 
+			objTrace(LOG_MOVEMENT, psNextRouteDroid->id, "Waiting droid %d (player %d) reset",
 			         (int)psNextRouteDroid->id, (int)psNextRouteDroid->player);
 			psNextRouteDroid = NULL;
 		}
@@ -377,7 +377,7 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 		x = psDroid->sMove.DestinationX;
 		y = psDroid->sMove.DestinationY;
 
-		objTrace(LOG_MOVEMENT, psDroid->id, "unit %d: path ok - base Speed %u, speed %f, target(%d, %d)", 
+		objTrace(LOG_MOVEMENT, psDroid->id, "unit %d: path ok - base Speed %u, speed %f, target(%d, %d)",
 		         (int)psDroid->id, psDroid->baseSpeed, psDroid->sMove.speed, (int)x, (int)y);
 
 		psDroid->sMove.Status = MOVENAVIGATE;
@@ -389,7 +389,7 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 		// reset the next route droid
 		if (psDroid == psNextRouteDroid)
 		{
-			objTrace(LOG_MOVEMENT, psDroid->id, "Waiting droid %d (player %d) got route", 
+			objTrace(LOG_MOVEMENT, psDroid->id, "Waiting droid %d (player %d) got route",
 			         (int)psDroid->id, (int)psDroid->player);
 			psNextRouteDroid = NULL;
 		}
@@ -448,7 +448,7 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 		if ((psDroid->sMove.Status != MOVEROUTE) &&
 			(psDroid->sMove.Status != MOVEROUTESHUFFLE))
 		{
-			objTrace(LOG_MOVEMENT, psDroid->id, "moveDroidToBase(%d): started waiting at %d", 
+			objTrace(LOG_MOVEMENT, psDroid->id, "moveDroidToBase(%d): started waiting at %d",
 			         (int)psDroid->id, (int)gameTime);
 
 			psDroid->sMove.Status = MOVEROUTE;
@@ -462,13 +462,13 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 		// reset the next route droid
 		if (psDroid == psNextRouteDroid)
 		{
-			objTrace(LOG_MOVEMENT, psDroid->id, "moveDroidToBase(%d): out of time, waiting for next frame (we are next)", 
+			objTrace(LOG_MOVEMENT, psDroid->id, "moveDroidToBase(%d): out of time, waiting for next frame (we are next)",
 			         (int)psDroid->id);
 			psNextRouteDroid = NULL;
 		}
 		else
 		{
-			objTrace(LOG_MOVEMENT, psDroid->id, "moveDroidToBase(%d): out of time, waiting for next frame (we are not next)", 
+			objTrace(LOG_MOVEMENT, psDroid->id, "moveDroidToBase(%d): out of time, waiting for next frame (we are not next)",
 			         (int)psDroid->id);
 		}
 
@@ -802,21 +802,11 @@ void updateDroidOrientation(DROID *psDroid)
 /* Turn a vector into an angle - returns a float (!) */
 static float vectorToAngle(float vx, float vy)
 {
-	float	angle;	// Angle in degrees (0->360)
+	// Angle in degrees (0->360):
+	float angle = 360.0f * atan2f(-vy,vx) / (M_PI * 2.0f);
+	angle += 360.0f / 4.0f;
 
-	angle = (float)(TRIG_DEGREES * atan2(-vy,vx) / M_PI / 2);
-	angle += TRIG_DEGREES/4;
-	if (angle < 0)
-	{
-		angle += TRIG_DEGREES;
-	}
-
-	if(angle>=360.0f)
-	{
-		angle -= 360.0f;
-	}
-
-	return angle;
+	return rangef(angle, 360.0f);
 }
 
 
@@ -825,9 +815,9 @@ static void moveCalcTurn(float *pCurr, float target, UDWORD rate)
 {
 	float diff, change, retval = *pCurr;
 
-	ASSERT( target < 360.0 && target >= 0.0,
+	ASSERT( target < 360.0f && target >= 0.0f,
 			 "moveCalcTurn: target out of range %f", target );
-	ASSERT( retval < 360.0 && retval >= 0.0,
+	ASSERT( retval < 360.0f && retval >= 0.0f,
 			 "moveCalcTurn: cur ang out of range %f", retval );
 
 	// calculate the difference in the angles
@@ -871,13 +861,9 @@ static void moveCalcTurn(float *pCurr, float target, UDWORD rate)
 		}
 	}
 
-	while (retval < 0.0f)
-	{
-		retval += 360.0f;
-	}
-	retval = fmodf(retval, 360);
+	retval = rangef(retval, 360.0f);
 
-	ASSERT(retval < 360 && retval >= 0, "moveCalcTurn: bad angle %f from (%f, %f, %u)\n",
+	ASSERT(retval < 360.0f && retval >= 0.0f, "moveCalcTurn: bad angle %f from (%f, %f, %u)\n",
 	       retval, *pCurr, target, rate);
 
 	*pCurr = retval;

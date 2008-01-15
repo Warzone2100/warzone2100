@@ -56,7 +56,7 @@ static inline WZ_DECL_CONST Vector2i Vector2i_Add(const Vector2i op1, const Vect
 {
 	Vector2i dest = {
 		op1.x + op2.x,
-  op1.y + op2.y
+		op1.y + op2.y
 	};
 	return dest;
 }

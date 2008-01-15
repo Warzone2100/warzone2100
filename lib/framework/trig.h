@@ -30,6 +30,32 @@
 #define DEG_TO_RAD(x)	(x * M_PI / 180.0)
 #define RAD_TO_DEG(x)	(x * 180.0 / M_PI)
 
+/*!
+ * Moves x into the range 0 - y
+ * \param x Value to clip
+ * \param y Upper range
+ * \return Value in the range 0 - y
+ */
+static inline WZ_DECL_CONST int range(int x, int y)
+{
+	while(x < 0) x += y;
+	while(x >= y) x -= y;
+	return x;
+}
+
+/*!
+ * Moves x into the range 0.0f - y
+ * \param x Value to clip
+ * \param y Upper range
+ * \return Value in the range 0.0f - y
+ */
+static inline WZ_DECL_CONST float rangef(float x, float y)
+{
+	while(x < 0.0f) x += y;
+	while(x >= y) x -= y;
+	return x;
+}
+
 /* Initialise the Trig tables */
 extern BOOL trigInitialise(void);
 
