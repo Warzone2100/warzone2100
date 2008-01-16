@@ -585,7 +585,6 @@ BOOL intAddTransButtonForm(void)
 		sFormInit.aNumMinors[i] = 1;
 	}
 
-	sFormInit.pFormDisplay = intDisplayObjectForm;
 	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
 
@@ -727,7 +726,6 @@ BOOL intAddTransContentsForm(void)
 		sFormInit.aNumMinors[i] = 1;
 	}
 
-	sFormInit.pFormDisplay = intDisplayObjectForm;
 	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
 
@@ -922,8 +920,6 @@ BOOL intAddDroidsAvailForm(void)
 	{
 		sFormInit.aNumMinors[i] = 1;
 	}
-
-	sFormInit.pFormDisplay = intDisplayObjectForm;
 
 	sFormInit.pUserData = &SmallTab;
 

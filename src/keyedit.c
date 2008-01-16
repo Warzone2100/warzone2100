@@ -319,11 +319,11 @@ void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 
 	if(psMapping == selectedKeyMap)
 	{
-		pie_BoxFillIndex(x,y,x+w,y+h,COL_GREEN);
+		pie_BoxFill(x, y, x + w, y + h, WZCOL_KEYMAP_ACTIVE);
 	}
 	else if(psMapping->status == KEYMAP_ALWAYS || psMapping->status == KEYMAP_ALWAYS_PROCESS)
 	{
-		pie_BoxFillIndex(x,y,x+w,y+h,COL_RED);
+		pie_BoxFill(x, y , x + w, y + h, WZCOL_KEYMAP_FIXED);
 	}
 	else
 	{
@@ -339,8 +339,6 @@ void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	// draw binding
 	keyMapToString(sKey,psMapping);
 	iV_DrawText(sKey, x + 370, y + (psWidget->height / 2) + 3);
-
-	return;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -421,7 +419,6 @@ BOOL startKeyMapEditor(BOOL first)
 	sFormInit.majorOffset		= OBJ_TABOFFSET;
 	sFormInit.tabVertOffset		= (OBJ_TABHEIGHT/2);
 	sFormInit.tabMajorThickness 	= OBJ_TABHEIGHT;
-	sFormInit.pFormDisplay		= intDisplayObjectForm;
 	sFormInit.pUserData		= &StandardTab;
 	sFormInit.pTabDisplay		= intDisplayTab;
 	for (i=0; i< sFormInit.numMajor; i++)

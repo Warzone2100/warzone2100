@@ -343,7 +343,6 @@ static BOOL intAddMessageForm(BOOL playCurrent)
 		sFormInit.aNumMinors[i] = 1;
 	}
 
-	sFormInit.pFormDisplay = intDisplayObjectForm;
 	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
 
@@ -567,7 +566,6 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 						  sFormInit.width, sFormInit.height,
 						  FALSE, &cur_seq, &cur_seqpage));
 
-		sFormInit.pFormDisplay = intDisplayObjectForm;
 		sFormInit.pUserData = &StandardTab;
 		sFormInit.pTabDisplay = intDisplayTab;
 

@@ -70,7 +70,9 @@
 #define WZCOL_RADAR_BACKGROUND		psPalette[24]
 #define WZCOL_MAP_OUTLINE_OK		psPalette[25]
 #define WZCOL_MAP_OUTLINE_BAD		psPalette[26]
-#define WZCOL_MAX			27
+#define WZCOL_KEYMAP_ACTIVE		psPalette[27]
+#define WZCOL_KEYMAP_FIXED		psPalette[28]
+#define WZCOL_MAX			29
 
 //*************************************************************************
 

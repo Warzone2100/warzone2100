@@ -1260,23 +1260,6 @@ void AdjustTabFormSize(W_TABFORM *Form,UDWORD *x0,UDWORD *y0,UDWORD *x1,UDWORD *
 }
 
 
-void intDisplayObjectForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
-{
-//	W_TABFORM *Form = (W_TABFORM*)psWidget;
-//	UDWORD x0,y0,x1,y1;
-//
-//	x0 = xOffset+Form->x;
-//	y0 = yOffset+Form->y;
-//	x1 = x0 + Form->width;
-//	y1 = y0 + Form->height;
-//
-//	AdjustTabFormSize(Form,&x0,&y0,&x1,&y1);
-//
-//	RenderWindowFrame(&FrameObject,x0,y0,x1-x0,y1-y0);
-}
-
-
-
 // Widget callback function to do the open form animation. Doesn't just open Plain Forms!!
 //
 void intOpenPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)

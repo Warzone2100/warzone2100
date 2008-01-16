@@ -308,7 +308,6 @@ static BOOL formCreateTabbed(W_TABFORM **ppsWidget, W_FORMINIT *psInit)
 	(*ppsWidget)->majorPos = psInit->majorPos;
 	(*ppsWidget)->minorPos = psInit->minorPos;
 	(*ppsWidget)->pTabDisplay = psInit->pTabDisplay;
-	(*ppsWidget)->pFormDisplay = psInit->pFormDisplay;
 	(*ppsWidget)->TabMultiplier = psInit->TabMultiplier;
 	(*ppsWidget)->numButtons = psInit->numButtons;
 	(*ppsWidget)->numStats = psInit->numStats;
@@ -1572,38 +1571,6 @@ void formDisplayTabbed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 		y1 -= psForm->tabMajorThickness - psForm->tabVertOffset;
 	} else if(psForm->minorPos == WFORM_TABBOTTOM) {
 		y1 -= psForm->tabMinorThickness - psForm->tabVertOffset;
-	}
-
-	/* Adjust for where the tabs are */
-//	if (psForm->majorPos == WFORM_TABLEFT || psForm->minorPos == WFORM_TABLEFT)
-//	{
-//		x0 += psForm->tabThickness - psForm->tabHorzOffset;
-//	}
-//	if (psForm->majorPos == WFORM_TABRIGHT || psForm->minorPos == WFORM_TABRIGHT)
-//	{
-//		x1 -= psForm->tabThickness - psForm->tabHorzOffset;
-//	}
-//	if (psForm->majorPos == WFORM_TABTOP || psForm->minorPos == WFORM_TABTOP)
-//	{
-//		y0 += psForm->tabThickness - psForm->tabVertOffset;
-//	}
-//	if (psForm->majorPos == WFORM_TABBOTTOM || psForm->minorPos == WFORM_TABBOTTOM)
-//	{
-//		y1 -= psForm->tabThickness - psForm->tabVertOffset;
-//	}
-
-	if(psForm->pFormDisplay) {
-		psForm->pFormDisplay((WIDGET *)psForm, xOffset, yOffset, psForm->aColours);
-	} else {
-		/* Draw the form outline */
-		if (!(psForm->style & WFORM_INVISIBLE))
-		{
-			pie_BoxFill(x0, y0, x1, y1, pColours[WCOL_BKGRND]);
-			iV_Line(x0,y1,x0,y0, pColours[WCOL_LIGHT]);
-			iV_Line(x0,y0,x1,y0, pColours[WCOL_LIGHT]);
-			iV_Line(x1,y0,x1,y1, pColours[WCOL_DARK]);
-			iV_Line(x1,y1,x0,y1, pColours[WCOL_DARK]);
-		}
 	}
 
 	/* Draw the major tabs */

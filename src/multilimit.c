@@ -203,7 +203,6 @@ BOOL startLimitScreen(void)
 	sFormInit.majorOffset = OBJ_TABOFFSET;
 	sFormInit.tabVertOffset = (OBJ_TABHEIGHT/2);			//(DES_TAB_HEIGHT/2)+2;
 	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
-	sFormInit.pFormDisplay = intDisplayObjectForm;
 	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
 	for (i=0; i< sFormInit.numMajor; i++)

@@ -151,6 +151,9 @@ void pie_SetColourDefines(void)
 
 	WZCOL_MAP_OUTLINE_OK = WZCOL_WHITE;
 	WZCOL_MAP_OUTLINE_BAD = WZCOL_RED;
+
+	WZCOL_KEYMAP_ACTIVE = pal_Colour(0, 128, 0);
+	WZCOL_KEYMAP_FIXED = pal_Colour(128, 0, 0);
 }
 
 PIELIGHT pal_SetBrightness(UBYTE brightness)

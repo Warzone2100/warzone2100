@@ -95,7 +95,6 @@ typedef struct _w_tabform
 	UWORD		numButtons;				//# of buttons per form
 	W_MAJORTAB	asMajor[WFORM_MAXMAJOR];	// The major tab information
 	TAB_DISPLAY pTabDisplay;			// Optional callback for display tabs.
-	WIDGET_DISPLAY pFormDisplay;		// Optional callback to display the form.
 } W_TABFORM;
 
 

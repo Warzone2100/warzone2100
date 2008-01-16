@@ -978,7 +978,6 @@ static BOOL _intAddTemplateForm(DROID_TEMPLATE *psSelected)
 	sFormInit.majorOffset = DES_TAB_LEFTOFFSET;
 	sFormInit.tabVertOffset = (DES_TAB_HEIGHT/2);			//(DES_TAB_HEIGHT/2)+2;
 	sFormInit.tabMajorThickness = DES_TAB_HEIGHT;
-	sFormInit.pFormDisplay = intDisplayObjectForm;
 	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
 	for (i=0; i< sFormInit.numMajor; i++)
@@ -2096,7 +2095,6 @@ static BOOL intAddComponentForm(UDWORD numButtons)
 	sFormInit.majorOffset = DES_TAB_LEFTOFFSET;
 	sFormInit.tabVertOffset = (DES_TAB_HEIGHT/2);
 	sFormInit.tabMajorThickness = DES_TAB_HEIGHT;
-	sFormInit.pFormDisplay = intDisplayObjectForm;
 	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
 	for (i=0; i< sFormInit.numMajor; i++)
@@ -4625,7 +4623,6 @@ void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 
 	//AdjustTabFormSize(Form,&x0,&y0,&x1,&y1);
 
-	//RenderWindowFrame(&FrameDesignView,x0,y0,x1-x0,y1-y0);
 	RenderWindowFrame(&FrameNormal,x0,y0,x1-x0,y1-y0);
 }
 

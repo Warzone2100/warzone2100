@@ -4526,7 +4526,6 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sFormInit.tabVertOffset = (OBJ_TABHEIGHT/2);
 	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
 	sFormInit.tabMajorGap = OBJ_TABOFFSET;
-	sFormInit.pFormDisplay = intDisplayObjectForm;
 	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
 
@@ -5790,7 +5789,6 @@ if (numForms(numStats, butPerForm)>8)	//only want these buttons when tab count >
 	sFormInit.tabVertOffset = (OBJ_TABHEIGHT/2);
 	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
 	sFormInit.tabMajorGap = OBJ_TABOFFSET;
-	sFormInit.pFormDisplay = intDisplayObjectForm;
 	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
     //Build menu can have up to 80 stats - so can research now 13/09/99 AB
