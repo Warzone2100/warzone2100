@@ -1947,7 +1947,17 @@ static void processMultiopWidgets(UDWORD id)
 			{
 				if(mouseDown(MOUSE_RMB)) // both buttons....
 				{
-					kickPlayer(NetPlay.players[id-MULTIOP_PLAYER_START].dpid);	// kick out that player.
+					int victim = NetPlay.players[id - MULTIOP_PLAYER_START].dpid;	// who to kick out
+					int j = 0;
+					char *msg;
+
+					while (player2dpid[j] != victim && j < MAX_PLAYERS)
+					{
+						j++; // find out ID of player
+					}
+					sasprintf(&msg, _("The host has kicked %s from the game!"), getPlayerName(j));
+					sendTextMessage(msg, TRUE);
+					kickPlayer(victim);
 				}
 			}
 		}
