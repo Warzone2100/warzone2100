@@ -1667,20 +1667,6 @@ BOOL ctrlShiftDown(void)
 }
 
 
-void BeepMessage(UDWORD StringID)
-{
-	static UDWORD LastFrame = 0;
-	UDWORD ThisFrame = frameGetFrameNumber();
-
-	// Ensure only done once per game cycle.
-	if(ThisFrame != LastFrame) {
-		addConsoleMessage(strresGetString(psStringRes,StringID),DEFAULT_JUSTIFY);
-		audio_PlayTrack( ID_SOUND_BUILD_FAIL );
-		LastFrame = ThisFrame;
-	}
-}
-
-
 void AddDerrickBurningMessage(void)
 {
 	addConsoleMessage(_("Cannot Build. Oil Resource Burning."),DEFAULT_JUSTIFY);

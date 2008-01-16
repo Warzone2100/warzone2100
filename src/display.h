@@ -214,7 +214,6 @@ extern BOOL	getShakeStatus( void );
 
 extern void	displayInitVars(void);
 
-void BeepMessage(UDWORD StringID);
 void AddDerrickBurningMessage(void);
 
 // check whether the queue order keys are pressed

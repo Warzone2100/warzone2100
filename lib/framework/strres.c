@@ -36,6 +36,11 @@
 #include "strres.h"
 #include "strresly.h"
 
+/* Static forward declarations */
+static void strresReleaseIDStrings(STR_RES *psRes);
+static BOOL strresAllocBlock(STR_BLOCK **ppsBlock, UDWORD size);
+static void stringCpy(char *pDest, const char *pSrc);
+
 /* The string resource currently being loaded */
 STR_RES	*psCurrRes;
 
@@ -115,7 +120,7 @@ BOOL strresCreate(STR_RES **ppsRes, UDWORD init, UDWORD ext)
 /* Release the id strings, but not the strings themselves,
  * (they can be accessed only by id number).
  */
-void strresReleaseIDStrings(STR_RES *psRes)
+static void strresReleaseIDStrings(STR_RES *psRes)
 {
 	STR_ID		*psID;
 
@@ -377,7 +382,7 @@ BOOL strresLoad(STR_RES* psRes, const char* fileName)
 }
 
 /* Copy a char */
-void stringCpy(char *pDest, const char *pSrc)
+static void stringCpy(char *pDest, const char *pSrc)
 {
 	do
 	{
