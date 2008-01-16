@@ -22,6 +22,8 @@
 #include <fstream>
 #include <sstream>
 
+#include <cstring>
+
 using namespace std;
 
 #if !defined(SAG_COM) && (defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__) || defined(WIN64) || defined(_WIN64) || defined(__WIN64__))
