@@ -2332,15 +2332,11 @@ static void moveUpdateDroidPos( DROID *psDroid, float dx, float dy )
 	/* impact if about to go off map else update coordinates */
 	if ( worldOnMap( iX, iY ) == FALSE )
 	{
-		if ( psDroid->droidType == DROID_TRANSPORTER )
-		{
-			/* transporter going off-world - trigger next map */
-
-		}
-		else
+		/* transporter going off-world will trigger next map, and is ok */
+		ASSERT(psDroid->droidType == DROID_TRANSPORTER, "droid trying to move off the map!")
+		if (psDroid->droidType != DROID_TRANSPORTER)
 		{
 			/* dreadful last-ditch crash-avoiding hack - sort this! - GJ */
-			debug(LOG_ERROR, "**** droid about to go off map - destroying it ****");
 			destroyDroid( psDroid );
 			return;
 		}

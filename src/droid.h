@@ -520,6 +520,7 @@ do { \
 	assert(droid->numWeaps <= DROID_MAXWEAPS); \
 	assert(droid->listSize <= ORDER_LIST_MAX); \
 	assert(droid->player < MAX_PLAYERS); \
+	assert(worldOnMap(droid->sMove.fx, droid->sMove.fy)); \
 \
 	for (i = 0; i < DROID_MAXWEAPS; ++i) \
 		assert(droid->turretRotation[i] <= 360); \

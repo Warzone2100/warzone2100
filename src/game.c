@@ -5674,11 +5674,11 @@ static void SaveDroidMoveControl(SAVE_DROID * const psSaveDroid, DROID const * c
 	psSaveDroid->sMove.targetY      = PHYSFS_swapSLE32(psDroid->sMove.targetY);
 
 	// Little endian floats
-	psSaveDroid->sMove.fx           = PHYSFS_swapSLE32(*(uint32_t*)(void*)&psDroid->sMove.fx);
-	psSaveDroid->sMove.fy           = PHYSFS_swapSLE32(*(uint32_t*)(void*)&psDroid->sMove.fy);
-	psSaveDroid->sMove.speed        = PHYSFS_swapSLE32(*(uint32_t*)(void*)&psDroid->sMove.speed);
-	psSaveDroid->sMove.moveDir      = PHYSFS_swapSLE32(*(uint32_t*)(void*)&psDroid->sMove.moveDir);
-	psSaveDroid->sMove.fz           = PHYSFS_swapSLE32(*(uint32_t*)(void*)&psDroid->sMove.fz);
+	psSaveDroid->sMove.fx           = PHYSFS_swapSLE32(psDroid->sMove.fx);
+	psSaveDroid->sMove.fy           = PHYSFS_swapSLE32(psDroid->sMove.fy);
+	psSaveDroid->sMove.speed        = PHYSFS_swapSLE32(psDroid->sMove.speed);
+	psSaveDroid->sMove.moveDir      = PHYSFS_swapSLE32(psDroid->sMove.moveDir);
+	psSaveDroid->sMove.fz           = PHYSFS_swapSLE32(psDroid->sMove.fz);
 
 	// Little endian SWORDs
 	psSaveDroid->sMove.boundX       = PHYSFS_swapSLE16(psDroid->sMove.boundX);
@@ -5742,11 +5742,12 @@ static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const
 	psDroid->sMove.targetY      = PHYSFS_swapSLE32(psSaveDroid->sMove.targetY);
 
 	// Little endian floats
-	psDroid->sMove.fx           = PHYSFS_swapSLE32(*(uint32_t*)(void*)&psSaveDroid->sMove.fx);
-	psDroid->sMove.fy           = PHYSFS_swapSLE32(*(uint32_t*)(void*)&psSaveDroid->sMove.fy);
-	psDroid->sMove.speed        = PHYSFS_swapSLE32(*(uint32_t*)(void*)&psSaveDroid->sMove.speed);
-	psDroid->sMove.moveDir      = PHYSFS_swapSLE32(*(uint32_t*)(void*)&psSaveDroid->sMove.moveDir);
-	psDroid->sMove.fz           = PHYSFS_swapSLE32(*(uint32_t*)(void*)&psSaveDroid->sMove.fz);
+	psDroid->sMove.fx           = PHYSFS_swapSLE32(psSaveDroid->sMove.fx);
+	psDroid->sMove.fy           = PHYSFS_swapSLE32(psSaveDroid->sMove.fy);
+	psDroid->sMove.speed        = PHYSFS_swapSLE32(psSaveDroid->sMove.speed);
+	psDroid->sMove.moveDir      = PHYSFS_swapSLE32(psSaveDroid->sMove.moveDir);
+	psDroid->sMove.fz           = PHYSFS_swapSLE32(psSaveDroid->sMove.fz);
+	assert(worldOnMap(psDroid->sMove.fx, psDroid->sMove.fy));
 
 	// Little endian SWORDs
 	psDroid->sMove.boundX       = PHYSFS_swapSLE16(psSaveDroid->sMove.boundX);
