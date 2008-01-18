@@ -460,6 +460,7 @@ void	removeDroidBase(DROID *psDel)
 	{
 		if( !((psDel->player != selectedPlayer) && (psDel->order == DORDER_RECYCLE)))
 		{
+			ASSERT(worldOnMap(psDel->sMove.fx, psDel->sMove.fy), "Asking other players to destroy droid driving off the map");
 			SendDestroyDroid(psDel);
 		}
 	}
@@ -5564,13 +5565,11 @@ TRUE if valid weapon*/
 /* Watermelon:this will be buggy if the droid being checked has both AA weapon and non-AA weapon
 Cannot think of a solution without adding additional return value atm.
 */
-
 BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 {
 	PROPULSION_STATS	*psPropStats;
-	BOOL				bValid;
+	BOOL			bValid = TRUE;
 
-	bValid = TRUE;
 	//check propulsion stat for vtol
 	psPropStats = asPropulsionStats + psTemplate->asParts[COMP_PROPULSION];
 	ASSERT( psPropStats != NULL,
@@ -5578,9 +5577,8 @@ BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 	if (asPropulsionTypes[psPropStats->propulsionType].travel == AIR)
 	{
 		//check weapon stat for indirect
-		//if (!(asWeaponStats + sCurrDesign.asWeaps[0])->direct)
-		if (!proj_Direct(asWeaponStats + psTemplate->asWeaps[0]) ||
-            !asWeaponStats[psTemplate->asWeaps[0]].vtolAttackRuns)
+		if (!proj_Direct(asWeaponStats + psTemplate->asWeaps[0]) 
+		    || !asWeaponStats[psTemplate->asWeaps[0]].vtolAttackRuns)
 		{
 			bValid = FALSE;
 		}
@@ -5598,9 +5596,10 @@ BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 	{
 		bValid = FALSE;
 	}
-	if ( (psTemplate->asParts[COMP_BRAIN] != 0) &&
-		 (psTemplate->asParts[COMP_WEAPON] != 0)   )
+	if (psTemplate->asParts[COMP_BRAIN] != 0
+	    && asWeaponStats[psTemplate->asWeaps[0]].weaponSubClass != WSC_COMMAND)
 	{
+		assert(FALSE);
 		bValid = FALSE;
 	}
 
