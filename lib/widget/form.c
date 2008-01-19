@@ -779,9 +779,16 @@ static BOOL formPickHTab(TAB_POS *psTabPos,
 
 	x = x0;
 	y1 = y0 + height;
+	
 	// We need to filter out some tabs, since we can only display 7 at a time.
-	number=  (number - (( psTabPos->TabMultiplier -1) * TAB_SEVEN));
-	if (number > TAB_SEVEN) number = TAB_SEVEN;	//7 = max tabs we can display.
+	if (number > TAB_SEVEN)	// of course only do this if we actually need >7 tabs.
+	{
+		number -= (psTabPos->TabMultiplier - 1) * TAB_SEVEN;
+		if (number > TAB_SEVEN)	// is it still > than TAB_SEVEN?
+		{
+			number = TAB_SEVEN;
+		}
+	}
 
 	for (i=0; i < number; i++)
 	{
