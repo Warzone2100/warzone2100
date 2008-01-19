@@ -748,11 +748,16 @@ void displayExtraGubbins(UDWORD height)
 	}
 
 #ifdef DEBUG
-	sprintf(str,"Traf:%d/%d",NETgetBytesSent(),NETgetBytesRecvd());
-	iV_DrawText(str, MULTIMENU_FORM_X, MULTIMENU_FORM_Y+MULTIMENU_FORM_H);
+	{
+		unsigned int width;
 
-	sprintf(str,"Pack:%d/%d",NETgetPacketsSent(), NETgetPacketsRecvd());
-	iV_DrawText(str, MULTIMENU_FORM_X+80, MULTIMENU_FORM_Y+MULTIMENU_FORM_H);
+		sprintf(str,"Traf: %u/%u", NETgetBytesSent(), NETgetBytesRecvd());
+		width = iV_GetTextWidth(str);
+		iV_DrawText(str, MULTIMENU_FORM_X, MULTIMENU_FORM_Y + MULTIMENU_FORM_H);
+
+		sprintf(str,"Pack: %u/%u", NETgetPacketsSent(), NETgetPacketsRecvd());
+		iV_DrawText(str, MULTIMENU_FORM_X + 20 + width, MULTIMENU_FORM_Y + MULTIMENU_FORM_H);
+	}
 #endif
 	return;
 }
