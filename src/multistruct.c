@@ -106,17 +106,16 @@ BOOL recvBuildStarted()
 	uint32_t		structRef, structId, targetId,droidID;
 
 	NETbeginDecode();
-
-	NETuint8_t(&player);
-	NETuint32_t(&structRef);
-	NETuint16_t(&x);
-	NETuint16_t(&y);
-	NETuint32_t(&droidID);
-	NETuint32_t(&structId);
-	NETint32_t(&order);
-	NETuint32_t(&targetId);
-	NETuint16_t(&z);
-
+		NETuint8_t(&player);
+		NETuint32_t(&structRef);
+		NETuint16_t(&x);
+		NETuint16_t(&y);
+		NETuint32_t(&droidID);
+		NETuint32_t(&structId);
+		NETint32_t(&order);
+		NETuint32_t(&targetId);
+		NETuint16_t(&z);
+	NETend();
 	// Find structure target
 	for (typeIndex = 0;
 	     typeIndex < numStructureStats && asStructureStats[typeIndex].ref != structRef;
@@ -167,7 +166,6 @@ BOOL recvBuildStarted()
 		}
 	}
 	
-	NETend();
 	return TRUE;
 }
 
@@ -199,7 +197,14 @@ BOOL recvBuildFinished()
 
 
 	NETbeginDecode();
-	NETuint32_t(&structId);			// get the struct id.
+		NETuint32_t(&structId);	// get the struct id.
+		NETuint32_t(&type); 	// Kind of building.
+		NETuint16_t(&x);    	// x pos
+		NETuint16_t(&y);    	// y pos
+		NETuint16_t(&z);    	// z pos
+		NETuint8_t(&player);
+	NETend();
+
 	psStruct = IdToStruct(structId,ANYPLAYER);
 
 	if (psStruct)
@@ -212,16 +217,10 @@ BOOL recvBuildFinished()
 			buildingComplete(psStruct);
 		}
 		NETlogEntry("building finished ok." ,0,0);
-		NETend();
 		return TRUE;
 	}
 
 	// The building wasn't started, so we'll have to just plonk it down in the map.
-	NETuint32_t(&type); 	// Kind of building.
-	NETuint16_t(&x);    	// x pos
-	NETuint16_t(&y);    	// y pos
-	NETuint16_t(&z);    	// z pos
-    NETuint8_t(&player);
 
 	// Find the structures stats
 	for (typeindex=0;						// Find structure target
@@ -240,7 +239,7 @@ BOOL recvBuildFinished()
 			psStruct->status = SS_BUILT;
 			buildingComplete(psStruct);
 			NETlogEntry("structure id modified", 0, player);
-			NETend();
+
 			return TRUE;
 		}
 	}
@@ -261,7 +260,6 @@ BOOL recvBuildFinished()
 		NETlogEntry("had to plonk down a building, BUT FAILED OH S**T." ,0,player);
 	}
 	
-	NETend();
 	return FALSE;
 }
 
@@ -286,15 +284,14 @@ BOOL recvDemolishFinished()
 	uint32_t	structID, droidID;
 
 	NETbeginDecode();
-
-	NETuint32_t(&structID);
-	NETuint32_t(&droidID);
+		NETuint32_t(&structID);
+		NETuint32_t(&droidID);
+	NETend();
 
 	psStruct = IdToStruct(structID, ANYPLAYER);
 	if (!IdToDroid(droidID, ANYPLAYER, &psDroid))
 	{
 		debug(LOG_ERROR, "recvDemolishFinished: Packet with bad droid ID received. Discarding!");
-		NETend();
 		return FALSE;
 	}
 
@@ -309,7 +306,6 @@ BOOL recvDemolishFinished()
 		}
 	}
 	
-	NETend();
 	return TRUE;
 }
 
@@ -378,12 +374,12 @@ BOOL recvLasSat()
 	uint32_t	id,targetid;
 	
 	NETbeginDecode();
-
 		NETuint8_t(&player);
 		NETuint32_t(&id);
 		NETuint32_t(&targetid);
 		NETuint8_t(&targetplayer);
-	
+	NETend();
+
 		psStruct = IdToStruct (id, player);
 		psObj	 = IdToPointer(targetid, targetplayer);
 	
@@ -397,6 +393,5 @@ BOOL recvLasSat()
 	            psObj->pos.z);
 		}
 
-	NETend();
 	return TRUE;
 }
