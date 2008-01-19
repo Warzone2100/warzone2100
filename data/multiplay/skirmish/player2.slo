@@ -1237,7 +1237,7 @@ event newfortify(fortifyTr)
 			if((count2 > 0) and (_numBuilders < _maxBuilders))
 			{
 				count = random(count2);
-				skDefenseLocation(ref tempx,ref tempy,wall,structChoice[count],droid,me);
+				skDefenseLocationB(ref tempx,ref tempy,wall,structChoice[count],droid,me);
 				_numBuilders++;
 			}
 
