@@ -108,7 +108,7 @@ static void iV_initializeGLC()
 
 	glcDisable(GLC_AUTO_FONT);
 #ifdef WZ_OS_MAC
-#warning Mac version still uses GLC_TRIANGE instead of GLC_TEXTURE
+#warning Mac version still uses GLC_TRIANGLE instead of GLC_TEXTURE
         glcRenderStyle(GLC_TRIANGLE);
 #else
 	glcRenderStyle(GLC_TEXTURE);
