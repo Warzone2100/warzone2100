@@ -35,7 +35,7 @@ warzone2100_SOURCES = scriptvals_parser.tab.c scriptvals_lexer.lex.c \
 	cheat.c cluster.c cmddroid.c combat.c component.c console.c \
 	data.c design.c difficulty.c display.c droid.c e3demo.c \
 	edit3d.c effects.c environ.c fpath.c feature.c formation.c frontend.c \
-	gateway.c gatewayroute.c gatewaysup.c geometry.c group.c hci.c init.c \
+	gateway.c gatewayroute.c geometry.c group.c hci.c init.c \
 	intdisplay.c intimage.c intorder.c intelmap.c keybind.c keymap.c levels.c lighting.c \
 	loop.c main.c map.c mapdisplay.c mapgrid.c mechanics.c message.c miscimd.c \
 	move.c multiint.c multimenu.c multiopt.c multisync.c multibot.c multistat.c \

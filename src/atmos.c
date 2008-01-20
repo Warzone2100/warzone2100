@@ -101,11 +101,6 @@ void	atmosUpdateSystem( void )
 	UDWORD	numberToAdd;
 	Vector3i pos;
 
- //	if(weather==WT_NONE)
- //	{
- //		return;
- //	}
-
 	for(i=0; i<MAX_ATMOS_PARTICLES; i++)
 	{
 		/* See if it's active */

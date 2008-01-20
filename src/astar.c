@@ -58,7 +58,6 @@ typedef struct _fp_node
 FP_NODE		*psOpen;
 
 // Size of closed hash table
-//#define FPATH_TABLESIZE		20671
 #define FPATH_TABLESIZE		4091
 
 // Hash table for closed nodes
@@ -197,13 +196,13 @@ static FP_NODE *fpathHashPresent(FP_NODE *apsTable[], SDWORD x, SDWORD y)
 static void fpathHashReset(void)
 {
 	SDWORD	i;
-	FP_NODE	*psNext;
 
 	for(i=0; i<FPATH_TABLESIZE; i++)
 	{
 		while (apsNodes[i])
 		{
-			psNext = apsNodes[i]->psNext;
+			FP_NODE	*psNext = apsNodes[i]->psNext;
+
 			free(apsNodes[i]);
 			apsNodes[i] = psNext;
 		}
@@ -619,13 +618,11 @@ static 	FP_NODE		*psNearest, *psRoute;
 	}
 
 	fpathHashReset();
-//	fpathOpenReset();
 
 	return retval;
 
 
 exit_error:
 	fpathHashReset();
-//	fpathOpenReset();
 	return ASR_FAILED;
 }

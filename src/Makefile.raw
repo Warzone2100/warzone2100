@@ -29,7 +29,6 @@ SRC=ai.c \
 	frontend.c \
 	gateway.c \
 	gatewayroute.c \
-	gatewaysup.c \
 	geometry.c \
 	group.c \
 	hci.c \

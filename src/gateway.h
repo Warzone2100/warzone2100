@@ -63,12 +63,6 @@ void gwFreeGateway(GATEWAY *psDel);
 // load a gateway list
 BOOL gwLoadGateways(char *pFileBuffer, UDWORD fileSize);
 
-// Process the map to create all the map zones
-BOOL gwProcessMap(void);
-
-// Create a new blank RLE Zone map suitable for creating zones in
-BOOL gwCreateBlankZoneMap(void);
-
 // link all the gateways together
 BOOL gwLinkGateways(void);
 
@@ -78,12 +72,8 @@ void gwCheckZoneSizes(void);
 // check if a zone is in the equivalence table for a water zone
 BOOL gwZoneInEquiv(SDWORD mainZone, SDWORD checkZone);
 
-// Set the zone for a coordinate
-void gwSetZone(SDWORD x, SDWORD y, SDWORD zone);
-
 // Look up the zone for a coordinate
 SDWORD gwGetZone(SDWORD x, SDWORD y);
-
 
 // Create a new empty zone map but don't allocate the actual zones yet.
 BOOL gwNewZoneMap(void);
