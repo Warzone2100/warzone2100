@@ -64,10 +64,33 @@ RADAR_DRAW_MODE	radarDrawMode = RADAR_MODE_DEFAULT;
 
 // colours for each clan on the radar map.
 
-static UDWORD		clanColours[MAX_PLAYERS] = { 81,243,231,1,182,187,207,195 };
-static UDWORD		flashColours[MAX_PLAYERS] = { 165,165,165,165,255,165,165,165 }; // everything flashes red when attacked except red - it goes white!
 static PIELIGHT		tileColours[MAX_TILES];
 static UDWORD		*radarBuffer;
+
+static PIELIGHT clanColours[MAX_PLAYERS]=
+{	// see frend2.png for team color order.
+	// [r,g,b,a]
+	{{0,81,0,200}},		// green  Player 0
+	{{255,140,66,200}},	// orange Player 1
+	{{82,92,82,200}},	// grey   Player 2
+	{{22,22,22,200}},		// black  Player 3
+	{{200,0,0,200}},		// red    Player 4
+	{{0,0,222,200}},		// blue   Player 5
+	{{222,0,222,200}},	// pink   Player 6
+	{{0,222,222,200}},	// cyan   Player 7
+};
+
+static PIELIGHT flashColours[MAX_PLAYERS]=
+{	//right now the flash color is all bright red
+	{{254,37,37,200}},	// Player 0
+	{{254,37,37,200}},	// Player 1
+	{{254,37,37,200}},	// Player 2
+	{{254,37,37,200}},	// Player 3
+	{{254,37,37,200}},	// Player 4  (notice, brighter red)
+	{{254,37,37,200}},	// Player 5
+	{{254,37,37,200}},	// Player 6
+	{{254,37,37,200}}		// Player 7
+};
 
 static SDWORD RadarScrollX;
 static SDWORD RadarScrollY;
@@ -550,7 +573,6 @@ static void DrawRadarObjects(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD 
 	SDWORD				OffsetY;
 	PIELIGHT			playerCol, col;
 	PIELIGHT			flashCol;
-	PIELIGHT			*palette = pie_GetGamePal();
 
 	SizeH = boxSizeH;
 	SizeV = boxSizeV;
@@ -561,19 +583,26 @@ static void DrawRadarObjects(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD 
 
    	/* Show droids on map - go through all players */
    	for(clan = 0; clan < MAX_PLAYERS; clan++)
-   	{
+	{
 		//see if have to draw enemy/ally color
-		if (bEnemyAllyRadarColor) {
-			if (clan == selectedPlayer) {
+		if (bEnemyAllyRadarColor)
+		{
+			if (clan == selectedPlayer)
+			{
 				playerCol = colRadarMe;
-			} else {
+			}
+			else
+			{
 				playerCol = (aiCheckAlliances(selectedPlayer, clan) ? colRadarAlly : colRadarEnemy);
 			}
-		} else {
-			//original 8-color mode
-			playerCol = palette[clanColours[getPlayerColour(clan)]];
 		}
-		flashCol = palette[flashColours[getPlayerColour(clan)]];
+		else
+		{
+			//original 8-color mode
+			playerCol = clanColours[getPlayerColour(clan)];
+		}
+
+		flashCol = flashColours[getPlayerColour(clan)];
 
    		/* Go through all droids */
    		for(psDroid = apsDroidLists[clan]; psDroid != NULL;
@@ -629,18 +658,26 @@ static void DrawRadarObjects(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD 
    	for(clan = 0; clan < MAX_PLAYERS; clan++)
    	{
 		//see if have to draw enemy/ally color
-		if (bEnemyAllyRadarColor) {
-			if (clan == selectedPlayer) {
+		if (bEnemyAllyRadarColor)
+		{
+			if (clan == selectedPlayer)
+			{
 				playerCol = colRadarMe;
-			} else {
+			}
+			else
+			{
 				playerCol = (aiCheckAlliances(selectedPlayer,clan) ? colRadarAlly: colRadarEnemy);
 			}
-		} else {
+		} 
+		else 
+		{
 			//original 8-color mode
-			playerCol = palette[clanColours[getPlayerColour(clan)]];
+			playerCol = clanColours[getPlayerColour(clan)];
 		}
-		flashCol = palette[flashColours[getPlayerColour(clan)]];
-   		/* Go through all structures */
+
+		flashCol = flashColours[getPlayerColour(clan)];
+		
+		/* Go through all structures */
    		for(psStruct = apsStructLists[clan]; psStruct != NULL;
    			psStruct = psStruct->psNext)
    		{
