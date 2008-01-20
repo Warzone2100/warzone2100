@@ -2105,7 +2105,6 @@ static SDWORD	startX, startY;
 static UDWORD   width, height;
 static UDWORD	gameType;
 static BOOL IsScenario;
-//static BOOL LoadGameFromWDG;
 /***************************************************************************/
 /*
  *	Local ProtoTypes
@@ -2193,6 +2192,8 @@ static BOOL getSaveObjectName(char *pName);
 /* set the global scroll values to use for the save game */
 static void setMapScroll(void);
 
+static bool gameLoad(const char* fileName);
+
 static char *getSaveStructNameV19(SAVE_STRUCTURE_V17 *psSaveStructure)
 {
 	return(psSaveStructure->name);
@@ -2211,17 +2212,11 @@ bool loadGameInit(const char* fileName)
 {
 	if (!gameLoad(fileName))
 	{
-		// FIXME Probably should never arrive here?
-		debug(LOG_ERROR, "loadGameInit: Fail2\n");
+		debug(LOG_ERROR, "loadGameInit: Fail");
 
 		/* Start the game clock */
 		gameTimeStart();
 
-//		if (multiPlayerInUse)
-//		{
-//			bMultiPlayer = TRUE;				// reenable multi player messages.
-//			multiPlayerInUse = FALSE;
-//		}
 		return false;
 	}
 
@@ -2282,15 +2277,12 @@ BOOL loadMissionExtras(const char *pGameToLoad, SWORD levelType)
 BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGame)
 {
 	char			aFileName[256];
-	//OPENFILENAME		sOFN;
 	UDWORD			fileExten, fileSize, pl;
 	char			*pFileData = NULL;
 	UDWORD			player, inc, i, j;
 	DROID           *psCurr;
 	UWORD           missionScrollMinX = 0, missionScrollMinY = 0,
 	                missionScrollMaxX = 0, missionScrollMaxY = 0;
-
-	debug( LOG_NEVER, "loadGame\n" );
 
 	/* Stop the game clock */
 	gameTimeStop();
@@ -2608,22 +2600,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 
 	//before loading the data - turn power off so don't get any power low warnings
 	powerCalculated = FALSE;
+
 	/* Load in the chosen file data */
-/*
-	pFileData = fileLoadBuffer;
-	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
-	{
-		DBPRINTF(("loadgame: Fail2\n"));
-		goto error;
-	}
-	if (!gameLoad(pFileData, fileSize))
-	{
-		DBPRINTF(("loadgame: Fail4\n"));
-		goto error;
-	}
-	//aFileName[fileExten - 1] = '\0';
-	//strcat(aFileName, "/");
-*/
 	strcpy(aFileName, pGameToLoad);
 	fileExten = strlen(aFileName) - 3;			// hack - !
 	aFileName[fileExten - 1] = '\0';
@@ -3926,7 +3904,7 @@ error:
 }
 
 // -----------------------------------------------------------------------------------------
-bool writeMapFile(const char* fileName)
+static bool writeMapFile(const char* fileName)
 {
 	char* pFileData = NULL;
 	UDWORD fileSize;
@@ -3963,7 +3941,7 @@ bool writeMapFile(const char* fileName)
 }
 
 // -----------------------------------------------------------------------------------------
-bool gameLoad(const char* fileName)
+static bool gameLoad(const char* fileName)
 {
 	GAME_SAVEHEADER fileHeader;
 

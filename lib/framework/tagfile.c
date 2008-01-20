@@ -294,14 +294,15 @@ static bool init(const char *definition, const char *datafile, bool write)
 	{
 		fp = PHYSFS_openRead(datafile);
 	}
+	handle = fp;
 	if (!fp)
 	{
-		TF_ERROR("Error opening data file %s: %s", datafile, PHYSFS_getLastError());
+		debug(LOG_ERROR, "Error opening data file %s: %s", datafile, PHYSFS_getLastError());
+		tagClose();
 		return false;
 	}
 	readmode = !write;
 	current = first;
-	handle = fp;
 	return true;
 }
 
@@ -334,7 +335,10 @@ static void remove_defines(struct define *df)
 
 void tagClose()
 {
-	PHYSFS_close(handle);
+	if (handle)
+	{
+		PHYSFS_close(handle);
+	}
 	remove_defines(first);
 	lastAccess = -1; // reset sanity counter
 }

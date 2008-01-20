@@ -136,9 +136,6 @@ extern BOOL loadScriptState(char *pFileName);
 /// Load the terrain types
 extern BOOL loadTerrainTypeMap(const char *pFileData, UDWORD filesize);
 
-//direct access for forceloader
-extern bool gameLoad(const char* fileName);
-
 extern BOOL saveGame(char *aFileName, SDWORD saveType);
 
 // Get the campaign number for loadGameInit game

@@ -1059,12 +1059,28 @@ BOOL mapSaveTagged(char *pFileName)
 	}
 	tagWriteLeave(0x0f);
 
-	// REMAINS TO BE DONE?
-	// * writeCompListFile
-	// * writeStructTypeListFile
-	// * writeProductionFile
-	// * writeCommandLists
-	// * writeScriptState
+	tagWriteEnter(0x10, gwNumZoneLines()); // gateway zone lines
+	for (i = 0; i < gwNumZoneLines(); i++)
+	{
+		// binary blob for now... ugh, this is ugly, but no worse than it was
+		tagWrite(0x01, gwZoneLineSize(i));
+		tagWrite8v(0x02, gwZoneLineSize(i), apRLEZones[i]);
+		tagWriteNext();
+	}
+	tagWriteLeave(0x10);
+
+	tagWriteEnter(0x11, gwNumZones); // gateway equivalency zones
+	for (i = 0; i < gwNumZones; i++)
+	{
+		tagWrite(0x01, aNumEquiv[i]);
+		if (aNumEquiv[i])
+		{
+			// another ugly blob job
+			tagWrite8v(0x02, aNumEquiv[i], apEquivZones[i]);
+		}
+		tagWriteNext();
+	}
+	tagWriteLeave(0x11);
 
 	tagClose();
 	return TRUE;
