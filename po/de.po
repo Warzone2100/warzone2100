@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-01-13 14:17+0100\n"
+"POT-Creation-Date: 2008-01-20 19:22+0100\n"
 "PO-Revision-Date: 2007-08-12 16:30+0100\n"
 "Last-Translator: Thomas Rösner <translation-bugs@digital-trauma.de>\n"
 "Language-Team: Deutsch\n"
@@ -57,16 +57,16 @@ msgstr "Pink"
 msgid "Cyan"
 msgstr "Cyan"
 
-#: src/display.c:1686
+#: src/display.c:1672
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Bau nicht möglich. Ölquelle brennt."
 
-#: src/display.c:1833
-#, c-format
-msgid "%s - Damage %d%% - Kills %d, %s"
+#: src/display.c:1819
+#, fuzzy, c-format
+msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Schaden %d%% - Abschüsse %d, %s"
 
-#: src/display.c:2070
+#: src/display.c:2056
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Baufahrzeug wurde beauftragt, einen Ölbohrturm zu bauen"
 
@@ -119,10 +119,10 @@ msgstr "%s bildet eine Allianz mit %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Sie haben Entwürfe für %s entdeckt"
 
-#: src/hci.c:1011 src/hci.c:3905 src/hci.c:4059 src/hci.c:4501 src/hci.c:5722
-#: src/transporter.c:283 src/transporter.c:372 src/transporter.c:865
-#: src/intorder.c:660 src/loadsave.c:257 src/intelmap.c:524
-#: src/multimenu.c:450 src/multimenu.c:1280
+#: src/hci.c:1011 src/hci.c:3905 src/hci.c:4059 src/hci.c:4501 src/hci.c:5721
+#: src/transporter.c:283 src/transporter.c:372 src/transporter.c:863
+#: src/intorder.c:660 src/loadsave.c:257 src/intelmap.c:523
+#: src/multimenu.c:449 src/multimenu.c:1284
 msgid "Close"
 msgstr "Schließen"
 
@@ -202,24 +202,24 @@ msgstr "Beenden"
 msgid "Exit Game"
 msgstr "Spiel verlassen"
 
-#: src/hci.c:4577 src/intdisplay.c:204 src/intdisplay.c:247
+#: src/hci.c:4576 src/intdisplay.c:204 src/intdisplay.c:247
 #: src/intdisplay.c:293
 msgid "Progress Bar"
 msgstr "Fortschrittsbalken"
 
-#: src/hci.c:5637
+#: src/hci.c:5636
 msgid "Factory Delivery Point"
 msgstr "Fabrik-Auslieferungspunkt"
 
-#: src/hci.c:5656
+#: src/hci.c:5655
 msgid "Loop Production"
 msgstr "Produktion wiederholen"
 
-#: src/hci.c:5747
+#: src/hci.c:5746
 msgid "Tab Scroll left"
 msgstr ""
 
-#: src/hci.c:5764
+#: src/hci.c:5763
 msgid "Tab Scroll right"
 msgstr ""
 
@@ -227,7 +227,7 @@ msgstr ""
 msgid "Launch Transport"
 msgstr "Transporter starten"
 
-#: src/transporter.c:1851
+#: src/transporter.c:1847
 msgid "Reinforcements landing"
 msgstr "Verstärkung landet"
 
@@ -259,72 +259,72 @@ msgstr "Speicherstand laden"
 msgid "Unit Lost!"
 msgstr "Einheit verloren!"
 
-#: src/droid.c:1935
+#: src/droid.c:1936
 msgid "Structure Restored"
 msgstr "Gebäude wiederhergestellt"
 
-#: src/droid.c:3847
+#: src/droid.c:3848
 #, fuzzy, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Gruppe %d ausgewählt - %d Einheit(en)"
 msgstr[1] "Gruppe %d ausgewählt - %d Einheit(en)"
 
-#: src/droid.c:3861
+#: src/droid.c:3862
 #, fuzzy, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%d Einheit(en) zu Gruppe %d hinzugefügt"
 msgstr[1] "%d Einheit(en) zu Gruppe %d hinzugefügt"
 
-#: src/droid.c:3874
+#: src/droid.c:3875
 #, fuzzy, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Auf Gruppe %d zentriert - %d Einheit(en)"
 msgstr[1] "Auf Gruppe %d zentriert - %d Einheit(en)"
 
-#: src/droid.c:3878
+#: src/droid.c:3879
 #, fuzzy, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "An Gruppe %d ausgerichtet - %d Einheit(en)"
 msgstr[1] "An Gruppe %d ausgerichtet - %d Einheit(en)"
 
-#: src/droid.c:4095
+#: src/droid.c:4096
 msgid "Rookie"
 msgstr "Neuling"
 
-#: src/droid.c:4096
+#: src/droid.c:4097
 msgctxt "rank"
 msgid "Green"
 msgstr "Unerfahren"
 
-#: src/droid.c:4097
+#: src/droid.c:4098
 msgid "Trained"
 msgstr "Geübt"
 
-#: src/droid.c:4098
+#: src/droid.c:4099
 msgid "Regular"
 msgstr "Soldat"
 
-#: src/droid.c:4099
+#: src/droid.c:4100
 msgid "Professional"
 msgstr "Profi"
 
-#: src/droid.c:4100
+#: src/droid.c:4101
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.c:4101
+#: src/droid.c:4102
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:4102
+#: src/droid.c:4103
 msgid "Special"
 msgstr "Spezialist"
 
-#: src/droid.c:4103
+#: src/droid.c:4104
 msgid "Hero"
 msgstr "Held"
 
@@ -341,7 +341,7 @@ msgid "CONNECTION"
 msgstr "VERBINDUNG"
 
 #: src/multiint.c:387 src/multiint.c:430 src/multiint.c:603 src/multiint.c:836
-#: src/keyedit.c:380 src/multilimit.c:165
+#: src/keyedit.c:378 src/multilimit.c:165
 msgid "Return To Previous Screen"
 msgstr "Zurück zum vorherigen Bildschirm"
 
@@ -405,7 +405,7 @@ msgstr "Nebel des Krieges"
 msgid "Distance Fog"
 msgstr "Entfernungsnebel"
 
-#: src/multiint.c:737 src/multimenu.c:736
+#: src/multiint.c:737 src/multimenu.c:735
 msgid "Alliances"
 msgstr "Allianzen"
 
@@ -469,7 +469,12 @@ msgstr "CHAT"
 msgid "Host is Starting Game"
 msgstr "Gastgeber startet das Spiel"
 
-#: src/multiint.c:2450
+#: src/multiint.c:1958
+#, fuzzy, c-format
+msgid "The host has kicked %s from the game!"
+msgstr "%s hat das Spiel verlassen"
+
+#: src/multiint.c:2460
 msgid "Players"
 msgstr "Spieler"
 
@@ -672,11 +677,11 @@ msgstr "Reparaturwerkstattprämie - Reparatur"
 msgid "Repair Facility Award - Nothing"
 msgstr "Reparaturwerkstattprämie - Nichts"
 
-#: src/keyedit.c:358
+#: src/keyedit.c:356
 msgid "KEY MAPPING"
 msgstr "TASTENZUORDNUNG"
 
-#: src/keyedit.c:385
+#: src/keyedit.c:383
 msgid "Select Default"
 msgstr "Voreinstellung auswählen"
 
@@ -1038,7 +1043,7 @@ msgstr ""
 msgid "Disable sound"
 msgstr ""
 
-#: src/design.c:456 src/design.c:476 src/design.c:3534
+#: src/design.c:456 src/design.c:476 src/design.c:3532
 msgid "New Vehicle"
 msgstr "Neues Fahrzeug"
 
@@ -1070,10 +1075,10 @@ msgstr "Thermische Panzerung"
 msgid "Engine Output"
 msgstr "Motorleistung"
 
-#: src/design.c:727 src/design.c:782 src/design.c:1581 src/design.c:1622
-#: src/design.c:1647 src/design.c:1665 src/design.c:1690 src/design.c:1708
-#: src/design.c:1750 src/design.c:1785 src/design.c:1921 src/design.c:1938
-#: src/design.c:1973 src/design.c:2009
+#: src/design.c:727 src/design.c:782 src/design.c:1580 src/design.c:1621
+#: src/design.c:1646 src/design.c:1664 src/design.c:1689 src/design.c:1707
+#: src/design.c:1749 src/design.c:1784 src/design.c:1920 src/design.c:1937
+#: src/design.c:1972 src/design.c:2008
 msgid "Weight"
 msgstr "Gewicht"
 
@@ -1086,63 +1091,63 @@ msgstr "Benötigte Gesamtenergie"
 msgid "Total Body Points"
 msgstr "Gesamte Strukturpunkte"
 
-#: src/design.c:1051 src/design.c:1083
+#: src/design.c:1050 src/design.c:1082
 msgid "Power Usage"
 msgstr "Energieverbrauch"
 
-#: src/design.c:1335
+#: src/design.c:1334
 msgid "Transporter"
 msgstr "Transporter"
 
-#: src/design.c:1563
+#: src/design.c:1562
 msgid "Sensor Range"
 msgstr "Sensorenreichweite"
 
-#: src/design.c:1572
+#: src/design.c:1571
 msgid "Sensor Power"
 msgstr "Sensorenenergie"
 
-#: src/design.c:1613
+#: src/design.c:1612
 msgid "ECM Power"
 msgstr "ECM Energie"
 
-#: src/design.c:1639 src/design.c:1656 src/design.c:1682 src/design.c:1699
+#: src/design.c:1638 src/design.c:1655 src/design.c:1681 src/design.c:1698
 msgid "Build Points"
 msgstr "Baupunkte"
 
-#: src/design.c:1726 src/design.c:1758
+#: src/design.c:1725 src/design.c:1757
 msgid "Range"
 msgstr "Reichweite"
 
-#: src/design.c:1734 src/design.c:1767
+#: src/design.c:1733 src/design.c:1766
 msgid "Damage"
 msgstr "Schaden"
 
-#: src/design.c:1742 src/design.c:1776
+#: src/design.c:1741 src/design.c:1775
 msgid "Rate-of-Fire"
 msgstr "Feuerrate"
 
-#: src/design.c:1913 src/design.c:1929
+#: src/design.c:1912 src/design.c:1928
 msgid "Air Speed"
 msgstr "Fluggeschwindigkeit"
 
-#: src/design.c:1949 src/design.c:1982
+#: src/design.c:1948 src/design.c:1981
 msgid "Road Speed"
 msgstr "Straßengeschwindigkeit"
 
-#: src/design.c:1957 src/design.c:1991
+#: src/design.c:1956 src/design.c:1990
 msgid "Off-Road Speed"
 msgstr "Geländegeschwindigkeit"
 
-#: src/design.c:1965 src/design.c:2000
+#: src/design.c:1964 src/design.c:1999
 msgid "Water Speed"
 msgstr "Wassergeschwindigkeit"
 
-#: src/design.c:2130
+#: src/design.c:2128
 msgid "Weapons"
 msgstr "Waffen"
 
-#: src/design.c:2154
+#: src/design.c:2152
 msgid "Systems"
 msgstr "Systeme"
 
@@ -1331,15 +1336,15 @@ msgstr "Scrollgeschwindigkeit"
 msgid "Unit Colour"
 msgstr "Einheitenfarbe"
 
-#: src/intelmap.c:398
+#: src/intelmap.c:397
 msgid "Research Update"
 msgstr "Forschungsaktualisierung"
 
-#: src/intelmap.c:402
+#: src/intelmap.c:401
 msgid "Project Goals"
 msgstr "Missionsziele"
 
-#: src/intelmap.c:405
+#: src/intelmap.c:404
 msgid "Current Objective"
 msgstr "Aktuelles Missionsziel"
 
@@ -1732,67 +1737,67 @@ msgstr "%s hat das Spiel verlassen"
 msgid "%s is Joining the Game"
 msgstr "%s ist dem Spiel beigetreten"
 
-#: src/multimenu.c:578
+#: src/multimenu.c:577
 msgid "Technology level 1"
 msgstr "Technologiestufe 1"
 
-#: src/multimenu.c:586
+#: src/multimenu.c:585
 msgid "Technology level 2"
 msgstr "Technologiestufe 2"
 
-#: src/multimenu.c:592
+#: src/multimenu.c:591
 msgid "Technology level 3"
 msgstr "Technologiestufe 3"
 
-#: src/multimenu.c:598
+#: src/multimenu.c:597
 msgid "Any number of players"
 msgstr "Beliebige Spielerzahl"
 
-#: src/multimenu.c:605
+#: src/multimenu.c:604
 msgid "2 players"
 msgstr "2 Spieler"
 
-#: src/multimenu.c:611
+#: src/multimenu.c:610
 msgid "4 players"
 msgstr "4 Spieler"
 
-#: src/multimenu.c:617
+#: src/multimenu.c:616
 msgid "8 players"
 msgstr "8 Spieler"
 
-#: src/multimenu.c:737
+#: src/multimenu.c:736
 msgid "Score"
 msgstr "Punktestand"
 
-#: src/multimenu.c:738
+#: src/multimenu.c:737
 msgid "Kills"
 msgstr "Abschüsse"
 
-#: src/multimenu.c:747
+#: src/multimenu.c:746
 msgid "Ping"
 msgstr "Ping"
 
-#: src/multimenu.c:748
+#: src/multimenu.c:747
 msgid "Played"
 msgstr "Gespielt"
 
-#: src/multimenu.c:1052
+#: src/multimenu.c:1056
 msgid "Toggle Alliance State"
 msgstr "Verbündungsstatus umschalten"
 
-#: src/multimenu.c:1071
+#: src/multimenu.c:1075
 msgid "Give Visibility Report"
 msgstr "Sensordaten übertragen"
 
-#: src/multimenu.c:1077
+#: src/multimenu.c:1081
 msgid "Leak Technology Documents"
 msgstr "Technologie übertragen"
 
-#: src/multimenu.c:1084
+#: src/multimenu.c:1088
 msgid "Hand Over Selected Units"
 msgstr "Übergebe ausgewählte Einheiten"
 
-#: src/multimenu.c:1090
+#: src/multimenu.c:1094
 msgid "Give Power To Player"
 msgstr "Energie übertragen"
 
