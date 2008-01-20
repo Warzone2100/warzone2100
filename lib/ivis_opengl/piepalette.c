@@ -154,6 +154,11 @@ void pie_SetColourDefines(void)
 
 	WZCOL_KEYMAP_ACTIVE = pal_Colour(0, 128, 0);
 	WZCOL_KEYMAP_FIXED = pal_Colour(128, 0, 0);
+
+	WZCOL_MENU_SCORE_LOSS = pal_Colour(43, 43, 43);
+	WZCOL_MENU_SCORE_DESTROYED = pal_Colour(183, 195, 127);
+	WZCOL_MENU_SCORE_BUILT = pal_Colour(81, 167, 156);
+	WZCOL_MENU_SCORE_RANK = pal_Colour(199, 127, 103);
 }
 
 PIELIGHT pal_SetBrightness(UBYTE brightness)

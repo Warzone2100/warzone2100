@@ -72,7 +72,11 @@
 #define WZCOL_MAP_OUTLINE_BAD		psPalette[26]
 #define WZCOL_KEYMAP_ACTIVE		psPalette[27]
 #define WZCOL_KEYMAP_FIXED		psPalette[28]
-#define WZCOL_MAX			29
+#define WZCOL_MENU_SCORE_LOSS		psPalette[29]
+#define WZCOL_MENU_SCORE_DESTROYED	psPalette[30]
+#define WZCOL_MENU_SCORE_BUILT		psPalette[31]
+#define WZCOL_MENU_SCORE_RANK		psPalette[32]
+#define WZCOL_MAX			33
 
 //*************************************************************************
 

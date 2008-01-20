@@ -63,7 +63,6 @@ UDWORD	queTime;		// How many game ticks before it's active?
 BOOL	bQueued;		// Already fired off?
 BOOL	bActive;		// Is this one active?
 UDWORD	number;			// %d string for the associated text string.
-UDWORD	colour;			// What colour is this bar then?
 }STAT_BAR;
 
 enum
