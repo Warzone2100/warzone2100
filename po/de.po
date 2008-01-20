@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-01-20 19:22+0100\n"
-"PO-Revision-Date: 2008-01-20 19:31+0100\n"
+"PO-Revision-Date: 2008-01-20 19:52+0100\n"
 "Last-Translator: Dennis Schridde <devurandom@gna.org>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -25,9 +25,8 @@ msgstr ""
 "X-Poedit-Basepath: ..\n"
 
 #: src/multiplay.c:741
-#, fuzzy
 msgid "The host has left the game!"
-msgstr "%s hat das Spiel verlassen"
+msgstr "Der Host hat das Spiel verlassen"
 
 #: src/multiplay.c:1893
 msgid "Green"
@@ -66,9 +65,9 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "Bau nicht möglich. Ölquelle brennt."
 
 #: src/display.c:1819
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
-msgstr "%s - Schaden %d%% - Abschüsse %d, %s"
+msgstr "%s - Schaden %d%% - Erfahrung %d, %s"
 
 #: src/display.c:2056
 msgid "Truck ordered to build Oil Derrick"
@@ -214,11 +213,11 @@ msgstr "Spiel speichern"
 
 #: src/hci.c:4188
 msgid "Unit"
-msgstr ""
+msgstr "Einheit"
 
 #: src/hci.c:4197
 msgid "Struct"
-msgstr ""
+msgstr "Gebäude"
 
 #: src/hci.c:4206
 msgid "Feat"
@@ -252,11 +251,11 @@ msgstr "Produktion wiederholen"
 
 #: src/hci.c:5746
 msgid "Tab Scroll left"
-msgstr ""
+msgstr "Tab nach links scrollen"
 
 #: src/hci.c:5763
 msgid "Tab Scroll right"
-msgstr ""
+msgstr "Tab nach rechts scrollen"
 
 #: src/transporter.c:422
 #: src/transporter.c:476
@@ -305,32 +304,32 @@ msgid "Structure Restored"
 msgstr "Gebäude wiederhergestellt"
 
 #: src/droid.c:3848
-#, fuzzy, c-format
+#, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
-msgstr[0] "Gruppe %d ausgewählt - %d Einheit(en)"
-msgstr[1] "Gruppe %d ausgewählt - %d Einheit(en)"
+msgstr[0] "Gruppe %u ausgewählt - %u Einheit"
+msgstr[1] "Gruppe %u ausgewählt - %u Einheiten"
 
 #: src/droid.c:3862
-#, fuzzy, c-format
+#, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
-msgstr[0] "%d Einheit(en) zu Gruppe %d hinzugefügt"
-msgstr[1] "%d Einheit(en) zu Gruppe %d hinzugefügt"
+msgstr[0] "%u Einheit zu Gruppe %u hinzugefügt"
+msgstr[1] "%u Einheiten zu Gruppe %u hinzugefügt"
 
 #: src/droid.c:3875
-#, fuzzy, c-format
+#, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
-msgstr[0] "Auf Gruppe %d zentriert - %d Einheit(en)"
-msgstr[1] "Auf Gruppe %d zentriert - %d Einheit(en)"
+msgstr[0] "Auf Gruppe %u zentriert - %u Einheit"
+msgstr[1] "Auf Gruppe %u zentriert - %u Einheiten"
 
 #: src/droid.c:3879
-#, fuzzy, c-format
+#, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
-msgstr[0] "An Gruppe %d ausgerichtet - %d Einheit(en)"
-msgstr[1] "An Gruppe %d ausgerichtet - %d Einheit(en)"
+msgstr[0] "An Gruppe %u ausgerichtet - %u Einheit"
+msgstr[1] "An Gruppe %u ausgerichtet - %u Einheiten"
 
 #: src/droid.c:4096
 msgid "Rookie"
@@ -394,11 +393,11 @@ msgstr "Zurück zum vorherigen Bildschirm"
 
 #: src/multiint.c:397
 msgid "Lobby"
-msgstr ""
+msgstr "Eingangshalle"
 
 #: src/multiint.c:398
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: src/multiint.c:589
 msgid "Searching"
@@ -430,7 +429,7 @@ msgstr "Spiel"
 
 #: src/multiint.c:695
 msgid "Mayhem"
-msgstr ""
+msgstr "Chaos"
 
 #: src/multiint.c:697
 msgid "Skirmish"
@@ -523,9 +522,9 @@ msgid "Host is Starting Game"
 msgstr "Gastgeber startet das Spiel"
 
 #: src/multiint.c:1958
-#, fuzzy, c-format
+#, c-format
 msgid "The host has kicked %s from the game!"
-msgstr "%s hat das Spiel verlassen"
+msgstr "Der Host hat %s aus dem Spiel geworfen!"
 
 #: src/multiint.c:2460
 msgid "Players"
@@ -533,15 +532,15 @@ msgstr "Spieler"
 
 #: src/keybind.c:132
 msgid "Sorry, that cheat is disabled in multiplayer games."
-msgstr ""
+msgstr "Entschuldige, dieser Cheat ist in Mehrspieler-Spielen deaktiviert."
 
 #: src/keybind.c:183
 msgid "Lets us see what you see!"
-msgstr ""
+msgstr "Lass uns sehen was du siehst!"
 
 #: src/keybind.c:185
 msgid "Fine, sensor display is off!"
-msgstr ""
+msgstr "Toll, Sensoranzeige ist aus!"
 
 #: src/keybind.c:283
 msgid "Hard as nails!!!"
@@ -580,19 +579,16 @@ msgid "Infinite power enabled"
 msgstr ""
 
 #: src/keybind.c:497
-#, fuzzy
 msgid "All items made available"
-msgstr "Verstärkungen sind verfügbar."
+msgstr "Alle Gegenstände wurden verfügbar gemacht"
 
 #: src/keybind.c:589
-#, fuzzy
 msgid "Fog off"
-msgstr "Nebel"
+msgstr "Nebel aus"
 
 #: src/keybind.c:595
-#, fuzzy
 msgid "Fog on"
-msgstr "Nebel"
+msgstr "Nebel an"
 
 #: src/keybind.c:1161
 msgid "View Aligned to North"
@@ -687,21 +683,21 @@ msgstr "Kommandoeinheit hat Kontrolllimit erreicht - Produktion eingestellt"
 
 #: src/structure.c:5935
 #: src/structure.c:5957
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
-msgstr[0] "Gruppe %s: %d Einheiten hinzugefügt"
-msgstr[1] "Gruppe %s: %d Einheiten hinzugefügt"
+msgstr[0] "Gruppe %s: %u Einheit hinzugefügt"
+msgstr[1] "Gruppe %s: %u Einheiten hinzugefügt"
 
 #: src/structure.c:5994
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Connected %u of %u"
-msgstr "%s - %d von %d verbunden"
+msgstr "%s - %u von %u verbunden"
 
 #: src/structure.c:6009
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Damage %u%%"
-msgstr "%s - Schaden %d%%"
+msgstr "%s - Schaden %u%%"
 
 #: src/structure.c:6128
 #: src/structure.c:6179
@@ -746,11 +742,11 @@ msgid "Select Default"
 msgstr "Voreinstellung auswählen"
 
 #: src/selection.c:116
-#, fuzzy, c-format
+#, c-format
 msgid "%u unit selected"
 msgid_plural "%u units selected"
-msgstr[0] "%d Einheit(en) ausgewählt"
-msgstr[1] "%d Einheit(en) ausgewählt"
+msgstr[0] "%u Einheit ausgewählt"
+msgstr[1] "%u Einheiten ausgewählt"
 
 #: src/selection.c:433
 #: src/selection.c:520
@@ -783,89 +779,89 @@ msgid "Research Award"
 msgstr "Forschungsprämie"
 
 #: src/scores.c:97
-#, fuzzy, c-format
+#, c-format
 msgid "Own Units: %u"
-msgstr "Eigene Einheiten: %d"
+msgstr "Eigene Einheiten: %u"
 
 #: src/scores.c:98
-#, fuzzy, c-format
+#, c-format
 msgid "Enemy Units: %u"
-msgstr "Feindliche Einheiten: %d"
+msgstr "Feindliche Einheiten: %u"
 
 #: src/scores.c:99
-#, fuzzy, c-format
+#, c-format
 msgid "Own Structures: %u"
-msgstr "Eigene Gebäude: %d"
+msgstr "Eigene Gebäude: %u"
 
 #: src/scores.c:100
-#, fuzzy, c-format
+#, c-format
 msgid "Enemy Structures: %u"
-msgstr "Feindliche Gebäude: %d"
+msgstr "Feindliche Gebäude: %u"
 
 #: src/scores.c:101
-#, fuzzy, c-format
+#, c-format
 msgid "Units Manufactured: %u"
-msgstr "Einheiten produziert: %d"
+msgstr "Einheiten produziert: %u"
 
 #: src/scores.c:102
-#, fuzzy, c-format
+#, c-format
 msgid "Total Units: %u"
-msgstr "Einheiten insgesamt: %d"
+msgstr "Einheiten insgesamt: %u"
 
 #: src/scores.c:103
-#, fuzzy, c-format
+#, c-format
 msgid "Structures Built: %u"
-msgstr "Gebäude gebaut: %d"
+msgstr "Gebäude gebaut: %u"
 
 #: src/scores.c:104
-#, fuzzy, c-format
+#, c-format
 msgid "Total Structures: %u"
-msgstr "Gebäude gesamt: %d"
+msgstr "Gebäude gesamt: %u"
 
 #: src/scores.c:106
-#, fuzzy, c-format
+#, c-format
 msgid "Rookie: %u"
-msgstr "Neuling: %d"
+msgstr "Rekrut: %u"
 
 #: src/scores.c:107
-#, fuzzy, c-format
+#, c-format
 msgid "Green: %u"
-msgstr "Unerfahren: %d"
+msgstr "Unerfahren: %u"
 
 #: src/scores.c:108
-#, fuzzy, c-format
+#, c-format
 msgid "Trained: %u"
-msgstr "Geübt: %d"
+msgstr "Ausgebildet: %u"
 
 #: src/scores.c:109
-#, fuzzy, c-format
+#, c-format
 msgid "Regular: %u"
-msgstr "Soldat: %d"
+msgstr "Soldat: %u"
 
 #: src/scores.c:110
-#, fuzzy, c-format
+#, c-format
 msgid "Professional: %u"
-msgstr "Profi: %d"
+msgstr "Profi: %u"
 
 #: src/scores.c:111
-#, fuzzy, c-format
+#, c-format
 msgid "Veteran: %u"
-msgstr "Veteran: %d"
+msgstr "Veteran: %u"
 
 #: src/scores.c:112
-#, fuzzy, c-format
+#, c-format
 msgid "Elite: %u"
-msgstr "Elite: %d"
+msgstr "Elite: %u"
 
 #: src/scores.c:113
-#, fuzzy, c-format
+#, c-format
 msgid "Special: %u"
-msgstr "Spezialist: %d"
+msgstr "Spezialist: %u"
 
 #: src/scores.c:114
-#, fuzzy, c-format
+#, c-format
 msgid "Hero: %u"
-msgstr "Held: %d"
+msgstr "Held: %u"
 
 #: src/scores.c:318
 msgid "Unit Losses"
@@ -1084,14 +1080,12 @@ msgid "Enable a multiplay only mod"
 msgstr ""
 
 #: src/clparse.c:96
-#, fuzzy
 msgid "Load a saved game"
 msgstr "Speicherstand laden"
 
 #: src/clparse.c:96
-#, fuzzy
 msgid "savegame"
-msgstr "Spiel speichern"
+msgstr "Speicherstand"
 
 #: src/clparse.c:99
 msgid "Play in windowed mode"
@@ -1183,7 +1177,6 @@ msgstr "Gewicht"
 
 #: src/design.c:813
 #: src/design.c:833
-#, fuzzy
 msgid "Total Power Required"
 msgstr "Benötigte Gesamtenergie"
 
@@ -1426,30 +1419,25 @@ msgid "Shadows"
 msgstr ""
 
 #: src/frontend.c:899
-#, fuzzy
 msgid "Graphics Mode*"
-msgstr "Grafikeinstellungen"
+msgstr "Grafikmodus*"
 
 #: src/frontend.c:903
 #: src/frontend.c:957
-#, fuzzy
 msgid "Fullscreen"
-msgstr "Plastbeton"
+msgstr "Vollbild"
 
 #: src/frontend.c:911
-#, fuzzy
 msgid "Resolution*"
-msgstr "Gegenschlag"
+msgstr "Auflösung*"
 
 #: src/frontend.c:916
-#, fuzzy
 msgid "Trap Cursor"
-msgstr "Transporter"
+msgstr "Mauszeiger einfangen"
 
 #: src/frontend.c:928
-#, fuzzy
 msgid "Texture size"
-msgstr "Detaillevel der Texturen"
+msgstr "Texturgröße"
 
 #: src/frontend.c:932
 msgid "* Takes effect on game restart"
@@ -1519,9 +1507,8 @@ msgid "View Location of Previous Message"
 msgstr "Zeige Ort der letzten Meldung"
 
 #: src/keymap.c:305
-#, fuzzy
 msgid "Assign Group 0"
-msgstr "Gruppe 1 zuteilen"
+msgstr "Gruppe 0 zuteilen"
 
 #: src/keymap.c:306
 msgid "Assign Group 1"
@@ -1560,9 +1547,8 @@ msgid "Assign Group 9"
 msgstr "Gruppe 9 zuteilen"
 
 #: src/keymap.c:318
-#, fuzzy
 msgid "Select Group 0"
-msgstr "Gruppe 1 auswählen"
+msgstr "Gruppe 0 auswählen"
 
 #: src/keymap.c:319
 msgid "Select Group 1"
@@ -1601,9 +1587,8 @@ msgid "Select Group 9"
 msgstr "Gruppe 9 auswählen"
 
 #: src/keymap.c:331
-#, fuzzy
 msgid "Select Commander 0"
-msgstr "Kommandoeinheit 1 auswählen"
+msgstr "Kommandoeinheit 0 auswählen"
 
 #: src/keymap.c:332
 msgid "Select Commander 1"
@@ -6629,7 +6614,6 @@ msgstr "Superschnellfeuernde Mini-Raketen MK3"
 
 #: data/messages/strings/names.txt:1175
 #: data/mp/messages/strings/names.txt:1182
-#, fuzzy
 msgid "Improved Rocket Wire Guidance"
 msgstr "Verbesserte Drahtsteuerung für Raketen"
 
@@ -11779,9 +11763,8 @@ msgid "Scorpion Command Turret Tracks"
 msgstr "Skorpion Kommandoturm Ketten"
 
 #: data/mp/messages/strings/names.txt:1890
-#, fuzzy
 msgid "mantis Command Turret Tracks"
-msgstr "Viper Kommandoturm Ketten"
+msgstr "Gottesanbeterin Kommandoturm Ketten"
 
 #: data/mp/messages/strings/names.txt:1892
 msgid "Cobra Lancer Tracks"
@@ -11796,9 +11779,8 @@ msgid "Mantis Tank Killer Tracks"
 msgstr "Gottesanbeterin Panzerkiller Ketten"
 
 #: data/mp/messages/strings/names.txt:1895
-#, fuzzy
 msgid "Mantis Scourge Tracks"
-msgstr "Gottesanbeterin Reparatur Ketten"
+msgstr "Gottesanbeterin Geißel Ketten"
 
 #: data/mp/messages/strings/names.txt:1896
 msgid "Scorpion Heavy Machinegun Tracks"
@@ -11813,14 +11795,12 @@ msgid "Scorpion Heavy Repair Hover"
 msgstr "Skorpion Schwerer Reparaturturm Gleiter"
 
 #: data/mp/messages/strings/names.txt:1902
-#, fuzzy
 msgid "Cobra Hover Truck"
-msgstr "Kobra Baufahrzeug"
+msgstr "Kobra Schwebe Baufahrzeug"
 
 #: data/mp/messages/strings/names.txt:1903
-#, fuzzy
 msgid "Scorpion Hover Truck"
-msgstr "Skorpion Speer Ketten"
+msgstr "Skorpion Schwebe Baufahrzeug"
 
 #: data/mp/messages/strings/names.txt:1904
 #, fuzzy
