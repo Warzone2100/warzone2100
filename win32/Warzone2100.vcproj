@@ -380,10 +380,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\gatewaysup.c"
-					>
-				</File>
-				<File
 					RelativePath="..\src\geometry.c"
 					>
 				</File>
