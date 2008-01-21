@@ -87,7 +87,10 @@ do { \
 } while(0)
 
 
-#define PRINT_B(var) ((var) ? "true" : "false")
+static const char * bool2string(bool var)
+{
+	return (var ? "true" : "false");
+}
 
 
 void tf_error(const char * fmt, ...)
@@ -120,7 +123,7 @@ void tf_print_nested_groups(unsigned int level, define_t *group)
 	{
 		debug(LOG_ERROR, "Group trace:");
 	}
-	debug(LOG_ERROR, "  #%u: %#04x %2.2s %5u default:%s", level, (unsigned int)group->element, group->vr, (unsigned int)group->vm, PRINT_B(group->defaultval));
+	debug(LOG_ERROR, "  #%u: %#04x %2.2s %5u default:%s", level, (unsigned int)group->element, group->vr, (unsigned int)group->vm, bool2string(group->defaultval));
 
 	if (group->parent != NULL)
 	{
