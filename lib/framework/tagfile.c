@@ -774,7 +774,7 @@ bool tagReadfv(element_t tag, uint16_t size, float *vals)
 	{
 		if (!PHYSFS_readBEFloat(handle, &vals[i]))
 		{
-			TF_ERROR("tagreadfv: Error reading idx %d, tag %#04x", i, (unsigned int)tag);
+			TF_ERROR("tagreadfv: Error reading index %d, tag %#04x", i, (unsigned int)tag);
 			return false;
 		}
 	}
@@ -810,7 +810,7 @@ uint8_t *tagRead8vDup(element_t tag, int *size)
 	{
 		if (!PHYSFS_readUBE8(handle, &values[i]))
 		{
-			TF_ERROR("tagread8vDup: Error reading idx %d, tag %#04x", i, (unsigned int)tag);
+			TF_ERROR("tagread8vDup: Error reading index %d, tag %#04x", i, (unsigned int)tag);
 			return NULL;
 		}
 	}
@@ -841,7 +841,7 @@ bool tagRead8v(element_t tag, uint16_t size, uint8_t *vals)
 	{
 		if (!PHYSFS_readUBE8(handle, &vals[i]))
 		{
-			TF_ERROR("tagread8v: Error reading idx %d, tag %#04x", i, (unsigned int)tag);
+			TF_ERROR("tagread8v: Error reading index %d, tag %#04x", i, (unsigned int)tag);
 			return false;
 		}
 	}
@@ -872,7 +872,7 @@ bool tagRead16v(element_t tag, uint16_t size, uint16_t *vals)
 	{
 		if (!PHYSFS_readUBE16(handle, &vals[i]))
 		{
-			TF_ERROR("tagread16v: Error reading idx %d, tag %#04x", i, (unsigned int)tag);
+			TF_ERROR("tagread16v: Error reading index %d, tag %#04x", i, (unsigned int)tag);
 			return false;
 		}
 	}
@@ -903,7 +903,7 @@ bool tagReads32v(element_t tag, uint16_t size, int32_t *vals)
 	{
 		if (!PHYSFS_readSBE32(handle, &vals[i]))
 		{
-			TF_ERROR("tagreads32v: Error reading idx %d, tag %d", i, (int)tag);
+			TF_ERROR("tagreads32v: Error reading index %d, tag %d", i, (int)tag);
 			return false;
 		}
 	}
