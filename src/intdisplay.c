@@ -1290,7 +1290,7 @@ void intOpenPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT
 		FormOpenCount = 0;
 	}
 
-	RenderWindowFrame(&FrameNormal,Form->Ax0,Form->Ay0,Form->Ax1-Form->Ax0,Form->Ay1-Form->Ay0);
+	RenderWindowFrame(FRAME_NORMAL, Form->Ax0, Form->Ay0, Form->Ax1 - Form->Ax0, Form->Ay1 - Form->Ay0);
 
 	Form->animCount++;
 
@@ -1359,7 +1359,7 @@ void intClosePlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 		FormCloseCount = 0;
 	}
 
-	RenderWindowFrame(&FrameNormal,Form->Ax0,Form->Ay0,Form->Ax1-Form->Ax0,Form->Ay1-Form->Ay0);
+	RenderWindowFrame(FRAME_NORMAL, Form->Ax0, Form->Ay0, Form->Ax1 - Form->Ax0, Form->Ay1 - Form->Ay0);
 
 	Form->animCount++;
 
@@ -1395,7 +1395,7 @@ void intDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELI
 	x1 = x0 + Form->width;
 	y1 = y0 + Form->height;
 
-	RenderWindowFrame(&FrameNormal,x0,y0,x1-x0,y1-y0);
+	RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
 }
 
 
@@ -1411,7 +1411,7 @@ void intDisplayStatsForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELI
 
 	AdjustTabFormSize(Form,&x0,&y0,&x1,&y1);
 
-	RenderWindowFrame(&FrameNormal,x0,y0,x1-x0,y1-y0);
+	RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
 }
 
 

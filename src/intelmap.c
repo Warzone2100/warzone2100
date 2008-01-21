@@ -768,7 +768,7 @@ static void intDisplaySeqTextView(WIDGET *psWidget,
 	x0 = xOffset + Form->x;
 	y0 = yOffset + Form->y;
 
-	RenderWindowFrame(&FrameNormal, x0, y0, Form->width, Form->height);
+	RenderWindowFrame(FRAME_NORMAL, x0, y0, Form->width, Form->height);
 
 	/* work out where we're up to in the text */
 	cur_seq = cur_seqpage = 0;
@@ -1256,10 +1256,8 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 		x1 = x0 + Form->width;
 		y1 = y0 + Form->height;
 
-
 		//moved from after close render
-		RenderWindowFrame(&FrameNormal,x0-1,y0-1,x1-x0+2,y1-y0+2);
-
+		RenderWindowFrame(FRAME_NORMAL, x0 - 1, y0 - 1, x1 - x0 + 2, y1 - y0 + 2);
 
 		OpenButtonRender((UWORD)(xOffset+Form->x), (UWORD)(yOffset+Form->y),
 			Form->width, Form->height);
@@ -1347,8 +1345,7 @@ void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIG
 	y1 = y0 + Form->height;
 	ty = y0;
 
-
-	RenderWindowFrame(&FrameNormal,x0,y0,x1-x0,y1-y0);
+	RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
 
 	if (psMessage)
 	{

@@ -66,11 +66,47 @@
 
 #include "intimage.h"
 
-#define TRANSRECT
+#define INCEND	(0)
+
+enum {
+	FR_SOLID,	//< Bitmap drawn solid.
+	FR_KEYED,	//< Bitmap drawn with colour 0 transparent.
+};
+
+typedef enum {
+	FR_IGNORE,	//< Fill rect is ignored.
+	FR_FRAME,	//< Fill rect drawn relative to frame.
+	FR_LEFT,	//< Fill rect drawn relative to left of frame.
+	FR_RIGHT,	//< Fill rect drawn relative to right of frame.
+	FR_TOP,		//< Fill rect drawn relative to top of frame.
+	FR_BOTTOM,	//< Fill rect drawn relative to bottom of frame.
+} FRAMERECTTYPE;
+
+typedef struct {
+	FRAMERECTTYPE Type;		//< One of the FR_... values.
+	int TLXOffset, TLYOffset;	//< Offsets for the rect fill.
+	int BRXOffset, BRYOffset;
+	int ColourIndex;		//< Hackish index into the WZCOLOR palette
+} FRAMERECT;
+
+// Frame definition structure.
+typedef struct {
+	SWORD OffsetX0,OffsetY0;	//< Offset top left of frame.
+	SWORD OffsetX1,OffsetY1;	//< Offset bottom right of frame.
+	SWORD TopLeft;			//< Image indecies for the corners ( -1 = don't draw).
+	SWORD TopRight;
+	SWORD BottomLeft;
+	SWORD BottomRight;
+	SWORD TopEdge,TopType;		//< Image indecies for the edges ( -1 = don't draw). Type ie FR_SOLID or FR_KEYED.
+	SWORD RightEdge,RightType;
+	SWORD BottomEdge,BottomType;
+	SWORD LeftEdge,LeftType;
+	FRAMERECT FRect[5];		//< Fill rectangles.
+} IMAGEFRAME;
 
 IMAGEFILE *IntImages;	// All the 2d graphics for the user interface.
 
-// Form frame definitions.
+/** Form frame definition for normal frames. */
 IMAGEFRAME FrameNormal = {
 	0,0, 0,0,
 	IMAGE_FRAME_C0,
@@ -81,13 +117,14 @@ IMAGEFRAME FrameNormal = {
 	IMAGE_FRAME_VR, FR_SOLID,
 	IMAGE_FRAME_HB, FR_SOLID,
 	IMAGE_FRAME_VL, FR_SOLID,
-	{{FR_FRAME,	0,1, 0,-1 ,190},
+	{{FR_FRAME, 0,1, 0,-1, 33},
 	{FR_IGNORE, 0,0, 0,0 ,0},
 	{FR_IGNORE, 0,0, 0,0 ,0},
 	{FR_IGNORE, 0,0, 0,0 ,0},
 	{FR_IGNORE, 0,0, 0,0 ,0}},
 };
 
+/** Form frame definition for radar frames. */
 IMAGEFRAME FrameRadar = {
 	0,0, 0,0,
 	IMAGE_FRAME_C0,
@@ -105,7 +142,6 @@ IMAGEFRAME FrameRadar = {
 	{FR_IGNORE, 0,0, 0,0 ,0}},
 };
 
-
 // Tab definitions, defines graphics to use for major and minor tabs.
 TABDEF	StandardTab = {
 	IMAGE_TAB1,			// Major tab normal.
@@ -118,6 +154,7 @@ TABDEF	StandardTab = {
 	IMAGE_TABHILIGHT,	// Minor tab hilighted by mouse.
 	IMAGE_TABSELECTED,	// Minor tab currently selected.
 };
+
 TABDEF SystemTab = {
 	IMAGE_DES_WEAPONS,
 	IMAGE_DES_WEAPONSDOWN,
@@ -147,8 +184,6 @@ TABDEF	SmallTab = {
 };
 
 
-
-
 // Read bitmaps used by the interface.
 //
 BOOL imageInitBitmaps(void)
@@ -158,23 +193,14 @@ BOOL imageInitBitmaps(void)
 	return TRUE;
 }
 
-void RenderWindowFrame(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height)
+void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height)
 {
-	RenderWindow(Frame,x,y,Width,Height,FALSE);
+	RenderWindow(frame, x, y, Width, Height, FALSE);
 }
-
-void RenderOpaqueWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height)
-{
-	RenderWindow(Frame,x,y,Width,Height,TRUE);
-}
-
-
-#define INCEND	(0)
-
 
 // Render a window frame.
 //
-void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height,BOOL Opaque)
+void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height, BOOL Opaque)
 {
 	SWORD WTopRight = 0;
 	SWORD WTopLeft = 0;
@@ -187,6 +213,16 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 	UWORD RectI;
 	FRAMERECT *Rect;
 	BOOL Masked = FALSE;
+	IMAGEFRAME *Frame;
+
+	if (frame == 0)
+	{
+		Frame = &FrameNormal;
+	}
+	else
+	{
+		Frame = &FrameRadar;
+	}
 
 	x += Frame->OffsetX0;
 	y += Frame->OffsetY0;
@@ -214,11 +250,8 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 				else
 				{
 
-					pie_BoxFillIndex( x+Rect->TLXOffset,
-								y+Rect->TLYOffset,
-								x+Width-INCEND+Rect->BRXOffset,
-								y+Height-INCEND+Rect->BRYOffset,Rect->ColourIndex);
-
+					pie_BoxFill(x + Rect->TLXOffset, y + Rect->TLYOffset, x + Width - INCEND + Rect->BRXOffset,
+					            y + Height - INCEND + Rect->BRYOffset, psPalette[Rect->ColourIndex]);
 				}
 				break;
 
@@ -233,8 +266,8 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 									x+Rect->BRXOffset,
 									y+Height-INCEND+Rect->BRYOffset);
 				} else {
-					pie_BoxFillIndex(x + Rect->TLXOffset, y + Rect->TLYOffset, x + Rect->BRXOffset,
-								y+Height-INCEND+Rect->BRYOffset,Rect->ColourIndex);
+					pie_BoxFill(x + Rect->TLXOffset, y + Rect->TLYOffset, x + Rect->BRXOffset,
+					            y + Height - INCEND + Rect->BRYOffset, psPalette[Rect->ColourIndex]);
 				}
 				break;
 
@@ -249,9 +282,9 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 									x+Width-INCEND+Rect->BRXOffset,
 									y+Height-INCEND+Rect->BRYOffset);
 				} else {
-					pie_BoxFillIndex(x + Width-INCEND + Rect->TLXOffset, y + Rect->TLYOffset,
-								x+Width-INCEND+Rect->BRXOffset,
-								y+Height-INCEND+Rect->BRYOffset,Rect->ColourIndex);
+					pie_BoxFill(x + Width - INCEND + Rect->TLXOffset, y + Rect->TLYOffset,
+					            x + Width - INCEND + Rect->BRXOffset, y + Height - INCEND + Rect->BRYOffset,
+					            psPalette[Rect->ColourIndex]);
 				}
 				break;
 
@@ -266,8 +299,8 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 									x+Width-INCEND+Rect->BRXOffset,
 									y+Rect->BRYOffset);
 				} else {
-					pie_BoxFillIndex(x + Rect->TLXOffset, y + Rect->TLYOffset, x + Width-INCEND+Rect->BRXOffset,
-								y+Rect->BRYOffset,Rect->ColourIndex);
+					pie_BoxFill(x + Rect->TLXOffset, y + Rect->TLYOffset, x + Width - INCEND + Rect->BRXOffset,
+					            y + Rect->BRYOffset, psPalette[Rect->ColourIndex]);
 				}
 				break;
 
@@ -284,11 +317,13 @@ void RenderWindow(IMAGEFRAME *Frame,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height
 									x+Width-INCEND+Rect->BRXOffset,
 									y+Height-INCEND+Rect->BRYOffset);
 				} else {
-					pie_BoxFillIndex(x + Rect->TLXOffset, y + Height-INCEND+Rect->TLYOffset,
-						   		x+Width-INCEND+Rect->BRXOffset,
-						   		y+Height-INCEND+Rect->BRYOffset,Rect->ColourIndex);
+					pie_BoxFill(x + Rect->TLXOffset, y + Height - INCEND + Rect->TLYOffset,
+					            x + Width - INCEND + Rect->BRXOffset, y + Height - INCEND + Rect->BRYOffset, 
+					            psPalette[Rect->ColourIndex]);
 				}
 				break;
+			case FR_IGNORE:
+				break; // ignored
 		}
 	}
 

@@ -113,7 +113,7 @@ BOOL intDisplayMultiJoiningStatus(UBYTE joinCount)
 	y = RET_Y;
 
 //	cameraToHome(selectedPlayer);				// home the camera to the player.
-	RenderWindowFrame(&FrameNormal, x, y ,w, h);		// draw a wee blu box.
+	RenderWindowFrame(FRAME_NORMAL, x, y ,w, h);		// draw a wee blu box.
 
 	// display how far done..
 	iV_DrawText(_("Players Still Joining"),

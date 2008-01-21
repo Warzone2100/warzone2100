@@ -928,7 +928,7 @@ static void DrawRadarExtras(UWORD boxSizeH,UWORD boxSizeV)
 	viewY = viewY&(~(boxSizeV-1));
 
 	drawViewingWindow(viewX,viewY,boxSizeH,boxSizeV);
-	RenderWindowFrame(&FrameRadar,RADTLX-1,RADTLY-1,RADWIDTH+2,RADHEIGHT+2);
+	RenderWindowFrame(FRAME_RADAR, RADTLX - 1, RADTLY - 1, RADWIDTH + 2, RADHEIGHT + 2);
 }
 
 // Does a screen coordinate lie within the radar area?

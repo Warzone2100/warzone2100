@@ -76,7 +76,8 @@
 #define WZCOL_MENU_SCORE_DESTROYED	psPalette[30]
 #define WZCOL_MENU_SCORE_BUILT		psPalette[31]
 #define WZCOL_MENU_SCORE_RANK		psPalette[32]
-#define WZCOL_MAX			33
+#define WZCOL_FRAME_BORDER_NORMAL	psPalette[33]
+#define WZCOL_MAX			34
 
 //*************************************************************************
 

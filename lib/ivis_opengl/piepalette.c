@@ -159,6 +159,8 @@ void pie_SetColourDefines(void)
 	WZCOL_MENU_SCORE_DESTROYED = pal_Colour(183, 195, 127);
 	WZCOL_MENU_SCORE_BUILT = pal_Colour(81, 167, 156);
 	WZCOL_MENU_SCORE_RANK = pal_Colour(199, 127, 103);
+
+	WZCOL_FRAME_BORDER_NORMAL = pal_Colour(145, 0, 195);
 }
 
 PIELIGHT pal_SetBrightness(UBYTE brightness)

@@ -4560,7 +4560,7 @@ static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	y1 = y0 + Form->height;
 
 
-	RenderWindowFrame(&FrameNormal,x0,y0,x1-x0,y1-y0);
+	RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
 
 	if(CurrentStatsTemplate) {
 
@@ -4623,7 +4623,7 @@ void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 
 	//AdjustTabFormSize(Form,&x0,&y0,&x1,&y1);
 
-	RenderWindowFrame(&FrameNormal,x0,y0,x1-x0,y1-y0);
+	RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
 }
 
 
