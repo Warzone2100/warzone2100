@@ -22,21 +22,21 @@
 // ahead through the file, even though we may not know every tag definition in it.
 enum internal_types
 {
-	TF_INT_U8, TF_INT_U16, TF_INT_U32, TF_INT_S8, TF_INT_S16, TF_INT_S32, TF_INT_FLOAT, 
+	TF_INT_U8, TF_INT_U16, TF_INT_U32, TF_INT_S8, TF_INT_S16, TF_INT_S32, TF_INT_FLOAT,
 	TF_INT_U16_ARRAY, TF_INT_FLOAT_ARRAY, TF_INT_U8_ARRAY, TF_INT_GROUP, TF_INT_BOOL,
 	TF_INT_S32_ARRAY
 };
 
 // A definition group
-struct define
+typedef struct _define
 {
 	int16_t vm; //! value multiple
 	uint8_t element; //! tag number
 	char vr[2]; //! value representation (type)
-	struct define *parent;	//! parent group
-	struct define *group;	//! child group
-	struct define *next;	//! sibling group
-	struct define *current; //! where in the sibling list we currently are
+	struct _define *parent;	//! parent group
+	struct _define *group;	//! child group
+	struct _define *next;	//! sibling group
+	struct _define *current; //! where in the sibling list we currently are
 	bool defaultval; //! default value
 	union {
 		uint32_t uint32_tval;
@@ -46,11 +46,12 @@ struct define
 	// debugging temp variables below
 	int countItems; // check group items against number of separators given
 	int expectedItems; // group items expected in current group
-};
+} define_t;
+
 
 static bool tag_error = false;		// are we in an error condition?
-static struct define *first = NULL;	// keep track of first group
-static struct define *current = NULL;	// currently iterated group
+static define_t *first = NULL;	// keep track of first group
+static define_t *current = NULL;	// currently iterated group
 static int line = 0;			// current definition line, report in error message
 static bool readmode = true;		// are we in read or write mode?
 static char *bufptr = NULL;		// pointer to definition file buffer
@@ -92,9 +93,9 @@ do { \
 
 
 // function to printf into errbuf the calling strack for nested groups on error
-static void print_nested_groups(struct define *group)
+static void print_nested_groups(define_t *group)
 {
-	struct define *parent;
+	define_t *parent;
 
 	if (group == NULL)
 	{
@@ -114,7 +115,7 @@ static void print_nested_groups(struct define *group)
 }
 
 // scan one definition group from definition file; returns true on success
-static bool scan_defines(struct define *node, struct define *group)
+static bool scan_defines(define_t *node, define_t *group)
 {
 	bool group_end = false;
 
@@ -248,7 +249,7 @@ static bool init(const char *definition, const char *datafile, bool write)
 		TF_ERROR("Error opening definition file %s: %s", definition, PHYSFS_getLastError());
 		return false;
 	}
-	
+
 	fsize = PHYSFS_fileLength(fp);
 	assert(fsize > 0);
 
@@ -316,13 +317,13 @@ bool tagOpenRead(const char *definition, const char *datafile)
 	return init(definition, datafile, false);
 }
 
-static void remove_defines(struct define *df)
+static void remove_defines(define_t *df)
 {
-	struct define *iter;
+	define_t *iter;
 
 	for (iter = df; iter != NULL;)
 	{
-		struct define *del = iter;
+		define_t *del = iter;
 
 		if (iter->group) // Also remove subgroups
 		{
@@ -1287,7 +1288,7 @@ void tagTest()
 	// Set our testing blob to a bunch of 0x01 bytes
 	memset(blob, 1, BLOB_SIZE); // 1111111...
 
-	
+
 	tagOpenWrite(virtual_definition, writename);
 	tagWrites(0x05, 11);
 	tagWriteString(0x06, cformat);
