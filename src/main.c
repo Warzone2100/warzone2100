@@ -809,9 +809,6 @@ static void mainLoop(void)
 
 int main(int argc, char *argv[])
 {
-	PIELIGHT *psPaletteBuffer = NULL;
-	UDWORD pSize = 0;
-
 	setupExceptionHandler(argv[0]);
 
 	debug_init();
@@ -913,21 +910,7 @@ int main(int argc, char *argv[])
 	pie_SetFogStatus(FALSE);
 	pie_ScreenFlip(CLEAR_BLACK);
 
-	//load palette
-	psPaletteBuffer = malloc(256 * sizeof(PIELIGHT) + 1);
-	if (psPaletteBuffer == NULL)
-	{
-		debug( LOG_ERROR, "Out of memory" );
-		return -1;
-	}
-	if ( !loadFileToBuffer("palette.bin", (char*)psPaletteBuffer, ( 256 * sizeof(PIELIGHT) + 1 ), &pSize) )
-	{
-		debug( LOG_ERROR, "Couldn't load palette data" );
-		return -1;
-	}
-	pal_AddNewPalette(psPaletteBuffer);
-	free(psPaletteBuffer);
-	psPaletteBuffer = NULL;
+	pal_Init();
 	atexit(pal_ShutDown);
 
 	pie_LoadBackDrop(SCREEN_RANDOMBDROP);

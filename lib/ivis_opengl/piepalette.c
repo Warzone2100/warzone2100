@@ -25,52 +25,7 @@
 #include "lib/framework/fractions.h"
 #include "screen.h"
 
-static void pie_SetColourDefines(void);
-
-static PIELIGHT	*psGamePal = NULL;
-static BOOL	bPaletteInitialised = FALSE;
-
-Uint8	colours[16];
 PIELIGHT psPalette[WZCOL_MAX];
-
-
-//*************************************************************************
-//*** add a new palette
-//*
-//* params	pal = pointer to palette to add
-//*
-//* returns slot number of added palette or -1 if error
-//*
-//******
-
-int pal_AddNewPalette(PIELIGHT *pal)
-{
-	int i;
-	PIELIGHT *p;
-
-	bPaletteInitialised = TRUE;
-	if (psGamePal == NULL)
-	{
-		psGamePal = malloc(PALETTE_SIZE * sizeof(PIELIGHT));
-		if (psGamePal == NULL)
-		{
-			debug( LOG_ERROR, "pal_AddNewPalette - Out of memory" );
-			abort();
-			return FALSE;
-		}
-	}
-
-	p = psGamePal;
-
-	for (i=0; i<PALETTE_SIZE; i++)
-	{
-		//set pie palette
-		p[i].argb = pal[i].argb;
-	}
-	pie_SetColourDefines();
-
-	return 0;
-}
 
 //*************************************************************************
 //*** calculate primary colours for current palette (store in COL_ ..
@@ -79,28 +34,8 @@ int pal_AddNewPalette(PIELIGHT *pal)
 //*			COL_.. below access _iVCOLS[0..15]
 //******
 
-void pie_SetColourDefines(void)
+void pal_Init(void)
 {
-	COL_BLACK 		= pal_GetNearestColour(  1,  1, 1);
-	COL_RED 		= pal_GetNearestColour( 128,  0, 0);
-	COL_GREEN 		= pal_GetNearestColour(  0, 128, 0);
- 	COL_BLUE 		= pal_GetNearestColour(  0,  0, 128);
-	COL_CYAN 		= pal_GetNearestColour(  0, 128, 128);
-	COL_MAGENTA 		= pal_GetNearestColour( 128,  0, 128);
-	COL_BROWN 		= pal_GetNearestColour( 128, 64,  0);
-	COL_DARKGREY 		= pal_GetNearestColour( 32, 32, 32);
-	COL_GREY		= pal_GetNearestColour( 128, 128, 128);
-	COL_LIGHTRED 		= pal_GetNearestColour( 255,  0,  0);
-	COL_LIGHTGREEN 		= pal_GetNearestColour(  0, 255,  0);
-	COL_LIGHTBLUE		= pal_GetNearestColour(  0,  0, 255);
-	COL_LIGHTCYAN 		= pal_GetNearestColour(  0, 255, 255);
-	COL_LIGHTMAGENTA	= pal_GetNearestColour( 255,  0, 255);
-	COL_YELLOW	  	= pal_GetNearestColour( 255, 255,  0);
-	COL_WHITE 		= pal_GetNearestColour( 255, 255, 255);
-
-// used to print out values from the old palette; remove with the old palette
-// #define PRINTCOL(x) debug(LOG_ERROR, "(%hhu, %hhu, %hhu)", psGamePal[x].byte.r, psGamePal[x].byte.g, psGamePal[x].byte.b);
-
 	// TODO: Read these from file so that mod-makers can change them
 
 	WZCOL_WHITE = pal_Colour(UBYTE_MAX, UBYTE_MAX, UBYTE_MAX);
@@ -163,60 +98,7 @@ void pie_SetColourDefines(void)
 	WZCOL_FRAME_BORDER_NORMAL = pal_Colour(145, 0, 195);
 }
 
-PIELIGHT pal_SetBrightness(UBYTE brightness)
-{
-	PIELIGHT c;
-	c.byte.r = brightness;
-	c.byte.g = brightness;
-	c.byte.b = brightness;
-	c.byte.a = UBYTE_MAX;
-	return c;
-}
-
 void pal_ShutDown(void)
 {
-	if (bPaletteInitialised)
-	{
-		bPaletteInitialised = FALSE;
-		free(psGamePal);
-		psGamePal = NULL;
-	}
+	// placeholder
 }
-
-Uint8 pal_GetNearestColour(Uint8 r, Uint8 g, Uint8 b)
-{
-	int c ;
-	Sint32 distance_r, distance_g, distance_b, squared_distance;
-	Sint32 best_colour = 0, best_squared_distance;
-
-	ASSERT( bPaletteInitialised,"pal_GetNearestColour, palette not initialised." );
-
-	best_squared_distance = 0x10000;
-
-	for (c = 0; c < PALETTE_SIZE; c++) {
-
-		distance_r = r -  psGamePal[c].byte.r;
-		distance_g = g -  psGamePal[c].byte.g;
-		distance_b = b -  psGamePal[c].byte.b;
-
-		squared_distance =  distance_r * distance_r + distance_g * distance_g + distance_b * distance_b;
-
-		if (squared_distance < best_squared_distance)
-		{
-			best_squared_distance = squared_distance;
-			best_colour = c;
-		}
-	}
-	if (best_colour == 0)
-	{
-		best_colour = 1;
-	}
-	return ((Uint8) best_colour);
-}
-
-PIELIGHT *pie_GetGamePal(void)
-{
-	ASSERT( bPaletteInitialised,"pie_GetGamePal, palette not initialised" );
-	return 	psGamePal;
-}
-

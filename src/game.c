@@ -11831,7 +11831,7 @@ BOOL plotStructurePreview(iTexture *backDropSprite, UBYTE scale, UDWORD offX, UD
 		{
 			for(y = (yy*scale);y< (yy*scale)+scale ;y++)
 			{
-				backDropSprite->bmp[( (offY+y)*BACKDROP_WIDTH)+x+offX]=COL_RED;
+				backDropSprite->bmp[((offY + y) * BACKDROP_WIDTH) + x + offX] = pal_Colour(UBYTE_MAX, 0, 0).argb;
 			}
 		}
 	}

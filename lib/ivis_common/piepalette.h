@@ -21,27 +21,6 @@
 #define _piePalette_
 
 #include "lib/ivis_common/piedef.h"
-//*************************************************************************
-
-#define PALETTE_SIZE	256
-
-#define COL_TRANS			0
-#define COL_BLACK			colours[0]
-#define COL_BLUE			colours[1]
-#define COL_GREEN			colours[2]
-#define COL_CYAN			colours[3]
-#define COL_RED				colours[4]
-#define COL_MAGENTA  		colours[5]
-#define COL_BROWN			colours[6]
-#define COL_GREY			colours[7]
-#define COL_DARKGREY		colours[8]
-#define COL_LIGHTBLUE		colours[9]
-#define COL_LIGHTGREEN		colours[10]
-#define COL_LIGHTCYAN		colours[11]
-#define COL_LIGHTRED		colours[12]
-#define COL_LIGHTMAGENTA	colours[13]
-#define COL_YELLOW			colours[14]
-#define COL_WHITE			colours[15]
 
 #define WZCOL_BLACK			psPalette[0]
 #define WZCOL_WHITE			psPalette[1]
@@ -81,17 +60,12 @@
 
 //*************************************************************************
 
-extern Uint8		colours[];
 extern PIELIGHT		psPalette[];
 
 //*************************************************************************
+
 extern void		pal_Init(void);
 extern void		pal_ShutDown(void);
-extern Uint8	pal_GetNearestColour(Uint8 r, Uint8 g, Uint8 b);
-extern int		pal_AddNewPalette(PIELIGHT *pal);
-extern void		pal_PaletteSet(void);
-extern PIELIGHT		*pie_GetGamePal(void);
-extern PIELIGHT		pal_SetBrightness(UBYTE brightness);
 
 static inline PIELIGHT pal_Colour(UBYTE r, UBYTE g, UBYTE b)
 {
@@ -100,6 +74,18 @@ static inline PIELIGHT pal_Colour(UBYTE r, UBYTE g, UBYTE b)
 	c.byte.r = r;
 	c.byte.g = g;
 	c.byte.b = b;
+	c.byte.a = UBYTE_MAX;
+
+	return c;
+}
+
+static inline PIELIGHT pal_SetBrightness(UBYTE brightness)
+{
+	PIELIGHT c;
+
+	c.byte.r = brightness;
+	c.byte.g = brightness;
+	c.byte.b = brightness;
 	c.byte.a = UBYTE_MAX;
 
 	return c;

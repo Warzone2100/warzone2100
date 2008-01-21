@@ -111,34 +111,6 @@ void pie_Box(int x0,int y0, int x1, int y1, PIELIGHT colour)
 
 /***************************************************************************/
 
-void pie_BoxFillIndex(int x0,int y0, int x1, int y1, UBYTE colour)
-{
-	PIELIGHT light, *psPalette;
-
-	pie_SetRendMode(REND_FLAT);
-	pie_SetTexturePage(-1);
-
-	if (x0>psRendSurface->clip.right || x1<psRendSurface->clip.left ||
-		y0>psRendSurface->clip.bottom || y1<psRendSurface->clip.top)
-	{
-		return;
-	}
-
-	if (x0<psRendSurface->clip.left)
-		x0 = psRendSurface->clip.left;
-	if (x1>psRendSurface->clip.right)
-		x1 = psRendSurface->clip.right;
-	if (y0<psRendSurface->clip.top)
-		y0 = psRendSurface->clip.top;
-	if (y1>psRendSurface->clip.bottom)
-		y1 = psRendSurface->clip.bottom;
-
-	psPalette = pie_GetGamePal();
-	light.argb = psPalette[colour].argb;
-	light.byte.a = UBYTE_MAX;
-	pie_DrawRect( x0, y0, x1, y1, light );
-}
-
 void pie_BoxFill(int x0,int y0, int x1, int y1, PIELIGHT colour)
 {
 	pie_SetRendMode(REND_FLAT);
