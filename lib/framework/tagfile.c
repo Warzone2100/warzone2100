@@ -56,28 +56,22 @@ static int line = 0;			// current definition line, report in error message
 static bool readmode = true;		// are we in read or write mode?
 static char *bufptr = NULL;		// pointer to definition file buffer
 static PHYSFS_file *handle = NULL;
-#define ERR_BUF_SIZE 255
-static char errbuf[ERR_BUF_SIZE];	// buffer where we compose error messages
 static int lastAccess = -1;		// track last accessed tag to detect user errors
 static int countGroups = 0;		// check group recursion count while reading definition
-static char saveDefine[ERR_BUF_SIZE];	// save define file for error messages
-static char saveTarget[ERR_BUF_SIZE];	// save binary file for error messages
+static char saveDefine[PATH_MAX];	// save define file for error messages
+static char saveTarget[PATH_MAX];	// save binary file for error messages
 
-// TODO: Make into a readable function...
+
+static void tf_error(const char * fmt, ...) WZ_DECL_FORMAT(printf, 1, 2);
+static void tf_print_nested_groups(unsigned int level, define_t *group);
+
+
 #define TF_ERROR(...) \
 do { \
-	tag_error = true; \
-	snprintf(errbuf, sizeof(errbuf), __VA_ARGS__); \
-	print_nested_groups(current); \
-	if (readmode) strlcat(errbuf, "While reading ", sizeof(errbuf)); \
-	else strlcat(errbuf, "While writing ", sizeof(errbuf)); \
-	strlcat(errbuf, saveTarget, sizeof(errbuf)); \
-	strlcat(errbuf, " using definition file ", sizeof(errbuf)); \
-	strlcat(errbuf, saveDefine, sizeof(errbuf)); \
-	strlcat(errbuf, "\n", sizeof(errbuf)); \
-	errbuf[sizeof(errbuf) - 1] = '\0'; /* Guarantee to nul-terminate */ \
-	ASSERT(!"tagfile error", errbuf); \
+	tf_error(__VA_ARGS__); \
+	assert(!"tagfile error"); \
 } while(0)
+
 
 #define VALIDATE_TAG(_def, _tag, _name) \
 do { \
@@ -86,33 +80,54 @@ do { \
 	         (unsigned int)tag, _name, current->vr[0], current->vr[1]); \
 } while(0)
 
+
 #define CHECK_VALID_TAG(_tag) \
 do { \
 	assert(tag != TAG_SEPARATOR && tag != TAG_GROUP_END); \
 } while(0)
 
 
-// function to printf into errbuf the calling strack for nested groups on error
-static void print_nested_groups(define_t *group)
-{
-	define_t *parent;
+#define PRINT_B(var) ((var) ? "true" : "false")
 
+
+void tf_error(const char * fmt, ...)
+{
+	va_list ap;
+	char errorBuffer[255];
+
+	tag_error = true;
+
+	va_start(ap, fmt);
+	vsnprintf(errorBuffer, sizeof(errorBuffer), fmt, ap);
+	va_end(ap);
+	debug(LOG_ERROR, errorBuffer);
+
+	tf_print_nested_groups(0, current);
+
+	debug(LOG_ERROR, "While %s '%s' using definition file '%s'\n", readmode ? "reading" : "writing", saveTarget, saveDefine);
+}
+
+
+// Print the calling strack for nested groups on error
+void tf_print_nested_groups(unsigned int level, define_t *group)
+{
 	if (group == NULL)
 	{
 		return;
 	}
-	parent = group->parent;
 
-	if (parent != NULL)
+	if (level == 0)
 	{
-		slcatprintf(errbuf, sizeof(errbuf), "\nNested inside element %x", (unsigned int)parent->element);
-		print_nested_groups(parent);
+		debug(LOG_ERROR, "Group trace:");
 	}
-	else
+	debug(LOG_ERROR, "  #%u: %#04x %2.2s %5u default:%s", level, (unsigned int)group->element, group->vr, (unsigned int)group->vm, PRINT_B(group->defaultval));
+
+	if (group->parent != NULL)
 	{
-		strlcat(errbuf, "\n", sizeof(errbuf));
+		tf_print_nested_groups(level+1, group->parent);
 	}
 }
+
 
 // scan one definition group from definition file; returns true on success
 static bool scan_defines(define_t *node, define_t *group)
@@ -238,7 +253,6 @@ static bool init(const char *definition, const char *datafile, bool write)
 	PHYSFS_sint64 fsize, fsize2;
 	char *buffer;
 
-	errbuf[0] = '\0';
 	tag_error = false;
 	line = 1;
 	fp = PHYSFS_openRead(definition);
@@ -344,16 +358,12 @@ void tagClose()
 	lastAccess = -1; // reset sanity counter
 }
 
+
 bool tagGetError()
 {
 	return tag_error;
 }
 
-const char *tagGetErrorString()
-{
-	print_nested_groups(current);
-	return errbuf;
-}
 
 // skip ahead to given element
 static bool scan_to(element_t tag)
@@ -1292,7 +1302,6 @@ void tagTest()
 	tagOpenWrite(virtual_definition, writename);
 	tagWrites(0x05, 11);
 	tagWriteString(0x06, cformat);
-	ASSERT(!tagGetError(), "Error 1: %s", tagGetErrorString());
 	tagClose();
 
 	tagOpenRead(virtual_definition, writename);
@@ -1305,11 +1314,9 @@ void tagTest()
 	assert(strncmp(formatdup, cformat, 9) == 0);
 	free(formatdup);
 	assert(tagReads(0x07) == 1);
-	ASSERT(!tagGetError(), "Error 2: %s", tagGetErrorString());
 	tagClose();
 
 	tagOpenWrite(basic_definition, writename);
-	ASSERT(!tagGetError(), "Error 3: %s", tagGetErrorString());
 	tagWriteString(0x01, cformat);
 	tagWriteEnter(0x02, 1);
 		tagWrite(0x01, 101);
@@ -1370,6 +1377,5 @@ void tagTest()
 	}
 	tagReadLeave(0x02);
 	assert(tagRead(0x04) == 9);
-	ASSERT(!tagGetError(), "Error 4: %s", tagGetErrorString());
 	tagClose();
 }
