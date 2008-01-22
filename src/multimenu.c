@@ -419,10 +419,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 	sFormInit.height = M_REQUEST_H-4;
 
 	sFormInit.numMajor = numForms(numButtons, butPerForm);
-	if (sFormInit.numMajor > 8)
-	{
-		sFormInit.numMajor = 8;
-	}
+
 	sFormInit.majorPos = WFORM_TABTOP;
 	sFormInit.minorPos = WFORM_TABNONE;
 	sFormInit.majorSize = OBJ_TABWIDTH+2;
@@ -431,6 +428,15 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
 	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
+
+	// TABFIXME: 
+	// This appears to be the map pick screen, when we have lots of maps
+	// this will need to change.
+	if (sFormInit.numMajor > MAX_TAB_STD_SHOWN)
+	{
+		sFormInit.numMajor = MAX_TAB_STD_SHOWN;
+	}
+
 	for (i = 0; i < sFormInit.numMajor; ++i)
 	{
 		sFormInit.aNumMinors[i] = 2;

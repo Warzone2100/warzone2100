@@ -980,6 +980,19 @@ static BOOL _intAddTemplateForm(DROID_TEMPLATE *psSelected)
 	sFormInit.tabMajorThickness = DES_TAB_HEIGHT;
 	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
+	if (sFormInit.numMajor > MAX_TAB_STD_SHOWN)
+	{
+		// we do NOT want more than this amount of tabs on design screen.
+		// 40 templates should be more than enough.
+		sFormInit.numMajor = MAX_TAB_STD_SHOWN;
+		// If we were to change this in future then :
+		//Just switching from normal sized tabs to smaller ones to fit more in form.
+		//		sFormInit.pUserData = &SmallTab;
+		//		sFormInit.majorSize /= 2;
+		// Change MAX_TAB_STD_SHOWN to ..SMALL_SHOWN, this will give us 80 templates max.
+	}
+
+
 	for (i=0; i< sFormInit.numMajor; i++)
 	{
 		sFormInit.aNumMinors[i] = 1;
@@ -2097,6 +2110,11 @@ static BOOL intAddComponentForm(UDWORD numButtons)
 	sFormInit.tabMajorThickness = DES_TAB_HEIGHT;
 	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
+	if (sFormInit.numMajor > MAX_TAB_STD_SHOWN)
+	{	// StandardTab can't have more than 4 tabs.  Being extra safe here, since
+		// we do NOT use scrolltabs & not smallTab icons either (which allow max 8)
+		sFormInit.numMajor = MAX_TAB_STD_SHOWN;
+	}
 	for (i=0; i< sFormInit.numMajor; i++)
 	{
 		sFormInit.aNumMinors[i] = 1;

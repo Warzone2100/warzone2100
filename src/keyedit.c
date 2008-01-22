@@ -421,6 +421,8 @@ BOOL startKeyMapEditor(BOOL first)
 	sFormInit.tabMajorThickness 	= OBJ_TABHEIGHT;
 	sFormInit.pUserData		= &StandardTab;
 	sFormInit.pTabDisplay		= intDisplayTab;
+
+	// TABFIXME: Special case for tabs, since this one has whole screen to itself. No need to modify(?)
 	for (i=0; i< sFormInit.numMajor; i++)
 	{
 		sFormInit.aNumMinors[i] = 1;

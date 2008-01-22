@@ -337,14 +337,19 @@ static BOOL intAddMessageForm(BOOL playCurrent)
 	sFormInit.numMajor = numForms((OBJ_BUTWIDTH + OBJ_GAP) * numButtons,
 								  (OBJ_WIDTH - OBJ_GAP)*2);
 
+	sFormInit.pUserData = &StandardTab;
+	sFormInit.pTabDisplay = intDisplayTab;
+
+	if (sFormInit.numMajor > MAX_TAB_STD_SHOWN)
+	{	// we do NOT use smallTab icons here, so be safe and only display max # of
+		// standard sized tab icons.
+		sFormInit.numMajor = MAX_TAB_STD_SHOWN;
+	}
 	//set minor tabs to 1
 	for (i=0; i< sFormInit.numMajor; i++)
 	{
 		sFormInit.aNumMinors[i] = 1;
 	}
-
-	sFormInit.pUserData = &StandardTab;
-	sFormInit.pTabDisplay = intDisplayTab;
 
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{

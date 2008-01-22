@@ -4529,6 +4529,16 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
 
+	if (sFormInit.numMajor > MAX_TAB_STD_SHOWN)
+	{
+		// We do NOT want more than this amount of tabs, 40 items should be more than enough(?)
+		sFormInit.numMajor = MAX_TAB_STD_SHOWN;
+		// If we were to change this in future then :
+		//Just switching from normal sized tabs to smaller ones to fit more in form.
+		//		sFormInit.pUserData = &SmallTab;
+		//		sFormInit.majorSize /= 2;
+		// Change MAX_TAB_STD_SHOWN to ..SMALL_SHOWN, this will give us 80 items max.
+	}
 	for (i=0; i< sFormInit.numMajor; i++)
 	{
 		sFormInit.aNumMinors[i] = 1;
@@ -5732,7 +5742,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 				 ((STAT_HEIGHT - STAT_GAP) /
 						(STAT_BUTHEIGHT + STAT_GAP));
 //================== adds L/R Scroll buttons ===================================
-if (numForms(numStats, butPerForm)>8)	//only want these buttons when tab count >8
+if (numForms(numStats, butPerForm)> MAX_TAB_SMALL_SHOWN)	//only want these buttons when tab count >8
 	{
 		// Add the left tab scroll button
 		memset(&sButInit, 0, sizeof(W_BUTINIT));
@@ -5795,16 +5805,16 @@ if (numForms(numStats, butPerForm)>8)	//only want these buttons when tab count >
 	// NOTE, there is really no limit now to the # of menu items we can have,
 	// It is #defined in hci.h to be 200 now. [#define	MAXSTRUCTURES	200]
 	//Same goes for research. [#define	MAXRESEARCH		200]
-	if (((objMode == IOBJ_BUILD) || (objMode == IOBJ_RESEARCH)) &&
-		(sFormInit.numMajor > 4))
+//	if (( (objMode == IOBJ_MANUFACTURE) || (objMode == IOBJ_BUILD) || (objMode == IOBJ_RESEARCH)) &&
+	if (sFormInit.numMajor > MAX_TAB_STD_SHOWN)
 	{	//Just switching from normal sized tabs to smaller ones to fit more in form.
 		sFormInit.pUserData = &SmallTab;
 		sFormInit.majorSize /= 2;
-	}
-	if (sFormInit.numMajor > MAXTABSSHOWN)		// 7 tabs is all we can fit with current form size.
-	{	//make room for new tab item (tab scroll buttons)
-		sFormInit.majorOffset = OBJ_TABOFFSET + 10;
-		sFormInit.TabMultiplier = 1;		// Enable our tabMultiplier buttons.
+		if (sFormInit.numMajor > MAX_TAB_SMALL_SHOWN)		// 7 tabs is all we can fit with current form size.
+		{	// make room for new tab item (tab scroll buttons)
+			sFormInit.majorOffset = OBJ_TABOFFSET + 10;
+			sFormInit.TabMultiplier = 1;		// Enable our tabMultiplier buttons.
+		}
 	}
 	for (i = 0; i< sFormInit.numMajor; i++)	// Sets # of tab's minors
 	{

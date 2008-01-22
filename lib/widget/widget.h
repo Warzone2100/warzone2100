@@ -137,8 +137,8 @@ typedef struct _w_init
 #define WFORM_MAXMAJOR		20	   // Maximum number of major tabs on a tab form
 // we do NOT use MAX MINOR now, it is another way to draw the widgets.
 #define WFORM_MAXMINOR		5	   //15		// Maximum number of minor tabs off a major
-
-#define MAXTABSSHOWN 8		//# of tabs we can show before we use tab scroll buttons.
+#define MAX_TAB_STD_SHOWN   4		// max # of tabs we can display using standard tab icons.
+#define MAX_TAB_SMALL_SHOWN 8		// max # of tabs we can display using small tab icons.
 #define TAB_SEVEN    7		//*with* tab scroll buttons, we can only (currently) show 7 max!
 // NOTE: enable TAB_MINOR at your own risk.  Have NOT testest new rotuines with that.
 #define TAB_MINOR 0	// Tab types passed into tab display callbacks.

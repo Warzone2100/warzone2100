@@ -780,14 +780,27 @@ static BOOL formPickHTab(TAB_POS *psTabPos,
 	x = x0;
 	y1 = y0 + height;
 	
-	// We need to filter out some tabs, since we can only display 7 at a time.
-	if (number > TAB_SEVEN)	// of course only do this if we actually need >7 tabs.
+	// We need to filter out some tabs, since we can only display 7 at a time, with
+	// the scroll tabs in place, and 8 without. MAX_TAB_SMALL_SHOWN (currently 8) is the case
+	// when we do NOT want scrolltabs, and are using smallTab icons.
+	// Also need to check if the TabMultiplier is set or not, if not then it means 
+	// we have not yet added the code to display/handle the tab scroll buttons.
+	// At this time, I think only the design screen has this limitation of only 8 tabs.
+	if (number > MAX_TAB_SMALL_SHOWN  && psTabPos->TabMultiplier) // of course only do this if we actually need >8 tabs.
 	{
 		number -= (psTabPos->TabMultiplier - 1) * TAB_SEVEN;
 		if (number > TAB_SEVEN)	// is it still > than TAB_SEVEN?
 		{
 			number = TAB_SEVEN;
 		}
+	}
+	else if (number > MAX_TAB_SMALL_SHOWN)
+	{
+		// we need to clip the tab count to max amount *without* the scrolltabs visible.
+		// The reason for this, is that in design screen & 'feature' debug & others(?),
+		// we can get over max # of tabs that the game originally supported.
+		// This made it look bad.
+		number = MAX_TAB_SMALL_SHOWN;
 	}
 
 	for (i=0; i < number; i++)
@@ -1320,7 +1333,7 @@ static void formDisplayTTabs(W_TABFORM *psForm,SDWORD x0, SDWORD y0,
 	x = x0 + 2;
 	x1 = x + width - 2;
 	y1 = y0 + height;
-	if (number > MAXTABSSHOWN)	//we can display 7 (currently) tabs fine.
+	if (number > MAX_TAB_SMALL_SHOWN)	//we can display 8 tabs fine with no extra voodoo.
 	{	// We do NOT want to draw all the tabs once we have drawn 7 tabs
 		// Both selected & hilite are converted from virtual tab range, to a range
 		// that is seen on the form itself.  This would be 0-6 (7 tabs)

@@ -205,6 +205,8 @@ BOOL startLimitScreen(void)
 	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
 	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
+
+	// TABFIXME --unsure if needs fixing yet.
 	for (i=0; i< sFormInit.numMajor; i++)
 	{
 		sFormInit.aNumMinors[i] = 1;
