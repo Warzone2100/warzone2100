@@ -76,9 +76,9 @@ static const char *code_part_names[] = {
  *
  * \return	Codepart number or LOG_LAST if can't match.
  */
-static int code_part_from_str(const char *str)
+static code_part code_part_from_str(const char *str)
 {
-	int i;
+	unsigned int i;
 
 	for (i = 0; i < LOG_LAST; i++) {
 		if (strcasecmp(code_part_names[i], str) == 0) {
@@ -186,8 +186,6 @@ void debug_callback_file_exit( void ** data )
 
 void debug_init(void)
 {
-	int count = 0;
-
 	/*** Initialize the debug subsystem ***/
 #if defined(WZ_CC_MSVC) && defined(DEBUG)
 	int tmpDbgFlag;
@@ -202,16 +200,8 @@ void debug_init(void)
 	_CrtSetDbgFlag( tmpDbgFlag );
 #endif // WZ_CC_MSVC && DEBUG
 
-	while (strcmp(code_part_names[count], "last") != 0) {
-		count++;
-	}
-	if (count != LOG_LAST) {
-		fprintf( stderr, "LOG_LAST != last; whoever edited the debug code last "
-		        "did a mistake.\n" );
-		fprintf( stderr, "Always edit both the enum in debug.h and the string "
-		        "list in debug.c!\n" );
-		exit(1);
-	}
+	STATIC_ASSERT(ARRAY_SIZE(code_part_names) - 1 == LOG_LAST); // enums start at 0
+
 	memset( enabled_debug, FALSE, sizeof(enabled_debug) );
 	enabled_debug[LOG_ERROR] = TRUE;
 #ifdef DEBUG
@@ -267,7 +257,7 @@ void debug_register_callback( debug_callback_fn callback, debug_callback_init in
 
 BOOL debug_enable_switch(const char *str)
 {
-	int part = code_part_from_str(str);
+	code_part part = code_part_from_str(str);
 
 	if (part != LOG_LAST) {
 		enabled_debug[part] = !enabled_debug[part];

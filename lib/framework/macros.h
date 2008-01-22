@@ -29,6 +29,8 @@
 
 #define ABSDIF(a,b) ((a)>(b) ? (a)-(b) : (b)-(a))
 
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+
 #define CLIP(val, min, max) do                                                \
 {                                                                             \
     if ((val) < (min)) (val) = (min);                                         \
@@ -54,7 +56,7 @@
 
 #define AT_MACRO __FILE__ ":" TOSTRING(__LINE__)
 
-#define MKID(a) MKID_(a, __LINE__)   
+#define MKID(a) MKID_(a, __LINE__)
 #define MKID_(a, b) a ## b
 
 #endif // MACROS_H
