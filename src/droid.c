@@ -5421,6 +5421,9 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
         //add back into cluster system
         clustNewDroid(psD);
 
+	// Update visibility
+	visTilesUpdate((BASE_OBJECT*)psD);
+
         //add back into the grid system
         gridAddObject((BASE_OBJECT *)psD);
 
