@@ -78,21 +78,25 @@ BOOL recvGift(void)
 			case RADAR_GIFT:
 				audioTrack = ID_SENSOR_DOWNLOAD;
 				giftRadar(from, to, FALSE);
+				NETend();
 				break;
-			case DROID_GIFT:
+			case DROID_GIFT:	// do NOT do NETend() for this one it is handled differently.
 				audioTrack = ID_UNITS_TRANSFER;
 				recvGiftDroids(from, to);
 				break;
 			case RESEARCH_GIFT:
 				audioTrack = ID_TECHNOLOGY_TRANSFER;
 				giftResearch(from, to, FALSE);
+				NETend();
 				break;
 			case POWER_GIFT:
 				audioTrack = ID_POWER_TRANSMIT;
 				giftPower(from, to, FALSE);
+				NETend();
 				break;
 			default:
 				debug(LOG_ERROR, "recvGift: Unknown Gift recvd");
+				NETend();
 				return FALSE;
 				break;
 		}
@@ -103,7 +107,6 @@ BOOL recvGift(void)
 			audio_QueueTrack(audioTrack);
 		}
 
-	NETend();
 	return TRUE;
 }
 
@@ -166,90 +169,94 @@ void giftRadar(uint8_t from, uint8_t to, BOOL send)
 	}
 }
 
-
+// recvGiftDroid()
+// We received a droid gift from another player.
+// NOTICE: the packet is already set-up for decoding via recvGift()
+//
+// \param from  :player that sent us the droid
+// \param to    :player that should be getting the droid
 static void recvGiftDroids(uint8_t from, uint8_t to)
 {
-	uint8_t droidCount, i;
+	uint32_t	droidID;
+	DROID		*psDroid;
 
-	// NB: The packet is already set-up for decoding
-
-	// Fetch the droid count
-	NETuint8_t(&droidCount);
-
-	for (i = 0; i < droidCount; i++)
+	NETuint32_t(&droidID);
+	NETend();	// the below call calls another net function.
+	if (IdToDroid(droidID, from, &psDroid))
 	{
-		uint32_t	droidID;
-		DROID		*psDroid;
-
-		NETuint32_t(&droidID);
-
-		if (IdToDroid(droidID, from, &psDroid))
+		giftSingleDroid(psDroid, to);
+		if (to == selectedPlayer)
 		{
-			giftSingleDroid(psDroid, to);
+			CONPRINTF(ConsoleString, (ConsoleString, _("%s Gives you a %s"), getPlayerName(from), psDroid->aName));
 		}
 	}
-
-	if (to == selectedPlayer)
+	else
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, _("%s Gives You Units"), getPlayerName(from)));
+		debug(LOG_ERROR, "recvGiftDroids: Bad droid id %d", (int)droidID);
 	}
 }
 
-
-// give selected droid
+// sendGiftDroids()
+// We give selected droid(s) as a gift to another player.
+//
+// \param from  :player that sent us the droid
+// \param to    :player that should be getting the droid
 static void sendGiftDroids(uint8_t from, uint8_t to)
 {
+	DROID        *next, *psD;
+	uint8_t      giftType = DROID_GIFT;
+	uint8_t      totalToSend;
+
 	if (apsDroidLists[from] == NULL)
 	{
 		return;
 	}
 
-	NETbeginEncode(NET_GIFT, NET_ALL_PLAYERS);
+	/*
+	 * Work out the number of droids to send. As well as making sure they are
+	 * selected we also need to make sure they will NOT put the receiving player
+	 * over their droid limit.
+	 */
+
+	for (totalToSend = 0, psD = apsDroidLists[from];
+	     psD && getNumDroids(to) + totalToSend < getMaxDroids(to) && totalToSend != UINT8_MAX;
+	     psD = psD->psNext)
 	{
-		DROID        *next, *psD;
-		uint8_t      giftType = DROID_GIFT;
-		uint8_t      totalToSend;
-
-		NETuint8_t(&giftType);
-		NETuint8_t(&from);
-		NETuint8_t(&to);
-
-		/*
-		 * Work out the number of droids to send. As well as making sure they are
-		 * selected we also need to make sure they will put the receiving player
-		 * over their droid limit.
-		 */
-		for (totalToSend = 0, psD = apsDroidLists[from];
-		     psD && getNumDroids(to) + totalToSend < getMaxDroids(to) && totalToSend != UINT8_MAX;
-		     psD = psD->psNext)
-		{
-			if (psD->selected)
+		if (psD->selected)
 				++totalToSend;
-		}
+	}
+	/*
+	 * We must send one droid at a time, due to the fact that giftSingleDroid()
+	 * does its own net calls.
+	 */
 
-		NETuint8_t(&totalToSend);
+	for (psD = apsDroidLists[from]; psD && totalToSend != 0; psD = next)
+	{
+		// Store the next droid in the list as the list may change
+		next = psD->psNext;
 
-		for (psD = apsDroidLists[from];
-		     psD && totalToSend != 0;
-		     psD = next)
+		if (psD->droidType == DROID_TRANSPORTER)
 		{
-			// Store the next droid in the list as the list may change
-			next = psD->psNext;
+			CONPRINTF(ConsoleString, (ConsoleString, _("Tried to give away a %s - but this is not allowed."), psD->aName));
+			continue;
+		}
+		if (psD->selected)
+		{
+			NETbeginEncode(NET_GIFT, NET_ALL_PLAYERS);
+			NETuint8_t(&giftType);
+			NETuint8_t(&from);
+			NETuint8_t(&to);
+			// Add the droid to the packet
+			NETuint32_t(&psD->id);
+			NETend();
 
-			if (psD->selected)
-			{
-				// Hand over the droid on our sidde
-				giftSingleDroid(psD, to);
+			// Hand over the droid on our sidde
+			giftSingleDroid(psD, to);
 
-				// Add the droid to the packet
-				NETuint32_t(&psD->id);
-
-				// Decrement the number of droids left to send
-				--totalToSend;
-			}
+			// Decrement the number of droids left to send
+			--totalToSend;
 		}
 	}
-	NETend();
 }
 
 
