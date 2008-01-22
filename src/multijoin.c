@@ -299,13 +299,11 @@ BOOL MultiPlayerJoin(UDWORD dpid)
 		ASSERT( NetPlay.playercount<=MAX_PLAYERS,"Too many players!" );
 
 		// setup data for this player, then broadcast it to the other players.
-#if 0
-		for(i=0; player2dpid[i]!= 0 ;i++);			// find a zero entry, for a new player. MAKE RANDOM!!!
-#else
-		do{											// randomly allocate a player to this new machine.
-			i = rand()%game.maxPlayers;
-		}while(player2dpid[i] != 0);
-#endif
+		do
+		{
+			// Randomly allocate a player to this new machine
+			i = rand() % game.maxPlayers;
+		} while (player2dpid[i] != 0);
 
 		setPlayerColour(i,MAX_PLAYERS);				// force a colourchoice
 		chooseColour(i);							// pick an unused colour.
