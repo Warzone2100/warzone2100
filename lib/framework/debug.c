@@ -39,71 +39,35 @@ UDWORD traceID;
 static debug_callback * callbackRegistry = NULL;
 BOOL enabled_debug[LOG_LAST]; // global
 
-
-/*!
- * Convert code_part enum to string.
- *
- * \return Codepart name or "unknown"
+/*
+ * This list _must_ match the enum in debug.h!
+ * Names must be 8 chars long at max!
  */
-static const char *code_part2string(code_part part)
-{
-	/*
-	 * This list _must_ match the enum in debug.h!
-	 * Names must be 8 chars long at max!
-	 */
-	switch(part)
-	{
-		case LOG_ALL:
-			return "all";
-		case LOG_MAIN:
-			return "main";
-		case LOG_SOUND:
-			return "sound";
-		case LOG_VIDEO:
-			return "video";
-		case LOG_WZ:
-			return "wz";
-		case LOG_3D:
-			return "3d";
-		case LOG_TEXTURE:
-			return "texture";
-		case LOG_NET:
-			return "net";
-		case LOG_MEMORY:
-			return "memory";
-		case LOG_WARNING:
-			return "warning";
-		case LOG_ERROR:
-			return "error";
-		case LOG_NEVER:
-			return "never";
-		case LOG_SCRIPT:
-			return "script";
-		case LOG_MOVEMENT:
-			return "movement";
-		case LOG_ATTACK:
-			return "attack";
-		case LOG_FOG:
-			return "fog";
-		case LOG_SENSOR:
-			return "sensor";
-		case LOG_GUI:
-			return "gui";
-		case LOG_MAP:
-			return "map";
-		case LOG_SAVEGAME:
-			return "savegame";
-		case LOG_MULTISYNC:
-			return "multisync";
-		case LOG_DEATH:
-			return "death";
-		case LOG_GATEWAY:
-			return "gateway";
-		case LOG_LAST:
-			return "last";
-	}
-
-	return "unknown"; // Here and not in switch to catch unhandled cases!
+static const char *code_part_names[] = {
+	"all",
+	"main",
+	"sound",
+	"video",
+	"wz",
+	"3d",
+	"texture",
+	"net",
+	"memory",
+	"warning",
+	"error",
+	"never",
+	"script",
+	"movement",
+	"attack",
+	"fog",
+	"sensor",
+	"gui",
+	"map",
+	"savegame",
+	"multisync",
+	"death",
+	"gateway",
+	"last"
 };
 
 
@@ -112,12 +76,12 @@ static const char *code_part2string(code_part part)
  *
  * \return	Codepart number or LOG_LAST if can't match.
  */
-static code_part code_part_from_str(const char *str)
+static int code_part_from_str(const char *str)
 {
-	unsigned int i;
+	int i;
 
 	for (i = 0; i < LOG_LAST; i++) {
-		if (strcasecmp(code_part2string(i), str) == 0) {
+		if (strcasecmp(code_part_names[i], str) == 0) {
 			return i;
 		}
 	}
@@ -222,6 +186,8 @@ void debug_callback_file_exit( void ** data )
 
 void debug_init(void)
 {
+	int count = 0;
+
 	/*** Initialize the debug subsystem ***/
 #if defined(WZ_CC_MSVC) && defined(DEBUG)
 	int tmpDbgFlag;
@@ -236,6 +202,16 @@ void debug_init(void)
 	_CrtSetDbgFlag( tmpDbgFlag );
 #endif // WZ_CC_MSVC && DEBUG
 
+	while (strcmp(code_part_names[count], "last") != 0) {
+		count++;
+	}
+	if (count != LOG_LAST) {
+		fprintf( stderr, "LOG_LAST != last; whoever edited the debug code last "
+		        "did a mistake.\n" );
+		fprintf( stderr, "Always edit both the enum in debug.h and the string "
+		        "list in debug.c!\n" );
+		exit(1);
+	}
 	memset( enabled_debug, FALSE, sizeof(enabled_debug) );
 	enabled_debug[LOG_ERROR] = TRUE;
 #ifdef DEBUG
@@ -291,7 +267,7 @@ void debug_register_callback( debug_callback_fn callback, debug_callback_init in
 
 BOOL debug_enable_switch(const char *str)
 {
-	code_part part = code_part_from_str(str);
+	int part = code_part_from_str(str);
 
 	if (part != LOG_LAST) {
 		enabled_debug[part] = !enabled_debug[part];
@@ -363,7 +339,7 @@ void _debug( code_part part, const char *str, ... )
 	if (!repeated)
 	{
 		// Assemble the outputBuffer:
-		snprintf( outputBuffer, MAX_LEN_LOG_LINE, "%-8s: %s", code_part2string(part), useInputBuffer1 ? inputBuffer[1] : inputBuffer[0] );
+		snprintf( outputBuffer, MAX_LEN_LOG_LINE, "%-8s: %s", code_part_names[part], useInputBuffer1 ? inputBuffer[1] : inputBuffer[0] );
 
 		while (curCallback) {
 			curCallback->callback( &curCallback->data, outputBuffer );
