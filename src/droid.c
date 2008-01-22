@@ -5361,13 +5361,13 @@ BOOL cbSensorDroid(DROID *psDroid)
 //returns the droid created - for single player
 DROID * giftSingleDroid(DROID *psD, UDWORD to)
 {
-    DROID_TEMPLATE      sTemplate;
-    UWORD               x, y, numKills, i;
-    float               direction;
-    DROID               *psNewDroid, *psCurr;
-    STRUCTURE           *psStruct;
-    UDWORD              body, armourK[NUM_HIT_SIDES], armourH[NUM_HIT_SIDES];
-	HIT_SIDE		impact_side;
+	DROID_TEMPLATE	sTemplate;
+	UWORD		x, y, numKills, i;
+	float		direction;
+	DROID		*psNewDroid, *psCurr;
+	STRUCTURE	*psStruct;
+	UDWORD		body, armourK[NUM_HIT_SIDES], armourH[NUM_HIT_SIDES];
+	HIT_SIDE	impact_side;
 
 	CHECK_DROID(psD);
 
@@ -5376,158 +5376,145 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 		return psD;
 	}
 
-    if (bMultiPlayer)
-    {
-        //reset order
-	    orderDroid(psD, DORDER_STOP);
+	// FIXME: why completely separate code paths for multiplayer and single player?? - Per
 
-	    if (droidRemove(psD,apsDroidLists)) 		// remove droid from one list
-        {
-			if(!isHumanPlayer(psD->player))
+	if (bMultiPlayer)
+	{
+		// reset order
+		orderDroid(psD, DORDER_STOP);
+
+		if (droidRemove(psD, apsDroidLists)) 		// remove droid from one list
+		{
+			if (!isHumanPlayer(psD->player))
 			{
-				droidSetName(psD,"Enemy Unit");
+				droidSetName(psD, "Enemy Unit");
 			}
 
+			// if successfully removed the droid from the players list add it to new player's list
+			psD->selected	= FALSE;
+			psD->player	= to;		// move droid
 
-            //if successfully removed the droid from the players list add it to new player's list
-            psD->selected = FALSE;
-	        psD->player	  = (UBYTE)to;					// move droid
+			addDroid(psD, apsDroidLists);	// add to other list.
 
-	        addDroid(psD, apsDroidLists);	// add to other list.
+			// the new player may have different default sensor/ecm/repair components
+			if ((asSensorStats + psD->asBits[COMP_SENSOR].nStat)->location == LOC_DEFAULT)
+			{
+				if (psD->asBits[COMP_SENSOR].nStat != aDefaultSensor[psD->player])
+				{
+					psD->asBits[COMP_SENSOR].nStat = (UBYTE)aDefaultSensor[psD->player];
+				}
+			}
+			if ((asECMStats + psD->asBits[COMP_ECM].nStat)->location == LOC_DEFAULT)
+			{
+				if (psD->asBits[COMP_ECM].nStat != aDefaultECM[psD->player])
+				{
+					psD->asBits[COMP_ECM].nStat = (UBYTE)aDefaultECM[psD->player];
+				}
+			}
+			if ((asRepairStats + psD->asBits[COMP_REPAIRUNIT].nStat)->location == LOC_DEFAULT)
+			{
+				if (psD->asBits[COMP_REPAIRUNIT].nStat != aDefaultRepair[psD->player])
+				{
+					psD->asBits[COMP_REPAIRUNIT].nStat = (UBYTE)aDefaultRepair[psD->player];
+				}
+			}
+	        }
+		// add back into cluster system
+		clustNewDroid(psD);
 
-            //the new player may have different default sensor/ecm/repair components
-            if ((asSensorStats + psD->asBits[COMP_SENSOR].nStat)->location == LOC_DEFAULT)
-            {
-                if (psD->asBits[COMP_SENSOR].nStat != aDefaultSensor[psD->player])
-                {
-                    psD->asBits[COMP_SENSOR].nStat = (UBYTE)aDefaultSensor[psD->player];
-                }
-            }
-            if ((asECMStats + psD->asBits[COMP_ECM].nStat)->location == LOC_DEFAULT)
-            {
-                if (psD->asBits[COMP_ECM].nStat != aDefaultECM[psD->player])
-                {
-                    psD->asBits[COMP_ECM].nStat = (UBYTE)aDefaultECM[psD->player];
-                }
-            }
-            if ((asRepairStats + psD->asBits[COMP_REPAIRUNIT].nStat)->location == LOC_DEFAULT)
-            {
-                if (psD->asBits[COMP_REPAIRUNIT].nStat != aDefaultRepair[psD->player])
-                {
-                    psD->asBits[COMP_REPAIRUNIT].nStat = (UBYTE)aDefaultRepair[psD->player];
-                }
-            }
-        }
-        //add back into cluster system
-        clustNewDroid(psD);
+		// Update visibility
+		visTilesUpdate((BASE_OBJECT*)psD);
 
-	// Update visibility
-	visTilesUpdate((BASE_OBJECT*)psD);
+		// add back into the grid system
+		gridAddObject((BASE_OBJECT *)psD);
 
-        //add back into the grid system
-        gridAddObject((BASE_OBJECT *)psD);
-
-        //check through the 'to' players list of droids to see if any are targetting it
-        for (psCurr = apsDroidLists[to]; psCurr != NULL; psCurr = psCurr->psNext)
-        {
-            if (psCurr->psTarget == (BASE_OBJECT *)psD ||
-                psCurr->psActionTarget[0] == (BASE_OBJECT *)psD)
-            {
-                orderDroid(psCurr, DORDER_STOP);
-            }
-            //check through order list
-            for (i = 0; i < psCurr->listSize; i++)
-            {
-                if (psCurr->asOrderList[i].psOrderTarget == (BASE_OBJECT *)psD)
-                {
+		// check through the 'to' players list of droids to see if any are targetting it
+		for (psCurr = apsDroidLists[to]; psCurr != NULL; psCurr = psCurr->psNext)
+		{
+			if (psCurr->psTarget == (BASE_OBJECT *)psD || psCurr->psActionTarget[0] == (BASE_OBJECT *)psD)
+			{
+				orderDroid(psCurr, DORDER_STOP);
+			}
+			// check through order list
+			for (i = 0; i < psCurr->listSize; i++)
+			{
+				if (psCurr->asOrderList[i].psOrderTarget == (BASE_OBJECT *)psD)
+				{
 					removeDroidOrderTarget(psCurr, i);
-            		// move the rest of the list down
-		            memmove(&psCurr->asOrderList[i], &psCurr->asOrderList[i] + 1,
-                        (psCurr->listSize - i) * sizeof(ORDER_LIST));
-                    //adjust list size
-                    psCurr->listSize -= 1;
-                    //initialise the empty last slot
-		            memset(psCurr->asOrderList + psCurr->listSize, 0,
-                        sizeof(ORDER_LIST));
-                }
-            }
-        }
-        //check through the 'to' players list of structures to see if any are targetting it
-        for (psStruct = apsStructLists[to]; psStruct != NULL; psStruct =
-            psStruct->psNext)
-        {
-            if (psStruct->psTarget[0] == (BASE_OBJECT *)psD)
-            {
-                psStruct->psTarget[0] = NULL;
-            }
-        }
+					// move the rest of the list down
+					memmove(&psCurr->asOrderList[i], &psCurr->asOrderList[i] + 1, (psCurr->listSize - i) * sizeof(ORDER_LIST));
+					// adjust list size
+					psCurr->listSize -= 1;
+					// initialise the empty last slot
+					memset(psCurr->asOrderList + psCurr->listSize, 0, sizeof(ORDER_LIST));
+				}
+			}
+		}
+		// check through the 'to' players list of structures to see if any are targetting it
+		for (psStruct = apsStructLists[to]; psStruct != NULL; psStruct = psStruct->psNext)
+		{
+			if (psStruct->psTarget[0] == (BASE_OBJECT *)psD)
+			{
+				psStruct->psTarget[0] = NULL;
+			}
+		}
 
 		// skirmish callback!
 		psScrCBDroidTaken = psD;
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_UNITTAKEOVER);
 		psScrCBDroidTaken = NULL;
 
-        return NULL;
-    }
-
-    {
-        //got to destroy the droid and build another since there are too many complications re order/action!
-
-        //create a template based on the droid
-        templateSetParts(psD, &sTemplate);
-
-        //copy the name across
-        strlcpy(sTemplate.aName, psD->aName, sizeof(sTemplate.aName));
-
-        x = psD->pos.x;
-        y = psD->pos.y;
-        body = psD->body;
-	for (impact_side = 0;impact_side < NUM_HIT_SIDES;impact_side=impact_side+1)
-	{
-		armourK[impact_side] = psD->armour[impact_side][WC_KINETIC];
-		armourH[impact_side] = psD->armour[impact_side][WC_HEAT];
+		return NULL;
 	}
-        numKills = psD->experience;
-        direction = psD->direction;
-        //only play the sound if unit being taken over is selectedPlayer's but not going to the selectedPlayer
-        //if ((psD->player == selectedPlayer) &&
-		//	(psD->player != to))
-        if ((psD->player == selectedPlayer) && (to != selectedPlayer))
-        {
-            scoreUpdateVar(WD_UNITS_LOST);
+	else
+	{
+		// got to destroy the droid and build another since there are too many complications re order/action!
 
-	        audio_QueueTrackPos( ID_SOUND_NEXUS_UNIT_ABSORBED, x, y, psD->pos.z );
+		// create a template based on the droid
+		templateSetParts(psD, &sTemplate);
 
-        }
-        //make the old droid vanish
-        vanishDroid(psD);
-        //create a new droid
-        psNewDroid = buildDroid(&sTemplate, x, y, to, FALSE);
-        if (psNewDroid)
-        {
-            addDroid(psNewDroid, apsDroidLists);
-            psNewDroid->body = body;
+		// copy the name across
+		strlcpy(sTemplate.aName, psD->aName, sizeof(sTemplate.aName));
+
+		x = psD->pos.x;
+		y = psD->pos.y;
+		body = psD->body;
+		for (impact_side = 0;impact_side < NUM_HIT_SIDES;impact_side=impact_side+1)
+		{
+			armourK[impact_side] = psD->armour[impact_side][WC_KINETIC];
+			armourH[impact_side] = psD->armour[impact_side][WC_HEAT];
+		}
+		numKills = psD->experience;
+		direction = psD->direction;
+		// only play the sound if unit being taken over is selectedPlayer's but not going to the selectedPlayer
+		if (psD->player == selectedPlayer && to != selectedPlayer)
+		{
+			scoreUpdateVar(WD_UNITS_LOST);
+			audio_QueueTrackPos( ID_SOUND_NEXUS_UNIT_ABSORBED, x, y, psD->pos.z );
+		}
+		// make the old droid vanish
+		vanishDroid(psD);
+		// create a new droid
+		psNewDroid = buildDroid(&sTemplate, x, y, to, FALSE);
+		ASSERT(psNewDroid != NULL, "giftSingleUnit: unable to build a unit" );
+		if (psNewDroid)
+		{
+			addDroid(psNewDroid, apsDroidLists);
+			psNewDroid->body = body;
 			for (impact_side = 0;impact_side < NUM_HIT_SIDES;impact_side=impact_side+1)
 			{
 				psNewDroid->armour[impact_side][WC_KINETIC] = armourK[impact_side];
 				psNewDroid->armour[impact_side][WC_HEAT] = armourH[impact_side];
 			}
-            psNewDroid->experience = numKills;
-            psNewDroid->direction = direction;
-    		if(!(psNewDroid->droidType == DROID_PERSON ||
-                //psNewDroid->droidType == DROID_CYBORG ||
-                cyborgDroid(psNewDroid) ||
-                psNewDroid->droidType == DROID_TRANSPORTER))
-	    	{
-		    	updateDroidOrientation(psNewDroid);
-		    }
-        }
-        else
-        {
-            ASSERT(!"failed building a droid", "giftSingleUnit: unable to build a unit" );
-        }
-        return psNewDroid;
-    }
+			psNewDroid->experience = numKills;
+			psNewDroid->direction = direction;
+			if (!(psNewDroid->droidType == DROID_PERSON || cyborgDroid(psNewDroid) || psNewDroid->droidType == DROID_TRANSPORTER))
+			{
+				updateDroidOrientation(psNewDroid);
+			}
+		}
+		return psNewDroid;
+	}
 }
 
 /*calculates the electronic resistance of a droid based on its experience level*/
