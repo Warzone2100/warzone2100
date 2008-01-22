@@ -261,7 +261,6 @@ event manufactureChosen;
 event manufactureIconChosen;
 event delivPointMoved;
 event buildSelectedFactory;
-event soundBug;
 event firstDroidBuilt;
 //event videoDone; // not used.. see end of file
 
@@ -269,6 +268,9 @@ event firstDroidBuilt;
 /* Main entry event - performs setup and the like */
 event	setupEvent(CALL_GAMEINIT)
 {
+	// And set this event to inactive - switch off
+	setEventTrigger(setupEvent,inactive);
+
 	// ajl: setup templates...
 	tutorialTemplates();
 
@@ -317,30 +319,18 @@ event	setupEvent(CALL_GAMEINIT)
 	// Fire off track one on the CD if it's there...
 	playCDAudio(1);
 
-	// Fire off next one
-	setEventTrigger(soundBug,tutorialTrigger);
-
-	// And set this event to inactive - switch off
-	setEventTrigger(setupEvent,inactive);
-
 	// Cam3daynight has set to cam 3 so reset to cam 1 - GJ
 	setCampaignNumber(1);
-}
-// -------------------------------------------------------------
-event	soundBug(inactive)
-{
-	// Wait a bit
+
+	//wait 
 	pause(20);
-	pause(20);
-		
+
 	// needed cos you can't have a pause in CALL_GAMEINIT
 	playSound(SND_TUT1,0);
 	addConsoleText(m_msge15,0);
 
  	// ... and setup the first real event for action
 	setEventTrigger(buildDerrick,tutorialTrigger);
-
-	setEventTrigger(soundBug,inactive);
 }
 // -------------------------------------------------------------
 // First event-Sets things up for the player to build a derrick
@@ -393,6 +383,9 @@ event	truckSelected(inactive)
 // What to do when the resource extractor has been built
 event	derrickBuilt(CALL_RESEX_BUILT)
 {
+	// Close this event
+	setEventTrigger(derrickBuilt,inactive);
+
 	tutState = 3;
 
 	// Wait for a wee bit...
@@ -421,20 +414,20 @@ event	derrickBuilt(CALL_RESEX_BUILT)
 	// build button
 	addReticuleButton(BUILD);
 
+	// Allow power generators to be built
+	enableStructure(powerGen,0);
+
 	// Set it off flashing
 	flashOn(IDRET_BUILD);
-
-	// Close this event
-	setEventTrigger(derrickBuilt,inactive);
 }
 // -------------------------------------------------------------
 // Fires off when player has clicked on the build icon
 event	buildIconChosen(buildlistTrig)
 {
-	tutState = 4;
+	// Close this event
+	setEventTrigger(buildIconChosen,inactive);
 
-	// Allow power generators to be built
-	enableStructure(powerGen,0);
+	tutState = 4;
 
 	// Stop the build icon flashing...
 	flashOff(IDRET_BUILD);
@@ -445,9 +438,6 @@ event	buildIconChosen(buildlistTrig)
 	tagConsoleText(m_msge2,0);
 
 	setEventTrigger(buildItemChosen,buildgridTrig);
-
-	// Close this event
-	setEventTrigger(buildIconChosen,inactive);
 }
 // -------------------------------------------------------------
 // Fires off when we've clicked on the item in the build menu
