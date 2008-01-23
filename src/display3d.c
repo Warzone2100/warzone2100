@@ -176,7 +176,7 @@ static iView	camera;
 static Vector3i	imdRot,imdRot2;
 
 /* How far away are we from the terrain */
-UDWORD		distance = START_DISTANCE;//(DISTANCE - (DISTANCE/6));
+UDWORD		distance;
 
 /* Stores the screen coordinates of the transformed terrain tiles */
 static TERRAIN_VERTEX tileScreenInfo[LAND_YGRD][LAND_XGRD];
@@ -900,6 +900,14 @@ BOOL init3DView(void)
 	memset(directionSet, FALSE, sizeof(directionSet));
 
 	pie_PrepareSkybox(skyboxPageName);
+	
+	// and set the camera position
+	distance = START_DISTANCE; // distance
+	player.p.y = 1000; // height
+	
+	player.r.z = 0; // roll
+	player.r.y = INITIAL_DESIRED_ROTATION; // rotation
+	player.r.x = DEG(360 + INITIAL_STARTING_PITCH); // angle
 
 	return TRUE;
 }
