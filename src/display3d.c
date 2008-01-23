@@ -894,13 +894,13 @@ BOOL init3DView(void)
 
 	pie_PrepareSkybox(skyboxPageName);
 	
-	// and set the camera position
-	distance = START_DISTANCE; // distance
-	player.p.y = 1000; // height
-	
 	player.r.z = 0; // roll
 	player.r.y = INITIAL_DESIRED_ROTATION; // rotation
 	player.r.x = DEG(360 + INITIAL_STARTING_PITCH); // angle
+
+	// and set the camera position
+	distance = START_DISTANCE; // distance	
+	player.p.y = 1000 + map_Height(player.r.x, player.r.z); // height
 
 	return TRUE;
 }
