@@ -32,6 +32,7 @@
 #include <windows.h>
 #include <string>
 #include <stdexcept>
+#include <boost/strong_typedef.hpp>
 
 #ifdef ShellExecute
 # undef ShellExecute
@@ -93,10 +94,10 @@ namespace Win
      */
     std::string GetCurrentDirectory();
 
-    /** @note: Don't depend on this typedef remaining ::HWND for ever, it might
-     *         be wrapped in some class later on.
+    /** @note Don't depend on this typedef remaining ::HWND for ever, it might
+     *        be wrapped in some class later on.
      */
-    typedef ::HWND HWND;
+    BOOST_STRONG_TYPEDEF(::HWND, HWND);
 
     enum show_command
     {
@@ -141,7 +142,7 @@ namespace Win
                        const charT* operation = NULL,
                        const charT* parameters = NULL,
                        const charT* directory = NULL,
-                       HWND hwnd = NULL,
+                       HWND hwnd = HWND(NULL),
                        show_command showCmd = show_command_normal)
     {
         return ShellExecute(hwnd, operation, fileName, parameters, directory, showCmd);
@@ -154,7 +155,7 @@ namespace Win
                        const std::basic_string<charT, traits, Allocator>& operation  = std::basic_string<charT, traits, Allocator>(),
                        const std::basic_string<charT, traits, Allocator>& parameters = std::basic_string<charT, traits, Allocator>(),
                        const std::basic_string<charT, traits, Allocator>& directory  = std::basic_string<charT, traits, Allocator>(),
-                       HWND hwnd = NULL,
+                       HWND hwnd = HWND(NULL),
                        show_command showCmd = show_command_normal)
     {
         const charT * const file = fileName.c_str();
