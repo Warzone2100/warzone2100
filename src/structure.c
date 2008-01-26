@@ -3680,13 +3680,14 @@ void structureUpdate(STRUCTURE *psBuilding)
 	UDWORD percentDamage, emissionInterval, iPointsToAdd, iPointsRequired;
 	Vector3i dv;
 
-	CHECK_STRUCTURE(psBuilding);
-
 	//update the manufacture/research of the building once complete
 	if (psBuilding->status == SS_BUILT)
 	{
 		aiUpdateStructure(psBuilding);
 	}
+
+	// must be after aiUpdateStructure because this is where we clean out dead targets
+	CHECK_STRUCTURE(psBuilding);
 
 	if(psBuilding->status!=SS_BUILT)
 	{
