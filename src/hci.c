@@ -72,6 +72,11 @@
 
 //#define DEBUG_SCROLLTABS 	//enable to see tab scroll button info for buttons
 
+//#define EDIT_OPTIONS
+#ifdef EDIT_OPTIONS
+static UDWORD		newMapWidth, newMapHeight;
+#endif
+
 #define RETXOFFSET (0)// Reticule button offset
 #define RETYOFFSET (0)
 #define NUMRETBUTS	7 // Number of reticule buttons.
@@ -176,8 +181,6 @@ BOOL Refreshing = FALSE;
 #define IDOPT_MAPNEW		1032		// The new map button
 #define IDOPT_MAPWIDTH		1033		// The edit box for the map width
 #define IDOPT_MAPHEIGHT		1034		// The edit box for the map height
-#define	IDOPT_LOADGAME		1035		// The load game button
-#define IDOPT_SAVEGAME		1036		// The save game button
 #define IDOPT_DROID			1037		// The place droid button
 #define IDOPT_STRUCT		1038		// The place struct button
 #define IDOPT_FEATURE		1039		// The place feature button
@@ -1030,10 +1033,10 @@ static void intRemoveEdit(void)
 static void intGetMapSize(void)
 {
 	SDWORD editWidth, editHeight;
-	STRING aText[WIDG_MAXSTR];
+	char aText[WIDG_MAXSTR];
 	UDWORD i, tmp, bitCount;
 	BOOL widthChanged = FALSE, heightChanged = FALSE;
-	STRING *pStr = widgGetString(psWScreen, IDOPT_MAPWIDTH);
+	const char *pStr = widgGetString(psWScreen, IDOPT_MAPWIDTH);
 
 	if (isdigit(*pStr))
 	{
@@ -1342,6 +1345,7 @@ static void intProcessOptions(UDWORD id)
 		{
 #ifdef EDIT_OPTIONS
 		case IDOPT_MAPLOAD:
+			debug(LOG_ERROR, "We should call loadFile and mapLoad here");
 			{
 				/* Managed to load so quit the option screen */
 				intRemoveOptions();
@@ -1349,6 +1353,7 @@ static void intProcessOptions(UDWORD id)
 			}
 			break;
 		case IDOPT_MAPSAVE:
+			debug(LOG_ERROR, "We should call writeMapFile here");
 			{
 				/* Managed to save so quit the option screen */
 				intRemoveOptions();
@@ -1372,6 +1377,9 @@ static void intProcessOptions(UDWORD id)
 			intGetMapSize();
 			break;
 		case IDOPT_EDIT:
+			intRemoveOptions();
+			intAddEdit();
+			intMode = INT_EDIT;
 			break;
 #endif
 			/* The add object buttons */
@@ -1430,26 +1438,6 @@ static void intProcessOptions(UDWORD id)
 		case IDOPT_MAPLABEL:
 		case IDOPT_PLAYERFORM:
 		case IDOPT_PLAYERLABEL:
-			break;
-		case IDOPT_SAVEGAME:
-			/* NO LONGER AVAILABLE HERE - 14/04/98 AB*/
-//#ifdef DEBUG	// We need this so that Keith can save maps to import into the editor. PD 13/05/98.
-//			if (saveGame())
-//			{
-//				intRemoveOptions();
-//				intMode = INT_NORMAL;
-//				widgSetButtonState(psWScreen, IDRET_OPTIONS, 0);
-//			}
-//#endif
-			break;
-		case IDOPT_LOADGAME:
-			/* NO LONGER AVAILABLE HERE - 14/04/98 AB
-			if (loadGame(NULL, FALSE, TRUE))
-			{
-				intRemoveOptions();
-				intMode = INT_NORMAL;
-				widgSetButtonState(psWScreen, IDRET_OPTIONS, 0);
-			}*/
 			break;
 		default:
 			ASSERT( FALSE, "intProcessOptions: Unknown return code" );
@@ -1939,14 +1927,6 @@ INT_RETVAL intRunWidgets(void)
 
 	if (!quitting && !retID)
 	{
-
-		if (intMode == INT_EDIT)
-		{
-			/* Including the edit mode here is pretty nasty - but it will get
-			 * ripped out for the final version.
-			 */
-		}
-		else
 		if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_BUILDSEL)
 		{
 			// See if a position for the structure has been found
@@ -2168,40 +2148,10 @@ INT_RETVAL intRunWidgets(void)
 	{
 		retCode = INT_QUIT;
 	}
-	//the return code has been superceded by the different pause states
-	/*else if (intMode == INT_DESIGN)
-	{
-		retCode = INT_FULLSCREENPAUSE;
-	}*/
-	//else if (intMode == INT_INTELMAP)
-	//{
-		//Pause game in Intel Screen now - AB 18/03/98
-		//retCode = INT_FULLSCREENPAUSE;
-		/*//if 3D View is up don't want scroll
-		psWidget = widgGetFromID(psWScreen,IDINTMAP_MSGVIEW);
-		if (psWidget)
-		{
-			retCode = INT_INTELNOSCROLL;
-		}
-		else
-		{
-			retCode = INT_INTELPAUSE;
-		}*/
-	//}
-	/*else if (intMode == INT_TUTORIAL)
-	{
-		retCode = INT_INTELNOSCROLL;
-	}*/
-
 	else if (retID || intMode == INT_EDIT || intMode == INT_MISSIONRES || widgOverID != 0)
 	{
 		retCode = INT_INTERCEPT;
 	}
-
-//	else if (retID || intMode == INT_EDIT || intMode == INT_MISSIONRES || widgGetMouseOver(psWScreen) != 0)
-//	{
-//		retCode = INT_INTERCEPT;
-//	}
 
 	if(	(testPlayerHasLost() || (testPlayerHasWon() && !bMultiPlayer)) && // yeah yeah yeah - I know....
         (intMode != INT_MISSIONRES) && !getDebugMappingStatus())
@@ -4115,26 +4065,6 @@ BOOL intAddOptions(void)
 	sButInit.y = OPT_GAP*2 + OPT_BUTHEIGHT;
 	sButInit.pText = "New";
 	sButInit.pTip = "New Blank Map";
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return FALSE;
-	}
-
-	/* Add the load and save game buttons */
-	sButInit.formID = IDOPT_FORM;
-	sButInit.id = IDOPT_LOADGAME;
-	sButInit.x = OPT_GAP;
-	sButInit.y = OPT_LOADY;
-	sButInit.pText = "Load";
-	sButInit.pTip = _("Load Game");
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return FALSE;
-	}
-	sButInit.id = IDOPT_SAVEGAME;
-	sButInit.x += OPT_GAP + OPT_BUTWIDTH;
-	sButInit.pText = "Save";
-	sButInit.pTip = _("Save Game");
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return FALSE;
