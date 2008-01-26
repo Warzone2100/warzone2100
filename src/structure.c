@@ -7514,8 +7514,7 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, BOOL
 		//in this version of Warzone, the attack Player can NEVER be the selectedPlayer (unless from the script)
 		if (!bFromScript && selectedPlayer == 0 && attackPlayer == selectedPlayer)
 		{
-			ASSERT( FALSE,
-				"giftSingleStructure: EW attack by selectedPlayer on a structure" );
+			ASSERT(bFromScript || selectedPlayer != 0 || attackPlayer != selectedPlayer, "giftSingleStructure: EW attack by selectedPlayer on a structure");
 			return NULL;
 		}
 	}
