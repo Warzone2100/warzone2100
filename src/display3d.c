@@ -621,7 +621,6 @@ static void drawTiles(iView *camera, iView *player)
 			tileScreenInfo[i][j].pos.x = world_coord(j - terrainMidX);
 			tileScreenInfo[i][j].pos.z = world_coord(terrainMidY - i);
 			tileScreenInfo[i][j].pos.y = 0;
-			tileScreenInfo[i][j].bWater = FALSE;
 
 			if( playerXTile+j < 0 ||
 				playerZTile+i < 0 ||
@@ -678,27 +677,6 @@ static void drawTiles(iView *camera, iView *player)
 					pushedDown = TRUE;
 				}
 
-				// If it's any water tile..
-				if (terrainType(psTile) == TER_WATER)
-				{
-					// If it's the main water tile then bring it back up because it was pushed down for the river bed calc.
-					int tmp_y = tileScreenInfo[i][j].pos.y;
-
-					if (pushedDown)
-					{
-						tileScreenInfo[i][j].pos.y += shiftVal;
-					}
-
-					tileScreenInfo[i][j].bWater = TRUE;
-					tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].pos.y;
-					tileScreenInfo[i][j].pos.y = tmp_y;
-				}
-				else
-				{
-					// If it wasnt a water tile then need to ensure water.xyz are valid because
-					// a water tile might be sharing verticies with it.
-					tileScreenInfo[i][j].water_height = tileScreenInfo[i][j].pos.y;
-				}
 				setTileColour(playerXTile + j, playerZTile + i, TileIllum);
 			}
 			// hack since tileScreenInfo[i][j].screen is Vector3i and pie_RotateProject takes Vector2i as 2nd param
@@ -729,7 +707,6 @@ static void drawTiles(iView *camera, iView *player)
 		{
 			//get distance of furthest corner
 			int zMax = MAX(tileScreenInfo[i][j].screen.z, tileScreenInfo[i+1][j].screen.z);
-
 			zMax = MAX(zMax, tileScreenInfo[i + 1][j + 1].screen.z);
 			zMax = MAX(zMax, tileScreenInfo[i][j + 1].screen.z);
 
@@ -744,6 +721,24 @@ static void drawTiles(iView *camera, iView *player)
 	}
 	pie_DrawTerrainDone(MIN(visibleTiles.x, mapWidth),  MIN(visibleTiles.y, mapHeight));
 
+	// Update height for water
+	for (i = 0; i < visibleTiles.y + 1; i++)
+	{
+		/* Go through the x's */
+		for (j = 0; j < visibleTiles.x + 1; j++)
+		{
+			if (!(playerXTile + j < 0 || playerZTile + i < 0 || playerXTile + j > (SDWORD)(mapWidth - 1)
+			      || playerZTile + i > (SDWORD)(mapHeight - 1)))
+			{
+				tileScreenInfo[i][j].pos.y = map_TileHeight(playerXTile + j, playerZTile + i);
+			}
+			else
+			{
+				tileScreenInfo[i][j].pos.y = 0;
+			}
+		}
+	}
+
 	// Draw water edges
 	pie_SetDepthOffset(-2.0);
 	pie_SetAlphaTest(TRUE);
@@ -751,9 +746,16 @@ static void drawTiles(iView *camera, iView *player)
 	{
 		for (j = 0; j < MIN(visibleTiles.x, mapWidth); j++)
 		{
+			MAPTILE *psTile;
+
+			if (!tileOnMap(playerXTile + j, playerZTile + i))
+			{
+				continue;
+			}
+			psTile = mapTile(playerXTile + j, playerZTile + i);
+
 			// check if we need to draw a water edge
-			if (tileScreenInfo[i][j].bWater
-			    && TileNumber_tile(mapTile(playerXTile + j, playerZTile + i)->texture) != WATER_TILE)
+			if (terrainType(psTile) == TER_WATER && TileNumber_tile(psTile->texture) != WATER_TILE)
 			{
 				//get distance of furthest corner
 				int zMax = MAX(tileScreenInfo[i][j].screen.z, tileScreenInfo[i + 1][j].screen.z);
@@ -777,11 +779,19 @@ static void drawTiles(iView *camera, iView *player)
 	pie_SetRendMode(REND_ALPHA_TEX);
 	pie_SetAlphaTest(FALSE);
 	pie_SetDepthOffset(-1.0f);
-	for (i = 0; i < MIN(visibleTiles.y, mapHeight); i++)
+	for (i = 0; i < MIN(visibleTiles.y, mapHeight ); i++)
 	{
 		for (j = 0; j < MIN(visibleTiles.x, mapWidth); j++)
 		{
-			if (tileScreenInfo[i][j].bWater)
+			MAPTILE *psTile;
+
+			if (!tileOnMap(playerXTile + j, playerZTile + i))
+			{
+				continue;
+			}
+			psTile = mapTile(playerXTile + j, playerZTile + i);
+
+			if (terrainType(psTile) == TER_WATER)
 			{
 				//get distance of furthest corner
 				int zMax = MAX(tileScreenInfo[i][j].screen.z, tileScreenInfo[i + 1][j].screen.z);
@@ -3778,29 +3788,16 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	vertices[1] = tileScreenInfo[i + 0][j + 1];
 	vertices[0].light = colour[0][0];
 	vertices[1].light = colour[0][1];
-	if (onWaterEdge)
-	{
-		vertices[0].pos.y = tileScreenInfo[i + 0][j + 0].water_height;
-		vertices[1].pos.y = tileScreenInfo[i + 0][j + 1].water_height;
-	}
 
 	if (psTile && TRI_FLIPPED(psTile))
 	{
 		vertices[2] = tileScreenInfo[i + 1][j + 0];
 		vertices[2].light = colour[1][0];
-		if (onWaterEdge)
-		{
-			vertices[2].pos.y = tileScreenInfo[i + 1][j + 0].water_height;
-		}
 	}
 	else
 	{
 		vertices[2] = tileScreenInfo[i + 1][j + 1];
 		vertices[2].light = colour[1][1];
-		if (onWaterEdge)
-		{
-			vertices[2].pos.y = tileScreenInfo[i + 1][j + 1].water_height;
-		}
 	}
 
 	if (onWaterEdge)
@@ -3817,30 +3814,17 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	{
 		vertices[0] = tileScreenInfo[i + 0][j + 1];
 		vertices[0].light = colour[0][1];
-		if (onWaterEdge)
-		{
-			vertices[0].pos.y = tileScreenInfo[i + 0][j + 1].water_height;
-		}
 	}
 	else
 	{
 		vertices[0] = tileScreenInfo[i + 0][j + 0];
 		vertices[0].light = colour[0][0];
-		if (onWaterEdge)
-		{
-			vertices[0].pos.y = tileScreenInfo[i + 0][j + 0].water_height;
-		}
 	}
 
 	vertices[1] = tileScreenInfo[i + 1][j + 1];
 	vertices[2] = tileScreenInfo[i + 1][j + 0];
 	vertices[1].light = colour[1][1];
 	vertices[2].light = colour[1][0];
-	if ( onWaterEdge )
-	{
-		vertices[1].pos.y = tileScreenInfo[i + 1][j + 1].water_height;
-		vertices[2].pos.y = tileScreenInfo[i + 1][j + 0].water_height;
-	}
 
 	if (onWaterEdge)
 	{
@@ -3910,17 +3894,14 @@ static void drawTerrainWaterTile(UDWORD i, UDWORD j)
 		tileScreenInfo[i+1][j+0].v = tileTexInfo[TileNumber_tile(tileNumber)].vOffset + (yMult - one);
 
 		vertices[0] = tileScreenInfo[i + 0][j + 0];
-		vertices[0].pos.y = tileScreenInfo[i + 0][j + 0].water_height;
 		vertices[0].light = colour[0][0];
 		vertices[0].light.byte.a = WATER_ALPHA_LEVEL;
 
 		vertices[1] = tileScreenInfo[i + 0][j + 1];
-		vertices[1].pos.y = tileScreenInfo[i + 0][j + 1].water_height;
 		vertices[1].light = colour[0][1];
 		vertices[1].light.byte.a = WATER_ALPHA_LEVEL;
 
 		vertices[2] = tileScreenInfo[i + 1][j + 1];
-		vertices[2].pos.y = tileScreenInfo[i + 1][j + 1].water_height;
 		vertices[2].light = colour[1][1];
 		vertices[2].light.byte.a = WATER_ALPHA_LEVEL;
 
@@ -3928,7 +3909,6 @@ static void drawTerrainWaterTile(UDWORD i, UDWORD j)
 
 		vertices[1] = vertices[2];
 		vertices[2] = tileScreenInfo[i + 1][j + 0];
-		vertices[2].pos.y = tileScreenInfo[i + 1][j + 0].water_height;
 		vertices[2].light = colour[1][0];
 		vertices[2].light.byte.a = WATER_ALPHA_LEVEL;
 

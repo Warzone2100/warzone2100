@@ -92,8 +92,6 @@ typedef struct
 	float u, v;
 	PIELIGHT light;
 	Vector3i screen; //! Screenspace tile coordinates
-	int water_height; //! Worldspace water height
-	UBYTE bWater; //! Is it a watertile?
 } TERRAIN_VERTEX;
 typedef struct {float x, y, z, u, v; PIELIGHT light, specular;} TERRAIN_VERTEXF;
 
