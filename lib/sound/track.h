@@ -24,6 +24,7 @@
 /* defines */
 
 #include "lib/framework/frame.h"
+#include <physfs.h>
 
 #ifndef WZ_NOSOUND
 # ifdef WZ_OS_MAC
@@ -137,5 +138,6 @@ void	sound_SetTrackTimeLastFinished( SDWORD iTrack, UDWORD iTime );
 extern void sound_StopStream(AUDIO_STREAM* stream);
 extern void sound_PauseStream(AUDIO_STREAM* stream);
 extern void sound_ResumeStream(AUDIO_STREAM* stream);
+extern AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, void (*onFinished)(void*), void* user_data, size_t streamBufferSize, unsigned int buffer_count);
 
 #endif	// _TRACK_H_

@@ -52,8 +52,6 @@
 ALuint current_queue_sample = -1;
 #endif
 
-static const size_t streamBufferSize = 16 * 1024;
-
 struct __audio_stream
 {
 #ifndef WZ_NOSOUND
@@ -66,6 +64,8 @@ struct __audio_stream
 	// Callbacks
 	void                    (*onFinished)(void*);
 	void                    *user_data;
+
+	size_t                  bufferSize;
 
 	// Linked list pointer
 	struct __audio_stream   *next;
@@ -610,12 +610,24 @@ BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
  */
 AUDIO_STREAM* sound_PlayStream(PHYSFS_file* fileHandle, float volume, void (*onFinished)(void*), void* user_data)
 {
-#define BUF_COUNT 2 // HACK: circumvents MSVC's freakingly bad C support
-	static const unsigned int buffer_count = BUF_COUNT;
+	// Default buffer size
+	static const size_t streamBufferSize = 16 * 1024;
+	// Default buffer count
+	static const unsigned int buffer_count = 2;
 
+	return sound_PlayStreamWithBuf(fileHandle, volume, onFinished, user_data, streamBufferSize, buffer_count);
+}
+
+/** Plays the audio data from the given file
+ *  \param streamBufferSize the size to use for the decoded audio buffers
+ *  \param buffer_count the amount of audio buffers to use
+ *  \see sound_PlayStream() for details about the rest of the function
+ *       parameters and other details.
+ */
+AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, void (*onFinished)(void*), void* user_data, size_t streamBufferSize, unsigned int buffer_count)
+{
 	AUDIO_STREAM* stream;
-	ALuint		buffers[BUF_COUNT];
-#undef BUF_COUNT
+	ALuint*       buffers = alloca(sizeof(ALuint) * buffer_count);
 
 	unsigned int i;
 
@@ -638,6 +650,7 @@ AUDIO_STREAM* sound_PlayStream(PHYSFS_file* fileHandle, float volume, void (*onF
 	}
 
 	stream->volume = volume;
+	stream->bufferSize = streamBufferSize;
 
 	// Retrieve an OpenAL sound source
 	alGenSources(1, &(stream->source));
@@ -655,7 +668,7 @@ AUDIO_STREAM* sound_PlayStream(PHYSFS_file* fileHandle, float volume, void (*onF
 	for (i = 0; i < buffer_count; ++i)
 	{
 		// Decode some audio data
-		soundDataBuffer* soundBuffer = sound_DecodeOggVorbis(stream->decoder, streamBufferSize);
+		soundDataBuffer* soundBuffer = sound_DecodeOggVorbis(stream->decoder, stream->bufferSize);
 
 		// If we actually decoded some data
 		if (soundBuffer && soundBuffer->size > 0)
@@ -814,7 +827,7 @@ static bool sound_UpdateStream(AUDIO_STREAM* stream)
 		sound_GetError();
 
 		// Decode some data to stuff in our buffer
-		soundBuffer = sound_DecodeOggVorbis(stream->decoder, streamBufferSize);
+		soundBuffer = sound_DecodeOggVorbis(stream->decoder, stream->bufferSize);
 
 		// If we actually decoded some data
 		if (soundBuffer && soundBuffer->size > 0)
