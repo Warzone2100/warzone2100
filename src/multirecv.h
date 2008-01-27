@@ -53,7 +53,7 @@ extern BOOL recvStructureCheck		(void);
 extern BOOL recvPowerCheck			(void);
 extern BOOL recvAlliance			(BOOL allowAudio);
 //extern BOOL multiPlayerRequest		(NETMSG *pMsg);
-extern BOOL recvColourRequest		(NETMSG *pMsg);
+extern BOOL recvColourRequest		(void);
 extern BOOL sendWholeDroid			(DROID	*pD, UDWORD dest);
 //extern BOOL sendWholeStructure		(STRUCTURE *pS, DPID dest);
 extern void recvOptions				(void);

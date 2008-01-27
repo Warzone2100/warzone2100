@@ -765,7 +765,7 @@ BOOL recvMessage(void)
 			break;
 		}
 		case NET_COLOURREQUEST:
-			recvColourRequest(&msg);
+			recvColourRequest();
 			break;
 		case NET_TEAMREQUEST:
 			recvTeamRequest();
