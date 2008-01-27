@@ -118,7 +118,7 @@ static void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR);
 static void	flipsAndRots(unsigned int tileNumber, unsigned int i, unsigned int j);
 static void	displayTerrain(void);
 static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDWORD direction);
-static void	drawTiles(iView *camera, iView *player);
+static void	drawTiles(iView *player);
 static void	display3DProjectiles(void);
 static void	drawDroidSelections(void);
 static void	drawStructureSelections(void);
@@ -165,7 +165,6 @@ BOOL	selectAttempt = FALSE;
 
 /* Vectors that hold the player and camera directions and positions */
 iView	player;
-static iView	camera;
 
 /* Temporary rotation vectors to store rotations for droids etc */
 static Vector3i	imdRot,imdRot2;
@@ -274,10 +273,6 @@ void draw3DScene( void )
 	// the world centre - used for decaying lighting etc
 	gridCentreX = player.p.x + world_coord(visibleTiles.x / 2);
 	gridCentreZ = player.p.z + world_coord(visibleTiles.y / 2);
-
-	camera.p.z = distance;
-	camera.p.y = 0;
-	camera.p.x = 0;
 
 	/* What frame number are we on? */
 	currentGameFrame = frameGetFrameNumber();
@@ -455,7 +450,7 @@ static void displayTerrain(void)
 	preprocessTiles();
 
 	/* Now, draw the terrain */
-	drawTiles(&camera, &player);
+	drawTiles(&player);
 
 	pie_PerspectiveEnd();
 
@@ -543,7 +538,7 @@ void setTileColour(int x, int y, PIELIGHT colour)
 	psTile->colour = colour;
 }
 
-static void drawTiles(iView *camera, iView *player)
+static void drawTiles(iView *player)
 {
 	UDWORD i, j;
 	SDWORD rx, rz;
@@ -590,7 +585,7 @@ static void drawTiles(iView *camera, iView *player)
 	pie_MatScale(pie_GetResScalingFactor());
 
 	/* Set the camera position */
-	pie_MATTRANS(camera->p.x, camera->p.y, camera->p.z);
+	pie_MATTRANS(0, 0, distance);
 
 	/* Rotate for the player */
 	pie_MatRotZ(player->r.z);
@@ -3543,7 +3538,7 @@ static void renderSurroundings(void)
 	pie_MatScale(pie_GetResScalingFactor());
 
 	// Set the camera position
-	pie_MATTRANS(camera.p.x, camera.p.y, camera.p.z);
+	pie_MATTRANS(0, 0, distance);
 
 	// Rotate for the player and for the wind
 	pie_MatRotZ(player.r.z);
