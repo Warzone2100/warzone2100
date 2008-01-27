@@ -1025,6 +1025,7 @@ BOOL recvTeamRequest()
 	{
 		debug(LOG_ERROR, "Invalid NET_TEAMREQUEST from player %d: Tried to change player %d (team %d)", 
 		      NETgetSource(), (int)player, (int)team);
+		return FALSE;
 	}
 
 	changeTeam(player, team);
@@ -1106,6 +1107,13 @@ BOOL recvColourRequest()
 		NETuint8_t(&col);
 		NETuint8_t(&chosenPlayer);
 	NETend();
+
+	if (player > MAX_PLAYERS || chosenPlayer > MAX_PLAYERS)
+	{
+		debug(LOG_ERROR, "Invalid NET_COLOURREQUEST from player %d: Tried to change player %d to %d", 
+		      NETgetSource(), (int)player, (int)chosenPlayer);
+		return FALSE;
+	}
 
 	return changeColour(player, col, chosenPlayer);
 }
