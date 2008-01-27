@@ -724,6 +724,67 @@ AUDIO_STREAM* sound_PlayStream(PHYSFS_file* fileHandle, float volume, void (*onF
 	return stream;
 }
 
+/** Stops the current stream from playing.
+ *  \param stream the stream to stop
+ *  \post The stopped stream will be destroyed on the next invocation of
+ *        sound_UpdateStreams(). So calling this function will result in the
+ *        \c onFinished callback being called and the \c stream pointer becoming
+ *        invalid.
+ */
+void sound_StopStream(AUDIO_STREAM* stream)
+{
+	assert(stream != NULL);
+
+	// Tell OpenAL to stop playing on the given source
+	alSourceStop(stream->source);
+	sound_GetError();
+}
+
+/** Pauses playing of this stream until playing is resumed with
+ *  sound_ResumeStream() or completely stopped with sound_StopStream().
+ *  \param stream the stream to pause playing for
+ */
+void sound_PauseStream(AUDIO_STREAM* stream)
+{
+	ALint state;
+
+	// To be sure we won't go mutilating this OpenAL source, check wether
+	// it's playing first.
+	alGetSourcei(stream->source, AL_SOURCE_STATE, &state);
+	sound_GetError();
+
+	if (state != AL_PLAYING)
+	{
+		return;
+	}
+
+	// Pause playing of this OpenAL source
+	alSourcePause(stream->source);
+	sound_GetError();
+}
+
+/** Resumes playing of a stream that's paused by means of sound_PauseStream().
+ *  \param stream the stream to resume playing for
+ */
+void sound_ResumeStream(AUDIO_STREAM* stream)
+{
+	ALint state;
+
+	// To be sure we won't go mutilating this OpenAL source, check wether
+	// it's paused first.
+	alGetSourcei(stream->source, AL_SOURCE_STATE, &state);
+	sound_GetError();
+
+	if (state != AL_PAUSED)
+	{
+		return;
+	}
+
+	// Resume playing of this OpenAL source
+	alSourcePlay(stream->source);
+	sound_GetError();
+}
+
 /** Update the given stream by making sure its buffers remain full
  *  \param stream the stream to update
  *  \return true when the stream is still playing, false when it has stopped
