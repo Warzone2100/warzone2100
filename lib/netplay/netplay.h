@@ -169,26 +169,10 @@ extern void NETsetGameserverPort(unsigned int port);
 #define NetAdd(m,pos,thing) \
 	memcpy(&(m.body[pos]),&(thing),sizeof(thing))
 
-#define NetAddUint8(m,pos,thing) \
-	*((Uint8*)(&((m).body[(pos)]))) = (thing)
-
-#define NetAddUint32(m,pos,thing) \
-	*((Uint32*)(&((m).body[(pos)]))) = (thing)
-
-#define NetAdd2(m,pos,thing) \
-	memcpy( &((*m).body[pos]), &(thing), sizeof(thing))
-
 #define NetAddSt(m,pos,stri) \
 	strcpy(&(m.body[pos]),stri)
 
-
 #define NetGet(m,pos,thing) \
 	memcpy(&(thing),&(m->body[pos]),sizeof(thing))
-
-#define NetGetUint8(m,pos,thing) \
-	(thing) = *((Uint8*)(&((m)->body[(pos)])))
-
-#define NetGetUint32(m,pos,thing) \
-	(thing) = *((Uint32*)(&((m)->body[(pos)])))
 
 #endif
