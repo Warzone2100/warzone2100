@@ -67,4 +67,4 @@ extern BOOL	recvMapFileRequested		(void);
 
 
 extern BOOL recvTextMessageAI		(void);		//AI multiplayer message
-extern BOOL	recvTeamRequest			(NETMSG *pMsg);
+extern BOOL	recvTeamRequest		(void);

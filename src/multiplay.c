@@ -768,7 +768,7 @@ BOOL recvMessage(void)
 			recvColourRequest(&msg);
 			break;
 		case NET_TEAMREQUEST:
-			recvTeamRequest(&msg);
+			recvTeamRequest();
 			break;
 		case NET_ARTIFACTS:
 			recvMultiPlayerRandomArtifacts();

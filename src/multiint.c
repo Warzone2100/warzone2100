@@ -982,43 +982,53 @@ static void closeColourChooser(void)
 	widgDelete(psWScreen,MULTIOP_COLCHOOSER_FORM);
 }
 
-static BOOL SendTeamRequest(UDWORD player, UBYTE chosenTeam)
+static void changeTeam(UBYTE player, UBYTE team)
 {
-	NETMSG m;
+	playerTeamGUI[player] = team;
+	debug(LOG_WZ, "set %d as new team for player %d", team, player);
+	sendOptions(player2dpid[player], player);	// tell everyone && update requesting player.
+}
 
-	m.body[0] =	(UBYTE)player;
-	m.body[1] = (UBYTE)chosenTeam;
-	m.type    = NET_TEAMREQUEST;
-	m.size    = 2;
-
+static BOOL SendTeamRequest(UBYTE player, UBYTE chosenTeam)
+{
 	if(NetPlay.bHost)			// do or request the change.
 	{
-		recvTeamRequest(&m);	// do the change, remember only the host can do this to avoid confusion.
-		return TRUE;
+		changeTeam(player, chosenTeam);	// do the change, remember only the host can do this to avoid confusion.
 	}
 	else
 	{
-		return NETbcast(&m,TRUE);
+		NETbeginEncode(NET_TEAMREQUEST, NET_ALL_PLAYERS);
+
+		NETuint8_t(&player);
+		NETuint8_t(&chosenTeam);
+
+		NETend();
+
 	}
+	return TRUE;
 }
 
-BOOL recvTeamRequest(NETMSG *pMsg)
+BOOL recvTeamRequest()
 {
-	UDWORD	player,team;
+	UBYTE	player, team;
 
 	if(!NetPlay.bHost)							//only host should act.
 	{
 		return TRUE;
 	}
 
-	player			= (UDWORD) pMsg->body[0];
-	team			= (UDWORD) pMsg->body[1];
+	NETbeginDecode();
+	NETuint8_t(&player);
+	NETuint8_t(&team);
+	NETend();
 
-	playerTeamGUI[player] = team;
+	if (player > MAX_PLAYERS || team > MAX_PLAYERS)
+	{
+		debug(LOG_ERROR, "Invalid NET_TEAMREQUEST from player %d: Tried to change player %d (team %d)", 
+		      NETgetSource(), (int)player, (int)team);
+	}
 
-	debug(LOG_WZ, "set %d as new team for player %d", team, player);
-
-	sendOptions(player2dpid[player],player);	// tell everyone && update requesting player.
+	changeTeam(player, team);
 
 	return TRUE;
 }
@@ -1303,11 +1313,9 @@ UDWORD addPlayerBox(BOOL players)
  */
 static void SendFireUp(void)
 {
-	NETMSG m;
-
-	m.type  = NET_FIREUP;
-	m.size  = 1;
-	NETbcast(&m,TRUE);
+	NETbeginEncode(NET_FIREUP, NET_ALL_PLAYERS);
+		// no payload necessary
+	NETend();
 }
 
 // host kick a player from a game.
@@ -2054,7 +2062,7 @@ void frontendMultiMessages(void)
 			break;
 
 		case NET_TEAMREQUEST:
-			recvTeamRequest(&msg);
+			recvTeamRequest();
 			break;
 
 		case NET_PING:						// diagnostic ping msg.
