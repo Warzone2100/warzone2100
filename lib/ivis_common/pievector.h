@@ -87,7 +87,7 @@ static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
  * \return Product
  */
 static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
-		Vector2i Vector2i_Mult(const Vector2i v, const float s)
+		Vector2i Vector2i_Mult(const Vector2i v, const int s)
 {
 	Vector2i dest = { v.x * s, v.y * s };
 	return dest;
@@ -249,6 +249,16 @@ static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
 
 
 /*!
+ * \return true if both vectors are equal
+ */
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		BOOL Vector3f_Compare(const Vector3f a, const Vector3f b)
+{
+	return a.x == b.x && a.y == b.y && a.z == b.z;
+}
+
+
+/*!
  * Set the vector field by field, same as v = (Vector3f){x, y, z};
  * Needed for MSVC which doesn't support C99 struct assignments.
  * \param[out] v Vector to set
@@ -297,6 +307,20 @@ static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
 
 
 /*!
+ * Multiply a vector with a scalar.
+ * \param v Vector
+ * \param s Scalar
+ * \return Product
+ */
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		Vector3f Vector3f_Mult(const Vector3f v, const float s)
+{
+	Vector3f dest = { v.x * s, v.y * s, v.z * s };
+	return dest;
+}
+
+
+/*!
  * Calculate the scalar product of op1 and op2.
  * \param op1,op2 Operands
  * \return Scalarproduct of the 2 vectors
@@ -324,6 +348,52 @@ static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
 	return dest;
 }
 
+
+/*!
+ * Calculate the length of a vector.
+ * \param v Vector
+ * \return Length
+ */
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		float Vector3f_Length(const Vector3f v)
+{
+	return sqrtf( Vector3f_ScalarP(v, v) );
+}
+
+
+/*!
+ * Normalise a Vector
+ * \param v Vector
+ * \return Normalised vector, nullvector when input was nullvector or very small
+ */
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		Vector3f Vector3f_Normalise(const Vector3f v)
+{
+	float length = Vector3f_Length(v);
+
+	if (length == 0.0f)
+	{
+		Vector3f dest = { 0.0f, 0.0f, 0.0f };
+		return dest;
+	}
+	else
+	{
+		Vector3f dest = { v.x / length, v.y / length, v.z / length };
+		return dest;
+	}
+}
+
+
+/*!
+ * \return true if both vectors are equal
+ */
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		BOOL Vector3i_Compare(const Vector3i a, const Vector3i b)
+{
+	return a.x == b.x && a.y == b.y && a.z == b.z;
+}
+
+
 /*!
  * Substract op2 from op1.
  * \param op1,op2 Operands
@@ -338,6 +408,67 @@ static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
 		op1.z - op2.z
 	};
 	return dest;
+}
+
+
+/*!
+ * Multiply a vector with a scalar.
+ * \param v Vector
+ * \param s Scalar
+ * \return Product
+ */
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		Vector3i Vector3i_Mult(const Vector3i v, const int s)
+{
+	Vector3i dest = { v.x * s, v.y * s, v.z * s };
+	return dest;
+}
+
+
+/*!
+ * Calculate the scalar product of op1 and op2.
+ * \param op1,op2 Operands
+ * \return Scalarproduct of the 2 vectors
+ */
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		unsigned int Vector3i_ScalarP(const Vector3i op1, const Vector3i op2)
+{
+	return op1.x * op2.x + op1.y * op2.y + op1.z * op2.z;
+}
+
+
+/*!
+ * Calculate the length of a vector.
+ * \param v Vector
+ * \return Length
+ */
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		float Vector3i_Length(const Vector3i v)
+{
+	return sqrtf( Vector3i_ScalarP(v, v) );
+}
+
+
+/*!
+ * Normalise a Vector
+ * \param v Vector
+ * \return Normalised vector, nullvector when input was nullvector or very small
+ */
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		Vector3i Vector3i_Normalise(const Vector3i v)
+{
+	float length = Vector3i_Length(v);
+
+	if (length == 0.0f)
+	{
+		Vector3i dest = { 0, 0, 0 };
+		return dest;
+	}
+	else
+	{
+		Vector3i dest = { v.x / length, v.y / length, v.z / length };
+		return dest;
+	}
 }
 
 
