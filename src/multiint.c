@@ -1108,7 +1108,7 @@ BOOL recvColourRequest()
 		NETuint8_t(&chosenPlayer);
 	NETend();
 
-	if (player > MAX_PLAYERS || chosenPlayer > MAX_PLAYERS)
+	if (player > MAX_PLAYERS || (chosenPlayer > MAX_PLAYERS && chosenPlayer != UBYTE_MAX))
 	{
 		debug(LOG_ERROR, "Invalid NET_COLOURREQUEST from player %d: Tried to change player %d to %d", 
 		      NETgetSource(), (int)player, (int)chosenPlayer);
