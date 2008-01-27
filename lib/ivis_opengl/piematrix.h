@@ -32,19 +32,10 @@
 
 /***************************************************************************/
 /*
- *	Global Definitions
- */
-/***************************************************************************/
-
-typedef struct {SDWORD a, b, c,  d, e, f,  g, h, i,  j, k, l;} SDMATRIX;
-
-/***************************************************************************/
-/*
  *	Global Variables
  */
 /***************************************************************************/
 
-extern SDMATRIX *psMatrix;
 extern SDWORD aSinTable[];
 
 //*************************************************************************
@@ -61,16 +52,7 @@ extern SDWORD aSinTable[];
  * \param[in] v Vector to translate
  * \param[out] s Resulting vector
  */
-static inline void pie_RotateTranslate3iv(Vector3i * v, Vector3i * s)
-{
-	s->x = ( v->x * psMatrix->a + v->z * psMatrix->d + v->y * psMatrix->g
-			+ psMatrix->j ) / FP12_MULTIPLIER;
-	s->z = ( v->x * psMatrix->b + v->z * psMatrix->e + v->y * psMatrix->h
-			+ psMatrix->k ) / FP12_MULTIPLIER;
-	s->y = ( v->x * psMatrix->c + v->z * psMatrix->f + v->y * psMatrix->i
-			+ psMatrix->l ) / FP12_MULTIPLIER;
-}
-
+void pie_RotateTranslate3iv(Vector3i * v, Vector3i * s);
 
 /*!
  * returns true if both vectors are equal

@@ -44,8 +44,9 @@
 #define MATRIX_MAX 8
 #define ONE_PERCENT 4096/100
 
+typedef struct { SDWORD a, b, c,  d, e, f,  g, h, i,  j, k, l; } SDMATRIX;
 static SDMATRIX	aMatrixStack[MATRIX_MAX];
-SDMATRIX *psMatrix = &aMatrixStack[0];
+static SDMATRIX *psMatrix = &aMatrixStack[0];
 
 BOOL drawing_interface = TRUE;
 
@@ -523,4 +524,14 @@ void pie_MatInit(void)
 	// init matrix/quat stack
 
 	pie_MatReset();
+}
+
+void pie_RotateTranslate3iv(Vector3i * v, Vector3i * s)
+{
+	s->x = ( v->x * psMatrix->a + v->z * psMatrix->d + v->y * psMatrix->g
+			+ psMatrix->j ) / FP12_MULTIPLIER;
+	s->z = ( v->x * psMatrix->b + v->z * psMatrix->e + v->y * psMatrix->h
+			+ psMatrix->k ) / FP12_MULTIPLIER;
+	s->y = ( v->x * psMatrix->c + v->z * psMatrix->f + v->y * psMatrix->i
+			+ psMatrix->l ) / FP12_MULTIPLIER;
 }
