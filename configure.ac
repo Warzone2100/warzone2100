@@ -161,18 +161,24 @@ AC_MSG_CHECKING([whether to compile in debug mode])
 AC_MSG_RESULT([${enable_debug}])
 if test "x$enable_debug" = "xyes" ; then
 	if test "x$cc_icc" = "xyes" ; then
-		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -DDEBUG -Wcheck -Werror"
+		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Wcheck -Werror"
+		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	else
-		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -DDEBUG -Wall -Werror -Wno-unused-label -Wno-pointer-to-int-cast"
+		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Wall -Werror -Wno-unused-label -Wno-pointer-to-int-cast"
+		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	fi
 elif test "x$enable_debug" = "xrelaxed" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -g -DDEBUG -Wall -Wextra"
+	WZ_CFLAGS="${WZ_CFLAGS} -g -Wall -Wextra"
+	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 elif test "x$enable_debug" = "xdebugprofile" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -DDEBUG -pg -Wall -Wextra"
+	WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -pg -Wall -Wextra"
+	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 elif test "x$enable_debug" = "xprofile" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -g -Os -DNDEBUG -pg -Wall -Wextra"
+	WZ_CFLAGS="${WZ_CFLAGS} -g -Os -pg -Wall -Wextra"
+	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DNDEBUG"
 else
-	WZ_CFLAGS="${WZ_CFLAGS} -g -DNDEBUG -Wall"
+	WZ_CFLAGS="${WZ_CFLAGS} -g -Wall"
+	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DNDEBUG"
 fi
 
 
@@ -224,16 +230,16 @@ AC_CHECK_LIB(GLC, main,
 AC_SUBST([OPENGLC_LIBS], [${OPENGLC_LIBS}])
 
 
-WZ_CFLAGS="${WZ_CFLAGS} -DDATADIR=\"\\\"\${datadir}/\${PACKAGE}\\\"\""
-WZ_CFLAGS="${WZ_CFLAGS} -DLOCALEDIR=\"\\\"\${localedir}\\\"\""
+WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDATADIR=\"\\\"\${datadir}/\${PACKAGE}\\\"\""
+WZ_CPPFLAGS="${WZ_CPPFLAGS} -DLOCALEDIR=\"\\\"\${localedir}\\\"\""
 
 
 # add some required C flags here
 #  YY_NO_INPUT to prevent Flex from defining input(): We use our own YY_INPUT instead.
-WZ_CFLAGS="${WZ_CFLAGS} -DYY_NO_INPUT"
+WZ_CPPFLAGS="${WZ_CPPFLAGS} -DYY_NO_INPUT"
 
 
-CPPFLAGS="${CPPFLAGS} -I\$(top_srcdir)"
+CPPFLAGS="${CPPFLAGS} ${WZ_CPPFLAGS} -I\$(top_srcdir)"
 CFLAGS="${SDL_CFLAGS} ${PNG_CFLAGS} ${OGGVORBIS_CFLAGS} $} ${OPENAL_CFLAGS} ${OPENGL_CFLAGS} ${CFLAGS} ${WZ_CFLAGS}"
 
 
