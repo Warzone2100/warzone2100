@@ -19,6 +19,7 @@
 */
 
 #include <string.h>
+#include <physfs.h>
 
 #include "lib/framework/frame.h"
 
@@ -28,6 +29,8 @@
 #include "mixer.h"
 #include "playlist.h"
 
+static const size_t bufferSize = 16 * 1024;
+static const unsigned int buffer_count = 32;
 static bool		music_initialized;
 static unsigned int	music_track = 0;
 static float		music_volume = 0.5;
@@ -81,10 +84,18 @@ static bool cdAudio_OpenTrack(const char* filename)
 #ifndef WZ_NOSOUND
 	if (strncasecmp(filename+strlen(filename)-4, ".ogg", 4) == 0)
 	{
-		cdStream = audio_PlayStream(filename, music_volume, cdAudio_TrackFinished, NULL);
+		PHYSFS_file* music_file = PHYSFS_openRead(filename);
 
+		if (music_file == NULL)
+		{
+			debug(LOG_ERROR, "cdAudio_OpenTrack: Failed opening file %s, with error %s", filename, PHYSFS_getLastError());
+			return false;
+		}
+
+		cdStream = sound_PlayStreamWithBuf(music_file, music_volume, cdAudio_TrackFinished, NULL, bufferSize, buffer_count);
 		if (cdStream == NULL)
 		{
+			PHYSFS_close(music_file);
 			debug(LOG_ERROR, "Failed creating audio stream for %s", filename);
 			return false;
 		}
