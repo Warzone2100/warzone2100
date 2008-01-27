@@ -52,7 +52,7 @@ extern SDWORD aSinTable[];
  * \param[in] v Vector to translate
  * \param[out] s Resulting vector
  */
-void pie_RotateTranslate3iv(Vector3i * v, Vector3i * s);
+void pie_RotateTranslate3iv(const Vector3i *v, Vector3i *s);
 
 /*!
  * returns true if both vectors are equal
@@ -102,9 +102,9 @@ extern void pie_TranslateTextureEnd(void);
 
 extern void pie_VectorNormalise3iv(Vector3i *v);
 extern void pie_VectorNormalise3fv(Vector3f *v);
-extern void pie_VectorInverseRotate0(Vector3i *v1, Vector3i *v2);
-extern void pie_SurfaceNormal3iv(Vector3i *p1, Vector3i *p2, Vector3i *p3, Vector3i *v);
-extern void pie_SurfaceNormal3fv(Vector3f *p1, Vector3f *p2, Vector3f *p3, Vector3f *v);
+extern void pie_VectorInverseRotate0(const Vector3i *v1, Vector3i *v2);
+extern void pie_SurfaceNormal3iv(const Vector3i *p1, const Vector3i *p2, const Vector3i *p3, Vector3i *v);
+extern void pie_SurfaceNormal3fv(const Vector3f *p1, const Vector3f *p2, const Vector3f *p3, Vector3f *v);
 extern void pie_SetGeometricOffset(int x, int y);
 
 void pie_Begin3DScene(void);

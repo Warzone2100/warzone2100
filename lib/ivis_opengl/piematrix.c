@@ -118,7 +118,7 @@ void pie_VectorNormalise3fv(Vector3f *v)
  * \param[in] p1,p2,p3 points for forming 2 vector for cross product
  * \param[out] v normal vector returned << FP12_SHIFT
  */
-void pie_SurfaceNormal3iv(Vector3i *p1, Vector3i *p2, Vector3i *p3, Vector3i *v)
+void pie_SurfaceNormal3iv(const Vector3i *p1, const Vector3i *p2, const Vector3i *p3, Vector3i *v)
 {
 	Vector3i a, b;
 
@@ -146,7 +146,7 @@ void pie_SurfaceNormal3iv(Vector3i *p1, Vector3i *p2, Vector3i *p3, Vector3i *v)
  * \param[in] p1,p2,p3 points for forming 2 vector for cross product
  * \param[out] v normal vector returned << FP12_SHIFT
  */
-void pie_SurfaceNormal3fv(Vector3f *p1, Vector3f *p2, Vector3f *p3, Vector3f *v)
+void pie_SurfaceNormal3fv(const Vector3f *p1, const Vector3f *p2, const Vector3f *p3, Vector3f *v)
 {
 	Vector3f a, b;
 
@@ -486,7 +486,7 @@ void pie_SetGeometricOffset(int x, int y)
 //*
 //******
 
-void pie_VectorInverseRotate0(Vector3i *v1, Vector3i *v2)
+void pie_VectorInverseRotate0(const Vector3i *v1, Vector3i *v2)
 {
 	Sint32 x, y, z;
 
@@ -526,7 +526,7 @@ void pie_MatInit(void)
 	pie_MatReset();
 }
 
-void pie_RotateTranslate3iv(Vector3i * v, Vector3i * s)
+void pie_RotateTranslate3iv(const Vector3i *v, Vector3i *s)
 {
 	s->x = ( v->x * psMatrix->a + v->z * psMatrix->d + v->y * psMatrix->g
 			+ psMatrix->j ) / FP12_MULTIPLIER;
