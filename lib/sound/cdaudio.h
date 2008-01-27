@@ -17,23 +17,15 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/***************************************************************************/
 
 #ifndef _CDAUDIO_H_
 #define _CDAUDIO_H_
 
-/***************************************************************************/
-
-BOOL	cdAudio_Open( const char* user_musicdir );
-BOOL	cdAudio_Close( void );
-BOOL	cdAudio_PlayTrack( SDWORD iTrack );
-BOOL	cdAudio_Stop( void );
-BOOL	cdAudio_Pause( void );
-BOOL	cdAudio_Resume( void );
-void	cdAudio_Update(void);
-
-/***************************************************************************/
+BOOL cdAudio_Open(const char* user_musicdir);
+void cdAudio_Close(void);
+BOOL cdAudio_PlayTrack( SDWORD iTrack );
+void cdAudio_Stop(void);
+void cdAudio_Pause(void);
+void cdAudio_Resume(void);
 
 #endif	/* _CDAUDIO_H_ */
-
-/***************************************************************************/

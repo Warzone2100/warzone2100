@@ -307,8 +307,6 @@ void sound_Update()
 		}
 	}
 
-	cdAudio_Update();
-
 	// Reset the current error state
 	alcGetError(device);
 
