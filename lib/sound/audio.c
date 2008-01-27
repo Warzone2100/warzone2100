@@ -802,19 +802,25 @@ BOOL audio_PlayObjDynamicTrack( void *psObj, int iTrack, AUDIO_CALLBACK pUserCal
  *         has been finished. You can use NULL to specifiy no callback function.
  *  \param user_data a pointer to contain some user data to pass along to the
  *         finished callback.
- *  \return true when the stream is playing (and as such the callback will be
- *          invoked some time in the future), false when the stream didn't start
- *          playing (and the callback won't be invoked).
+ *  \return a pointer to the currently playing stream when the stream is playing
+ *          (and as such the callback will be invoked some time in the future),
+ *          NULL when the stream didn't start playing (and the callback won't be
+ *          invoked).
+ *  \note The returned pointer will become invalid/dangling immediately after
+ *        the \c onFinished callback is invoked.
+ *  \note You must _never_ manually free() the memory used by the returned
+ *        pointer.
  */
-bool audio_PlayStream(const char* fileName, float volume, void (*onFinished)(void*), void* user_data)
+AUDIO_STREAM* audio_PlayStream(const char* fileName, float volume, void (*onFinished)(void*), void* user_data)
 {
 	PHYSFS_file* fileHandle;
+	AUDIO_STREAM* stream;
 
 	// If audio is not enabled return false to indicate that the given callback
 	// will not be invoked.
 	if (g_bAudioEnabled == FALSE)
 	{
-		return false;
+		return NULL;
 	}
 
 	// Open up the file
@@ -825,13 +831,14 @@ bool audio_PlayStream(const char* fileName, float volume, void (*onFinished)(voi
 		return NULL;
 	}
 
-	if (!sound_PlayStream(fileHandle, volume, onFinished, user_data))
+	stream = sound_PlayStream(fileHandle, volume, onFinished, user_data);
+	if (stream == NULL)
 	{
 		PHYSFS_close(fileHandle);
-		return false;
+		return NULL;
 	}
 
-	return true;
+	return stream;
 }
 
 //*

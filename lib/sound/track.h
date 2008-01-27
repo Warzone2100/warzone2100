@@ -17,12 +17,10 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/***************************************************************************/
 
 #ifndef _TRACK_H_
 #define _TRACK_H_
 
-/***************************************************************************/
 /* defines */
 
 #include "lib/framework/frame.h"
@@ -50,8 +48,6 @@
 #define	AUDIO_VOL_RANGE			(AUDIO_VOL_MAX-AUDIO_VOL_MIN)
 
 /***************************************************************************/
-
-/***************************************************************************/
 /* enums */
 
 
@@ -60,6 +56,7 @@
  */
 
 typedef BOOL (* AUDIO_CALLBACK)  ( void *psObj );
+typedef struct __audio_stream AUDIO_STREAM;
 
 /***************************************************************************/
 /* structs */
@@ -137,8 +134,4 @@ void	sound_SetStoppedCallback( AUDIO_CALLBACK pStopTrackCallback );
 UDWORD	sound_GetTrackTimeLastFinished( SDWORD iTrack );
 void	sound_SetTrackTimeLastFinished( SDWORD iTrack, UDWORD iTime );
 
-/***************************************************************************/
-
 #endif	// _TRACK_H_
-
-/***************************************************************************/

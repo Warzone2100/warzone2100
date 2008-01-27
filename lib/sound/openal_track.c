@@ -54,7 +54,7 @@ ALuint current_queue_sample = -1;
 
 static const size_t streamBufferSize = 16 * 1024;
 
-typedef struct __audio_stream
+struct __audio_stream
 {
 #ifndef WZ_NOSOUND
 	ALuint                  source;        // OpenAL name of the sound source
@@ -69,7 +69,7 @@ typedef struct __audio_stream
 
 	// Linked list pointer
 	struct __audio_stream   *next;
-} AUDIO_STREAM;
+};
 
 typedef struct	SAMPLE_LIST
 {
@@ -600,12 +600,17 @@ BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
  *  \param volume the volume to play the audio at (in a range of 0.0 to 1.0)
  *  \param onFinished callback to invoke when we're finished playing
  *  \param user_data user-data pointer to pass to the \c onFinished callback
- *  \return true when we succesfully initiated playing, false otherwise
- *  \post When true is returned the audio stream system will close the
- *        PhysicsFS file handle. Otherwise (when false is returned) this is left
- *        to the user.
+ *  \return a pointer to the currently playing stream when playing started
+ *          succesfully, NULL otherwise.
+ *  \post When a non-NULL pointer is returned the audio stream system will
+ *        close the PhysicsFS file handle. Otherwise (when false is returned)
+ *        this is left to the user.
+ *  \note The returned pointer will become invalid/dangling immediately after
+ *        the \c onFinished callback is invoked.
+ *  \note You must _never_ manually free() the memory used by the returned
+ *        pointer.
  */
-bool sound_PlayStream(PHYSFS_file* fileHandle, float volume, void (*onFinished)(void*), void* user_data)
+AUDIO_STREAM* sound_PlayStream(PHYSFS_file* fileHandle, float volume, void (*onFinished)(void*), void* user_data)
 {
 #define BUF_COUNT 2 // HACK: circumvents MSVC's freakingly bad C support
 	static const unsigned int buffer_count = BUF_COUNT;
@@ -621,7 +626,7 @@ bool sound_PlayStream(PHYSFS_file* fileHandle, float volume, void (*onFinished)(
 	{
 		debug(LOG_ERROR, "sound_PlayStream: Out of memory");
 		abort();
-		return false;
+		return NULL;
 	}
 
 	stream->fileHandle = fileHandle;
@@ -631,7 +636,7 @@ bool sound_PlayStream(PHYSFS_file* fileHandle, float volume, void (*onFinished)(
 	{
 		debug(LOG_ERROR, "sound_PlayStream: Failed to open audio file for decoding");
 		free(stream);
-		return false;
+		return NULL;
 	}
 
 	stream->volume = volume;
@@ -695,7 +700,7 @@ bool sound_PlayStream(PHYSFS_file* fileHandle, float volume, void (*onFinished)(
 		// Free allocated memory
 		free(stream);
 
-		return false;
+		return NULL;
 	}
 
 	// Attach the OpenAL buffers to our OpenAL source
@@ -706,6 +711,8 @@ bool sound_PlayStream(PHYSFS_file* fileHandle, float volume, void (*onFinished)(
 	// Start playing the source
 	alSourcePlay(stream->source);
 
+	sound_GetError();
+
 	// Set callback info
 	stream->onFinished = onFinished;
 	stream->user_data = user_data;
@@ -714,7 +721,7 @@ bool sound_PlayStream(PHYSFS_file* fileHandle, float volume, void (*onFinished)(
 	stream->next = active_streams;
 	active_streams = stream;
 
-	return true;
+	return stream;
 }
 
 /** Update the given stream by making sure its buffers remain full

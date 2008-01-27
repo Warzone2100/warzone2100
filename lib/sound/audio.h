@@ -17,18 +17,11 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/***************************************************************************/
 
 #ifndef _AUDIO_H_
 #define _AUDIO_H_
 
-/***************************************************************************/
-
-
-
 #include "track.h"
-
-/***************************************************************************/
 
 extern BOOL		audio_Init( AUDIO_CALLBACK pStopTrackCallback );
 extern void		audio_Update(void);
@@ -50,7 +43,7 @@ extern void		audio_StopObjTrack( void * psObj, int iTrack );
 extern void		audio_PlayTrack( int iTrack );
 extern void		audio_PlayCallbackTrack( int iTrack,
 											AUDIO_CALLBACK pUserCallback );
-extern bool audio_PlayStream(const char* fileName, float volume, void (*onFinished)(void*), void* user_data);
+extern AUDIO_STREAM* audio_PlayStream(const char* fileName, float volume, void (*onFinished)(void*), void* user_data);
 extern void		audio_QueueTrack( SDWORD iTrack );
 extern void		audio_QueueTrackMinDelay( SDWORD iTrack, UDWORD iMinDelay );
 extern void		audio_QueueTrackMinDelayPos( SDWORD iTrack, UDWORD iMinDelay,
@@ -71,8 +64,5 @@ extern void audio_RemoveObj(const void* psObj);
 extern unsigned int audio_GetSampleQueueCount(void);
 extern unsigned int audio_GetSampleListCount(void);
 extern unsigned int sound_GetActiveSamplesCount(void);
-/***************************************************************************/
 
 #endif	// _AUDIO_H_
-
-/***************************************************************************/
