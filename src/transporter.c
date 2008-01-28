@@ -25,7 +25,6 @@
 #include <string.h>
 
 #include "lib/framework/frame.h"
-#include "lib/framework/math-help.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/math-help.h"
 #include "lib/widget/widget.h"

@@ -21,16 +21,19 @@
 /* Simple short file - only because there was nowhere else for it logically to go */
 /* Handes the difficulty level effects on gameplay */
 
+
 /*
 	Changed to allow seperate modifiers for enemy and player damage.
 */
 
+
+// ------------------------------------------------------------------------------------
 #include "lib/framework/frame.h"
 
 #include <math.h>
 
 #include "difficulty.h"
-#include "lib/framework/math-help.h"
+// ------------------------------------------------------------------------------------
 
 static DIFFICULTY_LEVEL	presDifLevel = DL_NORMAL;
 static float		fDifPlayerModifier;

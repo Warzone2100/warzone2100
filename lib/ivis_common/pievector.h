@@ -21,7 +21,6 @@
 #define __INCLUDED_LIB_IVIS_PIEVECTOR_H__
 
 #include "lib/framework/wzglobal.h"
-#include <math.h>
 
 #include <math.h>
 

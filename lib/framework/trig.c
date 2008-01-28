@@ -35,7 +35,6 @@
 #include "types.h"
 #include "debug.h"
 #include "trig.h"
-#include <math.h>
 
 /* Number of steps between -1 and 1 for the inverse tables */
 #define TRIG_ACCURACY	4096
