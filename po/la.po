@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-01-28 01:31+0100\n"
+"POT-Creation-Date: 2008-01-28 23:29+0100\n"
 "PO-Revision-Date: 2008-01-20 19:26+0100\n"
 "Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
 "Language-Team: Latin\n"
@@ -121,7 +121,7 @@ msgid "You Discover Blueprints For %s"
 msgstr ""
 
 #: src/hci.c:1014 src/hci.c:3855 src/hci.c:4009 src/hci.c:4431 src/hci.c:5661
-#: src/transporter.c:285 src/transporter.c:374 src/transporter.c:872
+#: src/transporter.c:284 src/transporter.c:373 src/transporter.c:871
 #: src/intorder.c:660 src/loadsave.c:257 src/intelmap.c:528
 #: src/multimenu.c:455 src/multimenu.c:1290
 msgid "Close"
@@ -218,11 +218,11 @@ msgstr ""
 msgid "Tab Scroll right"
 msgstr ""
 
-#: src/transporter.c:424 src/transporter.c:478
+#: src/transporter.c:423 src/transporter.c:477
 msgid "Launch Transport"
 msgstr ""
 
-#: src/transporter.c:1860
+#: src/transporter.c:1859
 msgid "Reinforcements landing"
 msgstr ""
 
