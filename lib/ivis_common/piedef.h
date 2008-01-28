@@ -46,8 +46,11 @@
 #define DEG_60	(DEG_360/6)
 #define DEG(X)	(DEG_1 * (X))
 
+//! PSX-style float emulation: 12 digit semi-floats stored in an int
+// FIXME!
 #define FP12_SHIFT 12
-#define FP12_MULTIPLIER (1<<12)
+#define FP12_MULTIPLIER (1 << FP12_SHIFT)
+
 #define STRETCHED_Z_SHIFT		10 // stretchs z range for (1000 to 4000) to (8000 to 32000)
 #define MAX_Z				(32000.0f) // raised to 32000 from 6000 when stretched
 #define MIN_STRETCHED_Z			256
@@ -82,7 +85,7 @@
 
 typedef struct { UBYTE r, g, b, a; } PIELIGHTBYTES;
 
-/** Our basic colour type. Use whenever you want to define a colour. 
+/** Our basic colour type. Use whenever you want to define a colour.
  *  Set bytes separetely, and do not assume a byte order between the components. */
 typedef union  { PIELIGHTBYTES byte; UDWORD argb; UBYTE vector[4]; } PIELIGHT;
 
