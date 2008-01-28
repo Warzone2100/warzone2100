@@ -30,6 +30,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/math-help.h"
 
 #include "objmem.h"
 #include "statsdef.h"

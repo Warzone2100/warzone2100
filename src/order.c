@@ -27,6 +27,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
+#include "lib/framework/math-help.h"
 
 #include "objects.h"
 #include "order.h"

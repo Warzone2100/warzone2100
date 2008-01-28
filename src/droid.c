@@ -46,7 +46,7 @@
 #include "lib/sound/audio_id.h"
 #include "action.h"
 #include "order.h"
-#include "lib/framework/fractions.h"
+#include "lib/framework/math-help.h"
 #include "move.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include "anim_id.h"

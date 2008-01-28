@@ -30,7 +30,7 @@
 #include <string.h>
 
 #include "lib/framework/trig.h"
-#include "lib/framework/fractions.h"
+#include "lib/framework/math-help.h"
 #include "lib/netplay/netplay.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/sound/audio.h"

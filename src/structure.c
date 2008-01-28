@@ -44,7 +44,7 @@
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
 #include "stats.h"
-#include "lib/framework/fractions.h"
+#include "lib/framework/math-help.h"
 #include "edit3d.h"
 #include "anim_id.h"
 #include "lib/gamelib/anim.h"

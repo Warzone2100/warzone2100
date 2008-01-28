@@ -45,7 +45,7 @@
 #include "radar.h"
 #include "miscimd.h"
 #include "lighting.h"
-#include "lib/framework/fractions.h"
+#include "lib/framework/math-help.h"
 #include "console.h"
 #include "order.h"
 #include "wrappers.h"

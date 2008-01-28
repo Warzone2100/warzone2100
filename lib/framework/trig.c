@@ -31,7 +31,6 @@
 #include <stdlib.h>
 #include "types.h"
 #include "debug.h"
-#include "fractions.h"
 #include "trig.h"
 
 /* Number of steps between -1 and 1 for the inverse tables */

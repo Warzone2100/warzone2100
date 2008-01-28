@@ -44,7 +44,6 @@
 #include "input.h"
 #include "SDL_framerate.h"
 
-#include "fractions.h"
 #include <assert.h>
 #ifdef __APPLE__
 #include "cursors16.h"

@@ -58,7 +58,6 @@
 #include "lib/widget/button.h"
 #include "lib/widget/editbox.h"
 #include "lib/widget/slider.h"
-#include "lib/framework/fractions.h"
 #include "order.h"
 #include "projectile.h"
 

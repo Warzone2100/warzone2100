@@ -28,6 +28,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/math-help.h"
 
 #include "objects.h"
 #include "loop.h"
@@ -57,7 +58,7 @@
 #include "game.h"
 #include "power.h"
 #include "lib/sound/audio.h"
-#include "lib/framework/fractions.h"
+#include "lib/framework/math-help.h"
 #include "order.h"
 #include "frontend.h"
 #include "intimage.h"

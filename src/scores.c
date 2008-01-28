@@ -27,6 +27,7 @@
 
 // --------------------------------------------------------------------
 #include "lib/framework/frame.h"
+#include "lib/framework/math-help.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/tagfile.h"
 #include "lib/gamelib/gtime.h"

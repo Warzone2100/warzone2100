@@ -63,7 +63,7 @@
 #include "intdisplay.h"
 #include "radar.h"
 #include "display3d.h"
-#include "lib/framework/fractions.h"
+#include "lib/framework/math-help.h"
 #include "lighting.h"
 #include "console.h"
 #include "lib/gamelib/animobj.h"

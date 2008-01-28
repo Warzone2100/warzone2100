@@ -44,6 +44,7 @@
 #include "lib/framework/frameresource.h"
 #include "lib/framework/input.h"
 #include "lib/framework/tagfile.h"
+#include "lib/framework/math-help.h"
 
 #include "lib/ivis_common/ivisdef.h" //ivis matrix code
 #include "lib/ivis_common/piedef.h" //ivis matrix code

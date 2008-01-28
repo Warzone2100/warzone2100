@@ -22,6 +22,7 @@
 /* The terrain intensity values are calculated at map load/creation time. */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/math-help.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include "lib/ivis_common/ivisdef.h" //ivis matrix code

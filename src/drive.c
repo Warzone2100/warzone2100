@@ -50,7 +50,6 @@
 #include "mapgrid.h"
 #include "display.h"
 #include "effects.h"
-#include "lib/framework/fractions.h"
 #include "hci.h"
 #include "warcam.h"
 #include "radar.h"

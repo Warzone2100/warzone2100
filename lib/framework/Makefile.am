@@ -10,8 +10,8 @@ BUILT_SOURCES = resource_lexer.lex.c strres_lexer.lex.c resource_parser.tab.c st
 CLEANFILES = resource_lexer.lex.c strres_lexer.lex.c resource_parser.tab.c strres_parser.tab.c resource_parser.tab.h strres_parser.tab.h
 
 noinst_LIBRARIES = libframework.a
-noinst_HEADERS = configfile.h cursors.h cursors16.h debug.h fractions.h frame.h \
-	frameint.h frameresource.h input.h listmacs.h printf_ext.h resly.h \
+noinst_HEADERS = configfile.h cursors.h cursors16.h debug.h frame.h frameint.h \
+	frameresource.h input.h listmacs.h math-help.h printf_ext.h resly.h \
 	strlfuncs.h strnlen1.h strres.h strresly.h treap.h treapint.h trig.h \
 	types.h tagfile.h
 

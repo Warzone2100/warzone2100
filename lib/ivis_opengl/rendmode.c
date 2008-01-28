@@ -26,7 +26,6 @@
 #include "lib/ivis_common/piepalette.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/ivispatch.h"
-#include "lib/framework/fractions.h"
 
 //*************************************************************************
 

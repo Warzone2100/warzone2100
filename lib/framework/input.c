@@ -35,7 +35,6 @@
 #include "types.h"
 #include "debug.h"
 #include "input.h"
-#include "fractions.h"
 #include "frame.h"
 #include "frameint.h"
 #include "configfile.h"

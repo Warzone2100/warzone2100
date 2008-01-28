@@ -25,6 +25,7 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/math-help.h"
 
 #include "objects.h"
 #include "combat.h"
