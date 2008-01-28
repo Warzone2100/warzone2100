@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-01-28 23:29+0100\n"
+"POT-Creation-Date: 2008-01-28 23:50+0100\n"
 "PO-Revision-Date: 2008-01-28 23:30+0100\n"
 "Last-Translator: Dennis Schridde <devurandom@gna.org>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
@@ -12129,4 +12129,3 @@ msgstr "Stärkerer Kommandoturm verfügbar"
 #: data/mp/messages/strings/resstrings.txt:2149
 msgid "Upgraded battlefield computer system"
 msgstr "Verbesserter taktischer Computer"
-
