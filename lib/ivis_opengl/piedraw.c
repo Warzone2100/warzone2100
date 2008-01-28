@@ -467,10 +467,10 @@ static int compare_edge (EDGE *A, EDGE *B, const Vector3f *pVertices )
 		{
 			return TRUE;
 		}
-		return Vector3f_compare(&pVertices[A->to], &pVertices[B->from]);
+		return Vector3f_Compare(pVertices[A->to], pVertices[B->from]);
 	}
 
-	if(!Vector3f_compare(&pVertices[A->from], &pVertices[B->to]))
+	if(!Vector3f_Compare(pVertices[A->from], pVertices[B->to]))
 	{
 		return FALSE;
 	}
@@ -479,7 +479,7 @@ static int compare_edge (EDGE *A, EDGE *B, const Vector3f *pVertices )
 	{
 		return TRUE;
 	}
-	return Vector3f_compare(&pVertices[A->to], &pVertices[B->from]);
+	return Vector3f_Compare(pVertices[A->to], pVertices[B->from]);
 }
 
 /// Add an edge to an edgelist
