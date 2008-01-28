@@ -53,7 +53,7 @@
 //*************************************************************************
 typedef struct { Sint32 left, top, right, bottom; } iClip;
 
-typedef struct iSurface {
+typedef struct _iSurface {
 	Uint32 flags;
 	int xcentre;
 	int ycentre;
@@ -106,16 +106,16 @@ typedef struct {
 	Uint32 flags;
 	Sint32 zcentre;
 	unsigned int npnts;
-	Vector3f normal;
+	Vector3f normal; // FIXME Never actually used?
 	VERTEXID *pindex;
 	Vector2f *texCoord;
 	iTexAnim *pTexAnim;
 } iIMDPoly;
 
-typedef struct iIMDShape {
+typedef struct _iIMDShape {
 	int texpage;
 	int sradius, radius;
-	Vector3i min, max;
+	Vector3f min, max;
 
 	Vector3f ocen;
 	unsigned short numFrames;
@@ -133,7 +133,7 @@ typedef struct iIMDShape {
 	unsigned int nShadowEdges;
 	EDGE *shadowEdgeList;
 
-	struct iIMDShape *next; // next pie in multilevel pies (NULL for non multilevel !)
+	struct _iIMDShape *next; // next pie in multilevel pies (NULL for non multilevel !)
 } iIMDShape;
 
 

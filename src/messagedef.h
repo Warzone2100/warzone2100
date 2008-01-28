@@ -62,8 +62,8 @@ typedef enum _prox_type
 // info required to view an object in Intelligence screen
 typedef struct _view_research
 {
-	struct	iIMDShape	*pIMD;
-	struct	iIMDShape	*pIMD2;				//allows base plates and turrets to be drawn as well
+	iIMDShape	*pIMD;
+	iIMDShape	*pIMD2;				//allows base plates and turrets to be drawn as well
 	char	sequenceName[MAX_STR_LENGTH];	//which windowed flic to display
 	char	*pAudio;						/*name of audio track to play (for this seq)*/
 	UWORD	numFrames;						/* On PSX if type is VIEW_RPL then

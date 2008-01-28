@@ -39,8 +39,8 @@ extern BOOL	godMode;
 extern iSurface	*mapSurface;
 
 /* renders up to two IMDs into the surface - used by message display in Intelligence Map */
-extern void renderIMDToBuffer(struct iSurface *pSurface, struct iIMDShape *pIMD,
-							  struct iIMDShape *pIMD2, UDWORD WindowX,UDWORD WindowY,
+extern void renderIMDToBuffer(iSurface *pSurface, iIMDShape *pIMD,
+							  iIMDShape *pIMD2, UDWORD WindowX,UDWORD WindowY,
 							  UDWORD OriginX,UDWORD OriginY);
 extern void renderResearchToBuffer(RESEARCH *psResearch,
                             UDWORD OriginX, UDWORD OriginY);

@@ -211,7 +211,7 @@ typedef struct	_effect_def
 	uint16_t          frameDelay;		// how many game ticks between each frame?
 	uint16_t          lifeSpan;		// what is it's life expectancy?
 	uint16_t          radius;			// Used for area effects
-	struct iIMDShape  *imd;			// pointer to the imd the effect uses.
+	iIMDShape  *imd;			// pointer to the imd the effect uses.
 } EFFECT;
 
 /* Maximum number of effects in the world - need to investigate what this should be */
@@ -222,9 +222,9 @@ extern void	effectGiveAuxVarSec		( UDWORD var); // and so's this
 extern void	initEffectsSystem		( void );
 extern void	processEffects			( void );
 extern void	addEffect				( Vector3i *pos, EFFECT_GROUP group,
-										EFFECT_TYPE type, BOOL specified, struct iIMDShape *imd, BOOL lit );
+										EFFECT_TYPE type, BOOL specified, iIMDShape *imd, BOOL lit );
 extern void	addMultiEffect			( Vector3i *basePos, Vector3i *scatter,EFFECT_GROUP group,
-									EFFECT_TYPE type,BOOL specified, struct iIMDShape *imd, UDWORD number, BOOL lit, UDWORD size );
+									EFFECT_TYPE type,BOOL specified, iIMDShape *imd, UDWORD number, BOOL lit, UDWORD size );
 
 extern void	renderEffect			( EFFECT *psEffect );
 extern UDWORD getNumEffects			( void );

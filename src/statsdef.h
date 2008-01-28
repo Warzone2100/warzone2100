@@ -26,6 +26,7 @@
 #ifndef _statsdef_h
 #define _statsdef_h
 
+#include "lib/ivis_common/ivisdef.h"
 
 /* Elements common to all stats structures */
 #define STATS_BASE \
@@ -89,7 +90,7 @@ typedef enum _tech_level
 	UDWORD			body;				/* Component's body points */ \
 	BOOL			design;				/* flag to indicate whether this component can*/ \
 										/* be used in the design screen*/ \
-struct 	iIMDShape		*pIMD				/* The IMD to draw for this component */
+	iIMDShape		*pIMD				/* The IMD to draw for this component */
 
 /* Stats common to all components */
 typedef struct _comp_base_stats
@@ -218,8 +219,8 @@ typedef struct _body_stats
 												// cross-ref with the weapon types
 	// A measure of how much energy the power plant outputs
 	UDWORD		powerOutput;		// this is the engine output of the body
-	struct	iIMDShape	**ppIMDList;			//list of IMDs to use for propulsion unit - up to numPropulsionStats
-    struct  iIMDShape   *pFlameIMD;     //pointer to which flame graphic to use - for VTOLs only at the moment
+	iIMDShape	**ppIMDList;			//list of IMDs to use for propulsion unit - up to numPropulsionStats
+    iIMDShape   *pFlameIMD;     //pointer to which flame graphic to use - for VTOLs only at the moment
 } BODY_STATS;
 
 typedef struct _brain_stats
@@ -289,7 +290,7 @@ typedef struct _sensor_stats
 	SENSOR_TYPE	type;				// used for combat
 	UDWORD		time;				//time delay before associated weapon droids 'know' where the
 									//attack is from
-	struct	iIMDShape	*pMountGraphic;		// The turret mount to use
+	iIMDShape	*pMountGraphic;		// The turret mount to use
 } SENSOR_STATS;
 
 typedef struct _ecm_stats
@@ -300,7 +301,7 @@ typedef struct _ecm_stats
 	UDWORD		range;				// ECM range
 	UDWORD		power;				// ECM power (put against sensor power)
 	UDWORD		location;			// specifies whether the ECM is default or for the Turret
-	struct	iIMDShape	*pMountGraphic;		// The turret mount to use
+	iIMDShape	*pMountGraphic;		// The turret mount to use
 } ECM_STATS;
 
 typedef struct _repair_stats
@@ -313,7 +314,7 @@ typedef struct _repair_stats
 	BOOL				repairArmour;		// whether armour can be repaired or not
 	UDWORD				location;			// specifies whether the Repair is default or for the Turret
 	UDWORD				time;				// time delay for repair cycle
-	struct	iIMDShape	*pMountGraphic;		// The turret mount to use
+	iIMDShape	*pMountGraphic;		// The turret mount to use
 } REPAIR_STATS;
 
 typedef enum _fireonmove
@@ -371,13 +372,13 @@ typedef struct _weapon_stats
 	UDWORD			radiusLife;			// How long a blast radius is visible
 
 	/* Graphics used for the weapon */
-	struct	iIMDShape		*pMountGraphic;		// The turret mount to use
-	struct	iIMDShape		*pMuzzleGraphic;	// The muzzle flash
-	struct	iIMDShape		*pInFlightGraphic;	// The ammo in flight
-	struct	iIMDShape		*pTargetHitGraphic;	// The ammo hitting a target
-	struct	iIMDShape		*pTargetMissGraphic;// The ammo missing a target
-	struct	iIMDShape		*pWaterHitGraphic;	// The ammo hitting water
-	struct	iIMDShape		*pTrailGraphic;		// The trail used for in flight
+	iIMDShape		*pMountGraphic;		// The turret mount to use
+	iIMDShape		*pMuzzleGraphic;	// The muzzle flash
+	iIMDShape		*pInFlightGraphic;	// The ammo in flight
+	iIMDShape		*pTargetHitGraphic;	// The ammo hitting a target
+	iIMDShape		*pTargetMissGraphic;// The ammo missing a target
+	iIMDShape		*pWaterHitGraphic;	// The ammo hitting water
+	iIMDShape		*pTrailGraphic;		// The trail used for in flight
 
 	/* Audio */
 	SDWORD			iAudioFireID;
@@ -390,7 +391,7 @@ typedef struct _construct_stats
 	COMPONENT_STATS;
 
 	UDWORD		constructPoints;	/*The number of points contributed each cycle*/
-	struct	iIMDShape	*pMountGraphic;		// The turret mount to use
+	iIMDShape	*pMountGraphic;		// The turret mount to use
 } CONSTRUCT_STATS;
 
 /************************************************************************************

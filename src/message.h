@@ -37,7 +37,7 @@ extern MESSAGE		*apsMessages[MAX_PLAYERS];
 when called by the script. They are not to be re-displayed*/
 //extern MESSAGE		tutorialMessage;
 /* The IMD to use for the proximity messages */
-extern struct iIMDShape	*pProximityMsgIMD;
+extern iIMDShape	*pProximityMsgIMD;
 
 /* The list of proximity displays allocated */
 extern PROXIMITY_DISPLAY *apsProxDisp[MAX_PLAYERS];

@@ -4509,21 +4509,22 @@ void intRunDesign(void)
 
 static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	W_CLICKFORM		*Form = (W_CLICKFORM*)psWidget;
-	UWORD			x0, y0;
 	static UDWORD	iRY = 45;
-	BASE_STATS		*psStats;
-	Vector3i			Rotation,Position;
-	SWORD			templateRadius;
-	SDWORD			falseScale;
+
+	W_CLICKFORM		*Form = (W_CLICKFORM*)psWidget;
+	UWORD			x0 = xOffset+Form->x, y0 = yOffset+Form->y;
 
 	/* get stats from userdata pointer in widget stored in
 	 * intSetSystemStats, intSetBodyStats, intSetPropulsionStats
 	 */
-	psStats = (BASE_STATS *) Form->pUserData;
+	BASE_STATS *psStats = (BASE_STATS *) Form->pUserData;
 
-	x0 = (UWORD)(xOffset+Form->x);
-	y0 = (UWORD)(yOffset+Form->y);
+	SWORD templateRadius = getComponentRadius(psStats);
+
+	Vector3i Rotation = {-30, iRY, 0}, Position = {0, -templateRadius / 4, BUTTON_DEPTH /* templateRadius * 12 */};
+
+	//scale the object around the BUTTON_RADIUS so that half size objects are draw are draw 75% the size of normal objects
+	SDWORD falseScale = (DESIGN_COMPONENT_SCALE * COMPONENT_RADIUS) / templateRadius / 2 + (DESIGN_COMPONENT_SCALE / 2);
 
 	iV_DrawImage(IntImages,(UWORD)(IMAGE_DES_STATBACKLEFT),x0,y0);
 	iV_DrawImageRect(IntImages,IMAGE_DES_STATBACKMID,
@@ -4536,9 +4537,6 @@ static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	/* display current component */
 	pie_SetGeometricOffset( (xOffset+psWidget->width/4),
 							(yOffset+psWidget->height/2) );
-	Rotation.x = -30;
-	Rotation.y = iRY;
-	Rotation.z = 0;
 
 	/* inc rotation if highlighted */
 	if ( Form->state & WCLICK_HILITE )
@@ -4547,16 +4545,6 @@ static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 		iRY %= 360;
 	}
 
-	templateRadius = (SWORD)(getComponentRadius(psStats));
-
-	Position.x = 0;
-	Position.y = -templateRadius / 4;
-//	Position.z = templateRadius * 12;
-	Position.z = BUTTON_DEPTH;
-
-	//scale the object around the BUTTON_RADIUS so that half size objects are draw are draw 75% the size of normal objects
-	falseScale = (DESIGN_COMPONENT_SCALE * COMPONENT_RADIUS) / templateRadius;
-	falseScale = (falseScale/2) + (DESIGN_COMPONENT_SCALE/2);
 	//display component in bottom design screen window
 	displayComponentButton( psStats, &Rotation, &Position, TRUE, falseScale);
 }

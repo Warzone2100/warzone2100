@@ -157,7 +157,7 @@ typedef struct iIMDPoly {
 	iTexAnim *pTexAnim;
 } iIMDPoly;
 
-typedef struct iIMDShape {
+typedef struct _iIMDShape {
 	int texpage;
 	int sradius, radius, xmin, xmax, ymin, ymax, zmin, zmax;
 
@@ -177,7 +177,7 @@ typedef struct iIMDShape {
 	unsigned int nShadowEdges;
 	EDGE *shadowEdgeList;
 
-	struct iIMDShape *next; // next pie in multilevel pies (NULL for non multilevel !)
+	struct _iIMDShape *next; // next pie in multilevel pies (NULL for non multilevel !)
 } iIMDShape;
 
 /***************************************************************************/
