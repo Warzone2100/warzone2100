@@ -26,6 +26,7 @@
 // this has to be first
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
+#include <math.h>
 
 #ifndef WZ_NOSOUND
 # ifdef WZ_OS_MAC
