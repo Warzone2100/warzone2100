@@ -33,13 +33,15 @@
 # define M_PI 3.14159265358979323846
 #endif
 
-static inline int math_round(float x)
+#if !defined(WZ_C99)
+static inline int roundf(float x)
 {
 	// Ensure that float truncation results in a proper rounding
-	if (x < 0.f)
+	if (x < 0.0f)
 		return x - 0.5f;
 	else
 		return x + 0.5f;
 }
+#endif
 
 #endif // __INCLUDED_LIB_FRAMEWORK_MATH_HELP_H__

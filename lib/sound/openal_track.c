@@ -39,6 +39,7 @@
 
 #include <physfs.h>
 #include <string.h>
+#include <math.h>
 
 #include "tracklib.h"
 #include "audio.h"

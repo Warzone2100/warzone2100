@@ -22,6 +22,8 @@
 
 #include "lib/framework/wzglobal.h"
 
+#include <math.h>
+
 #if defined(WZ_CC_MSVC)
 // Prevent nasty "nonstandard extension used : non-constant aggregate initializer" warning when using MSVC
 # pragma warning(disable:4204)

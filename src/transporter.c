@@ -26,6 +26,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/math-help.h"
 #include "lib/widget/widget.h"
 #include "lib/ivis_common/textdraw.h"
 
@@ -584,7 +585,7 @@ BOOL intAddTransButtonForm(void)
 
 	if (sFormInit.numMajor > MAX_TAB_STD_SHOWN)
 	{	// we do NOT use smallTab icons here, so be safe and only display max # of
-		// standard sized tab icons.  
+		// standard sized tab icons.
 		sFormInit.numMajor = MAX_TAB_STD_SHOWN;
 	}
 	//set minor tabs to 1

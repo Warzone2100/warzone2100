@@ -1168,9 +1168,9 @@ void scroll(void)
 	sine = sinf(radians);
 
 	/* Get x component of movement */
-	xDif = math_round(cosine * scrollStepLeftRight + sine * scrollStepUpDown);
+	xDif = roundf(cosine * scrollStepLeftRight + sine * scrollStepUpDown);
 	/* Get y component of movement */
-	yDif = math_round(sine * scrollStepLeftRight - cosine * scrollStepUpDown);
+	yDif = roundf(sine * scrollStepLeftRight - cosine * scrollStepUpDown);
 
 	/* Adjust player's position by these components */
 	player.p.x += xDif;
