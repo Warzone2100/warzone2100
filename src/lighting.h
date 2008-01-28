@@ -26,8 +26,7 @@
 #define FOG_GROUND		4
 #define FOG_ENABLED		8
 
-extern UDWORD	fogStatus;
-extern Vector3f	theSun;
+extern UDWORD fogStatus;
 
 typedef enum _lightcols
 {
@@ -45,6 +44,9 @@ UBYTE	type;
 UDWORD	range;
 LIGHT_COLOUR	colour;
 } LIGHT;
+
+extern void setTheSun(Vector3f newSun);
+extern Vector3f getTheSun(void);
 
 extern void	processLight(LIGHT *psLight);
 //extern void	initLighting( void );

@@ -54,23 +54,43 @@ extern SDWORD aSinTable[];
  */
 void pie_RotateTranslate3iv(const Vector3i *v, Vector3i *s);
 
-/*!
- * returns true if both vectors are equal
- */
-static inline BOOL Vector3i_compare(const Vector3i *a, const Vector3i *b)
-{
-	return a->x == b->x && a->y == b->y && a->z == b->z;
-}
-
 
 /*!
- * returns true if both vectors are equal
+ * Calculate surface normal
+ * Eg. if a polygon (with n points in clockwise order) normal is required,
+ * \c p1 = point 0, \c p2 = point 1, \c p3 = point n-1
+ * \param p1,p2,p3 Points for forming 2 vector for cross product
+ * \return Normal vector
  */
-static inline BOOL Vector3f_compare(const Vector3f *a, const Vector3f *b)
+static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+		Vector3f pie_SurfaceNormal3fv(const Vector3f p1, const Vector3f p2, const Vector3f p3)
 {
-	return a->x == b->x && a->y == b->y && a->z == b->z;
-}
+	Vector3f
+		a = {
+			p3.x - p1.x,
+			p3.y - p1.y,
+			p3.z - p1.z
+		},
+ 		b = {
+			p2.x - p1.x,
+			p2.y - p1.y,
+			p2.z - p1.z
+		};
 
+	a = Vector3f_Normalise(a);
+	b = Vector3f_Normalise(b);
+
+	{ // MSVC hack
+		Vector3f
+			v = {
+				(a.y * b.z) - (a.z * b.y),
+				(a.z * b.x) - (a.x * b.z),
+				(a.x * b.y) - (a.y * b.x)
+			};
+
+		return Vector3f_Normalise(v);
+	}
+}
 
 //*************************************************************************
 
@@ -100,14 +120,10 @@ extern void pie_TranslateTextureEnd(void);
 
 //*************************************************************************
 
-extern void pie_VectorNormalise3iv(Vector3i *v);
-extern void pie_VectorNormalise3fv(Vector3f *v);
 extern void pie_VectorInverseRotate0(const Vector3i *v1, Vector3i *v2);
-extern void pie_SurfaceNormal3iv(const Vector3i *p1, const Vector3i *p2, const Vector3i *p3, Vector3i *v);
-extern void pie_SurfaceNormal3fv(const Vector3f *p1, const Vector3f *p2, const Vector3f *p3, Vector3f *v);
 extern void pie_SetGeometricOffset(int x, int y);
 
-void pie_Begin3DScene(void);
-void pie_BeginInterface(void);
+extern void pie_Begin3DScene(void);
+extern void pie_BeginInterface(void);
 
 #endif

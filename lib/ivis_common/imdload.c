@@ -146,7 +146,7 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 			p2.y = s->points[poly->pindex[poly->npnts-1]].y;
 			p2.z = s->points[poly->pindex[poly->npnts-1]].z;
 
-			pie_SurfaceNormal3fv(&p0, &p1, &p2, &poly->normal);
+			poly->normal = pie_SurfaceNormal3fv(p0, p1, p2);
 		}
 		else
 		{
@@ -248,7 +248,7 @@ static BOOL ReadPoints( const char **ppFileData, iIMDShape *s )
 		// scan through list upto the number of points added (lastPoint) ... not up to the number of points scanned in (i)  (which will include duplicates)
 		for (j = 0; j < lastPoint; j++)
 		{
-			if (Vector3f_compare(&newVector, &s->points[j]))
+			if (Vector3f_Compare(newVector, s->points[j]))
 			{
 				match = j;
 				break;

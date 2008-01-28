@@ -51,16 +51,22 @@
 #define FOG_END_SCALE 0.6
 
 /*	The vector that holds the sun's lighting direction - planar */
-Vector3f	theSun;
-UDWORD	fogStatus = 0;
+static Vector3f theSun;
+UDWORD fogStatus = 0;
 
 /*	Module function Prototypes */
 static void colourTile(SDWORD xIndex, SDWORD yIndex, LIGHT_COLOUR colour, UBYTE percent);
-static void normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant);
 static UDWORD calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos);
 
-static UDWORD	numNormals;		// How many normals have we got?
-static Vector3i normals[8];		// Maximum 8 possible normals
+void setTheSun(Vector3f newSun)
+{
+	theSun = Vector3f_Mult(Vector3f_Normalise(newSun), FP12_MULTIPLIER);
+}
+
+Vector3f getTheSun(void)
+{
+	return theSun;
+}
 
 /*****************************************************************************/
 /*
@@ -114,14 +120,229 @@ void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
 }
 
 
-void	calcTileIllum(UDWORD tileX, UDWORD tileY)
+static void normalsOnTile(unsigned int tileX, unsigned int tileY, unsigned int quadrant, unsigned int *numNormals, Vector3f normals[])
 {
-	Vector3i finalVector;
-	SDWORD	dotProduct;
-	UDWORD	i;
-	UDWORD	val;
+	/* Get a pointer to our tile */
+	/* And to the ones to the east, south and southeast of it */
+	MAPTILE
+		*psTile = mapTile(tileX,tileY),
+		*tileRight = mapTile(tileX+1,tileY),
+		*tileDownRight = mapTile(tileX+1,tileY+1),
+		*tileDown = mapTile(tileX,tileY+1);
+	unsigned int rMod = 0, drMod = 0, dMod = 0, nMod = 0;
 
-	numNormals = 0;
+	if (terrainType(psTile) == TER_WATER)
+	{
+ 		nMod = 100 + (2*environGetData(tileX,tileY));
+		rMod = 100 + (2*environGetData(tileX+1,tileY));
+		drMod = 100 + (2*environGetData(tileX+1,tileY+1));
+		dMod = 100 + (2*environGetData(tileX,tileY+1));
+	}
+
+	switch(quadrant)
+	{
+	case 0:
+	case 2:
+		/* Is it flipped? In this case one triangle  */
+		if(TRI_FLIPPED(psTile))
+		{
+			if(quadrant==0)
+			{
+				Vector3f
+					corner1 = {
+						world_coord(tileX + 1),
+						world_coord(tileY),
+						tileRight->height - rMod
+					},
+					corner2 = {
+						world_coord(tileX + 1),
+						world_coord(tileY + 1),
+						tileDownRight->height - drMod
+					},
+					corner3 = {
+						world_coord(tileX),
+						world_coord(tileY + 1),
+						tileDown->height - dMod
+					};
+
+				normals[(*numNormals)++] = pie_SurfaceNormal3fv( corner1, corner2, corner3);
+			}
+			else
+			{
+				Vector3f
+					corner1 = {
+						world_coord(tileX),
+						world_coord(tileY),
+						psTile->height - nMod
+					},
+					corner2 = {
+						world_coord(tileX + 1),
+						world_coord(tileY),
+						tileRight->height - rMod
+					},
+					corner3 = {
+						world_coord(tileX),
+						world_coord(tileY + 1),
+						tileDown->height - dMod
+					};
+
+				normals[(*numNormals)++] = pie_SurfaceNormal3fv( corner1, corner2, corner3);
+			}
+		}
+		else
+		{
+			/* Otherwise, it's not flipped and so two triangles*/
+			{ // MSVC hack
+			Vector3f
+				corner1 = {
+					world_coord(tileX),
+					world_coord(tileY),
+					psTile->height - nMod
+				},
+				corner2 = {
+					world_coord(tileX + 1),
+					world_coord(tileY),
+					tileRight->height - rMod
+				},
+				corner3 = {
+					world_coord(tileX + 1),
+					world_coord(tileY + 1),
+					tileDownRight->height - drMod
+				};
+
+			normals[(*numNormals)++] = pie_SurfaceNormal3fv( corner1, corner2, corner3);
+			}
+
+			{ // MSVC hack
+			Vector3f
+				corner1 = {
+					world_coord(tileX),
+					world_coord(tileY),
+					psTile->height - nMod
+				},
+				corner2 = {
+					world_coord(tileX + 1),
+					world_coord(tileY + 1),
+					tileDownRight->height - drMod
+				},
+				corner3 = {
+					world_coord(tileX),
+					world_coord(tileY + 1),
+					tileDown->height - dMod
+				};
+
+			normals[(*numNormals)++] = pie_SurfaceNormal3fv( corner1, corner2, corner3);
+			}
+		}
+		break;
+	case 1:
+	case 3:
+		/* Is it flipped? In this case two triangles  */
+		if(TRI_FLIPPED(psTile))
+		{
+			{ // MSVC hack
+			Vector3f
+				corner1 = {
+					world_coord(tileX),
+					world_coord(tileY),
+					psTile->height - nMod
+				},
+				corner2 = {
+					world_coord(tileX + 1),
+					world_coord(tileY),
+					tileRight->height - rMod
+				},
+				corner3 = {
+					world_coord(tileX),
+					world_coord(tileY + 1),
+					tileDown->height - dMod
+				};
+
+			normals[(*numNormals)++] = pie_SurfaceNormal3fv( corner1, corner2, corner3);
+			}
+
+			{ // MSVC hack
+			Vector3f
+				corner1 = {
+					world_coord(tileX + 1),
+					world_coord(tileY),
+					tileRight->height - rMod
+				},
+				corner2 = {
+					world_coord(tileX + 1),
+					world_coord(tileY + 1),
+					tileDownRight->height - drMod
+				},
+				corner3 = {
+					world_coord(tileX),
+					world_coord(tileY + 1),
+					tileDown->height - dMod
+				};
+
+			normals[(*numNormals)++] = pie_SurfaceNormal3fv( corner1, corner2, corner3);
+			}
+		}
+		else
+		{
+			if(quadrant==1)
+			{
+				Vector3f
+					corner1 = {
+						world_coord(tileX),
+						world_coord(tileY),
+						psTile->height - nMod
+					},
+					corner2 = {
+						world_coord(tileX + 1),
+						world_coord(tileY + 1),
+						tileDownRight->height - drMod
+					},
+					corner3 = {
+						world_coord(tileX),
+						world_coord(tileY + 1),
+						tileDown->height - dMod
+					};
+
+				normals[(*numNormals)++] = pie_SurfaceNormal3fv( corner1, corner2, corner3);
+			}
+			else
+			{
+				Vector3f
+					corner1 = {
+						world_coord(tileX),
+						world_coord(tileY),
+						psTile->height - nMod
+					},
+					corner2 = {
+						world_coord(tileX + 1),
+						world_coord(tileY),
+						tileRight->height - rMod
+					},
+					corner3 = {
+						world_coord(tileX + 1),
+						world_coord(tileY + 1),
+						tileDownRight->height - drMod
+					};
+
+				normals[(*numNormals)++] = pie_SurfaceNormal3fv( corner1, corner2, corner3);
+			}
+		}
+		break;
+	default:
+		ASSERT( FALSE,"Invalid quadrant in lighting code" );
+	} // end switch
+}
+
+
+void calcTileIllum(UDWORD tileX, UDWORD tileY)
+{
+	/* The number or normals that we got is in numNormals*/
+	Vector3f finalVector = {0.0f, 0.0f, 0.0f};
+	unsigned int i, dotProduct, val;
+
+	unsigned int numNormals = 0; // How many normals have we got?
+	Vector3f normals[8]; // Maximum 8 possible normals
+
 	/* Quadrants look like:-
 
 				  *
@@ -138,204 +359,30 @@ void	calcTileIllum(UDWORD tileX, UDWORD tileY)
 	*/
 
 	/* Do quadrant 0 - tile that's above and left*/
-	normalsOnTile(tileX-1, tileY-1,0);
+	normalsOnTile(tileX-1, tileY-1, 0, &numNormals, normals);
 
 	/* Do quadrant 1 - tile that's above and right*/
-	normalsOnTile(tileX,tileY-1,1);
+	normalsOnTile(tileX, tileY-1, 1, &numNormals, normals);
 
 	/* Do quadrant 2 - tile that's down and right*/
-	normalsOnTile(tileX,tileY,2);
+	normalsOnTile(tileX, tileY, 2, &numNormals, normals);
 
 	/* Do quadrant 3 - tile that's down and left*/
-	normalsOnTile(tileX-1,tileY,3);
+	normalsOnTile(tileX-1, tileY, 3, &numNormals, normals);
 
-	/* The number or normals that we got is in numNormals*/
-	finalVector.x = finalVector.y = finalVector.z = 0;
-
-	for(i=0; i<numNormals; i++)
+	for(i = 0; i < numNormals; i++)
 	{
-		finalVector.x += normals[i].x;
-		finalVector.y += normals[i].y;
-		finalVector.z += normals[i].z;
+		finalVector = Vector3f_Add(finalVector, normals[i]);
 	}
-	pie_VectorNormalise3iv(&finalVector);
-	pie_VectorNormalise3fv(&theSun);
 
-	dotProduct =	(finalVector.x * theSun.x +
-			 finalVector.y * theSun.y +
-			 finalVector.z * theSun.z) / FP12_MULTIPLIER;
+	dotProduct = Vector3f_ScalarP(Vector3f_Normalise(finalVector), theSun);
 
-	val = ((abs(dotProduct)) / 16);
+	val = abs(dotProduct) / 16;
 	if (val == 0) val = 1;
-	if(val > 254) val = 254;
+	if (val > 254) val = 254;
 	mapTile(tileX, tileY)->illumination = val;
 }
 
-static void normalsOnTile(UDWORD tileX, UDWORD tileY, UDWORD quadrant)
-{
-	Vector3i corner1, corner2, corner3;
-	MAPTILE	*psTile, *tileRight, *tileDownRight, *tileDown;
-	SDWORD	rMod,drMod,dMod,nMod;
-
-	/* Get a pointer to our tile */
-	psTile			= mapTile(tileX,tileY);
-
-	/* And to the ones to the east, south and southeast of it */
-	tileRight		= mapTile(tileX+1,tileY);
-	tileDownRight	= mapTile(tileX+1,tileY+1);
-	tileDown		= mapTile(tileX,tileY+1);
-
-	if (terrainType(psTile) == TER_WATER)
-	{
- 		nMod = 100 + (2*environGetData(tileX,tileY));
-		rMod = 100 + (2*environGetData(tileX+1,tileY));
-		drMod = 100 + (2*environGetData(tileX+1,tileY+1));
-		dMod = 100 + (2*environGetData(tileX,tileY+1));
-	}
-	else
-	{
-		nMod = rMod = drMod = dMod = 0;
-	}
-
-
- 	switch(quadrant)
-	{
-
-	case 0:
-	case 2:
-		/* Is it flipped? In this case one triangle  */
-		if(TRI_FLIPPED(psTile))
-		{
-			if(quadrant==0)
-			{
-			 	corner1.x = world_coord(tileX + 1);
-				corner1.y = world_coord(tileY);
-				corner1.z = tileRight->height - rMod;
-
-				corner2.x = world_coord(tileX + 1);
-				corner2.y = world_coord(tileY + 1);
-				corner2.z = tileDownRight->height - drMod;
-
-				corner3.x = world_coord(tileX);
-				corner3.y = world_coord(tileY + 1);
-				corner3.z = tileDown->height - dMod;
-				pie_SurfaceNormal3iv(&corner1,&corner2,&corner3,&normals[numNormals++]);
-			}
-			else
-			{
-				corner1.x = world_coord(tileX);
-				corner1.y = world_coord(tileY);
-				corner1.z = psTile->height - nMod;
-
-				corner2.x = world_coord(tileX + 1);
-				corner2.y = world_coord(tileY);
-				corner2.z = tileRight->height - rMod;
-
-				corner3.x = world_coord(tileX);
-				corner3.y = world_coord(tileY + 1);
-				corner3.z = tileDown->height - dMod;
-				pie_SurfaceNormal3iv(&corner1,&corner2,&corner3,&normals[numNormals++]);
-			}
-		}
-		else
-		{
-			/* Otherwise, it's not flipped and so two triangles*/
-			corner1.x = world_coord(tileX);
-			corner1.y = world_coord(tileY);
-			corner1.z = psTile->height - nMod;
-
-			corner2.x = world_coord(tileX + 1);
-			corner2.y = world_coord(tileY);
-			corner2.z = tileRight->height - rMod;
-
-			corner3.x = world_coord(tileX + 1);
-			corner3.y = world_coord(tileY + 1);
-			corner3.z = tileDownRight->height - drMod;
-			pie_SurfaceNormal3iv(&corner1,&corner2,&corner3,&normals[numNormals++]);
-
-			corner1.x = world_coord(tileX);
-			corner1.y = world_coord(tileY);
-			corner1.z = psTile->height - nMod;
-
-			corner2.x = world_coord(tileX + 1);
-			corner2.y = world_coord(tileY + 1);
-			corner2.z = tileDownRight->height - drMod;
-
-			corner3.x = world_coord(tileX);
-			corner3.y = world_coord(tileY + 1);
-			corner3.z = tileDown->height - dMod;
-			pie_SurfaceNormal3iv(&corner1,&corner2,&corner3,&normals[numNormals++]);
-		}
-		break;
-	case 1:
-	case 3:
-		/* Is it flipped? In this case two triangles  */
-		if(TRI_FLIPPED(psTile))
-		{
-	   	 	corner1.x = world_coord(tileX);
-	   		corner1.y = world_coord(tileY);
-	   		corner1.z = psTile->height - nMod;
-
-	   		corner2.x = world_coord(tileX + 1);
-	   		corner2.y = world_coord(tileY);
-	   		corner2.z = tileRight->height - rMod;
-
-	   		corner3.x = world_coord(tileX);
-	   		corner3.y = world_coord(tileY + 1);
-	   		corner3.z = tileDown->height - dMod;
-			pie_SurfaceNormal3iv(&corner1,&corner2,&corner3,&normals[numNormals++]);
-
-			corner1.x = world_coord(tileX + 1);
-	   		corner1.y = world_coord(tileY);
-	   		corner1.z = tileRight->height - rMod;
-
-			corner2.x = world_coord(tileX + 1);
-	   		corner2.y = world_coord(tileY + 1);
-	   		corner2.z = tileDownRight->height - drMod;
-
-	   		corner3.x = world_coord(tileX);
-	   		corner3.y = world_coord(tileY + 1);
-	   		corner3.z = tileDown->height - dMod;
-	   		pie_SurfaceNormal3iv(&corner1,&corner2,&corner3,&normals[numNormals++]);
-		}
-		else
-		{
-			if(quadrant==1)
-			{
-			 	corner1.x = world_coord(tileX);
-				corner1.y = world_coord(tileY);
-				corner1.z = psTile->height - nMod;
-
-				corner2.x = world_coord(tileX + 1);
-				corner2.y = world_coord(tileY + 1);
-				corner2.z = tileDownRight->height - drMod;
-
-				corner3.x = world_coord(tileX);
-				corner3.y = world_coord(tileY + 1);
-				corner3.z = tileDown->height - dMod;
-				pie_SurfaceNormal3iv(&corner1,&corner2,&corner3,&normals[numNormals++]);
-			}
-			else
-			{
-				corner1.x = world_coord(tileX);
-				corner1.y = world_coord(tileY);
-				corner1.z = psTile->height - nMod;
-
-				corner2.x = world_coord(tileX + 1);
-				corner2.y = world_coord(tileY);
-				corner2.z = tileRight->height - rMod;
-
-				corner3.x = world_coord(tileX + 1);
-				corner3.y = world_coord(tileY + 1);
-				corner3.z = tileDownRight->height - drMod;
-				pie_SurfaceNormal3iv(&corner1,&corner2,&corner3,&normals[numNormals++]);
-			}
-		}
-		break;
-	default:
-		ASSERT( FALSE,"Invalid quadrant in lighting code" );
-	} // end switch
-}
 
 void	processLight(LIGHT *psLight)
 {
@@ -533,19 +580,15 @@ void	doBuildingLights( void )
 	}
 }
 
+
 /* Experimental moving shadows code */
 void	findSunVector( void )
 {
-	SDWORD	val,val2,val3;
+	Vector3f val = {
+		4096 - getStaticTimeValueRange(16384,8192),
+		0 - getStaticTimeValueRange(16384,4096),
+		4096 - getStaticTimeValueRange(49152,8192)
+	};
 
-	val = getStaticTimeValueRange(16384,8192);
-	val = 4096 - val;
-	val2 = getStaticTimeValueRange(16384,4096);
-	val2 = 0-val2;
-	val3 = getStaticTimeValueRange(49152,8192);
-	val3 = 4096 - val3;
-
-	theSun.x = val;
-	theSun.y = val2;
-	theSun.z = val3;
+	setTheSun(val);
 }

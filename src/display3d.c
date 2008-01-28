@@ -597,6 +597,7 @@ static void drawTiles(iView *player)
 
 	if (getDrawShadows())
 	{
+		Vector3f theSun = getTheSun();
 		// this also detemines the length of the shadows
 		pie_BeginLighting(&theSun);
 	}
@@ -854,6 +855,10 @@ static void drawTiles(iView *player)
 
 BOOL init3DView(void)
 {
+	/* Arbitrary choice - from direct read! */
+	Vector3f theSun = { 225.0f, -600.0f, 450.0f };
+	setTheSun( theSun );
+
 	// the world centre - used for decaying lighting etc
 	gridCentreX = player.p.x + world_coord(visibleTiles.x / 2);
 	gridCentreZ = player.p.z + world_coord(visibleTiles.y / 2);
@@ -863,11 +868,6 @@ BOOL init3DView(void)
 
 	/* There are no drag boxes */
 	dragBox3D.status = DRAG_INACTIVE;
-
-	/* Arbitrary choice - from direct read! */
-	theSun.x = 225.0f;
-	theSun.y = -600.0f;
-	theSun.z = 450.0f;
 
 	/* Make sure and change these to comply with map.c */
 	imdRot.x = -35;
@@ -898,13 +898,13 @@ BOOL init3DView(void)
 	targetInitialise();
 
 	pie_PrepareSkybox(skyboxPageName);
-	
+
 	player.r.z = 0; // roll
 	player.r.y = INITIAL_DESIRED_ROTATION; // rotation
 	player.r.x = DEG(360 + INITIAL_STARTING_PITCH); // angle
 
 	// and set the camera position
-	distance = START_DISTANCE; // distance	
+	distance = START_DISTANCE; // distance
 	player.p.y = 1000 + map_Height(player.r.x, player.r.z); // height
 
 	return TRUE;
