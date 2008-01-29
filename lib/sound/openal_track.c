@@ -620,6 +620,7 @@ AUDIO_STREAM* sound_PlayStream(PHYSFS_file* fileHandle, float volume, void (*onF
 }
 
 /** Plays the audio data from the given file
+ *  \param fileHandle,volume,onFinished,user_data see sound_PlayStream()
  *  \param streamBufferSize the size to use for the decoded audio buffers
  *  \param buffer_count the amount of audio buffers to use
  *  \see sound_PlayStream() for details about the rest of the function
