@@ -8,6 +8,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+# define INT8_MAX		(127)
+# define INT16_MAX		(32767)
+# define UINT8_MAX		(255)
+# define UINT16_MAX		(65535)
+
 #include "frame.h"
 
 #include "tagfile.h"

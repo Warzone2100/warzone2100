@@ -218,6 +218,8 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 	 * over their droid limit.
 	 */
 
+#define UINT8_MAX 255
+
 	for (totalToSend = 0, psD = apsDroidLists[from];
 	     psD && getNumDroids(to) + totalToSend < getMaxDroids(to) && totalToSend != UINT8_MAX;
 	     psD = psD->psNext)

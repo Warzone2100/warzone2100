@@ -47,7 +47,6 @@ UDWORD numFunctions;
 
 
 typedef BOOL (*LoadFunction)(const char *pData);
-static LoadFunction pLoadFunction[NUMFUNCTIONS];
 
 
 /*Returns the Function type based on the string - used for reading in data */
@@ -136,51 +135,6 @@ static UDWORD functionType(const char* pType)
 
 	ASSERT( FALSE, "Unknown Function Type: %s", pType );
 	return 0;
-}
-
-
-BOOL loadFunctionStats(const char *pFunctionData, UDWORD bufferSize)
-{
-	const unsigned int totalFunctions = numCR(pFunctionData, bufferSize);
-	UDWORD		i, type;
-	char		FunctionType[MAX_NAME_SIZE];
-	FUNCTION	**pStartList;
-
-	//allocate storage for the Function pointer array
-	asFunctions = (FUNCTION**) malloc(totalFunctions*sizeof(FUNCTION*));
-	if (!asFunctions)
-	{
-		debug( LOG_ERROR, "Out of memory" );
-		abort();
-		return FALSE;
-	}
-	pStartList = asFunctions;
-	//initialise the storage
-	memset(asFunctions, 0, totalFunctions*sizeof(FUNCTION*));
-	numFunctions = 0;
-	//numProductionUpgrades =	numResearchUpgrades = 0;//numArmourUpgrades =
-		//numRepairUpgrades = numResistanceUpgrades = numBodyUpgrades =
-		//numWeaponUpgrades = 0;
-
-	for (i=0; i < totalFunctions; i++)
-	{
-		//read the data into the storage - the data is delimeted using comma's
-		FunctionType[0] = '\0';
-		sscanf(pFunctionData, "%[^',']", FunctionType);
-		type = functionType(FunctionType);
-		pFunctionData += (strlen(FunctionType)+1);
-
-		if (!(pLoadFunction[type](pFunctionData)))
-		{
-			return FALSE;
-		}
-		//increment the pointer to the start of the next record
-		pFunctionData = strchr(pFunctionData,'\n') + 1;
-	}
-	//set the function list pointer to the start
-	asFunctions = pStartList;
-
-	return TRUE;
 }
 
 // Allocate storage for the name
@@ -1596,29 +1550,71 @@ BOOL FunctionShutDown(void)
 	return TRUE;
 }
 
-
-//array of functions pointers for each load function
-static LoadFunction pLoadFunction[NUMFUNCTIONS] =
+BOOL loadFunctionStats(const char *pFunctionData, UDWORD bufferSize)
 {
-	loadProduction,
-	loadProductionUpgradeFunction,
-	loadResearchFunction,
-	loadResearchUpgradeFunction,
-	loadPowerGenFunction,
-	loadResourceFunction,
-	loadRepairDroidFunction,
-	loadWeaponUpgradeFunction,
-	loadWallFunction,
-	loadStructureUpgradeFunction,
-	loadWallDefenceUpgradeFunction,
-	loadPowerUpgradeFunction,
-	loadRepairUpgradeFunction,
-	loadDroidRepairUpgradeFunction,
-	loadDroidECMUpgradeFunction,
-	loadDroidBodyUpgradeFunction,
-	loadDroidSensorUpgradeFunction,
-	loadDroidConstUpgradeFunction,
-	loadReArmFunction,
-	loadReArmUpgradeFunction,
-};
+	//array of functions pointers for each load function
+	static const LoadFunction pLoadFunction[NUMFUNCTIONS] =
+	{
+		loadProduction,
+		loadProductionUpgradeFunction,
+		loadResearchFunction,
+		loadResearchUpgradeFunction,
+		loadPowerGenFunction,
+		loadResourceFunction,
+		loadRepairDroidFunction,
+		loadWeaponUpgradeFunction,
+		loadWallFunction,
+		loadStructureUpgradeFunction,
+		loadWallDefenceUpgradeFunction,
+		loadPowerUpgradeFunction,
+		loadRepairUpgradeFunction,
+		loadDroidRepairUpgradeFunction,
+		loadDroidECMUpgradeFunction,
+		loadDroidBodyUpgradeFunction,
+		loadDroidSensorUpgradeFunction,
+		loadDroidConstUpgradeFunction,
+		loadReArmFunction,
+		loadReArmUpgradeFunction,
+	};
 
+	const unsigned int totalFunctions = numCR(pFunctionData, bufferSize);
+	UDWORD		i, type;
+	char		FunctionType[MAX_NAME_SIZE];
+	FUNCTION	**pStartList;
+
+	//allocate storage for the Function pointer array
+	asFunctions = (FUNCTION**) malloc(totalFunctions*sizeof(FUNCTION*));
+	if (!asFunctions)
+	{
+		debug( LOG_ERROR, "Out of memory" );
+		abort();
+		return FALSE;
+	}
+	pStartList = asFunctions;
+	//initialise the storage
+	memset(asFunctions, 0, totalFunctions*sizeof(FUNCTION*));
+	numFunctions = 0;
+	//numProductionUpgrades =	numResearchUpgrades = 0;//numArmourUpgrades =
+		//numRepairUpgrades = numResistanceUpgrades = numBodyUpgrades =
+		//numWeaponUpgrades = 0;
+
+	for (i=0; i < totalFunctions; i++)
+	{
+		//read the data into the storage - the data is delimeted using comma's
+		FunctionType[0] = '\0';
+		sscanf(pFunctionData, "%[^',']", FunctionType);
+		type = functionType(FunctionType);
+		pFunctionData += (strlen(FunctionType)+1);
+
+		if (!(pLoadFunction[type](pFunctionData)))
+		{
+			return FALSE;
+		}
+		//increment the pointer to the start of the next record
+		pFunctionData = strchr(pFunctionData,'\n') + 1;
+	}
+	//set the function list pointer to the start
+	asFunctions = pStartList;
+
+	return TRUE;
+}
