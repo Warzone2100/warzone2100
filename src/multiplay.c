@@ -1357,7 +1357,7 @@ BOOL sendTemplate(DROID_TEMPLATE *pTempl)
 			NETuint32_t(&pTempl->asWeaps[i]);
 		}
 		
-		NETuint32_t(&pTempl->droidType);
+		NETuint32_t((uint32_t*)&pTempl->droidType);
 		NETuint32_t(&pTempl->multiPlayerID);
 
 	return NETend();
@@ -1395,7 +1395,7 @@ BOOL recvTemplate()
 			NETuint32_t(&pT->asWeaps[i]);
 		}
 		
-		NETuint32_t(&pT->droidType);
+		NETuint32_t((uint32_t*)&pT->droidType);
 		NETuint32_t(&pT->multiPlayerID);
 	NETend();
 	

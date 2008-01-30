@@ -789,7 +789,7 @@ BOOL scrGroupObjGet(UDWORD index)
 		scrFunctionResult.v.ival = psGroup->type;
 		break;
 	case GROUPID_CMD:
-		type = ST_DROID;
+		type = (INTERP_TYPE)ST_DROID;
 		scrFunctionResult.v.oval = psGroup->psCommander;
 		break;
 	default:

@@ -11287,7 +11287,7 @@ BOOL scrGetTileStructure(void)
 	}
 
 	scrFunctionResult.v.oval = getTileStructure(structureX, structureY);
-	if (!stackPushResult(ST_STRUCTURE, &scrFunctionResult))
+	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrGetTileStructure(): failed to push result");
 		return FALSE;
