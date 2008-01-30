@@ -17,11 +17,15 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*! \file trig.h
+/** \file
  *  * \brief Interface to trig lookup tables
  */
+
 #ifndef _trig_h
 #define _trig_h
+
+#include "frame.h"
+#include "math-help.h"
 
 /* The number of units around a full circle */
 #define TRIG_DEGREES	360
