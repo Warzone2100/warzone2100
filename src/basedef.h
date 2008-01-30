@@ -24,14 +24,13 @@
 #ifndef __INCLUDED_BASEDEF_H__
 #define __INCLUDED_BASEDEF_H__
 
+#include "lib/ivis_common/pievector.h"
 #include "deliverance.h"
 #include "displaydef.h"
 #include "statsdef.h"
 
 //the died flag for a droid is set to this when it gets added to the non-current list
 #define     NOT_CURRENT_LIST        1
-
-#define TURRET_ROTATION_RATE    360
 
 typedef enum _object_type
 {
