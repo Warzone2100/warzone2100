@@ -33,7 +33,7 @@
 # define M_PI 3.14159265358979323846
 #endif
 
-#if !defined(WZ_C99) && !(defined(__cplusplus) && defined(WZ_CC_GNU))
+#if !defined(WZ_C99)
 static inline int roundf(float x)
 {
 	// Ensure that float truncation results in a proper rounding

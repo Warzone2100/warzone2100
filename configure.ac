@@ -164,7 +164,7 @@ if test "x$enable_debug" = "xyes" ; then
 		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Wcheck -Werror"
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	else
-		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Wall -Wno-unused-label"
+		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Wall -Werror -Wno-unused-label -Wno-pointer-to-int-cast"
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	fi
 elif test "x$enable_debug" = "xrelaxed" ; then
