@@ -73,26 +73,23 @@ typedef enum _object_type
 #define NEXTOBJ(pointerType) \
 	pointerType			*psNext	/* Pointer to next object in list */
 
-#define	BASE_ELEMENTS(pointerType)	\
-	BASE_ELEMENTS1(pointerType);	\
-	NEXTOBJ(pointerType);			\
-	BASE_ELEMENTS2(pointerType)
-
-#define SIMPLE_ELEMENTS(pointerType)	\
-	BASE_ELEMENTS1(pointerType);		\
+#define SIMPLE_ELEMENTS(pointerType) \
+	BASE_ELEMENTS1(pointerType); \
 	NEXTOBJ(pointerType)
+
+#define BASE_ELEMENTS(pointerType) \
+	SIMPLE_ELEMENTS(pointerType); \
+	BASE_ELEMENTS2(pointerType)
 
 typedef struct _base_object
 {
 	BASE_ELEMENTS( struct _base_object );
-}
-BASE_OBJECT;
+} BASE_OBJECT;
 
 typedef struct SIMPLE_OBJECT
 {
 	SIMPLE_ELEMENTS( struct SIMPLE_OBJECT );
-}
-SIMPLE_OBJECT;
+} SIMPLE_OBJECT;
 
 static inline bool isDead(BASE_OBJECT *psObj)
 {
