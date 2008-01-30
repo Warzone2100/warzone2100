@@ -24,6 +24,9 @@
 #ifndef __INCLUDED_FEATUREDEF_H__
 #define __INCLUDED_FEATUREDEF_H__
 
+#include "basedef.h"
+#include "statsdef.h"
+
 typedef enum _feature_type
 {
 	FEAT_BUILD_WRECK,
@@ -39,7 +42,7 @@ typedef enum _feature_type
 	FEAT_OIL_DRUM,
 	FEAT_TREE,
 	FEAT_SKYSCRAPER,
-	//FEAT_MESA,	no longer used
+	//FEAT_MESA, // no longer used
 	//FEAT_MESA2,
 	//FEAT_CLIFF,
 	//FEAT_STACK,
@@ -59,38 +62,35 @@ typedef struct _feature_stats
 {
 	STATS_BASE;
 
-	FEATURE_TYPE	subType;		/* The type of feature */
+	FEATURE_TYPE    subType;                ///< type of feature
 
-	iIMDShape		*psImd;				// Graphic for the feature
-	UWORD			baseWidth;			/*The width of the base in tiles*/
-	UWORD			baseBreadth;		/*The breadth of the base in tiles*/
+	iIMDShape*      psImd;                  ///< Graphic for the feature
+	UWORD           baseWidth;              ///< The width of the base in tiles
+	UWORD           baseBreadth;            ///< The breadth of the base in tiles
 
 	//done in script files now
 	/* component type activated if a FEAT_GEN_ARTE */
-	//UDWORD			compType;			// type of component activated
-	//UDWORD			compIndex;			// index of component
+	//unsigned int    compType;               ///< type of component activated
+	//unsigned int    compIndex;              ///< index of component
 
-	BOOL			tileDraw;			/* Flag to indicated whether the tile needs to be drawn
-										   TRUE = draw tile */
-	BOOL			allowLOS;			/* Flag to indicate whether the feature allows the LOS
-										   TRUE = can see through the feature */
-	BOOL			visibleAtStart;		/* Flag to indicate whether the feature is visible at
-										   the start of the mission */
-	BOOL			damageable;			// Whether the feature can be blown up
-	UDWORD			body;				// Number of body points
-	UDWORD			armourValue;			// Feature armour
+	BOOL            tileDraw;               ///< Whether the tile needs to be drawn
+	BOOL            allowLOS;               ///< Whether the feature allows the LOS. true = can see through the feature
+	BOOL            visibleAtStart;         ///< Whether the feature is visible at the start of the mission
+	BOOL            damageable;             ///< Whether the feature can be destroyed
+	UDWORD          body;                   ///< Number of body points
+	UDWORD          armourValue;            ///< Feature armour
 } FEATURE_STATS;
 
 typedef struct _feature
 {
 	/* The common structure elements for all objects */
 	BASE_ELEMENTS(struct _feature);
-	FEATURE_STATS	*psStats;
-	UDWORD			startTime;		/*time the feature was created - valid for
-									  wrecked droids and structures */
-	UDWORD			body;			/* current body points */
-	UDWORD			timeLastHit;
-	BOOL			bTargetted;
+
+	FEATURE_STATS*  psStats;
+	UDWORD          startTime;              ///< Time the feature was created. Valid for wrecked droids and structures.
+	UDWORD          body;                   ///< current body points
+	UDWORD          timeLastHit;
+	BOOL            bTargetted;
 } FEATURE;
 
 #endif // __INCLUDED_FEATUREDEF_H__
