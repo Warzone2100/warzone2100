@@ -93,7 +93,7 @@ extern iView player;
 extern UDWORD distance;
 extern BOOL selectAttempt;
 extern BOOL draggingTile;
-extern struct iIMDShape *g_imd;
+extern iIMDShape *g_imd;
 extern BOOL	droidSelected;
 extern UDWORD terrainMidX,terrainMidY;
 
