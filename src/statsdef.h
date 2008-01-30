@@ -28,8 +28,8 @@
 
 /* Elements common to all stats structures */
 #define STATS_BASE \
-	UDWORD			ref;			/* Unique ID of the item */ \
-	char			*pName			/* pointer to the text id name (i.e. short language-independant name) */
+	UDWORD          ref;    /**< Unique ID of the item */ \
+	char*           pName   /**< pointer to the text id name (i.e. short language-independant name) */
 
 /* Stats common to all stats structs */
 typedef struct _base_stats
@@ -56,7 +56,7 @@ typedef enum _component_type
 	COMP_NUMCOMPONENTS
 } COMPONENT_TYPE;
 
-#define NULL_COMP	(-1)
+#define NULL_COMP (-1)
 
 //ALL components and structures and research topics have a tech level to which they belong
 typedef enum _tech_level
@@ -77,17 +77,16 @@ typedef enum _tech_level
 
 /* Stats common to all droid components */
 #define COMPONENT_STATS \
-	STATS_BASE;							/* Basic stats */ \
-	TECH_LEVEL		techLevel;			/* technology level of the component */ \
-	UDWORD			buildPower;			/* Power required to build the component */ \
-	UDWORD			buildPoints;		/* Time required to build the component */ \
-	UDWORD			weight;				/* Component's weight */ \
-	UDWORD			hitPoints;			/* Component's hit points - SEEMS TO BE UNUSED */ \
-	UDWORD			systemPoints;		/* Space the component takes in the droid - SEEMS TO BE UNUSED */ \
-	UDWORD			body;				/* Component's body points */ \
-	BOOL			design;				/* flag to indicate whether this component can*/ \
-										/* be used in the design screen*/ \
-	iIMDShape		*pIMD				/* The IMD to draw for this component */
+	STATS_BASE;                             /**< Basic stats */ \
+	TECH_LEVEL      techLevel;              /**< technology level of the component */ \
+	UDWORD          buildPower;             /**< Power required to build the component */ \
+	UDWORD          buildPoints;            /**< Time required to build the component */ \
+	UDWORD          weight;                 /**< Component's weight */ \
+	UDWORD          hitPoints;              /**< Component's hit points - SEEMS TO BE UNUSED */ \
+	UDWORD          systemPoints;           /**< Space the component takes in the droid - SEEMS TO BE UNUSED */ \
+	UDWORD          body;                   /**< Component's body points */ \
+	BOOL            design;                 /**< flag to indicate whether this component can be used in the design screen */ \
+	iIMDShape*      pIMD                    /**< The IMD to draw for this component */
 
 /* Stats common to all components */
 typedef struct _comp_base_stats
@@ -115,10 +114,10 @@ typedef enum _size
 //only using KINETIC and HEAT for now
 typedef enum _weapon_class
 {
-	WC_KINETIC,		//bullets etc
-	//WC_EXPLOSIVE,	//rockets etc - classed as WC_KINETIC now to save space in struct _droid AB 25/11/98
-	WC_HEAT,		//laser etc
-	//WC_MISC,		//others we haven't thought of! - classed as WC_HEAT now to save space in struct _droid AB 25/11/98
+	WC_KINETIC,             ///< bullets etc
+	//WC_EXPLOSIVE,           ///< rockets etc - classed as WC_KINETIC now to save space in DROID
+	WC_HEAT,                ///< laser etc
+	//WC_MISC,                ///< others we haven't thought of! - classed as WC_HEAT now to save space in DROID
 
 	NUM_WEAPON_CLASS
 } WEAPON_CLASS;
@@ -196,7 +195,7 @@ typedef enum _hit_sides
 	HIT_SIDE_RIGHT,
 	HIT_SIDE_TOP,
 	HIT_SIDE_BOTTOM,
-	NUM_HIT_SIDES		//should be last one
+	NUM_HIT_SIDES   // should be the last one
 } HIT_SIDE;
 
 //Special angles representing top or bottom hit
@@ -210,14 +209,14 @@ typedef struct _body_stats
 	 */
 	COMPONENT_STATS;
 
-	UBYTE		size;				// How big the body is - affects how hit
-	UDWORD		weaponSlots;		// The number of weapon slots on the body
-	UDWORD		armourValue[NUM_HIT_SIDES][NUM_WEAPON_CLASS];	// A measure of how much protection the armour provides
-												// cross-ref with the weapon types
+	UBYTE           size;           ///< How big the body is - affects how hit
+	UDWORD          weaponSlots;    ///< The number of weapon slots on the body
+	UDWORD          armourValue[NUM_HIT_SIDES][NUM_WEAPON_CLASS];   ///< A measure of how much protection the armour provides. Cross referenced with the weapon types.
+
 	// A measure of how much energy the power plant outputs
-	UDWORD		powerOutput;		// this is the engine output of the body
-	iIMDShape	**ppIMDList;			//list of IMDs to use for propulsion unit - up to numPropulsionStats
-	iIMDShape   *pFlameIMD;     //pointer to which flame graphic to use - for VTOLs only at the moment
+	UDWORD          powerOutput;    ///< this is the engine output of the body
+	iIMDShape**     ppIMDList;      ///< list of IMDs to use for propulsion unit - up to numPropulsionStats
+	iIMDShape*      pFlameIMD;      ///< pointer to which flame graphic to use - for VTOLs only at the moment
 } BODY_STATS;
 
 typedef struct _brain_stats
@@ -225,8 +224,8 @@ typedef struct _brain_stats
 	/* Common stats */
 	COMPONENT_STATS;
 
-	UDWORD		progCap;			// Program capacity
-	struct _weapon_stats	*psWeaponStat;	//weapon stats associated with this brain - for Command Droids
+	UDWORD          progCap;                ///< Program capacity
+	struct _weapon_stats* psWeaponStat;     ///< weapon stats associated with this brain - for Command Droids
 } BRAIN_STATS;
 
 //defines the left and right sides for propulsion IMDs
@@ -260,9 +259,8 @@ typedef struct _propulsion_stats
 	/* Common stats */
 	COMPONENT_STATS;
 
-	UDWORD		maxSpeed;			// Max speed for the droid
-	UBYTE		propulsionType;		// Type of propulsion used - index
-									// into PropulsionTable
+	UDWORD          maxSpeed;       ///< Max speed for the droid
+	UBYTE           propulsionType; ///< Type of propulsion used - index into PropulsionTable
 } PROPULSION_STATS;
 
 typedef enum _sensor_type
@@ -271,7 +269,7 @@ typedef enum _sensor_type
 	INDIRECT_CB_SENSOR,
 	VTOL_CB_SENSOR,
 	VTOL_INTERCEPT_SENSOR,
-	SUPER_SENSOR,           //works as all of the above together! - new for updates - added 11/06/99 AB
+	SUPER_SENSOR,           ///< works as all of the above together! - new for updates
 } SENSOR_TYPE;
 
 
@@ -280,13 +278,12 @@ typedef struct _sensor_stats
 	/* Common stats */
 	COMPONENT_STATS;
 
-	UDWORD		range;				// Sensor range
-	UDWORD		power;				// Sensor power (put against ecm power)
-	UDWORD		location;			// specifies whether the Sensor is default or for the Turret
-	SENSOR_TYPE	type;				// used for combat
-	UDWORD		time;				//time delay before associated weapon droids 'know' where the
-									//attack is from
-	iIMDShape	*pMountGraphic;		// The turret mount to use
+	UDWORD          range;                  ///< Sensor range
+	UDWORD          power;                  ///< Sensor power (put against ecm power)
+	UDWORD          location;               ///< specifies whether the Sensor is default or for the Turret
+	SENSOR_TYPE     type;                   ///< used for combat
+	UDWORD          time;                   ///< time delay before associated weapon droids 'know' where the attack is from
+	iIMDShape*      pMountGraphic;          ///< The turret mount to use
 } SENSOR_STATS;
 
 typedef struct _ecm_stats
@@ -294,10 +291,10 @@ typedef struct _ecm_stats
 	/* Common stats */
 	COMPONENT_STATS;
 
-	UDWORD		range;				// ECM range
-	UDWORD		power;				// ECM power (put against sensor power)
-	UDWORD		location;			// specifies whether the ECM is default or for the Turret
-	iIMDShape	*pMountGraphic;		// The turret mount to use
+	UDWORD          range;                  ///< ECM range
+	UDWORD          power;                  ///< ECM power (put against sensor power)
+	UDWORD          location;               ///< specifies whether the ECM is default or for the Turret
+	iIMDShape*      pMountGraphic;          ///< The turret mount to use
 } ECM_STATS;
 
 typedef struct _repair_stats
@@ -305,20 +302,18 @@ typedef struct _repair_stats
 	/* Common stats */
 	COMPONENT_STATS;
 
-	UDWORD				repairPoints;		// How much damage is restored to Body Points
-											// and armour each Repair Cycle
-	BOOL				repairArmour;		// whether armour can be repaired or not
-	UDWORD				location;			// specifies whether the Repair is default or for the Turret
-	UDWORD				time;				// time delay for repair cycle
-	iIMDShape	*pMountGraphic;		// The turret mount to use
+	UDWORD          repairPoints;           ///< How much damage is restored to Body Points and armour each Repair Cycle
+	BOOL            repairArmour;           ///< whether armour can be repaired or not
+	UDWORD          location;               ///< specifies whether the Repair is default or for the Turret
+	UDWORD          time;                   ///< time delay for repair cycle
+	iIMDShape*      pMountGraphic;          ///< The turret mount to use
 } REPAIR_STATS;
 
 typedef enum _fireonmove
 {
-	FOM_NO,			//no capability - droid must stop
-	FOM_PARTIAL,	//partial capability - droid has 50% chance to hit
-	FOM_YES,		//full capability - droid fires normally on move
-
+	FOM_NO,         ///< no capability - droid must stop
+	FOM_PARTIAL,    ///< partial capability - droid has 50% chance to hit
+	FOM_YES,        ///< full capability - droid fires normally on move
 } FIREONMOVE;
 
 typedef struct _weapon_stats
@@ -326,59 +321,58 @@ typedef struct _weapon_stats
 	/* Common stats */
 	COMPONENT_STATS;
 
-	UDWORD			shortRange;			// Max distance to target for short range shot
-	UDWORD			longRange;			// Max distance to target for long range shot
-	UDWORD			minRange;			// Min distance to target for shot
-	UDWORD			shortHit;			// Chance to hit at short range
-	UDWORD			longHit;			// Chance to hit at long range
-	UDWORD			firePause;			// Time between each weapon fire
-	UDWORD			numExplosions;		// The number of explosions per shot
-	UBYTE			numRounds;			// The number of rounds per salvo(magazine)
-	UDWORD			reloadTime;			// Time to reload the round of ammo (salvo fire)
-	UDWORD			damage;				// How much damage the weapon causes
-	UDWORD			radius;				// Basic blast radius of weapon
-	UDWORD			radiusHit;			// Chance to hit in the blast radius
-	UDWORD			radiusDamage;		// Damage done in the blast radius
-	UDWORD			incenTime;			// How long the round burns
-	UDWORD			incenDamage;		// Damage done each burn cycle
-	UDWORD			incenRadius;		// Burn radius of the round
-	UDWORD			flightSpeed;		// speed ammo travels at
-	UDWORD			indirectHeight;		// how high the ammo travels for indirect fire
-	FIREONMOVE		fireOnMove;			// indicates whether the droid has to stop before firing
-	WEAPON_CLASS	weaponClass;		// the class of weapon - see enum WEAPON_CLASS
-	WEAPON_SUBCLASS weaponSubClass;		// the subclass to which the weapon belongs - see
-										// enum WEAPON_SUBCLASS
-	MOVEMENT_MODEL	movementModel;		// which projectile model to use for the bullet
-	WEAPON_EFFECT	weaponEffect;		// which type of warhead is associated with the weapon
-	UDWORD			recoilValue;		// used to compare with weight to see if recoils or not
-	UBYTE			rotate;				// amount the weapon(turret) can rotate 0 = none
-	UBYTE			maxElevation;		// max amount the turret can be elevated up
-	SBYTE			minElevation;		// min amount the turret can be elevated down
-	UBYTE			facePlayer;			// flag to make the (explosion) effect face the player when drawn
-	UBYTE			faceInFlight;		// flag to make the inflight effect face the player when drawn
-	UBYTE			effectSize;			// size of the effect 100 = normal, 50 = half etc
-	BOOL			lightWorld;			// flag to indicate whether the effect lights up the world
-	UBYTE			surfaceToAir;		// indicates how good in the air - SHOOT_ON_GROUND, SHOOT_IN_AIR or both
-	UBYTE			vtolAttackRuns;		// number of attack runs a VTOL droid can do with this weapon
-	BOOL			penetrate;			// flag to indicate whether pentrate droid or not
+	UDWORD          shortRange;             ///< Max distance to target for short range shot
+	UDWORD          longRange;              ///< Max distance to target for long range shot
+	UDWORD          minRange;               ///< Min distance to target for shot
+	UDWORD          shortHit;               ///< Chance to hit at short range
+	UDWORD          longHit;                ///< Chance to hit at long range
+	UDWORD          firePause;              ///< Time between each weapon fire
+	UDWORD          numExplosions;          ///< The number of explosions per shot
+	UBYTE           numRounds;              ///< The number of rounds per salvo(magazine)
+	UDWORD          reloadTime;             ///< Time to reload the round of ammo (salvo fire)
+	UDWORD          damage;                 ///< How much damage the weapon causes
+	UDWORD          radius;                 ///< Basic blast radius of weapon
+	UDWORD          radiusHit;              ///< Chance to hit in the blast radius
+	UDWORD          radiusDamage;           ///< Damage done in the blast radius
+	UDWORD          incenTime;              ///< How long the round burns
+	UDWORD          incenDamage;            ///< Damage done each burn cycle
+	UDWORD          incenRadius;            ///< Burn radius of the round
+	UDWORD          flightSpeed;            ///< speed ammo travels at
+	UDWORD          indirectHeight;         ///< how high the ammo travels for indirect fire
+	FIREONMOVE      fireOnMove;             ///< indicates whether the droid has to stop before firing
+	WEAPON_CLASS    weaponClass;            ///< the class of weapon
+	WEAPON_SUBCLASS weaponSubClass;         ///< the subclass to which the weapon belongs
+
+	MOVEMENT_MODEL  movementModel;          ///< which projectile model to use for the bullet
+	WEAPON_EFFECT   weaponEffect;           ///< which type of warhead is associated with the weapon
+	UDWORD          recoilValue;            ///< used to compare with weight to see if recoils or not
+	UBYTE           rotate;                 ///< amount the weapon(turret) can rotate 0 = none
+	UBYTE           maxElevation;           ///< max amount the turret can be elevated up
+	SBYTE           minElevation;           ///< min amount the turret can be elevated down
+	UBYTE           facePlayer;             ///< flag to make the (explosion) effect face the player when drawn
+	UBYTE           faceInFlight;           ///< flag to make the inflight effect face the player when drawn
+	UBYTE           effectSize;             ///< size of the effect 100 = normal, 50 = half etc
+	BOOL            lightWorld;             ///< flag to indicate whether the effect lights up the world
+	UBYTE           surfaceToAir;           ///< indicates how good in the air - SHOOT_ON_GROUND, SHOOT_IN_AIR or both
+	UBYTE           vtolAttackRuns;         ///< number of attack runs a VTOL droid can do with this weapon
+	BOOL            penetrate;              ///< flag to indicate whether pentrate droid or not
 
 	/* Graphics control stats */
-	UDWORD			directLife;			// How long a direct fire weapon is visible
-										// Measured in 1/100 sec.
-	UDWORD			radiusLife;			// How long a blast radius is visible
+	UDWORD          directLife;             ///< How long a direct fire weapon is visible. Measured in 1/100 sec.
+	UDWORD          radiusLife;             ///< How long a blast radius is visible
 
 	/* Graphics used for the weapon */
-	iIMDShape		*pMountGraphic;		// The turret mount to use
-	iIMDShape		*pMuzzleGraphic;	// The muzzle flash
-	iIMDShape		*pInFlightGraphic;	// The ammo in flight
-	iIMDShape		*pTargetHitGraphic;	// The ammo hitting a target
-	iIMDShape		*pTargetMissGraphic;// The ammo missing a target
-	iIMDShape		*pWaterHitGraphic;	// The ammo hitting water
-	iIMDShape		*pTrailGraphic;		// The trail used for in flight
+	iIMDShape*       pMountGraphic;         ///< The turret mount to use
+	iIMDShape*       pMuzzleGraphic;        ///< The muzzle flash
+	iIMDShape*       pInFlightGraphic;      ///< The ammo in flight
+	iIMDShape*       pTargetHitGraphic;     ///< The ammo hitting a target
+	iIMDShape*       pTargetMissGraphic;    ///< The ammo missing a target
+	iIMDShape*       pWaterHitGraphic;      ///< The ammo hitting water
+	iIMDShape*       pTrailGraphic;         ///< The trail used for in flight
 
 	/* Audio */
-	SDWORD			iAudioFireID;
-	SDWORD			iAudioImpactID;
+	SDWORD          iAudioFireID;
+	SDWORD          iAudioImpactID;
 } WEAPON_STATS;
 
 typedef struct _construct_stats
@@ -386,13 +380,13 @@ typedef struct _construct_stats
 	/* Common stats */
 	COMPONENT_STATS;
 
-	UDWORD		constructPoints;	/*The number of points contributed each cycle*/
-	iIMDShape	*pMountGraphic;		// The turret mount to use
+	UDWORD          constructPoints;        ///< The number of points contributed each cycle
+	iIMDShape*      pMountGraphic;          ///< The turret mount to use
 } CONSTRUCT_STATS;
 
 /************************************************************************************
-*	Additional stats tables
-************************************************************************************/
+ * Additional stats tables
+ ************************************************************************************/
 
 typedef enum _travel_medium
 {
@@ -402,28 +396,24 @@ typedef enum _travel_medium
 
 typedef struct _propulsion_types
 {
-	UWORD				powerRatioMult;		// Multiplier for the calculated power ratio of
-											// the droid
-	UDWORD				travel;				// Which medium the propulsion travels in
-	SWORD				startID;			//sound to play when this prop type starts
-	SWORD				idleID;				//sound to play when this prop type is idle
-	SWORD				moveOffID;			//sound to link moveID and idleID
-	SWORD				moveID;				//sound to play when this prop type is moving
-	SWORD				hissID;				//sound to link moveID and idleID
-	SWORD				shutDownID;			//sound to play when this prop type shuts down
-
+	UWORD           powerRatioMult;         ///< Multiplier for the calculated power ratio of the droid
+	UDWORD          travel;                 ///< Which medium the propulsion travels in
+	SWORD           startID;                ///< sound to play when this prop type starts
+	SWORD           idleID;                 ///< sound to play when this prop type is idle
+	SWORD           moveOffID;              ///< sound to link moveID and idleID
+	SWORD           moveID;                 ///< sound to play when this prop type is moving
+	SWORD           hissID;                 ///< sound to link moveID and idleID
+	SWORD           shutDownID;             ///< sound to play when this prop type shuts down
 } PROPULSION_TYPES;
 
 typedef struct _terrain_table
 {
-	UDWORD	speedFactor;		// factor to multiply the speed by depending on the
-								// method of propulsion and the terrain type - to be
-								// divided by 100 before use
+	UDWORD          speedFactor;    ///< factor to multiply the speed by depending on the method of propulsion and the terrain type - to be divided by 100 before use
 } TERRAIN_TABLE;
 
 typedef struct _special_ability
 {
-	char *pName;				// Text name of the component
+	char*       pName;      ///< Text name of the component
 } SPECIAL_ABILITY;
 
 typedef UWORD WEAPON_MODIFIER;
@@ -431,45 +421,45 @@ typedef UWORD WEAPON_MODIFIER;
 /* weapon stats which can be upgraded by research*/
 typedef struct _weapon_upgrade
 {
-	UBYTE			firePause;
-	UWORD			shortHit;
-	UWORD			longHit;
-	UWORD			damage;
-	UWORD			radiusDamage;
-	UWORD			incenDamage;
-	UWORD			radiusHit;
+	UBYTE           firePause;
+	UWORD           shortHit;
+	UWORD           longHit;
+	UWORD           damage;
+	UWORD           radiusDamage;
+	UWORD           incenDamage;
+	UWORD           radiusHit;
 } WEAPON_UPGRADE;
 
 /*sensor stats which can be upgraded by research*/
 typedef struct _sensor_upgrade
 {
-	UWORD			power;
-	UWORD			range;
+	UWORD           power;
+	UWORD           range;
 } SENSOR_UPGRADE;
 
 /*ECM stats which can be upgraded by research*/
 typedef struct _ecm_upgrade
 {
-	UWORD			power;
+	UWORD           power;
 } ECM_UPGRADE;
 
 /*repair stats which can be upgraded by research*/
 typedef struct _repair_upgrade
 {
-	UWORD			repairPoints;
+	UWORD           repairPoints;
 } REPAIR_UPGRADE;
 
 /*constructor stats which can be upgraded by research*/
 typedef struct _constructor_upgrade
 {
-	UWORD			constructPoints;
+	UWORD           constructPoints;
 } CONSTRUCTOR_UPGRADE;
 
 /*body stats which can be upgraded by research*/
 typedef struct _body_upgrade
 {
-	UWORD			powerOutput;
-	UWORD			body;
+	UWORD           powerOutput;
+	UWORD           body;
 	UWORD           armourValue[NUM_WEAPON_CLASS];
 } BODY_UPGRADE;
 
