@@ -1085,7 +1085,7 @@ static UDWORD averagePing(void)
 
 BOOL sendPing(void)
 {
-	BOOL			new = TRUE;
+	BOOL			isNew = TRUE;
 	uint8_t			player = selectedPlayer;
 	int				i;
 	static UDWORD	lastPing = 0;	// Last time we sent a ping
@@ -1144,7 +1144,7 @@ BOOL sendPing(void)
 
 	NETbeginEncode(NET_PING, NET_ALL_PLAYERS);
 		NETuint8_t(&player);
-		NETbool(&new);
+		NETbool(&isNew);
 	NETend();
 
 	// Note when we sent the ping
@@ -1159,23 +1159,23 @@ BOOL sendPing(void)
 // accept and process incoming ping messages.
 BOOL recvPing()
 {
-	BOOL	new;
+	BOOL	isNew;
 	uint8_t	sender, us = selectedPlayer;
 	
 	NETbeginDecode();
 		NETuint8_t(&sender);
-		NETbool(&new);
+		NETbool(&isNew);
 	NETend();
 
 	// If this is a new ping, respond to it
-	if (new)
+	if (isNew)
 	{
 		NETbeginEncode(NET_PING, player2dpid[sender]);
 			// We are responding to a new ping
-			new = FALSE;
+			isNew = FALSE;
 			
 			NETuint8_t(&us);
-			NETbool(&new);
+			NETbool(&isNew);
 		NETend();
 	}
 	// They are responding to one of our pings
