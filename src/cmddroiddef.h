@@ -25,21 +25,22 @@
 #define __INCLUDED_CMDDROIDDEF_H__
 
 #include "statsdef.h"
+#include "droiddef.h"
 
 // the maximum number of command droids per side
 #define MAX_CMDDROIDS	5
 
 typedef struct _command_droid
 {
-	COMPONENT_STATS;		// define the command droid as a COMPONENT
-							// so it fits into the design screen
+	// define the command droid as a COMPONENT so it fits into the design screen
+	COMPONENT_STATS;
 
-	UDWORD			died;
-	SWORD			aggression;
-	SWORD			survival;
-	SWORD			nWeapStat;
-	UWORD			kills;
-	struct _droid	*psDroid;
+	UDWORD          died;
+	SWORD           aggression;
+	SWORD           survival;
+	SWORD           nWeapStat;
+	UWORD           kills;
+	DROID*          psDroid;
 } COMMAND_DROID;
 
 #endif // __INCLUDED_CMDDROIDDEF_H__

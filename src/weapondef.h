@@ -20,16 +20,17 @@
 /** \file
  *  Definitions for the weapons.
  */
+
 #ifndef __INCLUDED_WEAPONDEF_H__
 #define __INCLUDED_WEAPONDEF_H__
 
 typedef struct _weapon
 {
-	UDWORD			nStat;				// The stats for the weapon type
-	UDWORD			hitPoints;
-	UDWORD			ammo;
-	UDWORD			lastFired;			// When the weapon last fired
-	UDWORD			recoilValue;
+	UDWORD          nStat;          ///< The stats for the weapon type
+	UDWORD          hitPoints;
+	UDWORD          ammo;
+	UDWORD          lastFired;      ///< When the weapon last fired
+	UDWORD          recoilValue;
 } WEAPON;
 
 #endif // __INCLUDED_WEAPONDEF_H__
