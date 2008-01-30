@@ -74,9 +74,6 @@ typedef enum _object_type
 #define NEXTOBJ(pointerType) \
 	pointerType			*psNext	/* Pointer to next object in list */
 
-#define PREVOBJ(pointerType) \
-	pointerType			*psPrev	/* Pointer to previois object in list */
-
 #define	BASE_ELEMENTS(pointerType)	\
 	BASE_ELEMENTS1(pointerType);	\
 	NEXTOBJ(pointerType);			\
