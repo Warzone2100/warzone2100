@@ -17,13 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * DroidDef.h
- *
- * Droid structure definitions
+/** \file
+ *  Definitions for droids.
  */
-#ifndef _droiddef_h
-#define _droiddef_h
+
+#ifndef __INCLUDED_DROIDDEF_H__
+#define __INCLUDED_DROIDDEF_H__
 
 #include "lib/gamelib/animobj.h"
 
@@ -46,8 +45,6 @@
 #define LOOK_FOR_EMPTY_TILE		20
 //used to get a location next to a droid - withinh one tile
 #define LOOK_NEXT_TO_DROID		8
-
-
 
 
 /* The different types of droid */
@@ -230,5 +227,4 @@ typedef struct _droid
 	SDWORD				iAudioID;
 } DROID;
 
-
-#endif
+#endif // __INCLUDED_DROIDDEF_H__

@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * DisplayDef.h
- *
- * Definitions of the display structures
- *
+/** \file
+ *  Display structures.
  */
-#ifndef _displaydef_h
-#define _displaydef_h
+
+#ifndef __INCLUDED_DISPLAYDEF_H__
+#define __INCLUDED_DISPLAYDEF_H__
 
 #include "lib/ivis_common/imd.h"
 		// ffs am
@@ -36,8 +34,6 @@
 //#define	BOUNDARY_Y		(DISP_WIDTH/16)
 //#define	BOUNDARY_X		(24)
 //#define	BOUNDARY_Y		(24)
-
-
 
 typedef struct _screen_disp_data
 {
@@ -53,8 +49,4 @@ typedef struct _screen_disp_data
 	UDWORD		screenR;
 } SCREEN_DISP_DATA;
 
-
-
-
-#endif
-
+#endif // __INCLUDED_DISPLAYDEF_H__

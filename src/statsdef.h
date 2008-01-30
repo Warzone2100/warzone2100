@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * StatsDef.h
- *
- * Structure definitions for the stats system
- *
+/** \file
+ *  Definitions for the stats system.
  */
-#ifndef _statsdef_h
-#define _statsdef_h
+
+#ifndef __INCLUDED_STATSDEF_H__
+#define __INCLUDED_STATSDEF_H__
 
 #include "lib/ivis_common/ivisdef.h"
 
@@ -68,13 +66,12 @@ typedef enum _tech_level
 	TECH_LEVEL_THREE,
 	TECH_LEVEL_ONE_TWO,
 	TECH_LEVEL_TWO_THREE,
-    TECH_LEVEL_ALL,
+	TECH_LEVEL_ALL,
 
 	MAX_TECH_LEVELS
 } TECH_LEVEL;
 
-/***********************************************************************************
- *
+/*
  * Stats structures type definitions
  */
 
@@ -133,22 +130,22 @@ typedef enum _weapon_subclass
 	WSC_MGUN,
 	WSC_CANNON,
 	//WSC_ARTILLARY,
-    WSC_MORTARS,
+	WSC_MORTARS,
 	WSC_MISSILE,
 	WSC_ROCKET,
 	WSC_ENERGY,
 	WSC_GAUSS,
 	WSC_FLAME,
 	//WSC_CLOSECOMBAT,
-    WSC_HOWITZERS,
+	WSC_HOWITZERS,
 	WSC_ELECTRONIC,
-    WSC_AAGUN,
-    WSC_SLOWMISSILE,
-    WSC_SLOWROCKET,
-    WSC_LAS_SAT,
-    WSC_BOMB,
-    WSC_COMMAND,
-    WSC_EMP,
+	WSC_AAGUN,
+	WSC_SLOWMISSILE,
+	WSC_SLOWROCKET,
+	WSC_LAS_SAT,
+	WSC_BOMB,
+	WSC_COMMAND,
+	WSC_EMP,
 	WSC_COUNTER,
 
 	NUM_WEAPON_SUBCLASS,
@@ -179,7 +176,7 @@ typedef enum _weapon_effect
 	WE_BUNKER_BUSTER,
 	WE_ARTILLERY_ROUND,
 	WE_FLAMER,
-    WE_ANTI_AIRCRAFT,
+	WE_ANTI_AIRCRAFT,
 
 	WE_NUMEFFECTS,
 
@@ -220,7 +217,7 @@ typedef struct _body_stats
 	// A measure of how much energy the power plant outputs
 	UDWORD		powerOutput;		// this is the engine output of the body
 	iIMDShape	**ppIMDList;			//list of IMDs to use for propulsion unit - up to numPropulsionStats
-    iIMDShape   *pFlameIMD;     //pointer to which flame graphic to use - for VTOLs only at the moment
+	iIMDShape   *pFlameIMD;     //pointer to which flame graphic to use - for VTOLs only at the moment
 } BODY_STATS;
 
 typedef struct _brain_stats
@@ -274,8 +271,7 @@ typedef enum _sensor_type
 	INDIRECT_CB_SENSOR,
 	VTOL_CB_SENSOR,
 	VTOL_INTERCEPT_SENSOR,
-    SUPER_SENSOR,           //works as all of the above together! - new for updates - added 11/06/99 AB
-
+	SUPER_SENSOR,           //works as all of the above together! - new for updates - added 11/06/99 AB
 } SENSOR_TYPE;
 
 
@@ -477,4 +473,4 @@ typedef struct _body_upgrade
 	UWORD           armourValue[NUM_WEAPON_CLASS];
 } BODY_UPGRADE;
 
-#endif
+#endif // __INCLUDED_STATSDEF_H__

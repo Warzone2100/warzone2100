@@ -17,29 +17,19 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/***************************************************************************/
-/*
- * BulletDef.h
- *
- * Structure Definitions for the bullet object.
- *
+/** \file
+ *  Definitions for projectiles.
  */
-/***************************************************************************/
 
-#ifndef _bulletdef_h
-#define _bulletdef_h
-
-/***************************************************************************/
+#ifndef __INCLUDED_PROJECTILEDEF_H__
+#define __INCLUDED_PROJECTILEDEF_H__
 
 typedef enum PROJ_STATE
 {
 	PROJ_INFLIGHT,
 	PROJ_IMPACT,
 	PROJ_POSTIMPACT
-}
-PROJ_STATE;
-
-/***************************************************************************/
+} PROJ_STATE;
 
 struct PROJECTILE;
 
@@ -52,13 +42,13 @@ typedef struct PROJECTILE
 
 	UBYTE			state;			/* current projectile state */
 	UBYTE			airTarget;		/* whether the projectile was fired at an airborn target */
-	
-	UBYTE			player;			/* needed because damage and radDamage vary 
+
+	UBYTE			player;			/* needed because damage and radDamage vary
 									from base stat per player because of upgrades*/
 	UBYTE			bVisible;		// whether the selected player should see the projectile
 
 	WEAPON_STATS	*psWStats;		/* firing weapon stats */
-	
+
 	BASE_OBJECT		*psSource;		/* what fired the projectile */
 	BASE_OBJECT		*psDest;		/* projectile target */
 	BASE_OBJECT		*psDamaged;		/* Watermelon:the target it already damaged,dont damage the same target twice */
@@ -71,11 +61,8 @@ typedef struct PROJECTILE
 	UDWORD			born;
 	UDWORD			targetRadius;	// needed to backtrack the projectiles.
 	UDWORD			died;
-	
+
 	PROJECTILE_FUNC	pInFlightFunc;
-}
-PROJECTILE;
+} PROJECTILE;
 
-/***************************************************************************/
-
-#endif
+#endif // __INCLUDED_PROJECTILEDEF_H__

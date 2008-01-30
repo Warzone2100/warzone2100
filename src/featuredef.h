@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * FeatureDef.h
- *
- * Structure definitions for features
- *
+/** \file
+ *  Definitions for features.
  */
-#ifndef _featuredef_h
-#define _featuredef_h
+
+#ifndef __INCLUDED_FEATUREDEF_H__
+#define __INCLUDED_FEATUREDEF_H__
 
 typedef enum _feature_type
 {
@@ -40,9 +38,9 @@ typedef enum _feature_type
 	FEAT_LOS_OBJ,
 	FEAT_OIL_DRUM,
 	FEAT_TREE,
-    FEAT_SKYSCRAPER,
+	FEAT_SKYSCRAPER,
 	//FEAT_MESA,	no longer used
-	//FEAT_MESA2,	
+	//FEAT_MESA2,
 	//FEAT_CLIFF,
 	//FEAT_STACK,
 	//FEAT_BUILD_WRECK1,
@@ -88,12 +86,11 @@ typedef struct _feature
 	/* The common structure elements for all objects */
 	BASE_ELEMENTS(struct _feature);
 	FEATURE_STATS	*psStats;
-	UDWORD			startTime;		/*time the feature was created - valid for 
+	UDWORD			startTime;		/*time the feature was created - valid for
 									  wrecked droids and structures */
 	UDWORD			body;			/* current body points */
 	UDWORD			timeLastHit;
 	BOOL			bTargetted;
 } FEATURE;
 
-#endif
-
+#endif // __INCLUDED_FEATUREDEF_H__

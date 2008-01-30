@@ -17,13 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * messageDef.h
- *
- * Message structure definitions
+/** \file
+ *  Defintions for messages.
  */
-#ifndef _messageDef_h
-#define _messageDef_h
+
+#ifndef __INCLUDED_MESSAGEDEF_H__
+#define __INCLUDED_MESSAGEDEF_H__
 
 #include "deliverance.h"
 #include "lib/ivis_common/pietypes.h"
@@ -162,4 +161,4 @@ typedef struct _viewData_list
 	struct _viewData_list	*psNext;		//next array of data
 } VIEWDATA_LIST;
 
-#endif	//messageDef.h
+#endif // __INCLUDED_MESSAGEDEF_H__

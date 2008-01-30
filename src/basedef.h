@@ -17,19 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/***************************************************************************/
-/*
- * base.h
- *
- * Definitions for the base object type.
- *
+/** \file
+ *  Definitions for the base object type.
  */
-/***************************************************************************/
 
-#ifndef _base_h
-#define _base_h
-
-/***************************************************************************/
+#ifndef __INCLUDED_BASEDEF_H__
+#define __INCLUDED_BASEDEF_H__
 
 #include "deliverance.h"
 #include "displaydef.h"
@@ -39,7 +32,6 @@
 #define     NOT_CURRENT_LIST        1
 
 #define TURRET_ROTATION_RATE    360
-/***************************************************************************/
 
 typedef enum _object_type
 {
@@ -49,8 +41,6 @@ typedef enum _object_type
 	OBJ_PROJECTILE,		// Comes out of guns, stupid :-)
 	OBJ_TARGET,		// for the camera tracking
 } OBJECT_TYPE;
-
-/***************************************************************************/
 
 #define BASE_ELEMENTS1(pointerType) \
 	OBJECT_TYPE			type;		/* The type of object */ \
@@ -96,8 +86,6 @@ typedef enum _object_type
 	BASE_ELEMENTS1(pointerType);		\
 	NEXTOBJ(pointerType)
 
-/***************************************************************************/
-
 typedef struct _base_object
 {
 	BASE_ELEMENTS( struct _base_object );
@@ -109,8 +97,6 @@ typedef struct SIMPLE_OBJECT
 	SIMPLE_ELEMENTS( struct SIMPLE_OBJECT );
 }
 SIMPLE_OBJECT;
-
-/***************************************************************************/
 
 static inline bool isDead(BASE_OBJECT *psObj)
 {
@@ -130,6 +116,4 @@ do { \
         assert(object->direction <= 360.0f && object->direction >= 0.0f); \
 } while (0)
 
-#endif
-
-/***************************************************************************/
+#endif // __INCLUDED_BASEDEF_H__

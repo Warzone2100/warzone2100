@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * ResearchDef.h
- *
- * Structure definitions for research
- *
+/** \file
+ *  Definitions for research data.
  */
-#ifndef _researchdef_h
-#define _researchdef_h
+
+#ifndef __INCLUDED_RESEARCHDEF_H__
+#define __INCLUDED_RESEARCHDEF_H__
 
 /* Research struct type definitions */
 typedef enum
@@ -51,24 +49,24 @@ typedef struct research_stats
 	UBYTE			storeCount;			/* used to load in the following lists*/
 	UBYTE			numPRRequired;
 	//UDWORD			*pPRList;			/* List of research pre-requisites */
-    //needs to be UWORD sized for Patches
-    UWORD			*pPRList;			/* List of research pre-requisites */
-    //UBYTE			*pPRList;			/* List of research pre-requisites */
+	//needs to be UWORD sized for Patches
+	UWORD			*pPRList;			/* List of research pre-requisites */
+	//UBYTE			*pPRList;			/* List of research pre-requisites */
 	UBYTE			numStructures;
 	//UDWORD			*pStructList;		/* List of structures that when built would
-    UWORD			*pStructList;		/* List of structures that when built would
+	UWORD			*pStructList;		/* List of structures that when built would
 										   enable this research */
 	UBYTE			numFunctions;
 	struct _function	**pFunctionList; /* List of functions that can be performed
 										   on completion of research */
 	UBYTE			numRedStructs;
 	//UDWORD			*pRedStructs;		/* List of Structures that become redundant */
-    UWORD			*pRedStructs;		/* List of Structures that become redundant */
+	UWORD			*pRedStructs;		/* List of Structures that become redundant */
 	UBYTE			numRedArtefacts;
 	COMP_BASE_STATS	**pRedArtefacts;	/*List of Artefacts that become redundant */
 	UBYTE			numStructResults;
 	//UDWORD			*pStructureResults;	/*List of Structures that are possible after
-    UWORD			*pStructureResults;	/*List of Structures that are possible after
+	UWORD			*pStructureResults;	/*List of Structures that are possible after
 										  this research */
 	UBYTE			numArteResults;
 	COMP_BASE_STATS	**pArtefactResults;	/*List of Artefacts that are possible after
@@ -79,8 +77,8 @@ typedef struct research_stats
 	struct _viewdata	*pViewData;		/*data used to display a message in the
 										  Intelligence Screen*/
 	UWORD			iconID;				/* the ID from 'Framer' for which graphic to draw in interface*/
-    BASE_STATS      *psStat;            /* A stat used to define which graphic is
-                                           drawn instead of the two fields below*/
+	BASE_STATS      *psStat;            /* A stat used to define which graphic is
+	                                       drawn instead of the two fields below*/
 	iIMDShape		*pIMD;		/* the IMD to draw for this research topic */
 	iIMDShape		*pIMD2;		/* the 2nd IMD for base plates/turrets*/
 } RESEARCH;
@@ -123,5 +121,5 @@ typedef struct _player_research
 
 // clear all bits in the status except for the possible bit
 #define ResetResearchStatus(x) ((x)->ResearchStatus&=(~RESBITS))
-#endif
 
+#endif // __INCLUDED_RESEARCHDEF_H__

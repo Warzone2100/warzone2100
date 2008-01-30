@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * CmdDroidDef.h
- *
- * Typedef's for command droids
- *
+/** \file
+ *  Definitions for command droids.
  */
-#ifndef _cmddroiddef_h
-#define _cmddroiddef_h
+
+#ifndef __INCLUDED_CMDDROIDDEF_H__
+#define __INCLUDED_CMDDROIDDEF_H__
 
 #include "statsdef.h"
 
@@ -44,7 +42,4 @@ typedef struct _command_droid
 	struct _droid	*psDroid;
 } COMMAND_DROID;
 
-
-#endif
-
-
+#endif // __INCLUDED_CMDDROIDDEF_H__

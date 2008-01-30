@@ -17,14 +17,11 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * weapondef.h
- *
- * Definitions for the weapons
- *
+/** \file
+ *  Definitions for the weapons.
  */
-#ifndef _weapondef_h
-#define _weapondef_h
+#ifndef __INCLUDED_WEAPONDEF_H__
+#define __INCLUDED_WEAPONDEF_H__
 
 typedef struct _weapon
 {
@@ -35,5 +32,4 @@ typedef struct _weapon
 	UDWORD			recoilValue;
 } WEAPON;
 
-#endif
-
+#endif // __INCLUDED_WEAPONDEF_H__

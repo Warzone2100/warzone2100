@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * MoveDef.h
- *
- * Structure definitions for movement structures.
- *
+/** \file
+ *  Definitions for movement tracking.
  */
-#ifndef _movedef_h
-#define _movedef_h
+
+#ifndef __INCLUDED_MOVEDEF_H__
+#define __INCLUDED_MOVEDEF_H__
 
 #define TRAVELSIZE			100
 
@@ -72,4 +70,4 @@ typedef struct _move_control
 	float	fz;
 } MOVE_CONTROL;
 
-#endif
+#endif // __INCLUDED_MOVEDEF_H__

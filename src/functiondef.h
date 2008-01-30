@@ -17,17 +17,14 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * FunctionDef.h
- *
- * Structure defs for functions.
- *
+/** \file
+ *  Definitios for functions.
  */
-#ifndef _functiondef_h
-#define _functiondef_h
+
+#ifndef __INCLUDED_FUNCTIONDEF_H__
+#define __INCLUDED_FUNCTIONDEF_H__
 
 #include "statsdef.h"
-
 
 enum FUNCTION_TYPES
 {
@@ -77,7 +74,7 @@ enum FUNCTION_TYPES
 
 /*Common struct for all functions*/
 typedef struct _function
-{	
+{
 	FUNCTION_STATS;
 } FUNCTION;
 
@@ -87,9 +84,9 @@ typedef struct _repair_droid_function
 {
 	//common stats
 	FUNCTION_STATS;
-	
-	UDWORD			repairPoints;	/*The number of repair points used to reduce 
-									  damage to the droid. These repair points can 
+
+	UDWORD			repairPoints;	/*The number of repair points used to reduce
+									  damage to the droid. These repair points can
 									  restore even destroyed droid components*/
 } REPAIR_DROID_FUNCTION;
 
@@ -98,13 +95,13 @@ typedef struct _power_gen_function
 {
 	//common stats
 	FUNCTION_STATS;
-	
+
 	UDWORD		powerOutput;		/*How much power is generated per power cycle*/
 	UDWORD		powerMultiplier;	/*Multiplies the output - upgradeable*/
-	UDWORD		criticalMassChance;	/*The % chance of an explosion when the power 
+	UDWORD		criticalMassChance;	/*The % chance of an explosion when the power
 									  generator has taken damage*/
 	UDWORD		criticalMassRadius;	/*The primary blast radius*/
-	UDWORD		criticalMassDamage;	/*The base amount of damage applied to targets 
+	UDWORD		criticalMassDamage;	/*The base amount of damage applied to targets
 									  within the primary blast area*/
 	UDWORD		radiationDecayTime;	/*How long the radiation lasts n time cycles*/
 } POWER_GEN_FUNCTION;
@@ -135,7 +132,7 @@ typedef struct _production_upgrade_function
 	FUNCTION_STATS;
 
 	UBYTE		outputModifier;		/*The amount added to a facility's Output*/
-	
+
 	UBYTE		factory;			/*flag to indicate upgrades standard factories*/
 	UBYTE		cyborgFactory;		/*flag to indicate upgrades cyborg factories*/
 	UBYTE		vtolFactory;		/*flag to indicate upgrades vtol factories*/
@@ -148,12 +145,12 @@ typedef struct _production_function
 	//common stats
 	FUNCTION_STATS;
 
-	UWORD					capacity;			/*The max size of body the factory 
+	UWORD					capacity;			/*The max size of body the factory
 												  can produce*/
-	UWORD					productionOutput;	/*Droid Build Points Produced Per 
+	UWORD					productionOutput;	/*Droid Build Points Produced Per
 												  Build Cycle*/
-	//struct _propulsion_types*		propulsionType;		
-	//UBYTE					propulsionType;		/*The type of propulsion the facility 
+	//struct _propulsion_types*		propulsionType;
+	//UBYTE					propulsionType;		/*The type of propulsion the facility
 	//											  can produce*/
 } PRODUCTION_FUNCTION;
 
@@ -163,7 +160,7 @@ typedef struct _research_function
 	//common stats
 	FUNCTION_STATS;
 
-	UDWORD			researchPoints;	/*The number of research points added per 
+	UDWORD			researchPoints;	/*The number of research points added per
 									  research cycle*/
 } RESEARCH_FUNCTION;
 
@@ -245,7 +242,7 @@ typedef struct _droidBody_upgrade_function
 	UWORD					body;		//The % to increase the whole vehicle body points by*/
 	UWORD					armourValue[NUM_WEAPON_CLASS];
 	UBYTE					cyborg;		//flag to specify the upgrade is valid for cyborgs
-	UBYTE					droid;		/*flag to specify the upgrade is valid 
+	UBYTE					droid;		/*flag to specify the upgrade is valid
 										  for droids (non cyborgs!)*/
 } DROIDBODY_UPGRADE_FUNCTION;
 
@@ -278,9 +275,9 @@ typedef struct _function_upgrade
 //{
 //	//common stats
 //	FUNCTION_STATS;
-//	
-//	ARMOUR_STATS*	pArmour;		/*The armour to upgrade to*/	
-//	UDWORD			buildPoints;	/*The number of build points required to upgrade 
+//
+//	ARMOUR_STATS*	pArmour;		/*The armour to upgrade to*/
+//	UDWORD			buildPoints;	/*The number of build points required to upgrade
 //									  the structure*/
 //	UDWORD			powerRequired;	/*The amount of power required to upgrade*/
 //	UDWORD			armourPoints;	/*The percentage to increase the armour points by*/
@@ -291,8 +288,8 @@ typedef struct _function_upgrade
 //{
 //	//common stats
 //	FUNCTION_STATS;
-//	
-//	UDWORD		maxPower;			/*The maximum amount of power output the 
+//
+//	UDWORD		maxPower;			/*The maximum amount of power output the
 //									  regulator can handle*/
 //} POWER_REG_FUNCTION;
 
@@ -301,7 +298,7 @@ typedef struct _function_upgrade
 //{
 //	//common stats
 //	FUNCTION_STATS;
-//	
+//
 //	UDWORD		powerRelayType;		/*Broadcast=0 cable=1*/
 //	UDWORD		powerRelayRange;	/*The range in map distances that the power
 //									  can be relayed*/
@@ -313,9 +310,9 @@ typedef struct _function_upgrade
 //	//common stats
 //	FUNCTION_STATS;
 //
-//	UDWORD		radarDecayRate;		/*How fast the droids out of LOS decay on the 
+//	UDWORD		radarDecayRate;		/*How fast the droids out of LOS decay on the
 //									  radar*/
-//	UDWORD		radarRadius;		/*How far a radar building can see with 100% 
+//	UDWORD		radarRadius;		/*How far a radar building can see with 100%
 //									  accuracy*/
 //} RADAR_MAP_FUNCTION;
 
@@ -327,7 +324,7 @@ typedef struct _function_upgrade
 
 //	struct _repair_stats*	pRepair;		/*The repair unit to be upgraded*/
 //	UDWORD			repairPoints;	/*The percentage to increase the repair points by*/
-//	UDWORD			buildPoints;	/*The number of build points required to upgrade 
+//	UDWORD			buildPoints;	/*The number of build points required to upgrade
 //									  the structure*/
 //	UDWORD			powerRequired;	/*The amount of power required to upgrade*/
 //} REPAIR_UPGRADE_FUNCTION;
@@ -348,7 +345,7 @@ typedef struct _function_upgrade
 //	FUNCTION_STATS;
 //
 //	UDWORD			resistanceUpgrade;	/*This is unknown at the moment!!27/02/97*/
-//	UDWORD			buildPoints;		/*The number of build points required to 
+//	UDWORD			buildPoints;		/*The number of build points required to
 //										  upgrade the structure*/
 //	UDWORD			powerRequired;		/*The amount of power required to upgrade*/
 //	UDWORD			resistancePoints;	/*The percentage to increase the resistance points by*/
@@ -358,13 +355,11 @@ typedef struct _function_upgrade
 //{
 //	//common stats
 //	FUNCTION_STATS;
-//	
+//
 //	struct _sensor_stats*	pSensor;		/*The Sensor fitted, if any*/
 //	struct _ecm_stats*		pECM;			/*The ECM fitted, if any*/
-//	UDWORD			weaponCapacity;	/*The size of weapon in system points that may 
+//	UDWORD			weaponCapacity;	/*The size of weapon in system points that may
 //									  be added. 0 = no weapons can be added*/
 //} DEFENSIVE_STRUCTURE_FUNCTION;
 
-
-#endif
-
+#endif // __INCLUDED_FUNCTIONDEF_H__

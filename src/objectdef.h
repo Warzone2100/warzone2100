@@ -17,15 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * ObjectDef.h
- *
- * Overall header file for object structure definitions
- *
+/** \file
+ *  Includes all object (as derived from BASE_OBJECT) definitions.
  */
 
-#ifndef _objectdef_h
-#define _objectdef_h
+#ifndef __INCLUDED_OBJECTDEF_H__
+#define __INCLUDED_OBJECTDEF_H__
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_common/pietypes.h"
@@ -42,5 +39,4 @@
 #include "projectiledef.h"
 #include "featuredef.h"
 
-#endif
-
+#endif // __INCLUDED_OBJECTDEF_H__

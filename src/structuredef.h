@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * StructureDef.h
- *
- * Structure definitions for structures
- *
+/** \file
+ *  Definitions for structures.
  */
-#ifndef _structuredef_h
-#define _structuredef_h
+
+#ifndef __INCLUDED_STRUCTUREDEF_H__
+#define __INCLUDED_STRUCTUREDEF_H__
 
 #include "lib/gamelib/animobj.h"
 #include "statsdef.h"
@@ -385,4 +383,4 @@ typedef UPGRADE		REPAIR_FACILITY_UPGRADE;
 typedef UPGRADE		POWER_UPGRADE;
 typedef UPGRADE		REARM_UPGRADE;
 
-#endif
+#endif // __INCLUDED_STRUCTUREDEF_H__

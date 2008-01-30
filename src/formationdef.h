@@ -17,12 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * FormationDef.h
- *
+/** \file
+ *  Definitions for formations.
  */
-#ifndef _formationdef_h
-#define _formationdef_h
+
+#ifndef __INCLUDED_FORMATIONDEF_H__
+#define __INCLUDED_FORMATIONDEF_H__
 
 // maximum number of lines in a formation
 #define F_MAXLINES		4
@@ -74,7 +74,4 @@ typedef struct _formation
 	struct _formation	*psNext;
 } FORMATION;
 
-
-#endif
-
-
+#endif // __INCLUDED_FORMATIONDEF_H__

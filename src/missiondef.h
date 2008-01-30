@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * MissionDef.h
- *
- * Structure definitions for Mission
- *
+/** \file
+ *  Definitions for missions.
  */
-#ifndef _missiondef_h
-#define _missiondef_h
+
+#ifndef __INCLUDED_MISSIONDEF_H__
+#define __INCLUDED_MISSIONDEF_H__
 
 //mission types
 
@@ -89,4 +87,4 @@ typedef struct _mission
 
 } MISSION;
 
-#endif
+#endif // __INCLUDED_MISSIONDEF_H__

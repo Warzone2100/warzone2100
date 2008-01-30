@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * GatewayDef.h
- *
- * Structure definitions for routing gateways.
- *
+/** \file
+ *  Definitions for routing/pathfinding gateways.
  */
-#ifndef _gatewaydef_h
-#define _gatewaydef_h
+
+#ifndef __INCLUDED_GATEWAYDEF_H__
+#define __INCLUDED_GATEWAYDEF_H__
 
 typedef struct _gateway_link
 {
@@ -87,7 +85,4 @@ enum _gw_node_flags
 #define GW_MAP_MAXWIDTH		(MAP_MAXWIDTH - 1)
 #define GW_MAP_MAXHEIGHT	(MAP_MAXHEIGHT - 1)
 
-
-
-#endif
-
+#endif // __INCLUDED_GATEWAYDEF_H__
