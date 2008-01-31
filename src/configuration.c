@@ -228,8 +228,8 @@ BOOL loadConfig(void)
 	}
 	else
 	{
-		NETsetMasterserverPort(9998);
-		setWarzoneKeyNumeric("masterserver_port", 9998);
+		NETsetMasterserverPort(9997);
+		setWarzoneKeyNumeric("masterserver_port", 9997);
 	}
 
 	if (getWarzoneKeyNumeric("gameserver_port", &val))
