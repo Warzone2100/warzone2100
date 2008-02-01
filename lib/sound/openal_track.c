@@ -17,11 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-//*
-//
-// Sound library-specific functions
-//*
-//
+/** \file
+ *  Sound library-specific functions
+ */
 
 // this has to be first
 #include "lib/framework/frame.h"
