@@ -2367,17 +2367,21 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		memset(asBodyUpgrade, 0, MAX_PLAYERS * sizeof(BODY_UPGRADE) * BODY_TYPE);
 		//JPS 25 feb
 	}
-
+	
+	
+	if (saveGameVersion >= VERSION_11)
+	{
+		//camera position
+		disp3d_setView(&(saveGameData.currentPlayerPos));
+	}
+	else
+	{
+		disp3d_resetView();
+	}
 
 	//Stuff added after level load to avoid being reset or initialised during load
 	if (UserSaveGame)//always !keepObjects
 	{
-		if (saveGameVersion >= VERSION_11)//v21
-		{
-			//camera position
-			disp3d_setView(&(saveGameData.currentPlayerPos));
-		}
-
 		if (saveGameVersion >= VERSION_12)
 		{
 			mission.startTime = saveGameData.missionTime;
@@ -2389,12 +2393,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		width = saveGameData.ScrollMaxX - saveGameData.ScrollMinX;
 		height = saveGameData.ScrollMaxY - saveGameData.ScrollMinY;
 		gameType = saveGameData.GameType;
-
-		if (saveGameVersion >= VERSION_11)
-		{
-			//camera position
-			disp3d_setView(&(saveGameData.currentPlayerPos));
-		}
 
 		if (saveGameVersion >= VERSION_14)
 		{
@@ -3496,8 +3494,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 //		multiPlayerInUse = FALSE;
 //	}
 //	initViewPosition();
-	setViewAngle(INITIAL_STARTING_PITCH);
-	setDesiredPitch(INITIAL_DESIRED_PITCH);
 
 	//check if limbo_expand mission has changed to an expand mission for user save game (mid-mission)
 	if (gameType == GTYPE_SAVE_MIDMISSION && missionLimboExpand())
@@ -4574,6 +4570,10 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 	{
 		//camera position
 		disp3d_setView(&saveGameData.currentPlayerPos);
+	}
+	else
+	{
+		disp3d_resetView();
 	}
 
 	//load mission data from save game these values reloaded after load game

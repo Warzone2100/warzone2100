@@ -197,6 +197,7 @@ extern void	setDesiredPitch(SDWORD pitch);
 #define MAXDISTANCE	(3500)
 #define MINDISTANCE	(500)
 #define START_DISTANCE	(2000)
+#define START_HEIGHT (1500)
 
 #define CAMERA_PIVOT_HEIGHT (500)
 

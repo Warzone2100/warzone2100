@@ -54,6 +54,7 @@ extern void setViewPos( UDWORD x, UDWORD y, BOOL Pan);
 extern void getPlayerPos(SDWORD *px, SDWORD *py);
 extern void setPlayerPos(SDWORD x, SDWORD y);
 extern void disp3d_setView(iView *newView);
+extern void disp3d_resetView();
 extern void disp3d_getView(iView *newView);
 
 extern void draw3DScene (void);
