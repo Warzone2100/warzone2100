@@ -246,9 +246,7 @@ soundDataBuffer* sound_DecodeOggVorbis(struct OggVorbisDecoderState* decoder, si
 		return NULL;
 	}
 
-#if !defined(WZ_C99)
 	buffer->data = (char*)(buffer + 1);
-#endif /* WZ_C99 */
 	buffer->bufferSize = bufferSize;
 	buffer->bitsPerSample = 16;
 
