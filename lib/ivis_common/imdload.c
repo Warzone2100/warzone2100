@@ -730,9 +730,9 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 		ch = *pFileData++;
 
 		// Run up to the dot or till the buffer is filled. Leave room for the extension.
-		for( i = 0; i < PATH_MAX-5 && (ch = *pFileData++) != EOF && ch != '.'; i++ )
+		for (i = 0; i < PATH_MAX-5 && (ch = *pFileData++) != '\0' && ch != '.'; ++i)
 		{
- 			texfile[i] = (char)ch;
+ 			texfile[i] = ch;
 		}
 		texfile[i] = '\0';
 
