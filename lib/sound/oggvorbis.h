@@ -23,6 +23,11 @@
 #include "lib/framework/frame.h"
 #include <physfs.h>
 
+#if defined(__cplusplus)
+extern "C"
+{
+#endif
+
 typedef struct
 {
 	// the size of the data contained in *data (NOTE: this is *NOT* the size of *data itself)
@@ -50,5 +55,9 @@ struct OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_f
 void sound_DestroyOggVorbisDecoder(struct OggVorbisDecoderState* decoder);
 
 soundDataBuffer* sound_DecodeOggVorbis(struct OggVorbisDecoderState* decoder, size_t bufferSize);
+
+#if defined(__cplusplus)
+}
+#endif
 
 #endif // _LIBSOUND_OGGVORBIS_H_

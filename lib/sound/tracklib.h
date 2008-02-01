@@ -17,29 +17,20 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/***************************************************************************/
-/*
- * Library-specific sound library functions;
- * these need to be re-written for each library.
+/** \file
+ *  Library-specific sound library functions;
+ *  these need to be re-written for each library.
  */
-/***************************************************************************/
 
-#ifndef _TRACKLIB_H_
-#define _TRACKLIB_H_
-
-/***************************************************************************/
-
-
+#ifndef __INCLUDED_LIB_SOUND_TRACKLIB_H__
+#define __INCLUDED_LIB_SOUND_TRACKLIB_H__
 
 #include "track.h"
 
-/***************************************************************************/
-
-#define	KHZ22					(22050L)
-#define	KHZ11					(11025L)
-#define	MAX_AUDIO_SAMPLES		20
-
-/***************************************************************************/
+#if defined(__cplusplus)
+extern "C"
+{
+#endif
 
 BOOL	sound_InitLibrary( void );
 void	sound_ShutdownLibrary( void );
@@ -80,8 +71,8 @@ unsigned int sound_GetActiveSamplesCount(void);
 
 UDWORD	sound_GetGameTime( void );
 
-/***************************************************************************/
+#if defined(__cplusplus)
+}
+#endif
 
-#endif	// _TRACKLIB_H_
-
-/***************************************************************************/
+#endif	// __INCLUDED_LIB_SOUND_TRACKLIB_H__

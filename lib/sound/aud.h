@@ -17,24 +17,19 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/***************************************************************************/
-/*
- * Aud.h
- *
- * Audio wrapper functions
- *
- * Gareth Jones 16/12/97
+/** \file
+ *  Audio wrapper functions
  */
-/***************************************************************************/
 
-#ifndef _AUD_H_
-#define _AUD_H_
-
-/***************************************************************************/
+#ifndef __INCLUDED_LIB_SOUND_AUD_H__
+#define __INCLUDED_LIB_SOUND_AUD_H__
 
 #include "audio.h"
 
-/***************************************************************************/
+#if defined(__cplusplus)
+extern "C"
+{
+#endif
 
 void	audio_GetObjectPos( void *psObj, SDWORD *piX, SDWORD *piY,
 								SDWORD *piZ );
@@ -44,8 +39,8 @@ BOOL	audio_ObjectDead( void * psObj );
 void	audio_Get3DPlayerPos( SDWORD *piX, SDWORD *piY, SDWORD *piZ );
 void	audio_Get3DPlayerRotAboutVerticalAxis( SDWORD *piA );
 
-/***************************************************************************/
+#if defined(__cplusplus)
+}
+#endif
 
-#endif		/* _AUD_H_ */
-
-/***************************************************************************/
+#endif // __INCLUDED_LIB_SOUND_AUD_H__

@@ -32,6 +32,11 @@
 # include <AL/alc.h>
 #endif
 
+#if defined(__cplusplus)
+extern "C"
+{
+#endif
+
 extern ALenum __sound_GetError(const char* location_description);
 extern ALenum __sound_GetDeviceError(ALCdevice* device, const char* location_description);
 
@@ -54,5 +59,9 @@ extern ALenum __sound_GetDeviceError(ALCdevice* device, const char* location_des
 # define sound_GetError(err_code)       AL_NO_ERROR
 # define sound_GetDeviceError(err_code) ALC_NO_ERROR
 #endif // !defined(WZ_NOSOUND)
+
+#if defined(__cplusplus)
+}
+#endif
 
 #endif // __INCLUDED_LIB_SOUND_OPENAL_ERROR_H__

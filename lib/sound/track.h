@@ -18,10 +18,8 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef _TRACK_H_
-#define _TRACK_H_
-
-/* defines */
+#ifndef __INCLUDED_LIB_SOUND_TRACK_H__
+#define __INCLUDED_LIB_SOUND_TRACK_H__
 
 #include "lib/framework/frame.h"
 #include <physfs.h>
@@ -34,32 +32,23 @@
 # endif
 #endif
 
-#ifndef MAX_STR
-	#define	MAX_STR			255
+#if defined(__cplusplus)
+extern "C"
+{
 #endif
-
-#define	MAX_PITCH				127
 
 #define	SAMPLE_NOT_ALLOCATED	-1
 #define	SAMPLE_NOT_FOUND		-3
 #define	SAMPLE_COORD_INVALID	-5
 
-#define	AUDIO_VOL_MIN			0L
 #define	AUDIO_VOL_MAX			100L
-#define	AUDIO_VOL_RANGE			(AUDIO_VOL_MAX-AUDIO_VOL_MIN)
 
-/***************************************************************************/
-/* enums */
-
-
-/***************************************************************************/
 /* typedefs
  */
 
 typedef BOOL (* AUDIO_CALLBACK)  ( void *psObj );
 typedef struct __audio_stream AUDIO_STREAM;
 
-/***************************************************************************/
 /* structs */
 
 typedef struct AUDIO_SAMPLE
@@ -91,7 +80,6 @@ typedef struct TRACK
 	const char*     fileName;
 } TRACK;
 
-/***************************************************************************/
 /* functions
  */
 
@@ -140,4 +128,8 @@ extern void sound_PauseStream(AUDIO_STREAM* stream);
 extern void sound_ResumeStream(AUDIO_STREAM* stream);
 extern AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, void (*onFinished)(void*), void* user_data, size_t streamBufferSize, unsigned int buffer_count);
 
-#endif	// _TRACK_H_
+#if defined(__cplusplus)
+}
+#endif
+
+#endif	// __INCLUDED_LIB_SOUND_TRACK_H__

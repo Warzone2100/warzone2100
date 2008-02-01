@@ -18,10 +18,15 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef _PLAYLIST_H_
-#define _PLAYLIST_H_
+#ifndef __INCLUDED_LIB_SOUND_PLAYLIST_H__
+#define __INCLUDED_LIB_SOUND_PLAYLIST_H__
 
 #include "lib/framework/types.h"
+
+#if defined(__cplusplus)
+extern "C"
+{
+#endif
 
 void PlayList_Init(void);
 void PlayList_Quit(void);
@@ -30,4 +35,8 @@ void PlayList_SetTrack(unsigned int t);
 const char* PlayList_CurrentSong(void);
 const char* PlayList_NextSong(void);
 
-#endif /* _PLAYLIST_H_ */
+#if defined(__cplusplus)
+}
+#endif
+
+#endif // __INCLUDED_LIB_SOUND_PLAYLIST_H__

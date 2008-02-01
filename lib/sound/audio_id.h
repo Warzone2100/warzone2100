@@ -18,8 +18,13 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef _AUDIO_ID_H_
-#define _AUDIO_ID_H_
+#ifndef __INCLUDED_LIB_SOUND_AUDIO_ID_H__
+#define __INCLUDED_LIB_SOUND_AUDIO_ID_H__
+
+#if defined(__cplusplus)
+extern "C"
+{
+#endif
 
 /* INGAME AUDIO */
 
@@ -494,4 +499,8 @@ INGAME_AUDIO;
 
 INGAME_AUDIO audio_GetIDFromStr(const char *pWavStr);
 
-#endif	// _AUDIO_ID_H_
+#if defined(__cplusplus)
+}
+#endif
+
+#endif // __INCLUDED_LIB_SOUND_AUDIO_ID_H__

@@ -18,10 +18,15 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef _AUDIO_H_
-#define _AUDIO_H_
+#ifndef __INCLUDED_LIB_SOUND_AUDIO_H__
+#define __INCLUDED_LIB_SOUND_AUDIO_H__
 
 #include "track.h"
+
+#if defined(__cplusplus)
+extern "C"
+{
+#endif
 
 extern BOOL		audio_Init( AUDIO_CALLBACK pStopTrackCallback );
 extern void		audio_Update(void);
@@ -65,4 +70,8 @@ extern unsigned int audio_GetSampleQueueCount(void);
 extern unsigned int audio_GetSampleListCount(void);
 extern unsigned int sound_GetActiveSamplesCount(void);
 
-#endif	// _AUDIO_H_
+#if defined(__cplusplus)
+}
+#endif
+
+#endif // __INCLUDED_LIB_SOUND_AUDIO_H__

@@ -17,17 +17,17 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/***************************************************************************/
 
-#ifndef _MIXER_H_
-#define _MIXER_H_
-
-/***************************************************************************/
+#ifndef __INCLUDED_LIB_SOUND_MIXER_H__
+#define __INCLUDED_LIB_SOUND_MIXER_H__
 
 #include "lib/framework/frame.h"
 #include "audio.h"
 
-/***************************************************************************/
+#if defined(__cplusplus)
+extern "C"
+{
+#endif
 
 float sound_GetMusicVolume(void);
 void  sound_SetMusicVolume(float volume);
@@ -36,8 +36,8 @@ void  sound_SetUIVolume(float volume);
 float sound_GetEffectsVolume(void);
 void  sound_SetEffectsVolume(float volume);
 
-/***************************************************************************/
+#if defined(__cplusplus)
+}
+#endif
 
-#endif		// #ifndef _MIXER_H_
-
-/***************************************************************************/
+#endif // __INCLUDED_LIB_SOUND_MIXER_H__

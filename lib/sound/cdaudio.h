@@ -18,8 +18,13 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef _CDAUDIO_H_
-#define _CDAUDIO_H_
+#ifndef __INCLUDED_LIB_SOUND_CDAUDIO_H__
+#define __INCLUDED_LIB_SOUND_CDAUDIO_H__
+
+#if defined(__cplusplus)
+extern "C"
+{
+#endif
 
 BOOL cdAudio_Open(const char* user_musicdir);
 void cdAudio_Close(void);
@@ -28,4 +33,8 @@ void cdAudio_Stop(void);
 void cdAudio_Pause(void);
 void cdAudio_Resume(void);
 
-#endif	/* _CDAUDIO_H_ */
+#if defined(__cplusplus)
+}
+#endif
+
+#endif // __INCLUDED_LIB_SOUND_CDAUDIO_H__
