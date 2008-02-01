@@ -21,8 +21,8 @@
  *  \brief Debugging functions
  */
 
-#ifndef _debug_h
-#define _debug_h
+#ifndef __INCLUDED_LIB_FRAMEWORK_DEBUG_H__
+#define __INCLUDED_LIB_FRAMEWORK_DEBUG_H__
 
 /* Check the header files have been included from frame.h if they
  * are used outside of the framework library.
@@ -37,6 +37,11 @@
 #include <stdarg.h>
 
 #include "types.h"
+
+#if defined(__cplusplus)
+extern "C"
+{
+#endif
 
 /****************************************************************************************
  *
@@ -180,4 +185,8 @@ extern UDWORD traceID;
 static inline void objTraceEnable(UDWORD id) { traceID = id; }
 static inline void objTraceDisable(void) { traceID = 0; }
 
+#if defined(__cplusplus)
+}
 #endif
+
+#endif // __INCLUDED_LIB_FRAMEWORK_DEBUG_H__

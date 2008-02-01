@@ -17,14 +17,19 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*! \file frameresource.h
- * \brief Resource file processing functions
+/*! \file
+ *  \brief Resource file processing functions
  */
 
-#ifndef _resource_h
-#define _resource_h
+#ifndef __INCLUDED_LIB_FRAMEWORK_RESOURCE_H__
+#define __INCLUDED_LIB_FRAMEWORK_RESOURCE_H__
 
 #include "lib/framework/frame.h"
+
+#if defined(__cplusplus)
+extern "C"
+{
+#endif
 
 /** Maximum number of characters in a resource type. */
 #define RESTYPE_MAXCHAR		20
@@ -138,4 +143,8 @@ const char *GetLastResourceFilename(void) WZ_DECL_PURE;
 /** Set the resource name of the last resource file loaded. */
 void SetLastResourceFilename(const char *pName);
 
+#if defined(__cplusplus)
+}
 #endif
+
+#endif // __INCLUDED_LIB_FRAMEWORK_RESOURCE_H__

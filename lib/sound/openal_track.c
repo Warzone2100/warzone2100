@@ -46,6 +46,7 @@
 #include "cdaudio.h"
 #include "oggvorbis.h"
 #include "openal_error.h"
+#include "mixer.h"
 
 #define ATTENUATION_FACTOR	0.0003f
 
