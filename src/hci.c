@@ -3754,7 +3754,7 @@ BOOL intAddReticule(void)
 //		sButInit.x = 19+RETXOFFSET;
 //		sButInit.y = 35+RETYOFFSET;
 	//	sButInit.pText = "O";
-		sButInit.pTip = _("Commanders");
+		sButInit.pTip = _("Commanders (F6)");
 		sButInit.pDisplay = intDisplayReticuleButton;
 		sButInit.UserData = IMAGE_COMMANDDROID_UP;
 
@@ -3770,7 +3770,7 @@ BOOL intAddReticule(void)
 //		sButInit.x = 19+RETXOFFSET;
 //		sButInit.y = 70+RETYOFFSET;
 	//	sButInit.pText = "S";
-		sButInit.pTip = _("Intelligence Display");
+		sButInit.pTip = _("Intelligence Display (F5)");
 		sButInit.pDisplay = intDisplayReticuleButton;
 		sButInit.UserData = IMAGE_INTELMAP_UP;
 
@@ -3786,7 +3786,7 @@ BOOL intAddReticule(void)
 //		sButInit.x = 53+RETXOFFSET;
 //		sButInit.y = 17+RETYOFFSET;
 	//	sButInit.pText = "M";
-		sButInit.pTip = _("Manufacture");
+		sButInit.pTip = _("Manufacture (F1)");
 		sButInit.pDisplay = intDisplayReticuleButton;
 		sButInit.UserData = IMAGE_MANUFACTURE_UP;
 
@@ -3802,7 +3802,7 @@ BOOL intAddReticule(void)
 //		sButInit.x = 53+RETXOFFSET;
 //		sButInit.y = 88+RETYOFFSET;
 	//	sButInit.pText = "D";
-		sButInit.pTip = _("Design");
+		sButInit.pTip = _("Design (F4)");
 		sButInit.pDisplay = intDisplayReticuleButton;
 		sButInit.UserData = IMAGE_DESIGN_UP;
 
@@ -3818,7 +3818,7 @@ BOOL intAddReticule(void)
 //		sButInit.x = 87+RETXOFFSET;
 //		sButInit.y = 35+RETYOFFSET;
 	//	sButInit.pText = "R";
-		sButInit.pTip = _("Research");
+		sButInit.pTip = _("Research (F2)");
 		sButInit.pDisplay = intDisplayReticuleButton;
 		sButInit.UserData = IMAGE_RESEARCH_UP;
 
@@ -3834,7 +3834,7 @@ BOOL intAddReticule(void)
 //		sButInit.x = 87+RETXOFFSET;
 //		sButInit.y = 70+RETYOFFSET;
 	//	sButInit.pText = "B";
-		sButInit.pTip = _("Build");
+		sButInit.pTip = _("Build (F3)");
 		sButInit.pDisplay = intDisplayReticuleButton;
 		sButInit.UserData = IMAGE_BUILD_UP;
 
