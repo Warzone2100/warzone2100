@@ -159,6 +159,7 @@
 		02356E130BD3BD7E00E9A019 /* framing.c in Sources */ = {isa = PBXBuildFile; fileRef = 02356E110BD3BD7E00E9A019 /* framing.c */; };
 		02356E190BD3BD9700E9A019 /* ogg.h in Headers */ = {isa = PBXBuildFile; fileRef = 02356E170BD3BD9700E9A019 /* ogg.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02356E1A0BD3BD9700E9A019 /* os_types.h in Headers */ = {isa = PBXBuildFile; fileRef = 02356E180BD3BD9700E9A019 /* os_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0235F9100D52BCC7007B8F63 /* math-help.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 0235F90F0D52BCC7007B8F63 /* math-help.h */; };
 		0246A05D0BD3C975004D1C70 /* Warzone.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0246A05C0BD3C975004D1C70 /* Warzone.icns */; };
 		0246A0C10BD3CBD5004D1C70 /* configfile.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A09A0BD3CBD5004D1C70 /* configfile.c */; };
 		0246A0C20BD3CBD5004D1C70 /* debug.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A09F0BD3CBD5004D1C70 /* debug.c */; };
@@ -818,6 +819,7 @@
 				0223BBC10CFE3CD60056EF85 /* tagfile.h in Copy frameworks */,
 				02CDDD090D159D5900722688 /* autorevision.h in Copy frameworks */,
 				02CDDD1D0D159E2F00722688 /* openal_error.h in Copy frameworks */,
+				0235F9100D52BCC7007B8F63 /* math-help.h in Copy frameworks */,
 			);
 			name = "Copy frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -987,16 +989,15 @@
 		02356E110BD3BD7E00E9A019 /* framing.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = framing.c; path = external/libogg/src/framing.c; sourceTree = "<group>"; };
 		02356E170BD3BD9700E9A019 /* ogg.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ogg.h; path = external/libogg/include/ogg/ogg.h; sourceTree = "<group>"; };
 		02356E180BD3BD9700E9A019 /* os_types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = os_types.h; path = external/libogg/include/ogg/os_types.h; sourceTree = "<group>"; };
+		0235F90F0D52BCC7007B8F63 /* math-help.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = "math-help.h"; path = "../lib/framework/math-help.h"; sourceTree = SOURCE_ROOT; };
 		0246A05C0BD3C975004D1C70 /* Warzone.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = Warzone.icns; path = Resources/Warzone.icns; sourceTree = "<group>"; };
 		0246A09A0BD3CBD5004D1C70 /* configfile.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = configfile.c; path = ../lib/framework/configfile.c; sourceTree = SOURCE_ROOT; };
 		0246A09B0BD3CBD5004D1C70 /* configfile.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = configfile.h; path = ../lib/framework/configfile.h; sourceTree = SOURCE_ROOT; };
 		0246A09C0BD3CBD5004D1C70 /* cursors.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = cursors.h; path = ../lib/framework/cursors.h; sourceTree = SOURCE_ROOT; };
 		0246A09D0BD3CBD5004D1C70 /* cursors16.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = cursors16.h; path = ../lib/framework/cursors16.h; sourceTree = SOURCE_ROOT; };
-		0246A09E0BD3CBD5004D1C70 /* dbghelp.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = dbghelp.h; path = ../lib/framework/dbghelp.h; sourceTree = SOURCE_ROOT; };
 		0246A09F0BD3CBD5004D1C70 /* debug.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = debug.c; path = ../lib/framework/debug.c; sourceTree = SOURCE_ROOT; };
 		0246A0A00BD3CBD5004D1C70 /* debug.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = debug.h; path = ../lib/framework/debug.h; sourceTree = SOURCE_ROOT; };
 		0246A0A10BD3CBD5004D1C70 /* exceptionhandler.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = exceptionhandler.c; path = ../lib/framework/exceptionhandler.c; sourceTree = SOURCE_ROOT; };
-		0246A0A20BD3CBD5004D1C70 /* fractions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = fractions.h; path = ../lib/framework/fractions.h; sourceTree = SOURCE_ROOT; };
 		0246A0A30BD3CBD5004D1C70 /* frame.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = frame.c; path = ../lib/framework/frame.c; sourceTree = SOURCE_ROOT; };
 		0246A0A40BD3CBD5004D1C70 /* frame.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = frame.h; path = ../lib/framework/frame.h; sourceTree = SOURCE_ROOT; };
 		0246A0A50BD3CBD5004D1C70 /* frameint.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = frameint.h; path = ../lib/framework/frameint.h; sourceTree = SOURCE_ROOT; };
@@ -1972,6 +1973,7 @@
 		0246A0D00BD3CBE1004D1C70 /* Framework */ = {
 			isa = PBXGroup;
 			children = (
+				0235F90F0D52BCC7007B8F63 /* math-help.h */,
 				0223BBB40CFE3CD60056EF85 /* printf_ext.c */,
 				0223BBB50CFE3CD60056EF85 /* printf_ext.h */,
 				0223BBB60CFE3CD60056EF85 /* strlfuncs.h */,
@@ -1984,11 +1986,9 @@
 				0246A09B0BD3CBD5004D1C70 /* configfile.h */,
 				0246A09C0BD3CBD5004D1C70 /* cursors.h */,
 				0246A09D0BD3CBD5004D1C70 /* cursors16.h */,
-				0246A09E0BD3CBD5004D1C70 /* dbghelp.h */,
 				0246A09F0BD3CBD5004D1C70 /* debug.c */,
 				0246A0A00BD3CBD5004D1C70 /* debug.h */,
 				0246A0A10BD3CBD5004D1C70 /* exceptionhandler.c */,
-				0246A0A20BD3CBD5004D1C70 /* fractions.h */,
 				0246A0A30BD3CBD5004D1C70 /* frame.c */,
 				0246A0A40BD3CBD5004D1C70 /* frame.h */,
 				0246A0A50BD3CBD5004D1C70 /* frameint.h */,
