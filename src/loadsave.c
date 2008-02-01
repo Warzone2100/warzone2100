@@ -162,6 +162,7 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 // removed hardcoded values!  change with the defines above! -Q
 	static char	sSlots[totalslots][totalslotspace];
 	char **i, **files;
+	const char* checkExtension;
 
 	mode = bLoad;
 	debug(LOG_WZ, "_addLoadSave(%d, %s, %s, %s)", bLoad, sSearchPath, sExtension, title);
@@ -295,14 +296,22 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 
 	debug(LOG_WZ, "_addLoadSave: Searching \"%s\" for savegames", sSearchPath);
 
+	// Check for an extension like ".ext", not "ext"
+	sasprintf((char**)&checkExtension, ".%s", sExtension);
+
 	// add savegame filenames minus extensions to buttons (up to max 10)
 	files = PHYSFS_enumerateFiles(sSearchPath);
-	for (i = files; *i != NULL; i++) {
+	for (i = files; *i != NULL; ++i)
+	{
 		W_BUTTON *button;
 
-		if (!strstr(*i, sExtension)) {
+		// See if this filename contains the extension we're looking for
+		if (!strstr(*i, checkExtension))
+		{
+			// If it doesn't, move on to the next filename
 			continue;
 		}
+
 		button = (W_BUTTON*)widgGetFromID(psRequestScreen, LOADENTRY_START + slotCount);
 
 		debug(LOG_WZ, "_addLoadSave: We found [%s]", *i);
@@ -312,7 +321,8 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 		button->pTip = sSlots[slotCount];
 		button->pText = sSlots[slotCount];
 		slotCount++;		// goto next but...
-		if (slotCount == totalslots) {
+		if (slotCount == totalslots)
+		{
 			break;	// only show up to 10 entries
 		}
 	}
