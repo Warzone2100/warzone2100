@@ -91,10 +91,10 @@ typedef struct
 
 typedef struct
 {
-	BOOL		allocated;
-	unsigned int	id;
-	char		name[StringSize];
-	unsigned int	flags;
+	uint8_t         id;
+	BOOL            allocated;
+	char            name[StringSize];
+	uint32_t        flags;
 } NET_PLAYER;
 
 typedef struct
@@ -268,10 +268,12 @@ static void NET_InitPlayers(void)
 
 static void NETBroadcastPlayerInfo(int dpid)
 {
-	message.type = MSG_PLAYER_INFO;
-	message.size = sizeof(NET_PLAYER);
-	memcpy(message.body, &players[dpid], sizeof(NET_PLAYER));
-	NETbcast(&message, TRUE);
+	NETbeginEncode(MSG_PLAYER_INFO, NET_ALL_PLAYERS);
+		NETuint8_t(&players[dpid].id);
+		NETbool(&players[dpid].allocated);
+		NETstring(players[dpid].name, sizeof(players[dpid].name));
+		NETuint32_t(&players[dpid].flags);
+	NETend();
 }
 
 static unsigned int NET_CreatePlayer(const char* name, unsigned int flags)
@@ -295,6 +297,8 @@ static unsigned int NET_CreatePlayer(const char* name, unsigned int flags)
 
 static void NET_DestroyPlayer(unsigned int id)
 {
+	ASSERT(id < MAX_CONNECTED_PLAYERS, "Player ID (%u) out of range (max %u)", id, (unsigned int)MAX_CONNECTED_PLAYERS);
+
 	players[id].allocated = FALSE;
 }
 
@@ -786,15 +790,33 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 
 	switch (pMsg->type)
 	{
-		case MSG_PLAYER_INFO: {
-			NET_PLAYER* pi = (NET_PLAYER*)(pMsg->body);
-			int dpid = pi->id;
+		case MSG_PLAYER_INFO:
+		{
+			uint8_t dpid;
+			NETbeginDecode();
+				// Retrieve the player's ID
+				NETuint8_t(&dpid);
 
-			debug(LOG_NET, "NETprocessSystemMessage: Receiving MSG_PLAYER_INFO for player %d", dpid);
+				debug(LOG_NET, "NETprocessSystemMessage: Receiving MSG_PLAYER_INFO for player %u", (unsigned int)dpid);
 
-			memcpy(&players[dpid], pi, sizeof(NET_PLAYER));
+				// Bail out if the given ID number is out of range
+				ASSERT(dpid < MAX_CONNECTED_PLAYERS, "Player ID (%u) out of range (max %u)", (unsigned int)dpid, (unsigned int)MAX_CONNECTED_PLAYERS);
+				if (dpid >= MAX_CONNECTED_PLAYERS)
+					break;
+
+				// Copy the ID into the correct player's slot
+				players[dpid].id = dpid;
+
+				// Retrieve the rest of the data
+				NETbool(&players[dpid].allocated);
+				NETstring(players[dpid].name, sizeof(players[dpid].name));
+				NETuint32_t(&players[dpid].flags);
+			NETend();
+
 			NETplayerInfo();
 
+			// If we're the game host make sure to send the updated
+			// data to all other clients as well.
 			if (is_server)
 			{
 				NETBroadcastPlayerInfo(dpid);
