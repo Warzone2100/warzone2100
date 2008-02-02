@@ -1350,10 +1350,15 @@ static void NETallowJoining(void)
 				}
 				else if (message.type == MSG_JOIN)
 				{
+					char name[64];
 					int j;
+					uint8_t dpid;
 
-					char* name = message.body;
-					uint8_t dpid = NET_CreatePlayer(name, 0);
+					NETbeginDecode();
+						NETstring(name, sizeof(name));
+					NETend();
+
+					dpid = NET_CreatePlayer(name, 0);
 
 					debug(LOG_NET, "NETallowJoining, MSG_JOIN: dpid set to %u", (unsigned int)dpid);
 					SDLNet_TCP_DelSocket(tmp_socket_set, tmp_socket[i]);
@@ -1662,10 +1667,12 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 	bsocket = NET_createBufferedSocket();
 	NET_initBufferedSocket(bsocket, tcp_socket);
 
-	message.type = MSG_JOIN;
-	message.size = 64;
-	strlcpy(message.body, playername, sizeof(message.body));
-	NETsend(&message, 1, TRUE);
+	// Send a join message
+	NETbeginEncode(MSG_JOIN, 1);
+		// Casting constness away, because NETstring is const-incorrect
+		// when sending/encoding a packet.
+		NETstring((char*)playername, 64);
+	NETend();
 
 	// Loop until we've been accepted into the game
 	for (;;)
