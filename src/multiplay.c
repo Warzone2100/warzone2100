@@ -253,7 +253,6 @@ BOOL multiPlayerLoop(void)
 		{
 			if(bDisplayMultiJoiningStatus)
 			{
-				sendVersionCheck();
 				bDisplayMultiJoiningStatus = 0;
 				setWidgetsStatus(TRUE);
 			}
@@ -747,9 +746,6 @@ BOOL recvMessage(void)
 			break;
 		case NET_OPTIONS:
 			recvOptions();
-			break;
-		case NET_VERSION:
-			recvVersionCheck(&msg);
 			break;
 		case NET_PLAYERRESPONDING:			// remote player is now playing
 		{

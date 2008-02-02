@@ -79,28 +79,6 @@ extern BOOL		multiRequestUp;
 static void resetMultiVisibility(UDWORD player);
 
 // ////////////////////////////////////////////////////////////////////////////
-// Version Check
-
-BOOL sendVersionCheck(void)
-{
-	NETMSG msg;
-
-	msg.size = 0;
-
-	NetAdd(msg,0,selectedPlayer);
-	msg.size = 1;
-	msg.type = NET_VERSION;
-
-	return NETbcast(&msg,TRUE);
-}
-
-BOOL recvVersionCheck(NETMSG *pMsg)
-{
-	return TRUE;
-}
-
-
-// ////////////////////////////////////////////////////////////////////////////
 // Wait For Players
 
 BOOL intDisplayMultiJoiningStatus(UBYTE joinCount)

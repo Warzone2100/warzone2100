@@ -43,7 +43,7 @@ typedef enum _msgtype
 	NET_CHECK_DROID,		//9 check & update bot position and damage.
 	NET_CHECK_STRUCT,		//10 check & update struct damage.
 	NET_CHECK_POWER,		//11 power levels for a player.
-	NET_VERSION,			//12 VERSION data
+	__DEPRECATED__NET_VERSION__,			//12 was VERSION data; is unused now; but some code depends on this enum having these numbers (BAD!!!)
 	NET_BUILD,				//13 build a new structure
 	NET_STRUCTDEST,			//14 specify a strucutre to destroy
 	NET_BUILDFINISHED,		//15 a building is complete.
