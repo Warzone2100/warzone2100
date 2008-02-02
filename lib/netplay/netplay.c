@@ -846,8 +846,8 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 			{
 				NETBroadcastPlayerInfo(dpid);
 			}
-		}	break;
-
+			break;
+		}
 		case MSG_PLAYER_DATA:
 		{
 			uint32_t dpid;
@@ -872,17 +872,22 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 			{
 				NETsendGlobalPlayerData(dpid);
 			}
-		}	break;
+			break;
+		}
+		case MSG_PLAYER_JOINED:
+		{
+			uint8_t dpid;
+			NETbeginDecode();
+				NETuint8_t(&dpid);
+			NETend();
 
-		case MSG_PLAYER_JOINED: {
-			int dpid = pMsg->body[0];
-
-			debug(LOG_NET, "NETprocessSystemMessage: Receiving MSG_PLAYER_JOINED for player %d", dpid);
+			debug(LOG_NET, "NETprocessSystemMessage: Receiving MSG_PLAYER_JOINED for player %u", (unsigned int)dpid);
 
 			MultiPlayerJoin(dpid);
-		}	break;
-
-		case MSG_PLAYER_LEFT: {
+			break;
+		}
+		case MSG_PLAYER_LEFT:
+		{
 			unsigned int* pdpid = (unsigned int*)(pMsg->body);
 			int dpid = *pdpid;
 
@@ -890,8 +895,8 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 
 			NET_DestroyPlayer(dpid);
 			MultiPlayerLeave(dpid);
-		}	break;
-
+			break;
+		}
 		case MSG_GAME_FLAGS:
 		{
 			debug(LOG_NET, "NETprocessSystemMessage: Receiving game flags");
@@ -1347,39 +1352,39 @@ static void NETallowJoining(void)
 					int j;
 
 					char* name = message.body;
-					unsigned int dpid = NET_CreatePlayer(name, 0);
+					uint8_t dpid = NET_CreatePlayer(name, 0);
 
-					debug(LOG_NET, "NETallowJoining, MSG_JOIN: dpid set to %d", dpid);
+					debug(LOG_NET, "NETallowJoining, MSG_JOIN: dpid set to %u", (unsigned int)dpid);
 					SDLNet_TCP_DelSocket(tmp_socket_set, tmp_socket[i]);
 					NET_initBufferedSocket(connected_bsocket[dpid], tmp_socket[i]);
 					SDLNet_TCP_AddSocket(socket_set, connected_bsocket[dpid]->socket);
 					tmp_socket[i] = NULL;
 
+					// Increment player count
 					game.desc.dwCurrentPlayers++;
 
-					message.type = MSG_ACCEPTED;
-					message.size = 1;
-					message.body[0] = dpid;
-					NETsend(&message, dpid, TRUE);
+					NETbeginEncode(MSG_ACCEPTED, dpid);
+						NETuint8_t(&dpid);
+					NETend();
 
 					MultiPlayerJoin(dpid);
-					message.type = MSG_PLAYER_JOINED;
-					message.size = 1;
 
 					// Send info about players to newcomer.
 					for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
 					{
-						if (   players[j].allocated
-						    && dpid != players[j].id)
+						if (players[j].allocated
+						 && dpid != players[j].id)
 						{
-							message.body[0] = players[j].id;
-							NETsend(&message, dpid, TRUE);
+							NETbeginEncode(MSG_PLAYER_JOINED, dpid);
+								NETuint8_t(&players[j].id);
+							NETend();
 						}
 					}
 
 					// Send info about newcomer to all players.
-					message.body[0] = dpid;
-					NETbcast(&message, TRUE);
+					NETbeginEncode(MSG_PLAYER_JOINED, NET_ALL_PLAYERS);
+						NETuint8_t(&dpid);
+					NETend();
 
 					for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
 					{
@@ -1661,23 +1666,30 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 	strlcpy(message.body, playername, sizeof(message.body));
 	NETsend(&message, 1, TRUE);
 
+	// Loop until we've been accepted into the game
 	for (;;)
 	{
 		NETrecv(&message);
 
 		if (message.type == MSG_ACCEPTED)
 		{
-			NetPlay.dpidPlayer = message.body[0];
-			debug(LOG_NET, "NETjoinGame: I'm player %u", NetPlay.dpidPlayer);
+			uint8_t dpid;
+			NETbeginDecode();
+				// Retrieve the player ID the game host arranged for us
+				NETuint8_t(&dpid);
+			NETend();
+
+			NetPlay.dpidPlayer = dpid;
+			debug(LOG_NET, "NETjoinGame: I'm player %u", (unsigned int)NetPlay.dpidPlayer);
 			NetPlay.bHost = FALSE;
 			NetPlay.bSpectator = FALSE;
 
 			if (NetPlay.dpidPlayer >= MAX_CONNECTED_PLAYERS)
 			{
-				debug(LOG_ERROR, "Bad player number (%u) received from host!",
-				      NetPlay.dpidPlayer);
+				debug(LOG_ERROR, "Bad player number (%u) received from host!", NetPlay.dpidPlayer);
 				return FALSE;
 			}
+
 			players[NetPlay.dpidPlayer].allocated = TRUE;
 			players[NetPlay.dpidPlayer].id = NetPlay.dpidPlayer;
 			strlcpy(players[NetPlay.dpidPlayer].name, playername, sizeof(players[NetPlay.dpidPlayer].name));
