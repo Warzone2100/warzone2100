@@ -17,13 +17,6 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Netplay.c
- *
- */
-
-// ////////////////////////////////////////////////////////////////////////
-// includes
 
 #include "lib/framework/frame.h"
 
@@ -128,7 +121,7 @@ static NETMSG		message;
 static char*		hostname;
 static NETSTATS		nStats = { 0, 0, 0, 0 };
 static NET_PLAYER	players[MAX_CONNECTED_PLAYERS];
-static SDWORD		NetGameFlags[4];
+static int32_t          NetGameFlags[4];
 
 // *********** Socket with buffer that read NETMSGs ******************
 
@@ -489,6 +482,23 @@ SDWORD NETgetGameFlags(UDWORD flag)
 	}
 }
 
+static void NETsendGameFlags(void)
+{
+	NETbeginEncode(MSG_GAME_FLAGS, NET_ALL_PLAYERS);
+	{
+		// Send the amount of game flags we're about to send
+		uint8_t i, count = sizeof(NetGameFlags) / sizeof(*NetGameFlags);
+		NETuint8_t(&count);
+
+		// Send over all game flags
+		for (i = 0; i < count; ++i)
+		{
+			NETint32_t(&NetGameFlags[i]);
+		}
+	}	
+	NETend();
+}
+
 // ////////////////////////////////////////////////////////////////////////
 // Set a game flag
 BOOL NETsetGameFlags(UDWORD flag, SDWORD value)
@@ -503,10 +513,7 @@ BOOL NETsetGameFlags(UDWORD flag, SDWORD value)
 		return NetGameFlags[flag-1] = value;
 	}
 
-	message.type = MSG_GAME_FLAGS;
-	message.size = sizeof(NetGameFlags);
-	memcpy(message.body, NetGameFlags, sizeof(NetGameFlags));
-	NETbcast(&message, TRUE);
+	NETsendGameFlags();
 
 	return TRUE;
 }
@@ -885,16 +892,39 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 			MultiPlayerLeave(dpid);
 		}	break;
 
-		case MSG_GAME_FLAGS: {
+		case MSG_GAME_FLAGS:
+		{
 			debug(LOG_NET, "NETprocessSystemMessage: Receiving game flags");
 
-			memcpy(NetGameFlags, pMsg->body, sizeof(NetGameFlags));
-
-			if (is_server)
+			NETbeginEncode(MSG_GAME_FLAGS, NET_ALL_PLAYERS);
 			{
-				NETbcast(pMsg, TRUE);
+				static unsigned int max_flags = sizeof(NetGameFlags) / sizeof(*NetGameFlags);
+				// Retrieve the amount of game flags that we should receive
+				uint8_t i, count;
+				NETuint8_t(&count);
+ 
+				// Make sure that we won't get buffer overflows by checking that we
+				// have enough space to store the given amount of game flags.
+				if (count > max_flags)
+				{
+					debug(LOG_NET, "NETprocessSystemMessage: MSG_GAME_FLAGS: More game flags sent (%u) than our buffer can hold (%u)", (unsigned int)count, max_flags);
+					count = max_flags;
+				}
+
+				// Retrieve all game flags
+				for (i = 0; i < count; ++i)
+				{
+					NETint32_t(&NetGameFlags[i]);
+				}
+			}	
+			NETend();
+
+ 			if (is_server)
+ 			{
+				NETsendGameFlags();
 			}
-		}	break;
+			break;
+		}
 		default:
 			return FALSE;
 	}
