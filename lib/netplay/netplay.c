@@ -384,17 +384,28 @@ static void resize_local_player_data(unsigned int i, unsigned int size)
 	}
 }
 
-static void resize_global_player_data(unsigned int i, unsigned int size)
+static void resize_global_player_data(unsigned int i, size_t size)
 {
-	if (global_player_data[i].buffer_size < size)
+	void* new_buffer;
+
+	if (size == 0)
 	{
-		if (global_player_data[i].data != NULL)
-		{
-			free(global_player_data[i].data);
-		}
-		global_player_data[i].data = malloc(size);
-		global_player_data[i].buffer_size = size;
+		free(global_player_data[i].data);
+		global_player_data[i].data = NULL;
+		global_player_data[i].buffer_size = 0;
+		return;
 	}
+
+	new_buffer = realloc(global_player_data[i].data, size);
+	if (new_buffer == NULL)
+	{
+		debug(LOG_ERROR, "resize_global_player_data: Out of memory!");
+		abort();
+		return;
+	}
+
+	global_player_data[i].data = new_buffer;
+	global_player_data[i].buffer_size = size;
 }
 
 // ////////////////////////////////////////////////////////////////////////
