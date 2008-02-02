@@ -33,7 +33,6 @@ extern void setupNewPlayer				(UDWORD dpid, UDWORD player);		// stuff to do when
 //extern BOOL UpdateClient				(DPID dest, UDWORD playerToSend);// send info about another player
 extern void clearPlayer					(UDWORD player, BOOL quietly, BOOL removeOil);// wipe a player off the face of the earth.
 //extern BOOL ProcessDroidOrders			(void);
-//extern BOOL recvFeatures				(NETMSG *pMsg);
 //extern UDWORD							arenaPlayersReceived;
 
 typedef struct {

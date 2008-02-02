@@ -682,9 +682,6 @@ BOOL recvMessage(void)
 			case NET_REQUESTDROID:				// player requires a droid that they dont have.
 				recvRequestDroid();
 				break;
-//			case NET_REQUESTPLAYER:				// a new player requires information
-//				multiPlayerRequest(&msg);
-//				break;
 			case NET_GIFT:						// an alliance gift from one player to another.
 				recvGift();
 				break;
