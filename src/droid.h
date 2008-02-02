@@ -49,7 +49,7 @@ back when building is destroyed*/
 
 //storage
 extern DROID_TEMPLATE			*apsDroidTemplates[MAX_PLAYERS];
-
+extern bool runningMultiplayer(void);
 
 /* The range for neighbouring objects */
 #define NAYBOR_RANGE		(TILE_UNITS*9)	//range of lancer, BB, TK etc
@@ -520,6 +520,7 @@ do { \
 	assert(droid->numWeaps <= DROID_MAXWEAPS); \
 	assert(droid->listSize <= ORDER_LIST_MAX); \
 	assert(droid->player < MAX_PLAYERS); \
+	if (runningMultiplayer()) \
 	assert(worldOnMap(droid->sMove.fx, droid->sMove.fy)); \
 \
 	for (i = 0; i < DROID_MAXWEAPS; ++i) \
