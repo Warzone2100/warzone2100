@@ -84,9 +84,9 @@ typedef struct		// data regarding the last one second or so.
 
 typedef struct
 {
-	unsigned int	size;
-	void*		data;
-	unsigned int	buffer_size;
+	uint16_t        size;
+	void*           data;
+	size_t          buffer_size;
 } NET_PLAYER_DATA;
 
 typedef struct
@@ -438,8 +438,21 @@ BOOL NETsetLocalPlayerData(UDWORD dpid,void *pData, SDWORD size)
 	return TRUE;
 }
 
+static void NETsendGlobalPlayerData(uint32_t dpid)
+{
+	NETbeginEncode(MSG_PLAYER_DATA, NET_ALL_PLAYERS);
+	{
+		char* data = (char*)global_player_data[dpid].data;
+		uint16_t size = global_player_data[dpid].size;
+		NETuint32_t(&dpid);
+		NETuint16_t(&size);
+		NETbin(data, size);
+	}
+	NETend();
+}
+
 // ////////////////////////////////////////////////////////////////////////
-BOOL NETsetGlobalPlayerData(UDWORD dpid, void *pData, SDWORD size)
+BOOL NETsetGlobalPlayerData(uint32_t dpid, void *pData, uint16_t size)
 {
 	debug(LOG_NET, "NETsetGlobalPlayerData(%u, %p, %d)", dpid, pData, size);
 	if(!NetPlay.bComms)
@@ -454,14 +467,8 @@ BOOL NETsetGlobalPlayerData(UDWORD dpid, void *pData, SDWORD size)
 	resize_global_player_data(dpid, size);
 	memcpy(global_player_data[dpid].data, pData, size);
 
-	{ // broadcast player data
-		unsigned int* p_dpid = (unsigned int*)(message.body);
-
-		message.type = MSG_PLAYER_DATA;
-		message.size = sizeof(unsigned int) + size;
-		*p_dpid = dpid;
-		memcpy(message.body+sizeof(unsigned int), pData, size);
-	}
+	// broadcast player data
+	NETsendGlobalPlayerData(dpid);
 
 	NETBroadcastPlayerInfo(dpid);
 
@@ -834,20 +841,29 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 			}
 		}	break;
 
-		case MSG_PLAYER_DATA: {
-			unsigned int* pdpid = (unsigned int*)(pMsg->body);
-			int dpid = *pdpid;
-			unsigned int size = pMsg->size - sizeof(unsigned int);
+		case MSG_PLAYER_DATA:
+		{
+			uint32_t dpid;
+			NETbeginDecode();
+			{
+				uint16_t size;
+				NETuint32_t(&dpid);
 
-			debug(LOG_NET, "NETprocessSystemMessage: Receiving MSG_PLAYER_DATA for player %d", dpid);
+				debug(LOG_NET, "NETprocessSystemMessage: Receiving MSG_PLAYER_DATA for player %u", (unsigned int)dpid);
 
-			global_player_data[dpid].size = size;
-			resize_global_player_data(dpid, size);
-			memcpy(global_player_data[dpid].data, pMsg->body+sizeof(unsigned int), size);
+				// Retrieve required buffer size, and resize buffer
+				NETuint16_t(&size);
+				resize_global_player_data(dpid, size);
+				global_player_data[dpid].size = size;
+
+				// Retrieve data
+				NETbin((char*)global_player_data[dpid].data, size);
+			}
+			NETend();
 
 			if (is_server)
 			{
-				NETbcast(pMsg, TRUE);
+				NETsendGlobalPlayerData(dpid);
 			}
 		}	break;
 
