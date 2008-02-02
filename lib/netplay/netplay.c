@@ -888,10 +888,12 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 		}
 		case MSG_PLAYER_LEFT:
 		{
-			unsigned int* pdpid = (unsigned int*)(pMsg->body);
-			int dpid = *pdpid;
+			uint32_t dpid;
+			NETbeginDecode();
+				NETuint32_t(&dpid);
+			NETend();
 
-			debug(LOG_NET, "NETprocessSystemMessage: Receiving MSG_PLAYER_LEFT for player %d", dpid);
+			debug(LOG_NET, "NETprocessSystemMessage: Receiving MSG_PLAYER_LEFT for player %u", (unsigned int)dpid);
 
 			NET_DestroyPlayer(dpid);
 			MultiPlayerLeave(dpid);
@@ -972,7 +974,7 @@ receive_message:
 
 			if (received == FALSE)
 			{
-				unsigned int i = current + 1;
+				uint32_t i = current + 1;
 
 				if (socket_set == NULL
 				    || SDLNet_CheckSockets(socket_set, NET_READ_TIMEOUT) <= 0)
@@ -994,16 +996,15 @@ receive_message:
 					}
 					else if (connected_bsocket[i]->socket == NULL)
 					{
-						// check if we droped any players in the check above
-						unsigned int* message_dpid = (unsigned int*)(message.body);
+						// check if we dropped any players in the check above
 
-						game.desc.dwCurrentPlayers--;
+						// Decrement player count
+						--game.desc.dwCurrentPlayers;
 
-						message.type = MSG_PLAYER_LEFT;
-						message.size = 4;
-						*message_dpid = i;
-						debug(LOG_NET, "NETrecv: dpid to send set to %d", i);
-						NETbcast(&message, TRUE);
+						debug(LOG_NET, "NETrecv: dpid to send set to %u", (unsigned int)i);
+						NETbeginEncode(MSG_PLAYER_LEFT, NET_ALL_PLAYERS);
+							NETuint32_t(&i);
+						NETend();
 
 						NET_DestroyPlayer(i);
 						MultiPlayerLeave(i);
