@@ -14,7 +14,7 @@
 	</Platforms>
 	<ToolFiles>
 		<ToolFile
-			RelativePath="..\..\win32\FlexBison.rules"
+			RelativePath="..\..\devpkg\FlexBison.rules"
 		/>
 	</ToolFiles>
 	<Configurations>
