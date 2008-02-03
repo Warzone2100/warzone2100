@@ -414,6 +414,94 @@ BOOL NETsetGameFlags(UDWORD flag, SDWORD value)
 	return TRUE;
 }
 
+static void NETsendGAMESTRUCT(TCPsocket socket, const GAMESTRUCT* game)
+{
+	// A buffer that's guaranteed to have the correct size (i.e. it
+	// circumvents struct padding, which could pose a problem).
+	char buf[sizeof(game->name) + sizeof(game->desc.host) + sizeof(int32_t) * 8];
+	char* buffer = buf;;
+
+	// Now dump the data into the buffer
+	// Copy a string
+	strlcpy(buffer, game->name, sizeof(game->name));
+	buffer += sizeof(game->name);
+
+	// Copy 32bit large big endian numbers
+	*(int32_t*)buffer = SDL_SwapBE32(game->desc.dwSize);
+	buffer += sizeof(int32_t);
+	*(int32_t*)buffer = SDL_SwapBE32(game->desc.dwFlags);
+	buffer += sizeof(int32_t);
+
+	// Copy yet another string
+	strlcpy(buffer, game->desc.host, sizeof(game->desc.host));
+	buffer += sizeof(game->desc.host);
+
+	// Copy 32bit large big endian numbers
+	*(int32_t*)buffer = SDL_SwapBE32(game->desc.dwMaxPlayers);
+	buffer += sizeof(int32_t);
+	*(int32_t*)buffer = SDL_SwapBE32(game->desc.dwCurrentPlayers);
+	buffer += sizeof(int32_t);
+	*(int32_t*)buffer = SDL_SwapBE32(game->desc.dwUser1);
+	buffer += sizeof(int32_t);
+	*(int32_t*)buffer = SDL_SwapBE32(game->desc.dwUser2);
+	buffer += sizeof(int32_t);
+	*(int32_t*)buffer = SDL_SwapBE32(game->desc.dwUser3);
+	buffer += sizeof(int32_t);
+	*(int32_t*)buffer = SDL_SwapBE32(game->desc.dwUser4);
+	buffer += sizeof(int32_t);
+
+	// Send over the GAMESTRUCT
+	SDLNet_TCP_Send(socket, buf, sizeof(buf));
+}
+
+static bool NETrecvGAMESTRUCT(GAMESTRUCT* game)
+{
+	// A buffer that's guaranteed to have the correct size (i.e. it
+	// circumvents struct padding, which could pose a problem).
+	char buf[sizeof(game->name) + sizeof(game->desc.host) + sizeof(int32_t) * 8];
+	char* buffer = buf;
+
+	// Read a GAMESTRUCT from the connection
+	if (tcp_socket == NULL
+	 || socket_set == NULL
+	 || SDLNet_CheckSockets(socket_set, 1000) <= 0
+	 || !SDLNet_SocketReady(tcp_socket)
+	 || SDLNet_TCP_Recv(tcp_socket, buf, sizeof(buf)) != sizeof(buf))
+	{
+		return false;
+	}
+
+	// Now dump the data into the game struct
+	// Copy a string
+	strlcpy(game->name, buffer, sizeof(game->name));
+	buffer += sizeof(game->name);
+
+	// Copy 32bit large big endian numbers
+	game->desc.dwSize = SDL_SwapBE32(*(int32_t*)buffer);
+	buffer += sizeof(int32_t);
+	game->desc.dwFlags = SDL_SwapBE32(*(int32_t*)buffer);
+	buffer += sizeof(int32_t);
+
+	// Copy yet another string
+	strlcpy(game->desc.host, buffer, sizeof(game->desc.host));
+	buffer += sizeof(game->desc.host);
+
+	// Copy 32bit large big endian numbers
+	game->desc.dwMaxPlayers = SDL_SwapBE32(*(int32_t*)buffer);
+	buffer += sizeof(int32_t);
+	game->desc.dwCurrentPlayers = SDL_SwapBE32(*(int32_t*)buffer);
+	buffer += sizeof(int32_t);
+	game->desc.dwUser1 = SDL_SwapBE32(*(int32_t*)buffer);
+	buffer += sizeof(int32_t);
+	game->desc.dwUser2 = SDL_SwapBE32(*(int32_t*)buffer);
+	buffer += sizeof(int32_t);
+	game->desc.dwUser3 = SDL_SwapBE32(*(int32_t*)buffer);
+	buffer += sizeof(int32_t);
+	game->desc.dwUser4 = SDL_SwapBE32(*(int32_t*)buffer);
+	buffer += sizeof(int32_t);
+
+	return true;
+}
 
 // ////////////////////////////////////////////////////////////////////////
 // setup stuff
