@@ -800,9 +800,11 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 				debug(LOG_NET, "NETprocessSystemMessage: Receiving MSG_PLAYER_INFO for player %u", (unsigned int)dpid);
 
 				// Bail out if the given ID number is out of range
-				ASSERT(dpid < MAX_CONNECTED_PLAYERS, "Player ID (%u) out of range (max %u)", (unsigned int)dpid, (unsigned int)MAX_CONNECTED_PLAYERS);
 				if (dpid >= MAX_CONNECTED_PLAYERS)
+				{
+					debug(LOG_NET, "NETprocessSystemMessage: MSG_PLAYER_INFO: Player ID (%u) out of range (max %u)", (unsigned int)dpid, (unsigned int)MAX_CONNECTED_PLAYERS);
 					break;
+				}
 
 				// Copy the ID into the correct player's slot
 				players[dpid].id = dpid;
