@@ -391,7 +391,7 @@ static void NETsendGameFlags(void)
 		{
 			NETint32_t(&NetGameFlags[i]);
 		}
-	}	
+	}
 	NETend();
 }
 
@@ -858,7 +858,7 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 				// Retrieve the amount of game flags that we should receive
 				uint8_t i, count;
 				NETuint8_t(&count);
- 
+
 				// Make sure that we won't get buffer overflows by checking that we
 				// have enough space to store the given amount of game flags.
 				if (count > max_flags)
@@ -872,7 +872,7 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 				{
 					NETint32_t(&NetGameFlags[i]);
 				}
-			}	
+			}
 			NETend();
 
  			if (is_server)
@@ -1212,7 +1212,7 @@ void NETregisterServer(int state)
 				}
 
 				SDLNet_TCP_Send(rs_socket, "addg", 5);
-				SDLNet_TCP_Send(rs_socket, &game, sizeof(GAMESTRUCT));
+				NETsendGAMESTRUCT(rs_socket, &game);
 			}
 			break;
 
@@ -1272,11 +1272,11 @@ static void NETallowJoining(void)
 				if(strcmp(buffer, "list")==0)
 				{
 					SDLNet_TCP_Send(tmp_socket[i], &numgames, sizeof(UDWORD));
-					SDLNet_TCP_Send(tmp_socket[i], &game, sizeof(GAMESTRUCT));
+					NETsendGAMESTRUCT(tmp_socket[i], &game);
 				}
 				else if (strcmp(buffer, "join") == 0)
 				{
-					SDLNet_TCP_Send(tmp_socket[i], &game, sizeof(GAMESTRUCT));
+					NETsendGAMESTRUCT(tmp_socket[i], &game);
 				}
 
 			} else {
@@ -1442,15 +1442,13 @@ BOOL NEThaltJoining(void)
 // find games on open connection
 BOOL NETfindGame(void)
 {
-	static UDWORD gamecount = 0, gamesavailable;
+	unsigned int gamecount = 0;
+	uint32_t gamesavailable;
 	IPaddress ip;
-	char buffer[sizeof(GAMESTRUCT)*2];
-	GAMESTRUCT* tmpgame = (GAMESTRUCT*)buffer;
 	unsigned int port = (hostname == masterserver_name) ? masterserver_port : gameserver_port;
 
 	debug(LOG_NET, "NETfindGame");
 
-	gamecount = 0;
 	NetPlay.games[0].desc.dwSize = 0;
 	NetPlay.games[0].desc.dwCurrentPlayers = 0;
 	NetPlay.games[0].desc.dwMaxPlayers = 0;
@@ -1490,47 +1488,38 @@ BOOL NETfindGame(void)
 
 	SDLNet_TCP_Send(tcp_socket, "list", 5);
 
-	if (   SDLNet_CheckSockets(socket_set, 1000) > 0
-	    && SDLNet_SocketReady(tcp_socket)
-	    && SDLNet_TCP_Recv(tcp_socket, &gamesavailable, sizeof(gamesavailable)))
+	if (SDLNet_CheckSockets(socket_set, 1000) > 0
+	 && SDLNet_SocketReady(tcp_socket)
+	 && SDLNet_TCP_Recv(tcp_socket, &gamesavailable, sizeof(gamesavailable)))
 	{
 		gamesavailable = SDL_SwapBE32(gamesavailable);
 	}
 
-	debug(LOG_NET, "receiving info of %u game(s)", gamesavailable);
+	debug(LOG_NET, "receiving info of %u game(s)", (unsigned int)gamesavailable);
 
-	do {
-		if (   SDLNet_CheckSockets(socket_set, 1000) > 0
-		    && SDLNet_SocketReady(tcp_socket)
-		    && SDLNet_TCP_Recv(tcp_socket, buffer, sizeof(GAMESTRUCT)) == sizeof(GAMESTRUCT)
-		    && tmpgame->desc.dwSize == sizeof(SESSIONDESC))
+	do
+	{
+		// Attempt to receive a game description structure
+		if (NETrecvGAMESTRUCT(&NetPlay.games[gamecount]))
 		{
-			strlcpy(NetPlay.games[gamecount].name, tmpgame->name, sizeof(NetPlay.games[gamecount].name));
-			NetPlay.games[gamecount].desc.dwSize = tmpgame->desc.dwSize;
-			NetPlay.games[gamecount].desc.dwCurrentPlayers = tmpgame->desc.dwCurrentPlayers;
-			NetPlay.games[gamecount].desc.dwMaxPlayers = tmpgame->desc.dwMaxPlayers;
-			if (tmpgame->desc.host[0] == '\0')
+			if (NetPlay.games[gamecount].desc.host[0] == '\0')
 			{
 				unsigned char* address = (unsigned char*)(&(ip.host));
 
 				snprintf(NetPlay.games[gamecount].desc.host, sizeof(NetPlay.games[gamecount].desc.host),
-					"%i.%i.%i.%i",
- 					(int)(address[0]),
- 					(int)(address[1]),
- 					(int)(address[2]),
- 					(int)(address[3]));
+				"%i.%i.%i.%i",
+					(int)(address[0]),
+					(int)(address[1]),
+					(int)(address[2]),
+					(int)(address[3]));
 
 				// Guarantee to nul-terminate
 				NetPlay.games[gamecount].desc.host[sizeof(NetPlay.games[gamecount].desc.host) - 1] = '\0';
 			}
-			else
-			{
-				strlcpy(NetPlay.games[gamecount].desc.host, tmpgame->desc.host, sizeof(NetPlay.games[gamecount].desc.host));
-			}
 
 			gamecount++;
 		}
-	} while (gamecount<gamesavailable);
+	} while (gamecount < gamesavailable);
 
 	return TRUE;
 }
@@ -1541,8 +1530,6 @@ BOOL NETfindGame(void)
 BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 {
 	IPaddress ip;
-	char buffer[sizeof(GAMESTRUCT)*2];
-	GAMESTRUCT* tmpgame = (GAMESTRUCT*)buffer;
 
 	debug(LOG_NET, "NETjoinGame gameNumber=%d", gameNumber);
 
@@ -1582,35 +1569,17 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 
 	SDLNet_TCP_Send(tcp_socket, "join", 5);
 
-	if (   SDLNet_CheckSockets(socket_set, 1000) > 0
-	    && SDLNet_SocketReady(tcp_socket)
-	    && SDLNet_TCP_Recv(tcp_socket, buffer, sizeof(GAMESTRUCT)*2) == sizeof(GAMESTRUCT)
-	    && tmpgame->desc.dwSize == sizeof(SESSIONDESC))
+	if (NETrecvGAMESTRUCT(&NetPlay.games[gameNumber])
+	 && NetPlay.games[gameNumber].desc.host[0] == '\0')
 	{
-		strlcpy(NetPlay.games[gameNumber].name, tmpgame->name, sizeof(NetPlay.games[gameNumber].name));
+		unsigned char* address = (unsigned char*)(&(ip.host));
 
-		NetPlay.games[gameNumber].desc.dwSize = tmpgame->desc.dwSize;
-		NetPlay.games[gameNumber].desc.dwCurrentPlayers = tmpgame->desc.dwCurrentPlayers;
-		NetPlay.games[gameNumber].desc.dwMaxPlayers = tmpgame->desc.dwMaxPlayers;
-		strlcpy(NetPlay.games[gameNumber].desc.host, tmpgame->desc.host, sizeof(NetPlay.games[gameNumber].desc.host));
-		if (tmpgame->desc.host[0] == '\0')
-		{
-			unsigned char* address = (unsigned char*)(&(ip.host));
-
-			snprintf(NetPlay.games[gameNumber].desc.host, sizeof(NetPlay.games[gameNumber].desc.host),
-				"%i.%i.%i.%i",
-				(int)(address[0]),
-				(int)(address[1]),
-				(int)(address[2]),
-				(int)(address[3]));
-
-			// Guarantee to nul-terminate
-			NetPlay.games[gameNumber].desc.host[sizeof(NetPlay.games[gameNumber].desc.host) - 1] = '\0';
-		}
-		else
-		{
-			strlcpy(NetPlay.games[gameNumber].desc.host, tmpgame->desc.host, sizeof(NetPlay.games[gameNumber].desc.host));
-		}
+		snprintf(NetPlay.games[gameNumber].desc.host, sizeof(NetPlay.games[gameNumber].desc.host),
+			"%i.%i.%i.%i",
+			(int)(address[0]),
+			(int)(address[1]),
+			(int)(address[2]),
+			(int)(address[3]));
 	}
 
 	bsocket = NET_createBufferedSocket();
