@@ -48,7 +48,6 @@ enum
 	MSG_JOIN = 90, // needs to start at 90
 	MSG_ACCEPTED,
 	MSG_PLAYER_INFO,
-	MSG_PLAYER_DATA,
 	MSG_PLAYER_JOINED,
 	MSG_PLAYER_LEFT,
 	MSG_GAME_FLAGS,
@@ -111,8 +110,6 @@ NETPLAY	NetPlay;
 
 static BOOL		allow_joining = FALSE;
 static GAMESTRUCT	game;
-static NET_PLAYER_DATA	local_player_data[MAX_CONNECTED_PLAYERS] = { { 0, NULL, 0 } };
-static NET_PLAYER_DATA	global_player_data[MAX_CONNECTED_PLAYERS] = { { 0, NULL, 0 } };
 static TCPsocket	tcp_socket = NULL;
 static NETBUFSOCKET*	bsocket = NULL;
 static NETBUFSOCKET*	connected_bsocket[MAX_CONNECTED_PLAYERS] = { NULL };
@@ -367,110 +364,6 @@ BOOL NETchangePlayerName(UDWORD dpid, char *newName)
 	return TRUE;
 }
 
-static void resize_local_player_data(unsigned int i, unsigned int size)
-{
-	if (local_player_data[i].buffer_size < size)
-	{
-		if (local_player_data[i].data != NULL)
-		{
-			free(local_player_data[i].data);
-		}
-		local_player_data[i].data = malloc(size);
-		local_player_data[i].buffer_size = size;
-	}
-}
-
-static void resize_global_player_data(unsigned int i, size_t size)
-{
-	void* new_buffer;
-
-	if (size == 0)
-	{
-		free(global_player_data[i].data);
-		global_player_data[i].data = NULL;
-		global_player_data[i].buffer_size = 0;
-		return;
-	}
-
-	new_buffer = realloc(global_player_data[i].data, size);
-	if (new_buffer == NULL)
-	{
-		debug(LOG_ERROR, "resize_global_player_data: Out of memory!");
-		abort();
-		return;
-	}
-
-	global_player_data[i].data = new_buffer;
-	global_player_data[i].buffer_size = size;
-}
-
-// ////////////////////////////////////////////////////////////////////////
-BOOL NETgetLocalPlayerData(UDWORD dpid, void *pData)
-{
-	memcpy(pData, local_player_data[dpid].data, local_player_data[dpid].size);
-	return TRUE;
-}
-
-// ////////////////////////////////////////////////////////////////////////
-BOOL NETgetGlobalPlayerData(UDWORD dpid, void *pData)
-{
-	if(!NetPlay.bComms)
-	{
-		memcpy(pData, local_player_data[dpid].data, local_player_data[dpid].size);
-		return TRUE;
-	}
-
-	memcpy(pData, global_player_data[dpid].data, global_player_data[dpid].size);
-
-	return TRUE;
-}
-// ////////////////////////////////////////////////////////////////////////
-BOOL NETsetLocalPlayerData(UDWORD dpid,void *pData, SDWORD size)
-{
-	debug(LOG_NET, "NETsetLocalPlayerData(%u, %p, %d)", dpid, pData, size);
-	local_player_data[dpid].size = size;
-	resize_local_player_data(dpid, size);
-	memcpy(local_player_data[dpid].data, pData, size);
-	return TRUE;
-}
-
-static void NETsendGlobalPlayerData(uint32_t dpid)
-{
-	NETbeginEncode(MSG_PLAYER_DATA, NET_ALL_PLAYERS);
-	{
-		char* data = (char*)global_player_data[dpid].data;
-		uint16_t size = global_player_data[dpid].size;
-		NETuint32_t(&dpid);
-		NETuint16_t(&size);
-		NETbin(data, size);
-	}
-	NETend();
-}
-
-// ////////////////////////////////////////////////////////////////////////
-BOOL NETsetGlobalPlayerData(uint32_t dpid, void *pData, uint16_t size)
-{
-	debug(LOG_NET, "NETsetGlobalPlayerData(%u, %p, %d)", dpid, pData, size);
-	if(!NetPlay.bComms)
-	{
-		local_player_data[dpid].size = size;
-		resize_local_player_data(dpid, size);
-		memcpy(local_player_data[dpid].data, pData, size);
-		return TRUE;
-	}
-
-	global_player_data[dpid].size = size;
-	resize_global_player_data(dpid, size);
-	memcpy(global_player_data[dpid].data, pData, size);
-
-	// broadcast player data
-	NETsendGlobalPlayerData(dpid);
-
-	NETBroadcastPlayerInfo(dpid);
-
-	return TRUE;
-}
-
 // ////////////////////////////////////////////////////////////////////////
 // return one of the four user flags in the current sessiondescription.
 SDWORD NETgetGameFlags(UDWORD flag)
@@ -567,16 +460,7 @@ BOOL NETinit(BOOL bFirstCall)
 // SHUTDOWN THE CONNECTION.
 BOOL NETshutdown(void)
 {
-	unsigned int i;
 	debug( LOG_NET, "NETshutdown" );
-
-	for( i = 0; i < MAX_CONNECTED_PLAYERS; i++ )
-	{
-		if( local_player_data[i].data != NULL )
-		{
-			free( local_player_data[i].data );
-		}
-	}
 
 	NETstopLogging();
 	SDLNet_Quit();
@@ -848,32 +732,6 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 			if (is_server)
 			{
 				NETBroadcastPlayerInfo(dpid);
-			}
-			break;
-		}
-		case MSG_PLAYER_DATA:
-		{
-			uint32_t dpid;
-			NETbeginDecode();
-			{
-				uint16_t size;
-				NETuint32_t(&dpid);
-
-				debug(LOG_NET, "NETprocessSystemMessage: Receiving MSG_PLAYER_DATA for player %u", (unsigned int)dpid);
-
-				// Retrieve required buffer size, and resize buffer
-				NETuint16_t(&size);
-				resize_global_player_data(dpid, size);
-				global_player_data[dpid].size = size;
-
-				// Retrieve data
-				NETbin((char*)global_player_data[dpid].data, size);
-			}
-			NETend();
-
-			if (is_server)
-			{
-				NETsendGlobalPlayerData(dpid);
 			}
 			break;
 		}

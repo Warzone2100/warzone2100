@@ -791,6 +791,9 @@ BOOL recvMessage(void)
 		case NET_RESEARCHSTATUS:
 			recvResearchStatus();
 			break;
+		case NET_PLAYER_STATS:
+			recvMultiStats();
+			break;
 		default:
 			break;
 		}

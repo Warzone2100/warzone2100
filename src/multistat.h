@@ -27,6 +27,9 @@
  * Also Definitions for saved Arena Forces to enable teams to be saved to disk
  */
 
+#ifndef __INCLUDED_SRC_MULTISTATS_H__
+#define __INCLUDED_SRC_MULTISTATS_H__
+
 typedef struct
 {
 	uint32_t played;						/// propogated stats.
@@ -40,7 +43,6 @@ typedef struct
 
 	uint32_t killsToAdd;					// things to add next time score is updated.
 	uint32_t scoreToAdd;
-
 } PLAYERSTATS;
 
 // stat defs
@@ -53,3 +55,7 @@ extern void			updateMultiStatsGames	(void);
 extern void			updateMultiStatsWins	(void);
 extern void			updateMultiStatsLoses	(void);
 extern void			updateMultiStatsKills	(BASE_OBJECT *psKilled,UDWORD player);
+
+extern void recvMultiStats(void);
+
+#endif // __INCLUDED_SRC_MULTISTATS_H__

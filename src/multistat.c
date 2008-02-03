@@ -49,24 +49,17 @@ extern char	MultiPlayersPath[PATH_MAX];
 // ////////////////////////////////////////////////////////////////////////////
 // STATS STUFF
 // ////////////////////////////////////////////////////////////////////////////
+static PLAYERSTATS playerStats[MAX_PLAYERS];
 
 // ////////////////////////////////////////////////////////////////////////////
 // Get Player's stats
 PLAYERSTATS getMultiStats(UDWORD player,BOOL bLocal)
 {
 	static PLAYERSTATS stat;
-	UDWORD		playerDPID;
+	uint32_t playerDPID = player2dpid[player];
 
-	playerDPID = player2dpid[player];
-
-	if(bLocal)
-	{
-		NETgetLocalPlayerData(playerDPID, &stat);
-	}
-	else
-	{
-		NETgetGlobalPlayerData(playerDPID, &stat);
-	}
+	// Copy over the data from our local array
+	memcpy(&stat, &playerStats[playerDPID], sizeof(stat));
 
 	return stat;
 }
@@ -75,17 +68,54 @@ PLAYERSTATS getMultiStats(UDWORD player,BOOL bLocal)
 // Set Player's stats
 BOOL setMultiStats(SDWORD dp, PLAYERSTATS plStats, BOOL bLocal)
 {
-	UDWORD	playerDPID = (UDWORD) dp;
+	uint32_t playerDPID = (uint32_t)dp;
 
-	if(bLocal)
+	// First copy over the data into our local array
+	memcpy(&playerStats[playerDPID], &plStats, sizeof(plStats));
+
+	if (!bLocal)
 	{
-		NETsetLocalPlayerData(playerDPID,&plStats,sizeof(PLAYERSTATS));
+		// Now send it to all other players
+		NETbeginEncode(NET_PLAYER_STATS, NET_ALL_PLAYERS);
+			// Send the ID of the player's stats we're updating
+			NETuint32_t(&playerDPID);
+
+			// Send over the actual stats
+			NETuint32_t(&playerStats[playerDPID].played);
+			NETuint32_t(&playerStats[playerDPID].wins);
+			NETuint32_t(&playerStats[playerDPID].losses);
+			NETuint32_t(&playerStats[playerDPID].totalKills);
+			NETuint32_t(&playerStats[playerDPID].totalScore);
+			NETuint32_t(&playerStats[playerDPID].recentKills);
+			NETuint32_t(&playerStats[playerDPID].recentScore);
+			NETuint32_t(&playerStats[playerDPID].killsToAdd);
+			NETuint32_t(&playerStats[playerDPID].scoreToAdd);
+		NETend();
 	}
-	else
-	{
-		NETsetGlobalPlayerData(playerDPID,&plStats,sizeof(PLAYERSTATS));
-	}
+
 	return TRUE;
+}
+
+void recvMultiStats()
+{
+	uint32_t playerDPID;
+
+	NETbeginDecode();
+		// Retrieve the ID number of the player for which we need to
+		// update the stats
+		NETuint32_t(&playerDPID);
+
+		// Retrieve the actual stats
+		NETuint32_t(&playerStats[playerDPID].played);
+		NETuint32_t(&playerStats[playerDPID].wins);
+		NETuint32_t(&playerStats[playerDPID].losses);
+		NETuint32_t(&playerStats[playerDPID].totalKills);
+		NETuint32_t(&playerStats[playerDPID].totalScore);
+		NETuint32_t(&playerStats[playerDPID].recentKills);
+		NETuint32_t(&playerStats[playerDPID].recentScore);
+		NETuint32_t(&playerStats[playerDPID].killsToAdd);
+		NETuint32_t(&playerStats[playerDPID].scoreToAdd);
+	NETend();
 }
 
 // ////////////////////////////////////////////////////////////////////////////
