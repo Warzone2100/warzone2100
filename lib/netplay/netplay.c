@@ -43,13 +43,16 @@ unsigned int masterserver_port = 0, gameserver_port = 0;
 #define NET_READ_TIMEOUT	0
 #define NET_BUFFER_SIZE		1024
 
-#define MSG_JOIN		90
-#define MSG_ACCEPTED		91
-#define MSG_PLAYER_INFO		92
-#define MSG_PLAYER_DATA		93
-#define MSG_PLAYER_JOINED	94
-#define MSG_PLAYER_LEFT		95
-#define MSG_GAME_FLAGS		96
+enum
+{
+	MSG_JOIN = 90, // needs to start at 90
+	MSG_ACCEPTED,
+	MSG_PLAYER_INFO,
+	MSG_PLAYER_DATA,
+	MSG_PLAYER_JOINED,
+	MSG_PLAYER_LEFT,
+	MSG_GAME_FLAGS,
+};
 
 // ////////////////////////////////////////////////////////////////////////
 // Function prototypes
