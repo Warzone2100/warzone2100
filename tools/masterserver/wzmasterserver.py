@@ -121,7 +121,7 @@ class Game:
 	def setData(self, d):
 		""" decode the c-structure from the server into local varialbles"""
                 (self.description, self.size, self.flags, self.host, self.maxPlayers, self.currentPlayers, 
-			self.user1, self.user2, self.user3, self.user4 ) = struct.unpack("64sII16sIIIIII", d)
+			self.user1, self.user2, self.user3, self.user4 ) = struct.unpack("!64sII16sIIIIII", d)
 		self.description=self.description.strip("\x00")
 		self.host=self.host.strip("\x00")
 		logging.debug("Game: %s %s %s %s" % ( self.host, self.description, self.maxPlayers, self.currentPlayers))
