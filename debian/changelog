@@ -1,3 +1,10 @@
+warzone2100 (2.1.0~0.svn3670-0) unstable; urgency=low
+
+  * Bump upstream version number for the development branch
+    - This version is _not_ an official release, just a development snapshot.
+
+ -- Giel van Schijndel <muggenhor@gna.org>  Sun, 03 Feb 2008 21:24:31 +0100
+
 warzone2100 (2.1.0~0.svn3379-0) unstable; urgency=low
 
   * Bump upstream version number for the development branch
