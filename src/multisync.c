@@ -155,58 +155,54 @@ BOOL sendCheck(void)
 // pick a droid to send, NULL otherwise.
 static DROID* pickADroid(void)
 {
-	DROID			*pD=NULL;						// current droid we're checking
-	UDWORD			i;
+	DROID* pD = NULL;						// current droid we're checking
+	unsigned int i;
 	static UDWORD	droidnum=0;						// how far down the playerlist to go.
 	static UDWORD	player=0;						// current player we're checking
 	static UDWORD	maxtrys=0;
 
-	if ( !myResponsibility(player) )				// dont send stuff that's not our problem.
+	// Don't send stuff that isn't our problem
+	while (!myResponsibility(player))
 	{
-		player ++;									// next player next time.
-		player = player%MAX_PLAYERS;
-		droidnum =0;
+		++player;
+		player = player % MAX_PLAYERS;
+		droidnum = 0;
 
-		if(maxtrys<MAX_PLAYERS)
+		// Bail out if we've tried for each available player already
+		if (++maxtrys >= MAX_PLAYERS)
 		{
-			maxtrys++;
-			return pickADroid();
-		}
-		else
-		{
-			maxtrys =0;
+			maxtrys = 0;
 			return NULL;
 		}
 	}
 
-	pD = apsDroidLists[player];						// get the droid to send to everyone
-	for(i=0;												// CRITERIA FOR PICKADROID
-			(i<droidnum)									//not yet done.
-			&& (pD != NULL)									//still here.
-		;i++)//
+	// Find the 'droidnum'th droid for the current player
+	pD = apsDroidLists[player];
+	for (i = 0; i < droidnum && pD != NULL; ++i)
 	{
-		pD= pD->psNext;
+		pD = pD->psNext;
 	}
 
+	// If we've already dealt with the last droid for this player
 	if (pD == NULL)								// droid is no longer there or list end.
 	{
-		player ++;										// next player next time.
-		player = player%MAX_PLAYERS;
-		droidnum=0;
+		// Deal with the next player now
+		++player;
+		player = player % MAX_PLAYERS;
+		droidnum = 0;
 
-		if(maxtrys<MAX_PLAYERS)
+		// Bail out if we've tried for each available player already
+		if (maxtrys >= MAX_PLAYERS)
 		{
-			maxtrys++;
-			return pickADroid();
-		}
-		else
-		{
-			maxtrys =0;
+			maxtrys = 0;
 			return NULL;
 		}
+
+		// Invoke ourselves to pick a droid from the next player
+		return pickADroid();
 	}
 
-	droidnum++;
+	++droidnum;
 	maxtrys = 0;
 
 	return pD;
