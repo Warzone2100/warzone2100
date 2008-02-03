@@ -21,7 +21,8 @@
 #include <physfs.h>
 
 #ifndef WZ_NOSOUND
-#include <vorbis/vorbisfile.h>
+# include <vorbis/vorbisfile.h>
+# ifndef WZ_OS_MAC
 /* HACK: Dummy reference vorbisfile.h symbols to prevent warnings */
 static WZ_DECL_UNUSED void MKID(dummy)(void)
 {
@@ -30,6 +31,7 @@ static WZ_DECL_UNUSED void MKID(dummy)(void)
 	(void)OV_CALLBACKS_STREAMONLY;
 	(void)OV_CALLBACKS_STREAMONLY_NOCLOSE;
 }
+# endif
 #endif
 
 #ifdef __BIG_ENDIAN__
