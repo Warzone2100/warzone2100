@@ -803,6 +803,7 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 				if (dpid >= MAX_CONNECTED_PLAYERS)
 				{
 					debug(LOG_NET, "NETprocessSystemMessage: MSG_PLAYER_INFO: Player ID (%u) out of range (max %u)", (unsigned int)dpid, (unsigned int)MAX_CONNECTED_PLAYERS);
+					NETend();
 					break;
 				}
 
