@@ -18,10 +18,9 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#include "lib/framework/frame.h"
-
-#include "lib/framework/frameresource.h"
 #include "tracklib.h"
+#include "lib/framework/frame.h"
+#include "lib/framework/frameresource.h"
 #include "audio_id.h"
 
 //*
@@ -33,7 +32,7 @@
 //
 // static global variables
 // array of pointers to sound effects
-static TRACK			**g_apTrack;
+static TRACK                    *g_apTrack[MAX_TRACKS];
 
 // number of tracks loaded
 static SDWORD			g_iCurTracks = 0;
@@ -56,13 +55,7 @@ BOOL sound_Init()
 	}
 
 	// init audio array (with NULL pointers; which calloc ensures by setting all allocated memory to zero)
-	g_apTrack = calloc(MAX_TRACKS, sizeof(TRACK*));
-	if (!g_apTrack)
-	{
-		debug(LOG_ERROR, "sound_Init: Out of memory");
-		abort();
-		return FALSE;
-	}
+	memset(g_apTrack, 0, sizeof(g_apTrack));
 
 	// set system active flag for callbacks
 	g_bSystemActive = TRUE;
@@ -75,8 +68,6 @@ BOOL sound_Init()
 //
 BOOL sound_Shutdown( void )
 {
-	free( g_apTrack );
-
 	// set inactive flag to prevent callbacks coming after shutdown
 	g_bSystemActive = FALSE;
 	sound_ShutdownLibrary();
