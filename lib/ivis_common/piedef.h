@@ -101,9 +101,6 @@ typedef struct {float x, y, z, u, v; PIELIGHT light, specular;} TERRAIN_VERTEXF;
 typedef struct {SWORD x, y, w, h;} PIERECT;				/**< Screen rectangle. */
 typedef struct {SDWORD texPage; SWORD tu, tv, tw, th;} PIEIMAGE;	/**< An area of texture. */
 
-/** Render style for pie draw functions. */
-typedef struct {UDWORD pieFlag; PIELIGHT colour, specular; UBYTE light, trans, scale, height;} PIESTYLE;
-
 typedef struct {
 	unsigned int flags;
 	unsigned int nVrts;
@@ -111,14 +108,13 @@ typedef struct {
 	iTexAnim *pTexAnim;
 } PIEPOLY;
 
-
 /***************************************************************************/
 /*
  *	Global ProtoTypes
  */
 /***************************************************************************/
 extern void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, PIELIGHT specular, int pieFlag, int pieData);
-extern void pie_DrawImage(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style);
+extern void pie_DrawImage(PIEIMAGE *image, PIERECT *dest);
 
 void pie_DrawTerrainDone(int mapx, int mapy);
 void pie_DrawTerrainTriangle(int index, const TERRAIN_VERTEX *aVrts);

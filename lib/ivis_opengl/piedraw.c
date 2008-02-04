@@ -909,18 +909,16 @@ void pie_RemainingPasses(void)
  * replaces all ivis blit functions
  *
  ***************************************************************************/
-
-void pie_DrawImage(PIEIMAGE *image, PIERECT *dest, PIESTYLE *style)
+void pie_DrawImage(PIEIMAGE *image, PIERECT *dest)
 {
+	PIELIGHT colour = WZCOL_WHITE;
+
 	/* Set transparent color to be 0 red, 0 green, 0 blue, 0 alpha */
 	polyCount++;
 
 	pie_SetTexturePage(image->texPage);
 
-	style->colour = WZCOL_WHITE; // draw solid
-	style->specular = WZCOL_BLACK;
-
-	glColor4ubv(style->colour.vector);
+	glColor4ubv(colour.vector);
 
 	glBegin(GL_TRIANGLE_STRIP);
 		//set up 4 pie verts

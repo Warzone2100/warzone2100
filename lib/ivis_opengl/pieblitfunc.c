@@ -56,7 +56,6 @@
 #define RADARX 128
 #define RADARY 128
 
-static PIESTYLE rendStyle;
 static UDWORD radarTexture;
 
 /***************************************************************************/
@@ -193,7 +192,7 @@ void pie_ImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 	dest.y = y + Image->YOffset;
 	dest.w = Image->Width;
 	dest.h = Image->Height;
-	pie_DrawImage(&pieImage, &dest, &rendStyle);
+	pie_DrawImage(&pieImage, &dest);
 }
 
 void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, int Height)
@@ -232,7 +231,7 @@ void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 
 		for (hRep = 0; hRep < Width/Image->Width; hRep++)
 		{
-			pie_DrawImage(&pieImage, &dest, &rendStyle);
+			pie_DrawImage(&pieImage, &dest);
 			dest.x += Image->Width;
 		}
 
@@ -241,7 +240,7 @@ void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 		{
 			pieImage.tw = hRemainder;
 			dest.w = hRemainder;
-			pie_DrawImage(&pieImage, &dest, &rendStyle);
+			pie_DrawImage(&pieImage, &dest);
 		}
 
 		dest.y += Image->Height;
@@ -260,7 +259,7 @@ void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 
 		for (hRep = 0; hRep < Width/Image->Width; hRep++)
 		{
-			pie_DrawImage(&pieImage, &dest, &rendStyle);
+			pie_DrawImage(&pieImage, &dest);
 			dest.x += Image->Width;
 		}
 
@@ -269,7 +268,7 @@ void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 		{
 			pieImage.tw = hRemainder;
 			dest.w = hRemainder;
-			pie_DrawImage(&pieImage, &dest, &rendStyle);
+			pie_DrawImage(&pieImage, &dest);
 		}
 	}
 }
@@ -321,7 +320,7 @@ void pie_RenderRadar( int x, int y )
 	dest.y = y;
 	dest.w = RADARX;
 	dest.h = RADARY;
-	pie_DrawImage(&pieImage, &dest, &rendStyle);
+	pie_DrawImage(&pieImage, &dest);
 }
 
 void pie_LoadBackDrop(SCREENTYPE screenType)
