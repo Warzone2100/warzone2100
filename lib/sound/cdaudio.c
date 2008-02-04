@@ -92,7 +92,7 @@ static bool cdAudio_OpenTrack(const char* filename)
 			return false;
 		}
 
-		cdStream = sound_PlayStreamWithBuf(music_file, music_volume, cdAudio_TrackFinished, NULL, bufferSize, buffer_count);
+		cdStream = sound_PlayStreamWithBuf(music_file, music_volume, cdAudio_TrackFinished, (char*)filename, bufferSize, buffer_count);
 		if (cdStream == NULL)
 		{
 			PHYSFS_close(music_file);
@@ -109,7 +109,15 @@ static bool cdAudio_OpenTrack(const char* filename)
 
 static void cdAudio_TrackFinished(void* user_data)
 {
-	const char* filename = PlayList_NextSong();
+	const char* filename;
+
+	// HACK: bail out when a song switch has taken place
+	if (user_data != PlayList_CurrentSong())
+	{
+		return;
+	}
+
+	filename = PlayList_NextSong();
 	
 	// This pointer is now officially invalidated; so set it to NULL
 	cdStream = NULL;
