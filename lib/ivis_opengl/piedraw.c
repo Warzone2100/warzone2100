@@ -937,30 +937,6 @@ void pie_DrawImage(PIEIMAGE *image, PIERECT *dest)
 }
 
 /***************************************************************************
- * pie_DrawRect
- *
- * universal rectangle function for hardware
- *
- * Assumes render mode set up externally, draws filled rectangle
- *
- ***************************************************************************/
-
-void pie_DrawRect(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, PIELIGHT colour)
-{
-	polyCount++;
-
-	pie_SetAlphaTest(FALSE);
-
-	glColor4ubv(colour.vector);
-	glBegin(GL_TRIANGLE_STRIP);
-		glVertex2i(x0, y0);
-		glVertex2i(x1, y0);
-		glVertex2i(x0, y1);
-		glVertex2i(x1, y1);
-	glEnd();
-}
-
-/***************************************************************************
  *
  *
  *

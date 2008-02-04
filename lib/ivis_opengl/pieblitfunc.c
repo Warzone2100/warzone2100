@@ -63,6 +63,7 @@ static UDWORD radarTexture;
  *	Source
  */
 /***************************************************************************/
+
 void pie_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
 {
 	pie_SetRendMode(REND_FLAT);
@@ -75,6 +76,47 @@ void pie_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
 	glVertex2f(x1, y1);
 	glEnd();
 }
+
+/**
+ *	Assumes render mode set up externally, draws filled rectangle.
+ */
+static void pie_DrawRect(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, PIELIGHT colour)
+{
+	if (x0 > psRendSurface->clip.right || x1 < psRendSurface->clip.left
+	    || y0 > psRendSurface->clip.bottom || y1 < psRendSurface->clip.top)
+	{
+		return;
+	}
+
+	if (x0 < psRendSurface->clip.left)
+	{
+		x0 = psRendSurface->clip.left;
+	}
+	if (x1 > psRendSurface->clip.right)
+	{
+		x1 = psRendSurface->clip.right;
+	}
+	if (y0 < psRendSurface->clip.top)
+	{
+		y0 = psRendSurface->clip.top;
+	}
+	if (y1 > psRendSurface->clip.bottom)
+	{
+		y1 = psRendSurface->clip.bottom;
+	}
+
+	pie_SetAlphaTest(FALSE);
+
+	glColor4ubv(colour.vector);
+	glBegin(GL_TRIANGLE_STRIP);
+		glVertex2i(x0, y0);
+		glVertex2i(x1, y0);
+		glVertex2i(x0, y1);
+		glVertex2i(x1, y1);
+	glEnd();
+}
+
+
 /***************************************************************************/
 
 void pie_Box(int x0,int y0, int x1, int y1, PIELIGHT colour)
@@ -114,25 +156,9 @@ void pie_BoxFill(int x0,int y0, int x1, int y1, PIELIGHT colour)
 {
 	pie_SetRendMode(REND_FLAT);
 	pie_SetTexturePage(-1);
-
-	if (x0>psRendSurface->clip.right || x1<psRendSurface->clip.left ||
-		y0>psRendSurface->clip.bottom || y1<psRendSurface->clip.top)
-	{
-		return;
-	}
-
-	if (x0<psRendSurface->clip.left)
-		x0 = psRendSurface->clip.left;
-	if (x1>psRendSurface->clip.right)
-		x1 = psRendSurface->clip.right;
-	if (y0<psRendSurface->clip.top)
-		y0 = psRendSurface->clip.top;
-	if (y1>psRendSurface->clip.bottom)
-		y1 = psRendSurface->clip.bottom;
-
 	pie_DrawRect(x0, y0, x1, y1, colour);
-
 }
+
 /***************************************************************************/
 
 void pie_TransBoxFill(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1)
@@ -147,23 +173,9 @@ void pie_TransBoxFill(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1)
 }
 
 /***************************************************************************/
+
 void pie_UniTransBoxFill(SDWORD x0,SDWORD y0, SDWORD x1, SDWORD y1, PIELIGHT light)
 {
-	if (x0>psRendSurface->clip.right || x1<psRendSurface->clip.left ||
-		y0>psRendSurface->clip.bottom || y1<psRendSurface->clip.top)
-	{
-		return;
-	}
-
-	if (x0<psRendSurface->clip.left)
-		x0 = psRendSurface->clip.left;
-	if (x1>psRendSurface->clip.right)
-		x1 = psRendSurface->clip.right;
-	if (y0<psRendSurface->clip.top)
-		y0 = psRendSurface->clip.top;
-	if (y1>psRendSurface->clip.bottom)
-		y1 = psRendSurface->clip.bottom;
-
 	pie_SetTexturePage(-1);
 	pie_SetRendMode(REND_ALPHA_FLAT);
 	pie_DrawRect(x0, y0, x1, y1, light);

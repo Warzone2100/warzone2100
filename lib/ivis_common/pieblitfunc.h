@@ -67,8 +67,6 @@ extern void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, in
 extern void pie_TransBoxFill(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1);
 extern void pie_UniTransBoxFill(SDWORD x0,SDWORD y0, SDWORD x1, SDWORD y1, PIELIGHT colour);
 
-extern void pie_DrawRect(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, PIELIGHT colour);
-
 extern BOOL pie_InitRadar(void);
 extern BOOL pie_ShutdownRadar(void);
 extern void pie_DownLoadRadar(UDWORD *buffer);
