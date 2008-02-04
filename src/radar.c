@@ -219,22 +219,6 @@ void CalcRadarPosition(UDWORD mX,UDWORD mY,UDWORD *PosX,UDWORD *PosY)
 	*PosY = (UDWORD)sPosY;
 }
 
-//given a world pos, return a radar pos..
-void worldPosToRadarPos(UDWORD wX,UDWORD wY,SDWORD *rX, SDWORD *rY)
-{
-	SDWORD x,y;
-	UWORD	boxSizeH,boxSizeV;
-
-	CalcRadarPixelSize(&boxSizeH,&boxSizeV);
-	CalcRadarScroll(boxSizeH,boxSizeV);
-
-	x= ((wX-RadarScrollX-RadarMapOriginX) *boxSizeH)+RadarOffsetX;
-	y= ((wY-RadarScrollY-RadarMapOriginY) *boxSizeV)+RadarOffsetY;
-
-	*rX = x;
-	*rY = y;
-}
-
 
 // Calculate the radar pixel sizes.
 //
