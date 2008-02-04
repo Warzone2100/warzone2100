@@ -53,9 +53,6 @@
 #define pie_FILLBLUE	128
 #define pie_FILLTRANS	128
 
-#define RADARX 128
-#define RADARY 128
-
 static UDWORD radarTexture;
 
 /***************************************************************************/
@@ -304,10 +301,10 @@ BOOL pie_ShutdownRadar(void)
 	return TRUE;
 }
 
-void pie_DownLoadRadar(UDWORD *buffer)
+void pie_DownLoadRadar(UDWORD *buffer, int width, int height)
 {
 	pie_SetTexturePage(radarTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, wz_texture_compression, RADARX, RADARY, 0,
+	glTexImage2D(GL_TEXTURE_2D, 0, wz_texture_compression, width, height, 0,
 		     GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -316,7 +313,7 @@ void pie_DownLoadRadar(UDWORD *buffer)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 }
 
-void pie_RenderRadar( int x, int y )
+void pie_RenderRadar(int x, int y, int width, int height)
 {
 	PIEIMAGE pieImage;
 	PIERECT dest;
@@ -330,8 +327,8 @@ void pie_RenderRadar( int x, int y )
 	pieImage.th = 256;
 	dest.x = x;
 	dest.y = y;
-	dest.w = RADARX;
-	dest.h = RADARY;
+	dest.w = width;
+	dest.h = height;
 	pie_DrawImage(&pieImage, &dest);
 }
 

@@ -346,14 +346,14 @@ void drawRadar(void)
 
 	if(frameSkip<=0)
 	{
-		pie_DownLoadRadar( radarBuffer );
+		pie_DownLoadRadar(radarBuffer, RADWIDTH, RADHEIGHT);
 		frameSkip=RADAR_FRAME_SKIP;
 	}
 	frameSkip--;
 
 	iV_TransBoxFill( RADTLX,RADTLY, RADTLX + RADWIDTH, RADTLY + RADHEIGHT);
 
-	pie_RenderRadar( RADTLX, RADTLY );
+	pie_RenderRadar(RADTLX, RADTLY, RADWIDTH, RADHEIGHT);
 	DrawRadarExtras(boxSizeH,boxSizeV);
 	UpdateRadar(boxSizeH,boxSizeV);
 }
