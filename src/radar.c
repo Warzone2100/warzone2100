@@ -110,7 +110,6 @@ static void ClearRadar(UDWORD *screen);
 static void DrawRadarTiles(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSizeV);
 static void DrawRadarObjects(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSizeV);
 static void DrawRadarExtras(UWORD boxSizeH,UWORD boxSizeV);
-static void UpdateRadar(UWORD boxSizeH,UWORD boxSizeV);
 
 
 void radarInitVars(void)
@@ -338,13 +337,8 @@ void drawRadar(void)
 
 	pie_RenderRadar(RADTLX, RADTLY, RADWIDTH, RADHEIGHT);
 	DrawRadarExtras(boxSizeH,boxSizeV);
-	UpdateRadar(boxSizeH,boxSizeV);
 }
 
-static void UpdateRadar(UWORD boxSizeH,UWORD boxSizeV)
-{
-	// nothing now
-}
 
 // Clear the radar buffer.
 //
