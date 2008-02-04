@@ -337,15 +337,14 @@ void drawRadar(void)
 	CalcRadarPixelSize(&boxSizeH,&boxSizeV);
 	CalcRadarScroll(boxSizeH,boxSizeV);
 
-	if (RadVisWidth != RadarWidth || RadVisHeight != RadarHeight)
-	{
-		ClearRadar(radarBuffer);
-	}
-	DrawRadarTiles(radarBuffer,RADWIDTH,boxSizeH,boxSizeV);
-	DrawRadarObjects(radarBuffer,RADWIDTH,boxSizeH,boxSizeV);
-
 	if(frameSkip<=0)
 	{
+		if (RadVisWidth != RadarWidth || RadVisHeight != RadarHeight)
+		{
+			ClearRadar(radarBuffer);
+		}
+		DrawRadarTiles(radarBuffer, RADWIDTH, boxSizeH, boxSizeV);
+		DrawRadarObjects(radarBuffer, RADWIDTH, boxSizeH, boxSizeV);
 		pie_DownLoadRadar(radarBuffer, RADWIDTH, RADHEIGHT);
 		frameSkip=RADAR_FRAME_SKIP;
 	}
