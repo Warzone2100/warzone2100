@@ -46,8 +46,6 @@
 
 #define HIT_NOTIFICATION	(GAME_TICKS_PER_SEC*2)
 
-//#define CHECKBUFFER		// Do assertions for buffer overun\underun
-
 #define RADAR_DRAW_VIEW_BOX		// If defined then draw a box to show the viewing area.
 #define RADAR_TRIANGLE_SIZE		8
 #define RADAR_TRIANGLE_HEIGHT	RADAR_TRIANGLE_SIZE
@@ -108,7 +106,7 @@ static SDWORD RadarMapHeight;
 
 static void CalcRadarPixelSize(UWORD *SizeH,UWORD *SizeV);
 static void CalcRadarScroll(UWORD boxSizeH,UWORD boxSizeV);
-static void ClearRadar(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSizeV);
+static void ClearRadar(UDWORD *screen);
 static void DrawRadarTiles(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSizeV);
 static void DrawRadarObjects(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSizeV);
 static void DrawRadarExtras(UWORD boxSizeH,UWORD boxSizeV);
@@ -341,7 +339,7 @@ void drawRadar(void)
 
 	if (RadVisWidth != RadarWidth || RadVisHeight != RadarHeight)
 	{
-		ClearRadar(radarBuffer, RADWIDTH, boxSizeH, boxSizeV);
+		ClearRadar(radarBuffer);
 	}
 	DrawRadarTiles(radarBuffer,RADWIDTH,boxSizeH,boxSizeV);
 	DrawRadarObjects(radarBuffer,RADWIDTH,boxSizeH,boxSizeV);
@@ -367,23 +365,17 @@ static void UpdateRadar(UWORD boxSizeH,UWORD boxSizeV)
 
 // Clear the radar buffer.
 //
-static void ClearRadar(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD boxSizeV)
+static void ClearRadar(UDWORD *screen)
 {
-	SDWORD i,j;
-	UDWORD *Scr, *WScr;
-	SDWORD RadWidth,RadHeight;
+	SDWORD i, j;
+	UDWORD *pScr = screen;
 
-	RadWidth = RadarWidth;
-	RadHeight = RadarHeight;
-
-	Scr = screen;
-	for(i=0; i<RadWidth; i++) {
-		WScr = Scr;
-		for(j=0; j<RadHeight; j++) {
-			*WScr = WZCOL_RADAR_BACKGROUND.argb;
-			WScr++;
+	for (i = 0; i < RadarWidth; i++)
+	{
+		for (j = 0; j < RadarHeight; j++)
+		{
+			*pScr++ = WZCOL_RADAR_BACKGROUND.argb;
 		}
-		Scr += Modulus;
 	}
 }
 
@@ -469,10 +461,6 @@ static void DrawRadarTiles(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD bo
 
 			for (j=0; j<VisWidth; j+=SizeV)
 			{
-#ifdef CHECKBUFFER
-				ASSERT( ((UDWORD)WScr) >= radarBuffer , "WScr Onderflow" );
-				ASSERT( ((UDWORD)WScr) < ((UDWORD)radarBuffer)+RADWIDTH*RADHEIGHT , "WScr Overrun" );
-#endif
 				if ( TEST_TILE_VISIBLE(selectedPlayer,WTile) || godMode)
 				{
 					*WScr = appliedRadarColour(radarDrawMode, WTile).argb;
@@ -513,10 +501,6 @@ static void DrawRadarTiles(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD bo
 
    						for(d=0; d<SizeH; d++)
    						{
-#ifdef CHECKBUFFER
-							ASSERT( ((UDWORD)WPtr) >= (UDWORD)radarBuffer , "WPtr Onderflow" );
-							ASSERT( ((UDWORD)WPtr) < ((UDWORD)radarBuffer)+RADWIDTH*RADHEIGHT , "WPtr Overrun" );
-#endif
 							*WPtr = appliedRadarColour(radarDrawMode, WTile).argb;
    							WPtr++;
    						}
@@ -534,10 +518,6 @@ static void DrawRadarTiles(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD bo
 
    						for(d=0; d<SizeH; d++)
    						{
-#ifdef CHECKBUFFER
-							ASSERT( ((UDWORD)WPtr) >= (UDWORD)radarBuffer , "WPtr Onderflow" );
-							ASSERT( ((UDWORD)WPtr) < ((UDWORD)radarBuffer)+RADWIDTH*RADHEIGHT , "WPtr Overrun" );
-#endif
    							*WPtr = WZCOL_RADAR_BACKGROUND.argb;
    							WPtr++;
    						}
@@ -639,10 +619,6 @@ static void DrawRadarObjects(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD 
    							WPtr = Ptr;
    							for(d=0; d<SizeH; d++)
    							{
-#ifdef CHECKBUFFER
-								ASSERT( ((UDWORD)WPtr) >= (UDWORD)radarBuffer , "WPtr Onderflow" );
-								ASSERT( ((UDWORD)WPtr) < ((UDWORD)radarBuffer)+RADWIDTH*RADHEIGHT , "WPtr Overrun" );
-#endif
 								*WPtr = col.argb;
    								WPtr++;
    							}
@@ -742,10 +718,6 @@ static void DrawRadarObjects(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD 
    							WPtr = Ptr;
    							for(d=0; d<SSizeH; d++)
    							{
-#ifdef CHECKBUFFER
-								ASSERT( ((UDWORD)WPtr) >= (UDWORD)radarBuffer , "WPtr Onderflow" );
-								ASSERT( ((UDWORD)WPtr) < ((UDWORD)radarBuffer)+RADWIDTH*RADHEIGHT , "WPtr Overrun" );
-#endif
    								*WPtr = col.argb;
    								WPtr++;
    							}
