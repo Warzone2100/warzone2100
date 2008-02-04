@@ -17,7 +17,7 @@ event startup(CALL_GAMEINIT)
 	Rdiff = Rstart - Rend;
 	Gdiff = Gstart - Gend;
 	Bdiff = Bstart - Bend;
-	playCDAudio(1);
+	playIngameCDAudio();
 	setEventTrigger(startup, inactive);
 }
 

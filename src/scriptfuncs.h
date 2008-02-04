@@ -260,7 +260,7 @@ extern BOOL scrGameOver(void);
 extern BOOL scrPlayBackgroundAudio(void);
 
 // cd audio funcs
-extern BOOL scrPlayCDAudio(void);
+extern BOOL scrPlayIngameCDAudio(void);
 extern BOOL scrStopCDAudio(void);
 extern BOOL scrPauseCDAudio(void);
 extern BOOL scrResumeCDAudio(void);

@@ -25,10 +25,9 @@
 #include "lib/framework/wzglobal.h"
 
 #include "playlist.h"
+#include "cdaudio.h"
 
 #define BUFFER_SIZE 2048
-
-#define NB_TRACKS 3
 
 typedef struct {
 	char**		songs;
@@ -40,13 +39,13 @@ typedef struct {
 static unsigned int current_track = 0;
 static unsigned int current_song = 0;
 
-static WZ_TRACK playlist[NB_TRACKS];
+static WZ_TRACK playlist[playlist_last];
 
 void PlayList_Init()
 {
 	unsigned int i;
 
-	for (i = 0; i < NB_TRACKS; ++i)
+	for (i = 0; i < playlist_last; ++i)
 	{
 		playlist[i].songs = NULL;
 		playlist[i].list_size = 0;
@@ -58,7 +57,7 @@ void PlayList_Quit()
 {
 	unsigned int i, j;
 
-	for(i = 0; i < NB_TRACKS; ++i)
+	for(i = 0; i < playlist_last; ++i)
 	{
 		for (j = 0; j < playlist[i].list_size; ++j )
 		{
@@ -252,7 +251,7 @@ static void PlayList_Shuffle()
 
 void PlayList_SetTrack(unsigned int t)
 {
-	if (t < NB_TRACKS)
+	if (t < playlist_last)
 	{
 		current_track = t;
 	}

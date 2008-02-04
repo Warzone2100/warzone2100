@@ -95,7 +95,7 @@ event startup(CALL_GAMEINIT)
 	removeReticuleButton(RESEARCH);
 	removeReticuleButton(COMMAND);
 //start music
-	playCDAudio(1);
+	playIngameCDAudio();
 
 //set structure limits
 	setStructureLimits (powerGen, numPow, player0);

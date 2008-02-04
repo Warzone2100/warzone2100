@@ -637,8 +637,9 @@ BOOL frontendInitialise(const char *ResourceFile)
 	gameTimeInit();
 
 	// hit me with some funky beats....
-	if (war_GetPlayAudioCDs()) {
-		cdAudio_PlayTrack(2);	// track 2 = f.e. music,
+	if (war_GetPlayAudioCDs())
+	{
+		cdAudio_PlayTrack(playlist_frontend); // frontend music
 	}
 
 	return TRUE;

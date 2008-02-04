@@ -458,8 +458,8 @@ FUNC_SYMBOL asFuncTable[] =
 		2, { (INTERP_TYPE)ST_TEXTSTRING, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "playCDAudio",		scrPlayCDAudio,			VAL_VOID,
-		1, { VAL_INT },
+	{ "playIngameCDAudio",		scrPlayIngameCDAudio,		VAL_VOID,
+		0, { VAL_VOID },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "stopCDAudio",		scrStopCDAudio,			VAL_VOID,

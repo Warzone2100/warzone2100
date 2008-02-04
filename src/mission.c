@@ -3263,7 +3263,7 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));
 
 	// add some funky beats
-	cdAudio_PlayTrack(2);	// 2= frontend music.
+	cdAudio_PlayTrack(playlist_frontend); // frontend music.
 
 	pie_LoadBackDrop(SCREEN_MISSIONEND);
 

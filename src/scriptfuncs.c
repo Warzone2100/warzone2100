@@ -3396,21 +3396,11 @@ BOOL scrPlayBackgroundAudio(void)
 
 }
 
-// -----------------------------------------------------------------------------------------
-//defines the CD audio to play
-BOOL scrPlayCDAudio(void)
+BOOL scrPlayIngameCDAudio(void)
 {
-	SDWORD	iTrack;
-
-	if (!stackPopParams(1, VAL_INT, &iTrack))
+	if (war_GetPlayAudioCDs())
 	{
-		return FALSE;
-	}
-
-
-
-	if (war_GetPlayAudioCDs()) {
-		cdAudio_PlayTrack( iTrack );
+		cdAudio_PlayTrack(playlist_ingame);
 	}
 
 	return TRUE;

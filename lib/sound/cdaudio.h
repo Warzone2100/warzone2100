@@ -26,6 +26,16 @@ extern "C"
 {
 #endif
 
+enum
+{
+	playlist_custom,
+	playlist_ingame,
+	playlist_frontend,
+
+	// Must be the last
+	playlist_last,
+};
+
 BOOL cdAudio_Open(const char* user_musicdir);
 void cdAudio_Close(void);
 BOOL cdAudio_PlayTrack( SDWORD iTrack );
