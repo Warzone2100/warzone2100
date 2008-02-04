@@ -788,14 +788,6 @@ static void RotateVector2D(Vector3i *Vector, Vector3i *TVector, Vector3i *Pos, i
 }
 
 
-// Returns the world position which corresponds to the center of the radar view rectangle.
-//
-void GetRadarPlayerPos(UDWORD *XPos,UDWORD *YPos)
-{
-	*XPos = player.p.x + (visibleTiles.x/2)*TILE_UNITS;
-	*YPos = player.p.z + (visibleTiles.y/2)*TILE_UNITS;
-}
-
 static SDWORD getDistanceAdjust( void )
 {
 UDWORD	origDistance;

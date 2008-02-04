@@ -35,7 +35,6 @@ extern void worldPosToRadarPos(UDWORD wX,UDWORD wY,SDWORD *rX, SDWORD *rY);
 extern void SetRadarZoom(UWORD ZoomLevel);
 extern UDWORD GetRadarZoom(void);
 extern BOOL CoordInRadar(int x,int y);
-extern void GetRadarPlayerPos(UDWORD *XPos,UDWORD *YPos);
 
 //different mini-map draw modes
 typedef enum _radar_draw_mode
