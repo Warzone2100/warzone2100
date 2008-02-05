@@ -121,7 +121,7 @@ void pie_ScreenFlip(int clearMode) {
 			break;
 		default:
 			glDepthMask(GL_TRUE);
-			clearFlags = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
+			clearFlags = GL_DEPTH_BUFFER_BIT;
 			break;
 	}
 	if(clearMode&CLEAR_SHADOW_MASK)
