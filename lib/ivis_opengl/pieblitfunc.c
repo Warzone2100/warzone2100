@@ -329,6 +329,11 @@ void pie_RenderRadar(int x, int y, int width, int height)
 	dest.y = y;
 	dest.w = width;
 	dest.h = height;
+	
+	// enable alpha
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	pie_DrawImage(&pieImage, &dest);
 }
 
