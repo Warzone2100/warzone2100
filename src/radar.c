@@ -28,6 +28,7 @@
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/piefunc.h"
 #include "lib/gamelib/gtime.h"
+#include "advvis.h"
 #include "objects.h"
 #include "display3d.h"
 #include "map.h"
@@ -438,7 +439,7 @@ static void DrawRadarTiles(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD bo
 
 			for (j=0; j<VisWidth; j+=SizeV)
 			{
-				if ( TEST_TILE_VISIBLE(selectedPlayer,WTile) || godMode)
+				if (!getRevealStatus() || TEST_TILE_VISIBLE(selectedPlayer, WTile) || godMode)
 				{
 					*WScr = appliedRadarColour(radarDrawMode, WTile).argb;
 				} else {
@@ -461,7 +462,7 @@ static void DrawRadarTiles(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD bo
 			for (j=0; j<VisWidth; j+=SizeH)
 			{
 				/* Only draw if discovered or in GOD mode */
-				if ( TEST_TILE_VISIBLE(selectedPlayer,WTile) || godMode)
+				if (!getRevealStatus() || TEST_TILE_VISIBLE(selectedPlayer, WTile) || godMode)
 				{
 					PIELIGHT col = tileColours[TileNumber_tile(WTile->texture)];
 					UDWORD Val, c, d;
