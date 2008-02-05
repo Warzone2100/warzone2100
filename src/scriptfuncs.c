@@ -3923,12 +3923,15 @@ BOOL scrSetFogColour(void)
 		return FALSE;
 	}
 
-	scrFogColour.byte.r = red;
-	scrFogColour.byte.g = green;
-	scrFogColour.byte.b = blue;
-	scrFogColour.byte.a = 255;
+	if (war_GetFog())
+	{
+		scrFogColour.byte.r = red;
+		scrFogColour.byte.g = green;
+		scrFogColour.byte.b = blue;
+		scrFogColour.byte.a = 255;
 
-	pie_SetFogColour(scrFogColour);
+		pie_SetFogColour(scrFogColour);
+	}
 
 	return TRUE;
 }
