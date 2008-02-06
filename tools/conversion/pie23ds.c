@@ -211,24 +211,24 @@ static void dump_to_3ds(Lib3dsFile *f, FILE *fp)
 					exit(1);
 				}
 			}
-			for (k = 0; k < faceList[j].vertices; k++)
-			{
-				num = fscanf(fp, "%d %d", &faceList[j].texCoord[k][0], &faceList[j].texCoord[k][1]);
-				if (num != 2)
-				{
-					fprintf(stderr, "Bad texture coordinate entry frame %d, number %d\n", i, j);
-					exit(1);
-				}
-			}
 			if (flags & iV_IMD_TEXANIM)
 			{
 				// read in and discard animation values for now
 				int frames, rate, width, height;
 
 				num = fscanf(fp, "%d %d %d %d", &frames, &rate, &width, &height);
-				if (num != 2)
+				if (num != 4)
 				{
 					fprintf(stderr, "Bad texture animation entry frame %d, number %d\n", i, j);
+					exit(1);
+				}
+			}
+			for (k = 0; k < faceList[j].vertices; k++)
+			{
+				num = fscanf(fp, "%d %d", &faceList[j].texCoord[k][0], &faceList[j].texCoord[k][1]);
+				if (num != 2)
+				{
+					fprintf(stderr, "Bad texture coordinate entry frame %d, number %d\n", i, j);
 					exit(1);
 				}
 			}
