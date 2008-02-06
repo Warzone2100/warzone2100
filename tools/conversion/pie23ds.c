@@ -167,7 +167,6 @@ static void dump_to_3ds(Lib3dsFile *f, FILE *fp)
 			exit(1);			
 		}
 		faces3DS = faces;	// for starters
-printf("1: faces=%d\n", faces);
 		faceList = malloc(sizeof(WZ_FACE) * faces);
 		points3DS = 0;
 		for (j = 0; j < faces; ++j)
@@ -198,7 +197,6 @@ printf("1: faces=%d\n", faces);
 			if (faceList[j].vertices > 3)
 			{
 				// since they are triangle fans already, we get to do easy tessellation
-printf("2: faces += %d\n", (faceList[j].vertices - 3) * 3);
 				faces3DS += (faceList[j].vertices - 3);
 			}
 			points3DS += faceList[j].vertices;
