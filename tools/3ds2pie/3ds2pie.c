@@ -74,7 +74,7 @@ void dump_pie_file(Lib3dsFile *f, FILE *o, const char *page, bool swapYZ, bool i
 			continue;
 		}
 
-		fprintf(o, "LEVEL %d\n", meshIdx); // I think this is correct? not sure how 3ds does animations
+		fprintf(o, "LEVEL %d\n", meshIdx + 1);
 		fprintf(o, "POINTS %d\n", m->points);
 		for (i = 0; i < m->points; i++)
 		{
