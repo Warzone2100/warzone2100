@@ -5725,7 +5725,7 @@ static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const
 	psDroid->sMove.speed        = PHYSFS_swapSLE32(psSaveDroid->sMove.speed);
 	psDroid->sMove.moveDir      = PHYSFS_swapSLE32(psSaveDroid->sMove.moveDir);
 	psDroid->sMove.fz           = PHYSFS_swapSLE32(psSaveDroid->sMove.fz);
-	assert(worldOnMap(psDroid->sMove.fx, psDroid->sMove.fy));
+	ASSERT(droidOnMap(psDroid), "loaded droid standing or moving off the map");
 
 	// Little endian SWORDs
 	psDroid->sMove.boundX       = PHYSFS_swapSLE16(psSaveDroid->sMove.boundX);

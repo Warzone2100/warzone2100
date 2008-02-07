@@ -460,7 +460,7 @@ void	removeDroidBase(DROID *psDel)
 	{
 		if( !((psDel->player != selectedPlayer) && (psDel->order == DORDER_RECYCLE)))
 		{
-			ASSERT(worldOnMap(psDel->sMove.fx, psDel->sMove.fy), "Asking other players to destroy droid driving off the map");
+			ASSERT(droidOnMap(psDel), "Asking other players to destroy droid driving off the map");
 			SendDestroyDroid(psDel);
 		}
 	}
@@ -5766,4 +5766,15 @@ BOOL cyborgDroid(DROID *psDroid)
     }
 
     return FALSE;
+}
+
+BOOL droidOnMap(DROID *psDroid)
+{
+	if (psDroid->died == NOT_CURRENT_LIST || psDroid->droidType == DROID_TRANSPORTER)
+	{
+		// Off world or on a transport or is a transport - ignore
+		return TRUE;
+	}
+	return (worldOnMap(psDroid->sMove.fx, psDroid->sMove.fy)
+	        && worldOnMap(psDroid->pos.x, psDroid->pos.y));
 }

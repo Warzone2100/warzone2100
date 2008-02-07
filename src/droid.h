@@ -403,6 +403,9 @@ extern BOOL cyborgDroid(DROID *psDroid);
 // check for illegal references to droid we want to release
 BOOL droidCheckReferences(DROID *psVictimDroid);
 
+/** Check if droid is in a legal world position and is not on its way to drive off the map. */
+BOOL droidOnMap(DROID *psDroid);
+
 /*
  * Component stat helper functions
  */
@@ -520,8 +523,7 @@ do { \
 	assert(droid->numWeaps <= DROID_MAXWEAPS); \
 	assert(droid->listSize <= ORDER_LIST_MAX); \
 	assert(droid->player < MAX_PLAYERS); \
-	if (runningMultiplayer()) \
-	assert(worldOnMap(droid->sMove.fx, droid->sMove.fy)); \
+	assert(droidOnMap(droid)); \
 \
 	for (i = 0; i < DROID_MAXWEAPS; ++i) \
 		assert(droid->turretRotation[i] <= 360); \

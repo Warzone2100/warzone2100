@@ -326,7 +326,7 @@ BOOL recvDroidDisEmbark()
 		psDroid->pos = pos;
 	}
 
-	if (!worldOnMap(psDroid->pos.x, psDroid->pos.y))
+	if (!droidOnMap(psDroid))
 	{
 		debug(LOG_ERROR, "recvDroidDisEmbark: droid not disembarked on map");
 		return FALSE;
