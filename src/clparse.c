@@ -26,10 +26,11 @@
 
 #include <string.h>
 #include "lib/framework/frame.h"
-
+#include "lib/widget/widget.h"
 #include <popt.h>
 
 #include "main.h"
+#include "frontend.h"
 
 #include "lib/ivis_common/pieclip.h"
 #include "warzoneconfig.h"
@@ -64,6 +65,7 @@ typedef enum
 	CLI_DEBUG,
 	CLI_DEBUGFILE,
 	CLI_FULLSCREEN,
+	CLI_GAME,
 	CLI_HELP,
 	CLI_MOD_GLOB,
 	CLI_MOD_CA,
@@ -89,6 +91,7 @@ static const struct poptOption* getOptionsTable()
 		{ "debug",      '\0', POPT_ARG_STRING, NULL, CLI_DEBUG,      N_("Show debug for given level"),        N_("debug level") },
 		{ "debugfile",  '\0', POPT_ARG_STRING, NULL, CLI_DEBUGFILE,  N_("Log debug output to file"),          N_("file") },
 		{ "fullscreen", '\0', POPT_ARG_NONE,   NULL, CLI_FULLSCREEN, N_("Play in fullscreen mode"),           NULL },
+		{ "game",       '\0', POPT_ARG_STRING, NULL, CLI_GAME,       N_("Load a specific game"),              N_("game-name") },
 		{ "help",       'h',  POPT_ARG_NONE,   NULL, CLI_HELP,       N_("Show this help message and exit"),   NULL },
 		{ "mod",        '\0', POPT_ARG_STRING, NULL, CLI_MOD_GLOB,   N_("Enable a global mod"),               N_("mod") },
 		{ "mod_ca",     '\0', POPT_ARG_STRING, NULL, CLI_MOD_CA,     N_("Enable a campaign only mod"),        N_("mod") },
@@ -279,6 +282,19 @@ bool ParseCommandLine(int argc, const char** argv)
 				war_setFullscreen(TRUE);
 				break;
 
+			case CLI_GAME:
+				// retrieve the game name
+				token = poptGetOptArg(poptCon);
+				if (token == NULL)
+				{
+					debug(LOG_ERROR, "No game name");
+					poptFreeContext(poptCon);
+					abort();
+					return false;
+				}
+				strlcpy(aLevelName, token, sizeof(aLevelName));
+				SetGameMode(GS_NORMAL);
+				break;
 			case CLI_MOD_GLOB:
 			{
 				unsigned int i;
