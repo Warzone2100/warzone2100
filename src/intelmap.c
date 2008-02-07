@@ -703,15 +703,16 @@ void intProcessIntelMap(UDWORD id)
 	}
 }
 
-
+/**
+ * Draws the text for the intelligence display window.
+ */
 static BOOL intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
 				      UDWORD x0, UDWORD y0,
 				      UDWORD width, UDWORD height,
 				      BOOL render,
 				      size_t *cur_seq, size_t *cur_seqpage)
 {
-	UDWORD x1, y1, i, linePitch, cur_y;
-	UDWORD ty;
+	UDWORD i, cur_y;
 	UDWORD sequence;
 
 	if (!psViewReplay)
@@ -719,20 +720,11 @@ static BOOL intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
 		return TRUE;	/* nothing to do */
 	}
 
-	x1 = x0 + width;
-	y1 = y0 + height;
-	ty = y0;
-
 	iV_SetFont(font_regular);
-	/* Get the travel to the next line */
-	linePitch = iV_GetTextLineSize();
-	/* Fix for spacing.... */
-	linePitch += 6;
-	ty += 3;
 
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
-	cur_y = 0;
+	cur_y = y0 + iV_GetTextLineSize()/2 + 2*TEXT_YINDENT;
 
 	/* add each message */
 	for (sequence = *cur_seq, i = *cur_seqpage; sequence < psViewReplay->numSeq; sequence++)
@@ -742,11 +734,14 @@ static BOOL intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
 		{
 			if (render)
 			{
-				iV_DrawText(psSeqDisplay->ppTextMsg[i],
+				cur_y = iV_DrawFormattedText(psSeqDisplay->ppTextMsg[i],
 					    x0 + TEXT_XINDENT,
-					    (ty + TEXT_YINDENT*3) + cur_y);
+					    cur_y, width, FALSE);
 			}
-			cur_y += linePitch;
+			else
+			{
+				cur_y += iV_GetTextLineSize();
+			}
 			if (cur_y > height)
 			{
 				/* run out of room - need to make new tab */
@@ -761,6 +756,9 @@ static BOOL intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
 	return TRUE;		/* done */
 }
 
+/**
+ * Draw the text window for the intelligence display
+ */
 static void intDisplaySeqTextView(WIDGET *psWidget,
 				  UDWORD xOffset, UDWORD yOffset,
 				  PIELIGHT *pColours)
@@ -790,7 +788,7 @@ static void intDisplaySeqTextView(WIDGET *psWidget,
 	}
 
 	intDisplaySeqTextViewPage(psViewReplay, x0, y0,
-				  Form->width, Form->height,
+				  Form->width-40, Form->height,
 				  TRUE, &cur_seq, &cur_seqpage);
 }
 
@@ -1336,7 +1334,11 @@ void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIG
 }
 #endif
 
-/* displays the TEXT view for the current message */
+/**
+ * Displays the TEXT view for the current message.
+ * If this function breaks, please merge it with intDisplaySeqTextViewPage
+ * which presumably does almost the same.
+ */
 void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	W_TABFORM		*Form = (W_TABFORM*)psWidget;
