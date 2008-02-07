@@ -1350,10 +1350,10 @@ void	camToggleStatus( void )
 	{
 		/* Otherwise, switch it off */
 		setWarCamActive(FALSE);
-//		if(getDrivingStatus())
-//		{
-//			StopDriverMode();
-//		}
+		if(getDrivingStatus())
+		{
+			StopDriverMode();
+		}
 	}
 }
 

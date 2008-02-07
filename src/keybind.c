@@ -1473,8 +1473,8 @@ void	kf_ToggleDrivingMode( void )
 			addConsoleMessage("DriverMode off", LEFT_JUSTIFY);
 		}
 		else
-		{
-			if(	(driveModeActive() == FALSE) &&	(demoGetStatus() == FALSE) && !bMultiPlayer)
+		{	// removed the MP check for this, so you can now play with in in MP games.
+			if(	(driveModeActive() == FALSE) &&	(demoGetStatus() == FALSE) ) // && !bMultiPlayer)
 			{
 				StartDriverMode( NULL );
 				addConsoleMessage("DriverMode on", LEFT_JUSTIFY);
