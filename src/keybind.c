@@ -1481,6 +1481,10 @@ void	kf_ToggleDrivingMode( void )
 			}
 		}
 	}
+	else
+	{
+		addConsoleMessage("DriverMode disabled. Must be in tracking mode. Hit space bar with a unit selected.", LEFT_JUSTIFY);
+	}
 }
 
 BOOL	bMovePause = FALSE;

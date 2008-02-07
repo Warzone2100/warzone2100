@@ -247,7 +247,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_RaiseGamma,
 	kf_LowerGamma,
 	kf_ToggleWatchWindow,
-
+	kf_ToggleDrivingMode,
 	NULL		// last function!
 };
 
@@ -450,7 +450,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_X,KEYMAP_PRESSED,kf_FinishResearch,				"Complete current research");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LSHIFT,KEY_W,KEYMAP_PRESSED,kf_ToggleWatchWindow,			"Toggle watch window");
 	keyAddMapping(KEYMAP__DEBUG,KEY_LCTRL,KEY_L,KEYMAP_PRESSED,kf_TraceObject,				"Trace a game object");
-
+	keyAddMapping(KEYMAP__DEBUG,KEY_LSHIFT,KEY_D,KEYMAP_PRESSED,kf_ToggleDrivingMode, 			"Toggle Driving Mode");
 	saveKeyMap();	// save out the default key mappings.
 
 //  ------------------------ OLD STUFF - Store here!

@@ -128,7 +128,9 @@ void driveInitVars(BOOL Restart)
 		ControlMode = CONTROLMODE_DRIVE;
 		TargetFeatures = FALSE;
 
-	} else {
+	}
+	else
+	{
 		debug( LOG_NEVER, "driveInitVars: Driving\n" );
 		DrivingAudioTrack=-1;
 		psDrivenDroid = NULL;
@@ -214,11 +216,16 @@ BOOL StartDriverMode(DROID *psOldDroid)
 
 		setDrivingStatus(TRUE);
 
-		if(DriveInterfaceEnabled) {
+		if(DriveInterfaceEnabled)
+		{
 			debug( LOG_NEVER, "Interface enabled1 ! Disabling drive control\n" );
 			DriveControlEnabled = FALSE;
-		} else {
+			DirectControl = FALSE;
+		}
+		else
+		{
 			DriveControlEnabled = TRUE;
+			DirectControl = TRUE; // we are taking over the unit.
 		}
 
 		if(psLastDriven != psDrivenDroid) {
@@ -267,9 +274,10 @@ void StopDriverMode(void)
 {
 	DROID *psDroid;
 
-	if(psDrivenDroid != NULL) {
+	if(psDrivenDroid != NULL)
+	{
 		debug( LOG_NEVER, "Drive mode canceled\n" );
-
+		addConsoleMessage("Driver mode canceled.", LEFT_JUSTIFY);
 //		audio_StopObjTrack(psDrivenDroid,ID_SOUND_SMALL_DROID_RUN);
 
 		psDrivenDroid = NULL;
@@ -285,6 +293,7 @@ void StopDriverMode(void)
 
 	setDrivingStatus(FALSE);
 	DriveControlEnabled = FALSE;
+	DirectControl = FALSE;
 }
 
 
@@ -598,6 +607,8 @@ void driveSetDroidMove(DROID *psDroid)
 void driveDisableControl(void)
 {
 	DriveControlEnabled = FALSE;
+	DirectControl = FALSE;
+	DriveInterfaceEnabled = TRUE;
 }
 
 
@@ -606,6 +617,8 @@ void driveDisableControl(void)
 void driveEnableControl(void)
 {
 	DriveControlEnabled = TRUE;
+	DirectControl = TRUE;
+	DriveInterfaceEnabled = FALSE;
 }
 
 
@@ -653,7 +666,8 @@ BOOL driveInterfaceEnabled(void)
 //
 void driveProcessAquireButton(void)
 {
-	if(mouseReleased(MOUSE_RMB) || keyPressed(KEY_S)) {
+	if(mouseReleased(MOUSE_RMB) || keyPressed(KEY_S))
+	{
 		BASE_OBJECT	*psObj;
 		psObj = targetAquireNearestObjView((BASE_OBJECT*)psDrivenDroid);
 	}
