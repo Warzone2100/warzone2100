@@ -201,7 +201,7 @@ void texLoad(const char *fileName)
 		// Load until we cannot find anymore of them
 		for (k = 0; k < MAX_TILES; k++)
 		{
-			iTexture tile;
+			iV_Image tile;
 
 			sprintf(fullPath, "%s/tile-%02d.png", partialPath, k);
 			if (PHYSFS_exists(fullPath)) // avoid dire warning

@@ -11705,7 +11705,7 @@ static BOOL getNameFromComp(UDWORD compType, char *pDest, UDWORD compIndex)
 
 
 // draws the structures onto a completed map preview sprite.
-BOOL plotStructurePreview(iTexture *backDropSprite, UBYTE scale, UDWORD offX, UDWORD offY)
+BOOL plotStructurePreview(iV_Image *backDropSprite, UBYTE scale, UDWORD offX, UDWORD offY)
 {
 	SAVE_STRUCTURE				sSave;  // close eyes now.
 	SAVE_STRUCTURE				*psSaveStructure = &sSave; // assumes save_struct is larger than all previous ones...
