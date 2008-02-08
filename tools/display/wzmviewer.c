@@ -234,7 +234,7 @@ static MODEL *readModel(const char *filename, const char *path)
 	strcpy(fullPath, path);
 	strcat(fullPath, s);
 
-	num = fscanf(fp, "MESHES %d\n", &meshes);
+	num = fscanf(fp, "MESHES %d", &meshes);
 	if (num != 1)
 	{
 		fprintf(stderr, "Bad MESHES directive in %s\n", input);
@@ -248,7 +248,7 @@ static MODEL *readModel(const char *filename, const char *path)
 		MESH *psMesh = &psModel->mesh[mesh];
 		int j;
 
-		num = fscanf(fp, "MESH %d\n", &x);
+		num = fscanf(fp, "\nMESH %d\n", &x);
 		if (num != 1 || mesh != x)
 		{
 			fprintf(stderr, "Bad MESH directive in %s, was %d should be %d.\n", input, x, mesh);
@@ -512,7 +512,7 @@ int main(int argc, char **argv)
 			}
 		}
 		glLoadIdentity();
-		glTranslatef(0.0f, 0.0f, -100.0f);;
+		glTranslatef(0.0f, -30.0f, -125.0f);;
 		glRotatef(angle, 0, 1, 0);
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 		drawModel(psModel, 0, 0);
