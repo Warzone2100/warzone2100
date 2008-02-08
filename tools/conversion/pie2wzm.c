@@ -24,6 +24,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <errno.h>
+#include <limits.h>
 
 // The WZM format is a proposed successor to the PIE format used by Warzone.
 // For an explanation of the WZM format, see http://wiki.wz2100.net/WZM_format
@@ -37,8 +38,9 @@
 static bool swapYZ = false;
 static bool invertUV = false;
 static bool reverseWinding = false;
+static bool assumeAnimation = false;
 static char *input = "";
-static char *output = "";
+static char output[PATH_MAX];
 
 typedef struct {
 	int index[MAX_POLYGON_SIZE];
@@ -54,6 +56,7 @@ typedef struct {
 static void parse_args(int argc, char **argv)
 {
 	unsigned int i = 1;
+	char *dot;
 
 	for (i = 1; argc >= 2 + i && argv[i][0] == '-'; i++)
 	{
@@ -69,17 +72,25 @@ static void parse_args(int argc, char **argv)
 		{
 			reverseWinding = true;
 		}
+		if (argv[i][1] == 'a')
+		{
+			assumeAnimation = true;
+		}
 	}
-	if (argc < 2 + i)
+	if (argc < 1 + i)
 	{
-		fprintf(stderr, "Syntax: pie2wzm [-y|-r|-t] input_filename output_filename\n");
+		fprintf(stderr, "Syntax: pie2wzm [-y|-r|-t] input_filename\n");
 		fprintf(stderr, "  -y  Swap the Y and Z axis.\n");
 		fprintf(stderr, "  -r  Reverse winding of all polygons. (DOES NOT WORK YET.)\n");
 		fprintf(stderr, "  -i  Invert the vertical texture coordinates (for 3DS MAX etc.).\n");
+		fprintf(stderr, "  -a  Do not make a guess about team colour usage. Assume animation.\n");
 		exit(1);
 	}
 	input = argv[i++];
-	output = argv[i++];
+	strncpy(output, input, PATH_MAX);
+	dot = strrchr(output, '.');
+	*dot = '\0';
+	strcat(output, ".wzm");
 }
 
 static void dump_to_wzm(FILE *ctl, FILE *fp)
@@ -242,7 +253,7 @@ static void dump_to_wzm(FILE *ctl, FILE *fp)
 				}
 			}
 		}
-		if (textureArrays == 8)	// guesswork
+		if (textureArrays == 8 && !assumeAnimation)	// guesswork
 		{
 			fprintf(ctl, "TEAMCOLOURS 1\n");
 		}
@@ -284,8 +295,15 @@ static void dump_to_wzm(FILE *ctl, FILE *fp)
 
 				for (k = 0; k < faceList[j].vertices; k++)
 				{
-					double u = (double)(faceList[j].texCoord[k][0] + faceList[j].width * z) / 256.0f;
-					double v = (double)(faceList[j].texCoord[k][1] + faceList[j].height * z) / 256.0f;
+					// This works because wrap around is only permitted if you start the animation at the
+					// left border of the texture. What a horrible hack this was.
+					int framesPerLine = 256 / faceList[j].width;
+					int frameH = z % framesPerLine;
+					int frameV = z / framesPerLine;
+					double width = faceList[j].texCoord[k][0] + faceList[j].width * frameH;
+					double height = faceList[j].texCoord[k][1] + faceList[j].height * frameV;
+					double u = width / 256.0f;
+					double v = height / 256.0f;
 
 					if (invertUV)
 					{
