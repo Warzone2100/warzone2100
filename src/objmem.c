@@ -508,17 +508,17 @@ void killStruct(STRUCTURE *psBuilding)
 		{
 			FACTORY *psFactory = (FACTORY *)psBuilding->pFunctionality;
 
+			// remove any commander from the factory
+			if (psFactory->psCommander != NULL)
+			{
+				assignFactoryCommandDroid(psBuilding, NULL);
+			}
+
 			// remove any assembly points
 			if (psFactory->psAssemblyPoint != NULL)
 			{
 				removeFlagPosition(psFactory->psAssemblyPoint);
 				psFactory->psAssemblyPoint = NULL;
-			}
-
-			// remove any commander from the factory
-			if (psFactory->psCommander != NULL)
-			{
-				assignFactoryCommandDroid(psBuilding, NULL);
 			}
 		}
 		else if (psBuilding->pStructureType->type == REF_REPAIR_FACILITY)
@@ -641,8 +641,6 @@ void removeFlagPosition(FLAG_POSITION *psDel)
 		{
 			psPrev = psCurr;
 		}
-		ASSERT( psCurr != NULL,
-			"removeFlagPosition:object not found" );
 		if (psCurr != NULL)
 		{
 			psPrev->psNext = psCurr->psNext;
