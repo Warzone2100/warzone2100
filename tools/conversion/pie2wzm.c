@@ -108,7 +108,7 @@ static void dump_to_wzm(FILE *ctl, FILE *fp)
 		fprintf(stderr, "Bad TEXTURE directive in %s\n", input);
 		exit(1);
 	}
-	fprintf(ctl, "TEXTURE 0 %s\n", s);
+	fprintf(ctl, "TEXTURE %s\n", s);
 
 	num = fscanf(fp, "LEVELS %d\n", &levels);
 	if (num != 1)
@@ -312,19 +312,47 @@ static void dump_to_wzm(FILE *ctl, FILE *fp)
 			// Generate triangles from the Warzone triangle fans (PIEs, get it?)
 			for (k = 3; k < faceList[j].vertices; k++)
 			{
-				previous = faceList[j].index[k];
 				fprintf(ctl, "\n\t%d %d %d", key, previous, faceList[j].index[k]);
+				previous = faceList[j].index[k];
 			}
 		}
 
 		// We only handle texture animation here, so leave bone heap animation out of it for now.
-		fprintf(ctl, "\nFRAMES %d", textureArrays);
-		for (j = 0; j < textureArrays; j++)
+		if (textureArrays == 1)
 		{
-			fprintf(ctl, "\n\t0 %d %d", j, faceList[j].rate);
+			// none is just as good as one
+			fprintf(ctl, "\nFRAMES 0");
+		}
+		else
+		{
+			fprintf(ctl, "\nFRAMES %d", textureArrays);
+			for (j = 0; j < textureArrays; j++)
+			{
+				fprintf(ctl, "\n\t%f %d 0 0 0 0 0 0", (float)faceList[j].rate, j);
+			}
 		}
 
-		fprintf(ctl, "\nCONNECTORS 0\n"); // TODO
+		num = fscanf(fp, "\nCONNECTORS %d", &x);
+		if (num == 1 && x > 0)
+		{
+			fprintf(ctl, "\nCONNECTORS %d", x);
+			for (j = 0; j < x; ++j)
+			{
+				int a, b, c;
+
+				num = fscanf(fp, "\n%d %d %d", &a, &b, &c);
+				if (num != 3)
+				{
+					fprintf(stderr, "Bad CONNECTORS directive entry level %d, number %d\n", level, j);
+					exit(1);
+				}
+				fprintf(ctl, "\n\t%d %d %d", a, b, c);
+			}
+		}
+		else
+		{
+			fprintf(ctl, "\nCONNECTORS 0\n");
+		}
 
 		free(faceList);
 		free(posList);
