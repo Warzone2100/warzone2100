@@ -240,8 +240,8 @@ static void dump_to_wzm(FILE *ctl, FILE *fp)
 			{
 				faceList[j].frames = 0;
 				faceList[j].rate = 0;
-				faceList[j].width = 0;
-				faceList[j].height = 0;
+				faceList[j].width = 1; // to avoid division by zero
+				faceList[j].height = 1;
 			}
 			for (k = 0; k < faceList[j].vertices; k++)
 			{

@@ -57,6 +57,7 @@ typedef struct
 	GLuint *indexArray;	// TODO: use short instead
 	GLfloat *textureArray[MAX_TEXARRAYS];
 	FRAME *frameArray;
+	int currentFrame;
 } MESH;
 
 typedef struct
@@ -340,7 +341,7 @@ static MODEL *readModel(const char *filename, const char *path)
 			}
 		}
 
-		num = fscanf(fp, "\nFRAMES %d", &x);
+		num = fscanf(fp, "\nFRAMES %d", &psMesh->frames);
 		if (num != 1)
 		{
 			fprintf(stderr, "Bad FRAMES directive in mesh %d\n", mesh);
@@ -348,7 +349,7 @@ static MODEL *readModel(const char *filename, const char *path)
 		}
 
 		// throw away for now
-		for (j = 0; j < x; j++)
+		for (j = 0; j < psMesh->frames; j++)
 		{
 			int tex, translation[3], rotation[3];
 			float spend;
@@ -424,7 +425,7 @@ static void drawModel(MODEL *psModel, int x, int y)
 	{
 		MESH *psMesh = &psModel->mesh[i];
 
-		glTexCoordPointer(2, GL_FLOAT, 0, psMesh->textureArray[0]);
+		glTexCoordPointer(2, GL_FLOAT, 0, psMesh->textureArray[psMesh->currentFrame]);
 		glVertexPointer(3, GL_FLOAT, 0, psMesh->vertexArray);
 
 		glDrawElements(GL_TRIANGLES, psMesh->faces * 3, GL_UNSIGNED_INT, psMesh->indexArray);
@@ -448,9 +449,9 @@ int main(int argc, char **argv)
 	MODEL *psModel;
 	const int width = 640, height = 480;
 	SDL_Event event;
-	bool quit = false;
 	GLfloat angle = 0.0f;
 	const float aspect = (float)width / (float)height;
+	bool quit = false;
 
 	parse_args(argc, argv);
 	psModel = readModel(input, texPath);
@@ -479,7 +480,6 @@ int main(int argc, char **argv)
 
 	resizeWindow(width, height);
 	glEnable(GL_TEXTURE_2D);
-//	glEnable(GL_CULL_FACE);
 	glDisable(GL_FOG);
 	glDisable(GL_LIGHTING);
 	glEnable(GL_BLEND);
@@ -501,6 +501,9 @@ int main(int argc, char **argv)
 	{
 		while (SDL_PollEvent(&event))
 		{
+			SDL_keysym *keysym = &event.key.keysym;
+			int i;
+
 			switch (event.type)
 			{
 				case SDL_VIDEORESIZE:
@@ -508,6 +511,50 @@ int main(int argc, char **argv)
 					break;
 				case SDL_QUIT:
 					quit = true;
+					break;
+				case SDL_KEYDOWN:
+					switch (keysym->sym)
+					{
+						case SDLK_F1:
+							glEnable(GL_CULL_FACE);
+							printf("Culling enabled.\n");
+							break;
+						case SDLK_F2:
+							glDisable(GL_CULL_FACE);
+							printf("Culling disabled.\n");
+							break;
+						case SDLK_F3:
+							glDisable(GL_TEXTURE_2D);
+							glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+							printf("Wireframe mode.\n");
+							break;
+						case SDLK_F4:
+							glEnable(GL_TEXTURE_2D);
+							glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+							printf("Texturing mode.\n");
+							break;
+						case SDLK_ESCAPE:
+							quit = true;
+							break;
+						case SDLK_KP_PLUS:
+						case SDLK_PLUS:
+							for (i = 0; i < psModel->meshes; i++)
+							{
+								MESH *psMesh = &psModel->mesh[i];
+
+								if (psMesh->currentFrame < psMesh->frames - 1)
+								{
+									psMesh->currentFrame++;
+								}
+								else
+								{
+									psMesh->currentFrame = 0;
+								}
+							}
+							break;
+						default:
+							break;
+					}
 					break;
 			}
 		}
