@@ -287,8 +287,6 @@ static inline void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, const BOOL ligh
 
 		if (frame > 0)
 		{
-			// HACK - fix this!!!!
-			// should be: framesPerLine = iV_TEXTEX(texPage)->width / poly->pTexAnim->textureWidth;
 			const unsigned int framesPerLine = 256 / poly->pTexAnim->textureWidth;
 			const unsigned int
 					uFrame = (frame % framesPerLine) * poly->pTexAnim->textureWidth,
