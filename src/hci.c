@@ -1137,7 +1137,7 @@ static void intGetMapSize(void)
 void intResetScreen(BOOL NoAnim)
 {
 //	// Ensure driver mode is turned off.
-//	StopDriverMode();
+	StopDriverMode();
 
 	if(getWidgetsStatus() == FALSE)
 	{

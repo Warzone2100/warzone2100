@@ -292,6 +292,7 @@ void StopDriverMode(void)
 	}
 
 	setDrivingStatus(FALSE);
+	driveInitVars(FALSE);	// reset everything again
 	DriveControlEnabled = FALSE;
 	DirectControl = FALSE;
 }
@@ -670,6 +671,8 @@ void driveProcessAquireButton(void)
 	{
 		BASE_OBJECT	*psObj;
 		psObj = targetAquireNearestObjView((BASE_OBJECT*)psDrivenDroid);
+//		driveMarkTarget();
+//		frameSetCursorFromRes(111); //IDC_ATTACK = 111 defined in display.c
 	}
 }
 
@@ -739,3 +742,20 @@ void driveProcessRadarInput(int x,int y)
 	CalcRadarPosition(x,y,(UDWORD *)&PosX,(UDWORD *)&PosY);
 	orderSelectedLoc(selectedPlayer, PosX*TILE_UNITS,PosY*TILE_UNITS);
 }
+/*
+void driveMarkTarget(void)
+{
+
+		BASE_OBJECT *psObj = targetGetCurrent();
+		if(psObj != NULL)
+		{
+			if(driveAllowControl())
+			{
+//				MouseMovement(FALSE);
+				targetMarkCurrent();
+				SetMousePos(0,psObj->sDisplay.screenX,psObj->sDisplay.screenY);
+//				pie_DrawMouse(psObj->sDisplay.screenX,psObj->sDisplay.screenY);
+			}
+		}
+}
+*/

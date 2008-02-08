@@ -44,6 +44,7 @@
 #include "design.h"
 #include "wrappers.h"
 #include "init.h" // For fileLoadBuffer
+#include "drive.h"
 
 /***************************************************************************/
 /*
@@ -327,6 +328,7 @@ BOOL seq_UpdateFullScreenVideo(int *pbClear)
 
 BOOL seq_StopFullScreenVideo(void)
 {
+	StopDriverMode();
 	if (!seq_AnySeqLeft())
 	{
 		loop_ClearVideoPlaybackMode();
