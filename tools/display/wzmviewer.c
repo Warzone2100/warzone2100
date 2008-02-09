@@ -111,6 +111,7 @@ static MODEL *createModel(int meshes)
 			psMesh->textureArray[j] = NULL;
 		}
 		psMesh->frameArray = NULL;
+		psMesh->currentFrame = 0;
 	}
 
 	return psModel;
