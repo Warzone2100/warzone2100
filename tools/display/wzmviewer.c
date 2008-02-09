@@ -21,11 +21,19 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <errno.h>
+
+#ifndef WIN32
+#include <stdbool.h>
 #include <limits.h>
-#include <unistd.h>
+#else
+#include <windows.h>
+typedef int bool;
+#define PATH_MAX 255
+#define true 1
+#define false 0
+#endif
 
 #include <SDL.h>
 #include <SDL_opengl.h>
@@ -564,7 +572,7 @@ int main(int argc, char **argv)
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 		drawModel(psModel, 0, 0);
 		SDL_GL_SwapBuffers();
-		usleep(100);
+		SDL_Delay(5);
 		angle += 0.1;
 		if (angle > 360.0f)
 		{

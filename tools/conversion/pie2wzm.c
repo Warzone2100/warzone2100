@@ -21,10 +21,18 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <errno.h>
+
+#ifndef WIN32
+#include <stdbool.h>
 #include <limits.h>
+#else
+typedef int bool;
+#define PATH_MAX 255
+#define true 1
+#define false 0
+#endif
 
 // The WZM format is a proposed successor to the PIE format used by Warzone.
 // For an explanation of the WZM format, see http://wiki.wz2100.net/WZM_format

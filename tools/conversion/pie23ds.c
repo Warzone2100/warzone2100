@@ -21,8 +21,17 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <stdbool.h>
 #include <errno.h>
+
+#ifndef WIN32
+#include <stdbool.h>
+#include <limits.h>
+#else
+typedef int bool;
+#define PATH_MAX 255
+#define true 1
+#define false 0
+#endif
 
 #include <lib3ds/file.h>
 #include <lib3ds/mesh.h>

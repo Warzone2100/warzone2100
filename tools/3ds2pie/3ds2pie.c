@@ -24,7 +24,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+
+#ifndef WIN32
 #include <stdbool.h>
+#include <limits.h>
+#else
+typedef int bool;
+#define PATH_MAX 255
+#define true 1
+#define false 0
+#endif
 
 // Based on 3ds2m.c from lib3ds
 
