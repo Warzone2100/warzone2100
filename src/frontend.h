@@ -58,9 +58,7 @@ typedef enum _title_mode {
 extern tMode titleMode;					// the global case
 
 #define DEFAULT_LEVEL	"CAM_1A"
-//#define DEFAULT_LEVEL	"CAM_2A"
 #define TUTORIAL_LEVEL	"TUTORIAL3"
-
 
 #define MAX_LEVEL_NAME_SIZE	(256)
 
