@@ -2736,11 +2736,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		}
 
 	// reload the objects that were in the mission list
-//except droids these are always loaded directly to the mission.apsDroidList
-/*
-	*apsFlagPosLists[MAX_PLAYERS];
-	asPower[MAX_PLAYERS];
-*/
 		LOADBARCALLBACK();	//		loadingScreenCallback();
 		//load in the features -do before the structures
 		aFileName[fileExten] = '\0';
@@ -2806,7 +2801,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		if (loadFileToBufferNoError(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
 			//load the data into mission.apsDroidLists
-			//ppsCurrentDroidLists = mission.apsDroidLists;
 			if (!loadSaveDroid(pFileData, fileSize, apsDroidLists))
 			{
 				debug( LOG_NEVER, "loadgame: Fail12\n" );
@@ -2890,25 +2884,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			debug( LOG_NEVER, "loadgame: Fail7\n" );
 			return(FALSE);
 		}
-
-#ifdef JOHN
-		// load in the gateway map
-/*		aFileName[fileExten] = '\0';
-		strcat(aFileName, "gates.txt");
-		// Load in the chosen file data
-		pFileData = fileLoadBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
-		{
-			DBPRINTF(("loadgame: Failed to load gates.txt\n"));
-			goto error;
-		}
-
-		if (!gwLoadGateways(pFileData, fileSize))
-		{
-			DBPRINTF(("loadgame: failed to parse gates.txt"));
-			return FALSE;
-		}*/
-#endif
 	}
 
 	//save game stuff added after map load
@@ -3001,7 +2976,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		}
 
 		//load the data into apsDroidLists
-		//ppsCurrentDroidLists = apsDroidLists;
 		if (!loadSaveDroid(pFileData, fileSize, apsDroidLists))
 		{
 			debug( LOG_NEVER, "loadgame: Fail12\n" );
@@ -3046,7 +3020,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 				pFileData = fileLoadBuffer;
 				if (loadFileToBufferNoError(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize)) {
 					//load the data into mission.apsDroidLists
-					//ppsCurrentDroidLists = mission.apsDroidLists;
 					if (!loadSaveDroid(pFileData, fileSize, mission.apsDroidLists))
 					{
 						debug( LOG_NEVER, "loadgame: Fail12\n" );
@@ -3059,8 +3032,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 	}
 
 	LOADBARCALLBACK();	//	loadingScreenCallback();
-//21feb	if (saveGameOnMission && UserSaveGame)
-//21feb	{
 	if (saveGameVersion >= VERSION_23)
 	{
 		//load in the limbo droids
@@ -3071,7 +3042,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		if (loadFileToBufferNoError(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
 			//load the data into apsDroidLists
-			//ppsCurrentDroidLists = apsLimboDroids;
 			if (!loadSaveDroid(pFileData, fileSize, apsLimboDroids))
 			{
 				debug( LOG_NEVER, "loadgame: Fail12\n" );
@@ -3443,19 +3413,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			loadStructSetPointers();
 		}
 	}
-	//don't need to do this anymore - AB 22/04/98
-	//set up the power levels for each player if not
-	/*if (!keepObjects)
-	{
-		clearPlayerPower();
-		initPlayerPower();
-	}*/
-
-	//set all players to have some power at start - will be scripted!
-	//newGameInitPower();
-
-	//set these values to suitable for first map - will be scripted!
-	//setLandingZone(10,51,12,53);
 
 	//if user save game then reset the time - THIS SETS BOTH TIMERS - BEWARE IF YOU USE IT
 	if ((gameType == GTYPE_SAVE_START) ||
@@ -3607,7 +3564,6 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	aFileName[fileExtension] = '\0';
 	strcat(aFileName, "unit.bjo");
 	/*Write the current droid lists to the file*/
-	//ppsCurrentDroidLists = apsDroidLists;
 	if (!writeDroidFile(aFileName,apsDroidLists))
 	{
 		debug(LOG_ERROR, "saveGame: writeDroidFile(\"%s\") failed", aFileName);
@@ -3792,7 +3748,6 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	aFileName[fileExtension-1] = '\0';
 	strcat(aFileName, "/munit.bjo");
 	/*Write the swapped droid lists to the file*/
-	//ppsCurrentDroidLists = mission.apsDroidLists;
 	if (!writeDroidFile(aFileName, mission.apsDroidLists))
 	{
 		debug(LOG_ERROR, "saveGame: writeDroidFile(\"%s\") failed", aFileName);
@@ -3820,7 +3775,6 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 	aFileName[fileExtension] = '\0';
 	strcat(aFileName, "limbo.bjo");
 	/*Write the swapped droid lists to the file*/
-	//ppsCurrentDroidLists = apsLimboDroids;
 	if (!writeDroidFile(aFileName, apsLimboDroids))
 	{
 		debug(LOG_ERROR, "saveGame: writeDroidFile(\"%s\") failed", aFileName);

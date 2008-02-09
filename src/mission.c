@@ -324,7 +324,7 @@ void initMission(void)
 {
 	UDWORD inc;
 
-	debug( LOG_NEVER, "***Init Mission ***\n" );
+	debug(LOG_SAVEGAME, "*** Init Mission ***");
 	mission.type = LDS_NONE;
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
 	{
@@ -353,8 +353,7 @@ void initMission(void)
 	//init all the landing zones
 	for (inc = 0; inc < MAX_NOGO_AREAS; inc++)
 	{
-		sLandingZone[inc].x1 = sLandingZone[inc].y1 = sLandingZone[inc].x2 =
-			sLandingZone[inc].y2 = 0;
+		sLandingZone[inc].x1 = sLandingZone[inc].y1 = sLandingZone[inc].x2 = sLandingZone[inc].y2 = 0;
 	}
 
 	// init the vtol return pos
@@ -390,8 +389,9 @@ BOOL missionShutDown(void)
 {
 	UDWORD		inc;
 
-	//if (mission.type == MISSION_OFFKEEP || mission.type == MISSION_OFFCLEAR)
-	if (missionIsOffworld()) //mission.type == LDS_MKEEP || mission.type == LDS_MCLEAR)
+	debug(LOG_SAVEGAME, "missionShutDown: called, mission is %s", 
+	      missionIsOffworld() ? "off-world" : "main map");
+	if (missionIsOffworld())
 	{
 		//clear out the audio
 		audio_StopAll();
@@ -479,6 +479,8 @@ BOOL startMission(LEVEL_TYPE missionType, char *pGame)
 {
 	BOOL	loaded = TRUE;
 
+	debug(LOG_SAVEGAME, "startMission: type %d", (int)missionType);
+
 	/* Player has (obviously) not failed at the start */
 	setPlayerHasLost(FALSE);
 	setPlayerHasWon(FALSE);
@@ -493,7 +495,7 @@ BOOL startMission(LEVEL_TYPE missionType, char *pGame)
 	{
 		/*mission type gets set to none when you have returned from a mission
 		so don't want to go another mission when already on one! - so ignore*/
-		debug( LOG_NEVER, "Already on a mission" );
+		debug(LOG_SAVEGAME, "startMission: Already on a mission");
 		return TRUE;
 	}
 
@@ -808,14 +810,15 @@ void missionFlyTransportersIn( SDWORD iPlayer, BOOL bTrackTransporter )
 	}
 }
 
-/*Saves the necessary data when moving from a home base Mission to an OffWorld
-mission*/
+/* Saves the necessary data when moving from a home base Mission to an OffWorld mission */
 void saveMissionData(void)
 {
 	UDWORD			inc;
 	DROID			*psDroid;
 	STRUCTURE		*psStruct, *psStructBeingBuilt;
 	BOOL			bRepairExists;
+
+	debug(LOG_SAVEGAME, "saveMissionData: called");
 
 	//clear out the audio
 	audio_StopAll();
@@ -960,6 +963,8 @@ void restoreMissionData(void)
 	UDWORD		inc;
 	BASE_OBJECT	*psObj;
 
+	debug(LOG_SAVEGAME, "restoreMissionData: called");
+
 	//clear out the audio
 	audio_StopAll();
 
@@ -1069,9 +1074,9 @@ void restoreMissionData(void)
 void saveMissionLimboData(void)
 {
 	DROID           *psDroid, *psNext;
-	//UDWORD			droidX, droidY;
-	//PICKTILE		pickRes;
 	STRUCTURE           *psStruct;
+
+	debug(LOG_SAVEGAME, "saveMissionLimboData: called");
 
 	//clear out the audio
 	audio_StopAll();
@@ -1111,6 +1116,8 @@ void placeLimboDroids(void)
 	DROID           *psDroid, *psNext;
 	UDWORD			droidX, droidY;
 	PICKTILE		pickRes;
+
+	debug(LOG_SAVEGAME, "placeLimboDroids: called");
 
 	// Copy the droids across for the selected Player
 	for (psDroid = apsLimboDroids[selectedPlayer]; psDroid != NULL; psDroid = psNext)
@@ -1164,7 +1171,9 @@ void placeLimboDroids(void)
 /*restores the necessary data on completion of a Limbo Expand mission*/
 void restoreMissionLimboData(void)
 {
-    DROID           *psDroid, *psNext;
+	DROID           *psDroid, *psNext;
+
+	debug(LOG_SAVEGAME, "restoreMissionLimboData: called");
 
     /*the droids stored in the mission droid list need to be added back
     into the current droid list*/
@@ -1193,6 +1202,8 @@ void saveCampaignData(void)
 {
 	UBYTE		inc;
 	DROID		*psDroid, *psNext, *psSafeDroid, *psNextSafe, *psCurr, *psCurrNext;
+
+	debug(LOG_SAVEGAME, "saveCampaignData: called");
 
 	// If the droids have been moved to safety then get any Transporters that exist
 	if (getDroidsToSafetyFlag())
@@ -1311,6 +1322,8 @@ void saveCampaignData(void)
 //start an off world mission - clearing the object lists
 BOOL startMissionOffClear(char *pGame)
 {
+	debug(LOG_SAVEGAME, "startMissionOffClear: called for %s", pGame);
+
 	saveMissionData();
 
 	//load in the new game clearing the lists
@@ -1337,6 +1350,7 @@ BOOL startMissionOffClear(char *pGame)
 //start an off world mission - keeping the object lists
 BOOL startMissionOffKeep(char *pGame)
 {
+	debug(LOG_SAVEGAME, "startMissionOffKeep: called for %s", pGame);
 	saveMissionData();
 
 	//load in the new game clearing the lists
@@ -1362,6 +1376,8 @@ BOOL startMissionOffKeep(char *pGame)
 
 BOOL startMissionCampaignStart(char *pGame)
 {
+	debug(LOG_SAVEGAME, "startMissionCampaignStart: called for %s", pGame);
+
 	// Clear out all intelligence screen messages
 	freeMessages();
 
@@ -1556,6 +1572,8 @@ void swapMissionPointers(void)
 	void		**ppVoid;
 	UDWORD		udwTemp, inc;
 
+	debug(LOG_SAVEGAME, "swapMissionPointers: called");
+
 	// Swap psMapTiles
 	pVoid = (void*)psMapTiles;
 	psMapTiles = mission.psMapTiles;
@@ -1621,7 +1639,7 @@ void endMission(void)
 	if (mission.type == LDS_NONE)
 	{
 		//can't go back any further!!
-		debug( LOG_NEVER, "Already returned from mission" );
+		debug(LOG_SAVEGAME, "endMission: Already returned from mission");
 		return;
 	}
 
@@ -2108,6 +2126,8 @@ void missionResetDroids(void)
 	UDWORD			x, y;
 	PICKTILE		pickRes;
 
+	debug(LOG_SAVEGAME, "missionResetDroids: called");
+
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
 		for (psDroid = apsDroidLists[player]; psDroid != NULL; psDroid = psNext)
@@ -2269,59 +2289,27 @@ void missionResetDroids(void)
 			}
 			if (placed)
 			{
-                //don't need to do this since using pickATile now...
-				//add them to the current list
-				/*if (droidRemove(psDroid, mission.apsDroidLists))
-                {
-				    addDroid(psDroid, apsDroidLists);
-    				if (psFactory)
-	    			{
-		    			//order the droid to the factory DP
-			    		orderSelectedLoc(psDroid->player,
-				    		psFactory->psAssemblyPoint->coords.x,
-					    	psFactory->psAssemblyPoint->coords.y);
-    				}
-	    			else
-		    		{
-			    		//order them to move to an arbitary new location!
-				    	orderSelectedLoc(psDroid->player, psDroid->pos.x + 3 * TILE_UNITS,
-					    	psDroid->pos.y + 3 * TILE_UNITS);
-				    }*/
-				    //do all the things in build droid that never did when it was built!
-				    // check the droid is a reasonable distance from the edge of the map
-				    if (psDroid->pos.x <= TILE_UNITS || psDroid->pos.x >= (mapWidth *
-					    TILE_UNITS) - TILE_UNITS ||	psDroid->pos.y <= TILE_UNITS ||
-					    psDroid->pos.y >= (mapHeight * TILE_UNITS) - TILE_UNITS)
-				    {
-					    debug( LOG_NEVER, "missionResetUnits: unit too close to edge of map - removing" );
-						vanishDroid(psDroid);
-					    continue;
-				    }
-					// Check there is nothing on the map
-				    /*if (TILE_OCCUPIED(mapTile(map_coord(x), map_coord(y))))
-				    {
-					    DBPRINTF(("missionResetDroids: tile occupied\n");
-	    `				removeDroid(psDroid, apsDroidLists);
-					    droidRelease(psDroid);
-					    free(psDroid);
-				    }*/
-/*				    mapX = map_coord(psDroid->pos.x);
-				    mapY = map_coord(psDroid->pos.y);
-				    psDroid->lastTile = mapTile(mapX,mapY);
-*/
-				    //set droid height
-				    psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
+				// Do all the things in build droid that never did when it was built!
+				// check the droid is a reasonable distance from the edge of the map
+				if (psDroid->pos.x <= TILE_UNITS || psDroid->pos.x >= (mapWidth *
+				    TILE_UNITS) - TILE_UNITS ||	psDroid->pos.y <= TILE_UNITS ||
+				    psDroid->pos.y >= (mapHeight * TILE_UNITS) - TILE_UNITS)
+				{
+					debug(LOG_SAVEGAME, "missionResetUnits: unit too close to edge of map - removing");
+					vanishDroid(psDroid);
+					continue;
+				}
+				// Set droid height
+				psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
 
-				    // People always stand upright
-				    //if(psDroid->droidType != DROID_PERSON && psDroid->type != DROID_CYBORG)
-                    if(psDroid->droidType != DROID_PERSON && !cyborgDroid(psDroid))
-				    {
-					    updateDroidOrientation(psDroid);
-				    }
-				    visTilesUpdate((BASE_OBJECT *)psDroid);
-				    //reset the selected flag
-				    psDroid->selected = FALSE;
-                //}
+				// People always stand upright
+				if (psDroid->droidType != DROID_PERSON && !cyborgDroid(psDroid))
+				{
+					updateDroidOrientation(psDroid);
+				}
+				visTilesUpdate((BASE_OBJECT *)psDroid);
+				// Reset the selected flag
+				psDroid->selected = FALSE;
 			}
 			else
 			{
@@ -2533,7 +2521,7 @@ void missionMoveTransporterOffWorld( DROID *psTransporter )
 	}
 	else
 	{
-		debug( LOG_NEVER, "missionMoveTransporterOffWorld: droid type not transporter!\n" );
+		debug(LOG_SAVEGAME, "missionMoveTransporterOffWorld: droid type not transporter!");
 	}
 }
 
@@ -3226,7 +3214,6 @@ void intRemoveMissionResultNoAnim(void)
 
 void intRunMissionResult(void)
 {
-
 	frameSetCursorFromRes(IDC_DEFAULT);
 
 	if(bLoadSaveUp)
@@ -3235,54 +3222,33 @@ void intRunMissionResult(void)
 		{
 			if(strlen(sRequestResult))
 			{
-				debug( LOG_NEVER, "Returned %s", sRequestResult );
+				debug(LOG_SAVEGAME, "intRunMissionResult: Returned %s", sRequestResult);
 
-				if(bRequestLoad)
-				{
-//					loadGame(		);
-				}
-				else
-
+				if (!bRequestLoad)
 				{
 					saveGame(sRequestResult,GTYPE_SAVE_START);
-		            addConsoleMessage(_("GAME SAVED!"), LEFT_JUSTIFY);
+					addConsoleMessage(_("GAME SAVED!"), LEFT_JUSTIFY);
 				}
 			}
 		}
 	}
-
-
 }
 
 static void missionContineButtonPressed( void )
 {
-	//SHOULDN'T BE ABLE TO BE ANY OTHER TYPE AT PRESENT!
-	// start the next mission if necessary
-	// otherwise wait for the Launch button to be pressed
-	//if (nextMissionType == MISSION_CAMPSTART || nextMissionType ==
-	//	MISSION_CAMPEXPAND || nextMissionType == MISSION_BETWEEN)
-
 	if (nextMissionType == LDS_CAMSTART
 		|| nextMissionType == LDS_BETWEEN
 		|| nextMissionType == LDS_EXPAND
-		|| nextMissionType == LDS_EXPAND_LIMBO
-	)
+		|| nextMissionType == LDS_EXPAND_LIMBO)
 	{
-        //if we're moving from cam2-cam3?
 		launchMission();
 	}
 	widgDelete(psWScreen,IDMISSIONRES_FORM);	//close option box.
-	//if (nextMissionType == MISSION_OFFKEEP || nextMissionType == MISSION_OFFCLEAR)
-	/*if (nextMissionType == MISSION_BETWEEN)
+
+	if (bMultiPlayer)
 	{
 		intRemoveMissionResultNoAnim();
-	}*/
-//	intRemoveMissionResultNoAnim();
-
-    if (bMultiPlayer)
-    {
-        intRemoveMissionResultNoAnim();
-    }
+ 	}
 }
 
 void intProcessMissionResult(UDWORD id)
@@ -3291,8 +3257,6 @@ void intProcessMissionResult(UDWORD id)
 
 	switch(id)
 	{
-
-
 	case IDMISSIONRES_LOAD:
 		// throw up some filerequester
 		addLoadSave(LOAD_MISSIONEND,SaveGamePath,"gam",_("Load Saved Game")/*"Load Game"*/);
@@ -3380,7 +3344,7 @@ void launchMission(void)
 	}
 	else
 	{
-		debug( LOG_NEVER, "Start Mission has not been called" );
+		debug(LOG_SAVEGAME, "launchMission: Start Mission has not been called");
 	}
 }
 
@@ -3730,7 +3694,7 @@ void missionSetTransporterEntry( SDWORD iPlayer, SDWORD iEntryTileX, SDWORD iEnt
 	}
 	else
 	{
-		debug( LOG_NEVER, "missionSetTransporterEntry: entry point x %i outside scroll limits %i->%i\n", iEntryTileX, scrollMinX, scrollMaxX );
+		debug(LOG_SAVEGAME, "missionSetTransporterEntry: entry point x %i outside scroll limits %i->%i", iEntryTileX, scrollMinX, scrollMaxX);
 		mission.iTranspEntryTileX[iPlayer] = (UWORD) (scrollMinX + EDGE_SIZE);
 	}
 
@@ -3740,7 +3704,7 @@ void missionSetTransporterEntry( SDWORD iPlayer, SDWORD iEntryTileX, SDWORD iEnt
 	}
 	else
 	{
-		debug( LOG_NEVER, "missionSetTransporterEntry: entry point y %i outside scroll limits %i->%i\n", iEntryTileY, scrollMinY, scrollMaxY );
+		debug(LOG_SAVEGAME, "missionSetTransporterEntry: entry point y %i outside scroll limits %i->%i", iEntryTileY, scrollMinY, scrollMaxY);
 		mission.iTranspEntryTileY[iPlayer] = (UWORD) (scrollMinY + EDGE_SIZE);
 	}
 }
@@ -3755,7 +3719,7 @@ void missionSetTransporterExit( SDWORD iPlayer, SDWORD iExitTileX, SDWORD iExitT
 	}
 	else
 	{
-		debug( LOG_NEVER, "missionSetTransporterExit: entry point x %i outside scroll limits %i->%i\n", iExitTileX, scrollMinX, scrollMaxX );
+		debug(LOG_SAVEGAME, "missionSetTransporterExit: entry point x %i outside scroll limits %i->%i", iExitTileX, scrollMinX, scrollMaxX);
 		mission.iTranspExitTileX[iPlayer] = (UWORD) (scrollMinX + EDGE_SIZE);
 	}
 
@@ -3765,7 +3729,7 @@ void missionSetTransporterExit( SDWORD iPlayer, SDWORD iExitTileX, SDWORD iExitT
 	}
 	else
 	{
-		debug( LOG_NEVER, "missionSetTransporterExit: entry point y %i outside scroll limits %i->%i\n", iExitTileY, scrollMinY, scrollMaxY );
+		debug(LOG_SAVEGAME, "missionSetTransporterExit: entry point y %i outside scroll limits %i->%i", iExitTileY, scrollMinY, scrollMaxY);
 		mission.iTranspExitTileY[iPlayer] = (UWORD) (scrollMinY + EDGE_SIZE);
 	}
 }
@@ -3817,7 +3781,7 @@ void missionDestroyObjects(void)
 	STRUCTURE *psStruct;
 	UBYTE Player, i;
 
-	debug(LOG_NEVER, "missionDestroyObjects");
+	debug(LOG_SAVEGAME, "missionDestroyObjects");
 	proj_FreeAllProjectiles();
 	for(Player = 0; Player < MAX_PLAYERS; Player++) {
 		if (Player != selectedPlayer)
