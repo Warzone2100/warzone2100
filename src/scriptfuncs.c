@@ -2622,8 +2622,7 @@ BOOL scrGetDroid(void)
 // Sets all the scroll params for the map
 BOOL scrSetScrollParams(void)
 {
-	SDWORD				minX, minY, maxX, maxY;
-    SDWORD              prevMinX, prevMinY, prevMaxX, prevMaxY;
+	SDWORD		minX, minY, maxX, maxY, prevMinX, prevMinY, prevMaxX, prevMaxY;
 
 	if (!stackPopParams(4, VAL_INT, &minX, VAL_INT, &minY, VAL_INT, &maxX, VAL_INT, &maxY))
 	{
@@ -2635,24 +2634,22 @@ BOOL scrSetScrollParams(void)
 	ASSERT(minY >= 0, "Minimum scroll y value %d is less than zero - ", minY);
 	ASSERT(maxX <= mapWidth, "Maximum scroll x value %d is greater than mapWidth %d", maxX, (int)mapWidth);
 	ASSERT(maxY <= mapHeight, "Maximum scroll y value %d is greater than mapHeight %d", maxY, (int)mapHeight);
-	ASSERT(maxX <= visibleTiles.x, "Maximum scroll x %d has to be bigger than visible width %d - ", maxX, visibleTiles.x);
-	ASSERT(maxY <= visibleTiles.y, "Maximum scroll y %d has to be bigger than visible width %d - ", maxY, visibleTiles.y);
 
-    prevMinX = scrollMinX;
-    prevMinY = scrollMinY;
-    prevMaxX = scrollMaxX;
-    prevMaxY = scrollMaxY;
+	prevMinX = scrollMinX;
+	prevMinY = scrollMinY;
+	prevMaxX = scrollMaxX;
+	prevMaxY = scrollMaxY;
 
 	scrollMinX = minX;
 	scrollMaxX = maxX;
 	scrollMinY = minY;
 	scrollMaxY = maxY;
 
-    //when the scroll limits change midgame - need to redo the lighting
-    initLighting(prevMinX < scrollMinX ? prevMinX : scrollMinX,
-        prevMinY < scrollMinY ? prevMinY : scrollMinY,
-        prevMaxX < scrollMaxX ? prevMaxX : scrollMaxX,
-        prevMaxY < scrollMaxY ? prevMaxY : scrollMaxY);
+	// When the scroll limits change midgame - need to redo the lighting
+	initLighting(prevMinX < scrollMinX ? prevMinX : scrollMinX,
+	             prevMinY < scrollMinY ? prevMinY : scrollMinY,
+	             prevMaxX < scrollMaxX ? prevMaxX : scrollMaxX,
+	             prevMaxY < scrollMaxY ? prevMaxY : scrollMaxY);
 
 	return TRUE;
 }

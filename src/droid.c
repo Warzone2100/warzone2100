@@ -5770,9 +5770,10 @@ BOOL cyborgDroid(DROID *psDroid)
 
 BOOL droidOnMap(DROID *psDroid)
 {
-	if (psDroid->died == NOT_CURRENT_LIST || psDroid->droidType == DROID_TRANSPORTER)
+	if (psDroid->died == NOT_CURRENT_LIST || psDroid->droidType == DROID_TRANSPORTER
+	    || psDroid->sMove.fx == INVALID_XY || psDroid->pos.x == INVALID_XY)
 	{
-		// Off world or on a transport or is a transport - ignore
+		// Off world or on a transport or is a transport or in mission list - ignore
 		return TRUE;
 	}
 	return (worldOnMap(psDroid->sMove.fx, psDroid->sMove.fy)
