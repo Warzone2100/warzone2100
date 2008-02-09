@@ -3315,13 +3315,11 @@ DROID * buildMissionDroid(DROID_TEMPLATE *psTempl, UDWORD x, UDWORD y,
 {
 	DROID		*psNewDroid;
 
-	psNewDroid = buildDroid(psTempl, world_coord(x), world_coord(y),
-		player, TRUE);
+	psNewDroid = buildDroid(psTempl, world_coord(x), world_coord(y), player, TRUE);
 	if (!psNewDroid)
 	{
 		return NULL;
 	}
-	//addDroid(psNewDroid, mission.apsBuiltDroids);
 	addDroid(psNewDroid, mission.apsDroidLists);
 	//set its x/y to impossible values so can detect when return from mission
 	psNewDroid->pos.x = INVALID_XY;
@@ -3329,6 +3327,9 @@ DROID * buildMissionDroid(DROID_TEMPLATE *psTempl, UDWORD x, UDWORD y,
 
 	//set all the droids to selected from when return
 	psNewDroid->selected = TRUE;
+
+	// Set died parameter correctly
+	psNewDroid->died = NOT_CURRENT_LIST;
 
 	return psNewDroid;
 }
@@ -3346,22 +3347,6 @@ void launchMission(void)
 	{
 		debug(LOG_SAVEGAME, "launchMission: Start Mission has not been called");
 	}
-}
-
-
-void intCDOK( void )
-{
-
-		resetMissionPauseState();
-		intAddReticule();
-		intShowPowerBar();
-
-		launchMission();
-}
-
-void intCDCancel( void )
-{
-	/* do nothing - dealt with in HCI */
 }
 
 
@@ -3404,20 +3389,7 @@ BOOL setUpMission(UDWORD type)
 			    return FALSE;
 		    }
 		    loopMissionState = LMS_SAVECONTINUE;
-			//intCDOK(); - do this later - in missionContineButtonPressed() to be exact
 		}
-		/*else
-		{
-			if(!getWidgetsStatus())
-			{
-				setWidgetsStatus(TRUE);
-				intResetScreen(FALSE);
-			}
-			missionResetInGameState();
-			addCDChangeInterface( CDrequired, intCDOK, intCDCancel );
-			loopMissionState = LMS_SAVECONTINUE;
-		}*/
-
 	}
 	else if (type == LDS_MKEEP
 		|| type == LDS_MCLEAR
