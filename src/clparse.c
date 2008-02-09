@@ -295,7 +295,7 @@ bool ParseCommandLine(int argc, const char** argv)
 				if (strcmp(token, "CAM_1A") && strcmp(token, "CAM_2A") && strcmp(token, "CAM_3A")
 				    && strcmp(token, "TUTORIAL3") && strcmp(token, "FASTPLAY"))
 				{
-					fprintf(stderr, "The game parameter requires on of the following keywords:\n");
+					fprintf(stderr, "The game parameter requires one of the following keywords:\n");
 					fprintf(stderr, "\tCAM_1A\n\tCAM_2A\n\tCAM_3A\n\tTUTORIAL3\n\tFASTPLAY\n");
 					exit(1);
 				}
