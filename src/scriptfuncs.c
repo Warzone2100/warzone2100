@@ -969,27 +969,23 @@ BOOL scrAddDroidToTransporter(void)
 		return FALSE;
 	}
 
-    if (psTransporter == NULL || psDroid == NULL)
-    {
-        //ignore!
-        ASSERT( FALSE, "scrAddUnitToTransporter: null unit passed" );
-        return TRUE;
-    }
+	if (psTransporter == NULL || psDroid == NULL)
+	{
+		ASSERT(FALSE, "scrAddUnitToTransporter: null unit passed");
+		return TRUE; // allow to continue
+	}
 
-	ASSERT( psTransporter != NULL,
-			"scrAddUnitToTransporter: invalid transporter pointer" );
-	ASSERT( psDroid != NULL,
-			"scrAddUnitToTransporter: invalid unit pointer" );
-	ASSERT( psTransporter->droidType == DROID_TRANSPORTER,
-			"scrAddUnitToTransporter: invalid transporter type" );
+	ASSERT(psTransporter != NULL, "scrAddUnitToTransporter: invalid transporter pointer");
+	ASSERT(psDroid != NULL, "scrAddUnitToTransporter: invalid unit pointer");
+	ASSERT(psTransporter->droidType == DROID_TRANSPORTER, "scrAddUnitToTransporter: invalid transporter type");
 
 	/* check for space */
 	if (checkTransporterSpace(psTransporter, psDroid))
 	{
 		if (droidRemove(psDroid, mission.apsDroidLists))
-        {
-		    grpJoin(psTransporter->psGroup, psDroid);
-        }
+		{
+			grpJoin(psTransporter->psGroup, psDroid);
+		}
 	}
 
 	return TRUE;

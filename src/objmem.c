@@ -452,13 +452,13 @@ void removeDroid(DROID *psDroidToRemove, DROID *pList[MAX_PLAYERS])
 		"removeUnit: invalid player for unit" );
 	removeObjectFromList((BASE_OBJECT**)pList, (BASE_OBJECT*)psDroidToRemove);
 
-    /*whenever a droid is removed from the current list its died
-    flag is set to NOT_CURRENT_LIST so that anything targetting
-    it will cancel itself - HACK?!*/
-    if (pList[psDroidToRemove->player] == apsDroidLists[psDroidToRemove->player])
-    {
-        psDroidToRemove->died = NOT_CURRENT_LIST;
-    }
+	/* Whenever a droid is removed from the current list its died
+	 * flag is set to NOT_CURRENT_LIST so that anything targetting
+	 * it will cancel itself, and we know it is not really on the map. */
+	if (pList[psDroidToRemove->player] == apsDroidLists[psDroidToRemove->player])
+	{
+		psDroidToRemove->died = NOT_CURRENT_LIST;
+	}
 }
 
 /*Removes all droids that may be stored in the mission lists*/
