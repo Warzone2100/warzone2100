@@ -261,9 +261,15 @@ static void NET_InitPlayers(void)
 
 static void NETBroadcastPlayerInfo(int dpid)
 {
+	NET_PLAYER* player = (NET_PLAYER*)message.body;
+
 	message.type = MSG_PLAYER_INFO;
 	message.size = sizeof(NET_PLAYER);
 	memcpy(message.body, &players[dpid], sizeof(NET_PLAYER));
+
+	player->id    = SDL_SwapBE32(player->id);
+	player->flags = SDL_SwapBE32(player->flags);
+
 	NETbcast(&message, TRUE);
 }
 
@@ -788,7 +794,12 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 	{
 		case MSG_PLAYER_INFO: {
 			NET_PLAYER* pi = (NET_PLAYER*)(pMsg->body);
-			int dpid = pi->id;
+			unsigned int dpid;
+
+			pi->id    = SDL_SwapBE32(pi->id);
+			pi->flags = SDL_SwapBE32(pi->flags);
+
+			dpid = pi->id;
 
 			debug(LOG_NET, "NETprocessSystemMessage: Receiving MSG_PLAYER_INFO for player %d", dpid);
 
