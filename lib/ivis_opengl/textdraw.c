@@ -107,12 +107,7 @@ static void iV_initializeGLC()
 	glcContext(GLC_Context);
 
 	glcDisable(GLC_AUTO_FONT);
-#ifdef WZ_OS_MAC
-#warning Mac version still uses GLC_TRIANGLE instead of GLC_TEXTURE
-        glcRenderStyle(GLC_TRIANGLE);
-#else
 	glcRenderStyle(GLC_TEXTURE);
-#endif
 
 	GLC_Font_Regular = glcGenFontID();
 	GLC_Font_Bold = glcGenFontID();
@@ -603,7 +598,11 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 {
 	GLint matrix_mode = 0;
 
+#ifdef WZ_OS_MAC
+	pie_SetTexturePage(0);
+#else
 	pie_SetTexturePage(-2);
+#endif
 
 	glGetIntegerv(GL_MATRIX_MODE, &matrix_mode);
 	glMatrixMode(GL_TEXTURE);
