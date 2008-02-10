@@ -67,7 +67,7 @@ enum {
 };
 
 
-extern UDWORD iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify);
+extern int iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify);
 
 extern void iV_SetTextSize(float size);
 

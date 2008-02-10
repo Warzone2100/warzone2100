@@ -411,23 +411,19 @@ static int ExtentsStartY;
 static int ExtentsEndX;
 static int ExtentsEndY;
 
-// Draws formatted text with word wrap, long word splitting, embedded
-// newlines ( uses @ rather than \n ) and colour mode toggle ( # ) which enables
-// or disables font colouring.
-//
-//	UBYTE *String		The string to display.
-//	UDWORD x			x coord of top left of formatted text window.
-//	UDWORD y			y coord of top left of formatted text window.
-//	UDWORD Width		Width of formatted text window.
-//	UDWORD Justify		Justify mode, one of the following:
-//							FTEXT_LEFTJUSTIFY
-//							FTEXT_CENTRE
-//							FTEXT_RIGHTJUSTIFY
-//	BOOL DrawBack		If TRUE then draws transparent box behind text.
-//
-// Returns y coord of next text line.
-//
-UDWORD iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify)
+/** Draws formatted text with word wrap, long word splitting, embedded newlines
+ *  (uses '@' rather than '\n') and colour toggle mode ('#') which enables or
+ *  disables font colouring.
+ *
+ *  @param String   the string to display.
+ *  @param x,y      X and Y coordinates of top left of formatted text.
+ *  @param width    the maximum width of the formatted text (beyond which line
+ *                  wrapping is used).
+ *  @param justify  The alignment style to use, which is one of the following:
+ *                  FTEXT_LEFTJUSTIFY, FTEXT_CENTRE or FTEXT_RIGHTJUSTIFY.
+ *  @return the Y coordinate for the next text line.
+ */
+int iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify)
 {
 	int i;
 	int jx = x;		// Default to left justify.
