@@ -601,7 +601,7 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 #ifdef WZ_OS_MAC
 	pie_SetTexturePage(0);
 #else
-	pie_SetTexturePage(-2);
+	pie_SetTexturePage(-1);
 #endif
 
 	glGetIntegerv(GL_MATRIX_MODE, &matrix_mode);

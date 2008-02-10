@@ -141,21 +141,31 @@ void pie_SetFogStatus(BOOL val)
 	}
 }
 
-/***************************************************************************/
+/** Selects a texture page and binds it for the current texture unit
+ *  \param num a number indicating the texture page to bind. If this is a
+ *         negative value (doesn't matter what value) it will disable texturing.
+ */
 void pie_SetTexturePage(SDWORD num)
 {
-	if (num != rendStates.texPage) {
+	// If a negative value is passes _always_ disable texturing, even if
+	// rendStates.texPage indicates that we disabled it already.
+	if (num < 0)
+	{
 		rendStates.texPage = num;
-		if (num < 0) {
-			glDisable(GL_TEXTURE_2D);
-		} else {
-			glEnable(GL_TEXTURE_2D);
-			glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[num].id);
-		}
+
+		glDisable(GL_TEXTURE_2D);
+		return;
+	}
+	
+	// Only bind textures when they're not bound already
+	if (num != rendStates.texPage)
+	{
+		rendStates.texPage = num;
+
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[num].id);
 	}
 }
-
-/***************************************************************************/
 
 void pie_SetAlphaTest(BOOL keyingOn)
 {
