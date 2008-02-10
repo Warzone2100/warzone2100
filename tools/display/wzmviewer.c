@@ -514,7 +514,7 @@ int main(int argc, char **argv)
 		int j;
 		MESH *psMesh = &psModel->mesh[i];
 
-		for (j = 0; j < psMesh->vertices; j++)
+		for (j = 0; j < psMesh->vertices * 3; j++)
 		{
 			dimension = MAX(fabs(psMesh->vertexArray[j]), dimension);
 		}
