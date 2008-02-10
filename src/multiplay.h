@@ -50,13 +50,13 @@ typedef enum _msgtype
 	NET_RESEARCH,			//16 Research has been completed.
 	NET_TEXTMSG,			//17 A simple text message between machines.
 	NET_LEAVING,			//18 A player is leaving, (nicely)
-	NET_REQUESTDROID,		//19 a message has been recvd for an unknown droid, request the droid to resolve issues.
+	NET_UNUSED_19,			//19 a message has been recvd for an unknown droid, request the droid to resolve issues.
 
 	// JOINING TYPES. these msgs are used when a player joins a game in progress.
 	NET_PLAYERCOMPLETE,		//20 All Setup information about player x has been sent
-	__DEPRECATED__NET_REQUESTPLAYER__,		//21 NOTUSED please send me info about a player; is unused now; but some code depends on this enum having these numbers (BAD!!!)
+	NET_UNUSED_21,			//21 NOTUSED please send me info about a player; is unused now; but some code depends on this enum having these numbers (BAD!!!)
 	NET_STRUCT,				//22 a complete structure
-	NET_WHOLEDROID,			//23 a complete droid
+	NET_UNUSED_23,			//23 a complete droid
 	NET_FEATURES,			//24 information regarding features.
 	NET_PLAYERRESPONDING,	//25 computer that sent this is now playing warzone!
 

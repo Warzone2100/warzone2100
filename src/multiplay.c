@@ -679,9 +679,6 @@ BOOL recvMessage(void)
 			case NET_DROIDDISEMBARK:
 				recvDroidDisEmbark();           //droid has disembarked from a Transporter
 				break;
-			case NET_REQUESTDROID:				// player requires a droid that they dont have.
-				recvRequestDroid();
-				break;
 			case NET_GIFT:						// an alliance gift from one player to another.
 				recvGift();
 				break;
@@ -738,9 +735,6 @@ BOOL recvMessage(void)
 			}
 			break;
 		}
-		case NET_WHOLEDROID:				// a complete droid description has arrived.
-			receiveWholeDroid(&msg);
-			break;
 		case NET_OPTIONS:
 			recvOptions();
 			break;

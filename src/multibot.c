@@ -27,7 +27,6 @@
 
 #include "droid.h"						// for droid sending and ordering.
 #include "droiddef.h"
-#include "basedef.h"						// for sending WHOLE droids.
 #include "stats.h"
 #include "move.h"						// for ordering droids
 #include "objmem.h"
@@ -56,7 +55,6 @@ extern DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj);
 // ////////////////////////////////////////////////////////////////////////////
 // Local Prototypes
 
-static BOOL sendRequestDroid(UDWORD droidId);
 static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, OBJECT_TYPE desttype, UDWORD destid);
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -404,14 +402,11 @@ BOOL recvDroidMove()
 
 		NETend();
 
-		/*
-		 * If we could not find the droid, request it. We can safely return here
-		 * as when the droid is sent it will contain the updated movement position.
-		 */
 		if (!IdToDroid(droid, player, &psDroid))
 		{
-			sendRequestDroid(droid);
-			return TRUE;
+			debug(LOG_ERROR, "recvDroidMove: Packet from %d refers to non-existent droid %d!", 
+			      NETgetSource(), (int)droid);
+			return FALSE;
 		}
 	}
 
@@ -469,15 +464,14 @@ BOOL recvDroid()
 {
 	DROID_TEMPLATE* pT;
 	DROID* psDroid;
-    uint8_t player;
-    uint32_t id;
-    Vector3uw pos;
-    BOOL power;
+	uint8_t player;
+	uint32_t id;
+	Vector3uw pos;
+	BOOL power;
+	uint32_t templateID;
 
 	NETbeginDecode();
 	{
-		uint32_t templateID;
-
 		NETuint8_t(&player);
 		NETuint32_t(&id);
 		NETVector3uw(&pos);
@@ -491,8 +485,8 @@ BOOL recvDroid()
 	// If we can not find the template ask for the entire droid instead
 	if (!pT)
 	{
-		debug(LOG_NET, "Couldn't find template to build recvd droid");
-		sendRequestDroid(id);
+		debug(LOG_ERROR, "recvDroid: Packet from %d refers to non-existent template %d!", 
+		      NETgetSource(), (int)templateID);
 		return FALSE;
 	}
 
@@ -501,7 +495,7 @@ BOOL recvDroid()
 	// Use the power required to build the droid
 	 && !usePower(player, pT->powerPoints))
 	{
-		debug(LOG_NET, "Not enough power to build recvd droid, player = %hhu", player);
+		debug(LOG_ERROR, "recvDroid: Not enough power to build droid for player = %hhu", player);
 		// Build anyway..
 	}
 
@@ -518,6 +512,7 @@ BOOL recvDroid()
 	}
 	else
 	{
+		debug(LOG_ERROR, "recvDroid: Packet from %d cannot create droid!", NETgetSource());
 		DBCONPRINTF(ConsoleString, (ConsoleString, "MULTIPLAYER: Couldn't build a remote droid, relying on checking to resync"));
 		return FALSE;
 	}
@@ -713,10 +708,9 @@ BOOL recvGroupOrder()
 		// Retrieve the droid associated with the current ID
 		if (!IdToDroid(droidIDs[i], ANYPLAYER, &psDroid))
 		{
-			// If the droid's not found, request it...
-			sendRequestDroid(droidIDs[i]);
-			// and continue working on the next droid
-			continue;
+			debug(LOG_ERROR, "recvGroupOrder: Packet from %d refers to non-existent droid %d!", 
+			      NETgetSource(), (int)droidIDs[i]);
+			continue; // continue working on next droid; crossing fingers...
 		}
 
 		/*
@@ -806,7 +800,8 @@ BOOL recvDroidInfo()
 
 		if (!IdToDroid(droidId, ANYPLAYER, &psDroid))
 		{
-			sendRequestDroid(droidId);
+			debug(LOG_ERROR, "recvDroidInfo: Packet from %d refers to non-existent droid %d!", 
+			      NETgetSource(), (int)droidId);
 			return FALSE;
 		}
 
@@ -969,243 +964,6 @@ BOOL recvDestroyDroid()
 		debug(LOG_DEATH, "Killing droid %d on request from player %d", psDroid->id, NETgetSource());
 		destroyDroid(psDroid);
 		turnOffMultiMsg(FALSE);
-	}
-
-	return TRUE;
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-// ////////////////////////////////////////////////////////////////////////////
-// stuff for sending the WHOLE of a droid!
-BOOL sendWholeDroid(DROID *pD, UDWORD dest)
-{
-	NETMSG	m;
-	UDWORD	sizecount = 0;
-	UDWORD	noTarget = 0;
-	SDWORD	asParts[DROID_MAXCOMP];
-	UDWORD	asWeaps[DROID_MAXWEAPS];
-	unsigned int i;
-	BOOL bNoTarget = TRUE;
-	uint16_t direction = pD->direction * 32; // preserve precision
-
-	if (pD->numWeaps == 0)
-	{
-		if (pD->asWeaps[0].nStat > 0)									// build some bits for the template.
-		{
-			   asWeaps[0] = pD->asWeaps[0].nStat;
-		}
-		else
-		{
-			asWeaps[0] = 0;
-		}
-	}
-
-	asParts[COMP_BODY]		=	pD->asBits[COMP_BODY].nStat;		//allocate the components
-	asParts[COMP_BRAIN]		=	pD->asBits[COMP_BRAIN].nStat;
-	asParts[COMP_PROPULSION]=	pD->asBits[COMP_PROPULSION].nStat;
-	asParts[COMP_SENSOR]	=	pD->asBits[COMP_SENSOR].nStat;
-	asParts[COMP_ECM]		=	pD->asBits[COMP_ECM].nStat;
-	asParts[COMP_REPAIRUNIT]=	pD->asBits[COMP_REPAIRUNIT].nStat;
-	asParts[COMP_CONSTRUCT]	=	pD->asBits[COMP_CONSTRUCT].nStat;
-	asParts[COMP_WEAPON]	=	pD->asBits[COMP_WEAPON].nStat;
-	NetAdd(m,sizecount,asParts);					sizecount+=sizeof(asParts);
-	NetAdd(m,sizecount,pD->numWeaps);				sizecount+=sizeof(pD->numWeaps);
-	NetAdd(m,sizecount,pD->asWeaps);				sizecount+=sizeof(pD->asWeaps);			// to build a template.
-
-	NetAdd(m,sizecount,pD->pos.x);						sizecount+=sizeof(pD->pos.x);
-	NetAdd(m,sizecount,pD->pos.y);						sizecount+=sizeof(pD->pos.y);
-	NetAdd(m,sizecount,pD->pos.z);						sizecount+=sizeof(pD->pos.z);
-	NetAdd(m,sizecount,pD->player);					sizecount+=sizeof(pD->player);
-
-	NetAddSt(m,sizecount,pD->aName);				sizecount+=strlen(pD->aName)+1;
-
-	// that's enough to build a template, now the specific stuff!
-	NetAdd(m,sizecount,pD->id);						sizecount+=sizeof(pD->id);
-
-	NetAdd(m,sizecount,pD->NameVersion);			sizecount+=sizeof(pD->NameVersion);
-	NetAdd(m,sizecount,pD->droidType);				sizecount+=sizeof(pD->droidType);
-
-	NetAdd(m,sizecount,direction);				sizecount+=sizeof(direction);
-	NetAdd(m,sizecount,pD->pitch);					sizecount+=sizeof(pD->pitch);
-	NetAdd(m,sizecount,pD->roll);					sizecount+=sizeof(pD->roll);
-	NetAdd(m,sizecount,pD->visible);				sizecount+=sizeof(pD->visible);
-	NetAdd(m,sizecount,pD->inFire);					sizecount+=sizeof(pD->inFire);
-	NetAdd(m,sizecount,pD->burnDamage);				sizecount+=sizeof(pD->burnDamage);
-
-	NetAdd(m,sizecount,pD->body);					sizecount+=sizeof(pD->body);
-	NetAdd(m,sizecount,pD->secondaryOrder);			sizecount+=sizeof(pD->secondaryOrder);
-	NetAdd(m,sizecount,pD->order);					sizecount+=sizeof(pD->order);
-	NetAdd(m,sizecount,pD->orderX);					sizecount+=sizeof(pD->orderX);
-	NetAdd(m,sizecount,pD->orderY);					sizecount+=sizeof(pD->orderY);
-	NetAdd(m,sizecount,pD->orderX2);				sizecount+=sizeof(pD->orderX2);
-	NetAdd(m,sizecount,pD->orderY2);				sizecount+=sizeof(pD->orderY2);
-
-	for (i = 0; i < pD->numWeaps; i++)
-	{
-		if (pD->psActionTarget[i])
-		{
-			NetAdd(m,sizecount,pD->psActionTarget[i]->id);		sizecount+=sizeof(pD->psActionTarget[i]->id);
-			bNoTarget = FALSE;
-		}
-	}
-
-	if (bNoTarget)
-	{
-		NetAdd(m,sizecount,noTarget);				sizecount+=sizeof(noTarget);
-	}
-
-	if (pD->psTarStats)
-	{
-		NetAdd(m,sizecount,pD->psTarStats->ref);	sizecount+=sizeof(pD->psTarStats->ref);
-	}
-	else
-	{
-		NetAdd(m,sizecount,noTarget);				sizecount+=sizeof(noTarget);
-	}
-
-
-	m.type = NET_WHOLEDROID;
-	m.size = (UWORD)sizecount;
-	return NETsend(&m,dest,FALSE);
-}
-// ////////////////////////////////////////////////////////////////////////////
-// receive a whole droid!!!!
-BOOL receiveWholeDroid(NETMSG *m)
-{
-	UDWORD			sizecount=0;
-	DROID_TEMPLATE	dt;
-	DROID			*pD,*existingdroid;
-	UWORD x,y,z;
-	UDWORD id;
-	UBYTE player;
-	UBYTE i;
-	uint16_t direction;
-
-	// get the stuff
-	NetGet(m,sizecount,dt.asParts);				sizecount+=sizeof(dt.asParts);		// build a template
-	NetGet(m,sizecount,dt.asWeaps);				sizecount+=sizeof(dt.asWeaps);
-	NetGet(m,sizecount,dt.numWeaps);			sizecount+=sizeof(dt.numWeaps);		// numWeaps
-	NetGet(m,sizecount,x);						sizecount+=sizeof(x);				// edit it.
-	NetGet(m,sizecount,y);						sizecount+=sizeof(y);
-	NetGet(m,sizecount,z);						sizecount+=sizeof(z);
-	NetGet(m,sizecount,player);					sizecount+=sizeof(player);
-
-	dt.pName = (char*)&dt.aName;
-	strlcpy(dt.aName, &(m->body[sizecount]), sizeof(dt.aName));
-	sizecount+=strlen(dt.pName)+1;		// name is pointed at directly into the buffer.
-
-	if(dt.asWeaps[0] == 0)
-	{
-		dt.numWeaps =0;
-	}
-
-	dt.powerPoints = calcTemplatePower(&dt);
-
-	NetGet(m,sizecount,id);						sizecount+=sizeof(id);
-
-	if(IdToDroid(id,ANYPLAYER,&existingdroid))// if a droid of id already exists then go no further.
-	{
-		return FALSE;
-	}
-
-	// could do usepower , but we usually do this in an emergency, so leave it!
-	turnOffMultiMsg(TRUE);
-	pD = buildDroid(&dt,x,y,player, FALSE);			// make a droid
-	turnOffMultiMsg(FALSE);
-
-	if(!pD)										// failed to build it, give up.
-	{
-		return FALSE;
-	}
-
-	STATIC_ASSERT(sizeof(id) == sizeof(pD->id));
-
-	// now the instance specific stuff.
-	pD->id = id;
-	pD->pos.x = x;									//correct builddroid to use exact pos, not tile center
-	pD->pos.y = y;
-	pD->pos.z = z;
-
-	NetGet(m,sizecount,pD->NameVersion);		sizecount+=sizeof(pD->NameVersion);
-	NetGet(m,sizecount,pD->droidType);			sizecount+=sizeof(pD->droidType);
-
-	NetGet(m,sizecount, direction);			sizecount+=sizeof(direction);
-	pD->direction = (float)direction / 32;
-	NetGet(m,sizecount,pD->pitch);				sizecount+=sizeof(pD->pitch);
-	NetGet(m,sizecount,pD->roll);				sizecount+=sizeof(pD->roll);
-
-	NetGet(m,sizecount,pD->visible);			sizecount+=sizeof(pD->visible);
-	NetGet(m,sizecount,pD->inFire);				sizecount+=sizeof(pD->inFire);
-	NetGet(m,sizecount,pD->burnDamage);			sizecount+=sizeof(pD->burnDamage);
-
-	NetGet(m,sizecount,pD->body);				sizecount+=sizeof(pD->body);
-
-	NetGet(m,sizecount,pD->secondaryOrder);		sizecount+=sizeof(pD->secondaryOrder);
-
-	for (i = 0;i < dt.numWeaps;i++)
-	{
-		NetGet(m, sizecount, id);			sizecount += sizeof(id);
-		pD->psActionTarget[i] = IdToPointer(id, ANYPLAYER);
-	}
-	pD->psTarStats = NULL;
-
-	addDroid(pD, apsDroidLists);
-
-	return TRUE;
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-// ////////////////////////////////////////////////////////////////////////////
-// Functions for cases where a machine receives a netmessage about a certain
-// droid. The droid is unknown, so the machine uses tese functions in order to
-// find out about it.
-BOOL sendRequestDroid(uint32_t droidId)
-{
-	if (!bMultiPlayer)
-		return TRUE;
-
-	if (ingame.localJoiningInProgress)		// Don't worry if still joining.
-	{
-		return FALSE;
-	}
-
-	debug(LOG_NEVER, "multibot: unknown droid %u, requesting info", droidId);
-
-	NETbeginEncode(NET_REQUESTDROID, NET_ALL_PLAYERS);
-	{
-		int32_t dpid = player2dpid[selectedPlayer];
-
-		NETuint32_t(&droidId);
-		NETint32_t(&dpid);
-	}
-	return NETend();
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-BOOL recvRequestDroid()
-{
-	DROID*      psDroid;
-	uint32_t    droidId;
-	int32_t     dpid;
-
-	NETbeginDecode();
-	{
-		NETuint32_t(&droidId);
-		NETint32_t(&dpid);
-	}
-	NETend();
-
-	// Get the droid
-	if (!(IdToDroid(droidId, ANYPLAYER, &psDroid)))
-	{
-		// Can't find it, so ignore
-		return TRUE;
-	}
-
-	// If we are responsible, send it
-	if (myResponsibility(psDroid->player))
-	{
-		sendWholeDroid(psDroid, dpid);
 	}
 
 	return TRUE;
