@@ -394,13 +394,13 @@ int main(int argc, char **argv)
 	p = fopen(input, "r");
 	if (!p)
 	{
-		fprintf(stderr, "Cannot open \"%s\" for reading: %s", input, strerror(errno));
+		fprintf(stderr, "Cannot open \"%s\" for reading: %s\n", input, strerror(errno));
 		exit(1);
 	}
 	f = fopen(output, "w");
 	if (!f)
 	{
-		fprintf(stderr, "Cannot open \"%s\" for reading: %s", output, strerror(errno));
+		fprintf(stderr, "Cannot open \"%s\" for reading: %s\n", output, strerror(errno));
 		exit(1);
 	}
 	dump_to_wzm(f, p);

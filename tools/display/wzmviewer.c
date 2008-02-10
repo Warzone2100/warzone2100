@@ -23,6 +23,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <errno.h>
+#include <math.h>
 
 #ifndef WIN32
 #include <stdbool.h>
@@ -46,6 +47,7 @@ typedef int bool;
 
 #define MAX_MESHES 4
 #define MAX_TEXARRAYS 16
+#define MAX(a, b) (((a) > (b)) ? (a) : (b))
 
 typedef struct { float x, y, z; } Vector3f;
 
@@ -461,6 +463,8 @@ int main(int argc, char **argv)
 	GLfloat angle = 0.0f;
 	const float aspect = (float)width / (float)height;
 	bool quit = false;
+	float dimension = 0.0f;
+	int i;
 
 	parse_args(argc, argv);
 	psModel = readModel(input, texPath);
@@ -501,17 +505,28 @@ int main(int argc, char **argv)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(45.0f, aspect, 0.1f, 200.0f);
+	gluPerspective(45.0f, aspect, 0.1f, 500.0f);
 	glMatrixMode(GL_MODELVIEW);
 
 	prepareModel(psModel);
+	for (i = 0; i < psModel->meshes; i++)
+	{
+		int j;
+		MESH *psMesh = &psModel->mesh[i];
+
+		for (j = 0; j < psMesh->vertices; j++)
+		{
+			dimension = MAX(fabs(psMesh->vertexArray[j]), dimension);
+		}
+	}
+
+	/* Find model size */
 
 	while (!quit)
 	{
 		while (SDL_PollEvent(&event))
 		{
 			SDL_keysym *keysym = &event.key.keysym;
-			int i;
 
 			switch (event.type)
 			{
@@ -568,7 +583,7 @@ int main(int argc, char **argv)
 			}
 		}
 		glLoadIdentity();
-		glTranslatef(0.0f, -30.0f, -125.0f);;
+		glTranslatef(0.0f, -30.0f, -50.0f + -(dimension * 2.0f));;
 		glRotatef(angle, 0, 1, 0);
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 		drawModel(psModel, 0, 0);
