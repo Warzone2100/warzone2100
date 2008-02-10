@@ -85,7 +85,6 @@ typedef struct {
 	// The problem is however that these where previously declared as BOOL,
 	// which is typedef'd as int, which on most platforms is equal to uint32_t.
 	uint32_t bHost;
-	uint32_t bSpectator;
 } PLAYER;
 
 // ////////////////////////////////////////////////////////////////////////
@@ -101,12 +100,6 @@ typedef struct {
 	uint32_t        bComms;				// actually do the comms?
 	uint32_t        bHost;				// TRUE if we are hosting the session
 	uint32_t        bLobbyLaunched;			// true if app launched by a lobby
-	uint32_t        bSpectator;			// true if just spectating
-
-	// booleans
-	uint32_t        bCaptureInUse;			// true if someone is speaking.
-	uint32_t        bAllowCaptureRecord;		// true if speech can be recorded.
-	uint32_t        bAllowCapturePlay;		// true if speech can be played.
 } NETPLAY;
 
 // ////////////////////////////////////////////////////////////////////////

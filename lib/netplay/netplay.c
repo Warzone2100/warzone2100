@@ -104,7 +104,6 @@ typedef struct
 #define HOST_DPID 1
 
 #define PLAYER_HOST		1
-#define PLAYER_SPECTATOR	2
 
 // ////////////////////////////////////////////////////////////////////////
 // Variables
@@ -312,7 +311,6 @@ UDWORD NETplayerInfo(void)
 	{
 		NetPlay.playercount		= 1;
 		NetPlay.players[0].bHost	= TRUE;
-		NetPlay.players[0].bSpectator	= FALSE;
 		NetPlay.players[0].dpid		= 1;
 		return 1;
 	}
@@ -333,15 +331,6 @@ UDWORD NETplayerInfo(void)
 			else
 			{
 				NetPlay.players[NetPlay.playercount].bHost = FALSE;
-			}
-
-			if (players[i].flags & PLAYER_SPECTATOR)
-			{
-				NetPlay.players[NetPlay.playercount].bSpectator = TRUE;
-			}
-			else
-			{
-				NetPlay.players[NetPlay.playercount].bSpectator = FALSE;
 			}
 
 			NetPlay.playercount++;
@@ -523,10 +512,6 @@ BOOL NETinit(BOOL bFirstCall)
 		NetPlay.dpidPlayer		= 0;
 		NetPlay.bHost			= 0;
 		NetPlay.bComms			= TRUE;
-
-		NetPlay.bAllowCaptureRecord	= FALSE;
-		NetPlay.bAllowCapturePlay	= FALSE;
-		NetPlay.bCaptureInUse		= FALSE;
 
 		for(i=0;i<MaxNumberOfPlayers;i++)
 		{
@@ -1416,7 +1401,6 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	NET_InitPlayers();
 	NetPlay.dpidPlayer	= NET_CreatePlayer(PlayerName, PLAYER_HOST);
 	NetPlay.bHost		= TRUE;
-	NetPlay.bSpectator	= FALSE;
 
 	MultiPlayerJoin(NetPlay.dpidPlayer);
 
@@ -1609,7 +1593,6 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 			NetPlay.dpidPlayer = dpid;
 			debug(LOG_NET, "NETjoinGame: I'm player %u", (unsigned int)NetPlay.dpidPlayer);
 			NetPlay.bHost = FALSE;
-			NetPlay.bSpectator = FALSE;
 
 			if (NetPlay.dpidPlayer >= MAX_CONNECTED_PLAYERS)
 			{

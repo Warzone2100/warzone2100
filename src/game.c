@@ -530,15 +530,17 @@ static bool serializePlayer(PHYSFS_file* fileHandle, const PLAYER* serializePlay
 	return (PHYSFS_writeUBE32(fileHandle, serializePlayer->dpid)
 	     && PHYSFS_write(fileHandle, serializePlayer->name, StringSize, 1) == 1
 	     && PHYSFS_writeUBE32(fileHandle, serializePlayer->bHost)
-	     && PHYSFS_writeUBE32(fileHandle, serializePlayer->bSpectator));
+	     && PHYSFS_writeUBE32(fileHandle, 0));
 }
 
 static bool deserializePlayer(PHYSFS_file* fileHandle, PLAYER* serializePlayer)
 {
+	uint32_t dummy;
+
 	return (PHYSFS_readUBE32(fileHandle, &serializePlayer->dpid)
 	     && PHYSFS_read(fileHandle, serializePlayer->name, StringSize, 1) == 1
 	     && PHYSFS_readUBE32(fileHandle, &serializePlayer->bHost)
-	     && PHYSFS_readUBE32(fileHandle, &serializePlayer->bSpectator));
+	     && PHYSFS_readUBE32(fileHandle, &dummy));
 }
 
 static bool serializeNetPlay(PHYSFS_file* fileHandle, const NETPLAY* serializeNetPlay)
@@ -560,15 +562,16 @@ static bool serializeNetPlay(PHYSFS_file* fileHandle, const NETPLAY* serializeNe
 	return (PHYSFS_writeUBE32(fileHandle, serializeNetPlay->bComms)
 	     && PHYSFS_writeUBE32(fileHandle, serializeNetPlay->bHost)
 	     && PHYSFS_writeUBE32(fileHandle, serializeNetPlay->bLobbyLaunched)
-	     && PHYSFS_writeUBE32(fileHandle, serializeNetPlay->bSpectator)
-	     && PHYSFS_writeUBE32(fileHandle, serializeNetPlay->bCaptureInUse)
-	     && PHYSFS_writeUBE32(fileHandle, serializeNetPlay->bAllowCaptureRecord)
-	     && PHYSFS_writeUBE32(fileHandle, serializeNetPlay->bAllowCapturePlay));
+	     && PHYSFS_writeUBE32(fileHandle, 0)
+	     && PHYSFS_writeUBE32(fileHandle, 0)
+	     && PHYSFS_writeUBE32(fileHandle, 0)
+	     && PHYSFS_writeUBE32(fileHandle, 0));
 }
 
 static bool deserializeNetPlay(PHYSFS_file* fileHandle, NETPLAY* serializeNetPlay)
 {
 	unsigned int i;
+	uint32_t dummy;
 
 	for (i = 0; i < MaxGames; ++i)
 	{
@@ -585,10 +588,10 @@ static bool deserializeNetPlay(PHYSFS_file* fileHandle, NETPLAY* serializeNetPla
 	return (PHYSFS_readUBE32(fileHandle, &serializeNetPlay->bComms)
 	     && PHYSFS_readUBE32(fileHandle, &serializeNetPlay->bHost)
 	     && PHYSFS_readUBE32(fileHandle, &serializeNetPlay->bLobbyLaunched)
-	     && PHYSFS_readUBE32(fileHandle, &serializeNetPlay->bSpectator)
-	     && PHYSFS_readUBE32(fileHandle, &serializeNetPlay->bCaptureInUse)
-	     && PHYSFS_readUBE32(fileHandle, &serializeNetPlay->bAllowCaptureRecord)
-	     && PHYSFS_readUBE32(fileHandle, &serializeNetPlay->bAllowCapturePlay));
+	     && PHYSFS_readUBE32(fileHandle, &dummy)
+	     && PHYSFS_readUBE32(fileHandle, &dummy)
+	     && PHYSFS_readUBE32(fileHandle, &dummy)
+	     && PHYSFS_readUBE32(fileHandle, &dummy));
 }
 
 #define GAME_SAVE_V7	\
