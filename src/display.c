@@ -561,7 +561,9 @@ static void CheckFinishedDrag(void)
 			if(wallDrag.status == DRAG_DRAGGING)
 			{
 				//if invalid location keep looking for a valid one
-				if (buildState == BUILD3D_VALID || buildState == BUILD3D_FINISHED)
+				if ((buildState == BUILD3D_VALID || buildState == BUILD3D_FINISHED)
+				    && sBuildDetails.psStats->ref >= REF_STRUCTURE_START
+				    && sBuildDetails.psStats->ref < (REF_STRUCTURE_START + REF_RANGE))
 				{
 					if ((((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_WALL
 					     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE)
@@ -603,7 +605,9 @@ static void CheckStartWallDrag(void)
 		/* Store away the details if we're building */
 		// You can start dragging walls from invalid locations so check for
 		// BUILD3D_POS or BUILD3D_VALID, used tojust check for BUILD3D_VALID.
-		if( (buildState == BUILD3D_POS) || (buildState == BUILD3D_VALID) )
+		if ((buildState == BUILD3D_POS || buildState == BUILD3D_VALID)
+		    && sBuildDetails.psStats->ref >= REF_STRUCTURE_START
+		    && sBuildDetails.psStats->ref < (REF_STRUCTURE_START + REF_RANGE))
 		{
 			if ((((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_WALL
 			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE)
@@ -635,6 +639,8 @@ static BOOL CheckFinishedFindPosition(void)
 		{
 			if ((((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_WALL
 			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE)
+			    && sBuildDetails.psStats->ref >= REF_STRUCTURE_START
+			    && sBuildDetails.psStats->ref < (REF_STRUCTURE_START + REF_RANGE)
 			    && !isLasSat((STRUCTURE_STATS *)sBuildDetails.psStats))
 			{
 				int dx, dy;
