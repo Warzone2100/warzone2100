@@ -323,6 +323,12 @@ BOOL NETstring(char *str, uint16_t maxlen)
 	}
 	else if (NETgetPacketDir() == PACKET_DECODE)
 	{
+		// Truncate length if necessary
+		if (len > maxlen)
+		{
+			debug(LOG_ERROR, "NETstring: Decoding buffer size %u truncated by maxlen %u", len, maxlen);
+			len = maxlen;
+		}
 		memcpy(str, store, len);
 	}
 
@@ -331,6 +337,7 @@ BOOL NETstring(char *str, uint16_t maxlen)
 
 	return TRUE;
 }
+
 BOOL NETbin(char *str, uint16_t maxlen)
 {
 	/*
@@ -360,6 +367,12 @@ BOOL NETbin(char *str, uint16_t maxlen)
 	}
 	else if (NETgetPacketDir() == PACKET_DECODE)
 	{
+		// Truncate length if necessary
+		if (len > maxlen)
+		{
+			debug(LOG_ERROR, "NETbin: Decoding buffer size %u truncated by maxlen %u", len, maxlen);
+			len = maxlen;
+		}
 		memcpy(str, store, len);
 	}
 
@@ -368,6 +381,7 @@ BOOL NETbin(char *str, uint16_t maxlen)
 
 	return TRUE;
 }
+
 BOOL NETVector3uw(Vector3uw* vp)
 {
 	return (NETuint16_t(&vp->x)
