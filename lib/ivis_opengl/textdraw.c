@@ -608,7 +608,8 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 	glMatrixMode(GL_TEXTURE);
 	glPushMatrix();
 	glLoadIdentity();
-	glMatrixMode(matrix_mode);
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
 
 	if (rotation != 0.f)
 	{
@@ -626,6 +627,7 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 	glcRenderString(string);
 	glFrontFace(GL_CCW);
 
+	glPopMatrix();
 	glMatrixMode(GL_TEXTURE);
 	glPopMatrix();
 	glMatrixMode(matrix_mode);
