@@ -17,14 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/***************************************************************************/
-/*
- * piedraw.c
- *
- * updated render routines for 3D coloured shaded transparency rendering
- *
+/** \file
+ *  Render routines for 3D coloured and shaded transparency rendering.
  */
-/***************************************************************************/
 
 #include <string.h>
 #include <SDL_opengl.h>
@@ -54,11 +49,9 @@ static GLfloat aVertex[VERTEX_COMPONENTS * MAP_VERTICES];
 
 extern BOOL drawing_interface;
 
-/***************************************************************************/
 /*
  *	OpenGL extensions for shadows
  */
-/***************************************************************************/
 
 BOOL check_extension(const char* extension_name)
 {
@@ -126,12 +119,9 @@ static BOOL stencil_one_pass(void)
 	return (1 == can_do_stencil_one_pass); // to get the types right
 }
 
-
-/***************************************************************************/
 /*
  *	Local Variables
  */
-/***************************************************************************/
 
 static TERRAIN_VERTEXF pieVrts[pie_MAX_VERTICES_PER_POLYGON];
 static unsigned int pieCount = 0;
@@ -140,12 +130,9 @@ static unsigned int polyCount = 0;
 static BOOL lighting = FALSE;
 static BOOL shadows = FALSE;
 
-
-/***************************************************************************/
 /*
  *	Source
  */
-/***************************************************************************/
 
 void pie_BeginLighting(const Vector3f * light)
 {
@@ -172,7 +159,6 @@ void pie_EndLighting(void)
 	shadows = FALSE;
 	lighting = FALSE;
 }
-
 
 static inline void pie_Polygon(const unsigned int numVerts, const TERRAIN_VERTEXF* pVrts, const BOOL light)
 {
@@ -242,7 +228,6 @@ static inline void pie_Polygon(const unsigned int numVerts, const TERRAIN_VERTEX
 	}
 }
 
-
 /***************************************************************************
  * pie_PiePoly
  *
@@ -278,7 +263,6 @@ static inline void pie_PiePoly(const PIEPOLY *poly, const BOOL light)
 	}
 }
 
-
 static inline void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, const BOOL light)
 {
 	if ( (poly->flags & iV_IMD_TEXANIM) && poly->pTexAnim != NULL && frame != 0 )
@@ -305,7 +289,6 @@ static inline void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, const BOOL ligh
 	pie_PiePoly(poly, light);
 #endif
 }
-
 
 /***************************************************************************
  * pie_Draw3dShape
@@ -455,7 +438,6 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	}
 }
 
-
 /// returns true if the edges are adjacent
 static int compare_edge (EDGE *A, EDGE *B, const Vector3f *pVertices )
 {
@@ -509,7 +491,6 @@ static void addToEdgeList(int a, int b, EDGE *edgelist, unsigned int* edge_count
 	}
 }
 
-
 /// scale the height according to the flags
 static inline float scale_y(float y, int flag, int flag_data)
 {
@@ -524,7 +505,6 @@ static inline float scale_y(float y, int flag, int flag_data)
 	}
 	return tempY;
 }
-
 
 /// Draw the shadow for a shape
 static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* light)
@@ -670,7 +650,6 @@ static void inverse_matrix(const float * src, float * dst)
 	dst[8] = invdet * (src[0]*src[5] - src[4]*src[1]);
 }
 
-
 void pie_CleanUp( void )
 {
 	free( tshapes );
@@ -783,7 +762,6 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, PIE
 	}
 }
 
-
 static void pie_ShadowDrawLoop(void)
 {
 	unsigned int i = 0;
@@ -794,7 +772,6 @@ static void pie_ShadowDrawLoop(void)
 		pie_DrawShadow(scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, &scshapes[i].light);
 	}
 }
-
 
 static void pie_DrawShadows(void)
 {
@@ -933,12 +910,6 @@ void pie_DrawImage(PIEIMAGE *image, PIERECT *dest)
 		glVertex2f(dest->x + dest->w, dest->y + dest->h);
 	glEnd();
 }
-
-/***************************************************************************
- *
- *
- *
- ***************************************************************************/
 
 void pie_DrawTerrainDone(int mapx, int mapy)
 {

@@ -17,14 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/***************************************************************************/
-/*
- * pieMatrix.c
- *
- * matrix functions for pumpkin image library.
- *
+/** \file
+ *  Matrix manipulation functions.
  */
-/***************************************************************************/
 
 #include "lib/framework/frame.h"
 
@@ -264,8 +259,8 @@ void pie_MatRotX(int x)
 /*!
  * 3D vector perspective projection
  * Projects 3D vector into 2D screen space
- * \param v3d 3D vector to project
- * \param v2d resulting 2D vector
+ * \param v3d       3D vector to project
+ * \param[out] v2d  resulting 2D vector
  * \return projected z component of v2d
  */
 Sint32 pie_RotateProject(const Vector3i *v3d, Vector2i *v2d)
@@ -295,9 +290,6 @@ Sint32 pie_RotateProject(const Vector3i *v3d, Vector2i *v2d)
 
 	return zz;
 }
-
-
-//*************************************************************************
 
 void pie_PerspectiveBegin(void)
 {
@@ -352,8 +344,6 @@ void pie_BeginInterface(void)
 	drawing_interface = TRUE;
 }
 
-//*************************************************************************
-
 void pie_SetGeometricOffset(int x, int y)
 {
 	psRendSurface->xcentre = x;
@@ -361,16 +351,10 @@ void pie_SetGeometricOffset(int x, int y)
 }
 
 
-//*************************************************************************
-//*** inverse rotate 3D vector with current rotation matrix
-//*
-//* params	v1 = pointer to 3D vector to rotate
-//* 			v2 = pointer to 3D resultant vector
-//*
-//* on exit	v2 = inverse-rotated vector
-//*
-//******
-
+/** Inverse rotate 3D vector with current rotation matrix.
+ *  @param v1       3D vector to rotate
+ *  @param[out] v2  inverse rotated 3D vector
+ */
 void pie_VectorInverseRotate0(const Vector3i *v1, Vector3i *v2)
 {
 	Sint32 x, y, z;
@@ -382,11 +366,8 @@ void pie_VectorInverseRotate0(const Vector3i *v1, Vector3i *v2)
 	v2->z = (x * psMatrix->g+y * psMatrix->h+z * psMatrix->i) >> FP12_SHIFT;
 }
 
-//*************************************************************************
-//*** setup transformation matrices/quaternions and trig tables
-//*
-//******
-
+/** Sets up transformation matrices/quaternions and trig tables
+ */
 void pie_MatInit(void)
 {
 	unsigned i, scsize;

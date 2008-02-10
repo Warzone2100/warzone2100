@@ -17,14 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/***************************************************************************/
-/*
- * piefunc.c
- *
- * extended render routines for 3D rendering
- *
+/** \file
+ *  Extended render routines for 3D rendering.
  */
-/***************************************************************************/
 
 #include "lib/framework/frame.h"
 #include "lib/framework/frameint.h"
@@ -40,13 +35,9 @@
 #include "lib/ivis_common/piemode.h"
 #include "lib/ivis_common/pieclip.h"
 
-/***************************************************************************/
 /*
  *	Source
  */
-/***************************************************************************/
-
-/* ---------------------------------------------------------------------------------- */
 
 void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, PIELIGHT colour)
 {
@@ -102,7 +93,6 @@ void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD 
 	glDisable(GL_SCISSOR_TEST);
 }
 
-/* ---------------------------------------------------------------------------------- */
 void pie_TransColouredTriangle(CLIP_VERTEX *vrt, PIELIGHT c)
 {
 	UDWORD i;
@@ -119,8 +109,6 @@ void pie_TransColouredTriangle(CLIP_VERTEX *vrt, PIELIGHT c)
 		}
 	glEnd();
 }
-
-/* ---------------------------------------------------------------------------------- */
 
 void pie_DrawSkybox(float scale, int u, int v, int w, int h)
 {
@@ -203,8 +191,6 @@ void pie_DrawFogBox(float left, float right, float front, float back, float heig
 	glEnd();
 	glPopAttrib();
 }
-
-/* ---------------------------------------------------------------------------------- */
 
 UBYTE pie_ByteScale(UBYTE a, UBYTE b)
 {

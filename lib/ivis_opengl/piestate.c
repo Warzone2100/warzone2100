@@ -17,14 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/***************************************************************************/
-/*
- * pieState.c
- *
- * renderer setup and state control routines for 3D rendering
- *
+/** \file
+ *  Renderer setup and state control routines for 3D rendering.
  */
-/***************************************************************************/
 
 #include "lib/framework/frame.h"
 
@@ -36,36 +31,37 @@
 #include "lib/ivis_common/tex.h"
 #include "lib/ivis_common/piepalette.h"
 
-/***************************************************************************/
 /*
  *	Global Variables
  */
-/***************************************************************************/
 
 extern RENDER_STATE	rendStates;
 
-/***************************************************************************/
 /*
  *	Source
  */
-/***************************************************************************/
 
-void pie_SetDepthBufferStatus(DEPTH_MODE depthMode) {
-	switch(depthMode) {
+void pie_SetDepthBufferStatus(DEPTH_MODE depthMode)
+{
+	switch(depthMode)
+	{
 		case DEPTH_CMP_LEQ_WRT_ON:
 			glEnable(GL_DEPTH_TEST);
 			glDepthFunc(GL_LEQUAL);
 			glDepthMask(GL_TRUE);
 			break;
+
 		case DEPTH_CMP_ALWAYS_WRT_ON:
 			glDisable(GL_DEPTH_TEST);
 			glDepthMask(GL_TRUE);
 			break;
+
 		case DEPTH_CMP_LEQ_WRT_OFF:
 			glEnable(GL_DEPTH_TEST);
 			glDepthFunc(GL_LEQUAL);
 			glDepthMask(GL_FALSE);
 			break;
+
 		case DEPTH_CMP_ALWAYS_WRT_OFF:
 			glDisable(GL_DEPTH_TEST);
 			glDepthMask(GL_FALSE);
@@ -95,13 +91,11 @@ void pie_UpdateFogDistance(float begin, float end)
 	glFogf(GL_FOG_END, end);
 }
 
-//***************************************************************************
 //
 // pie_SetFogStatus(BOOL val)
 //
 // Toggle fog on and off for rendering objects inside or outside the 3D world
 //
-//***************************************************************************
 
 void pie_SetFogStatus(BOOL val)
 {
@@ -183,7 +177,6 @@ void pie_SetAlphaTest(BOOL keyingOn)
 	}
 }
 
-/***************************************************************************/
 void pie_SetColourCombine(COLOUR_MODE colCombMode)
 {
 	if (colCombMode != rendStates.colourCombine) {
@@ -202,7 +195,6 @@ void pie_SetColourCombine(COLOUR_MODE colCombMode)
 	}
 }
 
-/***************************************************************************/
 void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode)
 {
 	if (transMode != rendStates.transMode) {
@@ -228,7 +220,6 @@ void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode)
 	}
 }
 
-/***************************************************************************/
 void pie_SetGammaValue(float val)
 {
 	debug(LOG_VIDEO, "%s(%f)", __FUNCTION__, val);
