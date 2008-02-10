@@ -45,7 +45,7 @@ typedef struct environ_data
 	UBYTE	data;
 } ENVIRON_DATA;
 
-ENVIRON_DATA	*pEnvironData = NULL;
+static ENVIRON_DATA	*pEnvironData = NULL;
 
 /** This function just allocates the memory now according to map size. */
 BOOL    environInit( void )
