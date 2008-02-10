@@ -153,15 +153,4 @@ extern void NETsetMasterserverName(const char* hostname);
 extern void NETsetMasterserverPort(unsigned int port);
 extern void NETsetGameserverPort(unsigned int port);
 
-// Some shortcuts to help you along!
-/* FIXME: This is _not_ portable! Bad, Pumpkin, bad! - Per */
-#define NetAdd(m,pos,thing) \
-	memcpy(&(m.body[pos]),&(thing),sizeof(thing))
-
-#define NetAddSt(m,pos,stri) \
-	strcpy(&(m.body[pos]),stri)
-
-#define NetGet(m,pos,thing) \
-	memcpy(&(thing),&(m->body[pos]),sizeof(thing))
-
 #endif
