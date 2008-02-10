@@ -100,6 +100,9 @@ typedef struct
 	unsigned int	bytes;
 } NETBUFSOCKET;
 
+/// This is the hardcoded dpid (player ID) value for the hosting player.
+#define HOST_DPID 1
+
 #define PLAYER_HOST		1
 #define PLAYER_SPECTATOR	2
 
@@ -1365,7 +1368,7 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 
 	if(!NetPlay.bComms)
 	{
-		NetPlay.dpidPlayer		= 1;
+		NetPlay.dpidPlayer		= HOST_DPID;
 		NetPlay.bHost			= TRUE;
 
 		return TRUE;
@@ -1584,7 +1587,7 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 	NET_initBufferedSocket(bsocket, tcp_socket);
 
 	// Send a join message
-	NETbeginEncode(MSG_JOIN, 1);
+	NETbeginEncode(MSG_JOIN, HOST_DPID);
 		// Casting constness away, because NETstring is const-incorrect
 		// when sending/encoding a packet.
 		NETstring((char*)playername, 64);
