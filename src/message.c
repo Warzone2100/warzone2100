@@ -437,7 +437,6 @@ void releaseAllProxDisp(void)
 	 		psNext = psCurr->psNext;
 			//remove message associated with this display
 			removeMessage(psCurr->psMessage, player);
-			//HEAP_FREE(psProxDispHeap, psCurr);
 		}
 		apsProxDisp[player] = NULL;
 	}
@@ -1040,48 +1039,33 @@ MESSAGE * findMessage(MSG_VIEWDATA *pViewData, MESSAGE_TYPE type, UDWORD player)
 /* 'displays' a proximity display*/
 void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp)
 {
-	FEATURE			*psFeature;
-	VIEWDATA		*psViewData;
-	VIEW_PROXIMITY	*psViewProx;
-	//char			msgStr[255];
-
 	if (psProxDisp->type == POS_PROXDATA)
 	{
-		psViewData = (VIEWDATA *) psProxDisp->psMessage->pViewData;
+		VIEWDATA	*psViewData = (VIEWDATA *)psProxDisp->psMessage->pViewData;
+		VIEW_PROXIMITY	*psViewProx = (VIEW_PROXIMITY *)psViewData->pData;
 
 		//display text - if any
 		if (psViewData->ppTextMsg)
 		{
-			//Beacon stuff: Add player number to the text
-			//if(psViewData->type == VIEW_HELP)
-			//{
-			//	//NOTE: this seems to cause GFX artefacts for some players
-			//	sprintf(msgStr, "%s", psViewData->ppTextMsg[0]);	//temporary solution
-			//	addConsoleMessage( msgStr, DEFAULT_JUSTIFY );
-			//}
-			//else
-			//{
-				if(psViewData->type != VIEW_HELP)
-				{
-					addConsoleMessage( psViewData->ppTextMsg[0], DEFAULT_JUSTIFY );
-				}
-			//}
+			if (psViewData->type != VIEW_HELP)
+			{
+				addConsoleMessage(psViewData->ppTextMsg[0], DEFAULT_JUSTIFY);
+			}
 		}
 
 		//play message - if any
-		psViewProx = (VIEW_PROXIMITY *) psViewData->pData;
 		if ( psViewProx->audioID != NO_AUDIO_MSG )
 		{
-			audio_QueueTrackPos( psViewProx->audioID, psViewProx->x,
-									psViewProx->y, psViewProx->z );
+			audio_QueueTrackPos(psViewProx->audioID, psViewProx->x, psViewProx->y, psViewProx->z);
 		}
 	}
 	else if (psProxDisp->type == POS_PROXOBJ)
 	{
+		FEATURE	*psFeature = (FEATURE *)psProxDisp->psMessage->pViewData;
+
 		ASSERT( ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->type ==
 			OBJ_FEATURE, "displayProximityMessage: invalid feature" );
 
-		psFeature = (FEATURE *)psProxDisp->psMessage->pViewData;
 		if (psFeature->psStats->subType == FEAT_OIL_RESOURCE)
 		{
 			//play default audio message for oil resource
@@ -1098,24 +1082,7 @@ void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp)
 
 	//set the read flag
 	psProxDisp->psMessage->read = TRUE;
-
 }
-
-/*void storeProximityScreenCoords(MESSAGE *psMessage, SDWORD x, SDWORD y)
-{
-	PROXIMITY_DISPLAY		*psProxDisp = NULL;
-
-	psProxDisp = getProximityDisplay(psMessage);
-	if (psProxDisp)
-	{
-		psProxDisp->screenX = x;
-		psProxDisp->screenY = y;
-	}
-	else
-	{
-		ASSERT( FALSE, "Unable to find proximity display" );
-	}
-}*/
 
 PROXIMITY_DISPLAY * getProximityDisplay(MESSAGE *psMessage)
 {
@@ -1139,7 +1106,6 @@ PROXIMITY_DISPLAY * getProximityDisplay(MESSAGE *psMessage)
 }
 
 //check for any messages using this viewdata and remove them
-//void checkMessages(VIEWDATA *psViewData)
 void checkMessages(MSG_VIEWDATA *psViewData)
 {
 	MESSAGE			*psCurr, *psNext;

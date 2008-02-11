@@ -10177,7 +10177,6 @@ VIEWDATA *HelpViewData(SDWORD sender, char *textMsg, UDWORD LocX, UDWORD LocY)
 	SDWORD				audioID;
 	UDWORD				numText;
 
-
 	//allocate message space
 	psViewData = (VIEWDATA *)malloc(sizeof(VIEWDATA));
 	if (psViewData == NULL)
@@ -10223,7 +10222,6 @@ VIEWDATA *HelpViewData(SDWORD sender, char *textMsg, UDWORD LocX, UDWORD LocY)
 		return NULL;
 	}
 
-
 	//store audio
 	audioID = NO_SOUND;
 	((VIEW_PROXIMITY *)psViewData->pData)->audioID = audioID;
@@ -10266,12 +10264,9 @@ MESSAGE * findHelpMsg(UDWORD player, SDWORD sender)
 		//look for VIEW_HELP, should only be 1 per player
 		if (psCurr->type == MSG_PROXIMITY)
 		{
-			//((VIEW_PROXIMITY *)((VIEWDATA *)psCurr->pViewData)->pData)->proxType
 			if(((VIEWDATA *)psCurr->pViewData)->type == VIEW_HELP)
 			{
 				debug(LOG_WZ, "findHelpMsg: %d ALREADY HAS A MESSAGE STORED", player);
-				//debug(LOG_ERROR,"stored sender = %d, looking for %d", ((VIEW_PROXIMITY *)((VIEWDATA *)psCurr->pViewData)->pData)->sender, sender);
-				//if((VIEW_PROXIMITY *)psCurr->pViewData)
 				if(((VIEW_PROXIMITY *)((VIEWDATA *)psCurr->pViewData)->pData)->sender == sender)
 				{
 					debug(LOG_WZ, "findHelpMsg: %d ALREADY HAS A MESSAGE STORED from %d", player, sender);

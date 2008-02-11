@@ -1777,7 +1777,6 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 	psProxDisp->screenX = x;
 	psProxDisp->screenY = y;
 	psProxDisp->screenR = r;
-	//storeProximityScreenCoords(psMessage, x, y);
 
 	iV_MatrixEnd();
 }

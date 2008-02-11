@@ -3100,15 +3100,13 @@ void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
 void drawRadarBlips(void)
 {
 	PROXIMITY_DISPLAY	*psProxDisp;
-	FEATURE				*psFeature;
-	UWORD				imageID;
-	UDWORD				VisWidth, VisHeight, delay = 150;
-	PROX_TYPE			proxType;
-	MESSAGE					*psCurr;
-	UDWORD i;
-
-	VisWidth = RADWIDTH;
-	VisHeight = RADHEIGHT;
+	FEATURE			*psFeature;
+	UWORD			imageID;
+	UDWORD			delay = 150;
+	PROX_TYPE		proxType;
+	UDWORD			i;
+	UDWORD			VisWidth = RADWIDTH;
+	UDWORD			VisHeight = RADHEIGHT;
 
 	//check if it's time to remove beacons
 	for(i=0; i<MAX_PLAYERS; i++)
@@ -3119,15 +3117,17 @@ void drawRadarBlips(void)
 		{
 			if(psProxDisp->psMessage->type == MSG_PROXIMITY)
 			{
-				psCurr = psProxDisp->psMessage;
+				MESSAGE		*psCurr = psProxDisp->psMessage;
+				VIEWDATA	*pViewData = (VIEWDATA *)psCurr->pViewData;
 
-				if(((VIEWDATA *)psCurr->pViewData)->type == VIEW_HELP)
+				ASSERT(pViewData != NULL, "Message without data!");
+
+				if (pViewData->type == VIEW_HELP)
 				{
-					assert(((VIEWDATA *)psCurr->pViewData)->pData != NULL); // FIXME This should never happen since type==VIEW_HELP should imply pData!=NULL. This is apparently not the case for everyone and always. The real problem is somewhere else and should be fixed there.
-					if( ((VIEWDATA *)psCurr->pViewData)->pData != NULL &&
-					   (((VIEW_PROXIMITY *)((VIEWDATA *)psCurr->pViewData)->pData)->timeAdded + 60000) <= gameTime)
+					ASSERT(pViewData->pData != NULL, "Help message without data!");
+					if (pViewData->pData != NULL && (((VIEW_PROXIMITY *)pViewData->pData)->timeAdded + 60000) <= gameTime)
 					{
-						debug(LOG_WZ, "blip timeout for %d, from %d", i, (((VIEW_PROXIMITY *)((VIEWDATA *)psCurr->pViewData)->pData)->sender));
+						debug(LOG_WZ, "blip timeout for %d, from %d", i, (((VIEW_PROXIMITY *)pViewData->pData)->sender));
 						removeMessage(psCurr, i);	//remove beacon
 						break;	//there can only be 1 beacon per player
 					}

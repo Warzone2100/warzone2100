@@ -69,7 +69,6 @@ extern VIEWDATA* getViewData(const char *pTextMsg);
 /* Release the viewdata memory */
 extern void viewDataShutDown(VIEWDATA *psViewData);
 
-//extern void storeProximityScreenCoords(MESSAGE *psMessage, SDWORD x, SDWORD y);
 extern PROXIMITY_DISPLAY * getProximityDisplay(MESSAGE *psMessage);
 
 /* Looks through the players list of messages to find one with the same viewData

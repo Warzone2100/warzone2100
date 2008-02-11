@@ -2494,9 +2494,10 @@ void	kf_AddHelpBlip( void )
 			mOverR = TRUE;
 			CalcRadarPosition(x,y,&worldX,&worldY);
 
+			CLIP(worldX, 0, mapWidth - 1);	// temporary hack until CalcRadarPosition is fixed
+			CLIP(worldY, 0, mapHeight- 1);
 			worldX = worldX*TILE_UNITS+TILE_UNITS/2;
 			worldY = worldY*TILE_UNITS+TILE_UNITS/2;
-			//printf_console("Radar, x: %d, y: %d", worldX, worldY);
 		}
 	}
 
@@ -2516,7 +2517,6 @@ void	kf_AddHelpBlip( void )
 	//{
 	//	strlcpy(tempStr, sCurrentConsoleText, sizeof(tempStr));
 	//}
-
 
 	/* add beacon for the sender */
 	strlcpy(beaconMsg[selectedPlayer], tempStr, sizeof(beaconMsg[selectedPlayer]));
