@@ -214,8 +214,6 @@ static BOOL NET_recvMessage(NETBUFSOCKET* bs, NETMSG* pMsg)
 		goto error;
 	}
 
-	debug(LOG_NET, "NETrecvMessage: received message of type %i and size %i.", message->type, message->size);
-
 	memcpy(pMsg, message, size);
 	bs->buffer_start += size;
 	bs->bytes -= size;
@@ -732,8 +730,6 @@ BOOL NETbcast(NETMSG *msg, BOOL guarantee)
 		return TRUE;
 	}
 
-	debug(LOG_NET, "NETbcast");
-
 	msg->destination = NET_ALL_PLAYERS;
 	msg->source = selectedPlayer;
 
@@ -772,8 +768,6 @@ BOOL NETbcast(NETMSG *msg, BOOL guarantee)
 // Check if a message is a system message
 BOOL NETprocessSystemMessage(NETMSG * pMsg)
 {
-	debug(LOG_NET, "NETprocessSystemMessage with packet of type %hhu", pMsg->type);
-
 	switch (pMsg->type)
 	{
 		case MSG_PLAYER_INFO: {
@@ -833,7 +827,7 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 		{
 			debug(LOG_NET, "NETprocessSystemMessage: Receiving game flags");
 
-			NETbeginEncode(MSG_GAME_FLAGS, NET_ALL_PLAYERS);
+			NETbeginDecode();
 			{
 				static unsigned int max_flags = sizeof(NetGameFlags) / sizeof(*NetGameFlags);
 				// Retrieve the amount of game flags that we should receive
@@ -1404,6 +1398,8 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 
 	NETregisterServer(0);
 
+	debug(LOG_NET, "Hosting a server. We are player %d.", NetPlay.dpidPlayer);
+
 	return TRUE;
 }
 
@@ -1587,7 +1583,8 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 			NETend();
 
 			NetPlay.dpidPlayer = dpid;
-			debug(LOG_NET, "NETjoinGame: I'm player %u", (unsigned int)NetPlay.dpidPlayer);
+			debug(LOG_NET, "NETjoinGame: MSG_ACCEPTED received. Accepted into the game - I'm player %u", 
+			      (unsigned int)NetPlay.dpidPlayer);
 			NetPlay.bHost = FALSE;
 
 			if (NetPlay.dpidPlayer >= MAX_CONNECTED_PLAYERS)
