@@ -180,17 +180,12 @@ static BOOL enumerateMultiMaps(char *found, UDWORD *players,BOOL first, UBYTE ca
 			{
 				cam = 3;
 			}
-//			else if(lev->type == MULTI_SKIRMISHA)
-//			{
-//				cam = 0;
-//			}
 			else
 			{
 				cam = 1;
 			}
 
 			if((lev->type == SKIRMISH || lev->type == MULTI_SKIRMISH2 || lev->type == MULTI_SKIRMISH3)
-//				|| lev->type == MULTI_SKIRMISHA)
 				&& (numPlayers == 0 || numPlayers == lev->players)
 				&& cam == camToUse )
 			{
@@ -211,10 +206,6 @@ static BOOL enumerateMultiMaps(char *found, UDWORD *players,BOOL first, UBYTE ca
 			{
 				cam = 3;
 			}
-//			else if(lev->type == MULTI_CAMPAIGNA)
-//			{
-//				cam = 0;
-//			}
 			else
 			{
 				cam = 1;

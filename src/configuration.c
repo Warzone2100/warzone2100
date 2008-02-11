@@ -409,17 +409,6 @@ BOOL loadConfig(void)
 		setWarzoneKeyNumeric("base", game.base);
 	}
 
-	//limit
-	if(getWarzoneKeyNumeric("limit", &val))
-	{
-		game.limit=(UBYTE)val;
-	}
-	else
-	{
-		game.limit = NOLIMIT;
-		setWarzoneKeyNumeric("limit", game.limit);
-	}
-
 	//maxplay
 	if(getWarzoneKeyNumeric("maxPlay", &val))
 	{
@@ -636,7 +625,6 @@ BOOL saveConfig(void)
 		setWarzoneKeyNumeric("type", game.type);				// game type
 		setWarzoneKeyNumeric("base", game.base);				// size of base
 		setWarzoneKeyNumeric("fog", game.fog);				// fog 'o war
-		setWarzoneKeyNumeric("limit", game.limit);			// limits
 		setWarzoneKeyNumeric("maxPlay", game.maxPlayers);		// max no of players
 		setWarzoneKeyNumeric("alliance", game.alliance);			// allow alliances
 		setWarzoneKeyString("forceName", sForceName);			// force

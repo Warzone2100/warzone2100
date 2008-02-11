@@ -1702,39 +1702,6 @@ static void processMultiopWidgets(UDWORD id)
 				sendOptions(0,0);
 			}
 			break;
-
-		case MULTIOP_NOLIMIT:								// set power level to low
-			widgSetButtonState(psWScreen, MULTIOP_NOLIMIT,WBUT_LOCK);
-			widgSetButtonState(psWScreen, MULTIOP_FRAGLIMIT,0);
-			widgSetButtonState(psWScreen, MULTIOP_TIMELIMIT ,0);
-			game.limit = NOLIMIT;
-			if(bHosted)
-			{
-				sendOptions(0,0);
-			}
-			break;
-
-		case MULTIOP_FRAGLIMIT:								// set power to med
-			widgSetButtonState(psWScreen, MULTIOP_NOLIMIT,0);
-			widgSetButtonState(psWScreen, MULTIOP_FRAGLIMIT,WBUT_LOCK);
-			widgSetButtonState(psWScreen, MULTIOP_TIMELIMIT ,0);
-			game.limit = FRAGLIMIT;
-			if(bHosted)
-			{
-				sendOptions(0,0);
-			}
-			break;
-
-		case MULTIOP_TIMELIMIT:									// set power to hi
-			widgSetButtonState(psWScreen, MULTIOP_NOLIMIT,0);
-			widgSetButtonState(psWScreen, MULTIOP_FRAGLIMIT,0);
-			widgSetButtonState(psWScreen, MULTIOP_TIMELIMIT,WBUT_LOCK);
-			game.limit = TIMELIMIT;
-			if(bHosted)
-			{
-				sendOptions(0,0);
-			}
-			break;
 		}
 	}
 

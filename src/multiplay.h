@@ -106,9 +106,8 @@ typedef struct {
 	uint32_t    power;						// power level for arena game
 	uint8_t		base;						// clean/base/base&defence
 	uint8_t		alliance;					// no/yes/AIs vs Humans
-	uint8_t		limit;						// limit no/time/frag
 	uint8_t		skDiff[MAX_PLAYERS];			// skirmish game difficulty settings.
-} MULTIPLAYERGAME, *LPMULTIPLAYERGAME;
+} MULTIPLAYERGAME;
 
 typedef struct
 {
@@ -124,14 +123,11 @@ typedef struct {
 	BOOL				JoiningInProgress[MAX_PLAYERS];
 	BOOL				bHostSetup;
 	UDWORD				startTime;
-	UDWORD				modem;								// modem to use.
 	UDWORD				numStructureLimits;					// number of limits
 	MULTISTRUCTLIMITS	*pStructureLimits;					// limits chunk.
-
 	UDWORD		skScores[MAX_PLAYERS][2];			// score+kills for local skirmish players.
-
 	char		phrases[5][255];					// 5 favourite text messages.
-} MULTIPLAYERINGAME, *LPMULTIPLAYERINGAME;
+} MULTIPLAYERINGAME;
 
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -155,23 +151,13 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 #define ANYPLAYER				99
 #define ONEPLAYER				98
 
-//#define DMATCH					11			// to easily distinguish game types when joining.
 #define CAMPAIGN				12
-//#define TEAMPLAY				13
-
 #define	SKIRMISH				14
 #define MULTI_SKIRMISH2			18
 #define MULTI_SKIRMISH3			19
-//#define MULTI_SKIRMISHA			20
 
 #define MULTI_CAMPAIGN2			15
 #define MULTI_CAMPAIGN3			16
-//#define MULTI_CAMPAIGNA			17
-
-
-#define NOLIMIT					0			// limit options for dmatch.
-#define FRAGLIMIT				1
-#define TIMELIMIT				2
 
 #define CAMP_CLEAN				0			// campaign subtypes
 #define CAMP_BASE				1
@@ -180,7 +166,6 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 #define	FORCEEDITPLAYER			0
 #define DEATHMATCHTEMPLATES		4			// game templates are stored in player x.
 #define CAMPAIGNTEMPLATES		5
-
 
 #define PING_LO					0			// this ping is kickin'.
 #define PING_MED				600			// this ping is crusin'.
@@ -264,8 +249,6 @@ extern BOOL sendLeavingMsg		(void);
 
 extern BOOL hostCampaign		(char *sGame, char *sPlayer);
 extern BOOL joinCampaign		(UDWORD gameNumber, char *playername);
-//extern BOOL hostArena			(char *sGame, char *sPlayer);
-//extern BOOL joinArena			(UDWORD gameNumber, char *playername);
 extern void	playerResponding	(void);
 extern BOOL multiGameInit		(void);
 extern BOOL multiGameShutdown	(void);

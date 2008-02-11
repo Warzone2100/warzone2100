@@ -79,7 +79,6 @@ void sendOptions(uint32_t dest, uint32_t play)
 	NETuint32_t(&game.power);
 	NETuint8_t(&game.base);
 	NETuint8_t(&game.alliance);
-	NETuint8_t(&game.limit);
 	
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -177,7 +176,6 @@ void recvOptions()
 	NETuint32_t(&game.power);
 	NETuint8_t(&game.base);
 	NETuint8_t(&game.alliance);
-	NETuint8_t(&game.limit);
 	
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
