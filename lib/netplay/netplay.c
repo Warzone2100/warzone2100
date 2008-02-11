@@ -1473,6 +1473,11 @@ BOOL NETfindGame(void)
 	{
 		gamesavailable = SDL_SwapBE32(gamesavailable);
 	}
+	else
+	{
+		// when we fail to receive a game count, bail out
+		return FALSE;
+	}
 
 	debug(LOG_NET, "receiving info of %u game(s)", (unsigned int)gamesavailable);
 
