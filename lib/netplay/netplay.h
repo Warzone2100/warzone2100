@@ -32,11 +32,8 @@
 // Include this file in your game to add multiplayer facilities.
 
 // Constants
-#define MaxNumberOfPlayers	8			// max number of players in a game.
 #define MaxMsgSize		8000			// max size of a message in bytes.
 #define	StringSize		64			// size of strings used.
-#define ConnectionSize		255			// max size of a connection description.
-#define MaxProtocols		12			// max number of returnable protocols.
 #define MaxGames		12			// max number of concurrently playable games to allow.
 
 #define SESSION_JOINDISABLED	1
@@ -91,7 +88,7 @@ typedef struct {
 // all the luvly Netplay info....
 typedef struct {
 	GAMESTRUCT	games[MaxGames];		// the collection of games
-	PLAYER		players[MaxNumberOfPlayers];	// the array of players.
+	PLAYER		players[MAX_PLAYERS];	// the array of players.
 	uint32_t        playercount;			// number of players in game.
 	uint32_t        dpidPlayer;			// ID of player created
 

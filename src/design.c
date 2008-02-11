@@ -4338,9 +4338,7 @@ void intProcessDesign(UDWORD id)
 		/* save template if valid */
 		if (saveTemplate())
 		{
-#ifdef SCRIPTS
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROIDDESIGNED);
-#endif
 		}
 
 		switch ( desCompMode )

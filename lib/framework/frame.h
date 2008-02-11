@@ -62,6 +62,7 @@
 #include <physfs.h>
 
 extern UDWORD selectedPlayer;
+#define MAX_PLAYERS	8	/**< Maximum number of players in the game. */
 
 /** Initialise the frame work library */
 extern BOOL frameInitialise(

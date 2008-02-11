@@ -1871,7 +1871,6 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 		}
 	}
 
-#ifdef SCRIPTS
     if ((bMultiPlayer || player == selectedPlayer) && bDisplay)
     {
         psCBLastResearch = pResearch;
@@ -1882,7 +1881,6 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
         CBResFacilityOwner = -1;
 		psCBLastResearch = NULL;
     }
-#endif
 
 #ifdef DEBUG
     /*this just checks that there are not more than 32 weapons now available for

@@ -315,7 +315,7 @@ UDWORD NETplayerInfo(void)
 		return 1;
 	}
 
-	memset(NetPlay.players, 0, (sizeof(PLAYER)*MaxNumberOfPlayers));	// reset player info
+	memset(NetPlay.players, 0, sizeof(PLAYER) * MAX_PLAYERS);	// reset player info
 
 	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
@@ -511,13 +511,11 @@ BOOL NETinit(BOOL bFirstCall)
 		NetPlay.bHost			= 0;
 		NetPlay.bComms			= TRUE;
 
-		for(i=0;i<MaxNumberOfPlayers;i++)
+		for(i = 0; i < MAX_PLAYERS; i++)
 		{
 			memset(&NetPlay.players[i], 0, sizeof(PLAYER));
 			memset(&NetPlay.games[i], 0, sizeof(GAMESTRUCT));
 		}
-		//GAME_GUID = g;
-
 		NetPlay.bComms = TRUE;
 		NETstartLogging();
 	}

@@ -182,7 +182,6 @@ GAMECODE gameLoop(void)
 	{
 		if (!scriptPaused())
 		{
-#ifdef SCRIPTS
 			/* Update the event system */
 			if (!bInTutorial)
 			{
@@ -192,7 +191,6 @@ GAMECODE gameLoop(void)
 			{
 				eventProcessTriggers(gameTime2/SCR_TICKRATE);
 			}
-#endif
 		}
 
 		/* Run the in game interface and see if it grabbed any mouse clicks */

@@ -2714,12 +2714,11 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 		{
 			assignFactoryCommandDroid(psStructure, psNewDroid);
 		}
-#ifdef SCRIPTS
 		if ( psNewDroid->player == selectedPlayer )
 		{
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROIDBUILT);
 		}
-#endif
+
 		return TRUE;
 	}
 	else

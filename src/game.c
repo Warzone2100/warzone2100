@@ -553,7 +553,7 @@ static bool serializeNetPlay(PHYSFS_file* fileHandle, const NETPLAY* serializeNe
 			return false;
 	}
 
-	for (i = 0; i < MaxNumberOfPlayers; ++i)
+	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
 		if (!serializePlayer(fileHandle, &serializeNetPlay->players[i]))
 			return false;
@@ -579,7 +579,7 @@ static bool deserializeNetPlay(PHYSFS_file* fileHandle, NETPLAY* serializeNetPla
 			return false;
 	}
 
-	for (i = 0; i < MaxNumberOfPlayers; ++i)
+	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
 		if (!deserializePlayer(fileHandle, &serializeNetPlay->players[i]))
 			return false;
@@ -3985,7 +3985,7 @@ static void endian_SaveGameV(SAVE_GAME* psSaveGame, UDWORD version)
 			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser3);
 			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUser4);
 		}
-		for(i = 0; i < MaxNumberOfPlayers; i++)
+		for(i = 0; i < MAX_PLAYERS; i++)
 			endian_udword(&psSaveGame->sNetPlay.players[i].dpid);
 		endian_udword(&psSaveGame->sNetPlay.playercount);
 		endian_udword(&psSaveGame->sNetPlay.dpidPlayer);
