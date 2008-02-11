@@ -119,7 +119,6 @@ static SDLNet_SocketSet	socket_set = NULL;
 static BOOL		is_server = FALSE;
 static TCPsocket	tmp_socket[MAX_TMP_SOCKETS] = { NULL };
 static SDLNet_SocketSet	tmp_socket_set = NULL;
-static NETMSG		message;
 static char*		hostname;
 static NETSTATS		nStats = { 0, 0, 0, 0 };
 static NET_PLAYER	players[MAX_CONNECTED_PLAYERS];
@@ -261,16 +260,16 @@ static void NET_InitPlayers(void)
 
 static void NETBroadcastPlayerInfo(int dpid)
 {
-	NET_PLAYER* player = (NET_PLAYER*)message.body;
+	NET_PLAYER* player = (NET_PLAYER*)NetMsg.body;
 
-	message.type = MSG_PLAYER_INFO;
-	message.size = sizeof(NET_PLAYER);
-	memcpy(message.body, &players[dpid], sizeof(NET_PLAYER));
+	NetMsg.type = MSG_PLAYER_INFO;
+	NetMsg.size = sizeof(NET_PLAYER);
+	memcpy(NetMsg.body, &players[dpid], sizeof(NET_PLAYER));
 
 	player->id    = SDL_SwapBE32(player->id);
 	player->flags = SDL_SwapBE32(player->flags);
 
-	NETbcast(&message, TRUE);
+	NETbcast(&NetMsg, TRUE);
 }
 
 static unsigned int NET_CreatePlayer(const char* name, unsigned int flags)
@@ -1263,7 +1262,7 @@ static void NETallowJoining(void)
 			if (   tmp_socket[i] != NULL
 			    && SDLNet_SocketReady(tmp_socket[i]) > 0)
 			{
-				int size = SDLNet_TCP_Recv(tmp_socket[i], &message, sizeof(NETMSG));
+				int size = SDLNet_TCP_Recv(tmp_socket[i], &NetMsg, sizeof(NETMSG));
 
 				if (size <= 0)
 				{
@@ -1272,7 +1271,7 @@ static void NETallowJoining(void)
 					SDLNet_TCP_Close(tmp_socket[i]);
 					tmp_socket[i] = NULL;
 				}
-				else if (message.type == MSG_JOIN)
+				else if (NetMsg.type == MSG_JOIN)
 				{
 					char name[64];
 					int j;
@@ -1572,9 +1571,9 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 	// Loop until we've been accepted into the game
 	for (;;)
 	{
-		NETrecv(&message);
+		NETrecv(&NetMsg);
 
-		if (message.type == MSG_ACCEPTED)
+		if (NetMsg.type == MSG_ACCEPTED)
 		{
 			uint8_t dpid;
 			NETbeginDecode();
