@@ -779,7 +779,7 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 
 			dpid = pi->id;
 
-			debug(LOG_NET, "NETprocessSystemMessage: Receiving MSG_PLAYER_INFO for player %d from player %d. We are %d.", 
+			debug(LOG_NET, "NETprocessSystemMessage: Receiving MSG_PLAYER_INFO for player %d from player %d. We are %d.",
 			      dpid, pMsg->source, NetPlay.dpidPlayer);
 
 			// Bail out if the given ID number is out of range
@@ -1484,25 +1484,26 @@ BOOL NETfindGame(void)
 	do
 	{
 		// Attempt to receive a game description structure
-		if (NETrecvGAMESTRUCT(&NetPlay.games[gamecount]))
+		if (!NETrecvGAMESTRUCT(&NetPlay.games[gamecount]))
+			// If we fail, success depends on the amount of games that we've read already
+			return gamecount;
+
+		if (NetPlay.games[gamecount].desc.host[0] == '\0')
 		{
-			if (NetPlay.games[gamecount].desc.host[0] == '\0')
-			{
-				unsigned char* address = (unsigned char*)(&(ip.host));
+			unsigned char* address = (unsigned char*)(&(ip.host));
 
-				snprintf(NetPlay.games[gamecount].desc.host, sizeof(NetPlay.games[gamecount].desc.host),
-				"%i.%i.%i.%i",
-					(int)(address[0]),
-					(int)(address[1]),
-					(int)(address[2]),
-					(int)(address[3]));
+			snprintf(NetPlay.games[gamecount].desc.host, sizeof(NetPlay.games[gamecount].desc.host),
+			"%i.%i.%i.%i",
+				(int)(address[0]),
+				(int)(address[1]),
+				(int)(address[2]),
+				(int)(address[3]));
 
-				// Guarantee to nul-terminate
-				NetPlay.games[gamecount].desc.host[sizeof(NetPlay.games[gamecount].desc.host) - 1] = '\0';
-			}
-
-			gamecount++;
+			// Guarantee to nul-terminate
+			NetPlay.games[gamecount].desc.host[sizeof(NetPlay.games[gamecount].desc.host) - 1] = '\0';
 		}
+
+		++gamecount;
 	} while (gamecount < gamesavailable);
 
 	return TRUE;
@@ -1590,7 +1591,7 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 			NETend();
 
 			NetPlay.dpidPlayer = dpid;
-			debug(LOG_NET, "NETjoinGame: MSG_ACCEPTED received. Accepted into the game - I'm player %u", 
+			debug(LOG_NET, "NETjoinGame: MSG_ACCEPTED received. Accepted into the game - I'm player %u",
 			      (unsigned int)NetPlay.dpidPlayer);
 			NetPlay.bHost = FALSE;
 
