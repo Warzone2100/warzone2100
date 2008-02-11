@@ -309,7 +309,7 @@ UDWORD NETplayerInfo(void)
 	{
 		NetPlay.playercount		= 1;
 		NetPlay.players[0].bHost	= TRUE;
-		NetPlay.players[0].dpid		= 1;
+		NetPlay.players[0].dpid		= HOST_DPID;
 		return 1;
 	}
 
@@ -1432,7 +1432,7 @@ BOOL NETfindGame(void)
 
 	if(!NetPlay.bComms)
 	{
-		NetPlay.dpidPlayer		= 1;
+		NetPlay.dpidPlayer		= HOST_DPID;
 		NetPlay.bHost			= TRUE;
 		return TRUE;
 	}
