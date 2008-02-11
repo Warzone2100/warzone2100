@@ -10091,7 +10091,7 @@ BOOL addHelpBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char
 	MESSAGE			*psMessage;
 	VIEWDATA		*pTempData;
 
-	//debug(LOG_WZ, "addHelpBlip: forPlayer=%d, sender=%d", forPlayer,sender);
+	//debug(LOG_WZ, "addHelpBlip: forPlayer=%d, sender=%d", forPlayer, sender);
 
 	if (forPlayer >= MAX_PLAYERS)
 	{
@@ -10121,6 +10121,7 @@ BOOL addHelpBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char
 
 		//set the data
 		pTempData = HelpViewData(sender, textMsg, locX, locY);
+		ASSERT(pTempData != NULL, "Empty help data for radar beacon");
 
 		psMessage->pViewData = (MSG_VIEWDATA *)pTempData;
 
@@ -10132,7 +10133,6 @@ BOOL addHelpBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char
 		//{
 			((VIEW_PROXIMITY *)pTempData->pData)->z = height;
 		//}
-
 	}
 	else
 	{
@@ -10173,34 +10173,25 @@ BOOL sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sende
 VIEWDATA *HelpViewData(SDWORD sender, char *textMsg, UDWORD LocX, UDWORD LocY)
 {
 	VIEWDATA			*psViewData;
-	char				name[MAX_STR_LENGTH];
 	SDWORD				audioID;
-	UDWORD				numText;
 
 	//allocate message space
 	psViewData = (VIEWDATA *)malloc(sizeof(VIEWDATA));
 	if (psViewData == NULL)
 	{
-		debug(LOG_ERROR,"prepairHelpViewData() - Unable to allocate memory for viewdata");
+		ASSERT(FALSE, "prepairHelpViewData() - Unable to allocate memory for viewdata");
 		return NULL;
 	}
 
 	memset(psViewData, 0, sizeof(VIEWDATA));
 
-	numText = 1;
-
-	psViewData->numText=(UBYTE)numText;
+	psViewData->numText = 1;
 
 	//allocate storage for the name
-	name[0] = 'h';
-	name[1] = 'e';
-	name[2] = 'l';
-	name[3] = 'p';
-	name[4] = '\0';
- 	psViewData->pName = strdup(name);
+ 	psViewData->pName = strdup("help");
 	if (psViewData->pName == NULL)
 	{
-		debug(LOG_ERROR,"prepairHelpViewData() - ViewData Name - Out of memory");
+		ASSERT(FALSE, "prepairHelpViewData() - ViewData Name - Out of memory");
 		return NULL;
 	}
 
@@ -10215,10 +10206,9 @@ VIEWDATA *HelpViewData(SDWORD sender, char *textMsg, UDWORD LocX, UDWORD LocY)
 
 	//allocate memory for blip location etc
 	psViewData->pData = (VIEW_PROXIMITY *) malloc(sizeof(VIEW_PROXIMITY));
-
 	if (psViewData->pData == NULL)
 	{
-		debug(LOG_ERROR,"prepairHelpViewData() - Unable to allocate memory");
+		ASSERT(FALSE, "prepairHelpViewData() - Unable to allocate memory");
 		return NULL;
 	}
 
@@ -10229,13 +10219,13 @@ VIEWDATA *HelpViewData(SDWORD sender, char *textMsg, UDWORD LocX, UDWORD LocY)
 	//store blip location
 	if (LocX < 0)
 	{
-		debug(LOG_ERROR,"prepairHelpViewData() - Negative X coord for prox message");
+		ASSERT(FALSE, "prepairHelpViewData() - Negative X coord for prox message");
 		return NULL;
 	}
 
 	if (LocY < 0)
 	{
-		debug(LOG_ERROR,"prepairHelpViewData() - Negative X coord for prox message");
+		ASSERT(FALSE, "prepairHelpViewData() - Negative X coord for prox message");
 		return NULL;
 	}
 
