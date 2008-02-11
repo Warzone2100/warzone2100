@@ -259,8 +259,6 @@ extern BOOL sendHappyVtol		(const DROID* psDroid);
 
 // Startup. mulitopt
 extern BOOL multiTemplateSetup	(void);
-extern BOOL multiInitialise		(void);							// for Init.c
-extern BOOL lobbyInitialise		(void);							// for Init.c
 extern BOOL multiShutdown		(void);
 extern BOOL sendLeavingMsg		(void);
 

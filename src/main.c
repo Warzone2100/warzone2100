@@ -103,7 +103,6 @@ char * multiplay_mods[MAX_MODS] = { NULL };
 
 //flag to indicate when initialisation is complete
 BOOL	gameInitialised = FALSE;
-BOOL	bDisableLobby = FALSE;
 char	SaveGamePath[PATH_MAX];
 char	ScreenDumpPath[PATH_MAX];
 char	MultiForcesPath[PATH_MAX];
@@ -903,11 +902,7 @@ int main(int argc, char *argv[])
 	tagTest();
 #endif
 
-	// find out if the lobby stuff has been disabled
-	if (!bDisableLobby && !lobbyInitialise()) // ajl. Init net stuff. Lobby can modify startup conditions like commandline.
-	{
-		return -1;
-	}
+	NETinit(TRUE);
 
 	if (!frameInitialise( "Warzone 2100", pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), pie_GetVideoBufferDepth(), war_getFullscreen() ))
 	{

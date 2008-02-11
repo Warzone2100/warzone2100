@@ -561,7 +561,7 @@ static bool serializeNetPlay(PHYSFS_file* fileHandle, const NETPLAY* serializeNe
 
 	return (PHYSFS_writeUBE32(fileHandle, serializeNetPlay->bComms)
 	     && PHYSFS_writeUBE32(fileHandle, serializeNetPlay->bHost)
-	     && PHYSFS_writeUBE32(fileHandle, serializeNetPlay->bLobbyLaunched)
+	     && PHYSFS_writeUBE32(fileHandle, 0)
 	     && PHYSFS_writeUBE32(fileHandle, 0)
 	     && PHYSFS_writeUBE32(fileHandle, 0)
 	     && PHYSFS_writeUBE32(fileHandle, 0)
@@ -587,7 +587,7 @@ static bool deserializeNetPlay(PHYSFS_file* fileHandle, NETPLAY* serializeNetPla
 
 	return (PHYSFS_readUBE32(fileHandle, &serializeNetPlay->bComms)
 	     && PHYSFS_readUBE32(fileHandle, &serializeNetPlay->bHost)
-	     && PHYSFS_readUBE32(fileHandle, &serializeNetPlay->bLobbyLaunched)
+	     && PHYSFS_readUBE32(fileHandle, &dummy)
 	     && PHYSFS_readUBE32(fileHandle, &dummy)
 	     && PHYSFS_readUBE32(fileHandle, &dummy)
 	     && PHYSFS_readUBE32(fileHandle, &dummy)

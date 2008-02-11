@@ -125,19 +125,6 @@ TITLECODE titleLoop(void)
 		changeTitleMode(TITLE);
 
 		frameSetCursorFromRes(IDC_DEFAULT); // reset cursor (sw)
-
-		if(NetPlay.bLobbyLaunched) // lobbies skip title screens & go into the game
-		{
-			if (NetPlay.bHost)
-			{
-				ingame.bHostSetup = TRUE;
-			}
-			else
-			{
-				ingame.bHostSetup = FALSE;
-			}
-			changeTitleMode(QUIT);
-		}
 	}
 
 	switch(titleMode) // run relevant title screen code.

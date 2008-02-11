@@ -300,7 +300,7 @@ static void NET_DestroyPlayer(unsigned int id)
 }
 
 // ////////////////////////////////////////////////////////////////////////
-// count players. call with null to enumerate the game already joined.
+// count players.
 UDWORD NETplayerInfo(void)
 {
 	unsigned int i;
@@ -507,7 +507,6 @@ BOOL NETinit(BOOL bFirstCall)
 	{
 		debug(LOG_NET, "NETPLAY: Init called, MORNIN'");
 
-		NetPlay.bLobbyLaunched		= FALSE;				// clean up
 		NetPlay.dpidPlayer		= 0;
 		NetPlay.bHost			= 0;
 		NetPlay.bComms			= TRUE;

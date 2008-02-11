@@ -93,13 +93,11 @@ typedef struct {
 	GAMESTRUCT	games[MaxGames];		// the collection of games
 	PLAYER		players[MaxNumberOfPlayers];	// the array of players.
 	uint32_t        playercount;			// number of players in game.
-
 	uint32_t        dpidPlayer;			// ID of player created
 
 	// booleans
 	uint32_t        bComms;				// actually do the comms?
 	uint32_t        bHost;				// TRUE if we are hosting the session
-	uint32_t        bLobbyLaunched;			// true if app launched by a lobby
 } NETPLAY;
 
 // ////////////////////////////////////////////////////////////////////////

@@ -437,11 +437,6 @@ BOOL systemInitialise(void)
 		cdAudio_Open(UserMusicPath);
 	}
 
-	if (!bDisableLobby && !multiInitialise()) // ajl. Init net stuff
-	{
-		return FALSE;
-	}
-
 	if (!dataInitLoadFuncs()) // Pass all the data loading functions to the framework library
 	{
 		return FALSE;
@@ -491,7 +486,7 @@ void systemShutdown(void)
 	// free up all the load functions (all the data should already have been freed)
 	resReleaseAll();
 
-	if (!bDisableLobby && !multiShutdown()) // ajl. init net stuff
+	if (!multiShutdown()) // ajl. init net stuff
 	{
 		return;
 	}

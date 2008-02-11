@@ -310,17 +310,7 @@ BOOL hostCampaign(char *sGame, char *sPlayer)
 	debug(LOG_WZ, "Hosting campaign: '%s', player: '%s'", sGame, sPlayer);
 
 	freeMessages();
-	if (!NetPlay.bLobbyLaunched)
-	{
-		NEThostGame(sGame,sPlayer,game.type,0,0,0,game.maxPlayers); // temporary stuff
-	}
-	else
-	{
-		NETsetGameFlags(1,game.type);
-		// 2 is average ping
-		NETsetGameFlags(3,0);
-		NETsetGameFlags(4,0);
-	}
+	NEThostGame(sGame, sPlayer, game.type, 0, 0, 0, game.maxPlayers); // temporary stuff
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -379,10 +369,7 @@ BOOL joinCampaign(UDWORD gameNumber, char *sPlayer)
 	if(!ingame.localJoiningInProgress)
 	{
 //		game.type = CAMPAIGN;
-		if(!NetPlay.bLobbyLaunched)
-		{
-			NETjoinGame(gameNumber, sPlayer);	// join
-		}
+		NETjoinGame(gameNumber, sPlayer);	// join
 		ingame.localJoiningInProgress	= TRUE;
 
 		loadMultiStats(sPlayer,&playerStats);
@@ -424,32 +411,6 @@ BOOL LobbyLaunched(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-// Init and shutdown routines
-BOOL lobbyInitialise(void)
-{
-
-	if(!NETinit(TRUE))								// initialise, may change guid.
-	{
-		return FALSE;
-	}
-
-	if(NetPlay.bLobbyLaunched) // now check for lobby launching..
-	{
-		if(!LobbyLaunched())
-		{
-			return FALSE;
-		}
-	}
-	return TRUE;
-}
-
-BOOL multiInitialise(void)
-{
-	// Perform multiplayer initialization here, on success return TRUE
-	return TRUE;
-}
-
-// ////////////////////////////////////////////////////////////////////////////
 // say goodbye to everyone else
 BOOL sendLeavingMsg(void)
 {
@@ -474,10 +435,6 @@ BOOL sendLeavingMsg(void)
 // called in Init.c to shutdown the whole netgame gubbins.
 BOOL multiShutdown(void)
 {
-	debug(LOG_MAIN, "shutting down audio capture");
-
-	debug(LOG_MAIN, "shutting down audio playback");
-
 	// shut down netplay lib.
 	debug(LOG_MAIN, "shutting down networking");
   	NETshutdown();
@@ -495,8 +452,6 @@ BOOL multiShutdown(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // copy tempates from one player to another.
-
-
 BOOL addTemplate(UDWORD player, DROID_TEMPLATE *psNew)
 {
 	DROID_TEMPLATE  *psTempl = malloc(sizeof(DROID_TEMPLATE));
@@ -935,7 +890,6 @@ BOOL multiGameShutdown(void)
 	ingame.localJoiningInProgress = FALSE; // Clean up
 	ingame.localOptionsReceived = FALSE;
 	ingame.bHostSetup = FALSE;	// Dont attempt a host
-	NetPlay.bLobbyLaunched			= FALSE;	// Revert back to main menu, not multioptions.
 	NetPlay.bHost					= FALSE;
 	bMultiPlayer					= FALSE;	// Back to single player mode
 	selectedPlayer					= 0;		// Back to use player 0 (single player friendly)
