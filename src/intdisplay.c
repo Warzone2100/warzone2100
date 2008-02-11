@@ -3103,7 +3103,6 @@ void drawRadarBlips(void)
 	FEATURE			*psFeature;
 	UWORD			imageID;
 	UDWORD			delay = 150;
-	PROX_TYPE		proxType;
 	UDWORD			i;
 	UDWORD			VisWidth = RADWIDTH;
 	UDWORD			VisHeight = RADHEIGHT;
@@ -3112,8 +3111,7 @@ void drawRadarBlips(void)
 	for(i=0; i<MAX_PLAYERS; i++)
 	{
 		/* Go through all the proximity Displays*/
-		for (psProxDisp = apsProxDisp[i]; psProxDisp != NULL;
-			psProxDisp = psProxDisp->psNext)
+		for (psProxDisp = apsProxDisp[i]; psProxDisp != NULL; psProxDisp = psProxDisp->psNext)
 		{
 			if(psProxDisp->psMessage->type == MSG_PROXIMITY)
 			{
@@ -3144,12 +3142,11 @@ void drawRadarBlips(void)
 		if (psProxDisp->radarX > 0 && psProxDisp->radarX < VisWidth &&
 			psProxDisp->radarY > 0 && psProxDisp->radarY < VisHeight)
 		{
-			//pViewProximity = (VIEW_PROXIMITY*)psProxDisp->psMessage->
-			//	pViewData->pData;
+			PROX_TYPE		proxType;
+
 			if (psProxDisp->type == POS_PROXDATA)
 			{
-				proxType = ((VIEW_PROXIMITY*)((VIEWDATA *)psProxDisp->psMessage->
-					pViewData)->pData)->proxType;
+				proxType = ((VIEW_PROXIMITY*)((VIEWDATA *)psProxDisp->psMessage->pViewData)->pData)->proxType;
 			}
 			else
 			{
@@ -3168,11 +3165,7 @@ void drawRadarBlips(void)
 			//if the message is read - don't animate
 			if (psProxDisp->psMessage->read)
 			{
-
-				//imageID = (UWORD)(IMAGE_RAD_ENM3 + (pViewProximity->
-				//	proxType * (NUM_PULSES + 1)));
 				imageID = (UWORD)(IMAGE_RAD_ENM3 + (proxType * (NUM_PULSES + 1)));
-
 			}
 			else
 			{
@@ -3186,15 +3179,11 @@ void drawRadarBlips(void)
 					}
 					psProxDisp->timeLastDrawn = gameTime2;
 				}
-
-				//imageID = (UWORD)(IMAGE_RAD_ENM1 + psProxDisp->strobe + (
-				//	pViewProximity->proxType * (NUM_PULSES + 1)));
 				imageID = (UWORD)(IMAGE_RAD_ENM1 + psProxDisp->strobe + (
 					proxType * (NUM_PULSES + 1)));
 
 			}
 			//draw the 'blip'
-
 			iV_DrawImage(IntImages,imageID, psProxDisp->radarX + RADTLX,
 							psProxDisp->radarY + RADTLY);
 		}
