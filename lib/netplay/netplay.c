@@ -342,7 +342,6 @@ UDWORD NETplayerInfo(void)
 
 // ////////////////////////////////////////////////////////////////////////
 // rename the local player
-// dont call this a lot, since it uses a guaranteed msg.
 BOOL NETchangePlayerName(UDWORD dpid, char *newName)
 {
 	if(!NetPlay.bComms)
