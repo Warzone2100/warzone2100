@@ -326,7 +326,8 @@ BOOL NETstring(char *str, uint16_t maxlen)
 		// Truncate length if necessary
 		if (len > maxlen)
 		{
-			debug(LOG_ERROR, "NETstring: Decoding buffer size %u truncated by maxlen %u", len, maxlen);
+			debug(LOG_ERROR, "NETstring: Decoding packet type %d from %d, buffer size %u truncated at %u", 
+			      NetMsg.type, NetMsg.source, len, maxlen);
 			len = maxlen;
 		}
 		memcpy(str, store, len);
@@ -370,7 +371,8 @@ BOOL NETbin(char *str, uint16_t maxlen)
 		// Truncate length if necessary
 		if (len > maxlen)
 		{
-			debug(LOG_ERROR, "NETbin: Decoding buffer size %u truncated by maxlen %u", len, maxlen);
+			debug(LOG_ERROR, "NETbin: Decoding packet type %d from %d, buffer size %u truncated at %u", 
+			      NetMsg.type, NetMsg.source, len, maxlen);
 			len = maxlen;
 		}
 		memcpy(str, store, len);

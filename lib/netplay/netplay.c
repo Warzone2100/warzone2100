@@ -346,6 +346,7 @@ BOOL NETchangePlayerName(UDWORD dpid, char *newName)
 		strlcpy(NetPlay.players[0].name, newName, sizeof(NetPlay.players[0].name));
 		return TRUE;
 	}
+	debug(LOG_NET, "Requesting a change of player name for pid=%d to %s", dpid, newName);
 
 	strlcpy(players[dpid].name, newName, sizeof(players[dpid].name));
 
@@ -778,12 +779,14 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 
 			dpid = pi->id;
 
-			debug(LOG_NET, "NETprocessSystemMessage: Receiving MSG_PLAYER_INFO for player %d", dpid);
+			debug(LOG_NET, "NETprocessSystemMessage: Receiving MSG_PLAYER_INFO for player %d from player %d. We are %d.", 
+			      dpid, pMsg->source, NetPlay.dpidPlayer);
 
 			// Bail out if the given ID number is out of range
 			if (dpid >= MAX_CONNECTED_PLAYERS)
 			{
-				debug(LOG_NET, "NETprocessSystemMessage: MSG_PLAYER_INFO: Player ID (%u) out of range (max %u)", (unsigned int)dpid, (unsigned int)MAX_CONNECTED_PLAYERS);
+				debug(LOG_ERROR, "NETprocessSystemMessage: MSG_PLAYER_INFO: Player ID (%u) out of range (max %u)",
+				      dpid, MAX_CONNECTED_PLAYERS);
 				NETend();
 				break;
 			}
