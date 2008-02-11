@@ -311,6 +311,8 @@ static BOOL formCreateTabbed(W_TABFORM **ppsWidget, W_FORMINIT *psInit)
 	(*ppsWidget)->TabMultiplier = psInit->TabMultiplier;
 	(*ppsWidget)->numButtons = psInit->numButtons;
 	(*ppsWidget)->numStats = psInit->numStats;
+	(*ppsWidget)->majorT = 0;
+	(*ppsWidget)->minorT = 0;
 	
 	formSetDefaultColours((W_FORM *)(*ppsWidget));
 
@@ -636,8 +638,10 @@ void widgGetTabs(W_SCREEN *psScreen, UDWORD id, UWORD *pMajor, UWORD *pMinor)
 		ASSERT( FALSE,"widgGetTabs: couldn't find tabbed form from id" );
 		return;
 	}
-	ASSERT( psForm != NULL,
-		"widgGetTabs: Invalid tab form pointer" );
+	ASSERT(psForm != NULL, "widgGetTabs: Invalid tab form pointer");
+	ASSERT(*pMajor < psForm->numMajor, "widgGetTabs: invalid major id %u >= max %u", *pMajor, psForm->numMajor);
+	ASSERT(*pMinor < psForm->asMajor[*pMajor].numMinor, "widgGetTabs: invalid minor id %u >= max %u",
+	       *pMinor, psForm->asMajor[*pMajor].numMinor);
 
 	*pMajor = psForm->majorT;
 	*pMinor = psForm->minorT;
@@ -1187,7 +1191,9 @@ void formReleased(W_FORM *psWidget, UDWORD key, W_CONTEXT *psContext)
 			else
 			{
 				/* Clicked on a major tab */
-				psTabForm->majorT = (UWORD)sTabPos.index; 
+				ASSERT(psTabForm->majorT < psTabForm->numMajor, 
+				       "formReleased: invalid major id %u >= max %u", sTabPos.index, psTabForm->numMajor);
+				psTabForm->majorT = (UWORD)sTabPos.index;
 				psTabForm->minorT = psTabForm->asMajor[sTabPos.index].lastMinor;	
 				widgSetReturn((WIDGET *)psWidget);
 			}
