@@ -81,6 +81,8 @@ typedef enum _droid_action
 	DACTION_CIRCLE = 41,				// (41) circling while engaging
 } DROID_ACTION;
 
+extern const char* getDroidActionName(DROID_ACTION action);
+
 // after failing a route ... this is the amount of time that the droid goes all defensive untill it can start going aggressive
 #define MIN_SULK_TIME (1500)		// 1.5 sec
 #define MAX_SULK_TIME (4000)		// 4 secs

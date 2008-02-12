@@ -90,6 +90,59 @@ typedef struct _droid_action_data
 	(psDroid->sMove.Status == MOVEINACTIVE || psDroid->sMove.Status == MOVEHOVER || \
 	 psDroid->sMove.Status == MOVESHUFFLE)
 
+const char* getDroidActionName(DROID_ACTION action)
+{
+	static const char* name[] =
+	{
+		"DACTION_NONE",					// not doing anything
+		"DACTION_MOVE",					// 1 moving to a location
+		"DACTION_BUILD",					// building a structure
+		"DACTION_BUILD_FOUNDATION",		// 3 building a foundation for a structure
+		"DACTION_DEMOLISH",				// demolishing a structure
+		"DACTION_REPAIR",					// 5 repairing a structure
+		"DACTION_ATTACK",					// attacking something
+		"DACTION_OBSERVE",				// 7 observing something
+		"DACTION_FIRESUPPORT",			// attacking something visible by a sensor droid
+		"DACTION_SULK",					// 9 refuse to do anything aggresive for a fixed time
+		"DACTION_DESTRUCT",				// self destruct
+		"DACTION_TRANSPORTOUT",			// 11 move transporter offworld
+		"DACTION_TRANSPORTWAITTOFLYIN",	// wait for timer to move reinforcements in
+		"DACTION_TRANSPORTIN",			// 13 move transporter onworld
+		"DACTION_DROIDREPAIR",			// repairing a droid
+		"DACTION_RESTORE",				// 15 restore resistance points of a structure
+		"DACTION_CLEARWRECK",				// clearing building wreckage
+		"DACTION_MOVEFIRE",				// 17
+		"DACTION_MOVETOBUILD",			// moving to a new building location
+		"DACTION_MOVETODEMOLISH",			// 19 moving to a new demolition location
+		"DACTION_MOVETOREPAIR",			// moving to a new repair location
+		"DACTION_BUILDWANDER",			// 21 moving around while building
+		"DACTION_FOUNDATION_WANDER",		// moving around while building the foundation
+		"DACTION_MOVETOATTACK",			// 23 moving to a target to attack
+		"DACTION_ROTATETOATTACK",			// rotating to a target to attack
+		"DACTION_MOVETOOBSERVE",			// 25 moving to be able to see a target
+		"DACTION_WAITFORREPAIR",			// waiting to be repaired by a facility
+		"DACTION_MOVETOREPAIRPOINT",		// 27 move to repair facility repair point
+		"DACTION_WAITDURINGREPAIR",		// waiting to be repaired by a facility
+		"DACTION_MOVETODROIDREPAIR",		// 29 moving to a new location next to droid to be repaired
+		"DACTION_MOVETORESTORE",			// moving to a low resistance structure
+		"DACTION_MOVETOCLEAR",			// 31 moving to a building wreck location
+		"DACTION_MOVETOREARM",			// (32)moving to a rearming pad - VTOLS
+		"DACTION_WAITFORREARM",			// (33)waiting for rearm - VTOLS
+		"DACTION_MOVETOREARMPOINT",		// (34)move to rearm point - VTOLS - this actually moves them onto the pad
+		"DACTION_WAITDURINGREARM",		// (35)waiting during rearm process- VTOLS
+		"DACTION_VTOLATTACK",				// (36) a VTOL droid doing attack runs
+		"DACTION_CLEARREARMPAD",			// (37) a VTOL droid being told to get off a rearm pad
+		"DACTION_RETURNTOPOS",			// (38) used by scout/patrol order when returning to route
+		"DACTION_FIRESUPPORT_RETREAT",	// (39) used by firesupport order when sensor retreats
+		"ACTION UNKNOWN",
+		"DACTION_CIRCLE"				// (41) circling while engaging
+	};
+
+	ASSERT(action < sizeof(name) / sizeof(name[0]), "DROID_ACTION out of range: %u", action);
+
+	return name[action];
+}
+
 /* Check if a target is at correct range to attack */
 BOOL actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 {

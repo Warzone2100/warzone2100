@@ -228,6 +228,8 @@ extern void orderMoralCheck(UDWORD player);
 // do a moral check for a group
 extern void orderGroupMoralCheck(struct _droid_group *psGroup);
 
+extern const char* getDroidOrderName(DROID_ORDER order);
+
 extern DROID *FindATransporter(void);
 
 /*For a given constructor droid, check if there are any damaged buildings within 
