@@ -969,7 +969,6 @@ void restoreMissionData(void)
 	audio_StopAll();
 
 	//clear all the lists
-	//clearPlayerPower();
 	proj_FreeAllProjectiles();
 	freeAllDroids();
 	freeAllStructs();

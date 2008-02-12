@@ -74,8 +74,7 @@ BOOL allocPlayerPower(void)
 		asPower[player] = (PLAYER_POWER *) malloc(sizeof(PLAYER_POWER));
 		if (asPower[player] == NULL)
 		{
-			debug( LOG_ERROR, "Out of memory" );
-			abort();
+			ASSERT(FALSE, "Out of memory");
 			return FALSE;
 		}
 	}
@@ -133,15 +132,6 @@ BOOL checkPower(UDWORD player, UDWORD quantity, BOOL playAudio)
 	{
 		return TRUE;
 	}
-    //Not playing the power low message anymore - 6/1/99
-	/*else if (player == selectedPlayer)
-	{
-		if (playAudio && player == selectedPlayer)
-		{
-			audio_QueueTrack( ID_SOUND_POWER_LOW );
-			return FALSE;
-		}
-	}*/
 	return FALSE;
 }
 
@@ -168,9 +158,6 @@ BOOL usePower(UDWORD player, UDWORD quantity)
 		{
 			return FALSE;
 		}
-
-        //Not playing the power low message anymore - 6/1/99
-		//audio_QueueTrack( ID_SOUND_POWER_LOW );
 	}
 	return FALSE;
 }
@@ -200,7 +187,7 @@ UDWORD updateExtractedPower(STRUCTURE	*psBuilding)
 {
 	RES_EXTRACTOR		*pResExtractor;
 	UDWORD				pointsToAdd, extractedPoints, timeDiff;
-    UBYTE               modifier;
+	UBYTE			modifier;
 
 	pResExtractor = (RES_EXTRACTOR *) psBuilding->pFunctionality;
 	extractedPoints = 0;
@@ -209,27 +196,26 @@ UDWORD updateExtractedPower(STRUCTURE	*psBuilding)
 	//and has got some power to extract
 	if (pResExtractor->active && pResExtractor->power)
 	{
-        timeDiff = gameTime - pResExtractor->timeLastUpdated;
-        //add modifier according to difficulty level
-        if (getDifficultyLevel() == DL_EASY)
-        {
-            modifier = EASY_POWER_MOD;
-        }
-        else if (getDifficultyLevel() == DL_HARD)
-        {
-            modifier = HARD_POWER_MOD;
-        }
-        else
-        {
-            modifier = NORMAL_POWER_MOD;
-        }
-        //include modifier as a %
+		timeDiff = gameTime - pResExtractor->timeLastUpdated;
+		// Add modifier according to difficulty level
+		if (getDifficultyLevel() == DL_EASY)
+		{
+			modifier = EASY_POWER_MOD;
+		}
+		else if (getDifficultyLevel() == DL_HARD)
+		{
+			modifier = HARD_POWER_MOD;
+		}
+		else
+		{
+			modifier = NORMAL_POWER_MOD;
+		}
+		// include modifier as a %
 		pointsToAdd = (modifier * EXTRACT_POINTS * timeDiff) / (GAME_TICKS_PER_SEC * 100);
 		if (pointsToAdd)
 		{
-            //lose a lot on rounding this way
+			// Lose a lot on rounding this way
 			pResExtractor->timeLastUpdated = gameTime;
-            //pResExtractor->timeLastUpdated = gameTime - (timeDiff - GAME_TICKS_PER_SEC);
 			if (pResExtractor->power > pointsToAdd)
 			{
 				extractedPoints += pointsToAdd;
@@ -243,7 +229,7 @@ UDWORD updateExtractedPower(STRUCTURE	*psBuilding)
 
 			if (pResExtractor->power == 0)
 			{
-                //if not having unlimited power, put the 2 lines below back in
+				// If not having unlimited power, put the 2 lines below back in
 				//set the extractor to be inactive
 				//pResExtractor->active = FALSE;
 				//break the link between the power gen and the res extractor
@@ -276,16 +262,6 @@ void updatePlayerPower(UDWORD player)
 {
 	STRUCTURE		*psStruct;//, *psList;
 
-	/*if (offWorldKeepLists)
-	{
-		psList = mission.apsStructLists[player];
-	}
-	else
-	{
-		psList = apsStructLists[player];
-	}*/
-
-	//for (psStruct = psList; psStruct != NULL; psStruct = psStruct->psNext)
 	for (psStruct = powerStructList((UBYTE)player); psStruct != NULL; psStruct =
 		psStruct->psNext)
 	{
@@ -295,12 +271,11 @@ void updatePlayerPower(UDWORD player)
 			updateCurrentPower((POWER_GEN *)psStruct->pFunctionality, player);
 		}
 	}
-    //check that the psLastPowered hasn't died
-    if (asPower[player]->psLastPowered && asPower[player]->psLastPowered->died)
-    {
-        asPower[player]->psLastPowered = NULL;
-    }
-
+	// Check that the psLastPowered hasn't died
+	if (asPower[player]->psLastPowered && asPower[player]->psLastPowered->died)
+	{
+		asPower[player]->psLastPowered = NULL;
+	}
 }
 
 /* Updates the current power based on the extracted power and a Power Generator*/
@@ -310,8 +285,6 @@ void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 
 	//each power gen can cope with its associated resource extractors
 	extractedPower = 0;
-	//for (i=0; i < (NUM_POWER_MODULES + 1); i++)
-	//each Power Gen can cope with 4 extractors now - 9/6/98 AB
 	for (i=0; i < NUM_POWER_MODULES; i++)
 	{
 		if (psPowerGen->apResExtractors[i])
@@ -341,15 +314,11 @@ void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 void setPower(UDWORD player, UDWORD avail)
 {
 	asPower[player]->currentPower = avail;
-
 }
-
-
 
 /*sets the initial value for the power*/
 void setPlayerPower(UDWORD power, UDWORD player)
 {
-	//asPower[player]->initialPower = power;
 	asPower[player]->currentPower = power;
 }
 
@@ -360,9 +329,7 @@ void newGameInitPower(void)
 
 	for (inc=0; inc < MAX_PLAYERS; inc++)
 	{
-		//setPlayerPower(400, inc);
-        //add as opposed to set
-        addPower(inc, 400);
+		addPower(inc, 400);
 	}
 }
 
@@ -375,28 +342,28 @@ BOOL accruePower(BASE_OBJECT *psObject)
 	SDWORD					powerDiff;
 	UDWORD					count;
 	BOOL					bPowerUsed = FALSE;
-    STRUCTURE               *psStructure;
-    DROID                   *psDroid, *psTarget;
+	STRUCTURE			*psStructure;
+	DROID				*psDroid, *psTarget;
 
-    switch(psObject->type)
-    {
-    case OBJ_STRUCTURE:
-        psStructure = (STRUCTURE *)psObject;
-	    //see if it needs power
-	    switch(psStructure->pStructureType->type)
-    	{
-	    case REF_FACTORY:
-	    case REF_CYBORG_FACTORY:
-    	case REF_VTOL_FACTORY:
-	    	psFactory = (FACTORY *)psStructure->pFunctionality;
-		    //check the factory is not on hold
-            if (psFactory->timeStartHold)
-            {
-                break;
-            }
-		    //check the factory is active
-		    if (psFactory->psSubject)
-		    {
+	switch(psObject->type)
+	{
+	case OBJ_STRUCTURE:
+		psStructure = (STRUCTURE *)psObject;
+		// See if it needs power
+		switch(psStructure->pStructureType->type)
+		{
+		case REF_FACTORY:
+		case REF_CYBORG_FACTORY:
+		case REF_VTOL_FACTORY:
+			psFactory = (FACTORY *)psStructure->pFunctionality;
+			// Check the factory is not on hold
+			if (psFactory->timeStartHold)
+			{
+				break;
+			}
+			// Check the factory is active
+			if (psFactory->psSubject)
+			{
 			    //check needs power
 			    powerDiff = ((DROID_TEMPLATE *)psFactory->psSubject)->powerPoints -
 				    psFactory->powerAccrued;
