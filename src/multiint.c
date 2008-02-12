@@ -559,11 +559,12 @@ void runGameFind(void )
 		if( ( NetPlay.games[gameNumber].desc.dwCurrentPlayers < NetPlay.games[gameNumber].desc.dwMaxPlayers)
 			&& !(NetPlay.games[gameNumber].desc.dwFlags & SESSION_JOINDISABLED) ) // if still joinable
 		{
-
+			// TODO: Check whether this code is used at all in skirmish games, if not, remove it.
 			// if skirmish, check it wont take the last slot
-			if( NETgetGameFlagsUnjoined(gameNumber,1) == SKIRMISH
-			  && (NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers -1)
-			  )
+			if (bMultiPlayer
+			 && !NetPlay.bComms
+			 && NETgetGameFlagsUnjoined(gameNumber,1) == SKIRMISH
+			 && (NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers - 1))
 			{
 				goto FAIL;
 			}
@@ -2384,15 +2385,13 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	iV_DrawText(NetPlay.games[i].name, x + 100, y + 24);	// name
 
 	// get game info.
-	if(	   (NetPlay.games[i].desc.dwFlags & SESSION_JOINDISABLED)
-		|| (NetPlay.games[i].desc.dwCurrentPlayers >= NetPlay.games[i].desc.dwMaxPlayers) 	// if not joinable
-
-		||(   (NETgetGameFlagsUnjoined(gameNumber,1)== SKIRMISH)	// the LAST bug...
-			&&(NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers -1)
-		  )
-	   )
-
+	// TODO: Check whether this code is used at all in skirmish games, if not, remove it.
+	if ((NetPlay.games[i].desc.dwFlags & SESSION_JOINDISABLED)
+	 || NetPlay.games[i].desc.dwCurrentPlayers >= NetPlay.games[i].desc.dwMaxPlayers        // if not joinable
+	 || (NETgetGameFlagsUnjoined(gameNumber,1) == SKIRMISH                                  // the LAST bug...
+	  && NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers - 1))
 	{
+		// FIXME: We should really use another way to indicate that the game is full than our current big fat cross.
 		// need some sort of closed thing here!
 		iV_DrawImage(FrontImages,IMAGE_NOJOIN,x+18,y+11);
 	}
