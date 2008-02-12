@@ -50,70 +50,9 @@ void    kickPlayer                      (uint32_t dpid);
 UDWORD  addPlayerBox            (BOOL);                         // players (mid) box
 void loadMapPreview(void);
 
-// ////////////////////////////////////////////////////////////////
-// Force Select Screen
-
-
-#define	FORCE_LOAD				10300
-#define FORCE_LOADX				73
-#define FORCE_LOADY				50
-
-#define FORCE_PRESETCLEAR		10302
-#define FORCE_PRESETCLEARX		11
-#define FORCE_PRESETCLEARY		93
-
-#define	FORCE_PRESETDEFAULT		10301
-#define	FORCE_PRESETDEFAULTX	73
-#define	FORCE_PRESETDEFAULTY	93
-
-#define	FORCE_SAVE				10309
-#define FORCE_SAVEX				11
-#define FORCE_SAVEY				50
-
-#define FORCE_OKX				10
-#define FORCE_OKY				10
-
-#define FORCE_STATS				10303
-#define FORCE_STATSX			FORCE_AVAILABLEX+FORCE_AVAILABLEWIDTH+33
-#define FORCE_STATSY			FRONTEND_BOTFORMY
-#define FORCE_STATSWIDTH		140
-#define FORCE_STATSHEIGHT		255
-
-#define FORCE_DROID				10304
-#define FORCE_DROIDX			70
-#define FORCE_DROIDY			220
-
-//#define FORCE_LO				10304
-//#define FORCE_LOX				7
-//#define FORCE_LOY				220
-//#define FORCE_MED				10305
-//#define FORCE_MEDX				52
-//#define FORCE_MEDY				220
-//#define FORCE_HI				10306
-//#define FORCE_HIX				97
-//#define FORCE_HIY				220
-
-#define FORCE_CURRENT			10307
-#define FORCE_CURRENTX			FORCE_STATSX+FORCE_STATSWIDTH+33
-#define FORCE_CURRENTY			FRONTEND_BOTFORMY
-#define	FORCE_CURRENTWIDTH		138
-#define	FORCE_CURRENTHEIGHT		255
-#define FORCE_CURRENTFORM		10308
-
-#define	FORCE_AVAILABLEX		FRONTEND_BOTFORMX
-#define	FORCE_AVAILABLEY		FRONTEND_BOTFORMY
-#define	FORCE_AVAILABLEWIDTH	138
-#define	FORCE_AVAILABLEHEIGHT	255
-
-#define FORCE_FORCE				10350
-#define FORCE_FORCEEND			10420
-
-#define	FORCE_POWERX			(OBJ_BACKX - ((E_W)/2))
-#define FORCE_POWERY			(OBJ_BACKY + OBJ_BACKHEIGHT + 6 - (E_H))  //ffs al
 
 // ////////////////////////////////////////////////////////////////
 // CONNECTION SCREEN
-
 
 #define CON_CONTYPES		10103
 #define CON_CONTYPESWIDTH	290
