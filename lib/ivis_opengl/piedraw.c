@@ -53,28 +53,24 @@ extern BOOL drawing_interface;
  *	OpenGL extensions for shadows
  */
 
-BOOL check_extension(const char* extension_name)
+BOOL check_extension(const char *extName)
 {
-	const char *extension_list = (const char *)glGetString(GL_EXTENSIONS);
-	unsigned int extension_name_length = strlen(extension_name);
-	const char *tmp = extension_list;
-	unsigned int first_extension_length;
+	char *p = (char *) glGetString(GL_EXTENSIONS);
+	char *end;
+	size_t extNameLen= strlen(extName);
 
-	if (!extension_name || !extension_list) return FALSE;
-
-	while (tmp[0]) {
-		first_extension_length = strcspn(tmp, " ");
-
-		if (   extension_name_length == first_extension_length
-		    && strncmp(extension_name, tmp, first_extension_length) == 0) {
+	end = p + strlen(p);    
+	while (p < end)
+	{
+		int n = strcspn(p, " ");
+		if ((extNameLen == n) && (strncmp(extName, p, n) == 0))
+		{
 			return TRUE;
 		}
-		tmp += first_extension_length + 1;
+		p += (n + 1);
 	}
-
 	return FALSE;
 }
-
 
 // EXT_stencil_two_side
 #ifndef GL_EXT_stencil_two_side
