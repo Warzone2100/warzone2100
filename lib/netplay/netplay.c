@@ -43,8 +43,12 @@ unsigned int masterserver_port = 0, gameserver_port = 0;
 #define NET_READ_TIMEOUT	0
 #define NET_BUFFER_SIZE		1024
 
+// HACK to allow us to call a src/multistat.c function upon receiving a MSG_PLAYER_STATS msg
+extern void recvMultiStats(void);
+
 enum
 {
+	MSG_PLAYER_STATS = 12, // HACK-NOTE: This __must__ be the same to NET_PLAYER_STATS in src/multiplay.h
 	MSG_JOIN = 90, // needs to start at 90
 	MSG_ACCEPTED,
 	MSG_PLAYER_INFO,
@@ -770,6 +774,11 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 {
 	switch (pMsg->type)
 	{
+		case MSG_PLAYER_STATS:
+		{
+			recvMultiStats();
+			break;
+		}
 		case MSG_PLAYER_INFO: {
 			NET_PLAYER* pi = (NET_PLAYER*)(pMsg->body);
 			unsigned int dpid;

@@ -43,7 +43,7 @@ typedef enum _msgtype
 	NET_CHECK_DROID,		//9 check & update bot position and damage.
 	NET_CHECK_STRUCT,		//10 check & update struct damage.
 	NET_CHECK_POWER,		//11 power levels for a player.
-	NET_PLAYER_STATS,			//12 player stats
+	NET_PLAYER_STATS,			//12 player stats: HACK-NOTE: lib/netplay/netplay.c depends on this being 12
 	NET_BUILD,				//13 build a new structure
 	NET_STRUCTDEST,			//14 specify a strucutre to destroy
 	NET_BUILDFINISHED,		//15 a building is complete.
