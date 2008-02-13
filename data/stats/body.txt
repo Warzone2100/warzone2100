@@ -5,10 +5,8 @@ FireBody,Level One,LIGHT,4,75,3000,200,EXFIRE.PIE,50,1,4000,4,1,4,1,4,1,4,1,4,1,
 CybRotMgGrd,Level All,LIGHT,25,100,150,200,cybd_std.pie,100,1,600,12,6,12,6,12,6,12,6,12,6,12,6,0,0
 CyborgRkt1Ground,Level All,LIGHT,30,125,150,200,cybd_std.pie,100,1,500,12,6,12,6,12,6,12,6,12,6,12,6,0,0
 CyborgFlamerGrd,Level All,LIGHT,30,125,150,200,cybd_std.pie,100,1,500,12,6,12,6,12,6,12,6,12,6,12,6,0,0
-CyborgChn1CCGround,Level All,LIGHT,25,100,150,200,cybd_std.pie,100,1,600,12,6,12,6,12,6,12,6,12,6,12,6,0,0
 CyborgChain1Ground,Level All,LIGHT,30,125,150,200,cybd_std.pie,100,1,500,12,6,12,6,12,6,12,6,12,6,12,6,0,0
 CyborgCannonGrd,Level All,LIGHT,30,125,150,200,cybd_std.pie,100,1,500,12,6,12,6,12,6,12,6,12,6,12,6,0,0
-CyborgCan1CGround,Level All,LIGHT,25,100,150,200,cybd_std.pie,100,1,600,12,6,12,6,12,6,12,6,12,6,12,6,0,0
 CybNXRail1Jmp,Level All,LIGHT,30,125,150,370,cybd_std.pie,100,1,675,18,15,18,15,18,15,18,15,18,15,18,15,0,0
 CybNXPulseLasJmp,Level All,LIGHT,30,125,150,370,cybd_std.pie,100,1,675,18,15,18,15,18,15,18,15,18,15,18,15,0,0
 CybNXMissJmp,Level All,LIGHT,30,125,150,370,cybd_std.pie,100,1,675,18,15,18,15,18,15,18,15,18,15,18,15,0,0

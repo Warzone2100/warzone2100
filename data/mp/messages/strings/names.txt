@@ -215,11 +215,6 @@ CyborgFlamer01Grd			_("Flamer")
 CyborgRkt01Ground			_("Lancer")
 CyborgCannon01Grd			_("Heavy Gunner")
 
-CyborgChain01CGround			_("Machinegunner")
-CyborgFlamer01CGrd			_("Flamer")
-CyborgRkt01CGround			_("Lancer")
-CyborgCannon01CGrd			_("Heavy Gunner")
-
 // Cyborgs - shared 
 Cyb-Chain-GROUND			_("Machinegunner")
 Cyb-Flamer-GROUND			_("Cyborg Flamer")
@@ -279,8 +274,6 @@ NX-CybLasGrnd				"*NX-CybLasGrnd*"
 CyborgCannonGrd				"*Cyborg Cannon*"
 //				"*Cyborg Machine Gun*"
 CyborgFlamerGrd				"*Cyborg Flamer*"
-CyborgCan1CGround			"*Cyborg Cannon*"
-CyborgChn1CCGround			"*Cyborg Machine Gun*"
 //CyborgChn01Ground			"*Cyborg Machine Gun*"
 CybFlamer01CGrd				"*Cyborg Flamer*"
 //CybRocketGrd				"*Cyborg Rocket*"	

@@ -66,11 +66,8 @@ Cyb-Rail1-GROUND,Cyb-Wpn-Rail1,NULL,NULL,0
 Cyb-Rocket-GROUND,CyborgRocket,NULL,NULL,0
 Cyb-RotMG-GROUND,CyborgRotMG,NULL,NULL,0
 Cyb-Thermite,Cyb-Wpn-Thermite,NULL,NULL,5
-CyborgCannon01CGrd,CyborgCannon,NULL,NULL,4
 CyborgCannon01Grd,CyborgCannon,NULL,NULL,5
-CyborgChain01CGround,CyborgChaingun,NULL,NULL,4
 CyborgChain01Ground,CyborgChaingun,NULL,NULL,5
-CyborgFlamer01CGrd,CyborgFlamer01,NULL,NULL,4
 CyborgFlamer01Grd,CyborgFlamer01,NULL,NULL,5
 CyborgRkt01Ground,CyborgRocket,NULL,NULL,5
 CyborgRotMgGround,CyborgRotMG,NULL,NULL,5
