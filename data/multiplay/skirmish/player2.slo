@@ -191,7 +191,7 @@ trigger expandScoutAreaTr			(every,	600	);
 trigger scoutMainTr					(every,	150	);
 trigger newObjectReportTr			(CALL_OBJ_SEEN, me, ref baseobj, ref baseobj2);
 trigger attackStuffTr				(every, 300	);
-trigger allOutAttackTr				(every, 2000);
+trigger allOutAttackTr				(every, 4000);
 trigger defendWatchTr				(CALL_STRUCT_ATTACKED, me, ref structure, ref baseobj);
 trigger defendReturnTr				(every,	500	);
 trigger doResearchTr				(every, 400 );
@@ -1881,24 +1881,20 @@ event scoutMain(scoutMainTr)
 // process new visibility reports
 event newObjectReport(newObjectReportTr)
 {
-
-	if( baseobj2 != NULLOBJECT )
+	if(!friendlyPlayer(baseobj.player))
 	{
-		if((baseobj2.type == OBJ_DROID) and !friendlyPlayer(baseobj.player))
+		if(targetTypeValue(baseobj) > targetTypeValue(attackObj))
 		{
-			if(targetTypeValue(baseobj) > targetTypeValue(attackObj))
-			{
-				attackObj = baseobj;// got a new unseen  target from a scout.
+			attackObj = baseobj;// got a new unseen  target from a scout.
 
-				if(	attackObj.type == OBJ_STRUCTURE)
+			if(	attackObj.type == OBJ_STRUCTURE)
+			{
+				if(not allianceExistsBetween(attackObj.player,me))	// an enemy
 				{
-					if(not allianceExistsBetween(attackObj.player,me))	// an enemy
+					structure = objToStructure(attackObj);
+					if(structure.stat == factory)
 					{
-						structure = objToStructure(attackObj);
-						if(structure.stat == factory)
-						{
-							allOutAttack = attackObj;
-						}
+						allOutAttack = attackObj;
 					}
 				}
 			}
@@ -2021,7 +2017,12 @@ event findEnemy(attackStuffTr)
 			if(baseobj != NULLOBJECT)
 			{
 				attackObj =	baseobj;
-				allOutAttack = attackObj;
+
+				// set allOutAttack to attackObj only if attackObj is a more valuable target than allOutAttack
+				if(targetTypeValue(attackObj) > targetTypeValue(allOutAttack))
+				{
+					allOutAttack = attackObj;
+				}
 			}
 		}
 	}
@@ -2031,19 +2032,21 @@ event findEnemy(attackStuffTr)
 // send attack team out to cause trouble near things scout found.
 event attackStuff(attackStuffTr)
 {
-	if( idleGroup(attackGroup) >= (attackGroup.members /2))
+	if( idleGroup(attackGroup) >= (attackGroup.members / 2))
 	{
 		if( (attackObj != NULLOBJECT) and (not helpingAlly()) )
 		{
 			if (not allianceExistsBetween(me, attackObj.player))
 			{
-				if(attackGroup.members > (6+random(6)) )
+				if(attackGroup.members > (6 + random(6)) )
 				{
-					orderGroupLoc(attackGroup, DORDER_SCOUT,attackObj.x,attackObj.y);
+					orderGroupLoc(attackGroup, DORDER_SCOUT, attackObj.x, attackObj.y);
 				}
-				if( idleGroup(scoutGroup) >= (scoutGroup.members /2) )
+
+				// make scouts attack too
+				if( idleGroup(scoutGroup) >= (scoutGroup.members / 2) )
 				{
-					orderGroupLoc(scoutGroup, DORDER_MOVE,scoutX,scoutY);
+					orderGroupLoc(scoutGroup, DORDER_SCOUT, attackObj.x, attackObj.y);
 				}
 			}
 		}
@@ -2053,20 +2056,23 @@ event attackStuff(attackStuffTr)
 /////////////////////////////////////////////////////////////////////
 event doAllOutAttack(allOutAttackTr)
 {
-	if( (allOutAttack != NULLOBJECT) and (not helpingAlly()) )
+	if( idleGroup(attackGroup) >= (attackGroup.members / 3))	// make sure at least 30% are idle
 	{
-		if( !friendlyPlayer(allOutAttack.player) )
+		if( (allOutAttack != NULLOBJECT) and (not helpingAlly()) )
 		{
-			if( getDroidCount(me) > 40)	// plenty of units.
+			if( !friendlyPlayer(allOutAttack.player) )
 			{
-				orderGroupObj(attackGroup, DORDER_ATTACK,allOutAttack);
-				//orderGroupLoc(defendGroup, DORDER_SCOUT,allOutAttack.x,allOutAttack.y);
-				orderGroupLoc(scoutGroup,  DORDER_SCOUT,allOutAttack.x,allOutAttack.y);
+				if( getDroidCount(me) > 40)	// plenty of units.
+				{
+					orderGroupObj(attackGroup, DORDER_ATTACK,allOutAttack);
+					//orderGroupLoc(defendGroup, DORDER_SCOUT,allOutAttack.x,allOutAttack.y);
+					orderGroupLoc(scoutGroup,  DORDER_SCOUT,allOutAttack.x,allOutAttack.y);
+				}
 			}
-		}
-		else
-		{
-			allOutAttack = NULLOBJECT;
+			else
+			{
+				allOutAttack = NULLOBJECT;
+			}
 		}
 	}
 }
@@ -2355,18 +2361,19 @@ event consolidateEvent(consolidateEventTr)
 			orderGroupLoc(defendGroup, DORDER_MOVE,buildX,buildY);
 		}
 
+/*
 		if(attackObj != NULLOBJECT)	// consolidate any ongoing attack.
 		{
 			if(!friendlyPlayer(attackObj.player))
 			{
-				orderGroupObj(attackGroup, DORDER_ATTACK,attackObj);
+				orderGroupLoc(attackGroup, DORDER_SCOUT, attackObj.x, attackObj.y);
 			}
 			else
 			{
 				attackObj = NULLOBJECT;
 			}
 		}
-		else
+		else if(allOutAttack == NULLOBJECT) //make sure not allOutAttacking
 		{
 
 			// find a place with no structures nearby
@@ -2376,6 +2383,7 @@ event consolidateEvent(consolidateEventTr)
 
 			orderGroupLoc(attackGroup, DORDER_MOVE,buildX,buildY);
 		}
+*/
 	}
 }
 
