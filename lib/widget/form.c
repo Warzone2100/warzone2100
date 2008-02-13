@@ -639,9 +639,9 @@ void widgGetTabs(W_SCREEN *psScreen, UDWORD id, UWORD *pMajor, UWORD *pMinor)
 		return;
 	}
 	ASSERT(psForm != NULL, "widgGetTabs: Invalid tab form pointer");
-	ASSERT(*pMajor < psForm->numMajor, "widgGetTabs: invalid major id %u >= max %u", *pMajor, psForm->numMajor);
-	ASSERT(*pMinor < psForm->asMajor[*pMajor].numMinor, "widgGetTabs: invalid minor id %u >= max %u",
-	       *pMinor, psForm->asMajor[*pMajor].numMinor);
+	ASSERT(psForm->majorT < psForm->numMajor, "widgGetTabs: invalid major id %u >= max %u", psForm->majorT, psForm->numMajor);
+	ASSERT(psForm->minorT < psForm->asMajor[psForm->majorT].numMinor, "widgGetTabs: invalid minor id %u >= max %u",
+	       psForm->minorT, psForm->asMajor[psForm->majorT].numMinor);
 
 	*pMajor = psForm->majorT;
 	*pMinor = psForm->minorT;
