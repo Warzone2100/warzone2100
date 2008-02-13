@@ -148,4 +148,6 @@ extern void NETsetMasterserverName(const char* hostname);
 extern void NETsetMasterserverPort(unsigned int port);
 extern void NETsetGameserverPort(unsigned int port);
 
+extern BOOL NETsetupTCPIP(const char *machine);
+
 #endif

@@ -95,8 +95,6 @@ extern BOOL				bSendingMap;
 
 extern void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
-extern BOOL NETsetupTCPIP(void ** addr, const char * machine);
-
 BOOL						bHosted			= FALSE;				//we have set up a game
 char						sPlayer[128];							// player name (to be used)
 char						buildTime[8]	 = "67HGDV3"; //RODZ was __TIME__ ;
@@ -401,7 +399,6 @@ void runConnectionScreen(void )
 {
 	UDWORD id;
 	static char addr[128];
-	void * finalconnection;
 
 	if(SettingsUp == TRUE)
 	{
@@ -431,7 +428,7 @@ void runConnectionScreen(void )
 			addConnections(InitialProto);
 			break;
 		case CON_TYPESID_START+0: // Lobby button
-			NETsetupTCPIP(&finalconnection, ""); //inet
+			NETsetupTCPIP(""); //inet
 			changeTitleMode(GAMEFIND);
 			break;
 		case CON_TYPESID_START+1: // IP button
@@ -447,7 +444,7 @@ void runConnectionScreen(void )
 				SettingsUp = FALSE;
 			}
 
-			NETsetupTCPIP(&finalconnection, addr); //inet
+			NETsetupTCPIP(addr); //inet
 
 			changeTitleMode(GAMEFIND);
 			break;

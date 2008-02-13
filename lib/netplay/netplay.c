@@ -1036,7 +1036,7 @@ receive_message:
 // ////////////////////////////////////////////////////////////////////////
 // Protocol functions
 
-BOOL NETsetupTCPIP(void ** addr, const char * machine)
+BOOL NETsetupTCPIP(const char *machine)
 {
 	debug(LOG_NET, "NETsetupTCPIP(,%s)", machine ? machine : "NULL");
 
