@@ -1003,7 +1003,7 @@ BOOL recvTeamRequest()
 		return TRUE;
 	}
 
-	NETbeginDecode();
+	NETbeginDecode(NET_TEAMREQUEST);
 	NETuint8_t(&player);
 	NETuint8_t(&team);
 	NETend();
@@ -1089,7 +1089,7 @@ BOOL recvColourRequest()
 		return TRUE;
 	}
 
-	NETbeginDecode();
+	NETbeginDecode(NET_COLOURREQUEST);
 		NETuint8_t(&player);
 		NETuint8_t(&col);
 		NETuint8_t(&chosenPlayer);
@@ -1970,14 +1970,12 @@ static void processMultiopWidgets(UDWORD id)
 
 void frontendMultiMessages(void)
 {
-	NETMSG			msg;			// a blank msg.
+	uint8_t type;
 
-	while(NETrecv(&msg))
+	while(NETrecv(&type))
 	{
 		// Copy the message to the global one used by the new NET API
-		NetMsg = msg;
-		
-		switch(msg.type)
+		switch(type)
 		{
 		case NET_REQUESTMAP:
 			recvMapFileRequested();
@@ -1985,7 +1983,6 @@ void frontendMultiMessages(void)
 		case FILEMSG:
 			recvMapFileData();
 			break;
-
 
 		case NET_OPTIONS:					// incoming options file.
 			recvOptions();
@@ -2020,7 +2017,7 @@ void frontendMultiMessages(void)
 			BOOL host;
 			uint32_t player_id;
 
-			NETbeginDecode();
+			NETbeginDecode(NET_LEAVING);
 			{
 				NETuint32_t(&player_id);
 				NETbool(&host);
@@ -2037,7 +2034,7 @@ void frontendMultiMessages(void)
 		{
 			uint32_t player_id;
 
-			NETbeginDecode();
+			NETbeginDecode(NET_PLAYERRESPONDING);
 				// the player that has just responded
 				NETuint32_t(&player_id);
 			NETend();
@@ -2064,7 +2061,7 @@ void frontendMultiMessages(void)
 		{
 			uint32_t player_id;
 
-			NETbeginDecode();
+			NETbeginDecode(NET_KICK);
 				NETuint32_t(&player_id);
 			NETend();
 

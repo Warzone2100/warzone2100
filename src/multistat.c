@@ -100,7 +100,7 @@ void recvMultiStats()
 {
 	uint32_t playerDPID;
 
-	NETbeginDecode();
+	NETbeginDecode(NET_PLAYER_STATS);
 		// Retrieve the ID number of the player for which we need to
 		// update the stats
 		NETuint32_t(&playerDPID);

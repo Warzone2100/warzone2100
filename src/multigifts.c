@@ -67,7 +67,7 @@ BOOL recvGift(void)
 	uint8_t	type, from, to;
 	int		audioTrack;
 
-	NETbeginDecode();
+	NETbeginDecode(NET_GIFT);
 		NETuint8_t(&type);
 		NETuint8_t(&from);
 		NETuint8_t(&to);
@@ -471,7 +471,7 @@ BOOL recvAlliance(BOOL allowAudio)
 	uint8_t to, from, state;
 	int32_t value;
 
-	NETbeginDecode();
+	NETbeginDecode(NET_ALLIANCE);
 		NETuint8_t(&from);
 		NETuint8_t(&to);
 		NETuint8_t(&state);
@@ -659,7 +659,7 @@ void recvMultiPlayerFeature()
 	uint32_t     x, y;
 	unsigned int i;
 
-	NETbeginDecode();
+	NETbeginDecode(NET_FEATURES);
 	{
 		NETenum(&subType);
 		NETuint32_t(&x);
@@ -743,7 +743,7 @@ void recvMultiPlayerRandomArtifacts()
 	FEATURE_TYPE	type;
 	FEATURE 		*pF;
 
-	NETbeginDecode();
+	NETbeginDecode(NET_ARTIFACTS);
 		NETuint8_t(&quantity);
 		NETenum(&type);
 

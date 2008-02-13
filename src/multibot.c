@@ -92,7 +92,7 @@ BOOL recvHappyVtol()
 	DROID* pD;
 	unsigned int i;
 
-	NETbeginDecode();
+	NETbeginDecode(NET_VTOL);
 	{
 		uint8_t player;
 		uint32_t droid;
@@ -150,7 +150,7 @@ BOOL recvDroidSecondary()
 	SECONDARY_ORDER sec;
 	SECONDARY_STATE	state;
 
-	NETbeginDecode();
+	NETbeginDecode(NET_SECONDARY);
 	{
 		uint8_t player;
 		uint32_t droid;
@@ -199,7 +199,7 @@ BOOL recvDroidSecondaryAll()
 {
 	DROID* psDroid;
 
-	NETbeginDecode();
+	NETbeginDecode(NET_SECONDARY_ALL);
 	{
 		uint8_t player;
 		uint32_t droid, secOrder;
@@ -244,7 +244,7 @@ BOOL recvDroidEmbark()
 {
 	DROID* psDroid;
 
-	NETbeginDecode();
+	NETbeginDecode(NET_DROIDEMBARK);
 	{
 		uint8_t player;
 		uint32_t droid;
@@ -298,7 +298,7 @@ BOOL recvDroidDisEmbark()
 {
 	DROID* psDroid;
 
-	NETbeginDecode();
+	NETbeginDecode(NET_DROIDDISEMBARK);
 	{
 		uint8_t player;
 		uint32_t droid;
@@ -389,7 +389,7 @@ BOOL recvDroidMove()
 	uint32_t x, y;
 	BOOL formation;
 
-	NETbeginDecode();
+	NETbeginDecode(NET_DROIDMOVE);
 	{
 		uint8_t player;
 		uint32_t droid;
@@ -470,7 +470,7 @@ BOOL recvDroid()
 	BOOL power;
 	uint32_t templateID;
 
-	NETbeginDecode();
+	NETbeginDecode(NET_DROID);
 	{
 		NETuint8_t(&player);
 		NETuint32_t(&id);
@@ -659,7 +659,7 @@ BOOL recvGroupOrder()
 	uint8_t droidCount, i;
 	uint32_t* droidIDs;
 
-	NETbeginDecode();
+	NETbeginDecode(NET_GROUPORDER);
 	{
 		NETenum(&order);
 		NETbool(&cmdOrder);
@@ -788,7 +788,7 @@ BOOL SendDroidInfo(const DROID* psDroid, DROID_ORDER order, uint32_t x, uint32_t
 // receive droid information form other players.
 BOOL recvDroidInfo()
 {
-	NETbeginDecode();
+	NETbeginDecode(NET_DROIDINFO);
 	{
 		uint32_t    droidId;
 		DROID*      psDroid;
@@ -944,7 +944,7 @@ BOOL recvDestroyDroid()
 {
 	DROID* psDroid;
 
-	NETbeginDecode();
+	NETbeginDecode(NET_DROIDDEST);
 	{
 		uint32_t id;
 

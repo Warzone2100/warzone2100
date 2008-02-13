@@ -812,7 +812,7 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 		case MSG_PLAYER_JOINED:
 		{
 			uint8_t dpid;
-			NETbeginDecode();
+			NETbeginDecode(MSG_PLAYER_JOINED);
 				NETuint8_t(&dpid);
 			NETend();
 
@@ -824,7 +824,7 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 		case MSG_PLAYER_LEFT:
 		{
 			uint32_t dpid;
-			NETbeginDecode();
+			NETbeginDecode(MSG_PLAYER_LEFT);
 				NETuint32_t(&dpid);
 			NETend();
 
@@ -838,7 +838,7 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 		{
 			debug(LOG_NET, "NETprocessSystemMessage: Receiving game flags");
 
-			NETbeginDecode();
+			NETbeginDecode(MSG_GAME_FLAGS);
 			{
 				static unsigned int max_flags = sizeof(NetGameFlags) / sizeof(*NetGameFlags);
 				// Retrieve the amount of game flags that we should receive
@@ -878,8 +878,9 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 // Receive a message over the current connection. We return TRUE if there
 // is a message for the higher level code to process, and FALSE otherwise.
 // We should not block here.
-BOOL NETrecv(NETMSG * pMsg)
+BOOL NETrecv(uint8_t *type)
 {
+	NETMSG *pMsg = &NetMsg;
 	static unsigned int current = 0;
 	BOOL received;
 	int size;
@@ -1029,6 +1030,7 @@ receive_message:
 
 	NETlogPacket(pMsg, TRUE);
 
+	*type = pMsg->type;
 	return TRUE;
 }
 
@@ -1136,7 +1138,7 @@ UBYTE NETrecvFile(void)
 	memset(outBuff, 0x0, sizeof(outBuff));
 
 	//read incoming bytes.
-	NETbeginDecode();
+	NETbeginDecode(FILEMSG);
 	NETint32_t(&fileSize);		// total bytes in this file.
 	NETint32_t(&bytesRead);		// bytes in this packet
 	NETint32_t(&currPos);		// start byte
@@ -1289,7 +1291,7 @@ static void NETallowJoining(void)
 					int j;
 					uint8_t dpid;
 
-					NETbeginDecode();
+					NETbeginDecode(MSG_JOIN);
 						NETstring(name, sizeof(name));
 					NETend();
 
@@ -1589,12 +1591,14 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 	// Loop until we've been accepted into the game
 	for (;;)
 	{
-		NETrecv(&NetMsg);
+		uint8_t type;
 
-		if (NetMsg.type == MSG_ACCEPTED)
+		NETrecv(&type);
+
+		if (type == MSG_ACCEPTED)
 		{
 			uint8_t dpid;
-			NETbeginDecode();
+			NETbeginDecode(MSG_ACCEPTED);
 				// Retrieve the player ID the game host arranged for us
 				NETuint8_t(&dpid);
 			NETend();

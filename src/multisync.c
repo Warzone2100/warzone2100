@@ -324,7 +324,7 @@ BOOL recvDroidCheck()
 
 	debug(LOG_MULTISYNC, "recvDroidCheck");
 
-	NETbeginDecode();
+	NETbeginDecode(NET_CHECK_DROID);
 
 		// Get the number of droids to expect
 		NETuint8_t(&count);
@@ -754,7 +754,7 @@ BOOL recvStructureCheck()
 	uint16_t		x, y, z;
 	uint32_t		ref, type;
 	
-	NETbeginDecode();
+	NETbeginDecode(NET_CHECK_STRUCT);
 		NETuint8_t(&player);
 		NETuint32_t(&ref);
 		NETuint16_t(&body);
@@ -933,7 +933,7 @@ BOOL recvPowerCheck()
 	uint8_t		player;
 	uint32_t	power;
 
-	NETbeginDecode();
+	NETbeginDecode(NET_CHECK_POWER);
 		NETuint8_t(&player);
 		NETuint32_t(&power);
 	NETend();
@@ -1037,7 +1037,7 @@ BOOL recvScoreSubmission()
 	uint32_t	kills, score;
 	PLAYERSTATS	stats;
 
-	NETbeginDecode();
+	NETbeginDecode(NET_SCORESUBMIT);
 	
 	for (NETuint8_t(&player); player != ANYPLAYER; NETuint8_t(&player))
 	{
@@ -1158,7 +1158,7 @@ BOOL recvPing()
 	BOOL	isNew;
 	uint8_t	sender, us = selectedPlayer;
 	
-	NETbeginDecode();
+	NETbeginDecode(NET_PING);
 		NETuint8_t(&sender);
 		NETbool(&isNew);
 	NETend();

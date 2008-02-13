@@ -105,7 +105,7 @@ BOOL recvBuildStarted()
 	int32_t			order;
 	uint32_t		structRef, structId, targetId,droidID;
 
-	NETbeginDecode();
+	NETbeginDecode(NET_BUILD);
 		NETuint8_t(&player);
 		NETuint32_t(&structRef);
 		NETuint16_t(&x);
@@ -196,7 +196,7 @@ BOOL recvBuildFinished()
 	UBYTE	player;
 
 
-	NETbeginDecode();
+	NETbeginDecode(NET_BUILDFINISHED);
 		NETuint32_t(&structId);	// get the struct id.
 		NETuint32_t(&type); 	// Kind of building.
 		NETuint16_t(&x);    	// x pos
@@ -283,7 +283,7 @@ BOOL recvDemolishFinished()
 	DROID		*psDroid;
 	uint32_t	structID, droidID;
 
-	NETbeginDecode();
+	NETbeginDecode(NET_DEMOLISH);
 		NETuint32_t(&structID);
 		NETuint32_t(&droidID);
 	NETend();
@@ -330,7 +330,7 @@ BOOL recvDestroyStructure()
 	uint32_t structID;
 	STRUCTURE *psStruct;
 
-	NETbeginDecode();
+	NETbeginDecode(NET_STRUCTDEST);
 		NETuint32_t(&structID);
 	NETend();
 								
@@ -373,7 +373,7 @@ BOOL recvLasSat()
 	STRUCTURE	*psStruct;
 	uint32_t	id,targetid;
 	
-	NETbeginDecode();
+	NETbeginDecode(NET_LASSAT);
 		NETuint8_t(&player);
 		NETuint32_t(&id);
 		NETuint32_t(&targetid);

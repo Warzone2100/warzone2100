@@ -36,7 +36,7 @@ typedef enum packetDirectionEnum
 } PACKETDIR;
 
 void NETbeginEncode(uint8_t type, uint8_t player);
-void NETbeginDecode(void);
+void NETbeginDecode(uint8_t type);
 BOOL NETend(void);
 BOOL NETint8_t(int8_t *ip);
 BOOL NETuint8_t(uint8_t *ip);

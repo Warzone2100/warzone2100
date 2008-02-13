@@ -164,7 +164,7 @@ void recvOptions()
 	UDWORD	play;
 	UDWORD	newPl;
 
-	NETbeginDecode();
+	NETbeginDecode(NET_OPTIONS);
 
 	// Get general information about the game
 	NETuint8_t(&game.type);

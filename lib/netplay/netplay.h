@@ -109,7 +109,7 @@ extern NETMSG NetMsg;
 extern BOOL   NETinit(BOOL bFirstCall);				//init(guid can be NULL)
 extern BOOL   NETsend(NETMSG *msg, UDWORD player, BOOL guarantee);// send to player, possibly guaranteed
 extern BOOL   NETbcast(NETMSG *msg,BOOL guarantee);		// broadcast to everyone, possibly guaranteed
-extern BOOL   NETrecv(NETMSG *msg);				// recv a message if possible
+extern BOOL   NETrecv(uint8_t *type);				// recv a message if possible
 
 extern UBYTE   NETsendFile(BOOL newFile, char *fileName, UDWORD player);	// send file chunk.
 extern UBYTE   NETrecvFile(void);			// recv file chunk

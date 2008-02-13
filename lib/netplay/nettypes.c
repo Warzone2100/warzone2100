@@ -47,9 +47,10 @@ void NETbeginEncode(uint8_t type, uint8_t player)
 	memset(&NetMsg.body, '\0', MaxMsgSize);
 }
 
-void NETbeginDecode(void)
+void NETbeginDecode(uint8_t type)
 {
 	NETsetPacketDir(PACKET_DECODE);
+	assert(type == NetMsg.type);
 	NetMsg.size = 0;
 	NetMsg.status = TRUE;
 }
@@ -408,7 +409,7 @@ static void NETcoder(PACKETDIR dir)
 	if (dir == PACKET_ENCODE)
 		NETbeginEncode(0, 0);
 	else
-		NETbeginDecode();
+		NETbeginDecode(0);
 	NETbool(&b);			assert(b == TRUE);
 	NETuint32_t(&u32);  assert(u32 == 32);
 	NETuint16_t(&u16);  assert(u16 == 16);
