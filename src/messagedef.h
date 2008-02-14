@@ -123,7 +123,6 @@ typedef struct _message
 {
 	MESSAGE_TYPE	type;					//The type of message
 	UDWORD			id;						//ID number of the message
-	//VIEWDATA		*pViewData;				//Pointer to view data - if any - should be some!
 	MSG_VIEWDATA	*pViewData;				//Pointer to view data - if any - should be some!
 	BOOL			read;					//flag to indicate whether message has been read
 	UDWORD			player;					//which player this message belongs to

@@ -861,8 +861,6 @@ BOOL stageOneShutDown(void)
 	pie_TexShutDown();
 	pie_TexInit(); // restart it
 
-	viewDataHeapShutDown();
-
 	initMiscVars();
 
 	return TRUE;

@@ -45,7 +45,7 @@
 #define MAX_DATA		4
 
 //array of pointers for the view data
-VIEWDATA_LIST			*apsViewData;
+static VIEWDATA_LIST		*apsViewData;
 
 /* The id number for the next message allocated
  * Each message will have a unique id number irrespective of type
@@ -72,9 +72,12 @@ static void checkMessages(MSG_VIEWDATA *psViewData);
  * new is a pointer to a pointer to the new message
  * type is the type of the message
  */
-static inline MESSAGE* createMessage(MESSAGE_TYPE msgType)
+static inline MESSAGE* createMessage(MESSAGE_TYPE msgType, UDWORD player)
 {
 	MESSAGE *newMsg;
+
+	ASSERT(player < MAX_PLAYERS, "createMessage: Bad player");
+	ASSERT(msgType < MSG_TYPES, "createMessage: Bad message");
 
 	// Allocate memory for the message, and on failure return a NULL pointer
 	newMsg = (MESSAGE*)malloc(sizeof(MESSAGE));
@@ -86,6 +89,9 @@ static inline MESSAGE* createMessage(MESSAGE_TYPE msgType)
 
 	newMsg->type = msgType;
 	newMsg->id = (msgID << 3) | selectedPlayer;
+	newMsg->pViewData = NULL;
+	newMsg->read = FALSE;
+	newMsg->player = player;
 	msgID++;
 
 	return newMsg;
@@ -100,6 +106,7 @@ static inline void addMessageToList(MESSAGE *list[MAX_PLAYERS], MESSAGE *msg, UD
 	MESSAGE *psCurr = NULL, *psPrev = NULL;
 
 	ASSERT(msg != NULL, "addMessageToList: Invalid message pointer");
+	ASSERT(player < MAX_PLAYERS, "addMessageToList: Bad player");
 
 	// If there is no message list, create one
 	if (list[player] == NULL)
@@ -192,6 +199,7 @@ static inline void removeMessageFromList(MESSAGE *list[], MESSAGE *del, UDWORD p
 	MESSAGE *psPrev = NULL, *psCurr;
 
 	ASSERT(del != NULL, "removeMessageFromList: Invalid message pointer");
+	ASSERT(player < MAX_PLAYERS, "removeMessageFromList: Bad player");
 
 	// If the message to remove is the first one in the list then mark the next one as the first
 	if (list[player] == del)
@@ -259,32 +267,21 @@ BOOL initViewData(void)
 	return TRUE;
 }
 
-//destroys the viewdata heap
-void viewDataHeapShutDown(void)
-{
-}
-
 /*Add a message to the list */
 MESSAGE * addMessage(MESSAGE_TYPE msgType, BOOL proxPos, UDWORD player)
 {
 	//first create a message of the required type
-	MESSAGE* psMsgToAdd = createMessage(msgType);
+	MESSAGE* psMsgToAdd = createMessage(msgType, player);
 
 	debug(LOG_WZ, "addMessage: adding message for player %d, type is %d, proximity is %d", player, msgType, proxPos);
 
 	if (!psMsgToAdd)
 	{
-		debug(LOG_ERROR, "addMessage: createMessage failed");
+		ASSERT(FALSE, "addMessage: createMessage failed");
 		return NULL;
 	}
 	//then add to the players' list
 	addMessageToList(apsMessages, psMsgToAdd, player);
-
-	//initialise the message data
-	psMsgToAdd->player = player;
-	psMsgToAdd->pViewData = NULL;
-	//psMsgToAdd->frameNumber = 0;
-	psMsgToAdd->read = FALSE;
 
 	//add a proximity display
 	if (msgType == MSG_PROXIMITY)
@@ -297,9 +294,11 @@ MESSAGE * addMessage(MESSAGE_TYPE msgType, BOOL proxPos, UDWORD player)
 
 /* adds a proximity display - holds varaibles that enable the message to be
  displayed in the Intelligence Screen*/
-void addProximityDisplay(MESSAGE *psMessage, BOOL proxPos, UDWORD player)
+static void addProximityDisplay(MESSAGE *psMessage, BOOL proxPos, UDWORD player)
 {
 	PROXIMITY_DISPLAY *psToAdd;
+
+	ASSERT(player < MAX_PLAYERS, "addProximityDisplay: Bad player");
 
 	//create the proximity display
 	psToAdd = (PROXIMITY_DISPLAY*)malloc(sizeof(PROXIMITY_DISPLAY));
@@ -341,6 +340,8 @@ void addProximityDisplay(MESSAGE *psMessage, BOOL proxPos, UDWORD player)
  /*remove a message */
 void removeMessage(MESSAGE *psDel, UDWORD player)
 {
+	ASSERT(player < MAX_PLAYERS, "removeMessage: Bad player");
+	ASSERT(psDel != NULL, "removeMessage: Bad message");
 	debug(LOG_WZ, "removeMessage: removing message for player %d", player);
 
 	if (psDel->type == MSG_PROXIMITY)
@@ -354,6 +355,9 @@ void removeMessage(MESSAGE *psDel, UDWORD player)
 void removeProxDisp(MESSAGE *psMessage, UDWORD player)
 {
 	PROXIMITY_DISPLAY		*psCurr, *psPrev;
+
+	ASSERT(player < MAX_PLAYERS, "removeProxDisp: Bad player");
+	ASSERT(psMessage != NULL, "removeProxDisp: Bad message");
 
 	//find the proximity display for this message
 	if (apsProxDisp[player]->psMessage == psMessage)
@@ -426,8 +430,8 @@ BOOL initMessage(void)
 
 static BOOL addToViewDataList(VIEWDATA *psViewData, UBYTE numData)
 {
-	VIEWDATA_LIST		*psAdd;
-	psAdd = (VIEWDATA_LIST*)malloc(sizeof(VIEWDATA_LIST));
+	VIEWDATA_LIST		*psAdd = (VIEWDATA_LIST*)malloc(sizeof(VIEWDATA_LIST));
+
 	if (psAdd == NULL)
 	{
 		ASSERT(FALSE, "addToViewDataList: out of memory");
@@ -918,6 +922,9 @@ pointer and which is the same type of message - used in scriptFuncs */
 MESSAGE * findMessage(MSG_VIEWDATA *pViewData, MESSAGE_TYPE type, UDWORD player)
 {
 	MESSAGE					*psCurr;
+
+	ASSERT(player < MAX_PLAYERS, "findMessage: Bad player");
+	ASSERT(type < MSG_TYPES, "removeMessage: Bad message type");
 
 	for (psCurr = apsMessages[player]; psCurr != NULL; psCurr = psCurr->psNext)
 	{
