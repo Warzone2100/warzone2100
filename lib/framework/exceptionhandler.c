@@ -442,8 +442,7 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 
 	write(dumpFile, "Executed on: ", strlen("Executed on: "));
 	write(dumpFile, executionDate, strlen(executionDate));
-	write(dumpFile, "\n\n", 2);
-
+	write(dumpFile, "\n", 1);
 
 	if (!sysInfoValid)
 		write(dumpFile, "System information may be invalid!\n",
@@ -484,6 +483,7 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 	write(dumpFile, signal, strlen(signal));
 	write(dumpFile, "\n\n", 2);
 
+	dumpLog(dumpFile); // dump out the last two log calls
 
 # if defined(__GLIBC__)
 	// Dump raw backtrace in case GDB is not available or fails

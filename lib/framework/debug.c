@@ -70,6 +70,8 @@ static const char *code_part_names[] = {
 	"last"
 };
 
+static char inputBuffer[2][MAX_LEN_LOG_LINE];
+static BOOL useInputBuffer1 = FALSE;
 
 /**
  * Convert code_part names to enum. Case insensitive.
@@ -204,6 +206,8 @@ void debug_init(void)
 
 	memset( enabled_debug, FALSE, sizeof(enabled_debug) );
 	enabled_debug[LOG_ERROR] = TRUE;
+	inputBuffer[0][0] = '\0';
+	inputBuffer[1][0] = '\0';
 #ifdef DEBUG
 	enabled_debug[LOG_WARNING] = TRUE;
 #endif
@@ -268,13 +272,21 @@ BOOL debug_enable_switch(const char *str)
 	return (part != LOG_LAST);
 }
 
+/* Dump last two debug log calls into file descriptor. For exception handler. */
+#define dumpstr(desc, str) write(desc, str, strnlen(str, MAX_LEN_LOG_LINE))
+void dumpLog(int filedesc)
+{
+	dumpstr(filedesc, "Log message 1:");
+	dumpstr(filedesc, inputBuffer[0]);
+	dumpstr(filedesc, "\nLog message 2:");
+	dumpstr(filedesc, inputBuffer[1]);
+	dumpstr(filedesc, "\n\n");
+}
 
 void _debug( code_part part, const char *str, ... )
 {
 	va_list ap;
-	static char inputBuffer[2][MAX_LEN_LOG_LINE];
 	static char outputBuffer[MAX_LEN_LOG_LINE];
-	static BOOL useInputBuffer1 = FALSE;
 
 	debug_callback * curCallback = callbackRegistry;
 

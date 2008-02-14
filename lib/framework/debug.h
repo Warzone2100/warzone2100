@@ -189,4 +189,7 @@ static inline void objTraceDisable(void) { traceID = 0; }
 }
 #endif
 
+/** Dump last two debug log calls into given file descriptor. For exception handler. */
+void dumpLog(int filedesc);
+
 #endif // __INCLUDED_LIB_FRAMEWORK_DEBUG_H__
