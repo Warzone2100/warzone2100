@@ -78,6 +78,9 @@
 //Total number of technology branches
 #define	TECHS					2
 
+//How many best templates to choose from when deciding what template to build
+#define	MAX_RANDOM_TEMPLATES	4
+
 
 
 public	int				me;			// player for this instance.
@@ -1711,7 +1714,7 @@ function void factoryBuildDroid(STRUCTURE _factory)
 	{
 		_count = numTemplates[curTech] - 1;
 		_count2 = 0;
-		while( (_count2 < 4) and (_count >= 0) )
+		while( (_count2 < MAX_RANDOM_TEMPLATES) and (_count >= 0) )
 		{
 			if( skCanBuildTemplate(me,_factory, tmpl[curTech][_count]) )
 			{
@@ -1786,7 +1789,7 @@ function void cybFactorBuildCyborg(STRUCTURE _factory)
 
 				if(count2 > 0)
 				{
-					buildDroid(superCyb[random(count2)],_factory,me,1);
+					buildDroid(tmplChoice[random(count2)],_factory,me,1);
 				}
 				else	//try light cyborgs
 				{
@@ -1803,7 +1806,7 @@ function void cybFactorBuildCyborg(STRUCTURE _factory)
 					}
 					if(count2 > 0)
 					{
-						buildDroid(cybTempl[random(count2)], _factory, me, 1);
+						buildDroid(tmplChoice[random(count2)], _factory, me, 1);
 					}
 				}
 			}

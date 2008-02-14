@@ -141,6 +141,7 @@ Cyb-NXPulseLas-JUMP			"*Cyb-NXPulseLas-JUMP*"
 
 /* PLAYER 4 - FORCE EDITOR VEHICLES */
 ViperLtCannonWheels			_("Viper Light Cannon Wheels")
+ViperLtCannonHTracks		_("Viper Light Cannon Half-track")
 ViperFlameWheels			_("Viper Flamer Wheels")
 ViperSensorWheels			_("Viper Sensor Wheels")
 ViperLtCannonTracks			_("Viper Light Cannon Tracks")
@@ -1906,3 +1907,6 @@ ViperTrkLancer				_("Viper Tracks Lancer")
 CobraPODHTracks				_("Cobra Half-Tracks Mini-Pod")
 CobraPODTracks				_("Cobra Tracks Mini-Pod")
 CobraMRLTracks				_("Cobra Tracks Mini-Rocket Artillery")
+
+CobraInfernoHTracks			_("Cobra Inferno Half-track")
+PythonHoverHVC				_("Python HVC Hover")

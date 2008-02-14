@@ -212,6 +212,7 @@ ViperHMGTracks,MG3Mk1,NULL,NULL,6
 ViperLtA-Twheels,Rocket-LtA-T,NULL,NULL,6
 ViperLtCannonTracks,Cannon1Mk1,NULL,NULL,4
 ViperLtCannonWheels,Cannon1Mk1,NULL,NULL,4
+ViperLtCannonHTracks,Cannon1Mk1,NULL,NULL,4
 ViperLtMGWheels,MG1Mk1,NULL,NULL,0
 ViperMedCnTrks,Cannon2A-TMk1,NULL,NULL,6
 ViperMG01Wheels,MG1Mk1,NULL,NULL,6
@@ -281,4 +282,6 @@ ViperTrkLancer,Rocket-LtA-T,NULL,NULL,6
 CobraPODHTracks,Rocket-Pod,NULL,NULL,6
 CobraPODTracks,Rocket-Pod,NULL,NULL,6
 CobraMRLTracks,Rocket-MRL,NULL,NULL,6
+CobraInfernoHTracks,Flame2,NULL,NULL,6
+PythonHoverHVC,Cannon4AUTOMk1,NULL,NULL,6
 ZNULLDESIGN,ZNULLWEAPON,ZNULLWEAPON,ZNULLWEAPON,0
