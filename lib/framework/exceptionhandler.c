@@ -415,7 +415,7 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 	write(dumpFile, PACKAGE_VERSION, strlen(PACKAGE_VERSION));
 	write(dumpFile, "\n", 1);
 
-	write(dumpFile, "Distributor: ", strlen("Distributor:: "));
+	write(dumpFile, "Distributor: ", strlen("Distributor: "));
 	write(dumpFile, PACKAGE_DISTRIBUTOR, strlen(PACKAGE_DISTRIBUTOR));
 	write(dumpFile, "\n", 1);
 
