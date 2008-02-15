@@ -907,7 +907,7 @@ static BOOL sendPowerCheck()
 {
 	static UDWORD	lastsent = 0;
 	uint8_t			player = selectedPlayer;
-	uint32_t		power = asPower[player]->currentPower;
+	uint32_t		power = getPower(player);
 
 	if (lastsent > gameTime)
 	{
@@ -931,14 +931,26 @@ static BOOL sendPowerCheck()
 BOOL recvPowerCheck()
 {
 	uint8_t		player;
-	uint32_t	power;
+	uint32_t	power, power2;
 
 	NETbeginDecode(NET_CHECK_POWER);
 		NETuint8_t(&player);
 		NETuint32_t(&power);
 	NETend();
-	
-	setPower(player, power);
+
+	if (player >= MAX_PLAYERS)
+	{
+		debug(LOG_ERROR, "Bad NET_CHECK_POWER packet: player is %d", (int)player);
+		return FALSE;
+	}
+
+	power2 = getPower(player);
+	if (power != power2)
+	{
+		debug(LOG_NET, "NET_CHECK_POWER: Adjusting power for player %d from %u to %u", 
+		      (int)player, power2, power);
+		setPower(player, power);
+	}
 	return TRUE;
 }
 

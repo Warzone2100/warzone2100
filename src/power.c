@@ -337,6 +337,15 @@ void setPower(UDWORD player, UDWORD avail)
 	asPower[player]->currentPower = avail;
 }
 
+// only used in multiplayer games.
+UDWORD getPower(UDWORD player)
+{
+	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
+	ASSERT(asPower[player] != NULL, "asPower[player=%u] not allocated", player);
+
+	return asPower[player]->currentPower;
+}
+
 /*sets the initial value for the power*/
 void setPlayerPower(UDWORD power, UDWORD player)
 {
