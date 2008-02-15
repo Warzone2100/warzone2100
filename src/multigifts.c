@@ -55,7 +55,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // prototypes
 
-static void		recvGiftDroids					(uint8_t from, uint8_t to);
+static void		recvGiftDroids					(uint8_t from, uint8_t to, uint32_t droidID);
 static void		sendGiftDroids					(uint8_t from, uint8_t to);
 static void		giftResearch					(uint8_t from, uint8_t to, BOOL send);
 
@@ -66,47 +66,45 @@ BOOL recvGift(void)
 {
 	uint8_t	type, from, to;
 	int		audioTrack;
+	uint32_t droidID;
 
 	NETbeginDecode(NET_GIFT);
 		NETuint8_t(&type);
 		NETuint8_t(&from);
 		NETuint8_t(&to);
+		NETuint32_t(&droidID);
+	NETend();
 
-		// Handle the gift depending on what it is
-		switch (type)
-		{
-			case RADAR_GIFT:
-				audioTrack = ID_SENSOR_DOWNLOAD;
-				giftRadar(from, to, FALSE);
-				NETend();
-				break;
-			case DROID_GIFT:	// do NOT do NETend() for this one it is handled differently.
-				audioTrack = ID_UNITS_TRANSFER;
-				recvGiftDroids(from, to);
-				break;
-			case RESEARCH_GIFT:
-				audioTrack = ID_TECHNOLOGY_TRANSFER;
-				giftResearch(from, to, FALSE);
-				NETend();
-				break;
-			case POWER_GIFT:
-				audioTrack = ID_POWER_TRANSMIT;
-				giftPower(from, to, FALSE);
-				NETend();
-				break;
-			default:
-				debug(LOG_ERROR, "recvGift: Unknown Gift recvd");
-				NETend();
-				return FALSE;
-				break;
-		}
+	// Handle the gift depending on what it is
+	switch (type)
+	{
+		case RADAR_GIFT:
+			audioTrack = ID_SENSOR_DOWNLOAD;
+			giftRadar(from, to, FALSE);
+			break;
+		case DROID_GIFT:
+			audioTrack = ID_UNITS_TRANSFER;
+			recvGiftDroids(from, to, droidID);
+			break;
+		case RESEARCH_GIFT:
+			audioTrack = ID_TECHNOLOGY_TRANSFER;
+			giftResearch(from, to, FALSE);
+			break;
+		case POWER_GIFT:
+			audioTrack = ID_POWER_TRANSMIT;
+			giftPower(from, to, FALSE);
+			break;
+		default:
+			debug(LOG_ERROR, "recvGift: Unknown Gift recvd");
+			return FALSE;
+			break;
+	}
 
-		// If we are on the recieving end play an audio alert
-		if (to == selectedPlayer)
-		{
-			audio_QueueTrack(audioTrack);
-		}
-
+	// If we are on the recieving end play an audio alert
+	if (to == selectedPlayer)
+	{
+		audio_QueueTrack(audioTrack);
+	}
 	return TRUE;
 }
 
@@ -149,6 +147,8 @@ BOOL sendGift(uint8_t type, uint8_t to)
 // give radar information
 void giftRadar(uint8_t from, uint8_t to, BOOL send)
 {
+	uint32_t dummy = 0;
+
 	hqReward(from, to);
 
 	if (send)
@@ -159,6 +159,7 @@ void giftRadar(uint8_t from, uint8_t to, BOOL send)
 			NETuint8_t(&subType);
 			NETuint8_t(&from);
 			NETuint8_t(&to);
+			NETuint32_t(&dummy);
 		NETend();
 	}
 	// If we are recieving the gift
@@ -175,13 +176,10 @@ void giftRadar(uint8_t from, uint8_t to, BOOL send)
 //
 // \param from  :player that sent us the droid
 // \param to    :player that should be getting the droid
-static void recvGiftDroids(uint8_t from, uint8_t to)
+static void recvGiftDroids(uint8_t from, uint8_t to, uint32_t droidID)
 {
-	uint32_t	droidID;
 	DROID		*psDroid;
 
-	NETuint32_t(&droidID);
-	NETend();	// the below call calls another net function.
 	if (IdToDroid(droidID, from, &psDroid))
 	{
 		giftSingleDroid(psDroid, to);
@@ -265,7 +263,8 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 static void giftResearch(uint8_t from, uint8_t to, BOOL send)
 {
 	PLAYER_RESEARCH	*pR, *pRto;
-	int				i;
+	int		i;
+	uint32_t	dummy = 0;
 
 	pR	 = asPlayerResList[from];
 	pRto = asPlayerResList[to];
@@ -290,6 +289,7 @@ static void giftResearch(uint8_t from, uint8_t to, BOOL send)
 			NETuint8_t(&giftType);
 			NETuint8_t(&from);
 			NETuint8_t(&to);
+			NETuint32_t(&dummy);
 		NETend();
 	}
 	else if (to == selectedPlayer)
@@ -304,6 +304,7 @@ static void giftResearch(uint8_t from, uint8_t to, BOOL send)
 void giftPower(uint8_t from, uint8_t to, BOOL send)
 {
 	UDWORD gifval;
+	uint32_t dummy = 0;
 
 	if (from == ANYPLAYER)
 	{
@@ -326,6 +327,7 @@ void giftPower(uint8_t from, uint8_t to, BOOL send)
 			NETuint8_t(&giftType);
 			NETuint8_t(&from);
 			NETuint8_t(&to);
+			NETuint32_t(&dummy);
 		NETend();
 	}
 	else if (to == selectedPlayer)
