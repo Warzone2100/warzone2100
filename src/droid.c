@@ -101,12 +101,11 @@ DROID_TEMPLATE		*apsDroidTemplates[MAX_PLAYERS];
 UWORD	aDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS];
 UDWORD	selectedGroup = UBYTE_MAX;
 UDWORD	selectedCommander = UBYTE_MAX;
-/*Height the transporter hovers at above the terrain*/
 
+/** Height the transporter hovers at above the terrain. */
 #define TRANSPORTER_HOVER_HEIGHT	10
 
-
-//how far round a repair droid looks for a damaged droid
+/** How far round a repair droid looks for a damaged droid. */
 #define REPAIR_DIST		(TILE_UNITS * 4)//8)
 
 /* Store for the objects near the droid currently being updated
@@ -114,10 +113,6 @@ UDWORD	selectedCommander = UBYTE_MAX;
  */
 NAYBOR_INFO			asDroidNaybors[MAX_NAYBORS];
 UDWORD				numNaybors=0;
-
-// store the last time a structure was hit for a side
-// this controls when the CALL_STRUCT_ATTACKED is made
-//UDWORD	aLastDroidHit[MAX_PLAYERS];
 
 // the structure that was last hit
 DROID	*psLastDroidHit;
@@ -133,7 +128,6 @@ void	droidUpdateRecoil( DROID *psDroid );
 BOOL droidInit(void)
 {
 	memset(aDroidExperience, 0, sizeof(UWORD) * MAX_PLAYERS * MAX_RECYCLED_DROIDS);
-//	memset(aLastDroidHit, 0, sizeof(UDWORD) * MAX_PLAYERS);
 	psLastDroidHit = NULL;
 
 	return TRUE;
@@ -506,8 +500,7 @@ void	removeDroidBase(DROID *psDel)
 		grpLeave(psDel->psGroup, psDel);
 		orderGroupMoralCheck(psGroup);
 	}
-	//else if (psDel->player == BARB1 || psDel->player == BARB2)
-    else
+	else
 	{
 		orderMoralCheck(psDel->player);
 	}
@@ -533,18 +526,16 @@ void	removeDroidBase(DROID *psDel)
 		}
 	}
 
-    //check to see if constructor droid currently trying to find a location to build
-    //if (psDel->droidType == DROID_CONSTRUCT && psDel->player ==
-    if ((psDel->droidType == DROID_CONSTRUCT || psDel->droidType ==
-        DROID_CYBORG_CONSTRUCT) && psDel->player ==
-        selectedPlayer && psDel->selected)
-    {
-        //if currently trying to build, kill off the placement
-        if (tryingToGetLocation())
-        {
-            kill3DBuilding();
-        }
-    }
+	// Check to see if constructor droid currently trying to find a location to build
+	if ((psDel->droidType == DROID_CONSTRUCT || psDel->droidType == DROID_CYBORG_CONSTRUCT)
+	    && psDel->player == selectedPlayer && psDel->selected)
+	{
+		// If currently trying to build, kill off the placement
+		if (tryingToGetLocation())
+		{
+			kill3DBuilding();
+		}
+	}
 
 	// remove the droid from the grid
 	gridRemoveObject((BASE_OBJECT *)psDel);
@@ -579,31 +570,7 @@ static void removeDroidFX(DROID *psDel)
 		return;
 	}
 
-	/*
-	// -------------------------------------------------------------------------------
-	if(psDel->player == selectedPlayer)
-	{
-		if(gameTime - lastDroidRemove < 100)	//assume 10 fames a sec min
-		{
-			droidRemoveKills++;
-			if(droidRemoveKills>=2)
-			{
-				ASSERT( FALSE,"3 of your droids killed in less than a tenth of a second?" );
-			}
-		}
-		else
-		{
-			droidRemoveKills = 0;
-		}
-		lastDroidRemove = gameTime;
-	}
-	// -------------------------------------------------------------------------------
-
-  */
-
-    //if( (psDel->droidType == DROID_PERSON || psDel->droidType == DROID_CYBORG) &&
-    if( (psDel->droidType == DROID_PERSON || cyborgDroid(psDel)) &&
-		(psDel->order != DORDER_RUNBURN) )
+	if ((psDel->droidType == DROID_PERSON || cyborgDroid(psDel)) && psDel->order != DORDER_RUNBURN)
 	{
 		/* blow person up into blood and guts */
 		compPersonToBits(psDel);
@@ -616,7 +583,7 @@ static void removeDroidFX(DROID *psDel)
 		{
 			if(psDel->visible[selectedPlayer])
 			{
-// The babarian has been run over ...
+				// The babarian has been run over ...
 				audio_PlayStaticTrack( psDel->pos.x, psDel->pos.y, ID_SOUND_BARB_SQUISH );
 			}
 		}
@@ -750,8 +717,7 @@ static void droidBurntCallback( ANIM_OBJECT * psObj )
 		"unitBurntCallback: invalid Unit pointer\n" );
 
 	/* add falling anim */
-	psDroid->psCurAnim = animObj_Add( (BASE_OBJECT *) psDroid,
-											ID_ANIM_DROIDFLAMEFALL, 0, 1 );
+	psDroid->psCurAnim = animObj_Add((BASE_OBJECT *)psDroid, ID_ANIM_DROIDFLAMEFALL, 0, 1);
 	if ( psDroid->psCurAnim == NULL )
 	{
 		debug( LOG_ERROR, "unitBurntCallback: couldn't add fall over anim\n" );
@@ -894,17 +860,13 @@ static UDWORD	nayborTime = 0;
 /* Find all the objects close to the droid */
 void droidGetNaybors(DROID *psDroid)
 {
-//	DROID		*psCurrD;
-//	STRUCTURE	*psCurrS;
-//	FEATURE		*psCurrF;
 	SDWORD		xdiff, ydiff;
-//	UDWORD		player;
 	UDWORD		dx,dy, distSqr;
 	BASE_OBJECT	*psObj;
 
 	CHECK_DROID(psDroid);
 
-// Ensure only called max of once per droid per game cycle.
+	// Ensure only called max of once per droid per game cycle.
 	if(CurrentNaybors == psDroid && nayborTime == gameTime) {
 		return;
 	}
@@ -920,30 +882,6 @@ void droidGetNaybors(DROID *psDroid)
 	// search for naybor objects
 	dx = psDroid->pos.x;
 	dy = psDroid->pos.y;
-/*	for(player = 0; player < MAX_PLAYERS; player++)
-	{
-		for (psCurrD = apsDroidLists[player]; psCurrD; psCurrD = psCurrD->psNext)
-		{
-			if (psCurrD != psDroid)
-			{
-				IN_NAYBOR_RANGE(psCurrD);
-
-				addNaybor((BASE_OBJECT *)psCurrD, distSqr);
-			}
-		}
-		for (psCurrS = apsStructLists[player]; psCurrS; psCurrS = psCurrS->psNext)
-		{
-			IN_NAYBOR_RANGE(psCurrS);
-
-			addNaybor((BASE_OBJECT *)psCurrS, distSqr);
-		}
-	}
-	for (psCurrF = apsFeatureLists[0]; psCurrF; psCurrF = psCurrF->psNext)
-	{
-		IN_NAYBOR_RANGE(psCurrF);
-
-		addNaybor((BASE_OBJECT *)psCurrF, distSqr);
-	}*/
 
 	gridStartIterate((SDWORD)dx, (SDWORD)dy);
 	for (psObj = gridIterate(); psObj != NULL; psObj = gridIterate())
@@ -955,8 +893,6 @@ void droidGetNaybors(DROID *psDroid)
 			addNaybor(psObj, distSqr);
 		}
 	}
-
-
 }
 
 /* The main update routine for all droids */
@@ -969,37 +905,28 @@ void droidUpdate(DROID *psDroid)
 
 	CHECK_DROID(psDroid);
 
-	// Find all the objects close to the droid
-//	droidGetNaybors(psTmpDroid);	// Now done when needed.
-
-
-	/* Clear down every droid as attacker could get killed */
-//	psDroid->bTargetted = FALSE;
-
 	// update the cluster of the droid
 	if (psDroid->id % 20 == frameGetFrameNumber() % 20)
 	{
 		clustUpdateObject((BASE_OBJECT *)psDroid);
 	}
 
-    //may need power
-    if (droidUsesPower(psDroid))
-    {
-//	    if ((asPower[psDroid->player]->currentPower > POWER_PER_CYCLE) ||
-//		    (!powerCalculated))
+	// May need power
+	if (droidUsesPower(psDroid))
+	{
 		if (checkPower(psDroid->player, POWER_PER_CYCLE, FALSE))
-	    {
-		    //check if this droid is due some power
-		    if (getLastPowered((BASE_OBJECT *)psDroid))
-		    {
-			    //get some power if necessary
-			    if (accruePower((BASE_OBJECT *)psDroid))
-			    {
-				    updateLastPowered((BASE_OBJECT *)psDroid, psDroid->player);
-			    }
-		    }
-	    }
-    }
+		{
+			// Check if this droid is due some power
+			if (getLastPowered((BASE_OBJECT *)psDroid))
+			{
+				// Get some power if necessary
+				if (accruePower((BASE_OBJECT *)psDroid))
+				{
+					updateLastPowered((BASE_OBJECT *)psDroid, psDroid->player);
+				}
+			}
+		}
+	}
 
 	// ai update droid
 	aiUpdateDroid(psDroid);
@@ -1036,7 +963,6 @@ void droidUpdate(DROID *psDroid)
 
 				dv.y += (psDroid->sDisplay.imd->max.y * 2);
 				addEffect(&dv,EFFECT_SMOKE,SMOKE_TYPE_DRIFTING_SMALL,FALSE,NULL,0);
-		// FIXFX		addExplosion(&dv,TYPE_EXPLOSION_SMOKE_CLOUD,NULL);
 				psDroid->lastEmission = gameTime;
 			}
 		}
@@ -1065,9 +991,7 @@ void droidUpdate(DROID *psDroid)
 					((STRUCTURE*)psBeingTargetted)->targetted = 1;
 				}
 			}
-	// ffs AM
-			else
-			if(psBeingTargetted->type == OBJ_DROID)
+			else if (psBeingTargetted->type == OBJ_DROID)
 			{
 				/* And it's your  your droid... */
 	 			if( (((DROID*)psBeingTargetted)->player == selectedPlayer)
@@ -1116,11 +1040,9 @@ void droidUpdate(DROID *psDroid)
 				if (damageToDo > 0)
 				{
 					psDroid->burnDamage += damageToDo;
-					//psDroid->damage(psDroid, damageToDo, WC_HEAT);
 
 					//Watermelon:just assume the burn damage is from FRONT
-					droidDamage(psDroid, damageToDo, WC_HEAT,WSC_FLAME, 0);
-
+					droidDamage(psDroid, damageToDo, WC_HEAT,WSC_FLAME, HIT_SIDE_FRONT);
 				}
 			}
 		}
@@ -1137,16 +1059,16 @@ void droidUpdate(DROID *psDroid)
 
 	calcDroidIllumination(psDroid);
 
-    //check the resistance level of the droid
+	// Check the resistance level of the droid
 	if (psDroid->id % 50 == frameGetFrameNumber() % 50)
-    {
-        //zero resistance means not currently been attacked - ignore these
-	    if (psDroid->resistance && psDroid->resistance < droidResistance(psDroid))
-	    {
-		    //increase over time if low
-		    psDroid->resistance++;
-	    }
-    }
+	{
+		// Zero resistance means not currently been attacked - ignore these
+		if (psDroid->resistance && psDroid->resistance < droidResistance(psDroid))
+		{
+			// Increase over time if low
+			psDroid->resistance++;
+		}
+	}
 
 	CHECK_DROID(psDroid);
 }
