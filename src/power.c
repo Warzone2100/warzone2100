@@ -127,6 +127,8 @@ BOOL checkPower(UDWORD player, UDWORD quantity, BOOL playAudio)
 		return TRUE;
 	}
 
+	ASSERT(asPower[player] != NULL, "asPower[player=%u] not allocated", player);
+
 	if (asPower[player]->currentPower >= quantity)
 	{
 		return TRUE;
@@ -147,6 +149,8 @@ BOOL usePower(UDWORD player, UDWORD quantity)
 		return TRUE;
 	}
 
+	ASSERT(asPower[player] != NULL, "asPower[player=%u] not allocated", player);
+
 	//check there is enough first
 	if (asPower[player]->currentPower >= quantity)
 	{
@@ -166,7 +170,9 @@ BOOL usePower(UDWORD player, UDWORD quantity)
 //return the power when a structure/droid is deliberately destroyed
 void addPower(UDWORD player, UDWORD quantity)
 {
-	ASSERT(player < MAX_PLAYERS, "addPower: Bad player");
+	ASSERT(player < MAX_PLAYERS, "addPower: Bad player (%u)", player);
+	ASSERT(asPower[player] != NULL, "asPower[player=%u] not allocated", player);
+
 	asPower[player]->currentPower += quantity;
 }
 
@@ -276,6 +282,9 @@ void updatePlayerPower(UDWORD player)
 			updateCurrentPower((POWER_GEN *)psStruct->pFunctionality, player);
 		}
 	}
+
+	ASSERT(asPower[player] != NULL, "asPower[player=%u] not allocated", player);
+
 	// Check that the psLastPowered hasn't died
 	if (asPower[player]->psLastPowered && asPower[player]->psLastPowered->died)
 	{
@@ -308,6 +317,8 @@ void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 		}
 	}
 
+	ASSERT(asPower[player] != NULL, "asPower[player=%u] not allocated", player);
+
 	asPower[player]->extractedPower += extractedPower ;
 	power = (asPower[player]->extractedPower * psPowerGen->multiplier) / 100;
 	if (power)
@@ -320,14 +331,18 @@ void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 // only used in multiplayer games.
 void setPower(UDWORD player, UDWORD avail)
 {
-	ASSERT(player < MAX_PLAYERS, "setPower: Bad player");
+	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
+	ASSERT(asPower[player] != NULL, "asPower[player=%u] not allocated", player);
+
 	asPower[player]->currentPower = avail;
 }
 
 /*sets the initial value for the power*/
 void setPlayerPower(UDWORD power, UDWORD player)
 {
-	ASSERT(player < MAX_PLAYERS, "setPlayerPower: Bad player");
+	ASSERT(player < MAX_PLAYERS, "setPlayerPower: Bad player (%u)", player);
+	ASSERT(asPower[player] != NULL, "asPower[player=%u] not allocated", player);
+
 	asPower[player]->currentPower = power;
 }
 
@@ -565,6 +580,9 @@ BOOL accruePower(BASE_OBJECT *psObject)
 //informs the power array that a object has been destroyed
 void powerDestroyObject(BASE_OBJECT *psObject)
 {
+	ASSERT(psObject != NULL, "invalid object");
+	ASSERT(asPower[psObject->player] != NULL, "asPower[player=%u] not allocated", psObject->player);
+
 	//check that this wasn't the last object that received the power
 	if (asPower[psObject->player]->psLastPowered == psObject)
 	{
@@ -575,7 +593,8 @@ void powerDestroyObject(BASE_OBJECT *psObject)
 /*checks if the Object to be powered next - returns TRUE if power*/
 BOOL getLastPowered(BASE_OBJECT *psObject)
 {
-	ASSERT( psObject != NULL, "getLastPowered - invalid object" );
+	ASSERT(psObject != NULL, "invalid object");
+	ASSERT(asPower[psObject->player] != NULL, "asPower[player=%u] not allocated", psObject->player);
 
 	if (asPower[psObject->player]->psLastPowered == NULL)
 	{
@@ -593,9 +612,11 @@ BOOL getLastPowered(BASE_OBJECT *psObject)
 /*inform the players power struct that the last object to receive power has changed*/
 void updateLastPowered(BASE_OBJECT *psObject, UBYTE player)
 {
-	ASSERT(player < MAX_PLAYERS, "updateLastPowered: Bad player");
-	ASSERT(psObject == NULL || psObject->died == 0 || psObject->died == NOT_CURRENT_LIST,
+	ASSERT(player < MAX_PLAYERS, "updateLastPowered: Bad player (%u)", (unsigned int)player);
+	ASSERT(asPower[player] != NULL, "asPower[player=%u] not allocated", (unsigned int)player);
+	ASSERT(psObject != NULL && psObject->died != 0 && psObject->died != NOT_CURRENT_LIST,
 	       "updateLastPowered: Null or dead object");
+
 	asPower[player]->psLastPowered = psObject;
 }
 
@@ -690,7 +711,8 @@ void powerCheck(BOOL bBeforePowerUsed, UBYTE player)
     static  BASE_OBJECT     *psLastPowered = NULL;
     static  BOOL            bPowerBefore = FALSE;
 
-	ASSERT(player < MAX_PLAYERS, "powerCheck: Bad player");
+	ASSERT(player < MAX_PLAYERS, "powerCheck: Bad player (%u)", (unsigned int)player);
+	ASSERT(asPower[player] != NULL, "asPower[player=%u] not allocated", (unsigned int)player);
 
     if (bBeforePowerUsed)
     {
