@@ -581,6 +581,7 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
  */
 void setupExceptionHandler(const char * programCommand)
 {
+	return;
 #if defined(WZ_OS_WIN)
 	SetUnhandledExceptionFilter(windowsExceptionHandler);
 #elif defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)

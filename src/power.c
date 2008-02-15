@@ -614,7 +614,7 @@ void updateLastPowered(BASE_OBJECT *psObject, UBYTE player)
 {
 	ASSERT(player < MAX_PLAYERS, "updateLastPowered: Bad player (%u)", (unsigned int)player);
 	ASSERT(asPower[player] != NULL, "asPower[player=%u] not allocated", (unsigned int)player);
-	ASSERT(psObject != NULL && psObject->died != 0 && psObject->died != NOT_CURRENT_LIST,
+	ASSERT(psObject == NULL || psObject->died == 0 || psObject->died == NOT_CURRENT_LIST,
 	       "updateLastPowered: Null or dead object");
 
 	asPower[player]->psLastPowered = psObject;
