@@ -876,7 +876,7 @@ void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIG
 		iV_DrawText(str, x+MULTIMENU_C10, y+MULTIMENU_FONT_OSET);
 
 		//c11: Player power
-		sprintf(str,"%d",asPower[player]->currentPower);
+		sprintf(str, "%u", getPower(player));
 		iV_DrawText(str, MULTIMENU_FORM_X+MULTIMENU_C11,  y+MULTIMENU_FONT_OSET);
 	}
 

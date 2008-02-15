@@ -313,7 +313,7 @@ void giftPower(uint8_t from, uint8_t to, BOOL send)
 	else
 	{
 		// Give 1/3 of our power away
-		gifval = asPower[from]->currentPower / 3;
+		gifval = getPower(from) / 3;
 		usePower(from, gifval);
 	}
 
@@ -579,8 +579,7 @@ void addLoserGifts(void)
 		lastgift = 0;	// might be a restart
 
 	// Player has no power, so give the player some oil
-	if (apsStructLists[selectedPlayer]
-	 && asPower[selectedPlayer]->currentPower < 10)
+	if (apsStructLists[selectedPlayer] && getPower(selectedPlayer) < 10)
 	{
 		// Only proceed if it's been a while
 		if (gameTime - lastgift < GIFTFREQ)

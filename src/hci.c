@@ -2275,13 +2275,9 @@ static void intRunStats(void)
 			{
 				//get the template build points
 				Power = calcTemplatePower((DROID_TEMPLATE *)apsTemplateList[statID - IDSTAT_START]);
-				/*if(Power * Quantity > asPower[selectedPlayer]->availablePower)
+				if (Power * Quantity > getPower(selectedPlayer))
 				{
-					Quantity = asPower[selectedPlayer]->availablePower / Power;
-				}*/
-				if(Power * Quantity > asPower[selectedPlayer]->currentPower)
-				{
-					Quantity = (UBYTE)(asPower[selectedPlayer]->currentPower / Power);
+					Quantity = (UBYTE)(getPower(selectedPlayer) / Power);
 				}
 			}
 		}

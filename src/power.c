@@ -337,7 +337,6 @@ void setPower(UDWORD player, UDWORD avail)
 	asPower[player]->currentPower = avail;
 }
 
-// only used in multiplayer games.
 UDWORD getPower(UDWORD player)
 {
 	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);

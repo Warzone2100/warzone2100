@@ -248,7 +248,7 @@ BOOL scrPlayerPower(void)
 		return FALSE;
 	}
 
-	scrFunctionResult.v.ival = asPower[player]->currentPower;
+	scrFunctionResult.v.ival = getPower(player);
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
