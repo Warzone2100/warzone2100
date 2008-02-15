@@ -32,10 +32,7 @@
 // Logging for degug only
 // ////////////////////////////////////////////////////////////////////////
 
-// kluge, since I do not want to include src/multiplay.h here
-#define NET_MAX 52
-
-static const char *packetname[NET_MAX] =
+static const char *packetname[NUM_GAME_PACKETS] =
 {
 	"NET_DROID",
 	"NET_DROIDINFO",
@@ -88,12 +85,18 @@ static const char *packetname[NET_MAX] =
 	"NET_TEAMS_ON",
 	"NET_BEACONMSG",
 	"NET_SET_TEAMS",
-	"NET_TEAMREQUEST"
+	"NET_TEAMREQUEST",
+	"NET_JOIN",
+	"NET_ACCEPTED",
+	"NET_PLAYER_INFO",
+	"NET_PLAYER_JOINED",
+	"NET_PLAYER_LEFT",
+	"NET_GAME_FLAGS"
 };
 
 static PHYSFS_file	*pFileHandle;
-static uint32_t		packetcount[2][NET_MAX];
-static uint32_t		packetsize[2][NET_MAX];
+static uint32_t		packetcount[2][NUM_GAME_PACKETS];
+static uint32_t		packetsize[2][NUM_GAME_PACKETS];
 
 BOOL NETstartLogging(void)
 {
@@ -103,7 +106,7 @@ BOOL NETstartLogging(void)
 	char *filename = "netplay.log";
 	int i;
 
-	for (i = 0; i < NET_MAX; i++)
+	for (i = 0; i < NUM_GAME_PACKETS; i++)
 	{
 		packetcount[0][i] = 0;
 		packetsize[0][i] = 0;
@@ -134,7 +137,7 @@ BOOL NETstopLogging(void)
 	int i;
 
 	/* Output stats */
-	for (i = 0; i < NET_MAX; i++)
+	for (i = 0; i < NUM_GAME_PACKETS; i++)
 	{
 		snprintf(buf, sizeof(buf), "%s: received %u times, %u bytes; sent %u times, %u bytes\n", packetname[i],
 			packetcount[0][i], packetsize[0][i], packetcount[1][i], packetsize[1][i]);
@@ -154,7 +157,7 @@ BOOL NETstopLogging(void)
 
 void NETlogPacket(NETMSG *msg, BOOL received)
 {
-	if (msg->type >= NET_MAX)
+	if (msg->type >= NUM_GAME_PACKETS)
 	{
 		return;
 	}

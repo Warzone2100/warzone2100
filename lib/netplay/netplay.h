@@ -28,8 +28,68 @@
 
 #include "nettypes.h"
 
-// ////////////////////////////////////////////////////////////////////////
-// Include this file in your game to add multiplayer facilities.
+typedef enum
+{
+	NET_DROID,			//0 a new droid
+	NET_DROIDINFO,			//1 update a droid order.
+	NET_DROIDDEST,			//2 issue a droid destruction
+	NET_DROIDMOVE,			//3 move a droid, don't change anything else though..
+	NET_GROUPORDER,			//4 order a group of droids.
+	NET_TEMPLATE,			//5 a new template
+	NET_TEMPLATEDEST,		//6 remove template
+	NET_FEATUREDEST,		//7 destroy a game feature.
+	NET_PING,			//8 ping players.
+	NET_CHECK_DROID,		//9 check & update bot position and damage.
+	NET_CHECK_STRUCT,		//10 check & update struct damage.
+	NET_CHECK_POWER,		//11 power levels for a player.
+	NET_PLAYER_STATS,		//12 player stats: HACK-NOTE: lib/netplay/netplay.c depends on this being 12
+	NET_BUILD,			//13 build a new structure
+	NET_STRUCTDEST,			//14 specify a strucutre to destroy
+	NET_BUILDFINISHED,		//15 a building is complete.
+	NET_RESEARCH,			//16 Research has been completed.
+	NET_TEXTMSG,			//17 A simple text message between machines.
+	NET_LEAVING,			//18 A player is leaving, (nicely)
+	NET_UNUSED_19,
+	NET_PLAYERCOMPLETE,		//20 All Setup information about player x has been sent
+	NET_UNUSED_21,
+	NET_STRUCT,			//22 a complete structure
+	NET_UNUSED_23,
+	NET_FEATURES,			//24 information regarding features.
+	NET_PLAYERRESPONDING,		//25 computer that sent this is now playing warzone!
+	NET_OPTIONS,			//26 welcome a player to a game.
+	NET_KICK,			//27 kick a player .
+	NET_SECONDARY,			//28 set a droids secondary order
+	NET_FIREUP,			//29 campaign game has started, we can go too.. Shortcut message, not to be used in dmatch.
+	NET_ALLIANCE,			//30 alliance data.
+	NET_GIFT,			//31 a luvly gift between players.
+	NET_DEMOLISH,			//32 a demolish is complete.
+	NET_COLOURREQUEST,		//33 player requests a colour change.
+	NET_ARTIFACTS,			//34 artifacts randomly placed.
+	NET_DMATCHWIN,			//35 winner of a deathmatch. NOTUSED
+	NET_SCORESUBMIT,		//36 submission of scores to host.
+	NET_DESTROYXTRA,		//37 destroy droid with destroyer intact.
+	NET_VTOL,			//38 vtol rearmed
+	NET_UNUSED_39,
+	NET_WHITEBOARD,			//40 whiteboard.
+	NET_SECONDARY_ALL,		//41 complete secondary order.
+	NET_DROIDEMBARK,		//42 droid embarked on a Transporter
+	NET_DROIDDISEMBARK,		//43 droid disembarked from a Transporter
+	NET_RESEARCHSTATUS,		//44 research state.
+	NET_LASSAT,			//45 lassat firing.
+	NET_REQUESTMAP,			//46 dont have map, please send it.
+	NET_AITEXTMSG,			//47 chat between AIs
+	NET_TEAMS_ON,			//48 locked teams mode
+	NET_BEACONMSG,			//49 place beacon
+	NET_SET_TEAMS,			//50 set locked teams
+	NET_TEAMREQUEST,		//51 request team membership
+	NET_JOIN,			//52 join a game
+	NET_ACCEPTED,			//53 accepted into game
+	NET_PLAYER_INFO,		//54 basic player info
+	NET_PLAYER_JOINED,		//55 notice about player joining
+	NET_PLAYER_LEFT,		//56 notice about player leaving
+	NET_GAME_FLAGS,			//57 game flags
+	NUM_GAME_PACKETS
+} MESSAGE_TYPES;
 
 // Constants
 #define MaxMsgSize		8000			// max size of a message in bytes.

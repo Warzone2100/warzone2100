@@ -43,19 +43,8 @@ unsigned int masterserver_port = 0, gameserver_port = 0;
 #define NET_READ_TIMEOUT	0
 #define NET_BUFFER_SIZE		1024
 
-// HACK to allow us to call a src/multistat.c function upon receiving a MSG_PLAYER_STATS msg
+// HACK to allow us to call a src/multistat.c function upon receiving a NET_PLAYER_STATS msg
 extern void recvMultiStats(void);
-
-enum
-{
-	MSG_PLAYER_STATS = 12, // HACK-NOTE: This __must__ be the same to NET_PLAYER_STATS in src/multiplay.h
-	MSG_JOIN = 90, // needs to start at 90
-	MSG_ACCEPTED,
-	MSG_PLAYER_INFO,
-	MSG_PLAYER_JOINED,
-	MSG_PLAYER_LEFT,
-	MSG_GAME_FLAGS,
-};
 
 // ////////////////////////////////////////////////////////////////////////
 // Function prototypes
@@ -266,7 +255,7 @@ static void NETBroadcastPlayerInfo(int dpid)
 {
 	NET_PLAYER* player = (NET_PLAYER*)NetMsg.body;
 
-	NetMsg.type = MSG_PLAYER_INFO;
+	NetMsg.type = NET_PLAYER_INFO;
 	NetMsg.size = sizeof(NET_PLAYER);
 	memcpy(NetMsg.body, &players[dpid], sizeof(NET_PLAYER));
 
@@ -375,7 +364,7 @@ SDWORD NETgetGameFlags(UDWORD flag)
 
 static void NETsendGameFlags(void)
 {
-	NETbeginEncode(MSG_GAME_FLAGS, NET_ALL_PLAYERS);
+	NETbeginEncode(NET_GAME_FLAGS, NET_ALL_PLAYERS);
 	{
 		// Send the amount of game flags we're about to send
 		uint8_t i, count = sizeof(NetGameFlags) / sizeof(*NetGameFlags);
@@ -774,12 +763,12 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 {
 	switch (pMsg->type)
 	{
-		case MSG_PLAYER_STATS:
+		case NET_PLAYER_STATS:
 		{
 			recvMultiStats();
 			break;
 		}
-		case MSG_PLAYER_INFO: {
+		case NET_PLAYER_INFO: {
 			NET_PLAYER* pi = (NET_PLAYER*)(pMsg->body);
 			unsigned int dpid;
 
@@ -788,13 +777,13 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 
 			dpid = pi->id;
 
-			debug(LOG_NET, "NETprocessSystemMessage: Receiving MSG_PLAYER_INFO for player %d from player %d. We are %d.",
+			debug(LOG_NET, "NETprocessSystemMessage: Receiving NET_PLAYER_INFO for player %d from player %d. We are %d.",
 			      dpid, pMsg->source, NetPlay.dpidPlayer);
 
 			// Bail out if the given ID number is out of range
 			if (dpid >= MAX_CONNECTED_PLAYERS)
 			{
-				debug(LOG_ERROR, "NETprocessSystemMessage: MSG_PLAYER_INFO: Player ID (%u) out of range (max %u)",
+				debug(LOG_ERROR, "NETprocessSystemMessage: NET_PLAYER_INFO: Player ID (%u) out of range (max %u)",
 				      dpid, MAX_CONNECTED_PLAYERS);
 				NETend();
 				break;
@@ -809,36 +798,36 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 			}
 			break;
 		}
-		case MSG_PLAYER_JOINED:
+		case NET_PLAYER_JOINED:
 		{
 			uint8_t dpid;
-			NETbeginDecode(MSG_PLAYER_JOINED);
+			NETbeginDecode(NET_PLAYER_JOINED);
 				NETuint8_t(&dpid);
 			NETend();
 
-			debug(LOG_NET, "NETprocessSystemMessage: Receiving MSG_PLAYER_JOINED for player %u", (unsigned int)dpid);
+			debug(LOG_NET, "NETprocessSystemMessage: Receiving NET_PLAYER_JOINED for player %u", (unsigned int)dpid);
 
 			MultiPlayerJoin(dpid);
 			break;
 		}
-		case MSG_PLAYER_LEFT:
+		case NET_PLAYER_LEFT:
 		{
 			uint32_t dpid;
-			NETbeginDecode(MSG_PLAYER_LEFT);
+			NETbeginDecode(NET_PLAYER_LEFT);
 				NETuint32_t(&dpid);
 			NETend();
 
-			debug(LOG_NET, "NETprocessSystemMessage: Receiving MSG_PLAYER_LEFT for player %u", (unsigned int)dpid);
+			debug(LOG_NET, "NETprocessSystemMessage: Receiving NET_PLAYER_LEFT for player %u", (unsigned int)dpid);
 
 			NET_DestroyPlayer(dpid);
 			MultiPlayerLeave(dpid);
 			break;
 		}
-		case MSG_GAME_FLAGS:
+		case NET_GAME_FLAGS:
 		{
 			debug(LOG_NET, "NETprocessSystemMessage: Receiving game flags");
 
-			NETbeginDecode(MSG_GAME_FLAGS);
+			NETbeginDecode(NET_GAME_FLAGS);
 			{
 				static unsigned int max_flags = sizeof(NetGameFlags) / sizeof(*NetGameFlags);
 				// Retrieve the amount of game flags that we should receive
@@ -849,7 +838,7 @@ BOOL NETprocessSystemMessage(NETMSG * pMsg)
 				// have enough space to store the given amount of game flags.
 				if (count > max_flags)
 				{
-					debug(LOG_NET, "NETprocessSystemMessage: MSG_GAME_FLAGS: More game flags sent (%u) than our buffer can hold (%u)", (unsigned int)count, max_flags);
+					debug(LOG_NET, "NETprocessSystemMessage: NET_GAME_FLAGS: More game flags sent (%u) than our buffer can hold (%u)", (unsigned int)count, max_flags);
 					count = max_flags;
 				}
 
@@ -938,7 +927,7 @@ receive_message:
 						--game.desc.dwCurrentPlayers;
 
 						debug(LOG_NET, "NETrecv: dpid to send set to %u", (unsigned int)i);
-						NETbeginEncode(MSG_PLAYER_LEFT, NET_ALL_PLAYERS);
+						NETbeginEncode(NET_PLAYER_LEFT, NET_ALL_PLAYERS);
 							NETuint32_t(&i);
 						NETend();
 
@@ -1285,19 +1274,19 @@ static void NETallowJoining(void)
 					SDLNet_TCP_Close(tmp_socket[i]);
 					tmp_socket[i] = NULL;
 				}
-				else if (NetMsg.type == MSG_JOIN)
+				else if (NetMsg.type == NET_JOIN)
 				{
 					char name[64];
 					int j;
 					uint8_t dpid;
 
-					NETbeginDecode(MSG_JOIN);
+					NETbeginDecode(NET_JOIN);
 						NETstring(name, sizeof(name));
 					NETend();
 
 					dpid = NET_CreatePlayer(name, 0);
 
-					debug(LOG_NET, "NETallowJoining, MSG_JOIN: dpid set to %u", (unsigned int)dpid);
+					debug(LOG_NET, "NETallowJoining, NET_JOIN: dpid set to %u", (unsigned int)dpid);
 					SDLNet_TCP_DelSocket(tmp_socket_set, tmp_socket[i]);
 					NET_initBufferedSocket(connected_bsocket[dpid], tmp_socket[i]);
 					SDLNet_TCP_AddSocket(socket_set, connected_bsocket[dpid]->socket);
@@ -1306,7 +1295,7 @@ static void NETallowJoining(void)
 					// Increment player count
 					game.desc.dwCurrentPlayers++;
 
-					NETbeginEncode(MSG_ACCEPTED, dpid);
+					NETbeginEncode(NET_ACCEPTED, dpid);
 						NETuint8_t(&dpid);
 					NETend();
 
@@ -1319,14 +1308,14 @@ static void NETallowJoining(void)
 						 && dpid != players[j].id)
 						{
 							uint8_t id = players[j].id;
-							NETbeginEncode(MSG_PLAYER_JOINED, dpid);
+							NETbeginEncode(NET_PLAYER_JOINED, dpid);
 								NETuint8_t(&id);
 							NETend();
 						}
 					}
 
 					// Send info about newcomer to all players.
-					NETbeginEncode(MSG_PLAYER_JOINED, NET_ALL_PLAYERS);
+					NETbeginEncode(NET_PLAYER_JOINED, NET_ALL_PLAYERS);
 						NETuint8_t(&dpid);
 					NETend();
 
@@ -1582,7 +1571,7 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 	NET_initBufferedSocket(bsocket, tcp_socket);
 
 	// Send a join message
-	NETbeginEncode(MSG_JOIN, HOST_DPID);
+	NETbeginEncode(NET_JOIN, HOST_DPID);
 		// Casting constness away, because NETstring is const-incorrect
 		// when sending/encoding a packet.
 		NETstring((char*)playername, 64);
@@ -1595,16 +1584,16 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 
 		NETrecv(&type);
 
-		if (type == MSG_ACCEPTED)
+		if (type == NET_ACCEPTED)
 		{
 			uint8_t dpid;
-			NETbeginDecode(MSG_ACCEPTED);
+			NETbeginDecode(NET_ACCEPTED);
 				// Retrieve the player ID the game host arranged for us
 				NETuint8_t(&dpid);
 			NETend();
 
 			NetPlay.dpidPlayer = dpid;
-			debug(LOG_NET, "NETjoinGame: MSG_ACCEPTED received. Accepted into the game - I'm player %u",
+			debug(LOG_NET, "NETjoinGame: NET_ACCEPTED received. Accepted into the game - I'm player %u",
 			      (unsigned int)NetPlay.dpidPlayer);
 			NetPlay.bHost = FALSE;
 
