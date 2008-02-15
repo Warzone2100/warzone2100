@@ -763,7 +763,14 @@ BOOL recvStructureCheck()
 		NETuint16_t(&y);
 		NETuint16_t(&z);
 		NETfloat(&direction);
-		
+
+		if (player >= MAX_PLAYERS)
+		{
+			debug(LOG_ERROR, "Bad NET_CHECK_STRUCT received!");
+			NETend();
+			return FALSE;
+		}
+
 		// If the structure exists our job is easy
 		pS = IdToStruct(ref, player);
 		if (pS)
@@ -1042,7 +1049,6 @@ BOOL sendScoreCheck(void)
 }
 
 
-
 BOOL recvScoreSubmission()
 {
 	uint8_t		player;
@@ -1174,6 +1180,12 @@ BOOL recvPing()
 		NETuint8_t(&sender);
 		NETbool(&isNew);
 	NETend();
+
+	if (sender >= MAX_PLAYERS)
+	{
+		debug(LOG_ERROR, "Bad NET_PING packet, sender is %d", (int)sender);
+		return FALSE;
+	}
 
 	// If this is a new ping, respond to it
 	if (isNew)

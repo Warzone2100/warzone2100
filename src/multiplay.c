@@ -723,6 +723,11 @@ BOOL recvMessage(void)
 				NETuint32_t(&player_id);
 				NETbool(&host);                 // Added to check for host quit here -- Buggy
 			NETend();
+			if (player_id >= MAX_PLAYERS)
+			{
+				debug(LOG_ERROR, "Bad NET_LEAVING received, player ID is %d", (int)player_id);
+				break;
+			}
 			MultiPlayerLeave(player_id);
 			if (host)                               // host has quit, need to quit too.
 			{
@@ -743,7 +748,11 @@ BOOL recvMessage(void)
 				// the player that has just responded
 				NETuint32_t(&player_id);
 			NETend();
-
+			if (player_id >= MAX_PLAYERS)
+			{
+				debug(LOG_ERROR, "Bad NET_PLAYERRESPONDING received, ID is %d", (int)player_id);
+				break;
+			}
 			// This player is now with us!
 			ingame.JoiningInProgress[player_id] = FALSE;
 			break;
@@ -848,6 +857,12 @@ static BOOL recvResearch()
 		NETuint32_t(&index);
 	NETend();
 
+	if (player >= MAX_PLAYERS || index >= numResearch)
+	{
+		debug(LOG_ERROR, "Bad NET_RESEARCH received, player is %d, index is %u", (int)player, index);
+		return FALSE;
+	}
+
 	pPlayerRes = asPlayerResList[player] + index;
 	
 	// If they have completed the research
@@ -931,6 +946,12 @@ BOOL recvResearchStatus()
 		NETuint32_t(&structRef);
 		NETuint32_t(&index);
 	NETend();
+
+	if (player >= MAX_PLAYERS || index >= numResearch)
+	{
+		debug(LOG_ERROR, "Bad NET_RESEARCHSTATUS received, player is %d, index is %u", (int)player, index);
+		return FALSE;
+	}
 
 	pPlayerRes = asPlayerResList[player] + index;
 
