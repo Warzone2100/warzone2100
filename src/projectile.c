@@ -741,7 +741,6 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 			pos.y = psObj->pos.z-8;
 			pos.z = psObj->pos.y;
   			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LASER,FALSE,NULL,0);
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLARE,FALSE,NULL,0);
 		}
 		else if ( psStats->weaponSubClass == WSC_ROCKET ||
 			psStats->weaponSubClass == WSC_MISSILE ||
@@ -752,7 +751,6 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 			pos.y = psObj->pos.z+8;
 			pos.z = psObj->pos.y;
 			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,FALSE,NULL,0);
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLARE,FALSE,NULL,0);
 		}
 	}
 
@@ -1039,7 +1037,6 @@ proj_InFlightIndirectFunc( PROJECTILE *psObj )
 				pos.y = psObj->pos.z-8;
 				pos.z = psObj->pos.y;
 				addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LASER,FALSE,NULL,0);
-				addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLARE,FALSE,NULL,0);
 				break;
 			case WSC_ROCKET:
 			case WSC_MISSILE:
@@ -1049,7 +1046,6 @@ proj_InFlightIndirectFunc( PROJECTILE *psObj )
 				pos.y = psObj->pos.z+8;
 				pos.z = psObj->pos.y;
 				addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,FALSE,NULL,0);
-				addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLARE,FALSE,NULL,0);
 				break;
 		}
 	}
