@@ -42,10 +42,7 @@ extern ECM_STATS			*asECMStats;
 extern REPAIR_STATS			*asRepairStats;
 extern WEAPON_STATS			*asWeaponStats;
 extern CONSTRUCT_STATS		*asConstructStats;
-
 extern PROPULSION_TYPES		*asPropulsionTypes;
-extern TERRAIN_TABLE		*asTerrainTable;
-extern SPECIAL_ABILITY		*asSpecialAbility;
 
 //used to hold the modifiers cross refd by weapon effect and propulsion type
 extern WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][NUM_PROP_TYPES];
@@ -65,18 +62,13 @@ extern BODY_UPGRADE			asBodyUpgrade[MAX_PLAYERS][BODY_TYPE];
 /* The number of different stats stored */
 extern UDWORD		numBodyStats;
 extern UDWORD		numBrainStats;
-//extern UDWORD		numPowerStats;
 extern UDWORD		numPropulsionStats;
 extern UDWORD		numSensorStats;
 extern UDWORD		numECMStats;
-//extern UDWORD		numArmourStats;
 extern UDWORD		numRepairStats;
 extern UDWORD		numWeaponStats;
 extern UDWORD		numConstructStats;
-
-//extern UDWORD		numPropulsionTypes;
 extern UDWORD		numTerrainTypes;
-extern UDWORD		numSpecialAbility;
 
 /* What number the ref numbers start at for each type of stat */
 #define REF_BODY_START			0x010000

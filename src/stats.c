@@ -36,21 +36,21 @@
 #include "lib/sound/audio_id.h"
 #include "projectile.h"
 #include "text.h"
+
 #define WEAPON_TIME		100
 
-
 /* The stores for the different stats */
-BODY_STATS			*asBodyStats;
-BRAIN_STATS			*asBrainStats;
+BODY_STATS		*asBodyStats;
+BRAIN_STATS		*asBrainStats;
 PROPULSION_STATS	*asPropulsionStats;
 SENSOR_STATS		*asSensorStats;
-ECM_STATS			*asECMStats;
+ECM_STATS		*asECMStats;
 REPAIR_STATS		*asRepairStats;
 WEAPON_STATS		*asWeaponStats;
 CONSTRUCT_STATS		*asConstructStats;
 PROPULSION_TYPES	*asPropulsionTypes;
-TERRAIN_TABLE		*asTerrainTable;
-SPECIAL_ABILITY		*asSpecialAbility;
+static TERRAIN_TABLE	*asTerrainTable;
+static SPECIAL_ABILITY	*asSpecialAbility;
 
 //used to hold the modifiers cross refd by weapon effect and propulsion type
 WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][NUM_PROP_TYPES];
@@ -58,7 +58,7 @@ WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][NUM_PROP_TYPES];
 //used to hold the current upgrade level per player per weapon subclass
 WEAPON_UPGRADE		asWeaponUpgrade[MAX_PLAYERS][NUM_WEAPON_SUBCLASS];
 SENSOR_UPGRADE		asSensorUpgrade[MAX_PLAYERS];
-ECM_UPGRADE			asECMUpgrade[MAX_PLAYERS];
+ECM_UPGRADE		asECMUpgrade[MAX_PLAYERS];
 REPAIR_UPGRADE		asRepairUpgrade[MAX_PLAYERS];
 CONSTRUCTOR_UPGRADE	asConstUpgrade[MAX_PLAYERS];
 BODY_UPGRADE		asBodyUpgrade[MAX_PLAYERS][BODY_TYPE];
@@ -72,22 +72,22 @@ UDWORD		numECMStats;
 UDWORD		numRepairStats;
 UDWORD		numWeaponStats;
 UDWORD		numConstructStats;
-UDWORD		numSpecialAbility;
+static UDWORD	numSpecialAbility;
 
 //the max values of the stats used in the design screen
-UDWORD      maxComponentWeight;
-UDWORD      maxBodyArmour;
-UDWORD      maxBodyPower;
-UDWORD      maxBodyPoints;
-UDWORD      maxSensorRange;
-UDWORD      maxSensorPower;
-UDWORD      maxECMPower;
-UDWORD      maxConstPoints;
-UDWORD      maxRepairPoints;
-UDWORD      maxWeaponRange;
-UDWORD      maxWeaponDamage;
-UDWORD      maxWeaponROF;
-UDWORD      maxPropulsionSpeed;
+static UDWORD	maxComponentWeight;
+static UDWORD	maxBodyArmour;
+static UDWORD	maxBodyPower;
+static UDWORD	maxBodyPoints;
+static UDWORD	maxSensorRange;
+static UDWORD	maxSensorPower;
+static UDWORD	maxECMPower;
+static UDWORD	maxConstPoints;
+static UDWORD	maxRepairPoints;
+static UDWORD	maxWeaponRange;
+static UDWORD	maxWeaponDamage;
+static UDWORD	maxWeaponROF;
+static UDWORD	maxPropulsionSpeed;
 
 //stores for each players component states - can be either UNAVAILABLE, FOUND or AVAILABLE
 UBYTE		*apCompLists[MAX_PLAYERS][COMP_NUMCOMPONENTS];
@@ -224,7 +224,6 @@ static BOOL allocateStatName(BASE_STATS* pStat, const char *Name)
 {
 	return (allocateName(&pStat->pName, Name));
 }
-
 
 
 /* body stats need the extra list removing */
@@ -693,18 +692,18 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 				getStatName(psStats) );
 			return FALSE;
 		}
-        if (surfaceToAir == 0)
-        {
-            psStats->surfaceToAir = (UBYTE)SHOOT_ON_GROUND;
-        }
-        else if (surfaceToAir <= 50)
-        {
-            psStats->surfaceToAir = (UBYTE)SHOOT_IN_AIR;
-        }
-        else
-        {
-            psStats->surfaceToAir = (UBYTE)(SHOOT_ON_GROUND | SHOOT_IN_AIR);
-        }
+		if (surfaceToAir == 0)
+		{
+			psStats->surfaceToAir = (UBYTE)SHOOT_ON_GROUND;
+		}
+		else if (surfaceToAir <= 50)
+		{
+			psStats->surfaceToAir = (UBYTE)SHOOT_IN_AIR;
+		}
+		else
+		{
+			psStats->surfaceToAir = (UBYTE)(SHOOT_ON_GROUND | SHOOT_IN_AIR);
+		}
 
 		//set the attackRuns for VTOLs
 		if (numAttackRuns > UBYTE_MAX)
@@ -760,14 +759,14 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 		//save the stats
 		statsSetWeapon(psStats, i);
 
-        //set the max stat values for the design screen
-        if (psStats->design)
-        {
-            setMaxWeaponRange(psStats->longRange);
-            setMaxWeaponDamage(psStats->damage);
-            setMaxWeaponROF(weaponROF(psStats, -1));
-            setMaxComponentWeight(psStats->weight);
-        }
+		// Set the max stat values for the design screen
+		if (psStats->design)
+		{
+			setMaxWeaponRange(psStats->longRange);
+			setMaxWeaponDamage(psStats->damage);
+			setMaxWeaponROF(weaponROF(psStats, -1));
+			setMaxComponentWeight(psStats->weight);
+		}
 
 		psStats = psStartStats;
 		//increment the pointer to the start of the next record
@@ -1380,12 +1379,12 @@ BOOL loadECMStats(const char *pECMData, UDWORD bufferSize)
 		//save the stats
 		statsSetECM(psStats, i);
 
-        //set the max stat values for the design screen
-        if (psStats->design)
-        {
-            setMaxECMPower(psStats->power);
-            setMaxComponentWeight(psStats->weight);
-        }
+		// Set the max stat values for the design screen
+		if (psStats->design)
+		{
+			setMaxECMPower(psStats->power);
+			setMaxComponentWeight(psStats->weight);
+		}
 
 		psStats = psStartStats;
 		//increment the pointer to the start of the next record
@@ -1609,12 +1608,12 @@ BOOL loadConstructStats(const char *pConstructData, UDWORD bufferSize)
 		//save the stats
 		statsSetConstruct(psStats, i);
 
-        //set the max stat values for the design screen
-        if (psStats->design)
-        {
-            setMaxConstPoints(psStats->constructPoints);
-            setMaxComponentWeight(psStats->weight);
-        }
+		// Set the max stat values for the design screen
+		if (psStats->design)
+		{
+			setMaxConstPoints(psStats->constructPoints);
+			setMaxComponentWeight(psStats->weight);
+		}
 
 		psStats = psStartStats;
 		//increment the pointer to the start of the next record
