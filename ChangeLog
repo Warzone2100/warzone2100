@@ -58,6 +58,17 @@
      * reload time: increased from 5 mins to 8 mins
      * chance to hit in the blast radius: reduced from 99% to 90%
 
+2007-12-28: Version 2.0.10
+ * General:
+   * Change: Exit screen looks a bit cleaner than before now
+   * Change: Add some more info to the POSIX exception handler (Used compiler, responsible distributor)
+ * Sound:
+   * Fix: Make sure that sound still works with libvorbis 1.1 (this got broken in 2.0.9)
+ * Graphics:
+   * Fix: Prevent AMD OpenGL driver (slow) software rendering fallback, introduced in 2.0.8 (bug #10486)
+ * Buildsystem:
+   * New: Distributors now should use --with-distributor="Some String" when configuring, so we can track back where the dump comes from
+
 2007-12-03: Version 2.0.9
  * Sound:
    * Fix: Sound works with libvorbis 1.2.0 (no more hangups) (bug #10153)
