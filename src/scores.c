@@ -18,9 +18,10 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-/*
-	Scores.c Deals with all the mission results gubbins.
-	Alex W. McLean
+/**
+ * @file scores.c
+ * Deals with all the mission results gubbins.
+ * Alex W. McLean
 */
 
 #include <string.h>

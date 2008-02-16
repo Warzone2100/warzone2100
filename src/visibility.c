@@ -17,7 +17,11 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*	VISIBILTY.C Pumpkin Studios, Eidos Interactive 1996.	*/
+/**
+ * @file visibility.c
+ * Handles object visibility.
+ * Pumpkin Studios, Eidos Interactive 1996.
+ */
 
 #include <stdio.h>
 #include <string.h>

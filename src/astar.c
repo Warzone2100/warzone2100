@@ -18,7 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /**
- * @file aStar.c
+ * @file astar.c
  *
  * A* based findpath
  *

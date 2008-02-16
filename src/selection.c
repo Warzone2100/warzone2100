@@ -17,12 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
-	Selection.c
-	Alex McLean, Pumpkin studios, EIDOS.
-	Attempt to rationalise the unit selection procedure and
-	also necessary as we now need to return the number of
-	units selected according to specified criteria.
+/**
+ * @file selection.c
+ * Attempt to rationalise the unit selection procedure and
+ * also necessary as we now need to return the number of
+ * units selected according to specified criteria.
+ * Alex McLean, Pumpkin studios, EIDOS.
 */
 
 #include "lib/framework/frame.h"

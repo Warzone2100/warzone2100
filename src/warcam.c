@@ -17,7 +17,10 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/* WarCAM - Handles tracking/following of in game objects */
+/**
+ * @file warcam.c 
+ * Handles tracking/following of in game objects.
+ */
 /* Alex McLean, Pumpkin Studios, EIDOS Interactive, 1998 */
 /*	23rd September, 1998 - This code is now so hideously complex
 	and unreadable that's it's inadvisable to attempt changing

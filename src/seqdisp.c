@@ -17,10 +17,10 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * SeqDisp.c		(Sequence Display)
+/**
+ * @file seqdisp.c
  *
- * Functions for the display of the Escape Sequences
+ * Functions for the display of the Escape Sequences (FMV).
  *
  */
 #include <string.h>

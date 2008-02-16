@@ -18,7 +18,10 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-/* This is where we do texture atlas generation */
+/**
+ * @file texture.c
+ * This is where we do texture atlas generation.
+ */
 
 #include <string.h>
 
