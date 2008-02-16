@@ -2477,7 +2477,7 @@ static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 			compIndex = repairIndex;
 			break;
 		case 4:
-			// Repair Buttons
+			// Brain Buttons
 			psCurrStats = (COMP_BASE_STATS *)asBrainStats;
 			size = sizeof(BRAIN_STATS);
 			aAvailable = apCompLists[selectedPlayer][COMP_BRAIN];

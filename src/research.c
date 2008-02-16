@@ -2607,7 +2607,6 @@ BOOL enableResearch(RESEARCH *psResearch, UDWORD player)
 		{
 			flashReticuleButton(IDRET_RESEARCH);
 		}
-
 	}
 
 	return TRUE;
@@ -2866,17 +2865,17 @@ BOOL wallDefenceStruct(STRUCTURE_STATS *psStats)
 void replaceDroidComponent(DROID *pList, UDWORD oldType, UDWORD oldCompInc,
                       UDWORD newCompInc)
 {
-    DROID   *psDroid;
+	DROID   *psDroid;
 
 	//check thru the droids
 	for (psDroid = pList; psDroid != NULL; psDroid = psDroid->psNext)
 	{
-        switchComponent(psDroid, oldType, oldCompInc, newCompInc);
-        //need to replace the units inside the transporter
-        if (psDroid->droidType == DROID_TRANSPORTER)
-        {
-            replaceTransDroidComponents(psDroid, oldType, oldCompInc, newCompInc);
-        }
+		switchComponent(psDroid, oldType, oldCompInc, newCompInc);
+		// Need to replace the units inside the transporter
+		if (psDroid->droidType == DROID_TRANSPORTER)
+		{
+			replaceTransDroidComponents(psDroid, oldType, oldCompInc, newCompInc);
+		}
 	}
 }
 
@@ -2902,14 +2901,14 @@ void replaceTransDroidComponents(DROID *psTransporter, UDWORD oldType,
 void replaceStructureComponent(STRUCTURE *pList, UDWORD oldType, UDWORD oldCompInc,
                       UDWORD newCompInc, UBYTE player)
 {
-    STRUCTURE   *psStructure;
+	STRUCTURE   *psStructure;
 	int			inc;
 
-    //if the type is not one we are interested in, then don't bother checking
-    if (!(oldType == COMP_ECM || oldType == COMP_SENSOR || oldType == COMP_WEAPON))
-    {
-        return;
-    }
+	// If the type is not one we are interested in, then don't bother checking
+	if (!(oldType == COMP_ECM || oldType == COMP_SENSOR || oldType == COMP_WEAPON))
+	{
+		return;
+	}
 
 	//check thru the structures
 	for (psStructure = pList; psStructure != NULL; psStructure = psStructure->psNext)
@@ -2925,25 +2924,17 @@ void replaceStructureComponent(STRUCTURE *pList, UDWORD oldType, UDWORD oldCompI
 			case COMP_SENSOR:
 				if (psStructure->pStructureType->pSensor == (asSensorStats + oldCompInc))
 				{
-					//psStructure->sensorPower = (asSensorStats + newCompInc)->power;
 					psStructure->sensorPower = (UWORD)sensorPower(asSensorStats +
 						newCompInc,player);
-					//psStructure->sensorRange = (asSensorStats + newCompInc)->range;
 					psStructure->sensorRange = (UWORD)sensorRange(asSensorStats +
 						newCompInc,player);
 				}
 				break;
 			case COMP_WEAPON:
-				//Watermelon:can only be STRUCT_MAXWEAPS weapons now
 				for (inc=0; inc < psStructure->numWeaps; inc++)
 				{
-					//can only be one weapon now
 					if (psStructure->asWeaps[inc].nStat > 0)
 					{
-						/*if (psStructure->asWeaps[inc].nStat == oldCompInc)
-						{
-							psStructure->asWeaps[inc].nStat = newCompInc;
-						}*/
 						if (psStructure->asWeaps[inc].nStat == oldCompInc)
 						{
 							psStructure->asWeaps[inc].nStat = newCompInc;
@@ -2962,9 +2953,7 @@ void replaceStructureComponent(STRUCTURE *pList, UDWORD oldType, UDWORD oldCompI
 static void switchComponent(DROID *psDroid, UDWORD oldType, UDWORD oldCompInc,
                             UDWORD newCompInc)
 {
-
-    ASSERT( psDroid != NULL,
-        "switchComponent:invalid droid pointer" );
+	ASSERT(psDroid != NULL, "switchComponent:invalid droid pointer");
 
 	switch(oldType)
 	{
@@ -2981,15 +2970,12 @@ static void switchComponent(DROID *psDroid, UDWORD oldType, UDWORD oldCompInc,
 			}
 			break;
 		case COMP_WEAPON:
-            //can only be one weapon now
-			//for (inc=0; inc < psDroid->numWeaps; inc++)
-            if (psDroid->asWeaps[0].nStat > 0)
+			// Can only be one weapon now
+			if (psDroid->asWeaps[0].nStat > 0)
 			{
-				//if (psDroid->asWeaps[inc].nStat == oldCompInc)
-                if (psDroid->asWeaps[0].nStat == oldCompInc)
+				if (psDroid->asWeaps[0].nStat == oldCompInc)
 				{
-					//psDroid->asWeaps[inc].nStat = newCompInc;
-                    psDroid->asWeaps[0].nStat = newCompInc;
+					psDroid->asWeaps[0].nStat = newCompInc;
 				}
 			}
 			break;
