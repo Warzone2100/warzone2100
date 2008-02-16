@@ -634,7 +634,7 @@ static void drawTiles(iView *player)
 
 				if (getRevealStatus() && !godMode)
 				{
-					TileIllum = pal_SetBrightness(psTile->level == UBYTE_MAX ? 1 : psTile->level);
+					TileIllum = pal_SetBrightness(psTile->level < 0 ? 1 : psTile->level);
 				}
 				else
 				{

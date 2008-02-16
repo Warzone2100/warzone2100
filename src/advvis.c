@@ -54,7 +54,7 @@ MAPTILE	*psTile;
 SDWORD	lowerX,upperX,lowerY,upperY;
 
 	psTile= mapTile(x,y);
-	if(psTile->level == UBYTE_MAX)
+	if(psTile->level < 0)
 	{
 		lowerX = player.p.x/TILE_UNITS;
 		upperX = lowerX + visibleTiles.x;
@@ -69,7 +69,7 @@ SDWORD	lowerX,upperX,lowerY,upperY;
 		}
 		else
 		{
-			/* tile is off the gird, so force to maximum and finish */
+			/* tile is off the grid, so force to maximum and finish */
 			psTile->level = psTile->illumination;
 			psTile->bMaxed = TRUE;
 		}
@@ -86,10 +86,10 @@ SDWORD	lowerX,upperX,lowerY,upperY;
 static void processAVTile(UDWORD x, UDWORD y)
 {
 	MAPTILE *psTile;
-	UDWORD newLevel;
+	float newLevel;
 
 	psTile = mapTile(x, y);
-	if (psTile->level == UBYTE_MAX || psTile->bMaxed)
+	if (psTile->level < 0 || psTile->bMaxed)
 	{
 		return;
 	}
@@ -102,7 +102,7 @@ static void processAVTile(UDWORD x, UDWORD y)
 	}
 	else
 	{
-		psTile->level = (UBYTE)newLevel;
+		psTile->level = newLevel;
 	}
 }
 
@@ -214,7 +214,7 @@ MAPTILE		*psTile;
 		  	}
 			else
 			{
-			 	psTile->level = UBYTE_MAX;
+			 	psTile->level = -1;
 				psTile->bMaxed = FALSE;
 			}
 		}
