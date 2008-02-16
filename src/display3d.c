@@ -669,6 +669,39 @@ static void drawTiles(iView *player)
 					TileIllum.byte.b = (TileIllum.byte.b * 2) / 3;
 					pushedDown = TRUE;
 				}
+				
+				// to prevent a sharp edge to the map, make sure the border is black
+				if (i == 0 || j == 0 || i == visibleTiles.y || j == visibleTiles.x)
+				{
+					TileIllum.byte.r = 0;
+					TileIllum.byte.g = 0;
+					TileIllum.byte.b = 0;
+				}
+				// and fade towards the black border gradually
+				if (j == 1)
+				{
+					TileIllum.byte.r = TileIllum.byte.r*(TILE_UNITS-rx)/TILE_UNITS;
+					TileIllum.byte.g = TileIllum.byte.g*(TILE_UNITS-rx)/TILE_UNITS;
+					TileIllum.byte.b = TileIllum.byte.b*(TILE_UNITS-rx)/TILE_UNITS;
+				}
+				if (j == visibleTiles.x-1)
+				{
+					TileIllum.byte.r = TileIllum.byte.r*(rx)/TILE_UNITS;
+					TileIllum.byte.g = TileIllum.byte.g*(rx)/TILE_UNITS;
+					TileIllum.byte.b = TileIllum.byte.b*(rx)/TILE_UNITS;
+				}
+				if (i == 1)
+				{
+					TileIllum.byte.r = TileIllum.byte.r*(TILE_UNITS-rz)/TILE_UNITS;
+					TileIllum.byte.g = TileIllum.byte.g*(TILE_UNITS-rz)/TILE_UNITS;
+					TileIllum.byte.b = TileIllum.byte.b*(TILE_UNITS-rz)/TILE_UNITS;
+				}
+				if (i == visibleTiles.y-1)
+				{
+					TileIllum.byte.r = TileIllum.byte.r*(rz)/TILE_UNITS;
+					TileIllum.byte.g = TileIllum.byte.g*(rz)/TILE_UNITS;
+					TileIllum.byte.b = TileIllum.byte.b*(rz)/TILE_UNITS;
+				}
 
 				setTileColour(playerXTile + j, playerZTile + i, TileIllum);
 			}
