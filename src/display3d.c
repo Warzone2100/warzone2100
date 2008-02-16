@@ -608,7 +608,7 @@ static void drawTiles(iView *player)
 	for (i = 0; i < visibleTiles.y+1; i++)
 	{
 		/* Go through the x's */
-		for (j = 0; j < (SDWORD)visibleTiles.x+1; j++)
+		for (j = 0; j < visibleTiles.x+1; j++)
 		{
 			Vector2i screen;
 			PIELIGHT TileIllum = WZCOL_BLACK;
@@ -618,10 +618,7 @@ static void drawTiles(iView *player)
 			tileScreenInfo[i][j].pos.z = world_coord(terrainMidY - i);
 			tileScreenInfo[i][j].pos.y = 0;
 
-			if( playerXTile+j < 0 ||
-				playerZTile+i < 0 ||
-				playerXTile+j > (SDWORD)(mapWidth-1) ||
-				playerZTile+i > (SDWORD)(mapHeight-1) )
+			if (!tileOnMap(playerXTile + j, playerZTile + i)) 
 			{
 				// Special past-edge-of-map tiles
 				tileScreenInfo[i][j].u = 0;
@@ -697,9 +694,9 @@ static void drawTiles(iView *player)
 	pie_SetAlphaTest(FALSE);
 	pie_SetFogStatus(TRUE);
 	pie_SetTexturePage(terrainPage);
-	for (i = 0; i < MIN(visibleTiles.y, mapHeight); i++)
+	for (i = 0; i < visibleTiles.y; i++)
 	{
-		for (j = 0; j < MIN(visibleTiles.x, mapWidth); j++)
+		for (j = 0; j < visibleTiles.x; j++)
 		{
 			//get distance of furthest corner
 			int zMax = MAX(tileScreenInfo[i][j].screen.z, tileScreenInfo[i+1][j].screen.z);
@@ -715,7 +712,7 @@ static void drawTiles(iView *player)
 			drawTerrainTile(i, j, FALSE);
 		}
 	}
-	pie_DrawTerrainDone(MIN(visibleTiles.x, mapWidth),  MIN(visibleTiles.y, mapHeight));
+	pie_DrawTerrainDone(visibleTiles.x,  visibleTiles.y);
 
 	// Update height for water
 	for (i = 0; i < visibleTiles.y + 1; i++)
