@@ -31,7 +31,6 @@
 
 #include "frameint.h"
 #include "strnlen1.h"
-#include <string.h>
 
 #define MAX_LEN_LOG_LINE 512
 
@@ -275,25 +274,14 @@ BOOL debug_enable_switch(const char *str)
 }
 
 /* Dump last two debug log calls into file descriptor. For exception handler. */
+#define dumpstr(desc, str) write(desc, str, strnlen1(str, MAX_LEN_LOG_LINE) - 1)
 void dumpLog(int filedesc)
 {
-	size_t length;
-
-	write(filedesc, "Log message 1:", 14);
-
-	length = strlen(inputBuffer[0]);
-	if (length > MAX_LEN_LOG_LINE)
-		length = MAX_LEN_LOG_LINE;
-	write(filedesc, inputBuffer[0], length);
-
-	write(filedesc, "\nLog message 2:", 15);
-
-	length = strlen(inputBuffer[1]);
-	if (length > MAX_LEN_LOG_LINE)
-		length = MAX_LEN_LOG_LINE;
-	write(filedesc, inputBuffer[1], length);
-
-	write(filedesc, "\n\n", 2);
+	dumpstr(filedesc, "Log message 1:");
+	dumpstr(filedesc, inputBuffer[0]);
+	dumpstr(filedesc, "\nLog message 2:");
+	dumpstr(filedesc, inputBuffer[1]);
+	dumpstr(filedesc, "\n\n");
 }
 
 void _debug( code_part part, const char *str, ... )
