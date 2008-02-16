@@ -258,16 +258,12 @@ static void NET_InitPlayers(void)
 
 static void NETBroadcastPlayerInfo(int dpid)
 {
-	NET_PLAYER* player = (NET_PLAYER*)NetMsg.body;
-
-	NetMsg.type = NET_PLAYER_INFO;
-	NetMsg.size = sizeof(NET_PLAYER);
-	memcpy(NetMsg.body, &players[dpid], sizeof(NET_PLAYER));
-
-	player->id    = SDL_SwapBE32(player->id);
-	player->flags = SDL_SwapBE32(player->flags);
-
-	NETbcast(&NetMsg, TRUE);
+	NETbeginEncode(NET_PLAYER_INFO, NET_ALL_PLAYERS);
+		NETuint32_t(&players[dpid].id);
+		NETbool(&players[dpid].allocated);
+		NETstring(players[dpid].name, sizeof(players[dpid].name));
+		NETuint32_t(&players[dpid].flags);
+	NETend();
 }
 
 static unsigned int NET_CreatePlayer(const char* name, unsigned int flags)
@@ -775,30 +771,36 @@ static BOOL NETprocessSystemMessage(void)
 			recvMultiStats();
 			break;
 		}
-		case NET_PLAYER_INFO: {
-			NET_PLAYER* pi = (NET_PLAYER*)(pMsg->body);
-			unsigned int dpid;
+		case NET_PLAYER_INFO:
+		{
+			uint32_t dpid;
+			NETbeginDecode(NET_PLAYER_INFO);
+				// Retrieve the player's ID
+				NETuint32_t(&dpid);
 
-			pi->id    = SDL_SwapBE32(pi->id);
-			pi->flags = SDL_SwapBE32(pi->flags);
+				debug(LOG_NET, "NETprocessSystemMessage: Receiving MSG_PLAYER_INFO for player %u", (unsigned int)dpid);
 
-			dpid = pi->id;
+				// Bail out if the given ID number is out of range
+				if (dpid >= MAX_CONNECTED_PLAYERS)
+				{
+					debug(LOG_NET, "NETprocessSystemMessage: MSG_PLAYER_INFO: Player ID (%u) out of range (max %u)", (unsigned int)dpid, (unsigned int)MAX_CONNECTED_PLAYERS);
+					NETend();
+					break;
+				}
 
-			debug(LOG_NET, "NETprocessSystemMessage: Receiving NET_PLAYER_INFO for player %d from player %d. We are %d.",
-			      dpid, pMsg->source, NetPlay.dpidPlayer);
+				// Copy the ID into the correct player's slot
+				players[dpid].id = dpid;
 
-			// Bail out if the given ID number is out of range
-			if (dpid >= MAX_CONNECTED_PLAYERS)
-			{
-				debug(LOG_ERROR, "NETprocessSystemMessage: NET_PLAYER_INFO: Player ID (%u) out of range (max %u)",
-				      dpid, MAX_CONNECTED_PLAYERS);
-				NETend();
-				break;
-			}
+				// Retrieve the rest of the data
+				NETbool(&players[dpid].allocated);
+				NETstring(players[dpid].name, sizeof(players[dpid].name));
+				NETuint32_t(&players[dpid].flags);
+			NETend();
 
-			memcpy(&players[dpid], pi, sizeof(NET_PLAYER));
 			NETplayerInfo();
 
+			// If we're the game host make sure to send the updated
+			// data to all other clients as well.
 			if (is_server)
 			{
 				NETBroadcastPlayerInfo(dpid);
