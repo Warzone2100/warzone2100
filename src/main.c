@@ -17,9 +17,33 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * main.c
+/**
+ * @file main.c
  *
+ * The main file that launches the game and starts up everything.
+ */
+
+/** @mainpage Warzone2100 Code Documentation
+ *
+ * @section intro_sec Introduction
+ *
+ * Welcome to the Warzone2100 Resurrection Project's code library! We are still only starting
+ * to document this code base, but it should already be useful for quickly browsing around the
+ * code and getting an idea of what exists and how things work.
+ *
+ * @section install_sec Where to begin
+ *
+ * @subsection step1 Step 1: Read the wiki documentation
+ *
+ * We have a great deal of documentation on our wiki page at http://wiki.wz2100.net/ which
+ * may help get you started. Please also take notice of our style guide!
+ *  
+ * @subsection step2 Step 2: Skim main.c
+ *
+ * You may want to begin reading code with main.c, since this is where execution begins,
+ * and trace code paths from here.
+ *
+ * Have fun!
  */
 
 // Get platform defines before checking for them!

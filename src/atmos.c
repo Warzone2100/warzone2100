@@ -17,11 +17,10 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/* Atmos.c - Handles atmospherics such as snow and rain */
-/* Alex McLean, Pumpkin Studios, EIDOS Interactive */
-/*
-	At present, the water effects are part of the atmos
-	system and aren't properly implemented in the software mode
+/**
+ * @file atmos.c
+ *
+ * Handles atmospherics such as snow and rain.
 */
 #include "lib/framework/frame.h"
 #include "lib/ivis_common/piedef.h"

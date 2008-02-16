@@ -17,7 +17,10 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/* Handles cheat codes for Warzone */
+/**
+ * @file cheat.c
+ * Handles cheat codes for Warzone.
+ */
 /* Alex M 19th - Jan. 1999 */
 
 #include "lib/framework/frame.h"

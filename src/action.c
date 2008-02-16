@@ -17,10 +17,10 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Action.c
+/**
+ * @file action.c
  *
- * Functions for setting the action of a droid
+ * Functions for setting the action of a droid.
  *
  */
 #include <string.h>

@@ -17,10 +17,11 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * HCI.c		(Human Computer Interface - thanks to Alex for the file name).
+/**
+ * @file hci.c	
  *
  * Functions for the in game interface.
+ * (Human Computer Interface - thanks to Alex for the file name).
  *
  */
 

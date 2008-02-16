@@ -17,9 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
-	Display3D.c - draws the 3D terrain view. Both the 3D and pseudo-3D components:-
-	textured tiles.
+/**
+ * @file display3D.c
+ * Draws the 3D terrain view. Both the 3D and pseudo-3D components - textured tiles.
 
 	-------------------------------------------------------------------
 	-	Alex McLean & Jeremy Sallis, Pumpkin Studios, EIDOS INTERACTIVE -

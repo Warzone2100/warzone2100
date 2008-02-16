@@ -17,9 +17,11 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-// ------------------------------------------------------------------------------------
 /* Simple short file - only because there was nowhere else for it logically to go */
-/* Handes the difficulty level effects on gameplay */
+/**
+ * @file difficulty.c
+ * Handes the difficulty level effects on gameplay.
+ */
 
 
 /*

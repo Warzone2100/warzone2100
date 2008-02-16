@@ -17,13 +17,11 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
-	bucket3D.c - stores object render calls in a linked list renders after bucket sorting objects
-
-				-------------------------------------------------
-				Jeremy Sallis, Pumpkin Studios, EIDOS INTERACTIVE
-				-------------------------------------------------
-*/
+/**
+ * @file bucket3D.c
+ *
+ * Stores object render calls in a linked list renders after bucket sorting objects.
+ */
 
 /* Includes direct access to matrix code */
 #include "lib/ivis_common/piedef.h"

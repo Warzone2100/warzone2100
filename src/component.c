@@ -17,11 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
-	Component.c
-	Draws component objects - oh yes indeed.
-	Alex M, Pumpkin Studios, EIDOS Interactive, 1997.
-
+/**
+ * @file component.c
+ * Draws component objects - oh yes indeed.
 */
 #include <string.h>
 

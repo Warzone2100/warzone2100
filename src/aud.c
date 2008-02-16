@@ -17,13 +17,11 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/***************************************************************************/
-/*
- * Aud.c
+/**
+ * @file aud.c
  *
- * Warzone audio wrapper functions
+ * Warzone audio wrapper functions.
  *
- * Gareth Jones 16/12/97
  */
 /***************************************************************************/
 

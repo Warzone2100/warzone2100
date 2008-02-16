@@ -17,9 +17,11 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/* AdvVis.c Alex McLean */
-/* Experiment - possibly only for the faster configurations */
-/* Makes smooth transitions for terrain visibility */
+/**
+ * @file advvis.c
+ * 
+ * Makes smooth transitions for terrain visibility.
+ */
 
 #include "lib/framework/frame.h"
 #include "lib/gamelib/gtime.h"

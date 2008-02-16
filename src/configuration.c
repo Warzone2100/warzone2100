@@ -17,8 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- *Config.c  saves your favourite options to the Registry.
+/**
+ * @file config.c
+ * Saves your favourite options to the Registry.
  *
  */
 #include <string.h>

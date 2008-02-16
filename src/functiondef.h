@@ -18,7 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /** \file
- *  Definitios for functions.
+ *  Definitions for functions.
  */
 
 #ifndef __INCLUDED_FUNCTIONDEF_H__
