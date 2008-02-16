@@ -16,8 +16,8 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Nettypes.c
+/**
+ * @file nettypes.c
  *
  * Contains the 'new' Network API functions for sending and receiving both
  * low-level primitives and higher-level types.
@@ -32,6 +32,18 @@
 #include "../framework/frame.h"
 #include "netplay.h"
 #include "nettypes.h"
+
+static PACKETDIR NetDir;
+
+static void NETsetPacketDir(PACKETDIR dir)
+{
+	NetDir = dir;
+}
+
+PACKETDIR NETgetPacketDir()
+{
+	return NetDir;
+} 
 
 /*
  * Begin & End functions

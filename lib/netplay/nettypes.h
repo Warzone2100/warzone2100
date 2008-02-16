@@ -50,6 +50,8 @@ BOOL NETnull(void);
 BOOL NETstring(char *str, uint16_t maxlen);
 BOOL NETbin(char *str, uint16_t maxlen);
 
+PACKETDIR NETgetPacketDir();
+
 #define NETenum(enumPtr) \
 { \
 	int32_t _val = (NETgetPacketDir() == PACKET_ENCODE) ? *(enumPtr) : 0; \

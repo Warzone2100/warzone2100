@@ -17,6 +17,11 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
+/**
+ * @file netplay.c
+ *
+ * Basic netcode.
+ */
 
 #include "lib/framework/frame.h"
 
@@ -57,7 +62,6 @@ extern BOOL MultiPlayerLeave(UDWORD dpid); /* from src/multijoin.c ! */
  * Network globals, these are part of the new network API
  */
 NETMSG NetMsg;
-static PACKETDIR NetDir;
 
 // ////////////////////////////////////////////////////////////////////////
 // Types
@@ -185,8 +189,9 @@ static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SDLNet_SocketSet socket_set)
 // Check if we have a full message waiting for us. If not, return FALSE and wait for more data.
 // If there is a data remnant somewhere in the buffer except at its beginning, move it to the
 // beginning.
-static BOOL NET_recvMessage(NETBUFSOCKET* bs, NETMSG* pMsg)
+static BOOL NET_recvMessage(NETBUFSOCKET* bs)
 {
+	NETMSG *pMsg = &NetMsg;
 	unsigned int size;
 	const NETMSG* message = (NETMSG*)(bs->buffer + bs->buffer_start);
 	const unsigned int headersize =   sizeof(message->size)
@@ -759,8 +764,10 @@ BOOL NETbcast(NETMSG *msg, BOOL guarantee)
 
 ///////////////////////////////////////////////////////////////////////////
 // Check if a message is a system message
-BOOL NETprocessSystemMessage(NETMSG * pMsg)
+static BOOL NETprocessSystemMessage(void)
 {
+	NETMSG *pMsg = &NetMsg;
+
 	switch (pMsg->type)
 	{
 		case NET_PLAYER_STATS:
@@ -895,7 +902,7 @@ receive_message:
 				return FALSE;
 			}
 
-			received = NET_recvMessage(connected_bsocket[current], pMsg);
+			received = NET_recvMessage(connected_bsocket[current]);
 
 			if (received == FALSE)
 			{
@@ -915,7 +922,7 @@ receive_message:
 					else if (NET_fillBuffer(connected_bsocket[i], socket_set))
 					{
 						// we received some data, add to buffer
-						received = NET_recvMessage(connected_bsocket[i], pMsg);
+						received = NET_recvMessage(connected_bsocket[i]);
 						current = i;
 						break;
 					}
@@ -952,7 +959,7 @@ receive_message:
 			{
 				return FALSE;
 			} else {
-				received = NET_recvMessage(bsocket, pMsg);
+				received = NET_recvMessage(bsocket);
 
 				if (received == FALSE)
 				{
@@ -960,7 +967,7 @@ receive_message:
 					    && SDLNet_CheckSockets(socket_set, NET_READ_TIMEOUT) > 0
 					    && NET_fillBuffer(bsocket, socket_set))
 					{
-						received = NET_recvMessage(bsocket, pMsg);
+						received = NET_recvMessage(bsocket);
 					}
 				}
 			}
@@ -1015,7 +1022,7 @@ receive_message:
 			nStats.packetsRecvd += 1;
 		}
 
-	} while (NETprocessSystemMessage(pMsg) == TRUE);
+	} while (NETprocessSystemMessage() == TRUE);
 
 	NETlogPacket(pMsg, TRUE);
 
@@ -1613,16 +1620,6 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 	}
 
 	return FALSE;
-}
-
-void NETsetPacketDir(PACKETDIR dir)
-{
-    NetDir = dir;
-}
-
-PACKETDIR NETgetPacketDir()
-{
-    return NetDir;
 }
 
 /*!

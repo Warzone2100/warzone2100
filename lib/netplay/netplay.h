@@ -199,9 +199,6 @@ extern BOOL	NEThostGame(const char* SessionName, const char* PlayerName,// host 
 extern UDWORD	NETplayerInfo(void);		// count players in this game.
 extern BOOL	NETchangePlayerName(UDWORD dpid, char *newName);// change a players name.
 
-extern void NETsetPacketDir(PACKETDIR dir);
-extern PACKETDIR NETgetPacketDir(void);
-
 #include "netlog.h"
 
 extern void NETsetMasterserverName(const char* hostname);
