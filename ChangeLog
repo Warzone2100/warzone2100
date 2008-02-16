@@ -12,6 +12,7 @@
    * New: Improved scripting language documentation.
    * New: UTF-8 and font rendering support added (aids in i18n). This depends on QuesoGLC.
    * Fix: Skirmish difficulty slider now applies settings to the right players.
+   * Change: Migrate all networking code to a new and improved net-primitives API.
  * Campaign Mode:
    * Fix: accuracy, damage and ROF upgrades, which were mistakenly applied to Mini-Pods and Mini-Rocket
           Artillery, are now correctly applied to Lancer, Bunker Buster, Tank Killer and Ripple Rockets.
