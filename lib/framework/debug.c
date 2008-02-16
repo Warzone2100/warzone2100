@@ -30,6 +30,8 @@
 #include <stdio.h>
 
 #include "frameint.h"
+#include "strnlen1.h"
+#include <string.h>
 
 #define MAX_LEN_LOG_LINE 512
 
