@@ -266,13 +266,13 @@ const char *sound_GetTrackName( SDWORD iTrack )
 	if (iTrack <= 0
 	 || iTrack >= MAX_TRACKS
 	 || iTrack == SAMPLE_NOT_FOUND
-	 || g_apTrack == NULL)
+	 || g_apTrack == NULL
+	 || g_apTrack[iTrack] == NULL)
 	{
 		return NULL;
 	}
 
-	ASSERT(g_apTrack[iTrack] != NULL, "sound_GetTrackName: unallocated track (id number: %u)", iTrack);
-	return g_apTrack[iTrack] ? g_apTrack[iTrack]->fileName : "unallocated";
+	return g_apTrack[iTrack]->fileName;
 }
 
 //*
