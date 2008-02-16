@@ -723,7 +723,10 @@ static BOOL dataTexPageLoad(const char *fileName, void **ppData)
 	strlcpy(texpage, GetLastResourceFilename(), sizeof(texpage));
 
 	pie_MakeTexPageName(texpage);
-	dataImageLoad(fileName, ppData);
+	if (!dataImageLoad(fileName, ppData))
+	{
+		return FALSE;
+	}
 
 	// see if this texture page has already been loaded
 	if (resPresent("TEXPAGE", texpage))
