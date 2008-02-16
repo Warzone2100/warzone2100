@@ -89,7 +89,7 @@ static void parse_args(int argc, char **argv)
 	{
 		fprintf(stderr, "Syntax: pie2wzm [-y|-r|-t] input_filename\n");
 		fprintf(stderr, "  -y  Swap the Y and Z axis.\n");
-		fprintf(stderr, "  -r  Reverse winding of all polygons. (DOES NOT WORK YET.)\n");
+		fprintf(stderr, "  -r  Reverse winding of all polygons.\n");
 		fprintf(stderr, "  -i  Invert the vertical texture coordinates (for 3DS MAX etc.).\n");
 		fprintf(stderr, "  -a  Do not make a guess about team colour usage. Assume animation.\n");
 		exit(1);
@@ -333,12 +333,26 @@ static void dump_to_wzm(FILE *ctl, FILE *fp)
 			key = faceList[j].index[0];
 			previous = faceList[j].index[2];
 			faceCount++;
-			fprintf(ctl, "\n\t%d %d %d", key, faceList[j].index[1], previous);
+			if (reverseWinding)
+			{
+				fprintf(ctl, "\n\t%d %d %d", key, previous, faceList[j].index[1]);
+			}
+			else
+			{
+				fprintf(ctl, "\n\t%d %d %d", key, faceList[j].index[1], previous);
+			}
 
 			// Generate triangles from the Warzone triangle fans (PIEs, get it?)
 			for (k = 3; k < faceList[j].vertices; k++)
 			{
-				fprintf(ctl, "\n\t%d %d %d", key, previous, faceList[j].index[k]);
+				if (reverseWinding)
+				{
+					fprintf(ctl, "\n\t%d %d %d", key, faceList[j].index[k], previous);
+				}
+				else
+				{
+					fprintf(ctl, "\n\t%d %d %d", key, previous, faceList[j].index[k]);
+				}
 				previous = faceList[j].index[k];
 			}
 		}
