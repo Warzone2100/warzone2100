@@ -130,7 +130,7 @@ BOOL researchInitVars(void)
 	psCBLastResStructure = NULL;
 	CBResFacilityOwner = -1;
 	asResearch = NULL;
-    //research is a pre-defined size now
+	// research is a pre-defined size now
 	asResearch = (RESEARCH *)malloc(sizeof(RESEARCH)* MAX_RESEARCH);
 	if (asResearch == NULL)
 	{
@@ -156,86 +156,81 @@ BOOL researchInitVars(void)
 
 	numResearch = 0;
 
-    //and deal with all the other arrays for research
-    //needs to be UWORD sized for the Patches
-    pResearchPR = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_PR);
-    //pResearchPR = (UBYTE *) malloc(sizeof(UBYTE) * MAX_RESEARCH_PR);
+	// and deal with all the other arrays for research
+	pResearchPR = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_PR);
 	if (pResearchPR == NULL)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
 		abort();
 		return FALSE;
 	}
-    //needs to be UWORD sized for the Patches
-    memset(pResearchPR, 0, (MAX_RESEARCH_PR * sizeof(UWORD)));
-    //memset(pResearchPR, 0, (MAX_RESEARCH_PR * sizeof(UBYTE)));
+	memset(pResearchPR, 0, (MAX_RESEARCH_PR * sizeof(UWORD)));
 
-    pResearchStructPR = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_STRUCT_PR);
+	pResearchStructPR = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_STRUCT_PR);
 	if (pResearchStructPR == NULL)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
 		abort();
 		return FALSE;
 	}
-    memset(pResearchStructPR, 0, (MAX_RESEARCH_STRUCT_PR * sizeof(UWORD)));
+	memset(pResearchStructPR, 0, (MAX_RESEARCH_STRUCT_PR * sizeof(UWORD)));
 
-    pResearchFunc = (FUNCTION **) malloc(sizeof(FUNCTION *) * MAX_RESEARCH_FUNC);
+	pResearchFunc = (FUNCTION **) malloc(sizeof(FUNCTION *) * MAX_RESEARCH_FUNC);
 	if (pResearchFunc == NULL)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
 		abort();
 		return FALSE;
 	}
-    memset(pResearchFunc, 0, (MAX_RESEARCH_FUNC * sizeof(FUNCTION *)));
+	memset(pResearchFunc, 0, (MAX_RESEARCH_FUNC * sizeof(FUNCTION *)));
 
-    pResearchStructRed = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_STRUCT_RED);
+	pResearchStructRed = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_STRUCT_RED);
 	if (pResearchStructRed == NULL)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
 		abort();
 		return FALSE;
 	}
-    memset(pResearchStructRed, 0, (MAX_RESEARCH_STRUCT_RED * sizeof(UWORD)));
+	memset(pResearchStructRed, 0, (MAX_RESEARCH_STRUCT_RED * sizeof(UWORD)));
 
-    pResearchArteRed = (COMP_BASE_STATS **) malloc(sizeof(COMP_BASE_STATS *) * MAX_RESEARCH_ARTE_RED);
+	pResearchArteRed = (COMP_BASE_STATS **) malloc(sizeof(COMP_BASE_STATS *) * MAX_RESEARCH_ARTE_RED);
 	if (pResearchArteRed == NULL)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
 		abort();
 		return FALSE;
 	}
-    memset(pResearchArteRed, 0, (MAX_RESEARCH_ARTE_RED * sizeof(COMP_BASE_STATS *)));
+	memset(pResearchArteRed, 0, (MAX_RESEARCH_ARTE_RED * sizeof(COMP_BASE_STATS *)));
 
-    pResearchStructRes = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_STRUCT_RES);
+	pResearchStructRes = (UWORD *) malloc(sizeof(UWORD) * MAX_RESEARCH_STRUCT_RES);
 	if (pResearchStructRes == NULL)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
 		abort();
 		return FALSE;
 	}
-    memset(pResearchStructRes, 0, (MAX_RESEARCH_STRUCT_RES * sizeof(UWORD)));
+	memset(pResearchStructRes, 0, (MAX_RESEARCH_STRUCT_RES * sizeof(UWORD)));
 
-    pResearchArteRes = (COMP_BASE_STATS **) malloc(sizeof(COMP_BASE_STATS *) * MAX_RESEARCH_ARTE_RES);
+	pResearchArteRes = (COMP_BASE_STATS **) malloc(sizeof(COMP_BASE_STATS *) * MAX_RESEARCH_ARTE_RES);
 	if (pResearchArteRes == NULL)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
 		abort();
 		return FALSE;
 	}
-    memset(pResearchArteRes, 0, (MAX_RESEARCH_ARTE_RES * sizeof(COMP_BASE_STATS *)));
+	memset(pResearchArteRes, 0, (MAX_RESEARCH_ARTE_RES * sizeof(COMP_BASE_STATS *)));
 
-    pResearchArteRep = (COMP_BASE_STATS **) malloc(sizeof(COMP_BASE_STATS *) * MAX_RESEARCH_ARTE_RES);
+	pResearchArteRep = (COMP_BASE_STATS **) malloc(sizeof(COMP_BASE_STATS *) * MAX_RESEARCH_ARTE_RES);
 	if (pResearchArteRep == NULL)
 	{
 		debug( LOG_ERROR, "Research Stats - Out of memory" );
 		abort();
 		return FALSE;
 	}
-    memset(pResearchArteRep, 0, (MAX_RESEARCH_ARTE_RES * sizeof(COMP_BASE_STATS *)));
+	memset(pResearchArteRep, 0, (MAX_RESEARCH_ARTE_RES * sizeof(COMP_BASE_STATS *)));
 
 	for(i=0; i<MAX_PLAYERS; i++)
-    {
-		//asPlayerResList[i] = NULL;
+	{
 		bSelfRepair[i] = FALSE;
 	}
 
@@ -334,9 +329,9 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 			UDWORD numArteResults;
 
 			sscanf(pResearchData,"%d,%[^','],%[^','],%[^','],%[^','],%[^','], \
-                %[^','],%[^','],%d,%d,%d,%d,%d,%d,%d,%d,%d",
+			       %[^','],%[^','],%d,%d,%d,%d,%d,%d,%d,%d,%d",
 				&techCode, iconID, imdName, imdName2, msgName,
-                structName, compName, compType,
+			       structName, compName, compType,
 				&resPoints, &keyTopic, &numPRRequired,
 				&numFunctions, &numStructures,
 				&numRedStructs, &numStructResults,
@@ -346,7 +341,6 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 			pResearch->numFunctions = (UBYTE)numFunctions;
 			pResearch->numStructures = (UBYTE)numStructures;
 			pResearch->numRedStructs = (UBYTE)numRedStructs;
-
 			pResearch->numStructResults = (UBYTE)numStructResults;
 			pResearch->numRedArtefacts = (UBYTE)numRedArtefacts;
 			pResearch->numArteResults = (UBYTE)numArteResults;
@@ -364,20 +358,19 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 
 		//check the tech code is valid
 		if (techCode > 1)
-		//if (pResearch->techCode != TC_MAJOR && pResearch->techCode != TC_MINOR)
 		{
 			debug( LOG_ERROR, "Invalid tech code for research topic - %s ", getResearchName(pResearch) );
 			abort();
 			return FALSE;
 		}
-        if (techCode == 0)
-        {
-            pResearch->techCode = TC_MAJOR;
-        }
-        else
-        {
-            pResearch->techCode = TC_MINOR;
-        }
+		if (techCode == 0)
+		{
+			pResearch->techCode = TC_MAJOR;
+		}
+		else
+		{
+			pResearch->techCode = TC_MINOR;
+		}
 
 		//set the iconID
 		if (strcmp(iconID, "0"))
@@ -472,13 +465,6 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		//redundancies - artefacts
 		if (pResearch->numRedArtefacts > 0)
 		{
-			/*pResearch->pRedArtefacts = (COMP_BASE_STATS **) malloc(pResearch->
-				numRedArtefacts*sizeof(COMP_BASE_STATS *));
-			if (pResearch->pRedArtefacts == NULL)
-			{
-				DBERROR(("Out of memory assigning research artefacts - redundancies"));
-				return FALSE;
-			}*/
 			if (numResearchArteRed >= MAX_RESEARCH_ARTE_RED)
 			{
 				debug( LOG_ERROR, "Out of memory assigning research artefacts - redundancies" );
@@ -487,7 +473,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 			}
 			//don't MALLOC - get them from the pre-defined arrays
 			pResearch->pRedArtefacts = pResearchArteRed + numResearchArteRed;
-			//pResearchArteRed += pResearch->numRedArtefacts;
+
 			//keep track on how many are being allocated
 			numResearchArteRed = (UBYTE)(numResearchArteRed + pResearch->numRedArtefacts);
 		}
@@ -577,7 +563,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 			numResearchStructPR = (UBYTE)(numResearchStructPR + pResearch->numStructures);
 		}
 
-        //redundancies
+		// Redundancies
 		if (pResearch->numRedStructs > 0)
 		{
 			if (numResearchStructRed >= MAX_RESEARCH_STRUCT_RED)
@@ -645,9 +631,9 @@ BOOL loadResearchPR(const char *pPRData, UDWORD bufferSize)
 	RESEARCH			*pResearch = asResearch, *pPRResearch = asResearch;
 	BOOL				recFound;
 
-    //check not going to go over max
-    ASSERT( NumToAlloc <= MAX_RESEARCH_PR, "loadResearchPR: too many!" );
-    numResearchPR = 0;
+	// Check not going to go over max
+	ASSERT( NumToAlloc <= MAX_RESEARCH_PR, "loadResearchPR: too many!" );
+	numResearchPR = 0;
 
 	for (i = 0; i < NumToAlloc; i++)
 	{
@@ -747,7 +733,7 @@ BOOL loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD list
 	}
 	pResearch = asResearch;
 
-    //check not going to go over max
+	// Check not going to go over max
 	switch (listNumber)
 	{
 		case RED_LIST:
@@ -1216,8 +1202,6 @@ UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, UWORD limit)
 			bStructFound = TRUE;
 			for (incS = 0; incS < asResearch[inc].numStructures; incS++)
 			{
-				//if (!checkStructureStatus(asStructureStats + asResearch[inc].
-				//	pStructList[incS], playerID, SS_BUILT))
 				if (!checkSpecificStructExists(asResearch[inc].pStructList[incS],
 					playerID))
 				{
@@ -1547,28 +1531,28 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 					psDroid->psNext)
 				{
 					droidSensorUpgrade(psDroid);
-                    if (psDroid->droidType == DROID_TRANSPORTER)
-                    {
-                        upgradeTransporterDroids(psDroid, droidSensorUpgrade);
-                    }
+					if (psDroid->droidType == DROID_TRANSPORTER)
+					{
+						upgradeTransporterDroids(psDroid, droidSensorUpgrade);
+					}
 				}
 				for (psDroid = mission.apsDroidLists[player]; psDroid != NULL; psDroid =
 					psDroid->psNext)
 				{
 					droidSensorUpgrade(psDroid);
-                    if (psDroid->droidType == DROID_TRANSPORTER)
-                    {
-                        upgradeTransporterDroids(psDroid, droidSensorUpgrade);
-                    }
+					if (psDroid->droidType == DROID_TRANSPORTER)
+					{
+						upgradeTransporterDroids(psDroid, droidSensorUpgrade);
+					}
 				}
 				for (psDroid = apsLimboDroids[player]; psDroid != NULL; psDroid =
 					psDroid->psNext)
 				{
 					droidSensorUpgrade(psDroid);
-                    if (psDroid->droidType == DROID_TRANSPORTER)
-                    {
-                        upgradeTransporterDroids(psDroid, droidSensorUpgrade);
-                    }
+					if (psDroid->droidType == DROID_TRANSPORTER)
+					{
+						upgradeTransporterDroids(psDroid, droidSensorUpgrade);
+					}
 				}
 				// message/sound for sensor upgrade
 				break;
@@ -1593,28 +1577,28 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 					psDroid->psNext)
 				{
 					droidECMUpgrade(psDroid);
-                    if (psDroid->droidType == DROID_TRANSPORTER)
-                    {
-                        upgradeTransporterDroids(psDroid, droidECMUpgrade);
-                    }
+					if (psDroid->droidType == DROID_TRANSPORTER)
+					{
+						upgradeTransporterDroids(psDroid, droidECMUpgrade);
+					}
 				}
 				for (psDroid = mission.apsDroidLists[player]; psDroid != NULL; psDroid =
 					psDroid->psNext)
 				{
 					droidECMUpgrade(psDroid);
-                    if (psDroid->droidType == DROID_TRANSPORTER)
-                    {
-                        upgradeTransporterDroids(psDroid, droidECMUpgrade);
-                    }
+					if (psDroid->droidType == DROID_TRANSPORTER)
+					{
+						upgradeTransporterDroids(psDroid, droidECMUpgrade);
+					}
 				}
 				for (psDroid = apsLimboDroids[player]; psDroid != NULL; psDroid =
 					psDroid->psNext)
 				{
 					droidECMUpgrade(psDroid);
-                    if (psDroid->droidType == DROID_TRANSPORTER)
-                    {
-                        upgradeTransporterDroids(psDroid, droidECMUpgrade);
-                    }
+					if (psDroid->droidType == DROID_TRANSPORTER)
+					{
+						upgradeTransporterDroids(psDroid, droidECMUpgrade);
+					}
 				}
 				// message/sound for ecm upgrade
 				break;
@@ -1645,19 +1629,19 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 					psDroid->psNext)
 				{
 					droidBodyUpgrade(pFunction, psDroid);
-                    if (psDroid->droidType == DROID_TRANSPORTER)
-                    {
-                        upgradeTransporterDroids(psDroid, droidSensorUpgrade);
-                    }
+					if (psDroid->droidType == DROID_TRANSPORTER)
+					{
+						upgradeTransporterDroids(psDroid, droidSensorUpgrade);
+					}
 				}
 				for (psDroid = apsLimboDroids[player]; psDroid != NULL; psDroid =
 					psDroid->psNext)
 				{
 					droidBodyUpgrade(pFunction, psDroid);
-                    if (psDroid->droidType == DROID_TRANSPORTER)
-                    {
-                        upgradeTransporterDroids(psDroid, droidSensorUpgrade);
-                    }
+					if (psDroid->droidType == DROID_TRANSPORTER)
+					{
+						upgradeTransporterDroids(psDroid, droidSensorUpgrade);
+					}
 				}
 				//DO THIS AFTER so above calculations can use the previous upgrade values
 				//for the current player, upgrade the body stats
@@ -1679,11 +1663,11 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 						structureArmourUpgrade(pFunction, psCurr);
 						structureResistanceUpgrade(pFunction, psCurr);
 					}
-                    //defense type can have resistance upgrade now - AB 19/02/99
-                    if (psCurr->pStructureType->type == REF_DEFENSE)
-                    {
-                        structureResistanceUpgrade(pFunction, psCurr);
-                    }
+					// Defense type can have resistance upgrade now - AB 19/02/99
+					if (psCurr->pStructureType->type == REF_DEFENSE)
+					{
+						structureResistanceUpgrade(pFunction, psCurr);
+					}
 				}
 				for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr =
 					psCurr->psNext)
@@ -1695,11 +1679,11 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay,
 						structureArmourUpgrade(pFunction, psCurr);
 						structureResistanceUpgrade(pFunction, psCurr);
 					}
-                    //defense type can have resistance upgrade now - AB 19/02/99
-                    if (psCurr->pStructureType->type == REF_DEFENSE)
-                    {
-                        structureResistanceUpgrade(pFunction, psCurr);
-                    }
+					// Defense type can have resistance upgrade now - AB 19/02/99
+					if (psCurr->pStructureType->type == REF_DEFENSE)
+					{
+						structureResistanceUpgrade(pFunction, psCurr);
+					}
 				}
 				//DO THIS AFTER so above calculations can use the previous upgrade values
 				//for the current player, upgrade the structure stats
@@ -2066,7 +2050,7 @@ void CancelAllResearch(UDWORD pl)
    points accquired */
 void cancelResearch(STRUCTURE *psBuilding)
 {
-    UDWORD              topicInc;
+	UDWORD              topicInc;
 	PLAYER_RESEARCH	    *pPlayerRes;
 	RESEARCH_FACILITY	*psResFac;
 
@@ -2074,13 +2058,13 @@ void cancelResearch(STRUCTURE *psBuilding)
 		"cancelResearch: structure not a research facility" );
 
 	psResFac = (RESEARCH_FACILITY *)psBuilding->pFunctionality;
-    topicInc = ((RESEARCH *)psResFac->psSubject) - asResearch;
-    if (topicInc > numResearch)
-    {
-        ASSERT( FALSE, "cancelResearch: invalid research topic" );
-        return;
-    }
-    pPlayerRes = asPlayerResList[psBuilding->player] + topicInc;
+	topicInc = ((RESEARCH *)psResFac->psSubject) - asResearch;
+	if (topicInc > numResearch)
+	{
+		ASSERT( FALSE, "cancelResearch: invalid research topic" );
+		return;
+	}
+	pPlayerRes = asPlayerResList[psBuilding->player] + topicInc;
 
 	if (psBuilding->pStructureType->type == REF_RESEARCH)
 	{
@@ -2090,26 +2074,26 @@ void cancelResearch(STRUCTURE *psBuilding)
 			//return the power
 			addPower(psBuilding->player, psResFac->powerAccrued);
 			psResFac->powerAccrued = 0;
-            //reset this topic as not having been researched
+			// Reset this topic as not having been researched
 			ResetResearchStatus(pPlayerRes);
-        }
+		}
 		else
 		{
-		// only PC version saves these
+			// only PC version saves these
 			/*store the points - need to keep this so can add points after the topic
 			has been cancelled and restarted*/
 			pPlayerRes->currentPoints += (psResFac->researchPoints * (gameTime -
-                psResFac->timeStarted)) / GAME_TICKS_PER_SEC;
+			psResFac->timeStarted)) / GAME_TICKS_PER_SEC;
 
 
-            //set the researched flag
+			// Set the researched flag
 			MakeResearchCancelled(pPlayerRes);
 		}
 
 		 sendReseachStatus(psBuilding, topicInc, psBuilding->player, FALSE);
 
-        //initialise the research facility's subject
-        psResFac->psSubject = NULL;
+		// Initialise the research facility's subject
+		psResFac->psSubject = NULL;
 
 		//set the researched flag - only set the flag to cancelled if it got past the accruePower stage
 		//pPlayerRes->researched = CANCELLED_RESEARCH;
@@ -2198,42 +2182,42 @@ static UWORD setIconID(char *pIconName, char *pName)
 		return IMAGE_RES_CYBORGTECH;
 	}
 
-    if (!strcmp(pIconName,"IMAGE_RES_DEFENCE"))
+	if (!strcmp(pIconName,"IMAGE_RES_DEFENCE"))
 	{
 		return IMAGE_RES_DEFENCE;
 	}
 
-    if (!strcmp(pIconName,"IMAGE_RES_QUESTIONMARK"))
+	if (!strcmp(pIconName,"IMAGE_RES_QUESTIONMARK"))
 	{
 		return IMAGE_RES_QUESTIONMARK;
 	}
 
-    if (!strcmp(pIconName,"IMAGE_RES_GRPACC"))
+	if (!strcmp(pIconName,"IMAGE_RES_GRPACC"))
 	{
 		return IMAGE_RES_GRPACC;
 	}
 
-    if (!strcmp(pIconName,"IMAGE_RES_GRPUPG"))
-    {
+	if (!strcmp(pIconName,"IMAGE_RES_GRPUPG"))
+	{
 		return IMAGE_RES_GRPUPG;
 	}
 
-    if (!strcmp(pIconName,"IMAGE_RES_GRPREP"))
+	if (!strcmp(pIconName,"IMAGE_RES_GRPREP"))
 	{
 		return IMAGE_RES_GRPREP;
 	}
 
-    if (!strcmp(pIconName,"IMAGE_RES_GRPROF"))
+	if (!strcmp(pIconName,"IMAGE_RES_GRPROF"))
 	{
 		return IMAGE_RES_GRPROF;
 	}
 
-    if (!strcmp(pIconName,"IMAGE_RES_GRPDAM"))
+	if (!strcmp(pIconName,"IMAGE_RES_GRPDAM"))
 	{
 		return IMAGE_RES_GRPDAM;
 	}
 
-    //add more names as images are created
+	// Add more names as images are created
 	ASSERT( FALSE, "Invalid icon graphic %s for topic %s", pIconName, pName );
 
 	return 0;	// Should never get here.
@@ -2292,16 +2276,16 @@ SDWORD	mapRIDToIcon( UDWORD rid )
 	case RID_GRPACC:
 		return(IMAGE_RES_GRPACC);
 		break;
-    case RID_GRPUPG:
+	case RID_GRPUPG:
 		return(IMAGE_RES_GRPUPG);
 		break;
-    case RID_GRPREP:
+	case RID_GRPREP:
 		return(IMAGE_RES_GRPREP);
 		break;
-    case RID_GRPROF:
+	case RID_GRPROF:
 		return(IMAGE_RES_GRPROF);
 		break;
-    case RID_GRPDAM:
+	case RID_GRPDAM:
 		return(IMAGE_RES_GRPDAM);
 		break;
 
