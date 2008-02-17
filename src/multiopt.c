@@ -308,6 +308,14 @@ BOOL hostCampaign(char *sGame, char *sPlayer)
 	debug(LOG_WZ, "Hosting campaign: '%s', player: '%s'", sGame, sPlayer);
 
 	freeMessages();
+
+	// If we had a single player (i.e. campaign) game before this value will
+	// have been set to 0. So revert back to the default value.
+	if (game.maxPlayers == 0)
+	{
+		game.maxPlayers = 4;
+	}
+
 	NEThostGame(sGame, sPlayer, game.type, 0, 0, 0, game.maxPlayers); // temporary stuff
 
 	for (i = 0; i < MAX_PLAYERS; i++)
