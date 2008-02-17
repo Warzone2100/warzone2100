@@ -156,7 +156,7 @@ fi
 # Add later for stricter checking: -Wextra -Wmissing-declarations -Wstrict-prototypes
 AC_ARG_ENABLE(debug,
 	AS_HELP_STRING([--disable-debug[=yes/relaxed/profile/debugprofile/no]],[Compile debug version [yes]]),
-	[ enable_debug=${enableval} ], [ enable_debug=yes ])
+	[ enable_debug=${enableval} ], [ enable_debug=no ])
 AC_MSG_CHECKING([whether to compile in debug mode])
 AC_MSG_RESULT([${enable_debug}])
 if test "x$enable_debug" = "xyes" ; then

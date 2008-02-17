@@ -143,8 +143,8 @@ Section $(TEXT_SecBase) SecBase
   File "..\src\${PACKAGE}.exe"
 
   ; Windows dbghelp library
-  File "${EXTDIR}\dbghelp.dll.license.txt"
-  File "${EXTDIR}\dbghelp.dll"
+  File "${EXTDIR}\bin\dbghelp.dll.license.txt"
+  File "${EXTDIR}\bin\dbghelp.dll"
 
   ; Data files
   File "..\data\mp.wz"
@@ -166,6 +166,10 @@ Section $(TEXT_SecBase) SecBase
   File "/oname=readme.print.css" "..\doc\styles\readme.print.css"
   File "/oname=readme.screen.css" "..\doc\styles\readme.screen.css"
 
+  SetOutPath "$INSTDIR\fonts"
+
+  File "${EXTDIR}\etc\fonts\fonts.conf"
+  File "${EXTDIR}\etc\fonts\DejaVuSansMono.ttf"
 
   ;Store installation folder
   WriteRegStr HKLM "Software\${PACKAGE_NAME}" "" $INSTDIR
@@ -201,7 +205,7 @@ Section $(TEXT_SecOpenAL) SecOpenAL
 
   SetOutPath "$INSTDIR"
 
-  File "${EXTDIR}\oalinst.exe"
+  File "${EXTDIR}\bin\oalinst.exe"
 
   ExecWait "$INSTDIR\oalinst.exe"
 
@@ -344,7 +348,7 @@ FunctionEnd
 
 
   LangString TEXT_Readme ${LANG_ENGLISH} "$INSTDIR\Readme.en.html"
-  ;LangString TEXT_Readme ${LANG_DUTCH}   "$INSTDIR\Readme.nl.html"
+  LangString TEXT_Readme ${LANG_DUTCH}   "$INSTDIR\Readme.en.html"
   LangString TEXT_Readme ${LANG_GERMAN}  "$INSTDIR\Readme.de.html"
 
 
@@ -395,6 +399,9 @@ Section "Uninstall"
 
   Delete "$INSTDIR\styles\readme.print.css"
   Delete "$INSTDIR\styles\readme.screen.css"
+
+  Delete "${INSTDIR}\fonts\fonts.conf"
+  Delete "${INSTDIR}\fonts\DejaVuSansMono.ttf"
 
   Delete "$INSTDIR\mods\global\grim.wz"
 

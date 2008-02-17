@@ -146,8 +146,8 @@ Section $(TEXT_SecBase) SecBase
   !insertmacro VPatchFile "warzone2100.exe.vpatch" "$INSTDIR\warzone2100.exe" "$INSTDIR\warzone2100.exe.tmp"
 
   ; Windows dbghelp library
-  File "${EXTDIR}\dbghelp.dll.license.txt"
-  File "${EXTDIR}\dbghelp.dll"
+  File "${EXTDIR}\bin\dbghelp.dll.license.txt"
+  File "${EXTDIR}\bin\dbghelp.dll"
 ;  !insertmacro VPatchFile "dbghelp.dll.license.txt.vpatch" "$INSTDIR\dbghelp.dll.license.txt" "$INSTDIR\dbghelp.dll.license.txt.tmp"
 ;  !insertmacro VPatchFile "dbghelp.dll.vpatch" "$INSTDIR\dbghelp.dll" "$INSTDIR\dbghelp.dll.tmp"
 
@@ -206,7 +206,7 @@ Section $(TEXT_SecOpenAL) SecOpenAL
 
   SetOutPath "$INSTDIR"
 
-  File "${EXTDIR}\oalinst.exe"
+  File "${EXTDIR}\bin\oalinst.exe"
 
   ExecWait "$INSTDIR\oalinst.exe"
 
