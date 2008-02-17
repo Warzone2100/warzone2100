@@ -400,8 +400,8 @@ Section "Uninstall"
   Delete "$INSTDIR\styles\readme.print.css"
   Delete "$INSTDIR\styles\readme.screen.css"
 
-  Delete "${INSTDIR}\fonts\fonts.conf"
-  Delete "${INSTDIR}\fonts\DejaVuSansMono.ttf"
+  Delete "$INSTDIR\fonts\fonts.conf"
+  Delete "$INSTDIR\fonts\DejaVuSansMono.ttf"
 
   Delete "$INSTDIR\mods\global\grim.wz"
 
