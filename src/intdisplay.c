@@ -3122,8 +3122,11 @@ void drawRadarBlips(void)
 
 				if (pViewData->type == VIEW_HELP)
 				{
-					ASSERT(pViewData->pData != NULL, "Help message without data!");
-					if (pViewData->pData != NULL && (((VIEW_PROXIMITY *)pViewData->pData)->timeAdded + 60000) <= gameTime)
+					if (pViewData == NULL)
+					{
+						debug(LOG_ERROR, "Found a help message without data!");
+					}
+					else if ((((VIEW_PROXIMITY *)pViewData->pData)->timeAdded + 60000) <= gameTime)
 					{
 						debug(LOG_WZ, "blip timeout for %d, from %d", i, (((VIEW_PROXIMITY *)pViewData->pData)->sender));
 						removeMessage(psCurr, i);	//remove beacon
