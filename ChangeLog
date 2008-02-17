@@ -1,4 +1,6 @@
 0000-00-00: SVN
+
+2008-02-17: Version 2.1-beta1
  * General:
    * New: Video options menu to allow for things such as resolution to be
           changed without needing to manually edit the config file.
