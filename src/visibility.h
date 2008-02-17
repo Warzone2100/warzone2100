@@ -20,12 +20,6 @@
 #ifndef _visibility_h
 #define _visibility_h
 
-/* Terrain types that could obscure LOS */
-#define LOS_MASK	0 /*TER_STONE*/
-
-/* The distance under which visibility is automatic */
-#define BASE_VISIBILITY  (5*TILE_UNITS/2)
-
 // initialise the visibility stuff
 extern BOOL visInitialise(void);
 
