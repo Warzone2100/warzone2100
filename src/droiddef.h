@@ -215,7 +215,6 @@ typedef struct _droid
 
 	/* Movement control data */
 	MOVE_CONTROL    sMove;
-//	void            *lastTile;
 
 	/* anim data */
 	ANIM_OBJECT     *psCurAnim;

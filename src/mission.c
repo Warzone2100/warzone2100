@@ -1149,8 +1149,6 @@ void placeLimboDroids(void)
 		    ASSERT(worldOnMap(psDroid->pos.x,psDroid->pos.y), "limbo droid is not on the map");
 		    psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
 		    updateDroidOrientation(psDroid);
-		    //psDroid->lastTile = mapTile(map_coord(psDroid->pos.x),
-		    //	map_coord(psDroid->pos.y));
 		    psDroid->selected = FALSE;
             //this is mainly for VTOLs
 			setDroidBase(psDroid, NULL);
@@ -3848,62 +3846,23 @@ void missionDestroyObjects(void)
 
 void processPreviousCampDroids(void)
 {
-    DROID           *psDroid, *psNext;
-	//UDWORD			droidX, droidY;
-    //BOOL            bPlaced;
+	DROID           *psDroid, *psNext;
 
-    //see if any are left
-    if (mission.apsDroidLists[selectedPlayer])
-    {
-        for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid != NULL;
-            psDroid = psNext)
-        {
-            psNext = psDroid->psNext;
-            //We want to kill off all droids now! - AB 27/01/99
-		    //KILL OFF TRANSPORTER
-    		//if (psDroid->droidType == DROID_TRANSPORTER)
-	    	{
+	// See if any are left
+	if (mission.apsDroidLists[selectedPlayer])
+	{
+		for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psNext)
+		{
+			psNext = psDroid->psNext;
+			// We want to kill off all droids now! - AB 27/01/99
+			// KILL OFF TRANSPORTER
 		    	if (droidRemove(psDroid, mission.apsDroidLists))
-                {
-		            addDroid(psDroid, apsDroidLists);
-                    vanishDroid(psDroid);
-                }
-	    	}
-            /*else
-            {
-		        //remove out of stored list and add to current Droid list
-		        if (droidRemove(psDroid, mission.apsDroidLists))
-                {
-		            addDroid(psDroid, apsDroidLists);
-		            //set the x/y
-		            droidX = map_coord(getLandingX(psDroid->player));
-		            droidY = map_coord(getLandingY(psDroid->player));
-                    bPlaced = pickATileGen(&droidX, &droidY,LOOK_FOR_EMPTY_TILE,normalPAT);
-                    if (!bPlaced)
-		            {
-			            ASSERT( FALSE, "processPreviousCampDroids: Unable to find a free location \
-                            cancel to continue" );
-                        vanishDroid(psDroid);
-		            }
-                    else
-                    {
-    		            psDroid->pos.x = (UWORD)world_coord(droidX);
-	    	            psDroid->pos.y = (UWORD)world_coord(droidY);
-		                psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
-		                updateDroidOrientation(psDroid);
-		                //psDroid->lastTile = mapTile(map_coord(psDroid->pos.x),
-			            //    map_coord(psDroid->pos.y));
-
-					    psDroid->selected = FALSE;
-		                psDroid->cluster = 0;
-		                gridAddObject((BASE_OBJECT *)psDroid);
-		                //initialise the movement data
-		                initDroidMovement(psDroid);
-                    }
-                }
-            }*/
-        }
-    }
+	                {
+				addDroid(psDroid, apsDroidLists);
+				vanishDroid(psDroid);
+			}
+		}
+	}
 }
 
 //access functions for droidsToSafety flag - so we don't have to end the mission when a Transporter fly's off world

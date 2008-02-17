@@ -61,11 +61,6 @@ static float			visLevelIncAcc, visLevelDecAcc;
 // integer amount to change visiblility this turn
 static SDWORD			visLevelInc, visLevelDec;
 
-// percentage of power over which objects start to be visible
-// UNUSED. What for? - Per
-#define VIS_LEVEL_START		100
-#define VIS_LEVEL_RANGE		60
-
 // alexl's sensor range.
 BOOL bDisplaySensorRange;
 
