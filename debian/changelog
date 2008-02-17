@@ -1,3 +1,85 @@
+warzone2100 (2.1.0~beta1-0) unstable; urgency=low
+
+  * Bump upstream version number: releasing 2.1 beta 1
+  * General:
+    * New: Video options menu to allow for things such as resolution to be
+           changed without needing to manually edit the config file.
+    * New: 'Locked Teams' alliance mode: human players and AIs can play in a
+           team against other teams.
+    * New: Allies now have shared vision in 'Teamplay' and 'Locked Teams' modes.
+    * New: Height-map mini-map mode (Default key combination to cycle through
+           mini-map modes: Ctrl+Tab).
+    * New: Multi-Turret support for units and structures.
+    * New: 'Circle' command for VTOLs - upon activation will make VTOLs fly in
+           circles and engage approaching enemies.
+    * New: A more realistic miss/hit evaluation system - allows to dodge
+           projectiles.
+    * New: Top, bottom, left, right, front and rear armor types for units.
+    * New: Improved scripting language documentation.
+    * New: UTF-8 and font rendering support added (aids in i18n). This depends
+           on QuesoGLC.
+    * Fix: Skirmish difficulty slider now applies settings to the right players.
+    * Change: Migrate all networking code to a new and improved net-primitives
+              API.
+  * Campaign Mode:
+    * Fix: accuracy, damage and ROF upgrades, which were mistakenly applied to
+           Mini-Pods and Mini-Rocket Artillery, are now correctly applied
+           Lancer, Bunker Buster, Tank Killer and Ripple Rockets.
+  * Unit AI:
+    * New: Multi-criteria target selection routine to automatically choose the
+           best suitable target.
+    * New: Units and structures will constantly look for a better target taking
+           into consideration targets of the friendly units nearby - won't lock
+           on one target forever anymore.
+  * Skirmish/Multiplayer AI:
+    * New: Enabled basic level of Human-AI cooperation, for more information
+           visit: http://wz2100.net/wiki/gameplay:cooperative_ai
+    * New: AI units now return to defend its own base when it's in trouble.
+    * Improved: AI is faster at producing units, upgrading structures and oil
+                capturing.
+    * Several other improvements.
+    * Fix: AI doesn't get free units when playing in 'Advanced Bases' mode
+           anymore.
+    * Fix: AI won't preferably attack humans anymore.
+  * Buildsystem:
+    * New: Gettext support (0.16.1 included)
+    * New: Intel C++ Compiler (ICC) supported (10.0 is known to work,
+           FIXME: non-debug compiles only atm :FIXME)
+    * Change: No optional dependencies anymore (Ogg now required)
+    * Change: Use pkg-config (0.9 should work) instead of autoconf scripts for
+              SDL, PNG and Ogg/Vorbis (Faster)
+  * Balancing (Multiplayer):
+    * Light Cannon:
+      * weapon damage raised from 25 to 37
+      * weapon chance hit increased from 20 to 25
+      * weapon radius damage increased from 5 to 7
+    * Heavy Gunner Cyborg:
+      * weapon damage raised from 30 to 37
+    * Cyborg Engineer:
+      * construction component cost decreased from 17 to 10
+      * construction time for construction component decreased from 85 to 65
+        (used to be the same as truck's)
+      * hitpoints of construction component decreased from 50 to 40 (used to be
+        the same as truck's)
+    * Cyborg Mechanic: (all 3 repair components used to have almost same values,
+      which is now history)
+      * repair component cost reduced from 50 to 35
+      * repair component build time decreased from 250 to 100
+    * Heavy Repair:
+      * heavy repair component cost increased from 50 to 70
+      * heavy repair component build time increased from 250 to 300
+    * EMP Cannon:
+      * increased reload time from 5 to 8 seconds
+      * units will now get disabled in the splash radius of 2x2 tiles, with
+        probability of 50%
+    * Laser Satellite weapon:
+      * blast radius: increased from 2 tiles to 4.5 tiles
+      * blast radius damage: increased from 1000 to 2800
+      * reload time: increased from 5 mins to 8 mins
+      * chance to hit in the blast radius: reduced from 99% to 90%
+
+ -- Giel van Schijndel <muggenhor@gna.org>  Sun, 17 Feb 2008 01:19:48 +0100
+
 warzone2100 (2.1.0~0.svn3670-0) unstable; urgency=low
 
   * Bump upstream version number for the development branch
