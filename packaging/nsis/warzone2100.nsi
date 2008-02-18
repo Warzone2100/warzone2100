@@ -62,8 +62,8 @@ VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
 ;--------------------------------
 ;Interface Settings
 
-  !define MUI_ICON "..\icons\warzone2100.ico"
-  !define MUI_UNICON "..\icons\warzone2100.uninstall.ico"
+  !define MUI_ICON "..\..\icons\warzone2100.ico"
+  !define MUI_UNICON "..\..\icons\warzone2100.uninstall.ico"
 
   !define MUI_ABORTWARNING
 
@@ -113,9 +113,9 @@ VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
 ;--------------------------------
 ;License Language String
 
-  LicenseLangString MUILicense ${LANG_ENGLISH} "..\COPYING"
-  LicenseLangString MUILicense ${LANG_DUTCH} "..\COPYING"
-  LicenseLangString MUILicense ${LANG_GERMAN} "..\COPYING"
+  LicenseLangString MUILicense ${LANG_ENGLISH} "..\..\COPYING"
+  LicenseLangString MUILicense ${LANG_DUTCH} "..\..\COPYING"
+  LicenseLangString MUILicense ${LANG_GERMAN} "..\..\COPYING"
 
 ;--------------------------------
 ;Reserve Files
@@ -140,31 +140,31 @@ Section $(TEXT_SecBase) SecBase
   ;ADD YOUR OWN FILES HERE...
 
   ; Main executable
-  File "..\src\${PACKAGE}.exe"
+  File "..\..\src\${PACKAGE}.exe"
 
   ; Windows dbghelp library
   File "${EXTDIR}\bin\dbghelp.dll.license.txt"
   File "${EXTDIR}\bin\dbghelp.dll"
 
   ; Data files
-  File "..\data\mp.wz"
-  File "..\data\warzone.wz"
+  File "..\..\data\mp.wz"
+  File "..\..\data\warzone.wz"
 
   ; Information/documentation files
-  File "/oname=ChangeLog.txt" "..\ChangeLog"
-  File "/oname=Authors.txt" "..\AUTHORS"
-  File "/oname=License.txt" "..\COPYING"
-  File "/oname=Readme.en.txt" "..\doc\Readme.en"
-  File "/oname=Readme.de.txt" "..\doc\Readme.de"
-;  File "/oname=Readme.nl.txt" "..\doc\Readme.nl"
-  File "/oname=Readme.en.html" "..\doc\Readme.en.xhtml"
-  File "/oname=Readme.de.html" "..\doc\Readme.de.xhtml"
-;  File "/oname=Readme.nl.html" "..\doc\Readme.nl.xhtml"
+  File "/oname=ChangeLog.txt" "..\..\ChangeLog"
+  File "/oname=Authors.txt" "..\..\AUTHORS"
+  File "/oname=License.txt" "..\..\COPYING"
+  File "/oname=Readme.en.txt" "..\..\doc\Readme.en"
+  File "/oname=Readme.de.txt" "..\..\doc\Readme.de"
+;  File "/oname=Readme.nl.txt" "..\..\doc\Readme.nl"
+  File "/oname=Readme.en.html" "..\..\doc\Readme.en.xhtml"
+  File "/oname=Readme.de.html" "..\..\doc\Readme.de.xhtml"
+;  File "/oname=Readme.nl.html" "..\..\doc\Readme.nl.xhtml"
 
   SetOutPath "$INSTDIR\styles"
 
-  File "/oname=readme.print.css" "..\doc\styles\readme.print.css"
-  File "/oname=readme.screen.css" "..\doc\styles\readme.screen.css"
+  File "/oname=readme.print.css" "..\..\doc\styles\readme.print.css"
+  File "/oname=readme.screen.css" "..\..\doc\styles\readme.screen.css"
 
   SetOutPath "$INSTDIR\fonts"
 
@@ -218,7 +218,7 @@ Section $(TEXT_SecGrimMod) SecGrimMod
 
   SetOutPath "$INSTDIR\mods\global"
 
-  File "..\data\mods\global\grim.wz"
+  File "..\..\data\mods\global\grim.wz"
 
   SetOutPath "$INSTDIR"
 
@@ -232,7 +232,7 @@ Section $(TEXT_SecAIvolutionMod) SecAIvolutionMod
 
   SetOutPath "$INSTDIR\mods\global"
 
-  File "..\data\mods\global\aivolution.wz"
+  File "..\..\data\mods\global\aivolution.wz"
 
   SetOutPath "$INSTDIR"
 
@@ -247,19 +247,19 @@ SectionGroupEnd
 Section $(TEXT_SecNLS) SecNLS
 
   SetOutPath "$INSTDIR\locale\da\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "..\po\da.gmo"
+  File "/oname=${PACKAGE}.mo" "..\..\po\da.gmo"
 
   SetOutPath "$INSTDIR\locale\de\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "..\po\de.gmo"
+  File "/oname=${PACKAGE}.mo" "..\..\po\de.gmo"
 
   SetOutPath "$INSTDIR\locale\la\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "..\po\la.gmo"
+  File "/oname=${PACKAGE}.mo" "..\..\po\la.gmo"
 
   SetOutPath "$INSTDIR\locale\nb\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "..\po\nb.gmo"
+  File "/oname=${PACKAGE}.mo" "..\..\po\nb.gmo"
 
   SetOutPath "$INSTDIR\locale\nl\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "..\po\nl.gmo"
+  File "/oname=${PACKAGE}.mo" "..\..\po\nl.gmo"
 
 SectionEnd
 

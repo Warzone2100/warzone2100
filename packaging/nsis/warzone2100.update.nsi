@@ -66,8 +66,8 @@ VIAddVersionKey "ProductVersion"	"${VERSION}"
 ;--------------------------------
 ;Interface Settings
 
-  !define MUI_ICON "..\icons\warzone2100.ico"
-  !define MUI_UNICON "..\icons\warzone2100.uninstall.ico"
+  !define MUI_ICON "..\..\icons\warzone2100.ico"
+  !define MUI_UNICON "..\..\icons\warzone2100.uninstall.ico"
 
   !define MUI_ABORTWARNING
 
@@ -116,8 +116,8 @@ VIAddVersionKey "ProductVersion"	"${VERSION}"
 ;--------------------------------
 ;License Language String
 
-  LicenseLangString MUILicense ${LANG_ENGLISH} "..\COPYING"
-  LicenseLangString MUILicense ${LANG_GERMAN} "..\COPYING"
+  LicenseLangString MUILicense ${LANG_ENGLISH} "..\..\COPYING"
+  LicenseLangString MUILicense ${LANG_GERMAN} "..\..\COPYING"
 
 ;--------------------------------
 ;Reserve Files
@@ -142,7 +142,7 @@ Section $(TEXT_SecBase) SecBase
   ;ADD YOUR OWN FILES HERE...
 
   ; Main executable
-;  File "..\src\warzone2100.exe"
+;  File "..\..\src\warzone2100.exe"
   !insertmacro VPatchFile "warzone2100.exe.vpatch" "$INSTDIR\warzone2100.exe" "$INSTDIR\warzone2100.exe.tmp"
 
   ; Windows dbghelp library
@@ -152,24 +152,24 @@ Section $(TEXT_SecBase) SecBase
 ;  !insertmacro VPatchFile "dbghelp.dll.vpatch" "$INSTDIR\dbghelp.dll" "$INSTDIR\dbghelp.dll.tmp"
 
   ; Data files
-;  File "..\data\mp.wz"
-;  File "..\data\warzone.wz"
+;  File "..\..\data\mp.wz"
+;  File "..\..\data\warzone.wz"
   !insertmacro VPatchFile "mp.wz.vpatch" "$INSTDIR\mp.wz" "$INSTDIR\mp.wz.tmp"
   !insertmacro VPatchFile "warzone.wz.vpatch" "$INSTDIR\warzone.wz" "$INSTDIR\warzone.wz.tmp"
 
   ; Information/documentation files
-  File "/oname=ChangeLog.txt" "..\ChangeLog"
-  File "/oname=Authors.txt" "..\AUTHORS"
-  File "/oname=License.txt" "..\COPYING"
-  File "/oname=Readme.en.txt" "..\doc\Readme.en"
-  File "/oname=Readme.de.txt" "..\doc\Readme.de"
-  File "/oname=Readme.en.html" "..\doc\Readme.en.xhtml"
-  File "/oname=Readme.de.html" "..\doc\Readme.de.xhtml"
+  File "/oname=ChangeLog.txt" "..\..\ChangeLog"
+  File "/oname=Authors.txt" "..\..\AUTHORS"
+  File "/oname=License.txt" "..\..\COPYING"
+  File "/oname=Readme.en.txt" "..\..\doc\Readme.en"
+  File "/oname=Readme.de.txt" "..\..\doc\Readme.de"
+  File "/oname=Readme.en.html" "..\..\doc\Readme.en.xhtml"
+  File "/oname=Readme.de.html" "..\..\doc\Readme.de.xhtml"
 
   SetOutPath "$INSTDIR\styles"
 
-  File "/oname=readme.print.css" "..\doc\styles\readme.print.css"
-  File "/oname=readme.screen.css" "..\doc\styles\readme.screen.css"
+  File "/oname=readme.print.css" "..\..\doc\styles\readme.print.css"
+  File "/oname=readme.screen.css" "..\..\doc\styles\readme.screen.css"
 
 
   ;Store installation folder
@@ -219,7 +219,7 @@ Section $(TEXT_SecGrimMod) SecGrimMod
 
   SetOutPath "$INSTDIR\mods\global"
 
-;  File "..\data\mods\global\grim.wz"
+;  File "..\..\data\mods\global\grim.wz"
 ;  !insertmacro VPatchFile "grim.wz.vpatch" "$INSTDIR\grim.wz" "$INSTDIR\grim.wz.tmp"
 
   SetOutPath "$INSTDIR"
