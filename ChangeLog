@@ -36,7 +36,8 @@
    * Change: Use pkg-config (0.9 should work) instead of autoconf scripts for SDL, PNG and Ogg/Vorbis (Faster)
  * Balancing (Multiplayer):
    * Rock-Paper-Scissors applied to all weapon types by emphasizing their specialization.
-   * Less popular technologies like LasSat, Flamers, Mini-Pods, Light Cannon are made more attractive by raising their effectivity.
+   * Less popular technologies like LasSat, Fortresses, Flamers, Mini-Pods, Light Cannon are made more attractive
+     by raising their effectivity.
    * Cost/Performance ratio improved for Cyborgs.
    * Cannons cause more splash damage are now more versatile in their use.
    * Lancer and Tracks have more pre-requisites to become available.
