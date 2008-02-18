@@ -256,7 +256,8 @@ AC_CONFIG_FILES([Makefile
 		data/Makefile
 		data/mods/Makefile
 		data/mods/global/Makefile
-		nsis/Makefile
+		packaging/Makefile
+		packaging/nsis/Makefile
 		win32/Makefile
 		lib/Makefile
 		lib/framework/Makefile

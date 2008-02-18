@@ -8,9 +8,9 @@ all: $(INSTALLERFILE)
 endif
 
 data:
-	$(MAKE) $(AM_MAKEFLAGS) -C ../data/ data
+	$(MAKE) $(AM_MAKEFLAGS) -C ../../data/ data
 
-$(INSTALLERFILE): warzone2100.nsi ../src/warzone2100.exe data
+$(INSTALLERFILE): warzone2100.nsi ../../src/warzone2100.exe data
 	$(MAKENSIS) -DPACKAGE="$(PACKAGE)" -DPACKAGE_NAME="$(PACKAGE_NAME)" -DPACKAGE_VERSION="$(PACKAGE_VERSION)" -DPACKAGE_BUGREPORT="$(PACKAGE_BUGREPORT)" -DVERSIONNUM="$(INSTALLER_VERSION)" -DEXTDIR="$(INSTALLER_EXTDIR)" $<
 
 $(UPDATERFILE): warzone2100.update.nsi
