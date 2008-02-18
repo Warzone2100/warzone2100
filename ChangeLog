@@ -35,30 +35,11 @@
    * Change: No optional dependencies anymore (Ogg now required)
    * Change: Use pkg-config (0.9 should work) instead of autoconf scripts for SDL, PNG and Ogg/Vorbis (Faster)
  * Balancing (Multiplayer):
-   * Light Cannon:
-     * weapon damage raised from 25 to 37
-     * weapon chance hit increased from 20 to 25
-     * weapon radius damage increased from 5 to 7
-   * Heavy Gunner Cyborg:
-     * weapon damage raised from 30 to 37
-   * Cyborg Engineer:
-     * construction component cost decreased from 17 to 10
-     * construction time for construction component decreased from 85 to 65 (used to be the same as truck's)
-     * hitpoints of construction component decreased from 50 to 40 (used to be the same as truck's)
-   * Cyborg Mechanic: (all 3 repair components used to have almost same values, which is now history)
-     * repair component cost reduced from 50 to 35
-     * repair component build time decreased from 250 to 100
-   * Heavy Repair:
-     * heavy repair component cost increased from 50 to 70
-     * heavy repair component build time increased from 250 to 300
-   * EMP Cannon:
-     * increased reload time from 5 to 8 seconds
-     * units will now get disabled in the splash radius of 2x2 tiles, with probability of 50%
-   * Laser Satellite weapon:
-     * blast radius: increased from 2 tiles to 4.5 tiles
-     * blast radius damage: increased from 1000 to 2800
-     * reload time: increased from 5 mins to 8 mins
-     * chance to hit in the blast radius: reduced from 99% to 90%
+   * Rock-Paper-Scissors applied to all weapon types by emphasizing their specialization.
+   * Less popular technologies like LasSat, Flamers, Mini-Pods, Light Cannon are made more attractive by raising their effectivity.
+   * Cost/Performance ratio improved for Cyborgs.
+   * Cannons cause more splash damage are now more versatile in their use.
+   * Lancer and Tracks have more pre-requisites to become available.
 
 2007-12-28: Version 2.0.10
  * General:
