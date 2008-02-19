@@ -2401,7 +2401,7 @@ BOOL	processConsoleCommands( char *pName )
 
 	if(strcmp(pName,"/loadai") == FALSE)
 	{
-		(void)LoadAIExperience(TRUE);
+		LoadAIExperience(TRUE);
 		return TRUE;
 	}
 	else if(strcmp(pName,"/saveai") == FALSE)
@@ -2458,7 +2458,7 @@ BOOL	processConsoleCommands( char *pName )
 			sprintf(tmpStr,"/loadai %d", i);		//"loadai 0"
 			if(strcmp(pName,tmpStr) == FALSE)
 			{
-				LoadPlayerAIExperience(i, TRUE);
+				(void)LoadPlayerAIExperience(i);
 				return TRUE;
 			}
 		}

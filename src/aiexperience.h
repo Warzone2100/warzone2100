@@ -35,9 +35,9 @@ extern SDWORD baseDefendLocPrior[MAX_PLAYERS][MAX_BASE_DEFEND_LOCATIONS];
 extern SDWORD oilDefendLocPrior[MAX_PLAYERS][MAX_OIL_DEFEND_LOCATIONS];
 
 extern	BOOL SavePlayerAIExperience(SDWORD nPlayer, BOOL bNotify);
-extern	BOOL LoadPlayerAIExperience(SDWORD nPlayer, BOOL bNotify);
+extern	SDWORD LoadPlayerAIExperience(SDWORD nPlayer);
 
-extern	BOOL LoadAIExperience(BOOL bNotify);
+extern	void LoadAIExperience(BOOL bNotify);
 extern	BOOL SaveAIExperience(BOOL bNotify);
 
 
@@ -45,7 +45,7 @@ extern	BOOL ExperienceRecallOil(SDWORD nPlayer);
 extern	void InitializeAIExperience(void);
 extern	BOOL OilResourceAt(UDWORD OilX,UDWORD OilY, SDWORD VisibleToPlayer);
 
-extern	BOOL ReadAISaveData(SDWORD nPlayer);
+extern	SDWORD ReadAISaveData(SDWORD nPlayer);
 extern	BOOL WriteAISaveData(SDWORD nPlayer);
 
 extern	BOOL SetUpInputFile(SDWORD nPlayer);
@@ -68,3 +68,8 @@ extern	void BaseExperienceDebug(SDWORD nPlayer);
 extern	void OilExperienceDebug(SDWORD nPlayer);
 
 extern BOOL canRecallOilAt(SDWORD nPlayer, SDWORD x, SDWORD y);
+
+//Return values of experience-loading routine
+#define EXPERIENCE_LOAD_OK			0			//no problemens encountered
+#define EXPERIENCE_LOAD_ERROR		1			//error while loading experience
+#define EXPERIENCE_LOAD_NOSAVE		(-1)		//no experience exists
