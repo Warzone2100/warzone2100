@@ -2458,7 +2458,7 @@ BOOL	processConsoleCommands( char *pName )
 			sprintf(tmpStr,"/loadai %d", i);		//"loadai 0"
 			if(strcmp(pName,tmpStr) == FALSE)
 			{
-				LoadPlayerAIExperience(i, TRUE);
+				(void)LoadPlayerAIExperience(i);
 				return TRUE;
 			}
 		}

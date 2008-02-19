@@ -10066,16 +10066,15 @@ BOOL scrSavePlayerAIExperience(void)
 BOOL scrLoadPlayerAIExperience(void)
 {
 	SDWORD				player;
-	BOOL				bNotify;
 
-	if (!stackPopParams(2, VAL_INT, &player, VAL_BOOL, &bNotify))
+	if (!stackPopParams(1, VAL_INT, &player))
 	{
 		debug(LOG_ERROR, "scrLoadPlayerAIExperience(): stack failed");
 		return FALSE;
 	}
 
-	scrFunctionResult.v.bval = LoadPlayerAIExperience(player, bNotify);
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
+	scrFunctionResult.v.ival = LoadPlayerAIExperience(player);
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return FALSE;
 	}

@@ -85,15 +85,31 @@ void InitializeAIExperience(void)
 	}
 }
 
-BOOL LoadAIExperience(BOOL bNotify)
+void LoadAIExperience(BOOL bNotify)
 {
-	SDWORD i;
-	for(i=0;i<game.maxPlayers;i++)
-	{
-		LoadPlayerAIExperience(i, bNotify);
-	}
+	SDWORD player,status;
 
-	return TRUE;
+	for(player=0; player<game.maxPlayers; player++)
+	{
+		status = LoadPlayerAIExperience(player);
+
+		//notify if needed
+		if(bNotify)
+		{
+			if(status == EXPERIENCE_LOAD_NOSAVE)
+			{
+				console("No saved experience found for player %d", player);
+			}
+			else if(status == EXPERIENCE_LOAD_OK)
+			{
+				console("Successfully loaded experience for player %d", player);
+			}
+			else	//any error
+			{
+				console("Error while loading experience for player %d", player);
+			}
+		}
+	}
 }
 
 BOOL SaveAIExperience(BOOL bNotify)
@@ -107,24 +123,14 @@ BOOL SaveAIExperience(BOOL bNotify)
 	return TRUE;
 }
 
-BOOL LoadPlayerAIExperience(SDWORD nPlayer, BOOL bNotify)
+SDWORD LoadPlayerAIExperience(SDWORD nPlayer)
 {
 	if((nPlayer > -1) && (nPlayer < MAX_PLAYERS))
 	{
-		if(ReadAISaveData(nPlayer))
-		{
-			//addConsoleMessage("Experience loaded successfully.",RIGHT_JUSTIFY);
-
-			if(bNotify)
-				console("Experience for player %d loaded successfully.", nPlayer);
-
-			return TRUE;
-		}
+		return ReadAISaveData(nPlayer);
 	}
 
-	//addConsoleMessage("Failed to load experience (no experience saved?).",RIGHT_JUSTIFY);
-	console("Failed to load experience for player %d (no experience saved?).",nPlayer);
-	return FALSE;
+	return EXPERIENCE_LOAD_ERROR;
 }
 
 BOOL SavePlayerAIExperience(SDWORD nPlayer, BOOL bNotify)
@@ -139,17 +145,12 @@ BOOL SavePlayerAIExperience(SDWORD nPlayer, BOOL bNotify)
 			console("Failed to save experience for player %d.", nPlayer);
 			return FALSE;
 		}
-		//else
-		//{
-		//	addConsoleMessage("Experience saved successfully.",RIGHT_JUSTIFY);
-		//}
-
 	}
 
-	//addConsoleMessage("Experience saved successfully.",RIGHT_JUSTIFY);
-
 	if(bNotify)
+	{
 		console("Experience for player %d saved successfully.", nPlayer);
+	}
 
 	return TRUE;
 }
@@ -204,6 +205,7 @@ BOOL SetUpInputFile(SDWORD nPlayer)
 
 	/* Assemble dir */
 	snprintf(sPlayer, sizeof(sPlayer), "%d", nPlayer);
+
 	// Guarantee to nul-terminate
 	sPlayer[sizeof(sPlayer) - 1] = '\0';
 
@@ -219,6 +221,7 @@ BOOL SetUpInputFile(SDWORD nPlayer)
 
 	aiSaveFile[nPlayer] = NULL;
 	aiSaveFile[nPlayer] = PHYSFS_openRead(FileName);
+
 	if (!aiSaveFile[nPlayer])
 	{
 		debug(LOG_ERROR,"SetUpInputFile(): Couldn't open input file: '%s' for player %d:\n%s", FileName, nPlayer, PHYSFS_getLastError());
@@ -239,7 +242,6 @@ return TRUE;
 	{
 		if(psFeature->psStats->subType == FEAT_OIL_RESOURCE)
 		{
-
 			printf_console("Enabling feature at x: %d y: %d",psFeature->pos.x/128,psFeature->pos.y/128);
 
 			psFeature->visible[nPlayer] = TRUE;
@@ -513,19 +515,19 @@ BOOL canRecallOilAt(SDWORD nPlayer, SDWORD x, SDWORD y)
 	return FALSE;			//no
 }
 
-BOOL ReadAISaveData(SDWORD nPlayer)
+SDWORD ReadAISaveData(SDWORD nPlayer)
 {
-	FEATURE					*psFeature;
-	SDWORD					NumEntries=0;	//How many derricks/oil resources will be saved
-	UDWORD					PosXY[MAX_OIL_ENTRIES];		//Locations, 0=x,1=y,2=x etc
-	UDWORD					i,j;
-	BOOL					Found,bTileVisible;
-	UDWORD					version;
+	FEATURE		*psFeature;
+	SDWORD		NumEntries=0;		//How many derricks/oil resources will be saved
+	UDWORD		PosXY[MAX_OIL_ENTRIES];		//Locations, 0=x,1=y,2=x etc
+	UDWORD		i,j;
+	BOOL		Found,bTileVisible;
+	UDWORD		version;
 
 	if(!SetUpInputFile(nPlayer))
-	{	//printf_console
+	{
 		//debug(LOG_ERROR,"No experience data loaded for %d",nPlayer);
-		return FALSE;
+		return EXPERIENCE_LOAD_NOSAVE;
 	}
 	else
 	{
@@ -533,7 +535,7 @@ BOOL ReadAISaveData(SDWORD nPlayer)
 		if (PHYSFS_read(aiSaveFile[nPlayer], &version, sizeof(NumEntries), 1 ) != 1 )
 		{
 			debug(LOG_ERROR,"ReadAISaveData(): Failed to read version number for player '%d'",nPlayer);
-			return FALSE;
+			return EXPERIENCE_LOAD_ERROR;
 		}
 
 		// Check version, assume backward compatibility
@@ -541,8 +543,6 @@ BOOL ReadAISaveData(SDWORD nPlayer)
 		{
 			debug(LOG_ERROR,"ReadAISaveData(): Incompatible version of the learn data (%d, expected %d) for player '%d'", version, SAVE_FORMAT_VERSION, nPlayer);
 		}
-
-		//debug(LOG_ERROR,"version: %d", NumEntries);
 
 		/************************/
 		/*		Enemy bases		*/
@@ -552,16 +552,14 @@ BOOL ReadAISaveData(SDWORD nPlayer)
 		if (PHYSFS_read(aiSaveFile[nPlayer], &NumEntries, sizeof(NumEntries), 1 ) != 1 )
 		{
 			debug(LOG_ERROR,"ReadAISaveData(): Failed to read number of players for player '%d'",nPlayer);
-			return FALSE;
+			return EXPERIENCE_LOAD_ERROR;
 		}
-
-		//debug(LOG_ERROR,"num enemy base: %d", NumEntries);
 
 		/* read base locations of all players */
 		if (PHYSFS_read(aiSaveFile[nPlayer], baseLocation[nPlayer], sizeof(SDWORD), NumEntries * 2 ) != (NumEntries * 2) )
 		{
 			debug(LOG_ERROR,"ReadAISaveData(): Failed to load baseLocation for player '%d'",nPlayer);
-			return FALSE;
+			return EXPERIENCE_LOAD_ERROR;
 		}
 
 		/************************************/
@@ -572,14 +570,14 @@ BOOL ReadAISaveData(SDWORD nPlayer)
 		if (PHYSFS_read(aiSaveFile[nPlayer], &NumEntries, sizeof(SDWORD), 1 ) != 1 )
 		{
 			debug(LOG_ERROR,"ReadAISaveData(): Failed to read MAX_BASE_DEFEND_LOCATIONS for player '%d'",nPlayer);
-			return FALSE;
+			return EXPERIENCE_LOAD_ERROR;
 		}
 
 		/* check it's the same as current MAX_BASE_DEFEND_LOCATIONS */
 		if(NumEntries > MAX_BASE_DEFEND_LOCATIONS)
 		{
 			debug(LOG_ERROR, "ReadAISaveData(): saved MAX_BASE_DEFEND_LOCATIONS and current one don't match (%d / %d)", NumEntries, MAX_BASE_DEFEND_LOCATIONS);
-			return FALSE;
+			return EXPERIENCE_LOAD_ERROR;
 		}
 
 		//debug(LOG_ERROR,"num base attack loc: %d", NumEntries);
@@ -588,14 +586,14 @@ BOOL ReadAISaveData(SDWORD nPlayer)
 		if (PHYSFS_read(aiSaveFile[nPlayer], baseDefendLocation[nPlayer], sizeof(SDWORD), NumEntries * 2 ) != (NumEntries * 2) )
 		{
 			debug(LOG_ERROR,"ReadAISaveData(): Failed to load baseDefendLocation for player '%d'",nPlayer);
-			return FALSE;
+			return EXPERIENCE_LOAD_ERROR;
 		}
 
 		/* read base defend priorities */
 		if (PHYSFS_read(aiSaveFile[nPlayer], baseDefendLocPrior[nPlayer], sizeof(SDWORD), NumEntries * 2 ) != (NumEntries * 2) )
 		{
 			debug(LOG_ERROR,"ReadAISaveData(): Failed to load baseDefendLocPrior for player '%d'",nPlayer);
-			return FALSE;
+			return EXPERIENCE_LOAD_ERROR;
 		}
 
 		/************************************/
@@ -606,14 +604,14 @@ BOOL ReadAISaveData(SDWORD nPlayer)
 		if (PHYSFS_read(aiSaveFile[nPlayer], &NumEntries, sizeof(NumEntries), 1 ) != 1 )
 		{
 			debug(LOG_ERROR,"ReadAISaveData(): Failed to read max number of oil attack locations for player '%d'",nPlayer);
-			return FALSE;
+			return EXPERIENCE_LOAD_ERROR;
 		}
 
 		/* check it's the same as current MAX_OIL_DEFEND_LOCATIONS */
 		if(NumEntries > MAX_OIL_DEFEND_LOCATIONS)
 		{
 			debug(LOG_ERROR, "ReadAISaveData(): saved MAX_OIL_DEFEND_LOCATIONS and current one don't match (%d / %d)", NumEntries, MAX_OIL_DEFEND_LOCATIONS);
-			return FALSE;
+			return EXPERIENCE_LOAD_ERROR;
 		}
 
 		//debug(LOG_ERROR,"num oil attack loc: %d", NumEntries);
@@ -622,14 +620,14 @@ BOOL ReadAISaveData(SDWORD nPlayer)
 		if (PHYSFS_read(aiSaveFile[nPlayer], oilDefendLocation[nPlayer], sizeof(SDWORD), NumEntries * 2 ) != (NumEntries * 2) )
 		{
 			debug(LOG_ERROR,"ReadAISaveData(): Failed to load oilDefendLocation for player '%d'",nPlayer);
-			return FALSE;
+			return EXPERIENCE_LOAD_ERROR;
 		}
 
 		/* read oil location priority */
 		if (PHYSFS_read(aiSaveFile[nPlayer], oilDefendLocPrior[nPlayer], sizeof(SDWORD), NumEntries * 2 ) != (NumEntries * 2) )
 		{
 			debug(LOG_ERROR,"ReadAISaveData(): Failed to load oilDefendLocPrior for player '%d'",nPlayer);
-			return FALSE;
+			return EXPERIENCE_LOAD_ERROR;
 		}
 
 		/****************************/
@@ -640,14 +638,14 @@ BOOL ReadAISaveData(SDWORD nPlayer)
 		if (PHYSFS_read(aiSaveFile[nPlayer], &NumEntries, sizeof(NumEntries), 1 ) != 1 )
 		{
 			debug(LOG_ERROR,"ReadAISaveData(): Failed to load MAX_OIL_LOCATIONS for player '%d'",nPlayer);
-			return FALSE;
+			return EXPERIENCE_LOAD_ERROR;
 		}
 
 		/* check it's the same as current MAX_OIL_LOCATIONS */
 		if(NumEntries > MAX_OIL_LOCATIONS)
 		{
 			debug(LOG_ERROR, "ReadAISaveData(): saved MAX_OIL_LOCATIONS and current one don't match (%d / %d)", NumEntries, MAX_OIL_LOCATIONS);
-			return FALSE;
+			return EXPERIENCE_LOAD_ERROR;
 		}
 
 
@@ -655,7 +653,7 @@ BOOL ReadAISaveData(SDWORD nPlayer)
 		if (PHYSFS_read(aiSaveFile[nPlayer], &NumEntries, sizeof(NumEntries), 1 ) != 1 )
 		{
 			debug(LOG_ERROR,"ReadAISaveData(): Failed to read Oil Resources count for player '%d'",nPlayer);
-			return FALSE;
+			return EXPERIENCE_LOAD_ERROR;
 		}
 
 		//debug(LOG_ERROR,"Num oil: %d", NumEntries);
@@ -666,7 +664,7 @@ BOOL ReadAISaveData(SDWORD nPlayer)
 			if (PHYSFS_read(aiSaveFile[nPlayer], PosXY, sizeof(UDWORD), NumEntries * 2 ) != (NumEntries * 2) )
 			{
 				debug(LOG_ERROR,"ReadAISaveData(): Failed to read Oil Resources coordinates for player '%d'",nPlayer);
-				return FALSE;
+				return EXPERIENCE_LOAD_ERROR;
 			}
 
 			for(i=0; i<NumEntries; i++)
@@ -716,7 +714,7 @@ BOOL ReadAISaveData(SDWORD nPlayer)
 						if (PHYSFS_read(aiSaveFile[nPlayer], &bTileVisible, sizeof(BOOL), 1 ) != 1 )
 						{
 							debug(LOG_ERROR,"ReadAISaveData(): Failed to load tile visibility at tile %d-%d for player '%d'", i, j, nPlayer);
-							return FALSE;
+							return EXPERIENCE_LOAD_ERROR;
 						}
 
 						// Restore tile visibility
@@ -730,8 +728,7 @@ BOOL ReadAISaveData(SDWORD nPlayer)
 		}
 	}
 
-
-	return PHYSFS_close(aiSaveFile[nPlayer]);
+	return PHYSFS_close(aiSaveFile[nPlayer]) ? EXPERIENCE_LOAD_OK : EXPERIENCE_LOAD_ERROR;
 }
 
 BOOL OilResourceAt(UDWORD OilX,UDWORD OilY, SDWORD VisibleToPlayer)
@@ -762,8 +759,6 @@ BOOL OilResourceAt(UDWORD OilX,UDWORD OilY, SDWORD VisibleToPlayer)
 
 	return TRUE;
 }
-
-
 
 
 //x and y are passed by script, find out if this loc is close to

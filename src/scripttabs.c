@@ -1291,8 +1291,8 @@ FUNC_SYMBOL asFuncTable[] =
 		2, { VAL_INT, VAL_BOOL },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "loadPlayerAIExperience",	scrLoadPlayerAIExperience,	VAL_BOOL,
-		2, { VAL_INT, VAL_BOOL },
+	{ "loadPlayerAIExperience",	scrLoadPlayerAIExperience,	VAL_INT,
+		1, { VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
 	/* end of learn functions */
