@@ -1,7 +1,7 @@
 player%.slo:: playerX.slo.in
 	cp -p $< $@
 
-player%.vlo:: playerX.slo.in
+player%.vlo:: playerX.vlo.in
 	cp -p $< $@
 	sed -r -i "s/script\s+"playerX\.slo"/script \"$(@:%.vlo=%.slo)\"/" $@
 	sed -r -i "s/player\s+INT\s+X/player INT $(@:player%.vlo=%)/" $@
