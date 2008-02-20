@@ -1,7 +1,7 @@
-script "player5.slo"
+script "playerX.slo"
 run
 {
-	player          INT					5
+	player          INT					X
 
 	derrick			STRUCTURESTAT		"A0ResourceExtractor"
 
