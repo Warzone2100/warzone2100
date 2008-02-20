@@ -1,7 +1,7 @@
-%.tab.h %.tab.c: %.y
+%.tab.h %.tab.c:: %.y
 	$(YACC) $(YFLAGS) $(AM_YFLAGS) -o$@ $<
 
-%.lex.c: %.l
+%.lex.c:: %.l
 	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
 
 AM_LFLAGS = $(FLEX_FLAGS)
