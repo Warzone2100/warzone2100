@@ -256,6 +256,7 @@ AC_CONFIG_FILES([Makefile
 		data/Makefile
 		data/mods/Makefile
 		data/mods/global/Makefile
+		data/mods/global/aivolution/multiplay/skirmish/Makefile
 		packaging/Makefile
 		packaging/nsis/Makefile
 		win32/Makefile
