@@ -50,7 +50,7 @@ static void resToLower(char *pStr)
 }
 
 
-void dump_pie_file(Lib3dsFile *f, FILE *o, const char *page, bool swapYZ, bool invertUV, bool reverseWinding, unsigned int baseTexFlags)
+void dump_pie_file(Lib3dsFile *f, FILE *o, const char *page, bool swapYZ, bool invertUV, bool reverseWinding, unsigned int baseTexFlags, float scaleFactor)
 {
 	Lib3dsMesh *m;
 	Lib3dsMaterial *material;
@@ -93,11 +93,11 @@ void dump_pie_file(Lib3dsFile *f, FILE *o, const char *page, bool swapYZ, bool i
 
 			if (swapYZ)
 			{
-				fprintf(o, "\t%d %d %d\n", (int)pos[0], (int)pos[2], (int)pos[1]);
+				fprintf(o, "\t%d %d %d\n", (int)(pos[0] * scaleFactor), (int)(pos[2] * scaleFactor), (int)(pos[1] * scaleFactor));
 			}
 			else
 			{
-				fprintf(o, "\t%d %d %d\n", (int)pos[0], (int)pos[1], (int)pos[2]);
+				fprintf(o, "\t%d %d %d\n", (int)(pos[0] * scaleFactor), (int)(pos[1] * scaleFactor), (int)(pos[2] * scaleFactor));
 			}
 		}
 
@@ -149,6 +149,7 @@ static bool swapYZ = true;
 static bool reverseWinding = true;
 static bool invertUV = true;
 static unsigned int baseTexFlags = 200;
+static float scaleFactor = 1.0f;
 
 static void parse_args(int argc, char **argv)
 {
@@ -160,17 +161,39 @@ static void parse_args(int argc, char **argv)
 		{
 			swapYZ = false; // exporting program used Y-axis as "up", like we do, don't switch
 		}
-		if (argv[i][1] == 'i')
+		else if (argv[i][1] == 'i')
 		{
 			invertUV = false;
 		}
-		if (argv[i][1] == 't')
+		else if (argv[i][1] == 't')
 		{
 			baseTexFlags = 2200;
 		}
-		if (argv[i][1] == 'r')
+		else if (argv[i][1] == 'r')
 		{
 			reverseWinding = false;
+		}
+		else if (argv[i][1] == 's')
+		{
+			int ret;
+
+			i++;
+			if (argc < i)
+			{
+				fprintf(stderr, "Missing parameter to scale option.\n");
+				exit(1);
+			}
+			ret = sscanf(argv[i], "%f", &scaleFactor);
+			if (ret != 1)
+			{
+				fprintf(stderr, "Bad parameter to scale option.\n");
+				exit(1);
+			}
+		}
+		else
+		{
+			fprintf(stderr, "Unrecognized option: %s\n", argv[i]);
+			exit(1);
 		}
 	}
 	if (argc < 3 + i)
@@ -206,7 +229,7 @@ int main(int argc, char **argv)
 		fprintf(stderr, "***ERROR***\nCan't open %s for writing\n", output_file);
 		exit(1);
 	}
-	dump_pie_file(f, o, page, swapYZ, invertUV, reverseWinding, baseTexFlags);
+	dump_pie_file(f, o, page, swapYZ, invertUV, reverseWinding, baseTexFlags, scaleFactor);
 	fclose(o);
 
 	lib3ds_file_free(f);

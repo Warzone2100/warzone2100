@@ -26,7 +26,7 @@
 #include <lib3ds/file.h>
 
 
-extern "C" void dump_pie_file(Lib3dsFile *f, FILE *o, const char *page, bool swapYZ, bool inverseUV, bool reverseWinding, int baseTexFlags);
+extern "C" void dump_pie_file(Lib3dsFile *f, FILE *o, const char *page, bool swapYZ, bool inverseUV, bool reverseWinding, int baseTexFlags, float scaleFactor);
 
 
 Gui3ds2pie::Gui3ds2pie( QWidget *parent )
@@ -121,7 +121,7 @@ void Gui3ds2pie::accept()
 		return;
 	}
 
-	dump_pie_file(f, o, texturePage.toAscii().data(), swapYZ->isChecked(), invertUV->isChecked(), reverseWinding->isChecked(), baseTexFlags);
+	dump_pie_file(f, o, texturePage.toAscii().data(), swapYZ->isChecked(), invertUV->isChecked(), reverseWinding->isChecked(), baseTexFlags, 1.0f);
 
 	fclose(o);
 	lib3ds_file_free(f);
