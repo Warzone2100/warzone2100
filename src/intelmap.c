@@ -742,7 +742,7 @@ static BOOL intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
 			{
 				cur_y += iV_GetTextLineSize();
 			}
-			if (cur_y > height)
+			if (cur_y > y0 + height)
 			{
 				/* run out of room - need to make new tab */
 				*cur_seq = sequence;
