@@ -3176,7 +3176,6 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	//don't worry if not on homebase cos not being drawn yet
 	if (!onMission)
 	{
-//		psDroid->lastTile = mapTile(mapX,mapY);
 		//set droid height
 		psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
 	}
@@ -3219,7 +3218,6 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 		psDroid->asWeaps[i].hitPoints = 0;
 	}
 
-		// ffs je
 	psDroid->listSize = 0;
 	memset(psDroid->asOrderList, 0, sizeof(ORDER_LIST)*ORDER_LIST_MAX);
 
@@ -3300,7 +3298,6 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 		{
 			for (impact_side = 0;impact_side < NUM_HIT_SIDES;impact_side=impact_side+1)
 			{
-				//psDroid->armour[inc] = (asBodyStats + pTemplate->asParts[COMP_BODY])->armourValue[inc];
 				psDroid->armour[impact_side][inc] = bodyArmour(asBodyStats + pTemplate->
 				asParts[COMP_BODY], (UBYTE)player, CYBORG_BODY_UPGRADE, (WEAPON_CLASS)inc, impact_side);
 			}
@@ -3323,15 +3320,10 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 
 	memset(psDroid->visible, 0, sizeof(psDroid->visible));
 	psDroid->visible[psDroid->player] = UBYTE_MAX;
-	//psDroid->damage = droidDamage;
 	psDroid->died = 0;
 	psDroid->inFire = FALSE;
 	psDroid->burnStart = 0;
 	psDroid->burnDamage = 0;
-//	psDroid->sAI.state = AI_PAUSE;
-//	psDroid->sAI.psTarget = NULL;
-//	psDroid->sAI.psSelectedWeapon = NULL;
-//	psDroid->sAI.psStructToBuild = NULL;
 	psDroid->sDisplay.screenX = OFF_SCREEN;
 	psDroid->sDisplay.screenY = OFF_SCREEN;
 	psDroid->sDisplay.screenR = 0;
@@ -3366,7 +3358,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	if (psDroid->droidType == DROID_TRANSPORTER)
 	{
 		//add transporter launch button if selected player and not a reinforcable situation
-        if ( player == selectedPlayer && !missionCanReEnforce())
+		if ( player == selectedPlayer && !missionCanReEnforce())
 		{
 			(void)intAddTransporterLaunch(psDroid);
 		}
@@ -3414,8 +3406,6 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 		psDroid->turretPitch[inc] = 0;
 	}
 
-//	psDroid->ECMMod = (asECMStats + pTemplate->asParts[COMP_ECM])->power;
-
 	psDroid->body = calcTemplateBody(pTemplate, psDroid->player);
 	psDroid->originalBody = psDroid->body;
 
@@ -3423,7 +3413,7 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 	if (pTemplate->numWeaps > 0)
 	{
 
-        for (inc=0; inc < pTemplate->numWeaps; inc++)
+		for (inc=0; inc < pTemplate->numWeaps; inc++)
 		{
 			psDroid->asWeaps[inc].lastFired=0;
 			psDroid->asWeaps[inc].nStat = pTemplate->asWeaps[inc];
@@ -3442,37 +3432,18 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 	}
 	//allocate the components hit points
 	psDroid->asBits[COMP_BODY].nStat = (UBYTE)pTemplate->asParts[COMP_BODY];
-	//psDroid->asBits[COMP_BODY].hitPoints =
-	//	(asBodyStats + pTemplate->asParts[COMP_BODY])->hitPoints;
 
 	// ajl - changed this to init brains for all droids (crashed)
 	psDroid->asBits[COMP_BRAIN].nStat = 0;
 
 	// This is done by the Command droid stuff - John.
 	// Not any more - John.
-	psDroid->asBits[COMP_BRAIN].nStat = (UBYTE)pTemplate->asParts[COMP_BRAIN];
-//	psDroid->asBits[COMP_BRAIN].hitPoints =
-//		(asBrainStats + pTemplate->asParts[COMP_BRAIN])->hitPoints;
-
-	psDroid->asBits[COMP_PROPULSION].nStat = (UBYTE)pTemplate->asParts[COMP_PROPULSION];
-	//psDroid->asBits[COMP_PROPULSION].hitPoints =
-	//	(asPropulsionStats + pTemplate->asParts[COMP_PROPULSION])->hitPoints;
-
-	psDroid->asBits[COMP_SENSOR].nStat = (UBYTE)pTemplate->asParts[COMP_SENSOR];
-	//psDroid->asBits[COMP_SENSOR].hitPoints =
-	//	(asSensorStats + pTemplate->asParts[COMP_SENSOR])->hitPoints;
-
-	psDroid->asBits[COMP_ECM].nStat = (UBYTE)pTemplate->asParts[COMP_ECM];
-	//psDroid->asBits[COMP_ECM].hitPoints =
-	//	(asECMStats + pTemplate->asParts[COMP_ECM])->hitPoints;
-
-	psDroid->asBits[COMP_REPAIRUNIT].nStat = (UBYTE)pTemplate->asParts[COMP_REPAIRUNIT];
-	//psDroid->asBits[COMP_REPAIRUNIT].hitPoints =
-	//	(asRepairStats + pTemplate->asParts[COMP_REPAIRUNIT])->hitPoints;
-
-	psDroid->asBits[COMP_CONSTRUCT].nStat = (UBYTE)pTemplate->asParts[COMP_CONSTRUCT];
-	//psDroid->asBits[COMP_CONSTRUCT].hitPoints =
-	//	(asConstructStats + pTemplate->asParts[COMP_CONSTRUCT])->hitPoints;
+	psDroid->asBits[COMP_BRAIN].nStat = pTemplate->asParts[COMP_BRAIN];
+	psDroid->asBits[COMP_PROPULSION].nStat = pTemplate->asParts[COMP_PROPULSION];
+	psDroid->asBits[COMP_SENSOR].nStat = pTemplate->asParts[COMP_SENSOR];
+	psDroid->asBits[COMP_ECM].nStat = pTemplate->asParts[COMP_ECM];
+	psDroid->asBits[COMP_REPAIRUNIT].nStat = pTemplate->asParts[COMP_REPAIRUNIT];
+	psDroid->asBits[COMP_CONSTRUCT].nStat = pTemplate->asParts[COMP_CONSTRUCT];
 }
 
 

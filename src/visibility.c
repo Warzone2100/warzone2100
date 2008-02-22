@@ -498,60 +498,12 @@ found:
 /* Find out what can see this object */
 void processVisibility(BASE_OBJECT *psObj)
 {
-	DROID		*psDroid;
-	STRUCTURE	*psBuilding;
-	UDWORD		i, maxPower, ecmPoints;
-	ECM_STATS	*psECMStats;
+	UDWORD		i;
 	BOOL		prevVis[MAX_PLAYERS], currVis[MAX_PLAYERS];
 	SDWORD		visLevel;
 	BASE_OBJECT	*psViewer;
 	MESSAGE		*psMessage;
 	UDWORD		player, ally;
-
-	// calculate the ecm power for the object based on other ECM's in the area
-
-	maxPower = 0;
-
-	// set the current ecm power
-	switch (psObj->type)
-	{
-	case OBJ_DROID:
-		psDroid = (DROID *)psObj;
-		psECMStats = asECMStats + psDroid->asBits[COMP_ECM].nStat;
-		ecmPoints = ecmPower(psECMStats, psDroid->player);
-		if (ecmPoints < maxPower)
-		{
-			psDroid->ECMMod = maxPower;
-		}
-		else
-		{
-			psDroid->ECMMod = ecmPoints;
-			maxPower = psDroid->ECMMod;
-		}
-		// innate cyborg bonus
-		if (cyborgDroid((DROID*)psObj))
-		{
-			psDroid->ECMMod += 500;
-		}
-		break;
-	case OBJ_STRUCTURE:
-		psBuilding = (STRUCTURE *)psObj;
-		psECMStats = psBuilding->pStructureType->pECM;
-		if (psECMStats && psECMStats->power > maxPower)
-		{
-			psBuilding->ecmPower = (UWORD)psECMStats->power;
-		}
-		else
-		{
-			psBuilding->ecmPower = (UWORD)maxPower;
-			maxPower = psBuilding->ecmPower;
-		}
-		break;
-	case OBJ_FEATURE:
-	default:
-		// no ecm's on features
-		break;
-	}
 
 	// initialise the visibility array
 	for (i=0; i<MAX_PLAYERS; i++)

@@ -448,10 +448,7 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 		{
 			psDroid = (DROID *)psViewer;
 			//must be a CB sensor
-			/*if (asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type ==
-				INDIRECT_CB_SENSOR || asSensorStats[psDroid->asBits[COMP_SENSOR].
-				nStat].type == VTOL_CB_SENSOR)*/
-            if (cbSensorDroid(psDroid))
+			if (cbSensorDroid(psDroid))
 			{
 				sensorRange = asSensorStats[psDroid->asBits[COMP_SENSOR].
 					nStat].range;

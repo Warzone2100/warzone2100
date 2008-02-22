@@ -441,6 +441,7 @@ typedef struct _sensor_upgrade
 typedef struct _ecm_upgrade
 {
 	UWORD           power;
+	UDWORD		range;
 } ECM_UPGRADE;
 
 /*repair stats which can be upgraded by research*/

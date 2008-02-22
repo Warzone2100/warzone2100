@@ -82,6 +82,7 @@ static UDWORD	maxBodyPoints;
 static UDWORD	maxSensorRange;
 static UDWORD	maxSensorPower;
 static UDWORD	maxECMPower;
+static UDWORD	maxECMRange;
 static UDWORD	maxConstPoints;
 static UDWORD	maxRepairPoints;
 static UDWORD	maxWeaponRange;
@@ -105,6 +106,7 @@ static void setMaxBodyPower(UDWORD power);
 static void setMaxBodyPoints(UDWORD points);
 static void setMaxSensorRange(UDWORD range);
 static void setMaxSensorPower(UDWORD power);
+static void setMaxECMRange(UDWORD power);
 static void setMaxECMPower(UDWORD power);
 static void setMaxConstPoints(UDWORD points);
 static void setMaxRepairPoints(UDWORD repair);
@@ -193,7 +195,7 @@ void statsInitVars(void)
 
 	// init the max values
 	maxComponentWeight = maxBodyArmour = maxBodyPower =
-        maxBodyPoints = maxSensorRange = maxSensorPower = maxECMPower =
+        maxBodyPoints = maxSensorRange = maxSensorPower = maxECMPower = maxECMRange =
         maxConstPoints = maxRepairPoints = maxWeaponRange = maxWeaponDamage =
         maxPropulsionSpeed = 0;
 }
@@ -1306,11 +1308,11 @@ BOOL loadECMStats(const char *pECMData, UDWORD bufferSize)
 		location[0] = '\0';
 		//read the data into the storage - the data is delimeted using comma's
 		sscanf(pECMData,"%[^','],%[^','],%d,%d,%d,%d,%d,%d,%[^','],%[^','],\
-			%[^','],%d,%d",
+			%[^','],%d,%d,%d",
 			(char*)&ECMName, (char*)&techLevel, &psStats->buildPower,&psStats->buildPoints,
 			&psStats->weight, &psStats->hitPoints, &psStats->systemPoints,
 			&psStats->body,	(char*)&GfxFile, (char*)&mountGfx, (char*)&location, &psStats->power,
-			&designable);
+			&psStats->range, &designable);
 
 		// set a default ECM range for now
 		psStats->range = TILE_UNITS * 8;
@@ -1383,6 +1385,7 @@ BOOL loadECMStats(const char *pECMData, UDWORD bufferSize)
 		if (psStats->design)
 		{
 			setMaxECMPower(psStats->power);
+			setMaxECMRange(psStats->range);
 			setMaxComponentWeight(psStats->weight);
 		}
 
@@ -3088,6 +3091,12 @@ UDWORD	ecmPower(ECM_STATS *psStats, UBYTE player)
 	return (UWORD)(psStats->power + (psStats->power * asECMUpgrade[player].power)/100);
 }
 
+/*Access functions for the upgradeable stats of a ECM*/
+UDWORD	ecmRange(ECM_STATS *psStats, UBYTE player)
+{
+	return (UWORD)(psStats->range + (psStats->range * asECMUpgrade[player].range)/100);
+}
+
 /*Access functions for the upgradeable stats of a repair*/
 UDWORD	repairPoints(REPAIR_STATS *psStats, UBYTE player)
 {
@@ -3244,6 +3253,18 @@ void setMaxECMPower(UDWORD power)
 UDWORD getMaxECMPower(void)
 {
     return maxECMPower;
+}
+
+void setMaxECMRange(UDWORD power)
+{
+    if (power > maxECMRange)
+    {
+        maxECMPower = power;
+    }
+}
+UDWORD getMaxECMRange(void)
+{
+    return maxECMRange;
 }
 
 void setMaxConstPoints(UDWORD points)

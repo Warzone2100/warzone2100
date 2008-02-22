@@ -92,7 +92,6 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 	BOOL				electronic = FALSE;
 	STRUCTURE			*targetStructure;
 	WEAPON_EFFECT		weaponEffect;
-	DROID				*friendlyDroid;
 
 	//don't bother looking if empty vtol droid
 	if (vtolEmpty(psDroid))
@@ -135,7 +134,7 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 			{
 				if(friendlyObj->type == OBJ_DROID)
 				{
-					friendlyDroid = ((DROID *)friendlyObj);
+					DROID	*friendlyDroid = (DROID *)friendlyObj;
 
 					/* See if friendly droid has a target */
 					tempTarget = friendlyDroid->psActionTarget[0];
