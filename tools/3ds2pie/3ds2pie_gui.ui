@@ -6,281 +6,183 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>226</height>
+    <height>237</height>
    </rect>
-  </property>
-  <property name="minimumSize" >
-   <size>
-    <width>400</width>
-    <height>226</height>
-   </size>
-  </property>
-  <property name="maximumSize" >
-   <size>
-    <width>400</width>
-    <height>226</height>
-   </size>
   </property>
   <property name="windowTitle" >
    <string>3ds2pie</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox" >
-   <property name="geometry" >
-    <rect>
-     <x>30</x>
-     <y>190</y>
-     <width>341</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="orientation" >
-    <enum>Qt::Horizontal</enum>
-   </property>
-   <property name="standardButtons" >
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="inputFile_browse" >
-   <property name="geometry" >
-    <rect>
-     <x>300</x>
-     <y>20</y>
-     <width>91</width>
-     <height>27</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>Browse</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="outputFile_browse" >
-   <property name="geometry" >
-    <rect>
-     <x>300</x>
-     <y>50</y>
-     <width>91</width>
-     <height>27</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>Browse</string>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="swapYZ" >
-   <property name="geometry" >
-    <rect>
-     <x>10</x>
-     <y>140</y>
-     <width>161</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="toolTip" >
-    <string>Assume that 'Z' denotes "up" direction
+  <layout class="QGridLayout" >
+   <item row="0" column="0" >
+    <layout class="QGridLayout" >
+     <item row="0" column="1" >
+      <widget class="QLineEdit" name="inputFile_edit" >
+       <property name="toolTip" >
+        <string>Path to the 3DS file</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" >
+      <widget class="QLineEdit" name="outputFile_edit" >
+       <property name="toolTip" >
+        <string>Path to the PIE file</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1" >
+      <widget class="QSpinBox" name="texturePage_edit" >
+       <property name="toolTip" >
+        <string>Texture page to use</string>
+       </property>
+       <property name="prefix" >
+        <string>page-</string>
+       </property>
+       <property name="minimum" >
+        <number>1</number>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1" >
+      <widget class="QSlider" name="scale_slider" >
+       <property name="toolTip" >
+        <string>Scale for model</string>
+       </property>
+       <property name="maximum" >
+        <number>9999</number>
+       </property>
+       <property name="value" >
+        <number>1</number>
+       </property>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2" >
+      <widget class="QPushButton" name="inputFile_browse" >
+       <property name="text" >
+        <string>Browse</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2" >
+      <widget class="QPushButton" name="outputFile_browse" >
+       <property name="text" >
+        <string>Browse</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2" >
+      <widget class="QDoubleSpinBox" name="scale_spinbox" >
+       <property name="toolTip" >
+        <string>Scale for model</string>
+       </property>
+       <property name="maximum" >
+        <double>99.989999999999995</double>
+       </property>
+       <property name="value" >
+        <double>1.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" >
+      <widget class="QLabel" name="inputFile" >
+       <property name="text" >
+        <string>Input file</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" >
+      <widget class="QLabel" name="outputFile" >
+       <property name="text" >
+        <string>Output file</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0" >
+      <widget class="QLabel" name="texturePage" >
+       <property name="text" >
+        <string>Texture page</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0" >
+      <widget class="QLabel" name="scale" >
+       <property name="text" >
+        <string>Scale</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0" >
+    <layout class="QGridLayout" >
+     <item row="0" column="0" >
+      <widget class="QCheckBox" name="swapYZ" >
+       <property name="toolTip" >
+        <string>Assume that 'Z' denotes "up" direction
 (Should be enabled for 3DS Max created files)</string>
-   </property>
-   <property name="text" >
-    <string>Swap Y/Z</string>
-   </property>
-   <property name="checked" >
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="invertUV" >
-   <property name="geometry" >
-    <rect>
-     <x>10</x>
-     <y>160</y>
-     <width>161</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="toolTip" >
-    <string>Invert the vertical point of origin for UV coordinates
+       </property>
+       <property name="text" >
+        <string>Swap Y/Z</string>
+       </property>
+       <property name="checked" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1" >
+      <widget class="QCheckBox" name="reverseWinding" >
+       <property name="toolTip" >
+        <string>Reverse the winding of all polygon faces
 (Should be enabled for 3DS Max created files)</string>
-   </property>
-   <property name="text" >
-    <string>Invert U/V</string>
-   </property>
-   <property name="checked" >
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="reverseWinding" >
-   <property name="geometry" >
-    <rect>
-     <x>180</x>
-     <y>140</y>
-     <width>211</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="toolTip" >
-    <string>Reverse the winding of all polygon faces
+       </property>
+       <property name="text" >
+        <string>Reverse polygon winding</string>
+       </property>
+       <property name="checked" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" >
+      <widget class="QCheckBox" name="invertUV" >
+       <property name="toolTip" >
+        <string>Invert the vertical point of origin for UV coordinates
 (Should be enabled for 3DS Max created files)</string>
-   </property>
-   <property name="text" >
-    <string>Reverse polygon winding</string>
-   </property>
-   <property name="checked" >
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="twoSidedPolys" >
-   <property name="geometry" >
-    <rect>
-     <x>180</x>
-     <y>160</y>
-     <width>211</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="toolTip" >
-    <string>Use both sides of Polygons
+       </property>
+       <property name="text" >
+        <string>Invert U/V</string>
+       </property>
+       <property name="checked" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" >
+      <widget class="QCheckBox" name="twoSidedPolys" >
+       <property name="toolTip" >
+        <string>Use both sides of Polygons
 (Not used in Warzone 2100)</string>
-   </property>
-   <property name="text" >
-    <string>Two sided polygons</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="inputFile_edit" >
-   <property name="geometry" >
-    <rect>
-     <x>100</x>
-     <y>20</y>
-     <width>191</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="toolTip" >
-    <string>Path to the 3DS file</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="outputFile_edit" >
-   <property name="geometry" >
-    <rect>
-     <x>100</x>
-     <y>50</y>
-     <width>191</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="toolTip" >
-    <string>Path to the PIE file</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="inputFile" >
-   <property name="geometry" >
-    <rect>
-     <x>10</x>
-     <y>20</y>
-     <width>81</width>
-     <height>18</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>Input file</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="outputFile" >
-   <property name="geometry" >
-    <rect>
-     <x>10</x>
-     <y>50</y>
-     <width>81</width>
-     <height>18</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>Output file</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="texturePage" >
-   <property name="geometry" >
-    <rect>
-     <x>10</x>
-     <y>80</y>
-     <width>81</width>
-     <height>18</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>Texture page</string>
-   </property>
-  </widget>
-  <widget class="QSpinBox" name="texturePage_edit" >
-   <property name="geometry" >
-    <rect>
-     <x>100</x>
-     <y>80</y>
-     <width>91</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="toolTip" >
-    <string>Texture page to use</string>
-   </property>
-   <property name="prefix" >
-    <string>page-</string>
-   </property>
-   <property name="minimum" >
-    <number>1</number>
-   </property>
-  </widget>
-  <widget class="QLabel" name="scale" >
-   <property name="geometry" >
-    <rect>
-     <x>10</x>
-     <y>110</y>
-     <width>81</width>
-     <height>18</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>Scale</string>
-   </property>
-  </widget>
-  <widget class="QSlider" name="scale_slider" >
-   <property name="geometry" >
-    <rect>
-     <x>99</x>
-     <y>110</y>
-     <width>191</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="toolTip" >
-    <string>Scale for model</string>
-   </property>
-   <property name="maximum" >
-    <number>9999</number>
-   </property>
-   <property name="value" >
-    <number>1</number>
-   </property>
-   <property name="orientation" >
-    <enum>Qt::Horizontal</enum>
-   </property>
-  </widget>
-  <widget class="QDoubleSpinBox" name="scale_spinbox" >
-   <property name="geometry" >
-    <rect>
-     <x>300</x>
-     <y>110</y>
-     <width>91</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="toolTip" >
-    <string>Scale for model</string>
-   </property>
-   <property name="maximum" >
-    <double>99.989999999999995</double>
-   </property>
-   <property name="value" >
-    <double>1.000000000000000</double>
-   </property>
-  </widget>
+       </property>
+       <property name="text" >
+        <string>Two sided polygons</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="0" >
+    <widget class="QDialogButtonBox" name="buttonBox" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons" >
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections>
@@ -291,12 +193,12 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>248</x>
-     <y>254</y>
+     <x>199</x>
+     <y>214</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>157</x>
-     <y>274</y>
+     <x>199</x>
+     <y>119</y>
     </hint>
    </hints>
   </connection>
@@ -307,12 +209,12 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>316</x>
-     <y>260</y>
+     <x>199</x>
+     <y>214</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>286</x>
-     <y>274</y>
+     <x>199</x>
+     <y>119</y>
     </hint>
    </hints>
   </connection>
