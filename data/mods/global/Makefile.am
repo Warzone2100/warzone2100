@@ -1,5 +1,3 @@
-SUBDIRS = aivolution/multiplay/skirmish
-
 %.wz: %
 	(cd $(srcdir)/$< && zip -ru0 $(abs_builddir)/$@ $(filter-out $<,$(?:$</%=%)) -x '*svn*')
 	zip -T $@
