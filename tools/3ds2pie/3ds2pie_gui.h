@@ -34,6 +34,9 @@ class Gui3ds2pie : public QDialog, private Ui::Gui3ds2pie
 	private slots:
 		virtual void accept();
 
+		void sliderChanged(int value);
+		void spinboxChanged(double value);
+
 		void browseInputFile();
 		void browseOutputFile();
 

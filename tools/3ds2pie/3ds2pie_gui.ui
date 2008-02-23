@@ -6,8 +6,20 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>200</height>
+    <height>226</height>
    </rect>
+  </property>
+  <property name="minimumSize" >
+   <size>
+    <width>400</width>
+    <height>226</height>
+   </size>
+  </property>
+  <property name="maximumSize" >
+   <size>
+    <width>400</width>
+    <height>226</height>
+   </size>
   </property>
   <property name="windowTitle" >
    <string>3ds2pie</string>
@@ -16,7 +28,7 @@
    <property name="geometry" >
     <rect>
      <x>30</x>
-     <y>160</y>
+     <y>190</y>
      <width>341</width>
      <height>32</height>
     </rect>
@@ -58,7 +70,7 @@
    <property name="geometry" >
     <rect>
      <x>10</x>
-     <y>110</y>
+     <y>140</y>
      <width>161</width>
      <height>22</height>
     </rect>
@@ -78,7 +90,7 @@
    <property name="geometry" >
     <rect>
      <x>10</x>
-     <y>130</y>
+     <y>160</y>
      <width>161</width>
      <height>22</height>
     </rect>
@@ -98,7 +110,7 @@
    <property name="geometry" >
     <rect>
      <x>180</x>
-     <y>110</y>
+     <y>140</y>
      <width>211</width>
      <height>22</height>
     </rect>
@@ -118,7 +130,7 @@
    <property name="geometry" >
     <rect>
      <x>180</x>
-     <y>130</y>
+     <y>160</y>
      <width>211</width>
      <height>22</height>
     </rect>
@@ -213,6 +225,60 @@
    </property>
    <property name="minimum" >
     <number>1</number>
+   </property>
+  </widget>
+  <widget class="QLabel" name="scale" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>110</y>
+     <width>81</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Scale</string>
+   </property>
+  </widget>
+  <widget class="QSlider" name="scale_slider" >
+   <property name="geometry" >
+    <rect>
+     <x>99</x>
+     <y>110</y>
+     <width>191</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="toolTip" >
+    <string>Scale for model</string>
+   </property>
+   <property name="maximum" >
+    <number>9999</number>
+   </property>
+   <property name="value" >
+    <number>1</number>
+   </property>
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QDoubleSpinBox" name="scale_spinbox" >
+   <property name="geometry" >
+    <rect>
+     <x>300</x>
+     <y>110</y>
+     <width>91</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="toolTip" >
+    <string>Scale for model</string>
+   </property>
+   <property name="maximum" >
+    <double>99.989999999999995</double>
+   </property>
+   <property name="value" >
+    <double>1.000000000000000</double>
    </property>
   </widget>
  </widget>
