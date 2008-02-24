@@ -52,11 +52,6 @@
 #include "lib/script/script.h"
 
 // ////////////////////////////////////////////////////////////////////////////
-// externs
-extern void			intDisplayPlainForm	(WIDGET *psWidget, UDWORD xOffset,
-										 UDWORD yOffset, PIELIGHT *pColours);
-
-// ////////////////////////////////////////////////////////////////////////////
 // defines
 #define	IDLIMITS				22000
 #define IDLIMITS_RETURN			(IDLIMITS+1)
@@ -76,6 +71,7 @@ extern void			intDisplayPlainForm	(WIDGET *psWidget, UDWORD xOffset,
 #define BARWIDTH				480
 #define BARHEIGHT				40
 #define BUTPERFORM				8
+
 // ////////////////////////////////////////////////////////////////////////////
 // protos.
 
@@ -85,7 +81,7 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 
 static BOOL useStruct(UDWORD count,UDWORD i)
 {
-//	STRUCTURE_STATS	*pStat = asStructureStats+i;
+	ASSERT(i < numStructureStats, "Bad structure for structure limit: %d", (int)i);
 
 	if(count >= (4*BUTPERFORM))
 	{
@@ -144,20 +140,6 @@ BOOL startLimitScreen(void)
 	widgAddForm(psWScreen, &sFormInit);
 
 	// return button.
-//	addMultiBut(psWScreen,IDLIMITS,IDLIMITS_RETURN,
-//					8,5,
-//					iV_GetImageWidth(FrontImages,IMAGE_RETURN),
-//					iV_GetImageHeight(FrontImages,IMAGE_RETURN),
-//					_("Return To Previous Screen"),IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);
-
-
-	// ok button
-//	addMultiBut(psWScreen,IDLIMITS,IDLIMITS_OK,
-//					LIMITS_OKX,LIMITS_OKY,
-//					iV_GetImageWidth(FrontImages,IMAGE_BIGOK),
-//					iV_GetImageHeight(FrontImages,IMAGE_BIGOK),
-//					_("Accept Settings"),IMAGE_BIGOK,IMAGE_BIGOK,TRUE);
-
 	addMultiBut(psWScreen,IDLIMITS,IDLIMITS_RETURN,
 					LIMITS_OKX-40,LIMITS_OKY,
 					iV_GetImageWidth(FrontImages,IMAGE_RETURN),
@@ -171,8 +153,6 @@ BOOL startLimitScreen(void)
 					iV_GetImageWidth(FrontImages,IMAGE_BIGOK),
 					iV_GetImageHeight(FrontImages,IMAGE_BIGOK),
 					_("Accept Settings"),IMAGE_OK,IMAGE_OK,TRUE);
-
-
 
 	// Count the number of minor tabs needed
 	numButtons = 0;
@@ -240,7 +220,6 @@ BOOL startLimitScreen(void)
 						asStructLimits[0][i].limit, 0);
 			sButInit.id	++;
 
-
 			if (sButInit.y + BARHEIGHT + 2 > (BUTPERFORM*(BARHEIGHT+2) - 4) )
 			{
 				sButInit.y = 5;
@@ -283,13 +262,10 @@ void runLimitScreen(void)
 		case IDLIMITS_RETURN:
 			// reset the sliders..
 			eventReset();
-//			resReleaseBlockData(500);
 			resReleaseBlockData(501);
 			resReleaseBlockData(502);
-//			eventReset();
 			bForceEditorLoaded = FALSE;
 			changeTitleMode(MULTIOPTION);
-
 
 			// make some noize.
 			if(!ingame.localOptionsReceived)
@@ -300,7 +276,6 @@ void runLimitScreen(void)
 			{
 				sendTextMessage("Limits Reset To Default Values",TRUE);
 			}
-
 
 			break;
 		case IDLIMITS_OK:
@@ -318,7 +293,7 @@ void runLimitScreen(void)
 // ////////////////////////////////////////////////////////////////////////////
 void createLimitSet(void)
 {
-	UDWORD				i, numchanges = 0;
+	UDWORD			i, numchanges = 0, bufSize;
 	MULTISTRUCTLIMITS	*pEntry;
 
 	// Free the old set if required
@@ -340,9 +315,12 @@ void createLimitSet(void)
 	}
 
 	// Allocate some memory for the changes
-	pEntry = malloc(numchanges * sizeof(MULTISTRUCTLIMITS));
+	bufSize = numStructureStats * sizeof(MULTISTRUCTLIMITS);
+	pEntry = malloc(bufSize);
+	memset(pEntry, 255, bufSize);
 
 	// Prepare chunk
+	ASSERT(numStructureStats < UBYTE_MAX, "Too many structure stats");
 	for (i = 0; i < numStructureStats; i++)
 	{
 		if (asStructLimits[0][i].limit != LOTS_OF)
@@ -355,7 +333,7 @@ void createLimitSet(void)
 	ingame.numStructureLimits	= numchanges;
 	ingame.pStructureLimits		= pEntry;
 
-	sendOptions(0,0);
+	sendOptions(0, 0);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -372,7 +350,7 @@ void applyLimitSet(void)
 	// Get the limits and decode
 	for (i = 0; i < ingame.numStructureLimits; i++)
  	{
-		unsigned int id = pEntry[i].id;
+		UBYTE id = pEntry[i].id;
 		
 		// So long as the ID is valid
 		if (id < numStructureStats)
