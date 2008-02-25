@@ -594,11 +594,7 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 {
 	GLint matrix_mode = 0;
 
-#ifdef WZ_OS_MAC
 	pie_SetTexturePage(0);
-#else
-	pie_SetTexturePage(-1);
-#endif
 
 	glGetIntegerv(GL_MATRIX_MODE, &matrix_mode);
 	glMatrixMode(GL_TEXTURE);
@@ -659,7 +655,7 @@ void iV_DrawTextRotatedF(float x, float y, float rotation, const char* format, .
 void iV_DrawTextF(float x, float y, const char* format, ...)
 {
 	va_list ap;
-	
+
 	va_start(ap, format);
 		iV_DrawTextFv(x, y, format, ap);
 	va_end(ap);
