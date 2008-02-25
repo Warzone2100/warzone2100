@@ -1,6 +1,18 @@
-0000-00-00: SVN
+0000-00-00: Version 2.1_beta2
+ * General:
+   * Fix: Crash (integer divide by zero) when starting a multiplayer game after playing a single player game.
+   * Fix: A memory corruption in structure limits could cause destroy button to disappear (among other things).
+ * Graphics:
+   * Change: Reduce the number of atmospheric particles generated and lower the CPU usage.
+   * Fix: Briefings were not displayed at high resolutions. (bug #11121)
+   * Fix: Fonts were not displayed with QuesoGLC 0.7.0. (patch #961)
+ * AI:
+   * Fix: Restarting a map caused "unable to load experience" messages. (bug #11085)
+   * Fix: Upgrade power generator with powModule instead of resModule. (bug #11122)
+ * Balancing (Multiplayer):
+   * Change: Fortress balacing adapted
 
-2008-02-17: Version 2.1-beta1
+2008-02-17: Version 2.1_beta1
  * General:
    * New: Video options menu to allow for things such as resolution to be
           changed without needing to manually edit the config file.
