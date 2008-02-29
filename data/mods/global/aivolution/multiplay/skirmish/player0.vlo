@@ -308,19 +308,6 @@ run
 	gatewayDef[4]		STRUCTURESTAT		"WallTower-HPVcannon"	//HPV
 	gatewayDef[5]		STRUCTURESTAT		"WallTower-Rail3"	//Gauss
 
-/*
-	//structures to include into low-power economy test
-	numEconomySt		INT			8
-	economySt[0]		STRUCTURESTAT		"A0LightFactory"
-	economySt[1]		STRUCTURESTAT		"A0ResearchFacility"
-	economySt[2]		STRUCTURESTAT		"A0CommandCentre"
-	economySt[3]		STRUCTURESTAT		"A0PowerGenerator"
-	economySt[4]		STRUCTURESTAT		"A0VTolFactory1"
-	economySt[5]		STRUCTURESTAT		"A0PowMod1"
-	economySt[6]		STRUCTURESTAT		"A0FacMod1"
-	economySt[7]		STRUCTURESTAT		"A0ResearchModule1"
-*/
-
 	//upgrade structures
 	powMod			STRUCTURESTAT		"A0PowMod1"
 	facMod			STRUCTURESTAT		"A0FacMod1"
@@ -344,7 +331,7 @@ run
 	cybEngineer		TEMPLATE			"Cyb-ComEng"
 
 	/* Light Templates */
-	numTemplates[0]	INT		21
+	numTemplates[0]	INT		28
 
 	tmpl[0][0]	TEMPLATE	"ViperPODWheels"		//"ViperMG01Wheels"		//MG
 	tmpl[0][1]	TEMPLATE	"ViperMRLWheels"		//"ViperMG02Wheels"		//TMG
@@ -366,39 +353,68 @@ run
 	
 	tmpl[0][16]	TEMPLATE	"H-Scorp-Trk-HC"		//"Cobra-Hover-HC"
 	tmpl[0][17]	TEMPLATE	"H-Scorp-Trk-HC"		//"Cobra-Hover-HC"
-	//Campaign 2
+
+	// Mantis
 	tmpl[0][18]	TEMPLATE	"MantisTrkHC"
 	tmpl[0][19]	TEMPLATE	"MantisTKTracks"
 	tmpl[0][20]	TEMPLATE	"MantisScourgeTracks"
 
-	/* heavy templates */
-	numTemplates[1]	INT		24
-	tmpl[1][0]	TEMPLATE	"ViperMG01Wheels"
-	tmpl[1][1]	TEMPLATE	"ViperMG02Wheels"
-	tmpl[1][2]	TEMPLATE	"ViperHMGWheels"
-	tmpl[1][3]	TEMPLATE	"ViperHMGTracks"		//"ViperHMGWheels"
-	tmpl[1][4]	TEMPLATE	"ViperHMGTracks"		//HMG
-	tmpl[1][5]	TEMPLATE	"SK-Cobra-Hover-Lancer"		//"ViperLtA-Twheels"
-	tmpl[1][6]	TEMPLATE	"ViperHMGTracks"		//HMG
-	tmpl[1][7]	TEMPLATE	"ViperHMGTracks"		//HMG
-	tmpl[1][8]	TEMPLATE	"CobraHvyMortarHalftrack"
-	tmpl[1][9]	TEMPLATE	"SK-Cobra-Hover-Lancer"
-	tmpl[1][10]	TEMPLATE	"SK-Cobra-Hover-Lancer"		//"ViperLtA-Twheels"
+	// Python
+	tmpl[0][21]	TEMPLATE	"Sk-PythonHvCanTrack"		// Python HC
+	tmpl[0][22]	TEMPLATE	"PythonScourgeTracks"		// Python Scourge
+	tmpl[0][23]	TEMPLATE	"PythonGaussTracks"			// Python Gauss
+	tmpl[0][24]	TEMPLATE	"PythonPulseTracks"			// Python Pulse
+
+	// Gauss
+	tmpl[0][25]	TEMPLATE	"SK-Tiger-Track-Gauss"		// Tiger Gauss
+	tmpl[0][26]	TEMPLATE	"TigerPulseTracks"			// Tiger Pulse
+	tmpl[0][27]	TEMPLATE	"TigerHvLaserTracks"		// Tiger Heavy Laser
+
+	/* Heavy Templates */
+	numTemplates[1]	INT		33
+	tmpl[1][0]	TEMPLATE	"ViperPODWheels"
+	tmpl[1][1]	TEMPLATE	"ViperMRLWheels"
+	tmpl[1][2]	TEMPLATE	"ViperPODWheels"
+	tmpl[1][3]	TEMPLATE	"CobraPODHTracks"		//"ViperHMGWheels"
+	tmpl[1][4]	TEMPLATE	"CobraMRLHalftrack"		//HMG
+	tmpl[1][5]	TEMPLATE	"CobraPODHTracks"		//"ViperLtA-Twheels"
+	tmpl[1][6]	TEMPLATE	"CobraLtA-Thalftrack"		//HMG
+	tmpl[1][7]	TEMPLATE	"CobraLtA-Thalftrack"		//HMG
+	tmpl[1][8]	TEMPLATE	"CobraLtA-Thalftrack"
+	tmpl[1][9]	TEMPLATE	"CobraTrkLancer"
+	tmpl[1][10]	TEMPLATE	"CobraTrkLancer"		//"ViperLtA-Twheels"
 	tmpl[1][11]	TEMPLATE	"CobraHMGTracks"		//"ViperHMGTracks"
 	tmpl[1][12]	TEMPLATE	"CobraHMGTracks"		//"ViperHMGTracks"
-	tmpl[1][13]	TEMPLATE	"SK-Cobra-Hover-HMG"
-	tmpl[1][14]	TEMPLATE	"SK-Cobra-Hover-Lancer"
-	tmpl[1][15]	TEMPLATE	"CobraHMGTracks"		//"SK-Cobra-Hover-HMG"
+	tmpl[1][13]	TEMPLATE	"CobraHMGTracks"
+	tmpl[1][14]	TEMPLATE	"H-Scorp-Trk-Lancer"
+	tmpl[1][15]	TEMPLATE	"H-Scorp-Trk-Lancer"		//"SK-Cobra-Hover-HMG"
 
-	tmpl[1][16]	TEMPLATE	"PythonHvyCnTrks"		//"SK-Python-Hover-Hcannon"
-	tmpl[1][17]	TEMPLATE	"PythonHvyCnTrks"		//"SK-Python-Hover-Hcannon"
-	//Campaign 2
-	tmpl[1][18]	TEMPLATE	"SK-Tiger-Track-Hcannon"	//"Scourge-Mantis-H"
-	tmpl[1][19]	TEMPLATE	"SK-Tiger-Track-TK"		//"ViperLtA-Twheels"
-	tmpl[1][20]	TEMPLATE	"SK-Tiger-Track-Hcannon"	//"SK-Mantis-Hover-Hcannon"
-	tmpl[1][21]	TEMPLATE	"SK-Veng-Track-Scourge"		//"SK-Cobra-Hover-Lancer"
-	tmpl[1][22]	TEMPLATE	"SK-Veng-Track-PulseLsr"	//"SK-Mantis-Hover-Hcannon"
-	tmpl[1][23]	TEMPLATE	"SK-Veng-Track-Gauss"		//"Scourge-Mantis-H"
+	// Mantis
+	tmpl[1][16]	TEMPLATE	"MantisTrkHC"		//"SK-Python-Hover-Hcannon"
+	tmpl[1][17]	TEMPLATE	"MantisTKTracks"		//"SK-Python-Hover-Hcannon"
+	tmpl[1][18]	TEMPLATE	"MantisScourgeTracks"	//"Scourge-Mantis-H"
+
+	// Python
+	tmpl[1][19]	TEMPLATE	"Sk-PythonHvCanTrack"		// Python HC
+	tmpl[1][20]	TEMPLATE	"PythonScourgeTracks"		// Python Scourge
+	tmpl[1][21]	TEMPLATE	"PythonGaussTracks"			// Python Gauss
+	tmpl[1][22]	TEMPLATE	"PythonPulseTracks"			// Python Pulse
+
+	// Tiger
+	tmpl[1][23]	TEMPLATE	"SK-Tiger-Track-Gauss"		// Tiger Gauss
+	tmpl[1][24]	TEMPLATE	"TigerPulseTracks"			// Tiger Pulse
+	tmpl[1][25]	TEMPLATE	"TigerHvLaserTracks"		// Tiger Heavy Laser
+
+	// Vengeance
+	tmpl[1][26]	TEMPLATE	"SK-Veng-Track-Scourge"
+	tmpl[1][27]	TEMPLATE	"SK-Veng-Track-PulseLsr"
+	tmpl[1][28]	TEMPLATE	"SK-Veng-Track-Gauss"
+	tmpl[1][29]	TEMPLATE	"SK-Veng-Track-HvyLaser"
+
+	// Wyvern
+	tmpl[1][30]	TEMPLATE	"WyvernGaussTracks"
+	tmpl[1][31]	TEMPLATE	"WyvernPulseTracks"
+	tmpl[1][32]	TEMPLATE	"WyvernHvLaserTracks"
 
 	numRepairTmpl	INT		3
 	//tmplRep[0]	TEMPLATE	"ViperRepairWheels"
@@ -419,5 +435,6 @@ run
 	tmplCmd[0]		TEMPLATE	"Cobra-Trk-Com"
 	tmplCmd[1]		TEMPLATE	"Scorp-Trk-Com"
 	tmplCmd[2]		TEMPLATE	"Mantis-Trk-Com"
+	//PythonComTracks
 
 }
