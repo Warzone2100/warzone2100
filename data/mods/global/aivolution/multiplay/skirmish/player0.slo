@@ -663,7 +663,7 @@ function void 	setState(int _newState);
 function void	vsetState(int _newState);
 function void	toggleDebugMenu();
 function void	shutDown();
-function void	oneTimeInitialize();
+function void	oneTimeInitialize(bool bAIControlled);
 function bool	haveMinimalStructures();
 function void	checkMinimalStructures();
 function void	updateNumDefenders();
@@ -740,6 +740,8 @@ function DROID	closestEnemyDroidByType(int _x, int _y, int _range, int _type);
 //event powerup(CALL_GAMEINIT)
 event powerup(wait, 5)
 {
+	local bool bMyRespons,bNotLost;
+	
 	DEBUG_ALL = FALSE;
 
 	DEBUG_MSG = DEBUG_ALL;		//isHumanPlayer(player);
@@ -779,25 +781,19 @@ event powerup(wait, 5)
 	groupAddArea(tempGr, player, 0, 0, (mapWidth*128), (mapHeight*128));
 	structure = getStructure(fac, me);
 
-	bResult = TRUE;
+	bNotLost = TRUE;
 	if((tempGr.members == 0) and (structure == NULLOBJECT))
 	{
-		bResult = FALSE;
+		bNotLost = FALSE;
 	}
 
-	//do common one-time initialization only if this player is loaded
-	if(bResult){
-		oneTimeInitialize();
-	}
-
+	//find out if this player is controlled by AI
+	bMyRespons = FALSE;
 	if(myResponsibility(me) and ((me != selectedPlayer) or DEBUG_OBSERVE))
 	{
-		if(bResult)	//alive?
-		{
-			mainInitialize();
-		}
-		else
-		{
+		if(bNotLost){	//alive?
+			bMyRespons = TRUE;
+		}else{
 			dbg("deactivated", me);
 		}
 	}
@@ -805,11 +801,24 @@ event powerup(wait, 5)
 	{
 		dbg("not my responsibility", me);
 	}
+
+	//do common one-time initialization only if this player is loaded
+	if(bNotLost){
+		oneTimeInitialize(bMyRespons);
+	}
+
+	//only load if AI is active
+	if(bMyRespons)
+	{
+		mainInitialize();
+	}
 }
 
 /* Initialization for both AI and human player, to be performed once only */
-function void oneTimeInitialize()
+function void oneTimeInitialize(bool bAIControlled)
 {
+	local int loadExperienceStatus;
+
 	/* Decide what debug info to output to the watch window */
 	watchWindowDebug = WATCH_DEBUG_REINF;
 
@@ -833,9 +842,25 @@ function void oneTimeInitialize()
 	// remember base location
 	storeBase();
 
-	if(bLearn)
+	if(bLearn and bAIControlled)
 	{
-		loadPlayerAIExperience(me, true);
+		loadExperienceStatus = loadPlayerAIExperience(me);
+
+		if(DEBUG_MSG)
+		{
+			if(loadExperienceStatus == 0)		//loaded successfully
+			{
+				dbg("Experience loaded successfully for player " & me, me);
+			}
+			else if(loadExperienceStatus < 0)
+			{
+				dbg("No saved experience found for player " & me, me);
+			}
+			else // any error
+			{
+				dbg("Error while loading experience for player " & me, me);
+			}
+		}
 	}
 
 	/* Initialize ghost structures data */
@@ -949,27 +974,6 @@ function void oneTimeInitialize()
 	//fNumDefaultResearch = fMinResearch;
 	fNumDefaultResearch = fMinResearch;
 	fMinResearch = 2.5;
-	if(fMinResearch == 2.0){
-		dbg ("2.0", me);
-	}
-	if(2.6 == 2.0){
-		dbg ("2.6 == 2.0", me);
-	}
-	if(2.5 == 2.0){
-		dbg ("2.5 == 2.0", me);
-	}
-	if(fMinResearch == 2.5){
-		dbg ("2.5", me);
-	}
-	if(fMinResearch == 1.9){
-		dbg ("1.9", me);
-	}
-	if(fMinResearch == 1.0){
-		dbg ("1.0", me);
-	}
-
-	dbg("1.5 = " & 1.5 & ", fNumDefaultResearch = " & fNumDefaultResearch & ", fMinResearch = " & fMinResearch &
-		", F_MIN_ACTIVE_RES_FAC = " & F_MIN_ACTIVE_RES_FAC, me); 
 
 	/* Research urgency - controls how many research facilities are put to work */
 	tResUrgencyTrackInterval = (MINUTE * 7);	//How 'deep' our memory frame is, in secs - trimmed after tResUrgencyTrackInterval secs
@@ -2044,7 +2048,7 @@ function void updateMaxTrucks()
 
 function void showVersion()
 {
-	console("Aivolution AI active for player " & me & " (version " & sVer & ")");	//show to the local player
+	dbg("Aivolution AI active for player " & me & " (version " & sVer & ")", me);	//show to the local player
 }
 
 function void storeBase()
