@@ -1910,3 +1910,12 @@ CobraMRLTracks				_("Cobra Tracks Mini-Rocket Artillery")
 
 CobraInfernoHTracks			_("Cobra Inferno Half-track")
 PythonHoverHVC				_("Python HVC Hover")
+
+PythonScourgeTracks			_("Python Scourge Tracks")
+PythonGaussTracks			_("Python Gauss Cannon Tracks")
+PythonPulseTracks			_("Python Pulse Laser Tracks")
+TigerPulseTracks			_("Tiger Pulse Laser Tracks")
+TigerHvLaserTracks			_("Tiger Heavy Laser Tracks")
+WyvernGaussTracks			_("Wyvern Gauss Cannon Tracks")
+WyvernPulseTracks			_("Wyvern Pulse Laser Tracks")
+WyvernHvLaserTracks			_("Wyvern Heavy Laser Tracks")
