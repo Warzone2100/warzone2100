@@ -9,6 +9,7 @@
  * AI:
    * Fix: Restarting a map caused "unable to load experience" messages. (bug #11085)
    * Fix: Upgrade power generator with powModule instead of resModule. (bug #11122)
+   * Fix: AI opponents would use the medium yellow body all the time. (bug #11097)
  * Balancing (Multiplayer):
    * Change: Fortress balacing adapted
 
