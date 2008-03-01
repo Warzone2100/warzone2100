@@ -52,6 +52,7 @@ BOOL NETbin(char *str, uint16_t maxlen);
 
 PACKETDIR NETgetPacketDir();
 
+// FIXME: Causes tons of warnings: <enumPtr> is used unitialised in this function
 #define NETenum(enumPtr) \
 { \
 	int32_t _val = (NETgetPacketDir() == PACKET_ENCODE) ? *(enumPtr) : 0; \
