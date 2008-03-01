@@ -329,7 +329,7 @@ void pie_RenderRadar(int x, int y, int width, int height)
 	dest.y = y;
 	dest.w = width;
 	dest.h = height;
-	
+
 	// enable alpha
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -339,7 +339,7 @@ void pie_RenderRadar(int x, int y, int width, int height)
 
 void pie_LoadBackDrop(SCREENTYPE screenType)
 {
-	char	backd[128];
+	char backd[128];
 
 	//randomly load in a backdrop piccy.
 	srand( (unsigned)time(NULL) + 17 ); // Use offset since time alone doesn't work very well
@@ -347,10 +347,10 @@ void pie_LoadBackDrop(SCREENTYPE screenType)
 	switch (screenType)
 	{
 	case SCREEN_RANDOMBDROP:
-		if ( rand()%2 == 0 )
-			snprintf(backd, sizeof(backd), "texpages/bdrops/0%i-bdrop.png", rand() % 8); // Range: 0-7
+		if ( rand() % 2 == 0 )
+			snprintf(backd, sizeof(backd), "texpages/bdrops/0%i-bdrop.png", rand() % 9); // Range: 0-8
 		else
-			snprintf(backd, sizeof(backd), "texpages/bdrops/wzlogo_%i.png", rand()%5); // Range: 0-4
+			snprintf(backd, sizeof(backd), "texpages/bdrops/wzlogo_%i.png", rand() % 5); // Range: 0-4
 		break;
 	case SCREEN_MISSIONEND:
 		snprintf(backd, sizeof(backd), "texpages/bdrops/missionend.png");
