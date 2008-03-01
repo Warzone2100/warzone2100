@@ -1160,7 +1160,7 @@ function bool upgradePowGen(DROID _truck, int _maxBuilders)
 			if((numBuildSameBuilding(powModule, _powGen.x,_powGen.y) +
 			    numBuildSameBuilding(powGen, _powGen.x,_powGen.y)) < _maxBuilders)
 			{
-				orderDroidStatsLoc(_truck, DORDER_BUILD,resModule, _powGen.x,_powGen.y);	// upgrade it.
+				orderDroidStatsLoc(_truck, DORDER_BUILD, powModule, _powGen.x,_powGen.y);	// upgrade it.
 				return TRUE;
 			}
 		}
