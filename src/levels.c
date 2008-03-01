@@ -43,17 +43,11 @@
 #include "lib/ivis_common/piestate.h"
 #include "data.h"
 #include "lib/ivis_common/ivi.h"
-
-//#ifdef DEBUG
 #include "lib/script/script.h"
 #include "scripttabs.h"
-//#endif
-
-
 
 // minimum type number for a type instruction
 #define MULTI_TYPE_START	10
-
 
 // block ID number start for the current level data (as opposed to a dataset)
 #define CURRENT_DATAID		LEVEL_MAXFILES
@@ -64,11 +58,11 @@ static	char	currentLevelName[32];
 LEVEL_DATASET	*psLevels;
 
 // the currently loaded data set
-LEVEL_DATASET	*psBaseData;
-LEVEL_DATASET	*psCurrLevel;
+static LEVEL_DATASET	*psBaseData;
+static LEVEL_DATASET	*psCurrLevel;
 
 // dummy level data for single WRF loads
-LEVEL_DATASET	sSingleWRF;
+static LEVEL_DATASET	sSingleWRF;
 
 // return values from the lexer
 char *pLevToken;
@@ -88,18 +82,6 @@ enum
 	LP_GAME,		// game token received
 };
 
-/*// the current data file to parse
-static UBYTE	*pDataFile;
-static SDWORD	dataFileSize;
-
-// the current position in the data file
-static UBYTE	*pDataPtr;
-static SDWORD	levLine;
-
-// the token buffer
-#define TOKEN_MAX	255
-static char	aTokenBuff[TOKEN_MAX];
-*/
 
 // initialise the level system
 BOOL levInitialise(void)
@@ -573,64 +555,6 @@ static BOOL levLoadSingleWRF(char *pName)
 }
 
 
-// load up the base data set for a level (used by savegames)
-BOOL levLoadBaseData(char *pName)
-{
-	LEVEL_DATASET	*psNewLevel, *psBaseData;
-	SDWORD			i;
-
-	debug(LOG_WZ, "Loading base data for level %s", pName);
-
-	// find the level dataset
-	if (!levFindDataSet(pName, &psNewLevel))
-	{
-		debug( LOG_ERROR, "levLoadBaseData: couldn't find level data" );
-		abort();
-		return FALSE;
-	}
-
-	if (psNewLevel->type != LDS_CAMSTART &&
-		psNewLevel->type != LDS_MKEEP
-		&& psNewLevel->type != LDS_EXPAND &&
-		psNewLevel->type != LDS_MCLEAR &&
-		psNewLevel->type != LDS_EXPAND_LIMBO &&
-		psNewLevel->type != LDS_MKEEP_LIMBO
-		)
-	{
-		debug( LOG_ERROR, "levLoadBaseData: incorect level type" );
-		abort();
-		return FALSE;
-	}
-
-	// clear all the old data
-	levReleaseAll();
-
-	// initialise
-	if (!stageOneInitialise())
-	{
-		return FALSE;
-	}
-
-	// load up the base dataset
-	psBaseData = psNewLevel->psBaseData;
-	for(i=0; i<LEVEL_MAXFILES; i++)
-	{
-		if (psBaseData->apDataFiles[i])
-		{
-			// load the data
-			debug(LOG_WZ, "levLoadBaseData: Loading %s", psBaseData->apDataFiles[i]);
-			if (!resLoad(psBaseData->apDataFiles[i], i))
-			{
-				return FALSE;
-			}
-		}
-	}
-
-	psCurrLevel = psNewLevel;
-
-	return TRUE;
-}
-
 char *getLevelName( void )
 {
 	return(currentLevelName);
@@ -645,9 +569,6 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 	BOOL            bCamChangeSaveGame;
 
 	debug(LOG_WZ, "Loading level %s (%s)", pName, pSaveName);
-	// reset fog
-//	fogStatus = 0;
-//	pie_EnableFog(FALSE);//removed, always set by script or save game
 
 	levelLoadType = saveType;
 
@@ -847,12 +768,6 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 			{
 				return FALSE;
 			}
-
-			//we now need to go to the next level
-			//psNewLevel = psChangeLevel;
-			//psChangeLevel = NULL;
-
-			//stageTwoShutDown??
 		}
 	}
 
@@ -893,12 +808,6 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 				{
 					return FALSE;
 				}
-
-/*				if (saveType == GTYPE_SAVE_START)
-				{
-					// do not load any more data
-					break;
-				}*/
 			}
 
 			if ((pSaveName == NULL) ||
@@ -911,7 +820,6 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 				case LDS_COMPLETE:
 				case LDS_CAMSTART:
 					debug(LOG_WZ, "levLoadData: LDS_COMPLETE / LDS_CAMSTART");
-					//if (!startMission(MISSION_CAMPSTART, psNewLevel->apDataFiles[i]))
 					if (!startMission(LDS_CAMSTART, psNewLevel->apDataFiles[i]))
 					{
 						return FALSE;
@@ -927,7 +835,6 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 
 				case LDS_MKEEP:
 					debug(LOG_WZ, "levLoadData: LDS_MKEEP");
-					//if (!startMission(MISSION_OFFKEEP, psNewLevel->apDataFiles[i]))
 					if (!startMission(LDS_MKEEP, psNewLevel->apDataFiles[i]))
 					{
 						return FALSE;
@@ -935,7 +842,6 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 					break;
 				case LDS_CAMCHANGE:
 					debug(LOG_WZ, "levLoadData: LDS_CAMCHANGE");
-					//if (!startMission(MISSION_CAMPSTART, psNewLevel->apDataFiles[i]))
 					if (!startMission(LDS_CAMCHANGE, psNewLevel->apDataFiles[i]))
 					{
 						return FALSE;
@@ -944,7 +850,6 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 
 				case LDS_EXPAND:
 					debug(LOG_WZ, "levLoadData: LDS_EXPAND");
-					//if (!startMission(MISSION_CAMPEXPAND, psNewLevel->apDataFiles[i]))
 					if (!startMission(LDS_EXPAND, psNewLevel->apDataFiles[i]))
 					{
 						return FALSE;
@@ -952,7 +857,6 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 					break;
 				case LDS_EXPAND_LIMBO:
 					debug(LOG_WZ, "levLoadData: LDS_LIMBO");
-					//if (!startMission(MISSION_CAMPEXPAND, psNewLevel->apDataFiles[i]))
 					if (!startMission(LDS_EXPAND_LIMBO, psNewLevel->apDataFiles[i]))
 					{
 						return FALSE;
@@ -961,7 +865,6 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 
 				case LDS_MCLEAR:
 					debug(LOG_WZ, "levLoadData: LDS_MCLEAR");
-					//if (!startMission(MISSION_OFFCLEAR, psNewLevel->apDataFiles[i]))
 					if (!startMission(LDS_MCLEAR, psNewLevel->apDataFiles[i]))
 					{
 						return FALSE;
@@ -970,7 +873,6 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 				case LDS_MKEEP_LIMBO:
 					debug(LOG_WZ, "levLoadData: LDS_MKEEP_LIMBO");
 					debug( LOG_NEVER, "MKEEP_LIMBO\n" );
-					//if (!startMission(MISSION_OFFKEEP, psNewLevel->apDataFiles[i]))
 					if (!startMission(LDS_MKEEP_LIMBO, psNewLevel->apDataFiles[i]))
 					{
 						return FALSE;
@@ -980,7 +882,6 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 					ASSERT( psNewLevel->type >= MULTI_TYPE_START,
 						"levLoadData: Unexpected mission type" );
 					debug(LOG_WZ, "levLoadData: default (MULTIPLAYER)");
-					//if (!startMission(MISSION_CAMPSTART, psNewLevel->apDataFiles[i]))
 					if (!startMission(LDS_CAMSTART, psNewLevel->apDataFiles[i]))
 					{
 						return FALSE;
@@ -1002,7 +903,6 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 
 	dataClearSaveFlag();
 
-	//if (pSaveName != NULL && saveType == GTYPE_SAVE_MIDMISSION)
 	if (pSaveName != NULL)
 	{
 		//load MidMission Extras
@@ -1028,15 +928,12 @@ BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType)
 		return FALSE;
 	}
 
-//want to test with release build too
-//#ifdef DEBUG
 	//this enables us to to start cam2/cam3 without going via a save game and get the extra droids
 	//in from the script-controlled Transporters
 	if (!pSaveName && psNewLevel->type == LDS_CAMSTART)
 	{
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_NO_REINFORCEMENTS_LEFT);
 	}
-//#endif
 
 	//restore the level name for comparisons on next mission load up
 	if (psChangeLevel == NULL)

@@ -85,9 +85,6 @@ extern void levShutDown(void);
 
 extern BOOL levInitialise(void);
 
-// load up the base data set for a level (used by savegames)
-extern BOOL levLoadBaseData(char *pName);
-
 // load up the data for a level
 extern BOOL levLoadData(char *pName, char *pSaveName, SDWORD saveType);
 
