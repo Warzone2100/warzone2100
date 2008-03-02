@@ -544,6 +544,9 @@
 		02581C860BD5AD1100957CBC /* SDL_net.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 0246A3ED0BD3CD8A004D1C70 /* SDL_net.framework */; };
 		02581C870BD5AD1100957CBC /* Vorbis.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */; };
 		02581C880BD5AD1100957CBC /* Zlib.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02356D830BD3BB4100E9A019 /* Zlib.framework */; };
+		026591FA0D7B6E0F00B20A35 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 026591F70D7B6E0F00B20A35 /* sqlite3.c */; };
+		026591FB0D7B6E0F00B20A35 /* sqlite3.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 026591F80D7B6E0F00B20A35 /* sqlite3.h */; };
+		026591FC0D7B6E0F00B20A35 /* sqlite3ext.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 026591F90D7B6E0F00B20A35 /* sqlite3ext.h */; };
 		027F9E360D0322CE00FA2030 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246A3BC0BD3CD2B004D1C70 /* OpenGL.framework */; };
 		027F9E370D0322D300FA2030 /* libfreetype.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 027F9E1F0D03229500FA2030 /* libfreetype.dylib */; };
 		027F9E380D0322D400FA2030 /* libfontconfig.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 02EA22450CFE494000EA65A0 /* libfontconfig.dylib */; };
@@ -820,6 +823,8 @@
 				02CDDD090D159D5900722688 /* autorevision.h in Copy frameworks */,
 				02CDDD1D0D159E2F00722688 /* openal_error.h in Copy frameworks */,
 				0235F9100D52BCC7007B8F63 /* math-help.h in Copy frameworks */,
+				026591FB0D7B6E0F00B20A35 /* sqlite3.h in Copy frameworks */,
+				026591FC0D7B6E0F00B20A35 /* sqlite3ext.h in Copy frameworks */,
 			);
 			name = "Copy frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1543,6 +1548,9 @@
 		0246AA030BD3DEFA004D1C70 /* SDL_sysloadso.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = SDL_sysloadso.c; path = external/SDL/src/loadso/dlopen/SDL_sysloadso.c; sourceTree = "<group>"; };
 		0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
 		02581C5D0BD5A94A00957CBC /* libSDLmain.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSDLmain.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		026591F70D7B6E0F00B20A35 /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = sqlite3.c; path = ../lib/sqlite3/sqlite3.c; sourceTree = SOURCE_ROOT; };
+		026591F80D7B6E0F00B20A35 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = ../lib/sqlite3/sqlite3.h; sourceTree = SOURCE_ROOT; };
+		026591F90D7B6E0F00B20A35 /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = sqlite3ext.h; path = ../lib/sqlite3/sqlite3ext.h; sourceTree = SOURCE_ROOT; };
 		027F9E1F0D03229500FA2030 /* libfreetype.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; name = libfreetype.dylib; path = /Developer/SDKs/MacOSX10.4u.sdk/usr/X11R6/lib/libfreetype.dylib; sourceTree = "<absolute>"; };
 		02C8AEF60BE68A5600E9D8A7 /* png_util.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = png_util.c; path = ../lib/ivis_common/png_util.c; sourceTree = SOURCE_ROOT; };
 		02C8AEF70BE68A5600E9D8A7 /* png_util.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = png_util.h; path = ../lib/ivis_common/png_util.h; sourceTree = SOURCE_ROOT; };
@@ -1956,6 +1964,7 @@
 		0246A0980BD3CB97004D1C70 /* Warzone sources */ = {
 			isa = PBXGroup;
 			children = (
+				026591F40D7B6DE200B20A35 /* SQLite */,
 				0246A1970BD3CCC3004D1C70 /* Warzone */,
 				0246A1790BD3CCAB004D1C70 /* Widget */,
 				0246A1640BD3CC90004D1C70 /* Sound */,
@@ -2613,6 +2622,16 @@
 				0246A4050BD3CDFC004D1C70 /* SDLnetUDP.c */,
 			);
 			name = "SDL_net sources";
+			sourceTree = "<group>";
+		};
+		026591F40D7B6DE200B20A35 /* SQLite */ = {
+			isa = PBXGroup;
+			children = (
+				026591F70D7B6E0F00B20A35 /* sqlite3.c */,
+				026591F80D7B6E0F00B20A35 /* sqlite3.h */,
+				026591F90D7B6E0F00B20A35 /* sqlite3ext.h */,
+			);
+			name = SQLite;
 			sourceTree = "<group>";
 		};
 		02CDDCFD0D159BE700722688 /* Autorevision sources */ = {
@@ -3917,6 +3936,7 @@
 				0223BBC00CFE3CD60056EF85 /* tagfile.c in Sources */,
 				02CDDD1C0D159E2F00722688 /* openal_error.c in Sources */,
 				020A7E670D246D2B009C29F5 /* sequence.c in Sources */,
+				026591FA0D7B6E0F00B20A35 /* sqlite3.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
