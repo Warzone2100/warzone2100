@@ -1107,6 +1107,13 @@
 			<Option target="DBGWindows" />
 			<Option target="NDBGWindows" />
 		</Unit>
+		<Unit filename="lib/sqlite3/sqlite3.c">
+			<Option compilerVar="CC" />
+			<Option target="DBGUnix" />
+			<Option target="NDBGUnix" />
+			<Option target="DBGWindows" />
+			<Option target="NDBGWindows" />
+		</Unit>
 		<Unit filename="lib/widget/bar.c">
 			<Option compilerVar="CC" />
 			<Option target="DBGUnix" />

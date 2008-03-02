@@ -1,0 +1,46 @@
+--- sqlite3.c.orig	2008-03-02 23:04:07.000000000 +0100
++++ sqlite3.c	2008-03-02 23:07:10.000000000 +0100
+@@ -4818,12 +4818,16 @@
+ #if !defined(SQLITE_OMIT_SHARED_CACHE) && SQLITE_THREADSAFE
+ SQLITE_PRIVATE   void sqlite3BtreeEnter(Btree*);
+ SQLITE_PRIVATE   void sqlite3BtreeLeave(Btree*);
++#ifndef NDEBUG
+ SQLITE_PRIVATE   int sqlite3BtreeHoldsMutex(Btree*);
++#endif
+ SQLITE_PRIVATE   void sqlite3BtreeEnterCursor(BtCursor*);
+ SQLITE_PRIVATE   void sqlite3BtreeLeaveCursor(BtCursor*);
+ SQLITE_PRIVATE   void sqlite3BtreeEnterAll(sqlite3*);
+ SQLITE_PRIVATE   void sqlite3BtreeLeaveAll(sqlite3*);
++#ifndef NDEBUG
+ SQLITE_PRIVATE   int sqlite3BtreeHoldsAllMutexes(sqlite3*);
++#endif
+ SQLITE_PRIVATE   void sqlite3BtreeMutexArrayEnter(BtreeMutexArray*);
+ SQLITE_PRIVATE   void sqlite3BtreeMutexArrayLeave(BtreeMutexArray*);
+ SQLITE_PRIVATE   void sqlite3BtreeMutexArrayInsert(BtreeMutexArray*, Btree*);
+@@ -53986,7 +53990,7 @@
+     if( argType==0xff ){
+       pArg = db;
+     }else{
+-      pArg = (void*)(int)argType;
++      pArg = (void*)(size_t)argType;
+     }
+     sqlite3CreateFunc(db, aFuncs[i].zName, aFuncs[i].nArg,
+         aFuncs[i].eTextRep, pArg, aFuncs[i].xFunc, 0, 0);
+@@ -54005,7 +54009,7 @@
+   sqlite3AttachFunctions(db);
+ #endif
+   for(i=0; i<sizeof(aAggs)/sizeof(aAggs[0]); i++){
+-    void *pArg = (void*)(int)aAggs[i].argType;
++    void *pArg = (void*)(size_t)aAggs[i].argType;
+     sqlite3CreateFunc(db, aAggs[i].zName, aAggs[i].nArg, SQLITE_UTF8, 
+         pArg, 0, aAggs[i].xStep, aAggs[i].xFinalize);
+     if( aAggs[i].needCollSeq ){
+@@ -62510,7 +62514,7 @@
+ #endif
+   if( res.azResult ){
+     assert( sizeof(res.azResult[0])>= sizeof(res.nData) );
+-    res.azResult[0] = (char*)res.nData;
++    res.azResult[0] = (char*)(size_t)res.nData;
+   }
+   if( (rc&0xff)==SQLITE_ABORT ){
+     sqlite3_free_table(&res.azResult[1]);
