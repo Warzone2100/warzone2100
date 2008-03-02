@@ -40,6 +40,16 @@ typedef int bool;
 #include <SDL_opengl.h>
 #include <png.h>
 
+#if (defined(WIN64) || defined(_WIN64) || defined(__WIN64__) || defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__))
+#  define strcasecmp _stricmp
+#  define strncasecmp _strnicmp
+#  define inline __inline
+#  define alloca _alloca
+#  define fileno _fileno
+#  define isfinite _finite
+#  define PATH_MAX MAX_PATH
+#endif
+
 // The WZM format is a proposed successor to the PIE format used by Warzone.
 // For an explanation of the WZM format, see http://wiki.wz2100.net/WZM_format
 
@@ -363,7 +373,10 @@ static MODEL *readModel(const char *filename, const char *path)
 		}
 
 		// Read animation frames
-		psMesh->frameArray = malloc(sizeof(FRAME) * psMesh->frames);
+		if (psMesh->frames)
+		{
+			psMesh->frameArray = malloc(sizeof(FRAME) * psMesh->frames);
+		}
 		for (j = 0; j < psMesh->frames; j++)
 		{
 			FRAME *psFrame = &psMesh->frameArray[j];
@@ -439,6 +452,24 @@ static void drawModel(MODEL *psModel, int x, int y)
 	for (i = 0; i < psModel->meshes; i++)
 	{
 		MESH *psMesh = &psModel->mesh[i];
+
+		if (psMesh->frameArray)
+		{
+			FRAME *psFrame = &psMesh->frameArray[psMesh->currentFrame];
+
+			assert(psMesh->currentFrame < psMesh->frames);
+
+			// Try to avoid a crash from crap drivers
+			assert(isfinite(psFrame->translation.x) && isfinite(psFrame->translation.y) && isfinite(psFrame->translation.z));
+			assert(psFrame->translation.x >= 0.0f && psFrame->translation.y >= 0.0f && psFrame->translation.z >= 0.0f);
+			assert(psFrame->rotation.x >= 0.0f && psFrame->rotation.y >= 0.0f && psFrame->rotation.z >= 0.0f);
+			assert(psFrame->rotation.x <= 360.0f && psFrame->rotation.y <= 360.0f && psFrame->rotation.z <= 360.0f);
+
+			glTranslatef(psFrame->translation.x, psFrame->translation.y, psFrame->translation.z);
+			glRotatef(psFrame->rotation.x, 1, 0, 0);
+			glRotatef(psFrame->rotation.y, 0, 1, 0);
+			glRotatef(psFrame->rotation.z, 0, 0, 1);
+		}
 
 		glTexCoordPointer(2, GL_FLOAT, 0, psMesh->textureArray[psMesh->currentFrame]);
 		glVertexPointer(3, GL_FLOAT, 0, psMesh->vertexArray);
@@ -592,9 +623,15 @@ int main(int argc, char **argv)
 		for (i = 0; i < psModel->meshes; i++)
 		{
 			MESH *psMesh = &psModel->mesh[i];
-			FRAME *psFrame = &psMesh->frameArray[psMesh->currentFrame];
+			FRAME *psFrame;
 
-			assert(psMesh->frameArray && psMesh->currentFrame < psMesh->frames && psMesh->currentFrame >= 0);
+			if (!psMesh->frameArray)
+			{
+				continue;
+			}
+			psFrame = &psMesh->frameArray[psMesh->currentFrame];
+
+			assert(psMesh->currentFrame < psMesh->frames && psMesh->currentFrame >= 0);
 			if (psFrame->timeSlice != 0 && psFrame->timeSlice * 1000 + psMesh->lastChange < now)
 			{
 				psMesh->lastChange = now;
