@@ -1,0 +1,17 @@
+These are some release notes describing the current state of 2.1.
+
+New (notable) features:
+ * Internationalisation/Translation support by means of gettext
+ * Multi-turret support for droids (i.e. tanks and cyborgs) and structures
+ * Video options menu; allows selecting of (among others) the screen resolution and windowed/fullscreen mode
+ * A new mini-map mode: the heightmap (use CTRL+TAB to cycle through mini-map modes)
+ * Stock AI greatly improved
+ * Additional AI provided: Aivolution
+ * 64-bit compatibility! Warzone now runs on systems with 64 bit processors, kernels and libraries as well!
+
+Known issues:
+ * The multiplayer code has become a __lot__ more stable than it was, but running out of sync still happens. Though it now happens less often and the sync differences are smaller.
+ * The game in general still crashes a lot in debug builds (due to failed assertions).
+ * Text is not always drawn correctly on Mac OSX systems.
+ * Savegames from the 2.0 series can __not__ be loaded with this version. (And currently there are no plans of supporting 2.0 savegames).
+ * Terrain texture is known to fail from time to time (which will cause the entire terrain to show up white).
