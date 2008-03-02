@@ -68,6 +68,7 @@ typedef struct
 	GLfloat *textureArray[MAX_TEXARRAYS];
 	FRAME *frameArray;
 	int currentFrame;
+	uint32_t lastChange;	// animation
 } MESH;
 
 typedef struct
@@ -87,6 +88,7 @@ typedef struct
 static char *input = "";
 static char *texPath = "";
 static SDL_Surface *screen;
+static uint32_t now = 0;
 
 static MODEL *createModel(int meshes)
 {
@@ -114,6 +116,7 @@ static MODEL *createModel(int meshes)
 		}
 		psMesh->frameArray = NULL;
 		psMesh->currentFrame = 0;
+		psMesh->lastChange = SDL_GetTicks();
 	}
 
 	return psModel;
@@ -359,14 +362,15 @@ static MODEL *readModel(const char *filename, const char *path)
 			exit(1);
 		}
 
-		// throw away for now
+		// Read animation frames
+		psMesh->frameArray = malloc(sizeof(FRAME) * psMesh->frames);
 		for (j = 0; j < psMesh->frames; j++)
 		{
-			int tex, translation[3], rotation[3];
-			float spend;
+			FRAME *psFrame = &psMesh->frameArray[j];
 
-			num = fscanf(fp, "\n%f %d %d %d %d %d %d %d", &spend, &tex, &translation[0], &translation[1], &translation[2],
-			             &rotation[0], &rotation[1], &rotation[2]);
+			num = fscanf(fp, "\n%f %d %f %f %f %f %f %f", &psFrame->timeSlice, &psFrame->textureArray, 
+			             &psFrame->translation.x, &psFrame->translation.y, &psFrame->translation.z,
+			             &psFrame->rotation.x, &psFrame->rotation.y, &psFrame->rotation.z);
 			if (num != 8)
 			{
 				fprintf(stderr, "Bad FRAMES directive in mesh %d, number %d\n", mesh, j);
@@ -467,7 +471,6 @@ int main(int argc, char **argv)
 	int i;
 
 	parse_args(argc, argv);
-	psModel = readModel(input, texPath);
 
 	/* Initialize SDL */
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0)
@@ -476,6 +479,8 @@ int main(int argc, char **argv)
 		exit(EXIT_FAILURE);
 	}
 	atexit(SDL_Quit);
+
+	psModel = readModel(input, texPath);
 
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
@@ -524,6 +529,7 @@ int main(int argc, char **argv)
 
 	while (!quit)
 	{
+		now = SDL_GetTicks();
 		while (SDL_PollEvent(&event))
 		{
 			SDL_keysym *keysym = &event.key.keysym;
@@ -582,13 +588,30 @@ int main(int argc, char **argv)
 					break;
 			}
 		}
+		// Animation support! :-)
+		for (i = 0; i < psModel->meshes; i++)
+		{
+			MESH *psMesh = &psModel->mesh[i];
+			FRAME *psFrame = &psMesh->frameArray[psMesh->currentFrame];
+
+			assert(psMesh->frameArray && psMesh->currentFrame < psMesh->frames && psMesh->currentFrame >= 0);
+			if (psFrame->timeSlice != 0 && psFrame->timeSlice * 1000 + psMesh->lastChange < now)
+			{
+				psMesh->lastChange = now;
+				psMesh->currentFrame++;
+				if (psMesh->currentFrame >= psMesh->frames)
+				{
+					psMesh->currentFrame = 0;	// loop
+				}
+			}
+		}
 		glLoadIdentity();
 		glTranslatef(0.0f, -30.0f, -50.0f + -(dimension * 2.0f));;
 		glRotatef(angle, 0, 1, 0);
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 		drawModel(psModel, 0, 0);
 		SDL_GL_SwapBuffers();
-		SDL_Delay(5);
+		SDL_Delay(10);
 		angle += 0.1;
 		if (angle > 360.0f)
 		{
