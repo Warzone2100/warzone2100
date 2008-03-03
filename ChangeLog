@@ -1,4 +1,6 @@
 0000-00-00: SVN
+ * General:
+   * Fix: Crash during saving in multiplayer/skirmish mode, when Aivolution AI is enabled. (bug #11084)
 
 2008-02-17: Version 2.1-beta1
  * General:
