@@ -902,6 +902,7 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 	char		*pPos;
 	DROID		*psCDroid;
 	SDWORD		members;
+	BOOL		bObjectDefined;
 	DROID_GROUP	*psGroup;
 #ifdef _DEBUG
 	BASE_OBJECT	*psObj;
@@ -1047,7 +1048,9 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 		}
 		break;
 	case ST_GROUP:
-		if (psVal->v.oval != NULL)
+		bObjectDefined = (psVal->v.oval != NULL);
+
+		if (bObjectDefined)
 		{
 			members = grpNumMembers((DROID_GROUP *)psVal->v.oval);
 		}
@@ -1055,7 +1058,8 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 		{
 			members = 0;
 		}
-		if (pBuffer != NULL)
+
+		if (pBuffer != NULL && bObjectDefined)
 		{
 			pPos = pBuffer;
 			psGroup = (DROID_GROUP *)psVal->v.oval;
@@ -1088,7 +1092,25 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 				pPos += sizeof(UDWORD);
 			}
 		}
-		*pSize = sizeof(UDWORD) * members + sizeof(SDWORD) * 5;
+
+		if(!bObjectDefined)
+		{
+			if(pBuffer)		// make sure we are saving
+			{
+				pPos = pBuffer;
+
+				// Make sure loading routine can handle nullpointers
+				*((UWORD *)pPos) = UNALLOCATED_OBJECT;
+				endian_udword((UWORD*)pPos);
+				pPos += sizeof(UWORD);
+			}
+
+			*pSize = sizeof(UWORD);
+		}
+		else
+		{
+			*pSize = sizeof(UDWORD) * members + sizeof(SDWORD) * 5;	// members + runData
+		}
 		break;
 	case ST_SOUND:
 		if(psVal->v.ival)
@@ -1370,49 +1392,59 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 				members = 0;
 				debug( LOG_ERROR, "scrValDefLoad: unsupported version %i", version);
 		}
+
 		pPos = pBuffer;
-		if (version >= 2)
-		{
-			// load the retreat data
-			psGroup = (DROID_GROUP*)(psVal->v.oval);
-			endian_sdword((SDWORD*)pPos);
-			psGroup->sRunData.sPos.x = *((SDWORD *)pPos);
-			pPos += sizeof(SDWORD);
-			endian_sdword((SDWORD*)pPos);
-			psGroup->sRunData.sPos.y = *((SDWORD *)pPos);
-			pPos += sizeof(SDWORD);
-			endian_sdword((SDWORD*)pPos);
-			psGroup->sRunData.forceLevel = (UBYTE)(*((SDWORD *)pPos));
-			pPos += sizeof(SDWORD);
-			endian_sdword((SDWORD*)pPos);
-			psGroup->sRunData.leadership = (UBYTE)(*((SDWORD *)pPos));
-			pPos += sizeof(SDWORD);
-		}
-		if (version >= 3)
-		{
-			endian_sdword((SDWORD*)pPos);
-			psGroup->sRunData.healthLevel = (UBYTE)(*((SDWORD *)pPos));
-			pPos += sizeof(SDWORD);
-		}
 
-		// load the droids
-		while (members > 0)
+		// make sure group was allocated when it was saved (relevant starting from version 3)
+		if( (version < 3) || ( *((UWORD*)pPos) != UNALLOCATED_OBJECT ) )
 		{
-			endian_udword((UDWORD*)pPos);
-			id = *((UDWORD *) pPos);
-			psCDroid = (DROID *)getBaseObjFromId(id);
-			if (!psCDroid)
+			if (version >= 2)
 			{
-				debug( LOG_ERROR, "scrValDefLoad: couldn't find object id %d", id );
-				abort();
+				// load the retreat data
+				psGroup = (DROID_GROUP*)(psVal->v.oval);
+				endian_sdword((SDWORD*)pPos);
+				psGroup->sRunData.sPos.x = *((SDWORD *)pPos);
+				pPos += sizeof(SDWORD);
+				endian_sdword((SDWORD*)pPos);
+				psGroup->sRunData.sPos.y = *((SDWORD *)pPos);
+				pPos += sizeof(SDWORD);
+				endian_sdword((SDWORD*)pPos);
+				psGroup->sRunData.forceLevel = (UBYTE)(*((SDWORD *)pPos));
+				pPos += sizeof(SDWORD);
+				endian_sdword((SDWORD*)pPos);
+				psGroup->sRunData.leadership = (UBYTE)(*((SDWORD *)pPos));
+				pPos += sizeof(SDWORD);
 			}
-			else
+			if (version >= 3)
 			{
-				grpJoin((DROID_GROUP*)(psVal->v.oval), psCDroid);
+				endian_sdword((SDWORD*)pPos);
+				psGroup->sRunData.healthLevel = (UBYTE)(*((SDWORD *)pPos));
+				pPos += sizeof(SDWORD);
 			}
 
-			pPos += sizeof(UDWORD);
-			members -= 1;
+			// load the droids
+			while (members > 0)
+			{
+				endian_udword((UDWORD*)pPos);
+				id = *((UDWORD *) pPos);
+				psCDroid = (DROID *)getBaseObjFromId(id);
+				if (!psCDroid)
+				{
+					debug( LOG_ERROR, "scrValDefLoad: couldn't find object id %d", id );
+					abort();
+				}
+				else
+				{
+					grpJoin((DROID_GROUP*)(psVal->v.oval), psCDroid);
+				}
+
+				pPos += sizeof(UDWORD);
+				members -= 1;
+			}
+		}
+		else		// a group var was unallocated during saving
+		{
+			pPos += sizeof(UWORD);
 		}
 		break;
 	case ST_SOUND:

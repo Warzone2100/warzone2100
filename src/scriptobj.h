@@ -63,6 +63,9 @@ enum _objids
 	OBJID_ORIG_HITPOINTS,		// original health of a droid (when not damaged)
 };
 
+// marks a nullpointer for the save-game loading routine
+#define	UNALLOCATED_OBJECT	0
+
 // id's for group variables
 enum _groupids
 {
