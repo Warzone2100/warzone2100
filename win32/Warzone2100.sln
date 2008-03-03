@@ -34,6 +34,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gamelib", "..\lib\gamelib\g
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "framework", "..\lib\framework\framework.vcproj", "{33979915-684A-4885-BFEA-2A4CCC5A5FD6}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sqlite3", "..\lib\sqlite3\sqlite3.vcproj", "{BBCBB046-6EFC-4369-853A-CAEF001B449E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -84,6 +86,10 @@ Global
 		{33979915-684A-4885-BFEA-2A4CCC5A5FD6}.Debug|Win32.Build.0 = Debug|Win32
 		{33979915-684A-4885-BFEA-2A4CCC5A5FD6}.Release|Win32.ActiveCfg = Release|Win32
 		{33979915-684A-4885-BFEA-2A4CCC5A5FD6}.Release|Win32.Build.0 = Release|Win32
+		{BBCBB046-6EFC-4369-853A-CAEF001B449E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BBCBB046-6EFC-4369-853A-CAEF001B449E}.Debug|Win32.Build.0 = Debug|Win32
+		{BBCBB046-6EFC-4369-853A-CAEF001B449E}.Release|Win32.ActiveCfg = Release|Win32
+		{BBCBB046-6EFC-4369-853A-CAEF001B449E}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
