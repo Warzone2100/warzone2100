@@ -2,6 +2,7 @@
  * General:
    * Fix: Crash (integer divide by zero) when starting a multiplayer game after playing a single player game.
    * Fix: A memory corruption in structure limits could cause destroy button to disappear (among other things).
+   * Fix: Crash during saving in multiplayer/skirmish mode, when Aivolution AI is enabled. (bug #11084)
  * Graphics:
    * Change: Reduce the number of atmospheric particles generated and lower the CPU usage.
    * Fix: Briefings were not displayed at high resolutions. (bug #11121)
