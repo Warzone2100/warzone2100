@@ -2370,8 +2370,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		memset(asBodyUpgrade, 0, MAX_PLAYERS * sizeof(BODY_UPGRADE) * BODY_TYPE);
 		//JPS 25 feb
 	}
-	
-	
+
+
 	if (saveGameVersion >= VERSION_11)
 	{
 		//camera position
@@ -3289,7 +3289,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			//load in the command list file
 			aFileName[fileExten] = '\0';
 			strcat(aFileName, "firesupport.tag");
-			
+
 			if (!readFiresupportDesignators(aFileName))
 			{
 				debug( LOG_NEVER, "loadMissionExtras: readFiresupportDesignators(%s) failed\n", aFileName );
@@ -5585,7 +5585,7 @@ static void SaveDroidMoveControl(SAVE_DROID * const psSaveDroid, DROID const * c
 	psSaveDroid->sMove.numPoints = psDroid->sMove.numPoints;
 	memcpy(&psSaveDroid->sMove.asPath, &psDroid->sMove.asPath, sizeof(psSaveDroid->sMove.asPath));
 
-	
+
 	// Little endian SDWORDs
 	psSaveDroid->sMove.DestinationX = PHYSFS_swapSLE32(psDroid->sMove.DestinationX);
 	psSaveDroid->sMove.DestinationY = PHYSFS_swapSLE32(psDroid->sMove.DestinationY);
@@ -5653,7 +5653,7 @@ static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const
 	psDroid->sMove.numPoints   = psSaveDroid->sMove.numPoints;
 	memcpy(&psDroid->sMove.asPath, &psSaveDroid->sMove.asPath, sizeof(psSaveDroid->sMove.asPath));
 
-	
+
 	// Little endian SDWORDs
 	psDroid->sMove.DestinationX = PHYSFS_swapSLE32(psSaveDroid->sMove.DestinationX);
 	psDroid->sMove.DestinationY = PHYSFS_swapSLE32(psSaveDroid->sMove.DestinationY);
@@ -6475,13 +6475,13 @@ BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
 		{
 			for(i = 0;i < psSaveDroid->numWeaps;i++)
 			{
-				endian_uword(&psSaveDroid->sMove.iAttackRuns[i]);
+				endian_udword(&psSaveDroid->sMove.iAttackRuns[i]);
 			}
 			//endian_uword(&psSaveDroid->sMove.iGuardRadius);
 		}
 		else
 		{
-			endian_uword(&psSaveDroid->sMove.iAttackRuns[0]);
+			endian_udword(&psSaveDroid->sMove.iAttackRuns[0]);
 		}
 		for(i = 0; i < TEMP_DROID_MAXPROGS; i++) {
 			/* SAVE_WEAPON */
@@ -6617,24 +6617,24 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			psSaveDroid->orderX2		= psCurr->orderX2;
 			psSaveDroid->orderY2		= psCurr->orderY2;
 			psSaveDroid->timeLastHit	= psCurr->timeLastHit;
-			
+
 			psSaveDroid->targetID = NULL_ID;
 			if (psCurr->psTarget != NULL && psCurr->psTarget->died <= 1 && checkValidId(psCurr->psTarget->id))
 			{
 				psSaveDroid->targetID = psCurr->psTarget->id;
 			}
-			
+
 			psSaveDroid->secondaryOrder = psCurr->secondaryOrder;
 			psSaveDroid->action			= psCurr->action;
 			psSaveDroid->actionX		= psCurr->actionX;
 			psSaveDroid->actionY		= psCurr->actionY;
-			
+
 			psSaveDroid->actionTargetID = NULL_ID;
 			if (psCurr->psActionTarget[0] != NULL && psCurr->psActionTarget[0]->died <= 1 && checkValidId( psCurr->psActionTarget[0]->id))
 			{
 				psSaveDroid->actionTargetID = psCurr->psActionTarget[0]->id;
 			}
-			
+
 			psSaveDroid->actionStarted	= psCurr->actionStarted;
 			psSaveDroid->actionPoints	= psCurr->actionPoints;
 			psSaveDroid->actionHeight	= psCurr->powerAccrued;
@@ -6649,7 +6649,7 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			{
 				strcpy(psSaveDroid->tarStatName,"");
 			}
-			
+
 			psSaveDroid->baseStructID = NULL_ID;
 			if ((psCurr->psBaseStruct != NULL))
 			{
@@ -6660,7 +6660,7 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 					psSaveDroid->baseStructID = psCurr->psBaseStruct->id;
 				}
 			}
-			
+
 			psSaveDroid->group = psCurr->group;
 			psSaveDroid->selected = psCurr->selected;
 //20feb			psSaveDroid->cluster = psCurr->cluster;
@@ -11414,14 +11414,14 @@ BOOL readFiresupportDesignators(char *pFileName)
 		return FALSE;
 	}
 	debug(LOG_MAP, "Reading tagged savegame %s with definition %s:", pFileName, FireSupport_tag_definition);
-	
+
 	tagReadString(0x01, 12, formatIdentifier);
 	if (strcmp(formatIdentifier, FireSupport_file_identifier) != 0)
 	{
 		debug(LOG_ERROR, "readFiresupportDesignators: Incompatble %s, 'FIRESUPPORT' expected", pFileName);
 		return FALSE;
 	}
-	
+
 	numPlayers = tagReadEnter(0x02);
 	for (player = 0; player < numPlayers; player++)
 	{
@@ -11433,7 +11433,7 @@ BOOL readFiresupportDesignators(char *pFileName)
 		tagReadNext();
 	}
 	tagReadLeave(0x02);
-	
+
 	tagClose();
 
 	return TRUE;
@@ -11453,7 +11453,7 @@ BOOL writeFiresupportDesignators(char *pFileName)
 		return FALSE;
 	}
 	debug(LOG_MAP, "Creating tagged savegame %s with definition %s:", pFileName, FireSupport_tag_definition);
-	
+
 	tagWriteString(0x01, FireSupport_file_identifier);
 	tagWriteEnter(0x02, MAX_PLAYERS);
 	for (player = 0; player < MAX_PLAYERS; player++)
@@ -11470,9 +11470,9 @@ BOOL writeFiresupportDesignators(char *pFileName)
 		tagWriteNext();
 	}
 	tagWriteLeave(0x02);
-	
+
 	tagClose();
-	
+
 	return TRUE;
 }
 
