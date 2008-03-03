@@ -29,7 +29,7 @@
 					<Add option='-DPACKAGE_VERSION=\\&quot;TRUNK\\&quot;' />
 					<Add option='-DLOCALEDIR=\\&quot;\\&quot;' />
 					<Add option='-DPACKAGE=\\&quot;warzone2100\\&quot;' />
-					<Add option='-D_GNU_SOURCE=1' />
+					<Add option="-D_GNU_SOURCE=1" />
 				</Compiler>
 				<Linker>
 					<Add library="m" />
@@ -56,16 +56,16 @@
 					<Add option='-DPACKAGE_VERSION=\\&quot;TRUNK\\&quot;' />
 					<Add option='-DLOCALEDIR=\\&quot;\\&quot;' />
 					<Add option='-DPACKAGE=\\&quot;warzone2100\\&quot;' />
-					<Add option='-D_GNU_SOURCE=1' />
+					<Add option="-D_GNU_SOURCE=1" />
 				</Compiler>
 				<Linker>
+					<Add option="-s" />
 					<Add library="m" />
 					<Add library="pthread" />
 					<Add library="GL" />
 					<Add library="GLU" />
 					<Add library="GLC" />
 					<Add library="openal" />
-					<Add option="-s" />
 				</Linker>
 				<ExtraCommands>
 					<Add before="build_tools/autorevision/autorevision +cstr . src/autorevision.h" />
@@ -126,6 +126,7 @@
 					<Add directory="$(#warzone_devpkg.include)/SDL" />
 				</Compiler>
 				<Linker>
+					<Add option="-s" />
 					<Add library="mingw32" />
 					<Add library="SDLmain" />
 					<Add library="z" />
@@ -138,7 +139,6 @@
 					<Add library="winmm" />
 					<Add library="wsock32" />
 					<Add directory="$(#warzone_devpkg.lib)" />
-					<Add option="-s" />
 				</Linker>
 				<ExtraCommands>
 					<Add before="build_tools/autorevision/autorevision +cstr . src/autorevision.h" />
@@ -1109,6 +1109,18 @@
 		</Unit>
 		<Unit filename="lib/sqlite3/sqlite3.c">
 			<Option compilerVar="CC" />
+			<Option target="DBGUnix" />
+			<Option target="NDBGUnix" />
+			<Option target="DBGWindows" />
+			<Option target="NDBGWindows" />
+		</Unit>
+		<Unit filename="lib/sqlite3/sqlite3.h">
+			<Option target="DBGUnix" />
+			<Option target="NDBGUnix" />
+			<Option target="DBGWindows" />
+			<Option target="NDBGWindows" />
+		</Unit>
+		<Unit filename="lib/sqlite3/sqlite3ext.h">
 			<Option target="DBGUnix" />
 			<Option target="NDBGUnix" />
 			<Option target="DBGWindows" />
