@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-02-18 16:21+0100\n"
+"POT-Creation-Date: 2008-03-01 12:46+0100\n"
 "PO-Revision-Date: 2008-01-20 19:26+0100\n"
 "Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -361,7 +361,7 @@ msgstr "Held"
 
 #: src/multiint.c:329
 #: src/multiint.c:1334
-#: src/multilimit.c:173
+#: src/multilimit.c:155
 msgid "Accept Settings"
 msgstr "Accepteer Instellingen"
 
@@ -378,7 +378,7 @@ msgstr "VERBINDING"
 #: src/multiint.c:600
 #: src/multiint.c:833
 #: src/keyedit.c:378
-#: src/multilimit.c:165
+#: src/multilimit.c:147
 msgid "Return To Previous Screen"
 msgstr "Terug Naar Vorig Scherm"
 
@@ -11877,6 +11877,38 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1912
 msgid "Python HVC Hover"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1914
+msgid "Python Scourge Tracks"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1915
+msgid "Python Gauss Cannon Tracks"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1916
+msgid "Python Pulse Laser Tracks"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1917
+msgid "Tiger Pulse Laser Tracks"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1918
+msgid "Tiger Heavy Laser Tracks"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1919
+msgid "Wyvern Gauss Cannon Tracks"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1920
+msgid "Wyvern Pulse Laser Tracks"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1921
+msgid "Wyvern Heavy Laser Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/resstrings.txt:67

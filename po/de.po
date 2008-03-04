@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-02-18 16:21+0100\n"
-"PO-Revision-Date: 2008-01-28 23:30+0100\n"
+"POT-Creation-Date: 2008-03-01 12:46+0100\n"
+"PO-Revision-Date: 2008-03-04 14:54+0100\n"
 "Last-Translator: Dennis Schridde <devurandom@gna.org>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -369,7 +369,7 @@ msgstr "Held"
 
 #: src/multiint.c:329
 #: src/multiint.c:1334
-#: src/multilimit.c:173
+#: src/multilimit.c:155
 msgid "Accept Settings"
 msgstr "Einstellungen akzeptieren"
 
@@ -386,7 +386,7 @@ msgstr "VERBINDUNG"
 #: src/multiint.c:600
 #: src/multiint.c:833
 #: src/keyedit.c:378
-#: src/multilimit.c:165
+#: src/multilimit.c:147
 msgid "Return To Previous Screen"
 msgstr "Zurück zum vorherigen Bildschirm"
 
@@ -11883,6 +11883,46 @@ msgstr "Kobra Sensor Halbketten"
 #: data/mp/messages/strings/names.txt:1912
 msgid "Python HVC Hover"
 msgstr ""
+
+#: data/mp/messages/strings/names.txt:1914
+#, fuzzy
+msgid "Python Scourge Tracks"
+msgstr "Gottesanbeterin Geißel Ketten"
+
+#: data/mp/messages/strings/names.txt:1915
+#, fuzzy
+msgid "Python Gauss Cannon Tracks"
+msgstr "Python Schwere Kanone Ketten"
+
+#: data/mp/messages/strings/names.txt:1916
+#, fuzzy
+msgid "Python Pulse Laser Tracks"
+msgstr "Phyton Kommandoturm Ketten"
+
+#: data/mp/messages/strings/names.txt:1917
+#, fuzzy
+msgid "Tiger Pulse Laser Tracks"
+msgstr "Super Pulslaser-Cyborg"
+
+#: data/mp/messages/strings/names.txt:1918
+#, fuzzy
+msgid "Tiger Heavy Laser Tracks"
+msgstr "Viper Schweres Maschinengewehr Ketten"
+
+#: data/mp/messages/strings/names.txt:1919
+#, fuzzy
+msgid "Wyvern Gauss Cannon Tracks"
+msgstr "Viper Mittlere Kanone Ketten"
+
+#: data/mp/messages/strings/names.txt:1920
+#, fuzzy
+msgid "Wyvern Pulse Laser Tracks"
+msgstr "Super Pulslaser-Cyborg"
+
+#: data/mp/messages/strings/names.txt:1921
+#, fuzzy
+msgid "Wyvern Heavy Laser Tracks"
+msgstr "Viper Schweres Maschinengewehr Ketten"
 
 #: data/mp/messages/strings/resstrings.txt:67
 msgid "Cyborg Transport Available"
