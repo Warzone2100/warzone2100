@@ -47,9 +47,9 @@ static float font_size = 12.f;
 // Contains the font color in the following order: red, green, blue, alpha
 static float font_colour[4] = {1.f, 1.f, 1.f, 1.f};
 
-static GLint GLC_Context = 0;
-static GLint GLC_Font_Regular = 0;
-static GLint GLC_Font_Bold = 0;
+static GLint _glcContext = 0;
+static GLint _glcFont_Regular = 0;
+static GLint _glcFont_Bold = 0;
 
 /***************************************************************************/
 /*
@@ -89,30 +89,31 @@ static inline void iV_printFontList()
 
 static void iV_initializeGLC()
 {
-	if (GLC_Context)
+	if (_glcContext)
 	{
 		return;
 	}
 
-	GLC_Context = glcGenContext();
-	if (!GLC_Context)
+	_glcContext = glcGenContext();
+	if (!_glcContext)
 	{
 		debug(LOG_ERROR, "glcGenContext() failed");
 	}
 	else
 	{
-		debug(LOG_NEVER, "glcGenContext() succesful: GLC_Context = %d", GLC_Context);
+		debug(LOG_NEVER, "glcGenContext() succesful: _glcContext = %d", _glcContext);
 	}
 
-	glcContext(GLC_Context);
+	glcContext(_glcContext);
 
 	glcDisable(GLC_AUTO_FONT);
 	glcRenderStyle(GLC_TEXTURE);
+	glcStringType(GLC_UTF8_QSO);
 
-	GLC_Font_Regular = glcGenFontID();
-	GLC_Font_Bold = glcGenFontID();
+	_glcFont_Regular = glcGenFontID();
+	_glcFont_Bold = glcGenFontID();
 
-	if (!glcNewFontFromFamily(GLC_Font_Regular, font_family))
+	if (!glcNewFontFromFamily(_glcFont_Regular, font_family))
 	{
 		debug(LOG_ERROR, "iV_initializeGLC: Failed to select font family %s as regular font", font_family);
 	}
@@ -121,7 +122,7 @@ static void iV_initializeGLC()
 		debug(LOG_NEVER, "iV_initializeGLC: Successfully selected font family %s as regular font", font_family);
 	}
 
-	if (!glcFontFace(GLC_Font_Regular, font_face_regular))
+	if (!glcFontFace(_glcFont_Regular, font_face_regular))
 	{
 		debug(LOG_WARNING, "iV_initializeGLC: Failed to select the \"%s\" font face of font family %s", font_face_regular, font_family);
 	}
@@ -130,7 +131,7 @@ static void iV_initializeGLC()
 		debug(LOG_NEVER, "iV_initializeGLC: Successfully selected the \"%s\" font face of font family %s", font_face_regular, font_family);
 	}
 
-	if (!glcNewFontFromFamily(GLC_Font_Bold, font_family))
+	if (!glcNewFontFromFamily(_glcFont_Bold, font_family))
 	{
 		debug(LOG_ERROR, "iV_initializeGLC: Failed to select font family %s for the bold font", font_family);
 	}
@@ -139,7 +140,7 @@ static void iV_initializeGLC()
 		debug(LOG_NEVER, "iV_initializeGLC: Successfully selected font family %s for the bold font", font_family);
 	}
 
-	if (!glcFontFace(GLC_Font_Bold, font_face_bold))
+	if (!glcFontFace(_glcFont_Bold, font_face_bold))
 	{
 		debug(LOG_WARNING, "iV_initializeGLC: Failed to select the \"%s\" font face of font family %s", font_face_bold, font_family);
 	}
@@ -166,21 +167,21 @@ void iV_TextInit()
 
 void iV_TextShutdown()
 {
-	if (GLC_Font_Regular)
+	if (_glcFont_Regular)
 	{
-		glcDeleteFont(GLC_Font_Regular);
+		glcDeleteFont(_glcFont_Regular);
 	}
 
-	if (GLC_Font_Bold)
+	if (_glcFont_Bold)
 	{
-		glcDeleteFont(GLC_Font_Bold);
+		glcDeleteFont(_glcFont_Bold);
 	}
 
 	glcContext(0);
 
-	if (GLC_Context)
+	if (_glcContext)
 	{
-		glcDeleteContext(GLC_Context);
+		glcDeleteContext(_glcContext);
 	}
 }
 
@@ -190,12 +191,12 @@ void iV_SetFont(enum iV_fonts FontID)
 	{
 		case font_regular:
 			iV_SetTextSize(12.f);
-			glcFont(GLC_Font_Regular);
+			glcFont(_glcFont_Regular);
 			break;
 
 		case font_large:
 			iV_SetTextSize(21.f);
-			glcFont(GLC_Font_Bold);
+			glcFont(_glcFont_Bold);
 			break;
 	}
 }
