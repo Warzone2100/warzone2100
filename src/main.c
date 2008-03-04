@@ -37,7 +37,7 @@
  *
  * We have a great deal of documentation on our wiki page at http://wiki.wz2100.net/ which
  * may help get you started. Please also take notice of our style guide!
- *  
+ *
  * @subsection step2 Step 2: Skim main.c
  *
  * You may want to begin reading code with main.c, since this is where execution begins,
@@ -238,7 +238,7 @@ static bool getCurrentDir(char * const dest, size_t const size)
 		{
 			debug(LOG_ERROR, "getPlatformUserDir: getcwd failed: %s", strerror(errno));
 		}
-		
+
 		return false;
 	}
 #elif defined(WZ_OS_WIN)
@@ -258,13 +258,13 @@ static bool getCurrentDir(char * const dest, size_t const size)
 
 		// Free our chunk of memory FormatMessageA gave us
 		LocalFree(err_string);
-			
+
 		return false;
 	}
 	else if (len > size)
 	{
 		debug(LOG_ERROR, "getPlatformUserDir: The buffer to contain our current directory is too small (%u bytes and %d needed)", (unsigned int)size, len);
-		
+
 		return false;
 	}
 #else
@@ -854,8 +854,8 @@ int main(int argc, char *argv[])
 	initialize_PhysicsFS(argv[0]);
 
 	/*** Initialize translations ***/
-	setlocale(LC_MESSAGES, "");
-	setlocale(LC_NUMERIC, "C");		// set radix character to the period (".")
+	setlocale(LC_ALL, "");
+	setlocale(LC_NUMERIC, "C"); // set radix character to the period (".")
 #if defined(WZ_OS_WIN)
 	{
 		// Retrieve an absolute path to the locale directory
