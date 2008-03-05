@@ -351,6 +351,7 @@ void freeModel(MODEL *psModel)
 		}
 		free(psMesh->frameArray);
 	}
+	free(psModel->pixmap);
 	free(psModel->mesh);
 	free(psModel);
 }
