@@ -128,6 +128,7 @@ int main(int argc, char **argv)
 	atexit(SDL_Quit);
 
 	psModel = readModel(input, texPath);
+	psModel->pixmap = readPixmap(psModel->texPath);
 
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 

@@ -153,7 +153,7 @@ MODEL *readModel(const char *filename, const char *path)
 {
 	FILE *fp = fopen(filename, "r");
 	int num, x, meshes, mesh;
-	char s[200], fullPath[PATH_MAX];
+	char s[200];
 	MODEL *psModel;
 
 	if (!fp)
@@ -175,8 +175,6 @@ MODEL *readModel(const char *filename, const char *path)
 		fprintf(stderr, "Bad TEXTURE directive in %s\n", filename);
 		exit(1);
 	}
-	strcpy(fullPath, path);
-	strcat(fullPath, s);
 
 	num = fscanf(fp, "MESHES %d", &meshes);
 	if (num != 1)
@@ -185,6 +183,8 @@ MODEL *readModel(const char *filename, const char *path)
 		exit(1);
 	}
 	psModel = createModel(meshes);
+	strcpy(psModel->texPath, path);
+	strcat(psModel->texPath, s);
 
 	// WZM does not support multiple meshes, nor importing them from PIE
 	for (mesh = 0; mesh < meshes; mesh++)
@@ -330,9 +330,6 @@ MODEL *readModel(const char *filename, const char *path)
 			}
 		}
 	}
-
-	// Do this last for faster debug time ;)
-	psModel->pixmap = readPixmap(fullPath);
 
 	return psModel;
 }
