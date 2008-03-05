@@ -173,7 +173,7 @@ static Vector3i	imdRot,imdRot2;
 UDWORD		distance;
 
 /* Stores the screen coordinates of the transformed terrain tiles */
-static TERRAIN_VERTEX tileScreenInfo[LAND_YGRD][LAND_XGRD];
+static TERRAIN_VERTEX tileScreenInfo[VISIBLE_YTILES+1][VISIBLE_XTILES+1];
 
 /* Records the present X and Y values for the current mouse tile (in tiles */
 SDWORD mouseTileX, mouseTileY;
@@ -494,9 +494,9 @@ static void calcAverageTerrainHeight(iView *player)
 		of the tiles directly underneath us
 	*/
 	averageCentreTerrainHeight = 0;
-	for (i = VISIBLE_YTILES / 2 - 4; i < VISIBLE_YTILES / 2 + 4; i++)
+	for (i = visibleTiles.y / 2 - 4; i < visibleTiles.y / 2 + 4; i++)
 	{
-		for (j = VISIBLE_XTILES / 2 - 4; j < VISIBLE_XTILES / 2 + 4; j++)
+		for (j = visibleTiles.x / 2 - 4; j < visibleTiles.x / 2 + 4; j++)
 		{
 			if (tileOnMap(playerXTile + j, playerZTile + i))
 			{
@@ -512,7 +512,7 @@ static void calcAverageTerrainHeight(iView *player)
 	 * above the terrain. */
 	if (numTilesAveraged) // might not be if off map
 	{
-		MAPTILE *psTile = mapTile(playerXTile + VISIBLE_XTILES / 2, playerZTile + VISIBLE_YTILES / 2);
+		MAPTILE *psTile = mapTile(playerXTile + visibleTiles.x / 2, playerZTile + visibleTiles.y / 2);
 
 		averageCentreTerrainHeight /= numTilesAveraged;
 		if (averageCentreTerrainHeight < psTile->height * ELEVATION_SCALE)
@@ -618,7 +618,7 @@ static void drawTiles(iView *player)
 			tileScreenInfo[i][j].pos.z = world_coord(terrainMidY - i);
 			tileScreenInfo[i][j].pos.y = 0;
 
-			if (!tileOnMap(playerXTile + j, playerZTile + i)) 
+			if (!tileOnMap(playerXTile + j, playerZTile + i))
 			{
 				// Special past-edge-of-map tiles
 				tileScreenInfo[i][j].u = 0;
@@ -669,7 +669,7 @@ static void drawTiles(iView *player)
 					TileIllum.byte.b = (TileIllum.byte.b * 2) / 3;
 					pushedDown = TRUE;
 				}
-				
+
 				// to prevent a sharp edge to the map, make sure the border is black
 				if (i == 0 || j == 0 || i == visibleTiles.y || j == visibleTiles.x)
 				{
@@ -928,7 +928,7 @@ BOOL init3DView(void)
 	targetInitialise();
 
 	pie_PrepareSkybox(skyboxPageName);
-	
+
 	// distance is not saved, so initialise it now
 	distance = START_DISTANCE; // distance
 
@@ -3791,7 +3791,7 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		/* Clear it for next time round */
 		CLEAR_TILE_HIGHLIGHT(psTile);
 		bOutlined = TRUE;
-		if ( i < (LAND_XGRD-1) && j < (LAND_YGRD-1) ) // FIXME
+		if ( i < visibleTiles.x && j < visibleTiles.y ) // FIXME
 		{
 			if (outlineTile)
 			{
@@ -3836,7 +3836,7 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	}
 	else
 	{
-		pie_DrawTerrainTriangle(i * 2 + j * VISIBLE_XTILES * 2, vertices);
+		pie_DrawTerrainTriangle(i * 2 + j * visibleTiles.x * 2, vertices);
 	}
 
 	/* The second triangle */
@@ -3862,7 +3862,7 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	}
 	else
 	{
-		pie_DrawTerrainTriangle(i * 2 + j * VISIBLE_XTILES * 2 + 1, vertices);
+		pie_DrawTerrainTriangle(i * 2 + j * visibleTiles.x * 2 + 1, vertices);
 	}
 }
 
