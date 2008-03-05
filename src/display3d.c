@@ -173,7 +173,7 @@ static Vector3i	imdRot,imdRot2;
 UDWORD		distance;
 
 /* Stores the screen coordinates of the transformed terrain tiles */
-static TERRAIN_VERTEX tileScreenInfo[visibleTiles.y+1][visibleTiles.x+1];
+static TERRAIN_VERTEX tileScreenInfo[VISIBLE_YTILES+1][VISIBLE_XTILES+1];
 
 /* Records the present X and Y values for the current mouse tile (in tiles */
 SDWORD mouseTileX, mouseTileY;
