@@ -40,7 +40,7 @@
 #define COLOUR_COMPONENTS 4
 #define TEXCOORD_COMPONENTS 2
 #define VERTEX_COMPONENTS 3
-#define MAP_TRIANGLES (64 * 64 * 2) // two triangles per tile
+#define MAP_TRIANGLES (VISIBLE_YTILES * VISIBLE_XTILES * 2) // two triangles per tile
 #define MAP_VERTICES (VERTICES_PER_TRIANGLE * MAP_TRIANGLES)
 
 static GLubyte aColour[COLOUR_COMPONENTS * MAP_VERTICES];
@@ -59,7 +59,7 @@ BOOL check_extension(const char *extName)
 	char *end;
 	size_t extNameLen= strlen(extName);
 
-	end = p + strlen(p);    
+	end = p + strlen(p);
 	while (p < end)
 	{
 		int n = strcspn(p, " ");

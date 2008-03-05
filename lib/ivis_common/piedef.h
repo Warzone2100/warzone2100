@@ -59,6 +59,10 @@
 #define INTERFACE_DEPTH		(MAX_Z - 1.0f)
 #define BUTTON_DEPTH		2000 // will be stretched to 16000
 
+// Amount of visible terrain tiles in x/y direction
+#define VISIBLE_XTILES 64
+#define VISIBLE_YTILES 64
+
 #define OLD_TEXTURE_SIZE_FIX 256.0f
 
 //Render style flags for all pie draw functions

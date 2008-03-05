@@ -31,8 +31,4 @@
 #define	RADBRX		(RADTLX + RADWIDTH) -1
 #define	RADBRY		(RADTLY + RADHEIGHT) -1
 
-//assigned to variable visibleXtiles, visibleYTiles 25/02/98 AB
-#define VISIBLE_XTILES 64
-#define VISIBLE_YTILES 64
-
 #endif
