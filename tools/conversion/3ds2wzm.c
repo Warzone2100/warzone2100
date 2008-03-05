@@ -37,7 +37,7 @@ typedef int bool;
 
 // Based on 3ds2m.c from lib3ds
 
-// gcc -o 3ds2pie 3ds2pie.c -Wall -g -O0 `pkg-config --cflags --libs lib3ds` -Wshadow
+// gcc -o 3ds2wzm 3ds2wzm.c -Wall -g -O0 `pkg-config --cflags --libs lib3ds` -Wshadow
 
 // Make a string lower case
 static void resToLower(char *pStr)
@@ -49,15 +49,13 @@ static void resToLower(char *pStr)
 	}
 }
 
-
-void dump_pie_file(Lib3dsFile *f, FILE *o, const char *page, bool swapYZ, bool invertUV, bool reverseWinding, unsigned int baseTexFlags, float scaleFactor)
+void dump_wzm_file(Lib3dsFile *f, FILE *ctl, bool swapYZ, bool invertUV, bool reverseWinding, unsigned int baseTexFlags, float scaleFactor)
 {
 	Lib3dsMesh *m;
 	Lib3dsMaterial *material;
 	int meshIdx, j;
 
-	fprintf(o, "PIE 2\n");
-	fprintf(o, "TYPE 200\n");
+	fprintf(ctl, "WZM 1\n");
 
 	for (j = 0, material = f->materials; material; material = material->next, j++)
 	{
@@ -66,27 +64,24 @@ void dump_pie_file(Lib3dsFile *f, FILE *o, const char *page, bool swapYZ, bool i
 		resToLower(texture->name);
 		if (j > 0)
 		{
-			fprintf(stderr, "Texture %d %s-%s: More than one texture currently not supported!\n", j, page, texture->name);
+			fprintf(stderr, "Texture %d %s: More than one texture currently not supported!\n", j, texture->name);
 			continue;
 		}
-		fprintf(o, "TEXTURE %d %s-%s 256 256\n", j, page, texture->name);
+		fprintf(ctl, "TEXTURE %s\n", texture->name);
 	}
 
 	for (j = 0, m = f->meshes; m; m = m->next, j++);
-	fprintf(o, "LEVELS %d\n", j);
+	fprintf(ctl, "MESHES %d\n", j);
 
 	for (meshIdx = 0, m = f->meshes; m; m = m->next, meshIdx++)
 	{
 		unsigned int i;
 
-		if (meshIdx > 0)
-		{
-			fprintf(stderr, "Mesh %d %s: More than one frame currently not supported!\n", meshIdx, m->name);
-			continue;
-		}
-
-		fprintf(o, "LEVEL %d\n", meshIdx + 1);
-		fprintf(o, "POINTS %d\n", m->points);
+		fprintf(ctl, "MESH %d\n", meshIdx);
+		fprintf(ctl, "TEAMCOLOURS 0\n");
+		fprintf(ctl, "VERTICES %d\n", m->points);
+		fprintf(ctl, "FACES %d\n", m->faces);
+		fprintf(ctl, "VERTEXARRAY\n");
 		for (i = 0; i < m->points; i++)
 		{
 			Lib3dsVector pos;
@@ -95,58 +90,51 @@ void dump_pie_file(Lib3dsFile *f, FILE *o, const char *page, bool swapYZ, bool i
 
 			if (swapYZ)
 			{
-				fprintf(o, "\t%d %d %d\n", (int)(pos[0] * scaleFactor), (int)(pos[2] * scaleFactor), (int)(pos[1] * scaleFactor));
+				fprintf(ctl, "\t%d %d %d\n", (int)(pos[0] * scaleFactor), (int)(pos[2] * scaleFactor), (int)(pos[1] * scaleFactor));
 			}
 			else
 			{
-				fprintf(o, "\t%d %d %d\n", (int)(pos[0] * scaleFactor), (int)(pos[1] * scaleFactor), (int)(pos[2] * scaleFactor));
+				fprintf(ctl, "\t%d %d %d\n", (int)(pos[0] * scaleFactor), (int)(pos[1] * scaleFactor), (int)(pos[2] * scaleFactor));
 			}
 		}
 
-		fprintf(o, "POLYGONS %d\n", m->faces);
+		fprintf(ctl, "TEXTUREARRAYS 1\n");
+		fprintf(ctl, "TEXTUREARRAY 0\n");
+		for (i = 0; i < m->points; i++)
+		{
+			if (invertUV)
+			{
+				fprintf(ctl, "\t%f %f\n", m->texelL[i][0], 1.0f - m->texelL[i][1]);
+			}
+			else
+			{
+				fprintf(ctl, "\t%f %f\n", m->texelL[i][0], m->texelL[i][1]);
+			}
+		}
+
+		fprintf(ctl, "INDEXARRAY\n");
 		for (i = 0; i < m->faces; ++i)
 		{
 			Lib3dsFace *face = &m->faceL[i];
-			int texel[3][2];
-
-			if (!invertUV)
-			{
-				texel[0][0] = m->texelL[face->points[0]][0] * 256.0f;
-				texel[0][1] = m->texelL[face->points[0]][1] * 256.0f;
-				texel[1][0] = m->texelL[face->points[1]][0] * 256.0f;
-				texel[1][1] = m->texelL[face->points[1]][1] * 256.0f;
-				texel[2][0] = m->texelL[face->points[2]][0] * 256.0f;
-				texel[2][1] = m->texelL[face->points[2]][1] * 256.0f;
-			}
-			else
-			{
-				texel[0][0] = m->texelL[face->points[0]][0] * 256.0f;
-				texel[0][1] = (1.0f - m->texelL[face->points[0]][1]) * 256.0f;
-				texel[1][0] = m->texelL[face->points[1]][0] * 256.0f;
-				texel[1][1] = (1.0f - m->texelL[face->points[1]][1]) * 256.0f;
-				texel[2][0] = m->texelL[face->points[2]][0] * 256.0f;
-				texel[2][1] = (1.0f - m->texelL[face->points[2]][1]) * 256.0f;
-			}
 
 			if (reverseWinding)
 			{
-				fprintf(o, "\t%d 3 %d %d %d", baseTexFlags, (int)face->points[2], (int)face->points[1], (int)face->points[0]);
-				fprintf(o, " %d %d %d %d %d %d\n", texel[2][0], texel[2][1], texel[1][0], texel[1][1], texel[0][0], texel[0][1]);
+				fprintf(ctl, "\t%d %d %d\n", (int)face->points[2], (int)face->points[1], (int)face->points[0]);
 			}
 			else
 			{
-				fprintf(o, "\t%d 3 %d %d %d", baseTexFlags, (int)face->points[0], (int)face->points[1], (int)face->points[2]);
-				fprintf(o, " %d %d %d %d %d %d\n", texel[0][0], texel[0][1], texel[1][0], texel[1][1], texel[2][0], texel[2][1]);
+				fprintf(ctl, "\t%d %d %d\n", (int)face->points[0], (int)face->points[1], (int)face->points[2]);
 			}
 		}
+		fprintf(ctl, "FRAMES 0\n");
+		fprintf(ctl, "CONNECTORS 0\n");
 	}
 }
 
 
-#if !defined(WZ_3DS2PIE_GUI)
+#if !defined(WZ_3DS2WZM_GUI)
 static char *input_file = "";
 static char *output_file = "";
-static char *page = "";
 static bool swapYZ = true;
 static bool reverseWinding = true;
 static bool invertUV = true;
@@ -157,7 +145,7 @@ static void parse_args(int argc, char **argv)
 {
 	unsigned int i = 1;
 
-	for (i = 1; argc >= 3 + i && argv[i][0] == '-'; i++)
+	for (i = 1; argc >= 2 + i && argv[i][0] == '-'; i++)
 	{
 		if (argv[i][1] == 'y')
 		{
@@ -198,9 +186,9 @@ static void parse_args(int argc, char **argv)
 			exit(1);
 		}
 	}
-	if (argc < 3 + i)
+	if (argc < 2 + i)
 	{
-		fprintf(stderr, "Syntax: 3ds2m [-y] [-r] [-i] [-t] input_filename output_filename page_number\n");
+		fprintf(stderr, "Syntax: 3ds2wzm [-y] [-r] [-i] [-t] input_filename output_filename\n");
 		fprintf(stderr, "  -y  Do not swap Y and Z axis. Exporter uses Y-axis as \"up\".\n");
 		fprintf(stderr, "  -r  Do not reverse winding of all polygons.\n");
 		fprintf(stderr, "  -i  Do not invert the vertical texture coordinates.\n");
@@ -209,9 +197,7 @@ static void parse_args(int argc, char **argv)
 	}
 	input_file = argv[i++];
 	output_file = argv[i++];
-	page = argv[i++];
 }
-
 
 int main(int argc, char **argv)
 {
@@ -231,7 +217,7 @@ int main(int argc, char **argv)
 		fprintf(stderr, "***ERROR***\nCan't open %s for writing\n", output_file);
 		exit(1);
 	}
-	dump_pie_file(f, o, page, swapYZ, invertUV, reverseWinding, baseTexFlags, scaleFactor);
+	dump_wzm_file(f, o, swapYZ, invertUV, reverseWinding, baseTexFlags, scaleFactor);
 	fclose(o);
 
 	lib3ds_file_free(f);
