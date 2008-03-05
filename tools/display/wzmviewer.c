@@ -60,6 +60,16 @@ static void resizeWindow(int width, int height)
 	glViewport(0, 0, width, height);
 }
 
+// Adjust the vector in vec1 with the vector to be in vec2 by fractional value in
+// fraction which indicates how far we've come toward vec2. The result is put into
+// the result vector.
+static void interpolateVectors(Vector3f vec1, Vector3f vec2, Vector3f *result, double fraction)
+{
+	result->x = vec1.x * (1.0 - fraction) + vec2.x * fraction;
+	result->y = vec1.y * (1.0 - fraction) + vec2.y * fraction;
+	result->z = vec1.z * (1.0 - fraction) + vec2.z * fraction;
+}
+
 static void drawModel(MODEL *psModel, int x, int y)
 {
 	int i;
@@ -72,8 +82,20 @@ static void drawModel(MODEL *psModel, int x, int y)
 		if (psMesh->frameArray)
 		{
 			FRAME *psFrame = &psMesh->frameArray[psMesh->currentFrame];
+			FRAME *nextFrame = psFrame;
+			double fraction = 1.0f / (psFrame->timeSlice * 1000) * (now - psMesh->lastChange); // until next frame
+			Vector3f vec;
 
 			assert(psMesh->currentFrame < psMesh->frames);
+
+			if (psMesh->currentFrame == psMesh->frames - 1)
+			{
+				nextFrame = &psMesh->frameArray[0];	// wrap around
+			}
+			else
+			{
+				nextFrame = &psMesh->frameArray[psMesh->currentFrame + 1];
+			}
 
 			// Try to avoid a crash from crap drivers
 			assert(isfinite(psFrame->translation.x) && isfinite(psFrame->translation.y) && isfinite(psFrame->translation.z));
@@ -81,10 +103,15 @@ static void drawModel(MODEL *psModel, int x, int y)
 			assert(psFrame->rotation.x >= 0.0f && psFrame->rotation.y >= 0.0f && psFrame->rotation.z >= 0.0f);
 			assert(psFrame->rotation.x <= 360.0f && psFrame->rotation.y <= 360.0f && psFrame->rotation.z <= 360.0f);
 
-			glTranslatef(psFrame->translation.x, psFrame->translation.y, psFrame->translation.z);
-			glRotatef(psFrame->rotation.x, 1, 0, 0);
-			glRotatef(psFrame->rotation.y, 0, 1, 0);
-			glRotatef(psFrame->rotation.z, 0, 0, 1);
+			// Translate
+			interpolateVectors(psFrame->translation, nextFrame->translation, &vec, fraction);
+			glTranslatef(vec.x, vec.y, vec.z);
+
+			// Rotate
+			interpolateVectors(psFrame->rotation, nextFrame->rotation, &vec, fraction);
+			glRotatef(vec.x, 1, 0, 0);
+			glRotatef(vec.y, 0, 1, 0);
+			glRotatef(vec.z, 0, 0, 1);
 		}
 
 		glTexCoordPointer(2, GL_FLOAT, 0, psMesh->textureArray[psMesh->currentFrame]);
