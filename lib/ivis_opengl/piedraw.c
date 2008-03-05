@@ -36,11 +36,14 @@
 #include "lib/ivis_common/pieclip.h"
 #include "piematrix.h"
 
+#define SHADOW_END_DISTANCE (8000*8000) // Keep in sync with lighting.c:FOG_END
+
 #define VERTICES_PER_TRIANGLE 3
 #define COLOUR_COMPONENTS 4
 #define TEXCOORD_COMPONENTS 2
 #define VERTEX_COMPONENTS 3
-#define MAP_TRIANGLES (64 * 64 * 2) // two triangles per tile
+
+#define MAP_TRIANGLES (VISIBLE_YTILES * VISIBLE_XTILES * 2) // two triangles per tile
 #define MAP_VERTICES (VERTICES_PER_TRIANGLE * MAP_TRIANGLES)
 
 static GLubyte aColour[COLOUR_COMPONENTS * MAP_VERTICES];
@@ -59,7 +62,7 @@ BOOL check_extension(const char *extName)
 	char *end;
 	size_t extNameLen= strlen(extName);
 
-	end = p + strlen(p);    
+	end = p + strlen(p);
 	while (p < end)
 	{
 		int n = strcspn(p, " ");
@@ -734,7 +737,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, PIE
 				distance += scshapes[nb_scshapes].matrix[14] * scshapes[nb_scshapes].matrix[14];
 
 				// if object is too far in the fog don't generate a shadow.
-				if (distance < 6000*6000)
+				if (distance < SHADOW_END_DISTANCE)
 				{
 					float invmat[9], pos_light0[4];
 

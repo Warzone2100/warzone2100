@@ -41,8 +41,8 @@
 
 // These values determine the fog when fully zoomed in
 // Determine these when fully zoomed in
-#define FOG_END 3500
-#define FOG_DEPTH 800
+#define FOG_DEPTH 1000
+#define FOG_END 6500
 
 // These values are multiplied by the camera distance
 // to obtain the optimal settings when fully zoomed out
@@ -506,17 +506,9 @@ static void colourTile(SDWORD xIndex, SDWORD yIndex, LIGHT_COLOUR colouridx, UBY
 /// "popping" tiles
 void UpdateFogDistance(float distance)
 {
-	pie_UpdateFogDistance(FOG_END-FOG_DEPTH+distance*FOG_BEGIN_SCALE, FOG_END+distance*FOG_END_SCALE);
+	pie_UpdateFogDistance(FOG_END-FOG_DEPTH + distance*FOG_BEGIN_SCALE, FOG_END + distance*FOG_END_SCALE);
 }
 
-
-//three fog modes, background fog, distance fog, ground mist
-
-
-#define UMBRA_RADIUS 384
-#define FOG_RADIUS 384   //256 too abrupt at edges
-#define FOG_START 512
-#define FOG_RATE 10
 
 #define MIN_DROID_LIGHT_LEVEL	96
 #define	DROID_SEEK_LIGHT_SPEED	2

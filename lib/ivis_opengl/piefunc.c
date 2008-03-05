@@ -50,7 +50,7 @@ void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD 
 	pieVrts[0].pos.x = v[1].x;
 	pieVrts[0].pos.y = v[1].y;
 	//cull triangles with off screen points
-	pieVrts[0].pos.z  = (int)INTERFACE_DEPTH;
+	pieVrts[0].pos.z  = INTERFACE_DEPTH;
 
 	pieVrts[0].u = 0;
 	pieVrts[0].v = 0;
