@@ -510,14 +510,6 @@ void UpdateFogDistance(float distance)
 }
 
 
-//three fog modes, background fog, distance fog, ground mist
-
-
-#define UMBRA_RADIUS 384
-#define FOG_RADIUS 384   //256 too abrupt at edges
-#define FOG_START 512
-#define FOG_RATE 10
-
 #define MIN_DROID_LIGHT_LEVEL	96
 #define	DROID_SEEK_LIGHT_SPEED	2
 
