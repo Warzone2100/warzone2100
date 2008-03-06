@@ -1786,12 +1786,12 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		//set up the ecm stat
 		if (psBuilding->pStructureType->pECM)
 		{
-			psBuilding->ecmPower = (UWORD)ecmPower(psBuilding->pStructureType->pECM,
+			psBuilding->ECMMod = (UWORD)ecmPower(psBuilding->pStructureType->pECM,
 				psBuilding->player);
 		}
 		else
 		{
-			psBuilding->ecmPower = 0;
+			psBuilding->ECMMod = 0;
 		}
 
 		/* Store the weapons */
@@ -5925,7 +5925,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, "%s - %d Units assigned - ID %d - sensor range %hu power %hu - ECM %u",
 			          getStatName(psStructure->pStructureType), countAssignedDroids(psStructure),
-			          psStructure->id, psStructure->sensorRange, psStructure->sensorPower, psStructure->ecmPower));
+			          psStructure->id, psStructure->sensorRange, psStructure->sensorPower, psStructure->ECMMod));
 		}
 		else
 #endif
@@ -5947,7 +5947,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 			CONPRINTF(ConsoleString, (ConsoleString, "%s - %d Units assigned - ID %d - armour %d|%d - sensor range %hu power %hu - ECM %u",
 				getStatName(psStructure->pStructureType), countAssignedDroids(psStructure),
 				psStructure->id, psStructure->armour[0][WC_KINETIC], psStructure->armour[0][WC_HEAT],
-			        psStructure->sensorRange, psStructure->sensorPower, psStructure->ecmPower));
+			        psStructure->sensorRange, psStructure->sensorPower, psStructure->ECMMod));
 		}
 #endif
 		else

@@ -603,7 +603,7 @@ static void structureSaveTagged(STRUCTURE *psStruct)
 	/* common groups */
 
 	objectSaveTagged((BASE_OBJECT *)psStruct); /* 0x01 */
-	objectSensorTagged(psStruct->sensorRange, psStruct->sensorPower, 0, psStruct->ecmPower); /* 0x02 */
+	objectSensorTagged(psStruct->sensorRange, psStruct->sensorPower, 0, psStruct->ECMMod); /* 0x02 */
 	objectStatTagged((BASE_OBJECT *)psStruct, psStruct->pStructureType->bodyPoints, psStruct->resistance); /* 0x03 */
 	objectWeaponTagged(psStruct->numWeaps, psStruct->turretRotation, psStruct->turretPitch, psStruct->asWeaps, psStruct->psTarget);
 

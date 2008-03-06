@@ -2242,22 +2242,13 @@ void actionUpdateDroid(DROID *psDroid)
 			// make sure the target is within sensor range
 			xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psDroid->psActionTarget[0]->pos.x;
 			ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->psActionTarget[0]->pos.y;
-			//if change this back - change in MOVETOOBSERVE as well
-			//rangeSq = 2 * (SDWORD)psDroid->sensorRange / 3;
-			rangeSq = (SDWORD)psDroid->sensorRange;
+			rangeSq = droidGetSensorRange(psDroid);
 			rangeSq = rangeSq * rangeSq;
 			if (!visibleObject((BASE_OBJECT *)psDroid, psDroid->psActionTarget[0]) ||
 				xdiff*xdiff + ydiff*ydiff >= rangeSq)
 			{
-/*				if (secondaryGetState(psDroid, DSO_HALTTYPE, &state) && (state == DSS_HALT_HOLD))
-				{
-					psDroid->action = DACTION_NONE;						// holding, don't move.
-				}
-				else*/
-				{
-					psDroid->action = DACTION_MOVETOOBSERVE;
-					moveDroidTo(psDroid, psDroid->psActionTarget[0]->pos.x,psDroid->psActionTarget[0]->pos.y);
-				}
+				psDroid->action = DACTION_MOVETOOBSERVE;
+				moveDroidTo(psDroid, psDroid->psActionTarget[0]->pos.x, psDroid->psActionTarget[0]->pos.y);
 			}
 		}
 		break;
@@ -2272,9 +2263,7 @@ void actionUpdateDroid(DROID *psDroid)
 			// make sure the target is within sensor range
 			xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psDroid->psActionTarget[0]->pos.x;
 			ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->psActionTarget[0]->pos.y;
-			//if change this back - change in OBSERVE as well
-			//rangeSq = 2 * (SDWORD)psDroid->sensorRange / 3;
-			rangeSq = (SDWORD)psDroid->sensorRange;
+			rangeSq = droidGetSensorRange(psDroid);
 			rangeSq = rangeSq * rangeSq;
 			if ((xdiff*xdiff + ydiff*ydiff < rangeSq) &&
 				!DROID_STOPPED(psDroid))
@@ -2285,14 +2274,7 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 		if (DROID_STOPPED(psDroid) && psDroid->action == DACTION_MOVETOOBSERVE)
 		{
-/*			if (secondaryGetState(psDroid, DSO_HALTTYPE, &state) && (state == DSS_HALT_HOLD))
-			{
-				psDroid->action = DACTION_NONE;				// on hold, don't go any further.
-			}
-			else*/
-			{
-				moveDroidTo(psDroid, psDroid->psActionTarget[0]->pos.x,psDroid->psActionTarget[0]->pos.y);
-			}
+			moveDroidTo(psDroid, psDroid->psActionTarget[0]->pos.x, psDroid->psActionTarget[0]->pos.y);
 		}
 		break;
 	case DACTION_FIRESUPPORT:
@@ -2301,19 +2283,6 @@ void actionUpdateDroid(DROID *psDroid)
 			psDroid->psTarget->type == OBJ_STRUCTURE) &&
 				(psDroid->psTarget->player == psDroid->player),
 			"DACTION_FIRESUPPORT: incorrect target type" );
-/*		if (orderState(((DROID *)psDroid->psTarget), DORDER_OBSERVE))
-		{
-			// move to attack
-			psDroid->action = DACTION_MOVETOFSUPP_ATTACK;
-			setDroidActionTarget(psDroid, psDroid->psTarget->psTarget, 0);
-			moveDroidTo(psDroid, psDroid->psActionTarget->pos.x, psDroid->psActionTarget->pos.y);
-		}
-		else
-		{*/
-		//Move droids attached to structures and droids now...AB 13/10/98
-		//move (indirect weapon)droids attached to a sensor
-		//if (psDroid->psTarget->type == OBJ_DROID)
-		//{
 			//don't move VTOL's
 			// also don't move closer to sensor towers
 			if (!vtolDroid(psDroid) &&
@@ -2322,8 +2291,6 @@ void actionUpdateDroid(DROID *psDroid)
 				//move droids to within short range of the sensor now!!!!
 				xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psDroid->psTarget->pos.x;
 				ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->psTarget->pos.y;
-				// make sure the weapon droid is within 2/3 weapon range of the sensor
-				//rangeSq = 2 * proj_GetLongRange(asWeaponStats + psDroid->asWeaps[0].nStat) / 3;
 				rangeSq = asWeaponStats[psDroid->asWeaps[0].nStat].shortRange;
 				rangeSq = rangeSq * rangeSq;
 				if (xdiff*xdiff + ydiff*ydiff < rangeSq)

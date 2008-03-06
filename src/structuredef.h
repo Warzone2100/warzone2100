@@ -304,7 +304,7 @@ typedef struct _structure
 	UDWORD		lastHitWeapon;
 
 	//the ecm power needs to be stored since the actual ecm stat can change with research
-	UWORD		ecmPower;
+	UWORD		ECMMod;
 
 	FUNCTIONALITY	*pFunctionality;		/* pointer to structure that contains fields
 											   necessary for functionality */

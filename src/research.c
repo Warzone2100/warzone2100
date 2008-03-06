@@ -2918,7 +2918,7 @@ void replaceStructureComponent(STRUCTURE *pList, UDWORD oldType, UDWORD oldCompI
 			case COMP_ECM:
 				if (psStructure->pStructureType->pECM == (asECMStats + oldCompInc))
 				{
-					psStructure->ecmPower = (UWORD)(asECMStats + newCompInc)->power;
+					psStructure->ECMMod = (UWORD)(asECMStats + newCompInc)->power;
 				}
 				break;
 			case COMP_SENSOR:

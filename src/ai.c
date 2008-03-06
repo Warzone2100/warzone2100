@@ -146,11 +146,9 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 							// make sure this target wasn't assigned explicitly to this droid
 							if(friendlyDroid->order != DORDER_ATTACK)
 							{
-								//(WEAPON_STATS *)(asWeaponStats + ((DROID *)friendlyObj)->asWeaps[0].nStat)->;
-
 								// make sure target is near enough
-								if(dirtySqrt(psDroid->pos.x,psDroid->pos.y,tempTarget->pos.x,tempTarget->pos.y)
-									< (psDroid->sensorRange))
+								if (dirtySqrt(psDroid->pos.x, psDroid->pos.y, tempTarget->pos.x, tempTarget->pos.y)
+								    < droidGetSensorRange(psDroid))
 								{
 									targetInQuestion = tempTarget;		//consider this target
 								}
@@ -582,8 +580,8 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 			// Can't attack without a weapon
 			return FALSE;
 		}
-		radSquared = ((DROID *)psObj)->sensorRange *
-					 ((DROID *)psObj)->sensorRange;
+		sensorRange = droidGetSensorRange((DROID *)psObj);
+		radSquared = sensorRange * sensorRange;
 		break;
 	case OBJ_STRUCTURE:
 		if (((STRUCTURE *)psObj)->numWeaps == 0 || ((STRUCTURE *)psObj)->asWeaps[0].nStat == 0)
@@ -797,6 +795,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 /* See if there is a target in range for Sensor objects*/
 BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 {
+	SDWORD	sensorRange;
 	UDWORD	radSquared;
 	BASE_OBJECT		*psCurr,*psTemp = NULL;
 	BASE_OBJECT		*psTarget = NULL;
@@ -812,8 +811,8 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 			// to be used for Turret Sensors only
 			return FALSE;
 		}
-		radSquared = ((DROID *)psObj)->sensorRange *
-					 ((DROID *)psObj)->sensorRange;
+		sensorRange = droidGetSensorRange((DROID *)psObj);
+		radSquared = sensorRange * sensorRange;
 		break;
 	case OBJ_STRUCTURE:
 		if (!(structStandardSensor((STRUCTURE *)psObj) ||
@@ -822,11 +821,11 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 			// to be used for Standard and VTOL intercept Turret Sensors only
 			return FALSE;
 		}
-		radSquared = ((STRUCTURE *)psObj)->sensorRange *
-					 ((STRUCTURE *)psObj)->sensorRange;
+		sensorRange = ((STRUCTURE *)psObj)->sensorRange;
+		radSquared = sensorRange * sensorRange;
 		break;
 	default:
-		radSquared = 0;
+		sensorRange = radSquared = 0;
 		break;
 	}
 

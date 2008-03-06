@@ -371,7 +371,7 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 		ecmPower = ((DROID *)psTarget)->ECMMod;
 		break;
 	case OBJ_STRUCTURE:
-		ecmPower = ((STRUCTURE *)psTarget)->ecmPower;
+		ecmPower = ((STRUCTURE *)psTarget)->ECMMod;
 		range = 4 * range / 3;
 		break;
 	default:

@@ -406,6 +406,31 @@ BOOL droidCheckReferences(DROID *psVictimDroid);
 /** Check if droid is in a legal world position and is not on its way to drive off the map. */
 BOOL droidOnMap(DROID *psDroid);
 
+static inline int droidGetSensorRange(DROID *psDroid)
+{
+        return psDroid->sensorRange;
+}
+
+static inline int droidGetSensorPower(DROID *psDroid)
+{
+        return psDroid->sensorPower;
+}
+
+static inline int droidGetJammerPower(DROID *psDroid)
+{
+        return 0;
+}
+
+static inline int droidGetJammerRange(DROID *psDroid)
+{
+        return 0;
+}
+
+static inline int droidGetConcealment(DROID *psDroid)
+{
+	return psDroid->ECMMod;
+}
+
 /*
  * Component stat helper functions
  */

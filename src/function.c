@@ -1248,12 +1248,11 @@ void structureECMUpgrade(STRUCTURE *psBuilding)
 	//reallocate the sensor range and power since the upgrade
 	if (psBuilding->pStructureType->pECM)
 	{
-		psBuilding->ecmPower = (UWORD)ecmPower(psBuilding->pStructureType->pECM,
-			psBuilding->player);
+		psBuilding->ECMMod = (UWORD)ecmPower(psBuilding->pStructureType->pECM, psBuilding->player);
 	}
 	else
 	{
-		psBuilding->ecmPower = 0;
+		psBuilding->ECMMod = 0;
 	}
 }
 

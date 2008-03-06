@@ -222,17 +222,13 @@ void printDroidInfo(DROID *psDroid)
 	printBaseObjInfo((BASE_OBJECT *)psDroid);
 
 	CONPRINTF(ConsoleString,(ConsoleString,"   wt %d bSpeed %d sRng %d sPwr %d ECM %d bdy %d\n",
-		psDroid->weight, psDroid->baseSpeed, psDroid->sensorRange,
-		psDroid->sensorPower,psDroid->ECMMod, psDroid->body));
+		psDroid->weight, psDroid->baseSpeed, droidGetSensorRange(psDroid),
+		droidGetSensorPower(psDroid), droidGetConcealment(psDroid), psDroid->body));
 
-	/*for(i=0; i<(SDWORD)psDroid->numWeaps; i++)
+	if (psDroid->asWeaps[0].nStat > 0)
 	{
-		printWeaponInfo(asWeaponStats + psDroid->asWeaps[i].nStat);
-	}*/
-    if (psDroid->asWeaps[0].nStat > 0)
-    {
-        printWeaponInfo(asWeaponStats + psDroid->asWeaps[0].nStat);
-    }
+		printWeaponInfo(asWeaponStats + psDroid->asWeaps[0].nStat);
+	}
 
 	for(i=0; i<DROID_MAXCOMP; i++)
 	{
@@ -289,7 +285,6 @@ void printDroidInfo(DROID *psDroid)
 				psSensStats = asSensorStats + psDroid->asBits[i].nStat;
 				printComponentInfo((COMP_BASE_STATS *)psSensStats);
 				CONPRINTF(ConsoleString,(ConsoleString,"   rng %d pwr %d loc %d imd %p\n",
-					//psSensStats->range, psSensStats->power,
 					sensorRange(psSensStats,psDroid->player),
 					sensorPower(psSensStats,psDroid->player),
 					psSensStats->location, psSensStats->pMountGraphic));
