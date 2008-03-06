@@ -4328,7 +4328,7 @@ static void	showSensorRange2(BASE_OBJECT *psObj)
 		else
 		{
 			psStruct = (STRUCTURE*)psObj;
-			sensorRange = psStruct->sensorRange;
+			sensorRange = structSensorRange(psStruct);
 			bBuilding = TRUE;
 		}
 		radius = sensorRange;

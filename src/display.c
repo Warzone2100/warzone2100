@@ -1803,7 +1803,7 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 			          "%s - Damage %d%% - ID %d - experience %f, %s - order %s - action %s - sensor range %hu power %hu - ECM %u",
 			          droidGetName(psDroid), 100 - PERCENT(psDroid->body, psDroid->originalBody), psDroid->id,
 			          psDroid->experience, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order), getDroidActionName(psDroid->action),
-			          droidGetSensorRange(psDroid), droidGetSensorPower(psDroid), droidGetConcealment(psDroid)));
+			          droidSensorRange(psDroid), droidSensorPower(psDroid), droidConcealment(psDroid)));
 			FeedbackClickedOn();
 		}
 		else

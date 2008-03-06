@@ -373,7 +373,9 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	//psFeature->subType = psStats->subType;
 	psFeature->body = psStats->body;
 	psFeature->player = MAX_PLAYERS+1;	//set the player out of range to avoid targeting confusions
-
+	psFeature->sensorRange = 0;
+	psFeature->sensorPower = 0;
+	psFeature->ECMMod = 0;
 	psFeature->bTargetted = FALSE;
 	psFeature->timeLastHit = 0;
 

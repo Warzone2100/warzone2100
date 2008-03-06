@@ -2242,7 +2242,7 @@ void actionUpdateDroid(DROID *psDroid)
 			// make sure the target is within sensor range
 			xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psDroid->psActionTarget[0]->pos.x;
 			ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->psActionTarget[0]->pos.y;
-			rangeSq = droidGetSensorRange(psDroid);
+			rangeSq = droidSensorRange(psDroid);
 			rangeSq = rangeSq * rangeSq;
 			if (!visibleObject((BASE_OBJECT *)psDroid, psDroid->psActionTarget[0]) ||
 				xdiff*xdiff + ydiff*ydiff >= rangeSq)
@@ -2263,7 +2263,7 @@ void actionUpdateDroid(DROID *psDroid)
 			// make sure the target is within sensor range
 			xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psDroid->psActionTarget[0]->pos.x;
 			ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->psActionTarget[0]->pos.y;
-			rangeSq = droidGetSensorRange(psDroid);
+			rangeSq = droidSensorRange(psDroid);
 			rangeSq = rangeSq * rangeSq;
 			if ((xdiff*xdiff + ydiff*ydiff < rangeSq) &&
 				!DROID_STOPPED(psDroid))

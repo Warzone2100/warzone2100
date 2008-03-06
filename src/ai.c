@@ -148,7 +148,7 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 							{
 								// make sure target is near enough
 								if (dirtySqrt(psDroid->pos.x, psDroid->pos.y, tempTarget->pos.x, tempTarget->pos.y)
-								    < droidGetSensorRange(psDroid))
+								    < droidSensorRange(psDroid))
 								{
 									targetInQuestion = tempTarget;		//consider this target
 								}
@@ -561,7 +561,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 	STRUCTURE		*psCStruct;
 	DROID			*psCommander;
 	BOOL			bCommanderBlock;
-	UDWORD			sensorRange;
+	UDWORD			sensorRange = objSensorRange(psObj);
 	SECONDARY_STATE	state;
 	SDWORD			curTargetWeight=-1,newTargetWeight;
 
@@ -580,7 +580,6 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 			// Can't attack without a weapon
 			return FALSE;
 		}
-		sensorRange = droidGetSensorRange((DROID *)psObj);
 		radSquared = sensorRange * sensorRange;
 		break;
 	case OBJ_STRUCTURE:
@@ -589,7 +588,6 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 			// Can't attack without a weapon
 			return FALSE;
 		}
-		sensorRange = ((STRUCTURE *)psObj)->sensorRange;
 
 		// increase the sensor range for AA sites
 		// AA sites are defensive structures that can only shoot in the air
@@ -795,7 +793,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 /* See if there is a target in range for Sensor objects*/
 BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 {
-	SDWORD	sensorRange;
+	SDWORD	sensorRange = objSensorRange(psObj);
 	UDWORD	radSquared;
 	BASE_OBJECT		*psCurr,*psTemp = NULL;
 	BASE_OBJECT		*psTarget = NULL;
@@ -811,7 +809,6 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 			// to be used for Turret Sensors only
 			return FALSE;
 		}
-		sensorRange = droidGetSensorRange((DROID *)psObj);
 		radSquared = sensorRange * sensorRange;
 		break;
 	case OBJ_STRUCTURE:
@@ -821,11 +818,10 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 			// to be used for Standard and VTOL intercept Turret Sensors only
 			return FALSE;
 		}
-		sensorRange = ((STRUCTURE *)psObj)->sensorRange;
 		radSquared = sensorRange * sensorRange;
 		break;
 	default:
-		sensorRange = radSquared = 0;
+		radSquared = 0;
 		break;
 	}
 

@@ -151,9 +151,6 @@ typedef struct _droid
 	 */
 	UDWORD          weight;
 	UDWORD          baseSpeed;                      ///< the base speed dependant on propulsion type
-	UDWORD          sensorRange;
-	UDWORD          sensorPower;
-	UDWORD          ECMMod;
 	UDWORD          originalBody;                   ///< the original body points
 	UDWORD          body;                           ///< the current body points
 	float           experience;

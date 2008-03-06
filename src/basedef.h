@@ -66,6 +66,9 @@ typedef enum _object_type
 	BOOL                inFire;                     /**< TRUE if the object is in a fire */ \
 	UDWORD              burnStart;                  /**< When the object entered the fire */ \
 	UDWORD              burnDamage;                 /**< How much damage has been done since the object entered the fire */ \
+	SDWORD              sensorPower;		/**< Active sensor power */ \
+	SDWORD              sensorRange;		/**< Range of sensor */ \
+	SDWORD              ECMMod;			/**< Ability to conceal oneself from sensors */ \
 	UDWORD              armour[NUM_HIT_SIDES][NUM_WEAPON_CLASS]
 
 #define NEXTOBJ(pointerType) \

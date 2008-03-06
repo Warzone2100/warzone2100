@@ -29,6 +29,7 @@
 #include "projectile.h"
 #include "console.h"
 #include "oprint.h"
+#include "visibility.h"
 
 // print out information about a base object
 void printBaseObjInfo(BASE_OBJECT *psObj)
@@ -222,8 +223,8 @@ void printDroidInfo(DROID *psDroid)
 	printBaseObjInfo((BASE_OBJECT *)psDroid);
 
 	CONPRINTF(ConsoleString,(ConsoleString,"   wt %d bSpeed %d sRng %d sPwr %d ECM %d bdy %d\n",
-		psDroid->weight, psDroid->baseSpeed, droidGetSensorRange(psDroid),
-		droidGetSensorPower(psDroid), droidGetConcealment(psDroid), psDroid->body));
+		psDroid->weight, psDroid->baseSpeed, droidSensorRange(psDroid),
+		droidSensorPower(psDroid), droidConcealment(psDroid), psDroid->body));
 
 	if (psDroid->asWeaps[0].nStat > 0)
 	{

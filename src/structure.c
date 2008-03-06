@@ -5925,7 +5925,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, "%s - %d Units assigned - ID %d - sensor range %hu power %hu - ECM %u",
 			          getStatName(psStructure->pStructureType), countAssignedDroids(psStructure),
-			          psStructure->id, psStructure->sensorRange, psStructure->sensorPower, psStructure->ECMMod));
+			          psStructure->id, structSensorRange(psStructure), structSensorPower(psStructure), structConcealment(psStructure)));
 		}
 		else
 #endif
@@ -5947,7 +5947,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 			CONPRINTF(ConsoleString, (ConsoleString, "%s - %d Units assigned - ID %d - armour %d|%d - sensor range %hu power %hu - ECM %u",
 				getStatName(psStructure->pStructureType), countAssignedDroids(psStructure),
 				psStructure->id, psStructure->armour[0][WC_KINETIC], psStructure->armour[0][WC_HEAT],
-			        psStructure->sensorRange, psStructure->sensorPower, psStructure->ECMMod));
+			        structSensorRange(psStructure), structSensorPower(psStructure), structConcealment(psStructure)));
 		}
 #endif
 		else

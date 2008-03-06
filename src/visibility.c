@@ -259,37 +259,23 @@ BOOL visTilesPending(BASE_OBJECT *psObj)
 /* Check which tiles can be seen by an object */
 void visTilesUpdate(BASE_OBJECT *psObj)
 {
-	SDWORD	range;
+	SDWORD	range = objSensorRange(psObj);
 	SDWORD	ray;
 
-	// Get the sensor Range and power
-	switch (psObj->type)
-	{
-	case OBJ_DROID:	// Done whenever a droid is built or moves to a new tile.
-		range = ((DROID *)psObj)->sensorRange;
-		break;
-	case OBJ_STRUCTURE:	// Only done when structure initialy built.
-		range = ((STRUCTURE *)psObj)->sensorRange;
-		break;
-	default:
-		ASSERT( FALSE,
-			"visTilesUpdate: visibility checking is only implemented for"
-			"units and structures" );
-		return;
-	}
+	ASSERT(psObj->type != OBJ_FEATURE, "visTilesUpdate: visibility updates are not for features!");
 
 	rayPlayer = psObj->player;
 
-		// Do the whole circle.
-		for(ray=0; ray < NUM_RAYS; ray += NUM_RAYS/80)
-		{
-			// initialise the callback variables
-			startH = psObj->pos.z + visObjHeight(psObj);
-			currG = -UBYTE_MAX * GRAD_MUL;
+	// Do the whole circle.
+	for(ray = 0; ray < NUM_RAYS; ray += NUM_RAYS / 80)
+	{
+		// initialise the callback variables
+		startH = psObj->pos.z + visObjHeight(psObj);
+		currG = -UBYTE_MAX * GRAD_MUL;
 
-			// Cast the rays from the viewer
-			rayCast(psObj->pos.x,psObj->pos.y,ray, range, rayTerrainCallback);
-		}
+		// Cast the rays from the viewer
+		rayCast(psObj->pos.x, psObj->pos.y,ray, range, rayTerrainCallback);
+	}
 }
 
 /* Check whether psViewer can see psTarget.
@@ -302,8 +288,7 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 {
 	SDWORD		x,y, ray;
 	SDWORD		xdiff,ydiff, rangeSquared;
-	SDWORD		range;
-	UDWORD		senPower, ecmPower;
+	SDWORD		range = objSensorRange(psViewer);
 	SDWORD		tarG, top;
 	STRUCTURE	*psStruct;
 
@@ -311,8 +296,6 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 	switch (psViewer->type)
 	{
 	case OBJ_DROID:
-		range = ((DROID *)psViewer)->sensorRange;
-		senPower = ((DROID *)psViewer)->sensorPower;
 		if (((DROID*)psViewer)->droidType == DROID_COMMAND)
 		{
 			range = 3 * range / 2;
@@ -342,9 +325,6 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 			return TRUE;
 		}
 
-		range = ((STRUCTURE *)psViewer)->sensorRange;
-		senPower = ((STRUCTURE *)psViewer)->sensorPower;
-
 		// increase the sensor range for AA sites
 		// AA sites are defensive structures that can only shoot in the air
 		if ( (psStruct->pStructureType->type == REF_DEFENSE) &&
@@ -362,29 +342,10 @@ BOOL visibleObject(BASE_OBJECT *psViewer, BASE_OBJECT *psTarget)
 		break;
 	}
 
-	/* Get the target's ecm power (if it has one)
-	 * or that of a nearby ECM droid.
-	 */
-	switch (psTarget->type)
+	// Structures can be seen from further away
+	if (psTarget->type == OBJ_STRUCTURE)
 	{
-	case OBJ_DROID:
-		ecmPower = ((DROID *)psTarget)->ECMMod;
-		break;
-	case OBJ_STRUCTURE:
-		ecmPower = ((STRUCTURE *)psTarget)->ECMMod;
 		range = 4 * range / 3;
-		break;
-	default:
-		/* No ecm so zero power */
-		ecmPower = 0;
-		break;
-	}
-
-	/* Implement ECM by making sensor range two thirds of normal when
-	 * enemy's ECM rating is higher than our sensor power rating. */
-	if (ecmPower > senPower)
-	{
-		range = range * 2 / 3;
 	}
 
 	/* First see if the target is in sensor range */
