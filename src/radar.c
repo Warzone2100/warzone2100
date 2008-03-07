@@ -368,9 +368,9 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 			// draw radar terrain on/off feature
 			PIELIGHT col = tileColours[TileNumber_tile(WTile->texture)];
 
-			col.byte.r = sqrt(col.byte.r * WTile->illumination);
-			col.byte.b = sqrt(col.byte.b * WTile->illumination);
-			col.byte.g = sqrt(col.byte.g * WTile->illumination);
+			col.byte.r = sqrtf(col.byte.r * WTile->illumination);
+			col.byte.b = sqrtf(col.byte.b * WTile->illumination);
+			col.byte.g = sqrtf(col.byte.g * WTile->illumination);
 			WScr = col;
 		}
 		break;
@@ -379,9 +379,9 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 			// draw radar terrain on/off feature
 			PIELIGHT col = tileColours[TileNumber_tile(WTile->texture)];
 
-			col.byte.r = sqrt(col.byte.r * (WTile->illumination + WTile->height) / 2);
-			col.byte.b = sqrt(col.byte.b * (WTile->illumination + WTile->height) / 2);
-			col.byte.g = sqrt(col.byte.g * (WTile->illumination + WTile->height) / 2);
+			col.byte.r = sqrtf(col.byte.r * (WTile->illumination + WTile->height) / 2);
+			col.byte.b = sqrtf(col.byte.b * (WTile->illumination + WTile->height) / 2);
+			col.byte.g = sqrtf(col.byte.g * (WTile->illumination + WTile->height) / 2);
 			WScr = col;
 		}
 		break;
@@ -468,9 +468,9 @@ static void DrawRadarTiles(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD bo
 					UDWORD Val, c, d;
 					UDWORD *Ptr = Scr + j + i * Modulus;
 
-					col.byte.r = sqrt(col.byte.r * WTile->illumination);
-					col.byte.b = sqrt(col.byte.b * WTile->illumination);
-					col.byte.g = sqrt(col.byte.g * WTile->illumination);
+					col.byte.r = sqrtf(col.byte.r * WTile->illumination);
+					col.byte.b = sqrtf(col.byte.b * WTile->illumination);
+					col.byte.g = sqrtf(col.byte.g * WTile->illumination);
 					Val = col.argb;
 
    					for(c=0; c<SizeV; c++)
@@ -622,15 +622,15 @@ static void DrawRadarObjects(UDWORD *screen,UDWORD Modulus,UWORD boxSizeH,UWORD 
 			{
 				playerCol = (aiCheckAlliances(selectedPlayer,clan) ? colRadarAlly: colRadarEnemy);
 			}
-		} 
-		else 
+		}
+		else
 		{
 			//original 8-color mode
 			playerCol = clanColours[getPlayerColour(clan)];
 		}
 
 		flashCol = flashColours[getPlayerColour(clan)];
-		
+
 		/* Go through all structures */
    		for(psStruct = apsStructLists[clan]; psStruct != NULL;
    			psStruct = psStruct->psNext)

@@ -27,7 +27,7 @@
 #include <stdio.h>
 
 #include "lib/framework/frame.h"
-#include "lib/framework/trig.h"
+#include "lib/framework/math-help.h"
 
 #include "objects.h"
 #include "map.h"
@@ -69,11 +69,11 @@ static SDWORD	rayFPInvCos[NUM_RAYS], rayFPInvSin[NUM_RAYS];
 
 BOOL rayInitialise(void)
 {
-	SDWORD	i;
-	float	angle = 0.f;
-	float	val;
+	SDWORD i;
+	float angle = 0.0f;
+	float val;
 
-	for(i=0; i<NUM_RAYS; i++)
+	for(i = 0; i < NUM_RAYS; i++)
 	{
 		// Set up the fixed offset tables for calculating the intersection points
 		val = tanf(angle);
@@ -101,9 +101,9 @@ BOOL rayInitialise(void)
 		rayFPInvTan[i] = (float)RAY_ACCMUL / val;
 
 		// Set up the trig tables for calculating the offset distances
-		val = (float)sin(angle);
-		if(val == 0) {
-			val = (float)1;
+		val = sinf(angle);
+		if(val == 0.0f) {
+			val = 1.0f;
 		}
 		rayFPInvSin[i] = (float)RAY_ACCMUL / val;
 		if (i >= NUM_RAYS/2)
@@ -115,9 +115,9 @@ BOOL rayInitialise(void)
 			rayVDist[i] = (float)TILE_UNITS / val;
 		}
 
-		val = (float)cos(angle);
-		if(val == 0) {
-			val = (float)1;
+		val = cosf(angle);
+		if(val == 0.0f) {
+			val = 1.0f;
 		}
 		rayFPInvCos[i] = (float)RAY_ACCMUL / val;
 		if (i < NUM_RAYS/4 || i > 3*NUM_RAYS/4)
