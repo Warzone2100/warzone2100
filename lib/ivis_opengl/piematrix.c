@@ -181,7 +181,7 @@ void pie_MatRotY(int y)
 		psMatrix->i = ((sra * psMatrix->c) + (cra * psMatrix->i))>>FP12_SHIFT;
 		psMatrix->c = t;
 
-		glRotatef(y*22.5f/4096.0f, 0.0f, 1.0f, 0.0f);
+		glRotatef(y * 22.5f/4096.0f, 0.0f, 1.0f, 0.0f);
 	}
 }
 
@@ -210,7 +210,7 @@ void pie_MatRotZ(int z)
 		psMatrix->f = ((cra * psMatrix->f) - (sra * psMatrix->c))>>FP12_SHIFT;
 		psMatrix->c = t;
 
-		glRotatef(z*22.5f/4096.0f, 0.0f, 0.0f, 1.0f);
+		glRotatef(z * 22.5f/4096.0f, 0.0f, 0.0f, 1.0f);
 	}
 }
 
@@ -239,7 +239,7 @@ void pie_MatRotX(int x)
 		psMatrix->i = ((cra * psMatrix->i) - (sra * psMatrix->f))>>FP12_SHIFT;
 		psMatrix->f = t;
 
-		glRotatef(x*22.5f/4096.0f, 1.0f, 0.0f, 0.0f);
+		glRotatef(x * 22.5f/4096.0f, 1.0f, 0.0f, 0.0f);
 	}
 }
 
