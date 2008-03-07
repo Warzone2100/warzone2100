@@ -100,19 +100,21 @@ void	atmosUpdateSystem( void )
 	UDWORD	numberToAdd;
 	Vector3i pos;
 
-	for(i=0; i<MAX_ATMOS_PARTICLES; i++)
-	{
-		/* See if it's active */
-		if(asAtmosParts[i].status == APS_ACTIVE)
-		{
-			processParticle(&asAtmosParts[i]);
-		}
-	}
-
-	/* This bit below needs to go into a "precipitation function" */
+	// we don't want to do any of this while paused.
 	if(!gamePaused() && weather!=WT_NONE)
 	{
+		for(i = 0; i < MAX_ATMOS_PARTICLES; i++)
+		{
+			/* See if it's active */
+			if(asAtmosParts[i].status == APS_ACTIVE)
+			{
+				processParticle(&asAtmosParts[i]);
+			}
+		}
+
+		/* This bit below needs to go into a "precipitation function" */
 		numberToAdd = ((weather==WT_SNOWING) ? 2 : 4);
+
 		/* Temporary stuff - just adds a few particles! */
 		for(i=0; i<numberToAdd; i++)
 		{
