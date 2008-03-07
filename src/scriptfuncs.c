@@ -10953,7 +10953,7 @@ BOOL scrSqrt(void)
 		return FALSE;
 	}
 
-	scrFunctionResult.v.fval = sqrt(fArg);
+	scrFunctionResult.v.fval = sqrtf(fArg);
 	if (!stackPushResult(VAL_FLOAT, &scrFunctionResult))
 	{
 		return FALSE;
