@@ -18,7 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /**
- * @file warcam.c 
+ * @file warcam.c
  * Handles tracking/following of in game objects.
  */
 /* Alex McLean, Pumpkin Studios, EIDOS Interactive, 1998 */
@@ -709,21 +709,16 @@ in the case of location and degrees of arc in the case of rotation.
 
 static void updateCameraAcceleration(UBYTE update)
 {
-float	separation;
-SDWORD	realPos;
-SDWORD	xConcern,yConcern,zConcern;
-SDWORD	xBehind,yBehind;
-BOOL	bFlying;
-DROID	*psDroid;
-UDWORD	multiAngle;
-PROPULSION_STATS	*psPropStats;
-//SDWORD	pitch;
-SDWORD	angle;
+	float	separation;
+	SDWORD	realPos;
+	SDWORD	xConcern,yConcern,zConcern;
+	SDWORD	xBehind,yBehind;
+	BOOL	bFlying = FALSE;
+	DROID	*psDroid;
+	UDWORD	multiAngle;
+	PROPULSION_STATS	*psPropStats;
+	SDWORD angle = 90 - abs(((player.r.x/182)%90));
 
-	angle = abs(((player.r.x/182)%90));
-	angle = 90-angle;
-
-	bFlying = FALSE;
 	if(trackingCamera.target->type == OBJ_DROID)
 	{
 		psDroid = (DROID*)trackingCamera.target;
@@ -745,7 +740,7 @@ SDWORD	angle;
 	if(trackingCamera.target->type == OBJ_DROID)
 	{
 		/* Present direction is important */
-		if(getNumDroidsSelected()>2)
+		if(getNumDroidsSelected() > 2)
 		{
 			if(trackingCamera.target->selected)
 			{
@@ -772,7 +767,7 @@ SDWORD	angle;
 	}
 
 	/*	Get these new coordinates */
-	if(getNumDroidsSelected()>2 && trackingCamera.target->type == OBJ_DROID)
+	if(trackingCamera.target->type == OBJ_DROID && getNumDroidsSelected() > 2)
 	{
 	 	xConcern = trackingCamera.target->pos.x;		  // nb - still NEED to be set
 		yConcern = trackingCamera.target->pos.z;

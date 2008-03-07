@@ -45,7 +45,5 @@
 #define iV_MatrixRotateY			pie_MatRotY
 #define iV_MatrixRotateZ			pie_MatRotZ
 #define iV_TRANSLATE				pie_TRANSLATE
-#define iV_SIN						SIN
-#define iV_COS						COS
 
 #endif // _ivispatch_h

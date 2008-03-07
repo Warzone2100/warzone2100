@@ -306,6 +306,8 @@ static BOOL _imd_load_points( const char **ppFileData, iIMDShape *s )
 	// Read in points and remove duplicates (!)
 	if ( ReadPoints( ppFileData, s ) == FALSE )
 	{
+		free(s->points);
+		s->points = NULL;
 		return FALSE;
 	}
 
@@ -418,7 +420,7 @@ static BOOL _imd_load_points( const char **ppFileData, iIMDShape *s )
 	ymax = MAX(s->max.y, -s->min.y);
 	zmax = MAX(s->max.z, -s->min.z);
 
-	s->radius = MAX(xmax, (MAX(ymax, zmax)));
+	s->radius = MAX(xmax, MAX(ymax, zmax));
 	s->sradius = sqrtf(xmax*xmax + ymax*ymax + zmax*zmax);
 
 // START: tight bounding sphere

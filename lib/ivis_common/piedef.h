@@ -42,8 +42,6 @@
 /***************************************************************************/
 #define DEG_360	65536
 #define DEG_1	(DEG_360/360)
-#define DEG_2	(DEG_360/180)
-#define DEG_60	(DEG_360/6)
 #define DEG(X)	(DEG_1 * (X))
 
 //! PSX-style float emulation: 12 digit semi-floats stored in an int
@@ -55,7 +53,6 @@
 #define MAX_Z				(32000) // raised to 32000 from 6000 when stretched
 #define MIN_STRETCHED_Z			256
 #define LONG_WAY			(1<<15)
-#define LONG_TEST			(1<<14)
 #define INTERFACE_DEPTH		(MAX_Z - 1)
 #define BUTTON_DEPTH		2000 // will be stretched to 16000
 

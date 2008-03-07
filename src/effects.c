@@ -2477,8 +2477,8 @@ static void effectDroidUpdates(void)
 					if( (SDWORD)psDroid->sMove.speed != 0 )
 					{
 				   		/* Present direction is important */
-						xBehind = ( ( 50 * iV_SIN( DEG( (int)psDroid->direction) ) ) >> FP12_SHIFT );
-						yBehind = ( ( 50 * iV_COS( DEG( (int)psDroid->direction) ) ) >> FP12_SHIFT );
+						xBehind = ( 50 * SIN( DEG( (int)psDroid->direction) ) ) >> FP12_SHIFT;
+						yBehind = ( 50 * COS( DEG( (int)psDroid->direction) ) ) >> FP12_SHIFT;
 						pos.x = psDroid->pos.x - xBehind;
 						pos.z = psDroid->pos.y - yBehind;
 						pos.y = map_Height(pos.x, pos.z);
