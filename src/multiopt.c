@@ -393,7 +393,7 @@ BOOL joinCampaign(UDWORD gameNumber, char *sPlayer)
 BOOL LobbyLaunched(void)
 {
 	UDWORD i;
-	PLAYERSTATS pl={0};
+	PLAYERSTATS pl = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 	// set the player info as soon as possible to avoid screwy scores appearing elsewhere.
 	NETplayerInfo();

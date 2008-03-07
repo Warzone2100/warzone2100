@@ -23,6 +23,8 @@
 
 // Also PERCENT(int,int);	// returns a int value 0->100 of the percentage of the first param over the second
 
+#include "wzglobal.h"
+
 #ifndef __INCLUDED_LIB_FRAMEWORK_MATH_HELP_H__
 #define __INCLUDED_LIB_FRAMEWORK_MATH_HELP_H__
 
@@ -36,7 +38,7 @@
 # define M_PI 3.14159265358979323846
 #endif
 
-#if !defined(WZ_C99) && !(defined(__cplusplus) && defined(WZ_CC_GNU))
+#if !defined(WZ_C99) && !(defined(__cplusplus) && defined(WZ_CC_GNU)) && !defined(WZ_CC_GNU)
 static inline int roundf(float x)
 {
 	// Ensure that float truncation results in a proper rounding
