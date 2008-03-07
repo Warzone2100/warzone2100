@@ -749,7 +749,7 @@ BOOL recvStructureCheck()
 	BOOL			hasCapacity = TRUE;
 	int				i, j;
 	float			direction;
-	uint8_t			player, ourCapacity, actualCapacity;
+	uint8_t			player, ourCapacity;
 	uint16_t		body;
 	uint16_t		x, y, z;
 	uint32_t		ref, type;
@@ -884,8 +884,10 @@ BOOL recvStructureCheck()
 			// So long as the struct has a capacity fetch it from the packet
 			if (hasCapacity)
 			{
+				uint8_t actualCapacity = 0;
+
 				NETuint8_t(&actualCapacity);
-				
+
 				// If our capacity is different upgrade ourself
 				for (; ourCapacity < actualCapacity; ourCapacity++)
 				{

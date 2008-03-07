@@ -182,6 +182,9 @@
 
 #if defined(_MSC_VER)
 #  define WZ_CC_MSVC
+#  pragma warning (disable : 4244)	// shut up thousands of silly floating point <-> fixed point warnings
+#  pragma warning (disable : 4100)	// shut up about unused parameters... for now. should fix later.
+#  pragma warning (disable : 4127)	// shut up about our nice and legal while(0) constructs
 /* Visual C++.Net issues for _MSC_VER >= 1300 */
 #  if _MSC_VER >= 1300
 #    define WZ_CC_MSVC_NET
