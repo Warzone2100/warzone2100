@@ -2448,20 +2448,19 @@ void	effectGiveAuxVarSec( UDWORD var)
 /* Runs all the spot effect stuff for the droids - adding of dust and the like... */
 static void effectDroidUpdates(void)
 {
-	UDWORD	i;
-	DROID	*psDroid;
-	UDWORD	partition;
-	Vector3i pos;
-	SDWORD	xBehind,yBehind;
+	unsigned int i;
 
 	/* Go through all players */
-	for(i=0; i<MAX_PLAYERS; i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
+		DROID *psDroid;
+
 		/* Now go through all their droids */
-		for(psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
+		for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
 		{
 			/* Gets it's group number */
-			partition = psDroid->id % EFFECT_DROID_DIVISION;
+			unsigned int partition = psDroid->id % EFFECT_DROID_DIVISION;
+
 			/* Right frame to process? */
 			if(partition == frameGetFrameNumber() % EFFECT_DROID_DIVISION && ONEINFOUR)
 			{
@@ -2476,13 +2475,17 @@ static void effectDroidUpdates(void)
 					*/
 					if( (SDWORD)psDroid->sMove.speed != 0 )
 					{
-				   		/* Present direction is important */
-						xBehind = ( 50 * SIN( DEG( (int)psDroid->direction) ) ) >> FP12_SHIFT;
-						yBehind = ( 50 * COS( DEG( (int)psDroid->direction) ) ) >> FP12_SHIFT;
-						pos.x = psDroid->pos.x - xBehind;
-						pos.z = psDroid->pos.y - yBehind;
+						/* Present direction is important */
+						Vector2i behind = {
+							( 50 * SIN( DEG( psDroid->direction) ) ) >> FP12_SHIFT,
+							( 50 * COS( DEG( psDroid->direction) ) ) >> FP12_SHIFT
+						};
+						Vector3i pos = {
+							psDroid->pos.x - behind.x,
+							0,
+							psDroid->pos.y - behind.y
+						};
 						pos.y = map_Height(pos.x, pos.z);
-//						addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,FALSE,NULL);
 					}
 				}
 			}
