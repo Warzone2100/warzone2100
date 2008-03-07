@@ -1,3 +1,7 @@
+player0.slo:: ;
+
+player0.vlo:: ;
+
 player%.slo:: player0.slo
 	cp -p $< $@
 
