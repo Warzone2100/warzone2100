@@ -44,12 +44,13 @@ static UBYTE sineHeightTable[SIZE_SINE_TABLE];
 
 void initBulletTable( void )
 {
-UDWORD	 i;
-UBYTE	height;
-	for (i=0; i<SIZE_SINE_TABLE; i++)
+	UDWORD i;
+	UBYTE height;
+
+	for (i = 0; i < SIZE_SINE_TABLE; i++)
 	{
-	height = (UBYTE) (AMPLITUDE_HEIGHT*sin(i*deg));
-	sineHeightTable[i] = height;
+		height = AMPLITUDE_HEIGHT * sin(i*deg);
+		sineHeightTable[i] = height;
 	}
 }
 

@@ -53,7 +53,7 @@ typedef enum _terrain_type
 #define	TERRAIN_TYPES	TER_MAX
 
 #define TALLOBJECT_YMAX		(200)
-#define TALLOBJECT_ADJUST	(200)
+#define TALLOBJECT_ADJUST	(300)
 
 /* Flags for whether texture tiles are flipped in X and Y or rotated */
 #define TILE_XFLIP		0x8000

@@ -22,13 +22,15 @@
  *
  * all the stuff relevant to a mission
  */
+#include "mission.h"
+
 #include <stdio.h>
 #include <string.h>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/math-help.h"
 #include "lib/ivis_common/textdraw.h"
-#include "mission.h"
 #include "lib/gamelib/gtime.h"
 #include "game.h"
 #include "projectile.h"
@@ -389,7 +391,7 @@ BOOL missionShutDown(void)
 {
 	UDWORD		inc;
 
-	debug(LOG_SAVEGAME, "missionShutDown: called, mission is %s", 
+	debug(LOG_SAVEGAME, "missionShutDown: called, mission is %s",
 	      missionIsOffworld() ? "off-world" : "main map");
 	if (missionIsOffworld())
 	{

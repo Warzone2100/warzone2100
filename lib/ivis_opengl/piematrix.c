@@ -378,8 +378,9 @@ void pie_MatInit(void)
 	scsize = SC_TABLESIZE + (SC_TABLESIZE / 4);
   	conv = (double)(M_PI / (0.5 * SC_TABLESIZE));
 
-	for (i=0; i<scsize; i++) {
-		v = (double) sin(i * conv) * FP12_MULTIPLIER;
+	for (i = 0; i < scsize; i++)
+	{
+		v = sin(i * conv) * FP12_MULTIPLIER;
 
 		if (v >= 0.0)
 			aSinTable[i] = (Sint32)(v + 0.5);

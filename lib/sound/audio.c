@@ -27,7 +27,6 @@
 #include "tracklib.h"
 #include "aud.h"
 #include "audio_id.h"
-#include "lib/framework/trig.h"
 #include "lib/ivis_common/pietypes.h"
 
 // defines

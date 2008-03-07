@@ -23,6 +23,7 @@
 
 // this has to be first
 #include "lib/framework/frame.h"
+#include "lib/framework/math-help.h"
 #include "lib/framework/frameresource.h"
 
 #ifndef WZ_NOSOUND
@@ -992,21 +993,9 @@ void sound_SetPlayerPos( SDWORD iX, SDWORD iY, SDWORD iZ )
 void sound_SetPlayerOrientation( SDWORD iX, SDWORD iY, SDWORD iZ )
 {
 #ifndef WZ_NOSOUND
-	//~~~~~~~~~~~
-	float	ori[6];
-	//~~~~~~~~~~~
+	const float yaw = deg2radf(iZ);
+	const float ori[6] = {-sinf( yaw ), cosf( yaw ), 0.0f, 0.0f, 0.0f, 1.0f};
 
-	// convert params to rad
-	// float pitch = (float)iX * M_PI / 180;
-	// float roll = (float)iY * M_PI / 180;
-	float yaw = (float)iZ * M_PI / 180;
-
-	ori[0] = -sin( yaw );
-	ori[1] = cos( yaw );
-	ori[2] = 0;
-	ori[3] = 0;
-	ori[4] = 0;
-	ori[5] = 1;
 	alListenerfv( AL_ORIENTATION, ori );
 	sound_GetError();
 #endif

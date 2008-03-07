@@ -30,7 +30,6 @@
 #define PERNUM(range,a,b) (((a)*range)/(b))
 
 /* conversion macros */
-#define DEG_TO_RAD(x)	(x * M_PI / 180.0)
 #define RAD_TO_DEG(x)	(x * 180.0 / M_PI)
 
 #ifndef M_PI
@@ -48,6 +47,28 @@ static inline int roundf(float x)
 }
 #endif
 
+
+/*!
+ * Converts x from degrees to radian
+ * \param x Degree value to convert
+ * \return Radian value
+ */
+static inline WZ_DECL_CONST float deg2radf(float x)
+{
+	return x * (float)M_PI / 180.0f;
+}
+
+
+/*!
+ * Converts x from radian to degrees
+ * \param x Radian value to convert
+ * \return Degree value
+ */
+static inline WZ_DECL_CONST float rad2degf(float x)
+{
+	return x * (float)M_PI / 180.0f;
+}
+
 /*!
  * Moves x into the range 0 - y
  * \param x Value to clip
@@ -60,6 +81,7 @@ static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT int wrap(int x, int y)
 	while(x >= y) x -= y;
 	return x;
 }
+
 
 /*!
  * Moves x into the range 0.0f - y

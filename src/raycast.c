@@ -450,24 +450,15 @@ float	gHPitch;
 //-----------------------------------------------------------------------------------
 static BOOL	getTileHighestCallback(SDWORD x, SDWORD y, SDWORD dist)
 {
-	SDWORD	heightDif;
-	UDWORD	height;
-	//Vector3i	pos;
-
 	if(clipXY(x,y))
 	{
-		height = map_Height(x,y);
+		unsigned int height = map_Height(x,y);
 		if( (height > gHighestHeight) && (dist >= gHMinDist) )
 		{
-			heightDif = height - gHOrigHeight;
-			gHPitch = RAD_TO_DEG(atan2((float)heightDif,
-			                           (float)world_coord(6)));// (float)(dist - world_coord(3))));
+			int heightDif = height - gHOrigHeight;
+			gHPitch = rad2degf(atan2f(heightDif, world_coord(6)));// (float)(dist - world_coord(3))));
 			gHighestHeight = height;
   		}
-//		pos.x = x;
-//		pos.y = height;
-//		pos.z = y;
-//		addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,FALSE,NULL,0);
 	}
 	else
 	{
@@ -481,9 +472,6 @@ static BOOL	getTileHighestCallback(SDWORD x, SDWORD y, SDWORD dist)
 /* Will return false when we've hit the edge of the grid */
 static BOOL	getTileHeightCallback(SDWORD x, SDWORD y, SDWORD dist)
 {
-	SDWORD	height,heightDif;
-	float	newPitch;
-	BOOL HasTallStructure = FALSE;
 #ifdef TEST_RAY
 	Vector3i pos;
 #endif
@@ -491,9 +479,9 @@ static BOOL	getTileHeightCallback(SDWORD x, SDWORD y, SDWORD dist)
 	/* Are we still on the grid? */
 	if(clipXY(x,y))
 	{
-		HasTallStructure = TILE_HAS_TALLSTRUCTURE(mapTile(map_coord(x), map_coord(y)));
+		BOOL HasTallStructure = TILE_HAS_TALLSTRUCTURE(mapTile(map_coord(x), map_coord(y)));
 
-		if( (dist>TILE_UNITS) || HasTallStructure)
+		if( (dist > TILE_UNITS) || HasTallStructure)
 		{
 		// Only do it the current tile is > TILE_UNITS away from the starting tile. Or..
 		// there is a tall structure  on the current tile and the current tile is not the starting tile.
@@ -501,13 +489,15 @@ static BOOL	getTileHeightCallback(SDWORD x, SDWORD y, SDWORD dist)
 //			( (HasTallStructure = TILE_HAS_TALLSTRUCTURE(mapTile(map_coord(x), map_coord(y)))) &&
 //			((map_coord(x) != gStartTileX) || (map_coord(y) != gStartTileY)) ) ) {
 			/* Get height at this intersection point */
-			height = map_Height(x,y);
+			int height = map_Height(x,y), heightDif;
+			float newPitch;
 
-			if(HasTallStructure) {
-				height += 300;	//TALLOBJECT_ADJUST;
+			if(HasTallStructure)
+			{
+				height += TALLOBJECT_ADJUST;
 			}
 
-			if(height<=gHeight)
+			if(height <= gHeight)
 			{
 				heightDif = 0;
 			}
@@ -517,12 +507,10 @@ static BOOL	getTileHeightCallback(SDWORD x, SDWORD y, SDWORD dist)
 			}
 
 			/* Work out the angle to this point from start point */
-
-			newPitch = RAD_TO_DEG(atan2((float)heightDif, (float)dist));
-
+			newPitch = rad2degf(atan2f(heightDif, dist));
 
 			/* Is this the steepest we've found? */
-			if(newPitch>gPitch)
+			if(newPitch > gPitch)
 			{
 				/* Yes, then keep a record of it */
 				gPitch = newPitch;
