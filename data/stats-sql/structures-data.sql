@@ -20,8 +20,8 @@ CREATE TABLE `structures` (
   powerToBuild          NUMERIC NOT NULL, -- How much power this structure requires to be built
   resistance            NUMERIC,          -- The number used to determine whether a structure can resist an enemy takeover (0 = cannot be attacked electrically)
   sizeModifier          NUMERIC NOT NULL, -- The larger the target, the easier to hit
-  ecm                   INTEGER,          -- Which ECM is standard for the structure, if any
-  sensor                INTEGER,          -- Which sensor is standard for the structure, if any
+  ecm                   INTEGER,          -- Which ECM is standard for the structure, if any (is a reference to `ecm`.`id`)
+  sensor                INTEGER,          -- Which sensor is standard for the structure, if any (is a reference to `sensor`.`id`)
   GfxFile               TEXT,             -- The IMD to draw for this component
   BaseGfxFile           TEXT,             -- The base IMD to draw for this structure
   num_functions         INTEGER NOT NULL, -- Number of functions for default
