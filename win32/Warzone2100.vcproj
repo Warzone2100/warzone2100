@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="9,00"
 	Name="Warzone2100"
 	ProjectGUID="{BDDCCB7B-F4F7-4768-A1C3-AE20E9F5FDFC}"
 	RootNamespace="Warzone2100"
 	Keyword="Win32Proj"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -41,11 +42,11 @@
 				OutputFile="$(ProjectDir)..\src\$(InputName).lex.c"
 			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
 				Name="VCCustomBuildTool"
 				ExecutionBucket="4"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
 			/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"
@@ -56,7 +57,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)&quot;;&quot;$(SolutionDir)\..&quot;;&quot;$(SolutionDir)\devpkg\include&quot;;&quot;$(SolutionDir)\devpkg\include\SDL&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..&quot;;&quot;$(SolutionDir)\..\devpkg\include&quot;;&quot;$(SolutionDir)\..\devpkg\include\SDL&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;YY_NO_UNISTD_H;VERSION=\&quot;TRUNK\&quot;;PACKAGE=\&quot;warzone2100\&quot;;LOCALEDIR=\&quot;\&quot;;YY_STATIC"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -81,7 +82,7 @@
 				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net-static.lib libpng-static.lib ogg_static.lib vorbis_static.lib vorbisfile_static.lib OpenAL32.lib glc32.lib OpenGL32.lib GLU32.lib shfolder.lib winmm.lib wsock32.lib dbghelp.lib libpopt.lib physfs.lib zlib.lib"
 				OutputFile="$(OutDir)\$(ProjectName)-Dbg.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\devpkg\lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\devpkg\lib&quot;"
 				IgnoreDefaultLibraryNames="msvcrt.lib,libcmt.lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -106,10 +107,6 @@
 			<Tool
 				Name="VCFxCopTool"
 				ExecutionBucket="16"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
-				ExecutionBucket="17"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -145,11 +142,11 @@
 				OutputFile="$(ProjectDir)..\src\$(InputName).lex.c"
 			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
 				Name="VCCustomBuildTool"
 				ExecutionBucket="4"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
 			/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"
@@ -181,7 +178,7 @@
 				ExecutionBucket="11"
 				AdditionalDependencies="SDL.lib SDLmain.lib SDL_net-static.lib libpng-static.lib ogg_static.lib vorbis_static.lib vorbisfile_static.lib OpenAL32.lib glc32.lib OpenGL32.lib GLU32.lib shfolder.lib winmm.lib wsock32.lib dbghelp.lib libpopt.lib physfs.lib zlib.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\devpkg\lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\devpkg\lib&quot;"
 				IgnoreDefaultLibraryNames="libcmt.lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -208,10 +205,6 @@
 			<Tool
 				Name="VCFxCopTool"
 				ExecutionBucket="16"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
-				ExecutionBucket="17"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -1131,11 +1124,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\scriptvals_parser.tab.h"
+				RelativePath="..\src\scriptvals_parser.tab.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\scriptvals_parser.tab.h"
+				RelativePath=".\scriptvals_parser.tab.h"
 				>
 			</File>
 			<File

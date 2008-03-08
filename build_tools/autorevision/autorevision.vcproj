@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="9,00"
 	Name="autorevision"
 	ProjectGUID="{32FC4941-5ADF-483F-BD90-CDEBC50BA4AE}"
 	RootNamespace="autorevision"
 	Keyword="Win32Proj"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -84,12 +85,9 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 				Description="* Updating &amp; copying $(TargetFileName) into correct directory. *"
-				CommandLine="del $(SolutionDir)\..\$(TargetFileName)&#x0D;&#x0A;copy /Y $(OutDir)\$(TargetFileName) $(SolutionDir)..\$(TargetFileName)"
+				CommandLine="del $(SolutionDir)\..\$(TargetFileName)&#x0D;&#x0A;copy /Y $(OutDir)\$(TargetFileName) $(SolutionDir)..\$(TargetFileName)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -161,12 +159,9 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 				Description="* Updating &amp; copying $(TargetFileName) into correct directory. *"
-				CommandLine="del $(SolutionDir)\..\$(TargetFileName)&#x0D;&#x0A;copy /Y $(OutDir)\$(TargetFileName) $(SolutionDir)..\$(TargetFileName)"
+				CommandLine="del $(SolutionDir)\..\$(TargetFileName)&#x0D;&#x0A;copy /Y $(OutDir)\$(TargetFileName) $(SolutionDir)..\$(TargetFileName)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
