@@ -1,3 +1,5 @@
+CFLAGS+= -Wno-missing-field-initializers
+
 noinst_LIBRARIES = libsqlite3.a
 noinst_HEADERS = physfs_vfs.h sqlite3ext.h sqlite3.h
 
