@@ -18,26 +18,28 @@
 			</Target>
 			<Target title="DBGUnix">
 				<Option platforms="Unix;" />
-				<Option output="bin\Debug\warzone2100" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj\Debug\" />
+				<Option output="bin/Debug/warzone2100" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Option parameters="--datadir data" />
 				<Compiler>
 					<Add option="-g" />
+					<Add option="`pkg-config --cflags sdl openal libpng vorbisfile`" />
 					<Add option="-DDEBUG" />
+					<Add option='-DPACKAGE_DISTRIBUTOR=\\&quot;UNKNOWN\\&quot;' />
 					<Add option='-DPACKAGE_VERSION=\\&quot;TRUNK\\&quot;' />
 					<Add option='-DLOCALEDIR=\\&quot;\\&quot;' />
 					<Add option='-DPACKAGE=\\&quot;warzone2100\\&quot;' />
 					<Add option="-D_GNU_SOURCE=1" />
 				</Compiler>
 				<Linker>
+					<Add option="`pkg-config --libs sdl openal libpng vorbisfile`" />
 					<Add library="m" />
 					<Add library="pthread" />
 					<Add library="GL" />
 					<Add library="GLU" />
 					<Add library="GLC" />
-					<Add library="openal" />
 				</Linker>
 				<ExtraCommands>
 					<Add before="build_tools/autorevision/autorevision +cstr . src/autorevision.h" />
@@ -45,14 +47,16 @@
 			</Target>
 			<Target title="NDBGUnix">
 				<Option platforms="Unix;" />
-				<Option output="bin\Release\warzone2100" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj\Release\" />
+				<Option output="bin/Release/warzone2100" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Option parameters="--datadir data" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="`pkg-config --cflags sdl openal libpng vorbisfile`" />
 					<Add option="-DNDEBUG" />
+					<Add option='-DPACKAGE_DISTRIBUTOR=\\&quot;UNKNOWN\\&quot;' />
 					<Add option='-DPACKAGE_VERSION=\\&quot;TRUNK\\&quot;' />
 					<Add option='-DLOCALEDIR=\\&quot;\\&quot;' />
 					<Add option='-DPACKAGE=\\&quot;warzone2100\\&quot;' />
@@ -60,12 +64,12 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add option="`pkg-config --libs sdl openal libpng vorbisfile`" />
 					<Add library="m" />
 					<Add library="pthread" />
 					<Add library="GL" />
 					<Add library="GLU" />
 					<Add library="GLC" />
-					<Add library="openal" />
 				</Linker>
 				<ExtraCommands>
 					<Add before="build_tools/autorevision/autorevision +cstr . src/autorevision.h" />
@@ -73,14 +77,15 @@
 			</Target>
 			<Target title="DBGWindows">
 				<Option platforms="Windows;" />
-				<Option output="bin\Debug\warzone2100" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj\Debug\" />
+				<Option output="bin/Debug/warzone2100" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Option parameters="--datadir data" />
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-DDEBUG" />
+					<Add option='-DPACKAGE_DISTRIBUTOR=\&quot;UNKNOWN\&quot;' />
 					<Add option='-DPACKAGE_VERSION=\&quot;TRUNK\&quot;' />
 					<Add option='-DLOCALEDIR=\&quot;\&quot;' />
 					<Add option='-DPACKAGE=\&quot;warzone2100\&quot;' />
@@ -101,6 +106,7 @@
 					<Add library="dbghelp" />
 					<Add library="winmm" />
 					<Add library="wsock32" />
+					<Add library="intl" />
 					<Add directory="$(#warzone_devpkg.lib)" />
 				</Linker>
 				<ExtraCommands>
@@ -109,14 +115,15 @@
 			</Target>
 			<Target title="NDBGWindows">
 				<Option platforms="Windows;" />
-				<Option output="bin\Release\warzone2100" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj\Release\" />
+				<Option output="bin/Release/warzone2100" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Option parameters="--datadir data" />
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="-DNDEBUG" />
+					<Add option='-DPACKAGE_DISTRIBUTOR=\&quot;UNKNOWN\&quot;' />
 					<Add option='-DPACKAGE_VERSION=\&quot;TRUNK\&quot;' />
 					<Add option='-DLOCALEDIR=\&quot;\&quot;' />
 					<Add option='-DPACKAGE=\&quot;warzone2100\&quot;' />
@@ -138,6 +145,7 @@
 					<Add library="dbghelp" />
 					<Add library="winmm" />
 					<Add library="wsock32" />
+					<Add library="intl" />
 					<Add directory="$(#warzone_devpkg.lib)" />
 				</Linker>
 				<ExtraCommands>
@@ -162,7 +170,6 @@
 		</Compiler>
 		<Linker>
 			<Add library="popt" />
-			<Add library="intl" />
 			<Add library="physfs" />
 			<Add library="png" />
 			<Add library="SDL" />
@@ -171,7 +178,7 @@
 			<Add library="vorbis" />
 			<Add library="ogg" />
 		</Linker>
-		<Unit filename="build_tools\autorevision\autorevision.cpp">
+		<Unit filename="build_tools/autorevision/autorevision.cpp">
 			<Option target="AutoRevision" />
 		</Unit>
 		<Unit filename="lib/framework/SDL_framerate.c">
@@ -2757,13 +2764,15 @@
 			<Option target="DBGWindows" />
 			<Option target="NDBGWindows" />
 		</Unit>
-		<Unit filename="win32\warzone2100.rc">
+		<Unit filename="win32/warzone2100.rc">
 			<Option compilerVar="WINDRES" />
 			<Option target="DBGWindows" />
 			<Option target="NDBGWindows" />
 		</Unit>
 		<Extensions>
 			<code_completion />
+			<envvars />
+			<debugger />
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>
