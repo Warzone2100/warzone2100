@@ -12,7 +12,7 @@ CREATE TABLE `weapons` (
   hitpoints             NUMERIC NOT NULL, -- Component's hitpoints - SEEMS TO BE UNUSED
   systempoints          NUMERIC NOT NULL, -- Space the component takes in the droid - SEEMS TO BE UNUSED
   body                  NUMERIC NOT NULL, -- Component's body points
-  GfxFile               TEXT,             -- The IMD to draw for this weapon
+  GfxFile               TEXT,             -- The IMD to draw for this component
   mountGfx              TEXT,             -- The turret mount to use
   muzzleGfx             TEXT,             -- The muzzle flash
   flightGfx             TEXT,             -- The ammo in flight
