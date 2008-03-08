@@ -12,7 +12,7 @@ CREATE TABLE `brain` (
   hitpoints             NUMERIC NOT NULL, -- Component's hitpoints - SEEMS TO BE UNUSED
   systempoints          NUMERIC NOT NULL, -- Space the component takes in the droid - SEEMS TO BE UNUSED
   weapon                INTEGER,          -- A reference to `weapons`.`id`, refers to the weapon stats associated with this brain (can be NULL for none) - for Command Droids
-  program_capcity       INTEGER NOT NULL  -- Program's capacity
+  program_capacity      INTEGER NOT NULL  -- Program's capacity
 );
 
 -- Data for table `brain`
