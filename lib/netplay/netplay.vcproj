@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="8.00"
 	Name="netplay"
 	ProjectGUID="{C7698ECE-9255-4A60-8091-A9A76E8BE911}"
 	RootNamespace="netplay"

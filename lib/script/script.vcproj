@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="8.00"
 	Name="script"
 	ProjectGUID="{2D0B0F06-3CA2-46C7-908D-5C7098645021}"
 	RootNamespace="script"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="8.00"
 	Name="Warzone2100"
 	ProjectGUID="{BDDCCB7B-F4F7-4768-A1C3-AE20E9F5FDFC}"
 	RootNamespace="Warzone2100"

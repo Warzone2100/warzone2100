@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="8.00"
 	Name="ivis_common"
 	ProjectGUID="{F580F567-CE2A-4C58-A036-C1B71664BF2D}"
 	RootNamespace="ivis_common"

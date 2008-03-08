@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="8.00"
 	Name="gamelib"
 	ProjectGUID="{EFE011B6-4C0B-40AA-9F18-5AD599E70D28}"
 	RootNamespace="gamelib"
