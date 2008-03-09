@@ -3000,15 +3000,14 @@ BOOL allocateName(char **ppStore, const char *pName)
 	}
 	return TRUE;
 #else
-	//need to allocate space for the name
-	*ppStore = (char*)malloc((strlen(pName))+1);
+	// Allocate space for the name and copy it
+	*ppStore = strdup(pName);
 	if (ppStore == NULL)
 	{
-		debug( LOG_ERROR, "Name - Out of memory" );
+		debug(LOG_ERROR, "allocateName: Out of memory");
 		abort();
 		return FALSE;
 	}
-	strcpy(*ppStore,pName);
 
 	return TRUE;
 #endif
