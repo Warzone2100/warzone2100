@@ -74,6 +74,72 @@
 
 extern UWORD OffScreenEffects;
 
+#define MAX_EFFECTS	500
+
+#define	GRAVITON_GRAVITY	((float)-800)
+#define	EFFECT_X_FLIP		0x1
+#define	EFFECT_Y_FLIP		0x2
+#define	EFFECT_CYCLIC		0x4
+#define EFFECT_ESSENTIAL	0x8
+#define EFFECT_FACING		0x10
+#define	EFFECT_SCALED		0x20
+#define	EFFECT_LIT			0x40
+
+#define	TEST_FLIPPED_X(x)		(x->control & EFFECT_X_FLIP)
+#define	TEST_FLIPPED_Y(x)		(x->control & EFFECT_Y_FLIP)
+#define TEST_ESSENTIAL(x)		(x->control & EFFECT_ESSENTIAL)
+#define TEST_FACING(x)			(x->control & EFFECT_FACING)
+#define TEST_CYCLIC(x)			(x->control & EFFECT_CYCLIC)
+#define TEST_SCALED(x)			(x->control & EFFECT_SCALED)
+#define TEST_LIT(x)				(x->control & EFFECT_LIT)
+
+#define	SET_FLIPPED_X(x)		((x->control) = (UBYTE)(x->control | EFFECT_X_FLIP))
+#define	SET_FLIPPED_Y(x)		((x->control) = (UBYTE)(x->control | EFFECT_Y_FLIP))
+#define SET_ESSENTIAL(x)		((x->control) = (UBYTE)(x->control | EFFECT_ESSENTIAL))
+#define SET_FACING(x)			((x->control) = (UBYTE)(x->control | EFFECT_FACING))
+#define SET_CYCLIC(x)			((x->control) = (UBYTE)(x->control | EFFECT_CYCLIC))
+#define SET_SCALED(x)			((x->control) = (UBYTE)(x->control | EFFECT_SCALED))
+#define SET_LIT(x)				((x->control) = (UBYTE)(x->control | EFFECT_LIT))
+#define SET_LITABS(x)			((x.control) = (UBYTE)(x.control | EFFECT_LIT))
+
+#define MINIMUM_IMPACT_VELOCITY		(16)
+#define	NORMAL_SMOKE_LIFESPAN		(6000 + rand()%3000)
+#define SMALL_SMOKE_LIFESPAN		(3000 + rand()%3000)
+#define	TRAIL_SMOKE_LIFESPAN		(1200)
+#define	CONSTRUCTION_LIFESPAN		(5000)
+
+#define	SMOKE_FRAME_DELAY			(40 + rand()%30)
+#define	EXPLOSION_FRAME_DELAY		(25 + rand()%40)
+#define	EXPLOSION_TESLA_FRAME_DELAY	(65)
+#define	EXPLOSION_PLASMA_FRAME_DELAY	(45)
+#define	BLOOD_FRAME_DELAY			(150)
+#define DESTRUCTION_FRAME_DELAY		(200)
+
+#define	TESLA_SPEED					(170)// + (30 - rand()%60))
+#define	TESLA_SIZE					(100)// + (20 - rand()%40))
+
+#define GRAVITON_FRAME_DELAY		(100 + rand()%50)
+#define GRAVITON_BLOOD_DELAY		(200 + rand()%100)
+
+#define CONSTRUCTION_FRAME_DELAY	(40 + rand()%30)
+
+#define	EXPLOSION_SIZE				(110+(30-rand()%60))
+#define	LIMITED_EXPLOSION_SIZE		(100+(5-rand()%10))
+#define	BLOOD_SIZE					(100+(30-rand()%60))
+#define	BLOOD_FALL_SPEED			(-(20+rand()%20))
+
+#define GRAVITON_INIT_VEL_X			(float)(200 - rand() % 300)
+#define GRAVITON_INIT_VEL_Z			(float)(200 - rand() % 300)
+#define GRAVITON_INIT_VEL_Y			(float)(300 + rand() % 100)
+
+#define GIBLET_INIT_VEL_X			(float)(50 - rand() % 100)
+#define GIBLET_INIT_VEL_Z			(float)(50 - rand() % 100)
+#define GIBLET_INIT_VEL_Y			12.f
+
+#define	DROID_DESTRUCTION_DURATION		(3*GAME_TICKS_PER_SEC/2) // 1.5 seconds
+#define	STRUCTURE_DESTRUCTION_DURATION	((7*GAME_TICKS_PER_SEC)/2)	 // 3.5 seconds
+
+
 /* Our list of all game world effects */
 static EFFECT        asEffectsList[MAX_EFFECTS];
 static EFFECT_STATUS effectStatus[MAX_EFFECTS];
@@ -365,7 +431,6 @@ void	addEffect(Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type,BOOL specifie
 	}
 
 	/* Quick optimsation to reject every second non-essential effect if it's off grid */
-//	if(clipXY(pos->pos.x, pos->pos.z) == FALSE)
 	if(clipXY(pos->x, pos->z) == FALSE)
 	{
 		/* 	If effect is essentail - then let it through */
@@ -423,15 +488,14 @@ void	addEffect(Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type,BOOL specifie
 	}
 
 	/* Store away it's position - into FRACTS */
-	asEffectsList[freeEffect].position.x = (float)pos->x;
-	asEffectsList[freeEffect].position.y = (float)pos->y;
-	asEffectsList[freeEffect].position.z = (float)pos->z;
-
+	asEffectsList[freeEffect].position.x = pos->x;
+	asEffectsList[freeEffect].position.y = pos->y;
+	asEffectsList[freeEffect].position.z = pos->z;
 
 
 	/* Now, note group and type */
-	asEffectsList[freeEffect].group =(UBYTE) group;
-	asEffectsList[freeEffect].type = (UBYTE) type;
+	asEffectsList[freeEffect].group = group;
+	asEffectsList[freeEffect].type = type;
 
 	/* Set when it entered the world */
 	asEffectsList[freeEffect].birthTime = asEffectsList[freeEffect].lastFrame = gameTime;
