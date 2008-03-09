@@ -357,7 +357,7 @@ const char *getStatName(void * Stat)
 BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 {
 	const unsigned int NumWeapons = numCR(pWeaponData, bufferSize);
-	WEAPON_STATS	sStats, *psStats = &sStats, *psStartStats = &sStats;
+	WEAPON_STATS	sStats, * const psStats = &sStats;
 	UDWORD			i, rotate, maxElevation, surfaceToAir;
 	SDWORD			minElevation;
 	char			WeaponName[MAX_NAME_SIZE], GfxFile[MAX_NAME_SIZE];
@@ -770,7 +770,6 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 			setMaxComponentWeight(psStats->weight);
 		}
 
-		psStats = psStartStats;
 		//increment the pointer to the start of the next record
 		pWeaponData = strchr(pWeaponData,'\n') + 1;
 	}
@@ -781,7 +780,7 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 /*Load the Body stats from the file exported from Access*/
 BOOL loadBodyStats(const char *pBodyData, UDWORD bufferSize)
 {
-	BODY_STATS sStats, *psStats = &sStats, *psStartStats = &sStats;
+	BODY_STATS sStats, * const psStats = &sStats;
 	const unsigned int NumBody = numCR(pBodyData, bufferSize);
 	unsigned int i, designable;
 	char BodyName[MAX_NAME_SIZE], size[MAX_NAME_SIZE],
@@ -890,7 +889,6 @@ BOOL loadBodyStats(const char *pBodyData, UDWORD bufferSize)
 			setMaxComponentWeight(psStats->weight);
 		}
 
-		psStats = psStartStats;
 		//increment the pointer to the start of the next record
 		pBodyData = strchr(pBodyData,'\n') + 1;
 	}
@@ -901,7 +899,7 @@ BOOL loadBodyStats(const char *pBodyData, UDWORD bufferSize)
 /*Load the Brain stats from the file exported from Access*/
 BOOL loadBrainStats(const char *pBrainData, UDWORD bufferSize)
 {
-	BRAIN_STATS sStats, *psStats = &sStats, *psStartStats = &sStats;
+	BRAIN_STATS sStats, * const psStats = &sStats;
 	const unsigned int NumBrain = numCR(pBrainData, bufferSize);
 	unsigned int i = 0, weapon = 0;
 	char		BrainName[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE],
@@ -979,7 +977,6 @@ BOOL loadBrainStats(const char *pBrainData, UDWORD bufferSize)
 		//save the stats
 		statsSetBrain(psStats, i);
 
-		psStats = psStartStats;
 		//increment the pointer to the start of the next record
 		pBrainData = strchr(pBrainData, '\n') + 1;
 	}
@@ -1034,7 +1031,7 @@ PROPULSION_TYPE getPropulsionType(const char *pType)
 BOOL loadPropulsionStats(const char *pPropulsionData, UDWORD bufferSize)
 {
 	const unsigned int NumPropulsion = numCR(pPropulsionData, bufferSize);
-	PROPULSION_STATS	sStats, *psStats = &sStats, *psStartStats = &sStats;
+	PROPULSION_STATS	sStats, * const psStats = &sStats;
 	unsigned int i = 0, designable;
 	char				PropulsionName[MAX_NAME_SIZE], imdName[MAX_NAME_SIZE],
 						techLevel[MAX_NAME_SIZE], type[MAX_NAME_SIZE];
@@ -1110,7 +1107,6 @@ BOOL loadPropulsionStats(const char *pPropulsionData, UDWORD bufferSize)
 			//setMaxComponentWeight(psStats->weight);
 		}
 
-		psStats = psStartStats;
 		//increment the pointer to the start of the next record
 		pPropulsionData = strchr(pPropulsionData,'\n') + 1;
 	}
@@ -1147,7 +1143,7 @@ BOOL loadPropulsionStats(const char *pPropulsionData, UDWORD bufferSize)
 BOOL loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 {
 	const unsigned int NumSensor = numCR(pSensorData, bufferSize);
-	SENSOR_STATS sStats, *psStats = &sStats, *psStartStats = &sStats;
+	SENSOR_STATS sStats, * const psStats = &sStats;
 	unsigned int i = 0, designable;
 	char			SensorName[MAX_NAME_SIZE], location[MAX_NAME_SIZE],
 					GfxFile[MAX_NAME_SIZE],type[MAX_NAME_SIZE];
@@ -1275,7 +1271,6 @@ BOOL loadSensorStats(const char *pSensorData, UDWORD bufferSize)
             setMaxComponentWeight(psStats->weight);
         }
 
-		psStats = psStartStats;
 		//increment the pointer to the start of the next record
 		pSensorData = strchr(pSensorData,'\n') + 1;
 	}
@@ -1286,7 +1281,7 @@ BOOL loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 BOOL loadECMStats(const char *pECMData, UDWORD bufferSize)
 {
 	const unsigned int NumECM = numCR(pECMData, bufferSize);
-	ECM_STATS	sStats, *psStats = &sStats, *psStartStats = &sStats;
+	ECM_STATS	sStats, * const psStats = &sStats;
 	unsigned int i = 0, designable;
 	char		ECMName[MAX_NAME_SIZE], location[MAX_NAME_SIZE],
 				GfxFile[MAX_NAME_SIZE];
@@ -1389,7 +1384,6 @@ BOOL loadECMStats(const char *pECMData, UDWORD bufferSize)
 			setMaxComponentWeight(psStats->weight);
 		}
 
-		psStats = psStartStats;
 		//increment the pointer to the start of the next record
 		pECMData = strchr(pECMData,'\n') + 1;
 	}
@@ -1401,7 +1395,7 @@ BOOL loadECMStats(const char *pECMData, UDWORD bufferSize)
 BOOL loadRepairStats(const char *pRepairData, UDWORD bufferSize)
 {
 	const unsigned int NumRepair = numCR(pRepairData, bufferSize);
-	REPAIR_STATS sStats, *psStats = &sStats, *psStartStats = &sStats;
+	REPAIR_STATS sStats, * const psStats = &sStats;
 	unsigned int i = 0, designable;
 	char			RepairName[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE],
 					GfxFile[MAX_NAME_SIZE],	mountGfx[MAX_NAME_SIZE],
@@ -1514,7 +1508,6 @@ BOOL loadRepairStats(const char *pRepairData, UDWORD bufferSize)
             setMaxComponentWeight(psStats->weight);
         }
 
-		psStats = psStartStats;
 		//increment the pointer to the start of the next record
 		pRepairData = strchr(pRepairData,'\n') + 1;
 	}
@@ -1527,7 +1520,7 @@ BOOL loadRepairStats(const char *pRepairData, UDWORD bufferSize)
 BOOL loadConstructStats(const char *pConstructData, UDWORD bufferSize)
 {
 	const unsigned int NumConstruct = numCR(pConstructData, bufferSize);
-	CONSTRUCT_STATS sStats, *psStats = &sStats, *psStartStats = &sStats;
+	CONSTRUCT_STATS sStats, * const psStats = &sStats;
 	unsigned int i = 0, designable;
 	char			ConstructName[MAX_NAME_SIZE], GfxFile[MAX_NAME_SIZE];
 	char			mountGfx[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE];
@@ -1618,7 +1611,6 @@ BOOL loadConstructStats(const char *pConstructData, UDWORD bufferSize)
 			setMaxComponentWeight(psStats->weight);
 		}
 
-		psStats = psStartStats;
 		//increment the pointer to the start of the next record
 		pConstructData = strchr(pConstructData,'\n') + 1;
 	}
