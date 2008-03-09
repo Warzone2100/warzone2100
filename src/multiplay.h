@@ -96,7 +96,6 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 #define CAMP_BASE				1
 #define CAMP_WALLS				2
 
-#define	FORCEEDITPLAYER			0
 #define DEATHMATCHTEMPLATES		4			// game templates are stored in player x.
 #define CAMPAIGNTEMPLATES		5
 

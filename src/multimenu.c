@@ -39,7 +39,6 @@
 #include "component.h"		// for disaplycomponentobj.
 #include "hci.h"			// for wFont def.& intmode.
 #include "init.h"
-//#include "intfac.h"		// for images.
 #include "power.h"
 #include "loadsave.h"		// for drawbluebox
 #include "console.h"
@@ -87,24 +86,18 @@ static UDWORD	current_numplayers = 0;
 #define MULTIMENU_PLAYER_H		32
 #define MULTIMENU_FONT_OSET		20
 
+#define MULTIMENU_C0			(MULTIMENU_C2+95)
 #define MULTIMENU_C1			30
 #define MULTIMENU_C2			(MULTIMENU_C1+30)
-
-#define MULTIMENU_C0			(MULTIMENU_C2+95)
 #define MULTIMENU_C3			(MULTIMENU_C0+36)
-
 #define MULTIMENU_C4			(MULTIMENU_C3+36)
 #define MULTIMENU_C5			(MULTIMENU_C4+32)
 #define MULTIMENU_C6			(MULTIMENU_C5+32)
 #define MULTIMENU_C7			(MULTIMENU_C6+32)
-
-
-
 #define MULTIMENU_C8			(MULTIMENU_C7+45)
 #define MULTIMENU_C9			(MULTIMENU_C8+95)
 #define MULTIMENU_C10			(MULTIMENU_C9+50)
 #define MULTIMENU_C11			(MULTIMENU_C10+45)
-
 
 #define MULTIMENU_CLOSE			(MULTIMENU+1)
 #define MULTIMENU_PLAYER		(MULTIMENU+2)
@@ -142,10 +135,8 @@ static UDWORD	current_numplayers = 0;
 #define M_REQUEST_W		MULTIOP_PLAYERSW
 #define M_REQUEST_H		MULTIOP_PLAYERSH
 
-
 #define	R_BUT_W			105//112
 #define R_BUT_H			30
-
 
 BOOL			multiRequestUp = FALSE;				//multimenu is up.
 static BOOL		giftsUp[MAX_PLAYERS] = {TRUE};		//gift buttons for player are up.
@@ -213,7 +204,6 @@ static BOOL enumerateMultiMaps(char *found, UDWORD *players,BOOL first, UBYTE ca
 //	end of service pack
 
 			if ((lev->type == CAMPAIGN || lev->type == MULTI_CAMPAIGN2 || lev->type == MULTI_CAMPAIGN3)
-//				||lev->type == MULTI_CAMPAIGNA)
 			    && (numPlayers == 0 || numPlayers == lev->players)
 			    && cam == camToUse )
 			{
@@ -226,7 +216,6 @@ static BOOL enumerateMultiMaps(char *found, UDWORD *players,BOOL first, UBYTE ca
 		lev = lev->psNext;
 	}
 	return FALSE;
-
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -236,8 +225,6 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
-//	UWORD	im = (UWORD)UNPACKDWORD_TRI_B((UDWORD)psWidget->pUserData);
-//	UWORD	im2= (UWORD)(UNPACKDWORD_TRI_C((UDWORD)psWidget->pUserData));
 	UDWORD	count;
 	char  butString[255];
 
@@ -260,7 +247,6 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 	{
 		iV_DrawImage(FrontImages,IMAGE_WEE_GUY,(x+(6*count)+6),y+16);
 	}
-
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -635,11 +621,6 @@ BOOL runMultiRequester(UDWORD id,UDWORD *mode, char *chosen,UDWORD *chosenValue)
 	{
 		strcpy(chosen,((W_BUTTON *)widgGetFromID(psRScreen,id))->pText );
 
-//		if(context == MULTIOP_MAP)						// chop off the number of players.
-//		{
-//			strcpy(chosen, strrchr(chosen,')')+1  );
-//		}
-
 		*chosenValue = ((W_BUTTON *)widgGetFromID(psRScreen,id))->UserData ;
 		closeMultiRequester();
 		*mode = context;
@@ -677,12 +658,6 @@ BOOL runMultiRequester(UDWORD id,UDWORD *mode, char *chosen,UDWORD *chosenValue)
 			closeMultiRequester();
 			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, 8);
 			break;
-#if 0
-		case M_REQUEST_CA:
-			closeMultiRequester();
-			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, 0);
-			break;
-#endif
 	}
 
 	return FALSE;
@@ -962,7 +937,6 @@ void displayAllianceState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 	psWidget->UserData = PACKDWORD_TRI(a,b,c);
 	intDisplayImageHilight(psWidget,  xOffset,  yOffset, pColours);
 	psWidget->UserData = player;
-
 }
 
 
@@ -1314,7 +1288,6 @@ BOOL intCloseMultiMenu(void)
 		ClosingMultiMenu = TRUE;
 		MultiMenuUp  = FALSE;
 	}
-//intCloseMultiMenuNoAnim();
 
 	intMode		= INT_NORMAL;
 	return TRUE;
@@ -1460,6 +1433,4 @@ void intProcessMultiMenu(UDWORD id)
 	{
 		sendGift(POWER_GIFT, id - MULTIMENU_GIFT_POW);
 	}
-
-
 }
