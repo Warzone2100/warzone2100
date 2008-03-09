@@ -2732,7 +2732,7 @@ const char* getName(const char *pNameID)
 
 
 /*sets the tech level for the stat passed in - returns TRUE if set OK*/
-BOOL setTechLevel(BASE_STATS *psStats, char *pLevel)
+BOOL setTechLevel(BASE_STATS *psStats, const char *pLevel)
 {
 	TECH_LEVEL		techLevel = MAX_TECH_LEVELS;
 

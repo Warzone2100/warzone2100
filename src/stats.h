@@ -268,7 +268,7 @@ extern SDWORD getCompFromName(UDWORD compType, const char *pName);
 //get the component Inc for a stat based on the Resource name held in Names.txt
 extern SDWORD getCompFromResName(UDWORD compType, const char *pName);
 /*sets the tech level for the stat passed in */
-extern BOOL setTechLevel(BASE_STATS *psStats, char *pLevel);
+extern BOOL setTechLevel(BASE_STATS *psStats, const char *pLevel);
 /*returns the weapon sub class based on the string name passed in */
 extern WEAPON_SUBCLASS getWeaponSubClass(const char *pSubClass);
 /*either gets the name associated with the resource (if one) or allocates space and copies pName*/
