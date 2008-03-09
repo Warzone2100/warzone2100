@@ -97,7 +97,7 @@ UBYTE		*apCompLists[MAX_PLAYERS][COMP_NUMCOMPONENTS];
 UBYTE		*apStructTypeLists[MAX_PLAYERS];
 
 static BOOL compareYes(char *strToCompare, char *strOwner);
-static MOVEMENT_MODEL	getMovementModel(char *pMovement);
+static MOVEMENT_MODEL	getMovementModel(const char *pMovement);
 
 //Access functions for the max values to be used in the Design Screen
 static void setMaxComponentWeight(UDWORD weight);
@@ -2903,7 +2903,7 @@ WEAPON_SUBCLASS getWeaponSubClass(const char *pSubClass)
 }
 
 /*returns the movement model based on the string name passed in */
-MOVEMENT_MODEL	getMovementModel(char *pMovement)
+MOVEMENT_MODEL	getMovementModel(const char *pMovement)
 {
 	if (!strcmp(pMovement,"DIRECT"))
 	{
