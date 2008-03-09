@@ -347,3 +347,13 @@ static sqlite3_vfs physfs_sqlite3_vfs =
 	xSleep,
 	xCurrentTime,
 };
+
+void sqlite3_register_physfs_vfs(int makeDefault)
+{
+	sqlite3_vfs_register(&physfs_sqlite3_vfs, makeDefault);
+}
+
+void sqlite3_unregister_physfs_vfs()
+{
+	sqlite3_vfs_unregister(&physfs_sqlite3_vfs);
+}
