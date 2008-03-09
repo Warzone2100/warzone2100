@@ -424,6 +424,8 @@
 #  include <windows.h>
 
 #  if defined(WZ_CC_MSVC)
+//   notify people we are disabling these warning messages.
+#    pragma message (" *** Warnings 4100,4127,4204 & 4244 have been squelched. ***")	
 #    pragma warning (disable : 4100) // Shut up: unreferenced formal parameter (FIXME)
 #    pragma warning (disable : 4127) // Shut up: conditional expression is constant (eg. "while(0)")
 #    pragma warning (disable : 4204) // Shut up: non-constant aggregate initializer
