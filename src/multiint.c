@@ -21,8 +21,8 @@
  * MultiInt.c
  *
  * Alex Lee, 98. Pumpkin Studios, Bath.
- * Functions to display and handle the multiplayer interface screens
- * Arena and Campaign styles, along with connection and game options.
+ * Functions to display and handle the multiplayer interface screens,
+ * along with connection and game options.
  */
 
 #include "lib/framework/frame.h"
@@ -832,7 +832,6 @@ static void addGameOptions(BOOL bRedo)
 		iV_GetImageHeight(FrontImages,IMAGE_RETURN),
 		_("Return To Previous Screen"),IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);
 
-
 	// host Games button
 	if(ingame.bHostSetup && !bHosted)
 	{
@@ -924,7 +923,7 @@ static void addColourChooser(UDWORD player)
 				MULTIOP_ROW_WIDTH,MULTIOP_PLAYERHEIGHT);
 
 	// add the flags
-	for(i=0;i<MAX_PLAYERS;i++)		//game.maxPlayers;i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		addMultiBut(psWScreen,MULTIOP_COLCHOOSER_FORM, MULTIOP_COLCHOOSER+i,
 			(i*(iV_GetImageWidth(FrontImages,IMAGE_PLAYER0) +5)+7) ,//x
@@ -1129,7 +1128,7 @@ static void addTeamChooser(UDWORD player)
 				MULTIOP_ROW_WIDTH,MULTIOP_TEAMSHEIGHT);
 
 	// add the teams
-	for(i=0;i<MAX_PLAYERS;i++)		//game.maxPlayers;i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		W_BUTINIT		sButInit;
 
@@ -1560,9 +1559,7 @@ static void processMultiopWidgets(UDWORD id)
 			game.type = CAMPAIGN;
 			widgSetString(psWScreen, MULTIOP_MAP, DEFAULTCAMPAIGNMAP);
 			strcpy(game.map,widgGetString(psWScreen, MULTIOP_MAP));
-			game.maxPlayers = 4;
 			game.alliance = NO_ALLIANCES;
-
 			addGameOptions(FALSE);
 			break;
 
@@ -1570,11 +1567,8 @@ static void processMultiopWidgets(UDWORD id)
 			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN,0 );
 			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,WBUT_LOCK);
 			game.type = SKIRMISH;
-
 			widgSetString(psWScreen, MULTIOP_MAP, DEFAULTSKIRMISHMAP);
 			strcpy(game.map,widgGetString(psWScreen, MULTIOP_MAP));
-			game.maxPlayers = 4;
-
 			addGameOptions(FALSE);
 			break;
 		}

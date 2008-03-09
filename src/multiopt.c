@@ -374,7 +374,6 @@ BOOL joinCampaign(UDWORD gameNumber, char *sPlayer)
 
 	if(!ingame.localJoiningInProgress)
 	{
-//		game.type = CAMPAIGN;
 		NETjoinGame(gameNumber, sPlayer);	// join
 		ingame.localJoiningInProgress	= TRUE;
 
@@ -616,7 +615,6 @@ static BOOL cleanMap(UDWORD player)
 
 	// reverse so we always remove the last object. re-reverse afterwards.
 //	reverseObjectList((BASE_OBJECT**)&apsStructLists[player]);
-
 
 	switch(game.base)
 	{

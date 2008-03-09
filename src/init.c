@@ -412,8 +412,6 @@ BOOL systemInitialise(void)
 
 	buildMapList();
 
-	//loadLevels(DIR_CAMPAIGN);
-
 	// Initialize render engine
 	war_SetFog(FALSE);
 	if (!pie_Initialise()) {

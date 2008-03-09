@@ -222,8 +222,6 @@ static BOOL enumerateMultiMaps(char *found, UDWORD *players,BOOL first, UBYTE ca
 				lev = lev->psNext;
 				return TRUE;
 			}
-
-
 		}
 		lev = lev->psNext;
 	}
@@ -778,8 +776,6 @@ void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIG
 
 	if(isHumanPlayer(player) || (game.type == SKIRMISH && player<game.maxPlayers) )
 	{
-		//c2:name,
-
 		sprintf(str,"%d:", player);
 
 		strcat(str, getPlayerName(player));
@@ -1234,7 +1230,6 @@ BOOL intAddMultiMenu(void)
 	formHeight = MULTIMENU_PLAYER_H+7;
 	for(i=0;i<MAX_PLAYERS;i++)
 	{
-//		if(isHumanPlayer(i) || (game.type == SKIRMISH && i<game.maxPlayers && game.skirmishPlayers[i] ))
 		if(isHumanPlayer(i) || (game.type == SKIRMISH && i<game.maxPlayers && game.skDiff[i] ))
 		{
 			formHeight += MULTIMENU_PLAYER_H;
@@ -1261,7 +1256,6 @@ BOOL intAddMultiMenu(void)
 	// add any players
 	for(i=0;i<MAX_PLAYERS;i++)
 	{
-//		if(isHumanPlayer(i) || (game.type == SKIRMISH && i<game.maxPlayers && game.skirmishPlayers[i] ) )
 		if(isHumanPlayer(i) || (game.type == SKIRMISH && i<game.maxPlayers && game.skDiff[i] ) )
 		{
 			addMultiPlayer(i,pos);

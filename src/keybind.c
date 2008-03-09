@@ -2439,8 +2439,6 @@ BOOL	processConsoleCommands( char *pName )
 	{
 		char tmpStr[255];
 
-
-
 		/* saveai x */
 		for(i=0;i<MAX_PLAYERS;i++)
 		{
