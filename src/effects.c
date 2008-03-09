@@ -74,7 +74,7 @@
 
 extern UWORD OffScreenEffects;
 
-#define MAX_EFFECTS	500
+#define MAX_EFFECTS	2500
 
 #define	GRAVITON_GRAVITY	((float)-800)
 #define	EFFECT_X_FLIP		0x1
@@ -799,15 +799,9 @@ static void updateFirework(EFFECT *psEffect)
    					dv.y = psEffect->position.y + dif;
 					effectGiveAuxVar(100);
    					addEffect(&dv,EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST,FALSE,NULL,0);
-
-					//   			dv.x = dv.x - (2*xDif);
-	//   			dv.z = dv.z - (2*yDif);	// buildings are level!
-	//			effectGiveAuxVar(100);
-	//   			addEffect(&dv,EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST,FALSE,NULL,0);
 				}
 			}
 			killEffect(psEffect);
-
 		}
 		else
 		{
@@ -855,10 +849,7 @@ static void updateFirework(EFFECT *psEffect)
 				killEffect(psEffect);
 			}
 		}
-
-
 	}
-
 }
 
 // ----------------------------------------------------------------------------------------
