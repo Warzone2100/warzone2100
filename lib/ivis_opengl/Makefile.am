@@ -7,3 +7,4 @@ libivis_opengl_a_SOURCES = ivi.c pieblitfunc.c piedraw.c piefunc.c \
 
 libivis_opengl_a_LIBADD = $(top_builddir)/lib/ivis_common/libivis_common.a \
 	$(top_builddir)/lib/framework/libframework.a
+libivis_opengl_a_CFLAGS = $(SDL_CFLAGS) $(OPENGLC_CFLAGS) $(OPENGL_CFLAGS)

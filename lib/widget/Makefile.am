@@ -7,3 +7,4 @@ libwidget_a_SOURCES = bar.c button.c editbox.c form.c label.c scrap.c slider.c \
 
 libwidget_a_LIBADD = $(top_builddir)/lib/ivis_opengl/libivis_opengl.a \
 	$(top_builddir)/lib/ivis_common/libivis_common.a $(top_builddir)/lib/framework/libframework.a
+libwidget_a_CFLAGS = $(SDL_CFLAGS)

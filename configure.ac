@@ -233,16 +233,12 @@ AC_SUBST([OPENGLC_LIBS], [${OPENGLC_LIBS}])
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDATADIR=\"\\\"\${datadir}/\${PACKAGE}\\\"\""
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -DLOCALEDIR=\"\\\"\${localedir}\\\"\""
 
-
-# add some required C flags here
-#  YY_NO_INPUT to prevent Flex from defining input(): We use our own YY_INPUT instead.
+# Prevent Flex from defining input(): We use our own YY_INPUT instead.
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -DYY_NO_INPUT"
+WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)"
 
 
-# Purposefully including the SDL, PNG, OGGVORBIS, OPENAL and OPENGL CFLAGS into
-# the CPPFLAGS here as they're really preprocessor options, not C compilation
-# options.
-CPPFLAGS="${CPPFLAGS} ${WZ_CPPFLAGS} -I\$(top_srcdir) ${SDL_CFLAGS} ${PNG_CFLAGS} ${OGGVORBIS_CFLAGS} ${OPENAL_CFLAGS} ${OPENGL_CFLAGS}"
+CPPFLAGS="${CPPFLAGS} ${WZ_CPPFLAGS}"
 CFLAGS="${CFLAGS} ${WZ_CFLAGS}"
 
 

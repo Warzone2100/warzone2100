@@ -17,3 +17,4 @@ libgamelib_a_SOURCES = anim.c animobj.c audp_lexer.lex.c audp_parser.tab.c \
 
 libgamelib_a_LIBADD = $(top_builddir)/lib/ivis_opengl/libivis_opengl.a \
 	$(top_builddir)/lib/ivis_common/libivis_common.a $(top_builddir)/lib/framework/libframework.a
+libgamelib_a_CFLAGS = $(SDL_CFLAGS)

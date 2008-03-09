@@ -19,3 +19,5 @@ libframework_a_SOURCES = SDL_framerate.c configfile.c debug.c exceptionhandler.c
 	frame.c frameresource.c input.c printf_ext.c resource_lexer.lex.c \
 	resource_parser.tab.c strnlen1.c strres.c strres_lexer.lex.c \
 	strres_parser.tab.c treap.c trig.c tagfile.c
+
+libframework_a_CFLAGS = $(SDL_CFLAGS)

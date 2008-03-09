@@ -5,3 +5,4 @@ libsound_a_SOURCES = audio.c audio_id.c cdaudio.c oggvorbis.c openal_error.c ope
 
 libsound_a_LIBADD = $(top_builddir)/lib/gamelib/libgamelib.a \
 	$(top_builddir)/lib/framework/libframework.a
+libsound_a_CFLAGS = $(SDL_CFLAGS) $(OGGVORBIS_CFLAGS) $(OPENAL_CFLAGS)

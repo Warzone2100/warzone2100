@@ -17,3 +17,4 @@ libscript_a_SOURCES = script_lexer.lex.c script_parser.tab.c chat_lexer.lex.c \
 	chat_parser.tab.c codeprint.c event.c evntsave.c interp.c script.c stack.c
 
 libscript_a_LIBADD = $(top_builddir)/lib/framework/libframework.a
+libscript_a_CFLAGS = $(SDL_CFLAGS)
