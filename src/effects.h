@@ -120,7 +120,7 @@ typedef enum
 }LAND_LIGHT_SPEC;
 
 
-#define MAX_EFFECTS	500
+#define MAX_EFFECTS	2500
 
 #define	GRAVITON_GRAVITY	((float)-800)
 #define	EFFECT_X_FLIP		0x1
