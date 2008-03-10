@@ -52,12 +52,13 @@
 #include <SDL.h>
 #include <physfs.h>
 
-/* For SHGetFolderPath */
-#ifdef WZ_OS_WIN
+#if defined(WZ_OS_WIN)
 // FIXME HACK Workaround DATADIR definition in objbase.h
 // This works since DATADIR is never used on Windows.
-# undef DATADIR
-# include <shlobj.h>
+#  undef DATADIR
+#  include <shlobj.h> /* For SHGetFolderPath */
+#elif defined(WZ_OS_UNIX)
+#  include <errno.h>
 #endif // WZ_OS_WIN
 
 #include "lib/framework/configfile.h"
@@ -94,16 +95,21 @@
 #include "wrappers.h"
 #include "version.h"
 
-#if defined(WZ_OS_UNIX)
-# include <unistd.h>
-# include <errno.h>
-#elif defined(WZ_OS_WIN)
-# include <windows.h>
+
+/* Always use fallbacks on Windows */
+#if defined(WZ_OS_WIN)
+#  undef DATADIR
+#  undef LOCALEDIR
 #endif
 
-#ifndef DATADIR
-# define DATADIR "/usr/share/warzone2100/"
+#if !defined(DATADIR)
+#  define DATADIR "data"
 #endif
+
+#if !defined(LOCALEDIR)
+#  define LOCALEDIR "locale"
+#endif
+
 
 #if defined(WZ_OS_WIN)
 # define WZ_WRITEDIR "Warzone 2100 2.1"
@@ -114,6 +120,7 @@
 #else
 # define WZ_WRITEDIR ".warzone2100-2.1"
 #endif
+
 
 char datadir[PATH_MAX] = "\0"; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be \0 on startup for ParseCommandLine to work!
 char configdir[PATH_MAX] = "\0"; // specifies custom USER directory.  Same rules apply as datadir above.
