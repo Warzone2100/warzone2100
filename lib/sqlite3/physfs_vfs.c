@@ -47,7 +47,7 @@ struct physfs_sqlite3_file
  */
 static int xClose(sqlite3_file* f)
 {
-	physfs_sqlite3_file * const file = (physfs_sqlite3_file * const)file;
+	physfs_sqlite3_file * const file = (physfs_sqlite3_file * const)f;
 	assert(&file->SQLite3_file == f);
 
 	if (file->NOOP)
@@ -71,7 +71,7 @@ static int xRead(sqlite3_file* f, void* dst, int iAmt, sqlite3_int64 iOfst)
 {
 	PHYSFS_sint64 nRead;
 
-	physfs_sqlite3_file * const file = (physfs_sqlite3_file * const)file;
+	physfs_sqlite3_file * const file = (physfs_sqlite3_file * const)f;
 	assert(&file->SQLite3_file == f);
 
 	if (file->NOOP)
@@ -96,7 +96,7 @@ static int xRead(sqlite3_file* f, void* dst, int iAmt, sqlite3_int64 iOfst)
  */
 static int xWrite(sqlite3_file* f, const void* src, int iAmt, sqlite3_int64 iOfst)
 {
-	physfs_sqlite3_file * const file = (physfs_sqlite3_file * const)file;
+	physfs_sqlite3_file * const file = (physfs_sqlite3_file * const)f;
 	assert(&file->SQLite3_file == f);
 
 	if (file->NOOP)
@@ -110,7 +110,7 @@ static int xWrite(sqlite3_file* f, const void* src, int iAmt, sqlite3_int64 iOfs
  */
 static int xTruncate(sqlite3_file* f, sqlite3_int64 size)
 {
-	physfs_sqlite3_file * const file = (physfs_sqlite3_file * const)file;
+	physfs_sqlite3_file * const file = (physfs_sqlite3_file * const)f;
 	assert(&file->SQLite3_file == f);
 
 	if (file->NOOP)
@@ -124,7 +124,7 @@ static int xTruncate(sqlite3_file* f, sqlite3_int64 size)
  */
 static int xSync(sqlite3_file* f, int flags)
 {
-	physfs_sqlite3_file * const file = (physfs_sqlite3_file * const)file;
+	physfs_sqlite3_file * const file = (physfs_sqlite3_file * const)f;
 	assert(&file->SQLite3_file == f);
 
 	if (file->NOOP)
@@ -142,7 +142,7 @@ static int xFileSize(sqlite3_file* f, sqlite3_int64* pSize)
 {
 	PHYSFS_sint64 size;
 
-	physfs_sqlite3_file * const file = (physfs_sqlite3_file * const)file;
+	physfs_sqlite3_file * const file = (physfs_sqlite3_file * const)f;
 	assert(&file->SQLite3_file == f);
 
 	if (file->NOOP)
@@ -218,7 +218,7 @@ static const sqlite3_io_methods physfs_sqlite3_io_methods =
 
 static int xOpen(sqlite3_vfs* pVfs, const char* zName, sqlite3_file* f, int flags, int* pOutFlags)
 {
-	physfs_sqlite3_file * const file = (physfs_sqlite3_file * const)file;
+	physfs_sqlite3_file * const file = (physfs_sqlite3_file * const)f;
 	assert(&file->SQLite3_file == f);
 
 	/* Assign the "overloaded" I/O functions to this file object */
