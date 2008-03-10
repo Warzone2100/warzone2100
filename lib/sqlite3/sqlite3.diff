@@ -1,5 +1,5 @@
---- sqlite3.c.orig	2008-03-09 12:46:34.000000000 +0100
-+++ sqlite3.c	2008-03-09 12:47:47.000000000 +0100
+--- sqlite3.c.orig	2008-03-10 11:14:23.000000000 +0100
++++ sqlite3.c	2008-03-10 11:14:41.000000000 +0100
 @@ -4818,12 +4818,16 @@
  #if !defined(SQLITE_OMIT_SHARED_CACHE) && SQLITE_THREADSAFE
  SQLITE_PRIVATE   void sqlite3BtreeEnter(Btree*);
@@ -26,7 +26,65 @@
  # include <windows.h>
  # define SQLITE_TEMPNAME_SIZE (MAX_PATH+50)
  #elif OS_OS2
-@@ -53986,7 +53992,7 @@
+@@ -10832,32 +10838,6 @@
+   DWORD owner;               /* Thread holding this mutex */
+ };
+ 
+-/*
+-** Return true (non-zero) if we are running under WinNT, Win2K, WinXP,
+-** or WinCE.  Return false (zero) for Win95, Win98, or WinME.
+-**
+-** Here is an interesting observation:  Win95, Win98, and WinME lack
+-** the LockFileEx() API.  But we can still statically link against that
+-** API as long as we don't call it win running Win95/98/ME.  A call to
+-** this routine is used to determine if the host is Win95/98/ME or
+-** WinNT/2K/XP so that we will know whether or not we can safely call
+-** the LockFileEx() API.
+-*/
+-#if OS_WINCE
+-# define mutexIsNT()  (1)
+-#else
+-  static int mutexIsNT(void){
+-    static int osType = 0;
+-    if( osType==0 ){
+-      OSVERSIONINFO sInfo;
+-      sInfo.dwOSVersionInfoSize = sizeof(sInfo);
+-      GetVersionEx(&sInfo);
+-      osType = sInfo.dwPlatformId==VER_PLATFORM_WIN32_NT ? 2 : 1;
+-    }
+-    return osType==2;
+-  }
+-#endif /* OS_WINCE */
+-
+ 
+ /*
+ ** The sqlite3_mutex_alloc() routine allocates a new
+@@ -10972,24 +10952,6 @@
+   int rc = SQLITE_BUSY;
+   assert( p );
+   assert( p->id==SQLITE_MUTEX_RECURSIVE || sqlite3_mutex_notheld(p) );
+-  /*
+-  ** The sqlite3_mutex_try() routine is very rarely used, and when it
+-  ** is used it is merely an optimization.  So it is OK for it to always
+-  ** fail.  
+-  **
+-  ** The TryEnterCriticalSection() interface is only available on WinNT.
+-  ** And some windows compilers complain if you try to use it without
+-  ** first doing some #defines that prevent SQLite from building on Win98.
+-  ** For that reason, we will omit this optimization for now.  See
+-  ** ticket #2685.
+-  */
+-#if 0
+-  if( mutexIsNT() && TryEnterCriticalSection(&p->mutex) ){
+-    p->owner = GetCurrentThreadId();
+-    p->nRef++;
+-    rc = SQLITE_OK;
+-  }
+-#endif
+   return rc;
+ }
+ 
+@@ -53986,7 +53948,7 @@
      if( argType==0xff ){
        pArg = db;
      }else{
@@ -35,7 +93,7 @@
      }
      sqlite3CreateFunc(db, aFuncs[i].zName, aFuncs[i].nArg,
          aFuncs[i].eTextRep, pArg, aFuncs[i].xFunc, 0, 0);
-@@ -54005,7 +54011,7 @@
+@@ -54005,7 +53967,7 @@
    sqlite3AttachFunctions(db);
  #endif
    for(i=0; i<sizeof(aAggs)/sizeof(aAggs[0]); i++){
@@ -44,7 +102,7 @@
      sqlite3CreateFunc(db, aAggs[i].zName, aAggs[i].nArg, SQLITE_UTF8, 
          pArg, 0, aAggs[i].xStep, aAggs[i].xFinalize);
      if( aAggs[i].needCollSeq ){
-@@ -62510,7 +62516,7 @@
+@@ -62510,7 +62472,7 @@
  #endif
    if( res.azResult ){
      assert( sizeof(res.azResult[0])>= sizeof(res.nData) );
