@@ -21,8 +21,10 @@
 	   distribution.
 */
 
+// These are necessary for the `bool' type
 #include "lib/framework/frame.h"
 #include "lib/framework/strlfuncs.h"
+
 #include "physfs_vfs.h"
 #include "sqlite3.h"
 #include <physfs.h>
@@ -289,7 +291,7 @@ static int xGetTempname(sqlite3_vfs* pVfs, int nOut, char* zOut)
  */
 static int xFullPathname(sqlite3_vfs* pVfs, const char* zName, int nOut, char* zOut)
 {
-	return (strlcpy(zOut, zName, nOut) < nOut);
+	return (strlcpy(zOut, zName, nOut) < nOut) ? SQLITE_OK : SQLITE_IOERR;
 }
 
 static void* xDlOpen(sqlite3_vfs* pVfs, const char* zFilename)
