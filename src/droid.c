@@ -4031,7 +4031,7 @@ UDWORD getDroidEffectiveLevel(DROID *psDroid)
 {
 	UDWORD level = getDroidLevel(psDroid);
 	UDWORD cmdLevel = cmdGetCommanderLevel(psDroid);
-	
+
 	return MAX(level, cmdLevel);
 }
 
@@ -4513,14 +4513,14 @@ building the specified structure - returns TRUE if finds one*/
 BOOL checkDroidsBuilding(STRUCTURE *psStructure)
 {
 	DROID				*psDroid;
-	STRUCTURE			*psStruct = NULL;
 
 	for (psDroid = apsDroidLists[psStructure->player]; psDroid != NULL; psDroid =
 		psDroid->psNext)
 	{
+		BASE_OBJECT *psStruct = NULL;
 		//check DORDER_BUILD, HELP_BUILD is handled the same
-		orderStateObj(psDroid, DORDER_BUILD, (BASE_OBJECT **) &psStruct);
-		if (psStruct == psStructure)
+		orderStateObj(psDroid, DORDER_BUILD, &psStruct);
+		if ((STRUCTURE*)psStruct == psStructure)
 		{
 			return TRUE;
 		}
@@ -4533,14 +4533,14 @@ demolishing the specified structure - returns TRUE if finds one*/
 BOOL checkDroidsDemolishing(STRUCTURE *psStructure)
 {
 	DROID				*psDroid;
-	STRUCTURE			*psStruct = NULL;
 
 	for (psDroid = apsDroidLists[psStructure->player]; psDroid != NULL; psDroid =
 		psDroid->psNext)
 	{
+		BASE_OBJECT *psStruct = NULL;
 		//check DORDER_DEMOLISH
-		orderStateObj(psDroid, DORDER_DEMOLISH, (BASE_OBJECT **) &psStruct);
-		if (psStruct == psStructure)
+		orderStateObj(psDroid, DORDER_DEMOLISH, &psStruct);
+		if ((STRUCTURE*)psStruct == psStructure)
 		{
 			return TRUE;
 		}
@@ -4897,7 +4897,7 @@ BOOL vtolEmpty(DROID *psDroid)
 // true if a vtol is waiting to be rearmed by a particular rearm pad
 BOOL vtolReadyToRearm(DROID *psDroid, STRUCTURE *psStruct)
 {
-	STRUCTURE	*psRearmPad;
+	BASE_OBJECT *psRearmPad;
 
 	CHECK_DROID(psDroid);
 
@@ -4908,10 +4908,10 @@ BOOL vtolReadyToRearm(DROID *psDroid, STRUCTURE *psStruct)
 	}
 
 	// If a unit has been ordered to rearm make sure it goes to the correct base
-	if (orderStateObj(psDroid, DORDER_REARM, (BASE_OBJECT **)&psRearmPad))
+	if (orderStateObj(psDroid, DORDER_REARM, &psRearmPad))
 	{
-		if ((psRearmPad != psStruct) &&
-			!vtolOnRearmPad(psRearmPad, psDroid))
+		if (((STRUCTURE*)psRearmPad != psStruct) &&
+			!vtolOnRearmPad((STRUCTURE*)psRearmPad, psDroid))
 		{
 			// target rearm pad is clear - let it go there
 			return FALSE;
@@ -5460,7 +5460,7 @@ BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 	if (asPropulsionTypes[psPropStats->propulsionType].travel == AIR)
 	{
 		//check weapon stat for indirect
-		if (!proj_Direct(asWeaponStats + psTemplate->asWeaps[0]) 
+		if (!proj_Direct(asWeaponStats + psTemplate->asWeaps[0])
 		    || !asWeaponStats[psTemplate->asWeaps[0]].vtolAttackRuns)
 		{
 			bValid = FALSE;

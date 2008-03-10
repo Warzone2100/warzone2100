@@ -147,8 +147,8 @@ BOOL sendDroidSecondary(const DROID* psDroid, SECONDARY_ORDER sec, SECONDARY_STA
 BOOL recvDroidSecondary()
 {
 	DROID*          psDroid;
-	SECONDARY_ORDER sec;
-	SECONDARY_STATE	state;
+	SECONDARY_ORDER sec = DSO_ATTACK_RANGE;
+	SECONDARY_STATE state = DSS_NONE;
 
 	NETbeginDecode(NET_SECONDARY);
 	{
@@ -404,7 +404,7 @@ BOOL recvDroidMove()
 
 		if (!IdToDroid(droid, player, &psDroid))
 		{
-			debug(LOG_ERROR, "recvDroidMove: Packet from %d refers to non-existent droid %d!", 
+			debug(LOG_ERROR, "recvDroidMove: Packet from %d refers to non-existent droid %d!",
 			      NETgetSource(), (int)droid);
 			return FALSE;
 		}
@@ -485,7 +485,7 @@ BOOL recvDroid()
 	// If we can not find the template ask for the entire droid instead
 	if (!pT)
 	{
-		debug(LOG_ERROR, "recvDroid: Packet from %d refers to non-existent template %d!", 
+		debug(LOG_ERROR, "recvDroid: Packet from %d refers to non-existent template %d!",
 		      NETgetSource(), (int)templateID);
 		return FALSE;
 	}
@@ -650,11 +650,11 @@ BOOL SendGroupOrderGroup(const DROID_GROUP* psGroup, DROID_ORDER order, uint32_t
 // receive a group order.
 BOOL recvGroupOrder()
 {
-	DROID_ORDER order;
+	DROID_ORDER order = DORDER_NONE;
 	BOOL subType, cmdOrder;
 
 	uint32_t destId, x, y;
-	OBJECT_TYPE destType;
+	OBJECT_TYPE destType = OBJ_DROID; // Dummy initialisation to workaround NETenum macro
 
 	uint8_t droidCount, i;
 	uint32_t* droidIDs;
@@ -708,7 +708,7 @@ BOOL recvGroupOrder()
 		// Retrieve the droid associated with the current ID
 		if (!IdToDroid(droidIDs[i], ANYPLAYER, &psDroid))
 		{
-			debug(LOG_ERROR, "recvGroupOrder: Packet from %d refers to non-existent droid %d!", 
+			debug(LOG_ERROR, "recvGroupOrder: Packet from %d refers to non-existent droid %d!",
 			      NETgetSource(), (int)droidIDs[i]);
 			continue; // continue working on next droid; crossing fingers...
 		}
@@ -792,7 +792,7 @@ BOOL recvDroidInfo()
 	{
 		uint32_t    droidId;
 		DROID*      psDroid;
-		DROID_ORDER order;
+		DROID_ORDER order = DORDER_NONE;
 		BOOL        subType;
 
 		// Get the droid
@@ -800,7 +800,7 @@ BOOL recvDroidInfo()
 
 		if (!IdToDroid(droidId, ANYPLAYER, &psDroid))
 		{
-			debug(LOG_ERROR, "recvDroidInfo: Packet from %d refers to non-existent droid %d!", 
+			debug(LOG_ERROR, "recvDroidInfo: Packet from %d refers to non-existent droid %d!",
 			      NETgetSource(), (int)droidId);
 			return FALSE;
 		}
@@ -811,7 +811,7 @@ BOOL recvDroidInfo()
 
 		if (subType)
 		{
-			uint32_t destId, destType;
+			uint32_t destId, destType = 0;
 
 			NETuint32_t(&destId);
 			NETenum(&destType);

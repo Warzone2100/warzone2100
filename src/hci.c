@@ -18,7 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /**
- * @file hci.c	
+ * @file hci.c
  *
  * Functions for the in game interface.
  * (Human Computer Interface - thanks to Alex for the file name).
@@ -6064,34 +6064,38 @@ static BOOL selectConstruction(BASE_OBJECT *psObj)
 /* Return the stats for a construction droid */
 static BASE_STATS *getConstructionStats(BASE_OBJECT *psObj)
 {
-	DROID	*psDroid;
+	DROID *psDroid = (DROID *)psObj;
 	BASE_STATS *Stats;
-	STRUCTURE *Structure;
-	UDWORD x,y;
+	BASE_OBJECT *Structure;
+	UDWORD x, y;
 
 	ASSERT( psObj != NULL && psObj->type == OBJ_DROID,
 		"getConstructionStats: invalid droid pointer" );
-	psDroid = (DROID *)psObj;
 
-	//if(droidType(psDroid) != DROID_CONSTRUCT) return NULL;
-    if (!(droidType(psDroid) == DROID_CONSTRUCT || droidType(psDroid) ==
-        DROID_CYBORG_CONSTRUCT))
-    {
-        return NULL;
-    }
+	if (!(droidType(psDroid) == DROID_CONSTRUCT ||
+		droidType(psDroid) == DROID_CYBORG_CONSTRUCT))
+	{
+		return NULL;
+	}
 
-	if(orderStateStatsLoc(psDroid, DORDER_BUILD,&Stats,&x,&y)) {	// Moving to build location?
+	if(orderStateStatsLoc(psDroid, DORDER_BUILD, &Stats, &x, &y)) // Moving to build location?
+	{
 		return Stats;
-	} else if( orderStateObj(psDroid, DORDER_BUILD,(BASE_OBJECT**)&Structure) &&
-				 psDroid->order == DORDER_BUILD ) { // Is building
+	}
+	else if( orderStateObj(psDroid, DORDER_BUILD, &Structure) &&
+		psDroid->order == DORDER_BUILD ) // Is building
+	{
 		return psDroid->psTarStats;
-	} else if( orderStateObj(psDroid, DORDER_HELPBUILD,(BASE_OBJECT**)&Structure) &&
-		 (psDroid->order == DORDER_HELPBUILD || psDroid->order == DORDER_LINEBUILD)) { //Is helping
-		return (BASE_STATS*)Structure->pStructureType;
-    } else if (orderState(psDroid, DORDER_DEMOLISH)) {
-        return 	(BASE_STATS *)structGetDemolishStat();
-    }
-
+	}
+	else if( orderStateObj(psDroid, DORDER_HELPBUILD, &Structure) &&
+		(psDroid->order == DORDER_HELPBUILD || psDroid->order == DORDER_LINEBUILD)) // Is helping
+	{
+		return (BASE_STATS*)((STRUCTURE*)Structure)->pStructureType;
+	}
+	else if (orderState(psDroid, DORDER_DEMOLISH))
+	{
+		return (BASE_STATS *)structGetDemolishStat();
+	}
 
 	return NULL;
 }

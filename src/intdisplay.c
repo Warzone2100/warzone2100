@@ -800,6 +800,7 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PI
 						case REF_RESEARCH:
 							if (StructureIsResearching(Structure))
 							{
+								iIMDShape * shape = Object;
 								Stats = (BASE_STATS*)Buffer->Data2;
 								if (!Stats)
 								{
@@ -809,7 +810,8 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PI
 		    						{
 			    						bOnHold = TRUE;
 				    				}
-								StatGetResearchImage(Stats,&Image,(iIMDShape**)&Object, &psResGraphic, FALSE);
+								StatGetResearchImage(Stats,&Image,&shape, &psResGraphic, FALSE);
+								Object = shape;
 								if (psResGraphic)
 								{
 									// we have a Stat associated with this research topic
@@ -1052,6 +1054,7 @@ void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 				}
 				else if(StatIsResearch(Stat))
 				{
+					iIMDShape * shape = Object;
 					/*IMDType = IMDTYPE_RESEARCH;
 					StatGetResearchImage(Stat,&Image,(iIMDShape**)&Object,TRUE);
 					//if Object != NULL the there must be a IMD so set the object to
@@ -1060,7 +1063,8 @@ void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 					{
 						Object = (void*)Stat;
 					}*/
-                    StatGetResearchImage(Stat,&Image,(iIMDShape**)&Object, &psResGraphic, TRUE);
+                    StatGetResearchImage(Stat,&Image,&shape, &psResGraphic, TRUE);
+					Object = shape;
                     if (psResGraphic)
                     {
                         //we have a Stat associated with this research topic
@@ -2500,22 +2504,22 @@ void CreateBlankButton(RENDERED_BUTTON *Buffer,BOOL Down, UDWORD buttonType)
 BOOL DroidIsDemolishing(DROID *Droid)
 {
 	BASE_STATS	*Stats;
-	STRUCTURE *Structure;
+	BASE_OBJECT *Structure;
 	UDWORD x,y;
 
 	//if(droidType(Droid) != DROID_CONSTRUCT) return FALSE;
-    if (!(droidType(Droid) == DROID_CONSTRUCT || droidType(Droid) ==
-        DROID_CYBORG_CONSTRUCT))
-    {
-        return FALSE;
-    }
+	if (!(droidType(Droid) == DROID_CONSTRUCT ||
+		droidType(Droid) == DROID_CYBORG_CONSTRUCT))
+	{
+		return FALSE;
+	}
 
-	if(orderStateStatsLoc(Droid, DORDER_DEMOLISH,&Stats,&x,&y)) {	// Moving to demolish location?
-
+	if(orderStateStatsLoc(Droid, DORDER_DEMOLISH,&Stats,&x,&y)) // Moving to demolish location?
+	{
 		return TRUE;
-
-	} else if( orderStateObj(Droid, DORDER_DEMOLISH,(BASE_OBJECT**)&Structure) ) {	// Is demolishing?
-
+	}
+	else if( orderStateObj(Droid, DORDER_DEMOLISH,&Structure) ) // Is demolishing?
+	{
 		return TRUE;
 	}
 
@@ -2547,7 +2551,7 @@ BOOL DroidIsRepairing(DROID *Droid)
 BOOL DroidIsBuilding(DROID *Droid)
 {
 	BASE_STATS	*Stats;
-	STRUCTURE *Structure;
+	BASE_OBJECT *Structure;
 	UDWORD x,y;
 
 	//if(droidType(Droid) != DROID_CONSTRUCT) return FALSE;
@@ -2561,9 +2565,9 @@ BOOL DroidIsBuilding(DROID *Droid)
 	{
 		// Moving to build location?
 		return FALSE;
-
-	} else if (orderStateObj(Droid, DORDER_BUILD,(BASE_OBJECT**)&Structure) ||	// Is building or helping?
-		   orderStateObj(Droid, DORDER_HELPBUILD,(BASE_OBJECT**)&Structure))
+	}
+	else if (orderStateObj(Droid, DORDER_BUILD,&Structure) ||
+		   orderStateObj(Droid, DORDER_HELPBUILD,&Structure)) // Is building or helping?
 	{
 		return TRUE;
 	}
@@ -2598,13 +2602,13 @@ BOOL DroidGoingToBuild(DROID *Droid)
 //
 STRUCTURE *DroidGetBuildStructure(DROID *Droid)
 {
-	STRUCTURE *Structure;
+	BASE_OBJECT *Structure;
 
-	if(!orderStateObj(Droid, DORDER_BUILD,(BASE_OBJECT**)&Structure)) {
-		orderStateObj(Droid, DORDER_HELPBUILD,(BASE_OBJECT**)&Structure);
+	if(!orderStateObj(Droid, DORDER_BUILD,&Structure)) {
+		orderStateObj(Droid, DORDER_HELPBUILD,&Structure);
 	}
 
-	return Structure;
+	return (STRUCTURE*)Structure;
 }
 
 // Get the first factory assigned to a command droid
