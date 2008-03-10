@@ -1,3 +1,5 @@
+AM_CFLAGS = $(SDL_CFLAGS) $(OGGVORBIS_CFLAGS) $(OPENAL_CFLAGS) $(WZ_CFLAGS)
+
 noinst_LIBRARIES = libsound.a
 noinst_HEADERS = aud.h audio.h audio_id.h cdaudio.h mixer.h oggvorbis.h openal_error.h track.h tracklib.h
 
@@ -5,4 +7,3 @@ libsound_a_SOURCES = audio.c audio_id.c cdaudio.c oggvorbis.c openal_error.c ope
 
 libsound_a_LIBADD = $(top_builddir)/lib/gamelib/libgamelib.a \
 	$(top_builddir)/lib/framework/libframework.a
-libsound_a_CFLAGS = $(SDL_CFLAGS) $(OGGVORBIS_CFLAGS) $(OPENAL_CFLAGS)

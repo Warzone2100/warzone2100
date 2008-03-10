@@ -4,6 +4,8 @@
 %.lex.c:: %.l
 	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
 
+AM_CPPFLAGS = -DYY_NO_INPUT $(WZ_CPPFLAGS)
+AM_CFLAGS = $(SDL_CFLAGS) $(WZ_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 BUILT_SOURCES = audp_lexer.lex.c audp_parser.tab.c audp_parser.tab.h
@@ -17,4 +19,3 @@ libgamelib_a_SOURCES = anim.c animobj.c audp_lexer.lex.c audp_parser.tab.c \
 
 libgamelib_a_LIBADD = $(top_builddir)/lib/ivis_opengl/libivis_opengl.a \
 	$(top_builddir)/lib/ivis_common/libivis_common.a $(top_builddir)/lib/framework/libframework.a
-libgamelib_a_CFLAGS = $(SDL_CFLAGS)

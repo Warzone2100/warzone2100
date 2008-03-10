@@ -50,7 +50,7 @@ case ${host_os} in
 	*mingw32*)
 		host_os_mingw32=yes
 		AC_CHECK_TOOL([WINDRES], [windres], AC_MSG_ERROR([windres not found]))
-		WIN32_LIBS='-lintl -ldbghelp -lshfolder -lwinmm -lwsock32'
+		WIN32_LIBS='-ldbghelp -lshfolder -lwinmm -lwsock32'
 		AC_SUBST([WIN32_LIBS], [${WIN32_LIBS}])
 		;;
 	*)
@@ -238,8 +238,8 @@ WZ_CPPFLAGS="${WZ_CPPFLAGS} -DYY_NO_INPUT"
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)"
 
 
-CPPFLAGS="${CPPFLAGS} ${WZ_CPPFLAGS}"
-CFLAGS="${CFLAGS} ${WZ_CFLAGS}"
+AC_SUBST([WZ_CPPFLAGS], [${WZ_CPPFLAGS}])
+AC_SUBST([WZ_CFLAGS], [${WZ_CFLAGS}])
 
 
 AC_CONFIG_HEADER([config.h])

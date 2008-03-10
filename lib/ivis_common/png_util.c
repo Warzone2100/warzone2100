@@ -21,11 +21,7 @@
 #include "lib/framework/frame.h"
 
 #include "png_util.h"
-#ifdef WZ_OS_MAC
-#include <Png/png.h>
-#else
 #include <png.h>
-#endif
 #include <physfs.h>
 
 #define PNG_BYTES_TO_CHECK 8
