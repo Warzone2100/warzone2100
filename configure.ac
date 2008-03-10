@@ -232,9 +232,6 @@ AC_SUBST([OPENGLC_LIBS], [${OPENGLC_LIBS}])
 
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDATADIR=\"\\\"\${datadir}/\${PACKAGE}\\\"\""
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -DLOCALEDIR=\"\\\"\${localedir}\\\"\""
-
-# Prevent Flex from defining input(): We use our own YY_INPUT instead.
-WZ_CPPFLAGS="${WZ_CPPFLAGS} -DYY_NO_INPUT"
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)"
 
 
