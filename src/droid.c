@@ -147,10 +147,9 @@ BOOL droidInit(void)
  */
 float droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide)
 {
-	// Do at least one point of damage
-	unsigned int actualDamage = 1, armour;
-	float        originalBody = psDroid->originalBody;
-	float        body = psDroid->body;
+	UDWORD				actualDamage, armour, level;
+	float				originalBody = psDroid->originalBody;
+	float				body = psDroid->body;
 	SECONDARY_STATE		state;
 
 	CHECK_DROID(psDroid);
@@ -202,21 +201,19 @@ float droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weap
 
 	clustObjectAttacked((BASE_OBJECT *)psDroid);
 
-	// If the shell penetrated the armour work out how much damage it actually did
-	if (damage > armour)
-	{
-		unsigned int level;
 
-		actualDamage = damage - armour;
+	// Retrieve highest, applicable, experience level
+	level = getDroidEffectiveLevel(psDroid);
 
-		// Retrieve highest, applicable, experience level
-		level = getDroidEffectiveLevel(psDroid);
+	// Apply droid/commander experience to the droid damage
+	actualDamage = (damage * (100 - EXP_REDUCE_DAMAGE * level)) / 100;
 
-		// Reduce damage taken by EXP_REDUCE_DAMAGE % for each experience level
-		actualDamage = (actualDamage * (100 - EXP_REDUCE_DAMAGE * level)) / 100;
+	// Calculate final damage
+	actualDamage = (UDWORD)MAX((SDWORD)(actualDamage - armour), (SDWORD)(actualDamage / 3));
 
-		debug( LOG_ATTACK, "        penetrated: %d\n", actualDamage);
-	}
+	// Make sure we substract at least MIN_WEAPON_DAMAGE points from the target hp
+	actualDamage = MAX(actualDamage, MIN_WEAPON_DAMAGE);
+
 
 	// If the shell did sufficient damage to destroy the droid, deal with it and return
 	if (actualDamage >= psDroid->body)
