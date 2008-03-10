@@ -542,4 +542,7 @@ do { \
 			assert(droid->psActionTarget[i]->direction >= 0.0f); \
 } while (0)
 
+// Minimum damage a weapon will deal to its target
+#define	MIN_WEAPON_DAMAGE	1
+
 #endif
