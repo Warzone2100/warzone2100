@@ -1,6 +1,6 @@
 Index: sqlite3.c
 ===================================================================
---- sqlite3.c	(revision 3994)
+--- sqlite3.c	(revision 3997)
 +++ sqlite3.c	(working copy)
 @@ -4818,12 +4818,16 @@
  #if !defined(SQLITE_OMIT_SHARED_CACHE) && SQLITE_THREADSAFE
@@ -28,6 +28,23 @@ Index: sqlite3.c
  # include <windows.h>
  # define SQLITE_TEMPNAME_SIZE (MAX_PATH+50)
  #elif OS_OS2
+@@ -10584,11 +10590,11 @@
+ */
+ SQLITE_API sqlite3_mutex *sqlite3_mutex_alloc(int iType){
+   static sqlite3_mutex staticMutexes[] = {
+-    { PTHREAD_MUTEX_INITIALIZER, },
+-    { PTHREAD_MUTEX_INITIALIZER, },
+-    { PTHREAD_MUTEX_INITIALIZER, },
+-    { PTHREAD_MUTEX_INITIALIZER, },
+-    { PTHREAD_MUTEX_INITIALIZER, },
++    { PTHREAD_MUTEX_INITIALIZER, 0, 0, 0 },
++    { PTHREAD_MUTEX_INITIALIZER, 0, 0, 0 },
++    { PTHREAD_MUTEX_INITIALIZER, 0, 0, 0 },
++    { PTHREAD_MUTEX_INITIALIZER, 0, 0, 0 },
++    { PTHREAD_MUTEX_INITIALIZER, 0, 0, 0 },
+   };
+   sqlite3_mutex *p;
+   switch( iType ){
 @@ -10832,33 +10838,7 @@
    DWORD owner;               /* Thread holding this mutex */
  };
