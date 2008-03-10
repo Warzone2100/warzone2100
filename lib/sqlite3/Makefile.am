@@ -1,4 +1,5 @@
-AM_CFLAGS = $(SDL_CFLAGS) $(WZ_CFLAGS) -Wno-missing-field-initializers
+AM_CPPFLAGS = $(SDL_CFLAGS) $(WZ_CPPFLAGS)
+AM_CFLAGS = $(WZ_CFLAGS) -Wno-missing-field-initializers
 
 noinst_LIBRARIES = libsqlite3.a
 noinst_HEADERS = physfs_vfs.h sqlite3ext.h sqlite3.h

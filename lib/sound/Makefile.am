@@ -1,4 +1,5 @@
-AM_CFLAGS = $(SDL_CFLAGS) $(OGGVORBIS_CFLAGS) $(OPENAL_CFLAGS) $(WZ_CFLAGS)
+AM_CPPFLAGS = $(SDL_CFLAGS) $(OGGVORBIS_CFLAGS) $(OPENAL_CFLAGS) $(WZ_CPPFLAGS)
+AM_CFLAGS = $(WZ_CFLAGS)
 
 noinst_LIBRARIES = libsound.a
 noinst_HEADERS = aud.h audio.h audio_id.h cdaudio.h mixer.h oggvorbis.h openal_error.h track.h tracklib.h

@@ -4,8 +4,8 @@
 %.lex.c:: %.l
 	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
 
-AM_CPPFLAGS = -DYY_NO_INPUT $(WZ_CPPFLAGS)
-AM_CFLAGS = $(SDL_CFLAGS) $(WZ_CFLAGS)
+AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(WZ_CPPFLAGS)
+AM_CFLAGS = $(WZ_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 BUILT_SOURCES = script_lexer.lex.c chat_lexer.lex.c script_parser.tab.c chat_parser.tab.c script_parser.tab.h chat_parser.tab.h

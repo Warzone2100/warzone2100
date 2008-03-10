@@ -1,4 +1,5 @@
-AM_CFLAGS = $(SDL_CFLAGS) $(PNG_CFLAGS) $(WZ_CFLAGS)
+AM_CPPFLAGS = $(SDL_CFLAGS) $(PNG_CFLAGS) $(WZ_CPPFLAGS)
+AM_CFLAGS = $(WZ_CFLAGS)
 
 noinst_LIBRARIES = libivis_common.a
 noinst_HEADERS = bitimage.h imd.h ivi.h ivisdef.h \

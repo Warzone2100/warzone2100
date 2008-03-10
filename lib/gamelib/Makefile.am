@@ -4,8 +4,8 @@
 %.lex.c:: %.l
 	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
 
-AM_CPPFLAGS = -DYY_NO_INPUT $(WZ_CPPFLAGS)
-AM_CFLAGS = $(SDL_CFLAGS) $(WZ_CFLAGS)
+AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(WZ_CPPFLAGS)
+AM_CFLAGS = $(WZ_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 BUILT_SOURCES = audp_lexer.lex.c audp_parser.tab.c audp_parser.tab.h
