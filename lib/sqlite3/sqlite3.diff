@@ -1,5 +1,7 @@
---- sqlite3.c.orig	2008-03-10 11:14:23.000000000 +0100
-+++ sqlite3.c	2008-03-10 11:14:41.000000000 +0100
+Index: sqlite3.c
+===================================================================
+--- sqlite3.c	(revision 3994)
++++ sqlite3.c	(working copy)
 @@ -4818,12 +4818,16 @@
  #if !defined(SQLITE_OMIT_SHARED_CACHE) && SQLITE_THREADSAFE
  SQLITE_PRIVATE   void sqlite3BtreeEnter(Btree*);
@@ -26,7 +28,7 @@
  # include <windows.h>
  # define SQLITE_TEMPNAME_SIZE (MAX_PATH+50)
  #elif OS_OS2
-@@ -10832,32 +10838,6 @@
+@@ -10832,33 +10838,7 @@
    DWORD owner;               /* Thread holding this mutex */
  };
  
@@ -55,10 +57,11 @@
 -    return osType==2;
 -  }
 -#endif /* OS_WINCE */
--
  
+-
  /*
  ** The sqlite3_mutex_alloc() routine allocates a new
+ ** mutex and returns a pointer to it.  If it returns NULL
 @@ -10972,24 +10952,6 @@
    int rc = SQLITE_BUSY;
    assert( p );
