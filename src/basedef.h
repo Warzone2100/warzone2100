@@ -85,7 +85,7 @@ typedef enum _object_type
 typedef struct _base_object
 {
 	BASE_ELEMENTS( struct _base_object );
-} BASE_OBJECT;
+} WZ_DECL_MAY_ALIAS BASE_OBJECT;
 
 typedef struct SIMPLE_OBJECT
 {

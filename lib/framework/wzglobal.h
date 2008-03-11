@@ -369,7 +369,7 @@
  * \def WZ_DECL_PURE
  * "Many functions have no effects except the return value and their return value depends only on the parameters and/or global variables. Such a function can be subject to common subexpression elimination and loop optimization just as an arithmetic operator would be."
  */
-#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && WZ_CC_GNU_PREREQ(2,96)
+#if WZ_CC_GNU_PREREQ(2,96) && !defined(WZ_CC_INTEL)
 #  define WZ_DECL_PURE __attribute__((__pure__))
 #else
 #  define WZ_DECL_PURE
@@ -380,7 +380,7 @@
  * \def WZ_DECL_CONST
  * "Many functions do not examine any values except their arguments, and have no effects except the return value. Basically this is just slightly more strict class than the pure attribute below, since function is not allowed to read global memory."
  */
-#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && WZ_CC_GNU_PREREQ(2,5)
+#if WZ_CC_GNU_PREREQ(2,5) && !defined(WZ_CC_INTEL)
 #  define WZ_DECL_CONST __attribute__((__const__))
 #else
 #  define WZ_DECL_CONST
@@ -390,13 +390,22 @@
 /*! \def WZ_DECL_FORMAT
  * "The format attribute specifies that a function takes printf, scanf, strftime or strfmon style arguments which should be type-checked against a format string."
  */
-#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && WZ_CC_GNU_PREREQ(2,5)
+#if WZ_CC_GNU_PREREQ(2,5) && !defined(WZ_CC_INTEL)
 #  define WZ_DECL_FORMAT(archetype, string_index, first_to_check) \
           __attribute__((__format__ (archetype, string_index, first_to_check)))
 #else
 #  define WZ_DECL_FORMAT(archetype, string_index, first_to_check)
 #endif
 
+
+/*! \def WZ_DECL_MAY_ALIAS
+ * "Accesses to objects with types with this attribute are not subjected to type-based alias analysis, but are instead assumed to be able to alias any other type of objects, just like the char type. See -fstrict-aliasing for more information on aliasing issues."
+ */
+#if WZ_CC_GNU_PREREQ(3,3) && !defined(WZ_CC_INTEL)
+#  define WZ_DECL_MAY_ALIAS __attribute__((__may_alias__))
+#else
+#  define WZ_DECL_MAY_ALIAS
+#endif
 
 /* ---- Platform specific setup ---- */
 
@@ -425,7 +434,7 @@
 
 #  if defined(WZ_CC_MSVC)
 //   notify people we are disabling these warning messages.
-#    pragma message (" *** Warnings 4100,4127,4204 & 4244 have been squelched. ***")	
+#    pragma message (" *** Warnings 4100,4127,4204 & 4244 have been squelched. ***")
 #    pragma warning (disable : 4100) // Shut up: unreferenced formal parameter (FIXME)
 #    pragma warning (disable : 4127) // Shut up: conditional expression is constant (eg. "while(0)")
 #    pragma warning (disable : 4204) // Shut up: non-constant aggregate initializer

@@ -317,7 +317,7 @@ typedef struct _structure
 	/* anim data */
 	ANIM_OBJECT	*psCurAnim;
 
-} STRUCTURE;
+} WZ_DECL_MAY_ALIAS STRUCTURE;
 
 #define LOTS_OF	255						/*highest number the limit can be set to */
 typedef struct _structure_limits

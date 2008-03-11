@@ -91,6 +91,6 @@ typedef struct _feature
 	UDWORD          body;                   ///< current body points
 	UDWORD          timeLastHit;
 	BOOL            bTargetted;
-} FEATURE;
+} WZ_DECL_MAY_ALIAS FEATURE;
 
 #endif // __INCLUDED_FEATUREDEF_H__
