@@ -285,7 +285,6 @@ typedef struct _structure
     SWORD		currentBuildPts;			/* the build points currently assigned to this
 											   structure */
     SWORD       currentPowerAccrued;        /* the power accrued for building this structure*/
-	UWORD		body;						/* current body points */
 	SWORD		resistance;					/* current resistance points
 											   0 = cannot be attacked electrically*/
 	UDWORD		lastResistance;				/* time the resistance was last increased*/
@@ -296,9 +295,6 @@ typedef struct _structure
 	//the sensor stats need to be stored since the actual sensor stat can change with research
 	UWORD		turretRotation[STRUCT_MAXWEAPS];				// weapon, ECM and sensor direction and pitch
 	UWORD		turretPitch[STRUCT_MAXWEAPS];				// weapon, ECM and sensor direction and pitch
-
-	UDWORD		timeLastHit;				//the time the structure was last attacked
-	UDWORD		lastHitWeapon;
 
 	FUNCTIONALITY	*pFunctionality;		/* pointer to structure that contains fields
 											   necessary for functionality */

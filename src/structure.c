@@ -1219,59 +1219,28 @@ BOOL structureStatsShutDown(void)
 float structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
                        UDWORD weaponSubClass, HIT_SIDE impactSide)
 {
-	// Do at least one point of damage
-	unsigned int actualDamage = 1;
-	float		body = (float) psStructure->body;
-	float		originalBody = (float) structureBody(psStructure);
+	float		relativeDamage;
 
 	CHECK_STRUCTURE(psStructure);
 
-	debug( LOG_ATTACK, "structureDamage(%d): body %d armour %d damage: %d\n",
+	debug(LOG_ATTACK, "structureDamage(%d): body %d armour %d damage: %d",
 	      psStructure->id, psStructure->body, psStructure->armour[impactSide][weaponClass], damage);
 
-	// EMP cannons do not work on Structures
-	if (weaponSubClass == WSC_EMP)
-	{
-		return 0;
-	}
+	relativeDamage = objDamage((BASE_OBJECT *)psStructure, damage, structureBody(psStructure), weaponClass, weaponSubClass, impactSide);
 
-	if(psStructure->player != selectedPlayer)
+	// If the shell did sufficient damage to destroy the structure
+	if (relativeDamage < 0.0f)
 	{
-		// Player inflicting damage on enemy.
-		damage = (UDWORD) modifyForDifficultyLevel( (SDWORD) damage,TRUE);
+		debug(LOG_ATTACK, "structureDamage(%d): DESTROYED", psStructure->id);
+		destroyStruct(psStructure);
+		return relativeDamage * -1.0f;
 	}
 	else
 	{
-		// Enemy inflicting damage on player.
-		damage = (UDWORD) modifyForDifficultyLevel( (SDWORD) damage,FALSE);
+		// Survived
+		CHECK_STRUCTURE(psStructure);
+		return relativeDamage;
 	}
-
-	// Store the time it was hit and by what kind of weapon it was hit with
-	psStructure->timeLastHit = gameTime;
-	psStructure->lastHitWeapon = weaponSubClass;
-
-	// Tell the cluster system it has been attacked
-	clustObjectAttacked((BASE_OBJECT *)psStructure);
-
-	if (damage > psStructure->armour[impactSide][weaponClass])
-	{
-		// Damage has penetrated the armour
-		actualDamage = damage - psStructure->armour[impactSide][weaponClass];
-		debug( LOG_ATTACK, "        penetrated: %d\n", actualDamage);
-	}
-
-	// If the shell did sufficient damage to destroy the structure
-	if (actualDamage >= psStructure->body)
-	{
-		debug( LOG_ATTACK, "        DESTROYED\n");
-		destroyStruct(psStructure);
-		return body / originalBody * -1.0f;
-	}
-
-	// Substract the dealt damage from the structure's remaining body points
-	psStructure->body -= actualDamage;
-
-	return (float) actualDamage / originalBody;
 }
 
 

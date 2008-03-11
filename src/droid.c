@@ -81,6 +81,7 @@
 #include "edit3d.h"
 #include "scores.h"
 #include "research.h"
+#include "combat.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/screen.h"
 #include "scriptfuncs.h"			//for ThreatInRange()
@@ -147,86 +148,47 @@ BOOL droidInit(void)
  */
 float droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide)
 {
-	UDWORD				actualDamage, armour, level;
-	float				originalBody = psDroid->originalBody;
-	float				body = psDroid->body;
-	SECONDARY_STATE		state;
+	float		relativeDamage;
+	SECONDARY_STATE	state;
 
 	CHECK_DROID(psDroid);
 
-	// If the previous hit was by an EMP cannon and this one is not:
-	// don't reset the weapon class and hit time
-	// (Giel: I guess we need this to determine when the EMP-"shock" is over)
-	if (psDroid->lastHitWeapon != WSC_EMP || weaponSubClass == WSC_EMP)
-	{
-		psDroid->timeLastHit = gameTime;
-		psDroid->lastHitWeapon = weaponSubClass;
-	}
-
-	// EMP cannons do no damage, if we are one return now
-	if (weaponSubClass == WSC_EMP)
-	{
-		return 0;
-	}
-
-	if (psDroid->player != selectedPlayer)
-	{
-		// Player inflicting damage on enemy.
-		damage = (UDWORD) modifyForDifficultyLevel( (SDWORD) damage,TRUE);
-	}
-	else
-	{
-		// Enemy inflicting damage on player.
-		damage = (UDWORD) modifyForDifficultyLevel( (SDWORD) damage,FALSE);
-	}
-
 	// VTOLs on the ground take triple damage
-	if (vtolDroid(psDroid) &&
-		psDroid->sMove.Status == MOVEINACTIVE)
+	if (vtolDroid(psDroid) && psDroid->sMove.Status == MOVEINACTIVE)
 	{
 		damage *= 3;
 	}
 
-	// reset the attack level
-	if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state)
-	    && state == DSS_ALEV_ATTACKED)
+	relativeDamage = objDamage((BASE_OBJECT *)psDroid, damage, psDroid->originalBody, weaponClass, weaponSubClass, impactSide);
+
+	if (relativeDamage > 0.0f)
 	{
-		secondarySetState(psDroid, DSO_ATTACK_LEVEL, DSS_ALEV_ALWAYS);
+		// reset the attack level
+		if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL, &state) && state == DSS_ALEV_ATTACKED)
+		{
+			secondarySetState(psDroid, DSO_ATTACK_LEVEL, DSS_ALEV_ALWAYS);
+		}
+		// Now check for auto return on droid's secondary orders (i.e. return on medium/heavy damage)
+		secondaryCheckDamageLevel(psDroid);
+
+		// Now check for scripted run-away based on health left
+		orderHealthCheck(psDroid);
+
+		CHECK_DROID(psDroid);
+
+		return relativeDamage;
 	}
-
-	armour = psDroid->armour[impactSide][weaponClass];
-
-	debug( LOG_ATTACK, "unitDamage(%d): body %d armour %d damage: %d\n",
-		psDroid->id, psDroid->body, armour, damage);
-
-	clustObjectAttacked((BASE_OBJECT *)psDroid);
-
-
-	// Retrieve highest, applicable, experience level
-	level = getDroidEffectiveLevel(psDroid);
-
-	// Apply droid/commander experience to the droid damage
-	actualDamage = (damage * (100 - EXP_REDUCE_DAMAGE * level)) / 100;
-
-	// Calculate final damage
-	actualDamage = (UDWORD)MAX((SDWORD)(actualDamage - armour), (SDWORD)(actualDamage / 3));
-
-	// Make sure we substract at least MIN_WEAPON_DAMAGE points from the target hp
-	actualDamage = MAX(actualDamage, MIN_WEAPON_DAMAGE);
-
-
-	// If the shell did sufficient damage to destroy the droid, deal with it and return
-	if (actualDamage >= psDroid->body)
+	else if (relativeDamage < 0.0f)
 	{
 		// HACK: Prevent transporters from being destroyed in single player
 		if (!bMultiPlayer && psDroid->droidType == DROID_TRANSPORTER)
 		{
 			psDroid->body = 1;
-			return 0;
+			return 0.0f;
 		}
 
 		// Droid destroyed
-		debug( LOG_ATTACK, "        DESTROYED\n");
+		debug(LOG_ATTACK, "droidDamage(%d): DESTROYED", psDroid->id);
 
 		// Deal with score increase/decrease and messages to the player
 		if( psDroid->player == selectedPlayer)
@@ -254,22 +216,12 @@ float droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weap
 			destroyDroid(psDroid);
 		}
 
-		return body / originalBody * -1.0f;
+		return relativeDamage * -1.0f;
 	}
-
-	// Substract the dealt damage from the droid's remaining body points
-	psDroid->body -= actualDamage;
-
-	// Now check for auto return on droid's secondary orders (i.e. return on medium/heavy damage)
-	secondaryCheckDamageLevel(psDroid);
-
-	// Now check for scripted run-away based on health left
-	orderHealthCheck(psDroid);
-
-	CHECK_DROID(psDroid);
-
-	// Return the amount of damage done as an SDWORD between 0 and 999
-	return (float) actualDamage / originalBody;
+	else
+	{
+		return 0.0f;	// undamaged
+	}
 }
 
 // Check that psVictimDroid is not referred to by any other object in the game

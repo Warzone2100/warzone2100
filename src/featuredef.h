@@ -77,7 +77,7 @@ typedef struct _feature_stats
 	BOOL            allowLOS;               ///< Whether the feature allows the LOS. true = can see through the feature
 	BOOL            visibleAtStart;         ///< Whether the feature is visible at the start of the mission
 	BOOL            damageable;             ///< Whether the feature can be destroyed
-	UDWORD          body;                   ///< Number of body points
+	UDWORD		body;			///< Number of body points
 	UDWORD          armourValue;            ///< Feature armour
 } FEATURE_STATS;
 
@@ -88,8 +88,6 @@ typedef struct _feature
 
 	FEATURE_STATS*  psStats;
 	UDWORD          startTime;              ///< Time the feature was created. Valid for wrecked droids and structures.
-	UDWORD          body;                   ///< current body points
-	UDWORD          timeLastHit;
 	BOOL            bTargetted;
 } WZ_DECL_MAY_ALIAS FEATURE;
 

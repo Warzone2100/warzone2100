@@ -670,8 +670,6 @@ void clustObjectAttacked(BASE_OBJECT *psObj)
 {
 	if ((aClusterAttacked[psObj->cluster] + ATTACK_CB_PAUSE) < gameTime)
 	{
-//		DBPRINTF(("CALL_ATTACKED player %d, cluster %d\n",
-//			psObj->player, psObj->cluster));
 		psScrCBTarget = psObj;
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_ATTACKED);
 
@@ -689,7 +687,7 @@ void clustObjectAttacked(BASE_OBJECT *psObj)
 				break;
 			default:
 				ASSERT(!"invalid object type", "clustObjectAttacked: invalid object type");
-				break;
+				return;
 		}
 
 		aClusterAttacked[psObj->cluster] = gameTime;

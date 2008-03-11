@@ -50,7 +50,7 @@
 #include "effects.h"
 #include "geometry.h"
 #include "scores.h"
-
+#include "combat.h"
 #include "multiplay.h"
 #include "advvis.h"
 
@@ -254,44 +254,25 @@ void featureStatsShutDown(void)
  */
 float featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide)
 {
-	// Do at least one point of damage
-	unsigned int actualDamage = 1;
-	float		body = (float) psFeature->body;
-	float		originalBody = (float) psFeature->psStats->body;
+	float		relativeDamage;
 
-	ASSERT( psFeature != NULL,
-		"featureDamage: Invalid feature pointer" );
+	ASSERT(psFeature != NULL, "featureDamage: Invalid feature pointer");
 
-	debug( LOG_ATTACK, "featureDamage(%d): body %d armour %d damage: %d\n",
-		psFeature->id, psFeature->body, psFeature->armour[impactSide][weaponClass], damage);
+	debug(LOG_ATTACK, "featureDamage(%d): body %d armour %d damage: %d",
+	      psFeature->id, psFeature->body, psFeature->armour[impactSide][weaponClass], damage);
 
-	// EMP cannons do not work on Features
-	if (weaponSubClass == WSC_EMP)
-	{
-		return 0;
-	}
-
-	if (damage > psFeature->armour[impactSide][weaponClass])
-	{
-		// Damage has penetrated - reduce body points
-		actualDamage = damage - psFeature->armour[impactSide][weaponClass];
-		debug( LOG_ATTACK, "        penetrated: %d\n", actualDamage);
-	}
+	relativeDamage = objDamage((BASE_OBJECT *)psFeature, damage, psFeature->psStats->body, weaponClass, weaponSubClass, impactSide);
 
 	// If the shell did sufficient damage to destroy the feature
-	if (actualDamage >= psFeature->body)
+	if (relativeDamage < 0.0f)
 	{
 		destroyFeature(psFeature);
-		return body / originalBody * -1.0f;
+		return relativeDamage * -1.0f;
 	}
-
-	// Substract the dealt damage from the feature's remaining body points
-	psFeature->body -= actualDamage;
-
-	// Set last hit-time to <now>
-	psFeature->timeLastHit = gameTime;
-
-	return (float) actualDamage / originalBody;
+	else
+	{
+		return relativeDamage;
+	}
 }
 
 

@@ -709,7 +709,7 @@ static BOOL sendStructureCheck(void)
 		NETbeginEncode(NET_CHECK_STRUCT, NET_ALL_PLAYERS);
 			NETuint8_t(&pS->player);
 			NETuint32_t(&pS->id);
-			NETuint16_t(&pS->body);
+			NETuint32_t(&pS->body);
 			NETuint32_t(&pS->pStructureType->ref);
 			NETuint16_t(&pS->pos.x);
 			NETuint16_t(&pS->pos.y);
