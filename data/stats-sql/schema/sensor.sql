@@ -1,8 +1,6 @@
-BEGIN TRANSACTION;
+-- Table structure for table `sensor`
 
--- Table structure for table `construction`
-
-CREATE TABLE `construction` (
+CREATE TABLE `sensor` (
   id                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   name                  TEXT    NOT NULL, -- Text id name (short language independant name)
   techlevel             TEXT    NOT NULL, -- Technology level of this component
@@ -14,13 +12,10 @@ CREATE TABLE `construction` (
   body                  NUMERIC NOT NULL, -- Component's body points
   GfxFile               TEXT,             -- The IMD to draw for this component
   mountGfx              TEXT,             -- The turret mount to use
-  construction_points   INTEGER NOT NULL, -- The number of points contributed each cycle
-  designable            INTEGER NOT NULL  -- flag to indicate whether this component can be used in the design screen
+  range                 NUMERIC NOT NULL, -- Sensor range
+  location              TEXT    NOT NULL, -- specifies whether the Sensor is default or for the Turret
+  type                  TEXT    NOT NULL, -- used for combat
+  time                  NUMERIC NOT NULL, -- time delay before associated weapon droids 'know' where the attack is from
+  power                 NUMERIC NOT NULL, -- Sensor power (put against ecm power)
+  designable            NUMERIC NOT NULL  -- flag to indicate whether this component can be used in the design screen
 );
-
--- Data for table `construction`
-
-INSERT INTO `construction` VALUES(NULL, 'ZNULLCONSTRUCT', 'Level All', 0, 0, 0, 0, 0, 0, 'TRLCON.PIE', 'TRLCON.PIE', 0, 0);
-INSERT INTO `construction` VALUES(NULL, 'Spade1Mk1', 'Level All', 17, 85, 600, 20, 5, 50, 'TRLCON.PIE', NULL, 10, 1);
-
-COMMIT TRANSACTION;

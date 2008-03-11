@@ -1,13 +1,5 @@
 BEGIN TRANSACTION;
 
--- Table structure for table `structureweapons`
-
-CREATE TABLE `structureweapons` (
-  structure             INTEGER NOT NULL, -- Reference to `structures`.`id`
-  weapon                INTEGER NOT NULL, -- Reference to `weapons`.`id`
-  UNIQUE(structure,weapon)
-);
-
 -- Data for table `structureweapons`
 
 INSERT INTO `structureweapons` SELECT `structures`.`id`, `weapons`.`id` FROM `structures`, `weapons` WHERE `structures`.`name`='A0BaBaRocketPit' AND `weapons`.`name`='BabaPitRocket';

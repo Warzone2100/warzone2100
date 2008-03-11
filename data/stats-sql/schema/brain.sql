@@ -1,5 +1,3 @@
-BEGIN TRANSACTION;
-
 -- Table structure for table `brain`
 
 CREATE TABLE `brain` (
@@ -14,10 +12,3 @@ CREATE TABLE `brain` (
   weapon                INTEGER,          -- A reference to `weapons`.`id`, refers to the weapon stats associated with this brain (can be NULL for none) - for Command Droids
   program_capacity      INTEGER NOT NULL  -- Program's capacity
 );
-
--- Data for table `brain`
-
-INSERT INTO `brain` SELECT NULL, 'ZNULLBRAIN', 'Level All', 0, 0, 0, 0, 0, `weapons`.`id`, 0 FROM `weapons` WHERE `weapons`.`name`='ZNULLWEAPON';
-INSERT INTO `brain` SELECT NULL, 'CommandBrain01' ,'Level All', 1, 1, 1, 1, 1, `weapons`.`id`, 0 FROM `weapons` WHERE `weapons`.`name`='CommandTurret1';
-
-COMMIT TRANSACTION;
