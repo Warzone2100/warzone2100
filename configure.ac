@@ -8,6 +8,12 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([lib/framework/frame.c])
 
 
+# HACK
+# Workaround stupid autoconf CFLAGS default
+# (Bash considers set but empty variables different from null for the ${VAR:+alt} operator)
+CFLAGS=${CFLAGS}
+
+
 # Checks for programs.
 AC_PROG_CC_STDC
 AC_PROG_RANLIB
