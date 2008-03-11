@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-02-20 13:04+0100\n"
+"POT-Creation-Date: 2008-03-11 01:04+0100\n"
 "PO-Revision-Date: 2008-01-20 19:26+0100\n"
 "Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -133,13 +133,13 @@ msgstr ""
 #: src/intorder.c:660
 #: src/loadsave.c:258
 #: src/intelmap.c:528
-#: src/multimenu.c:446
-#: src/multimenu.c:1281
+#: src/multimenu.c:430
+#: src/multimenu.c:1249
 msgid "Close"
 msgstr "Sluiten"
 
 #: src/hci.c:1680
-#: src/mission.c:3227
+#: src/mission.c:3229
 #: src/loop.c:473
 #: src/loop.c:485
 msgid "GAME SAVED!"
@@ -250,118 +250,118 @@ msgstr ""
 msgid "Reinforcements landing"
 msgstr ""
 
-#: src/mission.c:2607
+#: src/mission.c:2609
 msgid "Load Transport"
 msgstr ""
 
-#: src/mission.c:3088
+#: src/mission.c:3090
 msgid "OBJECTIVE ACHIEVED"
 msgstr "DOEL BEHAALD"
 
-#: src/mission.c:3094
+#: src/mission.c:3096
 msgid "OBJECTIVE FAILED"
 msgstr "DOEL MISLUKT"
 
-#: src/mission.c:3120
-#: src/mission.c:3157
-#: src/mission.c:3278
+#: src/mission.c:3122
+#: src/mission.c:3159
+#: src/mission.c:3280
 msgid "Quit To Main Menu"
 msgstr "Afsluiten Naar Hoofdmenu"
 
-#: src/mission.c:3128
+#: src/mission.c:3130
 msgid "Continue Game"
 msgstr "Ga door met Spel"
 
-#: src/mission.c:3141
-#: src/mission.c:3262
+#: src/mission.c:3143
+#: src/mission.c:3264
 #: src/ingameop.c:278
 #: src/ingameop.c:417
 msgid "Save Game"
 msgstr "Spel opslaan"
 
-#: src/mission.c:3151
-#: src/mission.c:3259
+#: src/mission.c:3153
+#: src/mission.c:3261
 #: src/ingameop.c:413
 #: src/frontend.c:427
 msgid "Load Saved Game"
 msgstr "Laden Opgeslagen Spel"
 
-#: src/droid.c:237
+#: src/droid.c:234
 msgid "Unit Lost!"
 msgstr "Eenheid verloren!"
 
-#: src/droid.c:1858
+#: src/droid.c:1855
 msgid "Structure Restored"
 msgstr ""
 
-#: src/droid.c:3770
+#: src/droid.c:3738
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Groep %u geselecteerd - %u Eenheid"
 msgstr[1] "Groep %u geselecteerd - %u Eenheden"
 
-#: src/droid.c:3784
+#: src/droid.c:3752
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u eenheid aan Groep %u toegewezen"
 msgstr[1] "%u eenheden aan Groep %u toegewezen"
 
-#: src/droid.c:3797
+#: src/droid.c:3765
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Gecentreerd op Groep %u - %u Eenheid"
 msgstr[1] "Gecentreerd op Groep %u - %u Eenheden"
 
-#: src/droid.c:3801
+#: src/droid.c:3769
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:4018
+#: src/droid.c:3986
 msgid "Rookie"
 msgstr "Groentje"
 
-#: src/droid.c:4019
+#: src/droid.c:3987
 msgctxt "rank"
 msgid "Green"
 msgstr ""
 
-#: src/droid.c:4020
+#: src/droid.c:3988
 msgid "Trained"
 msgstr ""
 
-#: src/droid.c:4021
+#: src/droid.c:3989
 msgid "Regular"
 msgstr ""
 
-#: src/droid.c:4022
+#: src/droid.c:3990
 msgid "Professional"
 msgstr ""
 
-#: src/droid.c:4023
+#: src/droid.c:3991
 msgid "Veteran"
 msgstr "Veteraan"
 
-#: src/droid.c:4024
+#: src/droid.c:3992
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:4025
+#: src/droid.c:3993
 msgid "Special"
 msgstr "Speciaal"
 
-#: src/droid.c:4026
+#: src/droid.c:3994
 msgid "Hero"
 msgstr "Held"
 
 #: src/multiint.c:329
-#: src/multiint.c:1334
-#: src/multilimit.c:173
+#: src/multiint.c:1333
+#: src/multilimit.c:155
 msgid "Accept Settings"
 msgstr "Accepteer Instellingen"
 
@@ -378,7 +378,7 @@ msgstr "VERBINDING"
 #: src/multiint.c:600
 #: src/multiint.c:833
 #: src/keyedit.c:378
-#: src/multilimit.c:165
+#: src/multilimit.c:147
 msgid "Return To Previous Screen"
 msgstr "Terug Naar Vorig Scherm"
 
@@ -448,7 +448,7 @@ msgid "Distance Fog"
 msgstr ""
 
 #: src/multiint.c:734
-#: src/multimenu.c:732
+#: src/multimenu.c:705
 msgid "Alliances"
 msgstr "Allianties"
 
@@ -461,7 +461,7 @@ msgid "Allow Alliances"
 msgstr "Allianties Toestaan"
 
 #: src/multiint.c:743
-#: src/multiint.c:1886
+#: src/multiint.c:1880
 msgid "Locked Teams"
 msgstr "Vergrendelde Teams"
 
@@ -494,32 +494,32 @@ msgstr "Start Met Basis"
 msgid "Start with Advanced Bases"
 msgstr "Start Met Gevanceerde Basis"
 
-#: src/multiint.c:840
+#: src/multiint.c:839
 msgid "Start Hosting Game"
 msgstr ""
 
-#: src/multiint.c:848
+#: src/multiint.c:847
 msgid "Set Structure Limits"
 msgstr ""
 
-#: src/multiint.c:1220
+#: src/multiint.c:1219
 msgid "PLAYERS"
 msgstr "SPELERS"
 
-#: src/multiint.c:1365
+#: src/multiint.c:1364
 msgid "CHAT"
 msgstr "CHAT"
 
-#: src/multiint.c:1827
+#: src/multiint.c:1821
 msgid "Host is Starting Game"
 msgstr ""
 
-#: src/multiint.c:1912
+#: src/multiint.c:1906
 #, fuzzy, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "%s heeft het spel verlaten"
 
-#: src/multiint.c:2396
+#: src/multiint.c:2390
 msgid "Players"
 msgstr "Spelers"
 
@@ -1905,67 +1905,67 @@ msgstr "%s heeft het spel verlaten"
 msgid "%s is Joining the Game"
 msgstr ""
 
-#: src/multimenu.c:574
+#: src/multimenu.c:558
 msgid "Technology level 1"
 msgstr ""
 
-#: src/multimenu.c:582
+#: src/multimenu.c:566
 msgid "Technology level 2"
 msgstr ""
 
-#: src/multimenu.c:588
+#: src/multimenu.c:572
 msgid "Technology level 3"
 msgstr ""
 
-#: src/multimenu.c:594
+#: src/multimenu.c:578
 msgid "Any number of players"
 msgstr ""
 
-#: src/multimenu.c:601
+#: src/multimenu.c:585
 msgid "2 players"
 msgstr "2 spelers"
 
-#: src/multimenu.c:607
+#: src/multimenu.c:591
 msgid "4 players"
 msgstr "4 spelers"
 
-#: src/multimenu.c:613
+#: src/multimenu.c:597
 msgid "8 players"
 msgstr "8 spelers"
 
-#: src/multimenu.c:733
+#: src/multimenu.c:706
 msgid "Score"
 msgstr "Score"
 
-#: src/multimenu.c:734
+#: src/multimenu.c:707
 msgid "Kills"
 msgstr ""
 
-#: src/multimenu.c:743
+#: src/multimenu.c:716
 msgid "Ping"
 msgstr "Ping"
 
-#: src/multimenu.c:744
+#: src/multimenu.c:717
 msgid "Played"
 msgstr "Gespeeld"
 
-#: src/multimenu.c:1053
+#: src/multimenu.c:1023
 msgid "Toggle Alliance State"
 msgstr ""
 
-#: src/multimenu.c:1072
+#: src/multimenu.c:1042
 msgid "Give Visibility Report"
 msgstr ""
 
-#: src/multimenu.c:1078
+#: src/multimenu.c:1048
 msgid "Leak Technology Documents"
 msgstr ""
 
-#: src/multimenu.c:1085
+#: src/multimenu.c:1055
 msgid "Hand Over Selected Units"
 msgstr ""
 
-#: src/multimenu.c:1091
+#: src/multimenu.c:1061
 msgid "Give Power To Player"
 msgstr "Geef Energie Aan Speler"
 
@@ -11877,6 +11877,38 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1912
 msgid "Python HVC Hover"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1914
+msgid "Python Scourge Tracks"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1915
+msgid "Python Gauss Cannon Tracks"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1916
+msgid "Python Pulse Laser Tracks"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1917
+msgid "Tiger Pulse Laser Tracks"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1918
+msgid "Tiger Heavy Laser Tracks"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1919
+msgid "Wyvern Gauss Cannon Tracks"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1920
+msgid "Wyvern Pulse Laser Tracks"
+msgstr ""
+
+#: data/mp/messages/strings/names.txt:1921
+msgid "Wyvern Heavy Laser Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/resstrings.txt:67
