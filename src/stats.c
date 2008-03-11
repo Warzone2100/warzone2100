@@ -96,7 +96,7 @@ UBYTE		*apCompLists[MAX_PLAYERS][COMP_NUMCOMPONENTS];
 //store for each players Structure states
 UBYTE		*apStructTypeLists[MAX_PLAYERS];
 
-static BOOL compareYes(char *strToCompare, char *strOwner);
+static BOOL compareYes(const char *strToCompare, const char *strOwner);
 static MOVEMENT_MODEL	getMovementModel(const char *pMovement);
 
 //Access functions for the max values to be used in the Design Screen
@@ -2558,7 +2558,7 @@ unsigned int componentType(const char* pType)
 }
 
 //function to compare a value with yes/no - if neither warns player!
-BOOL compareYes(char *strToCompare, char *strOwner)
+BOOL compareYes(const char* strToCompare, const char* strOwner)
 {
 	if (!strcmp(strToCompare, "YES"))
 	{
