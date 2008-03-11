@@ -861,30 +861,28 @@ void saveMissionData(void)
 			for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL;
 				psDroid = psDroid->psNext)
 			{
-				if (orderStateObj(psDroid, DORDER_BUILD, (BASE_OBJECT **)&psStructBeingBuilt))
+				if ((psStructBeingBuilt = (STRUCTURE*)orderStateObj(psDroid, DORDER_BUILD))
+				 && psStructBeingBuilt == psStruct)
 				{
-					if (psStructBeingBuilt == psStruct)
+					// check there is enough power to complete
+					inc = structPowerToBuild(psStruct) - psStruct->currentPowerAccrued;
+					if (inc > 0)
 					{
-						// check there is enough power to complete
-						inc = structPowerToBuild(psStruct) - psStruct->currentPowerAccrued;
-						if (inc > 0)
+						// not accrued enough power, so check if there is enough available
+						if (checkPower(selectedPlayer, inc, FALSE))
 						{
-							// not accrued enough power, so check if there is enough available
-							if (checkPower(selectedPlayer, inc, FALSE))
-							{
-								// enough - so use it and set to complete
-								usePower(selectedPlayer, inc);
-								buildingComplete(psStruct);
-							}
-						}
-						else
-						{
-							// enough power or more than enough! - either way, set to complete
+							// enough - so use it and set to complete
+							usePower(selectedPlayer, inc);
 							buildingComplete(psStruct);
 						}
-						//don't bother looking for any other droids working on it
-						break;
 					}
+					else
+					{
+						// enough power or more than enough! - either way, set to complete
+						buildingComplete(psStruct);
+					}
+					//don't bother looking for any other droids working on it
+					break;
 				}
 			}
 		}
@@ -913,7 +911,7 @@ void saveMissionData(void)
 	for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL;
 			psDroid = psDroid->psNext)
 	{
-		if (orderStateObj(psDroid, DORDER_BUILD, (BASE_OBJECT **)&psStructBeingBuilt))
+		if ((psStructBeingBuilt = (STRUCTURE*)orderStateObj(psDroid, DORDER_BUILD)))
 		{
 			if (psStructBeingBuilt->status == SS_BUILT)
 			{
@@ -2135,9 +2133,9 @@ void missionResetDroids(void)
 
 			//reset order - unless constructor droid that is mid-build
             //if (psDroid->droidType == DROID_CONSTRUCT && orderStateObj(psDroid,
-            if ((psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType ==
-                DROID_CYBORG_CONSTRUCT) && orderStateObj(psDroid,
-                    DORDER_BUILD, (BASE_OBJECT **)&psStruct))
+            if ((psDroid->droidType == DROID_CONSTRUCT
+	      || psDroid->droidType == DROID_CYBORG_CONSTRUCT)
+	     && (psStruct = (STRUCTURE*)orderStateObj(psDroid, DORDER_BUILD)))
             {
                 //need to set the action time to ignore the previous mission time
                 psDroid->actionStarted = gameTime;

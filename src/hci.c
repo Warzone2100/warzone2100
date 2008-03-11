@@ -6082,13 +6082,14 @@ static BASE_STATS *getConstructionStats(BASE_OBJECT *psObj)
 	{
 		return Stats;
 	}
-	else if( orderStateObj(psDroid, DORDER_BUILD, &Structure) &&
-		psDroid->order == DORDER_BUILD ) // Is building
+	else if ((Structure = orderStateObj(psDroid, DORDER_BUILD))
+	      && psDroid->order == DORDER_BUILD) // Is building
 	{
 		return psDroid->psTarStats;
 	}
-	else if( orderStateObj(psDroid, DORDER_HELPBUILD, &Structure) &&
-		(psDroid->order == DORDER_HELPBUILD || psDroid->order == DORDER_LINEBUILD)) // Is helping
+	else if ((Structure = orderStateObj(psDroid, DORDER_HELPBUILD))
+	 && (psDroid->order == DORDER_HELPBUILD
+	  || psDroid->order == DORDER_LINEBUILD)) // Is helping
 	{
 		return (BASE_STATS*)((STRUCTURE*)Structure)->pStructureType;
 	}

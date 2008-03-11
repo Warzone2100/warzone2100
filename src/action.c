@@ -1538,10 +1538,13 @@ void actionUpdateDroid(DROID *psDroid)
 
 		if (!bHasTarget)
 		{
-			if (((psDroid->order == DORDER_ATTACKTARGET || psDroid->order == DORDER_FIRESUPPORT) &&
-				secondaryGetState(psDroid, DSO_HALTTYPE, &state) && (state == DSS_HALT_HOLD) ) ||
-				( !vtolDroid(psDroid) &&
-				orderStateObj(psDroid, DORDER_FIRESUPPORT, &psTarget) && (psTarget->type == OBJ_STRUCTURE) ) )
+			if (((psDroid->order == DORDER_ATTACKTARGET
+			   || psDroid->order == DORDER_FIRESUPPORT)
+			  && secondaryGetState(psDroid, DSO_HALTTYPE, &state)
+			  && (state == DSS_HALT_HOLD))
+			 || (!vtolDroid(psDroid)
+			  && (psTarget = orderStateObj(psDroid, DORDER_FIRESUPPORT))
+			  && psTarget->type == OBJ_STRUCTURE))
 			{
 				// don't move if on hold or firesupport for a sensor tower
 				psDroid->action = DACTION_NONE;				// holding, cancel the order.
@@ -2608,10 +2611,13 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		psDroid->actionY = psDroid->pos.y;
 		setDroidActionTarget(psDroid, psAction->psObj, 0);
 
-		if ( ( (psDroid->order == DORDER_ATTACKTARGET || psDroid->order == DORDER_FIRESUPPORT) &&
-			   secondaryGetState(psDroid, DSO_HALTTYPE, &state) && (state == DSS_HALT_HOLD)) ||
-			 ( !vtolDroid(psDroid) &&
-			   orderStateObj(psDroid, DORDER_FIRESUPPORT, &psTarget) && (psTarget->type == OBJ_STRUCTURE) ) )
+		if (((psDroid->order == DORDER_ATTACKTARGET
+		   || psDroid->order == DORDER_FIRESUPPORT)
+		  && secondaryGetState(psDroid, DSO_HALTTYPE, &state)
+		  && (state == DSS_HALT_HOLD))
+		   || (!vtolDroid(psDroid)
+		    && (psTarget = orderStateObj(psDroid, DORDER_FIRESUPPORT))
+		    && psTarget->type == OBJ_STRUCTURE))
 		{
 			psDroid->action = DACTION_ATTACK;		// holding, try attack straightaway
 		}

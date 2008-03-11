@@ -2915,14 +2915,14 @@ BASE_OBJECT		*psObj;
 		}
 	}
 
-	if (orderStateObj(psDroid, DORDER_FIRESUPPORT, &psObj))
+	psObj = orderStateObj(psDroid, DORDER_FIRESUPPORT);
+	if (psObj
+	 && psObj->selected)
 	{
-		if (psObj != NULL && psObj->selected)
-		{
-			retVal = TRUE;
-		}
+		retVal = TRUE;
 	}
-	return(retVal);
+
+	return retVal;
 }
 
 static void	drawDroidSelections( void )

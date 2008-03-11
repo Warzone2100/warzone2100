@@ -2504,7 +2504,6 @@ void CreateBlankButton(RENDERED_BUTTON *Buffer,BOOL Down, UDWORD buttonType)
 BOOL DroidIsDemolishing(DROID *Droid)
 {
 	BASE_STATS	*Stats;
-	BASE_OBJECT *Structure;
 	UDWORD x,y;
 
 	//if(droidType(Droid) != DROID_CONSTRUCT) return FALSE;
@@ -2518,7 +2517,7 @@ BOOL DroidIsDemolishing(DROID *Droid)
 	{
 		return TRUE;
 	}
-	else if( orderStateObj(Droid, DORDER_DEMOLISH,&Structure) ) // Is demolishing?
+	else if (orderStateObj(Droid, DORDER_DEMOLISH)) // Is demolishing?
 	{
 		return TRUE;
 	}
@@ -2529,17 +2528,15 @@ BOOL DroidIsDemolishing(DROID *Droid)
 // Returns TRUE if the droid is currently repairing another droid.
 BOOL DroidIsRepairing(DROID *Droid)
 {
-	BASE_OBJECT *psObject;
+	//if(droidType(Droid) != DROID_REPAIR)
+	if (!(droidType(Droid) == DROID_REPAIR
+	   || droidType(Droid) == DROID_CYBORG_REPAIR))
+	{
+		return FALSE;
+	}
 
-    //if(droidType(Droid) != DROID_REPAIR)
-    if (!(droidType(Droid) == DROID_REPAIR || droidType(Droid) ==
-        DROID_CYBORG_REPAIR))
-    {
-        return FALSE;
-    }
-
-    if (orderStateObj(Droid, DORDER_DROIDREPAIR, &psObject))
-    {
+	if (orderStateObj(Droid, DORDER_DROIDREPAIR))
+	{
 		return TRUE;
 	}
 
@@ -2551,7 +2548,6 @@ BOOL DroidIsRepairing(DROID *Droid)
 BOOL DroidIsBuilding(DROID *Droid)
 {
 	BASE_STATS	*Stats;
-	BASE_OBJECT *Structure;
 	UDWORD x,y;
 
 	//if(droidType(Droid) != DROID_CONSTRUCT) return FALSE;
@@ -2566,8 +2562,8 @@ BOOL DroidIsBuilding(DROID *Droid)
 		// Moving to build location?
 		return FALSE;
 	}
-	else if (orderStateObj(Droid, DORDER_BUILD,&Structure) ||
-		   orderStateObj(Droid, DORDER_HELPBUILD,&Structure)) // Is building or helping?
+	else if (orderStateObj(Droid, DORDER_BUILD)
+	      || orderStateObj(Droid, DORDER_HELPBUILD)) // Is building or helping?
 	{
 		return TRUE;
 	}
@@ -2602,10 +2598,11 @@ BOOL DroidGoingToBuild(DROID *Droid)
 //
 STRUCTURE *DroidGetBuildStructure(DROID *Droid)
 {
-	BASE_OBJECT *Structure;
+	BASE_OBJECT *Structure = NULL;
 
-	if(!orderStateObj(Droid, DORDER_BUILD,&Structure)) {
-		orderStateObj(Droid, DORDER_HELPBUILD,&Structure);
+	if (orderStateObj(Droid, DORDER_BUILD))
+	{
+		Structure = orderStateObj(Droid, DORDER_HELPBUILD);
 	}
 
 	return (STRUCTURE*)Structure;

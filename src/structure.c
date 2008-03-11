@@ -3082,11 +3082,11 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 				mindist = SDWORD_MAX;
 				for(psDroid = apsDroidLists[psStructure->player]; psDroid; psDroid = psDroid->psNext)
 				{
-					BASE_OBJECT *psTarget;
+					BASE_OBJECT * const psTarget = orderStateObj(psDroid, DORDER_RTR);
 
-					if (orderStateObj(psDroid, DORDER_RTR, &psTarget) &&
-						(psTarget == (BASE_OBJECT *)psStructure) &&
-						psDroid->action == DACTION_WAITFORREPAIR)
+					if (psTarget
+					 && psTarget == (BASE_OBJECT *)psStructure
+					 && psDroid->action == DACTION_WAITFORREPAIR)
 					{
 						xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
 						ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;

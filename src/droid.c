@@ -971,11 +971,9 @@ void droidUpdate(DROID *psDroid)
 	/* Are we a sensor droid or a command droid? */
 	if( (psDroid->droidType == DROID_SENSOR) || (psDroid->droidType == DROID_COMMAND) )
 	{
-		/* Nothing yet... */
-		psBeingTargetted = NULL;
 		/* If we're attacking or sensing (observing), then... */
-		if( (orderStateObj(psDroid,DORDER_ATTACK,&psBeingTargetted)) ||
-			(orderStateObj(psDroid,DORDER_OBSERVE,&psBeingTargetted)) )
+		if ((psBeingTargetted = orderStateObj(psDroid, DORDER_ATTACK))
+		 || (psBeingTargetted = orderStateObj(psDroid, DORDER_OBSERVE)))
 		{
 			/* If it's a structure */
 			if(psBeingTargetted->type == OBJ_STRUCTURE)
@@ -4514,9 +4512,8 @@ BOOL checkDroidsBuilding(STRUCTURE *psStructure)
 	for (psDroid = apsDroidLists[psStructure->player]; psDroid != NULL; psDroid =
 		psDroid->psNext)
 	{
-		BASE_OBJECT *psStruct = NULL;
 		//check DORDER_BUILD, HELP_BUILD is handled the same
-		orderStateObj(psDroid, DORDER_BUILD, &psStruct);
+		BASE_OBJECT * const psStruct = orderStateObj(psDroid, DORDER_BUILD);
 		if ((STRUCTURE*)psStruct == psStructure)
 		{
 			return TRUE;
@@ -4534,9 +4531,8 @@ BOOL checkDroidsDemolishing(STRUCTURE *psStructure)
 	for (psDroid = apsDroidLists[psStructure->player]; psDroid != NULL; psDroid =
 		psDroid->psNext)
 	{
-		BASE_OBJECT *psStruct = NULL;
 		//check DORDER_DEMOLISH
-		orderStateObj(psDroid, DORDER_DEMOLISH, &psStruct);
+		BASE_OBJECT * const psStruct = orderStateObj(psDroid, DORDER_DEMOLISH);
 		if ((STRUCTURE*)psStruct == psStructure)
 		{
 			return TRUE;
@@ -4905,14 +4901,13 @@ BOOL vtolReadyToRearm(DROID *psDroid, STRUCTURE *psStruct)
 	}
 
 	// If a unit has been ordered to rearm make sure it goes to the correct base
-	if (orderStateObj(psDroid, DORDER_REARM, &psRearmPad))
+	psRearmPad = orderStateObj(psDroid, DORDER_REARM);
+	if (psRearmPad
+	 && (STRUCTURE*)psRearmPad != psStruct
+	 && !vtolOnRearmPad((STRUCTURE*)psRearmPad, psDroid))
 	{
-		if (((STRUCTURE*)psRearmPad != psStruct) &&
-			!vtolOnRearmPad((STRUCTURE*)psRearmPad, psDroid))
-		{
-			// target rearm pad is clear - let it go there
-			return FALSE;
-		}
+		// target rearm pad is clear - let it go there
+		return FALSE;
 	}
 
 	if (vtolHappy(psDroid) &&

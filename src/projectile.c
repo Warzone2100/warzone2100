@@ -304,7 +304,8 @@ static void proj_UpdateKills(PROJECTILE *psObj, float experienceInc)
 		psDroid->experience += experienceInc;
 		cmdDroidUpdateKills(psDroid, experienceInc);
 
-		if (orderStateObj(psDroid, DORDER_FIRESUPPORT, &psSensor)
+		psSensor = orderStateObj(psDroid, DORDER_FIRESUPPORT);
+		if (psSensor
 		 && psSensor->type == OBJ_DROID)
 		{
 		    ((DROID *) psSensor)->experience += experienceInc;

@@ -1559,16 +1559,15 @@ static BOOL droidHasLeader(DROID *psDroid)
 		return FALSE;
 	}
 
-	psLeader = NULL;
-	if ((psDroid->psGroup != NULL) &&
-		(psDroid->psGroup->type == GT_COMMAND))
+	if (psDroid->psGroup != NULL
+	 && psDroid->psGroup->type == GT_COMMAND)
 	{
 		psLeader = (BASE_OBJECT *)psDroid->psGroup->psCommander;
 	}
 	else
 	{
 		//psLeader can be either a droid or a structure
-		orderStateObj(psDroid, DORDER_FIRESUPPORT, &psLeader);
+		psLeader = orderStateObj(psDroid, DORDER_FIRESUPPORT);
 	}
 
 	if (psLeader != NULL)

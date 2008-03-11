@@ -188,9 +188,10 @@ BASE_OBJECT * checkForRepairRange(DROID *psDroid,DROID *psTarget)
 	}
 
 	// if guarding a unit - always check that first
-	if (orderStateObj(psDroid, DORDER_GUARD, (BASE_OBJECT **)&psCurr) &&
-		(psCurr != NULL) && (psCurr->type == OBJ_DROID) &&
-		droidIsDamaged(psCurr))
+	psCurr = (DROID*)orderStateObj(psDroid, DORDER_GUARD);
+	if (psCurr != NULL
+	 && psCurr->type == OBJ_DROID
+	 && droidIsDamaged(psCurr))
 	{
 		return (BASE_OBJECT *)psCurr;
 	}
@@ -1004,7 +1005,7 @@ void orderUpdateDroid(DROID *psDroid)
 			{
 				DROID	*psSpotter = (DROID *)psDroid->psTarget;
 
-//				orderStateObj((DROID *)psDroid->psTarget, DORDER_OBSERVE, &psFireTarget);
+//				psFireTarget = orderStateObj((DROID *)psDroid->psTarget, DORDER_OBSERVE);
 				if (psSpotter->action == DACTION_OBSERVE
 				    || (psSpotter->droidType == DROID_COMMAND && psSpotter->action == DACTION_ATTACK))
 				{
@@ -1183,8 +1184,8 @@ void orderUpdateDroid(DROID *psDroid)
 			}
 
 			// make sure units in a command group are actually guarding the commander
-			if (!orderStateObj(psDroid, DORDER_GUARD, &psObj) ||
-				(psObj != (BASE_OBJECT *)psDroid->psGroup->psCommander))
+			if (!orderStateObj(psDroid, DORDER_GUARD)
+			 || psObj != (BASE_OBJECT *)psDroid->psGroup->psCommander)
 			{
 				orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psDroid->psGroup->psCommander);
 			}
@@ -1305,10 +1306,11 @@ WZ_DECL_UNUSED static void orderCheckFireSupportPos(DROID *psSensor, DROID_ORDER
 	fsx = fsy = fsnum = 0;
 	for(psCurr=apsDroidLists[psSensor->player]; psCurr; psCurr=psCurr->psNext)
 	{
-		if (!vtolDroid(psCurr) &&
-			orderStateObj(psCurr, DORDER_FIRESUPPORT, &psTarget) &&
-			(psTarget == (BASE_OBJECT *)psSensor) &&
-			(secondaryGetState(psCurr, DSO_HALTTYPE, &state) && (state != DSS_HALT_HOLD)))
+		if (!vtolDroid(psCurr)
+		 && (psTarget = orderStateObj(psCurr, DORDER_FIRESUPPORT))
+		 && psTarget == (BASE_OBJECT *)psSensor
+		 && secondaryGetState(psCurr, DSO_HALTTYPE, &state)
+		 && state != DSS_HALT_HOLD)
 		{
 			// got a unit doing fire support
 			fsnum += 1;
@@ -1372,10 +1374,11 @@ done:
 	// now move the firesupport units
 	for(psCurr=apsDroidLists[psSensor->player]; psCurr; psCurr=psCurr->psNext)
 	{
-		if (!vtolDroid(psCurr) &&
-			orderStateObj(psCurr, DORDER_FIRESUPPORT, &psTarget) &&
-			(psTarget == (BASE_OBJECT *)psSensor) &&
-			(secondaryGetState(psCurr, DSO_HALTTYPE, &state) && (state != DSS_HALT_HOLD)))
+		if (!vtolDroid(psCurr)
+		 && (psTarget = orderStateObj(psCurr, DORDER_FIRESUPPORT))
+		 && psTarget == (BASE_OBJECT *)psSensor
+		 && secondaryGetState(psCurr, DSO_HALTTYPE, &state)
+		 && state != DSS_HALT_HOLD)
 		{
 			if (bRetreat)
 			{
@@ -2232,7 +2235,7 @@ void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj)
 
 
 /* Get the state of a droid order with an object */
-BOOL orderStateObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT **ppsObj)
+BASE_OBJECT* orderStateObj(DROID *psDroid, DROID_ORDER order)
 {
 	BOOL	match = FALSE;
 
@@ -2272,7 +2275,7 @@ BOOL orderStateObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT **ppsObj)
 
 	if (!match)
 	{
-		return FALSE;
+		return NULL;
 	}
 
 	// check the order is one with an object
@@ -2280,15 +2283,14 @@ BOOL orderStateObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT **ppsObj)
 	{
 	default:
 		// not an object order - return false
-		return FALSE;
+		return NULL;
 		break;
 	case DORDER_BUILD:
 	case DORDER_LINEBUILD:
 		if (psDroid->action == DACTION_BUILD ||
 			psDroid->action == DACTION_BUILDWANDER)
 		{
-			*ppsObj = psDroid->psTarget;
-			return TRUE;
+			return psDroid->psTarget;
 		}
 		break;
 	case DORDER_HELPBUILD:
@@ -2296,8 +2298,7 @@ BOOL orderStateObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT **ppsObj)
 			psDroid->action == DACTION_BUILDWANDER ||
 			psDroid->action == DACTION_MOVETOBUILD)
 		{
-			*ppsObj = psDroid->psTarget;
-			return TRUE;
+			return psDroid->psTarget;
 		}
 		break;
 	//case DORDER_HELPBUILD:
@@ -2310,12 +2311,11 @@ BOOL orderStateObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT **ppsObj)
 	case DORDER_DROIDREPAIR:
 	case DORDER_REARM:
 	case DORDER_GUARD:
-		*ppsObj = psDroid->psTarget;
-		return TRUE;
+		return psDroid->psTarget;
 		break;
 	}
 
-	return FALSE;
+	return NULL;
 }
 
 
