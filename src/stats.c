@@ -2764,19 +2764,20 @@ BOOL setTechLevel(BASE_STATS *psStats, const char *pLevel)
 	}
 
 	//store tech level in the appropriate stat
-	if ((psStats->ref >= REF_BODY_START && psStats->ref <= (REF_WEAPON_START +
-		REF_RANGE)) || (psStats->ref>= REF_CONSTRUCT_START && psStats->ref <=
-		(REF_CONSTRUCT_START + REF_RANGE)))
+	if ((psStats->ref >= REF_BODY_START
+	  && psStats->ref <= (REF_WEAPON_START + REF_RANGE))
+	 || (psStats->ref >= REF_CONSTRUCT_START
+	  && psStats->ref <= (REF_CONSTRUCT_START + REF_RANGE)))
 	{
 		((COMP_BASE_STATS *)psStats)->techLevel = techLevel;
 	}
-	else if (psStats->ref >= REF_STRUCTURE_START && psStats->ref <= (
-		REF_STRUCTURE_START + REF_RANGE))
+	else if (psStats->ref >= REF_STRUCTURE_START
+	      && psStats->ref <= (REF_STRUCTURE_START + REF_RANGE))
 	{
 		((STRUCTURE_STATS *)psStats)->techLevel = techLevel;
 	}
-	else if (psStats->ref >= REF_RESEARCH_START && psStats->ref <= (
-		REF_RESEARCH_START + REF_RANGE))
+	else if (psStats->ref >= REF_RESEARCH_START
+	      && psStats->ref <= (REF_RESEARCH_START + REF_RANGE))
 	{
 		((RESEARCH *)psStats)->techLevel = techLevel;
 	}
