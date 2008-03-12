@@ -150,9 +150,8 @@ GAMECODE gameLoop(void)
 	UDWORD		i,widgval;
 	BOOL		quitting=FALSE;
 	INT_RETVAL	intRetVal;
-	int	        clearMode;
+	int	        clearMode = 0;
 
-	clearMode = CLEAR_FOG;
 	if (!war_GetFog())
 	{
 		PIELIGHT black;
@@ -561,7 +560,6 @@ GAMECODE gameLoop(void)
 
 	if (fogStatus & FOG_BACKGROUND)
 	{
-		clearMode = CLEAR_FOG;//screen clear to fog colour D3D
 		if (loopMissionState == LMS_SAVECONTINUE)
 		{
 			pie_SetFogStatus(FALSE);
@@ -621,7 +619,6 @@ GAMECODE gameLoop(void)
 	if (quitting)
 	{
 		pie_SetFogStatus(FALSE);
-		pie_ScreenFlip(CLEAR_BLACK);//gameloopflip
 		pie_ScreenFlip(CLEAR_BLACK);//gameloopflip
 		/* Check for toggling display mode */
 		if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && keyPressed(KEY_RETURN))

@@ -179,6 +179,8 @@ BOOL screenInitialise(
 	glCullFace(GL_FRONT);
 	glEnable(GL_CULL_FACE);
 
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
 	return TRUE;
 }
 

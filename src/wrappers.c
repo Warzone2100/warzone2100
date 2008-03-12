@@ -215,9 +215,7 @@ TITLECODE titleLoop(void)
 
 		case SHOWINTRO:
 			pie_SetFogStatus(FALSE);
-			pie_ScreenFlip(CLEAR_BLACK);//flip to clear screen but not here//reshow intro video.
-	  		pie_ScreenFlip(CLEAR_BLACK);//flip to clear screen but not here
-
+	  		pie_ScreenFlip(CLEAR_BLACK);
 			changeTitleMode(TITLE);
 			RetCode = TITLECODE_SHOWINTRO;
 			break;
@@ -310,15 +308,13 @@ void initLoadingScreen( BOOL drawbdrop )
 		//just init the load bar with the current screen
 		// setup the callback....
 		pie_SetFogStatus(FALSE);
-		pie_ScreenFlip(CLEAR_BLACK);//init loading
-		pie_ScreenFlip(CLEAR_BLACK);//init loading
+		pie_ScreenFlip(CLEAR_BLACK);
 		resSetLoadCallback(loadingScreenCallback);
 		loadScreenCallNo = 0;
 		return;
 	}
 
 	pie_SetFogStatus(FALSE);
-	pie_ScreenFlip(CLEAR_BLACK);//init loading
 	pie_ScreenFlip(CLEAR_BLACK);//init loading
 
 	// setup the callback....
@@ -340,7 +336,6 @@ void startCreditsScreen(void)
 	pie_LoadBackDrop(screen);
 
 	pie_SetFogStatus(FALSE);
-	pie_ScreenFlip(CLEAR_BLACK);//flip to set back buffer
 	pie_ScreenFlip(CLEAR_BLACK);//init loading
 }
 

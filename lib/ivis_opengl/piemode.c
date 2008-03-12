@@ -106,33 +106,27 @@ void pie_ShutDown(void) {
 
 /***************************************************************************/
 
-void pie_ScreenFlip(int clearMode) {
+void pie_ScreenFlip(int clearMode)
+{
 	GLbitfield clearFlags = 0;
 
 	screenDoDumpToDiskIfRequired();
 	SDL_GL_SwapBuffers();
-	switch (clearMode&CLEAR_MODE_MASK) {
-		case CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD:
-			break;
-		case CLEAR_BLACK:
-			glDepthMask(GL_TRUE);
-			glClearColor(0.0f,0.0f,0.0f,0.0f);
-			clearFlags = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
-			break;
-		default:
-			glDepthMask(GL_TRUE);
-			clearFlags = GL_DEPTH_BUFFER_BIT;
-			break;
-	}
-	if(clearMode&CLEAR_SHADOW_MASK)
+	if (!(clearMode & CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD))
 	{
-		clearFlags |= GL_STENCIL_BUFFER_BIT;
+		glDepthMask(GL_TRUE);
+		clearFlags = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
+		if (clearMode & CLEAR_SHADOW)
+		{
+			clearFlags |= GL_STENCIL_BUFFER_BIT;
+		}
 	}
-	if(clearFlags)
+	if (clearFlags)
 	{
 		glClear(clearFlags);
 	}
-	if (screen_GetBackDrop()) {
+	if (screen_GetBackDrop())
+	{
 		screen_Upload(NULL);
 	}
 }
