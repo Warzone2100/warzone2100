@@ -88,7 +88,6 @@ typedef struct	RENDER_STATE
 					SDWORD				texPage;
 					REND_MODE			rendMode;
 					BOOL				keyingOn;
-					COLOUR_MODE			colourCombine;
 					TRANSLUCENCY_MODE	transMode;
 				}
 				RENDER_STATE;
