@@ -39,8 +39,9 @@ typedef int bool;
 
 // To compile: gcc -o pie2wzm pie2wzm.c -Wall -g -O0 -Wshadow
 
-#define iV_IMD_TEX 0x00000200
-#define iV_IMD_TEXANIM 0x00004000
+#define iV_IMD_TEX	0x00000200
+#define iV_IMD_XNOCUL	0x00002000
+#define iV_IMD_TEXANIM	0x00004000
 #define MAX_POLYGON_SIZE 16
 
 static bool swapYZ = false;
@@ -55,6 +56,7 @@ typedef struct {
 	int texCoord[MAX_POLYGON_SIZE][2];
 	int vertices;
 	int frames, rate, width, height; // animation data
+	bool cull;
 } WZ_FACE;
 
 typedef struct {
@@ -202,6 +204,16 @@ static void dump_to_wzm(FILE *ctl, FILE *fp)
 				exit(1);
 			}
 
+			if (flags & iV_IMD_XNOCUL)
+			{
+				faceList[j].cull = true;
+				facesWZM++;	// must add additional face that is faced in the opposite direction
+			}
+			else
+			{
+				faceList[j].cull = false;
+			}
+
 			num = fscanf(fp, "%d", &faceList[j].vertices);
 			if (num != 1)
 			{
@@ -214,6 +226,10 @@ static void dump_to_wzm(FILE *ctl, FILE *fp)
 			{
 				// since they are triangle fans already, we get to do easy tessellation
 				facesWZM += (faceList[j].vertices - 3);
+				if (faceList[j].cull)
+				{
+					facesWZM += (faceList[j].vertices - 3); // double the number of extra faces needed
+				}
 			}
 			pointsWZM += faceList[j].vertices;
 
@@ -333,11 +349,11 @@ static void dump_to_wzm(FILE *ctl, FILE *fp)
 			key = faceList[j].index[0];
 			previous = faceList[j].index[2];
 			faceCount++;
-			if (reverseWinding)
+			if (reverseWinding || faceList[j].cull)
 			{
 				fprintf(ctl, "\n\t%d %d %d", key, previous, faceList[j].index[1]);
 			}
-			else
+			if (!reverseWinding || faceList[j].cull)
 			{
 				fprintf(ctl, "\n\t%d %d %d", key, faceList[j].index[1], previous);
 			}
@@ -345,11 +361,11 @@ static void dump_to_wzm(FILE *ctl, FILE *fp)
 			// Generate triangles from the Warzone triangle fans (PIEs, get it?)
 			for (k = 3; k < faceList[j].vertices; k++)
 			{
-				if (reverseWinding)
+				if (reverseWinding || faceList[j].cull)
 				{
 					fprintf(ctl, "\n\t%d %d %d", key, faceList[j].index[k], previous);
 				}
-				else
+				if (!reverseWinding || faceList[j].cull)
 				{
 					fprintf(ctl, "\n\t%d %d %d", key, previous, faceList[j].index[k]);
 				}
