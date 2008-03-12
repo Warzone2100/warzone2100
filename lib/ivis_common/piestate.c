@@ -22,7 +22,6 @@
 unsigned int pieStateCount = 0; // Used in pie_GetResetCounts
 RENDER_STATE rendStates;
 
-void pie_SetColourCombine(COLOUR_MODE colCombMode);
 void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode);
 
 void pie_SetDefaultStates(void)//Sets all states
@@ -40,8 +39,6 @@ void pie_SetDefaultStates(void)//Sets all states
 	//depth Buffer on
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 
-	rendStates.colourCombine = COLOUR_FLAT_CONSTANT;//to force reset to GOURAUD_TEX
-	pie_SetColourCombine(COLOUR_TEX_ITERATED);
 	rendStates.transMode = TRANS_ALPHA;//to force reset to DECAL
 	pie_SetTranslucencyMode(TRANS_DECAL);
 
@@ -121,45 +118,21 @@ void pie_SetRendMode(REND_MODE rendMode)
 		rendStates.rendMode = rendMode;
 		switch (rendMode)
 		{
-			case REND_GOURAUD_TEX:
-				pie_SetColourCombine(COLOUR_TEX_ITERATED);
-				pie_SetTranslucencyMode(TRANS_DECAL);
-				break;
-			case REND_ALPHA_TEX:
-				pie_SetColourCombine(COLOUR_TEX_ITERATED);
-				pie_SetTranslucencyMode(TRANS_ALPHA);
-				break;
-			case REND_ADDITIVE_TEX:
-				pie_SetColourCombine(COLOUR_TEX_ITERATED);
-				pie_SetTranslucencyMode(TRANS_ADDITIVE);
-				break;
-			case REND_TEXT:
-				pie_SetColourCombine(COLOUR_TEX_CONSTANT);
-				pie_SetTranslucencyMode(TRANS_DECAL);
-				break;
-			case REND_ALPHA_TEXT:
-				pie_SetColourCombine(COLOUR_TEX_CONSTANT);
-				pie_SetTranslucencyMode(TRANS_ALPHA);
-				break;
-			case REND_ALPHA_FLAT:
-				pie_SetColourCombine(COLOUR_FLAT_CONSTANT);
-				pie_SetTranslucencyMode(TRANS_ALPHA);
-				break;
-			case REND_ALPHA_ITERATED:
-				pie_SetColourCombine(COLOUR_FLAT_ITERATED);
-				pie_SetTranslucencyMode(TRANS_ADDITIVE);
-				break;
-			case REND_FILTER_FLAT:
-				pie_SetColourCombine(COLOUR_FLAT_CONSTANT);
-				pie_SetTranslucencyMode(TRANS_FILTER);
-				break;
-			case REND_FILTER_ITERATED:
-				pie_SetColourCombine(COLOUR_FLAT_CONSTANT);
-				pie_SetTranslucencyMode(TRANS_ALPHA);
-				break;
 			case REND_FLAT:
-				pie_SetColourCombine(COLOUR_FLAT_CONSTANT);
+			case REND_GOURAUD_TEX:
 				pie_SetTranslucencyMode(TRANS_DECAL);
+				break;
+
+			case REND_ALPHA_TEX:
+			case REND_ALPHA_FLAT:
+				pie_SetTranslucencyMode(TRANS_ALPHA);
+				break;
+
+			case REND_ADDITIVE_TEX:
+			case REND_ALPHA_ITERATED:
+				pie_SetTranslucencyMode(TRANS_ADDITIVE);
+				break;
+
 			default:
 				break;
 		}

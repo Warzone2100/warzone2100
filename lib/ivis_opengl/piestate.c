@@ -177,24 +177,6 @@ void pie_SetAlphaTest(BOOL keyingOn)
 	}
 }
 
-void pie_SetColourCombine(COLOUR_MODE colCombMode)
-{
-	if (colCombMode != rendStates.colourCombine) {
-		rendStates.colourCombine = colCombMode;
-		pieStateCount++;
-		switch (colCombMode) {
-			case COLOUR_FLAT_CONSTANT:
-			case COLOUR_FLAT_ITERATED:
-				pie_SetTexturePage(-1);
-				break;
-			case COLOUR_TEX_CONSTANT:
-			case COLOUR_TEX_ITERATED:
-			default:
-				break;
-		}
-	}
-}
-
 void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode)
 {
 	if (transMode != rendStates.transMode) {
@@ -207,10 +189,6 @@ void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode)
 			case TRANS_ADDITIVE:
 				glEnable(GL_BLEND);
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-				break;
-			case TRANS_FILTER:
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
 				break;
 			default:
 				rendStates.transMode = TRANS_DECAL;
