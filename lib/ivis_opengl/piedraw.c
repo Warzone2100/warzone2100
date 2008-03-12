@@ -388,14 +388,6 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	{
 		piePoly.flags = pPolys->flags;
 
-		if (pieFlag & pie_TRANSLUCENT)
-		{
-			/* There are no PIE files with PIE_ALPHA set, this is the only user, and
-			 * this flag is never checked anywhere, except we check below that _some_
-			 * flag is set. This is weird. FIXME. - Per */
-			piePoly.flags |= PIE_ALPHA;
-		}
-
 		for (n = 0, index = pPolys->pindex;
 				n < pPolys->npnts;
 				n++, index++)

@@ -149,6 +149,7 @@ void pie_Box(int x0,int y0, int x1, int y1, PIELIGHT colour)
 
 void pie_BoxFill(int x0,int y0, int x1, int y1, PIELIGHT colour)
 {
+	pie_SetRendMode(REND_FLAT);
 	pie_SetTexturePage(-1);
 	pie_DrawRect(x0, y0, x1, y1, colour);
 }
@@ -186,6 +187,7 @@ void pie_ImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 	assert(ID < ImageFile->NumImages);
 	Image = &ImageFile->ImageDefs[ID];
 
+	pie_SetRendMode(REND_GOURAUD_TEX);
 	pie_SetAlphaTest(TRUE);
 
 	pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
@@ -211,6 +213,7 @@ void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 
 	Image = &ImageFile->ImageDefs[ID];
 
+	pie_SetRendMode(REND_GOURAUD_TEX);
 	pie_SetAlphaTest(TRUE);
 
 	pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
@@ -313,6 +316,7 @@ void pie_RenderRadar(int x, int y, int width, int height)
 	PIEIMAGE pieImage;
 	PIERECT dest;
 
+	pie_SetRendMode(REND_GOURAUD_TEX);
 	//special case function because texture is held outside of texture list
 	pieImage.texPage = radarTexture;
 	pieImage.tu = 0;
