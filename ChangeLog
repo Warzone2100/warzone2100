@@ -1,17 +1,21 @@
 0000-00-00: Version 2.1_beta2
  * General:
-   * Fix: Crash (integer divide by zero) when starting a multiplayer game after playing a single player game.
-   * Fix: A memory corruption in structure limits could cause destroy button to disappear (among other things).
-   * Fix: Crash during saving in multiplayer/skirmish mode, when Aivolution AI is enabled. (bug #11084)
+   * New: Preview of italian translation (35% complete)
+   * Fix: Crash (integer divide by zero) when starting a multiplayer game after playing a single player game
+   * Fix: A memory corruption in structure limits could cause destroy button to disappear (among other things)
+   * Fix: Crash during saving in multiplayer/skirmish mode, when Aivolution AI is enabled (bug #11084)
+   * Fix: Special characters would be printed as '?' (bug #10913)
  * Graphics:
-   * Change: Reduce the number of atmospheric particles generated and lower the CPU usage.
-   * Fix: Briefings were not displayed at high resolutions. (bug #11121)
-   * Fix: Fonts were not displayed with QuesoGLC 0.7.0. (patch #961)
+   * Change: Reduce the number of atmospheric particles generated and lower the CPU usage
+   * Fix: Briefings were not displayed at high resolutions (bug #11121)
+   * Fix: Fonts were not displayed with QuesoGLC 0.7.0 (patch #961)
+   * Fix: Fireworks looked crappy (patch #994)
  * AI:
-   * Fix: Restarting a map caused "unable to load experience" messages. (bug #11085)
-   * Fix: Upgrade power generator with powModule instead of resModule. (bug #11122)
-   * Fix: AI opponents would use the medium yellow body all the time. (bug #11097)
+   * Fix: Restarting a map caused "unable to load experience" messages (bug #11085)
+   * Fix: Upgrade power generator with powModule instead of resModule (bug #11122)
+   * Fix: AI opponents would use the medium yellow body all the time (bug #11097)
  * Balancing (Multiplayer):
+   * Change: Let weapons with high ROF but low damage deal damage too (bug #11191)
    * Change: Fortress balacing adapted
 
 2008-02-17: Version 2.1_beta1
