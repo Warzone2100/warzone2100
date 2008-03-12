@@ -20,6 +20,9 @@
 
 2008-02-17: Version 2.1_beta1
  * General:
+   * New: i18n support (German translation at 96%)
+   * New: Optional additional AI: Aivolution
+   * New: 64bit compatibility
    * New: Video options menu to allow for things such as resolution to be
           changed without needing to manually edit the config file.
    * New: 'Locked Teams' alliance mode: human players and AIs can play in a team against other teams.
@@ -49,8 +52,8 @@
    * Fix: AI doesn't get free units when playing in 'Advanced Bases' mode anymore.
    * Fix: AI won't preferably attack humans anymore.
  * Buildsystem:
-   * New: Gettext support (0.17 is known to work)
-   * New: Intel C++ Compiler (ICC) supported (10.0 is known to work, FIXME: release compiles only atm :FIXME)
+   * New: Gettext required (0.17 is known to work)
+   * New: Intel C++ Compiler (ICC) supported (10.0 is known to work, FIXME: only release-mode compiles atm :FIXME)
    * Change: No optional dependencies anymore (Ogg/Vorbis now required)
    * Change: Use pkg-config (0.9 should work) instead of autoconf scripts for SDL, PNG and Ogg/Vorbis (Faster)
  * Balancing (Multiplayer):
