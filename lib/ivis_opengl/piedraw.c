@@ -241,14 +241,6 @@ static inline void pie_PiePoly(const PIEPOLY *poly, const BOOL light)
 
 	if (poly->nVrts >= 3)
 	{
-		if (poly->flags & PIE_COLOURKEYED)
-		{
-			pie_SetAlphaTest(TRUE);
-		}
-		else
-		{
-			pie_SetAlphaTest(FALSE);
-		}
 		pie_SetAlphaTest(TRUE);
 		if (poly->flags & PIE_NO_CULL)
 		{
@@ -402,10 +394,6 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 			 * this flag is never checked anywhere, except we check below that _some_
 			 * flag is set. This is weird. FIXME. - Per */
 			piePoly.flags |= PIE_ALPHA;
-		}
-		else if (pieFlag & pie_ADDITIVE)
-		{
-			piePoly.flags &= (0xffffffff-PIE_COLOURKEYED);//dont treat additive images as colour keyed
 		}
 
 		for (n = 0, index = pPolys->pindex;
