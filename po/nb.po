@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-03-11 01:04+0100\n"
+"POT-Creation-Date: 2008-03-13 19:03+0100\n"
 "PO-Revision-Date: 2008-01-20 19:26+0100\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -52,16 +52,16 @@ msgstr "Rosa"
 msgid "Cyan"
 msgstr ""
 
-#: src/display.c:1678
+#: src/display.c:1677
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Kan ikke bygge her. Oljeressurs brenner."
 
-#: src/display.c:1825
+#: src/display.c:1824
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr ""
 
-#: src/display.c:2062
+#: src/display.c:2061
 msgid "Truck ordered to build Oil Derrick"
 msgstr ""
 
@@ -138,9 +138,9 @@ msgid "Close"
 msgstr "Lukk"
 
 #: src/hci.c:1680
-#: src/mission.c:3229
-#: src/loop.c:473
-#: src/loop.c:485
+#: src/mission.c:3227
+#: src/loop.c:472
+#: src/loop.c:484
 msgid "GAME SAVED!"
 msgstr "SPILL LAGRET!"
 
@@ -248,112 +248,112 @@ msgstr ""
 msgid "Reinforcements landing"
 msgstr ""
 
-#: src/mission.c:2609
+#: src/mission.c:2607
 msgid "Load Transport"
 msgstr ""
 
-#: src/mission.c:3090
+#: src/mission.c:3088
 msgid "OBJECTIVE ACHIEVED"
 msgstr ""
 
-#: src/mission.c:3096
+#: src/mission.c:3094
 msgid "OBJECTIVE FAILED"
 msgstr ""
 
-#: src/mission.c:3122
-#: src/mission.c:3159
-#: src/mission.c:3280
+#: src/mission.c:3120
+#: src/mission.c:3157
+#: src/mission.c:3278
 msgid "Quit To Main Menu"
 msgstr "Tilbake til hovedmeny"
 
-#: src/mission.c:3130
+#: src/mission.c:3128
 msgid "Continue Game"
 msgstr "Fortsett spill"
 
-#: src/mission.c:3143
-#: src/mission.c:3264
+#: src/mission.c:3141
+#: src/mission.c:3262
 #: src/ingameop.c:278
 #: src/ingameop.c:417
 msgid "Save Game"
 msgstr ""
 
-#: src/mission.c:3153
-#: src/mission.c:3261
+#: src/mission.c:3151
+#: src/mission.c:3259
 #: src/ingameop.c:413
 #: src/frontend.c:427
 msgid "Load Saved Game"
 msgstr ""
 
-#: src/droid.c:234
+#: src/droid.c:196
 msgid "Unit Lost!"
 msgstr ""
 
-#: src/droid.c:1855
+#: src/droid.c:1805
 msgid "Structure Restored"
 msgstr ""
 
-#: src/droid.c:3738
+#: src/droid.c:3688
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3752
+#: src/droid.c:3702
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3765
+#: src/droid.c:3715
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3769
+#: src/droid.c:3719
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3986
+#: src/droid.c:3936
 msgid "Rookie"
 msgstr ""
 
-#: src/droid.c:3987
+#: src/droid.c:3937
 msgctxt "rank"
 msgid "Green"
 msgstr ""
 
-#: src/droid.c:3988
+#: src/droid.c:3938
 msgid "Trained"
 msgstr ""
 
-#: src/droid.c:3989
+#: src/droid.c:3939
 msgid "Regular"
 msgstr ""
 
-#: src/droid.c:3990
+#: src/droid.c:3940
 msgid "Professional"
 msgstr ""
 
-#: src/droid.c:3991
+#: src/droid.c:3941
 msgid "Veteran"
 msgstr ""
 
-#: src/droid.c:3992
+#: src/droid.c:3942
 msgid "Elite"
 msgstr ""
 
-#: src/droid.c:3993
+#: src/droid.c:3943
 msgid "Special"
 msgstr ""
 
-#: src/droid.c:3994
+#: src/droid.c:3944
 msgid "Hero"
 msgstr ""
 
@@ -667,59 +667,59 @@ msgstr ""
 msgid "Power Accrued"
 msgstr ""
 
-#: src/structure.c:2833
+#: src/structure.c:2802
 msgid "Command Control Limit Reached - Production Halted"
 msgstr ""
 
-#: src/structure.c:5935
-#: src/structure.c:5957
+#: src/structure.c:5904
+#: src/structure.c:5926
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/structure.c:5994
+#: src/structure.c:5963
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr ""
 
-#: src/structure.c:6009
+#: src/structure.c:5978
 #, c-format
 msgid "%s - Damage %u%%"
 msgstr ""
 
-#: src/structure.c:6128
-#: src/structure.c:6179
+#: src/structure.c:6097
+#: src/structure.c:6148
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr ""
 
-#: src/structure.c:6414
+#: src/structure.c:6383
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.c:6454
+#: src/structure.c:6423
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.c:6478
+#: src/structure.c:6447
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.c:6502
+#: src/structure.c:6471
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.c:6511
+#: src/structure.c:6480
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.c:6539
+#: src/structure.c:6508
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.c:6546
+#: src/structure.c:6515
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 
