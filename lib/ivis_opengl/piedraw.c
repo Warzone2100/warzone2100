@@ -195,7 +195,6 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 {
 	Vector3f *pVertices, *pPixels, scrPoints[pie_MAX_VERTICES];
 	iIMDPoly *pPolys;
-	VERTEXID *index;
 	BOOL light = lighting;
 
 	pie_SetAlphaTest(TRUE);
@@ -283,7 +282,8 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	{
 		Vector2f	texCoords[pie_MAX_VERTICES_PER_POLYGON];
 		Vector3f	vertexCoords[pie_MAX_VERTICES_PER_POLYGON];
-		int n;
+		int		n;
+		VERTEXID	*index;
 
 		for (n = 0, index = pPolys->pindex;
 				n < pPolys->npnts;
@@ -298,15 +298,15 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 
 		polyCount++;
 
-		if ((pPolys->flags & iV_IMD_TEXANIM) && pPolys->pTexAnim != NULL && frame != 0 )
+		if (frame != 0 && pPolys->flags & iV_IMD_TEXANIM)
 		{
-			frame %= abs(pPolys->pTexAnim->nFrames);
+			frame %= pPolys->texAnim.nFrames;
 
 			if (frame > 0)
 			{
-				const int framesPerLine = 256 / pPolys->pTexAnim->textureWidth;
-				const int uFrame = (frame % framesPerLine) * pPolys->pTexAnim->textureWidth;
-				const int vFrame = (frame / framesPerLine) * pPolys->pTexAnim->textureHeight;
+				const int framesPerLine = 256 / pPolys->texAnim.textureWidth;
+				const int uFrame = (frame % framesPerLine) * pPolys->texAnim.textureWidth;
+				const int vFrame = (frame / framesPerLine) * pPolys->texAnim.textureHeight;
 
 				for (n = 0; n < pPolys->npnts; n++)
 				{

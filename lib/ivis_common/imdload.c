@@ -108,7 +108,7 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 		poly->flags = flags;
 		poly->npnts = npnts;
 
-		poly->pindex = (VERTEXID*)malloc(sizeof(VERTEXID) * poly->npnts);
+		poly->pindex = malloc(sizeof(*poly->pindex) * poly->npnts);
 		if (poly->pindex == NULL)
 		{
 			debug(LOG_ERROR, "(_load_polys) [poly %u] memory alloc fail (poly indices)", i);
@@ -154,13 +154,6 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 		{
 			unsigned int nFrames, pbRate, tWidth, tHeight;
 
-			poly->pTexAnim = (iTexAnim*)malloc(sizeof(iTexAnim));
-			if (poly->pTexAnim == NULL)
-			{
-				debug(LOG_ERROR, "(_load_polys) [poly %u] memory alloc fail (iTexAnim struct)", i);
-				return FALSE;
-			}
-
 			// even the psx needs to skip the data
 			if (sscanf(pFileData, "%d %d %d %d%n", &nFrames, &pbRate, &tWidth, &tHeight, &cnt) != 4)
 			{
@@ -174,17 +167,17 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 
 			/* Assumes same number of frames per poly */
 			s->numFrames = nFrames;
-			poly->pTexAnim->nFrames = nFrames;
-			poly->pTexAnim->playbackRate =pbRate;
+			poly->texAnim.nFrames = nFrames;
+			poly->texAnim.playbackRate =pbRate;
 
 			/* Uses Max metric playback rate */
 			s->animInterval = pbRate;
-			poly->pTexAnim->textureWidth = tWidth;
-			poly->pTexAnim->textureHeight = tHeight;
+			poly->texAnim.textureWidth = tWidth;
+			poly->texAnim.textureHeight = tHeight;
 		}
 		else
 		{
-			poly->pTexAnim = NULL;
+			poly->texAnim.nFrames = 0;
 		}
 
 		// PC texture coord routine
