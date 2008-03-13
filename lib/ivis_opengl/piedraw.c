@@ -193,7 +193,6 @@ static unsigned int nb_tshapes = 0;
 
 static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT specular, int pieFlag, int pieFlagData)
 {
-	unsigned int n;
 	Vector3f *pVertices, *pPixels, scrPoints[pie_MAX_VERTICES];
 	iIMDPoly *pPolys;
 	VERTEXID *index;
@@ -280,20 +279,19 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 			pPolys < shape->polys + shape->npolys;
 			pPolys++)
 	{
-		TERRAIN_VERTEXF pieVrts[pie_MAX_VERTICES_PER_POLYGON];
-		int i = 0;
+		Vector2f	texCoords[pie_MAX_VERTICES_PER_POLYGON];
+		Vector3f	vertexCoords[pie_MAX_VERTICES_PER_POLYGON];
+		int n;
 
 		for (n = 0, index = pPolys->pindex;
 				n < pPolys->npnts;
 				n++, index++)
 		{
-			pieVrts[n].x = scrPoints[*index].x;
-			pieVrts[n].y = scrPoints[*index].y;
-			pieVrts[n].z = scrPoints[*index].z;
-			pieVrts[n].u = pPolys->texCoord[n].x;
-			pieVrts[n].v = pPolys->texCoord[n].y;
-			pieVrts[n].light = colour;
-			pieVrts[n].specular = specular;
+			vertexCoords[n].x = scrPoints[*index].x;
+			vertexCoords[n].y = scrPoints[*index].y;
+			vertexCoords[n].z = scrPoints[*index].z;
+			texCoords[n].x = pPolys->texCoord[n].x;
+			texCoords[n].y = pPolys->texCoord[n].y;
 		}
 
 		polyCount++;
@@ -307,12 +305,11 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 				const int framesPerLine = 256 / pPolys->pTexAnim->textureWidth;
 				const int uFrame = (frame % framesPerLine) * pPolys->pTexAnim->textureWidth;
 				const int vFrame = (frame / framesPerLine) * pPolys->pTexAnim->textureHeight;
-				int j = 0;
 
-				for (j = 0; j < pPolys->npnts; j++)
+				for (n = 0; n < pPolys->npnts; n++)
 				{
-					pieVrts[j].u += uFrame;
-					pieVrts[j].v += vFrame;
+					texCoords[n].x += uFrame;
+					texCoords[n].y += vFrame;
 				}
 			}
 		}
@@ -326,14 +323,14 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 
 		if (light)
 		{
-			glNormal3fv((float*)&pPolys->normal);
+			glNormal3fv((GLfloat*)&pPolys->normal);
 		}
 
-		for (i = 0; i < pPolys->npnts; i++)
+		for (n = 0; n < pPolys->npnts; n++)
 		{
-			glColor4ubv(pieVrts[i].light.vector);
-			glTexCoord2f(pieVrts[i].u, pieVrts[i].v);
-			glVertex3f(pieVrts[i].x, pieVrts[i].y, pieVrts[i].z);
+			glColor4ubv(colour.vector);
+			glTexCoord2fv((GLfloat*)&texCoords[n]);
+			glVertex3fv((GLfloat*)&vertexCoords[n]);
 		}
 
 		glEnd();

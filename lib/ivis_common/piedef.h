@@ -97,7 +97,6 @@ typedef struct
 	PIELIGHT light;
 	Vector3i screen; //! Screenspace tile coordinates
 } TERRAIN_VERTEX;
-typedef struct {float x, y, z, u, v; PIELIGHT light, specular;} TERRAIN_VERTEXF;
 
 typedef struct {SWORD x, y, w, h;} PIERECT;				/**< Screen rectangle. */
 typedef struct {SDWORD texPage; SWORD tu, tv, tw, th;} PIEIMAGE;	/**< An area of texture. */
