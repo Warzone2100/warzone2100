@@ -163,52 +163,38 @@ static inline void pie_Polygon(const unsigned int numVerts, const TERRAIN_VERTEX
 {
 	unsigned int i = 0;
 
-	if (numVerts < 1)
+	assert(numVerts >= 3);
+
+	if (light)
 	{
-		return;
+		const float ambient[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		const float diffuse[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		const float specular[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		const float shininess = 10;
+
+		glEnable(GL_LIGHTING);
+		glEnable(GL_NORMALIZE);
+
+		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+		glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
 	}
-	else if (numVerts == 1)
+
+	glBegin(GL_TRIANGLE_FAN);
+
+	if (light)
 	{
-		glBegin(GL_POINTS);
-	}
-	else if (numVerts == 2)
-	{
-		glBegin(GL_LINE_STRIP);
-	}
-	else
-	{
-		if (light)
-		{
-			float ambient[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-			float diffuse[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-			float specular[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-			float shininess = 10;
+		const Vector3f	p1 = { pVrts[0].x, pVrts[0].y, pVrts[0].z };
+		const Vector3f	p2 = { pVrts[1].x, pVrts[1].y, pVrts[1].z };
+		const Vector3f	p3 = { pVrts[2].x, pVrts[2].y, pVrts[2].z };
+		const Vector3f	v1 = Vector3f_Sub(p3, p1);
+		const Vector3f	v2 = Vector3f_Sub(p2, p1);
+		const Vector3f	normal = Vector3f_CrossP(v1, v2);
 
-			glEnable(GL_LIGHTING);
-			glEnable(GL_NORMALIZE);
+		STATIC_ASSERT(sizeof(Vector3f) == sizeof(float[3]));
 
-			glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
-			glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
-			glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
-			glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
-		}
-
-		glBegin(GL_TRIANGLE_FAN);
-
-		if (light)
-		{
-			const Vector3f
-					p1 = { pVrts[0].x, pVrts[0].y, pVrts[0].z },
-					p2 = { pVrts[1].x, pVrts[1].y, pVrts[1].z },
-					p3 = { pVrts[2].x, pVrts[2].y, pVrts[2].z },
-					v1 = Vector3f_Sub(p3, p1),
-					v2 = Vector3f_Sub(p2, p1),
-					normal = Vector3f_CrossP(v1, v2);
-
-			STATIC_ASSERT(sizeof(Vector3f) == sizeof(float[3]));
-
-			glNormal3fv((float*)&normal);
-		}
+		glNormal3fv((float*)&normal);
 	}
 
 	for (i = 0; i < numVerts; i++)
