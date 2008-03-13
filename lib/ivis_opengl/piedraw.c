@@ -275,6 +275,8 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 		pPixels->z = pVertices->z;
 	}
 
+	glColor4ubv(colour.vector);	// Only need to set once for entire model
+
 	for (pPolys = shape->polys;
 			pPolys < shape->polys + shape->npolys;
 			pPolys++)
@@ -328,7 +330,6 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 
 		for (n = 0; n < pPolys->npnts; n++)
 		{
-			glColor4ubv(colour.vector);
 			glTexCoord2fv((GLfloat*)&texCoords[n]);
 			glVertex3fv((GLfloat*)&vertexCoords[n]);
 		}
