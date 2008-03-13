@@ -40,6 +40,7 @@
 
 #include "lib/framework/frameresource.h"
 #include "stats.h"
+#include "stats-db.h"
 #include "structure.h"
 #include "feature.h"
 #include "research.h"
@@ -119,17 +120,26 @@ static void dataReleaseStats(void *pData)
 /* Load the weapon stats */
 static BOOL bufferSWEAPONLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	if (!loadWeaponStats(pBuffer, size))
+	if (!loadWeaponStats(pBuffer, size)
+	 || !allocComponentList(COMP_WEAPON, numWeaponStats))
 	{
 		return FALSE;
 	}
 
-	if (!allocComponentList(COMP_WEAPON, numWeaponStats))
+	// not interested in this value
+	*ppData = NULL;
+	return TRUE;
+}
+
+static BOOL dataDBWEAPONLoad(const char* filename, void **ppData)
+{
+	if (!loadWeaponStatsFromDB(filename)
+	 || !allocComponentList(COMP_WEAPON, numWeaponStats))
 	{
 		return FALSE;
 	}
 
-	//not interested in this value
+	// not interested in this value
 	*ppData = NULL;
 	return TRUE;
 }
@@ -1002,6 +1012,7 @@ typedef struct
 
 static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 {
+	{"DBWEAPON", dataDBWEAPONLoad, NULL},
 	{"WAV", dataAudioLoad, (RES_FREE)sound_ReleaseTrack},
 	{"AUDIOCFG", dataAudioCfgLoad, NULL},
 	{"ANI", dataAnimLoad, dataAnimRelease},

@@ -353,6 +353,11 @@ const char *getStatName(void * Stat)
 /*******************************************************************************
 *		Load stats functions
 *******************************************************************************/
+
+// Include the definitions of the database loading functions here (they need the
+// static functions from this file as well).
+#include "stats-db.c"
+
 /*Load the weapon stats from the file exported from Access*/
 BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 {
