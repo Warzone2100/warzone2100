@@ -159,26 +159,40 @@ void pie_EndLighting(void)
 	lighting = FALSE;
 }
 
-static inline void pie_Polygon(const unsigned int numVerts, const TERRAIN_VERTEXF* pVrts, const BOOL light)
+static inline void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, const BOOL light)
 {
 	unsigned int i = 0;
+	const TERRAIN_VERTEXF* pVrts = poly->pVrts;
+	const unsigned int numVerts = poly->nVrts;
 
+	polyCount++;
+
+	pie_SetAlphaTest(TRUE);
 	assert(numVerts >= 3);
 
-	if (light)
+	if ( (poly->flags & iV_IMD_TEXANIM) && poly->pTexAnim != NULL && frame != 0 )
 	{
-		const float ambient[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		const float diffuse[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		const float specular[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		const float shininess = 10;
+		frame %= abs(poly->pTexAnim->nFrames);
 
-		glEnable(GL_LIGHTING);
-		glEnable(GL_NORMALIZE);
+		if (frame > 0)
+		{
+			const unsigned int framesPerLine = 256 / poly->pTexAnim->textureWidth;
+			const unsigned int
+					uFrame = (frame % framesPerLine) * poly->pTexAnim->textureWidth,
+					vFrame = (frame / framesPerLine) * poly->pTexAnim->textureHeight;
+			unsigned int j = 0;
 
-		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
-		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
-		glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
-		glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+			for (j = 0; j < poly->nVrts; j++)
+			{
+				poly->pVrts[j].u += uFrame;
+				poly->pVrts[j].v += vFrame;
+			}
+		}
+	}
+
+	if (poly->flags & PIE_NO_CULL)
+	{
+		glDisable(GL_CULL_FACE);
 	}
 
 	glBegin(GL_TRIANGLE_FAN);
@@ -206,65 +220,10 @@ static inline void pie_Polygon(const unsigned int numVerts, const TERRAIN_VERTEX
 
 	glEnd();
 
-	if (light)
+	if (poly->flags & PIE_NO_CULL)
 	{
-		glDisable(GL_LIGHTING);
-		glDisable(GL_NORMALIZE);
+		glEnable(GL_CULL_FACE);
 	}
-}
-
-/***************************************************************************
- * pie_PiePoly
- *
- * universal poly draw function for hardware
- *
- * Assumes render mode set up externally
- *
- ***************************************************************************/
-static inline void pie_PiePoly(const PIEPOLY *poly, const BOOL light)
-{
-	polyCount++;
-
-	if (poly->nVrts >= 3)
-	{
-		pie_SetAlphaTest(TRUE);
-		if (poly->flags & PIE_NO_CULL)
-		{
-			glDisable(GL_CULL_FACE);
-		}
-		pie_Polygon(poly->nVrts, poly->pVrts, light);
-		if (poly->flags & PIE_NO_CULL)
-		{
-			glEnable(GL_CULL_FACE);
-		}
-	}
-}
-
-static inline void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, const BOOL light)
-{
-	if ( (poly->flags & iV_IMD_TEXANIM) && poly->pTexAnim != NULL && frame != 0 )
-	{
-		frame %= abs(poly->pTexAnim->nFrames);
-
-		if (frame > 0)
-		{
-			const unsigned int framesPerLine = 256 / poly->pTexAnim->textureWidth;
-			const unsigned int
-					uFrame = (frame % framesPerLine) * poly->pTexAnim->textureWidth,
-					vFrame = (frame / framesPerLine) * poly->pTexAnim->textureHeight;
-			unsigned int j = 0;
-
-			for (j = 0; j < poly->nVrts; j++)
-			{
-				poly->pVrts[j].u += uFrame;
-				poly->pVrts[j].v += vFrame;
-			}
-		}
-	}
-#ifndef NO_RENDER
-	//draw with new texture data
-	pie_PiePoly(poly, light);
-#endif
 }
 
 /***************************************************************************
@@ -308,6 +267,22 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	PIEPOLY piePoly;
 	VERTEXID *index;
 	BOOL light = lighting;
+
+	if (light)
+	{
+		const float ambient[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		const float diffuse[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		const float specular[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		const float shininess = 10;
+
+		glEnable(GL_LIGHTING);
+		glEnable(GL_NORMALIZE);
+
+		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+		glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+	}
 
 	/* Set tranlucency */
 	if (pieFlag & pie_ADDITIVE)
@@ -400,6 +375,12 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	if (pieFlag & pie_BUTTON)
 	{
 		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
+	}
+
+	if (light)
+	{
+		glDisable(GL_LIGHTING);
+		glDisable(GL_NORMALIZE);
 	}
 }
 
