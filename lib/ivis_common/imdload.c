@@ -128,8 +128,9 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 			poly->pindex[j] = vertexTable[newID];
 		}
 
+		assert(poly->npnts > 2);
+
 		// calc poly normal
-		if (poly->npnts > 2)
 		{
 			Vector3f p0, p1, p2;
 
@@ -147,10 +148,6 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 			p2.z = s->points[poly->pindex[poly->npnts-1]].z;
 
 			poly->normal = pie_SurfaceNormal3fv(p0, p1, p2);
-		}
-		else
-		{
-			Vector3f_Set(&poly->normal, 0.0f, 0.0f, 0.0f);
 		}
 
 		if (poly->flags & iV_IMD_TEXANIM)

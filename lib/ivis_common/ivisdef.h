@@ -106,7 +106,7 @@ typedef struct {
 	Uint32 flags;
 	Sint32 zcentre;
 	unsigned int npnts;
-	Vector3f normal; // FIXME Never actually used?
+	Vector3f normal;
 	VERTEXID *pindex;
 	Vector2f *texCoord;
 	iTexAnim *pTexAnim;

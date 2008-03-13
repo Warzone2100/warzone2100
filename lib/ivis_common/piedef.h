@@ -107,6 +107,7 @@ typedef struct {
 	unsigned int nVrts;
 	TERRAIN_VERTEXF *pVrts;
 	iTexAnim *pTexAnim;
+	Vector3f normal;
 } PIEPOLY;
 
 /***************************************************************************/

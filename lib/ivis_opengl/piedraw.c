@@ -199,16 +199,7 @@ static inline void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, const BOOL ligh
 
 	if (light)
 	{
-		const Vector3f	p1 = { pVrts[0].x, pVrts[0].y, pVrts[0].z };
-		const Vector3f	p2 = { pVrts[1].x, pVrts[1].y, pVrts[1].z };
-		const Vector3f	p3 = { pVrts[2].x, pVrts[2].y, pVrts[2].z };
-		const Vector3f	v1 = Vector3f_Sub(p3, p1);
-		const Vector3f	v2 = Vector3f_Sub(p2, p1);
-		const Vector3f	normal = Vector3f_CrossP(v1, v2);
-
-		STATIC_ASSERT(sizeof(Vector3f) == sizeof(float[3]));
-
-		glNormal3fv((float*)&normal);
+		glNormal3fv((float*)&poly->normal);
 	}
 
 	for (i = 0; i < numVerts; i++)
@@ -268,22 +259,6 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	VERTEXID *index;
 	BOOL light = lighting;
 
-	if (light)
-	{
-		const float ambient[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		const float diffuse[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		const float specular[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		const float shininess = 10;
-
-		glEnable(GL_LIGHTING);
-		glEnable(GL_NORMALIZE);
-
-		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
-		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
-		glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
-		glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
-	}
-
 	/* Set tranlucency */
 	if (pieFlag & pie_ADDITIVE)
 	{ //Assume also translucent
@@ -311,6 +286,22 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 			pie_SetFogStatus(TRUE);
 		}
 		pie_SetRendMode(REND_GOURAUD_TEX);
+	}
+
+	if (light)
+	{
+		const float ambient[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		const float diffuse[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		const float specular[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		const float shininess = 10;
+
+		glEnable(GL_LIGHTING);
+		glEnable(GL_NORMALIZE);
+
+		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+		glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
 	}
 
 	if (pieFlag & pie_RAISE)
@@ -363,6 +354,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 		}
 		piePoly.nVrts = pPolys->npnts;
 		piePoly.pVrts = pieVrts;
+		piePoly.normal = pPolys->normal;
 
 		piePoly.pTexAnim = pPolys->pTexAnim;
 
