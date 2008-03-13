@@ -102,14 +102,6 @@ typedef struct {float x, y, z, u, v; PIELIGHT light, specular;} TERRAIN_VERTEXF;
 typedef struct {SWORD x, y, w, h;} PIERECT;				/**< Screen rectangle. */
 typedef struct {SDWORD texPage; SWORD tu, tv, tw, th;} PIEIMAGE;	/**< An area of texture. */
 
-typedef struct {
-	unsigned int flags;
-	unsigned int nVrts;
-	TERRAIN_VERTEXF *pVrts;
-	iTexAnim *pTexAnim;
-	Vector3f normal;
-} PIEPOLY;
-
 /***************************************************************************/
 /*
  *	Global ProtoTypes

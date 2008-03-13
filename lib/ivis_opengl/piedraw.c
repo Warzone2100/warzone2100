@@ -122,7 +122,6 @@ static BOOL stencil_one_pass(void)
  *	Local Variables
  */
 
-static TERRAIN_VERTEXF pieVrts[pie_MAX_VERTICES_PER_POLYGON];
 static unsigned int pieCount = 0;
 static unsigned int tileCount = 0;
 static unsigned int polyCount = 0;
@@ -157,64 +156,6 @@ void pie_EndLighting(void)
 {
 	shadows = FALSE;
 	lighting = FALSE;
-}
-
-static inline void pie_PiePolyFrame(PIEPOLY *poly, SDWORD frame, const BOOL light)
-{
-	unsigned int i = 0;
-	const TERRAIN_VERTEXF* pVrts = poly->pVrts;
-	const unsigned int numVerts = poly->nVrts;
-
-	polyCount++;
-
-	pie_SetAlphaTest(TRUE);
-	assert(numVerts >= 3);
-
-	if ( (poly->flags & iV_IMD_TEXANIM) && poly->pTexAnim != NULL && frame != 0 )
-	{
-		frame %= abs(poly->pTexAnim->nFrames);
-
-		if (frame > 0)
-		{
-			const unsigned int framesPerLine = 256 / poly->pTexAnim->textureWidth;
-			const unsigned int
-					uFrame = (frame % framesPerLine) * poly->pTexAnim->textureWidth,
-					vFrame = (frame / framesPerLine) * poly->pTexAnim->textureHeight;
-			unsigned int j = 0;
-
-			for (j = 0; j < poly->nVrts; j++)
-			{
-				poly->pVrts[j].u += uFrame;
-				poly->pVrts[j].v += vFrame;
-			}
-		}
-	}
-
-	if (poly->flags & PIE_NO_CULL)
-	{
-		glDisable(GL_CULL_FACE);
-	}
-
-	glBegin(GL_TRIANGLE_FAN);
-
-	if (light)
-	{
-		glNormal3fv((float*)&poly->normal);
-	}
-
-	for (i = 0; i < numVerts; i++)
-	{
-		glColor4ubv(pVrts[i].light.vector);
-		glTexCoord2f(pVrts[i].u, pVrts[i].v);
-		glVertex3f(pVrts[i].x, pVrts[i].y, pVrts[i].z);
-	}
-
-	glEnd();
-
-	if (poly->flags & PIE_NO_CULL)
-	{
-		glEnable(GL_CULL_FACE);
-	}
 }
 
 /***************************************************************************
@@ -255,9 +196,10 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	unsigned int n;
 	Vector3f *pVertices, *pPixels, scrPoints[pie_MAX_VERTICES];
 	iIMDPoly *pPolys;
-	PIEPOLY piePoly;
 	VERTEXID *index;
 	BOOL light = lighting;
+
+	pie_SetAlphaTest(TRUE);
 
 	/* Set tranlucency */
 	if (pieFlag & pie_ADDITIVE)
@@ -338,7 +280,8 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 			pPolys < shape->polys + shape->npolys;
 			pPolys++)
 	{
-		piePoly.flags = pPolys->flags;
+		TERRAIN_VERTEXF pieVrts[pie_MAX_VERTICES_PER_POLYGON];
+		int i = 0;
 
 		for (n = 0, index = pPolys->pindex;
 				n < pPolys->npnts;
@@ -352,15 +295,52 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 			pieVrts[n].light = colour;
 			pieVrts[n].specular = specular;
 		}
-		piePoly.nVrts = pPolys->npnts;
-		piePoly.pVrts = pieVrts;
-		piePoly.normal = pPolys->normal;
 
-		piePoly.pTexAnim = pPolys->pTexAnim;
+		polyCount++;
 
-		if (piePoly.flags > 0)
+		if ((pPolys->flags & iV_IMD_TEXANIM) && pPolys->pTexAnim != NULL && frame != 0 )
 		{
-			pie_PiePolyFrame(&piePoly, frame, light); // draw the polygon ...
+			frame %= abs(pPolys->pTexAnim->nFrames);
+
+			if (frame > 0)
+			{
+				const int framesPerLine = 256 / pPolys->pTexAnim->textureWidth;
+				const int uFrame = (frame % framesPerLine) * pPolys->pTexAnim->textureWidth;
+				const int vFrame = (frame / framesPerLine) * pPolys->pTexAnim->textureHeight;
+				int j = 0;
+
+				for (j = 0; j < pPolys->npnts; j++)
+				{
+					pieVrts[j].u += uFrame;
+					pieVrts[j].v += vFrame;
+				}
+			}
+		}
+
+		if (pPolys->flags & PIE_NO_CULL)
+		{
+			glDisable(GL_CULL_FACE);
+		}
+
+		glBegin(GL_TRIANGLE_FAN);
+
+		if (light)
+		{
+			glNormal3fv((float*)&pPolys->normal);
+		}
+
+		for (i = 0; i < pPolys->npnts; i++)
+		{
+			glColor4ubv(pieVrts[i].light.vector);
+			glTexCoord2f(pieVrts[i].u, pieVrts[i].v);
+			glVertex3f(pieVrts[i].x, pieVrts[i].y, pieVrts[i].z);
+		}
+
+		glEnd();
+
+		if (pPolys->flags & PIE_NO_CULL)
+		{
+			glEnable(GL_CULL_FACE);
 		}
 	}
 
