@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-03-01 12:46+0100\n"
+"POT-Creation-Date: 2008-03-13 00:38+0100\n"
 "PO-Revision-Date: 2008-03-11 01:09+0100\n"
 "Last-Translator: Federico Aromolo <miracleblade@hotmail.it>\n"
 "Language-Team: Italian <warzone-dev@gna.org>\n"
@@ -290,76 +290,76 @@ msgstr "Salva Partita"
 msgid "Load Saved Game"
 msgstr "Carica Partita"
 
-#: src/droid.c:237
+#: src/droid.c:234
 msgid "Unit Lost!"
 msgstr "Unità Persa!"
 
-#: src/droid.c:1858
+#: src/droid.c:1855
 msgid "Structure Restored"
 msgstr "Struttura Riparata"
 
-#: src/droid.c:3770
+#: src/droid.c:3767
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Gruppo %u selezionato - %u Unità"
 msgstr[1] "Gruppo %u selezionato - %u Unità"
 
-#: src/droid.c:3784
+#: src/droid.c:3781
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unità assegnata al Gruppo %u"
 msgstr[1] "%u unità assegnata al Gruppo %u"
 
-#: src/droid.c:3797
+#: src/droid.c:3794
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Visuale Centrata sul Gruppo %u - %u Unit"
 msgstr[1] "Visuale Centrata sul gruppo %u - %u Unità"
 
-#: src/droid.c:3801
+#: src/droid.c:3798
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Visuale affiancata al Gruppo %u - %u Unità"
 msgstr[1] "Visuale affiancata al Gruppo %u - %u Unità"
 
-#: src/droid.c:4018
+#: src/droid.c:4015
 msgid "Rookie"
 msgstr "Coscritta"
 
-#: src/droid.c:4019
+#: src/droid.c:4016
 msgctxt "rank"
 msgid "Green"
 msgstr "Inesperta"
 
-#: src/droid.c:4020
+#: src/droid.c:4017
 msgid "Trained"
 msgstr "Addestrata"
 
-#: src/droid.c:4021
+#: src/droid.c:4018
 msgid "Regular"
 msgstr "Normale"
 
-#: src/droid.c:4022
+#: src/droid.c:4019
 msgid "Professional"
 msgstr "Professionale"
 
-#: src/droid.c:4023
+#: src/droid.c:4020
 msgid "Veteran"
 msgstr "Veterana"
 
-#: src/droid.c:4024
+#: src/droid.c:4021
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:4025
+#: src/droid.c:4022
 msgid "Special"
 msgstr "Speciale"
 
-#: src/droid.c:4026
+#: src/droid.c:4023
 msgid "Hero"
 msgstr "Eroica"
 

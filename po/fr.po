@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.1_beta1\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-03-13 19:03+0100\n"
+"POT-Creation-Date: 2008-03-13 00:38+0100\n"
 "PO-Revision-Date: 2008-03-13 00:38+0100\n"
 "Last-Translator: qwerty800\n"
 "Language-Team: French <warzone-dev@gna.org>\n"
@@ -52,16 +52,16 @@ msgstr "Joueur Rose"
 msgid "Cyan"
 msgstr "Joueur Cyan"
 
-#: src/display.c:1677
+#: src/display.c:1678
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Construction Impossible. Le Pétrole est en Feu"
 
-#: src/display.c:1824
+#: src/display.c:1825
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Endommagé à %d%% - Experience %d, %s"
 
-#: src/display.c:2061
+#: src/display.c:2062
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Un véicule de construction s'est fait ordonné de construire un Derrick"
 
@@ -132,15 +132,15 @@ msgstr "Vous avez trouvé des plans pour %s"
 #: src/intorder.c:660
 #: src/loadsave.c:258
 #: src/intelmap.c:528
-#: src/multimenu.c:430
-#: src/multimenu.c:1249
+#: src/multimenu.c:446
+#: src/multimenu.c:1281
 msgid "Close"
 msgstr "Fermer"
 
 #: src/hci.c:1680
-#: src/mission.c:3227
-#: src/loop.c:472
-#: src/loop.c:484
+#: src/mission.c:3229
+#: src/loop.c:473
+#: src/loop.c:485
 msgid "GAME SAVED!"
 msgstr "PARTIE SAUVEGARDÉE!"
 
@@ -244,117 +244,117 @@ msgstr "Lancer le Transporteur"
 msgid "Reinforcements landing"
 msgstr "Les renforts sont arrivés!"
 
-#: src/mission.c:2607
+#: src/mission.c:2609
 msgid "Load Transport"
 msgstr "Charger le Transporteur"
 
-#: src/mission.c:3088
+#: src/mission.c:3090
 msgid "OBJECTIVE ACHIEVED"
 msgstr "RÉUSSSITE DE LA MISSION"
 
-#: src/mission.c:3094
+#: src/mission.c:3096
 msgid "OBJECTIVE FAILED"
 msgstr "ÉCHEC DE LA MISSION"
 
-#: src/mission.c:3120
-#: src/mission.c:3157
-#: src/mission.c:3278
+#: src/mission.c:3122
+#: src/mission.c:3159
+#: src/mission.c:3280
 msgid "Quit To Main Menu"
 msgstr "Retour au Menu Principal"
 
-#: src/mission.c:3128
+#: src/mission.c:3130
 msgid "Continue Game"
 msgstr "Continuer"
 
-#: src/mission.c:3141
-#: src/mission.c:3262
+#: src/mission.c:3143
+#: src/mission.c:3264
 #: src/ingameop.c:278
 #: src/ingameop.c:417
 msgid "Save Game"
 msgstr "Sauvegarder"
 
-#: src/mission.c:3151
-#: src/mission.c:3259
+#: src/mission.c:3153
+#: src/mission.c:3261
 #: src/ingameop.c:413
 #: src/frontend.c:427
 msgid "Load Saved Game"
 msgstr "Charger une partie Enregistrée"
 
-#: src/droid.c:196
+#: src/droid.c:234
 msgid "Unit Lost!"
 msgstr "Unitée perdue"
 
-#: src/droid.c:1805
+#: src/droid.c:1855
 msgid "Structure Restored"
 msgstr "Structure Restaurée"
 
-#: src/droid.c:3688
+#: src/droid.c:3767
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Groupe %u selectioné - %u Unitée"
 msgstr[1] "Groupe %u selectioné - %u Unitées"
 
-#: src/droid.c:3702
+#: src/droid.c:3781
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unitée assignée au groupe %u"
 msgstr[1] "%u unitées assignée au groupe %u"
 
-#: src/droid.c:3715
+#: src/droid.c:3794
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Caméra centrée sur le groupe %u - %u Unitée"
 msgstr[1] "Caméra centrée sur le groupe %u - %u Unitées"
 
-#: src/droid.c:3719
+#: src/droid.c:3798
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Alignement avec le groupe %u - %u Unitée"
 msgstr[1] "Alignement avec le groupe %u - %u Unitées"
 
-#: src/droid.c:3936
+#: src/droid.c:4015
 msgid "Rookie"
 msgstr "À l'essai"
 
-#: src/droid.c:3937
+#: src/droid.c:4016
 msgctxt "rank"
 msgid "Green"
 msgstr "Recrue"
 
-#: src/droid.c:3938
+#: src/droid.c:4017
 msgid "Trained"
 msgstr "Aspirant"
 
-#: src/droid.c:3939
+#: src/droid.c:4018
 msgid "Regular"
 msgstr "Régulier"
 
-#: src/droid.c:3940
+#: src/droid.c:4019
 msgid "Professional"
 msgstr "Professionel"
 
-#: src/droid.c:3941
+#: src/droid.c:4020
 msgid "Veteran"
 msgstr "Vétéran"
 
-#: src/droid.c:3942
+#: src/droid.c:4021
 msgid "Elite"
 msgstr "Élite"
 
-#: src/droid.c:3943
+#: src/droid.c:4022
 msgid "Special"
 msgstr "Spécialiste"
 
-#: src/droid.c:3944
+#: src/droid.c:4023
 msgid "Hero"
 msgstr "Héro"
 
 #: src/multiint.c:329
-#: src/multiint.c:1333
+#: src/multiint.c:1334
 #: src/multilimit.c:155
 msgid "Accept Settings"
 msgstr "Accepter les Configurations"
@@ -440,7 +440,7 @@ msgid "Distance Fog"
 msgstr "Brouillard de distance"
 
 #: src/multiint.c:734
-#: src/multimenu.c:705
+#: src/multimenu.c:732
 msgid "Alliances"
 msgstr "Alliance"
 
@@ -453,7 +453,7 @@ msgid "Allow Alliances"
 msgstr "Autoriser les Alliances"
 
 #: src/multiint.c:743
-#: src/multiint.c:1880
+#: src/multiint.c:1886
 msgid "Locked Teams"
 msgstr "Vérouiller les Équipes"
 
@@ -486,32 +486,32 @@ msgstr "Commencer avec une base"
 msgid "Start with Advanced Bases"
 msgstr "Commencer avec une Base Avancée"
 
-#: src/multiint.c:839
+#: src/multiint.c:840
 msgid "Start Hosting Game"
 msgstr "Démarrer le Serveur"
 
-#: src/multiint.c:847
+#: src/multiint.c:848
 msgid "Set Structure Limits"
 msgstr "Fixer des limites de Construction"
 
-#: src/multiint.c:1219
+#: src/multiint.c:1220
 msgid "PLAYERS"
 msgstr "JOUEUERS"
 
-#: src/multiint.c:1364
+#: src/multiint.c:1365
 msgid "CHAT"
 msgstr "CHAT"
 
-#: src/multiint.c:1821
+#: src/multiint.c:1827
 msgid "Host is Starting Game"
 msgstr "L'hôte démmare la partie"
 
-#: src/multiint.c:1906
+#: src/multiint.c:1912
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "L'hôte a banni %s de la partie"
 
-#: src/multiint.c:2390
+#: src/multiint.c:2396
 msgid "Players"
 msgstr "Joueurs"
 
@@ -662,59 +662,59 @@ msgstr ""
 msgid "Power Accrued"
 msgstr ""
 
-#: src/structure.c:2802
+#: src/structure.c:2833
 msgid "Command Control Limit Reached - Production Halted"
 msgstr ""
 
-#: src/structure.c:5904
-#: src/structure.c:5926
+#: src/structure.c:5935
+#: src/structure.c:5957
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/structure.c:5963
+#: src/structure.c:5994
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr ""
 
-#: src/structure.c:5978
+#: src/structure.c:6009
 #, c-format
 msgid "%s - Damage %u%%"
 msgstr ""
 
-#: src/structure.c:6097
-#: src/structure.c:6148
+#: src/structure.c:6128
+#: src/structure.c:6179
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr ""
 
-#: src/structure.c:6383
+#: src/structure.c:6414
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.c:6423
+#: src/structure.c:6454
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.c:6447
+#: src/structure.c:6478
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.c:6471
+#: src/structure.c:6502
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.c:6480
+#: src/structure.c:6511
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.c:6508
+#: src/structure.c:6539
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.c:6515
+#: src/structure.c:6546
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 
@@ -1890,67 +1890,67 @@ msgstr ""
 msgid "%s is Joining the Game"
 msgstr ""
 
-#: src/multimenu.c:558
+#: src/multimenu.c:574
 msgid "Technology level 1"
 msgstr ""
 
-#: src/multimenu.c:566
+#: src/multimenu.c:582
 msgid "Technology level 2"
 msgstr ""
 
-#: src/multimenu.c:572
+#: src/multimenu.c:588
 msgid "Technology level 3"
 msgstr ""
 
-#: src/multimenu.c:578
+#: src/multimenu.c:594
 msgid "Any number of players"
 msgstr ""
 
-#: src/multimenu.c:585
+#: src/multimenu.c:601
 msgid "2 players"
 msgstr ""
 
-#: src/multimenu.c:591
+#: src/multimenu.c:607
 msgid "4 players"
 msgstr ""
 
-#: src/multimenu.c:597
+#: src/multimenu.c:613
 msgid "8 players"
 msgstr ""
 
-#: src/multimenu.c:706
+#: src/multimenu.c:733
 msgid "Score"
 msgstr ""
 
-#: src/multimenu.c:707
+#: src/multimenu.c:734
 msgid "Kills"
 msgstr ""
 
-#: src/multimenu.c:716
+#: src/multimenu.c:743
 msgid "Ping"
 msgstr ""
 
-#: src/multimenu.c:717
+#: src/multimenu.c:744
 msgid "Played"
 msgstr ""
 
-#: src/multimenu.c:1023
+#: src/multimenu.c:1053
 msgid "Toggle Alliance State"
 msgstr ""
 
-#: src/multimenu.c:1042
+#: src/multimenu.c:1072
 msgid "Give Visibility Report"
 msgstr ""
 
-#: src/multimenu.c:1048
+#: src/multimenu.c:1078
 msgid "Leak Technology Documents"
 msgstr ""
 
-#: src/multimenu.c:1055
+#: src/multimenu.c:1085
 msgid "Hand Over Selected Units"
 msgstr ""
 
-#: src/multimenu.c:1061
+#: src/multimenu.c:1091
 msgid "Give Power To Player"
 msgstr ""
 

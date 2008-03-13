@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-03-01 12:46+0100\n"
+"POT-Creation-Date: 2008-03-13 00:38+0100\n"
 "PO-Revision-Date: 2008-01-20 19:26+0100\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -284,76 +284,76 @@ msgstr ""
 msgid "Load Saved Game"
 msgstr ""
 
-#: src/droid.c:237
+#: src/droid.c:234
 msgid "Unit Lost!"
 msgstr ""
 
-#: src/droid.c:1858
+#: src/droid.c:1855
 msgid "Structure Restored"
 msgstr ""
 
-#: src/droid.c:3770
+#: src/droid.c:3767
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3784
+#: src/droid.c:3781
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3797
+#: src/droid.c:3794
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3801
+#: src/droid.c:3798
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:4018
+#: src/droid.c:4015
 msgid "Rookie"
 msgstr ""
 
-#: src/droid.c:4019
+#: src/droid.c:4016
 msgctxt "rank"
 msgid "Green"
 msgstr ""
 
-#: src/droid.c:4020
+#: src/droid.c:4017
 msgid "Trained"
 msgstr ""
 
-#: src/droid.c:4021
+#: src/droid.c:4018
 msgid "Regular"
 msgstr ""
 
-#: src/droid.c:4022
+#: src/droid.c:4019
 msgid "Professional"
 msgstr ""
 
-#: src/droid.c:4023
+#: src/droid.c:4020
 msgid "Veteran"
 msgstr ""
 
-#: src/droid.c:4024
+#: src/droid.c:4021
 msgid "Elite"
 msgstr ""
 
-#: src/droid.c:4025
+#: src/droid.c:4022
 msgid "Special"
 msgstr ""
 
-#: src/droid.c:4026
+#: src/droid.c:4023
 msgid "Hero"
 msgstr ""
 
