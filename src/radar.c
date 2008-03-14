@@ -67,7 +67,7 @@ static PIELIGHT		tileColours[MAX_TILES];
 static UDWORD		*radarBuffer;
 
 static PIELIGHT clanColours[MAX_PLAYERS]=
-{	// see frend2.png for team color order.
+{	// see frontend2.png for team color order.
 	// [r,g,b,a]
 	{{0,81,0,200}},		// green  Player 0
 	{{255,140,66,200}},	// orange Player 1
