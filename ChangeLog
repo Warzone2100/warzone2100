@@ -5,6 +5,7 @@
    * Fix: A memory corruption in structure limits could cause destroy button to disappear (among other things)
    * Fix: Crash during saving in multiplayer/skirmish mode, when Aivolution AI is enabled (bug #11084)
    * Fix: Special characters would be printed as '?' (bug #10913)
+   * Fix: Warzone could lock up, trying to pick a droid (bug #11250)
  * Graphics:
    * Change: Reduce the number of atmospheric particles generated and lower the CPU usage
    * Fix: Briefings were not displayed at high resolutions (bug #11121)
