@@ -38,7 +38,6 @@
 //*************************************************************************
 // polygon flags	b0..b7: col, b24..b31: anim index
 
-#define PIE_COLOURKEYED			0x00000800
 #define PIE_ALPHA			0x00040000
 #define PIE_NO_CULL			0x00002000
 
