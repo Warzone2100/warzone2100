@@ -44,7 +44,7 @@ configure: configure.ac autogen.sh
 config.status: configure
 	dh_testdir
 
-	CFLAGS="$(CFLAGS)" ./configure $(CONFFLAGS) --prefix=/usr --bindir=\$${prefix}/games --datadir=\$${prefix}/share/games --mandir=\$${prefix}/share/man --enable-data
+	CFLAGS="$(CFLAGS)" ./configure $(CONFFLAGS) --prefix=/usr --bindir=\$${prefix}/games --datadir=\$${prefix}/share/games --mandir=\$${prefix}/share/man --enable-data --disable-debug
 
 
 build: build-stamp
