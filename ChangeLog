@@ -1,6 +1,6 @@
 0000-00-00: Version 2.1_beta2
  * General:
-   * New: Preview of italian (35% complete), french (5%) and russian (1%) translations
+   * New: Preview of italian (35% complete), french (15%) and russian (1%) translations
    * Fix: Crash (integer divide by zero) when starting a multiplayer game after playing a single player game
    * Fix: A memory corruption in structure limits could cause destroy button to disappear (among other things)
    * Fix: Crash during saving in multiplayer/skirmish mode, when Aivolution AI is enabled (bug #11084)
