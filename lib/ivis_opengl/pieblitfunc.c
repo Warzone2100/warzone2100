@@ -345,10 +345,7 @@ void pie_LoadBackDrop(SCREENTYPE screenType)
 	switch (screenType)
 	{
 	case SCREEN_RANDOMBDROP:
-		if ( rand() % 2 == 0 )
-			snprintf(backd, sizeof(backd), "texpages/bdrops/0%i-bdrop.png", rand() % 9); // Range: 0-8
-		else
-			snprintf(backd, sizeof(backd), "texpages/bdrops/wzlogo_%i.png", rand() % 5); // Range: 0-4
+		snprintf(backd, sizeof(backd), "texpages/bdrops/backdrop%i.png", rand() % 7); // Range: 0-6
 		break;
 	case SCREEN_MISSIONEND:
 		snprintf(backd, sizeof(backd), "texpages/bdrops/missionend.png");
