@@ -1,15 +1,15 @@
 # French translations for Warzone 2100 package.
 # Copyright (C) 2008 Warzone Resurrection Project
 # This file is distributed under the same license as the Warzone 2100 package.
-# Automatically generated, 2008.
-# Traduction by qwerty800, (add your name if you participate)
+#
+# Traduction by qwerty800 <qwerty8034@hotmail.com>, (add your name if you participate)
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.1_beta1\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-03-13 19:03+0100\n"
 "PO-Revision-Date: 2008-03-13 00:38+0100\n"
-"Last-Translator: qwerty800\n"
+"Last-Translator: qwerty800 <qwerty8034@hotmail.com>\n"
 "Language-Team: French <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -63,7 +63,7 @@ msgstr "%s - Endommagé à %d%% - Experience %d, %s"
 
 #: src/display.c:2061
 msgid "Truck ordered to build Oil Derrick"
-msgstr "Un véicule de construction s'est fait ordonné de construire un Derrick"
+msgstr "Un véhicule de construction s'est fait ordonné de construire un Derrick"
 
 #: src/multistat.c:134
 #: src/configuration.c:354
@@ -147,17 +147,17 @@ msgstr "PARTIE SAUVEGARDÉE!"
 #: src/hci.c:2093
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
-msgstr "Le joueur %u Triche (Il se sert du debug menu pour se construire un nouveau bâtiment: %s."
+msgstr "Le joueur %u Triche (Il se sert du debug menu pour se construire un nouveau bâtiment: %s.)"
 
 #: src/hci.c:2116
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
-msgstr "Le joueur %u Triche (Il se sert du debug menu pour s'obtenir une nouvelle technologie: %s."
+msgstr "Le joueur %u Triche (Il se sert du debug menu pour s'obtenir une nouvelle technologie: %s.)"
 
 #: src/hci.c:2135
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
-msgstr "Le joueur %u Triche (Il se sert du debug menu pour se faire une nouvelle unitée: %s."
+msgstr "Le joueur %u Triche (Il se sert du debug menu pour se faire une nouvelle unitée: %s.)"
 
 #: src/hci.c:3754
 msgid "Commanders (F6)"
@@ -529,7 +529,7 @@ msgstr "C'est bon, je désactive l'affichage des senseurs!"
 
 #: src/keybind.c:283
 msgid "Hard as nails!!!"
-msgstr "Mange-toi ça dans 'a Geule!!!"
+msgstr "Mange-toi ça dans les dents!!!"
 
 #: src/keybind.c:296
 msgid "Takings thing easy!"
@@ -565,19 +565,19 @@ msgstr "Énergie Infinie Désactivée (T'est mieux aussi!)"
 
 #: src/keybind.c:497
 msgid "All items made available"
-msgstr ""
+msgstr "Tout les éléments de recherche, de design et les constructions sont disponibles(T'exagère vraiment)"
 
 #: src/keybind.c:589
 msgid "Fog off"
-msgstr ""
+msgstr "Brouillard désactivé"
 
 #: src/keybind.c:595
 msgid "Fog on"
-msgstr ""
+msgstr "Brouillard Actvé"
 
 #: src/keybind.c:1161
 msgid "View Aligned to North"
-msgstr ""
+msgstr "Caméra Réorientée vers le Nord"
 
 #: src/keybind.c:1190
 #: src/intelmap.c:241
@@ -586,19 +586,19 @@ msgstr "PAUSE"
 
 #: src/keybind.c:1229
 msgid "Researched EVERYTHING for you!"
-msgstr ""
+msgstr "Chercheur Exténué: On a fait du mieux qu'on a pu et on croit qu'on a réussi!"
 
 #: src/keybind.c:1260
 msgid "Energy bars display toggled"
-msgstr ""
+msgstr "Affichage du Blindage modifié"
 
 #: src/keybind.c:1278
 msgid "Demo mode off - Returning to normal game mode"
-msgstr ""
+msgstr "Mode Démonstration désactivé - Retour au Jeu Normal"
 
 #: src/keybind.c:1325
 msgid "Unable to locate any resource extractors!"
-msgstr ""
+msgstr "Impossible de localiser quelqu'extracteur de ressource sur cette map!"
 
 #: src/keybind.c:1548
 msgid "Oh, the weather outside is frightful... SNOW"
@@ -614,75 +614,75 @@ msgstr "Prévisions Locales: Ciel dégagé dans toute la Région... AUCUNE MÉT�
 
 #: src/keybind.c:1593
 msgid "Enemy destroyed by cheating!"
-msgstr ""
+msgstr "L'ennemi a été détruit par un TRICHEUR!!!"
 
 #: src/keybind.c:2121
 msgid "Centered on player HQ, direction NORTH"
-msgstr ""
+msgstr "Vue Centrée sur le quartier général"
 
 #: src/keybind.c:2133
 msgid "Unable to locate HQ!"
-msgstr ""
+msgstr "Impossible de localiser le Quartier Général"
 
 #: src/keybind.c:2149
 msgid "Formation speed limiting OFF"
-msgstr ""
+msgstr "Limite de vitesse en formation Désactivée"
 
 #: src/keybind.c:2153
 msgid "Formation speed limiting ON"
-msgstr ""
+msgstr "Limite de Vitesse en formation Activée"
 
 #: src/keybind.c:2278
 #: src/keybind.c:2314
 #: src/keybind.c:2336
 msgid "Game Speed Reset"
-msgstr ""
+msgstr "Réinitialisation de la Vitesse"
 
 #: src/keybind.c:2282
 #, c-format
 msgid "Game Speed Increased to %3.1f"
-msgstr ""
+msgstr "Accélération du temps à %3.1f"
 
 #: src/keybind.c:2318
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
-msgstr ""
+msgstr "Ralentissement du temps à %3.1f"
 
 #: src/keybind.c:2348
 msgid "Build menu will reopen"
-msgstr ""
+msgstr "Le menu des Constructions va se réouvrir"
 
 #: src/keybind.c:2352
 msgid "Build menu will not reopen"
-msgstr ""
+msgstr "Le menu des constructions ne se reouvrira pas"
 
 #: src/intdisplay.c:195
 #: src/intdisplay.c:240
 #: src/intdisplay.c:287
 msgid "Power Accrued"
-msgstr ""
+msgstr "Puissance Accrue"
 
 #: src/structure.c:2802
 msgid "Command Control Limit Reached - Production Halted"
-msgstr ""
+msgstr "Limite de Commandants Atteinte - Arrêt de la Production"
 
 #: src/structure.c:5904
 #: src/structure.c:5926
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%s - %u Unitée assignée"
+msgstr[1] "%s - %u Unitées assignées"
 
 #: src/structure.c:5963
 #, c-format
 msgid "%s - Connected %u of %u"
-msgstr ""
+msgstr "%s - %u connections établies sur %u"
 
 #: src/structure.c:5978
 #, c-format
 msgid "%s - Damage %u%%"
-msgstr ""
+msgstr "%s - Endommagé à %u%%"
 
 #: src/structure.c:6097
 #: src/structure.c:6148
@@ -730,34 +730,34 @@ msgstr ""
 #, c-format
 msgid "%u unit selected"
 msgid_plural "%u units selected"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u unitée sélectionée"
+msgstr[1] "%u unitées sélectionées"
 
 #: src/selection.c:434
 #: src/selection.c:521
 msgid "Unable to locate any repair units!"
-msgstr ""
+msgstr "Impossible de localiser des unitées alliés endommagées"
 
 #: src/selection.c:437
 msgid "Unable to locate any Trucks!"
-msgstr ""
+msgstr "Impossible de localiser aucun Véhicule de Construction"
 
 #: src/selection.c:440
 msgid "Unable to locate any Sensor Units!"
-msgstr ""
+msgstr "Impossible de localiser aucune unitée de détection"
 
 #: src/selection.c:443
 msgid "Unable to locate any Commanders!"
-msgstr ""
+msgstr "Impossible de localiser aucun véhicule de commandement"
 
 #: src/research.c:1849
 #, c-format
 msgid "Research completed: %s"
-msgstr ""
+msgstr "Recherche terminée: %s"
 
 #: src/research.c:1854
 msgid "Research Completed"
-msgstr ""
+msgstr "Recherche Terminée"
 
 #: src/research.c:2657
 msgid "Research Award"
@@ -766,32 +766,32 @@ msgstr ""
 #: src/scores.c:99
 #, c-format
 msgid "Own Units: %u"
-msgstr ""
+msgstr "Vos Unitées: %u"
 
 #: src/scores.c:100
 #, c-format
 msgid "Enemy Units: %u"
-msgstr ""
+msgstr "Unitées Ennemies: %u"
 
 #: src/scores.c:101
 #, c-format
 msgid "Own Structures: %u"
-msgstr ""
+msgstr "Vos Baîtiments: %u"
 
 #: src/scores.c:102
 #, c-format
 msgid "Enemy Structures: %u"
-msgstr ""
+msgstr "Batîments Ennemis: %u"
 
 #: src/scores.c:103
 #, c-format
 msgid "Units Manufactured: %u"
-msgstr ""
+msgstr "Unitées Assemblées: %u"
 
 #: src/scores.c:104
 #, c-format
 msgid "Total Units: %u"
-msgstr ""
+msgstr "Unitées Totales Controlées: %u"
 
 #: src/scores.c:105
 #, c-format
