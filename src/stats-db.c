@@ -530,3 +530,208 @@ in_db_err:
 	sqlite3_close(db);
 	return false;
 }
+
+/** Load the body stats from the given SQLite database file
+ *  \param filename name of the database file to load the body stats from.
+ */
+bool loadBodyStatsFromDB(const char* filename)
+{
+	sqlite3* db;
+	sqlite3_stmt* stmt;
+
+	int rc = sqlite3_open_v2(filename, &db, SQLITE_OPEN_READONLY, NULL);
+	if (rc != SQLITE_OK)
+	{
+		debug(LOG_ERROR, "loadBodyStatsFromDB: Can't open database (%s): %s", filename, sqlite3_errmsg(db));
+		goto in_db_err;
+	}
+
+	// Prepare this SQL statement for execution
+	rc = sqlite3_prepare_v2(db, "SELECT MAX(id) FROM `body`;", -1, &stmt, NULL);
+	if (rc != SQLITE_OK)
+	{
+		debug(LOG_ERROR, "loadBodyStatsFromDB: SQL error: %s", sqlite3_errmsg(db));
+		goto in_db_err;
+	}
+
+	/* Execute and process the results of the above SQL statement to
+	 * determine the amount of bodies we're about to fetch. Then make sure
+	 * to allocate memory for that amount of bodies. */
+	rc = sqlite3_step(stmt);
+	if (rc != SQLITE_ROW
+	 || sqlite3_data_count(stmt) != 1
+	 || !statsAllocBody(sqlite3_column_int(stmt, 0)))
+	{
+		goto in_statement_err;
+	}
+
+	sqlite3_finalize(stmt);
+	rc = sqlite3_prepare_v2(db, "SELECT `id`,"
+	                                   "`name`,"
+	                                   "`techlevel`,"
+	                                   "`size`,"
+	                                   "`buildPower`,"
+	                                   "`buildPoints`,"
+	                                   "`weight`,"
+	                                   "`body`,"
+	                                   "`GfxFile`,"
+	                                   "`systempoints`,"
+	                                   "`weapon_slots`,"
+	                                   "`power_output`,"
+	                                   "`armour_front_kinetic`,"
+	                                   "`armour_front_heat`,"
+	                                   "`armour_rear_kinetic`,"
+	                                   "`armour_rear_heat`,"
+	                                   "`armour_left_kinetic`,"
+	                                   "`armour_left_heat`,"
+	                                   "`armour_right_kinetic`,"
+	                                   "`armour_right_heat`,"
+	                                   "`armour_top_kinetic`,"
+	                                   "`armour_top_heat`,"
+	                                   "`armour_bottom_kinetic`,"
+	                                   "`armour_bottom_heat`,"
+	                                   "`flameIMD`,"
+	                                   "`designable`"
+	                            "FROM `body`;", -1, &stmt, NULL);
+
+	if (rc != SQLITE_OK)
+	{
+		debug(LOG_ERROR, "loadWeaponStatsFromDB: SQL error: %s", sqlite3_errmsg(db));
+		goto in_db_err;
+	}
+
+	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+	{
+		BODY_STATS sStats, * const stats = &sStats;
+		unsigned int colnum = 0;
+		const unsigned int body_id = sqlite3_column_int(stmt, colnum++);
+
+		memset(stats, 0, sizeof(*stats));
+
+		stats->ref = REF_BODY_START + body_id - 1;
+
+		// name                  TEXT    NOT NULL, -- Text id name (short language independant name)
+		if (!allocateStatName((BASE_STATS *)stats, (const char*)sqlite3_column_text(stmt, colnum++)))
+		{
+			goto in_statement_err;
+		}
+
+		// techlevel             TEXT    NOT NULL, -- Technology level of this component
+		if (!setTechLevel((BASE_STATS *)stats, (const char*)sqlite3_column_text(stmt, colnum++)))
+		{
+			goto in_statement_err;
+		}
+
+		// size                  TEXT    NOT NULL, -- How big the body is - affects how hit
+		if (!getBodySize((const char*)sqlite3_column_text(stmt, colnum++), &stats->size))
+		{
+			ASSERT(FALSE, "loadBodyStats: unknown body size for %s", getStatName(stats));
+			return false;
+		}
+
+		// buildPower            NUMERIC NOT NULL, -- Power required to build this component
+		stats->buildPower = sqlite3_column_double(stmt, colnum++);
+		// buildPoints           NUMERIC NOT NULL, -- Time required to build this component
+		stats->buildPoints = sqlite3_column_double(stmt, colnum++);
+		// weight                NUMERIC NOT NULL, -- Component's weight (mass?)
+		stats->weight = sqlite3_column_double(stmt, colnum++);
+		// body                  NUMERIC NOT NULL, -- Component's body points
+		stats->body = sqlite3_column_double(stmt, colnum++);
+
+		// Get the IMD for the component
+		// GfxFile               TEXT,             -- The IMD to draw for this component
+		if (sqlite3_column_type(stmt, colnum) != SQLITE_NULL)
+		{
+			stats->pIMD = (iIMDShape *) resGetData("IMD", (const char*)sqlite3_column_text(stmt, colnum++));
+			if (stats->pIMD == NULL)
+			{
+				debug(LOG_ERROR, "Cannot find the body PIE for record %s", getStatName(stats));
+				abort();
+				goto in_statement_err;
+			}
+		}
+		else
+		{
+			stats->pIMD = NULL;
+			++colnum;
+		}
+
+		// systempoints          NUMERIC NOT NULL, -- Space the component takes in the droid - SEEMS TO BE UNUSED
+		stats->systemPoints = sqlite3_column_double(stmt, colnum++);
+
+		// weapon_slots          NUMERIC NOT NULL, -- The number of weapon slots on the body
+		stats->weaponSlots = sqlite3_column_int(stmt, colnum++);
+
+		// power_output          NUMERIC NOT NULL, -- this is the engine output of the body
+		stats->powerOutput = sqlite3_column_double(stmt, colnum++);
+
+		// armour_front_kinetic  NUMERIC NOT NULL, -- A measure of how much protection the armour provides. Cross referenced with the weapon types.
+		stats->armourValue[HIT_SIDE_FRONT][WC_KINETIC] = sqlite3_column_double(stmt, colnum++);
+		// armour_front_heat     NUMERIC NOT NULL, -- 
+		stats->armourValue[HIT_SIDE_FRONT][WC_HEAT] = sqlite3_column_double(stmt, colnum++);
+		// armour_rear_kinetic   NUMERIC NOT NULL, -- 
+		stats->armourValue[HIT_SIDE_REAR][WC_KINETIC] = sqlite3_column_double(stmt, colnum++);
+		// armour_rear_heat      NUMERIC NOT NULL, -- 
+		stats->armourValue[HIT_SIDE_REAR][WC_HEAT] = sqlite3_column_double(stmt, colnum++);
+		// armour_left_kinetic   NUMERIC NOT NULL, -- 
+		stats->armourValue[HIT_SIDE_LEFT][WC_KINETIC] = sqlite3_column_double(stmt, colnum++);
+		// armour_left_heat      NUMERIC NOT NULL, -- 
+		stats->armourValue[HIT_SIDE_LEFT][WC_HEAT] = sqlite3_column_double(stmt, colnum++);
+		// armour_right_kinetic  NUMERIC NOT NULL, -- 
+		stats->armourValue[HIT_SIDE_RIGHT][WC_KINETIC] = sqlite3_column_double(stmt, colnum++);
+		// armour_right_heat     NUMERIC NOT NULL, -- 
+		stats->armourValue[HIT_SIDE_RIGHT][WC_HEAT] = sqlite3_column_double(stmt, colnum++);
+		// armour_top_kinetic    NUMERIC NOT NULL, -- 
+		stats->armourValue[HIT_SIDE_TOP][WC_KINETIC] = sqlite3_column_double(stmt, colnum++);
+		// armour_top_heat       NUMERIC NOT NULL, -- 
+		stats->armourValue[HIT_SIDE_TOP][WC_HEAT] = sqlite3_column_double(stmt, colnum++);
+		// armour_bottom_kinetic NUMERIC NOT NULL, -- 
+		stats->armourValue[HIT_SIDE_BOTTOM][WC_KINETIC] = sqlite3_column_double(stmt, colnum++);
+		// armour_bottom_heat    NUMERIC NOT NULL, -- 
+		stats->armourValue[HIT_SIDE_BOTTOM][WC_HEAT] = sqlite3_column_double(stmt, colnum++);
+
+		// flameIMD              TEXT,             -- pointer to which flame graphic to use - for VTOLs only at the moment
+		if (sqlite3_column_type(stmt, colnum) != SQLITE_NULL)
+		{
+			stats->pFlameIMD = (iIMDShape *) resGetData("IMD", (const char*)sqlite3_column_text(stmt, colnum++));
+			if (stats->pFlameIMD == NULL)
+			{
+				debug(LOG_ERROR, "Cannot find the flame PIE for record %s", getStatName(stats));
+				abort();
+				goto in_statement_err;
+			}
+		}
+		else
+		{
+			stats->pFlameIMD = NULL;
+			++colnum;
+		}
+
+		// designable            NUMERIC NOT NULL  -- flag to indicate whether this component can be used in the design screen
+		stats->design = sqlite3_column_int(stmt, colnum++) ? TRUE : FALSE;
+
+		//set the max stat values for the design screen
+		if (stats->design)
+		{
+			//use front armour value to prevent bodyStats corrupt problems
+			setMaxBodyArmour(stats->armourValue[HIT_SIDE_FRONT][WC_KINETIC]);
+			setMaxBodyArmour(stats->armourValue[HIT_SIDE_FRONT][WC_HEAT]);
+			setMaxBodyPower(stats->powerOutput);
+			setMaxBodyPoints(stats->body);
+			setMaxComponentWeight(stats->weight);
+		}
+
+		//save the stats
+		statsSetBody(stats, body_id - 1);
+	}
+
+	sqlite3_finalize(stmt);
+	sqlite3_close(db);
+	return true;
+
+in_statement_err:
+	sqlite3_finalize(stmt);
+in_db_err:
+	sqlite3_close(db);
+	return false;
+}

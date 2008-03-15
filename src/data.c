@@ -95,12 +95,21 @@ void dataClearSaveFlag(void)
 /* Load the body stats */
 static BOOL bufferSBODYLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	if (!loadBodyStats(pBuffer, size))
+	if (!loadBodyStats(pBuffer, size)
+	 || !allocComponentList(COMP_BODY, numBodyStats))
 	{
 		return FALSE;
 	}
 
-	if (!allocComponentList(COMP_BODY, numBodyStats))
+	// set a dummy value so the release function gets called
+	*ppData = (void *)1;
+	return TRUE;
+}
+
+static BOOL dataDBBODYLoad(const char* filename, void **ppData)
+{
+	if (!loadBodyStatsFromDB(filename)
+	 || !allocComponentList(COMP_BODY, numBodyStats))
 	{
 		return FALSE;
 	}
@@ -1013,6 +1022,7 @@ typedef struct
 static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 {
 	{"DBWEAPON", dataDBWEAPONLoad, NULL},
+	{"DBBODY", dataDBBODYLoad, dataReleaseStats},
 	{"WAV", dataAudioLoad, (RES_FREE)sound_ReleaseTrack},
 	{"AUDIOCFG", dataAudioCfgLoad, NULL},
 	{"ANI", dataAnimLoad, dataAnimRelease},
