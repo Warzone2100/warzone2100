@@ -252,6 +252,12 @@ Section $(TEXT_SecNLS) SecNLS
   SetOutPath "$INSTDIR\locale\de\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "..\..\po\de.gmo"
 
+  SetOutPath "$INSTDIR\locale\fr\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\..\po\fr.gmo"
+
+  SetOutPath "$INSTDIR\locale\it\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\..\po\it.gmo"
+
   SetOutPath "$INSTDIR\locale\la\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "..\..\po\la.gmo"
 
@@ -260,6 +266,9 @@ Section $(TEXT_SecNLS) SecNLS
 
   SetOutPath "$INSTDIR\locale\nl\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "..\..\po\nl.gmo"
+
+  SetOutPath "$INSTDIR\locale\ru\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\..\po\ru.gmo"
 
 SectionEnd
 
