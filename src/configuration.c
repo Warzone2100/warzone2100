@@ -134,21 +134,6 @@ BOOL loadConfig(void)
 	{
 		showFPS = val;
 	}
-	else
-	{
-		showFPS = FALSE;
-		setWarzoneKeyNumeric("showFPS", FALSE);
-	}
-
-	if (getWarzoneKeyString("language", sBuf))
-	{
-		setLanguage(sBuf);
-	}
-	else
-	{
-		setLanguage(WZ_SYSTEM_LOCALE);
-		setWarzoneKeyString("language", WZ_SYSTEM_LOCALE);
-	}
 
 	// //////////////////////////
 	// gamma
@@ -539,7 +524,7 @@ BOOL loadRenderMode(void)
 	{
 		bad_resolution = true;
 	}
-
+	
 	if (getWarzoneKeyNumeric("height", &val)
 	 && val > 0)
 	{
@@ -558,7 +543,7 @@ BOOL loadRenderMode(void)
 		war_SetWidth(640);
 		war_SetHeight(480);
 	}
-
+	
 	if (getWarzoneKeyNumeric("bpp", &val))
 	{
 		pie_SetVideoBufferDepth(val);

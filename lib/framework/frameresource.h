@@ -21,8 +21,8 @@
  *  \brief Resource file processing functions
  */
 
-#ifndef _frameresource_h
-#define _frameresource_h
+#ifndef __INCLUDED_LIB_FRAMEWORK_RESOURCE_H__
+#define __INCLUDED_LIB_FRAMEWORK_RESOURCE_H__
 
 #include "lib/framework/frame.h"
 
@@ -147,4 +147,4 @@ void SetLastResourceFilename(const char *pName);
 }
 #endif
 
-#endif // _frameresource_h
+#endif // __INCLUDED_LIB_FRAMEWORK_RESOURCE_H__

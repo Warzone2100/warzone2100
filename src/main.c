@@ -51,7 +51,6 @@
 
 #include <SDL.h>
 #include <physfs.h>
-#include <locale.h>
 
 #if defined(WZ_OS_WIN)
 // FIXME HACK Workaround DATADIR definition in objbase.h
@@ -863,7 +862,22 @@ int main(int argc, char *argv[])
 	initialize_PhysicsFS(argv[0]);
 
 	/*** Initialize translations ***/
-	initI18n();
+	setlocale(LC_ALL, "");
+	setlocale(LC_NUMERIC, "C"); // set radix character to the period (".")
+#if defined(WZ_OS_WIN)
+	{
+		// Retrieve an absolute path to the locale directory
+		char localeDir[PATH_MAX];
+		strlcpy(localeDir, PHYSFS_getBaseDir(), sizeof(localeDir));
+		strlcat(localeDir, "\\" LOCALEDIR, sizeof(localeDir));
+
+		// Set locale directory and translation domain name
+		(void)bindtextdomain(PACKAGE, localeDir);
+	}
+#else
+	(void)bindtextdomain(PACKAGE, LOCALEDIR);
+#endif
+	(void)textdomain(PACKAGE);
 
 	// find early boot info
 	if ( !ParseCommandLineEarly(argc, (const char**)argv) ) {

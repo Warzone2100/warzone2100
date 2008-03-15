@@ -23,15 +23,14 @@
  * Framework Resource file processing functions
  *
  */
+#include <string.h>
+#include <stdio.h>
+#include <assert.h>
+#include <ctype.h>
 #include "frame.h"
-
 #include "frameresource.h"
-
-#include <locale.h>
-
-#include <physfs.h>
-
 #include "resly.h"
+#include <physfs.h>
 
 // Local prototypes
 static RES_TYPE *psResTypes=NULL;
@@ -359,6 +358,47 @@ static inline RES_DATA* resDataInit(const char *DebugName, UDWORD DataIDHash, vo
 
 	return psRes;
 }
+
+
+#ifdef ENABLE_NLS
+/*!
+ * Return the language part of the selected locale
+ */
+static WZ_DECL_CONST const char* getLanguage(void)
+{
+	static char language[4] = { '\0' }; // ISO639 language code has to fit in!
+	static BOOL haveLanguage = FALSE;
+
+	if ( ! haveLanguage )  // only get language name once for speed optimization
+	{
+		char *localeName = setlocale(LC_MESSAGES, NULL);
+		char *delim = NULL;
+
+		haveLanguage = TRUE;
+
+		if ( !localeName )
+		{
+			return language; // Return empty string on errors
+		}
+
+		strlcpy(language, localeName, sizeof(language));
+
+		delim = strchr(language, '_');
+
+		if ( !delim )
+		{
+			delim = strchr(language, '.');
+		}
+
+		if ( delim )
+		{
+			*delim = '\0';
+		}
+	}
+
+	return language;
+}
+#endif // ENABLE_NLS
 
 
 /*!
