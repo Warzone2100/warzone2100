@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-03-13 00:38+0100\n"
-"PO-Revision-Date: 2008-03-13 19:08+0100\n"
-"Last-Translator: Sasha Ivanov <wz2100@mail.ru>\n"
+"PO-Revision-Date: 2008-03-15 11:53+0100\n"
+"Last-Translator: Dennis Schridde <devurandom@gna.org>\n"
 "Language-Team: Russian <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -22,58 +22,58 @@ msgstr ""
 
 #: src/multiplay.c:736
 msgid "The host has left the game!"
-msgstr ""
+msgstr "Хост покинул игру"
 
 #: src/multiplay.c:1901
 msgid "Green"
-msgstr ""
+msgstr "Зелёный"
 
 #: src/multiplay.c:1902
 msgid "Orange"
-msgstr ""
+msgstr "Оранжевый"
 
 #: src/multiplay.c:1903
 msgid "Grey"
-msgstr ""
+msgstr "Серый"
 
 #: src/multiplay.c:1904
 msgid "Black"
-msgstr ""
+msgstr "Чёрный"
 
 #: src/multiplay.c:1905
 msgid "Red"
-msgstr ""
+msgstr "Красный"
 
 #: src/multiplay.c:1906
 msgid "Blue"
-msgstr ""
+msgstr "Синий"
 
 #: src/multiplay.c:1907
 msgid "Pink"
-msgstr ""
+msgstr "Розовый"
 
 #: src/multiplay.c:1908
 msgid "Cyan"
-msgstr ""
+msgstr "Голубой"
 
 #: src/display.c:1678
 msgid "Cannot Build. Oil Resource Burning."
-msgstr ""
+msgstr "Немогу строить. Нефть горит."
 
 #: src/display.c:1825
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
-msgstr ""
+msgstr "%s - Урон %d%% - Опыт %d, %s"
 
 #: src/display.c:2062
 msgid "Truck ordered to build Oil Derrick"
-msgstr ""
+msgstr "Грузовику было приказано строить Нефтевышку"
 
 #: src/multistat.c:134
 #: src/configuration.c:354
 #: src/configuration.c:355
 msgid "Player"
-msgstr ""
+msgstr "Игрок"
 
 #: src/multigifts.c:168
 #, c-format
@@ -146,7 +146,7 @@ msgstr "Закрыть"
 #: src/loop.c:473
 #: src/loop.c:485
 msgid "GAME SAVED!"
-msgstr ""
+msgstr "Игра Сохранена"
 
 #: src/hci.c:2093
 #, c-format
@@ -165,37 +165,37 @@ msgstr ""
 
 #: src/hci.c:3754
 msgid "Commanders (F6)"
-msgstr ""
+msgstr "Командиры (F6)"
 
 #: src/hci.c:3770
 msgid "Intelligence Display (F5)"
-msgstr ""
+msgstr "Дисплей разведки (F5)"
 
 #: src/hci.c:3786
 msgid "Manufacture (F1)"
-msgstr ""
+msgstr "Производство (F1)"
 
 #: src/hci.c:3802
 msgid "Design (F4)"
-msgstr ""
+msgstr "Дизайн (F4)"
 
 #: src/hci.c:3818
 msgid "Research (F2)"
-msgstr ""
+msgstr "Исследования (F2)"
 
 #: src/hci.c:3834
 msgid "Build (F3)"
-msgstr ""
+msgstr "Построить (F3)"
 
 #: src/hci.c:3914
 #: src/multiint.c:768
 #: src/multiint.c:772
 msgid "Power"
-msgstr ""
+msgstr "Енергия"
 
 #: src/hci.c:4115
 msgid "Unit"
-msgstr ""
+msgstr "Юнит"
 
 #: src/hci.c:4124
 msgid "Struct"
@@ -210,26 +210,26 @@ msgstr ""
 #: src/ingameop.c:259
 #: src/ingameop.c:264
 msgid "Quit"
-msgstr ""
+msgstr "Выход"
 
 #: src/hci.c:4148
 msgid "Exit Game"
-msgstr ""
+msgstr "Выйти из Игры"
 
 #: src/hci.c:4513
 #: src/intdisplay.c:205
 #: src/intdisplay.c:248
 #: src/intdisplay.c:294
 msgid "Progress Bar"
-msgstr ""
+msgstr "Панель прогресса"
 
 #: src/hci.c:5573
 msgid "Factory Delivery Point"
-msgstr ""
+msgstr "Точка прибития с фабрики"
 
 #: src/hci.c:5592
 msgid "Loop Production"
-msgstr ""
+msgstr "Повторное Производство"
 
 #: src/hci.c:5683
 msgid "Tab Scroll left"
@@ -242,51 +242,51 @@ msgstr ""
 #: src/transporter.c:423
 #: src/transporter.c:477
 msgid "Launch Transport"
-msgstr ""
+msgstr "Запустить Транспорт"
 
 #: src/transporter.c:1859
 msgid "Reinforcements landing"
-msgstr ""
+msgstr "Прибытие подкрепления"
 
 #: src/mission.c:2609
 msgid "Load Transport"
-msgstr ""
+msgstr "Загрузить Транспорт"
 
 #: src/mission.c:3090
 msgid "OBJECTIVE ACHIEVED"
-msgstr ""
+msgstr "Цель Достигнута"
 
 #: src/mission.c:3096
 msgid "OBJECTIVE FAILED"
-msgstr ""
+msgstr "Цель провалена"
 
 #: src/mission.c:3122
 #: src/mission.c:3159
 #: src/mission.c:3280
 msgid "Quit To Main Menu"
-msgstr ""
+msgstr "Выйти в Главное Меню"
 
 #: src/mission.c:3130
 msgid "Continue Game"
-msgstr ""
+msgstr "Продолжить Игру"
 
 #: src/mission.c:3143
 #: src/mission.c:3264
 #: src/ingameop.c:278
 #: src/ingameop.c:417
 msgid "Save Game"
-msgstr ""
+msgstr "Сохранить Игру"
 
 #: src/mission.c:3153
 #: src/mission.c:3261
 #: src/ingameop.c:413
 #: src/frontend.c:427
 msgid "Load Saved Game"
-msgstr ""
+msgstr "Загрузить Игру"
 
 #: src/droid.c:234
 msgid "Unit Lost!"
-msgstr ""
+msgstr "Юнит Потерян!"
 
 #: src/droid.c:1855
 msgid "Structure Restored"
@@ -298,7 +298,6 @@ msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
 
 #: src/droid.c:3781
 #, c-format
@@ -306,7 +305,6 @@ msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
 
 #: src/droid.c:3794
 #, c-format
@@ -314,7 +312,6 @@ msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
 
 #: src/droid.c:3798
 #, c-format
@@ -322,7 +319,6 @@ msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
 
 #: src/droid.c:4015
 msgid "Rookie"
@@ -365,15 +361,15 @@ msgstr ""
 #: src/multiint.c:1334
 #: src/multilimit.c:155
 msgid "Accept Settings"
-msgstr ""
+msgstr "Принять Настройки"
 
 #: src/multiint.c:340
 msgid "IP Address or Machine Name"
-msgstr ""
+msgstr "IP Адрес или Имя Компютера"
 
 #: src/multiint.c:381
 msgid "CONNECTION"
-msgstr ""
+msgstr "СОЕДИНЕНИЕ"
 
 #: src/multiint.c:384
 #: src/multiint.c:426
@@ -382,137 +378,137 @@ msgstr ""
 #: src/keyedit.c:378
 #: src/multilimit.c:147
 msgid "Return To Previous Screen"
-msgstr ""
+msgstr "Назад"
 
 #: src/multiint.c:394
 msgid "Lobby"
-msgstr ""
+msgstr "On-Line"
 
 #: src/multiint.c:395
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: src/multiint.c:586
 msgid "Searching"
-msgstr ""
+msgstr "Поиск"
 
 #: src/multiint.c:597
 msgid "GAMES"
-msgstr ""
+msgstr "ИГРЫ"
 
 #: src/multiint.c:607
 msgid "Refresh Games List"
-msgstr ""
+msgstr "Обновить список игр"
 
 #: src/multiint.c:682
 msgid "OPTIONS"
-msgstr ""
+msgstr "ОПЦИИ"
 
 #: src/multiint.c:684
 msgid "Select Game Name"
-msgstr ""
+msgstr "Выбрать название игры"
 
 #: src/multiint.c:685
 msgid "Select Map"
-msgstr ""
+msgstr "Выбрать карту"
 
 #: src/multiint.c:690
 msgid "Game"
-msgstr ""
+msgstr "Игра"
 
 #: src/multiint.c:692
 msgid "Mayhem"
-msgstr ""
+msgstr "Кампания"
 
 #: src/multiint.c:694
 msgid "Skirmish"
-msgstr ""
+msgstr "Мясо с Ботами"
 
 #: src/multiint.c:715
 msgid "Select Player Name"
-msgstr ""
+msgstr "Выбор Имя Игрока"
 
 #: src/multiint.c:718
 #: src/frontend.c:620
 msgid "Fog"
-msgstr ""
+msgstr "Туман"
 
 #: src/multiint.c:720
 #: src/frontend.c:627
 #: src/frontend.c:734
 msgid "Fog Of War"
-msgstr ""
+msgstr "Туман Войны"
 
 #: src/multiint.c:721
 msgid "Distance Fog"
-msgstr ""
+msgstr "Тума на растоянии"
 
 #: src/multiint.c:734
 #: src/multimenu.c:732
 msgid "Alliances"
-msgstr ""
+msgstr "Союзники"
 
 #: src/multiint.c:737
 msgid "No Alliances"
-msgstr ""
+msgstr "Без Союзов"
 
 #: src/multiint.c:739
 msgid "Allow Alliances"
-msgstr ""
+msgstr "Позволить Союзы"
 
 #: src/multiint.c:743
 #: src/multiint.c:1886
 msgid "Locked Teams"
-msgstr ""
+msgstr "Закрытые Каманды"
 
 #: src/multiint.c:775
 msgid "Low Power Levels"
-msgstr ""
+msgstr "Низкий Уровень Енергии"
 
 #: src/multiint.c:777
 msgid "Medium Power Levels"
-msgstr ""
+msgstr "Средний Уровень Енергии"
 
 #: src/multiint.c:779
 msgid "High Power Levels"
-msgstr ""
+msgstr "Высокий Уровень Енергии"
 
 #: src/multiint.c:799
 #: src/multiint.c:803
 msgid "Base"
-msgstr ""
+msgstr "База"
 
 #: src/multiint.c:806
 msgid "Start with No Bases"
-msgstr ""
+msgstr "Начать без Базы"
 
 #: src/multiint.c:808
 msgid "Start with Bases"
-msgstr ""
+msgstr "Начать с Базой"
 
 #: src/multiint.c:810
 msgid "Start with Advanced Bases"
-msgstr ""
+msgstr "Начать с Продвинутой Базой"
 
 #: src/multiint.c:840
 msgid "Start Hosting Game"
-msgstr ""
+msgstr "Начать Хостинг Игры"
 
 #: src/multiint.c:848
 msgid "Set Structure Limits"
-msgstr ""
+msgstr "Установить Лимиты Сооружений"
 
 #: src/multiint.c:1220
 msgid "PLAYERS"
-msgstr ""
+msgstr "ИГРОКИ"
 
 #: src/multiint.c:1365
 msgid "CHAT"
-msgstr ""
+msgstr "ЧАТ"
 
 #: src/multiint.c:1827
 msgid "Host is Starting Game"
-msgstr ""
+msgstr "Хост Стартует"
 
 #: src/multiint.c:1912
 #, c-format
@@ -521,11 +517,11 @@ msgstr ""
 
 #: src/multiint.c:2396
 msgid "Players"
-msgstr ""
+msgstr "Игроки"
 
 #: src/keybind.c:132
 msgid "Sorry, that cheat is disabled in multiplayer games."
-msgstr ""
+msgstr "Извените, но читы закрыты в мультиплеере"
 
 #: src/keybind.c:183
 msgid "Lets us see what you see!"
@@ -577,20 +573,20 @@ msgstr ""
 
 #: src/keybind.c:589
 msgid "Fog off"
-msgstr ""
+msgstr "Туман вкл."
 
 #: src/keybind.c:595
 msgid "Fog on"
-msgstr ""
+msgstr "Туман откл."
 
 #: src/keybind.c:1161
 msgid "View Aligned to North"
-msgstr ""
+msgstr "Вид выровнен по северу"
 
 #: src/keybind.c:1190
 #: src/intelmap.c:241
 msgid "PAUSED"
-msgstr ""
+msgstr "ПАУЗА"
 
 #: src/keybind.c:1229
 msgid "Researched EVERYTHING for you!"
@@ -598,15 +594,15 @@ msgstr ""
 
 #: src/keybind.c:1260
 msgid "Energy bars display toggled"
-msgstr ""
+msgstr "Панельи Енергии Переключены"
 
 #: src/keybind.c:1278
 msgid "Demo mode off - Returning to normal game mode"
-msgstr ""
+msgstr "Демо режим выключен - Возвращение к нормальному режиму игры"
 
 #: src/keybind.c:1325
 msgid "Unable to locate any resource extractors!"
-msgstr ""
+msgstr "Невозможно найти Нефтевышки"
 
 #: src/keybind.c:1548
 msgid "Oh, the weather outside is frightful... SNOW"
@@ -622,29 +618,29 @@ msgstr ""
 
 #: src/keybind.c:1593
 msgid "Enemy destroyed by cheating!"
-msgstr ""
+msgstr "Враги Уничтожены Читами"
 
 #: src/keybind.c:2121
 msgid "Centered on player HQ, direction NORTH"
-msgstr ""
+msgstr "Фокус на Центре, Вид на север"
 
 #: src/keybind.c:2133
 msgid "Unable to locate HQ!"
-msgstr ""
+msgstr "невозможно Найти Командный Центр"
 
 #: src/keybind.c:2149
 msgid "Formation speed limiting OFF"
-msgstr ""
+msgstr "Ограничение Скорости Откл."
 
 #: src/keybind.c:2153
 msgid "Formation speed limiting ON"
-msgstr ""
+msgstr "Ограничение Скорости Вкл."
 
 #: src/keybind.c:2278
 #: src/keybind.c:2314
 #: src/keybind.c:2336
 msgid "Game Speed Reset"
-msgstr ""
+msgstr "Скорость Игры Сброшена"
 
 #: src/keybind.c:2282
 #, c-format
@@ -672,7 +668,7 @@ msgstr ""
 
 #: src/structure.c:2833
 msgid "Command Control Limit Reached - Production Halted"
-msgstr ""
+msgstr "Достигнут Предел - Производство Остановлено"
 
 #: src/structure.c:5935
 #: src/structure.c:5957
@@ -681,7 +677,6 @@ msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
 
 #: src/structure.c:5994
 #, c-format
@@ -729,11 +724,11 @@ msgstr ""
 
 #: src/keyedit.c:356
 msgid "KEY MAPPING"
-msgstr ""
+msgstr "Раскладка клавы"
 
 #: src/keyedit.c:383
 msgid "Select Default"
-msgstr ""
+msgstr "Выбрать по умолчанию"
 
 #: src/selection.c:117
 #, c-format
@@ -741,7 +736,6 @@ msgid "%u unit selected"
 msgid_plural "%u units selected"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
 
 #: src/selection.c:434
 #: src/selection.c:521
@@ -767,7 +761,7 @@ msgstr ""
 
 #: src/research.c:1854
 msgid "Research Completed"
-msgstr ""
+msgstr "Исследование Окончено"
 
 #: src/research.c:2657
 msgid "Research Award"
@@ -860,15 +854,15 @@ msgstr ""
 
 #: src/scores.c:350
 msgid "Unit Losses"
-msgstr ""
+msgstr "Юнитов Потеряно"
 
 #: src/scores.c:351
 msgid "Structure Losses"
-msgstr ""
+msgstr "Сооружений Потеряно"
 
 #: src/scores.c:352
 msgid "Force Information"
-msgstr ""
+msgstr "Информация о Войсках"
 
 #: src/scores.c:432
 #, c-format
@@ -888,87 +882,87 @@ msgstr ""
 #: src/intorder.c:178
 #: src/keymap.c:385
 msgid "Short Range"
-msgstr ""
+msgstr "Короткий  радиуса действия"
 
 #: src/intorder.c:179
 #: src/keymap.c:391
 msgid "Long Range"
-msgstr ""
+msgstr "Длинный  радиуса действия"
 
 #: src/intorder.c:180
 #: src/keymap.c:384
 msgid "Optimum Range"
-msgstr ""
+msgstr "Оптимальный  радиуса действия"
 
 #: src/intorder.c:181
 #: src/keymap.c:404
 msgid "Retreat at Medium Damage"
-msgstr ""
+msgstr "Отступление при среднем уроне"
 
 #: src/intorder.c:182
 #: src/keymap.c:405
 msgid "Retreat at Heavy Damage"
-msgstr ""
+msgstr "Отступление при тежолом уроне"
 
 #: src/intorder.c:183
 #: src/keymap.c:406
 msgid "Do or Die!"
-msgstr ""
+msgstr "Зделай или умри"
 
 #: src/intorder.c:184
 msgid "Fire-At-Will"
-msgstr ""
+msgstr "Произвольный Огонь"
 
 #: src/intorder.c:185
 #: src/keymap.c:381
 msgid "Return Fire"
-msgstr ""
+msgstr "Ответный Огонь"
 
 #: src/intorder.c:186
 #: src/keymap.c:379
 msgid "Hold Fire"
-msgstr ""
+msgstr "Не Стрелять"
 
 #: src/intorder.c:187
 #: src/keymap.c:387
 msgid "Patrol"
-msgstr ""
+msgstr "Патруль"
 
 #: src/intorder.c:188
 #: src/keymap.c:386
 msgid "Pursue"
-msgstr ""
+msgstr "Приследовать"
 
 #: src/intorder.c:189
 msgid "Guard Position"
-msgstr ""
+msgstr "Охранять"
 
 #: src/intorder.c:190
 #: src/keymap.c:389
 msgid "Hold Position"
-msgstr ""
+msgstr "Держать Позицию"
 
 #: src/intorder.c:191
 #: src/keymap.c:388
 msgid "Return For Repair"
-msgstr ""
+msgstr "Возвратиться для Починки"
 
 #: src/intorder.c:192
 msgid "Return To HQ"
-msgstr ""
+msgstr "Возвратиться к Ком.Центру"
 
 #: src/intorder.c:193
 msgid "Go to Transport"
-msgstr ""
+msgstr "Ити к транспорту"
 
 #: src/intorder.c:194
 #: src/keymap.c:415
 msgid "Return for Recycling"
-msgstr ""
+msgstr "Возвратиться для \tУтилизации"
 
 #: src/intorder.c:195
 msgid "Recycle"
-msgstr ""
+msgstr "Утилизировать"
 
 #: src/intorder.c:196
 msgid "Assign Factory Production"
@@ -990,31 +984,31 @@ msgstr ""
 #: src/ingameop.c:151
 #: src/ingameop.c:268
 msgid "Resume Game"
-msgstr ""
+msgstr "Возвратиться к игре"
 
 #: src/ingameop.c:154
 #: src/frontend.c:820
 msgid "Voice Volume"
-msgstr ""
+msgstr "Громкость Голоса"
 
 #: src/ingameop.c:159
 #: src/frontend.c:824
 msgid "FX Volume"
-msgstr ""
+msgstr "громкость эффекттов"
 
 #: src/ingameop.c:164
 #: src/frontend.c:828
 msgid "Music Volume"
-msgstr ""
+msgstr "Громкость музыки"
 
 #: src/ingameop.c:271
 #: src/frontend.c:235
 msgid "Options"
-msgstr ""
+msgstr "Опции"
 
 #: src/ingameop.c:276
 msgid "Load Game"
-msgstr ""
+msgstr "Загрузить Игру"
 
 #: src/clparse.c:88
 msgid "Run in cheat mode"
@@ -1054,15 +1048,15 @@ msgstr ""
 
 #: src/clparse.c:93
 msgid "Play in fullscreen mode"
-msgstr ""
+msgstr "Полноэкранный Режим"
 
 #: src/clparse.c:94
 msgid "Load a specific game"
-msgstr ""
+msgstr "Загрузить особую игру"
 
 #: src/clparse.c:94
 msgid "game-name"
-msgstr ""
+msgstr "Название Игры"
 
 #: src/clparse.c:95
 msgid "Show this help message and exit"
@@ -1088,15 +1082,15 @@ msgstr ""
 
 #: src/clparse.c:99
 msgid "Load a saved game"
-msgstr ""
+msgstr "Загрузить Игру"
 
 #: src/clparse.c:99
 msgid "savegame"
-msgstr ""
+msgstr "Сохраниьт Игру"
 
 #: src/clparse.c:102
 msgid "Play in windowed mode"
-msgstr ""
+msgstr "Оконный Режим"
 
 #: src/clparse.c:103
 msgid "Show version information and exit"
@@ -1148,22 +1142,22 @@ msgstr ""
 
 #: src/design.c:639
 msgid "Delete Design"
-msgstr ""
+msgstr "Удалить Дизайн"
 
 #: src/design.c:693
 #: src/design.c:741
 msgid "Kinetic Armour"
-msgstr ""
+msgstr "Кинетическая Броня"
 
 #: src/design.c:702
 #: src/design.c:752
 msgid "Thermal Armour"
-msgstr ""
+msgstr "Термальная Броня"
 
 #: src/design.c:718
 #: src/design.c:772
 msgid "Engine Output"
-msgstr ""
+msgstr "Мощность Двигателя"
 
 #: src/design.c:726
 #: src/design.c:781
@@ -1180,88 +1174,88 @@ msgstr ""
 #: src/design.c:1984
 #: src/design.c:2020
 msgid "Weight"
-msgstr ""
+msgstr "Вес"
 
 #: src/design.c:812
 #: src/design.c:832
 msgid "Total Power Required"
-msgstr ""
+msgstr "Суммарно кол-во Енергии"
 
 #: src/design.c:845
 #: src/design.c:866
 msgid "Total Body Points"
-msgstr ""
+msgstr "Суммарно кол-во Очков обэкта"
 
 #: src/design.c:1062
 #: src/design.c:1094
 msgid "Power Usage"
-msgstr ""
+msgstr "Использование энергии"
 
 #: src/design.c:1346
 msgid "Transporter"
-msgstr ""
+msgstr "Перевозчик"
 
 #: src/design.c:1574
 msgid "Sensor Range"
-msgstr ""
+msgstr "Дальность Сенсора"
 
 #: src/design.c:1583
 msgid "Sensor Power"
-msgstr ""
+msgstr "Мощность Сенсора"
 
 #: src/design.c:1624
 msgid "ECM Power"
-msgstr ""
+msgstr "ЕМ Можность"
 
 #: src/design.c:1650
 #: src/design.c:1667
 #: src/design.c:1693
 #: src/design.c:1710
 msgid "Build Points"
-msgstr ""
+msgstr "Очки"
 
 #: src/design.c:1737
 #: src/design.c:1769
 msgid "Range"
-msgstr ""
+msgstr "Дальность"
 
 #: src/design.c:1745
 #: src/design.c:1778
 msgid "Damage"
-msgstr ""
+msgstr "Урон"
 
 #: src/design.c:1753
 #: src/design.c:1787
 msgid "Rate-of-Fire"
-msgstr ""
+msgstr "Скорострельность"
 
 #: src/design.c:1924
 #: src/design.c:1940
 msgid "Air Speed"
-msgstr ""
+msgstr "Скорость в воздухе"
 
 #: src/design.c:1960
 #: src/design.c:1993
 msgid "Road Speed"
-msgstr ""
+msgstr "Скорость по дороге"
 
 #: src/design.c:1968
 #: src/design.c:2002
 msgid "Off-Road Speed"
-msgstr ""
+msgstr "Внедорожная скорости"
 
 #: src/design.c:1976
 #: src/design.c:2011
 msgid "Water Speed"
-msgstr ""
+msgstr "Скорость по воде"
 
 #: src/design.c:2145
 msgid "Weapons"
-msgstr ""
+msgstr "Оружия"
 
 #: src/design.c:2169
 msgid "Systems"
-msgstr ""
+msgstr "Системы"
 
 #: src/frontend.c:232
 msgid "Single Player Campaign"
@@ -1397,24 +1391,24 @@ msgstr "Туман"
 
 #: src/frontend.c:632
 msgid "Video Playback"
-msgstr ""
+msgstr "Видео-ролики"
 
 #: src/frontend.c:635
 #: src/frontend.c:791
 msgid "Full"
-msgstr ""
+msgstr "Полноэкран"
 
 #: src/frontend.c:639
 #: src/frontend.c:781
 #: src/frontend.c:907
 #: src/frontend.c:952
 msgid "Windowed"
-msgstr ""
+msgstr "в Окне"
 
 #: src/frontend.c:642
 #: src/frontend.c:786
 msgid "Minimal"
-msgstr ""
+msgstr "минимум"
 
 #: src/frontend.c:649
 #: src/frontend.c:653
@@ -1440,15 +1434,15 @@ msgstr "Разрешение"
 
 #: src/frontend.c:916
 msgid "Trap Cursor"
-msgstr ""
+msgstr "Курсор треп"
 
 #: src/frontend.c:928
 msgid "Texture size"
-msgstr ""
+msgstr "Размер текстур"
 
 #: src/frontend.c:932
 msgid "* Takes effect on game restart"
-msgstr ""
+msgstr "Применяеться после перезагрузки игры"
 
 #: src/frontend.c:1065
 msgid "Difficulty"
@@ -1457,25 +1451,25 @@ msgstr "Сложность"
 #: src/frontend.c:1069
 #: src/frontend.c:1151
 msgid "Easy"
-msgstr ""
+msgstr "Легко"
 
 #: src/frontend.c:1072
 #: src/frontend.c:1143
 msgid "Normal"
-msgstr ""
+msgstr "Нормально"
 
 #: src/frontend.c:1076
 #: src/frontend.c:1147
 msgid "Hard"
-msgstr ""
+msgstr "Сложно"
 
 #: src/frontend.c:1081
 msgid "Scroll Speed"
-msgstr ""
+msgstr "Скорость прамотки"
 
 #: src/frontend.c:1097
 msgid "Unit Colour"
-msgstr ""
+msgstr "Цвет Юнтов"
 
 #: src/intelmap.c:402
 msgid "Research Update"
@@ -1487,47 +1481,47 @@ msgstr ""
 
 #: src/intelmap.c:409
 msgid "Current Objective"
-msgstr ""
+msgstr "Данная Цель"
 
 #: src/keymap.c:289
 msgid "Manufacture"
-msgstr ""
+msgstr "Производство"
 
 #: src/keymap.c:290
 msgid "Research"
-msgstr ""
+msgstr "Исследование"
 
 #: src/keymap.c:291
 msgid "Build"
-msgstr ""
+msgstr "Строительство"
 
 #: src/keymap.c:292
 msgid "Design"
-msgstr ""
+msgstr "Дизайн"
 
 #: src/keymap.c:293
 msgid "Intelligence Display"
-msgstr ""
+msgstr "Дисплей разведки"
 
 #: src/keymap.c:294
 msgid "Commanders"
-msgstr ""
+msgstr "Командиры"
 
 #: src/keymap.c:295
 msgid "Toggle Radar"
-msgstr ""
+msgstr "Переключить Радар"
 
 #: src/keymap.c:296
 msgid "Toggle Console Display"
-msgstr ""
+msgstr "Консоль"
 
 #: src/keymap.c:297
 msgid "Toggle Damage Bars On/Off"
-msgstr ""
+msgstr "Переключатель панелей Урона Вкл./Откл."
 
 #: src/keymap.c:298
 msgid "Take Screen Shot"
-msgstr ""
+msgstr "Скриншот"
 
 #: src/keymap.c:299
 msgid "Toggle Formation Speed Limiting"
@@ -1535,7 +1529,7 @@ msgstr ""
 
 #: src/keymap.c:300
 msgid "View Location of Previous Message"
-msgstr ""
+msgstr "Обзор места предведущего сообщения"
 
 #: src/keymap.c:305
 msgid "Assign Group 0"
@@ -1795,7 +1789,7 @@ msgstr ""
 
 #: src/keymap.c:390
 msgid "Send Text Message"
-msgstr ""
+msgstr "Чат"
 
 #: src/keymap.c:410
 msgid "Select all Combat Units"
@@ -1888,7 +1882,7 @@ msgstr ""
 #: src/multijoin.c:98
 #: src/multijoin.c:99
 msgid "Players Still Joining"
-msgstr ""
+msgstr "Игроки еще соединяються"
 
 #: src/multijoin.c:220
 #, c-format
@@ -1930,39 +1924,39 @@ msgstr ""
 
 #: src/multimenu.c:733
 msgid "Score"
-msgstr ""
+msgstr "Очки"
 
 #: src/multimenu.c:734
 msgid "Kills"
-msgstr ""
+msgstr "Убил"
 
 #: src/multimenu.c:743
 msgid "Ping"
-msgstr ""
+msgstr "Пинг"
 
 #: src/multimenu.c:744
 msgid "Played"
-msgstr ""
+msgstr "Игр"
 
 #: src/multimenu.c:1053
 msgid "Toggle Alliance State"
-msgstr ""
+msgstr "Предложить Союз"
 
 #: src/multimenu.c:1072
 msgid "Give Visibility Report"
-msgstr ""
+msgstr "Передать Видимость"
 
 #: src/multimenu.c:1078
 msgid "Leak Technology Documents"
-msgstr ""
+msgstr "Передать Технологии"
 
 #: src/multimenu.c:1085
 msgid "Hand Over Selected Units"
-msgstr ""
+msgstr "Передать Выбраного Юнита"
 
 #: src/multimenu.c:1091
 msgid "Give Power To Player"
-msgstr ""
+msgstr "Передать Енергию Игроку"
 
 #: data/messages/strings/cam1strings.txt:3
 msgid "Campaign One Full Version Test Message"
@@ -3397,7 +3391,7 @@ msgstr ""
 #: data/messages/strings/names.txt:12
 #: data/mp/messages/strings/names.txt:12
 msgid "New Design"
-msgstr ""
+msgstr "Новый Дизайн"
 
 #: data/messages/strings/names.txt:15
 #: data/mp/messages/strings/names.txt:15
