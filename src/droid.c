@@ -4542,7 +4542,7 @@ BOOL buildModule(STRUCTURE *psStruct)
 	{
 		// Check availability of Module
 		if (!((i < numStructureStats) &&
-			(apStructTypeLists[psDroid->player][i] == AVAILABLE)))
+			(apStructTypeLists[psStruct->player][i] == AVAILABLE)))
 		{
 			order = FALSE;
 		}
@@ -4582,7 +4582,7 @@ void setUpBuildModule(DROID *psDroid)
 		}
 		else
 		{
-			if(buildModule(psDroid,psStruct,FALSE))
+			if(buildModule(psStruct))
 			{
 				//no other droids building so just start it off
 				if (droidStartBuild(psDroid))
