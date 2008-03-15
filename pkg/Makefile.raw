@@ -1,0 +1,7 @@
+SUBDIRS=nsis
+
+all clean: $(SUBDIRS)
+
+.PHONY: $(SUBDIRS)
+$(SUBDIRS):
+	$(MAKE) -f Makefile.raw -C $@ $(MAKECMDGOALS)
