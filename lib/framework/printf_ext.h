@@ -23,6 +23,8 @@
 
 #include "frame.h"
 
+#include <stdarg.h>
+
 /** A variant on snprintf which appends its output string to the given string
  *  buffer, rather than to replace it.
  *  \param str the string to append to
