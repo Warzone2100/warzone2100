@@ -31,6 +31,32 @@
 #include "lib/sound/audio_id.h"
 #include "lib/sqlite3/sqlite3.h"
 
+static bool openDB(const char* filename, sqlite3** db)
+{
+	int rc = sqlite3_open_v2(filename, db, SQLITE_OPEN_READONLY, NULL);
+
+	if (rc != SQLITE_OK)
+	{
+		debug(LOG_ERROR, "openDB: Can't open database (%s): %s", filename, sqlite3_errmsg(*db));
+		return false;
+	}
+
+	return true;
+}
+
+static bool prepareStatement(sqlite3* db, const char* statement, sqlite3_stmt** stmt)
+{
+	int rc = sqlite3_prepare_v2(db, statement, -1, stmt, NULL);
+
+	if (rc != SQLITE_OK)
+	{
+		debug(LOG_ERROR, "prepareStatement: SQL error: %s", sqlite3_errmsg(db));
+		return false;
+	}
+
+	return true;
+}
+
 /** Load the weapon stats from the given SQLite database file
  *  \param filename name of the database file to load the weapon stats from.
  */
@@ -39,21 +65,14 @@ bool loadWeaponStatsFromDB(const char* filename)
 	bool retval = false;
 	sqlite3* db;
 	sqlite3_stmt* stmt;
+	int rc;
 
-	int rc = sqlite3_open_v2(filename, &db, SQLITE_OPEN_READONLY, NULL);
-	if (rc != SQLITE_OK)
-	{
-		debug(LOG_ERROR, "loadWeaponStatsFromDB: Can't open database (%s): %s", filename, sqlite3_errmsg(db));
+	if (!openDB(filename, &db))
 		goto in_db_err;
-	}
 
 	// Prepare this SQL statement for execution
-	rc = sqlite3_prepare_v2(db, "SELECT MAX(id) FROM `weapons`;", -1, &stmt, NULL);
-	if (rc != SQLITE_OK)
-	{
-		debug(LOG_ERROR, "loadWeaponStatsFromDB: SQL error: %s", sqlite3_errmsg(db));
+	if (!prepareStatement(db, "SELECT MAX(id) FROM `weapons`;", &stmt))
 		goto in_db_err;
-	}
 
 	/* Execute and process the results of the above SQL statement to
 	 * determine the amount of weapons we're about to fetch. Then make sure
@@ -67,66 +86,62 @@ bool loadWeaponStatsFromDB(const char* filename)
 	}
 
 	sqlite3_finalize(stmt);
-	rc = sqlite3_prepare_v2(db, "SELECT `id`,"
-	                                   "`name`,"
-	                                   "`techlevel`,"
-	                                   "`buildPower`,"
-	                                   "`buildPoints`,"
-	                                   "`weight`,"
-	                                   "`hitpoints`,"
-	                                   "`systempoints`,"
-	                                   "`body`,"
-	                                   "`GfxFile`,"
-	                                   "`mountGfx`,"
-	                                   "`muzzleGfx`,"
-	                                   "`flightGfx`,"
-	                                   "`hitGfx`,"
-	                                   "`missGfx`,"
-	                                   "`waterGfx`,"
-	                                   "`trailGfx`,"
-	                                   "`short_range`,"
-	                                   "`long_range`,"
-	                                   "`short_range_accuracy`,"
-	                                   "`long_range_accuracy`,"
-	                                   "`firePause`,"
-	                                   "`numExplosions`,"
-	                                   "`rounds_per_salvo`,"
-	                                   "`reload_time_per_salvo`,"
-	                                   "`damage`,"
-	                                   "`radius`,"
-	                                   "`radiusHit`,"
-	                                   "`radiusDamage`,"
-	                                   "`incenTime`,"
-	                                   "`incenDamage`,"
-	                                   "`incenRadius`,"
-	                                   "`directLife`,"
-	                                   "`radiusLife`,"
-	                                   "`flightSpeed`,"
-	                                   "`indirectHeight`,"
-	                                   "`fireOnMove`,"
-	                                   "`weaponClass`,"
-	                                   "`weaponSubClass`,"
-	                                   "`movement`,"
-	                                   "`weaponEffect`,"
-	                                   "`rotate`,"
-	                                   "`maxElevation`,"
-	                                   "`minElevation`,"
-	                                   "`facePlayer`,"
-	                                   "`faceInFlight`,"
-	                                   "`recoilValue`,"
-	                                   "`minRange`,"
-	                                   "`lightWorld`,"
-	                                   "`effectSize`,"
-	                                   "`surfaceToAir`,"
-	                                   "`numAttackRuns`,"
-	                                   "`designable`,"
-	                                   "`penetrate` "
-	                            "FROM `weapons`;", -1, &stmt, NULL);
-	if (rc != SQLITE_OK)
-	{
-		debug(LOG_ERROR, "loadWeaponStatsFromDB: SQL error: %s", sqlite3_errmsg(db));
+	if (!prepareStatement(db, "SELECT `id`,"
+	                                 "`name`,"
+	                                 "`techlevel`,"
+	                                 "`buildPower`,"
+	                                 "`buildPoints`,"
+	                                 "`weight`,"
+	                                 "`hitpoints`,"
+	                                 "`systempoints`,"
+	                                 "`body`,"
+	                                 "`GfxFile`,"
+	                                 "`mountGfx`,"
+	                                 "`muzzleGfx`,"
+	                                 "`flightGfx`,"
+	                                 "`hitGfx`,"
+	                                 "`missGfx`,"
+	                                 "`waterGfx`,"
+	                                 "`trailGfx`,"
+	                                 "`short_range`,"
+	                                 "`long_range`,"
+	                                 "`short_range_accuracy`,"
+	                                 "`long_range_accuracy`,"
+	                                 "`firePause`,"
+	                                 "`numExplosions`,"
+	                                 "`rounds_per_salvo`,"
+	                                 "`reload_time_per_salvo`,"
+	                                 "`damage`,"
+	                                 "`radius`,"
+	                                 "`radiusHit`,"
+	                                 "`radiusDamage`,"
+	                                 "`incenTime`,"
+	                                 "`incenDamage`,"
+	                                 "`incenRadius`,"
+	                                 "`directLife`,"
+	                                 "`radiusLife`,"
+	                                 "`flightSpeed`,"
+	                                 "`indirectHeight`,"
+	                                 "`fireOnMove`,"
+	                                 "`weaponClass`,"
+	                                 "`weaponSubClass`,"
+	                                 "`movement`,"
+	                                 "`weaponEffect`,"
+	                                 "`rotate`,"
+	                                 "`maxElevation`,"
+	                                 "`minElevation`,"
+	                                 "`facePlayer`,"
+	                                 "`faceInFlight`,"
+	                                 "`recoilValue`,"
+	                                 "`minRange`,"
+	                                 "`lightWorld`,"
+	                                 "`effectSize`,"
+	                                 "`surfaceToAir`,"
+	                                 "`numAttackRuns`,"
+	                                 "`designable`,"
+	                                 "`penetrate` "
+	                          "FROM `weapons`;", &stmt))
 		goto in_db_err;
-	}
 
 	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
 	{
@@ -539,21 +554,14 @@ bool loadBodyStatsFromDB(const char* filename)
 	bool retval = false;
 	sqlite3* db;
 	sqlite3_stmt* stmt;
+	int rc;
 
-	int rc = sqlite3_open_v2(filename, &db, SQLITE_OPEN_READONLY, NULL);
-	if (rc != SQLITE_OK)
-	{
-		debug(LOG_ERROR, "loadBodyStatsFromDB: Can't open database (%s): %s", filename, sqlite3_errmsg(db));
+	if (!openDB(filename, &db))
 		goto in_db_err;
-	}
 
 	// Prepare this SQL statement for execution
-	rc = sqlite3_prepare_v2(db, "SELECT MAX(id) FROM `body`;", -1, &stmt, NULL);
-	if (rc != SQLITE_OK)
-	{
-		debug(LOG_ERROR, "loadBodyStatsFromDB: SQL error: %s", sqlite3_errmsg(db));
+	if (!prepareStatement(db, "SELECT MAX(id) FROM `body`;", &stmt))
 		goto in_db_err;
-	}
 
 	/* Execute and process the results of the above SQL statement to
 	 * determine the amount of bodies we're about to fetch. Then make sure
@@ -567,39 +575,34 @@ bool loadBodyStatsFromDB(const char* filename)
 	}
 
 	sqlite3_finalize(stmt);
-	rc = sqlite3_prepare_v2(db, "SELECT `id`,"
-	                                   "`name`,"
-	                                   "`techlevel`,"
-	                                   "`size`,"
-	                                   "`buildPower`,"
-	                                   "`buildPoints`,"
-	                                   "`weight`,"
-	                                   "`body`,"
-	                                   "`GfxFile`,"
-	                                   "`systempoints`,"
-	                                   "`weapon_slots`,"
-	                                   "`power_output`,"
-	                                   "`armour_front_kinetic`,"
-	                                   "`armour_front_heat`,"
-	                                   "`armour_rear_kinetic`,"
-	                                   "`armour_rear_heat`,"
-	                                   "`armour_left_kinetic`,"
-	                                   "`armour_left_heat`,"
-	                                   "`armour_right_kinetic`,"
-	                                   "`armour_right_heat`,"
-	                                   "`armour_top_kinetic`,"
-	                                   "`armour_top_heat`,"
-	                                   "`armour_bottom_kinetic`,"
-	                                   "`armour_bottom_heat`,"
-	                                   "`flameIMD`,"
-	                                   "`designable`"
-	                            "FROM `body`;", -1, &stmt, NULL);
-
-	if (rc != SQLITE_OK)
-	{
-		debug(LOG_ERROR, "loadWeaponStatsFromDB: SQL error: %s", sqlite3_errmsg(db));
+	if (!prepareStatement(db, "SELECT `id`,"
+	                                 "`name`,"
+	                                 "`techlevel`,"
+	                                 "`size`,"
+	                                 "`buildPower`,"
+	                                 "`buildPoints`,"
+	                                 "`weight`,"
+	                                 "`body`,"
+	                                 "`GfxFile`,"
+	                                 "`systempoints`,"
+	                                 "`weapon_slots`,"
+	                                 "`power_output`,"
+	                                 "`armour_front_kinetic`,"
+	                                 "`armour_front_heat`,"
+	                                 "`armour_rear_kinetic`,"
+	                                 "`armour_rear_heat`,"
+	                                 "`armour_left_kinetic`,"
+	                                 "`armour_left_heat`,"
+	                                 "`armour_right_kinetic`,"
+	                                 "`armour_right_heat`,"
+	                                 "`armour_top_kinetic`,"
+	                                 "`armour_top_heat`,"
+	                                 "`armour_bottom_kinetic`,"
+	                                 "`armour_bottom_heat`,"
+	                                 "`flameIMD`,"
+	                                 "`designable`"
+	                          "FROM `body`;", &stmt))
 		goto in_db_err;
-	}
 
 	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
 	{
