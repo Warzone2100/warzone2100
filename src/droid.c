@@ -4496,85 +4496,56 @@ BOOL checkDroidsDemolishing(STRUCTURE *psStructure)
 
 /* checks the structure for type and capacity and **NOT orders the droid*** to build
 a module if it can - returns TRUE if order is set */
-BOOL buildModule(DROID *psDroid, STRUCTURE *psStruct,BOOL bCheckPower)
+BOOL buildModule(STRUCTURE *psStruct)
 {
-	BOOL	order;
-	UDWORD	i=0;
+	BOOL	order = FALSE;
+	UDWORD	i = 0;
 
 //	ASSERT( psDroid != NULL,
 //		"buildModule: Invalid droid pointer" );
 	ASSERT( psStruct != NULL,
 		"buildModule: Invalid structure pointer" );
 
-	order = FALSE;
 	switch (psStruct->pStructureType->type)
 	{
-	case REF_POWER_GEN:
-		//check room for one more!
-		if (psStruct->pFunctionality->powerGenerator.capacity < NUM_POWER_MODULES)
-		{
-			/*for (i = 0; (i < numStructureStats) && (asStructureStats[i].type !=
-				REF_POWER_MODULE);i++)
+		case REF_POWER_GEN:
+			//check room for one more!
+			if (psStruct->pFunctionality->powerGenerator.capacity < NUM_POWER_MODULES)
 			{
-				//keep looking for the Power Module stat...
-			}*/
-			i = powerModuleStat;
-
-			order = TRUE;
-		}
-		break;
-	case REF_FACTORY:
-	case REF_VTOL_FACTORY:
-		//check room for one more!
-		if (psStruct->pFunctionality->factory.capacity < NUM_FACTORY_MODULES)
-		{
-			/*for (i = 0; (i < numStructureStats) && (asStructureStats[i].type !=
-				REF_FACTORY_MODULE);i++)
+				i = powerModuleStat;
+				order = TRUE;
+			}
+			break;
+		case REF_FACTORY:
+		case REF_VTOL_FACTORY:
+			//check room for one more!
+			if (psStruct->pFunctionality->factory.capacity < NUM_FACTORY_MODULES)
 			{
-				//keep looking for the Factory Module stat...
-			}*/
-			i = factoryModuleStat;
-
-			order = TRUE;
-		}
-		break;
-	case REF_RESEARCH:
-		//check room for one more!
-		if (psStruct->pFunctionality->researchFacility.capacity < NUM_RESEARCH_MODULES)
-		{
-			/*for (i = 0; (i < numStructureStats) && (asStructureStats[i].type !=
-				REF_RESEARCH_MODULE);i++)
+				i = factoryModuleStat;
+				order = TRUE;
+			}
+			break;
+		case REF_RESEARCH:
+			//check room for one more!
+			if (psStruct->pFunctionality->researchFacility.capacity < NUM_RESEARCH_MODULES)
 			{
-				//keep looking for the Research Module stat...
-			}*/
-			i = researchModuleStat;
-
-			order = TRUE;
-		}
-		break;
-	default:
-		//no other structures can have modules attached
-		break;
+				i = researchModuleStat;
+				order = TRUE;
+			}
+			break;
+		default:
+			//no other structures can have modules attached
+			break;
 	}
 
 	if (order)
 	{
-		//check availability of Module
+		// Check availability of Module
 		if (!((i < numStructureStats) &&
 			(apStructTypeLists[psDroid->player][i] == AVAILABLE)))
 		{
 			order = FALSE;
 		}
-
-        //Power is obtained gradually now, so allow order
-		/*if(bCheckPower)
-		{
-			// check enough power to build
-			if (!checkPower(selectedPlayer, asStructureStats[i].powerToBuild, TRUE))
-			{
-				order = FALSE;
-			}
-		}*/
 	}
 
 	return order;
@@ -4636,9 +4607,6 @@ void setUpBuildModule(DROID *psDroid)
 		psDroid->action = DACTION_NONE;
 	}
 }
-
-// We just need 1 buffer for the current displayed droid (or template) name
-#define MAXCONNAME WIDG_MAXSTR	//(32)
 
 char *getDroidName(DROID *psDroid)
 {

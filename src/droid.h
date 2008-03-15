@@ -289,7 +289,7 @@ extern BOOL checkDroidsDemolishing(STRUCTURE *psStructure);
 
 /* checks the structure for type and capacity and orders the droid to build
 a module if it can - returns TRUE if order is set */
-extern BOOL buildModule(DROID *psDroid, STRUCTURE *psStruct,BOOL bCheckPower);
+extern BOOL buildModule(STRUCTURE *psStruct);
 
 /*Deals with building a module - checking if any droid is currently doing this
  - if so, helping to build the current one*/

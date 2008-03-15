@@ -3011,7 +3011,7 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj)
 				order = DORDER_REPAIR;
 			}
 			//check if can build a module
-			else if (buildModule(psDroid, psStruct,TRUE))
+			else if (buildModule(psStruct))
 			{
 				order = DORDER_BUILDMODULE;
 			}
