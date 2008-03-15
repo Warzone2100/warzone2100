@@ -36,6 +36,7 @@
  */
 bool loadWeaponStatsFromDB(const char* filename)
 {
+	bool retval = false;
 	sqlite3* db;
 	sqlite3_stmt* stmt;
 
@@ -417,7 +418,7 @@ bool loadWeaponStatsFromDB(const char* filename)
 		 || sqlite3_column_int(stmt, colnum) < SBYTE_MIN)
 		{
 			ASSERT(FALSE, "loadWeaponStats: minElevation is outside of limits for weapon %s", getStatName(stats));
-			return false;
+			goto in_statement_err;
 		}
 		stats->minElevation = sqlite3_column_double(stmt, colnum++);
 
@@ -520,15 +521,14 @@ bool loadWeaponStatsFromDB(const char* filename)
 		statsSetWeapon(stats, weapon_id - 1);
 	}
 
-	sqlite3_finalize(stmt);
-	sqlite3_close(db);
-	return true;
+	retval = true;
 
 in_statement_err:
 	sqlite3_finalize(stmt);
 in_db_err:
 	sqlite3_close(db);
-	return false;
+
+	return retval;
 }
 
 /** Load the body stats from the given SQLite database file
@@ -536,6 +536,7 @@ in_db_err:
  */
 bool loadBodyStatsFromDB(const char* filename)
 {
+	bool retval = false;
 	sqlite3* db;
 	sqlite3_stmt* stmt;
 
@@ -626,7 +627,7 @@ bool loadBodyStatsFromDB(const char* filename)
 		if (!getBodySize((const char*)sqlite3_column_text(stmt, colnum++), &stats->size))
 		{
 			ASSERT(FALSE, "loadBodyStats: unknown body size for %s", getStatName(stats));
-			return false;
+			goto in_statement_err;
 		}
 
 		// buildPower            NUMERIC NOT NULL, -- Power required to build this component
@@ -725,13 +726,12 @@ bool loadBodyStatsFromDB(const char* filename)
 		statsSetBody(stats, body_id - 1);
 	}
 
-	sqlite3_finalize(stmt);
-	sqlite3_close(db);
-	return true;
+	retval = true;
 
 in_statement_err:
 	sqlite3_finalize(stmt);
 in_db_err:
 	sqlite3_close(db);
-	return false;
+
+	return retval;
 }
