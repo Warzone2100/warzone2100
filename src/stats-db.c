@@ -738,3 +738,123 @@ in_db_err:
 
 	return retval;
 }
+
+
+/** Load the brain stats from the given SQLite database file
+ *  \param filename name of the database file to load the brain stats from.
+ */
+bool loadBrainStatsFromDB(const char* filename)
+{
+	bool retval = false;
+	sqlite3* db;
+	sqlite3_stmt* stmt;
+	int rc;
+
+	if (!openDB(filename, &db))
+		goto in_db_err;
+
+	// Prepare this SQL statement for execution
+	if (!prepareStatement(db, "SELECT MAX(id) FROM `brain`;", &stmt))
+		goto in_db_err;
+
+	/* Execute and process the results of the above SQL statement to
+	 * determine the amount of brains we're about to fetch. Then make sure
+	 * to allocate memory for that amount of brains. */
+	rc = sqlite3_step(stmt);
+	if (rc != SQLITE_ROW
+	 || sqlite3_data_count(stmt) != 1
+	 || !statsAllocBrain(sqlite3_column_int(stmt, 0)))
+	{
+		goto in_statement_err;
+	}
+
+	sqlite3_finalize(stmt);
+	if (!prepareStatement(db, "SELECT `id`,"
+	                                 "`name`,"
+	                                 "`techlevel`,"
+	                                 "`buildPower`,"
+	                                 "`buildPoints`,"
+	                                 "`weight`,"
+	                                 "`hitpoints`,"
+	                                 "`systempoints`,"
+	                                 "`weapon`,"
+	                                 "`program_capacity`"
+	                          "FROM `brain`;", &stmt))
+		goto in_db_err;
+
+
+	while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+	{
+		BRAIN_STATS sStats, * const stats = &sStats;
+		unsigned int colnum = 0;
+		const unsigned int brain_id = sqlite3_column_int(stmt, colnum++);
+
+		memset(stats, 0, sizeof(*stats));
+
+		stats->ref = REF_BRAIN_START + brain_id - 1;
+
+		// name                  TEXT    NOT NULL, -- Text id name (short language independant name)
+		if (!allocateStatName((BASE_STATS *)stats, (const char*)sqlite3_column_text(stmt, colnum++)))
+		{
+			goto in_statement_err;
+		}
+
+		// techlevel             TEXT    NOT NULL, -- Technology level of this component
+		if (!setTechLevel((BASE_STATS *)stats, (const char*)sqlite3_column_text(stmt, colnum++)))
+		{
+			goto in_statement_err;
+		}
+
+		// buildPower            NUMERIC NOT NULL, -- Power required to build this component
+		stats->buildPower = sqlite3_column_double(stmt, colnum++);
+		// buildPoints           NUMERIC NOT NULL, -- Time required to build this component
+		stats->buildPoints = sqlite3_column_double(stmt, colnum++);
+		// weight                NUMERIC NOT NULL, -- Component's weight (mass?)
+		stats->weight = sqlite3_column_double(stmt, colnum++);
+		// hitpoints             NUMERIC NOT NULL, -- Component's hitpoints - SEEMS TO BE UNUSED
+		stats->hitPoints = sqlite3_column_double(stmt, colnum++);
+		// systempoints          NUMERIC NOT NULL, -- Space the component takes in the droid - SEEMS TO BE UNUSED
+		stats->systemPoints = sqlite3_column_double(stmt, colnum++);
+
+		// weapon                INTEGER,          -- A reference to `weapons`.`id`, refers to the weapon stats associated with this brain (can be NULL for none) - for Command Droids
+		// Check whether a weapon is attached
+		if (sqlite3_column_type(stmt, colnum) != SQLITE_NULL)
+		{
+			const unsigned int weapon_id = sqlite3_column_int(stmt, colnum++);
+
+			//get the weapon stat
+			stats->psWeaponStat = statsGetWeapon(REF_WEAPON_START + weapon_id - 1);
+
+			//if weapon not found - error
+			if (stats->psWeaponStat == NULL)
+			{
+				debug(LOG_ERROR, "Unable to find weapon %u for brain %s", weapon_id, stats->pName);
+				abort();
+				goto in_statement_err;
+			}
+		}
+		else
+		{
+			stats->psWeaponStat = NULL;
+			++colnum;
+		}
+
+		// program_capacity      INTEGER NOT NULL  -- Program's capacity
+		stats->progCap = sqlite3_column_int(stmt, colnum++);
+
+		// All brains except ZNULLBRAIN available in design screen
+		stats->design = strcmp(stats->pName, "ZNULLBRAIN") ? TRUE : FALSE;
+
+		// save the stats
+		statsSetBrain(stats, brain_id - 1);
+	}
+
+	retval = true;
+
+in_statement_err:
+	sqlite3_finalize(stmt);
+in_db_err:
+	sqlite3_close(db);
+
+	return retval;
+}

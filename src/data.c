@@ -237,6 +237,19 @@ static BOOL bufferSBRAINLoad(const char *pBuffer, UDWORD size, void **ppData)
 	return TRUE;
 }
 
+static BOOL dataDBBRAINLoad(const char* filename, void** ppData)
+{
+	if (!loadBrainStatsFromDB(filename)
+	 || !allocComponentList(COMP_BRAIN, numBrainStats))
+	{
+		return FALSE;
+	}
+
+	//not interested in this value
+	*ppData = NULL;
+	return TRUE;
+}
+
 /* Load the PropulsionType stats */
 static BOOL bufferSPROPTYPESLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
@@ -976,6 +989,7 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 {
 	{"DBWEAPON", dataDBWEAPONLoad, NULL},
 	{"DBBODY", dataDBBODYLoad, dataReleaseStats},
+	{"DBBRAIN", dataDBBRAINLoad, NULL},
 	{"WAV", dataAudioLoad, (RES_FREE)sound_ReleaseTrack},
 	{"AUDIOCFG", dataAudioCfgLoad, NULL},
 	{"ANI", dataAnimLoad, dataAnimRelease},
