@@ -25,42 +25,21 @@
 
 #include "wzglobal.h"
 
-/* This one must be invoked *after* wzglobal.h to get _GNU_SOURCE! */
-#include <string.h>
-#include <locale.h>
-#include <stdlib.h>
-#include <ctype.h>
+#include <physfs.h>
 
 // Provides the safer functions strlcpy and strlcat
 #include "strlfuncs.h"
+#include "printf_ext.h"
 
-#include "gettext.h"
-
-#if !defined(LC_MESSAGES)
-# define LC_MESSAGES 0
-#endif
-
-#define _(String) gettext(String)
-#define N_(String) gettext_noop(String)
-
-// Context sensitive strings
-#define P_(Context, String) pgettext(Context, String)
-// Non literal context sensitive strings
-#define PE_(Context, String) pgettext_expr(Context, String)
-// Make xgettext recognize the context
-#define NP_(Context, String) gettext_noop(String)
-
+#include "i18n.h"
 
 #include "macros.h"
 #include "types.h"
 #include "debug.h"
 
 #include "treap.h"
-#include "printf_ext.h"
 
 #include "trig.h"
-
-#include <physfs.h>
 
 extern UDWORD selectedPlayer;
 #define MAX_PLAYERS	8	/**< Maximum number of players in the game. */

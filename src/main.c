@@ -52,12 +52,13 @@
 #include <SDL.h>
 #include <physfs.h>
 
-/* For SHGetFolderPath */
-#ifdef WZ_OS_WIN
+#if defined(WZ_OS_WIN)
 // FIXME HACK Workaround DATADIR definition in objbase.h
 // This works since DATADIR is never used on Windows.
-# undef DATADIR
-# include <shlobj.h>
+#  undef DATADIR
+#  include <shlobj.h> /* For SHGetFolderPath */
+#elif defined(WZ_OS_UNIX)
+#  include <errno.h>
 #endif // WZ_OS_WIN
 
 #include "lib/framework/configfile.h"
@@ -94,16 +95,16 @@
 #include "wrappers.h"
 #include "version.h"
 
-#if defined(WZ_OS_UNIX)
-# include <unistd.h>
-# include <errno.h>
-#elif defined(WZ_OS_WIN)
-# include <windows.h>
+
+/* Always use fallbacks on Windows */
+#if defined(WZ_OS_WIN)
+#  undef DATADIR
 #endif
 
-#ifndef DATADIR
-# define DATADIR "/usr/share/warzone2100/"
+#if !defined(DATADIR)
+#  define DATADIR "data"
 #endif
+
 
 #if defined(WZ_OS_WIN)
 # define WZ_WRITEDIR "Warzone 2100 2.1"
@@ -114,6 +115,7 @@
 #else
 # define WZ_WRITEDIR ".warzone2100-2.1"
 #endif
+
 
 char datadir[PATH_MAX] = "\0"; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be \0 on startup for ParseCommandLine to work!
 char configdir[PATH_MAX] = "\0"; // specifies custom USER directory.  Same rules apply as datadir above.
@@ -854,27 +856,14 @@ int main(int argc, char *argv[])
 	initialize_PhysicsFS(argv[0]);
 
 	/*** Initialize translations ***/
-	setlocale(LC_ALL, "");
-	setlocale(LC_NUMERIC, "C"); // set radix character to the period (".")
-#if defined(WZ_OS_WIN)
-	{
-		// Retrieve an absolute path to the locale directory
-		char localeDir[PATH_MAX];
-		strlcpy(localeDir, PHYSFS_getBaseDir(), sizeof(localeDir));
-		strlcat(localeDir, "\\" LOCALEDIR, sizeof(localeDir));
-
-		// Set locale directory and translation domain name
-		(void)bindtextdomain(PACKAGE, localeDir);
-	}
-#else
-	(void)bindtextdomain(PACKAGE, LOCALEDIR);
-#endif
-	(void)textdomain(PACKAGE);
+	initI18n();
 
 	// find early boot info
 	if ( !ParseCommandLineEarly(argc, (const char**)argv) ) {
 		return -1;
 	}
+
+	debug(LOG_WZ, "Using language: %s", getLanguage());
 
 	/* Initialize the write/config directory for PhysicsFS.
 	 * This needs to be done __after__ the early commandline parsing,
