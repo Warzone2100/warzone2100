@@ -156,12 +156,8 @@ static BOOL dataDBWEAPONLoad(const char* filename, void **ppData)
 /* Load the constructor stats */
 static BOOL bufferSCONSTRLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	if (!loadConstructStats(pBuffer, size))
-	{
-		return FALSE;
-	}
-
-	if (!allocComponentList(COMP_CONSTRUCT, numConstructStats))
+	if (!loadConstructStats(pBuffer, size)
+	 || !allocComponentList(COMP_CONSTRUCT, numConstructStats))
 	{
 		return FALSE;
 	}
@@ -174,12 +170,8 @@ static BOOL bufferSCONSTRLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the ECM stats */
 static BOOL bufferSECMLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	if (!loadECMStats(pBuffer, size))
-	{
-		return FALSE;
-	}
-
-	if (!allocComponentList(COMP_ECM, numECMStats))
+	if (!loadECMStats(pBuffer, size)
+	 || !allocComponentList(COMP_ECM, numECMStats))
 	{
 		return FALSE;
 	}
@@ -192,12 +184,8 @@ static BOOL bufferSECMLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the Propulsion stats */
 static BOOL bufferSPROPLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	if (!loadPropulsionStats(pBuffer, size))
-	{
-		return FALSE;
-	}
-
-	if (!allocComponentList(COMP_PROPULSION, numPropulsionStats))
+	if (!loadPropulsionStats(pBuffer, size)
+	 || !allocComponentList(COMP_PROPULSION, numPropulsionStats))
 	{
 		return FALSE;
 	}
@@ -210,12 +198,8 @@ static BOOL bufferSPROPLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the Sensor stats */
 static BOOL bufferSSENSORLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	if (!loadSensorStats(pBuffer, size))
-	{
-		return FALSE;
-	}
-
-	if (!allocComponentList(COMP_SENSOR, numSensorStats))
+	if (!loadSensorStats(pBuffer, size)
+	 || !allocComponentList(COMP_SENSOR, numSensorStats))
 	{
 		return FALSE;
 	}
@@ -228,12 +212,8 @@ static BOOL bufferSSENSORLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the Repair stats */
 static BOOL bufferSREPAIRLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	if (!loadRepairStats(pBuffer, size))
-	{
-		return FALSE;
-	}
-
-	if (!allocComponentList(COMP_REPAIRUNIT, numRepairStats))
+	if (!loadRepairStats(pBuffer, size)
+	 || !allocComponentList(COMP_REPAIRUNIT, numRepairStats))
 	{
 		return FALSE;
 	}
@@ -246,12 +226,8 @@ static BOOL bufferSREPAIRLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the Brain stats */
 static BOOL bufferSBRAINLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	if (!loadBrainStats(pBuffer, size))
-	{
-		return FALSE;
-	}
-
-	if (!allocComponentList(COMP_BRAIN, numBrainStats))
+	if (!loadBrainStats(pBuffer, size)
+	 || !allocComponentList(COMP_BRAIN, numBrainStats))
 	{
 		return FALSE;
 	}
@@ -296,7 +272,6 @@ static BOOL bufferSSPECABILLoad(const char *pBuffer, UDWORD size, void **ppData)
 		return FALSE;
 	}
 
-
 	//not interested in this value
 	*ppData = NULL;
 	return TRUE;
@@ -309,7 +284,6 @@ static BOOL bufferSTERRTABLELoad(const char *pBuffer, UDWORD size, void **ppData
 	{
 		return FALSE;
 	}
-
 
 	//not interested in this value
 	*ppData = NULL;
@@ -324,7 +298,6 @@ static BOOL bufferSBPIMDLoad(const char *pBuffer, UDWORD size, void **ppData)
 		return FALSE;
 	}
 
-
 	//not interested in this value
 	*ppData = NULL;
 	return TRUE;
@@ -337,7 +310,6 @@ static BOOL bufferSWEAPSNDLoad(const char *pBuffer, UDWORD size, void **ppData)
 	{
 		return FALSE;
 	}
-
 
 	//not interested in this value
 	*ppData = NULL;
@@ -352,7 +324,6 @@ static BOOL bufferSWEAPMODLoad(const char *pBuffer, UDWORD size, void **ppData)
 		return FALSE;
 	}
 
-
 	//not interested in this value
 	*ppData = NULL;
 	return TRUE;
@@ -366,7 +337,6 @@ static BOOL bufferSTEMPLLoad(const char *pBuffer, UDWORD size, void **ppData)
 	{
 		return FALSE;
 	}
-
 
 	// set a dummy value so the release function gets called
 	*ppData = (void *)1;
@@ -388,7 +358,6 @@ static BOOL bufferSTEMPWEAPLoad(const char *pBuffer, UDWORD size, void **ppData)
 		return FALSE;
 	}
 
-
 	//not interested in this value
 	*ppData = NULL;
 	return TRUE;
@@ -397,12 +366,8 @@ static BOOL bufferSTEMPWEAPLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the Structure stats */
 static BOOL bufferSSTRUCTLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-	if (!loadStructureStats(pBuffer, size))
-	{
-		return FALSE;
-	}
-
-	if (!allocStructLists())
+	if (!loadStructureStats(pBuffer, size)
+	 || !allocStructLists())
 	{
 		return FALSE;
 	}
@@ -427,7 +392,6 @@ static BOOL bufferSSTRWEAPLoad(const char *pBuffer, UDWORD size, void **ppData)
 		return FALSE;
 	}
 
-
 	//not interested in this value
 	*ppData = NULL;
 	return TRUE;
@@ -440,7 +404,6 @@ static BOOL bufferSSTRFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
 	{
 		return FALSE;
 	}
-
 
 	//not interested in this value
 	*ppData = NULL;
@@ -511,12 +474,12 @@ static void dataRESCHRelease(void *pData)
 /* Load the Research stats */
 static BOOL bufferRESCHLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-    //check to see if already loaded
-    if (numResearch > 0)
-    {
-        //release previous data before loading in the new
-        dataRESCHRelease(NULL);
-    }
+	//check to see if already loaded
+	if (numResearch > 0)
+	{
+		//release previous data before loading in the new
+		dataRESCHRelease(NULL);
+	}
 
 	if (!loadResearch(pBuffer, size))
 	{
@@ -525,9 +488,9 @@ static BOOL bufferRESCHLoad(const char *pBuffer, UDWORD size, void **ppData)
 
 
 	/* set a dummy value so the release function gets called - the Release
-    function is now called when load up the next set
+	 * function is now called when load up the next set
 	// *ppData = (void *)1;
-    pass back NULL so that can load the same name file for the next campaign*/
+	 * pass back NULL so that can load the same name file for the next campaign*/
 	*ppData = NULL;
 	return TRUE;
 }
@@ -553,7 +516,6 @@ static BOOL bufferRCOMPREDLoad(const char *pBuffer, UDWORD size, void **ppData)
 		return FALSE;
 	}
 
-
 	//not interested in this value
 	*ppData = NULL;
 	return TRUE;
@@ -562,12 +524,10 @@ static BOOL bufferRCOMPREDLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the research component results */
 static BOOL bufferRCOMPRESLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-
 	if (!loadResearchArtefacts(pBuffer, size, RES_LIST))
 	{
 		return FALSE;
 	}
-
 
 	//not interested in this value
 	*ppData = NULL;
@@ -577,12 +537,10 @@ static BOOL bufferRCOMPRESLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the research structures required */
 static BOOL bufferRSTRREQLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-
 	if (!loadResearchStructures(pBuffer, size, REQ_LIST))
 	{
 		return FALSE;
 	}
-
 
 	//not interested in this value
 	*ppData = NULL;
@@ -610,7 +568,6 @@ static BOOL bufferRSTRRESLoad(const char *pBuffer, UDWORD size, void **ppData)
 		return FALSE;
 	}
 
-
 	//not interested in this value
 	*ppData = NULL;
 	return TRUE;
@@ -619,12 +576,10 @@ static BOOL bufferRSTRRESLoad(const char *pBuffer, UDWORD size, void **ppData)
 /* Load the research functions */
 static BOOL bufferRFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
 {
-
 	if (!loadResearchFunctions(pBuffer, size))
 	{
 		return FALSE;
 	}
-
 
 	//not interested in this value
 	*ppData = NULL;
@@ -641,7 +596,6 @@ static BOOL bufferSMSGLoad(const char *pBuffer, UDWORD size, void **ppData)
 	{
 		return FALSE;
 	}
-
 
 	// set the pointer so the release function gets called with it
 	*ppData = (void *)pViewData;
@@ -764,7 +718,6 @@ static BOOL dataTexPageLoad(const char *fileName, void **ppData)
 	return TRUE;
 }
 
-
 /*!
  * Release an Image
  */
@@ -803,7 +756,7 @@ static BOOL dataAudioCfgLoad(const char* fileName, void **ppData)
 
 	*ppData = NULL;
 
-	if ( audio_Disabled() == TRUE )
+	if (audio_Disabled())
 	{
 		return TRUE;
 	}
@@ -1046,7 +999,7 @@ BOOL dataInitLoadFuncs(void)
 	{
 		const RES_TYPE_MIN_BUF *CurrentType;
 		// Points just past the last item in the list
-		const RES_TYPE_MIN_BUF *EndType = &BufferResourceTypes[sizeof(BufferResourceTypes) / sizeof(RES_TYPE_MIN_BUF)];
+		const RES_TYPE_MIN_BUF * const EndType = &BufferResourceTypes[sizeof(BufferResourceTypes) / sizeof(RES_TYPE_MIN_BUF)];
 
 		for (CurrentType = BufferResourceTypes; CurrentType != EndType; ++CurrentType)
 		{
@@ -1061,7 +1014,7 @@ BOOL dataInitLoadFuncs(void)
 	{
 		const RES_TYPE_MIN_FILE *CurrentType;
 		// Points just past the last item in the list
-		const RES_TYPE_MIN_FILE *EndType = &FileResourceTypes[sizeof(FileResourceTypes) / sizeof(RES_TYPE_MIN_BUF)];
+		const RES_TYPE_MIN_FILE * const EndType = &FileResourceTypes[sizeof(FileResourceTypes) / sizeof(RES_TYPE_MIN_BUF)];
 
 		for (CurrentType = FileResourceTypes; CurrentType != EndType; ++CurrentType)
 		{
