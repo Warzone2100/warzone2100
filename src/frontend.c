@@ -1051,56 +1051,50 @@ BOOL runGameOptions4Menu(void)
 // Game Options Menu
 BOOL startGameOptionsMenu(void)
 {
-
-	UDWORD	w,h;
-
-
+	UDWORD	w, h;
 
 	addBackdrop();
 	addTopForm();
 	addBottomForm();
 
-
-	// difficulty
-	addTextButton(FRONTEND_DIFFICULTY,  FRONTEND_POS2X-25,FRONTEND_POS2Y, _("Difficulty"),TRUE,FALSE);
-	switch(getDifficultyLevel())
+	// Difficulty
+	addTextButton(FRONTEND_DIFFICULTY, FRONTEND_POS2X-25, FRONTEND_POS2Y, _("Difficulty"), TRUE, FALSE);
+	switch (getDifficultyLevel())
 	{
-	case DL_EASY:
-		addTextButton(FRONTEND_DIFFICULTY_R,FRONTEND_POS2M-25,FRONTEND_POS2Y, _("Easy"),TRUE,FALSE);
-		break;
-	case DL_NORMAL:
-		addTextButton(FRONTEND_DIFFICULTY_R,FRONTEND_POS2M-25,FRONTEND_POS2Y, _("Normal"),TRUE,FALSE);
-		break;
-	case DL_HARD:
-	default:
-		addTextButton(FRONTEND_DIFFICULTY_R,FRONTEND_POS2M-25,FRONTEND_POS2Y, _("Hard"),TRUE,FALSE);
-		break;
+		case DL_EASY:
+			addTextButton(FRONTEND_DIFFICULTY_R, FRONTEND_POS2M-25, FRONTEND_POS2Y, _("Easy"), TRUE, FALSE);
+			break;
+		case DL_NORMAL:
+			addTextButton(FRONTEND_DIFFICULTY_R, FRONTEND_POS2M-25,FRONTEND_POS2Y, _("Normal"), TRUE, FALSE);
+			break;
+		case DL_HARD:
+		default:
+			addTextButton(FRONTEND_DIFFICULTY_R, FRONTEND_POS2M-25, FRONTEND_POS2Y, _("Hard"), TRUE, FALSE);
+			break;
 	}
 
-	// scroll speed.
-	addTextButton(FRONTEND_SCROLLSPEED, FRONTEND_POS3X-25,FRONTEND_POS3Y, _("Scroll Speed"),TRUE,FALSE);
-	addFESlider(FRONTEND_SCROLLSPEED_SL,FRONTEND_BOTFORM, FRONTEND_POS3M, FRONTEND_POS3Y+5, 16,(scroll_speed_accel/100),FRONTEND_SCROLLSPEED);
+	// Scroll speed
+	addTextButton(FRONTEND_SCROLLSPEED, FRONTEND_POS3X-25, FRONTEND_POS3Y, _("Scroll Speed"), TRUE, FALSE);
+	addFESlider(FRONTEND_SCROLLSPEED_SL, FRONTEND_BOTFORM, FRONTEND_POS3M, FRONTEND_POS3Y+5, 16, scroll_speed_accel / 100, FRONTEND_SCROLLSPEED);
 
-	// colour stuff
-	w = 	iV_GetImageWidth(FrontImages,IMAGE_PLAYER0);
-	h = 	iV_GetImageHeight(FrontImages,IMAGE_PLAYER0);
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P0, FRONTEND_POS4M+(0*(w+6)),FRONTEND_POS4Y,w,h, "", IMAGE_PLAYER0, IMAGE_PLAYERX,TRUE);
-//	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P1, FRONTEND_POS6M-(3*(w+4)),FRONTEND_POS6Y,w,h, "", IMAGE_PLAYER1, IMAGE_HI34,TRUE);
-//	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P2, FRONTEND_POS6M-(2*(w+4)),FRONTEND_POS6Y,w,h, "", IMAGE_PLAYER2, IMAGE_HI34,TRUE);
-//	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P3, FRONTEND_POS6M-(1*(w+4)),FRONTEND_POS6Y,w,h, "", IMAGE_PLAYER3, IMAGE_HI34,TRUE);
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P4, FRONTEND_POS4M+(1*(w+6)),FRONTEND_POS4Y,w,h, "", IMAGE_PLAYER4, IMAGE_PLAYERX,TRUE);
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P5, FRONTEND_POS4M+(2*(w+6)),FRONTEND_POS4Y,w,h, "", IMAGE_PLAYER5, IMAGE_PLAYERX,TRUE);
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P6, FRONTEND_POS4M+(3*(w+6)),FRONTEND_POS4Y,w,h, "", IMAGE_PLAYER6, IMAGE_PLAYERX,TRUE);
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P7, FRONTEND_POS4M+(4*(w+6)),FRONTEND_POS4Y,w,h, "", IMAGE_PLAYER7, IMAGE_PLAYERX,TRUE);
+	// Colour stuff
+	w = iV_GetImageWidth(FrontImages, IMAGE_PLAYER0);
+	h = iV_GetImageHeight(FrontImages, IMAGE_PLAYER0);
+	
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P0, FRONTEND_POS4M+(0*(w+6)), FRONTEND_POS4Y, w, h, "", IMAGE_PLAYER0, IMAGE_PLAYERX, TRUE);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P4, FRONTEND_POS4M+(1*(w+6)), FRONTEND_POS4Y, w, h, "", IMAGE_PLAYER4, IMAGE_PLAYERX, TRUE);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P5, FRONTEND_POS4M+(2*(w+6)), FRONTEND_POS4Y, w, h, "", IMAGE_PLAYER5, IMAGE_PLAYERX, TRUE);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P6, FRONTEND_POS4M+(3*(w+6)), FRONTEND_POS4Y, w, h, "", IMAGE_PLAYER6, IMAGE_PLAYERX, TRUE);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P7, FRONTEND_POS4M+(4*(w+6)), FRONTEND_POS4Y, w, h, "", IMAGE_PLAYER7, IMAGE_PLAYERX, TRUE);
 
-	widgSetButtonState(psWScreen, FE_P0+getPlayerColour(0), WBUT_LOCK);
-	addTextButton(FRONTEND_COLOUR,		FRONTEND_POS4X-25,FRONTEND_POS4Y, _("Unit Colour"),TRUE,FALSE);
+	widgSetButtonState(psWScreen, FE_P0 + getPlayerColour(0), WBUT_LOCK);
+	addTextButton(FRONTEND_COLOUR, FRONTEND_POS4X-25, FRONTEND_POS4Y, _("Unit Colour"), TRUE, FALSE);
 
-	// quit.
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,FRONTEND_QUIT,10,10,30,29, P_("menu", "Return"),IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);
+	// Quit
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, TRUE);
 
-	//add some text down the side of the form
-	addSideText	 (FRONTEND_SIDETEXT ,	FRONTEND_SIDEX,FRONTEND_SIDEY, _("GAME OPTIONS"));
+	// Add some text down the side of the form
+	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("GAME OPTIONS"));
 
 	return TRUE;
 }
