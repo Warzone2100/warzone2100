@@ -1,20 +1,24 @@
 # French translations for Warzone 2100 package.
 # Copyright (C) 2008 Warzone Resurrection Project
 # This file is distributed under the same license as the Warzone 2100 package.
-# Automatically generated, 2008.
-# Traduction by qwerty800, (add your name if you participate)
+#
+# Qwerty800 <qwerty8034@hotmail.com>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.1_beta1\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-03-13 00:38+0100\n"
-"PO-Revision-Date: 2008-03-13 00:38+0100\n"
-"Last-Translator: qwerty800 <qwerty8034@hotmail.com>\n"
+"PO-Revision-Date: 2008-03-15 01:46+0100\n"
+"Last-Translator: Qwerty800 <qwerty8034@hotmail.com>\n"
 "Language-Team: French <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Poedit-Language: French\n"
+"X-Poedit-Country: FRANCE\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Basepath: ..\n"
 
 #: src/multiplay.c:736
 msgid "The host has left the game!"
@@ -1094,11 +1098,11 @@ msgstr ""
 
 #: src/clparse.c:104
 msgid "Set the resolution to use"
-msgstr ""
+msgstr "Veuillez entrer la résolution à utiliser"
 
 #: src/clparse.c:104
 msgid "WIDTHxHEIGHT"
-msgstr ""
+msgstr "HAUTEUR*LARGEUR"
 
 #: src/clparse.c:105
 msgid "Enable shadows"
@@ -1866,7 +1870,7 @@ msgstr ""
 #: src/version.c:157
 #, c-format
 msgid " - Built %s"
-msgstr ""
+msgstr " - Compilation %s"
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
@@ -1883,48 +1887,48 @@ msgstr ""
 #: src/multijoin.c:220
 #, c-format
 msgid "%s has Left the Game"
-msgstr ""
+msgstr "%s a Quitté la Partie"
 
 #: src/multijoin.c:323
 #, c-format
 msgid "%s is Joining the Game"
-msgstr ""
+msgstr "%s vient de Joinder la Partie"
 
 #: src/multimenu.c:574
 msgid "Technology level 1"
-msgstr ""
+msgstr "Niveau technologique 1"
 
 #: src/multimenu.c:582
 msgid "Technology level 2"
-msgstr ""
+msgstr "Niveau technologique 2"
 
 #: src/multimenu.c:588
 msgid "Technology level 3"
-msgstr ""
+msgstr "Niveau technologique 3"
 
 #: src/multimenu.c:594
 msgid "Any number of players"
-msgstr ""
+msgstr "Nombre de joueurs indéfini"
 
 #: src/multimenu.c:601
 msgid "2 players"
-msgstr ""
+msgstr "2 joueurs"
 
 #: src/multimenu.c:607
 msgid "4 players"
-msgstr ""
+msgstr "4 joueurs"
 
 #: src/multimenu.c:613
 msgid "8 players"
-msgstr ""
+msgstr "8 joueurs"
 
 #: src/multimenu.c:733
 msgid "Score"
-msgstr ""
+msgstr "Score"
 
 #: src/multimenu.c:734
 msgid "Kills"
-msgstr ""
+msgstr "Meurtres"
 
 #: src/multimenu.c:743
 msgid "Ping"
@@ -1932,19 +1936,19 @@ msgstr ""
 
 #: src/multimenu.c:744
 msgid "Played"
-msgstr ""
+msgstr "Parties Jouées"
 
 #: src/multimenu.c:1053
 msgid "Toggle Alliance State"
-msgstr ""
+msgstr "Activer/Désactiver l'état des Alliances"
 
 #: src/multimenu.c:1072
 msgid "Give Visibility Report"
-msgstr ""
+msgstr "Envoyer un Rapport de Visibilité"
 
 #: src/multimenu.c:1078
 msgid "Leak Technology Documents"
-msgstr ""
+msgstr "Divulguer des Documents Technologiques"
 
 #: src/multimenu.c:1085
 msgid "Hand Over Selected Units"
@@ -1952,64 +1956,64 @@ msgstr ""
 
 #: src/multimenu.c:1091
 msgid "Give Power To Player"
-msgstr ""
+msgstr "Donner de l'énergie au Joueur"
 
 #: data/messages/strings/cam1strings.txt:3
 msgid "Campaign One Full Version Test Message"
-msgstr ""
+msgstr "Message de test de la Première Campagne"
 
 #: data/messages/strings/cam1strings.txt:5
 msgid "OBJECTIVE: Locate and recover neural synapse technology"
-msgstr ""
+msgstr "OBJECTIF: Localiser et récupèrer la technologie des synapses neuronales"
 
 #: data/messages/strings/cam1strings.txt:6
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr ""
+msgstr "Établir un Campement de base, puis chercher des bâtiments pré-apocaliptiques"
 
 #: data/messages/strings/cam1strings.txt:7
 msgid "This structure contains technology vital for the success of the Project."
-msgstr ""
+msgstr "Ce bâtiment contient une technologie vitale pour le succès du Projet."
 
 #: data/messages/strings/cam1strings.txt:9
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr ""
+msgstr "MISSION LOCALE (ALPHA): Le groupe des Charognards"
 
 #: data/messages/strings/cam1strings.txt:10
 msgid "Scavenger raiders are approaching our base."
-msgstr ""
+msgstr "Un groupe de résistents nommé les Charognards est en approche."
 
 #: data/messages/strings/cam1strings.txt:11
 msgid "Defend the base then destroy the Scavenger camps."
-msgstr ""
+msgstr "Défendez la Base puis mettez fin à lurs agissements."
 
 #: data/messages/strings/cam1strings.txt:13
 #: data/messages/strings/cam1strings.txt:68
 msgid "ALPHA BASE MISSION: Power Surge Detected"
-msgstr ""
+msgstr "MISSION LOCALE (ALPHA): Surtension Détectée"
 
 #: data/messages/strings/cam1strings.txt:14
 msgid "A power surge has been detected to the south of our position."
-msgstr ""
+msgstr "Une quantitée importante d'énergie à été détectée au Sud de notre position"
 
 #: data/messages/strings/cam1strings.txt:15
 msgid "Investigate and secure the area."
-msgstr ""
+msgstr "Enquètez puis sécurisez le secteur."
 
 #: data/messages/strings/cam1strings.txt:17
 msgid "ALPHA BASE MISSION: The New Paradigm"
-msgstr ""
+msgstr "MISSION LOCALE (ALPHA): La Nouvelle Perfection"
 
 #: data/messages/strings/cam1strings.txt:18
 msgid "The New Paradigm control superior weapons technology."
-msgstr ""
+msgstr "La Nouvelle Perfection controle des technologies d'armement supérieures"
 
 #: data/messages/strings/cam1strings.txt:19
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr ""
+msgstr "Ils doivent posséder la technologie du lien Synaptique. Il est vital pour Le Projet de la retrouver."
 
 #: data/messages/strings/cam1strings.txt:21
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
-msgstr ""
+msgstr "MISSION "
 
 #: data/messages/strings/cam1strings.txt:22
 msgid "Load an attack force into the transport."
@@ -3129,148 +3133,148 @@ msgstr ""
 
 #: data/messages/strings/genstrings.txt:4
 msgid "Briefing Commences:"
-msgstr ""
+msgstr "Début du Briefing"
 
 #: data/messages/strings/genstrings.txt:5
 msgid "End Of Briefing."
-msgstr ""
+msgstr "Fin du Briefing"
 
 #: data/messages/strings/genstrings.txt:8
 msgid "Armed Scavengers Approaching"
-msgstr ""
+msgstr "Charognards armés en Approche"
 
 #: data/messages/strings/genstrings.txt:9
 msgid "Scavenger Outpost"
-msgstr ""
+msgstr "Poste Défensif Charognard"
 
 #: data/messages/strings/genstrings.txt:10
 msgid "Power Resource"
-msgstr ""
+msgstr "Source d'énergie"
 
 #: data/messages/strings/genstrings.txt:11
 msgid "Unknown Artifact"
-msgstr ""
+msgstr "Artefact Inconnu"
 
 #: data/messages/strings/genstrings.txt:12
 msgid "Source of Power Surge"
-msgstr ""
+msgstr "Source de Surtension"
 
 #: data/messages/strings/genstrings.txt:15
 msgid "Landing Zone"
-msgstr ""
+msgstr "Zone d'Atérissage"
 
 #: data/messages/strings/genstrings.txt:16
 msgid "Return to LZ"
-msgstr ""
+msgstr "Revenez à la ZA"
 
 #: data/messages/strings/genstrings.txt:17
 #: data/messages/strings/genstrings.txt:27
 msgid "Mission Target"
-msgstr ""
+msgstr "Cible de la Mission"
 
 #: data/messages/strings/genstrings.txt:18
 msgid "Pre-Collapse Research Center"
-msgstr ""
+msgstr "Centre de recherche Pré-Apocalyptique"
 
 #: data/messages/strings/genstrings.txt:20
 msgid "En-route To Mission Site"
-msgstr ""
+msgstr "En-route vers le Site de la Mission"
 
 #: data/messages/strings/genstrings.txt:21
 msgid "Mission Failed"
-msgstr ""
+msgstr "Échec"
 
 #: data/messages/strings/genstrings.txt:22
 msgid "Mission Successful"
-msgstr ""
+msgstr "Réussite"
 
 #: data/messages/strings/genstrings.txt:25
 msgid "Enemy Landing Zone"
-msgstr ""
+msgstr "Zone d'Atérissage Enemie"
 
 #: data/messages/strings/genstrings.txt:26
 msgid "Enemy Base"
-msgstr ""
+msgstr "Base Enemie"
 
 #: data/messages/strings/genstrings.txt:30
 msgid "Incoming transmission"
-msgstr ""
+msgstr "Réception d'une Transmission"
 
 #: data/messages/strings/genstrings.txt:32
 msgid "Reinforcements are now available"
-msgstr ""
+msgstr "Renforts Disponibles"
 
 #: data/messages/strings/genstrings.txt:35
 msgid "Incoming intelligence report."
-msgstr ""
+msgstr "Réception du Rapport de Conaissences"
 
 #: data/messages/strings/genstrings.txt:38
 msgid "Civilian Rescued"
-msgstr ""
+msgstr "Civil Sauvé"
 
 #: data/messages/strings/genstrings.txt:39
 msgid "Civilians Rescued"
-msgstr ""
+msgstr "Civils Sauvés"
 
 #: data/messages/strings/genstrings.txt:40
 msgid "Unit Rescued"
-msgstr ""
+msgstr "Unitée Sauvée"
 
 #: data/messages/strings/genstrings.txt:41
 msgid "Units Rescued"
-msgstr ""
+msgstr "Unitées Sauvées"
 
 #: data/messages/strings/genstrings.txt:42
 msgid "Group Rescued"
-msgstr ""
+msgstr "Groupe Sauvé"
 
 #: data/messages/strings/genstrings.txt:43
 msgid "Unit Captured"
-msgstr ""
+msgstr "Unitée Capturée"
 
 #: data/messages/strings/genstrings.txt:44
 msgid "Group Captured"
-msgstr ""
+msgstr "Groupe Capturé"
 
 #: data/messages/strings/genstrings.txt:45
 msgid "Structure Captured"
-msgstr ""
+msgstr "Bâtiment Capturé"
 
 #: data/messages/strings/genstrings.txt:46
 msgid "Structure Destroyed"
-msgstr ""
+msgstr "Bâtiment Détruit"
 
 #: data/messages/strings/genstrings.txt:47
 msgid "Objective Captured"
-msgstr ""
+msgstr "Objectif Capturé"
 
 #: data/messages/strings/genstrings.txt:48
 msgid "Objective Destroyed"
-msgstr ""
+msgstr "Objectif Anéanti"
 
 #: data/messages/strings/genstrings.txt:49
 msgid "Structure Infected"
-msgstr ""
+msgstr "Structure Infectée"
 
 #: data/messages/strings/genstrings.txt:50
 msgid "Unit Infected"
-msgstr ""
+msgstr "Unitée Infectée"
 
 #: data/messages/strings/genstrings.txt:51
 msgid "Group Infected"
-msgstr ""
+msgstr "Groupe Infecté"
 
 #: data/messages/strings/genstrings.txt:52
 msgid "Primary Objective Completed"
-msgstr ""
+msgstr "Objectif Primaire Atteint"
 
 #: data/messages/strings/genstrings.txt:53
 msgid "Secondary Objective Completed"
-msgstr ""
+msgstr "Objectif Secondaire Atteint"
 
 #: data/messages/strings/genstrings.txt:54
 msgid "Time Limit Exceeded"
-msgstr ""
+msgstr "Limite de Temps Excédée"
 
 #: data/messages/strings/genstrings.txt:55
 msgid "Out Of Time"
@@ -3278,15 +3282,15 @@ msgstr ""
 
 #: data/messages/strings/genstrings.txt:56
 msgid "Enemy Escaped"
-msgstr ""
+msgstr "Un Enemi s'est Échappé"
 
 #: data/messages/strings/genstrings.txt:57
 msgid "Enemy Escaping"
-msgstr ""
+msgstr "Un Enemi s'échappe"
 
 #: data/messages/strings/genstrings.txt:58
 msgid "Enemy Transport Landing"
-msgstr ""
+msgstr "Un Transporteur Enemi s'est Posé"
 
 #: data/messages/strings/genstrings.txt:59
 msgid "Incoming Airstrike"
@@ -3294,39 +3298,39 @@ msgstr ""
 
 #: data/messages/strings/genstrings.txt:61
 msgid "Team Alpha Eradicated"
-msgstr ""
+msgstr "Équipe Alpha Irradiquée"
 
 #: data/messages/strings/genstrings.txt:62
 msgid "Team Beta Eradicated"
-msgstr ""
+msgstr "Équipe Beta Irradiquée"
 
 #: data/messages/strings/genstrings.txt:63
 msgid "Team Gamma Eradicated"
-msgstr ""
+msgstr "Équipe Gamma Irradiqueé"
 
 #: data/messages/strings/genstrings.txt:64
 msgid "Team Alpha Rescued"
-msgstr ""
+msgstr "Équipe Alpha Sauvée"
 
 #: data/messages/strings/genstrings.txt:65
 msgid "Team Beta Rescued"
-msgstr ""
+msgstr "Équipe Beta Sauvée"
 
 #: data/messages/strings/genstrings.txt:66
 msgid "Team Gamma Rescued"
-msgstr ""
+msgstr "Équipe Gamma Sauvée"
 
 #: data/messages/strings/genstrings.txt:67
 msgid "Team Alpha Liberated"
-msgstr ""
+msgstr "Équipe Alpha Libèrée"
 
 #: data/messages/strings/genstrings.txt:68
 msgid "Team Beta Liberated"
-msgstr ""
+msgstr "Équipe Beta Libèrée"
 
 #: data/messages/strings/genstrings.txt:69
 msgid "Team Gamma Liberated"
-msgstr ""
+msgstr "Équipe Gamma Libèrée"
 
 #: data/messages/strings/genstrings.txt:70
 msgid "Civilians Eradicated"
@@ -3392,7 +3396,7 @@ msgstr ""
 #: data/messages/strings/names.txt:15
 #: data/mp/messages/strings/names.txt:15
 msgid "Transport"
-msgstr ""
+msgstr "Transporteur"
 
 #: data/messages/strings/names.txt:16
 #: data/messages/strings/names.txt:153
@@ -3403,7 +3407,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:313
 #: data/mp/messages/strings/names.txt:1466
 msgid "Truck"
-msgstr ""
+msgstr "Véhicule de Construction"
 
 #: data/messages/strings/names.txt:17
 #: data/mp/messages/strings/names.txt:17
@@ -3582,7 +3586,7 @@ msgstr ""
 #: data/messages/strings/names.txt:199
 #: data/mp/messages/strings/names.txt:201
 msgid "Scavenger"
-msgstr ""
+msgstr "Charognard"
 
 #: data/messages/strings/names.txt:200
 #: data/mp/messages/strings/names.txt:202
@@ -3592,7 +3596,7 @@ msgstr ""
 #: data/messages/strings/names.txt:201
 #: data/mp/messages/strings/names.txt:203
 msgid "Trike"
-msgstr ""
+msgstr "Trois-Roue"
 
 #: data/messages/strings/names.txt:202
 #: data/mp/messages/strings/names.txt:204
@@ -3602,17 +3606,17 @@ msgstr ""
 #: data/messages/strings/names.txt:203
 #: data/mp/messages/strings/names.txt:205
 msgid "Rocket Buggy"
-msgstr ""
+msgstr "Buggy à Roquettes"
 
 #: data/messages/strings/names.txt:204
 #: data/mp/messages/strings/names.txt:206
 msgid "Rocket Jeep"
-msgstr ""
+msgstr "Jeep è Roquettes"
 
 #: data/messages/strings/names.txt:205
 #: data/mp/messages/strings/names.txt:207
 msgid "Fire Truck"
-msgstr ""
+msgstr "Camion d'Incedieurs"
 
 #: data/messages/strings/names.txt:206
 #: data/mp/messages/strings/names.txt:208
@@ -3627,19 +3631,19 @@ msgstr ""
 #: data/messages/strings/names.txt:208
 #: data/mp/messages/strings/names.txt:210
 msgid "School Bus"
-msgstr ""
+msgstr "Autobus Scholaire"
 
 #: data/messages/strings/names.txt:209
 #: data/mp/messages/strings/names.txt:211
 msgid "Civilian"
-msgstr ""
+msgstr "Civil"
 
 #: data/messages/strings/names.txt:212
 #: data/messages/strings/names.txt:218
 #: data/mp/messages/strings/names.txt:214
 #: data/mp/messages/strings/names.txt:220
 msgid "Machinegunner"
-msgstr ""
+msgstr "Mitrailleur"
 
 #: data/messages/strings/names.txt:213
 #: data/messages/strings/names.txt:479
@@ -3652,7 +3656,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:678
 #: data/mp/messages/strings/names.txt:1065
 msgid "Flamer"
-msgstr ""
+msgstr "Incedieur"
 
 #: data/messages/strings/names.txt:214
 #: data/messages/strings/names.txt:221
@@ -3676,12 +3680,12 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:535
 #: data/mp/messages/strings/names.txt:677
 msgid "Heavy Gunner"
-msgstr ""
+msgstr "Mitrailleur Lourd"
 
 #: data/messages/strings/names.txt:219
 #: data/mp/messages/strings/names.txt:221
 msgid "Cyborg Flamer"
-msgstr ""
+msgstr "Incendieur Cyborg"
 
 #: data/messages/strings/names.txt:222
 #: data/messages/strings/names.txt:677
@@ -3699,67 +3703,67 @@ msgstr ""
 #: data/messages/strings/names.txt:234
 #: data/mp/messages/strings/names.txt:236
 msgid "Viper"
-msgstr ""
+msgstr "Vipère"
 
 #: data/messages/strings/names.txt:235
 #: data/mp/messages/strings/names.txt:237
 msgid "Leopard"
-msgstr ""
+msgstr "Léopard"
 
 #: data/messages/strings/names.txt:236
 #: data/mp/messages/strings/names.txt:238
 msgid "Retaliation"
-msgstr ""
+msgstr "Revanche"
 
 #: data/messages/strings/names.txt:237
 #: data/mp/messages/strings/names.txt:239
 msgid "Bug"
-msgstr ""
+msgstr "Guèpe"
 
 #: data/messages/strings/names.txt:238
 #: data/mp/messages/strings/names.txt:240
 msgid "Cobra"
-msgstr ""
+msgstr "Cobra"
 
 #: data/messages/strings/names.txt:239
 #: data/mp/messages/strings/names.txt:241
 msgid "Panther"
-msgstr ""
+msgstr "Panthère"
 
 #: data/messages/strings/names.txt:240
 #: data/mp/messages/strings/names.txt:242
 msgid "Retribution"
-msgstr ""
+msgstr "Châtiment"
 
 #: data/messages/strings/names.txt:241
 #: data/mp/messages/strings/names.txt:243
 msgid "Scorpion"
-msgstr ""
+msgstr "Scorpion"
 
 #: data/messages/strings/names.txt:242
 #: data/mp/messages/strings/names.txt:244
 msgid "Tiger"
-msgstr ""
+msgstr "Tigre"
 
 #: data/messages/strings/names.txt:243
 #: data/mp/messages/strings/names.txt:245
 msgid "Vengeance"
-msgstr ""
+msgstr "Vengeance"
 
 #: data/messages/strings/names.txt:244
 #: data/mp/messages/strings/names.txt:246
 msgid "Python"
-msgstr ""
+msgstr "Python"
 
 #: data/messages/strings/names.txt:245
 #: data/mp/messages/strings/names.txt:247
 msgid "Mantis"
-msgstr ""
+msgstr "Mante Religieuse"
 
 #: data/messages/strings/names.txt:247
 #: data/mp/messages/strings/names.txt:249
 msgid "Transport Body"
-msgstr ""
+msgstr "Chassis de Transporteur"
 
 #: data/messages/strings/names.txt:297
 #: data/mp/messages/strings/names.txt:299
