@@ -940,7 +940,7 @@ static CODE_ERROR scriptCodeCallbackParams(
 	{
 		snprintf(aErrorString, sizeof(aErrorString), "Expected %d parameters", psCBSymbol->numParams);
 		// Guarantee to nul-terminate
-		aErrorString[sizeof(aErrorString)] = '\0';
+		aErrorString[sizeof(aErrorString) - 1] = '\0';
 		scr_error(aErrorString);
 		*ppsTDecl = NULL;
 		return CE_PARSE;
