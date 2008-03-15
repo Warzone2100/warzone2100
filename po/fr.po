@@ -1,13 +1,13 @@
 # French translations for Warzone 2100 package.
 # Copyright (C) 2008 Warzone Resurrection Project
 # This file is distributed under the same license as the Warzone 2100 package.
-#
-# Qwerty800 <qwerty8034@hotmail.com>, 2008.
+# Automatically generated, 2008.
+# Traduction by qwerty800 (qwerty8034@hotmail.com), (add your name if you participate)
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.1_beta1\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-03-13 00:38+0100\n"
+"POT-Creation-Date: 2008-03-16 00:16+0100\n"
 "PO-Revision-Date: 2008-03-15 01:46+0100\n"
 "Last-Translator: Qwerty800 <qwerty8034@hotmail.com>\n"
 "Language-Team: French <warzone-dev@gna.org>\n"
@@ -70,8 +70,8 @@ msgid "Truck ordered to build Oil Derrick"
 msgstr "Un véhicule de construction s'est fait ordonné de construire un Derrick"
 
 #: src/multistat.c:134
-#: src/configuration.c:354
-#: src/configuration.c:355
+#: src/configuration.c:359
+#: src/configuration.c:360
 msgid "Player"
 msgstr "Joueur"
 
@@ -1012,7 +1012,7 @@ msgstr "Charger"
 
 #: src/clparse.c:88
 msgid "Run in cheat mode"
-msgstr ""
+msgstr "Execution en mode DEBUG"
 
 #: src/clparse.c:89
 msgid "Set default data directory"
@@ -1048,7 +1048,7 @@ msgstr ""
 
 #: src/clparse.c:93
 msgid "Play in fullscreen mode"
-msgstr ""
+msgstr "Jouer en mode plein écran"
 
 #: src/clparse.c:94
 msgid "Load a specific game"
@@ -1090,7 +1090,7 @@ msgstr ""
 
 #: src/clparse.c:102
 msgid "Play in windowed mode"
-msgstr ""
+msgstr "Jouer en mode fenètré"
 
 #: src/clparse.c:103
 msgid "Show version information and exit"
@@ -1106,11 +1106,11 @@ msgstr "HAUTEUR*LARGEUR"
 
 #: src/clparse.c:105
 msgid "Enable shadows"
-msgstr ""
+msgstr "Activer les Ombres"
 
 #: src/clparse.c:106
 msgid "Disable shadows"
-msgstr ""
+msgstr "Désactiver les Ombres"
 
 #: src/clparse.c:107
 msgid "Enable sound"
@@ -1193,7 +1193,7 @@ msgstr ""
 
 #: src/design.c:1346
 msgid "Transporter"
-msgstr ""
+msgstr "Transporteur"
 
 #: src/design.c:1574
 msgid "Sensor Range"
@@ -1347,11 +1347,11 @@ msgstr "Options Audio"
 
 #: src/frontend.c:524
 msgid "Key Mappings"
-msgstr ""
+msgstr "Mappage des Touches"
 
 #: src/frontend.c:596
 msgid "Reverse Mouse"
-msgstr "Inverser la Souris"
+msgstr ""
 
 #: src/frontend.c:599
 #: src/frontend.c:611
@@ -1976,11 +1976,11 @@ msgstr "Ce bâtiment contient une technologie vitale pour le succès du Projet."
 
 #: data/messages/strings/cam1strings.txt:9
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr "MISSION LOCALE (ALPHA): Le groupe des Charognards"
+msgstr "MISSION LOCALE (ALPHA): Les Pillards"
 
 #: data/messages/strings/cam1strings.txt:10
 msgid "Scavenger raiders are approaching our base."
-msgstr "Un groupe de résistents nommé les Charognards est en approche."
+msgstr "Un groupe de résistents Pillards est en approche."
 
 #: data/messages/strings/cam1strings.txt:11
 msgid "Defend the base then destroy the Scavenger camps."
@@ -2001,11 +2001,11 @@ msgstr "Enquètez puis sécurisez le secteur."
 
 #: data/messages/strings/cam1strings.txt:17
 msgid "ALPHA BASE MISSION: The New Paradigm"
-msgstr "MISSION LOCALE (ALPHA): La Nouvelle Perfection"
+msgstr "MISSION LOCALE (ALPHA): La Nouvelle Paradigme"
 
 #: data/messages/strings/cam1strings.txt:18
 msgid "The New Paradigm control superior weapons technology."
-msgstr "La Nouvelle Perfection controle des technologies d'armement supérieures"
+msgstr "Le Nouveau Paradigme controle des technologies d'armement supérieures"
 
 #: data/messages/strings/cam1strings.txt:19
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
@@ -2013,125 +2013,125 @@ msgstr "Ils doivent posséder la technologie du lien Synaptique. Il est vital po
 
 #: data/messages/strings/cam1strings.txt:21
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
-msgstr "MISSION "
+msgstr "MISSION LONGUE DISTANCE: Localisez et Retrouvez des Artefacts"
 
 #: data/messages/strings/cam1strings.txt:22
 msgid "Load an attack force into the transport."
-msgstr ""
+msgstr "Chargez une force d'attaque dans le transporteur"
 
 #: data/messages/strings/cam1strings.txt:23
 msgid "On landing, explore the ruins and recover any artifacts."
-msgstr ""
+msgstr "À l'atérissage, explorez les ruines et récuperez tout les artefacts que vous trouverez."
 
 #: data/messages/strings/cam1strings.txt:25
 msgid "TRANSPORT MISSION: Investigate Research Center"
-msgstr ""
+msgstr "MISSION LONGUE DISTANCE: Fouillez le Laboratoire"
 
 #: data/messages/strings/cam1strings.txt:26
 msgid "Investigate the area and recover any artifacts present."
-msgstr ""
+msgstr "Explorez la Zone et Récuperez tout ce qui s'y trouve."
 
 #: data/messages/strings/cam1strings.txt:27
 #: data/messages/strings/cam1strings.txt:170
 msgid "Reinforcements are available."
-msgstr ""
+msgstr "Il nous sera possible de vous envoyer des Renforts."
 
 #: data/messages/strings/cam1strings.txt:29
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
-msgstr ""
+msgstr "MISSION LONGUE DISTANCE: Signaux Codés Détectés"
 
 #: data/messages/strings/cam1strings.txt:30
 msgid "Take a scout force to investigate these signals."
-msgstr ""
+msgstr "Emenez une force d'exploration pour enquèter sur ces signaux."
 
 #: data/messages/strings/cam1strings.txt:31
 msgid "Use your trucks to build defenses at your LZ."
-msgstr ""
+msgstr "Utilisez vos Véhicules de Construction pour défendre votre Zone d'Atérissage."
 
 #: data/messages/strings/cam1strings.txt:33
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
-msgstr ""
+msgstr "MISSION LONGUE DISTANCE: Transmission Enemie Détectée"
 
 #: data/messages/strings/cam1strings.txt:34
 msgid "Scout the designated area for enemy research facilities."
-msgstr ""
+msgstr "Explorez la zone désignée pour trouver des laboratoires enemis"
 
 #: data/messages/strings/cam1strings.txt:35
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
-msgstr ""
+msgstr "Déplacez-vous maintenant à la seconde ZA. Ne pas engager l'ennemi tout de suite."
 
 #: data/messages/strings/cam1strings.txt:37
 msgid "TRANSPORT MISSION: Synaptic Link Location"
-msgstr ""
+msgstr "MISSION lONGUE DISTANCE: Emplacement du Lien Sinaptique"
 
 #: data/messages/strings/cam1strings.txt:38
 msgid "The New Paradigm are analyzing synaptic link technology at this location."
-msgstr ""
+msgstr "Le Nouveau Paradigme fait analiser la technologie du lien sinaptique à cet endroit"
 
 #: data/messages/strings/cam1strings.txt:39
 msgid "Assemble an attack team and recover the synaptic link technology."
-msgstr ""
+msgstr "Assemblez une équipe d'attaque et allez la chercher"
 
 #: data/messages/strings/cam1strings.txt:41
 msgid "TRANSPORT MISSION: New Objectives"
-msgstr ""
+msgstr "MISSION LONGUE DISTANCE: Nouveaux Objectifs"
 
 #: data/messages/strings/cam1strings.txt:42
 msgid "New Paradigm are searching for artifacts in this vicinity."
-msgstr ""
+msgstr "Le Nouveau Paradigme cherche des artefacts dans les environs"
 
 #: data/messages/strings/cam1strings.txt:43
 msgid "Intercept them. Do not let any enemies exit this area."
-msgstr ""
+msgstr "Interceptez les. Ne les laissez surtout pas s'enfuir."
 
 #: data/messages/strings/cam1strings.txt:45
 msgid "TRANSPORT MISSION: Enemy Base Under Construction"
-msgstr ""
+msgstr "MISSION LONGUE DISTANCE: L'enemi se Raproche"
 
 #: data/messages/strings/cam1strings.txt:46
 msgid "Enemy forces are establishing a forward base at this location."
-msgstr ""
+msgstr "Les forces enemies établisent un campement de base en position avancée."
 
 #: data/messages/strings/cam1strings.txt:47
 msgid "Eradicate the base and secure the area."
-msgstr ""
+msgstr "Irradiquez cette base et sécurisez la zone."
 
 #: data/messages/strings/cam1strings.txt:50
 #: data/messages/strings/cam1strings.txt:117
 msgid "ALPHA BASE MISSION: Establish a Forward Base"
-msgstr ""
+msgstr "MISSION LOCALE (Alpha): Établir une base avancée"
 
 #: data/messages/strings/cam1strings.txt:51
 msgid "Establish a forward base on the plateau."
-msgstr ""
+msgstr "Établissez une base avancée sur le plateau."
 
 #: data/messages/strings/cam1strings.txt:52
 msgid "Build defensive structures."
-msgstr ""
+msgstr "Ajoutez y des structures défensives."
 
 #: data/messages/strings/cam1strings.txt:54
 msgid "ALPHA BASE MISSION: Counter Attack"
-msgstr ""
+msgstr "MISSION LOCALE (Alpha): Contre-Attaque"
 
 #: data/messages/strings/cam1strings.txt:55
 msgid "Enemy forces are approaching from the east and north."
-msgstr ""
+msgstr "Forces enemies en approche à partir des cotés Nord et Est."
 
 #: data/messages/strings/cam1strings.txt:56
 msgid "Hold the bases and repulse any attacks."
-msgstr ""
+msgstr "Résistez à l'assault et repoussez chacune des attaques."
 
 #: data/messages/strings/cam1strings.txt:58
 msgid "ALPHA BASE MISSION: Incoming Transmission"
-msgstr ""
+msgstr "MISSION LOCALE (Alpha): Réception d'une Transmission"
 
 #: data/messages/strings/cam1strings.txt:59
 msgid "We are detecting enemy forces at these locations."
-msgstr ""
+msgstr "Nous détectons des forces enemies dans les alentours."
 
 #: data/messages/strings/cam1strings.txt:60
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
-msgstr ""
+msgstr "Voilà notre chance de renverser le Nouveau Paradigme et de détruire leur base"
 
 #: data/messages/strings/cam1strings.txt:64
 #: data/messages/strings/cam1strings.txt:75
@@ -2143,179 +2143,179 @@ msgstr ""
 #: data/messages/strings/cam2strings.txt:118
 #: data/messages/strings/cam3strings.txt:163
 msgid " "
-msgstr ""
+msgstr " "
 
 #: data/messages/strings/cam1strings.txt:65
 msgid "New Paradigm Transmission"
-msgstr ""
+msgstr "Transmission en Provenance du Noueau Paradigme"
 
 #: data/messages/strings/cam1strings.txt:69
 msgid "Congratulations Commander."
-msgstr ""
+msgstr "Mes Félicitations Commandant."
 
 #: data/messages/strings/cam1strings.txt:70
 msgid "We now have a further task for you."
-msgstr ""
+msgstr "Nous avons une autre tâche pour vous."
 
 #: data/messages/strings/cam1strings.txt:73
 msgid "ALPHA BASE MISSION: Locate and Recover Artifacts"
-msgstr ""
+msgstr "MISSION LOCALE (Alpha): Localisez et Récupèrez des Artefacts"
 
 #: data/messages/strings/cam1strings.txt:74
 msgid "The first two zones are now secure."
-msgstr ""
+msgstr "Les deux premiers secteurs sont maintenant sécurisés."
 
 #: data/messages/strings/cam1strings.txt:78
 msgid "PROJECT TEAM UPDATES"
-msgstr ""
+msgstr "HISTORIQUE DES DIVISIONS DU PROJET"
 
 #: data/messages/strings/cam1strings.txt:81
 msgid "TEAM BETA UPDATE"
-msgstr ""
+msgstr "MISE À JOUR: DIVISION BETA"
 
 #: data/messages/strings/cam1strings.txt:82
 msgid "We have recovered some artifacts."
-msgstr ""
+msgstr "Nous avons retrouvé des artefacts."
 
 #: data/messages/strings/cam1strings.txt:83
 msgid "There is a better equipped force operating in this area."
-msgstr ""
+msgstr "Il y a certainement une force mieux équippée que nous dans les parages."
 
 #: data/messages/strings/cam1strings.txt:86
 msgid "TEAM GAMMA UPDATE"
-msgstr ""
+msgstr "MISE À JOUR: DIVISION BETA"
 
 #: data/messages/strings/cam1strings.txt:87
 msgid "Nothing to report."
-msgstr ""
+msgstr "Rien à rapporter."
 
 #: data/messages/strings/cam1strings.txt:88
 msgid "We've discovered no artifacts and encountered no hostiles."
-msgstr ""
+msgstr "Nous avons découvert aucun artefacts et n'avons pas non plus découvert de présence hostile."
 
 #: data/messages/strings/cam1strings.txt:91
 msgid "ALPHA BASE INTELLIGENCE REPORT: Enemy Attack"
-msgstr ""
+msgstr "RAPPORT DE CONAISSENCES DIVISION ALPHA: Attaque Enemie"
 
 #: data/messages/strings/cam1strings.txt:92
 msgid "We are detecting an enemy attack force at this location."
-msgstr ""
+msgstr "We avons découvert une force d'attaque à cet endroit."
 
 #: data/messages/strings/cam1strings.txt:96
 msgid "PRIMARY OBJECTIVE"
-msgstr ""
+msgstr "OBJECTIF PRIMAIRE"
 
 #: data/messages/strings/cam1strings.txt:97
 msgid "This structure is your primary objective."
-msgstr ""
+msgstr "Cette structure est votre objectif primaire."
 
 #: data/messages/strings/cam1strings.txt:98
 msgid "Search for and recover any artifacts here."
-msgstr ""
+msgstr "Ramassez chaque artefact qui s'y trouve."
 
 #: data/messages/strings/cam1strings.txt:100
 msgid "ENEMY LZ"
-msgstr ""
+msgstr "ZA ENEMIE"
 
 #: data/messages/strings/cam1strings.txt:101
 msgid "Destroy this LZ to prevent enemy landings."
-msgstr ""
+msgstr "Détruisez les Défenses de la ZA pour empècher l'enemi d'atterir"
 
 #: data/messages/strings/cam1strings.txt:104
 msgid "ALPHA BASE INTELLIGENCE REPORT: NEXUS"
-msgstr ""
+msgstr "RAPPORT DE CONAISSENCES DIVISION ALPHA: LE NEXUS"
 
 #: data/messages/strings/cam1strings.txt:105
 msgid "New objective."
-msgstr ""
+msgstr "Nouvel Objectif."
 
 #: data/messages/strings/cam1strings.txt:106
 msgid "We have detected and isolated an intruder program."
-msgstr ""
+msgstr "Nous avons détecté et isolé un programme intrus."
 
 #: data/messages/strings/cam1strings.txt:111
 msgid "Supplemental"
-msgstr ""
+msgstr "Supplément"
 
 #: data/messages/strings/cam1strings.txt:112
 msgid "The synaptic link technology was at this location but was removed."
-msgstr ""
+msgstr "La technologie du lien synaptique était à cet endroit mais quelqu'un l'a ramassé."
 
 #: data/messages/strings/cam1strings.txt:114
 msgid "Establish a forward base then continue the search for the synaptic link."
-msgstr ""
+msgstr "Vous devez établir une base avancée et continuer les recherches"
 
 #: data/messages/strings/cam1strings.txt:118
 msgid "The New Paradigm have been driven from this zone."
-msgstr ""
+msgstr "Le Nouveau Pardigme a été conduit à cet endroit."
 
 #: data/messages/strings/cam1strings.txt:119
 msgid "Establish a forward base near the site of the Research Centre."
-msgstr ""
+msgstr "Vous devez établir une base avancée le plus près possible du site du Laboratoire."
 
 #: data/messages/strings/cam1strings.txt:122
 msgid "INCOMING TRANSMISSION"
-msgstr ""
+msgstr "Récepion d'une Transmission"
 
 #: data/messages/strings/cam1strings.txt:123
 msgid "Decoding in progress....."
-msgstr ""
+msgstr "Décryptage en cours....."
 
 #: data/messages/strings/cam1strings.txt:127
 msgid "Commander."
-msgstr ""
+msgstr "Commandant."
 
 #: data/messages/strings/cam1strings.txt:128
 msgid "We have decoded the incoming message to the New Paradigm..."
-msgstr ""
+msgstr "Nous avons décodé le message en provénance du Nouveau Paradigme..."
 
 #: data/messages/strings/cam1strings.txt:131
 msgid "Destroy Enemy Base"
-msgstr ""
+msgstr "Vous devez Détruire la Base Enemie."
 
 #: data/messages/strings/cam1strings.txt:132
 msgid "Assemble an attack force and board the transport."
-msgstr ""
+msgstr "Assemblez une force d'attaque et et abordez le transporteur."
 
 #: data/messages/strings/cam1strings.txt:133
 msgid "Destroy the base and recover any artifacts present."
-msgstr ""
+msgstr "Détruisez la base et récuperez tout les artefacts qui s'y trouvent."
 
 #: data/messages/strings/cam1strings.txt:137
 msgid "The synaptic link technology has been recovered!"
-msgstr ""
+msgstr "Nous avons enfin trouvé la technologie du lien sinaptique!"
 
 #: data/messages/strings/cam1strings.txt:138
 msgid "Initial research confirms it will be of great benefit to the Project."
-msgstr ""
+msgstr "Les premières découvertes de la recherche confirment que ce sera une grande avancée dans Le Projet."
 
 #: data/messages/strings/cam1strings.txt:141
 msgid "Base Beta is under heavy attack, they may need assistance."
-msgstr ""
+msgstr "La base Beta est attaquée, ils pourrraient avoir besoin de renforts."
 
 #: data/messages/strings/cam1strings.txt:142
 msgid "We will send further updates as they arrive."
-msgstr ""
+msgstr "Nous vous enverrons plus d'informations au fur et à meusure que nous la recevrons"
 
 #: data/messages/strings/cam1strings.txt:145
 msgid "This transmission was intercepted a few minutes ago."
-msgstr ""
+msgstr "Nous avons intercepté cette transmision il y a à peine quelques minutes."
 
 #: data/messages/strings/cam1strings.txt:146
 msgid "It originates from the east."
-msgstr ""
+msgstr "Elle provient de l'est."
 
 #: data/messages/strings/cam1strings.txt:149
 msgid "Commander"
-msgstr ""
+msgstr "Commandant"
 
 #: data/messages/strings/cam1strings.txt:150
 msgid "Congratulations on defeating the New Paradigm."
-msgstr ""
+msgstr "Félicitations pour avoir vaincu le Nouveau Paradigme."
 
 #: data/messages/strings/cam1strings.txt:151
 msgid "This sector is now secure."
-msgstr ""
+msgstr "La Zone est maintenant sécurisée."
 
 #: data/messages/strings/cam1strings.txt:155
 msgid "When we failed to respond it became threatening."
@@ -2323,7 +2323,7 @@ msgstr ""
 
 #: data/messages/strings/cam1strings.txt:158
 msgid "Nexus removed itself leaving no trace"
-msgstr ""
+msgstr "Le Nexus a Disparu sans laisser de traces"
 
 #: data/messages/strings/cam1strings.txt:159
 msgid "The Nexus Intruder Program has links with the Reed corporation."
@@ -3141,11 +3141,11 @@ msgstr "Fin du Briefing"
 
 #: data/messages/strings/genstrings.txt:8
 msgid "Armed Scavengers Approaching"
-msgstr "Charognards armés en Approche"
+msgstr "Pillards armés en Approche"
 
 #: data/messages/strings/genstrings.txt:9
 msgid "Scavenger Outpost"
-msgstr "Poste Défensif Charognard"
+msgstr "Poste Défensif de Pillards"
 
 #: data/messages/strings/genstrings.txt:10
 msgid "Power Resource"
@@ -3298,39 +3298,39 @@ msgstr ""
 
 #: data/messages/strings/genstrings.txt:61
 msgid "Team Alpha Eradicated"
-msgstr "Équipe Alpha Irradiquée"
+msgstr "Division Alpha Irradiquée"
 
 #: data/messages/strings/genstrings.txt:62
 msgid "Team Beta Eradicated"
-msgstr "Équipe Beta Irradiquée"
+msgstr "Division Beta Irradiquée"
 
 #: data/messages/strings/genstrings.txt:63
 msgid "Team Gamma Eradicated"
-msgstr "Équipe Gamma Irradiqueé"
+msgstr "Division Gamma Irradiqueé"
 
 #: data/messages/strings/genstrings.txt:64
 msgid "Team Alpha Rescued"
-msgstr "Équipe Alpha Sauvée"
+msgstr "Division Alpha Sauvée"
 
 #: data/messages/strings/genstrings.txt:65
 msgid "Team Beta Rescued"
-msgstr "Équipe Beta Sauvée"
+msgstr "Division Beta Sauvée"
 
 #: data/messages/strings/genstrings.txt:66
 msgid "Team Gamma Rescued"
-msgstr "Équipe Gamma Sauvée"
+msgstr "Division Gamma Sauvée"
 
 #: data/messages/strings/genstrings.txt:67
 msgid "Team Alpha Liberated"
-msgstr "Équipe Alpha Libèrée"
+msgstr "Division Alpha Libèrée"
 
 #: data/messages/strings/genstrings.txt:68
 msgid "Team Beta Liberated"
-msgstr "Équipe Beta Libèrée"
+msgstr "Division Beta Libèrée"
 
 #: data/messages/strings/genstrings.txt:69
 msgid "Team Gamma Liberated"
-msgstr "Équipe Gamma Libèrée"
+msgstr "Division Gamma Libèrée"
 
 #: data/messages/strings/genstrings.txt:70
 msgid "Civilians Eradicated"
@@ -3586,7 +3586,7 @@ msgstr ""
 #: data/messages/strings/names.txt:199
 #: data/mp/messages/strings/names.txt:201
 msgid "Scavenger"
-msgstr "Charognard"
+msgstr "Pillard"
 
 #: data/messages/strings/names.txt:200
 #: data/mp/messages/strings/names.txt:202

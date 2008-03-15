@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: da\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-03-13 00:38+0100\n"
+"POT-Creation-Date: 2008-03-16 00:16+0100\n"
 "PO-Revision-Date: 2008-01-20 19:26+0100\n"
 "Last-Translator: Christian Vest Hansen <karmazilla@gmail.com>\n"
 "Language-Team: Dansk <en@li.org>\n"
@@ -67,8 +67,8 @@ msgid "Truck ordered to build Oil Derrick"
 msgstr "Truck beordret til at bygge oliebrøn."
 
 #: src/multistat.c:134
-#: src/configuration.c:354
-#: src/configuration.c:355
+#: src/configuration.c:359
+#: src/configuration.c:360
 #, fuzzy
 msgid "Player"
 msgstr "Spillere"
