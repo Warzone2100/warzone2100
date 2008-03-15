@@ -39,7 +39,7 @@ bool loadWeaponStatsFromDB(const char* filename)
 	sqlite3* db;
 	sqlite3_stmt* stmt;
 
-	int rc = sqlite3_open_v2(filename, &db, SQLITE_OPEN_READONLY, "physfs");
+	int rc = sqlite3_open_v2(filename, &db, SQLITE_OPEN_READONLY, NULL);
 	if (rc != SQLITE_OK)
 	{
 		debug(LOG_ERROR, "loadWeaponStatsFromDB: Can't open database (%s): %s", filename, sqlite3_errmsg(db));
