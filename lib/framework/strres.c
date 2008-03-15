@@ -331,7 +331,7 @@ char *strresGetString(STR_RES *psRes, UDWORD id)
 	// find the block the string is in
 	for(psBlock = psRes->psStrings; psBlock && psBlock->idEnd < id;
 		psBlock = psBlock->psNext)
-		;
+	{}
 
 	if (!psBlock)
 	{
