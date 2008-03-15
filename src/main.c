@@ -100,15 +100,10 @@
 /* Always use fallbacks on Windows */
 #if defined(WZ_OS_WIN)
 #  undef DATADIR
-#  undef LOCALEDIR
 #endif
 
 #if !defined(DATADIR)
 #  define DATADIR "data"
-#endif
-
-#if !defined(LOCALEDIR)
-#  define LOCALEDIR "locale"
 #endif
 
 
@@ -862,27 +857,14 @@ int main(int argc, char *argv[])
 	initialize_PhysicsFS(argv[0]);
 
 	/*** Initialize translations ***/
-	setlocale(LC_ALL, "");
-	setlocale(LC_NUMERIC, "C"); // set radix character to the period (".")
-#if defined(WZ_OS_WIN)
-	{
-		// Retrieve an absolute path to the locale directory
-		char localeDir[PATH_MAX];
-		strlcpy(localeDir, PHYSFS_getBaseDir(), sizeof(localeDir));
-		strlcat(localeDir, "\\" LOCALEDIR, sizeof(localeDir));
-
-		// Set locale directory and translation domain name
-		(void)bindtextdomain(PACKAGE, localeDir);
-	}
-#else
-	(void)bindtextdomain(PACKAGE, LOCALEDIR);
-#endif
-	(void)textdomain(PACKAGE);
+	initI18n();
 
 	// find early boot info
 	if ( !ParseCommandLineEarly(argc, (const char**)argv) ) {
 		return -1;
 	}
+
+	debug(LOG_WZ, "Using language: %s", getLanguage());
 
 	/* Initialize the write/config directory for PhysicsFS.
 	 * This needs to be done __after__ the early commandline parsing,
