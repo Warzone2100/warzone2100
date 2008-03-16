@@ -191,6 +191,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\i18n.c"
+				>
+			</File>
+			<File
 				RelativePath=".\printf_ext.c"
 				>
 			</File>
@@ -296,6 +300,10 @@
 			</File>
 			<File
 				RelativePath=".\input.h"
+				>
+			</File>
+			<File
+				RelativePath=".\i18n.h"
 				>
 			</File>
 			<File
