@@ -56,10 +56,6 @@
 #define INTERFACE_DEPTH		(MAX_Z - 1)
 #define BUTTON_DEPTH		2000 // will be stretched to 16000
 
-// Amount of visible terrain tiles in x/y direction
-#define VISIBLE_XTILES 64
-#define VISIBLE_YTILES 64
-
 #define OLD_TEXTURE_SIZE_FIX 256.0f
 
 //Render style flags for all pie draw functions
@@ -109,7 +105,8 @@ typedef struct {SDWORD texPage; SWORD tu, tv, tw, th;} PIEIMAGE;	/**< An area of
 extern void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, PIELIGHT specular, int pieFlag, int pieData);
 extern void pie_DrawImage(PIEIMAGE *image, PIERECT *dest);
 
-void pie_DrawTerrainDone(int mapx, int mapy);
+void pie_TerrainInit(int sizex, int sizey);
+void pie_DrawTerrain(int mapx, int mapy);
 void pie_DrawTerrainTriangle(int index, const TERRAIN_VERTEX *aVrts);
 void pie_DrawWaterTriangle(const TERRAIN_VERTEX *aVrts);
 

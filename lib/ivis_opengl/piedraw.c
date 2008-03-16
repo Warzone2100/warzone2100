@@ -42,13 +42,13 @@
 #define COLOUR_COMPONENTS 4
 #define TEXCOORD_COMPONENTS 2
 #define VERTEX_COMPONENTS 3
+#define TRIANGLES_PER_TILE 2
+#define VERTICES_PER_TILE (TRIANGLES_PER_TILE * VERTICES_PER_TRIANGLE)
 
-#define MAP_TRIANGLES (VISIBLE_YTILES * VISIBLE_XTILES * 2) // two triangles per tile
-#define MAP_VERTICES (VERTICES_PER_TRIANGLE * MAP_TRIANGLES)
-
-static GLubyte aColour[COLOUR_COMPONENTS * MAP_VERTICES];
-static GLfloat aTexCoord[TEXCOORD_COMPONENTS * MAP_VERTICES];
-static GLfloat aVertex[VERTEX_COMPONENTS * MAP_VERTICES];
+static GLubyte *aColour = NULL;
+static GLfloat *aTexCoord = NULL;
+static GLfloat *aVertex = NULL;
+static GLuint rowLength;	///< Length of one array table row in tiles
 
 extern BOOL drawing_interface;
 
@@ -827,7 +827,18 @@ void pie_DrawImage(PIEIMAGE *image, PIERECT *dest)
 	glEnd();
 }
 
-void pie_DrawTerrainDone(int mapx, int mapy)
+void pie_TerrainInit(int sizex, int sizey)
+{
+	int size = sizex * sizey;
+
+	assert(sizex > 0 && sizey > 0);
+	aColour = realloc(aColour, size * sizeof(GLubyte) * COLOUR_COMPONENTS * VERTICES_PER_TILE);
+	aTexCoord = realloc(aTexCoord, size * sizeof(GLfloat) * TEXCOORD_COMPONENTS * VERTICES_PER_TILE);
+	aVertex = realloc(aVertex, size * sizeof(GLfloat) * VERTEX_COMPONENTS * VERTICES_PER_TILE);
+	rowLength = sizex;
+}
+
+void pie_DrawTerrain(int mapx, int mapy)
 {
 	glEnableClientState(GL_COLOR_ARRAY);
 	glEnableClientState(GL_VERTEX_ARRAY);
@@ -848,8 +859,6 @@ void pie_DrawTerrainTriangle(int index, const TERRAIN_VERTEX *aVrts)
 {
 	unsigned int i = 0, j = index * VERTICES_PER_TRIANGLE;
 
-	assert(index < MAP_TRIANGLES);
-	assert(j < MAP_VERTICES);
 	tileCount++;
 
 	for ( i = 0; i < 3; i++ )

@@ -201,7 +201,7 @@ static Vector3f alteredPoints[iV_IMD_MAX_POINTS];
 
 //number of tiles visible
 // FIXME This should become dynamic! (A function of resolution, angle and zoom maybe.)
-const Vector2i visibleTiles = { VISIBLE_XTILES, VISIBLE_YTILES };
+Vector2i visibleTiles = { VISIBLE_XTILES, VISIBLE_YTILES };
 
 UDWORD	terrainMidX;
 UDWORD	terrainMidY;
@@ -745,7 +745,7 @@ static void drawTiles(iView *player)
 			drawTerrainTile(i, j, FALSE);
 		}
 	}
-	pie_DrawTerrainDone(visibleTiles.x,  visibleTiles.y);
+	pie_DrawTerrain(visibleTiles.x,  visibleTiles.y);
 
 	// Update height for water
 	for (i = 0; i < visibleTiles.y + 1; i++)
@@ -887,7 +887,10 @@ BOOL init3DView(void)
 {
 	/* Arbitrary choice - from direct read! */
 	Vector3f theSun = { 225.0f, -600.0f, 450.0f };
-	setTheSun( theSun );
+
+	setTheSun(theSun);
+	visibleTiles.x = MIN(VISIBLE_XTILES, mapWidth);
+	visibleTiles.y = MIN(VISIBLE_YTILES, mapHeight);
 
 	// the world centre - used for decaying lighting etc
 	gridCentreX = player.p.x + world_coord(visibleTiles.x / 2);
@@ -901,6 +904,9 @@ BOOL init3DView(void)
 
 	/* Make sure and change these to comply with map.c */
 	imdRot.x = -35;
+
+	/* Initialize vertex arrays */
+	pie_TerrainInit(mapWidth, mapHeight);
 
 	/* Get all the init stuff out of here? */
 	initWarCam();
@@ -1046,8 +1052,7 @@ static void flipsAndRots(unsigned int tileNumber, unsigned int i, unsigned int j
 /* Clips anything - not necessarily a droid */
 BOOL clipXY(SDWORD x, SDWORD y)
 {
-	if (x > (SDWORD)player.p.x &&  x < (SDWORD)(player.p.x+(visibleTiles.x*
-		TILE_UNITS)) &&
+	if (x > (SDWORD)player.p.x &&  x < (SDWORD)(player.p.x+(visibleTiles.x * TILE_UNITS)) &&
 		y > (SDWORD)player.p.z && y < (SDWORD)(player.p.z+(visibleTiles.y*TILE_UNITS)))
 		return(TRUE);
 	else

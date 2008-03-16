@@ -114,7 +114,7 @@ extern SDWORD mouseTileX, mouseTileY;
 
 extern BOOL bRender3DOnly;
 
-extern const Vector2i visibleTiles;
+extern Vector2i visibleTiles;
 
 /*returns the graphic ID for a droid rank*/
 extern UDWORD  getDroidRankGraphic(DROID *psDroid);
