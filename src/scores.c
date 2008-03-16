@@ -106,7 +106,7 @@ const char *getDescription(int id)
 		case STR_MR_STR_NOW      : return _("Total Structures: %u");
 
 		case STR_MR_LEVEL_ROOKIE : return _("Rookie: %u");
-		case STR_MR_LEVEL_GREEN  : return _("Green: %u");
+		case STR_MR_LEVEL_GREEN  : return P_("rank", "Green: %u");
 		case STR_MR_LEVEL_TRAINED: return _("Trained: %u");
 		case STR_MR_LEVEL_REGULAR: return _("Regular: %u");
 		case STR_MR_LEVEL_VETERAN: return _("Professional: %u");
