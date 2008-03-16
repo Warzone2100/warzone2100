@@ -1,4 +1,4 @@
-0000-00-00: Version 2.1_beta2
+2008-03-16: Version 2.1_beta2
  * General:
    * New: Preview of italian (35% complete), french (25%) and russian (9%) translations
    * Fix: Crash (integer divide by zero) when starting a multiplayer game after playing a single player game

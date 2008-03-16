@@ -1,3 +1,28 @@
+warzone2100 (2.1.0~beta2-0) unstable; urgency=low
+
+  * Bump upstream version number: releasing 2.1 beta 1
+  * General:
+    * New: Preview of italian (35% complete), french (25%) and russian (9%) translations
+    * Fix: Crash (integer divide by zero) when starting a multiplayer game after playing a single player game
+    * Fix: A memory corruption in structure limits could cause destroy button to disappear (among other things)
+    * Fix: Crash during saving in multiplayer/skirmish mode, when Aivolution AI is enabled (bug #11084)
+    * Fix: Special characters would be printed as '?' (bug #10913)
+    * Fix: Warzone could lock up, trying to pick a droid (bug #11250)
+  * Graphics:
+    * Change: Reduce the number of atmospheric particles generated and lower the CPU usage
+    * Fix: Briefings were not displayed at high resolutions (bug #11121)
+    * Fix: Fonts were not displayed with QuesoGLC 0.7.0 (patch #961)
+    * Fix: Fireworks looked crappy (patch #994)
+  * AI:
+    * Fix: Restarting a map caused "unable to load experience" messages (bug #11085)
+    * Fix: Upgrade power generator with powModule instead of resModule (bug #11122)
+    * Fix: AI opponents would use the medium yellow body all the time (bug #11097)
+  * Balancing (Multiplayer):
+    * Change: Let weapons with high ROF but low damage deal damage too (bug #11191)
+    * Change: Fortress balacing adapted
+
+ -- Dennis Schridde <devurandom@gna.org>  Sun, 16 Mar 2008 00:00:00 +0100
+
 warzone2100 (2.1.0~beta1-0) unstable; urgency=low
 
   * Bump upstream version number: releasing 2.1 beta 1
