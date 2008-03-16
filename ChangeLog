@@ -2,8 +2,32 @@
  * General:
    * Fix: Crash during saving in multiplayer/skirmish mode, when Aivolution AI is enabled. (bug #11084)
 
-2008-02-17: Version 2.1-beta1
+2008-03-16: Version 2.1_beta2
  * General:
+   * New: Preview of italian (35% complete), french (25%) and russian (9%) translations
+   * Fix: Crash (integer divide by zero) when starting a multiplayer game after playing a single player game
+   * Fix: A memory corruption in structure limits could cause destroy button to disappear (among other things)
+   * Fix: Crash during saving in multiplayer/skirmish mode, when Aivolution AI is enabled (bug #11084)
+   * Fix: Special characters would be printed as '?' (bug #10913)
+   * Fix: Warzone could lock up, trying to pick a droid (bug #11250)
+ * Graphics:
+   * Change: Reduce the number of atmospheric particles generated and lower the CPU usage
+   * Fix: Briefings were not displayed at high resolutions (bug #11121)
+   * Fix: Fonts were not displayed with QuesoGLC 0.7.0 (patch #961)
+   * Fix: Fireworks looked crappy (patch #994)
+ * AI:
+   * Fix: Restarting a map caused "unable to load experience" messages (bug #11085)
+   * Fix: Upgrade power generator with powModule instead of resModule (bug #11122)
+   * Fix: AI opponents would use the medium yellow body all the time (bug #11097)
+ * Balancing (Multiplayer):
+   * Change: Let weapons with high ROF but low damage deal damage too (bug #11191)
+   * Change: Fortress balacing adapted
+
+2008-02-17: Version 2.1_beta1
+ * General:
+   * New: i18n support (German translation at 95%, dansk 13%, dutch 11%)
+   * New: Optional additional AI: Aivolution
+   * New: 64bit compatibility
    * New: Video options menu to allow for things such as resolution to be
           changed without needing to manually edit the config file.
    * New: 'Locked Teams' alliance mode: human players and AIs can play in a team against other teams.
@@ -15,8 +39,9 @@
    * New: Top, bottom, left, right, front and rear armor types for units.
    * New: Improved scripting language documentation.
    * New: UTF-8 and font rendering support added (aids in i18n). This depends on QuesoGLC.
-   * Fix: Skirmish difficulty slider now applies settings to the right players.
    * Change: Migrate all networking code to a new and improved net-primitives API.
+   * Change: Store data in "Local Settings\Application Data" instead of "My Documents\My Games", as Microsoft recommends.
+   * Fix: Skirmish difficulty slider now applies settings to the right players.
  * Campaign Mode:
    * Fix: accuracy, damage and ROF upgrades, which were mistakenly applied to Mini-Pods and Mini-Rocket
           Artillery, are now correctly applied to Lancer, Bunker Buster, Tank Killer and Ripple Rockets.
@@ -32,9 +57,9 @@
    * Fix: AI doesn't get free units when playing in 'Advanced Bases' mode anymore.
    * Fix: AI won't preferably attack humans anymore.
  * Buildsystem:
-   * New: Gettext support (0.16.1 included)
-   * New: Intel C++ Compiler (ICC) supported (10.0 is known to work, FIXME: non-debug compiles only atm :FIXME)
-   * Change: No optional dependencies anymore (Ogg now required)
+   * New: Gettext required (0.17 is known to work)
+   * New: Intel C++ Compiler (ICC) supported (10.0 is known to work, FIXME: only release-mode compiles atm :FIXME)
+   * Change: No optional dependencies anymore (Ogg/Vorbis now required)
    * Change: Use pkg-config (0.9 should work) instead of autoconf scripts for SDL, PNG and Ogg/Vorbis (Faster)
  * Balancing (Multiplayer):
    * Rock-Paper-Scissors applied to all weapon types by emphasizing their specialization.
