@@ -15,7 +15,7 @@ noinst_LIBRARIES = libframework.a
 noinst_HEADERS = configfile.h cursors.h cursors16.h debug.h frame.h frameint.h \
 	frameresource.h input.h listmacs.h math-help.h printf_ext.h resly.h \
 	strlfuncs.h strnlen1.h strres.h strresly.h treap.h treapint.h trig.h \
-	types.h tagfile.h i18n.h
+	types.h tagfile.h i18n.h file.h physfs_ext.h
 
 libframework_a_SOURCES = SDL_framerate.c configfile.c debug.c exceptionhandler.c \
 	frame.c frameresource.c input.c printf_ext.c resource_lexer.lex.c \
