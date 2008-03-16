@@ -26,29 +26,20 @@
  * Includes a basic windows message loop.
  *
  */
+#include "frame.h"
 
-// defines the inline functions in this module
-#define DEFINE_INLINE
-
-#include <stdio.h>
-#include <time.h>
-#include <string.h>
 #include <SDL.h>
 #include <physfs.h>
 
-// window focus messages
-//#define DEBUG_GROUP1
-#include "frame.h"
 #include "frameint.h"
 #include "frameresource.h"
 #include "input.h"
 #include "SDL_framerate.h"
 
-#include <assert.h>
 #ifdef __APPLE__
-#include "cursors16.h"
+#  include "cursors16.h"
 #else
-#include "cursors.h"
+#  include "cursors.h"
 #endif
 
 /* Linux specific stuff */
