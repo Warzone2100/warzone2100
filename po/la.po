@@ -20,7 +20,6 @@ msgid "The host has left the game!"
 msgstr ""
 
 #: src/multiplay.c:1901
-#, fuzzy
 msgid "Green"
 msgstr "Viridum"
 
@@ -37,7 +36,6 @@ msgid "Black"
 msgstr "Nĭgrum"
 
 #: src/multiplay.c:1905
-#, fuzzy
 msgid "Red"
 msgstr "Rubrum"
 
@@ -177,19 +175,16 @@ msgid "Design (F4)"
 msgstr ""
 
 #: src/hci.c:3818
-#, fuzzy
 msgid "Research (F2)"
-msgstr "Invenio"
+msgstr "Invenio (F2)"
 
 #: src/hci.c:3834
-#, fuzzy
 msgid "Build (F3)"
-msgstr "Construo"
+msgstr "Construo (F3)"
 
 #: src/hci.c:3914
 #: src/multiint.c:768
 #: src/multiint.c:772
-#, fuzzy
 msgid "Power"
 msgstr "Vigor"
 
@@ -324,13 +319,13 @@ msgstr[1] ""
 msgid "Rookie"
 msgstr ""
 
+# Green - Inexperienced, e.g.: "John's kind of green, so take it easy on him this first week."
 #: src/droid.c:3927
 msgctxt "rank"
 msgid "Green"
 msgstr ""
 
 #: src/droid.c:3928
-#, fuzzy
 msgid "Trained"
 msgstr "Exercitum"
 
@@ -343,7 +338,6 @@ msgid "Professional"
 msgstr ""
 
 #: src/droid.c:3931
-#, fuzzy
 msgid "Veteran"
 msgstr "Veteranum"
 
@@ -356,7 +350,6 @@ msgid "Special"
 msgstr ""
 
 #: src/droid.c:3934
-#, fuzzy
 msgid "Hero"
 msgstr "Heros"
 
@@ -666,7 +659,6 @@ msgstr ""
 #: src/intdisplay.c:195
 #: src/intdisplay.c:240
 #: src/intdisplay.c:287
-#, fuzzy
 msgid "Power Accrued"
 msgstr "Vigor Adquirāvi"
 
@@ -816,16 +808,17 @@ msgstr ""
 msgid "Rookie: %u"
 msgstr ""
 
+# Green - Inexperienced, e.g.: "John's kind of green, so take it easy on him this first week."
 #: src/scores.c:109
-#, fuzzy, c-format
+#, c-format
 msgctxt "rank"
 msgid "Green: %u"
-msgstr "Viridum"
+msgstr ""
 
 #: src/scores.c:110
-#, fuzzy, c-format
+#, c-format
 msgid "Trained: %u"
-msgstr "Exercitum"
+msgstr "Exercitum: %u"
 
 #: src/scores.c:111
 #, c-format
@@ -838,9 +831,9 @@ msgid "Professional: %u"
 msgstr ""
 
 #: src/scores.c:113
-#, fuzzy, c-format
+#, c-format
 msgid "Veteran: %u"
-msgstr "Veteranum"
+msgstr "Veteranum: %u"
 
 #: src/scores.c:114
 #, c-format
@@ -853,9 +846,9 @@ msgid "Special: %u"
 msgstr ""
 
 #: src/scores.c:116
-#, fuzzy, c-format
+#, c-format
 msgid "Hero: %u"
-msgstr "Heros"
+msgstr "Heros: %u"
 
 #: src/scores.c:350
 msgid "Unit Losses"
@@ -1493,12 +1486,10 @@ msgid "Manufacture"
 msgstr ""
 
 #: src/keymap.c:290
-#, fuzzy
 msgid "Research"
 msgstr "Invenio"
 
 #: src/keymap.c:291
-#, fuzzy
 msgid "Build"
 msgstr "Construo"
 
@@ -3602,9 +3593,8 @@ msgstr ""
 
 #: data/messages/strings/names.txt:201
 #: data/mp/messages/strings/names.txt:203
-#, fuzzy
 msgid "Trike"
-msgstr "Exercitum"
+msgstr ""
 
 #: data/messages/strings/names.txt:202
 #: data/mp/messages/strings/names.txt:204
@@ -3755,9 +3745,8 @@ msgstr ""
 
 #: data/messages/strings/names.txt:243
 #: data/mp/messages/strings/names.txt:245
-#, fuzzy
 msgid "Vengeance"
-msgstr "Veteranum"
+msgstr ""
 
 #: data/messages/strings/names.txt:244
 #: data/mp/messages/strings/names.txt:246
@@ -3842,9 +3831,8 @@ msgstr ""
 
 #: data/messages/strings/names.txt:321
 #: data/mp/messages/strings/names.txt:323
-#, fuzzy
 msgid "Hover"
-msgstr "Heros"
+msgstr ""
 
 #: data/messages/strings/names.txt:322
 #: data/mp/messages/strings/names.txt:324
@@ -4186,9 +4174,8 @@ msgstr ""
 #: data/messages/strings/names.txt:891
 #: data/mp/messages/strings/names.txt:427
 #: data/mp/messages/strings/names.txt:899
-#, fuzzy
 msgid "CB Tower"
-msgstr "Vigor"
+msgstr ""
 
 #: data/messages/strings/names.txt:426
 #: data/messages/strings/names.txt:898
@@ -4451,9 +4438,8 @@ msgstr ""
 #: data/messages/strings/names.txt:1060
 #: data/mp/messages/strings/names.txt:484
 #: data/mp/messages/strings/names.txt:1068
-#, fuzzy
 msgid "Howitzer"
-msgstr "Vigor"
+msgstr ""
 
 #: data/messages/strings/names.txt:484
 #: data/mp/messages/strings/names.txt:486
