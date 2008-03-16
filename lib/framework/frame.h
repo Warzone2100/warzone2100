@@ -27,18 +27,17 @@
 
 #include <physfs.h>
 
+#include "types.h"
+
 // Provides the safer functions strlcpy and strlcat
 #include "strlfuncs.h"
 #include "printf_ext.h"
 
-#include "i18n.h"
-
 #include "macros.h"
-#include "types.h"
 #include "debug.h"
 
+#include "i18n.h"
 #include "treap.h"
-
 #include "trig.h"
 
 extern UDWORD selectedPlayer;
