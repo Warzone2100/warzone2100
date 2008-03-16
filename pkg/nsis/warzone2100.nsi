@@ -156,10 +156,8 @@ Section $(TEXT_SecBase) SecBase
   File "/oname=License.txt" "..\..\COPYING"
   File "/oname=Readme.en.txt" "..\..\doc\Readme.en"
   File "/oname=Readme.de.txt" "..\..\doc\Readme.de"
-;  File "/oname=Readme.nl.txt" "..\..\doc\Readme.nl"
   File "/oname=Readme.en.html" "..\..\doc\Readme.en.xhtml"
   File "/oname=Readme.de.html" "..\..\doc\Readme.de.xhtml"
-;  File "/oname=Readme.nl.html" "..\..\doc\Readme.nl.xhtml"
 
   SetOutPath "$INSTDIR\styles"
 
@@ -395,10 +393,8 @@ Section "Uninstall"
 
   Delete "$INSTDIR\Readme.en.txt"
   Delete "$INSTDIR\Readme.de.txt"
-  Delete "$INSTDIR\Readme.nl.txt"
   Delete "$INSTDIR\Readme.en.html"
   Delete "$INSTDIR\Readme.de.html"
-  Delete "$INSTDIR\Readme.nl.html"
 
   Delete "$INSTDIR\License.txt"
   Delete "$INSTDIR\Authors.txt"
@@ -408,11 +404,15 @@ Section "Uninstall"
 
   Delete "$INSTDIR\styles\readme.print.css"
   Delete "$INSTDIR\styles\readme.screen.css"
+  RMDir "$INSTDIR\styles"
 
   Delete "$INSTDIR\fonts\fonts.conf"
   Delete "$INSTDIR\fonts\DejaVuSansMono.ttf"
+  RMDir "$INSTDIR\fonts"
 
   Delete "$INSTDIR\mods\global\grim.wz"
+  RMDir "$INSTDIR\mods\global"
+  RMDir "$INSTDIR\mods"
 
   Delete "$INSTDIR\locale\da\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\da\LC_MESSAGES"
@@ -421,6 +421,14 @@ Section "Uninstall"
   Delete "$INSTDIR\locale\de\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\de\LC_MESSAGES"
   RMDir "$INSTDIR\locale\de"
+
+  Delete "$INSTDIR\locale\fr\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\fr\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\fr"
+
+  Delete "$INSTDIR\locale\it\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\it\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\it"
 
   Delete "$INSTDIR\locale\la\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\la\LC_MESSAGES"
@@ -434,16 +442,18 @@ Section "Uninstall"
   RMDir "$INSTDIR\locale\nl\LC_MESSAGES"
   RMDir "$INSTDIR\locale\nl"
 
-  RMDir "$INSTDIR\locale"
+  Delete "$INSTDIR\locale\ru\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\ru\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\ru"
 
-  RMDir "$INSTDIR\mods\global"
-  RMDir "$INSTDIR\mods"
-  RMDir "$INSTDIR\styles"
+  RMDir "$INSTDIR\locale"
   RMDir "$INSTDIR"
 
   Delete "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk"
   Delete "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME}.lnk"
   Delete "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Grim's GFX.lnk"
+  Delete "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Aivolution.lnk"
+  RMDir "$SMPROGRAMS\$STARTMENU_FOLDER"
 
   ;Delete empty start menu parent diretories
   !insertmacro MUI_STARTMENU_GETFOLDER Application $MUI_TEMP
