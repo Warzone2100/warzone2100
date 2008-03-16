@@ -23,7 +23,6 @@
 
 // These are necessary for the `bool' type
 #include "lib/framework/frame.h"
-#include "lib/framework/strlfuncs.h"
 
 #include "physfs_vfs.h"
 #include "sqlite3.h"
