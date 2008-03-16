@@ -9,6 +9,7 @@ warzone2100 (2.1.0~beta2-0) unstable; urgency=low
     * Fix: Special characters would be printed as '?' (bug #10913)
     * Fix: Warzone could lock up, trying to pick a droid (bug #11250)
   * Graphics:
+    * New: Replaced old menu backdrops with new, high-res ones
     * Change: Reduce the number of atmospheric particles generated and lower the CPU usage
     * Fix: Briefings were not displayed at high resolutions (bug #11121)
     * Fix: Fonts were not displayed with QuesoGLC 0.7.0 (patch #961)
