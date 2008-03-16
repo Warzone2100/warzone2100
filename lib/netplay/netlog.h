@@ -30,3 +30,4 @@ BOOL NETlogEntry( const char *str, UDWORD a, UDWORD b );
 void NETlogPacket(NETMSG *msg, BOOL received);
 
 #endif // _netlog_h
+

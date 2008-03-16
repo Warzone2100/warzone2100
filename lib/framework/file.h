@@ -43,3 +43,4 @@ extern BOOL loadFileToBufferNoError(const char *pFileName, char *pFileBuffer, UD
                              UDWORD *pSize);
 
 #endif // _file_h
+
