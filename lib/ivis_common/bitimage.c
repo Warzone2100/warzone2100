@@ -17,18 +17,14 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "lib/framework/frame.h"
-#include "lib/framework/frameresource.h"
 
-#include "piepalette.h"
-#include "tex.h"
-#include "ivispatch.h"
+#include "lib/framework/frameresource.h"
+#include "lib/framework/file.h"
+
 #include "bitimage.h"
-#include <physfs.h>
+#include "tex.h"
+
 
 static unsigned short LoadTextureFile(const char *FileName)
 {
@@ -83,7 +79,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		int temp, retval;
 		IMAGEDEF *ImageDef = &ImageFile->ImageDefs[numImages];
 
-		retval = sscanf(ptr, "%u,%u,%u,%u,%u,%d,%d%n", &ImageDef->TPageID, &ImageDef->Tu, &ImageDef->Tv, &ImageDef->Width, 
+		retval = sscanf(ptr, "%u,%u,%u,%u,%u,%d,%d%n", &ImageDef->TPageID, &ImageDef->Tu, &ImageDef->Tv, &ImageDef->Width,
 		       &ImageDef->Height, &ImageDef->XOffset, &ImageDef->YOffset, &temp);
 		if (retval != 7)
 		{

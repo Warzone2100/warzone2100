@@ -23,17 +23,10 @@
  * Callback and display functions for interface.
  *
  */
-
-#include <stdio.h>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/math-help.h"
 
-#include "objects.h"
-#include "loop.h"
-#include "map.h"
-#include "radar.h"
 /* Includes direct access to render library */
 #include "lib/ivis_common/ivisdef.h"
 #include "lib/ivis_common/piestate.h"
@@ -47,22 +40,28 @@
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_opengl/piematrix.h"
 
+#include "lib/gamelib/gtime.h"
+#include "lib/sound/audio.h"
+
+#include "intdisplay.h"
+
+#include "objects.h"
+#include "loop.h"
+#include "map.h"
+#include "radar.h"
+
 #include "display3d.h"
 #include "edit3d.h"
 #include "structure.h"
 #include "research.h"
 #include "function.h"
-#include "lib/gamelib/gtime.h"
 #include "hci.h"
 #include "stats.h"
 #include "game.h"
 #include "power.h"
-#include "lib/sound/audio.h"
-#include "lib/framework/math-help.h"
 #include "order.h"
 #include "frontend.h"
 #include "intimage.h"
-#include "intdisplay.h"
 #include "component.h"
 #include "console.h"
 #include "cmddroid.h"

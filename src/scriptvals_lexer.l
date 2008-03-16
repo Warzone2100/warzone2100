@@ -24,17 +24,16 @@
  * lexer for loading script variable values
  *
  */
-
-#include <stdio.h>
-
 #include "lib/framework/frame.h"
-#include "lib/script/script.h"
-#include "src/scriptvals.h"
 
 #include <physfs.h>
 
+#include "lib/script/script.h"
+#include "src/scriptvals.h"
+
 /* Get the Yacc definitions */
 #include "scriptvals_parser.tab.h"
+
 
 /* Maximum length for any TEXT value */
 #ifndef YYLMAX

@@ -26,15 +26,9 @@
 
 #include "lib/framework/frame.h"
 
-#include <stdio.h>
-
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
 
-#include <string.h>
-
-#include "lib/framework/types.h"
-#include "lib/framework/debug.h"
 #include "lib/framework/resly.h"
 
 /* Get the Yacc definitions */

@@ -31,9 +31,6 @@
 #ifndef _tagfile_h
 #define _tagfile_h
 
-#include <stdio.h>
-#include <physfs.h>
-
 #include "lib/framework/types.h"
 
 typedef uint8_t element_t;

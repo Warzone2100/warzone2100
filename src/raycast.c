@@ -24,19 +24,14 @@
  *
  */
 
-#include <stdio.h>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/math-help.h"
 
+#include "raycast.h"
 #include "objects.h"
 #include "map.h"
-
-#include "raycast.h"
 #include "display3d.h"
-//#ifdef ALEXM
 #include "effects.h"
-//#endif
 
 
 // accuracy for the raycast lookup tables

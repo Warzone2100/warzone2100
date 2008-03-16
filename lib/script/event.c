@@ -22,18 +22,10 @@
  *
  * The event management system.
  */
-
-#include <stdio.h>
-#include <string.h>
-
-// event tracing printf's
-#define DEBUG_GROUP0
-// display tested triggers
-//#define DEBUG_GROUP1
 #include "lib/framework/frame.h"
-#include "interp.h"
-#include "script.h"
+
 #include "event.h"
+#include "script.h"
 
 // array to store release functions
 static VAL_CREATE_FUNC		*asCreateFuncs;

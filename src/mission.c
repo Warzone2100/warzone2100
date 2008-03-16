@@ -24,14 +24,22 @@
  */
 #include "mission.h"
 
-#include <stdio.h>
-#include <string.h>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/math-help.h"
+#include "lib/ivis_common/bitimage.h"
 #include "lib/ivis_common/textdraw.h"
+#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/piefunc.h"
+#include "lib/ivis_common/pieblitfunc.h"
 #include "lib/gamelib/gtime.h"
+#include "lib/script/script.h"
+#include "lib/sound/audio.h"
+#include "lib/sound/audio_id.h"
+#include "lib/sound/cdaudio.h"
+#include "lib/widget/widget.h"
+#include "lib/widget/widgint.h"
+
 #include "game.h"
 #include "projectile.h"
 #include "power.h"
@@ -42,7 +50,6 @@
 #include "order.h"
 #include "action.h"
 #include "display3d.h"
-#include "lib/ivis_common/piestate.h"
 #include "effects.h"
 #include "radar.h"
 #include "resource.h"		// for mousecursors
@@ -53,22 +60,15 @@
 #include "main.h"
 #include "display.h"
 #include "loadsave.h"
-#include "lib/script/script.h"
 #include "scripttabs.h"
-#include "lib/sound/audio.h"
-#include "lib/sound/audio_id.h"
 #include "cmddroid.h"
 #include "warcam.h"
 #include "wrappers.h"
-#include "lib/widget/widget.h"
-#include "lib/widget/widgint.h"
 #include "console.h"
 #include "droid.h"
 
 #include "data.h"
 #include "multiplay.h"
-#include "lib/ivis_common/piefunc.h"
-#include "lib/ivis_common/pieblitfunc.h"
 #include "environ.h"
 
 #include "loop.h"
@@ -80,11 +80,6 @@
 #include "selection.h"
 #include "scores.h"
 #include "keymap.h"
-#include "lib/ivis_common/bitimage.h"
-
-#include "lib/sound/cdaudio.h"
-
-//#include "texture.h"	   // ffs
 
 #include "texture.h"
 

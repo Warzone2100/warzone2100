@@ -24,21 +24,23 @@
 
 #define DEFINE_DRIVE_INLINE
 
-#include <stdio.h>
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 
 #include "lib/ivis_common/rendmode.h"
+
+#include "lib/gamelib/gtime.h"
+#include "lib/gamelib/animobj.h"
+#include "lib/sound/audio.h"
+
+#include "drive.h"
 #include "objects.h"
 #include "move.h"
 #include "visibility.h"
 #include "map.h"
 #include "fpath.h"
 #include "loop.h"
-#include "lib/gamelib/gtime.h"
-#include "lib/sound/audio.h"
 #include "geometry.h"
-#include "lib/gamelib/animobj.h"
 #include "anim_id.h"
 #include "formationdef.h"
 #include "formation.h"
@@ -58,7 +60,6 @@
 #include "intdisplay.h"
 #include "multiplay.h"
 #include "target.h"
-#include "drive.h"
 
 // all the bollox needed for script callbacks
 #include "lib/script/interp.h"				// needed to define types in scripttabs.h
@@ -311,7 +312,7 @@ BOOL driveDroidKilled(DROID *psDroid)
 			psDrivenDroid = NULL;
 			DeSelectDroid(psDroid);
 
-			if(!StartDriverMode(psDroid)) 
+			if(!StartDriverMode(psDroid))
 			{
 				return FALSE;
 			}
@@ -702,10 +703,10 @@ BOOL driveAllowControl(void)
 
 
 // Disable Tactical order mode.
-// 
+//
 void driveDisableTactical(void)
 {
-	if(driveModeActive() && TacticalActive) 
+	if(driveModeActive() && TacticalActive)
 	{
 		CancelTacticalScroll();
 		TacticalActive = FALSE;

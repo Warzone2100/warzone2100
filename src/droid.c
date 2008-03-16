@@ -23,11 +23,17 @@
  * Droid method functions.
  *
  */
-
-#include <stdio.h>
-
 #include "lib/framework/frame.h"
+#include "lib/framework/math-help.h"
 #include "lib/framework/strres.h"
+
+#include "lib/gamelib/gtime.h"
+#include "lib/gamelib/animobj.h"
+#include "lib/ivis_opengl/piematrix.h"
+#include "lib/ivis_opengl/screen.h"
+#include "lib/script/script.h"
+#include "lib/sound/audio.h"
+#include "lib/sound/audio_id.h"
 
 #include "objects.h"
 #include "loop.h"
@@ -36,21 +42,15 @@
 #include "drive.h"
 #include "droid.h"
 #include "hci.h"
-#include "lib/gamelib/gtime.h"
 #include "game.h"
 #include "power.h"
 #include "miscimd.h"
 #include "effects.h"
 #include "feature.h"
-#include "lib/sound/audio.h"
-#include "lib/sound/audio_id.h"
 #include "action.h"
 #include "order.h"
-#include "lib/framework/math-help.h"
 #include "move.h"
-#include "lib/ivis_opengl/piematrix.h"
 #include "anim_id.h"
-#include "lib/gamelib/animobj.h"
 #include "geometry.h"
 #include "display.h"
 #include "console.h"
@@ -65,7 +65,6 @@
 #include "display3d.h"
 #include "group.h"
 #include "text.h"
-#include "lib/script/script.h"
 #include "scripttabs.h"
 #include "scriptcb.h"
 #include "cmddroid.h"
@@ -82,8 +81,6 @@
 #include "scores.h"
 #include "research.h"
 #include "combat.h"
-// FIXME Direct iVis implementation include!
-#include "lib/ivis_opengl/screen.h"
 #include "scriptfuncs.h"			//for ThreatInRange()
 
 

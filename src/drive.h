@@ -21,6 +21,8 @@
 #ifndef _drive_h
 #define _drive_h
 
+#include "droid.h"
+
 extern BOOL DirectControl;
 extern DROID *psDrivenDroid;
 

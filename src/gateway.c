@@ -24,18 +24,15 @@
  *
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-
 #include "lib/framework/frame.h"
+
+#include "lib/framework/listmacs.h"
 #include "map.h"
 #include "astar.h"
 #include "fpath.h"
 #include "wrappers.h"
 
 #include "gateway.h"
-#include "lib/framework/listmacs.h"
 
 // the list of gateways on the current map
 GATEWAY		*psGateways;

@@ -23,22 +23,19 @@
  * Routines for moving units about the map
  *
  */
-
 #include "lib/framework/frame.h"
-
-#include <stdio.h>
-#include <string.h>
 
 #include "lib/framework/trig.h"
 #include "lib/framework/math-help.h"
-#include "lib/netplay/netplay.h"
 #include "lib/gamelib/gtime.h"
+#include "lib/gamelib/animobj.h"
+#include "lib/netplay/netplay.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
-#include "lib/gamelib/animobj.h"
+
+#include "move.h"
 
 #include "objects.h"
-#include "move.h"
 #include "visibility.h"
 #include "map.h"
 #include "fpath.h"

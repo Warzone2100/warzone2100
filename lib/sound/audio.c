@@ -17,17 +17,14 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-//*
-//
-#include <stdio.h>
-#include <string.h>
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/gamelib/gtime.h"
+#include "lib/ivis_common/pietypes.h"
+
 #include "tracklib.h"
 #include "aud.h"
 #include "audio_id.h"
-#include "lib/ivis_common/pietypes.h"
 
 // defines
 #define NO_SAMPLE				- 2

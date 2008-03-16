@@ -23,16 +23,9 @@
  * Image definitions and related functions.
  *
  */
-
-#include <stdio.h>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
-#include "lib/widget/widget.h"
 
-#include "objects.h"
-#include "loop.h"
-#include "map.h"
 /* Includes direct access to render library */
 #include "lib/ivis_common/ivisdef.h"
 #include "lib/ivis_common/piestate.h"
@@ -42,17 +35,9 @@
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/bitimage.h"
 
-#include "display3d.h"
-#include "edit3d.h"
-#include "structure.h"
-#include "research.h"
-#include "function.h"
 #include "lib/gamelib/gtime.h"
-#include "hci.h"
-#include "stats.h"
-#include "game.h"
-#include "power.h"
 #include "lib/sound/audio.h"
+#include "lib/widget/widget.h"
 #include "lib/widget/widgint.h"
 #include "lib/widget/bar.h"
 #include "lib/widget/form.h"
@@ -60,10 +45,25 @@
 #include "lib/widget/button.h"
 #include "lib/widget/editbox.h"
 #include "lib/widget/slider.h"
+
+#include "intimage.h"
+
+#include "objects.h"
+#include "loop.h"
+#include "map.h"
+
+#include "display3d.h"
+#include "edit3d.h"
+#include "structure.h"
+#include "research.h"
+#include "function.h"
+#include "hci.h"
+#include "stats.h"
+#include "game.h"
+#include "power.h"
 #include "order.h"
 #include "main.h"
 
-#include "intimage.h"
 
 #define INCEND	(0)
 
@@ -317,7 +317,7 @@ void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Heig
 									y+Height-INCEND+Rect->BRYOffset);
 				} else {
 					pie_BoxFill(x + Rect->TLXOffset, y + Height - INCEND + Rect->TLYOffset,
-					            x + Width - INCEND + Rect->BRXOffset, y + Height - INCEND + Rect->BRYOffset, 
+					            x + Width - INCEND + Rect->BRXOffset, y + Height - INCEND + Rect->BRYOffset,
 					            psPalette[Rect->ColourIndex]);
 				}
 				break;

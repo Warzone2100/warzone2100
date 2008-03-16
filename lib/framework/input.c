@@ -24,20 +24,15 @@
  * Processes all keyboard and mouse input.
  *
  */
-
-#include <stdio.h>
-#include <string.h>
+#include "frame.h"
 
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
 
-/* The input buffer printf's */
-#include "types.h"
-#include "debug.h"
 #include "input.h"
-#include "frame.h"
 #include "frameint.h"
 #include "configfile.h"
+
 #include "lib/gamelib/gtime.h"
 
 /* The possible states for keys */

@@ -21,6 +21,8 @@
 #ifndef _target_h
 #define _target_h
 
+#include "basedef.h"
+
 void targetInitialise(void);
 void targetOpenList(BASE_OBJECT *psTargeting);
 void targetCloseList(void);

@@ -25,18 +25,16 @@
  * load / update / store multiplayer statistics for league tables etc...
  */
 
-#include <stdio.h>
-#include <string.h>
-#include <physfs.h>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/file.h"
+#include "lib/netplay/netplay.h"
+#include "lib/widget/widget.h"
+
 #include "objmem.h"
 #include "power.h"
 #include "map.h"
-#include "lib/widget/widget.h"
 #include "effects.h"	// for discovery flash
-#include "lib/netplay/netplay.h"
 #include "cmddroid.h"
 #include "multiplay.h"
 #include "multirecv.h"

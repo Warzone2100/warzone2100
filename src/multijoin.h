@@ -23,8 +23,10 @@
  * Alex Lee, pumpkin studios,
  * multijoin caters for all the player comings and goings of each player
  */
+#ifndef _multijoin_h
+#define _multijoin_h
 
-#include "lib/netplay/netplay.h"
+#include "droiddef.h"
 
 extern BOOL intDisplayMultiJoiningStatus(UBYTE joinCount);
 extern BOOL MultiPlayerLeave			(UDWORD dp);						// A player has left the game.
@@ -38,6 +40,8 @@ extern void clearPlayer					(UDWORD player, BOOL quietly, BOOL removeOil);// wip
 typedef struct {
 	DROID *psDroid;
 	void  *psNext;
-}DROIDSTORE, *LPDROIDSTORE;
+} DROIDSTORE, *LPDROIDSTORE;
 
 extern DROIDSTORE *tempDroidList;
+
+#endif // _multijoin_h

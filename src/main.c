@@ -50,7 +50,6 @@
 #include "lib/framework/frame.h"
 
 #include <SDL.h>
-#include <physfs.h>
 
 #if defined(WZ_OS_WIN)
 // FIXME HACK Workaround DATADIR definition in objbase.h
@@ -63,6 +62,7 @@
 
 #include "lib/framework/configfile.h"
 #include "lib/framework/input.h"
+#include "lib/framework/physfs_ext.h"
 #include "lib/framework/tagfile.h"
 
 #include "lib/gamelib/gtime.h"

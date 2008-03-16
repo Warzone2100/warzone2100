@@ -20,13 +20,12 @@
 // ////////////////////////////////////////////////////////////////////////
 // Includes
 #include "lib/framework/frame.h"
-#include "netplay.h"
-#include "netlog.h"
 
 #include <time.h>
-#include <stdio.h>
 #include <physfs.h>
-#include <string.h>
+
+#include "netlog.h"
+#include "netplay.h"
 
 // ////////////////////////////////////////////////////////////////////////
 // Logging for degug only

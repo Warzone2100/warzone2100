@@ -31,11 +31,7 @@
 # error Framework header files MUST be included from Frame.h ONLY.
 #endif
 
-#include <stdio.h>
 #include <assert.h>
-#include <stdarg.h>
-
-#include "types.h"
 
 #if defined(__cplusplus)
 extern "C"

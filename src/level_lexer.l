@@ -24,9 +24,6 @@
  * lexer for loading level description files
  *
  */
-
-#include <stdio.h>
-
 #include "lib/framework/frame.h"
 
 #include "src/levels.h"

@@ -22,9 +22,6 @@
  * Frontend loop & also loading screen & game over screen.
  * AlexL. Pumpkin Studios, EIDOS Interactive, 1997
  */
-
-#include <stdio.h>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/strres.h"
@@ -191,7 +188,7 @@ TITLECODE titleLoop(void)
 		case GAME3:
 			runGameOptions3Menu();
 			break;
-		
+
 		case GAME4:
 			runGameOptions4Menu();
 			break;

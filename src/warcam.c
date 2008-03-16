@@ -28,19 +28,21 @@
 	get it working the way it used to, should anything get broken.
 	I really hope that no further changes are needed here...:-(
 	Alex M. */
-#include <stdio.h>
 #include "lib/framework/frame.h"
 #include "lib/framework/trig.h"
 
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_common/piedef.h" //ivis matrix code
-#include "objects.h"
+
+#include "lib/gamelib/gtime.h"
+
 #include "warcam.h"
+
+#include "objects.h"
 #include "display.h"
 #include "display3d.h"
 #include "hci.h"
 #include "console.h"
-#include "lib/gamelib/gtime.h"
 #include "effects.h"
 #include "map.h"
 #include "geometry.h"
@@ -56,6 +58,7 @@
 #include "raycast.h"
 #include "display3d.h"
 #include "selection.h"
+
 
 #define MIN_TRACK_HEIGHT 16
 

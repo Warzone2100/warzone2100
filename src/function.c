@@ -23,9 +23,6 @@
  * Store function stats for the Structures etc.
  *
  */
-#include <stdio.h>
-#include <string.h>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 
@@ -36,7 +33,6 @@
 #include "research.h"
 #include "droid.h"
 #include "group.h"
-
 
 #include "multiplay.h"
 

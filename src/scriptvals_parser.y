@@ -24,21 +24,19 @@
  * yacc grammar for loading script variable values
  *
  */
-
-#include <stdio.h>
-#include <string.h>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
+
+#include "lib/gamelib/gtime.h"
 #include "lib/script/script.h"
+#include "lib/sound/audio.h"
+
 #include "src/scripttabs.h"
 #include "src/scriptvals.h"
 #include "src/objects.h"
-#include "lib/gamelib/gtime.h"
 #include "src/droid.h"
 #include "src/structure.h"
 #include "src/message.h"
-#include "lib/sound/audio.h"
 #include "src/levels.h"
 #include "src/research.h"
 

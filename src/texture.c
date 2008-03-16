@@ -22,18 +22,10 @@
  * @file texture.c
  * This is where we do texture atlas generation.
  */
+#include "lib/framework/frame.h"
+
 
 #include <string.h>
-
-#include "lib/framework/frame.h"
-#include "lib/ivis_common/pietypes.h"
-#include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/tex.h"
-#include "lib/ivis_common/piepalette.h"
-#include "lib/ivis_opengl/screen.h"
-#include "display3ddef.h"
-#include "texture.h"
-#include "radar.h"
 
 #include <physfs.h>
 #include <SDL_opengl.h>
@@ -42,6 +34,19 @@
 #else
 #include <GL/glu.h>
 #endif
+
+#include "lib/framework/file.h"
+
+#include "lib/ivis_common/pietypes.h"
+#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/tex.h"
+#include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_opengl/screen.h"
+
+#include "display3ddef.h"
+#include "texture.h"
+#include "radar.h"
+
 
 #define MIPMAP_LEVELS		4
 #define MIPMAP_MIN		16
@@ -134,7 +139,7 @@ void texLoad(const char *fileName)
 	mipmap_levels = MIPMAP_LEVELS;
 
 	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &glval);
-	
+
 	while (glval < mipmap_max * TILES_IN_PAGE_COLUMN)
 	{
 		mipmap_max /= 2;

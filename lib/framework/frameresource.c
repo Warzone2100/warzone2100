@@ -25,8 +25,7 @@
  */
 #include "frameresource.h"
 
-#include <physfs.h>
-
+#include "file.h"
 #include "resly.h"
 
 // Local prototypes

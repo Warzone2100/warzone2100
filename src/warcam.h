@@ -18,10 +18,10 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 #ifndef _warcam_h
-/* Prevent multiple inclusion */
 #define _warcam_h
 
 #include "lib/ivis_common/pietypes.h"
+#include "objectdef.h"
 
 #define X_UPDATE 0x1
 #define Y_UPDATE 0x2

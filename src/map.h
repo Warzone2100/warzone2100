@@ -26,7 +26,6 @@
 #ifndef _map_h
 #define _map_h
 
-#include <stdio.h>
 #include "lib/framework/frame.h"
 #include "objects.h"
 

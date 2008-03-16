@@ -23,13 +23,14 @@
  * Game initialisation routines.
  *
  */
+#include "lib/framework/frame.h"
 
-#include <physfs.h>
 #include <string.h>
 
-#include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/input.h"
+#include "lib/framework/file.h"
+#include "lib/framework/physfs_ext.h"
 #include "lib/framework/strres.h"
 #include "lib/ivis_common/piemode.h"
 #include "lib/ivis_common/piestate.h"
@@ -38,13 +39,15 @@
 #include "lib/ivis_common/ivi.h"
 #include "lib/netplay/netplay.h"
 #include "lib/script/script.h"
+#include "lib/sound/audio_id.h"
 #include "lib/sound/cdaudio.h"
 #include "lib/sound/mixer.h"
+
+#include "init.h"
 
 #include "advvis.h"
 #include "astar.h"
 #include "atmos.h"
-#include "lib/sound/audio_id.h"
 #include "cluster.h"
 #include "cmddroid.h"
 #include "component.h"
@@ -64,7 +67,6 @@
 #include "game.h"
 #include "gateway.h"
 #include "hci.h"
-#include "init.h"
 #include "intdisplay.h"
 #include "keymap.h"
 #include "levels.h"

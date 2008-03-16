@@ -20,20 +20,12 @@
 
 /* Handle clipboard text and data in arbitrary formats */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <limits.h>
-#include <string.h>
+#include "lib/framework/frame.h"
 
 #include <SDL.h>
 #include <SDL_syswm.h>
 
-#include "lib/framework/frame.h"
 #include "scrap.h"
-
-/* Miscellaneous defines */
-#define PUBLIC
-#define PRIVATE	static
 
 /* System dependent data types */
 #if defined(WZ_WS_X11)
@@ -75,7 +67,7 @@ static unsigned short InputGroup;
 
 #define FORMAT_PREFIX	"SDL_scrap_0x"
 
-PRIVATE scrap_type
+static scrap_type
 convert_format(int type)
 {
 switch (type)
@@ -118,7 +110,7 @@ switch (type)
 }
 
 /* Convert internal data to scrap format */
-PRIVATE int
+static int
 convert_data(int type, char *dst, char *src, int srclen)
 {
 int dstlen;
@@ -198,7 +190,7 @@ switch (type)
 }
 
 /* Convert scrap data to internal format */
-PRIVATE int
+static int
 convert_scrap(int type, char *dst, char *src, int srclen)
 {
 int dstlen;
@@ -267,10 +259,10 @@ return dstlen;
 
 #if defined(WZ_WS_X11)
 /* The system message filter function -- handle clipboard messages */
-PRIVATE int clipboard_filter(const SDL_Event *event);
+static int clipboard_filter(const SDL_Event *event);
 #endif
 
-PUBLIC int
+int
 init_scrap(void)
 {
 SDL_SysWMinfo info;
@@ -319,7 +311,7 @@ if ( SDL_GetWMInfo(&info) )
 return(retval);
 }
 
-PUBLIC int
+int
 lost_scrap(void)
 {
 int retval;
@@ -343,7 +335,7 @@ retval = ( PhInputGroup(NULL) != InputGroup );
 return(retval);
 }
 
-PUBLIC void
+void
 put_scrap(int type, int srclen, char *src)
 {
 scrap_type format;
@@ -443,7 +435,7 @@ if ( OpenClipboard(SDL_Window) )
 #endif /* scrap type */
 }
 
-PUBLIC void
+void
 get_scrap(int type, int *dstlen, char **dst)
 {
 	scrap_type format;
@@ -596,7 +588,7 @@ get_scrap(int type, int *dstlen, char **dst)
 }
 
 #if defined(WZ_WS_X11)
-PRIVATE int clipboard_filter(const SDL_Event *event)
+static int clipboard_filter(const SDL_Event *event)
 {
 /* Post all non-window manager specific events */
 if ( event->type != SDL_SYSWMEVENT ) {

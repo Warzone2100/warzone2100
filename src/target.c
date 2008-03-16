@@ -23,12 +23,15 @@
  * Screen coordinate based targeting system. Maintains a list of on screen objects
  * and provides various functions for aquiring targets from this list.
  */
-
-#include <stdio.h>
-
 #include "lib/framework/frame.h"
+
 #include "lib/gamelib/gtime.h"
 #include "lib/gamelib/animobj.h"
+
+#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/piepalette.h"
+
+#include "target.h"
 
 #include "statsdef.h"
 #include "basedef.h"
@@ -40,11 +43,6 @@
 #include "objectdef.h"
 #include "droid.h"
 
-// FIXME Direct iVis implementation include!
-#include "lib/ivis_common/rendmode.h"
-#include "lib/ivis_common/piepalette.h"
-
-#include "target.h"
 
 #define MAX_TARGETS	32
 

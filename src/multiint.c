@@ -27,53 +27,51 @@
 
 #include "lib/framework/frame.h"
 
+#include <time.h>
 #include <SDL_opengl.h>
 
 #include "lib/framework/frameresource.h"
 #include "lib/framework/frameint.h"
-// FIXME Direct iVis implementation include!
-#include "lib/ivis_opengl/screen.h"
-#include "lib/widget/widget.h"
-
-#include "main.h"
-#include "objects.h"
-#include "display.h"// pal stuff
-#include "display3d.h"
+#include "lib/framework/file.h"
 
 /* Includes direct access to render library */
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/pieclip.h"
 #include "lib/ivis_common/piepalette.h"
-// FIXME Direct iVis implementation include!
 #include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_opengl/piematrix.h"			// for setgeometricoffset
+#include "lib/ivis_opengl/screen.h"
+
+#include "lib/gamelib/gtime.h"
+#include "lib/netplay/netplay.h"
+#include "lib/script/script.h"
+#include "lib/widget/widget.h"
+
+#include "main.h"
+#include "objects.h"
+#include "display.h"// pal stuff
+#include "display3d.h"
 #include "objmem.h"
 #include "gateway.h"
-#include <time.h>
-#include "lib/gamelib/gtime.h"
+
 #include "configuration.h"
 #include "intdisplay.h"
 #include "design.h"
 #include "hci.h"
 #include "power.h"
 #include "loadsave.h"			// for blueboxes.
-// FIXME Direct iVis implementation include!
-#include "lib/ivis_opengl/piematrix.h"			// for setgeometricoffset
 #include "component.h"
 #include "map.h"
 #include "console.h"			// chat box stuff
 #include "frend.h"
 #include "advvis.h"
-//#include "editbox.h"
 #include "frontend.h"
-//#include "texture.h"
 #include "data.h"
-#include "lib/script/script.h"
 #include "keymap.h"
 #include "game.h"
 #include "warzoneconfig.h"
 
-#include "lib/netplay/netplay.h"
 #include "multiplay.h"
 #include "multiint.h"
 #include "multijoin.h"
@@ -1009,7 +1007,7 @@ BOOL recvTeamRequest()
 
 	if (player > MAX_PLAYERS || team > MAX_PLAYERS)
 	{
-		debug(LOG_ERROR, "Invalid NET_TEAMREQUEST from player %d: Tried to change player %d (team %d)", 
+		debug(LOG_ERROR, "Invalid NET_TEAMREQUEST from player %d: Tried to change player %d (team %d)",
 		      NETgetSource(), (int)player, (int)team);
 		return FALSE;
 	}
@@ -1096,7 +1094,7 @@ BOOL recvColourRequest()
 
 	if (player > MAX_PLAYERS || (chosenPlayer > MAX_PLAYERS && chosenPlayer != UBYTE_MAX))
 	{
-		debug(LOG_ERROR, "Invalid NET_COLOURREQUEST from player %d: Tried to change player %d to %d", 
+		debug(LOG_ERROR, "Invalid NET_COLOURREQUEST from player %d: Tried to change player %d to %d",
 		      NETgetSource(), (int)player, (int)chosenPlayer);
 		return FALSE;
 	}
@@ -2303,7 +2301,7 @@ void displayChatEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y -4;			// 4 is the magic number.
 
-	// draws the line at the bottom of the multiplayer join dialog separating the chat 
+	// draws the line at the bottom of the multiplayer join dialog separating the chat
 	// box from the input box
 	iV_Line(x, y, x + psWidget->width, y, WZCOL_MENU_SEPARATOR);
 

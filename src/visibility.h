@@ -20,6 +20,8 @@
 #ifndef _visibility_h
 #define _visibility_h
 
+#include "objectdef.h"
+
 // initialise the visibility stuff
 extern BOOL visInitialise(void);
 

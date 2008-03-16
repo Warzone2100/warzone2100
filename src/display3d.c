@@ -25,33 +25,34 @@
 	-	Alex McLean & Jeremy Sallis, Pumpkin Studios, EIDOS INTERACTIVE -
 	-------------------------------------------------------------------
 */
-/* Generic includes */
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <limits.h>
+#include "lib/framework/frame.h"
+#include "lib/framework/math-help.h"
 
 /* Includes direct access to render library */
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/tex.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/piepalette.h"
-// FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_common/piemode.h"
 #include "lib/ivis_common/piefunc.h"
 #include "lib/ivis_common/rendmode.h"
+
+#include "lib/gamelib/gtime.h"
+#include "lib/gamelib/animobj.h"
+#include "lib/script/script.h"
+#include "lib/sound/audio.h"
+#include "lib/sound/audio_id.h"
+
 #include "e3demo.h"
 #include "loop.h"
 #include "atmos.h"
 #include "raycast.h"
 #include "levels.h"
-#include "lib/framework/frame.h"
 #include "map.h"
 #include "move.h"
 #include "visibility.h"
 #include "geometry.h"
-#include "lib/gamelib/gtime.h"
 #include "resource.h"
 #include "messagedef.h"
 #include "miscimd.h"
@@ -63,10 +64,8 @@
 #include "intdisplay.h"
 #include "radar.h"
 #include "display3d.h"
-#include "lib/framework/math-help.h"
 #include "lighting.h"
 #include "console.h"
-#include "lib/gamelib/animobj.h"
 #include "projectile.h"
 #include "bucket3d.h"
 #include "intelmap.h"
@@ -74,7 +73,6 @@
 #include "message.h"
 #include "component.h"
 #include "warcam.h"
-#include "lib/script/script.h"
 #include "scripttabs.h"
 #include "scriptextern.h"
 #include "scriptcb.h"
@@ -85,8 +83,6 @@
 #include "gateway.h"
 #include "transporter.h"
 #include "warzoneconfig.h"
-#include "lib/sound/audio.h"
-#include "lib/sound/audio_id.h"
 #include "action.h"
 #include "keybind.h"
 #include "combat.h"
@@ -98,6 +94,7 @@
 #include "texture.h"
 #include "anim_id.h"
 #include "cmddroid.h"
+
 
 #define WATER_ALPHA_LEVEL 255 //was 164	// Amount to alpha blend water.
 #define WATER_ZOFFSET 32		// Sorting offset for main water tile.

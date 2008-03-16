@@ -23,13 +23,13 @@
  * Utility functions for the map data structure.
  *
  */
-#include <stdio.h>
-#include <string.h>
-#include <physfs.h>
-#include <assert.h>
 #include "lib/framework/frame.h"
 #include "lib/framework/tagfile.h"
+#include "lib/framework/file.h"
+#include "lib/framework/physfs_ext.h"
 #include "lib/ivis_common/tex.h"
+
+#include "map.h"
 #include "hci.h"
 #include "projectile.h"
 #include "display3d.h"
@@ -44,7 +44,6 @@
 #include "gateway.h"
 #include "wrappers.h"
 
-#include "map.h"
 
 //scroll min and max values
 SDWORD		scrollMinX, scrollMaxX, scrollMinY, scrollMaxY;
@@ -587,7 +586,7 @@ static void droidSaveTagged(DROID *psDroid)
 	tagWriteLeave(0x25);
 	tagWrite(0x26, psDroid->sMove.Status);
 	tagWrite(0x27, psDroid->sMove.Position);
-	
+
 	tagWriteLeave(0x0a);
 }
 

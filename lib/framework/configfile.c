@@ -21,9 +21,9 @@
 #include "frame.h"
 #include "configfile.h"
 
-#include <physfs.h>
-#include <stdio.h>
 #include <string.h>
+
+#include "file.h"
 
 #define REGISTRY_HASH_SIZE	32
 #define MAXLINESIZE 255

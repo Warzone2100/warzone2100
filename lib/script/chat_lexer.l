@@ -26,13 +26,11 @@
  *
  */
 
-#include <stdio.h>
-
 #include "lib/framework/frame.h"
+
 #include "src/basedef.h"
 #include "src/droiddef.h"
 #include "src/structuredef.h"
-//#include "src/scriptfuncs.h"
 #include "lib/script/script.h"
 #include "src/scriptfuncs.h"
 #include "lib/script/chat_processing.h"

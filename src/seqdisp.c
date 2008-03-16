@@ -23,23 +23,25 @@
  * Functions for the display of the Escape Sequences (FMV).
  *
  */
+#include "lib/framework/frame.h"
+
 #include <string.h>
 #include <SDL_timer.h>
 #include <physfs.h>
 
-#include "lib/framework/frame.h"
+#include "lib/framework/file.h"
 #include "lib/ivis_common/rendmode.h"
-#include "seqdisp.h"
+#include "lib/ivis_opengl/screen.h"
 #include "lib/sequence/sequence.h"
-#include "loop.h"
-#include "hci.h"//for font
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"
-#include "warzoneconfig.h"
-// FIXME Direct iVis implementation include!
-#include "lib/ivis_opengl/screen.h"
-
 #include "lib/script/script.h"
+
+#include "seqdisp.h"
+
+#include "warzoneconfig.h"
+#include "hci.h"//for font
+#include "loop.h"
 #include "scripttabs.h"
 #include "design.h"
 #include "wrappers.h"

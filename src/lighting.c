@@ -26,17 +26,19 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/math-help.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include "lib/ivis_opengl/piematrix.h"
+
 #include "lib/ivis_common/piestate.h"
+#include "lib/ivis_opengl/piematrix.h"
+
+#include "lib/gamelib/gtime.h"
+
 #include "map.h"
 #include "lighting.h"
 #include "display3d.h"
 #include "effects.h"
 #include "atmos.h"
 #include "environ.h"
-#include "lib/gamelib/gtime.h"
+
 
 // These values determine the fog when fully zoomed in
 // Determine these when fully zoomed in

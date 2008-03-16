@@ -17,7 +17,16 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
+#ifndef _netlog_h
+#define _netlog_h
+
+#include "lib/framework/frame.h"
+
+#include "netplay.h"
+
 BOOL NETstartLogging(void);
 BOOL NETstopLogging(void);
 BOOL NETlogEntry( const char *str, UDWORD a, UDWORD b );
 void NETlogPacket(NETMSG *msg, BOOL received);
+
+#endif // _netlog_h

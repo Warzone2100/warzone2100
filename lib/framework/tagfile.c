@@ -4,13 +4,15 @@
 //
 // See header file for documentation.
 
-#include <assert.h>
-#include <stdlib.h>
-#include <string.h>
+// #include <assert.h>
+// #include <stdlib.h>
+// #include <string.h>
 
 #include "frame.h"
 
 #include "tagfile.h"
+
+#include "physfs_ext.h"
 
 // Tags of values 0x0 and 0xFF are reserved as instance separators and group end
 // tags, respectively. You cannot use a separator in your definition file, but

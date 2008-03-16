@@ -26,11 +26,7 @@
 	it's neater as a separate file, as the intelligence map has special requirements
 	and overlays and needs to render to a specified buffer for later use.
 */
-
-/* ----------------------------------------------------------------------------------------- */
-/* Included files */
-#include <stdio.h>
-#include <string.h>
+#include "lib/framework/frame.h"
 
 /* Includes direct access to render library */
 #include "lib/ivis_common/ivisdef.h"
@@ -39,7 +35,7 @@
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piemode.h"
 
-// FIXME Direct iVis implementation include!
+#include "lib/gamelib/gtime.h"
 #include "lib/ivis_opengl/piematrix.h"
 
 #include "map.h"
@@ -49,7 +45,6 @@
 #include "hci.h"
 #include "intelmap.h"
 #include "intimage.h"
-#include "lib/gamelib/gtime.h"
 
 #include "texture.h"
 #include "intdisplay.h"

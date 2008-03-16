@@ -24,19 +24,22 @@
  *
  * Stuff to handle the comings and goings of players.
  */
-
-#include <stdio.h>					// for sprintf
-#include <string.h>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/math-help.h"
 
+#include "lib/gamelib/gtime.h"
+#include "lib/ivis_common/textdraw.h"
+#include "lib/netplay/netplay.h"
+#include "lib/sound/audio.h"
+#include "lib/sound/audio_id.h"
+#include "lib/script/script.h"
+
+#include "multijoin.h"
+
 #include "objmem.h"
 #include "statsdef.h"
 #include "droiddef.h"
-#include "lib/ivis_common/textdraw.h"
-#include "lib/gamelib/gtime.h"
 #include "game.h"
 #include "projectile.h"
 #include "droid.h"
@@ -50,21 +53,17 @@
 #include "hci.h"
 #include "component.h"
 #include "research.h"
-#include "lib/sound/audio.h"
-#include "lib/sound/audio_id.h"
 #include "wrappers.h"
 #include "intimage.h"
 #include "data.h"
-#include "lib/script/script.h"
 #include "scripttabs.h"
 
-#include "lib/netplay/netplay.h"
 #include "multiplay.h"
-#include "multijoin.h"
 #include "multirecv.h"
 #include "multiint.h"
 #include "multistat.h"
 #include "multigifts.h"
+
 
 // ////////////////////////////////////////////////////////////////////////////
 // External Variables

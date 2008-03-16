@@ -22,22 +22,18 @@
  *
  * Load feature stats
  */
-
-#include <stdio.h>
-#include <assert.h>
-#include <string.h>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/strres.h"
 
+#include "lib/gamelib/gtime.h"
+#include "lib/sound/audio.h"
+#include "lib/sound/audio_id.h"
+
 #include "feature.h"
 #include "map.h"
 #include "hci.h"
-#include "lib/gamelib/gtime.h"
 #include "power.h"
-#include "lib/sound/audio.h"
-#include "lib/sound/audio_id.h"
 #include "objects.h"
 #include "display.h"
 #include "console.h"

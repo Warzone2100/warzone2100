@@ -35,11 +35,6 @@
 	* STILL NEED TO REMOVE SOME MAGIC NUMBERS INTO #DEFINES!!! *
 	************************************************************
 */
-
-#include <stdio.h>
-#include <assert.h>
-#include <string.h>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/input.h"
@@ -51,19 +46,21 @@
 #include "lib/ivis_common/piepalette.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_opengl/piematrix.h"
+#include "lib/ivis_common/piemode.h"
+
 #include "lib/gamelib/gtime.h"
+#include "lib/sound/audio.h"
+#include "lib/sound/audio_id.h"
+
 #include "display3d.h"
 #include "map.h"
 #include "bucket3d.h"
 
-#include "lib/ivis_common/piemode.h"
+#include "effects.h"
+
 #include "mission.h"
 
-/*Remove this one!!! :-( */
 #include "miscimd.h"
-#include "effects.h"
-#include "lib/sound/audio.h"
-#include "lib/sound/audio_id.h"
 #include "hci.h"
 #include "lighting.h"
 #include "console.h"
@@ -72,7 +69,6 @@
 #include "multiplay.h"
 #include "game.h"
 
-extern UWORD OffScreenEffects;
 
 #define MAX_EFFECTS	2500
 
@@ -138,6 +134,9 @@ extern UWORD OffScreenEffects;
 
 #define	DROID_DESTRUCTION_DURATION		(3*GAME_TICKS_PER_SEC/2) // 1.5 seconds
 #define	STRUCTURE_DESTRUCTION_DURATION	((7*GAME_TICKS_PER_SEC)/2)	 // 3.5 seconds
+
+
+extern UWORD OffScreenEffects;
 
 
 /* Our list of all game world effects */

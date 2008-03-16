@@ -17,26 +17,34 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
+#include "lib/framework/frame.h"
 
 /* Standard library headers */
 #include <physfs.h>
 #include <string.h>
 
 /* Warzone src and library headers */
-#include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/frameint.h"
 #include "lib/framework/tagfile.h"
+#include "lib/framework/file.h"
+#include "lib/framework/physfs_ext.h"
+
+#include "lib/gamelib/gtime.h"
 #include "lib/ivis_common/ivisdef.h"
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/piepalette.h"
+#include "lib/netplay/netplay.h"
 #include "lib/script/script.h"
-#include "lib/gamelib/gtime.h"
+#include "lib/sound/audio.h"
+#include "lib/sound/audio_id.h"
+
+#include "game.h"
+
 #include "map.h"
 #include "droid.h"
 #include "action.h"
-#include "game.h"
 #include "research.h"
 #include "power.h"
 #include "projectile.h"
@@ -51,7 +59,6 @@
 #include "init.h"
 #include "mission.h"
 #include "scores.h"
-#include "lib/sound/audio_id.h"
 #include "anim_id.h"
 #include "design.h"
 #include "lighting.h"
@@ -62,23 +69,22 @@
 #include "formationdef.h"
 #include "warzoneconfig.h"
 #include "multiplay.h"
-#include "lib/netplay/netplay.h"
 #include "frontend.h"
 #include "levels.h"
 #include "mission.h"
 #include "geometry.h"
-#include "lib/sound/audio.h"
 #include "gateway.h"
 #include "scripttabs.h"
 #include "scriptextern.h"
 #include "multistat.h"
 #include "wrappers.h"
 
+
 #define MAX_SAVE_NAME_SIZE_V19	40
 #define MAX_SAVE_NAME_SIZE	60
 
 #if (MAX_NAME_SIZE > MAX_SAVE_NAME_SIZE)
-#error warning the current MAX_NAME_SIZE is to big for the save game
+#  error warning the current MAX_NAME_SIZE is to big for the save game
 #endif
 
 #define NULL_ID UDWORD_MAX
@@ -9511,7 +9517,7 @@ BOOL loadTerrainTypeMap(const char *pFileData, UDWORD filesize)
 			return FALSE;
 
 		}
-		if (*pType > TER_MAX)
+		if (*pType > TERRAIN_TYPES)
 		{
 			debug( LOG_ERROR, "loadTerrainTypeMap: terrain type out of range" );
 			abort();
