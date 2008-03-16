@@ -659,7 +659,7 @@ void videoLoop(void)
 		bQuitVideo = !seq_UpdateFullScreenVideo(NULL);
 	}
 
-	if ( (keyPressed(KEY_ESC) || bQuitVideo) && !seq_AnySeqLeft() )
+	if ( (keyPressed(KEY_ESC) || mouseReleased(MOUSE_LMB) || bQuitVideo) && !seq_AnySeqLeft() )
 	{
 		/* zero volume before video quit - restore later */
 		originalVolume = sound_GetUIVolume();
@@ -669,7 +669,7 @@ void videoLoop(void)
 
 	//toggling display mode disabled in video mode
 	// Check for quit
-	if (keyPressed(KEY_ESC))
+	if (keyPressed(KEY_ESC) || mouseReleased(MOUSE_LMB))
 	{
 		seq_StopFullScreenVideo();
 		bQuitVideo = FALSE;
