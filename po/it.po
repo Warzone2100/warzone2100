@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-03-16 22:30+0100\n"
+"POT-Creation-Date: 2008-03-17 00:45+0100\n"
 "PO-Revision-Date: 2008-03-11 01:09+0100\n"
 "Last-Translator: Federico Aromolo <miracleblade@hotmail.it>\n"
 "Language-Team: Italian <warzone-dev@gna.org>\n"
@@ -69,7 +69,7 @@ msgstr "%s - Danno %d%% - Esperienza %d, %s"
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Camion incaricato di costruire un Traliccio Petrolifero"
 
-#: src/multistat.c:134
+#: src/multistat.c:132
 #: src/configuration.c:359
 #: src/configuration.c:360
 msgid "Player"
@@ -142,9 +142,9 @@ msgid "Close"
 msgstr "Chiudi"
 
 #: src/hci.c:1680
-#: src/mission.c:3227
-#: src/loop.c:472
-#: src/loop.c:484
+#: src/mission.c:3222
+#: src/loop.c:469
+#: src/loop.c:481
 msgid "GAME SAVED!"
 msgstr "PARTITA SALVATA!"
 
@@ -194,8 +194,8 @@ msgid "Build (F3)"
 msgstr "Costruzione"
 
 #: src/hci.c:3914
-#: src/multiint.c:768
-#: src/multiint.c:772
+#: src/multiint.c:766
+#: src/multiint.c:770
 msgid "Power"
 msgstr "Energia"
 
@@ -203,13 +203,26 @@ msgstr "Energia"
 msgid "Unit"
 msgstr "Unità"
 
+#: src/hci.c:4116
+msgid "Place Unit on map"
+msgstr ""
+
 #: src/hci.c:4124
 msgid "Struct"
 msgstr "Struttura"
 
+#: src/hci.c:4125
+#, fuzzy
+msgid "Place Structures on map"
+msgstr "Imposta i limiti di strutture"
+
 #: src/hci.c:4133
 msgid "Feat"
 msgstr "Caratteristica"
+
+#: src/hci.c:4134
+msgid "Place Features on map"
+msgstr ""
 
 #: src/hci.c:4147
 #: src/ingameop.c:120
@@ -223,9 +236,9 @@ msgid "Exit Game"
 msgstr "Esci dal Gioco"
 
 #: src/hci.c:4513
-#: src/intdisplay.c:205
-#: src/intdisplay.c:248
-#: src/intdisplay.c:294
+#: src/intdisplay.c:204
+#: src/intdisplay.c:247
+#: src/intdisplay.c:293
 msgid "Progress Bar"
 msgstr "Barra del Progresso"
 
@@ -254,274 +267,274 @@ msgstr "Lancia il Trasporto"
 msgid "Reinforcements landing"
 msgstr "I rinforzi stanno atterrando"
 
-#: src/mission.c:2607
+#: src/mission.c:2602
 msgid "Load Transport"
 msgstr "Carica il trasporto"
 
-#: src/mission.c:3088
+#: src/mission.c:3083
 msgid "OBJECTIVE ACHIEVED"
 msgstr "OBIETTIVO RAGGIUNTO"
 
-#: src/mission.c:3094
+#: src/mission.c:3089
 msgid "OBJECTIVE FAILED"
 msgstr "MISSIONE FALLITA"
 
-#: src/mission.c:3120
-#: src/mission.c:3157
-#: src/mission.c:3278
+#: src/mission.c:3115
+#: src/mission.c:3152
+#: src/mission.c:3273
 msgid "Quit To Main Menu"
 msgstr "Esci al Menu Principale"
 
-#: src/mission.c:3128
+#: src/mission.c:3123
 msgid "Continue Game"
 msgstr "Continua la Partita"
 
-#: src/mission.c:3141
-#: src/mission.c:3262
+#: src/mission.c:3136
+#: src/mission.c:3257
 #: src/ingameop.c:278
 #: src/ingameop.c:417
 msgid "Save Game"
 msgstr "Salva Partita"
 
-#: src/mission.c:3151
-#: src/mission.c:3259
+#: src/mission.c:3146
+#: src/mission.c:3254
 #: src/ingameop.c:413
 #: src/frontend.c:427
 msgid "Load Saved Game"
 msgstr "Carica Partita"
 
-#: src/droid.c:196
+#: src/droid.c:193
 msgid "Unit Lost!"
 msgstr "Unità Persa!"
 
-#: src/droid.c:1805
+#: src/droid.c:1802
 msgid "Structure Restored"
 msgstr "Struttura Riparata"
 
-#: src/droid.c:3685
+#: src/droid.c:3682
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Gruppo %u selezionato - %u Unità"
 msgstr[1] "Gruppo %u selezionato - %u Unità"
 
-#: src/droid.c:3699
+#: src/droid.c:3696
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unità assegnata al Gruppo %u"
 msgstr[1] "%u unità assegnata al Gruppo %u"
 
-#: src/droid.c:3712
+#: src/droid.c:3709
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Visuale Centrata sul Gruppo %u - %u Unit"
 msgstr[1] "Visuale Centrata sul gruppo %u - %u Unità"
 
-#: src/droid.c:3716
+#: src/droid.c:3713
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Visuale affiancata al Gruppo %u - %u Unità"
 msgstr[1] "Visuale affiancata al Gruppo %u - %u Unità"
 
-#: src/droid.c:3926
+#: src/droid.c:3923
 msgid "Rookie"
 msgstr "Coscritta"
 
-#: src/droid.c:3927
+#: src/droid.c:3924
 msgctxt "rank"
 msgid "Green"
 msgstr "Inesperta"
 
-#: src/droid.c:3928
+#: src/droid.c:3925
 msgid "Trained"
 msgstr "Addestrata"
 
-#: src/droid.c:3929
+#: src/droid.c:3926
 msgid "Regular"
 msgstr "Normale"
 
-#: src/droid.c:3930
+#: src/droid.c:3927
 msgid "Professional"
 msgstr "Professionale"
 
-#: src/droid.c:3931
+#: src/droid.c:3928
 msgid "Veteran"
 msgstr "Veterana"
 
-#: src/droid.c:3932
+#: src/droid.c:3929
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:3933
+#: src/droid.c:3930
 msgid "Special"
 msgstr "Speciale"
 
-#: src/droid.c:3934
+#: src/droid.c:3931
 msgid "Hero"
 msgstr "Eroica"
 
-#: src/multiint.c:329
-#: src/multiint.c:1333
+#: src/multiint.c:327
+#: src/multiint.c:1331
 #: src/multilimit.c:155
 msgid "Accept Settings"
 msgstr "Accetta le Impostazioni"
 
-#: src/multiint.c:340
+#: src/multiint.c:338
 msgid "IP Address or Machine Name"
 msgstr "Indirizzo IP o Nome Computer"
 
-#: src/multiint.c:381
+#: src/multiint.c:379
 msgid "CONNECTION"
 msgstr "CONNESSIONE"
 
-#: src/multiint.c:384
-#: src/multiint.c:426
-#: src/multiint.c:600
-#: src/multiint.c:833
+#: src/multiint.c:382
+#: src/multiint.c:424
+#: src/multiint.c:598
+#: src/multiint.c:831
 #: src/keyedit.c:378
 #: src/multilimit.c:147
 msgid "Return To Previous Screen"
 msgstr "Ritorna alla Schermata Precedente"
 
-#: src/multiint.c:394
+#: src/multiint.c:392
 msgid "Lobby"
 msgstr "Lobby"
 
-#: src/multiint.c:395
+#: src/multiint.c:393
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.c:586
+#: src/multiint.c:584
 msgid "Searching"
 msgstr "Ricerca in corso..."
 
-#: src/multiint.c:597
+#: src/multiint.c:595
 msgid "GAMES"
 msgstr "PARTITE"
 
-#: src/multiint.c:607
+#: src/multiint.c:605
 msgid "Refresh Games List"
 msgstr "Aggiorna la Lista Partite"
 
-#: src/multiint.c:682
+#: src/multiint.c:680
 msgid "OPTIONS"
 msgstr "OPZIONI"
 
-#: src/multiint.c:684
+#: src/multiint.c:682
 msgid "Select Game Name"
 msgstr "Seleziona il Nome della Partita"
 
-#: src/multiint.c:685
+#: src/multiint.c:683
 msgid "Select Map"
 msgstr "Seleziona la Mappa"
 
-#: src/multiint.c:690
+#: src/multiint.c:688
 msgid "Game"
 msgstr "Partita"
 
-#: src/multiint.c:692
+#: src/multiint.c:690
 msgid "Mayhem"
 msgstr "Mayhem"
 
-#: src/multiint.c:694
+#: src/multiint.c:692
 msgid "Skirmish"
 msgstr "Schermaglia"
 
-#: src/multiint.c:715
+#: src/multiint.c:713
 msgid "Select Player Name"
 msgstr "Seleziona il Nome del Giocatore"
 
-#: src/multiint.c:718
+#: src/multiint.c:716
 #: src/frontend.c:620
 msgid "Fog"
 msgstr "Nebbia"
 
-#: src/multiint.c:720
+#: src/multiint.c:718
 #: src/frontend.c:627
 #: src/frontend.c:734
 msgid "Fog Of War"
 msgstr "Nebbia di Guerra"
 
-#: src/multiint.c:721
+#: src/multiint.c:719
 msgid "Distance Fog"
 msgstr "Nebbia sulla Distanza"
 
-#: src/multiint.c:734
+#: src/multiint.c:732
 #: src/multimenu.c:705
 msgid "Alliances"
 msgstr "Alleanze"
 
-#: src/multiint.c:737
+#: src/multiint.c:735
 msgid "No Alliances"
 msgstr "Nessuna Alleanza"
 
-#: src/multiint.c:739
+#: src/multiint.c:737
 msgid "Allow Alliances"
 msgstr "Concedi Alleanze"
 
-#: src/multiint.c:743
-#: src/multiint.c:1880
+#: src/multiint.c:741
+#: src/multiint.c:1878
 msgid "Locked Teams"
 msgstr "Squadre Bloccate"
 
-#: src/multiint.c:775
+#: src/multiint.c:773
 msgid "Low Power Levels"
 msgstr "Livelli Energetici Bassi"
 
-#: src/multiint.c:777
+#: src/multiint.c:775
 msgid "Medium Power Levels"
 msgstr "Livelli Energetici Medi"
 
-#: src/multiint.c:779
+#: src/multiint.c:777
 msgid "High Power Levels"
 msgstr "Livelli Energetici Alti"
 
-#: src/multiint.c:799
-#: src/multiint.c:803
+#: src/multiint.c:797
+#: src/multiint.c:801
 msgid "Base"
 msgstr "Base"
 
-#: src/multiint.c:806
+#: src/multiint.c:804
 msgid "Start with No Bases"
 msgstr "Inizia senza Basi"
 
-#: src/multiint.c:808
+#: src/multiint.c:806
 msgid "Start with Bases"
 msgstr "Inizia con Basi"
 
-#: src/multiint.c:810
+#: src/multiint.c:808
 msgid "Start with Advanced Bases"
 msgstr "Inizia con Basi Avanzate"
 
-#: src/multiint.c:839
+#: src/multiint.c:837
 msgid "Start Hosting Game"
 msgstr "Inizia ad ospitare la Partita"
 
-#: src/multiint.c:847
+#: src/multiint.c:845
 msgid "Set Structure Limits"
 msgstr "Imposta i limiti di strutture"
 
-#: src/multiint.c:1219
+#: src/multiint.c:1217
 msgid "PLAYERS"
 msgstr "GIOCATORI"
 
-#: src/multiint.c:1364
+#: src/multiint.c:1362
 msgid "CHAT"
 msgstr "CHAT"
 
-#: src/multiint.c:1821
+#: src/multiint.c:1819
 msgid "Host is Starting Game"
 msgstr "L'host sta avviando la partita"
 
-#: src/multiint.c:1906
+#: src/multiint.c:1904
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "L'host ha espulso %s dalla partita!"
 
-#: src/multiint.c:2390
+#: src/multiint.c:2388
 msgid "Players"
 msgstr "Giocatori"
 
@@ -666,9 +679,9 @@ msgstr "Il menu Costruzione si riaprirà"
 msgid "Build menu will not reopen"
 msgstr "Il menu Costruzione non si riaprirà"
 
-#: src/intdisplay.c:195
-#: src/intdisplay.c:240
-#: src/intdisplay.c:287
+#: src/intdisplay.c:194
+#: src/intdisplay.c:239
+#: src/intdisplay.c:286
 msgid "Power Accrued"
 msgstr "Energia Accumulata"
 
@@ -1887,17 +1900,17 @@ msgstr " - Costruito %s"
 msgid "Version %s%s%s%s"
 msgstr "Versione %s%s%s%s"
 
+#: src/multijoin.c:97
 #: src/multijoin.c:98
-#: src/multijoin.c:99
 msgid "Players Still Joining"
 msgstr "Alcuni giocatori si stanno ancora unendo alla partita"
 
-#: src/multijoin.c:220
+#: src/multijoin.c:219
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s ha abbandonato la partita"
 
-#: src/multijoin.c:323
+#: src/multijoin.c:322
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s si sta unendo alla partita"

@@ -4113,7 +4113,7 @@ BOOL intAddOptions(void)
 	sButInit.id = IDOPT_DROID;
 	sButInit.x += OPT_GAP + OPT_BUTWIDTH;
 	sButInit.pText = _("Unit");
-	sButInit.pTip = "Place Unit on map";
+	sButInit.pTip = _("Place Unit on map");
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return FALSE;
@@ -4122,7 +4122,7 @@ BOOL intAddOptions(void)
 	sButInit.id = IDOPT_STRUCT;
 	sButInit.x += OPT_GAP + OPT_BUTWIDTH;
 	sButInit.pText = _("Struct");
-	sButInit.pTip = "Place Structures on map";
+	sButInit.pTip = _("Place Structures on map");
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return FALSE;
@@ -4131,7 +4131,7 @@ BOOL intAddOptions(void)
 	sButInit.id = IDOPT_FEATURE;
 	sButInit.x += OPT_GAP + OPT_BUTWIDTH;
 	sButInit.pText = _("Feat");
-	sButInit.pTip = "Place Features on map";
+	sButInit.pTip = _("Place Features on map");
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return FALSE;
