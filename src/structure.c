@@ -1181,9 +1181,6 @@ BOOL structureStatsShutDown(void)
 
 	for(inc=0; inc < numStructureStats; inc++, pStructure++)
 	{
-#if !defined(RESOURCE_NAMES) && !defined(STORE_RESOURCE_ID)
-		free(pStructure->pName);
-#endif
 		if (pStructure->numFuncs > 0)
 		{
 			free(pStructure->asFuncList);

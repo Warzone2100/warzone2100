@@ -2089,9 +2089,6 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 	COMP_BASE_STATS		*pStats;
 	UDWORD				size, inc, templateID;
 	BOOL				bDefaultTemplateFound = FALSE;
-#ifdef STORE_RESOURCE_ID
-//	char				*pDroidName = droidName;
-#endif
 	UDWORD				id;
 
 	/* init default template */
@@ -3814,13 +3811,6 @@ DROID_TEMPLATE * getTemplateFromName(char *pName)
 	UDWORD			player;
 	DROID_TEMPLATE	*psCurr;
 
-#ifdef RESOURCE_NAMES
-	if (!getResourceName(pName))
-	{
-		return NULL;
-	}
-#endif
-
 	/*all droid and template names are now stored as the translated
 	name regardless of RESOURCE_NAMES and STORE_RESOURCE_ID! - AB 26/06/98*/
 	getDroidResourceName(pName);
@@ -4624,7 +4614,6 @@ a string ID or something the user types in*/
 char* getTemplateName(DROID_TEMPLATE *psTemplate)
 {
 	char *pNameID = psTemplate->aName;
-#ifdef STORE_RESOURCE_ID
 	UDWORD			id;
 	char			*pName = NULL;
 
@@ -4645,11 +4634,6 @@ char* getTemplateName(DROID_TEMPLATE *psTemplate)
 		return pNameID;
 	}
 	return NULL;
-
-#else
-	//just return the name passed in
-	return pNameID;
-#endif
 }
 
 /* Just returns true if the droid's present body points aren't as high as the original*/

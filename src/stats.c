@@ -204,20 +204,6 @@ void statsInitVars(void)
 /*Deallocate all the stats assigned from input data*/
 void statsDealloc(COMP_BASE_STATS* pStats, UDWORD listSize, UDWORD structureSize)
 {
-#if !defined (RESOURCE_NAMES) && !defined(STORE_RESOURCE_ID)
-
-	UDWORD				inc;
-	COMP_BASE_STATS		*pStatList = pStats;
-	UDWORD				address = (UDWORD)pStats;
-
-	for (inc=0; inc < listSize; inc++)
-	{
-		free(pStatList->pName);
-		address += structureSize;
-		pStatList = (COMP_BASE_STATS *) address;
-	}
-#endif
-
 	free(pStats);
 }
 
@@ -237,11 +223,6 @@ static void deallocBodyStats(void)
 	for (inc = 0; inc < numBodyStats; inc++)
 	{
 		psStat = &asBodyStats[inc];
-
-#if !defined (RESOURCE_NAMES) && !defined (STORE_RESOURCE_ID)
-
-		free(psStat->pName);
-#endif
 		free(psStat->ppIMDList);
 	}
 	free(asBodyStats);
@@ -2588,13 +2569,6 @@ BOOL compareYes(const char* strToCompare, const char* strOwner)
 //used in Scripts
 SDWORD	getCompFromResName(UDWORD compType, const char *pName)
 {
-#ifdef RESOURCE_NAMES
-	if (!getResourceName(pName))
-	{
-		return -1;
-	}
-#endif
-
 	return getCompFromName(compType, pName);
 }
 
@@ -2678,27 +2652,12 @@ SDWORD getCompFromName(UDWORD compType, const char *pName)
 //converts the name read in from Access into the name which is used in the Stat lists
 BOOL getResourceName(const char *pName)
 {
-#ifdef RESOURCE_NAMES
-	UDWORD id;
-
-	//see if the name has a resource associated with it by trying to get the ID for the string
-	if (!strresGetIDNum(psStringRes, pName, &id))
-	{
-		debug( LOG_ERROR, "Unable to find string resource for %s", pName );
-		abort();
-		return FALSE;
-	}
-	//get the string from the id
-	strcpy(pName, strresGetString(psStringRes, id));
-#endif
-
 	return TRUE;
 }
 
 /*return the name to display for the interface - valid for OBJECTS and STATS*/
 const char* getName(const char *pNameID)
 {
-#ifdef STORE_RESOURCE_ID
 	UDWORD id;
 	char *pName;
 	static char Unknown[] = "Name Unknown";
@@ -2721,10 +2680,6 @@ const char* getName(const char *pNameID)
 	{
 		return Unknown;
 	}
-
-#else
-	return pNameID;
-#endif
 }
 
 
@@ -2972,23 +2927,6 @@ and stores the name. Eventually ALL names will be 'resourced' for translation
 */
 BOOL allocateName(char **ppStore, const char *pName)
 {
-#ifdef RESOURCE_NAMES
-
-	UDWORD id;
-
-	//see if the name has a resource associated with it by trying to get the ID for the string
-	if (!strresGetIDNum(psStringRes, pName, &id))
-	{
-		debug( LOG_ERROR, "Unable to find string resource for %s", pName );
-		abort();
-		return FALSE;
-	}
-
-	//get the string from the id
-	*ppStore = strresGetString(psStringRes, id);
-	return TRUE;
-
-#elif defined STORE_RESOURCE_ID
 	//checks the name has been loaded as a resource and gets the storage pointer
 	if (!strresGetIDString(psStringRes, pName, ppStore))
 	{
@@ -2997,18 +2935,6 @@ BOOL allocateName(char **ppStore, const char *pName)
 		return FALSE;
 	}
 	return TRUE;
-#else
-	// Allocate space for the name and copy it
-	*ppStore = strdup(pName);
-	if (ppStore == NULL)
-	{
-		debug(LOG_ERROR, "allocateName: Out of memory");
-		abort();
-		return FALSE;
-	}
-
-	return TRUE;
-#endif
 }
 
 

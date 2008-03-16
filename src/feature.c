@@ -228,16 +228,6 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 /* Release the feature stats memory */
 void featureStatsShutDown(void)
 {
-#if !defined(RESOURCE_NAMES) && !defined(STORE_RESOURCE_ID)
-	FEATURE_STATS	*psFeature = asFeatureStats;
-	UDWORD			inc;
-
-	for(inc=0; inc < numFeatureStats; inc++, psFeature++)
-	{
-		free(psFeature->pName);
-	}
-#endif
-
 	if(numFeatureStats)
 	{
 		free(asFeatureStats);

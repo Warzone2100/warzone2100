@@ -11580,26 +11580,6 @@ static void setMapScroll(void)
 // -----------------------------------------------------------------------------------------
 BOOL getSaveObjectName(char *pName)
 {
-#ifdef RESOURCE_NAMES
-
-	UDWORD		id;
-
-	//check not a user save game
-	if (IsScenario)
-	{
-		//see if the name has a resource associated with it by trying to get the ID for the string
-		if (!strresGetIDNum(psStringRes, pName, &id))
-		{
-			debug( LOG_ERROR, "Cannot find string resource %s", pName );
-			abort();
-			return FALSE;
-		}
-
-		//get the string from the id if one exists
-		strcpy(pName, strresGetString(psStringRes, id));
-	}
-#endif
-
 	return TRUE;
 }
 

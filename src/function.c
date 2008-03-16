@@ -1534,13 +1534,6 @@ BOOL FunctionShutDown(void)
 	{
 		pFunction = *asFunctions;
 		free(pFunction->pName);
-
-#if !defined (RESOURCE_NAMES) && !defined(STORE_RESOURCE_ID)
-		if (pFunction->type == WALL_TYPE)
-		{
-			free(((WALL_FUNCTION *)pFunction)->pStructName);
-		}
-#endif
 		free(pFunction);
 		asFunctions++;
 	}

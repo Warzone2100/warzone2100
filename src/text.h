@@ -26,10 +26,6 @@
 #ifndef _text_h
 #define _text_h
 
-//the two defines below are MUTUALLY EXCLUSIVE! don't have both defined...
-//#define RESOURCE_NAMES
-#define	STORE_RESOURCE_ID
-
 /* The string resource object */
 extern STR_RES *psStringRes;
 
@@ -40,4 +36,3 @@ extern BOOL stringsInitialise(void);
 extern void stringsShutDown(void);
 
 #endif
-
