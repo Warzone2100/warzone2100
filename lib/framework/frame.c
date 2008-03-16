@@ -26,13 +26,6 @@
  * Includes a basic windows message loop.
  *
  */
-
-// defines the inline functions in this module
-#define DEFINE_INLINE
-
-#include <stdio.h>
-#include <time.h>
-#include <string.h>
 #include <SDL.h>
 #include <physfs.h>
 
