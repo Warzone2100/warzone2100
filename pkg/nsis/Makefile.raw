@@ -1,4 +1,4 @@
-MAKERULES=../makerules
+MAKERULES=../../makerules
 include $(MAKERULES)/configure.mk
 
 SETUPFILE=warzone2100-$(VERSION).exe
