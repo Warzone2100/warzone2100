@@ -17,19 +17,18 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/* Lighting.c - Alex McLean, Pumpkin Studios, EIDOS Interactive. */
-/* Calculates the shading values for the terrain world. */
-/* The terrain intensity values are calculated at map load/creation time. */
+/**
+ * @file lighting.c
+ * Calculates the shading values for the terrain world.
+ * The terrain intensity values are calculated at map load/creation time.
+ * - Alex McLean, Pumpkin Studios, EIDOS Interactive.
+ */
 
 #include "lib/framework/frame.h"
 #include "lib/framework/math-help.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "lib/ivis_common/ivisdef.h" //ivis matrix code
-#include "lib/ivis_common/piestate.h" //ivis matrix code
-#include "lib/ivis_common/piefunc.h" //ivis matrix code
 #include "lib/ivis_opengl/piematrix.h"
-#include "lib/ivis_common/piepalette.h"
 #include "map.h"
 #include "lighting.h"
 #include "display3d.h"
@@ -37,7 +36,6 @@
 #include "atmos.h"
 #include "environ.h"
 #include "lib/gamelib/gtime.h"
-#include "console.h"
 
 // These values determine the fog when fully zoomed in
 // Determine these when fully zoomed in
@@ -57,6 +55,7 @@ UDWORD fogStatus = 0;
 /*	Module function Prototypes */
 static void colourTile(SDWORD xIndex, SDWORD yIndex, LIGHT_COLOUR colour, UBYTE percent);
 static UDWORD calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos);
+static void calcTileIllum(UDWORD tileX, UDWORD tileY);
 
 void setTheSun(Vector3f newSun)
 {
@@ -79,7 +78,6 @@ Vector3f getTheSun(void)
 void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
 {
 	UDWORD       i, j;
-	MAPTILE	    *psTile;
 
 	// quick check not trying to go off the map - don't need to check for < 0 since UWORD's!!
 	if (x1 > mapWidth || x2 > mapWidth || y1 > mapHeight || y2 > mapHeight)
@@ -92,7 +90,8 @@ void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
 	{
 		for(j = y1; j < y2; j++)
 		{
-			psTile = mapTile(i, j);
+			MAPTILE	*psTile = mapTile(i, j);
+
 			// always make the edge tiles dark
 			if (i==0 || j==0 || i >= mapWidth-1 || j >= mapHeight-1)
 			{
@@ -334,7 +333,7 @@ static void normalsOnTile(unsigned int tileX, unsigned int tileY, unsigned int q
 }
 
 
-void calcTileIllum(UDWORD tileX, UDWORD tileY)
+static void calcTileIllum(UDWORD tileX, UDWORD tileY)
 {
 	/* The number or normals that we got is in numNormals*/
 	Vector3f finalVector = {0.0f, 0.0f, 0.0f};

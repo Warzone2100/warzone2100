@@ -52,7 +52,6 @@ extern void	processLight(LIGHT *psLight);
 //extern void	initLighting( void );
 extern void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2);
 extern void	lightValueForTile(UDWORD tileX, UDWORD tileY);
-extern void	calcTileIllum(UDWORD tileX, UDWORD tileY);
 extern void	doBuildingLights( void );
 extern void UpdateFogDistance(float distance);
 extern void	calcDroidIllumination(DROID *psDroid);
