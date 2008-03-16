@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-03-13 19:03+0100\n"
+"POT-Creation-Date: 2008-03-16 22:30+0100\n"
 "PO-Revision-Date: 2008-01-20 19:26+0100\n"
 "Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -67,8 +67,8 @@ msgid "Truck ordered to build Oil Derrick"
 msgstr ""
 
 #: src/multistat.c:134
-#: src/configuration.c:354
-#: src/configuration.c:355
+#: src/configuration.c:359
+#: src/configuration.c:360
 msgid "Player"
 msgstr "Speler"
 
@@ -294,68 +294,68 @@ msgstr "Eenheid verloren!"
 msgid "Structure Restored"
 msgstr ""
 
-#: src/droid.c:3688
+#: src/droid.c:3685
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Groep %u geselecteerd - %u Eenheid"
 msgstr[1] "Groep %u geselecteerd - %u Eenheden"
 
-#: src/droid.c:3702
+#: src/droid.c:3699
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u eenheid aan Groep %u toegewezen"
 msgstr[1] "%u eenheden aan Groep %u toegewezen"
 
-#: src/droid.c:3715
+#: src/droid.c:3712
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Gecentreerd op Groep %u - %u Eenheid"
 msgstr[1] "Gecentreerd op Groep %u - %u Eenheden"
 
-#: src/droid.c:3719
+#: src/droid.c:3716
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3936
+#: src/droid.c:3926
 msgid "Rookie"
 msgstr "Groentje"
 
-#: src/droid.c:3937
+#: src/droid.c:3927
 msgctxt "rank"
 msgid "Green"
 msgstr ""
 
-#: src/droid.c:3938
+#: src/droid.c:3928
 msgid "Trained"
 msgstr ""
 
-#: src/droid.c:3939
+#: src/droid.c:3929
 msgid "Regular"
 msgstr ""
 
-#: src/droid.c:3940
+#: src/droid.c:3930
 msgid "Professional"
 msgstr ""
 
-#: src/droid.c:3941
+#: src/droid.c:3931
 msgid "Veteran"
 msgstr "Veteraan"
 
-#: src/droid.c:3942
+#: src/droid.c:3932
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:3943
+#: src/droid.c:3933
 msgid "Special"
 msgstr "Speciaal"
 
-#: src/droid.c:3944
+#: src/droid.c:3934
 msgid "Hero"
 msgstr "Held"
 
@@ -672,59 +672,59 @@ msgstr "Bouwmenu zal niet opnieuw openen"
 msgid "Power Accrued"
 msgstr "Energie Toegenomen"
 
-#: src/structure.c:2802
+#: src/structure.c:2799
 msgid "Command Control Limit Reached - Production Halted"
 msgstr ""
 
-#: src/structure.c:5904
-#: src/structure.c:5926
+#: src/structure.c:5901
+#: src/structure.c:5923
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Eenheid toegewezen"
 msgstr[1] "%s - %u Eenheden toegewezen"
 
-#: src/structure.c:5963
+#: src/structure.c:5960
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Verbonden %u van %u"
 
-#: src/structure.c:5978
+#: src/structure.c:5975
 #, c-format
 msgid "%s - Damage %u%%"
 msgstr "%s - Schade %u%%"
 
-#: src/structure.c:6097
-#: src/structure.c:6148
+#: src/structure.c:6094
+#: src/structure.c:6145
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr ""
 
-#: src/structure.c:6383
+#: src/structure.c:6380
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.c:6423
+#: src/structure.c:6420
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.c:6447
+#: src/structure.c:6444
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.c:6471
+#: src/structure.c:6468
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.c:6480
+#: src/structure.c:6477
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.c:6508
+#: src/structure.c:6505
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.c:6515
+#: src/structure.c:6512
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 
@@ -820,6 +820,7 @@ msgstr "Groentje: %u"
 
 #: src/scores.c:109
 #, fuzzy, c-format
+msgctxt "rank"
 msgid "Green: %u"
 msgstr "Groen: %u"
 
@@ -1303,7 +1304,7 @@ msgstr ""
 #: src/frontend.c:686
 #: src/frontend.c:832
 #: src/frontend.c:935
-#: src/frontend.c:1100
+#: src/frontend.c:1094
 msgctxt "menu"
 msgid "Return"
 msgstr "Terug"
@@ -1338,7 +1339,7 @@ msgstr ""
 
 #: src/frontend.c:519
 #: src/frontend.c:835
-#: src/frontend.c:1103
+#: src/frontend.c:1097
 msgid "GAME OPTIONS"
 msgstr "SPEL INSTELLINGEN"
 
@@ -1455,30 +1456,30 @@ msgstr "Terug Schieten"
 msgid "* Takes effect on game restart"
 msgstr ""
 
-#: src/frontend.c:1065
+#: src/frontend.c:1061
 msgid "Difficulty"
 msgstr "Moeilijkheidsgraad"
 
-#: src/frontend.c:1069
-#: src/frontend.c:1151
+#: src/frontend.c:1065
+#: src/frontend.c:1145
 msgid "Easy"
 msgstr "Makkelijk"
 
-#: src/frontend.c:1072
-#: src/frontend.c:1143
+#: src/frontend.c:1068
+#: src/frontend.c:1137
 msgid "Normal"
 msgstr "Normaal"
 
-#: src/frontend.c:1076
-#: src/frontend.c:1147
+#: src/frontend.c:1072
+#: src/frontend.c:1141
 msgid "Hard"
 msgstr "Moeilijk"
 
-#: src/frontend.c:1081
+#: src/frontend.c:1077
 msgid "Scroll Speed"
 msgstr ""
 
-#: src/frontend.c:1097
+#: src/frontend.c:1091
 msgid "Unit Colour"
 msgstr ""
 

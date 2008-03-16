@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: da\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-03-13 19:03+0100\n"
+"POT-Creation-Date: 2008-03-16 22:30+0100\n"
 "PO-Revision-Date: 2008-01-20 19:26+0100\n"
 "Last-Translator: Christian Vest Hansen <karmazilla@gmail.com>\n"
 "Language-Team: Dansk <en@li.org>\n"
@@ -67,8 +67,8 @@ msgid "Truck ordered to build Oil Derrick"
 msgstr "Truck beordret til at bygge oliebrøn."
 
 #: src/multistat.c:134
-#: src/configuration.c:354
-#: src/configuration.c:355
+#: src/configuration.c:359
+#: src/configuration.c:360
 #, fuzzy
 msgid "Player"
 msgstr "Spillere"
@@ -296,69 +296,69 @@ msgstr "Enhed tabt!"
 msgid "Structure Restored"
 msgstr "Bygning restoreret"
 
-#: src/droid.c:3688
+#: src/droid.c:3685
 #, fuzzy, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Gruppe %d valgt - %d Enheder"
 msgstr[1] "Gruppe %d valgt - %d Enheder"
 
-#: src/droid.c:3702
+#: src/droid.c:3699
 #, fuzzy, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%d Enheder tildelt gruppe %d"
 msgstr[1] "%d Enheder tildelt gruppe %d"
 
-#: src/droid.c:3715
+#: src/droid.c:3712
 #, fuzzy, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Fokuseret på gruppe %d - %d Enheder"
 msgstr[1] "Fokuseret på gruppe %d - %d Enheder"
 
-#: src/droid.c:3719
+#: src/droid.c:3716
 #, fuzzy, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Korigerede med gruppe %d - %d Enheder"
 msgstr[1] "Korigerede med gruppe %d - %d Enheder"
 
-#: src/droid.c:3936
+#: src/droid.c:3926
 msgid "Rookie"
 msgstr "Menig"
 
-#: src/droid.c:3937
+#: src/droid.c:3927
 #, fuzzy
 msgctxt "rank"
 msgid "Green"
 msgstr "Grøn"
 
-#: src/droid.c:3938
+#: src/droid.c:3928
 msgid "Trained"
 msgstr "Sasjant"
 
-#: src/droid.c:3939
+#: src/droid.c:3929
 msgid "Regular"
 msgstr "Oversasjant"
 
-#: src/droid.c:3940
+#: src/droid.c:3930
 msgid "Professional"
 msgstr "Løjtnant"
 
-#: src/droid.c:3941
+#: src/droid.c:3931
 msgid "Veteran"
 msgstr "Kaptajn"
 
-#: src/droid.c:3942
+#: src/droid.c:3932
 msgid "Elite"
 msgstr "Major"
 
-#: src/droid.c:3943
+#: src/droid.c:3933
 msgid "Special"
 msgstr "Oberst"
 
-#: src/droid.c:3944
+#: src/droid.c:3934
 msgid "Hero"
 msgstr "General"
 
@@ -678,59 +678,59 @@ msgstr "Konstruktionsmenuen vil ikke genåbne"
 msgid "Power Accrued"
 msgstr "Indsalmet energi"
 
-#: src/structure.c:2802
+#: src/structure.c:2799
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Kommandobegrænsning nået - indstiller produktion"
 
-#: src/structure.c:5904
-#: src/structure.c:5926
+#: src/structure.c:5901
+#: src/structure.c:5923
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%d Enheder tildelt gruppe %d"
 msgstr[1] "%d Enheder tildelt gruppe %d"
 
-#: src/structure.c:5963
+#: src/structure.c:5960
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Forbundet %d af %d"
 
-#: src/structure.c:5978
+#: src/structure.c:5975
 #, fuzzy, c-format
 msgid "%s - Damage %u%%"
 msgstr "%s - Skade %d%% - Drab %d, %s"
 
-#: src/structure.c:6097
-#: src/structure.c:6148
+#: src/structure.c:6094
+#: src/structure.c:6145
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronisk beskadiget"
 
-#: src/structure.c:6383
+#: src/structure.c:6380
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronisk gevinst - Rekonniseringsrapport"
 
-#: src/structure.c:6423
+#: src/structure.c:6420
 msgid "Factory Reward - Propulsion"
 msgstr "Fabriksgevinst - Fremdrift"
 
-#: src/structure.c:6447
+#: src/structure.c:6444
 msgid "Factory Reward - Body"
 msgstr "Fabriksgevinst - Skrog"
 
-#: src/structure.c:6471
+#: src/structure.c:6468
 msgid "Factory Reward - Weapon"
 msgstr "Frabriskgevinst - Våben"
 
-#: src/structure.c:6480
+#: src/structure.c:6477
 msgid "Factory Reward - Nothing"
 msgstr "Fabriksgevinst - Ingen"
 
-#: src/structure.c:6508
+#: src/structure.c:6505
 msgid "Repair Facility Award - Repair"
 msgstr "Reperationsgevinst - Reperation"
 
-#: src/structure.c:6515
+#: src/structure.c:6512
 msgid "Repair Facility Award - Nothing"
 msgstr "Reperationsgevinst - Ingen"
 
@@ -826,6 +826,7 @@ msgstr "Menig"
 
 #: src/scores.c:109
 #, fuzzy, c-format
+msgctxt "rank"
 msgid "Green: %u"
 msgstr "Grøn"
 
@@ -1318,7 +1319,7 @@ msgstr "TUTORIALS"
 #: src/frontend.c:686
 #: src/frontend.c:832
 #: src/frontend.c:935
-#: src/frontend.c:1100
+#: src/frontend.c:1094
 msgctxt "menu"
 msgid "Return"
 msgstr "Tilbage"
@@ -1353,7 +1354,7 @@ msgstr "Spil mod computeren"
 
 #: src/frontend.c:519
 #: src/frontend.c:835
-#: src/frontend.c:1103
+#: src/frontend.c:1097
 msgid "GAME OPTIONS"
 msgstr "SPIL INDSTILLINGER"
 
@@ -1471,30 +1472,30 @@ msgstr "Besvar ild"
 msgid "* Takes effect on game restart"
 msgstr ""
 
-#: src/frontend.c:1065
+#: src/frontend.c:1061
 msgid "Difficulty"
 msgstr "Sværhedsgræd"
 
-#: src/frontend.c:1069
-#: src/frontend.c:1151
+#: src/frontend.c:1065
+#: src/frontend.c:1145
 msgid "Easy"
 msgstr "Begynder"
 
-#: src/frontend.c:1072
-#: src/frontend.c:1143
+#: src/frontend.c:1068
+#: src/frontend.c:1137
 msgid "Normal"
 msgstr "Øvet"
 
-#: src/frontend.c:1076
-#: src/frontend.c:1147
+#: src/frontend.c:1072
+#: src/frontend.c:1141
 msgid "Hard"
 msgstr "Svær"
 
-#: src/frontend.c:1081
+#: src/frontend.c:1077
 msgid "Scroll Speed"
 msgstr "Kamera hastighed"
 
-#: src/frontend.c:1097
+#: src/frontend.c:1091
 msgid "Unit Colour"
 msgstr "Holdfarve"
 
