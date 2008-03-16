@@ -29,6 +29,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "lib/ivis_opengl/piematrix.h"
+#include "lib/ivis_common/piestate.h"
 #include "map.h"
 #include "lighting.h"
 #include "display3d.h"
