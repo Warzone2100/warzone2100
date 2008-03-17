@@ -752,10 +752,24 @@ void recvMultiPlayerRandomArtifacts()
 
 	for (count = 0; count < quantity; count++)
 	{
+		MAPTILE *psTile;
+
 		NETuint32_t(&tx);
 		NETuint32_t(&ty);
 		NETuint32_t(&ref);
 		NETuint8_t(&player);
+
+		if (!tileOnMap(tx, ty))
+		{
+			debug(LOG_ERROR, "recvMultiPlayerRandomArtifacts: Bad tile coordinates (%u,%u)", tx, ty);
+			continue;
+		}
+		psTile = mapTile(tx, ty);
+		if (!psTile || psTile->psObject != NULL)
+		{
+			debug(LOG_ERROR, "recvMultiPlayerRandomArtifacts: Already something at (%u,%u)!", tx, ty);
+			continue;
+		}
 
 		pF = buildFeature((asFeatureStats + i), world_coord(tx), world_coord(ty), FALSE);
 		if (pF)
@@ -764,6 +778,7 @@ void recvMultiPlayerRandomArtifacts()
 			pF->player	= player;
 		}
 	}
+	NETend();
 }
 
 // ///////////////////////////////////////////////////////////////
