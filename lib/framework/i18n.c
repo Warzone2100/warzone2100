@@ -99,5 +99,6 @@ void initI18n(void)
 #else
 	(void)bindtextdomain(PACKAGE, LOCALEDIR);
 #endif
+	(void)bind_textdomain_codeset(PACKAGE, "UTF-8"); // FIXME should be UCS4 to avoid conversions
 	(void)textdomain(PACKAGE);
 }

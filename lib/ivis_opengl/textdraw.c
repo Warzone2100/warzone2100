@@ -108,7 +108,7 @@ static void iV_initializeGLC()
 
 	glcDisable(GLC_AUTO_FONT);
 	glcRenderStyle(GLC_TEXTURE);
-	glcStringType(GLC_UTF8_QSO);
+	glcStringType(GLC_UTF8_QSO); // Set GLC's string type to UTF-8 FIXME should be UCS4 to avoid conversions
 
 	_glcFont_Regular = glcGenFontID();
 	_glcFont_Bold = glcGenFontID();
@@ -150,9 +150,6 @@ static void iV_initializeGLC()
 	}
 
 	debug(LOG_NEVER, "finished initializing GLC");
-
-	// Set GLC's string type to UTF-8
-	glcStringType(GLC_UTF8_QSO);
 }
 
 void iV_TextInit()
