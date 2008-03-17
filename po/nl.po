@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-03-17 00:45+0100\n"
-"PO-Revision-Date: 2008-01-20 19:26+0100\n"
+"PO-Revision-Date: 2008-03-17 01:12+0100\n"
 "Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -75,12 +75,12 @@ msgstr "Speler"
 #: src/multigifts.c:168
 #, c-format
 msgid "%s Gives You A Visibility Report"
-msgstr ""
+msgstr "%s geeft je een zichtbaarheidsrapport"
 
 #: src/multigifts.c:188
 #, c-format
 msgid "%s Gives you a %s"
-msgstr ""
+msgstr "%s geeft je een %s"
 
 #: src/multigifts.c:238
 #, c-format
@@ -95,7 +95,7 @@ msgstr ""
 #: src/multigifts.c:335
 #, c-format
 msgid "%s Gives You Power"
-msgstr ""
+msgstr "%s geeft je energie"
 
 #: src/multigifts.c:355
 #, c-format
@@ -148,17 +148,17 @@ msgstr "SPEL OPGESLAGEN!"
 #: src/hci.c:2093
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
-msgstr ""
+msgstr "Speler %u cheat (debug menu) hem/haarzelf een nieuw gebouw: %s."
 
 #: src/hci.c:2116
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
-msgstr ""
+msgstr "Speler %u cheat (debug menu) hem/haarzelf een nieuwe functie: %s."
 
 #: src/hci.c:2135
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
-msgstr ""
+msgstr "Speler %u cheat (debug menu) hem/haarzelf een nieuwe droid: %s."
 
 #: src/hci.c:3754
 #, fuzzy
@@ -342,11 +342,11 @@ msgstr "Groentje"
 #: src/droid.c:3924
 msgctxt "rank"
 msgid "Green"
-msgstr ""
+msgstr "Onervaren"
 
 #: src/droid.c:3925
 msgid "Trained"
-msgstr ""
+msgstr "Getraind"
 
 #: src/droid.c:3926
 msgid "Regular"
@@ -354,7 +354,7 @@ msgstr ""
 
 #: src/droid.c:3927
 msgid "Professional"
-msgstr ""
+msgstr "Professional"
 
 #: src/droid.c:3928
 msgid "Veteran"
@@ -578,11 +578,11 @@ msgstr ""
 
 #: src/keybind.c:439
 msgid "Infinite power disabled"
-msgstr ""
+msgstr "Oneindige energie uitgeschakeld"
 
 #: src/keybind.c:444
 msgid "Infinite power enabled"
-msgstr ""
+msgstr "Oneindige energie ingeschakeld"
 
 #: src/keybind.c:497
 msgid "All items made available"
@@ -840,7 +840,7 @@ msgstr "Groen: %u"
 #: src/scores.c:110
 #, c-format
 msgid "Trained: %u"
-msgstr ""
+msgstr "Getraind: %u"
 
 #: src/scores.c:111
 #, c-format
@@ -850,7 +850,7 @@ msgstr ""
 #: src/scores.c:112
 #, c-format
 msgid "Professional: %u"
-msgstr ""
+msgstr "Professional: %u"
 
 #: src/scores.c:113
 #, c-format
@@ -979,11 +979,11 @@ msgstr ""
 #: src/intorder.c:194
 #: src/keymap.c:415
 msgid "Return for Recycling"
-msgstr ""
+msgstr "Ga terug om te recyclen"
 
 #: src/intorder.c:195
 msgid "Recycle"
-msgstr ""
+msgstr "Recyclen"
 
 #: src/intorder.c:196
 msgid "Assign Factory Production"
@@ -1200,7 +1200,7 @@ msgstr "Gewicht"
 #: src/design.c:812
 #: src/design.c:832
 msgid "Total Power Required"
-msgstr ""
+msgstr "Totale Hoeveelheid Energie Benodigd"
 
 #: src/design.c:845
 #: src/design.c:866
@@ -1210,7 +1210,7 @@ msgstr ""
 #: src/design.c:1062
 #: src/design.c:1094
 msgid "Power Usage"
-msgstr "Energie Verbruik"
+msgstr "Energie Gebruik"
 
 #: src/design.c:1346
 msgid "Transporter"
@@ -1348,7 +1348,7 @@ msgstr ""
 
 #: src/frontend.c:472
 msgid "One Player Skirmish"
-msgstr ""
+msgstr "Enkel speler schermutseling"
 
 #: src/frontend.c:519
 #: src/frontend.c:835
@@ -2484,7 +2484,7 @@ msgstr ""
 
 #: data/messages/strings/cam2strings.txt:44
 msgid "Attack!"
-msgstr ""
+msgstr "Aanvallen!"
 
 #: data/messages/strings/cam2strings.txt:47
 msgid "BETA BASE MISSION: Hold At All Costs"
@@ -3174,7 +3174,7 @@ msgstr ""
 
 #: data/messages/strings/genstrings.txt:10
 msgid "Power Resource"
-msgstr ""
+msgstr "Energie Bron"
 
 #: data/messages/strings/genstrings.txt:11
 msgid "Unknown Artifact"
@@ -4043,7 +4043,7 @@ msgstr ""
 #: data/messages/strings/names.txt:386
 #: data/mp/messages/strings/names.txt:388
 msgid "Power Generator"
-msgstr ""
+msgstr "Energie Generator"
 
 #: data/messages/strings/names.txt:387
 #: data/messages/strings/names.txt:815
@@ -8497,7 +8497,7 @@ msgstr ""
 #: data/messages/strings/resstrings.txt:657
 #: data/mp/messages/strings/resstrings.txt:735
 msgid "Power Module Available"
-msgstr ""
+msgstr "Energie Module Beschikbaar"
 
 #: data/messages/strings/resstrings.txt:658
 #: data/messages/strings/resstrings.txt:663
@@ -12212,6 +12212,6 @@ msgstr ""
 
 #~ msgid "Disable fog"
 #~ msgstr "Schakel mist uit"
-
 #~ msgid "Internet"
 #~ msgstr "Internet"
+
