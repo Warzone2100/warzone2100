@@ -644,6 +644,8 @@
 		02F5CC900D1496580000A2D0 /* poptparse.c in Sources */ = {isa = PBXBuildFile; fileRef = 02F5CC870D1496580000A2D0 /* poptparse.c */; };
 		02F5CC910D1496580000A2D0 /* system.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F5CC880D1496580000A2D0 /* system.h */; };
 		02F5CCC00D1498A30000A2D0 /* Popt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F5CC6D0D1494AA0000A2D0 /* Popt.framework */; };
+		973A9EFF0D8EDC6200BAE951 /* i18n.c in Sources */ = {isa = PBXBuildFile; fileRef = 973A9EFD0D8EDC6200BAE951 /* i18n.c */; };
+		973A9F000D8EDC6200BAE951 /* i18n.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 973A9EFE0D8EDC6200BAE951 /* i18n.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -820,6 +822,7 @@
 				02CDDD090D159D5900722688 /* autorevision.h in Copy frameworks */,
 				02CDDD1D0D159E2F00722688 /* openal_error.h in Copy frameworks */,
 				0235F9100D52BCC7007B8F63 /* math-help.h in Copy frameworks */,
+				973A9F000D8EDC6200BAE951 /* i18n.h in Copy frameworks */,
 			);
 			name = "Copy frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1647,6 +1650,8 @@
 		02F5CC860D1496580000A2D0 /* poptint.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = poptint.h; path = external/popt/poptint.h; sourceTree = SOURCE_ROOT; };
 		02F5CC870D1496580000A2D0 /* poptparse.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = poptparse.c; path = external/popt/poptparse.c; sourceTree = SOURCE_ROOT; };
 		02F5CC880D1496580000A2D0 /* system.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = system.h; path = external/popt/system.h; sourceTree = SOURCE_ROOT; };
+		973A9EFD0D8EDC6200BAE951 /* i18n.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = i18n.c; path = ../lib/framework/i18n.c; sourceTree = SOURCE_ROOT; };
+		973A9EFE0D8EDC6200BAE951 /* i18n.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = i18n.h; path = ../lib/framework/i18n.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1973,6 +1978,8 @@
 		0246A0D00BD3CBE1004D1C70 /* Framework */ = {
 			isa = PBXGroup;
 			children = (
+				973A9EFD0D8EDC6200BAE951 /* i18n.c */,
+				973A9EFE0D8EDC6200BAE951 /* i18n.h */,
 				0235F90F0D52BCC7007B8F63 /* math-help.h */,
 				0223BBB40CFE3CD60056EF85 /* printf_ext.c */,
 				0223BBB50CFE3CD60056EF85 /* printf_ext.h */,
@@ -3475,7 +3482,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "OUTDIR=quesoglc\nSVNURL=https://quesoglc.svn.sourceforge.net/svnroot/quesoglc/branches/release-0.7.0/quesoglc\nSVNREV=721\n\nPATH=\"/usr/local/bin:${PATH}\"\nexport PATH\n\ncd external\n\nif [ -d \"$OUTDIR\" ]; then\n  echo \"$OUTDIR exists, skipping\"\n  exit 0\nfi\n\nif [ ! -z \"$SVNREV\" ]; then\n  SVNARGS=\"$SVNARGS -r $SVNREV\"\nfi\n\nsvn co $SVNARGS $SVNURL $OUTDIR\n";
+			shellScript = "OUTDIR=quesoglc\nSVNURL=https://quesoglc.svn.sourceforge.net/svnroot/quesoglc/branches/release-0.7/quesoglc/\nSVNREV=768\n\nPATH=\"/usr/local/bin:${PATH}\"\nexport PATH\n\ncd external\n\nif [ -d \"$OUTDIR\" ]; then\n  echo \"$OUTDIR exists, skipping\"\n  exit 0\nfi\n\nif [ ! -z \"$SVNREV\" ]; then\n  SVNARGS=\"$SVNARGS -r $SVNREV\"\nfi\n\nsvn co $SVNARGS $SVNURL $OUTDIR\n";
 		};
 		022B2F290BD55840002E64E3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3521,7 +3528,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"${CONFIGURATION}\" == \"Debug\" ]; then\n    mkdir -p ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources\n    rm -rf ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data\n    tar -cC .. --exclude .svn --exclude 'Makefile*' data | tar -xC ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources\nelse\n    mkdir -p ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources\n    rm -rf ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data\n    mkdir ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data\n    cd ../data\n    zip -ru0 ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data/warzone.wz anims audio components effects features tagdefinitions gamedesc.lev images messages misc multiplay novideo.rpl palette.bin script sequenceaudio stats structs texpages wrf -x *svn*\n    cd mp\n    zip -ru0 ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data/mp.wz addon.lev anims components effects messages multiplay stats structs wrf -x *svn*\nfi\n";
+			shellScript = " mkdir -p ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources\n rm -rf ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources/data\n tar -cC .. --exclude .svn --exclude 'Makefile*' data | tar -xC ${TARGET_BUILD_DIR}/Warzone.app/Contents/Resources";
 		};
 		02CDDD010D159CA700722688 /* Run autorevision */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3917,6 +3924,7 @@
 				0223BBC00CFE3CD60056EF85 /* tagfile.c in Sources */,
 				02CDDD1C0D159E2F00722688 /* openal_error.c in Sources */,
 				020A7E670D246D2B009C29F5 /* sequence.c in Sources */,
+				973A9EFF0D8EDC6200BAE951 /* i18n.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
