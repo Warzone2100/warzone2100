@@ -369,7 +369,14 @@ void kf_ToggleFPS(void) //This shows *just FPS* and is always visable (when acti
 	// Toggle the boolean value of showFPS
 	showFPS = !showFPS;
 
-	CONPRINTF(ConsoleString, (ConsoleString, "FPS display is %s", showFPS ? "Enabled" : "Disabled"));
+	if (showFPS)
+	{
+		CONPRINTF(ConsoleString, (ConsoleString, _("FPS display is enabled.")));
+	}
+	else
+	{
+		CONPRINTF(ConsoleString, (ConsoleString, _("FPS display is disabled.")));
+	}
 }
 void kf_ToggleSamples(void) //Displays number of sound sample in the sound queues & lists.
 {
@@ -381,7 +388,8 @@ void kf_ToggleSamples(void) //Displays number of sound sample in the sound queue
 /* Writes out the frame rate */
 void	kf_FrameRate( void )
 {
-	CONPRINTF(ConsoleString,(ConsoleString,"FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d", frameGetAverageRate(), getFramerateLimit(), loopPieCount, loopPolyCount, loopTileCount, loopStateChanges));
+	CONPRINTF(ConsoleString,(ConsoleString, _("FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"), 
+	          frameGetAverageRate(), getFramerateLimit(), loopPieCount, loopPolyCount, loopTileCount, loopStateChanges));
 	if (runningMultiplayer()) {
 			CONPRINTF(ConsoleString,(ConsoleString,
 						"NETWORK:  Bytes: s-%d r-%d  Packets: s-%d r-%d",
@@ -394,7 +402,6 @@ void	kf_FrameRate( void )
 	gameStats = !gameStats;
 
 	CONPRINTF(ConsoleString, (ConsoleString,"Built at %s on %s",__TIME__,__DATE__));
-//		addConsoleMessage("Game statistics display toggled",DEFAULT_JUSTIFY);
 }
 
 // --------------------------------------------------------------------------
@@ -2361,11 +2368,11 @@ void kf_ToggleRadarAllyEnemy(void)
 
 	if(bEnemyAllyRadarColor)
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, "Radar showing friend-foe colors"));
+		CONPRINTF(ConsoleString, (ConsoleString, _("Radar showing friend-foe colors")));
 	}
 	else
 	{
-		CONPRINTF(ConsoleString, (ConsoleString, "Radar showing player colors"));
+		CONPRINTF(ConsoleString, (ConsoleString, _("Radar showing player colors")));
 	}
 
 	resetRadarRedraw();
@@ -2382,16 +2389,16 @@ void kf_ToggleRadarTerrain(void)
 	switch (radarDrawMode)
 	{
 		case RADAR_MODE_NO_TERRAIN:
-		 	CONPRINTF(ConsoleString, (ConsoleString, "Radar showing only objects"));
+		 	CONPRINTF(ConsoleString, (ConsoleString, _("Radar showing only objects")));
 			break;
 		case RADAR_MODE_COMBINED:
-		 	CONPRINTF(ConsoleString, (ConsoleString, "Radar blending terrain and height"));
+		 	CONPRINTF(ConsoleString, (ConsoleString, _("Radar blending terrain and height")));
 			break;
 		case RADAR_MODE_TERRAIN:
-		 	CONPRINTF(ConsoleString, (ConsoleString, "Radar showing terrain"));
+		 	CONPRINTF(ConsoleString, (ConsoleString, _("Radar showing terrain")));
 			break;
 		case RADAR_MODE_HEIGHT_MAP:
-		 	CONPRINTF(ConsoleString, (ConsoleString, "Radar showing height"));
+		 	CONPRINTF(ConsoleString, (ConsoleString, _("Radar showing height")));
 			break;
 		case NUM_RADAR_MODES:
 			assert(false);
