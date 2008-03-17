@@ -148,6 +148,7 @@ static SDWORD	rangeCenterX,rangeCenterY,rangeRadius;
 static BOOL	bDrawBlips=TRUE;
 static BOOL	bDrawProximitys=TRUE;
 BOOL	godMode;
+BOOL	showGateways = FALSE;
 
 static char skyboxPageName[PATH_MAX] = "page-25";
 
@@ -3700,9 +3701,6 @@ static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDW
 	return imd;
 }
 
-//#define SHOW_ZONES
-//#define SHOW_GATEWAYS
-
 // -------------------------------------------------------------------------------------
 /* New improved (and much faster) tile drawer */
 // -------------------------------------------------------------------------------------
@@ -3714,9 +3712,6 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	BOOL bOutlined = FALSE;
 	UDWORD tileNumber = 0;
 	TERRAIN_VERTEX vertices[3];
-#if defined(SHOW_ZONES) || defined(SHOW_GATEWAYS)
-	SDWORD zone = 0;
-#endif
 	PIELIGHT colour[2][2];
 
 	colour[0][0] = WZCOL_BLACK;
@@ -3749,18 +3744,6 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		{
 			colour[1][1] = mapTile(actualX + 1, actualY + 1)->colour;
 		}
-#if defined(SHOW_ZONES)
-		if (!fpathBlockingTile(actualX, actualY) ||
-			terrainType(psTile) == TER_WATER)
-		{
-			zone = gwGetZone(actualX, actualY);
-		}
-#elif defined(SHOW_GATEWAYS)
-		if (psTile->tileInfoBits & BITS_GATEWAY)
-		{
-			zone = gwGetZone(actualX, actualY);
-		}
-#endif
 		if ( terrainType(psTile) != TER_WATER || onWaterEdge )
 		{
 			// what tile texture number is it?
@@ -3773,17 +3756,14 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 		}
 	}
 
-#if defined(SHOW_ZONES)
-	if (zone != 0)
+	/* Show gateways */
+	if (psTile && psTile->tileInfoBits & BITS_GATEWAY && showGateways)
 	{
-		tileNumber = zone;
+		colour[0][0].byte.g = 255;
+		colour[1][0].byte.g = 255;
+		colour[0][1].byte.g = 255;
+		colour[1][1].byte.g = 255;
 	}
-#elif defined(SHOW_GATEWAYS)
-	if (psTile && psTile->tileInfoBits & BITS_GATEWAY)
-	{
-		tileNumber = 55;//zone;
-	}
-#endif
 
 	/* Is the tile highlighted? Perhaps because there's a building foundation on it */
 	if (psTile && !onWaterEdge && TILE_HIGHLIGHT(psTile))

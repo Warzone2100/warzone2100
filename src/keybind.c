@@ -137,6 +137,13 @@ void	kf_ToggleMissionTimer( void )
 {
 	setMissionCheatTime(!mission.cheatTime);
 }
+
+void	kf_ToggleShowGateways(void)
+{
+	addConsoleMessage("Gateways toggled.", DEFAULT_JUSTIFY);
+	showGateways = !showGateways;
+}
+
 // --------------------------------------------------------------------------
 void	kf_ToggleRadarJump( void )
 {

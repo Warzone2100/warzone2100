@@ -113,7 +113,7 @@ extern SDWORD	getCentreZ( void );
 extern SDWORD mouseTileX, mouseTileY;
 
 extern BOOL bRender3DOnly;
-
+extern BOOL showGateways;
 extern Vector2i visibleTiles;
 
 /*returns the graphic ID for a droid rank*/

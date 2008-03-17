@@ -205,6 +205,8 @@ extern void	kf_SelectCommander_8( void );
 extern void	kf_SelectCommander_9( void );
 void kf_ToggleReopenBuildMenu( void );
 
+extern void	kf_ToggleShowGateways(void);
+
 // dirty but necessary
 extern	char	sTextToSend[MAX_CONSOLE_STRING_LENGTH];
 extern	void	kf_FaceNorth(void);
