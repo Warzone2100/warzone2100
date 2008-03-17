@@ -348,7 +348,7 @@ void applyLimitSet(void)
 	}
 
 	// Get the limits and decode
-	for (i = 0; i < ingame.numStructureLimits; i++)
+	for (i = 0; i < numStructureStats; i++)
  	{
 		UBYTE id = pEntry[i].id;
 		
