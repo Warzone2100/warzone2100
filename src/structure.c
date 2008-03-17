@@ -262,11 +262,12 @@ void structureInitVars(void)
 	researchModuleStat = 0;
 	lastMaxUnitMessage = 0;
 
-	for(i=0; i< MAX_PLAYERS; i++) {
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
 		asStructLimits[i] = NULL;
-		for (j=0; j < NUM_FLAG_TYPES; j++)
+		for (j = 0; j < NUM_FLAG_TYPES; j++)
 		{
-			factoryNumFlag[i][j] = (UBYTE)0;
+			factoryNumFlag[i][j] = 0;
 		}
 	}
 	for (i = 0; i < MAX_PLAYERS; i++)
@@ -851,8 +852,7 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 	//allocate the structureLimits structure
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		asStructLimits[player] = (STRUCTURE_LIMITS *)malloc(sizeof(STRUCTURE_LIMITS) *
-			numStructureStats);
+		asStructLimits[player] = malloc(sizeof(STRUCTURE_LIMITS) * numStructureStats);
 		if (asStructLimits[player] == NULL)
 		{
 			debug( LOG_ERROR, "Unable to allocate structure limits" );
@@ -879,16 +879,15 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 void initStructLimits(void)
 {
 	UDWORD				i, player;
-	STRUCTURE_LIMITS	*psStructLimits;
 
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		psStructLimits = asStructLimits[player];
+		STRUCTURE_LIMITS	*psStructLimits = asStructLimits[player];
+
 		for (i=0; i < numStructureStats; i++)
 		{
 			psStructLimits[i].limit = LOTS_OF;
 			psStructLimits[i].currentQuantity = 0;
-
 			psStructLimits[i].globalLimit = LOTS_OF;
 		}
 	}
@@ -898,12 +897,12 @@ void initStructLimits(void)
 void setCurrentStructQuantity(BOOL displayError)
 {
 	UDWORD		player, inc;
-	STRUCTURE	*psCurr;
-	STRUCTURE_LIMITS	*psStructLimits;
 
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		psStructLimits = asStructLimits[player];
+		STRUCTURE_LIMITS	*psStructLimits = asStructLimits[player];
+		STRUCTURE		*psCurr;
+
 		//initialise the current quantity for all structures
 		for (inc = 0; inc < numStructureStats; inc++)
 		{
@@ -934,7 +933,6 @@ BOOL loadStructureWeapons(const char *pWeaponData, UDWORD bufferSize)
 	const unsigned int NumToAlloc = numCR(pWeaponData, bufferSize);
 	UDWORD				i, incS, incW;
 	char				StructureName[MAX_NAME_SIZE];//, WeaponName[MAX_NAME_SIZE];
-	//Watermelon:weaponName array
 	char				WeaponName[STRUCT_MAXWEAPS][MAX_NAME_SIZE];
 	STRUCTURE_STATS		*pStructure = asStructureStats;
 	WEAPON_STATS		*pWeapon = asWeaponStats;
@@ -1196,7 +1194,8 @@ BOOL structureStatsShutDown(void)
 	//free up the structLimits structure
 	for (inc = 0; inc < MAX_PLAYERS ; inc++)
 	{
-		if(asStructLimits[inc]) {
+		if (asStructLimits[inc])
+		{
 			free(asStructLimits[inc]);
 			asStructLimits[inc] = NULL;
 		}
@@ -3853,8 +3852,7 @@ UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer, UDWORD
 		if (apStructTypeLists[selectedPlayer][inc] & AVAILABLE)
 		{
 			//check not built the maximum allowed already
-			if (asStructLimits[selectedPlayer][inc].currentQuantity <
-					asStructLimits[selectedPlayer][inc].limit)
+			if (asStructLimits[selectedPlayer][inc].currentQuantity < asStructLimits[selectedPlayer][inc].limit)
 			{
 				psBuilding = asStructureStats + inc;
 
@@ -4803,8 +4801,7 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 	if (asStructLimits[psDel->player][psDel->pStructureType - asStructureStats].
 		currentQuantity)
 	{
-		asStructLimits[psDel->player][psDel->pStructureType - asStructureStats].
-			currentQuantity--;
+		asStructLimits[psDel->player][psDel->pStructureType - asStructureStats].currentQuantity--;
 	}
 
 	//if it is a factory - need to reset the factoryNumFlag

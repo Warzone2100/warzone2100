@@ -181,15 +181,11 @@ void recvOptions()
 	{
 		NETuint8_t(&game.skDiff[i]);
 	}
- 
+
 	// Check the version
 	if (strncmp(game.version, buildTime, 8) != 0)
 	{
-
-#ifndef DEBUG
 		debug(LOG_ERROR, "Host is running a different version of Warzone2100.");
-		abort();
-#endif
 	}
 
 	// Now the dpid array
