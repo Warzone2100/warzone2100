@@ -293,7 +293,7 @@ void runLimitScreen(void)
 // ////////////////////////////////////////////////////////////////////////////
 void createLimitSet(void)
 {
-	UDWORD			i, numchanges = 0, bufSize;
+	UDWORD			i, numchanges = 0, bufSize, idx = 0;
 	MULTISTRUCTLIMITS	*pEntry;
 
 	// Free the old set if required
@@ -315,7 +315,7 @@ void createLimitSet(void)
 	}
 
 	// Allocate some memory for the changes
-	bufSize = numStructureStats * sizeof(MULTISTRUCTLIMITS);
+	bufSize = numchanges * sizeof(MULTISTRUCTLIMITS);
 	pEntry = malloc(bufSize);
 	memset(pEntry, 255, bufSize);
 
@@ -325,8 +325,10 @@ void createLimitSet(void)
 	{
 		if (asStructLimits[0][i].limit != LOTS_OF)
 		{
-			pEntry[i].id	= i;
-			pEntry[i].limit	= asStructLimits[0][i].limit;
+			ASSERT(idx < numchanges, "Bad number of changed limits");
+			pEntry[idx].id		= i;
+			pEntry[idx].limit	= asStructLimits[0][i].limit;
+			idx++;
 		}
 	}
 
@@ -348,7 +350,7 @@ void applyLimitSet(void)
 	}
 
 	// Get the limits and decode
-	for (i = 0; i < numStructureStats; i++)
+	for (i = 0; i < ingame.numStructureLimits; i++)
  	{
 		UBYTE id = pEntry[i].id;
 		
