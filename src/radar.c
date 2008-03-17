@@ -69,14 +69,14 @@ static UDWORD		*radarBuffer;
 static PIELIGHT clanColours[MAX_PLAYERS]=
 {	// see frontend2.png for team color order.
 	// [r,g,b,a]
-	{{0,81,0,200}},		// green  Player 0
-	{{255,140,66,200}},	// orange Player 1
-	{{82,92,82,200}},	// grey   Player 2
-	{{22,22,22,200}},		// black  Player 3
-	{{200,0,0,200}},		// red    Player 4
-	{{0,0,222,200}},		// blue   Player 5
-	{{222,0,222,200}},	// pink   Player 6
-	{{0,222,222,200}},	// cyan   Player 7
+	{{0,255,0,255}},		// green  Player 0
+	{{255,210,40,255}},		// orange Player 1
+	{{255,255,255,255}},	// grey   Player 2
+	{{0,0,0,255}},			// black  Player 3
+	{{255,0,0,255}},		// red    Player 4
+	{{20,20,255,255}},		// blue   Player 5
+	{{255,0,255,255}},		// pink   Player 6
+	{{0,255,255,255}},		// cyan   Player 7
 };
 
 static PIELIGHT flashColours[MAX_PLAYERS]=
