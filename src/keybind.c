@@ -2358,6 +2358,16 @@ void kf_ToggleReopenBuildMenu( void )
 void kf_ToggleRadarAllyEnemy(void)
 {
 	bEnemyAllyRadarColor = !bEnemyAllyRadarColor;
+
+	if(bEnemyAllyRadarColor)
+	{
+		CONPRINTF(ConsoleString, (ConsoleString, "Radar showing friend-foe colors"));
+	}
+	else
+	{
+		CONPRINTF(ConsoleString, (ConsoleString, "Radar showing player colors"));
+	}
+
 	resetRadarRedraw();
 }
 
