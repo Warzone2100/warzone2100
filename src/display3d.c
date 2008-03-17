@@ -886,8 +886,6 @@ BOOL init3DView(void)
 	Vector3f theSun = { 225.0f, -600.0f, 450.0f };
 
 	setTheSun(theSun);
-	visibleTiles.x = MIN(VISIBLE_XTILES, mapWidth);
-	visibleTiles.y = MIN(VISIBLE_YTILES, mapHeight);
 
 	// the world centre - used for decaying lighting etc
 	gridCentreX = player.p.x + world_coord(visibleTiles.x / 2);
