@@ -1770,7 +1770,8 @@ BOOL scrSkDifficultyModifier(void)
 	}
 
 	// power modifier
-	amount = game.skDiff[player]*40;		//(0-DIFF_SLIDER_STOPS)*25
+	// power range: 0-1000 (0 - DIFF_SLIDER_STOPS * 50)
+	amount = game.skDiff[player]*50;
 
 	if(amount > 0)
 	{
@@ -1784,24 +1785,17 @@ BOOL scrSkDifficultyModifier(void)
 	//research modifier.??
 	for(psStr=apsStructLists[player];psStr;psStr=psStr->psNext)
 	{
-		// subtract 0 - 60% off the time to research.
 		if(psStr->pStructureType->type == REF_RESEARCH)
 		{
 			psResFacility =	(RESEARCH_FACILITY*)psStr->pFunctionality;
 
-			/*if(psResFacility->timeToResearch )
-			{
-				amount = psResFacility->timeToResearch;
-				psResFacility->timeToResearch  = amount - ( (amount*3*game.skDiff[player])/100);
-			}*/
-            //this is not appropriate now the timeToResearch is not used - 10/06/99 so...
-            //add 0-60% to the amount required to research
+			// subtract 0 - 80% off the time to research.
             if (psResFacility->psSubject)
             {
                 pPlayerRes = asPlayerResList[player] +
                     (((RESEARCH *)psResFacility->psSubject)->ref - REF_RESEARCH_START);
                 pPlayerRes->currentPoints += ((((RESEARCH *)psResFacility->psSubject)->
-                    researchPoints * 3 * game.skDiff[player])/100);
+                    researchPoints * 4 * game.skDiff[player])/100);
             }
 		}
 
