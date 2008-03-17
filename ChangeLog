@@ -1,6 +1,7 @@
 0000-00-00: SVN
  * General:
    * Fix: Crash during saving in multiplayer/skirmish mode, when Aivolution AI is enabled. (bug #11084)
+   * Fix: Dull radar player colors were replaced by brighter colors.
 
 2008-03-16: Version 2.1_beta2
  * General:
