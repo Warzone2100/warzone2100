@@ -72,6 +72,29 @@ UDWORD			oilResFeature;
 //specifies how far round (in tiles) a constructor droid sound look for more wreckage
 #define WRECK_SEARCH 3
 
+struct featureTypeMap
+{
+	char *typeStr;
+	FEATURE_TYPE type;
+};
+
+const struct featureTypeMap map[] =
+{
+	{ "HOVER WRECK", FEAT_HOVER },
+	{ "TANK WRECK", FEAT_TANK },
+	{ "GENERIC ARTEFACT", FEAT_GEN_ARTE },
+	{ "OIL RESOURCE", FEAT_OIL_RESOURCE },
+	{ "BOULDER", FEAT_BOULDER },
+	{ "VEHICLE", FEAT_VEHICLE },
+	{ "DROID WRECK", FEAT_DROID },
+	{ "BUILDING WRECK", FEAT_BUILD_WRECK },
+	{ "BUILDING", FEAT_BUILDING },
+	{ "OIL DRUM", FEAT_OIL_DRUM },
+	{ "TREE", FEAT_TREE },
+	{ "SKYSCRAPER", FEAT_SKYSCRAPER }
+};
+
+
 void featureInitVars(void)
 {
 	asFeatureStats = NULL;
@@ -79,71 +102,20 @@ void featureInitVars(void)
 	oilResFeature = 0;
 }
 
-static void featureType(FEATURE_STATS* psFeature, char *pType)
+static void featureType(FEATURE_STATS* psFeature, const char *pType)
 {
-	if (!strcmp(pType,"HOVER WRECK"))
+	int i;
+	
+	for (i = 0; i < sizeof(map) / sizeof(map[0]); i++)
 	{
-		psFeature->subType = FEAT_HOVER;
-		return;
-	}
-	if (!strcmp(pType,"TANK WRECK"))
-	{
-		psFeature->subType = FEAT_TANK;
-		return;
-	}
-	if (!strcmp(pType,"GENERIC ARTEFACT"))
-	{
-		psFeature->subType = FEAT_GEN_ARTE;
-		return;
-	}
-	if (!strcmp(pType,"OIL RESOURCE"))
-	{
-		psFeature->subType = FEAT_OIL_RESOURCE;
-		return;
-	}
-	if (!strcmp(pType,"BOULDER"))
-	{
-		psFeature->subType = FEAT_BOULDER;
-		return;
-	}
-	if (!strcmp(pType,"VEHICLE"))
-	{
-		psFeature->subType = FEAT_VEHICLE;
-		return;
-	}
-	if (!strcmp(pType,"DROID WRECK"))
-	{
-		psFeature->subType = FEAT_DROID;
-		return;
-	}
-	if (!strcmp(pType,"BUILDING WRECK"))
-	{
-		psFeature->subType = FEAT_BUILD_WRECK;
-		return;
-	}
-	if (!strcmp(pType,"BUILDING"))
-	{
-		psFeature->subType = FEAT_BUILDING;
-		return;
+		if (strcmp(pType, map[i].typeStr) == 0)
+		{
+			psFeature->subType = map[i].type;
+			return;
+		}
 	}
 
-	if (!strcmp(pType,"OIL DRUM"))
-	{
-		psFeature->subType = FEAT_OIL_DRUM;
-		return;
-	}
-
-	if (!strcmp(pType,"TREE"))
-	{
-		psFeature->subType = FEAT_TREE;
-		return;
-	}
-	if (!strcmp(pType,"SKYSCRAPER"))
-	{
-		psFeature->subType = FEAT_SKYSCRAPER;
-		return;
-	}
-	ASSERT(!"unknown feature type", "Unknown Feature Type");
+	ASSERT(FALSE, "featureType: Unknown feature type");
 }
 
 /* Load the feature stats */
