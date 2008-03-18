@@ -1667,7 +1667,10 @@ function void doMilitary()
 				}
 				else if(notifyReadyAttackTime <= 0)	//haven't started countdown already
 				{
-					notifyReadyAttack();		//notify allies and wait for orders
+					if(haveTheoretilcallyMinAttackers(false))
+					{
+						notifyReadyAttack();		//notify allies and wait for orders
+					}
 				}
 			}
 		/* } */
@@ -2433,7 +2436,7 @@ function bool canSendReinf(bool _forHelping)
 			_sendRange = REACHED_DEST_RANGE;
 		}
 
-		// Calculate travel distance of the reinfrocements
+		// Calculate travel distance of the reinforcements
 		_travelDist = ( max(0, distBetweenTwoPoints(sendForceX, sendForceY, baseX, baseY) -
 						baseRange - defendCorridor)) / TILE;
 
@@ -10790,11 +10793,11 @@ function void notifyStatus(int _playerToNotify)
 	}
 	else if(state == stAttacking)
 	{
-		msg("going " & enemy ,me , _playerToNotify);
+		msg("going " & getPlayerName(enemy), me, _playerToNotify);
 	}
 	else if(state == stHelpingAlly)
 	{
-		msg("helping " & enemy ,me , _playerToNotify);
+		msg("helping " & getPlayerName(enemy), me, _playerToNotify);
 	}
 	else if(state == stTakingOil)
 	{
