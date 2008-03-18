@@ -2,6 +2,8 @@
  * General:
    * Fix: Dull radar player colors were replaced by brighter colors.
    * Change: Effect of skirmish modifier slider increased by 20%.
+ * Aivolution AI:
+   * Fix: Using "go <player>" command makes Aivolution send its units to the proper player now.
 
 2008-03-16: Version 2.1_beta2
  * General:
