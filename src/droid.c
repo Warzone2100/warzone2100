@@ -5554,7 +5554,7 @@ BOOL cyborgDroid(DROID *psDroid)
     return FALSE;
 }
 
-BOOL droidOnMap(DROID *psDroid)
+BOOL droidOnMap(const DROID *psDroid)
 {
 	if (psDroid->died == NOT_CURRENT_LIST || psDroid->droidType == DROID_TRANSPORTER
 	    || psDroid->sMove.fx == INVALID_XY || psDroid->pos.x == INVALID_XY || missionIsOffworld())

@@ -404,7 +404,7 @@ extern BOOL cyborgDroid(DROID *psDroid);
 BOOL droidCheckReferences(DROID *psVictimDroid);
 
 /** Check if droid is in a legal world position and is not on its way to drive off the map. */
-BOOL droidOnMap(DROID *psDroid);
+BOOL droidOnMap(const DROID *psDroid);
 
 #define droidSensorRange(_psDroid) objSensorRange((BASE_OBJECT *)_psDroid)
 #define droidSensorPower(_psDroid) objSensorPower((BASE_OBJECT *)_psDroid)
