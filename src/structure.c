@@ -6814,6 +6814,7 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, BOOL 
 	UDWORD		inc, factoryType, factoryInc;
 	FACTORY		*psFactory;
 	BOOL		bAssigned = FALSE, bCheckForCancel = FALSE;
+	UBYTE	built, quantity, remaining;
 
 	CHECK_STRUCTURE(psStructure);
 	ASSERT( psStructure->player == productionPlayer,
@@ -6828,11 +6829,15 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, BOOL 
 	{
 		if (asProductionRun[factoryType][factoryInc][inc].psTemplate == psTemplate)
 		{
-			//adjust the prod run
-			if (add)
+			//adjust the prod run 
+			if (add)	//user left clicked, so increase # in queue
 			{
-				asProductionRun[factoryType][factoryInc][inc].quantity++;
-				if (asProductionRun[factoryType][factoryInc][inc].quantity > MAX_IN_RUN)
+				// Allows us to queue up more units up to MAX_IN_RUN instead of ignoring how many we have built from that queue 
+				quantity = ++asProductionRun[factoryType][factoryInc][inc].quantity;
+				built = asProductionRun[factoryType][factoryInc][inc].built;
+				remaining = quantity - built;
+				// check to see if user canceled all orders in queue
+				if (remaining > MAX_IN_RUN)
 				{
 					asProductionRun[factoryType][factoryInc][inc].quantity = 0;
 					//initialise the template
@@ -6847,7 +6852,7 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, BOOL 
 					}
 				}
 			}
-			else
+			else	//user right clicked, so we subtract form queue
 			{
 				if (asProductionRun[factoryType][factoryInc][inc].quantity == 0)
 				{

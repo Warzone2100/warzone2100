@@ -419,7 +419,7 @@ void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 		DROID_TEMPLATE	*psTemplate = (DROID_TEMPLATE *)psStat;
 		STRUCTURE	*psStructure = NULL;
 		BASE_OBJECT	*psObj = getCurrentSelected();
-		UDWORD		quantity = 0;
+		UDWORD		quantity = 0, remaining = 0;
 
 		if (psObj != NULL && psObj->type == OBJ_STRUCTURE && !isDead(psObj))
 		{
@@ -431,6 +431,16 @@ void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 		    quantity = getProductionQuantity(psStructure, psTemplate);
 		}
 
+		// now find out how many we have built
+		remaining = getProductionBuilt(psStructure, psTemplate);
+		if (quantity > remaining)
+		{
+			quantity -= remaining;
+		}
+		else
+		{
+			quantity = 0;
+		}
 		if (quantity != 0)
 		{
 			snprintf(Label->aText, sizeof(Label->aText), "%u", quantity);
