@@ -14582,10 +14582,10 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 								msg("drop a beacon", me, _sender);
 								return;
 							}
-							else if(curBase[_sender][0] > 0)	/* remember or can directly see it */
+							else if(curBase[_player][0] > 0)	/* remember or can directly see it */
 							{
-								_x = curBase[_sender][0];
-								_y = curBase[_sender][1];
+								_x = curBase[_player][0];
+								_y = curBase[_player][1];
 							}
 							else
 							{
@@ -14682,10 +14682,10 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 								msg("drop a beacon", me, _sender);
 								return;
 							}
-							else if(curBase[_sender][0] > 0)	/* remember or can directly see it */
+							else if(curBase[_player][0] > 0)	/* remember or can directly see it */
 							{
-								_x = curBase[_sender][0];
-								_y = curBase[_sender][1];
+								_x = curBase[_player][0];
+								_y = curBase[_player][1];
 							}
 						}
 
