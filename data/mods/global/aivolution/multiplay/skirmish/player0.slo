@@ -197,6 +197,9 @@
 #define	MAP_REVEAL_MIN_OIL_RES			0.0
 #define	MAP_REVEAL_MAX_OIL_RES			16.0
 
+#define	TAUNT_SUCCESS					0
+#define	TAUNT_FAILURE					1
+
 public	int				player,numLego,numTemplates[2],numBaseStructs,numDef,numRes[2],
 						numGatewayDef,numAA,numRepairTmpl,maxDamageLevels,damageLevel[4],
 						numBranches,techTanks,techAir,numVtolTemplates,numVitalStructs,
@@ -277,7 +280,7 @@ private	int		_temp,_temp2,_temp3,_temp4,_range,lostDroids[MAX_PLAYERS],lostStruc
 private	int		beaconX[8],beaconY[8],tBeacon[8],curHelpX[8],curHelpY[8],tBeaconTimeout,maxGhosts,
 				ghostx[120],ghosty[120],tResUrgencyTrackInterval,
 				structNoLiveHealth,iterateCommanderIndex[MAX_GROUP_ITERATE_BUCKET],
-				iterateStage[MAX_GROUP_ITERATE_BUCKET];
+				iterateStage[MAX_GROUP_ITERATE_BUCKET],dice;
 private	float	fCurResUrgency,fMaxResUrgency,fMinResUrgency,fNumDefaultResearch,
 				fMinResearch,fMaxResHold,fMapRevealFactor;
 
@@ -490,7 +493,7 @@ function bool	canStartAttack(int _enemy);
 function bool	canTheoreticallyStartAttack();		//count current attackers as well
 function bool	haveTheoretilcallyMinAttackers(bool _bSafeToSendLittleAttackers);		// have *any* attackers? (count current attackers as well)
 function int	numAvailableAttackers();
-function int 	totalAttackUnits();
+function int 	totalWeapUnits();
 function bool	checkFollowAttackRequest(int _attackRequester, bool _bHighPriorityTask);
 function int	groupSizeCmds(GROUP _groupToCount, bool _bIncludeUnassigned,
 					bool _bIncludeCmds, bool _bInclDroidsAssignedToCmds);
@@ -589,8 +592,11 @@ function void	requestPrepareDrop();
 function void	dropAllyBeacon(STRING _cstr, int _x, int _y);
 
 function void	notifyAllies(STRING _cstr, bool _bUpdateRadar);
+function void	notifyAll(STRING _cstr);
 function void	notifyReadyAttack();
+function void	notifyIdle(bool bAfterFailure);
 function void	notifyTakeOil(int _enemy, int _x, int _y);
+function void	taunt(int targetPlayer, int type, int tauntProbability);
 function void	notifyStatus(int _playerToNotify);
 function void	notifyStatusAll();
 function void	notifyPower(int _targetPlayer);
@@ -741,7 +747,7 @@ function DROID	closestEnemyDroidByType(int _x, int _y, int _range, int _type);
 event powerup(wait, 5)
 {
 	local bool bMyRespons,bNotLost;
-	
+
 	DEBUG_ALL = FALSE;
 
 	DEBUG_MSG = DEBUG_ALL;		//isHumanPlayer(player);
@@ -929,7 +935,7 @@ function void oneTimeInitialize(bool bAIControlled)
 	maxTakeOil = 6;		//max take oil reids we can make
 	countTakeOil = 0;
 	numTakeOil = random(maxTakeOil);
-	
+
 	// For the oil defense routine
 	resetOilDefendCoords();
 
@@ -1080,7 +1086,7 @@ function void oneTimeInitialize(bool bAIControlled)
 	stCollecting	= 7;
 	stDrop			= 8;
 	stTransporting	= 9;
-	
+
 
 	threatRange = (TILE * 10);
 
@@ -1202,12 +1208,12 @@ function void oneTimeInitialize(bool bAIControlled)
 
 	defendCorridor = (5 * 128);	//range which defenders can stay in (baseRange)
 
-	minAttackers = 10;
+	minAttackers = 5;
 	maxAttackers = 90;	//(unitLimit - maxTrucks - numDefenders) * 3 / 4;
-	numAttackers = 5 + random(12) + minAttackers;
-	
+	numAttackers = 5 + random(17) + minAttackers;
+
 	attackersIncrease = 4;		// by how many units to increase number of attackers vs a certain player when attack fails
-	
+
 	// set initial number of attackers to use vs. all players
 	count = 0;
 	while(count < MAX_PLAYERS)
@@ -1490,6 +1496,8 @@ function void doMilitary()
 	{
 		if(tState >= maxStateTime)
 		{
+			notifyIdle(false);
+
 			stopDefendingOil();
 		}
 	}
@@ -1749,7 +1757,7 @@ function bool legoPhase()
 	if(GAME_TIME_IN_SECS <= LEGO_PHASE_LEN){
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -1759,7 +1767,7 @@ function bool startupPhase()
 	if(GAME_TIME_IN_SECS <= STARTUP_PHASE_LEN){
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -1768,7 +1776,7 @@ function bool haveMinTrucks()
 	if(groupSizeCmds(buildGr,true,false,true) >= minTrucks){
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -1780,7 +1788,7 @@ function bool gettingMinTrucks()
 	{
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -1798,7 +1806,7 @@ function void buildMoreOil()
 		if(_oil != NULLOBJECT)
 		{
 			_truck = closestIdleTruck(_oil.x, _oil.y);
-		
+
 			if(_truck != NULLOBJECT)
 			{
 				orderDroidStatsLoc(_truck, DORDER_BUILD, derrick, _oil.x, _oil.y);
@@ -1811,9 +1819,9 @@ function void doEconomy()
 {
 	local	int		_numBuilders;
 	local	bool	_bBaseHasHighPriority;
-	
+
 	economySelftest();
-	
+
 	/* build AA defenses */
 	if(!defending() or (playerPower(me) > muchoPower))
 	{
@@ -1824,12 +1832,12 @@ function void doEconomy()
 	if(DEBUG_POWER and (playerPower(me) <= lowPower)){
 		addPower(highPower - 300, me);
 	}
-	
+
 	// send a droid to build oil if we have just started or we are not low on trucks and there are many unoccupied oil resources
 	if((numVisibleOilResInRange(-1,-1,-1) >= 4) or legoPhase())
 	{
 		buildMoreOil();
-		
+
 		if(startupPhase()){
 			dbg(numVisibleOilResInRange(-1,-1,-1) & " oil resources are visible", me);
 		}
@@ -1841,7 +1849,7 @@ function void doEconomy()
 
 	if(needTrucks()){
 		// dbg("NEED TRUCKS", me);
-		
+
 		buildTrucks();
 	}
 	// else
@@ -1889,7 +1897,7 @@ function void doEconomy()
 	{
 		buildOil( defending() );	//don't go away from base if in danger and low on trucks
 	}
-	
+
 	/* Build factories and research facilities */
 	buildBaseStructs();
 
@@ -2000,12 +2008,12 @@ function void updateMaxTrucks()
 	minTrucks = 6;				//Critical number
 
 	maxTrucks = 8;
-	
+
 	// we need more at startup
 	if(legoPhase()){
 		maxTrucks = maxTrucks + 4;
 	}
-	
+
 	// we need more trucks if there's a lot of defences to build
 	if(getBaseDefendLocCount() > 0){
 		maxTrucks++;
@@ -2041,7 +2049,7 @@ function void updateMaxTrucks()
 			maxOilDefenseTrucks++;
 		}
 	}
-	
+
 	// how many trucks to use for a single base defense location
 	maxBaseDefendDefLocTrucks = NUM_BASE_DEF_LOC_TRUCKS;
 	if(defending()){
@@ -2305,7 +2313,7 @@ function bool finishDefenses(DROID _truck, int _repairx, int _repairy, int _maxR
 
 		_def--;
 	}
-	
+
 	return false;
 }
 
@@ -2412,7 +2420,7 @@ function bool canSendReinf(bool _forHelping)
 					_fReinfAvFirepower,_fAllyCompoundKillRate,_fEnemyCompoundKillRate,
 					_fTotalAllyUnits;
 	local	bool	_bWin,_bWinWithSentReinf;
-	
+
 	// Calculate how many units we have available
 	_numAvailable = groupSizeCmds(defendGr,true,false,true) - numDefenders;	//use less units
 	if(_forHelping)	//use more units if helping
@@ -2420,13 +2428,13 @@ function bool canSendReinf(bool _forHelping)
 		_numAvailable = groupSizeCmds(defendGr,true,false,true) -
 					min(minDefenders, numDefenders);	//leave only minimal number of derenders
 	}
-	
+
 	_numAvailable = max(0,_numAvailable);
-	
+
 	// if(_numAvailable > 0)
 	// {
 		_fightRange = REINF_ENEMY_COUNT_RANGE;
-		
+
 		// range when sendAttackGr units get added to attackGr
 		if(helpingAlly()){
 			_sendRange = sendHelpRange;
@@ -2442,9 +2450,9 @@ function bool canSendReinf(bool _forHelping)
 
 		// Calculate travel time of the reinforcements
 		_travelTime = TILE_TRAVEL_TIME * _travelDist;
-		
+
 		_numReinfOnTheWay = groupSizeCmds(sendAttackGr,true,false,true);
-		
+
 		// If there are already old reinforcements on the way to the attack location, calc how long they need to arrive
 		_sentReinfTravDist = 0;
 		_sentReinfTravelTime = 0;
@@ -2452,7 +2460,7 @@ function bool canSendReinf(bool _forHelping)
 		{
 			_sentReinfTravDist = distBetweenTwoPoints(sendForceX, sendForceY, groupCMD_x(sendAttackGr), groupCMD_y(sendAttackGr)) / TILE;
 			if(_sentReinfTravDist > _sendRange)		//make sure won't count sendAttackGr members twice
-			{		
+			{
 				_sentReinfTravelTime = TILE_TRAVEL_TIME * _sentReinfTravDist;
 			}
 		}
@@ -2460,22 +2468,22 @@ function bool canSendReinf(bool _forHelping)
 		// Determine number of enemy and friendly units in range
 		_numEnemies = numEnemyWeapObjInRange(me, sendForceX, sendForceY, _fightRange, false, true);
 		_numAllies = numFriendlyWeapObjInRange(me, sendForceX, sendForceY, _fightRange, false, true);
-		
+
 		// Calculate enemy and friendly strengths
 		_fNumAttackersLeft = (float)_numAllies;
 		_fNumEnemiesLeft = (float)_numEnemies;
-		
+
 		// if(_numEnemies > 0 and _numAllies > 0)
 		// {
 			// Calculate total hp of the weapon objects
 			if(_numAllies > 0){
 				_friendlyHP = totalFriendlyWeapObjHPInRange(sendForceX, sendForceY, _fightRange, false);
 			}
-			
+
 			if(_numEnemies > 0){
 				_enemyHP = totalEnemyWeapObjHPInRange(sendForceX, sendForceY, _fightRange, false);
 			}
-			
+
 			// Find out how much stronger friendly/enemy units are compared
 			// to the default unit hp used to measure default kill rate
 			_fFriendlyAvUnitStrength = 0.0;
@@ -2487,25 +2495,25 @@ function bool canSendReinf(bool _forHelping)
 			if(_enemyHP > 0 and _numEnemies > 0){
 				_fEnemyAvUnitStrength = (float)_enemyHP / (float)_numEnemies;
 			}
-			
+
 			// _fEnemyAvUnitFirepower = _enemyPower / _numEnemies;
 			// _fFriendlyAvUnitFirepower = _friendlyPower / _numAllies;
-			
+
 			_fFriendlyFirepower = friendlyFirepowerInRange(sendForceX, sendForceY, _fightRange);
 			if(_numAllies > 0){
 				_fFriendlyAvUnitFirepower = _fFriendlyFirepower / (float)_numAllies;	//can't use group here because of possible ally units
 			}
-			
+
 			_fEnemyFirepower = enemyFirepowerInRange(sendForceX, sendForceY, _fightRange);
 			if(_numEnemies > 0){
 				_fEnemyAvUnitFirepower = _fEnemyFirepower / (float)_numEnemies;
 			}
-			
+
 			// Calculate how fast units kill each other (one unit vs one enemy unit)
 			if(_fEnemyAvUnitStrength > 0.0){
 				_allyKillRate = _fFriendlyAvUnitFirepower / _fEnemyAvUnitStrength;
 			}
-			
+
 			if(_fFriendlyAvUnitStrength > 0.0){
 				_enemyKillRate = _fEnemyAvUnitFirepower / _fFriendlyAvUnitStrength;
 			}
@@ -2516,13 +2524,13 @@ function bool canSendReinf(bool _forHelping)
 
 			_fNumAttackersLeft = secondLanchasterLaw((float)_numAllies,(float)_numEnemies,_travelTime,_allyKillRate,_enemyKillRate);
 			_fNumEnemiesLeft = secondLanchasterLaw((float)_numEnemies,(float)_numAllies,_travelTime,_enemyKillRate,_allyKillRate);
-		
+
 			_bWin = LanchasterVictory((float)_numAllies, (float)_numEnemies, _allyKillRate, _enemyKillRate);
-		
+
 			// calculate how much time it will take for us to win
 			if(_bWin){
 				_timeToWin = LanchasterTimeToWin((float)_numAllies, (float)_numEnemies, _allyKillRate, _enemyKillRate);
-			
+
 				// if(_timeToWin < _travelTime)
 				// {
 					_fNumAttackersLeft = secondLanchasterLaw((float)_numAllies,(float)_numEnemies,_timeToWin,_allyKillRate,_enemyKillRate);
@@ -2530,20 +2538,20 @@ function bool canSendReinf(bool _forHelping)
 				// }
 			}else{
 				_timeToLose = LanchasterTimeToWin((float)_numEnemies, (float)_numAllies, _enemyKillRate, _allyKillRate);
-				
+
 				// if(_timeToWin < _travelTime)
 				// {
 					_fNumAttackersLeft = 0.0;
 					_fNumEnemiesLeft = secondLanchasterLaw((float)_numEnemies,(float)_numAllies,_timeToLose,_enemyKillRate,_allyKillRate);
 				// }
 			}
-			
+
 			// How many reinforcements do we have considering their number and distance to the battlefield
 			_fNumEffectiveReinf = fmax(0.0, (float)_numReinfOnTheWay - (float)_sentReinfTravelTime / (float)SECONDS_PER_DROID);
 
 			// if we are going to lose see if reinforcements that are already on the way (!) will make it in time
 			_bWinWithSentReinf = true;
-			
+
 			// Reinforcements vs Enemy
 			//------------------------------------------
 			_fReinfAvUnitStrength = 0.0;
@@ -2553,19 +2561,19 @@ function bool canSendReinf(bool _forHelping)
 			{
 				_fReinfAvUnitStrength = groupHP(sendAttackGr) / (float)_numReinfOnTheWay;
 				_fReinfAvFirepower = groupFirepower(sendAttackGr) / (float)_numReinfOnTheWay;
-				
+
 				// kill rate our reinforcements vs the original enemy force
 				if(_fEnemyAvUnitStrength > 0.0){
 					_fReinfAvKillRate = _fReinfAvFirepower / _fEnemyAvUnitStrength;
 				}
-				
+
 				// kill rate of the riginal enemy force vs our reinforcements
 				if(_fReinfAvUnitStrength > 0.0){
 					_fReinfEnAvKillRate = _fEnemyAvUnitFirepower / _fReinfAvUnitStrength;
 				}
 			}
 
-			
+
 			// check if reinforcements will be able to win against the enemy force
 			if(!_bWin and _numReinfOnTheWay > 0)	// will lose and have reinforcements that are already on the way to the battlefield
 			{
@@ -2578,21 +2586,21 @@ function bool canSendReinf(bool _forHelping)
 
 					// Original attackForce + old reinforcements
 					_fTotalAllyUnits = (float)_numReinfOnTheWay + _fNumReinfAttackersLeft;
-			
+
 					// kill rate of original attackers and reinforcements
 					_fAllyCompoundKillRate = (( (float)_numReinfOnTheWay * _fReinfAvKillRate +
 										_fNumReinfAttackersLeft * _allyKillRate)) / _fTotalAllyUnits;
-					
+
 					// kill rate of original enemy force against original ally force and reinforcements
 					_fEnemyCompoundKillRate = _fEnemyAvUnitFirepower /
 									(( (float)_numReinfOnTheWay * _fReinfAvUnitStrength +
 										_fNumReinfAttackersLeft * _fFriendlyAvUnitStrength) / _fTotalAllyUnits);
-										
-					
+
+
 					// try again
 					_bWinWithSentReinf = LanchasterVictory(_fTotalAllyUnits, _fNumReinfEnemiesLeft,
 														_fAllyCompoundKillRate, _fEnemyCompoundKillRate);
-					
+
 					// if we are going to lose even with reinforcements, see how many enemies will be left
 					if(!_bWinWithSentReinf){
 						_reinfLoseTime = 		LanchasterTimeToWin(_fNumReinfEnemiesLeft, _fTotalAllyUnits, _fEnemyCompoundKillRate, _fAllyCompoundKillRate);
@@ -2608,10 +2616,10 @@ function bool canSendReinf(bool _forHelping)
 					// calc how many enemies will be left
 					_fNumReinfEnemiesLeft = secondLanchasterLaw((float)_numEnemies,(float)_numAllies,_timeToLose,_enemyKillRate,_allyKillRate);
 					_fNumReinfAttackersLeft = 0.0;
-					
+
 					// see if our reinfrcements will be able to win against remaining enemy troops, use corrected kill rates
 					_bWinWithSentReinf = LanchasterVictory((float)_numReinfOnTheWay, _fNumReinfEnemiesLeft, _fReinfAvKillRate, _fReinfEnAvKillRate);
-					
+
 					// if we are going to lose even with reinforcements, see how many enemies will be left
 					if(!_bWinWithSentReinf){
 						_reinfLoseTime = LanchasterTimeToWin(_fNumReinfEnemiesLeft, (float)_numReinfOnTheWay, _fReinfEnAvKillRate, _fReinfAvKillRate);
@@ -2625,57 +2633,57 @@ function bool canSendReinf(bool _forHelping)
 			}
 
 		// }
-		
+
 		// The longer the travel distance, the more units must be sent, 1 additional unit per 10 secs
 		_minTravelingUnits = _travelTime / SECONDS_PER_DROID;
-		
+
 		// how many enemy reinforcements must arrive - we need additional firepower to counter them
 		_predictedEnemyReinf = 1;
-		
+
 		// we should only send more units if we are going to lose
 		if(_bWin){
 			_minSendUnits = _predictedEnemyReinf + _minTravelingUnits;
 		}else if(!_bWin and _bWinWithSentReinf){
 			_minSendUnits = _predictedEnemyReinf + _minTravelingUnits;
 		}else{		// going to lose no matter what, send at least as many as they will have
-			_minSendUnits = _predictedEnemyReinf + 
+			_minSendUnits = _predictedEnemyReinf +
 							max(_minTravelingUnits, (int)_fNumReinfEnemiesLeft);
 		}
-		
+
 		//_minSendUnits = _predictedEnemyReinf + max(0, (int)_fNumEnemiesLeft - (int)_fNumAttackersLeft);
-		
+
 		// Take old reinforcements into account
 		// TODO: need a better way to model this
 		// if(_numReinfOnTheWay > 0)
 		// {
 			// _minSendUnits = _minSendUnits - (int)_fNumEffectiveReinf;
 		// }
-		
+
 		// Make sure there is a min number of reinforcements available
 		// if(_minSendUnits < _minTravelingUnits)
 		// {
 			// _minSendUnits = _minTravelingUnits;
 		// }
 	// }
-	
+
 	if(watchWindowDebug == WATCH_DEBUG_REINF)
 	{
 		setDebugMenuEntry("time/min trav:" & _travelTime & "/" & _minTravelingUnits, 0);
 		setDebugMenuEntry("# (left): " & _numAllies & "(" & _fNumAttackersLeft &  ")/" & _numEnemies & "(" & _fNumEnemiesLeft & ")", 1);
-		
+
 		setDebugMenuEntry("hp:" & (int)_fFriendlyAvUnitStrength & " (" & _friendlyHP &
 						") / " & (int)_fEnemyAvUnitStrength & " (" & _enemyHP & ")" , 2);
-						
+
 		setDebugMenuEntry("dam:" & _fFriendlyAvUnitFirepower & " (" &
 						(int)_fFriendlyFirepower & ") / " & _fEnemyAvUnitFirepower &
 						" (" & (int)_fEnemyFirepower & ")" , 3);
-						
+
 		setDebugMenuEntry("kill rate: " & _allyKillRate & " / " & _enemyKillRate , 4);
 
 		setDebugMenuEntry("old r/time: " & _numReinfOnTheWay & "(" & _sentReinfTravelTime & ")" , 5);
 		setDebugMenuEntry("o r kill rate: " & _fReinfAvKillRate & "/" & _fReinfEnAvKillRate, 6);
 		setDebugMenuEntry("*min send*/avail: " & _minSendUnits & " (" & _numAvailable & ")", 7);
-		
+
 		if(_bWin){
 			setDebugMenuEntry("win in " & ((float)_timeToWin / (float)MINUTE) & " mins", 8);
 			setDebugMenuEntry("left: " & _fNumAttackersLeft, 9);
@@ -2697,22 +2705,22 @@ function bool canSendReinf(bool _forHelping)
 			}
 			setDebugMenuEntry("en left: " & _fNumReinfEnemiesLeft, 9);
 		}
-		
-		
+
+
 	}
 
-	
+
 	// make sure there will be any attackers left when reinforcements will arrive
 /* 	if(_fNumAttackersLeft <= 0.0)
 	{
 		return false;
 	} */
-	
+
 	if(_numAvailable < _minSendUnits)
 	{
 		return false;
 	}
-	
+
 	return true;
 
 /* 	_numAvailable = groupSizeCmds(defendGr,true,false,true) - numDefenders;	//use less units
@@ -2976,7 +2984,7 @@ function void stopDefending()
 	/* now that we are ok, check if can help our ally, if someone's in trouble */
 	if(not _busy)	//didn't resume state
 	{
-		temp = totalAttackUnits();
+		temp = totalWeapUnits();
 		if(temp > minAllyHelpers)
 		{
 			temp = findAllyInTrouble();		//see if any of our allies is in trouble
@@ -3093,7 +3101,7 @@ function void endTakingOil()
 }
 
 //----------------------------------------------------------
-//			stop pdefending oil
+//			stop defending oil
 //----------------------------------------------------------
 function void stopDefendingOil()
 {
@@ -3122,7 +3130,7 @@ function void endDefendingOil()
 
 	phase = phNone;
 	enemy = none;
-	
+
 	// reset coordinates of the attacked derrick
 	resetOilDefendCoords();
 }
@@ -4091,7 +4099,7 @@ function FEATURE closestOilResource(int _x, int _y)
 	_bestDist = 99999;
 
 	_closestOil = NULLOBJECT;
-	
+
 	// check oil resources
 	initGetFeature(oilRes,me,me);
 	_tempOil = getFeatureB(me);
@@ -4242,7 +4250,7 @@ function bool buildDerrickDefence(STRUCTURE _derrick, DROID _truck)
 	{
 		// check if this derrick has a defense location stored
 		_oilDefLocIndex = getOilDefendLocIndex(me, _derrick.x, _derrick.y);
-		
+
 		if(_oilDefLocIndex >= 0)		//we have a defense loc stored for this derrick
 		{
 			/* check if priority is high enough */
@@ -4275,7 +4283,7 @@ function bool buildDerrickDefence(STRUCTURE _derrick, DROID _truck)
 		orderDroidStatsLoc(_truck, DORDER_BUILD, def[_bestDefIndex], _buildX, _buildY);
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -4350,10 +4358,10 @@ event defendOil(inactive)
 
 						// count how many oil resources we are going to defend
 						_totalOil = numTotalOilInRange(_closestDerrick.x, _closestDerrick.y, (TILE * 3));
-						
+
 						//decide how many defenses we want to build depending on total number of oil resource we have to guard
 						_numDefensesToBuild = max(numOilDef, numOilDef + (_totalOil - 1) * (numOilDef / 2));
-						
+
 						//count if not too many built on this site already (using corrected coords!)
 						if(numStructsByTypeInRange(me, me, REF_DEFENSE, buildX, buildY, oilDefensesRange) < _numDefensesToBuild)	//max
 						{
@@ -4404,7 +4412,7 @@ function bool buildOilDefenseFromExperience(int _index, DROID _truck)
 {
 	local	int			_prior,_defx,_defy;
 	local	STRUCTURE	_closestDerrick;
-	
+
 	recallOilDefendLoc(me, _index, ref _defx, ref _defy, ref _prior);
 
 	//find oil derrick which is supposed to be defended (closest one)
@@ -4416,10 +4424,10 @@ function bool buildOilDefenseFromExperience(int _index, DROID _truck)
 		dbg("defendOil() - couldn't find closest derrick !!!!!!!!!!!!!!!!", me);
 		return false;
 	}
-	
+
 	// build a defense
 	bDummy = buildOilDefense(_defx, _defy, _closestDerrick.x, _closestDerrick.y, _truck);
-	
+
 	return true;
 }
 
@@ -4551,16 +4559,16 @@ function bool buildOilDefense(int _buildX, int _buildY, int _oilx,
 	{
 		return false;
 	}
-	
+
 	// build a defense
 	if(pickStructLocation(def[best], ref _buildX, ref _buildY, me))
 	{
 		orderDroidStatsLoc(_truck, DORDER_BUILD, def[best], _buildX, _buildY);
-		
+
 		return true;
 	}
 	//buildOnMap(def[best], _x, _y, 1);
-	
+
 	return false;
 }
 
@@ -4919,10 +4927,10 @@ function bool buildNextOil(DROID _truck, int _maxRange, bool _bClosestOil)
 	local	bool		_bCanBuild;
 	local	FEATURE		_oil,_bestOil;
 	local	DROID		_otherTruck;
-	
+
 	_bestDist = 99999;
 	_bestOil = NULLOBJECT;	//Not found right now
-	
+
 	_oilRange = _maxRange;	//max range to look for further oil
 	_bCanBuild = false;		//can we build using callback truck?
 
@@ -4964,7 +4972,7 @@ function bool buildNextOil(DROID _truck, int _maxRange, bool _bClosestOil)
 		// if not looking for the best oil, just find the closest possible
 		_bestOil = findBestOilToBuildOn(_truck.x, _truck.y, _maxRange);
 	}
-	
+
  	//now check if any other trucks were sent to build there already
 	if(_bestOil != NULLOBJECT)	//found oil
 	{
@@ -4996,7 +5004,7 @@ function bool buildNextOil(DROID _truck, int _maxRange, bool _bClosestOil)
 		orderDroidStatsLoc(_truck, DORDER_BUILD, derrick, _bestOil.x, _bestOil.y);
 		return true;	//exit here
 	}
-	
+
 	return false;
 }
 
@@ -5064,22 +5072,22 @@ function FEATURE findBestOilToBuildOn(int _lookx, int _looky, int _maxRange)
 function bool needTrucks()
 {
 	local	int	_totalTrucks,_numHaveTrucks;
-	
+
 	// we always need at least minTrucks
 	if( !gettingMinTrucks() ){
 		return true;
 	}
-	
+
 	_numHaveTrucks = groupSizeCmds(buildGr,true,false,true);
-	
+
 	_totalTrucks = numBuildersInProduction(me) + _numHaveTrucks;
-	
+
 	if((idleGroupCmd(buildGr,true,false) == 0) and (_totalTrucks < MAX_BUILDERS)){
 		return true;
 	}
-	
+
 	return false;
-/* 
+/*
 
 	if(_totalTrucks >= maxTrucks)
 	{
@@ -5117,7 +5125,7 @@ function void buildTrucks()
 		dbg("HAVE TOO MANY TRUCKS", me);
 		exit;
 	}
-	
+
 	_maxBuiltMinTrucks = 2;
 	if(defending()){
 		_maxBuiltMinTrucks = 1;
@@ -5157,7 +5165,7 @@ function void buildTrucks()
 		}
 		_factory = enumStruct();
 	}
-	
+
 	// Build cyborg engineers if we are still low on trucks
 	initEnumStruct(false,cybfac,me,me);
 	_factory = enumStruct();
@@ -5253,7 +5261,7 @@ function void upgradeFac()
 	local	int			_numUpgrading;
 	local	STRUCTURE	_structure;
 	local	bool		_bLetFinishProduction;
-	
+
 	if(idleGroupCmd(buildGr,true,false) == 0){exit;}
 
 	initEnumStruct(FALSE,fac,me,me);
@@ -5271,7 +5279,7 @@ function void upgradeFac()
 				// see if this tank can be used as a scout (and probably will be)
 				_bLetFinishProduction = isTankTemplate(factoryGetTemplate(_structure));
 			}
-			
+
 			if(!_bLetFinishProduction)
 			{
 				if(numBuildSameBuilding(facMod, _structure.x, _structure.y) <= MAX_FACTORY_UPGRADE_TRUCKS)	//Make sure not too many upgrading
@@ -5386,7 +5394,7 @@ function int calcNeededRes()
 	_topicCost = 400.0;			//Approximate cost of a single research topic
 	_tankCost = _topicCost;
 	_missingDefendersCost = max(0, minDefenders - groupSizeCmds(defendGr,true,false,true)) * (int)_tankCost;	//can't be negative, don't care if have more than needed
-	
+
 	_availableAttackers = numAvailableAttackers();
 	_minAttackers = minAttackers;
 	_availableAttackersCost = _availableAttackers * (int)_tankCost;
@@ -5397,7 +5405,7 @@ function int calcNeededRes()
 		* _topicCost);	//+1 res at fMaxResHold
 
 	_stateCost = 0;
-	_tStateUrgencyTimeout = (int)fMaxResHold;	//MINUTE * 10;	
+	_tStateUrgencyTimeout = (int)fMaxResHold;	//MINUTE * 10;
 											/* 10 mins - when to add at least 1 res, in secs, can't put research on hold forever while defending or helping ally
 											shouldn't lose urgency way too fast, should still put enough power into what we are doing now - flat function*/
 	if(defending() or (state == stHelpingAlly)) {
@@ -5417,7 +5425,7 @@ function int calcNeededRes()
 	_fMinResCost = _topicCost * fMinResearch;
 	_fPlayerPow = (float)playerPower(me);
 	_fMissingDefCost = (float)_missingDefendersCost;
-	
+
 	_fNeedResInPower = (_fMinResCost + _fPlayerPow -
 		_fMissingDefCost +
 		(float)((int)toPow((float)_availableAttackers / (float)max(_minAttackers, 1), 2.0) * (int)_tankCost) +
@@ -5426,7 +5434,7 @@ function int calcNeededRes()
 	/* Convert from power currency into number of research facilities needed to put to work */
 	_needRes = (int)(_fNeedResInPower / _topicCost);
 	_fNeedRes = (_fNeedResInPower / _topicCost);
-	
+
 	// round to the nearest integer
 	if((_fNeedRes - (float)(int)_fNeedRes) > 0.5){
 		_needRes++;
@@ -5448,7 +5456,7 @@ function int calcNeededRes()
 		setDebugMenuEntry("resUrgency : " & fCurResUrgency & " (" & _researchActivityCost & ")" , 1);
 		setDebugMenuEntry("-defenders: " & _missingDefendersCost, 2);
 		setDebugMenuEntry("attackers: " & _availableAttackers & " (" & toPow((float)_availableAttackers / (float)max(_minAttackers,1), 2.0) & ")", 3);
-		
+
 		setDebugMenuEntry("maxOilScouts: " & maxOilScouts, 5);
 		setDebugMenuEntry("addScout: " & addScout, 6);
 		setDebugMenuEntry("numEnemyScouts: " & numEnemyScouts, 7);
@@ -6178,11 +6186,11 @@ event droidDestroyed(droidDestroyedTr)
 	{
 		_cmdGroup = droid.group;
 		_cmdIndex = cmdToIndex(droid);
-		
+
 		if(_cmdIndex >= 0)
 		{
 			_group = cmdGr[_cmdIndex];	//group a commander belonged to
-			
+
 			dbg("Destroyed commander had " & _cmdGroup.members & " attached", me);
 
 			//Add all units controlled by the commander to the group commander belonged to
@@ -6214,7 +6222,7 @@ event droidDestroyed(droidDestroyedTr)
 				if(_commander != NULLOBJECT and _cmdIndex >= 0)
 				{
 					ASSERT(_commander.droidType == DROID_COMMAND, "Droid is not a commander", me);
-					
+
 					// find a droid not in a command group closest to the commander
 					//_newDroid = closestDroidByGroup(defendGr, _commander.x, _commander.y, false);
 					_newDroid = closestDroidByGroup(cmdGr[_cmdIndex], _commander.x, _commander.y, false);
@@ -6248,12 +6256,12 @@ event structDestroyed(inactive)
 		{
 			_numEnemies = enemyWeapObjCostInRange(me, structure.x, structure.y,
 				CHECK_OIL_THREAT_RANGE, false, true);
-			
+
 			tOilAttackBegin = GAME_TIME_IN_SECS;
 			tLastOilAttack = GAME_TIME_IN_SECS;
 			lastOilAttackedX = structure.x;
 			lastOilAttackedY = structure.y;
-						
+
 			//if(checkOilThreat(structure.x, structure.y))
 			//{
 				if(canStartDefendingOil())
@@ -6264,8 +6272,8 @@ event structDestroyed(inactive)
 			//}
 		}
 	}
-	
-	
+
+
 	/* Update ghost data */
 	if(structure.player == me)
 	{
@@ -6300,9 +6308,9 @@ function bool manageOilSite(DROID _truck, STRUCTURE _derrick)
 	local	STRUCTURE	_enemyDerrick;
 
 	_threatRange = (TILE * 8);
-	
+
 	_bBusy = false;
-	
+
 	// attack unprotected enemy derrick with defenses, if can
 	_enemyDerrick = getClosestEnemyStructByType(_derrick.x, _derrick.y, NEXT_OIL_RANGE, REF_RESOURCE_EXTRACTOR, me);
 	if(_enemyDerrick != NULLOBJECT)
@@ -6313,7 +6321,7 @@ function bool manageOilSite(DROID _truck, STRUCTURE _derrick)
 		{
 			_bThreat = true;
 		}
-		
+
 		// if there are unbuilt structures, check if there's an enemy truck that could finish building it (assume it will be faster than us)
 		if(!_bThreat)
 		{
@@ -6323,14 +6331,14 @@ function bool manageOilSite(DROID _truck, STRUCTURE _derrick)
 				{
 					_bThreat = true;
 				}
-				
+
 				if(closestEnemyDroidByType(_enemyDerrick.x, _enemyDerrick.x, _threatRange, DROID_CYBORG_CONSTRUCT) != NULLOBJECT)
 				{
 					_bThreat = true;
 				}
 			}
 		}
-		
+
 		// build defenses near enemy derrick, if it's not dangerous
 		if(!_bThreat)
 		{
@@ -6342,9 +6350,9 @@ function bool manageOilSite(DROID _truck, STRUCTURE _derrick)
 			}
 		}
 	}
-	
+
 	// TODO: also protect burning oil derricks, with a lower priority
-	
+
 	/* check if we can build another derrick near this one */
 	if(!structureLimitReached(derrick, me))
 	{
@@ -6365,7 +6373,7 @@ function bool manageOilSite(DROID _truck, STRUCTURE _derrick)
 		if(repairDamagedDefenses(_derrick.x, _derrick.y, _truck, 50, RANGE_ALL_OIL_DEFENSES)){
 			return true;
 		}
-		
+
 		if(finishDefenses(_truck, _derrick.x, _derrick.y, RANGE_ALL_OIL_DEFENSES)){
 			return true;
 		}
@@ -6380,12 +6388,12 @@ function bool manageOilSite(DROID _truck, STRUCTURE _derrick)
 			return true;
 		}
 	}
-	
+
 	if(buildDerrickDefence(_derrick, _truck))
 	{
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -6456,7 +6464,7 @@ event structBuilt(inactive)
 				exit;
 			}
 		// }
-		
+
 		// try to find any unoccupied oil resource
 		if(buildNextOil(droid, NEXT_OIL_RANGE, false))
 		{
@@ -6472,7 +6480,7 @@ event structBuilt(inactive)
 				exit;
 			}
 		// }
-		
+
 		// try to find any unoccupied oil resource
 		if(buildNextOil(droid, NEXT_OIL_RANGE, false))
 		{
@@ -6513,7 +6521,7 @@ event structBuilt(inactive)
 /* 	if(structure == NULLOBJECT){exit;}	//don't have a derrick to defend
 
 	if(structure.stat != derrick){exit;}	//make sure we are going to build defenses for a derrick
-	
+
 	if(defending()){exit;}
 
 	// make the callback droid build a defence near this oil derrick
@@ -6645,11 +6653,11 @@ function void assignDroid(DROID _droid)
 			{
 				bResult2 = FALSE;
 			}
-			
+
 			if(defending()){
 				bResult2 = false;
 			}
-			
+
 			if(watchWindowDebug == WATCH_DEBUG_RESEARCH){
 				setDebugMenuEntry("to scouts: " & addScout & "/" & lowMilitary & "/" & bResult2, 8);
 			}
@@ -6662,7 +6670,7 @@ function void assignDroid(DROID _droid)
 					if(realEnemyScoutX > 0 and realEnemyScoutY > 0){
 						orderDroidLoc(_droid, DORDER_MOVE, realEnemyScoutX, realEnemyScoutY);
 					}
-					
+
 					groupAddDroid(enemyScoutGr, _droid);
 					bResult = TRUE;
 					bToEnemyScoutGr = !bToEnemyScoutGr;
@@ -6711,14 +6719,14 @@ function void updateMaxScouts()
 	minEnemyScouts = 1;
 
 	enemyScoutRange = (13 * 128);		//revealed when within this range
-	
+
 	addScout = 0;	//next tank is for scouts
-	
+
 	// addScoutInterval = (int) ( ((float)MAX_SCOUTS_PRIORITY - (float)MIN_SCOUTS_PRIORITY) /
 						// ((float)SCOUT_MIN_OIL_RES - (float)SCOUT_MAX_OIL_RES) *
 						// (float)numVisibleOilResInRange() + (float)MAX_SCOUTS_PRIORITY );
-	
-	// use more scouts if there are not many revealed oil resources [ y = mx+z  =>  y = (x1 - x2 / y1 - y2)x + z ]	
+
+	// use more scouts if there are not many revealed oil resources [ y = mx+z  =>  y = (x1 - x2 / y1 - y2)x + z ]
 	addScoutInterval = (int)(((float)MIN_SCOUTS_PRIORITY - (float)MAX_SCOUTS_PRIORITY) /
 						(MAP_REVEAL_FAC_UBOUND - MAP_REVEAL_FAC_LBOUND) *
 						fMapRevealFactor +
@@ -6731,21 +6739,21 @@ function void updateMaxScouts()
 	// make sure addScoutInterval is between MAX_SCOUTS_PRIORITY and MIN_SCOUTS_PRIORITY
 	addScoutInterval = min(addScoutInterval, MIN_SCOUTS_PRIORITY);
 	addScoutInterval = max(addScoutInterval, MAX_SCOUTS_PRIORITY);
-	
+
 	// use 2 scouts when scouting has a high priority
 	// if(addScoutInterval <= MAX_SCOUTS_PRIORITY){
 		// maxEnemyScouts = 2;
 	// }else{
 		maxEnemyScouts = 1;
 	// }
-	
+
 	numEnemyScouts = maxEnemyScouts;
-	
+
 	if(GAME_TIME_IN_SECS <= STARTUP_PHASE_LEN){
 		dbg("addScoutInterval = " & addScoutInterval, me);
 	}
-	
-	
+
+
 	scoutStep = (25 * 128);		//inacrease search area by this value
 	scoutRange = scoutStep;		//start with small area
 
@@ -6753,12 +6761,12 @@ function void updateMaxScouts()
 	enemyScoutY = none;
 
 	enemyScoutStep = (18 * 128);
-	
+
 	// define number of oil scouts depending on the map reveal factor (linear function)
 	maxOilScouts = (int)((float)(MIN_OIL_SCOUTS - MAX_OIL_SCOUTS) /
 						(MAP_REVEAL_FAC_UBOUND - MAP_REVEAL_FAC_LBOUND) *
 						fMapRevealFactor) + MAX_OIL_SCOUTS;
-	
+
 	//adapt for big maps
 	if(bigMap)
 	{
@@ -6768,7 +6776,7 @@ function void updateMaxScouts()
 		scoutStep = scoutStep + (TILE * 12);
 		scoutRange = scoutStep;
 	}
-	
+
 	numOilScouts = maxOilScouts;
 }
 
@@ -7307,7 +7315,7 @@ function void repairCMDGroup()
 						}
 
 						// find cur dist to the commander
-						_distanceFromCMD = distBetweenTwoPoints(cmds[_cmdIndex].x, 
+						_distanceFromCMD = distBetweenTwoPoints(cmds[_cmdIndex].x,
 											cmds[_cmdIndex].y, _repairer.x, _repairer.y);
 
 						if(_distanceFromCMD > _maxDistanceFromCMD)	// too far away from commander
@@ -7455,7 +7463,7 @@ function bool repairDamagedDefenses(int _repairx, int _repairy, DROID _truck,
 
 	_mostDamage = 0;
 	_mostDamagedDefense = NULLOBJECT;
-	
+
 	_def = numDef;
 	while(_def >= 0)
 	{
@@ -7468,7 +7476,7 @@ function bool repairDamagedDefenses(int _repairx, int _repairy, DROID _truck,
 				if(!buildingSiteBlocked(_truck, _maxRange, _defense.x, _defense.y, true))
 				{
 					_tempDamage = 100 - _defense.health;
-					
+
 					// damaged at least by _minDamage %
 					if(_tempDamage >= _minDamage)
 					{
@@ -7486,13 +7494,13 @@ function bool repairDamagedDefenses(int _repairx, int _repairy, DROID _truck,
 
 		_def--;
 	}
-	
+
 	if(_mostDamagedDefense != NULLOBJECT)
 	{
 		orderDroidObj(_truck, DORDER_REPAIR, _mostDamagedDefense);
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -7618,7 +7626,7 @@ function int numBuildersInProduction(int _player)
 
 		_index++;
 	}
-	
+
 	/* Cyborg Engineers */
 	_numBuildersInProd = _numBuildersInProd +
 		numTemplatesInProduction(cybEngineer,me);	//engineers
@@ -7650,11 +7658,11 @@ function bool needStartupScouts()
 	if(groupSizeCmds(enemyScoutGr,true,false,true) == 0){
 		return true;
 	}
-	
+
 	if(groupSizeCmds(scoutGr,true,false,true) == 0){
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -7672,7 +7680,7 @@ function bool canBuildTanks()
 	{
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -7683,7 +7691,7 @@ function void buildTanks()
 						_needTotalRepairers,_minUnassignedDroids,_needBBs;
 	local	bool		_bStartedBuild;
 	local	STRUCTURE	_factory;
-	
+
 	//dbg(" " & me & ")  Executing buildTanks()");
 
 	_facNum = 0;
@@ -7698,7 +7706,7 @@ function void buildTanks()
 
 	//Calculate how many commanders we have and how many are being built
 	_numTotalCommanders = getNumCommanders() + numCommandersInProduction();
-	
+
 	// calc how many repairers we still need
 	_needTotalRepairers = numNeedRepairers();
 
@@ -7722,14 +7730,14 @@ function void buildTanks()
 					// if( !defending() )
 					// {
 						/* Calculate how many commanders we need */
-						_numDroidsNoCmd = max(0, totalAttackUnits() - getTotalCmdsCapacity(NULLOBJECT, true));	//num of droids without commander or 0
+						_numDroidsNoCmd = max(0, totalWeapUnits() - getTotalCmdsCapacity(NULLOBJECT, true));	//num of droids without commander or 0
 
 						// droids need a new commander if there are more than _minUnassignedDroids of them
 						_minUnassignedDroids = 4;
 						if( defending() ){
 							_minUnassignedDroids = CMD_INIT_CAPACITY;
 						}
-						
+
 						// calculate how many commanders we need
 						_numNeedCmds = (_numDroidsNoCmd + CMD_INIT_CAPACITY - _minUnassignedDroids) / CMD_INIT_CAPACITY;
 
@@ -7778,7 +7786,7 @@ function void buildTanks()
 							_result = _result + numDroidsByComponent(weaponBB, me, me);	//num BBs
 
 							_needBBs = min(numBB, _result - numAvailableAttackers() / 9);	//1 bb for 9 droids
-							
+
 							//if(_result < numBB)	//not too many
 							if(_needBBs > 0)	//not too many
 							{
@@ -7872,7 +7880,7 @@ function void buildTanks()
 		}
 		_factory = enumStruct();
 	}
-	
+
 	// Build cyborg mechanicsif we are still low on repairers
 	initEnumStruct(false,cybfac,me,me);
 	_factory = enumStruct();
@@ -7914,16 +7922,16 @@ function int numNeedRepairers()
 	_needDefendRepairers = min(maxDefendRepairers,
 		(groupSizeCmds(defendGr,true,false,false) / NUM_DEFENDERS_PER_REPAIRER)
 		- _numDefendRepairers);
-		
+
 	if(_needDefendRepairers < 0){
 		_needDefendRepairers = 0;
 	}
 
 	_numRepInProd = totalRepairersInProduction();
-	
+
 	// calc how many we still need
 	_needTotalRepairers = _needCmdRepairers + _needDefendRepairers - _numRepInProd;
-	
+
 	return _needTotalRepairers;
 }
 
@@ -7995,7 +8003,7 @@ function void buildVTOLs()
 function int totalRepairersInProduction()
 {
 	local	int		_numRepairers;
-	
+
 	// total repairs
 	_numRepairers = numNonCybRepairsInProd() + numCybRepairsInProd();
 
@@ -8005,29 +8013,29 @@ function int totalRepairersInProduction()
 function int numCybRepairsInProd()
 {
 	local	int		_numRepairers;
-	
+
 	_numRepairers = 0;
-	
+
 	// cyborg mechanics
 	_numRepairers = numTemplatesInProduction(cybMechanic,me);	//mechanics
-	
+
 	return _numRepairers;
 }
 
 function int numNonCybRepairsInProd()
 {
 	local	int		_repTmplIndex,_numRepairers;
-	
+
 	_numRepairers = 0;
 	_repTmplIndex = 0;
-	
+
 	// wheeled, tracked repairs
 	while(_repTmplIndex < numRepairTmpl)
 	{
 		_numRepairers = _numRepairers + numTemplatesInProduction(tmplRep[_repTmplIndex],me);
 		_repTmplIndex++;
 	}
-	
+
 	return _numRepairers;
 }
 
@@ -8496,7 +8504,7 @@ event objectAttacked(inactive)
 			{
 				storeOilDefLocEv();
 			}
-			
+
 			// decide if we have to defend oil derrick
 			dealWithOilAttacked(obj.x, obj.y);
 		}
@@ -8624,7 +8632,7 @@ function bool isNearOil(int _x, int _y)
 	local	int			_range;
 	local	STRUCTURE	_derrick;
 	local	FEATURE		_oil;
-	
+
 	_range = (6 * 128);		//near oil range
 
 	// check derricks
@@ -8781,7 +8789,7 @@ event doScout(inactive)
 				//if( ((scoutRange / 128) > mapWidth) and ((scoutRange / 128) > mapHeight))
 				//{
 					dbg("doScout() - STOP SCOUTING, MAP REVEALED (!!!!!!!!!!!!!)", me);
-					
+
 					//fMapRevealFactor = MAP_REVEAL_FAC_UBOUND;
 
 					groupAddGroupCmd(defendGr, scoutGr);
@@ -8810,22 +8818,22 @@ event scoutForEnemy(inactive)
 	local	int 	_bucket;
 
 	//dbg(" " & me & ")  scoutForEnemy()");
-	
+
 	// only scout if the group is full, otherwise will lose units too quickly
 /* 	if(groupSizeCmds(enemyScoutGr,true,false,true) < maxEnemyScouts){
 		exit;
 	} */
 
 	bResult = FALSE;	//no idle scouts
-	
+
 	// most of the group is idle
 	if(idleGroupCmd(enemyScoutGr,true,false) > (groupSizeCmds(enemyScoutGr,true,false,true)) / 2){
 		bResult = TRUE;
 	}
-	
+
 	// see if reached destination already
 	if(!bResult){
-		
+
 		// count how many scouts have reached destination points
 		_bucket = initIterateGroupCmd(enemyScoutGr,true,true,false);	// find all units in group
 		droid = iterateGroupCmd(enemyScoutGr,_bucket);
@@ -8837,9 +8845,9 @@ event scoutForEnemy(inactive)
 				bResult = TRUE;
 			}
 			droid = iterateGroupCmd(enemyScoutGr,_bucket);
-		} 
+		}
 	}
-	
+
 	if(not bResult){exit;}
 
 
@@ -8858,9 +8866,9 @@ event scoutForEnemy(inactive)
 			numEnemyScouts = 0;
 			realEnemyScoutX = 0;
 			realEnemyScoutY = 0;
-			
+
 			//fMapRevealFactor = MAP_REVEAL_FAC_UBOUND;
-			
+
 			groupAddGroupCmd(defendGr, enemyScoutGr);
 			setEventTrigger(scoutForEnemy, inactive);	//deactivate
 		}
@@ -8903,7 +8911,7 @@ event scoutForEnemy(inactive)
 		bResult = mapRevealedInRange(realEnemyScoutX, realEnemyScoutY,
 										enemyScoutRange, me) or	//check if has already visited this area
 					threatInRange(me, realEnemyScoutX, realEnemyScoutY, (TILE * 10), FALSE);
-		
+
 		count = count + 1;
 	}
 
@@ -9141,7 +9149,7 @@ function void updateNumDefenders()
 		if(GAME_TIME_IN_SECS < (MINUTE * 12)){
 			minDefenders = (MIN_DEFENDERS / (MINUTE * 12)) * GAME_TIME_IN_SECS;	//0 for 0 mins, 3 for 12 mins
 		}
-		
+
 		// leave 9 defenders for 40 and 18 for total 80 units
 		numDefenders = max(minDefenders, (int)((float)numAvailableAttackers() / 5.44));
 		return;
@@ -9254,7 +9262,7 @@ function void militarySelftest()
 	}
 
 	bCanUseCommanders = canUseCommanders();
-	
+
 	// how much of the map do we have revealed?
 /* 	if(fMapRevealFactor < MAP_REVEAL_FAC_UBOUND)
 	{
@@ -9339,7 +9347,7 @@ function bool haveTheoretilcallyMinAttackers(bool _bSafeToSendLittleAttackers)
 {
 	if(_bSafeToSendLittleAttackers)		//it's ok to send little attackers, for example if joining forces with other players
 	{
-		if((totalAttackUnits() - minDefenders) >= minAttackers)
+		if((totalWeapUnits() - minDefenders) >= minAttackers)
 		{
 			return TRUE;
 		}
@@ -9359,11 +9367,11 @@ function bool haveTheoretilcallyMinAttackers(bool _bSafeToSendLittleAttackers)
 /* All units - number of required defenders */
 function int numAvailableAttackers()
 {
-	return max(totalAttackUnits() - numDefenders, 0);
+	return max(totalWeapUnits() - numDefenders, 0);
 }
 
 /* Total units that can attack, including defenders */
-function int totalAttackUnits()
+function int totalWeapUnits()
 {
 	return groupSizeCmds(attackGr,true,false,true) +
 		   groupSizeCmds(sendAttackGr,true,false,true) +
@@ -9501,7 +9509,7 @@ function int groupCMD_x(GROUP _group)
 
 	_x = _group.x;
 	_numUnits = _group.members;
-	
+
 	_cmdIndex = 0;
 	while(_cmdIndex < MAX_COMMANDERS)
 	{
@@ -9512,7 +9520,7 @@ function int groupCMD_x(GROUP _group)
 				// commander unit
 				_x = _x + cmds[_cmdIndex].x;
 				_numUnits++;
-				
+
 				// count units assigned to commander
 				_x = _x + cmds[_cmdIndex].group.x;
 				_numUnits = _numUnits + cmds[_cmdIndex].group.members;
@@ -9520,11 +9528,11 @@ function int groupCMD_x(GROUP _group)
 		}
 		_cmdIndex++;
 	}
-	
+
 	if(_numUnits <= 0){
 		return -1;
 	}
-	
+
 	return (_x / _numUnits);
 }
 
@@ -9535,7 +9543,7 @@ function int groupCMD_y(GROUP _group)
 
 	_y = _group.y;
 	_numUnits = _group.members;
-	
+
 	_cmdIndex = 0;
 	while(_cmdIndex < MAX_COMMANDERS)
 	{
@@ -9546,7 +9554,7 @@ function int groupCMD_y(GROUP _group)
 				// commander unit
 				_y = _y + cmds[_cmdIndex].y;
 				_numUnits++;
-				
+
 				// count units assigned to commander
 				_y = _y + cmds[_cmdIndex].group.y;
 				_numUnits = _numUnits + cmds[_cmdIndex].group.members;
@@ -9554,11 +9562,11 @@ function int groupCMD_y(GROUP _group)
 		}
 		_cmdIndex++;
 	}
-	
+
 	if(_numUnits <= 0){
 		return -1;
 	}
-	
+
 	return (_y / _numUnits);
 }
 
@@ -10424,6 +10432,8 @@ function void checkBaseThreat()
 
 			_counterEnemy = counterEnemy;
 			stopDefending();
+			
+			taunt(TAUNT_SUCCESS, enemy, 55);
 
 			notifyAllies("i'm ok", FALSE);		//tell allies we are ok now
 
@@ -10432,7 +10442,7 @@ function void checkBaseThreat()
 			{
 				if(not allianceExistsBetween(_counterEnemy, me))
 				{
-					if(totalAttackUnits() >= MIN_COUNTERATTACKERS)
+					if(totalWeapUnits() >= MIN_COUNTERATTACKERS)
 					{
 						if(knowBase[_counterEnemy])
 						{
@@ -10444,14 +10454,14 @@ function void checkBaseThreat()
 							_counterEnemyForce = numPlayerWeapDroidsInRange(_counterEnemy, me, _enemyX, _enemyY, -1, FALSE) +
 										  numPlayerWeapStructsInRange(_counterEnemy, me, _enemyX, _enemyY, _range, true) / 3;
 
-							if(totalAttackUnits() > _counterEnemyForce)
+							if(totalWeapUnits() > _counterEnemyForce)
 							{
 								dbg("counterattacking", me);
 								startAttack(_counterEnemy, _enemyX, _enemyY);
 								requestStartAttack(_counterEnemy, _enemyX, _enemyY);
 							}
 							else{
-								dbg("counterattack: too dangerous: " & totalAttackUnits() & "/" & _counterEnemyForce, me);
+								dbg("counterattack: too dangerous: " & totalWeapUnits() & "/" & _counterEnemyForce, me);
 							}
 						}
 						else{
@@ -10459,7 +10469,7 @@ function void checkBaseThreat()
 						}
 					}
 					else{
-						dbg("counterattack: not enough attackers " & totalAttackUnits(), me);
+						dbg("counterattack: not enough attackers " & totalWeapUnits(), me);
 					}
 				}
 				else{
@@ -10578,9 +10588,65 @@ function void notifyLost()
 	}
 }
 
+/* Notify we are idle, if failed to take over enemy derrick or if attack failed */
+function void notifyIdle(bool bAfterFailure)
+{
+	if(bAfterFailure)
+	{
+		notifyAllies("building more units", false);		//make sure allies are aware of our current state
+	}
+	else
+	{
+		dice = random(10);
+		if(dice > 5){
+			notifyAllies("getting units", false);
+		}else{
+			notifyAllies("building an army", false);
+		}
+	}
+}
+
+function void taunt(int targetPlayer, int type, int tauntProbability)
+{
+	if(random(100) >= tauntProbability)
+	{
+		return;
+	}
+
+	dice = random(10);
+
+	if(type == TAUNT_SUCCESS)
+	{
+		if(dice < 3)
+		{
+			notifyAll(getPlayerName(targetPlayer) &  ", you suck.");
+		}
+		else if(dice < 7)
+		{
+			notifyAll("too easy");
+		}
+		else
+		{
+			notifyAll("I get what I want");
+		}
+	}
+	else if(type == TAUNT_FAILURE)
+	{
+		notifyAll(getPlayerName(targetPlayer) &  ", screw you!!");
+	}
+}
+
 function void notifyReadyAttack()
 {
-	notifyAllies("go?", FALSE);
+	dice = random(10);
+
+	if(dice > 5){
+		notifyAllies("go?", FALSE);
+	}else if(dice == 0){
+		notifyAllies("ready", FALSE);
+	}else{
+		notifyAllies("I'm ready", FALSE);
+	}
 
 	notifyReadyAttackTime = maxNotifyReadyAttackTime;
 
@@ -10637,6 +10703,19 @@ function void notifyAllies(STRING _cstr, bool _bUpdateRadar)
 			msg(_cstr, me, i);
 		}
 		i = i + 1;
+	}
+}
+
+/* Send a message to all players */
+function void notifyAll(STRING _cstr)
+{
+	local int player;
+
+	player = 0;
+	while(player < multiPlayerMaxPlayers)
+	{
+		msg(_cstr, me, player);
+		player++;
 	}
 }
 
@@ -10757,13 +10836,13 @@ function void requestStartAttack(int _enemy, int _x, int _y)
 		}
 		_temp = _temp + 1;
 	}
-	
+
 	dropAllyBeacon("go " & getPlayerName(_enemy), _x, _y);
 }
 
 function void notifyPlayerHasVTOLs(int _playerWithVTOLs)
 {
-	notifyAllies(_playerWithVTOLs & " got vtols", FALSE);
+	notifyAllies(getPlayerName(_playerWithVTOLs) & " got vtols", FALSE);
 }
 
 function void notifyStatusAll()
@@ -10790,10 +10869,11 @@ function void notifyStatus(int _playerToNotify)
 	if(defendingOil())
 	{
 		msg("defending oil" ,me , _playerToNotify);
+		dropAllyBeacon("defending oil", sendForceX, sendForceY);
 	}
 	else if(state == stAttacking)
 	{
-		msg("going " & getPlayerName(enemy), me, _playerToNotify);
+		msg("attacking " & getPlayerName(enemy), me, _playerToNotify);
 	}
 	else if(state == stHelpingAlly)
 	{
@@ -10802,6 +10882,7 @@ function void notifyStatus(int _playerToNotify)
 	else if(state == stTakingOil)
 	{
 		msg("hunting " & getPlayerName(enemy) & "'s oil" ,me , _playerToNotify);
+		dropAllyBeacon("hunting " & getPlayerName(enemy) & "'s oil", sendForceX, sendForceY);
 	}
 	else if(((state == stDrop) or (state == stTransporting)) and (enemy != none))
 	{
@@ -12604,7 +12685,7 @@ function void checkStopAttack()
 		dbg("cancelling attack !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", me);
 
 		numPlayerAttackers[enemy] = min(minAttackers, numPlayerAttackers[enemy] + random(attackersIncrease));
-		
+
 		cancelAttack();
 	}
 
@@ -12890,7 +12971,7 @@ event coordinatePhases(inactive)
 	if((state == stTakingOil) or (state == stAttacking)
 		or (state == stHelpingAlly) or defendingOil())
 	{
-		if(_bReachedDestination)	
+		if(_bReachedDestination)
 		{
 			dbg("MANAGE UNITS: reached destination !!!!!", me);
 			phase = phAttackingLoc;
@@ -12951,7 +13032,7 @@ event coordinatePhases(inactive)
 				}else{	//repairs etc
 					range = (TILE * 8);
 				}
-				
+
 				// allow to travel further away if attacking or repairing
 				if(droidActionAttacking(droid) or droidActionDroidRepair(droid)){
 					range = range + (TILE * 12);
@@ -13004,7 +13085,13 @@ event coordinatePhases(inactive)
 			groupSizeCmds(attackGr,true,false,true)) < minOilAttackers)
 		{
 			dbg("TAKE OIL: little attackers left, cancel", me);
+			
+			taunt(TAUNT_FAILURE, enemy, 40);
+			
+			notifyIdle(true);
+			
 			stopTakingOil();
+			
 			exit;
 		}
 
@@ -13012,7 +13099,13 @@ event coordinatePhases(inactive)
 		if(!_bStopped and (phase == phGuardingPos) and (timeGuardPos <= 0))		//guarding oil long enough
 		{
 			dbg("TAKE OIL: waiting time is up!!!!!!!!!!!!!", me);
+			
+			taunt(TAUNT_SUCCESS, enemy, 20);
+			
+			notifyIdle(false);
+			
 			stopTakingOil();
+			
 			exit;
 		}
 
@@ -13020,6 +13113,9 @@ event coordinatePhases(inactive)
 		if(!_bStopped and tTakeOil <= 0)
 		{
 			dbg("TAKE OIL: takeoil timeout!!!!!!!!!!!!!", me);
+			
+			notifyIdle(false);
+			
 			stopTakingOil();
 			exit;
 		}
@@ -13043,6 +13139,11 @@ event coordinatePhases(inactive)
 			numEnemyWeapObjInRange(me, sendForceX, sendForceY, (8 * 128), false, true))
 		{
 			dbg("TAKE OIL: they have more than us", me);
+			
+			taunt(TAUNT_FAILURE, enemy, 40);
+			
+			notifyIdle(true);
+			
 			stopTakingOil();
 			exit;
 		}
@@ -13056,13 +13157,15 @@ event coordinatePhases(inactive)
 			{
 				if(groupSizeCmds(attackGr,true,false,true) > 0)	//if we reached destination
 				{
+					taunt(TAUNT_SUCCESS, enemy, 40);
+			
 					dbg("TAKE OIL: no enemies, started guarding", me);
 					timeGuardPos = maxTimeGuardPos;
 					phase = phGuardingPos;
 				}
 			}
 		}
-		
+
 		if(_bStopped)
 		{
 			if(canStartTakingOil() and (THROW_DICE <= CHANCE_COUNTER_OIL)) // enough units?
@@ -13073,7 +13176,7 @@ event coordinatePhases(inactive)
 				}
 			}
 		}
-		
+
 		if(_bStopped)
 		{
 			exit;
@@ -13095,33 +13198,22 @@ event coordinatePhases(inactive)
 	}
 	else if(defendingOil())
 	{
+		// sucess is handled in everySecEv()
+
 		// see if it's hopeless to go on
 		if((groupSizeCmds(sendAttackGr,true,false,true) +
 			groupSizeCmds(attackGr,true,false,true)) < MIN_OIL_DEFENDERS)
 		{
 			dbg("DEFENDING OIL: little attackers left, cancel", me);
+			
+			taunt(TAUNT_FAILURE, enemy, 70);
+			
+			notifyIdle(false);
+
 			stopDefendingOil();
 			_bStopped = true;
 		}
 
-/* 		//check if we can cancel guarding oil since have defenses
-		if(!_bStopped and (phase == phAttackingLoc))		// if we have reached destination point already
-		{
-			if(tOilAttackBegin <= 0)// not attacked for long time
-			{
-				if(numFriendlyWeapStructsInRange(me, sendForceX, sendForceY,  (8 * TILE), true) >= 1)	//also include ally's defenses
-				{
-					//if(numEnemyObjInRange(me, sendForceX, sendForceY, (8 * 128), FALSE) == 0)
-					if(numEnemyWeapObjInRange(me, sendForceX, sendForceY, (8 * TILE), false, true) == 0)
-					{
-						dbg("DEFENDING OIL: oil is safe, rtb!!!!!!!!!!!!!", me);
-						stopDefendingOil();
-						_bStopped = true;
-					}
-				}
-			}
-		} */
-		
 		// see if we want to counter-oil
 		if(_bStopped and (state == stNone))	// if idle
 		{
@@ -13133,7 +13225,7 @@ event coordinatePhases(inactive)
 				}
 			}
 		}
-		
+
 		//must exit here, since stopped defending oil
 		if(_bStopped)
 		{
@@ -13203,14 +13295,14 @@ function string droidToGroupName(DROID _droid)
 event everySecEv(inactive)
 {
 	local	float		_newCurResUrgency;
-	
+
 	// if our oil derrick was attacked, remember how long the attack lasts already,
 	// to be able to judge if the derrick is really under attack or whether it was just
 	// an enemy unit passing by and shooting at the derrick
 /* 	if(tOilAttackBegin > 0){
 		tOilAttackBegin++;		// remember how long it has been attacked already
 	} */
-	
+
 	// if derrick under siege wasn't attacked for certain time, assume it wasn't under siege
 	if((tLastOilAttack > 0) and
 		(GAME_TIME_IN_SECS > (tLastOilAttack + MAX_TIME_OIL_NOT_ATTACKED)))
@@ -13218,7 +13310,7 @@ event everySecEv(inactive)
 		if(!defendingOil())
 		{
 			resetOilDefendCoords();
-			
+
 			dbg("derrick siege threat timed out", me);
 		}
 		else if(defendingOil())
@@ -13228,7 +13320,13 @@ event everySecEv(inactive)
 			{
 				if(numEnemyWeapObjInRange(me, sendForceX, sendForceY, (8 * TILE), false, true) == 0)
 				{
+					taunt(TAUNT_SUCCESS, enemy, 70);
+
 					stopDefendingOil();
+					
+					if(state == stNone){
+						notifyIdle(false);
+					}
 
 					dbg("THREAT IS GONE - STOPPED DEFENDING OIL", me);
 				}
@@ -14273,7 +14371,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 				allyEnemy[_sender] = none;
 
 				/* tell him we are busy */
-				if(not checkFollowAttackRequest(_sender, TRUE))
+				if(not checkFollowAttackRequest(_sender, true))
 				{
 					return;
 				}
@@ -14284,7 +14382,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 			if(_msg == "go center")
 			{
 				/* tell him we are busy */
-				if(not checkFollowAttackRequest(_sender, TRUE))
+				if(not checkFollowAttackRequest(_sender, true))
 					return;
 
 				/* cancel current state since not doing anything important */
@@ -14299,7 +14397,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 			{
 				if(state == stNone)
 				{
-					msg("pumping units" , me, _sender);
+					notifyIdle(false);
 				}
 				else
 				{
@@ -14338,7 +14436,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 			else if(_msg == "go!")
 			{
 				/* tell him we are busy */
-				if(not checkFollowAttackRequest(_sender, TRUE))
+				if(not checkFollowAttackRequest(_sender, true))
 					return;
 
 				/* cancel current state since not doing anything important */
@@ -14408,7 +14506,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 					return;
 				}
 
-				temp = totalAttackUnits();
+				temp = totalWeapUnits();
 				if(temp < minAllyHelpers)
 				{
 					msg("have nothing", me, _sender);
@@ -14567,7 +14665,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 								return;
 							}
 						}		/* we are doing something else already */
-						else if(not checkFollowAttackRequest(_sender, TRUE))
+						else if(not checkFollowAttackRequest(_sender, true))
 						{
 							return;
 						}
@@ -14619,7 +14717,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 						offeredEnemy = _player;	//remember the offer
 
 						startAttack(_player, _x, _y);
-						notifyAllies("going " & getPlayerName(_player), TRUE);
+						notifyAllies("attacking " & getPlayerName(_player), TRUE);
 						return;
 					}
 				}
@@ -14667,7 +14765,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 							return;
 						}
 
-						if(not haveTheoretilcallyMinAttackers(TRUE))
+						if(not haveTheoretilcallyMinAttackers(true))
 						{
 							return;		//ignore
 						}
@@ -14699,7 +14797,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 
 						//enemy = _player;
 						startAttack(_player, _x, _y);
-						notifyAllies("going " & getPlayerName(_player), TRUE);
+						notifyAllies("attacking " & getPlayerName(_player), TRUE);
 						return;
 					}
 				}
@@ -14779,7 +14877,7 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 						if(random(10) <= 6)
 						{
 							/* do we have enough units to start start attacking enemy derrick alone? */
-							if(haveTheoretilcallyMinAttackers(TRUE))	/* don't need too many for the derrick, hence "TRUE" */
+							if(haveTheoretilcallyMinAttackers(true))	/* don't need too many for the derrick, hence "true" */
 							{
 								/* find a derrick */
 								structure = findEnemyDerrick(_player);	/* find enemy derrick to attack */
@@ -14799,12 +14897,12 @@ function void processCommand(string _message, int _sender, bool _bBlipMessage)
 						}
 
 						/* didn't start attacking derrick, decide if we want (and can) to attack the base directly */
-						if(knowBase[_player] and haveTheoretilcallyMinAttackers(FALSE))
+						if(knowBase[_player] and haveTheoretilcallyMinAttackers(false))
 						{
 							cancelState();	/* stop if doing anything unimportant */
 							startAttack(_player, curBase[_player][0], curBase[_player][1]);
-							dropAllyBeacon("going " & getPlayerName(_player), curBase[_player][0], curBase[_player][1]);
-							notifyAllies("going " & getPlayerName(_player), TRUE);
+							dropAllyBeacon("attacking " & getPlayerName(_player), curBase[_player][0], curBase[_player][1]);
+							notifyAllies("attacking " & getPlayerName(_player), TRUE);
 							return;
 						}
 
@@ -14929,7 +15027,7 @@ function void checkMinimalStructures()
 	local	bool		_bStartedBuild;
 	local	STRUCTURE	_structure;
 	local	FEATURE		_oil;
-	
+
 	_maxStructsAtATime = 2;
 	_numStructsAtATime = 0;
 
@@ -14962,7 +15060,7 @@ function void checkMinimalStructures()
 
 				if(_bStartedBuild){
 					_numStructsAtATime++;
-					
+
 					dbg("Building minimal base " & _index, me);
 				}
 			}
@@ -15041,7 +15139,7 @@ function int numDerricksInRange(int _targetPlayer, int _x, int _y, int _range)
 	local	STRUCTURE		_derrick;
 
 	_numDerricks = 0;
-	
+
 	initEnumStruct(false,derrick,_targetPlayer,me);
 	_derrick = enumStruct();
 	while(_derrick != NULLOBJECT)
@@ -15053,7 +15151,7 @@ function int numDerricksInRange(int _targetPlayer, int _x, int _y, int _range)
 		}
 		_derrick = enumStruct();
 	}
-	
+
 	return _numDerricks;
 }
 
@@ -15069,21 +15167,21 @@ function BASEOBJ closerObject(BASEOBJ _obj1, BASEOBJ _obj2, int _x, int _y)
 	if(_obj1 == NULLOBJECT and _obj2 == NULLOBJECT){
 		return _obj1;	//NULLOBJECT
 	}
-	
+
 	if(_obj1 == NULLOBJECT){
 		return _obj2;
 	}
-	
+
 	if(_obj2 == NULLOBJECT){
 		return _obj1;
 	}
-	
+
 	if(distBetweenTwoPoints(_obj1.x, _obj1.y, _x, _y)
 		< distBetweenTwoPoints(_obj2.x, _obj2.y, _x, _y))
 	{
 		return _obj1;
 	}
-	
+
 	return _obj2;
 }
 
@@ -15091,7 +15189,7 @@ function BASEOBJ closerObject(BASEOBJ _obj1, BASEOBJ _obj2, int _x, int _y)
 function void dealWithOilAttacked(int _oilx, int _oily)
 {
 	local	BASEOBJ		_oilLocation;
-	
+
 	if(isInMyBase(_oilx, _oily)){
 		return;
 	}
@@ -15102,7 +15200,7 @@ function void dealWithOilAttacked(int _oilx, int _oily)
 		// check if same derrick was attacked again
 		_oilLocation = closerObject(closestDerrick(_oilx, _oily),
 					closestOilResource(_oilx, _oily), _oilx, _oily);
-		
+
 		if(_oilLocation != NULLOBJECT)
 		{
 			if(distBetweenTwoPoints(lastOilAttackedX, lastOilAttackedY,
@@ -15135,7 +15233,7 @@ function void dealWithOilAttacked(int _oilx, int _oily)
 			}
 		}
 	}
-	
+
 	// check if we have to defend attacked oil
 	if((tOilAttackBegin > 0) and	// it wasn't just a random bullet, the derrick is really under siege
 		(GAME_TIME_IN_SECS > (tOilAttackBegin + MIN_TIME_OIL_ATTACKED_DELAY)))
@@ -15161,7 +15259,7 @@ function bool canStartDefendingOil()
 			return true;
 		}
 	}
-	
+
 	return false;
 }
 
@@ -15183,7 +15281,7 @@ function bool checkOilThreat(int _oilx, int _oily)
 
 			_allyForce = friendlyWeapObjCostInRange(me, _oilx,
 				_oily, _range, false, true);
-			
+
 			// make sure enemy force is stronger
 			if((_enemyForce - _allyForce) > 0)
 			{
@@ -15191,7 +15289,7 @@ function bool checkOilThreat(int _oilx, int _oily)
 			}
 		}
 	}
-	
+
 	return false;
 }
 
@@ -15205,19 +15303,19 @@ function bool canStartTakingOil()
 	// if(state != stNone){		// busy
 		// return false;
 	// }
-	
+
 	return false;
 }
 
 function bool initializeStartTakingOil(int _oilx, int _oily, int _maxRange)
 {
 	local	STRUCTURE	_enemyDerrick;
-	
+
 	// cancel state if busy and not doing anything important
 	if(state != stNone){
 		cancelState();
 	}
-	
+
 	_enemyDerrick = findBestEnemyDerrick(none, numAvailableAttackers(),
 			sendForceX, sendForceY, _maxRange);
 
@@ -15225,7 +15323,7 @@ function bool initializeStartTakingOil(int _oilx, int _oily, int _maxRange)
 	{
 		return false;
 	}
-	
+
 	startTakingOil(_enemyDerrick);
 
 	return true;
@@ -15238,15 +15336,15 @@ function void initializeStartDefeindingOil(int _oilx, int _oily)
 
 	_maxDefendingOilTime = distBetweenTwoPoints(_oilx, _oily,
 		baseX, baseY) / TILE + MIN_DEF_OIL_TIME;
-	
+
 	dbg("OIL IS THREATENED AT " & (_oilx / TILE) & "/" &
 		(_oily / TILE) & " (" & _maxDefendingOilTime & " secs)", me);
-	
+
 	// cancel state if busy and not doing anything important
 	if(state != stNone){
 		cancelState();
 	}
-	
+
 	startDefendingOil(_oilx, _oily, _maxDefendingOilTime);
 }
 
@@ -15280,9 +15378,9 @@ function void startDefendingOil(int _derrickX, int _derrickY, int _maxTime)
 	prepareAttackers(false);
 
 	startMovePhase();
-	
+
 	dropAllyBeacon("defending my oil", sendForceX, sendForceY);
-} 
+}
 
 /* Returns how many friendly units will be left after some period of time, given starting forces and forces effectivenesses */
 function float secondLanchasterLaw(float _fAllyStartForce, float _fEnemyStartForce,
@@ -15291,7 +15389,7 @@ function float secondLanchasterLaw(float _fAllyStartForce, float _fEnemyStartFor
 									float _enemyEffectiveness)
 {
 	local	float _sqrtDivEffect,		//square root from (ally effectiveness / enemy effectiveness)
-				  _sqrtMultTimeEffect;	//time multiplied with square root from (ally effectiveness * enemy effectiveness)	
+				  _sqrtMultTimeEffect;	//time multiplied with square root from (ally effectiveness * enemy effectiveness)
 
 	// number of force won't change if enemy can't attack or if there are no enemies
 	if(_fEnemyStartForce == 0.0 or _enemyEffectiveness == 0.0){
@@ -15309,17 +15407,17 @@ function bool LanchasterVictory(float _fStartForceA, float _fStartForceB,
 								float _fKillRateA, float _fKillRateB)
 {
 	//ASSERT(!(_fStartForceB > 0 and _fKillRateB <= 0.0), "_fKillRateB can't be 0", me);
-	
+
 	// avoid division by zero
 /* 	if(_fStartForceB <= 0 or _fKillRateB <= 0.0){
 		return true;
 	}
-	
+
 	// check if force A is going to win
 	if( ((float)_fStartForceA / (float)_fStartForceB) > sqrt(_fKillRateA / _fKillRateB)){
 		return true;
 	} */
-	
+
 	//in case one of the sides has 0 units both kill rates will be 0.0
 	if(_fKillRateA == 0.0 and _fKillRateB == 0.0)
 	{
@@ -15329,11 +15427,11 @@ function bool LanchasterVictory(float _fStartForceA, float _fStartForceB,
 			return false;
 		}
 	}
-	
+
 	if( (sqrt(_fKillRateA) * _fStartForceA) >= (sqrt(_fKillRateB) * _fStartForceB) ){
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -15346,13 +15444,13 @@ function int LanchasterTimeToWin(float _fStartForceA, float _fStartForceB,
 	if(_fStartForceA <= 0.0 or _fStartForceB <= 0.0){
 		return 0;
 	}
-	
+
 	_fKillFactor = (_fStartForceB / _fStartForceA) *
 					sqrt(_fKillRateA / _fKillRateB);
-	
+
 	_fTimeToWin = 1.0 / (2.0 * sqrt(_fKillRateA * _fKillRateB)) *
 				log ( (1.0 + _fKillFactor) / (1.0 - _fKillFactor) );
-	
+
 	return (int)_fTimeToWin;
 }
 
@@ -15361,12 +15459,12 @@ function float objBaseDamagePerSec(BASEOBJ _obj)
 {
 	local	float	_fFirePowerPerSec,_fFireRatePerSec,_fShortRangeDamagePerSec,
 					_fLongRangeDamagePerSec,_fReloadTime,_fFirePause;
-					
+
 	// Make sure droid has a weapon
 	if(_obj.weapon == NULLSTAT){
 		return 0.0;
 	}
-	
+
 	debug(_obj.firePause & "," & _obj.reloadTime & "," & _obj.numRounds &
 			"," & _obj.damage & "," & _obj.shortHit & "," & _obj.longHit);
 
@@ -15376,7 +15474,7 @@ function float objBaseDamagePerSec(BASEOBJ _obj)
 	}else{
 		_fFirePause = (float)_obj.firePause;
 	}
-	
+
 	if(_obj.numRounds > 0){
 
 		// avoid division by 0
@@ -15385,17 +15483,17 @@ function float objBaseDamagePerSec(BASEOBJ _obj)
 		}else{
 			_fReloadTime = (float)_obj.reloadTime;
 		}
-		
+
 		_fFireRatePerSec = (1.0 / (_fReloadTime / 10.0) + ((_fFirePause / 10.0) * (float)(_obj.numRounds - 1))) / (float)_obj.numRounds;
 	}else{
 		_fFireRatePerSec = 1.0 / (_fFirePause / 10.0);
 	}
-	
+
 	_fShortRangeDamagePerSec = _fFireRatePerSec * ((float)_obj.damage / 100.0 * (float)_obj.shortHit);
 	_fLongRangeDamagePerSec = _fFireRatePerSec * ((float)_obj.damage / 100.0 * (float)_obj.longHit);
-	
+
 	_fFirePowerPerSec = (_fShortRangeDamagePerSec + _fLongRangeDamagePerSec) / 2.0;
-	
+
 	return _fFirePowerPerSec;
 }
 
@@ -15403,7 +15501,7 @@ function float enemyFirepowerInRange(int _x, int _y, int _range)
 {
 	local	int		_enemy;
 	local	float	_fFirePower;
-	
+
 	_fFirePower = 0.0;
 	_enemy = 0;
 	while(_enemy < MAX_PLAYERS)
@@ -15414,7 +15512,7 @@ function float enemyFirepowerInRange(int _x, int _y, int _range)
 		}
 		_enemy++;
 	}
-	
+
 	return _fFirePower;
 }
 
@@ -15422,7 +15520,7 @@ function float friendlyFirepowerInRange(int _x, int _y, int _range)
 {
 	local	int		_allyOrMe;
 	local	float	_fFirePower;
-	
+
 	_fFirePower = 0.0;
 	_allyOrMe = 0;
 	while(_allyOrMe < MAX_PLAYERS)
@@ -15433,7 +15531,7 @@ function float friendlyFirepowerInRange(int _x, int _y, int _range)
 		}
 		_allyOrMe++;
 	}
-	
+
 	return _fFirePower;
 }
 
@@ -15442,9 +15540,9 @@ function float playerFirepowerInRange(int _player, int _x, int _y, int _range)
 	local	float		_fFirePower;
 	local	DROID		_droid;
 	local	STRUCTURE	_structure;
-	
+
 	_fFirePower = 0.0;
-	
+
 	InitEnumDroids(_player,me);
 	_droid = EnumDroid();
 	while(_droid != NULLOBJECT)
@@ -15461,7 +15559,7 @@ function float playerFirepowerInRange(int _player, int _x, int _y, int _range)
 		}
 		_droid = EnumDroid();
 	}
-	
+
 	//iterate through all strucrures
 	initEnumStruct(TRUE,derrick,_player,me);
 	_structure = enumStruct();
@@ -15479,7 +15577,7 @@ function float playerFirepowerInRange(int _player, int _x, int _y, int _range)
 		}
 		_structure = enumStruct();
 	}
-	
+
 	return _fFirePower;
 }
 
@@ -15488,9 +15586,9 @@ function float groupFirepower(GROUP _group)
 	local	int		_bucket;
 	local	float	_fFirePower;
 	local	DROID	_droid;
-	
+
 	_fFirePower = 0.0;
-	
+
 	_bucket = initIterateGroupCmd(_group,true,true,true);
 	_droid = iterateGroupCmd(_group, _bucket);
 	while(_droid != NULLOBJECT)
@@ -15498,7 +15596,7 @@ function float groupFirepower(GROUP _group)
 		_fFirePower = _fFirePower + objBaseDamagePerSec(_droid);
 		_droid = iterateGroupCmd(_group, _bucket);
 	}
-	
+
 	return _fFirePower;
 }
 
@@ -15507,9 +15605,9 @@ function float groupHP(GROUP _group)
 	local	int		_bucket;
 	local	float	_fDroidHP;
 	local	DROID	_droid;
-	
+
 	_fDroidHP = 0.0;
-	
+
 	_bucket = initIterateGroupCmd(_group,true,true,true);
 	_droid = iterateGroupCmd(_group, _bucket);
 	while(_droid != NULLOBJECT)
@@ -15517,7 +15615,7 @@ function float groupHP(GROUP _group)
 		_fDroidHP = _fDroidHP + (float)_droid.hitPoints;
 		_droid = iterateGroupCmd(_group, _bucket);
 	}
-	
+
 	return _fDroidHP;
 }
 
@@ -15525,7 +15623,7 @@ function float groupHP(GROUP _group)
 function int totalEnemyWeapObjHPInRange(int _x, int _y, int _range, bool _bVtols)
 {
 	local	int		_enemy,_enemyHP;
-	
+
 	_enemyHP = 0;
 	_enemy = 0;
 	while(_enemy < MAX_PLAYERS)
@@ -15536,14 +15634,14 @@ function int totalEnemyWeapObjHPInRange(int _x, int _y, int _range, bool _bVtols
 		}
 		_enemy++;
 	}
-	
+
 	return _enemyHP;
 }
 
 function int totalFriendlyWeapObjHPInRange(int _x, int _y, int _range, bool _bVtols)
 {
 	local	int		_allyOrMe,_friendlyHP;
-	
+
 	_friendlyHP = 0;
 	_allyOrMe = 0;
 	while(_allyOrMe < MAX_PLAYERS)
@@ -15554,7 +15652,7 @@ function int totalFriendlyWeapObjHPInRange(int _x, int _y, int _range, bool _bVt
 		}
 		_allyOrMe++;
 	}
-	
+
 	return _friendlyHP;
 }
 
@@ -15565,9 +15663,9 @@ function int totalPlayerWeapObjHPInRange(int _player, int _x, int _y,
 	local	int			_hp;
 	local	DROID		_droid;
 	local	STRUCTURE	_structure;
-	
+
 	_hp = 0;
-	
+
 	InitEnumDroids(_player,me);
 	_droid = EnumDroid();
 	while(_droid != NULLOBJECT)
@@ -15584,7 +15682,7 @@ function int totalPlayerWeapObjHPInRange(int _player, int _x, int _y,
 		}
 		_droid = EnumDroid();
 	}
-	
+
 	//iterate through all strucrures
 	initEnumStruct(TRUE,derrick,_player,me);
 	_structure = enumStruct();
@@ -15602,14 +15700,14 @@ function int totalPlayerWeapObjHPInRange(int _player, int _x, int _y,
 		}
 		_structure = enumStruct();
 	}
-	
+
 	return _hp;
 }
 
 function bool isTankTemplate(TEMPLATE _tmpl)
 {
 	local	int	_tmplIndex,_techIndex;
-	
+
 	_techIndex = 0;
 	while(_techIndex < numBranches)
 	{
@@ -15622,10 +15720,10 @@ function bool isTankTemplate(TEMPLATE _tmpl)
 			}
 			_tmplIndex++;
 		}
-		
+
 		_techIndex++;
 	}
-	
+
 	return false;
 }
 
@@ -15647,7 +15745,7 @@ function void updateMapRevealFactor()
 	local	int		_x,_y,_numUnrevealedTiles,_totalTiles,_step;
 
 	_numUnrevealedTiles = 0;
-	
+
 	_step = 3;
 
 	_x = 1;
@@ -15664,9 +15762,9 @@ function void updateMapRevealFactor()
 		}
 		_x = _x + _step;
 	}
-	
+
 	_totalTiles = mapWidth * mapHeight;
-	
+
 	fMapRevealFactor = MAP_REVEAL_FAC_UBOUND -
 					(float)(_totalTiles - max(0, _numUnrevealedTiles * _step)) /
 					(float)_totalTiles;
@@ -15676,7 +15774,7 @@ function DROID closestEnemyDroidByType(int _x, int _y, int _range, int _type)
 {
 	local	DROID	_droid,_closestDroid;
 	local	int		_closestDist,_tempDist,_enemy;
-	
+
 	_closestDist = 99999;
 	_closestDroid = NULLOBJECT;
 
@@ -15704,9 +15802,9 @@ function DROID closestEnemyDroidByType(int _x, int _y, int _range, int _type)
 				_droid = EnumDroid();
 			}
 		}
-		
+
 		_enemy++;
 	}
-	
+
 	return _closestDroid;
 }
