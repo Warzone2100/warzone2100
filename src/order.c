@@ -1184,7 +1184,8 @@ void orderUpdateDroid(DROID *psDroid)
 			}
 
 			// make sure units in a command group are actually guarding the commander
-			if (!orderStateObj(psDroid, DORDER_GUARD)
+			psObj = orderStateObj(psDroid, DORDER_GUARD);	// find out who is being guarded by the droid
+			if (psObj == NULL
 			 || psObj != (BASE_OBJECT *)psDroid->psGroup->psCommander)
 			{
 				orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psDroid->psGroup->psCommander);
