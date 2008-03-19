@@ -1,2 +1,0 @@
-Installation:
-Unzip content of warzone.wz, replace playerX.slo and playerX.vlo (where X is a player number: 0-7) files with the ones provided in this archive. Zip the content of warzone.wz again.

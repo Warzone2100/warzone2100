@@ -5,10 +5,10 @@ All commands must be entered without quotes.
 "status?"				- ask AI what it is currently busy with
 "stop"					- ask AI to stop executing a command which was initiated by you (eg help command etc)
 "got power?"			- ask if AI is low on power
-"go!"					- make AI go to a location you previously marked with a beacon (ctrl+h)
+"go!"					- make AI go to a location you previously marked with a beacon (alt+h)
 "help me"				- ask AI for help
 "i'm ok"				- notify AI that you don't need his help anymore
-"go <player>"			- tell AI to attack some payer, where <player> is player name (blue, red etc) or player number
+"go <player>"			- tell AI to attack some payer, where <player> is player name (blue, red etc)
 "<player> has vtols"	- inform AI that some player has VTOLs, will make AI build some additional AA defences
 
 Addressing only certain AI players:
