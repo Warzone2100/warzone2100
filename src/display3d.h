@@ -114,6 +114,7 @@ extern SDWORD mouseTileX, mouseTileY;
 
 extern BOOL bRender3DOnly;
 extern BOOL showGateways;
+extern BOOL showPath;
 extern Vector2i visibleTiles;
 
 /*returns the graphic ID for a droid rank*/

@@ -149,6 +149,7 @@ static BOOL	bDrawBlips=TRUE;
 static BOOL	bDrawProximitys=TRUE;
 BOOL	godMode;
 BOOL	showGateways = FALSE;
+BOOL	showPath = FALSE;
 
 static char skyboxPageName[PATH_MAX] = "page-25";
 
@@ -261,6 +262,39 @@ SDWORD	getCentreX( void )
 SDWORD	getCentreZ( void )
 {
 	return(gridCentreZ);
+}
+
+static void showDroidPaths(void)
+{
+	DROID *psDroid;
+
+	if (((gameTime2 / 250) % 2) != 0)
+	{
+		return;
+	}
+
+	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid=psDroid->psNext)
+	{
+		if (psDroid->selected)
+		{
+			int	i;
+			int	len = psDroid->sMove.numPoints;
+
+			for (i = 0; i < len; i++)
+			{
+				Vector3i pos;
+
+				ASSERT(tileOnMap(psDroid->sMove.asPath[i].x, psDroid->sMove.asPath[i].y), "Path off map!");
+				pos.x = world_coord(psDroid->sMove.asPath[i].x) + TILE_UNITS / 2;
+				pos.z = world_coord(psDroid->sMove.asPath[i].y) + TILE_UNITS / 2;
+				pos.y = map_Height(pos.x, pos.z) + 16;
+
+				ASSERT(worldOnMap(pos.x, pos.y), "Effect off map!");
+				effectGiveAuxVar(80);
+				addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, FALSE, NULL, 0);
+			}
+		}
+	}
 }
 
 /* Render the 3D world */
@@ -428,6 +462,11 @@ void draw3DScene( void )
 	if (bRangeDisplay)
 	{
 		drawRangeAtPos(rangeCenterX,rangeCenterY,rangeRadius);
+	}
+
+	if (showPath)
+	{
+		showDroidPaths();
 	}
 }
 
@@ -4319,7 +4358,7 @@ static void	showSensorRange2(BASE_OBJECT *psObj)
 		yDif = yDif/4096;
 		pos.x = psObj->pos.x - xDif;
 		pos.z = psObj->pos.y - yDif;
-		pos.y = map_Height(pos.x,pos.z)+ 16;	// 64 up to get to base of spire
+		pos.y = map_Height(pos.x,pos.z) + 16;
 		effectGiveAuxVar(80);	// half normal plasma size...
 		if(bBuilding)
 		{
@@ -4347,7 +4386,7 @@ static void	drawRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius)
 		yDif = yDif/4096;
 		pos.x = centerX - xDif;
 		pos.z = centerY - yDif;
-		pos.y = map_Height(pos.x,pos.z)+ 16;	// 64 up to get to base of spire
+		pos.y = map_Height(pos.x,pos.z) + 16;
 		effectGiveAuxVar(80);	// half normal plasma size...
 
 		addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,FALSE,NULL,0);

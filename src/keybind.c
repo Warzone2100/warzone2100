@@ -144,6 +144,12 @@ void	kf_ToggleShowGateways(void)
 	showGateways = !showGateways;
 }
 
+void	kf_ToggleShowPath(void)
+{
+	addConsoleMessage("Path display toggled.", DEFAULT_JUSTIFY);
+	showPath = !showPath;
+}
+
 // --------------------------------------------------------------------------
 void	kf_ToggleRadarJump( void )
 {

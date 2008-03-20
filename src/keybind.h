@@ -206,6 +206,7 @@ extern void	kf_SelectCommander_9( void );
 void kf_ToggleReopenBuildMenu( void );
 
 extern void	kf_ToggleShowGateways(void);
+extern void	kf_ToggleShowPath(void);
 
 // dirty but necessary
 extern	char	sTextToSend[MAX_CONSOLE_STRING_LENGTH];
