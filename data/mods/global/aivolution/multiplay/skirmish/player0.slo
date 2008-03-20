@@ -1496,8 +1496,6 @@ function void doMilitary()
 	{
 		if(tState >= maxStateTime)
 		{
-			notifyIdle(false);
-
 			stopDefendingOil();
 		}
 	}
@@ -13088,8 +13086,6 @@ event coordinatePhases(inactive)
 			
 			taunt(TAUNT_FAILURE, enemy, 40);
 			
-			notifyIdle(true);
-			
 			stopTakingOil();
 			
 			exit;
@@ -13102,8 +13098,6 @@ event coordinatePhases(inactive)
 			
 			taunt(TAUNT_SUCCESS, enemy, 20);
 			
-			notifyIdle(false);
-			
 			stopTakingOil();
 			
 			exit;
@@ -13113,8 +13107,6 @@ event coordinatePhases(inactive)
 		if(!_bStopped and tTakeOil <= 0)
 		{
 			dbg("TAKE OIL: takeoil timeout!!!!!!!!!!!!!", me);
-			
-			notifyIdle(false);
 			
 			stopTakingOil();
 			exit;
@@ -13141,8 +13133,6 @@ event coordinatePhases(inactive)
 			dbg("TAKE OIL: they have more than us", me);
 			
 			taunt(TAUNT_FAILURE, enemy, 40);
-			
-			notifyIdle(true);
 			
 			stopTakingOil();
 			exit;
@@ -13207,8 +13197,6 @@ event coordinatePhases(inactive)
 			dbg("DEFENDING OIL: little attackers left, cancel", me);
 			
 			taunt(TAUNT_FAILURE, enemy, 70);
-			
-			notifyIdle(false);
 
 			stopDefendingOil();
 			_bStopped = true;
@@ -13323,10 +13311,6 @@ event everySecEv(inactive)
 					taunt(TAUNT_SUCCESS, enemy, 70);
 
 					stopDefendingOil();
-					
-					if(state == stNone){
-						notifyIdle(false);
-					}
 
 					dbg("THREAT IS GONE - STOPPED DEFENDING OIL", me);
 				}
@@ -13526,6 +13510,18 @@ event everySecEv(inactive)
 	}
 
 	tLastResearch++;	//will be reset by doResearch if research is not idle
+
+	// notify allies if we are idle for certain amout of time
+	// can't do that immediately when we become idle, since can switch
+	// to some other state right after that - prevent flooding console
+	// with state changes notifications
+	if((state == stNone) and (GAME_TIME_IN_SECS > 10))	// skip startup
+	{
+		if(tState == 6)	// do only once per idle state
+		{
+			notifyIdle(false);
+		}
+	}
 }
 
 function bool checkFollowAttackRequest(int _attackRequester, bool _bHighPriorityTask)
