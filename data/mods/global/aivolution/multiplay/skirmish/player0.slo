@@ -10431,7 +10431,7 @@ function void checkBaseThreat()
 			_counterEnemy = counterEnemy;
 			stopDefending();
 			
-			taunt(TAUNT_SUCCESS, enemy, 55);
+			taunt(enemy, TAUNT_SUCCESS, 55);
 
 			notifyAllies("i'm ok", FALSE);		//tell allies we are ok now
 
@@ -13084,7 +13084,7 @@ event coordinatePhases(inactive)
 		{
 			dbg("TAKE OIL: little attackers left, cancel", me);
 			
-			taunt(TAUNT_FAILURE, enemy, 40);
+			taunt(enemy, TAUNT_FAILURE, 40);
 			
 			stopTakingOil();
 			
@@ -13096,7 +13096,7 @@ event coordinatePhases(inactive)
 		{
 			dbg("TAKE OIL: waiting time is up!!!!!!!!!!!!!", me);
 			
-			taunt(TAUNT_SUCCESS, enemy, 20);
+			taunt(enemy, TAUNT_SUCCESS, 20);
 			
 			stopTakingOil();
 			
@@ -13132,7 +13132,7 @@ event coordinatePhases(inactive)
 		{
 			dbg("TAKE OIL: they have more than us", me);
 			
-			taunt(TAUNT_FAILURE, enemy, 40);
+			taunt(enemy, TAUNT_FAILURE, 40);
 			
 			stopTakingOil();
 			exit;
@@ -13147,7 +13147,7 @@ event coordinatePhases(inactive)
 			{
 				if(groupSizeCmds(attackGr,true,false,true) > 0)	//if we reached destination
 				{
-					taunt(TAUNT_SUCCESS, enemy, 40);
+					taunt(enemy, TAUNT_SUCCESS, 40);
 			
 					dbg("TAKE OIL: no enemies, started guarding", me);
 					timeGuardPos = maxTimeGuardPos;
@@ -13196,7 +13196,7 @@ event coordinatePhases(inactive)
 		{
 			dbg("DEFENDING OIL: little attackers left, cancel", me);
 			
-			taunt(TAUNT_FAILURE, enemy, 70);
+			taunt(enemy, TAUNT_FAILURE, 70);
 
 			stopDefendingOil();
 			_bStopped = true;
@@ -13308,7 +13308,7 @@ event everySecEv(inactive)
 			{
 				if(numEnemyWeapObjInRange(me, sendForceX, sendForceY, (8 * TILE), false, true) == 0)
 				{
-					taunt(TAUNT_SUCCESS, enemy, 70);
+					taunt(enemy, TAUNT_SUCCESS, 70);
 
 					stopDefendingOil();
 
