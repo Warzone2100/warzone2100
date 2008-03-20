@@ -50,6 +50,7 @@
 
 #define MIPMAP_LEVELS		4
 #define MIPMAP_MIN		16
+#define MIPMAP_NORMAL		64
 #define MIPMAP_MAX		128
 
 /* Texture page and coordinates for each tile */
@@ -57,7 +58,7 @@ TILE_TEX_INFO tileTexInfo[MAX_TILES];
 
 static int firstPage; // the last used page before we start adding terrain textures
 int terrainPage; // texture ID of the terrain page
-static int mipmap_max, mipmap_levels, mipmap_user_requested = MIPMAP_MAX;
+static int mipmap_max, mipmap_levels, mipmap_user_requested = MIPMAP_NORMAL;
 
 void setTextureSize(int texSize)
 {
