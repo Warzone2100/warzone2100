@@ -6963,6 +6963,7 @@ UDWORD	getProductionQuantity(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate)
 	UDWORD		inc, factoryType, factoryInc;
 	FACTORY		*psFactory;
 
+	if (psStructure == NULL) return 0;
 	if (psStructure->player == productionPlayer)
 	{
 		psFactory = &psStructure->pFunctionality->factory;
@@ -6991,6 +6992,7 @@ UDWORD	getProductionBuilt(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate)
 	UDWORD		inc, factoryType, factoryInc;
 	FACTORY		*psFactory;
 
+	if (psStructure == NULL) return 0;
 	if (psStructure->player == productionPlayer)
 	{
 		psFactory = &psStructure->pFunctionality->factory;
