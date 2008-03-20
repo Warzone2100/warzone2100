@@ -123,7 +123,7 @@ BOOL fpathGroundBlockingTile(SDWORD x, SDWORD y)
 	}
 
 	ASSERT( !(x <1 || y < 1 ||	x >= (SDWORD)mapWidth-1 || y >= (SDWORD)mapHeight-1),
-		"fpathBlockingTile: off map" );
+		"fpathGroundBlockingTile: off map" );
 
 	psTile = mapTile((UDWORD)x, (UDWORD)y);
 
@@ -150,7 +150,7 @@ BOOL fpathHoverBlockingTile(SDWORD x, SDWORD y)
 	}
 
 	ASSERT( !(x <1 || y < 1 ||	x >= (SDWORD)mapWidth-1 || y >= (SDWORD)mapHeight-1),
-		"fpathBlockingTile: off map" );
+		"fpathHoverBlockingTile: off map" );
 
 	psTile = mapTile((UDWORD)x, (UDWORD)y);
 
@@ -270,62 +270,15 @@ BOOL fpathLiftSlideBlockingTile(SDWORD x, SDWORD y)
 }
 
 // Calculate the distance to a tile from a point
-static SDWORD fpathDistToTile(SDWORD tileX,SDWORD tileY, SDWORD pointX, SDWORD pointY)
+static inline int fpathDistToTile(int tileX, int tileY, int pointX, int pointY)
 {
-	SDWORD	xdiff,ydiff, dist;
-	SDWORD	tx,ty;
+	// get the difference in world coords
+	int xdiff = world_coord(tileX) - pointX;
+	int ydiff = world_coord(tileY) - pointY;
 
-	// get the difference in tile coords
-	xdiff = tileX - map_coord(pointX);
-	ydiff = tileY - map_coord(pointY);
+	ASSERT(xdiff != 0 || ydiff != 0, "fpathDistToTile: points are on same position");
 
-	ASSERT( (xdiff >= -1 && xdiff <= 1 && ydiff >= -1 && ydiff <= 1),
-		"fpathDistToTile: points are more than one tile apart" );
-	ASSERT( xdiff != 0 || ydiff != 0,
-		"fpathDistToTile: points are on same tile" );
-
-	// not the most elegant solution but it works
-	switch (xdiff + ydiff * 10)
-	{
-	case 10:	// xdiff == 0, ydiff == 1
-		dist = TILE_UNITS - (pointY & TILE_MASK);
-		break;
-	case 9:		// xdiff == -1, ydiff == 1
-		tx = pointX & TILE_MASK;
-		ty = TILE_UNITS - (pointY & TILE_MASK);
-		dist = tx > ty ? tx + ty/2 : tx/2 + ty;
-		break;
-	case -1:	// xdiff == -1, ydiff == 0
-		dist = pointX & TILE_MASK;
-		break;
-	case -11:	// xdiff == -1, ydiff == -1
-		tx = pointX & TILE_MASK;
-		ty = pointY & TILE_MASK;
-		dist = tx > ty ? tx + ty/2 : tx/2 + ty;
-		break;
-	case -10:	// xdiff == 0, ydiff == -1
-		dist = pointY & TILE_MASK;
-		break;
-	case -9:	// xdiff == 1, ydiff == -1
-		tx = TILE_UNITS - (pointX & TILE_MASK);
-		ty = pointY & TILE_MASK;
-		dist = tx > ty ? tx + ty/2 : tx/2 + ty;
-		break;
-	case 1:		// xdiff == 1, ydiff == 0
-		dist = TILE_UNITS - (pointX & TILE_MASK);
-		break;
-	case 11:	// xdiff == 1, ydiff == 1
-		tx = TILE_UNITS - (pointX & TILE_MASK);
-		ty = TILE_UNITS - (pointY & TILE_MASK);
-		dist = tx > ty ? tx + ty/2 : tx/2 + ty;
-		break;
-	default:
-		ASSERT( FALSE, "fpathDistToTile: unexpected point relationship" );
-		dist = TILE_UNITS;
-		break;
-	}
-
-	return dist;
+	return trigIntSqrt(xdiff * xdiff + ydiff * ydiff);
 }
 
 // Variables for the callback
@@ -933,7 +886,6 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 						SDWORD tX, SDWORD tY)
 {
 	SDWORD				startX,startY, targetX,targetY;
-	SDWORD				x,y;
 	SDWORD				dir, nearestDir, minDist, tileDist;
 	FPATH_RETVAL		retVal = FPR_OK;
 	PROPULSION_STATS	*psPropStats;
@@ -1020,8 +972,8 @@ FPATH_RETVAL fpathRoute(BASE_OBJECT *psObj, MOVE_CONTROL *psMoveCntl,
 			nearestDir = NUM_DIR;
 			for(dir=0; dir<NUM_DIR; dir++)
 			{
-				x = map_coord(startX) + aDirOffset[dir].x;
-				y = map_coord(startY) + aDirOffset[dir].y;
+				int x = map_coord(startX) + aDirOffset[dir].x;
+				int y = map_coord(startY) + aDirOffset[dir].y;
 				if (!fpathBlockingTile(x,y))
 				{
 					tileDist = fpathDistToTile(x,y, startX,startY);
