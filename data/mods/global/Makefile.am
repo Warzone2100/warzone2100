@@ -4,7 +4,7 @@ SUBDIRS = aivolution/multiplay/skirmish
 	(cd $(srcdir)/$< && zip -ru0 $(abs_builddir)/$@ $(filter-out $<,$(?:$</%=%)) -x '*svn*')
 	zip -T $@
 
-AIVOLUTIONLIST = multiplay commands.txt installation.txt
+AIVOLUTIONLIST = multiplay commands.txt
 GRIMLIST = components structs texpages wrf COPYING
 NEWST_TILESLIST = texpages COPYING readme.txt
 
