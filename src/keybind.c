@@ -2257,19 +2257,22 @@ void	kf_ToggleShadows( void )
 // --------------------------------------------------------------------------
 
 float available_speed[] = {
-	1.f / 8.f,
-	1.f / 4.f,
-	1.f / 2.f,
-	3.f / 4.f,
-	1.f / 1.f,
-	3.f / 2.f,
-	2.f / 1.f,
-	5.f / 2.f,
-	3.f / 1.f,
-	10.f / 1.f,
-	20.f / 1.f
+// p = pumpkin allowed, n = new entries allowed in debug mode only.
+// Since some of these values can ruin a SP game, we disallow them in normal mode.
+	1.f / 8.f,	// n
+	1.f / 5.f,	// n
+	1.f / 3.f,	// p 
+	3.f / 4.f,	// p
+	1.f / 1.f,	// p  
+	5.f / 4.f,	// p
+	3.f / 2.f,	// p
+	2.f / 1.f,	// p (in debug mode only)
+	5.f / 2.f,	// n 
+	3.f / 1.f,	// n
+	10.f / 1.f,	// n
+	20.f / 1.f	// n
 };
-unsigned int nb_available_speeds = 11;
+unsigned int nb_available_speeds = 12;
 
 void kf_SpeedUp( void )
 {
@@ -2292,7 +2295,12 @@ void kf_SpeedUp( void )
 		if (mod < available_speed[i])
 		{
 			mod = available_speed[i];
-
+			// only in debug/cheat mode do we enable all time compression speeds.
+			if (!getDebugMappingStatus())
+			{	
+				if (mod >= 2.f / 1.f)		// max officialy allowed time compression
+					break;
+			}
 			if (mod == 1.f / 1.f)
 			{
 				CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Reset")));
@@ -2328,7 +2336,12 @@ void kf_SlowDown( void )
 		if (mod > available_speed[i])
 		{
 			mod = available_speed[i];
-
+			// only in debug/cheat mode do we enable all time compression speeds.
+			if( !getDebugMappingStatus() )
+			{	
+				if (mod < 1.f / 3.f)
+					break;
+			}
 			if (mod == 1.f / 1.f)
 			{
 				CONPRINTF(ConsoleString,(ConsoleString,_("Game Speed Reset")));
