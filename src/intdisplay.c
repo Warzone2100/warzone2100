@@ -428,12 +428,11 @@ void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 
 		if (psStructure != NULL && StructIsFactory(psStructure))
 		{
-		    quantity = getProductionQuantity(psStructure, psTemplate);
-		   remaining = getProductionBuilt(psStructure, psTemplate);
+			quantity = getProductionQuantity(psStructure, psTemplate);
+			remaining = getProductionBuilt(psStructure, psTemplate);
 		}
 
 		// now find out how many we have built
-
 		if (quantity > remaining)
 		{
 			quantity -= remaining;
