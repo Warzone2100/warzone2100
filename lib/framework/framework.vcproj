@@ -186,6 +186,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\i18n.c"
+				>
+			</File>
+			<File
 				RelativePath=".\input.c"
 				>
 			</File>
@@ -278,10 +282,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\math-help.h"
-				>
-			</File>
-			<File
 				RelativePath=".\frame.h"
 				>
 			</File>
@@ -307,6 +307,10 @@
 			</File>
 			<File
 				RelativePath=".\macros.h"
+				>
+			</File>
+			<File
+				RelativePath=".\math-help.h"
 				>
 			</File>
 			<File
