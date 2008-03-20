@@ -162,6 +162,8 @@ void pie_DrawFogBox(float left, float right, float front, float back, float heig
 {
 	PIELIGHT fog_colour = pie_GetFogColour();
 
+	pie_SetTexturePage(-1);
+
 	glColor4ub(fog_colour.byte.r,fog_colour.byte.g,fog_colour.byte.b,0xFF);
 
 	pie_SetRendMode(REND_FLAT);
