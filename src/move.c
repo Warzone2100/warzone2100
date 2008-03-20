@@ -145,19 +145,6 @@
 #define SHUFFLE_MOVE		(2*TILE_UNITS/2)
 
 /***********************************************************************************/
-/*                      Slope defines                                              */
-
-// angle after which the droid starts to turn back down a slope
-#define SLOPE_TURN_ANGLE	50
-
-// max and min ranges of roll for controlling how much to turn
-#define SLOPE_MIN_ROLL		5
-#define SLOPE_MAX_ROLL		30
-
-// base amount to turn
-#define SLOPE_DIR_CHANGE	20
-
-/***********************************************************************************/
 /*             Tracked model defines                                               */
 
 // The magnitude of direction change required for a droid to spin on the spot
@@ -2060,6 +2047,13 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	}
 	// now offset the speed for the slope of the droid
 	speed = (MAX_SPEED_PITCH - pitch) * speed / MAX_SPEED_PITCH;
+	if (speed <= 0)
+	{
+		// Very nasty hack to deal with buggy maps, where some cliffs are 
+		// not properly marked as being cliffs, but too steep to drive over.
+		// This confuses the heck out of the path-finding code! - Per
+		speed = 10;
+	}
 
 	// slow down damaged droids
 	damLevel = PERCENT(psDroid->body, psDroid->originalBody);
