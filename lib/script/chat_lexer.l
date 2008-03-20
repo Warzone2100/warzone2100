@@ -89,6 +89,7 @@ static SDWORD playerIndex;
 "any"						{ return _T_ANY; }
 "attack"					{ return _T_ATTACK; }
 "attacking"					{ return _T_ATTACKING; }
+"army"						{ return _T_ARMY; }
 "beacon"					{ return _T_BEACON; }
 "building"					{ return _T_BUILDING; }
 "can't"						{ return _T_CANT; }

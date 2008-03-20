@@ -208,6 +208,7 @@ static void chat_reset_command(SDWORD cmdIndex)
 %token _T_ANY
 %token _T_ATTACK
 %token _T_ATTACKING
+%token _T_ARMY
 %token _T_BEACON
 %token _T_BUILDING
 %token _T_CANT
