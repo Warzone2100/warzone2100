@@ -493,7 +493,7 @@ BOOL widgAddBarGraph(W_SCREEN *psScreen, W_BARINIT *psInit)
 
 
 /* Add a slider to a form */
-BOOL widgAddSlider(W_SCREEN *psScreen, W_SLDINIT *psInit)
+BOOL widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT* psInit)
 {
 	W_SLIDER	*psSlider;
 	W_FORM		*psForm;
@@ -526,7 +526,8 @@ BOOL widgAddSlider(W_SCREEN *psScreen, W_SLDINIT *psInit)
 	}
 
 	/* Create the slider structure */
-	if (!sliderCreate(&psSlider, psInit)
+	psSlider = sliderCreate(psInit);
+	if (psSlider == NULL
 	/* Add it to the form */
 	 || !formAddWidget(psForm, (WIDGET *)psSlider, (W_INIT *)psInit))
 	{

@@ -43,7 +43,7 @@ typedef struct _w_slider
 } W_SLIDER;
 
 /* Create a slider widget data structure */
-extern BOOL sliderCreate(W_SLIDER **ppsWidget, W_SLDINIT *psInit);
+extern W_SLIDER* sliderCreate(const W_SLDINIT* psInit);
 
 /* Free the memory used by a slider */
 extern void sliderFree(W_SLIDER *psWidget);

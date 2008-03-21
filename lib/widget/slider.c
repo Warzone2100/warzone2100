@@ -38,13 +38,15 @@ void sliderEnableDrag(BOOL Enable)
 }
 
 /* Create a slider widget data structure */
-BOOL sliderCreate(W_SLIDER **ppsWidget, W_SLDINIT *psInit)
+W_SLIDER* sliderCreate(const W_SLDINIT* psInit)
 {
+	W_SLIDER* psWidget;
+
 	if (psInit->style & ~(WBAR_PLAIN | WIDG_HIDDEN))
 	{
 		debug(LOG_ERROR, "sliderCreate: Unknown style");
 		abort();
-		return FALSE;
+		return NULL;
 	}
 
 	if (psInit->orientation < WSLD_LEFT
@@ -52,7 +54,7 @@ BOOL sliderCreate(W_SLIDER **ppsWidget, W_SLDINIT *psInit)
 	{
 		debug(LOG_ERROR, "sliderCreate: Unknown orientation");
 		abort();
-		return FALSE;
+		return NULL;
 	}
 
 	if (((psInit->orientation == WSLD_LEFT
@@ -64,14 +66,14 @@ BOOL sliderCreate(W_SLIDER **ppsWidget, W_SLDINIT *psInit)
 	{
 		debug(LOG_ERROR, "sliderCreate: Too many stops for slider length");
 		abort();
-		return FALSE;
+		return NULL;
 	}
 
 	if (psInit->pos > psInit->numStops)
 	{
 		debug(LOG_ERROR, "sliderCreate: slider position greater than stops (%d/%d)", psInit->pos,  psInit->numStops);
 		abort();
-		return FALSE;
+		return NULL;
 	}
 
 	if (((psInit->orientation == WSLD_LEFT
@@ -83,50 +85,50 @@ BOOL sliderCreate(W_SLIDER **ppsWidget, W_SLDINIT *psInit)
 	{
 		debug(LOG_ERROR, "sliderCreate: slider bar is larger than slider width");
 		abort();
-		return FALSE;
+		return NULL;
 	}
 
 	/* Allocate the required memory */
-	*ppsWidget = (W_SLIDER *)malloc(sizeof(W_SLIDER));
-	if (*ppsWidget == NULL)
+	psWidget = (W_SLIDER *)malloc(sizeof(W_SLIDER));
+	if (psWidget == NULL)
 	{
 		debug(LOG_ERROR, "sliderCreate: Out of memory");
 		abort();
-		return FALSE;
+		return NULL;
 	}
 	/* Allocate the memory for the tip and copy it if necessary */
-	(*ppsWidget)->pTip = psInit->pTip;
+	psWidget->pTip = psInit->pTip;
 
 	/* Initialise the structure */
-	(*ppsWidget)->type = WIDG_SLIDER;
-	(*ppsWidget)->id = psInit->id;
-	(*ppsWidget)->formID = psInit->formID;
-	(*ppsWidget)->style = psInit->style;
-	(*ppsWidget)->x = psInit->x;
-	(*ppsWidget)->y = psInit->y;
-	(*ppsWidget)->width = psInit->width;
-	(*ppsWidget)->height = psInit->height;
+	psWidget->type = WIDG_SLIDER;
+	psWidget->id = psInit->id;
+	psWidget->formID = psInit->formID;
+	psWidget->style = psInit->style;
+	psWidget->x = psInit->x;
+	psWidget->y = psInit->y;
+	psWidget->width = psInit->width;
+	psWidget->height = psInit->height;
 
 	if (psInit->pDisplay)
 	{
-		(*ppsWidget)->display = psInit->pDisplay;
+		psWidget->display = psInit->pDisplay;
 	}
 	else
 	{
-		(*ppsWidget)->display = sliderDisplay;
+		psWidget->display = sliderDisplay;
 	}
-	(*ppsWidget)->callback = psInit->pCallback;
-	(*ppsWidget)->pUserData = psInit->pUserData;
-	(*ppsWidget)->UserData = psInit->UserData;
-	(*ppsWidget)->orientation = psInit->orientation;
-	(*ppsWidget)->numStops = psInit->numStops;
-	(*ppsWidget)->barSize = psInit->barSize;
+	psWidget->callback = psInit->pCallback;
+	psWidget->pUserData = psInit->pUserData;
+	psWidget->UserData = psInit->UserData;
+	psWidget->orientation = psInit->orientation;
+	psWidget->numStops = psInit->numStops;
+	psWidget->barSize = psInit->barSize;
 
-	sliderInitialise(*ppsWidget);
+	sliderInitialise(psWidget);
 
-	(*ppsWidget)->pos = psInit->pos;
+	psWidget->pos = psInit->pos;
 
-	return TRUE;
+	return psWidget;
 }
 
 
