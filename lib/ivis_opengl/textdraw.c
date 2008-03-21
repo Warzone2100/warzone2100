@@ -592,7 +592,7 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 {
 	GLint matrix_mode = 0;
 
-	pie_SetTexturePage(0);
+	pie_SetTexturePage(TEXPAGE_FONT);
 
 	glGetIntegerv(GL_MATRIX_MODE, &matrix_mode);
 	glMatrixMode(GL_TEXTURE);

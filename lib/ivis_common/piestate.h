@@ -92,7 +92,11 @@ typedef struct	RENDER_STATE
 				}
 				RENDER_STATE;
 
-#define NO_TEXPAGE -1
+typedef enum
+{
+	TEXPAGE_NONE = -1,
+	TEXPAGE_FONT = -2
+} TEXPAGE_TYPE;
 
 /***************************************************************************/
 /*

@@ -210,7 +210,7 @@ void screen_SetBackDropFromFile(const char* filename)
 
 	// Make sure the current texture page is reloaded after we are finished
 	// Otherwise WZ will think it is still loaded and not load it again
-	pie_SetTexturePage(-1);
+	pie_SetTexturePage(TEXPAGE_NONE);
 
 	if( strcmp(extension,".png") == 0 )
 	{
@@ -261,7 +261,7 @@ void screen_Upload(const char *newBackDropBmp)
 	if(newBackDropBmp != NULL)
 	{
 		glGenTextures(1, &backDropTexture);
-		pie_SetTexturePage(-1);
+		pie_SetTexturePage(TEXPAGE_NONE);
 		glBindTexture(GL_TEXTURE_2D, backDropTexture);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
 			BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT,
@@ -279,7 +279,7 @@ void screen_Upload(const char *newBackDropBmp)
 
 	// Make sure the current texture page is reloaded after we are finished
 	// Otherwise WZ will think it is still loaded and not load it again
-	pie_SetTexturePage(-1);
+	pie_SetTexturePage(TEXPAGE_NONE);
 
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, backDropTexture);

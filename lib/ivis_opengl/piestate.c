@@ -141,23 +141,23 @@ void pie_SetFogStatus(BOOL val)
  */
 void pie_SetTexturePage(SDWORD num)
 {
-	// If a negative value is passes _always_ disable texturing, even if
-	// rendStates.texPage indicates that we disabled it already.
-	if (num < 0)
-	{
-		rendStates.texPage = num;
-
-		glDisable(GL_TEXTURE_2D);
-		return;
-	}
-	
 	// Only bind textures when they're not bound already
 	if (num != rendStates.texPage)
 	{
 		rendStates.texPage = num;
-
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[num].id);
+		switch (num)
+		{
+			case TEXPAGE_NONE:
+				glDisable(GL_TEXTURE_2D);
+				break;
+			case TEXPAGE_FONT:
+				// GLC will set the texture, we just need to enable texturing
+				glEnable(GL_TEXTURE_2D);
+				break;
+			default:
+				glEnable(GL_TEXTURE_2D);
+				glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[num].id);
+		}
 	}
 }
 
@@ -197,6 +197,7 @@ void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode)
 		}
 	}
 }
+
 
 void pie_SetGammaValue(float val)
 {

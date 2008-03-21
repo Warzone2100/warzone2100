@@ -63,7 +63,7 @@ static UDWORD radarTexture;
 
 void pie_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
 {
-	pie_SetTexturePage(-1);
+	pie_SetTexturePage(TEXPAGE_NONE);
 	pie_SetAlphaTest(FALSE);
 
 	glColor4ubv(colour.vector);
@@ -117,7 +117,7 @@ static void pie_DrawRect(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1, PIELIGHT co
 
 void pie_Box(int x0,int y0, int x1, int y1, PIELIGHT colour)
 {
-	pie_SetTexturePage(-1);
+	pie_SetTexturePage(TEXPAGE_NONE);
 	pie_SetAlphaTest(FALSE);
 
 	if (x0>psRendSurface->clip.right || x1<psRendSurface->clip.left ||
@@ -150,7 +150,7 @@ void pie_Box(int x0,int y0, int x1, int y1, PIELIGHT colour)
 void pie_BoxFill(int x0,int y0, int x1, int y1, PIELIGHT colour)
 {
 	pie_SetRendMode(REND_FLAT);
-	pie_SetTexturePage(-1);
+	pie_SetTexturePage(TEXPAGE_NONE);
 	pie_DrawRect(x0, y0, x1, y1, colour);
 }
 
@@ -171,7 +171,7 @@ void pie_TransBoxFill(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1)
 
 void pie_UniTransBoxFill(SDWORD x0,SDWORD y0, SDWORD x1, SDWORD y1, PIELIGHT light)
 {
-	pie_SetTexturePage(-1);
+	pie_SetTexturePage(TEXPAGE_NONE);
 	pie_SetRendMode(REND_ALPHA_FLAT);
 	pie_DrawRect(x0, y0, x1, y1, light);
 }
@@ -313,20 +313,11 @@ void pie_DownLoadRadar(UDWORD *buffer, int width, int height)
 
 void pie_RenderRadar(int x, int y, int width, int height)
 {
-	PIEIMAGE pieImage;
-	PIERECT dest;
+	// special case function because texture is held outside of texture list
+	PIEIMAGE pieImage = { radarTexture, 0, 0, 256, 256 };
+	PIERECT dest = { x, y, width, height };
 
 	pie_SetRendMode(REND_GOURAUD_TEX);
-	//special case function because texture is held outside of texture list
-	pieImage.texPage = radarTexture;
-	pieImage.tu = 0;
-	pieImage.tv = 0;
-	pieImage.tw = 256;
-	pieImage.th = 256;
-	dest.x = x;
-	dest.y = y;
-	dest.w = width;
-	dest.h = height;
 
 	// enable alpha
 	glEnable(GL_BLEND);

@@ -694,7 +694,7 @@ static void pie_DrawShadows(void)
 	const float width = pie_GetVideoBufferWidth();
 	const float height = pie_GetVideoBufferHeight();
 
-	pie_SetTexturePage(-1);
+	pie_SetTexturePage(TEXPAGE_NONE);
 
 	glPushMatrix();
 
