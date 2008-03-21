@@ -28,11 +28,9 @@
 #define WZGLOBAL_H
 
 
-#ifdef HAVE_CONFIG_H
+#if defined(HAVE_CONFIG_H)
 #  include "config.h"
-#endif
-
-#ifdef __MACOSX__
+#elif defined(__MACOSX__)
 #  include "config-macosx.h"
 #endif
 
