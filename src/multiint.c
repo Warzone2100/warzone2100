@@ -309,7 +309,7 @@ static BOOL OptionsInet(UDWORD parentID)			//internet options
 	W_FORMINIT		sFormInit;
 	W_LABINIT		sLabInit;
 
-	widgCreateScreen(&psConScreen);
+	psConScreen = widgCreateScreen();
 	widgSetTipFont(psConScreen,font_regular);
 
 	memset(&sFormInit, 0, sizeof(W_FORMINIT));		//Connection Settings

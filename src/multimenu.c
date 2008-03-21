@@ -361,7 +361,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 		}
 	}
 
-	widgCreateScreen(&psRScreen);			/// move this to intinit or somewhere like that.. (close too.)
+	psRScreen = widgCreateScreen(); ///< move this to intinit or somewhere like that.. (close too.)
 	widgSetTipFont(psRScreen,font_regular);
 
 	/* Calculate how many buttons will go on a single form */

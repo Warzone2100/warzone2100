@@ -86,16 +86,17 @@ void widgShutDown(void)
 }
 
 /* Create an empty widget screen */
-BOOL widgCreateScreen(W_SCREEN **ppsScreen)
+W_SCREEN* widgCreateScreen()
 {
 	W_FORM		*psForm;
 	W_FORMINIT	sInit;
 
-	*ppsScreen = (W_SCREEN *)malloc(sizeof(W_SCREEN));
-	if (*ppsScreen == NULL)
+	W_SCREEN* psScreen = (W_SCREEN *)malloc(sizeof(W_SCREEN));
+	if (psScreen == NULL)
 	{
-		ASSERT( FALSE, "Out of memory" );
-		return FALSE;
+		debug(LOG_ERROR, "widgCreateScreen: Out of memory");
+		abort();
+		return NULL;
 	}
 
 	memset(&sInit, 0, sizeof(W_FORMINIT));
@@ -109,14 +110,15 @@ BOOL widgCreateScreen(W_SCREEN **ppsScreen)
 	psForm = formCreate(&sInit);
 	if (psForm == NULL)
 	{
-		return FALSE;
+		free(psScreen);
+		return NULL;
 	}
 
-	(*ppsScreen)->psForm = (WIDGET *)psForm;
-	(*ppsScreen)->psFocus = NULL;
-	(*ppsScreen)->TipFontID = 0;
+	psScreen->psForm = (WIDGET *)psForm;
+	psScreen->psFocus = NULL;
+	psScreen->TipFontID = 0;
 
-	return TRUE;
+	return psScreen;
 }
 
 

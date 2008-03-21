@@ -284,7 +284,7 @@ extern void widgReset(void);
 extern void widgShutDown(void);
 
 /* Create an empty widget screen */
-extern BOOL widgCreateScreen(W_SCREEN **ppsScreen);
+extern W_SCREEN* widgCreateScreen(void);
 
 /* Release a screen and all its associated data */
 extern void widgReleaseScreen(W_SCREEN *psScreen);
