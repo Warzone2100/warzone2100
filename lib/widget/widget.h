@@ -302,7 +302,7 @@ extern BOOL widgAddLabel(W_SCREEN *psScreen, const W_LABINIT* psInit);
 extern BOOL widgAddButton(W_SCREEN *psScreen, const W_BUTINIT* psInit);
 
 /* Add an edit box to a form */
-extern BOOL widgAddEditBox(W_SCREEN *psScreen, W_EDBINIT *psInit);
+extern BOOL widgAddEditBox(W_SCREEN *psScreen, const W_EDBINIT* psInit);
 
 /* Add a bar graph to a form */
 extern BOOL widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT* psInit);

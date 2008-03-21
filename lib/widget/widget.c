@@ -393,7 +393,7 @@ BOOL widgAddButton(W_SCREEN *psScreen, const W_BUTINIT* psInit)
 
 
 /* Add an edit box to the widget screen */
-BOOL widgAddEditBox(W_SCREEN *psScreen, W_EDBINIT *psInit)
+BOOL widgAddEditBox(W_SCREEN *psScreen, const W_EDBINIT* psInit)
 {
 	W_EDITBOX	*psEdBox;
 	W_FORM		*psForm;
@@ -424,13 +424,10 @@ BOOL widgAddEditBox(W_SCREEN *psScreen, W_EDBINIT *psInit)
 	}
 
 	/* Create the edit box structure */
-	if (!editBoxCreate(&psEdBox, psInit))
-	{
-		return FALSE;
-	}
-
+	psEdBox = editBoxCreate(psInit);
+	if (psEdBox == NULL
 	/* Add it to the form */
-	if (!formAddWidget(psForm, (WIDGET *)psEdBox, (W_INIT *)psInit))
+	 || !formAddWidget(psForm, (WIDGET *)psEdBox, (W_INIT *)psInit))
 	{
 		return FALSE;
 	}
