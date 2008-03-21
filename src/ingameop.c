@@ -123,7 +123,7 @@ static BOOL addQuitOptions(void)
 }
 
 
-static BOOL _addSlideOptions(void)
+static BOOL addSlideOptions(void)
 {
 	W_FORMINIT		sFormInit;
 
@@ -182,12 +182,6 @@ static BOOL _addSlideOptions(void)
 	return TRUE;
 }
 
-
-static BOOL addSlideOptions(void)
-{
-
-	return _addSlideOptions();
-}
 
 // ////////////////////////////////////////////////////////////////////////////
 
