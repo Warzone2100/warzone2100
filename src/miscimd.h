@@ -17,8 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef _miscimd_h
-#define _miscimd_h
+
+#ifndef __INCLUDED_SRC_MISCIMD_H__
+#define __INCLUDED_SRC_MISCIMD_H__
 
 extern BOOL initMiscImds( void );
 extern iIMDShape	*getImdFromIndex(UDWORD	index);
@@ -126,5 +127,4 @@ MI_FIREWORK,
 MI_TOO_MANY  
 };
 
- #endif
-               
+#endif // __INCLUDED_SRC_MISCIMD_H__

@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Mission.h
- *
+/** @file
  * Mission defines for the game
- *
  */
-#ifndef _mission_h
-#define _mission_h
+
+#ifndef __INCLUDED_SRC_MISSION_H__
+#define __INCLUDED_SRC_MISSION_H__
 
 #include "map.h"
 #include "power.h"
@@ -212,5 +210,4 @@ extern void setMissionCheatTime(BOOL bCheating);
 #define		MISSIONRES_TITLE_W		600
 #define		MISSIONRES_TITLE_H		40
 
-#endif
-
+#endif // __INCLUDED_SRC_MISSION_H__

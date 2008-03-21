@@ -17,10 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/* WinMain.h */
 
-#ifndef _winmain_h
-#define _winmain_h
+#ifndef __INCLUDED_SRC_MAIN_H__
+#define __INCLUDED_SRC_MAIN_H__
 
 typedef enum {
 	GS_TITLE_SCREEN,
@@ -37,4 +36,4 @@ extern void SetGameMode(GS_GAMEMODE status);
 
 extern char SaveGamePath[];
 
-#endif
+#endif // __INCLUDED_SRC_MAIN_H__

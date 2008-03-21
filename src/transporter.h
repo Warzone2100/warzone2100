@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Transporter.h
- *
- * Functions for the display/functionality of the Transporter
+/** @file
+ *  Functions for the display/functionality of the Transporter
  */
 
-#ifndef _transporter_h
-#define _transporter_h
+#ifndef __INCLUDED_SRC_TRANSPORTER_H__
+#define __INCLUDED_SRC_TRANSPORTER_H__
 
 #include "lib/widget/widget.h"
 
@@ -104,4 +102,4 @@ extern BOOL transporterFlying(DROID *psTransporter);
 //initialise the flag to indicate the first transporter has arrived - set in startMission()
 extern void initFirstTransporterFlag(void);
 
-#endif
+#endif // __INCLUDED_SRC_TRANSPORTER_H__

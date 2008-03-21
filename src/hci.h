@@ -17,13 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * HCI.h
- *
- * Function definitions for the in game interface code.
+/** @file
+ *  Function definitions for the in game interface code.
  */
-#ifndef _hci_h
-#define _hci_h
+
+#ifndef __INCLUDED_SRC_HCI_H__
+#define __INCLUDED_SRC_HCI_H__
 
 #include "lib/ivis_common/pieclip.h"
 #include "lib/widget/widget.h"
@@ -457,5 +456,4 @@ BOOL intGetReopenBuild(void);
 
 extern void intDemolishCancel(void);
 
-#endif
-
+#endif // __INCLUDED_SRC_HCI_H__

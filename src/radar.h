@@ -17,8 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef _radar_h
-#define _radar_h
+
+#ifndef __INCLUDED_SRC_RADAR_H__
+#define __INCLUDED_SRC_RADAR_H__
 
 void radarColour(UDWORD tileNumber, uint8_t r, uint8_t g, uint8_t b);
 
@@ -48,4 +49,4 @@ typedef enum _radar_draw_mode
 extern BOOL		bEnemyAllyRadarColor;		//enemy/ally radar color
 extern RADAR_DRAW_MODE	radarDrawMode;		//current mini-map mode
 
-#endif
+#endif // __INCLUDED_SRC_RADAR_H__

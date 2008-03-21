@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * IntelMap.h
- *
- * Functions for the display of the Intelligence Map
+/** @file
+ *  Functions for the display of the Intelligence Map
  */
 
-#ifndef _intelmap_h
-#define _intelmap_h
+#ifndef __INCLUDED_SRC_INTELMAP_H__
+#define __INCLUDED_SRC_INTELMAP_H__
 
 /* Intelligence Map screen IDs */
 #define IDINTMAP_FORM			6000	//The intelligence map base form
@@ -88,6 +86,4 @@ extern BOOL messageIsImmediate(void);
 /*sets the flag*/
 extern void setMessageImmediate(BOOL state);
 
-#endif	//intelmap.h
-
-
+#endif	// __INCLUDED_SRC_INTELMAP_H__

@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Text.h (was Strings.h)
- *
- * String management functions
- *
+/** @file
+ *  String management functions
  */
-#ifndef _text_h
-#define _text_h
+
+#ifndef __INCLUDED_SRC_TEXT_H__
+#define __INCLUDED_SRC_TEXT_H__
 
 //the two defines below are MUTUALLY EXCLUSIVE! don't have both defined...
 //#define RESOURCE_NAMES
@@ -39,5 +37,4 @@ extern BOOL stringsInitialise(void);
 /* Shut down the string system */
 extern void stringsShutDown(void);
 
-#endif
-
+#endif // __INCLUDED_SRC_TEXT_H__

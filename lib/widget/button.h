@@ -17,13 +17,14 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Button.h
- *
- * Definitions for edit box functions.
+/** @file
+ *  Definitions for edit box functions.
  */
-#ifndef _button_h
-#define _button_h
+
+#ifndef __INCLUDED_LIB_WIDGET_BUTTON_H__
+#define __INCLUDED_LIB_WIDGET_BUTTON_H__
+
+#include "widgbase.h"
 
 /* Button states */
 #define WBUTS_NORMAL	0x0000
@@ -68,7 +69,7 @@ extern void buttonRun(W_BUTTON *psWidget);
 extern void buttonClicked(W_BUTTON *psWidget, UDWORD key);
 
 /* Respond to a mouse button up */
-extern void buttonReleased(W_BUTTON *psWidget, UDWORD key);
+extern void buttonReleased(W_SCREEN* psScreen, W_BUTTON *psWidget, UDWORD key);
 
 /* Respond to a mouse moving over a button */
 extern void buttonHiLite(W_BUTTON *psWidget, W_CONTEXT *psContext);
@@ -88,5 +89,4 @@ extern void buttonClearFlash(W_BUTTON *psButton);
 /* The button display function */
 extern void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
-#endif
-
+#endif // __INCLUDED_LIB_WIDGET_BUTTON_H__

@@ -17,12 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/***************************************************************************/
 
-#ifndef _ANIM_ID_H_
-#define _ANIM_ID_H_
-
-/***************************************************************************/
+#ifndef __INCLUDED_SRC_ANIM_ID_H__
+#define __INCLUDED_SRC_ANIM_ID_H__
 
 #define	ID_ANIM_DROIDWALK				 0
 #define	ID_ANIM_DROIDFIRE				 1
@@ -36,8 +33,4 @@
 #define	ID_ANIM_CYBORG_PACK_RUN			 9
 #define	ID_ANIM_SUPERCYBORG_RUN			10
 
-/***************************************************************************/
-
-#endif	// _ANIM_ID_H_
-
-/***************************************************************************/
+#endif // __INCLUDED_SRC_ANIM_ID_H__

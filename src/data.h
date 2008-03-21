@@ -17,13 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Data.h
- *
- * Data loading functions
+/** @file
+ *  Data loading functions, deals with loading of all resource types.
  */
-#ifndef _data_h
-#define _data_h
+
+#ifndef __INCLUDED_SRC_DATA_H__
+#define __INCLUDED_SRC_DATA_H__
 
 /* Pass all the data loading functions to the framework library */
 extern BOOL dataInitLoadFuncs(void);
@@ -31,5 +30,4 @@ extern BOOL dataInitLoadFuncs(void);
 extern void dataSetSaveFlag(void);
 extern void dataClearSaveFlag(void);
 
-#endif
-
+#endif // __INCLUDED_SRC_DATA_H__

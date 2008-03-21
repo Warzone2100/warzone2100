@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Group.h
- *
- * Link droids together into a group for AI etc.
- *
+/** @file
+ *  Link droids together into a group for AI etc.
  */
-#ifndef _group_h
-#define _group_h
+
+#ifndef __INCLUDED_SRC_GROUP_H__
+#define __INCLUDED_SRC_GROUP_H__
 
 #include "order.h"
 #include "orderdef.h"
@@ -86,6 +84,4 @@ extern void orderGroupObj(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *
 /* set the secondary state for a group of droids */
 extern void grpSetSecondary(DROID_GROUP *psGroup, SECONDARY_ORDER sec, SECONDARY_STATE state);
 
-#endif
-
-
+#endif // __INCLUDED_SRC_GROUP_H__

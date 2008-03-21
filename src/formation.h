@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Formation.h
- *
- * Control units moving in formation.
- *
+/** @file
+ *  Control units moving in formation.
  */
-#ifndef _formation_h
-#define _formation_h
+
+#ifndef __INCLUDED_SRC_FORMATION_H__
+#define __INCLUDED_SRC_FORMATION_H__
 
 #include "formationdef.h"
 
@@ -68,6 +66,4 @@ extern BOOL formationMember(FORMATION *psFormation, BASE_OBJECT *psObj);
 
 extern SDWORD formationGetSpeed( FORMATION *psFormation );
 
-#endif
-
-
+#endif // __INCLUDED_SRC_FORMATION_H__

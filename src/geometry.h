@@ -17,10 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/* Geometry.h */
 
-#ifndef _geometry_h
-#define _geometry_h
+#ifndef __INCLUDED_SRC_GEOMETRY_H__
+#define __INCLUDED_SRC_GEOMETRY_H__
 
 #include "map.h"
 #include "hci.h"
@@ -61,4 +60,4 @@ static inline BASE_OBJECT *getTileOccupier(UDWORD x, UDWORD y)
 	}
 }
 
-#endif
+#endif // __INCLUDED_SRC_GEOMETRY_H__

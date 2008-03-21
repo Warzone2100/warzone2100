@@ -17,8 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef _advvis_h
-#define _advvis_h
+
+#ifndef __INCLUDED_SRC_ADVVIS_H__
+#define __INCLUDED_SRC_ADVVIS_H__
 
 #include "lib/framework/types.h"
 #include "basedef.h"
@@ -32,4 +33,4 @@ extern BOOL	getRevealStatus( void );
 extern void	preProcessVisibility( void );
 extern void	avSetStatus(BOOL var);
 
-#endif
+#endif // __INCLUDED_SRC_ADVVIS_H__

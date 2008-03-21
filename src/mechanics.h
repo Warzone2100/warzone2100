@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Mechanics.h
- *
+/** @file
  * Game world mechanics.
- *
  */
-#ifndef _mechanics_h
-#define _mechanics_h
+
+#ifndef __INCLUDED_SRC_MECHANICS_H__
+#define __INCLUDED_SRC_MECHANICS_H__
 
 #include "lib/framework/frame.h"
 #include "combat.h"
@@ -55,5 +53,4 @@ extern void freeStructureLists(void);
 //TEST FUNCTION - MAKE EVERYTHING AVAILABLE
 extern void makeAllAvailable(void);
 
-#endif
-
+#endif // __INCLUDED_SRC_MECHANICS_H__

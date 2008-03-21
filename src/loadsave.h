@@ -17,14 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/***************************************************************************/
-/*
- * loadsave.h
- */
-/***************************************************************************/
 
-#ifndef _loadsave_h
-#define _loadsave_h
+#ifndef __INCLUDED_SRC_LOADSAVE_H__
+#define __INCLUDED_SRC_LOADSAVE_H__
 
 /***************************************************************************/
 /*
@@ -79,4 +74,4 @@ BOOL saveMidMission(void);
 
 extern void deleteSaveGame(char* saveGameName);
 
-#endif //_loadsave_h
+#endif // __INCLUDED_SRC_LOADSAVE_H__

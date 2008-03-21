@@ -17,18 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/***************************************************************************/
-/*
- * Projectile types and function headers
- *
- * Gareth Jones 11/7/97
+/** @file
+ *  Projectile types and function headers
  */
-/***************************************************************************/
 
-#ifndef _PROJECTILE_H_
-#define _PROJECTILE_H_
-
-/***************************************************************************/
+#ifndef __INCLUDED_SRC_PROJECTILE_H__
+#define __INCLUDED_SRC_PROJECTILE_H__
 
 #include "lib/framework/types.h"
 #include "basedef.h"
@@ -70,10 +64,10 @@ BOOL	proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player
 					 UDWORD tarX, UDWORD tarY, UDWORD tarZ, BASE_OBJECT *psTarget, BOOL bVisible, BOOL bPenetrate, int weapon_slot );
 
 // return whether a weapon is direct or indirect
-BOOL	proj_Direct(WEAPON_STATS *psStats);
+bool proj_Direct(const WEAPON_STATS* psStats);
 
 // return the maximum range for a weapon
-SDWORD	proj_GetLongRange(WEAPON_STATS *psStats);
+SDWORD	proj_GetLongRange(const WEAPON_STATS* psStats);
 
 // Watermelon:neighbour info ripped from droiddef.h
 /* Info stored for each projectile neighbour */
@@ -136,7 +130,4 @@ do { \
 	if (object->psDamaged) CHECK_OBJECT(object->psDamaged); \
 } while (0)
 
-
-#endif	/* _PROJECTILE_H_ */
-
-/***************************************************************************/
+#endif // __INCLUDED_SRC_PROJECTILE_H__

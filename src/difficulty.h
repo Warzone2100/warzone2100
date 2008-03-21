@@ -17,8 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef _difficulty_h
-#define _difficulty_h
+
+#ifndef __INCLUDED_SRC_DIFFICULTY_H__
+#define __INCLUDED_SRC_DIFFICULTY_H__
 
 // required to ensure "types.h" is included the proper way (we need the "bool" type)
 #include "lib/framework/frame.h"
@@ -37,5 +38,4 @@ extern DIFFICULTY_LEVEL	getDifficultyLevel( void );
 extern int modifyForDifficultyLevel(int basicVal, bool IsPlayer);
 extern void setModifiers(float Player,float Enemy);
 
-
-#endif
+#endif // __INCLUDED_SRC_DIFFICULTY_H__

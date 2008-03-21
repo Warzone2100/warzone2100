@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * ScriptExtern.h
- *
- * All game variable access functions for the scripts
- *
+/** @file
+ *  All game variable access functions for the scripts
  */
-#ifndef _scriptextern_h
-#define _scriptextern_h
+
+#ifndef __INCLUDED_SRC_SCRIPTEXTERN_H__
+#define __INCLUDED_SRC_SCRIPTEXTERN_H__
 
 // current game level
 extern SDWORD	scrGameLevel;
@@ -67,5 +65,4 @@ extern BOOL scrGenExternGet(UDWORD index);
 // General function to set some basic game values
 extern BOOL scrGenExternSet(UDWORD index);
 
-#endif
-
+#endif // __INCLUDED_SRC_SCRIPTEXTERN_H__

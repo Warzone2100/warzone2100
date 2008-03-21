@@ -17,14 +17,11 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Stats.h
- *
- * Interface to the common stats module
- *
+/** @file
+ *  Interface to the common stats module
  */
-#ifndef _stats_h
-#define _stats_h
+#ifndef __INCLUDED_SRC_STATS_H__
+#define __INCLUDED_SRC_STATS_H__
 
 #include "objectdef.h"
 /**************************************************************************************
@@ -282,7 +279,7 @@ if doesn't compare with any*/
 extern BOOL getBodySize(const char *pSize, UBYTE *pStore);
 
 // Pass in a stat and get its name
-extern const char* getStatName(void * pStat);
+extern const char* getStatName(const void * pStat);
 
 /*returns the propulsion type based on the string name passed in */
 extern PROPULSION_TYPE getPropulsionType(const char *pType);
@@ -291,11 +288,11 @@ extern WEAPON_EFFECT getWeaponEffect(const char *pWeaponEffect);
 
 extern UWORD weaponROF(WEAPON_STATS *psStat, SBYTE player);
 /*Access functions for the upgradeable stats of a weapon*/
-extern UDWORD	weaponFirePause(WEAPON_STATS *psStats, UBYTE player);
+extern UDWORD	weaponFirePause(const WEAPON_STATS* psStats, UBYTE player);
 extern UDWORD	weaponReloadTime(WEAPON_STATS *psStats, UBYTE player);
-extern UDWORD	weaponShortHit(WEAPON_STATS *psStats, UBYTE player);
-extern UDWORD	weaponLongHit(WEAPON_STATS *psStats, UBYTE player);
-extern UDWORD	weaponDamage(WEAPON_STATS *psStats, UBYTE player);
+extern UDWORD	weaponShortHit(const WEAPON_STATS* psStats, UBYTE player);
+extern UDWORD	weaponLongHit(const WEAPON_STATS* psStats, UBYTE player);
+extern UDWORD	weaponDamage(const WEAPON_STATS* psStats, UBYTE player);
 extern UDWORD	weaponRadDamage(WEAPON_STATS *psStats, UBYTE player);
 extern UDWORD	weaponIncenDamage(WEAPON_STATS *psStats, UBYTE player);
 extern UDWORD	weaponRadiusHit(WEAPON_STATS *psStats, UBYTE player);
@@ -335,6 +332,4 @@ extern UDWORD getMaxPropulsionSpeed(void);
 
 extern BOOL objHasWeapon(BASE_OBJECT *psObj);
 
-#endif
-
-
+#endif // __INCLUDED_SRC_STATS_H__

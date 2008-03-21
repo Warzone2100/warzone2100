@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * ScriptCB.h
- *
- * functions to deal with parameterised script callback triggers.
- *
+/** @file
+ *  functions to deal with parameterised script callback triggers.
  */
-#ifndef _scriptcb_h
-#define _scriptcb_h
+
+#ifndef __INCLUDED_SRC_SCRIPTCB_H__
+#define __INCLUDED_SRC_SCRIPTCB_H__
 
 //console callback stuff
 //---------------------------
@@ -150,6 +148,4 @@ extern BOOL scrCBDorderStop(void);
 extern BOOL scrCBDorderReachedLocation(void);
 extern BOOL scrCBProcessKeyPress(void);
 
-#endif
-
-
+#endif // __INCLUDED_SRC_SCRIPTCB_H__

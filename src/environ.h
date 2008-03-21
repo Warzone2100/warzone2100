@@ -17,10 +17,10 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef _environ_h
-#define _environ_h
 
-// -------------------------------------------------------------------------------
+#ifndef __INCLUDED_SRC_ENVIRON_H__
+#define __INCLUDED_SRC_ENVIRON_H__
+
 extern BOOL environInit					( void );
 extern unsigned int environGetValue		(unsigned int x, unsigned int y);
 extern UDWORD	environGetData			( UDWORD x, UDWORD y );
@@ -28,5 +28,4 @@ extern void	environShutDown				( void );
 //this function is called whenever the map changes - load new level or return from an offWorld map
 extern void environReset(void);
 
-// -------------------------------------------------------------------------------
-#endif
+#endif // __INCLUDED_SRC_ENVIRON_H__

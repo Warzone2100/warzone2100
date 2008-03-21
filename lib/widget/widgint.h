@@ -17,18 +17,18 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * WidgInt.h
- *
- * Internal widget library definitions
+/** @file 
+ *  Internal widget library definitions
  */
-#ifndef _widgint_h
-#define _widgint_h
+
+#ifndef __INCLUDED_LIB_WIDGET_WIDGINT_H__
+#define __INCLUDED_LIB_WIDGET_WIDGINT_H__
 
 #include "lib/framework/input.h"
+#include "widgbase.h"
 
 /* Set the id number for widgRunScreen to return */
-extern void widgSetReturn(WIDGET *psWidget);
+extern void widgSetReturn(W_SCREEN* psScreen, WIDGET *psWidget);
 
 /* Find a widget in a screen from its ID number */
 extern WIDGET *widgGetFromID(W_SCREEN *psScreen, UDWORD id);
@@ -42,14 +42,10 @@ extern void widgHiLite(WIDGET *psWidget, W_CONTEXT *psContext);
 /* Call the correct function for mouse moving off */
 extern void widgHiLiteLost(WIDGET *psWidget, W_CONTEXT *psContext);
 
-/* Call the correct function for loss of focus */
-extern void widgFocusLost(WIDGET *psWidget);
-
 /* Set the keyboard focus for the screen */
 extern void screenSetFocus(W_SCREEN *psScreen, WIDGET *psWidget);
 
 /* Clear the keyboard focus */
 extern void screenClearFocus(W_SCREEN *psScreen);
 
-#endif
-
+#endif // __INCLUDED_LIB_WIDGET_WIDGINT_H__

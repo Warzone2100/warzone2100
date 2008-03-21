@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * CmdDroid.h
- *
- * Typedef's for command droids
- *
+/** @file
+ *  Typedef's for command droids
  */
-#ifndef _cmddroid_h
-#define _cmddroid_h
+
+#ifndef __INCLUDED_SRC_CMDDROID_H__
+#define __INCLUDED_SRC_CMDDROID_H__
 
 #include "cmddroiddef.h"
 #include "droiddef.h"
@@ -74,6 +72,4 @@ extern void cmdDroidMultiExpBoost(BOOL bDoit);
 // check whether commander experience should be increased
 extern BOOL cmdGetDroidMultiExpBoost(void);
 
-#endif
-
-
+#endif // __INCLUDED_SRC_CMDDROID_H__

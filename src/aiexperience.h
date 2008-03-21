@@ -17,7 +17,10 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-//aiexperience.h
+
+#ifndef __INCLUDED_SRC_AIEXPERIENCE_H__
+#define __INCLUDED_SRC_AIEXPERIENCE_H__
+
 #define	SAVE_FORMAT_VERSION			2
 
 #define MAX_OIL_ENTRIES				600		//(Max number of derricks or oil resources) / 2
@@ -73,3 +76,5 @@ extern BOOL canRecallOilAt(SDWORD nPlayer, SDWORD x, SDWORD y);
 #define EXPERIENCE_LOAD_OK			0			//no problemens encountered
 #define EXPERIENCE_LOAD_ERROR		1			//error while loading experience
 #define EXPERIENCE_LOAD_NOSAVE		(-1)		//no experience exists
+
+#endif // __INCLUDED_SRC_AIEXPERIENCE_H__

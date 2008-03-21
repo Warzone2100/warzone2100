@@ -17,12 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Internal definitions for the level system
- *
+/** @file
+ *  Internal definitions for the level system
  */
-#ifndef _levelint_h
-#define _levelint_h
+
+#ifndef __INCLUDED_SRC_LEVELINT_H__
+#define __INCLUDED_SRC_LEVELINT_H__
 
 // return values from the lexer
 enum _token_type
@@ -62,5 +62,4 @@ extern void levSetInputBuffer(char *pBuffer, UDWORD size);
 
 extern void levGetErrorData(int *pLine, char **ppText);
 
-#endif
-
+#endif // __INCLUDED_SRC_LEVELINT_H__

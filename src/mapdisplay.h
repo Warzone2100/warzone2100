@@ -17,12 +17,11 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef _mapdisplay_h
-#define _mapdisplay_h
+
+#ifndef __INCLUDED_SRC_MAPDISPLAY_H__
+#define __INCLUDED_SRC_MAPDISPLAY_H__
 
 #include "lib/ivis_common/pietypes.h"
-
-/* MapDisplay.h */
 
 #define BUFFER_GRIDX	22
 #define BUFFER_GRIDY	22
@@ -45,4 +44,4 @@ extern void renderIMDToBuffer(iSurface *pSurface, iIMDShape *pIMD,
 extern void renderResearchToBuffer(RESEARCH *psResearch,
                             UDWORD OriginX, UDWORD OriginY);
 
-#endif // _mapdisplay_h
+#endif // __INCLUDED_SRC_MAPDISPLAY_H__

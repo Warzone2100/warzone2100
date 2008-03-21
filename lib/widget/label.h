@@ -17,13 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Label.h
- *
- * Definitions for the label widget.
+/** @file
+ *  Definitions for the label widget.
  */
-#ifndef _label_h
-#define _label_h
+
+#ifndef __INCLUDED_LIB_WIDGET_LABEL_H__
+#define __INCLUDED_LIB_WIDGET_LABEL_H__
 
 // label states.
 #define WLABEL_HILITE	0x0004		// label is hilited
@@ -54,5 +53,4 @@ extern void labelHiLite(W_LABEL *psWidget, W_CONTEXT *psContext);
 /* Respond to the mouse moving off a label */
 extern void labelHiLiteLost(W_LABEL *psWidget);
 
-#endif
-
+#endif // __INCLUDED_LIB_WIDGET_LABEL_H__

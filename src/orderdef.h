@@ -17,13 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-//
-// orderdef.h
-//
-// order releated structures.
+/** @file
+ *  order releated structures.
+ */
 
-#ifndef _orderdef_h
-#define _orderdef_h
+#ifndef __INCLUDED_SRC_ORDERDEF_H__
+#define __INCLUDED_SRC_ORDERDEF_H__
 
 // data for barbarians retreating
 typedef struct _run_data
@@ -47,4 +46,4 @@ typedef struct _droid_order_data
 extern RUN_DATA asRunData[MAX_PLAYERS]; // retreat positions for the players
 extern void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder);
 
-#endif
+#endif // __INCLUDED_SRC_ORDERDEF_H__

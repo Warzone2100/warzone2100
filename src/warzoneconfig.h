@@ -17,17 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/***************************************************************************/
-/*
- * warzoneConfig.h
- *
- * warzone Global configuration functions.
- *
+/** @file
+ *  Warzone Global configuration functions.
  */
-/***************************************************************************/
 
-#ifndef _warzoneConfig_h
-#define _warzoneConfig_h
+#ifndef __INCLUDED_SRC_WARZONECONFIG_H__
+#define __INCLUDED_SRC_WARZONECONFIG_H__
 
 #include "lib/framework/frame.h"
 
@@ -82,4 +77,4 @@ void war_setSoundEnabled( BOOL soundEnabled );
  */
 BOOL war_getSoundEnabled( void );
 
-#endif // _warzoneConfig_h
+#endif // __INCLUDED_SRC_WARZONECONFIG_H__

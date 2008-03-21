@@ -17,13 +17,14 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * EditBox.h
- *
- * Definitions for the edit box functions.
+/** @file
+ *  Definitions for the edit box functions.
  */
-#ifndef _editbox_h
-#define _editbox_h
+
+#ifndef __INCLUDED_LIB_WIDGET_EDITBOX_H__
+#define __INCLUDED_LIB_WIDGET_EDITBOX_H__
+
+#include "widgbase.h"
 
 /* Edit Box states */
 #define WEDBS_FIXED		0x0001		// No editing is going on
@@ -65,7 +66,7 @@ extern void editBoxInitialise(W_EDITBOX *psWidget);
 extern void editBoxSetString(W_EDITBOX *psWidget, const char *pText);
 
 /* Respond to loss of focus */
-extern void editBoxFocusLost(W_EDITBOX *psWidget);
+extern void editBoxFocusLost(W_SCREEN* psScreen, W_EDITBOX *psWidget);
 
 /* Run an edit box widget */
 extern void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext);
@@ -88,4 +89,4 @@ extern void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 /* set state of edit box */
 extern void editBoxSetState(W_EDITBOX *psEditBox, UDWORD state);
 
-#endif
+#endif // __INCLUDED_LIB_WIDGET_EDITBOX_H__

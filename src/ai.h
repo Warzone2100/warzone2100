@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * AI.h
- *
- * Definitions for the AI system structures
- *
+/** @file
+ *  Definitions for the AI system structures
  */
-#ifndef _ai_h
-#define _ai_h
+
+#ifndef __INCLUDED_SRC_AI_H__
+#define __INCLUDED_SRC_AI_H__
 
 #include "objectdef.h"
 #include "action.h" //DROID_OACTION_INFO
@@ -106,10 +104,4 @@ extern BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget);
 can fire on the propulsion type of the target*/
 extern BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot);
 
-#endif
-
-
-
-
-
-
+#endif // __INCLUDED_SRC_AI_H__

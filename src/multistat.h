@@ -17,14 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- *  multistat.h
- *
- *   Alex Lee
- *
- * Pumpkin Studios, Eidos PLC, Jan98.
- * Definitions for multi player statistics and scores for league tables.
- * Also Definitions for saved Arena Forces to enable teams to be saved to disk
+/** @file
+ *  Definitions for multi player statistics and scores for league tables.
+ *  Also Definitions for saved Arena Forces to enable teams to be saved to disk
  */
 
 #ifndef __INCLUDED_SRC_MULTISTATS_H__

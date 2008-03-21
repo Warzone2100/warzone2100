@@ -17,12 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Multijoin.h
- *
- * Alex Lee, pumpkin studios,
- * multijoin caters for all the player comings and goings of each player
+/** @file
+ *  multijoin caters for all the player comings and goings of each player
  */
+
+#ifndef __INCLUDED_SRC_MULTIJOIN_H__
+#define __INCLUDED_SRC_MULTIJOIN_H__
 
 #include "lib/netplay/netplay.h"
 
@@ -41,3 +41,5 @@ typedef struct {
 }DROIDSTORE, *LPDROIDSTORE;
 
 extern DROIDSTORE *tempDroidList;
+
+#endif // __INCLUDED_SRC_MULTIJOIN_H__

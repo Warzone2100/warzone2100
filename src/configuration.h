@@ -17,12 +17,16 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * config.h
- * load and save favourites to the registry.
+/** @file
+ *  load and save favourites to the config file
  */
+
+#ifndef __INCLUDED_SRC_CONFIGURATION_H__
+#define __INCLUDED_SRC_CONFIGURATION_H__
 
 extern BOOL loadConfig(void);
 extern BOOL loadRenderMode(void);
 extern BOOL saveConfig(void);
 extern void closeConfig( void );
+
+#endif // __INCLUDED_SRC_CONFIGURATION_H__

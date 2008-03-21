@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Move.h
- *
- * Interface for the unit movement system
- *
+/** @file
+ *  Interface for the unit movement system
  */
-#ifndef _move_h
-#define _move_h
+
+#ifndef __INCLUDED_SRC_MOVE_H__
+#define __INCLUDED_SRC_MOVE_H__
 
 #include "objectdef.h"
 
@@ -102,5 +100,4 @@ extern BOOL moveCheckDroidMovingAndVisible( void *psObj );
 // set a vtol to be hovering in the air
 void moveMakeVtolHover( DROID *psDroid );
 
-#endif
-
+#endif // __INCLUDED_SRC_MOVE_H__

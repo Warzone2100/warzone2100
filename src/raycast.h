@@ -17,13 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * RayCast.h
- *
- * Raycaster functions
+/** @file
+ *  Raycaster functions
  */
-#ifndef _raycast_h
-#define _raycast_h
+
+#ifndef __INCLUDED_SRC_RAYCAST_H__
+#define __INCLUDED_SRC_RAYCAST_H__
 
 #define NUM_RAYS		360
 
@@ -64,6 +63,4 @@ extern void	getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, UDWORD direction, SDWOR
 extern void	getPitchToHighestPoint( UDWORD x, UDWORD y, UDWORD direction, 
 								   UDWORD thresholdDistance, SDWORD *pitch );
 
-
-#endif
-
+#endif // __INCLUDED_SRC_RAYCAST_H__

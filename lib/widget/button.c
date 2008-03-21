@@ -17,10 +17,8 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Button.c
- *
- * Functions for the button widget
+/** @file
+ *  Functions for the button widget
  */
 
 #include "lib/framework/frame.h"
@@ -250,7 +248,7 @@ void buttonClicked(W_BUTTON *psWidget, UDWORD key)
 }
 
 /* Respond to a mouse button up */
-void buttonReleased(W_BUTTON *psWidget, UDWORD key)
+void buttonReleased(W_SCREEN* psScreen, W_BUTTON* psWidget, UDWORD key)
 {
 	if (psWidget->state & WBUTS_DOWN)
 	{
@@ -258,7 +256,7 @@ void buttonReleased(W_BUTTON *psWidget, UDWORD key)
 		if ((!(psWidget->style & WBUT_NOPRIMARY) && key == WKEY_PRIMARY) ||
 			((psWidget->style & WBUT_SECONDARY) && key == WKEY_SECONDARY))
 		{
-			widgSetReturn((WIDGET *)psWidget);
+			widgSetReturn(psScreen, (WIDGET *)psWidget);
 			psWidget->state &= ~WBUTS_DOWN;
 		}
 	}

@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Function.h
- *
- * Definitions for the Structure Functions.
- *
+/** @file
+ *  Definitions for the Structure Functions.
  */
-#ifndef _function_h
-#define _function_h
+
+#ifndef __INCLUDED_SRC_FUNCTION_H__
+#define __INCLUDED_SRC_FUNCTION_H__
 
 #include "objectdef.h"
 
@@ -66,5 +64,4 @@ extern void upgradeTransporterDroids(DROID *psTransporter,
 
 extern BOOL FunctionShutDown(void);
 
-#endif //_function_h
-
+#endif // __INCLUDED_SRC_FUNCTION_H__

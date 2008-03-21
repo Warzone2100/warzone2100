@@ -17,13 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Message.h
- *
- * Functions for the messages shown in the Intelligence Map View
+/** @file
+ *  Functions for the messages shown in the Intelligence Map View
  */
-#ifndef _message_h
-#define _message_h
+
+#ifndef __INCLUDED_SRC_MESSAGE_H__
+#define __INCLUDED_SRC_MESSAGE_H__
 
 #include "structure.h"
 #include "messagedef.h"
@@ -82,4 +81,4 @@ extern void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp);
 /** Add proximity messages for all untapped VISIBLE oil resources. */
 extern void addOilResourceProximities(void);
 
-#endif // message_h
+#endif // __INCLUDED_SRC_MESSAGE_H__

@@ -17,11 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- *multiint.h
- * Interface defines/externs for warzone frontend.
- * Alex Lee, pumpkin Studios.
+/** @file
+ *  Interface defines/externs for warzone frontend.
  */
+
+#ifndef __INCLUDED_SRC_MULTIINT_H__
+#define __INCLUDED_SRC_MULTIINT_H__
 
 extern	void	runConnectionScreen		(void);
 extern	BOOL	startConnectionScreen	(void);
@@ -284,3 +285,5 @@ void loadMapPreview(void);
 
 #define MULTIOP_BUTW			35
 #define MULTIOP_BUTH			24
+
+#endif // __INCLUDED_SRC_MULTIINT_H__

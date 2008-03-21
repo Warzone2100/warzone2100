@@ -17,13 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * WidgBase.h
- *
- * Definitions for the basic widget types.
+/** @file
+ *  Definitions for the basic widget types.
  */
-#ifndef _widgbase_h
-#define _widgbase_h
+
+#ifndef __INCLUDED_LIB_WIDGET_WIDGBASE_H__
+#define __INCLUDED_LIB_WIDGET_WIDGBASE_H__
 
 #include "lib/framework/frame.h"
 
@@ -87,9 +86,10 @@ typedef struct _widget
 /* The screen structure which stores all info for a widget screen */
 typedef struct _w_screen
 {
-	WIDGET		*psForm;			// The root form of the screen
-	WIDGET		*psFocus;			// The widget that has keyboard focus
-	int			TipFontID;			// ID of the IVIS font to use for tool tips.
+	WIDGET*          psForm;        ///< The root form of the screen
+	WIDGET*          psFocus;       ///< The widget that has keyboard focus
+	int              TipFontID;     ///< ID of the IVIS font to use for tool tips.
+	WIDGET*          psRetWidget;   ///< The widget to be returned by widgRunScreen
 } W_SCREEN;
 
 /* Context information to pass into the widget functions */
@@ -101,4 +101,4 @@ typedef struct _w_context
 	SDWORD		mx,my;				// mouse position on the form
 } W_CONTEXT;
 
-#endif
+#endif // __INCLUDED_LIB_WIDGET_WIDGBASE_H__

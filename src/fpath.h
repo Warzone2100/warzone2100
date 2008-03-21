@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Fpath.h
- *
- * Interface to the routing functions
- *
+/** @file
+ *  Interface to the routing functions
  */
-#ifndef _fpath_h
-#define _fpath_h
+
+#ifndef __INCLUDED_SRC_FPATH_H__
+#define __INCLUDED_SRC_FPATH_H__
 
 #define FPATH_LOOP_LIMIT	600
 
@@ -71,4 +69,4 @@ extern void fpathSetCurrentObject( BASE_OBJECT *psDroid );
  */
 extern void fpathSetDirectRoute(BASE_OBJECT *psObj, SDWORD targetX, SDWORD targetY);
 
-#endif
+#endif // __INCLUDED_SRC_FPATH_H__

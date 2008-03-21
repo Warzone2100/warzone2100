@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * ObjMem.h
- *
- * Routines for managing object's memory
- *
+/** @file
+ *  Routines for managing object's memory
  */
-#ifndef _objmem_h
-#define _objmem_h
+
+#ifndef __INCLUDED_SRC_OBJMEM_H__
+#define __INCLUDED_SRC_OBJMEM_H__
 
 #include "objectdef.h"
 
@@ -116,4 +114,5 @@ void objCount(int *droids, int *structures, int *features);
 #ifdef DEBUG
 extern void checkFactoryFlags(void);
 #endif
-#endif
+
+#endif // __INCLUDED_SRC_OBJMEM_H__

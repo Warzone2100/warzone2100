@@ -17,8 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef _design_h
-#define _design_h
+
+#ifndef __INCLUDED_SRC_DESIGN_H__
+#define __INCLUDED_SRC_DESIGN_H__
 
 #include "lib/widget/widgbase.h"
 
@@ -152,4 +153,4 @@ extern void resetDesignPauseState(void);
 
 extern void reverseTemplateList(DROID_TEMPLATE **ppsList);
 
-#endif
+#endif // __INCLUDED_SRC_DESIGN_H__

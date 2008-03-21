@@ -17,11 +17,13 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * keyedit.h
- */
+
+#ifndef __INCLUDED_SRC_KEYEDIT_H__
+#define __INCLUDED_SRC_KEYEDIT_H__
 
 extern BOOL runKeyMapEditor		(void);
 extern BOOL startKeyMapEditor	(BOOL first);
 extern BOOL saveKeyMap			(void);
 extern BOOL loadKeyMap			(void);
+
+#endif // __INCLUDED_SRC_KEYEDIT_H__

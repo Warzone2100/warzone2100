@@ -17,13 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Bar.h
- *
- * Definitions for Bar Graph functions.
+/** @file
+ *  Definitions for Bar Graph functions.
  */
-#ifndef _bar_h
-#define _bar_h
+
+#ifndef __INCLUDED_LIB_WIDGET_BAR_H__
+#define __INCLUDED_LIB_WIDGET_BAR_H__
 
 typedef struct _w_bargraph
 {
@@ -75,5 +74,4 @@ extern void barGraphDisplayDouble(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffs
 /* The trough bar graph display function */
 extern void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
-#endif
-
+#endif // __INCLUDED_LIB_WIDGET_BAR_H__

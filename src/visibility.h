@@ -17,8 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef _visibility_h
-#define _visibility_h
+
+#ifndef __INCLUDED_SRC_VISIBILITY__
+#define __INCLUDED_SRC_VISIBILITY__
 
 /* Terrain types that could obscure LOS */
 #define LOS_MASK	0 /*TER_STONE*/
@@ -103,4 +104,4 @@ static inline BOOL visObjInRange(BASE_OBJECT *psObj1, BASE_OBJECT *psObj2, SDWOR
 }
 
 
-#endif
+#endif // __INCLUDED_SRC_VISIBILITY__

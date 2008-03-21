@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * SeqDisp.h
- *
- * Functions for the display of the Escape Sequences
+/** @file
+ *  Functions for the display of the Escape Sequences
  */
 
-#ifndef _SeqDisp_h
-#define _SeqDisp_h
+#ifndef __INCLUDED_SRC_SEQDISP_H__
+#define __INCLUDED_SRC_SEQDISP_H__
 
 			// ffs js (bastard)
 #include "lib/ivis_common/piemode.h"
@@ -78,14 +76,7 @@ extern BOOL seq_AnySeqLeft(void);
 extern void seq_SetSubtitles(BOOL bNewState);
 extern BOOL seq_GetSubtitles(void);
 
-
-
-
 /*returns the next sequence in the list to play*/
 extern void seq_StartNextFullScreenVideo(void);
 
-
-
-#endif	//SeqDisp.h
-
-
+#endif	// __INCLUDED_SRC_SEQDISP_H__

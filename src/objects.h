@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Objects.h
- *
- * A header file that groups together all the object header files
- *
+/** @file
+ *  A header file that groups together all the object header files
  */
-#ifndef _objects_h
-#define _objects_h
+
+#ifndef __INCLUDED_SRC_OBJECTS_H__
+#define __INCLUDED_SRC_OBJECTS_H__
 
 #include "objectdef.h"
 #include "droid.h"
@@ -47,6 +45,4 @@ extern BOOL objShutdown(void);
 the last and the last entry becomes the first!*/
 extern void reverseObjectList(BASE_OBJECT **ppsList);
 
-#endif
-
-
+#endif // __INCLUDED_SRC_OBJECTS_H__

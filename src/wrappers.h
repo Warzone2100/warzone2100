@@ -17,10 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/* Wrappers.h */
 
-#ifndef _wrappers_h
-#define _wrappers_h
+#ifndef __INCLUDED_SRC_WRAPPERS_H__
+#define __INCLUDED_SRC_WRAPPERS_H__
 
 typedef enum {
 	TITLECODE_CONTINUE,
@@ -61,5 +60,4 @@ extern UBYTE        getScriptWinLoseVideo   ( void );
 //#define LOADBARCALLBACK() loadingScreenCallback()
 #define LOADBARCALLBACK()
 
-
-#endif
+#endif // __INCLUDED_SRC_WRAPPERS_H__

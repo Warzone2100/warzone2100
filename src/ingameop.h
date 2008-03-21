@@ -17,11 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * inGameOp.h
- * In game options screen.n
- * pumpkin Studios. 98.
+/** @file
+ *  In game options screen
  */
+
+#ifndef __INCLUDED_SRC_INGAMEOP_H__
+#define __INCLUDED_SRC_INGAMEOP_H__
 
 // functions	
 extern BOOL intAddInGameOptions			(void);
@@ -115,3 +116,5 @@ extern BOOL	InGameOpUp;
 #define	INTINGAMEOP_6_Y		120
 
 #define OPALIGN		(WBUT_PLAIN | WBUT_TXTCENTRE)
+
+#endif // __INCLUDED_SRC_INGAMEOP_H__

@@ -17,9 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef _warcam_h
-/* Prevent multiple inclusion */
-#define _warcam_h
+
+#ifndef __INCLUDED_SRC_WARCAM_H__
+#define __INCLUDED_SRC_WARCAM_H__
 
 #include "lib/ivis_common/pietypes.h"
 
@@ -87,4 +87,4 @@ extern SDWORD	getPresAngle( void );
 extern UDWORD	getNumDroidsSelected( void );
 extern void	camAllignWithTarget(BASE_OBJECT *psTarget);
 
-#endif
+#endif // __INCLUDED_SRC_WARCAM_H__

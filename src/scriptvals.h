@@ -17,13 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * ScriptVals.h
- *
- * Common functions for the scriptvals loader
+/** @file
+ *  Common functions for the scriptvals loader
  */
-#ifndef _scriptvals_h
-#define _scriptvals_h
+
+#ifndef __INCLUDED_SRC_SCRIPTVALS_H__
+#define __INCLUDED_SRC_SCRIPTVALS_H__
 
 #include "basedef.h"
 #include <physfs.h>
@@ -120,5 +119,5 @@ extern BOOL scrvLoad(PHYSFS_file* fileHandle);
 
 // Find a string from it's (string)id
 extern BOOL scrvGetString(const char *pStringID, char **ppString);
-#endif
 
+#endif // __INCLUDED_SRC_SCRIPTVALS_H__

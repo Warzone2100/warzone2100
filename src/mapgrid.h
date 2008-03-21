@@ -17,16 +17,13 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * MapGrid.h
- *
- * Definitions for storing objects in a grid over the map.
- * The objects are stored in every grid over which they might
- * have some influence.
- *
+/** @file
+ *  Definitions for storing objects in a grid over the map.
+ *  The objects are stored in every grid over which they might have some influence.
  */
-#ifndef _mapgrid_h
-#define _mapgrid_h
+
+#ifndef __INCLUDED_SRC_MAPGRID_H__
+#define __INCLUDED_SRC_MAPGRID_H__
 
 /** Number of objects in each chunk of the grid array. */
 #define MAX_GRID_ARRAY_CHUNK 32
@@ -81,4 +78,4 @@ extern void gridStartIterate(SDWORD x, SDWORD y);
 // should only be called after gridStartIterate
 extern BASE_OBJECT *gridIterate(void);
 
-#endif
+#endif // __INCLUDED_SRC_MAPGRID_H__

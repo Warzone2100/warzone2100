@@ -17,18 +17,15 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Deliverance.h
- *
- * Global defines for the game
- *
+/** @file
+ *  Global defines for the game
  */
-#ifndef _deliverance_h
-#define _deliverance_h
+
+#ifndef __INCLUDED_SRC_DELIVERANCE_H__
+#define __INCLUDED_SRC_DELIVERANCE_H__
 
 #define MAX_NAME_SIZE		60
 #define MAX_STR_SIZE		20
 #define	MAX_STR_LENGTH		256
 
-#endif
-
+#endif // __INCLUDED_SRC_DELIVERANCE_H__

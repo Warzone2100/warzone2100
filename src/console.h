@@ -17,8 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef _console_h
-#define _console_h
+
+#ifndef __INCLUDED_SRC_CONSOLE_H__
+#define __INCLUDED_SRC_CONSOLE_H__
 
 #define MAX_CONSOLE_MESSAGES			(64)
 #define MAX_CONSOLE_STRING_LENGTH		(255)
@@ -123,9 +124,4 @@ extern void console(const char *pFormat, ...); /// Print allways to the ingame c
 #define DBCONPRINTF(s,x)
 #endif
 
-#endif
-
-
-
-
-
+#endif // __INCLUDED_SRC_CONSOLE_H__

@@ -18,6 +18,11 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+#ifndef __INCLUDED_SRC_MODDING_H__
+#define __INCLUDED_SRC_MODDING_H__
+
 void addSubdirs( const char * basedir, const char * subdir, const BOOL appendToPath, char * checkList[] );
 void removeSubdirs( const char * basedir, const char * subdir, char * checkList[] );
 void printSearchPath( void );
+
+#endif // __INCLUDED_SRC_MODDING_H__

@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * MultiMenu.h
- *
- * Definition for in game,multiplayer, interface.
+/** @file
+ *  Definition for in game,multiplayer, interface.
  */
-//
-#ifndef __INCLUDED_MULTIMENU__
-#define __INCLUDED_MULTIMENU__
+
+#ifndef __INCLUDED_SRC_MULTIMENU__
+#define __INCLUDED_SRC_MULTIMENU__
 
 // requester
 extern void		addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD id,UBYTE mapCam, UBYTE numPlayers);
@@ -59,4 +57,4 @@ extern BOOL		DebugMenuUp;
 
 extern char		debugMenuEntry[DEBUGMENU_MAX_ENTRIES][MAX_STR_LENGTH];
 
-#endif
+#endif // __INCLUDED_SRC_MULTIMENU__

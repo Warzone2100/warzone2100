@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Form.h
- *
- * Definitions for the form functions.
- *
+/** @file
+ *  Definitions for the form functions.
  */
-#ifndef _form_h
-#define _form_h
+
+#ifndef __INCLUDED_LIB_WIDGET_FORM_H__
+#define __INCLUDED_LIB_WIDGET_FORM_H__
 
 /* The basic form data */
 #define FORM_BASE \
@@ -187,5 +185,4 @@ extern void formDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIG
 extern void formDisplayClickable(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 extern void formDisplayTabbed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
-#endif
-
+#endif // __INCLUDED_LIB_WIDGET_FORM_H__

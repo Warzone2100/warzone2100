@@ -17,17 +17,17 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * game.h
+/** @file
  *
- * load and save game routines.
- * Very likely to ALL change! All the headers are separately defined at the
- * moment - they probably don't need to be - if no difference make into one.
- * Also the struct defintions throughout the game could be re-ordered to contain
- * the variables required for saving so that don't need to create a load more here!
+ *  load and save game routines.
+ *  Very likely to ALL change! All the headers are separately defined at the
+ *  moment - they probably don't need to be - if no difference make into one.
+ *  Also the struct defintions throughout the game could be re-ordered to contain
+ *  the variables required for saving so that don't need to create a load more here!
  */
-#ifndef _game_h
-#define _game_h
+
+#ifndef __INCLUDED_SRC_GAME_H__
+#define __INCLUDED_SRC_GAME_H__
 
 /***************************************************************************/
 /*
@@ -154,4 +154,4 @@ UDWORD RemapPlayerNumber(UDWORD OldNumber);
 
 BOOL plotStructurePreview16(char *backDropSprite, UBYTE scale, UDWORD offX, UDWORD offY);
 
-#endif
+#endif // __INCLUDED_SRC_GAME_H__
