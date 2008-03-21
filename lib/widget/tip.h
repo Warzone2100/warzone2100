@@ -17,15 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Tip.h
- *
- * Interface to the tool tip display module
- *
+/** @file
+ *  Interface to the tool tip display module
  */
-#ifndef _tip_h
-#define _tip_h
 
+#ifndef __INCLUDED_LIB_WIDGET_TIP_H__
+#define __INCLUDED_LIB_WIDGET_TIP_H__
 
 /* Initialise the tool tip module */
 extern void tipInitialise(void);
@@ -52,5 +49,4 @@ extern void tipStop(WIDGET *psSource);
 /* Update and possibly display the tip */
 extern void tipDisplay(void);
 
-#endif
-
+#endif // __INCLUDED_LIB_WIDGET_TIP_H__

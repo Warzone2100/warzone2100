@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * WidgInt.h
- *
- * Internal widget library definitions
+/** @file 
+ *  Internal widget library definitions
  */
 
-#ifndef _widgint_h
-#define _widgint_h
+#ifndef __INCLUDED_LIB_WIDGET_WIDGINT_H__
+#define __INCLUDED_LIB_WIDGET_WIDGINT_H__
 
 #include "lib/framework/input.h"
 #include "widgbase.h"
@@ -50,5 +48,4 @@ extern void screenSetFocus(W_SCREEN *psScreen, WIDGET *psWidget);
 /* Clear the keyboard focus */
 extern void screenClearFocus(W_SCREEN *psScreen);
 
-#endif
-
+#endif // __INCLUDED_LIB_WIDGET_WIDGINT_H__

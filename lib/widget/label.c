@@ -17,12 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Label.c
- *
- * Functions for the label widget.
+/** @file
+ *  Functions for the label widget.
  */
-
 
 #include "lib/framework/frame.h"
 #include "widget.h"

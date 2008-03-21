@@ -17,8 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-
-/* Handle clipboard text and data in arbitrary formats */
+/** @file
+ *  Handle clipboard text and data in arbitrary formats
+ */
 
 #include "lib/framework/frame.h"
 

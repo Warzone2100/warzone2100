@@ -17,13 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * EditBox.h
- *
- * Definitions for the edit box functions.
+/** @file
+ *  Definitions for the edit box functions.
  */
-#ifndef _editbox_h
-#define _editbox_h
+
+#ifndef __INCLUDED_LIB_WIDGET_EDITBOX_H__
+#define __INCLUDED_LIB_WIDGET_EDITBOX_H__
 
 #include "widgbase.h"
 
@@ -90,4 +89,4 @@ extern void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 /* set state of edit box */
 extern void editBoxSetState(W_EDITBOX *psEditBox, UDWORD state);
 
-#endif
+#endif // __INCLUDED_LIB_WIDGET_EDITBOX_H__

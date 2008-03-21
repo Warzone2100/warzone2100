@@ -17,13 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Widget.h
- *
- * Definitions for the Widget library
+/** @file
+ *  Definitions for the Widget library
  */
-#ifndef _widget_h
-#define _widget_h
+
+#ifndef __INCLUDED_LIB_WIDGET_WIDGET_H__
+#define __INCLUDED_LIB_WIDGET_WIDGET_H__
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_common/piepalette.h"
@@ -461,5 +460,4 @@ extern void sliderEnableDrag(BOOL Enable);
 extern void setWidgetsStatus( BOOL var );
 extern BOOL getWidgetsStatus( void );
 
-#endif
-
+#endif // __INCLUDED_LIB_WIDGET_WIDGET_H__

@@ -17,13 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * WidgBase.h
- *
- * Definitions for the basic widget types.
+/** @file
+ *  Definitions for the basic widget types.
  */
-#ifndef _widgbase_h
-#define _widgbase_h
+
+#ifndef __INCLUDED_LIB_WIDGET_WIDGBASE_H__
+#define __INCLUDED_LIB_WIDGET_WIDGBASE_H__
 
 #include "lib/framework/frame.h"
 
@@ -102,4 +101,4 @@ typedef struct _w_context
 	SDWORD		mx,my;				// mouse position on the form
 } W_CONTEXT;
 
-#endif
+#endif // __INCLUDED_LIB_WIDGET_WIDGBASE_H__

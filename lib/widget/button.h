@@ -17,13 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Button.h
- *
- * Definitions for edit box functions.
+/** @file
+ *  Definitions for edit box functions.
  */
-#ifndef _button_h
-#define _button_h
+
+#ifndef __INCLUDED_LIB_WIDGET_BUTTON_H__
+#define __INCLUDED_LIB_WIDGET_BUTTON_H__
 
 #include "widgbase.h"
 
@@ -90,5 +89,4 @@ extern void buttonClearFlash(W_BUTTON *psButton);
 /* The button display function */
 extern void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
-#endif
-
+#endif // __INCLUDED_LIB_WIDGET_BUTTON_H__

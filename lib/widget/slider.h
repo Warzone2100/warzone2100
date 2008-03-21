@@ -17,13 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Slider.h
- *
- * Slider bar interface definitions.
+/** @file
+ *  Slider bar interface definitions.
  */
-#ifndef _slider_h
-#define _slider_h
+
+#ifndef __INCLUDED_LIB_WIDGET_SLIDER_H__
+#define __INCLUDED_LIB_WIDGET_SLIDER_H__
 
 #include "widgbase.h"
 
@@ -71,6 +70,4 @@ extern void sliderHiLiteLost(W_SLIDER *psWidget);
 /* The slider display function */
 extern void sliderDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
-
-#endif
-
+#endif // __INCLUDED_LIB_WIDGET_SLIDER_H__
