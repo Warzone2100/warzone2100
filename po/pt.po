@@ -12215,4 +12215,3 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:2149
 msgid "Upgraded battlefield computer system"
 msgstr ""
-
