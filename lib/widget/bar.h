@@ -41,7 +41,7 @@ typedef struct _w_bargraph
 } W_BARGRAPH;
 
 /* Create a barGraph widget data structure */
-extern BOOL barGraphCreate(W_BARGRAPH **ppsWidget, W_BARINIT *psInit);
+extern W_BARGRAPH* barGraphCreate(const W_BARINIT* psInit);
 
 /* Free the memory used by a barGraph */
 extern void barGraphFree(W_BARGRAPH *psWidget);

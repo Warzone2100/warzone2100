@@ -40,7 +40,7 @@ typedef struct _w_label
 } W_LABEL;
 
 /* Create a button widget data structure */
-extern BOOL labelCreate(W_LABEL **ppsWidget, W_LABINIT *psInit);
+extern W_LABEL* labelCreate(const W_LABINIT* psInit);
 
 /* Free the memory used by a button */
 extern void labelFree(W_LABEL *psWidget);

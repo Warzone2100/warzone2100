@@ -55,64 +55,67 @@
 static void fitStringStart(char *pBuffer, UDWORD boxWidth, UWORD *pCount, UWORD *pCharWidth);
 
 /* Create an edit box widget data structure */
-BOOL editBoxCreate(W_EDITBOX **ppsWidget, W_EDBINIT *psInit)
+W_EDITBOX* editBoxCreate(const W_EDBINIT* psInit)
 {
+	W_EDITBOX* psWidget;
+
 	if (psInit->style & ~(WEDB_PLAIN | WIDG_HIDDEN | WEDB_DISABLED))
 	{
 		ASSERT( FALSE, "Unknown edit box style" );
-		return FALSE;
+		return NULL;
 	}
 
 	/* Allocate the required memory */
-	*ppsWidget = (W_EDITBOX *)malloc(sizeof(W_EDITBOX));
-	if (*ppsWidget == NULL)
+	psWidget = (W_EDITBOX *)malloc(sizeof(W_EDITBOX));
+	if (psWidget == NULL)
 	{
-		ASSERT( FALSE, "Out of memory" );
-		return FALSE;
+		debug(LOG_ERROR, "editBoxCreate: Out of memory");
+		abort();
+		return NULL;
 	}
 
 	/* Initialise the structure */
-	(*ppsWidget)->type = WIDG_EDITBOX;
-	(*ppsWidget)->id = psInit->id;
-	(*ppsWidget)->formID = psInit->formID;
-	(*ppsWidget)->style = psInit->style;
-	(*ppsWidget)->x = psInit->x;
-	(*ppsWidget)->y = psInit->y;
-	(*ppsWidget)->width = psInit->width;
-	(*ppsWidget)->height = psInit->height;
-	(*ppsWidget)->FontID = psInit->FontID;
+	psWidget->type = WIDG_EDITBOX;
+	psWidget->id = psInit->id;
+	psWidget->formID = psInit->formID;
+	psWidget->style = psInit->style;
+	psWidget->x = psInit->x;
+	psWidget->y = psInit->y;
+	psWidget->width = psInit->width;
+	psWidget->height = psInit->height;
+	psWidget->FontID = psInit->FontID;
 	if (psInit->pDisplay)
 	{
-		(*ppsWidget)->display = psInit->pDisplay;
+		psWidget->display = psInit->pDisplay;
 	}
 	else
 	{
-		(*ppsWidget)->display = editBoxDisplay;
+		psWidget->display = editBoxDisplay;
 	}
-	(*ppsWidget)->callback = psInit->pCallback;
-	(*ppsWidget)->pUserData = psInit->pUserData;
-	(*ppsWidget)->UserData = psInit->UserData;
-	(*ppsWidget)->pBoxDisplay = psInit->pBoxDisplay;
-	(*ppsWidget)->pFontDisplay = psInit->pFontDisplay;
+	psWidget->callback = psInit->pCallback;
+	psWidget->pUserData = psInit->pUserData;
+	psWidget->UserData = psInit->UserData;
+	psWidget->pBoxDisplay = psInit->pBoxDisplay;
+	psWidget->pFontDisplay = psInit->pFontDisplay;
 
-	(*ppsWidget)->AudioCallback = WidgGetAudioCallback();
-	(*ppsWidget)->HilightAudioID = WidgGetHilightAudioID();
-	(*ppsWidget)->ClickedAudioID = WidgGetClickedAudioID();
+	psWidget->AudioCallback = WidgGetAudioCallback();
+	psWidget->HilightAudioID = WidgGetHilightAudioID();
+	psWidget->ClickedAudioID = WidgGetClickedAudioID();
 
 	if (psInit->pText)
 	{
-		strlcpy((*ppsWidget)->aText, psInit->pText, sizeof((*ppsWidget)->aText));
+		strlcpy(psWidget->aText, psInit->pText, sizeof(psWidget->aText));
 	}
 	else
 	{
-		(*ppsWidget)->aText[0] = '\0';
+		psWidget->aText[0] = '\0';
 	}
 
-	editBoxInitialise(*ppsWidget);
+	editBoxInitialise(psWidget);
 
 	init_scrap();
 
-	return TRUE;
+	return psWidget;
 }
 
 

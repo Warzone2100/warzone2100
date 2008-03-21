@@ -648,9 +648,10 @@ BOOL intInitialise(void)
 
 	LOADBARCALLBACK();	//	loadingScreenCallback();
 
-	if (!widgCreateScreen(&psWScreen))
+	psWScreen = widgCreateScreen();
+	if (psWScreen == NULL)
 	{
-		debug( LOG_ERROR, "intInitialise: Couldn't create widget screen (Out of memory ?)" );
+		debug(LOG_ERROR, "intInitialise: Couldn't create widget screen");
 		abort();
 		return FALSE;
 	}

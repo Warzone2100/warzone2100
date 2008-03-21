@@ -53,7 +53,7 @@ typedef struct _w_button
 extern BOOL buttonStartUp(void);
 
 /* Create a button widget data structure */
-extern BOOL buttonCreate(W_BUTTON **ppsWidget, W_BUTINIT *psInit);
+extern W_BUTTON* buttonCreate(const W_BUTINIT* psInit);
 
 /* Free the memory used by a button */
 extern void buttonFree(W_BUTTON *psWidget);

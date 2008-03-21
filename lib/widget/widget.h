@@ -284,7 +284,7 @@ extern void widgReset(void);
 extern void widgShutDown(void);
 
 /* Create an empty widget screen */
-extern BOOL widgCreateScreen(W_SCREEN **ppsScreen);
+extern W_SCREEN* widgCreateScreen(void);
 
 /* Release a screen and all its associated data */
 extern void widgReleaseScreen(W_SCREEN *psScreen);
@@ -293,19 +293,19 @@ extern void widgReleaseScreen(W_SCREEN *psScreen);
 extern void widgSetTipFont(W_SCREEN *psScreen, int FontID);
 
 /* Add a form to the widget screen */
-extern BOOL widgAddForm(W_SCREEN *psScreen, W_FORMINIT *psInit);
+extern BOOL widgAddForm(W_SCREEN *psScreen, const W_FORMINIT* psInit);
 
 /* Add a label to the widget screen */
-extern BOOL widgAddLabel(W_SCREEN *psScreen, W_LABINIT *psInit);
+extern BOOL widgAddLabel(W_SCREEN *psScreen, const W_LABINIT* psInit);
 
 /* Add a button to a form */
-extern BOOL widgAddButton(W_SCREEN *psScreen, W_BUTINIT *psInit);
+extern BOOL widgAddButton(W_SCREEN *psScreen, const W_BUTINIT* psInit);
 
 /* Add an edit box to a form */
-extern BOOL widgAddEditBox(W_SCREEN *psScreen, W_EDBINIT *psInit);
+extern BOOL widgAddEditBox(W_SCREEN *psScreen, const W_EDBINIT* psInit);
 
 /* Add a bar graph to a form */
-extern BOOL widgAddBarGraph(W_SCREEN *psScreen, W_BARINIT *psInit);
+extern BOOL widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT* psInit);
 
 /* Add a slider to a form */
 extern BOOL widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT* psInit);

@@ -53,7 +53,7 @@ typedef struct _w_editbox
 } W_EDITBOX;
 
 /* Create an edit box widget data structure */
-extern BOOL editBoxCreate(W_EDITBOX **ppsWidget, W_EDBINIT *psInit);
+extern W_EDITBOX* editBoxCreate(const W_EDBINIT* psInit);
 
 /* Free the memory used by an edit box */
 extern void editBoxFree(W_EDITBOX *psWidget);

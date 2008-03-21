@@ -201,7 +201,7 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 
 	(void) PHYSFS_mkdir(sSearchPath); // just in case
 
-	widgCreateScreen(&psRequestScreen);			// init the screen.
+	psRequestScreen = widgCreateScreen(); // init the screen
 	widgSetTipFont(psRequestScreen,font_regular);
 
 	/* add a form to place the tabbed form on */

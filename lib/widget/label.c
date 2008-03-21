@@ -34,59 +34,62 @@
 #include "lib/ivis_common/rendmode.h"
 
 /* Create a button widget data structure */
-BOOL labelCreate(W_LABEL **ppsWidget, W_LABINIT *psInit)
+W_LABEL* labelCreate(const W_LABINIT* psInit)
 {
+	W_LABEL* psWidget;
+
 	/* Do some validation on the initialisation struct */
 	if (psInit->style & ~(WLAB_PLAIN | WLAB_ALIGNLEFT |
 						   WLAB_ALIGNRIGHT | WLAB_ALIGNCENTRE | WIDG_HIDDEN))
 	{
 		ASSERT( FALSE, "Unknown button style" );
-		return FALSE;
+		return NULL;
 	}
 
 	/* Allocate the required memory */
-	*ppsWidget = (W_LABEL *)malloc(sizeof(W_LABEL));
-	if (*ppsWidget == NULL)
+	psWidget = (W_LABEL *)malloc(sizeof(W_LABEL));
+	if (psWidget == NULL)
 	{
-		ASSERT( FALSE, "Out of memory" );
-		return FALSE;
+		debug(LOG_ERROR, "labelCreate: Out of memory");
+		abort();
+		return NULL;
 	}
 	/* Allocate the memory for the tip and copy it if necessary */
-	(*ppsWidget)->pTip = psInit->pTip;
+	psWidget->pTip = psInit->pTip;
 
 	/* Initialise the structure */
-	(*ppsWidget)->type = WIDG_LABEL;
-	(*ppsWidget)->id = psInit->id;
-	(*ppsWidget)->formID = psInit->formID;
-	(*ppsWidget)->style = psInit->style;
-	(*ppsWidget)->x = psInit->x;
-	(*ppsWidget)->y = psInit->y;
-	(*ppsWidget)->width = psInit->width;
-	(*ppsWidget)->height = psInit->height;
+	psWidget->type = WIDG_LABEL;
+	psWidget->id = psInit->id;
+	psWidget->formID = psInit->formID;
+	psWidget->style = psInit->style;
+	psWidget->x = psInit->x;
+	psWidget->y = psInit->y;
+	psWidget->width = psInit->width;
+	psWidget->height = psInit->height;
 
 	if (psInit->pDisplay)
 	{
-		(*ppsWidget)->display = psInit->pDisplay;
+		psWidget->display = psInit->pDisplay;
 	}
 	else
 	{
-		(*ppsWidget)->display = labelDisplay;
+		psWidget->display = labelDisplay;
 	}
-	(*ppsWidget)->callback = psInit->pCallback;
-	(*ppsWidget)->pUserData = psInit->pUserData;
-	(*ppsWidget)->UserData = psInit->UserData;
-	(*ppsWidget)->FontID = psInit->FontID;
+	psWidget->callback = psInit->pCallback;
+	psWidget->pUserData = psInit->pUserData;
+	psWidget->UserData = psInit->UserData;
+	psWidget->FontID = psInit->FontID;
 
 	if (psInit->pText)
 	{
-		strlcpy((*ppsWidget)->aText, psInit->pText, sizeof((*ppsWidget)->aText));
+		strlcpy(psWidget->aText, psInit->pText, sizeof(psWidget->aText));
 	}
 	else
 	{
-		*(*ppsWidget)->aText = 0;
+		psWidget->aText[0] = 0;
 	}
 
-	return TRUE;
+	return psWidget;
 }
 
 
