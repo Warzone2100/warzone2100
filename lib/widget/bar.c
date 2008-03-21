@@ -17,12 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * bar.c
- *
- * Functions for the bar graph widget
+/** @file
+ *  Functions for the bar graph widget
  */
-
 
 #include "widget.h"
 #include "widgint.h"

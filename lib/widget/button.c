@@ -17,10 +17,8 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Button.c
- *
- * Functions for the button widget
+/** @file
+ *  Functions for the button widget
  */
 
 #include "lib/framework/frame.h"
