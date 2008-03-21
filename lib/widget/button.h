@@ -25,6 +25,8 @@
 #ifndef _button_h
 #define _button_h
 
+#include "widgbase.h"
+
 /* Button states */
 #define WBUTS_NORMAL	0x0000
 #define WBUTS_DOWN		0x0001		// Button is down
@@ -68,7 +70,7 @@ extern void buttonRun(W_BUTTON *psWidget);
 extern void buttonClicked(W_BUTTON *psWidget, UDWORD key);
 
 /* Respond to a mouse button up */
-extern void buttonReleased(W_BUTTON *psWidget, UDWORD key);
+extern void buttonReleased(W_SCREEN* psScreen, W_BUTTON *psWidget, UDWORD key);
 
 /* Respond to a mouse moving over a button */
 extern void buttonHiLite(W_BUTTON *psWidget, W_CONTEXT *psContext);

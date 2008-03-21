@@ -37,9 +37,6 @@
 #include "slider.h"
 #include "tip.h"
 
-/* the widget to be returned by widgRunScreen */
-static WIDGET	*psRetWidget;
-
 static	BOOL	bWidgetsActive = TRUE;
 
 /* The widget the mouse is over this update */
@@ -910,14 +907,11 @@ void widgSetUserData2(W_SCREEN *psScreen, UDWORD id,UDWORD UserData)
 /* Return the user data for the returned widget */
 void *widgGetLastUserData(W_SCREEN *psScreen)
 {
-	/* Don't actually need the screen parameter at the moment - but it might be
-	   handy if psRetWidget needs to stop being a static and moves into
-	   the screen structure */
-	(void)psScreen;
+	assert(psScreen != NULL);	
 
-	if (psRetWidget)
+	if (psScreen->psRetWidget)
 	{
-		return psRetWidget->pUserData;
+		return psScreen->psRetWidget->pUserData;
 	}
 
 	return NULL;
@@ -1436,7 +1430,7 @@ UDWORD widgRunScreen(W_SCREEN *psScreen)
 {
 	W_CONTEXT	sContext;
 
-	psRetWidget = NULL;
+	psScreen->psRetWidget = NULL;
 
 	// Note which keys have been pressed
 	pressed = WKEY_NONE;
@@ -1477,14 +1471,14 @@ UDWORD widgRunScreen(W_SCREEN *psScreen)
 	widgProcessCallbacks(&sContext);
 
 	/* Return the ID of a pressed button or finished edit box if any */
-	return psRetWidget ? psRetWidget->id : 0;
+	return psScreen->psRetWidget ? psScreen->psRetWidget->id : 0;
 }
 
 
 /* Set the id number for widgRunScreen to return */
-void widgSetReturn(WIDGET *psWidget)
+void widgSetReturn(W_SCREEN* psScreen, WIDGET *psWidget)
 {
-	psRetWidget = psWidget;
+	psScreen->psRetWidget = psWidget;
 }
 
 
@@ -1552,30 +1546,8 @@ void widgDisplayScreen(W_SCREEN *psScreen)
 	tipDisplay();
 }
 
-
-/* Set the keyboard focus for the screen */
-void screenSetFocus(W_SCREEN *psScreen, WIDGET *psWidget)
-{
-	if (psScreen->psFocus != NULL)
-	{
-		widgFocusLost(psScreen->psFocus);
-	}
-	psScreen->psFocus = psWidget;
-}
-
-
-/* Clear the keyboard focus */
-void screenClearFocus(W_SCREEN *psScreen)
-{
-	if (psScreen->psFocus != NULL)
-	{
-		widgFocusLost(psScreen->psFocus);
-		psScreen->psFocus = NULL;
-	}
-}
-
 /* Call the correct function for loss of focus */
-void widgFocusLost(WIDGET *psWidget)
+static void widgFocusLost(W_SCREEN* psScreen, WIDGET *psWidget)
 {
 	switch (psWidget->type)
 	{
@@ -1586,7 +1558,7 @@ void widgFocusLost(WIDGET *psWidget)
 	case WIDG_BUTTON:
 		break;
 	case WIDG_EDITBOX:
-		editBoxFocusLost((W_EDITBOX *)psWidget);
+		editBoxFocusLost(psScreen, (W_EDITBOX *)psWidget);
 		break;
 	case WIDG_BARGRAPH:
 		break;
@@ -1595,6 +1567,27 @@ void widgFocusLost(WIDGET *psWidget)
 	default:
 		ASSERT( FALSE,"widgFocusLost: Unknown widget type" );
 		break;
+	}
+}
+
+/* Set the keyboard focus for the screen */
+void screenSetFocus(W_SCREEN *psScreen, WIDGET *psWidget)
+{
+	if (psScreen->psFocus != NULL)
+	{
+		widgFocusLost(psScreen, psScreen->psFocus);
+	}
+	psScreen->psFocus = psWidget;
+}
+
+
+/* Clear the keyboard focus */
+void screenClearFocus(W_SCREEN *psScreen)
+{
+	if (psScreen->psFocus != NULL)
+	{
+		widgFocusLost(psScreen, psScreen->psFocus);
+		psScreen->psFocus = NULL;
 	}
 }
 
@@ -1698,7 +1691,7 @@ static void widgReleased(WIDGET *psWidget, UDWORD key, W_CONTEXT *psContext)
 	case WIDG_LABEL:
 		break;
 	case WIDG_BUTTON:
-		buttonReleased((W_BUTTON *)psWidget, key);
+		buttonReleased(psContext->psScreen, (W_BUTTON *)psWidget, key);
 		break;
 	case WIDG_EDITBOX:
 		editBoxReleased((W_EDITBOX *)psWidget);

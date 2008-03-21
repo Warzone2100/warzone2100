@@ -234,7 +234,7 @@ void sliderRun(W_SLIDER *psWidget, W_CONTEXT *psContext)
 	if ((psWidget->state & SLD_DRAG) && !mouseDown(MOUSE_LMB))
 	{
 		psWidget->state &= ~SLD_DRAG;
-		widgSetReturn((WIDGET *)psWidget);
+		widgSetReturn(psContext->psScreen, (WIDGET *)psWidget);
 	}
 	else if (psWidget->state & SLD_DRAG)
 	{

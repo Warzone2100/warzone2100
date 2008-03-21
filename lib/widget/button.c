@@ -250,7 +250,7 @@ void buttonClicked(W_BUTTON *psWidget, UDWORD key)
 }
 
 /* Respond to a mouse button up */
-void buttonReleased(W_BUTTON *psWidget, UDWORD key)
+void buttonReleased(W_SCREEN* psScreen, W_BUTTON* psWidget, UDWORD key)
 {
 	if (psWidget->state & WBUTS_DOWN)
 	{
@@ -258,7 +258,7 @@ void buttonReleased(W_BUTTON *psWidget, UDWORD key)
 		if ((!(psWidget->style & WBUT_NOPRIMARY) && key == WKEY_PRIMARY) ||
 			((psWidget->style & WBUT_SECONDARY) && key == WKEY_SECONDARY))
 		{
-			widgSetReturn((WIDGET *)psWidget);
+			widgSetReturn(psScreen, (WIDGET *)psWidget);
 			psWidget->state &= ~WBUTS_DOWN;
 		}
 	}

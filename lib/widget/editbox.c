@@ -519,7 +519,7 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 			break;
 		case INPBUF_CR :
 			/* Finish editing */
-			editBoxFocusLost(psWidget);
+			editBoxFocusLost(psContext->psScreen, psWidget);
 			screenClearFocus(psContext->psScreen);
 			return;
 			break;
@@ -627,7 +627,7 @@ void editBoxClicked(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 
 
 /* Respond to loss of focus */
-void editBoxFocusLost(W_EDITBOX *psWidget)
+void editBoxFocusLost(W_SCREEN* psScreen, W_EDITBOX *psWidget)
 {
 	ASSERT( !(psWidget->state & WEDBS_DISABLE),
 		"editBoxFocusLost: disabled edit box" );
@@ -638,7 +638,7 @@ void editBoxFocusLost(W_EDITBOX *psWidget)
 	fitStringStart(psWidget->aText,psWidget->width,
 				   &psWidget->printChars, &psWidget->printWidth);
 
-	widgSetReturn((WIDGET *)psWidget);
+	widgSetReturn(psScreen, (WIDGET *)psWidget);
 
 }
 

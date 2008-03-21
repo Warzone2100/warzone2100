@@ -1192,7 +1192,7 @@ void formReleased(W_FORM *psWidget, UDWORD key, W_CONTEXT *psContext)
 				/* Clicked on a minor tab */
 				psTabForm->minorT = (UWORD)(sTabPos.index - psTabForm->numMajor);
 				psTabForm->asMajor[psTabForm->majorT].lastMinor = psTabForm->minorT;
-				widgSetReturn((WIDGET *)psWidget);
+				widgSetReturn(psContext->psScreen, (WIDGET *)psWidget);
 			}
 			else
 			{
@@ -1201,7 +1201,7 @@ void formReleased(W_FORM *psWidget, UDWORD key, W_CONTEXT *psContext)
 				       "formReleased: invalid major id %u >= max %u", sTabPos.index, psTabForm->numMajor);
 				psTabForm->majorT = (UWORD)sTabPos.index;
 				psTabForm->minorT = psTabForm->asMajor[sTabPos.index].lastMinor;	
-				widgSetReturn((WIDGET *)psWidget);
+				widgSetReturn(psContext->psScreen, (WIDGET *)psWidget);
 			}
 		}
 	}
@@ -1214,7 +1214,7 @@ void formReleased(W_FORM *psWidget, UDWORD key, W_CONTEXT *psContext)
 			if ((!(psWidget->style & WFORM_NOPRIMARY) && key == WKEY_PRIMARY) ||
 				((psWidget->style & WFORM_SECONDARY) && key == WKEY_SECONDARY))
 			{
-				widgSetReturn((WIDGET *)psClickForm);
+				widgSetReturn(psContext->psScreen, (WIDGET *)psClickForm);
 				psClickForm->state &= ~WCLICK_DOWN;
 			}
 		}

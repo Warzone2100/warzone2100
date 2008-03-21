@@ -87,9 +87,10 @@ typedef struct _widget
 /* The screen structure which stores all info for a widget screen */
 typedef struct _w_screen
 {
-	WIDGET		*psForm;			// The root form of the screen
-	WIDGET		*psFocus;			// The widget that has keyboard focus
-	int			TipFontID;			// ID of the IVIS font to use for tool tips.
+	WIDGET*          psForm;        ///< The root form of the screen
+	WIDGET*          psFocus;       ///< The widget that has keyboard focus
+	int              TipFontID;     ///< ID of the IVIS font to use for tool tips.
+	WIDGET*          psRetWidget;   ///< The widget to be returned by widgRunScreen
 } W_SCREEN;
 
 /* Context information to pass into the widget functions */

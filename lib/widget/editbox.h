@@ -25,6 +25,8 @@
 #ifndef _editbox_h
 #define _editbox_h
 
+#include "widgbase.h"
+
 /* Edit Box states */
 #define WEDBS_FIXED		0x0001		// No editing is going on
 #define WEDBS_INSERT	0x0002		// Insertion editing
@@ -65,7 +67,7 @@ extern void editBoxInitialise(W_EDITBOX *psWidget);
 extern void editBoxSetString(W_EDITBOX *psWidget, const char *pText);
 
 /* Respond to loss of focus */
-extern void editBoxFocusLost(W_EDITBOX *psWidget);
+extern void editBoxFocusLost(W_SCREEN* psScreen, W_EDITBOX *psWidget);
 
 /* Run an edit box widget */
 extern void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext);
