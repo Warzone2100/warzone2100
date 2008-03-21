@@ -308,7 +308,7 @@ extern BOOL widgAddEditBox(W_SCREEN *psScreen, W_EDBINIT *psInit);
 extern BOOL widgAddBarGraph(W_SCREEN *psScreen, W_BARINIT *psInit);
 
 /* Add a slider to a form */
-extern BOOL widgAddSlider(W_SCREEN *psScreen, W_SLDINIT *psInit);
+extern BOOL widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT* psInit);
 
 /* Delete a widget from the screen */
 extern void widgDelete(W_SCREEN *psScreen, UDWORD id);
