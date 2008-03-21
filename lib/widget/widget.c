@@ -105,7 +105,9 @@ BOOL widgCreateScreen(W_SCREEN **ppsScreen)
 	sInit.y = 0;
 	sInit.width = (UWORD)(screenWidth - 1);
 	sInit.height = (UWORD)(screenHeight - 1);
-	if (!formCreate(&psForm, &sInit))
+
+	psForm = formCreate(&sInit);
+	if (psForm == NULL)
 	{
 		return FALSE;
 	}
@@ -258,7 +260,7 @@ void widgSetTipFont(W_SCREEN *psScreen, int FontID)
 
 
 /* Add a form to the widget screen */
-BOOL widgAddForm(W_SCREEN *psScreen, W_FORMINIT *psInit)
+BOOL widgAddForm(W_SCREEN *psScreen, const W_FORMINIT* psInit)
 {
 	W_FORM	*psParent, *psForm;
 
@@ -289,13 +291,10 @@ BOOL widgAddForm(W_SCREEN *psScreen, W_FORMINIT *psInit)
 	}
 
 	/* Create the form structure */
-	if (!formCreate(&psForm, psInit))
-	{
-		return FALSE;
-	}
-
+	psForm = formCreate(psInit);
+	if (psForm == NULL
 	/* Add it to the screen */
-	if (!formAddWidget(psParent, (WIDGET *)psForm, (W_INIT *)psInit))
+	 || !formAddWidget(psParent, (WIDGET *)psForm, (W_INIT *)psInit))
 	{
 		return FALSE;
 	}

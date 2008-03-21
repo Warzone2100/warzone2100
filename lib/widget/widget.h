@@ -293,7 +293,7 @@ extern void widgReleaseScreen(W_SCREEN *psScreen);
 extern void widgSetTipFont(W_SCREEN *psScreen, int FontID);
 
 /* Add a form to the widget screen */
-extern BOOL widgAddForm(W_SCREEN *psScreen, W_FORMINIT *psInit);
+extern BOOL widgAddForm(W_SCREEN *psScreen, const W_FORMINIT* psInit);
 
 /* Add a label to the widget screen */
 extern BOOL widgAddLabel(W_SCREEN *psScreen, const W_LABINIT* psInit);

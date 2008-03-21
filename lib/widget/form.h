@@ -124,7 +124,7 @@ typedef struct _w_clickform
 extern void formClearFlash(W_FORM *psWidget);
 
 /* Create a form widget data structure */
-extern BOOL formCreate(W_FORM **ppsWidget, W_FORMINIT *psInit);
+extern W_FORM* formCreate(const W_FORMINIT* psInit);
 
 /* Free the memory used by a form */
 extern void formFree(W_FORM *psWidget);
