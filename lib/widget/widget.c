@@ -305,7 +305,7 @@ BOOL widgAddForm(W_SCREEN *psScreen, W_FORMINIT *psInit)
 
 
 /* Add a label to the widget screen */
-BOOL widgAddLabel(W_SCREEN *psScreen, W_LABINIT *psInit)
+BOOL widgAddLabel(W_SCREEN *psScreen, const W_LABINIT* psInit)
 {
 	W_LABEL		*psLabel;
 	W_FORM		*psForm;
@@ -336,13 +336,10 @@ BOOL widgAddLabel(W_SCREEN *psScreen, W_LABINIT *psInit)
 	}
 
 	/* Create the button structure */
-	if (!labelCreate(&psLabel, psInit))
-	{
-		return FALSE;
-	}
-
+	psLabel = labelCreate(psInit);
+	if (psInit == NULL
 	/* Add it to the form */
-	if (!formAddWidget(psForm, (WIDGET *)psLabel, (W_INIT *)psInit))
+	 || !formAddWidget(psForm, (WIDGET *)psLabel, (W_INIT *)psInit))
 	{
 		return FALSE;
 	}
