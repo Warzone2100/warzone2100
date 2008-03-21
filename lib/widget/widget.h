@@ -299,7 +299,7 @@ extern BOOL widgAddForm(W_SCREEN *psScreen, W_FORMINIT *psInit);
 extern BOOL widgAddLabel(W_SCREEN *psScreen, W_LABINIT *psInit);
 
 /* Add a button to a form */
-extern BOOL widgAddButton(W_SCREEN *psScreen, W_BUTINIT *psInit);
+extern BOOL widgAddButton(W_SCREEN *psScreen, const W_BUTINIT* psInit);
 
 /* Add an edit box to a form */
 extern BOOL widgAddEditBox(W_SCREEN *psScreen, W_EDBINIT *psInit);
