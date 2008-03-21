@@ -44,16 +44,14 @@ W_SLIDER* sliderCreate(const W_SLDINIT* psInit)
 
 	if (psInit->style & ~(WBAR_PLAIN | WIDG_HIDDEN))
 	{
-		debug(LOG_ERROR, "sliderCreate: Unknown style");
-		abort();
+		ASSERT(FALSE, "sliderCreate: Unknown style");
 		return NULL;
 	}
 
 	if (psInit->orientation < WSLD_LEFT
 	 || psInit->orientation > WSLD_BOTTOM)
 	{
-		debug(LOG_ERROR, "sliderCreate: Unknown orientation");
-		abort();
+		ASSERT(FALSE, "sliderCreate: Unknown orientation");
 		return NULL;
 	}
 
@@ -64,15 +62,13 @@ W_SLIDER* sliderCreate(const W_SLDINIT* psInit)
 	   || psInit->orientation == WSLD_BOTTOM)
 	  && psInit->numStops > (psInit->height - psInit->barSize)))
 	{
-		debug(LOG_ERROR, "sliderCreate: Too many stops for slider length");
-		abort();
+		ASSERT(FALSE, "sliderCreate: Too many stops for slider length");
 		return NULL;
 	}
 
 	if (psInit->pos > psInit->numStops)
 	{
-		debug(LOG_ERROR, "sliderCreate: slider position greater than stops (%d/%d)", psInit->pos,  psInit->numStops);
-		abort();
+		ASSERT(FALSE, "sliderCreate: slider position greater than stops (%d/%d)", psInit->pos,  psInit->numStops);
 		return NULL;
 	}
 
@@ -83,8 +79,7 @@ W_SLIDER* sliderCreate(const W_SLDINIT* psInit)
 	   || psInit->orientation == WSLD_BOTTOM)
 	  && psInit->barSize > psInit->height))
 	{
-		debug(LOG_ERROR, "sliderCreate: slider bar is larger than slider width");
-		abort();
+		ASSERT(FALSE, "sliderCreate: slider bar is larger than slider width");
 		return NULL;
 	}
 

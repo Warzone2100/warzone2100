@@ -503,8 +503,7 @@ BOOL widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT* psInit)
 
 	if (widgCheckIDForm((W_FORM *)psScreen->psForm, psInit->id))
 	{
-		debug(LOG_ERROR, "widgSlider: ID number has already been used (%d)", psInit->id);
-		abort();
+		ASSERT(FALSE, "widgSlider: ID number has already been used (%d)", psInit->id);
 		return FALSE;
 	}
 
@@ -519,8 +518,7 @@ BOOL widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT* psInit)
 		if (!psForm
 		 || psForm->type != WIDG_FORM)
 		{
-			debug(LOG_ERROR, "widgAddSlider: Could not find parent form from formID");
-			abort();
+			ASSERT(FALSE, "widgAddSlider: Could not find parent form from formID");
 			return FALSE;
 		}
 	}
