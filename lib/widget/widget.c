@@ -1446,7 +1446,6 @@ static void widgProcessForm(W_CONTEXT *psContext)
 UDWORD widgRunScreen(W_SCREEN *psScreen)
 {
 	W_CONTEXT	sContext;
-	UDWORD		returnID;
 
 	psRetWidget = NULL;
 
@@ -1489,15 +1488,7 @@ UDWORD widgRunScreen(W_SCREEN *psScreen)
 	widgProcessCallbacks(&sContext);
 
 	/* Return the ID of a pressed button or finished edit box if any */
-	if (psRetWidget)
-	{
-		returnID = psRetWidget->id;
-	}
-	else
-	{
-		returnID = 0;
-	}
-	return returnID;
+	return psRetWidget ? psRetWidget->id : 0;
 }
 
 
