@@ -100,8 +100,6 @@
 
 /* The maximum number of characters on the component buttons */
 #define DES_COMPBUTMAXCHAR			5
-/* The maximum number of characters in a design name */
-#define DES_NAMEMAXCHAR				MAX_STR_SIZE
 
 
 /* Which type of system is displayed on the design screen */
@@ -146,7 +144,7 @@ typedef enum _des_propmode
 DES_PROPMODE desPropMode;
 
 
-#define STRING_BUFFER_SIZE (32 * MAX_NAME_SIZE)
+#define STRING_BUFFER_SIZE (32 * MAX_STR_LENGTH)
 char StringBuffer[STRING_BUFFER_SIZE];
 
 /* Design screen positions */
@@ -1095,9 +1093,9 @@ BOOL intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight,
 			// Guarantee to nul-terminate
 			TempString[sizeof(TempString) - 1] = '\0';
 
-			ASSERT( BufferPos+strlen(TempString)+1 < STRING_BUFFER_SIZE,"String Buffer Overrun" );
-
+			ASSERT(BufferPos + strlen(TempString) + 1 < sizeof(StringBuffer), "String Buffer Overflow");
 			strlcpy(&StringBuffer[BufferPos], TempString, sizeof(StringBuffer) - BufferPos);
+
 			sBarInit.pTip = &StringBuffer[BufferPos];
 			BufferPos += strlen(TempString) + 1;
 

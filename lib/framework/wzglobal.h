@@ -398,6 +398,10 @@
 #endif
 
 
+/* ---- Global constants ---- */
+
+#define	MAX_STR_LENGTH          256
+
 /* ---- Platform specific setup ---- */
 
 

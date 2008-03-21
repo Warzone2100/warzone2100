@@ -24,7 +24,6 @@
 #ifndef __INCLUDED_MESSAGEDEF_H__
 #define __INCLUDED_MESSAGEDEF_H__
 
-#include "deliverance.h"
 #include "lib/ivis_common/pietypes.h"
 
 typedef enum _message_type

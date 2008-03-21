@@ -358,11 +358,11 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 	WEAPON_STATS	sStats, *psStats = &sStats, *psStartStats = &sStats;
 	UDWORD			i, rotate, maxElevation, surfaceToAir;
 	SDWORD			minElevation;
-	char			WeaponName[MAX_NAME_SIZE], GfxFile[MAX_NAME_SIZE];
-	char			mountGfx[MAX_NAME_SIZE], flightGfx[MAX_NAME_SIZE],
-					hitGfx[MAX_NAME_SIZE], missGfx[MAX_NAME_SIZE],
-					waterGfx[MAX_NAME_SIZE], muzzleGfx[MAX_NAME_SIZE],
-					trailGfx[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE];
+	char			WeaponName[MAX_STR_LENGTH], GfxFile[MAX_STR_LENGTH];
+	char			mountGfx[MAX_STR_LENGTH], flightGfx[MAX_STR_LENGTH],
+					hitGfx[MAX_STR_LENGTH], missGfx[MAX_STR_LENGTH],
+					waterGfx[MAX_STR_LENGTH], muzzleGfx[MAX_STR_LENGTH],
+					trailGfx[MAX_STR_LENGTH], techLevel[MAX_STR_LENGTH];
 	char			fireOnMove[10], weaponClass[15], weaponSubClass[15],
 					weaponEffect[16], movement[15], facePlayer[5],		//weaponEffect[15] caused stack corruption. --Qamly
 					faceInFlight[5],lightWorld[5];
@@ -782,9 +782,9 @@ BOOL loadBodyStats(const char *pBodyData, UDWORD bufferSize)
 	BODY_STATS sStats, *psStats = &sStats, *psStartStats = &sStats;
 	const unsigned int NumBody = numCR(pBodyData, bufferSize);
 	unsigned int i, designable;
-	char BodyName[MAX_NAME_SIZE], size[MAX_NAME_SIZE],
-		GfxFile[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE],
-		flameIMD[MAX_NAME_SIZE];
+	char BodyName[MAX_STR_LENGTH], size[MAX_STR_LENGTH],
+		GfxFile[MAX_STR_LENGTH], techLevel[MAX_STR_LENGTH],
+		flameIMD[MAX_STR_LENGTH];
 
 	if (!statsAllocBody(NumBody))
 	{
@@ -902,8 +902,8 @@ BOOL loadBrainStats(const char *pBrainData, UDWORD bufferSize)
 	BRAIN_STATS sStats, *psStats = &sStats, *psStartStats = &sStats;
 	const unsigned int NumBrain = numCR(pBrainData, bufferSize);
 	unsigned int i = 0, weapon = 0;
-	char		BrainName[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE],
-				weaponName[MAX_NAME_SIZE];
+	char		BrainName[MAX_STR_LENGTH], techLevel[MAX_STR_LENGTH],
+				weaponName[MAX_STR_LENGTH];
 
 	if (!statsAllocBrain(NumBrain))
 	{
@@ -1034,8 +1034,8 @@ BOOL loadPropulsionStats(const char *pPropulsionData, UDWORD bufferSize)
 	const unsigned int NumPropulsion = numCR(pPropulsionData, bufferSize);
 	PROPULSION_STATS	sStats, *psStats = &sStats, *psStartStats = &sStats;
 	unsigned int i = 0, designable;
-	char				PropulsionName[MAX_NAME_SIZE], imdName[MAX_NAME_SIZE],
-						techLevel[MAX_NAME_SIZE], type[MAX_NAME_SIZE];
+	char				PropulsionName[MAX_STR_LENGTH], imdName[MAX_STR_LENGTH],
+						techLevel[MAX_STR_LENGTH], type[MAX_STR_LENGTH];
 
 	if (!statsAllocPropulsion(NumPropulsion))
 	{
@@ -1147,9 +1147,9 @@ BOOL loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 	const unsigned int NumSensor = numCR(pSensorData, bufferSize);
 	SENSOR_STATS sStats, *psStats = &sStats, *psStartStats = &sStats;
 	unsigned int i = 0, designable;
-	char			SensorName[MAX_NAME_SIZE], location[MAX_NAME_SIZE],
-					GfxFile[MAX_NAME_SIZE],type[MAX_NAME_SIZE];
-	char			mountGfx[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE];
+	char			SensorName[MAX_STR_LENGTH], location[MAX_STR_LENGTH],
+					GfxFile[MAX_STR_LENGTH],type[MAX_STR_LENGTH];
+	char			mountGfx[MAX_STR_LENGTH], techLevel[MAX_STR_LENGTH];
 
 	if (!statsAllocSensor(NumSensor))
 	{
@@ -1286,9 +1286,9 @@ BOOL loadECMStats(const char *pECMData, UDWORD bufferSize)
 	const unsigned int NumECM = numCR(pECMData, bufferSize);
 	ECM_STATS	sStats, *psStats = &sStats, *psStartStats = &sStats;
 	unsigned int i = 0, designable;
-	char		ECMName[MAX_NAME_SIZE], location[MAX_NAME_SIZE],
-				GfxFile[MAX_NAME_SIZE];
-	char		mountGfx[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE];
+	char		ECMName[MAX_STR_LENGTH], location[MAX_STR_LENGTH],
+				GfxFile[MAX_STR_LENGTH];
+	char		mountGfx[MAX_STR_LENGTH], techLevel[MAX_STR_LENGTH];
 
 	if (!statsAllocECM(NumECM))
 	{
@@ -1400,9 +1400,9 @@ BOOL loadRepairStats(const char *pRepairData, UDWORD bufferSize)
 	const unsigned int NumRepair = numCR(pRepairData, bufferSize);
 	REPAIR_STATS sStats, *psStats = &sStats, *psStartStats = &sStats;
 	unsigned int i = 0, designable;
-	char			RepairName[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE],
-					GfxFile[MAX_NAME_SIZE],	mountGfx[MAX_NAME_SIZE],
-					location[MAX_NAME_SIZE];
+	char			RepairName[MAX_STR_LENGTH], techLevel[MAX_STR_LENGTH],
+					GfxFile[MAX_STR_LENGTH],	mountGfx[MAX_STR_LENGTH],
+					location[MAX_STR_LENGTH];
 
 	if (!statsAllocRepair(NumRepair))
 	{
@@ -1526,8 +1526,8 @@ BOOL loadConstructStats(const char *pConstructData, UDWORD bufferSize)
 	const unsigned int NumConstruct = numCR(pConstructData, bufferSize);
 	CONSTRUCT_STATS sStats, *psStats = &sStats, *psStartStats = &sStats;
 	unsigned int i = 0, designable;
-	char			ConstructName[MAX_NAME_SIZE], GfxFile[MAX_NAME_SIZE];
-	char			mountGfx[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE];
+	char			ConstructName[MAX_STR_LENGTH], GfxFile[MAX_STR_LENGTH];
+	char			mountGfx[MAX_STR_LENGTH], techLevel[MAX_STR_LENGTH];
 
 	if (!statsAllocConstruct(NumConstruct))
 	{
@@ -1630,7 +1630,7 @@ BOOL loadPropulsionTypes(const char *pPropTypeData, UDWORD bufferSize)
 	const unsigned int NumTypes = NUM_PROP_TYPES;
 	PROPULSION_TYPES *pPropType;
 	unsigned int i, multiplier, type;
-	char PropulsionName[MAX_NAME_SIZE], flightName[MAX_NAME_SIZE];
+	char PropulsionName[MAX_STR_LENGTH], flightName[MAX_STR_LENGTH];
 
 	//allocate storage for the stats
 	asPropulsionTypes = (PROPULSION_TYPES *)malloc(sizeof(PROPULSION_TYPES)*NumTypes);
@@ -1763,7 +1763,7 @@ BOOL loadSpecialAbility(const char *pSAbilityData, UDWORD bufferSize)
 	const unsigned int NumTypes = numCR(pSAbilityData, bufferSize);
 	SPECIAL_ABILITY *pSAbility;
 	unsigned int i, accessID;
-	char SAbilityName[MAX_NAME_SIZE];
+	char SAbilityName[MAX_STR_LENGTH];
 
 	//allocate storage for the stats
 	asSpecialAbility = (SPECIAL_ABILITY *)malloc(sizeof(SPECIAL_ABILITY)*NumTypes);
@@ -1820,8 +1820,8 @@ BOOL loadBodyPropulsionIMDs(const char *pData, UDWORD bufferSize)
 	BODY_STATS *psBodyStat = asBodyStats;
 	PROPULSION_STATS *psPropulsionStat = asPropulsionStats;
 	unsigned int i, numStats;
-	char				bodyName[MAX_NAME_SIZE], propulsionName[MAX_NAME_SIZE],
-						leftIMD[MAX_NAME_SIZE], rightIMD[MAX_NAME_SIZE];
+	char				bodyName[MAX_STR_LENGTH], propulsionName[MAX_STR_LENGTH],
+						leftIMD[MAX_STR_LENGTH], rightIMD[MAX_STR_LENGTH];
 	iIMDShape			**startIMDs;
 	BOOL				found;
 
@@ -1987,8 +1987,8 @@ BOOL loadWeaponSounds(const char *pSoundData, UDWORD bufferSize)
 {
 	const unsigned int NumRecords = numCR(pSoundData, bufferSize);
 	SDWORD i, weaponSoundID, explosionSoundID, inc, iDum;
-	char			WeaponName[MAX_NAME_SIZE];
-	char			szWeaponWav[MAX_NAME_SIZE],	szExplosionWav[MAX_NAME_SIZE];
+	char			WeaponName[MAX_STR_LENGTH];
+	char			szWeaponWav[MAX_STR_LENGTH],	szExplosionWav[MAX_STR_LENGTH];
 	BOOL 	Ok = TRUE;
 
 	ASSERT( asWeaponStats != NULL, "loadWeaponSounds: Weapon stats not loaded" );
@@ -2048,7 +2048,7 @@ BOOL loadWeaponModifiers(const char *pWeapModData, UDWORD bufferSize)
 	PROPULSION_TYPE		propInc;
 	WEAPON_EFFECT		effectInc;
 	UDWORD				i, j, modifier;
-	char				weaponEffectName[MAX_NAME_SIZE], propulsionName[MAX_NAME_SIZE];
+	char				weaponEffectName[MAX_STR_LENGTH], propulsionName[MAX_STR_LENGTH];
 
 	//initialise to 100%
 	for (i=0; i < WE_NUMEFFECTS; i++)
@@ -2104,10 +2104,10 @@ BOOL loadPropulsionSounds(const char *pPropSoundData, UDWORD bufferSize)
 	const unsigned int NumRecords = numCR(pPropSoundData, bufferSize);
 	SDWORD				i, startID, idleID, moveOffID, moveID,
 						hissID, shutDownID, iDum;
-	char				propulsionName[MAX_NAME_SIZE], szStart[MAX_NAME_SIZE],
-						szIdle[MAX_NAME_SIZE], szMoveOff[MAX_NAME_SIZE],
-						szMove[MAX_NAME_SIZE], szHiss[MAX_NAME_SIZE],
-						szShutDown[MAX_NAME_SIZE];
+	char				propulsionName[MAX_STR_LENGTH], szStart[MAX_STR_LENGTH],
+						szIdle[MAX_STR_LENGTH], szMoveOff[MAX_STR_LENGTH],
+						szMove[MAX_STR_LENGTH], szHiss[MAX_STR_LENGTH],
+						szShutDown[MAX_STR_LENGTH];
 	UDWORD				type;
 	PROPULSION_TYPES	*pPropType;
 

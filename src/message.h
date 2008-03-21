@@ -26,7 +26,6 @@
 
 #include "structure.h"
 #include "messagedef.h"
-#include "deliverance.h"
 
 #define NO_AUDIO_MSG		-1
 

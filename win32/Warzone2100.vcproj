@@ -763,10 +763,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\deliverance.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\design.h"
 				>
 			</File>

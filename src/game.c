@@ -77,10 +77,6 @@
 #define MAX_SAVE_NAME_SIZE_V19	40
 #define MAX_SAVE_NAME_SIZE	60
 
-#if (MAX_NAME_SIZE > MAX_SAVE_NAME_SIZE)
-#error warning the current MAX_NAME_SIZE is to big for the save game
-#endif
-
 #define NULL_ID UDWORD_MAX
 #define MAX_BODY			SWORD_MAX
 #define SAVEKEY_ONMISSION	0x100
@@ -91,6 +87,9 @@
  * should be fixed!
  */
 #define FIXME_CAST_ASSIGN(TYPE, lval, rval) { TYPE* __tmp = (TYPE*) &lval; *__tmp = (TYPE)rval; }
+
+/// @note This represents a size internal to savegame files, so: DO NOT CHANGE THIS
+#define MAX_GAME_STR_SIZE 20
 
 UDWORD RemapPlayerNumber(UDWORD OldNumber);
 
@@ -1546,7 +1545,7 @@ typedef struct _save_droid_v12
 
 #define DROID_SAVE_V14		\
 	DROID_SAVE_V12;			\
-	char	tarStatName[MAX_STR_SIZE];\
+	char	tarStatName[MAX_GAME_STR_SIZE];\
     UDWORD	baseStructID;	\
 	UBYTE	group;			\
 	UBYTE	selected;		\
@@ -1989,7 +1988,7 @@ typedef struct _save_message
 {
 	MESSAGE_TYPE	type;			//The type of message
 	BOOL			bObj;
-	char			name[MAX_STR_SIZE];
+	char			name[MAX_GAME_STR_SIZE];
 	UDWORD			objId;					//Id for Proximity messages!
 	BOOL			read;					//flag to indicate whether message has been read
 	UDWORD			player;					//which player this message belongs to
@@ -6570,7 +6569,8 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			the translated name - old versions of save games should load because
 			templates are loaded from Access AND the save game so they should all
 			still exist*/
-			strcpy(psSaveDroid->name, psCurr->aName);
+			ASSERT(strlen(psCurr->aName) + 1 < sizeof(psSaveDroid->name), "Truncation of droid name occurred! Max droid length (without truncation while saving) is %zu", sizeof(psSaveDroid->name) - 1);
+			strlcpy(psSaveDroid->name, psCurr->aName, sizeof(psSaveDroid->name));
 
 			// not interested in first comp - COMP_UNKNOWN
 			for (i=1; i < DROID_MAXCOMP; i++)
@@ -6649,8 +6649,8 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			//version 14
 			if (psCurr->psTarStats != NULL)
 			{
-				ASSERT( strlen(psCurr->psTarStats->pName) < MAX_NAME_SIZE,"writeUnitFile; psTarStat pName Error" );
-				strcpy(psSaveDroid->tarStatName,psCurr->psTarStats->pName);
+				ASSERT(strlen(psCurr->psTarStats->pName) < sizeof(psSaveDroid->tarStatName), "writeUnitFile; psTarStat pName Error");
+				strlcpy(psSaveDroid->tarStatName, psCurr->psTarStats->pName, sizeof(psSaveDroid->tarStatName));
 			}
 			else
 			{
@@ -8259,8 +8259,8 @@ BOOL writeStructFile(char *pFileName)
 						psSaveStruct->subjectInc = 0;
 						researchId = ((RESEARCH_FACILITY *)psCurr->pFunctionality)->
 							psSubject->ref - REF_RESEARCH_START;
-						ASSERT( strlen(asResearch[researchId].pName)<MAX_NAME_SIZE,"writeStructData: research name too long" );
-						strcpy(psSaveStruct->researchName, asResearch[researchId].pName);
+						ASSERT(strlen(asResearch[researchId].pName) < sizeof(psSaveStruct->researchName), "writeStructData: research name too long");
+						strlcpy(psSaveStruct->researchName, asResearch[researchId].pName, sizeof(psSaveStruct->researchName));
 						psSaveStruct->timeStarted = ((RESEARCH_FACILITY *)psCurr->
 							pFunctionality)->timeStarted;
 					}
@@ -9403,7 +9403,8 @@ BOOL writeTemplateFile(char *pFileName)
 	{
 		for(psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
-			strcpy(psSaveTemplate->name, psCurr->aName);
+			ASSERT(strlen(psCurr->aName) + 1 < sizeof(psSaveTemplate->name), "Truncation of droid name occurred! Max droid length (without truncation while saving) is %zu", sizeof(psSaveTemplate->name) - 1);
+			strlcpy(psSaveTemplate->name, psCurr->aName, sizeof(psSaveTemplate->name));
 
 			psSaveTemplate->ref = psCurr->ref;
 			psSaveTemplate->player = player;
@@ -10612,7 +10613,7 @@ static BOOL writeMessageFile(char *pFileName)
 					//message has viewdata so store the name
 					psSaveMessage->bObj = FALSE;
 					pViewData = (VIEWDATA*)psMessage->pViewData;
-					ASSERT( strlen(pViewData->pName) < MAX_STR_SIZE,"writeMessageFile; viewdata pName Error" );
+					ASSERT( strlen(pViewData->pName) < MAX_GAME_STR_SIZE,"writeMessageFile; viewdata pName Error" );
 					strcpy(psSaveMessage->name,pViewData->pName);	//Pointer to view data - if any - should be some!
 				}
 				else
@@ -10627,7 +10628,7 @@ static BOOL writeMessageFile(char *pFileName)
 			{
 				psSaveMessage->bObj = FALSE;
 				pViewData = (VIEWDATA*)psMessage->pViewData;
-				ASSERT( strlen(pViewData->pName) < MAX_STR_SIZE,"writeMessageFile; viewdata pName Error" );
+				ASSERT( strlen(pViewData->pName) < MAX_GAME_STR_SIZE,"writeMessageFile; viewdata pName Error" );
 				strcpy(psSaveMessage->name,pViewData->pName);	//Pointer to view data - if any - should be some!
 			}
 			psSaveMessage->read = psMessage->read;			//flag to indicate whether message has been read

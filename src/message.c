@@ -454,9 +454,9 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 	VIEWDATA			*psViewData, *pData;
 	VIEW_RESEARCH		*psViewRes;
 	VIEW_REPLAY			*psViewReplay;
-	char				name[MAX_STR_LENGTH], imdName[MAX_NAME_SIZE],
+	char				name[MAX_STR_LENGTH], imdName[MAX_STR_LENGTH],
 						string[MAX_STR_LENGTH],
-						imdName2[MAX_NAME_SIZE];
+						imdName2[MAX_STR_LENGTH];
 	char				audioName[MAX_STR_LENGTH];
 	SDWORD				LocX,LocY,LocZ, audioID;
 	PROX_TYPE	proxType;
@@ -802,8 +802,6 @@ VIEWDATA * getViewData(const char *pName)
 {
 	VIEWDATA_LIST *psList = NULL;
 	unsigned int i = 0;
-
-	ASSERT( strlen(pName) < MAX_STR_SIZE, "getViewData: verbose message name" );
 
 	for (psList = apsViewData; psList != NULL; psList = psList->psNext)
 	{

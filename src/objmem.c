@@ -28,7 +28,6 @@
 #include "lib/framework/frame.h"
 #include "lib/sound/audio.h"
 #include "objects.h"
-#include "deliverance.h"
 #include "lib/gamelib/gtime.h"
 #include "hci.h"
 #include "map.h"

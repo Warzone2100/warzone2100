@@ -33,7 +33,6 @@
 #include "projectile.h"
 #include "move.h"
 #include "message.h"
-#include "deliverance.h"
 #include "astar.h"
 #include "visibility.h"
 

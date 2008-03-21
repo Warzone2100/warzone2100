@@ -25,7 +25,6 @@
 #define __INCLUDED_BASEDEF_H__
 
 #include "lib/ivis_common/pievector.h"
-#include "deliverance.h"
 #include "displaydef.h"
 #include "statsdef.h"
 
