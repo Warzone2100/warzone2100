@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.1_beta1\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-03-16 00:16+0100\n"
+"POT-Creation-Date: 2008-03-21 13:12+0100\n"
 "PO-Revision-Date: 2008-03-15 01:46+0100\n"
 "Last-Translator: Qwerty800 <qwerty8034@hotmail.com>\n"
 "Language-Team: French <warzone-dev@gna.org>\n"
@@ -120,7 +120,7 @@ msgstr "%s Brise son alliance avec %s"
 msgid "%s Forms An Alliance With %s"
 msgstr "%s S'allie avec %s"
 
-#: src/multigifts.c:786
+#: src/multigifts.c:801
 #, c-format
 msgid "You Discover Blueprints For %s"
 msgstr "Vous avez trouvé des plans pour %s"
@@ -207,8 +207,8 @@ msgstr "Fonction"
 
 #: src/hci.c:4147
 #: src/ingameop.c:120
-#: src/ingameop.c:259
-#: src/ingameop.c:264
+#: src/ingameop.c:253
+#: src/ingameop.c:258
 msgid "Quit"
 msgstr "Quitter"
 
@@ -272,14 +272,14 @@ msgstr "Continuer"
 
 #: src/mission.c:3143
 #: src/mission.c:3264
-#: src/ingameop.c:278
-#: src/ingameop.c:417
+#: src/ingameop.c:272
+#: src/ingameop.c:411
 msgid "Save Game"
 msgstr "Sauvegarder"
 
 #: src/mission.c:3153
 #: src/mission.c:3261
-#: src/ingameop.c:413
+#: src/ingameop.c:407
 #: src/frontend.c:427
 msgid "Load Saved Game"
 msgstr "Charger une partie Enregistrée"
@@ -559,106 +559,143 @@ msgstr "Sois plus Audacieux!"
 msgid "Twice as nice!"
 msgstr "À Deux, c'est Mieux!"
 
-#: src/keybind.c:439
+#: src/keybind.c:374
+msgid "FPS display is enabled."
+msgstr ""
+
+#: src/keybind.c:378
+msgid "FPS display is disabled."
+msgstr ""
+
+#: src/keybind.c:391
+#, c-format
+msgid "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
+msgstr ""
+
+#: src/keybind.c:446
 msgid "Infinite power disabled"
 msgstr "Énergie Infinie  (Espèce de Tricheur!)"
 
-#: src/keybind.c:444
+#: src/keybind.c:451
 msgid "Infinite power enabled"
 msgstr "Énergie Infinie Désactivée (T'est mieux aussi!)"
 
-#: src/keybind.c:497
+#: src/keybind.c:504
 msgid "All items made available"
 msgstr "Tout les éléments de recherche, de design et les constructions sont disponibles(T'exagère vraiment)"
 
-#: src/keybind.c:589
+#: src/keybind.c:596
 msgid "Fog off"
 msgstr "Brouillard désactivé"
 
-#: src/keybind.c:595
+#: src/keybind.c:602
 msgid "Fog on"
 msgstr "Brouillard Actvé"
 
-#: src/keybind.c:1161
+#: src/keybind.c:1168
 msgid "View Aligned to North"
 msgstr "Caméra Réorientée vers le Nord"
 
-#: src/keybind.c:1190
+#: src/keybind.c:1197
 #: src/intelmap.c:241
 msgid "PAUSED"
 msgstr "PAUSE"
 
-#: src/keybind.c:1229
+#: src/keybind.c:1236
 msgid "Researched EVERYTHING for you!"
 msgstr "Chercheur Exténué: On a fait du mieux qu'on a pu et on croit qu'on a réussi!"
 
-#: src/keybind.c:1260
+#: src/keybind.c:1267
 msgid "Energy bars display toggled"
 msgstr "Affichage du Blindage modifié"
 
-#: src/keybind.c:1278
+#: src/keybind.c:1285
 msgid "Demo mode off - Returning to normal game mode"
 msgstr "Mode Démonstration désactivé - Retour au Jeu Normal"
 
-#: src/keybind.c:1325
+#: src/keybind.c:1332
 msgid "Unable to locate any resource extractors!"
 msgstr "Impossible de localiser quelqu'extracteur de ressource sur cette map!"
 
-#: src/keybind.c:1548
+#: src/keybind.c:1555
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Brrr... Il fait si froid... IL NEIGE"
 
-#: src/keybind.c:1554
+#: src/keybind.c:1561
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "Singing in the rain, I'm singing in the rain... IL PLEUT"
 
-#: src/keybind.c:1560
+#: src/keybind.c:1567
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Prévisions Locales: Ciel dégagé dans toute la Région... AUCUNE MÉTÉO"
 
-#: src/keybind.c:1593
+#: src/keybind.c:1600
 msgid "Enemy destroyed by cheating!"
 msgstr "L'ennemi a été détruit par un TRICHEUR!!!"
 
-#: src/keybind.c:2121
+#: src/keybind.c:2128
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Vue Centrée sur le quartier général"
 
-#: src/keybind.c:2133
+#: src/keybind.c:2140
 msgid "Unable to locate HQ!"
 msgstr "Impossible de localiser le Quartier Général"
 
-#: src/keybind.c:2149
+#: src/keybind.c:2156
 msgid "Formation speed limiting OFF"
 msgstr "Limite de vitesse en formation Désactivée"
 
-#: src/keybind.c:2153
+#: src/keybind.c:2160
 msgid "Formation speed limiting ON"
 msgstr "Limite de Vitesse en formation Activée"
 
-#: src/keybind.c:2278
-#: src/keybind.c:2314
-#: src/keybind.c:2336
+#: src/keybind.c:2293
+#: src/keybind.c:2334
+#: src/keybind.c:2356
 msgid "Game Speed Reset"
 msgstr "Réinitialisation de la Vitesse"
 
-#: src/keybind.c:2282
+#: src/keybind.c:2297
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Accélération du temps à %3.1f"
 
-#: src/keybind.c:2318
+#: src/keybind.c:2338
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Ralentissement du temps à %3.1f"
 
-#: src/keybind.c:2348
+#: src/keybind.c:2368
 msgid "Build menu will reopen"
 msgstr "Le menu des Constructions va se réouvrir"
 
-#: src/keybind.c:2352
+#: src/keybind.c:2372
 msgid "Build menu will not reopen"
 msgstr "Le menu des constructions ne se reouvrira pas"
+
+#: src/keybind.c:2384
+msgid "Radar showing friend-foe colors"
+msgstr ""
+
+#: src/keybind.c:2388
+msgid "Radar showing player colors"
+msgstr ""
+
+#: src/keybind.c:2405
+msgid "Radar showing only objects"
+msgstr ""
+
+#: src/keybind.c:2408
+msgid "Radar blending terrain and height"
+msgstr ""
+
+#: src/keybind.c:2411
+msgid "Radar showing terrain"
+msgstr ""
+
+#: src/keybind.c:2414
+msgid "Radar showing height"
+msgstr ""
 
 #: src/intdisplay.c:195
 #: src/intdisplay.c:240
@@ -982,7 +1019,7 @@ msgstr "Lui assigner la production d'une usine à DeVAs"
 
 #: src/ingameop.c:117
 #: src/ingameop.c:151
-#: src/ingameop.c:268
+#: src/ingameop.c:262
 msgid "Resume Game"
 msgstr "Retour au Jeu"
 
@@ -1001,12 +1038,12 @@ msgstr "Volume des Bruits(FX)"
 msgid "Music Volume"
 msgstr "Volume de la Musique"
 
-#: src/ingameop.c:271
+#: src/ingameop.c:265
 #: src/frontend.c:235
 msgid "Options"
 msgstr "Options"
 
-#: src/ingameop.c:276
+#: src/ingameop.c:270
 msgid "Load Game"
 msgstr "Charger"
 
