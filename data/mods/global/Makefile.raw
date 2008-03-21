@@ -1,7 +1,7 @@
 MAKERULES=../../../makerules
 include $(MAKERULES)/configure.mk
 
-AIVOLUTIONLIST = multiplay commands.txt installation.txt
+AIVOLUTIONLIST = multiplay commands.txt
 GRIMLIST = components structs texpages wrf COPYING
 NEWST_TILESLIST = texpages COPYING readme.txt
 
