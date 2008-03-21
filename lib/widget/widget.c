@@ -446,7 +446,7 @@ BOOL widgAddEditBox(W_SCREEN *psScreen, W_EDBINIT *psInit)
 
 
 /* Add a bar graph to the widget screen */
-BOOL widgAddBarGraph(W_SCREEN *psScreen, W_BARINIT *psInit)
+BOOL widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT* psInit)
 {
 	W_BARGRAPH	*psBarGraph;
 	W_FORM		*psForm;
@@ -477,13 +477,10 @@ BOOL widgAddBarGraph(W_SCREEN *psScreen, W_BARINIT *psInit)
 	}
 
 	/* Create the bar graph structure */
-	if (!barGraphCreate(&psBarGraph, psInit))
-	{
-		return FALSE;
-	}
-
+	psBarGraph = barGraphCreate(psInit);
+	if (psBarGraph == NULL
 	/* Add it to the form */
-	if (!formAddWidget(psForm, (WIDGET *)psBarGraph, (W_INIT *)psInit))
+	 || !formAddWidget(psForm, (WIDGET *)psBarGraph, (W_INIT *)psInit))
 	{
 		return FALSE;
 	}

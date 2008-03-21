@@ -34,95 +34,100 @@
 #include "lib/ivis_common/piepalette.h"
 
 /* Create a barGraph widget data structure */
-BOOL barGraphCreate(W_BARGRAPH **ppsWidget, W_BARINIT *psInit)
+W_BARGRAPH* barGraphCreate(const W_BARINIT* psInit)
 {
+	W_BARGRAPH* psWidget;
+
 	if (psInit->style & ~(WBAR_PLAIN | WBAR_TROUGH | WBAR_DOUBLE | WIDG_HIDDEN))
 	{
-		ASSERT( FALSE, "Unknown bar graph style" );
-		return FALSE;
+		ASSERT(FALSE, "Unknown bar graph style");
+		return NULL;
 	}
 
-	if (psInit->orientation < WBAR_LEFT || psInit->orientation > WBAR_BOTTOM)
+	if (psInit->orientation < WBAR_LEFT
+	 || psInit->orientation > WBAR_BOTTOM)
 	{
-		ASSERT( FALSE, "barGraphCreate: Unknown orientation" );
-		return FALSE;
+		ASSERT(FALSE, "barGraphCreate: Unknown orientation");
+		return NULL;
 	}
 
 	if (psInit->size > WBAR_SCALE)
 	{
-		ASSERT( FALSE, "barGraphCreate: Bar size out of range" );
-		return FALSE;
+		ASSERT(FALSE, "barGraphCreate: Bar size out of range");
+		return NULL;
 	}
-	if ((psInit->style & WBAR_DOUBLE) && (psInit->minorSize > WBAR_SCALE))
+	if ((psInit->style & WBAR_DOUBLE)
+	 && (psInit->minorSize > WBAR_SCALE))
 	{
-		ASSERT( FALSE, "barGraphCreate: Minor bar size out of range" );
-		return FALSE;
+		ASSERT(FALSE, "barGraphCreate: Minor bar size out of range");
+		return NULL;
 	}
 
 	/* Allocate the required memory */
-	*ppsWidget = (W_BARGRAPH *)malloc(sizeof(W_BARGRAPH));
-	if (*ppsWidget == NULL)
+	psWidget = (W_BARGRAPH *)malloc(sizeof(W_BARGRAPH));
+	if (psWidget == NULL)
 	{
-		ASSERT( FALSE, "barGraphCreate: Out of memory" );
-		return FALSE;
+		debug(LOG_ERROR, "barGraphCreate: Out of memory");
+		abort();
+		return NULL;
 	}
 	/* Allocate the memory for the tip and copy it if necessary */
 	if (psInit->pTip)
 	{
-		(*ppsWidget)->pTip = psInit->pTip;
+		psWidget->pTip = psInit->pTip;
 	}
 	else
 	{
-		(*ppsWidget)->pTip = NULL;
+		psWidget->pTip = NULL;
 	}
 
 	/* Initialise the structure */
-	(*ppsWidget)->type = WIDG_BARGRAPH;
-	(*ppsWidget)->id = psInit->id;
-	(*ppsWidget)->formID = psInit->formID;
-	(*ppsWidget)->style = psInit->style;
-	(*ppsWidget)->x = psInit->x;
-	(*ppsWidget)->y = psInit->y;
-	(*ppsWidget)->width = psInit->width;
-	(*ppsWidget)->height = psInit->height;
-	(*ppsWidget)->callback = psInit->pCallback;
-	(*ppsWidget)->pUserData = psInit->pUserData;
-	(*ppsWidget)->UserData = psInit->UserData;
-	(*ppsWidget)->barPos = psInit->orientation;
-	(*ppsWidget)->majorSize = psInit->size;
-	(*ppsWidget)->minorSize = psInit->minorSize;
-	(*ppsWidget)->iRange = psInit->iRange;
+	psWidget->type = WIDG_BARGRAPH;
+	psWidget->id = psInit->id;
+	psWidget->formID = psInit->formID;
+	psWidget->style = psInit->style;
+	psWidget->x = psInit->x;
+	psWidget->y = psInit->y;
+	psWidget->width = psInit->width;
+	psWidget->height = psInit->height;
+	psWidget->callback = psInit->pCallback;
+	psWidget->pUserData = psInit->pUserData;
+	psWidget->UserData = psInit->UserData;
+	psWidget->barPos = psInit->orientation;
+	psWidget->majorSize = psInit->size;
+	psWidget->minorSize = psInit->minorSize;
+	psWidget->iRange = psInit->iRange;
 
 
 	/* Set the display function */
 	if (psInit->pDisplay)
 	{
-		(*ppsWidget)->display = psInit->pDisplay;
+		psWidget->display = psInit->pDisplay;
 	}
 	else if (psInit->style & WBAR_TROUGH)
 	{
-		(*ppsWidget)->display = barGraphDisplayTrough;
+		psWidget->display = barGraphDisplayTrough;
 	}
 	else if (psInit->style & WBAR_DOUBLE)
 	{
-		(*ppsWidget)->display = barGraphDisplayDouble;
+		psWidget->display = barGraphDisplayDouble;
 	}
 	else
 	{
-		(*ppsWidget)->display = barGraphDisplay;
+		psWidget->display = barGraphDisplay;
 	}
 	/* Set the major colour */
-	(*ppsWidget)->majorCol = psInit->sCol;
+	psWidget->majorCol = psInit->sCol;
 
 	/* Set the minor colour if necessary */
 	if (psInit->style & WBAR_DOUBLE)
 	{
-		(*ppsWidget)->majorCol = psInit->sMinorCol;
+		psWidget->majorCol = psInit->sMinorCol;
 	}
 
-	barGraphInitialise(*ppsWidget);
+	barGraphInitialise(psWidget);
 
-	return TRUE;
+	return psWidget;
 }
 
 

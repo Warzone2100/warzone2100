@@ -305,7 +305,7 @@ extern BOOL widgAddButton(W_SCREEN *psScreen, W_BUTINIT *psInit);
 extern BOOL widgAddEditBox(W_SCREEN *psScreen, W_EDBINIT *psInit);
 
 /* Add a bar graph to a form */
-extern BOOL widgAddBarGraph(W_SCREEN *psScreen, W_BARINIT *psInit);
+extern BOOL widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT* psInit);
 
 /* Add a slider to a form */
 extern BOOL widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT* psInit);
