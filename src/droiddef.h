@@ -27,7 +27,6 @@
 #include "lib/gamelib/animobj.h"
 
 #include "basedef.h"
-#include "deliverance.h"
 #include "movedef.h"
 #include "statsdef.h"
 #include "weapondef.h"

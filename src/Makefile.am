@@ -16,7 +16,7 @@ noinst_HEADERS = action.h advvis.h ai.h aiexperience.h anim_id.h \
 	astar.h atmos.h basedef.h bridge.h bucket3d.h \
 	projectiledef.h cheat.h clparse.h cluster.h cmddroid.h \
 	cmddroiddef.h combat.h component.h configuration.h console.h data.h \
-	deliverance.h design.h difficulty.h display.h display3d.h display3ddef.h \
+	design.h difficulty.h display.h display3d.h display3ddef.h \
 	displaydef.h drive.h droid.h droiddef.h e3demo.h edit3d.h effects.h \
 	environ.h feature.h featuredef.h formation.h formationdef.h fpath.h \
 	frend.h frontend.h function.h functiondef.h game.h gateway.h \
