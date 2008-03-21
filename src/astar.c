@@ -438,7 +438,8 @@ static 	FP_NODE		*psNearest, *psRoute;
 		psCurr = fpathNewNode(tileSX,tileSY, 0, NULL);
 		if (!psCurr)
 		{
-			goto exit_error;
+			fpathHashReset();
+			return ASR_FAILED;
 		}
 		// estimate the estimated distance/moves
 		psCurr->est = (SWORD)fpathEstimate(psCurr->x, psCurr->y, tileFX, tileFY);
@@ -615,11 +616,5 @@ static 	FP_NODE		*psNearest, *psRoute;
 	}
 
 	fpathHashReset();
-
 	return retval;
-
-
-exit_error:
-	fpathHashReset();
-	return ASR_FAILED;
 }
