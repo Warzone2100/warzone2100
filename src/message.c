@@ -803,8 +803,6 @@ VIEWDATA * getViewData(const char *pName)
 	VIEWDATA_LIST *psList = NULL;
 	unsigned int i = 0;
 
-	ASSERT( strlen(pName) < MAX_STR_SIZE, "getViewData: verbose message name" );
-
 	for (psList = apsViewData; psList != NULL; psList = psList->psNext)
 	{
 		for (i = 0; i < psList->numViewData; i++)

@@ -100,8 +100,6 @@
 
 /* The maximum number of characters on the component buttons */
 #define DES_COMPBUTMAXCHAR			5
-/* The maximum number of characters in a design name */
-#define DES_NAMEMAXCHAR				MAX_STR_SIZE
 
 
 /* Which type of system is displayed on the design screen */

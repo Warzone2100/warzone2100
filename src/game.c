@@ -98,6 +98,9 @@
  */
 #define FIXME_CAST_ASSIGN(TYPE, lval, rval) { TYPE* __tmp = (TYPE*) &lval; *__tmp = (TYPE)rval; }
 
+/// @note This represents a size internal to savegame files, so: DO NOT CHANGE THIS
+#define MAX_GAME_STR_SIZE 20
+
 UDWORD RemapPlayerNumber(UDWORD OldNumber);
 
 typedef struct _game_save_header
@@ -1552,7 +1555,7 @@ typedef struct _save_droid_v12
 
 #define DROID_SAVE_V14		\
 	DROID_SAVE_V12;			\
-	char	tarStatName[MAX_STR_SIZE];\
+	char	tarStatName[MAX_GAME_STR_SIZE];\
     UDWORD	baseStructID;	\
 	UBYTE	group;			\
 	UBYTE	selected;		\
@@ -1995,7 +1998,7 @@ typedef struct _save_message
 {
 	MESSAGE_TYPE	type;			//The type of message
 	BOOL			bObj;
-	char			name[MAX_STR_SIZE];
+	char			name[MAX_GAME_STR_SIZE];
 	UDWORD			objId;					//Id for Proximity messages!
 	BOOL			read;					//flag to indicate whether message has been read
 	UDWORD			player;					//which player this message belongs to
@@ -10635,7 +10638,7 @@ static BOOL writeMessageFile(char *pFileName)
 					//message has viewdata so store the name
 					psSaveMessage->bObj = FALSE;
 					pViewData = (VIEWDATA*)psMessage->pViewData;
-					ASSERT( strlen(pViewData->pName) < MAX_STR_SIZE,"writeMessageFile; viewdata pName Error" );
+					ASSERT( strlen(pViewData->pName) < MAX_GAME_STR_SIZE,"writeMessageFile; viewdata pName Error" );
 					strcpy(psSaveMessage->name,pViewData->pName);	//Pointer to view data - if any - should be some!
 				}
 				else
@@ -10650,7 +10653,7 @@ static BOOL writeMessageFile(char *pFileName)
 			{
 				psSaveMessage->bObj = FALSE;
 				pViewData = (VIEWDATA*)psMessage->pViewData;
-				ASSERT( strlen(pViewData->pName) < MAX_STR_SIZE,"writeMessageFile; viewdata pName Error" );
+				ASSERT( strlen(pViewData->pName) < MAX_GAME_STR_SIZE,"writeMessageFile; viewdata pName Error" );
 				strcpy(psSaveMessage->name,pViewData->pName);	//Pointer to view data - if any - should be some!
 			}
 			psSaveMessage->read = psMessage->read;			//flag to indicate whether message has been read

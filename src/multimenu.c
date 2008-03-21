@@ -322,7 +322,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 
 	unsigned int       numButtons, count, butPerForm, i;
 
-	static char		tips[NBTIPS][MAX_STR_SIZE];
+	static char		tips[NBTIPS][MAX_STR_LENGTH];
 
 
 	context = mode;

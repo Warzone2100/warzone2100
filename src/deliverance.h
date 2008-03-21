@@ -25,7 +25,6 @@
 #define __INCLUDED_SRC_DELIVERANCE_H__
 
 #define MAX_NAME_SIZE		60
-#define MAX_STR_SIZE		20
 #define	MAX_STR_LENGTH		256
 
 #endif // __INCLUDED_SRC_DELIVERANCE_H__

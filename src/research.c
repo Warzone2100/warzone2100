@@ -247,10 +247,10 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 	SDWORD structID;
 	UDWORD i, keyTopic, techCode, resPoints;
 	char ResearchName[MAX_NAME_SIZE];
-	char msgName[MAX_STR_SIZE], iconID[MAX_NAME_SIZE];
+	char msgName[MAX_STR_LENGTH], iconID[MAX_NAME_SIZE];
 	char imdName[MAX_NAME_SIZE], imdName2[MAX_NAME_SIZE];
 	char structName[MAX_NAME_SIZE], compName[MAX_NAME_SIZE],
-		compType[MAX_STR_SIZE];
+		compType[MAX_STR_LENGTH];
 
 	numResearch = researchCount;
 
