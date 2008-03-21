@@ -24,16 +24,7 @@
 #ifndef __INCLUDED_SRC_OPRINT_H__
 #define __INCLUDED_SRC_OPRINT_H__
 
-// print out information about a base object
-extern void printBaseObjInfo(BASE_OBJECT *psObj);
-
-// print out information about a general component
-extern void printComponentInfo(COMP_BASE_STATS *psStats);
-
-// print out weapon information
-extern void printWeaponInfo(WEAPON_STATS *psStats);
-
 // print out information about a droid and it's components
-extern void printDroidInfo(DROID *psDroid);
+extern void printDroidInfo(const DROID* psDroid);
 
 #endif // __INCLUDED_SRC_OPRINT_H__

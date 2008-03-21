@@ -17,11 +17,8 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * oPrint.c
- *
- * Object information printing routines
- *
+/** @file
+ *  Object information printing routines
  */
 
 #include "lib/framework/frame.h"
@@ -31,8 +28,10 @@
 #include "oprint.h"
 #include "visibility.h"
 
-// print out information about a base object
-void printBaseObjInfo(BASE_OBJECT *psObj)
+/** print out information about a base object
+ *  \param psObj the object to print the info for
+ */
+static void printBaseObjInfo(const BASE_OBJECT* psObj)
 {
 	const char *pType;
 	switch (psObj->type)
@@ -54,8 +53,10 @@ void printBaseObjInfo(BASE_OBJECT *psObj)
 	CONPRINTF( ConsoleString, (ConsoleString, "%s id %d at (%d,%d,%d) dpr (%f,%d,%d)\n", pType, psObj->id, psObj->pos.x, psObj->pos.y, psObj->pos.z, psObj->direction, psObj->pitch, psObj->roll) );
 }
 
-// print out information about a general component
-void printComponentInfo(COMP_BASE_STATS *psStats)
+/** print out information about a general component
+ *  \param psStats the component to print the info for
+ */
+static void printComponentInfo(const COMP_BASE_STATS* psStats)
 {
 	psStats = psStats;
 
@@ -68,8 +69,10 @@ void printComponentInfo(COMP_BASE_STATS *psStats)
 }
 
 
-// print out weapon information
-void printWeaponInfo(WEAPON_STATS *psStats)
+/** print out weapon information
+ *  \param psStats the weapon to print the info for
+ */
+static void printWeaponInfo(const WEAPON_STATS* psStats)
 {
 	const char *pWC, *pWSC, *pMM;
 
@@ -208,9 +211,10 @@ void printWeaponInfo(WEAPON_STATS *psStats)
 			  psStats->recoilValue, psStats->directLife, psStats->radiusLife));
 }
 
-
-// print out information about a droid and it's components
-void printDroidInfo(DROID *psDroid)
+/** print out information about a droid and it's components
+ *  \param psDroid the droid to print the info for
+ */
+void printDroidInfo(const DROID* psDroid)
 {
 	SDWORD	i;
 	BODY_STATS			*psBdyStats;
