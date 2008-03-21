@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Gateway.h
- *
- * Interface to routing gateway code.
- *
+/** @file
+ *  Interface to routing gateway code.
  */
-#ifndef _gateway_h
-#define _gateway_h
+
+#ifndef __INCLUDED_SRC_GATEWAY_H__
+#define __INCLUDED_SRC_GATEWAY_H__
 
 #include "gatewaydef.h"
 
@@ -123,4 +121,4 @@ BOOL gwSetZoneEquiv(SDWORD zone, SDWORD numEquiv, UBYTE *pEquiv);
 // see if a zone is reachable
 BOOL gwZoneReachable(SDWORD zone);
 
-#endif
+#endif // __INCLUDED_SRC_GATEWAY_H__

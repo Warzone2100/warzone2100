@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Action.h
- *
+/** @file
  * Function prototypes for setting the action of a droid
- *
  */
-#ifndef _action_h
-#define _action_h
+
+#ifndef __INCLUDED_SRC_ACTION_H__
+#define __INCLUDED_SRC_ACTION_H__
 
 #include "droiddef.h"
 #include "structuredef.h" //STRUCT_MAXWEAPS
@@ -164,11 +162,4 @@ extern BOOL updateAttackTarget(BASE_OBJECT * psAttacker, SDWORD weapon_slot);
 #define CAN_UPDATE_NAYBORS(object)\
 (((object)->id % NAYBOR_SKIP_FRAMES) == (frameGetFrameNumber() % NAYBOR_SKIP_FRAMES))
 
-#endif
-
-
-
-
-
-
-
+#endif // __INCLUDED_SRC_ACTION_H__

@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Structure.h
- *
- * Definitions for the structures.
- *
+/** @file
+ *  Definitions for the structures.
  */
-#ifndef _structure_h
-#define _structure_h
+
+#ifndef __INCLUDED_SRC_STRUCTURE_H__
+#define __INCLUDED_SRC_STRUCTURE_H__
 
 #include "objectdef.h"
 #include "structuredef.h"
@@ -435,4 +433,4 @@ do { \
 	} \
 } while (0)
 
-#endif
+#endif // __INCLUDED_SRC_STRUCTURE_H__

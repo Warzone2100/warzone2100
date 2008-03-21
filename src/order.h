@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Order.h
- *
- * Function prototypes for giving droids orders
- *
+/** @file
+ *  Function prototypes for giving droids orders
  */
-#ifndef _order_h
-#define _order_h
+
+#ifndef __INCLUDED_SRC_ORDER_H__
+#define __INCLUDED_SRC_ORDER_H__
 
 #include "orderdef.h"
 #include "action.h" //Watermelon:needs DROID_OACTION_INFO
@@ -260,4 +258,4 @@ static inline void removeDroidOrderTarget(DROID *psDroid, SDWORD idx)
 	psDroid->asOrderList[idx].psOrderTarget = NULL;
 }
 
-#endif
+#endif // __INCLUDED_SRC_ORDER_H__

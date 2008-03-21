@@ -17,10 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/* display3d.h */
 
-#ifndef _display3d_h
-#define _display3d_h
+#ifndef __INCLUDED_SRC_DISPLAY3D_H__
+#define __INCLUDED_SRC_DISPLAY3D_H__
 
 #include "display.h"
 #include "display3ddef.h"	// This should be the only place including this file
@@ -142,4 +141,4 @@ enum
 	BAR_LAST
 };
 
-#endif
+#endif // __INCLUDED_SRC_DISPLAY3D_H__

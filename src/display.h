@@ -17,15 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Display.h
- *
- * Definitions for the display system structures and routines.
- *
+/** @file
+ *  Definitions for the display system structures and routines.
  */
 
-#ifndef _display_h
-#define _display_h
+#ifndef __INCLUDED_SRC_DISPLAY_H__
+#define __INCLUDED_SRC_DISPLAY_H__
 
 #include "basedef.h"
 #include "structure.h"
@@ -222,4 +219,4 @@ extern BOOL ctrlShiftDown(void);
 
 extern UDWORD getTargetType(void);
 
-#endif
+#endif // __INCLUDED_SRC_DISPLAY_H__

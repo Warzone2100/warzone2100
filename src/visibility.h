@@ -17,8 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef _visibility_h
-#define _visibility_h
+
+#ifndef __INCLUDED_SRC_VISIBILITY__
+#define __INCLUDED_SRC_VISIBILITY__
 
 #include "objectdef.h"
 
@@ -123,4 +124,4 @@ static inline int objConcealment(BASE_OBJECT *psObj)
 	return psObj->ECMMod;
 }
 
-#endif
+#endif // __INCLUDED_SRC_VISIBILITY__

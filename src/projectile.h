@@ -17,18 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/***************************************************************************/
-/*
- * Projectile types and function headers
- *
- * Gareth Jones 11/7/97
+/** @file
+ *  Projectile types and function headers
  */
-/***************************************************************************/
 
-#ifndef _PROJECTILE_H_
-#define _PROJECTILE_H_
-
-/***************************************************************************/
+#ifndef __INCLUDED_SRC_PROJECTILE_H__
+#define __INCLUDED_SRC_PROJECTILE_H__
 
 #include "lib/framework/types.h"
 #include "basedef.h"
@@ -136,7 +130,4 @@ do { \
 	if (object->psDamaged) CHECK_OBJECT(object->psDamaged); \
 } while (0)
 
-
-#endif	/* _PROJECTILE_H_ */
-
-/***************************************************************************/
+#endif // __INCLUDED_SRC_PROJECTILE_H__

@@ -17,8 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef _intdisplay_h
-#define _intdisplay_h
+
+#ifndef __INCLUDED_SRC_INTDISPLAY_H__
+#define __INCLUDED_SRC_INTDISPLAY_H__
 
 #include "lib/widget/widget.h"
 #include "lib/widget/widgint.h"
@@ -310,4 +311,4 @@ extern void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOff
 
 extern void intDisplayAllyIcon(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
-#endif
+#endif // __INCLUDED_SRC_INTDISPLAY_H__

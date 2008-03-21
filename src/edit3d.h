@@ -17,8 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef _edit3d_h
-#define _edit3d_h
+
+#ifndef __INCLUDED_SRC_EDIT3D_H__
+#define __INCLUDED_SRC_EDIT3D_H__
 
 #include "map.h"
 
@@ -73,4 +74,4 @@ extern UDWORD temp;
 /*returns true if the build state is not equal to BUILD3D_NONE*/
 extern BOOL   tryingToGetLocation(void);
 
-#endif
+#endif // __INCLUDED_SRC_EDIT3D_H__

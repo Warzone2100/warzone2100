@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * ScriptAI.h
- *
- * Script functions to support the AI system
- *
+/** @file
+ *  Script functions to support the AI system
  */
-#ifndef _scriptai_h
-#define _scriptai_h
+
+#ifndef __INCLUDED_SRC_SCRIPTAI_H__
+#define __INCLUDED_SRC_SCRIPTAI_H__
 
 // Add a droid to a group
 extern BOOL scrGroupAddDroid(void);
@@ -197,10 +195,4 @@ BOOL scrSkDefenseLocation(void);
 // line build.
 //BOOL scrSkOrderDroidLineBuild(void);
 
-
-
-#endif
-
-
-
-
+#endif // __INCLUDED_SRC_SCRIPTAI_H__

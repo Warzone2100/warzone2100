@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * GatewayRoute.h
- *
- * Interface to the gateway routing code
- *
+/** @file
+ *  Interface to the gateway routing code
  */
-#ifndef _gatewayroute_h
-#define _gatewayroute_h
+
+#ifndef __INCLUDED_SRC_GATEWAYROUTE_H__
+#define __INCLUDED_SRC_GATEWAYROUTE_H__
 
 #include "gateway.h"
 
@@ -52,5 +50,4 @@ extern SDWORD gwrAStarRoute(SDWORD player, UDWORD terrain,
 							SDWORD sx, SDWORD sy, SDWORD fx, SDWORD fy,
 							GATEWAY **ppsRoute);
 
-#endif
-
+#endif // __INCLUDED_SRC_GATEWAYROUTE_H__

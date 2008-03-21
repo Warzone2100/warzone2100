@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * ScriptTabs.h
- *
- * All the tables for the script compiler
- *
+/** @file
+ *  All the tables for the script compiler
  */
-#ifndef _scripttabs_h
-#define _scripttabs_h
+
+#ifndef __INCLUDED_SRC_SCRIPTTABS_H__
+#define __INCLUDED_SRC_SCRIPTTABS_H__
 
 #include "lib/script/event.h" // needed for _scr_user_types
 
@@ -34,7 +32,6 @@
 
 #define BARB1		6	
 #define BARB2		7
-
 
 typedef enum _scr_callback_types
 {
@@ -125,5 +122,4 @@ extern BOOL scrTabInitialise(void);
 // Shut down the script system
 extern void scrShutDown(void);
 
-#endif
-
+#endif // __INCLUDED_SRC_SCRIPTTABS_H__

@@ -17,8 +17,10 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef _effects_h
-#define _effects_h
+
+#ifndef __INCLUDED_SRC_EFFECTS_H__
+#define __INCLUDED_SRC_EFFECTS_H__
+
 /*
 	All singing, all dancing new effects code. Does all the stuff
 	that explosion.c and most of particle.c used to do as well as
@@ -178,4 +180,4 @@ extern bool	writeFXData(const char* fileName);
 extern	void	effectSetSize(UDWORD size);
 extern void	effectSetLandLightSpec(LAND_LIGHT_SPEC spec);
 
-#endif
+#endif // __INCLUDED_SRC_EFFECTS_H__

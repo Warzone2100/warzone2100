@@ -17,15 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * ScriptObj.h
- *
- * Object access functions for the script library
- *
+/** @file
+ *  Object access functions for the script library
  */
-#ifndef _scriptobj_h
-#define _scriptobh_h
 
+#ifndef __INCLUDED_SRC_SCRIPTOBJ_H__
+#define __INCLUDED_SRC_SCRIPTOBJ_H__
 
 // id's for object variables
 enum _objids
@@ -101,6 +98,4 @@ extern BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize);
 // default value load routine
 extern BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size);
 
-
-#endif
-
+#endif // __INCLUDED_SRC_SCRIPTOBJ_H__

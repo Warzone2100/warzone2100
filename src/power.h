@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Power.h
- *
- * Definitions for the Power Functionality.
- *
+/** @file
+ *  Definitions for the Power Functionality.
  */
-#ifndef _power_h
-#define _power_h
+
+#ifndef __INCLUDED_SRC_POWER_H__
+#define __INCLUDED_SRC_POWER_H__
 
 /** Free power on collection of oildrum. */
 #define OILDRUM_POWER		100
@@ -119,4 +117,4 @@ extern PLAYER_POWER		*asPower[MAX_PLAYERS];
 /** Flag used to check for power calculations to be done or not. */
 extern	BOOL			powerCalculated;
 
-#endif //power.h
+#endif // __INCLUDED_SRC_POWER_H__

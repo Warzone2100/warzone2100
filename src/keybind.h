@@ -17,8 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef _keybind_h
-#define _keybind_h
+
+#ifndef __INCLUDED_SRC_KEYBIND_H__
+#define __INCLUDED_SRC_KEYBIND_H__
 
 // --------------- All those keyboard mappable functions */
 extern void	kf_HalveHeights( void );
@@ -234,4 +235,4 @@ extern void	kf_ToggleWatchWindow( void );
 
 bool runningMultiplayer(void);
 
-#endif
+#endif // __INCLUDED_SRC_KEYBIND_H__

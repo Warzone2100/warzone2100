@@ -17,8 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef _bridge_h
-#define _bridge_h
+
+#ifndef __INCLUDED_SRC_BRIDGE_H__
+#define __INCLUDED_SRC_BRIDGE_H__
 
 /* Shift these out into a header file */
 #define MINIMUM_BRIDGE_SPAN 2
@@ -47,4 +48,4 @@ extern void	getBridgeInfo(UDWORD startX,UDWORD startY,UDWORD endX, UDWORD endY, 
 /* FIX ME - this is used in debug to test the bridge build code */
 extern void	testBuildBridge(UDWORD startX,UDWORD startY,UDWORD endX,UDWORD endY);
 
-#endif
+#endif // __INCLUDED_SRC_BRIDGE_H__

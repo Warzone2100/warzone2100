@@ -17,9 +17,10 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef _scores_h
-#define _scores_h
-// --------------------------------------------------------------------
+
+#ifndef __INCLUDED_SRC_SCORES_H__
+#define __INCLUDED_SRC_SCORES_H__
+
 typedef enum data_index
 {
 WD_UNITS_BUILT,
@@ -97,5 +98,4 @@ extern void	getAsciiTime			( char *psText, UDWORD time );
 extern bool readScoreData			( const char* fileName );
 extern bool writeScoreData			( const char* fileName );
 
-#endif
-
+#endif // __INCLUDED_SRC_SCORES_H__

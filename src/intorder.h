@@ -17,13 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-// 
-// IntOrder.h 
-// definitions for order interface functions.
-// 
-#ifndef __INCLUDED_INTORDER__
-#define __INCLUDED_INTORDER__
+/** @file
+ *  definitions for order interface functions.
+ */
 
+#ifndef __INCLUDED_SRC_INTORDER_H__
+#define __INCLUDED_SRC_INTORDER_H__
 
 #define IDORDER_FORM	8000
 #define IDORDER_CLOSE	8001
@@ -43,6 +42,4 @@ BOOL intRefreshOrder(void);
 //new function added to bring up the RMB order form for Factories as well as droids
 extern void intAddFactoryOrder(STRUCTURE *psStructure);
 
-
-
-#endif
+#endif // __INCLUDED_SRC_INTORDER_H__

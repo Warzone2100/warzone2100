@@ -17,7 +17,10 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/* Lighting.h - Alex */
+
+#ifndef __INCLUDED_SRC_LIGHTNING_H__
+#define __INCLUDED_SRC_LIGHTNING_H__
+
 #include "lib/ivis_common/pietypes.h"
 
 #define FOG_FLAGS		7
@@ -59,3 +62,5 @@ extern void	calcDroidIllumination(DROID *psDroid);
 extern void setScrollLimitLighting(void);
 
 extern void	findSunVector(void);
+
+#endif // __INCLUDED_SRC_LIGHTNING_H__

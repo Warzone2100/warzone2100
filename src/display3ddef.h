@@ -17,8 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef _display3ddef_h
-#define _display3ddef_h
+
+#ifndef __INCLUDED_SRC_DISPLAY3DDEF_H__
+#define __INCLUDED_SRC_DISPLAY3DDEF_H__
 
 #define TILE_WIDTH 128
 #define TILE_HEIGHT 128
@@ -35,4 +36,4 @@
 #define	RADBRX		(RADTLX + RADWIDTH) -1
 #define	RADBRY		(RADTLY + RADHEIGHT) -1
 
-#endif
+#endif // __INCLUDED_SRC_DISPLAY3DDEF_H__

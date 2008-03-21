@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Feature.h
- *
- * Definitions for the feature structures.
- *
+/** @file
+ *  Definitions for the feature structures.
  */
-#ifndef _feature_h
-#define _feature_h
+
+#ifndef __INCLUDED_SRC_FEATURE_H__
+#define __INCLUDED_SRC_FEATURE_H__
 
 #include "objectdef.h"
 
@@ -65,5 +63,4 @@ extern FEATURE	* checkForWreckage(DROID *psDroid);
 
 extern float featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide);
 
-#endif
-
+#endif // __INCLUDED_SRC_FEATURE_H__

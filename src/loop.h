@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Loop.h
- *
+/** @file
  * Interface to the main game loop routine.
- *
  */
-#ifndef _loop_h
-#define _loop_h
+
+#ifndef __INCLUDED_SRC_LOOP_H__
+#define __INCLUDED_SRC_LOOP_H__
 
 #include "lib/framework/frame.h"
 
@@ -95,5 +93,4 @@ void incNumDroids(UDWORD player);
 void incNumCommandDroids(UDWORD player);
 void incNumConstructorDroids(UDWORD player);
 
-#endif
-
+#endif // __INCLUDED_SRC_LOOP_H__

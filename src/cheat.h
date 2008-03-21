@@ -17,9 +17,10 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef _cheat_h
-#define _cheat_h
+
+#ifndef __INCLUDED_SRC_CHEAT_H__
+#define __INCLUDED_SRC_CHEAT_H__
 
 extern BOOL attemptCheatCode(const char* cheat_name);
 
-#endif
+#endif // __INCLUDED_SRC_CHEAT_H__

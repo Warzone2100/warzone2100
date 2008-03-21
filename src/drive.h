@@ -18,8 +18,8 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef _drive_h
-#define _drive_h
+#ifndef __INCLUDED_SRC_DRIVE_H__
+#define __INCLUDED_SRC_DRIVE_H__
 
 #include "droid.h"
 
@@ -94,4 +94,4 @@ SDWORD driveGetMoveDir(void);
 BOOL driveSetDirectControl(BOOL Control);
 BOOL driveSetWasDriving(BOOL Driving);
 
-#endif
+#endif // __INCLUDED_SRC_DRIVE_H__

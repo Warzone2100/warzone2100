@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * clParse.h
- *
- * All the command line values
- *
+/** @file
+ *  All the command line values
  */
-#ifndef _clparse_h
-#define _clparse_h
+
+#ifndef __INCLUDED_SRC_CLPARSE_H__
+#define __INCLUDED_SRC_CLPARSE_H__
 
 #include "lib/framework/frame.h"
 #include "lib/framework/types.h"
@@ -37,6 +35,4 @@ extern bool ParseCommandLineEarly(int argc, const char** argv);
 
 extern BOOL bAllowDebugMode;
 
-#endif
-
-
+#endif // __INCLUDED_SRC_CLPARSE_H__

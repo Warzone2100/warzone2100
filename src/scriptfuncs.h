@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * ScriptFuncs.h
- *
- * All the C functions callable from the script code
- *
+/** @file
+ *  All the C functions callable from the script code
  */
-#ifndef _scriptfuncs_h
-#define _scriptfuncs_h
+
+#ifndef __INCLUDED_SRC_SCRIPTFUNCS_H__
+#define __INCLUDED_SRC_SCRIPTFUNCS_H__
 
 #include "messagedef.h"			//for VIEWDATA
 
@@ -665,8 +663,5 @@ extern SDWORD getPlayerFromString(char *playerName);
 extern BOOL scrExp(void);
 extern BOOL scrSqrt(void);
 extern BOOL scrLog(void);
-#endif
 
-
-
-
+#endif // __INCLUDED_SRC_SCRIPTFUNCS_H__

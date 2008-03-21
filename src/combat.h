@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Combat.h
- *
- * Interface to the combat routines.
- *
+/** @file
+ *  Interface to the combat routines.
  */
-#ifndef _combat_h
-#define _combat_h
+
+#ifndef __INCLUDED_SRC_COMBAT_H__
+#define __INCLUDED_SRC_COMBAT_H__
 
 #include "lib/framework/frame.h"
 #include "objects.h"
@@ -57,4 +55,4 @@ extern void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget);
 extern float objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, UDWORD weaponClass, 
                        UDWORD weaponSubClass, HIT_SIDE impactSide);
 
-#endif
+#endif // __INCLUDED_SRC_COMBAT_H__

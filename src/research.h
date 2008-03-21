@@ -17,17 +17,14 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Research.h
- *
- * structures required for research stats
- *
+/** @file
+ *  structures required for research stats
  */
-#ifndef _research_h
-#define _research_h
+
+#ifndef __INCLUDED_SRC_RESEARCH_H__
+#define __INCLUDED_SRC_RESEARCH_H__
 
 #include "objectdef.h"
-
 
 #define NO_RESEARCH_ICON 0
 //max 'research complete' console message length
@@ -150,4 +147,4 @@ extern void enableSelfRepair(UBYTE player);
 
 void CancelAllResearch(UDWORD pl);
 
-#endif //research.h
+#endif // __INCLUDED_SRC_RESEARCH_H__

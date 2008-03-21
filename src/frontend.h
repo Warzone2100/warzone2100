@@ -17,11 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Frontend.h
- */
-#ifndef _frontend_h
-#define _frontend_h
+
+#ifndef __INCLUDED_SRC_FRONTEND_H__
+#define __INCLUDED_SRC_FRONTEND_H__
 
 #include "lib/widget/widgbase.h"
 
@@ -291,5 +289,4 @@ BOOL		runGameOptions4Menu		(void);
 #define FRONTEND_SEQUENCE		20097
 #define FRONTEND_SEQUENCE_R		20098
 
-
-#endif
+#endif // __INCLUDED_SRC_FRONTEND_H__

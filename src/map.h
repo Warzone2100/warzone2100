@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Map.h
- *
- * Definitions for the map structure
- *
+/** @file
+ *  Definitions for the map structure
  */
-#ifndef _map_h
-#define _map_h
+
+#ifndef __INCLUDED_SRC_MAP_H__
+#define __INCLUDED_SRC_MAP_H__
 
 #include "lib/framework/frame.h"
 #include "objects.h"
@@ -298,4 +296,4 @@ extern bool	writeVisibilityData(const char* fileName);
 //scroll min and max values
 extern SDWORD		scrollMinX, scrollMaxX, scrollMinY, scrollMaxY;
 
-#endif
+#endif // __INCLUDED_SRC_MAP_H__

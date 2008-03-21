@@ -17,8 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef _atmos_h
-#define _atmos_h
+
+#ifndef __INCLUDED_SRC_ATMOS_H__
+#define __INCLUDED_SRC_ATMOS_H__
 
 typedef struct _atmosParticle
 {
@@ -51,7 +52,6 @@ UBYTE	base;
 SBYTE	vec;
 } MISTAREA;
 
-
 extern MISTAREA *pMistValues;
 
-#endif
+#endif // __INCLUDED_SRC_ATMOS_H__

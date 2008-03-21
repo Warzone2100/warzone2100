@@ -17,8 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef _component_h
-#define _component_h
+
+#ifndef __INCLUDED_SRC_COMPONENT_H__
+#define __INCLUDED_SRC_COMPONENT_H__
 
 #include "droiddef.h"
 #include "structuredef.h"
@@ -104,4 +105,4 @@ extern SDWORD	rescaleButtonObject(SDWORD radius, SDWORD baseScale,SDWORD baseRad
 
 extern void	destroyFXDroid(DROID	*psDroid);
 
-#endif
+#endif // __INCLUDED_SRC_COMPONENT_H__

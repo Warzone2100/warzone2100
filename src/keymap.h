@@ -17,8 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef _keymap_h
-#define _keymap_h
+
+#ifndef __INCLUDED_SRC_KEYMAP_H__
+#define __INCLUDED_SRC_KEYMAP_H__
 
 #include "lib/framework/input.h"
 
@@ -99,6 +100,4 @@ extern KEY_MAPPING	*keyMappings;
 //remove this one below
 extern void	keyShowMappings				( void );
 
-
-
-#endif
+#endif // __INCLUDED_SRC_KEYMAP_H__

@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Cluster.h
- *
- * Form droids and structures into clusters
- *
+/** @file
+ *  Form droids and structures into clusters
  */
-#ifndef _cluster_h
-#define _cluster_h
+
+#ifndef __INCLUDED_SRC_CLUSTER_H__
+#define __INCLUDED_SRC_CLUSTER_H__
 
 #include "droiddef.h"
 #include "structuredef.h"
@@ -103,5 +101,4 @@ extern BASE_OBJECT *clustIterate(void);
 // reset the visibility for all clusters for a particular player
 extern void clustResetVisibility(SDWORD player);
 
-#endif
-
+#endif // __INCLUDED_SRC_CLUSTER_H__

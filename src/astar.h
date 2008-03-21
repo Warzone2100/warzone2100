@@ -17,13 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * AStar.h
- *
- */
-#ifndef _AStar_h
-#define _AStar_h
 
+#ifndef __INCLUDED_SRC_ASTART_H__
+#define __INCLUDED_SRC_ASTART_H__
 
 // the buffer to store a route in
 #define ASTAR_MAXROUTE		50
@@ -69,4 +65,4 @@ extern SDWORD fpathAStarRoute(SDWORD routeMode, ASTAR_ROUTE *psRoutePoints,
 // Check los between two tiles
 extern BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2);
 
-#endif
+#endif // __INCLUDED_SRC_ASTART_H__

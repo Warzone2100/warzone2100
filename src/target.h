@@ -18,8 +18,8 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef _target_h
-#define _target_h
+#ifndef __INCLUDED_SRC_TARGET_H__
+#define __INCLUDED_SRC_TARGET_H__
 
 #include "basedef.h"
 
@@ -32,4 +32,4 @@ BASE_OBJECT *targetGetCurrent(void);
 void targetStartAnim(void);
 void targetMarkCurrent(void);
 
-#endif
+#endif // __INCLUDED_SRC_TARGET_H__

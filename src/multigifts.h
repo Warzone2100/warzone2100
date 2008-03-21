@@ -17,11 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * multigifts.h
- *
- * multiplayer game, gifts and deathmatch relevant funcs.
+/** @file
+ *  multiplayer game, gifts and deathmatch relevant funcs.
  */
+
+#ifndef __INCLUDED_SRC_MULTIGIFTS_H__
+#define __INCLUDED_SRC_MULTIGIFTS_H__
 
 extern void requestAlliance		(uint8_t from, uint8_t to, BOOL prop, BOOL allowAudio);
 extern void breakAlliance		(uint8_t p1, uint8_t p2, BOOL prop, BOOL allowAudio);
@@ -50,3 +51,5 @@ extern void giftRadar						(uint8_t from, uint8_t to, BOOL send);
 #define RESEARCH_GIFT	3
 #define POWER_GIFT		4
 #define STRUCTURE_GIFT	5	// Unused
+
+#endif // __INCLUDED_SRC_MULTIGIFTS_H__

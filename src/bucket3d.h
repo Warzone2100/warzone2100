@@ -17,10 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/* bucket3D.h */
 
-#ifndef _bucket3d_h
-#define _bucket3d_h
+#ifndef __INCLUDED_SRC_BUCKET3D_H__
+#define __INCLUDED_SRC_BUCKET3D_H__
 
 #define		BUCKET
 
@@ -49,4 +48,4 @@ extern BOOL bucketAddTypeToList(RENDER_TYPE objectType, void* object);
 /* render Objects in list */
 extern BOOL bucketRenderCurrentList(void);
 
-#endif
+#endif // __INCLUDED_SRC_BUCKET3D_H__

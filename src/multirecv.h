@@ -17,14 +17,15 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * 	MultiRecv.h
- *
- * header for multiplay files that recv netmsgs.
- * this is a little lower level than multiplay.h
- * so we don't include it in other warzone stuff
- * to avoid a load of warnings
+/** @file
+ *  header for multiplay files that receive netmessages
+ *  this is a little lower level than multiplay.h
+ *  so we don't include it in other warzone stuff
+ *  to avoid a load of warnings
  */
+
+#ifndef __INCLUDED_SRC_MULTIRECV_H__
+#define __INCLUDED_SRC_MULTIRECV_H__
 
 extern BOOL recvDroid				(void);
 extern BOOL recvDroidInfo			(void);
@@ -64,3 +65,5 @@ extern BOOL	recvMapFileRequested		(void);
 
 extern BOOL recvTextMessageAI		(void);		//AI multiplayer message
 extern BOOL	recvTeamRequest		(void);
+
+#endif // __INCLUDED_SRC_MULTIRECV_H__

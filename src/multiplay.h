@@ -18,13 +18,12 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /*
- * Multiplay.h
- *
- *Alex Lee 1997/98, Pumpkin Studios, Bath.
+ *  Alex Lee 1997/98, Pumpkin Studios, Bath.
  */
 
-#ifndef _multiplay_h
-#define _multiplay_h
+#ifndef __INCLUDED_SRC_MULTIPLAY_H__
+#define __INCLUDED_SRC_MULTIPLAY_H__
+
 #include "group.h"
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -215,4 +214,4 @@ extern BOOL msgStackGetDroid(DROID **ppsDroid);
 extern BOOL sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, const char* pStr);
 extern BOOL msgStackFireTop(void);
 
-#endif
+#endif // __INCLUDED_SRC_MULTIPLAY_H__

@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * droid.h
- *
- * Definitions for the droid object.
- *
+/** @file
+ *  Definitions for the droid object.
  */
-#ifndef _droid_h
-#define _droid_h
+
+#ifndef __INCLUDED_SRC_DROID_H__
+#define __INCLUDED_SRC_DROID_H__
 
 #include "objectdef.h"
 #include "lib/gamelib/gtime.h"
@@ -545,4 +543,4 @@ do { \
 // Minimum damage a weapon will deal to its target
 #define	MIN_WEAPON_DAMAGE	1
 
-#endif
+#endif // __INCLUDED_SRC_DROID_H__

@@ -17,8 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef _texture_h
-#define _texture_h
+
+#ifndef __INCLUDED_SRC_TEXTURE_H__
+#define __INCLUDED_SRC_TEXTURE_H__
 
 #include "display3ddef.h"
 
@@ -44,4 +45,4 @@ extern int terrainPage;
 void setTextureSize(int texSize);
 int getTextureSize(void);
 
-#endif
+#endif // __INCLUDED_SRC_TEXTURE_H__

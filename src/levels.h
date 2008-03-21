@@ -17,14 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Levels.h
- *
- * Control the data loading for game levels
- *
+/** @file
+ *  Control the data loading for game levels
  */
-#ifndef _levels_h
-#define _levels_h
+
+#ifndef __INCLUDED_SRC_LEVELS_H__
+#define __INCLUDED_SRC_LEVELS_H__
 
 #include "init.h"
 
@@ -102,6 +100,4 @@ extern SDWORD getLevelLoadType(void);
 
 char *getLevelName( void );
 
-#endif
-
-
+#endif // __INCLUDED_SRC_LEVELS_H__

@@ -17,14 +17,11 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Stats.h
- *
- * Interface to the common stats module
- *
+/** @file
+ *  Interface to the common stats module
  */
-#ifndef _stats_h
-#define _stats_h
+#ifndef __INCLUDED_SRC_STATS_H__
+#define __INCLUDED_SRC_STATS_H__
 
 #include "objectdef.h"
 /**************************************************************************************
@@ -337,6 +334,4 @@ extern UDWORD getMaxPropulsionSpeed(void);
 
 extern BOOL objHasWeapon(BASE_OBJECT *psObj);
 
-#endif
-
-
+#endif // __INCLUDED_SRC_STATS_H__
