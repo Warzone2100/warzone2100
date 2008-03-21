@@ -279,7 +279,7 @@ if doesn't compare with any*/
 extern BOOL getBodySize(const char *pSize, UBYTE *pStore);
 
 // Pass in a stat and get its name
-extern const char* getStatName(void * pStat);
+extern const char* getStatName(const void * pStat);
 
 /*returns the propulsion type based on the string name passed in */
 extern PROPULSION_TYPE getPropulsionType(const char *pType);
@@ -288,11 +288,11 @@ extern WEAPON_EFFECT getWeaponEffect(const char *pWeaponEffect);
 
 extern UWORD weaponROF(WEAPON_STATS *psStat, SBYTE player);
 /*Access functions for the upgradeable stats of a weapon*/
-extern UDWORD	weaponFirePause(WEAPON_STATS *psStats, UBYTE player);
+extern UDWORD	weaponFirePause(const WEAPON_STATS* psStats, UBYTE player);
 extern UDWORD	weaponReloadTime(WEAPON_STATS *psStats, UBYTE player);
-extern UDWORD	weaponShortHit(WEAPON_STATS *psStats, UBYTE player);
-extern UDWORD	weaponLongHit(WEAPON_STATS *psStats, UBYTE player);
-extern UDWORD	weaponDamage(WEAPON_STATS *psStats, UBYTE player);
+extern UDWORD	weaponShortHit(const WEAPON_STATS* psStats, UBYTE player);
+extern UDWORD	weaponLongHit(const WEAPON_STATS* psStats, UBYTE player);
+extern UDWORD	weaponDamage(const WEAPON_STATS* psStats, UBYTE player);
 extern UDWORD	weaponRadDamage(WEAPON_STATS *psStats, UBYTE player);
 extern UDWORD	weaponIncenDamage(WEAPON_STATS *psStats, UBYTE player);
 extern UDWORD	weaponRadiusHit(WEAPON_STATS *psStats, UBYTE player);

@@ -64,10 +64,10 @@ BOOL	proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player
 					 UDWORD tarX, UDWORD tarY, UDWORD tarZ, BASE_OBJECT *psTarget, BOOL bVisible, BOOL bPenetrate, int weapon_slot );
 
 // return whether a weapon is direct or indirect
-BOOL	proj_Direct(WEAPON_STATS *psStats);
+bool proj_Direct(const WEAPON_STATS* psStats);
 
 // return the maximum range for a weapon
-SDWORD	proj_GetLongRange(WEAPON_STATS *psStats);
+SDWORD	proj_GetLongRange(const WEAPON_STATS* psStats);
 
 // Watermelon:neighbour info ripped from droiddef.h
 /* Info stored for each projectile neighbour */

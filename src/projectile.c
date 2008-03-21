@@ -1848,12 +1848,12 @@ proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj,
 /***************************************************************************/
 
 // return whether a weapon is direct or indirect
-BOOL proj_Direct(WEAPON_STATS *psStats)
+bool proj_Direct(const WEAPON_STATS* psStats)
 {
 	ASSERT(psStats != NULL, "proj_Direct: called with NULL weapon!");
 	if (!psStats)
 	{
-		return TRUE; // arbitrary value in no-debug case
+		return true; // arbitrary value in no-debug case
 	}
 	ASSERT(psStats->movementModel < NUM_MOVEMENT_MODEL, "proj_Direct: invalid weapon stat");
 
@@ -1863,26 +1863,26 @@ BOOL proj_Direct(WEAPON_STATS *psStats)
 	case MM_HOMINGDIRECT:
 	case MM_ERRATICDIRECT:
 	case MM_SWEEP:
-		return TRUE;
+		return true;
 		break;
 	case MM_INDIRECT:
 	case MM_HOMINGINDIRECT:
-		return FALSE;
+		return false;
 		break;
 	case NUM_MOVEMENT_MODEL:
 	case INVALID_MOVEMENT:
 		break; // error checking in assert above; this is for no-debug case
 	}
 
-	return TRUE; // just to satisfy compiler
+	return true; // just to satisfy compiler
 }
 
 /***************************************************************************/
 
 // return the maximum range for a weapon
-SDWORD proj_GetLongRange(WEAPON_STATS *psStats)
+SDWORD proj_GetLongRange(const WEAPON_STATS* psStats)
 {
-	return (SDWORD)psStats->longRange;
+	return psStats->longRange;
 }
 
 

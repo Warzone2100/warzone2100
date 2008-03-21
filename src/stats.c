@@ -321,11 +321,11 @@ BOOL statsAllocConstruct(UDWORD	numStats)
 	ALLOC_STATS(numStats, asConstructStats, numConstructStats, CONSTRUCT_STATS);
 }
 
-const char *getStatName(void * Stat)
+const char *getStatName(const void * Stat)
 {
-	const BASE_STATS * psStats= (BASE_STATS*)Stat;
+	const BASE_STATS * const psStats= (const BASE_STATS*)Stat;
 
-	return(getName(psStats->pName));
+	return getName(psStats->pName);
 }
 
 
@@ -2939,7 +2939,7 @@ BOOL allocateName(char **ppStore, const char *pName)
 
 
 /*Access functions for the upgradeable stats of a weapon*/
-UDWORD	weaponFirePause(WEAPON_STATS *psStats, UBYTE player)
+UDWORD	weaponFirePause(const WEAPON_STATS* psStats, UBYTE player)
 {
 	if(psStats->reloadTime == 0)
 	{
@@ -2959,19 +2959,19 @@ UDWORD	weaponReloadTime(WEAPON_STATS *psStats, UBYTE player)
 		psStats->weaponSubClass].firePause)/100);
 }
 
-UDWORD	weaponShortHit(WEAPON_STATS *psStats, UBYTE player)
+UDWORD	weaponShortHit(const WEAPON_STATS* psStats, UBYTE player)
 {
 	return (psStats->shortHit + (psStats->shortHit * asWeaponUpgrade[player][
 		psStats->weaponSubClass].shortHit)/100);
 }
 
-UDWORD	weaponLongHit(WEAPON_STATS *psStats, UBYTE player)
+UDWORD	weaponLongHit(const WEAPON_STATS* psStats, UBYTE player)
 {
 	return (psStats->longHit + (psStats->longHit * asWeaponUpgrade[player][
 		psStats->weaponSubClass].longHit)/100);
 }
 
-UDWORD	weaponDamage(WEAPON_STATS *psStats, UBYTE player)
+UDWORD	weaponDamage(const WEAPON_STATS* psStats, UBYTE player)
 {
 	return (psStats->damage + (psStats->damage * asWeaponUpgrade[player][
 		psStats->weaponSubClass].damage)/100);
