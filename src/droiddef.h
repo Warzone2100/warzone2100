@@ -91,16 +91,13 @@ typedef struct _order_list
 	UWORD           x, y, x2, y2;   ///< line build requires two sets of coords
 } ORDER_LIST;
 
-// maximum number of characters in a droid name
-#define DROID_MAXNAME	MAX_NAME_SIZE
-
 typedef struct _droid_template
 {
 	// On the PC the pName entry in STATS_BASE is redundant and can be assumed to be NULL,
 	STATS_BASE;						/* basic stats */
 
 	/// on the PC this contains the full editable UTF-8 encoded name of the template
-	char            aName[DROID_MAXNAME];
+	char            aName[MAX_STR_LENGTH];
 
 	UBYTE           NameVersion;                //< Version number used in name (e.g. Viper Mk "I" would be stored as 1 - Viper Mk "X" as 10)
 
@@ -129,7 +126,7 @@ typedef struct _droid
 	BASE_ELEMENTS(struct _droid);
 
 	/// UTF-8 name of the droid. This is generated from the droid template and cannot be changed by the game player after creation.
-	char            aName[DROID_MAXNAME];
+	char            aName[MAX_STR_LENGTH];
 
 	DROID_TYPE      droidType;                      ///< The type of droid
 

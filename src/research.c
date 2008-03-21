@@ -246,10 +246,10 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 	COMP_BASE_STATS *psComp;
 	SDWORD structID;
 	UDWORD i, keyTopic, techCode, resPoints;
-	char ResearchName[MAX_NAME_SIZE];
-	char msgName[MAX_STR_LENGTH], iconID[MAX_NAME_SIZE];
-	char imdName[MAX_NAME_SIZE], imdName2[MAX_NAME_SIZE];
-	char structName[MAX_NAME_SIZE], compName[MAX_NAME_SIZE],
+	char ResearchName[MAX_STR_LENGTH];
+	char msgName[MAX_STR_LENGTH], iconID[MAX_STR_LENGTH];
+	char imdName[MAX_STR_LENGTH], imdName2[MAX_STR_LENGTH];
+	char structName[MAX_STR_LENGTH], compName[MAX_STR_LENGTH],
 		compType[MAX_STR_LENGTH];
 
 	numResearch = researchCount;
@@ -626,7 +626,7 @@ BOOL loadResearchPR(const char *pPRData, UDWORD bufferSize)
 {
 	const unsigned int NumToAlloc = numCR(pPRData, bufferSize);
 	unsigned int i = 0;
-	char				ResearchName[MAX_NAME_SIZE], PRName[MAX_NAME_SIZE];
+	char				ResearchName[MAX_STR_LENGTH], PRName[MAX_STR_LENGTH];
 	UWORD				incR, incPR;
 	RESEARCH			*pResearch = asResearch, *pPRResearch = asResearch;
 	BOOL				recFound;
@@ -719,8 +719,8 @@ BOOL loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD list
 {
 	const unsigned int NumToAlloc = numCR(pArteData, bufferSize);
 	unsigned int i = 0;
-	char				ResearchName[MAX_NAME_SIZE], ArteName[MAX_NAME_SIZE],
-						TypeName[MAX_NAME_SIZE];
+	char				ResearchName[MAX_STR_LENGTH], ArteName[MAX_STR_LENGTH],
+						TypeName[MAX_STR_LENGTH];
 	RESEARCH			*pResearch = asResearch;
 	COMP_BASE_STATS		*pArtefact;
 	UDWORD				newType;
@@ -875,7 +875,7 @@ BOOL loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD li
 {
 	const unsigned int NumToAlloc = numCR(pStructData, bufferSize);
 	unsigned int i = 0;
-	char				ResearchName[MAX_NAME_SIZE], StructureName[MAX_NAME_SIZE];
+	char				ResearchName[MAX_STR_LENGTH], StructureName[MAX_STR_LENGTH];
 	UWORD				incR, incS;
 	RESEARCH			*pResearch = asResearch;
 	STRUCTURE_STATS		*pStructure = asStructureStats;
@@ -1021,7 +1021,7 @@ BOOL loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize)
 {
 	const unsigned int NumToAlloc = numCR(pFunctionData, bufferSize);
 	unsigned int i = 0;
-	char				ResearchName[MAX_NAME_SIZE], FunctionName[MAX_NAME_SIZE];
+	char				ResearchName[MAX_STR_LENGTH], FunctionName[MAX_STR_LENGTH];
 	UDWORD				incR, incF;
 	RESEARCH			*pResearch = asResearch;
 	FUNCTION			**pFunction = asFunctions;

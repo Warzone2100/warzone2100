@@ -2080,7 +2080,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 	const char				*pStartDroidData;
         int cnt;
 	UDWORD				NumDroids = 0, i, player;
-	char				componentName[MAX_NAME_SIZE];
+	char				componentName[MAX_STR_LENGTH];
 	BOOL				found = FALSE; //,EndOfFile;
 	DROID_TEMPLATE		*pDroidDesign;
 	COMP_BASE_STATS		*pStats;
@@ -2629,9 +2629,9 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 {
 	const char			*pStartWeaponData;
 	UDWORD				NumWeapons = 0, i, player;
-	char				WeaponName[MAX_NAME_SIZE], TemplateName[MAX_NAME_SIZE];
-	//Watermelon:TODO:fix this temp naming one day,WeaponName[DROID_MAXWEAPS][MAX_NAME_SIZE] causes stack corruption
-	char				WeaponNameA[MAX_NAME_SIZE],WeaponNameB[MAX_NAME_SIZE];
+	char				WeaponName[MAX_STR_LENGTH], TemplateName[MAX_STR_LENGTH];
+	//Watermelon:TODO:fix this temp naming one day,WeaponName[DROID_MAXWEAPS][MAX_STR_LENGTH] causes stack corruption
+	char				WeaponNameA[MAX_STR_LENGTH],WeaponNameB[MAX_STR_LENGTH];
 	UBYTE				j;
 	DROID_TEMPLATE		*pTemplate;
 	BOOL				recFound;

@@ -84,7 +84,7 @@ BOOL						bSendingMap					= FALSE;	// map broadcasting.
 
 char						tempString[12];
 char						beaconReceiveMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];	//beacon msg for each player
-char								playerName[MAX_PLAYERS][MAX_NAME_SIZE];	//Array to store all player names (humans and AIs)
+char								playerName[MAX_PLAYERS][MAX_STR_LENGTH];	//Array to store all player names (humans and AIs)
 
 /////////////////////////////////////
 /* multiplayer message stack stuff */
@@ -1346,7 +1346,7 @@ BOOL sendTemplate(DROID_TEMPLATE *pTempl)
 	NETbeginEncode(NET_TEMPLATE, NET_ALL_PLAYERS);
 		NETuint8_t(&player);
 		NETuint32_t(&pTempl->ref);
-		NETstring(pTempl->aName, DROID_MAXNAME);
+		NETstring(pTempl->aName, sizeof(pTempl->aName));
 		NETuint8_t(&pTempl->NameVersion);
 
 		for (i = 0; i < DROID_MAXCOMP; i++)
@@ -1384,7 +1384,7 @@ BOOL recvTemplate()
 		ASSERT(player < MAX_PLAYERS, "recvtemplate: invalid player size: %d", player);
 
 		NETuint32_t(&pT->ref);
-		NETstring(pT->aName, DROID_MAXNAME);
+		NETstring(pT->aName, sizeof(pT->aName));
 		NETuint8_t(&pT->NameVersion);
 		
 		for (i = 0; i < DROID_MAXCOMP; i++)

@@ -6551,7 +6551,7 @@ BOOL scrIsVtol(void)
 BOOL scrTutorialTemplates(void)
 {
 	DROID_TEMPLATE	*psCurr, *psPrev;
-	char			pName[MAX_NAME_SIZE];
+	char			pName[MAX_STR_LENGTH];
 
 	// find ViperLtMGWheels
 	strlcpy(pName, "ViperLtMGWheels", sizeof(pName));

@@ -315,7 +315,7 @@ void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	UDWORD		w = psWidget->width;
 	UDWORD		h = psWidget->height;
 	KEY_MAPPING *psMapping = (KEY_MAPPING*)psWidget->pUserData;
-	char		sKey[MAX_NAME_SIZE];// was just 40
+	char		sKey[MAX_STR_LENGTH];
 
 	if(psMapping == selectedKeyMap)
 	{

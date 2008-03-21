@@ -454,9 +454,9 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 	VIEWDATA			*psViewData, *pData;
 	VIEW_RESEARCH		*psViewRes;
 	VIEW_REPLAY			*psViewReplay;
-	char				name[MAX_STR_LENGTH], imdName[MAX_NAME_SIZE],
+	char				name[MAX_STR_LENGTH], imdName[MAX_STR_LENGTH],
 						string[MAX_STR_LENGTH],
-						imdName2[MAX_NAME_SIZE];
+						imdName2[MAX_STR_LENGTH];
 	char				audioName[MAX_STR_LENGTH];
 	SDWORD				LocX,LocY,LocZ, audioID;
 	PROX_TYPE	proxType;

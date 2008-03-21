@@ -127,7 +127,7 @@ extern BOOL responsibleFor		(UDWORD player, UDWORD playerinquestion);
 extern UDWORD whosResponsible	(UDWORD player);
 extern Vector3i cameraToHome		(UDWORD player,BOOL scroll);
 extern SDWORD dpidToPlayer		(SDWORD dpid);
-extern char		playerName[MAX_PLAYERS][MAX_NAME_SIZE];	//Array to store all player names (humans and AIs)
+extern char		playerName[MAX_PLAYERS][MAX_STR_LENGTH];	//Array to store all player names (humans and AIs)
 
 extern BOOL	multiPlayerLoop		(void);							// for loop.c
 

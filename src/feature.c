@@ -123,8 +123,8 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 {
 	FEATURE_STATS		*psFeature;
 	unsigned int		i;
-	char				featureName[MAX_NAME_SIZE], GfxFile[MAX_NAME_SIZE],
-						type[MAX_NAME_SIZE];
+	char				featureName[MAX_STR_LENGTH], GfxFile[MAX_STR_LENGTH],
+						type[MAX_STR_LENGTH];
 
 	numFeatureStats = numCR(pFeatureData, bufferSize);
 

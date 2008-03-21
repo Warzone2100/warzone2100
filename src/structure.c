@@ -483,7 +483,7 @@ static UBYTE getStructStrength(const char *pStrength)
 
 static void initModulePIEs(char *PIEName,UDWORD i,STRUCTURE_STATS *psStructure)
 {
-	char GfxFile[MAX_NAME_SIZE];
+	char GfxFile[MAX_STR_LENGTH];
 	char charNum[2];
 	UDWORD length, module = 0;
 
@@ -616,11 +616,11 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 {
 	const unsigned int NumStructures = numCR(pStructData, bufferSize);
 	UDWORD i, inc, player, numWeaps, weapSlots;
-	char				StructureName[MAX_NAME_SIZE], foundation[MAX_NAME_SIZE],
-						type[MAX_NAME_SIZE], techLevel[MAX_NAME_SIZE],
-						strength[MAX_NAME_SIZE];
-	char				GfxFile[MAX_NAME_SIZE], baseIMD[MAX_NAME_SIZE];
-	char				ecmType[MAX_NAME_SIZE], sensorType[MAX_NAME_SIZE];
+	char				StructureName[MAX_STR_LENGTH], foundation[MAX_STR_LENGTH],
+						type[MAX_STR_LENGTH], techLevel[MAX_STR_LENGTH],
+						strength[MAX_STR_LENGTH];
+	char				GfxFile[MAX_STR_LENGTH], baseIMD[MAX_STR_LENGTH];
+	char				ecmType[MAX_STR_LENGTH], sensorType[MAX_STR_LENGTH];
 	STRUCTURE_STATS		*psStructure, *pStartStats;
 	ECM_STATS*			pECMType;
 	SENSOR_STATS*		pSensorType;
@@ -629,7 +629,7 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 	UDWORD              dummyVal;
 
 #if (MAX_PLAYERS != 8)
-	char NotUsedString[MAX_NAME_SIZE];
+	char NotUsedString[MAX_STR_LENGTH];
 #endif
 
 	//initialise the module IMD structs
@@ -932,8 +932,8 @@ BOOL loadStructureWeapons(const char *pWeaponData, UDWORD bufferSize)
 {
 	const unsigned int NumToAlloc = numCR(pWeaponData, bufferSize);
 	UDWORD				i, incS, incW;
-	char				StructureName[MAX_NAME_SIZE];//, WeaponName[MAX_NAME_SIZE];
-	char				WeaponName[STRUCT_MAXWEAPS][MAX_NAME_SIZE];
+	char				StructureName[MAX_STR_LENGTH];//, WeaponName[MAX_STR_LENGTH];
+	char				WeaponName[STRUCT_MAXWEAPS][MAX_STR_LENGTH];
 	STRUCTURE_STATS		*pStructure = asStructureStats;
 	WEAPON_STATS		*pWeapon = asWeaponStats;
 	BOOL				weaponFound, structureFound;
@@ -1008,7 +1008,7 @@ BOOL loadStructureFunctions(const char *pFunctionData, UDWORD bufferSize)
 {
 	const unsigned int NumToAlloc = numCR(pFunctionData, bufferSize);
 	UDWORD				i, incS, incF;
-	char				StructureName[MAX_NAME_SIZE], FunctionName[MAX_NAME_SIZE];
+	char				StructureName[MAX_STR_LENGTH], FunctionName[MAX_STR_LENGTH];
 	STRUCTURE_STATS		*pStructure = asStructureStats;
 	FUNCTION			*pFunction, **pStartFunctions = asFunctions;
 	BOOL				functionFound, structureFound;
@@ -1121,7 +1121,7 @@ BOOL loadStructureStrengthModifiers(const char *pStrengthModData, UDWORD bufferS
 	STRUCT_STRENGTH		strengthInc;
 	WEAPON_EFFECT		effectInc;
 	UDWORD				i, j, modifier;
-	char				weaponEffectName[MAX_NAME_SIZE], strengthName[MAX_NAME_SIZE];
+	char				weaponEffectName[MAX_STR_LENGTH], strengthName[MAX_STR_LENGTH];
 
 	//initialise to 100%
 	for (i=0; i < WE_NUMEFFECTS; i++)
