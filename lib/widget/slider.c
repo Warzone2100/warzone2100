@@ -42,37 +42,47 @@ BOOL sliderCreate(W_SLIDER **ppsWidget, W_SLDINIT *psInit)
 {
 	if (psInit->style & ~(WBAR_PLAIN | WIDG_HIDDEN))
 	{
-		ASSERT( FALSE, "sliderCreate: Unknown style" );
+		debug(LOG_ERROR, "sliderCreate: Unknown style");
+		abort();
 		return FALSE;
 	}
 
-	if (psInit->orientation < WSLD_LEFT || psInit->orientation > WSLD_BOTTOM)
+	if (psInit->orientation < WSLD_LEFT
+	 || psInit->orientation > WSLD_BOTTOM)
 	{
-		ASSERT( FALSE, "sliderCreate: Unknown orientation" );
+		debug(LOG_ERROR, "sliderCreate: Unknown orientation");
+		abort();
 		return FALSE;
 	}
 
-	if (((psInit->orientation == WSLD_LEFT || psInit->orientation == WSLD_RIGHT) &&
-				psInit->numStops > (psInit->width - psInit->barSize)) ||
-		((psInit->orientation == WSLD_TOP || psInit->orientation == WSLD_BOTTOM) &&
-				psInit->numStops > (psInit->height - psInit->barSize)))
+	if (((psInit->orientation == WSLD_LEFT
+	   || psInit->orientation == WSLD_RIGHT)
+	  && psInit->numStops > (psInit->width - psInit->barSize))
+	 || ((psInit->orientation == WSLD_TOP
+	   || psInit->orientation == WSLD_BOTTOM)
+	  && psInit->numStops > (psInit->height - psInit->barSize)))
 	{
-		ASSERT( FALSE, "sliderCreate: Too many stops for slider length" );
+		debug(LOG_ERROR, "sliderCreate: Too many stops for slider length");
+		abort();
 		return FALSE;
 	}
 
 	if (psInit->pos > psInit->numStops)
 	{
-		ASSERT( FALSE, "sliderCreate: slider position greater than stops (%d/%d)", psInit->pos,  psInit->numStops);
+		debug(LOG_ERROR, "sliderCreate: slider position greater than stops (%d/%d)", psInit->pos,  psInit->numStops);
+		abort();
 		return FALSE;
 	}
 
-	if (((psInit->orientation == WSLD_LEFT || psInit->orientation == WSLD_RIGHT) &&
-				psInit->barSize > psInit->width) ||
-		((psInit->orientation == WSLD_TOP || psInit->orientation == WSLD_BOTTOM) &&
-				psInit->barSize > psInit->height))
+	if (((psInit->orientation == WSLD_LEFT
+	   || psInit->orientation == WSLD_RIGHT)
+	  && psInit->barSize > psInit->width)
+	 || ((psInit->orientation == WSLD_TOP
+	   || psInit->orientation == WSLD_BOTTOM)
+	  && psInit->barSize > psInit->height))
 	{
-		ASSERT( FALSE, "sliderCreate: slider bar is larger than slider width" );
+		debug(LOG_ERROR, "sliderCreate: slider bar is larger than slider width");
+		abort();
 		return FALSE;
 	}
 
@@ -80,7 +90,8 @@ BOOL sliderCreate(W_SLIDER **ppsWidget, W_SLDINIT *psInit)
 	*ppsWidget = (W_SLIDER *)malloc(sizeof(W_SLIDER));
 	if (*ppsWidget == NULL)
 	{
-		ASSERT( FALSE, "sliderCreate: Out of memory" );
+		debug(LOG_ERROR, "sliderCreate: Out of memory");
+		abort();
 		return FALSE;
 	}
 	/* Allocate the memory for the tip and copy it if necessary */
