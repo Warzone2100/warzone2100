@@ -7393,7 +7393,7 @@ BOOL scrFogTileInRange(void)
 
 BOOL scrMapRevealedInRange(void)
 {
-	SDWORD		wRangeX,wRangeY,tRangeX,tRangeY,wRange,player;
+	SDWORD		wRangeX,wRangeY,tRangeX,tRangeY,wRange,tRange,player;
 	UDWORD		i,j;
 
 	if (!stackPopParams(4, VAL_INT, &wRangeX, VAL_INT, &wRangeY,
@@ -7413,6 +7413,8 @@ BOOL scrMapRevealedInRange(void)
 		return FALSE;
 	}
 
+	// convert to tile coords
+	tRange = map_coord(wRange);
 	tRangeX = map_coord(wRangeX);				//cache to tile coords, for faster calculations
 	tRangeY = map_coord(wRangeY);
 
@@ -7420,10 +7422,12 @@ BOOL scrMapRevealedInRange(void)
 	{
 		for(j=0; j<mapHeight; j++)
 		{
-		   	if(TEST_TILE_VISIBLE( player,mapTile(i,j) ))	//not vis
-		  	{
+			// don't bother checking if out of range
+			if(abs(tRangeX-i) < tRange && abs(tRangeY-j) < tRange)
+			{
 				//within range
-				if (world_coord(dirtySqrt(tRangeX, tRangeY, i, j)) < wRange)		//dist in world units between x/y and the tile
+				if ((world_coord(dirtySqrt(tRangeX, tRangeY, i, j)) < wRange) && 		//dist in world units between x/y and the tile
+					TEST_TILE_VISIBLE( player,mapTile(i,j) ))		//not visible
 				{
 					scrFunctionResult.v.bval = TRUE;
 					if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -7432,8 +7436,8 @@ BOOL scrMapRevealedInRange(void)
 					}
 
 					return TRUE;
-				}
-		  	}
+		  		}
+			}
 		}
 	}
 
