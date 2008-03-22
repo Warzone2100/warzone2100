@@ -4824,8 +4824,6 @@ floatexp:		floatexp '+' floatexp
 					PUT_PKOPCODE(ip, OP_PUSH, VAL_FLOAT);
 					PUT_DATA_FLOAT(ip, $1);
 
-					debug(LOG_WZ, "putting float '%f'", $1);
-
 					/* Return the code block */
 					$$ = psCurrBlock;
 				}
