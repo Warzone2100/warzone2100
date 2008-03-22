@@ -130,6 +130,14 @@ BOOL loadConfig(void)
 		setWarzoneKeyNumeric("framerate", 60);
 	}
 
+	if (getWarzoneKeyString("language", sBuf))
+	{
+		if (!setLanguageByName(sBuf))
+		{
+			debug(LOG_ERROR, "Failed to set language to %s", sBuf);
+		}
+	}
+
 	if (getWarzoneKeyNumeric("showFPS", &val))
 	{
 		showFPS = val;

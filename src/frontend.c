@@ -39,6 +39,7 @@
 #include "lib/netplay/netplay.h"
 #include "lib/sound/mixer.h"
 #include "lib/widget/widget.h"
+#include "lib/framework/configfile.h"
 
 #include "advvis.h"
 #include "component.h"
@@ -1087,6 +1088,10 @@ BOOL startGameOptionsMenu(void)
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P6, FRONTEND_POS4M+(3*(w+6)), FRONTEND_POS4Y, w, h, "", IMAGE_PLAYER6, IMAGE_PLAYERX, TRUE);
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P7, FRONTEND_POS4M+(4*(w+6)), FRONTEND_POS4Y, w, h, "", IMAGE_PLAYER7, IMAGE_PLAYERX, TRUE);
 
+	// language
+	addTextButton(FRONTEND_LANGUAGE,  FRONTEND_POS2X - 25, FRONTEND_POS5Y, _("Language"), TRUE, FALSE);
+	addTextButton(FRONTEND_LANGUAGE_R,  FRONTEND_POS2M - 25, FRONTEND_POS5Y, getLanguageName(), TRUE, FALSE);
+
 	widgSetButtonState(psWScreen, FE_P0 + getPlayerColour(0), WBUT_LOCK);
 	addTextButton(FRONTEND_COLOUR, FRONTEND_POS4X-25, FRONTEND_POS4Y, _("Unit Colour"), TRUE, FALSE);
 
@@ -1106,27 +1111,38 @@ BOOL runGameOptionsMenu(void)
 	id = widgRunScreen(psWScreen);						// Run the current set of widgets
 	switch(id)
 	{
-
+	case FRONTEND_LANGUAGE_R:
+		setNextLanguage();
+		setWarzoneKeyString("language", getLanguageName());
+		widgSetString(psWScreen, FRONTEND_LANGUAGE_R, getLanguageName());
+		/* Hack to reset current menu text, which looks fancy. */
+		widgSetString(psWScreen, FRONTEND_LANGUAGE, _("Language"));
+		widgSetString(psWScreen, FRONTEND_COLOUR,  _("Unit Colour"));
+		widgSetString(psWScreen, FRONTEND_DIFFICULTY, _("Difficulty"));
+		widgSetString(psWScreen, FRONTEND_SCROLLSPEED,_("Scroll Speed"));
+		widgSetString(psWScreen, FRONTEND_SIDETEXT, _("GAME OPTIONS"));
+		// FIXME: Changing the below return button tooltip does not work.
+		//widgSetString(psWScreen, FRONTEND_BOTFORM, P_("menu", "Return"));
+		switch( getDifficultyLevel() )
+		{
+		case DL_EASY:
+			widgSetString(psWScreen,FRONTEND_DIFFICULTY_R, _("Easy"));
+			break;
+		case DL_NORMAL:
+			widgSetString(psWScreen,FRONTEND_DIFFICULTY_R, _("Normal"));
+			break;
+		case DL_HARD:
+			widgSetString(psWScreen,FRONTEND_DIFFICULTY_R, _("Hard") );
+			break;
+		case DL_TOUGH:
+		case DL_KILLER:
+			debug(LOG_ERROR, "runGameOptionsMenu: Unused difficulty level selected!");
+			break;
+		}
+		break;
 //	case FRONTEND_GAMMA:
 	case FRONTEND_SCROLLSPEED:
 		break;
-
-/*	case FRONTEND_FOGTYPE:
-	case FRONTEND_FOGTYPE_R:
-	if( war_GetFog()	)
-	{	// turn off crap fog, turn on vis fog.
-		war_SetFog(FALSE);
-		avSetStatus(TRUE);
-		widgSetString(psWScreen,FRONTEND_FOGTYPE_R, _("Fog Of War"));
-	}
-	else
-	{	// turn off vis fog, turn on normal crap fog.
-		avSetStatus(FALSE);
-		war_SetFog(TRUE);
-		widgSetString(psWScreen,FRONTEND_FOGTYPE_R, _("Mist"));
-	}
-	break;
-*/
 
 	case FRONTEND_DIFFICULTY:
 	case FRONTEND_DIFFICULTY_R:
@@ -1163,9 +1179,6 @@ BOOL runGameOptionsMenu(void)
 
 	case FE_P0:
 		widgSetButtonState(psWScreen, FE_P0, WBUT_LOCK);
-//		widgSetButtonState(psWScreen, FE_P1, 0);
-//		widgSetButtonState(psWScreen, FE_P2, 0);
-//		widgSetButtonState(psWScreen, FE_P3, 0);
 		widgSetButtonState(psWScreen, FE_P4, 0);
 		widgSetButtonState(psWScreen, FE_P5, 0);
 		widgSetButtonState(psWScreen, FE_P6, 0);
@@ -1174,9 +1187,6 @@ BOOL runGameOptionsMenu(void)
 		break;
 	case FE_P4:
 		widgSetButtonState(psWScreen, FE_P0, 0);
-	//	widgSetButtonState(psWScreen, FE_P1, 0);
-	//	widgSetButtonState(psWScreen, FE_P2, 0);
-	//	widgSetButtonState(psWScreen, FE_P3, 0);
 		widgSetButtonState(psWScreen, FE_P4, WBUT_LOCK);
 		widgSetButtonState(psWScreen, FE_P5, 0);
 		widgSetButtonState(psWScreen, FE_P6, 0);
@@ -1185,9 +1195,6 @@ BOOL runGameOptionsMenu(void)
 		break;
 	case FE_P5:
 		widgSetButtonState(psWScreen, FE_P0, 0);
-	//	widgSetButtonState(psWScreen, FE_P1, 0);
-	//	widgSetButtonState(psWScreen, FE_P2, 0);
-	//	widgSetButtonState(psWScreen, FE_P3, 0);
 		widgSetButtonState(psWScreen, FE_P4, 0);
 		widgSetButtonState(psWScreen, FE_P5, WBUT_LOCK);
 		widgSetButtonState(psWScreen, FE_P6, 0);
@@ -1196,9 +1203,6 @@ BOOL runGameOptionsMenu(void)
 		break;
 	case FE_P6:
 		widgSetButtonState(psWScreen, FE_P0, 0);
-	//	widgSetButtonState(psWScreen, FE_P1, 0);
-	//	widgSetButtonState(psWScreen, FE_P2, 0);
-	//	widgSetButtonState(psWScreen, FE_P3, 0);
 		widgSetButtonState(psWScreen, FE_P4, 0);
 		widgSetButtonState(psWScreen, FE_P5, 0);
 		widgSetButtonState(psWScreen, FE_P6, WBUT_LOCK);
@@ -1207,9 +1211,6 @@ BOOL runGameOptionsMenu(void)
 		break;
 	case FE_P7:
 		widgSetButtonState(psWScreen, FE_P0, 0);
-	//	widgSetButtonState(psWScreen, FE_P1, 0);
-	//	widgSetButtonState(psWScreen, FE_P2, 0);
-	//	widgSetButtonState(psWScreen, FE_P3, 0);
 		widgSetButtonState(psWScreen, FE_P4, 0);
 		widgSetButtonState(psWScreen, FE_P5, 0);
 		widgSetButtonState(psWScreen, FE_P6, 0);
@@ -1372,7 +1373,6 @@ void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt,BOOL bA
 	{
 		widgSetButtonState(psWScreen,id,WBUT_DISABLE);
 	}
-
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1395,7 +1395,6 @@ void addFESlider(UDWORD id, UDWORD parent, UDWORD x,UDWORD y,UDWORD stops,UDWORD
 	sSldInit.pDisplay	= displayBigSlider;
 	sSldInit.pCallback  = intUpdateQuantitySlider;
 	widgAddSlider(psWScreen, &sSldInit);
-
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1437,7 +1436,6 @@ void displayLogo(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pCo
 {
 	iV_DrawImage(FrontImages,IMAGE_FE_LOGO,xOffset+psWidget->x,yOffset+psWidget->y);
 }
-
 
 
 

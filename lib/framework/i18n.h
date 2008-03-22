@@ -30,8 +30,6 @@
 #include "gettext.h"
 
 
-#define WZ_SYSTEM_LOCALE ""
-
 #if !defined(LC_MESSAGES)
 #  define LC_MESSAGES 0
 #endif
@@ -47,10 +45,10 @@
 // Make xgettext recognize the context
 #define NP_(Context, String) gettext_noop(String)
 
-
+extern void setNextLanguage(void);
+extern WZ_DECL_CONST const char* getLanguageName(void);
 extern WZ_DECL_CONST const char* getLanguage(void);
-extern void setLanguage(const char* locale);
 extern void initI18n(void);
-
+extern BOOL setLanguageByName(const char *name);
 
 #endif // _i18n_h
