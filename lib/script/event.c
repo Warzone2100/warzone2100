@@ -242,6 +242,13 @@ const char *eventGetEventID(SCRIPT_CODE *psCode, SDWORD event)
 	static char	aIDNum[255];
 	SDWORD			i;
 
+	// skip if not debugging scripts
+	if(!debugPartEnabled(LOG_SCRIPT))
+	{
+		pID = "N/A";
+		return pID;
+	}
+
 	if ((psCode->psDebug == NULL) ||
 		(event < 0) || (event > psCode->numEvents))
 	{

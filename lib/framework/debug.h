@@ -187,4 +187,7 @@ static inline void objTraceDisable(void) { traceID = 0; }
 /** Dump last two debug log calls into given file descriptor. For exception handler. */
 void dumpLog(int filedesc);
 
+/** Checks if a particular debub flag was enabled */
+extern bool debugPartEnabled(code_part codePart);
+
 #endif // __INCLUDED_LIB_FRAMEWORK_DEBUG_H__

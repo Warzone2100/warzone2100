@@ -351,3 +351,8 @@ void _debug( code_part part, const char *str, ... )
 	}
 	useInputBuffer1 = !useInputBuffer1; // Swap buffers
 }
+
+bool debugPartEnabled(code_part codePart)
+{
+	return enabled_debug[codePart];
+}
