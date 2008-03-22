@@ -119,7 +119,7 @@ static SDLNet_SocketSet	tmp_socket_set = NULL;
 static char*		hostname;
 static NETSTATS		nStats = { 0, 0, 0, 0 };
 static NET_PLAYER	players[MAX_CONNECTED_PLAYERS];
-static int32_t          NetGameFlags[4];
+static int32_t          NetGameFlags[4] = { 0 };
 
 // *********** Socket with buffer that read NETMSGs ******************
 
@@ -389,7 +389,7 @@ BOOL NETsetGameFlags(UDWORD flag, SDWORD value)
 		return TRUE;
 	}
 
-	if (flag < 1 || flag > 4)
+	if (flag > 0 && flag < 5)
 	{
 		return NetGameFlags[flag-1] = value;
 	}
