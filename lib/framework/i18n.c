@@ -19,6 +19,7 @@
 #include "frame.h"
 
 #include <locale.h>
+#include <physfs.h>
 
 
 /* Always use fallbacks on Windows */
