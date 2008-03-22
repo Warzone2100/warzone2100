@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 TRUNK\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2008-03-21 13:12+0100\n"
+"POT-Creation-Date: 2008-03-22 01:19+0100\n"
 "PO-Revision-Date: 2008-01-20 19:26+0100\n"
 "Last-Translator: Giel van Schijndel <me@mortis.eu>\n"
 "Language-Team: Latin\n"
@@ -122,11 +122,11 @@ msgstr ""
 msgid "You Discover Blueprints For %s"
 msgstr ""
 
-#: src/hci.c:1015
-#: src/hci.c:3852
-#: src/hci.c:4006
-#: src/hci.c:4428
-#: src/hci.c:5658
+#: src/hci.c:1016
+#: src/hci.c:3853
+#: src/hci.c:4007
+#: src/hci.c:4429
+#: src/hci.c:5659
 #: src/transporter.c:284
 #: src/transporter.c:373
 #: src/transporter.c:871
@@ -138,104 +138,104 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: src/hci.c:1680
+#: src/hci.c:1681
 #: src/mission.c:3229
 #: src/loop.c:473
 #: src/loop.c:485
 msgid "GAME SAVED!"
 msgstr ""
 
-#: src/hci.c:2093
+#: src/hci.c:2094
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr ""
 
-#: src/hci.c:2116
+#: src/hci.c:2117
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr ""
 
-#: src/hci.c:2135
+#: src/hci.c:2136
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr ""
 
-#: src/hci.c:3754
+#: src/hci.c:3755
 msgid "Commanders (F6)"
 msgstr ""
 
-#: src/hci.c:3770
+#: src/hci.c:3771
 msgid "Intelligence Display (F5)"
 msgstr ""
 
-#: src/hci.c:3786
+#: src/hci.c:3787
 msgid "Manufacture (F1)"
 msgstr ""
 
-#: src/hci.c:3802
+#: src/hci.c:3803
 msgid "Design (F4)"
 msgstr ""
 
-#: src/hci.c:3818
+#: src/hci.c:3819
 #, fuzzy
 msgid "Research (F2)"
 msgstr "Invenio"
 
-#: src/hci.c:3834
+#: src/hci.c:3835
 #, fuzzy
 msgid "Build (F3)"
 msgstr "Construo"
 
-#: src/hci.c:3914
+#: src/hci.c:3915
 #: src/multiint.c:768
 #: src/multiint.c:772
 #, fuzzy
 msgid "Power"
 msgstr "Vigor"
 
-#: src/hci.c:4115
+#: src/hci.c:4116
 msgid "Unit"
 msgstr ""
 
-#: src/hci.c:4124
+#: src/hci.c:4125
 msgid "Struct"
 msgstr ""
 
-#: src/hci.c:4133
+#: src/hci.c:4134
 msgid "Feat"
 msgstr ""
 
-#: src/hci.c:4147
+#: src/hci.c:4148
 #: src/ingameop.c:120
 #: src/ingameop.c:253
 #: src/ingameop.c:258
 msgid "Quit"
 msgstr ""
 
-#: src/hci.c:4148
+#: src/hci.c:4149
 msgid "Exit Game"
 msgstr ""
 
-#: src/hci.c:4513
+#: src/hci.c:4514
 #: src/intdisplay.c:205
 #: src/intdisplay.c:248
 #: src/intdisplay.c:294
 msgid "Progress Bar"
 msgstr ""
 
-#: src/hci.c:5573
+#: src/hci.c:5574
 msgid "Factory Delivery Point"
 msgstr ""
 
-#: src/hci.c:5592
+#: src/hci.c:5593
 msgid "Loop Production"
 msgstr ""
 
-#: src/hci.c:5683
+#: src/hci.c:5684
 msgid "Tab Scroll left"
 msgstr ""
 
-#: src/hci.c:5700
+#: src/hci.c:5701
 msgid "Tab Scroll right"
 msgstr ""
 
@@ -1161,140 +1161,140 @@ msgstr ""
 msgid "Disable sound"
 msgstr ""
 
-#: src/design.c:455
-#: src/design.c:475
-#: src/design.c:3549
+#: src/design.c:453
+#: src/design.c:473
+#: src/design.c:3547
 msgid "New Vehicle"
 msgstr ""
 
-#: src/design.c:522
+#: src/design.c:520
 msgid "Vehicle Body"
 msgstr ""
 
-#: src/design.c:544
+#: src/design.c:542
 msgid "Vehicle Propulsion"
 msgstr ""
 
-#: src/design.c:567
-#: src/design.c:592
-#: src/design.c:618
+#: src/design.c:565
+#: src/design.c:590
+#: src/design.c:616
 msgid "Vehicle Turret"
 msgstr ""
 
-#: src/design.c:639
+#: src/design.c:637
 msgid "Delete Design"
 msgstr ""
 
-#: src/design.c:693
-#: src/design.c:741
+#: src/design.c:691
+#: src/design.c:739
 msgid "Kinetic Armour"
 msgstr ""
 
-#: src/design.c:702
-#: src/design.c:752
+#: src/design.c:700
+#: src/design.c:750
 msgid "Thermal Armour"
 msgstr ""
 
-#: src/design.c:718
-#: src/design.c:772
+#: src/design.c:716
+#: src/design.c:770
 msgid "Engine Output"
 msgstr ""
 
-#: src/design.c:726
-#: src/design.c:781
-#: src/design.c:1592
-#: src/design.c:1633
-#: src/design.c:1658
-#: src/design.c:1676
-#: src/design.c:1701
-#: src/design.c:1719
-#: src/design.c:1761
-#: src/design.c:1796
-#: src/design.c:1932
-#: src/design.c:1949
-#: src/design.c:1984
-#: src/design.c:2020
+#: src/design.c:724
+#: src/design.c:779
+#: src/design.c:1590
+#: src/design.c:1631
+#: src/design.c:1656
+#: src/design.c:1674
+#: src/design.c:1699
+#: src/design.c:1717
+#: src/design.c:1759
+#: src/design.c:1794
+#: src/design.c:1930
+#: src/design.c:1947
+#: src/design.c:1982
+#: src/design.c:2018
 msgid "Weight"
 msgstr ""
 
-#: src/design.c:812
-#: src/design.c:832
+#: src/design.c:810
+#: src/design.c:830
 msgid "Total Power Required"
 msgstr ""
 
-#: src/design.c:845
-#: src/design.c:866
+#: src/design.c:843
+#: src/design.c:864
 msgid "Total Body Points"
 msgstr ""
 
-#: src/design.c:1062
-#: src/design.c:1094
+#: src/design.c:1060
+#: src/design.c:1092
 msgid "Power Usage"
 msgstr ""
 
-#: src/design.c:1346
+#: src/design.c:1344
 msgid "Transporter"
 msgstr ""
 
-#: src/design.c:1574
+#: src/design.c:1572
 msgid "Sensor Range"
 msgstr ""
 
-#: src/design.c:1583
+#: src/design.c:1581
 msgid "Sensor Power"
 msgstr ""
 
-#: src/design.c:1624
+#: src/design.c:1622
 msgid "ECM Power"
 msgstr ""
 
-#: src/design.c:1650
-#: src/design.c:1667
-#: src/design.c:1693
-#: src/design.c:1710
+#: src/design.c:1648
+#: src/design.c:1665
+#: src/design.c:1691
+#: src/design.c:1708
 msgid "Build Points"
 msgstr ""
 
-#: src/design.c:1737
-#: src/design.c:1769
+#: src/design.c:1735
+#: src/design.c:1767
 msgid "Range"
 msgstr ""
 
-#: src/design.c:1745
-#: src/design.c:1778
+#: src/design.c:1743
+#: src/design.c:1776
 msgid "Damage"
 msgstr ""
 
-#: src/design.c:1753
-#: src/design.c:1787
+#: src/design.c:1751
+#: src/design.c:1785
 msgid "Rate-of-Fire"
 msgstr ""
 
-#: src/design.c:1924
-#: src/design.c:1940
+#: src/design.c:1922
+#: src/design.c:1938
 msgid "Air Speed"
 msgstr ""
 
-#: src/design.c:1960
-#: src/design.c:1993
+#: src/design.c:1958
+#: src/design.c:1991
 msgid "Road Speed"
 msgstr ""
 
-#: src/design.c:1968
-#: src/design.c:2002
+#: src/design.c:1966
+#: src/design.c:2000
 msgid "Off-Road Speed"
 msgstr ""
 
-#: src/design.c:1976
-#: src/design.c:2011
+#: src/design.c:1974
+#: src/design.c:2009
 msgid "Water Speed"
 msgstr ""
 
-#: src/design.c:2145
+#: src/design.c:2143
 msgid "Weapons"
 msgstr "Armorum"
 
-#: src/design.c:2169
+#: src/design.c:2167
 msgid "Systems"
 msgstr ""
 
