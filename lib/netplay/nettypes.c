@@ -357,7 +357,9 @@ BOOL NETstring(char *str, uint16_t maxlen)
 			      NetMsg.type, NetMsg.source, len, maxlen);
 			len = maxlen;
 		}
-		strlcpy(str, store, len);
+		memcpy(str, store, len);
+		// Guarantee NUL-termination
+		str[len - 1] = '\0';
 	}
 
 	// Increment the size of the message
