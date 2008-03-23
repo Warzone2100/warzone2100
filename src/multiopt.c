@@ -285,7 +285,7 @@ void recvOptions()
 		
 		NETend();
 		
-		addConsoleMessage("MAP REQUESTED!",DEFAULT_JUSTIFY);
+		addConsoleMessage("MAP REQUESTED!",DEFAULT_JUSTIFY, CONSOLE_SYSTEM);
 	}
 	else
 	{

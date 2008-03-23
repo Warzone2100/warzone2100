@@ -375,7 +375,7 @@ BOOL Status = TRUE;
 			else
 			{
 				/* We've requested a track with no droid selected */
-//				addConsoleMessage("Droid-CAM V0.1 ERROR - No targets(s) selected",DEFAULT_JUSTIFY);
+//				addConsoleMessage("Droid-CAM V0.1 ERROR - No targets(s) selected",DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
 				trackingCamera.status = CAM_INACTIVE;
 			}
 		break;
@@ -411,7 +411,7 @@ BOOL Status = TRUE;
 			}
 			/* Switch to inactive mode */
 			trackingCamera.status = CAM_INACTIVE;
-//			addConsoleMessage("Droid-CAM V0.1 Disabled",DEFAULT_JUSTIFY);
+//			addConsoleMessage("Droid-CAM V0.1 Disabled",DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
 			Status = FALSE;
 		break;
 	default:

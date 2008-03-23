@@ -36,6 +36,7 @@
 #include "scriptextern.h"
 #include "lib/sound/audio_id.h"
 #include "lib/sound/audio.h"
+#include "radar.h"
 
 /* Alex McLean, Pumpkin Studios, EIDOS Interactive */
 
@@ -104,7 +105,7 @@ char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];
 /* MODULE CONSOLE PROTOTYPES */
 void	consolePrintf				( char *layout, ... );
 void	setConsoleSizePos			( UDWORD x, UDWORD y, UDWORD width );
-BOOL	addConsoleMessage			( const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType );
+BOOL	addConsoleMessage			( const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType, CONSOLE_TEXT_TYPE textType );
 void	updateConsoleMessages		( void );
 void	displayConsoleMessages		( void );
 void	initConsoleMessages			( void );
@@ -119,8 +120,10 @@ void	setConsolePermanence		( BOOL state, BOOL bClearOld );
 BOOL	mouseOverConsoleBox			( void );
 void	setConsoleLineInfo			( UDWORD vis );
 UDWORD	getConsoleLineInfo			( void );
-void	permitNewConsoleMessages		( BOOL allow);
+void	permitNewConsoleMessages	( BOOL allow);
 int		displayOldMessages			( void );
+void	setConsoleTextColor			( CONSOLE_TEXT_TYPE type );
+CONSOLE_TEXT_TYPE pickConsolePlayerTextType(UDWORD player1, UDWORD player2);
 
 /** Sets the system up */
 void	initConsoleMessages( void )
@@ -192,7 +195,8 @@ void	toggleConsoleDrop( void )
 }
 
 /** Add a string to the console. */
-static BOOL _addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType)
+static BOOL _addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType,
+							   CONSOLE_TEXT_TYPE textType)
 {
 	int textLength;
 	CONSOLE_MESSAGE	*psMessage;
@@ -221,6 +225,9 @@ static BOOL _addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATI
 		/* Then set it */
 		jusType = defJustification;
 	}
+
+	consoleStorage[messageIndex].textType = textType;
+
 	/* Precalculate and store (quicker!) the indent for justified text */
 	switch(jusType)
 	{
@@ -286,9 +293,10 @@ static BOOL _addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATI
 }
 
 /// Wrapper for _addConsoleMessage
-BOOL addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType)
+BOOL addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType, 
+					   CONSOLE_TEXT_TYPE textType)
 {
-	return _addConsoleMessage(messageText,jusType);
+	return _addConsoleMessage(messageText, jusType, textType);
 }
 
 /// \return The number of console messages currently active
@@ -402,6 +410,56 @@ void	flushConsoleMessages( void )
 	messageId = 0;
 }
 
+/** Choose an appropriate message type, which will result in
+  appropriate console text color, depending on current radar
+  type and whether source and destination players are in alliance. */
+CONSOLE_TEXT_TYPE pickConsolePlayerTextType(UDWORD player1, UDWORD player2)
+{
+	if(bEnemyAllyRadarColor)
+	{
+		if(aiCheckAlliances(player1,player2))
+		{
+			return CONSOLE_USER_ALLY;
+		}
+		else
+		{
+			return CONSOLE_USER_ENEMY;
+		}
+	}
+
+	return CONSOLE_USER;	// pick a default color if friend-foe radar colors are off
+}
+
+/** Sets console text color depending on message type */
+void setConsoleTextColor(CONSOLE_TEXT_TYPE type)
+{
+	switch(type) // run relevant title screen code.
+	{
+		// System message: 'research complete' etc
+		case CONSOLE_SYSTEM:
+			iV_SetTextColour(WZCOL_CONS_TEXT_SYSTEM);
+			break;
+		// Human or AI Chat messages
+		case CONSOLE_USER:
+			iV_SetTextColour(WZCOL_CONS_TEXT_USER);
+			break;
+		case CONSOLE_USER_ALLY:
+			iV_SetTextColour(WZCOL_CONS_TEXT_USER_ALLY);
+			break;
+		case CONSOLE_USER_ENEMY:
+			iV_SetTextColour(WZCOL_CONS_TEXT_USER_ENEMY);
+			break;
+		// Currently debug output from scripts
+		case CONSOLE_DEBUG:
+			iV_SetTextColour(WZCOL_CONS_TEXT_USER);
+			break;
+		default:
+			debug( LOG_ERROR, "unknown console message type" );
+			abort();
+	}
+}
+
+
 /** Displays all the console messages */
 void	displayConsoleMessages( void )
 {
@@ -435,12 +493,10 @@ void	displayConsoleMessages( void )
 
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 	pie_SetFogStatus(FALSE);
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
 	drop = 0;
 	if(bConsoleDropped)
 	{
-
 		drop = displayOldMessages();
 	}
 	if(consoleMessages==NULL)
@@ -463,32 +519,36 @@ void	displayConsoleMessages( void )
 
 		/* How big a box is necessary? */
 		boxDepth = (numActiveMessages> consoleVisibleLines ? consoleVisibleLines-1 : numActiveMessages-1);
+
 		/* Add on the extra - hope it doesn't exceed two lines! */
 		boxDepth+=exceed;
+
 		/* GET RID OF THE MAGIC NUMBERS BELOW */
 		clipDepth = (mainConsole.topY+(boxDepth*linePitch)+CON_BORDER_HEIGHT+drop);
 		if(clipDepth > (pie_GetVideoBufferHeight() - linePitch))
 		{
 			clipDepth = (pie_GetVideoBufferHeight() - linePitch);
 		}
+
 		iV_TransBoxFill(mainConsole.topX - CON_BORDER_WIDTH,mainConsole.topY-mainConsole.textDepth-CON_BORDER_HEIGHT+drop+1,
 			mainConsole.topX+mainConsole.width ,clipDepth);
 	}
 
-
-
 	/* Stop when we've drawn enough or we're at the end */
 	MesY = mainConsole.topY + drop;
+
 	for(psMessage = consoleMessages,numProcessed = 0;
 		psMessage && numProcessed<consoleVisibleLines && MesY < (pie_GetVideoBufferHeight()-linePitch);
 		psMessage = psMessage->psNext)
 	{
+
+		/* Set text color depending on message type */
+		setConsoleTextColor(psMessage->textType);
+
  		/* Draw the text string */
-		MesY = iV_DrawFormattedText(psMessage->text,
-		                            mainConsole.topX,
-		                            MesY,
-                                    mainConsole.width,
-                                    psMessage->JustifyType);
+		MesY = iV_DrawFormattedText(psMessage->text, mainConsole.topX, MesY,
+									mainConsole.width, psMessage->JustifyType);
+
 		/* Move on */
 		numProcessed++;
 	}
@@ -581,6 +641,9 @@ int displayOldMessages()
 	/* Render what we found */
 	for(i=count-1; i>0; i--)
 	{
+		/* Set text color depending on message type */
+		setConsoleTextColor(consoleStorage[history[i]].textType);
+
 		/* Draw the text string */
 		MesY = iV_DrawFormattedText(consoleStorage[history[i]].text,
                                     mainConsole.topX,
@@ -588,6 +651,10 @@ int displayOldMessages()
                                     mainConsole.width,
                                     consoleStorage[history[i]].JustifyType);
 	}
+
+	/* Set text color depending on message type */
+	setConsoleTextColor(consoleStorage[history[0]].textType);
+
 	/* Draw the top one */
 	iV_DrawFormattedText(consoleStorage[history[0]].text,
 	                     mainConsole.topX,
@@ -720,7 +787,7 @@ va_list	arguments;		// Formatting info
 	consoleString[sizeof(consoleString) - 1] = '\0';
 
 	/* Add the message through the normal channels! */
-	addConsoleMessage(consoleString,DEFAULT_JUSTIFY);
+	addConsoleMessage(consoleString,DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
 
 	/* Close arguments */
 	va_end(arguments);
@@ -755,7 +822,7 @@ void printf_console(const char *pFormat, ...)
 
 	/* Output it */
 
-	addConsoleMessage(aBuffer,RIGHT_JUSTIFY);		//debug messages are displayed right-aligned
+	addConsoleMessage(aBuffer,RIGHT_JUSTIFY,CONSOLE_SYSTEM);		//debug messages are displayed right-aligned
 #endif
 }
 
@@ -774,6 +841,6 @@ void console(const char *pFormat, ...)
 	aBuffer[sizeof(aBuffer) - 1] = '\0';
 
 	/* Output it */
-	addConsoleMessage(aBuffer,DEFAULT_JUSTIFY);
+	addConsoleMessage(aBuffer,DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
 
 }

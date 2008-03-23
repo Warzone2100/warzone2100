@@ -1674,7 +1674,7 @@ BOOL ctrlShiftDown(void)
 
 void AddDerrickBurningMessage(void)
 {
-	addConsoleMessage(_("Cannot Build. Oil Resource Burning."),DEFAULT_JUSTIFY);
+	addConsoleMessage(_("Cannot Build. Oil Resource Burning."),DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
 	audio_PlayTrack( ID_SOUND_BUILD_FAIL );
 }
 
@@ -1683,7 +1683,7 @@ static inline void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 	if(psDroid->player != selectedPlayer)
 	{
 		/* We've clicked on somebody else's droid */
-//		addConsoleMessage("Clicked on another player's droid",DEFAULT_JUSTIFY);
+//		addConsoleMessage("Clicked on another player's droid",CONSOLE_SYSTEM);
 		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT*)psDroid, ctrlShiftDown());
 
 		//lasSat structure can select a target - in multiPlayer only
@@ -2058,7 +2058,7 @@ static inline void dealWithLMBFeature(FEATURE* psFeature)
 							(BASE_STATS*) &asStructureStats[i],
 							psFeature->pos.x, psFeature->pos.y);
 					}
-					addConsoleMessage(_("Truck ordered to build Oil Derrick"),DEFAULT_JUSTIFY);
+					addConsoleMessage(_("Truck ordered to build Oil Derrick"),DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
 		//				"Construction vehicle ordered to build a Derrick.",DEFAULT_JUSTIFY);
 					FeedbackOrderGiven();
 				}
@@ -2104,18 +2104,18 @@ static inline void dealWithLMBFeature(FEATURE* psFeature)
 				}
 				break;*/
 			case FEAT_BOULDER:
-				//addConsoleMessage("Clicked on a Boulder",DEFAULT_JUSTIFY);
+				//addConsoleMessage("Clicked on a Boulder",DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
 				break;
 			case FEAT_BUILD_WRECK:
-//				addConsoleMessage("Clicked on a Wrecked Building",DEFAULT_JUSTIFY);
+//				addConsoleMessage("Clicked on a Wrecked Building",DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
 				break;
 			case FEAT_HOVER:
-//				addConsoleMessage("Clicked on a Hover",DEFAULT_JUSTIFY);
+//				addConsoleMessage("Clicked on a Hover",DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
 				break;
 			case FEAT_OIL_RESOURCE:
 			case FEAT_VEHICLE:
 			default:
-//				addConsoleMessage("Clicked on an Obstacle",DEFAULT_JUSTIFY);
+//				addConsoleMessage("Clicked on an Obstacle",DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
 				break;
 		}
 	}
@@ -2209,7 +2209,7 @@ void	dealWithLMB( void )
 					gwGetZone(mouseTileX, mouseTileY)));
 			}
 
-			//addConsoleMessage("Droid ordered to new location",DEFAULT_JUSTIFY);
+			//addConsoleMessage("Droid ordered to new location",DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
 		}
 
 		driveDisableTactical();
@@ -2225,7 +2225,7 @@ void	dealWithLMB( void )
 				StartDeliveryPosition( psLocation );
 #if 0
 				/* We've clicked on one of our own DP */
-				addConsoleMessage("Clicked on your delivery point",DEFAULT_JUSTIFY);
+				addConsoleMessage("Clicked on your delivery point",DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
 
 				/* clear the selection */
 				clearSelection();
@@ -2236,7 +2236,7 @@ void	dealWithLMB( void )
 			else
 			{
 				/* We've clicked on somebody else's DP - remove this sometime?*/
-				addConsoleMessage("Clicked on another player's delivery point",DEFAULT_JUSTIFY);
+				addConsoleMessage("Clicked on another player's delivery point",DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
 #endif
 			}
 			break;
@@ -2409,7 +2409,7 @@ static void dealWithRMB( void )
 					{
 						/* We've clicked on one of our own droids */
 		//				addGameMessage("Right clicked on own droid",1000,TRUE);
-	//					addConsoleMessage("Right click detected on own droid",DEFAULT_JUSTIFY);
+	//					addConsoleMessage("Right click detected on own droid",DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
 
 						if(psDroid->selected==TRUE)
 						{
@@ -2461,7 +2461,7 @@ static void dealWithRMB( void )
 			{
 				/* We've clicked on our own building */
 //				addGameMessage("Right clicked on own building",1000,TRUE);
-//				addConsoleMessage("Right clicked on own building",DEFAULT_JUSTIFY);
+//				addConsoleMessage("Right clicked on own building",DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
 
 
 				if(psStructure->selected==TRUE) {

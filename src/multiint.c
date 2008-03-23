@@ -1879,7 +1879,7 @@ static void processMultiopWidgets(UDWORD id)
 			setLockedTeamsMode();		//update GUI
 
 			sprintf( msg,"'%s' mode enabled", _("Locked Teams") );
-			addConsoleMessage(msg,DEFAULT_JUSTIFY);
+			addConsoleMessage(msg,DEFAULT_JUSTIFY, CONSOLE_SYSTEM);
 		}
 	}
 

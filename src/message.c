@@ -949,7 +949,7 @@ void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp)
 		{
 			if (psViewData->type != VIEW_HELP)
 			{
-				addConsoleMessage(psViewData->ppTextMsg[0], DEFAULT_JUSTIFY);
+				addConsoleMessage(psViewData->ppTextMsg[0], DEFAULT_JUSTIFY, CONSOLE_SYSTEM);
 			}
 		}
 

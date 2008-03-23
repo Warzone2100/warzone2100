@@ -115,7 +115,7 @@ char	selInfo[255];
 
 	/* Send back the return value */
 	snprintf(selInfo, sizeof(selInfo), ngettext("%u unit selected", "%u units selected", retVal), retVal);
-	addConsoleMessage(selInfo, RIGHT_JUSTIFY);
+	addConsoleMessage(selInfo, RIGHT_JUSTIFY,CONSOLE_SYSTEM);
 	return retVal;
 }
 
@@ -431,16 +431,16 @@ BOOL	bLaterInList, bMatch;
 		switch(unitType)
 		{
 		case	DROID_REPAIR:
-			addConsoleMessage(_("Unable to locate any repair units!"),LEFT_JUSTIFY);
+			addConsoleMessage(_("Unable to locate any repair units!"),LEFT_JUSTIFY,CONSOLE_SYSTEM);
 			break;
 		case	DROID_CONSTRUCT:
-			addConsoleMessage(_("Unable to locate any Trucks!"),LEFT_JUSTIFY);
+			addConsoleMessage(_("Unable to locate any Trucks!"),LEFT_JUSTIFY,CONSOLE_SYSTEM);
 			break;
 		case	DROID_SENSOR:
-			addConsoleMessage(_("Unable to locate any Sensor Units!"),LEFT_JUSTIFY);
+			addConsoleMessage(_("Unable to locate any Sensor Units!"),LEFT_JUSTIFY,CONSOLE_SYSTEM);
 			break;
 		case	DROID_COMMAND:
-			addConsoleMessage(_("Unable to locate any Commanders!"),LEFT_JUSTIFY);
+			addConsoleMessage(_("Unable to locate any Commanders!"),LEFT_JUSTIFY,CONSOLE_SYSTEM);
 			break;
 		}
 	}
@@ -518,7 +518,7 @@ BOOL	bLaterInList;
 	}
 	else
 	{
-		addConsoleMessage(_("Unable to locate any repair units!"),LEFT_JUSTIFY);
+		addConsoleMessage(_("Unable to locate any repair units!"),LEFT_JUSTIFY,CONSOLE_SYSTEM);
 	}
 }
 // ---------------------------------------------------------------------
@@ -577,7 +577,7 @@ BOOL		bLaterInList;
 		else
 		{
 			// Can't find required building
-			addConsoleMessage("Cannot find required building!",LEFT_JUSTIFY);
+			addConsoleMessage("Cannot find required building!",LEFT_JUSTIFY,CONSOLE_SYSTEM);
 		}
 }
 

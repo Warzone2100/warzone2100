@@ -280,7 +280,8 @@ static void showDroidPaths(void)
 			int	i;
 			int	len = psDroid->sMove.numPoints;
 
-			for (i = 0; i < len; i++)
+			i = MAX(psDroid->sMove.Position-1,0);
+			for (; i < len; i++)
 			{
 				Vector3i pos;
 
@@ -440,7 +441,7 @@ void draw3DScene( void )
 		flushConsoleMessages();
 		setConsolePermanence(TRUE, TRUE);
 		permitNewConsoleMessages(TRUE);
-		addConsoleMessage("Warzone 2100 : Pumpkin Studios ", RIGHT_JUSTIFY);
+		addConsoleMessage("Warzone 2100 : Pumpkin Studios ", RIGHT_JUSTIFY,CONSOLE_SYSTEM);
 		permitNewConsoleMessages(FALSE);
 	}
 

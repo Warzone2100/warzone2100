@@ -2795,7 +2795,7 @@ BOOL CheckHaltOnMaxUnitsReached(STRUCTURE *psStructure)
 		if ((psStructure->player == selectedPlayer) &&
 			(lastMaxUnitMessage + MAX_UNIT_MESSAGE_PAUSE < gameTime))
 		{
-			addConsoleMessage(_("Command Control Limit Reached - Production Halted"),DEFAULT_JUSTIFY);
+			addConsoleMessage(_("Command Control Limit Reached - Production Halted"),DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
 			lastMaxUnitMessage = gameTime;
 		}
 		return TRUE;
@@ -6374,7 +6374,7 @@ BOOL electronicReward(STRUCTURE *psStructure, UBYTE attackPlayer)
 		hqReward(psStructure->player,attackPlayer);
 		if (attackPlayer == selectedPlayer)
 		{
-			addConsoleMessage(_("Electronic Reward - Visibility Report"),	DEFAULT_JUSTIFY);
+			addConsoleMessage(_("Electronic Reward - Visibility Report"),	DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
 		}
 		bRewarded = TRUE;
 		break;
@@ -6471,7 +6471,7 @@ void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	//losing Player hasn't got anything better so don't gain anything!
 	if (rewardPlayer == selectedPlayer)
 	{
-		addConsoleMessage(_("Factory Reward - Nothing"), DEFAULT_JUSTIFY);
+		addConsoleMessage(_("Factory Reward - Nothing"), DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
 	}
 }
 
@@ -6506,7 +6506,7 @@ void repairFacilityReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	}
 	if (rewardPlayer == selectedPlayer)
 	{
-		addConsoleMessage(_("Repair Facility Award - Nothing"), DEFAULT_JUSTIFY);
+		addConsoleMessage(_("Repair Facility Award - Nothing"), DEFAULT_JUSTIFY,CONSOLE_SYSTEM);
 	}
 }
 

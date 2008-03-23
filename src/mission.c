@@ -3219,7 +3219,7 @@ void intRunMissionResult(void)
 				if (!bRequestLoad)
 				{
 					saveGame(sRequestResult,GTYPE_SAVE_START);
-					addConsoleMessage(_("GAME SAVED!"), LEFT_JUSTIFY);
+					addConsoleMessage(_("GAME SAVED!"), LEFT_JUSTIFY, CONSOLE_SYSTEM);
 				}
 			}
 		}

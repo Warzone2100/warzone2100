@@ -399,7 +399,7 @@ void intProcessInGameOptions(UDWORD id)
 //		{
 //			loopMissionState = LMS_LOADGAME;
 //			strcpy(saveGameName, "replay/replay.gam");
-//			addConsoleMessage(_("GAME SAVED!"), LEFT_JUSTIFY);
+//			addConsoleMessage(_("GAME SAVED!"), LEFT_JUSTIFY, CONSOLE_SYSTEM);
 //		}
 //		break;
 	case INTINGAMEOP_LOAD:
@@ -443,4 +443,5 @@ void intProcessInGameOptions(UDWORD id)
 
 
 }
+
 

@@ -466,7 +466,7 @@ GAMECODE gameLoop(void)
 				{
 					if (saveGame(sRequestResult, GTYPE_SAVE_START))
 					{
-						addConsoleMessage(_("GAME SAVED!"), LEFT_JUSTIFY);
+						addConsoleMessage(_("GAME SAVED!"), LEFT_JUSTIFY, CONSOLE_SYSTEM);
 					}
 					else
 					{
@@ -478,7 +478,7 @@ GAMECODE gameLoop(void)
 				{
 					if (saveGame(sRequestResult, GTYPE_SAVE_MIDMISSION))//mid mission from [esc] menu
 					{
-						addConsoleMessage(_("GAME SAVED!"), LEFT_JUSTIFY);
+						addConsoleMessage(_("GAME SAVED!"), LEFT_JUSTIFY, CONSOLE_SYSTEM);
 					}
 					else
 					{

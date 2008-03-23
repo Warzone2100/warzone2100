@@ -278,7 +278,7 @@ void StopDriverMode(void)
 	if(psDrivenDroid != NULL)
 	{
 		debug( LOG_NEVER, "Drive mode canceled\n" );
-		addConsoleMessage("Driver mode canceled.", LEFT_JUSTIFY);
+		addConsoleMessage("Driver mode canceled.", LEFT_JUSTIFY,CONSOLE_SYSTEM);
 //		audio_StopObjTrack(psDrivenDroid,ID_SOUND_SMALL_DROID_RUN);
 
 		psDrivenDroid = NULL;

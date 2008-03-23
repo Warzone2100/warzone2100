@@ -733,7 +733,7 @@ BOOL recvMessage(void)
 			{
 				//stopJoining();		//NOT defined here, checking if we need it or not.
 				debug(LOG_NET, "***Need to call stopJoining()");
-				addConsoleMessage(_("The host has left the game!"), LEFT_JUSTIFY);
+				addConsoleMessage(_("The host has left the game!"), LEFT_JUSTIFY, CONSOLE_SYSTEM);
 			}
 			break;
 		}
@@ -1044,12 +1044,13 @@ BOOL recvResearchStatus()
 // eg "123 hi there" sends "hi there" to players 1,2 and 3.
 BOOL sendTextMessage(const char *pStr, BOOL all)
 {
-	BOOL	normal = TRUE;
-	BOOL	sendto[MAX_PLAYERS];
-	UDWORD	i;
-	char	display[MAX_CONSOLE_STRING_LENGTH];
-	char	msg[MAX_CONSOLE_STRING_LENGTH];
-	uint8_t netplayer = 0;
+	BOOL				normal = TRUE;
+	BOOL				sendto[MAX_PLAYERS];
+	UDWORD				i;
+	char				display[MAX_CONSOLE_STRING_LENGTH];
+	char				msg[MAX_CONSOLE_STRING_LENGTH];
+	CONSOLE_TEXT_TYPE	messageType;
+	uint8_t				netplayer = 0;
 
 	if (!ingame.localOptionsReceived)
 	{
@@ -1128,7 +1129,11 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 	strlcat(display, NetPlay.players[i].name, sizeof(display));		// name
 	strlcat(display, ": ", sizeof(display));						// seperator
 	strlcat(display, pStr, sizeof(display));						// add message
-	addConsoleMessage(display, DEFAULT_JUSTIFY);					// display
+
+	/* Set color for console message */
+	messageType = pickConsolePlayerTextType(selectedPlayer, i);
+
+	addConsoleMessage(display, DEFAULT_JUSTIFY, messageType);		// display
 
 	return TRUE;
 }
@@ -1225,14 +1230,19 @@ BOOL sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, c
 
 void displayAIMessage(char *pStr, SDWORD from, SDWORD to)
 {
-	char tmp[255];
+	char				tmp[255];
+	CONSOLE_TEXT_TYPE	messageType;
 
 	if (isHumanPlayer(to))		//display text only if receiver is the (human) host machine itself
 	{
 		strcpy(tmp, getPlayerName(from));
 		strcat(tmp, ": ");											// seperator
 		strcat(tmp, pStr);											// add message
-		addConsoleMessage(tmp, DEFAULT_JUSTIFY);
+
+		/* Set color for console message */
+		messageType = pickConsolePlayerTextType(to, from);
+
+		addConsoleMessage(tmp, DEFAULT_JUSTIFY, messageType);
 	}
 }
 
@@ -1244,6 +1254,7 @@ BOOL recvTextMessage()
 	char	msg[MAX_CONSOLE_STRING_LENGTH];
 	char newmsg[MAX_CONSOLE_STRING_LENGTH];
 	UDWORD  player=MAX_PLAYERS,j;		//console callback - player who sent the message
+	CONSOLE_TEXT_TYPE	messageType;
 
 	memset(msg, 0x0, sizeof(msg));
 	memset(newmsg, 0x0, sizeof(newmsg));
@@ -1275,8 +1286,11 @@ BOOL recvTextMessage()
 	strlcat(msg, ": ", sizeof(msg));
 	// Add message
 	strlcat(msg, newmsg, sizeof(msg));
-	
-	addConsoleMessage(msg, DEFAULT_JUSTIFY);
+
+	/* Set color for console message */
+	messageType = pickConsolePlayerTextType(selectedPlayer, i);
+
+	addConsoleMessage(msg, DEFAULT_JUSTIFY, messageType);
 
 	// Multiplayer message callback
 	// Received a console message from a player, save
@@ -1546,7 +1560,7 @@ BOOL recvMapFileRequested()
 		memset(mapName,0,256);
 		memset(fixedname,0,256);
 		bSendingMap = TRUE;
-		addConsoleMessage("Map was requested: SENDING MAP!",DEFAULT_JUSTIFY);
+		addConsoleMessage("Map was requested: SENDING MAP!",DEFAULT_JUSTIFY, CONSOLE_SYSTEM);
 
 		strlcpy(mapName, game.map, sizeof(mapName));
 		// chop off the -T1
@@ -1587,7 +1601,7 @@ UBYTE sendMap(void)
 
 	if(done == 100)
 	{
-		addConsoleMessage("MAP SENT!",DEFAULT_JUSTIFY);
+		addConsoleMessage("MAP SENT!",DEFAULT_JUSTIFY, CONSOLE_SYSTEM);
 		bSendingMap = FALSE;
 	}
 
@@ -1602,7 +1616,7 @@ BOOL recvMapFileData()
 	done =  NETrecvFile();
 	if(done == 100)
 	{
-		addConsoleMessage("MAP DOWNLOADED!",DEFAULT_JUSTIFY);
+		addConsoleMessage("MAP DOWNLOADED!",DEFAULT_JUSTIFY, CONSOLE_SYSTEM);
 		sendTextMessage("MAP DOWNLOADED",TRUE);					//send
 
 		// clear out the old level list.
