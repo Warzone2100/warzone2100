@@ -19,6 +19,11 @@
 # --------------------------------------------------------------------------
 #
 ################################################################################
+# import from __future__
+from __future__ import with_statement
+
+#
+################################################################################
 #
 
 __author__ = "Gerard Krol, Tim Perrei, Freddie Witherden, Gerhard Schaden"
@@ -30,9 +35,6 @@ This script runs a Warzone 2100 2.x masterserver
 #
 ################################################################################
 # Get the things we need.
-
-#import the new with statement, has to be the first expression
-from __future__ import with_statement
 
 import sys
 import SocketServer

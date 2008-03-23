@@ -37,7 +37,7 @@ import SocketServer
 import time
 import struct
 
-server="localhost"
+server="lobby.wz2100.net"
 
 # simulate a gameserver
 class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHandler):
