@@ -66,9 +66,9 @@ extern char	buildTime[8];
 void sendOptions(uint32_t dest, uint32_t play)
 {
 	int i, j;
-	
+
 	NETbeginEncode(NET_OPTIONS, NET_ALL_PLAYERS);
-	
+
 	// First send information about the game
 	NETuint8_t(&game.type);
 	NETstring(game.map, 128);
@@ -79,19 +79,19 @@ void sendOptions(uint32_t dest, uint32_t play)
 	NETuint32_t(&game.power);
 	NETuint8_t(&game.base);
 	NETuint8_t(&game.alliance);
-	
+
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		NETuint8_t(&game.skDiff[i]);
 	}
-	
+
 	// Now the dpid array
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		// We should probably re-define player2dpid as a uint8_t
 		NETint32_t(&player2dpid[i]);
 	}
-	
+
 	// Send the list of who is still joining
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -126,7 +126,7 @@ void sendOptions(uint32_t dest, uint32_t play)
 
 	// Send the number of structure limits to expect
 	NETuint32_t(&ingame.numStructureLimits);
-	
+
 	// Send the structures changed
 	for (i = 0; i < ingame.numStructureLimits; i++)
 	{
@@ -176,7 +176,7 @@ void recvOptions()
 	NETuint32_t(&game.power);
 	NETuint8_t(&game.base);
 	NETuint8_t(&game.alliance);
-	
+
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		NETuint8_t(&game.skDiff[i]);
@@ -202,7 +202,7 @@ void recvOptions()
 
 	NETuint32_t(&newPl);
 	NETuint32_t(&play);
-	
+
 	// Player colours
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -231,7 +231,7 @@ void recvOptions()
 		free(ingame.pStructureLimits);
 		ingame.pStructureLimits = NULL;
 	}
- 
+
 	// Get the number of structure limits to expect
 	NETuint32_t(&ingame.numStructureLimits);
 
@@ -246,7 +246,7 @@ void recvOptions()
 		NETuint8_t(&ingame.pStructureLimits[i].id);
 		NETuint8_t(&ingame.pStructureLimits[i].limit);
 	}
-	
+
 	NETend();
 
 	// Post process
@@ -280,11 +280,11 @@ void recvOptions()
 	{
 		// Request the map from the host
 		NETbeginEncode(NET_REQUESTMAP, NET_ALL_PLAYERS);
-		
+
 		NETuint32_t(&NetPlay.dpidPlayer);
-		
+
 		NETend();
-		
+
 		addConsoleMessage("MAP REQUESTED!",DEFAULT_JUSTIFY, CONSOLE_SYSTEM);
 	}
 	else
@@ -455,7 +455,7 @@ BOOL multiShutdown(void)
 // copy tempates from one player to another.
 BOOL addTemplate(UDWORD player, DROID_TEMPLATE *psNew)
 {
-	DROID_TEMPLATE  *psTempl = malloc(sizeof(DROID_TEMPLATE));
+	DROID_TEMPLATE *psTempl = malloc(sizeof(DROID_TEMPLATE));
 
 	if (psTempl == NULL)
 	{
@@ -464,9 +464,7 @@ BOOL addTemplate(UDWORD player, DROID_TEMPLATE *psNew)
 	}
 	memcpy(psTempl, psNew, sizeof(DROID_TEMPLATE));
 
-	psTempl->pName = (char*)&psTempl->aName;
-	strlcpy(psTempl->aName, psNew->aName, sizeof(psTempl->aName));
-
+	psTempl->pName = strdup(psTempl->pName);
 
 	psTempl->psNext = apsDroidTemplates[player];
 	apsDroidTemplates[player] = psTempl;
