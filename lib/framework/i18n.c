@@ -132,7 +132,6 @@ const char* getLanguage(void)
 	return language;
 }
 
-
 /*!
  * Set the prefered locale
  * \param locale The locale, NOT just the language part
@@ -140,6 +139,13 @@ const char* getLanguage(void)
 static const char *setLocale(const char* locale)
 {
 	const char *retval = setlocale(LC_ALL, locale);
+	char buf[PATH_MAX];
+
+	snprintf(buf, PATH_MAX, "PATH=%s", locale);
+	if (putenv(buf) != 0)
+	{
+		debug(LOG_ERROR, "setLocale: putenv failed");
+	}
 
 	debug(LOG_WZ, "Wanted to set language to %s. Actually set language to %s", 
 	      locale, retval ? retval : "");
