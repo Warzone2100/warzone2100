@@ -54,13 +54,14 @@ PACKETDIR NETgetPacketDir();
 
 // FIXME: Causes tons of warnings: <enumPtr> is used unitialised in this function
 #define NETenum(enumPtr) \
+do \
 { \
 	int32_t _val = (NETgetPacketDir() == PACKET_ENCODE) ? *(enumPtr) : 0; \
 \
 	NETint32_t(&_val); \
 \
 	*(enumPtr) = _val; \
-}
+} while(0)
 
 BOOL NETVector3uw(Vector3uw* vp);
 
