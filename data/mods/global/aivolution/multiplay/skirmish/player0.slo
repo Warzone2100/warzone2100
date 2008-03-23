@@ -1388,9 +1388,11 @@ event checkLost(inactive)
 		temp = temp + 1;
 	}
 
-	//if((getDroidCount(me) == 0) and (getStructure(fac, me) == NULLOBJECT))
-	if((getDroidCount(me) == 0) and
-		not (multiPlayerGameType == SKIRMISH and multiPlayerAlliancesType == ALLIANCES_TEAMS))
+	// FIXME: might consider reactivating
+	//if((getDroidCount(me) == 0) and
+	//	not (multiPlayerGameType == SKIRMISH and multiPlayerAlliancesType == ALLIANCES_TEAMS))
+		
+	if(getDroidCount(me) == 0)
 	{
 		shutDown();
 	}
@@ -6993,8 +6995,7 @@ function void assignCommander(DROID _newCommander, GROUP _group)
 {
 	local	int		_index;
 
-	ASSERT(getNumCommanders() < MAX_COMMANDERS,
-		"Maximum number of commanders exceeded", me);
+	// FIXME: number of commander can exceed MAX_COMMANDERS
 
 	_index = 0;
 	while(_index < MAX_COMMANDERS)
