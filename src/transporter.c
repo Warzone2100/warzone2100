@@ -27,6 +27,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/math-help.h"
+#include "lib/widget/label.h"
 #include "lib/widget/widget.h"
 #include "lib/ivis_common/textdraw.h"
 

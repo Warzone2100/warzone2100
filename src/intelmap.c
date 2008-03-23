@@ -28,6 +28,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/widget/widget.h"
+#include "lib/widget/button.h"
 /* Includes direct access to render library */
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piestate.h"

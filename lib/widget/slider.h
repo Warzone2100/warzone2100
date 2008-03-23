@@ -24,6 +24,7 @@
 #ifndef __INCLUDED_LIB_WIDGET_SLIDER_H__
 #define __INCLUDED_LIB_WIDGET_SLIDER_H__
 
+#include "widget.h"
 #include "widgbase.h"
 
 /* Slider state */

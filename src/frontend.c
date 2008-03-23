@@ -35,10 +35,15 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/input.h"
 #include "lib/ivis_common/rendmode.h"
 #include "lib/netplay/netplay.h"
 #include "lib/sound/mixer.h"
 #include "lib/widget/widget.h"
+
+#include "lib/widget/slider.h"
+#include "lib/widget/label.h"
+#include "lib/widget/button.h"
 
 #include "advvis.h"
 #include "component.h"

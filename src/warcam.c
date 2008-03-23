@@ -28,8 +28,10 @@
 	get it working the way it used to, should anything get broken.
 	I really hope that no further changes are needed here...:-(
 	Alex M. */
+
 #include "lib/framework/frame.h"
 #include "lib/framework/trig.h"
+#include "lib/framework/input.h"
 
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_common/piedef.h" //ivis matrix code

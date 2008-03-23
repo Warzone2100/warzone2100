@@ -22,13 +22,7 @@
 #define __INCLUDED_SRC_INTDISPLAY_H__
 
 #include "lib/widget/widget.h"
-#include "lib/widget/widgint.h"
-#include "lib/widget/bar.h"
 #include "lib/widget/form.h"
-#include "lib/widget/label.h"
-#include "lib/widget/button.h"
-#include "lib/widget/editbox.h"
-#include "lib/widget/slider.h"
 #include "intimage.h"
 #include "droid.h"
 

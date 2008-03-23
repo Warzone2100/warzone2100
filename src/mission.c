@@ -37,8 +37,8 @@
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
 #include "lib/sound/cdaudio.h"
+#include "lib/widget/label.h"
 #include "lib/widget/widget.h"
-#include "lib/widget/widgint.h"
 
 #include "game.h"
 #include "projectile.h"

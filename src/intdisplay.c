@@ -40,6 +40,13 @@
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_opengl/piematrix.h"
 
+#include "lib/framework/input.h"
+#include "lib/widget/slider.h"
+#include "lib/widget/editbox.h"
+#include "lib/widget/button.h"
+#include "lib/widget/label.h"
+#include "lib/widget/bar.h"
+
 #include "lib/gamelib/gtime.h"
 #include "lib/sound/audio.h"
 

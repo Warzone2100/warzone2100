@@ -24,6 +24,7 @@
 #ifndef __INCLUDED_LIB_WIDGET_BUTTON_H__
 #define __INCLUDED_LIB_WIDGET_BUTTON_H__
 
+#include "widget.h"
 #include "widgbase.h"
 #include "lib/ivis_common/textdraw.h"
 

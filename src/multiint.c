@@ -46,7 +46,10 @@
 #include "lib/gamelib/gtime.h"
 #include "lib/netplay/netplay.h"
 #include "lib/script/script.h"
+#include "lib/widget/editbox.h"
+#include "lib/widget/button.h"
 #include "lib/widget/widget.h"
+#include "lib/widget/widgint.h"
 
 #include "main.h"
 #include "objects.h"

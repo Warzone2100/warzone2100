@@ -30,6 +30,9 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/input.h"
+#include "lib/widget/button.h"
+#include "lib/widget/editbox.h"
 #include "lib/widget/widget.h"
 #include "lib/ivis_common/piepalette.h"		// for predefined colours.
 #include "lib/ivis_common/rendmode.h"		// for boxfill

@@ -24,6 +24,7 @@
  */
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
+#include "lib/widget/button.h"
 #include "lib/widget/widget.h"
 
 #include "display3d.h"
