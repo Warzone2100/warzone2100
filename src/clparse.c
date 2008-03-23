@@ -26,7 +26,6 @@
 
 #include <string.h>
 #include "lib/framework/frame.h"
-#include "lib/widget/widget.h"
 #include <popt.h>
 
 #include "main.h"
