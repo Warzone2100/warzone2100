@@ -34,7 +34,6 @@
 #include "lib/ivis_common/piefunc.h"
 
 #include "hci.h"		// access to widget screen.
-#include "lib/widget/widget.h"
 #include "wrappers.h"
 #include "main.h"
 #include "objects.h"
