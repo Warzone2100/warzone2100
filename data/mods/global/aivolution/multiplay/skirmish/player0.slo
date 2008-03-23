@@ -15437,12 +15437,17 @@ function int LanchasterTimeToWin(float _fStartForceA, float _fStartForceB,
 {
 	local	float	_fTimeToWin,_fKillFactor;
 
-	if(_fStartForceA <= 0.0 or _fStartForceB <= 0.0){
+	if(_fStartForceA <= 0.0 or _fStartForceB <= 0.0 or _fKillRateB == 0.0){
 		return 0;
 	}
 
 	_fKillFactor = (_fStartForceB / _fStartForceA) *
 					sqrt(_fKillRateA / _fKillRateB);
+
+	// avoid division by 0
+	if( (1.0 - _fKillFactor) == 0.0){
+		return 0;
+	}
 
 	_fTimeToWin = 1.0 / (2.0 * sqrt(_fKillRateA * _fKillRateB)) *
 				log ( (1.0 + _fKillFactor) / (1.0 - _fKillFactor) );
