@@ -426,7 +426,7 @@ static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSE
 # endif
 
 	write(dumpFile, "Compiled on: ", strlen("Compiled on: "));
-	write(dumpFile, __DATE__, strlen(__DATE__));
+	write(dumpFile, __DATE__ " " __TIME__, strlen(__DATE__ " " __TIME__));
 	write(dumpFile, "\n", 1);
 
 	write(dumpFile, "Compiled by: ", strlen("Compiled by: "));
