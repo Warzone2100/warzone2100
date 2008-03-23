@@ -56,11 +56,17 @@ PACKETDIR NETgetPacketDir();
 template <typename EnumT>
 BOOL NETenum(EnumT* enumPtr)
 {
-	int32_t val = (NETgetPacketDir() == PACKET_ENCODE) ? *enumPtr : 0;
+	int32_t val;
+	
+	if (NETgetPacketDir() == PACKET_ENCODE)
+		val = *enumPtr;
 
-	NETint32_t(&val);
+	const BOOL retVal = NETint32_t(&val);
 
-	*enumPtr = static_cast<EnumT>(val);
+	if (NETgetPacketDir() == PACKET_DECODE)
+		*enumPtr = static_cast<EnumT>(val);
+
+	return retVal;
 }
 #else
 // FIXME: Causes tons of warnings: <enumPtr> is used unitialised in this function
