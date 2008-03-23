@@ -700,6 +700,26 @@ BOOL recvGroupOrder()
 	}
 	NETend();
 
+	/* Check if the order is valid */
+	switch (order)
+	{
+	case DORDER_NONE:
+	case DORDER_MOVE:
+	case DORDER_GUARD:
+	case DORDER_SCOUT:
+	case DORDER_RUN:
+	case DORDER_PATROL:
+	case DORDER_TRANSPORTOUT:
+	case DORDER_TRANSPORTIN:
+	case DORDER_TRANSPORTRETURN:
+	case DORDER_DISEMBARK:
+	case DORDER_CIRCLE:
+		break;
+	default:
+		debug(LOG_ERROR, "recvGroupOrder: Invalid group order received from %d!", NETgetSource());
+		return FALSE;
+	}
+
 	// Process the given order for all droids we've retrieved
 	for (i = 0; i < droidCount; ++i)
 	{
