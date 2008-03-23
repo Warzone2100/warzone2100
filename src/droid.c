@@ -4577,21 +4577,18 @@ BOOL checkDroidsDemolishing(STRUCTURE *psStructure)
 
 /* checks the structure for type and capacity and **NOT orders the droid*** to build
 a module if it can - returns TRUE if order is set */
-BOOL buildModule(DROID *psDroid, STRUCTURE *psStruct,BOOL bCheckPower)
+BOOL buildModule(DROID *psDroid, STRUCTURE *psStruct)
 {
-	BOOL	order;
+	BOOL	order = FALSE;
 	UDWORD	i=0;
 
-//	ASSERT( psDroid != NULL,
-//		"buildModule: Invalid droid pointer" );
-	ASSERT( psStruct != NULL,
-		"buildModule: Invalid structure pointer" );
+	ASSERT(psStruct != NULL, "buildModule: Invalid structure pointer" );
 
-	order = FALSE;
 	switch (psStruct->pStructureType->type)
 	{
 	case REF_POWER_GEN:
 		//check room for one more!
+		ASSERT(psStruct->pFunctionality, "buildModule: Functionality missing for power!");
 		if (psStruct->pFunctionality->powerGenerator.capacity < NUM_POWER_MODULES)
 		{
 			/*for (i = 0; (i < numStructureStats) && (asStructureStats[i].type !=
@@ -4607,6 +4604,7 @@ BOOL buildModule(DROID *psDroid, STRUCTURE *psStruct,BOOL bCheckPower)
 	case REF_FACTORY:
 	case REF_VTOL_FACTORY:
 		//check room for one more!
+		ASSERT(psStruct->pFunctionality, "buildModule: Functionality missing for factory!");
 		if (psStruct->pFunctionality->factory.capacity < NUM_FACTORY_MODULES)
 		{
 			/*for (i = 0; (i < numStructureStats) && (asStructureStats[i].type !=
@@ -4621,6 +4619,7 @@ BOOL buildModule(DROID *psDroid, STRUCTURE *psStruct,BOOL bCheckPower)
 		break;
 	case REF_RESEARCH:
 		//check room for one more!
+		ASSERT(psStruct->pFunctionality, "buildModule: Functionality missing for research!");
 		if (psStruct->pFunctionality->researchFacility.capacity < NUM_RESEARCH_MODULES)
 		{
 			/*for (i = 0; (i < numStructureStats) && (asStructureStats[i].type !=
@@ -4646,16 +4645,6 @@ BOOL buildModule(DROID *psDroid, STRUCTURE *psStruct,BOOL bCheckPower)
 		{
 			order = FALSE;
 		}
-
-        //Power is obtained gradually now, so allow order
-		/*if(bCheckPower)
-		{
-			// check enough power to build
-			if (!checkPower(selectedPlayer, asStructureStats[i].powerToBuild, TRUE))
-			{
-				order = FALSE;
-			}
-		}*/
 	}
 
 	return order;
@@ -4692,7 +4681,7 @@ void setUpBuildModule(DROID *psDroid)
 		}
 		else
 		{
-			if(buildModule(psDroid,psStruct,FALSE))
+			if (buildModule(psDroid, psStruct))
 			{
 				//no other droids building so just start it off
 				if (droidStartBuild(psDroid))
