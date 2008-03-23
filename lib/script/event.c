@@ -73,7 +73,7 @@ static SDWORD			eventTraceLevel=3;
 #ifdef DEBUG
 #define DB_TRACE(x, level) \
 	if (eventTraceLevel >= (level)) \
-		debug( LOG_NEVER, x)
+		debug(LOG_SCRIPT, x)
 #else
 #define DB_TRACE(x,level)
 #endif
@@ -161,7 +161,7 @@ void eventReset(void)
 #ifdef DEBUG
 	if (count>0)
 	{
-		debug( LOG_NEVER, "eventReset: %d contexts still allocated at shutdown\n", count );
+		debug(LOG_WARNING, "eventReset: %d contexts still allocated at shutdown\n", count );
 	}
 #endif
 }
@@ -302,10 +302,10 @@ void eventPrintTriggerInfo(ACTIVE_TRIGGER *psTrigger)
 	// find the debug info for the event
 	pEventLab = eventGetEventID(psCode, psTrigger->event);
 
-	debug( LOG_NEVER, "trigger %s at %d -> %s", pTrigLab, psTrigger->testTime, pEventLab );
+	debug(LOG_SCRIPT, "trigger %s at %d -> %s", pTrigLab, psTrigger->testTime, pEventLab);
 	if (psTrigger->offset != 0)
 	{
-		debug( LOG_NEVER, " %d", psTrigger->offset );
+		debug(LOG_SCRIPT, " %d", psTrigger->offset);
 	}
 }
 
@@ -790,7 +790,6 @@ BOOL eventSetContextVar(SCRIPT_CONTEXT *psContext, UDWORD index, INTERP_VAL *dat
 // Add a trigger to the list in order
 static void eventAddTrigger(ACTIVE_TRIGGER *psTrigger)
 {
-	ACTIVE_TRIGGER	*psCurr, *psPrev=NULL;
 	UDWORD	testTime = psTrigger->testTime;
 
 	if (psTrigger->type >= TR_CALLBACKSTART)
@@ -808,8 +807,9 @@ static void eventAddTrigger(ACTIVE_TRIGGER *psTrigger)
 		}
 		else
 		{
-			for(psCurr=psCallbackList; psCurr && psCurr->type < psTrigger->type;
-				psCurr=psCurr->psNext)
+			ACTIVE_TRIGGER	*psCurr, *psPrev = NULL;
+
+			for (psCurr = psCallbackList; psCurr && psCurr->type < psTrigger->type;	psCurr = psCurr->psNext)
 			{
 				psPrev = psCurr;
 			}
@@ -829,6 +829,8 @@ static void eventAddTrigger(ACTIVE_TRIGGER *psTrigger)
 	}
 	else
 	{
+		ACTIVE_TRIGGER	*psCurr, *psPrev = NULL;
+
 		for(psCurr=psTrigList; psCurr && psCurr->testTime < testTime;
 			psCurr=psCurr->psNext)
 		{
@@ -986,7 +988,7 @@ static void eventFreeTrigger(ACTIVE_TRIGGER *psTrigger)
 
 
 // Activate a callback trigger
-void eventFireCallbackTrigger(TRIGGER_TYPE callback)
+void eventFireCallbackTrigger(int callback)
 {
 	ACTIVE_TRIGGER	*psPrev,*psCurr,*psNext;
 	TRIGGER_DATA	*psTrigDat;
@@ -1007,8 +1009,7 @@ void eventFireCallbackTrigger(TRIGGER_TYPE callback)
 	//this can be called from eventProcessTriggers and so will wipe out all the current added ones
 	//psAddedTriggers = NULL;
 	psPrev = NULL;
-	for(psCurr = psCallbackList; psCurr && psCurr->type <= (int)callback;
-		psCurr = psNext)
+	for(psCurr = psCallbackList; psCurr && psCurr->type <= (int)callback; psCurr = psNext)
 	{
 		psNext = psCurr->psNext;
 		if (psCurr->type == (int)callback)
@@ -1426,4 +1427,3 @@ BOOL eventSetTraceLevel(void)
 
 	return TRUE;
 }
-

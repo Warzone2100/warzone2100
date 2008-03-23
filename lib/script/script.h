@@ -171,7 +171,7 @@ extern BOOL eventGetContextVal(SCRIPT_CONTEXT *psContext, UDWORD index,
 extern void eventProcessTriggers(UDWORD currTime);
 
 // Activate a callback trigger
-extern void eventFireCallbackTrigger(TRIGGER_TYPE callback);
+extern void eventFireCallbackTrigger(int callback);
 
 /***********************************************************************************
  *
