@@ -235,7 +235,9 @@ extern BOOL activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber);
 extern BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot);
 
 /* gets a template from its name - relies on the name being unique */
-extern DROID_TEMPLATE* getTemplateFromName(char *pName);
+extern DROID_TEMPLATE * getTemplateFromUniqueName(const char *pName, unsigned int player);
+/* gets a template from its name - relies on the name being unique */
+extern DROID_TEMPLATE* getTemplateFromTranslatedNameNoPlayer(char *pName);
 /*getTemplateFromSinglePlayerID gets template for unique ID  searching one players list */
 extern DROID_TEMPLATE* getTemplateFromSinglePlayerID(UDWORD multiPlayerID, UDWORD player);
 /*getTemplateFromMultiPlayerID gets template for unique ID  searching all lists */
@@ -294,11 +296,11 @@ extern BOOL buildModule(STRUCTURE *psStruct);
 extern void setUpBuildModule(DROID *psDroid);
 
 /*return the name to display for the interface given a DROID structure*/
-extern char* getDroidName(DROID *psDroid);
+extern const char* getDroidName(const DROID *psDroid) WZ_DECL_UNUSED;
 
 /*return the name to display for the interface - we don't know if this is
 a string ID or something the user types in*/
-extern char* getTemplateName(DROID_TEMPLATE *psTemplate);
+extern const char* getTemplateName(const DROID_TEMPLATE *psTemplate);
 
 /* Just returns true if the droid's present body points aren't as high as the original*/
 extern BOOL	droidIsDamaged(DROID *psDroid);

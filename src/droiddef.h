@@ -35,7 +35,7 @@
 #define DROID_MAXCOMP		(COMP_NUMCOMPONENTS - 1)//(COMP_NUMCOMPONENTS - 2)
 
 /* The maximum number of droid weapons */
-#define DROID_MAXWEAPS		3//Watermelon:its 3 again now
+#define DROID_MAXWEAPS		3
 #define	DROID_DAMAGE_SCALING	400
 // This should really be logarithmic
 #define	CALC_DROID_SMOKE_INTERVAL(x) ((((100-x)+10)/10) * DROID_DAMAGE_SCALING)

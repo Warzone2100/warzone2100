@@ -507,7 +507,7 @@ var_init:		var_entry TYPE var_value
 							scrv_error("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						data.v.oval = getTemplateFromName($3.pString);	/* store pointer to the template */
+						data.v.oval = getTemplateFromTranslatedNameNoPlayer($3.pString);	/* store pointer to the template */
 						if (data.v.oval == NULL)
 						{
 							scrv_error("Template %s not found", $3.pString);

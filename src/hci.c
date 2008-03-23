@@ -394,9 +394,6 @@ BASE_OBJECT		**apsListToOrder;
 #define			ORDERED_LIST_SIZE		(NUM_FACTORY_TYPES * MAX_FACTORY)
 
 
-/* default droid design template */
-extern DROID_TEMPLATE	sDefaultDesignTemplate;
-
 /* The current design being edited on the design screen */
 extern DROID_TEMPLATE	sCurrDesign;
 
