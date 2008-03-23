@@ -747,14 +747,14 @@ BOOL recvStructureCheck()
 	int				i, j;
 	float			direction;
 	uint8_t			player, ourCapacity;
-	uint16_t		body;
+	uint32_t		body;
 	uint16_t		x, y, z;
 	uint32_t		ref, type;
 
 	NETbeginDecode(NET_CHECK_STRUCT);
 		NETuint8_t(&player);
 		NETuint32_t(&ref);
-		NETuint16_t(&body);
+		NETuint32_t(&body);
 		NETuint32_t(&type);
 		NETuint16_t(&x);
 		NETuint16_t(&y);
