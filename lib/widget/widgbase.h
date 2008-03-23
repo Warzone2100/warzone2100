@@ -88,7 +88,7 @@ typedef struct _w_screen
 {
 	WIDGET*          psForm;        ///< The root form of the screen
 	WIDGET*          psFocus;       ///< The widget that has keyboard focus
-	int              TipFontID;     ///< ID of the IVIS font to use for tool tips.
+	enum iV_fonts    TipFontID;     ///< ID of the IVIS font to use for tool tips.
 	WIDGET*          psRetWidget;   ///< The widget to be returned by widgRunScreen
 } W_SCREEN;
 

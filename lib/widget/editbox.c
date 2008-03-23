@@ -30,6 +30,7 @@
 #include "form.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/textdraw.h"
 #include "scrap.h"
 
 
@@ -681,7 +682,7 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *
 {
 	W_EDITBOX	*psEdBox;
 	SDWORD		x0,y0,x1,y1, fx,fy, cx,cy;
-	int CurrFontID;
+	enum iV_fonts CurrFontID;
 	char		ch, *pInsPoint, *pPrint;
 #if CURSOR_BLINK
 	BOOL		blink;

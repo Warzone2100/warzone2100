@@ -57,7 +57,7 @@ static SDWORD		fx,fy;				// Position of the text
 static const char *pTip;				// Tip text
 static PIELIGHT		*pColours;			// The colours for the tool tip
 static WIDGET		*psWidget;			// The button the tip is for
-static int FontID = 0;	// ID for the Ivis Font.
+static enum iV_fonts FontID = font_regular;	// ID for the Ivis Font.
 static PIELIGHT TipColour;
 
 /* Initialise the tool tip module */
@@ -84,7 +84,7 @@ void widgSetTipColour(W_SCREEN *psScreen, PIELIGHT colour)
  * x,y,width,height - specify the position of the button to place the
  * tip by.
  */
-void tipStart(WIDGET *psSource, const char *pNewTip, int NewFontID,
+void tipStart(WIDGET *psSource, const char *pNewTip, enum iV_fonts NewFontID,
 					 PIELIGHT *pNewColours, SDWORD x, SDWORD y, UDWORD width, UDWORD height)
 {
 	ASSERT( psSource != NULL,

@@ -26,6 +26,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_common/textdraw.h"
 #include "widgbase.h"
 
 /***********************************************************************************
@@ -184,7 +185,7 @@ typedef struct _w_labinit
 
 	const char		*pText;			// label text
 	const char		*pTip;			// Tool tip for the label.
-	int			FontID;			// ID of the IVIS font to use for this widget.
+	enum iV_fonts           FontID;			// ID of the IVIS font to use for this widget.
 } W_LABINIT;
 
 /* Button initialisation structure */
@@ -195,7 +196,7 @@ typedef struct _w_butinit
 
 	const char *pText; // button text
 	const char *pTip; // Tool tip text
-	int FontID; // ID of the IVIS font to use for this widget.
+	enum iV_fonts FontID; // ID of the IVIS font to use for this widget.
 } W_BUTINIT;
 
 /* Edit box initialisation structure */
@@ -205,7 +206,7 @@ typedef struct _w_edbinit
 	WINIT_BASE;
 
 	const char *pText; // initial contents of the edit box
-	int FontID; // ID of the IVIS font to use for this widget.
+	enum iV_fonts FontID; // ID of the IVIS font to use for this widget.
 	WIDGET_DISPLAY pBoxDisplay;		// Optional callback to display the form.
 	FONT_DISPLAY pFontDisplay;	// Optional callback to display a string.
 } W_EDBINIT;
@@ -289,7 +290,7 @@ extern W_SCREEN* widgCreateScreen(void);
 extern void widgReleaseScreen(W_SCREEN *psScreen);
 
 /* Set the tool tip font for a screen */
-extern void widgSetTipFont(W_SCREEN *psScreen, int FontID);
+extern void widgSetTipFont(W_SCREEN *psScreen, enum iV_fonts FontID);
 
 /* Add a form to the widget screen */
 extern BOOL widgAddForm(W_SCREEN *psScreen, const W_FORMINIT* psInit);

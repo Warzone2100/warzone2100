@@ -29,6 +29,7 @@
 #include "tip.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/textdraw.h"
 
 /* Create a button widget data structure */
 W_LABEL* labelCreate(const W_LABINIT* psInit)
@@ -105,7 +106,7 @@ void labelDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pC
 {
 	SDWORD		fx,fy, fw;
 	W_LABEL		*psLabel;
-	int			FontID;
+	enum iV_fonts FontID;
 
 	psLabel = (W_LABEL *)psWidget;
 	FontID = psLabel->FontID;

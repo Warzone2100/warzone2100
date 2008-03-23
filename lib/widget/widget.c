@@ -23,6 +23,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/frameint.h"
+#include "lib/ivis_common/textdraw.h"
 
 #include "widget.h"
 #include "widgint.h"
@@ -111,7 +112,7 @@ W_SCREEN* widgCreateScreen()
 
 	psScreen->psForm = (WIDGET *)psForm;
 	psScreen->psFocus = NULL;
-	psScreen->TipFontID = 0;
+	psScreen->TipFontID = font_regular;
 
 	return psScreen;
 }
@@ -246,7 +247,7 @@ static BOOL widgCheckID(W_SCREEN *psScreen, UDWORD id)
 
 
 /* Set the tool tip font for a screen */
-void widgSetTipFont(W_SCREEN *psScreen, int FontID)
+void widgSetTipFont(W_SCREEN *psScreen, enum iV_fonts FontID)
 {
 	ASSERT( psScreen != NULL,
 		"widgSetTipFont: Invalid screen pointer" );
