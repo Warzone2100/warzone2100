@@ -216,6 +216,6 @@ typedef struct _droid
 	/* anim data */
 	ANIM_OBJECT     *psCurAnim;
 	SDWORD          iAudioID;
-} DROID;
+} WZ_DECL_MAY_ALIAS DROID;
 
 #endif // __INCLUDED_DROIDDEF_H__
