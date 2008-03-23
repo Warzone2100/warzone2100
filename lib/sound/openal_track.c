@@ -382,6 +382,19 @@ static inline TRACK* sound_DecodeOggVorbisTrack(TRACK *psTrack, PHYSFS_file* PHY
 		return NULL;
 	}
 
+	if (soundBuffer->size == 0)
+	{
+		debug(LOG_WARNING, "sound_DecodeOggVorbisTrack: OggVorbis track is entirely empty after decoding");
+// NOTE: I'm not entirely sure if a track that's empty after decoding should be
+//       considered an error condition. Therefore I'll only error out on DEBUG
+//       builds. (Returning NULL here __will__ result in a program termination.)
+#ifdef DEBUG
+		free(soundBuffer);
+		free(psTrack);
+		return NULL;
+#endif
+	}
+
 	// Determine PCM data format
 	format = (soundBuffer->channelCount == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;
 
