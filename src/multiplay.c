@@ -1361,6 +1361,7 @@ BOOL sendTemplate(DROID_TEMPLATE *pTempl)
 		NETuint8_t(&player);
 		NETuint32_t(&pTempl->ref);
 		NETstring(pTempl->aName, sizeof(pTempl->aName));
+		NETstring(pTempl->pName, strlen(pTempl->pName) + 1);
 		NETuint8_t(&pTempl->NameVersion);
 
 		for (i = 0; i < DROID_MAXCOMP; i++)
@@ -1392,6 +1393,7 @@ BOOL recvTemplate()
 	DROID_TEMPLATE	*psTempl;
 	DROID_TEMPLATE	t, *pT = &t;
 	int				i;
+	char		nameBuf[MAX_STR_LENGTH];
 
 	NETbeginDecode(NET_TEMPLATE);
 		NETuint8_t(&player);
@@ -1399,6 +1401,7 @@ BOOL recvTemplate()
 
 		NETuint32_t(&pT->ref);
 		NETstring(pT->aName, sizeof(pT->aName));
+		NETstring(nameBuf, MAX_STR_LENGTH);
 		NETuint8_t(&pT->NameVersion);
 		
 		for (i = 0; i < DROID_MAXCOMP; i++)
@@ -1422,6 +1425,7 @@ BOOL recvTemplate()
 	NETend();
 	
 	t.psNext = NULL;
+	t.pName = strdup(nameBuf);
 
 	psTempl = IdToTemplate(t.multiPlayerID,player);
 	
