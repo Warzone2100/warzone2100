@@ -404,6 +404,12 @@ BOOL NETVector3uw(Vector3uw* vp)
 	     && NETuint16_t(&vp->z));
 }
 
+typedef enum
+{
+	test_a,
+	test_b,
+} test_enum;
+
 static void NETcoder(PACKETDIR dir)
 {
 	static const char original[] = "THIS IS A TEST STRING";
@@ -415,6 +421,7 @@ static void NETcoder(PACKETDIR dir)
 	int32_t i32 = -32;
 	int16_t i16 = -16;
 	int8_t i8 = -8;
+	test_enum te = test_b;
 
 	strlcpy(str, original, sizeof(str));
 
@@ -430,6 +437,7 @@ static void NETcoder(PACKETDIR dir)
 	NETint16_t(&i16);   assert(i16 == -16);
 	NETint8_t(&i8);     assert(i8 == -8);
 	NETstring(str, sizeof(str)); assert(strncmp(str, original, sizeof(str) - 1) == 0);
+	NETenum(&te);       assert(te == test_b);
 	NETend();
 }
 
