@@ -149,7 +149,7 @@ void changeTitleMode(tMode mode)
 	case GAME3:
 		startGameOptions3Menu();
 		break;
-	
+
 	case GAME4:
 		startGameOptions4Menu();
 		break;
@@ -891,14 +891,14 @@ BOOL startGameOptions4Menu(void)
 	         war_GetWidth(), war_GetHeight());
 	// Generate texture size string
 	snprintf(textureSize, WIDG_MAXSTR, "%d", getTextureSize());
-	
+
 	addBackdrop();
 	addTopForm();
 	addBottomForm();
-	
+
 	// Fullscreen/windowed
 	addTextButton(FRONTEND_WINDOWMODE, FRONTEND_POS2X-35, FRONTEND_POS2Y, _("Graphics Mode*"), TRUE, FALSE);
-	
+
 	if (war_getFullscreen())
 	{
 		addTextButton(FRONTEND_WINDOWMODE_R, FRONTEND_POS2M-55, FRONTEND_POS2Y, _("Fullscreen"), TRUE, FALSE);
@@ -907,15 +907,15 @@ BOOL startGameOptions4Menu(void)
 	{
 		addTextButton(FRONTEND_WINDOWMODE_R, FRONTEND_POS2M-55, FRONTEND_POS2Y, _("Windowed"), TRUE, FALSE);
 	}
-	
+
 	// Resolution
 	addTextButton(FRONTEND_RESOLUTION, FRONTEND_POS3X-35, FRONTEND_POS3Y, _("Resolution*"), TRUE, FALSE);
 	addTextButton(FRONTEND_RESOLUTION_R, FRONTEND_POS3M-55, FRONTEND_POS3Y, resolution, TRUE, FALSE);
 	widgSetString(psWScreen, FRONTEND_RESOLUTION_R, resolution);
-	
+
 	// Cursor trapping
 	addTextButton(FRONTEND_TRAP, FRONTEND_POS4X-35, FRONTEND_POS4Y, _("Trap Cursor"), TRUE, FALSE);
-	
+
 	if (war_GetTrapCursor())
 	{
 		addTextButton(FRONTEND_TRAP_R, FRONTEND_POS4M-55, FRONTEND_POS4Y, _("On"), TRUE, FALSE);
@@ -942,7 +942,7 @@ BOOL runGameOptions4Menu(void)
 {
 	SDL_Rect **modes = SDL_ListModes(NULL, SDL_FULLSCREEN | SDL_HWSURFACE);
 	UDWORD id = widgRunScreen(psWScreen);
-	
+
 	switch (id)
 	{
 		case FRONTEND_WINDOWMODE:
@@ -958,12 +958,12 @@ BOOL runGameOptions4Menu(void)
 				widgSetString(psWScreen, FRONTEND_WINDOWMODE_R, _("Fullscreen"));
 			}
 			break;
-		
+
 		case FRONTEND_RESOLUTION:
 		case FRONTEND_RESOLUTION_R:
 		{
 			int current, count;
-			
+
 			// Get the current mode offset
 			for (count = 0, current = 0; modes[count]; count++)
 			{
@@ -973,25 +973,25 @@ BOOL runGameOptions4Menu(void)
 					current = count;
 				}
 			}
-			
+
 			// Increment and clip if required
 			if (++current == count)
 				current = 0;
-			
+
 			// Set the new width and height (takes effect on restart)
 			war_SetWidth(modes[current]->w);
 			war_SetHeight(modes[current]->h);
-			
+
 			// Generate the textual representation of the new width and height
 			snprintf(resolution, WIDG_MAXSTR, "%d x %d", modes[current]->w,
 			         modes[current]->h);
-			
+
 			// Update the widget
 			widgSetString(psWScreen, FRONTEND_RESOLUTION_R, resolution);
-			
+
 			break;
 		}
-		
+
 		case FRONTEND_TRAP:
 		case FRONTEND_TRAP_R:
 			if (war_GetTrapCursor())
@@ -1005,45 +1005,45 @@ BOOL runGameOptions4Menu(void)
 				widgSetString(psWScreen, FRONTEND_TRAP_R, _("On"));
 			}
 			break;
-		
+
 		case FRONTEND_TEXTURESZ:
 		case FRONTEND_TEXTURESZ_R:
 		{
 			int newTexSize = getTextureSize() * 2;
-			
+
 			// Clip such that 32 <= size <= 128
 			if (newTexSize > 128)
 			{
 				newTexSize = 32;
 			}
-			
+
 			// Set the new size
 			setTextureSize(newTexSize);
-			
+
 			// Generate the string representation of the new size
 			snprintf(textureSize, WIDG_MAXSTR, "%d", newTexSize);
-			
+
 			// Update the widget
 			widgSetString(psWScreen, FRONTEND_TEXTURESZ_R, textureSize);
-			
+
 			break;
 		}
-		
+
 		case FRONTEND_QUIT:
 			changeTitleMode(OPTIONS);
 			break;
-		
+
 		default:
 			break;
 	}
-	
+
 	if (CancelPressed())
 	{
 		changeTitleMode(OPTIONS);
 	}
-	
+
 	widgDisplayScreen(psWScreen);
-	
+
 	return TRUE;
 }
 
@@ -1081,7 +1081,7 @@ BOOL startGameOptionsMenu(void)
 	// Colour stuff
 	w = iV_GetImageWidth(FrontImages, IMAGE_PLAYER0);
 	h = iV_GetImageHeight(FrontImages, IMAGE_PLAYER0);
-	
+
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P0, FRONTEND_POS4M+(0*(w+6)), FRONTEND_POS4Y, w, h, "", IMAGE_PLAYER0, IMAGE_PLAYERX, TRUE);
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P4, FRONTEND_POS4M+(1*(w+6)), FRONTEND_POS4Y, w, h, "", IMAGE_PLAYER4, IMAGE_PLAYERX, TRUE);
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P5, FRONTEND_POS4M+(2*(w+6)), FRONTEND_POS4Y, w, h, "", IMAGE_PLAYER5, IMAGE_PLAYERX, TRUE);
@@ -1113,7 +1113,6 @@ BOOL runGameOptionsMenu(void)
 	{
 	case FRONTEND_LANGUAGE_R:
 		setNextLanguage();
-		setWarzoneKeyString("language", getLanguageName());
 		widgSetString(psWScreen, FRONTEND_LANGUAGE_R, getLanguageName());
 		/* Hack to reset current menu text, which looks fancy. */
 		widgSetString(psWScreen, FRONTEND_LANGUAGE, _("Language"));

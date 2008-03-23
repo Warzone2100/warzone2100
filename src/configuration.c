@@ -132,10 +132,7 @@ BOOL loadConfig(void)
 
 	if (getWarzoneKeyString("language", sBuf))
 	{
-		if (!setLanguageByName(sBuf))
-		{
-			debug(LOG_ERROR, "Failed to set language to %s", sBuf);
-		}
+		setLanguage(sBuf);
 	}
 
 	if (getWarzoneKeyNumeric("showFPS", &val))
@@ -586,6 +583,8 @@ BOOL saveConfig(void)
 	setWarzoneKeyNumeric("height", war_GetHeight());
 	setWarzoneKeyNumeric("bpp", pie_GetVideoBufferDepth());
 	setWarzoneKeyNumeric("fullscreen", war_getFullscreen());
+
+	setWarzoneKeyString("language", getLanguage());
 
 	// dont save out the cheat mode.
 	if(getDifficultyLevel()==DL_KILLER || getDifficultyLevel()== DL_TOUGH)
