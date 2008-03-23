@@ -27,6 +27,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/gamelib/gtime.h"
+#include "ai.h"
 #include "basedef.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piestate.h"
@@ -123,7 +124,6 @@ UDWORD	getConsoleLineInfo			( void );
 void	permitNewConsoleMessages	( BOOL allow);
 int		displayOldMessages			( void );
 void	setConsoleTextColor			( CONSOLE_TEXT_TYPE type );
-CONSOLE_TEXT_TYPE pickConsolePlayerTextType(UDWORD player1, UDWORD player2);
 
 /** Sets the system up */
 void	initConsoleMessages( void )

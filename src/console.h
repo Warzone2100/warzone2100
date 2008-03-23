@@ -96,6 +96,7 @@ extern	void	toggleConsoleDrop( void );
 extern void printf_console(const char *pFormat, ...); /// Print to the ingame console in debug mode only
 extern void console(const char *pFormat, ...); /// Print allways to the ingame console
 extern CONSOLE_TEXT_TYPE pickConsolePlayerTextMode(UDWORD player1, UDWORD player2);
+extern CONSOLE_TEXT_TYPE pickConsolePlayerTextType(UDWORD player1, UDWORD player2);
 
 /* Basic wrapper to sprintf - allows convenient printf style game info to be displayed */
 
