@@ -4449,15 +4449,13 @@ BOOL buildModule(STRUCTURE *psStruct)
 	BOOL	order = FALSE;
 	UDWORD	i = 0;
 
-//	ASSERT( psDroid != NULL,
-//		"buildModule: Invalid droid pointer" );
-	ASSERT( psStruct != NULL,
-		"buildModule: Invalid structure pointer" );
+	ASSERT(psStruct != NULL, "buildModule: Invalid structure pointer");
 
 	switch (psStruct->pStructureType->type)
 	{
 		case REF_POWER_GEN:
 			//check room for one more!
+			ASSERT(psStruct->pFunctionality, "buildModule: Functionality missing for power!");
 			if (psStruct->pFunctionality->powerGenerator.capacity < NUM_POWER_MODULES)
 			{
 				i = powerModuleStat;
@@ -4467,6 +4465,7 @@ BOOL buildModule(STRUCTURE *psStruct)
 		case REF_FACTORY:
 		case REF_VTOL_FACTORY:
 			//check room for one more!
+			ASSERT(psStruct->pFunctionality, "buildModule: Functionality missing for factory!");
 			if (psStruct->pFunctionality->factory.capacity < NUM_FACTORY_MODULES)
 			{
 				i = factoryModuleStat;
@@ -4475,6 +4474,7 @@ BOOL buildModule(STRUCTURE *psStruct)
 			break;
 		case REF_RESEARCH:
 			//check room for one more!
+			ASSERT(psStruct->pFunctionality, "buildModule: Functionality missing for research!");
 			if (psStruct->pFunctionality->researchFacility.capacity < NUM_RESEARCH_MODULES)
 			{
 				i = researchModuleStat;
