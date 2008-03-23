@@ -26,13 +26,9 @@
 #  error Framework header files MUST be included from frame.h ONLY.
 #endif
 
+#include <locale.h>
 
 #include "gettext.h"
-
-
-#if !defined(LC_MESSAGES)
-#  define LC_MESSAGES 0
-#endif
 
 
 #define _(String) gettext(String)
@@ -45,10 +41,10 @@
 // Make xgettext recognize the context
 #define NP_(Context, String) gettext_noop(String)
 
-extern void setNextLanguage(void);
-extern WZ_DECL_CONST const char* getLanguageName(void);
 extern WZ_DECL_CONST const char* getLanguage(void);
+extern WZ_DECL_CONST const char* getLanguageName(void);
+extern BOOL setLanguage(const char *name);
+extern void setNextLanguage(void);
 extern void initI18n(void);
-extern BOOL setLanguageByName(const char *name);
 
 #endif // _i18n_h
