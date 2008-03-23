@@ -450,14 +450,15 @@ BOOL resLoadFile(const char *pType, const char *pFile)
 		if (!RetreiveResourceFile(aFileName, &Resource))
 		{
 			debug(LOG_ERROR, "resLoadFile: Unable to retreive resource - %s", aFileName);
-			return(FALSE);
+			return FALSE;
 		}
 
 		// Now process the buffer data
 		if (!psT->buffLoad(Resource->pBuffer, Resource->size, &pData))
 		{
+			debug(LOG_ERROR, "resLoadFile: The load function for resource type \"%s\" failed for file \"%s\"", pType, pFile);
 			FreeResourceFile(Resource);
-			psT->release( pData );
+			psT->release(pData);
 			return FALSE;
 		}
 
@@ -468,13 +469,14 @@ BOOL resLoadFile(const char *pType, const char *pFile)
 		// Process data directly from file
 		if (!psT->fileLoad(aFileName, &pData))
 		{
-			psT->release( pData );
+			debug(LOG_ERROR, "resLoadFile: The load function for resource type \"%s\" failed for file \"%s\"", pType, pFile);
+			psT->release(pData);
 			return FALSE;
 		}
 	}
 	else
 	{
-		debug(LOG_ERROR, "resLoadFile:  No load functions for this type (%s)", pType);
+		debug(LOG_ERROR, "resLoadFile: No load functions for this type (%s)", pType);
 		return FALSE;
 	}
 
