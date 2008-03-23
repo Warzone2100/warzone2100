@@ -9620,7 +9620,9 @@ BOOL scrLearnPlayerBaseLoc(void)
 	baseLocation[playerStoring][enemyPlayer][0] = x;
 	baseLocation[playerStoring][enemyPlayer][1] = y;
 
+#ifdef DEBUG
 	printf_console("Learned player base.");
+#endif
 
 	scrFunctionResult.v.bval = TRUE;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
