@@ -26,6 +26,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_common/piedef.h"
+#include "lib/ivis_common/textdraw.h"
 
 /* Button colours */
 #define WBUTC_TEXT		0			// Colour for button text
