@@ -31,7 +31,7 @@
 
 
 // MSVC doesn't have it, and gettext's wonderful design needs it.
-#ifndef LC_MESSAGES
+#if !defined(LC_MESSAGES)
 #  define LC_MESSAGES 0
 #endif
 
