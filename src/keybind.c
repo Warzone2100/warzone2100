@@ -319,7 +319,7 @@ void	kf_UpThePower( void )
 		return;
 	}
 
-	asPower[selectedPlayer]->currentPower+=1000;
+	asPower[selectedPlayer].currentPower+=1000;
 	addConsoleMessage(_("1000 big ones!!!"), LEFT_JUSTIFY);
 }
 
@@ -333,7 +333,7 @@ void	kf_MaxPower( void )
 		return;
 	}
 
-	asPower[selectedPlayer]->currentPower = SDWORD_MAX / 2;
+	asPower[selectedPlayer].currentPower = SDWORD_MAX / 2;
 	addConsoleMessage(_("Power overwhelming"), LEFT_JUSTIFY);
 }
 

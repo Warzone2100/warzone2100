@@ -4812,11 +4812,11 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
             //only overwrite selectedPlayer's power on a startMission save game
             if (gameType == GTYPE_SAVE_MIDMISSION || i == selectedPlayer)
             {
-    		    asPower[i]->currentPower = powerSaved[i].currentPower;
-	    	    asPower[i]->extractedPower = powerSaved[i].extractedPower;
+    		    asPower[i].currentPower = powerSaved[i].currentPower;
+	    	    asPower[i].extractedPower = powerSaved[i].extractedPower;
             }
 		    //init the last structure
-		    asPower[i]->psLastPowered = NULL;
+		    asPower[i].psLastPowered = NULL;
 	    }
     }
 
@@ -4899,8 +4899,8 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 	//save out the players power
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		saveGame.power[i].currentPower = asPower[i]->currentPower;
-		saveGame.power[i].extractedPower = asPower[i]->extractedPower;
+		saveGame.power[i].currentPower = asPower[i].currentPower;
+		saveGame.power[i].extractedPower = asPower[i].extractedPower;
 	}
 
 	//camera position

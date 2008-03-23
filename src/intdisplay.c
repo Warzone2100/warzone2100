@@ -604,8 +604,8 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIG
 	static char		szVal[8];
 
 	ManPow = ManuPower / POWERBAR_SCALE;
-	Avail = asPower[selectedPlayer]->currentPower / POWERBAR_SCALE;
-	realPower = asPower[selectedPlayer]->currentPower - ManuPower;
+	Avail = asPower[selectedPlayer].currentPower / POWERBAR_SCALE;
+	realPower = asPower[selectedPlayer].currentPower - ManuPower;
 
 	BarWidth = BarGraph->width;
 	iV_SetFont(font_regular);

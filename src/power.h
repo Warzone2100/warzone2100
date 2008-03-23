@@ -112,7 +112,7 @@ extern BOOL droidUsesPower(DROID *psDroid);
 extern void powerCheck(BOOL bBeforePowerUsed, UBYTE player);
 
 /** @todo Wrap access to this global and make it static for easier sanity checking! */
-extern PLAYER_POWER		*asPower[MAX_PLAYERS];
+extern PLAYER_POWER		asPower[MAX_PLAYERS];
 
 /** Flag used to check for power calculations to be done or not. */
 extern	BOOL			powerCalculated;
