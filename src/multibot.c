@@ -148,7 +148,7 @@ BOOL recvDroidSecondary()
 {
 	DROID*          psDroid;
 	SECONDARY_ORDER sec;
-	SECONDARY_STATE	state;
+	SECONDARY_STATE	state = DSS_NONE;
 
 	NETbeginDecode(NET_SECONDARY);
 	{
@@ -650,7 +650,7 @@ BOOL SendGroupOrderGroup(const DROID_GROUP* psGroup, DROID_ORDER order, uint32_t
 // receive a group order.
 BOOL recvGroupOrder()
 {
-	DROID_ORDER order;
+	DROID_ORDER order = DORDER_NONE;
 	BOOL subType, cmdOrder;
 
 	uint32_t destId, x, y;
@@ -699,6 +699,26 @@ BOOL recvGroupOrder()
 		}
 	}
 	NETend();
+
+	/* Check if the order is valid */
+	switch (order)
+	{
+	case DORDER_NONE:
+	case DORDER_MOVE:
+	case DORDER_GUARD:
+	case DORDER_SCOUT:
+	case DORDER_RUN:
+	case DORDER_PATROL:
+	case DORDER_TRANSPORTOUT:
+	case DORDER_TRANSPORTIN:
+	case DORDER_TRANSPORTRETURN:
+	case DORDER_DISEMBARK:
+	case DORDER_CIRCLE:
+		break;
+	default:
+		debug(LOG_ERROR, "recvGroupOrder: Invalid group order received from %d!", NETgetSource());
+		return FALSE;
+	}
 
 	// Process the given order for all droids we've retrieved
 	for (i = 0; i < droidCount; ++i)
@@ -790,10 +810,10 @@ BOOL recvDroidInfo()
 {
 	NETbeginDecode(NET_DROIDINFO);
 	{
-		uint32_t    droidId;
-		DROID*      psDroid;
-		DROID_ORDER order;
-		BOOL        subType;
+		uint32_t    droidId = 0;
+		DROID*      psDroid = NULL;
+		DROID_ORDER order = DORDER_NONE;
+		BOOL        subType = FALSE;
 
 		// Get the droid
 		NETuint32_t(&droidId);
@@ -811,7 +831,7 @@ BOOL recvDroidInfo()
 
 		if (subType)
 		{
-			uint32_t destId, destType;
+			uint32_t destId = 0, destType = 0;
 
 			NETuint32_t(&destId);
 			NETenum(&destType);
