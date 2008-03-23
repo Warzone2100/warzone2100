@@ -26,9 +26,14 @@
 #  error Framework header files MUST be included from frame.h ONLY.
 #endif
 
-#include <locale.h>
 
 #include "gettext.h"
+
+
+// MSVC doesn't have it, and gettext's wonderful design needs it.
+#ifndef LC_MESSAGES
+#  define LC_MESSAGES 0
+#endif
 
 
 #define _(String) gettext(String)

@@ -18,6 +18,7 @@
 */
 #include "frame.h"
 
+#include <locale.h>
 #include <physfs.h>
 
 
