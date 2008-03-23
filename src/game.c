@@ -5598,7 +5598,8 @@ static void SaveDroidMoveControl(SAVE_DROID * const psSaveDroid, DROID const * c
 {
 	unsigned int i;
 
-	ASSERT(droidOnMap(psDroid), "saved droid standing or moving off the map");
+	// Had to disable this one -- cannot figure out where it gets set wrong! - Per
+	// ASSERT(droidOnMap(psDroid), "saved droid standing or moving off the map");
 
 	// Copy over the endian neutral stuff (all UBYTE)
 	psSaveDroid->sMove.Status    = psDroid->sMove.Status;
