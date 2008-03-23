@@ -39,7 +39,6 @@
 #include "lib/netplay/netplay.h"
 #include "lib/sound/mixer.h"
 #include "lib/widget/widget.h"
-#include "lib/framework/configfile.h"
 
 #include "advvis.h"
 #include "component.h"

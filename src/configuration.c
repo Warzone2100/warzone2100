@@ -132,7 +132,7 @@ BOOL loadConfig(void)
 
 	if (getWarzoneKeyString("language", sBuf))
 	{
-		setLanguage(sBuf);
+		setLanguageByName(sBuf);
 	}
 
 	if (getWarzoneKeyNumeric("showFPS", &val))
