@@ -52,6 +52,17 @@ BOOL NETbin(char *str, uint16_t maxlen);
 
 PACKETDIR NETgetPacketDir();
 
+#if defined(__cplusplus)
+template <typename EnumT>
+BOOL NETenum(EnumT* enumPtr)
+{
+	int32_t val = (NETgetPacketDir() == PACKET_ENCODE) ? *enumPtr : 0;
+
+	NETint32_t(&val);
+
+	*enumPtr = static_cast<EnumT>(val);
+}
+#else
 // FIXME: Causes tons of warnings: <enumPtr> is used unitialised in this function
 #define NETenum(enumPtr) \
 do \
@@ -62,6 +73,7 @@ do \
 \
 	*(enumPtr) = _val; \
 } while(0)
+#endif
 
 BOOL NETVector3uw(Vector3uw* vp);
 

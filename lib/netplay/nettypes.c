@@ -307,6 +307,20 @@ BOOL NETnull()
 	return NETuint32_t(&zero);
 }
 
+/** Sends or receives a string to or from the current network package.
+ *  \param str    When encoding a packet this is the (NUL-terminated string to
+ *                be sent in the current network package. When decoding this
+ *                is the buffer to decode the string from the network package
+ *                into. When decoding this string is guaranteed to be
+ *                NUL-terminated provided that this buffer is at least 1 byte
+ *                large.
+ *  \param maxlen The buffer size of \c str. For static buffers this means
+ *                sizeof(\c str), for dynamically allocated buffers this is
+ *                whatever number you passed to malloc().
+ *  \note If while decoding \c maxlen is smaller than the actual length of the
+ *        string being decoded, the resulting string (in \c str) will be
+ *        truncated.
+ */
 BOOL NETstring(char *str, uint16_t maxlen)
 {
 	/*
@@ -343,7 +357,7 @@ BOOL NETstring(char *str, uint16_t maxlen)
 			      NetMsg.type, NetMsg.source, len, maxlen);
 			len = maxlen;
 		}
-		memcpy(str, store, len);
+		strlcpy(str, store, len);
 	}
 
 	// Increment the size of the message
