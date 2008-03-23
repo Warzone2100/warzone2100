@@ -406,8 +406,8 @@ BOOL NETVector3uw(Vector3uw* vp)
 
 static void NETcoder(PACKETDIR dir)
 {
-	char str[100];
-	char *original = "THIS IS A TEST STRING";
+	static const char original[] = "THIS IS A TEST STRING";
+	char str[sizeof(original)];
 	BOOL b = TRUE;
 	uint32_t u32 = 32;
 	uint16_t u16 = 16;
@@ -429,7 +429,7 @@ static void NETcoder(PACKETDIR dir)
 	NETint32_t(&i32);   assert(i32 == -32);
 	NETint16_t(&i16);   assert(i16 == -16);
 	NETint8_t(&i8);     assert(i8 == -8);
-	NETstring(str, 99); assert(strncmp(str, original, 99) == 0);
+	NETstring(str, sizeof(str)); assert(strncmp(str, original, sizeof(str) - 1) == 0);
 	NETend();
 }
 

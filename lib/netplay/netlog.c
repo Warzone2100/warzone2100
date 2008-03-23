@@ -102,7 +102,7 @@ BOOL NETstartLogging(void)
 	time_t aclock;
 	struct tm *newtime;
 	char buf[256];
-	char *filename = "netplay.log";
+	static const char filename[] = "netplay.log";
 	int i;
 
 	for (i = 0; i < NUM_GAME_PACKETS; i++)
