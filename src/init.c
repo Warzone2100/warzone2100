@@ -386,28 +386,7 @@ BOOL buildMapList(void)
 //
 BOOL systemInitialise(void)
 {
-	W_HEAPINIT		sWInit;
-
-	memset(&sWInit, 0, sizeof(sWInit));
-
-	sWInit.barInit = 40;
-	sWInit.barExt = 5;
-	sWInit.butInit = 50;		// was 30 ... but what about the virtual keyboard
-	sWInit.butExt = 5;
-	sWInit.edbInit = 2;
-	sWInit.edbExt = 1;
-	sWInit.formInit = 10;
-	sWInit.formExt = 2;
-	sWInit.cFormInit = 50;
-	sWInit.cFormExt = 5;
-	sWInit.tFormInit = 3;
-	sWInit.tFormExt = 2;
-	sWInit.labInit = 15;
-	sWInit.labExt = 3;
-	sWInit.sldInit = 2;
-	sWInit.sldExt = 1;
-
-	if (!widgInitialise(&sWInit))
+	if (!widgInitialise())
 	{
 		return FALSE;
 	}

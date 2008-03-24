@@ -260,22 +260,8 @@ typedef struct _w_sldinit
 /* The maximum value for bar graph size */
 #define WBAR_SCALE		100
 
-
-/* Structure to specify the heap sizes for the widget library */
-typedef struct _w_heapinit
-{
-	UDWORD		barInit, barExt;		// bar graph heap
-	UDWORD		butInit, butExt;		// button heap
-	UDWORD		edbInit, edbExt;		// edit box heap
-	UDWORD		formInit, formExt;		// form heap
-	UDWORD		cFormInit, cFormExt;	// clicable form heap
-	UDWORD		tFormInit, tFormExt;	// tab form heap
-	UDWORD		labInit, labExt;		// label heap
-	UDWORD		sldInit, sldExt;		// slider heap
-} W_HEAPINIT;
-
 /* Initialise the widget module */
-extern BOOL	widgInitialise(W_HEAPINIT *psInit);
+extern bool widgInitialise(void);
 
 /* Reset the widget module */
 extern void widgReset(void);

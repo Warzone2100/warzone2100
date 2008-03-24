@@ -58,13 +58,11 @@ static void widgDisplayForm(W_FORM *psForm, UDWORD xOffset, UDWORD yOffset);
 static char aStringRetBuffer[WIDG_MAXSTR];
 
 /* Initialise the widget module */
-BOOL widgInitialise(W_HEAPINIT *psInit)
+bool widgInitialise()
 {
 	tipInitialise();
 
-	psInit = psInit;
-
-	return TRUE;
+	return true;
 }
 
 
