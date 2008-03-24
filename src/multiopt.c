@@ -463,8 +463,12 @@ BOOL addTemplate(UDWORD player, DROID_TEMPLATE *psNew)
 		return FALSE;
 	}
 	memcpy(psTempl, psNew, sizeof(DROID_TEMPLATE));
+	psTempl->pName = NULL;
 
-	psTempl->pName = strdup(psNew->pName);
+	if (psNew->pName)
+	{
+		psTempl->pName = strdup(psNew->pName);
+	}
 
 	psTempl->psNext = apsDroidTemplates[player];
 	apsDroidTemplates[player] = psTempl;
