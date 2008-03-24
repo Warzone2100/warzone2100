@@ -119,7 +119,7 @@ static SDLNet_SocketSet	tmp_socket_set = NULL;
 static char*		hostname;
 static NETSTATS		nStats = { 0, 0, 0, 0 };
 static NET_PLAYER	players[MAX_CONNECTED_PLAYERS];
-static int32_t          NetGameFlags[4] = { 0 };
+static int32_t          NetGameFlags[4] = { 0, 0, 0, 0 };
 
 // *********** Socket with buffer that read NETMSGs ******************
 
@@ -673,7 +673,7 @@ UDWORD NETgetPacketsRecvd(void)
 
 // ////////////////////////////////////////////////////////////////////////
 // Send a message to a player, option to guarantee message
-BOOL NETsend(NETMSG *msg, UDWORD player, BOOL guarantee)
+BOOL NETsend(NETMSG *msg, UDWORD player)
 {
 	int size;
 
@@ -715,7 +715,7 @@ BOOL NETsend(NETMSG *msg, UDWORD player, BOOL guarantee)
 
 // ////////////////////////////////////////////////////////////////////////
 // broadcast a message to all players.
-BOOL NETbcast(NETMSG *msg, BOOL guarantee)
+BOOL NETbcast(NETMSG *msg)
 {
 	int size;
 

@@ -89,11 +89,11 @@ BOOL NETend(void)
 	// Send the packet, updating the send functions is on my todo list!
 	if (NetMsg.destination == NET_ALL_PLAYERS)
 	{
-		return NETbcast(&NetMsg, TRUE);
+		return NETbcast(&NetMsg);
 	}
 	else
 	{
-		return NETsend(&NetMsg, NetMsg.destination, TRUE);
+		return NETsend(&NetMsg, NetMsg.destination);
 	}
 }
 
