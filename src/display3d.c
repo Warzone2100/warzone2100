@@ -927,7 +927,7 @@ BOOL init3DView(void)
 
 	targetInitialise();
 
-	pie_PrepareSkybox(skyboxPageName);
+	pie_InitSkybox(iV_GetTexture(skyboxPageName));
 
 	// distance is not saved, so initialise it now
 	distance = START_DISTANCE; // distance

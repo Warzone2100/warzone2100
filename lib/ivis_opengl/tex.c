@@ -67,7 +67,7 @@ int pie_AddTexPage(iV_Image *s, const char* filename, int slot)
 		{
 			pie_PrintLoadedTextures();
 		}
-		ASSERT(strncmp(filename, _TEX_PAGE[i].name, iV_TEXNAME_MAX) != 0, 
+		ASSERT(strncmp(filename, _TEX_PAGE[i].name, iV_TEXNAME_MAX) != 0,
 		       "pie_AddTexPage: %s loaded again! Already loaded as %s|%u", filename,
 		       _TEX_PAGE[i].name, i);
 		i++;
@@ -75,7 +75,7 @@ int pie_AddTexPage(iV_Image *s, const char* filename, int slot)
 
 	/* Use first unused slot */
 	for (i = slot; i < iV_TEX_MAX && _TEX_PAGE[i].name[0] != '\0'; i++);
-	
+
 	if (i == _TEX_INDEX)
 	{
 		_TEX_INDEX++; // increase table
@@ -124,12 +124,18 @@ int pie_AddTexPage(iV_Image *s, const char* filename, int slot)
 	return i;
 }
 
-void pie_PrepareSkybox(const char *pageName)
+
+void pie_InitSkybox(SDWORD pageNum)
 {
-	pie_SetTexturePage(iV_GetTexture(pageName));
+	pie_SetTexturePage(pageNum);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 }
 
+
+/*!
+ * Turns filename into a pagename if possible
+ * \param[in,out] filename Filename to pagify
+ */
 void pie_MakeTexPageName(char * filename)
 {
 	if (strncmp(filename, "page-", 5) == 0)
@@ -139,6 +145,7 @@ void pie_MakeTexPageName(char * filename)
 		filename[i] = '\0';
 	}
 }
+
 
 /*!
  * Print the names of all loaded textures to LOG_ERROR
@@ -186,7 +193,7 @@ int iV_GetTexture(const char *filename)
 /**************************************************************************
 	WRF files may specify overrides for the textures on a map. This
 	is done through an ugly hack involving cutting the texture name
-	down to just "page-NN", where NN is the page number, and 
+	down to just "page-NN", where NN is the page number, and
 	replaceing the texture page with the same name if another file
 	with this prefix is loaded.
 **************************************************************************/
@@ -208,6 +215,7 @@ int pie_ReplaceTexPage(iV_Image *s, const char *texPage)
 	return i;
 }
 
+
 /*
 	Alex - fixed this so it doesn't try to free up the memory if it got the page from resource
 	handler - this is because the resource handler will deal with freeing it, and in all probability
@@ -217,7 +225,7 @@ void pie_TexShutDown(void)
 {
 	unsigned int i = 0;
 
-	while (i < _TEX_INDEX) 
+	while (i < _TEX_INDEX)
 	{
 		glDeleteTextures(1, (GLuint *) &_TEX_PAGE[i].id);
 		i++;

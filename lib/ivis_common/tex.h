@@ -55,12 +55,8 @@ extern int pie_ReplaceTexPage(iV_Image *s, const char *texPage);
 extern int pie_AddTexPage(iV_Image *s, const char *filename, int slot);
 extern void pie_TexInit(void);
 
-void pie_PrepareSkybox(const char *pageName);
+extern void pie_InitSkybox(SDWORD pageNum);
 
-/*!
- * Turns filename into a pagename if possible
- * \param[in,out] filename Filename to pagify
- */
 extern void pie_MakeTexPageName(char * filename);
 
 //*************************************************************************
