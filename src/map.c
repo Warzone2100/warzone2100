@@ -1287,28 +1287,16 @@ BOOL mapShutdown(void)
 }
 
 /* Return linear interpolated height of x,y */
-extern SWORD map_Height(UDWORD x, UDWORD y)
+extern SWORD map_Height(int x, int y)
 {
-	SDWORD	retVal;
-	UDWORD tileX, tileY, tileYOffset;
-	UDWORD tileX2, tileY2Offset;
-	SDWORD h0, hx, hy, hxy, wTL = 0, wTR = 0, wBL = 0, wBR = 0;
-	SDWORD dx, dy, ox, oy;
+	int	retVal, tileX, tileY, tileYOffset, tileX2, tileY2Offset, dx, dy, ox, oy;
+	int	h0, hx, hy, hxy, wTL = 0, wTR = 0, wBL = 0, wBR = 0;
 	BOOL	bWaterTile = FALSE;
 
-	// Print out a debug message when we get SDWORDs passed as if they're UDWORDs
-	if (x > SDWORD_MAX)
-	{
-		debug(LOG_ERROR, "map_Height: x coordinate is a negative SDWORD passed as an UDWORD: %d", (int)x);
-	}
-	if (y > SDWORD_MAX)
-	{
-		debug(LOG_ERROR, "map_Height: y coordinate is a negative SDWORD passed as an UDWORD: %d", (int)y);
-	}
+	ASSERT(x >= 0, "map_Height: Negative x value");
+	ASSERT(y >= 0, "map_Height: Negative y value");
 
-	x = x > SDWORD_MAX ? 0 : x;//negative SDWORD passed as UDWORD
 	x = x >= world_coord(mapWidth) ? world_coord(mapWidth - 1) : x;
-	y = y > SDWORD_MAX ? 0 : y;//negative SDWORD passed as UDWORD
 	y = y >= world_coord(mapHeight) ? world_coord(mapHeight - 1) : y;
 
 	/* Turn into tile coordinates */
@@ -1326,15 +1314,6 @@ extern SWORD map_Height(UDWORD x, UDWORD y)
 		wTR = environGetValue(tileX+1,tileY)/2;
 		wBL = environGetValue(tileX,tileY+1)/2;
 		wBR = environGetValue(tileX+1,tileY+1)/2;
-		/*
-		lowerHeightOffset = waves[(y%(MAX_RIPPLES-1))];
-		upperHeightOffset = waves[((y%(MAX_RIPPLES-1))+1)];
-		oy = (SDWORD)y - world_coord(tileY);
-		oy = TILE_UNITS - oy;
-		dy = ((lowerHeightOffset - upperHeightOffset) * oy )/ TILE_UNITS;
-
-		return((SEA_LEVEL + (dy*ELEVATION_SCALE)));
-		*/
 	}
 
 	// to account for the border of the map

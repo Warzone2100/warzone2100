@@ -279,7 +279,7 @@ typedef struct _tile_coord
 extern TILE_COORD	*aMapLinePoints;
 
 /* Return height of x,y */
-extern SWORD map_Height(UDWORD x, UDWORD y);
+extern SWORD map_Height(int x, int y);
 
 /* returns TRUE if object is above ground */
 extern BOOL mapObjIsAboveGround( BASE_OBJECT *psObj );
