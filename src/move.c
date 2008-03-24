@@ -739,9 +739,9 @@ void updateDroidOrientation(DROID *psDroid)
 
 	w = 20;
 	hx0 = map_Height(psDroid->pos.x + w, psDroid->pos.y);
-	hx1 = map_Height(psDroid->pos.x - w, psDroid->pos.y);
+	hx1 = map_Height(MAX(0, psDroid->pos.x - w), psDroid->pos.y);
 	hy0 = map_Height(psDroid->pos.x, psDroid->pos.y + w);
-	hy1 = map_Height(psDroid->pos.x, psDroid->pos.y - w);
+	hy1 = map_Height(psDroid->pos.x, MAX(0, psDroid->pos.y - w));
 
 	//update height in case were in the bottom of a trough
 	if (((hx0 +hx1)/2) > (SDWORD)psDroid->pos.z)
