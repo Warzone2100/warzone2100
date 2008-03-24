@@ -265,6 +265,9 @@ Section $(TEXT_SecNLS) SecNLS
   SetOutPath "$INSTDIR\locale\nl\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "..\..\po\nl.gmo"
 
+  SetOutPath "$INSTDIR\locale\pt\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "..\..\po\pt.gmo"
+
   SetOutPath "$INSTDIR\locale\ru\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "..\..\po\ru.gmo"
 
@@ -441,6 +444,10 @@ Section "Uninstall"
   Delete "$INSTDIR\locale\nl\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\nl\LC_MESSAGES"
   RMDir "$INSTDIR\locale\nl"
+
+  Delete "$INSTDIR\locale\pt\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\pt\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\pt"
 
   Delete "$INSTDIR\locale\ru\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\ru\LC_MESSAGES"
