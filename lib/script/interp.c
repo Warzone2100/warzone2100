@@ -155,7 +155,7 @@ static TYPE_EQUIV *asInterpTypeEquiv = NULL;
 static BOOL		bInterpRunning = false;
 
 /* Whether to output trace information */
-static BOOL	interpTrace;
+static BOOL	interpTrace = false;
 
 static SCRIPT_CODE *psCurProg = NULL;
 static BOOL bCurCallerIsEvent = false;

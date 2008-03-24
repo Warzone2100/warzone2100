@@ -42,7 +42,7 @@ extern void cpPrintFunc(SCRIPT_FUNC pFunc);
 extern void cpPrintVarFunc(SCRIPT_VARFUNC pFunc, UDWORD index);
 
 /* Display a maths operator */
-extern void cpPrintMathsOp(UDWORD opcode);
+extern void cpPrintMathsOp(OPCODE opcode);
 
 #endif
 

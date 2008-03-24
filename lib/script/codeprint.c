@@ -186,7 +186,7 @@ void cpPrintPackedVal(INTERP_VAL *ip)
 
 
 /* Display a maths operator */
-void cpPrintMathsOp(UDWORD opcode)
+void cpPrintMathsOp(OPCODE opcode)
 {
 	switch (opcode)
 	{
@@ -237,6 +237,9 @@ void cpPrintMathsOp(UDWORD opcode)
 		break;
 	case OP_LESS:
 		debug( LOG_NEVER, "LESS" );
+		break;
+	case OP_CONC:
+		debug( LOG_NEVER, "CONCAT" );
 		break;
 	default:
 		ASSERT( false, "cpPrintMathsOp: unknown operator" );
