@@ -327,9 +327,8 @@ static void proj_UpdateKills(PROJECTILE *psObj, float experienceInc)
 
 /***************************************************************************/
 
-BOOL
-proj_SendProjectile( WEAPON *psWeap, BASE_OBJECT *psAttacker, SDWORD player,
-					 UDWORD tarX, UDWORD tarY, UDWORD tarZ, BASE_OBJECT *psTarget, BOOL bVisible, BOOL bPenetrate, int weapon_slot )
+BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, int tarX, int tarY, int tarZ, 
+                         BASE_OBJECT *psTarget, BOOL bVisible, BOOL bPenetrate, int weapon_slot)
 {
 	PROJECTILE		*psObj = malloc(sizeof(PROJECTILE));
 	SDWORD			tarHeight, srcHeight, iMinSq;
@@ -872,10 +871,10 @@ proj_InFlightDirectFunc( PROJECTILE *psObj )
 						// Determine position to fire a missile at
 						// (must be at least 0 because we don't use signed integers
 						//  this shouldn't be larger than the height and width of the map either)
-						TargetX = MAX(psObj->startX + extendRad * dx / rad, 0);
-						TargetX = MIN(TargetX, world_coord(mapWidth - 1));
-						TargetY = MAX(psObj->startY + extendRad * dy / rad, 0);
-						TargetY = MIN(TargetY, world_coord(mapHeight - 1));
+						TargetX = psObj->startX + extendRad * dx / rad;
+						TargetY = psObj->startY + extendRad * dy / rad;
+						CLIP(TargetX, 0, world_coord(mapWidth - 1));
+						CLIP(TargetY, 0, world_coord(mapHeight - 1));
 						proj_SendProjectile( &asWeap, (BASE_OBJECT*)psObj, psObj->player, TargetX, TargetY, psObj->pos.z, NULL, TRUE, bPenetrate, -1 );
 					}
 					else
