@@ -391,7 +391,7 @@ BOOL NETsetGameFlags(UDWORD flag, SDWORD value)
 
 	if (flag > 0 && flag < 5)
 	{
-		return NetGameFlags[flag-1] = value;
+		return (NetGameFlags[flag-1] = value);
 	}
 
 	NETsendGameFlags();
