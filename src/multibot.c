@@ -356,6 +356,8 @@ BOOL SendDroidMove(const DROID* psDroid, uint32_t x, uint32_t y, BOOL formation)
 	if (!bMultiPlayer)
 		return true;
 
+	ASSERT(x > 0 && y > 0, "SendDroidMove: Invalid move order");
+
 	// Don't allow a move to happen at all if it is not our responsibility
 	if (!myResponsibility(psDroid->player))
 	{
@@ -402,6 +404,12 @@ BOOL recvDroidMove()
 
 		NETend();
 
+		if ((x == 0 && y == 0) || x > world_coord(mapWidth) || y > world_coord(mapHeight))
+		{
+			/* Probably an invalid droid position */
+			debug(LOG_ERROR, "Received an invalid droid position from %d", NETgetSource());
+			return false;
+		}
 		if (!IdToDroid(droid, player, &psDroid))
 		{
 			debug(LOG_ERROR, "recvDroidMove: Packet from %d refers to non-existent droid %d!",
@@ -430,6 +438,8 @@ BOOL SendDroid(const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t 
 {
 	if (!bMultiPlayer)
 		return true;
+
+	ASSERT(x != 0 && y != 0, "SendDroid: Invalid droid coordinates");
 
 	// Dont send other droids during campaign setup
 	if (ingame.localJoiningInProgress)
@@ -481,6 +491,12 @@ BOOL recvDroid()
 		pT = IdToTemplate(templateID, player);
 	}
 	NETend();
+
+	if ((pos.x == 0 && pos.y == 0) || pos.x > world_coord(mapWidth) || pos.y > world_coord(mapHeight))
+	{
+		debug(LOG_ERROR, "recvDroid: Received bad droid position (%d, %d) from %d", (int)pos.x, (int)pos.y, NETgetSource());
+		return false;
+	}
 
 	// If we can not find the template ask for the entire droid instead
 	if (!pT)
