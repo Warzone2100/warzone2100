@@ -1524,7 +1524,7 @@ VAR_SYMBOL asObjTable[] =
 		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_HEALTH,	scrBaseObjGet,	NULL, 0, {0}, NULL },
 	{ "weapon",		(INTERP_TYPE)ST_WEAPON,	ST_OBJECT,
 		(INTERP_TYPE)ST_BASEOBJECT,		OBJID_WEAPON,	scrBaseObjGet,	NULL, 0, {0}, NULL },
-	
+
 	// object's hit points
 	{ "hitPoints",	VAL_INT,	ST_OBJECT,
 		(INTERP_TYPE)ST_BASEOBJECT,	OBJID_HITPOINTS,	scrBaseObjGet,	NULL, 0, {0}, NULL },
@@ -2178,7 +2178,7 @@ CALLBACK_SYMBOL asCallbackTable[] =
 };
 
 
-/* The table of type equivalence
+/* The table of type equivalence (only user types allowed)
  * The format is :
  *
  *       <base type>  <num equivalents>  <eqivalent types>
@@ -2205,7 +2205,6 @@ TYPE_EQUIV asEquivTable[] =
 	{ (INTERP_TYPE)ST_REPAIR,		1,	{ (INTERP_TYPE)ST_POINTER_S, } },
 	{ (INTERP_TYPE)ST_BRAIN,		1,	{ (INTERP_TYPE)ST_POINTER_S, } },
 	{ (INTERP_TYPE)ST_STRUCTURESTAT,1,	{ (INTERP_TYPE)ST_POINTER_STRUCTSTAT, } },
-
 
 	/* This marks the end of the equivalence list */
 	{ (INTERP_TYPE)0, 0, {0} }

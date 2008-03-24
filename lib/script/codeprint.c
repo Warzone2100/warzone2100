@@ -44,25 +44,13 @@ void cpPrintType(INTERP_TYPE type)
 	switch(type)
 	{
 	case VAL_BOOL:
-		debug( LOG_NEVER, "BOOL" );
-		break;
 	case VAL_INT:
-		debug( LOG_NEVER, "INT" );
-		break;
-/*	case VAL_FLOAT:
-		debug( LOG_NEVER, "FLOAT" );
-		break;*/
+	case VAL_FLOAT:
 	case VAL_STRING:
-		debug( LOG_NEVER, "char" );
-		break;
 	case VAL_TRIGGER:
-		debug( LOG_NEVER, "TRIGGER" );
-		break;
 	case VAL_EVENT:
-		debug( LOG_NEVER, "EVENT" );
-		break;
 	case VAL_VOID:
-		debug( LOG_NEVER, "VOID" );
+		debug( LOG_NEVER, interpTypeToString(type) );
 		break;
 	default:
 		// See if it is a user defined type

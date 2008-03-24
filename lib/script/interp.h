@@ -41,20 +41,20 @@ typedef enum _interp_type
 	VAL_STRING,
 
 	// events and triggers
-	VAL_TRIGGER,				//trigger index
-	VAL_EVENT,					//event (or in-script function)
+	VAL_TRIGGER, //!< trigger index
+	VAL_EVENT, //!< event (or in-script function)
 
 	/* Type used by the compiler for functions that do not return a value */
 	VAL_VOID,
 
-	VAL_OPCODE,							//Script opcode
-	VAL_PKOPCODE,						//Packed script opcode
+	VAL_OPCODE, //!< Script opcode
+	VAL_PKOPCODE, //!< Packed script opcode
 
-	VAL_OBJ_GETSET,						//Pointer to the object .set or .get function
-	VAL_FUNC_EXTERN,					//External function pointer
+	VAL_OBJ_GETSET, //!< Pointer to the object .set or .get function
+	VAL_FUNC_EXTERN, //!< External function pointer
 
-	VAL_USERTYPESTART,		// user defined types should start with this id
-	VAL_REF = 0x00100000 // flag to specify a variable reference rather than simple value
+	VAL_USERTYPESTART, //!< user defined types should start with this id
+	VAL_REF = 0x00100000 //!< flag to specify a variable reference rather than simple value
 } INTERP_TYPE;
 
 
@@ -69,7 +69,7 @@ typedef struct _interp_val
 		SCRIPT_FUNC			pFuncExtern;		//External (C) function - VAL_FUNC_EXTERN
 		void					*oval;			//Object value - any in-game object
 		float					fval;				//Float value - VAL_FLOAT
-		SDWORD					ival;				// Integer value - VAL_INT
+		int						ival;				// Integer value - VAL_INT
 		BOOL					bval;			//Boolean value - VAL_BOOL
 	} v;
 } INTERP_VAL;
@@ -283,6 +283,8 @@ extern BOOL interpProcessorActive(void);
 
 /* Output script call stack trace */
 extern void scrOutputCallTrace(void);
+
+extern const char *interpTypeToString(INTERP_TYPE type) WZ_DECL_PURE;
 
 #endif
 

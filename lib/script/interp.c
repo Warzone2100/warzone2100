@@ -149,7 +149,7 @@ SDWORD aOpSize[] =
 };
 
 /* The type equivalence table */
-static TYPE_EQUIV	*asInterpTypeEquiv;
+static TYPE_EQUIV *asInterpTypeEquiv = NULL;
 
 // whether the interpreter is running
 static BOOL		bInterpRunning = false;
@@ -969,11 +969,51 @@ void scriptSetTypeEquiv(TYPE_EQUIV *psTypeTab)
 }
 
 
+static const struct {
+	INTERP_TYPE type;
+	const char *name;
+} typeToStringMap[] = {
+	// Basic types
+	{ VAL_BOOL, "bool" },
+	{ VAL_INT, "int" },
+	{ VAL_FLOAT, "float" },
+	{ VAL_STRING, "string" },
+
+	// events and triggers
+	{ VAL_TRIGGER, "trigger" },
+	{ VAL_EVENT, "event" },
+
+	{ VAL_VOID, "void" },
+
+	{ VAL_OPCODE, "opcode" },
+	{ VAL_PKOPCODE, "pkopcode" },
+
+	{ VAL_OBJ_GETSET, "objgs" },
+	{ VAL_FUNC_EXTERN, "func" },
+
+	{ VAL_USERTYPESTART, "usertype" },
+	{ VAL_REF, "ref" },
+};
+
+
+const char *interpTypeToString(INTERP_TYPE type)
+{
+	int i; // Loop goes down -> signed
+
+	for (i = ARRAY_SIZE(typeToStringMap)-1; i >= 0; i--)
+	{
+		if (type >= typeToStringMap[i].type)
+			return typeToStringMap[i].name;
+	}
+
+	return "unknown";
+}
+
+
 /* Check if two types are equivalent */
 BOOL interpCheckEquiv(INTERP_TYPE to, INTERP_TYPE from)
 {
-	SDWORD	i,j;
-	BOOL	toRef = false, fromRef = false;
+	BOOL toRef = false, fromRef = false;
 
 	// check for the VAL_REF flag
 	if (to & VAL_REF)
@@ -992,12 +1032,16 @@ BOOL interpCheckEquiv(INTERP_TYPE to, INTERP_TYPE from)
 	}
 
 	/* Void pointer is compatible with any other type */
-	if(toRef == true && fromRef == true)
+	if (to == VAL_VOID && toRef == true && fromRef == true)
 	{
-		if(to == VAL_VOID)
-		{
-			return true;
-		}
+		return true;
+	}
+
+	/* Strings can be converted to */
+	if ( to == VAL_STRING &&
+		(from == VAL_BOOL || from == VAL_INT || from == VAL_FLOAT) )
+	{
+		return true;
 	}
 
 	if (to == from)
@@ -1006,11 +1050,13 @@ BOOL interpCheckEquiv(INTERP_TYPE to, INTERP_TYPE from)
 	}
 	else if (asInterpTypeEquiv)
 	{
-		for(i=0; asInterpTypeEquiv[i].base != 0; i++)
+		unsigned int i;
+		for (i = 0; asInterpTypeEquiv[i].base != 0; i++)
 		{
 			if (asInterpTypeEquiv[i].base == to)
 			{
-				for(j=0; j<asInterpTypeEquiv[i].numEquiv; j++)
+				unsigned int j;
+				for (j = 0; j < asInterpTypeEquiv[i].numEquiv; j++)
 				{
 					if (asInterpTypeEquiv[i].aEquivTypes[j] == from)
 					{
@@ -1211,7 +1257,7 @@ static inline void destroyVarEnvironment(SCRIPT_CONTEXT *psContext, UDWORD envIn
 static void cleanupVarEnvironments(void)
 {
 	UDWORD i;
-	
+
 	for (i = 0; i < retStackCallDepth(); i++)
 	{
 		destroyVarEnvironment(NULL, i, 0);
