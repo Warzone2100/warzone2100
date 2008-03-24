@@ -724,9 +724,7 @@ BOOL recvGroupOrder()
 	NETend();
 
 	/* Check if the order is valid */
-	if (order == UNKNOWN
-	    || (subType && !validOrderForObj(order))
-	    || (!subType && !validOrderForLoc(order)))
+	if (order != UNKNOWN && ((subType && !validOrderForObj(order)) || (!subType && !validOrderForLoc(order))))
 	{
 		debug(LOG_ERROR, "recvGroupOrder: Invalid group order received from %d!", NETgetSource());
 		return false;
