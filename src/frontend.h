@@ -45,13 +45,7 @@ typedef enum _title_mode {
 	GAME2,			// 17 second options menu.
 	GAME3,			// 18 third options menu.
 	GAME4,			// 19 fourth options menu.
-//	GRAPHICS,
-//	VIDEO,
-//	DEMOMODE,		// demo mode. remove for release?
 } tMode;
-
-// This dos'nt compile on the PSX.
-//typedef enum _titlemode tMode;	// define the type
 
 extern tMode titleMode;					// the global case
 
@@ -66,7 +60,6 @@ extern BOOL	bUsingKeyboard;	// to disable mouse pointer when using keys.
 extern BOOL	bUsingSlider;
 
 extern BOOL	bForceEditorLoaded;
-
 
 extern void	changeTitleMode			(tMode mode);
 extern BOOL startTitleMenu			(void);
@@ -211,12 +204,6 @@ BOOL		runGameOptions4Menu		(void);
 #define FRONTEND_CONTROL		20041
 #define FRONTEND_CONTROL_BT		20042
 
-//#define FRONTEND_VIDEO			20051
-//#define FRONTEND_SOFTWARE		20052
-//#define FRONTEND_DIRECTX		20053
-//#define FRONTEND_OPENGL			20054
-//#define FRONTEND_GLIDE			20055
-
 #define FRONTEND_DEMO			20056
 #define FRONTEND_DEMO1			20057
 #define FRONTEND_DEMO2			20058
@@ -227,7 +214,6 @@ BOOL		runGameOptions4Menu		(void);
 #define FRONTEND_LOGO			20062
 
 #define FRONTEND_GAMEOPTIONS 	20063
-//#define FRONTEND_GRAPHICS		20064
 #define FRONTEND_TEXTURES		20065
 #define FRONTEND_TEXTURES_R		20066
 #define FRONTEND_EFFECTS		20067
@@ -236,6 +222,9 @@ BOOL		runGameOptions4Menu		(void);
 #define FRONTEND_SUBTITLES_R	20070
 #define FRONTEND_SHADOWS	20071
 #define FRONTEND_SHADOWS_R	20072
+
+#define FRONTEND_LANGUAGE		20051
+#define FRONTEND_LANGUAGE_R		20052
 
 #define FRONTEND_COLOUR			20073
 

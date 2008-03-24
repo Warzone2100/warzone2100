@@ -30,8 +30,7 @@
 #include "gettext.h"
 
 
-#define WZ_SYSTEM_LOCALE ""
-
+// MSVC doesn't have it, and gettext's wonderful design needs it.
 #if !defined(LC_MESSAGES)
 #  define LC_MESSAGES 0
 #endif
@@ -47,10 +46,10 @@
 // Make xgettext recognize the context
 #define NP_(Context, String) gettext_noop(String)
 
-
 extern WZ_DECL_CONST const char* getLanguage(void);
-extern void setLanguage(const char* locale);
+extern WZ_DECL_CONST const char* getLanguageName(void);
+extern BOOL setLanguage(const char *name);
+extern void setNextLanguage(void);
 extern void initI18n(void);
-
 
 #endif // _i18n_h

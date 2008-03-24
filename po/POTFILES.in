@@ -1,5 +1,6 @@
 # List of source files which contain translatable strings.
 lib/framework/debug.c
+lib/framework/i18n.c
 lib/framework/configfile.c
 lib/framework/SDL_framerate.c
 lib/framework/frameresource.c

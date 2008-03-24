@@ -76,6 +76,29 @@ UDWORD			oilResFeature;
 //specifies how far round (in tiles) a constructor droid sound look for more wreckage
 #define WRECK_SEARCH 3
 
+struct featureTypeMap
+{
+	char *typeStr;
+	FEATURE_TYPE type;
+};
+
+const static struct featureTypeMap map[] =
+{
+	{ "HOVER WRECK", FEAT_HOVER },
+	{ "TANK WRECK", FEAT_TANK },
+	{ "GENERIC ARTEFACT", FEAT_GEN_ARTE },
+	{ "OIL RESOURCE", FEAT_OIL_RESOURCE },
+	{ "BOULDER", FEAT_BOULDER },
+	{ "VEHICLE", FEAT_VEHICLE },
+	{ "DROID WRECK", FEAT_DROID },
+	{ "BUILDING WRECK", FEAT_BUILD_WRECK },
+	{ "BUILDING", FEAT_BUILDING },
+	{ "OIL DRUM", FEAT_OIL_DRUM },
+	{ "TREE", FEAT_TREE },
+	{ "SKYSCRAPER", FEAT_SKYSCRAPER }
+};
+
+
 void featureInitVars(void)
 {
 	asFeatureStats = NULL;

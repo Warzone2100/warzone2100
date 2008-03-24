@@ -39,6 +39,7 @@
 #include "lib/netplay/netplay.h"
 #include "lib/sound/mixer.h"
 #include "lib/widget/widget.h"
+#include "lib/framework/configfile.h"
 
 #include "advvis.h"
 #include "component.h"
@@ -148,7 +149,7 @@ void changeTitleMode(tMode mode)
 	case GAME3:
 		startGameOptions3Menu();
 		break;
-	
+
 	case GAME4:
 		startGameOptions4Menu();
 		break;
@@ -890,14 +891,14 @@ BOOL startGameOptions4Menu(void)
 	         war_GetWidth(), war_GetHeight());
 	// Generate texture size string
 	snprintf(textureSize, WIDG_MAXSTR, "%d", getTextureSize());
-	
+
 	addBackdrop();
 	addTopForm();
 	addBottomForm();
-	
+
 	// Fullscreen/windowed
 	addTextButton(FRONTEND_WINDOWMODE, FRONTEND_POS2X-35, FRONTEND_POS2Y, _("Graphics Mode*"), TRUE, FALSE);
-	
+
 	if (war_getFullscreen())
 	{
 		addTextButton(FRONTEND_WINDOWMODE_R, FRONTEND_POS2M-55, FRONTEND_POS2Y, _("Fullscreen"), TRUE, FALSE);
@@ -906,15 +907,15 @@ BOOL startGameOptions4Menu(void)
 	{
 		addTextButton(FRONTEND_WINDOWMODE_R, FRONTEND_POS2M-55, FRONTEND_POS2Y, _("Windowed"), TRUE, FALSE);
 	}
-	
+
 	// Resolution
 	addTextButton(FRONTEND_RESOLUTION, FRONTEND_POS3X-35, FRONTEND_POS3Y, _("Resolution*"), TRUE, FALSE);
 	addTextButton(FRONTEND_RESOLUTION_R, FRONTEND_POS3M-55, FRONTEND_POS3Y, resolution, TRUE, FALSE);
 	widgSetString(psWScreen, FRONTEND_RESOLUTION_R, resolution);
-	
+
 	// Cursor trapping
 	addTextButton(FRONTEND_TRAP, FRONTEND_POS4X-35, FRONTEND_POS4Y, _("Trap Cursor"), TRUE, FALSE);
-	
+
 	if (war_GetTrapCursor())
 	{
 		addTextButton(FRONTEND_TRAP_R, FRONTEND_POS4M-55, FRONTEND_POS4Y, _("On"), TRUE, FALSE);
@@ -941,7 +942,7 @@ BOOL runGameOptions4Menu(void)
 {
 	SDL_Rect **modes = SDL_ListModes(NULL, SDL_FULLSCREEN | SDL_HWSURFACE);
 	UDWORD id = widgRunScreen(psWScreen);
-	
+
 	switch (id)
 	{
 		case FRONTEND_WINDOWMODE:
@@ -957,12 +958,12 @@ BOOL runGameOptions4Menu(void)
 				widgSetString(psWScreen, FRONTEND_WINDOWMODE_R, _("Fullscreen"));
 			}
 			break;
-		
+
 		case FRONTEND_RESOLUTION:
 		case FRONTEND_RESOLUTION_R:
 		{
 			int current, count;
-			
+
 			// Get the current mode offset
 			for (count = 0, current = 0; modes[count]; count++)
 			{
@@ -972,25 +973,25 @@ BOOL runGameOptions4Menu(void)
 					current = count;
 				}
 			}
-			
+
 			// Increment and clip if required
 			if (++current == count)
 				current = 0;
-			
+
 			// Set the new width and height (takes effect on restart)
 			war_SetWidth(modes[current]->w);
 			war_SetHeight(modes[current]->h);
-			
+
 			// Generate the textual representation of the new width and height
 			snprintf(resolution, WIDG_MAXSTR, "%d x %d", modes[current]->w,
 			         modes[current]->h);
-			
+
 			// Update the widget
 			widgSetString(psWScreen, FRONTEND_RESOLUTION_R, resolution);
-			
+
 			break;
 		}
-		
+
 		case FRONTEND_TRAP:
 		case FRONTEND_TRAP_R:
 			if (war_GetTrapCursor())
@@ -1004,45 +1005,45 @@ BOOL runGameOptions4Menu(void)
 				widgSetString(psWScreen, FRONTEND_TRAP_R, _("On"));
 			}
 			break;
-		
+
 		case FRONTEND_TEXTURESZ:
 		case FRONTEND_TEXTURESZ_R:
 		{
 			int newTexSize = getTextureSize() * 2;
-			
+
 			// Clip such that 32 <= size <= 128
 			if (newTexSize > 128)
 			{
 				newTexSize = 32;
 			}
-			
+
 			// Set the new size
 			setTextureSize(newTexSize);
-			
+
 			// Generate the string representation of the new size
 			snprintf(textureSize, WIDG_MAXSTR, "%d", newTexSize);
-			
+
 			// Update the widget
 			widgSetString(psWScreen, FRONTEND_TEXTURESZ_R, textureSize);
-			
+
 			break;
 		}
-		
+
 		case FRONTEND_QUIT:
 			changeTitleMode(OPTIONS);
 			break;
-		
+
 		default:
 			break;
 	}
-	
+
 	if (CancelPressed())
 	{
 		changeTitleMode(OPTIONS);
 	}
-	
+
 	widgDisplayScreen(psWScreen);
-	
+
 	return TRUE;
 }
 
@@ -1081,20 +1082,22 @@ BOOL startGameOptionsMenu(void)
 	addTextButton(FRONTEND_SCROLLSPEED, FRONTEND_POS3X-25,FRONTEND_POS3Y, _("Scroll Speed"),TRUE,FALSE);
 	addFESlider(FRONTEND_SCROLLSPEED_SL,FRONTEND_BOTFORM, FRONTEND_POS3M, FRONTEND_POS3Y+5, 16,(scroll_speed_accel/100),FRONTEND_SCROLLSPEED);
 
-	// colour stuff
-	w = 	iV_GetImageWidth(FrontImages,IMAGE_PLAYER0);
-	h = 	iV_GetImageHeight(FrontImages,IMAGE_PLAYER0);
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P0, FRONTEND_POS4M+(0*(w+6)),FRONTEND_POS4Y,w,h, "", IMAGE_PLAYER0, IMAGE_PLAYERX,TRUE);
-//	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P1, FRONTEND_POS6M-(3*(w+4)),FRONTEND_POS6Y,w,h, "", IMAGE_PLAYER1, IMAGE_HI34,TRUE);
-//	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P2, FRONTEND_POS6M-(2*(w+4)),FRONTEND_POS6Y,w,h, "", IMAGE_PLAYER2, IMAGE_HI34,TRUE);
-//	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P3, FRONTEND_POS6M-(1*(w+4)),FRONTEND_POS6Y,w,h, "", IMAGE_PLAYER3, IMAGE_HI34,TRUE);
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P4, FRONTEND_POS4M+(1*(w+6)),FRONTEND_POS4Y,w,h, "", IMAGE_PLAYER4, IMAGE_PLAYERX,TRUE);
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P5, FRONTEND_POS4M+(2*(w+6)),FRONTEND_POS4Y,w,h, "", IMAGE_PLAYER5, IMAGE_PLAYERX,TRUE);
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P6, FRONTEND_POS4M+(3*(w+6)),FRONTEND_POS4Y,w,h, "", IMAGE_PLAYER6, IMAGE_PLAYERX,TRUE);
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,FE_P7, FRONTEND_POS4M+(4*(w+6)),FRONTEND_POS4Y,w,h, "", IMAGE_PLAYER7, IMAGE_PLAYERX,TRUE);
+	// Colour stuff
+	w = iV_GetImageWidth(FrontImages, IMAGE_PLAYER0);
+	h = iV_GetImageHeight(FrontImages, IMAGE_PLAYER0);
 
-	widgSetButtonState(psWScreen, FE_P0+getPlayerColour(0), WBUT_LOCK);
-	addTextButton(FRONTEND_COLOUR,		FRONTEND_POS4X-25,FRONTEND_POS4Y, _("Unit Colour"),TRUE,FALSE);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P0, FRONTEND_POS4M+(0*(w+6)), FRONTEND_POS4Y, w, h, "", IMAGE_PLAYER0, IMAGE_PLAYERX, TRUE);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P4, FRONTEND_POS4M+(1*(w+6)), FRONTEND_POS4Y, w, h, "", IMAGE_PLAYER4, IMAGE_PLAYERX, TRUE);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P5, FRONTEND_POS4M+(2*(w+6)), FRONTEND_POS4Y, w, h, "", IMAGE_PLAYER5, IMAGE_PLAYERX, TRUE);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P6, FRONTEND_POS4M+(3*(w+6)), FRONTEND_POS4Y, w, h, "", IMAGE_PLAYER6, IMAGE_PLAYERX, TRUE);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P7, FRONTEND_POS4M+(4*(w+6)), FRONTEND_POS4Y, w, h, "", IMAGE_PLAYER7, IMAGE_PLAYERX, TRUE);
+
+	// language
+	addTextButton(FRONTEND_LANGUAGE,  FRONTEND_POS2X - 25, FRONTEND_POS5Y, _("Language"), TRUE, FALSE);
+	addTextButton(FRONTEND_LANGUAGE_R,  FRONTEND_POS2M - 25, FRONTEND_POS5Y, getLanguageName(), TRUE, FALSE);
+
+	widgSetButtonState(psWScreen, FE_P0 + getPlayerColour(0), WBUT_LOCK);
+	addTextButton(FRONTEND_COLOUR, FRONTEND_POS4X-25, FRONTEND_POS4Y, _("Unit Colour"), TRUE, FALSE);
 
 	// quit.
 	addMultiBut(psWScreen,FRONTEND_BOTFORM,FRONTEND_QUIT,10,10,30,29, P_("menu", "Return"),IMAGE_RETURN,IMAGE_RETURN_HI,TRUE);
@@ -1112,27 +1115,37 @@ BOOL runGameOptionsMenu(void)
 	id = widgRunScreen(psWScreen);						// Run the current set of widgets
 	switch(id)
 	{
-
+	case FRONTEND_LANGUAGE_R:
+		setNextLanguage();
+		widgSetString(psWScreen, FRONTEND_LANGUAGE_R, getLanguageName());
+		/* Hack to reset current menu text, which looks fancy. */
+		widgSetString(psWScreen, FRONTEND_LANGUAGE, _("Language"));
+		widgSetString(psWScreen, FRONTEND_COLOUR,  _("Unit Colour"));
+		widgSetString(psWScreen, FRONTEND_DIFFICULTY, _("Difficulty"));
+		widgSetString(psWScreen, FRONTEND_SCROLLSPEED,_("Scroll Speed"));
+		widgSetString(psWScreen, FRONTEND_SIDETEXT, _("GAME OPTIONS"));
+		// FIXME: Changing the below return button tooltip does not work.
+		//widgSetString(psWScreen, FRONTEND_BOTFORM, P_("menu", "Return"));
+		switch( getDifficultyLevel() )
+		{
+		case DL_EASY:
+			widgSetString(psWScreen,FRONTEND_DIFFICULTY_R, _("Easy"));
+			break;
+		case DL_NORMAL:
+			widgSetString(psWScreen,FRONTEND_DIFFICULTY_R, _("Normal"));
+			break;
+		case DL_HARD:
+			widgSetString(psWScreen,FRONTEND_DIFFICULTY_R, _("Hard") );
+			break;
+		case DL_TOUGH:
+		case DL_KILLER:
+			debug(LOG_ERROR, "runGameOptionsMenu: Unused difficulty level selected!");
+			break;
+		}
+		break;
 //	case FRONTEND_GAMMA:
 	case FRONTEND_SCROLLSPEED:
 		break;
-
-/*	case FRONTEND_FOGTYPE:
-	case FRONTEND_FOGTYPE_R:
-	if( war_GetFog()	)
-	{	// turn off crap fog, turn on vis fog.
-		war_SetFog(FALSE);
-		avSetStatus(TRUE);
-		widgSetString(psWScreen,FRONTEND_FOGTYPE_R, _("Fog Of War"));
-	}
-	else
-	{	// turn off vis fog, turn on normal crap fog.
-		avSetStatus(FALSE);
-		war_SetFog(TRUE);
-		widgSetString(psWScreen,FRONTEND_FOGTYPE_R, _("Mist"));
-	}
-	break;
-*/
 
 	case FRONTEND_DIFFICULTY:
 	case FRONTEND_DIFFICULTY_R:
@@ -1169,9 +1182,6 @@ BOOL runGameOptionsMenu(void)
 
 	case FE_P0:
 		widgSetButtonState(psWScreen, FE_P0, WBUT_LOCK);
-//		widgSetButtonState(psWScreen, FE_P1, 0);
-//		widgSetButtonState(psWScreen, FE_P2, 0);
-//		widgSetButtonState(psWScreen, FE_P3, 0);
 		widgSetButtonState(psWScreen, FE_P4, 0);
 		widgSetButtonState(psWScreen, FE_P5, 0);
 		widgSetButtonState(psWScreen, FE_P6, 0);
@@ -1180,9 +1190,6 @@ BOOL runGameOptionsMenu(void)
 		break;
 	case FE_P4:
 		widgSetButtonState(psWScreen, FE_P0, 0);
-	//	widgSetButtonState(psWScreen, FE_P1, 0);
-	//	widgSetButtonState(psWScreen, FE_P2, 0);
-	//	widgSetButtonState(psWScreen, FE_P3, 0);
 		widgSetButtonState(psWScreen, FE_P4, WBUT_LOCK);
 		widgSetButtonState(psWScreen, FE_P5, 0);
 		widgSetButtonState(psWScreen, FE_P6, 0);
@@ -1191,9 +1198,6 @@ BOOL runGameOptionsMenu(void)
 		break;
 	case FE_P5:
 		widgSetButtonState(psWScreen, FE_P0, 0);
-	//	widgSetButtonState(psWScreen, FE_P1, 0);
-	//	widgSetButtonState(psWScreen, FE_P2, 0);
-	//	widgSetButtonState(psWScreen, FE_P3, 0);
 		widgSetButtonState(psWScreen, FE_P4, 0);
 		widgSetButtonState(psWScreen, FE_P5, WBUT_LOCK);
 		widgSetButtonState(psWScreen, FE_P6, 0);
@@ -1202,9 +1206,6 @@ BOOL runGameOptionsMenu(void)
 		break;
 	case FE_P6:
 		widgSetButtonState(psWScreen, FE_P0, 0);
-	//	widgSetButtonState(psWScreen, FE_P1, 0);
-	//	widgSetButtonState(psWScreen, FE_P2, 0);
-	//	widgSetButtonState(psWScreen, FE_P3, 0);
 		widgSetButtonState(psWScreen, FE_P4, 0);
 		widgSetButtonState(psWScreen, FE_P5, 0);
 		widgSetButtonState(psWScreen, FE_P6, WBUT_LOCK);
@@ -1213,9 +1214,6 @@ BOOL runGameOptionsMenu(void)
 		break;
 	case FE_P7:
 		widgSetButtonState(psWScreen, FE_P0, 0);
-	//	widgSetButtonState(psWScreen, FE_P1, 0);
-	//	widgSetButtonState(psWScreen, FE_P2, 0);
-	//	widgSetButtonState(psWScreen, FE_P3, 0);
 		widgSetButtonState(psWScreen, FE_P4, 0);
 		widgSetButtonState(psWScreen, FE_P5, 0);
 		widgSetButtonState(psWScreen, FE_P6, 0);
@@ -1378,7 +1376,6 @@ void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt,BOOL bA
 	{
 		widgSetButtonState(psWScreen,id,WBUT_DISABLE);
 	}
-
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1401,7 +1398,6 @@ void addFESlider(UDWORD id, UDWORD parent, UDWORD x,UDWORD y,UDWORD stops,UDWORD
 	sSldInit.pDisplay	= displayBigSlider;
 	sSldInit.pCallback  = intUpdateQuantitySlider;
 	widgAddSlider(psWScreen, &sSldInit);
-
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1443,7 +1439,6 @@ void displayLogo(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pCo
 {
 	iV_DrawImage(FrontImages,IMAGE_FE_LOGO,xOffset+psWidget->x,yOffset+psWidget->y);
 }
-
 
 
 

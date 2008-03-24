@@ -130,6 +130,11 @@ BOOL loadConfig(void)
 		setWarzoneKeyNumeric("framerate", 60);
 	}
 
+	if (getWarzoneKeyString("language", sBuf))
+	{
+		setLanguage(sBuf);
+	}
+
 	if (getWarzoneKeyNumeric("showFPS", &val))
 	{
 		showFPS = val;
@@ -589,6 +594,8 @@ BOOL saveConfig(void)
 	setWarzoneKeyNumeric("height", war_GetHeight());
 	setWarzoneKeyNumeric("bpp", pie_GetVideoBufferDepth());
 	setWarzoneKeyNumeric("fullscreen", war_getFullscreen());
+
+	setWarzoneKeyString("language", getLanguage());
 
 	// dont save out the cheat mode.
 	if(getDifficultyLevel()==DL_KILLER || getDifficultyLevel()== DL_TOUGH)
