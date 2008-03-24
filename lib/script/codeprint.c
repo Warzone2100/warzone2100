@@ -97,11 +97,11 @@ void cpPrintVal(INTERP_VAL *psVal)
 	case VAL_INT:
 		debug( LOG_NEVER, "type: INT     value: %d", psVal->v.ival );
 		break;
-/*	case VAL_FLOAT:
+	case VAL_FLOAT:
 		debug( LOG_NEVER, "type: FLOAT   value: %f", psVal->v.fval );
-		break;*/
+		break;
 	case VAL_STRING:
-		debug( LOG_NEVER, "type: char  value: %s", psVal->v.sval );
+		debug( LOG_NEVER, "type: char    value: %s", psVal->v.sval );
 		break;
 	case VAL_TRIGGER:
 		debug( LOG_NEVER, "type: TRIGGER value: %d", psVal->v.ival );
