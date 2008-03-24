@@ -38,6 +38,7 @@
 #include "lib/sound/audio_id.h"
 #include "lib/sound/audio.h"
 #include "radar.h"
+#include "main.h"
 
 /* Alex McLean, Pumpkin Studios, EIDOS Interactive */
 
@@ -415,7 +416,8 @@ void	flushConsoleMessages( void )
   type and whether source and destination players are in alliance. */
 CONSOLE_TEXT_TYPE pickConsolePlayerTextType(UDWORD player1, UDWORD player2)
 {
-	if(bEnemyAllyRadarColor)
+	// don't use friend-foe colors in the lobby
+	if(bEnemyAllyRadarColor && (GetGameMode() == GS_NORMAL))
 	{
 		if(aiCheckAlliances(player1,player2))
 		{
