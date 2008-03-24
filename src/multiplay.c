@@ -90,7 +90,7 @@ char								playerName[MAX_PLAYERS][MAX_STR_LENGTH];	//Array to store all player
 /* multiplayer message stack stuff */
 /////////////////////////////////////
 #define MAX_MSG_STACK	50
-#define MAX_STR			255
+#define MAX_STR			MAX_STR_LENGTH
 
 static char msgStr[MAX_MSG_STACK][MAX_STR];
 static SDWORD msgPlFrom[MAX_MSG_STACK];
@@ -822,13 +822,13 @@ BOOL SendResearch(uint8_t player, uint32_t index)
 	 * are doing/have done.
 	 */
 	if (game.type == SKIRMISH)
-	{		
+	{
 		for (i = 0; i < MAX_PLAYERS; i++)
 		{
 			if (alliances[i][player] == ALLIANCE_FORMED)
 			{
 				pPlayerRes = asPlayerResList[i] + index;
-				
+
 				// If we have it but they don't
 				if (!IsResearchCompleted(pPlayerRes))
 				{
@@ -864,7 +864,7 @@ static BOOL recvResearch()
 	}
 
 	pPlayerRes = asPlayerResList[player] + index;
-	
+
 	// If they have completed the research
 	if (IsResearchCompleted(pPlayerRes))
 	{
@@ -884,7 +884,7 @@ static BOOL recvResearch()
 			if (alliances[i][player] == ALLIANCE_FORMED)
 			{
 				pPlayerRes = asPlayerResList[i] + index;
-				
+
 				if (!IsResearchCompleted(pPlayerRes))
 				{
 					// Do the research for that player
@@ -903,16 +903,16 @@ static BOOL recvResearch()
 // New research stuff, so you can see what others are up to!
 // inform others that I'm researching this.
 BOOL sendReseachStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, BOOL bStart)
-{	
+{
 	if (!myResponsibility(player) || gameTime < 5)
 	{
 		return TRUE;
 	}
-	
+
 	NETbeginEncode(NET_RESEARCHSTATUS, NET_ALL_PLAYERS);
 		NETuint8_t(&player);
 		NETbool(&bStart);
-		
+
 		// If we know the building researching it then send its ID
 		if (psBuilding)
 		{
@@ -922,7 +922,7 @@ BOOL sendReseachStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, BO
 		{
 			NETnull();
 		}
-		
+
 		// Finally the topic in question
 		NETuint32_t(&index);
 	NETend();
@@ -959,17 +959,17 @@ BOOL recvResearchStatus()
 	if (bStart)							// Starting research
 	{
 		psBuilding = IdToStruct(structRef, player);
-		
+
 		// Set that facility to research
 		if (psBuilding)
 		{
 			psResFacilty = (RESEARCH_FACILITY *) psBuilding->pFunctionality;
-			
+
 			if (psResFacilty->psSubject)
 			{
 				cancelResearch(psBuilding);
 			}
-			
+
 			// Set the subject up
 			pResearch				= asResearch + index;
 			psResFacilty->psSubject = (BASE_STATS *) pResearch;
@@ -989,7 +989,7 @@ BOOL recvResearchStatus()
 			psResFacilty->timeStarted		= ACTION_START_TIME;
 			psResFacilty->timeStartHold		= 0;
 			psResFacilty->timeToResearch	= pResearch->researchPoints / psResFacilty->researchPoints;
-			
+
 			// A failsafe of some sort
 			if (psResFacilty->timeToResearch == 0)
 			{
@@ -1006,7 +1006,7 @@ BOOL recvResearchStatus()
 		{
 			return TRUE;
 		}
-		
+
 		// If they did not say what facility it was, look it up orselves
 		if (!structRef)
 		{
@@ -1026,14 +1026,14 @@ BOOL recvResearchStatus()
 		{
 			psBuilding = IdToStruct(structRef, player);
 		}
-		
+
 		// Stop the facility doing any research
 		if (psBuilding)
 		{
 			cancelResearch(psBuilding);
 		}
 	}
-	
+
 	return TRUE;
 }
 
@@ -1121,7 +1121,7 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 				}
 			}
 		}
-		sprintf(display,"(private)");		 
+		sprintf(display,"(private)");
 	}
 
 	//This is for local display
@@ -1181,7 +1181,7 @@ BOOL sendAIMessage(char *pStr, UDWORD player, UDWORD to)
 			return FALSE;
 		}
 		netplayer = player2dpid[sendPlayer];
-		
+
 		//send to the player who is hosting 'to' player (might be himself if human and not AI)
 		NETbeginEncode(NET_AITEXTMSG, netplayer);
 			NETuint32_t(&player);			//save the actual sender
@@ -1249,7 +1249,7 @@ void displayAIMessage(char *pStr, SDWORD from, SDWORD to)
 // Write a message to the console.
 BOOL recvTextMessage()
 {
-	UDWORD	dpid;		
+	UDWORD	dpid;
 	UDWORD	i;
 	char	msg[MAX_CONSOLE_STRING_LENGTH];
 	char newmsg[MAX_CONSOLE_STRING_LENGTH];
@@ -1323,7 +1323,7 @@ BOOL recvTextMessageAI()
 	NETbeginDecode(NET_AITEXTMSG);
 		NETuint32_t(&sender);			//in-game player index ('normal' one)
 		NETuint32_t(&receiver);			//in-game player index
-		NETstring(newmsg,MAX_CONSOLE_STRING_LENGTH);		
+		NETstring(newmsg,MAX_CONSOLE_STRING_LENGTH);
 	NETend();
 
 	//strlcpy(msg, getPlayerName(sender), sizeof(msg));  // name
@@ -1361,7 +1361,6 @@ BOOL sendTemplate(DROID_TEMPLATE *pTempl)
 		NETuint8_t(&player);
 		NETuint32_t(&pTempl->ref);
 		NETstring(pTempl->aName, sizeof(pTempl->aName));
-		NETstring(pTempl->pName, strlen(pTempl->pName) + 1);
 		NETuint8_t(&pTempl->NameVersion);
 
 		for (i = 0; i < DROID_MAXCOMP; i++)
@@ -1369,7 +1368,7 @@ BOOL sendTemplate(DROID_TEMPLATE *pTempl)
 			// signed, but sent as a bunch of bits...
 			NETint32_t(&pTempl->asParts[i]);
 		}
-		
+
 		NETuint32_t(&pTempl->buildPoints);
 		NETuint32_t(&pTempl->powerPoints);
 		NETuint32_t(&pTempl->storeCount);
@@ -1379,7 +1378,7 @@ BOOL sendTemplate(DROID_TEMPLATE *pTempl)
 		{
 			NETuint32_t(&pTempl->asWeaps[i]);
 		}
-		
+
 		NETuint32_t((uint32_t*)&pTempl->droidType);
 		NETuint32_t(&pTempl->multiPlayerID);
 
@@ -1393,7 +1392,6 @@ BOOL recvTemplate()
 	DROID_TEMPLATE	*psTempl;
 	DROID_TEMPLATE	t, *pT = &t;
 	int				i;
-	char		nameBuf[MAX_STR_LENGTH];
 
 	NETbeginDecode(NET_TEMPLATE);
 		NETuint8_t(&player);
@@ -1401,34 +1399,33 @@ BOOL recvTemplate()
 
 		NETuint32_t(&pT->ref);
 		NETstring(pT->aName, sizeof(pT->aName));
-		NETstring(nameBuf, MAX_STR_LENGTH);
 		NETuint8_t(&pT->NameVersion);
-		
+
 		for (i = 0; i < DROID_MAXCOMP; i++)
 		{
 			// signed, but sent as a bunch of bits...
-			NETint32_t(&pT->asParts[i]);	
+			NETint32_t(&pT->asParts[i]);
 		}
-		
+
 		NETuint32_t(&pT->buildPoints);
 		NETuint32_t(&pT->powerPoints);
 		NETuint32_t(&pT->storeCount);
 		NETuint32_t(&pT->numWeaps);
-				
+
 		for (i = 0; i < DROID_MAXWEAPS; i++)
 		{
 			NETuint32_t(&pT->asWeaps[i]);
 		}
-		
+
 		NETuint32_t((uint32_t*)&pT->droidType);
 		NETuint32_t(&pT->multiPlayerID);
 	NETend();
-	
+
 	t.psNext = NULL;
-	t.pName = strdup(nameBuf);
+	t.pName = NULL;
 
 	psTempl = IdToTemplate(t.multiPlayerID,player);
-	
+
 	// Already exists
 	if (psTempl)
 	{
@@ -1440,7 +1437,7 @@ BOOL recvTemplate()
 		addTemplate(player,&t);
 		apsDroidTemplates[player]->ref = REF_TEMPLATE_START;
 	}
-	
+
 	return TRUE;
 }
 
@@ -1451,7 +1448,7 @@ BOOL recvTemplate()
 BOOL SendDestroyTemplate(DROID_TEMPLATE *t)
 {
 	uint8_t player = selectedPlayer;
-	
+
 	NETbeginEncode(NET_TEMPLATEDEST, NET_ALL_PLAYERS);
 		NETuint8_t(&player);
 		NETuint32_t(&t->multiPlayerID);
@@ -1466,12 +1463,12 @@ static BOOL recvDestroyTemplate()
 	uint8_t			player;
 	uint32_t		templateID;
 	DROID_TEMPLATE	*psTempl, *psTempPrev = NULL;
-	
+
 	NETbeginDecode(NET_TEMPLATEDEST);
 		NETuint8_t(&player);
 		NETuint32_t(&templateID);
 	NETend();
-	
+
 	// Find the template in the list
 	for (psTempl = apsDroidTemplates[player]; psTempl; psTempl = psTempl->psNext)
 	{
@@ -1479,7 +1476,7 @@ static BOOL recvDestroyTemplate()
 		{
 			break;
 		}
-		
+
 		psTempPrev = psTempl;
 	}
 
@@ -1495,11 +1492,11 @@ static BOOL recvDestroyTemplate()
 		{
 			apsDroidTemplates[player] = psTempl->psNext;
 		}
-		
+
 		// Delete the template
 		free(psTempl);
 	}
-	
+
 	return TRUE;
 }
 
@@ -1525,7 +1522,7 @@ BOOL recvDestroyFeature()
 {
 	FEATURE *pF;
 	uint32_t	id;
-	
+
 	NETbeginDecode(NET_FEATUREDEST);
 		NETuint32_t(&id);
 	NETend();
