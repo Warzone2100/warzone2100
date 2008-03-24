@@ -2127,26 +2127,22 @@ BOOL orderState(DROID *psDroid, DROID_ORDER order)
 	return psDroid->order == order;
 }
 
+BOOL validOrderForLoc(DROID_ORDER order)
+{
+	return (order == DORDER_NONE ||	order == DORDER_MOVE ||	order == DORDER_GUARD ||
+		order == DORDER_SCOUT || order == DORDER_RUN || order == DORDER_PATROL ||
+		order == DORDER_TRANSPORTOUT || order == DORDER_TRANSPORTIN  ||
+		order == DORDER_TRANSPORTRETURN || order == DORDER_DISEMBARK ||
+		order == DORDER_CIRCLE);
+}
 
 /* Give a droid an order with a location target */
 void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y)
 {
 	DROID_ORDER_DATA	sOrder;
 
-	ASSERT( psDroid != NULL,
-		"orderUnitLoc: Invalid unit pointer" );
-	ASSERT( order == DORDER_NONE ||
-			order == DORDER_MOVE ||
-			order == DORDER_GUARD ||
-			order == DORDER_SCOUT ||
-			order == DORDER_RUN ||
-			order == DORDER_PATROL ||
-			order == DORDER_TRANSPORTOUT ||
-			order == DORDER_TRANSPORTIN  ||
-			order == DORDER_TRANSPORTRETURN ||
-            order == DORDER_DISEMBARK ||
-			order == DORDER_CIRCLE,
-		"orderUnitLoc: Invalid order for location" );
+	ASSERT(psDroid != NULL, "orderUnitLoc: Invalid unit pointer");
+	ASSERT(validOrderForLoc(order), "orderUnitLoc: Invalid order for location");
 
 	orderClearDroidList(psDroid);
 
@@ -2191,6 +2187,15 @@ BOOL orderStateLoc(DROID *psDroid, DROID_ORDER order, UDWORD *pX, UDWORD *pY)
 	return FALSE;
 }
 
+BOOL validOrderForObj(DROID_ORDER order)
+{
+	return (order == DORDER_NONE || order == DORDER_HELPBUILD || order == DORDER_DEMOLISH ||
+		order == DORDER_REPAIR || order == DORDER_ATTACK || order == DORDER_FIRESUPPORT ||
+		order == DORDER_OBSERVE || order == DORDER_ATTACKTARGET || order == DORDER_RTR ||
+		order == DORDER_RTR_SPECIFIED || order == DORDER_EMBARK || order == DORDER_GUARD ||
+		order == DORDER_DROIDREPAIR || order == DORDER_RESTORE || order == DORDER_BUILDMODULE ||
+		order == DORDER_REARM || order == DORDER_CLEARWRECK || order == DORDER_RECOVER);
+}
 
 /* Give a droid an order with an object target */
 //Watermelon:changed psObj to array
@@ -2198,28 +2203,8 @@ void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj)
 {
 	DROID_ORDER_DATA	sOrder;
 
-	ASSERT( psDroid != NULL,
-		"orderUnitObj: Invalid unit pointer" );
-
-	ASSERT( order == DORDER_NONE ||
-			order == DORDER_HELPBUILD ||
-			order == DORDER_DEMOLISH ||
-			order == DORDER_REPAIR ||
-			order == DORDER_ATTACK ||
-			order == DORDER_FIRESUPPORT ||
-			order == DORDER_OBSERVE ||
-			order == DORDER_ATTACKTARGET ||
-			order == DORDER_RTR ||
-			order == DORDER_RTR_SPECIFIED ||
-			order == DORDER_EMBARK ||
-			order == DORDER_GUARD ||
-			order == DORDER_DROIDREPAIR ||
-			order == DORDER_RESTORE ||
-			order == DORDER_BUILDMODULE ||
-			order == DORDER_REARM ||
-			order == DORDER_CLEARWRECK ||
-			order == DORDER_RECOVER,
-		"orderUnitObj: Invalid order for object" );
+	ASSERT(psDroid != NULL, "orderUnitObj: Invalid unit pointer");
+	ASSERT(validOrderForObj(order), "orderUnitObj: Invalid order for object");
 
 	orderClearDroidList(psDroid);
 

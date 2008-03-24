@@ -154,6 +154,12 @@ extern void orderDroid(DROID *psDroid, DROID_ORDER order);
 /* Check the order state of a droid */
 extern BOOL orderState(DROID *psDroid, DROID_ORDER order);
 
+/** Check if an order is valid for a location. */
+BOOL validOrderForLoc(DROID_ORDER order);
+
+/** Check if an order is valid for an object. */
+BOOL validOrderForObj(DROID_ORDER order);
+
 /* Give a droid an order with a location target */
 extern void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y);
 

@@ -600,21 +600,8 @@ BOOL SendGroupOrderSelected(uint8_t player, uint32_t x, uint32_t y, const BASE_O
 BOOL SendGroupOrderGroup(const DROID_GROUP* psGroup, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT* psObj)
 {
 	/* Check if the order is valid */
-	switch (order)
+	if ((psObj && !validOrderForObj(order)) || (!psObj && !validOrderForLoc(order)))
 	{
-	case DORDER_NONE:
-	case DORDER_MOVE:
-	case DORDER_GUARD:
-	case DORDER_SCOUT:
-	case DORDER_RUN:
-	case DORDER_PATROL:
-	case DORDER_TRANSPORTOUT:
-	case DORDER_TRANSPORTIN:
-	case DORDER_TRANSPORTRETURN:
-	case DORDER_DISEMBARK:
-	case DORDER_CIRCLE:
-		break;
-	default:
 		ASSERT(FALSE, "SendGroupOrderGroup: Bad order");
 		return FALSE;
 	}
@@ -721,21 +708,10 @@ BOOL recvGroupOrder()
 	NETend();
 
 	/* Check if the order is valid */
-	switch (order)
+	if (order == UNKNOWN
+	    || (subType && !validOrderForObj(order))
+	    || (!subType && !validOrderForLoc(order)))
 	{
-	case DORDER_NONE:
-	case DORDER_MOVE:
-	case DORDER_GUARD:
-	case DORDER_SCOUT:
-	case DORDER_RUN:
-	case DORDER_PATROL:
-	case DORDER_TRANSPORTOUT:
-	case DORDER_TRANSPORTIN:
-	case DORDER_TRANSPORTRETURN:
-	case DORDER_DISEMBARK:
-	case DORDER_CIRCLE:
-		break;
-	default:
 		debug(LOG_ERROR, "recvGroupOrder: Invalid group order received from %d!", NETgetSource());
 		return FALSE;
 	}
