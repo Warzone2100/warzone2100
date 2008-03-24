@@ -2325,6 +2325,8 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, SDWORD direction
 	SDWORD			slideDir;
 	BOOL			bRet;
 
+	CHECK_DROID(psDroid);
+
 	// nothing to do if the droid is stopped
 	if ( moveDroidStopped( psDroid, speed ) == true )
 	{
@@ -2429,6 +2431,7 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, SDWORD direction
 	{
 		psDroid->psCurAnim->bVisible = true;
 	}
+	CHECK_DROID(psDroid);
 }
 
 #define	VTOL_VERTICAL_SPEED		((((SDWORD)psDroid->baseSpeed / 4) > 60) ? ((SDWORD)psDroid->baseSpeed / 4) : 60)
@@ -2485,6 +2488,7 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, SDWORD direction)
 	SDWORD	iMapZ, iRoll, slideDir, iSpinSpeed, iTurnSpeed;
 	float	fDZ, fDroidZ, fMapZ;
 
+	CHECK_DROID(psDroid);
 
 	// nothing to do if the droid is stopped
 	if ( moveDroidStopped(  psDroid, speed ) == true )
@@ -2628,6 +2632,7 @@ moveUpdateCyborgModel( DROID *psDroid, SDWORD moveSpeed, SDWORD moveDir, UBYTE o
 	SDWORD				iDist, iDx, iDy, iDz, iDroidZ;
 	BOOL			bRet;
 
+	CHECK_DROID(psDroid);
 
 	// nothing to do if the droid is stopped
 	if ( moveDroidStopped( psDroid, moveSpeed ) == true )
@@ -2762,9 +2767,7 @@ moveUpdateCyborgModel( DROID *psDroid, SDWORD moveSpeed, SDWORD moveDir, UBYTE o
 
 static BOOL moveDescending( DROID *psDroid, UDWORD iMapHeight )
 {
-
 	if ( psDroid->pos.z > iMapHeight )
-
 	{
 		/* descending */
 		psDroid->sMove.iVertSpeed = (SWORD)-VTOL_VERTICAL_SPEED;
@@ -2807,7 +2810,6 @@ BOOL moveCheckDroidMovingAndVisible( void *psObj )
 
 	return true;
 }
-
 
 
 static void movePlayDroidMoveAudio( DROID *psDroid )
@@ -2853,7 +2855,6 @@ static void movePlayDroidMoveAudio( DROID *psDroid )
 		}
 	}
 }
-
 
 
 static BOOL moveDroidStartCallback( void *psObj )
@@ -3012,15 +3013,15 @@ void moveUpdateDroid(DROID *psDroid)
 //		driveUpdateDroid(psDroid);
 //	}
 
-    //if the droid has been attacked by an EMP weapon, it is temporarily disabled
-    if (psDroid->lastHitWeapon == WSC_EMP)
-    {
-        if (gameTime - psDroid->timeLastHit < EMP_DISABLE_TIME)
-        {
-            //get out without updating
-            return;
-        }
-    }
+	// If the droid has been attacked by an EMP weapon, it is temporarily disabled
+	if (psDroid->lastHitWeapon == WSC_EMP)
+	{
+		if (gameTime - psDroid->timeLastHit < EMP_DISABLE_TIME)
+		{
+			// Get out without updating
+			return;
+		}
+	}
 
 	/* save current motion status of droid */
 	bStopped = moveDroidStopped( psDroid, 0 );
@@ -3092,14 +3093,10 @@ void moveUpdateDroid(DROID *psDroid)
 
 		if ((psDroid->sMove.Status == MOVEROUTE) ||
 			(psDroid->sMove.Status == MOVEROUTESHUFFLE))
-//			 (gameTime >= psDroid->sMove.bumpTime) )
 		{
 			psDroid->sMove.fx = psDroid->pos.x;
 			psDroid->sMove.fy = psDroid->pos.y;
-
 			psDroid->sMove.fz = psDroid->pos.z;
-
-//			psDroid->sMove.bumpTime = 0;
 
 			turnOffMultiMsg(true);
 			moveDroidTo(psDroid, psDroid->sMove.DestinationX,psDroid->sMove.DestinationY);
@@ -3421,9 +3418,6 @@ void moveUpdateDroid(DROID *psDroid)
 	fpathBlockingTile = fpathGroundBlockingTile;
 	fpathSetCurrentObject( NULL );
 
-//	ASSERT( psDroid->pos.x != 0 && psDroid->pos.y != 0,
-//		"moveUpdateUnit (end): unit at (0,0)" );
-
 	/* If it's sitting in water then it's got to go with the flow! */
 	if (terrainType(mapTile(psDroid->pos.x/TILE_UNITS,psDroid->pos.y/TILE_UNITS)) == TER_WATER)
 	{
@@ -3434,7 +3428,6 @@ void moveUpdateDroid(DROID *psDroid)
 	{
 		pos.x = psDroid->pos.x + (18-rand()%36);
 		pos.z = psDroid->pos.y + (18-rand()%36);
-//		pos.y = map_Height(pos.x,pos.z) + (psDroid->sDisplay.imd->pos.max.y / 3);
 		pos.y = psDroid->pos.z + (psDroid->sDisplay.imd->max.y / 3);
 		addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
 	}
