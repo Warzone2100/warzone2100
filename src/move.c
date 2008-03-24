@@ -322,7 +322,7 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 	FPATH_RETVAL		retVal = FPR_OK;
 	SDWORD				fmx1,fmy1, fmx2,fmy2;
 
-	ASSERT(psDroid != NULL, "moveDroidToBase: Invalid unit pointer");
+	CHECK_DROID(psDroid);
 
 	if(bMultiPlayer && (psDroid->sMove.Status != MOVEWAITROUTE))
 	{
@@ -469,6 +469,7 @@ static BOOL moveDroidToBase(DROID	*psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 		return(FALSE);
 	}
 
+	CHECK_DROID(psDroid);
 	return TRUE;
 }
 
@@ -560,6 +561,8 @@ static void moveShuffleDroid(DROID *psDroid, UDWORD shuffleStart, SDWORD sx, SDW
 	SDWORD	lvx,lvy, rvx,rvy, svx,svy;
 	SDWORD	shuffleMove;
 	SDWORD	tarX,tarY;
+
+	CHECK_DROID(psDroid);
 
 	shuffleDir = vectorToAngle(sx, sy);
 	shuffleMag = (SDWORD)sqrtf(sx*sx + sy*sy);
@@ -681,6 +684,7 @@ static void moveShuffleDroid(DROID *psDroid, UDWORD shuffleStart, SDWORD sx, SDW
 		formationLeave(psDroid->sMove.psFormation, (BASE_OBJECT *)psDroid);
 		psDroid->sMove.psFormation = NULL;
 	}
+	CHECK_DROID(psDroid);
 }
 
 
@@ -689,8 +693,7 @@ void moveStopDroid(DROID *psDroid)
 {
 	PROPULSION_STATS	*psPropStats;
 
-	ASSERT( psDroid != NULL,
-		"moveStopUnit: Invalid unit pointer" );
+	CHECK_DROID(psDroid);
 
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 	ASSERT( psPropStats != NULL,
@@ -709,11 +712,10 @@ void moveStopDroid(DROID *psDroid)
 /*Stops a droid dead in its tracks - doesn't allow for any little skidding bits*/
 void moveReallyStopDroid(DROID *psDroid)
 {
-    ASSERT( psDroid != NULL,
-        "moveReallyStopUnit: invalid unit pointer" );
+	CHECK_DROID(psDroid);
 
-    psDroid->sMove.Status = MOVEINACTIVE;
-    psDroid->sMove.speed = 0;
+	psDroid->sMove.Status = MOVEINACTIVE;
+	psDroid->sMove.speed = 0;
 }
 
 
@@ -726,10 +728,8 @@ void updateDroidOrientation(DROID *psDroid)
 	SDWORD newPitch, dPitch, pitchLimit;
 	double dx, dy;
 	double direction, pitch, roll;
-	ASSERT( psDroid->pos.x < world_coord(mapWidth),
-		"mapHeight: x coordinate bigger than map width" );
-	ASSERT( psDroid->pos.y < world_coord(mapHeight),
-		"mapHeight: y coordinate bigger than map height" );
+
+	CHECK_DROID(psDroid);
 
 	if(psDroid->droidType == DROID_PERSON || cyborgDroid(psDroid) || psDroid->droidType == DROID_TRANSPORTER)
 	{
@@ -780,6 +780,7 @@ void updateDroidOrientation(DROID *psDroid)
 	roll = cos(direction) * dx - sin(direction) * dy;
 	roll = atan(roll);
 	psDroid->roll = (UWORD)((roll * 180) / M_PI);
+	CHECK_DROID(psDroid);
 }
 
 
@@ -859,6 +860,8 @@ static BOOL moveNextTarget(DROID *psDroid)
 {
 	UDWORD	srcX,srcY, tarX, tarY;
 
+	CHECK_DROID(psDroid);
+
 	// See if there is anything left in the move list
 	if (psDroid->sMove.Position == psDroid->sMove.numPoints)
 	{
@@ -883,6 +886,7 @@ static BOOL moveNextTarget(DROID *psDroid)
 	psDroid->sMove.targetY = tarY;
 	psDroid->sMove.Position++;
 
+	CHECK_DROID(psDroid);
 	return TRUE;
 }
 
@@ -1157,6 +1161,8 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 	float	radx,rady;
 	BOOL	blocked;
 	SDWORD	slideDir;
+
+	CHECK_DROID(psDroid);
 
 	blocked = FALSE;
 	radx = 0;
@@ -1530,7 +1536,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 //	ASSERT( slide || (!fpathBlockingTile(map_coord(nx)), map_coord(ny))),
 //		"moveCalcBlockingSlide: slid onto a blocking tile" );
 #endif
-
+	CHECK_DROID(psDroid);
 }
 
 
@@ -1544,6 +1550,8 @@ static void moveCalcDroidSlide(DROID *psDroid, float *pmx, float *pmy)
 	NAYBOR_INFO	*psInfo;
 	BASE_OBJECT	*psObst;
 	BOOL		bLegs;
+
+	CHECK_DROID(psDroid);
 
 	bLegs = FALSE;
 	if (psDroid->droidType == DROID_PERSON ||
@@ -1663,6 +1671,7 @@ static void moveCalcDroidSlide(DROID *psDroid, float *pmx, float *pmy)
 		// Try to slide round it
 		moveCalcSlideVector(psDroid, (SDWORD)psObst->pos.x,(SDWORD)psObst->pos.y, pmx,pmy);
 	}
+	CHECK_DROID(psDroid);
 }
 
 // get an obstacle avoidance vector
@@ -2031,6 +2040,8 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	SDWORD			speed, pitch;
 	WEAPON_STATS	*psWStats;
 
+	CHECK_DROID(psDroid);
+
 	mapX = map_coord(psDroid->pos.x);
 	mapY = map_coord(psDroid->pos.y);
 	speed = (SDWORD) calcDroidSpeed(psDroid->baseSpeed, terrainType(mapTile(mapX,mapY)),
@@ -2094,6 +2105,8 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	{
 		speed = MIN_END_SPEED;
 	}
+
+	CHECK_DROID(psDroid);
 
 	return speed;
 }
@@ -2308,6 +2321,8 @@ static void moveUpdateDroidPos( DROID *psDroid, float dx, float dy )
 {
 	SDWORD	iX = 0, iY = 0;
 
+	CHECK_DROID(psDroid);
+
 	if (psDroid->sMove.Status == MOVEPAUSE)
 	{
 		// don't actually move if the move is paused
@@ -2351,6 +2366,7 @@ static void moveUpdateDroidPos( DROID *psDroid, float dx, float dy )
 			psDroid->pos.y = 1;
 		}
 	}
+	CHECK_DROID(psDroid);
 }
 
 /* Update a tracked droids position and speed given target values */
@@ -3114,8 +3130,7 @@ void moveUpdateDroid(DROID *psDroid)
 	BOOL				bStarted = FALSE, bStopped;
 	Vector2f			target;
 
-//	ASSERT( psDroid->pos.x != 0 && psDroid->pos.y != 0,
-//		"moveUpdateUnit: unit at (0,0)" );
+	CHECK_DROID(psDroid);
 
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 	ASSERT( psPropStats != NULL,
@@ -3553,4 +3568,5 @@ void moveUpdateDroid(DROID *psDroid)
 	}
 
 	movePlayAudio( psDroid, bStarted, bStopped, moveSpeed );
+	CHECK_DROID(psDroid);
 }
