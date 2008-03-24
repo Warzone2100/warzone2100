@@ -1145,28 +1145,12 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 	SDWORD	tx,ty, ntx,nty;		// current tile x,y and new tile x,y
 	SDWORD	blkCX,blkCY;
 	SDWORD	horizX,horizY, vertX,vertY;
-	SDWORD	intx,inty;
-	SDWORD	jumpx,jumpy, bJumped=false;
-#ifdef DEBUG
-	BOOL	slide =false;
-#define NOTE_SLIDE	slide=true
-	SDWORD	state = 0;
-#define NOTE_STATE(x) state = x
-#else
-#define NOTE_STATE(x)
-#define NOTE_SLIDE
-#define NOTE_STATE(x)
-#endif
-//	float	mag, rad, temp;
-	float	radx,rady;
 	BOOL	blocked;
 	SDWORD	slideDir;
 
 	CHECK_DROID(psDroid);
 
 	blocked = false;
-	radx = 0;
-	rady = 0;
 
 	// calculate the new coords and see if they are on a different tile
 	tx = map_coord(psDroid->sMove.fx);
@@ -1181,82 +1165,6 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 	{
 		blocked = true;
 	}
-
-	// now test ahead of the droid
-/*	if (!blocked)
-	{
-		rad = moveObjRadius((BASE_OBJECT *)psDroid);
-		mag = sqrtf(mx*mx + my*my);
-
-		if (mag==0)
-		{
-			*pmx = 0;
-			*pmy = 0;
-			return;
-		}
-
-		radx = (rad * mx) / mag;
-		rady = (rad * my) / mag;
-
-		nx = psDroid->sMove.fx + radx;
-		ny = psDroid->sMove.fy + rady;
-		tx = map_coord(nx);
-		ty = map_coord(ny);
-		nx += mx;
-		ny += my;
-		ntx = map_coord(nx);
-		nty = map_coord(ny);
-
-		// is the new tile blocking?
-		if (fpathBlockingTile(ntx,nty))
-		{
-			blocked = true;
-		}
-	}
-
-	// now test one side of the droid
-	if (!blocked)
-	{
-		nx = psDroid->sMove.fx - rady;
-		ny = psDroid->sMove.fy + radx;
-		tx = map_coord(nx);
-		ty = map_coord(ny);
-		nx += mx;
-		ny += my;
-		ntx = map_coord(nx);
-		nty = map_coord(ny);
-
-		// is the new tile blocking?
-		if (fpathBlockingTile(ntx,nty))
-		{
-			blocked = true;
-			temp = radx;
-			radx = -rady;
-			rady = radx;
-		}
-	}
-
-	// now test the other side of the droid
-	if (!blocked)
-	{
-		nx = psDroid->sMove.fx + rady;
-		ny = psDroid->sMove.fy - radx;
-		tx = map_coord(nx);
-		ty = map_coord(ny);
-		nx += mx;
-		ny += my;
-		ntx = map_coord(nx);
-		nty = map_coord(ny);
-
-		// is the new tile blocking?
-		if (fpathBlockingTile(ntx,nty))
-		{
-			blocked = true;
-			temp = radx;
-			radx = rady;
-			rady = -radx;
-		}
-	}*/
 
 	blkCX = world_coord(ntx) + TILE_UNITS/2;
 	blkCY = world_coord(nty) + TILE_UNITS/2;
@@ -1304,30 +1212,24 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 			{
 				*pmx = 0;
 				*pmy = -*pmy;
-				NOTE_STATE(1);
 			}
 			else
 			{
 				*pmx = -*pmx;
 				*pmy = 0;
-				NOTE_STATE(2);
 			}
 		}
 		else if (fpathBlockingTile(horizX,horizY))
 		{
 			*pmy = 0;
-			NOTE_STATE(3);
 		}
 		else if (fpathBlockingTile(vertX,vertY))
 		{
 			*pmx = 0;
-			NOTE_STATE(4);
 		}
 		else
 		{
 			moveCalcSlideVector(psDroid, blkCX,blkCY, pmx,pmy);
-			NOTE_SLIDE;
-			NOTE_STATE(5);
 		}
 	}
 	else if (tx != ntx)
@@ -1339,13 +1241,10 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 			if (fpathBlockingTile(ntx,nty+1))
 			{
 				*pmx = 0;
-				NOTE_STATE(6);
 			}
 			else
 			{
 				moveCalcSlideVector(psDroid, blkCX,blkCY, pmx,pmy);
-				NOTE_SLIDE;
-				NOTE_STATE(7);
 			}
 		}
 		else
@@ -1354,13 +1253,10 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 			if (fpathBlockingTile(ntx,nty-1))
 			{
 				*pmx = 0;
-				NOTE_STATE(8);
 			}
 			else
 			{
 				moveCalcSlideVector(psDroid, blkCX,blkCY, pmx,pmy);
-				NOTE_SLIDE;
-				NOTE_STATE(9);
 			}
 		}
 	}
@@ -1373,13 +1269,10 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 			if (fpathBlockingTile(ntx+1,nty))
 			{
 				*pmy = 0;
-				NOTE_STATE(10);
 			}
 			else
 			{
 				moveCalcSlideVector(psDroid, blkCX,blkCY, pmx,pmy);
-				NOTE_SLIDE;
-				NOTE_STATE(11);
 			}
 		}
 		else
@@ -1388,31 +1281,21 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 			if (fpathBlockingTile(ntx-1,nty))
 			{
 				*pmy = 0;
-				NOTE_STATE(12);
 			}
 			else
 			{
 				moveCalcSlideVector(psDroid, blkCX,blkCY, pmx,pmy);
-				NOTE_SLIDE;
-				NOTE_STATE(13);
 			}
 		}
 	}
 	else // if (tx == ntx && ty == nty)
 	{
 		// on a blocking tile - see if we need to jump off
-
-		intx = (int)psDroid->sMove.fx & TILE_MASK;
-		inty = (int)psDroid->sMove.fy & TILE_MASK;
-		jumpx = psDroid->pos.x;
-		jumpy = psDroid->pos.y;
-		bJumped = false;
-
-/*		jumpx = nx - mx;
-		jumpy = ny - my;
-		intx = jumpx & TILE_MASK;
-		inty = jumpy & TILE_MASK;
-		bJumped = false;*/
+		int	intx = ((int)psDroid->sMove.fx) & TILE_MASK;
+		int	inty = ((int)psDroid->sMove.fy) & TILE_MASK;
+		BOOL	bJumped = false;
+		int	jumpx = psDroid->pos.x;
+		int	jumpy = psDroid->pos.y;
 
 		if (intx < TILE_UNITS/2)
 		{
@@ -1429,7 +1312,6 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 					bJumped = true;
 					jumpx = (jumpx & ~TILE_MASK) -1;
 				}
-				NOTE_STATE(14);
 			}
 			else
 			{
@@ -1444,7 +1326,6 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 					bJumped = true;
 					jumpx = (jumpx & ~TILE_MASK) -1;
 				}
-				NOTE_STATE(15);
 			}
 		}
 		else
@@ -1462,7 +1343,6 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 					bJumped = true;
 					jumpx = (jumpx & ~TILE_MASK) + TILE_UNITS;
 				}
-				NOTE_STATE(16);
 			}
 			else
 			{
@@ -1477,26 +1357,23 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 					bJumped = true;
 					jumpx = (jumpx & ~TILE_MASK) + TILE_UNITS;
 				}
-				NOTE_STATE(17);
 			}
 		}
 
 		if (bJumped)
 		{
-			psDroid->pos.x = (SWORD)(jumpx - radx);
-			psDroid->pos.y = (SWORD)(jumpy - rady);
-			psDroid->sMove.fx = jumpx;
-			psDroid->sMove.fy = jumpy;
+			psDroid->pos.x = MAX(0, jumpx);
+			psDroid->pos.y = MAX(0, jumpy);
+			psDroid->sMove.fx = MAX(0, jumpx);
+			psDroid->sMove.fy = MAX(0, jumpy);
 			*pmx = 0;
 			*pmy = 0;
 		}
 		else
 		{
 			moveCalcSlideVector(psDroid, blkCX,blkCY, pmx,pmy);
-			NOTE_SLIDE;
 		}
 	}
-
 
 	slideDir = vectorToAngle(*pmx,*pmy);
 	if (ntx != tx)
@@ -1529,13 +1406,6 @@ static void moveCalcBlockingSlide(DROID *psDroid, float *pmx, float *pmy, SDWORD
 	}
 	*pSlideDir = slideDir;
 
-#ifdef DEBUG
-	nx = psDroid->sMove.fx + *pmx;
-	ny = psDroid->sMove.fy + *pmy;
-
-//	ASSERT( slide || (!fpathBlockingTile(map_coord(nx)), map_coord(ny))),
-//		"moveCalcBlockingSlide: slid onto a blocking tile" );
-#endif
 	CHECK_DROID(psDroid);
 }
 
@@ -2384,6 +2254,8 @@ static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, SDWORD direction
 	static float		hvrTurn = 3.f / 4.f;		//0.75f;
 	static float		whlTurn = 1.f / 1.f;		//1.0f;
 	static float		trkTurn = 1.f / 1.f;		//1.0f;
+
+	CHECK_DROID(psDroid);
 
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 	switch (psPropStats->propulsionType)
