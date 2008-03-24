@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2008-03-22 01:33+0100\n"
-"PO-Revision-Date: 2008-03-23 17:42+0100\n"
+"PO-Revision-Date: 2008-03-24 10:27+0100\n"
 "Last-Translator: Steven "Kreuvf" Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "MIME-Version: 1.0\n"
@@ -120,7 +120,7 @@ msgstr "%s bricht das Bündnis mit %s"
 #: src/multigifts.c:410
 #, c-format
 msgid "%s Forms An Alliance With %s"
-msgstr "%s ein Bündnis mit %s ein"
+msgstr "%s geht ein Bündnis mit %s ein"
 
 #: src/multigifts.c:801
 #, c-format
@@ -648,7 +648,7 @@ msgstr "Singing in the rain, I'm singing in the rain... REGEN"
 
 #: src/keybind.c:1580
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
-msgstr "Vorhersage: Klarer Himmel in allen Gebiete... KEIN WETTER"
+msgstr "Vorhersage: Klarer Himmel in allen Gebieten... KEIN WETTER"
 
 #: src/keybind.c:1613
 msgid "Enemy destroyed by cheating!"
@@ -943,17 +943,17 @@ msgstr "Gesamte Spielzeit - %s"
 #: src/intorder.c:178
 #: src/keymap.c:387
 msgid "Short Range"
-msgstr "Kurze Entfernung"
+msgstr "Kurze Reichweite"
 
 #: src/intorder.c:179
 #: src/keymap.c:393
 msgid "Long Range"
-msgstr "Hohe Entfernung"
+msgstr "Hohe Reichweite"
 
 #: src/intorder.c:180
 #: src/keymap.c:386
 msgid "Optimum Range"
-msgstr "Optimale Entfernung"
+msgstr "Optimale Reichweite"
 
 #: src/intorder.c:181
 #: src/keymap.c:406
@@ -1844,7 +1844,7 @@ msgstr "Zentriere Ansicht auf die Kommandozentrale"
 
 #: src/keymap.c:382
 msgid "View Unassigned Units"
-msgstr "Zeige nicht zugeordnete Einheiten"
+msgstr "Zeige nicht zugewiesene Einheiten"
 
 #: src/keymap.c:384
 msgid "Fire at Will"
@@ -2174,7 +2174,7 @@ msgstr "Errichten Sie eine vorgelagerte Basis auf diesem Plateau."
 
 #: data/messages/strings/cam1strings.txt:52
 msgid "Build defensive structures."
-msgstr "Bauen Sie Verteidigungsanlagen."
+msgstr "Errichten Sie Verteidigungsanlagen."
 
 #: data/messages/strings/cam1strings.txt:54
 msgid "ALPHA BASE MISSION: Counter Attack"
@@ -2640,7 +2640,7 @@ msgstr "Das Kollektiv treibt alle Zivilisten in diesem Gebiet zusammen."
 
 #: data/messages/strings/cam2strings.txt:93
 msgid "They are then flying them to an unknown location."
-msgstr "Sie transportieren sie dann zu einer unbekannten Position."
+msgstr "Sie transportieren sie dann zu einem unbekannten Ort."
 
 #: data/messages/strings/cam2strings.txt:97
 msgid "Destroy or drive off The Collective's transport."
@@ -2796,7 +2796,7 @@ msgstr "Glückwunsch zu Ihrer erfolgreichen Evakuierung der Betabasis."
 
 #: data/messages/strings/cam3strings.txt:8
 msgid "NEXUS has gained access to nuclear weapons and is determined to destroy the Project."
-msgstr "NEXUS hat sich Zugriff zu atomaren Waffen verschafft und ist darauf aus das Projekt zu zerstören."
+msgstr "NEXUS hat sich Zugriff zu Kernwaffen verschafft und ist darauf aus das Projekt zu zerstören."
 
 #: data/messages/strings/cam3strings.txt:11
 msgid "Take your forces to the Northern Sector"
@@ -2816,7 +2816,7 @@ msgstr "TRANSPORTERMISSION: Vorgelagerte Basis errichten"
 
 #: data/messages/strings/cam3strings.txt:17
 msgid "Commander, the success of the Project lies with you."
-msgstr "Kommander, der Erfolg des Projekts hängt von Ihnen ab."
+msgstr "Commander, der Erfolg des Projekts hängt von Ihnen ab."
 
 #: data/messages/strings/cam3strings.txt:18
 msgid "Secure an LZ, then establish a forward base."
@@ -2959,7 +2959,7 @@ msgstr "TRANSPORTERMISSION: Hinterhalt"
 
 #: data/messages/strings/cam3strings.txt:87
 msgid "Commander, your decisive actions halted the spread of NEXUS."
-msgstr "Commander, Ihre entscheidenden Eingriffe haben eine weitere Ausbreitung von NEXUS gestoppt."
+msgstr "Commander, Ihr entschiedenes Vorgehen hat die weitere Ausbreitung von NEXUS aufgehalten."
 
 #: data/messages/strings/cam3strings.txt:88
 msgid "Before NEXUS was expelled, we intercepted this message - Decoding completed."
@@ -7968,7 +7968,7 @@ msgstr "Artilleriebatterie verschießt Firestorm-Raketen"
 #: data/messages/strings/resstrings.txt:284
 #: data/mp/messages/strings/resstrings.txt:338
 msgid "Artillery battery firing Novastorm Missiles"
-msgstr "Artilleriebatterie für Novastorm-Raketen"
+msgstr "Artilleriebatterie verschießt Novastorm-Raketen"
 
 #: data/messages/strings/resstrings.txt:290
 #: data/mp/messages/strings/resstrings.txt:344
@@ -8774,7 +8774,7 @@ msgstr "Alle LKW werden automatisch aufgerüstet"
 #: data/messages/strings/resstrings.txt:778
 #: data/mp/messages/strings/resstrings.txt:856
 msgid "Advanced Engineering Techniques"
-msgstr "Fortgeschrittene Konstruktionstechniken"
+msgstr "Fortschrittliche Konstruktionstechniken"
 
 #: data/messages/strings/resstrings.txt:783
 #: data/messages/strings/resstrings.txt:789
@@ -10151,7 +10151,7 @@ msgstr "Erhöht Feuerrate von Geschützen"
 #: data/mp/messages/strings/resstrings.txt:1565
 #: data/mp/messages/strings/resstrings.txt:1811
 msgid "Robotic loading system feeds rounds into breech"
-msgstr "Robotergestützter Lademechanimus befördert Projektile schneller in den Verschluss"
+msgstr "Robotergestützter Lademechanimus befördert Geschosse schneller in den Verschluss"
 
 #: data/messages/strings/resstrings.txt:1366
 #: data/mp/messages/strings/resstrings.txt:1469
@@ -10397,7 +10397,7 @@ msgstr "Alle Laser werden automatisch aufgerüstet"
 #: data/messages/strings/resstrings.txt:1474
 #: data/mp/messages/strings/resstrings.txt:1589
 msgid "Improvement in laser emission density "
-msgstr "Verbesesrung der Laseremissionsdichte"
+msgstr "Verbesserung der Laseremissionsdichte"
 
 #: data/messages/strings/resstrings.txt:1475
 #: data/mp/messages/strings/resstrings.txt:1590
@@ -10523,7 +10523,7 @@ msgstr "Panzerbrechende Projektile mit wolframummantelter Spitze"
 #: data/messages/strings/resstrings.txt:1534
 #: data/mp/messages/strings/resstrings.txt:1655
 msgid "Depleted uranium kinetic energy bullets"
-msgstr "Projektile aus abgereicherten Uran"
+msgstr "Projektile aus abgereichertem Uran"
 
 #: data/messages/strings/resstrings.txt:1540
 #: data/mp/messages/strings/resstrings.txt:1661
@@ -11125,11 +11125,11 @@ msgstr "Erhöht Feuerrate von Raketen"
 
 #: data/messages/strings/tutstrings.txt:8
 msgid "To build an oil derrick, select one of your trucks"
-msgstr "Um einen Ölbohrturm zu bauen, wählen Sie eines ihrer LKW"
+msgstr "Um einen Ölbohrturm zu bauen, wählen Sie einen Ihrer LKW"
 
 #: data/messages/strings/tutstrings.txt:9
 msgid "Left click the oil pool indicated by the radar pulse to order your truck to build"
-msgstr "Linksklicken Sie auf die Ölquelle, die durch den Radarimpuls angezeigt wird, um ihrem LKW anzuweisen dort zu bauen"
+msgstr "Linksklicken Sie auf die Ölquelle, die durch den Radarimpuls angezeigt wird, um Ihrem LKW anzuweisen dort zu bauen"
 
 #: data/messages/strings/tutstrings.txt:10
 msgid "The oil derrick is currently dormant. Build a power generator to convert the oil into power"
@@ -11213,7 +11213,7 @@ msgstr "Die Fabrik kann nun beauftragt werden eine neue Einheit zu produzieren"
 
 #: data/messages/strings/tutstrings.txt:30
 msgid "Please wait whilst the factory manufactures the new unit(s)"
-msgstr "Bitte warten Sie während die Fabrik die neuen Einheiten produziert"
+msgstr "Bitte warten Sie, während die Fabrik die neuen Einheiten produziert"
 
 #: data/messages/strings/tutstrings.txt:31
 msgid "Congratulations commander - you are ready for your first mission"
@@ -11221,7 +11221,7 @@ msgstr "Gratulation, Commander - Sie sind nun bereit für Ihre erste Mission"
 
 #: data/messages/strings/tutstrings.txt:33
 msgid "Left click the flashing BUILD icon"
-msgstr "Linksklicken Sie auf das aufleuchtende KONSTRUKTIONS-Symbol"
+msgstr "Linksklicken Sie auf das aufleuchtende KONSTRUKTION-Symbol"
 
 #: data/messages/strings/tutstrings.txt:34
 msgid "Now left click the power generator in the build menu on the left"
@@ -11233,7 +11233,7 @@ msgstr "Derzeit nicht verwendet"
 
 #: data/messages/strings/tutstrings.txt:36
 msgid "Now left click the research facility and position it at your base"
-msgstr "Linksklicken Sie jetzt auf die Forschungseinrichtung und platzieren Sie sie in ihrer Basis"
+msgstr "Linksklicken Sie jetzt auf die Forschungseinrichtung und platzieren Sie sie in Ihrer Basis"
 
 #: data/messages/strings/tutstrings.txt:37
 msgid "Use your other truck to help build the research facility"
@@ -11745,7 +11745,7 @@ msgstr "Python Hover Mittleres Geschütz"
 
 #: data/mp/messages/strings/names.txt:1839
 msgid "Python Hover Heavy Cannon"
-msgstr "Python Hover  Schwere Geschütz"
+msgstr "Python Hover Schweres Geschütz"
 
 #: data/mp/messages/strings/names.txt:1840
 msgid "Python Tracks Heavy Cannon"
@@ -11830,7 +11830,7 @@ msgstr "Scorpion Lancer VTOL"
 
 #: data/mp/messages/strings/names.txt:1868
 msgid "Scorpion HPV VTOL"
-msgstr "Scorption Hochgeschwindigkeitsgeschütz VTOL"
+msgstr "Scorpion Hochgeschwindigkeitsgeschütz VTOL"
 
 #: data/mp/messages/strings/names.txt:1869
 msgid "Mantis Lancer VTOL"
@@ -11894,7 +11894,7 @@ msgstr "Mantis Scourge Ketten"
 
 #: data/mp/messages/strings/names.txt:1890
 msgid "Scorpion Heavy Machinegun Tracks"
-msgstr "Scorption Schweres Maschinengewehr Ketten"
+msgstr "Scorpion Schweres Maschinengewehr Ketten"
 
 #: data/mp/messages/strings/names.txt:1892
 msgid "Scorpion Repair Tracks"
@@ -12261,7 +12261,7 @@ msgstr "Verschießt EMP-Raketen"
 #: data/mp/messages/strings/resstrings.txt:2142
 #: data/mp/messages/strings/resstrings.txt:2148
 msgid "Stronger Commander Turret Available for Design"
-msgstr "Stärkerer Kommandoturm verfügbar"
+msgstr "Stärkerer Commanderturm verfügbar"
 
 #: data/mp/messages/strings/resstrings.txt:2137
 #: data/mp/messages/strings/resstrings.txt:2143
