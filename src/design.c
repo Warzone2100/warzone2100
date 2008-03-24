@@ -272,7 +272,7 @@ extern W_SCREEN		*psWScreen;
 extern	UDWORD				objID;					// unique ID creation thing..
 
 /* default droid design template */
-DROID_TEMPLATE	sDefaultDesignTemplate;
+DROID_TEMPLATE sDefaultDesignTemplate;
 
 extern void intDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 void desSetupDesignTemplates( void );
