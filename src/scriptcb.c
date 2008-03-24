@@ -795,7 +795,7 @@ BOOL scrCBResCompleted(void)
 BOOL scrCBPlayerLeft(void)
 {
 	SDWORD	*player;
-	if (!stackPopParams(1, VAL_INT, &player) )
+	if (!stackPopParams(1, VAL_REF | VAL_INT, &player) )
 	{
 		return false;
 	}
