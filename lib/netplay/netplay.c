@@ -1589,7 +1589,7 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 	// Loop until we've been accepted into the game
 	for (;;)
 	{
-		uint8_t type;
+		uint8_t type = NUM_GAME_PACKETS;
 
 		NETrecv(&type);
 
