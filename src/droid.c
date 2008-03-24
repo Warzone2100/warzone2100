@@ -3270,9 +3270,9 @@ void initDroidMovement(DROID *psDroid)
 {
 	memset(&psDroid->sMove, 0, sizeof(MOVE_CONTROL));
 
-	psDroid->sMove.fx = 0.0f;
-	psDroid->sMove.fy = 0.0f;
-	psDroid->sMove.fz = 0.0f;
+	psDroid->sMove.fx = psDroid->pos.x;
+	psDroid->sMove.fy = psDroid->pos.y;
+	psDroid->sMove.fz = psDroid->pos.z;
 	psDroid->sMove.speed = 0.0f;
 	psDroid->sMove.moveDir = 0.0f;
 }
