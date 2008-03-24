@@ -2006,7 +2006,7 @@ void actionUpdateDroid(DROID *psDroid)
 						(SDWORD)psDroid->orderX,(SDWORD)psDroid->orderY, psDroid->psTarStats))
 		{
 //			psDroid->action = DACTION_MOVETOBUILD;
-			moveDroidToNoFormation(psDroid, psDroid->actionX,psDroid->actionY);
+			moveDroidToNoFormation(psDroid, psDroid->orderX, psDroid->orderY);
 		}
 		else if (!DROID_STOPPED(psDroid) &&
 				psDroid->sMove.Status != MOVETURNTOTARGET &&
@@ -2703,11 +2703,11 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		ASSERT( psDroid->order == DORDER_BUILD || psDroid->order == DORDER_HELPBUILD ||
 				psDroid->order == DORDER_LINEBUILD,
 			"actionUnitBase: cannot start build action without a build order" );
+		ASSERT(psAction->x > 0 && psAction->y > 0, "actionUnitBase: Bad build order position");
 		psDroid->action = DACTION_MOVETOBUILD;
 		psDroid->actionX = psAction->x;
 		psDroid->actionY = psAction->y;
-		if (actionDroidOnBuildPos(psDroid,
-					(SDWORD)psDroid->orderX,(SDWORD)psDroid->orderY, psDroid->psTarStats))
+		if (actionDroidOnBuildPos(psDroid, psDroid->orderX, psDroid->orderY, psDroid->psTarStats))
 		{
 			actionHomeBasePos(psDroid->player, &pbx,&pby);
 			moveDroidToNoFormation(psDroid, (UDWORD)pbx,(UDWORD)pby);
