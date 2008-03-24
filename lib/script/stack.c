@@ -291,23 +291,17 @@ BOOL stackPopType(INTERP_VAL  *psVal)
 /* Pop a number of values off the stack checking their types
  * This is used by instinct functions to get their parameters
  */
-BOOL stackPopParams(SDWORD numParams, ...)
+BOOL stackPopParams(unsigned int numParams, ...)
 {
-	va_list		args;
-	SDWORD		i;
-	INTERP_TYPE	type;
-	void		*pData;
-	INTERP_VAL	*psVal;
-	UDWORD		index, params;
-	STACK_CHUNK	*psCurr;
-
-	//debug(LOG_SCRIPT,"stackPopParams");
+	va_list args;
+	unsigned int i, index;
+	STACK_CHUNK *psCurr;
 
 	va_start(args, numParams);
 
 	// Find the position of the first parameter, and set
 	// the stack top to it
-	if ((UDWORD)numParams <= currEntry)
+	if (numParams <= currEntry)
 	{
 		// parameters are all on current chunk
 		currEntry = currEntry - numParams;
@@ -316,7 +310,7 @@ BOOL stackPopParams(SDWORD numParams, ...)
 	else
 	{
 		// Have to work down the previous chunks to find the first param
-		params = numParams - currEntry;
+		unsigned int params = numParams - currEntry;
 
 		for(psCurr = psCurrChunk->psPrev; psCurr != NULL; psCurr = psCurr->psPrev)
 		{
@@ -336,91 +330,89 @@ BOOL stackPopParams(SDWORD numParams, ...)
 
 	if (!psCurr)
 	{
-		debug(LOG_ERROR,"stackPopParams: not enough parameters on stack");
+		debug( LOG_ERROR, "stackPopParams: not enough parameters on stack" );
 		ASSERT( false, "stackPopParams: not enough parameters on stack" );
+		va_end(args);
 		return false;
 	}
 
 	// Get the values, checking their types
 	index = currEntry;
-	for (i=0; i< numParams; i++)
+	for (i = 0; i < numParams; i++)
 	{
-		type = (INTERP_TYPE)(va_arg(args, int));
-		pData = va_arg(args, void *);
+		INTERP_VAL *psVal = psCurr->aVals + index;
+		INTERP_TYPE type = va_arg(args, INTERP_TYPE);
+		void * pData = va_arg(args, void *);
 
-		psVal = psCurr->aVals + index;
-
-		if(type == VAL_FLOAT)		//expecting a float
+		if (!interpCheckEquiv(type, psVal->type))
 		{
-			/* if (!interpCheckEquiv(type,psVal->type))
-			{
-				ASSERT( false, "stackPopParams: type mismatch (%d/%d)" , type, psVal->type);
-				va_end(args);
-				return false;
-			} */
-			*((float*)pData) = psVal->v.fval;
+			ASSERT( false,
+				"stackPopParams: type mismatch (expected %s, got %s)",
+				interpTypeToString(type), interpTypeToString(psVal->type) );
+			va_end(args);
+			return false;
 		}
-		else if(type != VAL_STRING)	//anything (including references)
+
+		switch (type)
 		{
-			if (!interpCheckEquiv(type,psVal->type))
-			{
-				ASSERT( false, "stackPopParams: type mismatch" );
-				va_end(args);
-				return false;
-			}
-			if (scriptTypeIsPointer(psVal->type))
-			{
-				if(psVal->type >= VAL_REF)	//if it's a reference
-				{
-					INTERP_VAL	*refVal;
-
-					refVal = (INTERP_VAL*)psVal->v.oval;	//oval is a pointer to INTERP_VAL in this case
-
-					/* doublecheck types */
-					ASSERT(interpCheckEquiv(type & ~VAL_REF, refVal->type), "stackPopParams: type mismatch for a reference: %d/%d",
-						type & ~VAL_REF, refVal->type);		//type of provided container and type of the INTERP_VAL pointed by psVal->v.oval
-
-					*((void**)pData) = &(refVal->v.ival);		/* get pointer to the union */
-				}
-				else		//some pointer type
-				{
-					*((void**)pData) = psVal->v.oval;
-				}
-			}
-			else
-			{
-				*((SDWORD*)pData) = psVal->v.ival;
-			}
-		}
-		else	//TODO: allow only compatible types
-		{
-			if(psVal->type == VAL_STRING)	//Passing a String
-			{
-				//*((char **)pData) = psVal->v.sval;
-				strcpy(((char *)pData), psVal->v.sval);		//COPY string
-			}
-			else		//Integer or float
-			{
+			case VAL_BOOL:
+				*(BOOL*)pData = psVal->v.bval;
+				break;
+			case VAL_INT:
+				*(int*)pData = psVal->v.ival;
+				break;
+			case VAL_FLOAT:
+				*(float*)pData = psVal->v.fval;
+				break;
+			case VAL_STRING:
 				switch (psVal->type)
 				{
-				case VAL_INT:
-					sprintf(((char *)pData), "%d", psVal->v.ival);
-					break;
-				case VAL_FLOAT:
-					sprintf(((char *)pData), "%f", psVal->v.fval);
-					break;
-				case VAL_BOOL:
-					sprintf(((char *)pData), "%d", psVal->v.bval);
-					break;
-				default:
-					ASSERT(false, "StackPopParam - wrong data type being converted to string (type: %d)", psVal->type);
-					break;
+					case VAL_BOOL:
+						sprintf((char*)pData, "%d", psVal->v.bval);
+						break;
+					case VAL_INT:
+						sprintf((char*)pData, "%d", psVal->v.ival);
+						break;
+					case VAL_FLOAT:
+						sprintf((char*)pData, "%f", psVal->v.fval);
+						break;
+					case VAL_STRING:
+						strcpy((char*)pData, psVal->v.sval);
+						break;
+					default:
+						ASSERT(false,
+							"StackPopParam - wrong data type being converted to string (type: %s)",
+							interpTypeToString(psVal->type));
+						break;
 				}
-				//*((char **)pData) = psVal->v.sval;
-			}
+				break;
+			default: // anything (including references)
+				if (scriptTypeIsPointer(psVal->type))
+				{
+					if (psVal->type >= VAL_REF) // if it's a reference
+					{
+						INTERP_VAL *refVal = psVal->v.oval; // oval is a pointer to INTERP_VAL in this case
+
+						/* doublecheck types */
+						ASSERT(interpCheckEquiv(type & ~VAL_REF, refVal->type),
+							"stackPopParams: type mismatch for a reference (expected %s, got %s)",
+							interpTypeToString(type & ~VAL_REF), interpTypeToString(refVal->type));
+						// type of provided container and type of the INTERP_VAL pointed by psVal->v.oval
+
+						*(void**)pData = &(refVal->v); /* get pointer to the union */
+					}
+					else // some pointer type
+					{
+						*(void**)pData = psVal->v.oval;
+					}
+				}
+				else
+				{
+					*(int*)pData = psVal->v.ival;
+				}
 		}
 
-		index += 1;
+		index++;
 		if (index >= psCurr->size)
 		{
 			psCurr = psCurr->psNext;

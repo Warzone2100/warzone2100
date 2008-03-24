@@ -183,7 +183,7 @@ extern void eventFireCallbackTrigger(TRIGGER_TYPE callback);
  * The varargs part is a set of INTERP_TYPE, UDWORD * pairs.
  * The value of the parameter is stored in the DWORD pointed to by the UDWORD *
  */
-extern BOOL stackPopParams(SDWORD numParams, ...);
+extern BOOL stackPopParams(unsigned int numParams, ...);
 
 /* Push a value onto the stack without using a value structure */
 extern BOOL stackPushResult(INTERP_TYPE type, INTERP_VAL *result);
